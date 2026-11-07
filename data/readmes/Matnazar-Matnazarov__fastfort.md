@@ -16,12 +16,32 @@ PostGIS & pgvector · SQLAlchemy & Tortoise · **No Node.js required**
 [Live demo](https://fastfort.inventrix.uz) ·
 [Changelog](CHANGELOG.md)
 
+<br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/dashboard-dark.webp">
+  <img alt="The FastFort dashboard: metrics with sparklines, a 30-day trend chart and a breakdown, all drawn by the server" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/dashboard-light.webp" width="100%">
+</picture>
+
+<sub>The live demo, <a href="https://fastfort.inventrix.uz">fastfort.inventrix.uz</a> — the sign-in form is filled in for you.</sub>
+
 </div>
 
 > [!NOTE]
 > **Stable since 1.0.** The public API follows Semantic Versioning — see
 > [Versioning](#versioning). The badge above is the released version; this
 > README describes `main`, which may be ahead of it.
+
+**Contents** —
+[Why FastFort?](#why-fastfort) ·
+[Screenshots](#screenshots) ·
+[Features](#features) ·
+[Coming from Django](#coming-from-django) ·
+[How it is put together](#how-it-is-put-together) ·
+[Installation](#installation) ·
+[Security](#security) ·
+[Versioning](#versioning) ·
+[Development](#development)
 
 ---
 
@@ -143,6 +163,33 @@ the token expired.
 
 ---
 
+## Screenshots
+
+Every screen below is the [live demo](https://fastfort.inventrix.uz), a freight
+company with seventeen models on PostgreSQL and PostGIS. No screen was mocked
+up; each is what `pip install fastfort` renders.
+
+<table>
+  <tr>
+    <td width="50%"><img alt="A list view with search, a date drill-down bar, sortable columns, row selection and per-row actions" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/list-light.webp"><br><b>Lists</b> — search, sort, a <code>date_hierarchy</code> bar, per-row star, edit and delete</td>
+    <td width="50%"><img alt="The filter drawer: checkboxes for an enum, searchable relation pickers and date ranges with presets" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/filters-light.webp"><br><b>Filters</b> — every <code>list_filter</code> in one drawer; dates get presets and the admin's own calendar</td>
+  </tr>
+  <tr>
+    <td><img alt="A route form with a PostGIS line drawn on an OpenStreetMap slippy map, and the Django save buttons" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/form-map-light.webp"><br><b>PostGIS</b> — a hand-rolled slippy map that writes WKT into the field; <i>Save as new</i> beside Django's save buttons</td>
+    <td><img alt="A form in dark mode with a CKEditor 5 rich-text field matching the admin's palette" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/form-richtext-dark.webp"><br><b>Rich text</b> — CKEditor 5 or TinyMCE from one setting, in the admin's palette and dark mode</td>
+  </tr>
+  <tr>
+    <td><img alt="The command palette opened over a list, filtering models as you type" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/palette-light.webp"><br><b>Command palette</b> — <kbd>Ctrl</kbd> <kbd>K</kbd> to any model</td>
+    <td><img alt="A delete confirmation listing the related records that will be kept without the link" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/delete-light.webp"><br><b>Deletes you can trust</b> — what cascades, what is unlinked, what blocks it</td>
+  </tr>
+  <tr>
+    <td><img alt="The admin in Arabic, laid out right to left in dark mode" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/rtl-arabic-dark.webp"><br><b>Eleven languages</b> — Arabic turns the whole layout around from one attribute</td>
+    <td align="center"><img alt="The shipments list on a phone" src="https://raw.githubusercontent.com/Matnazar-Matnazarov/fastfort/main/docs/screenshots/mobile-list.webp" width="48%"><br><b>Phones</b> — a real mobile layout, not a shrunken desktop</td>
+  </tr>
+</table>
+
+---
+
 ## Features
 
 | | |
@@ -154,11 +201,12 @@ the token expired.
 | 🔑 **Personal access tokens** | `fort.enable_api_tokens(ApiToken)` — named, scoped, expiring, individually revocable tokens for the cron job and the integration with no password to type. Minted from the admin, shown exactly once, stored only as a digest |
 | ✏️ **Editing where you are** | `inlines` edit an order's lines on the order's own page, `list_editable` edits cells in the list, `bulk_editable` sets one field across the selected rows — all in one transaction, all working with JavaScript off |
 | 🛡 **Accounts a demo cannot break** | Four settings for what the admin may do to an account — change a password, change a *superuser's* password, delete an account, delete a superuser. All default to what the admin has always done. A protected password field is read-only *and* dropped from the write, because a read-only control that still accepts a posted value is a label rather than a protection |
-| 🎛 **Django-style admin** | `@admin.register`, `list_display`, `list_filter`, `search_fields`, `fieldsets`, `actions` |
+| 🎛 **Django-style admin** | `@admin.register`, `list_display`, `list_filter`, `search_fields`, `fieldsets`, `actions`, `date_hierarchy`, `prepopulated_fields`, `save_as` — see [Coming from Django](#coming-from-django) |
+| 📝 **Rich text, without bundling an editor** | `ui={"richtext_url": …, "richtext_editor": "ckeditor5"}` and every `richtext` field is CKEditor 5 (or TinyMCE), started by FastFort under its own strict CSP and drawn in the admin's palette, dark mode included. The textarea underneath stays what submits |
 | 🗑 **Deletes you can trust** | The confirmation counts what actually goes: rows that cascade, rows kept with the link cleared, and rows that block the delete outright — refused with a sentence instead of a constraint violation |
 | 🎨 **A UI you will not want to replace** | Light and dark themes, brand colour from a single setting, ⌘K command palette, full keyboard navigation, real mobile layout |
 | 🔐 **Production-grade auth** | Argon2id hashing, session cookies invalidated by a password change, login lockout with a growing delay, CSRF on every form, and a CSP that starts at `default-src 'none'` |
-| 🎫 **A token API in one setting** | `auth={"api_enabled": True}` mounts `/auth/token`, `/refresh`, `/logout` and `/me` in OAuth 2's shapes. Refresh rotation with reuse detection: a token presented twice revokes the whole family. `bearer_user(fort)` is a `Depends` for your own routes, and it hands them the user *row* |
+| 🎫 **A token API in one setting** | `auth={"api_enabled": True}` mounts `/auth/token`, `/refresh`, `/logout` and `/me` in OAuth 2's shapes. Refresh rotation with reuse detection: a token presented twice revokes the whole family. A refresh is refused once the account is deactivated, deleted or has a new password, and no chain outlives `refresh_token_max_age`. `bearer_user(fort)` is a `Depends` for your own routes, and it hands them the user *row* |
 | 🚦 **Rate limiting, on by default** | Three budgets — reads, writes, and sign-in. Argon2 is slow by design, which makes the sign-in form the cheapest thing on any site to attack, so it is charged in middleware *before* the handler and a refused request never reaches the hash |
 | 📎 **Uploads that are what they say** | Extension allow-list per field kind, a deny-list checked alongside it, magic numbers checked against the name, and a `Content-Type` at serve time decided from the bytes rather than the filename. `hack.exe.png` is stored as `hack_exe.png` |
 | 🗄 **Three databases** | SQLite · PostgreSQL · MySQL, with identical behaviour |
@@ -170,6 +218,28 @@ the token expired.
 | ⌨️ **A CLI that matters** | `createsuperuser` so a fresh install has a way in, and `check --deploy` that exits non-zero |
 | 📤 **Export and import** | The current view out as CSV, Excel or JSON — filters, search and ordering included. And back in again: the same parsers the form uses, foreign keys resolved by name or id, every bad cell reported at once with its line number, and nothing written unless the whole file parses. No openpyxl, no pandas |
 | 📦 **No Node.js** | CSS and JavaScript are hand-written files inside the package, served Brotli-compressed with a gzip fallback. An ordinary page costs about 32 KB of CSS and 33 KB of script on the wire; the map and the data editors are separate files, fetched only by a page that needs them. A test weighs the lot and fails when it grows |
+
+---
+
+## Coming from Django
+
+The `ModelAdmin` vocabulary is Django's, so most of an existing `admin.py`
+reads the same here. What is supported, option by option:
+
+| Django option | FastFort | Notes |
+|---|---|---|
+| `list_display`, `list_display_links`, `list_filter`, `search_fields`, `ordering`, `list_per_page` | ✅ | Checked against the model at start-up |
+| `list_select_related` | ✅ `select_related` / `prefetch_related` | |
+| `list_editable` | ✅ | One form, one transaction, works without JavaScript |
+| `date_hierarchy` | ✅ | Two queries; each level is an ordinary filter URL |
+| `readonly_fields`, `fieldsets`, `inlines` (`TabularInline`) | ✅ | Collapsed sections are `<details>` |
+| `prepopulated_fields` | ✅ | Add form only; keeps a published slug stable |
+| `save_as`, `save_on_top`, *Save and add another / continue* | ✅ | *Save as new* refused beside `inlines` |
+| `empty_value_display` | ✅ | |
+| `actions`, `@admin.action`, `@admin.display` | ✅ | |
+| `formfield_overrides` | ✅ | Keyed by field name or by type |
+| `autocomplete_fields`, `raw_id_fields` | automatic | A relation becomes a search box once its table outgrows a dropdown |
+| `has_*_permission`, object-level permissions | not yet | See [Not in the box yet](#not-in-the-box-yet) |
 
 ---
 
@@ -282,6 +352,34 @@ browser rather than trusting a `200`: a refused request often answers with a
 perfectly valid picture of an error — OpenStreetMap's "Access blocked", or
 CARTO's "API KEY REQUIRED", which is why CARTO is no longer in this table. Each provider requires its credit line in
 `map_attribution`, and has usage terms worth reading before you ship.
+
+---
+
+## Security
+
+Security is the half of an admin that is not visible until it fails, so it is
+tested as a feature: `tests/security/` holds a regression test for every
+control below, and a fix for a reported issue lands with the test that failed
+before it.
+
+- **Sessions** — signed cookies, `HttpOnly`, `SameSite=Lax`, `Secure` by default;
+  a password change signs every device out.
+- **Passwords** — Argon2id, rehashed on sign-in when the parameters change;
+  lockout with a growing delay; a timing-equalised path for unknown accounts.
+- **Tokens** — JWT access tokens verified against exactly one configured
+  algorithm; refresh rotation with family revocation on reuse, refused for a
+  deactivated, deleted or re-passworded account, with an absolute chain
+  lifetime. Personal access tokens stored only as a digest.
+- **The browser** — CSRF on every form; a CSP starting at `default-src 'none'`
+  with no inline script; open redirects refused; HTML never compressed (BREACH).
+- **Data in and out** — mass assignment bounded by `FieldSpec.editable`; uploads
+  typed by their bytes, not their name; CSV exports defused against formula
+  injection; workbook imports refuse XML entity declarations in any encoding.
+- **Deployment** — `fastfort check --deploy` exits non-zero on an unsafe
+  configuration.
+
+Found a vulnerability? Please **do not open a public issue** — see
+[SECURITY.md](SECURITY.md) for how to report it privately.
 
 ---
 

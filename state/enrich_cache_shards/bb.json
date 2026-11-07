@@ -23,11 +23,11 @@
   }
  },
  "ddev/ddev": {
-  "commit_7d": 16,
-  "commit_90d": 247,
+  "commit_7d": 30,
+  "commit_90d": 263,
   "rel_ver": "v1.25.5",
   "rel_pub": "2026-10-26",
-  "rel_days": 7,
+  "rel_days": 12,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -39,7 +39,7 @@
    "GHSA-x2xq-qhjf-5mvg(CVE-2026-32885,medium)"
   ],
   "contrib_n": 381,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Go": 74,
    "Shell": 13,
@@ -49,9 +49,9 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
    {
@@ -69,6 +69,14 @@
     "d": "2026-07-06",
     "n": "- Use wrapper scripts in `ddev-dbserver` to avoid `mysql` deprecation warnings with MariaDB 11.x+\n* ci(github): add brew sandbox setup, remove obsolete env, for #8469 by @stasadev in https://github.com/ddev/ddev/pull/8512\n- **MariaDB 12.3 LTS support**\n- Support the Flatpak user binary for DBeaver on Linux, thanks to @nickchomey\n* docs(configuration): Add `ddev config --database=<database type>:<version>` example command (#8387) [skip ci] by @silverham in https://github.com/ddev/ddev/pull/8387\n* feat: add M"
    }
+  ],
+  "etag": {
+   "release": "W/\"3331e09586c01326bbf46e5371672ef59422b1599a30bfcf90234ba16767a48b\"",
+   "security": "W/\"18809f2e57ddd36fd87da99444fea7fea18487714786b674f672c9984ffeb3c9\""
+  },
+  "rel_dates": [
+   "2026-10-26",
+   "2026-09-02"
   ]
  },
  "percona/grafana-dashboards": {
@@ -123,7 +131,7 @@
   "commit_90d": 0,
   "rel_ver": "1.0.0-13",
   "rel_pub": "2019-02-19",
-  "rel_days": 2777,
+  "rel_days": 2818,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -170,7 +178,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1",
   "rel_pub": "2020-12-19",
-  "rel_days": 2108,
+  "rel_days": 2149,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -186,12 +194,12 @@
   }
  },
  "Willxup/cpa-usage-keeper": {
-  "commit_90d": 998,
-  "commit_7d": 92,
+  "commit_90d": 990,
+  "commit_7d": 36,
   "rel_ver": "v2.0.3",
   "rel_pub": "2026-10-30",
-  "rel_days": 3,
-  "rel_n90": 12,
+  "rel_days": 8,
+  "rel_n90": 22,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -206,10 +214,10 @@
    "Shell": 0,
    "CSS": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -227,15 +235,77 @@
     "t": "v2.0.1",
     "d": "2026-10-23",
     "n": "## What's Changed:\r\n\r\nThis release adds OIDC administrator login, fixes time-boundary handling in usage statistics and request archival, and improves credential synchronization and quota refreshes.\r\n\r\n- Added optional administrator login through an OpenID Connect provider, with an optional subject allowlist and configurable reauthentication. Password login remains available, and OIDC sessions can be viewed and revoked in Session Management. ([#655](https://github.com/Willxup/cpa-usage-keeper/pull/655))\r\n- F"
+   },
+   {
+    "t": "v2.0.0",
+    "d": "2026-10-18",
+    "n": "`v2.0.0` introduces persisted request costs, more flexible pricing, and model speed comparisons, together with a database migration for existing `v1` installations.\n> **Please upgrade while CPA and Keeper are not in use. Pause new requests and stop the old Keeper instance before upgrading. Keep a verified pre-upgrade database backup, and resume use only after migration completes and Keeper is ready.**\nOn the first `v2` startup, Keeper automatically backs up the `v1` database, captures the existing pricing c"
+   },
+   {
+    "t": "v1.15.11",
+    "d": "2026-10-13",
+    "n": "- Added a copy button for User-Agent values in Request Events, allowing the full value to be copied even when its displayed text is truncated, with success or failure feedback. ([#632](https://github.com/Willxup/cpa-usage-keeper/pull/632))\nThis release improves request details, quota refresh feedback, and usage charts, and fixes token totals for Responses requests that do not include a token breakdown."
+   },
+   {
+    "t": "v1.15.10",
+    "d": "2026-10-07",
+    "n": "## What's Changed:\r\n\r\nThis release adds Claude quota resets and international Kimi support, makes credential filters easier to retain and share, and adds optional retention limits for archived requests.\r\n\r\n- Added Claude quota resets in Auth Files. View available reset grants, remaining uses, expiry times, and reset scope before choosing a grant to use. Successful resets also attempt to restore CPA routing and refresh quota information. ([#613](https://github.com/Willxup/cpa-usage-keeper/pull/613))\r\n- Added"
+   },
+   {
+    "t": "v1.15.9",
+    "d": "2026-09-30",
+    "n": "## What's Changed:\r\n\r\n- Added Claude quota history for the 5-hour and 7-day windows, with token usage and cost statistics. New requests can also update quota progress automatically. ([#584](https://github.com/Willxup/cpa-usage-keeper/pull/584))\r\n- Credential badges now distinguish Claude Max 5x and Max 20x plans, making subscription tiers easier to identify. ([#587](https://github.com/Willxup/cpa-usage-keeper/pull/587))\r\n- Unified realtime latency charts in Overview and API Key Viewer, making it easier to c"
+   },
+   {
+    "t": "v1.15.8",
+    "d": "2026-09-26",
+    "n": "## What's Changed:\r\n\r\n- Added a unified editor for credential aliases, enabled status, and priority in Auth Files and AI Providers, with partial-save recovery and IME-safe keyboard shortcuts. Improved priority saves to avoid reporting failure after CPA has accepted the change. ([#575](https://github.com/Willxup/cpa-usage-keeper/pull/575)) ([#581](https://github.com/Willxup/cpa-usage-keeper/pull/581))\r\n- Combined Overview and API Key Viewer usage charts into a stacked Token Trends chart. Overview supports sw"
+   },
+   {
+    "t": "v1.15.7",
+    "d": "2026-09-24",
+    "n": "> Upgrade note: Database migrations automatically add optional request fields and normalize empty parent-session values while retaining historical usage and archive records. Older CPA versions remain compatible; streaming flags and status codes are recorded only when supplied by CPA, and Meta synchronization requires CPA support."
+   },
+   {
+    "t": "v1.15.6",
+    "d": "2026-09-20",
+    "n": "> Upgrade note: Existing databases receive an additive `response_model` field while preserving historical usage and archive records. Older CPA versions remain compatible; the field is populated when CPA sends the optional value introduced by [CPA #5928](https://github.com/router-for-me/CLIProxyAPI/pull/5928)."
    }
+  ],
+  "etag": {
+   "release": "W/\"32d23fdfe7751a1e79c952c82acd363a00d799ea3b15518aae6f73748d946d4b\""
+  },
+  "rel_dates": [
+   "2026-10-30",
+   "2026-10-27",
+   "2026-10-23",
+   "2026-10-18",
+   "2026-10-13",
+   "2026-10-07",
+   "2026-09-30",
+   "2026-09-26",
+   "2026-09-24",
+   "2026-09-20",
+   "2026-09-19",
+   "2026-09-11",
+   "2026-09-10",
+   "2026-09-07",
+   "2026-09-04",
+   "2026-08-30",
+   "2026-08-27",
+   "2026-08-24",
+   "2026-08-23",
+   "2026-08-21",
+   "2026-08-18",
+   "2026-08-10"
   ]
  },
  "Evokoa/pgGraph": {
   "commit_90d": 300,
-  "commit_7d": 2,
+  "commit_7d": 0,
   "rel_ver": "v1.2.1",
   "rel_pub": "2026-09-23",
-  "rel_days": 4,
+  "rel_days": 45,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -283,7 +353,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.0.1",
   "rel_pub": "2020-04-04",
-  "rel_days": 2367,
+  "rel_days": 2408,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -304,7 +374,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.1",
   "rel_pub": "2022-10-01",
-  "rel_days": 1457,
+  "rel_days": 1498,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -327,7 +397,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.1.0",
   "rel_pub": "2023-08-07",
-  "rel_days": 1147,
+  "rel_days": 1188,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -350,7 +420,7 @@
   "commit_7d": 0,
   "rel_ver": "v6.2.2",
   "rel_pub": "2026-02-01",
-  "rel_days": 238,
+  "rel_days": 279,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -369,7 +439,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.0",
   "rel_pub": "2026-09-10",
-  "rel_days": 17,
+  "rel_days": 58,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -392,7 +462,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.2.0",
   "rel_pub": "2021-09-24",
-  "rel_days": 1829,
+  "rel_days": 1870,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -427,7 +497,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.7.6.2",
   "rel_pub": "2026-06-11",
-  "rel_days": 138,
+  "rel_days": 149,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -493,7 +563,7 @@
   "commit_7d": 14,
   "rel_ver": "v0.3.76",
   "rel_pub": "2026-10-21",
-  "rel_days": 6,
+  "rel_days": 17,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -537,7 +607,7 @@
   "commit_7d": 0,
   "rel_ver": "5.0.0",
   "rel_pub": "2022-10-06",
-  "rel_days": 1452,
+  "rel_days": 1493,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -676,7 +746,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.3",
   "rel_pub": "2026-01-16",
-  "rel_days": 254,
+  "rel_days": 295,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -767,7 +837,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.2.2",
   "rel_pub": "2022-01-08",
-  "rel_days": 1723,
+  "rel_days": 1764,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -790,7 +860,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0-alpha",
   "rel_pub": "2021-11-25",
-  "rel_days": 1767,
+  "rel_days": 1808,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -839,7 +909,7 @@
  "cerebruminc/yates": {
   "rel_ver": "v4.1.1",
   "rel_pub": "2026-08-18",
-  "rel_days": 40,
+  "rel_days": 81,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -871,7 +941,7 @@
  "mrtkp9993/SimpleCRUDApp": {
   "rel_ver": "3.0",
   "rel_pub": "2019-07-27",
-  "rel_days": 2619,
+  "rel_days": 2660,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -905,7 +975,7 @@
  "NivixX/NDatabase": {
   "rel_ver": "1.5.4",
   "rel_pub": "2024-11-26",
-  "rel_days": 670,
+  "rel_days": 711,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -922,7 +992,7 @@
  "dwb/dogfish": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2015-07-17",
-  "rel_days": 4090,
+  "rel_days": 4131,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -939,7 +1009,7 @@
  "laolin5564/canvas-realm-gpt-image-2-studio": {
   "rel_ver": "v0.2.16",
   "rel_pub": "2026-05-05",
-  "rel_days": 145,
+  "rel_days": 186,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1044,7 +1114,7 @@
  "zifter/clickhouse-migrations": {
   "rel_ver": "v0.15.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 3,
+  "rel_days": 44,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1063,7 +1133,7 @@
  "Oceania2018/EntityFrameworkCore.BootKit": {
   "rel_ver": "EntityFramework_6.0",
   "rel_pub": "2023-01-12",
-  "rel_days": 1354,
+  "rel_days": 1395,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1080,7 +1150,7 @@
  "zaber-dev/laravel-cooldown": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2026-07-10",
-  "rel_days": 79,
+  "rel_days": 120,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1114,7 +1184,7 @@
  "Vectorface/MySQLite": {
   "rel_ver": "v0.2.2",
   "rel_pub": "2026-01-12",
-  "rel_days": 258,
+  "rel_days": 299,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1162,7 +1232,7 @@
  "rusq/osx-callhistory-decryptor": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2023-01-24",
-  "rel_days": 1342,
+  "rel_days": 1383,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1260,7 +1330,7 @@
  "syamdanda/mySequelWeb": {
   "rel_ver": "1.0.0",
   "rel_pub": "2020-07-05",
-  "rel_days": 2276,
+  "rel_days": 2316,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1312,7 +1382,7 @@
  "kajitiluna/erd-designer": {
   "rel_ver": "github-page/2026/09/v0.260922.143727",
   "rel_pub": "2026-09-22",
-  "rel_days": 6,
+  "rel_days": 46,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1402,7 +1472,7 @@
  "LeetCraft/pgforge": {
   "rel_ver": "v2.2.1",
   "rel_pub": "2026-03-01",
-  "rel_days": 211,
+  "rel_days": 251,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1421,7 +1491,7 @@
  "heyvaldemar/mattermost-traefik-letsencrypt-docker-compose": {
   "rel_ver": "v1.9.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 2,
+  "rel_days": 42,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1502,7 +1572,7 @@
  "Minoro/pgpyml": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2022-07-01",
-  "rel_days": 1550,
+  "rel_days": 1590,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1520,7 +1590,7 @@
  "layerai-archive/dbt-layer": {
   "rel_ver": "0.1.3152792218",
   "rel_pub": "2022-09-29",
-  "rel_days": 1460,
+  "rel_days": 1500,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1597,7 +1667,7 @@
  "ifauzeee/Zee-Index": {
   "rel_ver": "v2.1.0",
   "rel_pub": "2026-09-16",
-  "rel_days": 12,
+  "rel_days": 52,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1631,7 +1701,7 @@
  "SSujitX/docklift": {
   "rel_ver": "v2.1.5",
   "rel_pub": "2026-08-10",
-  "rel_days": 49,
+  "rel_days": 89,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1652,7 +1722,7 @@
  "bytadaniel/clickhouse-ts": {
   "rel_ver": "v2.1.0",
   "rel_pub": "2024-12-06",
-  "rel_days": 661,
+  "rel_days": 701,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1713,7 +1783,7 @@
  "vornicx/Midas": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-08",
-  "rel_days": 82,
+  "rel_days": 122,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1746,7 +1816,7 @@
  "cagriekin/charts": {
   "rel_ver": "pgvector-2.2.0",
   "rel_pub": "2026-09-25",
-  "rel_days": 3,
+  "rel_days": 43,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1767,7 +1837,7 @@
  "tridpt/ShopSmart": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-16",
-  "rel_days": 104,
+  "rel_days": 144,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1820,7 +1890,7 @@
  "aryaminus/tomodachi": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2019-08-02",
-  "rel_days": 2614,
+  "rel_days": 2654,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1869,7 +1939,7 @@
  "BeardedManZhao/EasterBunny": {
   "rel_ver": "v1.5",
   "rel_pub": "2023-02-07",
-  "rel_days": 1329,
+  "rel_days": 1369,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1960,7 +2030,7 @@
  "webmatch/WbmQueryManager": {
   "rel_ver": "2.0.4",
   "rel_pub": "2019-01-08",
-  "rel_days": 2820,
+  "rel_days": 2860,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2022,7 +2092,7 @@
  "HoffmanEngineering/3d-print-log-api": {
   "rel_ver": "v1.11.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 24,
+  "rel_days": 64,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2056,7 +2126,7 @@
  "yuziyydss/gaussdb_test": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-09-14",
-  "rel_days": 44,
+  "rel_days": 54,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2074,7 +2144,7 @@
   },
   "enriched_at": "20261028",
   "commit_90d": 234,
-  "commit_7d": 101,
+  "commit_7d": 0,
   "dim_ts": {
    "commit": "20260930",
    "release": "20261028"
@@ -2109,7 +2179,7 @@
  "driscollis/squall": {
   "rel_ver": "v0.1.8",
   "rel_pub": "2025-03-11",
-  "rel_days": 567,
+  "rel_days": 606,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2151,7 +2221,7 @@
  "Sahil1337/perch": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 4,
+  "rel_days": 42,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2247,7 +2317,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2022-01-17",
-  "rel_days": 1717,
+  "rel_days": 1755,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2271,7 +2341,7 @@
  "zSimone35/TypogNotes": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-09-27",
-  "rel_days": 3,
+  "rel_days": 41,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2386,7 +2456,7 @@
  "cuipengdba/agentsql": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 1,
+  "rel_days": 38,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2970,7 +3040,7 @@
  "2witstudios/PageSpace": {
   "rel_ver": "desktop-v1.0.25",
   "rel_pub": "2026-09-09",
-  "rel_days": 26,
+  "rel_days": 59,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2997,7 +3067,7 @@
  "AmirKenzo/PasarguardBot": {
   "rel_ver": "v3.0.1",
   "rel_pub": "2026-10-11",
-  "rel_days": 0,
+  "rel_days": 27,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3047,7 +3117,7 @@
  "pplytas/good-webhooks": {
   "rel_ver": "v0.1.0-beta.3",
   "rel_pub": "2026-10-12",
-  "rel_days": 1,
+  "rel_days": 26,
   "rel_n90": 7,
   "rel_pre": true,
   "rel_none": false,
@@ -3074,7 +3144,7 @@
  "donet-org-cn/PureDb": {
   "rel_ver": "v1.0.0-rc.1",
   "rel_pub": "2026-10-27",
-  "rel_days": 0,
+  "rel_days": 11,
   "rel_n90": 4,
   "rel_pre": true,
   "rel_none": false,
@@ -3099,7 +3169,7 @@
  "abyssdblabs/abyssdb": {
   "rel_ver": "v0.0.0-null",
   "rel_pub": "2026-10-21",
-  "rel_days": 7,
+  "rel_days": 17,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3126,7 +3196,7 @@
  "pardnchiu/ToriiDB": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-09-07",
-  "rel_days": 57,
+  "rel_days": 61,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -3188,6 +3258,33 @@
    "security": "20261105",
    "contrib": "20261105",
    "lang": "20261105"
+  }
+ },
+ "backupdrill/cli": {
+  "etag": {
+   "release": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\"",
+   "security": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "TypeScript": 52,
+   "JavaScript": 48,
+   "Shell": 0,
+   "Dockerfile": 0
+  },
+  "enriched_at": "20261107",
+  "dim_ts": {
+   "release": "20261107",
+   "security": "20261107",
+   "contrib": "20261107",
+   "lang": "20261107"
   }
  }
 }

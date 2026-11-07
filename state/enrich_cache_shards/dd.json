@@ -21,11 +21,11 @@
   }
  },
  "goldbergyoni/nodejs-testing-best-practices": {
-  "commit_7d": 2,
+  "commit_7d": 0,
   "commit_90d": 2,
   "rel_ver": "1.0",
   "rel_pub": "2025-04-06",
-  "rel_days": 539,
+  "rel_days": 580,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -45,12 +45,12 @@
   }
  },
  "doug-martin/goqu": {
-  "commit_7d": 93,
-  "commit_90d": 95,
-  "rel_ver": "v9.21.0",
-  "rel_pub": "2026-11-03",
-  "rel_days": 0,
-  "rel_n90": 2,
+  "commit_7d": 178,
+  "commit_90d": 180,
+  "rel_ver": "v9.25.0",
+  "rel_pub": "2026-11-05",
+  "rel_days": 2,
+  "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -58,7 +58,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 37,
-  "enriched_at": "20261103",
+  "enriched_at": "20261107",
   "lang": {
    "Go": 99,
    "Shell": 1,
@@ -67,10 +67,25 @@
   "dim_ts": {
    "lang": "20260929",
    "security": "20261027",
-   "commit": "20261103",
-   "release": "20261103"
+   "commit": "20261107",
+   "release": "20261107"
   },
   "rel_notes": [
+   {
+    "t": "v9.25.0",
+    "d": "2026-11-05",
+    "n": "* [FEATURE] Add the `SliceAsArray` dialect option, on for `postgres`. A slice used as an insert or update value is written as one array literal (`'{\"a\",\"b\"}'`, the value `pq.Array` produces) instead of the row list `('a', 'b')`, so it takes the type of the column (`text[]`, `integer[]`, `uuid[]`, ...) and is bound as a single argument in prepared mode. An empty slice is `'{}'` and a nil slice `NULL`. Slices in predicates (`IN`, ...), `[]byte`, `json.RawMessage`, `driver.Valuer`s and expressions are unchange"
+   },
+   {
+    "t": "v9.24.0",
+    "d": "2026-11-04",
+    "n": "* [SECURITY] The `sqlserver` dialect escaped a single quote in interpolated strings as `\\'`, which SQL Server does not understand, so a quote in a value could end the string literal early (SQL injection when interpolating untrusted values). Only the single quote is now escaped, by doubling it, and quotes, backslashes and control characters are no longer backslash-escaped. Prepared statements were not affected. Upgrade if you use the `sqlserver` dialect with interpolated (non prepared) queries [#411](https:/"
+   },
+   {
+    "t": "v9.23.0",
+    "d": "2026-11-04",
+    "n": "* [FEATURE] Add `SelectDataset.Qualify` and the `SupportsQualify` dialect option for the `QUALIFY` clause (Teradata, Snowflake, BigQuery, ...). Off by default for all built in dialects [#343](https://github.com/doug-martin/goqu/issues/343), [#401](https://github.com/doug-martin/goqu/pull/401) - [@slessard](https://github.com/slessard)\n* [FEATURE] Add `SelectDataset.CustomJoin` to write a join clause goqu does not model (e.g. ClickHouse `ARRAY JOIN`) [#423](https://github.com/doug-martin/goqu/issues/423), [#"
+   },
    {
     "t": "v9.21.0",
     "d": "2026-11-03",
@@ -82,10 +97,26 @@
     "n": "* MySQL `INSERT ... ON DUPLICATE KEY UPDATE` no longer generates `INSERT IGNORE ... ON DUPLICATE KEY UPDATE`. `INSERT IGNORE` is still used for `DO NOTHING`.\n* [FEATURE] SQL Server: support `Limit` on `Delete` via `DELETE TOP (n)` [#456](https://github.com/doug-martin/goqu/pull/456) - [@saurabh-prakash](https://github.com/saurabh-prakash)\n* [FIX] MySQL: do not add an extra `IGNORE` to `INSERT ... ON DUPLICATE KEY UPDATE` [#435](https://github.com/doug-martin/goqu/pull/435) - [@autowp](https://github.com/aut"
    },
    {
+    "t": "v9.22.0",
+    "d": "2026-11-03",
+    "n": "* `ScanStruct` into a `nil` `sql.Scanner` interface field (or a non-pointer value) now returns a descriptive error instead of the `database/sql` error `unsupported Scan, storing driver.Value type ... into type *sql.Scanner`.\n* [DOCS] Update the Docker Compose instructions for running the tests and raise the database wait timeouts [#341](https://github.com/doug-martin/goqu/issues/341), [#480](https://github.com/doug-martin/goqu/pull/480)"
+   },
+   {
     "t": "v9.19.0",
     "d": "2023-11-21",
     "n": "* [FEATURE] Add support for omitempty and omitnil struct tags [#309](https://github.com/doug-martin/goqu/pull/309) - [@randallmlough](https://github.com/randallmlough)"
    }
+  ],
+  "etag": {
+   "release": "W/\"bfb1b8415cb8ea72ec9780c44dc83e205b36268d0c714a697280db2ac4807ccc\""
+  },
+  "rel_dates": [
+   "2026-11-05",
+   "2026-11-04",
+   "2026-11-04",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-03"
   ]
  },
  "selfboot/CS_Offer": {
@@ -113,7 +144,7 @@
   "commit_90d": 96,
   "rel_ver": "v3.55.0",
   "rel_pub": "2026-09-27",
-  "rel_days": 25,
+  "rel_days": 41,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -124,7 +155,7 @@
    "GHSA-mggx-p7jf-jgw4(-,high)"
   ],
   "contrib_n": 141,
-  "enriched_at": "20261027",
+  "enriched_at": "20261107",
   "lang": {
    "Java": 96,
    "Kotlin": 4,
@@ -136,7 +167,10 @@
    "lang": "20260929",
    "commit": "20261022",
    "release": "20261022",
-   "security": "20261027"
+   "security": "20261107"
+  },
+  "etag": {
+   "security": "W/\"c7869267bedab3f6fd0c545937d38a460a4701f240562b7702e9fc0c62acaddc\""
   }
  },
  "nanoninja/docker-nginx-php-mysql": {
@@ -187,12 +221,12 @@
   }
  },
  "tess1o/geopulse": {
-  "commit_90d": 206,
-  "commit_7d": 6,
-  "rel_ver": "v2.1.1",
-  "rel_pub": "2026-10-25",
-  "rel_days": 8,
-  "rel_n90": 11,
+  "commit_90d": 227,
+  "commit_7d": 29,
+  "rel_ver": "v2.2.1",
+  "rel_pub": "2026-11-05",
+  "rel_days": 2,
+  "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -207,13 +241,23 @@
    "CSS": 1,
    "Shell": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v2.2.1",
+    "d": "2026-11-05",
+    "n": "- **Upgrade to 2.2.0 could stop at the database migration** ([#657](https://github.com/tess1o/geopulse/issues/657)). A manual transport-type correction recorded on a trip with zero length was carried over as an empty time range, which the new timeline-edit table does not allow. The migration rolled back on every restart, so the backend kept restarting and the UI showed a 502 Bad Gateway error."
+   },
+   {
+    "t": "v2.2.0",
+    "d": "2026-11-05",
+    "n": "<img width=\"401\" height=\"697\" alt=\"image\" src=\"https://github.com/user-attachments/assets/d732fb34-0c34-44eb-aa3a-ba1f951b9db9\" />\n<img width=\"405\" height=\"169\" alt=\"image\" src=\"https://github.com/user-attachments/assets/50664edb-6b44-442e-a901-120180fea729\" />"
+   },
    {
     "t": "v2.1.1",
     "d": "2026-10-25",
@@ -228,7 +272,49 @@
     "t": "v2.0.0",
     "d": "2026-10-17",
     "n": "When the script finishes, **change the pin in your values file to `tag: \"18-3.6\"`** (or remove it to use the chart default). The script switches the running release to PostgreSQL 18, but your values file still says 17, and the next `helm upgrade -f your-values.yaml` would switch back to PostgreSQL 17, which cannot open the upgraded data.\n> - **Docker Compose / Unraid:** change only `GEOPULSE_VERSION` and keep your current compose file. The new compose files use PostgreSQL 18, so switch to them only after yo"
+   },
+   {
+    "t": "v1.39.1",
+    "d": "2026-10-08",
+    "n": "This is a hot fix to fix issue #619 - sometimes Overland sends an \"empty\" message (no GPS data, no timestamp, nothing) which is not correctly handled by GeoPulse and thus batch saving fails."
+   },
+   {
+    "t": "v1.39.0",
+    "d": "2026-09-07",
+    "n": "<img width=\"2559\" height=\"1282\" alt=\"Panoramax integration on the Timeline map\" src=\"https://github.com/user-attachments/assets/8a318a63-bdee-49d3-bf3d-8506b730a2db\" />"
+   },
+   {
+    "t": "v1.38.1",
+    "d": "2026-09-04",
+    "n": "This release fixes one regression issue introduced in `1.38.0`. As a result you cannot manually perform Reverse Geocoding reconciliation - it throws different backend errors. The issue has been fixed.\r\n\r\nCorresponding issue: https://github.com/tess1o/geopulse/issues/599"
+   },
+   {
+    "t": "v1.38.0",
+    "d": "2026-09-03",
+    "n": "This is a major release that introduces several new features and integrations, including **Map Matching** for cleaner trip routes, **Backup & Restore** with scheduled automatic backups, **embeddable shared locations**, **custom reverse geocoding providers**, and more.\r\n\r\n## 🗺️ Map Matching\r\n\r\nSee the detailed explanation in [#589](https://github.com/tess1o/geopulse/issues/589).\r\n\r\nMap Matching makes trip routes easier to read by aligning noisy GPS points with roads and paths from OpenStreetMap. Instead"
+   },
+   {
+    "t": "v1.37.1",
+    "d": "2026-08-21",
+    "n": "# GeoPulse 1.37.1\r\n\r\nGeoPulse 1.37.1 is a small polish and compatibility release. GeoJSON imports now support MultiPoint data, mobile Timeline context menus behave more cleanly, and profile settings now let users choose distance and temperature units separately. This release also improves TinyAuth/OIDC login behavior and adds Helm controls for backend deployment strategy.\r\n\r\nHighlights:\r\n- Added GeoJSON MultiPoint import support\r\n- Improved Timeline context menus on mobile\r\n- Added separate distance and tem"
    }
+  ],
+  "etag": {
+   "release": "W/\"9dc7158edcaa07c4de757a1b588340341b593f32c50df7e1e9aa59c0b18e9628\""
+  },
+  "rel_dates": [
+   "2026-11-05",
+   "2026-11-05",
+   "2026-10-25",
+   "2026-10-21",
+   "2026-10-17",
+   "2026-10-08",
+   "2026-09-07",
+   "2026-09-04",
+   "2026-09-03",
+   "2026-08-21",
+   "2026-08-18",
+   "2026-08-12"
   ]
  },
  "paunin/PostDock": {
@@ -236,7 +322,7 @@
   "commit_7d": 0,
   "rel_ver": "1.15",
   "rel_pub": "2019-10-27",
-  "rel_days": 2527,
+  "rel_days": 2568,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -260,7 +346,7 @@
   "commit_7d": 0,
   "rel_ver": "v5.5.1",
   "rel_pub": "2022-01-09",
-  "rel_days": 1722,
+  "rel_days": 1763,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -275,11 +361,11 @@
   "enriched_at": "20260927"
  },
  "xieyumc/YuYuWechat": {
-  "commit_90d": 1,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "V3.0.2",
   "rel_pub": "2026-05-13",
-  "rel_days": 137,
+  "rel_days": 178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -302,7 +388,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.2.3",
   "rel_pub": "2022-06-06",
-  "rel_days": 1574,
+  "rel_days": 1615,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -321,7 +407,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.1.0-preview0001",
   "rel_pub": "2025-03-24",
-  "rel_days": 552,
+  "rel_days": 593,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -340,7 +426,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0",
   "rel_pub": "2025-04-30",
-  "rel_days": 515,
+  "rel_days": 556,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -363,7 +449,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.0-alpha",
   "rel_pub": "2024-10-02",
-  "rel_days": 725,
+  "rel_days": 766,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -426,7 +512,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.12.1",
   "rel_pub": "2023-09-13",
-  "rel_days": 1110,
+  "rel_days": 1151,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -464,7 +550,7 @@
   "commit_7d": 45,
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-10-18",
-  "rel_days": 9,
+  "rel_days": 20,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -488,10 +574,10 @@
  },
  "Dzoukr/CosmoStore": {
   "commit_90d": 2,
-  "commit_7d": 2,
+  "commit_7d": 0,
   "rel_ver": "v3.0.0-marten",
   "rel_pub": "2019-11-18",
-  "rel_days": 2505,
+  "rel_days": 2546,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -524,7 +610,7 @@
   "commit_7d": 4,
   "rel_ver": "v0.1.5",
   "rel_pub": "2018-12-08",
-  "rel_days": 2886,
+  "rel_days": 2891,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -563,7 +649,7 @@
   "commit_7d": 1,
   "rel_ver": "2.22.0",
   "rel_pub": "2026-05-21",
-  "rel_days": 160,
+  "rel_days": 170,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -587,7 +673,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.26.0",
   "rel_pub": "2021-05-06",
-  "rel_days": 1970,
+  "rel_days": 2011,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -610,7 +696,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.41",
   "rel_pub": "2026-10-21",
-  "rel_days": 6,
+  "rel_days": 17,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -631,11 +717,11 @@
   }
  },
  "xingranya/GitHub-Stars-AI-Tools": {
-  "commit_90d": 208,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v1.5.3",
   "rel_pub": "2026-07-15",
-  "rel_days": 74,
+  "rel_days": 115,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -683,7 +769,7 @@
  "gaoyuan98/dameng_exporter": {
   "rel_ver": "v1.2.6",
   "rel_pub": "2026-10-26",
-  "rel_days": 1,
+  "rel_days": 12,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -708,7 +794,7 @@
  "codingwithsudhir/Hotel-Management-System": {
   "rel_ver": "hotel-management-system",
   "rel_pub": "2022-07-25",
-  "rel_days": 1525,
+  "rel_days": 1566,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -725,7 +811,7 @@
  "lijile/easyflow": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-08-02",
-  "rel_days": 1517,
+  "rel_days": 1558,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -758,7 +844,7 @@
  "mobiletoly/sqlitenow-kmp": {
   "rel_ver": "v0.17.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 23,
+  "rel_days": 64,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -779,7 +865,7 @@
  "zhichkin/dajet": {
   "rel_ver": "dajet-3.13.9",
   "rel_pub": "2026-07-25",
-  "rel_days": 64,
+  "rel_days": 105,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -800,7 +886,7 @@
  "hobrt-programming/hobrtEcom": {
   "rel_ver": "0.0.1",
   "rel_pub": "2020-09-20",
-  "rel_days": 2198,
+  "rel_days": 2239,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -847,7 +933,7 @@
  "hfhbd/postgres-native-sqldelight": {
   "rel_ver": "v0.0.11",
   "rel_pub": "2023-09-18",
-  "rel_days": 1105,
+  "rel_days": 1146,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -955,7 +1041,7 @@
  "metarhia/metasql": {
   "rel_ver": "v3.0.0-alpha.4",
   "rel_pub": "2025-09-19",
-  "rel_days": 373,
+  "rel_days": 414,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1002,7 +1088,7 @@
  "markhuangai/dense-mem": {
   "rel_ver": "v2.6.4-rc.25",
   "rel_pub": "2026-09-27",
-  "rel_days": 0,
+  "rel_days": 41,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -1040,7 +1126,7 @@
  "davbeck/graphile-scheduler": {
   "rel_ver": "0.8.0",
   "rel_pub": "2020-12-18",
-  "rel_days": 2109,
+  "rel_days": 2150,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1086,7 +1172,7 @@
  "ndaidong/flat-db": {
   "rel_ver": "v4.0.0",
   "rel_pub": "2020-11-08",
-  "rel_days": 2150,
+  "rel_days": 2190,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1130,7 +1216,7 @@
  "zerodeploy-dev/zeroback": {
   "rel_ver": "v0.0.26",
   "rel_pub": "2026-04-06",
-  "rel_days": 175,
+  "rel_days": 215,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1163,7 +1249,7 @@
  "apache/horaedb-client-java": {
   "rel_ver": "v1.0.3",
   "rel_pub": "2023-04-04",
-  "rel_days": 1273,
+  "rel_days": 1313,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1195,7 +1281,7 @@
  "squidfunk/isotopes": {
   "rel_ver": "0.6.1",
   "rel_pub": "2021-07-11",
-  "rel_days": 1905,
+  "rel_days": 1945,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1213,7 +1299,7 @@
  "loiclefevre/dragon": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2021-06-02",
-  "rel_days": 1944,
+  "rel_days": 1984,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1254,7 +1340,7 @@
  "davebarnwell/model-orm-php": {
   "rel_ver": "v26.03.08.8",
   "rel_pub": "2026-03-08",
-  "rel_days": 204,
+  "rel_days": 244,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1396,7 +1482,7 @@
  "RootDBApp/rootdb": {
   "rel_ver": "1.1.3",
   "rel_pub": "2024-08-08",
-  "rel_days": 781,
+  "rel_days": 821,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1411,7 +1497,7 @@
  "odpi/egeria-database-connectors": {
   "rel_ver": "V3.4",
   "rel_pub": "2021-12-02",
-  "rel_days": 1761,
+  "rel_days": 1801,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1522,7 +1608,7 @@
  "SecondDim/crawler-news": {
   "rel_ver": "v0.2.0-alpha",
   "rel_pub": "2020-03-14",
-  "rel_days": 2389,
+  "rel_days": 2429,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1708,7 +1794,7 @@
  "martin-c-peutz/typescript-starter": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-11-25",
-  "rel_days": 307,
+  "rel_days": 347,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1729,7 +1815,7 @@
  "braedonsaunders/trawl": {
   "rel_ver": "v1.0.3-desktop-20260310-172350",
   "rel_pub": "2026-03-10",
-  "rel_days": 202,
+  "rel_days": 242,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1799,7 +1885,7 @@
  "sivabudh/system-in-a-box": {
   "rel_ver": "v1.0",
   "rel_pub": "2017-02-10",
-  "rel_days": 3517,
+  "rel_days": 3557,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1906,7 +1992,7 @@
  "iritec/myloggy": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2026-04-16",
-  "rel_days": 166,
+  "rel_days": 205,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1951,7 +2037,7 @@
  "latentco/sqlite-undo": {
   "rel_ver": "0.7.0",
   "rel_pub": "2026-08-15",
-  "rel_days": 45,
+  "rel_days": 84,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1975,7 +2061,7 @@
  "DawidWetzler/capacitor-sqlite-kysely": {
   "rel_ver": "1.0.2",
   "rel_pub": "2024-11-07",
-  "rel_days": 691,
+  "rel_days": 730,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2132,7 +2218,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-06-07",
-  "rel_days": 480,
+  "rel_days": 518,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2157,7 +2243,7 @@
  "zyx3721/picsw-rust": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 1,
+  "rel_days": 38,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2649,7 +2735,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.1",
   "rel_pub": "2024-07-12",
-  "rel_days": 812,
+  "rel_days": 848,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2721,7 +2807,7 @@
  "yvvsatyanarayana-dev/Zion-Habit-Tracker": {
   "rel_ver": "v1.0.2",
   "rel_pub": "2026-10-11",
-  "rel_days": 2,
+  "rel_days": 27,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2880,7 +2966,7 @@
  "eshanized/Kyro": {
   "rel_ver": "v0.1.4",
   "rel_pub": "2026-10-30",
-  "rel_days": 3,
+  "rel_days": 8,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,

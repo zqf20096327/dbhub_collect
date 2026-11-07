@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/icon.png" width="128" height="128" alt="Keywordista app icon: a radar sweep on a dark scope"></p>
+
 # Keywordista - App Store keyword tracker for indie iOS developers
 
 [![CI](https://github.com/bootuz/keywordista/actions/workflows/ci.yml/badge.svg)](https://github.com/bootuz/keywordista/actions/workflows/ci.yml)
@@ -18,7 +20,7 @@ Tracks where your apps rank for a set of keywords across any of Apple's 175 App 
 > macOS 15+.
 
 <!-- LATEST_DMG_BEGIN -->
-**Download the latest DMG:** [Keywordista-0.6.2.dmg](https://github.com/bootuz/keywordista/releases/download/app-v0.6.2/Keywordista-0.6.2.dmg) (signed + notarized). Drag `Keywordista.app` into `/Applications` and launch — a magnifying-glass icon appears in your menu bar.
+**Download the latest DMG:** [Keywordista-0.7.1.dmg](https://github.com/bootuz/keywordista/releases/download/app-v0.7.1/Keywordista-0.7.1.dmg) (signed + notarized). Drag `Keywordista.app` into `/Applications` and launch — a magnifying-glass icon appears in your menu bar.
 <!-- LATEST_DMG_END -->
 
 Click **Open Dashboard** → the browser opens `http://127.0.0.1:8080/` (auto-picks `:8081…:8090` if `:8080` is taken). For other versions, see [all releases](https://github.com/bootuz/keywordista/releases?q=app-v).
@@ -129,7 +131,7 @@ Cutting a signed + notarized DMG: see [`.github/RELEASING.md`](.github/RELEASING
 
 ## API surface
 
-Everything under `/api/v1`. No auth, `127.0.0.1`-only. Five categories: **apps**, **keywords**, **dashboard**, **charts**, **settings**.
+Everything under `/api/v1`. No auth, `127.0.0.1`-only. Six categories: **apps**, **keywords**, **dashboard**, **charts**, **apple ads**, **settings**.
 
 <details>
 <summary>Full endpoint table</summary>
@@ -152,6 +154,10 @@ Everything under `/api/v1`. No auth, `127.0.0.1`-only. Five categories: **apps**
 | `GET` | `/chart-positions` | Currently-charted snapshot rows |
 | `GET` | `/chart-events?since=&limit=` | Append-only watchdog activity feed (SPA polls this) |
 | `POST` | `/charts/refresh` | Kick the chart watchdog immediately |
+| `GET` | `/apple-ads/overview?appId=&days=7\|30` | Spend, installs, CPI and campaigns vs the previous period, from synced data |
+| `GET` | `/apple-ads/keywords?appId=&days=` | Bid keywords with paid results next to organic rank |
+| `GET` | `/apple-ads/bid-ideas?appId=&days=` | Converting search terms, Apple's suggestions, wasted spend |
+| `POST` / `GET` | `/apple-ads/sync`, `/apple-ads/sync-status` | Start a sync now (202); read the running state and last run |
 | `GET` | `/settings/{asc,asa}` | Read App Store Connect / Apple Ads credential status |
 | `GET` | `/settings/asa/accounts` | Ad accounts the stored Apple Ads credentials can reach |
 | `PUT`/`DELETE` | `/settings/{asc,asa}` | Update / clear those credentials |

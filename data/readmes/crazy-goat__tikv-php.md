@@ -100,7 +100,7 @@ server) after enabling the extension.
 The library is **pre-1.0**. It follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html), but before `1.0.0`
 a breaking change bumps the **minor** version — so a `0.x` release may break
-your code, and `0.10.0 → 0.11.0` is not a safe upgrade on its own.
+your code, and `0.11.0 → 0.12.0` is not a safe upgrade on its own.
 
 [`CHANGELOG.md`](CHANGELOG.md) marks every breaking change of the public API
 below with a **BREAKING** prefix and a migration note. A change that breaks a
@@ -109,23 +109,23 @@ migration note and needs no version bump of its own.
 
 ### Which version to require
 
-The current release is **v0.10.0**. Require the exact version, or allow patch
+The current release is **v0.11.0**. Require the exact version, or allow patch
 releases inside the current minor line only:
 
 ```json
 {
     "require": {
-        "crazy-goat/tikv-client": "~0.10.0"
+        "crazy-goat/tikv-client": "~0.11.0"
     }
 }
 ```
 
-`~0.10.0` (equivalently `^0.10.0` or `0.10.*`) resolves to `>=0.10.0 <0.11.0`, so
-it never pulls `0.11.0` — and therefore never pulls a breaking change. Use
-`"0.10.0"` instead when you want a reproducible build.
+`~0.11.0` (equivalently `^0.11.0` or `0.11.*`) resolves to `>=0.11.0 <0.12.0`, so
+it never pulls `0.12.0` — and therefore never pulls a breaking change. Use
+`"0.11.0"` instead when you want a reproducible build.
 
 Avoid the constraints that *do* admit the next minor: `^0`, `0.*`, `*` and
-`~0.10` all resolve to a range that includes `0.11.0` and every later release.
+`~0.11` all resolve to a range that includes `0.12.0` and every later release.
 
 The versions above follow the releases: every one of them is updated in the
 same pull request as the changelog section of the release, because the guard
@@ -142,7 +142,7 @@ that keeps existing, correct code working.
 | Surface | What it covers |
 |---|---|
 | `RawKv\RawKvClient` | every public method — the RawKV entry point |
-| `TxnKv\TxnKvClient` | every public method — `create()`, `begin()` (with its `pessimistic`, `priority`, `enable1Pc`, `enableAsyncCommit` and `eagerPessimisticLocks` options), `beginOptimistic()`, `beginPessimistic()`, `holdGcSafePoint()`, `releaseGcSafePoint()`, `getClusterId()`, `healthCheck()`, `getMetrics()`, `reapIdleChannels()`, `close()` — the TxnKV entry point |
+| `TxnKv\TxnKvClient` | every public method — `create()`, `begin()` (with its `pessimistic`, `priority`, `enable1Pc`, `enableAsyncCommit` and `eagerPessimisticLocks` options), `beginOptimistic()`, `beginPessimistic()`, `holdGcSafePoint()`, `releaseGcSafePoint()`, `getClusterId()`, `healthCheck()`, `getMetrics()`, `reapIdleChannels()`, `refreshRegionCache()`, `preloadRegions()`, `close()` — the TxnKV entry point |
 | `TxnKv\Transaction` | every public method — the transaction handle |
 | `RawKv\CasResult`, `RawKv\ChecksumResult` | the result DTOs of `compareAndSwap()` and `checksum()` |
 | `RawKv\ScanIterator` | the iterator returned by `scanIterator()` and `scanPrefixIterator()` |
@@ -366,7 +366,10 @@ $client->ingest(['k1' => 'v1', 'k2' => 'v2'], ttl: 3600);
 > switched into import mode and switched back on completion. The switch-back
 > runs in a `finally` block, so exceptions are safe — but a killed process
 > (OOM killer, deploy restart, `max_execution_time`) leaves the cluster in
-> import mode, degrading it for all clients. Run `ingest()` only from a
+> import mode, degrading it for all clients. Retryable region errors are
+> retried per region, but the import is not atomic across regions: a permanent
+> failure throws `IngestPartialFailureException` with the applied region IDs,
+> and re-running the whole call is the recovery. Run `ingest()` only from a
 > dedicated, supervised CLI process, and see
 > [Bulk Import (SST Ingest)](docs/operations.md#bulk-import-sst-ingest) in the
 > operations guide for the full semantics, the configurable ingest deadline
@@ -423,7 +426,7 @@ transaction's internal retry loop, default
 `Transaction::DEFAULT_RETRY_DEADLINE_MS`), `gcSafePointValidation`,
 `replicaRead` and `tsoPoolSize`. The per-transaction options
 (`pessimistic`, `priority`, `enable1Pc`, `enableAsyncCommit`,
-`eagerPessimisticLocks` and `lockWaitTimeMs`) belong to
+`eagerPessimisticLocks`, `lockWaitTimeMs` and `requestContext`) belong to
 `TxnKvClient::begin()`, not to `create()`.
 
 #### Reads and writes
@@ -467,7 +470,7 @@ $txn = $txnClient->beginOptimistic();
 
 Both are thin wrappers over `begin()`: they accept the same options
 (`priority`, `enable1Pc`, `enableAsyncCommit`, `eagerPessimisticLocks`,
-`lockWaitTimeMs`) and go through the same option handling. `lockWaitTimeMs`
+`lockWaitTimeMs`, `requestContext`) and go through the same option handling. `lockWaitTimeMs`
 matters in the pessimistic mode only — an optimistic transaction takes no
 pessimistic lock, so it never waits for one.
 
@@ -901,7 +904,7 @@ The list is cross-checked against `CHANGELOG.md` at release time, see
 - ✅ **Checksum** — CRC64-XOR checksum over key range with `ChecksumResult`
 
 ### Bulk Import
-- ✅ **Ingest** — SST bulk import: the key/value pairs are sorted and written straight into the regions, bypassing the Raft write path (optional TTL); the payload is streamed in chunks, and `options['maxIngestSize']` optionally bounds it before any RPC
+- ✅ **Ingest** — SST bulk import: the key/value pairs are sorted and written straight into the regions, bypassing the Raft write path (optional TTL); the payload is streamed in chunks, retryable region errors are retried per region, `IngestPartialFailureException` reports a partial import, and `options['maxIngestSize']` optionally bounds the payload before any RPC
 
 ### Transaction Capabilities
 - ✅ **TxnKvClient / Transaction** — ACID transactions with snapshot reads and two-phase commit
@@ -912,6 +915,7 @@ The list is cross-checked against `CHANGELOG.md` at release time, see
 - ✅ **Conflict retry** — typed `TransactionConflictException`, `DeadlockException`, `LockWaitTimeoutException`
 - ✅ **GC safe points** — `holdGcSafePoint()` / `releaseGcSafePoint()` for reads that outlive `gc_life_time`
 - ✅ **Replica reads** — `options['replicaRead']` picks the replica that serves a read — `ReplicaReadMode::Leader`, `::Follower`, `::Mixed` or `::PreferLeader` — on both clients
+- ✅ **Resource control** — `options['resourceGroup']` and `options['resourceGroupTag']` (and the matching `begin()` options) attribute every request to a TiKV resource group through `Context.resource_control_context` and `Context.resource_group_tag`
 - ✅ **One-phase and async commit** — the `begin()` options `enable1Pc` and `enableAsyncCommit`
 - ✅ **Transaction state** — `getTxnId()`, `getStartTs()`, `getCommitTs()`, `getStatus()`, `isPessimistic()`, `getPriority()`, `getWriteSet()`, `getWriteSetSize()`, `getWriteSetCount()`, `getReadSet()`, `getReadSetSize()`, `getReadSetCount()`, `clearReadSet()`
 
@@ -922,6 +926,7 @@ The list is cross-checked against `CHANGELOG.md` at release time, see
 - ✅ **Slow log** — `options['slowLog']` logs the RawKV operations that are slower than their per-operation threshold
 - ✅ **PSR-3 Logging** — Structured logging with any PSR-3 logger
 - ✅ **Idle channel reaping** — `reapIdleChannels()` on both clients drops cached gRPC channels idle longer than `idleTtlMs`, for a worker to call from its own tick
+- ✅ **Region cache refresh** — `refreshRegionCache()` on both clients re-queries PD for the cached regions at most once per `regionCacheRefreshMs`, for the same worker tick; `preloadRegions()` warms the cache at boot
 
 ### API Versions and Codec
 - ✅ **API V1 and V2** — `options['apiVersion']` and `options['keyspace']`; V2 prefixes the keys with the mode and the keyspace ID
@@ -945,7 +950,9 @@ reference, with the defaults, is in [Configuration](docs/configuration.md).
 | `maxConcurrency` | Maximum number of in-flight requests in the batch and range fan-outs |
 | `maxScanRows` | Row cap for an unbounded (`limit: 0`) scan; exceeding it throws `ScanLimitExceededException` |
 | `replicaRead` | A `ReplicaReadPolicy` object — `ReplicaReadMode::Leader`, `::Follower`, `::Mixed` or `::PreferLeader` ([Replica Reads](docs/configuration.md#replica-reads)) |
+| `requestContext` | A `RequestContextOptions` object — isolation level, not-fill-cache, max execution duration, request source, resource group tag/name and busy threshold applied to every request ([Request Context Controls](docs/configuration.md#request-context-controls-issue-426-gap-12)) |
 | `batchCommands` | RawKV experimental RPC multiplexing over the `BatchCommands` stream |
+| `resourceGroup` / `resourceGroupTag` | Resource-control attribution — the resource group and opaque tag sent on every request's `Context` ([Resource Control](docs/configuration.md#resource-control-resource-groups)) |
 | `apiVersion` / `keyspace` | API V2 with a named keyspace |
 | `grpc` | gRPC channel arguments (keepalive, message sizes) |
 | `maxChannels` / `idleTtlMs` | The channel pool — how many gRPC channels the transport keeps open and after how long an unused one is evicted ([Channel Pool](docs/configuration.md#channel-pool-maxchannels-idlettlms)) |
@@ -954,6 +961,7 @@ reference, with the defaults, is in [Configuration](docs/configuration.md).
 | `expectedClusterId` | The PD cluster ID every PD/TSO response must report when set — a mismatch or a missing cluster-ID header throws instead of adopting the server's value ([Cluster Identity Verification](docs/configuration.md#cluster-identity-verification-issue-308-sec-05)) |
 | `allowedStoreHosts` / `storeHostPolicy` / `allowedStorePorts` | Which store addresses the client is allowed to talk to |
 | `gcSafePointValidation` / `gcSafePointRefreshMs` | TxnKV GC safe-point validation and its refresh interval |
+| `regionCacheRefreshMs` | Minimum interval between non-forced `refreshRegionCache()` ticks; `0` (default) disables the non-forced refresh, which is opt-in ([Region Cache Refresh and Preload](docs/configuration.md#region-cache-refresh-and-preload)) |
 
 The transport options (`tls`, `allowInsecure`, `maxChannels`, `idleTtlMs`,
 `grpc`) cannot be combined with `grpcClient` — they configure a transport the
@@ -970,7 +978,9 @@ locking at write time — the default — or at commit time), `lockWaitTimeMs`
 `trackReadSet` (read-set tracking, default false), `maxReadSetEntries` /
 `maxReadSetTotalSize` (read-set bounds, each 0 = unlimited), `maxTxnBatchSize` (bytes per prewrite/commit request per region, default
 16384) and `maxTxnBatchCount` (mutations/keys per prewrite/commit request per
-region, default 512).
+region, default 512). `requestContext` is a `RequestContextOptions`
+object that replaces the client-level `options['requestContext']` for this
+transaction only; pass `null` to disable the client-level controls.
 
 Two settings are methods on the client rather than options:
 `setAtomicForCAS()` / `isAtomicForCAS()` (see
@@ -983,7 +993,8 @@ Two settings are methods on the client rather than options:
 ### Infrastructure
 - ✅ **PD Region Discovery** — With RegionEpoch support
 - ✅ **Region Routing** — Direct to correct TiKV node
-- ✅ **Region Cache** — In-memory caching of region metadata; a custom `RegionCacheInterface` can be injected through the constructor
+- ✅ **Region Cache** — In-memory caching of region metadata; a custom `RegionCacheInterface` can be injected through the constructor. RawKV forward scans/iterators and TxnKV `Transaction::scan()` read the cache first and query PD only for the uncovered ranges, reporting `regionCacheHit()` / `regionCacheMiss()` under the `scan` / `txn_scan` labels; RawKV `reverseScan()` resolves regions top-down through the region resolver and reports `region_resolution`
+- ✅ **Region cache refresh and preload** — opt-in, PHP-process-model friendly (no timers): call `refreshRegionCache()` from a worker tick (throttled by `options['regionCacheRefreshMs']`, default `0` = disabled) and `preloadRegions([['start', 'end'], ...])` at boot to warm the keys the worker will touch without serving a read. Both keep the old entry and only log when PD fails, and are no-ops after `close()` ([Region Cache Refresh and Preload](docs/configuration.md#region-cache-refresh-and-preload))
 - ✅ **Store Cache** — In-memory caching of store addresses
 - ✅ **Retry Logic** — Automatic retry with exponential backoff; the wall-clock bound of one retry loop is `options['retryDeadlineMs']` (see [Retry System](docs/architecture.md#8-retry-system))
 - ✅ **NotLeader Handling** — Automatic leader redirection
@@ -1191,6 +1202,13 @@ Shipped in the released versions — `CHANGELOG.md` has the details of each one.
 - ✅ **Batch lock resolution and resolved-status cache** — one `KvResolveLock` per (region, transaction), with a bounded `ResolvedTxnStatusCache`
 - ✅ **Automatic primary-lock keepalive** — `TxnHeartBeat` when less than half of the lock TTL remains, with `optimisticLockTtlMs` / `pessimisticLockTtlMs`
 - ✅ **Transaction size limits and request batching** — write-set limits with `TransactionTooLargeException`, `getWriteSetSize()` / `getWriteSetCount()`, and prewrite/commit splitting by `maxTxnBatchSize` / `maxTxnBatchCount`
+- ✅ **Read-set limits and streaming SST ingest** — opt-in `trackReadSet` with `maxReadSetEntries` / `maxReadSetTotalSize`, `maxIngestSize`, and a generator-based `RawWrite` stream that no longer triple-buffers the payload
+- ✅ **Region-cache refresh, preload and cache-first scans** — `refreshRegionCache()`, `preloadRegions()` and `regionCacheRefreshMs`, with scan paths that serve cached regions and query PD only for the gaps
+- ✅ **The remaining `kvrpcpb.Context` control fields** — `RequestContextOptions` (isolation level, not-fill-cache, max execution duration, request source, resource group tag/name, busy threshold)
+- ✅ **Resource control and resource groups** — `resourceGroup` / `resourceGroupTag` attribution on every request, with per-transaction overrides
+- ✅ **Typed CAS outcome** — `CasIndeterminateException` for a compare-and-swap whose outcome cannot be determined, never retried
+- ✅ **Cluster identity verification** — `options['expectedClusterId']` pins the PD cluster ID on the PD and TSO paths
+- ✅ **Store-cache invalidation and operation-scoped retry budget** — the cached store is dropped on `StoreNotMatch` and transport failures, and one retry budget covers a whole logical operation
 
 ### Planned
 
@@ -1204,14 +1222,11 @@ the issue is still open.
 
 - ⬜ **The remaining gRPC channel parameters** — compression, the HTTP/2 initial window size and `keepalive_permit_without_calls` are still hard-coded (the message sizes and the keepalive times are configurable already) ([#423](https://github.com/crazy-goat/tikv-php/issues/423))
 - ⬜ **Prometheus exporter and tracing hooks** — a ready-made metrics backend and request tracing ([#434](https://github.com/crazy-goat/tikv-php/issues/434))
-- ⬜ **Resource control and resource groups** — per-request resource-group tags ([#427](https://github.com/crazy-goat/tikv-php/issues/427))
-- ⬜ **Background region-cache refresh and region preloading** ([#425](https://github.com/crazy-goat/tikv-php/issues/425))
 - ⬜ **Store health checking and failover to healthy replicas** ([#424](https://github.com/crazy-goat/tikv-php/issues/424))
 - ⬜ **Transaction reverse scan and range deletion** ([#435](https://github.com/crazy-goat/tikv-php/issues/435))
 - ⬜ **`RawBatchScan` RPC for multi-range scans** — `batchScan()` is a client-side loop today ([#433](https://github.com/crazy-goat/tikv-php/issues/433))
 - ⬜ **Explicit key-locking API for pessimistic transactions** ([#436](https://github.com/crazy-goat/tikv-php/issues/436))
 - ⬜ **Read-through locks for snapshot reads** ([#432](https://github.com/crazy-goat/tikv-php/issues/432))
-- ⬜ **The remaining `kvrpcpb.Context` control fields** — isolation level, not-fill-cache, request source ([#426](https://github.com/crazy-goat/tikv-php/issues/426))
 
 ## Contributing
 

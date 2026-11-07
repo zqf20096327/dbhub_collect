@@ -1,4 +1,4 @@
-<h1 align="center">sqlite</h1>
+<h1 align="center"><img src="assets/brand/sqlite-banner.png" alt="SQLite driver for Go"></h1>
 
 <p align="center"><b>The fastest cgo-free SQLite driver for Go's <code>database/sql</code>.<br>It builds with <code>CGO_ENABLED=0</code>, and on most workloads it beats the cgo driver too.</b></p>
 
@@ -13,9 +13,20 @@
   <a href="https://github.com/liustack/sqlite/actions/workflows/test.yml"><img src="https://github.com/liustack/sqlite/actions/workflows/test.yml/badge.svg?branch=main" alt="test"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License: MIT"></a>
   <a href="https://x.com/liustack"><img src="https://img.shields.io/badge/follow-%40liustack-black?style=flat-square&logo=x&logoColor=white" alt="Follow @liustack on X"></a>
+  <img src="https://img.shields.io/badge/CGO-off-success?style=flat-square" alt="CGO off">
+  <img src="https://img.shields.io/badge/Not%20backed%20by-Y%20Combinator-FF6600?style=flat-square&logo=ycombinator&logoColor=white" alt="Not backed by Y Combinator">
+  <img src="https://img.shields.io/badge/users-unknown-lightgrey?style=flat-square" alt="Users unknown">
 </p>
 
 It is for Go programs that keep their data in SQLite and want to stay plain Go: one static binary, cross-compiled from any machine, no C compiler in the build or in the container. Until now that meant giving up speed. Here the cgo driver is the one that falls behind.
+
+> liustack/sqlite is at v0.1. The APIs may still change before v1.
+
+## Why it exists
+
+While building [Tifa](https://github.com/liustack/tifa), I wanted every app to deploy as one Go binary copied to a small VPS. The data had to live in SQLite, and CGO had to stay off, or there goes cross-compiling and the `scratch` image.
+
+The pure Go drivers paid for that in speed. modernc translates SQLite's C into Go and ncruces runs it as WebAssembly, and both trailed the cgo driver. So I had LLVM compile SQLite's own C straight into Go assembly, and kept at it until the cgo driver was the one falling behind.
 
 ## Benchmarks
 
@@ -113,6 +124,7 @@ The driver registers as `sqlite`, as modernc.org/sqlite and glebarez/go-sqlite d
 
 ## Why you can trust it
 
+- **Tifa builds on it.** Apps made with `tifa new`, from [Tifa](https://github.com/liustack/tifa), the full-stack Go framework, keep their data in this driver.
 - **Safety comes first, speed second, memory third.** A change that is faster but could lose a write, return a wrong result or weaken a commit is not taken. Group commit keeps a SAVEPOINT around every merged statement for this reason, though it costs speed.
 - **The C is SQLite's, unchanged.** `engine/` holds the 3.54.1 amalgamation as released, checked against its hash (`engine/vendor.sh --verify`). The compile options sit in one file, each with its reason.
 - **The Go assembly is made, never written.** LLVM compiles the C, and a generator turns what LLVM writes into Go assembly. It stops on anything it has no rule for, and checks the linked binary. `make check-gen` fails when the checked-in assembly is not what the generator makes from `engine/` today.
@@ -136,6 +148,16 @@ The driver registers as `sqlite`, as modernc.org/sqlite and glebarez/go-sqlite d
 | [Upstream](docs/upstream.md) | You want to know which SQLite it is, or how it moves to a new one |
 | [Testing](docs/testing.md), [Commits](docs/commit.md) | You are about to change the code |
 
+## Talk to us
+
+Issues are welcome any time: [open one](https://github.com/liustack/sqlite/issues/new/choose). Tell us what you built, where it hurt, and what should come next. Follow the liustack WeChat official account, and come find me on X: **[@liustack](https://x.com/liustack)**. What changes in the driver and what comes next are shared on WeChat and X.
+
+The **liustack** WeChat official account: AI startup opportunities, indie-dev insights, and hands-on AI tooling, delivered as they happen. Scan the QR code in WeChat, or search for "liustack":
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/liustack/sqlite/main/assets/wechat-qrcode.png" width="420" alt="liustack WeChat official account" />
+</p>
+
 ## Contributing
 
 liustack/sqlite does not accept pull requests. A change here can reach from SQLite's C, through the generator, to group commit and the replicator, and getting it right takes a lot of context, so every line is written and reviewed by one author. Two ways to help:
@@ -145,6 +167,16 @@ liustack/sqlite does not accept pull requests. A change here can reach from SQLi
 
 Security issues go through a private report, not an issue: see [SECURITY.md](SECURITY.md).
 
+## Star History
+
+<a href="https://www.star-history.com/#liustack/sqlite&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=liustack/sqlite&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=liustack/sqlite&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=liustack/sqlite&type=Date" />
+ </picture>
+</a>
+
 ## Thanks
 
 To D. Richard Hipp and the SQLite developers for SQLite, and to musl for the string functions the engine links. To the authors of mattn/go-sqlite3, modernc.org/sqlite and ncruces/go-sqlite3, who showed the ways SQLite can live in Go and whose drivers this one is measured against.
@@ -152,3 +184,5 @@ To D. Richard Hipp and the SQLite developers for SQLite, and to musl for the str
 ## License
 
 MIT for the code of this repository. SQLite is in the public domain, and musl's code keeps its MIT license. [NOTICE.md](NOTICE.md) says which license covers which path.
+
+SQLite is a registered trademark of Hipp, Wyrick & Company, Inc., and this project is not affiliated with it. The gopher in the banner is a redrawn [Go gopher](https://go.dev/blog/gopher), originally designed by Renee French and used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

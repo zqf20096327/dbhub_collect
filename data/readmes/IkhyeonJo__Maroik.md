@@ -1,11 +1,14 @@
 # Maroik
 
-## Seed accounts (`Init.sql`)
+## Seed accounts
 
-| Role | Email | Password |
-|---|---|---|
-| Admin | `admin@maroik.com` | `demoO12!!` |
-| User (public demo) | `demo@maroik.com` | `demoO12!!` |
+| Role | Email | Password | Seeded by |
+|---|---|---|---|
+| Admin | `admin@maroik.com` | `demoO12!!` | `Debugging/Init.sql` |
+| User (public demo) | `demo@maroik.com` | `demoO12!!` | `Debugging/Init.sql`, then `SeedDemo.sql` |
+
+`SeedDemo.sql` runs after `Init.sql` on every database rebuild and puts the demo account back to these values. A database
+restored from a backup keeps the backup's admin password.
 
 # [https://www.maroik.com]
 
@@ -17,29 +20,29 @@
 <img width="551" height="574" alt="1" src="https://github.com/user-attachments/assets/54821d51-5fce-46b6-a182-c97bbfa86b76" />
 
 ### User Dashboard
-<img width="1902" height="940" alt="0" src="https://github.com/user-attachments/assets/22e98cb6-8f39-402a-9ec5-e73528afa06d" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/7e90f7a1-5d45-4cc1-8444-4cb0bdd0cd3e" />
 
 ### File Manager
-<img width="1918" height="942" alt="1" src="https://github.com/user-attachments/assets/4b4099de-20d8-4fcd-9d68-838a29b5c6c9" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/ce7120a4-e275-492d-b7fb-1df55f136cdf" />
 
 ### Kanban Board
-<img width="1915" height="934" alt="2" src="https://github.com/user-attachments/assets/7537ddfc-6657-48a4-acac-88e1dab44ee2" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/08524a20-addf-44ec-9c84-8ebc4cb0da94" />
 
 ### Calendar
-<img width="1915" height="933" alt="3" src="https://github.com/user-attachments/assets/884d923b-995b-4c98-93b1-5b10841c315c" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/c326056f-deac-4d48-b1aa-f6e2c21c29d2" />
 
 ### Forum
-<img width="1914" height="940" alt="4" src="https://github.com/user-attachments/assets/76894805-ac2e-4416-bba6-670b62133fa3" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/8b87326f-7403-4800-9740-dc08d9b34ea4" />
 
 ### NonfactorGrid
-<img width="1917" height="933" alt="5" src="https://github.com/user-attachments/assets/8271558d-037e-45d6-a6a8-8e1a92958570" />
-<img width="1914" height="942" alt="6" src="https://github.com/user-attachments/assets/c6231b7a-6d87-44fe-aed4-cc1ba9bb6921" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/d414d399-eadf-49f5-a883-c221c661388c" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/2548e81b-6745-46bf-b90a-a98abf9f1f96" />
 
 ### Budget
-<img width="1897" height="944" alt="7" src="https://github.com/user-attachments/assets/d1df24a3-e67e-4051-93b0-a9414c62765e" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/4d2f7ca8-ade9-4d4e-bb90-c56be6f79faa" />
 
 ### User Profile
-<img width="1899" height="942" alt="8" src="https://github.com/user-attachments/assets/b167e3c8-aa32-40ff-8332-748a8412f96d" />
+<img width="1851" height="958" alt="image" src="https://github.com/user-attachments/assets/c0bc9513-82f5-41e7-b4e8-4b032dbb5373" />
 
 ## How to Deploy
 
@@ -166,7 +169,7 @@ Maroik is a modern web application built with ASP.NET Core MVC, featuring a comp
 ### 3. Calendar and Schedule Management
 - Monthly calendar view
 - Event creation and management, with a file attachment and inline images per event
-- Calendars shared with other users or the public
+- Administrators can share their calendars with signed-in users (who subscribe to them) and/or with anonymous visitors
 - Event reminders by e-mail, scheduled when the event is saved (time zone and daylight-saving aware) and sent by the
   worker through the mail queue
 
@@ -277,24 +280,27 @@ Maroik has been built by one developer since May 2021. It was developed in a pri
 
 ### Layers — DDD + Clean Architecture
 
-Solid arrows show which project calls which, always through an interface in `Maroik.Core.Contract`
-(interfaces and DTOs only, so it calls nothing and is not drawn). The Website calls the Service layer and nothing
-else. Maroik.Worker and Maroik.FileStorage are separate processes: when a use case sends mail or stores a file,
-the Service hands it to Client, and Client puts the mail job on RabbitMQ for the Worker (which sends it over SMTP)
-or uploads / downloads the file over HTTP to FileStorage — the dotted lines. Repository and Client implementations
-are registered only in each host's composition root (`Program.cs`, `WorkerHost`), never called from controllers,
-views or handlers.
+Solid arrows show which project calls which; calls to Service, Repository and Client always go through an interface in
+`Maroik.Core.Contract` (interfaces and data shapes the layers share; it runs no use case, so it is not drawn). The Website communicates only
+with the Service layer. Maroik.Worker and Maroik.FileStorage are separate processes: when a use case sends mail or
+touches a stored file, the Service hands it to Client, and Client puts the mail job on RabbitMQ for the Worker (which sends it over
+SMTP) or calls FileStorage over HTTP (upload, download, and the File Manager's chunks, complete, abort and delete) —
+the dotted lines. The Worker also runs use cases of its own on a timer, through the same Service layer: the due
+calendar reminders every minute and, every hour, the sweep of abandoned File Manager uploads, which removes their rows
+and aborts their staging files in FileStorage. Its dead-letter redrive command uses no service: it moves failed mail
+from the dead-letter queue back into the mail queue on RabbitMQ itself. Repository and Client implementations are registered only in each
+host's composition root (`Program.cs`, `WorkerHost`), never called from controllers, views or handlers.
 
 ```mermaid
 flowchart TB
+    Worker["Maroik.Worker<br/>e-mail consumer · dead-letter redrive<br/>reminder scheduler · upload sweep"]
     Website["Maroik.Website<br/>MVC controllers · views · TypeScript"]
+    FileStorage["Maroik.FileStorage<br/>internal file API · background virus scan"]
     Service["Maroik.Core.Service<br/>use cases · transactions · logging"]
     Domain["Maroik.Core.Domain<br/>aggregates · value objects · policies"]
     Repository["Maroik.Core.Repository<br/>EF Core repositories"]
     PostgreSQL["Maroik.Core.PostgreSQL<br/>DbContext · mapped models"]
     Client["Maroik.Core.Client<br/>file storage · RabbitMQ · SMTP · ClamAV"]
-    Worker["Maroik.Worker<br/>e-mail consumer · reminder scheduler"]
-    FileStorage["Maroik.FileStorage<br/>internal file API"]
 
     Website --> Service
     Service --> Domain
@@ -304,20 +310,21 @@ flowchart TB
     Repository --> PostgreSQL
 
     Client -. "mail jobs (RabbitMQ)" .-> Worker
-    Client -. "HTTP upload / download" .-> FileStorage
+    Client -. "HTTP upload / download<br/>chunks · complete · abort · delete" .-> FileStorage
+    Worker -. "dead-letter redrive (RabbitMQ)" .-> Worker
 
-    Worker -- "mail status · due reminders" --> Service
+    Worker -- "mail status · due reminders<br/>abandoned uploads" --> Service
     Worker -- "send mail (SMTP)" --> Client
     FileStorage -- "virus scan (ClamAV)" --> Client
 ```
 
 - **Domain** holds the business rules — aggregates, value objects (`Email`, `Money`, `CurrencyCode`, …), policies
-  (finance class taxonomies, reminder limits and schedules, fixed schedules, passwords, uploads, File Manager quotas
-  and names, Kanban lanes) and the budget formula engine. It calls no other
-  project, logs nothing, never reads the clock (the current time is passed in) and reports every error through
+  (finance class taxonomies, amounts and history, asset usage, reminder limits and schedules, calendar access, fixed
+  schedules, passwords, nicknames, sessions, admin and menu safeguards, uploads, File Manager quotas and names, Kanban
+  lanes) and the budget formula engine. It calls no other project, logs nothing, never reads the clock (the current time is passed in) and reports every error through
   `DomainError`, so the outer layers can translate it.
 - **Service** orchestrates a use case: it loads aggregates through repository interfaces, calls domain methods, owns
-  the transaction (each write spells out `BeginAsync` / `CommitAsync` / `RollbackAsync`), maps to DTOs and logs. It
+  the transaction (each write that runs in one spells out `BeginAsync` / `CommitAsync` / `RollbackAsync`), maps to DTOs and logs. It
   calls Repository and Client only through their Contract interfaces.
 - **Repository** (EF Core) and **Client** (file storage over HTTP, RabbitMQ publishing, SMTP, ClamAV) implement the
   Contract interfaces. Website controllers and views never call them; the Worker calls the SMTP client itself and
@@ -332,8 +339,8 @@ All of this is enforced by architecture tests that fail the build, among them:
 `Domain_ErrorMessages_MustGoThrough_DomainError`, `BoundedContext_ShouldNot_DependOnAnotherBoundedContext`,
 `ServiceLayer_MustNotProjectReference_AnyInfrastructureOrPersistenceProject`,
 `InfrastructureLayers_MustBuildOnContractOnly_NotOnEachOtherOrService`, `ProjectReferenceGraph_MustBeAcyclic`,
-`Controllers_ShouldNot_DependOnRepositoryOrClientOrServiceNamespace`,
-`PostActions_MustCarry_AntiforgeryAndRoleAttributes` and `ServiceResults_TakeTheirMessageKey_FromServiceErrorKeys`.
+`Controllers_ShouldNot_DependOnRepositoryOrClientOrServiceNamespace`, `WebsiteTypes_ShouldNot_DependOnDomainNamespace`,
+`WebsiteSources_ShouldNot_MentionDomainNamespace`, `PostActions_MustCarry_AntiforgeryAndRoleAttributes` and `ServiceResults_TakeTheirMessageKey_FromServiceErrorKeys`.
 
 ### Runtime
 
@@ -344,19 +351,29 @@ flowchart LR
     cloudflared -- "HTTP :80" --> Website["Maroik.Website"]
     Website --> PostgreSQL[("PostgreSQL 17")]
     Website --> Valkey[("Valkey<br/>session · Data Protection keys")]
-    Website -- "HTTP upload / download" --> FileStorage["Maroik.FileStorage"]
+    Website -- "HTTP upload / download<br/>chunks · complete · abort · delete" --> FileStorage["Maroik.FileStorage"]
     FileStorage -- "scan (TCP 3310)" --> ClamAV["ClamAV"]
     Website -- "publish mail jobs" --> RabbitMQ[("RabbitMQ")]
     RabbitMQ -- "deliver mail jobs" --> Worker["Maroik.Worker"]
-    Worker -- "mail status · due reminders" --> PostgreSQL
+    Worker -- "publish reminder mail jobs" --> RabbitMQ
+    Worker -- "mail status · due reminders<br/>abandoned uploads" --> PostgreSQL
+    Worker -- "abort abandoned uploads" --> FileStorage
     Worker -- "send mail" --> SMTP["SMTP relay"]
 ```
 
 Every service runs as a container under Docker Compose. Uploads are scanned by ClamAV before they are stored (File
 Manager uploads in the background; an administrator can turn the scan off for one account's File Manager), the file
 storage is reachable only on the internal network, and outgoing mail is queued in RabbitMQ and sent by the worker,
-which also sends the due calendar reminders once a minute. In production the site is reached through a Cloudflare Tunnel, so the host publishes no port (a build deployed with
+which also sends the due calendar reminders once a minute and removes abandoned File Manager uploads once an hour. In
+production the site is reached through a Cloudflare Tunnel, so the host publishes no port (a build deployed with
 `Deploy.sh` choice 1 can instead use port forwarding behind Caddy, or plain HTTP without a domain).
+
+Mail that runs out of retries lands in a dead-letter queue. Once the cause is fixed (an SMTP outage longer than the
+retry delays, a wrong mail setting), an operator moves it back into the mail queue with a fresh retry budget:
+
+```bash
+docker exec Maroik.Worker dotnet Maroik.Worker.dll redrive-email-dead-letters
+```
 
 ### Client scripts
 
@@ -396,7 +413,7 @@ generic error instead of failing half-way through a handler.
 - Bootstrap 4.6.0
 - jQuery 3.6.0
 - HTML5/CSS3
-- JavaScript ES2024
+- JavaScript ES2020
 - TypeScript 7.0
   - The custom client scripts are authored in TypeScript at `Maroik.Website/TypeScripts/{admin,anonymous,user}/custom/**/site.ts` and compiled 1:1 by `tsc` to `Maroik.Website/wwwroot/**/custom/**/site.js` (no bundler, no Babel). The release build (`npm run build`, used by the Docker image) then minifies each `site.js` in place with terser; `npm run build:debug` leaves it readable with a source map.
   - Compiled under `--strict`; each file is an IIFE-wrapped global script (no `import`/`export`).
@@ -455,7 +472,7 @@ The goal is that a test fails whenever the behavior it describes breaks — not 
   or ones the MTP runner miscounts inside static field initializers).
 
 ### Test projects
-Every source project has a matching `*.Tests` project (xUnit v3 on Microsoft.Testing.Platform), plus the client-script suite and an end-to-end suite — about 3,700 .NET tests and 500 client-script tests. `Maroik.slnx` builds them all; CI runs each with coverage (`.github/workflows/ci-cd.yml`, gate: line >= 80 %, branch >= 65 %).
+Every source project has a matching `*.Tests` project (xUnit v3 on Microsoft.Testing.Platform), plus the client-script suite and an end-to-end suite — more than 3,800 .NET test methods and about 500 client-script tests. `Maroik.slnx` builds them all; CI runs each with coverage (`.github/workflows/ci-cd.yml`, gate: line >= 80 %, branch >= 65 %).
 
 | Tests | What they cover | Needs Docker |
 |---|---|---|
@@ -500,7 +517,7 @@ dotnet test --project Maroik.Core.Service.Tests            # any single project
 #### Rider settings
 
 Opening the solution brings what Rider reads from a solution: the run configurations (`.run`), the required plugins, the
-inspection profile and dictionary (`.idea`), and the code style (`.editorconfig`, `Maroik.slnx.DotSettings`).
+inspection profile (`.idea`), and the code style and spelling words (`.editorconfig`, `Maroik.slnx.DotSettings`).
 
 The keymap, color scheme, theme, editor options and tool-window layout are IDE-level: Rider reads them only from its own
 configuration folder, so a solution cannot apply them. `.config/rider/install.sh` copies them there, on Linux, macOS and

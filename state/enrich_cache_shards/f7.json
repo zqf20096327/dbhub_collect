@@ -4,7 +4,7 @@
   "commit_90d": 13,
   "rel_ver": "v4.20.1",
   "rel_pub": "2026-09-09",
-  "rel_days": 18,
+  "rel_days": 59,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -31,7 +31,7 @@
   "commit_90d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2019-03-09",
-  "rel_days": 2759,
+  "rel_days": 2800,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -50,8 +50,8 @@
   }
  },
  "supabase/etl": {
-  "commit_7d": 21,
-  "commit_90d": 210,
+  "commit_7d": 34,
+  "commit_90d": 230,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -59,7 +59,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 39,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Rust": 95,
    "MDX": 2,
@@ -69,18 +69,22 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
-  }
+  },
+  "etag": {
+   "release": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\""
+  },
+  "rel_dates": []
  },
  "ytsaurus/ytsaurus": {
-  "commit_7d": 287,
-  "commit_90d": 3537,
-  "rel_ver": "python/ytsaurus-client/0.13.55",
-  "rel_pub": "2026-10-02",
-  "rel_days": 31,
-  "rel_n90": 11,
+  "commit_7d": 248,
+  "commit_90d": 3553,
+  "rel_ver": "yql/language-server/v0.1.0",
+  "rel_pub": "2026-11-05",
+  "rel_days": 2,
+  "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -88,7 +92,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 170,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "C++": 50,
    "C": 25,
@@ -98,15 +102,35 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
    {
+    "t": "yql/language-server/v0.1.0",
+    "d": "2026-11-05",
+    "n": "### Added\n\n- `linux-x86_64` and `linux-aarch64` build\n- `textDocument/completion` without provider entities\n- `textDocument/diagnostic` without provider entities\n- `textDocument/formatting`"
+   },
+   {
     "t": "python/ytsaurus-client/0.13.55",
     "d": "2026-10-02",
     "n": "### Features\r\n- Add the `job_binary_local_path` and `job_binary_cypress_path` methods to `UserJobSpecBuilder` to run Python function and C++ jobs with the specified executable instead of the current one [7e2aa2780fffded19b274df1db787b5576c75fd3]\r\n\r\n### Fixes\r\n- Retry `yt flow` commands when the flow controller has not built its flow view yet (error code `3302`) [c235cd45b50a94ef04adff99e0a4e3dd44ccc0a1]"
+   },
+   {
+    "t": "flow/0.3.0",
+    "d": "2026-10-02",
+    "n": "YTsaurus Flow is a framework for streaming cross-DC event processing with exactly-once guarantees within the YTsaurus ecosystem, with APIs for C++, Java and Kotlin, Python, and Go. Its closest external counterparts are Google Cloud Dataflow and Apache Flink.\n\nThis is the first Flow release with published artifacts. It includes the server, the SDKs, and the tools, all versioned 0.3.0 and built from a single commit.\n\n**Release date:** 2026-09-28\n\n**Docker image:** [ghcr.io/ytsaurus/flow:0.3.0](https://github."
+   },
+   {
+    "t": "python/ytsaurus-client/0.13.54",
+    "d": "2026-10-02",
+    "n": "- Add `-q`/`--quiet` to `yt check-permission` to suppress output and report the result through the exit code: `0` if the permission is granted, `1` otherwise [f3b2a1cdbd46c8326c1b4e45893ab9be7e5611c4]\n- Add the `YT_PREFER_HTTPS` environment variable for the `proxy/prefer_https` config option [cd416bd9ba31dbbda519ece6760b252213892de1]\n- Add the `driver_enable_fork_detection` config option and `YT_DRIVER_ENABLE_FORK_DETECTION` environment variable to make the driver raise an error when it is used in a forked "
+   },
+   {
+    "t": "docker/ytsaurus/25.4.2",
+    "d": "2026-09-30",
+    "n": "## Overview\r\n\r\nYTsaurus 25.4.2 is a patch release on top of 25.4.1. For the full list of changes, features and\r\nmigration notes see the [25.4.0 release notes](https://github.com/ytsaurus/ytsaurus/releases/tag/docker%2Fytsaurus%2F25.4.0).\r\n\r\nYTsaurus Server 25.4.x is supported since 0.27.0 version of the Kubernetes operator.\r\n\r\n## What's changed since 25.4.1\r\n\r\n### Kafka Proxy\r\n\r\n- Various fixes, [22e6287](https://github.com/ytsaurus/ytsaurus/commit/22e6287)."
    },
    {
     "t": "yt/go/v0.0.35",
@@ -114,19 +138,51 @@
     "n": "- Support `date32`, `datetime64`, `timestamp64` and `interval64` in `schema` and `wire`, distinguishing `interval`, `interval64` and `int64` in type inference and encoding [a7c279f9d6f2a249dd47341eadb1dab37d3623e8]\n- Fixed `ReadTablePartition` with Skiff format for strongly typed complex values: the schema is passed through the new client-side option `ReadTablePartitionOptions.TableSchema`; `TableSchema` without Skiff format returns an error [f0cb9ef6f77fb93bb3b5ba4ea2e42fb9c43fdbb8]"
    },
    {
-    "t": "flow/0.3.0",
-    "d": "2026-10-02",
-    "n": "YTsaurus Flow is a framework for streaming cross-DC event processing with exactly-once guarantees within the YTsaurus ecosystem, with APIs for C++, Java and Kotlin, Python, and Go. Its closest external counterparts are Google Cloud Dataflow and Apache Flink.\n\nThis is the first Flow release with published artifacts. It includes the server, the SDKs, and the tools, all versioned 0.3.0 and built from a single commit.\n\n**Release date:** 2026-09-28\n\n**Docker image:** [ghcr.io/ytsaurus/flow:0.3.0](https://github."
+    "t": "docker/ytsaurus/25.4.1",
+    "d": "2026-09-11",
+    "n": "## Overview\r\n\r\nYTsaurus 25.4.1 is a patch release on top of **25.4.0**. For the full list of changes, features and\r\nmigration notes see the [25.4.0 release notes](https://github.com/ytsaurus/ytsaurus/releases/tag/docker%2Fytsaurus%2F25.4.0).\r\n\r\nYTsaurus Server 25.4.x is supported since [0.27.0](https://github.com/ytsaurus/ytsaurus-k8s-operator/releases/tag/release%2F0.27.0) version of the Kubernetes operator.\r\n\r\n## What's changed since 25.4.0\r\n\r\n### Dynamic Tables\r\n- Bulk insert under user transaction is no"
+   },
+   {
+    "t": "yt/go/v0.0.34",
+    "d": "2026-09-03",
+    "n": "- Add protobuf row serialization to the `wire` package [3f95d83dd52a66c6d4d25bea4dbc117d1d45e89d]\n- Support the `allow_unfrozen_input_tables` operation spec option [838848aa26952b0ca85721fca30054f2adb36eac]\n- Add `partition_tables` and `read_table_partition` support to `TableClient` [93cb1a9417c518af51cd5068604822db3c640925]\n- Marshal `TxID`, `MutationID`, `JobID`, `MaintenanceID` and `QueryID` as GUID strings in JSON [0d63376fe664776019dc3c0dba8f55534038abfe]"
+   },
+   {
+    "t": "yt/chyt/controller/v0.0.18",
+    "d": "2026-08-14",
+    "n": "- Add ODBC support for CHYT ([35e94c6](https://github.com/ytsaurus/ytsaurus/commit/35e94c6bc4296f8226bd0d60a35f5a538444cb82)).\n- Check permissions for network projects ([ba5fad9](https://github.com/ytsaurus/ytsaurus/commit/ba5fad9864242ddb2dd58e0e74aa260d05fc1fa5)).\n- Resolve a deadlock between the operation collector and job checker ([83c0bf9](https://github.com/ytsaurus/ytsaurus/commit/83c0bf9d1529aec7caf70db902c6d1d204ce162f))."
+   },
+   {
+    "t": "docker/query-tracker/0.4.1",
+    "d": "2026-08-12",
+    "n": "YQL:\r\n- Added row-level security support for YT tables.\r\n- Extended `QLFilter` with Boolean, floating-point, string, and UTF-8 types, plus per-cluster activation.\r\n- Added partial CBO execution.\r\n- Improved descending-sort handling and compatibility with older tables under the yt.UseNativeDescSort pragma.\r\n- Supported dynamic-table writes by REPLACE INTO (https://ytsaurus.tech/docs/ru/yql/syntax/replace_into)\r\n- Fixed the behavior of the yt.FuseMapToMapReduce pragma with horizontal joins.\r\n- Supported YQL l"
    }
+  ],
+  "etag": {
+   "release": "W/\"7b463bc9882c323488921059a216879051ec769e748587553e32126bb189db96\""
+  },
+  "rel_dates": [
+   "2026-11-05",
+   "2026-10-02",
+   "2026-09-26",
+   "2026-10-02",
+   "2026-09-30",
+   "2026-09-03",
+   "2026-09-11",
+   "2026-10-02",
+   "2026-08-14",
+   "2026-08-12",
+   "2026-08-14",
+   "2026-08-10"
   ]
  },
  "Syngnat/GoNavi": {
-  "commit_90d": 2349,
-  "commit_7d": 193,
+  "commit_90d": 2441,
+  "commit_7d": 212,
   "rel_ver": "dev-latest",
-  "rel_pub": "2026-11-01",
-  "rel_days": 1,
-  "rel_n90": 12,
+  "rel_pub": "2026-11-07",
+  "rel_days": 0,
+  "rel_n90": 19,
   "rel_pre": true,
   "rel_none": false,
   "sec_n": 0,
@@ -141,17 +197,27 @@
    "Python": 1,
    "Shell": 1
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
    {
     "t": "dev-latest",
-    "d": "2026-11-01",
-    "n": "**提交**: [`b6f49c2190f740fe514967b03b1db89c50c9dd91`](https://github.com/Syngnat/GoNavi/commit/b6f49c2190f740fe514967b03b1db89c50c9dd91)\n**完整变更**: [3ff9dca070e57047fcbcbd7a3f88ed4a58466e6e...b6f49c2190f740fe514967b03b1db89c50c9dd91](https://github.com/Syngnat/GoNavi/compare/3ff9dca070e57047fcbcbd7a3f88ed4a58466e6e...b6f49c2190f740fe514967b03b1db89c50c9dd91)"
+    "d": "2026-11-07",
+    "n": "## 🧪 测试版本 (Dev Build)\n\n**版本**: `dev-bb2d776`\n**分支**: `dev`\n**提交**: [`bb2d776fc2ccf7083eee0b60e9500446525a589b`](https://github.com/Syngnat/GoNavi/commit/bb2d776fc2ccf7083eee0b60e9500446525a589b)\n**构建时间**: 2026-11-07 12:17:17\n\n> ⚠️ 这是开发测试版本，仅供内部测试使用，不建议用于生产环境。\n> 每次 push 到 `dev` 分支会自动覆盖此 release。\n\n## 更新日志（相对上一测试版）\n\n> 💖 **赞助商 · [華龍AI算力](https://gonavi.hu"
+   },
+   {
+    "t": "v1.2.2",
+    "d": "2026-11-06",
+    "n": "- 🐛 fix(kingbase): 列定义查询改用不带 jsonb 取值的写法，修复结果集丢注释与类型"
+   },
+   {
+    "t": "v1.2.1",
+    "d": "2026-11-03",
+    "n": "- ✅ test(database-copy): 表清单失败用例不再依赖具体文案\n- ✅ test(query-editor): kingbase 聚合结果用例不再断言「从不查列元数据」"
    },
    {
     "t": "v1.2.0",
@@ -162,7 +228,56 @@
     "t": "v1.1.5",
     "d": "2026-10-23",
     "n": "- 🐛 fix(kingbase): 维护库全失败报错附填写库名自助引导\n- 🐛 fix(kingbase): 调度作业源探测改为验证关系可解析\n- 🐛 fix(database): 修复数据库加载失败后的重试\n- 🐛 test(db): 放宽插件数据源禁用耗时上界到 1s\n- 🐛 fix(table-overview): 修复消息队列与 Redis 表概览回落到 information_schema 导致报错 (contributed by **@AutumnNazi**)\n- 🐛 fix(chroma): 修复部分版本 v2 无 databases 列表端点导致连接打不开 (contributed"
+   },
+   {
+    "t": "v1.1.4",
+    "d": "2026-10-18",
+    "n": "- 🐛 fix(sqlparam): Oracle 参数误报不再拦住正常 SQL (contributed by **@kunghim**)\n- 🐛 fix(gbase8a): 修复集群下结果集提交事务失败 (contributed by **@AutumnNazi**)\n- 🐛 fix(ci): 为 DuckDB 测试补齐 WebKit 构建标签\n- 🐛 fix(database-jobs): 修复达梦作业目录查询与状态回退\n- ♻️ refactor(gbase8a): 连接串解析失败文案改走 i18n 目录 (contributed by **@AutumnNazi**)\n<!-- gonavi-release-provenance {\"commit\":\"266a25be23b3db2e4e566f8d5c7ed9accb2ba91"
+   },
+   {
+    "t": "v1.1.3",
+    "d": "2026-10-15",
+    "n": "- ✨ feat(database-jobs): 新增多数据源作业管理与写入安全保护\n- ✨ feat(database-jobs): 扩展现有数据源的只读作业浏览支持\n- ✨ feat(database-jobs): 支持 Oracle 与达梦作业浏览及定义查看\n- 🐛 fix(kingbase): 多语句写入改为同一连接事务逐条执行 (contributed by **@virgosgod-maker**)\n- 🐛 fix(data-viewer): 修复 MySQL 大表统计超时并支持按需精确计数\n- 🔧 fix(redis): 保持 SQL 保活与诊断能力边界 (contributed by **@YogeLi"
+   },
+   {
+    "t": "v1.1.2",
+    "d": "2026-10-11",
+    "n": "- 🐛 fix(oracle): 修复带 schema 限定名的表存在性点查恒判不存在 (contributed by **@kunghim**)\n- 🐛 fix(iotdb): 修复带结果预算的表查询被多结果集接口拒绝 (#1444)\n- 🐛 fix(sidebar): 修复 PostgreSQL 置顶表后列表被折叠\n- 🐛 fix(dameng): 修复小写表名元数据查询 (contributed by **@AutumnNazi**)\n- ⚡️ perf(db): 扫描归一化加标量快路径，结果切片按容量预分配\n- 🔧 chore(db): 补齐驱动标签构建下的连接池调用适配"
+   },
+   {
+    "t": "v1.1.1",
+    "d": "2026-10-06",
+    "n": "- ✨ feat(sql-analysis): 执行计划实测模式支持 SQL Server 与 Oracle\n- ✨ feat(session): 锁等待面板支持 OceanBase、达梦、崖山与 GBase 8c，会话工作台新增崖山与 GBase 8c\n- 🐛 fix(session): 修复 OceanBase Oracle 租户会话列表与终止失败，并修正“只看执行中”筛选不生效\n- 🐛 fix(db-icons): Trino 补上官方图标，自定义数据源图标重画"
+   },
+   {
+    "t": "v1.1.0",
+    "d": "2026-10-05",
+    "n": "- ✨ feat(yashandb): 接入崖山数据库（purego 绑定 yacli 客户端，复用 Oracle 元数据）\n- ✨ feat(gbase8s): 接入 GBase 8s（Informix 内核，经用户安装的 CSDK 以 ODBC 连接）\n- ✨ feat(gbase8c): 接入 GBase 8c（openGauss 内核、sha256 / sm3 认证与 A / B / PG 兼容模式）\n- ✨ feat(gbase8a): 接入 GBase 8a（MySQL 协议、真正生效的事务与 HASH 索引表设计）\n- ✨ feat(influxdb): 接入 InfluxDB（InfluxQL / Flux / SQL 控制台、line protocol 写入"
    }
+  ],
+  "etag": {
+   "release": "W/\"3bf7039bc2164809b6792c3300ecb08e729dfa1b8624dfc773ea2e4240ef45c8\""
+  },
+  "rel_dates": [
+   "2026-11-07",
+   "2026-11-06",
+   "2026-11-03",
+   "2026-10-31",
+   "2026-10-23",
+   "2026-10-18",
+   "2026-10-15",
+   "2026-10-11",
+   "2026-10-06",
+   "2026-10-05",
+   "2026-10-01",
+   "2026-09-24",
+   "2026-09-21",
+   "2026-09-10",
+   "2026-09-04",
+   "2026-09-03",
+   "2026-09-03",
+   "2026-08-23",
+   "2026-08-14"
   ]
  },
  "hidu/mysql-schema-sync": {
@@ -186,7 +301,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.0",
   "rel_pub": "2019-07-24",
-  "rel_days": 2622,
+  "rel_days": 2663,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -225,7 +340,7 @@
   "commit_7d": 0,
   "rel_ver": "psmdb-3.0.7-1.0",
   "rel_pub": "2015-11-17",
-  "rel_days": 3967,
+  "rel_days": 4008,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -248,7 +363,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.45.0",
   "rel_pub": "2026-10-03",
-  "rel_days": 24,
+  "rel_days": 35,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -293,7 +408,7 @@
   "commit_7d": 0,
   "rel_ver": "v6.1.22",
   "rel_pub": "2025-10-21",
-  "rel_days": 341,
+  "rel_days": 382,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -313,7 +428,7 @@
   "commit_7d": 0,
   "rel_ver": "1.7.3",
   "rel_pub": "2026-06-25",
-  "rel_days": 94,
+  "rel_days": 135,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -336,7 +451,7 @@
   "commit_7d": 0,
   "rel_ver": "5.2.0-beta1",
   "rel_pub": "2016-10-18",
-  "rel_days": 3631,
+  "rel_days": 3672,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -358,7 +473,7 @@
   "commit_7d": 0,
   "rel_ver": "R42",
   "rel_pub": "2016-01-22",
-  "rel_days": 3901,
+  "rel_days": 3942,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -381,7 +496,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2026-04-14",
-  "rel_days": 199,
+  "rel_days": 207,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -423,7 +538,7 @@
   "commit_7d": 0,
   "rel_ver": "0.4.3",
   "rel_pub": "2016-01-27",
-  "rel_days": 3896,
+  "rel_days": 3937,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -461,7 +576,7 @@
   "commit_7d": 0,
   "rel_ver": "latest",
   "rel_pub": "2026-10-08",
-  "rel_days": 20,
+  "rel_days": 30,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -484,7 +599,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.19.11.03",
   "rel_pub": "2019-11-03",
-  "rel_days": 2520,
+  "rel_days": 2561,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -507,7 +622,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.4",
   "rel_pub": "2021-12-01",
-  "rel_days": 1761,
+  "rel_days": 1802,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -526,7 +641,7 @@
  "eygraber/sqldelight-androidx-driver": {
   "rel_ver": "0.5.0-alpha.11",
   "rel_pub": "2026-09-16",
-  "rel_days": 11,
+  "rel_days": 52,
   "rel_n90": 6,
   "rel_pre": true,
   "rel_none": false,
@@ -555,7 +670,7 @@
  "soumyadip007/E-Marketplace-for-buying-and-reselling-products-Web-Project-Using-JSP-Servlet-Jstl-Security-Jdbc": {
   "rel_ver": "5.1",
   "rel_pub": "2019-12-07",
-  "rel_days": 2486,
+  "rel_days": 2527,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -575,7 +690,7 @@
  "n3rada/MSSQLand": {
   "rel_ver": "v2.0",
   "rel_pub": "2026-05-19",
-  "rel_days": 131,
+  "rel_days": 172,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -609,7 +724,7 @@
  "rust-dd/rsql": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-08-10",
-  "rel_days": 48,
+  "rel_days": 89,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -662,7 +777,7 @@
  "percona/pmm-client": {
   "rel_ver": "v1.1.2",
   "rel_pub": "2017-03-31",
-  "rel_days": 3467,
+  "rel_days": 3508,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -713,7 +828,7 @@
  "xuejiazhi/pgii": {
   "rel_ver": "v1.0.2",
   "rel_pub": "2023-06-09",
-  "rel_days": 1206,
+  "rel_days": 1247,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -731,7 +846,7 @@
  "wilfredinni/django-starter-template": {
   "rel_ver": "0.6.0",
   "rel_pub": "2026-08-25",
-  "rel_days": 33,
+  "rel_days": 74,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -794,7 +909,7 @@
  "mysql-time-machine/replicator": {
   "rel_ver": "v0.16.0-RC3",
   "rel_pub": "2020-01-22",
-  "rel_days": 2440,
+  "rel_days": 2481,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -848,7 +963,7 @@
  "sphireinc/Hydra": {
   "rel_ver": "latest",
   "rel_pub": "2026-03-12",
-  "rel_days": 199,
+  "rel_days": 240,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -868,7 +983,7 @@
  "pepoviola/tide-basic-crud": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2020-10-30",
-  "rel_days": 2158,
+  "rel_days": 2199,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -906,7 +1021,7 @@
  "mujib77/pgstream": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-05-13",
-  "rel_days": 137,
+  "rel_days": 178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -970,7 +1085,7 @@
  "oracle/oci-mlflow": {
   "rel_ver": "v1.0.3",
   "rel_pub": "2026-01-30",
-  "rel_days": 240,
+  "rel_days": 281,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -991,7 +1106,7 @@
  "phenomenoner/openclaw-mem": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-07-17",
-  "rel_days": 72,
+  "rel_days": 113,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1012,7 +1127,7 @@
  "saward/spawn": {
   "rel_ver": "v0.3.2",
   "rel_pub": "2026-09-14",
-  "rel_days": 13,
+  "rel_days": 54,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1140,7 +1255,7 @@
  "RonnyWeiss/APEX-Material-BI-Dashboard": {
   "rel_ver": "25.03.19",
   "rel_pub": "2025-03-19",
-  "rel_days": 558,
+  "rel_days": 598,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1203,7 +1318,7 @@
  "oceanbase/oblogclient": {
   "rel_ver": "oblogclient-1.1.3",
   "rel_pub": "2024-09-18",
-  "rel_days": 740,
+  "rel_days": 780,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1239,7 +1354,7 @@
  "kevgk/Leya": {
   "rel_ver": "1.3.1",
   "rel_pub": "2018-10-28",
-  "rel_days": 2892,
+  "rel_days": 2932,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1327,7 +1442,7 @@
  "lukaszwoznica/bus-booking-system": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-02-27",
-  "rel_days": 1674,
+  "rel_days": 1714,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1530,7 +1645,7 @@
  "Daniel-Yonkov/jest-mysql": {
   "rel_ver": "2.0.3",
   "rel_pub": "2026-08-02",
-  "rel_days": 57,
+  "rel_days": 97,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1575,7 +1690,7 @@
  "hatchet-dev/hatchet-embedded": {
   "rel_ver": "v0.107.0",
   "rel_pub": "2026-09-15",
-  "rel_days": 13,
+  "rel_days": 53,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1678,7 +1793,7 @@
   "commit_7d": 1,
   "rel_ver": "desktop-v0.12.5",
   "rel_pub": "2026-10-08",
-  "rel_days": 25,
+  "rel_days": 30,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1715,7 +1830,7 @@
  "h0tak88r/subfalcon": {
   "rel_ver": "v2.0.1",
   "rel_pub": "2024-12-09",
-  "rel_days": 659,
+  "rel_days": 698,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1776,7 +1891,7 @@
  "Hoshinonyaruko/gensokyo-dash": {
   "rel_ver": "14/merge",
   "rel_pub": "2024-07-19",
-  "rel_days": 802,
+  "rel_days": 841,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2021,7 +2136,7 @@
  "baozha2023/JobTrail": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-09-29",
-  "rel_days": 1,
+  "rel_days": 39,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2538,7 +2653,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.1.0",
   "rel_pub": "2023-07-24",
-  "rel_days": 1166,
+  "rel_days": 1202,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2580,7 +2695,7 @@
  "cosmyo/ha-pi-durable": {
   "rel_ver": "v0.1.0-alpha.1",
   "rel_pub": "2026-10-03",
-  "rel_days": 1,
+  "rel_days": 35,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -2629,10 +2744,10 @@
  },
  "TykTechnologies/tyk-pump": {
   "commit_90d": 23,
-  "commit_7d": 5,
+  "commit_7d": 1,
   "rel_ver": "v1.16.0",
   "rel_pub": "2026-07-07",
-  "rel_days": 99,
+  "rel_days": 123,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2648,19 +2763,23 @@
    "Dockerfile": 0,
    "Makefile": 0
   },
-  "enriched_at": "20261014",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261014",
-   "release": "20261014",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261014",
    "contrib": "20261014",
    "lang": "20261014"
-  }
+  },
+  "etag": {
+   "release": "W/\"ff234b623ca1e47e6fa2467e433cbf30c33b22a0dc6e1dd6ce8ee9fa877fc12b\""
+  },
+  "rel_dates": []
  },
  "Reliary/ocserve": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 1,
+  "rel_days": 20,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2747,7 +2866,7 @@
  "brandonkamga237/sourcefolio": {
   "rel_ver": "v0.19.0",
   "rel_pub": "2026-11-01",
-  "rel_days": 2,
+  "rel_days": 6,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2793,7 +2912,7 @@
   "commit_7d": 17,
   "rel_ver": "v7.0.2",
   "rel_pub": "2026-11-02",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,

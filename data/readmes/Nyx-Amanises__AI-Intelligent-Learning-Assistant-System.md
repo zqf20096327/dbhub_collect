@@ -1,0 +1,299 @@
+# AI 智能学习助手系统
+
+中文 | [English](README.en.md)
+
+> 一个围绕“资料管理 -> RAG 检索 -> AI 总结/出题 -> 在线练习 -> 错题复盘 -> 学习分析 -> Agent 学习助手”构建的全栈 AI 学习闭环项目。  
+> 适合作为 **AI 应用实战、RAG 工程化、Agent 工具调用、课程设计、简历项目** 的参考案例。
+
+![AI 智能学习助手系统 Social Preview](docs/images/social-preview.png)
+
+## 项目亮点
+
+- **完整 AI 学习闭环**：资料解析、RAG 检索、AI 总结、AI 出题、在线练习、错题复盘和学习分析形成一套可演示流程。
+- **工程化 RAG 能力**：基于 Qdrant 的资料向量检索，支持引用页码、相似度、章节信息和 Hit@K / Recall@K / MRR 评测。
+- **Agent 工具调用**：学习助手支持 SSE 流式回复，并能查询资料、题集、练习记录、任务状态等系统上下文。
+- **适合简历展示**：覆盖 Spring Boot、Vue3、MySQL、Redis/Valkey、Qdrant、Docker、Vercel、Render、Aiven 等完整全栈部署链路。
+
+
+## 联系方式
+如有对本项目有问题，建议，可发送邮件至：`3111471949@qq.com`
+> 注：广告、推广信息恕不回复，邮件请备注「AI学习系统+来意」
+
+
+## 在线体验
+
+> 中国大陆网络访问 Vercel / Render / Qdrant Cloud 可能不稳定，如打不开可尝试网络加速。Render 免费实例有冷启动，首次请求可能需要等待几十秒。
+请注册普通用户体验；公开演示账号只能使用 USER 角色，管理员凭据不对外共享。
+
+- 前端 Demo：[https://ai-intelligent-learning-assistant-s.vercel.app](https://ai-intelligent-learning-assistant-s.vercel.app)
+- 后端健康检查：[https://ai-learning-assistant-backend-zfth.onrender.com/api/health](https://ai-learning-assistant-backend-zfth.onrender.com/api/health)
+- GitHub 仓库：[https://github.com/Nyx-Amanises/AI-Intelligent-Learning-Assistant-System](https://github.com/Nyx-Amanises/AI-Intelligent-Learning-Assistant-System)
+
+线上环境使用 **Vercel + Render + Aiven MySQL + Aiven Valkey + Qdrant Cloud** 部署，部署过程可参考：[Render + Aiven + Qdrant Cloud 免费部署指南](docs/deploy-render-aiven-qdrant.md)。
+
+
+## 项目截图
+
+| 首页 / 学习概览 | Agent 学习助手 |
+| --- | --- |
+| ![首页](docs/images/home.png) | ![Agent 学习助手](docs/images/agent.png) |
+
+| 资料管理 | RAG 评测 |
+| --- | --- |
+| ![资料管理](docs/images/materials.png) | ![RAG 评测](docs/images/rag-eval.png) |
+
+| 学习分析 | AI 配置 |
+| --- | --- |
+| ![学习分析](docs/images/analytics.png) | ![AI 配置](docs/images/ai-config.png) |
+
+## 核心能力
+
+### 资料驱动学习闭环
+
+- 上传或创建学习资料，支持 TXT / PDF / DOCX 等内容解析。
+- TXT 按 UTF-8 优先解码，兼容 GBK / GB18030；坏编码或无正文会标记解析失败，并在资料卡片和详情保留原因。扫描 PDF 需先进行 OCR，转换为可搜索 PDF 或文本后上传；系统不会将无文字层的文件标为解析成功。
+- 基于资料生成 AI 总结、复习提纲和练习题。
+- 支持在线练习、自动判分、错题沉淀和知识点掌握度统计。
+- 简答作答支持每题最多 5000 字符，页面计数与接口校验一致；超限时定位题目并保留草稿。升级通过 V15 将答案字段扩为 TEXT，500 字以上的答案也会完整保存。
+- 学习分析看板汇总正确率、错题数量、薄弱知识点和练习趋势。
+
+### RAG 与向量检索
+
+- 对资料内容进行分段和 Embedding。
+- 使用 Qdrant 存储资料向量，支持语义检索。
+- 支持 RAG 检索预览，展示相似度、页码、段落和章节信息。
+- 内置 RAG 评测集管理，支持 Hit@K、Recall@K、MRR 和耗时统计。
+- 评测可选文本检索、纯向量检索、向量召回后词面重排。每次运行保存参数、样本/资料版本及实际命中片段，支持分页历史和同一评测集 2–3 次运行并排对比。Mock、降级、失败、样本或原文变化会提示不可直接比较；Top K 不足的指标显示未充分召回。
+- 资料页“解析与分块”可设置每块 200–4000 字符及 0–500 字符重叠（必须小于块大小），按原始文件或保存的完整文本重新分块。重新解析后需要更新片段 ID 标注并重新生成向量；PDF 可用稳定的页码标注比较不同分块。历史文本未保存原文时需用原文新建，CMRC 导入保留原 context。历史参数不会被伪填为默认值。
+- 向量索引会记录实际模型和 Mock/真实来源；与查询不一致、索引不完整或旧索引来源未知时使用带原因提示的文本降级。旧索引需重新生成向量才能参与真实向量方案评测。
+- 可删除已运行过的评测样本；删除后新运行不再选取它，已有指标、原样本编号和当时的标注及召回快照仍保留用于历史比较。
+- 支持导入 CMRC2018 数据集做批量检索质量验证。
+
+### Agent 学习助手
+
+- 支持通用学习对话和 SSE 流式回复。
+- 支持会话列表、新建对话、删除对话和工具调用轨迹。
+- 可查询资料、题集、练习记录、任务状态等系统上下文。
+- 新对话默认不自动绑定资料，用户可在消息里主动指定资料标题或 ID。
+- 打开 Agent 时会提示当前 AI 配置是否处于 Mock 模式。
+- 同一会话的追问会携带最近完成的对话，供意图识别、工具规划和最终回复共同使用；新会话不会带入其他会话的聊天上下文，个人学习目标和回复偏好仍可沿用。
+- 每次模型请求最多携带最近 10 轮对话、合计 24000 字符，单条最多 6000 字符；失败或中断的回答不参与。超过范围时优先携带近期完整轮次，单条截断会标注省略，较早的细节需要重新补充。
+
+### AI 配置与任务中心
+
+- 支持 Chat 模型和 Embedding 模型分开配置。
+- 支持 OpenAI-compatible、DeepSeek、豆包 Ark 等兼容接口。
+- 支持 Mock 模式，便于无真实模型 Key 时演示系统流程。
+- 总结、题集及其练习/错题会保存生成时的来源并显示“模拟数据”标记；切换当前 AI 配置不会改写已有来源。升级前未记录来源的内容显示“来源未记录”，不会推断为真实模型生成。
+- AI 总结、AI 出题、简答题判分、Embedding 等耗时操作统一进入任务中心。
+- 任务中心支持状态追踪、详情查看、失败重试、重新派发和删除记录。
+
+## 技术栈
+
+| 层级 | 技术 |
+| --- | --- |
+| 前端 | Vue 3, TypeScript, Vite, Pinia, Vue Router, Element Plus, Axios |
+| 后端 | Spring Boot 3.3, Java 17, MyBatis Plus, JWT, Bean Validation |
+| 数据库 | MySQL 8, Redis |
+| RAG | Qdrant, Embedding API, 资料分段, Hit@K / Recall@K / MRR 评测 |
+| AI | OpenAI-compatible Chat API, SSE 流式输出, Mock 模式 |
+| 部署 | Docker Compose, Vercel, Render, Aiven MySQL, Aiven Valkey, Qdrant Cloud |
+
+
+## 目录结构
+
+```text
+AI-Intelligent-Learning-Assistant-System
+├─ backend/                  # Spring Boot 后端
+│  ├─ src/main/java/          # 业务代码
+│  ├─ src/main/resources/     # 配置文件
+│  └─ Dockerfile
+├─ frontend/                 # Vue 3 前端
+│  ├─ src/api/                # 接口封装
+│  ├─ src/components/         # 通用组件
+│  ├─ src/views/              # 页面视图
+│  └─ Dockerfile
+├─ db/                        # 旧版建表脚本（仅参考，表结构现由 Flyway 管理）
+├─ docker/mysql/init/         # MySQL 容器初始化脚本（只建库）
+├─ docs/deploy-render-aiven-qdrant.md
+│                              # 免费云部署指南
+├─ docs/images/               # README 截图和社交预览图
+├─ runtime/                   # AI 运行时配置，默认不提交敏感内容
+├─ docker-compose.yml         # 本地一键启动
+├─ render.yaml                # Render Blueprint 配置
+├─ vercel.json                # Vercel 前端部署配置
+├─ README.md                  # 中文说明
+└─ README.en.md               # English README
+```
+
+## 快速启动
+
+首次需要管理员权限时，设置环境变量 `APP_BOOTSTRAP_ADMIN_PASSWORD` 为自行生成的私人密码（至少 12 个字符、最多 72 字节，同时包含英文字母和数字），再启动后端。Docker Compose 在 `.env` 中设置；手动启动在当前终端或运行配置中设置（Spring Boot 不会自动读取根目录 `.env`）。管理员用户名为 `admin`，用自己设置的密码登录。未配置时，历史默认管理员保持锁定，普通用户仍可注册使用。
+
+升级时会自动锁定仍使用历史公开密码的管理员，并使旧登录令牌失效；同一环境变量可为初始 `admin` 设置私人密码。已改过密码的账号不会被重置，主动禁用的账号不会自动恢复。成功初始化后可移除此变量，日常改密使用个人中心。如果线上曾公开管理员凭据并配置真实 AI Key，请轮换服务商 Key，并更换管理员密码；仅删除 README 中的凭据无法保护已部署的旧版本。
+
+### 方式一：Docker Compose
+
+1. 准备环境变量：
+
+```powershell
+Copy-Item .env.example .env
+```
+
+2. 启动全部服务：
+
+```powershell
+docker compose up -d --build
+```
+
+3. 访问服务：
+
+- 前端：http://localhost:5173
+- 后端：http://localhost:8083
+- MySQL：localhost:3307
+- Redis：localhost:6379
+- Qdrant：http://localhost:6333
+
+4. 查看日志：
+
+```powershell
+docker compose logs -f backend
+docker compose logs -f frontend
+```
+
+5. 停止服务：
+
+```powershell
+docker compose down
+```
+
+### 方式二：本地手动启动
+
+后端：
+
+```powershell
+Set-Location backend
+mvn spring-boot:run
+```
+
+前端：
+
+```powershell
+Set-Location frontend
+npm install
+npm run dev
+```
+
+如果需要向量检索能力，请同时启动 Qdrant：
+
+```powershell
+docker run -d --name qdrant -p 6333:6333 -p 6334:6334 -v qdrant_storage:/qdrant/storage qdrant/qdrant
+```
+
+## 核心配置
+
+数据库表结构由 Flyway 管理，脚本位于 `backend/src/main/resources/db/migration`，后端启动时自动建表或补齐变更；旧库会被自动标记为基线版本 1，无需手工导入 SQL。
+
+后端支持通过环境变量覆盖配置，遵循**“本地默认能跑、生产显式严格”**的设计：
+- **本地开发（默认）**：未配置时开箱即用。MySQL 密码默认 `123456789`（与 Docker Compose 一致），JWT 密钥在内存中随机生成（重启后旧 Token 失效），数据库加密口令自动生成并落入 `runtime/secret-encryption.key` 跨重启复用。
+- **生产环境**（激活 `prod` profile 或配置 `app.security.require-explicit-secrets=true`）：`SPRING_DATASOURCE_PASSWORD`、`APP_JWT_SECRET` 与 `APP_SECRET_ENCRYPTION_KEY` 必须显式提供且满足长度要求，缺失时拒绝启动并报错提示（参考根目录 `.env.example`）。
+
+| 变量 | 说明 |
+| --- | --- |
+| `SPRING_DATASOURCE_URL` | MySQL 连接地址 |
+| `SPRING_DATASOURCE_USERNAME` | MySQL 用户名 |
+| `SPRING_DATASOURCE_PASSWORD` | MySQL 密码（生产必填；本地默认 `123456789`） |
+| `SPRING_REDIS_HOST` | Redis 地址 |
+| `SPRING_REDIS_SSL_ENABLED` | Redis / Valkey 是否启用 TLS |
+| `APP_AI_ENABLED` | 是否启用 AI 能力 |
+| `APP_AI_MOCK_MODE` | 是否启用 Mock 模式 |
+| `APP_AI_CHAT_PROVIDER_TYPE` | 聊天模型 Provider |
+| `APP_AI_BASE_URL` | Chat API Base URL |
+| `APP_AI_CHAT_PATH` | Chat API Path |
+| `APP_AI_API_KEY` | Chat API Key |
+| `APP_AI_DEFAULT_MODEL` | 默认聊天模型 |
+| `APP_AI_EMBEDDING_BASE_URL` | Embedding API Base URL |
+| `APP_AI_EMBEDDING_API_KEY` | Embedding API Key |
+| `APP_AI_DEFAULT_EMBEDDING_MODEL` | 默认 Embedding 模型 |
+| `APP_QDRANT_BASE_URL` | Qdrant 地址 |
+| `APP_QDRANT_API_KEY` | Qdrant API Key |
+| `APP_QDRANT_COLLECTION_NAME` | Qdrant Collection 名称 |
+| `APP_JWT_SECRET` | JWT 密钥（生产必填，至少 32 字符；本地缺失时随机生成） |
+| `APP_BOOTSTRAP_ADMIN_PASSWORD` | 初始管理员私人密码（至少 12 字符、最多 72 字节、含字母和数字；留空则锁定默认管理员） |
+| `APP_SECRET_ENCRYPTION_KEY` | 数据库中 AI API Key 的加密口令（生产必填，至少 16 字符；本地缺失时落盘复用） |
+| `APP_FILE_UPLOAD_DIR` | 上传文件保存目录，默认 `./uploads` |
+| `VITE_API_BASE_URL` | 前端生产环境后端 API 地址 |
+
+AI 配置页面保存的运行时配置默认写入：
+
+```text
+runtime/ai-config.json
+```
+
+## 常用接口
+
+| 模块 | 接口示例 |
+| --- | --- |
+| 认证 | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/user/profile` |
+| 资料 | `POST /api/material/upload`, `GET /api/material/page`, `POST /api/material/{id}/parse` |
+| AI 任务 | `POST /api/ai/tasks/material/{materialId}/summary`, `POST /api/ai/tasks/material/{materialId}/question-set` |
+| 练习 | `POST /api/practice/start`, `POST /api/practice/submit`, `GET /api/practice/page` |
+| 分析 | `GET /api/wrong-questions/page`, `GET /api/knowledge-mastery/overview`, `GET /api/learning-analytics/overview` |
+| RAG | `GET /api/rag/material/{materialId}/retrieve-preview`, `POST /api/rag-eval/datasets/{datasetId}/run` |
+| Agent | `POST /api/assistant/sessions`, `POST /api/assistant/sessions/{sessionId}/messages/stream` |
+
+## 部署说明
+
+当前线上部署方式：
+
+- 前端：Vercel
+- 后端：Render Web Service
+- MySQL：Aiven MySQL Free
+- Redis / Valkey：Aiven Valkey Free
+- 向量数据库：Qdrant Cloud Free
+
+完整迁移和配置步骤见：[Render + Aiven + Qdrant Cloud 免费部署指南](docs/deploy-render-aiven-qdrant.md)。
+
+前端生产构建：
+
+```powershell
+Set-Location frontend
+npm run build
+```
+
+后端生产构建：
+
+```powershell
+Set-Location backend
+mvn -DskipTests package
+```
+
+Vercel 使用根目录的 `vercel.json`，并配置生产环境变量：
+
+```text
+VITE_API_BASE_URL=https://<RENDER_BACKEND_DOMAIN>/api
+```
+
+`vercel.json`：
+
+```json
+{
+  "installCommand": "cd frontend && npm ci",
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/dist"
+}
+```
+
+Render 后端部署时，可以使用根目录的 `render.yaml` Blueprint，也可以手动创建 Docker Web Service。需要确保服务根目录指向 `backend`，并配置好 MySQL、Valkey、Qdrant、AI Provider 和 JWT 相关环境变量。
+
+## 后续规划
+
+- 引入更完整的 Agent 工具编排和权限控制。
+- 增加混合检索、重排模型和 RAG A/B 对比。
+- 增加学习计划、间隔复习和个性化推荐。
+- 增加模型调用成本统计和调用日志。
+- 增加 GitHub Actions 自动化构建与部署。
+
+## License
+
+本项目用于学习、课程设计和作品集展示。若用于商业用途，请先确认依赖组件与模型服务的许可要求。

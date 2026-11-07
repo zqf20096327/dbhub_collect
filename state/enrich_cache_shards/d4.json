@@ -27,7 +27,7 @@
   "commit_90d": 12,
   "rel_ver": "v1.6.8",
   "rel_pub": "2026-09-08",
-  "rel_days": 19,
+  "rel_days": 60,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -49,12 +49,12 @@
   }
  },
  "xtdb/xtdb": {
-  "commit_7d": 28,
-  "commit_90d": 629,
+  "commit_7d": 55,
+  "commit_90d": 644,
   "rel_ver": "v2.2.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 12,
-  "rel_n90": 6,
+  "rel_days": 17,
+  "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -62,7 +62,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 32,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Clojure": 57,
    "Kotlin": 39,
@@ -72,8 +72,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -91,7 +91,27 @@
     "t": "v2.2.0-rc2",
     "d": "2026-10-20",
     "n": "For those characteristics to be able to arrive after `BEGIN`, the transaction can't fix its read basis _at_ `BEGIN` - so (**breaking**) the snapshot and `current_timestamp` are now fixed at the transaction's first query, as Postgres does for a repeatable-read snapshot.\nThe upshot for cookieless clients - which the Java ADBC driver is, by default - is that a `SET` no longer leaks across to other clients, nor persists to your next call.\n* Decimal and array parameters no longer make every result column come ba"
+   },
+   {
+    "t": "v2.2.0-beta3",
+    "d": "2026-09-28",
+    "n": "* [#6100](https://github.com/xtdb/xtdb/issues/6100) - compaction could drop validity bits when merging a page that contributed no rows.\n* The Postgres source no longer logs an orderly stand-down (demotion, detach, node close) as `External source failed`.\nIn beta3, the idempotence checks on the replica log move into XTDB, rather than relying on the acknowledgement from Kafka. Each record now carries its position within the leader's term, and every node checks those positions as it reads: if a record is lost "
+   },
+   {
+    "t": "v2.2.0-beta2",
+    "d": "2026-09-17",
+    "n": "## Postgres source now needs PostgreSQL 17 (**breaking**)\n* [#6070](https://github.com/xtdb/xtdb/pull/6070) - a replica-log message larger than Kafka's `max.message.bytes` stopped that database indexing, with the transaction behind it already committed. Oversized messages now go to object storage and are referenced from the log - raising the topic's limit is still worthwhile, since the indirection costs a round trip, but it's no longer what stands between a large `UPDATE` and a stalled database.\n* [#5909](h"
    }
+  ],
+  "etag": {
+   "release": "W/\"2cae527f1416b8eb4ec7f610e895a52e797fdf0020ad928a217f3434c2f1531d\""
+  },
+  "rel_dates": [
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-20",
+   "2026-09-28",
+   "2026-09-17"
   ]
  },
  "processone/tsung": {
@@ -118,11 +138,11 @@
   }
  },
  "wait4x/wait4x": {
-  "commit_90d": 127,
-  "commit_7d": 0,
+  "commit_90d": 129,
+  "commit_7d": 2,
   "rel_ver": "v3.7.3",
   "rel_pub": "2026-10-23",
-  "rel_days": 11,
+  "rel_days": 15,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -138,10 +158,10 @@
    "HCL": 0,
    "Nix": 0
   },
-  "enriched_at": "20261103",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261103",
-   "release": "20261103",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -159,7 +179,21 @@
     "t": "v3.7.1",
     "d": "2026-08-19",
     "n": "<!-- Release notes generated using configuration in .github/release.yml at v3.7.1 -->\r\n\r\n## What's Changed\r\n### Dependency Updates ⬆️\r\n* Bump github.com/moby/go-archive from 0.2.0 to 0.3.0 by @dependabot[bot] in https://github.com/wait4x/wait4x/pull/541\r\n\r\n\r\n**Full Changelog**: https://github.com/wait4x/wait4x/compare/v3.7.0...v3.7.1"
+   },
+   {
+    "t": "v3.7.0",
+    "d": "2026-08-19",
+    "n": "* Bump go.mongodb.org/mongo-driver from 1.17.4 to 1.17.9 by @dependabot[bot] in https://github.com/wait4x/wait4x/pull/519\n* Bump github.com/go-sql-driver/mysql from 1.9.3 to 1.10.0 by @dependabot[bot] in https://github.com/wait4x/wait4x/pull/534\n* wait until mysql is ready in tests by @atkrad in https://github.com/wait4x/wait4x/pull/526"
    }
+  ],
+  "etag": {
+   "release": "W/\"e651eda1f261af9f0f8f8780a30bed7a6090a6b0f05572561ad319f0ffc5ea50\""
+  },
+  "rel_dates": [
+   "2026-10-23",
+   "2026-09-25",
+   "2026-08-19",
+   "2026-08-19"
   ]
  },
  "snowflakedb/snowflake-connector-python": {
@@ -196,7 +230,7 @@
   "commit_7d": 0,
   "rel_ver": "0.8.2",
   "rel_pub": "2025-07-08",
-  "rel_days": 476,
+  "rel_days": 487,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -236,7 +270,7 @@
   "commit_7d": 5,
   "rel_ver": "v4.0.0",
   "rel_pub": "2026-05-22",
-  "rel_days": 159,
+  "rel_days": 169,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -279,7 +313,7 @@
   "commit_7d": 0,
   "rel_ver": "4.0",
   "rel_pub": "2026-07-04",
-  "rel_days": 115,
+  "rel_days": 126,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -296,10 +330,14 @@
    "HTML": 7,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261107",
   "dim_ts": {
    "commit": "20261027",
-   "release": "20261027"
+   "release": "20261027",
+   "security": "20261107"
+  },
+  "etag": {
+   "security": "W/\"09c546ec7c2a98674284edf111378468aba3ec3639e8f71488212f0e64cbba1b\""
   }
  },
  "bvinc/go-sqlite-lite": {
@@ -319,11 +357,11 @@
   "enriched_at": "20260927"
  },
  "NDXDeveloper/formation-postgresql-18": {
-  "commit_90d": 6,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-07-03",
-  "rel_days": 86,
+  "rel_days": 127,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -340,7 +378,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2023-09-30",
-  "rel_days": 1093,
+  "rel_days": 1134,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -417,7 +455,7 @@
   "commit_7d": 0,
   "rel_ver": "3.1.1",
   "rel_pub": "2023-02-27",
-  "rel_days": 1308,
+  "rel_days": 1349,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -463,7 +501,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.2.0",
   "rel_pub": "2019-03-05",
-  "rel_days": 2763,
+  "rel_days": 2804,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -520,7 +558,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-07-11",
-  "rel_days": 1540,
+  "rel_days": 1580,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -557,7 +595,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.7.2",
   "rel_pub": "2024-12-16",
-  "rel_days": 680,
+  "rel_days": 691,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -593,7 +631,7 @@
   "commit_7d": 1,
   "rel_ver": "v2.15.6.1",
   "rel_pub": "2026-09-21",
-  "rel_days": 36,
+  "rel_days": 47,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -618,7 +656,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.2.2",
   "rel_pub": "2022-11-28",
-  "rel_days": 1399,
+  "rel_days": 1440,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -638,7 +676,7 @@
  "reshadman/laravel-optimistic-locking": {
   "rel_ver": "1.1.0",
   "rel_pub": "2019-01-11",
-  "rel_days": 2816,
+  "rel_days": 2857,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -673,7 +711,7 @@
  "Sina-Ghaderi/goshkan": {
   "rel_ver": "goshkan-0.2.6",
   "rel_pub": "2022-02-04",
-  "rel_days": 1696,
+  "rel_days": 1737,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -764,7 +802,7 @@
  "United-Codes/uc-local-apex-dev": {
   "rel_ver": "v26.4",
   "rel_pub": "2026-09-03",
-  "rel_days": 24,
+  "rel_days": 65,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -873,7 +911,7 @@
  "TencentCloud/terraform-provider-tencentcloudenterprise": {
   "rel_ver": "v3.1012.33",
   "rel_pub": "2026-10-09",
-  "rel_days": 18,
+  "rel_days": 29,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -968,7 +1006,7 @@
  "mergestat/scribe": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2023-01-29",
-  "rel_days": 1337,
+  "rel_days": 1378,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1134,7 +1172,7 @@
  "adamghill/dj-lite-tenant": {
   "rel_ver": "0.2.0",
   "rel_pub": "2026-05-19",
-  "rel_days": 131,
+  "rel_days": 172,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1233,7 +1271,7 @@
  "mahmoudsamy7729/fastapi-saas-starter": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-12-27",
-  "rel_days": 274,
+  "rel_days": 315,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1254,7 +1292,7 @@
  "andrewferrier/memy": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-08-16",
-  "rel_days": 42,
+  "rel_days": 83,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1275,7 +1313,7 @@
  "ratchet-run/ratchet": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 1,
+  "rel_days": 42,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -1296,7 +1334,7 @@
  "OthmaneBlial/rustframe": {
   "rel_ver": "v0.1.0-rc.4",
   "rel_pub": "2026-09-08",
-  "rel_days": 20,
+  "rel_days": 60,
   "rel_n90": 4,
   "rel_pre": true,
   "rel_none": false,
@@ -1344,7 +1382,7 @@
  "darkterminal/libsql-client-php": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2024-05-19",
-  "rel_days": 862,
+  "rel_days": 902,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1378,7 +1416,7 @@
  "Trivadis/plsql-cop-cli": {
   "rel_ver": "v5.0.1",
   "rel_pub": "2024-03-26",
-  "rel_days": 916,
+  "rel_days": 956,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1409,7 +1447,7 @@
  "mfscpayload-690/network-intrusion-log-manager": {
   "rel_ver": "initial",
   "rel_pub": "2025-08-07",
-  "rel_days": 417,
+  "rel_days": 457,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1430,7 +1468,7 @@
  "20minutes/pg-rabbitmq-fdw": {
   "rel_ver": "1.0.2",
   "rel_pub": "2018-03-16",
-  "rel_days": 3118,
+  "rel_days": 3158,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1448,7 +1486,7 @@
  "ucsandman/declick": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 24,
+  "rel_days": 64,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1496,7 +1534,7 @@
  "ARPA-SIMC/dballe": {
   "rel_ver": "v9.11-1",
   "rel_pub": "2025-06-27",
-  "rel_days": 458,
+  "rel_days": 498,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1576,7 +1614,7 @@
  "MikeAmputer/ClickHouse.Facades": {
   "rel_ver": "3.2.0",
   "rel_pub": "2026-08-23",
-  "rel_days": 36,
+  "rel_days": 76,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1593,7 +1631,7 @@
  "markusbegerow/local-llm-chat-ssms": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-11-18",
-  "rel_days": 314,
+  "rel_days": 354,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1655,7 +1693,7 @@
  "ulovecode/gdcache": {
   "rel_ver": "v0.2.18",
   "rel_pub": "2021-10-12",
-  "rel_days": 1812,
+  "rel_days": 1852,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1672,7 +1710,7 @@
  "hstptcn5/Catena": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-07-25",
-  "rel_days": 65,
+  "rel_days": 105,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1723,7 +1761,7 @@
  "geoffreylgv/WorldCountryAPI": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-04-09",
-  "rel_days": 1268,
+  "rel_days": 1308,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1766,7 +1804,7 @@
  "oracle/oraclejet-tooling": {
   "rel_ver": "21.0.0",
   "rel_pub": "2026-08-17",
-  "rel_days": 42,
+  "rel_days": 82,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1815,7 +1853,7 @@
  "susomejias/rembric": {
   "rel_ver": "server-v0.28.16",
   "rel_pub": "2026-09-27",
-  "rel_days": 1,
+  "rel_days": 41,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1833,7 +1871,13 @@
    "Python": 4,
    "CSS": 1
   },
-  "enriched_at": "20260928"
+  "enriched_at": "20261107",
+  "etag": {
+   "security": "W/\"9c966a2bd148f006fde0c2978b8f6ce8eb7b3dfdb70d8631515e0da936d398cb\""
+  },
+  "dim_ts": {
+   "security": "20261107"
+  }
  },
  "directusbr/render": {
   "rel_ver": null,
@@ -1849,7 +1893,7 @@
  "Spartacus-shoulder-kinematics-dataset/shoulder-kinematics": {
   "rel_ver": "0.3.1",
   "rel_pub": "2025-04-05",
-  "rel_days": 541,
+  "rel_days": 581,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1884,7 +1928,7 @@
  "tidbcloud/tidbcloud-cli": {
   "rel_ver": "v1.0.0-beta.11",
   "rel_pub": "2025-12-23",
-  "rel_days": 309,
+  "rel_days": 319,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1926,7 +1970,7 @@
  "quarkiverse/quarkus-jdbc-sqlite4j": {
   "rel_ver": "0.0.8",
   "rel_pub": "2025-10-24",
-  "rel_days": 339,
+  "rel_days": 379,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1943,7 +1987,7 @@
  "ajistyle/apollo-dameng": {
   "rel_ver": "v2.1.0-dameng",
   "rel_pub": "2026-02-13",
-  "rel_days": 227,
+  "rel_days": 267,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1969,7 +2013,7 @@
  "gzorm/gosqlx": {
   "rel_ver": "v0.0.11",
   "rel_pub": "2025-05-15",
-  "rel_days": 501,
+  "rel_days": 541,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2011,7 +2055,7 @@
  "Ranchero-Software/RSDatabase": {
   "rel_ver": "2.0.0",
   "rel_pub": "2023-08-27",
-  "rel_days": 1129,
+  "rel_days": 1168,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2058,7 +2102,7 @@
  "6enta0/CPAplus": {
   "rel_ver": "v7.2.101-cpa.1",
   "rel_pub": "2026-07-26",
-  "rel_days": 65,
+  "rel_days": 104,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2085,7 +2129,7 @@
  "MercuryTechnologies/sqkon": {
   "rel_ver": "3.0.1",
   "rel_pub": "2026-07-01",
-  "rel_days": 90,
+  "rel_days": 129,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2196,7 +2240,7 @@
  "RayElg/pgmqtt": {
   "rel_ver": "0.5.1",
   "rel_pub": "2026-09-23",
-  "rel_days": 7,
+  "rel_days": 45,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2223,7 +2267,7 @@
  "wasm-forge/ic-rusqlite": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-04-25",
-  "rel_days": 158,
+  "rel_days": 196,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2247,7 +2291,7 @@
  "GenKnot/MischicatBot": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2026-03-27",
-  "rel_days": 187,
+  "rel_days": 225,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2789,7 +2833,7 @@
   "commit_7d": 2,
   "rel_ver": "3.12.2",
   "rel_pub": "2026-10-30",
-  "rel_days": 3,
+  "rel_days": 8,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2977,7 +3021,7 @@
  "VheissuLabs/tql": {
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-10-02",
-  "rel_days": 1,
+  "rel_days": 36,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3087,7 +3131,7 @@
  },
  "huaweicloud-samples/database-dapper-orm-gaussdb": {
   "commit_90d": 1,
-  "commit_7d": 1,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -3108,7 +3152,7 @@
  "shipap/vless-vpn-shop-telegram-bot": {
   "rel_ver": "v0.1.0-rc.1",
   "rel_pub": "2026-10-15",
-  "rel_days": 10,
+  "rel_days": 23,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -3224,7 +3268,7 @@
  "haoyuant/tomrade": {
   "rel_ver": "v0.28.0-beta.1",
   "rel_pub": "2026-11-05",
-  "rel_days": 0,
+  "rel_days": 2,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,

@@ -1,11 +1,11 @@
 {
  "taosdata/TDengine": {
-  "commit_7d": 144,
-  "commit_90d": 1646,
-  "rel_ver": "ver-3.4.3.3",
-  "rel_pub": "2026-10-19",
-  "rel_days": 14,
-  "rel_n90": 5,
+  "commit_7d": 48,
+  "commit_90d": 2817,
+  "rel_ver": "ver-3.4.3.9",
+  "rel_pub": "2026-11-03",
+  "rel_days": 4,
+  "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 15,
@@ -22,7 +22,7 @@
    "GHSA-8pc4-p252-f5m7(CVE-2026-62351,high)"
   ],
   "contrib_n": 229,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "C": 76,
    "C++": 16,
@@ -32,15 +32,15 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
    {
-    "t": "ver-3.4.3.3",
-    "d": "2026-10-19",
-    "n": "- **Virtual-table inheritance and cross-layer references**: A virtual super table can inherit columns and tags from a parent model, and columns and tags can reference other virtual tables layer by layer. A virtual child table can add its own columns and tags, and virtual tables can be created or dropped in batches. External columns can be filtered before time alignment. One table can reference databases of different time precision. A broken reference names the failed object and the full chain.\n- A stream ke"
+    "t": "ver-3.4.3.9",
+    "d": "2026-11-03",
+    "n": "- Querying `information_schema.ins_tags` by table name reads that child table's tags directly. Equality filters on database, super table, and table name are applied before the scan, so a database with many child tables no longer walks all metadata.\n- When a query of `information_schema.ins_databases` does not request `ntables`, taosd no longer scans every vgroup to count tables. The columns and the `ntables` values are unchanged.\n- After SQL Server stops, a federated query fails at the configured `connect_t"
    },
    {
     "t": "ver-3.4.2.8",
@@ -51,33 +51,60 @@
     "t": "ver-3.4.2.5",
     "d": "2026-10-20",
     "n": "- InfluxDB synchronization no longer loads the whole bucket metadata when only a few measurements are selected.\n- With shared storage on and no default access string configured, `DROP DATABASE` crashed taosd. Affected versions: `v3.3.7.0` through `v3.4.2.2`.\n- Stream processing supports federated query of an external source, including InfluxDB.\n- Federated query of an external source is supported, including InfluxDB. Trigger modes, stream options, and the observability fields in `SHOW` are completed.\n- taos"
+   },
+   {
+    "t": "ver-3.4.2.2",
+    "d": "2026-10-20",
+    "n": "`BASE`, `REMOVE`, `SERIES`, used by virtual-table `BASE ON` and InfluxDB Series migration.\n2. Drop every TSMA: `DROP TSMA [db_name.]tsma_name`. The TSMA result super table is dropped with the TSMA.\n- **Federated query**: External data sources can be queried through virtual tables, and a stream task can run a federated query. MySQL, PostgreSQL, and InfluxDB v3 are supported. The feature is off by default.\n- Federated query based on virtual tables is supported. External data sources are MySQL, PostgreSQL, and"
+   },
+   {
+    "t": "ver-3.4.1.13",
+    "d": "2026-10-20",
+    "n": "- The JDBC, Rust, and C# connectors support taosAdapter high availability.\n- Windows supports UDF and shared storage. The default `WAL_LEVEL` of a new database is 2.\n- The ODBC WebSocket connector supports transport compression. The C WebSocket connector supports `DECIMAL`.\n- Windows supports UDF and shared storage. On Windows, the default `WAL_LEVEL` of a new database is 2, which forces a flush on every write.\n- On Windows, the default `WAL_LEVEL` of a new database is 2. Existing databases are unchanged.\n|"
+   },
+   {
+    "t": "ver-3.4.3.3",
+    "d": "2026-10-19",
+    "n": "- **Virtual-table inheritance and cross-layer references**: A virtual super table can inherit columns and tags from a parent model, and columns and tags can reference other virtual tables layer by layer. A virtual child table can add its own columns and tags, and virtual tables can be created or dropped in batches. External columns can be filtered before time alignment. One table can reference databases of different time precision. A broken reference names the failed object and the full chain.\n- A stream ke"
    }
+  ],
+  "etag": {
+   "release": "W/\"0218f6a56f0249760e2b57c5a843ad5b3cbcabac425ec07313690d588b02e7ed\"",
+   "security": "W/\"185b8094922dc46b9f3d652280180d717401b343158bb2f0befcf8555ac268c1\""
+  },
+  "rel_dates": [
+   "2026-11-03",
+   "2026-10-19",
+   "2026-10-20",
+   "2026-10-20",
+   "2026-10-20",
+   "2026-10-20"
   ]
  },
  "teableio/teable": {
   "commit_7d": 2,
-  "commit_90d": 12,
-  "rel_ver": "release.2026-11-01T07-52-11Z.3675",
-  "rel_pub": "2026-11-01",
+  "commit_90d": 14,
+  "rel_ver": "release.2026-11-06T11-23-32Z.3804",
+  "rel_pub": "2026-11-06",
   "rel_days": 1,
-  "rel_n90": 12,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 30,
   "sec_worst": "high",
-  "sec_last": "2026-10-27",
+  "sec_last": "2026-11-03",
   "sec_ids": [
+   "GHSA-3w7j-7hpq-74cj(-,medium)",
+   "GHSA-p4qm-93qw-7qhv(-,high)",
+   "GHSA-c58g-j3wm-3hqg(-,high)",
    "GHSA-5gph-69xh-rccq(-,high)",
    "GHSA-3452-hq3g-22gc(-,medium)",
    "GHSA-c3m3-rchr-3vr9(-,medium)",
    "GHSA-9pmg-5mmm-9j2c(-,medium)",
-   "GHSA-874f-8fvw-pwx2(-,medium)",
-   "GHSA-gfhp-53cj-g8c8(-,high)",
-   "GHSA-4rch-rfjf-6m86(-,high)",
-   "GHSA-5qj3-rq3x-q739(-,low)"
+   "GHSA-874f-8fvw-pwx2(-,medium)"
   ],
   "contrib_n": 40,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "TypeScript": 99,
    "JavaScript": 0,
@@ -87,34 +114,105 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
+   {
+    "t": "release.2026-11-06T11-23-32Z.3804",
+    "d": "2026-11-06",
+    "n": "## Bug Fixes & Improvements\n- Improved the security of key management."
+   },
+   {
+    "t": "release.2026-11-06T08-34-24Z.3803",
+    "d": "2026-11-06",
+    "n": "## Feature Updates\n- Added the read-only MCP query-data tool for structured record retrieval, filtering, pagination, aggregation, grouping, and bucketing without SQL. Queries follow existing access controls, and unsupported capabilities return explicit errors. The behavior of the existing sql-query and get-records tools remains unchanged.\n- Mobile home page search now supports finding chats by title and message content, displays matching snippets, and sorts results by most recent activity. Selecting a match"
+   },
+   {
+    "t": "release.2026-11-06T03-08-47Z.3797",
+    "d": "2026-11-06",
+    "n": "## Feature Updates\n- DATETIME_DIFF with day or days now returns the number of whole elapsed days truncated toward zero and uses the formula’s time zone to avoid one-day discrepancies caused by daylight saving time transitions. To retain fractional results in existing formulas, set the fourth argument to TRUE.\n\n## Bug Fixes & Improvements\n- Improved date handling when copying content across time zones and when creating or installing templates, preserving calendar dates and local clock times. Fields with mi"
+   },
+   {
+    "t": "release.2026-11-05T12-40-53Z.3790",
+    "d": "2026-11-05",
+    "n": "## Feature Updates\n- Formulas created through the CLI and AI now use the time zones of the date fields they reference, ensuring accurate calculations for `TODAY()`, countdowns, and similar operations. Explicitly configured formula time zones still take precedence.\n- Lookup and rollup fields created through the CLI and AI can now resolve linked tables and fields by name, including fields not previously loaded, and infer the correct type when no lookup type is specified. If a target field is missing, a clear "
+   },
+   {
+    "t": "release.2026-11-05T10-37-52Z.3784",
+    "d": "2026-11-05",
+    "n": "## Feature Updates\n- Field deletion and conversion previews now show affected apps, queries, fields, and data sources, distinguishing published and latest-saved versions. Saved queries report healthy, drifted, or broken status with clearer explanations. Previews remain read-only, require confirmation before changes, and do not automatically modify affected apps.\n- Self-hosted administrators can map custom domains to published apps with automatic HTTPS. The Custom domain option now opens the setup guide, and"
+   },
+   {
+    "t": "release.2026-11-05T08-33-35Z.3779",
+    "d": "2026-11-05",
+    "n": "## Feature Updates\n- Added a mobile app download option to the user menu.\n- Added custom domain support for published apps on self-hosted instances.\n- Added instance-wide OIDC configuration for App Builder, enabling apps to offer “Continue with SSO” alongside existing sign-in methods.\n- Simplified personal access token configuration with four permission presets, grouped read/write permissions, searchable individual permissions, and clearer access coverage. Token lists now show presets, support expiratio"
+   },
+   {
+    "t": "release.2026-11-04T07-59-29Z.3755",
+    "d": "2026-11-04",
+    "n": "- Routines now run as their owners, and generated artifacts and run conversations belong to those owners. Publishing, activating, or running an inactive Routine may transfer ownership to the user performing the action; sandbox resources, credentials, and quotas remain bound to the Routine."
+   },
+   {
+    "t": "release.2026-11-04T04-12-18Z.3742",
+    "d": "2026-11-04",
+    "n": "- Added read-only impact previews for field deletion and type conversion, table deletion and duplication, record pasting and bulk updates, and database duplication. Previews show blockers, warnings, dependencies, and unknowns, and are also available through the HTTP API and authenticated integrations. Current inputs and permissions are still validated when operations are submitted.\n- Optimized initial loading for database, Space, shared view, login, and settings pages, reducing compressed download sizes by "
+   },
+   {
+    "t": "release.2026-11-03T05-42-34Z.3718",
+    "d": "2026-11-03",
+    "n": "- Fixed attachment storage usage in BYODB spaces continuing to include permanently deleted records after table trash was emptied. Usage recalculation now correctly reflects remaining active attachments."
+   },
    {
     "t": "release.2026-11-01T07-52-11Z.3675",
     "d": "2026-11-01",
     "n": "## Feature Updates\n- Record details now open in a resizable, non-modal side panel within the table, keeping the selected row highlighted and remembering the panel width between sessions.\n- Linked records open in the same panel, with breadcrumbs to return to previously viewed records.\n- Comments adapt to the panel width for improved readability.\n- Kanban, Gallery, and Calendar views now support opening expanded records by URL and navigating to previous or next records.\n\n## Bug Fixes & Improvements\n- Fixed ba"
-   },
-   {
-    "t": "release.2026-10-30T09-29-42Z.3673",
-    "d": "2026-10-30",
-    "n": "## Feature Updates\n- Global search now highlights all visible matching cells, shows the active match and total count, and supports Enter to move between results. Highlights and navigation respect filters, hidden fields, shared views, and permissions, including for multi-value fields.\n- Pinned Connect everything and Skill creator to the top of the skill menu and made menu ordering consistent across entry points.\n- Pressing Enter now confirms paste operations in the confirmation dialog.\n- Base share users can"
-   },
-   {
-    "t": "release.2026-10-30T02-25-28Z.3658",
-    "d": "2026-10-30",
-    "n": "## Feature Updates\n- Improved the resource pane with resizable lists, full-name tooltips for truncated items, quick access to open tabs when collapsed, and keyboard navigation.\n\n## Bug Fixes & Improvements\n- Unread email reminders now apply only to Chat tasks that run for at least 10 minutes and remain unread for 30 minutes after completion, whether successful or failed. Emails identify the task by its prompt and link directly to the relevant project and conversation.\n- Prevented duplicate conversations in "
    }
+  ],
+  "etag": {
+   "release": "W/\"674afad6329b01c3f4a51a43808bf9c8479472b817b9260fc46645a29202b42c\"",
+   "security": "W/\"89007ad93b3f003b917f2abccd54ea3576fe3114b7f1d8b11e79950930896f14\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-06",
+   "2026-11-06",
+   "2026-11-05",
+   "2026-11-05",
+   "2026-11-05",
+   "2026-11-04",
+   "2026-11-04",
+   "2026-11-03",
+   "2026-11-01",
+   "2026-10-30",
+   "2026-10-30",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-27",
+   "2026-10-23",
+   "2026-10-22",
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-16",
+   "2026-10-16",
+   "2026-10-14",
+   "2026-10-14",
+   "2026-10-13",
+   "2026-10-13",
+   "2026-10-11",
+   "2026-10-02",
+   "2026-09-30",
+   "2026-09-27",
+   "2026-09-25"
   ]
  },
  "aquasecurity/cloudsploit": {
-  "commit_7d": 6,
+  "commit_7d": 0,
   "commit_90d": 49,
   "rel_ver": "v3.10.0",
   "rel_pub": "2024-11-15",
-  "rel_days": 681,
+  "rel_days": 722,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -159,7 +257,7 @@
   "commit_7d": 0,
   "rel_ver": "7.0",
   "rel_pub": "2026-04-14",
-  "rel_days": 166,
+  "rel_days": 207,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -179,7 +277,7 @@
  },
  "ClickHouse/clickhouse-presentations": {
   "commit_90d": 137,
-  "commit_7d": 44,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -225,7 +323,7 @@
   "commit_7d": 0,
   "rel_ver": "1.5.1",
   "rel_pub": "2026-04-07",
-  "rel_days": 173,
+  "rel_days": 214,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -245,7 +343,7 @@
  },
  "grillazz/fastapi-sqlalchemy-asyncpg": {
   "commit_90d": 12,
-  "commit_7d": 11,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -294,7 +392,7 @@
   "commit_7d": 0,
   "rel_ver": "0.2.1",
   "rel_pub": "2024-11-13",
-  "rel_days": 683,
+  "rel_days": 724,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -313,7 +411,7 @@
   "commit_7d": 0,
   "rel_ver": "0.13.2",
   "rel_pub": "2022-11-22",
-  "rel_days": 1405,
+  "rel_days": 1446,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -347,7 +445,7 @@
   "enriched_at": "20260927"
  },
  "nrjdalal/rdt-li": {
-  "commit_90d": 1,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -422,7 +520,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0",
   "rel_pub": "2015-10-18",
-  "rel_days": 3997,
+  "rel_days": 4038,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -508,7 +606,7 @@
  "turbot/steampipe-postgres-fdw": {
   "rel_ver": "v2.2.7",
   "rel_pub": "2026-09-16",
-  "rel_days": 11,
+  "rel_days": 52,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -529,7 +627,7 @@
  "dipjyotimetia/MobileTestFramework": {
   "rel_ver": "v1.5.6",
   "rel_pub": "2024-06-28",
-  "rel_days": 821,
+  "rel_days": 862,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -549,7 +647,7 @@
  "jatindotdev/express-drizzle-postgres-starter": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2024-05-14",
-  "rel_days": 866,
+  "rel_days": 907,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -567,7 +665,7 @@
  "erik/squabble": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2020-02-19",
-  "rel_days": 2412,
+  "rel_days": 2453,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -584,7 +682,7 @@
  "zalando-stups/java-sproc-wrapper": {
   "rel_ver": "4.0.0",
   "rel_pub": "2025-10-14",
-  "rel_days": 348,
+  "rel_days": 389,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -647,7 +745,7 @@
  "alex-ald/postgraphile-nest": {
   "rel_ver": "v1.0.6",
   "rel_pub": "2021-01-28",
-  "rel_days": 2068,
+  "rel_days": 2109,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -682,7 +780,7 @@
  "fdhhhdjd/Go_Secure_Auth_Pro": {
   "rel_ver": "v1.1.8",
   "rel_pub": "2024-10-15",
-  "rel_days": 712,
+  "rel_days": 753,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -752,7 +850,7 @@
  "Ruimusume/PMSV": {
   "rel_ver": "1.2.0",
   "rel_pub": "2022-12-02",
-  "rel_days": 1395,
+  "rel_days": 1436,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -769,7 +867,7 @@
  "cjauvin/little_pger": {
   "rel_ver": "v1.0.3",
   "rel_pub": "2018-03-30",
-  "rel_days": 3103,
+  "rel_days": 3144,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -786,7 +884,7 @@
  "VISWESWARAN1998/CyberGod-KSGMPRH": {
   "rel_ver": "1.3",
   "rel_pub": "2017-04-13",
-  "rel_days": 3454,
+  "rel_days": 3495,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -821,7 +919,7 @@
  "StaffNowa/docker-symfony": {
   "rel_ver": "v2.0.25",
   "rel_pub": "2025-02-23",
-  "rel_days": 581,
+  "rel_days": 622,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -853,7 +951,7 @@
  "gwalkey/SQLTranscriptase": {
   "rel_ver": "v2025.03",
   "rel_pub": "2025-03-07",
-  "rel_days": 569,
+  "rel_days": 610,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -918,7 +1016,7 @@
  "raaidarshad/dbdeclare": {
   "rel_ver": "0.0.1",
   "rel_pub": "2023-02-27",
-  "rel_days": 1308,
+  "rel_days": 1349,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -982,7 +1080,7 @@
  "nullbitsco/tidbit": {
   "rel_ver": "latest",
   "rel_pub": "2021-07-28",
-  "rel_days": 1887,
+  "rel_days": 1928,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1203,7 +1301,7 @@
  "thiamsantos/ecto_enum_migration": {
   "rel_ver": "v0.3.4",
   "rel_pub": "2021-12-15",
-  "rel_days": 1748,
+  "rel_days": 1788,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1246,7 +1344,7 @@
  "joseluisq/docker-mysql-client": {
   "rel_ver": "v8.0.44",
   "rel_pub": "2026-01-05",
-  "rel_days": 266,
+  "rel_days": 306,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1421,7 +1519,7 @@
  "DeanZFC/sub2api-custom": {
   "rel_ver": "v0.2.4-custom.8",
   "rel_pub": "2026-09-11",
-  "rel_days": 17,
+  "rel_days": 57,
   "rel_n90": 6,
   "rel_pre": true,
   "rel_none": false,
@@ -1459,7 +1557,7 @@
  "hbmartin/overcast-to-sqlite": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-03-15",
-  "rel_days": 197,
+  "rel_days": 237,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1542,7 +1640,7 @@
  "old6ix/HIT-Database-System-Labs": {
   "rel_ver": "lab3-v1.0.0",
   "rel_pub": "2022-05-24",
-  "rel_days": 1588,
+  "rel_days": 1628,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1604,7 +1702,7 @@
  "kisen9102-lgtm/dbquery": {
   "rel_ver": "v1.3",
   "rel_pub": "2026-03-23",
-  "rel_days": 189,
+  "rel_days": 229,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1692,7 +1790,7 @@
  "FlameyosSnowy/Universal": {
   "rel_ver": "7.1.6",
   "rel_pub": "2026-04-22",
-  "rel_days": 160,
+  "rel_days": 199,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1756,7 +1854,7 @@
  "ccccsssssyyyyyy/xiaochen-math-treasure": {
   "rel_ver": "V2.4.2",
   "rel_pub": "2026-09-21",
-  "rel_days": 9,
+  "rel_days": 47,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1802,7 +1900,7 @@
  "walterwanderley/sqlite-http-cache": {
   "rel_ver": "v0.0.7",
   "rel_pub": "2025-08-16",
-  "rel_days": 410,
+  "rel_days": 448,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2024,7 +2122,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2024-11-08",
-  "rel_days": 692,
+  "rel_days": 729,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2239,7 +2337,7 @@
  "Novanglus96/LenoreShop": {
   "rel_ver": "v1.9.2",
   "rel_pub": "2026-08-17",
-  "rel_days": 46,
+  "rel_days": 82,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2380,7 +2478,7 @@
  "atc0005/mysql2sqlite": {
   "rel_ver": "v0.4.1",
   "rel_pub": "2025-05-23",
-  "rel_days": 500,
+  "rel_days": 533,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2450,7 +2548,7 @@
  "liunor/nlp-agent": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 26,
+  "rel_days": 49,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2502,10 +2600,10 @@
   }
  },
  "cristianadrielbraun/gofer": {
-  "rel_ver": "v0.9.0",
-  "rel_pub": "2026-10-18",
-  "rel_days": 0,
-  "rel_n90": 8,
+  "rel_ver": "v0.22.0",
+  "rel_pub": "2026-11-06",
+  "rel_days": 1,
+  "rel_n90": 23,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -2520,16 +2618,96 @@
    "CSS": 2,
    "HTML": 1
   },
-  "enriched_at": "20261024",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "release": "20261018",
+   "release": "20261107",
    "security": "20261018",
    "contrib": "20261018",
    "lang": "20261018",
-   "commit": "20261024"
+   "commit": "20261107"
   },
-  "commit_90d": 510,
-  "commit_7d": 210
+  "commit_90d": 755,
+  "commit_7d": 139,
+  "etag": {
+   "release": "W/\"b8657f5e410e7c28022c8aa8ee85699d493d0de482703676ed05b6acb73a3f5c\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-04",
+   "2026-11-02",
+   "2026-10-31",
+   "2026-10-30",
+   "2026-10-28",
+   "2026-10-26",
+   "2026-10-24",
+   "2026-10-23",
+   "2026-10-23",
+   "2026-10-22",
+   "2026-10-21",
+   "2026-10-20",
+   "2026-10-20",
+   "2026-10-18",
+   "2026-10-18",
+   "2026-10-16",
+   "2026-10-14",
+   "2026-10-12",
+   "2026-10-09",
+   "2026-10-09",
+   "2026-10-09",
+   "2026-10-05"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.22.0",
+    "d": "2026-11-06",
+    "n": "* ⚠️ This release upgrades the database (schemas 137 to 140). You can't go back to an older release afterwards, so back up your data directory first.\n* The first start can take a while on large databases while contacts are given a home, split and recounted. Progress is logged as \"storage: schema 13x/140 …\"."
+   },
+   {
+    "t": "v0.21.0",
+    "d": "2026-11-04",
+    "n": "* With managed sign-in, pages, notifications and reminders read the user's saved language and date settings from their own store. Before, they were looked up in the shared database, so they didn't apply.\n* ⚠️ This release upgrades the database (schema 136). You can't go back to an older release afterwards, so back up your data directory first."
+   },
+   {
+    "t": "v0.20.0",
+    "d": "2026-11-02",
+    "n": "* ⚠️ This release upgrades the database (schema 135). You can't go back to an older release afterwards, so back up your data directory first."
+   },
+   {
+    "t": "v0.19.0",
+    "d": "2026-10-31",
+    "n": "* ⚠️ This release upgrades the database (schema 133). You can't go back to an older release afterwards, so back up your data directory first."
+   },
+   {
+    "t": "v0.18.0",
+    "d": "2026-10-30",
+    "n": "* This release doesn't change the database, so you can go back to v0.17.0 if needed."
+   },
+   {
+    "t": "v0.17.0",
+    "d": "2026-10-28",
+    "n": "* ⚠️ This release upgrades the database (schema 132). You can't go back to an older release afterwards, so back up your data directory first.\n* Auth commands reach the running Gofer through `<db>.control/socket`. If the database path is too long for a socket, Gofer logs it at startup and those commands still need Gofer stopped."
+   },
+   {
+    "t": "v0.16.0",
+    "d": "2026-10-26",
+    "n": "- ⚠️ This release upgrades the database (schema 130). You can't go back to an older release afterwards, so back up your data directory first."
+   },
+   {
+    "t": "v0.15.0",
+    "d": "2026-10-24",
+    "n": "- ⚠️ This release upgrades the database (schema 127). You can't go back to an older release afterwards, so back up your data directory first.\n- The cleanup runs with the regular retention pass, every 6 hours. On large installs it goes through old leftovers in batches over a few days. The database file only shrinks after a `VACUUM`."
+   },
+   {
+    "t": "v0.14.0",
+    "d": "2026-10-23",
+    "n": "- No database changes. Upgrading and downgrading are both safe."
+   },
+   {
+    "t": "v0.13.0",
+    "d": "2026-10-23",
+    "n": "- ⚠️ This release upgrades the database (schema 125). You can't go back to an older release afterwards, so back up your data directory first. On large mailboxes the upgrade may take a few seconds longer to start."
+   }
+  ]
  },
  "webkubor/suno-publisher": {
   "rel_ver": null,
@@ -2555,7 +2733,7 @@
  "vuhai2002/zalo-agent": {
   "rel_ver": "v0.3.1",
   "rel_pub": "2026-08-30",
-  "rel_days": 51,
+  "rel_days": 69,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2581,7 +2759,7 @@
  },
  "ayd-jamesjr/grandis-tidb-website": {
   "commit_90d": 4,
-  "commit_7d": 4,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2607,7 +2785,7 @@
  "assetcorp/sirannon-db": {
   "rel_ver": "v0.3.4",
   "rel_pub": "2026-09-27",
-  "rel_days": 26,
+  "rel_days": 41,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -2634,7 +2812,7 @@
  "hare-orm/hare-orm": {
   "rel_ver": "v0.9.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 0,
+  "rel_days": 15,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2733,7 +2911,7 @@
   "commit_7d": 499,
   "rel_ver": "desktop-latest",
   "rel_pub": "2026-10-19",
-  "rel_days": 10,
+  "rel_days": 19,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2761,7 +2939,7 @@
  "davidedalcortivo/Forget": {
   "rel_ver": "v2.4.4",
   "rel_pub": "2026-10-26",
-  "rel_days": 3,
+  "rel_days": 12,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2809,7 +2987,7 @@
  "Charlie-BU/Digital-Immortality": {
   "rel_ver": "v1.2.6",
   "rel_pub": "2026-08-30",
-  "rel_days": 62,
+  "rel_days": 69,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2853,7 +3031,7 @@
  "glincker/theauth-go": {
   "rel_ver": "v2.13.0",
   "rel_pub": "2026-10-31",
-  "rel_days": 4,
+  "rel_days": 7,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,

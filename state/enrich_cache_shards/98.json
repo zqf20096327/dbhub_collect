@@ -1,10 +1,10 @@
 {
  "chroma-core/chroma": {
-  "commit_7d": 0,
-  "commit_90d": 85,
+  "commit_7d": 1,
+  "commit_90d": 86,
   "rel_ver": "latest",
   "rel_pub": "2025-04-01",
-  "rel_days": 580,
+  "rel_days": 585,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 190,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Rust": 71,
    "Python": 15,
@@ -23,8 +23,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261102"
   },
   "rel_notes": [
@@ -43,15 +43,19 @@
     "d": "2026-05-05",
     "n": "CLI release."
    }
-  ]
+  ],
+  "etag": {
+   "release": "W/\"8e4c7e0380a94cbab6d0959bf04c9401673416b50d0cfd929166c1b548d3e0d4\""
+  },
+  "rel_dates": []
  },
  "StarRocks/starrocks": {
-  "commit_7d": 193,
-  "commit_90d": 1507,
-  "rel_ver": "3.5.21",
-  "rel_pub": "2026-08-31",
-  "rel_days": 63,
-  "rel_n90": 3,
+  "commit_7d": 170,
+  "commit_90d": 1595,
+  "rel_ver": "4.1.7",
+  "rel_pub": "2026-11-03",
+  "rel_days": 4,
+  "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -59,7 +63,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 395,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Java": 55,
    "C++": 42,
@@ -69,11 +73,46 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "4.1.7",
+    "d": "2026-11-03",
+    "n": "- Security integration (LDAP) users could not authenticate on the non-MySQL channels. [#79165](https://github.com/StarRocks/starrocks/pull/79165)\n- `CAST(x AS CHAR(N))` now truncates the result to `N` characters, consistent with MySQL. Both constant folding in the FE and execution in the BE apply the truncation. [#75909](https://github.com/StarRocks/starrocks/pull/75909)\n- `ViewsSystemTable` held a database read lock instead of an intensive table lock. [#78344](https://github.com/StarRocks/starrocks/pull/78"
+   },
+   {
+    "t": "4.0.17",
+    "d": "2026-11-03",
+    "n": "- Internal statistics DML now binds its own context, so `DROP STATS` in an external catalog session no longer reports `Unknown database '_statistics_'`. [#80473](https://github.com/StarRocks/starrocks/pull/80473)\n- Explicit `CAST(x AS CHAR(N))` now truncates the result to the first `N` characters, consistent with MySQL. [#75909](https://github.com/StarRocks/starrocks/pull/75909)\n- `information_schema.views` queries failed when Ranger authorization was enabled because of a database-wide read lock. [#78344](h"
+   },
+   {
+    "t": "4.1.6",
+    "d": "2026-11-03",
+    "n": "- Elasticsearch external tables and Elasticsearch catalogs rejected clusters running version 8 or 9 with `Unsupported/Unknown ES Cluster version`, and concurrent queries could overwrite each other's request URL parameters, which surfaced as unrelated analysis errors such as `Column 'id' cannot be resolved`. [#78267](https://github.com/StarRocks/starrocks/pull/78267) [#79391](https://github.com/StarRocks/starrocks/pull/79391)\n- `TRUNCATE TABLE <external_catalog>.<db>.<table>` now checks the `DELETE` privileg"
+   },
+   {
+    "t": "4.0.16",
+    "d": "2026-11-03",
+    "n": "- Elasticsearch external tables and Elasticsearch catalogs rejected clusters running version 8 or 9 with `Unsupported/Unknown ES Cluster version`, and concurrent queries could overwrite each other's request URL parameters, which surfaced as unrelated analysis errors such as `Column 'id' cannot be resolved`. [#78267](https://github.com/StarRocks/starrocks/pull/78267) [#79391](https://github.com/StarRocks/starrocks/pull/79391)\n- Background auto-ANALYZE of an external table could fail with `primary key size ex"
+   },
+   {
+    "t": "4.1.4",
+    "d": "2026-11-03",
+    "n": "- Range-colocate fixes: stopped an alignment job storm and fail-close unaligned colocate joins, fixed null-safe joins dropping matches under bucket-shuffle, and improved range-colocate join detection in plan feedback. [#75930](https://github.com/StarRocks/starrocks/pull/75930) [#76104](https://github.com/StarRocks/starrocks/pull/76104) [#76121](https://github.com/StarRocks/starrocks/pull/76121)\n- Materialized view pinned-range maps are now keyed correctly (by table UUID), fixing MV bootstrap pinning being d"
+   },
+   {
+    "t": "4.1.2",
+    "d": "2026-11-03",
+    "n": "- MySQL result serialization no longer uses per-row virtual dispatch; a typed column writer is built once per chunk, reducing serialization overhead for wide or large result sets. [#66316](https://github.com/StarRocks/starrocks/pull/66316)\n- `_statistics_.pipe_file_list` internal table was not re-created after the `_statistics_` database or table was dropped. [#73970](https://github.com/StarRocks/starrocks/pull/73970)\n- Added missing MySQL 8 columns to `information_schema` tables to improve compatibility wi"
+   },
+   {
+    "t": "4.1.3",
+    "d": "2026-09-17",
+    "n": "* `information_schema.COLUMNS` always returned `NULL` for `DATETIME_PRECISION`, breaking MySQL-protocol clients that derive column size from that field. [#74623](https://github.com/StarRocks/starrocks/pull/74623)\n* `DROP PERSISTENT INDEX` modified `rebuildPindexVersion` without a table lock; `RestoreJob` post-restore mutated MV base-table info under only a DB READ lock; `FinalizeCreateTableAction` passed a DB-level lock across iterator creation. [#74968](https://github.com/StarRocks/starrocks/pull/74968)\n* "
+   },
    {
     "t": "3.5.21",
     "d": "2026-08-31",
@@ -89,15 +128,29 @@
     "d": "2026-07-23",
     "n": "- Added the FE metric `txn_max_committed_pending_publish_ms`, a per-database gauge reporting the longest time a committed transaction has been pending publish, to help diagnose stuck or lagging version publishing. [#75025](https://github.com/StarRocks/starrocks/pull/75025)\n- `CREATE DATABASE IF NOT EXISTS` on Iceberg REST catalogs now succeeds silently when the database already exists, instead of raising an error. [#75017](https://github.com/StarRocks/starrocks/pull/75017)"
    }
+  ],
+  "etag": {
+   "release": "W/\"1711581de19dcb53d4c9dc29fbdde2f5317dd4c1d0e377b1100189ff94142e04\""
+  },
+  "rel_dates": [
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-08-31",
+   "2026-08-27",
+   "2026-11-03",
+   "2026-09-17",
+   "2026-11-03"
   ]
  },
  "mnemosyne-oss/mnemosyne": {
-  "commit_7d": 215,
-  "commit_90d": 964,
+  "commit_7d": 104,
+  "commit_90d": 973,
   "rel_ver": "v0.7.7",
   "rel_pub": "2026-10-27",
-  "rel_days": 6,
-  "rel_n90": 12,
+  "rel_days": 11,
+  "rel_n90": 15,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 1,
@@ -107,7 +160,7 @@
    "GHSA-xcw4-53cc-hv32(CVE-2026-59163,critical)"
   ],
   "contrib_n": 89,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Python": 99,
    "TypeScript": 0,
@@ -116,9 +169,9 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
    {
@@ -135,16 +188,72 @@
     "t": "v4.0.0b6",
     "d": "2026-10-26",
     "n": "* fix(connections): explicit caller-asserted release for thread-local SQLite handles (#1163) by @vitobotta in https://github.com/mnemosyne-oss/mnemosyne/pull/1228\n* fix(dr): create binary SQLite backups to safely restore FTS5/vec0 virtual tables (#640) by @bayhnf in https://github.com/mnemosyne-oss/mnemosyne/pull/1229"
+   },
+   {
+    "t": "v4.0.0b5",
+    "d": "2026-10-19",
+    "n": "## What's Changed\n* fix: combine Hermes baseline, resolver guards and UTC eligibility by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1152\n* fix(core): judge valid_until expiry with julianday eligibility (split from #1113) by @Astraea-Hermes in https://github.com/mnemosyne-oss/mnemosyne/pull/1142\n* fix(tests): isolate 17 Hermes baseline expectation and runtime fixture corrections by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1150\n* fix(hermes): align opt-in resolver evaluation "
+   },
+   {
+    "t": "v0.7.6",
+    "d": "2026-10-19",
+    "n": "## What's Changed\n* fix(beam): finish the deletion cascade and block late enrichment (#1131, #1126, #1100) by @AxDSan in https://github.com/mnemosyne-oss/mnemosyne/pull/1209\n* test(recall): cover enhanced explain content cap boundaries by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1186\n* fix(hermes): key bindings by home and active profile (#1188) by @AxDSan in https://github.com/mnemosyne-oss/mnemosyne/pull/1211\n* fix(recall): hide derived rows whose source memory is gone (#1035) by @AxDSan"
+   },
+   {
+    "t": "v0.7.5",
+    "d": "2026-10-19",
+    "n": "## What's Changed\n* fix: combine Hermes baseline, resolver guards and UTC eligibility by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1152\n* fix(core): judge valid_until expiry with julianday eligibility (split from #1113) by @Astraea-Hermes in https://github.com/mnemosyne-oss/mnemosyne/pull/1142\n* fix(tests): isolate 17 Hermes baseline expectation and runtime fixture corrections by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1150\n* fix(hermes): align opt-in resolver evaluation "
+   },
+   {
+    "t": "v4.0.0b4",
+    "d": "2026-10-03",
+    "n": "* fix(repair): load sqlite-vec consistently for D1 (#1040) by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1057\n* fix(cli): honor --db/--bank in reindex and reject unknown options (#1045) by @jamalkamaladdin in https://github.com/mnemosyne-oss/mnemosyne/pull/1049"
+   },
+   {
+    "t": "v0.7.4",
+    "d": "2026-10-03",
+    "n": "* fix(repair): load sqlite-vec consistently for D1 (#1040) by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1057\n* fix(cli): honor --db/--bank in reindex and reject unknown options (#1045) by @jamalkamaladdin in https://github.com/mnemosyne-oss/mnemosyne/pull/1049"
+   },
+   {
+    "t": "v4.0.0b3",
+    "d": "2026-09-23",
+    "n": "## What's Changed\n* feat(core): recall provenance logging by @AxelFooley in https://github.com/mnemosyne-oss/mnemosyne/pull/957\n* fix(hermes): make audit writes thread-safe by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1009\n* fix(hermes): honor audit busy timeout by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1010\n* feat(doctor): expose read-only embeddings status by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1020\n* fix(hermes): disambiguate iteration-mark reca"
+   },
+   {
+    "t": "v0.7.3",
+    "d": "2026-09-23",
+    "n": "## What's Changed\n* feat(core): recall provenance logging by @AxelFooley in https://github.com/mnemosyne-oss/mnemosyne/pull/957\n* fix(hermes): make audit writes thread-safe by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1009\n* fix(hermes): honor audit busy timeout by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1010\n* feat(doctor): expose read-only embeddings status by @dplush in https://github.com/mnemosyne-oss/mnemosyne/pull/1020\n* fix(hermes): disambiguate iteration-mark reca"
    }
+  ],
+  "etag": {
+   "release": "W/\"a23f75e10d4b616919843568c768b7f728f263b2fbfb175398865c3987c73352\"",
+   "security": "W/\"53ad801c0704ac6bac11f97d7ff319c70b76ad2e2e856116f0d07583c29b2dd0\""
+  },
+  "rel_dates": [
+   "2026-10-27",
+   "2026-10-27",
+   "2026-10-26",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-03",
+   "2026-10-03",
+   "2026-09-23",
+   "2026-09-23",
+   "2026-09-21",
+   "2026-09-19",
+   "2026-09-10",
+   "2026-09-09",
+   "2026-08-24"
   ]
  },
  "mydumper/mydumper": {
-  "commit_7d": 7,
-  "commit_90d": 58,
-  "rel_ver": "v1.0.17-1",
-  "rel_pub": "2026-11-03",
-  "rel_days": 0,
-  "rel_n90": 7,
+  "commit_7d": 9,
+  "commit_90d": 60,
+  "rel_ver": "v1.0.19-1",
+  "rel_pub": "2026-11-05",
+  "rel_days": 2,
+  "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 1,
@@ -154,7 +263,7 @@
    "GHSA-r8qc-xp3g-c458(CVE-2025-30224,medium)"
   ],
   "contrib_n": 102,
-  "enriched_at": "20261103",
+  "enriched_at": "20261107",
   "lang": {
    "C": 90,
    "Shell": 5,
@@ -164,11 +273,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261103",
-   "release": "20261103",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
+   {
+    "t": "v1.0.19-1",
+    "d": "2026-11-05",
+    "n": "7dc30f64db54728333900e35fab84ced  mydumper-1.0.19-1.el10.x86_64.rpm\n82d5ea22af019c65d84a1d876aadb7d3  mydumper_1.0.19-1~bookworm_amd64.deb\n5022bf07ce6cebe5b09db4c387eff0d5  mydumper_1.0.19-1~resolute_arm64.deb\nf529cf44360c4dbaee14e460b6c4d66b5e9a9480  mydumper-1.0.19-1.el8.aarch64.rpm\n968ddbaa66b40adaa716ce6fab90e45de7f4f5ce  mydumper-1.0.19-1.el9.x86_64.rpm\nd0e3be234b1b885090d0bd924a61aead9fedbeba  mydumper_1.0.19-1~jammy_amd64.deb\n0d6feedbaf8572acc00105f61d51448f7cae10ad  mydumper_1.0.19-1~trixie_arm64.de"
+   },
    {
     "t": "v1.0.17-1",
     "d": "2026-11-03",
@@ -183,7 +297,41 @@
     "t": "v1.0.13-1",
     "d": "2026-11-02",
     "n": "e5fddb3537d25d8ae5746467d5c6d964  mydumper_1.0.13-1~resolute_amd64.deb\na7bdb0fd65c894b755ee34ddc9d10f45  mydumper_1.0.13-1~resolute_arm64.deb\ned159dba60733ef4321fafc5474c29f5807caced  mydumper-1.0.13-1.el7.x86_64.rpm\nbb43a2a3e7bff63e85546c41d85c6db500b82151  mydumper-1.0.13-1.el9.x86_64.rpm\n978a8653627374db43a160449d136133995fd0a1  mydumper_1.0.13-1~trixie_amd64.deb\n3a00d85a48bf7a4d9ede698ef473b516ec5905edc2a9c51604214141adbeca49  mydumper-1.0.13-1.el10.aarch64.rpm\n0bf56c802bd6de4db99908101c90d96ee35d9189db"
+   },
+   {
+    "t": "v1.0.11-1",
+    "d": "2026-10-08",
+    "n": "8bea22d7cf47dc693d0495db561d3fe6  mydumper-1.0.11-1.el10.x86_64.rpm\ne49a4a1adb3ca4d382e4d4b1488ef43b  mydumper_1.0.11-1~trixie_arm64.deb\n8022ff8f529648120342ce168ddbd490281dba66  mydumper-1.0.11-1.el9.aarch64.rpm\n09577bb1e852be1338db1af7e5cbbc7600901a24  mydumper_1.0.11-1~noble_arm64.deb\n885e50a0df0d0ad413fd94176193f44db70117a3  mydumper_1.0.11-1~resolute_arm64.deb\ndb9a6f0890c4ab824a6f51a04af9923b1c75ac993a404b8ed01cb8a4e76fab41  mydumper_1.0.11-1~bionic_amd64.deb\n632ed42729b5299b74821c856ad2704db3bf01b6b02"
+   },
+   {
+    "t": "v1.0.8-1",
+    "d": "2026-09-15",
+    "n": "41bc6eead58a1e5d285aeadb10dbdc0f  mydumper_1.0.8-1~focal_amd64.deb\n98665ae15a340231254d990d576dbcc3  mydumper_1.0.8-1~trixie_arm64.deb\nc955ded5342f699ff5dbbf0245d30f6c2ec16637  mydumper-1.0.8-1.el8.x86_64.rpm\n4b6653d57c3dbadb7c604a7e9c0ca8ff64c1d4b9  mydumper_1.0.8-1~resolute_arm64.deb\n004e1e7c09c63d28afe2c03a94f10795e38f7ecdbccc42d7703265f2a711512e  mydumper-1.0.8-1.el7.x86_64.rpm\nf57b76d707f3a951c074b4c222dc74d7e02fdcfba1db2acf6b01d17064c72320  mydumper-1.0.8-1.el9.aarch64.rpm\n65ad3602c33afd850eb2db0edae6"
+   },
+   {
+    "t": "v1.0.6-1",
+    "d": "2026-08-26",
+    "n": "a50d9cf7ee62a6799bf39f71cdb2d26f  mydumper-1.0.6-1.el10.x86_64.rpm\na4f75b220d783a7edbf059100ff31f68  mydumper_1.0.6-1~noble_arm64.deb\nf5e2b630593ce82e12355dbac54f574f  mydumper_1.0.6-1~trixie_arm64.deb\nd841725a107950fea5cfdba6e9e557a12ac07b6c  mydumper_1.0.6-1~noble_arm64.deb\n4e5208180090dbe063e6549969a611549634c546ec509e19656e3320f0c6849e  mydumper-1.0.6-1.el10.x86_64.rpm\ndc7f3683300294e10d33722fa023ed139e65dedeca3f06f574ce37db6417b683  mydumper_1.0.6-1~focal_amd64.deb\nbc495d69cb21d9ac01f9152ac14b0afebadba"
+   },
+   {
+    "t": "v1.0.5-1",
+    "d": "2026-08-18",
+    "n": "93e3c211adad65dbb0ef2dcba897ebed  mydumper_1.0.5-1~bookworm_arm64.deb\n5c39aef3f0db59e5e73bb3fb342fad9c  mydumper_1.0.5-1~trixie_amd64.deb\n925dbd38101dfeaab889bcf64691c59f180bf0e0  mydumper-1.0.5-1.el9.x86_64.rpm\nb7ac6e94c7a54dc96cc4a53135c8610f9a445fdb  mydumper_1.0.5-1~bookworm_arm64.deb\nfc5b98b15986e515bdb61cf22c2e71bce87e59f0  mydumper_1.0.5-1~bullseye_amd64.deb\ndb334bd21d822632178a8928fef99cb3b3b911c6aa111b1a4ff62bf8451f9ce5  mydumper-1.0.5-1.el10.x86_64.rpm\n4f13355804a49b2f3fe67e1b73db320c940f793fe6071"
    }
+  ],
+  "etag": {
+   "release": "W/\"e26fb086261c32c5dcb3e11b8eed18a840117a8176942b1d83c0ecd6a2cddd7e\"",
+   "security": "W/\"1eeee4f23629caa5e28551b404a6316a02703cefbf2172f8c36e8cd5e468912e\""
+  },
+  "rel_dates": [
+   "2026-11-05",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-02",
+   "2026-10-08",
+   "2026-09-15",
+   "2026-08-26",
+   "2026-08-18"
   ]
  },
  "PomeloFoundation/Pomelo.EntityFrameworkCore.MySql": {
@@ -191,7 +339,7 @@
   "commit_90d": 0,
   "rel_ver": "9.0.0",
   "rel_pub": "2025-08-17",
-  "rel_days": 406,
+  "rel_days": 447,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -234,11 +382,11 @@
   }
  },
  "stoolap/stoolap": {
-  "commit_90d": 615,
-  "commit_7d": 126,
+  "commit_90d": 710,
+  "commit_7d": 128,
   "rel_ver": "v0.4.2",
   "rel_pub": "2026-09-23",
-  "rel_days": 40,
+  "rel_days": 45,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -251,10 +399,10 @@
    "Rust": 100,
    "C": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -273,6 +421,13 @@
     "d": "2026-04-01",
     "n": "Existing v0.3.7 databases are automatically migrated on first open:\nUPDATE on primary key columns is now rejected with a clear error message. The engine uses `row_id == pk_value` as a core invariant across ~50 code paths. This matches SQLite's behavior for rowid tables. Use `DELETE + INSERT` to change a row's primary key value.\n- CLI error paths ensure database cleanup before exit"
    }
+  ],
+  "etag": {
+   "release": "W/\"14d6c68a85d5d3d6414804ddd8d846bb4711e0881f85d133868ac2e60a7c2a87\""
+  },
+  "rel_dates": [
+   "2026-09-23",
+   "2026-09-06"
   ]
  },
  "epsilla-cloud/vectordb": {
@@ -320,7 +475,7 @@
   "commit_7d": 15,
   "rel_ver": "v4.0.53",
   "rel_pub": "2026-10-14",
-  "rel_days": 13,
+  "rel_days": 24,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -363,7 +518,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.189.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 7,
+  "rel_days": 18,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -408,7 +563,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.11.0",
   "rel_pub": "2023-11-04",
-  "rel_days": 1058,
+  "rel_days": 1099,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -443,7 +598,7 @@
   "commit_7d": 2,
   "rel_ver": "v0.2.12",
   "rel_pub": "2026-01-10",
-  "rel_days": 293,
+  "rel_days": 301,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -476,7 +631,7 @@
   "commit_7d": 0,
   "rel_ver": "v5.6.0",
   "rel_pub": "2026-06-24",
-  "rel_days": 95,
+  "rel_days": 136,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -496,14 +651,15 @@
   "commit_7d": 24,
   "rel_ver": "v2.1.0-beta.2",
   "rel_pub": "2026-05-15",
-  "rel_days": 165,
+  "rel_days": 176,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
-  "sec_n": 1,
+  "sec_n": 2,
   "sec_worst": null,
-  "sec_last": "2023-09-01",
+  "sec_last": "2026-11-04",
   "sec_ids": [
+   "GHSA-8mgf-g7p8-j827(-,medium)",
    "GHSA-wc6p-6cgv-2m72(-,medium)"
   ],
   "contrib_n": 28,
@@ -514,10 +670,14 @@
    "JavaScript": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261107",
   "dim_ts": {
    "commit": "20261027",
-   "release": "20261027"
+   "release": "20261027",
+   "security": "20261107"
+  },
+  "etag": {
+   "security": "W/\"db6a7504d438b0d75ce4552bde962cdb79af780983cee9cbc3abaea6ad475659\""
   }
  },
  "henvic/pgxtutorial": {
@@ -567,7 +727,7 @@
  "TeamDerUntergang/Telegram-SedenUserBot": {
   "rel_ver": "v1.8.0",
   "rel_pub": "2024-03-08",
-  "rel_days": 933,
+  "rel_days": 974,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -630,7 +790,7 @@
  "Impact123/CallAdmin": {
   "rel_ver": "development-18",
   "rel_pub": "2023-08-27",
-  "rel_days": 1127,
+  "rel_days": 1168,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -661,7 +821,7 @@
  "huaweicloud/huaweicloud-sdk-php-obs": {
   "rel_ver": "v3.24.9",
   "rel_pub": "2024-10-09",
-  "rel_days": 718,
+  "rel_days": 759,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -683,7 +843,7 @@
  "adarshaacharya/MentorLabs": {
   "rel_ver": "v0.0.1-experimental",
   "rel_pub": "2021-11-05",
-  "rel_days": 1787,
+  "rel_days": 1828,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -704,7 +864,7 @@
  "satisfecho/pos": {
   "rel_ver": "v2.1.175",
   "rel_pub": "2026-09-18",
-  "rel_days": 9,
+  "rel_days": 50,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -799,7 +959,7 @@
  "oracle/fmw-chef-cookbook": {
   "rel_ver": "0.1.5",
   "rel_pub": "2018-07-10",
-  "rel_days": 3001,
+  "rel_days": 3042,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -818,7 +978,7 @@
  "arkuznetsov/yabr.os": {
   "rel_ver": "v.0.7.1",
   "rel_pub": "2021-07-16",
-  "rel_days": 1899,
+  "rel_days": 1940,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -836,7 +996,7 @@
  "eterdb/eterdb": {
   "rel_ver": "v0.1.2",
   "rel_pub": "2026-09-10",
-  "rel_days": 17,
+  "rel_days": 58,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -857,7 +1017,7 @@
  "Nareshix/Sqlitex": {
   "rel_ver": "v0.5.3",
   "rel_pub": "2026-09-07",
-  "rel_days": 20,
+  "rel_days": 61,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -919,7 +1079,7 @@
  "jamj2000/GestionBasesDatos": {
   "rel_ver": "v1.0",
   "rel_pub": "2017-11-16",
-  "rel_days": 3237,
+  "rel_days": 3278,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1036,7 +1196,7 @@
  "fulldump/inceptiondb": {
   "rel_ver": "v0.0.17",
   "rel_pub": "2026-02-08",
-  "rel_days": 232,
+  "rel_days": 272,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1072,7 +1232,7 @@
  "IvanOfThings/terraform-provider-clickhouse": {
   "rel_ver": "v3.8.3",
   "rel_pub": "2026-01-30",
-  "rel_days": 241,
+  "rel_days": 281,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1107,7 +1267,7 @@
  "suiflex/rdb": {
   "rel_ver": "v0.48.1",
   "rel_pub": "2026-09-25",
-  "rel_days": 3,
+  "rel_days": 43,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1203,7 +1363,7 @@
  "Limetric/pgferry": {
   "rel_ver": "v6.1.0",
   "rel_pub": "2026-07-13",
-  "rel_days": 77,
+  "rel_days": 117,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1256,7 +1416,7 @@
  "oracle/rewrite-recipes": {
   "rel_ver": "rewrite-weblogic-0.6.3",
   "rel_pub": "2026-02-03",
-  "rel_days": 237,
+  "rel_days": 277,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1273,7 +1433,7 @@
  "SirClappington/enq": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2025-10-18",
-  "rel_days": 345,
+  "rel_days": 385,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1308,7 +1468,7 @@
  "turbot/steampipe-plugin-reddit": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2024-10-22",
-  "rel_days": 706,
+  "rel_days": 746,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1327,7 +1487,7 @@
  "shukun-ai/shukun-ai": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2024-03-03",
-  "rel_days": 939,
+  "rel_days": 979,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1392,7 +1552,7 @@
  "iz0eyj/LSSA": {
   "rel_ver": "Rel.2.1",
   "rel_pub": "2025-05-21",
-  "rel_days": 495,
+  "rel_days": 535,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1587,7 +1747,7 @@
  "developer-Bushido/mariadb2tidb": {
   "rel_ver": "v1.3.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 5,
+  "rel_days": 15,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1614,7 +1774,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.2",
   "rel_pub": "2026-08-06",
-  "rel_days": 54,
+  "rel_days": 93,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1659,7 +1819,7 @@
  "distantnative/search-for-kirby": {
   "rel_ver": "1.1.1",
   "rel_pub": "2021-02-13",
-  "rel_days": 2054,
+  "rel_days": 2093,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1685,7 +1845,7 @@
  "Xuepoo/carryctx": {
   "rel_ver": "v0.11.6",
   "rel_pub": "2026-09-20",
-  "rel_days": 9,
+  "rel_days": 48,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1734,7 +1894,7 @@
  "crs48/xNet": {
   "rel_ver": "v3.0.0",
   "rel_pub": "2026-07-21",
-  "rel_days": 71,
+  "rel_days": 109,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1780,7 +1940,7 @@
  "megagonlabs/tabulaflow": {
   "rel_ver": "v0.2.2",
   "rel_pub": "2026-09-30",
-  "rel_days": 0,
+  "rel_days": 38,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1967,7 +2127,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0",
   "rel_pub": "2023-12-08",
-  "rel_days": 1028,
+  "rel_days": 1065,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2013,7 +2173,7 @@
  },
  "tejvir21/travel_booking_project": {
   "commit_90d": 2,
-  "commit_7d": 2,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2311,7 +2471,7 @@
  "deved234/rased": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-09-29",
-  "rel_days": 5,
+  "rel_days": 39,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2337,7 +2497,7 @@
  "bradymholt/vscode-pgFormatter": {
   "rel_ver": "v1.35.0",
   "rel_pub": "2026-05-11",
-  "rel_days": 147,
+  "rel_days": 180,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2359,7 +2519,7 @@
  },
  "White-Bear1122/kafka2db": {
   "commit_90d": 1,
-  "commit_7d": 1,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2382,7 +2542,7 @@
  "midvash/bible-data": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-12",
-  "rel_days": 153,
+  "rel_days": 179,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2526,7 +2686,7 @@
  "msking18/agent-memory-mcp": {
   "rel_ver": "v3.0.0",
   "rel_pub": "2026-11-03",
-  "rel_days": 0,
+  "rel_days": 4,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2558,7 +2718,7 @@
   "commit_7d": 52,
   "rel_ver": "release-1.6.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 13,
+  "rel_days": 15,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2591,19 +2751,26 @@
    "Python": 0,
    "Shell": 0
   },
-  "enriched_at": "20261105",
+  "enriched_at": "20261107",
   "dim_ts": {
    "commit": "20261105",
-   "release": "20261105",
+   "release": "20261107",
    "security": "20261105",
    "contrib": "20261105",
    "lang": "20261105"
-  }
+  },
+  "etag": {
+   "release": "W/\"0f7c887c370887d2cf981fb9bae58e8ce5df18ada52d98bae846788f50f3ff6e\""
+  },
+  "rel_dates": [
+   "2026-10-23",
+   "2026-10-17"
+  ]
  },
  "Soda-null/whale-be-friends": {
   "rel_ver": "demo-video",
   "rel_pub": "2026-11-06",
-  "rel_days": 0,
+  "rel_days": 1,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

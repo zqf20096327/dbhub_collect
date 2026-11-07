@@ -19,11 +19,12 @@ Oblecto is a self-hosted media server for the movies and TV shows you already ow
 - Episode pages show remaining and estimated finish time, nearby episodes and a next-unwatched shortcut. Expand Chapters to play from a timestamp when chapter metadata exists. Full crew, regional series content ratings and external provider links sit below the banners.
 - In Account → Language & playback, choose Episode spoilers to hide unwatched artwork and synopsis, optionally titles too. Reveal individual episodes temporarily when needed; watched episodes remain visible.
 - Movie banners keep playback, trailers and the watchlist bookmark together. Open More (⋯) to start over, change watched state or save a favourite; genres and provider links are under About this movie, and technical badges are under Available files. Use the Movies library's Watchlist and Favourites filters to find saved titles. Movie favourites are shared with Jellyfin apps; watchlists stay separate from watched state.
+- Movie and series genre filters match whole genre names in both native and Jellyfin libraries: selecting Comedy does not also select Dark Comedy.
 - A web app with browsing, search, continue watching, a full player and remote control of other devices. Progress and library changes show up as they happen. Next-episode previews use the show-page card artwork and episode details, with a borderless credits indicator, a subtle countdown strip and small text actions. They appear at terminal credits or, when markers are unavailable, in the final 30 seconds; the end screen also offers the next episode. By default, after 90 minutes without interaction, the current episode finishes and “Are you still watching?” must be confirmed before autoplay continues. Mouse movement, touch, keyboard input and remote playback commands count as interaction; automatic episode changes do not. Disable this safeguard under Account → Preferences → “Ask if I’m still watching”.
 - Direct play, and on-the-fly conversion to HLS with FFmpeg when a device needs it.
 - A Jellyfin-compatible API on port 8096, so Jellyfin apps on phones, TVs and desktops can sign in, browse, keep favourites and play.
 - Accounts with groups and permissions, per-user preferences and avatars, and an optional profile picker on the local network.
-- Personal viewing statistics and full session history, plus administrator library and playback-health dashboards. Open Statistics from the account menu, or Settings → Statistics with `statistics.view`. Tracking begins after upgrade; see [metric definitions and retention](docs/API.md#statistics).
+- Personal viewing statistics and full session history, plus administrator library and playback-health dashboards. Per-folder title counts, indexed files, known storage and problem counts appear in Settings → Statistics and beside folders in Settings → Libraries; overlapping folders include the same files. Open Statistics from the account menu, or Settings → Statistics with `statistics.view`. Tracking begins after upgrade; see [metric definitions and retention](docs/API.md#statistics).
 - A problem files page for anything that could not be identified or read, with retry.
 - Optional [federation between Oblecto servers](docs/FEDERATION.md), with mutual pairing, library synchronization and remote playback, plus seedbox import.
 
@@ -106,7 +107,9 @@ Oblecto reads `OBLECTO_CONFIG_PATH`, or `/etc/oblecto/config.json`. Anything the
 | `federation`, `seedboxes` | Federation with other Oblecto servers ([docs/FEDERATION.md](docs/FEDERATION.md)) and seedbox imports |
 | `web.enabled` | Serve the web app (on) |
 
-Oblecto refuses to start without a config file or a signing secret, and says why.
+Oblecto refuses to start without a config file or a signing secret, and says why. Startup awaits database migration, group initialization and playback cache preparation before opening the APIs. If required startup fails, acquired services and the database are closed.
+
+On SIGINT or SIGTERM, Oblecto stops accepting requests and polling seedboxes, drains accepted background jobs (including their follow-up work), ends playback, and closes the database last. Cleanup continues if a service fails, and failures produce a nonzero exit. The shutdown deadline is 15 seconds; work still running at that deadline is interrupted. Requests arriving on existing HTTP connections during shutdown receive HTTP 503.
 
 ## Groups and permissions
 
@@ -144,7 +147,7 @@ cd Oblecto
 npm ci
 npm run build:web
 OBLECTO_CONFIG_PATH=/path/to/dev-config.json npm run dev
-npm run verify           # lint, typecheck and tests, as CI runs them
+npm run verify           # source lint, backend + test typecheck, and unit/integration tests
 ```
 
 `npm run build` builds both web apps and the server into `dist/`. `npm run test:network` runs the tests that call the real metadata services. The Playwright suites run with `npm run test:player:ui` and `npm run test:playback:browser`.

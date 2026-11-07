@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.85.0-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.87.0-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -38,6 +38,7 @@
 | 🌍 | **资产强关联** | 世界观 / 故事大纲 / 场景大纲 / 用户指令四位一体显式调和，剧情不跑偏 |
 | 🔄 | **资产回流** | 每章正文生成后自动提取角色 / 关系 / 世界观 / 大纲回流累积进资产库，手工编辑永不覆盖，续写越写越强关联 |
 | 🔌 | **多模型适配** | OpenAI / Anthropic / Ollama / 本地 API，角色 × 任务模型路由 |
+| 🔄 | **双源自动更新** | GitHub Releases 优先、官网备用；清单与下载网络故障自动换源，备用源限同一版本，签名验证始终启用 |
 | 📚 | **全链路资产管理** | 角色 / 世界构建 / 场景 / 知识图谱 / 伏笔看板 / 叙事分析 / 拆书，AI 不「吃书」 |
 | ❤️ | **情感回路** | 单拍强制「事件→评估→情绪变化→行动/台词→代价」因果链；批量续写按章生成 1–3 幕；关系张力账本、情感债务与读者面板；情感驱动情节，不是形容词 |
 | 🧩 | **叙事契约** | 每拍先编译场契约（目标 / 具名阻力 / 转折 / 必须结果 / 情感链 / 字数），writer 按这一页写；gate 对具名阻力缺席、正文过短、契约无效硬拦截；幕后选中另一部小说即切换，生成中也不静默拒绝 |
@@ -114,6 +115,20 @@ npm run build
 ## 🆕 最新动态
 
 > 完整变更日志见 [`CHANGELOG.md`](./CHANGELOG.md)。
+
+### v0.87.0 · 幕前幕后统一剧组对话，工作室可编辑每个 agent 的人设
+
+幕前（沉浸式写作）底部输入栏现在会「听懂」你在跟谁说话：以 `@导演` `@管理` `@编审` `@主创` 开头的消息直接发给对应 agent（幕前默认 @导演），
+说「让导演安排主创续写」这类对话也会被识别并转入剧组对话浮层（会话与幕后工作室实时同步）；普通写作指令仍走原来的生成管线，不受影响。
+代理工作室的每个角色卡新增「人设」按钮，可以直接编辑四个 agent 的 agent.md 系统提示词（专业默认模板 + 自定义覆盖，保存后下一个任务即生效），
+主创/管理/编审的默认人设也按各自职责做了专业化精修。
+
+### v0.86.0 · 导演能「连续写到第 N 章自动停」，重试不再报任务不存在
+
+在代理工作室对导演说「续写，在 60 章结束第一阶段」，现在导演会拆成多个串行批次（每批最多 5 章），
+从下一章一直写到第 60 章自动停止并汇报，每章都过质量门后装配。同时修了两个让导演「执行不了」的问题：
+巡检快照曾把任务 ID 截成前 8 位，导演照着去重试必然报「任务不存在」；模型 API 瞬时断网也不再一次失败就判死，
+会自动退避重试。建议第 48 章只有一千字左右的作者，直接对导演说「修订第 48 章」把它补齐。
 
 ### v0.73.14 · 改名不再多出一个角色，风格弹窗有了确定按钮
 

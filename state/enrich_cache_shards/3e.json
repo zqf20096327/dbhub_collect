@@ -1,10 +1,10 @@
 {
  "authzed/spicedb": {
-  "commit_7d": 24,
-  "commit_90d": 112,
+  "commit_7d": 9,
+  "commit_90d": 110,
   "rel_ver": "v1.57.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 13,
+  "rel_days": 18,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -22,7 +22,7 @@
    "GHSA-pm3x-jrhh-qcr7(CVE-2025-64529,low)"
   ],
   "contrib_n": 78,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Go": 100,
    "JavaScript": 0,
@@ -32,9 +32,9 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
    {
@@ -52,15 +52,24 @@
     "d": "2026-08-26",
     "n": "- Postgres: read replicas no longer intermittently return `object definition not found` under load. The strict read-replica guard now verifies that the replica's snapshot has caught up to the revision being read (snapshot domination) instead of checking a single transaction id, and raises from within the read itself rather than from a trailing assertion, so a replica that catches up mid-query can no longer let an incomplete read through. In both cases the read correctly falls back to the primary. (https://g"
    }
+  ],
+  "etag": {
+   "release": "W/\"517811604e74817d782754e45e1d0c6a6f100500302b48bbe1b83754bc0b16e5\"",
+   "security": "W/\"e6e9a70f1c13998140b304f34fbc336f505d9853773eee327a935db05f3a5581\""
+  },
+  "rel_dates": [
+   "2026-10-20",
+   "2026-09-11",
+   "2026-08-26"
   ]
  },
  "trailbaseio/trailbase": {
-  "commit_7d": 38,
-  "commit_90d": 410,
-  "rel_ver": "v0.35.8",
-  "rel_pub": "2026-10-30",
-  "rel_days": 3,
-  "rel_n90": 12,
+  "commit_7d": 9,
+  "commit_90d": 357,
+  "rel_ver": "v0.35.9",
+  "rel_pub": "2026-11-03",
+  "rel_days": 4,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -68,7 +77,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 28,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Rust": 60,
    "TypeScript": 28,
@@ -78,11 +87,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v0.35.9",
+    "d": "2026-11-03",
+    "n": "- Return 401 from `/api/auth/v1/logout` if not logged in, don't redirect JSON requests and improve OpenAPI docs.\n- Refinery fork: add dry-run and remove un-grouped mode.\n- Update dependencies. Addresses security advisories.\n\n\n**Full Changelog**: https://github.com/trailbaseio/trailbase/compare/v0.35.8...v0.35.9"
+   },
    {
     "t": "v0.35.8",
     "d": "2026-10-30",
@@ -97,16 +111,81 @@
     "t": "v0.35.6",
     "d": "2026-10-27",
     "n": "- Add explicit DB shutdown order to avoid an issues w/o implicit destruction even though it was working just fine.\n- Avoid truncating SQLite WALs on implicit connection closure. In multi-DBs setups, we don't want to interfere with other connections when a cached connection is evicted."
+   },
+   {
+    "t": "v0.35.5",
+    "d": "2026-10-26",
+    "n": "- Fix DB connection destruction order issue that prevented SQLite from cleaning up auxiliary files.\n- Update Rust and JavaScript dependencies. Address `zstd-safe`'s security advisories.\n\n\n**Full Changelog**: https://github.com/trailbaseio/trailbase/compare/v0.35.4...v0.35.5"
+   },
+   {
+    "t": "v0.35.4",
+    "d": "2026-10-25",
+    "n": "- Explicitly truncate SQLite WALs on shutdown.\n- Bound the number of password hashing threads.\n- Fix building the CLI w/o the default WASM feature.\n- Update dependencies. Addresses securiy advisories and bumps SQLite to v3.54.\n\n\n**Full Changelog**: https://github.com/trailbaseio/trailbase/compare/v0.35.3...v0.35.4"
+   },
+   {
+    "t": "v0.35.3",
+    "d": "2026-10-23",
+    "n": "- Make refresh tokens optional allowing to run off sessions entirely in favor of purely stateless tokens.\n- When RecordApi RLA queries fail, log the error to `stderr` to avoid silently failing malformed queries.\n- Update dependencies. Addresses Tokio security advisories.\n\n\n**Full Changelog**: https://github.com/trailbaseio/trailbase/compare/v0.35.2...v0.35.3"
+   },
+   {
+    "t": "v0.35.2",
+    "d": "2026-10-21",
+    "n": "- Fix graceful DB shutdown for busy backlogs and extend wait time to allow logs to be written safely. This came to light as a result of increased throughput.\n- Tidy up `User` and `DbUser` memory representations resulting in ~5% throughput increases. As we keep pushing, even small optimizations start to matter."
+   },
+   {
+    "t": "v0.35.1",
+    "d": "2026-10-19",
+    "n": "- Major post-v0.35 clean-up: simpler ownership, less reference counting and more consistent flows across acrions.\n- Update dependencies.\n\n\n**Full Changelog**: https://github.com/trailbaseio/trailbase/compare/v0.35.0...v0.35.1"
+   },
+   {
+    "t": "v0.35.0",
+    "d": "2026-10-17",
+    "n": "- Fewer yields and thus less congestion during record handling.\r\n  - Doubles the insert throughput and results in roughly 10% faster reads.\r\n- Enable file writes as part of transactions and batch-operations.\r\n- Batch insertions now return a fake \"skipped\" id, when an insertion conflict was ignored based on the API's policy.\r\n  - This is more in line with the transaction endpoint's behavior but technically a breaking change. This will only matter to you if you're using batch insertions, with an ignore policy"
    }
+  ],
+  "etag": {
+   "release": "W/\"778b66bcbab50848cb5958aaa7898374af4cd84a930045b4580b4b35bbcbeb27\""
+  },
+  "rel_dates": [
+   "2026-11-03",
+   "2026-10-30",
+   "2026-10-28",
+   "2026-10-27",
+   "2026-10-26",
+   "2026-10-25",
+   "2026-10-23",
+   "2026-10-21",
+   "2026-10-19",
+   "2026-10-17",
+   "2026-10-16",
+   "2026-10-14",
+   "2026-10-13",
+   "2026-10-05",
+   "2026-10-02",
+   "2026-09-30",
+   "2026-09-29",
+   "2026-09-29",
+   "2026-09-28",
+   "2026-09-23",
+   "2026-09-22",
+   "2026-09-19",
+   "2026-09-17",
+   "2026-09-16",
+   "2026-09-15",
+   "2026-09-14",
+   "2026-09-12",
+   "2026-09-10",
+   "2026-09-09",
+   "2026-09-09"
   ]
  },
  "sqldef/sqldef": {
-  "commit_7d": 12,
-  "commit_90d": 108,
+  "commit_7d": 3,
+  "commit_90d": 92,
   "rel_ver": "v3.11.29",
   "rel_pub": "2026-10-30",
-  "rel_days": 1,
-  "rel_n90": 11,
+  "rel_days": 8,
+  "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -114,7 +193,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 123,
-  "enriched_at": "20261031",
+  "enriched_at": "20261107",
   "lang": {
    "Go": 86,
    "Yacc": 12,
@@ -124,8 +203,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261031",
-   "release": "20261031",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -143,7 +222,57 @@
     "t": "v3.11.27",
     "d": "2026-10-24",
     "n": "<!-- Release notes generated using configuration in .github/release.yml at c871e8163b320a43271af05b99179574a9941203 -->\n\n## What's Changed\n* build(deps): bump golang from 1.27.0-alpine to 1.27.1-alpine in the docker group by @dependabot[bot] in https://github.com/sqldef/sqldef/pull/1406\n* build(deps): bump the github-actions group with 5 updates by @dependabot[bot] in https://github.com/sqldef/sqldef/pull/1408\n* build(deps): bump the gomod group with 5 updates by @dependabot[bot] in https://github.com/sqlde"
+   },
+   {
+    "t": "v3.11.26",
+    "d": "2026-10-01",
+    "n": "<!-- Release notes generated using configuration in .github/release.yml at ebf7697d9f214f189eea0092873152ee989f727f -->\n\n## What's Changed\n* schema: generate ALTER TABLE and index statements as typed changes by @178inaba in https://github.com/sqldef/sqldef/pull/1394\n* psqldef: add manage.owner to manage ownership separately from privileges by @gfx in https://github.com/sqldef/sqldef/pull/1402\n* psqldef: round-trip a type modifier that holds identifiers by @dip-daiki-ogikubo in https://github.com/sqldef/sqld"
+   },
+   {
+    "t": "v3.11.25",
+    "d": "2026-09-29",
+    "n": "<!-- Release notes generated using configuration in .github/release.yml at 43c7d783db75607aff0e239a1643f7843054300c -->\n* mysqldef: compare CHECK and generated column expressions with mixed-case columns and CASE by @moznion in https://github.com/sqldef/sqldef/pull/1390"
+   },
+   {
+    "t": "v3.11.24",
+    "d": "2026-09-25",
+    "n": "* parser: accept 15 SQL Server keywords as identifiers by @178inaba in https://github.com/sqldef/sqldef/pull/1373\n* mysqldef: preserve parentheses around literal DEFAULT values by @zaneli in https://github.com/sqldef/sqldef/pull/1361\n* mysqldef: stop bulk_alter from skipping non-destructive actions by @178inaba in https://github.com/sqldef/sqldef/pull/1377\n* mysqldef: parse CHARSET in CAST AS CHAR and ignore its implicit charset in DEFAULT comparison by @zaneli in https://github.com/sqldef/sqldef/pull/1381"
+   },
+   {
+    "t": "v3.11.23",
+    "d": "2026-09-17",
+    "n": "<!-- Release notes generated using configuration in .github/release.yml at 74b68442ed34c9e1281ec6dc4b95d500e05c0811 -->\n\n## What's Changed\n* parser: drop the never-reduced duplicate rule in function_call_generic by @178inaba in https://github.com/sqldef/sqldef/pull/1356\n* psqldef: emit the operator class before ASC/DESC on index columns by @moznion in https://github.com/sqldef/sqldef/pull/1288\n* psqldef: stop losing index clauses in quote-aware mode by @gfx in https://github.com/sqldef/sqldef/pull/1372\n\n\n**"
+   },
+   {
+    "t": "v3.11.22",
+    "d": "2026-09-16",
+    "n": "* feat(sqlite3def): support bracket-quoted identifiers by @knaka in https://github.com/sqldef/sqldef/pull/1367\n* psqldef: treat MySQL-only UNUSED keywords as identifiers by @dim0627 in https://github.com/sqldef/sqldef/pull/1358"
+   },
+   {
+    "t": "v3.11.21",
+    "d": "2026-09-15",
+    "n": "* mysqldef: Add --disable-ddl-transaction flag by @zaneli in https://github.com/sqldef/sqldef/pull/1321\n* sqlite3def: accept and ignore DELETE / PRAGMA statements from Cloudflare D1 schema exports by @knaka in https://github.com/sqldef/sqldef/pull/1352"
+   },
+   {
+    "t": "v3.11.20",
+    "d": "2026-08-19",
+    "n": "* fix(mysqldef): support CAST(... AS type ARRAY) in multi-valued index parsing  by @masuyu in https://github.com/sqldef/sqldef/pull/1298"
    }
+  ],
+  "etag": {
+   "release": "W/\"3b613d3c0a66e49ebdead8ef55b3b51a20fb14d29ae4e7a55916e206bb8438bc\""
+  },
+  "rel_dates": [
+   "2026-10-30",
+   "2026-10-27",
+   "2026-10-24",
+   "2026-10-01",
+   "2026-09-29",
+   "2026-09-25",
+   "2026-09-17",
+   "2026-09-16",
+   "2026-09-15",
+   "2026-08-19"
   ]
  },
  "codedrinker/community": {
@@ -169,11 +298,11 @@
   }
  },
  "tonbo-io/tonbo": {
-  "commit_90d": 1,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "0.3.2",
   "rel_pub": "2025-04-10",
-  "rel_days": 535,
+  "rel_days": 576,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -196,7 +325,7 @@
   "commit_7d": 2,
   "rel_ver": "v0.42.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 7,
+  "rel_days": 18,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -223,7 +352,7 @@
   "commit_7d": 20,
   "rel_ver": "v4.0.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 8,
+  "rel_days": 19,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -248,7 +377,7 @@
   "commit_7d": 0,
   "rel_ver": "0.37.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 31,
+  "rel_days": 42,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -306,7 +435,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.1",
   "rel_pub": "2019-08-20",
-  "rel_days": 2595,
+  "rel_days": 2636,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -328,7 +457,7 @@
   "commit_7d": 0,
   "rel_ver": "trusted-network-v6.0.44",
   "rel_pub": "2026-05-28",
-  "rel_days": 152,
+  "rel_days": 163,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -391,7 +520,7 @@
   "commit_7d": 0,
   "rel_ver": "4.0.1",
   "rel_pub": "2026-07-16",
-  "rel_days": 73,
+  "rel_days": 114,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -449,10 +578,14 @@
    "Shell": 2,
    "Makefile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261107",
   "dim_ts": {
    "commit": "20261027",
-   "release": "20261027"
+   "release": "20261027",
+   "security": "20261107"
+  },
+  "etag": {
+   "security": "W/\"28c4f8ec1957a3a614f8c5f11bfbebbd27307bea06ac052bd48b045dc60c60ea\""
   }
  },
  "CodyTseng/nostr-relay-tray": {
@@ -460,7 +593,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-03-23",
-  "rel_days": 553,
+  "rel_days": 594,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -508,7 +641,7 @@
  "uscensusbureau/us-census-bureau-data-api-mcp": {
   "rel_ver": "v0.1.2-beta",
   "rel_pub": "2026-03-06",
-  "rel_days": 205,
+  "rel_days": 246,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -551,7 +684,7 @@
  "b-straub/SqliteWasmBlazor": {
   "rel_ver": "v0.9.4-pre",
   "rel_pub": "2026-09-13",
-  "rel_days": 14,
+  "rel_days": 55,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -572,7 +705,7 @@
  "mrflashstudio/OsuParsers": {
   "rel_ver": "v1.7.2",
   "rel_pub": "2025-01-11",
-  "rel_days": 624,
+  "rel_days": 665,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -589,7 +722,7 @@
  "waylau/new-star-blog": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2018-04-25",
-  "rel_days": 3077,
+  "rel_days": 3118,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -609,7 +742,7 @@
  "vostride/id-agent": {
   "rel_ver": "v1.1.5",
   "rel_pub": "2026-06-03",
-  "rel_days": 116,
+  "rel_days": 157,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -645,7 +778,7 @@
  "iamcal/SQLParser": {
   "rel_ver": "v0.7",
   "rel_pub": "2026-01-28",
-  "rel_days": 242,
+  "rel_days": 283,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -663,7 +796,7 @@
  "BRO3886/healthsync": {
   "rel_ver": "v0.5.3",
   "rel_pub": "2026-07-13",
-  "rel_days": 76,
+  "rel_days": 117,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -728,7 +861,7 @@
  "kocaemre/recon-deck": {
   "rel_ver": "v2.5.0",
   "rel_pub": "2026-06-22",
-  "rel_days": 97,
+  "rel_days": 138,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -749,7 +882,7 @@
  "fauna/faunadb-csharp": {
   "rel_ver": "4.2.0",
   "rel_pub": "2022-02-09",
-  "rel_days": 1691,
+  "rel_days": 1732,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -783,7 +916,7 @@
  "janbjorge/rekal": {
   "rel_ver": "v3.4.0",
   "rel_pub": "2026-08-26",
-  "rel_days": 32,
+  "rel_days": 73,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -811,7 +944,7 @@
  "productdevbook/full-stack-monorepo": {
   "rel_ver": "v0.0.6",
   "rel_pub": "2022-08-06",
-  "rel_days": 1513,
+  "rel_days": 1554,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -832,7 +965,7 @@
  "Nano-Core/Nano.Library": {
   "rel_ver": "v10.0.15.112",
   "rel_pub": "2026-09-25",
-  "rel_days": 2,
+  "rel_days": 43,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -846,12 +979,18 @@
   "lang": {
    "C#": 100
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261107",
+  "etag": {
+   "security": "W/\"755b208fbf36bc2df2b91d9ac83822ea438bb9587d50e04d79003647c812a48a\""
+  },
+  "dim_ts": {
+   "security": "20261107"
+  }
  },
  "anubissbe/ProjectHub-Mcp": {
   "rel_ver": "v5.0.0",
   "rel_pub": "2025-07-04",
-  "rel_days": 450,
+  "rel_days": 491,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -934,7 +1073,7 @@
  "Alir3z4/django-databrowse": {
   "rel_ver": "2016.3.16",
   "rel_pub": "2017-03-16",
-  "rel_days": 3482,
+  "rel_days": 3523,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1067,7 +1206,7 @@
  "pgEdge/pgedge-anonymizer": {
   "rel_ver": "v1.0.0-test1",
   "rel_pub": "2026-07-23",
-  "rel_days": 66,
+  "rel_days": 107,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -1086,7 +1225,7 @@
  "blitss/typeid-postgres": {
   "rel_ver": "v0.4.1",
   "rel_pub": "2026-08-11",
-  "rel_days": 47,
+  "rel_days": 88,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1148,7 +1287,7 @@
  "subsquid/pipes-sdk": {
   "rel_ver": "pipes-v1.0.0-beta.8",
   "rel_pub": "2026-09-22",
-  "rel_days": 6,
+  "rel_days": 46,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1169,7 +1308,7 @@
  "mittelmark/DGTcl": {
   "rel_ver": "2023-03-05",
   "rel_pub": "2023-03-05",
-  "rel_days": 1303,
+  "rel_days": 1343,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1190,7 +1329,7 @@
  "web-dl-tools/api": {
   "rel_ver": "3.4.0",
   "rel_pub": "2024-04-07",
-  "rel_days": 904,
+  "rel_days": 944,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1210,7 +1349,7 @@
  "nantobv/pituitary": {
   "rel_ver": "v1.0.0-beta.12",
   "rel_pub": "2026-05-08",
-  "rel_days": 143,
+  "rel_days": 183,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1261,7 +1400,7 @@
  "jim108dev/purescript-payload-realworld-example": {
   "rel_ver": "v0.1",
   "rel_pub": "2021-02-11",
-  "rel_days": 2055,
+  "rel_days": 2095,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1280,7 +1419,7 @@
  "IzzySoft/HyperSQL": {
   "rel_ver": "v3.9.8",
   "rel_pub": "2016-09-19",
-  "rel_days": 3661,
+  "rel_days": 3701,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1318,7 +1457,7 @@
  "crisbez/atlas4d-base": {
   "rel_ver": "v0.3.1",
   "rel_pub": "2025-12-08",
-  "rel_days": 294,
+  "rel_days": 334,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1339,7 +1478,7 @@
  "srdzank/WinSQLite-Editor": {
   "rel_ver": "3",
   "rel_pub": "2026-08-02",
-  "rel_days": 57,
+  "rel_days": 97,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1382,7 +1521,7 @@
  "rabbitLove520/SalamanderWamp": {
   "rel_ver": "1.0",
   "rel_pub": "2017-02-18",
-  "rel_days": 3509,
+  "rel_days": 3549,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1399,7 +1538,7 @@
  "DataBooster/DataAccess": {
   "rel_ver": "1.8.2",
   "rel_pub": "2017-10-10",
-  "rel_days": 3275,
+  "rel_days": 3315,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1437,7 +1576,7 @@
  "YakirOren/turbine": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-05-17",
-  "rel_days": 134,
+  "rel_days": 174,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1483,7 +1622,7 @@
  "elcorto/psweep": {
   "rel_ver": "0.16.0",
   "rel_pub": "2026-03-21",
-  "rel_days": 191,
+  "rel_days": 231,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1512,7 +1651,7 @@
  "dbi-beam/dbi": {
   "rel_ver": "0.2.0",
   "rel_pub": "2018-02-23",
-  "rel_days": 3139,
+  "rel_days": 3179,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1562,7 +1701,7 @@
  "TencentCloud/tencentcloud-agentobs-sdk-dsh": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2026-08-18",
-  "rel_days": 41,
+  "rel_days": 81,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1585,7 +1724,7 @@
  "yihleego/mypages": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2021-08-15",
-  "rel_days": 1870,
+  "rel_days": 1910,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1662,7 +1801,7 @@
  "jjcfrancisco/popgis": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2024-09-11",
-  "rel_days": 747,
+  "rel_days": 787,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1680,7 +1819,7 @@
  "aim-rsf/cprd-data-wrangle": {
   "rel_ver": "1.1.3",
   "rel_pub": "2025-02-27",
-  "rel_days": 578,
+  "rel_days": 618,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1726,7 +1865,7 @@
  "zahidaramai/MyInvoice-SDK-Middleware": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2026-02-03",
-  "rel_days": 237,
+  "rel_days": 277,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1747,7 +1886,7 @@
  "btsouth/cubby-clipboard": {
   "rel_ver": "v1.3.5",
   "rel_pub": "2026-09-27",
-  "rel_days": 1,
+  "rel_days": 41,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1768,7 +1907,7 @@
  "stuyspec/stuyspec-api": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2018-02-22",
-  "rel_days": 3140,
+  "rel_days": 3180,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1873,7 +2012,7 @@
  "eduardolat/nocodbgo": {
   "rel_ver": "v0.1.3",
   "rel_pub": "2025-03-17",
-  "rel_days": 560,
+  "rel_days": 600,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1906,7 +2045,7 @@
  "cadmium-org/cadmium-cms": {
   "rel_ver": "v.0.4.9",
   "rel_pub": "2017-10-02",
-  "rel_days": 3283,
+  "rel_days": 3323,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1927,7 +2066,7 @@
  "Ontheia/ontheia": {
   "rel_ver": "v0.6.8",
   "rel_pub": "2026-09-15",
-  "rel_days": 13,
+  "rel_days": 53,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1948,7 +2087,7 @@
  "lyr1cs/rein": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2026-09-06",
-  "rel_days": 22,
+  "rel_days": 62,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1969,7 +2108,7 @@
  "BeckY824/daedalus-crm": {
   "rel_ver": "v0.46.0",
   "rel_pub": "2026-09-20",
-  "rel_days": 8,
+  "rel_days": 48,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2064,7 +2203,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.68.0",
   "rel_pub": "2026-07-13",
-  "rel_days": 78,
+  "rel_days": 117,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2154,7 +2293,7 @@
  "MrSaikatS/nextjs-starter-fullstack-node": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-07-26",
-  "rel_days": 65,
+  "rel_days": 104,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2199,7 +2338,7 @@
  "MakerViking/mimir": {
   "rel_ver": "v0.16.0",
   "rel_pub": "2026-07-23",
-  "rel_days": 69,
+  "rel_days": 107,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2226,7 +2365,7 @@
  "epure-sh/epure": {
   "rel_ver": "v0.1.3",
   "rel_pub": "2026-09-28",
-  "rel_days": 2,
+  "rel_days": 40,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2393,7 +2532,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0",
   "rel_pub": "2020-01-16",
-  "rel_days": 2449,
+  "rel_days": 2487,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2762,7 +2901,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.2",
   "rel_pub": "2025-06-30",
-  "rel_days": 459,
+  "rel_days": 495,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2918,7 +3057,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 28,
+  "rel_days": 64,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2982,7 +3121,7 @@
  "YawLabs/postgres-mcp": {
   "rel_ver": "v0.13.9",
   "rel_pub": "2026-10-11",
-  "rel_days": 12,
+  "rel_days": 27,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3139,7 +3278,7 @@
  "aamirkhanz/apex-plugin-report-designer": {
   "rel_ver": "v1.0",
   "rel_pub": "2026-11-02",
-  "rel_days": 2,
+  "rel_days": 5,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3166,6 +3305,35 @@
    "security": "20261104",
    "contrib": "20261104",
    "lang": "20261104"
+  }
+ },
+ "yuexingjian/powercontext": {
+  "commit_90d": 2,
+  "commit_7d": 1,
+  "etag": {
+   "release": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\"",
+   "security": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "Yacc": 89,
+   "Python": 11,
+   "C++": 0
+  },
+  "enriched_at": "20261107",
+  "dim_ts": {
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107",
+   "contrib": "20261107",
+   "lang": "20261107"
   }
  }
 }

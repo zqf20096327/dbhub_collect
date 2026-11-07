@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-9.0.16-brightgreen?style=flat-square" alt="version">
+  <img src="https://img.shields.io/badge/version-9.0.19-brightgreen?style=flat-square" alt="version">
   <img src="https://img.shields.io/github/actions/workflow/status/gymaira1990-jpg/Mnemosyne-OS/test.yml?style=flat-square&label=CI" alt="CI">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="license">
   <img src="https://img.shields.io/badge/python-3.11+-blue?style=flat-square" alt="python">
@@ -36,7 +36,7 @@
 
 | | |
 |---|---|
-| **Memories** | 32,383 (3,524 catalog cards, 100% embedded) — snapshot 2026-11-04 |
+| **Memories** | 38,514 (33,038 live, 3,897 catalog cards) — snapshot 2026-11-07 |
 | **Recall** | 4 channels fused (server: E/C/T · client: S) · 90% recall@10 measured first-party |
 | **Trace** | archive no → card → `sid` → original transcript |
 | **Butler** | polish / dedupe / diary / gap-sweep — server-side, 7×24 |
@@ -332,15 +332,19 @@ One user, one modest cloud instance (4 vCPU), 7×24:
 
 | Metric | Value |
 |---|---|
-| Memories | **32,383** (snapshot: 2026-11-04) |
-| Catalog cards | **3,524** — 97.4% with archive no, 100% with vectors |
+| Memories | **38,514** (33,038 live) — snapshot: 2026-11-07 |
+| Catalog cards | **3,897** — 100% with archive no, 99.97% with vectors · every live memory has a card |
 | Average card length | 376 characters (from transcripts averaging ~33,000) |
 | Recall@10 — general set | **9/10 (90%)** |
 | Recall@10 — anti-overfit set | **9/10 (90%)** |
 | Recall latency | 100–400 ms (four channels, fused) |
+| Diary entries | every day, including days with no conversation |
 
 > Numbers above are a **snapshot** (date in the table). For live values: `GET /api/v1/memory-os/stats?user_id=default`.
-| Diary entries | every day, including days with no conversation |
+>
+> **Scope of "Catalog cards"**: only cards carrying a `K·…` archive number (result cards, i.e. `tome_cards` rows titled `[结果卡]`).
+> The `tome_cards` table also holds report / Q&A / import cards (34,073 rows in total). Comparing that raw count against this
+> number is an apples-to-oranges mistake, not a discrepancy — the SQL to recompute either figure is in `docs/VERIFICATION.md`.
 
 **Neither eval script ships with the repo** — the labels point at the author's real memories, so they can't be
 published. The 90% is a **first-party measurement**, not second-party evidence you can reproduce; verify it
@@ -397,6 +401,9 @@ We publish the regressions, not just the wins:
 
 | Version | Date | Ships |
 |---|---|---|
+| [v9.0.19](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.19) | 2026-11-07 | Scoped irreversible purge · sync LLM calls off the event loop · embedding cache namespaced |
+| [v9.0.18](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.18) | 2026-11-07 | Silent-failure fixes: search category filter, archive user scope, PG16 schema · CI now runs a real database |
+| [v9.0.17](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.17) | 2026-11-07 | Deploy fingerprint (`make prod-diff`) + number gate (`make numbers-check`) · README numbers corrected |
 | [v9.0.16](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.16) | 2026-11-04 | `make demo` now seeds 40 cards (old behaviour kept as `demo-basic`) |
 | [v9.0.15](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.15) | 2026-11-04 | Conflicts are flagged, not auto-invalidated · optional `constraints.txt` |
 | [v9.0.14](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.14) | 2026-11-04 | Front-page numbers are snapshots now · diary doc states its jobs are not in this repo |

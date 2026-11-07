@@ -1,11 +1,11 @@
 {
  "dolthub/dolt": {
-  "commit_7d": 39,
-  "commit_90d": 993,
-  "rel_ver": "v2.6.2",
-  "rel_pub": "2026-10-31",
+  "commit_7d": 112,
+  "commit_90d": 1093,
+  "rel_ver": "v2.7.2",
+  "rel_pub": "2026-11-05",
   "rel_days": 2,
-  "rel_n90": 12,
+  "rel_n90": 19,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 144,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Go": 80,
    "Shell": 19,
@@ -23,11 +23,26 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v2.7.2",
+    "d": "2026-11-05",
+    "n": "* [4103](https://github.com/dolthub/go-mysql-server/pull/4103): sql: Remove the global variable registries.\n## go-mysql-server\n* [4123](https://github.com/dolthub/go-mysql-server/pull/4123): Preserve caller transactions when executing stored procedures\n* [4106](https://github.com/dolthub/go-mysql-server/pull/4106): Make the quadratic range overlap check opt-in, and check for cancelation during analysis\n* [4104](https://github.com/dolthub/go-mysql-server/pull/4104): sql: Tighten the session and registry inte"
+   },
+   {
+    "t": "v2.7.1",
+    "d": "2026-11-05",
+    "n": "Adds one compact shared regression covering 21 columns, inherited and alternate collations, views, aliases, and filtering. Collation, query, view, and modify-column engine suites pass; metadata was also checked against MySQL 8.4.11 and a locally built Dolt CLI.\nResolve inherited stored defaults before analyzing `CREATE TABLE ... SELECT` with inline indexes, avoiding `plan is not resolved` while preserving the defaults. Adds a MySQL-specific regression verified against MySQL 8.4.\n* [4094](https://github.com/"
+   },
+   {
+    "t": "v2.7.0",
+    "d": "2026-11-04",
+    "n": "With context validation enabled by an earlier engine in the process, as in DoltgreSQL's startup integrity check, loading databases in this check panicked. ConfigureServices now creates one GCSafepointController, shared by this check and the engine through the new SqlEngineConfig.GCSafepointController field.\nWalkAddrs skipped a working set's rebase state and pre-merge head commit, so GC could collect them and leave the database unreadable. WorkingSetHashes now also keeps the pre-merge head for in-memory work"
+   },
    {
     "t": "v2.6.2",
     "d": "2026-10-31",
@@ -42,15 +57,59 @@
     "t": "v2.6.0",
     "d": "2026-10-23",
     "n": "* [4056](https://github.com/dolthub/go-mysql-server/pull/4056): Fix accidentally dropping filters in complex joins\nfilter-branch creates a new database for each commit it replays and never closed them, so their sequence trackers could still be reading the store when dolt closed it. That panic made filter-branch.bats fail intermittently. The rebased engine now closes the databases it owns, and filter-branch closes the engine. Adds a unit regression test.\n* [4023](https://github.com/dolthub/go-mysql-server/pu"
+   },
+   {
+    "t": "v2.5.1",
+    "d": "2026-10-20",
+    "n": "When combined with https://github.com/dolthub/go-mysql-server/pull/4011, this would have resulted in pruning the columnSet for DOLT_LOG without pruning the schema, which would result in incorrect offset cacluation during assignExecOffsets. This change prevents that interaction.\n* [11934](https://github.com/dolthub/dolt/pull/11934): Expose PostgreSQL session settings through Dolt sessions"
+   },
+   {
+    "t": "v2.5.0",
+    "d": "2026-10-17",
+    "n": "* [4021](https://github.com/dolthub/go-mysql-server/pull/4021): Do not remove GroupBy node when replacing sorted MIN/MAX aggregates\n* [4015](https://github.com/dolthub/go-mysql-server/pull/4015): Support conditional column drops in ALTER TABLE plans\n* [4008](https://github.com/dolthub/go-mysql-server/pull/4008): Make Handler.doQuery start and end the root query span. Remove Context.RootSpan and deprecate WithRootSpan.\nThis adds support for concurrent GC runs against different databases on the same server. E"
+   },
+   {
+    "t": "v2.4.2",
+    "d": "2026-10-06",
+    "n": "The new \"Storage locking\" section documents the lock's path (`<database dir>/.dolt/noms/LOCK`), that it goes through `github.com/dolthub/file-locks` (`flock(2)` on unix, `LockFileEx` on Windows), and that it is advisory. It covers the lifetime (`newJournalLock` acquires, `NomsBlockStore.Close` releases; there is no maximum hold time), the 100 ms `lockFileTimeout` and what happens after it (a silent read-only open by default, `ErrDatabaseLocked` with `fail_on_journal_lock_timeout`, a single non-blocking atte"
+   },
+   {
+    "t": "v2.4.1",
+    "d": "2026-10-02",
+    "n": "* [11903](https://github.com/dolthub/dolt/issues/11903): String literals drop the backslash in \\% and \\_, so LIKE '%\\_%' matches every row (differs from MySQL)\n- Add `checkNonlocalTableName` for `Database.CreateTable` and `Database.CreateIndexedTable` to allow a table name where the nonlocal rule resolves it locally.\nAdds CSV import regression coverage for update triggers alongside https://github.com/dolthub/go-mysql-server/pull/3947 and https://github.com/dolthub/doltgresql/pull/3469.\nAdds shared engine co"
    }
+  ],
+  "etag": {
+   "release": "W/\"ce4cf060944bac0996db422b98b6afd3fef58c9dc287b286dbea41fb8a537e19\""
+  },
+  "rel_dates": [
+   "2026-11-05",
+   "2026-11-05",
+   "2026-11-04",
+   "2026-10-31",
+   "2026-10-26",
+   "2026-10-23",
+   "2026-10-20",
+   "2026-10-17",
+   "2026-10-06",
+   "2026-10-02",
+   "2026-09-30",
+   "2026-09-16",
+   "2026-09-14",
+   "2026-09-09",
+   "2026-09-02",
+   "2026-08-19",
+   "2026-08-17",
+   "2026-08-13",
+   "2026-08-12"
   ]
  },
  "go-sql-driver/mysql": {
-  "commit_7d": 3,
+  "commit_7d": 1,
   "commit_90d": 30,
   "rel_ver": "v1.10.1",
   "rel_pub": "2026-09-02",
-  "rel_days": 62,
+  "rel_days": 66,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -59,14 +118,14 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 158,
-  "enriched_at": "20261103",
+  "enriched_at": "20261107",
   "lang": {
    "Go": 100
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261103",
-   "release": "20261103",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -85,14 +144,20 @@
     "d": "2025-06-13",
     "n": "* [1.9] test stability improvement. by @methane in https://github.com/go-sql-driver/mysql/pull/1699\n* [1.9] Transaction Commit/Rollback returns conn's cached error by @methane in https://github.com/go-sql-driver/mysql/pull/1702\n* backport benchmark_test by @methane in https://github.com/go-sql-driver/mysql/pull/1706\n* [1.9] optimize readPacket (#1705) by @methane in https://github.com/go-sql-driver/mysql/pull/1707\n* [1.9] fix PING on compressed connections by @methane in https://github.com/go-sql-driver/mys"
    }
+  ],
+  "etag": {
+   "release": "W/\"3bf6958a2d447d1c9b77f6064c5d1eda523637537a52ee21ac431a4962836232\""
+  },
+  "rel_dates": [
+   "2026-09-02"
   ]
  },
  "jaredwray/keyv": {
-  "commit_7d": 3,
-  "commit_90d": 115,
+  "commit_7d": 57,
+  "commit_90d": 172,
   "rel_ver": "v6.1.0",
   "rel_pub": "2026-10-06",
-  "rel_days": 27,
+  "rel_days": 32,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -101,7 +166,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 81,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "HTML": 64,
    "TypeScript": 34,
@@ -111,8 +176,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -131,6 +196,12 @@
     "d": "2026-06-18",
     "n": "- **mysql:** return `undefined` instead of `null`, guard `getMany`, and align tests/docs. (d76926b, #1969)\n- **postgres:** code/test review for `@keyv/postgres`. (9fa6847, #1971)\n- **redis:** full code and test review cleanup. (480a560, #1974)\n- **mongo:** uniform test suite, fix README API docs. (0240400, #1968)\n- **mongo:** documentation and fixes (includes #1980 review follow-ups). (f31850d, #1976)\n- **sqlite:** full code and test review cleanup. (8539cfd, #1975)\n- mongo - test: uniform test suite, fix R"
    }
+  ],
+  "etag": {
+   "release": "W/\"edf336608aba72667b036e336eb91fd8766ee0a17b6bc7f877eff91568a563cf\""
+  },
+  "rel_dates": [
+   "2026-10-06"
   ]
  },
  "okbob/pspg": {
@@ -138,7 +209,7 @@
   "commit_90d": 28,
   "rel_ver": "5.9.1",
   "rel_pub": "2026-11-02",
-  "rel_days": 1,
+  "rel_days": 5,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -184,7 +255,7 @@
   "commit_7d": 0,
   "rel_ver": "0.4-2",
   "rel_pub": "2025-12-15",
-  "rel_days": 286,
+  "rel_days": 327,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -204,11 +275,11 @@
   }
  },
  "tikv/pd": {
-  "commit_90d": 118,
-  "commit_7d": 16,
+  "commit_90d": 131,
+  "commit_7d": 20,
   "rel_ver": "v7.5.8",
   "rel_pub": "2026-09-17",
-  "rel_days": 46,
+  "rel_days": 51,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -223,10 +294,10 @@
    "Makefile": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -245,6 +316,13 @@
     "d": "2026-07-09",
     "n": "For new features, improvements, and bug fixes released in v8.5.7 for PD, see [TiDB v8.5.7 release notes](https://docs.pingcap.com/tidb/stable/release-8.5.7).\n\nSee the difference from the issue perspective:\n<details>\n\n- tikv/pd#5718\n- tikv/pd#10722\n- tikv/pd#10684\n- tikv/pd#9745\n- tikv/pd#10687\n- tikv/pd#10251\n- tikv/pd#10681\n- tikv/pd#10744\n- tikv/pd#10797\n- tikv/pd#10684\n- tikv/pd#10795\n- tikv/pd#8978\n- tikv/pd#9477\n- tikv/pd#10705\n- tikv/pd#10868\n- tikv/pd#10876\n- tikv/pd#10901\n\n</details>"
    }
+  ],
+  "etag": {
+   "release": "W/\"d5ef9c041cd034e23a9860d620dbdd53e4d4192626205ae088b68256fa36266d\""
+  },
+  "rel_dates": [
+   "2026-09-17",
+   "2026-08-27"
   ]
  },
  "foldergram/foldergram": {
@@ -252,7 +330,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.2.2",
   "rel_pub": "2026-06-01",
-  "rel_days": 148,
+  "rel_days": 159,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -279,7 +357,7 @@
   "commit_7d": 0,
   "rel_ver": "21.0.0",
   "rel_pub": "2026-08-17",
-  "rel_days": 41,
+  "rel_days": 82,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -314,7 +392,7 @@
   "commit_7d": 0,
   "rel_ver": "2.5",
   "rel_pub": "2024-06-12",
-  "rel_days": 837,
+  "rel_days": 878,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -366,7 +444,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2022-10-24",
-  "rel_days": 1434,
+  "rel_days": 1475,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -462,7 +540,7 @@
   "commit_7d": 33,
   "rel_ver": "v0.12.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 5,
+  "rel_days": 15,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -509,7 +587,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.2",
   "rel_pub": "2026-04-07",
-  "rel_days": 173,
+  "rel_days": 214,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -551,7 +629,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-12-11",
-  "rel_days": 290,
+  "rel_days": 331,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -570,14 +648,16 @@
   "commit_7d": 9,
   "rel_ver": "v1.9.1",
   "rel_pub": "2026-10-16",
-  "rel_days": 18,
+  "rel_days": 22,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
-  "sec_n": 1,
+  "sec_n": 3,
   "sec_worst": "high",
-  "sec_last": "2026-09-25",
+  "sec_last": "2026-10-12",
   "sec_ids": [
+   "GHSA-mw49-53pm-wrvf(-,low)",
+   "GHSA-gq8r-4ccg-vxcr(-,medium)",
    "GHSA-27v7-5cxc-wf63(-,high)"
   ],
   "contrib_n": 15,
@@ -585,7 +665,7 @@
    "Python": 100,
    "HTML": 0
   },
-  "enriched_at": "20261103",
+  "enriched_at": "20261107",
   "rel_notes": [
    {
     "t": "v1.9.1",
@@ -605,7 +685,11 @@
   ],
   "dim_ts": {
    "commit": "20261103",
-   "release": "20261103"
+   "release": "20261103",
+   "security": "20261107"
+  },
+  "etag": {
+   "security": "W/\"981699a007d27c837307d0b74597fec6b3a946c4c4e038b468a3db51bceaf268\""
   }
  },
  "claudiosw/python-clean-architecture-example": {
@@ -659,7 +743,7 @@
  "frkdrgt/ferox": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-08",
-  "rel_days": 19,
+  "rel_days": 60,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -677,7 +761,7 @@
  "VladimirBalun/RacingWorld": {
   "rel_ver": "0.1.0",
   "rel_pub": "2019-03-04",
-  "rel_days": 2764,
+  "rel_days": 2805,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -748,7 +832,7 @@
  "3c7/yaramanager": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2022-11-02",
-  "rel_days": 1425,
+  "rel_days": 1466,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -766,7 +850,7 @@
  "oracle/rwloadsim": {
   "rel_ver": "v3.3.0",
   "rel_pub": "2026-07-06",
-  "rel_days": 83,
+  "rel_days": 124,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -787,7 +871,7 @@
  "reliefsupports/reliefsupports.org-v1": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2017-06-04",
-  "rel_days": 3402,
+  "rel_days": 3443,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -808,7 +892,7 @@
  "kevinmartintech/sp_CRUDGen": {
   "rel_ver": "v3.02.05",
   "rel_pub": "2022-02-27",
-  "rel_days": 1673,
+  "rel_days": 1714,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -825,7 +909,7 @@
  "malaria-atlas-project/malariaAtlas": {
   "rel_ver": "V0.0.2",
   "rel_pub": "2018-09-11",
-  "rel_days": 2938,
+  "rel_days": 2979,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -842,7 +926,7 @@
  "LeChatErrant/API-template": {
   "rel_ver": "1.1.3",
   "rel_pub": "2021-12-23",
-  "rel_days": 1739,
+  "rel_days": 1780,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -862,7 +946,7 @@
  "caiobarroso/react-native-nativescope": {
   "rel_ver": "v1.4.1",
   "rel_pub": "2026-08-12",
-  "rel_days": 46,
+  "rel_days": 87,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -883,7 +967,7 @@
  "sabertaz/notes": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-09-15",
-  "rel_days": 12,
+  "rel_days": 53,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -949,7 +1033,7 @@
  "UznetDev/Aiogram-Bot-Template": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2024-08-15",
-  "rel_days": 773,
+  "rel_days": 814,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -980,7 +1064,7 @@
  "dsa0x/go-social-network": {
   "rel_ver": "v1",
   "rel_pub": "2022-04-14",
-  "rel_days": 1627,
+  "rel_days": 1668,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1030,7 +1114,7 @@
  "stidges/laravel-fk-migration": {
   "rel_ver": "1.1.0",
   "rel_pub": "2014-06-25",
-  "rel_days": 4477,
+  "rel_days": 4518,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1154,7 +1238,7 @@
  "MeltanoLabs/tap-postgres": {
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-07-27",
-  "rel_days": 63,
+  "rel_days": 103,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1198,7 +1282,7 @@
  "leo-aa88/PetitePass": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-13",
-  "rel_days": 15,
+  "rel_days": 55,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1216,7 +1300,7 @@
  "internetarchive/arklet": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2026-02-25",
-  "rel_days": 215,
+  "rel_days": 255,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1233,7 +1317,7 @@
  "sprklai/zenii": {
   "rel_ver": "app-v0.2.6",
   "rel_pub": "2026-06-03",
-  "rel_days": 117,
+  "rel_days": 157,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1281,7 +1365,7 @@
  "edwig/CXHibernate": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2025-04-09",
-  "rel_days": 537,
+  "rel_days": 577,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1301,7 +1385,7 @@
  "OUIsolutions/DoTheWorld": {
   "rel_ver": "11.2.1",
   "rel_pub": "2026-02-14",
-  "rel_days": 226,
+  "rel_days": 266,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1351,7 +1435,7 @@
  "bolajiwahab/pgrubic": {
   "rel_ver": "3.1.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 2,
+  "rel_days": 42,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1370,7 +1454,7 @@
  "adorsys/encrypt-down": {
   "rel_ver": "v2.1.2",
   "rel_pub": "2020-11-07",
-  "rel_days": 2151,
+  "rel_days": 2191,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1489,7 +1573,7 @@
  "memloom/memloom": {
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-08-13",
-  "rel_days": 46,
+  "rel_days": 86,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1566,7 +1650,7 @@
  "Dani3lSun/apex-plugin-extend_ig_menu": {
   "rel_ver": "v1.1.3",
   "rel_pub": "2018-01-15",
-  "rel_days": 3178,
+  "rel_days": 3218,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1669,7 +1753,7 @@
  "MatissJanis/knex-serverless-mysql": {
   "rel_ver": "1.1.0",
   "rel_pub": "2021-04-26",
-  "rel_days": 1981,
+  "rel_days": 2021,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1824,7 +1908,7 @@
  "Oreoxmt/tidbcloudy": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2023-10-08",
-  "rel_days": 1086,
+  "rel_days": 1126,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1951,7 +2035,7 @@
  "datasette/datasette-litestream": {
   "rel_ver": "0.2a0",
   "rel_pub": "2026-01-20",
-  "rel_days": 252,
+  "rel_days": 291,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2000,7 +2084,7 @@
  "EliaTolin/remote_caching": {
   "rel_ver": "v1.0.16",
   "rel_pub": "2026-01-23",
-  "rel_days": 249,
+  "rel_days": 288,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2027,7 +2111,7 @@
  "zendbit/katabase": {
   "rel_ver": "v0.1.29",
   "rel_pub": "2025-06-02",
-  "rel_days": 484,
+  "rel_days": 523,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2089,7 +2173,7 @@
  "vbgate/opencode-supertask": {
   "rel_ver": "v0.1.41",
   "rel_pub": "2026-07-19",
-  "rel_days": 73,
+  "rel_days": 111,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2132,7 +2216,7 @@
  "lodilorenzo/teatro": {
   "rel_ver": "0.19.6_beta",
   "rel_pub": "2026-09-17",
-  "rel_days": 13,
+  "rel_days": 51,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -2350,7 +2434,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.1",
   "rel_pub": "2024-01-22",
-  "rel_days": 983,
+  "rel_days": 1020,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2376,7 +2460,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-08-13",
-  "rel_days": 414,
+  "rel_days": 451,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2849,7 +2933,7 @@
  },
  "TikVault-jr7/TikVault-jr77": {
   "commit_90d": 2,
-  "commit_7d": 2,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2872,7 +2956,7 @@
  "AwesomeDog/soma": {
   "rel_ver": "v0.10.6",
   "rel_pub": "2026-10-13",
-  "rel_days": 7,
+  "rel_days": 25,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2898,7 +2982,7 @@
  "devcristianlopez/lemoria": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-29",
-  "rel_days": 27,
+  "rel_days": 39,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2925,7 +3009,7 @@
  "KarakoramDev/Karakoram": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-26",
-  "rel_days": 1,
+  "rel_days": 12,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2968,6 +3052,34 @@
    "security": "20261029",
    "contrib": "20261029",
    "lang": "20261029"
+  }
+ },
+ "Bogdusik/AI-Office": {
+  "etag": {
+   "release": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\"",
+   "security": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Python": 53,
+   "TypeScript": 45,
+   "PowerShell": 2,
+   "JavaScript": 0,
+   "Mako": 0
+  },
+  "enriched_at": "20261107",
+  "dim_ts": {
+   "release": "20261107",
+   "security": "20261107",
+   "contrib": "20261107",
+   "lang": "20261107"
   }
  }
 }

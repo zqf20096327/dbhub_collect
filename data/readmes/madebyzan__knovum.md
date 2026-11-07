@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/madebyzan/knovum/releases/latest">
-    <img src="docs/assets/readme/banner.jpg" width="100%" alt="Knovum — the local-first AI knowledge workspace" />
+    <img src="docs/assets/readme/banner.png" width="100%" alt="Knovum — the local-first AI knowledge workspace" />
   </a>
 
   <p>
@@ -27,10 +27,7 @@
   </p>
 </div>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/screenshot-en-dark.webp" />
-  <img src="docs/assets/readme/screenshot-en-light.webp" width="100%" alt="Knovum desktop app: a Space with sources, claims, evidence and a design brief connected on an infinite canvas, and a cited answer in the conversation panel." />
-</picture>
+<img src="docs/assets/readme/screenshot.png" width="100%" alt="Knovum desktop app: a Space with sources, claims, evidence and a design brief connected on an infinite canvas, and a cited answer in the conversation panel." />
 
 ---
 
@@ -66,7 +63,7 @@ bring-your-own-key, and only receive the context an action needs.
 ## How it works
 
 <div align="center">
-  <img src="docs/assets/readme/source-to-work.svg" width="100%" alt="An example knowledge flow: notes raise a question, a recording and a saved article support a claim, and a creation step produces a document with its inputs recorded." />
+  <img src="docs/assets/readme/source-to-work.png" width="100%" alt="How it works: Sources. Reasoning. Work you can trace. Turn scattered sources into connected reasoning and a ready-to-use project brief." />
   <sub>An example knowledge flow, shown schematically.</sub>
 </div>
 
@@ -232,6 +229,31 @@ made.
 
 Yes. Ollama and any OpenAI-compatible endpoint can be connected as a model for answers and the
 Builtin Agent. The on-device capabilities listed above do not need Ollama at all.
+
+</details>
+
+<details>
+<summary><strong>What should I do if local model downloads fail or time out?</strong></summary>
+
+On-device capabilities (such as OCR text recognition, Whisper transcription, and image processing)
+automatically download pinned model weights on first use. If your network has restricted access to
+`huggingface.co`, you can configure the standard `HF_ENDPOINT` environment variable to use a mirror
+(e.g., `https://hf-mirror.com`):
+
+- **Windows**:
+  Set a persistent user environment variable (restart Knovum afterwards):
+  - **GUI**: Press `Win + R`, enter `sysdm.cpl` → **Advanced** → **Environment Variables**, and under
+    **User variables** add `HF_ENDPOINT` with value `https://hf-mirror.com`.
+  - **Command Prompt**: Run `setx HF_ENDPOINT "https://hf-mirror.com"` (persistent user variable; avoid
+    session-only `set`).
+- **macOS / Linux**:
+  Add the variable to your shell configuration (e.g., `~/.zshrc` or `~/.bashrc`):
+  ```bash
+  echo 'export HF_ENDPOINT="https://hf-mirror.com"' >> ~/.zshrc
+  source ~/.zshrc
+  ```
+
+All downloaded model files are strictly verified against hardcoded SHA-256 digests.
 
 </details>
 

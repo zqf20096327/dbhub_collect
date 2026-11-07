@@ -1,11 +1,11 @@
 {
  "coollabsio/coolify": {
-  "commit_7d": 174,
-  "commit_90d": 2064,
-  "rel_ver": "v4.5.3",
-  "rel_pub": "2026-10-28",
+  "commit_7d": 257,
+  "commit_90d": 2303,
+  "rel_ver": "v4.6.0",
+  "rel_pub": "2026-11-02",
   "rel_days": 5,
-  "rel_n90": 12,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 30,
@@ -22,7 +22,7 @@
    "GHSA-mv4c-9x67-rrmv(CVE-2026-42200,high)"
   ],
   "contrib_n": 409,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "PHP": 81,
    "Blade": 16,
@@ -32,11 +32,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
+   {
+    "t": "v4.6.0",
+    "d": "2026-11-02",
+    "n": "- Set, remove and import the secret manager of applications, services and databases, key names are listed and values are never returned\n- Bump the SQLite image to `3.54.1-v0.2.0` with SQLite 3.54.1, which lets any user ID write the database files, so a connected application no longer has to run as `65532` or root\n- Replace the user ID note on the connect page with a warning that a bind mount opens the database files to every user on the host\n- Keep the file names of PostgreSQL init scripts inside the init s"
+   },
    {
     "t": "v4.5.3",
     "d": "2026-10-28",
@@ -51,16 +56,82 @@
     "t": "v4.5.1",
     "d": "2026-10-27",
     "n": "- Saved removed databases in the backup list (#11548) and explained dumps that stopped without an error (#11549).\n- Fixed the database image picker (#12337) and server IDs in the new resource wizard (#12327).\n- Security: blocked PostgreSQL restore scan bypasses and stopped restores on SQL errors (#12333).\n- Security: hid database URLs in API create responses without sensitive access (#12297, fixes #11190).\n- Security: scoped database backup API endpoints to the database type (#12279).\n- Kept privileges in P"
+   },
+   {
+    "t": "v4.5.0",
+    "d": "2026-10-23",
+    "n": "- Added a file browser for applications, services, and databases (#11518, fixes #6519)\n- Added an automatic backup of the Coolify database before an update (#12093)\n- Added a cache flush for Redis, KeyDB, and Dragonfly databases (#11513)\n- PostgreSQL healthchecks and backups set `PGPASSWORD` (#12224, fixes #6353)\n- Backups use the configured databases when the container environment is missing (#12212, fixes #9417)\n- Database updates apply `redis_password` and `instant_deploy`\n- Database custom configuration"
+   },
+   {
+    "t": "v4.4.7",
+    "d": "2026-10-21",
+    "n": "> [!IMPORTANT]\r\n> This release fixes multiple critical CVEs in dependencies that Coolify uses. Update immediately.\r\n\r\n> [!TIP]\r\n> Every v4 line has a security fix release. On v4.4, update from the dashboard: `Settings → Update → Check now → Update`. We recommend that everyone moves to v4.4.7, because the v4.1, v4.2, v4.3, v4.4 minior releases also include other security fixes that are not backported.\r\n>\r\n> To update to a patched version of v4.0 to v4.3, run this on your server to update to the securit"
+   },
+   {
+    "t": "v4.3.24",
+    "d": "2026-10-21",
+    "n": "> [!IMPORTANT]\r\n> This release backports the [v4.4.7](https://github.com/coollabsio/coolify/releases/tag/v4.4.7) security fixes to this release line. It is the same security release as v4.4.7, not a separate one. It fixes multiple critical CVEs in dependencies that Coolify uses, so update immediately.\r\n\r\n> [!TIP]\r\n> Run this on your server to update to the security fix release of your line:\r\n>\r\n> ```bash\r\n> curl -fsSL https://cdn.coollabs.io/coolify/patch.sh | sudo bash\r\n> ```\r\n>\r\n> | Running | Security fix"
+   },
+   {
+    "t": "v4.2.1",
+    "d": "2026-10-21",
+    "n": "> [!IMPORTANT]\r\n> This release backports the [v4.4.7](https://github.com/coollabsio/coolify/releases/tag/v4.4.7) security fixes to this release line. It is the same security release as v4.4.7, not a separate one. It fixes multiple critical CVEs in dependencies that Coolify uses, so update immediately.\r\n\r\n> [!TIP]\r\n> Run this on your server to update to the security fix release of your line:\r\n>\r\n> ```bash\r\n> curl -fsSL https://cdn.coollabs.io/coolify/patch.sh | sudo bash\r\n> ```\r\n>\r\n> | Running | Security fix"
+   },
+   {
+    "t": "v4.1.3",
+    "d": "2026-10-21",
+    "n": "> [!IMPORTANT]\r\n> This release backports the [v4.4.7](https://github.com/coollabsio/coolify/releases/tag/v4.4.7) security fixes to this release line. It is the same security release as v4.4.7, not a separate one. It fixes multiple critical CVEs in dependencies that Coolify uses, so update immediately.\r\n\r\n> [!TIP]\r\n> Run this on your server to update to the security fix release of your line:\r\n>\r\n> ```bash\r\n> curl -fsSL https://cdn.coollabs.io/coolify/patch.sh | sudo bash\r\n> ```\r\n>\r\n> | Running | Security fix"
+   },
+   {
+    "t": "v4.0.1",
+    "d": "2026-10-21",
+    "n": "> [!IMPORTANT]\r\n> This release backports the [v4.4.7](https://github.com/coollabsio/coolify/releases/tag/v4.4.7) security fixes to this release line. It is the same security release as v4.4.7, not a separate one. It fixes multiple critical CVEs in dependencies that Coolify uses, so update immediately.\r\n\r\n> [!TIP]\r\n> Run this on your server to update to the security fix release of your line:\r\n>\r\n> ```bash\r\n> curl -fsSL https://cdn.coollabs.io/coolify/patch.sh | sudo bash\r\n> ```\r\n>\r\n> | Running | Security fix"
    }
+  ],
+  "etag": {
+   "release": "W/\"9c27466cdac86a693206de2b2d2e46fab62946cbc7d0f5bec923dabd8def450b\"",
+   "security": "W/\"fbcf81a7a62e9e1bb05fb4418a21b0937800eb97836d278c7a80adce1822a333\""
+  },
+  "rel_dates": [
+   "2026-11-02",
+   "2026-10-28",
+   "2026-10-28",
+   "2026-10-27",
+   "2026-10-23",
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-09",
+   "2026-10-09",
+   "2026-10-09",
+   "2026-10-08",
+   "2026-10-07",
+   "2026-10-07",
+   "2026-10-06",
+   "2026-09-18",
+   "2026-09-18",
+   "2026-09-15",
+   "2026-09-15",
+   "2026-09-10",
+   "2026-09-08",
+   "2026-09-04",
+   "2026-09-03",
+   "2026-09-03",
+   "2026-08-28",
+   "2026-08-28",
+   "2026-08-26",
+   "2026-08-25"
   ]
  },
  "citusdata/citus": {
-  "commit_7d": 3,
-  "commit_90d": 78,
+  "commit_7d": 5,
+  "commit_90d": 77,
   "rel_ver": "v14.3.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 10,
-  "rel_n90": 5,
+  "rel_days": 15,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -68,7 +139,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 122,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "C": 57,
    "PLpgSQL": 35,
@@ -78,8 +149,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -98,6 +169,13 @@
     "d": "2026-08-06",
     "n": "* [release-14.0] Fix crash on writable standby coordinator writing to a coordinator-local shard (#8561) by @ihalatci in https://github.com/citusdata/citus/pull/8717"
    }
+  ],
+  "etag": {
+   "release": "W/\"5e3a0318e26066d523505fc2a04568531c65c04446b48e6e07ad236b87a85537\""
+  },
+  "rel_dates": [
+   "2026-10-23",
+   "2026-10-23"
   ]
  },
  "Snouzy/workout-cool": {
@@ -105,7 +183,7 @@
   "commit_90d": 2,
   "rel_ver": "v1.3.2",
   "rel_pub": "2025-12-07",
-  "rel_days": 331,
+  "rel_days": 335,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -166,12 +244,12 @@
   }
  },
  "openfoodfacts/openfoodfacts-server": {
-  "commit_90d": 730,
-  "commit_7d": 82,
-  "rel_ver": "v2.118.0",
-  "rel_pub": "2026-10-30",
-  "rel_days": 3,
-  "rel_n90": 12,
+  "commit_90d": 784,
+  "commit_7d": 84,
+  "rel_ver": "v2.120.0",
+  "rel_pub": "2026-11-06",
+  "rel_days": 1,
+  "rel_n90": 22,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -186,13 +264,23 @@
    "JavaScript": 2,
    "SCSS": 1
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261102"
   },
   "rel_notes": [
+   {
+    "t": "v2.120.0",
+    "d": "2026-11-06",
+    "n": "* Keep JSON facet requests on their requested taxonomy IDs ([#15095](https://github.com/openfoodfacts/openfoodfacts-server/issues/15095)) ([fbb311d](https://github.com/openfoodfacts/openfoodfacts-server/commit/fbb311dd399bdc6a4d0013b764f7fd39d1941db0))\n* keep taxonomy suggestions closed after blur ([#15136](https://github.com/openfoodfacts/openfoodfacts-server/issues/15136)) ([921a2bd](https://github.com/openfoodfacts/openfoodfacts-server/commit/921a2bdbc83458bcc34c926458d869e6258f84ee))\n* mongodb_dump.sh, "
+   },
+   {
+    "t": "v2.119.0",
+    "d": "2026-11-02",
+    "n": "## [2.119.0](https://github.com/openfoodfacts/openfoodfacts-server/compare/v2.118.0...v2.119.0) (2026-11-02)\n\n\n### Features\n\n* ask for nutrition facts in the empty nutrition facts table panel ([#14886](https://github.com/openfoodfacts/openfoodfacts-server/issues/14886)) ([c15fd24](https://github.com/openfoodfacts/openfoodfacts-server/commit/c15fd246ef9bfff787cc34808fcffffbfcdae616))\n* Open Food Facts Days 2026 banner ([#15229](https://github.com/openfoodfacts/openfoodfacts-server/issues/15229)) ([3a4af76](h"
+   },
    {
     "t": "v2.118.0",
     "d": "2026-10-30",
@@ -207,7 +295,59 @@
     "t": "v2.116.1",
     "d": "2026-10-21",
     "n": "* taxonomies enhancer - do not parse ingredients again when there is only 1 language ([#15060](https://github.com/openfoodfacts/openfoodfacts-server/issues/15060)) ([826d5f7](https://github.com/openfoodfacts/openfoodfacts-server/commit/826d5f756ea05b4bfbeeb0a49d34c8db87eecfbd))"
+   },
+   {
+    "t": "v2.116.0",
+    "d": "2026-10-20",
+    "n": "* 14586 - donate page v2 (hybrid Donorbox form, A/B per page view) ([#14590](https://github.com/openfoodfacts/openfoodfacts-server/issues/14590)) ([5789b3d](https://github.com/openfoodfacts/openfoodfacts-server/commit/5789b3dbcddf90600989de5f5451acae3f44fa9b))\n* better recognition of French ingredients (labels in names, text after parenthesis, footnotes) ([#14974](https://github.com/openfoodfacts/openfoodfacts-server/issues/14974)) ([38bd2af](https://github.com/openfoodfacts/openfoodfacts-server/commit/38bd"
+   },
+   {
+    "t": "v2.115.0",
+    "d": "2026-10-16",
+    "n": "* check duplicate additives synonyms ([#14707](https://github.com/openfoodfacts/openfoodfacts-server/issues/14707)) ([dc37e05](https://github.com/openfoodfacts/openfoodfacts-server/commit/dc37e0540321d0f18142aced7f40b43f4530db43))"
+   },
+   {
+    "t": "v2.114.0",
+    "d": "2026-10-09",
+    "n": "## [2.114.0](https://github.com/openfoodfacts/openfoodfacts-server/compare/v2.113.0...v2.114.0) (2026-10-09)\n\n\n### Features\n\n* **Nutrition:** keep unit empty for empty-unit nutrients ([#14844](https://github.com/openfoodfacts/openfoodfacts-server/issues/14844)) ([29c3415](https://github.com/openfoodfacts/openfoodfacts-server/commit/29c3415e156df07a818f5c8a02b3fc27a0205476))\n\n\n### Bug Fixes\n\n* do not show g as unit for pH and glycemic index, fix issue with aggregated set for unit less and % per serving nutri"
+   },
+   {
+    "t": "v2.113.0",
+    "d": "2026-10-06",
+    "n": "* **Nutrition:** allow “kg” for carbon footprint ([#14822](https://github.com/openfoodfacts/openfoodfacts-server/issues/14822)) ([8cfd1ad](https://github.com/openfoodfacts/openfoodfacts-server/commit/8cfd1ad1e820e0880db0a769a7da4f29bfa84210))"
+   },
+   {
+    "t": "v2.112.0",
+    "d": "2026-10-02",
+    "n": "## [2.112.0](https://github.com/openfoodfacts/openfoodfacts-server/compare/v2.111.0...v2.112.0) (2026-10-02)\n\n\n### Features\n\n* **Ingredients:** add sv phrase to ignore ([#14773](https://github.com/openfoodfacts/openfoodfacts-server/issues/14773)) ([d1cdfd4](https://github.com/openfoodfacts/openfoodfacts-server/commit/d1cdfd4f2ef41b346b47c608057b15ee99aa7928))\n\n\n### Bug Fixes\n\n* improve ingredient traces parser ([#14663](https://github.com/openfoodfacts/openfoodfacts-server/issues/14663)) ([09a5dd1](https://"
    }
+  ],
+  "etag": {
+   "release": "W/\"e735ae9ec562b1d7e723edc9429c07d93c98c62bdff86415e75ede6ab4e942d0\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-02",
+   "2026-10-30",
+   "2026-10-28",
+   "2026-10-21",
+   "2026-10-20",
+   "2026-10-16",
+   "2026-10-09",
+   "2026-10-06",
+   "2026-10-02",
+   "2026-09-30",
+   "2026-09-28",
+   "2026-09-25",
+   "2026-09-24",
+   "2026-09-23",
+   "2026-09-22",
+   "2026-09-22",
+   "2026-09-18",
+   "2026-09-17",
+   "2026-09-08",
+   "2026-08-26",
+   "2026-08-14"
   ]
  },
  "nickjj/docker-rails-example": {
@@ -254,7 +394,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2021-10-08",
-  "rel_days": 1815,
+  "rel_days": 1856,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -277,7 +417,7 @@
   "commit_7d": 0,
   "rel_ver": "2.0.0-rc.9",
   "rel_pub": "2026-06-18",
-  "rel_days": 101,
+  "rel_days": 142,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -297,7 +437,7 @@
   "commit_7d": 31,
   "rel_ver": "v1.5.10",
   "rel_pub": "2026-10-27",
-  "rel_days": 0,
+  "rel_days": 11,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -324,7 +464,7 @@
   "commit_7d": 4,
   "rel_ver": "v0.60.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 6,
+  "rel_days": 17,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -349,7 +489,7 @@
   "commit_7d": 13,
   "rel_ver": "v5.1.0",
   "rel_pub": "2026-10-28",
-  "rel_days": 5,
+  "rel_days": 10,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -390,7 +530,7 @@
   "commit_7d": 0,
   "rel_ver": "4.1.0",
   "rel_pub": "2023-04-19",
-  "rel_days": 1257,
+  "rel_days": 1298,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -448,7 +588,7 @@
   "commit_7d": 7,
   "rel_ver": "v0.18.0",
   "rel_pub": "2026-08-16",
-  "rel_days": 72,
+  "rel_days": 83,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -506,7 +646,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-05-19",
-  "rel_days": 497,
+  "rel_days": 537,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -541,7 +681,7 @@
   },
   "enriched_at": "20261027",
   "rel_pub": "2026-10-24",
-  "rel_days": 3,
+  "rel_days": 14,
   "rel_n90": 1,
   "rel_pre": false,
   "dim_ts": {
@@ -585,7 +725,7 @@
  "FgForrest/evitaDB": {
   "rel_ver": "v2026.2.17",
   "rel_pub": "2026-09-25",
-  "rel_days": 2,
+  "rel_days": 43,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -606,7 +746,7 @@
  "nhaarman/SQLiteBuilder": {
   "rel_ver": "0.1.0",
   "rel_pub": "2015-05-17",
-  "rel_days": 4151,
+  "rel_days": 4192,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -623,7 +763,7 @@
  "oceanbase/ocp-express": {
   "rel_ver": "v4.2.2-release-20240117173031",
   "rel_pub": "2024-07-23",
-  "rel_days": 796,
+  "rel_days": 837,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -666,7 +806,7 @@
  "INotfound/Magic": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2021-01-19",
-  "rel_days": 2077,
+  "rel_days": 2118,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -702,7 +842,7 @@
  "beiju-dev/beiju": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-09-02",
-  "rel_days": 25,
+  "rel_days": 66,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -734,7 +874,7 @@
  "greencapk8s/greencap-k8s": {
   "rel_ver": "v0.7.9",
   "rel_pub": "2026-08-05",
-  "rel_days": 53,
+  "rel_days": 94,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -782,7 +922,7 @@
  "iamsauravsharma/sqlx_migrator": {
   "rel_ver": "v0.19.0",
   "rel_pub": "2026-06-02",
-  "rel_days": 117,
+  "rel_days": 158,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -828,7 +968,7 @@
  "nellavio/nellavio-backend": {
   "rel_ver": "2.0.1",
   "rel_pub": "2026-04-12",
-  "rel_days": 168,
+  "rel_days": 209,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -848,7 +988,7 @@
  "nickatnight/tag-youre-it-backend": {
   "rel_ver": "0.1.1",
   "rel_pub": "2023-03-11",
-  "rel_days": 1296,
+  "rel_days": 1337,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1007,7 +1147,7 @@
  "si3nloong/sqlgen": {
   "rel_ver": "v1.0.0-beta.0",
   "rel_pub": "2025-10-06",
-  "rel_days": 357,
+  "rel_days": 397,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1054,7 +1194,7 @@
  "marklogic/marklogic-docker": {
   "rel_ver": "2.3.0",
   "rel_pub": "2026-09-10",
-  "rel_days": 18,
+  "rel_days": 58,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1091,7 +1231,7 @@
  "Dani3lSun/apex-plugin-clockpicker": {
   "rel_ver": "v1.7.0",
   "rel_pub": "2016-12-22",
-  "rel_days": 3567,
+  "rel_days": 3607,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1135,7 +1275,7 @@
  "vitingr/spotify-guess": {
   "rel_ver": "alpha",
   "rel_pub": "2024-06-15",
-  "rel_days": 835,
+  "rel_days": 875,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1155,7 +1295,7 @@
  "iguntur/administratif-indonesia": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2018-03-21",
-  "rel_days": 3113,
+  "rel_days": 3153,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1188,7 +1328,7 @@
  "RhetTbull/apple-news-to-sqlite": {
   "rel_ver": "v0.5.2",
   "rel_pub": "2023-03-16",
-  "rel_days": 1292,
+  "rel_days": 1332,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1205,7 +1345,7 @@
  "jalalmostafa/SciTS": {
   "rel_ver": "v2.0-rc1",
   "rel_pub": "2024-01-29",
-  "rel_days": 973,
+  "rel_days": 1013,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1252,7 +1392,7 @@
  "uchebnick/unch": {
   "rel_ver": "v0.4.4",
   "rel_pub": "2026-04-26",
-  "rel_days": 155,
+  "rel_days": 195,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1273,7 +1413,7 @@
  "txthinking/denolib": {
   "rel_ver": "v20221108",
   "rel_pub": "2022-11-08",
-  "rel_days": 1420,
+  "rel_days": 1460,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1303,7 +1443,7 @@
  "romzes13/WorkOrderCMS": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2018-06-08",
-  "rel_days": 3034,
+  "rel_days": 3074,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1337,7 +1477,7 @@
  "turbot/steampipe-plugin-googledirectory": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2025-10-13",
-  "rel_days": 350,
+  "rel_days": 390,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1383,7 +1523,7 @@
  "FinnPL/Forum": {
   "rel_ver": "v0.0.1-alpha",
   "rel_pub": "2023-02-25",
-  "rel_days": 1311,
+  "rel_days": 1351,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1430,7 +1570,7 @@
  "DanielFGray/pg-sourcerer": {
   "rel_ver": "v0.5.2",
   "rel_pub": "2026-02-25",
-  "rel_days": 215,
+  "rel_days": 255,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1464,7 +1604,7 @@
  "OpenGovMail/raven": {
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-08-12",
-  "rel_days": 47,
+  "rel_days": 87,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1547,7 +1687,7 @@
  "Sharaal/sql-pg": {
   "rel_ver": "v10.4.1",
   "rel_pub": "2021-09-14",
-  "rel_days": 1840,
+  "rel_days": 1880,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1578,7 +1718,7 @@
  "AI3I/pyCluster": {
   "rel_ver": "v1.0.22",
   "rel_pub": "2026-09-07",
-  "rel_days": 21,
+  "rel_days": 61,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
@@ -1697,7 +1837,7 @@
  "wusterbuilds/habitat-cli": {
   "rel_ver": "v0.4.7",
   "rel_pub": "2026-08-28",
-  "rel_days": 62,
+  "rel_days": 71,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1784,7 +1924,7 @@
  "windily-cloud/obsidian-sqlite3": {
   "rel_ver": "0.0.1",
   "rel_pub": "2022-09-21",
-  "rel_days": 1469,
+  "rel_days": 1508,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2431,7 +2571,7 @@
  "oleg-tkachuk/paladin": {
   "rel_ver": "sdk/go/v0.23.1",
   "rel_pub": "2026-10-03",
-  "rel_days": 0,
+  "rel_days": 35,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2473,8 +2613,8 @@
   }
  },
  "bestevan01/cafe-pos": {
-  "commit_90d": 105,
-  "commit_7d": 2,
+  "commit_90d": 93,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2487,18 +2627,22 @@
    "CSS": 1,
    "HTML": 0
   },
-  "enriched_at": "20261014",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261014",
-   "release": "20261014",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261014",
    "contrib": "20261014",
    "lang": "20261014"
-  }
+  },
+  "etag": {
+   "release": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\""
+  },
+  "rel_dates": []
  },
  "mru2006/Campus-Lost-and-Found-Render-TiDB": {
   "commit_90d": 1,
-  "commit_7d": 1,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2522,12 +2666,12 @@
   }
  },
  "abdulwaheedsyed/Rowsmith": {
-  "commit_90d": 121,
-  "commit_7d": 41,
-  "rel_ver": "v0.4.0",
-  "rel_pub": "2026-10-19",
-  "rel_days": 0,
-  "rel_n90": 5,
+  "commit_90d": 140,
+  "commit_7d": 3,
+  "rel_ver": "v0.6.0",
+  "rel_pub": "2026-10-20",
+  "rel_days": 18,
+  "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -2542,19 +2686,68 @@
    "CQL": 4,
    "Python": 2
   },
-  "enriched_at": "20261019",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261019",
-   "release": "20261019",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261019",
    "contrib": "20261019",
    "lang": "20261019"
-  }
+  },
+  "etag": {
+   "release": "W/\"179a4fb15360ecc43655980519938fb9237d728e9d2ab931adb75b508b83489c\""
+  },
+  "rel_dates": [
+   "2026-10-20",
+   "2026-10-20",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-18"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.6.0",
+    "d": "2026-10-20",
+    "n": "- Amazon DynamoDB, in any region or DynamoDB Local, signing in with an access key, the server's own AWS credentials or an assumed role: tables with their item counts, keys, global and local indexes, capacity, time to live, streams and backups; a grid that queries by key (or a global index) when a partition key is filtered with = and scans otherwise; edits saved in one conditional transaction, so an insert never overwrites an item; a console for PartiQL and DynamoDB API calls in DynamoDB JSON; the structure "
+   },
+   {
+    "t": "v0.5.0",
+    "d": "2026-10-20",
+    "n": "- The dev stack adds a three-node Redis Cluster, Cassandra, ScyllaDB, Elasticsearch and OpenSearch.\n- Redis Cluster: connecting to any node opens the whole cluster. Keys are listed from every primary, browsing and edits go to the node that owns each key, and processes show every node's clients. The console follows the cluster's redirects, runs `KEYS`, `DBSIZE` and `FLUSHDB` on every primary, and explains why `SELECT`, `SCAN` and transactions aren't available. A command on keys in different slots explains ho"
+   },
+   {
+    "t": "v0.4.0",
+    "d": "2026-10-19",
+    "n": "- A connection's configured schema (Snowflake, Trino) is now the one the navigator opens on."
+   },
+   {
+    "t": "v0.3.0",
+    "d": "2026-10-19",
+    "n": "- CockroachDB (24.1 and later, and CockroachDB Cloud), YugabyteDB (2.20 and later, and YugabyteDB Aeon) and TiDB (7.5 and later, and TiDB Cloud), each in the connection form with its own default port, through the PostgreSQL and MySQL drivers.\n- Migrations into and out of CockroachDB, YugabyteDB and TiDB, with types translated; TiDB stores spatial columns as GeoJSON.\n- Snowflake: sign in with a key pair, a programmatic access token, an OAuth token or a password, through SSH tunnels too. The catalog, keys and"
+   },
+   {
+    "t": "v0.2.0",
+    "d": "2026-10-19",
+    "n": "- Editing a connection uses the dialog's full width again. The form had been squeezed into the narrow column that the database list fills when you create a connection.\n- Redis and Valkey. The navigator lists keys by type and finds them on the server by name or pattern (`user:*`), and each numbered database shows its key count. Opening a key shows a grid for its type: string, hash, list, set, sorted set, stream or JSON document. You can filter, search, sort and edit it, and a save is checked first, then appl"
+   },
+   {
+    "t": "v0.1.0",
+    "d": "2026-10-19",
+    "n": "- MySQL 5.7 to 9.x, MariaDB 10 and 11, PostgreSQL 10+ with PostGIS, SQL Server 2012+ and Azure SQL, Oracle 12c+, ClickHouse 24.8+ and ClickHouse Cloud, SQLite 3, MongoDB 5+ and Google BigQuery. Every driver is pure Go, so no client libraries need installing.\n### Managing databases\n- Database users, roles and privileges, managed without writing GRANT statements.\n- Running processes, server variables, and database and table sizes."
+   },
+   {
+    "t": "v0.1.0-rc.1",
+    "d": "2026-10-18",
+    "n": "- MySQL 5.7 to 9.x, MariaDB 10 and 11, PostgreSQL 10+ with PostGIS, SQL Server 2012+ and Azure SQL, Oracle 12c+, ClickHouse 24.8+ and ClickHouse Cloud, SQLite 3, MongoDB 5+ and Google BigQuery. Every driver is pure Go, so no client libraries need installing.\n### Managing databases\n- Database users, roles and privileges, managed without writing GRANT statements.\n- Running processes, server variables, and database and table sizes."
+   }
+  ]
  },
  "egggeeegg/quiz-app": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 1,
+  "rel_days": 17,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

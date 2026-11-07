@@ -1,10 +1,10 @@
 {
  "airbytehq/airbyte": {
-  "commit_7d": 458,
-  "commit_90d": 5371,
+  "commit_7d": 566,
+  "commit_90d": 5550,
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-10-15",
-  "rel_days": 383,
+  "rel_days": 388,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -16,7 +16,7 @@
    "GHSA-4j3c-fgvx-xgqq(CVE-2024-38363,high)"
   ],
   "contrib_n": 378,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Python": 47,
    "Kotlin": 43,
@@ -26,9 +26,9 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
    {
@@ -46,14 +46,19 @@
     "d": "2025-06-17",
     "n": "People liked the last version of Airbyte so much that we decided to ship another one 🚢. Airbyte 1.7 was released on June 16, 2025. We're excited to share new improvements and changes to the Airbyte platform.\r\n\r\n## Platform changes\r\n\r\nThese changes improve Airbyte for everyone.\r\n\r\n### Move files and records together\r\n\r\nAirbyte now supports moving files and records in the same connection. The combination of structured and unstructured data drives more robust knowledge systems that have more context, which "
    }
-  ]
+  ],
+  "etag": {
+   "release": "W/\"bcffc3e64440b6644971e3c8336abeb5d6651f8149928e2f869cd05b895dfc74\"",
+   "security": "W/\"9dad48471bd808f9b9c993b6afa3922ef96d197082a2154b5900cc3eaf75e9bd\""
+  },
+  "rel_dates": []
  },
  "realm/realm-swift": {
-  "commit_7d": 7,
+  "commit_7d": 0,
   "commit_90d": 13,
   "rel_ver": "v20.0.6",
   "rel_pub": "2026-09-27",
-  "rel_days": 0,
+  "rel_days": 41,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -80,7 +85,7 @@
   "commit_90d": 0,
   "rel_ver": "latest",
   "rel_pub": "2022-08-06",
-  "rel_days": 1513,
+  "rel_days": 1554,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -107,7 +112,7 @@
   "commit_90d": 0,
   "rel_ver": "v0.2.0-alpha.2",
   "rel_pub": "2024-06-19",
-  "rel_days": 830,
+  "rel_days": 871,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -127,12 +132,12 @@
   }
  },
  "pgdogdev/pgdog": {
-  "commit_7d": 17,
-  "commit_90d": 341,
-  "rel_ver": "v0.1.62",
-  "rel_pub": "2026-10-16",
-  "rel_days": 17,
-  "rel_n90": 11,
+  "commit_7d": 40,
+  "commit_90d": 364,
+  "rel_ver": "v0.1.64",
+  "rel_pub": "2026-11-05",
+  "rel_days": 2,
+  "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -140,7 +145,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 81,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Rust": 86,
    "Python": 3,
@@ -150,11 +155,21 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v0.1.64",
+    "d": "2026-11-05",
+    "n": "- Query cancellation would leak between connections if the query finished on its own before the cancellation request was processed by Postgres\n- Primary key discovery wouldn't work for read-only users which would cause automatic primary key injection to break in sharded deployments if the read user was used to fetch the database schema (race condition)"
+   },
+   {
+    "t": "v0.1.63",
+    "d": "2026-11-02",
+    "n": "- **Breaking** `prepared_statements_limit` is now set to 5,000 by default. This is to prevent statement leaks when that setting is not set and the pg client driver does not use prepared statements optimally (e.g., tokio-postgres). @levkk\n- Make `SET` more Postgres-compliant: return errors on incorrect parameter values, return correct `ParameterStatus` messages, handle `RESET` correctly for `DateStyle` and other parameters that have connection defaults, correctly return multiple `CommandComplete` messages fo"
+   },
    {
     "t": "v0.1.62",
     "d": "2026-10-16",
@@ -169,11 +184,53 @@
     "t": "v0.1.60",
     "d": "2026-09-24",
     "n": "## Performance\r\n* 40% faster handling of `SELECT` in sharded queries by removing redundant AST walks @jkaczman \r\n\r\n## Bugs\r\n* 0.0 and -0.0 hashed to the same value, which broke `DISTINCT`, `count()` and other cross-shard functions @MaxFreedomPollard\r\n* `session_replication_role` should be set via `SET` command @levkk \r\n* `interval` type wasn't correctly parsed for some edge cases in cross-shard aggregates @dipeshbabu\r\n* `stddev` / `variance` failed on some `NULL` values in cross-shard aggregates @dipeshbabu"
+   },
+   {
+    "t": "v0.1.59",
+    "d": "2026-09-17",
+    "n": "- Support Postgres foreign keys during resharding by disabling Postgres triggers during replication. This also ensures that triggers on the destination shards don't run, potentially causing double data insertion. @meskill\n- Add `checkout_timeout` metric to OpenMetrics (and OTEL) and admin database (`SHOW STATS`) which shows how many times clients hit the error for a particular pool @levkk\n- Improve performance of resharding copy data phase when using multiple replicas by more fairly distributing workloads b"
+   },
+   {
+    "t": "v0.1.58",
+    "d": "2026-09-10",
+    "n": "- Database-specific TLS configuration (incl. mTLS), allowing different TLS certificates per host in `pgdog.toml` @rlittlefield"
+   },
+   {
+    "t": "v0.1.57",
+    "d": "2026-09-03",
+    "n": "- Add `banned` gauge to OpenMetrics and OTEL indicating which database is currently blocked from reads by the load balancer @ChrisJr404"
+   },
+   {
+    "t": "v0.1.56",
+    "d": "2026-08-27",
+    "n": "Hot fix for [v0.1.55](https://github.com/pgdogdev/pgdog/releases/tag/v0.1.55).\r\n\r\n## Bug fixes\r\n- Don't set the thread stack size to 32MB by default and don't warn the user about a deprecated setting at runtime (`query_parser_engine`)."
+   },
+   {
+    "t": "v0.1.55",
+    "d": "2026-08-27",
+    "n": "## Security\r\n- Docker images now use keyless cosign attestation @dkarter \r\n\r\n## Features\r\n- Support execution of multi-statement queries sent via the simple protocol, e.g., `SET statement_timeout TO 0; SELECT * FROM users;`. Previously, this would error out. Limitation: we don't automatically start a transaction, so only one DML statement per query is allowed. @levkk \r\n- Switch to our implementation of query normalization instead of using `pg_query` (only relevant if using the Enterprise edition) @sgrif @jk"
    }
+  ],
+  "etag": {
+   "release": "W/\"c75b7ceb189c1f0b89b4dfccd218c23e136ef3060140f9516d5650d8716811e5\""
+  },
+  "rel_dates": [
+   "2026-11-05",
+   "2026-11-02",
+   "2026-10-16",
+   "2026-10-09",
+   "2026-09-24",
+   "2026-09-17",
+   "2026-09-10",
+   "2026-09-03",
+   "2026-08-27",
+   "2026-08-27",
+   "2026-08-20",
+   "2026-08-13"
   ]
  },
  "mgramin/awesome-db-tools": {
-  "commit_7d": 4,
+  "commit_7d": 0,
   "commit_90d": 4,
   "rel_ver": null,
   "rel_none": true,
@@ -212,7 +269,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.2",
   "rel_pub": "2025-01-25",
-  "rel_days": 610,
+  "rel_days": 651,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -231,12 +288,12 @@
   }
  },
  "hoangsonww/Claude-Code-Agent-Monitor": {
-  "commit_90d": 412,
-  "commit_7d": 13,
+  "commit_90d": 529,
+  "commit_7d": 59,
   "rel_ver": "v2.4.5",
   "rel_pub": "2026-10-23",
-  "rel_days": 10,
-  "rel_n90": 12,
+  "rel_days": 15,
+  "rel_n90": 24,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -251,10 +308,10 @@
    "Shell": 2,
    "CSS": 1
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -272,7 +329,71 @@
     "t": "v2.4.3",
     "d": "2026-10-21",
     "n": "## What's Changed\n* fix(release): backfill every merged PR without a milestone by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/387\n* fix(release): reuse valid stale release branch by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/388\n* chore(release): bump version to 2.4.3 by @github-actions[bot] in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/386\n\n\n**Full Changelog**: https://github.com/hoangsonww/Claude-Code-Agent-Monitor/compare/"
+   },
+   {
+    "t": "v2.4.2",
+    "d": "2026-10-21",
+    "n": "## What's Changed\n* fix(release): tolerate unpublished previous release tag by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/385\n* chore(release): bump version to 2.4.2 by @github-actions[bot] in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/384\n\n\n**Full Changelog**: https://github.com/hoangsonww/Claude-Code-Agent-Monitor/compare/v2.4.1...v2.4.2"
+   },
+   {
+    "t": "v2.4.1",
+    "d": "2026-10-21",
+    "n": "## What's Changed\n* fix(release): assign and label generated bump PRs by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/380\n* fix(release): backfill milestones on included PRs by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/383\n* chore(release): bump version to 2.4.1 by @github-actions[bot] in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/381\n\n\n**Full Changelog**: https://github.com/hoangsonww/Claude-Code-Agent-Monitor/compare/v2.4.0"
+   },
+   {
+    "t": "v2.4.0",
+    "d": "2026-10-20",
+    "n": "## What's Changed\n* fix first-prompt descriptor overwriting a custom title equal to the folder name by @lasse-tech in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/375\n* feat(server): add POST /api/hooks/ingest-transcript for remote transcript upload by @houdinisparks in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/366\n* feat(release): automate version bump pull requests by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/367\n* docs(ts): document tes"
+   },
+   {
+    "t": "v2.3.0",
+    "d": "2026-10-10",
+    "n": "## What's Changed\n* docs: add READMEs for undocumented directories by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/363\n* docs: make repository README mobile-friendly by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/364\n* chore(release): bump version to 2.3.0 by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/365\n\n\n**Full Changelog**: https://github.com/hoangsonww/Claude-Code-Agent-Monitor/compare/v2.2.6...v2.3.0"
+   },
+   {
+    "t": "v2.2.6",
+    "d": "2026-10-04",
+    "n": "## What's Changed\n* docs: re-enhance TSDoc + v2.2.6 by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/361\n\n\n**Full Changelog**: https://github.com/hoangsonww/Claude-Code-Agent-Monitor/compare/v2.2.5...v2.2.6"
+   },
+   {
+    "t": "v2.2.5",
+    "d": "2026-10-04",
+    "n": "* fix(cursor): read chat titles from state.vscdb by @albertpastrana in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/353"
+   },
+   {
+    "t": "v2.2.4",
+    "d": "2026-09-27",
+    "n": "## What's Changed\n* fix(pricing): add Claude Opus 5.5 rate card by @Doccy008 in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/346\n* chore(release): bump version to 2.2.4 by @hoangsonww in https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/347\n\n\n**Full Changelog**: https://github.com/hoangsonww/Claude-Code-Agent-Monitor/compare/v2.2.3...v2.2.4"
    }
+  ],
+  "etag": {
+   "release": "W/\"b0cb4e3ccf898aeb2978092ea728c2538d8bd61bb224a31c28094f6ed1d13352\""
+  },
+  "rel_dates": [
+   "2026-10-23",
+   "2026-10-22",
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-20",
+   "2026-10-10",
+   "2026-10-04",
+   "2026-10-04",
+   "2026-09-27",
+   "2026-09-24",
+   "2026-09-21",
+   "2026-09-18",
+   "2026-09-13",
+   "2026-09-07",
+   "2026-09-06",
+   "2026-09-01",
+   "2026-08-28",
+   "2026-08-20",
+   "2026-08-19",
+   "2026-08-19",
+   "2026-08-14",
+   "2026-08-12",
+   "2026-08-10"
   ]
  },
  "thelia/thelia": {
@@ -280,20 +401,22 @@
   "commit_7d": 243,
   "rel_ver": "3.1.6",
   "rel_pub": "2026-10-27",
-  "rel_days": 0,
+  "rel_days": 11,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
-  "sec_n": 6,
+  "sec_n": 17,
   "sec_worst": "critical",
-  "sec_last": "2026-09-16",
+  "sec_last": "2026-11-02",
   "sec_ids": [
-   "GHSA-r63g-6wfg-v5v9(-,critical)",
-   "GHSA-59cp-795h-6wgx(-,medium)",
-   "GHSA-m887-7g6m-w83g(-,high)",
-   "GHSA-8ffm-2g9j-m8pp(-,high)",
-   "GHSA-v6v7-757c-2w5g(-,medium)",
-   "GHSA-p2h2-2622-q773(-,medium)"
+   "GHSA-g445-rq89-gwjx(-,medium)",
+   "GHSA-g996-jgxj-cgh4(-,medium)",
+   "GHSA-q679-2j8v-rh79(-,medium)",
+   "GHSA-pq5m-7g9w-ppg8(-,medium)",
+   "GHSA-5524-qfxp-33v9(-,critical)",
+   "GHSA-gcgv-f8rf-w2wc(-,medium)",
+   "GHSA-7wrm-pcw6-4g9m(-,high)",
+   "GHSA-cfvv-2jvw-x2hp(-,medium)"
   ],
   "contrib_n": 91,
   "lang": {
@@ -303,10 +426,14 @@
    "Twig": 0,
    "Smarty": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261107",
   "dim_ts": {
    "commit": "20261027",
-   "release": "20261027"
+   "release": "20261027",
+   "security": "20261107"
+  },
+  "etag": {
+   "security": "W/\"06097c057bd7eb5e325b5b273f8c71b1f9941d7e2f82c91d1c82bd75b449602d\""
   }
  },
  "geekcattle/geek-framework": {
@@ -356,7 +483,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.1",
   "rel_pub": "2020-12-10",
-  "rel_days": 2117,
+  "rel_days": 2158,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -379,7 +506,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0-beta",
   "rel_pub": "2020-04-06",
-  "rel_days": 2365,
+  "rel_days": 2406,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -400,7 +527,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.38.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 9,
+  "rel_days": 20,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -531,7 +658,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.0-rc.2",
   "rel_pub": "2026-08-17",
-  "rel_days": 42,
+  "rel_days": 82,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -597,7 +724,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-03-01",
-  "rel_days": 210,
+  "rel_days": 251,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -616,7 +743,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.05",
   "rel_pub": "2018-12-06",
-  "rel_days": 2852,
+  "rel_days": 2893,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -635,7 +762,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.1",
   "rel_pub": "2024-12-19",
-  "rel_days": 677,
+  "rel_days": 688,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -704,7 +831,7 @@
  "Uconnect-Technologies/wertik-js": {
   "rel_ver": "3.3.1",
   "rel_pub": "2022-11-11",
-  "rel_days": 1416,
+  "rel_days": 1457,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -753,7 +880,7 @@
  "denizzzka/dpq2": {
   "rel_ver": "v1.3.0",
   "rel_pub": "2026-06-18",
-  "rel_days": 101,
+  "rel_days": 142,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -838,7 +965,7 @@
  "Noveum/orbit": {
   "rel_ver": "2026.09.27",
   "rel_pub": "2026-09-27",
-  "rel_days": 0,
+  "rel_days": 41,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -886,7 +1013,7 @@
  "huaweicloud/huaweicloud-sdk-python": {
   "rel_ver": "v1.0.28",
   "rel_pub": "2021-01-05",
-  "rel_days": 2091,
+  "rel_days": 2132,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -925,7 +1052,7 @@
  "hagan/claudia-statusline": {
   "rel_ver": "v3.2.0",
   "rel_pub": "2026-06-15",
-  "rel_days": 104,
+  "rel_days": 145,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -945,7 +1072,7 @@
  "Rundiz/nested-set": {
   "rel_ver": "1.0.2",
   "rel_pub": "2021-03-03",
-  "rel_days": 2034,
+  "rel_days": 2075,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1007,7 +1134,7 @@
  "Blitzapps/blitz-orm": {
   "rel_ver": "v0.11.1",
   "rel_pub": "2024-09-04",
-  "rel_days": 753,
+  "rel_days": 794,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1042,7 +1169,7 @@
  "YooUp/RS232-Monitor-Database": {
   "rel_ver": "v3",
   "rel_pub": "2021-04-01",
-  "rel_days": 2006,
+  "rel_days": 2046,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1059,7 +1186,7 @@
  "ChivukulaVirinchi/photovault": {
   "rel_ver": "v0.3.1",
   "rel_pub": "2026-07-10",
-  "rel_days": 80,
+  "rel_days": 120,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1080,7 +1207,7 @@
  "aomsir/Jewix-Blog": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-06-09",
-  "rel_days": 476,
+  "rel_days": 516,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1101,7 +1228,7 @@
  "LadybugDB/go-ladybug": {
   "rel_ver": "v0.13.1",
   "rel_pub": "2025-12-18",
-  "rel_days": 284,
+  "rel_days": 324,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1136,7 +1263,7 @@
  "axumrs/axum-rs-archived": {
   "rel_ver": "v0.2.3",
   "rel_pub": "2022-09-11",
-  "rel_days": 1478,
+  "rel_days": 1518,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1157,7 +1284,7 @@
  "Sohex/musefs": {
   "rel_ver": "v1.3.0",
   "rel_pub": "2026-08-19",
-  "rel_days": 40,
+  "rel_days": 80,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1189,7 +1316,7 @@
  "contributte/nextras-orm-generator": {
   "rel_ver": "v0.7.1",
   "rel_pub": "2026-01-06",
-  "rel_days": 265,
+  "rel_days": 305,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1264,7 +1391,7 @@
  "kiwicom/pg2avro": {
   "rel_ver": "0.2.2",
   "rel_pub": "2020-01-09",
-  "rel_days": 2454,
+  "rel_days": 2494,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1298,7 +1425,7 @@
  "samuel-oldra/NutriLab": {
   "rel_ver": "2022.07",
   "rel_pub": "2024-06-18",
-  "rel_days": 832,
+  "rel_days": 872,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1331,7 +1458,7 @@
  "andywer/plow": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2021-02-23",
-  "rel_days": 2043,
+  "rel_days": 2083,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1364,7 +1491,7 @@
  "wuwangzhang1216/openDB": {
   "rel_ver": "v1.5.0",
   "rel_pub": "2026-04-11",
-  "rel_days": 170,
+  "rel_days": 210,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1401,7 +1528,7 @@
  "ebenefuenf/quma": {
   "rel_ver": "0.1.0",
   "rel_pub": "2020-08-18",
-  "rel_days": 2232,
+  "rel_days": 2272,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1432,7 +1559,7 @@
  "rajguptaH/MauiCrudUsingApi": {
   "rel_ver": "v2.1.4",
   "rel_pub": "2023-02-05",
-  "rel_days": 1331,
+  "rel_days": 1371,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1538,7 +1665,7 @@
  "KarelWintersky/monolog-pdo-handler": {
   "rel_ver": "0.7",
   "rel_pub": "2025-03-04",
-  "rel_days": 573,
+  "rel_days": 613,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1600,7 +1727,7 @@
  "shiotomo/codecandy": {
   "rel_ver": "v5.0",
   "rel_pub": "2019-02-19",
-  "rel_days": 2778,
+  "rel_days": 2818,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1656,7 +1783,7 @@
  "superfly/litevfs": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2024-04-03",
-  "rel_days": 909,
+  "rel_days": 948,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1681,7 +1808,7 @@
  "SPANDigital/cel2sql": {
   "rel_ver": "v3.10.0",
   "rel_pub": "2026-09-09",
-  "rel_days": 20,
+  "rel_days": 59,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1707,7 +1834,7 @@
  "omigeft/QTChatroom": {
   "rel_ver": "pre-release",
   "rel_pub": "2023-12-28",
-  "rel_days": 1006,
+  "rel_days": 1045,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1813,7 +1940,7 @@
  "aosasona/migrant": {
   "rel_ver": "1.1.0",
   "rel_pub": "2026-06-14",
-  "rel_days": 107,
+  "rel_days": 146,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1855,7 +1982,7 @@
  "HiK87409/MemeOS": {
   "rel_ver": "1.0.6",
   "rel_pub": "2025-08-19",
-  "rel_days": 406,
+  "rel_days": 445,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1905,7 +2032,7 @@
  "baudsmithstudios/vigil": {
   "rel_ver": "v0.3.1",
   "rel_pub": "2026-05-15",
-  "rel_days": 137,
+  "rel_days": 176,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1930,7 +2057,7 @@
  "akkadotnet/Akka.Persistence.Sql": {
   "rel_ver": "1.5.70",
   "rel_pub": "2026-07-23",
-  "rel_days": 68,
+  "rel_days": 107,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1979,7 +2106,7 @@
  "jltsiren/gbz-base": {
   "rel_ver": "v0.6.2",
   "rel_pub": "2026-09-27",
-  "rel_days": 2,
+  "rel_days": 41,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2173,7 +2300,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.9",
   "rel_pub": "2026-10-16",
-  "rel_days": 14,
+  "rel_days": 22,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2756,7 +2883,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-11",
-  "rel_days": 144,
+  "rel_days": 180,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2804,7 +2931,7 @@
  "lianmatsuo/remcycle": {
   "rel_ver": "v0.4.1",
   "rel_pub": "2026-10-07",
-  "rel_days": 0,
+  "rel_days": 31,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2855,7 +2982,7 @@
  },
  "sumanmondal02/pocketmentor": {
   "commit_90d": 13,
-  "commit_7d": 13,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2901,7 +3028,7 @@
  "CoderJackZhu/Thingary": {
   "rel_ver": "v0.0.6",
   "rel_pub": "2026-10-13",
-  "rel_days": 0,
+  "rel_days": 25,
   "rel_n90": 6,
   "rel_pre": true,
   "rel_none": false,
@@ -2970,7 +3097,7 @@
  "nickerhov89/opencrm": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2026-10-13",
-  "rel_days": 8,
+  "rel_days": 25,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -3058,7 +3185,7 @@
  "hesedcasa/sdkck": {
   "rel_ver": "v0.37.4",
   "rel_pub": "2026-10-21",
-  "rel_days": 16,
+  "rel_days": 17,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,

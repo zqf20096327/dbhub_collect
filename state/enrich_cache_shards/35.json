@@ -1,11 +1,11 @@
 {
  "hasura/graphql-engine": {
-  "commit_7d": 24,
-  "commit_90d": 107,
-  "rel_ver": "v2.51.3",
-  "rel_pub": "2026-10-27",
-  "rel_days": 6,
-  "rel_n90": 11,
+  "commit_7d": 34,
+  "commit_90d": 138,
+  "rel_ver": "v2.51.4",
+  "rel_pub": "2026-11-03",
+  "rel_days": 4,
+  "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 4,
@@ -18,7 +18,7 @@
    "GHSA-j622-hw7j-c72x(-,critical)"
   ],
   "contrib_n": 394,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "TypeScript": 43,
    "Haskell": 28,
@@ -28,11 +28,26 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
+   {
+    "t": "v2.51.4",
+    "d": "2026-11-03",
+    "n": "- The OpenTelemetry span attribute holding the SQL query text for Postgres queries is renamed from `db.query` to `db.query.text`, following the [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/registry/attributes/db/#db-query-text). This lets APM tools such as Datadog link traces to their database monitoring queries. Monitors or dashboards that reference `db.query` must be updated to use `db.query.text`.\n- Show an error instead of \"Reload successful!\" when a reloaded database"
+   },
+   {
+    "t": "v2.50.7",
+    "d": "2026-11-03",
+    "n": "- The OpenTelemetry span attribute holding the SQL query text for Postgres queries is renamed from `db.query` to `db.query.text`, following the [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/registry/attributes/db/#db-query-text). This lets APM tools such as Datadog link traces to their database monitoring queries. Monitors or dashboards that reference `db.query` must be updated to use `db.query.text`.\n- Show an error instead of \"Reload successful!\" when a reloaded database"
+   },
+   {
+    "t": "v2.45.11",
+    "d": "2026-11-03",
+    "n": "## Changelog\r\n\r\nThis is a patch release for `v2.45`.\r\n\r\n### Bug fixes and improvements\r\n\r\n#### Build\r\n\r\n- Upgrade the Ubuntu Jammy image’s `libbrotli1` package to at least `1.0.9-2ubuntu0.1` for CVE-2026-111497. Preserve explicit eMudhra-chain distrust while supporting UBI9 trust stores that already removed the affected roots."
+   },
    {
     "t": "v2.51.3",
     "d": "2026-10-27",
@@ -47,7 +62,45 @@
     "t": "v2.51.2",
     "d": "2026-10-23",
     "n": "- Fixed Data Manager filters truncating PostgreSQL UUID and fractional values, and Edit Row clearing existing UUID, timestamp and numeric values. Timestamp calendars now open on the field's current value."
+   },
+   {
+    "t": "v2.50.5",
+    "d": "2026-10-23",
+    "n": "- Fixed Data Manager filters truncating PostgreSQL UUID and fractional values, and Edit Row clearing existing UUID, timestamp and numeric values. Timestamp calendars now open on the field's current value."
+   },
+   {
+    "t": "v2.45.9",
+    "d": "2026-10-20",
+    "n": "- Fixed the UBI-based `hasura/graphql-engine` image breaking Postgres MD5 password authentication (via `libpq`/`psql`). The image no longer sets `OPENSSL_FORCE_FIPS_MODE`, whose mere presence caused Red Hat UBI's OpenSSL to enable FIPS behavior regardless of the value. (close #10880)\n- Fixed row-level permission filters that traverse a remote relationship into a Data Connector source (e.g. Snowflake). Such filters previously failed at query time with `getColVals: not implemented for the Data Connector backe"
+   },
+   {
+    "t": "v2.51.1",
+    "d": "2026-10-20",
+    "n": "- **Breaking (server):** Hasura no longer imports PostgreSQL `COMMENT`s on tables, columns and functions into the GraphQL schema for Postgres-family sources (PostgreSQL, Citus, CockroachDB). Table/column descriptions and computed-field descriptions (which were inherited from the backing function's `COMMENT`) now come only from Metadata (`configuration.comment` / `configuration.column_config` / computed-field `comment`). Upgrade Hasura CLI `v2.51.1` and run `hasura metadata codemod migrate-postgres-comments`"
+   },
+   {
+    "t": "v2.50.4",
+    "d": "2026-10-20",
+    "n": "- **Breaking (server):** Hasura no longer imports PostgreSQL `COMMENT`s on tables, columns and functions into the GraphQL schema for Postgres-family sources (PostgreSQL, Citus, CockroachDB). Table/column descriptions and computed-field descriptions (which were inherited from the backing function's `COMMENT`) now come only from Metadata (`configuration.comment` / `configuration.column_config` / computed-field `comment`).\n**New (cli):** `hasura metadata codemod migrate-postgres-comments` migrates existing dat"
    }
+  ],
+  "etag": {
+   "release": "W/\"292dee28c14fb6382b1cdbc4d9c44317b61604a0a5882f6b8cc02d7063c1b1d4\"",
+   "security": "W/\"f76fee50a2afa484c35f4a20e69e6bdcc6cd7de41f9bff877a3722638e9f0630\""
+  },
+  "rel_dates": [
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-10-27",
+   "2026-10-27",
+   "2026-10-23",
+   "2026-10-23",
+   "2026-10-20",
+   "2026-10-20",
+   "2026-10-20",
+   "2026-09-09",
+   "2026-08-18"
   ]
  },
  "judasn/Linux-Tutorial": {
@@ -72,10 +125,10 @@
  },
  "aarondl/sqlboiler": {
   "commit_7d": 0,
-  "commit_90d": 2,
+  "commit_90d": 0,
   "rel_ver": "v4.19.5",
   "rel_pub": "2025-06-27",
-  "rel_days": 457,
+  "rel_days": 498,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -102,7 +155,7 @@
   "commit_90d": 0,
   "rel_ver": "v1.0.1",
   "rel_pub": "2026-02-04",
-  "rel_days": 235,
+  "rel_days": 276,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -128,7 +181,7 @@
   "commit_90d": 151,
   "rel_ver": "v1.4.2",
   "rel_pub": "2026-05-11",
-  "rel_days": 179,
+  "rel_days": 180,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -194,7 +247,7 @@
   "commit_90d": 0,
   "rel_ver": "0.1.29",
   "rel_pub": "2026-03-23",
-  "rel_days": 188,
+  "rel_days": 229,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -216,12 +269,12 @@
   }
  },
  "feldera/feldera": {
-  "commit_7d": 179,
-  "commit_90d": 1336,
-  "rel_ver": "v0.374.0",
-  "rel_pub": "2026-11-01",
+  "commit_7d": 239,
+  "commit_90d": 1481,
+  "rel_ver": "v0.378.0",
+  "rel_pub": "2026-11-06",
   "rel_days": 1,
-  "rel_n90": 12,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -229,7 +282,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 57,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Rust": 51,
    "Java": 27,
@@ -239,11 +292,31 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v0.378.0",
+    "d": "2026-11-06",
+    "n": "* [dbsp] Reject exchange connections from other runtimes by @blp in https://github.com/feldera/feldera/pull/7814\n* [dbsp] Keep the circuit running after a failed checkpoint by @blp in https://github.com/feldera/feldera/pull/7846"
+   },
+   {
+    "t": "v0.377.0",
+    "d": "2026-11-05",
+    "n": "* [connectors] Make the postgres runtime shutdown panic test robust on CI by @blp in https://github.com/feldera/feldera/pull/7808\n* [ci] Give the iceberg-rest catalog one sqlite connection. by @swanandx in https://github.com/feldera/feldera/pull/7834\n* [connectors] Retry DynamoDB writes through throttling and report health by @bestouff in https://github.com/feldera/feldera/pull/7736\n* [dbsp] Exchange data between hosts over TLS with client certificates by @blp in https://github.com/feldera/feldera/pull/7713"
+   },
+   {
+    "t": "v0.376.0",
+    "d": "2026-11-04",
+    "n": "* [dbsp] Finish a sharded accumulator's flush in the step of the last flush. by @ryzhyk in https://github.com/feldera/feldera/pull/7778\n* docs: explain how to rotate the database password by @jyotshnayaparla-00 in https://github.com/feldera/feldera/pull/7792"
+   },
+   {
+    "t": "v0.375.0",
+    "d": "2026-11-02",
+    "n": "## What's Changed\n* docs: bump joi and follow-redirects in docs lockfile by @mythical-fred-ops[bot] in https://github.com/feldera/feldera/pull/7769\n* get rid of needless string allocations by @llogiq in https://github.com/feldera/feldera/pull/7773\n* [sqllib] Fix `POSITION` and `REPLACE` with an empty needle by @mihaibudiu in https://github.com/feldera/feldera/pull/7775\n* [SQL] Escape SQL identifiers in generated Rust string literals by @mihaibudiu in https://github.com/feldera/feldera/pull/7776\n* [SQL] Back"
+   },
    {
     "t": "v0.374.0",
     "d": "2026-11-01",
@@ -258,16 +331,66 @@
     "t": "v0.372.0",
     "d": "2026-10-30",
     "n": "* [dbsp] Reject exchange connections that are not from another host by @blp in https://github.com/feldera/feldera/pull/7670"
+   },
+   {
+    "t": "v0.371.0",
+    "d": "2026-10-29",
+    "n": "* [dbsp] Keep the panic hook that was installed before the runtime by @blp in https://github.com/feldera/feldera/pull/7671"
+   },
+   {
+    "t": "v0.370.0",
+    "d": "2026-10-28",
+    "n": "* [adapters] Move the Postgres CDC connector to upstream supabase/etl by @bestouff in https://github.com/feldera/feldera/pull/7539\n* [adapters] Postgres CDC: close out the small items of #6126 by @no-flaks-given in https://github.com/feldera/feldera/pull/7456\n* [dbsp] Upgrade binrw from 0.13.3 to 0.15.2 by @blp in https://github.com/feldera/feldera/pull/7614\n* Bump certifi from 2026.2.25 to 2026.10.18 in /python/dbt-feldera in the uv group across 1 directory by @dependabot[bot] in https://github.com/feldera"
+   },
+   {
+    "t": "v0.369.0",
+    "d": "2026-10-23",
+    "n": "* Configure tables that are acceptable to reload when bootstrapping by @anandbraman in https://github.com/feldera/feldera/pull/7546"
    }
+  ],
+  "etag": {
+   "release": "W/\"245708379db91e44c756018d789ee7a71f7f80e03a630d6386368d01bf159b4d\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-05",
+   "2026-11-04",
+   "2026-11-02",
+   "2026-11-01",
+   "2026-10-31",
+   "2026-10-30",
+   "2026-10-29",
+   "2026-10-28",
+   "2026-10-23",
+   "2026-10-22",
+   "2026-10-18",
+   "2026-10-15",
+   "2026-10-13",
+   "2026-10-09",
+   "2026-10-08",
+   "2026-10-06",
+   "2026-10-05",
+   "2026-10-02",
+   "2026-10-01",
+   "2026-10-01",
+   "2026-09-30",
+   "2026-09-28",
+   "2026-09-27",
+   "2026-09-26",
+   "2026-09-23",
+   "2026-09-22",
+   "2026-09-21",
+   "2026-09-19",
+   "2026-09-18"
   ]
  },
  "tianma-if/edgeever": {
-  "commit_90d": 2024,
-  "commit_7d": 131,
-  "rel_ver": "v2.16.1",
-  "rel_pub": "2026-10-31",
-  "rel_days": 2,
-  "rel_n90": 12,
+  "commit_90d": 2053,
+  "commit_7d": 144,
+  "rel_ver": "v2.22.0",
+  "rel_pub": "2026-11-06",
+  "rel_days": 1,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -282,13 +405,43 @@
    "Swift": 3,
    "CSS": 1
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v2.22.0",
+    "d": "2026-11-06",
+    "n": "## 主要更新\n\n- AI 长文可分段生成并自动续接截断的结果。Web 和桌面可在侧栏查看、恢复和应用最近的草稿。\n- 受支持的客户端新增繁体中文、西班牙语、德语、法语和俄语。\n- 双行紧凑列表可显示更多笔记，重新打开应用时会保留主动选择的「全部笔记」。\n- 修复桌面端 MCP 端点与发现响应，并新增 MCP 客户端接入指南。\n- 修复 Windows 上 Antigravity ACP 辅助进程无法启动的问题。\n- 修复 Me"
+   },
+   {
+    "t": "v2.21.0",
+    "d": "2026-11-05",
+    "n": "## 主要更新\n\n- 桌面端可将外部应用中保存的修改回存到原附件，需要先升级服务端。感谢 @LuoQianhong（#789）。\n- AI 根据探测到的模型限制自动调整输出预算，并在回复截断时提示。升级服务端后可使用自动预算。感谢 @yulei666（#791）。\n- 更新了第三方笔记导入窗口，可拖放文件导入印象笔记、Obsidian 和 Joplin 导出内容。\n- 修复 Mermaid 工具栏遮住图表，以及部分缩放比例下文字被裁切的问"
+   },
+   {
+    "t": "v2.20.0",
+    "d": "2026-11-04",
+    "n": "- Self-hosted instances: back up your database before upgrading and apply migrations through 0091."
+   },
+   {
+    "t": "v2.19.0",
+    "d": "2026-11-03",
+    "n": "## 主要更新\n\n- 独立设置笔记正文的间距和对齐方式，在重新分组的阅读偏好中直接找到自定义 CSS。数字胶囊标题现在与正文文字大小一致。\n- 桌面端安装待处理更新前会重新检查是否有更新版本，减少经过中间版本的重复升级（#776）。\n- 编辑器专注模式会进入浏览器全屏，AI 助手入口与笔记大纲内容对齐。\n- 调整备份和迁移设置的布局，更容易找到定时备份状态和导入选项。\n\n关联 Is"
+   },
+   {
+    "t": "v2.18.0",
+    "d": "2026-11-03",
+    "n": "## 主要更新\n\n- 桌面端新增 CodeBuddy 本机 Agent，可使用自行安装的官方 CLI（#758，@yulei666 贡献于 #761）。\n- 桌面端定时备份支持可选的 WebDAV 异地副本，提供独立上传状态和重试（#723，@dkoryto 贡献于 #763）。\n- 修复无标题笔记在编辑或删除附件后从搜索结果中消失的问题（#751，@sivdead 贡献于 #769）。\n- 修复桌面端附件无法在系统应用中打开的问题，通过打开本地副本使用外部应用（#768）。"
+   },
+   {
+    "t": "v2.17.0",
+    "d": "2026-11-02",
+    "n": "- Import notes from Evernote, Obsidian and Joplin while retaining notebooks, attachments and links; large-library backup and initial sync read fewer database rows. Thanks @sivdead (#747, #657).\n- Keep authenticated desktop local workspaces available during temporary server failures and clearly diagnose exhausted database daily quotas.\n- Fix concurrent Android local database writes when sharing images into notes."
+   },
    {
     "t": "v2.16.1",
     "d": "2026-10-31",
@@ -303,15 +456,55 @@
     "t": "v2.15.0",
     "d": "2026-10-29",
     "n": "## 主要更新\n\n- 在笔记分享弹窗中直接查看并复制 Markdown 原文链接。\n- 图库在移动或删除图片后仅剩一张时，完整显示剩余图片，避免上下裁切。（#728）\n- 减少浮动 AI 入口周围的留白，提供更宽敞的笔记编辑空间。\n- 统一快捷键设置布局并简化分组标题，让设置与操作更清晰。\n- 显示桌面端最近一次备份的大小，并改善备份历史中的大小显示。\n\n关联 Issue：#731\n\n## Key Changes\n\n- Access and cop"
+   },
+   {
+    "t": "v2.14.0",
+    "d": "2026-10-29",
+    "n": "## 主要更新\n\n- 支持拖动笔记中已有图片及调整图库图片顺序，图库控件在交互时显示。（#708）\n- 修复复制笔记到其他应用时出现过多空行的问题。\n- 桌面端新备份配置默认保留 1 份，可选 1、3 或 5 份；已有配置继续使用原保留设置。\n- 改善动态加载的 Instagram 帖子与轮播图片的剪藏效果。\n- 最佳实践指南新增 Instagram 与 GitHub 仓库元数据剪藏示例。\n\n关联 Issue：#726\n\n## Key Changes\n\n- Move exis"
    }
+  ],
+  "etag": {
+   "release": "W/\"6421508975241716c8e98bab371ab43c635be7b9fe07d404f2f1252db80196a7\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-05",
+   "2026-11-04",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-02",
+   "2026-10-31",
+   "2026-10-30",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-28",
+   "2026-10-28",
+   "2026-10-27",
+   "2026-10-26",
+   "2026-10-26",
+   "2026-10-25",
+   "2026-10-23",
+   "2026-10-22",
+   "2026-10-21",
+   "2026-10-21",
+   "2026-10-20",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-18",
+   "2026-10-18",
+   "2026-10-16",
+   "2026-10-15",
+   "2026-10-15"
   ]
  },
  "mysql-net/MySqlConnector": {
-  "commit_90d": 57,
+  "commit_90d": 66,
   "commit_7d": 28,
   "rel_ver": "3.0.0-beta.1",
   "rel_pub": "2026-11-01",
-  "rel_days": 1,
+  "rel_days": 6,
   "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
@@ -329,11 +522,11 @@
    "Dockerfile": 0,
    "Batchfile": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
    {
@@ -351,6 +544,14 @@
     "d": "2026-06-25",
     "n": "* Fix GHSA-473q-m89c-ghf8: MitM password disclosure in zero-configuration TLS mode.\r\n* Fix `MySqlCommand.Prepare` with `INSERT INTO ... RETURNING`: #1652.\r\n* Thanks to @rusher for contributions to this release."
    }
+  ],
+  "etag": {
+   "release": "W/\"491b7a1e87a6743a83316c8931e3ad685118fbd6988462d081aadb09c87ddc50\"",
+   "security": "W/\"2a40b2792d2e62ed549d34ad797e616309fad6dd42dfbcd709b3e6e1655b2e12\""
+  },
+  "rel_dates": [
+   "2026-11-01",
+   "2026-08-11"
   ]
  },
  "reactive-tech/kubegres": {
@@ -358,7 +559,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.19",
   "rel_pub": "2025-01-04",
-  "rel_days": 631,
+  "rel_days": 672,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -379,11 +580,11 @@
   }
  },
  "tcgdex/cards-database": {
-  "commit_90d": 368,
+  "commit_90d": 359,
   "commit_7d": 14,
   "rel_ver": "v2.48.0",
   "rel_pub": "2026-09-16",
-  "rel_days": 47,
+  "rel_days": 52,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -397,10 +598,10 @@
    "Bru": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261102"
   },
   "rel_notes": [
@@ -419,10 +620,16 @@
     "d": "2026-06-04",
     "n": "* feat: migrate Mega Evolution Energy to new variant format by @pragmaticivan in https://github.com/tcgdex/cards-database/pull/1558\n* feat: add phantasmal flames missing illustrators by @pragmaticivan in https://github.com/tcgdex/cards-database/pull/1561\n* feat: me04 cardmarket IDs by @Aviortheking in https://github.com/tcgdex/cards-database/pull/1566\n* fix(data): Correct types on Ninetales and Bewear by @jbourdin in https://github.com/tcgdex/cards-database/pull/1569\n* patch(data): retreat in Neo/Neo Genesi"
    }
+  ],
+  "etag": {
+   "release": "W/\"004455728f3cacfaf30acdb2f5cf00c37a67da13e1eeb6e253fe65c9fb864be1\""
+  },
+  "rel_dates": [
+   "2026-09-16"
   ]
  },
  "MysticRyuujin/guac-install": {
-  "commit_90d": 1,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -444,7 +651,7 @@
   "commit_7d": 10,
   "rel_ver": "v6.1.1",
   "rel_pub": "2026-10-26",
-  "rel_days": 1,
+  "rel_days": 12,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -548,7 +755,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.1",
   "rel_pub": "2019-09-21",
-  "rel_days": 2563,
+  "rel_days": 2604,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -567,7 +774,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.1.0",
   "rel_pub": "2024-12-12",
-  "rel_days": 654,
+  "rel_days": 695,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -587,7 +794,7 @@
   "commit_7d": 0,
   "rel_ver": "0.7.0",
   "rel_pub": "2025-12-24",
-  "rel_days": 277,
+  "rel_days": 318,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -634,7 +841,7 @@
   "commit_7d": 0,
   "rel_ver": "0.6.0",
   "rel_pub": "2016-10-07",
-  "rel_days": 3642,
+  "rel_days": 3683,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -656,7 +863,7 @@
   "commit_7d": 0,
   "rel_ver": "0.1.2",
   "rel_pub": "2021-06-28",
-  "rel_days": 1917,
+  "rel_days": 1958,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -689,7 +896,7 @@
   "commit_7d": 0,
   "rel_ver": "0.0.0",
   "rel_pub": "2018-07-26",
-  "rel_days": 3015,
+  "rel_days": 3026,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -716,7 +923,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.1",
   "rel_pub": "2024-11-17",
-  "rel_days": 680,
+  "rel_days": 720,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -737,7 +944,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.0",
   "rel_pub": "2020-07-24",
-  "rel_days": 2257,
+  "rel_days": 2297,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -776,7 +983,7 @@
   "commit_7d": 0,
   "rel_ver": "0.26.8",
   "rel_pub": "2026-03-04",
-  "rel_days": 237,
+  "rel_days": 248,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -819,10 +1026,10 @@
  },
  "Agent-Field/plandb": {
   "commit_90d": 1,
-  "commit_7d": 1,
+  "commit_7d": 0,
   "rel_ver": "v0.2.1",
   "rel_pub": "2026-05-05",
-  "rel_days": 145,
+  "rel_days": 186,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -871,7 +1078,7 @@
  "johnny-morrice/godless": {
   "rel_ver": "v0.19.4",
   "rel_pub": "2017-08-27",
-  "rel_days": 3318,
+  "rel_days": 3359,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -889,7 +1096,7 @@
  "AlexITC/crypto-coin-alerts": {
   "rel_ver": "v2018.10.07",
   "rel_pub": "2018-10-07",
-  "rel_days": 2912,
+  "rel_days": 2953,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -910,7 +1117,7 @@
  "hasinhayder/tyro-checkpoint": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2026-06-16",
-  "rel_days": 103,
+  "rel_days": 144,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -957,7 +1164,7 @@
  "tmcgilchrist/postgresql-transactional": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2016-05-09",
-  "rel_days": 3793,
+  "rel_days": 3834,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -990,7 +1197,7 @@
  "rehmatworks/fastcp": {
   "rel_ver": "v2.0.4",
   "rel_pub": "2026-04-09",
-  "rel_days": 171,
+  "rel_days": 212,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1024,7 +1231,7 @@
  "cpcloud/stupidb": {
   "rel_ver": "v7.0.4",
   "rel_pub": "2022-01-21",
-  "rel_days": 1710,
+  "rel_days": 1751,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1060,7 +1267,7 @@
  "oracle/cluster-api-provider-oci": {
   "rel_ver": "v0.24.2",
   "rel_pub": "2026-09-23",
-  "rel_days": 4,
+  "rel_days": 45,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1126,7 +1333,7 @@
  "senseta-os/senseta-base-project": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2018-01-08",
-  "rel_days": 3184,
+  "rel_days": 3225,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1253,7 +1460,7 @@
  "cobaltdb/cobaltdb": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-07-06",
-  "rel_days": 83,
+  "rel_days": 124,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1290,7 +1497,7 @@
  "zequel-labs/zequel": {
   "rel_ver": "1.2.3",
   "rel_pub": "2026-04-07",
-  "rel_days": 173,
+  "rel_days": 214,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1354,7 +1561,7 @@
  "stadia/activerecord-mysql2rgeo-adapter": {
   "rel_ver": "v8.0.4",
   "rel_pub": "2026-04-02",
-  "rel_days": 178,
+  "rel_days": 219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1385,7 +1592,7 @@
  "zachleigh/yarak": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2018-01-17",
-  "rel_days": 3175,
+  "rel_days": 3216,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1402,7 +1609,7 @@
  "vstorm-co/production-stack-skills": {
   "rel_ver": "1.0.0",
   "rel_pub": "2026-04-16",
-  "rel_days": 165,
+  "rel_days": 205,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1601,7 +1808,7 @@
  "tanbro/sqlalchemy-dlock": {
   "rel_ver": "v0.9.0",
   "rel_pub": "2026-09-18",
-  "rel_days": 10,
+  "rel_days": 50,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1695,7 +1902,7 @@
  "nikita-volkov/postgresql-syntax": {
   "rel_ver": "v0.5.0.3",
   "rel_pub": "2026-08-24",
-  "rel_days": 35,
+  "rel_days": 75,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1715,7 +1922,7 @@
  "filipskrabak/protocol-designer": {
   "rel_ver": "v0.1.3",
   "rel_pub": "2025-09-18",
-  "rel_days": 375,
+  "rel_days": 415,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1856,7 +2063,7 @@
  "SpecHive/SpecHive": {
   "rel_ver": "worker-v0.0.17",
   "rel_pub": "2026-04-29",
-  "rel_days": 152,
+  "rel_days": 192,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1877,7 +2084,7 @@
  "tidbcloud/prisma-adapter": {
   "rel_ver": "v6.17.0",
   "rel_pub": "2025-10-28",
-  "rel_days": 365,
+  "rel_days": 375,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1946,7 +2153,7 @@
  "sukovanej/effect-pg": {
   "rel_ver": "v0.27.3",
   "rel_pub": "2024-05-24",
-  "rel_days": 857,
+  "rel_days": 897,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1964,7 +2171,7 @@
  "True-Good-Craft/TGC-BUS-Core": {
   "rel_ver": "v1.4.2",
   "rel_pub": "2026-08-26",
-  "rel_days": 33,
+  "rel_days": 73,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1998,7 +2205,7 @@
  "alshawai/PBTune": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-22",
-  "rel_days": 68,
+  "rel_days": 108,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2019,7 +2226,7 @@
  "brayandiazc/inforcap-house-rails": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-02",
-  "rel_days": 88,
+  "rel_days": 128,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2040,7 +2247,7 @@
  "reubensultana/SQLMonitor": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-05-31",
-  "rel_days": 1581,
+  "rel_days": 1621,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2059,7 +2266,7 @@
  "Mg30/pydwt": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2023-03-04",
-  "rel_days": 1304,
+  "rel_days": 1344,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2108,7 +2315,7 @@
  "sfu-cl-lab/FactorBase": {
   "rel_ver": "V1.2",
   "rel_pub": "2016-11-18",
-  "rel_days": 3601,
+  "rel_days": 3641,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2157,7 +2364,7 @@
  "armandwipangestu/nestjs-boilerplate": {
   "rel_ver": "v1.6.4",
   "rel_pub": "2026-03-07",
-  "rel_days": 205,
+  "rel_days": 245,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2193,7 +2400,7 @@
  "laowantong/sqlab": {
   "rel_ver": "0.6.6",
   "rel_pub": "2025-04-14",
-  "rel_days": 532,
+  "rel_days": 572,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2241,7 +2448,7 @@
  "ventstream/ventstream": {
   "rel_ver": "v0.1.43",
   "rel_pub": "2026-08-24",
-  "rel_days": 35,
+  "rel_days": 75,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2279,7 +2486,7 @@
  "ClickHouse/tachikoma": {
   "rel_ver": "v0.2.8",
   "rel_pub": "2026-06-08",
-  "rel_days": 112,
+  "rel_days": 152,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2295,12 +2502,12 @@
   "enriched_at": "20260928"
  },
  "mvanhorn/cli-printing-press": {
-  "commit_90d": 419,
-  "commit_7d": 33,
-  "rel_ver": "v4.35.2",
-  "rel_pub": "2026-11-03",
-  "rel_days": 0,
-  "rel_n90": 12,
+  "commit_90d": 418,
+  "commit_7d": 27,
+  "rel_ver": "v4.35.3",
+  "rel_pub": "2026-11-06",
+  "rel_days": 1,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 1,
@@ -2316,15 +2523,20 @@
    "Python": 1,
    "Shell": 0
   },
-  "enriched_at": "20261103",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261103",
-   "release": "20261103",
-   "security": "20261029",
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107",
    "contrib": "20260929",
    "lang": "20260929"
   },
   "rel_notes": [
+   {
+    "t": "v4.35.3",
+    "d": "2026-11-06",
+    "n": "## [4.35.3](https://github.com/mvanhorn/cli-printing-press/compare/v4.35.2...v4.35.3) (2026-11-06)\n\n\n### Bug Fixes\n\n* **cli:** count structured non-zero outcomes and skip account-disabled features in live dogfood ([#5354](https://github.com/mvanhorn/cli-printing-press/issues/5354)) ([d10c27c](https://github.com/mvanhorn/cli-printing-press/commit/d10c27c5c6b92ff4b21856ea040a94c4d1ded366))\n* **cli:** emit valid JSON from tail and the learning commands ([#5353](https://github.com/mvanhorn/cli-printing-press/is"
+   },
    {
     "t": "v4.35.2",
     "d": "2026-11-03",
@@ -2339,13 +2551,79 @@
     "t": "v4.35.0",
     "d": "2026-10-31",
     "n": "* **cli:** add action to local-data purge JSON output ([#5253](https://github.com/mvanhorn/cli-printing-press/issues/5253)) ([65a8989](https://github.com/mvanhorn/cli-printing-press/commit/65a8989cbed574100eadb09f848700eb761dce27))"
+   },
+   {
+    "t": "v4.34.2",
+    "d": "2026-10-25",
+    "n": "## [4.34.2](https://github.com/mvanhorn/cli-printing-press/compare/v4.34.1...v4.34.2) (2026-10-25)\n\n\n### Bug Fixes\n\n* **cli:** honor --ignore-missing on promoted DELETE commands ([#5244](https://github.com/mvanhorn/cli-printing-press/issues/5244)) ([37ea813](https://github.com/mvanhorn/cli-printing-press/commit/37ea81388d4aed35f27052879e3aaf27e3c5ec6e))\n* **cli:** keep --dry-run from opening the store and cut backfillColumns schema probes ([#5246](https://github.com/mvanhorn/cli-printing-press/issues/5246))"
+   },
+   {
+    "t": "v4.34.1",
+    "d": "2026-10-24",
+    "n": "* **cli:** validate MCP HTTP origins, reject short tokens, and hide the token from child CLIs ([#5210](https://github.com/mvanhorn/cli-printing-press/issues/5210)) ([da6cb4c](https://github.com/mvanhorn/cli-printing-press/commit/da6cb4cb9d1e52acea440411a7f2adbe0c1f269b))"
+   },
+   {
+    "t": "v4.34.0",
+    "d": "2026-10-23",
+    "n": "* **cli:** sweep expired HTTP response cache entries ([#5189](https://github.com/mvanhorn/cli-printing-press/issues/5189)) ([1eb99ad](https://github.com/mvanhorn/cli-printing-press/commit/1eb99ad8bd0774a2ffa2db65ae8a8258af0b9424))"
+   },
+   {
+    "t": "v4.33.10",
+    "d": "2026-10-23",
+    "n": "* **cli:** stamp binary-response dry-run action and drop dead stamped-output helper ([#5128](https://github.com/mvanhorn/cli-printing-press/issues/5128)) ([a7a16c4](https://github.com/mvanhorn/cli-printing-press/commit/a7a16c4f3da7cb09adbfb7a4b924bf5597382236))\n* **cli:** honor profile flags, deliver sinks, and MCP argument schemas ([#5165](https://github.com/mvanhorn/cli-printing-press/issues/5165)) ([9600d4c](https://github.com/mvanhorn/cli-printing-press/commit/9600d4cb5145cedb8c961ad87d810b8b9a11002d))\n"
+   },
+   {
+    "t": "v4.33.9",
+    "d": "2026-10-21",
+    "n": "* **cli:** run verify probes inside the mock environment ([#5102](https://github.com/mvanhorn/cli-printing-press/issues/5102)) ([10c6496](https://github.com/mvanhorn/cli-printing-press/commit/10c64962fb7b67c545eb6bdbbd95c95737859142))"
+   },
+   {
+    "t": "v4.33.8",
+    "d": "2026-10-19",
+    "n": "## [4.33.8](https://github.com/mvanhorn/cli-printing-press/compare/v4.33.7...v4.33.8) (2026-10-19)\n\n\n### Bug Fixes\n\n* **cli:** drop raw discovery captures from published manuscripts ([#5092](https://github.com/mvanhorn/cli-printing-press/issues/5092)) ([a182672](https://github.com/mvanhorn/cli-printing-press/commit/a182672a6c781b744bb0a4a7cfefbfca25772c8e))\n* **cli:** keep single-array record responses intact ([#5091](https://github.com/mvanhorn/cli-printing-press/issues/5091)) ([48da962](https://github.com"
    }
+  ],
+  "etag": {
+   "release": "W/\"dd839b5415b290fbeadd1cf343cb15e10ba9f55e45fde67926fcdc7cef00d4ab\"",
+   "security": "W/\"b4d3646abc047371932a3c5385496ddf77a18b478b22e38571a6030b2e275578\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-03",
+   "2026-11-02",
+   "2026-10-31",
+   "2026-10-25",
+   "2026-10-24",
+   "2026-10-23",
+   "2026-10-23",
+   "2026-10-21",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-17",
+   "2026-10-13",
+   "2026-10-10",
+   "2026-10-09",
+   "2026-10-08",
+   "2026-10-06",
+   "2026-10-02",
+   "2026-09-28",
+   "2026-09-26",
+   "2026-09-21",
+   "2026-09-20",
+   "2026-09-17",
+   "2026-09-08",
+   "2026-09-07",
+   "2026-09-04",
+   "2026-09-02",
+   "2026-09-01",
+   "2026-08-31",
+   "2026-08-30"
   ]
  },
  "rafiattrach/m3": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2025-12-19",
-  "rel_days": 284,
+  "rel_days": 323,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2412,7 +2690,7 @@
  "nyurik/sqlite-compressions": {
   "rel_ver": "v0.3.12",
   "rel_pub": "2026-06-23",
-  "rel_days": 98,
+  "rel_days": 137,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2437,7 +2715,7 @@
  "djkcyl/mihomo-connections-tracker": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2025-03-27",
-  "rel_days": 551,
+  "rel_days": 590,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3030,7 +3308,7 @@
  "0xZekeA/supastash": {
   "rel_ver": "v0.1.16",
   "rel_pub": "2025-07-07",
-  "rel_days": 459,
+  "rel_days": 488,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3121,7 +3399,7 @@
  "theopentv/opentv-app": {
   "rel_ver": "v1.6.6",
   "rel_pub": "2026-10-07",
-  "rel_days": 9,
+  "rel_days": 31,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -3188,7 +3466,7 @@
  "Lueyu/squabble": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2026-10-31",
-  "rel_days": 0,
+  "rel_days": 7,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,

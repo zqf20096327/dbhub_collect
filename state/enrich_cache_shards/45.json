@@ -23,12 +23,12 @@
   }
  },
  "evoluhq/evolu": {
-  "commit_90d": 692,
-  "commit_7d": 87,
-  "rel_ver": "@evolu/web@3.7.0",
-  "rel_pub": "2026-11-01",
-  "rel_days": 1,
-  "rel_n90": 12,
+  "commit_90d": 701,
+  "commit_7d": 37,
+  "rel_ver": "@evolu/web@3.7.1",
+  "rel_pub": "2026-11-04",
+  "rel_days": 3,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -43,13 +43,53 @@
    "CSS": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "@evolu/web@3.7.1",
+    "d": "2026-11-04",
+    "n": "Before each transaction, SQLite rereads the database's first page to check that no other connection changed the file, and Evolu's encryption had to decrypt that whole page each time. Queries already share one transaction per batch, but sync runs most of its reads on their own: reconciling 20,000 rows split between a device and the relay, interleaved in time, takes about 12,000 of them. An encrypted database now holds its lock from open to close, in SQLite's exclusive locking mode, so SQLite skips that check"
+   },
+   {
+    "t": "@evolu/relay@4.3.3",
+    "d": "2026-11-04",
+    "n": "### Patch Changes\n\n- Updated dependencies [e6e70d9]\n  - @evolu/common@8.27.2\n  - @evolu/nodejs@4.6.0"
+   },
+   {
+    "t": "@evolu/react-native@16.2.3",
+    "d": "2026-11-04",
+    "n": "Before each transaction, SQLite rereads the database's first page to check that no other connection changed the file, and Evolu's encryption had to decrypt that whole page each time. Queries already share one transaction per batch, but sync runs most of its reads on their own: reconciling 20,000 rows split between a device and the relay, interleaved in time, takes about 12,000 of them. An encrypted database now holds its lock from open to close, in SQLite's exclusive locking mode, so SQLite skips that check"
+   },
+   {
+    "t": "@evolu/common@8.27.2",
+    "d": "2026-11-04",
+    "n": "Changing one column on 10,000 rows of an encrypted database with 327,000\nread thousands of database pages it didn't need, and the web decrypts every"
+   },
+   {
+    "t": "@evolu/relay@4.3.2",
+    "d": "2026-11-03",
+    "n": "### Patch Changes\n\n- Updated dependencies [28fc037]\n- Updated dependencies [ace3cce]\n  - @evolu/common@8.27.1\n  - @evolu/nodejs@4.6.0"
+   },
+   {
+    "t": "@evolu/relay@4.3.1",
+    "d": "2026-11-03",
+    "n": "### Patch Changes\n\n- Updated dependencies [030ea30]\n  - @evolu/common@8.27.0\n  - @evolu/nodejs@4.6.0"
+   },
+   {
+    "t": "@evolu/common@8.27.1",
+    "d": "2026-11-03",
+    "n": "### Patch Changes\n\n- 28fc037: Replaced dead relay connections sooner after a system sleep\n\n  After a system sleep, a relay connection can die without closing, and `OwnerSyncStatus` reads `Synced` while changes from other devices don't arrive, until the shared worker notices the sleep and replaces the connection. The worker now checks each open connection every five seconds instead of every thirty, so it notices the sleep within about five seconds of waking. This applies wherever `performance.now()` stops du"
+   },
+   {
+    "t": "@evolu/common@8.27.0",
+    "d": "2026-11-03",
+    "n": "`deleteOwner` was declared but threw, so an app couldn't remove one owner's data from a device without deleting the whole database, for example when a user removes a wallet ([#676](https://github.com/evoluhq/evolu/issues/676)). It now deletes the owner's rows from the instance's local database on this device, stops syncing the owner, and resolves once the rows are gone.\nThe deletion runs after the mutations and requests made before it. It deletes the owner's rows of every table, local-only tables included, "
+   },
    {
     "t": "@evolu/web@3.7.0",
     "d": "2026-11-01",
@@ -59,12 +99,42 @@
     "t": "@evolu/relay@4.3.0",
     "d": "2026-11-01",
     "n": "`pingInterval` of `createRelay` must now be at most thirty seconds, `relayHeartbeatInterval`, and a longer one panics before the relay opens its database."
-   },
-   {
-    "t": "@evolu/react@11.2.3",
-    "d": "2026-11-01",
-    "n": "`deleteDatabase` was declared but threw, so an app couldn't wipe its local data, for example when a user resets the app or removes an account from a device ([#676](https://github.com/evoluhq/evolu/issues/676)). It now deletes the instance's local database on this device and resolves once the database's files are gone, which lets the app wait for the wipe to finish.\nThe deletion runs after the mutations and requests made before it. Then every instance of the database disposes itself, in every tab, and the re"
    }
+  ],
+  "etag": {
+   "release": "W/\"d9c869a41c141b0f656b076fbcee683f27dd57ccfde888768408d0db7a2f9045\""
+  },
+  "rel_dates": [
+   "2026-11-04",
+   "2026-11-04",
+   "2026-11-04",
+   "2026-11-04",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-03",
+   "2026-11-01",
+   "2026-11-01",
+   "2026-11-01",
+   "2026-11-01",
+   "2026-11-01",
+   "2026-11-01",
+   "2026-10-31",
+   "2026-10-31",
+   "2026-10-31",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-28",
+   "2026-10-28",
+   "2026-10-28",
+   "2026-10-28"
   ]
  },
  "liukelin/canal_mysql_nosql_sync": {
@@ -72,7 +142,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.22.2",
   "rel_pub": "2016-08-29",
-  "rel_days": 3681,
+  "rel_days": 3722,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -93,10 +163,10 @@
  },
  "Rabithua/Rote": {
   "commit_90d": 210,
-  "commit_7d": 0,
+  "commit_7d": 3,
   "rel_ver": "v2.6.0",
   "rel_pub": "2026-10-12",
-  "rel_days": 21,
+  "rel_days": 26,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -112,10 +182,10 @@
    "CSS": 0,
    "Shell": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -133,7 +203,59 @@
     "t": "v2.5.1",
     "d": "2026-09-29",
     "n": "# Rote v2.5.1\n\n## 修复\n\n- 修复多媒体轨道中的图片无法点击预览的问题；鼠标只有在实际拖动开始后才会捕获指针，普通点击可打开图片预览。"
+   },
+   {
+    "t": "v2.5.0",
+    "d": "2026-09-29",
+    "n": "# 更新日志\n\n## v2.5.0 - 2026-09-29\n\n### 新增\n\n- 笔记支持图片、GIF、视频和 Live Photo 混合展示；多媒体以横向轨道浏览，单媒体继续使用原有大图布局。\n- 上传流程支持 PNG 与 WebP 缩略图，并由客户端明确声明实际编码格式。\n\n### 改进\n\n- 多媒体轨道延伸至笔记卡片两侧，媒体间距为 4px；触控板和触屏可横向浏览，纵向滚动仍由页面处理。\n- 附件上传和重试保留媒体身份与批次信息，减少失败"
+   },
+   {
+    "t": "v2.4.2",
+    "d": "2026-09-11",
+    "n": "## 更新内容\n\n- 加快带附件笔记的提交：浏览器直接上传到最终位置，附件确认仅写入数据库，使用客户端提供的元数据。\n- 简化编辑器上传失败后的操作，统一使用普通提交与错误提示；修复签名过期后无法重试，以及确认响应丢失后重排、替换或删除附件时的状态问题。\n- 修复 OpenKey 创建笔记的重复请求处理，保留稳定的笔记标识，并对创建结果重放执行读取权限检查。\n- Explore 增"
+   },
+   {
+    "t": "v2.4.1",
+    "d": "2026-09-07",
+    "n": "## 更新内容\n\n- 浏览器附件上传改为由服务端预留并绑定签名，补齐配额、过期、清理和并发最终确认保护。\n- Web 笔记附件提交接入批次流程；丢弃与重试会正确处理正在确认或已失效的上传。\n- OpenKey 校验、用量审计、请求日志、健康检查和隐藏文件访问进一步收紧。\n- 编辑器与服务端创建/更新接口统一禁止空内容或仅空白字符的笔记，附件不能替代正文。\n\n## 升级说明\n\n本版本不需"
+   },
+   {
+    "t": "v2.4.0",
+    "d": "2026-09-07",
+    "n": "## 更新内容\n\n- 新增专用 OpenKey 权限 `SHAREROTE`，提供笔记分享状态查询、幂等创建与撤销接口。\n- 新增非默认 OAuth scope `notes:share`，Rote HTTP MCP 增加 `notes_share_get`、`notes_share_create` 和 `notes_share_revoke`。\n- 分享状态统一返回 active、token、createdAt 与可用时的 url；分享 URL 只根据服务端配置的前端 origin 生成，不回退到官方域名。\n- Web 授权页与 OpenKey 权限界面补齐中、英、日文说明，并增加权"
+   },
+   {
+    "t": "v2.3.0",
+    "d": "2026-09-06",
+    "n": "## 更新内容\n\n- 新增笔记分享链接：作者可以创建、复制和撤销链接，持有链接的人无需登录即可阅读。撤销分享或删除笔记后，原链接失效。\n- 新增独立的分享阅读页，支持正文、文章、附件、标签和作者信息，并完善作者主页跳转与侧栏展示。\n- 修复有效分享链接因旧版网页缓存而显示 404 的问题，调整页面入口和 Service Worker 的缓存规则。\n- 分享页面和接口使用不缓存、不索引及不"
+   },
+   {
+    "t": "v2.2.3",
+    "d": "2026-09-06",
+    "n": "前后端 lint、build 及 72 项测试通过，覆盖普通 PostgreSQL 旧库迁移、pgvector 索引生命周期、事件分页、租约接替、无重复 schema 生成与管理界面状态。"
+   },
+   {
+    "t": "v2.2.2",
+    "d": "2026-09-06",
+    "n": "- 本版包含数据库迁移 `0030`–`0033`，升级前请备份 PostgreSQL。迁移保留原有笔记、文章和向量记录，不调用模型，也不会自动启动全量重建。\n- PostgreSQL 17 旧库迁移及 pgvector 索引集成测试通过。"
    }
+  ],
+  "etag": {
+   "release": "W/\"e51ff40141d856f3312d8a3ebcb9b79fe4c52f22e5ee9e7bb5fdbfec91ae7c68\""
+  },
+  "rel_dates": [
+   "2026-10-12",
+   "2026-09-29",
+   "2026-09-29",
+   "2026-09-29",
+   "2026-09-11",
+   "2026-09-07",
+   "2026-09-07",
+   "2026-09-06",
+   "2026-09-06",
+   "2026-09-06",
+   "2026-09-01",
+   "2026-08-30"
   ]
  },
  "flike/kingbus": {
@@ -141,7 +263,7 @@
   "commit_7d": 0,
   "rel_ver": "0.8.0",
   "rel_pub": "2018-12-30",
-  "rel_days": 2828,
+  "rel_days": 2869,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -164,7 +286,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.14.0",
   "rel_pub": "2026-10-02",
-  "rel_days": 25,
+  "rel_days": 36,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -191,7 +313,7 @@
   "commit_7d": 0,
   "rel_ver": "3.2",
   "rel_pub": "2017-04-23",
-  "rel_days": 3444,
+  "rel_days": 3485,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -211,7 +333,7 @@
   "commit_7d": 7,
   "rel_ver": "v3.0.0-rc.31",
   "rel_pub": "2026-10-22",
-  "rel_days": 5,
+  "rel_days": 16,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -257,11 +379,11 @@
   "enriched_at": "20260927"
  },
  "evilmartians/evil-seed": {
-  "commit_90d": 1,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v0.7.0",
   "rel_pub": "2025-02-07",
-  "rel_days": 597,
+  "rel_days": 638,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -281,7 +403,7 @@
   "commit_7d": 1,
   "rel_ver": "v2022.12.28",
   "rel_pub": "2022-12-30",
-  "rel_days": 1403,
+  "rel_days": 1408,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -321,7 +443,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.4",
   "rel_pub": "2026-09-12",
-  "rel_days": 15,
+  "rel_days": 56,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -340,7 +462,7 @@
   "commit_7d": 0,
   "rel_ver": "0.20.0",
   "rel_pub": "2024-11-28",
-  "rel_days": 668,
+  "rel_days": 709,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -378,7 +500,7 @@
   "commit_7d": 0,
   "rel_ver": "EFCore-13.0.0.0",
   "rel_pub": "2026-02-08",
-  "rel_days": 267,
+  "rel_days": 272,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -469,7 +591,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.8",
   "rel_pub": "2026-10-08",
-  "rel_days": 25,
+  "rel_days": 30,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -500,7 +622,7 @@
   "commit_7d": 0,
   "rel_ver": "0.0.17",
   "rel_pub": "2021-05-28",
-  "rel_days": 1948,
+  "rel_days": 1989,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -533,7 +655,7 @@
   "enriched_at": "20260927"
  },
  "stephenafamo/scan": {
-  "commit_90d": 15,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -552,7 +674,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2021-11-14",
-  "rel_days": 1778,
+  "rel_days": 1819,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -574,7 +696,7 @@
   "commit_7d": 0,
   "rel_ver": "0.1.4",
   "rel_pub": "2023-04-30",
-  "rel_days": 1246,
+  "rel_days": 1287,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -607,7 +729,7 @@
  "naimulcsx/progHours": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2023-01-03",
-  "rel_days": 1363,
+  "rel_days": 1404,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -671,7 +793,7 @@
  "salmans/codd": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2020-11-01",
-  "rel_days": 2156,
+  "rel_days": 2197,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -701,7 +823,7 @@
  "nicklog/devliver": {
   "rel_ver": "2.0.2",
   "rel_pub": "2021-04-17",
-  "rel_days": 1989,
+  "rel_days": 2030,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -722,7 +844,7 @@
  "StreamIntelligenceLab/Kolibrie": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2026-02-20",
-  "rel_days": 219,
+  "rel_days": 260,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -743,7 +865,7 @@
  "nooncall/owls": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2022-07-24",
-  "rel_days": 1526,
+  "rel_days": 1567,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -764,7 +886,7 @@
  "guanlisheng/wxsqliteplus": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2024-12-09",
-  "rel_days": 657,
+  "rel_days": 698,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -800,7 +922,7 @@
  "asg017/sqlite-url": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2023-07-24",
-  "rel_days": 1161,
+  "rel_days": 1202,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -821,7 +943,7 @@
  "groue/GRDBSnapshotTesting": {
   "rel_ver": "0.4.1",
   "rel_pub": "2024-09-29",
-  "rel_days": 728,
+  "rel_days": 769,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -889,7 +1011,7 @@
  "singlestore-labs/singlestoredb-python": {
   "rel_ver": "v1.17.3",
   "rel_pub": "2026-09-11",
-  "rel_days": 16,
+  "rel_days": 57,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -927,7 +1049,7 @@
  "a2lix/schemql": {
   "rel_ver": "0.5.3",
   "rel_pub": "2026-06-10",
-  "rel_days": 109,
+  "rel_days": 150,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1062,7 +1184,7 @@
  "ifsnow/mysql-pool-booster": {
   "rel_ver": "v1.0.3",
   "rel_pub": "2017-08-31",
-  "rel_days": 3315,
+  "rel_days": 3355,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1079,7 +1201,7 @@
  "Jackfinal/laravel-dm8": {
   "rel_ver": "1.0.2",
   "rel_pub": "2026-10-25",
-  "rel_days": 3,
+  "rel_days": 13,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1150,7 +1272,7 @@
  "sql-bi/SQLBI-Whiteboard": {
   "rel_ver": "v1.7.0",
   "rel_pub": "2026-09-27",
-  "rel_days": 1,
+  "rel_days": 41,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1187,7 +1309,7 @@
  "jswildcards/filedb": {
   "rel_ver": "0.0.6",
   "rel_pub": "2021-01-18",
-  "rel_days": 2079,
+  "rel_days": 2119,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1270,7 +1392,7 @@
  "DnomaidGit/WinccUnifiedTest": {
   "rel_ver": "0.0.8",
   "rel_pub": "2025-03-09",
-  "rel_days": 568,
+  "rel_days": 608,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1342,7 +1464,7 @@
  "PrivAtlas/javascript-dlc": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2025-10-14",
-  "rel_days": 349,
+  "rel_days": 389,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1363,7 +1485,7 @@
  "PnX-SI/UsersHub": {
   "rel_ver": "2.4.8",
   "rel_pub": "2026-03-03",
-  "rel_days": 209,
+  "rel_days": 249,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1516,7 +1638,7 @@
  "Riscue/ha-ai-memory": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-08",
-  "rel_days": 20,
+  "rel_days": 60,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1568,7 +1690,7 @@
  "EpicStep/clickhouse-github-action": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2024-10-08",
-  "rel_days": 720,
+  "rel_days": 760,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1663,7 +1785,7 @@
  "typekpb/oradown": {
   "rel_ver": "v0.0.3",
   "rel_pub": "2017-11-06",
-  "rel_days": 3248,
+  "rel_days": 3288,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1754,7 +1876,7 @@
   "commit_7d": 0,
   "rel_ver": "v7.0.2",
   "rel_pub": "2023-06-21",
-  "rel_days": 1196,
+  "rel_days": 1235,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1779,7 +1901,7 @@
  "amitsuthar69/GoTTH": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2024-12-11",
-  "rel_days": 657,
+  "rel_days": 696,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1806,7 +1928,7 @@
  "XxSnake/project-management-system": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-06-05",
-  "rel_days": 116,
+  "rel_days": 155,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1959,7 +2081,7 @@
  "zidnyzd/uptime-pulse": {
   "rel_ver": "v0.1.6",
   "rel_pub": "2026-09-19",
-  "rel_days": 11,
+  "rel_days": 49,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1986,7 +2108,7 @@
  "savannah-i-g/OpenCrawlEngine": {
   "rel_ver": "0.1.0.Deb",
   "rel_pub": "2026-06-22",
-  "rel_days": 100,
+  "rel_days": 138,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2014,7 +2136,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.14.2",
   "rel_pub": "2026-09-13",
-  "rel_days": 17,
+  "rel_days": 55,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2135,7 +2257,7 @@
  "AndreySchurko/garnet-polymarket": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-09-27",
-  "rel_days": 4,
+  "rel_days": 41,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2630,7 +2752,7 @@
  "changkun/urlstat": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2026-02-02",
-  "rel_days": 244,
+  "rel_days": 278,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2788,7 +2910,7 @@
  "Neiyako/ResearchDataHub": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-11-05",
-  "rel_days": 0,
+  "rel_days": 2,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,

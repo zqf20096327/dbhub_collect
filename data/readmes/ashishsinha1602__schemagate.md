@@ -1202,7 +1202,9 @@ every 5 seconds), and `health` shows `catalog_stale` and the reason. A re-read
 that neither fails nor returns, a database that took the connection and went
 quiet, is bounded too: callers wait at most `SCHEMAGATE_REREAD_TIMEOUT` seconds
 (default 30) and are then refused the same way, while the re-read runs on; if it
-returns, the next call is served from what it brought. Caller
+returns, the next call is served from what it brought. Because callers are
+bounded, their latency won't show a re-read that never finishes; `health` does,
+in `reread_running_seconds`, which you can alert on. Caller
 roles from a `groups` resolver have their own bound, its `ttl`. Every tool catches everything and returns
 `{"error": ...}`; a bad request cannot end the session for other clients.
 `health` tells a load balancer what state it's in. A test throws 125 kinds of
@@ -1242,6 +1244,22 @@ ddl = prompt_fragment(retriever.retrieve("revenue by month"))
 ```
 
 See [docs/llamaindex.md](docs/llamaindex.md).
+
+**Pydantic AI.** A capability that gives the agent one tool, `select_schema(question)`. The tool takes a question and
+nothing else, so the model can't choose who it's asking as:
+
+```bash
+pip install 'schemagate[pydantic-ai]'
+```
+
+```python
+from schemagate.integrations.pydantic_ai import SchemagateCapability
+
+agent = Agent("anthropic:claude-haiku-4-5", capabilities=[
+    SchemagateCapability(cat, principal=lambda ctx: ctx.deps.user)])
+```
+
+See [docs/pydantic-ai.md](docs/pydantic-ai.md).
 
 **jev4pg.** `schemagate.integrations.jev4pg.ScopedCatalog` wraps
 [jev4pg](https://github.com/Sheltercosmo/jev4pg)'s per-tenant catalogue so its
@@ -1434,6 +1452,7 @@ may not read is never in it.
 | MCP server | done, tested through a real MCP client |
 | LangChain retriever | done, tested against langchain-core |
 | LlamaIndex retriever | done, tested against llama-index-core |
+| Pydantic AI capability | done, tested against pydantic-ai-slim |
 | `OracleStore` | written and statically verified, needs a live run |
 | pgvector store | not started |
 

@@ -71,7 +71,7 @@ The rules above are checked in this order; the first match decides. These codes 
 | Reason | Decision |
 | --- | --- |
 | `hodor_error` | build, after a failure inside hodor |
-| `store_slow` (dbt v2) | build, when the records are not loaded within 2 seconds |
+| `store_slow` (dbt v2) | build, when the records are not loaded within the 30 seconds shared by the run |
 | `cloned_from_base` | clone from the base target, instead of a build |
 | `pre_cloned_from_base` (dbt-core) | clone, then build on top |
 | `clone_registered` (dbt v2) | the server accepts a clone dbt asked for itself |
@@ -143,7 +143,7 @@ Each store has its own page: [State stores](docs/stores/index.md).
 | `delta` | `<hodor_database>.<hodor_schema>.<hodor_table>` | the table only. The schema must exist, because creating one needs catalog-level grants |
 | `trino` | `<hodor_database>.<hodor_schema>.<hodor_table>` in a Trino catalog | the table only. The schema must exist |
 | `duckdb` | table `<hodor_schema>.<hodor_table>` in the file `hodor_path` | the file, the schema and the table |
-| `postgres` (alias `lakebase`) | `<hodor_schema>.<hodor_table>` in the Postgres database `hodor_database` | the schema and the table |
+| `postgres` (alias `lakebase`) | `<hodor_schema>.<hodor_table>` in the Postgres database `hodor_database` | the schema, the table and a lookup index (see [Postgres](docs/stores/postgres.md)) |
 
 `delta` and `trino` have no default schema on purpose: hodor writes nothing to a catalog until someone names the schema. Without it, hodor turns itself off with a warning.
 
@@ -170,7 +170,7 @@ The state table decides what gets skipped in every target that uses it. Grant `M
 
 ## Scope
 
-Supported: models materialized as `table`, `incremental` (append, merge, delete+insert, insert_overwrite, replace_where; an unset strategy counts as merge) and `view`, seeds, snapshots, and data tests (generic and singular), on `dbt-databricks` 1.12.7, `dbt-duckdb`, `dbt-trino` 1.10.6 and `dbt-snowflake` 1.12.4 (state in DuckDB or Postgres; see [Data versions](docs/adapters/snowflake.md#data-version)), with dbt-core 1.12.x. Trino support covers the Iceberg and Delta Lake connectors; see [Data versions](docs/adapters/trino.md#data-version).
+Supported: models materialized as `table`, `incremental` (append, merge, delete+insert, insert_overwrite, replace_where; an unset strategy counts as merge) and `view`, seeds, snapshots, and data tests (generic and singular), on `dbt-databricks` 1.13.0, `dbt-duckdb`, `dbt-trino` 1.11.0 and `dbt-snowflake` 1.12.4 (state in DuckDB or Postgres; see [Data versions](docs/adapters/snowflake.md#data-version)), with dbt-core 1.12.x. Trino support covers the Iceberg and Delta Lake connectors; see [Data versions](docs/adapters/trino.md#data-version).
 
 Model versions: each version is its own node with its own table and records. Moving `latest_version` rebuilds the models that `ref()` it.
 

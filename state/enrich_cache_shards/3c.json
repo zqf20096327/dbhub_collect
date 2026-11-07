@@ -1,11 +1,11 @@
 {
  "timgit/pg-boss": {
-  "commit_7d": 2,
-  "commit_90d": 447,
-  "rel_ver": "dashboard-1.13.0",
-  "rel_pub": "2026-10-27",
-  "rel_days": 6,
-  "rel_n90": 12,
+  "commit_7d": 10,
+  "commit_90d": 456,
+  "rel_ver": "12.38.1",
+  "rel_pub": "2026-11-05",
+  "rel_days": 2,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 94,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "TypeScript": 97,
    "JavaScript": 2,
@@ -22,11 +22,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "12.38.1",
+    "d": "2026-11-05",
+    "n": "`fetch()` with `db`, inside your own transaction, is not covered. Other fetches can't see its claim until that transaction commits, and it doesn't try again, since it would claim the jobs it just put back."
+   },
    {
     "t": "dashboard-1.13.0",
     "d": "2026-10-27",
@@ -41,16 +46,81 @@
     "t": "dashboard-1.12.1",
     "d": "2026-10-15",
     "n": "* The dashboard registers in the instance registry as `pg-boss-dashboard`.\r\n* Updated deps"
+   },
+   {
+    "t": "proxy-1.12.0",
+    "d": "2026-10-14",
+    "n": "Requires pg-boss **12.38.0** or later.\r\n\r\n* The list routes take `limit` and page with `after`, as the pg-boss 12.38 list reads do.\r\n* `previewRedrive` takes `limit`.\r\n* `deleteQueuedJobs`, `deleteStoredJobs` and `deleteAllJobs` return how many jobs they deleted.\r\n\r\n## Highlights\r\n\r\n### Bounded list routes\r\n\r\npg-boss 12.38 returns at most 1,000 rows from its list reads unless given a `limit`, in a fixed\r\norder, and continues a list past the last row of the previous page with `after`. The GET routes pass\r\nbo"
+   },
+   {
+    "t": "dashboard-1.12.0",
+    "d": "2026-10-14",
+    "n": "write action, and that copy only connects to a database on its own schema version.\nAgainst a database that pg-boss 12.38 has migrated, 1.11.x lists queues, jobs and\n`pg-boss database requires migrations`.\n* Works against pg-boss 12.38 databases.\narrives with the database upgrade whichever dashboard you run. After the 12.38"
+   },
+   {
+    "t": "12.38.0",
+    "d": "2026-10-13",
+    "n": "- A concurrent index build or drop on PostgreSQL keeps running on the server. Its row stays\nWith a custom [`db`](https://pgboss.io/api/constructor#db) adapter, pg-boss has no connection to\nmigration claim with an `error`. See [`db`](https://pgboss.io/api/constructor#db).\nWithout table partitioning (`noTablePartitioning`, as on CockroachDB), `queue_stats` retention deletes\n| `getDependencies(name, id, options)`, `getDependents(name, id, options)` | queue name, then id | third, beside `db` |\non an instance th"
+   },
+   {
+    "t": "proxy-1.11.0",
+    "d": "2026-10-09",
+    "n": "Requires pg-boss **12.37.1** or later.\r\n\r\n* `getQueueStats` takes `percentiles` and returns wait and run times for each snapshot.\r\n* Queue and queue stats responses carry the 12.36 wait and run histograms, the oldest ready wait, and `blockedCount`.\r\n\r\n## Highlights\r\n\r\n### Percentiles from `getQueueStats`\r\n\r\n`GET /api/getQueueStats` accepts `percentiles`, a comma-separated list of percents from 1 to 100, and passes it to `boss.getQueueStats()`. Each snapshot then carries one entry per percent asked for:\r\n\r\n`"
+   },
+   {
+    "t": "dashboard-1.11.0",
+    "d": "2026-10-09",
+    "n": "No dashboard code changed.  For use with pg-boss 12.37. Stay on dashboard 1.10.x with 12.35."
+   },
+   {
+    "t": "12.37.1",
+    "d": "2026-10-08",
+    "n": "Schema version: **45**, unchanged from 12.37.0\r\n\r\n* Fix: a `singleton` or `stately` queue could stop fetching while none of its jobs were active. `fetch()` skipped every key in the queue's cached list of active singleton keys. Only a monitor pass refreshed that list, so after a job completed its key stayed blocked until the next pass that counted the queue. A pass skips the count when another instance is already counting, so with several instances supervising, the block had no upper limit. In production it "
    }
+  ],
+  "etag": {
+   "release": "W/\"0535a9a076564dcfdc936a95060d764427f764f3088ae3d614d6424a77512c21\""
+  },
+  "rel_dates": [
+   "2026-11-05",
+   "2026-10-27",
+   "2026-10-15",
+   "2026-10-15",
+   "2026-10-13",
+   "2026-10-14",
+   "2026-10-14",
+   "2026-10-09",
+   "2026-10-09",
+   "2026-10-08",
+   "2026-10-05",
+   "2026-10-02",
+   "2026-09-30",
+   "2026-09-26",
+   "2026-09-26",
+   "2026-09-26",
+   "2026-09-23",
+   "2026-09-23",
+   "2026-09-23",
+   "2026-09-22",
+   "2026-09-22",
+   "2026-09-21",
+   "2026-09-21",
+   "2026-09-19",
+   "2026-09-18",
+   "2026-09-17",
+   "2026-09-16",
+   "2026-09-14",
+   "2026-09-13",
+   "2026-09-10"
   ]
  },
  "JasperFx/marten": {
-  "commit_7d": 46,
-  "commit_90d": 479,
-  "rel_ver": "v9.56.0",
-  "rel_pub": "2026-10-31",
-  "rel_days": 2,
-  "rel_n90": 12,
+  "commit_7d": 65,
+  "commit_90d": 518,
+  "rel_ver": "v9.58.0",
+  "rel_pub": "2026-11-06",
+  "rel_days": 1,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 2,
@@ -61,7 +131,7 @@
    "GHSA-vmw2-qwm8-x84c(CVE-2026-45288,critical)"
   ],
   "contrib_n": 257,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "C#": 99,
    "HTML": 0,
@@ -71,11 +141,21 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
+   {
+    "t": "v9.58.0",
+    "d": "2026-11-06",
+    "n": "Marten 9.58.0 moves to JasperFx 2.100.0 and Weasel 9.49.0, and makes per-tenant composite rebuilds work on per-tenant partitioned stores.\n\n## Highlights\n\n- **Per-tenant composite rebuilds:** composite members' per-tenant progression is reset before a per-tenant rebuild, and a store-wide composite rebuild under per-tenant partitioning no longer fails on `pk_mt_event_progression` (#5829, #5833).\n- **Cursor paging:** the configured identity is honored, value-type keys work (thanks to new contributor @BinaryTEN"
+   },
+   {
+    "t": "V9.57.0",
+    "d": "2026-11-02",
+    "n": "## Highlights\n\n- **Compaction no longer deletes the history of a stream that folds to null.** A stream deleted by its own aggregate, through `ShouldDelete` or `DeleteEvent<T>`, used to lose its whole history to an empty snapshot. Compaction now leaves it alone and logs an information line. (#5797)\n- **Event data masking now reaches archived and skipped events.** `IncludeStream` and `IncludeEvents` used to leave those rows in plain text and report success. (#5797)\n- **`opts.Events.AutoDiscoverTagTypes`** tur"
+   },
    {
     "t": "v9.56.0",
     "d": "2026-10-31",
@@ -90,16 +170,77 @@
     "t": "v9.54.2",
     "d": "2026-10-26",
     "n": "## What's Changed\r\n* Bobcat 1.0.0-rc.4 by @jeremydmiller in https://github.com/JasperFx/marten/pull/5769\r\n* Match tabs and line breaks in string.IsNullOrWhiteSpace() queries by @johnkaram02 in https://github.com/JasperFx/marten/pull/5760\r\n* Escape LIKE wildcards in EqualsIgnoreCase() queries by @johnkaram02 in https://github.com/JasperFx/marten/pull/5758\r\n* Pin that removing a tenant from its shard takes its natural key rows by @lahma in https://github.com/JasperFx/marten/pull/5770\r\n* Weasel 9.47.0 by @jere"
+   },
+   {
+    "t": "V9.54.1",
+    "d": "2026-10-25",
+    "n": "**Full Changelog**: https://github.com/JasperFx/marten/compare/V9.54.0...V9.54.1"
+   },
+   {
+    "t": "V9.54.0",
+    "d": "2026-10-24",
+    "n": "**Full Changelog**: https://github.com/JasperFx/marten/compare/v9.53.0...V9.54.0"
+   },
+   {
+    "t": "v9.53.0",
+    "d": "2026-10-23",
+    "n": "9.53.0 is a minor release. It picks up JasperFx 2.94.0 and implements the three members that release adds, for CritterWatch's Document Store Explorer and Event Store Explorer ([#5756](https://github.com/JasperFx/marten/pull/5756)).\n\n## New\n\n- **`IReadOnlyEventStore.QueryEventData<T>(tenantId)`** ([jasperfx#1073](https://github.com/JasperFx/jasperfx/issues/1073)): store-agnostic LINQ over the bodies of one event type, across every stream. It runs through the shared `DocumentQueryableExtensions` terminators ("
+   },
+   {
+    "t": "v9.52.0",
+    "d": "2026-10-23",
+    "n": "* Move the Aspire sample to Aspire.AppHost.Sdk 13.6.3 with a PostgreSQL resource; drop the workload step (#5724) by @jeremydmiller in https://github.com/JasperFx/marten/pull/5748\nA database whose schema has not been migrated yet keeps starting its projections exactly as before. Floors survive\nbefore Marten's built-in ones, to turn a `PostgresException` with your own SQLSTATE into a typed exception.\n* **A permanent database error in projection code is now attributed to the event that hit it** (#5741). The pa"
+   },
+   {
+    "t": "v9.51.0",
+    "d": "2026-10-19",
+    "n": "* Skip the database when LoadManyAsync is given no ids by @lahma in https://github.com/JasperFx/marten/pull/5681\n* Supervised CI on Bobcat 0.60.4: worker lanes, per-lane databases, opt-in retries, committed ledger (bobcat#565) by @jeremydmiller in https://github.com/JasperFx/marten/pull/5687\n* IMartenStorage.ApplyAllConfiguredChangesToDatabaseAsync: pass the AutoCreate override on to each database by @lahma in https://github.com/JasperFx/marten/pull/5693\n* ShardedTenancy: resolve a shard's database id inste"
    }
+  ],
+  "etag": {
+   "release": "W/\"509823cbc7226be86afd56917cb98070a15dc30cd046fa881ee8f1ac027ca5a2\"",
+   "security": "W/\"83212bd7ea725b7823454ab0de04754e1cce6d415d3affd54d509af74ab405ac\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-02",
+   "2026-10-31",
+   "2026-10-28",
+   "2026-10-26",
+   "2026-10-25",
+   "2026-10-24",
+   "2026-10-23",
+   "2026-10-23",
+   "2026-10-19",
+   "2026-10-15",
+   "2026-10-14",
+   "2026-10-14",
+   "2026-10-13",
+   "2026-10-11",
+   "2026-10-11",
+   "2026-10-07",
+   "2026-10-04",
+   "2026-10-02",
+   "2026-10-01",
+   "2026-09-30",
+   "2026-09-29",
+   "2026-09-29",
+   "2026-09-27",
+   "2026-09-24",
+   "2026-09-22",
+   "2026-09-21",
+   "2026-09-15",
+   "2026-09-15",
+   "2026-09-13"
   ]
  },
  "oschwald/geoip2-golang": {
   "commit_7d": 21,
-  "commit_90d": 49,
+  "commit_90d": 39,
   "rel_ver": "v2.5.0",
   "rel_pub": "2026-10-12",
-  "rel_days": 21,
-  "rel_n90": 3,
+  "rel_days": 26,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -107,15 +248,15 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 18,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Go": 94,
    "Shell": 6
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261102"
   },
   "rel_notes": [
@@ -134,14 +275,21 @@
     "d": "2026-08-08",
     "n": "- Updated `github.com/oschwald/maxminddb-golang/v2` to `v2.5.0` and switched\n  all exported database model structs to generated decoders. This substantially\n  reduces City and Enterprise lookup latency and allocations while preserving\n  the existing lookup APIs and decoded results."
    }
+  ],
+  "etag": {
+   "release": "W/\"58fcf971787c27078cbcf76087ddb253b7ad561ffe2550de250513bb5aee874d\""
+  },
+  "rel_dates": [
+   "2026-10-12",
+   "2026-09-07"
   ]
  },
  "simonw/sqlite-utils": {
-  "commit_7d": 1,
+  "commit_7d": 0,
   "commit_90d": 32,
   "rel_ver": "4.2.1",
   "rel_pub": "2026-08-13",
-  "rel_days": 65,
+  "rel_days": 86,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -168,7 +316,7 @@
   "commit_7d": 2,
   "rel_ver": "@ts-safeql/zod-annotator@5.0.5",
   "rel_pub": "2026-10-18",
-  "rel_days": 9,
+  "rel_days": 20,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -216,7 +364,7 @@
   "commit_7d": 0,
   "rel_ver": "3.5.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 339,
+  "rel_days": 380,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -236,10 +384,10 @@
  },
  "OpenLabs-so/openanalytics": {
   "commit_90d": 147,
-  "commit_7d": 1,
+  "commit_7d": 0,
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 38,
+  "rel_days": 49,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -266,7 +414,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.6.0",
   "rel_pub": "2026-02-21",
-  "rel_days": 218,
+  "rel_days": 259,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -287,7 +435,7 @@
   "commit_7d": 22,
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-10-25",
-  "rel_days": 2,
+  "rel_days": 13,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -351,7 +499,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2018-07-30",
-  "rel_days": 2981,
+  "rel_days": 3022,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -374,7 +522,7 @@
   "commit_7d": 0,
   "rel_ver": "1.6.1",
   "rel_pub": "2023-05-24",
-  "rel_days": 1222,
+  "rel_days": 1263,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -431,7 +579,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.8",
   "rel_pub": "2024-03-20",
-  "rel_days": 921,
+  "rel_days": 962,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -451,7 +599,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.15",
   "rel_pub": "2026-04-06",
-  "rel_days": 204,
+  "rel_days": 215,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -564,7 +712,7 @@
   "commit_7d": 0,
   "rel_ver": "main-latest",
   "rel_pub": "2026-08-01",
-  "rel_days": 57,
+  "rel_days": 98,
   "rel_n90": 3,
   "rel_pre": true,
   "rel_none": false,
@@ -585,7 +733,7 @@
  "kosame-rs/kosame": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2025-12-10",
-  "rel_days": 291,
+  "rel_days": 332,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -632,7 +780,7 @@
  "Pure-Peace/peace": {
   "rel_ver": "v0.12.0",
   "rel_pub": "2021-06-16",
-  "rel_days": 1929,
+  "rel_days": 1970,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -651,7 +799,7 @@
  "thijsmie/pocketbase": {
   "rel_ver": "0.12.0",
   "rel_pub": "2025-02-02",
-  "rel_days": 602,
+  "rel_days": 643,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -711,7 +859,7 @@
  "depyronick/clickhouse-client": {
   "rel_ver": "2.1.0",
   "rel_pub": "2026-01-21",
-  "rel_days": 249,
+  "rel_days": 290,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -729,7 +877,7 @@
  "EddieHubCommunity/CreatorsRegistry": {
   "rel_ver": "v0.26.3",
   "rel_pub": "2024-08-12",
-  "rel_days": 776,
+  "rel_days": 817,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -858,7 +1006,7 @@
  "antifailure/antifailure": {
   "rel_ver": "v1.8.1",
   "rel_pub": "2026-09-27",
-  "rel_days": 0,
+  "rel_days": 41,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -879,7 +1027,7 @@
  "hxlog/balanced-portfolio": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-17",
-  "rel_days": 72,
+  "rel_days": 113,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -900,7 +1048,7 @@
  "bilaschandra/laravel-coreui": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2024-09-27",
-  "rel_days": 730,
+  "rel_days": 771,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -920,7 +1068,7 @@
  "rapidloop/rapidrows": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-09-29",
-  "rel_days": 1459,
+  "rel_days": 1500,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -953,7 +1101,7 @@
  "CEDStandards/CEDS-Data-Warehouse": {
   "rel_ver": "v14.1.0.0",
   "rel_pub": "2026-06-18",
-  "rel_days": 101,
+  "rel_days": 142,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -983,7 +1131,7 @@
  "agis/pglockanalyze": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2025-09-26",
-  "rel_days": 366,
+  "rel_days": 407,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1001,7 +1149,7 @@
  "basxsoftwareassociation/basxconnect": {
   "rel_ver": "v0.4.62",
   "rel_pub": "2024-04-24",
-  "rel_days": 886,
+  "rel_days": 927,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1063,7 +1211,7 @@
  "bnomei/kirby3-pageviewcounter": {
   "rel_ver": "v5.4.0",
   "rel_pub": "2026-05-13",
-  "rel_days": 138,
+  "rel_days": 178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1081,7 +1229,7 @@
  "Point72/polars-io-tools": {
   "rel_ver": "v0.2.4",
   "rel_pub": "2026-09-26",
-  "rel_days": 2,
+  "rel_days": 42,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -1143,7 +1291,7 @@
  "dzwvip/oracle": {
   "rel_ver": "v1.3.2",
   "rel_pub": "2024-12-31",
-  "rel_days": 636,
+  "rel_days": 676,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1160,7 +1308,7 @@
  "kungfux/business-accounting-desktop": {
   "rel_ver": "1.4.1",
   "rel_pub": "2019-10-11",
-  "rel_days": 2544,
+  "rel_days": 2584,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1207,7 +1355,7 @@
  "radkawar/screenlogger": {
   "rel_ver": "v0.1.15",
   "rel_pub": "2026-08-21",
-  "rel_days": 38,
+  "rel_days": 78,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1273,7 +1421,7 @@
  "chanukyasds/pg_math": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-10-16",
-  "rel_days": 347,
+  "rel_days": 387,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1306,7 +1454,7 @@
  "r2hu1/cavio": {
   "rel_ver": "v2.2",
   "rel_pub": "2026-02-14",
-  "rel_days": 226,
+  "rel_days": 266,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1325,7 +1473,7 @@
  "banghuazhao/longevity-master": {
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 4,
+  "rel_days": 44,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1359,7 +1507,7 @@
  "kingrishabdugar/Green-Leaf-Gourmet": {
   "rel_ver": "v2.5.1",
   "rel_pub": "2023-02-14",
-  "rel_days": 1322,
+  "rel_days": 1362,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1404,7 +1552,7 @@
  "CNVioletTech/image2-ai": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-07-11",
-  "rel_days": 79,
+  "rel_days": 119,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1438,7 +1586,7 @@
  "gewebe/TecdocBundle": {
   "rel_ver": "v0.9.1",
   "rel_pub": "2019-05-19",
-  "rel_days": 2689,
+  "rel_days": 2729,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1455,7 +1603,7 @@
  "DavLagoHern/LakeDB": {
   "rel_ver": "v1.0.0-beta.6.3",
   "rel_pub": "2026-09-22",
-  "rel_days": 6,
+  "rel_days": 46,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1488,7 +1636,7 @@
  "frerich/pg_large_objects": {
   "rel_ver": "v0.2.7",
   "rel_pub": "2026-05-17",
-  "rel_days": 134,
+  "rel_days": 174,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1519,7 +1667,7 @@
  "KillerAery/ForAlive": {
   "rel_ver": "v0.213",
   "rel_pub": "2018-05-15",
-  "rel_days": 3058,
+  "rel_days": 3098,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1643,7 +1791,7 @@
  "IITDBGroup/gprom": {
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-04-03",
-  "rel_days": 178,
+  "rel_days": 218,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1725,7 +1873,7 @@
  "deadislove/nestJS-modular-monolith-cqrs-event-sourcing-architecture-template": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2025-05-11",
-  "rel_days": 505,
+  "rel_days": 545,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1806,7 +1954,7 @@
  "SaberSz/College-System-2-Attendance-Management-Systems": {
   "rel_ver": "v1.0",
   "rel_pub": "2017-11-15",
-  "rel_days": 3239,
+  "rel_days": 3279,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1842,7 +1990,7 @@
  "Holo795/CBMCoolifyBackup": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-07-03",
-  "rel_days": 87,
+  "rel_days": 127,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1875,7 +2023,7 @@
  "jince-boy/php-ccenote-blog-api": {
   "rel_ver": "laravel",
   "rel_pub": "2023-02-28",
-  "rel_days": 1308,
+  "rel_days": 1348,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1916,7 +2064,7 @@
  "hieutdo/policyfs": {
   "rel_ver": "v1.0.8",
   "rel_pub": "2026-08-28",
-  "rel_days": 32,
+  "rel_days": 71,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1984,7 +2132,7 @@
  "bbkane/enventory": {
   "rel_ver": "v0.0.28",
   "rel_pub": "2026-06-20",
-  "rel_days": 101,
+  "rel_days": 140,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2009,7 +2157,7 @@
  "Salve-Software/react-native-salve-db": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 25,
+  "rel_days": 64,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2055,7 +2203,7 @@
  "budiadiono/sqlite-ts": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2019-02-10",
-  "rel_days": 2788,
+  "rel_days": 2827,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2499,7 +2647,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-09-01",
-  "rel_days": 30,
+  "rel_days": 67,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -2788,7 +2936,7 @@
  "sucraft-hub/homeledger": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 9,
+  "rel_days": 44,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2815,7 +2963,7 @@
  "paperkite-hq/stork": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-04-06",
-  "rel_days": 189,
+  "rel_days": 215,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2907,7 +3055,7 @@
  "DavidBelicza/semantic-search": {
   "rel_ver": "v1.9.0",
   "rel_pub": "2026-08-18",
-  "rel_days": 74,
+  "rel_days": 81,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2950,7 +3098,7 @@
   "commit_7d": 129,
   "rel_ver": "v0.6.3",
   "rel_pub": "2026-11-04",
-  "rel_days": 2,
+  "rel_days": 3,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,

@@ -1,11 +1,11 @@
 {
  "thedotmack/claude-mem": {
-  "commit_7d": 104,
-  "commit_90d": 1404,
-  "rel_ver": "v15.8.1",
-  "rel_pub": "2026-11-01",
-  "rel_days": 1,
-  "rel_n90": 12,
+  "commit_7d": 220,
+  "commit_90d": 1610,
+  "rel_ver": "v15.11.1",
+  "rel_pub": "2026-11-07",
+  "rel_days": 0,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 143,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "TypeScript": 46,
    "JavaScript": 40,
@@ -23,11 +23,46 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v15.11.1",
+    "d": "2026-11-07",
+    "n": "## Pro sign-in works again\n\nSigning in to cmem.ai Pro from the plugin returned a 500 error on every fresh plugin install. The plugin's install did not include `better-auth`, and its tables were never created. The plugin now ships `better-auth` and `@better-auth/api-key` as dependencies and creates the auth tables the first time they are needed (#5455, thanks @0xABCD01).\n\n## Fixes\n\n- **Worker:** when a run pauses after a transport, rate-limit or similar abort, it now releases its claims, so the paused sessio"
+   },
+   {
+    "t": "v15.11.0",
+    "d": "2026-11-06",
+    "n": "- Restore the server viewer's read endpoints using the server's Postgres data and existing team/project authorization. Shared server log files remain unavailable to tenant keys."
+   },
+   {
+    "t": "v15.10.1",
+    "d": "2026-11-06",
+    "n": "- Context reads keep working when the database's `-wal` and wal-index files are missing. (#5432 by @0xABCD01)"
+   },
+   {
+    "t": "v15.10.0",
+    "d": "2026-11-05",
+    "n": "- Docker: the server and worker share the same BullMQ queue prefix, and the docs list tested Redis-compatible servers. The sync-api container runs as a non-root user. (#5389, #5390 by @murtazayusuf, #5331 by @DeryFerd)\n- Test fix for macOS SQLite. (#5313 by @patrickballard)"
+   },
+   {
+    "t": "v15.9.0",
+    "d": "2026-11-02",
+    "n": "- My Work no longer slows other worker requests on large databases, and saving rules or focus rebuilds the view once instead of twice. (#5284 by @Kirat0201; #5239 by @LucianVane)\n- `claude-md:regenerate` reads the database from `CLAUDE_MEM_DATA_DIR`. (#5210 by @Bortlesboat)"
+   },
+   {
+    "t": "v15.8.3",
+    "d": "2026-11-02",
+    "n": "## Privacy fix\n\nBrowser setup no longer uploads your prompts to cmem.ai without asking. Fixes #5176.\n\nThe browser setup opened by `npx claude-mem install` (since v15.2.0) scanned local agent histories and uploaded the full text of the last 30 days of prompts, with session IDs, project names, folder paths and timestamps, without asking.\n\n**What changed (#5220)**\n\n- The scan now reads local history only, then stops and asks. Nothing leaves the machine until you answer.\n- A new consent panel states what is sen"
+   },
+   {
+    "t": "v15.8.2",
+    "d": "2026-11-02",
+    "n": "## Fixes\n- Work view: telemetry volume cuts. High-volume events (observer turns, work-state use, context injections, searches, skills) are now one daily rollup per install with a `count`; worker start/stop carry `restart_count`; failures are one event per type per day with `count`.\n- Observer: after a spent cmem.ai allowance, the gateway is probed once a day instead of on every resume.\n- Work view: fixed a runaway \"opened\" event; hosted viewer reports analytics with `viewer_host='hosted'`.\n- Work view: idle"
+   },
    {
     "t": "v15.8.1",
     "d": "2026-11-01",
@@ -43,6 +78,41 @@
     "d": "2026-10-30",
     "n": "- Activity-driven background rebuilds of My Work are coalesced, so an open My Work page no longer rebuilds on every database commit (#5133, mitigates #5124).\n## My Work: refresh stays on your agent, and a Feedback button (#5190)\n- Feedback button in the My Work header, next to Star. It opens a short \"My Work feedback\" issue form.\n- Work View waits for the database to finish starting before it builds (#5157).\n- Postgres API keys are stored as salted scrypt hashes (#5160), and every Postgres sslmode is honore"
    }
+  ],
+  "etag": {
+   "release": "W/\"70c03a4b28828f4ff276dc7f0bf3258e8a026e7fd0bd47a9046e55d770f7eac1\""
+  },
+  "rel_dates": [
+   "2026-11-07",
+   "2026-11-06",
+   "2026-11-06",
+   "2026-11-05",
+   "2026-11-02",
+   "2026-11-02",
+   "2026-11-02",
+   "2026-11-01",
+   "2026-11-01",
+   "2026-10-30",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-28",
+   "2026-10-26",
+   "2026-10-25",
+   "2026-10-25",
+   "2026-10-25",
+   "2026-10-23",
+   "2026-10-20",
+   "2026-10-20",
+   "2026-10-17",
+   "2026-10-17",
+   "2026-10-17",
+   "2026-10-16",
+   "2026-10-13",
+   "2026-10-13",
+   "2026-10-13",
+   "2026-10-12",
+   "2026-10-12",
+   "2026-10-09"
   ]
  },
  "porsager/postgres": {
@@ -50,7 +120,7 @@
   "commit_90d": 68,
   "rel_ver": "v4.1.0",
   "rel_pub": "2026-11-05",
-  "rel_days": 0,
+  "rel_days": 2,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -111,12 +181,12 @@
   }
  },
  "ydb-platform/ydb": {
-  "commit_7d": 486,
-  "commit_90d": 5972,
+  "commit_7d": 424,
+  "commit_90d": 6011,
   "rel_ver": "26.3.1.16",
   "rel_pub": "2026-09-21",
-  "rel_days": 42,
-  "rel_n90": 3,
+  "rel_days": 47,
+  "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
   "sec_n": 0,
@@ -124,7 +194,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 233,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "C++": 53,
    "C": 25,
@@ -134,8 +204,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -154,6 +224,13 @@
     "d": "2026-08-04",
     "n": "https://ydb.tech/docs/ru/changelog-server?version=v26.1#26-1-1-22"
    }
+  ],
+  "etag": {
+   "release": "W/\"e4c6102610d2c61b59f77405c9ab7a5fc375a76bd45f1ebc7fc69bbac3a49b80\""
+  },
+  "rel_dates": [
+   "2026-09-21",
+   "2026-09-17"
   ]
  },
  "nucleuscloud/neosync": {
@@ -161,7 +238,7 @@
   "commit_90d": 0,
   "rel_ver": "v0.5.41",
   "rel_pub": "2025-07-11",
-  "rel_days": 443,
+  "rel_days": 484,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -249,7 +326,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.0",
   "rel_pub": "2023-09-06",
-  "rel_days": 1117,
+  "rel_days": 1158,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -457,7 +534,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.2",
   "rel_pub": "2017-08-05",
-  "rel_days": 3341,
+  "rel_days": 3381,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -524,7 +601,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-04-02",
-  "rel_days": 178,
+  "rel_days": 219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -545,7 +622,7 @@
   "commit_7d": 5,
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-10-18",
-  "rel_days": 1105,
+  "rel_days": 1116,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -553,7 +630,7 @@
   "sec_worst": null,
   "sec_last": "2026-07-23",
   "sec_ids": [
-   "GHSA-8c5j-qxxx-539r(-,medium)"
+   "GHSA-8c5j-qxxx-539r(CVE-2026-102696,medium)"
   ],
   "contrib_n": 279,
   "lang": {
@@ -563,10 +640,14 @@
    "Shell": 1,
    "CSS": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261107",
   "dim_ts": {
    "commit": "20261027",
-   "release": "20261027"
+   "release": "20261027",
+   "security": "20261107"
+  },
+  "etag": {
+   "security": "W/\"6c76c341119573b53c13c2bfd0e7e9db183def91c3191b0cf93e5b7e25716235\""
   }
  },
  "querymx/querym": {
@@ -574,7 +655,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.9",
   "rel_pub": "2023-11-08",
-  "rel_days": 1054,
+  "rel_days": 1095,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -617,7 +698,7 @@
  "simonw/markdown-to-sqlite": {
   "rel_ver": "1.0",
   "rel_pub": "2021-06-13",
-  "rel_days": 1932,
+  "rel_days": 1973,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -665,7 +746,7 @@
  "kkrisz1/staruml-reverse-db": {
   "rel_ver": "v2.1.8",
   "rel_pub": "2023-08-27",
-  "rel_days": 1127,
+  "rel_days": 1168,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -683,7 +764,7 @@
  "dan-kimani/mysql-mongo-etl": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2020-03-29",
-  "rel_days": 2373,
+  "rel_days": 2414,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -716,7 +797,7 @@
  "truenormis/savvy": {
   "rel_ver": "v1.3.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 19,
+  "rel_days": 60,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -750,7 +831,7 @@
  "daobab-projects/daobab-core": {
   "rel_ver": "Daobab",
   "rel_pub": "2023-11-29",
-  "rel_days": 1033,
+  "rel_days": 1074,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -858,7 +939,7 @@
  "tikv/migration": {
   "rel_ver": "br-v1.0.2",
   "rel_pub": "2025-04-17",
-  "rel_days": 528,
+  "rel_days": 569,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -927,7 +1008,7 @@
  "epost/purescript-node-postgres": {
   "rel_ver": "v4.1.0",
   "rel_pub": "2017-12-16",
-  "rel_days": 3207,
+  "rel_days": 3248,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -946,7 +1027,7 @@
  "go-fries/fries": {
   "rel_ver": "v4.2.0",
   "rel_pub": "2026-09-14",
-  "rel_days": 13,
+  "rel_days": 54,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -993,7 +1074,7 @@
  "majiayu000/remem": {
   "rel_ver": "v0.6.98",
   "rel_pub": "2026-09-27",
-  "rel_days": 0,
+  "rel_days": 41,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1014,7 +1095,7 @@
  "datreant/MDSynthesis": {
   "rel_ver": "0.6.1",
   "rel_pub": "2016-05-17",
-  "rel_days": 3785,
+  "rel_days": 3826,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1218,7 +1299,7 @@
  "kowala-tech/kcoin": {
   "rel_ver": "3.0.0",
   "rel_pub": "2018-10-04",
-  "rel_days": 2916,
+  "rel_days": 2956,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1329,7 +1410,7 @@
  "elky84/light": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-01-02",
-  "rel_days": 1730,
+  "rel_days": 1770,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1362,7 +1443,7 @@
  "oracle-quickstart/oci-elastic": {
   "rel_ver": "v2.0",
   "rel_pub": "2022-02-01",
-  "rel_days": 1700,
+  "rel_days": 1740,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1380,7 +1461,7 @@
  "nativeapptemplate/nativeapptemplateapi": {
   "rel_ver": "v1.0.0-with-nfc",
   "rel_pub": "2026-04-23",
-  "rel_days": 158,
+  "rel_days": 198,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1401,7 +1482,7 @@
  "ozankasikci/global-agent-memory": {
   "rel_ver": "v0.1.7",
   "rel_pub": "2026-08-31",
-  "rel_days": 28,
+  "rel_days": 68,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1435,7 +1516,7 @@
  "Dani3lSun/apex-plugin-videoplayer": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2016-02-24",
-  "rel_days": 3869,
+  "rel_days": 3909,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1478,7 +1559,7 @@
  "claranet/ansible-role-patroni": {
   "rel_ver": "1.1.0",
   "rel_pub": "2026-07-24",
-  "rel_days": 66,
+  "rel_days": 106,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1497,7 +1578,7 @@
  "HenryJi529/OpenMorningstar": {
   "rel_ver": "v0.2.14",
   "rel_pub": "2024-03-04",
-  "rel_days": 938,
+  "rel_days": 978,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1562,7 +1643,7 @@
  "oceanbase/spark-connector-oceanbase": {
   "rel_ver": "v1.5",
   "rel_pub": "2026-07-22",
-  "rel_days": 98,
+  "rel_days": 108,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1586,7 +1667,7 @@
  "gz08/database": {
   "rel_ver": "v1.0-final",
   "rel_pub": "2026-06-20",
-  "rel_days": 100,
+  "rel_days": 140,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1609,7 +1690,7 @@
  "huaweicloud-samples/database-dify-gaussdb": {
   "rel_ver": "v1.16.1-gaussdb",
   "rel_pub": "2026-08-15",
-  "rel_days": 44,
+  "rel_days": 84,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1675,7 +1756,7 @@
  "Linuxndroid/WhatsApp-Viewer": {
   "rel_ver": "v.1.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 341,
+  "rel_days": 380,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1726,7 +1807,7 @@
   "commit_7d": 0,
   "rel_ver": "flink-connector-jdbc-dameng_20250331_(适用于v3.3及以上版本)",
   "rel_pub": "2025-03-31",
-  "rel_days": 548,
+  "rel_days": 586,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2506,7 +2587,7 @@
  "phuthuycoding/dbclone": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-10-05",
-  "rel_days": 3,
+  "rel_days": 33,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2530,7 +2611,7 @@
  "macolszewski/dbeast_manager": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 0,
+  "rel_days": 20,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2577,7 +2658,7 @@
  "Paul0Franca/lurkqvd": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-24",
-  "rel_days": 4,
+  "rel_days": 14,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2643,7 +2724,7 @@
  "BalianWang/busytok": {
   "rel_ver": "v0.0.16",
   "rel_pub": "2026-07-15",
-  "rel_days": 111,
+  "rel_days": 115,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2687,7 +2768,7 @@
  "EnriqueMuhammad/Zephix-DBStudio": {
   "rel_ver": "v0.3.2",
   "rel_pub": "2026-11-01",
-  "rel_days": 2,
+  "rel_days": 6,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2748,6 +2829,34 @@
    "security": "20261106",
    "contrib": "20261106",
    "lang": "20261106"
+  }
+ },
+ "LikhithV02/Customer-Support-Agent": {
+  "etag": {
+   "release": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\"",
+   "security": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "Python": 67,
+   "TypeScript": 29,
+   "Shell": 2,
+   "CSS": 1,
+   "JavaScript": 1
+  },
+  "enriched_at": "20261107",
+  "dim_ts": {
+   "release": "20261107",
+   "security": "20261107",
+   "contrib": "20261107",
+   "lang": "20261107"
   }
  }
 }

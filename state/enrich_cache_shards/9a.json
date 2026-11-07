@@ -1,10 +1,10 @@
 {
  "Tencent/wcdb": {
-  "commit_7d": 1,
+  "commit_7d": 0,
   "commit_90d": 1,
   "rel_ver": "v2.1.16",
   "rel_pub": "2026-03-27",
-  "rel_days": 196,
+  "rel_days": 225,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -33,7 +33,7 @@
   "commit_90d": 0,
   "rel_ver": "0.11.0",
   "rel_pub": "2019-01-21",
-  "rel_days": 2806,
+  "rel_days": 2847,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -74,11 +74,11 @@
   }
  },
  "WGDashboard/WGDashboard": {
-  "commit_7d": 2,
-  "commit_90d": 8,
+  "commit_7d": 1,
+  "commit_90d": 9,
   "rel_ver": "v4.3.4",
   "rel_pub": "2026-10-26",
-  "rel_days": 7,
+  "rel_days": 12,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -89,7 +89,7 @@
    "GHSA-rrf5-q4fp-qvgm(CVE-2026-44343,critical)"
   ],
   "contrib_n": 56,
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "lang": {
    "Vue": 58,
    "Python": 31,
@@ -99,9 +99,9 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261102",
-   "release": "20261102",
-   "security": "20261027"
+   "commit": "20261107",
+   "release": "20261107",
+   "security": "20261107"
   },
   "rel_notes": [
    {
@@ -119,10 +119,17 @@
     "d": "2026-03-29",
     "n": "# Security Advisory: March 2026 Update\r\n\r\n> [!WARNING]\r\n> All users running WGDashboard v4.2.x or later and hosted on the public internet are strongly advised to update to the latest release immediately.\r\n\r\n## Overview\r\n\r\nWe have recently been made aware of critical vulnerabilities affecting WGDashboard that, if exploited, could allow unauthorized parties to access the host file system without authentication. We take these issues extremely seriously and sincerely apologize for any concern or disruption this"
    }
+  ],
+  "etag": {
+   "release": "W/\"3e98f23f1a798d19ca6e483a4308ec2e1eb31d695fd57d98ca29860faf696aa6\"",
+   "security": "W/\"0ec0774c59be9f655a0a2ee26a6c720f36fd815e1453ca57e4d4ef6c137705f1\""
+  },
+  "rel_dates": [
+   "2026-10-26"
   ]
  },
  "Snailclimb/interview-guide": {
-  "commit_7d": 4,
+  "commit_7d": 0,
   "commit_90d": 82,
   "rel_ver": null,
   "rel_none": true,
@@ -186,12 +193,12 @@
   }
  },
  "Dicklesworthstone/beads_rust": {
-  "commit_90d": 1320,
-  "commit_7d": 38,
+  "commit_90d": 1348,
+  "commit_7d": 73,
   "rel_ver": "v0.7.6",
   "rel_pub": "2026-10-15",
-  "rel_days": 18,
-  "rel_n90": 12,
+  "rel_days": 23,
+  "rel_n90": 22,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -206,10 +213,10 @@
    "Python": 0,
    "Ruby": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261107",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261107",
+   "release": "20261107",
    "security": "20261027"
   },
   "rel_notes": [
@@ -227,7 +234,69 @@
     "t": "v0.7.4",
     "d": "2026-10-01",
     "n": "**Reads after bv or `sqlite3` no longer copy the database**\n- Every write after a SQLite reader used to copy the whole database twice into a new `.beads/.br_recovery/schema-migrations/` run, and nothing removed them. When the WAL holds no frames, the main database file is already the complete committed state, so recovery now sets aside only the old index plus its receipts. It still checks that the database and WAL come out byte-identical and that the integrity check is clean; if it finds older damage, it re"
+   },
+   {
+    "t": "v0.7.3",
+    "d": "2026-09-29",
+    "n": "- `br doctor` names this index state instead of calling `beads.db-shm` inert. `br doctor --repair` still refuses while it is present; run any ordinary br command or `br doctor migrate-schema recover` first.\nbr 0.7.3 fixes read-only commands that failed after another SQLite program had read the tracker. The database schema is unchanged (19).\n**Read-only commands work after bv or `sqlite3` reads the tracker**\nSince 0.7.0, a command run with `--no-auto-import --no-auto-flush` failed with \"database is busy (rec"
+   },
+   {
+    "t": "v0.7.2",
+    "d": "2026-09-29",
+    "n": "If a table has lost a row that its indexes still point to, rebuilding the indexes would hide the loss. When the integrity check shows index entries with no matching row, recovery now says rows may have been lost from the table and asks you to check `issues.jsonl` for them before running `--repair-indexes` (the receipt sets `index_corruption.index_entries_without_table_rows`). No refusal changes the live database, and every attempt keeps the complete pre-recovery files under `.beads/.br_recovery/`. A failed "
+   },
+   {
+    "t": "v0.7.1",
+    "d": "2026-09-29",
+    "n": "2. Run `br doctor migrate-schema recover`. It keeps a full copy of the database files under `.beads/.br_recovery/`, rehearses the rebuild on a private copy, and then rebuilds only the stale `-shm` index.\n- A tracker left on an older schema, including early br and Go `bd` databases, upgrades itself when everything in it is also in `issues.jsonl`. When some data exists only in the database, mutations refuse and name the issues, and `br doctor migrate-schema heal` upgrades while keeping them.\nbr 0.7.1 fixes th"
+   },
+   {
+    "t": "v0.7.0",
+    "d": "2026-09-24",
+    "n": "br 0.7.0 moves the storage engine to FrankenSQLite 0.4.4, keeps both issues when two clones mint the same id, and adds conditional updates for concurrent agents. The database schema is unchanged (19): no migration step is needed from 0.6.0.\n- **JSONL import refuses an id that names a different issue ([#512](https://github.com/Dicklesworthstone/beads_rust/issues/512)).** Import used to resolve rows by id with last-write-wins, so when two clones minted the same id (typically a child id `<parent>.N`) one issue"
+   },
+   {
+    "t": "v0.6.0",
+    "d": "2026-09-12",
+    "n": "This version uses schema 19. Existing databases on supported older schemas require an explicit reviewed migration: start with `br doctor migrate-schema plan`, inspect the plan, and follow its approval instructions. Ordinary opens refuse older schemas. Migration and undo preserve the original database family subject to the documented validation and subsequent-write checks.\n- The optional MCP server uses FastMCP 0.9.0 and its required asupersync 0.4.10 and TOML 1.1.5 versions. FrankenSQLite remains 0.3.18; re"
+   },
+   {
+    "t": "v0.5.12",
+    "d": "2026-09-09",
+    "n": "- Database namespace admission errors preserve the specific ownership or hard-link failure across read-only opens, reconciliation, schema inspection, and external-project reads. They leave database integrity explicitly unverified.\nSource: [`366c69a63fe18260afc4deff798850053954cac9`](https://github.com/Dicklesworthstone/beads_rust/commit/366c69a63fe18260afc4deff798850053954cac9). The storage engine remains FrankenSQLite 0.3.18."
+   },
+   {
+    "t": "v0.5.11",
+    "d": "2026-09-08",
+    "n": "- FrankenSQLite 0.3.18 fixes grouped multi-label counts. Namespace-sidecar permission failures now explain the filesystem limitation and remedy, including affected WSL mounts; repairable POSIX permissions recover before admission checks.\n- Deferrals show their remaining interval. Policy gates, initialization receipts, structured output, the `BEADS_DB` alias, and pinned-version upgrades follow their documented contracts.\nKnown limitations: legacy databases containing multiple dependency types for the same is"
    }
+  ],
+  "etag": {
+   "release": "W/\"10d5e9eff9dc0576de1e38e2ceaaece04279f3699645d6c7c5e09622870faa83\""
+  },
+  "rel_dates": [
+   "2026-10-15",
+   "2026-10-14",
+   "2026-10-01",
+   "2026-09-29",
+   "2026-09-29",
+   "2026-09-29",
+   "2026-09-24",
+   "2026-09-12",
+   "2026-09-09",
+   "2026-09-08",
+   "2026-09-04",
+   "2026-08-29",
+   "2026-08-29",
+   "2026-08-29",
+   "2026-08-29",
+   "2026-08-27",
+   "2026-08-26",
+   "2026-08-25",
+   "2026-08-24",
+   "2026-08-23",
+   "2026-08-15",
+   "2026-08-14"
   ]
  },
  "goksan/statusnook": {
@@ -235,7 +304,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.0",
   "rel_pub": "2024-06-18",
-  "rel_days": 831,
+  "rel_days": 872,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -271,7 +340,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.43.0",
   "rel_pub": "2026-08-15",
-  "rel_days": 73,
+  "rel_days": 84,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -290,11 +359,11 @@
   }
  },
  "nim-lang/nimforum": {
-  "commit_90d": 1,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v2.5.0",
   "rel_pub": "2024-09-03",
-  "rel_days": 754,
+  "rel_days": 795,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -312,14 +381,20 @@
    "Go Template": 2,
    "Dockerfile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261107",
+  "etag": {
+   "security": "W/\"34c2c5e10d33c839d16c0ea2aa709b6f517e33133ad40dc8ee175a435a10b841\""
+  },
+  "dim_ts": {
+   "security": "20261107"
+  }
  },
  "dalibo/temboard": {
   "commit_90d": 65,
   "commit_7d": 34,
   "rel_ver": "v10.0.0",
   "rel_pub": "2025-12-08",
-  "rel_days": 323,
+  "rel_days": 334,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -346,7 +421,7 @@
   "commit_7d": 16,
   "rel_ver": "v2.6.1",
   "rel_pub": "2026-10-12",
-  "rel_days": 15,
+  "rel_days": 26,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -373,7 +448,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.7.0",
   "rel_pub": "2020-12-19",
-  "rel_days": 2108,
+  "rel_days": 2149,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -393,7 +468,7 @@
   "commit_7d": 0,
   "rel_ver": "v.3.2.3",
   "rel_pub": "2026-07-10",
-  "rel_days": 109,
+  "rel_days": 120,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -417,7 +492,7 @@
   "commit_7d": 9,
   "rel_ver": "v2026.18.0",
   "rel_pub": "2026-10-26",
-  "rel_days": 1,
+  "rel_days": 12,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -440,7 +515,7 @@
   "commit_7d": 0,
   "rel_ver": "v8.5.8",
   "rel_pub": "2026-08-27",
-  "rel_days": 61,
+  "rel_days": 72,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -530,7 +605,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.2-alpha",
   "rel_pub": "2025-08-13",
-  "rel_days": 410,
+  "rel_days": 451,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -567,7 +642,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.0",
   "rel_pub": "2020-05-20",
-  "rel_days": 2321,
+  "rel_days": 2362,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -590,7 +665,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-09-01",
-  "rel_days": 62,
+  "rel_days": 67,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -650,7 +725,7 @@
   "commit_7d": 0,
   "rel_ver": "1.5.3",
   "rel_pub": "2025-02-19",
-  "rel_days": 585,
+  "rel_days": 626,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -669,7 +744,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-03-10",
-  "rel_days": 201,
+  "rel_days": 242,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -690,7 +765,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.0",
   "rel_pub": "2024-03-07",
-  "rel_days": 934,
+  "rel_days": 975,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -710,7 +785,7 @@
   "commit_7d": 0,
   "rel_ver": "1.3.0",
   "rel_pub": "2024-11-06",
-  "rel_days": 690,
+  "rel_days": 731,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -788,7 +863,7 @@
   "commit_7d": 0,
   "rel_ver": "0.2.0",
   "rel_pub": "2020-12-18",
-  "rel_days": 2109,
+  "rel_days": 2150,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -841,7 +916,7 @@
  "akardapolov/dimension-ui": {
   "rel_ver": "26.8.4",
   "rel_pub": "2026-08-22",
-  "rel_days": 36,
+  "rel_days": 77,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -861,7 +936,7 @@
  "jaykelin/clickhouse-hdfs-loader": {
   "rel_ver": "v1.3.0",
   "rel_pub": "2017-07-18",
-  "rel_days": 3358,
+  "rel_days": 3399,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -896,7 +971,7 @@
  "Nextdoor/pg-bifrost": {
   "rel_ver": "1.15.0",
   "rel_pub": "2025-06-05",
-  "rel_days": 479,
+  "rel_days": 520,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -964,7 +1039,7 @@
  "hideaki-t/sqlite-fts-python": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2025-10-18",
-  "rel_days": 344,
+  "rel_days": 385,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1010,7 +1085,7 @@
  "benclawbot/open-brain": {
   "rel_ver": "v1.0.2",
   "rel_pub": "2026-09-07",
-  "rel_days": 20,
+  "rel_days": 61,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1041,7 +1116,7 @@
  "im6/javascript-fun": {
   "rel_ver": "v1.13.0",
   "rel_pub": "2023-05-29",
-  "rel_days": 1217,
+  "rel_days": 1258,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1061,7 +1136,7 @@
  "findmypast-oss/mssqlex": {
   "rel_ver": "1.1.0",
   "rel_pub": "2018-05-23",
-  "rel_days": 3049,
+  "rel_days": 3090,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1079,7 +1154,7 @@
  "mothership/rds-auth-proxy": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2021-09-24",
-  "rel_days": 1829,
+  "rel_days": 1870,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1139,7 +1214,7 @@
  "embryo-labs/Blitzcrank": {
   "rel_ver": "rust-preview-2026-09-14",
   "rel_pub": "2026-09-14",
-  "rel_days": 13,
+  "rel_days": 54,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -1158,7 +1233,7 @@
  "linq2db/t4models": {
   "rel_ver": "Release.1.10.0",
   "rel_pub": "2017-11-19",
-  "rel_days": 3234,
+  "rel_days": 3275,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1179,7 +1254,7 @@
  "hasirciogluhq/xdatabase-proxy": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-01-12",
-  "rel_days": 258,
+  "rel_days": 299,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1198,7 +1273,7 @@
  "nexirdb/nexir-mvcc-core": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-07-04",
-  "rel_days": 85,
+  "rel_days": 126,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1229,7 +1304,7 @@
  "JGoutin/ansible_home": {
   "rel_ver": "2.3.11",
   "rel_pub": "2026-04-28",
-  "rel_days": 152,
+  "rel_days": 193,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1375,7 +1450,7 @@
  "hyeonsangjeon/vertx-embedded-springboot": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-07-02",
-  "rel_days": 88,
+  "rel_days": 128,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1442,7 +1517,7 @@
  "tidesdb/tidesql": {
   "rel_ver": "v5.0.0",
   "rel_pub": "2026-09-10",
-  "rel_days": 18,
+  "rel_days": 58,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1476,7 +1551,7 @@
  "byerlikaya/SmartWhere": {
   "rel_ver": "v2.2.3",
   "rel_pub": "2025-08-21",
-  "rel_days": 403,
+  "rel_days": 443,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1571,7 +1646,7 @@
  "simonireilly/typeorm-erd": {
   "rel_ver": "0.0.4",
   "rel_pub": "2022-06-10",
-  "rel_days": 1571,
+  "rel_days": 1611,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1645,7 +1720,7 @@
  "jsdecena/docker-php-lemp": {
   "rel_ver": "v2.0.1",
   "rel_pub": "2021-11-09",
-  "rel_days": 1784,
+  "rel_days": 1824,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1688,7 +1763,7 @@
  "qlarr-surveys/qlarr": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2025-01-16",
-  "rel_days": 620,
+  "rel_days": 660,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1709,7 +1784,7 @@
  "toxicbishop/Student-Marks-Management": {
   "rel_ver": "v2.0-java",
   "rel_pub": "2026-03-02",
-  "rel_days": 210,
+  "rel_days": 250,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1760,7 +1835,7 @@
  "ropensci/rcites": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2021-11-05",
-  "rel_days": 1788,
+  "rel_days": 1828,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1778,7 +1853,7 @@
  "shane-jacobeen/schema3d": {
   "rel_ver": "v1.2.1",
   "rel_pub": "2026-09-20",
-  "rel_days": 8,
+  "rel_days": 48,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1799,7 +1874,7 @@
  "steve-nzr/go-ff": {
   "rel_ver": "0.1.0",
   "rel_pub": "2018-11-16",
-  "rel_days": 2873,
+  "rel_days": 2913,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1818,7 +1893,7 @@
  "concile-dev/concile": {
   "rel_ver": "concile@0.1.6",
   "rel_pub": "2026-09-26",
-  "rel_days": 2,
+  "rel_days": 42,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1844,7 +1919,7 @@
  "mozilla-services/buildhub": {
   "rel_ver": "v1.4.1",
   "rel_pub": "2019-06-11",
-  "rel_days": 2666,
+  "rel_days": 2706,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1865,7 +1940,7 @@
  "intelligenthack/badgie-migrator": {
   "rel_ver": "v1.7.1",
   "rel_pub": "2026-04-17",
-  "rel_days": 164,
+  "rel_days": 204,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1924,7 +1999,7 @@
  "pingcap-inc/plan-change-capturer": {
   "rel_ver": "v1.0.2",
   "rel_pub": "2024-03-08",
-  "rel_days": 964,
+  "rel_days": 974,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1949,7 +2024,7 @@
  "NaOH2333/FaceRecognition": {
   "rel_ver": "1.3",
   "rel_pub": "2021-04-06",
-  "rel_days": 2001,
+  "rel_days": 2041,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2027,7 +2102,7 @@
  "funnyzak/koa-starter": {
   "rel_ver": "0.2.1",
   "rel_pub": "2023-11-15",
-  "rel_days": 1048,
+  "rel_days": 1088,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2147,7 +2222,7 @@
  "unknowbug/qlens": {
   "rel_ver": "v0.2.7",
   "rel_pub": "2026-09-04",
-  "rel_days": 24,
+  "rel_days": 64,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -2358,7 +2433,7 @@
  "dmytrodanylyk/lazy-data-loading": {
   "rel_ver": "1",
   "rel_pub": "2015-04-04",
-  "rel_days": 4196,
+  "rel_days": 4235,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2400,7 +2475,7 @@
  "tabledog/tdog-cli": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2022-05-21",
-  "rel_days": 1592,
+  "rel_days": 1631,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2465,7 +2540,7 @@
  "Query-farm/grainlift": {
   "rel_ver": "v0.4.0-rc.1",
   "rel_pub": "2026-09-28",
-  "rel_days": 2,
+  "rel_days": 40,
   "rel_n90": 6,
   "rel_pre": true,
   "rel_none": false,
@@ -3041,7 +3116,7 @@
  "VincenzoManto/HistWarDB": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-08",
-  "rel_days": 5,
+  "rel_days": 30,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3084,7 +3159,7 @@
  "pazti/Rizz-Base": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-10-24",
-  "rel_days": 1,
+  "rel_days": 14,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -3111,7 +3186,7 @@
  "AlonsoSG0/CodiceHub": {
   "rel_ver": "v0.5.1",
   "rel_pub": "2026-10-30",
-  "rel_days": 0,
+  "rel_days": 8,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
