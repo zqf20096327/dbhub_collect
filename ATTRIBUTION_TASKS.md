@@ -147,28 +147,28 @@
 - **验收**：`python interpret/golden_eval.py --run --tag t4a` 对 base **不退步**（[[golden-eval-gate]] 金标 814 是一切 interpret 改动验收关）；烧完全量后**抽 50 条裁决人工过目**——golden_eval 管解读质量不管"是否支持库 X"的裁决对错，抽检过了才准进 T4b
 - **防坑**：BudgetOut 原样 raise、仓边界收尾 exit 0（09-29 铁律）；烧 API 前先 `--limit 20` 冒烟
 
-### T4b 回写器 ｜✅ 2026-11-03 完成（b3e081d2；selftest 31 断言绿+全 attribution/evidence 链 9/9 绿）
+### T4b 回写器 ｜✅ 2026-11-04 定稿（v2 cdb2a8c7 + A 修 c652e400；selftest 32 断言 + 11 套回归绿）
 - **目标**：quorum 立案结论写回 interp dbs；13,242 空适配全部打四类原因（真不涉及/范围外/证据不足/新仓未解读）
-- **结果**：`attribution/writeback.py`（零网络零 AI）判定优先级=已烧裁决 supports → 信号层（薄壳口径复用）→ 引擎 draft 质量门（≥2 票+工具类+非 topic 单通道）。全量 7.5s：入圈 12,028（fn 级）→ **fill 554**（engine 287/adjudicate 267）+ **tag 11,474**（真不涉及 3,398/范围外 1,391/证据不足 6,685）+ 池内未解读 1,727（台账记数）= **黑洞归零**；记录级 651 fill+12,379 tag 共 13,030 条，台账外零触碰、字段零越界（逐记录审计）。剩 212 条无原因记录=最新已有归属仓的老空记录（铁律设计内）。金标∩写动 212 条：171 打原因不动 dbs、41 回写眼验合理（liquibase/symmetric-ds 等）；金标文件零触碰。台账 `state/attribution_writes.json` 可 `--rollback`（自测含逐字节还原）；行号引证未证实 2,740 条不硬填（提名≠支持）。注：提交随行 287 条出池清理删除（动笔前已在工作区的本地收口工作，非本卡产物）
+- **结果（终版；11-03 v1 见 b3e081d2）**：`attribution/writeback.py`（零网络零 AI）判定优先级=已烧裁决 supports → 信号层（薄壳口径复用）→ 引擎 draft 质量门（≥2 票+工具类+非 topic 单通道）。**五刀修法（11-03 用户拍板）**：①裁决只补集不覆盖 ②引擎结论直通（质量门只剩 cat∈工具类）③范围外让位（17 库信号全无才打 oos）④AI 旧 db_verdicts 不短路 ⑤旧 fill 带 dbs_src 重判扩库。**A 修（11-04 用户拍板）**：弱路径 0.5 票不直通（TDengine 类测试夹具误配清零）。实数据重跑 9.4s：入圈 12,028 → **fill 1,964**（PG 807/MySQL 683）+ **tag 10,036** + 范围外 453 = **黑洞归零**；**50 金标对账定稿：一致 24/漏判 18/多判 8，按口径达成 31/50**（漏判全设计内归 v1.5 读时 dbs；多判 B 类宽口径用户已接受，见 [[golden-eval-gate]]）。台账 `state/attribution_writes.json` 可 `--rollback`（自测含内容级还原）；行号引证未证实不硬填（提名≠支持）。
 - **输出**：回写函数 + 空白态四类标注 + `state/attribution_writes.json` 台账（可回滚）
 - **验收**：黑洞归零统计（13,242 → 100% 带原因）；golden_eval 对比不退；抽 20 条回写 diff 人工过
 - **防坑**：只补空缺不改历史结论（方案铁律）；写分片用 touch(fn) 惯例（[[interp-cache-sharding]]）
 
-### T4c 误杀复审批
+### T4c 误杀复审批 ｜✅ 2026-11-04 完成（T4b v2 吸收 820 批：mention 遗留 0；postgis ✓PG、sqlkata/querybuilder ✓3 库；sqlkata 主仓出池+无解读待 interpret 复核）
 - **目标**：820 个"提名过被 AI 否决"仓（sqlkata/postgis 级），star 降序重裁决
 - **验收**：sqlkata 判回 5 库、postgis 判回 PostgreSQL（金丝雀案例必须过）
 
 ## 第 5 批 · 常态与专项（三卡并行）
 
-### T5a 增量挂钩 ｜🔄 2026-11-04 实施完成（ba722136），验收=连续 3 晚 CI 绿（观察中）
+### T5a 增量挂钩 ｜✅ 2026-11-08 验收达成（ba722136；11-04 手动 limit=1 冒烟 success + 连续 4 晚定时跑全绿 11-04~11-07）
 - **结果**：collect.yml 两步——①采集前**离线自检绿门**：evidence+attribution 11 套零 API 合成宇宙，红则当晚采集停（以前引擎坏了要等下次全池扫描才发现）；②提交前**程序适配回写**：evidence 各班增量+打满自愈重采落地后当晚收口重判（零 API ~10s 幂等，失败只警告不损采集），interpret 恢复后此步同时兜夜间新解读重开的黑洞；补全率报表进 CI step summary。未动 evidence.yml（用户红线）
-- **验收**：collect.yml 加一步，连续 3 晚报表落盘且不炸（CI 续跑教训 [[ci-resume-pitfalls]]）；attribution selftest 进 CI 后首晚绿——**待 3 晚观察后打 ✅**
+- **验收**：collect.yml 加一步，连续 3 晚报表落盘且不炸（CI 续跑教训 [[ci-resume-pitfalls]]）；attribution selftest 进 CI 后首晚绿——**已达成：11-04 冒烟 success（绿门全绿+回写 1963·打原因 10065+提交已推送）；11-04~11-07 四晚 schedule 全 success（最近一晚 11-07 回写 979·打原因 19847·已推送）**
 
 ### T5b release notes 复验 ｜✅ 2026-11-04 完成（1ccf3db1；触发器+单测+真实冒烟）
 - **结果**：`attribution/rel_notes.py`——行内动词×库名宽匹配（词表=readme_vocab 同源零新词表）+四动词强度排序 add>support>deprecate>drop+去模板头部（Keep a Changelog 样板不产出）+同库取最强；队列 state/relnotes_queue.json（atomic）。单测 10 断言全绿（合成 5 条+模板头+sqlite3 别名+mysqltool 词边界+强度排序+trigger 取最强）。真实冒烟：6 家头部仓最新 release——arrow-adbc 命中 PG add ✓、liquibase/metabase/sqlc/netdata/pop 无命中（纯补丁版无库名，零假阳性）。后续接线：evidence 采集 release 后调 trigger 进复验队列（T5a 挂钩的下一刀）
 - **验收**：构造 5 条合成 release note 单测全绿；真实仓冒烟 1 晚——达标（冒烟取 6 仓即时跑，非整晚）
 
-### T5c Gitee MVP（可提前并行）
+### T5c Gitee MVP（可提前并行） ｜⏸ 2026-11-08 用户裁定：不开卡（搁置，待另行指令）
 - **目标**：GoldenDB/GBase/YashanDB/TDSQL 四库，Gitee API v5 独立 token，平行池 `state/gitee_pool.ndjson` 不并入主池
 - **验收**：独立失败域（Gitee 挂了主流程不受影响）；每晚 ≤500 仓封顶；四库生态清单落盘
 - **防坑**：Gitee 限流 ~60/min 独立核算；README 内容有内容审查风险——输出脱敏（[[llm-paste-moderation]]）
