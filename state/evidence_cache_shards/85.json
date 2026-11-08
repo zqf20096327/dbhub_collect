@@ -6532,13 +6532,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T18:39:25Z",
+  "collected_at": "2026-11-08T11:38:05Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-08",
   "stars": 55,
   "tree": {
-   "sha": "0bf3c031fccc77d9cfdc76be4eba15dead108310",
-   "etag": "W/\"1b2d4a6daca17d4db48e4f410442529a4b7e4293fbb4ec631027a6680438fa15\"",
+   "sha": "846feac073aac76285bdf35bf31f67e06049a564",
+   "etag": "W/\"5496db5b24fe01889ff3fce14e642c6b6455f67bac8d8746b7981c207e30705a\"",
    "truncated": false,
    "path_count": 6,
    "matched": [
@@ -10650,19 +10650,20 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:20:45Z",
+  "collected_at": "2026-11-08T11:51:18Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-08",
   "stars": 10,
   "tree": {
-   "sha": "2285ff59cf168787a21d08a5cec8ecba7e0b6d94",
-   "etag": "W/\"d0bbba0ed71760a8527d77aebe454a0b29af609bbceff234528c41478cd67c55\"",
+   "sha": "c6d4819c5a92486bb37556bc94b3fc1ce4cd81df",
+   "etag": "W/\"a4584fb487eb3c061432c057b2bea97e5d97729eed7fb923a6e133789ca5c84f\"",
    "truncated": false,
-   "path_count": 1506,
+   "path_count": 1540,
    "matched": [
     "composer.json",
     "go/go.mod",
     "docker-compose.redis-cache.yml",
+    "docker-compose.stress.yml",
     "docker-compose.test.yml",
     "docker-compose.trace-test.yml",
     "docker-compose.tunnel.yml",
@@ -10673,11 +10674,15 @@
     ".github/workflows/build-vendor-archive.yml",
     ".github/workflows/docker-build-smoke.yml",
     ".github/workflows/go.yml",
+    ".github/workflows/muchocore-visual.yml",
     ".github/workflows/performance-ab-fpm.yml",
     ".github/workflows/php7-native-features.yml",
     ".github/workflows/php7-preview-archives.yml",
+    ".github/workflows/publish-stress-image.yml",
     ".github/workflows/release-stable.yml",
-    ".github/workflows/validate.yml"
+    ".github/workflows/validate.yml",
+    ".github/workflows/vps-bridge-verify.yml",
+    ".github/workflows/vps-bridge.yml"
    ]
   },
   "files": [
@@ -10716,6 +10721,17 @@
     "bytes": 1159,
     "images": [
      "redis:7.4-alpine"
+    ]
+   },
+   {
+    "path": "docker-compose.stress.yml",
+    "kind": "image",
+    "blob_sha": "b8ee4fc4d6adbcaff1f4417f7570344dbd8e2bd7",
+    "bytes": 2409,
+    "images": [
+     "mariadb:11.4",
+     "${MUCHO_STRESS_APP_IMAGE:-ghcr.io/izkgmd/gmdmucho-core:stress}",
+     "caddy:2.10-alpine"
     ]
    },
    {
@@ -10798,6 +10814,12 @@
     ]
    },
    {
+    "path": ".github/workflows/muchocore-visual.yml",
+    "kind": "ci",
+    "blob_sha": "b66744b8160b356f352c7cd26b3de1a34cdc1ec4",
+    "bytes": 1094
+   },
+   {
     "path": ".github/workflows/performance-ab-fpm.yml",
     "kind": "ci",
     "blob_sha": "e2430942c3d988a8a1f3dadde87184f99ff6a874",
@@ -10822,6 +10844,12 @@
     "bytes": 3192
    },
    {
+    "path": ".github/workflows/publish-stress-image.yml",
+    "kind": "ci",
+    "blob_sha": "39d69518a19ade7f306b90665546494fd19149db",
+    "bytes": 1264
+   },
+   {
     "path": ".github/workflows/release-stable.yml",
     "kind": "ci",
     "blob_sha": "81df7869a76c86fb2dbdcdc4c07f299db9943501",
@@ -10830,12 +10858,24 @@
    {
     "path": ".github/workflows/validate.yml",
     "kind": "ci",
-    "blob_sha": "c19351b719013f6c892f11fc7f0db79c677a0116",
-    "bytes": 40536,
+    "blob_sha": "831a06413738cb7c4cecf8c7050b51f48fe3b9fe",
+    "bytes": 41083,
     "images": [
      "redis:7.4-alpine",
      "mariadb:11.4"
     ]
+   },
+   {
+    "path": ".github/workflows/vps-bridge-verify.yml",
+    "kind": "ci",
+    "blob_sha": "7bd3727bf0de33b9e17598ec8445f7da1b676843",
+    "bytes": 4214
+   },
+   {
+    "path": ".github/workflows/vps-bridge.yml",
+    "kind": "ci",
+    "blob_sha": "b9c5c317f71e280f79df94061e03e7e87ed0e615",
+    "bytes": 6233
    }
   ],
   "clues": {
@@ -11709,13 +11749,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T19:49:34Z",
+  "collected_at": "2026-11-08T11:54:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-11-08",
   "stars": 3,
   "tree": {
-   "sha": "830024256a993463c62bb37bc41a4c8d60dabaa1",
-   "etag": "W/\"b885c6dda2b078c9308906056f4c10a39847402062b5928376d44051f504f8e9\"",
+   "sha": "f8986c396bf8b3f43bae1e6d851e98666a7906ab",
+   "etag": "W/\"ca146bd875f82ab5f1272a1789ec87133f116ae57ff9f2a2b2592f5e280f3484\"",
    "truncated": false,
    "path_count": 127,
    "matched": [
@@ -12819,13 +12859,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T18:43:24Z",
+  "collected_at": "2026-11-08T11:42:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
-  "stars": 28,
+  "pushed_at": "2026-11-08",
+  "stars": 30,
   "tree": {
    "sha": "550af426708cd69434b1d45a6bd7c9dd6408fc0c",
-   "etag": "W/\"776502be10a8d3ee4b9f049e58e1b336038e42f4db5d25300e2a54d6a9e4d2d0\"",
+   "etag": "W/\"cf51dd8c9196a74528d581f544249c5f4e2a7418052ca3dc18d0a85af9957e7d\"",
    "truncated": false,
    "path_count": 3832,
    "matched": [
@@ -12897,6 +12937,144 @@
     "tests/unit_legacy/test_stat_adapters_graph.py",
     "tests/unit_legacy/test_stat_adapters_grid.py"
    ]
+  },
+  "fail_count": 0
+ },
+ "Ce11an/tree-sitter-surrealql": {
+  "fn": "Ce11an/tree-sitter-surrealql",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-08T11:11:33Z",
+  "default_branch": "main",
+  "pushed_at": "2026-04-26",
+  "stars": 12,
+  "tree": {
+   "sha": "7b8f8c54188001f5e6820639c1233523e2cdcf83",
+   "etag": "W/\"5fe7ca4790bd452508970ff4b9f3eb5ff3f7d288823792cef195a9ba0f7d1015\"",
+   "truncated": false,
+   "path_count": 136,
+   "matched": [
+    "Cargo.toml",
+    "package.json",
+    "pyproject.toml",
+    "setup.py",
+    "bindings/go/go.mod",
+    ".github/workflows/ci.yml",
+    ".github/workflows/publish.yml",
+    ".github/workflows/regenerate.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c19cb4b7777c881f772946f74f4ec6f6c33d48d1",
+    "ecosystem": "cargo",
+    "bytes": 538,
+    "names": [
+     "tree-sitter"
+    ],
+    "dev": [
+     "cc"
+    ]
+   },
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "3f2c6509f7e99f9bc23ce813fd435ac6ebdd6578",
+    "ecosystem": "npm",
+    "bytes": 1616,
+    "names": [
+     "node-addon-api",
+     "node-gyp-build",
+     "tree-sitter"
+    ],
+    "dev": [
+     "husky",
+     "lint-staged",
+     "prebuildify",
+     "prettier",
+     "tree-sitter-cli"
+    ]
+   },
+   {
+    "path": "pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "0e1fc3b4cedb877cb23bb9b0c4a33d125f526ac6",
+    "ecosystem": "pyproject",
+    "bytes": 878
+   },
+   {
+    "path": "setup.py",
+    "kind": "dep",
+    "blob_sha": "2d8d42cc1e9ffcca20a8b3c74e4bd10b2bdcd680",
+    "ecosystem": "setup_py",
+    "bytes": 1608
+   },
+   {
+    "path": "bindings/go/go.mod",
+    "kind": "dep",
+    "blob_sha": "bcb2ae79b60984173974c857e4bbc609fe4a3371",
+    "ecosystem": "go",
+    "bytes": 139,
+    "names": [
+     "github.com/smacker/go-tree-sitter"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "e53bf2acf46551a1f666231433a76e35bb01b3e5",
+    "bytes": 2555
+   },
+   {
+    "path": ".github/workflows/publish.yml",
+    "kind": "ci",
+    "blob_sha": "946a3da5cf4a2d77743e01e7a7cd6cdb6c52f2a1",
+    "bytes": 484
+   },
+   {
+    "path": ".github/workflows/regenerate.yml",
+    "kind": "ci",
+    "blob_sha": "75cc0f4a654c5cd8adbfadcb8522d0bd9fd7b8db",
+    "bytes": 320
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "apache/couchdb-jquery-couch": {
+  "fn": "apache/couchdb-jquery-couch",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-08T11:11:39Z",
+  "default_branch": "master",
+  "pushed_at": "2017-04-28",
+  "stars": 12,
+  "tree": {
+   "sha": "9806ac965cb03fce90423bad3d5f771a40ac9fc1",
+   "etag": "W/\"ee4134a60fc587455384630568e70f5376a86ca5d5ae8f4122cdc1c34df706b8\"",
+   "truncated": false,
+   "path_count": 11,
+   "matched": []
+  },
+  "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
   },
   "fail_count": 0
  }

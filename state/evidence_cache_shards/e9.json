@@ -3718,34 +3718,40 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T18:53:40Z",
+  "collected_at": "2026-11-08T11:55:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-08",
   "stars": 0,
   "tree": {
-   "sha": "d3d3474c0f7d95cda60f0bd60f7426802a8f0336",
-   "etag": "W/\"af1a8462086b783c71ea04a32723258b2bf25a39185d1c199c26e97cabc6bd4d\"",
+   "sha": "4a318a48e1e81797825733f1a9662dda784cbcb0",
+   "etag": "W/\"e7bec58d2788511175007096156b803b672667a6a89a00613130c672f1b511a3\"",
    "truncated": false,
-   "path_count": 563,
+   "path_count": 761,
    "matched": [
     "Cargo.toml",
     "crates/base/Cargo.toml",
+    "crates/chunk/Cargo.toml",
+    "crates/codec/Cargo.toml",
     "crates/distsql/Cargo.toml",
-    "crates/domain/Cargo.toml",
-    "crates/executor/Cargo.toml",
     "crates/kv/Cargo.toml",
     "crates/memory/Cargo.toml",
     "crates/meta/Cargo.toml",
     "crates/metrics/Cargo.toml",
+    "crates/model/Cargo.toml",
     "crates/mysql-protocol/Cargo.toml",
     "crates/parser/Cargo.toml",
     "crates/query-smoke/Cargo.toml",
     "crates/runtime/Cargo.toml",
-    "crates/server/Cargo.toml",
-    "crates/session/Cargo.toml",
+    "crates/sessionctx/Cargo.toml",
     "crates/sql/Cargo.toml",
+    "crates/tablecodec/Cargo.toml",
     "crates/types/Cargo.toml",
     "tools/ab/Cargo.toml",
+    "crates/poc/domain/Cargo.toml",
+    "crates/poc/executor/Cargo.toml",
+    "crates/poc/kv/Cargo.toml",
+    "crates/poc/server/Cargo.toml",
+    "crates/poc/session/Cargo.toml",
     "third_party/tikv-shims/api_version/Cargo.toml",
     "third_party/tikv-shims/crypto/Cargo.toml",
     "third_party/tikv-shims/file_system/Cargo.toml",
@@ -3771,9 +3777,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "67d50791f1899b865f9b880c7a39de6230b75223",
+    "blob_sha": "121bd2168cce3a8305526de336baa2ee1271106c",
     "ecosystem": "cargo",
-    "bytes": 6644
+    "bytes": 7039
    },
    {
     "path": "crates/base/Cargo.toml",
@@ -3795,18 +3801,64 @@
     ]
    },
    {
+    "path": "crates/chunk/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "87590b9774822777aaee42a58822bd59a1683dae",
+    "ecosystem": "cargo",
+    "bytes": 1474,
+    "names": [
+     "tidb-base",
+     "tidb-parser",
+     "tidb-types",
+     "tidb-memory",
+     "allocator-api2",
+     "bytes",
+     "zerocopy",
+     "triomphe",
+     "parking_lot"
+    ],
+    "dev": [
+     "flate2",
+     "serde_json",
+     "criterion",
+     "tikv-jemallocator"
+    ]
+   },
+   {
+    "path": "crates/codec/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "2391e67e7d7a9b939dd2553290a7d1aafece0788",
+    "ecosystem": "cargo",
+    "bytes": 1191,
+    "names": [
+     "tidb-base",
+     "tidb-parser",
+     "tidb-types",
+     "tidb-chunk",
+     "log"
+    ],
+    "dev": [
+     "flate2",
+     "serde_json",
+     "criterion",
+     "tikv-jemallocator",
+     "codec",
+     "tidb_query_datatype"
+    ]
+   },
+   {
     "path": "crates/distsql/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ee822e3c26f1107713fc90d7b0f28c35be11fc21",
+    "blob_sha": "f984badad6a53c54064af15a94c3e04522b994af",
     "ecosystem": "cargo",
-    "bytes": 816,
+    "bytes": 815,
     "names": [
      "tidb-runtime",
      "collections",
      "protobuf",
      "serde_json",
      "thiserror",
-     "tidb-kv",
+     "poc-kv",
      "tidb-meta",
      "tidb-metrics",
      "tidb_query_datatype",
@@ -3818,55 +3870,26 @@
     ]
    },
    {
-    "path": "crates/domain/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "7965f72d0364ff09cf5c1ea477cd145b834a357a",
-    "ecosystem": "cargo",
-    "bytes": 968,
-    "names": [
-     "etcd-client",
-     "futures",
-     "serde",
-     "serde_json",
-     "thiserror",
-     "tidb-distsql",
-     "tidb-executor",
-     "tidb-kv",
-     "tidb-meta",
-     "tidb-mysql-protocol",
-     "tidb-sql",
-     "tokio",
-     "tracing",
-     "uuid"
-    ]
-   },
-   {
-    "path": "crates/executor/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "40a10a327f81fbcebfbdff81e1858cd450bc5e72",
-    "ecosystem": "cargo",
-    "bytes": 628,
-    "names": [
-     "tidb-runtime",
-     "tidb-distsql",
-     "tidb-kv",
-     "tidb-meta",
-     "tidb-mysql-protocol",
-     "tidb-sql",
-     "tidb_query_datatype"
-    ]
-   },
-   {
     "path": "crates/kv/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "6298be80f4a9222f88b248b9a530474ac85c3d89",
+    "blob_sha": "0820d4b7e2d5e2cb45ff87a54cc2a1e6a916dae2",
     "ecosystem": "cargo",
-    "bytes": 429,
+    "bytes": 1413,
     "names": [
+     "tidb-base",
+     "tidb-types",
+     "tidb-codec",
+     "tidb-memory",
      "futures",
-     "thiserror",
-     "tikv-client",
-     "tokio"
+     "tokio",
+     "rand",
+     "parking_lot",
+     "log"
+    ],
+    "dev": [
+     "flate2",
+     "serde_json",
+     "criterion"
     ]
    },
    {
@@ -3896,16 +3919,16 @@
    {
     "path": "crates/meta/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "bb1a50d675a9ee94c8254015ff83e597348b775f",
+    "blob_sha": "868d47d715ba1439d97f6ecf3d2d0b8211263de5",
     "ecosystem": "cargo",
-    "bytes": 544,
+    "bytes": 543,
     "names": [
      "codec",
      "futures",
      "serde",
      "serde_json",
      "thiserror",
-     "tidb-kv"
+     "poc-kv"
     ],
     "dev": [
      "tokio"
@@ -3920,6 +3943,22 @@
     "names": [
      "prometheus",
      "nix"
+    ]
+   },
+   {
+    "path": "crates/model/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f37da3a64522e88bff97b6aa2968fbda706a8282",
+    "ecosystem": "cargo",
+    "bytes": 774,
+    "names": [
+     "tidb-base",
+     "tidb-parser",
+     "tidb-types"
+    ],
+    "dev": [
+     "flate2",
+     "serde_json"
     ]
    },
    {
@@ -3947,11 +3986,12 @@
    {
     "path": "crates/parser/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "692a15cff69601f24c62b2b592472ba886829c94",
+    "blob_sha": "b686fed049a55a96ceae44370694406ab4da60bb",
     "ecosystem": "cargo",
-    "bytes": 659,
+    "bytes": 688,
     "names": [
-     "tidb-base"
+     "tidb-base",
+     "log"
     ],
     "dev": [
      "cfgrammar",
@@ -3994,53 +4034,22 @@
     ]
    },
    {
-    "path": "crates/server/Cargo.toml",
+    "path": "crates/sessionctx/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "1332287f6e6675e621e48d7d7b726c3929d149a4",
+    "blob_sha": "889d056329867209c1120d1e4d9024d43ebf1d24",
     "ecosystem": "cargo",
-    "bytes": 1360,
+    "bytes": 1101,
     "names": [
-     "bytes",
-     "clap",
-     "http-body-util",
-     "hyper",
-     "hyper-util",
-     "serde_json",
-     "tidb-distsql",
-     "tidb-domain",
+     "tidb-base",
+     "tidb-types",
      "tidb-kv",
-     "tidb-meta",
-     "tidb-metrics",
-     "tidb-mysql-protocol",
-     "tidb-session",
-     "tidb-runtime",
-     "tikv-jemallocator",
-     "tokio",
-     "tracing",
-     "tracing-subscriber"
-    ]
-   },
-   {
-    "path": "crates/session/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "bfbe415a36a720cf35ad94a8d0e1fe73bbca2592",
-    "ecosystem": "cargo",
-    "bytes": 738,
-    "names": [
-     "futures",
-     "tidb-distsql",
-     "tidb-domain",
-     "tidb-executor",
-     "tidb-kv",
-     "tidb-meta",
-     "tidb-metrics",
-     "tidb-mysql-protocol",
-     "tidb-sql",
-     "tokio"
+     "tidb-memory",
+     "tidb-parser",
+     "parking_lot"
     ],
     "dev": [
-     "tidb-distsql",
-     "tokio"
+     "flate2",
+     "serde_json"
     ]
    },
    {
@@ -4057,21 +4066,48 @@
     ]
    },
    {
+    "path": "crates/tablecodec/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "5398af26cef94df7d41b802c281490823a4e6647",
+    "ecosystem": "cargo",
+    "bytes": 1632,
+    "names": [
+     "tidb-base",
+     "tidb-parser",
+     "tidb-types",
+     "tidb-model",
+     "tidb-chunk",
+     "tidb-codec",
+     "tidb-kv"
+    ],
+    "dev": [
+     "flate2",
+     "serde_json",
+     "criterion",
+     "tikv-jemallocator",
+     "codec",
+     "tidb_query_datatype",
+     "tipb",
+     "collections"
+    ]
+   },
+   {
     "path": "crates/types/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "8efb77e79b482c05a9135b160723c3b62c1fcc24",
+    "blob_sha": "ec7dfb955a87bac23a232fa8de62356c41a07c26",
     "ecosystem": "cargo",
-    "bytes": 943,
+    "bytes": 1283,
     "names": [
      "log",
      "tidb-base",
-     "ryu",
-     "serde",
-     "serde_json"
+     "tidb-parser",
+     "ryu"
     ],
     "dev": [
+     "serde_json",
      "criterion",
      "flate2",
+     "sha2",
      "tikv-jemallocator"
     ]
    },
@@ -4086,6 +4122,108 @@
      "mysql_async",
      "regex",
      "serde_json",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/poc/domain/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "06d033bea95868e26cdd53273d25631f8007e816",
+    "ecosystem": "cargo",
+    "bytes": 965,
+    "names": [
+     "etcd-client",
+     "futures",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "tidb-distsql",
+     "poc-executor",
+     "poc-kv",
+     "tidb-meta",
+     "tidb-mysql-protocol",
+     "tidb-sql",
+     "tokio",
+     "tracing",
+     "uuid"
+    ]
+   },
+   {
+    "path": "crates/poc/executor/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1796001db7a34db33c47047f61aa81ba9e996917",
+    "ecosystem": "cargo",
+    "bytes": 626,
+    "names": [
+     "tidb-runtime",
+     "tidb-distsql",
+     "poc-kv",
+     "tidb-meta",
+     "tidb-mysql-protocol",
+     "tidb-sql",
+     "tidb_query_datatype"
+    ]
+   },
+   {
+    "path": "crates/poc/kv/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "7d3c446c10d20e6a143557d420a34296d07e1d12",
+    "ecosystem": "cargo",
+    "bytes": 428,
+    "names": [
+     "futures",
+     "thiserror",
+     "tikv-client",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/poc/server/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "8ac1856f3192a1bb9e66665e24751da08ee1d09e",
+    "ecosystem": "cargo",
+    "bytes": 1474,
+    "names": [
+     "bytes",
+     "clap",
+     "http-body-util",
+     "hyper",
+     "hyper-util",
+     "serde_json",
+     "tidb-distsql",
+     "poc-domain",
+     "poc-kv",
+     "tidb-meta",
+     "tidb-metrics",
+     "tidb-mysql-protocol",
+     "poc-session",
+     "tidb-runtime",
+     "tikv-jemallocator",
+     "tokio",
+     "tracing",
+     "tracing-subscriber"
+    ]
+   },
+   {
+    "path": "crates/poc/session/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "94dc7dd4dd65930c24f32a39019ab96ccbbdfc40",
+    "ecosystem": "cargo",
+    "bytes": 734,
+    "names": [
+     "futures",
+     "tidb-distsql",
+     "poc-domain",
+     "poc-executor",
+     "poc-kv",
+     "tidb-meta",
+     "tidb-metrics",
+     "tidb-mysql-protocol",
+     "tidb-sql",
+     "tokio"
+    ],
+    "dev": [
+     "tidb-distsql",
      "tokio"
     ]
    },
@@ -4393,8 +4531,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "6ea457f73b28813cdda78979c6d8fbf80dcb3bf0",
-    "bytes": 3814
+    "blob_sha": "8151d569b4a5ca26dd2cd848bd147aba1e4b5d12",
+    "bytes": 4174
    }
   ],
   "clues": {
@@ -16343,6 +16481,224 @@
     "images": [
      "node:20-alpine",
      "nginx:alpine"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "olric-data/olric": {
+  "fn": "olric-data/olric",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-08T10:51:04Z",
+  "default_branch": "master",
+  "pushed_at": "2026-11-03",
+  "stars": 3503,
+  "tree": {
+   "sha": "9092df94501b755a27892a1368d0a144119037af",
+   "etag": "W/\"cb49fd479f80934e0556855499a9b65865c4433dd532e3cebfc8dc614b51433a\"",
+   "truncated": false,
+   "path_count": 205,
+   "matched": [
+    "go.mod",
+    "Dockerfile",
+    ".github/workflows/ci.yml",
+    ".github/workflows/codeql-analysis.yml",
+    ".github/workflows/golangci-lint.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "go.mod",
+    "kind": "dep",
+    "blob_sha": "93dbb630644080cb9aa64ea2bc99df8f2e78ba55",
+    "ecosystem": "go",
+    "bytes": 1595,
+    "names": [
+     "github.com/RoaringBitmap/roaring",
+     "github.com/buraksezer/consistent",
+     "github.com/cespare/xxhash/v2",
+     "github.com/hashicorp/go-multierror",
+     "github.com/hashicorp/go-sockaddr",
+     "github.com/hashicorp/logutils",
+     "github.com/hashicorp/memberlist",
+     "github.com/pkg/errors",
+     "github.com/redis/go-redis/v9",
+     "github.com/sean-/seed",
+     "github.com/stretchr/testify",
+     "github.com/tidwall/btree",
+     "github.com/tidwall/match",
+     "github.com/tidwall/redcon",
+     "github.com/vmihailenco/msgpack/v5",
+     "golang.org/x/sync",
+     "gopkg.in/yaml.v2"
+    ],
+    "dev": [
+     "github.com/armon/go-metrics",
+     "github.com/bits-and-blooms/bitset",
+     "github.com/davecgh/go-spew",
+     "github.com/google/btree",
+     "github.com/hashicorp/errwrap",
+     "github.com/hashicorp/go-immutable-radix",
+     "github.com/hashicorp/go-metrics",
+     "github.com/hashicorp/go-msgpack/v2",
+     "github.com/hashicorp/golang-lru",
+     "github.com/miekg/dns",
+     "github.com/mschoch/smat",
+     "github.com/pmezard/go-difflib",
+     "github.com/vmihailenco/tagparser/v2",
+     "go.uber.org/atomic",
+     "golang.org/x/mod",
+     "golang.org/x/net",
+     "golang.org/x/sys",
+     "golang.org/x/tools",
+     "gopkg.in/yaml.v3"
+    ]
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "f7d3921d030643ee43e9377ab7982516215d44db",
+    "bytes": 424,
+    "images": [
+     "golang:latest",
+     "gcr.io/distroless/base-debian12"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "c55875cab5aacb7a722080438b06249a59e63e04",
+    "bytes": 1398
+   },
+   {
+    "path": ".github/workflows/codeql-analysis.yml",
+    "kind": "ci",
+    "blob_sha": "80da286836ff7dbfb9fd34a7254dbe62a9145a5a",
+    "bytes": 2334
+   },
+   {
+    "path": ".github/workflows/golangci-lint.yml",
+    "kind": "ci",
+    "blob_sha": "f5b2207fb780d829088da130be293661d9681507",
+    "bytes": 511
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [],
+   "matrix_urls": [
+    "https://github.com/sponsors/buraksezer"
+   ]
+  },
+  "fail_count": 0
+ },
+ "arun1729/cog": {
+  "fn": "arun1729/cog",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-08T10:54:05Z",
+  "default_branch": "master",
+  "pushed_at": "2026-10-26",
+  "stars": 402,
+  "tree": {
+   "sha": "5be9863fce7e5b62fb265c85f3543fa8c0e5c527",
+   "etag": "W/\"8c6f41c7da4824b641a3bafc0b22c6a8f601afd5170763df78928d714651902e\"",
+   "truncated": false,
+   "path_count": 100,
+   "matched": [
+    "setup.py",
+    ".github/workflows/python-publish.yml",
+    ".github/workflows/python-tests.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "setup.py",
+    "kind": "dep",
+    "blob_sha": "df877b53473f974d4136be5eebb18b471f4b4ab1",
+    "ecosystem": "setup_py",
+    "bytes": 1035,
+    "names": [
+     "xxhash",
+     "simsimd",
+     "websocket-client",
+     "certifi"
+    ]
+   },
+   {
+    "path": ".github/workflows/python-publish.yml",
+    "kind": "ci",
+    "blob_sha": "d78763ee1ffc79da2406f66d413450b0d558a57b",
+    "bytes": 1850
+   },
+   {
+    "path": ".github/workflows/python-tests.yml",
+    "kind": "ci",
+    "blob_sha": "a7d5502165ee76538457b087a8a862d853beafaa",
+    "bytes": 2226
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [],
+   "matrix_urls": [
+    "https://github.com/ashvardanian/SimSIMD"
+   ]
+  },
+  "fail_count": 0
+ },
+ "emreyalvac/firebase-rs": {
+  "fn": "emreyalvac/firebase-rs",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-08T10:56:28Z",
+  "default_branch": "master",
+  "pushed_at": "2026-04-18",
+  "stars": 182,
+  "tree": {
+   "sha": "ef20b98c626f8076fc5bc21c711c595e8c582d3c",
+   "etag": "W/\"32c490dd812daf118df594aafc4d02ac2d8abcedc87a5f00b7206b67f5bced53\"",
+   "truncated": false,
+   "path_count": 12,
+   "matched": [
+    "Cargo.toml"
+   ]
+  },
+  "files": [
+   {
+    "path": "Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "9144e5ff25ec3a9a7714deed5af7282b56983172",
+    "ecosystem": "cargo",
+    "bytes": 775,
+    "names": [
+     "url",
+     "reqwest",
+     "serde_json",
+     "serde",
+     "itertools",
+     "eventsource-client",
+     "futures-util"
+    ],
+    "dev": [
+     "tokio"
     ]
    }
   ],

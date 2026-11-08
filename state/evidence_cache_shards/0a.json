@@ -1461,15 +1461,15 @@
   "epoch": "sweep-1",
   "status": "partial",
   "caps_v": 2,
-  "collected_at": "2026-11-07T18:37:26Z",
+  "collected_at": "2026-11-08T11:35:55Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-08",
   "stars": 78,
   "tree": {
-   "sha": "878d43b2a08d8097e767ef07f3a44997d833fda5",
-   "etag": "W/\"84ac9362a806092a4f67cbadcfbdc76c2bf9795bc4cfad04e8a7f2e225733a62\"",
+   "sha": "60b93c7cf8f5b0d65d1cc289503b4fcc3c85a6ed",
+   "etag": "W/\"a713261c832adef0415dff17c85f0db7346e82ed1aa78001df57c8abc66266ee\"",
    "truncated": true,
-   "path_count": 38611,
+   "path_count": 38588,
    "matched": [
     "package.json",
     "infra/package.json",
@@ -1532,6 +1532,7 @@
     "packages/drivers/git/package.json",
     "packages/drivers/github-actions/package.json",
     "docker-compose.yml",
+    ".github/workflows/beep-ci-binary.yml",
     ".github/workflows/cache-local-observe.yml",
     ".github/workflows/cache-producer-inspect.yml",
     ".github/workflows/cache-producer-prepare.yml",
@@ -1558,9 +1559,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "44b4c8c6dacac13dd428aa2c31a3817c57968cb9",
+    "blob_sha": "f924ab2a7460a0072fc320d9b37894ace74f9234",
     "ecosystem": "npm",
-    "bytes": 24932,
+    "bytes": 25279,
     "dev": [
      "@babel/cli",
      "@babel/core",
@@ -1969,9 +1970,9 @@
    {
     "path": "apps/professional-desktop/package.json",
     "kind": "dep",
-    "blob_sha": "d4e1076a48481864649b620cd8beaa12c0e1d890",
+    "blob_sha": "4d60e9e76440b476c5b9cbc2182d1ad593b97f1f",
     "ecosystem": "npm",
-    "bytes": 6212,
+    "bytes": 6429,
     "names": [
      "@beep/agents-client",
      "@beep/agents-domain",
@@ -1988,13 +1989,16 @@
      "@beep/documents-use-cases",
      "@beep/editor",
      "@beep/epistemic-client",
-     "@beep/epistemic-config",
      "@beep/epistemic-domain",
      "@beep/epistemic-server",
      "@beep/epistemic-tables",
      "@beep/epistemic-ui",
      "@beep/epistemic-use-cases",
      "@beep/epistemics",
+     "@beep/execution-authority-config",
+     "@beep/execution-authority-domain",
+     "@beep/execution-authority-server",
+     "@beep/execution-authority-use-cases",
      "@beep/file-processing",
      "@beep/graph-3d",
      "@beep/identity",
@@ -2034,6 +2038,7 @@
      "xstate"
     ],
     "dev": [
+     "@alchemy.run/domain",
      "@beep/memfs",
      "@beep/test-runner",
      "@beep/test-utils",
@@ -2338,16 +2343,18 @@
    {
     "path": "packages/_internal/db-admin/package.json",
     "kind": "dep",
-    "blob_sha": "9846833350715758bc8f66eefc0598a36b206302",
+    "blob_sha": "af91c370d8d586127bf6ab1321fd721277ae72fb",
     "ecosystem": "npm",
-    "bytes": 3326,
+    "bytes": 3519,
     "names": [
      "@beep/architecture-lab-tables",
      "@beep/documents-tables",
      "@beep/epistemic-tables",
+     "@beep/execution-authority-tables",
      "@beep/identity",
      "@beep/law-practice-tables",
      "@beep/postgres",
+     "@beep/shared-tables",
      "@beep/workspace-tables",
      "drizzle-orm",
      "effect"
@@ -2355,11 +2362,13 @@
     "dev": [
      "@beep/documents-domain",
      "@beep/epistemic-domain",
+     "@beep/execution-authority-domain",
      "@beep/law-practice-domain",
      "@beep/test-runner",
      "@beep/test-utils",
      "@beep/utils",
      "@effect/platform-bun",
+     "@effect/platform-node",
      "@effect/vitest",
      "@electric-sql/pglite",
      "@types/node",
@@ -2665,9 +2674,9 @@
    {
     "path": "packages/documents/server/package.json",
     "kind": "dep",
-    "blob_sha": "e6f021e9d620d78ad57bf96e4e60e0c72c5f6602",
+    "blob_sha": "1e25d637cdb3883b2bdb9b04e31941ba2d6d8594",
     "ecosystem": "npm",
-    "bytes": 3402,
+    "bytes": 3455,
     "names": [
      "@alchemy.run/domain",
      "@beep/alchemy-postgres",
@@ -2677,15 +2686,19 @@
      "@beep/documents-use-cases",
      "@beep/file-processing",
      "@beep/identity",
+     "@beep/mcp-kit",
+     "@beep/observability",
      "@beep/postgres",
      "@beep/schema",
      "@beep/shared-domain",
+     "@beep/shared-tables",
      "@beep/utils",
      "@noble/hashes",
      "drizzle-orm",
      "effect"
     ],
     "dev": [
+     "@beep/memfs",
      "@beep/pglite",
      "@beep/test-runner",
      "@beep/test-utils",
@@ -2721,13 +2734,14 @@
    {
     "path": "packages/documents/use-cases/package.json",
     "kind": "dep",
-    "blob_sha": "64d9e432a046744b618080b7ab1fca501a837df7",
+    "blob_sha": "7c4f466e254dbfa2280f70c7f7d07e248eccf3e6",
     "ecosystem": "npm",
-    "bytes": 3218,
+    "bytes": 3042,
     "names": [
      "@alchemy.run/domain",
      "@beep/documents-domain",
      "@beep/identity",
+     "@beep/observability",
      "@beep/schema",
      "@beep/shared-domain",
      "effect"
@@ -3176,6 +3190,12 @@
     ]
    },
    {
+    "path": ".github/workflows/beep-ci-binary.yml",
+    "kind": "ci",
+    "blob_sha": "25030e84838ea605bec3044cf5f2d34f15678ca1",
+    "bytes": 3065
+   },
+   {
     "path": ".github/workflows/cache-local-observe.yml",
     "kind": "ci",
     "blob_sha": "d23ea792f01ecc182f3ff9c342602e5271c4bfb1",
@@ -3208,8 +3228,8 @@
    {
     "path": ".github/workflows/check.yml",
     "kind": "ci",
-    "blob_sha": "00afcc8eab42877ac9d7fe7fac73bfd2efce34c5",
-    "bytes": 79904
+    "blob_sha": "d7aad2185af684c6c4bbfc06afef2060f23e1b6d",
+    "bytes": 80248
    },
    {
     "path": ".github/workflows/data-sync.yml",
@@ -3244,8 +3264,8 @@
    {
     "path": ".github/workflows/heavy.yml",
     "kind": "ci",
-    "blob_sha": "131b15b77820fb919ff8ba1d90e6a40f26648b03",
-    "bytes": 44982
+    "blob_sha": "579a331e163e81b180a9b0aebc1bc9711095882c",
+    "bytes": 45227
    },
    {
     "path": ".github/workflows/history-notes-publish.yml",
@@ -3274,14 +3294,14 @@
    {
     "path": ".github/workflows/release-desktop.yml",
     "kind": "ci",
-    "blob_sha": "f584692747637fc3c5ce8916e89fbe8845b416d2",
-    "bytes": 25937
+    "blob_sha": "16173146562bd99a96692d2b24dc177a7e01afcd",
+    "bytes": 26038
    },
    {
     "path": ".github/workflows/rerun-runner-loss.yml",
     "kind": "ci",
-    "blob_sha": "ae512f56f56a41df3cff9b70feafd3a621cc7330",
-    "bytes": 2867
+    "blob_sha": "58fa16461106d03a96687ede96c2ce15d0787556",
+    "bytes": 2745
    },
    {
     "path": ".github/workflows/skills-update-train.yml",
@@ -3292,8 +3312,8 @@
    {
     "path": ".github/workflows/storybook.yml",
     "kind": "ci",
-    "blob_sha": "19a35e5b1f7e4ee4d4ce9b6307ad0249f3699b1f",
-    "bytes": 8878
+    "blob_sha": "998f00c28940fb58e361fec90279ba9a40bf842f",
+    "bytes": 8934
    }
   ],
   "clues": {
@@ -3430,6 +3450,7 @@
     "explorations/uspto-patent-driver-depth/reviews/2026-06-29-codex-research.md",
     "goals/alchemy-vault-sync-slice/decisions/2026-11-06-driver-package-location.md",
     "goals/alchemy-vault-sync-slice/decisions/2026-11-06-provenance-in-driver-rows.md",
+    "goals/alchemy-vault-sync-slice/decisions/2026-11-07-api-identity-adapters.md",
     "goals/alchemy-vault-sync-slice/decisions/2026-11-07-driver-coverage-floor-pr2b.md",
     "goals/alchemy-vault-sync-slice/decisions/2026-11-07-pr-2b-driver-complete.md",
     "goals/boolean-creep/data/2026-09-22-drivers-stream-state-projection.json",
@@ -3450,6 +3471,8 @@
     "goals/boolean-creep/designs/r3-foundation-mention-plugin-lookup-phase.md",
     "goals/boolean-creep/designs/r40-drivers-openai-compat-stream-choice-writer.md",
     "goals/box-driver/ops/manifest.json",
+    "goals/citation-extraction-engine/decisions/2026-11-08-normalize-nested-safety-attribution-in-the-existing-effect-timing-adapter.md",
+    "goals/claim-check-performance/decisions/2026-11-07-preserve-intrinsic-adapter-runtime-immutability-at-the-fixed-sdk-boundary.md",
     "goals/claim-check-performance/history/2026-11-03-inspection-source-adapter.json",
     "goals/claim-check-performance/history/2026-11-03-source-adapter-coverage-repair.json",
     "goals/claim-check-performance/research/implementation-inspection-adapter-001.json",
@@ -3505,10 +3528,7 @@
     "goals/freshbooks-driver/research/.gitkeep",
     "goals/freshbooks-driver/research/OPPORTUNITIES.md",
     "goals/freshbooks-driver/research/SOURCES.md",
-    "goals/freshbooks-driver/research/live-spike-harness.md",
-    "goals/goal-portfolio-driver/history/.gitkeep",
-    "goals/goal-portfolio-driver/ops/manifest.json",
-    "goals/goal-portfolio-driver/ops/queue.json"
+    "goals/freshbooks-driver/research/live-spike-harness.md"
    ]
   },
   "fail_count": 0
@@ -10055,15 +10075,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:55:04Z",
+  "collected_at": "2026-11-08T11:34:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-08",
   "stars": 111,
   "tree": {
-   "sha": "0f932867fe7c48c9f9a03d437e02e8ccd7c8300c",
-   "etag": "W/\"d73e1c4d7fd14483dddf2190cfb9f64c4ee89b7dc40af543a62f86e3ab94e427\"",
+   "sha": "46c4edc57291c2fb053152e3fa6136c4d70880b3",
+   "etag": "W/\"f61d930950c7ad680b2a577b6a1ffeba759a4ced07de70ed4eddeedbe15de293\"",
    "truncated": false,
-   "path_count": 871,
+   "path_count": 895,
    "matched": [
     "Cargo.toml",
     "crates/cli/Cargo.toml",
@@ -10165,9 +10185,9 @@
    {
     "path": "crates/server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "6b8ed5175097f56ffb540ef73217a0a11db49b8a",
+    "blob_sha": "168f178bc73804572356282d18b836a4b4f140b1",
     "ecosystem": "cargo",
-    "bytes": 4521,
+    "bytes": 4684,
     "names": [
      "better-auth",
      "better-auth-diesel-sqlite",
@@ -10229,9 +10249,9 @@
    {
     "path": "crates/skardi/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9e2f9c8efa5359122554d6a9e1d879efe54aec83",
+    "blob_sha": "960004cf25f2149b1403efcaec0d6c0af0e00a08",
     "ecosystem": "cargo",
-    "bytes": 9838,
+    "bytes": 11326,
     "names": [
      "skardi-source-pack",
      "anyhow",
@@ -10281,6 +10301,7 @@
      "liteparse",
      "blake3",
      "glob",
+     "pulldown-cmark",
      "encoding_rs",
      "htmd",
      "feed-rs",
@@ -10368,8 +10389,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "91841775fdd7bd478c87339b1cc39331b50827f8",
-    "bytes": 39835,
+    "blob_sha": "4198de57ef6dd48837bbeec13ccc71aa43e94dec",
+    "bytes": 40370,
     "images": [
      "mysql:8.0",
      "pgvector/pgvector:pg16",
@@ -12347,15 +12368,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:01:49Z",
+  "collected_at": "2026-11-08T11:38:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
-  "stars": 53,
+  "pushed_at": "2026-11-08",
+  "stars": 54,
   "tree": {
-   "sha": "1e7ee8ab4e25122c284ab6b645440692273cf642",
-   "etag": "W/\"675f98c26acdb9b2ee250240a081b6fb7e36b0ec321dd677b27b05ede88a9810\"",
+   "sha": "241dbcbbd2987fa6df0159ef16ce18b8bd15840a",
+   "etag": "W/\"c6c26df546d0e21c903e538279388b0af956852c2e4635b6c58d3add19f48560\"",
    "truncated": false,
-   "path_count": 1055,
+   "path_count": 1057,
    "matched": [
     "go.mod",
     "package.json",
@@ -13856,15 +13877,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:36:13Z",
+  "collected_at": "2026-11-08T11:44:47Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-07",
   "stars": 22,
   "tree": {
-   "sha": "8139ecc5b7010ba54163a1c1d3aac8d7cbaea55c",
-   "etag": "W/\"25042f328fe0a3e8c861ac6740fcad113d079bacdae0b8ab733fc5e1f0aba063\"",
+   "sha": "57e1473ece804a6424c2155e5b48af520b3d6185",
+   "etag": "W/\"97732f7bfa1dc07285681ab52ae2585641833a923d57c88e02477eec8d822ac4\"",
    "truncated": false,
-   "path_count": 322,
+   "path_count": 324,
    "matched": [
     "mcp-server/pyproject.toml",
     "mcp-server/requirements.txt",
@@ -13875,7 +13896,7 @@
    {
     "path": "mcp-server/pyproject.toml",
     "kind": "dep",
-    "blob_sha": "53ac4d0448a4b9ae28df083e1181aac0a1f05720",
+    "blob_sha": "15bb34b1434a245e911c0ca398138f186888bdcd",
     "ecosystem": "pyproject",
     "bytes": 1628,
     "names": [
@@ -18882,6 +18903,143 @@
    "changelog": [
     "CHANGELOG.md"
    ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "weitw/Notes": {
+  "fn": "weitw/Notes",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-08T11:03:39Z",
+  "default_branch": "master",
+  "pushed_at": "2020-10-20",
+  "stars": 38,
+  "tree": {
+   "sha": "0d3e61fb047684f9c29bb6deb9dc5ad8463b17e1",
+   "etag": "W/\"9af3fca4dbc91fe72571edd0042307dd4ae642ecf922945f42897bd466cc8273\"",
+   "truncated": false,
+   "path_count": 179,
+   "matched": []
+  },
+  "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "AayushK47/fireshell": {
+  "fn": "AayushK47/fireshell",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-08T11:10:31Z",
+  "default_branch": "master",
+  "pushed_at": "2022-10-05",
+  "stars": 14,
+  "tree": {
+   "sha": "6b935ce92b84974b768ae5d650ac8499bac8da1d",
+   "etag": "W/\"3e57f59fa2e61db7c18641012948286482df071092f2b6c49094e14dc25954ed\"",
+   "truncated": false,
+   "path_count": 28,
+   "matched": [
+    "package.json"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "0d0e349fe71cfe835054c00be97c0eaca0209dc7",
+    "ecosystem": "npm",
+    "bytes": 1512,
+    "names": [
+     "babel-preset-latest-node",
+     "codecov",
+     "commander",
+     "dotenv",
+     "firebase",
+     "inquirer",
+     "shortid"
+    ],
+    "dev": [
+     "@babel/cli",
+     "@babel/core",
+     "eslint",
+     "jest"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "Artriai/misight-viewer": {
+  "fn": "Artriai/misight-viewer",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-08T11:14:19Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-07",
+  "stars": 4,
+  "tree": {
+   "sha": "c0554b96fa61ee4f431a7f7bd139883f4bb5dc27",
+   "etag": "W/\"aba558a0ecc9aaf8ddf3c5d67744a6c8f222d9182ebc2a6a79420e1ea3340d3b\"",
+   "truncated": false,
+   "path_count": 26,
+   "matched": [
+    "build.gradle",
+    "app/build.gradle",
+    ".github/workflows/build.yml",
+    ".github/workflows/device-tests.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "build.gradle",
+    "kind": "dep",
+    "blob_sha": "ccfe716be26540803e3d162c8fdbd6921ef45d81",
+    "ecosystem": "gradle",
+    "bytes": 73
+   },
+   {
+    "path": "app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "db4da262a6f03bfa2c738f2c4b0308115475e235",
+    "ecosystem": "gradle",
+    "bytes": 1117
+   },
+   {
+    "path": ".github/workflows/build.yml",
+    "kind": "ci",
+    "blob_sha": "f0ba74db80116916ed2463103a85f4399af8fb12",
+    "bytes": 1743
+   },
+   {
+    "path": ".github/workflows/device-tests.yml",
+    "kind": "ci",
+    "blob_sha": "7d86b09986ed423845190e3f22b241216ec0c594",
+    "bytes": 2127
+   }
+  ],
+  "clues": {
+   "changelog": [],
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
