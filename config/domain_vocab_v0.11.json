@@ -1,0 +1,551 @@
+{
+ "vocab_ver": "0.11",
+ "n_words": 75,
+ "source": "受控词表v0.10（A类修复版）+ platform 域 4 词草案（1107）· 1107 定版",
+ "domains": [
+  {
+   "domain": "data-pipeline",
+   "cn": "数据管道",
+   "words": [
+    {
+     "slug": "cdc",
+     "cn": "变更数据捕获",
+     "syn": "change data capture / CDC / 变更捕获 / binlog 订阅",
+     "def": "日志流实时捕获行级变更，≠data-sync"
+    },
+    {
+     "slug": "binlog",
+     "cn": "日志解析",
+     "syn": "binary log / 日志解析器 / WAL 解析",
+     "def": "解析事务日志为事件的底层库，≠cdc"
+    },
+    {
+     "slug": "etl",
+     "cn": "ETL/数据集成",
+     "syn": "extract transform load / ELT / data integration / 数据集成",
+     "def": "跨源抽取-转换-加载，≠stream-processing"
+    },
+    {
+     "slug": "data-sync",
+     "cn": "数据同步",
+     "syn": "data synchronization / 双写同步 / 数据搬运",
+     "def": "库/端间批量或定时搬运，≠cdc"
+    },
+    {
+     "slug": "data-pipeline",
+     "cn": "数据管道",
+     "syn": "data pipeline / 数据流水线",
+     "def": "多级处理流水线通称（兜底）"
+    },
+    {
+     "slug": "replication",
+     "cn": "副本同步",
+     "syn": "主从复制 / replica / 库间同步 / multi-source replication / 多活 / 双活 / active-active",
+     "def": "库实例间保持副本一致，≠cdc"
+    },
+    {
+     "slug": "stream-processing",
+     "cn": "流处理",
+     "syn": "streaming / 流计算 / 实时计算",
+     "def": "数据流实时计算（窗口/聚合）"
+    },
+    {
+     "slug": "kafka-connect",
+     "cn": "Kafka 连接器",
+     "syn": "kafka connector / source connector / sink connector",
+     "def": "实现 Kafka Connect 框架的连接器"
+    }
+   ]
+  },
+  {
+   "domain": "backup-restore",
+   "cn": "备份恢复",
+   "words": [
+    {
+     "slug": "backup",
+     "cn": "备份",
+     "syn": "backup / 备份工具",
+     "def": "物理或逻辑备份数据库，≠replication"
+    },
+    {
+     "slug": "restore",
+     "cn": "恢复",
+     "syn": "restore / recovery / 还原",
+     "def": "从备份重建数据库"
+    },
+    {
+     "slug": "dump",
+     "cn": "逻辑导出",
+     "syn": "dump / pg_dump / mysqldump 类",
+     "def": "导出为 SQL/文本的工具形态"
+    },
+    {
+     "slug": "snapshot",
+     "cn": "快照",
+     "syn": "snapshot / 一致性快照 / 卷快照",
+     "def": "基于存储/文件系统的时点副本"
+    },
+    {
+     "slug": "pitr",
+     "cn": "时间点恢复",
+     "syn": "point-in-time recovery / PITR / 时点恢复 / wal 归档回放",
+     "def": "按 WAL/binlog 回放任意时点"
+    }
+   ]
+  },
+  {
+   "domain": "migration",
+   "cn": "迁移",
+   "words": [
+    {
+     "slug": "schema-migration",
+     "cn": "结构迁移",
+     "syn": "schema migration / DDL 版本管理 / flyway / liquibase 类",
+     "def": "schema 变更版本化管理执行"
+    },
+    {
+     "slug": "data-migration",
+     "cn": "数据迁移",
+     "syn": "data migration / 异构迁移 / 数据库搬家 / 升级迁移",
+     "def": "跨库/跨版本一次性搬迁数据"
+    },
+    {
+     "slug": "dialect-rewrite",
+     "cn": "方言改写",
+     "syn": "SQL 转换 / dialect conversion / SQL 兼容改写",
+     "def": "SQL 方言间语法转换工具"
+    }
+   ]
+  },
+  {
+   "domain": "connectivity",
+   "cn": "连接/代理/驱动",
+   "words": [
+    {
+     "slug": "pooler",
+     "cn": "连接池",
+     "syn": "connection pool / pooler / pgbouncer 类",
+     "def": "数据库连接池化管理，≠proxy"
+    },
+    {
+     "slug": "proxy",
+     "cn": "数据库代理",
+     "syn": "database proxy / 中间件（代理型）",
+     "def": "代理协议居中转发/改写请求"
+    },
+    {
+     "slug": "router",
+     "cn": "路由分发",
+     "syn": "query router / 读写分离 / 分片路由 / 分库分表 / sharding / shardingsphere 类",
+     "def": "按规则路由到不同后端，含分库分表"
+    },
+    {
+     "slug": "load-balancer",
+     "cn": "负载均衡",
+     "syn": "load balancer / 负载",
+     "def": "对请求/节点做负载均衡"
+    },
+    {
+     "slug": "jdbc",
+     "cn": "JDBC 驱动",
+     "syn": "jdbc driver",
+     "def": "实现 JDBC 接口的驱动"
+    },
+    {
+     "slug": "odbc",
+     "cn": "ODBC 驱动",
+     "syn": "odbc driver",
+     "def": "ODBC 协议驱动"
+    },
+    {
+     "slug": "driver",
+     "cn": "数据库驱动",
+     "syn": "driver / client library / client-library / client sdk / 连接库 / psycopg 类",
+     "def": "语言级连接驱动/客户端库，≠jdbc"
+    }
+   ]
+  },
+  {
+   "domain": "orm-query",
+   "cn": "ORM/查询",
+   "words": [
+    {
+     "slug": "orm",
+     "cn": "ORM",
+     "syn": "object relational mapper / 实体映射",
+     "def": "对象模型与关系表映射层"
+    },
+    {
+     "slug": "query-builder",
+     "cn": "查询构建器",
+     "syn": "query builder / sql builder",
+     "def": "链式 API 构造 SQL，≠orm"
+    },
+    {
+     "slug": "mapper",
+     "cn": "SQL 映射",
+     "syn": "data mapper / mybatis 类 / sql 映射",
+     "def": "手写 SQL + 对象映射框架"
+    }
+   ]
+  },
+  {
+   "domain": "observability",
+   "cn": "监控观测",
+   "words": [
+    {
+     "slug": "exporter",
+     "cn": "指标导出器",
+     "syn": "prometheus exporter / metrics exporter / /metrics",
+     "def": "按 Prometheus 格式暴露指标"
+    },
+    {
+     "slug": "metrics",
+     "cn": "指标采集",
+     "syn": "metrics / 监控指标 / 采集",
+     "def": "采集/存储数据库运行指标"
+    },
+    {
+     "slug": "slow-query",
+     "cn": "慢查询分析",
+     "syn": "slow query log / 慢 SQL",
+     "def": "慢查询日志采集与分析"
+    },
+    {
+     "slug": "query-analytics",
+     "cn": "查询分析",
+     "syn": "query analysis / performance insight / 性能洞察",
+     "def": "查询负载统计与优化建议"
+    },
+    {
+     "slug": "dashboard",
+     "cn": "监控面板",
+     "syn": "dashboard / grafana 面板",
+     "def": "监控可视化面板"
+    },
+    {
+     "slug": "alerting",
+     "cn": "告警",
+     "syn": "alerting / alarm / 阈值告警",
+     "def": "基于阈值的告警"
+    },
+    {
+     "slug": "observability",
+     "cn": "可观测",
+     "syn": "observability / tracing",
+     "def": "日志+指标+追踪合称（兜底）"
+    }
+   ]
+  },
+  {
+   "domain": "admin-client",
+   "cn": "管理客户端",
+   "words": [
+    {
+     "slug": "admin-cli",
+     "cn": "管理命令行",
+     "syn": "cli / admin tool / 命令行管理",
+     "def": "数据库管理命令行工具"
+    },
+    {
+     "slug": "gui-client",
+     "cn": "GUI 客户端",
+     "syn": "gui client / desktop client / DBeaver 类",
+     "def": "图形界面数据库客户端"
+    },
+    {
+     "slug": "web-console",
+     "cn": "Web 控制台",
+     "syn": "web ui / adminer 类 / web console",
+     "def": "浏览器访问的管理控制台"
+    },
+    {
+     "slug": "sql-editor",
+     "cn": "SQL 编辑器",
+     "syn": "sql editor / query editor",
+     "def": "以编写/执行 SQL 为主业的编辑器"
+    }
+   ]
+  },
+  {
+   "domain": "testing",
+   "cn": "测试质量",
+   "words": [
+    {
+     "slug": "benchmark",
+     "cn": "基准测试",
+     "syn": "benchmark / tpc / 性能压测",
+     "def": "数据库性能基准测试"
+    },
+    {
+     "slug": "test-data",
+     "cn": "测试数据",
+     "syn": "test data generator / 数据伪造 / faker",
+     "def": "生成测试/伪造数据填充"
+    },
+    {
+     "slug": "fuzzing",
+     "cn": "模糊测试",
+     "syn": "fuzz / fuzzer",
+     "def": "对 DB/SQL 模糊测试找缺陷"
+    },
+    {
+     "slug": "sql-linter",
+     "cn": "SQL 检查",
+     "syn": "sql lint / sql format / 规范检查",
+     "def": "SQL 风格规范检查/格式化"
+    },
+    {
+     "slug": "chaos",
+     "cn": "混沌工程",
+     "syn": "chaos engineering / fault injection",
+     "def": "注入故障验证数据库韧性"
+    }
+   ]
+  },
+  {
+   "domain": "modeling",
+   "cn": "建模设计",
+   "words": [
+    {
+     "slug": "erd",
+     "cn": "ER 图",
+     "syn": "erd / entity relationship / 关系图",
+     "def": "从库/模型生成或编辑 ER 图"
+    },
+    {
+     "slug": "data-modeling",
+     "cn": "数据建模",
+     "syn": "data modeling / 概念建模",
+     "def": "设计期数据建模工具"
+    },
+    {
+     "slug": "schema-design",
+     "cn": "结构设计",
+     "syn": "schema design / 表结构设计 / DDL 设计",
+     "def": "表结构可视化设计并输出 DDL"
+    }
+   ]
+  },
+  {
+   "domain": "security",
+   "cn": "安全审计",
+   "words": [
+    {
+     "slug": "audit-log",
+     "cn": "审计日志",
+     "syn": "audit logging / sql audit",
+     "def": "数据库操作审计记录"
+    },
+    {
+     "slug": "data-masking",
+     "cn": "数据脱敏",
+     "syn": "masking / anonymization / 脱敏 / 匿名化",
+     "def": "敏感数据脱敏/匿名化"
+    },
+    {
+     "slug": "access-control",
+     "cn": "访问控制",
+     "syn": "access control / rbac / 权限管理",
+     "def": "数据库访问权限控制"
+    },
+    {
+     "slug": "sql-firewall",
+     "cn": "SQL 防火墙",
+     "syn": "sql firewall / 注入防护",
+     "def": "拦截危险 SQL"
+    },
+    {
+     "slug": "encryption",
+     "cn": "加密",
+     "syn": "encryption / tde / 透明加密",
+     "def": "存储/传输层加密"
+    }
+   ]
+  },
+  {
+   "domain": "ha",
+   "cn": "高可用",
+   "words": [
+    {
+     "slug": "failover",
+     "cn": "故障转移",
+     "syn": "failover / 自动切换 / 自动故障转移",
+     "def": "主库故障时自动切换从库"
+    },
+    {
+     "slug": "orchestration",
+     "cn": "部署编排",
+     "syn": "orchestration / patroni 类 / cluster management / 集群编排 / control plane / 管理面",
+     "def": "实例部署编排自动化"
+    },
+    {
+     "slug": "switchover",
+     "cn": "计划切换",
+     "syn": "switchover / 在线切换",
+     "def": "计划内主从切换"
+    }
+   ]
+  },
+  {
+   "domain": "engine",
+   "cn": "内核/引擎",
+   "words": [
+    {
+     "slug": "storage-engine",
+     "cn": "存储引擎",
+     "syn": "storage engine",
+     "def": "可插拔/独立存储引擎实现"
+    },
+    {
+     "slug": "columnar",
+     "cn": "列存",
+     "syn": "columnar / column store",
+     "def": "列式存储引擎/加速器"
+    },
+    {
+     "slug": "distributed-sql",
+     "cn": "分布式 SQL",
+     "syn": "distributed sql / 分布式数据库内核",
+     "def": "分布式 SQL 引擎"
+    },
+    {
+     "slug": "htap",
+     "cn": "HTAP",
+     "syn": "hybrid tp/ap / 混合负载",
+     "def": "混合事务分析引擎"
+    },
+    {
+     "slug": "time-series",
+     "cn": "时序",
+     "syn": "time series / tsdb",
+     "def": "时序存储引擎/扩展"
+    },
+    {
+     "slug": "embedded",
+     "cn": "嵌入式",
+     "syn": "embedded / 进程内库",
+     "def": "进程内嵌入式数据库"
+    },
+    {
+     "slug": "parser",
+     "cn": "SQL 解析器",
+     "syn": "sql parser / lexer / 语法解析",
+     "def": "SQL 词法语法解析库"
+    },
+    {
+     "slug": "optimizer",
+     "cn": "优化器",
+     "syn": "query optimizer / 计划优化",
+     "def": "查询计划优化实现/研究"
+    }
+   ]
+  },
+  {
+   "domain": "platform",
+   "cn": "平台/部署",
+   "words": [
+    {
+     "slug": "operator",
+     "cn": "K8s Operator",
+     "syn": "kubernetes operator / db operator",
+     "def": "K8s 上管理数据库的 Operator"
+    },
+    {
+     "slug": "dbaas",
+     "cn": "DBaaS",
+     "syn": "database as a service / 云数据库控制面",
+     "def": "数据库即服务平台"
+    },
+    {
+     "slug": "semantic-layer",
+     "cn": "语义层",
+     "syn": "",
+     "def": "BI/指标的统一语义建模层，≠analytics",
+     "draft": true
+    },
+    {
+     "slug": "db-branching",
+     "cn": "数据库分支",
+     "syn": "",
+     "def": "秒级克隆/分支库用于开发测试",
+     "draft": true
+    },
+    {
+     "slug": "baas",
+     "cn": "后端即服务",
+     "syn": "",
+     "def": "托管后端与数据库一体化平台",
+     "draft": true
+    },
+    {
+     "slug": "local-db-manager",
+     "cn": "本地实例管理",
+     "syn": "",
+     "def": "本机多版本数据库实例启停管理",
+     "draft": true
+    }
+   ]
+  },
+  {
+   "domain": "ai-data",
+   "cn": "AI 数据",
+   "words": [
+    {
+     "slug": "vector-search",
+     "cn": "向量检索",
+     "syn": "vector search / ann / 近邻检索",
+     "def": "向量近邻检索引擎/扩展"
+    },
+    {
+     "slug": "embedding-store",
+     "cn": "向量存储",
+     "syn": "embedding storage / 向量库",
+     "def": "面向 embedding 的存储，≠vector-search"
+    },
+    {
+     "slug": "semantic-search",
+     "cn": "语义检索",
+     "syn": "semantic search / 语义搜索",
+     "def": "基于语义理解的文本检索"
+    },
+    {
+     "slug": "knowledge-graph",
+     "cn": "知识图谱",
+     "syn": "knowledge graph / graph rag",
+     "def": "图谱构建/图存储与检索"
+    },
+    {
+     "slug": "agent-memory",
+     "cn": "智能体记忆",
+     "syn": "agent memory / llm memory",
+     "def": "为 LLM agent 提供持久记忆"
+    }
+   ]
+  },
+  {
+   "domain": "data-wrangling",
+   "cn": "数据加工",
+   "words": [
+    {
+     "slug": "data-export",
+     "cn": "数据导出",
+     "syn": "export / 结果导出",
+     "def": "查询结果/表数据导出文件"
+    },
+    {
+     "slug": "csv-tool",
+     "cn": "CSV 工具",
+     "syn": "csv import / csv 处理",
+     "def": "CSV 与库互转工具"
+    },
+    {
+     "slug": "analytics",
+     "cn": "分析查询",
+     "syn": "analytics / olap 查询 / 交互分析",
+     "def": "BI/报表/即席分析，≠query-analytics"
+    }
+   ]
+  }
+ ]
+}

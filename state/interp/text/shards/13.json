@@ -1,0 +1,3038 @@
+{
+ "9e2b7ad73f9c": {
+  "identity": {
+   "one_liner": "OCaml 的 sqlite3 绑定高层封装库，提供资源管理与类型化查询 API。",
+   "review": "Sqlite3_utils 是 OCaml sqlite3 绑定之上的高层封装库，用于管理数据库连接资源并处理 SQL 语句的类型标注。函数提供 f/f_exn 两种版本，后者在返回错误码时抛出 RcError 异常，前者返回 result 类型；通过 with_db 确保句柄在代码返回后关闭。Ty 模块提供类型组合子。README 标注该库处于 beta 阶段。",
+   "highlights": [
+    "提供 with_db 等资源管理函数，确保数据库句柄在代码块结束后关闭",
+    "函数区分 f 与 f_exn 两类版本，前者返回 ('a, Rc.t) result，后者在错误时抛出 RcError",
+    "提供基于 ~ty 参数的 Typed API，通过 Ty 模块的组合子声明参数与返回列的类型"
+   ],
+   "use_cases": [
+    "在 OCaml 项目中读写 SQLite 数据库并需要资源自动释放",
+    "需要对 SQL 参数和返回值进行类型声明的参数化查询",
+    "使用 WITH RECURSIVE 等 SQLite 特性执行递归计算"
+   ]
+  },
+  "sha": "9e2b7ad73f9c",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3face10bd08": {
+  "identity": {
+   "one_liner": "提供 Northwind 与 ecommerce 示例数据库的建库脚本集合，覆盖多种数据库",
+   "review": "该仓库包含用于在 MySQL、PostgreSQL、MS SQL Server、SQLite、MongoDB 中创建并加载示例数据库（经典 Northwind 及较新的 ecommerce 模型）的脚本。提供 Docker Compose 配置与 renew 系列脚本，可在数秒内重建带测试数据的数据库；同时附 ER 图、验证查询与 JSON 平面文件，适合开发者做学习、教程或测试用途。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、MS SQL Server、SQLite、MongoDB 五种数据库的建库与数据加载脚本",
+    "提供 Docker Compose 配置与 renew 脚本，可重建容器并自动填入示例数据",
+    "ecommerce 样例含外键、CHECK、JSON 列、生成列、全文索引等结构；MongoDB 版本采用内嵌文档模型"
+   ],
+   "use_cases": [
+    "跟随教程或书籍时搭建 Northwind 数据集练习 SQL",
+    "为集成测试或演示快速创建带测试数据的数据库环境",
+    "对比学习关系型表结构与 MongoDB 文档模型的差异"
+   ]
+  },
+  "sha": "c3face10bd08",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "57bd032f3d87": {
+  "identity": {
+   "one_liner": "Go 编写的模块化单体架构任务管理应用，可单进程或多进程部署。",
+   "review": "一个以模块化单体形式构建的任务管理应用，编译为单个二进制文件，支持单进程部署，也支持每个实例运行部分模块的多进程部署。技术栈包含 Go、htmx、NATS、PostgreSQL 与 ZITADEL，基础设施基于 Azure K3s 环境并使用 Terraform 自动化。适合研究模块化单体部署方式的开发者参考，部署前需按文档配置 hosts、NATS、PostgreSQL 和 ZITADEL。",
+   "highlights": [
+    "支持单进程与多进程两种部署模式，多进程模式下每个实例可运行模块子集",
+    "使用 NATS 提供消息、WebSocket、KV 存储与对象存储，PostgreSQL 作为数据库，ZITADEL 负责身份与访问管理",
+    "提供 ci.sh、cd.sh、cleanup.sh 脚本，以 K8s overlay 分别部署单进程与微服务形态"
+   ],
+   "use_cases": [
+    "以模块化单体方式运行任务管理应用",
+    "在 Azure K3s 环境中演练单二进制与多进程部署流程",
+    "通过 smtp4dev Web 界面查看应用发出的邮件（如密码修改通知、任务到期提醒）"
+   ]
+  },
+  "sha": "57bd032f3d87",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "906bcd56db41": {
+  "identity": {
+   "one_liner": "本地优先的跨平台数据库客户端，结合 SQL 工作台与自选模型的 AI 助手",
+   "review": "Chat2DB Community 是一个免费、本地优先的数据库客户端与 SQL 工作区，面向开发者、DBA、分析师和数据团队，支持桌面、Web、Docker 和 CLI 部署。它通过 JDBC 及插件连接 MySQL、PostgreSQL、MongoDB 等 40 余种数据库，提供元数据浏览、数据编辑、导入导出、图表仪表盘和 ER 图；AI 部分采用自备模型方式生成、解释和优化 SQL。数据源密码与 AI API 密钥使用 AES-256-GCM 加密，依赖需手动初始化并妥善保管的加密密钥文件。",
+   "highlights": [
+    "支持连接 40 余种数据库，新增 JDBC 数据库仅需配置即可，无需改代码",
+    "提供 SQL 编辑、补全、格式化、执行历史，以及自然语言生成/解释/优化 SQL 的 AI 助手（自备模型）",
+    "数据源密码与 AI API 密钥以 AES-256-GCM 按安装实例密钥加密存储，支持 Docker、桌面、Web 与 CLI 形式运行"
+   ],
+   "use_cases": [
+    "在本地统一管理多种数据库（含 ClickHouse、MongoDB、Redis 等）的元数据浏览与数据编辑",
+    "通过自备 AI 模型以自然语言生成、解释和优化 SQL 查询",
+    "用 Docker 部署 Web 版并配合开源 CLI/MCP 接入现有数据工具链"
+   ]
+  },
+  "sha": "906bcd56db41",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "662e065b9730": {
+  "identity": {
+   "one_liner": "Postgres 实时同步引擎，基于 HTTP 协议读取并分发数据。",
+   "review": "Electric 是一个 Postgres 读路径同步引擎，将 Postgres 数据同步到客户端或其他消费端。核心同步协议基于低层 HTTP API，可与 CDN 集成做数据分发；部分复制通过 Shapes 管理，提供客户端库与框架集成。要求 Postgres 开启逻辑复制，当前处于 Beta 阶段，使用 Apache 2.0 许可证，核心服务以 Elixir 实现。",
+   "highlights": [
+    "基于 HTTP API 的同步协议，API 定义在 OpenAPI 规范中，可与 CDN 集成进行数据分发",
+    "通过 Shapes 机制管理部分复制，提供 React（useShape hook）、Elixir 等客户端库与框架集成",
+    "包含可选的 Phoenix LiveDashboard 用于监控 VM 指标、进程信息、ETS 表等运行状态（无鉴权，需自行限制端口访问）"
+   ],
+   "use_cases": [
+    "需要将 Postgres 数据实时同步到前端应用或客户端的场景",
+    "依赖 Postgres 逻辑复制进行数据读取分发的架构",
+    "通过 React hook 等集成方式在组件中消费 Postgres 数据"
+   ]
+  },
+  "sha": "662e065b9730",
+  "source": "readme",
+  "generated_at": "2026-11-06",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "62e2a34790b8": {
+  "identity": {
+   "one_liner": "IBM 数据分析师证书结业项目：收集招聘等多源数据分析热门编程技能",
+   "review": "该项目为 IBM Data Analyst Professional Certificate 的结业 Capstone，模拟一名咨询公司数据分析师的角色，从招聘信息、培训平台、调查问卷等来源收集数据，分析年度热门编程技能并产出趋势洞察。分析流程按步骤拆分在仓库的多个 notebook 中，并附有说明所需的附加文件。",
+   "highlights": [
+    "使用 Python 生态（pandas、numpy、matplotlib）实现数据收集、清洗、探索性分析与可视化",
+    "涉及 Web 数据抓取（BeautifulSoup、requests）与 Flask API 获取数据",
+    "使用 IBM Cognos 制作仪表盘，各分析步骤分别记录在不同 notebook 中"
+   ],
+   "use_cases": [
+    "作为 IBM 数据分析师证书课程的结业项目提交",
+    "学习多源数据采集到可视化报告的完整分析流程",
+    "参考基于招聘/调查数据的热门技能趋势分析方法"
+   ]
+  },
+  "sha": "62e2a34790b8",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0f6ddcf364da": {
+  "identity": {
+   "one_liner": "PostgreSQL 维护小工具集合，含生成数据库关系 DOT 图的脚本",
+   "review": "这是一个 PostgreSQL 辅助脚本集合，来自作者日常运维工作中的积累。README 中当前只收录了 pg_graph 工具：它连接指定数据库后生成 Graphviz DOT 格式文件，配合 dot 命令可输出 SVG 图，用于查看现有数据库的表结构关系。许可证信息需查看 LICENSE 文件。",
+   "highlights": [
+    "pg_graph 读取指定数据库并生成描述整个数据库的 Graphviz DOT 文件",
+    "可通过管道与 dot 命令配合生成 SVG 等格式图像",
+    "工具集合形式，便于按需选用单个脚本"
+   ],
+   "use_cases": [
+    "为现有 PostgreSQL 数据库生成结构关系图以辅助了解 schema",
+    "在缺乏建模工具时为已有数据库生成类似 ERD 的图表",
+    "数据库日常维护中按需使用作者积累的脚本"
+   ]
+  },
+  "sha": "0f6ddcf364da",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5cc7b1acd426": {
+  "identity": {
+   "one_liner": "基于 TiUP playground 的 TiSpark 测试环境仓库",
+   "review": "该仓库提供基于 TiUP playground 的 TiSpark 测试环境，包含初始化脚本 init.tispark 与测试用 SQL 文件 spark.sql。使用者先执行 init.tispark 初始化环境，再通过 spark-sql 命令加载 spark.sql 进行测试。README 另提供 TiSpark 快速入门与用户指南链接，适用于需要在本地搭建 TiSpark 测试场景的用户。",
+   "highlights": [
+    "提供 init.tispark 初始化脚本，用于搭建 TiSpark 测试环境",
+    "附带 spark.sql 测试 SQL 文件，可通过 spark-sql 以 -f 参数执行",
+    "基于 TiUP playground 运行环境"
+   ],
+   "use_cases": [
+    "本地搭建 TiSpark 测试环境",
+    "使用预置 SQL 对 TiSpark 进行功能验证"
+   ]
+  },
+  "sha": "5cc7b1acd426",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e044c0f4997": {
+  "identity": {
+   "one_liner": "解析 Postgres interval 列字符串为 JavaScript interval 对象的 Node.js 库",
+   "review": "该包将 Postgres 默认格式的 interval 字符串（如 '01:02:03'）解析为包含 hours、minutes 等字段的 JS 对象，并提供 toPostgres、toISOString、toTemporalDuration 等输出方法。为提升性能，它不校验输入，且要求数据库 intervalstyle 为默认值；混合正负号区间转 Temporal.Duration 时会抛出 RangeError。",
+   "highlights": [
+    "将 Postgres 默认格式的 interval 字符串解析为分字段的对象，缺失字段置为 0",
+    "支持输出为 Postgres interval 字符串、ISO 8601（完整与短格式）及 Temporal.Duration",
+    "解析过程不校验输入，依赖输入符合默认 interval 格式以优化性能"
+   ],
+   "use_cases": [
+    "Node.js 应用读取 Postgres interval 列并在 JS 中按字段处理时长",
+    "将 interval 对象序列化后传入 prepared statements 写回数据库",
+    "需要 ISO 8601 或 Temporal.Duration 格式的时长转换场景（需相应运行时环境）"
+   ]
+  },
+  "sha": "1e044c0f4997",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d86b7ea79ab3": {
+  "identity": {
+   "one_liner": "基于SpringBoot与Vue前后端分离架构的个人博客系统",
+   "review": "Aurora 是一个前后端分离的个人博客系统，前台基于 Vue3、后台管理基于 Vue2，后端采用 SpringBoot 并集成 MyBatisPlus、SpringSecurity、Redis、RabbitMQ、Elasticsearch、MinIO、Quartz 等组件，用于博客内容的发布、检索与定时任务管理。项目提供演示账号与一键安装脚本，脚本目前仅适用于 CentOS 系统。",
+   "highlights": [
+    "前台使用 Vue3 + Pinia，后台管理使用 Vue2 + Vuex，通过 axios 进行网络请求",
+    "后端集成 SpringSecurity 权限控制、Redis 缓存、RabbitMQ 消息队列与 Elasticsearch 搜索",
+    "提供 shell 一键安装脚本，并存在独立的轻量版后端仓库 aurora_Lite"
+   ],
+   "use_cases": [
+    "搭建个人博客站点，含前台展示与后台管理界面",
+    "作为前后端分离项目的学习参考，涵盖 SpringBoot 与多个中间件的集成",
+    "在 CentOS 服务器上通过一键脚本进行部署"
+   ]
+  },
+  "sha": "d86b7ea79ab3",
+  "source": "readme",
+  "generated_at": "2026-11-06",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "956940e13466": {
+  "identity": {
+   "one_liner": "包含 100 个 Android/iOS 示例工程的合集仓库",
+   "review": "该仓库收录 100 个编号示例工程，覆盖 UI 组件、地图与地理围栏、相机、SQLite、第三方 SDK 集成（AdMob、Facebook、Twitter、Instagram、Google Analytics 等）、PhoneGap/Cordova 以及少量 iOS 示例。每个子目录为一个独立 demo，README 以名称加一句话描述的方式逐条列出，未提供统一的构建说明，使用者需按子目录单独查看与运行。",
+   "highlights": [
+    "包含 100 个示例工程，涵盖 UI、地图、相机、数据库、通知、支付等主题",
+    "集成多种第三方服务与 SDK 的示例代码",
+    "含 Android 与 iOS 两种平台的示例"
+   ],
+   "use_cases": [
+    "查找某项 Android 功能（如二维码扫描、地理围栏、SQLite CRUD）的示例实现",
+    "参考第三方 SDK 的集成写法",
+    "作为 Android 学习示例代码库浏览"
+   ]
+  },
+  "sha": "956940e13466",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fc045fb37eb": {
+  "identity": {
+   "one_liner": "Prisma Data Guide 的源码与内容仓库，基于 Gatsby 的 MDX 文章站",
+   "review": "该仓库包含 Prisma's Data Guide 文档网站的源码与文章内容，文章以 MDX 形式写在 content 目录，通过 config.ts 配置 Gatsby、页眉页脚等。面向想学习数据库相关知识的读者与希望贡献文章的开发者。本地运行需 Node.js 22.18.0+，经 npm install 与 npm run dev 启动；内容文件以数字前缀控制侧边栏顺序，可使用 mdtool CLI 插入、移动或删除文件。",
+   "highlights": [
+    "文章以 MDX 编写，每篇文章可通过 URL 加 .md 后缀以 Markdown 形式获取，/llms.txt 列出全部文章",
+    "提供 mdtool CLI，用于自动调整文件数字前缀以插入、交换、移动、删除内容文件",
+    "内置 npm test、typecheck、build（含内部链接检查）与 prettify 等脚本"
+   ],
+   "use_cases": [
+    "需要以 Markdown 格式读取或引用数据库相关文章内容",
+    "向 Data Guide 站点贡献、调整或维护文档文章",
+    "本地构建和预览基于 Gatsby 的 MDX 文档站点"
+   ]
+  },
+  "sha": "9fc045fb37eb",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8d0633ca2042": {
+  "identity": {
+   "one_liner": "Mike.Works SQL 课程的配套示例项目，含 Node.js 应用与练习",
+   "review": "该仓库是 Mike.Works 的 SQL Fundamentals 与 Professional SQL 两门课程的示例项目，配套一个基于 Express 的 Node.js Web 应用。项目以多版本的 Northwind 数据库为数据源，初始状态存在缺失功能和数据库相关缺陷，学习者通过按练习修复来掌握 SQL。支持 SQLite、PostgreSQL、MySQL 三种数据库，通过 DB_TYPE 环境变量切换。许可为 BSD 3-clause，练习内容不得用于自行开设培训。",
+   "highlights": [
+    "支持通过 DB_TYPE 环境变量在 SQLite、PostgreSQL 和 MySQL 三种数据库之间切换",
+    "提供 npm 脚本完成数据库初始化、应用启动、测试运行及调试器连接",
+    "内置按练习组织的测试集，可通过 test:ex 运行至指定练习的全部测试"
+   ],
+   "use_cases": [
+    "参加 Mike.Works 的 SQL Fundamentals 或 Professional SQL 课程时作为练习环境",
+    "在本地通过 Northwind 数据集练习 SQL 查询与数据库修复",
+    "无法搭建本地数据库时，将应用部署到 Heroku 并使用其托管的 PostgreSQL 服务"
+   ]
+  },
+  "sha": "8d0633ca2042",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f6eb36927fbe": {
+  "identity": {
+   "one_liner": "为 SQLAlchemy 提供 MobilityDB 移动对象类型扩展的 Python 库",
+   "review": "该库为 SQLAlchemy 提供 MobilityDB 扩展支持，让 ORM 模型可直接声明 TGeomPoint、TGeogPoint 等移动点类型列。查询结果映射为带时间索引的 pandas DataFrame，亦可映射为 movingpandas 的 Trajectory 结构。包基于 PyMEOS 构建，需 Python 3.7 以上，可通过 pip 从 PyPI 安装。适合在 Python 应用中以 ORM 方式操作 MobilityDB 时空数据的开发者。",
+   "highlights": [
+    "在 SQLAlchemy 模型中声明 TGeomPoint、TGeogPoint 类型列，并可调用 MobilityDB 函数（如 valueAtTimestamp）查询",
+    "查询数据直接映射为时间索引的 pandas DataFrame，可选映射为 movingpandas Trajectory 结构",
+    "基于 PyMEOS 构建，提供在线演示应用、教程与文档"
+   ],
+   "use_cases": [
+    "在 Python/Web 应用中通过 ORM 读写 MobilityDB 中的移动轨迹数据",
+    "将数据库中的移动点数据导出为 pandas DataFrame 或 movingpandas 轨迹进行分析",
+    "需要使用 MobilityDB 函数进行时空查询的场景"
+   ]
+  },
+  "sha": "f6eb36927fbe",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d7982320193b": {
+  "identity": {
+   "one_liner": "VS Code 扩展，为 Oracle PL/SQL 项目提供编译、打包与部署工作流",
+   "review": "Oradew 是一个 VS Code 扩展，用于在 Visual Studio Code 中开发 Oracle PL/SQL 项目。它将 PL/SQL 源码纳入 Git 版本管理，提供编译文件、执行语句（带 ORA 错误问题匹配）、打包为单一 SQL 部署脚本以及一键部署到多环境的能力。运行前提为 Node.js 14.6+、Git 与 SQL*Plus 或 SQLcl，也可使用预装依赖的开发容器；连接配置由必需的 dbconfig.json 定义。",
+   "highlights": [
+    "提供编译变更文件（F6）、运行当前语句（Ctrl+Enter）等命令，编译结果带 ORA 错误问题匹配",
+    "支持 Package（F9）将项目文件打包为部署脚本，Package Delta 从 Git 历史提取上次版本以来的变更文件",
+    "支持多数据库环境与每环境多用户配置，可使用 oracle wallet 凭据，并提供 oradew CLI 命令行工具"
+   ],
+   "use_cases": [
+    "将数据库中的既有 PL/SQL 对象导出为源码文件并纳入 Git 管理",
+    "通过 Package 与 Deploy 命令向多个环境执行部署脚本",
+    "编写 PL/SQL 生成器函数并通过 Generate 命令生成代码文件"
+   ]
+  },
+  "sha": "d7982320193b",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8e47b95fcac": {
+  "identity": {
+   "one_liner": "一个已弃用的个人网站源码仓库，含 React PWA 与 Django REST API",
+   "review": "该仓库是 omaralbeik.com 个人网站的源码，现已标记为弃用，作者指引参考 v3.0 版本。项目实际代码分散在两个子仓库：website-api 使用 Python3 和 Django 构建 REST API 服务端，website-client 使用 NextJS 和 Redux 构建 PWA 前端。仓库采用 MIT 许可证发布。适合想了解前后端分离个人站点结构的人作为参考，但需注意代码已不再在此仓库维护。",
+   "highlights": [
+    "服务端以 Python3 与 Django 实现 REST API，代码位于 website-api 仓库",
+    "前端为基于 NextJS 与 Redux 的 PWA 应用，代码位于 website-client 仓库",
+    "仓库源码采用 MIT 许可证发布"
+   ],
+   "use_cases": [
+    "查看个人网站前后端分离架构的源码组织方式",
+    "作为 Django REST API 与 React PWA 组合的项目结构参考",
+    "跟踪作者指向的 v3.0 新版本仓库"
+   ]
+  },
+  "sha": "c8e47b95fcac",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a844bf22891": {
+  "identity": {
+   "one_liner": "SQLite JDBC 驱动的 fork，扩展数据类型并优化查询",
+   "review": "该项目是 David Crawshaw 所提供的 SQLite JDBC 驱动的 fork 版本，面向需要在 Java 应用中通过 JDBC 访问 SQLite 数据库的开发者。相对原版，它增加了 BigDecimal、BinaryStream、CharacterStream、AsciiStream 的基础支持，将日期和时间以儒略日数存储，并通过引入缓存加快 ResultSet#findColumn(String) 的执行速度。",
+   "highlights": [
+    "提供 BigDecimal、BinaryStream、CharacterStream、AsciiStream 的基础支持",
+    "以儒略日数（julian day number）格式存储 Dates 和 Times",
+    "通过引入缓存加快 ResultSet#findColumn(String) 的速度"
+   ],
+   "use_cases": [
+    "Java 应用通过 JDBC 访问 SQLite 数据库",
+    "需要使用 BigDecimal、流类型等数据类型的场景",
+    "涉及日期时间存取且依赖频繁按列名查找字段的应用"
+   ]
+  },
+  "sha": "8a844bf22891",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "27ef0953dd8e": {
+  "identity": {
+   "one_liner": "面向开发者的项目分享与问答社区平台，前后端一体的全栈 monorepo",
+   "review": "Built On It 是一个供开发者浏览项目、发布问题、提交解决方案和上传教程的开源平台。前端为 React 18 + Vite，后端为 Node.js/Express，数据库使用 MySQL 或 TiDB Serverless，通过 mysql2 连接，图片上传依赖 Multer。README 提供本地部署步骤、环境变量示例及 /problems、/solutions 等基础 REST 接口，采用 ISC 许可证。",
+   "highlights": [
+    "前后端分离的单仓库结构：React 18 + Vite 前端，Node.js/Express REST API 后端",
+    "数据库支持 MySQL 与 TiDB Serverless 云实例，经 mysql2 驱动连接，凭据通过 .env 配置",
+    "提供 /problems、/solutions、/uploads 等 REST 接口，解决方案提交支持图片上传（Multer）"
+   ],
+   "use_cases": [
+    "开发者提交并按技术栈分类展示个人项目、截图与文档",
+    "社区通过 AskDev 模块发布问题并提交对应解答",
+    "作为 React + Express + TiDB 的本地开发与部署练习项目"
+   ]
+  },
+  "sha": "27ef0953dd8e",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b441decfc79a": {
+  "identity": {
+   "one_liner": "基于 Pomelo 的 EF Core MySQL 兼容数据库提供程序，本分支用于适配 OceanBase",
+   "review": "该项目是 Pomelo.EntityFrameworkCore.MySql 的一个分支，仓库描述表明其修改目的与 OceanBase 相关。它为 Entity Framework Core 提供 MySQL 兼容数据库的访问支持，底层使用 MySqlConnector 通信。官方测试覆盖 MySQL 8.0 与多个 MariaDB 版本，当前最新发布版 8.0.0（2024-02-13），采用 MIT 许可证。",
+   "highlights": [
+    "支持 EF Core 8.0.x，依赖 MySqlConnector >= 2.3.5，官方测试覆盖 MySQL 8.0 及 MariaDB 10.4–11.2",
+    "提供 JSON（Microsoft/Newtonsoft）与 NetTopologySuite 扩展包，支持 dotnet ef dbcontext scaffold 反向工程",
+    "提供 Release 与 Debug 两类 nightly 构建源，.pdb 文件使用 Source Link"
+   ],
+   "use_cases": [
+    "在 ASP.NET Core/.NET 项目中通过 EF Core 访问 MySQL 或 MariaDB 数据库",
+    "需要将 EF Core 应用运行于 OceanBase 等 MySQL 兼容数据库的场景",
+    "从现有数据库表反向生成 EF Core 实体模型（scaffolding）"
+   ]
+  },
+  "sha": "b441decfc79a",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "06c61594fd59": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的图书馆管理系统示例源码",
+   "review": "该仓库是一篇博客文章《Library Management System using Spring Boot》的配套源码，实现一个图书馆管理系统。技术栈包含 Spring Boot 3、Spring Data JPA、Hibernate 与 MySQL，适合学习 Spring Boot 全栈开发的读者对照博客文章阅读代码。README 仅两行，未提供安装运行说明，需参考原博客文章获取使用细节。",
+   "highlights": [
+    "基于 Spring Boot 3 实现图书馆管理系统",
+    "使用 Spring Data JPA 与 Hibernate 进行数据持久化",
+    "使用 MySQL 作为数据库"
+   ],
+   "use_cases": [
+    "配合博客文章学习 Spring Boot 项目开发",
+    "作为 Spring Data JPA + MySQL 项目的代码参考",
+    "用于搭建或二次开发图书馆管理类应用"
+   ]
+  },
+  "sha": "06c61594fd59",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9d0b60846fca": {
+  "identity": {
+   "one_liner": "Bun 应用脚手架 CLI，通过 NPX/BUNX 快速生成项目模板",
+   "review": "Bunsoir 是一个用于创建 Bun 应用的脚手架工具，开发者可通过 npx 或 bunx 命令生成项目。生成时可选 Elysia 或 Hono 框架，数据层支持 Drizzle ORM（PostgreSQL/MySQL/SQLite）或 Prisma（标注为开发中），并可包含 Docker 配置。Prisma 相关选项尚未完成，README 未列出更多配置项说明。",
+   "highlights": [
+    "支持通过 npx 或 bunx 运行，无需全局安装",
+    "生成项目时可选择 Elysia 或 Hono 框架",
+    "提供 Docker 配置选项"
+   ],
+   "use_cases": [
+    "快速初始化基于 Elysia 或 Hono 的 Bun 后端项目",
+    "需要 Drizzle ORM 连接 PostgreSQL、MySQL 或 SQLite 的项目搭建",
+    "需要附带 Docker 配置的 Bun 应用模板"
+   ]
+  },
+  "sha": "9d0b60846fca",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "087dda1de17f": {
+  "identity": {
+   "one_liner": "基于 MQTT 通信的北京交通大学校园失物招领微信小程序",
+   "review": "该项目由北京交通大学学生团队开发，用于校园失物招领场景，包含微信小程序前端与 Go 语言编写的 MQTT 客户端。架构采用前后端分离与双消息链路：查询数据通过 DBAPI 从 MySQL 读取，增删改操作则由小程序发布消息、MQTT 客户端订阅后修改数据库。运行依赖 MySQL、EMQX 和微信开发者工具。",
+   "highlights": [
+    "提供基于 Go 语言的全局 MQTT 客户端，以发布/订阅方式接收小程序消息并操作 MySQL 数据库",
+    "采用前后端分离的双消息链路架构：读取走 DBAPI，增删改走 MQTT 单向通信",
+    "设计失物表与用户表两个数据表，小程序包含主页、用户页、丢失页、寻得页、总结页五个页面"
+   ],
+   "use_cases": [
+    "校园场景下的失物登记与招领信息发布",
+    "学习 MQTT 通信客户端与微信小程序前后端协作架构的参考项目",
+    "需要通过配置文件部署 Go 客户端连接自建 MySQL 与 EMQX 服务器的场景"
+   ]
+  },
+  "sha": "087dda1de17f",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c5cf6d061789": {
+  "identity": {
+   "one_liner": "用Dagster编排、DBT转换、Metabase做BI的本地数据工程教学项目",
+   "review": "该项目以IMDB公开数据演示一套本地运行的简单数据工程流水线：Dagster负责下载IMDB压缩包、装载staging库并触发DBT转换，结果写入SQLite形式的最终数据库，Metabase通过Docker运行并提供IMDB仪表板。项目包含参数化连接、任务配置与定时调度示例，适合学习SQL和Python的初学者或需要在Windows本地环境搭建数据仓库流程的人。",
+   "highlights": [
+    "流水线包含三步：下载IMDB压缩包、加载到staging数据库、触发DBT转换并写入最终数据库",
+    "演示Dagster的连接参数化、任务配置、Schedule调度，README建议可扩展Sensor场景",
+    "提供PowerShell脚本一键启动Dagster、DBT文档站点与Metabase，并含预设登录账号的IMDB仪表板"
+   ],
+   "use_cases": [
+    "学习Dagster+DBT+Metabase流水线的入门实践与教学演示",
+    "Windows环境下本地/on-premise数据仓库方案的原型参考",
+    "数据分析师练习SQL转换逻辑、查看DBT模型谱系与文档站点"
+   ]
+  },
+  "sha": "c5cf6d061789",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "831c33d2f8cc": {
+  "identity": {
+   "one_liner": "基于 Node/Express 和 Prisma 的旅行线路与车票销售管理系统",
+   "review": "Vai de Van 是一个旅行线路与车票销售管理系统，后端采用 Node、Express 与 PostgreSQL，通过 Prisma 访问数据库。提供车辆、客户、线路、行程、司机的登记功能及销售与行程报表，集成 Nodemailer 发送邮件、Yup 做数据校验、Jest 跑测试。README 中登录功能清单显示未完成（CheckList 标记为空）。",
+   "highlights": [
+    "提供车辆、客户、线路、行程、司机等登记功能，并生成销售与行程报表",
+    "使用 Prisma ORM 访问 PostgreSQL，用 Yup 做数据校验，Multer 处理文件上传",
+    "集成 Nodemailer 发送邮件，使用 Jest 运行测试（npm run test）"
+   ],
+   "use_cases": [
+    "需要对旅行线路、行程和车票销售进行登记与报表统计的业务场景",
+    "需要用 Node/Express + Prisma + PostgreSQL 搭建运输管理后端的开发实践"
+   ]
+  },
+  "sha": "831c33d2f8cc",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0e792e2354ec": {
+  "identity": {
+   "one_liner": "开源反馈管理平台，提供公开路线图与更新日志",
+   "review": "Feedbackjar 是一个开源的反馈管理、公开路线图与更新日志平台，使用 Nuxt 3、Vue 与 Turso 数据库构建，面向需要收集用户反馈和追踪问题的产品团队。项目尚处早期，v0.1 路线图中的反馈管理、嵌入组件等多项功能仍未完成。",
+   "highlights": [
+    "计划提供 React、Vue、HTML 嵌入组件及移动端 API 用于收集反馈",
+    "支持 GitHub、Google、邮箱密码三种认证方式，可自托管",
+    "使用 Turso 数据库与 Drizzle ORM，通过 yarn 脚本运行迁移与部署"
+   ],
+   "use_cases": [
+    "为非开源产品收集用户反馈并管理问题状态",
+    "向用户公开产品路线图和发布更新日志",
+    "本地自托管部署以搭建反馈收集页面"
+   ]
+  },
+  "sha": "0e792e2354ec",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "59acf8b2d05e": {
+  "identity": {
+   "one_liner": "基于JSP+Servlet+MySQL的蛋糕店课程作业项目",
+   "review": "cakeshop是一个使用JSP、Servlet和MySQL实现的蛋糕店系统，定位为JSP期末大作业项目，面向需要完成课程作业的学习者。README仅标注了技术栈（JSP+MySQL+Servlet）和作业用途，并包含一张图片，未提供安装步骤、运行说明或功能列表，使用前需自行查看代码结构。",
+   "highlights": [
+    "采用JSP+Servlet+MySQL技术栈实现",
+    "定位为JSP期末大作业项目",
+    "README包含一张项目图片"
+   ],
+   "use_cases": [
+    "JSP课程期末作业提交",
+    "JavaWeb入门学习者参考代码结构",
+    "基于Servlet+MySQL的教学演示"
+   ]
+  },
+  "sha": "59acf8b2d05e",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a4b4ed23e8a4": {
+  "identity": {
+   "one_liner": "Aktuel Listesi 移动应用的后端 API，基于 ASP.NET Core 与 Azure 云服务构建。",
+   "review": "该项目是 Aktuel Listesi 移动应用的 API 服务，使用 ASP.NET Core Web API 与 EF Core 2.0 实现，集成 Azure Storage、Azure Cognitive Services 和 Azure Functions。默认使用 NpgSQL 连接 PostgreSQL，README 说明可在 Startup.cs 中切换为 MS SQL、MySQL 等数据库提供程序，并通过 dotnet ef 执行数据库迁移。部署需在 appsettings.Development.json 中配置数据库连接串、Cognitive Services 密钥及 Storage 账户信息，内置 Swagger UI 供接口测试，采用 MIT 许可证。",
+   "highlights": [
+    "基于 ASP.NET Core Web API 与 EF Core 2.0 构建，默认通过 NpgSQL 支持 PostgreSQL，可在 Startup.cs 中更换数据库提供程序",
+    "集成 Azure Storage、Azure Cognitive Services 与 Azure Functions，密钥与账户信息通过 appsettings.Development.json 配置",
+    "提供 Swagger UI 用于 API 测试与文档，支持 dotnet ef database update 执行数据库迁移"
+   ],
+   "use_cases": [
+    "为 Aktuel Listesi 移动应用提供后端 API 服务",
+    "需要对接 Azure Cognitive Services 与 Azure Storage 的 .NET Core 后端项目参考",
+    "在 Swagger UI 上进行 API 接口调试与测试"
+   ]
+  },
+  "sha": "a4b4ed23e8a4",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b7f34252f82b": {
+  "identity": {
+   "one_liner": "基于 aiogram 的 Telegram 实体商品商店机器人模板",
+   "review": "这是一个用于销售实体商品的 Telegram 机器人模板，基于 Python/aiogram、PostgreSQL 与 Redis 构建，提供 Docker 部署方式。核心机制包括库存跟踪与预约（默认24小时超时）、比特币地址池与货到付款两种支付方式、邀请码注册及推荐奖励，并通过 bot_cli.py 命令行工具管理订单、库存和导出数据。使用前需配置 TOKEN、OWNER_ID 等环境变量，且需向 btc_addresses.txt 预先添加比特币地址。",
+   "highlights": [
+    "库存管理：支持 stock_quantity/reserved_quantity 跟踪、结账时24小时（可配置）商品预约及超时自动清理，使用行级锁防止超卖",
+    "支付方式：比特币一次性地址池（文件监视器自动重载）与货到付款（管理员经 CLI 手动确认）两种方式",
+    "订单与营销：多阶段订单状态流转、限时折扣与促销码（可叠加、限次）、推荐奖励与奖金余额抵扣"
+   ],
+   "use_cases": [
+    "在 Telegram 中销售需要库存管理、收货地址与物流跟进的实体商品",
+    "需要比特币收款或货到付款的小型商店运营",
+    "通过邀请码控制用户注册并依赖 CLI 与 Prometheus 指标进行运维管理的部署场景"
+   ]
+  },
+  "sha": "b7f34252f82b",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4d44e0606843": {
+  "identity": {
+   "one_liner": "基于 Next.js 15 与 React 19 的个人作品集网站应用",
+   "review": "该项目是开发者个人的作品集网站，用于展示其工作、技能与经历。前端采用 Next.js 15.5.4（App Router）、React 19.1.0 与 TypeScript 5，UI 层使用 Tailwind CSS 4、Radix UI 组件与 Framer Motion 动画。运行需 Node.js 18.x 或 20.x，支持 npm/yarn/pnpm/bun 安装依赖后通过 npm run dev 启动开发服务器。项目配置了 Vercel 部署与 GitHub Actions CI/CD。许可证为私有专有，非开源许可。",
+   "highlights": [
+    "基于 Next.js 15 App Router 与 React 19 构建，使用 TypeScript 5 进行类型检查",
+    "内置技术滑块展示、访问计数器功能，并通过 Radix UI 组件实现界面交互",
+    "提供 npm run dev/build/start/lint/type-check 等脚本，配置 GitHub Actions 与 Vercel 部署流程"
+   ],
+   "use_cases": [
+    "作为个人开发者展示作品、技能与经历的在线作品集站点",
+    "作为使用 Next.js 15 + Tailwind CSS 4 + Radix UI 技术栈的站点参考实现",
+    "部署到 Vercel 平台并通过 GitHub Actions 进行自动化构建发布"
+   ]
+  },
+  "sha": "4d44e0606843",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2efaf43311b": {
+  "identity": {
+   "one_liner": "基于WCDB的iOS SQLite数据库修复工具库",
+   "review": "RepairKit是从WCDB提炼的iOS SQLite数据库修复Demo，面向需要处理SQLite损坏文件的iOS开发者。机制为预先备份数据库元数据（几KB，可并发读取），损坏时据此从旧库读出数据并写入新库；支持对备份文件加解密。使用前需将文件夹拖入工程并在Other Linker Flags配置sqlcipher，备份过期后修复可能失效。",
+   "highlights": [
+    "提供 backupDBPath: 接口备份数据库元数据，文件仅几KB且属读操作可并发执行",
+    "提供 recoveryDBPath:DBPageSize: 接口，从损坏数据库读出数据并插入新库",
+    "支持传入密钥字符串对备份元数据文件进行加解密"
+   ],
+   "use_cases": [
+    "iOS应用中SQLite数据库文件损坏后的数据恢复",
+    "需要对备份元数据进行加密存储的场景",
+    "需要参考WCDB数据库修复机制实现的开发场景"
+   ]
+  },
+  "sha": "d2efaf43311b",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3c64aa5cb265": {
+  "identity": {
+   "one_liner": "面向 Yggdrasil 网络的社交化 BitTorrent 种子目录，基于 Symfony 构建",
+   "review": "YGGtracker 是运行于 Yggdrasil 网络的 BitTorrent 种子目录与社交网络，用 PHP Symfony 编写。系统通过 IPv6 0200::/7 地址识别用户而无需注册，支持用户手动分享种子。部署依赖 Composer 与 Symfony CLI，数据库使用 SQLite 并通过 Doctrine 管理迁移，另需配置 Crontab 定时更新做种统计及可选的匿名只读 FTP 目录访问。",
+   "highlights": [
+    "通过 IPv6 0200::/7 地址识别用户，无需注册流程",
+    "提供 qBittorrent 搜索插件集成，并支持多节点种子订阅脚本",
+    "数据库基于 Doctrine，提供 schema 初始化与迁移命令；支持通过 .env.local 覆盖默认配置"
+   ],
+   "use_cases": [
+    "在 Yggdrasil 网络内搭建本地种子分享目录",
+    "无注册机制下的社区资源发布与交流",
+    "配合 qBittorrent 插件在多点节点间订阅与检索种子"
+   ]
+  },
+  "sha": "3c64aa5cb265",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e714386839ac": {
+  "identity": {
+   "one_liner": "基于 Laravel、VueJS 和 MySQL 的在线水果选购网站",
+   "review": "该项目是一个在线选购水果的网站，为 Web 应用开发课程的期末项目。前端使用 HTML、CSS、JavaScript、VueJS 2 与 Laravel，后端使用 Laravel 与 MySQL，并提供内置 phpMyAdmin 导入的 selling_food 数据库。README 给出了基于 XAMPP、Composer、npm 的本地部署步骤，后台管理入口位于 localhost:8000/admin，并附带演示账号。",
+   "highlights": [
+    "前端采用 VueJS 2 与 Laravel，后端使用 Laravel 与 MySQL",
+    "提供 selling_food.sql 数据库文件，可通过 phpMyAdmin 导入",
+    "README 包含完整的本地运行步骤：后端端口 8000，前端端口 8060"
+   ],
+   "use_cases": [
+    "本地搭建在线选购水果的演示网站",
+    "作为 Web 应用开发课程的期末项目示例运行与学习",
+    "通过 localhost:8000/admin 使用演示账号体验后台管理功能"
+   ]
+  },
+  "sha": "e714386839ac",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41c0115cc7a7": {
+  "identity": {
+   "one_liner": "为 Postgres 提供 jev() 语义函数的 SQL 工具，由 CLI 在外部评估行",
+   "review": "jevQL 是一个面向原生 PostgreSQL 的 CLI 工具与 SDK 集合，允许在 SQL 查询中使用 jev() 等函数对行进行语义判断。jev_* 调用由 CLI 通过 TypeSafe 的 System One 模型评估，数据库只接收普通 SQL，无需扩展或超级用户权限。行内容会发送到 TypeSafe API，且每次 jev 查询会对过滤后的行集做全量评估，成本与 Token 用量可通过 --explain 预估。支持 Go、TypeScript、Python SDK、HTTP 服务及 MCP 服务器。",
+   "highlights": [
+    "提供 jev()/jev_prob()/jev_choice()/jev_score() 等函数族，返回布尔、概率、选择文本或分数",
+    "非 jev 谓词原样发给 Postgres，jev 谓词由 CLI 解析（libpg_query）并调用 TypeSafe API 评估，本地 sqlite 缓存按行哈希去重",
+    "提供 REPL/CLI、HTTP 服务节点、Go/TypeScript/Python SDK 以及包含 query/explain/judge 等工具的 MCP 服务器"
+   ],
+   "use_cases": [
+    "对表中含文本列的行按自然语言条件做过滤、排序或分组统计，如按语义条件筛选记录",
+    "通过 --explain 预估 Token 与成本后，对过滤后行集执行语义评估查询",
+    "为 Agent 提供 MCP 服务器（只读为默认），或将共享引擎部署给团队/公共演示节点使用"
+   ]
+  },
+  "sha": "41c0115cc7a7",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e2da9acdf22b": {
+  "identity": {
+   "one_liner": "PostgreSQL 示例数据库集合，复制自 pgFoundry dbsamples",
+   "review": "该仓库汇集多个用于 PostgreSQL 的示例数据库，内容为 pgFoundry dbsamples 的副本。包含 Adventureworks、Chinook、Pagila、World、USDA 等 8 个数据库，覆盖 OLTP 业务、数字媒体、地理数据等类型。适合需要现成数据集进行练习或测试的用户，README 未提供各库的导入步骤说明。",
+   "highlights": [
+    "包含 8 个 PostgreSQL 示例数据库，如 Adventureworks、Chinook、Pagila、USDA 等",
+    "Adventureworks 为虚构制造公司的 OLTP 数据库",
+    "提供 ISO-3166 国家数据和法国城镇地区数据"
+   ],
+   "use_cases": [
+    "PostgreSQL 学习与教学数据环境搭建",
+    "数据建模练习",
+    "查询与工具测试用的现成数据集"
+   ]
+  },
+  "sha": "e2da9acdf22b",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13c1054cac61": {
+  "identity": {
+   "one_liner": "在 PostgreSQL 中模拟 Oracle 风格全局临时表的结构持久化机制",
+   "review": "该库用于在 PostgreSQL 中实现 Oracle 语义的临时表：表结构持久驻留在用户 schema 内、对所有会话可见，数据仍为会话私有。其实现组合了返回表函数、视图与 instead of 触发器，并提供 create_permanent_temp_table / drop_permanent_temp_table 两个函数，可将普通临时表逆向转换为持久对象，使含 schema.table 写法的 Oracle 查询无需改动即可运行。适合 Oracle 向 PostgreSQL 迁移或需双数据库兼容的应用。",
+   "highlights": [
+    "提供 create_permanent_temp_table 与 drop_permanent_temp_table 两个函数，用于在指定 schema 中创建和删除模拟的临时表",
+    "通过视图 + 返回表函数 + instead of insert/update/delete 触发器组合实现，支持 schema.table 限定名访问和读写操作",
+    "基于 information_schema 与 pg_catalog 查询逆向工程临时表结构，支持复合主键及无主键表"
+   ],
+   "use_cases": [
+    "将依赖大量 Oracle 风格临时表的应用迁移到 PostgreSQL，且不修改原有查询语法",
+    "应用需同时运行于 Oracle 与 PostgreSQL 两种数据库的场景",
+    "需要表结构跨会话持久、数据按会话隔离的临时表语义"
+   ]
+  },
+  "sha": "13c1054cac61",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8b79d2795d0": {
+  "identity": {
+   "one_liner": "基于 Python 2.7.12 镜像构建并运行 OpenStack Keystone 身份服务的 Docker 镜像项目",
+   "review": "该项目提供用于构建 OpenStack Keystone 容器的 Dockerfile，镜像托管于 Docker Hub。容器使用 Apache 加 mod_wsgi 在 5000 和 35357 端口提供 Identity 服务，支持通过环境变量开启 TLS、连接远程 MySQL，并用 Memcached 存储令牌。适用于需要以容器方式运行 Keystone 身份服务的 OpenStack 部署场景；默认镜像基于 Python 2.7.12，Keystone 版本在构建时通过 KEYSTONE_VERSION 指定。",
+   "highlights": [
+    "通过 Apache mod_wsgi 在 5000 和 35357 端口提供 Keystone Identity 服务，支持 http 及 TLS/https",
+    "支持远程 MySQL 数据库连接，并使用 Memcached 存储令牌",
+    "可通过修改 Dockerfile 中的 KEYSTONE_VERSION 自行构建指定版本的 Keystone 镜像，并可挂载目录自定义 keystone.conf 配置"
+   ],
+   "use_cases": [
+    "在单容器中运行 OpenStack Keystone 以进行开发或测试",
+    "需要启用 TLS 或连接外部 MySQL 数据库的 Keystone 部署",
+    "需要构建特定版本 Keystone 镜像或自定义 keystone.conf 配置的场景"
+   ]
+  },
+  "sha": "c8b79d2795d0",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4bc1114edf70": {
+  "identity": {
+   "one_liner": "Harness CI 密钥管理教程：用 Text Secrets 在流水线中安全引用敏感值",
+   "review": "这是 Harness University 的 CI 教程（Tidbit），演示在 Harness Cloud 上创建 Text Secrets 并在流水线 Run 步骤中通过 <+secrets.getValue()> 表达式绑定到环境变量。密文存储于内置 Secret Manager，YAML 中仅含引用，运行时解密注入并在日志中以星号掩码。教程包含创建步骤、作用域前缀、故障排查表。前提：需 Harness 账户及建 Secret 和运行流水线的权限。",
+   "highlights": [
+    "密文存储于 Secret Manager，YAML 仅保存表达式引用，日志中自动以星号掩码",
+    "支持项目/组织/账户三级作用域，通过 org.、account. 前缀区分引用",
+    "Run 步骤可校验密钥长度并在密钥为空时使构建失败"
+   ],
+   "use_cases": [
+    "在 CI 流水线中引用 API token、镜像仓库账号密码等敏感值",
+    "教学演示密钥解析与日志掩码机制",
+    "排查密钥 id 不匹配、作用域错误等常见问题"
+   ]
+  },
+  "sha": "4bc1114edf70",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "779ac1ed0370": {
+  "identity": {
+   "one_liner": "面向多种数据库的 LINQ 提供程序，API 接近 Linq to SQL",
+   "review": "DbLinq 是一个 C# 3.0 的 LINQ 提供程序，提供接近 Linq to SQL 的 API，用于访问 MySQL、Oracle、PostgreSQL、SQLite、Ingres、Firebird 和 SQL Server 等数据库。项目于 2010 年发布 0.20.1 版后已归档，不再维护。",
+   "highlights": [
+    "支持 MySQL、Oracle、PostgreSQL、SQLite、Ingres、Firebird 和 SQL Server 等多种数据库",
+    "提供接近 Linq to SQL 的 API",
+    "包含存储过程、批量插入和客户端枚举相关实现"
+   ],
+   "use_cases": [
+    "在 C# 项目中以 LINQ 语法访问多种关系数据库",
+    "需要 Linq to SQL 风格 API 的历史 .NET 项目的数据库访问层"
+   ]
+  },
+  "sha": "779ac1ed0370",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c4c2a2195014": {
+  "identity": {
+   "one_liner": "基于 Ruby on Rails 的新闻类 Web 应用，数据库管理课程项目。",
+   "review": "这是一个为数据库管理课程编写的 Ruby on Rails 新闻 Web 应用。README 仅为 Rails 默认模板，列出了 Ruby 版本、系统依赖、配置、数据库创建与初始化、测试运行、部署说明等待补充条目，未提供具体安装步骤或功能描述，实际使用需参考源码。",
+   "highlights": [
+    "采用 Ruby on Rails 框架构建的新闻类 Web 应用",
+    "README 包含 Rails 默认文档条目：Ruby 版本、系统依赖、配置、数据库创建与初始化、测试、部署说明"
+   ],
+   "use_cases": [
+    "作为数据库管理课程的项目作业或教学参考",
+    "作为 Ruby on Rails 应用源码用于阅读学习"
+   ]
+  },
+  "sha": "c4c2a2195014",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d43fd1605946": {
+  "identity": {
+   "one_liner": "EuRuKo 2024 演示应用：SQLite 后端的 Rails 7.2 Hacker News 风格项目",
+   "review": "这是为 2024 年 EuRuKo 大会（萨拉热窝）准备的研讨会配套代码仓库，实现一个包含用户、帖子、评论的 Hacker News 风格应用，运行在 Ruby（3.1–3.3 多版本）、Rails 7.2.1 与 SQLite 3.46.1 之上。仓库内置已填充数据的生产数据库、预编译资源与 bin/serve 启动脚本，并预设多个基准测试路径，配合 oha 进行负载测试，工作坊步骤以 markdown 文件形式存于 workshop/ 目录，可自行引导完成。",
+   "highlights": [
+    "仓库内置已填充数据的生产数据库、预编译资源与生产模式启动脚本 bin/serve，可开箱运行",
+    "提供多个 /benchmarking 命名空间下的 POST 基准路径，配合 oha CLI 进行负载测试",
+    "种子数据包含约 100 个用户、约 1,000 篇帖子及每帖约 10 条评论，所有用户密码均为 password，可用于登录测试"
+   ],
+   "use_cases": [
+    "参加 EuRuKo 2024 SQLite on Rails 研讨会的动手练习环境",
+    "在本地以不同 Ruby 版本与并发参数对 SQLite 支撑的 Rails 应用进行负载测试",
+    "探索 WEB_CONCURRENCY、RAILS_MAX_THREADS 等配置变化对应用性能表现的影响"
+   ]
+  },
+  "sha": "d43fd1605946",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29a37fcdf994": {
+  "identity": {
+   "one_liner": "1С 迁移至开源软件（Linux + PostgreSQL）的分步文档指南",
+   "review": "该项目以文档形式记录如何在使用 1C 的组织中，以小步渐进方式将基础设施迁移到开源软件，覆盖从 Debian 起步、依次替换 IIS/MSSQL/Hyper-V 等服务到最终迁移用户桌面的路径，并强调将新服务接入 AD 统一管理。面向计划渐进迁移的 1C 用户组织运维人员。文档尚在持续补充中，作者征集文章链接与勘误。",
+   "highlights": [
+    "按影响程度分级列出可替换组件清单：IIS→Apache、MSSQL→PostgreSQL、1C 服务器→Linux、域控制器→Samba、Hyper-V→Proxmox 等",
+    "明确区分对用户透明的服务替换与涉及 UX、需谨慎准备的迁移（终端服务器、LibreOffice、桌面工作站）",
+    "接受通过 bibliography.md 和 issues 提交补充资料与修正"
+   ],
+   "use_cases": [
+    "使用 1C 的组织规划向 Linux 与 PostgreSQL 的渐进式基础设施迁移",
+    "需要在不中断用户的情况下分阶段替换 Microsoft 服务（Web、数据库、虚拟化、域控制）",
+    "为开源迁移项目收集参考资料与实施路径"
+   ]
+  },
+  "sha": "29a37fcdf994",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f79db268ac0": {
+  "identity": {
+   "one_liner": "跨平台数据库浏览器，沿外键关系探索关系数据库表",
+   "review": "DbTarzan 是一个跨平台数据库浏览器，用于查看一个或多个关系数据库中的表，并按照外键定义的关系在表之间导航。面向需要查看数据库结构或数据的开发者，无需编写查询即可浏览表及表间关联。README 提供视频演示、Gitter 频道与构建说明。",
+   "highlights": [
+    "支持浏览一个或多个关系数据库的表",
+    "按照外键定义的关系在表之间导航",
+    "提供跨平台发行版（含 Snap Store 安装渠道）"
+   ],
+   "use_cases": [
+    "初次接触某个数据库时了解表中的数据及表间关系",
+    "不编写 SQL 查询即可按关联关系查找数据库中的信息",
+    "通过示例视频学习数据库探索方式"
+   ]
+  },
+  "sha": "8f79db268ac0",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "846907f4e2b1": {
+  "identity": {
+   "one_liner": "本地优先的 AI 知识工作台：无限画布组织资料，设备端 AI 提供带引用的回答与生成",
+   "review": "Knovum 是一款基于 Tauri 2 + Rust 的桌面知识工作区应用，支持 macOS（14+）与 Windows（10 2004+）。用户在名为 Space 的无限画布上放置笔记、网页、录音、PDF 等资料，数据存储在本机 SQLite 与 LanceDB 向量索引中；转录、OCR、嵌入搜索等在设备端运行。回答类与生成类功能需自行接入云模型 API key。安装包未经 Apple 公证或 Authenticode 签名，首次启动需手动确认；暂不支持 Linux 与 Windows ARM。",
+   "highlights": [
+    "支持无限画布（Space）混合管理笔记、网页截存、PDF、Office 文档、音视频与代码，可经 JSON Canvas 与其他工具交换画布",
+    "提供混合关键词与向量语义搜索，使用 Qwen3 嵌入与 LanceDB 在本机运行；内置 Whisper 转录、说话人分离、OCR 等设备端 AI 能力",
+    "回答附带定位引用（录音时间段、PDF 页码、笔记标题），源文件变更时引用状态标记为 detached；导出支持 DOCX、PDF、PPTX、HTML、Markdown"
+   ],
+   "use_cases": [
+    "在本地整理研究、学习材料，向自己的资料提问并追溯引用到原始出处",
+    "录音/视频的本地转录与说话人标注，如会议记录、讲座、访谈整理",
+    "通过 MCP 将本地知识库接入桌面 Agent 工作流，或使用全局快捷键进行系统级语音听写"
+   ]
+  },
+  "sha": "846907f4e2b1",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7c21be9dc621": {
+  "identity": {
+   "one_liner": "TiDB 分布式集群部署文档：6 节点 PD/TiKV/TiDB 架构与测试记录",
+   "review": "该项目是印尼语编写的分布式数据库课程作业，基于 Vagrant 部署 6 节点 TiDB 集群（3 PD、2 TiKV、1 TiDB，每节点 512MB 内存），运行 Wordpress 作为应用层，并用 Sysbench 与 JMeter 记录基准测试及 PD 故障切换过程，Prometheus+Grafana 负责监控。适合作为 TiDB 集群部署流程的教学参考。",
+   "highlights": [
+    "通过 Vagrant 部署 6 节点 TiDB 集群，包含 PD、TiKV、TiDB 组件启动命令",
+    "使用 Sysbench 进行数据库基准测试，记录 1-3 个 PD 的运行结果与故障切换",
+    "配置 Prometheus 与 Grafana 监控，仓库内含 Grafana 仪表盘 JSON 配置"
+   ],
+   "use_cases": [
+    "学习 TiDB 分布式集群的组件部署与启动流程",
+    "复现 Sysbench/JMeter 基准测试与 PD failover 实验",
+    "搭建带 Prometheus/Grafana 监控的测试环境"
+   ]
+  },
+  "sha": "7c21be9dc621",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "89208de735c4": {
+  "identity": {
+   "one_liner": "DM819计算几何课程项目：用旋转扫掠线算法判断平面上线段从定点的可见性",
+   "review": "该项目实现计算几何教材习题2.14的算法：给定平面内n条互不相交线段与不在任一线段上的定点p，以p为轴心的旋转扫掠线方法判定各线段是否可见，README给出O(n log n)时间复杂度目标。输入为文本文件（一个查询点加若干线段），输出终端文本结果与result.pdf可视化。由两名学生结对编程完成。",
+   "highlights": [
+    "实现以定点p为轴心的旋转扫掠线算法，目标复杂度为O(n log n)",
+    "输入格式宽松：数值间允许任意非数字分隔符，空行自动忽略",
+    "同时生成文本结果与PDF可视化，以绿/红线段和蓝点区分可见、不可见线段与查询点"
+   ],
+   "use_cases": [
+    "计算几何课程中扫掠线（旋转半直线）算法的教学演示",
+    "判定平面上一组互不相交线段相对某个定点哪些可见、哪些被遮挡",
+    "通过data目录下的测试样例（如big_test.txt、ManyCol.txt）观察不同输入配置的运行结果"
+   ]
+  },
+  "sha": "89208de735c4",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1f978210980d": {
+  "identity": {
+   "one_liner": "基于小米 soar 的 PHP 封装，用于辅助 SQL 调优",
+   "review": "soar-php 是小米开源 SQL 调优工具 soar 的 PHP 封装库，通过 Composer 安装后可在 PHP 中调用 soar 命令，对 SQL 语句生成评分报告，包含指纹、评分、执行计划、启发式建议与索引建议。要求 PHP ≥ 8.2。README 提供 Laravel、ThinkPHP、Hyperf、Webman 的配套扩展包。非 CLI 环境运行可能报错，需配置 sudo 密码或 sudoers。",
+   "highlights": [
+    "生成 SQL 评分报告，包含指纹、评分、Explain、启发式建议与索引建议",
+    "提供 Laravel、ThinkPHP、Hyperf、Webman 框架的配套扩展",
+    "通过 withSudoPassword 或 sudoers 配置支持非 CLI 环境运行"
+   ],
+   "use_cases": [
+    "PHP 项目中批量分析慢 SQL 并获取索引建议",
+    "结合 Laravel/ThinkPHP 等 Web 框架在开发阶段辅助 SQL 调优",
+    "在数据库监控或 SQL 审核流程中调用评分与指纹输出"
+   ]
+  },
+  "sha": "1f978210980d",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bf88e95982c6": {
+  "identity": {
+   "one_liner": "自托管的个人联系人管理应用，包含导入、去重、充实与跟踪四步流程。",
+   "review": "Contrack 是一个自托管的开源联系人管理应用，提供从 Apple、Google、LinkedIn、Facebook 等来源导入联系人、自动合并重复项、基于笔记或网络检索充实资料、生成提醒与跟进时间线等功能。数据存储在本地 Docker 卷中，支持多账户隔离地址簿、数据库快照备份、MCP/API 接入 AI 客户端。采用 AGPL v3 许可证，需 Node.js 26.13+ 运行源码。",
+   "highlights": [
+    "支持从多个来源导入联系人，自动合并明显重复项并提供 90 天撤销窗口",
+    "支持自然语言笔记转换为资料字段、提醒与标签，以及带引用来源的网络研究充实",
+    "提供本地搜索问答（Ask Contrack）、命令面板、按城市/区域查看联系人地图和完整性校验备份"
+   ],
+   "use_cases": [
+    "在个人或家庭服务器上集中管理分散于多个通讯录应用的联系人",
+    "为团队成员或家人提供各自隔离的私有地址簿",
+    "通过 MCP 或 API 让 Claude、ChatGPT、Cursor 等客户端查询联系人并记录笔记"
+   ]
+  },
+  "sha": "bf88e95982c6",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "425a57c4921e": {
+  "identity": {
+   "one_liner": "在线学习平台，支持教师注册课程信息、学生按条件筛选教师。",
+   "review": "Proffy 是一个在线学习平台 Web 项目：教师可登记个人资料、所授科目和上课时间，注册数据发布在站点上供学生按偏好查找教师。项目为 Rocketseat Next Level Week #02 的实战作品，采用 Node.js + Express 后端、Nunjucks 模板渲染页面，数据存储于 SQLite。README 提供克隆仓库后的运行步骤，需本地安装 Git 和 Node.js。",
+   "highlights": [
+    "提供教师注册流程，包含个人资料、教学科目和可选时间信息",
+    "注册后的教师数据在站点页面展示，供学生浏览选择",
+    "基于 Node.js/Express 构建并使用 SQLite 存储，提供克隆后本地运行步骤"
+   ],
+   "use_cases": [
+    "学习 Node.js + Express + Nunjucks + SQLite 组合的 Web 开发练习参考",
+    "作为教师/学生课程匹配类应用的起步示例项目"
+   ]
+  },
+  "sha": "425a57c4921e",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9b76dd1e08a8": {
+  "identity": {
+   "one_liner": "基于 Npgsql 与 Vp.FSharp.Sql 的 F# PostgreSQL 命令封装库",
+   "review": "该库是面向 F# 开发者的 PostgreSQL 交互封装，遵循 Vp.FSharp.Sql 原则并依赖 Npgsql 实现。它以不可变更新方式构建命令定义，支持参数、事务、超时、取消令牌、预编译与日志配置，提供同步/异步多组执行函数。通过 NuGet 包 Vp.FSharp.Sql.PostgreSql 安装。",
+   "highlights": [
+    "以不可变更新链式构建 NpgsqlCommand 定义，支持参数、事务、超时、取消令牌与 prepare 选项",
+    "提供 queryAsyncSeq/queryList/querySetList2/querySetList3 等异步与同步执行函数，支持多结果集读取",
+    "支持 executeScalar 系列取值及自定义 NpgsqlDbType 参数类型，可配置或覆盖日志器"
+   ],
+   "use_cases": [
+    "F# 项目中通过命令定义方式执行 PostgreSQL 查询与标量取值",
+    "需要异步流式读取多结果集或以事务包裹命令的场景",
+    "需要与 C# 风格取消令牌互操作或自定义命令日志的场景"
+   ]
+  },
+  "sha": "9b76dd1e08a8",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a89000452ea4": {
+  "identity": {
+   "one_liner": "C# 实现的 Cosmos DB SQL API 泛型仓储模式类库",
+   "review": "该项目实现并演示如何在 Azure Cosmos DB SQL API 上使用仓储模式，提供 GenericRepository 类，基于 CosmosClient（preview）实现 AddAsync、UpdateAsync、DeleteAsync、GetByIdAsync 等基础 CRUD 方法。依赖 Cosmos.Db.Sql.Api.Domain（含 IGenericRepository 接口与 Entity 基类），实体需继承 Entity。使用者通过继承 GenericRepository 并配置依赖注入接入，附 Foo 示例项目与 Postman 集合，采用 MIT 许可证。",
+   "highlights": [
+    "GenericRepository 基于 CosmosClient（preview）实现 AddAsync、UpdateAsync、DeleteAsync、GetByIdAsync、GetAllAsync 等 CRUD 方法",
+    "提供 IGenericRepository 接口与 Entity 基类（Domain 层），实体通过继承 Entity 定义",
+    "通过 NuGet 包安装（Install-Package Cosmos.Db.Sql.Api.Repository），附 Foo 示例项目与 postman-collection.json"
+   ],
+   "use_cases": [
+    ".NET 项目中访问 Azure Cosmos DB SQL API 的数据访问层",
+    "需要将领域模型与 Cosmos DB 数据映射逻辑分离的应用",
+    "通过继承 GenericRepository 快速定义各实体的仓储类"
+   ]
+  },
+  "sha": "a89000452ea4",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b6ef21dfa37c": {
+  "identity": {
+   "one_liner": "端到端智能灌溉源码集，含硬件、服务端与安卓端",
+   "review": "该项目提供智能灌溉系统的完整端到端源码，包含 Arduino IDE 编写的 Arduino 与 ESP8266 代码、用于数据库访问及 Arduino、App 与 FCM 间通信的 PHP 脚本、Firebase 云消息推送代码以及 Android 应用源码。适合搭建带推送通知的物联网灌溉系统的开发者参考使用。",
+   "highlights": [
+    "提供 Arduino IDE 编写的 Arduino 与 ESP 代码",
+    "包含连接数据库并在 Arduino、App 与 FCM 之间通信的 PHP 脚本",
+    "提供完整 Android 应用源码与 FCM 推送通知代码"
+   ],
+   "use_cases": [
+    "搭建带推送通知的智能灌溉系统",
+    "学习 Arduino/ESP8266 与 Android 应用间的 HTTP 通信",
+    "构建基于 FCM 的物联网设备通知流程"
+   ]
+  },
+  "sha": "b6ef21dfa37c",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c4c1b74a5a4": {
+  "identity": {
+   "one_liner": "ELIXIR生物信息学资源注册中心bio.tools的Web应用，用于编目与发现工具和数据库",
+   "review": "biotoolsregistry是ELIXIR Tools & Data Services Registry的Web应用，用于生物信息学资源的编目与发现，覆盖数据库、工具、服务等多种接口形式。它提供查询界面、注册界面和HTTP API三类入口，资源描述遵循biotoolsSchema模型，注册数据以CC BY 4.0许可开放获取。项目由ELIXIR支持，开发环境配置与安装步骤见CONTRIBUTING.md和INSTALL.md。",
+   "highlights": [
+    "提供查询界面，支持按多种属性过滤和排序资源描述的搜索结果",
+    "提供注册界面用于手动创建和编辑资源描述，并提供HTTP API支持查询与自动创建、更新条目",
+    "注册内容以CC BY 4.0许可向所有人开放，资源描述遵循biotoolsSchema模型"
+   ],
+   "use_cases": [
+    "检索和发现生命科学研究中的生物信息学工具、数据库和服务",
+    "通过API自动化创建与更新资源注册条目",
+    "以统一的标准描述模型编目分散的生物信息学资源信息"
+   ]
+  },
+  "sha": "2c4c1b74a5a4",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0ad303a60368": {
+  "identity": {
+   "one_liner": "基于 SQLite（sqlite-vec 扩展）的 TypeScript 向量数据库/RAG 库",
+   "review": "veqlite 是一个 TypeScript 库，使用 SQLite 与 sqlite-vec 扩展实现向量存储与余弦相似度检索，并集成 @huggingface/transformers 生成嵌入。支持 Bun 与 Node.js 运行时，提供多种 SQLite 适配器（其中 BetterSqlite3Adapter 需额外安装依赖），可选内存或持久化数据库，面向需在应用内嵌向量检索功能的 JavaScript/TypeScript 开发者。",
+   "highlights": [
+    "存储带元数据与嵌入向量的文本块，使用余弦距离进行相似度检索",
+    "集成 @huggingface/transformers，支持自定义 IEmbeddingModel 实现",
+    "支持内存或持久化数据库、批量插入，提供 Bun/Node.js 多种 SQLite 适配器"
+   ],
+   "use_cases": [
+    "在 TypeScript/Bun/Node.js 应用中嵌入向量检索或 RAG 流程",
+    "需要内存或本地持久化文本块存储与相似度搜索的场景",
+    "基于自定义元数据类型管理文本块并进行语义查询"
+   ]
+  },
+  "sha": "0ad303a60368",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3d19825942b": {
+  "identity": {
+   "one_liner": "名为 Python_Tidbits 的 Python 代码片段/知识点集合仓库",
+   "review": "该仓库标题为 pythonTidbits，README 仅含标题，无使用说明或文档。从命名推断，其内容为 Python 相关的零散代码片段或知识点整理，适合作为个人学习笔记或代码示例参考；具体包含哪些条目、如何组织与运行，需查看仓库内其他文件确认。",
+   "highlights": [
+    "仓库以 pythonTidbits 命名，主题指向 Python 相关内容集合",
+    "README 仅包含标题，未提供安装、运行或使用说明"
+   ],
+   "use_cases": [
+    "作为 Python 代码片段的查阅与参考来源",
+    "作为 Python 学习笔记的收集与整理场所"
+   ]
+  },
+  "sha": "b3d19825942b",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "56fb9f059b82": {
+  "identity": {
+   "one_liner": "一个连接 SQLite 并同步或异步执行 SQL 命令的 Node.js 模块",
+   "review": "sqlite-sync.js 是一个 npm 包，用于在 Node.js 中连接 SQLite 数据库并执行 SQL 命令，支持同步和异步两种调用方式。安装通过 npm install sqlite-sync 完成。连接时若数据库文件不存在会自动创建。适合需要在 Node.js 环境读写 SQLite 的开发者使用。",
+   "highlights": [
+    "支持同步与异步两种方式执行 SQL 命令",
+    "连接 SQLite 数据库文件，文件不存在时自动创建",
+    "通过 npm 安装，以 require 方式引入使用"
+   ],
+   "use_cases": [
+    "在 Node.js 应用中读写 SQLite 数据库",
+    "需要同步方式执行 SQL 的脚本场景",
+    "轻量级本地数据存储的 Node.js 项目"
+   ]
+  },
+  "sha": "56fb9f059b82",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "046ef022648f": {
+  "identity": {
+   "one_liner": "基于Ionic 3、Angular 4与PHP Slim RESTful API的血库移动应用",
+   "review": "BloodCenter是一个开源移动应用，采用Ionic 3与Angular 4构建前端，后端由PHP及Slim框架实现的RESTful API管理应用功能。README标注该项目仅为样板（BoilerPlate）且处于开发中状态，另有付费完整版本在Envato上架。适合需要移动端血库应用基础结构的开发者参考。",
+   "highlights": [
+    "前端使用Ionic 3和Angular 4构建移动应用",
+    "后端由PHP与Slim框架实现RESTful API",
+    "项目当前为BoilerPlate样板，处于开发中状态"
+   ],
+   "use_cases": [
+    "需要血库/献血应用基础代码结构的开发项目",
+    "基于Ionic与PHP RESTful架构的移动应用开发参考",
+    "非营利性应急血液信息服务的应用搭建场景"
+   ]
+  },
+  "sha": "046ef022648f",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dd0458d90dea": {
+  "identity": {
+   "one_liner": "单二进制 Rust 守护进程，通过逻辑复制实现 PostgreSQL 实时 CDC",
+   "review": "dbmazz 是一个由 EZ-CDC 维护的开源（ELv2 许可）Rust 守护进程，读取 PostgreSQL 12+ 的 WAL 逻辑复制流（pgoutput），将 INSERT/UPDATE/DELETE 事件流式写入 StarRocks、Snowflake 或另一 PostgreSQL，稳态亚秒级延迟。支持 MySQL 5.7+/8.0+ 作为源。通过 ez-cdc CLI 或官方 Docker 镜像运行，每实例处理一个复制任务，README 称稳态内存约 11 MB。",
+   "highlights": [
+    "读取 PostgreSQL pgoutput 逻辑复制流，支持 INSERT/UPDATE/DELETE 事件的实时流式写入，稳态复制延迟亚秒级",
+    "支持三种目标端：StarRocks 3.2+（Stream Load）、PostgreSQL 15+（二进制 COPY 加 MERGE）、Snowflake（Parquet 暂存加 COPY INTO）；源端另支持 MySQL 5.7+/8.0+（基于 binlog 与 GTID 检查点）",
+    "提供快照回填与 CDC 流式两种模式；扩展新 sink 需实现 6 个方法的 Sink trait"
+   ],
+   "use_cases": [
+    "需要将 PostgreSQL 数据变更实时同步到 StarRocks、Snowflake 或另一 PostgreSQL 实例做分析或副本的场景",
+    "在资源受限环境（如小规格云主机、树莓派、应用容器 sidecar）运行 CDC 任务的场景",
+    "多租户或多库并行复制的场景，README 的负载测试显示单台 2 vCPU/4 GB 机器可并行运行 40 个守护进程"
+   ]
+  },
+  "sha": "dd0458d90dea",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ac7ecd33bd7": {
+  "identity": {
+   "one_liner": "自托管的餐厅预订系统，含网站嵌入组件、预订页与员工看板。",
+   "review": "OpenPax 是一个面向单体或多餐厅的自托管预订系统，以单个 Docker 镜像加一个 Postgres 数据库运行，无按预订计费。它提供三端界面：客人端的嵌入组件与预订页、员工端的今日屏幕与周历、老板端的服务与容量配置及分析报表。技术栈为 Node 24、Postgres 16、React 与 Hono，采用 AGPL-3.0 许可证，通过安装脚本或 Docker Compose 部署。",
+   "highlights": [
+    "提供三种容量层的可用性引擎：按时段节奏、开放餐厅座位数、以及带自动分配的桌台，并采用幂等创建与 advisory 锁防止重复预订",
+    "包含预订状态流、候补名单、通过 Stripe 的押金/预授权、支持 SMTP 与多个邮件/短信服务商的通知系统，以及含占座率与爽约率的统计分析",
+    "提供带 OpenAPI 文档的 REST API、组织级 API 密钥与一个 MCP 服务器，后端任务通过 pg-boss 运行于 Postgres，域事件经事务性 outbox 发布"
+   ],
+   "use_cases": [
+    "希望自行托管预订系统、替换按人头计费 SaaS 的餐厅或餐厅集团",
+    "前台与吧台员工用手机完成落座、爽约标记、候补名单操作的门店日常运营",
+    "开发者或 AI 助手通过 REST API / MCP 服务器接入并管理预订数据"
+   ]
+  },
+  "sha": "4ac7ecd33bd7",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "87b6806c3c36": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 Dubbo 微服务架构的在线电影购票平台",
+   "review": "该项目是一个微服务架构的在线电影购票平台，包含用户、影院、电影、订单、支付五个模块，功能覆盖注册登录、影片检索、在线选座、超时关单与支付宝沙箱扫码支付。技术栈使用 Dubbo、Redis、Zookeeper、MySQL 主从复制，支付环节采用 TCC 分布式事务。项目提供在线 Demo 与部署文档，适合作为学习微服务相关技术的实践参考。",
+   "highlights": [
+    "订单模块实现在线选座、订单生成、超时关单、应用限流与服务降级",
+    "支付模块集成支付宝沙箱 SDK，采用 TCC 分布式事务处理",
+    "项目总结部分涵盖缓存穿透/雪崩/击穿、限流算法、分库分表、幂等性与布隆过滤器等主题"
+   ],
+   "use_cases": [
+    "学习微服务架构下购票类业务系统的设计与实现",
+    "研究 TCC 分布式事务、缓存一致性、限流等分布式技术的实践案例",
+    "参考 Redis、Zookeeper 伪分布式及 MySQL 主从复制的部署配置流程"
+   ]
+  },
+  "sha": "87b6806c3c36",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c4c4e3320b5": {
+  "identity": {
+   "one_liner": "基于 PyQt5 GUI 与 MySQL 的航班订票桌面系统",
+   "review": "这是一个 DBMS 课程项目，实现航班订票桌面应用，包含账户创建、登录、OTP 验证（通过 Twilio）、航班信息表格展示等界面。数据库含 Payment、Flights、Cancellation、Company、Customer 等实体，README 提供安装步骤、ER 图、规范化说明及视频演示。安装需 Python、MySQL 客户端，通过 requirements.txt 装依赖，执行 SQL 脚本建库（库名 dbms_project）后运行 main.py。支付与取消功能处于原型阶段。",
+   "highlights": [
+    "提供账户创建、登录、OTP 验证（Twilio）及航班详情表格展示等界面",
+    "数据库设计涵盖 Payment、Flights、Cancellation、Company、Customer 等实体，附 ER 图、关系模型与规范化说明",
+    "安装依赖通过 requirements.txt 完成，SQL 建库脚本在 Markdown 文件中逐条执行，运行入口为 main.py"
+   ],
+   "use_cases": [
+    "本机运行 Python + PyQt5 + MySQL 的航班订票流程演示",
+    "学习 GUI 前端与 MySQL 后端连接集成的课程项目参考",
+    "查看数据库设计文档（ER 图、关系模式、规范化）的教学示例"
+   ]
+  },
+  "sha": "0c4c4e3320b5",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c17b05c22d9b": {
+  "identity": {
+   "one_liner": "基于免费开放 API 浏览 GitHub 趋势仓库与开发者的 Web 应用",
+   "review": "GitHub Trend 是一个由 Bocaletto Luca 开发的 Web 应用，采用 HTML5、CSS3 与 JavaScript 构建，通过免费开放数据 API 获取 GitHub 趋势仓库、开发者与技术信息，并展示仓库的 stars、forks、贡献者数及直达链接。面向开发者、研究人员与开源爱好者，可通过 GitHub Pages 或 Netlify 部署，采用 GPL v3 许可证。",
+   "highlights": [
+    "支持按编程语言或类别浏览 GitHub 趋势仓库与开发者",
+    "每条仓库条目包含名称、描述、语言、stars、forks、贡献者数及仓库链接",
+    "采用响应式设计，可部署于 GitHub Pages 或 Netlify"
+   ],
+   "use_cases": [
+    "开发者按语言和类别查看当前趋势仓库",
+    "研究人员或学生检索开源项目的 stars、forks 与贡献者数据",
+    "技术爱好者跟踪 GitHub 上的开发者排行与项目动态"
+   ]
+  },
+  "sha": "c17b05c22d9b",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c2ef0e6e9d0": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core Minimal API 的 Todo API 示例项目",
+   "review": "该项目是一个运行于 .NET 10 的 Minimal API 示例，实现 Todo 的 CRUD 操作，结合 EF Core 与 SQL Server，使用 JWT 令牌认证、API 版本化、Scalar 文档及单元/集成测试。适用于希望查看 Minimal API 各特性组合用法的 .NET 开发者。README 以变更日志形式记录了从 .NET 6 起的迭代过程，未提供完整安装运行步骤。",
+   "highlights": [
+    "提供基于 Minimal API 与 EF Core、SQL Server 的 Todo CRUD 实现",
+    "支持 JWT 令牌认证，可使用 dotnet user-jwts 生成开发用令牌",
+    "包含单元测试、集成测试、API 版本化与 Open API/Scalar 文档"
+   ],
+   "use_cases": [
+    "学习 Minimal API 与 EF Core 在 .NET 10 中的组合用法",
+    "参考 JWT 认证、速率限制、CancellationToken 等特性的示例代码",
+    "作为编写 Web API 单元测试与集成测试的参考样例"
+   ]
+  },
+  "sha": "2c2ef0e6e9d0",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49cc376d2aa3": {
+  "identity": {
+   "one_liner": "基于 IntegreSQL 的 .NET 测试库，为 EF Core 测试提供模板化 PostgreSQL/Sqlite 数据库。",
+   "review": "该库为在 .NET 测试中使用 EntityFramework Core 的开发者提供辅助类，封装 IntegreSQL 客户端 API。其机制是先通过 EnsureCreated 或 Migrations 创建模板数据库并可选注入种子数据，之后每个测试从模板复制数据库，另支持 Sqlite 初始化器。使用前提是运行 Docker Compose 启动 IntegreSQL 与 PostgreSQL 容器，且依赖 PostgreSQL，不适用于其他数据库提供程序。",
+   "highlights": [
+    "提供 NpgsqlDatabaseInitializer 与 SqliteDatabaseInitializer，可创建模板数据库并返回连接字符串或 DbContextOptions",
+    "支持通过 DatabaseSeedingOptions 注入种子数据，以及基于 Migrations 的建库方式",
+    "提供 ReturnDatabaseToPool 与 RemoveDatabase 方法管理测试数据库的复用与删除"
+   ],
+   "use_cases": [
+    "为 EF Core 单元测试创建指向真实 PostgreSQL 或 Sqlite 数据库的 DbContext",
+    "在 ASP.NET Core 集成测试中配合 WebApplicationFactory 替换 DI 容器中的连接字符串",
+    "在 CI 流水线中通过运行 Docker Compose 脚本准备 IntegreSQL 与 PostgreSQL 环境"
+   ]
+  },
+  "sha": "49cc376d2aa3",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b60f8fb973e8": {
+  "identity": {
+   "one_liner": "基于 TiDB 向量库与 Ollama 本地模型的 RAG 问答应用",
+   "review": "TiChat 是一个 RAG 聊天应用，用户可上传文档并基于其内容进行问答。它通过 Ollama 本地运行 Mistral-7B-Instruct-v0.3 模型，用 FastEmbed（ONNX）在 CPU 上生成向量嵌入，经 Llama-Index 在 TiDB 向量库中检索并注入上下文，也支持不走索引的直接对话，并自动保存聊天记录。提供 Windows 安装包，前端为 React + Bootstrap 5，需自行配置 TiDB Cloud 连接串与 CA 证书。",
+   "highlights": [
+    "本地推理：Ollama 托管 Mistral-7B-Instruct-v0.3，嵌入由 mxbai-embed-large-v1 ONNX 模型在 CPU 上生成",
+    "基于 TiDB 向量存储与 Llama-Index 实现向量检索，检索文档作为上下文供 LLM 生成回答",
+    "支持上传文档建索引查询与普通聊天两种模式，并自动保存聊天记录"
+   ],
+   "use_cases": [
+    "需要上传文档并针对其内容进行问答的场景",
+    "希望在本地设备运行 LLM 推理与嵌入生成的部署环境",
+    "已使用或计划使用 TiDB Cloud 作为向量存储的应用场景"
+   ]
+  },
+  "sha": "b60f8fb973e8",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9a3f6afddb01": {
+  "identity": {
+   "one_liner": "JavaScript 编写的 SQLite 3 查询解析器，将 SQL 语句解析为 AST",
+   "review": "sqlite-parser 是一个 JavaScript 库，按 SQLite 3 规范将 SQL 语句解析为抽象语法树（AST）。它通过 npm 安装，提供同步/回调两种调用方式，支持全局安装后的命令行使用，并提供实验性的 Node 流处理能力。解析失败时生成包含出错位置与上下文的描述性错误信息。适合需要在 JavaScript 环境中处理 SQL 语句结构的开发者使用。",
+   "highlights": [
+    "支持同步调用与回调函数两种方式，返回 AST 或抛出错误",
+    "提供实验性的流转换（stream transform）支持，可逐条解析大量 SQL 语句而无需将整个文件读入内存",
+    "解析失败时生成描述性错误消息，包含语法错误的近似位置及所在子句的说明"
+   ],
+   "use_cases": [
+    "在 Node.js 程序中解析 SQL 语句并获取其抽象语法树表示",
+    "通过全局命令行工具解析 SQL 文件并输出到 stdout 或 JSON 文件",
+    "使用流方式批量处理包含数百或数千条查询语句的大型 SQL 文件"
+   ]
+  },
+  "sha": "9a3f6afddb01",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c99f2be303df": {
+  "identity": {
+   "one_liner": "BuguLink 文件分享网站的后端，基于 Koa2、MySQL 与 Redis。",
+   "review": "BuguLink 是一个 MIT 许可的文件分享网站项目，本仓库为其后端，前端在 bugu-static 仓库。后端使用 Node.js/Koa2、MySQL 和 Redis，文件存储依赖七牛 CDN，配置通过 BUGU_ 前缀的环境变量注入。运行需自建 MySQL 并注册七牛账号。",
+   "highlights": [
+    "后端基于 Node.js Koa2，使用 MySQL 存储数据、Redis 配合动态 token 登录",
+    "文件上传支持分块与断点续传，可上传大文件，文件存储于七牛 CDN",
+    "分享链接带随机码，可随时自动删除和停止分享，配置通过环境变量读取"
+   ],
+   "use_cases": [
+    "自建文件分享网站，向他人提供文件上传与随机码分享链接",
+    "需要断点续传和分块上传大文件（如 1GB 级别）的场景",
+    "基于 Koa2 + MySQL + Redis 的 Web 后端开发与部署实践"
+   ]
+  },
+  "sha": "c99f2be303df",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae2cceca1341": {
+  "identity": {
+   "one_liner": "将 Discord 服务器历史与桌面缓存消息归档到本地 SQLite 的 Go 命令行工具。",
+   "review": "Discrawl 是一个 Go 编写的 CLI，用于将 Discord 服务器数据和 Discord Desktop 本地缓存消息归档到 SQLite，支持离线搜索、SQL 查询和终端浏览。它面向需要持久保存服务器历史或本地恢复缓存私信的用户。支持 bot 同步、缓存读取、Git 快照分享四种数据来源；wiretap 只读取已缓存消息，不获取完整账号历史。",
+   "highlights": [
+    "提供 FTS5 全文搜索、频道/作者过滤和 TUI 浏览，并可通过 sql 命令只读查询数据库",
+    "支持四种归档来源：bot 同步（sync/tail）、Discord Desktop 缓存导入（wiretap）、Git 快照订阅（subscribe）和远程归档（subscribe-cloud）",
+    "通过 publish 生成分片 Git 快照供他人订阅，读取者无需 Discord 凭据，快照排除 wiretap 私信"
+   ],
+   "use_cases": [
+    "用 Discord bot 持续同步并回填服务器消息，建立本地可搜索的历史归档",
+    "无需 token 地扫描 Discord Desktop 本地缓存，离线检索已缓存消息和私信",
+    "以 Git 快照向团队共享只读归档，或将 JSON 状态输出集成到自动化流程"
+   ]
+  },
+  "sha": "ae2cceca1341",
+  "source": "readme",
+  "generated_at": "2026-11-06",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ffdd13c76d73": {
+  "identity": {
+   "one_liner": "基于Django与LangChain的多智能体客服系统，含RAG检索与风险代理协作。",
+   "review": "ARCHA是一个多智能体客服系统，使用Python、Django、LangChain、Claude API与ChromaDB构建。系统包含支持、管理、风险评估三类AI代理，通过RAG检索公司知识库处理客户咨询、退款与欺诈评估，并以SSE驱动管理端实时监控面板。README未提供安装运行步骤，主要面向学习Agentic AI开发的场景。",
+   "highlights": [
+    "包含支持代理、管理代理与风险评估代理三角色协作架构，并有对话与代理日志记录",
+    "使用RAG与ChromaDB向量库检索公司政策与支持文档，工作流为分块、嵌入、相似性搜索",
+    "通过Server-Sent Events向管理面板实时推送对话、工具调用与代理活动"
+   ],
+   "use_cases": [
+    "客户支持自动化：处理订单与配送查询、退款历史检查与工单升级",
+    "欺诈风险评估：对可疑客户、支付与订单场景给出风险提示供管理代理参考",
+    "内部监控审计：管理员通过实时面板查看对话、工具调用与代理执行轨迹"
+   ]
+  },
+  "sha": "ffdd13c76d73",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "21d78f209b8d": {
+  "identity": {
+   "one_liner": "Go 编写的 ETL 工具集，采用 Framework+插件架构实现离线数据同步。",
+   "review": "go-etl 是用 Go 实现的数据抽取、转换、加载工具集，包含 datax、storage、element、stream 等模块。datax 包提供类似 Alibaba DataX 的离线同步框架，通过 Reader/Writer 插件读写 MySQL、PostgreSQL、Oracle、达梦、CSV、Excel 等数据源。支持二进制、Docker 和源码编译安装，编译需 Go 1.20+ 及 GCC，Windows 需 MinGW-w64 环境；SQLite3、DB2、Oracle 在 Docker 中需额外配置 ODBC。",
+   "highlights": [
+    "支持对 MySQL、PostgreSQL、Oracle、SQL Server、DB2、达梦、SQLite3 等关系型数据库及 CSV、XLSX 文件的读取与写入",
+    "datax 包采用 Framework + 插件架构，框架层处理缓冲、流控、并发和数据转换",
+    "提供向导 CSV 文件批量同步多表，并可接入 Prometheus 获取性能指标"
+   ],
+   "use_cases": [
+    "在多种关系型数据库与 CSV/Excel 文件之间进行离线数据同步",
+    "通过配置 wizard.csv 批量同步多张表",
+    "开发者按插件模板扩展新的 Reader/Writer 数据源"
+   ]
+  },
+  "sha": "21d78f209b8d",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fe597ad9056": {
+  "identity": {
+   "one_liner": "复现全球学者迁移动态论文的数据与脚本仓库",
+   "review": "该仓库包含论文《Bilateral flows and rates of subnational and international migration of scholars worldwide by gender and field》的复现数据与代码。数据来自 Scopus 和 OpenAlex 两个文献数据库，并与 World Bank 数据合并，提供 1998-2024 年全球 2000 余个次国家级区域的学者迁移率和双边流量，按性别与学科划分。数据以 CSV 和 Parquet 两种格式提供，处理流程需 Python >=3.9。适用于人口学、科学计量学研究者。",
+   "highlights": [
+    "提供基于 Scopus 与 OpenAlex 的国家层面逐年迁移、净迁移率及双边流量 CSV 数据集",
+    "包含三个 Python 脚本：下载合并 World Bank 数据、合并两库数据、绘制论文图 2-5",
+    "数据同时以带表头的 CSV 文本和 Parquet 二进制文件提供，内容一致"
+   ],
+   "use_cases": [
+    "复现论文中的学者迁移动态分析与图表",
+    "研究按性别与学科划分的国际及次国家级学者迁移模式",
+    "在已有迁移数据基础上合并 World Bank 变量做进一步分析"
+   ]
+  },
+  "sha": "9fe597ad9056",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b258db14633d": {
+  "identity": {
+   "one_liner": "受 Evernote 启发的 React/Redux 与 Rails 全栈笔记应用",
+   "review": "Whenevernote 是一个基于 Ruby on Rails 后端、React/Redux 前端和 PostgreSQL 数据库的单页全栈笔记应用，供用户记录笔记、待办清单并按笔记本和标签组织内容。项目内置 BCrypt 密码加盐哈希认证、CSRF 防护令牌，前端使用 Draft.js 提供富文本编辑，并通过定时检查变更的自动保存机制发送 PATCH 请求。按 README 提供的步骤可在本地克隆部署运行，前端媒体资源托管于 AWS 和 Cloudinary。",
+   "highlights": [
+    "支持笔记的创建、编辑、删除，可放入笔记本并添加多个标签，按标签或笔记本筛选查看",
+    "提供基于 BCrypt 加盐哈希的用户认证，登录支持用户名或邮箱，并包含表单 CSRF 令牌校验",
+    "使用 Draft.js 实现富文本编辑，支持列表、复选框、高亮和代码块，编辑内容按变更检测自动保存"
+   ],
+   "use_cases": [
+    "个人笔记记录与管理，按笔记本归类、按标签检索",
+    "创建待办清单和快速记录想法",
+    "作为 Rails API 与 React/Redux 单页应用结合的全栈项目示例在本地部署学习"
+   ]
+  },
+  "sha": "b258db14633d",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7dc0d0e3b42f": {
+  "identity": {
+   "one_liner": "SQLite 库的 V 语言薄封装，内置合并源码便于各平台安装",
+   "review": "vlang/sqlite 为 V 语言提供 SQLite 数据库的封装接口，目标是让 Windows 在内的各平台上安装和使用方式保持统一。项目将 SQLite 合并（amalgamation）源码包含在仓库内，由 download.bat / download.sh 脚本从 sqlite.org 提取，当前对应 SQLite 3.51.0 版本；README 未说明超出依赖安装的使用细节。",
+   "highlights": [
+    "提供对 SQLite 库的薄封装，可在 V 代码中调用",
+    "仓库内包含 SQLite 合并源码，通过 download.bat / download.sh 脚本提取",
+    "对应 SQLite 3.51.0 版本的 amalgamation"
+   ],
+   "use_cases": [
+    "在 V 项目中读写 SQLite 数据库",
+    "需要跨平台（含 Windows）统一安装 SQLite 依赖的 V 开发环境"
+   ]
+  },
+  "sha": "7dc0d0e3b42f",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3b10c25f6619": {
+  "identity": {
+   "one_liner": "基于 Flask 与 MySQL/SQLAlchemy 的个人支出记录 Web 应用",
+   "review": "一个实现完整 CRUD 功能的支出记录 Web 应用，面向想了解个人开销以管理财务的用户。后端使用 Flask/Gunicorn，数据存于 MySQL（经 SQLAlchemy），包含 Users 与 Expenses 两张一对多关系的表。项目依赖需预先存在的 MySQL 数据库，通过 config.py 配置后由 create.py 建表；测试用 Pytest 与 Unittest，CI 由 Jenkins 处理构建、测试与部署。可视化分类等功能留待后续版本。",
+   "highlights": [
+    "实现完整的 CRUD 功能，数据模型包含 Users 与 Expenses 两张一对多关系的表",
+    "使用 Jenkins 实现 CI 流水线，涵盖自动构建、测试与部署",
+    "使用 Pytest 与 Unittest 两种测试框架进行单元测试"
+   ],
+   "use_cases": [
+    "记录和管理个人日常支出（类型、描述、日期、金额）",
+    "作为学习 Flask + MySQL + Jenkins CI 全流程的实践项目参考"
+   ]
+  },
+  "sha": "3b10c25f6619",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4fbdf35a9048": {
+  "identity": {
+   "one_liner": "Laravel 的 JSON 导入导出扩展包，基于 Eloquent 模型 trait 实现",
+   "review": "mathieutu/laravel-json-syncer 是一个 Laravel 扩展包，为 Eloquent 模型提供 JSON 导入导出功能。使用者通过在模型中添加 JsonExportable/JsonImportable 接口及对应 trait，即可调用 exportToJson 导出模型属性及 HasOneOrMany 关联数据，调用 importFromJson 从 JSON 字符串或数组创建实体。默认导出/导入 $fillable 属性（导出时排除 *_id 字段），可通过属性或方法覆盖自定义范围。安装方式为 composer require，采用 MIT 许可证。",
+   "highlights": [
+    "提供 exportToJson($jsonOptions) 方法导出模型属性及关联的子数据，支持传入 JSON 编码选项",
+    "提供 importFromJson 静态方法从 JSON 字符串或数组导入并创建数据库实体",
+    "默认基于模型的 $fillable 属性与 HasOneOrMany 关联自动处理，可通过属性或重写方法自定义导出/导入范围"
+   ],
+   "use_cases": [
+    "将 Eloquent 模型数据（含关联）导出为 JSON 字符串，用于数据传输或存档",
+    "从 JSON 字符串或数组批量导入并创建模型实体及其关联数据",
+    "需要对导出/导入字段范围进行自定义配置的 Laravel 项目"
+   ]
+  },
+  "sha": "4fbdf35a9048",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f250c145cc7": {
+  "identity": {
+   "one_liner": "面向云对象存储的 Zarr 事务性张量存储引擎",
+   "review": "Icechunk 是开源（Apache 2.0）的 Zarr 存储引擎，面向云对象存储管理张量/多维数组数据的元数据与块 I/O。通过可序列化隔离的事务和快照机制，多个无协调进程可并行读写；支持分支、标签、时间回溯和分片存储。目前仅支持 Zarr Python，无需外部数据库即可运行。",
+   "highlights": [
+    "基于快照的可序列化隔离事务，提交原子生效，读取无需锁",
+    "支持分支与不可变标签引用快照，可访问历史快照",
+    "分片存储与 Chunk References，可引用 HDF5、NetCDF 等文件中的块构建虚拟数据集"
+   ],
+   "use_cases": [
+    "多进程并行读写的云上 Zarr 数据存储",
+    "需要版本控制与历史快照访问的科学数据集管理",
+    "以虚拟数据集方式增量引用既有 HDF5/NetCDF 数据"
+   ]
+  },
+  "sha": "8f250c145cc7",
+  "source": "readme",
+  "generated_at": "2026-11-06",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "197cca5de499": {
+  "identity": {
+   "one_liner": "用 SQL 查询将 SQLite 数据库模式生成为 GraphViz 图示的脚本工具",
+   "review": "该项目包含一个 SQL 文件，运行后返回描述数据库模式（表与外键关系）的 GraphViz 格式字符串，可保存或管道给 dot 命令渲染为 PNG、SVG、PDF 等。依赖 sqlite3 命令行工具与 GraphViz，无需安装大型数据库管理套件。适合想快速获得库结构概览、了解规范化数据库中众多表及其外键连接的开发者。example/ 目录提供示例模式、Makefile 及生成结果。",
+   "highlights": [
+    "sqlite-schema-diagram.sql 内含查询，返回以 GraphViz 格式表示 SQLite 数据库模式的字符串序列",
+    "输出可保存为文件或直接通过管道传给 GraphViz 的 dot 命令，生成 PNG、SVG、PDF 等格式",
+    "仅需 sqlite3 命令行工具与 GraphViz，不依赖更大的数据库管理工具套件"
+   ],
+   "use_cases": [
+    "接手新 SQLite 数据库时快速生成表结构与外键关系的概览图",
+    "需要输出 PNG、SVG、PDF 等格式的数据库模式图用于文档或分享",
+    "作为脚本集成到流程中（如 Makefile）自动生成模式图"
+   ]
+  },
+  "sha": "197cca5de499",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ad4f1af40171": {
+  "identity": {
+   "one_liner": "基于 .NET 10 与 ASP.NET Core 的 RESTful Web API 概念验证项目",
+   "review": "该项目是一个基于 .NET 10（LTS）与 ASP.NET Core 的 RESTful API 概念验证，用于管理足球运动员数据，采用分层架构（Controller→Service→Repository），集成 EF Core、FluentValidation、AutoMapper、Serilog 与 Swagger。默认使用 SQLite，可通过环境变量切换为 PostgreSQL 17。提供完整 Docker Compose 部署与 CI/CD 流水线，设计决策以 ADR 文档记录，适合作为学习参考或项目脚手架。",
+   "highlights": [
+    "分层架构：Controller 调用 Service，Service 调用 Repository，采用仓储模式、构造函数依赖注入与异步操作",
+    "支持 SQLite（默认）与 PostgreSQL 17 双数据库，通过 DATABASE_PROVIDER 环境变量切换",
+    "内置 FluentValidation 输入校验、RFC 7807 错误响应、内存缓存、速率限制及 Swagger 文档（仅开发模式）"
+   ],
+   "use_cases": [
+    "学习 ASP.NET Core Web API 分层架构、EF Core、FluentValidation 等组件的整合方式",
+    "作为 Web API 项目的起步模板，克隆后运行 dotnet run 或 docker compose up 即可启动",
+    "演示 CI/CD、代码质量检查与容器化发布的完整工程化流程实践"
+   ]
+  },
+  "sha": "ad4f1af40171",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec0e628d46c6": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 React 的 Agentic RAG 企业知识库问答系统",
+   "review": "该项目实现基于 Agentic RAG 架构的知识库问答，后端用 Python/FastAPI，向量检索依赖 Qdrant，前端为 React + TypeScript。核心机制包含 ReAct 多步推理、三层记忆模型、引用溯源与文档增量同步。运行需准备智谱 AI API Key 与 Qdrant 服务，安装时 bcrypt 须固定为 3.2.2 版本以兼容 passlib。README 显示项目处于设计阶段完成状态。",
+   "highlights": [
+    "采用 ReAct 模式实现多步推理与检索策略动态规划，回答标注来源并支持跳转原文",
+    "支持 PDF/Office/图片/代码/HTML/文本多格式文档，文档编辑后增量同步向量库并支持版本回退",
+    "提供多模型路由（OpenAI/Claude/本地模型）与全链路 Trace 可观测性，存储层支持 SQLite，知识图谱可选接入 Neo4j"
+   ],
+   "use_cases": [
+    "搭建企业内部知识库问答系统，回答附带引用溯源",
+    "需要多轮对话记忆管理与多步检索推理的 RAG 应用开发",
+    "接入 Qdrant 向量库与多模型路由的检索增强生成场景"
+   ]
+  },
+  "sha": "ec0e628d46c6",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6bc939e90dba": {
+  "identity": {
+   "one_liner": "Rust 编写的去中心化混合搜索引擎，融合 KV 存储与全文索引",
+   "review": "CameoDB 是用 Rust 实现的分布式数据库，每个分片同时包含基于 redb 的 ACID 键值存储和基于 tantivy 的倒排全文索引，节点间通过 Kademlia DHT 与一致性哈希路由，无中心主节点。README 提供 Docker 单节点启动方式，HTTP API 默认监听 9480 端口，支持 rustls 实现的 TLS 配置；文档提示 mTLS 尚不支持，证书更新需重启加载。",
+   "highlights": [
+    "每个分片为原子单元，同时包含 redb 键值存储（数据/WAL）与 tantivy 倒排索引，启动时自动从 KV 恢复未提交记录到索引",
+    "无主节点拓扑，使用一致性哈希与自定义 Kademlia DHT 行为进行节点发现与路由；支持 rustls 原生 HTTPS",
+    "数据加载管道支持 CSV、TSV、JSON、JSONL/NDJSON 格式与 Gzip/Zip 解压，可从本地磁盘、网络挂载路径和 HTTP(S) 端点流式读取"
+   ],
+   "use_cases": [
+    "需要同时对结构化数据做 KV 写入并提供多语言全文检索的场景（内置英、德、法、西、意、葡、克罗地亚语等词干/词典分析器）",
+    "希望以 Docker 部署单节点或通过 Docker Compose 组建多节点集群的开发与运维环境",
+    "需要 HTTPS 加密访问和 TLS 证书配置（含 systemd 服务集成、FHS 目录规范）的生产部署流程"
+   ]
+  },
+  "sha": "6bc939e90dba",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9df8624f65f1": {
+  "identity": {
+   "one_liner": "CRR二叉树期权定价模型的7种语言实现及存储过程优化对比基准测试项目",
+   "review": "该项目实现CRR二叉树模型的美式/欧式期权定价，提供C、Go、Java、Python、Rust及Oracle PL/SQL、GaussDB PL/pgSQL共七种实现，通过一键脚本自动编译、运行并生成Markdown基准报告。核心内容是对基线V1与优化V2两版算法的对比：V2利用再组合树的几何递推替代逐节点POWER()调用，并将NUMBER/NUMERIC换成硬件浮点类型。适合需要跨语言性能参照或在数据库内运行定价计算的开发者与DBA。",
+   "highlights": [
+    "提供C、Go、Java、Python、Rust及Oracle PL/SQL、GaussDB PL/pgSQL七种CRR二叉树定价实现，统一命令行参数接口",
+    "V2优化通过常数时间内在价值递推将POWER()调用次数从O(N²)降至O(N)，README记载N=300时Oracle 19c提速最高18.4倍、GaussDB提速2.3倍",
+    "包含run_benchmark.sh一键脚本，自动检测工具链、编译运行各实现并输出CSV与Markdown报告"
+   ],
+   "use_cases": [
+    "对比不同编程语言及数据库存储过程在数值计算场景下的执行性能",
+    "在Oracle或GaussDB内部以存储过程实现期权定价并优化SQL数值类型开销",
+    "作为CRR二叉树模型美式/欧式期权定价的教学与参考实现"
+   ]
+  },
+  "sha": "9df8624f65f1",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4658432c6e38": {
+  "identity": {
+   "one_liner": "基于 PHP+MySQL 的公务出差命令单管理系统，用于 SPPD 归档",
+   "review": "SISFO-SPPD 是一套运行于 XAMPP/PHP 7.4 环境的 Web 应用，用于录入、归档公务出差任务命令单（SPT/SPPD），管理预算、差旅费明细并生成多种报表。部署方式为解压到 htdocs、配置 /inc/config.php、导入 /db 下的 .sql 数据库文件，附带 Android 端用于签到与 GPS 定位。",
+   "highlights": [
+    "支持员工主数据、预算（原始/变更/实际）、酒店费率、交通等基础设置，并可指定签发 SPPD 的官员",
+    "支持录入 SPT 并设置 Panjar/Rampung 状态，上传 jpg/jpeg/pdf/png/doc/docx 附件作为凭证，下载 .xls 格式的费用明细与收据",
+    "提供按人员、部门、职级、月份、年份、出差类型等多种维度的报表，Android 端可通过 GPS 记录持有 SPPD 员工的最近位置"
+   ],
+   "use_cases": [
+    "需要电子化归档出差任务命令单（SPPD）的办公室",
+    "需按部门、人员、月份等维度统计差旅预算与实际执行情况的行政单位",
+    "需通过 Android 应用对出差人员进行定位签到与查看个人 SPPD 明细的单位"
+   ]
+  },
+  "sha": "4658432c6e38",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7ebce8106b8f": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 Swift 持久化工作流引擎，用检查点恢复执行",
+   "review": "Strand 是面向 Swift 6.3 的持久化工作流引擎，以 PostgreSQL 作为唯一后端，无需独立的协调服务、Redis 或 Cassandra。开发者用 @Workflow 宏声明工作流，工作进程崩溃后由下一个进程从最后检查点恢复执行。运行环境要求 Swift 6.3+ 与 PostgreSQL 17+，通过 Swift Package Manager 引入。",
+   "highlights": [
+    "以 Postgres 存储状态，工作进程崩溃后从最后检查点恢复，避免工作重复或状态丢失",
+    "支持 cron/间隔调度、信号与事件唤醒、重试策略及集成测试辅助",
+    "提供 @Workflow 宏与多个可运行示例（fan-out、数据管道、CI 审批、IoT 聚合等）"
+   ],
+   "use_cases": [
+    "需要崩溃恢复的长时间后台任务与工作流编排",
+    "基于 Postgres 的定时任务调度（cron、间隔、补跑）",
+    "数据管道、CI 流程审批等含人工介入或 fan-out 的场景"
+   ]
+  },
+  "sha": "7ebce8106b8f",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a79f372752a5": {
+  "identity": {
+   "one_liner": "基于 Flask 与 PostgreSQL 的问答引擎 Sal 后端",
+   "review": "Sal 是一个问答（Q/A）引擎的后端部分，使用 Python3 与 Flask 框架、SQLAlchemy ORM、PostgreSQL 数据库和 Flask-Migrate 迁移工具实现，通过 REST API 提供服务，前端为独立的 ReactJS 仓库。项目源自 Udacity 全栈纳米学位的毕业项目，README 中作者定位为全栈 Web 应用的学习指南，欢迎提交贡献。部署配置包含 Heroku 的 Procfile 与环境变量示例文件，详细文档在 wiki 中。",
+   "highlights": [
+    "后端技术栈包含 PostgreSQL、SQLAlchemy ORM、Python3/Flask 与 Flask-Migrate",
+    "提供 auth 认证模块与 db 数据库模型模块，路由集中定义在 app.py 入口文件",
+    "包含 Procfile 与 .env.example，支持 Heroku 部署方式"
+   ],
+   "use_cases": [
+    "作为学习 Python + React 全栈 Web 应用开发的参考项目",
+    "为 Sal 前端 React 应用提供问答功能的 API 服务",
+    "作为 Flask + PostgreSQL 后端项目的模板结构参考"
+   ]
+  },
+  "sha": "a79f372752a5",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a0bb829f64ba": {
+  "identity": {
+   "one_liner": "一个面向 openGauss 数据库巡检工具的组件（widget）。",
+   "review": "README 内容极简，仅说明该项目是为 openGauss Database inspection Tool 设计的一个 widget 组件，未提供功能细节、安装步骤或使用文档。openGauss 是开源数据库，该组件面向需要使用此巡检工具的用户。由于描述之外的信息缺失，具体能力与限制无法从 README 验证。",
+   "highlights": [
+    "README 声明该组件用于 openGauss Database inspection Tool"
+   ],
+   "use_cases": [
+    "配合 openGauss 数据库巡检工具使用"
+   ]
+  },
+  "sha": "a0bb829f64ba",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9d4b7a36af64": {
+  "identity": {
+   "one_liner": "Fastify 的 PostgreSQL 连接插件，基于 node-postgres 共享连接池",
+   "review": "该插件为 Fastify 服务器注册 pg 命名空间，底层使用 node-postgres 建立连接池，供服务各部分共享。提供 query（无事务查询）、transact（事务查询）、connect、pool、Client 等属性，支持通过 name 选项配置多个数据库，支持 TypeScript。适用于使用 Fastify 框架并需要连接 PostgreSQL 的 Node.js 项目。",
+   "highlights": [
+    "注册后在 Fastify 实例上提供 pg 命名空间，包含 connect、pool、Client、query、transact 五个属性",
+    "支持 name 选项命名多个数据库连接，可在使用未命名连接的同时使用多个命名连接",
+    "提供 transact 路由选项，通过 preHandler/onError/onSend 钩子自动包装路由处理器于事务中"
+   ],
+   "use_cases": [
+    "Fastify 应用中共享同一 PostgreSQL 连接池",
+    "需要同时连接多个 PostgreSQL 数据库的项目",
+    "路由级别需要自动事务提交/回滚的数据库操作"
+   ]
+  },
+  "sha": "9d4b7a36af64",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ed8f5593038": {
+  "identity": {
+   "one_liner": "用于在 GitHub Actions 工作流中部署 SQL 项目的官方 Action",
+   "review": "sql-action 是微软 Azure 官方维护的 GitHub Action，用于将 dacpac、SQL 脚本或 SDK 风格 SQL 项目部署到 Azure SQL Database、Azure SQL Managed Instance 或 SQL Server。底层调用 SqlPackage、go-sqlcmd 和 dotnet build；v2 起支持 SQL 认证及多种 AAD 认证方式。可在 PR 上生成部署摘要与粘性评论，需授予 pull-requests: write 权限。",
+   "highlights": [
+    "支持以 dacpac、SQL 脚本或基于 Microsoft.Build.Sql SDK 的 SQL 项目作为部署来源，运行于 Windows 和 Linux 环境",
+    "提供 changes-detected、objects-changed、deployment-report-path、deployment-script-path 等输出，并将部署报告与 T-SQL 脚本写入 job summary",
+    "可自动为 GitHub Actions runner 的 IP 添加和移除 Azure SQL Database 防火墙规则，需配合 Azure/login 步骤及相应 RBAC 权限"
+   ],
+   "use_cases": [
+    "在 CI/CD 工作流中自动化部署 SQL 项目或 dacpac 到 Azure SQL 数据库",
+    "通过部署摘要和 PR 评论审查每次部署的对象变更与潜在数据丢失警告",
+    "在防火墙受限环境下部署 SQL 脚本时自动管理 runner IP 的临时防火墙规则"
+   ]
+  },
+  "sha": "6ed8f5593038",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "784f8e08d2d0": {
+  "identity": {
+   "one_liner": "在自有 PostgreSQL 中实现 BM25+向量+RRF 混合检索的 TypeScript 库",
+   "review": "searchgres.js 是开源 TypeScript 库（Apache 2.0），在 PostgreSQL 内组合 BM25 关键词检索、HNSW 向量检索、RRF 混合排序及树/JSONB/时间/正则过滤。使用者需自备 postgres.js 连接与 AI SDK 嵌入模型，库负责搜索 schema、索引与嵌入队列管理。要求 PostgreSQL 18（pgvector、pg_textsearch、ltree）及 Node ≥22 或 Bun ≥1.4，通过 npm 包 searchgres 安装。",
+   "highlights": [
+    "index.search() 根据传入参数自动选择检索模式：语义、BM25、RRF 混合或仅过滤的 keyset 分页列表",
+    "索引为普通 PostgreSQL schema，使用 HNSW、BM25、GiST、GIN 原生索引，新写入记录对 BM25 和过滤即时可见",
+    "核心不含用户、账户或授权模型，认证与权限由应用或数据库层处理"
+   ],
+   "use_cases": [
+    "在自有 PostgreSQL 中构建应用内搜索或托管搜索 API",
+    "自选分块与生成流程的 RAG 检索环节",
+    "基于现有表通过代码、SQL 或触发器构建索引管道"
+   ]
+  },
+  "sha": "784f8e08d2d0",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "caaeb6df7ec5": {
+  "identity": {
+   "one_liner": "基于 React 与 Vite 的前端项目模板",
+   "review": "该仓库是一个 React + Vite 前端模板项目，提供让 React 在 Vite 中运行的最小化配置，包含 HMR（热模块替换）支持与部分 ESLint 规则，并使用官方插件。README 仅包含模板说明，未描述具体业务功能与使用对象；项目名称显示其为 CapStone-Tidbit 项目的前端部分。",
+   "highlights": [
+    "提供 React 在 Vite 中的最小化初始配置",
+    "支持 HMR 热模块替换",
+    "包含部分 ESLint 规则并使用官方插件"
+   ],
+   "use_cases": [
+    "需要快速搭建 React + Vite 前端项目结构的场景",
+    "需要 HMR 与 ESLint 基础配置的开发场景"
+   ]
+  },
+  "sha": "caaeb6df7ec5",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "67614dfacb73": {
+  "identity": {
+   "one_liner": "Python 与 MySQL 的 ETL 教学材料，含 4 个 Jupyter Notebook。",
+   "review": "这是特拉维夫大学 2017 年数据仓库课程使用的约 2 小时 ETL 培训材料，面向学习数据管道的学员。包含 4 个 Notebook：Jupyter 入门、基于 MySQLdb 的 MySQL 读写、基于 petl 包的 ETL 流程，以及 csv 库示例；附带 drinks.json、zip 压缩包和多个 CSV 数据文件，MySQL 练习依赖内置 world 示例库，缺失时可通过 CreateWorld.sql 脚本创建。",
+   "highlights": [
+    "提供 4 个 Jupyter Notebook，覆盖 Jupyter 入门、MySQLdb 读写 MySQL、petl 包 ETL 操作与 csv 库用法",
+    "附带 json、zip 与多个 csv 示例数据文件，用于各练习",
+    "包含 CreateWorld.sql 脚本，用于生成 mysql-io 练习所需的 world 示例数据库"
+   ],
+   "use_cases": [
+    "学习使用 Python 进行 ETL 流程开发",
+    "练习通过 MySQLdb 连接器对 MySQL 进行输入输出操作",
+    "了解 csv 库（含 sniffer）及 petl 包的基本用法"
+   ]
+  },
+  "sha": "67614dfacb73",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5a05e626acff": {
+  "identity": {
+   "one_liner": "howtocards 的后端服务，提供 REST-like API。",
+   "review": "howtocards/backend 是 howtocards 项目的后端仓库，提供 REST-like API。从主题标签看，其技术栈包括 Rust、Actix Web 框架、Diesel ORM 与 PostgreSQL 数据库。README 内容较短，仅包含通过 public-api.Dockerfile 进行 Docker 构建的说明，未详述接口列表与部署要求。",
+   "highlights": [
+    "提供 REST-like API 服务",
+    "技术栈包含 Actix Web、Diesel 与 PostgreSQL",
+    "支持通过 Dockerfile 构建 Docker 镜像"
+   ],
+   "use_cases": [
+    "作为 howtocards 项目的后端 API 服务运行",
+    "以 Docker 容器方式部署 public-api 服务"
+   ]
+  },
+  "sha": "5a05e626acff",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "40f3d3c8db6b": {
+  "identity": {
+   "one_liner": "Shell 脚本工具，用于下载 Oracle 网站上受 SSO 保护的文件",
+   "review": "oradown 是一个 shell 脚本，用于下载 Oracle 网站上受 SSO 保护、需要登录账号和许可 cookie 的文件（如 OTN 上的安装包）。用户需提供 Oracle 用户名和许可 cookie，密码可选；支持指定输出文件，可通过 wget/curl 直接拉取脚本运行。适用于需要脚本化获取 Oracle 下载资源的用户。",
+   "highlights": [
+    "以命令行方式运行：oradown.sh [OPTION]... URL，需提供 Oracle 用户名（必填）与许可 cookie 名称（必填）",
+    "支持通过 --output 指定输出文件，密码为可选参数",
+    "可通过 wget 或 curl 直接拉取脚本并以 bash 执行，README 提供 weblogic 12c 下载示例"
+   ],
+   "use_cases": [
+    "脚本化下载 Oracle OTN 上受 SSO 保护的安装包",
+    "在自动化流程中获取需要 Oracle 账号授权的文件",
+    "无需预装工具，借助 wget/curl 直接执行下载"
+   ]
+  },
+  "sha": "40f3d3c8db6b",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb9e08f59b0f": {
+  "identity": {
+   "one_liner": "一个 DataFusion 表提供器，用于在远程数据库上执行 SQL 并流式返回结果",
+   "review": "这是一个用 Rust 编写的 DataFusion 表提供器（table provider），通过远程数据库连接执行 SQL 查询并将结果以流方式接入 DataFusion，同时支持向远程数据库写入数据。README 给出了基于连接选项构造实例的 Rust 使用示例，支持 Postgres、MySQL、Oracle、SQLite、达梦、GaussDB/OpenGauss 及 Microsoft Access 等数据库，并逐一列出各库已支持的数据类型；README 未说明版本号与许可证具体内容。",
+   "highlights": [
+    "支持将远程数据库上的 SQL 查询结果作为 DataFusion 表提供器流式输出，并可向远程数据库插入数据",
+    "支持模式推断或用户指定模式，支持下推过滤条件与 limit 到远程数据库，执行计划可序列化用于分布式执行",
+    "覆盖 Postgres、MySQL、Oracle、SQLite、达梦、GaussDB/OpenGauss、MDB/Access（经 MDBTools ODBC 驱动）等数据库及其各自的数据类型列表"
+   ],
+   "use_cases": [
+    "在 DataFusion 查询流程中读取远程关系数据库（如 Postgres、MySQL、Oracle）中的表数据",
+    "需要在分布式执行计划中接入远程数据库数据源的场景",
+    "需要向远程数据库写入数据或将 Access/MDB 文件作为数据源接入的场景"
+   ]
+  },
+  "sha": "cb9e08f59b0f",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f7efdda674b9": {
+  "identity": {
+   "one_liner": "Linux Tidbits 系列推特示例程序源码集",
+   "review": "该仓库包含 Twitter 账号 @shuveb 上 Linux Tidbits 系列推文的示例程序源码。面向阅读该系列推文、希望运行示例的读者。构建使用 CMake：克隆仓库后新建 build 目录并在其中执行 cmake 与 cmake --build，生成的可执行文件位于 build 目录下可直接运行。README 未说明各示例的具体功能与依赖。",
+   "highlights": [
+    "提供 Linux Tidbits 系列推文对应的示例程序源码",
+    "使用 CMake 构建，可执行文件输出至 build 目录",
+    "支持克隆后通过 cmake --build 命令完成编译"
+   ],
+   "use_cases": [
+    "配合阅读 @shuveb 发布的 Linux Tidbits 系列推文并运行对应示例",
+    "本地编译执行示例程序以观察其行为"
+   ]
+  },
+  "sha": "f7efdda674b9",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "36d9a347c3e9": {
+  "identity": {
+   "one_liner": "《Mastering Data Analysis with Python》一书的配套代码仓库，含 Jupyter 笔记本与练习",
+   "review": "该仓库是 Rajender Kumar 所著《Mastering Data Analysis with Python》一书的代码配套资源，包含 Jupyter 笔记本、示例和练习。内容覆盖 Python 基础、NumPy、Pandas、Matplotlib、描述统计、数据探索、可视化及业务应用共 11 章。README 说明代码与书中概念一一对应，书籍通过 Amazon 销售，仓库提供 License 信息。",
+   "highlights": [
+    "包含与书籍各章对应的 Jupyter 笔记本、示例和动手练习",
+    "覆盖数据清洗、NumPy 数值计算、Pandas 数据操作、描述统计与 Matplotlib 可视化等主题",
+    "内容按 Python 基础、核心库、统计分析、可视化、业务应用五个阶段组织"
+   ],
+   "use_cases": [
+    "配合原书学习 Python 数据分析",
+    "作为 NumPy/Pandas/Matplotlib 各主题的代码示例参考",
+    "数据科学课程或自学中的练习材料"
+   ]
+  },
+  "sha": "36d9a347c3e9",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bbf36eed18b7": {
+  "identity": {
+   "one_liner": "将多种表格数据格式转换为 SQLite 数据库文件的 CLI 工具",
+   "review": "sqlitebiter 是一个 Python 编写的命令行工具，把 CSV/TSV/SSV、Excel、HTML、JSON、Jupyter Notebook、LDJSON、LTSV、Markdown、Mediawiki、SQLite、Google Sheets 等格式导入 SQLite 数据库，并支持从 URL 抓取网页表格和从 stdin 读取数据。每次转换会在库中生成 _source_info_ 表记录来源信息；列名中的符号可通过 --replace-symbol 选项替换。JSON 转换在文档中有单独的局限说明。",
+   "highlights": [
+    "支持从文件、URL、stdin 三种来源读取并转换为 SQLite 数据库",
+    "涵盖 CSV/TSV/SSV、Excel、HTML、JSON、Jupyter Notebook、LDJSON、LTSV、Markdown、Mediawiki、SQLite、Google Sheets 等输入格式",
+    "提供多字节字符支持和自动文件编码检测，可用 --replace-symbol 替换列名中的符号"
+   ],
+   "use_cases": [
+    "将 CSV、Excel 等本地表格文件批量合并为一个 SQLite 数据库",
+    "抓取网页中的 HTML 表格并存入 SQLite 表",
+    "通过管道将 JSON 等流式数据从 stdin 导入 SQLite"
+   ]
+  },
+  "sha": "bbf36eed18b7",
+  "source": "readme",
+  "generated_at": "2026-11-06",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a1a6840ebd3f": {
+  "identity": {
+   "one_liner": "WizardMC 我的世界服务器官方网站，含前端、API 与管理后台三部分。",
+   "review": "wizardmc.fr 是 WizardMC 我的世界服务器的官方网站，由三个独立应用组成：Nuxt.js 前端、Adonis 5 编写的 API 以及基于 Vue.js 2 的管理后台，均使用 TailwindCSS。项目依赖 Node.js 12+、PostgreSQL 和 Redis，通过 npm install 配置 .env 后运行，采用 GPLv3 许可证。适合需要参考多应用单仓库结构的开发者。",
+   "highlights": [
+    "由前端、API、管理后台三个应用组成",
+    "API 使用 Adonis 5 与 TypeScript，数据存储于 PostgreSQL 并配合 Redis",
+    "三个应用均提供开发与构建命令及 .env 配置模板"
+   ],
+   "use_cases": [
+    "访问 WizardMC 我的世界服务器官网",
+    "通过管理后台维护服务器站点内容",
+    "参考 Nuxt.js + Adonis 5 + Vue 2 的多应用项目结构"
+   ]
+  },
+  "sha": "a1a6840ebd3f",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "066e22321902": {
+  "identity": {
+   "one_liner": "SQL 学习资源索引清单，汇集教程、课程与示例数据库链接",
+   "review": "该仓库是一个 SQL 学习资源合集，README 仅包含外部链接列表：SQL 入门教程、交互式教程与风格指南，Khan Academy 与 DB2 Express-C 相关课程，以及 MSSQL Adventure Works、DB2 示例数据库等。项目本身不含代码或数据库文件，适合作为 SQL 初学者的链接导航使用。",
+   "highlights": [
+    "提供 SQL 入门 PDF 教程、交互式教程（SQLZoo）与 SQL 风格指南的外部链接",
+    "收录 Khan Academy 与基于 DB2 Express-C 的在线课程链接",
+    "包含 MSSQL Adventure Works、DB2 示例数据库等样例数据库资源链接"
+   ],
+   "use_cases": [
+    "SQL 初学者按清单查找入门教程与交互式练习资源",
+    "需要样例数据库（MSSQL、DB2）用于练习或测试时查找下载入口",
+    "检索 DB2、PostgreSQL 等数据库相关的学习材料链接"
+   ]
+  },
+  "sha": "066e22321902",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f3a1921826e": {
+  "identity": {
+   "one_liner": "云和恩墨发布的openGauss数据库Docker镜像，支持x86-64与ARM64双架构。",
+   "review": "该项目提供openGauss开源关系型数据库的容器镜像，由Enmotech OpenSource Team维护，含1.0.0、1.0.1与latest标签。通过环境变量GS_PASSWORD等配置实例，必须设置密码且需满足大小写字母、数字与特殊符号的复杂度要求；支持-v持久化数据、-p端口映射，并提供create_master_slave.sh脚本创建主从架构容器。",
+   "highlights": [
+    "提供x86-64（CentOS 7.6）与ARM64（openEuler 20.03 LTS）两种架构的镜像，按运行机器架构自动匹配",
+    "支持GS_PASSWORD、GS_NODENAME、GS_USERNAME、GS_PORT等环境变量配置",
+    "包含create_master_slave.sh脚本，可通过可配置参数创建openGauss主从复制容器"
+   ],
+   "use_cases": [
+    "在Docker环境中快速运行openGauss数据库实例",
+    "通过-v挂载宿主机目录实现数据库数据持久化存储",
+    "使用脚本搭建openGauss主从复制测试环境"
+   ]
+  },
+  "sha": "3f3a1921826e",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b7fb67e5051d": {
+  "identity": {
+   "one_liner": "基于 Blessed 的终端多源并行翻译 TUI，集成 LLM 与 SQLite 历史",
+   "review": "multranslate 是一个运行于终端的翻译工具，可在同一界面同时调用 Google、DeepL（经 DeepLX）、Reverso、MyMemory 及 OpenAI/OpenRouter/LM Studio 等来源。多数翻译源无需 API 密钥；翻译历史存于 SQLite，上限 500 条后自动清理；支持英文与约 23 种语言间的自动语种检测。通过 npm 安装，也可用 Docker 运行。",
+   "highlights": [
+    "同时向 Google、DeepL、Reverso、MyMemory 及 LLM 多个来源发送翻译请求，多数来源无需 API 密钥",
+    "支持 OpenAI、OpenRouter 及本地 LM Studio（兼容 OpenAI 接口格式），含翻译预设 prompt 与聊天模式、流式响应",
+    "通过 SQLite 保存最多 500 条翻译历史，超出后自动清理旧记录；支持自动语种检测与快捷键复制结果"
+   ],
+   "use_cases": [
+    "在终端中同时获取多个翻译服务的译文进行对照",
+    "通过 OpenRouter 免费模型或 LM Studio 本地模型进行离线或低成本的 LLM 翻译",
+    "需要保留和回溯近期翻译记录的命令行工作流"
+   ]
+  },
+  "sha": "b7fb67e5051d",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1efd7f30794c": {
+  "identity": {
+   "one_liner": "Go 编写的数据库连接路由代理，通过用户名或 TLS SNI 将客户端路由到后端数据库。",
+   "review": "该项目是一个数据库连接代理，客户端连接单一端点，代理依据登录用户名后缀或 TLS SNI 选择后端，并在转发前剥离路由后缀。支持 PostgreSQL、Redis、ClickHouse 及 TLS-first 协议，可在 Kubernetes 中基于 Service 标签自动发现路由，也可通过 STATIC_BACKENDS 在容器/VM 中静态配置。MySQL/MariaDB 支持尚在计划中；部分 PostgreSQL 兼容数据库未经真实产品实测。",
+   "highlights": [
+    "支持 PostgreSQL（含 CockroachDB、YugabyteDB 等兼容库）、Redis、ClickHouse 原生协议及任意 TLS-first 协议的 SNI 透传",
+    "提供基于 Kubernetes Service 标签的自动服务发现与 STATIC_BACKENDS 静态路由两种模式",
+    "TLS 可在代理终止或透传，支持自签证书按需生成、6 小时检查与热切换，Kustomize 清单含 NodePort 和 DaemonSet 部署方式"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中为多个数据库 Service 提供统一连接入口",
+    "在无 Kubernetes 的容器或虚拟机环境中进行静态后端路由",
+    "客户端需要通过 SNI 访问 TLS-first 数据库（如 MongoDB）的场景"
+   ]
+  },
+  "sha": "1efd7f30794c",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "86c43897dc7d": {
+  "identity": {
+   "one_liner": "Models 是基于 Rust 结构体派生自动生成 SQL 迁移的管理工具",
+   "review": "Models 是一个 SQL 迁移管理工具，支持 PostgreSQL、MySQL 和 SQLite。开发者通过对 Rust 结构体派生 Model trait 并使用 primary_key、foreign_key、default、unique 等属性标注，运行 models generate 即可自动生成迁移文件，再执行 models migrate run 应用。CLI 通过 cargo install models-cli 安装，支持 -r 标志生成可回滚迁移，并提供 database/generate/migrate 等命令缩写。适用于在 Rust 项目中以代码结构驱动数据库表结构变更的团队。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL 和 SQLite 三种数据库",
+    "通过派生 Model trait 与属性标注自动生成迁移文件，支持 -r 生成可回滚的 down 迁移",
+    "提供 migrate run/revert/info 子命令及 db/gen/mig 命令缩写"
+   ],
+   "use_cases": [
+    "Rust 项目中依据结构体定义自动生成并执行数据库表结构迁移",
+    "需要对已应用的迁移执行回退与状态查看的流程管理",
+    "为不同数据库后端维护统一的迁移文件目录"
+   ]
+  },
+  "sha": "86c43897dc7d",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ca372d07912f": {
+  "identity": {
+   "one_liner": "为 Gemini CLI 提供 TiDB 文档支持的扩展",
+   "review": "这是一个 Gemini CLI 扩展，为在该环境中使用 TiDB 数据库提供文档支持，文档内容来源于 llms.txt。用户可通过 gemini extension install 命令安装，也可将仓库克隆到全局（~/.gemini/extensions）或工作区（./.gemini/extensions）目录。扩展在 Gemini CLI 启动时自动加载，用于回答与 TiDB 相关的问题，适合需要在命令行查询 TiDB 文档的用户。",
+   "highlights": [
+    "提供基于 llms.txt 来源的 TiDB 文档内容",
+    "支持 gemini extension install 一条命令安装，或通过 git clone 到全局/工作区扩展目录",
+    "Gemini CLI 启动时自动加载扩展，用于回答 TiDB 相关问题"
+   ],
+   "use_cases": [
+    "在 Gemini CLI 环境中查询 TiDB 数据库相关文档信息",
+    "需要在多个工作区统一加载 TiDB 文档时进行全局安装",
+    "仅在特定项目中使用 TiDB 文档时进行工作区级安装"
+   ]
+  },
+  "sha": "ca372d07912f",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01d800761ab6": {
+  "identity": {
+   "one_liner": "基于 Java 17 与 Spring 的事件与场馆管理 REST API",
+   "review": "这是一个用于管理事件（Events）与场馆（Venues）的 REST API 项目，采用 Clean Architecture 分层组织代码（Domain、Application、Infrastructure、Presentation），使用 Spring Boot、Spring Data、PostgreSQL 存储，Flyway 管理数据库迁移，Docker Compose 一键启动，并暴露 Swagger 文档。适合需要事件/场馆增删改查功能的开发者参考或部署使用。数据库迁移脚本位于 src/main/resources/db/migration。",
+   "highlights": [
+    "提供 Events 与 Venues 两类资源的完整 CRUD REST 接口（GET/POST/PUT/DELETE）",
+    "按 Clean Architecture 分为 Domain、Application、Infrastructure、Presentation 四层",
+    "使用 Flyway 管理数据库迁移，通过 docker-compose up 即可启动并访问 Swagger 文档"
+   ],
+   "use_cases": [
+    "需要事件与场馆信息增删改查能力的应用后端",
+    "参考 Clean Architecture 在 Java/Spring 项目中的分层实现",
+    "借助 Flyway 与 Docker 快速搭建带数据库迁移的 API 环境"
+   ]
+  },
+  "sha": "01d800761ab6",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "944d6d7f3134": {
+  "identity": {
+   "one_liner": "基于 Rust/Ratatui 的终端数据库管理 TUI，采用 Vim 式模态编辑与标签-面板布局。",
+   "review": "ShellQL 是一个运行于终端的数据库管理工具，面向使用 Vim/tmux 的开发者，支持 Postgres、MySQL、SQLite 三种引擎。其核心机制是标签-面板-视图的可组合布局，SQL 编辑器实现 normal/insert/visual 模态与操作符、motion，数据修改采用暂存（staged）后以 `:w` 提交的模式。项目目前处于 beta 阶段（v0.1.x-beta），键位与功能仍在演进，安装可通过 Homebrew、cargo 或源码构建，许可证为 MIT。",
+   "highlights": [
+    "支持 Postgres、MySQL、SQLite 连接管理（TUI 与 CLI 两种方式），提供多标签、多面板工作区与 tables/table/schema/editor/results 五种视图",
+    "SQL 编辑器实现 Vim 式模态操作（motions、operators、text objects、yank/paste），并带上下文感知的 SQL 与表名自动补全",
+    "表格视图支持浏览、`:where` 过滤、`:order` 排序、`:select` 投影、单元格编辑、暂存插入/删除，经 `:w` 提交；`:! <sql>` 可在命令行直接执行 SQL"
+   ],
+   "use_cases": [
+    "通过 SSH 会话检查数据库行数据",
+    "编码过程中排查数据问题并执行一次性 SQL 更新",
+    "Vim/tmux 用户的纯键盘数据操作工作流"
+   ]
+  },
+  "sha": "944d6d7f3134",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea035697a646": {
+  "identity": {
+   "one_liner": "面向大学选课场景的关系型数据库课程项目，基于 Oracle 与 JDBC",
+   "review": "该项目为 NC State University 一类高校的选课业务设计关系型数据库应用，主题标签含 dbms、oracle、sql。README 提供需在 /src/first_example.java 中填写 Unity ID 与密码的说明、Oracle JDBC 驱动安装链接及项目报告，并给出管理员与学生的预置登录凭据。内容较简，未说明部署细节，面向课程作业使用者。",
+   "highlights": [
+    "用于支持大学课程注册（选课）业务的关系型数据库应用",
+    "通过 JDBC 连接 Oracle 数据库，需在 Java 源码中配置 Unity ID 与密码",
+    "提供管理员与学生两种角色的登录账号及项目报告、ER 图链接"
+   ],
+   "use_cases": [
+    "数据库课程作业中实现与演示选课系统",
+    "练习 Oracle JDBC 连接与 SQL 操作的教学场景",
+    "作为包含管理员与学生角色的选课数据库设计参考"
+   ]
+  },
+  "sha": "ea035697a646",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d6d88895018": {
+  "identity": {
+   "one_liner": "OceanBase 开发者快速入门索引，按应用、SDK、插件、MCP 分类收录项目",
+   "review": "该仓库是一份面向 OceanBase 开发者的项目索引，收录应用/Demo、AI SDK、数据库驱动、ORM、插件与 MCP Server 等条目，每条附使用场景与关键能力说明，用于帮助开发者选择合适的 SDK 或工具构建应用。条目覆盖 Python/Java/Go/Rust/JS 等语言，索引本身欢迎通过 Issue 或 PR 贡献新增项目。",
+   "highlights": [
+    "按 Application/Demo、SDK（AI、驱动/ORM、KV）、Plugin、MCP Resources 四大类组织条目",
+    "收录多语言 SDK：pyseekdb、pyobvector、seekdb-js、seekdb-rs、seekdb-go、obvec_jdbc、obconnector-j 等",
+    "包含 Flyway、Spark、Flink、Kafka Connect、Trino、Dify 等集成插件，以及 OceanBase、OCP、seekdb 等多个 MCP Server 条目"
+   ],
+   "use_cases": [
+    "为基于 OceanBase 或 seekdb 的应用开发挑选合适的 SDK、驱动或 ORM",
+    "搭建 RAG、向量检索、AI Agent 类应用时查找相关 Demo 与集成插件",
+    "为 AI 工具或 Agent 接入 OceanBase 数据能力时查找 MCP Server"
+   ]
+  },
+  "sha": "1d6d88895018",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec1610c58827": {
+  "identity": {
+   "one_liner": "将 Evernote ENEX 导出文件转换为 SQLite 数据库的命令行工具",
+   "review": "evernote-to-sqlite 是一个 Python 命令行工具，用于把 Evernote 桌面端导出的 ENEX 文件转换成 SQLite 数据库，属于 dogsheep 项目族。通过 pip 安装后执行 `evernote-to-sqlite enex` 命令即可转换并显示进度条。因 ENEX 格式不含笔记唯一标识和所属笔记本信息，工具只适合对导出文件做一次性转换，不支持更新后重新导入。",
+   "highlights": [
+    "提供 `evernote-to-sqlite enex` 命令，将 ENEX 导出文件转换为 SQLite 数据库文件",
+    "转换过程显示进度条",
+    "通过 pip 安装，依赖 PyPI 分发"
+   ],
+   "use_cases": [
+    "将 Evernote 笔记导出的 ENEX 文件一次性转换为 SQLite 数据库以便本地查询",
+    "对整个笔记本导出的 ENEX 文件做结构化存储",
+    "配合 datasette 等工具浏览转换后的笔记数据"
+   ]
+  },
+  "sha": "ec1610c58827",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01dfecd1a093": {
+  "identity": {
+   "one_liner": "一款基于Dapper的.NET扩展库，SQL拼接与单表Lambda查询结合，支持多种数据库。",
+   "review": "Dapper.Lite是一个.NET平台上的Dapper扩展库，用于在保留原生SQL编写方式的同时，为单表查询和Where条件提供Lambda表达式支持。它内置支持Oracle、SQL Server、MySQL、PostgreSQL、SQLite、Access、ClickHouse等数据库，其他ADO.NET支持的数据库可通过实现IProvider接口扩展。适合希望以原生SQL为主、Lambda为辅的.NET开发者使用；连表、子查询等复杂查询不支持Lambda写法。",
+   "highlights": [
+    "增删改查支持实体类与实体类集合操作，无需手写SQL，增删改支持联合主键",
+    "支持参数化查询、多数据源连接、事务、异步查询、分页查询及手动分表",
+    "内置多种数据库Provider，其他ADO.NET数据库可通过实现IProvider接口扩展，并提供配套Model生成器"
+   ],
+   "use_cases": [
+    "需要以原生SQL为主、Lambda条件拼接为辅的.NET数据访问层开发",
+    "使用Oracle、SQL Server、MySQL、PostgreSQL、SQLite、Access、ClickHouse等多种数据库的项目",
+    "需要调用存储过程等场景可直接回退使用原生Dapper的混合式数据访问"
+   ]
+  },
+  "sha": "01dfecd1a093",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e58a11018941": {
+  "identity": {
+   "one_liner": "为 AI 代理提供隔离沙箱环境的 MCP 服务器，基于嵌入式 VM 运行时。",
+   "review": "boxlite-mcp 是一个 MCP 服务器，为 AI 代理提供基于虚拟机的隔离沙箱环境，底层由 BoxLite 嵌入式 VM 运行时驱动，支持硬件级隔离且无需后台守护进程。提供 computer、browser、code_interpreter、sandbox 四类工具，可通过 uvx、pip 安装并接入 Claude Code 或 Claude Desktop。当前仅支持 macOS 和 Linux。",
+   "highlights": [
+    "提供四类 MCP 工具：兼容 Anthropic computer use API 的 Ubuntu XFCE 桌面（computer）、带 CDP 端点的 Chromium（browser）、Python 执行沙箱（code_interpreter）、通用 shell 容器（sandbox）",
+    "沙箱基于虚拟机实现，README 声明无需后台守护进程，通过导入即可使用",
+    "支持 uvx/pip 安装，可直接注册到 Claude Code 与 Claude Desktop"
+   ],
+   "use_cases": [
+    "让 AI 代理在隔离环境中执行代码、浏览网页、操作应用程序",
+    "运行不受信任的代码而不影响宿主系统",
+    "通过 CDP 端点配合 Puppeteer/Playwright/Selenium 进行浏览器自动化"
+   ]
+  },
+  "sha": "e58a11018941",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "92d05dc9dc9e": {
+  "identity": {
+   "one_liner": "由 AI 代理维护的待办看板，单个 Python 文件加 SQLite 实现",
+   "review": "Pult 是一个自托管的任务看板：会话开始时 AI 代理通过 `pult.py brief` 读取摘要，结束时以 JSON 批量操作更新卡片状态。项目定位为与 AI 协作的外部记忆，而非团队任务管理器。仅需 Python 3.9+，无第三方依赖，内存占用约 15 MB，支持 Telegram 通知与多代理权限控制。界面与文档仅提供俄语。",
+   "highlights": [
+    "提供 CLI 客户端 `pult.py` 和 HTTP API，代理可在会话开始读取摘要、结束时用 `apply ops.json` 批量更新卡片",
+    "单个 Python 文件（标准库）加 SQLite，无第三方依赖，含每日数据库备份与 systemd 部署脚本",
+    "实现多代理/多人权限体系：模型密钥权限不超出其所有者，记录变更日志，过期编辑按字段合并并提示冲突"
+   ],
+   "use_cases": [
+    "跨会话保持 AI 代理的工作上下文：代理自行读取摘要并续接卡片中的下一步骤",
+    "个人或小团队在自有电脑/最小 VPS 上运行任务看板，并通过手机页面或 Telegram 查看状态",
+    "需要多个代理与人协同维护同一任务列表，并追踪各会话变更记录的场景"
+   ]
+  },
+  "sha": "92d05dc9dc9e",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "93c1a8c61276": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue前后端分离的个人博客系统",
+   "review": "一个前后端分离的个人博客项目，包含前台展示、后台管理和SpringBoot后端三部分。持久层使用MyBatis-Plus，认证授权采用Shiro+JWT，缓存使用Redis，数据库为MySQL。README提供了数据库SQL脚本和后端开发文档，项目处于开发中，非稳定版本。适合需要自部署博客或学习该技术栈组合的开发者。",
+   "highlights": [
+    "前后端分离，前端分前台（blog-client）与后台管理（blog-manage）两个Vue项目",
+    "后端使用SpringBoot+MyBatis-Plus+MySQL+Redis，认证授权使用Shiro+JWT",
+    "提供数据库SQL文件与后端开发文档，README含完整本地启动步骤"
+   ],
+   "use_cases": [
+    "自部署个人博客站点",
+    "学习SpringBoot+Vue+MyBatis-Plus技术栈组合",
+    "作为后台管理系统与前台分离的参考项目运行调试"
+   ]
+  },
+  "sha": "93c1a8c61276",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "941537f605eb": {
+  "identity": {
+   "one_liner": "演示在 Dapper 与 Postgres 上用行级安全实现多租户的应用示例",
+   "review": "该项目是一个演示仓库，展示在 .NET 中通过 Dapper 访问 Postgres 时利用行级安全（RLS）隔离多租户数据的做法：建表时包含 tenant 列，在表上配置安全策略并创建独立数据库账号，连接时通过 SET app.tenant 设置租户上下文。适合需要在单个 Postgres 数据库中实现多租户数据隔离的 .NET 开发者参考。",
+   "highlights": [
+    "建表示例中包含 tenant 列用于标识行所属租户，并以 jsonb 列存储数据",
+    "演示为租户创建独立数据库账号并在表上配置安全策略",
+    "通过 SET app.tenant 设置连接级租户上下文后执行查询"
+   ],
+   "use_cases": [
+    "单个 Postgres 数据库承载多租户数据的 .NET 应用参考实现",
+    "学习 Postgres 行级安全策略与 Dapper 配合使用的示例",
+    "基于 FluentMigrator 风格建表脚本的数据库迁移参考"
+   ]
+  },
+  "sha": "941537f605eb",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b09ee795bfc2": {
+  "identity": {
+   "one_liner": "基于RAG+LLaMA 3生成个性化旅行行程的Web应用",
+   "review": "AuraTrips是一个生成个性化旅行行程的Web应用，面向有出行规划需求的用户。用户输入目的地、预算、兴趣和行程天数，后端通过Groq API调用LLaMA 3模型，结合本地CSV数据集（300+目的地及评分）实现RAG检索与生成；相同请求经哈希缓存存入数据库以降低调用成本，行程可保存或以PDF/链接分享。",
+   "highlights": [
+    "实现RAG流程：从本地CSV数据集（300+目的地、含用户评分）检索信息，再由LLaMA 3生成行程",
+    "后端采用FastAPI+SQLAlchemy+SQLite，前端采用React+Vite+TailwindCSS+shadcn/ui",
+    "支持用户认证、行程保存、PDF下载/打印与链接分享，并对LLM响应做哈希缓存"
+   ],
+   "use_cases": [
+    "按预算、兴趣、行程天数生成个性化旅行计划",
+    "本地部署运行前后端进行开发或学习RAG+LLM应用结构",
+    "生成的行程以PDF或链接形式与他人共享"
+   ]
+  },
+  "sha": "b09ee795bfc2",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "21fdd5a08c67": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 AWS 的二手交易平台学习项目",
+   "review": "该仓库是四人团队于2021年1月至3月开发的二手交易平台项目，使用 Java 11、Spring Boot 2.4.2、Gradle 构建，数据库为 MySQL，部署于 AWS EC2，商品图片存储于 AWS S3。通过 JPA 设置实体关联关系，用 Spring Security 实现注册与登录，前端采用 Thymeleaf。仓库还包含十余篇开发笔记文档，内容涵盖数据库搭建、Git 协作规范、Spring Data JPA 等。",
+   "highlights": [
+    "实现注册登录（Spring Security）、商品列表浏览与上传、商品详情页、含点赞及买卖记录的个人页面",
+    "使用 AWS EC2 部署、AWS S3 存储商品图片，数据库为 MySQL，构建工具为 Gradle",
+    "仓库内包含 DB、Git、Spring、Thymeleaf 等主题的多篇开发笔记文档"
+   ],
+   "use_cases": [
+    "学习 Spring Boot、JPA、Spring Security 组合开发 Web 应用的流程参考",
+    "了解 AWS EC2 与 S3 在小型项目中的部署与图片存储方案",
+    "参考团队协作规范（commit 规则、PR 流程、密钥管理约定）"
+   ]
+  },
+  "sha": "21fdd5a08c67",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49357e65a90e": {
+  "identity": {
+   "one_liner": "纯 Java 库，直接读写 Microsoft Access 的 .mdb/.accdb 文件",
+   "review": "Jackcess 是一个开源 Java 库，用于读写 Microsoft Access 数据库文件（.mdb/.accdb）。它提供直接的底层 API，操作 Access 文件时不依赖数据库引擎，也无需安装 Access 或原生 DLL。它不是应用程序、没有 GUI，面向需要构建 Java 应用的开发者，也是 UCanAccess 的底层实现。需 Java 8+，构建工具为 Maven，默认 autoSync 会将每次写操作立即刷盘，批量写入时可关闭以换取速度。",
+   "highlights": [
+    "100% Java 实现，除可选的 Apache POI（仅复合 OLE 附件数据需要）外零运行时依赖，无需安装 MS Access",
+    "支持 Access 2000–2019 版本，可创建/修改表结构、索引和关系，读取复杂 schema",
+    "默认 autoSync=true 使每次写操作后文件保持一致状态，支持通过 addRows 批量写入或关闭 autoSync 提升吞吐；自带 JMH 基准测试套件"
+   ],
+   "use_cases": [
+    "在 Java 应用中程序化读取、创建、更新 Access 数据库文件的表数据",
+    "通过代码创建或修改 Access 文件的表结构、索引与表间关系",
+    "作为 UCanAccess 等需要直接操作 Access 文件的 Java 项目的底层库"
+   ]
+  },
+  "sha": "49357e65a90e",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f86862c2efb0": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 ClickHouse 的开源网站流量统计平台",
+   "review": "your-analytics 是一个面向网站站长与开发者的网络分析平台，强调隐私保护。技术栈包含 Node.js、ClickHouse、Svelte/Sapper 与 Tailwind CSS，开发环境可通过 Gitpod 一键启动并自动安装依赖、拉起服务，Web 应用运行在 3000 端口。部署前需在 FaunaDB 创建数据库并配置管理密钥等环境变量，认证使用 Magic Link；测试结果发布在 Cypress Dashboard。",
+   "highlights": [
+    "提供网站流量统计功能，以隐私保护为设计方向",
+    "开发环境通过 Gitpod 启动，自动完成依赖安装与各服务启动",
+    "使用 FaunaDB 存储配置、Magic Link 用于账户认证，测试结果公开在 Cypress Dashboard"
+   ],
+   "use_cases": [
+    "为自己的网站接入隐私导向的访问统计",
+    "开发者通过 Gitpod 快速搭建本地开发环境并参与开发",
+    "需要开源、可自托管的网络分析平台的技术团队"
+   ]
+  },
+  "sha": "f86862c2efb0",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cefc20520698": {
+  "identity": {
+   "one_liner": "SQLite 数据库向 OpenVMS 平台的原生移植版本。",
+   "review": "该项目将 SQLite 数据库包移植到 OpenVMS，利用 tis 库实现线程支持、通过 $QIO 系统服务直接访问文件、使用 OpenVMS 分布式锁管理器实现集群节点间的原生锁协调。生成的数据库文件仍可移植到其他系统上的 SQLite 应用。适用于需要在 OpenVMS 环境运行 SQLite 的用户。",
+   "highlights": [
+    "使用 tis 库提供线程支持，无需链接 pthreads RTL",
+    "所有文件访问通过 $QIO 系统服务执行，而非 C RTL 或 RMS",
+    "使用 OpenVMS 分布式锁管理器实现跨集群节点（含所有架构）的锁协调"
+   ],
+   "use_cases": [
+    "在 OpenVMS 系统上运行基于 SQLite 的应用",
+    "需要跨 OpenVMS 集群节点协调访问同一数据库的场景",
+    "需要生成的数据库文件在其他系统的 SQLite 应用间交换的场景"
+   ]
+  },
+  "sha": "cefc20520698",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7450a672cf6": {
+  "identity": {
+   "one_liner": "基于 Kafka 的 Python 消费者，实现 MongoDB 到 MySQL 的变更数据捕获",
+   "review": "该项目提供一套 MongoDB 到 MySQL 的 CDC 流程示例：通过 Kafka Connect 加载 MongoDB Source Connector 将变更写入 Kafka 主题，再用 Python（kafka-python）编写的消费者读取数据并记录 offset 与 topic 日志，可用 Supervisord 托管脚本并通过其 Web UI 监控。适合需要在 Kafka 环境中同步 MongoDB 数据变更的开发者参考部署。",
+   "highlights": [
+    "支持通过 confluent-hub 安装 MongoDB Kafka Connect 连接器，配置 Source/Sink 连接器",
+    "消费者基于 kafka-python 模块读取新数据并写入包含 offset 和 topic 的日志文件",
+    "提供 Supervisord 配置用于运行 Python 脚本，并可开启 Web 监控界面"
+   ],
+   "use_cases": [
+    "将 MongoDB 的数据变更经 Kafka 同步到下游 MySQL 环境",
+    "需要记录消费者 offset 与 topic 日志的 Kafka 消费流程",
+    "使用 Supervisord 托管和监控 Python 消费者进程的部署场景"
+   ]
+  },
+  "sha": "a7450a672cf6",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e94f4bb95272": {
+  "identity": {
+   "one_liner": "基于 pgslice 的 Ruby 工具，用于创建和维护 Postgres 分区表",
+   "review": "PgDice 是一个 Ruby gem，在 pgslice 基础上提供分区表的创建与维护能力，面向在 Sidekiq 等框架中以定时后台任务方式运行的场景。它要求配置 postgres database_url 和 approved_tables，支持将现有表转换为分区表（附 fill 数据迁移）、按 period 增补新分区、按 past 数量与 batch_size 删除旧分区，并提供 assert_tables 验证。README 提醒 drop 操作不可逆，仅支持基于时间范围的分区。",
+   "highlights": [
+    "提供 partition_table、add_new_partitions、drop_old_partitions、list_droppable_partitions 等分区表生命周期 API，参数可通过哈希覆盖配置值",
+    "支持 dry_run 模式仅记录命令不执行，以及 batch_size（默认 7）限制单次 drop_old_partitions 删除的分区数量",
+    "提供 assert_tables 校验方法，检查配置的 past/future 分区数量，不满足时抛出 InsufficientTablesError"
+   ],
+   "use_cases": [
+    "在 Sidekiq 等后台任务框架中定时执行分区增补与旧分区清理",
+    "将现有小表转换为时间范围分区表，可选 fill: true 将旧数据复制进新分区",
+    "通过 Ruby 或 YAML 声明 approved_tables，集中管理允许操作的分区表清单"
+   ]
+  },
+  "sha": "e94f4bb95272",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3fdcdfc8bb7a": {
+  "identity": {
+   "one_liner": "从 API 生成经验证的 AI 代理工具的 Go CLI 工厂",
+   "review": "tools-factory（gutenberg-cli）读取 OpenAPI、GraphQL 或 HAR 输入，生成 Go CLI、MCP server、Claude/OpenClaw skill 与 SQLite/FTS5 缓存，并通过构建、CLI 冒烟、MCP 握手和 Go 测试生成 proofs/verification.json 证明文件。面向需要为 AI 代理运行时提供工具的开发者。需 Node.js 20+ 与 Go 环境，当前仅能从源码安装，npm 包未发布；对强反爬站点默认不做绕过。",
+   "highlights": [
+    "支持从 OpenAPI、GraphQL、HAR 及 Postman/Insomnia/curl 导出格式生成 Go CLI、MCP server 与 agent skill",
+    "内置 verify 流程：运行 go build、CLI 冒烟、MCP 握手与 go test 并写入 proofs/verification.json",
+    "提供 try 命令将 URL 分类为 openapi-published/json-endpoint/html-content/spa 等，并给出下一步命令；含 AES-GCM 加密 vault 与 snapshot/replay 离线回放"
+   ],
+   "use_cases": [
+    "为已有 OpenAPI 规范或 JSON 端点的公共 API 生成可供 MCP/代理运行时调用的 CLI 工具",
+    "从 HAR 录制为无规范 API 推断 schema 并生成工具，用于测试与 CI 的确定性回放",
+    "通过自然语言意图在本地目录中匹配并执行已编目的工具"
+   ]
+  },
+  "sha": "3fdcdfc8bb7a",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d16c9b52ccc6": {
+  "identity": {
+   "one_liner": "基于 Django 2.1.5 与 MySQL 的 B2C 书籍电商网站项目。",
+   "review": "书籍屋是一个用 Django 2.1.5 开发的 B2C 书籍商城网站，运行于 Python 3.7 环境。数据库使用 MySQL，通过 PyMySQL 连接，需在 settings.py 中配置后执行 makemigrations 与 migrate 完成迁移，再以 runserver 启动。项目集成 DjangoUeditor3 富文本编辑器，README 提供安装与运行步骤。",
+   "highlights": [
+    "基于 Django 2.1.5 与 Python 3.7 实现 B2C 书籍商城功能",
+    "使用 PyMySQL 0.9.3 连接 MySQL 数据库，并提供迁移命令说明",
+    "集成 DjangoUeditor3（百度）富文本编辑器，README 附安装来源与步骤"
+   ],
+   "use_cases": [
+    "作为 Django 入门学习者的电商项目参考示例",
+    "学习 Django 与 MySQL 的数据库配置及迁移流程",
+    "了解 Django 项目集成富文本编辑器的实践"
+   ]
+  },
+  "sha": "d16c9b52ccc6",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9aa11bdee336": {
+  "identity": {
+   "one_liner": "借助 SQLAlchemy 在 Oracle 与 Postgres 间迁移数据的 Python 包",
+   "review": "oracle2postgres 是一个 Python 包，用于将 Oracle 数据库中的数据迁移到 Postgres。它通过 SQLAlchemy 作为中间层完成两个数据库系统间的数据类型映射。安装方式为 pip install oracle2postgres，具体用法需参照仓库提供的 Jupyter Notebook 示例。README 自述其实现方式偏临时（hacky），源自 MIT-LCP 的实际使用经验。",
+   "highlights": [
+    "使用 SQLAlchemy 作为中间层映射 Oracle 与 Postgres 的数据类型",
+    "通过 pip 安装，以 Jupyter Notebook 形式提供使用示例"
+   ],
+   "use_cases": [
+    "需要将 Oracle 数据库中的数据搬运到 Postgres 的场景",
+    "习惯以 Jupyter Notebook 流程执行一次性数据迁移的场景"
+   ]
+  },
+  "sha": "9aa11bdee336",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29ad220644d5": {
+  "identity": {
+   "one_liner": "TiDB 的 Docker 容器封装，用于以容器方式运行 TiDB 数据库",
+   "review": "该项目提供 TiDB 的 Docker 容器封装，README 仅包含一行标题，说明其用途是将 TiDB 以容器镜像形式交付与运行。仓库未在 README 中给出配置参数、端口、卷挂载或版本信息，使用者需查阅仓库文件或 TiDB 官方文档获取部署细节。",
+   "highlights": [
+    "提供 TiDB 的 Docker 容器封装",
+    "README 仅包含标题'TiDB docker container'，未记载其他配置细节"
+   ],
+   "use_cases": [
+    "需要以容器方式运行 TiDB 的部署场景",
+    "基于 Docker 环境测试 TiDB 的场景"
+   ]
+  },
+  "sha": "29ad220644d5",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0bb2e8fda519": {
+  "identity": {
+   "one_liner": "Left 4 Dead 2 的 SourceMod 玩家统计数据记录与排名插件",
+   "review": "这是一个运行于 Left 4 Dead 2 专用服务器的 SourceMod 插件，记录真人玩家的击杀、倒地、爆头等基础统计及爆头秒杀 Hunter 等进阶统计，并提供点数、排名、Top N 面板和入服公告。数据写入 MySQL/MariaDB，进阶统计需另装 Skill Detect 插件，默认仅在对抗模式生效。安装时需导入 SQL 脚本并配置 databases.cfg。",
+   "highlights": [
+    "记录幸存者与感染者双方的统计项，进阶统计可通过 pstats_extras_enabled 开启",
+    "提供 !rank、!top、!ranks 等聊天命令和排名显示面板",
+    "点数倍率、面板标题、入服公告格式均可通过 playerstats.cfg 配置，公告支持颜色标签"
+   ],
+   "use_cases": [
+    "为 L4D2 对抗模式服务器提供玩家统计记录与排名展示",
+    "需要基于 MySQL 持久化存储玩家数据的运营环境",
+    "需要自定义入服公告和点数倍率规则的社区服务器"
+   ]
+  },
+  "sha": "0bb2e8fda519",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9d781c9cfdc0": {
+  "identity": {
+   "one_liner": "一套覆盖数据库、Kafka 等多类服务的 Docker Compose 配置合集",
+   "review": "该仓库收集作者开发过程中使用过的多种服务的 Docker Compose（版本 2.3）配置，涵盖关系型/文档/键值/列式/图数据库、搜索引擎、Kafka 基础设施、消息代理及 Minio、Jaeger 等基础设施工具。各服务配置了相互依赖关系，README 可作为模板，按需将所需服务的配置段复制到自己的 docker-compose.yml 中。",
+   "highlights": [
+    "提供 Postgres、Oracle、MongoDB、ArangoDB、ClickHouse、Redis、Cassandra 等多种数据库的 Compose 配置",
+    "包含 Kafka 全套基础设施配置（Zookeeper、Kafka、Schema Registry、KSQL、REST、Control Center），服务间声明依赖关系",
+    "涵盖 Minio、Jaeger、SonarQube、Apache Atlas、Apollo Federation 等基础设施与工具配置"
+   ],
+   "use_cases": [
+    "本地开发环境搭建：按需复制所需服务的配置段组装 docker-compose.yml",
+    "需要多个服务互相依赖的本地集成测试环境",
+    "查阅特定服务（如 ArangoDB 集群、KSQL）的 Compose 配置写法参考"
+   ]
+  },
+  "sha": "9d781c9cfdc0",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "474fc1a2eb10": {
+  "identity": {
+   "one_liner": "C++ 对象关系映射库，含代码生成器，提供对象持久化层",
+   "review": "LiteSQL 是一个 C++ 对象持久化框架，由代码生成器和 C++ 库组成，将 C++ 对象映射到关系数据库。它支持 SQLite3、PostgreSQL、MySQL 和 Oracle 后端，自动创建和升级数据库表结构，并提供基于模板的 API 实现编译期类型检查。注意 0.3.x 版本为概念验证实现，README 中注明适用于非关键用途。",
+   "highlights": [
+    "支持 SQLite3、PostgreSQL、MySQL、Oracle 四种数据库后端",
+    "自动维护数据库结构（创建、更新、删除表和索引）",
+    "基于模板的数据库 API，无需手写 SQL 查询"
+   ],
+   "use_cases": [
+    "需要将 C++ 对象持久化到关系数据库的应用",
+    "用面向对象方式建模聚合、组合、关联等关系的项目",
+    "数据库模式需随版本演进自动升级的场景"
+   ]
+  },
+  "sha": "474fc1a2eb10",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f5f4240e56cb": {
+  "identity": {
+   "one_liner": "TypeScript 编写的 Node.js/Express 项目启动模板",
+   "review": "该项目是一个使用 TypeScript 和 Express 构建的 Node.js 项目模板，面向希望以类型安全方式开发 Node.js 应用的开发者。它以电子产品商店为例包含 Category 与 Product 两个实体，模块化组织代码目录，默认使用 db.json 作为内存虚拟数据库，并遵循 JSON API 响应规范，通过 ESLint、Prettier、Husky、Lint-Staged 做静态代码检查。PostgreSQL、MySQL 等数据库支持分布在其他分支。",
+   "highlights": [
+    "默认以 db.json 文件作为内存虚拟数据库，支持增删改查直到应用重启",
+    "API 响应遵循 JSON API 规范，统一包含 meta 与 errors 结构并定义 AppErrorCode 错误码枚举",
+    "集成 ESLint、Prettier、Husky、Lint-Staged 进行静态代码检查"
+   ],
+   "use_cases": [
+    "以 TypeScript 开发 Express 后端应用的初始模板",
+    "学习 Node.js 项目的模块化目录组织与 JSON API 响应结构设计",
+    "需要内存数据库即可运行的示例或演示场景"
+   ]
+  },
+  "sha": "f5f4240e56cb",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df794683443a": {
+  "identity": {
+   "one_liner": "Udacity 数据工程纳米学位课程的项目作业合集",
+   "review": "该仓库收录 Udacity 数据工程纳米学位的四个项目，对应数据建模、云数据仓库、Spark 数据湖与 Airflow 数据管道四门课程。内容以课程大纲和项目列表为主，涉及 Postgres、Cassandra、Redshift、S3/EMR、Airflow 等工具。README 未提供各项目的具体代码结构或运行说明，仅含一张证书图片路径。",
+   "highlights": [
+    "覆盖数据建模（Postgres/Cassandra）、Redshift 数据仓库、Spark 数据湖与 Airflow 管道四类项目",
+    "课程内容包含 ETL/ELT 流程、OLAP 星型模型、AWS 基础设施即代码等主题",
+    "主题标签涉及 airflow、cassandra、postgresql、redshift、jupyter-notebook"
+   ],
+   "use_cases": [
+    "参考数据工程师学习路径的课程主题与项目类型",
+    "查找特定课程项目（如 Spark 大数据或 Airflow 管道）的作业实现",
+    "了解 Udacity 数据工程纳米学位的课程大纲内容"
+   ]
+  },
+  "sha": "df794683443a",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "181acbace371": {
+  "identity": {
+   "one_liner": "基于 Next.js、Prisma 与 PostgreSQL 的全栈电商网站与后台管理项目",
+   "review": "Bitex 是一个以作品集为目的的全栈电商项目，使用 Next.js、TypeScript、Prisma 与 PostgreSQL 构建，仓库采用 Turborepo monorepo 结构，商店代码位于 apps/store。包含面向消费者的商店和带 NextAuth 认证的管理后台，支持分类、品牌、商品与访问报告管理。作者注明其为个人项目，不关联真实业务；原 MongoDB 版本保留在 legacy/mongo-monolith 分支。",
+   "highlights": [
+    "管理后台提供分类（含子分类与规格）、品牌与商品的增删改，以及用户页面访问报告，使用 NextAuth 凭证认证",
+    "商店支持按价格、品牌和库存筛选商品，按名称和价格排序，购物车状态由 Redux 管理",
+    "前端 UI 组件（价格滑块、下拉框、弹窗等）与首页轮播为自实现，未使用外部组件库；服务端表单校验使用 ZOD"
+   ],
+   "use_cases": [
+    "作为学习 Next.js + Prisma + Turborepo 全栈电商架构的参考代码库",
+    "作为搭建包含商品、分类、品牌管理和访问报告的电商站点的基础",
+    "查看 legacy/mongo-monolith 分支以了解迁移前的 MongoDB 单包版本结构"
+   ]
+  },
+  "sha": "181acbace371",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e640a3733c89": {
+  "identity": {
+   "one_liner": "YouTube 课程《Statistics Using Python》的配套代码文件集合",
+   "review": "该仓库包含 The Engineering World 在 YouTube 上发布的《Statistics Using Python》课程的配套文件。根据主题标签，内容以 Jupyter Notebook 形式组织，涉及 Python 统计、数据清洗、数据分析、数据可视化和数据挖掘等主题，供跟随该课程学习的观众使用。README 仅两行，具体章节结构需查看仓库文件列表。",
+   "highlights": [
+    "提供与 YouTube 课程配套的代码文件",
+    "以 Jupyter Notebook 形式组织（据主题标签）",
+    "涵盖统计、数据清洗、数据分析、数据可视化、数据挖掘等主题（据主题标签）"
+   ],
+   "use_cases": [
+    "配合观看该 YouTube 课程进行练习",
+    "作为 Python 统计学习代码示例参考",
+    "下载数据处理相关 Notebook 本地运行"
+   ]
+  },
+  "sha": "e640a3733c89",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13b5389e8c8e": {
+  "identity": {
+   "one_liner": "基于 PHP、MySQL 和 JavaScript 实现的搜索引擎脚本",
+   "review": "voogle 是一个用 PHP、MySQL 和 JavaScript 编写的搜索引擎脚本，包含爬虫功能。安装需将脚本放入 www 或 htdocs 目录、导入 search_engine.sql 建库，并在 config.php 中配置数据库连接信息。使用者还需修改 url_helpers.php 中的项目目录名，并将 php.ini 的 max_execution_time 提升至 1200 秒。",
+   "highlights": [
+    "使用 PHP、MySQL 和 JavaScript 实现，包含 crawler 爬虫功能",
+    "提供 search_engine.sql 数据库导入文件用于初始化",
+    "通过 config.php 配置数据库的服务器地址、库名、用户名和密码"
+   ],
+   "use_cases": [
+    "在本地 PHP 环境（www/htdocs 目录）中部署运行",
+    "用于学习搜索引擎与爬虫的 PHP 实现方式",
+    "搭建需自行配置数据库连接和目录名的搜索脚本项目"
+   ]
+  },
+  "sha": "13b5389e8c8e",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bd2b53858cd7": {
+  "identity": {
+   "one_liner": "基于 React 与 Node.js 的服装电商及 3D 定制服装平台",
+   "review": "Humming Tone 是一个服装电商全栈 Web 应用，包含顾客商店（分类浏览、3D/canvas 服装定制、Razorpay 支付、订单追踪）与管理后台（商品、库存、CMS 管理）。前端为 React 19 + Vite + Three.js，后端为 Node.js/Express 5 + TiDB Cloud MySQL，媒体走 Cloudinary CDN，通知走 WhatsApp 与邮件。本地运行需分别启动 Server（5000 端口）与前端（5173 端口）。许可证为专有，保留所有权利。",
+   "highlights": [
+    "支持 3D/canvas 定制服装构建器、按性别与动态类目浏览、含库存实时计算与 GST 处理的购物车结算",
+    "集成 Razorpay 支付及 webhook 验证，通过 Meta WhatsApp Cloud API 与 Nodemailer 发送订单通知",
+    "后台提供多规格商品管理、Cloudinary 缓冲流式上传（自动 WebP/AVIF 压缩）、库存/退货管理与站点 CMS 定制"
+   ],
+   "use_cases": [
+    "需要在线定制（图案、文字、3D 预览）功能的服装类电商网站",
+    "需要商品管理后台、库存与订单流程一体化的零售业务部署",
+    "基于 React/Vite 前端与 Express + TiDB MySQL 后端的电商全栈开发参考场景"
+   ]
+  },
+  "sha": "bd2b53858cd7",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2a55c2985c9": {
+  "identity": {
+   "one_liner": "基于官方 PHP 与 MySQL 镜像运行 Laravel 的 Docker 环境",
+   "review": "这是一个基于官方 php 和 mysql Docker Hub 镜像构建、用于运行 Laravel 应用的 Docker 环境模板，包含 Apache 2.4、PHP 8.5、MySQL 8、Laravel 13，开发环境附带 Mailpit 邮件测试工具。面向 Laravel 开发者，通过 Makefile 命令管理 dev/staging/prod 三套环境，支持 Xdebug 调试配置，并内置 phpstan、phpmd、rector 等代码质量工具与 Git Flow 工作流约定。需 Docker Engine 23.0+ 与 Docker Compose 2.0+。",
+   "highlights": [
+    "提供 dev、staging、prod 三套环境的构建与启动命令，通过 Makefile 管理",
+    "包含 Apache 2.4、PHP 8.5（Apache handler）、MySQL 8、Laravel 13 组件，开发环境含 Mailpit",
+    "支持 Xdebug 调试配置（可全局或按需触发），并附带 phpstan、phpmd、phpinsights、rector 等代码质量工具"
+   ],
+   "use_cases": [
+    "在本地以 Docker 容器方式开发与调试 Laravel 应用",
+    "在本地搭建 staging/prod 环境进行调试与验证",
+    "为团队提供统一的 Laravel 开发流程、代码质量检查与 CI/CD 集成（CircleCI、GitHub Actions 等）基础环境"
+   ]
+  },
+  "sha": "f2a55c2985c9",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "05673e5a7d0f": {
+  "identity": {
+   "one_liner": "WildBerries 类目数据采集器，抓取类目 JSON 并写入 MySQL。",
+   "review": "这是一个针对 WildBerries 商品类目的信息采集脚本，源自一次委托需求。按类目请求 JSON，提取类目名称（含格变化归一化）、商品数量、月请求量、TOP-3 均价及前四广告出价，结果写入远程 MySQL。通过自实现的信号量控制多线程并发数（作者称 50 为其使用值），自称可在 8 分钟处理约 7400 个类目。",
+   "highlights": [
+    "按类目提取名称、商品数、月请求量、TOP-3 均价与广告出价字段",
+    "对类目名称进行格变化分析，选择返回商品数最多的形式",
+    "自实现信号量限制并发线程数，参数可配置"
+   ],
+   "use_cases": [
+    "批量收集 WildBerries 类目维度的商品与需求数据",
+    "将类目数据定时导入 MySQL 数据库存储",
+    "分析类目月请求量与广告出价信息"
+   ]
+  },
+  "sha": "05673e5a7d0f",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6f51d8d9967e": {
+  "identity": {
+   "one_liner": "基于 SQLite 音乐元数据库的查询 API 服务器",
+   "review": "这是一个用 Go 编写的元数据查询 API 服务器，用于读取包含 2.56 亿条曲目记录的 SQLite 数据库，为音乐服务器提供曲目、艺人、专辑的查询服务。它本身不含任何数据库文件，需自行准备约 117GB 主库和 99GB 曲目文件库两个 SQLite 文件，支持 Docker 部署，采用 MIT 许可证，与 Spotify 等流媒体服务无关联。",
+   "highlights": [
+    "支持按 ISRC、ID 查询曲目/艺人/专辑，以及不区分大小写的子串名称搜索",
+    "提供批量查询接口，单次请求最多 400 个实体，可混合曲目、艺人、专辑和 ISRC",
+    "速率限制为每秒 100 次请求、突发容量 200，附带 OpenAPI 3.1 规范与 Swagger UI"
+   ],
+   "use_cases": [
+    "为自建音乐服务器补充曲目图片、流派、厂牌、发行日期等元数据",
+    "需要按 ISRC 或名称批量匹配音乐实体的大批量查询场景",
+    "本地部署元数据查询服务，通过 Docker 挂载只读数据库运行"
+   ]
+  },
+  "sha": "6f51d8d9967e",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb3cda4006ad": {
+  "identity": {
+   "one_liner": "马尔马拉大学计算机工程课程项目集合仓库",
+   "review": "该仓库收录马尔马拉大学一名计算机工程专业学生的课程项目，覆盖 2019–2022 年的操作系统、数字逻辑设计、微处理器、计算机网络、算法分析、信息安全、数据库、机器学习、计算基因组学、程序设计语言等课程。每个项目以课程名和年份命名，并附带说明用 PDF；多数项目为二至七人小组协作完成。",
+   "highlights": [
+    "按课程名与年份组织项目文件，各项目附 PDF 说明文档",
+    "包含 Java/JavaFX、MIPS 汇编、Logisim/Verilog、Python/Haskell 等多种语言与工具的项目实现",
+    "README 标明各项目协作成员及分工背景"
+   ],
+   "use_cases": [
+    "了解计算机工程本科课程的典型项目类型与实现方式",
+    "查阅 CPU 设计、Web 服务器、数据库系统、LSTM 股价预测等具体实现",
+    "参考课程项目报告的 PDF 组织形式"
+   ]
+  },
+  "sha": "eb3cda4006ad",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2fcddfddc244": {
+  "identity": {
+   "one_liner": "用于检测 CVE-2018-2636 的低交互蜜罐，模拟 MICROS 服务器记录目录遍历攻击",
+   "review": "该工具由 Cymmetria Research 于 2018 年发布，采用 MIT 许可证开源。它通过模拟 Oracle Hospitality Simphony (MICROS) 服务器的简单行为，诱使攻击者利用 CVE-2018-2636 目录遍历漏洞'窃取文件'，并报告此类尝试。使用 Python 运行 micros_server.py 即可在默认 8080 端口监听，适合需要监测该特定漏洞利用行为的运维或安全人员。",
+   "highlights": [
+    "检测针对 MICROS 服务器 CVE-2018-2636 目录遍历漏洞的利用尝试",
+    "低交互实现，简单模拟 MICROS 服务器并允许攻击者'窃取文件'以捕获行为",
+    "通过 python micros_server.py 运行，默认监听 8080 端口，支持命令行参数"
+   ],
+   "use_cases": [
+    "部署在运行 Oracle Hospitality Applications (MICROS) 的环境中探测针对 CVE-2018-2636 的攻击",
+    "作为安全监测手段，记录和报告目录遍历漏洞利用尝试"
+   ]
+  },
+  "sha": "2fcddfddc244",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9887a8b058e6": {
+  "identity": {
+   "one_liner": "基于 TiDB Cloud OpenAPI 将 TiDB 快照与增量数据复制到 Snowflake 的工具",
+   "review": "tidb2snowflake 用于将 TiDB Cloud Serverless/Essential 集群的数据复制到 Snowflake。它不内嵌 Dumpling 也不直连 TiCDC，而是通过 TiDB Cloud OpenAPI 创建导出任务生成快照 CSV，并经 CLOUD_STORAGE sink 的 changefeed 输出增量 CSV 到 S3，再加载进 Snowflake。项目处于开发中，OpenAPI 编排 CLI 尚在构建，仅支持有主键的表，目标仅限 Snowflake，部分 DDL 不受支持。",
+   "highlights": [
+    "通过 TiDB Cloud OpenAPI 创建快照导出（CSV）与 CLOUD_STORAGE sink 的 changefeed，经 S3 中转加载到 Snowflake",
+    "pkg/snowsql 提供 Snowflake 连接器、DDL 翻译与类型映射，pkg/metrics 提供 Prometheus 指标",
+    "使用 make build 构建出 bin/tidb2snowflake，CLI 基于 cobra，Apache 2.0 许可"
+   ],
+   "use_cases": [
+    "需要将 TiDB Cloud Serverless/Essential 集群数据加载到 Snowflake 数据仓库",
+    "需要快照加持续增量的数据复制链路，且可提供 TiDB Cloud API key 与可读写的 S3",
+    "需要基于已有的 Snowflake loader、schema 工具、复制逻辑等构建块做二次开发"
+   ]
+  },
+  "sha": "9887a8b058e6",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e89cab72bbcc": {
+  "identity": {
+   "one_liner": "Android SQLite 的 ORM 库，编译期注解处理生成类型安全查询构建器并支持声明式迁移。",
+   "review": "Android Orma 是面向 Android SQLiteDatabase 的 ORM，模型类用 @Table/@Column 注解标注，orma-processor 在编译期生成 Schema、Relation、Selector、Updater、Deleter 等辅助类，使查询构建具有类型安全性，并提供基于模式差异检测的迁移机制。使用需 JDK 8 构建，运行要求 Android API 15 及以上。写入操作默认不允许在主线程执行。",
+   "highlights": [
+    "通过注解处理器在编译期生成辅助类，提供类型安全的查询构建器与代码补全支持",
+    "支持声明式 schema 迁移，可检测并处理 add column、drop column 等变更",
+    "模型为无继承限制的 POJO，可实现 Parcelable 或继承任意类；支持内存数据库与 WAL、外键配置"
+   ],
+   "use_cases": [
+    "需要在 Android 应用中通过类型安全 API 执行 SQLite 的增删改查",
+    "需要声明式处理 SQLite 数据库表结构迁移的 Android 项目",
+    "需要批量插入或测试用内存数据库的场景"
+   ]
+  },
+  "sha": "e89cab72bbcc",
+  "source": "readme",
+  "generated_at": "2026-11-07",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ }
+}

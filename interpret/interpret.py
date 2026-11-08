@@ -52,6 +52,7 @@ HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import strategy                    # noqa: E402
 from gh import atomic_write_json, load_env  # noqa: E402
 from interp_store import InterpCacheStore  # noqa: E402  分片缓存（10-06 起，兼容读旧单文件）
+from interp_layer_store import LayerStore  # noqa: E402  G1-6b：v4/v4t 层存储（state/interp/<layer>）
 from rm_clean import clean_readme, CLEAN_VER   # noqa: E402
 from clean_delta import compute_delta as _cd_delta   # noqa: E402  B1 旁路：只算不落盘
 from db_scan import number_lines, _COMPILED as _DB_COMPILED  # noqa: E402  行号口径与 db_scan 严格一致
@@ -70,7 +71,7 @@ PROMPT_VER_V4 = "4.0"
 # E2 文本层（作文卷）：仅头部项目（enrich head/mid 口径=star≥100），产 identity
 # 四件套；缓存键 sha+prompt_ver(text) 与判定键独立——文本提示词升级不作废判定缓存。
 PROMPT_VER_TEXT = "4.0"
-TEXT_STAR_MIN = 100            # enrich 分层：head=1000 / mid=100（head+mid ≈ 20% 池）
+TEXT_STAR_MIN = int(os.environ.get("TEXT_STAR_MIN") or 100)   # enrich 分层：head=1000 / mid=100（head+mid ≈ 20% 池）；env 可临时放开，0=全池
 
 
 def text_key(sha: str) -> str:
@@ -138,13 +139,15 @@ def validate_text(obj: dict, desc: str) -> tuple[dict | None, list[str]]:
     review = (ident.get("review") or "").strip()
     hl = ident.get("highlights") or []
     uc = ident.get("use_cases") or []
-    if not one or len(one) > 50:
+    if not one or len(one) > 80:
         # 真机实测（1104 文本卷首跑 20/20 拒收）：模型常态输出 31-40 字，30 字硬卡
         # 全灭。30/60-120 是 v3 的【质量统计口径】（94.3% 合规）不是合规门槛——
-        # 校验只拒离谱值，常规超长靠提示词与人工抽检治理
-        errs.append(f"one_liner 非法（须 1-50 字）: {len(one)}")
-    if review and not (30 <= len(review) <= 300):
-        errs.append(f"review 长度越带（须 30-300 字）: {len(review)}")
+        # 校验只拒离谱值，常规超长靠提示词与人工抽检治理。
+        # 1107 全池跑（glm）拒收 6.5%：one_liner 常态 51-67 字（主峰，最长 83），
+        # 50 线卡死 82% 拒收——同 1104 形态，50→80。review 微超 305-343 同理 300→360。
+        errs.append(f"one_liner 非法（须 1-80 字）: {len(one)}")
+    if review and not (30 <= len(review) <= 360):
+        errs.append(f"review 长度越带（须 30-360 字）: {len(review)}")
     # 1104 deepseek 实测：模型常态给 4 条（提示词说 2-3）——同 ai_kind 缺键形态，
     # 属"提示词说了模型不做"，按容量放行 + 程序裁到 3 条，不整条拒
     if not isinstance(hl, list) or not (1 <= len(hl) <= 5):
@@ -522,10 +525,12 @@ class AIClient:
     def __init__(self, deadline: float | None = None):
         load_env()                     # gh 的读取（config/.env 与根 .env 都认）
         self.key = os.environ.get("AI_API_KEY") or os.environ.get("DEEPSEEK_API_KEY")
-        self.base = (os.environ.get("AI_BASE_URL") or "https://api.deepseek.com").rstrip("/")
+        # G1-6b：缺省模型/base 从 deepseek 改 glm-5.3-flash + bigmodel（env 未设时不落回旧模型）
+        self.base = (os.environ.get("AI_BASE_URL")
+                     or "https://open.bigmodel.cn/api/coding/paas/v4").rstrip("/")
         if self.base.endswith("/chat/completions"):          # 容错：粘了完整端点时剥掉，防路径拼重
             self.base = self.base.rsplit("/chat/completions", 1)[0]
-        self.model = os.environ.get("AI_MODEL") or "deepseek-chat"
+        self.model = os.environ.get("AI_MODEL") or "glm-5.3-flash"
         self.deadline = deadline       # 墙钟截止：额度睡等不得越过（防进程僵尸数小时）
         if not self.key:
             raise SystemExit("AI_API_KEY 未配置：写入本仓库 .env（dbhub_collect/.env）")
@@ -1293,6 +1298,13 @@ def pick_schema(schemas: dict, degraded: bool, mode: str) -> str:
 def run(args):
     st = json.loads(ISTATE.read_text(encoding="utf-8")) if ISTATE.is_file() else {"items": {}}
     cache = InterpCacheStore()
+    # G1-6b：v4 判定卷写入/查重切新层目录（state/interp/judge，层内键=裸 sha）；
+    # v3/v2 回滚模式维持旧缓存不动（旧代数据 G7 删）。
+    judge_store = LayerStore("judge") if args.mode == "v4" else None
+    if judge_store:
+        judge_store.load()
+        log.info("判定层库存 %d 条 · 台账 %d 仓（新目录）", len(judge_store.items),
+                 len(judge_store.state()))
     rstate_p = HERE / "state" / "readme_state.json"
     rstate = json.loads(rstate_p.read_text(encoding="utf-8")) if rstate_p.is_file() else {"items": {}}
     dbscan_p = HERE / "state" / "db_scan.json"
@@ -1319,7 +1331,7 @@ def run(args):
                    if ln.strip() and not ln.startswith("#")}
     todo: list[tuple[str, str, bool]] = []      # (fn, sha, degraded)
     n_skip = {"out_of_pool": 0, "rejected_same_sha": 0, "empty_desc": 0,
-              "repo_blacklist": 0, "failed_same_sha": 0}
+              "repo_blacklist": 0, "failed_same_sha": 0, "desc_defer_g3": 0}
     n_reuse = 0
     for fn, rec in rstate.get("items", {}).items():
         if fn not in pool:
@@ -1331,7 +1343,9 @@ def run(args):
         sha = rec.get("sha")
         prev = st["items"].get(fn) or {}
         if rec.get("status") in ("done", "oversized") and sha:
-            if cache_key(sha, args.mode) in cache:    # v4 起键控（sha#v4），v3/v2 保持裸 sha
+            # G1-6b：v4 查重看新层库存（裸 sha）；旧模式仍查旧缓存键
+            has = (sha in judge_store) if judge_store else (cache_key(sha, args.mode) in cache)
+            if has:
                 # 镜像复用（10-10）：fork/搬家仓 readme 同 sha 已有解读，不重烧，
                 # 补 fn 状态条目让每个仓名都可查到解读（查询链 fn→sha→缓存）。
                 # rejected 不覆盖（人工队列语义）；failed 且镜像已有结果则升 done
@@ -1344,6 +1358,11 @@ def run(args):
             else:
                 todo.append((fn, sha, False))
         elif rec.get("status") == "no_readme":
+            if args.mode == "v4":
+                # G1-6b：v4 不再走旧 desc 降级通道（键会碰撞，G3-3 独立 runner 用
+                # 新键 desc::sha1(fn+desc)[:12] 重做）；有描述/空描述都等 G3
+                n_skip["desc_defer_g3"] += 1
+                continue
             desc = (pool.get(fn, {}).get("description") or "")[:100]
             if not desc:
                 n_skip["empty_desc"] += 1
@@ -1438,29 +1457,47 @@ def run(args):
                         from clean_delta import save as _cd_save
                         _cd_save(f"{r['sha']}+{CLEAN_VER}", r["clean_delta"], fn=r["fn"])
                         r["obj"]["clean_ver"] = CLEAN_VER
-                    cache[cache_key(r["sha"], args.mode)] = r["obj"]
+                    if judge_store:      # G1-6b：层内裸 sha 键，跨层字段由 sanitize 解耦丢弃
+                        judge_store.put(r["sha"], r["obj"])
+                        judge_store.mark(r["fn"], r["sha"], "done")
+                    else:
+                        cache[cache_key(r["sha"], args.mode)] = r["obj"]
                     st["items"][r["fn"]] = {"sha": r["sha"], "status": "done"}
                     if r["obj"]["audit"]["confidence"] == "low":
                         low_conf.append(r["fn"])
                     done += 1
                 elif r["kind"] == "rejected":
+                    if judge_store:
+                        judge_store.mark(r["fn"], r["sha"], "rejected",
+                                         detail="；".join(r["violations"])[:200])
                     st["items"][r["fn"]] = {"sha": r["sha"], "status": "rejected",
                                             "violations": r["violations"],
                                             "raw": r.get("raw", "")[:200]}   # 短摘要；全文在 jsonl
                     rejected.append({"fn": r["fn"], "why": r["violations"][:3]})
                 else:
+                    if judge_store:
+                        judge_store.mark(r["fn"], r["sha"], "failed",
+                                         detail=(r.get("error") or "")[:200])
                     st["items"][r["fn"]] = {"sha": r["sha"], "status": "failed",
                                             "error": r["error"]}
                     failed_n += 1
                 chunk_done += 1
             if chunk_done:                      # 按 chunk 落盘（分片后只重写脏桶，~250KB/桶）
+                if judge_store:
+                    judge_store.flush()
+                    judge_store.save_state({"prompt_ver": PROMPT_VER_V4})
                 cache.flush()
                 atomic_write_json(ISTATE, st)
                 # 心跳：每个 chunk（并发×4 条）一行，长窗不再"静默干活"
-                log.info("进度 %d/%d · 成功 %d · 拒收 %d · 失败 %d · 缓存 %d · 已用 %.0f 分钟",
+                log.info("进度 %d/%d · 成功 %d · 拒收 %d · 失败 %d · 判定层 %d · 已用 %.0f 分钟",
                          min(i + chunk_done, len(todo)), len(todo),
-                         done, len(rejected), failed_n, len(cache), (time.time() - t0) / 60)
+                         done, len(rejected), failed_n,
+                         len(judge_store.items) if judge_store else len(cache),
+                         (time.time() - t0) / 60)
     # 收尾必落 + 人工队列累积合并
+    if judge_store:
+        judge_store.flush()
+        judge_store.save_state({"prompt_ver": PROMPT_VER_V4})
     cache.flush()
     atomic_write_json(ISTATE, st)
     prev_review = json.loads(REVIEW.read_text(encoding="utf-8")) if REVIEW.is_file() else {}
@@ -1470,8 +1507,10 @@ def run(args):
     runlog.log_summary({**runlog.summarize_items(recs), "run_id": run_id,
                         "src": "interpret", "mode": args.mode, "prompt_ver": PROMPT_VER,
                         "model": ai.model, "concurrency": args.concurrency})
-    log.info("==== 解读完成：成功 %d · 拒收 %d · 低置信 %d · 缓存 %d · 镜像复用 %d · %.1f 分钟 ====",
-             done, len(rejected), len(low_conf), len(cache), n_reuse, (time.time() - t0) / 60)
+    log.info("==== 解读完成：成功 %d · 拒收 %d · 低置信 %d · 判定层 %d · 镜像复用 %d · %.1f 分钟 ====",
+             done, len(rejected), len(low_conf),
+             len(judge_store.items) if judge_store else len(cache), n_reuse,
+             (time.time() - t0) / 60)
 
 
 def run_text(args):
@@ -1479,7 +1518,12 @@ def run_text(args):
     输入=清理后 README，缓存键 sha#txt<prompt_ver>——与判定卷（sha#v4）完全独立，
     文本提示词升级不作废判定缓存（《AI方案》§5）。"""
     st = json.loads(ISTATE.read_text(encoding="utf-8")) if ISTATE.is_file() else {"items": {}}
-    cache = InterpCacheStore()
+    # G1-6b：文本卷写入/查重切新层目录（state/interp/text，层内键=裸 sha），
+    # 不再写旧缓存（旧目录零新增；旧 sha#txt4.0 条目已由 G1-6a 搬入本层）
+    text_store = LayerStore("text")
+    text_store.load()
+    log.info("文本层库存 %d 条 · 台账 %d 仓（新目录）", len(text_store.items),
+             len(text_store.state()))
     rstate_p = HERE / "state" / "readme_state.json"
     rstate = json.loads(rstate_p.read_text(encoding="utf-8")) if rstate_p.is_file() else {"items": {}}
     pool_path = Path(args.pool) if args.pool else latest_pool()
@@ -1506,7 +1550,7 @@ def run_text(args):
         if (pool[fn].get("stars") or 0) < TEXT_STAR_MIN:
             n_skip["below_star"] += 1
             continue
-        if text_key(sha) in cache:
+        if sha in text_store:          # G1-6b：查重看文本层库存（裸 sha）
             n_skip["already"] += 1
             continue
         todo.append((fn, sha))
@@ -1569,21 +1613,29 @@ def run_text(args):
             recs.append(rec)
             runlog.log_item(rec)
             if r["kind"] == "done":
-                cache[text_key(r["sha"])] = r["obj"]
+                text_store.put(r["sha"], r["obj"])       # G1-6b：层内裸 sha 键
+                text_store.mark(r["fn"], r["sha"], "done")
                 done += 1
             elif r["kind"] == "rejected":
+                text_store.mark(r["fn"], r["sha"], "rejected",
+                                detail="；".join(r["violations"])[:200])
                 rejected.append({"fn": r["fn"], "why": r["violations"][:3]})
             else:
+                text_store.mark(r["fn"], r["sha"], "failed",
+                                detail=(r.get("error") or "")[:200])
                 failed_n += 1
             if (done + len(rejected) + failed_n) % 20 == 0:
-                cache.flush()
-                log.info("文本卷进度 %d/%d · 成功 %d · 拒收 %d · 失败 %d",
-                         done + len(rejected) + failed_n, len(todo), done, len(rejected), failed_n)
-    cache.flush()
+                text_store.flush()
+                text_store.save_state({"prompt_ver": PROMPT_VER_TEXT})
+                log.info("文本卷进度 %d/%d · 成功 %d · 拒收 %d · 失败 %d · 文本层 %d",
+                         done + len(rejected) + failed_n, len(todo), done, len(rejected),
+                         failed_n, len(text_store.items))
+    text_store.flush()
+    text_store.save_state({"prompt_ver": PROMPT_VER_TEXT})
     runlog.log_summary({**runlog.summarize_items(recs), "run_id": run_id, "src": "interpret",
                         "mode": "v4t", "prompt_ver": PROMPT_VER_TEXT, "model": ai.model})
-    log.info("==== 文本卷完成：成功 %d · 拒收 %d · 失败 %d · %.1f 分钟 ====",
-             done, len(rejected), failed_n, (time.time() - t0) / 60)
+    log.info("==== 文本卷完成：成功 %d · 拒收 %d · 失败 %d · 文本层 %d · %.1f 分钟 ====",
+             done, len(rejected), failed_n, len(text_store.items), (time.time() - t0) / 60)
 
 
 def main():

@@ -1,0 +1,157 @@
+{
+ "schema": 1,
+ "gen_id": "g2-20261107",
+ "status": "ready",
+ "plan": "A",
+ "worklist": "docs/AI解析工作清单_G2.md",
+ "phase": "G7-2",
+ "created_at": "2026-11-08T02:57:01Z",
+ "updated_at": "2026-11-08T02:57:01Z",
+ "model": {
+  "target": "glm-5.3-flash",
+  "base_url": "https://open.bigmodel.cn/api/coding/paas/v4",
+  "mixed": {
+   "deepseek": 463,
+   "action": "G2-2 归一为 glm-5.3-flash 后重跑"
+  },
+  "per_entry": "缓存条目不记模型；逐条模型只在 state/logs/interp_*.jsonl"
+ },
+ "layers": {
+  "judge": {
+   "label": "v4 判定卷",
+   "prompt_ver": "4.0",
+   "key": "{sha}#v4",
+   "code": "interpret/interpret.py",
+   "status": "run",
+   "entries": 32090
+  },
+  "text": {
+   "label": "v4t 文本卷",
+   "prompt_ver": "4.0",
+   "key": "{sha}#txt4.0",
+   "code": "interpret/interpret.py",
+   "status": "running",
+   "entries": 32018,
+   "scope_note": "TEXT_STAR_MIN 默认 100；1107 全池跑用 env=0"
+  },
+  "domain_tags": {
+   "label": "vc1.0 词控",
+   "prompt_ver": "vc1.0",
+   "key": "{sha}#vc1.0",
+   "code": "interpret/vocab_control.py",
+   "status": "running",
+   "entries": 31598,
+   "vocab": {
+    "ver": "0.11",
+    "file": "config/domain_vocab_v0.11.json",
+    "sha256": "966e2d9fe86d204c805c1dc0c204a87d3073b95b5f2b08b67d58e6d0697db3e7",
+    "n_words": 75,
+    "n_domains": 15,
+    "source": "受控词表v0.10（A类修复版）+ platform 域 4 词草案（1107）· 1107 定版"
+   },
+   "abstain_codes": [
+    "insufficient"
+   ],
+   "magnet_words": [
+    "analytics",
+    "dashboard",
+    "driver",
+    "orm"
+   ]
+  },
+  "desc": {
+   "label": "desc 降级（无 README 仓）",
+   "key": "desc::{sha1(fn + desc)[:12]}",
+   "status": "run",
+   "entries": 1009,
+   "prompt_ver": "dc1.0",
+   "scope_note": "在池 no_readme 且有描述（1,009 全量已跑）；空描述 912 进 dead-letter 不生成",
+   "note": "旧键 desc::<description>（会碰撞，最多 97 仓共用一条）已随 G7-2 下线（desc_legacy 0 条归零）"
+  }
+ },
+ "legacy": {
+  "label": "v3 裸 sha + 旧 desc 键（旧代，G7-2 已删）",
+  "key": "{sha} 或 desc::<description>[#v4]",
+  "entries": 0,
+  "status": "deleted_at_G7_2（2026-11-08，备份 D:/dbhub_interp_backup_20261108 + pre-g2 标签）"
+ },
+ "counts": {
+  "asof": "2026-11-08T02:57:01Z",
+  "cache_total": 96715,
+  "storage_dup": 0,
+  "layers": {
+   "judge": 32090,
+   "text": 32018,
+   "domain_tags": 31598,
+   "desc": 1009
+  },
+  "interp_state": {
+   "total": 33701,
+   "done": 33693,
+   "rejected": 8
+  },
+  "readme_state": {
+   "total": 36989,
+   "done": 34793,
+   "oversized": 130,
+   "no_readme": 2066
+  },
+  "pool": {
+   "repos": 34613
+  }
+ },
+ "artifacts": {
+  "cache": "state/interp_cache_shards（已于 G7-2 删除，2026-11-08；可从备份/pre-g2 恢复）",
+  "layer_root": "state/interp/<layer>/（judge|text|domain_tags|desc；shards + state.json + runlog）",
+  "ledger": "state/interp_state.json",
+  "readme_ledger": "state/readme_state.json",
+  "dead_letter": "state/dead_letter.json",
+  "runlog": "state/logs/interp_*.jsonl（gitignored）",
+  "shadow": "state/shadow"
+ },
+ "code": {
+  "git_commit": "0ecd28b4358f19e19990d13150169cc66f3912e5",
+  "git_commit_date": "2026-11-08T10:55:27+08:00",
+  "dirty": true,
+  "files": {
+   "interpret/interpret.py": "024b2b22932976b76124aab68ae802f4bce8efa25e27d66d3173d86716c54181",
+   "interpret/vocab_control.py": "01c61864963e8b1759a014297665fb3caa9c8880eba60dc6c401ee59e33937e5",
+   "interpret/gen_manifest.py": "308f2245d8b010a16b1dcd078b98580f3b5eccdde8ef6ea586304626693bd6a5",
+   "lib/interp_read.py": "1b11b3ecc7e1011991adc80e1a448ce23cbc743ead917b3c48296370af8d29b4",
+   "lib/interp_keys.py": "e8bcc19f2f8ead3f200a558b5adbcc55ffd7dfb9e8ab2c8a1f7bd654959a5e47",
+   "lib/interp_layer_store.py": "935056e79060f9de1a05e3bc5602f005aab8330df92b790ff9594b5a8bccc412",
+   "tools/split_layers.py": "d149e15d7a579c8e0d58e90e3a42ae6606f8a90b89538e60b2c0a41dcf921547",
+   "config/domain_vocab_v0.11.json": "966e2d9fe86d204c805c1dc0c204a87d3073b95b5f2b08b67d58e6d0697db3e7"
+  }
+ },
+ "finalized_at": "2026-11-08T02:57:01Z",
+ "lineage": {
+  "per_entry_fields": [
+   "source",
+   "prompt_ver",
+   "generated_at"
+  ],
+  "entry_model_field": {
+   "judge": false,
+   "text": false,
+   "domain_tags": true,
+   "desc": true
+  },
+  "runlog_model_evidence": {
+   "text": {
+    "glm-5.3-flash": 32656,
+    "deepseek-flash": 55
+   },
+   "judge": {
+    "deepseek-flash": 398,
+    "glm-5.3-flash": 21279
+   }
+  },
+  "note": "runlog 是历史流水（含被 G2-2 归一重烧取代的 deepseek 行）；最终库存模型以 g2_model_normalize --verify 为准（left=0，全 glm）",
+  "sample100": {
+   "n": 100,
+   "missing": [],
+   "missing_n": 0
+  }
+ }
+}

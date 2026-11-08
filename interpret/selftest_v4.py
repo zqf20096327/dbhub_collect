@@ -169,7 +169,7 @@ def main() -> int:
         "cat_primary": "监控", "cat_tags": [], "persona": ["ops"], "eco": "tool",
         "ai_kind": "other"}), NUMBERED, "d")
     chk("对抗：cat_tags 空数组视同省略", o is not None and "cat_tags" not in o["classification"])
-    # A3) 文本卷长度门槛边界（1104 文本卷首跑 20/20 拒收事故：模型常态 31-40/180-210 字）
+    # A3) 文本卷长度门槛边界（1104 首跑 20/20 拒收；1107 全池 6.5% 拒收 → 50→80 / 300→360）
     # review 构造须带 ≥3 个 desc 外实义 token（否则 info_gain 先拒，测不到长度分支）
     def _rv(n):
         pre = "甲乙 丙丁 戊己 "                 # 9 字符（含 3 个分隔空格）
@@ -179,9 +179,9 @@ def main() -> int:
                   "highlights": ["h" * 20], "use_cases": ["u" * 20]}
     o, e = itp.validate_text({"identity": base_ident}, "desc" + "y" * 50)
     chk("对抗：常态长度（40/200 字）放行", o is not None)
-    for one_len, rv_len, want in ((51, 200, False), (50, 200, True),
+    for one_len, rv_len, want in ((81, 200, False), (80, 200, True),
                                   (40, 29, False), (40, 30, True),
-                                  (40, 300, True), (40, 301, False)):
+                                  (40, 360, True), (40, 361, False)):
         bi = dict(base_ident, one_liner="x" * one_len, review=_rv(rv_len))
         o, _ = itp.validate_text({"identity": bi}, "desc" + "y" * 50)
         chk(f"对抗：长度边界 one={one_len} review={rv_len} → {'过' if want else '拒'}",
