@@ -15,6 +15,8 @@ data/snapshot_*/parts*/
 # 状态轮转备份（atomic_write_json 的 .1~.4 备份）
 state/*.json.[0-9]
 state/*.json.[0-9][0-9]
+state/interp/*/*.json.[0-9]
+state/interp/*/*.json.[0-9][0-9]
 
 # interpret 工作文件（分片/待办批，可再生）
 state/pending_batch.json
@@ -43,6 +45,9 @@ data/snapshot_*/meta/*.json.[0-9][0-9]
 
 # interp_cache 分片写入的 tmp 瞬态件（只有崩溃残留才会留下）
 state/interp_cache_shards/*.tmp
+
+# 分层存储（G1-6）：层内 runlog 可再生，不入库；轮转副本同 state/ 规则
+state/interp/*/runlog/
 
 # enrich_cache 分片写入的 tmp 瞬态件（同上，10-09 起）
 state/enrich_cache_shards/*.tmp
