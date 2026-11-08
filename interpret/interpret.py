@@ -71,7 +71,7 @@ PROMPT_VER_V4 = "4.0"
 # E2 文本层（作文卷）：仅头部项目（enrich head/mid 口径=star≥100），产 identity
 # 四件套；缓存键 sha+prompt_ver(text) 与判定键独立——文本提示词升级不作废判定缓存。
 PROMPT_VER_TEXT = "4.0"
-TEXT_STAR_MIN = int(os.environ.get("TEXT_STAR_MIN") or 100)   # enrich 分层：head=1000 / mid=100（head+mid ≈ 20% 池）；env 可临时放开，0=全池
+TEXT_STAR_MIN = int(os.environ.get("TEXT_STAR_MIN") or 0)   # 2026-11-08 用户裁定：全池口径固化（v4/v4t/词控三层覆盖一致，来源唯一）；env 仍可临时收紧，0=全池
 
 
 def text_key(sha: str) -> str:
