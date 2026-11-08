@@ -2881,5 +2881,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a81e4ea84e87": {
+  "identity": {
+   "one_liner": "面向 SQL Server 的 .NET 数据脱敏/匿名化库，基于 JSON 配置和 Bogus 生成假数据",
+   "review": "DataMasker 是一个用 .NET 编写、针对 SQL Server 的数据脱敏库，可通过 NuGet 引用或作为 CLI 运行，用于对从生产环境拉到开发/测试环境的数据库中的个人信息进行替换。它通过 JSON 文件配置表和列的脱敏规则，支持 Bogus 假数据生成、值映射、SQL 查询取值等机制；数据源目前仅支持 SqlServer 和示例用的 InMemoryFake。3.0 版要求 .NET 10，迁移到 Microsoft.Data.SqlClient，主键须为单一可排序列。",
+   "highlights": [
+    "支持 FirstName、LastName、DateOfBirth、PhoneNumber、FullAddress、Rant、Lorem、StringFormat、None、Sql 等列脱敏类型，底层由 Bogus 库生成数据",
+    "支持值映射、固定值、随机列表（useList）、唯一值（unique）及 retainNullValues/retainEmptyStringValues 等行为配置，可组合 stringFormatPattern 生成复杂数据",
+    "SQL Server 数据源按主键顺序分批读取并以批量更新写入，提供 dryRun（事务回滚）、updateBatchSize、commandTimeout 等配置；Sql 类型可用当前行列作参数查询同库其他表取值"
+   ],
+   "use_cases": [
+    "将生产库副本下发到开发或测试环境前，对姓名、生日、电话、地址等个人信息列进行脱敏",
+    "以 JSON 配置定义少量表的脱敏规则，通过 CLI 批量执行替换",
+    "使用 Sql 类型查询按关联关系从同库其他表取值，保持跨表数据一致性"
+   ]
+  },
+  "sha": "a81e4ea84e87",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "554ea5f58eeb": {
+  "identity": {
+   "one_liner": "纯 Java 实现的 JDBC 驱动，用于读写 Microsoft Access 数据库文件",
+   "review": "UCanAccess 是开源纯 Java JDBC 驱动，通过 Jackcess 和 HSQLDB 读写 .accdb/.mdb 文件，无需本地 Windows 库，支持 SELECT/INSERT/UPDATE/DELETE 及 DDL，内置 IIf、Nz、PMT 等 Access 函数。面向需在 Java 及 OpenOffice、LibreOffice、Matlab、SQuirreL 等程序中访问 Access 数据库的用户。要求 Java 11+，默认拒绝指向网络/UNC 路径的链接表，需用 allowRemoteLinks 属性显式开启。",
+   "highlights": [
+    "纯 Java 实现，无本地依赖，可在支持 Java 11 及以上的环境运行，测试覆盖 Java 11/17/21",
+    "基于 Jackcess 5.2.0 和 HSQLDB 2.7.4 构建，支持通过 Jackcess Encrypt 读取加密数据库",
+    "支持 SQL 的 SELECT/INSERT/UPDATE/DELETE 及 ALTER TABLE 等 DDL 操作，内置 IIf、Nz、PMT、PV 等 Access 函数"
+   ],
+   "use_cases": [
+    "在 Java 应用中通过 JDBC 读写 Access 数据库文件",
+    "OpenOffice、LibreOffice、Matlab、SQuirreL 等客户端程序连接 Access 数据库",
+    "迁移自 net.sf.ucanaccess 旧坐标的项目，保持相同驱动类与连接 URL 升级依赖"
+   ]
+  },
+  "sha": "554ea5f58eeb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

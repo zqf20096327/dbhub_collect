@@ -2928,5 +2928,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5be23ec1eab9": {
+  "identity": {
+   "one_liner": "Go 编写的本地优先 AI 记忆库，含知识图谱，数据存于单个 SQLite 文件",
+   "review": "CortexDB 是一个纯 Go 实现的 AI 代理记忆与知识图谱库，数据默认存于单个 SQLite 文件，也可经 DSN 切换到 PostgreSQL + pgvector。它提供向量检索、FTS5 全文检索、混合与图检索，以及 SPARQL 1.1/1.2、SHACL、RDFS/OWL 2 RL 推理的 RDF 图，可在无嵌入模型下以词法模式运行。可通过 Go 库、Claude Code/Codex 插件、gRPC 共享服务器及 Rust/Python/JS 客户端使用，MIT 许可。",
+   "highlights": [
+    "单文件 SQLite 存储，支持可选的 PostgreSQL + pgvector 后端，未配置嵌入模型时以词法模式运行",
+    "内置 RDF 1.2 知识图谱，支持 SPARQL 1.1/1.2 查询、RDFS 与 OWL 2 RL 推理、SHACL 约束，另支持只读 Cypher",
+    "提供记忆来源标注（verified/guess 分开召回）、变更流、图谱历史与 as_of 查询，以及带请求 id 和 W3C trace 的可观测性"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex 等代理提供本地或跨机器共享的持久记忆（通过 cortexdb-grpc 指向同一服务器）",
+    "在小型设备上运行嵌入式检索：EmbeddedConfig 提供 SQ8 索引与有界缓存，README 称 10 万条 768 维向量约 0.28 秒打开、堆内存约 193 MB",
+    "媒体内容的文本检索：通过字幕、可见文本和转录稿查找图像、录音与视频（ingest_media），可选配置视觉/转录/CLIP 类嵌入端点"
+   ]
+  },
+  "sha": "5be23ec1eab9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

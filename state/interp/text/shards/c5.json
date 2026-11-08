@@ -2652,5 +2652,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d36c00e49502": {
+  "identity": {
+   "one_liner": "Rust 编写的多线程内存键值数据库，兼容 Redis 协议并内置全文与向量搜索",
+   "review": "KiviDB 是用 Rust 编写的内存键值数据库，实现 Redis 的 RESP2/RESP3 协议，现有 Redis 客户端可直接连接。它采用分片设计在多核上运行命令，支持快照与可选的追加文件持久化，内置 Redis Stack 风格的 FT.* 全文和向量搜索命令。默认监听 6380 端口，Lua 脚本与 TLS 需通过 Cargo feature 构建启用，采用 AGPL-3.0 许可证。",
+   "highlights": [
+    "支持 Redis 协议（RESP2/RESP3），兼容 redis-cli 和现有客户端库",
+    "内置 Redis Stack 风格 FT.* 命令，支持全文（BM25）、标签、数值和向量搜索（FLAT/HNSW）",
+    "提供快照（dump.kdb）与可选追加文件持久化，快照可保存 HNSW 图以便重启后恢复索引"
+   ],
+   "use_cases": [
+    "作为 Redis/Valkey 协议兼容的内存键值存储部署，客户端无需改动",
+    "对哈希字段执行全文检索和 KNN 向量搜索的场景",
+    "通过 Docker 运行并使用 Kubernetes operator 管理的部署环境"
+   ]
+  },
+  "sha": "d36c00e49502",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

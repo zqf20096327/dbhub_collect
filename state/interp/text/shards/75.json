@@ -2777,5 +2777,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a7b17a3fbe9a": {
+  "identity": {
+   "one_liner": "面向 DeepSeek Harness 的跨会话分层记忆插件",
+   "review": "StrataGate 是 DeepSeek Harness 的跨会话记忆插件。它按日期记录每日笔记以便恢复工作，将对话块保存为 L0–L5 六级视图并随时间精简，把决策与偏好沉淀为带来源引用的 Event，配合主题目录、可选知识图与语义检索。README 说明需通过 dsh 命令安装，检索命中不自动强化记忆，仅实际采用才更新权重。",
+   "highlights": [
+    "对话记忆采用 L0–L5 六级视图，旧对话精简为关键事实与索引，原始 L5 记录保留且可展开",
+    "Event 记录带时间、范围与来源引用，主题目录按章节组织相关 Events，知识图与重排序可按需启用",
+    "自动召回上限为 4 个 Events 与 4 个图节点，共享约 900 tokens 预算；证据门机制在检索不足时补充搜索或声明不确定"
+   ],
+   "use_cases": [
+    "需要跨会话延续工作进度、在恢复会话时读取最近三日每日笔记的 DeepSeek Harness 用户",
+    "需要查询历史决策、偏好与变更来源，或从模糊印象出发经主题目录定位具体记忆的场景",
+    "需要导入其他 AI 的既有记忆并转为可追溯 Event 的迁移场景"
+   ]
+  },
+  "sha": "a7b17a3fbe9a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a67a30d8a43b": {
+  "identity": {
+   "one_liner": "本地运行的 CPAP 数据查看器，读取呼吸机 SD 卡并以网页仪表盘展示",
+   "review": "HMS-CPAP 是一个 C++ 服务，内置 Angular 网页界面，读取 ResMed、Löwenstein、Sefam、Luna 等 CPAP 呼吸机 SD 卡上的数据文件（经 WiFi SD 卡、Sleep Bridge Lite、蓝牙或文件夹），自行解析后存入 SQLite/PostgreSQL/MySQL 并生成含图表、事件标记和 PDF 报告的仪表盘。数据完全本地处理，可经 MQTT 发布至 Home Assistant。README 明确声明它不是医疗器械，解析的是逆向工程的未公开格式，数值可能有误，不可据此调整治疗参数。",
+   "highlights": [
+    "支持从 Sleep Bridge Lite、ez Share/FlashAir WiFi SD 卡、AirSense 11 蓝牙、本地文件夹及手动上传页面五种方式获取数据，ResMed 机型在治疗期间每 65 秒更新实时图表",
+    "提供每晚关键指标、30 天趋势、13 张可缩放信号图、按日期/类型/时长筛选的事件浏览器及供医生查看的日期范围 PDF 报告",
+    "通过 MQTT 自动发现向 Home Assistant 提供 47+ 个传感器，支持 SQLite（默认）、PostgreSQL、MySQL/MariaDB 存储，可运行于 Windows、macOS、Linux、树莓派、Docker 或 HA 插件"
+   ],
+   "use_cases": [
+    "在本地网络内集中查看和归档多品牌 CPAP 治疗数据，生成 PDF 报告供医生复诊时参考",
+    "作为 Home Assistant 插件或 Docker 服务接入智能家居，通过 MQTT 传感器和耗材提醒参与自动化",
+    "通过手动上传页面或文件夹源在不共享网络的情况下导入 SD 卡数据 zip 文件与 O2Ring 血氧 CSV"
+   ]
+  },
+  "sha": "a67a30d8a43b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

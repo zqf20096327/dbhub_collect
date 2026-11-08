@@ -2667,5 +2667,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a9487b289b24": {
+  "identity": {
+   "one_liner": "开源 AI 代理可观测平台，基于 OpenTelemetry 提供追踪、评估与护栏。",
+   "review": "OpenLIT 是一个开源的代理 harness 工程平台，围绕 AI 代理与编码代理（如 Claude Code、Cursor、Codex）提供 OpenTelemetry 格式的追踪、评估、护栏、提示词管理和成本/GPU 监控。团队可通过 Docker Compose 自托管，SDK 一行代码自动插桩，适用于在生产中定位代理失败原因并调整提示词或规则。",
+   "highlights": [
+    "提供 OpenTelemetry 原生追踪（遵循 gen_ai.* 语义约定），覆盖 LLM 调用、工具调用、检索、代理步骤、延迟、令牌用量与成本",
+    "内置 LLM-as-a-Judge 评估（幻觉、偏見、毒性等）、护栏（提示注入检测）、Prompt Hub、Rule Engine、Vault 密钥管理及 OpenGround 模型对比",
+    "支持 70+ 集成及 NVIDIA/AMD/Intel GPU 监控，Python 与 TypeScript SDK 均可用"
+   ],
+   "use_cases": [
+    "对编码代理会话进行可观测性追踪，定位失败的 LLM 调用或异常成本",
+    "在生产环境对代理输出进行自动评估与 CI 质量门禁",
+    "通过 Prompt Hub 与 Rule Engine 在不重新部署的情况下调整提示词和运行时行为"
+   ]
+  },
+  "sha": "a9487b289b24",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "84afda129345": {
+  "identity": {
+   "one_liner": "浏览器看板与 MCP 服务器合一的单二进制自托管任务管理工具",
+   "review": "Kanzo 是一个运行在本地浏览器中的看板程序，同时内置 MCP 服务器，供编码代理领取任务、移动卡片和发表评论。它以单个约 4.7 MB 的二进制文件分发，运行 `kanzo` 命令即启动于 http://localhost:4242，无需账号和配置，数据存储在 `~/kanzo` 目录。任务操作通过看板界面、MCP 接口或命令行三种途径完成，支持多机共享与 git 同步。",
+   "highlights": [
+    "提供浏览器看板、MCP 服务器与 `kanzo` 命令行三种操作方式，代理可移动卡片、评论、设置任务依赖",
+    "支持局域网内多台计算机实时共享同一看板，或通过用户自有的私有 git 仓库在机器间同步",
+    "提供 tag:/status:/project:/is:waiting 等限定符过滤语法，支持 Human 任务标记与 Backlog 列"
+   ],
+   "use_cases": [
+    "使用 Claude Code、Codex 等编码代理协作管理任务，让代理与人在同一看板上工作",
+    "在多台设备或 Raspberry Pi 上共享或同步一份任务看板",
+    "以命令行或脚本方式创建与查询任务"
+   ]
+  },
+  "sha": "84afda129345",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a2b3eeda077": {
+  "identity": {
+   "one_liner": "以 SQLite 数据库为区块的私有权威证明区块链软件",
+   "review": "Daisy 是用 Go 编写的私有混合区块链软件，区块负载为 SQLite 数据库文件，通过密码学签名保证数据不可变。采用权威证明机制：所有人可下载验证数据，仅持被认可私钥的签名者可出块，新签名者需现有签名者以 web-of-trust 方式签名接纳。适合需要分布式数据采集与分发的机构。当前为早期 alpha，p2p 连接尚无加密与认证。",
+   "highlights": [
+    "区块为 SQLite 数据库文件，支持用 SQL 只读查询遍历链上所有区块（结果以 JSON 输出）",
+    "提供 daisy pull 从指定节点复制链参数与创世块，可用 -expect-genesis 校验创世块哈希",
+    "支持 UPnP/NAT-PMP 端口转发、mDNS 局域网发现、JSON 配置文件，消息含创世块哈希以支持同端口多链"
+   ],
+   "use_cases": [
+    "向内部或特定机构分发文档、科研数据、日志审计记录",
+    "网关定时发布传感器聚合数据",
+    "构建多方参与、仅少数方可写入的单用途链实例框架"
+   ]
+  },
+  "sha": "8a2b3eeda077",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fcb21e45b7f2": {
+  "identity": {
+   "one_liner": "FSCR 是面向 Oracle Fusion Cloud 实施的 AI 技能与工作流样例仓库",
+   "review": "FSCR 提供可复用的 AI 技能与引导式工作流，用于 Oracle Fusion Cloud Applications（ERP/HCM/SCM/CX）的规划、设置、配置与验证，面向客户、系统集成商和 AI 助手。仓库分层为 router/core/shared/pillars 等，技能输出持久化到本地 project 工作区以支持跨会话续作。它不是 Fusion 产品功能，不在产品支持范围内，需自备环境连接与凭证，要求 Fusion 26D 及更新维护包、Python 3.10+。",
+   "highlights": [
+    "按 router、core、shared、pillars、knowledge、schemas、governance、project 分层组织技能，技能以 manifest 声明输入、输出、依赖与执行模式",
+    "核心层提供认证、REST 客户端、ESS 作业、设置导入/导出、FBDI、HDL 等技术服务",
+    "本地 project 工作区通过 project-state.json 与 artifacts 目录持久化状态，支持跨会话恢复实施项目"
+   ],
+   "use_cases": [
+    "借助 AI 助手定义 Oracle Fusion 实施范围、需求与配置计划",
+    "通过 automated/hybrid 执行模式经 API、加载器或作业执行已批准的配置操作",
+    "在本地工作区中维护导出、基线、决策与蓝图，实现多会话实施进度管理"
+   ]
+  },
+  "sha": "fcb21e45b7f2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

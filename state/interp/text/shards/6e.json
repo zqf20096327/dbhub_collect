@@ -2681,5 +2681,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a85587dd8d82": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件：审批门写入本地 SQLite 并注入冻结快照",
+   "review": "dsh-memento 为 DeepSeek Harness 提供 ctx.memory 能力接缝，将模型写入经审批门落盘到本地 SQLite（node:sqlite、WAL、0600 权限），下次会话把冻结快照注入 systemPrompt。记忆分 user/agent 两轨、user-global/workspace 两层并按 agentPreset 隔离，各层有硬字符预算（默认 user 2000 / agent 4000），写满返回结构化错误而不截断。社区插件，与 DeepSeek 官方无关。",
+   "highlights": [
+    "写入路径（add/replace/remove/seed）强制经过服务内部审批门，writePolicy 支持 ask/auto/off，被拒写入落 *-denied 审计行",
+    "提供 memory/memory_recall 工具、/memory 命令、只读 Web 面板，以及只读 stdio MCP 服务器（dsh-memento-mcp）供外部 MCP 客户端检索",
+    "定义 dsh-memory-protocol v1，内置 mem0、Hermes、Claude Code 风格记忆的适配器与协议一致性测试套件"
+   ],
+   "use_cases": [
+    "需要 AI 会话跨次保留用户事实与环境约定、且每次写入需人工审批与审计记录的场景",
+    "需要外部 MCP 客户端（如 Claude、Codex）只读检索本地记忆库的场景",
+    "需要从 mem0、memory.md、CLAUDE.md 等既有记忆格式迁移或导入条目的场景"
+   ]
+  },
+  "sha": "a85587dd8d82",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c7a1b3bc7ad6": {
+  "identity": {
+   "one_liner": "编译期生成代码、注解驱动、无反射的 Android SQLite 数据库层",
+   "review": "SqliteMagic 是面向使用 KSP 的 Kotlin Android 项目的 SQLite 数据库层，通过编译期代码生成实现类型安全的 SQL-first DSL 查询，无反射。支持协程与 RxJava 适配器、自动 schema 迁移及迁移测试。要求 Android API 24+，3.x 版本未发布至公共仓库，需从源码构建并安装到本地 Maven。数据库驱动需自行选择：设备 SQLite 或打包进应用的 SQLite。",
+   "highlights": [
+    "提供 SQL-first Kotlin DSL，编译器检查子句顺序、列类型与可空性",
+    "通过 KSP 在编译期生成代码，不使用反射",
+    "提供 coroutines、RxJava 2/3 适配器，支持表变更时重新触发的观察查询与 withTransaction 挂起事务"
+   ],
+   "use_cases": [
+    "使用 Kotlin 与 KSP 的 Android 应用本地 SQLite 持久化",
+    "需要观察查询（表变更驱动 Flow/RxJava 发射）与事务性挂起操作的场景",
+    "需要在各 Android 版本上运行相同 SQL 特性、通过打包 SQLite 驱动控制 SQLite 版本的项目"
+   ]
+  },
+  "sha": "c7a1b3bc7ad6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

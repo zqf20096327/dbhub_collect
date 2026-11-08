@@ -2995,5 +2995,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4b9cc72ab780": {
+  "identity": {
+   "one_liner": "原生多数据库客户端，含 SQL 编辑器、数据网格与内置 AI",
+   "review": "TablePro 是一款开源的 macOS/iOS 数据库客户端，使用原生框架而非 Electron 或 JVM 构建，通过内置与插件驱动连接多种 SQL 和 NoSQL 数据库。核心功能包括 SQL 编辑器、可编辑数据网格、SSH 隧道、查询历史及 AI 辅助，采用 AGPLv3 许可，付费许可解锁 iCloud 同步等附加功能。",
+   "highlights": [
+    "SQL 编辑器支持自动补全、多光标、Vim 模式与语法主题；数据网格支持内联编辑、排序、过滤与撤销",
+    "内置 AI 聊天、内联建议与 MCP 服务器，可接入 Cursor、Raycast、Claude Desktop，支持自带 API 密钥或本地 Ollama",
+    "支持 SSH 隧道（密码与密钥认证）、SSL/TLS，插件系统允许用 Swift 编写数据库驱动"
+   ],
+   "use_cases": [
+    "在 macOS 或 iOS/iPadOS 上管理 MySQL、MongoDB、MSSQL 等多种数据库",
+    "通过 MCP 服务器或 URL scheme 将本地数据库接入 AI 工具链",
+    "开发者从源码构建：需 Xcode 26+ 与 XcodeGen，经 scripts 脚本生成工程后用 xcodebuild 编译"
+   ]
+  },
+  "sha": "4b9cc72ab780",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e77e751f4240": {
+  "identity": {
+   "one_liner": "中国人社/电子政务后端参考实现：五模块 Spring MVC + MyBatis 工程",
+   "review": "Mestudy 是一个省级社保与政务服务平台的五个后端服务合集，以参考架构形式发布给需要构建或维护同类系统的工程师。四个模块采用 Spring MVC + MyBatis + Oracle 多 schema，NetPortalManagement 使用 JDBC/Jersey；通过 Axis SOAP 对接旧政务接口，Redis 管理会话与令牌，共约 358 个 HTTP 端点。全部模块打包为 war 部署到 servlet 容器，构建需 JDK 8 与 Maven 3.2+。",
+   "highlights": [
+    "提供 5 个 Maven 模块，统一以 war 包部署到 servlet 容器（Tomcat 7/8 或 WebLogic 12c），包含社保查询、社保卡生命周期、就业服务、医院挂号、人脸核验、电子签章等业务流程实现",
+    "约 350 个端点共享统一的 Result 响应封装（statusCode/message/data），对下游政务系统的 SOAP/Jersey/HttpClient 调用封装为失败码响应而非 500",
+    "全部模块已可在公共依赖下构建：`mvn -B test` 无需 Oracle、Redis 或容器即可运行单元测试，其中 BanjianVo 为按 mapper 列重建的非原始代码并在 Javadoc 标注来源"
+   ],
+   "use_cases": [
+    "作为参考架构，供构建或维护具有 servlet 容器 + XML Spring + MyBatis/Oracle + Redis 会话 + SOAP 旧系统桥接形态的后端系统的工程师查阅领域建模与集成模式",
+    "研究令牌认证客户端 SDK（IFaceHttpsClient 自续期心跳）、草稿/提交/审核状态机、Axis SOAP→REST 适配等具体集成模式的实现样本",
+    "多数据源（c3p0 + MyBatis 绑定多个 Oracle schema）配置、Spring 上下文加载测试（SpringContextLoadTest 校验数据源 URL 与 mapper 语句）等运维与构建卫生问题的参照"
+   ]
+  },
+  "sha": "e77e751f4240",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8d71bc5c2f6": {
+  "identity": {
+   "one_liner": "开源桌面取证工作台，直接检视归档、备份与磁盘镜像无需预解压。",
+   "review": "Crush 是一个用于数字取证的桌面工作台，面向需要查看特定文件或数据源的检验人员，而非执行完整处理流水线。它支持直接打开 ZIP/TAR/7z、iOS/Android 备份、raw/E01 磁盘镜像、UFDR 等数据源，无需先解压，并内置 SQLite、Plist、ABX、Protobuf、MMKV 等多种查看器。每个发布版本运行取证测试套件验证证据不可变性。不支持 carving、日志分析、快照与 RAID。",
+   "highlights": [
+    "支持免解压直接浏览 ZIP/TAR/7z、加密备份、raw/EWF 磁盘镜像、L01/AD1/UFDR 等数据源",
+    "内置 SQLite（含 WAL/SQLCipher）、LevelDB、Realm、MMKV、ABX、SEGB、Protobuf 等专用查看器，提供 BLOB/Value Inspector 与十六进制字节溯源",
+    "完整性模式打开时计算哈希、导出生成哈希清单，每次发布附带跨平台取证审计报告"
+   ],
+   "use_cases": [
+    "检视 iOS/Android 备份或 Cellebrite UFDR 提取中的特定文件与数据库",
+    "无需挂载或管理员权限地浏览磁盘镜像与逻辑证据文件",
+    "解码 Base64/压缩链的 BLOB 数据并生成含 SHA-256 的导出记录"
+   ]
+  },
+  "sha": "b8d71bc5c2f6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2531,5 +2531,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6368ccf7c7d9": {
+  "identity": {
+   "one_liner": "Text-to-SQL 的身份感知 schema 选择器，仅向 LLM 提供调用者有权限读取的表。",
+   "review": "schemagate 是一个 Python 库，用于在 text-to-SQL 流程中选择表 schema：先按调用者的授权过滤，再向 LLM 提供所需的表子集。README 称其在 50+ 表的数据库上中位数减少 91.1% 的 schema token（在 Spider 2.0 基准测试中测得），并指出无权限表会被完全排除，而不是排名较低。它以 BM25 加上一个哈希嵌入器作为选择器，README 称其无需模型调用，可离线以毫秒级速度运行。可通过 pip 安装，依赖 SQLAlchemy，无需 API key，支持 Postgres、Oracle、MySQL、SQL Server 和 SQLite，可与 LangChain、LlamaIndex 和 MCP 集成。",
+   "highlights": [
+    "按调用者权限（principal/roles）过滤 schema，将未授权的表完全排除在 prompt 之外",
+    "在不调用模型的情况下离线选择表，使用 BM25 加上哈希 n-gram 嵌入器",
+    "支持 Postgres、Oracle、MySQL、SQL Server 和 SQLite；与 LangChain、LlamaIndex 和 MCP 集成"
+   ],
+   "use_cases": [
+    "针对 LLM 需要受限表访问权限的 SQL agent 流水线进行 schema 剪枝",
+    "通过避免在每次查询中粘贴完整的 schema，为大 schema 的 text-to-SQL prompt 减少成本",
+    "在行级安全导致静默、空结果的环境中进行开发或演示 SQL agent"
+   ]
+  },
+  "sha": "6368ccf7c7d9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2464,5 +2464,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8781407b7cbe": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 AI 代理记忆层，单依赖安装",
+   "review": "Mnemosyne 是一个面向 AI 代理的记忆层，通过 pip 安装、以单个 SQLite 文件存储数据，无需外部服务。它提供 MCP 服务器（stdio/SSE）与 Python SDK 两种接入方式，适配 Cursor、Claude Code、OpenWebUI 等多种平台。内部采用 BEAM 三层架构：工作记忆、情景记忆与时间知识图谱，检索使用 50% 向量相似度 + 30% FTS5 + 20% 重要性的混合评分。注意基准数据标注为 v3.0.0 时点结果，且部分 LongMemEval 数据因无可复现方法学已被撤回。",
+   "highlights": [
+    "支持 MCP 服务器（stdio/SSE 传输）、Python SDK、OpenWebUI 原生工具等多种接入方式",
+    "BEAM 三层架构：TTL 驱逐的工作记忆、sqlite-vec + FTS5 混合检索的情景记忆、带版本链的时间知识图谱",
+    "嵌入经 MIB 二值化压缩至 48 字节（384 维 float32 的 32 倍压缩），Hamming 距离计算全部在 SQLite 内完成"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Code、Codex 等 MCP 客户端添加持久记忆能力",
+    "自托管或本地运行、数据不出机器的代理记忆场景",
+    "Python 代理通过 import mnemosyne 直接调用 remember/recall API"
+   ]
+  },
+  "sha": "8781407b7cbe",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

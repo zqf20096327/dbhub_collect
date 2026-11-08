@@ -2493,5 +2493,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2e1136886b3e": {
+  "identity": {
+   "one_liner": "面向 Sigma 检测标准的 Rust 工具链：解析、评估、转换规则并提供流式检测守护进程",
+   "review": "RSigma 是用 Rust 实现的 Sigma 规则工具链，覆盖解析、lint、规则转换、评估与流式检测。它把 Sigma YAML 解析为强类型 AST 并编译为匹配器，可接收 JSON、syslog、EVTX、OTLP 等多种格式日志，以内置守护进程做实时检测与相关性分析，供安全检测工程师使用。代码按功能拆分为多个 crate，支持 MCP 与 LSP 集成。",
+   "highlights": [
+    "内置 linter 提供 90 项校验，支持四个严重级别与 14 条安全规则的自动修复",
+    "流式守护进程支持 stdin/HTTP/NATS/OTLP 输入，提供热重载、Prometheus 指标与带重试和 DLQ 的多路 sink",
+    "规则可转换为 PostgreSQL/TimescaleDB、LynxDB、Fibratus 等后端查询，并可通过 sigma-cli 委托 30+ pySigma 后端"
+   ],
+   "use_cases": [
+    "在 CI 中对规则仓库执行 lint、验证、回测与覆盖率检查，并通过 GitHub Action 门禁合并",
+    "作为长期运行的检测守护进程，从多种日志源接入事件并实时评估 Sigma 规则与相关性逻辑",
+    "在编辑器中通过 LSP 获得规则诊断与补全，或通过 MCP 服务器向 AI 代理暴露工具链"
+   ]
+  },
+  "sha": "2e1136886b3e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

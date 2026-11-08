@@ -2459,5 +2459,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "47b1ee15c7f8": {
+  "identity": {
+   "one_liner": "一组 SQL Server 存储过程，用于服务器健康检查与性能调优",
+   "review": "First Responder Kit 提供一组 SQL Server 存储过程：sp_Blitz 做整体健康检查并输出按优先级排序的问题列表，sp_BlitzCache 从计划缓存中查找资源占用最高的查询，sp_BlitzIndex 分析索引，sp_BlitzFirst 用于定位当前慢的原因，另有备份恢复相关脚本。面向管理 SQL Server 的 DBA、系统管理员和开发者。通过运行 Install-All-Scripts.sql 安装，支持 Windows/Linux 上的 SQL Server 和 Amazon RDS，不支持 Azure SQL DB（部分过程可用但无官方支持）。sp_Blitz 依赖同仓库的 sp_ineachdb。",
+   "highlights": [
+    "sp_Blitz 输出带 Priority、Findings、URL、Details 等列的检查结果，支持写入表中集中保存多服务器历史记录，并可通过 BlitzChecksToSkip 表跳过指定检查或数据库",
+    "sp_BlitzCache 读取计划缓存，默认返回最耗资源的 10 条查询及警告说明、查询文本、执行计划等列",
+    "支持 SQL Server on Windows/Linux 与 Amazon RDS；sp_DatabaseRestore 因依赖 xp_cmdshell 不支持 Linux"
+   ],
+   "use_cases": [
+    "定期（每日/每周）对 SQL Server 实例做健康检查并集中收集结果",
+    "排查资源占用最高的查询，查看其警告与执行计划",
+    "服务器当前变慢时进行实时诊断"
+   ]
+  },
+  "sha": "47b1ee15c7f8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3569c37763b3": {
+  "identity": {
+   "one_liner": "自托管 GitHub 流量分析工具，定时抓取 API 数据存入 SQLite",
+   "review": "ghstats 是一个自托管的 GitHub 仓库流量分析服务。GitHub 仅保留 14 天流量数据，它每小时通过 GitHub API 拉取 views、clones、stars、forks、issues、PR 等指标并存入本地 SQLite，提供 Web 仪表盘、SVG 徽章与卡片、JSON API。适用于个人项目、开源作品集或组织统计页面。部署为单个 Rust 二进制或 Docker 镜像，需配置 GitHub Token；采集范围默认限可访问的公开仓库。",
+   "highlights": [
+    "定时（默认每小时，可经 GHS_CRON_SCHEDULE 调整）从 GitHub API 拉取仓库指标，按天存入本地 SQLite，保留长期历史",
+    "提供仓库仪表盘、SVG 徽章与卡片、受 x-api-token 保护的 JSON API（/api/repos、/health 等）",
+    "单 Docker 镜像部署，前端依赖内嵌于二进制，运行时不请求 CDN；支持按 owner、fork、archived 等条件过滤仓库及私有仓库采集"
+   ],
+   "use_cases": [
+    "为个人项目或开源作品集保留超过 GitHub 14 天限制的流量历史",
+    "搭建组织或公开的仓库统计页面，通过徽章和卡片嵌入个人站点",
+    "在私有部署中通过 API 或仪表盘查看仓库 views/clones/stars 等趋势数据"
+   ]
+  },
+  "sha": "3569c37763b3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2357,5 +2357,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "788822d3087d": {
+  "identity": {
+   "one_liner": "SQLite 分支版，用内容寻址 prolly tree 替换 B-tree 实现 Git 式版本控制",
+   "review": "DoltLite 是 DoltLite 项目的 SQLite fork，将存储引擎替换为内容寻址的 prolly tree，在 SQL 层以函数和虚拟表提供 commit、branch、diff、merge 等版本控制操作。解析器、规划器和 VDBE 保留自上游 SQLite。可嵌入多种语言，配套提供 Python、Go、Rust 等绑定及 HTTP 远程同步服务器 doltlite-remotesrv。当前处于 Beta 阶段，版本 12 存储格式已冻结。",
+   "highlights": [
+    "提供 SQL 函数形式的版本控制操作：dolt_commit、dolt_branch、dolt_diff、dolt_merge、dolt_rebase 等",
+    "内置 vec1 向量 ANN 扩展，向量表支持分支、diff、历史查询和推送",
+    "保留 sqlite3_* API，可按文件头自动打开原生 SQLite B-tree 格式数据库"
+   ],
+   "use_cases": [
+    "需要数据库级版本控制（分支、diff、合并、回滚）的本地应用开发",
+    "通过 C 库或语言绑定嵌入应用，实现 local-first 场景",
+    "通过 doltlite-remotesrv 或 push/pull 进行数据库的远程同步与克隆"
+   ]
+  },
+  "sha": "788822d3087d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42553f6c3e7e": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 Kubernetes Operator，通过自定义资源声明式管理集群。",
+   "review": "该项目是 ClickHouse 官方发布的 Kubernetes Operator，用于自动化部署、配置和管理 ClickHouse 集群与 ClickHouse Keeper 集群。它通过自定义资源实现声明式管理，覆盖扩缩容、升级和配置等生命周期操作。使用者需准备 Kubernetes v1.28+ 集群、cert-manager，并可通过预构建清单、Helm Chart 或源码构建安装。",
+   "highlights": [
+    "通过自定义资源（clickhouseclusters、keeperclusters）创建和管理 ClickHouse 及 Keeper 集群",
+    "支持 TLS/SSL 安全通信、Prometheus 指标集成，以及可配置存储类的持久卷声明",
+    "提供 manifests、Helm Chart 和源码构建（make docker-build/deploy）三种安装方式"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上以声明式方式部署和管理 ClickHouse 集群",
+    "需要 ClickHouse Keeper 做分布式协调的集群搭建",
+    "在 AWS EKS、GCP GKE 等环境中按存储方案（gp3、SSD）部署示例集群"
+   ]
+  },
+  "sha": "42553f6c3e7e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

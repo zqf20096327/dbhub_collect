@@ -2811,5 +2811,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c0e16159da2f": {
+  "identity": {
+   "one_liner": "用列式存储和 JIT 编译加速查询的 SQLite 兼容嵌入式数据库",
+   "review": "musql 是一个 Go 编写的嵌入式 SQL 数据库，实现 SQLite 的 SQL 方言，使用自有 .musq 列式段文件格式，扫描和聚合经 JIT 编译为本地机器码执行。支持通过 database/sql 嵌入使用、musqld 服务器（兼容 libSQL 客户端协议）以及 musql-convert 在 SQLite 与 musql 格式间转换；文件格式与 SQLite 不兼容，需转换后打开。",
+   "highlights": [
+    "纯 Go 实现，无 CGo，需 Go 1.27 及以上，driver 注册为 sqlite 和 musql",
+    "支持 joins、窗口函数、触发器、JSON、全文检索、R-tree 索引及 libSQL 向量函数",
+    "提供 CRDT 复制和 leader 模式（可选共识集成）两种节点间复制方式"
+   ],
+   "use_cases": [
+    "在 Go 程序中替换现有 SQLite 驱动，需将数据库文件用 musql-convert 转换",
+    "通过 musqld/Docker 部署为服务端，供 libSQL 客户端（如 @libsql/client）连接",
+    "在需独立工作的节点间复制数据库"
+   ]
+  },
+  "sha": "c0e16159da2f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

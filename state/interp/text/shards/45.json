@@ -2861,5 +2861,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "45095fc23cc5": {
+  "identity": {
+   "one_liner": "开源制造管理软件，将 ERP、MRP、MES 与 QMS 构建在单一 Postgres 数据库之上",
+   "review": "Carbon 是面向制造业的开源管理系统，把报价、订单、库存、MRP 计划、车间执行、质量与批次/序列号追溯放在同一个 Postgres schema 中，通过 REST API 与 MCP server 暴露操作，支持云托管和自托管部署。技术栈为 TypeScript（React Router）加 Rust 几何服务，许可证为 AGPL-3.0；自托管环境使用 API 与 MCP 需商业许可。本地开发需 Docker、Node.js 24.22.1+ 与 pnpm，通过 pnpm dev 启动完整后端与应用。",
+   "highlights": [
+    "提供 ERP、MRP、MES、QMS、批次与序列号双向追溯、工作流自动化、多级 BOM 与产品配置等功能模块",
+    "API 以 HTTP（附 OpenAPI 规范）和 MCP 两种接口提供相同操作，权限由数据库行级安全与角色/属性控制实现",
+    "包含 Rust 几何服务，用于 STEP 转 GLB 及装配运动规划，并提供 3D 装配说明书查看器"
+   ],
+   "use_cases": [
+    "需要将计划、生产、质量与会计数据集中在同一数据库中的制造团队",
+    "涉及复杂装配、合同制造、按订单配置（CTO）及高混合低产量生产的场景",
+    "希望基于其 API 和 starter 示例构建定制化端到端制造系统的开发团队"
+   ]
+  },
+  "sha": "45095fc23cc5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61ac28bc4171": {
+  "identity": {
+   "one_liner": "开源有状态 Actor 运行时，提供持久化状态与串行化执行，支持 TypeScript 与 Python。",
+   "review": "Durable Actors 是一个实现有状态 serverless 函数的开源运行时：actor 是带有持久化字段（@Persisted）和串行化执行的类，状态可在中断、错误与重启后保留。SDK 自动生成类型安全客户端，当前支持 Python 和 TypeScript；通过 bunx durable-actors dev 本地开发，可自托管于 GCP，内置可观测性功能，采用 MIT 许可证。",
+   "highlights": [
+    "提供持久化状态与串行化执行机制，运行时按需加载 actor 并持久化标记为 @Persisted 的字段",
+    "支持自动生成类型安全客户端，提供 Python 与 TypeScript SDK",
+    "内置可观测性功能，支持本地开发一条命令运行，并可自托管"
+   ],
+   "use_cases": [
+    "构建聊天系统等实时应用，会话状态可持久化，回复可流式推送给多端",
+    "多人协作编辑场景，协调多人及代理对同一文档的并发修改",
+    "构建多智能体协调系统，如共享的 TeamAgent 聊天与 agent swarm"
+   ]
+  },
+  "sha": "61ac28bc4171",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c615b736c9df": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的本地优先项目记忆与证据层，基于 SQLite 与 MCP。",
+   "review": "Rta-Smriti 为 AI 编码代理提供本地项目记忆：将 Git 仓库、代理会话、决策与证据索引进项目级 SQLite，按来源和验证状态区分证据类型，并通过 CLI 与 stdio MCP 输出受 token 预算约束的上下文包。适用于使用 Codex、Claude Code 等多种编码主机的开发者。README 标注当前版本 v1.1.0-alpha.13 为早期采用者版本；原生 Claude 捕获/回放与跨主机交接尚未验证，捕获需显式授权，无遥测和云端数据库。",
+   "highlights": [
+    "将仓库结构、符号、导入、证据与会话记录索引到本地 SQLite，支持只读检索接口 `search --json --read-only`",
+    "按证据来源（如直接观察、受信指令、推断）与时效标签区分可信度，提供冲突与决策债务视图",
+    "通过本地 stdio MCP 与 CLI 集成，README 列出 Codex、Claude Code、Cursor、Zed、OpenCode、Gemini CLI 的配置配方"
+   ],
+   "use_cases": [
+    "在新代理会话中恢复项目上下文，避免重复陈述历史决策",
+    "在有界审查下进行项目交接（Project Passport 的 Resume/Changes/Decisions/Handoff 流程）",
+    "需要本地数据保留的团队协作，通过显式授权的范围共享选定记忆"
+   ]
+  },
+  "sha": "c615b736c9df",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

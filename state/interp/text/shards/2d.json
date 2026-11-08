@@ -2612,5 +2612,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e09eb95fad73": {
+  "identity": {
+   "one_liner": "用 Rust 实现的开源湖仓引擎，兼容 PostgreSQL 协议，数据存于对象存储",
+   "review": "LakeSoul 是 LF AI & Data 沙盒项目，以 Rust 编写，运行在用户自有对象存储之上，通过 PostgreSQL wire 协议接收 psql、JDBC 等客户端的 DDL、INSERT 与查询，支持 ACID 主键 upsert 与 merge-on-read。它不是完整 PostgreSQL：UPDATE、DELETE、COPY、RETURNING 及非 READ COMMITTED 隔离级别会返回错误，写入须为 autocommit。同一端点还可通过 CREATE SUBSCRIPTION 订阅源 PostgreSQL 的逻辑复制流同步 CDC 表。",
+   "highlights": [
+    "实现 PostgreSQL wire 协议、扩展查询协议、pg_catalog 与 psql \\d，不依赖 Postgres 扩展或 CDC sidecar",
+    "提供会话级增量 SQL（lakesoul.ivm.enabled），INSERT ... SELECT 仅读取游标之后的提交并写入变更行，结果与全量重算一致且重试安全",
+    "支持 pgvector 兼容 SQL 与写时维护的 IVF + RaBitQ 向量索引、Tantivy BM25 全文检索；Python SDK 经 Rust IO 层直读对象存储，可输出 Arrow、Daft、Ray、PyTorch 数据集"
+   ],
+   "use_cases": [
+    "将现有 PostgreSQL 客户端与 BI 工具（Superset、Metabase 等）指向对象存储上的湖仓表",
+    "通过 CREATE SUBSCRIPTION 以逻辑复制同步源 PostgreSQL 库到 LakeSoul CDC 表",
+    "以 Python SDK 让 Pandas、DuckDB、Ray、PyTorch 等直接读取同一份湖仓数据用于分析与训练"
+   ]
+  },
+  "sha": "e09eb95fad73",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0909b715fcc": {
+  "identity": {
+   "one_liner": "基于 Talend Studio 8 开发并进行版本管理的 8 个 ETL 数据管道作业集合",
+   "review": "该仓库包含 8 个使用 Talend Studio 8 开发的 ETL 作业（Job），流程覆盖从 REST API 提取数据、解析 JSON、执行转换，到将数据加载至 SQL Server。README 仅含少量标题文字，作业的具体配置与依赖需查阅仓库内文件。适用于需要复用或维护这些 Talend 作业定义的数据工程场景。",
+   "highlights": [
+    "提供 8 个 Talend Studio 8 ETL 作业，实现数据提取、转换与加载流程",
+    "作业支持通过 REST API 提取数据并解析 JSON",
+    "加载目标为 SQL Server"
+   ],
+   "use_cases": [
+    "从 REST API 提取银行经济类数据并进行 JSON 解析与转换",
+    "构建将数据写入 SQL Server 的数据管道",
+    "对 Talend 作业进行版本化管理与团队协作维护"
+   ]
+  },
+  "sha": "b0909b715fcc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2800,5 +2800,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "05734ed3d1d1": {
+  "identity": {
+   "one_liner": "本地优先的 AI 长期记忆库，以人工审核闸门管理 Agent 记忆",
+   "review": "memory-eternal 是一个面向 DSH、Claude Code、Codex、Cursor 及任意 MCP 客户端的本地长期记忆插件。它用单一 SQLite 库存储记忆卡片，新记忆须经人工在 Web UI、TUI 或 CLI 中审核后才进入主库，并附不可变审计日志与 token 账本。检索基于 FTS5 + BM25，读取时无需调用模型。数据全部存于本地磁盘，README 注明 News 页面会按需抓取公开 RSS。",
+   "highlights": [
+    "一条写入路径加两条读取路径：新记忆进入待审队列，人工批准后才写入主库，且 Agent 无法自行批准自己的记忆卡片",
+    "检索基于 SQLite FTS5 + BM25 实现，读取零模型调用；另含记录召回注入量、蒸馏调用与有用性反馈的 token 账本",
+    "支持已批准卡片的升格为 Core memory 并自动注入每次会话系统提示，Agent 可提交修订副本经审核后覆盖原卡"
+   ],
+   "use_cases": [
+    "希望多个编码 Agent（Claude Code、Codex、Cursor 等）共享同一份本地记忆库并通过审核闸门控制写入",
+    "需要在每轮会话自动复用已确认的项目决策、偏好与约束，避免重复粘贴背景说明",
+    "想量化记忆系统的 token 开支与召回有用性，据账本数据调整或关闭召回"
+   ]
+  },
+  "sha": "05734ed3d1d1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

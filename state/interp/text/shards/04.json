@@ -2723,5 +2723,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "375148db945c": {
+  "identity": {
+   "one_liner": "在 .NET 代码与测试中运行真实 PostgreSQL 服务器的嵌入式库",
+   "review": "该库用于从 .NET 代码启动真实 PostgreSQL 服务器，无需 Docker 或本地安装。它按操作系统和 CPU 架构自动下载 zonkyio 发布的精简二进制文件并缓存，支持 Windows、Linux（glibc/musl）和 macOS。适用于需要在单元测试或本地运行真实数据库的 .NET 开发者；要求以非 root 用户运行，且服务器仅监听 localhost。",
+   "highlights": [
+    "自动检测 OS 与 CPU 架构并下载匹配的 PostgreSQL 二进制文件，支持版本规格（如 \"17\"、\"latest\"）解析",
+    "支持命名实例的复用与跨进程附加（attach），提供共享缓存目录和 CI 预下载（InstallAsync）机制",
+    "支持安装扩展 zip 包（需同平台同主版本），可校验 SHA-256，并通过 PgServerOptions 配置端口、参数、日志等"
+   ],
+   "use_cases": [
+    ".NET 单元/集成测试中通过 xUnit fixture 共享一个真实 PostgreSQL 实例",
+    "CI 流水线中用 InstallAsync 预热二进制缓存，避免首个测试承担下载耗时",
+    "本地开发或工具中通过命名实例复用带数据的 Postgres 服务器"
+   ]
+  },
+  "sha": "375148db945c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
