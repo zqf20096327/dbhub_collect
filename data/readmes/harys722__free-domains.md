@@ -9,7 +9,7 @@
   <h1 align="center">Free Domains</h1>
 
   <p align="center">
-    A curated collection of free subdomains ideal for personal websites, open source projects, portfolio showcases, and innovative online ventures.
+    A big list of free subdomains for personal websites, portfolios, open-source projects, and other online projects.
     <br />
     <br />
     ⭐ <a href="https://github.com/harys722/free-domains">Star on GitHub</a>
@@ -33,11 +33,11 @@
 <div align="center">
   <h2>List of Free Domains Services</h2>
 
-  📋 All Domains Services: **74**
+  📋 All Domains Services: **96**
   &bull;
-  ✅ Available: **46**
+  ✅ Available: **67**
   &bull;
-  ❌ Unavailable: **28**
+  ❌ Unavailable: **29**
 
 </div>
 
@@ -65,7 +65,6 @@
  | [ngo.us](https://nic.ngo.us/) | Free subdomains exclusively for nonprofits, nongovernmental organizations (NGOs) and initiatives. | [ngo-us/registry](https://github.com/ngo-us/registry) <br><br> ![GitHub stars](https://img.shields.io/github/stars/ngo-us/registry?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/ngo-us/registry?style=flat&label=Forks) | ✅ |
  | [pp.ua](https://pp.ua/) | Free pp.ua subdomains. | — | ✅ |
  | [part-of.my.id](https://part-of.my.id/) | Your own personal id for your website. | [partofmyid/register](https://github.com/partofmyid/register) <br><br> ![GitHub stars](https://img.shields.io/github/stars/partofmyid/register?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/partofmyid/register?style=flat&label=Forks) | ✅ |
- | [openalias.xyz](https://openalias.xyz/) | Free developer subdomains: hi-dev.pro & dev-at.net for your website. | — | ✅ |
  | [cli.rs](https://cli.rs/) | .RS is an expensive domain. Use {yourproject}.cli.rs for your Rust projects! | [zackify/cli.rs](https://github.com/zackify/cli.rs) <br><br> ![GitHub stars](https://img.shields.io/github/stars/zackify/cli.rs?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/zackify/cli.rs?style=flat&label=Forks) | ✅ |
  | [env.pm](https://env.pm/) | Use the 'env.pm' / 'jsx.pm' subdomains for your projects or personal use. | — | ✅ |
  | [creepers.sbs & creepers.cloud](https://creepers.sbs/) | You can register your '.creepers.sbs' / '.creepers.cloud' subdomain completely free. | [creepersbs/register](https://github.com/creepersbs/register) <br><br> ![GitHub stars](https://img.shields.io/github/stars/creepersbs/register?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/creepersbs/register?style=flat&label=Forks) | ✅ |
@@ -92,8 +91,31 @@
  | [fluxcast.dev](https://sub.fluxcast.dev/) | Free GitOps-based subdomain registry for developers (*.fluxcast.dev). | [IlyaP358/fluxcast-domains](https://github.com/IlyaP358/fluxcast-domains) <br><br> ![GitHub stars](https://img.shields.io/github/stars/IlyaP358/fluxcast-domains?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/IlyaP358/fluxcast-domains?style=flat&label=Forks) | ✅ |
  | [is-a.stupid.cat](https://is-a.stupid.cat/) | Register for your own stupid-looking '.is-a.stupid.cat' subdomain. | [is-a-stupid-cat/register](https://github.com/is-a-stupid-cat/register) <br><br> ![GitHub stars](https://img.shields.io/github/stars/is-a-stupid-cat/register?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/is-a-stupid-cat/register?style=flat&label=Forks) | ✅ |
  | [4k.pics](https://4k.pics/) | Get your own personalized subdomain at 4k.pics completely free of charge. | — | ✅ |
+ | [Public Free Suffix](https://publicfreesuffix.org/) | Non-profit free subdomains for personal sites, open-source projects and AI apps on is-a.si, pfsdns.org, nastu.net, tun.re, no.kg and so.kg, with a web console, REST API and MCP support for LLM agents. | [PublicFreeSuffix/PublicFreeSuffix](https://github.com/PublicFreeSuffix/PublicFreeSuffix) <br><br> ![GitHub stars](https://img.shields.io/github/stars/PublicFreeSuffix/PublicFreeSuffix?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/PublicFreeSuffix/PublicFreeSuffix?style=flat&label=Forks) | ✅ |
+ | [FreeDNS (afraid.org)](https://freedns.afraid.org/) | Free DNS hosting plus free dynamic and static subdomains on a shared registry of 23,000+ domains. | — | ✅ |
+ | [Dynu](https://www.dynu.com/) | Free dynamic DNS with a free third-level domain, or use your own domain. | — | ✅ |
+ | [DuckDNS](https://www.duckdns.org/) | Free dynamic DNS subdomains under duckdns.org. | — | ✅ |
+ | [dynv6](https://dynv6.com/) | Free IPv4 and IPv6 dynamic DNS hostnames, or delegate your own domain. | — | ✅ |
+ | [FreeMyIP](https://freemyip.com/) | Free dynamic DNS under freemyip.com, with no login or expiration. | — | ✅ |
+ | [is-a.ru](https://is-a.ru/) | Free name.is-a.ru subdomains for developers, via application form. | — | ✅ |
+ | [dedyn.io (deSEC)](https://desec.io/) | Free DNSSEC-secured dynamic DNS subdomains under dedyn.io. | [desec-io/desec-stack](https://github.com/desec-io/desec-stack) <br><br> ![GitHub stars](https://img.shields.io/github/stars/desec-io/desec-stack?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/desec-io/desec-stack?style=flat&label=Forks) | ✅ |
+ | [EU.org](https://nic.eu.org/) | Free subdomain registration under eu.org, running since 1996. | — | ✅ |
+ | [Intent Subdomains](https://int.yt/) | Intent provides premium subdomains with a focus on simplicity and longevity. Available free subdomain is .int.yt. | [intentfreedomain/FreeDomain](https://github.com/intentfreedomain/FreeDomain) <br><br> ![GitHub stars](https://img.shields.io/github/stars/intentfreedomain/FreeDomain?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/intentfreedomain/FreeDomain?style=flat&label=Forks) | ✅ |
+ | [freedns.my](https://freedns.my/) | Free second-level domains under freedns.my - human review, no fees, no expiry. | [KevinWhite-387/freedns-my](https://github.com/KevinWhite-387/freedns-my) <br><br> ![GitHub stars](https://img.shields.io/github/stars/KevinWhite-387/freedns-my?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/KevinWhite-387/freedns-my?style=flat&label=Forks) | ✅ |
+ | [pntr.dev](https://pntr.dev/) | Free, no sign-up. yourname.pntr.dev points anywhere, receives email at any address, and captures HTTP requests for debugging, with your AI assistant managing all of it over MCP. | [oddunits/pntr-cli](https://github.com/oddunits/pntr-cli) <br><br> ![GitHub stars](https://img.shields.io/github/stars/oddunits/pntr-cli?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/oddunits/pntr-cli?style=flat&label=Forks) | ✅ |
+ | [runs-on.dev](https://runs-on.dev/) | Grab your own cool 'runs-on.dev' subdomain to use for free forever. | [zordhalo/runs-on.dev](https://github.com/zordhalo/runs-on.dev) <br><br> ![GitHub stars](https://img.shields.io/github/stars/zordhalo/runs-on.dev?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/zordhalo/runs-on.dev?style=flat&label=Forks) | ✅ |
+ | [is-my.app](https://is-my.app/) | Grab your own sweet-looking '.is-my.app' subdomain. | [jn-aman/is-my.app](https://github.com/jn-aman/is-my.app) <br><br> ![GitHub stars](https://img.shields.io/github/stars/jn-aman/is-my.app?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/jn-aman/is-my.app?style=flat&label=Forks) | ✅ |
+ | [dev-in.tw](https://dev-in.tw/) | Free personal 'dev-in.tw' subdomain for Taiwanese developers. | [Dev-in-tw/dev-in.tw](https://github.com/Dev-in-tw/dev-in.tw) <br><br> ![GitHub stars](https://img.shields.io/github/stars/Dev-in-tw/dev-in.tw?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/Dev-in-tw/dev-in.tw?style=flat&label=Forks) | ✅ |
+ | [go-live.me](https://go-live.me/) | Claim your free custom domain and instant Anycast subdomain on 'go-live.me'. | [shanmukhasaireddy13/Go-Live](https://github.com/shanmukhasaireddy13/Go-Live) <br><br> ![GitHub stars](https://img.shields.io/github/stars/shanmukhasaireddy13/Go-Live?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/shanmukhasaireddy13/Go-Live?style=flat&label=Forks) | ✅ |
+ | [from-mm.dev](https://www.from-mm.dev) | Free 'from-mm.dev' subdomain for Myanmar developers. | [thetmyoekhaing/from-mm.dev](https://github.com/thetmyoekhaing/from-mm.dev) <br><br> ![GitHub stars](https://img.shields.io/github/stars/thetmyoekhaing/from-mm.dev?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/thetmyoekhaing/from-mm.dev?style=flat&label=Forks) | ✅ |
+ | [awesomeprojects.tech](https://awesomeprojects.tech/) | Free 'awesomeprojects.tech' subdomain for your projects. | [So10-k/awesomeprojects.tech](https://github.com/So10-k/awesomeprojects.tech) <br><br> ![GitHub stars](https://img.shields.io/github/stars/So10-k/awesomeprojects.tech?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/So10-k/awesomeprojects.tech?style=flat&label=Forks) | ✅ |
+ | [deed.page](https://deed.page/) | Free 'deed.page' subdomain with static hosting: publish HTML or a folder with one API request or the MCP server and get https://your-slug.deed.page. No signup. | [f-o-x11/deed-page-skill](https://github.com/f-o-x11/deed-page-skill) <br><br> ![GitHub stars](https://img.shields.io/github/stars/f-o-x11/deed-page-skill?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/f-o-x11/deed-page-skill?style=flat&label=Forks) | ✅ |
+ | [lovie.me](https://www.lovie.me/) | Free 'lovie.me' subdomain with authoritative Anycast DNS control, automated SSL/TLS provisioning, and 1-click email routing. | — | ✅ |
+ | [stackryze.com](https://domain.stackryze.com) | Free Domain for Everyone, Claim yours today. | [stackryze/FreeDomains](https://github.com/stackryze/FreeDomains) <br><br> ![GitHub stars](https://img.shields.io/github/stars/stackryze/FreeDomains?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/stackryze/FreeDomains?style=flat&label=Forks) | ✅ |
+ | [devs.surf](https://devs.surf/) | A free subdomain for developers on devs.surf: always free, forever. | — | ✅ |
  | [Domains Project](https://getyourfree.space/) | Free developer subdomains under owns.it.com, with more domains coming soon. | [domainsproject/register](https://github.com/domainsproject/register) <br><br> ![GitHub stars](https://img.shields.io/github/stars/domainsproject/register?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/domainsproject/register?style=flat&label=Forks) | ❌ |
  | [is-a.shop](https://is-a.shop/) | Get is-a.shop subdomain for your shop. | [is-a-shop/register](https://github.com/is-a-shop/register) <br><br> ![GitHub stars](https://img.shields.io/github/stars/is-a-shop/register?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/is-a-shop/register?style=flat&label=Forks) | ❌ |
+ | [openalias.xyz](https://openalias.xyz/) | Free developer subdomains: hi-dev.pro & dev-at.net for your website. | — | ❌ |
  | [lgbt.sh](https://lgbt.sh/) | Free lgbt.sh sub-domain registration service. | [lgbt-sh/lgbt-sh-v1](https://github.com/lgbt-sh/lgbt-sh-v1) <br><br> ![GitHub stars](https://img.shields.io/github/stars/lgbt-sh/lgbt-sh-v1?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/lgbt-sh/lgbt-sh-v1?style=flat&label=Forks) | ❌ |
  | [zone.id](https://zone.id/) | Zone.ID is a premium subdomain provider as an alternative to the traditional .id TLD. | — | ❌ |
  | [is-truly-a.pro](https://is-truly-a.pro/) | Free is-truly-a.pro subdomains, available for everyone! | [is-truly-a-pro/register](https://github.com/is-truly-a-pro/register) <br><br> ![GitHub stars](https://img.shields.io/github/stars/is-truly-a-pro/register?style=flat&label=Stars) ![GitHub forks](https://img.shields.io/github/forks/is-truly-a-pro/register?style=flat&label=Forks) | ❌ |

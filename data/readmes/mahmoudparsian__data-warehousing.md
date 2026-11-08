@@ -12,7 +12,7 @@
 
 ![Architecture: Medallion](https://img.shields.io/badge/Architecture-Bronze%20%E2%86%92%20Silver%20%E2%86%92%20Gold-B87333) ![Modeling: Star schema](https://img.shields.io/badge/Modeling-Star%20schema%20%26%20OLAP-2E7D32) ![Labs: 20 in-class](https://img.shields.io/badge/Labs-20%20in--class-6A1B9A)
 
-**[📄 Course syllabus](course_information/SYLLABUS.md)** ([PDF](course_information/SYLLABUS.pdf)) · **[📅 Weekly schedule](syllabus/README.md)** · **[⚙️ Week 0: setup](syllabus/week00-outline-and-TOC/)** · **[📘 Course info](course_information/course_info_and_desc.md)** · **[📊 Grading](course_information/grading_and_class_conduct.md)** · **[🗓️ Dates](course_information/class_meeting_dates_hours.md)** · **[🧑‍🤝‍🧑 Project](syllabus/PROJECT/README.md)**
+**[📄 Course syllabus](course_information/SYLLABUS.md)** ([PDF](course_information/SYLLABUS.pdf)) · **[📅 Weekly schedule](syllabus/README.md)** · **[⬇️ Download a week (ZIP)](course_information/DOWNLOADING_COURSE_FILES.md)** · **[⚙️ Week 0: setup](syllabus/week00-outline-and-TOC/)** · **[📘 Course info](course_information/course_info_and_desc.md)** · **[📊 Grading](course_information/grading_and_class_conduct.md)** · **[🗓️ Dates](course_information/class_meeting_dates_hours.md)** · **[🧑‍🤝‍🧑 Project](syllabus/PROJECT/README.md)**
 
 </div>
 
@@ -22,12 +22,12 @@
 
 | | |
 |---|---|
-| **Format** | 10 weeks · 20 sessions (2 per week, 100 minutes each) · a 30-minute in-class lab in every session |
+| **Format** | 10 weeks · 20 sessions (Mon & Wed, 95 minutes each) · a 30-minute in-class lab in every session |
 | **Credit** | 4 units |
 | **Quarter** | Winter 2027 (January–March) · [dates & hours](course_information/class_meeting_dates_hours.md) |
 | **Instructor** | [Dr. Mahmoud Parsian](https://www.scu.edu/business/isa/faculty/parsian/) |
 | **Teaching assistant** | to be announced |
-| **Prerequisites** | ISBA 2401 (Data Analytics with Python) and ISBA 2402 (Database Management Systems — Fundamentals of SQL) |
+| **Prerequisites** | ISBA 2401 (Data Analytics with Python) and ISBA 2402 / MSIS-2402 (Database Management Systems — Fundamentals of SQL) |
 | **Primary tools** | [DuckDB](https://duckdb.org) · [Marimo](https://marimo.io) notebooks · Python · [Tableau](https://www.tableau.com) |
 
 
@@ -115,11 +115,11 @@ Full schedule with both sessions' topics: [Syllabus](syllabus/README.md) · Star
 
 Optional: [Bonus — LLM + SQL integration](syllabus/bonus-LLM-SQL-Integration/).
 
-**A typical session (100 minutes):**
+**A typical session (95 minutes):**
 
 | Part | Activity |
 |---|---|
-| First ~70 minutes | Lecture and live demo (slides + Marimo notebooks) |
+| First ~65 minutes | Lecture and live demo (slides + Marimo notebooks) |
 | Last 30 minutes | In-class lab: released at the start of the session in the week's `labs/` folder (a lab sheet + a Marimo notebook) |
 
 ---
@@ -142,7 +142,7 @@ Full policy: [Grading and class conduct](course_information/grading_and_class_co
 
 1. Install the tools ([details](course_information/required_software.md)):
    ```bash
-   pip install "duckdb>=2.0" pandas matplotlib seaborn marimo
+   pip install "duckdb>=2.0" pandas matplotlib seaborn marimo sqlglot
    ```
 2. Clone this repository, then check your setup with the week 0 demo notebook:
    ```bash

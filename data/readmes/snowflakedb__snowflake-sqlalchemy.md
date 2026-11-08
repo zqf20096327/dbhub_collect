@@ -8,7 +8,9 @@
 
 Snowflake SQLAlchemy runs on the top of the Snowflake Connector for Python as a [dialect](http://docs.sqlalchemy.org/en/latest/dialects/) to bridge a Snowflake database and SQLAlchemy applications.
 
-> **v1.11.0 — Sensitive connection parameters:** We curated a set of connector parameters (`host`, `protocol`, `token_file_path`, `private_key_file`, `ocsp_response_cache_filename`, `connection_diag_log_path`, `crl_cache_dir`, `unsafe_file_write`, `unsafe_skip_file_permissions_check`) that can no longer be supplied through the URL query string — pass them via `connect_args` in `create_engine()` instead. If you encounter a possible behavioral change, set `SNOWFLAKE_SQLALCHEMY_LEGACY_URL_PARAMS=1` and follow the instructions in [Sensitive connection parameters](#sensitive-connection-parameters).
+> **v2.1.0 — Async is opt-in:** SQLAlchemy 2.1 no longer installs `greenlet`, so the base install is sync-only. Async applications must install the extra, `pip install "snowflake-sqlalchemy[async]"`; without it the install succeeds but `create_async_engine()` raises an `ImportError`. Install the extra on SQLAlchemy 2.0 too: it installs `greenlet` only on some platforms (not on Apple Silicon macOS). See [Async Support](#async-support).
+
+> **v1.11.0 — Sensitive connection parameters:** We curated a set of connector parameters (`host`, `protocol`, `token_file_path`, `private_key_file`, `ocsp_response_cache_filename`, `connection_diag_log_path`, `crl_cache_dir`, `unsafe_file_write`, `unsafe_skip_file_permissions_check`) that can no longer be supplied through the URL query string — pass them via `connect_args` in `create_engine()` instead. See [Sensitive connection parameters](#sensitive-connection-parameters). The temporary `SNOWFLAKE_SQLALCHEMY_LEGACY_URL_PARAMS` / `legacy_url_params` opt-out that 1.11.x offered was **removed in 2.x** and no longer has any effect.
 
 ---
 
@@ -41,17 +43,17 @@ Table of contents:
     * [DECFLOAT Data Type Support](#decfloat-data-type-support)
       * [DECFLOAT Precision](#decfloat-precision)
     * [VECTOR Data Type Support](#vector-data-type-support)
-    * [UUID Data Type Support](#uuid-data-type-support)
+    * [UUID Data Type Support](#uuid-data-typ
+
+[...截断...]
+
+e-support)
       * [UUID and DECFLOAT inside VARIANT and structured types](#uuid-and-decfloat-inside-variant-and-structured-types)
       * [Native UUID with enable_native_uuid](#native-uuid-with-enable_native_uuid)
     * [Cache Column Metadata](#cache-column-metadata)
     * [Cross-Database Reflection](#cross-database-reflection)
     * [Reflecting Large Schemas (10,000+ objects)](#reflecting-large-schemas-10000-objects)
-    * [VARIANT, ARRAY and OBJECT Support](#variant-arr
-
-[...截断...]
-
-ay-and-object-support)
+    * [VARIANT, ARRAY and OBJECT Support](#variant-array-and-object-support)
     * [Structured Data Types Support](#structured-data-types-support)
       * [MAP](#map)
       * [OBJECT](#object)
@@ -95,44 +97,18 @@ pip install --upgrade snowflake-sqlalchemy
 
 `pip` automatically installs all required modules, including the Snowflake Connector for Python.
 
+2.x requires Python 3.11+. 2.1 requires SQLAlchemy `>=2.0.44,<2.2` and `snowflake-connector-python>=5.1.0,<6.0` (2.0.0 requires SQLAlchemy `>=2.0.44,<2.1` and `snowflake-connector-python>=5.0.0`).
+
+2.1 is a pre-release, so a plain `pip install` does not select it. Install it with `pip install "snowflake-sqlalchemy==2.1.0rc0"`, or allow pre-releases with `pip install --pre snowflake-sqlalchemy`. It is required for SQLAlchemy 2.1.
+If you are upgrading from 1.x, see the [1.x → 2.x migration guide](MIGRATING.md).
+
 ## Verifying Your Installation
 
 1. Create a file (e.g. `validate.py`) that contains the following Python sample code,
    which connects to Snowflake and displays the Snowflake version:
 
     ```python
-    from sqlalchemy import create_engine
+    from sqlalchemy import create_engine, text
 
     engine = create_engine(
         'snowflake://{user}:{password}@{account}/'.format(
-            user='<your_user_login_name>',
-            password='<your_password>',
-            account='<your_account_name>',
-        )
-    )
-    try:
-        connection = engine.connect()
-        results = connection.execute('select current_version()').fetchone()
-        print(results[0])
-    finally:
-        connection.close()
-        engine.dispose()
-    ```
-
-2. Replace `<your_user_login_name>`, `<your_password>`, and `<your_account_name>` with the appropriate values for your Snowflake account and user.
-
-    For more details, see [Connection Parameters](#connection-parameters).
-
-3. Execute the sample code. For example, if you created a file named `validate.py`:
-
-    ```shell
-    python validate.py
-    ```
-
-    The Snowflake version (e.g. `1.48.0`) should be displayed.
-
-## Async Support
-
-> **Note:** Async support requires `snowflake-connector-python` 5.x,
-> currently a pre-release (`5.0.0rc3`). APIs may change before the connector's final
-> 5.0.0 release. Please report issues again

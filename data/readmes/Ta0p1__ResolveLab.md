@@ -143,14 +143,14 @@ grader ([docs/dialects.md](docs/dialects.md)).
 ```bash
 resolvelab casedesk run --episode test-test_conflict_rate-07 --model ollama:qwen3:4b
 resolvelab casedesk eval --pool dev --model ollama:qwen3:4b --output runs/qwen3-4b-dev.json
-resolvelab casedesk eval --pool dev --model openai:<model> --option base_url=http://localhost:8000/v1 --output runs/vllm-dev.json
+resolvelab casedesk eval --pool dev --model openai:<model> --option base_url=http://localhost:8000/v1 --output runs/vllm-dev.json --workers 16
 resolvelab casedesk eval --pool dev --model anthropic:claude-opus-5-5 --output runs/opus-dev.json   # pip install "resolvelab[anthropic]"
 ```
 
 Every model sees the study's prompt, demonstration and tool contract; reports and traces use
-the published format and are resumable. Local Transformers (`hf:`), Ollama, any
-OpenAI-compatible server and Claude are supported. [Options and what is comparable to the
-registered study](docs/models.md).
+the published format and are resumable, and `--workers N` runs N episodes at once. Local
+Transformers (`hf:`), Ollama, any OpenAI-compatible server and Claude are supported.
+[Options and what is comparable to the registered study](docs/models.md).
 
 ## How it works
 
@@ -203,11 +203,26 @@ protocol lists every arm, budget and decision rule.
 | `src/resolvelab/providers/` | model providers for the CLI: local Transformers, Ollama, OpenAI-compatible servers, Claude |
 | `src/resolvelab/dialects/` | generated API dialects of the CaseDesk contract, and the tooling of the v0.5 transfer study |
 | `src/resolvelab/httpdesk/` | the CaseDesk HTTP contract: service, adapter, schema, v0.3 grader (frozen) |
+| `src/resolvelab/durable/` | the same contract on a persisted store in worker processes that crash, restart and race; exactly-once grading ([docs](docs/durable-recovery.md)) |
 | `src/resolvelab/*.py` | the original SQLite sync service and workbench (v0.1–v0.2) |
 | `benchmarks/` | registered manifests and study configurations |
 | `artifacts/v0.*` | each study's results, locks, reports and zipped traces |
 | `scripts/` | pipelines, audits and figure generation |
 | `examples/` | runnable entry points |
+
+## Where it is going
+
+The studies above run on one synthetic service. The next releases make the method usable on
+other APIs ([roadmap](docs/roadmap.md)):
+
+- **0.6:** a fault proxy that runs in front of any HTTP service and a declarative grader over
+  state snapshots and the request log ([design](docs/fault-proxy-design.md)); durable
+  idempotency receipts with crash and restart faults (built for CaseDesk:
+  [durable recovery](docs/durable-recovery.md)).
+- **0.7:** reference services beyond ticketing (refunds, inventory), published results for
+  hosted and local models, and an MCP server mode.
+- **0.8:** grader-verified training data from strong-model teachers, larger trained models and
+  RL on the environments.
 
 ## Scope and limits
 

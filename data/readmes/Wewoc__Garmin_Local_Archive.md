@@ -83,8 +83,6 @@ Garmin Connect is still required — the app pulls data from there via API.
 
 I wanted to ask an AI questions about my health data without sending that data to another cloud service. So I built a local alternative instead.
 
-There's a second reason that matters more over time: Garmin silently degrades intraday data resolution. Empirical analysis of archive data (April–June 2026) shows the threshold at approximately 120–135 days, and appears to trend lower over time. Once full resolution is lost, it's gone permanently. This tool exists to capture it while it's still available.
-
 What "intraday resolution" actually means in practice:
 
 | Metric | API resolution | Data points / day |
@@ -94,8 +92,6 @@ What "intraday resolution" actually means in practice:
 | Body Battery | ~15 minutes | up to 96 |
 | SpO2 | ~1 hour | up to 24 |
 | Respiration | variable | variable |
-
-After ~120 days, Garmin stops serving this data entirely. The daily summary (resting HR, average stress, etc.) remains — but the curves, the detail, the full timeline: gone. GLA captures it while it's still there.
 
 *→ For the full story, see [MINDSET.md](src/docs/MINDSET.md).*
 
@@ -127,7 +123,7 @@ I can't write Python. The architecture, module boundaries, and decisions are min
 
 ## How it works
 
-The app works in two modes: **live sync** pulls recent data directly from Garmin Connect via API; **Bulk Import** loads your complete history from a Garmin GDPR export ZIP — this is the primary path for recovering years of data that the API no longer serves.
+The app works in two modes: **live sync** pulls recent data directly from Garmin Connect via API; **Bulk Import** loads your complete history from a Garmin GDPR export ZIP (the daily values and, since v1.7.6, the heart-rate series over the day) — this is the primary path for recovering years of data that the API no longer serves.
 
 Everything is stored locally in structured formats (JSON, Excel, HTML dashboards). Once downloaded, nothing is transmitted anywhere.
 
@@ -135,9 +131,11 @@ Everything is stored locally in structured formats (JSON, Excel, HTML dashboards
 
 ### Bulk Import
 
-The GDPR export from Garmin contains your complete daily history — but in our testing, no intraday data was found (no heart rate curves, no stress timelines, no body battery graphs). That resolution appears to be available only through the API, and only for recent days.
+The GDPR export from Garmin contains your complete daily history.
 
-The **Bulk Import** feature fills in the rest: request your full data export from Garmin (typically ready in 20–30 minutes), point the app at the ZIP, and your complete daily history lands in the local archive — in the same format as live API data. Days already present with good quality are skipped automatically.
+The **Bulk Import** feature fills in the rest: request your full data export from Garmin (typically ready in 20–30 minutes), point the app at the ZIP, and your complete daily history is stored locally. The daily files in `summary/` are made from the export for every day Garmin's API did not deliver, and completed from it where the API data has gaps — what the API delivered always wins.
+
+The import dialog offers two parts: **Daily values (JSON)** and, since v1.7.6, **Heart-rate series (FIT files)** — the heart-rate curve over the day from the FIT files of the export. Both are stored in their own folder, `garmin_data/bulk/`, next to the archive, not in `raw/`: `raw/` holds only what came from the Garmin API. A **Preview** shows what would be imported without writing anything, for both parts. AI queries (MCP) and the dashboards use the stored series for days that have no heart-rate series from the live sync, and since v1.7.6.1 the time per day in the four stress zones (rest, low, medium, high) from the export is available as well. Existing API data is never overwritten (the quality log gets a marker per imported day); since v1.7.6.2 the folder is part of the backup (`backup/bulk/`) and of the mirror.
 
 ---
 
@@ -264,10 +262,14 @@ hosts" above for Docker clients.
 | `query_health` | Daily health metrics (e.g. sleep, stress, heart rate, body battery) for a date or date range |
 | `query_context` | Weather, pollen and air-quality data for a date or date range |
 | `query_fit_activities` | FIT activity data — *planned, not yet available* (see `docs/ROADMAP.md`, "FIT Pipeline") |
-| `query_raw` | Unprocessed archive data for a given domain, for deeper inspection |
+| `query_raw` | Archived data as stored in `raw/`, without value extraction — for list and event fields (e.g. nutrition logs, lifestyle logging) that the other tools cannot reduce to a daily value; health domain only. Floors, weigh-ins and intensity minutes exist both ways: `query_health` holds the daily value, and the two tools point to each other |
 | `get_archive_metadata` | Archive coverage and quality info (date ranges, missing days, data quality) |
 | `list_available_fields` | Which fields the archive actually contains, per domain |
 | `refresh_cache` | Rebuilds the server's local query cache on demand, e.g. right after a sync |
+| `baselines` | A health field's rolling 90-day average and normal range, day by day |
+| `anomalies` | Days (or multi-day streaks) where a health field broke from its own recent pattern |
+| `gaps` | Days with no usable data in a given domain and date range |
+| `correlate` | How closely two fields move together over time — any combination of health and context, with optional lag (e.g. "does X today predict Y a few days later") |
 
 Example: *"How did my sleep and stress compare over the last two weeks?"*
 — the model calls the tools above itself and answers from your real
@@ -292,7 +294,7 @@ The token is encrypted at rest. Details on the encryption design and threat mode
 
 ### Pipeline
 
-Live sync and Bulk Import both flow through the same validation and quality pipeline before anything lands in the local archive — the diagram below shows the full picture.
+Live sync flows through the validation and quality pipeline before anything lands in the local archive; the daily values of the Bulk Import are validated and quality-checked the same way but are stored in `garmin_data/bulk/aggregates` and only joined with the API data in `summary/` (the heart-rate series from the FIT files take their own path into `garmin_data/bulk/`) — the diagram below shows the full picture of the live pipeline.
 
 > [!TIP]
 > **Pipeline Architecture:** For a detailed view of the v1.3.4 data flow including the validation layer and self-healing loop, open [screenshots/flowchart_v134.html](src/screenshots/flowchart_v134.html) in your browser.
@@ -313,7 +315,7 @@ The project is structured into six focused layers — Garmin pipeline, Context p
 
 The diagram above shows how the layers connect. Each module is self-contained and designed to be extended — for a script-by-script reference (what each module does, owns, and how to add new ones), see [`docs/MAINTENANCE_GLOBAL.md`](src/docs/MAINTENANCE_GLOBAL.md).
 
-The desktop app includes a **Background Timer** — once started, it automatically repairs failed/incomplete days, upgrades bulk-imported days within Garmin's intraday resolution window (~120 days), fills missing days, keeps a raw API-response backup current, retroactively adds newly supported data fields (like step count) to already-archived days, and re-fetches bulk-imported days for the handful of data fields the official Garmin export never contains at all (HRV, SpO2, Body Battery, respiration, training status, race predictions, max metrics) — regardless of how old the day is, since that gap has nothing to do with intraday resolution — with no further manual steps in between. The timer must be started manually and only runs while the app is open — it does not resume automatically after a restart.
+The desktop app includes a **Background Timer** — once started, it automatically repairs failed/incomplete days, upgrades bulk-imported days within its 180-day retry window, fills missing days, keeps a raw API-response backup current, retroactively adds newly supported data fields (like step count) to already-archived days, and re-fetches bulk-imported days for the handful of data fields the official Garmin export never contains at all (HRV, SpO2, Body Battery, respiration, training status, race predictions, max metrics) — regardless of how old the day is, since that gap has nothing to do with intraday resolution — with no further manual steps in between. The timer must be started manually and only runs while the app is open — it does not resume automatically after a restart.
 
 Data is stored in two root folders:
 
@@ -321,7 +323,8 @@ Data is stored in two root folders:
 garmin_data/
 ├── raw/        – complete API dumps (~500 KB/day) — permanent archive / basis for dashboards and analysis
 ├── source/     – unmodified API responses (~250 KB/day) — replay-safe intraday backup
-├── summary/    – compact daily JSONs (~2 KB/day)  — basis for dashboards and analysis
+├── summary/    – compact daily JSONs (~2 KB/day)  — basis for dashboards and analysis; for export days API data first, the export fills the gaps (v1.7.6.1)
+├── bulk/       – data from the Garmin export: heart-rate series (one JSON per day), daily values (bulk/aggregates, v1.7.6.1) + the unchanged export files — separate from the API archive (v1.7.6); backed up in backup/bulk/ and carried by the mirror (v1.7.6.2)
 └── log/        – session logs, quality register, encrypted token
 
 context_data/
@@ -345,13 +348,15 @@ same as everything else here):
 
 ```bash
 python tests/test_local.py                    # Garmin pipeline — cross-module checks (determinism, invariants, robustness, end-to-end)
-python tests/test_<module>.py                 # Garmin pipeline — one file per module of src/garmin/ (18 files, e.g. test_writer.py, test_quality.py, test_collector.py; shared setup in tests/gla_testenv.py)
+python tests/test_<module>.py                 # Garmin pipeline — one file per module of src/garmin/ (31 files, e.g. test_writer.py, test_quality.py, test_collector.py; shared setup in tests/gla_testenv.py)
+python tests/test_prop_*.py  tests/test_fuzz_parsers.py   # Property tests and parser fuzzing with generated inputs (hypothesis)
 python tests/test_local_context.py            # Context pipeline (external APIs mocked)
 python tests/test_dashboard.py                # Dashboard pipeline
 python tests/test_broker.py                   # Broker layer (health_map / gateway_map routing, metadata_map)
 python tests/test_mcp.py                      # MCP layer (mcp_map protocol translation)
 python tests/test_export.py                   # Export Layer
 python tests/test_app_logic.py                # App layer (entry points, path resolution)
+python tests/test_daily_update.py             # Daily update (schema check, unattended migration with its safety copy)
 pytest tests/test_qt_app.py                   # PyQt6 App layer
 python tests/test_static.py                   # ruff + bandit + regression guards
 python tests/test_build_output.py             # Build output validation (run after build)

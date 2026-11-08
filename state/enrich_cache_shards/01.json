@@ -4,7 +4,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.2",
   "rel_pub": "2025-10-22",
-  "rel_days": 381,
+  "rel_days": 382,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -82,7 +82,7 @@
   "commit_7d": 6,
   "rel_ver": "v1.8.0.4020",
   "rel_pub": "2026-09-20",
-  "rel_days": 48,
+  "rel_days": 49,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -107,10 +107,10 @@
  "strelov1/freehire": {
   "commit_90d": 2727,
   "commit_7d": 307,
-  "rel_ver": "deploy-20261107-0347",
-  "rel_pub": "2026-11-07",
+  "rel_ver": "deploy-20261108-0251",
+  "rel_pub": "2026-11-08",
   "rel_days": 0,
-  "rel_n90": 21,
+  "rel_n90": 25,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -125,13 +125,28 @@
    "HTML": 1,
    "JavaScript": 1
   },
-  "enriched_at": "20261107",
+  "enriched_at": "20261108",
   "dim_ts": {
    "commit": "20261107",
-   "release": "20261107",
+   "release": "20261108",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "deploy-20261108-0251",
+    "d": "2026-11-08",
+    "n": "## Changes\n- #4277 Default saved-search digests to once a day at 09:00 local time\n- #4276 Wake SuperPlane on PRs stuck on a conflict or a red check\n\n## How it was verified\n- Pre-flight: CI green on d6865f0be (26 check runs, all success). Flags: one migration (0246, column defaults plus two small UPDATEs on notification settings, ~1k rows; no DROP/RENAME, so rollback stayed possible); no search index settings change, no new binaries, routes or env vars. No long transactions, no maintenance jobs running, host"
+   },
+   {
+    "t": "deploy-20261108-0201",
+    "d": "2026-11-08",
+    "n": "Production moved from e30d7152c to e80c2e4fb.\n\n## Changes\n- #4275 Say plainly that the assistant never embeds a view\n- #4269 Say what splitting a search push really costs\n- #4241 Add Firefish ATS adapter (firefish)\n- #4198 Track delivery and clicks only, without an open pixel\n- #4270 Merge thinkbrg into berkeley-research-group\n\n## How it was verified\n- Pre-flight: CI green on e80c2e4fb (23/23 check runs). No migrations, no search index settings change, no new commands, routes or env vars.\n- Release: built, "
+   },
+   {
+    "t": "deploy-20261108-0017",
+    "d": "2026-11-08",
+    "n": "## Changes\n- #4252 Check the web app's architecture with easement\n- #4251 Split search pushes under Meilisearch's payload limit, and log a wave's fallback\n- #4247 Add verify-freehire skill: launch an isolated stack and drive it with Playwright\n\n## How it was verified\n- Pre-flight: CI green on f8e81f6fe (29/29 check runs success). No migrations, no search index settings change, no new binaries, routes or env vars.\n- After the flip: the live color serves f8e81f6fe, the previous build stays warm for rollback; "
+   },
    {
     "t": "deploy-20261107-0347",
     "d": "2026-11-07",
@@ -148,6 +163,11 @@
     "n": "Deploy of 8417c9bfa84a954aff6583a2028d890023c1a7c8 (previous d0226dd92ed1745eda03f6dc8ef20448051e1693).\n\n- #4234 Add ast-grep syntax rules, tested, in CI and a pre-commit hook\n- #4235 Add .out-of-scope/: declined ideas, why, and what would reopen them"
    },
    {
+    "t": "deploy-20261107-2340",
+    "d": "2026-11-07",
+    "n": "## Changes\n- #4249 Fix what MCP agents tripped on: get_job misses, weaker signed-in search, false internal errors\n- #4250 Fix shellcheck SC1007 in diff-cover-gate.sh\n- #4248 Ask Grok and Claude.ai to sign in, and give the job cards a Connect panel\n- #4246 Hand a prod perf watchdog breach to the SuperPlane incident agent\n- #4245 Gate coverage of changed lines with diff-cover\n- #4244 Pause outbound mail by class and stop SES hammering\n- #4243 lefthook: make govulncheck blocking\n\n## How it was verified\n- Pre-f"
+   },
+   {
     "t": "web-v0.1.2",
     "d": "2026-11-02",
     "n": "* Add the Cadremploi adapter (France, managers and professionals) (#3759) (37a5cdbf9)\n* feat(dict): add odoo, duckdb, deepseek, dspy, litellm, sglang, and mastra skills (#3688) (9293c2c2e)\n* Add an Oorwin source adapter (#3644) (63db5bbe7)\n* Move Hiring again into Company filters and mark Hide viewed with an eye (#4042) (dcb87db21)\n* Autosave incomplete profiles and refine mobile account UI (9db8f83b2)\n* Show where a posting is on the job card (#3903) (9ade30dbb)\n* Let API plans keep derived data and train "
@@ -161,32 +181,16 @@
     "t": "extension-v0.1.13",
     "d": "2026-11-01",
     "n": "Automated build from commit 3114e877aff6f5f03121541ebf0b5ce8bedc5c3b."
-   },
-   {
-    "t": "web-v0.1.1",
-    "d": "2026-10-26",
-    "n": "Changelog only. This tag does not deploy.\n\nChanges since web-v0.1.0.\nCompare: https://github.com/strelov1/freehire/compare/web-v0.1.0...web-v0.1.1\n\n* Give the filter search its own row on a phone. (#3639) (c89e97e0b)\n* Restore the filter modal's sign-in and button styling lost in #3634. (#3633) (fe54fed86)\n* Ingest 104 Job Bank (104.com.tw), Taiwan's largest job board (#3632) (f630e4bea)\n* Ingest Cake (cake.me), Taiwan's tech-leaning job board (#3629) (d2d3be13a)\n* Fuzzy search across the filter modal, and "
-   },
-   {
-    "t": "backend-v0.1.1",
-    "d": "2026-10-26",
-    "n": "* Recognise vendor-hosted Taleo, Oracle, myworkdaysite, Loxo, RecruiterFlow, Jibe and Hireology boards (#3618) (0f3d39c2f)"
-   },
-   {
-    "t": "web-v0.1.0",
-    "d": "2026-10-25",
-    "n": "* Add the rexx systems source adapter (#3556) (9a21db8c0)\n* Add a job posting removal policy page (#3428) (db8fb514c)\n* Bump oxlint and eslint-plugin-oxlint in /design-system (#3304) (6feb1dbe2)\n* Fix profile-derived seniority filters (#3237) (cddb08eb9)\n* Bump vite-plugin-pwa from 1.3.0 to 2.0.0 in /web (#3181) (e873f5dbd)\n* Surface a failed résumé extraction on the Experience tab, with a retry (#3165) (f8f5d40db)\n* Translate /my/market-pulse into en/ru (#3153) (87dbda8d5)"
-   },
-   {
-    "t": "backend-v0.1.0",
-    "d": "2026-10-25",
-    "n": "* Add the rexx systems source adapter (#3556) (9a21db8c0)\n* Add the Halyk Bank source adapter. (#3239) (adb4984a2)\n* Point the billing-sync gate tests at a database that cannot connect (#3421) (ca3bd57f4)\n* Pace every Homerun request at 2 a second (#3609) (bdbe544fa)\n* Point the security contact at hello@freehire.me (#3607) (03c8de1db)\n* Read Dutch work-arrangement prose into work_mode (#3589) (c95bdbe3f)\n* Bump github.com/aws/aws-sdk-go-v2/service/sqs from 1.52.1 to 1.52.4 (#3535) (7c848db30)\n* Bump modern"
    }
   ],
   "etag": {
-   "release": "W/\"9cf5f8e879f90095fb3c158e826c2a8c28c5a8f7f236b4ee2ae53b75cd216716\""
+   "release": "W/\"e9e5562da3c26e8b7428cac527753066154e4a3756a396ba4bdf8850f052519a\""
   },
   "rel_dates": [
+   "2026-11-08",
+   "2026-11-08",
+   "2026-11-08",
+   "2026-11-07",
    "2026-11-07",
    "2026-11-07",
    "2026-11-07",
@@ -215,7 +219,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.16.6",
   "rel_pub": "2025-10-31",
-  "rel_days": 372,
+  "rel_days": 373,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -251,7 +255,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.38.10",
   "rel_pub": "2026-10-18",
-  "rel_days": 20,
+  "rel_days": 21,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -276,7 +280,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.11",
   "rel_pub": "2026-09-22",
-  "rel_days": 46,
+  "rel_days": 47,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -298,7 +302,7 @@
   "commit_7d": 0,
   "rel_ver": "0.14.0",
   "rel_pub": "2025-05-21",
-  "rel_days": 535,
+  "rel_days": 536,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -338,7 +342,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2020-01-10",
-  "rel_days": 2493,
+  "rel_days": 2494,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -357,7 +361,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2021-04-21",
-  "rel_days": 2026,
+  "rel_days": 2027,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -380,7 +384,7 @@
   "commit_7d": 0,
   "rel_ver": "2.3.0",
   "rel_pub": "2018-10-22",
-  "rel_days": 2897,
+  "rel_days": 2939,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -400,7 +404,7 @@
   "commit_7d": 66,
   "rel_ver": "v3.0.2",
   "rel_pub": "2026-10-26",
-  "rel_days": 12,
+  "rel_days": 13,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -444,7 +448,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.1",
   "rel_pub": "2025-09-05",
-  "rel_days": 428,
+  "rel_days": 429,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -488,7 +492,7 @@
   "commit_7d": 0,
   "rel_ver": "0.40.1",
   "rel_pub": "2026-05-04",
-  "rel_days": 187,
+  "rel_days": 188,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -510,7 +514,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.9.0",
   "rel_pub": "2018-12-15",
-  "rel_days": 2844,
+  "rel_days": 2885,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -557,7 +561,7 @@
  "pomm-project/pomm-bundle": {
   "rel_ver": "3.0.0",
   "rel_pub": "2020-10-18",
-  "rel_days": 2211,
+  "rel_days": 2212,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -576,7 +580,7 @@
  "VMDashboard/vmdashboard": {
   "rel_ver": "v19.01.03",
   "rel_pub": "2020-11-25",
-  "rel_days": 2173,
+  "rel_days": 2174,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -597,7 +601,7 @@
  "andrei-polukhin/pgdbtemplate": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-05-07",
-  "rel_days": 184,
+  "rel_days": 185,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -631,7 +635,7 @@
  "simonw/paginate-json": {
   "rel_ver": "1.0",
   "rel_pub": "2023-08-30",
-  "rel_days": 1165,
+  "rel_days": 1166,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -722,7 +726,7 @@
  "jpazvd/wbopendata": {
   "rel_ver": "v18.8.0",
   "rel_pub": "2026-08-08",
-  "rel_days": 91,
+  "rel_days": 92,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -770,7 +774,7 @@
  "TeamDerUntergang/Telegram-UserBot": {
   "rel_ver": "v3.4",
   "rel_pub": "2020-06-18",
-  "rel_days": 2333,
+  "rel_days": 2334,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -855,7 +859,7 @@
  "ansible-collections/community.elastic": {
   "rel_ver": "latest",
   "rel_pub": "2024-04-18",
-  "rel_days": 892,
+  "rel_days": 934,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1037,7 +1041,7 @@
  "oceanbase/dify-on-mysql": {
   "rel_ver": "1.8.0",
   "rel_pub": "2025-09-16",
-  "rel_days": 417,
+  "rel_days": 418,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1093,7 +1097,7 @@
  "Lombiq/UI-Testing-Toolbox": {
   "rel_ver": "v15.0.0",
   "rel_pub": "2026-07-18",
-  "rel_days": 112,
+  "rel_days": 113,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1129,7 +1133,7 @@
  "LuckyIndraEfendi/Mangazuna": {
   "rel_ver": "3.1",
   "rel_pub": "2024-02-09",
-  "rel_days": 1002,
+  "rel_days": 1003,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1177,7 +1181,7 @@
  "pierreforstmann/pg_readonly": {
   "rel_ver": "1.0.6",
   "rel_pub": "2026-07-15",
-  "rel_days": 115,
+  "rel_days": 116,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1209,7 +1213,7 @@
  "circuitsacul/apgorm": {
   "rel_ver": "v1.0.0-b.14",
   "rel_pub": "2022-11-22",
-  "rel_days": 1446,
+  "rel_days": 1447,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1252,7 +1256,7 @@
  "JumpCodeFrog/telegram-shop-bot": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-25",
-  "rel_days": 43,
+  "rel_days": 44,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1300,7 +1304,7 @@
  "kbennett2000/lan-games": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-28",
-  "rel_days": 163,
+  "rel_days": 164,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1337,7 +1341,7 @@
  "raw-lab/NFixDB": {
   "rel_ver": "v2.1",
   "rel_pub": "2024-04-23",
-  "rel_days": 928,
+  "rel_days": 929,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1397,7 +1401,7 @@
  "SiavashGolchoobian/SqlDeep": {
   "rel_ver": "v3.0.0.7",
   "rel_pub": "2025-01-03",
-  "rel_days": 673,
+  "rel_days": 674,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1519,7 +1523,7 @@
  "Marco-Sulla/ewa": {
   "rel_ver": "v1.5.7",
   "rel_pub": "2019-05-29",
-  "rel_days": 2719,
+  "rel_days": 2720,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1580,7 +1584,7 @@
   "commit_7d": 7,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-12",
-  "rel_days": 148,
+  "rel_days": 149,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2263,7 +2267,7 @@
  "DerKezorm/nexlore": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-10-06",
-  "rel_days": 32,
+  "rel_days": 33,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2313,7 +2317,7 @@
  "Vincentkeio/clover-mail": {
   "rel_ver": "v2.0.2",
   "rel_pub": "2026-10-15",
-  "rel_days": 23,
+  "rel_days": 24,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2340,7 +2344,7 @@
  "federicoaecom/mimir": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 20,
+  "rel_days": 21,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2365,7 +2369,7 @@
  "WPTK/Kipple": {
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-10-28",
-  "rel_days": 10,
+  "rel_days": 11,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2392,7 +2396,7 @@
  "directus/monospace-starter": {
   "rel_ver": "monoerp@0.1.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 4,
+  "rel_days": 5,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2431,7 +2435,7 @@
  "XWJ-z/ZXDesk": {
   "rel_ver": "v0.9.7",
   "rel_pub": "2026-11-05",
-  "rel_days": 2,
+  "rel_days": 3,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2475,7 +2479,7 @@
  "catzoidhub/DevCatz": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-11-04",
-  "rel_days": 3,
+  "rel_days": 4,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,

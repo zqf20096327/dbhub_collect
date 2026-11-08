@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <a href="https://scorecard.dev/viewer/?uri=github.com/necessarylion/sql-pro"><img src="https://api.scorecard.dev/projects/github.com/necessarylion/sql-pro/badge" alt="OpenSSF Scorecard"></a>
+  <a href="https://www.bestpractices.dev/projects/16422"><img src="https://www.bestpractices.dev/projects/16422/badge" alt="OpenSSF Best Practices"></a>
+</p>
+
+<p align="center">
   <img src="docs/screenshot.png" width="900" alt="SQL Pro showing the rows of a table">
 </p>
 
@@ -23,6 +28,7 @@ curl -fsSL https://raw.githubusercontent.com/necessarylion/sql-pro/main/install.
 ```
 
 - macOS (Apple silicon and Intel): it puts `SQL Pro.app` in your Applications folder.
+- macOS with [Homebrew](https://brew.sh): you can also run `brew install --cask necessarylion/tap/sql-pro`.
 - Linux (64-bit Intel, AMD and ARM): it installs the `.deb` or the `.rpm` with the package manager of your system, and asks for your password. A system without `apt`, `dnf`, `yum` or `zypper` gets the AppImage in `~/.local/bin`.
 
 **Windows** (64-bit Intel, AMD and ARM), in PowerShell:
@@ -49,6 +55,10 @@ bun run typecheck  # vue-tsc
 bun run format     # Prettier
 bun test           # Session logic with a fake backend
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the checks and the test policy.
 
 ## Layout
 

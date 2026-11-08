@@ -26,6 +26,7 @@ You will then have the following binaries in `target/release/`:
   * `gaf-base sort` sorts a GAF file for GAF-base construction (`gafsort` until version 0.5.1).
   * `gaf-base construct` builds a GAF-base (`gaf2db` until version 0.5.1).
   * `gaf-base decompress` converts GAF-base back to GAF (`db2gaf` until version 0.5.1).
+  * `gaf-base batch` executes multiple GAF-base queries.
 
 ## GBZ-base construction
 
@@ -82,6 +83,11 @@ The default temporary file size (1 million lines) is appropriate for short reads
 You can get a more appropriate size (10 thousand lines) for long reads with `--preset long`.
 File size can be changed manually with `--records-per-file N` (e.g. `--records-per-file 10k` for 20 kpb reads).
 The size can be specified using suffixes such as `k` or `M`.
+
+By default, each worker thread merges 32 temporary files at once.
+This can be adjusted with `--files-per-merge N`.
+With at most 1024 temporary files (at most ~50x human coverage with 150 bp reads), there will be at most two merge rounds.
+Option `--two-merge-rounds` can be used to ensure this by automatically adjusting merge width up for large datasets.
 
 ### Building the GAF-base
 

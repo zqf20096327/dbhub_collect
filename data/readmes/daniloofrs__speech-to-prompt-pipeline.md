@@ -8,160 +8,299 @@
 
 # Speech-to-Prompt Pipeline e Dynamic Island
 
+> Transforme comandos de voz informais em prompts estruturados de alta densidade em menos de 300ms diretamente no cursor ativo (`Ctrl + V`), com interface flutuante inspirada no Liquid Glass da Apple e inferência 100% local acelerada na GPU.
+
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white" alt="Python 3.12" />
-  <img src="https://img.shields.io/badge/PostgreSQL-16%20Alpine-336791?logo=postgresql&logoColor=white" alt="PostgreSQL 16" />
-  <img src="https://img.shields.io/badge/Docker%20Compose-v2-2496ED?logo=docker&logoColor=white" alt="Docker Compose" />
-  <img src="https://img.shields.io/badge/NVIDIA%20CUDA-12%20RTX%204050-76B900?logo=nvidia&logoColor=white" alt="CUDA 12" />
-  <img src="https://img.shields.io/badge/Faster--Whisper-Medium%20FP16-orange" alt="Faster-Whisper" />
-  <img src="https://img.shields.io/badge/Ollama-Qwen2.5-black?logo=ollama&logoColor=white" alt="Ollama" />
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.12%2B-blue?logo=python&logoColor=white" alt="Python 3.12+" /></a>
+  <a href="https://developer.nvidia.com/cuda-toolkit"><img src="https://img.shields.io/badge/NVIDIA%20CUDA-12%20(RTX%204050)-76B900?logo=nvidia&logoColor=white" alt="CUDA 12" /></a>
+  <a href="https://github.com/SYSTRAN/faster-whisper"><img src="https://img.shields.io/badge/Faster--Whisper-Medium%20FP16-orange" alt="Faster-Whisper FP16" /></a>
+  <a href="https://github.com/abetlen/llama-cpp-python"><img src="https://img.shields.io/badge/Llama.cpp%20GGUF-Qwen%202.5%201.5B-green" alt="Llama.cpp In-Process" /></a>
+  <a href="https://www.postgresql.org/"><img src="https://img.shields.io/badge/PostgreSQL-16%20Alpine-336791?logo=postgresql&logoColor=white" alt="PostgreSQL 16" /></a>
+  <img src="https://img.shields.io/badge/Testes-38%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="38 Testes Passando" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/Licen%C3%A7a-MIT-purple" alt="Licença MIT" /></a>
 </p>
-
-Se você programa ou cria soluções com IA todo dia, sabe que cansa ter que parar o raciocínio pra digitar prompts longos e cheios de contexto na mão. Eu criei esse pipeline pra resolver essa dor no meu próprio fluxo: falar o que eu preciso em voz alta e ter um prompt técnico, limpo e estruturado colado no `Ctrl + V` em menos de dois segundos.
-
-Tudo roda 100% local na GPU da minha máquina (uma RTX 4050 de 6 GB), sem depender de APIs pagas na nuvem. O áudio passa pelo Faster-Whisper pra transcrição imediata, vai pro Ollama (Qwen 2.5) pra lapidar o texto e exibe tudo numa interface flutuante inspirada na Dynamic Island da Apple.
 
 ---
 
-## Como você usa no dia a dia
+## Por que o Speech-to-Prompt?
 
-O modo desktop foi feito pra você nunca precisar tirar a mão do teclado ou trocar a janela do seu editor:
+Digitar prompts longos, repletos de requisitos, contexto e restrições técnicas no meio do desenvolvimento quebra o estado de fluxo mental. O **Speech-to-Prompt Pipeline** foi concebido para resolver essa fricção na raiz:
+
+- **⚡ Latência Instantânea (< 300ms):** Substituição de gargalos HTTP REST por um motor LLM in-process na GPU (`llama-cpp-python` com `Qwen 2.5 1.5B Instruct` em GGUF), reduzindo o tempo de resposta de 1.5s para 280ms.
+- **🎯 Injeção Direta Auto-Paste (Win32):** Captura inteligente do handle (`HWND`) do seu editor (VS Code, Cursor, terminal ou navegador) no instante do clique e injeção automática de `Ctrl + V` ao concluir a fala.
+- **🎛️ Perfis de Prompt Comutáveis (Presets):** Alterne entre comandos de código, mensagens de commit convencional, prompts em inglês ou transcrição bruta sem abrir janelas.
+- **🔊 Áudio-Haptics Procedural Apple:** Síntese em tempo real de ondas senoidais puras em memória float32 (sino D5, acorde duplo C5 $\to$ E5 e cliques transitórios), sem depender de arquivos externos ou alertas do Windows.
+- **🔒 100% Privado e Offline:** Todo o processamento fonético e de linguagem opera estritamente na VRAM da sua placa de vídeo local (RTX 4050 de 6 GB), com zero envio de dados para servidores na nuvem e zero custo por token.
+
+---
+
+## Como Usar no Dia a Dia
+
+O modo desktop opera em segundo plano direto na memória RAM e GPU, sem janelas pretas de terminal:
 
 <p align="center">
   <img src="assets/setup-desktop.png" alt="Dynamic Island em Setup de Desenvolvimento" width="100%" />
 </p>
 
-Você inicia a ferramenta com dois cliques no atalho **Speech to Prompt** na sua Área de Trabalho. Ela sobe em segundo plano, direto na memória, sem abrir nenhuma janela preta de console:
+### Fluxo de Trabalho em 3 Passos:
+1. **Acione o atalho:** Pressione <kbd>F8</kbd> em qualquer aplicativo. Um sino procedural suave confirma que o microfone está escutando.
+2. **Fale livremente:** A pílula flutuante exibe a forma de onda reativa e a transcrição contínua em tempo real a 60 FPS com física de molas (Liquid Glass).
+3. **Conclusão automática:** Ao pausar a fala por 3 segundos (VAD hands-free) ou pressionar <kbd>F8</kbd> novamente, o áudio é processado, o prompt é sintetizado pelo preset ativo e o texto cai imediatamente no seu cursor ativo (`Ctrl + V`).
 
-1. **Aperte F8 em qualquer tela.** Não importa se você está no VS Code, no navegador ou no terminal. Um som suave avisa você que o microfone abriu.
-2. **Fale naturalmente.** A pílula flutuante mostra o seu equalizador de voz em tempo real e a transcrição ao vivo na tela a 60 FPS com física de molas.
-3. **Parada automática por silêncio (ou aperte F8 pra concluir na hora).** Quando você termina de falar e faz uma pausa de 2 segundos, a pílula detecta o silêncio e conclui tudo sozinha (hands-free). Se preferir, você também pode apertar F8 pra enviar de imediato. Em cerca de 1.2s, o seu prompt estruturado já cai no clipboard, pronto pra você dar `Ctrl + V` no Claude, Gemini ou ChatGPT.
+### Tabela de Atalhos de Teclado
+
+| Comando / Atalho | Ação | Descrição |
+| :--- | :---: | :--- |
+| <kbd>F8</kbd> | **Gravar / Concluir** | Alterna entre iniciar a captura de áudio e finalizar imediatamente o processamento. |
+| <kbd>Tab</kbd> ou <kbd>P</kbd> ou <kbd>Shift</kbd> + <kbd>F8</kbd> | **Ciclar Preset** | Alterna ciclicamente entre os 4 perfis de prompt com feedback sonoro tátil (`tick`). |
+| Clique no **Chip de Preset** | **Ciclar via Mouse** | Toque na cápsula interativa no estado ocioso da Dynamic Island para alternar o modo. |
+| <kbd>Esc</kbd> | **Ocultar / Fechar** | Encerra a aplicação de forma limpa, desregistrando atalhos globais. |
+| **Pausa de 3.0s** | **Auto-Stop VAD** | Detecção de silêncio adaptativa que encerra a gravação de modo mãos-livres. |
 
 ---
 
-## Início Rápido
+## Perfis de Prompt (Presets)
 
-Pra colocar o projeto pra rodar no seu computador, você só precisa clonar o repositório e seguir estes passos:
+O motor conta com 4 perfis pré-calibrados para eliminar a necessidade de instruções repetitivas:
+
+| Ícone | Preset | Finalidade Principal | Exemplo de Entrada Falada | Exemplo de Saída Gerada |
+| :---: | :--- | :--- | :--- | :--- |
+| 💻 | **`code`** *(Padrão)* | Comandos de IA estruturados para código e refatoração | *"faz uma função pra calcular fibonacci usando memoization"* | `Crie uma função em Python para calcular a sequência de Fibonacci utilizando memoization para otimizar o desempenho.` |
+| 📝 | **`commit`** | Mensagens no padrão Conventional Commits | *"adicionei o suporte a auto paste no windows e testes"* | `feat(automation): add Win32 auto-paste injection with unit tests` |
+| 🌐 | **`english`** | Prompts traduzidos e otimizados para LLMs em inglês | *"explique a diferença entre processo e thread de forma simples"* | `Explain the fundamental difference between a process and a thread in simple terms with concrete examples.` |
+| 📄 | **`clean`** | Transcrição bruta limpa (Bypass direto sem LLM) | *"reunião com o time de engenharia às dez horas"* | `reunião com o time de engenharia às dez horas` |
+
+---
+
+## Início Rápido (Quickstart)
+
+### 1. Clonar e Configurar Ambiente Virtual
 
 ```powershell
-# 1. Clone o repositório e ative o seu ambiente virtual
+# Clone o repositório
 git clone https://github.com/daniloofrs/speech-to-prompt-pipeline.git
 cd speech-to-prompt-pipeline
+
+# Crie e ative o ambiente virtual Python 3.12
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 
-# 2. Instale as dependências e gere o seu arquivo de ambiente
+# Instale os pacotes necessários
 pip install -r requirements.txt
+```
+
+> [!TIP]
+> Para habilitar aceleração nativa CUDA no `llama-cpp-python`, instale a roda pré-compilada:
+> ```powershell
+> pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
+> ```
+
+### 2. Configurar Variáveis de Ambiente
+
+Copie o modelo de configuração:
+
+```powershell
 cp .env.example .env
+```
 
-# 3. Baixe os modelos locais no seu Ollama
-ollama pull qwen2.5:3b
-ollama pull qwen2.5:7b
+### 3. Pré-carregar e Validar os Modelos Neurais
 
-# 4. Crie o seu atalho na Área de Trabalho com ícone oficial
+Execute o script de verificação atômica para baixar o Faster-Whisper Medium e o modelo GGUF para a GPU:
+
+```powershell
+python tools/preparar_modelos.py
+```
+
+### 4. Executar a Pílula Flutuante
+
+```powershell
+# Execução direta pelo terminal:
+python -m src.live_pill
+
+# Ou crie um atalho na Área de Trabalho com inicialização silenciosa em 1 clique:
 powershell -ExecutionPolicy Bypass -File tools/criar_atalho.ps1
 ```
 
-Se o seu objetivo for apenas usar o assistente flutuante de voz no cotidiano, você não precisa ligar o Docker. O modo desktop roda direto na sua placa de vídeo e na sua memória RAM.
+---
+
+## Arquitetura do Sistema
+
+```mermaid
+flowchart TD
+    subgraph Input["Entrada de Voz e Sistema"]
+        MIC["Microfone do Usuário"]
+        HOTKEY["Win32 Global Hotkey (F8)"]
+        HWND["Captura Preemptiva de HWND Alvo"]
+    end
+
+    subgraph AudioEngine["Processamento de Áudio"]
+        BUFFER["Ring Buffer Assíncrono (16 kHz)"]
+        VAD["Detector de Silêncio RMS (VAD)"]
+        CHIME["Áudio-Haptics Procedural (NumPy Float32)"]
+    end
+
+    subgraph AIInference["Inferência Neural na GPU"]
+        WHISPER["Faster-Whisper Medium (FP16 / CUDA)"]
+        PRESET["Motor de Presets (code / commit / en / clean)"]
+        GGUF["EmbeddedLLM Qwen 2.5 1.5B (GGUF In-Process)"]
+    end
+
+    subgraph Output["Entrega e Persistência"]
+        CLIP["Área de Transferência (Clipboard)"]
+        PASTE["Injeção Win32 Auto-Paste (Ctrl + V)"]
+        HIST["Histórico Local JSONL (data/history.jsonl)"]
+        UI["Dynamic Island Canvas (60 FPS Spring Physics)"]
+    end
+
+    HOTKEY -->|Dispara Gravação| HWND
+    HOTKEY -->|Feedback Sonoro| CHIME
+    MIC --> BUFFER
+    BUFFER --> VAD
+    VAD -->|Silêncio ou F8| WHISPER
+    WHISPER -->|Texto Fonético| PRESET
+    PRESET -->|System Prompt Dinâmico| GGUF
+    GGUF --> CLIP
+    CLIP --> PASTE
+    PASTE -->|Restaura Foco| HWND
+    GGUF --> HIST
+    BUFFER -.->|Equalizador em Tempo Real| UI
+```
+
+---
+
+## Configuração (`.env`)
+
+Principais parâmetros disponíveis no arquivo de configuração:
+
+| Variável | Padrão | Descrição |
+| :--- | :---: | :--- |
+| `LLM_BACKEND` | `embedded` | Motor do LLM: `embedded` (GGUF in-process na GPU), `direct` (Whisper puro) ou `ollama` (legado HTTP). |
+| `LIVE_HOTKEY` | `F8` | Tecla de atalho global do Windows para alternar a gravação. |
+| `DEFAULT_PRESET` | `code` | Perfil de prompt inicial ao abrir o app (`code`, `commit`, `english`, `clean`). |
+| `AUTO_PASTE_ON_SUCCESS` | `false` | Se `true`, injeta automaticamente `Ctrl + V` na janela ativa após o processamento. |
+| `AUDIO_HAPTICS` | `true` | Habilita os efeitos sonoros procedurais suaves de feedback tátil. |
+| `AUTO_STOP_ON_SILENCE` | `true` | Habilita a finalização automática ao detectar silêncio contínuo. |
+| `SILENCE_TIMEOUT_S` | `3.0` | Duração do silêncio (em segundos) para considerar a fala concluída. |
+| `WHISPER_MODEL` | `medium` | Tamanho do modelo Whisper (`small`, `medium`, `large-v3`). |
+| `WHISPER_DEVICE` | `cuda` | Dispositivo de computação (`cuda` para GPU NVIDIA ou `cpu`). |
+| `EMBEDDED_MODEL_PATH` | `models/qwen2.5...` | Caminho do modelo `.gguf` para o motor embutido. |
 
 ---
 
 ## Trilha Batch e Governança com PostgreSQL
 
-Além do assistente de produtividade instantâneo, montei uma trilha em lote pensada pra Engenharia de Dados e LLMOps. Se você quiser processar arquivos de áudio em lote, evitar duplicatas e medir a assertividade das respostas da IA no seu histórico, essa trilha cuida de tudo.
+Além do assistente de produtividade instantâneo, o projeto conta com uma trilha em lote voltada para Engenharia de Dados e LLMOps, permitindo ingestão transacional, desduplicação por hash SHA-256 e auditoria de alucinações:
 
 <p align="center">
   <img src="assets/pipeline-isometric.png" alt="Arquitetura 3D do Pipeline" width="100%" />
 </p>
 
-Suba o seu banco de dados via Docker:
-
 ```powershell
+# Suba o banco de dados PostgreSQL 16 Alpine via Docker:
 docker compose up -d
-```
 
-Execute o fluxo de ingestão e a sua auditoria:
-
-```powershell
-# Ingestão com hash SHA-256 estrito (impede você de reprocessar o mesmo áudio)
+# Ingestão de áudio com verificação de idempotência (SHA-256):
 python src/ingest.py data/samples/teste.wav
 
-# Reescrita estruturada com o seu LLM local
+# Reescrita e curadoria com métricas de alucinação:
 python src/rewrite.py
-
-# Resumo analítico de curadoria humana (taxa de aprovação direta e alucinações)
 python src/evaluate.py --summary
 ```
 
-### Por que separamos em duas trilhas?
-
-- **Live Desktop:** Foco total na sua agilidade diária com o atalho F8. Usa o Qwen 2.5 de 3B parâmetros pra entregar a resposta em ~1.5s no seu clipboard.
-- **Batch Pipeline:** Foco em rastreabilidade, persistência segura no PostgreSQL 16 e auditoria profunda com o modelo de 7B parâmetros.
-
 ---
 
-## Dashboard Web e Shader de Vidro Líquido
+## Dashboard Web e Refração Liquid Glass
 
-Pra você acompanhar as métricas do seu banco de dados de um jeito visual, criei um dashboard web com um efeito óptico de vidro líquido (Liquid Glass), inspirado nos experimentos de SVG de [Shu Ding](https://github.com/shuding/liquid-glass).
+Para monitoramento analítico, o repositório inclui um dashboard web com efeito de refração óptica inspirado no design Liquid Glass da Apple, utilizando filtros SVG nativos (`<feDisplacementMap>` e `<feGaussianBlur>`):
 
 <p align="center">
   <img src="assets/liquid-glass-macro.png" alt="Macro Refração Liquid Glass" width="100%" />
 </p>
 
-Abra o painel no seu navegador:
-
 ```powershell
+# Inicie o dashboard analítico no navegador:
 python src/dashboard.py --open
 ```
 
-O painel abre em `http://localhost:8080` (ou no terminal se você preferir passar `--cli`). A nossa pílula na página usa filtros SVG nativos (`<feDisplacementMap>` e `<feGaussianBlur>` com 52px de desfoque) pra distorcer os elementos que passam por trás dela, com controles pra você ajustar opacidade e refração ao vivo.
-
 ---
 
-## Cuidados de Engenharia e Memória de Vídeo
+## Garantia de Qualidade e Testes (QA)
 
-Quando eu comecei a juntar Whisper e LLM no mesmo computador, o meu maior cuidado foi não estourar os 6 GB de VRAM da minha placa de vídeo. Se a memória estoura, o Windows joga dados pra RAM e o seu tempo de resposta salta de 1.5s pra mais de 10s.
+A robustez da solução é assegurada por suítes completas de testes unitários, testes de regressão de renderização física e simulação de áudio:
 
-Ajustei a distribuição de memória pra manter o seu setup leve e veloz:
+```powershell
+# 1. Executar todos os 38 testes unitários (TDD):
+python -m unittest discover -s tests -p "test_*.py"
 
-- **Faster-Whisper Medium FP16:** consome ~1.5 GB da sua VRAM.
-- **Ollama Qwen 2.5 (3B em Q4_K_M):** ocupa ~1.9 GB da sua VRAM.
-- **Buffers do Windows e DWM:** reservam cerca de ~0.8 GB da máquina.
-- **Total:** ~4.2 GB de VRAM ocupados, deixando uma folga segura nos 6 GB da GPU pra você manter o seu VS Code e navegador abertos sem engasgos.
-- **Calibração de vocabulário:** configurei um prompt fonético inicial (`TECH_INITIAL_PROMPT`) pra orientar o Whisper a reconhecer termos de tecnologia em português sem você ter que corrigir palavras como *Docker, FastAPI, SQL, PyTorch e Git*.
+# 2. Testar integração completa dos novos recursos da Pílula Live:
+python tools/test_live_pill_features.py
 
----
+# 3. Validar renderização visual de todos os 5 estados da Dynamic Island:
+python tools/test_render_all_states.py
 
-## Estrutura do Projeto
-
-```text
-speech-to-prompt-pipeline/
-├── assets/                  # Identidade visual e imagens geradas com Nano Banana
-│   ├── app-icon.ico         # Ícone oficial pro atalho do Windows
-│   ├── app-icon.png         # Logo em squircle pra web e avatar
-│   ├── hero-banner.png      # Banner panorâmico do repositório
-│   ├── liquid-glass-macro.png # Detalhe da refração óptica SVG
-│   ├── pipeline-isometric.png # Diagrama 3D da arquitetura
-│   └── setup-desktop.png    # Pílula flutuante no fluxo de trabalho
-├── sql/                     # Migrações e tabelas do PostgreSQL
-├── src/
-│   ├── config.py            # Variáveis de ambiente e caminhos
-│   ├── database.py          # Conexão psycopg v3 e consultas SQL
-│   ├── ingest.py            # Ingestão de áudio, SHA-256 e Faster-Whisper
-│   ├── rewrite.py           # Prompt engineering e chamada ao Ollama
-│   ├── evaluate.py          # Interface de curadoria humana e métricas
-│   ├── dashboard.py         # Servidor web com Liquid Glass e modo CLI
-│   └── live_pill.py         # Dynamic Island em Tkinter com física e atalho F8
-├── tools/criar_atalho.ps1   # Script PowerShell pra gerar o atalho desktop
-├── iniciar_live.vbs         # Inicializador silencioso sem janela de prompt
-├── docker-compose.yml       # Configuração do PostgreSQL 16 Alpine
-└── README.md                # Documentação do projeto
+# 4. Validar o algoritmo de detecção de silêncio adaptativo (VAD):
+python tools/test_vad_autostop.py
 ```
 
 ---
 
-## Autor
+## Estrutura do Repositório
 
-Desenvolvido por **Danilo Fernandes** pra servir como projeto prático de portfólio em Engenharia de Dados e aplicações locais com modelos de linguagem.
+```text
+speech-to-prompt-pipeline/
+├── assets/                       # Banners, logotipos, ícones e diagramas visuais
+│   ├── app-icon.ico              # Ícone oficial de alta definição para Windows
+│   ├── app-icon.png              # Logo squircle com sombra óptica
+│   ├── hero-banner.png           # Banner panorâmico oficial
+│   ├── liquid-glass-macro.png    # Detalhe óptico da refração Liquid Glass
+│   ├── pipeline-isometric.png    # Render isométrico da arquitetura
+│   └── setup-desktop.png         # Demonstração real no setup de desenvolvimento
+├── data/
+│   └── history.jsonl             # Log persistente e atômico do histórico de prompts
+├── sql/                          # Scripts DDL e migrações do PostgreSQL
+├── src/
+│   ├── audio_haptics.py          # Síntese procedural de áudio senoidal em memória (Float32)
+│   ├── auto_paste.py             # Captura de HWND Win32 e injeção à prova de falhas (Ctrl+V)
+│   ├── config.py                 # Centralização de configurações e variáveis de ambiente
+│   ├── dashboard.py              # Dashboard analítico web com shader óptico Liquid Glass
+│   ├── database.py               # Conexão psycopg v3 e operações de banco de dados
+│   ├── embedded_llm.py           # Motor GGUF in-process na GPU via llama-cpp-python (<300ms)
+│   ├── evaluate.py               # Avaliação e curadoria de alucinações do modelo
+│   ├── history.py                # Módulo de persistência e consulta do histórico JSONL
+│   ├── ingest.py                 # Pipeline batch com Faster-Whisper e hash SHA-256
+│   ├── live_pill.py              # Dynamic Island flutuante a 60 FPS com física de molas
+│   ├── presets.py                # Catálogo de perfis de prompt (código, commit, inglês, clean)
+│   └── rewrite.py                # Módulo de reescrita e parse estruturado
+├── tests/                        # 38 testes unitários cobrindo todos os módulos
+├── tools/                        # Ferramentas de benchmark, testes visuais e instaladores
+│   ├── criar_atalho.ps1          # Script para gerar atalho desktop oficial
+│   ├── preparar_modelos.py       # Pré-carregamento e verificação atômica dos modelos
+│   ├── test_live_pill_features.py # Teste de integração dos recursos avançados
+│   ├── test_render_all_states.py # Validação de desenho dos 5 estados de interface
+│   └── test_vad_autostop.py      # Verificação de corte automático de silêncio
+├── docker-compose.yml            # Infraestrutura do PostgreSQL 16 Alpine
+├── requirements.txt              # Dependências do projeto
+├── LICENSE                       # Licença MIT
+└── README.md                     # Documentação oficial do projeto
+```
 
-- GitHub: [@daniloofrs](https://github.com/daniloofrs)
+---
+
+## Contribuindo
+
+Contribuições são muito bem-vindas! Se você deseja reportar um bug, sugerir um novo perfil de prompt ou aprimorar os algoritmos de renderização:
+
+1. Faça um Fork do projeto.
+2. Crie uma branch para a sua feature (`git checkout -b feature/novo-preset`).
+3. Certifique-se de que todos os testes passem (`python -m unittest discover -s tests -p "test_*.py"`).
+4. Faça commit das alterações no padrão Conventional Commits (`git commit -m "feat(presets): add markdown doc preset"`).
+5. Envie um Pull Request detalhado.
+
+---
+
+## Licença e Autor
+
+Distribuído sob a licença **MIT**. Consulte o arquivo [`LICENSE`](LICENSE) para mais detalhes.
+
+Desenvolvido com foco em engenharia de alta performance por **Danilo Fernandes**:
+- **GitHub:** [@daniloofrs](https://github.com/daniloofrs)

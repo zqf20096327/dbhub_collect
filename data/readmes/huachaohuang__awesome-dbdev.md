@@ -12,7 +12,7 @@ Database development is interesting and challenging. You can always find interes
 
   In this practical and comprehensive guide, author Martin Kleppmann helps you navigate this diverse landscape by examining the pros and cons of various technologies for processing and storing data. Software keeps changing, but the fundamental principles remain the same. With this book, software engineers and architects will learn how to apply those ideas in practice, and how to make full use of data in modern applications.
 
-- [How does a relational database work](http://coding-geek.com/how-databases-work/) (2015)
+- [How does a relational database work](https://web.archive.org/web/20230307091314/http://coding-geek.com/how-databases-work/) (2015)
 
 - [Elements Of Scale: Composing And Scaling Data Platforms](http://www.benstopford.com/2015/04/28/elements-of-scale-composing-and-scaling-data-platforms/) (2015)
 
@@ -32,11 +32,11 @@ Database development is interesting and challenging. You can always find interes
 
 - [What Every Systems Programmer Should Know About Concurrency](papers/concurrency.pdf) (2018)
 
-  Seasoned programmers are familiar with tools like mutexes, semaphores, and condition variables. But what makes them work? How do we write concurrent code when we can’t use them, like when we’re working below the operating system in an embedded environment, or when we can’t block due to hard time constraints? And sin
+  Seasoned programmers are familiar with tools like mutexes, semaphores, and condition variables. But what makes them work? How do we write concurrent code when we can’t use them, like when we’re working below the operating system in an embedded environment, or when we can’t 
 
 [...截断...]
 
-ce your system transforms your code into things you didn’t write, running in orders you never asked for, how do multithreaded programs work at all? Concurrency — especially on modern hardware — is a complicated and unintuitive topic, but let’s try to cover some fundamentals.
+block due to hard time constraints? And since your system transforms your code into things you didn’t write, running in orders you never asked for, how do multithreaded programs work at all? Concurrency — especially on modern hardware — is a complicated and unintuitive topic, but let’s try to cover some fundamentals.
 
 - [Everything You Always Wanted to Know About Synchronization but Were Afraid to Ask](papers/synchronization.pdf) (2013)
 
@@ -90,4 +90,4 @@ ce your system transforms your code into things you didn’t write, running in o
 
 - [Efficiently Reclaiming Space in a Log Structured Store](papers/lss.pdf) (2020)
 
-  A log structured store uses a single write I/O for a number of diverse and non-contiguous pages within a large buffer instead of using a write I/O for each page separately. This requires that pages be relocated on every write, because pages are never updated in place. Instead, pages are dynamically remapped on every write. Log structuring was invented for and 
+  A log structured store uses a single write I/O for a number of diverse and non-contiguous pages within a large buffer instead of using a write I/O for each page separately. This requires that pages be relocated on every write, because pages are never updated in place. Instead, pages are dynamically remapped on every w

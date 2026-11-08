@@ -4,7 +4,7 @@ A k6 extension for interacting with MongoDB while performance testing.
 
 ## Features
 
-- **CRUD Operations**: Insert, InsertMany, Find, FindOne, FindAll, UpdateOne, UpdateMany, DeleteOne, DeleteMany
+- **CRUD Operations**: Insert, InsertMany, Find, FindOne, FindAll, UpdateOne, UpdateMany, ReplaceOne, DeleteOne, DeleteMany
 - **Advanced Operations**: Upsert, FindOneAndUpdate, Aggregate, Distinct, CountDocuments
 - **Bulk Operations**: BulkWrite for mixed insert/update/delete operations
 - **Index Management**: CreateIndex, DropIndex, ListIndexes
@@ -35,6 +35,15 @@ To build a custom `k6` binary with this extension, first ensure you have the pre
     ```
 
    This will create a k6 binary that includes the xk6-mongo extension in your local folder. This k6 binary can now run a k6 test.
+
+### k6 v1 and v2
+
+This extension registers itself with both the k6 v1 (`go.k6.io/k6`) and k6 v2 (`go.k6.io/k6/v2`) module systems, so it works with either major version — `xk6 build` picks up whichever one it links against. To target a specific k6 version:
+
+```bash
+xk6 build v1.8.2 --with github.com/GhMartingit/xk6-mongo   # k6 v1.x
+xk6 build v2.3.0 --with github.com/GhMartingit/xk6-mongo   # k6 v2.x
+```
 
 ### Development
 
@@ -167,7 +176,8 @@ export default () => {
         skip: 10,
         batch_size: 50,  // Process results in batches of 50
         sort: { createdAt: -1 },
-        projection: { name: 1, email: 1, _id: 0 }  // Only return specific fields
+        projection: { name: 1, email: 1, _id: 0 },  // Only return specific fields
+        hint: { active: 1, createdAt: -1 }  // Use a specific index
     };
 
     const results = client.findWithOptions(
@@ -277,11 +287,12 @@ export default () => {
 - `insert(db, collection, document)` - Insert a single document
 - `insertMany(db, collection, documents)` - Insert multiple documents
 - `find(db, collection, filter, sort, limit)` - Find documents with basic options
-- `findWithOptions(db, collection, filter, options)` - Find with advanced options (batch size, projection, skip)
+- `findWithOptions(db, collection, filter, options)` - Find with advanced options (batch size, projection, skip, hint)
 - `findOne(db, collection, filter)` - Find a single document
 - `findAll(db, collection)` - Find all documents in a collection
 - `updateOne(db, collection, filter, update)` - Update a single document
 - `updateMany(db, collection, filter, update)` - Update multiple documents
+- `replaceOne(db, collection, filter, replacement)` - Replace a single document (entire document replacement)
 - `deleteOne(db, collection, filter)` - Delete a single document
 - `deleteMany(db, collection, filter)` - Delete multiple documents
 

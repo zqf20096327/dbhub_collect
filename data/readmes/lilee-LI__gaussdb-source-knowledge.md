@@ -1,97 +1,122 @@
-# GaussDB 源码知识工程 2.2
+# GaussDB 源码知识工程 2.3
 
-同一仓库提供 Linux 产图端和 Windows 学习端。ECS 按真实构建编译器选择 GCC 或 Clang 前端，并发解析编译单元，输出带源码位置的调用图。Windows 读取交付目录、完整源码、设计和手册，生成全仓计划。成员选择特性后才创建研究任务。经审阅的知识保存在学习 SQLite，可导出 Wiki，或按开发、测试、评审、运维角色查询。
+从完整源码、设计文档、用户手册和可选的 ECS 编译调用图，建立版本绑定的学习计划、经审阅的结构化知识和 Wiki。支持模块持续学习、不同服务器离线协作、覆盖验收和开发／测试／review 上下文查询。
 
-当前 `main` 为 2.2 开发版本，已完成 ECS 全量产图验证；新图的 Windows 验收和新迁移包尚未完成。已发布迁移包仍为 `v2.1.1`，其验证结果与当前代码分别记录。
+**操作手册：[迁移到 GaussDB](MIGRATE-GAUSSDB.md)。工程合同：[全仓持续学习](docs/WHOLE-REPOSITORY.md)。验证范围：[2.3 验证报告](docs/VALIDATION-2.3.md)。**
 
-## 先在 ECS 生成调用图
+直接看 [openGauss实际输出](assets/examples/opengauss-2.3/README.md)：全仓计划、Wiki、结构化知识和三类使用上下文；试点未覆盖范围保留为未完成。
 
-解压发布 ZIP 或克隆本仓库，进入含 `ecs.sh` 的目录。在能正常编译产品的 Linux 环境中执行。ECS 需要 Git、64 位 Python 3.9+（含 venv、ensurepip）以及产品本身的编译环境。GCC 工程还需该工具链匹配的插件开发头文件；工程会自动编译随包提供的插件源码。Clang 使用包内 x86_64 / aarch64 的 libclang 和内置头文件。
+## 输入和输出
 
-~~~bash
-sh ecs.sh doctor
-sh ecs.sh build --source /srv/GaussDB --compile-db /srv/build/compile_commands.json \
-  --work /srv/kb-work --output /srv/export/build-01 --jobs 4
-~~~
+- 输入：本地已有源码；可选设计、手册；可选 ECS `knowledge.sqlite3` 调用图。不会自动下载产品源码。
+- 全仓计划：`home/whole/PLAN.md`、`PLAN.json`、`COVERAGE.csv`、`index.html`。按领域和目录模块归属，每个资产可追踪。
+- 权威知识：学习工作区 `knowledge.sqlite3` 中的版本、任务、证据、已审知识、知识关系与覆盖账。`wiki.git` 保存知识修订。
+- Wiki：同一已审知识的 HTML／Markdown 阅读视图；不复制整个源码图。
+- 使用：`ask`／MCP 返回证据上下文与未决项，供已有 Claude 或开发工具使用。
 
-初次可追加一个或多个 `--tu 仓内相对路径.cpp` 先验证一个模块。省略 `--tu` 会处理编译库中的所有可用命令。如果使用项目自带 GCC，请加载与构建一致的环境，通过 `--cc` 和 `--cxx` 指定该工具链。默认 `--frontend auto`，GCC 工程使用同版本编译器的语法树插件，Clang 工程使用 libclang。GCC 会先自动发现真实 include 依赖，`.map`、`.ini` 等被编译器引用的文件也会冻结。分析不生成产品目标文件或链接产品。逐 TU 结果在工作目录的 `last-build.json`。
+完整图只读挂接到协调端；学习库不复制图。成员材料包包含本模块、证据文件和一跳图，成员不需要共享协调端 SQLite，不需要每人搬完整图。大公共模块的包仍可能较大；按自然目录细分或调整归属后分派。
 
-**还没有编译数据库时**，Make 项目可以用仓内采集器包住一次真实的重新编译，将下面的 `make -B -j4` 替换为项目的构建命令。CMake 项目也可以在原配置中开启 `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`。
+## 配置后启动
 
-~~~bash
-sh ecs.sh capture --source /srv/GaussDB --output /srv/export/compile_commands.json -- make -B -j4
-~~~
+Windows 准备 Python 3.12、Git 和已登录的 Claude Code。发行 ZIP 包含基础依赖的离线 wheel；源码克隆需同时取得仓内 wheelhouse。Claude、认证和产品源码不打包。Linux 对应使用 `sh kb.sh`。
 
-把产图命令输出的**整个** `build-01/` 复制到 Windows，例如 `E:/ecs-export/build-01/`。其中 `knowledge.sqlite3` 是调用图，`run.json` 记录 run、编译覆盖和校验值，`blobs/` 保存回放所需的生成头或其他未跟踪材料。已有符合旧版合同的 ECS 索引可以直接接入。
-
-Windows 担任协调端时，需要在可访问的文件路径保留完整交付图。`graph_storage=reference` 通过 SQLite 只读挂接，避免在学习库重复存图；当前没有远程 ECS 图查询 API。成员使用按模块生成的材料包。模块包包含整个指定模块及一跳邻居，目前没有包大小上限，共享模块可能较大。
-
-## 在 Windows 第一次使用
-
-准备 64 位 Python 3.12、Git 和已有的 Claude Code。解压内网包或克隆本仓库，在含 `kb.cmd` 的目录运行。首次调用从随包 wheel 离线安装依赖。
-
-~~~powershell
+```powershell
 New-Item -ItemType Directory -Force local | Out-Null
 Copy-Item paths.example.json local/paths.json
 notepad local/paths.json
-~~~
-
-填写 `source`（与上游匹配的完整源码）、`design`、`manual`、`index_db`（ECS 单文件一致性备份）、`home`（独立可写目录）。相对路径以 JSON 所在目录为准。缺少的文档可省略；CHM 先导出 HTML。一个可用 run 自动选择，有多个时从 `check` 的输出选择 `run_id`。没有 ECS 交付件时可省略 `index_db`，使用文本证据。Windows 使用配置的路径，无需提供 `compile_commands.json`。Linux 对应命令为 `sh kb.sh`。
-
-~~~powershell
 .\kb.cmd check
 .\kb.cmd start
+.\kb.cmd plan
+```
+
+只需在 `local/paths.json` 填写真实路径。缺少设计、手册、ECS 图可删掉相应字段；没有图时仍能用冻结文本研究，调用和宏配置保持待核。CHM 先导出 HTML。
+
+`start` 自动盘点完整检出目录、额外编译材料和文档；按自然目录细分宽模块，生成领域归属、模块调查及公共机制／集成工作包。默认 PostgreSQL 家族策略含 20 个领域、10 项公共机制、12 项跨域主题；目录未匹配会生成范围调查，不能默认为不适用。领域与主题是规划模板，正确性需要源码研究。
+
+它不会把每个函数或每条调用边变成任务。原始注册／语法／测试线索留在候选账，模块盘点通过审阅后，才按机制归并产生有预算、有依赖的深度任务。
+
+## 持续学习与审阅
+
+```powershell
 .\kb.cmd modules
-.\kb.cmd features --limit 15
-.\kb.cmd learn --candidate <上一步返回的候选ID>
-~~~
+.\kb.cmd next --worker learner-a --module '<完整模块名>'
+.\kb.cmd run --worker learner-a --module '<完整模块名>' --steps 1 --budget 3
+.\kb.cmd review --task '<任务ID>' --reviewer reviewer-a
+.\kb.cmd review --task '<任务ID>' --reviewer reviewer-a --accept '<研究digest>' --notes '实际核对意见'
+```
 
-打开 `start` 返回的 `plan`。每个模块分别列出文件数、ECS 清单内文件、编译记录和逐 TU 状态。`features` 可用 `--module`、`--state`、`--offset` 筛选或翻页。候选显示主责、相关模块、证据文件和行号、设计缺口、问题及任务状态。协调人可以在派单前用 `kb.cmd route --candidate <ID> --module <模块>` 确认或更正归属。临时问题仍可直接用 `learn --module <模块> --question "…" --symbol <符号>`。
+`run` 使用本机已有的原生 Claude CLI，每项任务一个独立会话。先做模块盘点、分批提交机制提案；盘点通过后，`advance` 生成下一批任务。也可用 `learn --candidate` 或 `learn --module ... --question ...` 获得手动 Claude 命令和提示词。
 
-执行 `learn` 返回的 `claude_command`，发送其 `prompt`。Claude 领取工作单、核对实际证据，提交研究。函数指针、宏分支或图外消费者需要单独取证。手册所写、源码所证、实际运行结果分别标注。
+有知识正文的任务还需第二次知识审阅：上一条命令返回新的提案 digest 后，核对提案和源码，再执行同一 `review --accept <提案digest>`。纯盘点任务只经过研究审阅。程序不会替审阅人自动批准。
 
-## 审阅和使用
-
-~~~powershell
-.\kb.cmd review --task <任务ID> --reviewer <审阅人>
-.\kb.cmd review --task <任务ID> --reviewer <审阅人> --accept <研究digest> --notes "实际核对意见"
-.\kb.cmd review --task <任务ID> --reviewer <审阅人> --accept <提案digest> --notes "实际核对意见"
+```powershell
+.\kb.cmd advance --max-tasks 8
+.\kb.cmd run --worker learner-a --module '<完整模块名>' --steps 2 --budget 3
+.\kb.cmd progress --module '<完整模块名>'
+.\kb.cmd coverage --module '<完整模块名>'
 .\kb.cmd wiki
-.\kb.cmd ask --role test_generation --symbol <函数> --question "边界条件和预期依据是什么？"
-~~~
+.\kb.cmd ask --role test_generation --question '这个机制的边界、预期依据和未覆盖分支是什么？'
+```
 
-研究证据和知识提案分别审阅。`wiki` 返回可整体分发的阅读目录，`ask` 从同一已审修订取结论、契约、测试预期和证据。可选角色为 `coding`、`test_generation`、`review`、`operations`。
+每位成员默认最多保留 4 项待审；活动租约、待审上限、依赖未通过会明确阻止继续。超时或模型失败会保留会话日志与任务状态，使用 MCP 租约工具或 `--home ... task` 命令恢复。模型与版本来自本机配置，完整过程只保留在本地 `home/sessions/`。
 
-## 不同服务器分别学习
+## 多服务器按模块协作
 
-协调端持有完整图，成员持有模块材料、一跳关系和候选条目的引用材料。每台机器的工作区独立。以下路径仅为示例。
+协调端：
 
-~~~powershell
-.\kb.cmd --home E:/kb/hub team assign --module <完整模块名> --worker opt-a --kit E:/share/optimizer.zip
-.\kb.cmd --home E:/kb/member-a team open --kit E:/share/optimizer.zip
-claude --mcp-config E:/kb/member-a/worker.mcp.json
-~~~
+```powershell
+.\kb.cmd --home 'E:/knowledge/gaussdb' team assign --module '<完整模块名>' --worker learner-a --kit 'E:/exchange/opt-a.zip'
+```
 
-在成员 Claude 中用 `feature_candidates` 查看本模块候选，用 `focus_module(candidate_id=…)` 生成一项任务，再领取、取证和提交。成员将一单结果回传，协调端收件后按同样的两步审阅。
+成员解压同一版本工程，接收材料包，在独立本地目录执行：
 
-~~~powershell
-.\kb.cmd --home E:/kb/member-a team export --task <任务ID> --out E:/share/optimizer.result.gz
-.\kb.cmd --home E:/kb/hub team receive --input E:/share/optimizer.result.gz
-~~~
+```powershell
+.\kb.cmd --home 'E:/member/opt-a' team open --kit 'E:/exchange/opt-a.zip'
+.\kb.cmd --home 'E:/member/opt-a' whole next --worker learner-a
+.\kb.cmd --home 'E:/member/opt-a' whole run --worker learner-a --steps 1 --budget 3
+.\kb.cmd --home 'E:/member/opt-a' team export --task '<已提交任务ID>' --out 'E:/exchange/result-01.gz'
+```
 
-同一工作单支持重复投递同一结果。下一批使用新的工作单。请在完成现有审阅后替换分派。补包、旧队列迁移和归档见[操作手册](INTERNAL.md)。
+协调端导入后，通过自己的路径配置执行 `review`，再回传反馈：
 
-## 实现、验收与打包
+```powershell
+.\kb.cmd --home 'E:/knowledge/gaussdb' team receive --input 'E:/exchange/result-01.gz'
+# 完成研究／知识审阅；从 workspace/order 文件获得协调端工作单路径
+.\kb.cmd --home 'E:/knowledge/gaussdb' team feedback --order 'E:/exchange/opt-a.order.json' --out 'E:/exchange/feedback-01.gz'
+```
 
-[完整技术设计](docs/DESIGN.md) · [验证范围与结果](docs/VALIDATION.md) · [ECS 交付与调用图查询](CALLGRAPH-REPLAY.md)
+成员执行 `team sync --input feedback-01.gz`、`whole advance`、`whole run`，继续下一任务；同一工作单可以多次提交。签名包校验源码版本、成员和知识基线；重复导入幂等，退回可以重做，已审结果不能被另一个包覆盖。不要手工合并 SQLite 文件。
 
-当前代码在公开 openGauss 上完整分析 2,412 个编译上下文：全部干净解析，耗时 32 分 9.701 秒，生成 2,508,564 条 CALLS 记录，交付 SQLite 为 5.171 GiB。控制器累计写入计数相较历史观察至少下降 86.89%，交付库仍比旧版大 5.22%。详细口径与限制见 [2.2 ECS 对照实测](docs/benchmarks/opengauss-2412-v22.md)。新图尚未完成 Windows 计划和成员包实测；旧版的 157 张盘点单、3,370 条候选及 50.173 秒 `start` 耗时见 [2.1.1 历史基线](docs/benchmarks/opengauss-2412.md)。
+研究发现包内缺少材料时，协调端在 `team feedback` 添加 `--include-asset '<全仓计划里的冻结资产ID>'`，成员再次sync即可补充同版文本。此操作扩展可读材料，不宣称补齐了对应调用图。中断会话可用 `run --resume-task '<仍有效的本人成员任务ID>'` 续作；任务提交后程序会停止该会话，防止继续消耗预算。
 
-~~~powershell
-.\kb.cmd --help
-.\.venv\Scripts\python -m unittest discover -s tests
-.\.venv\Scripts\python scripts/verify_ecs_workflow.py --output E:/temp/new-kb-acceptance
-python scripts/package_release.py
-~~~
+## 覆盖验收
 
-打包命令从当前 Git 暂存区生成 `dist/gaussdb-source-knowledge-2.2.0.zip` 和 SHA-256 清单。发布物包含两端代码、GCC 插件源码、测试、研究方法和离线 Python 依赖。产品源码、工具链及其插件开发头文件、用户已有的 Claude 使用各自环境。GCC 实机回归入口为 `python scripts/verify_gcc_producer.py --output /tmp/new-gcc-acceptance --cc /path/gcc --cxx /path/g++`。原 Make 采集及 Clang 回放回归仍用 `python3.12 scripts/verify_ecs_producer.py --output /tmp/new-kb-acceptance`；输出目录须为新路径。
+`coverage` 明确列出未覆盖文件、未处置线索、未闭合模块、公共机制／跨域任务、单方契约、未决问题和使用回读缺口。`partial` 允许大文件分段研究，只有实际阅读、研究审阅、知识入库后，引用区间才累积为完整文件覆盖；知识变化使相关覆盖失效。
+
+每个模块还需开发、测试、review 三类实际检索用例：
+
+```powershell
+.\kb.cmd verify-uses --input 'E:/acceptance/use-cases.json'
+.\kb.cmd coverage --module '<完整模块名>'
+.\kb.cmd accept-coverage --module '<完整模块名>' --digest '<报告digest>' --reviewer owner-a --notes '实际验收意见'
+```
+
+用例格式见 [迁移手册](MIGRATE-GAUSSDB.md)。不指定 `--module` 是全仓验收。回读检查证明必要知识进入上下文，不能替代专家判断或数据库运行测试。完整发布需要全仓覆盖签署；试点 Wiki 可直接导出，部分范围发布需明确 `--allow-partial`。
+
+## ECS 生成编译调用图
+
+在产品原有 Linux 构建环境中，使用匹配版本的 `compile_commands.json`：
+
+```bash
+sh ecs.sh doctor
+sh ecs.sh build --source /srv/GaussDB --compile-db /srv/build/compile_commands.json \
+  --work /srv/kb-work --output /srv/export/build-01 --jobs 8
+```
+
+工程提供 GCC／Clang 分析器与并发调度，需匹配的产品编译器、插件开发头／libclang 及生成头。现有编译数据库可直接使用；没有时可用 `ecs.sh capture ... -- <实际构建命令>` 采集。将完整输出目录（图、run.json、blobs）交给协调端；Windows 不解析 TU。
+
+## 配置适配与验证边界
+
+`product_adapter` 控制目录、注册和候选规则；`learning_policy` 控制领域、模块预算及公共机制课程，内置 `postgres-family` 与 `generic`，也可用自己的 JSON。`module_prefixes` 可固定责任边界；新增模块跟随下一次 `start --refresh` 形成新版本计划，已有知识不会被删除或自动认定适用。
+
+2.3 在公开 openGauss 与合成协议场景验证；公司专有 GaussDB 的目录、宏和构建条件需要首次实际接入核验。全仓计划不是全仓语义已经学完。历史探索方案见 `docs/plans/`，当前默认路径以本 README 与迁移手册为准。可选平台／HTTP／RAGFlow 组件不属于本条离线使用路径的依赖。

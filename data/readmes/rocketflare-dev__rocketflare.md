@@ -8,7 +8,7 @@
 
 Rocketflare is one repository that already solves the platform work every internal or B2B product
 needs before its first real feature: tenancy, sign-in, roles and permissions, background jobs,
-realtime, file storage, analytics dashboards, an AI layer (chat, agents, retrieval) and a CLI —
+realtime, file storage, opt-in analytics dashboards, an AI layer (chat, agents, retrieval) and a CLI —
 running as a single Cloudflare Worker over Postgres, with a React UI and a shared contract package
 that keeps the API, the UI and the CLI in agreement. The first local run needs **zero external
 credentials**, and the codebase is written to be driven by a coding agent: `CLAUDE.md`,
@@ -79,7 +79,7 @@ you removed. [`CHANGELOG.md`](CHANGELOG.md) is what you would be catching up on.
 | CLI | commander + chalk; browser login → tenant API key; `--json` on every list command |
 | Async / realtime | Queues, Workflows, a per-tenant Durable Object over WebSockets, cron triggers, R2 |
 | AI | Anthropic / OpenAI-compatible / Workers AI chat over SSE, agents on Workflows, Workers AI embeddings → pgvector, OTLP tracing (Langfuse, Phoenix, any backend), evals (vitest-evals) with thumbs feedback |
-| Analytics | drizzle-cube semantic layer (`/cubejs-api`, `/mcp`), fact tables on a cron, TypeScript dashboard templates |
+| Analytics | an opt-in plugin (`/rf-plugin add analytics`): drizzle-cube semantic layer (`/cubejs-api`, `/mcp`), fact tables on a cron, TypeScript dashboard templates |
 | Quality | Biome 2, strict TypeScript, vitest against real Postgres, gitleaks, one CI gate |
 
 ## Features
@@ -121,6 +121,8 @@ you removed. [`CHANGELOG.md`](CHANGELOG.md) is what you would be catching up on.
 - **Evals and feedback** — `pnpm eval` runs vitest-evals suites against the real chat route and agent runtime in-process, with deterministic judges (tool trajectory, schema, contains, budget) and LLM judges (rubric, faithfulness to what was retrieved, reference answer) that go through the kit's own model resolver; runs are JSON with committed baselines and `--compare` regression checks, plus a local report UI. Thumbs on chat replies and run output feed `rocketflare evals promote`, which turns a bad real answer into a draft case. The `/rf-evals` skill drives all of it.
 
 ### Analytics
+An opt-in plugin, not part of the kit: `/rf-plugin add analytics` installs it.
+
 - **Semantic layer** — drizzle-cube mounted at `/cubejs-api` and `/mcp` behind the app's auth; every cube scopes its SQL to the current tenant, and a mandatory isolation test queries every cube as two tenants and asserts disjoint rows.
 - **Fact tables** — plain tables rebuilt per tenant in one transaction by the hourly cron, with a freshness endpoint and `rocketflare analytics check-facts` for ops.
 - **Dashboards** — TypeScript templates copied into each tenant's `analytics_pages` (seeded on tenant creation and lazily on first read), editable in the UI with autosave, reset-to-template and recreate; an explore/query-builder page; a shipped "Organisation Overview" dashboard.
@@ -183,7 +185,7 @@ there list every known gap.
 | [`docs/DEPLOYER.md`](docs/DEPLOYER.md) | you are building a service that deploys kit apps from CI (the versioned v1 protocol behind `DEPLOYER_URL`) |
 | [`docs/RLS.md`](docs/RLS.md) | tenant isolation posture and how to turn row-level security on |
 | `.claude/rules/*.md` | layer conventions (api, database, ui, cli, testing, code-quality, cloudflare) — auto-loaded by path |
-| `.claude/skills/` | the slash commands a coding agent drives: `/rf-setup` (first run), `/rf-preflight` (read-only diagnosis), `/rf-adapt` (rename + checklist), `/rf-how-do-i` (coaching for a new feature — asks, plans, writes `docs/features/<slug>.md`, never the code), `/rf-upgrade` (port later kit releases into your copy), `/rf-plugin` (install, upgrade, remove or audit a plugin), `/rf-traces` (debug a run or chat turn from its span tree; pick or switch a tracing backend), `/rf-evals` (write, run and interpret evals; compare models or prompts; turn thumbs-down into cases), `/rf-agent-replay` (replay an agent's past runs with the code you just changed — recorded answers, no model calls) — an agent may run those when you ask in plain words — and `/rf-provision` (deploy to Cloudflare + Neon + Resend), which only you can start: it creates paid resources and prompts for tokens |
+| `.claude/skills/` | the slash commands a coding agent drives: `/rf-setup` (first run), `/rf-preflight` (read-only diagnosis), `/rf-adapt` (rename + checklist), `/rf-how-do-i` (coaching for a new feature — asks, plans, writes `docs/features/<slug>.md`, never the code), `/rf-upgrade` (port later kit releases into your copy), `/rf-plugin` (install, upgrade, remove or audit a plugin), `/rf-traces` (debug a run or chat turn from its span tree; pick or switch a tracing backend), `/rf-evals` (write, run and interpret evals; compare models or prompts; turn thumbs-down into cases), `/rf-agent-replay` (replay an agent's past runs with the code you just changed — recorded answers, no model calls), `/rf-agent-docs` (audit the CLAUDE.md files, rules and skills for stale paths, oversized files and contradictions, then fix them) — an agent may run those when you ask in plain words — and `/rf-provision` (deploy to Cloudflare + Neon + Resend), which only you can start: it creates paid resources and prompts for tokens |
 
 ## Provenance
 

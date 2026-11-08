@@ -1,7 +1,7 @@
 # Snowflake Connector for Python
 
 > [!IMPORTANT]
-> A new version of the driver is being developed in [snowflakedb/drivers](https://github.com/snowflakedb/drivers) and is currently in public preview. See the [documentation](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-universal-core) for more information.
+> Version 5.0.0 of the Snowflake Connector for Python has been released. Development has moved to [snowflakedb/drivers](https://github.com/snowflakedb/drivers). See the [documentation](https://docs.snowflake.com/en/developer-guide/universal-core/universal-core) for more information.
 
 This package includes the Snowflake Connector for Python, which conforms to the [Python DB API 2.0](https://www.python.org/dev/peps/pep-0249/) specification.
 
@@ -12,7 +12,7 @@ using the Snowflake JDBC or ODBC drivers.
 
 The connector has **no** dependencies on JDBC or ODBC.
 It can be installed using ``pip`` on Linux, Mac OSX, and Windows platforms
-where Python 3.10.0 (or higher) is installed.
+where Python 3.11.0 (or higher) is installed.
 
 Snowflake Documentation is available at:
 https://docs.snowflake.com/
@@ -39,7 +39,7 @@ Find the `snowflake_connector_python*.whl` package in the `./dist` directory.
 ### In Docker
 Or use our Dockerized build script `ci/build_docker.sh` and find the built wheel files in `dist/repaired_wheels`.
 
-Note: `ci/build_docker.sh` can be used to compile only certain versions, like this: `ci/build_docker.sh "3.10 3.11"`
+Note: `ci/build_docker.sh` can be used to compile only certain versions, like this: `ci/build_docker.sh "3.11 3.12"`
 
 ## Code hygiene and other utilities
 These tools are integrated into `tox` to allow us to easily set them up universally on any computer.

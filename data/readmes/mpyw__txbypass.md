@@ -43,11 +43,59 @@ order.go:19:11: r.db bypasses the transaction opened with Transaction; use tx in
 
 The callback receives the transaction as `tx`. `r.db` is the pool the transaction came from, so the audit log is written outside the transaction.
 
-| What goes wrong | Why |
-| --- | --- |
-| The write survives a rollback | It was never part of the transaction |
-| The write can wait forever | It runs on another connection, and may need a lock the transaction holds |
-| The write cannot see the transaction's rows | They are not committed yet |
+<table>
+<thead>
+<tr><th>Code</th><th>What goes wrong</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>
+
+```go
+r.db.Transaction(func(tx *gorm.DB) error {
+	r.db.Create(&AuditLog{}) // kept
+	return errFailed // rolls back tx only
+})
+```
+
+</td>
+<td><b>The write survives a rollback.</b> It was never part of the transaction</td>
+</tr>
+<tr>
+<td>
+
+```go
+r.db.Transaction(func(tx *gorm.DB) error {
+	// locks the row
+	tx.Model(o).Update("status", "paid")
+	// waits for that lock, on another
+	// connection, until tx ends
+	return r.db.Model(o).
+		Update("note", "paid").Error
+})
+```
+
+</td>
+<td><b>The write can wait forever.</b> It runs on another connection, and needs a lock the transaction holds. With a pool of one connection, it waits for the connection itself</td>
+</tr>
+<tr>
+<td>
+
+```go
+r.db.Transaction(func(tx *gorm.DB) error {
+	tx.Create(o)
+	var n int64
+	// does not count o
+	r.db.Model(&Order{}).Count(&n)
+	return nil
+})
+```
+
+</td>
+<td><b>The read cannot see the transaction's rows.</b> They are not committed yet</td>
+</tr>
+</tbody>
+</table>
 
 The code compiles. A test where nothing fails passes too. txbypass finds it from the source.
 
@@ -57,9 +105,9 @@ Every report of a rule ends with the rule's name. That name is what `//txbypass:
 
 | Method | Command | Needs |
 | --- | --- | --- |
-| **[mise](https://mise.jdx.dev/)** *(recommended)* | `mise use "github:mpyw/txbypass@0.1.0"` | Nothing. Installs the prebuilt binary |
-| `go tool` | `go get -tool github.com/mpyw/txbypass/cmd/txbypass@latest` | Go 1.27+ |
-| `go install` | `go install github.com/mpyw/txbypass/cmd/txbypass@latest` | Go 1.27+ |
+| **[mise](https://mise.jdx.dev/)** *(recommended)* | `mise use "github:mpyw/txbypass@0.3.1"` | Nothing. Installs the prebuilt binary |
+| `go tool` | `go get -tool github.com/mpyw/txbypass/cmd/txbypass@latest` | Go 1.26+ |
+| `go install` | `go install github.com/mpyw/txbypass/cmd/txbypass@latest` | Go 1.26+ |
 | Release archive | See below | Nothing |
 
 ```bash
@@ -74,7 +122,7 @@ txbypass -V=full   # the release this binary was built from
 
 ```toml
 [tools]
-"github:mpyw/txbypass" = "0.1.0"
+"github:mpyw/txbypass" = "0.3.1"
 ```
 
 As a tool dependency in `go.mod`:
@@ -99,7 +147,7 @@ go run github.com/mpyw/txbypass/cmd/txbypass@latest ./...
 From a release archive, verified against the published checksums:
 
 ```bash
-VERSION=0.1.0
+VERSION=0.3.1
 REPO=https://github.com/mpyw/txbypass
 BASE="${REPO}/releases/download/v${VERSION}"
 curl -LO "${BASE}/txbypass_${VERSION}_darwin_arm64.tar.gz"
@@ -115,10 +163,10 @@ version: v2.13.1  # the golangci-lint release to build
 plugins:
   - module: github.com/mpyw/txbypass
     import: github.com/mpyw/txbypass/plugin
-    version: v0.1.0
+    version: v0.3.1
 ```
 
-Turn it on in `.golangci.yml`. Each key under `settings` is a rule's name, as the flags take it. A rule left out keeps its default. An unknown name stops the run:
+Turn it on in `.golangci.yml`. Each key under `settings` is a rule's name, as the flags take it, or `invokes`, `begins` or `closes`. A rule left out keeps its default. An unknown name stops the run:
 
 ```yaml
 version: "2"
@@ -132,6 +180,9 @@ linters:
         description: Transaction bypass linter
         settings:
           outer-handle: true
+          # One function per item, not comma-separated.
+          invokes:
+            - (example.com/db.Manager).InTx
 ```
 
 Then build and run it:
@@ -139,6 +190,15 @@ Then build and run it:
 ```bash
 golangci-lint custom  # writes ./custom-gcl
 ./custom-gcl run ./...
+```
+
+From a Go program of your own, build an analyzer with `txbypass.New`. It takes the same settings as a `txbypass.Config`, and has no flags. `txbypass.Analyzer` is the one with flags:
+
+```go
+a, err := txbypass.New(txbypass.Config{
+	Rules:   map[string]bool{"outer-context": false},
+	Invokes: []string{"(example.com/db.Manager).InTx"},
+})
 ```
 
 </details>
@@ -161,7 +221,9 @@ Nothing is reported in a generated file. Test files are checked like any other f
 
 ### Supported libraries
 
-| Library | Callback | Begin ... Commit |
+An invoker opens a transaction and invokes a callback inside it. A begin returns the transaction, which stays open until it is committed or rolled back.
+
+| Library | Invoker | Begin ... Commit |
 | --- | --- | --- |
 | [database/sql](https://pkg.go.dev/database/sql) |  | [`DB.Begin`](https://pkg.go.dev/database/sql#DB.Begin), [`DB.BeginTx`](https://pkg.go.dev/database/sql#DB.BeginTx) |
 | [sqlx](https://pkg.go.dev/github.com/jmoiron/sqlx) |  | [`DB.Beginx`](https://pkg.go.dev/github.com/jmoiron/sqlx#DB.Beginx), [`DB.BeginTxx`](https://pkg.go.dev/github.com/jmoiron/sqlx#DB.BeginTxx), [`DB.MustBegin`](https://pkg.go.dev/github.com/jmoiron/sqlx#DB.MustBegin), [`DB.MustBeginTx`](https://pkg.go.dev/github.com/jmoiron/sqlx#DB.MustBeginTx) |
@@ -188,10 +250,280 @@ Nothing is reported in a generated file. Test files are checked like any other f
 
 Query builders that take the handle as an argument, such as [jet](https://github.com/go-jet/jet) and [squirrel](https://github.com/Masterminds/squirrel), need nothing of their own. Passing the outer handle to them is a use. [sqlc](https://sqlc.dev) is covered through [`WithTx`](#sqlcs-withtx).
 
-The exact receivers and signatures are in [design/rules.md](design/rules.md#callback-openers).
+The exact receivers and signatures are in [design/rules.md](design/rules.md#invokers).
 
 > [!NOTE]
-> A transaction begun on one dedicated connection is not read. `*sql.Conn`, `*pgx.Conn`, `*pgxpool.Conn`, `bun.Conn`, `bob.Conn` and go-pg's `*pg.Conn` are such connections. A statement on the connection runs inside the transaction, so it bypasses nothing. A savepoint, a transaction opened on a transaction, is not read either, for the same reason. The `Tx` of upper/db is no savepoint on a transaction: it begins another transaction on the pool.
+> A transaction begun on one connection, rather than a pool, is not read. `*sql.Conn`, `*pgx.Conn`, `*pgxpool.Conn`, `bun.Conn`, `bob.Conn` and go-pg's `*pg.Conn` are such connections. A statement on the connection runs inside the transaction, so it bypasses nothing. A savepoint, a transaction opened on a transaction, is not read either, for the same reason. The `Tx` of upper/db is no savepoint on a transaction: it begins another transaction on the pool.
+
+### Helpers of your own
+
+A function of your project that opens a transaction and runs a callback in it is read as an invoker too. No configuration is needed, and a helper in another package works the same way.
+
+```go
+func (s *Store) withTx(
+	ctx context.Context,
+	fn func(*sql.Tx) error,
+) error {
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	if err := fn(tx); err != nil {
+		return errors.Join(err, tx.Rollback())
+	}
+	return tx.Commit()
+}
+
+func (s *Store) Place(ctx context.Context) error {
+	return s.withTx(ctx, func(tx *sql.Tx) error {
+		// s.db bypasses the transaction opened with
+		// withTx; use tx instead
+		_, err := s.db.ExecContext(ctx, audit)
+		return err
+	})
+}
+```
+
+The helper may open the transaction with a begin, as above, or with the callback of an invoker or of another helper.
+
+A helper that returns the transaction it begins is read as a begin:
+
+```go
+func (s *Store) begin(
+	ctx context.Context,
+) (*sql.Tx, error) {
+	return s.db.BeginTx(ctx, nil)
+}
+
+tx, err := s.begin(ctx)
+if err != nil {
+	return err
+}
+defer tx.Rollback()
+// s.db bypasses the transaction opened with begin;
+// use tx instead
+s.db.ExecContext(ctx, audit)
+```
+
+<details>
+<summary>Helpers that are not read, so a bypass in a callback given to one is not reported</summary>
+
+<table>
+<thead>
+<tr><th>Helper</th><th>Why it is not read</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>
+
+```go
+func (s *Store) reuse(
+	ctx context.Context,
+	cur *sql.Tx,
+	fn func(*sql.Tx) error,
+) error {
+	if cur != nil {
+		return fn(cur)
+	}
+	tx, err := s.db.BeginTx(ctx, nil)
+	// ...
+}
+```
+
+</td>
+<td>It may call the callback outside the transaction it opens. Every use inside would be reported on that path</td>
+</tr>
+<tr>
+<td>
+
+```go
+func (s *Store) withTx(
+	ctx context.Context,
+	fn func(*sql.Tx) error,
+) error {
+	s.hooks = append(s.hooks, fn)
+	// ...
+	go fn(tx)
+	// ...
+}
+```
+
+</td>
+<td>It stores the callback, passes it on, or runs it with <code>go</code> or <code>defer</code>. The callback may run outside the transaction</td>
+</tr>
+<tr>
+<td>
+
+```go
+var db *sql.DB
+
+func withTx(
+	ctx context.Context,
+	fn func(*sql.Tx) error,
+) error {
+	tx, err := db.BeginTx(ctx, nil)
+	// ...
+}
+```
+
+</td>
+<td>It opens on a package-level variable, or on a handle a call returns. Only a parameter, or a field of one, can name the handle at the call</td>
+</tr>
+<tr>
+<td>
+
+```go
+func (s *Store) withTx(
+	ctx context.Context,
+	fn func(context.Context) error,
+) error {
+	tx, err := s.db.BeginTx(ctx, nil)
+	// ...
+	return fn(ctxWithTx(ctx, tx))
+}
+```
+
+</td>
+<td>It carries the transaction in a context. Its body is not read for that yet. <a href="#declaring-helpers">Declare it</a></td>
+</tr>
+<tr>
+<td>
+
+```go
+func (s *Store) begin(
+	ctx context.Context,
+) (*Tx, error) {
+	tx, err := s.db.BeginTx(ctx, nil)
+	return &Tx{tx}, err
+}
+```
+
+</td>
+<td>It returns the transaction wrapped in a struct, or one it was given. The struct is not followed, and a transaction it was given is not new</td>
+</tr>
+<tr>
+<td>
+
+```go
+func (s *Store) begin(
+	ctx context.Context,
+) (*sql.Tx, error) {
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+	return tx, nil
+}
+```
+
+</td>
+<td>It defers a call given the transaction it returns. The call may end the transaction before the caller uses it</td>
+</tr>
+<tr>
+<td>
+
+```go
+func (s *Store) begin(
+	ctx context.Context,
+) (tx *sql.Tx, err error) {
+	defer annotate(&err)
+	return s.db.BeginTx(ctx, nil)
+}
+```
+
+</td>
+<td>It gives the address of its error to a call. The call may return an open transaction beside an error</td>
+</tr>
+<tr>
+<td>
+
+```go
+func (s *Store) withTx(
+	ctx context.Context,
+	pre func(*sql.Tx) error,
+	fn func(*sql.Tx) error,
+) error
+```
+
+</td>
+<td>It takes two callbacks. Only the first that runs inside the transaction is read, here <code>pre</code></td>
+</tr>
+<tr>
+<td>
+
+```go
+s := Store{db: db}
+s.withTx(ctx, func(tx *sql.Tx) error {
+	_, err := s.db.ExecContext(ctx, q)
+	return err
+})
+```
+
+</td>
+<td>It is a method with a pointer receiver, called on a struct held by value. The call takes the address of <code>s</code>, and a method of the module given it may change what <code>s.db</code> holds</td>
+</tr>
+</tbody>
+</table>
+
+</details>
+
+The exact conditions are in [design/rules.md](design/rules.md#helpers-that-are-invokers) and [Helpers that are begins](design/rules.md#helpers-that-are-begins).
+
+### Declaring helpers
+
+A helper whose body cannot be read has to be declared. That is usually an interface method, as a transaction manager given by dependency injection.
+
+```go
+type Store interface {
+	//txbypass:invokes
+	WithTx(ctx context.Context, fn func(q Querier) error) error
+
+	//txbypass:begins
+	Begin(ctx context.Context) (Tx, error)
+}
+
+type Tx interface {
+	//txbypass:closes
+	Done(err error) error
+}
+```
+
+| Directive | Declares |
+| --- | --- |
+| `//txbypass:invokes` | A call opens a transaction, and runs the callback inside it |
+| `//txbypass:begins` | A call returns a transaction, open |
+| `//txbypass:closes` | A call ends every transaction it is given, its receiver included |
+
+The handle is the receiver. The callback is the first parameter of a function type. It is given the transaction at its first parameter that may be one. A number, a string, a bool, an error, a context or a function may not. A callback that takes a context and no transaction gets the transaction in the context, and [`outer-context`](#outer-context) reads it. The exact rules are in [design/rules.md](design/rules.md#declared-helpers).
+
+For code you cannot edit, pass the names in a flag:
+
+```bash
+txbypass \
+  -invokes '(example.com/db.Manager).InTx' \
+  -begins '(example.com/db.Manager).Begin' \
+  -closes '(example.com/db.Tx).Done' \
+  ./...
+```
+
+Each flag takes a comma-separated list of names of its kind. A flag given twice declares the names of both:
+
+```bash
+txbypass \
+  -invokes '(example.com/db.Manager).InTx,(example.com/db.Store).WithTx' \
+  ./...
+```
+
+A comma inside the brackets of type arguments does not split, as in `(example.com/db.Map[K, V]).InTx`. The golangci-lint plugin takes one name per item of a list instead.
+
+| Kind | Spelling |
+| --- | --- |
+| A function | `example.com/db.InTx` |
+| A method | `(example.com/db.Manager).InTx` |
+| A method with a pointer receiver | `(*example.com/db.Manager).InTx`. The `*` may be left out |
+
+A name not spelled this way stops the run. A name that is spelled right but names nothing is not reported, so check the package path.
 
 ### `outer-handle`
 
@@ -809,7 +1141,7 @@ type DBTX interface {
 
 ### `outer-context`
 
-Some openers carry the transaction in the callback's context, not in a value. A statement run with the outer context runs outside the transaction:
+Some invokers carry the transaction in the callback's context, not in a value. A statement run with the outer context runs outside the transaction:
 
 ```go
 _, err := sess.WithTransaction(
@@ -844,7 +1176,7 @@ sess.WithTransaction(
 
 </td>
 <td>❌</td>
-<td><code>ctx</code> was given to the opener, and carries no transaction</td>
+<td><code>ctx</code> was given to the invoker, and carries no transaction</td>
 </tr>
 <tr>
 <td>
@@ -974,7 +1306,7 @@ func (r *Repo) place(tx *gorm.DB) error {
 <td>
 
 ```go
-s.withTx(ctx, func(tx *sql.Tx) error {
+s.reuse(ctx, cur, func(tx *sql.Tx) error {
 	_, err := s.db.ExecContext(ctx, q)
 	return err
 })
@@ -982,7 +1314,7 @@ s.withTx(ctx, func(tx *sql.Tx) error {
 
 </td>
 <td>⚠️</td>
-<td>A literal given to a transaction helper of your own is not read. Only a call of a known opener opens a scope. Inside the helper, the callback is a function value</td>
+<td>A helper that may run the callback outside the transaction is not read as one. See <a href="#helpers-of-your-own">Helpers of your own</a></td>
 </tr>
 <tr>
 <td>
@@ -1165,6 +1497,10 @@ db.Exec(refresh)
 </table>
 
 The full specification, with every limit, is [design/rules.md](design/rules.md).
+
+## AI usage
+
+txbypass is developed with AI coding agents (Claude Code). The rules in [design/rules.md](design/rules.md) and the fixtures under `testdata/src/` define what it reports.
 
 ## License
 

@@ -13,6 +13,7 @@ IMBoy 是可私有部署的即时通讯平台。本仓库包含 Erlang/OTP 后�
 一期交付（`phase1_delivery` profile）能力面：
 
 - 单聊、群聊与消息推送（Core IM：联系人、历史/离线/多端同步、附件与消息治理）
+- 已登录 App 好友之间的一对一语音/视频（`rtc` 已选入编译清单，运行时预设默认允许，可通过 `features.rtc=false` 显式关闭）
 - 企业组织/部门/成员/工作区与 RBAC；人工客服坐席与访客 Widget；OA 对接（internal API / SSO / Webhook）
 - 频道底座（组织内部 General 群与公告频道）
 - 朋友圈与附近的人（一期范围；发布、互动、定位及隐私控制须按交付矩阵验收）
@@ -20,7 +21,9 @@ IMBoy 是可私有部署的即时通讯平台。本仓库包含 Erlang/OTP 后�
 - PostgreSQL 持久化与 Garage S3 附件直传
 - Docker Compose 单节点生产部署（Helm/Kubernetes 为实验性，未经生产集群验证）
 
-完整版（full-selected）另含频道发现/邀请/付费频道、E2EE 端到端加密、RTC、Bot、AI 助手等域；一期交付 profile 下这些域经交付锁与 fail-closed 门禁关闭，旧缓存或远端配置不能重新打开。分期边界、白名单与交付锁清单见[打包契约](./docs/product/packaging-contract.md)，交付包内容见[交付包清单](./docs/product/delivery-package-manifest.md)。
+仓库还保留频道发现/邀请/付费频道、E2EE 端到端加密、群通话（`rtc_group`）、Bot、AI 助手等域，是否编入以目标 manifest 为准；一期交付 profile 下这些域经交付锁与 fail-closed 门禁关闭，旧缓存或远端配置不能重新打开。分期边界、白名单与交付锁清单见[打包契约](./docs/product/packaging-contract.md)，交付包内容见[交付包清单](./docs/product/delivery-package-manifest.md)。
+
+RTC 的编译包含、运行时允许与真实双端音视频验收须分别核对；manifest 的 profile 不会自动切换现场运行时 profile。访客、Web 坐席及 C2S 音视频不在本次开放范围，群通话仍未选入且受交付锁关闭。边界与验收要求见[打包契约 §9.5](./docs/product/packaging-contract.md#95-app-一对一-rtc-与群通话边界)。
 
 ## 系统架构
 
@@ -115,25 +118,35 @@ Docker 24+ 与 Compose v2 插件，未安装时 `install.sh` 会确认后经 get
 # 1) 克隆仓库并进入部署目录
 git clone <本仓库地址> && cd imboy/deploy
 
-# 2) 首跑生成配置，然后按提示编辑 .env 填 3 个必填变量
+# 2) .env 不存在时，首跑复制模板并退出；按客户配置表编辑 .env
 bash install.sh --edition community
-#    编辑 .env：API_DOMAIN / ADMIN_DOMAIN / CERTBOT_EMAIL
-#    （后端域名 + 管理后台域名 + 证书通知邮箱，其余密钥全部自动生成）
+#    五个独立纯域名：API_DOMAIN / ADMIN_DOMAIN / CS_WIDGET_DOMAIN / RTC_DOMAIN / TURN_DOMAIN
+#    证书邮箱：CERTBOT_EMAIL；API origin、独立清理账号等要求见下方链接
 
-# 3) 再跑一次同一条命令，完成安装
-bash install.sh --edition community
+# 3) 全新社区实例：显式授权迁移后创建缺失的独立清理 LOGIN
+bash install.sh --edition community --init-cleanup-db
 ```
 
-第一次运行会生成 `.env`、全部随机密钥（数据库口令、JWT、Garage 对象存储凭据等）
-和 RSA 登录密钥对，然后停下来等人填上面 3 项机器无从知晓的信息。第二次运行依次
-完成：前置检查 → 拉起服务 → 签发 TLS 证书 → 等待健康 → 部署后自检，最后打印
-Release Identity 三元组与访问地址。
+先按[客户填写与自动生成字段表](./deploy/README.md#customer-input)准备配置：五域互不相同、
+不带协议或路径，DNS 指向部署入口，公网 TCP 80 可用于 HTTP-01 验证，443 可用于 HTTPS/WSS。
+另需设置 `IMBOY_BASE_URL=https://<API_DOMAIN>`、独立的 `IMBOY_DIRECT_CLEANUP_PG_USER`；
+已有账号须填写匹配的密码。社区安装默认只验证；显式 `--init-cleanup-db` 才使用现有
+`POSTGRES_USER` 的管理权限创建缺失 LOGIN，仅授目标库 CONNECT 和 `v5_worker` 成员资格。
+权限不足会停止，不自动提权或修改已有账号。商务/外部数据库及 DBA 操作见
+[清理数据库账号手册](./deploy/standalone/docs/DB_CLEANUP_ACCOUNT.md)。
+
+`.env` 不存在时，首次运行在依赖检查后仅复制模板并退出。填写后再次运行才会幂等补齐
+内部随机密钥与 RSA 登录密钥对，随后执行前置检查 → 拉起服务 → 申请 TLS 证书 →
+等待健康 → 社区清理身份门禁（镜像迁移清单、正反密码、角色权限）→ 部署后自检，
+最后打印 Release Identity 三元组与访问地址。新 PG 镜像须包含初始化脚本停止密码
+xtrace 的修复；宿主机脚本更新不会修复旧镜像，交付方须确认镜像身份。
+TLS 签发依赖真实 DNS 与网络条件；客户业务仍须按部署手册现场验收。
 
 首次访问管理后台会自动进入 `/setup` 向导创建超级管理员；也可以直接用参数创建，
 实现无浏览器纯脚本部署：
 
 ```bash
-bash install.sh --edition community \
+bash install.sh --edition community --init-cleanup-db \
   --admin-phone 13800138000 --admin-password 'S3curePass2026' --yes
 ```
 
@@ -162,9 +175,10 @@ IMBOY_IMAGE_DIGEST=sha256:...
   docker compose -f docker-compose.community.yml --profile monitoring up -d
   ```
 
-- **商务版**：`deploy/docker-compose.prod.yml` + sales-policy overlay 不随开源仓
-  分发，需通过商务交付渠道获取（leeyisoft@qq.com），安装命令为
-  `bash install.sh --edition business`（缺文件时脚本会明确提示索取方式）。
+- **商务版**：`deploy/docker-compose.prod.yml` 不随开源仓分发，需通过商务交付渠道
+  获取（leeyisoft@qq.com）；`deploy/docker-compose-sales-policy.yml` 随仓分发。
+  补齐商务版条件配置后执行 `bash install.sh --edition business`，安装器会组合两份文件
+  （缺文件时明确提示索取方式）。两种版本均要求上述五域与客户配置。
 
 ### 升级
 
@@ -181,7 +195,7 @@ docker compose -f docker-compose.demo.yml up -d
 # 30 秒后访问 http://127.0.0.1:9800/api/v1/init
 ```
 
-该示例用于本地产品评估。启动前核对配置模板、端口和健康检查，详见[部署指南](./deploy/README.md)。实际能力以部署 profile 为准；一期不启用 E2EE、AI 或 RTC。
+该示例用于本地产品评估。启动前核对配置模板、端口和健康检查，详见[部署指南](./deploy/README.md)。实际能力以构建清单和现场运行时 profile/features 为准；`phase1_delivery` 默认允许 App 好友一对一 RTC，`features.rtc=false` 可关闭，群通话、E2EE 与 AI 仍关闭。演示服务启动不代表 LiveKit/TURN 已就绪或真实双端音视频已验收。
 
 ## 继续阅读
 

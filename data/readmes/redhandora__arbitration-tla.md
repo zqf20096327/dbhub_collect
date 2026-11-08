@@ -1,6 +1,6 @@
 # arbitration-tla
 
-OceanBase PALF 仲裁副本的 TLA+ 模型，检查了 2F1A 和 4F1A：一个日志流上的选举、日志重确认（Prepare 阶段、日志恢复、StartWorking 日志）、配置确认、日志的接受与提交、降级和升级、仲裁副本推送配置，以及全量副本和仲裁副本的崩溃与重启。模型依据 OceanBase 源码 `src/logservice/palf`（提交 `0fa1778`），名称与论文的术语一致（对照见 [`arbitration/README.md`](arbitration/README.md)）。
+OceanBase PALF 仲裁副本的 TLA+ 模型，检查了 2F1A 和 4F1A：一个日志流上的选举、日志重确认（Prepare 阶段、日志恢复、StartWorking 日志）、配置确认、日志的接受与提交、降级和升级、仲裁副本推送配置，以及全量副本和仲裁副本的崩溃与重启。模型依据 OceanBase PALF 的实现，名称与论文的术语一致（对照见 [`arbitration/README.md`](arbitration/README.md)）。
 
 ## 检查了什么
 
@@ -31,5 +31,4 @@ BASE=LiveCoverage ./check-witnesses.sh NoServingAfterFCrash \
 | 路径 | 内容 |
 |---|---|
 | `arbitration/` | 模型、配置、脚本和结果，说明见 [`arbitration/README.md`](arbitration/README.md) |
-| `docs/specs/` | 设计文档：建模范围、状态、动作、不变式和活性前提 |
 | `tools/` | TLC |

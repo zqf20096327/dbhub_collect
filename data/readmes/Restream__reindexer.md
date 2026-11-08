@@ -47,6 +47,7 @@ This document describes the Go connector and its API. For information about the 
   - [Counting](#counting)
   - [Text pattern search with LIKE condition](#text-pattern-search-with-like-condition)
   - [Update queries](#update-queries)
+    - [Updating a missing indexed field](#updating-a-missing-indexed-field)
     - [Update queries with inner joins and subqueries](#update-queries-with-inner-joins-and-subqueries)
     - [Update field with object](#update-field-with-object)
     - [Remove field via update-query](#remove-field-via-update-query)
@@ -60,6 +61,9 @@ This document describes the Go connector and its API. For information about the 
     - [Async batch mode](#async-batch-mode)
     - [Transactions commit strategies](#transactions-commit-strategies)
     - [Implementation notes](#implementation-notes)
+  - [Merge](#merge)
+    - [Sorting](#sorting)
+    - [Deduplication](#deduplication)
   - [Join](#join)
     - [Nested Join](#nested-join)
     - [Anti-join](#anti-join)
@@ -69,13 +73,13 @@ This document describes the Go connector and its API. For information about the 
   - [Aggregations](#aggregations)
   - [Search in array fields](#search-in-array-fields)
     - [Search in array fields with matching indexes](#search-in-array-fields-with-matching-indexes)
-    - [Search in array fields with matching indexes using grouping](#search-in-array-fields-with-matching-indexes-using-grouping)
-      - [Query Execution Examples](#query-execution-examples)
-    - [Grouped values extraction examples
+    - [Search in array fields with matching indexes using grouping](#sear
 
 [...截断...]
 
- for more complex cases](#grouped-values-extraction-examples-for-more-complex-cases)
+ch-in-array-fields-with-matching-indexes-using-grouping)
+      - [Query Execution Examples](#query-execution-examples)
+    - [Grouped values extraction examples for more complex cases](#grouped-values-extraction-examples-for-more-complex-cases)
   - [Atomic on update functions](#atomic-on-update-functions)
   - [Expire Data from Namespace by Setting TTL](#expire-data-from-namespace-by-setting-ttl)
   - [Direct JSON operations](#direct-json-operations)
@@ -158,4 +162,4 @@ Reindexer has internal full text search engine. Full text search usage documenta
 
 ### Vector indexes (ANN/KNN)
 
-Reindexer has internal k-nearest neighbors search engine. k-nearest neighbors search usage documentation and examples are [here](float_vector.md). For selective post-filtered pages on HNSW, see [
+Reindexer has internal k-nearest ne

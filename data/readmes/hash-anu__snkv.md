@@ -18,8 +18,7 @@ SQLite:  Application → SQL Parser → Query Planner → VDBE → B-Tree → Di
 SNKV:    Application → KV API → B-Tree → Disk
 ```
 
-> **Looking for Python?** The Python bindings are no longer maintained on `master`.
-> Use the [`python_bindings`](https://github.com/hash-anu/snkv/tree/python_bindings) branch.
+> **Using SNKV in a product?** Paid support, device-specific builds and custom features are available. See [Commercial Support](#commercial-support).
 
 ---
 
@@ -80,6 +79,30 @@ kvstore_open_v2("mydb.db", &db, &cfg);
 
 ---
 
+## Power-Loss Testing
+
+[tests/test_powerloss.c](tests/test_powerloss.c) cuts the power at **every write and sync** of a mixed workload (puts, overflow-sized values, deletes, TTL, column families, checkpoints). At each crash point, the writes not yet synced are:
+
+- **lost**: all rolled back,
+- **kept**: all reach the disk, or
+- **torn**: kept or lost one 512-byte sector at a time, in random order.
+
+After each crash the store must reopen, pass `kvstore_integrity_check`, and hold exactly the data of a committed transaction:
+
+| Mode | Guarantee after power loss |
+| ---- | -------------------------- |
+| WAL + `SYNC_FULL`, DELETE + `SYNC_FULL` | the last commit that succeeded, or the one in flight |
+| WAL + `SYNC_NORMAL` | an earlier commit or the one in flight; never a half-applied one |
+| Encrypted (WAL and DELETE, `SYNC_FULL`) | same as above, including while the password is changed or removed |
+
+Runs on every pull request (every 5th crash point) and nightly at every crash point on Linux (with ASan + UBSan), macOS and Windows.
+
+```bash
+make test-powerloss
+```
+
+---
+
 ## Build
 
 **Linux / macOS**
@@ -122,6 +145,19 @@ Comparisons against [LMDB](https://github.com/hash-anu/lmdb-benchmark) and [Rock
 
 **Good fit:** read-heavy or mixed workloads (point reads and existence checks run about 2.3–2.5x faster than SQLite), native TTL (sessions, caches, leases), embedded or memory-constrained targets, and simple C integration.
 **Consider alternatives:** RocksDB for maximum write throughput, LMDB for maximum read speed when memory is plentiful.
+
+---
+
+## Commercial Support
+
+Using SNKV in a product? Paid help is available from the author:
+
+- **Priority fixes and support**: your bug or question goes first, with a response time agreed up front.
+- **Builds for your device**: SNKV tuned for your RAM, flash and RTOS (cache size, Argon2 cost, threading off), tested on your target.
+- **Integration and review**: help designing your storage layer, migrating from SQLite or another store, or reviewing how you use SNKV.
+- **Custom features**: a feature your product needs, developed and maintained in SNKV.
+
+Contact: [Discord](https://discord.gg/Wwe9dFy3P) or [open an issue titled "Commercial support"](https://github.com/hash-anu/snkv/issues/new?title=Commercial%20support).
 
 ---
 

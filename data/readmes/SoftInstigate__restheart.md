@@ -1,4 +1,4 @@
-# <img src="https://cloud.restheart.com/assets/img/restheart%20logo.svg" alt="RESTHeart logo" width="32px" height="auto" /> RESTHeart
+# <img src="https://restheart.org/images/restheart%20logo.svg" alt="RESTHeart logo" width="32px" height="auto" /> RESTHeart
 
 **A backend for web, mobile, AI and IoT apps.**
 
@@ -10,6 +10,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/softinstigate/restheart.svg?maxAge=2592000)](https://hub.docker.com/r/softinstigate/restheart/)
 [![Join the chat on Slack](https://img.shields.io/badge/chat-on%20slack-orange)](https://join.slack.com/t/restheart/shared_invite/zt-1olrhtoq8-5DdYLBWYDonFGEALhmgSXQ)
 [![CLA assistant](https://cla-assistant.io/readme/badge/SoftInstigate/restheart)](https://cla-assistant.io/SoftInstigate/restheart)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/SoftInstigate/restheart)
 
 ---
 
@@ -21,8 +22,12 @@ RESTHeart is a backend for web, mobile, AI and IoT apps. It gives an application
 
 ### Example
 
+With RESTHeart running locally (see below), create a collection, add a document and query it:
+
 ```bash
-curl "https://demo.restheart.org/messages?filter={\"from\":\"Bob\"}&pagesize=1"
+curl -u admin:secret -X PUT localhost:8080/messages
+curl -u admin:secret -H 'Content-Type: application/json' -d '{"from":"Bob","message":"Hello"}' localhost:8080/messages
+curl -u admin:secret "localhost:8080/messages?filter={\"from\":\"Bob\"}&pagesize=1"
 ```
 
 No route was written for `/messages`. It is a MongoDB collection, and the query parameters (`filter`, `pagesize`, sorting) map directly to MongoDB's query language.
@@ -47,9 +52,9 @@ Distributed as a Docker image and a GraalVM native binary. Built on Java 25, Und
 
 ### Running it
 
-Fully managed, no installation required, and including [Sophia](https://restheart.org/docs/cloud/sophia/mcp), an MCP server and browser assistant that exposes RESTHeart's docs and plugin API to AI coding assistants such as Claude Code, Cursor, or VS Code:
+Managed, on [Ulabase](https://ulabase.com), the platform built on RESTHeart: nothing to install, a free plan to start.
 
-[![Try RESTHeart Cloud for free](https://restheart.org/images/restheart-cloud-button.svg)](https://cloud.restheart.com/signup)
+[![Try Ulabase for free](https://restheart.org/images/ulabase-button.svg)](https://ulabase.com/auth/signup)
 
 Or self-hosted, since the core is free and open source:
 
@@ -59,6 +64,17 @@ curl https://raw.githubusercontent.com/SoftInstigate/restheart/master/docker-com
 
 curl http://localhost:8080/ping
 ```
+
+### Supported MongoDB versions
+
+Every build is tested against MongoDB 7.0, 8.0, 8.3 and 9.0, and against [`mongodb/mongodb-atlas-local`](https://hub.docker.com/r/mongodb/mongodb-atlas-local).
+
+Older versions should work too, down to MongoDB 4.2, the oldest the MongoDB Java driver connects to, but they are not tested and some features may need a newer server. If something does not work on your version, please [open an issue](https://github.com/SoftInstigate/restheart/issues).
+
+Some features need more than a standalone server:
+
+- **Transactions and change streams**, which the WebSocket and SSE streams of collection changes rely on, need a replica set. A single-node one is enough, like the one in `docker-compose.yml`.
+- **Vector search indexes and `$vectorSearch`** need mongot: MongoDB Atlas, `mongodb-atlas-local`, or Community/Enterprise 8.2+ with mongot. `$vectorScan` works on any MongoDB, without an index.
 
 Full documentation: https://restheart.org/docs/
 

@@ -1,28 +1,28 @@
 {
  "valkey-io/valkey": {
-  "commit_7d": 13,
-  "commit_90d": 239,
-  "rel_ver": "9.2.0-rc1",
-  "rel_pub": "2026-09-16",
-  "rel_days": 18,
-  "rel_n90": 10,
+  "commit_7d": 68,
+  "commit_90d": 380,
+  "rel_ver": "9.2.0-rc2",
+  "rel_pub": "2026-11-04",
+  "rel_days": 4,
+  "rel_n90": 11,
   "rel_pre": true,
   "rel_none": false,
-  "sec_n": 12,
+  "sec_n": 13,
   "sec_worst": "high",
-  "sec_last": "2026-08-31",
+  "sec_last": "2026-10-26",
   "sec_ids": [
+   "GHSA-f4q9-j22m-xqq9(-,high)",
    "GHSA-jcj7-v34w-v9vv(-,high)",
    "GHSA-fq2f-crmw-q97r(-,high)",
    "GHSA-mvcj-73cw-22m4(CVE-2026-63639,high)",
    "GHSA-53mc-f3m3-99vh(CVE-2026-56684,high)",
    "GHSA-93p9-5vc7-8wgr(CVE-2026-27623,high)",
    "GHSA-c677-q3wr-gggq(CVE-2026-21863,medium)",
-   "GHSA-p876-p7q5-hv2m(CVE-2025-67733,high)",
-   "GHSA-9rfg-jx7v-52p6(CVE-2025-49844,high)"
+   "GHSA-p876-p7q5-hv2m(CVE-2025-67733,high)"
   ],
   "contrib_n": 382,
-  "enriched_at": "20261004",
+  "enriched_at": "20261108",
   "lang": {
    "C": 63,
    "Tcl": 28,
@@ -32,16 +32,86 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  },
+  "etag": {
+   "release": "W/\"3bd69a95c7b9f8cec491687426a3873f48378d95313948179386fe2131f07607\"",
+   "security": "W/\"f759d3256f21ec1ad0eac768c38e453d9f0798cb3e3939b028d8c362000b32b7\""
+  },
+  "rel_dates": [
+   "2026-11-04",
+   "2026-10-26",
+   "2026-10-27",
+   "2026-10-26",
+   "2026-10-26",
+   "2026-10-26",
+   "2026-09-16",
+   "2026-09-01",
+   "2026-09-01",
+   "2026-08-31",
+   "2026-08-31"
+  ],
+  "rel_notes": [
+   {
+    "t": "9.2.0-rc2",
+    "d": "2026-11-04",
+    "n": "* Let `FLUSHALL` and `SHUTDOWN` cancel a forkless save that is finalizing its file, so a stale snapshot can no longer overwrite the newer dump.rdb by @madolson (#5121)\n* FUNCTION LOAD no longer aborts the server when a library calls `server.log()` at its top level, including when loading from RDB or AOF by @madolson (#5114)\n* KEYS on a flushed database no longer leaks a rehashing pause that permanently stops rehashing and can eventually crash the server by @madolson (#5166)\n* Automatic RDB snapshots and AOF"
+   },
+   {
+    "t": "9.0.7",
+    "d": "2026-10-27",
+    "n": "* Fix atomic slot migration with `cluster-databases` > 1 applying writes made during the snapshot to the wrong database on the target by @pirate329 (#4952)\n* valkey-check-aof now recognizes RDB base files with the `VALKEY` signature instead of misreporting a valid multipart AOF as invalid by @sarthakaggarwal97 (#4739)"
+   },
+   {
+    "t": "9.1.3",
+    "d": "2026-10-26",
+    "n": "* Fix listpack encoding incompatibility that caused RDB load and replication failures for entries of certain lengths between 9.0 and 9.1.x by @jjuleslasarte (#4819)\n* Fix atomic slot migration with `cluster-databases` > 1 applying writes made during the snapshot to the wrong database on the target by @pirate329 (#4952)\n* valkey-check-aof now recognizes RDB base files with the `VALKEY` signature instead of misreporting a valid multipart AOF as invalid by @sarthakaggarwal97 (#4739)"
+   },
+   {
+    "t": "8.1.11",
+    "d": "2026-10-26",
+    "n": "Valkey 8.1.11  -  Released Mon 26 October 2026\n----------------------------------------------\n\nUpgrade urgency SECURITY: This release includes security fixes we recommend you apply as soon as possible.\n\n### Security Fixes\n* GHSA-f4q9-j22m-xqq9: Fix a heap buffer overflow in cluster Pub/Sub message construction that could allow an authenticated client to potentially execute arbitrary code by publishing an oversized message by @roshkhatri (#5030)\n\n### Bug Fixes\n* Fix stream commands that mutate consumer-group"
+   },
+   {
+    "t": "8.0.12",
+    "d": "2026-10-26",
+    "n": "Valkey 8.0.12  -  Released Mon 26 October 2026\n----------------------------------------------\n\nUpgrade urgency SECURITY: This release includes security fixes we recommend you apply as soon as possible.\n\n### Security Fixes\n* GHSA-f4q9-j22m-xqq9: Fix a heap buffer overflow in cluster Pub/Sub message construction that could allow an authenticated client to potentially execute arbitrary code by publishing an oversized message by @roshkhatri (#5030)\n\n### Bug Fixes\n* Fix stream commands that mutate consumer-group"
+   },
+   {
+    "t": "7.2.15",
+    "d": "2026-10-26",
+    "n": "* Harden stream validation on RDB load and RESTORE so crafted payloads can no longer crash the server on later commands by @madolson (#3922)\n* Fix an ACL bypass where duplicate STORE/STOREDIST options let GEORADIUS write or delete keys outside the user's permitted patterns by @tjade273 (#3971)\n* Listpacks are now always validated on RDB load and RESTORE, preventing deferred assertion crashes; `sanitize-dump-payload` and its ACL flags become no-ops by @jjuleslasarte (#3721)"
+   },
+   {
+    "t": "9.2.0-rc1",
+    "d": "2026-09-16",
+    "n": "* Add forkless RDB snapshots, opt-in via the new `forkless-infrastructure-enabled` and `bgsave-default-method` configs, with new INFO persistence fields reporting the save method and progress by @JimB123 (#4460)\n* Support whole-stream LZ4 compression of RDB files via the new `rdbcompression lz4` option; the default per-string LZF behavior is unchanged by @sarthakaggarwal97 (#3531)\n* `MOVE` accepts a new optional `REPLACE` argument to overwrite an existing key in the destination database by @bandalgomsu (#29"
+   },
+   {
+    "t": "9.0.6",
+    "d": "2026-09-01",
+    "n": "* Always deep-validate payloads on RDB load and RESTORE, preventing deferred assertion crashes; sanitize-dump-payload is now a deprecated no-op by @jjuleslasarte (#3721)\n* Reject invalid slot import ranges when loading an RDB, preventing corrupted files from creating bad migration state by @enjoy-binbin (#4229)\n* Fix a crash when COPY ends with a bare DB token during slot migration, and block cross-DB COPY regardless of option order by @madolson (#4301)\n* Reject RDB slot-import records with an invalid job n"
+   },
+   {
+    "t": "9.1.2",
+    "d": "2026-09-01",
+    "n": "* Reject invalid slot import ranges when loading an RDB, so corrupted files can no longer create bad migration jobs by @enjoy-binbin (#4229)\n* MOVE and COPY now check ACL access to the current database, so users can no longer exfiltrate keys from an unauthorized DB by @cjx-zar (#4155)\n* Harden stream validation on RDB load and RESTORE so crafted payloads can no longer crash the server on later commands by @madolson (#3922)\n* Fix a crash on COPY with a trailing DB option during slot migration, and block cros"
+   },
+   {
+    "t": "8.1.10",
+    "d": "2026-08-31",
+    "n": "* Always validate listpacks on RDB load and RESTORE to prevent deferred crashes; `sanitize-dump-payload` and the related ACL flags are now deprecated no-ops by @jjuleslasarte (#3721)\n* Fix an ACL bypass where duplicate STORE/STOREDIST options in GEORADIUS commands escaped key write permission checks by @tjade273 (#3971)\n* Reject crafted stream RESTORE/RDB payloads with inconsistent lengths or negative field counts that could crash the server by @madolson (#3922)"
+   }
+  ]
  },
  "TencentCloud/CubeSandbox": {
   "commit_7d": 44,
   "commit_90d": 465,
   "rel_ver": "v0.7.3",
   "rel_pub": "2026-10-12",
-  "rel_days": 26,
+  "rel_days": 27,
   "rel_n90": 17,
   "rel_pre": false,
   "rel_none": false,
@@ -148,7 +218,7 @@
   "commit_90d": 418,
   "rel_ver": "v0.27.1",
   "rel_pub": "2026-10-31",
-  "rel_days": 7,
+  "rel_days": 8,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -201,7 +271,7 @@
   "commit_90d": 209,
   "rel_ver": "2.2.0",
   "rel_pub": "2026-10-29",
-  "rel_days": 9,
+  "rel_days": 10,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -264,7 +334,7 @@
   "commit_90d": 283,
   "commit_7d": 6,
   "rel_ver": "early-access-release",
-  "rel_pub": "2026-11-07",
+  "rel_pub": "2026-11-08",
   "rel_days": 0,
   "rel_n90": 13,
   "rel_pre": true,
@@ -281,17 +351,17 @@
    "FreeMarker": 1,
    "Python": 0
   },
-  "enriched_at": "20261107",
+  "enriched_at": "20261108",
   "dim_ts": {
    "commit": "20261107",
-   "release": "20261107",
+   "release": "20261108",
    "security": "20261027"
   },
   "rel_notes": [
    {
     "t": "early-access-release",
-    "d": "2026-11-07",
-    "n": "SchemaCrawler early access release at last commit 10017f88590019d6fe4cfdbfe698370f2d0ec4b9"
+    "d": "2026-11-08",
+    "n": "SchemaCrawler early access release at last commit d22275aee0e27ef45bab5f79410ec566296d51b8"
    },
    {
     "t": "v18.0.1",
@@ -340,10 +410,10 @@
    }
   ],
   "etag": {
-   "release": "W/\"58fdd18193ce2b6430f506b28208dcabedb6b9db116c55ffa6b8528773362fcd\""
+   "release": "W/\"8ec05d5019db275f4f4fc97bfc438d8d047ed1f02c895666a66f52801f9e2dee\""
   },
   "rel_dates": [
-   "2026-11-07",
+   "2026-11-08",
    "2026-10-30",
    "2026-10-14",
    "2026-09-29",
@@ -363,7 +433,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2022-05-26",
-  "rel_days": 1626,
+  "rel_days": 1627,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -388,7 +458,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.8.2",
   "rel_pub": "2022-01-29",
-  "rel_days": 1743,
+  "rel_days": 1744,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -410,7 +480,7 @@
   "commit_7d": 0,
   "rel_ver": "tokudb-7.1.6",
   "rel_pub": "2014-05-09",
-  "rel_days": 4565,
+  "rel_days": 4566,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -433,7 +503,7 @@
   "commit_7d": 0,
   "rel_ver": "1.14.0",
   "rel_pub": "2026-06-19",
-  "rel_days": 141,
+  "rel_days": 142,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -465,7 +535,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.7.4",
   "rel_pub": "2022-10-31",
-  "rel_days": 1468,
+  "rel_days": 1469,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -505,7 +575,7 @@
   "commit_7d": 2,
   "rel_ver": "v2.60.1",
   "rel_pub": "2026-10-12",
-  "rel_days": 26,
+  "rel_days": 27,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -550,7 +620,7 @@
   "commit_7d": 5,
   "rel_ver": "v0.5.0.0",
   "rel_pub": "2025-07-26",
-  "rel_days": 469,
+  "rel_days": 470,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -577,7 +647,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.9.0",
   "rel_pub": "2017-10-13",
-  "rel_days": 3271,
+  "rel_days": 3313,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -599,7 +669,7 @@
   "commit_7d": 28,
   "rel_ver": "v1.100.0",
   "rel_pub": "2026-10-27",
-  "rel_days": 11,
+  "rel_days": 12,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -641,7 +711,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0-alpha.20180407",
   "rel_pub": "2018-04-07",
-  "rel_days": 3136,
+  "rel_days": 3137,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -681,7 +751,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 38,
+  "rel_days": 39,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -754,7 +824,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2017-09-26",
-  "rel_days": 3329,
+  "rel_days": 3330,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -773,7 +843,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-07",
-  "rel_days": 61,
+  "rel_days": 62,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -941,7 +1011,7 @@
  "domsen123/mrx-nuxt-template": {
   "rel_ver": "v0.1.5",
   "rel_pub": "2025-09-04",
-  "rel_days": 429,
+  "rel_days": 430,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -991,7 +1061,7 @@
  "mhernesniemi/kide-cms": {
   "rel_ver": "v0.29.3",
   "rel_pub": "2026-09-18",
-  "rel_days": 50,
+  "rel_days": 51,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1040,7 +1110,7 @@
  "stackernews/booger": {
   "rel_ver": "v0.0.3-sigma",
   "rel_pub": "2023-06-27",
-  "rel_days": 1229,
+  "rel_days": 1230,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1076,7 +1146,7 @@
  "sakurawwwxh/qq-agent-plus": {
   "rel_ver": "v0.9.13",
   "rel_pub": "2026-10-30",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1120,7 +1190,7 @@
  "oracle/oci-powershell-modules": {
   "rel_ver": "v143.0.0",
   "rel_pub": "2026-09-22",
-  "rel_days": 46,
+  "rel_days": 47,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1138,7 +1208,7 @@
  "IARC-CSU/CanReg5": {
   "rel_ver": "v5.00.44i",
   "rel_pub": "2023-01-27",
-  "rel_days": 1380,
+  "rel_days": 1381,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1159,7 +1229,7 @@
  "muhammadhanif/crud-application-using-flask-and-mysql": {
   "rel_ver": "v1.0",
   "rel_pub": "2019-06-19",
-  "rel_days": 2698,
+  "rel_days": 2699,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1205,7 +1275,7 @@
  "brian-emarquez/Python-Course": {
   "rel_ver": "1.6.1",
   "rel_pub": "2026-09-24",
-  "rel_days": 44,
+  "rel_days": 45,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1239,7 +1309,7 @@
  "dhamith93/csv-sql": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2021-06-13",
-  "rel_days": 1973,
+  "rel_days": 1974,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1256,7 +1326,7 @@
  "terraform-providers/terraform-provider-opc": {
   "rel_ver": "v1.3.6",
   "rel_pub": "2019-05-09",
-  "rel_days": 2739,
+  "rel_days": 2740,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1302,7 +1372,7 @@
  "JointOps/hitlimit-monorepo": {
   "rel_ver": "v1.5.0",
   "rel_pub": "2026-05-18",
-  "rel_days": 173,
+  "rel_days": 174,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1320,7 +1390,7 @@
  "eduardocornelsen/full-funnel-ai-analytics": {
   "rel_ver": "v0.9.1",
   "rel_pub": "2026-05-21",
-  "rel_days": 170,
+  "rel_days": 171,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1442,7 +1512,7 @@
  "voltade/cnpg-supabase": {
   "rel_ver": "cnpg-cluster-0.4.4",
   "rel_pub": "2026-02-03",
-  "rel_days": 277,
+  "rel_days": 278,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1462,7 +1532,7 @@
  "griffin-php/griffin": {
   "rel_ver": "1.0.0",
   "rel_pub": "2021-04-24",
-  "rel_days": 2023,
+  "rel_days": 2024,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1535,7 +1605,7 @@
  "studiomado/query-bundle": {
   "rel_ver": "v3.0.0-dev",
   "rel_pub": "2022-10-04",
-  "rel_days": 1495,
+  "rel_days": 1496,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1596,7 +1666,7 @@
  "SammyTourani/evestack": {
   "rel_ver": "@evestack/dashboard@0.4.0",
   "rel_pub": "2026-08-11",
-  "rel_days": 88,
+  "rel_days": 89,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1634,7 +1704,7 @@
  "darkterminal/libsql-driver-laravel": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2024-05-24",
-  "rel_days": 897,
+  "rel_days": 898,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1701,7 +1771,7 @@
  "chdb-io/chdb-cli": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-08-10",
-  "rel_days": 1185,
+  "rel_days": 1186,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1716,7 +1786,7 @@
  "Wildboar-Software/directory": {
   "rel_ver": "v4.0.0-rc1",
   "rel_pub": "2026-02-08",
-  "rel_days": 272,
+  "rel_days": 273,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1797,7 +1867,7 @@
  "robertjkeller/PyARINC424": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2025-05-07",
-  "rel_days": 549,
+  "rel_days": 550,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1864,7 +1934,7 @@
  "CleverTap/stormdb": {
   "rel_ver": "1.2.0",
   "rel_pub": "2020-09-03",
-  "rel_days": 2256,
+  "rel_days": 2257,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1881,7 +1951,7 @@
  "tteamtm/dbcli": {
   "rel_ver": "v1.0.26011",
   "rel_pub": "2026-01-10",
-  "rel_days": 301,
+  "rel_days": 302,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1985,7 +2055,7 @@
  "simonw/sqlite-chronicle": {
   "rel_ver": "0.6.1",
   "rel_pub": "2026-02-15",
-  "rel_days": 265,
+  "rel_days": 266,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2008,7 +2078,7 @@
  "yuanrui/CodeGenerator": {
   "rel_ver": "v1.3.2507.11",
   "rel_pub": "2025-07-11",
-  "rel_days": 484,
+  "rel_days": 485,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2154,7 +2224,7 @@
  "Olipro/ZomboidDB": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2022-01-12",
-  "rel_days": 1760,
+  "rel_days": 1761,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2178,7 +2248,7 @@
  "Synapsr/SaaS-Monitor": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-09-29",
-  "rel_days": 39,
+  "rel_days": 40,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2742,7 +2812,7 @@
   "commit_7d": 0,
   "rel_ver": "release-1.13-1.3.1.2",
   "rel_pub": "2026-05-18",
-  "rel_days": 173,
+  "rel_days": 174,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2897,7 +2967,7 @@
  "matttsys/RayZen-Pilot": {
   "rel_ver": "v5.0.0-alpha.2",
   "rel_pub": "2026-10-19",
-  "rel_days": 19,
+  "rel_days": 20,
   "rel_n90": 4,
   "rel_pre": true,
   "rel_none": false,
@@ -2922,7 +2992,7 @@
  "asifletzshop/letzcontrol": {
   "rel_ver": "v1.1.26",
   "rel_pub": "2026-10-23",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2948,7 +3018,7 @@
  "ahmershahdev/zovita": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-03",
-  "rel_days": 35,
+  "rel_days": 36,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3040,7 +3110,7 @@
  "wangjunhan131/whale-card": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-11-01",
-  "rel_days": 6,
+  "rel_days": 7,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3076,7 +3146,7 @@
  "likvp/AgeCMS": {
   "rel_ver": "v1.10.0",
   "rel_pub": "2026-11-06",
-  "rel_days": 1,
+  "rel_days": 2,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,

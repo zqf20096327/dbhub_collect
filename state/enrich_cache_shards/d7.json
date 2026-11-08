@@ -1,11 +1,11 @@
 {
  "influxdata/influxdb": {
   "commit_7d": 0,
-  "commit_90d": 7,
-  "rel_ver": "v3.11.4",
-  "rel_pub": "2026-09-08",
-  "rel_days": 26,
-  "rel_n90": 6,
+  "commit_90d": 4,
+  "rel_ver": "v3.12.2",
+  "rel_pub": "2026-11-02",
+  "rel_days": 6,
+  "rel_n90": 13,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 314,
-  "enriched_at": "20261004",
+  "enriched_at": "20261108",
   "lang": {
    "Rust": 96,
    "Answer Set Programming": 2,
@@ -23,16 +23,88 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  },
+  "etag": {
+   "release": "W/\"b4ece34dc7bddf59c356017b0ab72a0f9d61155f5048452571c38d4ba20f8b06\"",
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_dates": [
+   "2026-11-02",
+   "2026-11-02",
+   "2026-10-30",
+   "2026-10-15",
+   "2026-10-15",
+   "2026-10-15",
+   "2026-10-15",
+   "2026-09-08",
+   "2026-09-08",
+   "2026-09-08",
+   "2026-09-08",
+   "2026-09-08",
+   "2026-09-09"
+  ],
+  "rel_notes": [
+   {
+    "t": "v3.12.2",
+    "d": "2026-11-02",
+    "n": "- **Storage engine upgrade completed with unconverted Parquet files**: If a Parquet file fails every conversion attempt, the ingest node now reports `failed` in `system.upgrade_parquet_node`. The `last_message` column identifies the file and its error. The cluster upgrade also fails. To resume the upgrade, follow the [retry procedure](https://docs.influxdata.com/influxdb3/enterprise/reference/cli/influxdb3/manage/retry-upgrade-to-pacha-tree/#retry-after-an-ingest-conversion-failure). Previously, the node dr"
+   },
+   {
+    "t": "v3.11.8",
+    "d": "2026-11-02",
+    "n": "- **Storage engine upgrade completed with unconverted Parquet files**: If a Parquet file fails every conversion attempt, the ingest node now reports `failed` in `system.upgrade_parquet_node`. The `last_message` column identifies the file and its error. The cluster upgrade also fails. To resume the upgrade, follow the [retry procedure](https://docs.influxdata.com/influxdb3/enterprise/reference/cli/influxdb3/manage/retry-upgrade-to-pacha-tree/#retry-after-an-ingest-conversion-failure). Previously, the node dr"
+   },
+   {
+    "t": "v1.13.2",
+    "d": "2026-10-30",
+    "n": "Please see https://docs.influxdata.com/influxdb/v1/about_the_project/release-notes/#v1132 for official release notes.\n* Resolve unimplemented interface member (#27715) in https://github.com/influxdata/influxdb/pull/27716\n* Update go version to 1.26.10 in https://github.com/influxdata/influxdb/pull/27730\n[influxdb-1.13.2_linux_amd64.tar.gz](https://dl.influxdata.com/influxdb/releases/v1.13.2/influxdb-1.13.2_linux_amd64.tar.gz) | 4b1254ebcef8361baab2e0e4313e7e2821d56bea34bc0d5a63c0c2312cdd41c1\n[influxdb-1.13."
+   },
+   {
+    "t": "v3.12.1",
+    "d": "2026-10-15",
+    "n": "- **Missing rows after changing a table's [file index](https://docs.influxdata.com/influxdb3/enterprise/admin/file-index/) columns (Parquet engine)**: The file index now records which columns each compacted generation indexed. A query that filters on a column that only some generations indexed scans the other generations instead of skipping them. Previously, after you added or removed file index columns, such a query could return incomplete results from compacted data.\n- **Larger bulk import batches (upgrad"
+   },
+   {
+    "t": "v3.11.7",
+    "d": "2026-10-15",
+    "n": "- **WAL flush wait metric (Parquet engine)**: The new `influxdb3_parquet_wal_flush_lock_wait_seconds` histogram reports how long a WAL flush waited for an earlier flush to finish. The `kind` label is `timed` for the regular flush interval and `forced` for a flush that forces a snapshot.\nThe following are some highlighted updates with the newest release for InfluxDB 3. Learn more via our full [Release Notes](https://docs.influxdata.com/influxdb3/core/release-notes/#v3117).\n- **Acknowledged writes lost after "
+   },
+   {
+    "t": "v3.12.0",
+    "d": "2026-10-15",
+    "n": "- **Faster startup with many tables**: Replaying the catalog no longer copies a database's whole schema for every table it creates or alters, so startup time no longer grows quadratically with the number of tables in a database.\n- **Missing rows from `IN` filters against a [file index](https://docs.influxdata.com/influxdb3/enterprise/admin/file-index/) (Parquet engine)**: A filter with an `IN` list of four or more values on a column the file index doesn't cover, such as a field, no longer skips every compac"
+   },
+   {
+    "t": "v3.11.5",
+    "d": "2026-10-15",
+    "n": "- **Missing rows from tag queries after a compactor restart (Parquet engine)**: Removing a generation now removes only that generation's [file index](https://docs.influxdata.com/influxdb3/enterprise/admin/file-index/) entries. Previously, a compact-only node numbered its files from zero again after a restart, so removing an older generation also removed the index entries for a live file with the same number, and queries that filter on an indexed tag value skipped that file and returned incomplete results.\n-"
+   },
+   {
+    "t": "v3.11.4",
+    "d": "2026-09-08",
+    "n": "The following are some highlighted updates with the newest release for InfluxDB 3. Learn more via our full [Release Notes](https://docs.influxdata.com/influxdb3/core/release-notes/).\n- **Plugin source retained after a database was deleted**: Deleting a database now evicts its triggers' cached plugin source. Previously it stayed resident until the server restarted.\n- **Privilege escalation through role assignment**: Creating, updating, and deleting a role, and assigning roles to a user, now require admin aut"
+   },
+   {
+    "t": "v3.11.3",
+    "d": "2026-09-08",
+    "n": "The following are some highlighted updates with the newest release for InfluxDB 3. Learn more via our full [Release Notes](https://docs.influxdata.com/influxdb3/core/release-notes/).\n- **Missing rows from an `OR` predicate against a [file index](/influxdb3/enterprise/admin/file-index/)**:\n[`--recover-deferred-snapshots-in-flight-limit`](/influxdb3/enterprise/reference/storage-engine-config-options/#deferred-snapshot-recovery)"
+   },
+   {
+    "t": "v3.10.6",
+    "d": "2026-09-08",
+    "n": "The following are some highlighted updates with the newest release for InfluxDB 3. Learn more via our full [Release Notes](https://docs.influxdata.com/influxdb3/core/release-notes/).\n- **Privilege escalation through role assignment**: Creating, updating, and deleting a role, and assigning roles to a user, now require admin authorization. Previously a non-admin subject holding `User:Update`, or `User:Create` with roles in the request, could grant permissions beyond its own. This affects the [user authenticat"
+   }
+  ]
  },
  "greenrobot/greenDAO": {
   "commit_7d": 0,
   "commit_90d": 0,
   "rel_ver": "V3.3.0",
   "rel_pub": "2020-05-04",
-  "rel_days": 2378,
+  "rel_days": 2379,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -57,7 +129,7 @@
   "commit_90d": 0,
   "rel_ver": "realm-react-v0.20.0",
   "rel_pub": "2025-10-17",
-  "rel_days": 386,
+  "rel_days": 387,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -107,7 +179,7 @@
   "commit_90d": 0,
   "rel_ver": "v1.18.7",
   "rel_pub": "2026-07-02",
-  "rel_days": 128,
+  "rel_days": 129,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -157,7 +229,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.2",
   "rel_pub": "2025-02-12",
-  "rel_days": 633,
+  "rel_days": 634,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -201,7 +273,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-14",
-  "rel_days": 177,
+  "rel_days": 178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -240,7 +312,7 @@
   "commit_7d": 0,
   "rel_ver": "3.0.6",
   "rel_pub": "2016-01-01",
-  "rel_days": 3922,
+  "rel_days": 3964,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -255,14 +327,20 @@
    "Dockerfile": 14,
    "Makefile": 7
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261108",
+  "etag": {
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "dim_ts": {
+   "security": "20261108"
+  }
  },
  "Swetrix/swetrix": {
   "commit_90d": 128,
   "commit_7d": 15,
   "rel_ver": "v5.5.3",
   "rel_pub": "2026-11-06",
-  "rel_days": 1,
+  "rel_days": 2,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
@@ -356,12 +434,12 @@
   ]
  },
  "SoftInstigate/restheart": {
-  "commit_90d": 546,
-  "commit_7d": 9,
-  "rel_ver": "9.8.2",
-  "rel_pub": "2026-09-20",
-  "rel_days": 7,
-  "rel_n90": 11,
+  "commit_90d": 718,
+  "commit_7d": 4,
+  "rel_ver": "9.14.0",
+  "rel_pub": "2026-11-02",
+  "rel_days": 6,
+  "rel_n90": 18,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -376,7 +454,86 @@
    "Shell": 1,
    "JavaScript": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261108",
+  "etag": {
+   "release": "W/\"2fdb553076a46a78bedab975b893ea193016fa2d90aa412d87205d0cc7eaac8a\""
+  },
+  "rel_dates": [
+   "2026-11-02",
+   "2026-10-31",
+   "2026-10-31",
+   "2026-10-29",
+   "2026-10-27",
+   "2026-10-23",
+   "2026-10-18",
+   "2026-10-15",
+   "2026-10-15",
+   "2026-10-05",
+   "2026-10-02",
+   "2026-10-01",
+   "2026-09-27",
+   "2026-09-20",
+   "2026-09-13",
+   "2026-09-08",
+   "2026-08-31",
+   "2026-08-11"
+  ],
+  "rel_notes": [
+   {
+    "t": "9.14.0",
+    "d": "2026-11-02",
+    "n": "**Capabilities, from providers.** `http`, `mongo`, `config`, `mail` and `providers`. `mongo` takes plain object literals in canonical extended JSON (`{ _id: { $oid: id } }`) and returns the same: `find`, `findOne`, `aggregate`, `insertOne`, `updateMany`, `bulkWrite`, `db.command()` and the rest. `http` calls other services with the shared client of a new provider, see below; a 4xx or a 5xx comes back with `ok === false` and does not throw. The import is the declaration: a plugin that imports `mail` where em"
+   },
+   {
+    "t": "9.13.1",
+    "d": "2026-10-31",
+    "n": "9.13.0 updated the GraalVM polyglot libraries to 25.4.4.1.1 but kept the native build and the Docker base image on GraalVM 25.1.3. The native build failed on the mismatch (`ClassNotFoundException: com.oracle.truffle.api.impl.TruffleLocator`), so 9.13.0 has no native binaries and no `-native` Docker image. The JVM image of 9.13.0 works; it runs on GraalVM CE 25.1.3 (JDK 25.0.3).\nSee the [9.13.0 release notes](https://github.com/SoftInstigate/restheart/releases/tag/9.13.0) for MongoDB 9.0 and the security fix"
+   },
+   {
+    "t": "9.13.0",
+    "d": "2026-10-31",
+    "n": "**Change streams survive an election.** After an election MongoDB 9.0 returns `InterruptedDueToReplStateChange` (11602) from a change stream's `getMore`, and the driver resumes by itself. When the driver cannot resume, RESTHeart used to reopen the stream after a second from the token it was created with: the events written in between were lost, or sent again. The change stream worker and the MCP collection watchers now reopen from the last event dispatched, so an SSE or MCP client gets every event exactly o"
+   },
+   {
+    "t": "9.12.3",
+    "d": "2026-10-29",
+    "n": "`query-time-limit` bounds how long a query runs. It said nothing about its shape: a query nested deep, or selecting very many fields, was stopped only when it had already spent its time on the database. Two keys, wired to graphql-java's `MaxQueryDepthInstrumentation` and `MaxQueryComplexityInstrumentation`:\n## Mongo: the count honours query-time-limit (#783)\n`/mongo/query-time-limit` applied to the `find` of a collection read, not to its `count`: a `GET` with `?count` and a filter no index serves scanned th"
+   },
+   {
+    "t": "9.12.2",
+    "d": "2026-10-27",
+    "n": "mongod 8.x refuses to start (SERVER-131155)."
+   },
+   {
+    "t": "9.12.1",
+    "d": "2026-10-23",
+    "n": "# RESTHeart 9.12.1\r\n\r\nThis is a security release. It fixes how RESTHeart sends emails on behalf of requests, and how it fills email templates. If you use\r\nrestheart-accounts or the emails plugin, upgrade. Read \"Before you upgrade\" first: some changes alter existing behaviour.\r\n\r\n## Before you upgrade\r\n\r\n1. **You set per-request SMTP overrides (`override-emails-*`).** They now apply only when the request carries a complete SMTP server:\r\n`smtp-hostname`, `smtp-username` and `smtp-password`. A partial override"
+   },
+   {
+    "t": "9.12.0",
+    "d": "2026-10-18",
+    "n": "When a request matches more than one permission, RESTHeart applies one of them, together with its `mongo` options: filters, write modes, projections. Three changes make that choice follow the documented rule.\nThe documentation says that higher priority numbers are evaluated first, and `mongoAclAuthorizer` works that way. `fileAclAuthorizer` evaluated the lowest number first. Both authorizers now follow the documentation.\nA permission without `priority` is now evaluated last, in both authorizers. Before, it "
+   },
+   {
+    "t": "9.11.1",
+    "d": "2026-10-15",
+    "n": "A security release that completes 9.11.0: no request can make MongoDB run JavaScript, from any of the three places where a client writes operators. 9.11.0 covered the `filter` query parameter. This release covers the other two, the `keys` query parameter and the aggregation pipeline of a `PATCH` request. Upgrade recommended for every deployment that serves untrusted clients. No data migration is needed.\n`$where`, `$function` and `$accumulator` run JavaScript on the MongoDB server. A client can write operato"
+   },
+   {
+    "t": "9.11.0",
+    "d": "2026-10-15",
+    "n": "A minor release about server-side JavaScript: the `filter` query parameter can no longer make MongoDB run it. Also in this release: `call_api` for MCP sessions with no account, and a fix for invitations on a users collection with a JSON Schema. Upgrading from 9.10.0 needs no data migration. It is a minor release, not a patch, because a default changed: `filterOperatorsBlacklist` now refuses `$function` and `$accumulator` too. If your clients use those operators in `filter`, read **Behavior Changes** below.\n"
+   },
+   {
+    "t": "9.10.0",
+    "d": "2026-10-05",
+    "n": "- The properties of the db and of the collection are now read after authentication. Whether a db or a collection exists is information, and the query that answers it no longer runs for a request without valid credentials.\n- **`dbPropsInjector` and `collectionPropsInjector` moved from `REQUEST_BEFORE_AUTH` to `REQUEST_AFTER_AUTH`**, with priority `Integer.MIN_VALUE` and `Integer.MIN_VALUE + 1`. An interceptor that reads `MongoRequest.getDbProps()` or `getCollectionProps()` must run at `REQUEST_AFTER_AUTH` wi"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261108",
+   "release": "20261108"
+  }
  },
  "ZHENFENG13/perfect-ssm": {
   "commit_90d": 0,
@@ -399,7 +556,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.2",
   "rel_pub": "2020-01-23",
-  "rel_days": 2480,
+  "rel_days": 2481,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -437,7 +594,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.6.0",
   "rel_pub": "2023-05-30",
-  "rel_days": 1257,
+  "rel_days": 1258,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -460,7 +617,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.7",
   "rel_pub": "2020-08-02",
-  "rel_days": 2288,
+  "rel_days": 2289,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -483,7 +640,7 @@
   "commit_7d": 13,
   "rel_ver": "v1.3.1",
   "rel_pub": "2026-10-08",
-  "rel_days": 30,
+  "rel_days": 31,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -543,7 +700,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.1",
   "rel_pub": "2017-12-24",
-  "rel_days": 3240,
+  "rel_days": 3241,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -564,7 +721,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.2",
   "rel_pub": "2023-01-17",
-  "rel_days": 1390,
+  "rel_days": 1391,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -584,7 +741,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.6",
   "rel_pub": "2026-08-12",
-  "rel_days": 87,
+  "rel_days": 88,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -608,7 +765,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.6",
   "rel_pub": "2025-12-30",
-  "rel_days": 312,
+  "rel_days": 313,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -629,7 +786,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.7.0",
   "rel_pub": "2025-08-05",
-  "rel_days": 459,
+  "rel_days": 460,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -650,7 +807,7 @@
   "commit_7d": 8,
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-07-03",
-  "rel_days": 127,
+  "rel_days": 128,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -695,7 +852,7 @@
   "commit_7d": 0,
   "rel_ver": "0.3.0-alpha",
   "rel_pub": "2017-08-28",
-  "rel_days": 3358,
+  "rel_days": 3359,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -714,7 +871,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0-beta",
   "rel_pub": "2017-05-18",
-  "rel_days": 3460,
+  "rel_days": 3461,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -734,7 +891,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.12",
   "rel_pub": "2026-08-21",
-  "rel_days": 78,
+  "rel_days": 79,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -775,7 +932,7 @@
   "commit_7d": 0,
   "rel_ver": "v8.2.0",
   "rel_pub": "2024-09-23",
-  "rel_days": 775,
+  "rel_days": 776,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -798,7 +955,7 @@
   "commit_7d": 0,
   "rel_ver": "1.3.5",
   "rel_pub": "2026-06-10",
-  "rel_days": 150,
+  "rel_days": 151,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -824,7 +981,7 @@
   "commit_7d": 0,
   "rel_ver": "1.1.0",
   "rel_pub": "2026-05-14",
-  "rel_days": 177,
+  "rel_days": 178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -862,7 +1019,7 @@
  "plexidev/quickmongo": {
   "rel_ver": "v5.2.0",
   "rel_pub": "2022-09-18",
-  "rel_days": 1470,
+  "rel_days": 1512,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -898,7 +1055,7 @@
  "monoclex/StringDB": {
   "rel_ver": "10.0.3",
   "rel_pub": "2019-05-07",
-  "rel_days": 2741,
+  "rel_days": 2742,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -915,7 +1072,7 @@
  "levinsv/pgadmin3": {
   "rel_ver": "v1.27.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 49,
+  "rel_days": 50,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -963,7 +1120,7 @@
  "solana-rpc/superbank": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 44,
+  "rel_days": 45,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -984,7 +1141,7 @@
  "samdark/wnmp-dev": {
   "rel_ver": "1.1.1",
   "rel_pub": "2020-10-27",
-  "rel_days": 2202,
+  "rel_days": 2203,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1003,7 +1160,7 @@
  "aerogo/nano": {
   "rel_ver": "v0.3.1",
   "rel_pub": "2019-05-25",
-  "rel_days": 2723,
+  "rel_days": 2724,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1020,7 +1177,7 @@
  "rizwansoaib/face-attendence": {
   "rel_ver": "0.1",
   "rel_pub": "2019-03-03",
-  "rel_days": 2806,
+  "rel_days": 2807,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1113,7 +1270,7 @@
  "roboticforce/remembrallmcp": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-07-28",
-  "rel_days": 102,
+  "rel_days": 103,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1147,7 +1304,7 @@
  "ststeiger/sql_profiler": {
   "rel_ver": "1.0",
   "rel_pub": "2018-02-08",
-  "rel_days": 3194,
+  "rel_days": 3195,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1269,7 +1426,7 @@
  "JDBDT/jdbdt": {
   "rel_ver": "1.4.1",
   "rel_pub": "2021-09-25",
-  "rel_days": 1869,
+  "rel_days": 1870,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1288,7 +1445,7 @@
  "elitan/terradb": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-08-27",
-  "rel_days": 72,
+  "rel_days": 73,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1336,7 +1493,7 @@
  "basicmachines-co/basic-foundation": {
   "rel_ver": "v0.1.9",
   "rel_pub": "2024-09-28",
-  "rel_days": 770,
+  "rel_days": 771,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1434,7 +1591,7 @@
  "CrunchyData/pgSimload": {
   "rel_ver": "v.1.4.8",
   "rel_pub": "2025-08-04",
-  "rel_days": 460,
+  "rel_days": 461,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1476,7 +1633,7 @@
  "RamaAditya49/titen": {
   "rel_ver": "v0.10.3",
   "rel_pub": "2026-09-25",
-  "rel_days": 43,
+  "rel_days": 44,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1497,7 +1654,7 @@
  "pingcap/dbt-tidb": {
   "rel_ver": "v.1.6.4",
   "rel_pub": "2023-12-14",
-  "rel_days": 1059,
+  "rel_days": 1060,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1564,7 +1721,7 @@
  "iSemary/cursus-meester": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-12-24",
-  "rel_days": 1049,
+  "rel_days": 1050,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1602,7 +1759,7 @@
  "pratik0197/Ticket-Booking": {
   "rel_ver": "1.0",
   "rel_pub": "2020-06-14",
-  "rel_days": 2297,
+  "rel_days": 2338,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1639,7 +1796,7 @@
  "Kinjalrk2k/prisma-extension-pg-trgm": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2023-11-28",
-  "rel_days": 1075,
+  "rel_days": 1076,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1688,7 +1845,7 @@
  "gggeek/db-3v4l": {
   "rel_ver": "0.17.0",
   "rel_pub": "2020-10-22",
-  "rel_days": 2207,
+  "rel_days": 2208,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1820,7 +1977,7 @@
  "Afdaan/Alya-Bot-Telegram": {
   "rel_ver": "1.0.0",
   "rel_pub": "2026-03-19",
-  "rel_days": 233,
+  "rel_days": 234,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1867,7 +2024,7 @@
  "regeda/turboql": {
   "rel_ver": "v0.0.0-alpha.3",
   "rel_pub": "2025-01-06",
-  "rel_days": 670,
+  "rel_days": 671,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1955,7 +2112,7 @@
  "SethPyle376/hiraeth": {
   "rel_ver": "v0.3",
   "rel_pub": "2026-05-14",
-  "rel_days": 177,
+  "rel_days": 178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2068,7 +2225,7 @@
  "bingzer/DbQuery": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2016-06-09",
-  "rel_days": 3803,
+  "rel_days": 3804,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2178,7 +2335,7 @@
   "commit_7d": 0,
   "rel_ver": "nightly",
   "rel_pub": "2024-10-04",
-  "rel_days": 764,
+  "rel_days": 765,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2230,7 +2387,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.8",
   "rel_pub": "2023-02-24",
-  "rel_days": 1352,
+  "rel_days": 1353,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2760,7 +2917,7 @@
  "powertime-org/pgdeclare": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2026-10-18",
-  "rel_days": 20,
+  "rel_days": 21,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2805,7 +2962,7 @@
  "Manannikov-Nikita/miracle": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2832,7 +2989,7 @@
  "Koimsurai/sora-to-ki": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-10-30",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2871,7 +3028,7 @@
  "studycom69-debug/momsafe": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-08-07",
-  "rel_days": 92,
+  "rel_days": 93,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2954,7 +3111,7 @@
   "commit_7d": 138,
   "rel_ver": "v0.24.0",
   "rel_pub": "2026-11-02",
-  "rel_days": 5,
+  "rel_days": 6,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,

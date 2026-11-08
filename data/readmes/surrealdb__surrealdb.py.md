@@ -177,14 +177,17 @@ The builder is **typed** via `@overload`:
 
 - `RecordID` target -> `dict[str, Value]`
 - `Table` target   -> `list[Value]`
-- `str` target     -> `Value` (a record-id string returns a dict; a table-name
-  string returns a list - the type checker can't tell them apart, so falls back to `Value`)
+- `StringRecordId` target -> a record, sent for the server to parse
+- `str` target     -> `list[Value]`: a plain string is always a table name, even
+  one containing a colon (`"person:tobie"` is a table of that name). It is never
+  parsed as a record id; pass `StringRecordId("person:tobie")` or a `RecordID`
+  for a record
 
 `select()` returns a builder, like every other CRUD method - `await` it on the
 async client, `.execute()` it on the blocking one - and it unwraps single
 records:
 
-- `select(RecordID(...))` (or a `"table:id"` string) -> `dict[str, Value] | None`
+- `select(RecordID(...))` (or a `StringRecordId`) -> `dict[str, Value] | None`
   (`None` when the record does not exist)
 - `select(Table(...))` (or a bare table-name string) -> `list[Value]`
 
@@ -332,12 +335,19 @@ accepts ['id', 'name'].
 Give the extra fields defaults, add them to the model, or `SELECT` only the
 columns it declares.
 
-Sync usage is **eager** - there is no `await` to defer to, so the
-connection methods run single-shot operations immediately and return the
-plain result. A builder is only handed back for the deferred no-data form
-so you can pick a clause; there are **no** magic methods, so a builder
-never auto-executes on `bool()`, `==`, indexing, iteration, or attribute
-access.
+Sync usage has no `await` to defer to, so the rule is: **a write you give its
+data runs immediately; everything else returns a builder.**
+`create/update/upsert/insert(target, data)` run at once and return the result.
+`select()`, `delete()`, `query()` and the no-data write forms return a builder,
+which you run with `.execute()` (or a clause such as `.merge(...)`), or iterate
+to stream the rows. A builder never auto-executes on `bool()`, `==`, indexing
+or attribute access, and `len(...)` or indexing one raises a `TypeError` that
+tells you to call `.execute()`.
+
+A builder you never run does nothing, so one that is thrown away unrun - a
+`db.delete(Table("person"))` missing its `.execute()`, or an async call missing
+its `await` - emits a `RuntimeWarning` naming the call and the line that made
+it, the way asyncio does for a coroutine that was never awaited.
 
 ```python
 from surrealdb import Surreal
@@ -355,9 +365,13 @@ with Surreal("ws://localhost:8000/rpc") as db:
     # Clause-less run: call .execute() explicitly.
     empty = db.create(RecordID("person", "bob")).execute()
 
-    # Every CRUD call returns a builder; .execute() runs it.
+    # select() and delete() return a builder; .execute() runs it.
     row = db.select(RecordID("person", "tobie")).execute()  # dict | None
     db.delete(RecordID("person", "bob")).execute()
+
+    # Iterating a builder streams its rows instead of loading them all.
+    for person in db.select(Table("person")):
+        print(person["name"])
 
     # query() returns a builder; call .execute()/.first()/.into().
     db.query("DELETE person;").execute()
@@ -598,6 +612,15 @@ async for person in db.query("SELECT * FROM person").rows():
     ...
 ```
 
+Iterating the builder itself is the same thing without the `.rows()`, on the
+async client as on the blocking one - `await builder` for the whole answer,
+`async for row in builder` for the rows as they arrive:
+
+```python
+async for person in db.select(Table("person")):
+    ...
+```
+
 It needs the same v3.3.0 server and a WebSocket connection. Against an
 older server, or over HTTP, the query runs the buffered way and its rows are
 handed back one at a time, so the call works everywhere - see
@@ -677,6 +700,23 @@ The same on the blocking client, with `with` instead of `async with`:
 for person in db.select("person").rows(into=Person):
     print(person.name)
 ```
+
+The rows are typed, so a type checker sees what each loop yields. A record is
+`dict[str, Value]` and `into=Model` gives `Model`, however the target is spelled
+(`Table`, `RecordID` or a string), and the same goes for iterating the builder
+directly:
+
+```python
+for row in db.select(Table("person")):                # dict[str, Value]
+    ...
+for person in db.select(Table("person"), into=Person):  # Person
+    print(person.name)
+```
+
+A query's rows can be any value, so `query(...).rows()` yields `Any` unless you
+pass `into=`. What `rows()` returns is a `SyncRows[T]` (or `AsyncRows[T]`) - the
+iterable that also works as a context manager - which is the name to annotate
+with if you pass one around.
 
 ### Rows are provisional until iteration ends
 
@@ -937,6 +977,45 @@ with Surreal("ws://localhost:8000/rpc") as db:
     except TransportError as error:
         print("could not reach the server:", error)
 ```
+
+### Permissions do not raise
+
+A signed-in record user whose `PERMISSIONS` deny a statement does not get an
+error. The server filters instead, the way row-level security does elsewhere:
+the statement comes back `OK` with an empty result, `query_raw()` reports
+`status: "OK"`, and nothing is raised.
+
+```python
+db.signup({"namespace": "ns", "database": "db", "access": "account", "variables": {...}})
+db.use("ns", "db")
+
+db.query("CREATE thing SET v = 1").execute()        # [[]] - denied, nothing was written
+db.select(Table("thing")).execute()                 # []   - rows you cannot see are omitted
+db.query("UPDATE thing:theirs SET v = 9").execute() # [[]] - denied, nothing was changed
+```
+
+This is deliberate, and the SDK does not turn it into an error. An error that
+only appeared when a record exists but is not yours would tell the caller the
+record exists, and one that depended on a `WHERE` in a permission rule would
+leak what that rule hides. It could not be told apart from an ordinary empty
+result in any case: a denied `UPDATE` of an existing record and an `UPDATE` of
+one that does not exist come back identically.
+
+Two things follow when you are debugging:
+
+- **An empty result from a write is ambiguous.** A write returns the rows it
+  touched *as the user could select them*. If the user may `CREATE` a record
+  but not `SELECT` it back, the record is created and the result is still empty.
+  Check the outcome by reading the record with a connection that can see it,
+  not by the write's own result.
+- **Nothing was written does not mean nothing was denied.** An empty result tells
+  you the statement produced no visible rows. To find out which rule is
+  responsible, test the same statement as a user the rule lets through, or
+  review the table's `PERMISSIONS` clause.
+
+A root user is not subject to table permissions, so the same statement succeeds
+for them - which is also the quickest way to confirm a rule, and not the query,
+is what filtered the result.
 
 ### Talking to a SurrealDB 2.x server
 
@@ -1232,6 +1311,34 @@ async with AsyncSurreal("ws://localhost:8000") as db:
 ### Learn More
 
 For a complete example with configuration options and best practices, see [`examples/logfire/`](https://github.com/surrealdb/surrealdb.py/tree/main/examples/logfire).
+
+## WebSocket keepalive
+
+Websocket connections send a keepalive ping on an idle socket and close the
+connection if the pong does not come back. Both intervals are in seconds, and
+both accept `None` to switch that half off:
+
+```python
+from surrealdb import Surreal
+
+# the defaults
+db = Surreal("ws://localhost:8000/rpc", ping_interval=30, ping_timeout=10)
+
+# behind a proxy with a short idle timeout
+db = Surreal("ws://localhost:8000/rpc", ping_interval=10)
+
+# let something else handle liveness
+db = Surreal("ws://localhost:8000/rpc", ping_interval=None)
+```
+
+A peer that goes away is noticed within roughly `ping_interval + ping_timeout`,
+so the defaults detect it in about 40 seconds. SurrealDB also pings the client
+every 5 seconds of its own accord, which the library answers automatically — so
+the socket is rarely idle for long in either direction.
+
+Both options are ignored by the HTTP and embedded transports, which have no
+websocket, exactly as `streaming` is. They require `websockets` 15.0 or newer,
+which is the SDK's declared floor.
 
 ## Files
 

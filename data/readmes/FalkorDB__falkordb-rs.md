@@ -32,6 +32,8 @@ OpenTelemetry-aligned tracing and metrics.
 - **Resilient** — opt-in `RetryPolicy` with bounded backoff for transient failures; writes are never retried.
 - **Observable** — OpenTelemetry-aligned `tracing` spans and `metrics` counters/histograms, privacy-safe by default.
 - **Replica-aware** — opt in to routing read-only queries to replicas behind Redis Sentinel.
+- **Cluster-aware** — connect to any node of a Redis Cluster; each graph command goes to the node
+  that owns the graph.
 - **Embedded server** — spin up a self-contained FalkorDB for tests and prototyping, with an
   optional build-time bundle mode that runs fully offline.
 
@@ -107,7 +109,7 @@ All features are **off by default** — enable only what you need:
 
 | Feature | Enables |
 |---|---|
-| `tokio` | The async client and API on the `tokio` runtime (multi-threaded scheduler). |
+| `tokio` | The async client and API on the `tokio` runtime (multi-thread or `current_thread` scheduler). |
 | `serde` | Map query results into your own `serde::Deserialize` types. |
 | `tracing` | OpenTelemetry-aligned `tracing` spans with a privacy-safe query fingerprint. |
 | `metrics` | Counters and histograms via the `metrics` facade (install any exporter). |
@@ -288,9 +290,7 @@ It can be enabled like so:
 cargo add falkordb --features tokio
 ```
 
-Currently, this API requires running within a [
-`multi_threaded tokio scheduler`](https://docs.rs/tokio/latest/tokio/runtime/index.html#multi-thread-scheduler), and
-does not support the `current_thread` one, but this will probably be supported in the future.
+The async API works on both the multi-thread and the `current_thread` tokio schedulers.
 
 The API uses an almost identical API, but the various functions need to be awaited:
 
@@ -578,7 +578,7 @@ A runnable example is provided in [`examples/tls.rs`](https://github.com/FalkorD
 
 #### Connection deadlines
 
-Two independent deadlines govern an async client, and collapsing them into one is a
+Two independent deadlines govern a client, and collapsing them into one is a
 classic way to end up with a client that cannot be constructed at all — a tight query
 deadline should never mean "the handshake must also finish that fast":
 
@@ -605,7 +605,7 @@ let client = FalkorClientBuilder::new_async()
             .expect("Failed to build client");
 ```
 
-> **Note:** both deadlines apply to async connections. Passing `None` to
+> **Note:** both deadlines apply to sync and async connections. Passing `None` to
 > `with_connect_timeout` restores the unbounded setup of earlier releases.
 
 #### TCP keepalive
@@ -637,9 +637,8 @@ let client = FalkorClientBuilder::new()
     .expect("Failed to build client");
 ```
 
-> **Note:** TCP settings apply to direct Redis TCP connections only.
-> Unix-domain socket / embedded connections and the Sentinel connection path are
-> not affected.
+> **Note:** TCP settings apply to Redis TCP connections (both direct and
+> Sentinel-resolved). Unix-domain socket / embedded connections are not affected.
 
 #### Read-only queries and replica routing
 
@@ -702,6 +701,48 @@ Against a single node (or any deployment without readable replicas),
 use the primary. See [`examples/readonly_replica.rs`](https://github.com/FalkorDB/falkordb-rs/blob/main/examples/readonly_replica.rs)
 for a complete working example.
 
+#### Redis Cluster
+
+Point the client at any node of a Redis Cluster running FalkorDB. While the client is built it
+sees that the node reports `redis_mode:cluster`, discovers the other nodes from it, and from then
+on sends each graph command to the node that owns the graph's hash slot, following the cluster's
+redirects when slots move. The sync client and both async connection strategies work this way.
+New connections can start from any node found then, so they do not need the configured node to
+be up. TLS works with a `rediss://` URL and the system's root certificates. TLS settings made on a
+connection info, such as a private root, a client certificate or not checking host names, are
+refused for a cluster: the redis-rs cluster client cannot take them from it, and would silently
+connect without them.
+
+Commands that act on the whole server are routed for you:
+
+- `list_graphs` asks every primary and merges their answers, so
+  it lists the graphs of the whole cluster.
+- `config_set`, `udf_load`, `udf_delete` and `udf_flush` run on every primary and fail if any
+  of them refuses; `config_get`, `udf_list` and `redis_info` ask a single primary.
+
+`copy_graph` makes the copy on the node that owns the source
+graph, so both names must hash to the same slot. Give them a shared hash tag (the part in braces,
+which is all Redis hashes):
+
+```rust
+// `{tenant42}` puts both graphs in one slot.
+client.copy_graph("{tenant42}:graph", "{tenant42}:copy")?;
+```
+
+Without one, the server rejects the copy with a `CROSSSLOT` error, whose
+`mitigation_hint` suggests a hash tag. Read-only queries run on
+the primaries: `ReadPreference::PreferReplica` routes to replicas only behind Redis Sentinel.
+
+Two things work differently on a cluster:
+
+- **A write can run more than once.** The redis-rs cluster client sends a command again when
+  the node connection drops before the reply arrives, and the sync client also when the reply
+  misses the response timeout (by default up to 16 more times). This happens even with retries
+  disabled (`RetryPolicy::disabled`), so keep writes idempotent where it matters (for example
+  with `MERGE`), or leave the sync client's response timeout unset.
+- **A sync `batch` takes a round trip per query**: its queries are sent one
+  after another, so that each one still reports its own error. Async batches are pipelined.
+
 ### Resilience and observability
 
 #### Automatic retries
@@ -729,7 +770,8 @@ The same `with_retry_policy(..)` is available on the async builder
 
 **Write safety.** The only scope available today, `RetryScope::ReadOnly`, retries **read-only /
 idempotent** operations only (`ro_query`, `explain`, `list_indices`, `list_constraints`, read-only
-procedure calls). **Writes are never retried**, so enabling a policy can never duplicate a write.
+procedure calls). **Writes are never retried**, so enabling a policy can never duplicate a write
+(on a Redis Cluster, redis-rs itself can send one again; see [Redis Cluster](#redis-cluster)).
 Classification is by the API you call, never by inspecting Cypher — `query()` is treated as a write
 even when it only reads, so use `ro_query()` for retryable reads.
 
@@ -780,8 +822,9 @@ map cleanly when exported via `tracing-opentelemetry`):
 **Privacy by default.** The raw query text and parameter values are **never** recorded by default —
 only the `db.query.fingerprint`, which is a hash of the query with all literals (strings, numbers,
 `true`/`false`/`null`) redacted, so two queries that differ only in their values share a fingerprint
-and no value ever enters a span. If you need the raw Cypher for debugging in a trusted environment,
-opt in explicitly:
+and no value ever enters a span. Comments and runs of whitespace count as a single space, so
+tagging a query with a comment doesn't change its fingerprint. If you need the raw Cypher for
+debugging in a trusted environment, opt in explicitly:
 
 ```rust
 use falkordb::FalkorClientBuilder;

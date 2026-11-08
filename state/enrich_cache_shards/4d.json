@@ -1,23 +1,28 @@
 {
  "VictoriaMetrics/VictoriaMetrics": {
-  "commit_7d": 40,
-  "commit_90d": 343,
-  "rel_ver": "v1.153.0",
-  "rel_pub": "2026-09-28",
-  "rel_days": 6,
-  "rel_n90": 12,
+  "commit_7d": 34,
+  "commit_90d": 372,
+  "rel_ver": "v1.155.0",
+  "rel_pub": "2026-10-26",
+  "rel_days": 13,
+  "rel_n90": 14,
   "rel_pre": false,
   "rel_none": false,
-  "sec_n": 3,
+  "sec_n": 8,
   "sec_worst": "high",
-  "sec_last": "2026-08-31",
+  "sec_last": "2026-11-05",
   "sec_ids": [
+   "GHSA-7277-c249-gccp(-,medium)",
+   "GHSA-vw9j-rqhg-qff9(-,medium)",
    "GHSA-8q3c-rjr9-xxrp(CVE-2026-61625,medium)",
    "GHSA-c7pm-322g-r9gf(-,high)",
+   "GHSA-8mjx-cc46-grxv(-,medium)",
+   "GHSA-89v2-864p-v3xc(-,medium)",
+   "GHSA-m2x2-9xpq-mmq5(-,medium)",
    "GHSA-66jq-2c23-2xh5(CVE-2025-65942,low)"
   ],
   "contrib_n": 398,
-  "enriched_at": "20261004",
+  "enriched_at": "20261108",
   "lang": {
    "Go": 88,
    "TypeScript": 9,
@@ -27,17 +32,90 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  },
+  "etag": {
+   "release": "W/\"4fd27172b4dfce8ad64c677a1a649cacc5603251a241eea6dac10e789595d6e2\"",
+   "security": "W/\"39bda453ea6f175867937dc4325203b6c321e508f5df90cf8f1df0e1daf2fb10\""
+  },
+  "rel_dates": [
+   "2026-10-26",
+   "2026-10-20",
+   "2026-10-12",
+   "2026-09-28",
+   "2026-09-14",
+   "2026-08-31",
+   "2026-08-17",
+   "2026-10-26",
+   "2026-10-20",
+   "2026-10-12",
+   "2026-09-28",
+   "2026-09-14",
+   "2026-08-31",
+   "2026-08-17"
+  ],
+  "rel_notes": [
+   {
+    "t": "v1.155.0",
+    "d": "2026-10-26",
+    "n": "* FEATURE: `vmselect` in [VictoriaMetrics cluster](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/): export `vm_request_duration_seconds{path=\"/admin/tenants\"}` for tracking time it takes to fetch [tenants](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#multitenancy) from the database."
+   },
+   {
+    "t": "v1.148.8",
+    "d": "2026-10-26",
+    "n": "## [v1.148.8](https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v1.148.8)\n\nReleased at 2026-10-23\n\n**v1.148.x is a line of [LTS releases](https://docs.victoriametrics.com/victoriametrics/lts-releases/). It contains important up-to-date bugfixes for [VictoriaMetrics enterprise](https://docs.victoriametrics.com/victoriametrics/enterprise/).\nAll these fixes are also included in [the latest community release](https://github.com/VictoriaMetrics/VictoriaMetrics/releases/latest).\nThe v1.148.x line wi"
+   },
+   {
+    "t": "v1.154.1",
+    "d": "2026-10-20",
+    "n": "## [v1.154.1](https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v1.154.1)\r\n\r\nReleased at 2026-10-19\r\n\r\n* BUGFIX: [vmauth](https://docs.victoriametrics.com/victoriametrics/vmauth/): do not slow down requests with auth tokens if no `users` are configured. Previously, such requests were delayed by 2-3 seconds before being proxied to `unauthorized_user`, though there were no users to brute-force. This affected setups where one `vmauth` authenticates requests and proxies them to another `vmauth` wi"
+   },
+   {
+    "t": "v1.148.7",
+    "d": "2026-10-20",
+    "n": "## [v1.148.7](https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v1.148.7)\n\nReleased at 2026-10-19\n\n**v1.148.x is a line of [LTS releases](https://docs.victoriametrics.com/victoriametrics/lts-releases/). It contains important up-to-date bugfixes for [VictoriaMetrics enterprise](https://docs.victoriametrics.com/victoriametrics/enterprise/).\nAll these fixes are also included in [the latest community release](https://github.com/VictoriaMetrics/VictoriaMetrics/releases/latest).\nThe v1.148.x line wi"
+   },
+   {
+    "t": "v1.154.0",
+    "d": "2026-10-12",
+    "n": "* FEATURE: [vmagent](https://docs.victoriametrics.com/victoriametrics/vmagent/),`vminsert` in [VictoriaMetrics cluster](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/) and [Single-node VictoriaMetrics](https://docs.victoriametrics.com/victoriametrics/single-server-victoriametrics/): add `/influx/ping` endpoint, which returns the `X-Influxdb-Version` HTTP header. Some [InfluxDB](https://docs.victoriametrics.com/victoriametrics/integrations/influxdb/) clients, such as the Jenkins In"
+   },
+   {
+    "t": "v1.148.6",
+    "d": "2026-10-12",
+    "n": "* BUGFIX: all VictoriaMetrics components: properly match regexps that start with an alternation or a character class and continue with `.*foo.*` or `.+foo.+`, for example `(a|b).*foo.*`. Previously the leading part was ignored when matching [relabeling](https://docs.victoriametrics.com/victoriametrics/relabeling/) `regex` and `if` filters and [stream aggregation](https://docs.victoriametrics.com/victoriametrics/stream-aggregation/) `match` filters, so such rules matched more series than intended. See [#1171"
+   },
+   {
+    "t": "v1.153.0",
+    "d": "2026-09-28",
+    "n": "* BUGFIX: [vmagent](https://docs.victoriametrics.com/victoriametrics/vmagent/): add missing `X-Influxdb-Version` HTTP header to [influxdb](https://docs.victoriametrics.com/victoriametrics/integrations/influxdb/) API responses. See [#11570](https://github.com/VictoriaMetrics/VictoriaMetrics/issues/11570)."
+   },
+   {
+    "t": "v1.152.0",
+    "d": "2026-09-14",
+    "n": "* BUGFIX: `vmselect` in [VictoriaMetrics cluster](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/): allow access to `/prometheus/api/v1/admin/tsdb/delete_series` and `graphite/tags/delSeries` using only the corresponding `-deleteAuthKey`, even when `-httpAuth.*` is also configured, without additionally requiring `-httpAuth.*` credentials. See [#11512](https://github.com/VictoriaMetrics/VictoriaMetrics/pull/11512)."
+   },
+   {
+    "t": "v1.151.0",
+    "d": "2026-08-31",
+    "n": "* BUGFIX: [vmsingle](https://docs.victoriametrics.com/victoriametrics/single-server-victoriametrics/), [vmagent](https://docs.victoriametrics.com/victoriametrics/vmagent/) and `vmstorage` in [VictoriaMetrics cluster](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/): allow access to `/remotewrite-relabel-config`, `/api/v1/status/remotewrite-relabel-config`, `/remotewrite-url-relabel-config`, `/api/v1/status/remotewrite-url-relabel-config` and `/internal/log_new_series` with only the"
+   },
+   {
+    "t": "v1.150.0",
+    "d": "2026-08-17",
+    "n": "## [v1.150.0](https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v1.150.0)\n\nReleased at 2026-08-14\n\n**Update Note 1:** `vmselect` and `vminsert` in [VictoriaMetrics cluster](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/), and `vmagent`: default value of `-enableMultitenancyViaHeaders` command-line flag has changed from `false` to `true`. This change enables support of [multitenancy via headers for cluster](https://docs.victoriametrics.com/victoriametrics/cluster-vict"
+   }
+  ]
  },
  "FalkorDB/FalkorDB": {
-  "commit_7d": 7,
-  "commit_90d": 137,
-  "rel_ver": "v6.0.1",
-  "rel_pub": "2026-10-01",
+  "commit_7d": 33,
+  "commit_90d": 272,
+  "rel_ver": "v6.0.4",
+  "rel_pub": "2026-11-05",
   "rel_days": 3,
-  "rel_n90": 11,
+  "rel_n90": 14,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -45,7 +123,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 67,
-  "enriched_at": "20261004",
+  "enriched_at": "20261108",
   "lang": {
    "Rust": 47,
    "Python": 28,
@@ -55,17 +133,90 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  },
+  "etag": {
+   "release": "W/\"547b96fb7d12a126baf4cc343c82d765bcc091108556967e312cf28020b609a9\"",
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_dates": [
+   "2026-11-05",
+   "2026-10-28",
+   "2026-10-22",
+   "2026-10-20",
+   "2026-10-15",
+   "2026-10-08",
+   "2026-10-01",
+   "2026-09-30",
+   "2026-09-29",
+   "2026-09-24",
+   "2026-09-16",
+   "2026-09-15",
+   "2026-08-20",
+   "2026-08-13"
+  ],
+  "rel_notes": [
+   {
+    "t": "v6.0.4",
+    "d": "2026-11-05",
+    "n": "* `dbms.functions` type unions and the `fulltext.drop` error are spelled like 4.x (#3280)\n* Loading a 4.x RDB keeps every index type of an attribute; a RANGE index on an attribute that also has a FULLTEXT index is no longer dropped (#3514)\n# FalkorDB v6.0.4\n**Full Changelog**: https://github.com/FalkorDB/FalkorDB/compare/v6.0.3...v6.0.4"
+   },
+   {
+    "t": "v4.22.3",
+    "d": "2026-10-28",
+    "n": "Redis's global lock and tries again. While a writer is waiting, new read\n# FalkorDB 4.22.3\nfrom the index every time the index was rebuilt from an RDB: on restart,\ncreate a duplicate. The fix is in RediSearch (FalkorDB/RediSearch#31), which\nA write query used to take Redis's global lock and then wait, still holding\nquery waits for the graph write lock before releasing Redis's global lock and\n- RediSearch updated to include the index fix above. (#3513)\n**Full Changelog**: https://github.com/FalkorDB/FalkorDB"
+   },
+   {
+    "t": "v6.0.3",
+    "d": "2026-10-22",
+    "n": "* RDB, DUMP and GRAPH.COPY payloads no longer carry heap addresses in matrix headers (#3097)\n* New per-OS server images: `falkordb-server:6.0.3-rhel9-x64` and `falkordb-server:6.0.3-amazonlinux2023-x64` (#3314)\n# FalkorDB v6.0.3\n* Graphs loaded from an RDB get the configured `CACHE_SIZE` (#3262)\n* Corrupt GRAPH.RESTORE / RDB payloads are refused instead of panicking (#2996)\n* Value nesting is bounded on RDB/RESTORE decode, property writes and bulk insert (#3339)\n* RDB decode refuses a tensor section that br"
+   },
+   {
+    "t": "v4.22.2",
+    "d": "2026-10-20",
+    "n": "# FalkorDB 4.22.2\nRediSearch trims surrounding whitespace from TAG tokens, so a constrained\n**Full Changelog**: https://github.com/FalkorDB/FalkorDB/compare/v4.22.1...v4.22.2"
+   },
+   {
+    "t": "v4.22.1",
+    "d": "2026-10-15",
+    "n": "A short read — a diskless-replication stream dropping mid-transfer, a truncated RESTORE/MIGRATE payload, or a corrupt dump.rdb — previously panicked the server, or in release builds silently built a corrupt graph. FalkorDB now declares REDISMODULE_OPTIONS_HANDLE_IO_ERRORS and checks for truncation at every count and loop in the decoders, so RESTORE replies with an error and an RDB load or diskless sync is refused, with no crash and no leaked graph.\nRESTORE decodes a payload before Redis evicts the value"
+   },
+   {
+    "t": "v6.0.2",
+    "d": "2026-10-08",
+    "n": "* Docker: redis-server runs as the non-root `falkordb` user; set `SKIP_DROP_PRIVS=1` to keep root (#3181)\n# FalkorDB v6.0.2\n* RDBs keep every graph in GRAPH.LIST when loaded by 4.x (#3161)\n* Replace graphblas.sh/redisearch.sh with a `native-deps` crate; GraphBLAS and LAGraph are now submodules (#2695)\n* Fix the RediSearch build with libc++ 23 on macOS (#3170)\n**Full Changelog**: https://github.com/FalkorDB/FalkorDB/compare/v6.0.1...v6.0.2"
+   },
+   {
+    "t": "v6.0.1",
+    "d": "2026-10-01",
+    "n": "## What's Changed\r\n* Build image with up do date dependencies  https://github.com/FalkorDB/FalkorDB/pull/3153\r\n\r\n\r\n**Full Changelog**: https://github.com/FalkorDB/FalkorDB/compare/v6.0.0...v6.0.1"
+   },
+   {
+    "t": "v4.22.0",
+    "d": "2026-09-30",
+    "n": "- RDB encoding v19 → v20 (adds CCH serialization).\n- Query: db.idx.cch.query — rank-pruned bidirectional Dijkstra.\n- Persistence: full RDB serialization, restored on load."
+   },
+   {
+    "t": "v6.0.0",
+    "d": "2026-09-29",
+    "n": "- **Closer to 4.x behaviour:** `GRAPH.INFO` output, NUL bytes in queries, and `INFO` no longer showing RediSearch's version as FalkorDB's (#2915).\nFalkorDB 6.0 is the first release of the new FalkorDB engine, written in Rust. It replaces the C engine that shipped in every 4.x release.\n# FalkorDB 6.0.0\nFor applications nothing changes: it is still a Redis module named `graph`, with the same `GRAPH.*` commands, the same Cypher, and the same client libraries. What changes is how replication works and which pac"
+   },
+   {
+    "t": "v4.20.7",
+    "d": "2026-09-24",
+    "n": "- Bump Redis to 8.10.2 for CVE-2026-85091. Updates the pinned Redis version across all Docker images (build + server) and the sanitizer/test paths. (#2850, fixes #2849)"
+   }
+  ]
  },
  "heavyai/heavydb": {
-  "commit_7d": 5,
-  "commit_90d": 20,
-  "rel_ver": "v9.0.0",
-  "rel_pub": "2025-10-20",
-  "rel_days": 349,
-  "rel_n90": 0,
+  "commit_7d": 2,
+  "commit_90d": 27,
+  "rel_ver": "v10.0.0",
+  "rel_pub": "2026-10-08",
+  "rel_days": 31,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -73,7 +224,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 80,
-  "enriched_at": "20261004",
+  "enriched_at": "20261108",
   "lang": {
    "C++": 82,
    "Java": 9,
@@ -83,9 +234,24 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  },
+  "etag": {
+   "release": "W/\"f3f77b14eeed7646a2fa32e98a871566eb2e7f7bf5258a52ce63ebed63a5bb5c\"",
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_dates": [
+   "2026-10-08"
+  ],
+  "rel_notes": [
+   {
+    "t": "v10.0.0",
+    "d": "2026-10-08",
+    "n": "* HeavyConnect exposes external data through foreign tables that you can analyze with HeavyDB simplifying ETL workflows. Supported adapters include CSV/delimited files, Parquet, and regex-parsed logs on local storage or Amazon S3. ODBC database connectivity and raster data sources.\nThis project now includes access to not only the core HeavyDB server, but also all the functionality of the full HeavyAI platform, previously only available as an enterprise product."
+   }
+  ]
  },
  "anonystick/anonystick": {
   "commit_7d": 0,
@@ -216,7 +382,7 @@
   "commit_7d": 0,
   "rel_ver": "@rushdb/mcp-server@2.13.0",
   "rel_pub": "2026-08-31",
-  "rel_days": 68,
+  "rel_days": 69,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -243,7 +409,7 @@
   "commit_7d": 15,
   "rel_ver": "0.15.0",
   "rel_pub": "2026-10-22",
-  "rel_days": 16,
+  "rel_days": 17,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -289,7 +455,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 18,
+  "rel_days": 19,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -331,7 +497,7 @@
   "commit_7d": 0,
   "rel_ver": "0.2.1",
   "rel_pub": "2026-03-01",
-  "rel_days": 251,
+  "rel_days": 252,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -352,7 +518,7 @@
   "commit_7d": 0,
   "rel_ver": "0.4.0",
   "rel_pub": "2025-11-20",
-  "rel_days": 352,
+  "rel_days": 353,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -390,7 +556,7 @@
  "segasai/q3c": {
   "rel_ver": "v2.0.5",
   "rel_pub": "2026-08-08",
-  "rel_days": 91,
+  "rel_days": 92,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -411,7 +577,7 @@
  "jeyrce/ishare": {
   "rel_ver": "v1.0.3-final",
   "rel_pub": "2024-04-22",
-  "rel_days": 929,
+  "rel_days": 930,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -432,7 +598,7 @@
  "PraxisMapper/PraxisMapper": {
   "rel_ver": "Release13",
   "rel_pub": "2025-03-04",
-  "rel_days": 613,
+  "rel_days": 614,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -467,7 +633,7 @@
  "ngudbhav/TriCo-electron-app": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2023-01-22",
-  "rel_days": 1385,
+  "rel_days": 1386,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -530,7 +696,7 @@
  "rejot-dev/rejot": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2025-05-19",
-  "rel_days": 537,
+  "rel_days": 538,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -578,7 +744,7 @@
  "oracle/navarkos": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2017-12-06",
-  "rel_days": 3258,
+  "rel_days": 3259,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -629,7 +795,7 @@
  "Galarzaa90/tibiawiki-sql": {
   "rel_ver": "v9.0.0",
   "rel_pub": "2026-07-22",
-  "rel_days": 108,
+  "rel_days": 109,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -727,7 +893,7 @@
  "verygoodplugins/mcp-local-wp": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-01-04",
-  "rel_days": 307,
+  "rel_days": 308,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -745,7 +911,7 @@
  "Yupcha/memXT": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-07-18",
-  "rel_days": 112,
+  "rel_days": 113,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -766,7 +932,7 @@
  "NoelDeMartin/soukai": {
   "rel_ver": "v0.7.1",
   "rel_pub": "2025-12-14",
-  "rel_days": 328,
+  "rel_days": 329,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -863,7 +1029,7 @@
  "CairnCMS/cairncms": {
   "rel_ver": "v1.5.0",
   "rel_pub": "2026-08-29",
-  "rel_days": 70,
+  "rel_days": 71,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -941,7 +1107,7 @@
  "pg-tools/pgcompare": {
   "rel_ver": "v1.2.4",
   "rel_pub": "2026-05-10",
-  "rel_days": 181,
+  "rel_days": 182,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -975,7 +1141,7 @@
  "NtimYeboah/laravel-database-trigger": {
   "rel_ver": "v8.5.0",
   "rel_pub": "2025-02-24",
-  "rel_days": 621,
+  "rel_days": 622,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1036,7 +1202,7 @@
  "SvenskaSpel/cobra-policytool": {
   "rel_ver": "v1.1.6",
   "rel_pub": "2019-05-23",
-  "rel_days": 2725,
+  "rel_days": 2726,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1097,7 +1263,7 @@
  "mbarre/schemacrawler-additional-lints": {
   "rel_ver": "1.06.11",
   "rel_pub": "2020-12-07",
-  "rel_days": 2161,
+  "rel_days": 2162,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1181,7 +1347,7 @@
  "paperhive/octonom": {
   "rel_ver": "v1.0.0-alpha.4",
   "rel_pub": "2017-08-28",
-  "rel_days": 3318,
+  "rel_days": 3359,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1216,7 +1382,7 @@
  "ZeroCoolHacker/FactoryManagment": {
   "rel_ver": "1",
   "rel_pub": "2019-03-22",
-  "rel_days": 2787,
+  "rel_days": 2788,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1234,7 +1400,7 @@
  "boxed-code/laravel-scout-database": {
   "rel_ver": "1.2",
   "rel_pub": "2021-05-23",
-  "rel_days": 1994,
+  "rel_days": 1995,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1279,7 +1445,7 @@
  "NotCompsky/rscraper": {
   "rel_ver": "0.4.0",
   "rel_pub": "2020-08-04",
-  "rel_days": 2286,
+  "rel_days": 2287,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1300,7 +1466,7 @@
  "yamdev07/HotelManagement": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-02-06",
-  "rel_days": 274,
+  "rel_days": 275,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1373,7 +1539,7 @@
  "huaweicloud-samples/database-gaussdb-hibernate-orm": {
   "rel_ver": "7.0.1",
   "rel_pub": "2025-07-09",
-  "rel_days": 486,
+  "rel_days": 487,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1447,7 +1613,7 @@
   "commit_7d": 188,
   "rel_ver": "v0.3.39",
   "rel_pub": "2026-10-13",
-  "rel_days": 25,
+  "rel_days": 26,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1475,7 +1641,7 @@
  "cdeust/Cortex": {
   "rel_ver": "v4.23.5",
   "rel_pub": "2026-09-23",
-  "rel_days": 45,
+  "rel_days": 46,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1507,7 +1673,7 @@
  "mcollina/sqlite-pool": {
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-08-13",
-  "rel_days": 86,
+  "rel_days": 87,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1571,7 +1737,7 @@
  "codenamev/claude_memory": {
   "rel_ver": "v0.13.2",
   "rel_pub": "2026-06-27",
-  "rel_days": 133,
+  "rel_days": 134,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1786,7 +1952,7 @@
  "sboorlagadda/artmark": {
   "rel_ver": "v0.2.2",
   "rel_pub": "2026-09-29",
-  "rel_days": 39,
+  "rel_days": 40,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -2155,7 +2321,7 @@
  "fclairamb/solidping": {
   "rel_ver": "v0.37.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 38,
+  "rel_days": 39,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2224,7 +2390,7 @@
   "commit_7d": 0,
   "rel_ver": "1.8.2320",
   "rel_pub": "2025-10-17",
-  "rel_days": 386,
+  "rel_days": 387,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2430,7 +2596,7 @@
  "rongshu8/intertext-history": {
   "rel_ver": "1.0",
   "rel_pub": "2026-10-06",
-  "rel_days": 32,
+  "rel_days": 33,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2459,7 +2625,7 @@
   "commit_7d": 4,
   "rel_ver": "v5.0.4",
   "rel_pub": "2026-11-05",
-  "rel_days": 2,
+  "rel_days": 3,
   "rel_n90": 25,
   "rel_pre": false,
   "rel_none": false,
@@ -2656,5 +2822,46 @@
    "lang": "20261107"
   },
   "rel_n90": 0
+ },
+ "mansiverma897993/ReRu": {
+  "etag": {
+   "release": "W/\"f78625883b229b7bb335b867d609a93afbbaeff4ed50f8236af220e303c4ca8f\"",
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_ver": "v0.1.0-alpha.1",
+  "rel_pub": "2026-11-07",
+  "rel_days": 1,
+  "rel_n90": 1,
+  "rel_pre": true,
+  "rel_none": false,
+  "rel_dates": [
+   "2026-11-07"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.1.0-alpha.1",
+    "d": "2026-11-07",
+    "n": "percentage of Redis rebuilt. See [compatibility](COMPATIBILITY.md).\n- Custom snapshots, single-file AOF with online rewrite, a subset of Redis RDB,\nThe command inventory has 203 of 459 Redis 8.10.2 metadata names (44.2%).\ntheir source. The implementation is clean-room; no Redis source is translated.\nredis-cli SET hello world EX 60\nredis-cli GET hello\nlive Redis 7.0.15 server. RDB file exchange is checked in both directions with\n`redis-check-rdb`. Formatting, Clippy with warnings denied, and an optimized\nbui"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 4,
+  "lang": {
+   "Rust": 97,
+   "Python": 2,
+   "PowerShell": 1,
+   "Makefile": 0,
+   "Dockerfile": 0
+  },
+  "enriched_at": "20261108",
+  "dim_ts": {
+   "release": "20261108",
+   "security": "20261108",
+   "contrib": "20261108",
+   "lang": "20261108"
+  }
  }
 }

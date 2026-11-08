@@ -12,6 +12,13 @@
 
 A Lead agent plans the work on a Kanban board and hands it to a team of agents on Claude Code, Codex, Gemini CLI or Hermes. They work on their own, and you approve what ships. It is open source and runs on your machine with your keys.
 
+- **20 agency templates:** a Lead and a team with jobs, a goal, a plan and skills, around one folder.
+- **A board and an Inbox:** briefs become cards; the Lead asks, reports and sends digests in the agency's Chat → Inbox, or on Telegram and Slack.
+- **Memory:** plain Markdown notes per agency and per agent, added to every run.
+- **Integrations:** tools from GitHub, Linear, Stripe and any MCP server, including search and install from the official MCP Registry.
+- **Your keys or your sign-in:** API keys for Claude, OpenAI and Gemini, local models on Ollama, or your Claude, ChatGPT or Google sign-in through Claude Code, Codex and Gemini CLI.
+- **You approve:** every file change is a diff you accept or reject, and each agency has a monthly budget.
+
 <!-- TODO: replace with docs/screenshots/agency-board.png (an agency's Kanban board) once it is added. -->
 <p align="center">
   <img src="docs/screenshots/agency-overview.png" alt="The Research & Intelligence agency in Tyslin Studio: Iris, the Lead, with Hugo (Analyst), Beatrice (Fact-check) and Felix (Writer) on Claude Code, the five-step plan and how it runs" width="900">
@@ -41,7 +48,7 @@ Updates: the app checks GitHub Releases when it starts. Windows and the AppImage
 3. **Work:** workers run their cards on their adapter, in the agency's folder.
 4. **Review:** every file change waits for you as a diff to accept or reject.
 5. **Done:** accepting a card's changes moves it to Done.
-6. **Digest:** the Lead reports to you on Telegram or Slack.
+6. **Digest:** the Lead reports to you in the agency's Chat → Inbox, and on Telegram or Slack if you link one.
 
 Only the Lead messages you; workers report to the Lead on the card. Each agency has a budget: every card shows its estimated cost, and once the agency's total reaches the budget no more cards start until you raise it.
 
@@ -84,9 +91,9 @@ Workers run on agents you install. Tyslin drives them over the [Agent Client Pro
 
 | Adapter | Install command the app uses | Needs |
 |---|---|---|
-| Claude Code | `npm install -g @agentclientprotocol/claude-agent-acp` | A Claude sign-in (run `claude` once), or your Claude key in Settings → Models |
-| Codex | `npm install -g @agentclientprotocol/codex-acp` | Your OpenAI key in Settings → Models, or a ChatGPT sign-in when the agent asks |
-| Gemini CLI | `npm install -g @google/gemini-cli` | A Google sign-in (run `gemini` once), or your Gemini key in Settings → Models |
+| Claude Code | `npm install -g @agentclientprotocol/claude-agent-acp` | A Claude sign-in (Settings → Models → Claude → Sign in with Claude), or your Claude key |
+| Codex | `npm install -g @agentclientprotocol/codex-acp` | A ChatGPT sign-in (Settings → Models → ChatGPT → Sign in with ChatGPT), or your OpenAI key |
+| Gemini CLI | `npm install -g @google/gemini-cli` | A Google sign-in (Settings → Models → Gemini → Sign in with Google), or your Gemini key |
 | Hermes | `curl -fsSL https://hermes-agent.nousresearch.com/install.sh \| bash -s -- --non-interactive` (PowerShell installer on Windows) | A model and key set up with the Hermes setup guide; on a Mac, Apple Silicon only. Each agent gets its own Hermes profile |
 | Goose | `curl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh \| CONFIGURE=false bash` (PowerShell script on Windows) | Run `goose configure` once to choose its model provider |
 | ZeroClaw | No installer in the app; install from github.com/zeroclaw-labs/zeroclaw | Its own setup; the app runs `zeroclaw acp` |
@@ -104,17 +111,26 @@ The Lead, and any agent on the built-in runtime, uses one of these.
 | Claude (Anthropic) | Settings → Models, Anthropic API key |
 | OpenAI | Settings → Models, OpenAI API key |
 | Gemini (Google) | Settings → Models, Gemini API key |
-| OpenRouter | Settings → Models, OpenRouter key |
 | Ollama | No key; Settings → Models, the address of Ollama running on this computer |
 
-Keys are also passed to Claude Code, Codex and Gemini CLI when you haven't signed them in yourself.
+Keys are also passed to Claude Code, Codex and Gemini CLI unless the provider's card is set to use your signed-in account.
+
+**Sign in instead of a key.** Settings → Models → Claude, ChatGPT or Gemini → *Sign in with …* installs the provider's own tool if needed (Claude Code, Codex or Gemini CLI) and opens its browser sign-in, so agents on that tool use your Claude Pro/Max, ChatGPT or Google plan. The tool keeps the login; Tyslin never stores it. Leads and the default model still use an API key.
+
+### Memory
+
+Each agency keeps memory as plain Markdown in its folder, under `memory/`: `agency.md` for notes every agent should know, and one file per agent. Tyslin adds them to the agent's instructions on every run. Edit them in the agency's Memory screen or any editor; they also show in Drive and sync with Google Drive.
+
+### Integrations
+
+Agents on Claude Code, Codex, Gemini CLI or Goose can use tools from other apps through MCP servers. Open an agency → Integrations: connect GitHub, Linear or Stripe with a token, search the official [MCP Registry](https://registry.modelcontextprotocol.io) and install a server from there, or add any MCP server yourself (a remote address or a command on this computer), then switch it on per agent. Each agency suggests the integrations that fit its work. Registry servers are published by companies and the community and aren't reviewed by Tyslin; check the publisher and source before installing. Tokens are encrypted with your keychain and sent only to that server. Agents on the built-in models don't use integrations yet.
 
 ## Your data
 
 - One local SQLite database per organization, in the app's data folder (Settings → About → Open folder).
-- One folder per agency under `Documents/Tyslin Studio/<organization>/<agency>/`, with its board and the files its agents make.
+- One folder per agency under `Documents/Tyslin Studio/<organization>/<agency>/`, with its board, its `memory/` notes and the files its agents make.
 - API keys are encrypted with your operating system's keychain.
-- The app contacts only: the model providers and adapters you set up; GitHub, for updates, skill packs and the star count; Telegram or Slack, if you connect a channel; Google, if you sign in or connect Google Drive sync.
+- The app contacts only: the model providers and adapters you set up; GitHub, for updates, skill packs and the star count; Telegram or Slack, if you connect a channel; the MCP servers you add under Integrations; Google, if you sign in or connect Google Drive sync.
 - No analytics. Nothing is collected about how you use the app.
 
 ## Build from source
@@ -128,6 +144,8 @@ npm install        # also rebuilds the SQLite driver for Electron
 npm run dev        # the app with hot reload
 npm run typecheck  # run after every change
 ```
+
+The interface is React with Tailwind CSS v4 and shadcn/ui (Radix) components only (`src/renderer/src/components/ui/`), themed with Tyslin's colour tokens in `src/renderer/src/index.css`; charts use recharts through shadcn's Chart component.
 
 Running from a VS Code terminal? VS Code sets `ELECTRON_RUN_AS_NODE=1`, which stops Electron from opening a window. Start it with `env -u ELECTRON_RUN_AS_NODE npm run dev`.
 
@@ -145,10 +163,10 @@ Output goes to `dist/`. Build each installer on its own platform; the release wo
 
 1. Runs while the app is closed: the Lead's scheduled runs and auto-run keep going when the window is shut.
 2. Cost ledger on Home: spend per agency, agent and model.
-3. File-based memory: agents that remember what they learned, in plain files.
-4. Discord and Email channels, next to Telegram and Slack.
-5. More agencies.
-6. Hosted plan: the same agencies with no setup.
+3. Agents that write their own memory notes and propose new skills from your feedback (memory files exist today; you write the notes).
+4. Integrations for the Lead too, and sign-in for MCP servers that need it (OAuth).
+5. Discord and Email channels, next to Telegram and Slack.
+6. Hosted plan: the same agencies with no setup, with a ready-made app catalogue.
 
 Assistants, Automation, Canvas and Mind mapper from earlier versions are archived in `archive/`. They are not built into the app; some may return.
 

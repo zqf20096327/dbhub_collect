@@ -2,7 +2,7 @@
 
 **原生跨平台数据库客户端与 SQL 编辑器，面向高性能、低开销的桌面体验设计：在一个窗口中完成查询、数据编辑、结构管理和 Redis 调试。**
 
-FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、MariaDB、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。
+FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、MariaDB、PostgreSQL、人大金仓 KingbaseES、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。
 
 **简体中文 | [English](./README.en.md)**
 
@@ -17,6 +17,14 @@ FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL
 
 ## 最近更新
 
+### v0.1.16
+
+- **新增人大金仓 KingbaseES**：复用 PostgreSQL 连接链路（PG 兼容模式），支持连接测试、库 / Schema 与对象浏览、SQL 查询与补全、数据查看与编辑、表结构查看与设计，以及用户与权限入口；默认端口 54321，支持 TLS、SSH、代理与连接串导入。
+- **首版边界**：仅支持 PG 兼容模式；原生备份 / 恢复与 `psql` / `ksql` 等外部工具入口暂不支持；用户与权限页沿用 PostgreSQL 实现，尚未单独回归。
+- **修复**：修复 Kingbase 打开表属性 DDL 时的 panic（`pg_sequence` 数值列声明为 `int2`，改为显式 `::bigint`）；连接类型栏底部计数更新为 11 种。
+
+[完整更新说明](./release-notes/v0.1.16/zh-CN.md) · [历史版本](https://github.com/fluxdb-alt/fluxDB/releases)
+
 ### v0.1.15
 
 - **新增 MariaDB 数据源**：复用 MySQL 协议链路，支持对象浏览、SQL 查询与补全、表结构管理与设计、数据编辑、导入导出、备份恢复、用户与权限，并接入 MariaDB 专用只读与 AI SQL 策略。
@@ -28,18 +36,6 @@ FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL
 - **设置与退出**：设置页补齐 10 种内置连接器支持列表；退出时存在未保存修改或运行中查询会先确认。
 
 [完整更新说明](./release-notes/v0.1.15/zh-CN.md) · [历史版本](https://github.com/fluxdb-alt/fluxDB/releases)
-
-### v0.1.14
-
-- **新增 MongoDB 数据源**：连接串导入与 SRV 拓扑发现、库 / 集合 / 视图浏览、集合工作台（文档 / 聚合 / 索引 / 信息）、筛选投影排序、条件构建器、查询补全、文档新增 / 编辑 / 复制 / 删除、JSON / JSONL / CSV 导入导出、集合重命名与删除、索引查看与删除、库级命令工作台与命令行终端，以及 AI 页面上下文与受控执行。
-- **MongoDB 工作台对齐 Compass**：聚合管道改为可拖动卡片视图并支持单阶段预览；条件构建改为表达式树，支持 AND / OR / NOR、`$elemMatch` 与 `$not`；索引页展示类型、大小与使用统计，支持表头排序和删除索引；文档与 JSON 展示区支持窗口级文本选择。
-- **MongoDB 首版边界**：不提供数据库级备份恢复（`mongodump` / `mongorestore`）与性能指标面板；不支持 SSH 隧道、跨库移动集合、批量删除、表格行内编辑、事务与变更流；详见[数据库支持](#数据库支持)。
-- **超大字段不再丢行**：单元格正文超预算时外置到本地受控存储，只保留预览与大小，可分段只读查看；上传替换改为分块流式追加。MySQL、SQLite、PostgreSQL、SQL Server 与达梦 DM8 统一接入。
-- **MongoDB 性能**：文档区改用虚拟列表并缓存整页解析结果；同一连接复用 MongoClient 连接池，减少查询与打开集合时的建连开销。
-- **Redis 体验修复**：新建 Key 后留在当前库标签页并选中新键；无 RedisJSON 模块的服务端可把 JSON Key 存为字符串并使用 JSON 编辑器；命令参数填完后隐藏签名提示。
-- **稳定性修复**：修复 PostgreSQL 与无主键表含大字段行无法更新 / 删除、SQL Server 超预算丢行、中文等非 ASCII 值导入 MongoDB 时的崩溃、筛选 / 排序弹层未对齐触发控件，以及浅色主题下 ghost 按钮悬停文字与底色同色。
-
-[完整更新说明](./release-notes/v0.1.14/zh-CN.md) · [历史版本](https://github.com/fluxdb-alt/fluxDB/releases)
 
 ## 为什么选择 FluxDB
 
@@ -106,6 +102,7 @@ https://github.com/user-attachments/assets/f6075999-a87f-4644-9d14-dbda49a7981d
 | TiDB | 复用 MySQL 协议链路，适配 SQL 方言、补全与表结构管理 | 复用 MySQL 逻辑备份能力 | 连接能力与 MySQL 一致 | - |
 | MariaDB | 复用 MySQL 协议链路，支持对象浏览、SQL 查询、表结构管理、数据编辑、导入导出、用户与权限；识别 MariaDB 服务端版本 | 复用 `mysqldump` / `mariadb-dump` 逻辑备份与 SQL 恢复 | 连接能力与 MySQL 一致；默认端口 3306 | - |
 | PostgreSQL | SQL 查询、Schema / 对象浏览、表结构管理、数据编辑、用户与角色管理、psql 工具入口 | `pg_dump` plain SQL 备份，`psql` 恢复 | TLS、SSH、代理、Schema 作用域、超时 | - |
+| 人大金仓 KingbaseES | 复用 PostgreSQL 连接器（PG 兼容模式）：连接、库 / Schema 与对象浏览、SQL 查询、数据查看与编辑、表结构查看与设计；用户与权限页沿用 PostgreSQL 实现，尚未单独回归 | 暂不支持原生备份 / 恢复；需要时请在命令行使用 `sys_dump` / `ksql` | 仅支持 PG 兼容模式；默认端口 54321，用户名通常为 `system`、默认库 `test`；表单、TLS / SSH / 代理等入口与 PostgreSQL 一致 | Oracle 兼容模式、原生备份 / 恢复、`psql` / `ksql` 等外部工具入口 |
 | SQL Server | T-SQL 查询、数据库 / Schema / 对象浏览、表结构管理与数据编辑、表数据导入导出、登录名 / 数据库用户 / 角色成员 / 显式权限管理、对象级逻辑备份恢复、AI 页面上下文与受控执行 | 对象级逻辑 SQL 备份与恢复 | SQL Server 认证、TLS、显式端口；命名实例需填写实际端口 | Windows 集成认证、Azure AD、包含数据库用户、列级权限编辑、用户自定义服务器角色、SQL Browser / 命名实例自动解析、数据库级物理备份（`BACKUP DATABASE`）。对象级逻辑备份恢复不能替代数据库级灾难恢复。 |
 | SQLite | 本地文件连接、SQL 查询、对象浏览、表结构管理、数据编辑 | `VACUUM INTO` 完整一致快照；恢复到新文件并检查完整性与外键 | 本地文件路径 | - |
 | 达梦 DM8 | Schema / 对象浏览、SQL 查询、表结构管理与设计、数据编辑、表数据导入 | 逻辑备份与 SQL 恢复；当前恢复面向单 Schema | 实例与 Schema 连接配置 | - |

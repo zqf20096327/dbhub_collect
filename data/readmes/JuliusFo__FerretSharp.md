@@ -56,6 +56,8 @@ developer works with an Oracle database day to day:
   copy its name, `OWNER.NAME`, entity or link. A tab can be duplicated with its filters or shown in the explorer.
 - Drag the explorer wider or narrower (for every connection) and the SQL and LINQ editors taller or lower (each tab its
   own height) – kept after a restart; a double click on the edge goes back to the default.
+- Drag tabs into the order you like; many tabs in one row that scrolls sideways or in several rows (*Settings ›
+  Appearance*).
 - **Quick open and command palette**: one box at the top of the window – type a name to open a table, view or PL/SQL
   (also by its C# entity name), or ">" to find an action with its shortcut.
 - Fast grid for large tables (blocks of 500 rows, server-side sorting, deterministic paging), `NULL` shown as such,
@@ -152,6 +154,9 @@ developer works with an Oracle database day to day:
 - Lock conflicts are detected after a short wait (`SELECT … FOR UPDATE WAIT n`) and shown with the blocking session.
 - Optimistic concurrency check on the changed columns; insert and delete rows; edit CLOBs and BLOBs in a dialog
   (text in the code editor with line wrap, JSON/XML coloring and JSON indenting).
+- **Change primary keys** of existing rows like any other value. Before writing, FerretSharp counts the rows that still
+  point to the old key – along constraints and relationships without one (manual, by convention, from the C# model) –
+  and asks first if there are any; behind a constraint Oracle refuses the change, nothing is changed along.
 - **One value for many cells**: type it into one of the marked cells and press <kbd>Ctrl</kbd>+<kbd>Enter</kbd>, or
   paste a copied value with <kbd>Ctrl</kbd>+<kbd>V</kbd> – into the marked cells, the selected rows or just the focused
   cell, no double click needed (a cell copied with <kbd>Ctrl</kbd>+<kbd>C</kbd> pastes back whole, line breaks and
@@ -261,6 +266,12 @@ changes, and a new build is picked up automatically:
   see every statement it sends through EF Core, grouped by origin (LINQ, lazy loading, raw SQL, `SaveChanges` …), the
   most frequent and most expensive ones, and N+1 patterns. Look a statement up in V$SQL of the app's connection with its
   plan, or open it in the SQL editor. Local apps of your own user only, EF Core 7 or later for the origin.
+- **Server load**: how busy the database server is – host CPU, active sessions against the CPUs, what the sessions
+  wait for, a chart of up to the last hour – and its top statements by CPU, time, executions or reads, either for the time
+  you watch or since each was loaded (like SQL Developer’s reports), with plan, Excel export and the sessions running
+  right now. Only views outside the Diagnostics and Tuning Pack; needs `SELECT_CATALOG_ROLE` or grants on the V$ views.
+  With a linked C# project, a statement's details name the methods of your solution that may send it – guessed from its
+  tables and the columns it filters by, best fit first – and a click opens the line in Visual Studio.
 - **Usage in the code**: per column, the methods of your solution that read or write its property or query the table,
   read from the compiled code – a click opens the line in Visual Studio. Properties no code uses are marked, and the
   designer warns before dropping a column the code still uses. Uses open in your *work clone* of the connection group.

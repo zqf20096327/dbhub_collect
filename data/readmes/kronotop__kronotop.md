@@ -6,12 +6,11 @@ Kronotop is a distributed, transactional document database backed by [Foundation
 
 > Millions of databases. One cluster.
 
-Kronotop gives every AI agent, tenant, or application its own logical database, called a namespace. A namespace is 
-implemented as a FoundationDB key prefix, so creating one is essentially free and provides isolation.
+Each tenant or app gets its own logical database, called a namespace. A namespace is a FoundationDB key prefix, so
+creating one costs almost nothing. Isolation lives in the keyspace, so application code carries no tenant filter. One
+transaction can commit across any number of namespaces.
 
-**Proof**: [Created 1,000,001 namespaces in a single cluster.](proof/README.md)
-
-A single transaction can commit atomically across any number of namespaces.
+Proof: we [created 1,000,001 namespaces in a single cluster](proof/README.md).
 
 Kronotop speaks RESP2 and RESP3, so you can use existing RESP-compatible clients, including `redis-cli` or `valkey-cli`, 
 without a new driver.
@@ -19,13 +18,13 @@ without a new driver.
 ```
 BEGIN
 
-# In an agent's namespace: store a memory with its embedding.
-NAMESPACE USE agents.support-bot
-BUCKET.INSERT memories DOCS '{"text": "prefers email", "embedding": [0.12, 0.07, 0.91]}'
+# The tenant's own database: a new order.
+NAMESPACE USE tenants.acme
+BUCKET.INSERT orders DOCS '{"item": "keyboard", "qty": 2, "price": 49.99}'
 
-# In the billing namespace: bump a shared usage counter, conflict-free.
+# A shared database, same commit: metered usage.
 NAMESPACE USE billing
-ZINC.I64 support-bot:tokens 1240
+ZINC.I64 acme:requests 1
 
 COMMIT
 ```
@@ -33,22 +32,25 @@ COMMIT
 Read it back with the Bucket Query Language (BQL):
 
 ```
-NAMESPACE USE agents.support-bot
-BUCKET.QUERY memories '{ "text": { "$eq": "prefers email" } }'
+NAMESPACE USE tenants.acme
+BUCKET.QUERY orders '{"qty": {"$gte": 1}}'
 1# "cursor_id" => (integer) 1
-2# "entries" => 1) {"_id": "6a133c8806bf494c9e7e00cb", "text": "prefers email", "embedding": [0.12, 0.07, 0.91]}
+2# "entries" => 1) {"_id": "6a133c8806bf494c9e7e00cb", "item": "keyboard", "qty": 2, "price": 49.99}
 ```
 
-Or, with a vector index on `embedding`, recall it by similarity over the same field:
+A bucket with a vector index on `embedding` also answers similarity queries over its documents:
 
 ```
-NAMESPACE USE agents.support-bot
-BUCKET.VECTOR memories embedding '[0.10, 0.09, 0.88]' TOP 3
+NAMESPACE USE tenants.acme
+BUCKET.VECTOR products embedding '[0.10, 0.09, 0.88]' FILTER '{"in_stock": true}' TOP 3
 1) 1# "score" => (double) 0.9981
-   2# "entry" => {"_id": "6a133c8806bf494c9e7e00cb", "text": "prefers email", "embedding": [0.12, 0.07, 0.91]}
+   2# "entry" => {"_id": "69ce80c76597b10d87d13500", "name": "Wireless Headphones", "in_stock": true, "embedding": [0.12, 0.07, 0.91]}
 ```
 
-Jump to [Quickstart](#quickstart) for more details and quickly spin up a cluster.
+The same model fits an AI agent: a namespace per agent holds its memory, vector search runs over those documents,
+and one transaction updates the documents and ZMap state, such as counters, together.
+
+See [Quickstart](#quickstart) to spin up a cluster.
 
 Join our [Discord](https://discord.gg/VPRNvdh2C) to ask questions, share feedback, or follow development.
 
@@ -73,6 +75,7 @@ See the [roadmap](ROADMAP.md) for where Kronotop is headed.
 - [ZMap](#zmap)
 - [Transactions](#transactions)
 - [Clustering](#clustering)
+- [Observability](#observability)
 - [Why These Building Blocks?](#why-these-building-blocks)
 - [Support](#support)
 - [About the Name](#about-the-name)
@@ -136,9 +139,8 @@ docker run --rm -it --platform linux/amd64 --network kronotop \
   ghcr.io/kronotop/kronotop:latest kronotop-cli -h kronotop-primary -p 5484
 ```
 
-`kronotop-cli` sets these automatically. If you are using `redis-cli` or `valkey-cli`, set the session attributes
-manually
-for human-readable output:
+If you use `redis-cli` or `valkey-cli`, set the following session attributes to get human-readable output.
+`kronotop-cli` sets them automatically:
 
 ```
 SESSION.ATTRIBUTE SET input_type json
@@ -191,7 +193,7 @@ Strictly serializable by default, inherited from FoundationDB. Both auto-commit 
 
 ### Storage
 
-Metadata and indexes live in FoundationDB. Document bodies are stored in Volume, Kronotop’s segment-based storage engine
+Metadata and indexes live in FoundationDB. Document bodies are stored in Volume, Kronotop's append-only storage engine on local disk
 with primary-standby replication. ZMap data is stored directly in FoundationDB.
 
 ## Benchmarks
@@ -201,13 +203,12 @@ in the same availability zone: FoundationDB on an `m5d.4xlarge` (16 vCPU, 64 GB,
 (8 vCPU, 32 GB, NVMe), and the benchmark client on an `m5.2xlarge`. FoundationDB runs in `single` redundancy mode
 with no replication.
 
-50,000 documents were loaded into a single bucket. The setup used single-field indexes on `category` (string), `age` (
-int32),
-`score` (double), and a compound index on `(category, age)`.
+50,000 documents were loaded into a single bucket with single-field indexes on `category` (string), `age` (int32)
+and `score` (double), and a compound index on `(category, age)`.
 
 Each scenario ran 50,000 queries across 50 virtual threads. The benchmarks do not use bulk reads or writes, and the
-client does not pipeline requests. Every query runs as a single FoundationDB transaction, so the numbers reflect real
-OLTP workloads where each request is an independent transaction.
+client does not pipeline requests. Every query runs as a single FoundationDB transaction, so the numbers reflect an
+OLTP workload where each request is an independent transaction.
 
 | Scenario                 | Throughput | P50      | P99      |
 |--------------------------|------------|----------|----------|
@@ -221,10 +222,11 @@ See the [full benchmark results and deployment guide](benchmarks/README.md) for 
 
 ## Use Cases
 
-- AI agent context store with namespace-level isolation, vector search, and transactional updates.
-- Horizontally scalable transactional document store.
-- Lease-based distributed locks with atomic acquire, safe release, and fencing tokens from versionstamped commits.
-- ZMap-based ordered key-value workloads: range scans, counters, and atomic mutations.
+- Agent context store: namespace-level isolation, vector search, and transactional updates for agent memory.
+- Transactional document store: horizontally scalable, backed by strictly serializable transactions.
+- Distributed coordination: lease-based locks with atomic acquire, safe release, and fencing tokens from versionstamped
+  commits.
+- Ordered key-value: range scans, counters, and conflict-free atomic mutations on the ZMap model.
 
 ## Namespaces
 
@@ -260,7 +262,7 @@ See the [namespace documentation](https://kronotop.com/docs/namespaces) for the 
 ## Bucket
 
 Bucket is Kronotop's document data model. It stores BSON documents and provides a query language with comparison,
-logical, and array operators. Bucket supports single field, compound, and vector indexes as secondary index.
+logical and array operators. Secondary indexes can be single field, compound or vector.
 
 A bucket's life starts with the `BUCKET.CREATE` command:
 
@@ -269,9 +271,7 @@ A bucket's life starts with the `BUCKET.CREATE` command:
 OK
 ```
 
-After getting `OK`, the bucket is ready to use.
-
-The Bucket data model supports JSON-like documents and stores them internally in BSON format.
+After `OK`, the bucket is ready to use. You insert JSON documents and Kronotop stores them as BSON:
 
 ```
 127.0.0.1:5484> BUCKET.INSERT orders DOCS '{"item": "keyboard", "qty": 2, "price": 49.99}'
@@ -281,10 +281,8 @@ The Bucket data model supports JSON-like documents and stores them internally in
 `BUCKET.INSERT` creates a one-off transaction, inserts the given document into the `orders` bucket, and returns a RESP
 array containing the generated `ObjectId` values.
 
-Buckets can be queried with `BUCKET.QUERY`. The Bucket Query Language (BQL) provides familiar semantics for querying
-BSON documents.
-
-The following example queries documents with a `qty` field greater than one.
+Buckets are queried with `BUCKET.QUERY` and the Bucket Query Language (BQL). If you have used a document database
+before, the operators will look familiar. The following example returns documents with a `qty` field of at least one.
 
 ```
 127.0.0.1:5484> BUCKET.QUERY orders '{"qty": {"$gte": 1}}'
@@ -371,10 +369,9 @@ Kronotop ships with a rule-based query planner. A query goes through four stages
 planning, and optimization.
 
 The logical planner normalizes the query tree. It flattens nested operators, eliminates double negation, detects
-contradictions
-and tautologies, removes redundant conditions, and folds constants. The physical planner then maps the normalized tree
-to scan operations, and the optimizer iteratively applies rules such as range scan consolidation, index intersection,
-and selectivity-based ordering.
+contradictions and tautologies, removes redundant conditions, and folds constants. The physical planner then maps the
+normalized tree to scan operations, and the optimizer applies rules such as range scan consolidation, index
+intersection, and selectivity-based ordering until the plan stops changing.
 
 `BUCKET.EXPLAIN` shows the final physical plan for a query. The following example demonstrates how the `price` index we
 created above is picked up by the planner:
@@ -395,12 +392,14 @@ created above is picked up by the planner:
 
 ### Vector Search
 
-Bucket supports approximate nearest neighbor (ANN) search on document vector fields, powered by [JVector](https://github.com/datastax/jvector). The graph 
-index uses HNSW with automatic Product Quantization for memory efficiency and supports three distance functions: `cosine`,`euclidean`, and `dot_product`.
+Bucket supports approximate nearest neighbor (ANN) search on document vector fields, powered by [JVector](https://github.com/datastax/jvector). The graph
+index uses HNSW with automatic Product Quantization to reduce memory use. Three distance functions are supported:
+`cosine`, `euclidean` and `dot_product`.
 
-Results are ranked by similarity first, then filtered with BQL predicates (post-filtering). Search behavior is tunable
-via `TOP`, `THRESHOLD`, `OVERQUERY`, and `MAX-SCAN-CANDIDATES`. The graph index is not part of the transaction. Kronotop
-updates it after the commit, then sends the reply. For this reason, vector search does not carry ACID guarantees.
+Results are ranked by similarity first, then filtered with BQL predicates (post-filtering). Search behavior is tuned
+with `TOP`, `THRESHOLD`, `OVERQUERY` and `MAX-SCAN-CANDIDATES`. You should know that the graph index is not part of the
+transaction. Kronotop updates it after the commit and before it sends the reply, so vector search does not carry ACID
+guarantees.
 
 Create a bucket with a vector index:
 
@@ -429,14 +428,14 @@ options.
 
 ## ZMap
 
-ZMap is a RESP-compatible proxy over FoundationDB's ordered key-value API. Unlike Bucket, ZMap does not use Volume.
-It operates as a direct RESP-to-FoundationDB proxy layer. Keys and values are opaque byte sequences. ZMap does not
-interpret their contents. The examples below use JSON as values for readability, but any byte payload works.
-FoundationDB's key size limit (10 KB) and value size limit (100 KB) apply directly.
+ZMap is a thin RESP layer over FoundationDB's ordered key-value API. Unlike Bucket, it does not use Volume. Keys and
+values go straight to FoundationDB as opaque byte sequences, and ZMap does not interpret their contents. The examples
+below use JSON values for readability, but any byte payload works. Please note that FoundationDB's key size limit
+(10 KB) and value size limit (100 KB) apply directly.
 
-Keys are stored in lexicographic order, and all operations inherit FoundationDB's ACID transaction guarantees.
-ZMap provides typed numeric commands for int64 (conflict-free via FoundationDB's atomic `ADD`), float64 and decimal128
-(read-modify-write), conflict-free atomic mutations, and efficient range operations over the ordered key space.
+Keys are stored in lexicographic order, and all operations inherit FoundationDB's ACID guarantees. ZMap has typed
+numeric commands for int64, float64 and decimal128, conflict-free atomic mutations, and range operations over the
+ordered key space.
 
 Set and read a value:
 
@@ -447,8 +446,8 @@ OK
 {"name": "alice", "role": "admin"}
 ```
 
-Atomic increment - `ZINC.I64` maps to FoundationDB's native atomic `ADD`, so concurrent increments on the same key never
-conflict. `ZINC.F64` and `ZINC.D128` perform a read-modify-write cycle and can conflict under contention:
+Atomic increment. `ZINC.I64` maps to FoundationDB's native atomic `ADD`, so concurrent increments on the same key never
+conflict. `ZINC.F64` and `ZINC.D128` do a read-modify-write cycle and can conflict under contention:
 
 ```
 127.0.0.1:5484> ZINC.I64 page-views 1
@@ -478,8 +477,8 @@ See the [distributed lock on ZMap](recipes/distributed-lock-on-zmap.md) draft re
 ## Transactions
 
 Kronotop transactions are thin wrappers around FoundationDB transactions. By default, each command runs in auto-commit
-mode. The system creates a transaction, executes the command, and commits it. To group multiple commands into a single atomic
-unit, wrap them in `BEGIN` - `COMMIT` block:
+mode: Kronotop creates a transaction, runs the command and commits it. To group several commands into one atomic unit,
+wrap them between `BEGIN` and `COMMIT`:
 
 ```
 127.0.0.1:5484> BEGIN
@@ -492,18 +491,16 @@ OK
 OK
 ```
 
-`ROLLBACK` discards all uncommitted changes. Switching namespaces within a transaction is allowed, a single `BEGIN` -
-`COMMIT` block can atomically span multiple namespaces. Snapshot reads are available via `SNAPSHOTREAD ON` for read-heavy
-workloads where strict serializability is not required. Snapshot reads do not create read conflict ranges, so they will 
+`ROLLBACK` discards all uncommitted changes. You can switch namespaces inside a transaction, so a single `BEGIN` and
+`COMMIT` block can span multiple namespaces atomically. `SNAPSHOTREAD ON` enables snapshot reads for read-heavy
+workloads where strict serializability is not required. Snapshot reads do not create read conflict ranges, so they do
 not conflict with concurrent writes.
 
 Transactions inherit FoundationDB's constraints: a 5-second time window starting from the first read and a 10 MB
 transaction size limit. For Bucket, only metadata passes through FoundationDB; document bodies are stored in the Volume
 layer, so the size limit does not apply to document bodies.
 
-See the [transaction documentation](https://kronotop.com/docs/transactions) for snapshot reads, cross-namespace
-transactions,
-and the transaction time window.
+See the [transaction documentation](https://kronotop.com/docs/transactions) for snapshot reads, cross-namespace transactions, and the transaction time window.
 
 ## Clustering
 
@@ -517,6 +514,13 @@ shard reassignment are managed through the admin command interface.
 See the [cluster administration documentation](https://kronotop.com/docs/admin/cluster/operations-guide) for cluster
 initialization, shard routing, and replication configuration.
 
+## Observability
+
+The `INFO` command reports runtime metrics: clients, traffic, transactions, memory, Bucket, ZMap and vector index
+activity. Kronotop can also push these metrics to an OpenTelemetry collector over OTLP/HTTP. Ready-made Grafana
+dashboards are in [extras/observability](extras/observability). For a local setup with collector, Prometheus and Grafana, 
+see [docker/observability](docker/observability).
+
 ## Why These Building Blocks?
 
 ### FoundationDB
@@ -527,14 +531,14 @@ these guarantees instead of implementing its own consensus layer.
 ### RESP
 
 Kronotop needs a lightweight request-response protocol. Developers already know how RESP works, and most mainstream
-languages have a RESP client. That means Kronotop SDKs are thin wrappers, not ground-up implementations.
+languages have a RESP client. So a Kronotop SDK is a thin wrapper around an existing client.
 
 ### Java
 
-The original plan was to build on FoundationDB Record Layer and Apache Calcite, or at least reuse some of their
-components. Both projects are in Java. After implementing key components, the project shifted toward developing a native document
-layer. The FoundationDB Java client and the Directory Layer are officially supported. Being on the JVM also gives access to
-libraries like [JVector](https://github.com/datastax/jvector), which powers Kronotop's vector search. These were the main reasons behind the language choice.
+The original plan was to build on FoundationDB Record Layer and Apache Calcite, or at least to reuse some of their
+components. Both projects are in Java. After the key components were in place, the project moved to a native document
+layer. The FoundationDB Java client and the Directory Layer are officially supported, and the JVM gives access to
+libraries like [JVector](https://github.com/datastax/jvector), which powers Kronotop's vector search.
 
 ## Support
 
@@ -544,11 +548,10 @@ libraries like [JVector](https://github.com/datastax/jvector), which powers Kron
 
 ## About the Name
 
-[Chronotope](https://en.wikipedia.org/wiki/Chronotope) is a concept from literary theory introduced
-by [Mikhail Bakhtin](https://en.wikipedia.org/wiki/Mikhail_Bakhtin). It refers to the relationship between time
-and space in a narrative. An early goal of the project was to bring OLTP and OLAP workloads together under different 
-data models. The name felt appropriate: the idea of time and space aligned with that ambition, and nobody in the
-database world seemed to be using it. Kronotop is the Turkish phonetic spelling of Chronotope.
+[Chronotope](https://en.wikipedia.org/wiki/Chronotope) is a concept from literary theory introduced by [Mikhail Bakhtin](https://en.wikipedia.org/wiki/Mikhail_Bakhtin). It refers to the relationship 
+between time and space in a narrative. An early goal of the project was to bring OLTP and OLAP workloads together under 
+different data models. The name felt appropriate: the idea of time and space aligned with that ambition, and nobody in 
+the database world seemed to be using it. Kronotop is the Turkish phonetic spelling of Chronotope.
 
 ## License
 

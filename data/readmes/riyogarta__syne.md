@@ -323,7 +323,7 @@ When a public user searches memories, results outside the allowed categories are
 
 ### History & Recall — Lean Window + Semantic Search Over Full Archive (No Compaction)
 
-Syne loads a **lean window** of recent messages each turn (default: 50 via `session.history_limit`) and reaches beyond it via `history_search` for semantic recall over the entire chat log. Compaction is **disabled by default** (`compaction.trigger_percent = 100`) — the summarizer function is still in the code, but the trigger threshold is unreachable in normal use.
+Syne loads a **lean window** of recent messages each turn (default: 50 via `session.history_limit`) and reaches beyond it via `history_search` for semantic recall over the entire chat log. There is no compaction — nothing is ever summarized.
 
 The 50-message default was chosen after measuring real production sessions: a 1000-message window cost ~316k tokens per request once a session got long (950 messages → 1.21M chars per call). At 50, the same session costs ~17k tokens per request — a ~95% cut with **no data loss**, since the full log stays in the DB and `history_search` can reach any turn on demand.
 
@@ -335,7 +335,7 @@ Compaction is a workaround for a constraint Syne doesn't have. Other assistants 
 - **Bias injection.** Summaries are LLM-generated text. If the summarizer hallucinates a claim ("we agreed to X"), that claim becomes "background context" for every subsequent turn — the model treats it as fact, not as one model's interpretation of a past exchange.
 - **Compounding drift.** Summaries of summaries progressively lose fidelity. Old decisions get restated in the summarizer's preferred framing rather than the owner's own words.
 
-Syne's tradeoff is different: it retains **every message forever** (marked `status='compacted'` only when a compaction summary was created historically — content is never deleted) and provides `history_search` to reach anything outside the lean window semantically. The tools loop is:
+Syne's tradeoff is different: it retains **every message forever** (content is never deleted or summarized) and provides `history_search` to reach anything outside the lean window semantically. The tools loop is:
 
 ```
 history_search(query, ...)        → previews (user messages, ground truth)
@@ -351,7 +351,6 @@ The retrieval is (a) unlimited in reach — full chat archive is searchable, (b)
 
 - `trim_context` — per-turn safety net that drops oldest non-system messages 4 at a time if the loaded window still exceeds the context budget. Non-destructive; nothing leaves the DB.
 - `session.history_limit` — the load window itself. 50 default is conservative; raise it (`syne config set session.history_limit 200`) if you want more raw context in the model's window and your token budget allows.
-- `run_compact()` — the summarizer stays in the code, dormant. If a specific installation observes that the lean-window + `history_search` pattern is a poor fit (e.g. extremely high-throughput group chat), reactivating is one config change: `syne config set compaction.trigger_percent 60`.
 
 **How this shows up in behavior:**
 
@@ -429,7 +428,7 @@ syne restart
 - **Trigger word is mandatory** — in groups *and* DMs, including from the owner. Set it with `whatsapp.trigger_name` (falls back to `telegram.bot_trigger_name`, then the identity name). The one exception: **replying to one of Syne's messages** needs no trigger — the reply itself addresses the bot, and the quoted message is passed along as context. Syne's messages are recognised by id, and after a restart by the reply marker.
 - **Reply marker** — every message Syne sends on WhatsApp starts with 🐍 on its own line, so its replies are told apart from your own messages. Change or disable it with `syne config set whatsapp.reply_prefix ""`.
 - **Running on your own number** — your own messages can call the bot too, in groups and in private chats with other people (trigger anywhere in the text). In a private chat the conversation stays the other person's, but your message is attributed to you, with your own access level. Syne recognises its own replies by message id and content, and a brake ignores more than 3 of your triggers per chat per minute.
-- **Members** — anyone who addresses the bot by name is registered as `public` on first contact. Manage them with `/wamembers` on Telegram: block, per-entry model override, per-member access level in groups, leave a group.
+- **Members** — anyone who addresses the bot by name is registered as `public` on first contact. Manage them with `/wamembers` on Telegram: block, per-entry model override, per-member access level in groups, leave a group. **Delete** removes the entry from the allowlist, so it no longer appears in the list.
 - **Re-pairing** — WhatsApp logs linked devices out if the primary phone is unused for about 14 days, or when the device is removed from *Linked devices*. Syne tells the owner on Telegram when that happens; send `/restart` and scan the new QR it sends.
 - **Outbound limits** — through `send_message`, family members can only reach WhatsApp chats that have already talked to Syne; only the owner can message a new number. Group sends (WhatsApp groups, Discord server channels) are allowed only from scheduled tasks.
 
@@ -446,7 +445,7 @@ syne restart
 
 - **DM approval** — `discord.dm_policy` (default `approval`): the first DM from an unknown user is held and the owner gets **Approve / Reject** buttons on Telegram. Rejected users are stored as blocked.
 - **Server approval** — `discord.guild_policy` (default `allowlist`): Syne stays silent in a new server until the owner approves it on Telegram; rejecting makes the bot leave.
-- **Members** — `/dcmembers` on Telegram: per-DM and per-server model override, block, and per-member access level inside a server.
+- **Members** — `/dcmembers` on Telegram: per-DM and per-server model override, block, and per-member access level inside a server. The list shows active entries only; DM users waiting for approval are hidden until approved. **Delete** on a DM user revokes access — see [Member lists and Delete](#member-lists-and-delete).
 - **Mentions are pinned** — replies can never ping `@everyone` or a role.
 
 ---
@@ -517,6 +516,21 @@ Syne uses a Linux-inspired 3-digit octal permission system. Every tool and abili
 | **blocked** | Denied users | No access to anything |
 
 The first user to message Syne automatically becomes `owner`.
+
+### Member lists and Delete
+
+`/telemembers` and `/dcmembers` list **active members only**. Blocked users sit in their own submenu, and users waiting for approval (new, or deleted) are not listed at all; they appear once the owner approves them.
+
+**Delete** on a user in `/telemembers` or `/dcmembers` revokes access without erasing anything:
+
+- The user is set back to `public` and marked as pending approval, and disappears from the list.
+- Their next DM is held and the owner gets **Approve / Reject** buttons again (unless the DM policy is `open`, in which case they are let back in).
+- Chat history and memories are kept. Approving reconnects them, because the user record itself was never removed.
+- The owner cannot be deleted.
+
+On `/wamembers`, Delete only removes the entry from the allowlist.
+
+**Idle members are deleted automatically.** Once a day, any Telegram, Discord or WhatsApp DM member who has not messaged Syne in a DM for `members.idle_revoke_days` days (default `60`, `0` disables) gets the same Delete as above, and the owner receives a summary on Telegram. Owner and family users, blocked entries and groups are never touched. Activity is measured from DMs only: group messages are stored per group, not per sender, so someone active only in groups counts as idle. On WhatsApp this only drops their DM allowlist entry; it does not affect replies in groups.
 
 ### Permission Format: `0oOFP`
 
@@ -780,9 +794,6 @@ All configuration lives in the `config` table. Change via conversation or `updat
 |-----|---------|-------------|
 | `session.history_limit` | `50` | Max messages loaded into context per turn. Full history stays reachable via `history_search` — see [History & Recall](#history--recall--lean-window--semantic-search-over-full-archive-no-compaction). Raise (e.g. `200`) if you want more raw context in the window and your token budget allows. |
 | `session.tool_loop_timeout` | `1800` | Tool loop timeout in seconds (30 min default) |
-| `compaction.trigger_percent` | `100` | Compaction trigger: fires when context usage reaches this % of the model window. **Default 100 = proactive compaction OFF.** Set to `60–80` to reactivate if you observe the lean-window + `history_search` pattern is a poor fit for your workload. |
-| `session.compaction_keep_recent` | `40` | Messages preserved raw when compaction does run |
-| `session.compaction_overlap_percent` | `15` | Overlap: % of summarized batch also kept raw as a verbatim bridge |
 | `session.thinking_budget` | `null` | Global default only — per-model thinking is set via `/models` |
 | `session.reasoning_visible` | `false` | Show model thinking in responses (on/off) |
 
@@ -805,6 +816,7 @@ All configuration lives in the `config` table. Change via conversation or `updat
 | Key | Default | Description |
 |-----|---------|-------------|
 | `telegram.dm_policy` | `"approval"` | DM policy: "approval" or "open" |
+| `members.idle_revoke_days` | `60` | Auto-Delete members with no DM for N days (all platforms, history kept); 0 disables |
 | `telegram.group_policy` | `"allowlist"` | Group policy: "allowlist" or "open" |
 | `telegram.require_mention` | `true` | Require @mention in groups |
 
@@ -892,7 +904,6 @@ Config snapshots (`syne config backup` or `/backupconf` on Telegram) live in `~/
 | `/memory` | Memory statistics | All |
 | `/identity` | Agent identity | All |
 | `/clear` | Clear conversation history | Owner |
-| `/compact` | Compact conversation | Owner |
 | `/reasoning [on/off]` | Toggle reasoning visibility | Owner |
 | `/autocapture [on/off]` | Toggle auto memory capture | Owner |
 | `/consent [on/off]` | Toggle consent gate for destructive tools | Owner |
@@ -904,11 +915,9 @@ Config snapshots (`syne config backup` or `/backupconf` on Telegram) live in `~/
 | `/vision` | Manage vision provider (for OCR / image analysis) | Owner |
 | `/imagegen` | Manage image generation provider | Owner |
 | `/browse` | Browse directories (share session with CLI) | Owner |
-| `/groups` | Manage groups & members | Owner |
-| `/members` | Manage global user access levels | Owner |
-| `/telemembers` | Manage Telegram users & groups | Owner |
+| `/telemembers` | Manage Telegram users & groups (active members only) | Owner |
 | `/wamembers` | Manage WhatsApp members, groups & model overrides | Owner |
-| `/dcmembers` | Manage Discord users, servers & model overrides | Owner |
+| `/dcmembers` | Manage Discord users, servers & model overrides (active members only) | Owner |
 | `/backup` | Backup database | Owner |
 | `/restore` | Restore database from backup | Owner |
 | `/backupconf` | Back up config only (models, credentials, per-user model overrides) | Owner |
@@ -1030,7 +1039,6 @@ syne/
 │   ├── boot.py              # System prompt builder (identity, soul, rules, guides)
 │   ├── conversation.py      # Conversation loop: context → LLM → tools → response
 │   ├── context.py           # Context window manager (token counting)
-│   ├── compaction.py        # Conversation summarization
 │   ├── security.py          # Permission system, SSRF protection, credential masking
 │   ├── consent.py           # Per-action Yes/No gate (owner/family clean-turn skip, provenance-aware)
 │   ├── shell_guard.py       # Deterministic shell parser (ALLOW/CONSENT/HARD_DENY, fail-closed)

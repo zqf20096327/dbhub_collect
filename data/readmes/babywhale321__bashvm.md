@@ -1,6 +1,6 @@
 # bashvm
 
-bashvm is a console based virtual machine manager
+BashVM is a lightweight, console-based virtual machine manager written in Bash. It lets administrators manage virtual machines without a heavy management daemon or web interface, keeping overall security exposure small because it requires only SSH access.
 
 ## How to use
 
@@ -56,8 +56,8 @@ The bashvm installer script installs the following packages
 ### Screenshots
 https://bashvm.com/screenshots.html
 
-### Guide
-https://bashvm.com/guide.html
+### Documentation
+https://bashvm.com/documentation.html
 
 ### Donations:
 https://www.paypal.com/paypalme/babywhale123

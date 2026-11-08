@@ -70,6 +70,18 @@ NODE_NAME=我的节点 NODE_URL=https://我的域名 NODE_P2P_ADDR=/ip4/1.2.3.4/
 镜像：`ghcr.io/openwtu/charging-crawler:latest`（CI 推 `v*` tag 自动构建）。
 自动更新：每天 03:00 拉最新镜像，`/health` 检查失败自动回退旧镜像（日志 `/var/log/charge-update.log`）。
 
+可选环境变量：
+
+| 变量 | 说明 |
+|---|---|
+| `TRUST_PROXY` | 前面有 Nginx 时设 `true`（只信任本机/docker 网段转发的 `X-Forwarded-For`，防伪造绕过限流）|
+| `REGISTER_TOKEN` | 设备注册令牌。**留空 = 不校验**；配置后 `POST /api/device/register` 必须带同名 `x-register-token` 头（新版 App 已内置），用于阻止任意注册 |
+| `NODE_NAME` / `NODE_URL` / `NODE_P2P_ADDR` | 节点名称 / HTTP 地址 / 公网 P2P 地址（状态页卡片与节点互连用）|
+| `ADMIN_INIT_PASSWORD` | 初始管理员口令（仅在 `admin_users` 为空时用来创建 `admin`，**首次登录强制改密**；不配则不创建账号）|
+| `ADMIN_SESSION_SECRET` | 会话签名密钥（建议 ≥16 位随机串；缺失时进程内随机，重启后所有会话失效）|
+| `ADMIN_COOKIE_SECURE` | 会话 cookie 是否 Secure（默认 `true`；本地 http 调试设 `false`）|
+| `P2P_TRUST_NON_WHITELIST` | 是否采纳**非白名单节点**的数据。默认 `false`（丢弃，只信 `nodes.json` 里的节点）；设 `true` 则任何能连上来的节点数据都接受。**不影响连接本身**——非白名单节点照样能加入网络、状态页可见、App 可手动切过去 |
+
 ## 功能
 
 - **App**：实时列表、按楼栋推荐、分析页（热力图/趋势/排行/同期参考）、**历史页**（单区曲线/作息规律/采样明细）、令牌页（VPN 抓包/手动粘贴）、设置、刷新进度、**离线降级**（连不上服务器时隐藏分析/历史页签）、**节点发现**（GitHub 目录 + mDNS）。
@@ -107,6 +119,8 @@ NODE_NAME=我的节点 NODE_URL=https://我的域名 NODE_P2P_ADDR=/ip4/1.2.3.4/
 | GET | `/api/area-coords` | 区域坐标 |
 | GET | `/api/controllers` | 控制器清单 |
 | GET | `/api/version` | APK 版本与 sha256 |
+| — | `/admin` | **管理后台**（17 页：概览/实时/历史/质量/数据浏览器/令牌/设备/桩区域/节点/任务/日志/流量/系统/配置/发布/备份/账号/审计）|
+| — | `/admin/login` | 管理员登录（多账号 + 三角色）|
 | GET | `/api/latest` | 最新原始快照 |
 | GET | `/status` | 公开状态页（无登录） |
 | GET | `/health` | 健康摘要 |
@@ -117,7 +131,16 @@ NODE_NAME=我的节点 NODE_URL=https://我的域名 NODE_P2P_ADDR=/ip4/1.2.3.4/
 - token：AES-256-GCM 加密存储，仅用于 worker 代为抓取；App「上传令牌」开关默认开，关闭后不上传。
 - 设备注册：自动审批（无人工审核），secret 用 AES-GCM 加密落库。
 - 只读接口：IP 限流。
+- **管理后台**：`/admin`（17 页）。首次部署配 `ADMIN_INIT_PASSWORD` 创建 `admin` 账号，登录后**必须先改密**。
+  三角色：`super`（全部）/`ops`（数据处理，不能改配置/白名单/恢复/账号）/`viewer`（只读）。
+  写操作需 CSRF 头，全部进 `admin_audit`。方案见 [`docs/admin-plan.md`](docs/admin-plan.md)，
+  跨节点互校见 [`docs/p2p-validation.md`](docs/p2p-validation.md)。
 - **P2P**：节点身份用 peerId 白名单（权威源 `server/p2p/nodes.json`，App 节点目录与白名单合并成一份，走 PR 审计）；节点私钥留在服务器本地，绝不进仓库。
+  - **连接层完全开放**：任何 libp2p 节点都能连上来（不拦 dial），非白名单节点也会出现在状态页
+  - **消息层默认只信白名单**：不在 `nodes.json` 的节点，其快照/心跳默认丢弃；
+    设 `P2P_TRUST_NON_WHITELIST=true` 可改为全部采纳
+  - **App 自动切换只走白名单目录**（GitHub `nodes.json`）；mDNS 发现的局域网节点只记日志、
+    不自动切换，但可以在状态页手动点过去
 
 ## P2P 去中心化共享
 
@@ -143,7 +166,7 @@ App 上传 → 节点 A 落库 → gossipsub 广播（topic "charge-snapshots"�
 cd webui && pnpm install && pnpm run build   # 输出到 webui/dist
 
 # APK（本机，需 Android SDK/JDK + release keystore）
-CHARGE_VERSION_CODE=2003001 CHARGE_VERSION_NAME=2.3.1 python android/build.py
+CHARGE_VERSION_CODE=2004021 CHARGE_VERSION_NAME=2.4.21 python android/build.py
 
 # Docker 镜像（本地验证）
 docker compose build
@@ -165,7 +188,7 @@ docker compose build
 
 ## 版本与测试
 
-- App：`2.3.1`（versionCode 2003001）
+- App：`2.4.21`（versionCode 2004021）
 - Node 后端测试：`cd server && pnpm test`（53 项，含密码学对拍、端点边界、P2P 两节点互传、worker mock）
 - 只读接口曾与 Python 版 24/24 对拍一致（Python 版已删除，见 git 历史）
 - 签名：release keystore 保持仓库外，SHA256 见 `/api/version`

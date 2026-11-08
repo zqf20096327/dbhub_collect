@@ -2,22 +2,37 @@
 
 > A file-based & memory-efficient, serverless relational database with **crash-atomic ACID: single-table DML + multi-table transactions** :fire: — per-table writer locks, write-ahead journal + crash recovery, fsync-backed durability, and a `begin`/`commit`/`rollback` transaction API (exact scope in [Durability & crash safety](#durability--crash-safety)).
 
-[![Inibase banner](./.github/assets/banner.jpg)](https://github.com/inicontent/inibase)
+[![Inibase: TypeScript API, column-file storage, relations, transactions, and durability](./.github/assets/overview.svg)](#usage)
 
 [![npmjs](https://img.shields.io/npm/dm/inibase.svg?style=flat)](https://www.npmjs.org/package/inibase) [![License](https://img.shields.io/github/license/inicontent/inibase.svg?style=flat&colorA=18181B&colorB=28CF8D)](./LICENSE) [![Activity](https://img.shields.io/github/commit-activity/m/inicontent/inibase)](https://github.com/inicontent/inibase/pulse) [![GitHub stars](https://img.shields.io/github/stars/inicontent/inibase?style=social)](https://github.com/inicontent/inibase)
+
+**[Quick start](#usage) · [How it works](#how-it-works) · [Durability](#durability--crash-safety) · [Benchmarks](#benchmark)**
+
+## Small footprint. Real benchmark results.
+
+Inibase is a file-based TypeScript database designed for **fast data access and low memory usage**, with column selection, built-in caching, and optional gzip compression.
+
+In the **100,000-record CMS benchmark**, published **Inibase 3.8.0 with gzip and `log: true`** used **1.64 MiB of allocated disk** after bulk loading — **89.3% less than LevelDB** and **98.7% less than SQLite**. Five committed updates took **175 ms**, versus **5174 ms** with the default gzip update path. A full read took **258 ms**, and a two-column projection took **64 ms**, both before updates.
+
+[![Database storage comparison for 100,000 CMS records with published Inibase 3.8.0; lower is better](./.github/assets/storage-benchmark-100k-v3.8.0.png)](https://github.com/inicontent/benchmarks/blob/11123a511e1c5dc2dce0b80f113ab1f65c02093d/results/large-cms/REPORT.md)
+
+*Source: [inicontent/benchmarks](https://github.com/inicontent/benchmarks/blob/11123a511e1c5dc2dce0b80f113ab1f65c02093d/results/large-cms/REPORT.md), medians of three trials on Apple M5 with repetitive synthetic CMS content, full durability, and query caching disabled. Storage is measured before updates; reads are affected by the OS cache. Logging is opt-in and defers work to compaction, which may increase delete costs. Indexed competitors remain faster for key lookups. See [all operation timings](#benchmark).*
+
+[Explore the full results](https://github.com/inicontent/benchmarks/blob/11123a511e1c5dc2dce0b80f113ab1f65c02093d/results/large-cms/REPORT.md) · [Read the methodology](https://github.com/inicontent/benchmarks/blob/11123a511e1c5dc2dce0b80f113ab1f65c02093d/METHODOLOGY.md) · [Enable incremental updates](#incremental-update-log)
 
 ## Features
 
 - **Lightweight** 🪶
 - **Minimalist** :white_circle: (but powerful)
 - **100% TypeScript** :large_blue_diamond:
-- **Super-Fast** :zap: (built-in caching system)
+- **Built for fast access** :zap: Built-in caching and column projection
 - **ATOMIC** :lock: Per-table writer locks, write-ahead journal + crash recovery, fsync-backed durability, and multi-table transactions (`begin`/`commit`/`rollback`) for atomic cascades (exact scope below)
 - **Built-in** form validation (+unique values :new: ) :sunglasses:
 - **Suitable for large data** :page_with_curl: (tested with 4M records)
+- **Incremental updates** :recycle: Opt-in update log (`log: true`) appends small frames instead of rewriting whole columns
 - **Support Compression** :eight_spoked_asterisk: (using built-in nodejs zlib)
 - **Support Table Joins** :link:
-- **Low memory-usage** :chart_with_downwards_trend: (3-5mb)
+- **Memory-conscious design** :chart_with_downwards_trend: File-based storage and streaming reads
 - **Safe** :lock: (no sql or javascript injections)
 - **Easy to use** :bread:
 - **...** and much more :rocket:
@@ -70,7 +85,7 @@ const users = await db.get("user", { favoriteFoods: "![]Pizza,Burger" });
 
 - **POST**: New data is appended to column files efficiently.
 - **GET**: Data retrieval is optimized by reading files line-by-line.
-- **PUT**: Updates are streamlined, with only the relevant file being modified.
+- **PUT**: Updates are streamlined: on a plain table only the relevant column file is rewritten, while a table with the [update log](#incremental-update-log) enabled appends a small frame instead.
 - **DELETE**: Removes lines from column files for swift deletion.
 
 This structure ensures efficient storage, retrieval, and updates, making our system scalable and high-performing for diverse datasets and applications.
@@ -166,6 +181,50 @@ Run `pnpm test:durability` for the journal-recovery, multi-process writer,
 live-reader and stale-lock test suite, `pnpm test:transaction` for the
 transaction/cascade/crash-recovery suite, and `pnpm benchmark:durability` for
 the `full` vs `none` throughput comparison.
+
+## Incremental update log
+
+Opt a table into the append-only **update log** (on-disk format 2) to make `put`
+cheap when a table is large but each update touches few rows:
+
+```js
+await db.createTable("user", userTableSchema, { log: true });
+// or migrate an existing table in place:
+await db.updateTable("user", undefined, { log: true });
+```
+
+- **Writes.** `put` appends one length-prefixed, `crc32`-checked frame
+  (`{ id, cols, updatedAt }`) to `updates.log` instead of rewriting column
+  files, so the fast path is proportional to the number of updated rows rather
+  than the table size. `post` and `delete` still rewrite the base columns.
+- **Reads.** Every read — `get`, criteria, `columns`, sort, pagination,
+  aggregates, and uniqueness checks — merges the log over the base columns, so
+  results match an un-logged table. With an empty log the merge is a no-op.
+- **Compaction.** `await db.compact(tableName)` folds the log into the base
+  columns and resets it, returning the new `baseGen` — or `null` when there was
+  nothing to fold. Compaction is crash-safe and semantically neutral: it only
+  materializes already-acknowledged updates. It also runs automatically under
+  backpressure so the overlay and log stay bounded
+  (`INIBASE_MAX_OVERLAY_RECORDS`, default `100000`; `INIBASE_MAX_LOG_BYTES`,
+  default 64 MiB); if the bound is hit and compaction cannot run, the write
+  fails with `MAINTENANCE_REQUIRED` rather than growing without limit.
+- **Requirements.** The table must use the append layout (no `prepend`) and a
+  schema of simple top-level fields. Transactions, schema changes, and
+  disabling the log on a log table throw `MAINTENANCE_REQUIRED` for now (they
+  need compaction rewiring, planned for 3.9).
+- **On disk.** A `.format` marker records `format`, `baseGen`, and the
+  compatibility contract (`minReader`); `updates.log` holds the frames. A table
+  with no `.format` is legacy format 1 and behaves exactly as before.
+- **Downgrade safety.** A reader older than the log format ignores the marker
+  and would silently serve **stale** base columns. The marker's `minReader`
+  makes a conforming engine refuse such a table with `UNSUPPORTED_FORMAT`
+  instead of mis-reading it.
+
+> [!WARNING]
+> **Backups.** A raw directory copy is only a valid backup when writes are
+> quiesced or the copy is a filesystem snapshot. Copying a logged table *during*
+> writes can capture base columns paired with a mismatched `updates.log` /
+> `baseGen`. Running `compact` first does not remove the need to quiesce writes.
 
 ## Inibase CLI
 
@@ -1058,53 +1117,50 @@ are derived first, in dependency order.
 
 ## Benchmark
 
-### Bulk
+### Published 3.8.0: 100,000 CMS records
 
-|        | 10                | 100               | 1000              |
-|--------|-------------------|-------------------|-------------------|
-| POST   | 11 ms (0.66 mb)   | 5 ms (1.02 mb)    | 24 ms (1.44 mb)   |
-| GET    | 29 ms (2.86 mb)   | 24 ms (2.81 mb)   | 36 ms (0.89 mb)   |
-| PUT    | 21 ms (2.68 mb)   | 16 ms (2.90 mb)   | 12 ms (0.63 mb)   |
-| DELETE | 14 ms (0.82 mb)   | 13 ms (0.84 mb)   | 2 ms (0.17 mb)    |
+**252/252 trials passed** across the comparison suite: eight engines, twelve configurations, three datasets at 1,000 and 10,000 records, plus this 100,000-record CMS run. Every successful trial verifies full content, projections, lookups, updates, and the remaining records after deletion.
 
+The table shows **median total milliseconds across three trials; lower is better**. These are database API operations, not HTTP requests.
 
-### Single
+- **POST:** insert all 100,000 records in batches of 1,000, including commit/flush and excluding separately reported maintenance.
+- **GET:** read all 100,000 records; projection returns only `seq` and `category`. Both are measured before updates and are cache-affected.
+- **PUT:** five separate committed updates selected by application key, setting `score` to `-1`.
+- **DELETE:** five separate committed deletions, including any compaction the engine triggers.
 
-|        | 10                  | 100                | 1000               |
-|--------|---------------------|--------------------|--------------------|
-| POST   | 45 ms (1.07 mb)     | 12 ms (0.52 mb)    | 11 ms (0.37 mb)    |
-| GET    | 200 ms (2.15 mb)    | 192 ms (2.72 mb)   | 190 ms (2.31 mb)   |
-| PUT    | 49 ms (3.22 mb)     | 17 ms (2.98 mb)    | 17 ms (3.06 mb)    |
-| DELETE | 118 ms (0.59 mb)    | 113 ms (0.51 mb)   | 103 ms (3.14 mb)   |
+| Configuration | POST 100k | GET 100k | GET projection 100k | PUT 5 records | DELETE 5 records |
+|---|---:|---:|---:|---:|---:|
+| Inibase 3.8.0 plain | 6629.709 | 229.705 | 58.865 | 738.768 | 1208.188 |
+| Inibase 3.8.0 gzip | 3141.852 | 258.723 | 63.058 | 5174.360 | 1932.057 |
+| Inibase 3.8.0 plain + log | 7305.530 | 257.801 | 64.880 | 178.175 | 1382.575 |
+| Inibase 3.8.0 gzip + log | 3194.676 | 257.580 | 64.079 | 175.072 | 3273.597 |
+| SQLite | 358.504 | 113.873 | 47.684 | 0.731 | 0.302 |
+| DuckDB | 1051.170 | 171.503 | 23.602 | 2.368 | 0.898 |
+| PGlite | 1084.946 | 421.289 | 168.332 | 1.658 | 0.678 |
+| PostgreSQL | 580.652 | 105.262 | 26.082 | 0.995 | 0.486 |
+| MongoDB | 636.233 | 408.611 | 113.722 | 18.148 | 20.182 |
+| LevelDB | 316.729 | 231.328 | 226.973 | 0.793 | 0.452 |
+| LMDB | 522.254 | 167.659 | 113.197 | 19.052 | 19.994 |
+| LMDB LZ4 | 1552.237 | 170.728 | 135.092 | 20.034 | 19.979 |
 
-> Default testing uses a table with username, email, and password fields, ensuring password encryption is included in the process<br>
-> Results are measured on a default table plus dedicated tables with `prepend`, `compression`, and `decodeID` configs enabled<br>
-> To run benchmarks, install _typescript_ & _[tsx](https://github.com/privatenumber/tsx)_ globally and run `benchmark` by default bulk, for single use `benchmark --single|-s`
->
-> > [!WARNING]
-> > The numbers above were measured **before** always-on fsync + write-ahead journaling landed (they no longer reflect current hot-path write costs). Run `pnpm benchmark:durability` for the crash-atomic numbers.
+**Small storage, faster incremental updates.** In this workload, gzip + log stores the initial dataset in **1.641 MiB** and reduces the five-update total by **29.6×** compared with the default 3.8.0 gzip path. Bulk insertion remains around **3.2 seconds**. The following five deletes take **3274 ms** with logging versus **1932 ms** without it; that cost includes any triggered compaction.
 
-### Computed fields
+The [update log](#incremental-update-log) is opt-in and currently restricts transactions and schema changes. This short update test does not measure sustained compaction amortization, pending-overlay read latency, peak log space, or crash recovery. Inibase filters on the application `seq` field; competitors use native primary-key indexes. Durability and feature coverage differ across engines. The corpus is repetitive synthetic CMS content, not production customer data; high-entropy and compact-record controls are included in the main report.
 
-Write-time evaluation cost (helpers `sum(3 * 4)`, `avg(4)`, `min(4)`, `max(4)`, `count(3)` over an `items` array with 3 lines, plus an arithmetic field `itemTotal × (314 / 100)`), compared against the identical table without computed fields:
+[All datasets and storage results](https://github.com/inicontent/benchmarks/blob/11123a511e1c5dc2dce0b80f113ab1f65c02093d/results/latest/REPORT.md) · [100,000-record report](https://github.com/inicontent/benchmarks/blob/11123a511e1c5dc2dce0b80f113ab1f65c02093d/results/large-cms/REPORT.md) · [Raw samples](https://github.com/inicontent/benchmarks/blob/11123a511e1c5dc2dce0b80f113ab1f65c02093d/results/large-cms/results.json) · [Methodology](https://github.com/inicontent/benchmarks/blob/11123a511e1c5dc2dce0b80f113ab1f65c02093d/METHODOLOGY.md)
 
-| rows | POST bulk (plain / computed) | POST single (plain / computed) | PUT recompute (plain / computed) |
-|------|------------------------------|--------------------------------|----------------------------------|
-| 10   | 21.90 / 22.69 ms             | 25.24 / 26.80 ms               | 23.10 / 37.07 ms                 |
-| 100  | 22.00 / 25.23 ms             | 25.24 / 26.80 ms               | 22.16 / 40.00 ms                 |
-| 1000 | 28.79 / 35.15 ms             | 25.24 / 26.80 ms               | 21.01 / 45.05 ms                 |
+### Reproduce and profile
 
-> Min of 3 rounds (fsync + journal on); the plain-vs-computed delta is the pure expression-evaluation cost (~6 ms/1000 rows of helpers on POST, more on `PUT` because every matched row is recomputed). GET all (1110 rows): 11.44 / 15.90 ms — computed values are stored in real column files, so reads never evaluate; the gap is the larger column count to scan. Run `pnpm benchmark:computed` to reproduce.
+Run the cross-database suite from [inicontent/benchmarks](https://github.com/inicontent/benchmarks). Its package lock pins the published package and competitor versions; instructions include the exact workloads and configuration labels.
 
-**Link-heavy: shared product catalog with batched link-hop reads.** Every order's line items reference a shared 20-row catalog; `totalCentsLive = sum(quantity, product.price)` follows one link hop per line item. The engine batches the hops across the whole post: each batch resolves at most one read per **distinct** `(table, column, id)` triple (here: catalogSize=20 product rows) instead of one full row-level read per line item (2000 reads for 1000 orders × 2 items):
+For local engine development, the following scripts measure different workloads and should not be compared directly with the table above:
 
-| rows | POST bulk (lk link hop) |
-|------|-------------------------|
-| 10   | 42.29 ms                |
-| 100  | 47.76 ms                |
-| 1000 | 59.46 ms                |
-
-> Shared 20-row catalog (10/100/1000 orders × 2 line items). Without batching every line item re-reads its product row; with it each batch resolves ≤ catalogSize distinct linked rows once (deduplicated across every line item and every order of the batch) and re-evaluates against the warm in-memory cache. A dangling link anywhere in the batch still rejects the whole post (`COMPUTED_FIELD_DANGLING_LINK`). HTTP-request bound, not disk-bound: the cost scales with the number of *distinct* linked rows the catalog actually has, not with line-item count.
+```sh
+pnpm benchmark
+pnpm benchmark:durability
+pnpm benchmark:updatelog
+pnpm benchmark:computed
+```
 
 ## Roadmap
 

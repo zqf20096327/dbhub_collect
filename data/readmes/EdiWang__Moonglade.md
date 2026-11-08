@@ -9,7 +9,10 @@ A public blog and authenticated admin portal provide:
 - **Content publishing:** posts, drafts, scheduled posts, Markdown Mermaid diagrams, pages, featured/outdated flags, archives, recycle bin behavior, and route links for published posts.
 - **Reader interaction:** comments, replies, Webmentions, comment moderation, view counts, and optional email notifications.
 - **Site management:** runtime blog settings, widgets, themes, custom CSS, menus, image storage, site verification files, account settings, and data import/export.
+- **Activity history:** localized administrator history with time, actor, a single activity description, event/date filters, and readable details. Each automatically published article has its own System entry with the captured title, stable ID, and actual publication time. Ordinary setting updates show approved before/after values only when effective values change; unchanged saves produce no activity entry, while updates without displayable values retain a localized explanation. **Clear all** is the only deletion action; public comment submissions are excluded. After clearing, the application attempts to record the administrator, time, and deleted count. A failed activity write is logged without undoing the business operation.
 - **Discovery and interoperability:** RSS, Atom, OPML, OpenSearch, FOAF, sitemap, robots.txt, IndexNow, root-level site ownership verification files, reader-friendly markup, and health checks.
+
+The admin portal supports desktop browsers with a viewport at least 1440 CSS pixels wide.
 
 ## Repository Layout
 
@@ -43,6 +46,7 @@ Apply upgrades in order when required:
 
 1. [Category integer IDs](docs/upgrade-category-int-identity.md): converts GUID keys; public category/feed URLs retain their slugs, while admin APIs use integers.
 2. [PostgreSQL snake_case names](docs/upgrade-postgresql-snake-case.md): requires integer category IDs first. SQL Server retains PascalCase names.
+3. [Canonical activity events](docs/upgrade-activity-log-events.md): replaces legacy activity wording with stable event keys on both providers. Stop the old host first; this one-time upgrade discards only legacy activity history. Reruns preserve new history.
 
 ### Quick Local Deployment (Docker)
 
@@ -105,11 +109,15 @@ Choose HTML or Markdown under **Settings > Content > Default editor** (`/admin/s
 
 Article saves, publication changes (including scheduled publishing), recycle-bin operations, and category/tag updates or deletions invalidate article caches, feeds, and the sitemap. Counters do not trigger invalidation; page-specific sitemap invalidation preserves article/feed caches. Feeds and the sitemap expire after one hour; articles use `PostCacheMinutes`. Invalidation is process-local, so multiple instances require separate coordination. See [Caching and Side Effects](docs/agent-reference.md#caching-and-side-effects) for implementation details.
 
+Scheduled publication commits before cache and activity notifications. It attempts the activity handoff even if postcommit cache notification fails, while retaining that cache failure's existing error behavior. Individual activity failures do not roll back publication or stop the remaining activity writes; already-published articles are excluded from later scheduler passes. This is best-effort, in-process history, not durable delivery or multi-instance deduplication, and adds no further activity schema migration.
+
 ### Saving Blog Settings
 
 Settings become active only after a successful database save and publication of one immutable ordinary-settings snapshot; groups submitted together are persisted together. Each operation or page render uses one immutable settings capture, including its related layouts/components or feed data/formatting; a subsequent operation can capture newer values. Updates are serialized within one process; other instances must reload or synchronize separately. See the [configuration write contract](docs/agent-reference.md#configuration).
 
-If settings or an avatar have been saved but activity-log recording fails, the request retains its successful response and the failure is recorded at Error level. Authenticator reset still signs out the local-account sessions. Validation, settings persistence, cache invalidation, image storage, and sign-out failures are not treated as audit-only failures; they remain visible to the caller. Uploaded avatars are saved as database assets separately from ordinary settings.
+Settings activity compares the effective previous and saved group inside that same write gate, including partial saves and nested custom menus. Only approved public labels, choices, counts, and switches enter before/after details. URLs, email identities, scripts, CSS, menu contents, filter keywords, and credential values are excluded. A restricted-only change still records the update without naming its restricted fields. Legacy configuration JSON normalization can still update persistence timestamps and caches without an activity entry when effective values are unchanged. Ordinary settings activity requires the before/after details format. Installations that ran a preview with the canonical schema must also clear pre-release activity history before starting the release. See the [activity upgrade guide](docs/upgrade-activity-log-events.md#reset-an-already-upgraded-preview).
+
+If an administrator operation succeeds but activity-log recording fails, the request retains its successful response and a safe diagnostic is recorded at Error level without request values or exception messages. Authenticator reset still signs out the local-account sessions. Validation, settings persistence, cache invalidation, image storage, and sign-out failures are not treated as audit-only failures; they remain visible to the caller. Uploaded avatars are saved as database assets separately from ordinary settings.
 
 Successful changes invalidate affected server caches in the current process, including settings saved through the shared write command. Avatar uploads invalidate the local avatar cache without rewriting ordinary settings. Feed and theme caches use separate generations so an older request cannot refill the active cache after a change; settings changes do not flush unrelated article caches. Full-content RSS/Atom feeds use the article body, including Markdown formatting and configured CDN image URLs; summary feeds use the abstract.
 

@@ -119,8 +119,12 @@ class ProductionSchema(Schema):
 
 async def main():
     # create store and keyspaces using runtime migration
-    await Sales.create_keyspace()
+    await Sales.create_keyspace(cache=128, compression=True)
     await Production.create_keyspace()
+
+    # Compression is fixed at persistent-keyspace creation. Cache capacity is
+    # in MB and can be changed later without resubmitting compression.
+    await Sales.update_cache(cache=256)
 
     await Sales.enforce_schema(SalesSchema)
     await Production.enforce_schema(ProductionSchema)
@@ -212,6 +216,10 @@ await connection.reembed_semantic_search(
 # pass drop_vectors=True to also clear stored vectors)
 await connection.disable_semantic_search()
 ```
+
+### CPU embedding memory
+
+On Montycat Semantic server 1.3.9 or newer, `await connection.enable_semantic_search(cpu_arena=False)` saves a DB-wide CPU allocator override. The default is `True`; disabling the arena can lower idle memory but may reduce inference throughput. `get_semantic_status()` reports the effective `cpu_arena` and saved `cpu_arena_override`. Existing vectors do not need backfilling. The optional `MONTYCAT_EMBED_CPU_ARENA` environment variable sets the startup default when no API override is saved.
 
 ### Search modes and metadata filters
 

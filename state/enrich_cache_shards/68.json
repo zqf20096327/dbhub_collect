@@ -4,7 +4,7 @@
   "commit_90d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2016-07-15",
-  "rel_days": 3767,
+  "rel_days": 3768,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -27,23 +27,24 @@
  },
  "mongodb/mongo-java-driver": {
   "commit_7d": 0,
-  "commit_90d": 61,
-  "rel_ver": "r5.13.0",
-  "rel_pub": "2026-09-25",
-  "rel_days": 9,
-  "rel_n90": 10,
+  "commit_90d": 70,
+  "rel_ver": "r5.14.0",
+  "rel_pub": "2026-10-28",
+  "rel_days": 11,
+  "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
-  "sec_n": 3,
+  "sec_n": 4,
   "sec_worst": "high",
-  "sec_last": "2026-09-10",
+  "sec_last": "2026-10-28",
   "sec_ids": [
+   "GHSA-qmf9-cqwj-c9xv(CVE-2026-118581,medium)",
    "GHSA-556f-q76p-2vxq(CVE-2026-88033,high)",
    "GHSA-c4c8-c376-3p6c(CVE-2026-88032,high)",
    "GHSA-r7rp-27cm-h3qf(CVE-2026-18710,medium)"
   ],
   "contrib_n": 188,
-  "enriched_at": "20261004",
+  "enriched_at": "20261108",
   "lang": {
    "Java": 71,
    "Groovy": 14,
@@ -53,9 +54,66 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  },
+  "etag": {
+   "release": "W/\"ebb740078e279f71c2bae5ed2c4250a7dfef0c1b4a2d9e7273b25031af2f2d0e\"",
+   "security": "W/\"b387dbdbd731fa03371afb80a01923c88c640222cc8bd13e456cd6f22d671b93\""
+  },
+  "rel_dates": [
+   "2026-10-28",
+   "2026-09-25",
+   "2026-09-17",
+   "2026-09-10",
+   "2026-08-28",
+   "2026-08-15",
+   "2026-08-11",
+   "2026-08-13"
+  ],
+  "rel_notes": [
+   {
+    "t": "r5.14.0",
+    "d": "2026-10-28",
+    "n": "* Java-6108 replace deprecated orchestration with run-mongodb script  by @strogiyotec in https://github.com/mongodb/mongo-java-driver/pull/2070\n* JAVA-6236 add builder API for facet without operator and clean up search api from beta Reason.SERVER by @strogiyotec in https://github.com/mongodb/mongo-java-driver/pull/2006\n* JAVA-6158: Add Atlas Secure Frontend Processor (SFP) prose tests by @nhachicha in https://github.com/mongodb/mongo-java-driver/pull/2072\n* JAVA-6164 Bump maxWireVersion to 29 for MongoDB 9."
+   },
+   {
+    "t": "r5.13.0",
+    "d": "2026-09-25",
+    "n": "* JAVA-6235 Add SRV allow hosts option to legacy driver by @apmasell in https://github.com/mongodb/mongo-java-driver/pull/2065\n* build(deps): bump testing/resources/specifications from `92b3c0b` to `529a2dd` by @apmasell in https://github.com/mongodb/mongo-java-driver/pull/2061\n* JAVA-6312 Increase testConnectionPoolBackpressure completion time on CI by @nhachicha in https://github.com/mongodb/mongo-java-driver/pull/2062\n* JAVA-6235: Configurable DNS domain validation for SRV records by @apmasell in https:/"
+   },
+   {
+    "t": "r5.12.0",
+    "d": "2026-09-17",
+    "n": "* JAVA-6284 add server 9.0 test variant to evergreen by @strogiyotec in https://github.com/mongodb/mongo-java-driver/pull/2037\nAdded support for [MongoDB 9.0's Intelligent Workload Management (IWM)](https://www.mongodb.com/docs/atlas/intelligent-workload-management/). The driver now gracefully handles write-blocking scenarios and optimizes connection establishment during high-load conditions to maintain application availability.\n* JAVA-6231 build(deps): bump testing/resources/specifications from `d4d0cdf` t"
+   },
+   {
+    "t": "r5.11.1",
+    "d": "2026-09-10",
+    "n": "Upgrade both reactive driver and mongodb-crypt to version 5.11.1 or later.\n**Full Changelog**: https://github.com/mongodb/mongo-java-driver/compare/r5.11.0...r5.11.1\nSee [JAVA-6283](https://jira.mongodb.org/browse/JAVA-6283) / [CVE-2026-88033](https://www.cve.org/CVERecord?id=CVE-2026-88033)]\nSee [JAVA-6266](https://jira.mongodb.org/browse/JAVA-6266) / [CVE-2026-88032](https://www.cve.org/CVERecord?id=CVE-2026-88032)"
+   },
+   {
+    "t": "r5.11.0",
+    "d": "2026-08-28",
+    "n": "* Java 6173 CSFLE/QE Support for HTTP Proxies  by @strogiyotec in https://github.com/mongodb/mongo-java-driver/pull/2043\n**Full Changelog**: https://github.com/mongodb/mongo-java-driver/compare/r5.10.0...r5.11.0\n.keyVaultMongoClientSettings(keyVaultClientSettings)"
+   },
+   {
+    "t": "r5.10.0",
+    "d": "2026-08-15",
+    "n": "- Removed stale `@Beta` from `SearchOptions` and `VectorSearchOptions` in the Java and Scala drivers [#2026](https://github.com/mongodb/mongo-java-driver/pull/2026) by @rozza\n- Added `$scoreFusion` hybrid search stage for combining and normalizing the scores of multiple search pipelines (MongoDB 8.2+) [#2024](https://github.com/mongodb/mongo-java-driver/pull/2024) by @nhachicha\n- Added a fluent builder API for the `$score` aggregation stage, with normalization, weighting, and score details (MongoDB 8.2+) [#"
+   },
+   {
+    "t": "r5.7.1",
+    "d": "2026-08-13",
+    "n": "## What's Changed\r\n* JAVA-6189 - Added Scala 3 to publish.sh by @rozza in https://github.com/mongodb/mongo-java-driver/pull/1957\r\n* JAVA-6197 - Fix javadoc warnings in micrometer 5.7 by @rozza in https://github.com/mongodb/mongo-java-driver/pull/1966\r\n* JAVA-6215 - Mark micrometer OSGi imports as optional and add bundle resolution test by @rozza in https://github.com/mongodb/mongo-java-driver/pull/1985\r\n\r\n\r\n**Full Changelog**: https://github.com/mongodb/mongo-java-driver/compare/r5.7.0...r5.7.1"
+   },
+   {
+    "t": "r5.9.2",
+    "d": "2026-08-11",
+    "n": "If you cannot upgrade, set the `org.mongodb.driver.client` logger to WARN or higher to suppress the client-construction message. We do not recommend this as a long-term measure: it silences diagnostic information that is valuable for support, and it does not remove credentials already written to existing logs.\n**Full Changelog**: https://github.com/mongodb/mongo-java-driver/compare/r5.9.1...r5.9.2\nSee [JAVA-6266](https://jira.mongodb.org/browse/JAVA-6266) / [CVE-2026-18710](https://www.cve.org/CVERecord?id="
+   }
+  ]
  },
  "oracle-samples/oracle-db-examples": {
   "commit_90d": 43,
@@ -86,7 +144,7 @@
   "commit_7d": 28,
   "rel_ver": "v1.18.0-beta.6",
   "rel_pub": "2026-09-16",
-  "rel_days": 52,
+  "rel_days": 53,
   "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
@@ -102,14 +160,14 @@
    "HTML": 0,
    "WGSL": 0
   },
-  "enriched_at": "20261107",
+  "enriched_at": "20261108",
   "dim_ts": {
    "commit": "20261107",
-   "release": "20261107",
+   "release": "20261108",
    "security": "20261027"
   },
   "etag": {
-   "release": "W/\"555f8dfcf740ec4bdb0898f915e010bbeb47ed5a373ddbb9154ff6d274f53789\""
+   "release": "W/\"8229e4b6c4c6526b6789932c3143d217e9fded1bb7951aaed24595f36a7d7e61\""
   },
   "rel_dates": [
    "2026-09-16",
@@ -121,7 +179,7 @@
   "commit_7d": 0,
   "rel_ver": "3.49.0",
   "rel_pub": "2025-05-29",
-  "rel_days": 527,
+  "rel_days": 528,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -202,7 +260,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.11.1.0",
   "rel_pub": "2026-05-13",
-  "rel_days": 178,
+  "rel_days": 179,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -229,7 +287,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.0.5",
   "rel_pub": "2026-07-27",
-  "rel_days": 103,
+  "rel_days": 104,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -291,10 +349,10 @@
  },
  "pgsty/pg_exporter": {
   "commit_90d": 7,
-  "commit_7d": 3,
+  "commit_7d": 0,
   "rel_ver": "v1.5.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -320,7 +378,7 @@
   "commit_7d": 0,
   "rel_ver": "0.4",
   "rel_pub": "2020-03-05",
-  "rel_days": 2438,
+  "rel_days": 2439,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -356,12 +414,12 @@
   "enriched_at": "20260927"
  },
  "furey/mongodb-lens": {
-  "commit_90d": 0,
-  "commit_7d": 0,
-  "rel_ver": "9.1.4",
-  "rel_pub": "2025-04-23",
-  "rel_days": 522,
-  "rel_n90": 0,
+  "commit_90d": 6,
+  "commit_7d": 6,
+  "rel_ver": "9.1.5",
+  "rel_pub": "2026-11-07",
+  "rel_days": 1,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -373,7 +431,17 @@
    "JavaScript": 100,
    "Dockerfile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261108",
+  "etag": {
+   "release": "W/\"96fddcdd5bf688aa9326ba7acbabede6d4801a961cee3cdc3040c74117579e8b\""
+  },
+  "rel_dates": [
+   "2026-11-07"
+  ],
+  "dim_ts": {
+   "commit": "20261108",
+   "release": "20261108"
+  }
  },
  "duolicious/duolicious": {
   "commit_90d": 293,
@@ -416,7 +484,7 @@
   "commit_7d": 4,
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-06-29",
-  "rel_days": 131,
+  "rel_days": 132,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -443,7 +511,7 @@
   "commit_7d": 9,
   "rel_ver": "v7.0.3",
   "rel_pub": "2026-10-23",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -467,7 +535,7 @@
   "commit_7d": 0,
   "rel_ver": "v25.02-Novokuznetsk",
   "rel_pub": "2025-02-17",
-  "rel_days": 628,
+  "rel_days": 629,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -543,7 +611,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.7.3",
   "rel_pub": "2026-08-12",
-  "rel_days": 87,
+  "rel_days": 88,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -583,7 +651,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3-hertz",
   "rel_pub": "2023-02-27",
-  "rel_days": 1349,
+  "rel_days": 1350,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -604,7 +672,7 @@
   "commit_7d": 0,
   "rel_ver": "REL0_8_BETA1",
   "rel_pub": "2018-10-06",
-  "rel_days": 2954,
+  "rel_days": 2955,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -624,7 +692,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2021-08-17",
-  "rel_days": 1908,
+  "rel_days": 1909,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -642,7 +710,7 @@
  "anyproto/any-store": {
   "rel_ver": "cmd/any-store-cli2/v2.2.0",
   "rel_pub": "2026-09-21",
-  "rel_days": 47,
+  "rel_days": 48,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -662,7 +730,7 @@
  "josephgoksu/TaskWing": {
   "rel_ver": "v1.23.2",
   "rel_pub": "2026-05-12",
-  "rel_days": 179,
+  "rel_days": 180,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -725,7 +793,7 @@
  "ropensci/bikedata": {
   "rel_ver": "v0.2.3",
   "rel_pub": "2019-05-09",
-  "rel_days": 2739,
+  "rel_days": 2740,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -851,7 +919,7 @@
  "commandprompt/plPHP": {
   "rel_ver": "plphp-2.6",
   "rel_pub": "2026-07-07",
-  "rel_days": 123,
+  "rel_days": 124,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -884,7 +952,7 @@
  "huntlabs/hunt-database": {
   "rel_ver": "v2.3.7",
   "rel_pub": "2023-11-15",
-  "rel_days": 1088,
+  "rel_days": 1089,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -901,7 +969,7 @@
  "sunkafei/coffeedb": {
   "rel_ver": "v1.4.1",
   "rel_pub": "2023-07-26",
-  "rel_days": 1200,
+  "rel_days": 1201,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -938,7 +1006,7 @@
  "neiliro/neiliro": {
   "rel_ver": "v2.4.1",
   "rel_pub": "2026-09-22",
-  "rel_days": 46,
+  "rel_days": 47,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -972,7 +1040,7 @@
  "SurajSanap/College.ai-main": {
   "rel_ver": "v2",
   "rel_pub": "2025-02-04",
-  "rel_days": 641,
+  "rel_days": 642,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1061,7 +1129,7 @@
  "alexander-akhmetov/mdb": {
   "rel_ver": "0.1.0",
   "rel_pub": "2018-09-02",
-  "rel_days": 2988,
+  "rel_days": 2989,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1095,7 +1163,7 @@
  "deedeecx330/skyhook": {
   "rel_ver": "v1.4",
   "rel_pub": "2021-06-06",
-  "rel_days": 1980,
+  "rel_days": 1981,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1213,7 +1281,7 @@
  "openinsight-proj/OpenInsight": {
   "rel_ver": "v0.81.0-72e85b2",
   "rel_pub": "2023-07-07",
-  "rel_days": 1219,
+  "rel_days": 1220,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1234,7 +1302,7 @@
  "edwig/ODBCQueryTool": {
   "rel_ver": "v3.6.3",
   "rel_pub": "2026-04-07",
-  "rel_days": 214,
+  "rel_days": 215,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1255,7 +1323,7 @@
  "heavyai/heavyai": {
   "rel_ver": "v0.30.0",
   "rel_pub": "2022-04-04",
-  "rel_days": 1638,
+  "rel_days": 1679,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1274,7 +1342,7 @@
  "jawira/db-draw": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-06-26",
-  "rel_days": 134,
+  "rel_days": 135,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1428,7 +1496,7 @@
  "motif-Labs/motif": {
   "rel_ver": "v1.3.3",
   "rel_pub": "2026-09-02",
-  "rel_days": 66,
+  "rel_days": 67,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1468,7 +1536,7 @@
  "schefa/Secretary": {
   "rel_ver": "4.2.0",
   "rel_pub": "2026-08-24",
-  "rel_days": 75,
+  "rel_days": 76,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1489,7 +1557,7 @@
  "imtaqin/goampp": {
   "rel_ver": "v0.7.2",
   "rel_pub": "2026-09-26",
-  "rel_days": 42,
+  "rel_days": 43,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1522,7 +1590,7 @@
  "TencentCloud/octop-gateway": {
   "rel_ver": "v1.0.3",
   "rel_pub": "2026-10-16",
-  "rel_days": 22,
+  "rel_days": 23,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1547,7 +1615,7 @@
  "b10cks/cms": {
   "rel_ver": "v2026.9.17-b4c3aa25",
   "rel_pub": "2026-09-17",
-  "rel_days": 51,
+  "rel_days": 52,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1618,7 +1686,7 @@
  "dmaiken/konifer": {
   "rel_ver": "v0.13.0",
   "rel_pub": "2026-09-17",
-  "rel_days": 51,
+  "rel_days": 52,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
@@ -1671,7 +1739,7 @@
  "exzvor/ide99": {
   "rel_ver": "v1.0.9",
   "rel_pub": "2026-06-05",
-  "rel_days": 155,
+  "rel_days": 156,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1707,7 +1775,7 @@
  "Dixer-ETL/dixer-docs": {
   "rel_ver": "v2.4.0",
   "rel_pub": "2024-03-20",
-  "rel_days": 962,
+  "rel_days": 963,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1741,7 +1809,7 @@
  "go-gywn/query-exporter": {
   "rel_ver": "0.1.0",
   "rel_pub": "2021-07-15",
-  "rel_days": 1941,
+  "rel_days": 1942,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1787,7 +1855,7 @@
  "fxxkrlab/ADMINCHAT_PANEL": {
   "rel_ver": "v1.1.8",
   "rel_pub": "2026-04-10",
-  "rel_days": 211,
+  "rel_days": 212,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1808,7 +1876,7 @@
  "devfeel/database": {
   "rel_ver": "v0.5",
   "rel_pub": "2019-07-01",
-  "rel_days": 2686,
+  "rel_days": 2687,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1851,7 +1919,7 @@
  "red1oon/bim-ootb": {
   "rel_ver": "v1.70.0",
   "rel_pub": "2026-09-27",
-  "rel_days": 41,
+  "rel_days": 42,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1919,7 +1987,7 @@
  "hhalim/Shift": {
   "rel_ver": "v1.0.8.4",
   "rel_pub": "2018-10-19",
-  "rel_days": 2941,
+  "rel_days": 2942,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1936,7 +2004,7 @@
  "Delvoid/clinvoice": {
   "rel_ver": "release",
   "rel_pub": "2023-08-21",
-  "rel_days": 1174,
+  "rel_days": 1175,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1970,7 +2038,7 @@
  "yippeesoft/NotifyTools": {
   "rel_ver": "0.0.1A",
   "rel_pub": "2020-04-20",
-  "rel_days": 2392,
+  "rel_days": 2393,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2082,7 +2150,7 @@
  "jamtheradar/SQLExtended": {
   "rel_ver": "v2026.9.23.1425",
   "rel_pub": "2026-09-23",
-  "rel_days": 45,
+  "rel_days": 46,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -2149,7 +2217,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.1",
   "rel_pub": "2022-03-16",
-  "rel_days": 1697,
+  "rel_days": 1698,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2506,7 +2574,7 @@
   "commit_7d": 0,
   "rel_ver": "Iteration-1",
   "rel_pub": "2025-10-28",
-  "rel_days": 375,
+  "rel_days": 376,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2668,7 +2736,7 @@
   "commit_7d": 2,
   "rel_ver": "v4.12.2",
   "rel_pub": "2026-10-30",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2711,7 +2779,7 @@
   "commit_7d": 1,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-03-04",
-  "rel_days": 248,
+  "rel_days": 249,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2852,7 +2920,7 @@
  "le-quesne/wsp-mcp": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-10-09",
-  "rel_days": 29,
+  "rel_days": 30,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2988,7 +3056,7 @@
  "EduLGFon/ergon-wa-bot": {
   "rel_ver": "v2.1.0",
   "rel_pub": "2026-10-08",
-  "rel_days": 30,
+  "rel_days": 31,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

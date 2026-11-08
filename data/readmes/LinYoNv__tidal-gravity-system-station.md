@@ -301,7 +301,10 @@ TOKEN=$(grep '^EMOTION_AUTH_ACCESS_TOKEN=' .env | cut -d= -f2- | tr -d "'")
 ⚠️ **两个必须知道的点**（实测事故，详见 `host/README.md` §8）：
 
 1. 插件会**回写自己的源码目录**（会改坏别人 AstrBot 的生产配置）
-   → 已用**源码镜像**隔离（`EMOTION_PLUGINS_MIRROR_SOURCES=true`）
+   → 有**源码镜像**能力（`EMOTION_PLUGINS_MIRROR_SOURCES=true` 时启用），
+     但**生产当前是 `false`（关着的）** —— 是有意关的，详见 `项目更新.md:4227`。
+     ⚠️ 关着意味着插件直接跑在 `plugins/` 源目录上，改插件会直接改这批文件。
+     要开就设 `EMOTION_PLUGINS_MIRROR_SOURCES=true` 后重启。
 2. 某插件 `initialize()` 会联网下载 26MB 字体 → 已加**超时隔离**（启动 181.6s → 20.8s）
 
 ### 两个目录，职责不重叠

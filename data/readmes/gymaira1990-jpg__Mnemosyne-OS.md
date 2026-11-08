@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-9.0.19-brightgreen?style=flat-square" alt="version">
+  <img src="https://img.shields.io/badge/version-9.1.1-brightgreen?style=flat-square" alt="version">
   <img src="https://img.shields.io/github/actions/workflow/status/gymaira1990-jpg/Mnemosyne-OS/test.yml?style=flat-square&label=CI" alt="CI">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="license">
   <img src="https://img.shields.io/badge/python-3.11+-blue?style=flat-square" alt="python">
@@ -14,6 +14,15 @@
   <i>Not a vector store. Not a RAG pipeline.<br>
   Every conversation becomes a cataloged card — with an archive number, entities,<br>
   evidence, and a pointer back to the original transcript. Plus a diary that keeps running when you don't.</i>
+</p>
+
+<p align="center">
+  <b>🏔️ v9.1.1 · Milestone — measure it, ask when unsure, ship through a gate</b><br>
+  <sub>
+  <b>Measurable</b>: eval with negative cases &amp; a discrimination self-check (re-score in reverse — if the score doesn't move, the ruler is broken)<br>
+  <b>Answerable</b>: when recall isn't sure it asks → your verdict reweights the memory → that verdict becomes a new test case<br>
+  <b>Releasable</b>: isolated pre-release instance; production deploys must match a commit already smoke-tested there
+  </sub>
 </p>
 
 <p align="center">
@@ -36,7 +45,7 @@
 
 | | |
 |---|---|
-| **Memories** | 38,514 (33,038 live, 3,897 catalog cards) — snapshot 2026-11-07 |
+| **Memories** | 38,858 (33,171 live · 35,075 catalog cards · 3,622 result cards) — snapshot 2026-11-08 |
 | **Recall** | 4 channels fused (server: E/C/T · client: S) · 90% recall@10 measured first-party |
 | **Trace** | archive no → card → `sid` → original transcript |
 | **Butler** | polish / dedupe / diary / gap-sweep — server-side, 7×24 |
@@ -332,8 +341,9 @@ One user, one modest cloud instance (4 vCPU), 7×24:
 
 | Metric | Value |
 |---|---|
-| Memories | **38,514** (33,038 live) — snapshot: 2026-11-07 |
-| Catalog cards | **3,897** — 100% with archive no, 99.97% with vectors · every live memory has a card |
+| Memories | **38,858** (33,171 live) — snapshot: 2026-11-08 |
+| Catalog cards | **35,075** — 100% with archive no · result cards **3,622**, 100% vectored |
+| Vector coverage | **100%** of live memories (33,171 / 33,171) |
 | Average card length | 376 characters (from transcripts averaging ~33,000) |
 | Recall@10 — general set | **9/10 (90%)** |
 | Recall@10 — anti-overfit set | **9/10 (90%)** |
@@ -387,12 +397,13 @@ We publish the regressions, not just the wins:
 |---|---|
 | [INSTALL.md](INSTALL.md) | Installation (Linux / macOS / WSL2), model backends, FAQ |
 | [AGENTS.md](AGENTS.md) | Manual for AI agents: API surface, env vars, Hermes/MCP |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Internals: layers, fusion, storage |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · **[English edition](docs/en/)** | Internals: layers, fusion, storage |
 | [docs/CARD-SPEC.md](docs/CARD-SPEC.md) | **Card Spec v1**: 7-line structure, archive numbers, evidence ranks, embedding rules |
 | [docs/VERIFICATION.md](docs/VERIFICATION.md) | **Verify it yourself**: `make demo && make eval` · two measured runs (92% / 100%) and the two traps |
 | [evals/](evals/) | 40 demo cards + 12 questions + raw outputs (reproducible) |
 | [integrations/card-builder/](integrations/card-builder/) | Reference implementation: dialogue → card (stdlib only) · [`evals/`](evals/) recall cases |
 | [docs/API.md](docs/API.md) · [docs/ENV.md](docs/ENV.md) | REST reference · every environment variable |
+| [docs/en/STAGING.md](docs/en/STAGING.md) | Pre-release environment: why it's mandatory, isolation proof, deploy flow |
 | [docs/WHITEPAPER.md](docs/WHITEPAPER.md) · [docs/palace-architecture.md](docs/palace-architecture.md) | Design philosophy |
 | [docs/design/](docs/design/) · [docs/adr/](docs/adr/) | Design docs · architecture decision records |
 | [ROADMAP.md](ROADMAP.md) · [CHANGELOG.md](CHANGELOG.md) | Where it is going · what changed |
@@ -401,6 +412,16 @@ We publish the regressions, not just the wins:
 
 | Version | Date | Ships |
 |---|---|---|
+| [v9.1.1](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.1.1) | 2026-11-08 | **Milestone**: measurable (eval with negatives + discrimination), answerable (ask-on-uncertain → verdict write-back → new cases), pre-releasable (staging + deploy gates). 13 real defects found and fixed — incl. 89% of memories invisible to keyword/time channels |
+| [v9.0.28](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.28) | 2026-11-07 | Numeric conflict detector (`conflict_scan.py`) — samples first, adjudication rules later |
+| [v9.0.27](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.27) | 2026-11-07 | Topic-drift detection + automatic widening to earlier sessions when context is thin |
+| [v9.0.26](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.26) | 2026-11-07 | Three-stage sampling (`context_pack.py`): prior history → current session → output constraints, with a computed "context sufficient?" verdict |
+| [v9.0.25](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.25) | 2026-11-07 | `make eval-live` — human verdicts merge into the eval baseline (usage becomes training data) |
+| [v9.0.24](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.24) | 2026-11-07 | Human verdict write-back: labels reweight memories and become new eval cases (`labels_to_cases.py`) |
+| [v9.0.23](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.23) | 2026-11-07 | Ask instead of guessing: `confirm_margin` returns top candidates + a question when the match is ambiguous |
+| [v9.0.22](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.22) | 2026-11-07 | Abstention capability (off by default) — and the negative result proving a score threshold can't do it |
+| [v9.0.21](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.21) | 2026-11-07 | Recall scoped per user · semantic channel wired (measured: off by default, it scores worse) · `k` no longer ignored |
+| [v9.0.20](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.20) | 2026-11-07 | Agent identity cards — `GET /api/v1/agents` lists every agent's role/status/boundary plus memory count |
 | [v9.0.19](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.19) | 2026-11-07 | Scoped irreversible purge · sync LLM calls off the event loop · embedding cache namespaced |
 | [v9.0.18](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.18) | 2026-11-07 | Silent-failure fixes: search category filter, archive user scope, PG16 schema · CI now runs a real database |
 | [v9.0.17](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.17) | 2026-11-07 | Deploy fingerprint (`make prod-diff`) + number gate (`make numbers-check`) · README numbers corrected |

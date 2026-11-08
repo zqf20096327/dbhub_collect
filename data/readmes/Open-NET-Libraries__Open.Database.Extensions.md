@@ -40,7 +40,7 @@ while (reader.Read())
 }
 ```
 
-And with Open.Database.Extensions:
+And with Open.Database.Extensions (`connectionFactory`, created once per application, is explained just below):
 
 ```cs
 Post[] posts = await connectionFactory
@@ -52,7 +52,7 @@ Post[] posts = await connectionFactory
 
 `connectionFactory` is created once per application, for example `new DbConnectionFactory<SqliteConnection>(() => new SqliteConnection(connectionString))`; see [Registering the factory once](https://open-net-libraries.github.io/Open.Database.Extensions/articles/coming-from-dapper.html#registering-the-factory-once).
 
-The same four jobs, counted from the compiled snippets in [`docsite/samples/BeforeAfter.cs`](https://github.com/Open-NET-Libraries/Open.Database.Extensions/blob/master/docsite/samples/BeforeAfter.cs) (lines of code, not counting blank lines):
+The same four jobs, counted from the `plain_*` and `ode_*` regions of [`docsite/samples/BeforeAfter.cs`](https://github.com/Open-NET-Libraries/Open.Database.Extensions/blob/master/docsite/samples/BeforeAfter.cs) (lines of code, not counting blank lines):
 
 | Job | Plain ADO.NET | Open.Database.Extensions |
 |---|---:|---:|
@@ -145,11 +145,11 @@ More in [Columns named differently](https://open-net-libraries.github.io/Open.Da
 bool committed = connectionFactory.Using(connection =>
     connection.ExecuteTransactionConditional(transaction =>
     {
-        transaction
+        int inserted = transaction
             .Command("insert into posts (id, author, title, body, views) values (100, 1, 'Temporary', null, 0)")
             .ExecuteNonQuery();
 
-        return shouldCommit;
+        return inserted == 1;
     }));
 ```
 
@@ -167,14 +167,14 @@ bool committed = connectionFactory.Using(connection =>
 | `Open.Database.Extensions.Channel` | Rows into `System.Threading.Channels`. |
 | `Open.Database.Extensions.Dataflow` | Rows into TPL Dataflow blocks. |
 | `Open.Database.Extensions.MSSqlClient` | `SqlConnectionFactory` and SQL Server specializations on `Microsoft.Data.SqlClient`. |
-| `Open.Database.Extensions.SqlClient` | The same API on the older `System.Data.SqlClient`. Legacy: prefer `MSSqlClient`. |
+| `Open.Database.Extensions.SqlClient` | The same API on the older `System.Data.SqlClient`. Deprecated: use `MSSqlClient`. |
 | `Open.Database.Extensions` | A meta-package for Core. The last published version is 9.0.3: use Core. |
 
 ```sh
 dotnet add package Open.Database.Extensions.Core --prerelease
 ```
 
-Targets: `netstandard2.0`, `netstandard2.1` and `net10.0` (`MSSqlClient`: `net472` and `net10.0`). Version 11 is a preview (`11.0.0-preview04`): see [What's new in 11](https://open-net-libraries.github.io/Open.Database.Extensions/articles/whats-new-11.html) for the changes, the breaking changes and the known limitations, and the [release notes](https://open-net-libraries.github.io/Open.Database.Extensions/articles/release-notes.html) for earlier versions. Please try it and tell us what you find.
+Targets: `netstandard2.0`, `netstandard2.1` and `net10.0` (`MSSqlClient`: `net472` and `net10.0`). Version 11 is a preview (`11.0.0-preview05`): see [What's new in 11](https://open-net-libraries.github.io/Open.Database.Extensions/articles/whats-new-11.html) for the changes, the breaking changes and the known limitations, and the [release notes](https://open-net-libraries.github.io/Open.Database.Extensions/articles/release-notes.html) for earlier versions. Please try it and tell us what you find.
 
 ## How it fits together
 

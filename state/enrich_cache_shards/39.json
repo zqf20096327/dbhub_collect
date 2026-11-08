@@ -1,11 +1,11 @@
 {
  "clockworklabs/SpacetimeDB": {
-  "commit_7d": 13,
-  "commit_90d": 203,
-  "rel_ver": "v2.10.2",
-  "rel_pub": "2026-09-29",
-  "rel_days": 5,
-  "rel_n90": 10,
+  "commit_7d": 30,
+  "commit_90d": 233,
+  "rel_ver": "v2.14.1",
+  "rel_pub": "2026-11-04",
+  "rel_days": 4,
+  "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 123,
-  "enriched_at": "20261004",
+  "enriched_at": "20261108",
   "lang": {
    "Rust": 60,
    "TypeScript": 16,
@@ -23,16 +23,87 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  },
+  "etag": {
+   "release": "W/\"1241d2aa291486b641c222f8ec9a4fbad2fb969e3a925f7cba4754f870ab6b36\"",
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_dates": [
+   "2026-11-04",
+   "2026-10-30",
+   "2026-10-21",
+   "2026-10-13",
+   "2026-10-07",
+   "2026-09-29",
+   "2026-09-15",
+   "2026-09-04",
+   "2026-09-01",
+   "2026-08-25",
+   "2026-08-18",
+   "2026-08-12"
+  ],
+  "rel_notes": [
+   {
+    "t": "v2.14.1",
+    "d": "2026-11-04",
+    "n": "Operators should upgrade their SpacetimeDB binaries and container images. See the [RustSec advisory](<https://rustsec.org/advisories/RUSTSEC-2026-0382.html>) for details about the upstream incident.\n([#6366](<https://github.com/clockworklabs/SpacetimeDB/pull/6366>))\n([#5971](<https://github.com/clockworklabs/SpacetimeDB/pull/5971>))\n([#6344](<https://github.com/clockworklabs/SpacetimeDB/pull/6344>))\n- Updated TLS verification dependencies and container trust stores following the eMudhra/emSign CA incident i"
+   },
+   {
+    "t": "v2.14.0",
+    "d": "2026-10-30",
+    "n": "- `init` is no longer internal, since its sender is the database owner.\nSenders enqueue calls by inserting rows into generated outbox tables, which are insert-only and map their columns to the receiver's reducer parameters with compile-time type checking. Delivery is handled by a new IDC actor that manages concurrent outbox streams over HTTP/2, and optional `on_result` / `onResult` callbacks report delivery outcomes back to the sender. Dependencies are namespaced by name, so a module can depend on two datab"
+   },
+   {
+    "t": "v2.13.0",
+    "d": "2026-10-21",
+    "n": "The datastore no longer clones the full subscriber state for each transaction. It records transaction-local subscriber and timestamp changes instead, substantially reducing memory usage for databases with many subscribers while preserving subscription and view behavior.\nThe new `spacetime auth` command group lets Maincloud users manage a database's SpacetimeAuth configuration from the command line. It supports identity-provider configuration, project settings, and client creation, inspection, and deletion.\n"
+   },
+   {
+    "t": "v2.12.0",
+    "d": "2026-10-13",
+    "n": "SpacetimeDB now rejects JWTs signed with `HS256`. Symmetric signing cannot be validated through an issuer's public key in the same way as supported asymmetric algorithms, so these tokens are no longer accepted for authentication.\nSpacetimeDB modules can now declare typed environment variables for configuration and secrets. Rust, TypeScript, C#, and C++ modules can read declared values through their execution context, with support for required and optional strings as well as constrained sets of allowed value"
+   },
+   {
+    "t": "v2.11.0",
+    "d": "2026-10-07",
+    "n": "- CLI documentation no longer lists the nonexistent `--force` option. ([#5988](<https://github.com/clockworklabs/SpacetimeDB/pull/5988>))\n- Removed the nonexistent CLI `--force` option from documentation in [#5988](<https://github.com/clockworklabs/SpacetimeDB/pull/5988>)\nOn September 1, we became aware of a security vulnerability in SpacetimeDB that allowed an attacker who knew a token’s subject and issuer to impersonate the corresponding Identity. We released a [patch](<https://github.com/clockworklabs/"
+   },
+   {
+    "t": "v2.10.2",
+    "d": "2026-09-29",
+    "n": "- Scheduled functions that overrun their interval no longer produce repetitive warning-level log messages. ([#5963](<https://github.com/clockworklabs/SpacetimeDB/pull/5963>))\n- Added official SpacetimeDB agent setup guide in [#5928](<https://github.com/clockworklabs/SpacetimeDB/pull/5928>)\n- Introduced the Zen of Spacetime in the agent setup guide in [#5968](<https://github.com/clockworklabs/SpacetimeDB/pull/5968>)\n- Server groundwork for automatic client reconnection in [#5877](<https://github.com/clockwor"
+   },
+   {
+    "t": "v2.10.1",
+    "d": "2026-09-15",
+    "n": "- docs: update automatic migration compatibility notes in [#5723](<https://github.com/clockworklabs/SpacetimeDB/pull/5723>)\n`spacetime list`, `spacetime rename`, and `spacetime mcp` now read the `server` value from `spacetime.json` instead of falling back to the CLI's global default. This makes authentication and target server selection consistent with `spacetime call`, `spacetime logs`, `spacetime sql`, and other database-addressing commands.\n([#5883](<https://github.com/clockworklabs/SpacetimeDB/pull/5883"
+   },
+   {
+    "t": "v2.10.0",
+    "d": "2026-09-04",
+    "n": "The SpacetimeDB MCP endpoint (`/v1/mcp`) is now available on Maincloud. You can connect AI agents and MCP-compatible tools directly to your Maincloud databases. This release also adds cluster-aware routing so that MCP requests sent to any node are automatically proxied to the leader replica, along with egress tracking for MCP tool calls.\n- Add MCP request routing to leader replica in [#5849](<https://github.com/clockworklabs/SpacetimeDB/pull/5849>)\n- Add egress tracking for MCP requests in [#5793](<https://"
+   },
+   {
+    "t": "v2.9.0",
+    "d": "2026-09-01",
+    "n": "- Add configuration for disabling module outbound HTTP requests in [#5774](<https://github.com/clockworklabs/SpacetimeDB/pull/5774>)\n- Preserve TypeScript client identity tokens during automatic reconnect in [#5761](<https://github.com/clockworklabs/SpacetimeDB/pull/5761>)\n- Clean up C# SDK state after errors and disconnections in [#5794](<https://github.com/clockworklabs/SpacetimeDB/pull/5794>)\n([#5774](<https://github.com/clockworklabs/SpacetimeDB/pull/5774>))\n([#5571](<https://github.com/clockworklabs/Sp"
+   },
+   {
+    "t": "v2.8.3",
+    "d": "2026-08-25",
+    "n": "([#5735](<https://github.com/clockworklabs/SpacetimeDB/pull/5735>))\n- Bug: Scheduled functions to be scheduled from their \"intended\" execution time in [#5735](<https://github.com/clockworklabs/SpacetimeDB/pull/5735>)\n**Full Changelog**: [v2.8.2...v2.8.3](<https://github.com/clockworklabs/SpacetimeDB/compare/v2.8.2...release/candidate/v2.8.3>)"
+   }
+  ]
  },
  "remult/remult": {
   "commit_7d": 19,
   "commit_90d": 62,
   "rel_ver": "v3.4.1",
   "rel_pub": "2026-10-30",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -141,7 +212,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.2",
   "rel_pub": "2026-08-02",
-  "rel_days": 97,
+  "rel_days": 98,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -165,11 +236,11 @@
   }
  },
  "coleifer/walrus": {
-  "commit_90d": 0,
-  "commit_7d": 0,
+  "commit_90d": 26,
+  "commit_7d": 1,
   "rel_ver": "0.9.2",
   "rel_pub": "2022-06-30",
-  "rel_days": 1550,
+  "rel_days": 1592,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -182,14 +253,24 @@
    "Python": 99,
    "Lua": 1
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261108",
+  "etag": {
+   "release": "W/\"dc86800b65aa6393ca231a78a1ca89caffed8247641a3234bd78c042e30d65d2\"",
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_dates": [],
+  "dim_ts": {
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  }
  },
  "rogerbinns/apsw": {
   "commit_90d": 246,
   "commit_7d": 0,
   "rel_ver": "3.54.1.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 19,
+  "rel_days": 20,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -230,7 +311,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.2.0",
   "rel_pub": "2026-07-11",
-  "rel_days": 119,
+  "rel_days": 120,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -271,7 +352,7 @@
   "commit_7d": 9,
   "rel_ver": "client-1.24.1",
   "rel_pub": "2026-10-13",
-  "rel_days": 25,
+  "rel_days": 26,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -316,7 +397,7 @@
   "commit_7d": 48,
   "rel_ver": "2.0.0-M1",
   "rel_pub": "2026-11-01",
-  "rel_days": 6,
+  "rel_days": 7,
   "rel_n90": 8,
   "rel_pre": true,
   "rel_none": false,
@@ -357,7 +438,7 @@
   "commit_7d": 33,
   "rel_ver": "v-2026-10-22.0",
   "rel_pub": "2026-10-22",
-  "rel_days": 16,
+  "rel_days": 17,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -384,7 +465,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.6.3",
   "rel_pub": "2026-06-03",
-  "rel_days": 157,
+  "rel_days": 158,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -423,7 +504,7 @@
   "commit_7d": 2,
   "rel_ver": "2.1.0-beta0",
   "rel_pub": "2020-12-18",
-  "rel_days": 2150,
+  "rel_days": 2151,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -447,7 +528,7 @@
  },
  "ElunaLuaEngine/ElunaTrinityWotlk": {
   "commit_90d": 133,
-  "commit_7d": 10,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -473,7 +554,7 @@
   "commit_7d": 0,
   "rel_ver": "oceanbase-dashboard-0.6.1",
   "rel_pub": "2026-06-11",
-  "rel_days": 149,
+  "rel_days": 150,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -500,7 +581,7 @@
   "commit_7d": 13,
   "rel_ver": "v1.23.1",
   "rel_pub": "2026-10-26",
-  "rel_days": 12,
+  "rel_days": 13,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -523,8 +604,8 @@
   }
  },
  "bs32g1038/node-blog": {
-  "commit_90d": 0,
-  "commit_7d": 0,
+  "commit_90d": 1,
+  "commit_7d": 1,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -538,7 +619,15 @@
    "JavaScript": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261108",
+  "etag": {
+   "release": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_dates": [],
+  "dim_ts": {
+   "commit": "20261108",
+   "release": "20261108"
+  }
  },
  "yangjufo/Learned-Indexes": {
   "commit_90d": 0,
@@ -560,7 +649,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.3",
   "rel_pub": "2024-02-06",
-  "rel_days": 1005,
+  "rel_days": 1006,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -583,7 +672,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0-preview-1",
   "rel_pub": "2025-12-04",
-  "rel_days": 338,
+  "rel_days": 339,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -619,7 +708,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.17.2",
   "rel_pub": "2026-09-08",
-  "rel_days": 60,
+  "rel_days": 61,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -644,7 +733,7 @@
  "lucavallin/gnaro": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2023-08-28",
-  "rel_days": 1167,
+  "rel_days": 1168,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -677,7 +766,7 @@
  "authcompanion/authcompanion2": {
   "rel_ver": "5.0.0-beta.1",
   "rel_pub": "2025-05-08",
-  "rel_days": 548,
+  "rel_days": 549,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -714,7 +803,7 @@
  "YinBuLiao/AnimeX": {
   "rel_ver": "v1.0.3",
   "rel_pub": "2026-05-20",
-  "rel_days": 171,
+  "rel_days": 172,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -767,7 +856,7 @@
  "pomm-project/Foundation": {
   "rel_ver": "2.0.4",
   "rel_pub": "2020-03-27",
-  "rel_days": 2416,
+  "rel_days": 2417,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -784,7 +873,7 @@
  "sidetracklabs/sidetrack": {
   "rel_ver": "sidetrack@0.1.9",
   "rel_pub": "2025-03-02",
-  "rel_days": 615,
+  "rel_days": 616,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -819,7 +908,7 @@
  "dataegret/pg_index_watch": {
   "rel_ver": "#current",
   "rel_pub": "2023-02-10",
-  "rel_days": 1366,
+  "rel_days": 1367,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -849,7 +938,7 @@
  "anvilpowered/anvil": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2020-11-27",
-  "rel_days": 2171,
+  "rel_days": 2172,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -866,7 +955,7 @@
  "filiptrivan/spiderly": {
   "rel_ver": "v19.12.3",
   "rel_pub": "2026-09-20",
-  "rel_days": 48,
+  "rel_days": 49,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -887,7 +976,7 @@
  "chenjiandongx/grogudb": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2023-04-11",
-  "rel_days": 1306,
+  "rel_days": 1307,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -921,7 +1010,7 @@
  "nhtera/OxiMux": {
   "rel_ver": "v0.1.29",
   "rel_pub": "2026-09-24",
-  "rel_days": 44,
+  "rel_days": 45,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -956,7 +1045,7 @@
  "DeploCloud/deplo": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 44,
+  "rel_days": 45,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1003,7 +1092,7 @@
  "circa10a/dead-mans-switch": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2026-09-02",
-  "rel_days": 66,
+  "rel_days": 67,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1041,7 +1130,7 @@
  "GeniXCMS/GeniXCMS": {
   "rel_ver": "v2.3.0",
   "rel_pub": "2026-04-21",
-  "rel_days": 200,
+  "rel_days": 201,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1078,7 +1167,7 @@
  "chillerlan/php-database": {
   "rel_ver": "3.1.0",
   "rel_pub": "2019-08-01",
-  "rel_days": 2655,
+  "rel_days": 2656,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1095,7 +1184,7 @@
  "andy-byers/CalicoDB": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2023-10-02",
-  "rel_days": 1132,
+  "rel_days": 1133,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1116,7 +1205,7 @@
  "gagoyal01/mongodb-rdbms-sync": {
   "rel_ver": "AUG_2017",
   "rel_pub": "2017-08-24",
-  "rel_days": 3362,
+  "rel_days": 3363,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1136,7 +1225,7 @@
  "zpoint/idataapi-transform": {
   "rel_ver": "release",
   "rel_pub": "2021-07-19",
-  "rel_days": 1937,
+  "rel_days": 1938,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1278,7 +1367,7 @@
  "technology16/pgsqlblocks": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-08-11",
-  "rel_days": 88,
+  "rel_days": 89,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1309,7 +1398,7 @@
  "rzander/jaindb": {
   "rel_ver": "1.0.1.85",
   "rel_pub": "2018-11-13",
-  "rel_days": 2916,
+  "rel_days": 2917,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1330,7 +1419,7 @@
  "hoangsonww/SymptomSync-Health-App": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-05-19",
-  "rel_days": 537,
+  "rel_days": 538,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1445,7 +1534,7 @@
  "cachapa/tudo_server": {
   "rel_ver": "v58",
   "rel_pub": "2025-08-13",
-  "rel_days": 451,
+  "rel_days": 452,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1464,7 +1553,7 @@
  "yesdeepakverma/pysql-beam": {
   "rel_ver": "0.2",
   "rel_pub": "2023-12-16",
-  "rel_days": 1057,
+  "rel_days": 1058,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1481,7 +1570,7 @@
  "alvarorichard/GoCrypto": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-10-02",
-  "rel_days": 1132,
+  "rel_days": 1133,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1549,7 +1638,7 @@
  "vbakhteev/telegram_bot_template": {
   "rel_ver": "v0.0.0",
   "rel_pub": "2022-04-17",
-  "rel_days": 1665,
+  "rel_days": 1666,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1570,7 +1659,7 @@
  "oceanbase/canal": {
   "rel_ver": "canal-for-ob-1.1.7-alpha",
   "rel_pub": "2023-10-09",
-  "rel_days": 1125,
+  "rel_days": 1126,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1628,7 +1717,7 @@
  "samuel-oldra/SistemaDeHotel": {
   "rel_ver": "2011.08",
   "rel_pub": "2024-06-11",
-  "rel_days": 879,
+  "rel_days": 880,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1646,7 +1735,7 @@
  "huaweicloud/huaweicloud-cs-sdk": {
   "rel_ver": "1.0.1",
   "rel_pub": "2018-11-01",
-  "rel_days": 2928,
+  "rel_days": 2929,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1744,7 +1833,7 @@
  "joaquinbejar/OptionChain-Simulator": {
   "rel_ver": "v0.2.29",
   "rel_pub": "2026-09-18",
-  "rel_days": 50,
+  "rel_days": 51,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1792,7 +1881,7 @@
  "jasonmassie01/pg_sage": {
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-09-28",
-  "rel_days": 40,
+  "rel_days": 41,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1813,7 +1902,7 @@
  "Mohammedaljer/n8nTrace": {
   "rel_ver": "v2.1.1",
   "rel_pub": "2026-07-17",
-  "rel_days": 113,
+  "rel_days": 114,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1834,7 +1923,7 @@
  "simonneutert/labradorite-notebook": {
   "rel_ver": "v0.9.1",
   "rel_pub": "2026-07-22",
-  "rel_days": 108,
+  "rel_days": 109,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2015,7 +2104,7 @@
  "urasandesu/JVLinkToSQLite": {
   "rel_ver": "v0.1.2",
   "rel_pub": "2025-08-10",
-  "rel_days": 454,
+  "rel_days": 455,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2362,7 +2451,7 @@
   "commit_7d": 0,
   "rel_ver": "baked-tidbyt-app-v.0.2.1",
   "rel_pub": "2025-03-12",
-  "rel_days": 605,
+  "rel_days": 606,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2541,7 +2630,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.4.2.2-cl2",
   "rel_pub": "2026-08-29",
-  "rel_days": 70,
+  "rel_days": 71,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2727,7 +2816,7 @@
  "poesterlin/sole": {
   "rel_ver": "v0.1.5",
   "rel_pub": "2026-10-02",
-  "rel_days": 36,
+  "rel_days": 37,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2754,7 +2843,7 @@
  "SysAdminDoc/OpenNetLimit": {
   "rel_ver": "v1.0.2",
   "rel_pub": "2026-09-13",
-  "rel_days": 55,
+  "rel_days": 56,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2778,7 +2867,7 @@
  "slyyr/yappr": {
   "rel_ver": "v3.0.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 49,
+  "rel_days": 50,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2849,7 +2938,7 @@
  "cryptoangelito/DocKit": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-14",
-  "rel_days": 24,
+  "rel_days": 25,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2875,7 +2964,7 @@
  "wwwescape/VideoGameTrackarr": {
   "rel_ver": "v1.34.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 19,
+  "rel_days": 20,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,

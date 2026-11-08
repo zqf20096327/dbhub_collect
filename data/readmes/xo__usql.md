@@ -415,11 +415,11 @@ Arguments:
 Flags:
   -c, --command COMMAND                     run only single command (SQL or internal) and exit
   -f, --file FILE                           execute commands from file and exit
-  -w, --no-password                         never prompt for password
-  -X, --no-init                             do not execute initialization scripts (aliases: --no-rc --no-psqlrc --no-usqlrc)
+  -w, --no-password[=true|false]            never prompt for password
+  -X, --no-init[=true|false]                do not execute initialization scripts (aliases: --no-rc --no-psqlrc --no-usqlrc)
   -o, --out FILE                            output file
-  -W, --password                            force password prompt (should happen automatically)
-  -1, --single-transaction                  execute as a single transaction (if non-interactive)
+  -W, --password[=true|false]               force password prompt (should happen automatically)
+  -1, --single-transaction[=true|false]     execute as a single transaction (if non-interactive)
   -v, --set NAME=VALUE                      set script variable NAME to VALUE (see \set command, aliases: --var --variable)
   -U, --uset NAME=VALUE                     set setting NAME of usql to VALUE (see \uset command)
   -N, --cset NAME=DSN                       set named connection NAME to DSN (see \cset command)
@@ -439,8 +439,8 @@ Flags:
   -M, --markdown                            markdown output mode
   -q, --quiet                               run quietly (no messages, only query output)
       --config string                       config file
-  -V, --version                             output version information, then exit
-  -?, --help                                show this help, then exit
+  -V, --version[=true|false]                output version information, then exit
+  -?, --help[=true|false]                   show this help, then exit
 ```
 
 ### Connecting to Databases
@@ -551,6 +551,59 @@ the variable from its own environment after it reads it, so that `\!`, the
 pager and the editor do not get the password. `\c` never reads the variable.
 
 `usql` has no environment variable for the password alone.
+
+#### Databases in Kubernetes
+
+`usql` opens a database that runs in Kubernetes through a port forward. The
+[`dbfwd`][dbfwd] package finds the database and its credentials, and runs
+`kubectl port-forward` to it. `kubectl` must be on the `PATH`, and it uses the
+current context of the kubeconfig, or the one that `?context=` names:
+
+```sh
+# the Service, StatefulSet or pod pg in the namespace prod
+$ usql k://pg.prod/app
+
+# the CloudNativePG cluster pg, with another context
+$ usql 'k8s+cnpg://pg.prod/app?context=staging'
+```
+
+The URL holds no password. `dbfwd` reads it from the Secret of the operator or
+of the pod, so `-W` does not apply. The banner and `\conninfo` name what the
+forward reached, such as `Service pg-rw in context kind-prod, namespace prod,
+owned by CloudNativePG Cluster pg`, and the prompt shows the host from the URL,
+such as `pg`, in place of the local address and port. When the pod restarts, the forward follows it, and
+the first statement after that fails as it does after a server restart. When
+no pod runs for two minutes, the forward is lost, and `\c` with no argument
+starts it again.
+
+`\k` lists the databases that `usql` can reach, with the URL that `\c` opens:
+
+```txt
+=> \k -A
+    List of Kubernetes databases in context kind-prod, every namespace
+ Namespace | Name |   Type   |  Kind   |     Operator     |      URL
+-----------+------+----------+---------+------------------+----------------
+ prod      | pg   | postgres | Cluster | CloudNativePG    | k://pg.prod/
+ prod      | shop | mariadb  | MariaDB | mariadb-operator | k://shop.prod/
+(2 rows)
+```
+
+`\k` lists the current namespace, `-A` every namespace, `-n NAMESPACE` one
+namespace, and `--context NAME` another context. A scope narrows the list,
+such as `pg*`, `pg*.prod` or `cnpg://*`, and its `k://` is optional. Only `*`
+is a wildcard. `\k+` adds the roles, the ready pods, the databases, and where
+the password comes from. `\k` reads no Secret.
+
+On Linux and FreeBSD, if `usql` is killed, `kubectl` stops with it. On other
+systems, a `kubectl port-forward` can keep running after `usql` is killed with
+`SIGKILL`, and it must be stopped by hand.
+
+See `dbfwd`'s [URL rules][dbfwd-url] for the types and the parts of the URL, and
+its [lookup rules][dbfwd-lookup] for how it finds a database from a name.
+
+[dbfwd]: https://github.com/xo/dbfwd
+[dbfwd-url]: https://github.com/xo/dbfwd/blob/main/docs/URL.md
+[dbfwd-lookup]: https://github.com/xo/dbfwd/blob/main/docs/LOOKUP.md
 
 ### Connection Examples
 
@@ -723,6 +776,9 @@ Type "help" for help.
 (not connected)=> \?
 General
   \q                                quit usql
+  \restrict RESTRICT_KEY            enter restricted mode with provided key
+  \unrestrict RESTRICT_KEY          exit restricted mode if key matches
+  \errverbose                       show most recent error message at maximum verbosity
   \copyright                        show usage and distribution terms for usql
   \drivers                          show database drivers available to usql
 
@@ -738,11 +794,14 @@ Connection
   \password [USER]                  change password for user
   \conninfo [-password]             display information about the current database connection,
                                     with the password when -password is given
+  \k[+] [OPTIONS] [SCOPE]           list databases in Kubernetes, with the URL for \c (OPTIONS:
+                                    -A, -n NAMESPACE, --context NAME)
 
 Query Execute
   \g [(OPTIONS)] [FILE] or ;        execute query (and send results to file or |pipe)
   \G [(OPTIONS)] [FILE]             as \g, but forces vertical output mode
   \gx [(OPTIONS)] [FILE]            as \g, but forces expanded output mode
+  \gdesc                            describe result of query, without executing it
   \gexec                            execute query and execute each value of the result
   \gset [PREFIX]                    execute query and store results in usql variables
   \bind [PARAM]...                  set query parameters
@@ -761,59 +820,61 @@ Query Buffer
   \w [-raw|-exec] FILE              write the contents of the query buffer, raw
                                     (non-interpolated) buffer, or exec buffer to file
   \r                                reset (clear) the query buffer
+  \history [COUNT]                  show the history, or its last COUNT entries
+  \s [FILE]                         display history or save it to file
   \ef [FUNCNAME [LINE]]             edit function definition with external editor
   \ev [VIEWNAME [LINE]]             edit view definition with external editor
 
 Informational
-  \d[S+] [NAME]                     list tables, views, and sequences or describe table, view,
+  \d[Sx+] [NAME]                    list tables, views, and sequences or describe table, view,
                                     sequence, or index
-  \da[S+] [PATTERN]                 list aggregates
-  \dA[+] [PATTERN]                  list access methods
-  \dAc[+] [AMPTRN [PATTERN]]        list operator classes
-  \dAf[+] [AMPTRN [PATTERN]]        list operator families
-  \dAo[+] [AMPTRN [PATTERN]]        list operators of operator families
-  \dAp[+] [AMPTRN [PATTERN]]        list support functions of operator families
-  \db[+] [PATTERN]                  list tablespaces
-  \dc[S+] [PATTERN]                 list conversions
-  \dconfig[+] [PATTERN]             list configuration parameters
-  \dC[+] [PATTERN]                  list casts
-  \dd[S] [PATTERN]                  show object descriptions not displayed elsewhere
-  \dD[S+] [PATTERN]                 list domains
-  \ddp [PATTERN]                    list default privileges
-  \dE[S+] [PATTERN]                 list foreign tables
-  \des[+] [PATTERN]                 list foreign servers
-  \det[+] [PATTERN]                 list foreign tables and their servers
-  \deu[+] [PATTERN]                 list user mappings
-  \dew[+] [PATTERN]                 list foreign-data wrappers
-  \df[anptw][S+] [PATTERN]          list [only agg/normal/procedure/trigger/window] functions
-  \dF[+] [PATTERN]                  list text search configurations
-  \dFd[+] [PATTERN]                 list text search dictionaries
-  \dFp[+] [PATTERN]                 list text search parsers
-  \dFt[+] [PATTERN]                 list text search templates
-  \dg[S+] [PATTERN]                 list roles
-  \di[S+] [PATTERN]                 list indexes
-  \dl[+]                            list large objects, same as \lo_list
-  \dL[S+] [PATTERN]                 list procedural languages
-  \dm[S+] [PATTERN]                 list materialized views
-  \dn[S+] [PATTERN]                 list schemas
-  \do[S+] [PATTERN]                 list operators
-  \dO[S+] [PATTERN]                 list collations
-  \dp[S] [PATTERN]                  list table, view, and sequence access privileges
-  \dP[itn+] [PATTERN]               list [only index/table] partitioned relations [n=nested]
-  \drds [ROLEPTRN [DBPTRN]]         list per-database role settings
-  \drg[S] [PATTERN]                 list role grants
-  \dRp[+] [PATTERN]                 list replication publications
-  \dRs[+] [PATTERN]                 list replication subscriptions
-  \ds[S+] [PATTERN]                 list sequences
-  \dt[S+] [PATTERN]                 list tables
-  \dT[S+] [PATTERN]                 list data types
-  \du[S+] [PATTERN]                 list roles
-  \dv[S+] [PATTERN]                 list views
-  \dx[+] [PATTERN]                  list extensions
-  \dX [PATTERN]                     list extended statistics
-  \dy[+] [PATTERN]                  list event triggers
-  \l[+] [PATTERN]                   list databases
-  \z[S] [PATTERN]                   same as \dp
+  \da[Sx+] [PATTERN]                list aggregates
+  \dA[x+] [PATTERN]                 list access methods
+  \dAc[x+] [AMPTRN [PATTERN]]       list operator classes
+  \dAf[x+] [AMPTRN [PATTERN]]       list operator families
+  \dAo[x+] [AMPTRN [PATTERN]]       list operators of operator families
+  \dAp[x+] [AMPTRN [PATTERN]]       list support functions of operator families
+  \db[x+] [PATTERN]                 list tablespaces
+  \dc[Sx+] [PATTERN]                list conversions
+  \dconfig[x+] [PATTERN]            list configuration parameters
+  \dC[x+] [PATTERN]                 list casts
+  \dd[Sx] [PATTERN]                 show object descriptions not displayed elsewhere
+  \dD[Sx+] [PATTERN]                list domains
+  \ddp[x] [PATTERN]                 list default privileges
+  \dE[Sx+] [PATTERN]                list foreign tables
+  \des[x+] [PATTERN]                list foreign servers
+  \det[x+] [PATTERN]                list foreign tables and their servers
+  \deu[x+] [PATTERN]                list user mappings
+  \dew[x+] [PATTERN]                list foreign-data wrappers
+  \df[anptw][Sx+] [NAME [TYPES]]    list [only agg/normal/procedure/trigger/window] functions
+  \dF[x+] [PATTERN]                 list text search configurations
+  \dFd[x+] [PATTERN]                list text search dictionaries
+  \dFp[x+] [PATTERN]                list text search parsers
+  \dFt[x+] [PATTERN]                list text search templates
+  \dg[Sx+] [PATTERN]                list roles
+  \di[Sx+] [PATTERN]                list indexes
+  \dl[x+]                           list large objects, same as \lo_list
+  \dL[Sx+] [PATTERN]                list procedural languages
+  \dm[Sx+] [PATTERN]                list materialized views
+  \dn[Sx+] [PATTERN]                list schemas
+  \do[Sx+] [NAME [TYPES]]           list operators
+  \dO[Sx+] [PATTERN]                list collations
+  \dp[Sx] [PATTERN]                 list table, view, and sequence access privileges
+  \dP[itn][x+] [PATTERN]            list [only index/table] partitioned relations [n=nested]
+  \drds[x] [ROLEPTRN [DBPTRN]]      list per-database role settings
+  \drg[Sx] [PATTERN]                list role grants
+  \dRp[x+] [PATTERN]                list replication publications
+  \dRs[x+] [PATTERN]                list replication subscriptions
+  \ds[Sx+] [PATTERN]                list sequences
+  \dt[Sx+] [PATTERN]                list tables
+  \dT[Sx+] [PATTERN]                list data types
+  \du[Sx+] [PATTERN]                list roles
+  \dv[Sx+] [PATTERN]                list views
+  \dx[x+] [PATTERN]                 list extensions
+  \dX[x] [PATTERN]                  list extended statistics
+  \dy[x+] [PATTERN]                 list event triggers
+  \l[x+] [PATTERN]                  list databases
+  \z[Sx] [PATTERN]                  same as \dp
   \sf[+] FUNCNAME                   show a function's definition
   \sv[+] VIEWNAME                   show a view's definition
   \ss[+] TABLE [k]                  show stats for the columns of a table
@@ -1303,7 +1364,7 @@ Type "help" for help.
 (not connected)=> \set DESTINATION_DSN sqlite3:booktest.db
 (not connected)=> -- connecting to the destination and creating the schema
 (not connected)=> \c :DESTINATION_DSN
-Connected with driver sqlite3 (SQLite 3.53.4)
+Connected with driver sqlite3 (SQLite 3.54.1)
 sq:booktest.db=> create table authors (author_id integer, name text);
 CREATE TABLE
 sq:booktest.db=> create table books (book_id integer not null primary key autoincrement, author_id integer, title text);
@@ -1319,7 +1380,7 @@ COPY 2
 (not connected)=> \copy :SOURCE_DSN :DESTINATION_DSN 'select author_id, title from books' 'books(author_id, title)'
 COPY 3
 (not connected)=> \c :DESTINATION_DSN
-Connected with driver sqlite3 (SQLite 3.53.4)
+Connected with driver sqlite3 (SQLite 3.54.1)
 sq:booktest.db=> select * from authors;
  author_id |     name
 -----------+--------------
@@ -1430,9 +1491,9 @@ Connected with driver sqlserver (Microsoft SQL Server 2025 17.0.5005.3, RTM-CU9,
 Type "help" for help.
 
 ms:sa@localhost/master=> \g
- 1 \g        4 \gset
- 2 \go       5 \gexec
- 3 \gx       6 \getenv
+ 1 \g        4 \gset     7 \getenv
+ 2 \go       5 \gdesc
+ 3 \gx       6 \gexec
 ```
 
 Not all commands, contexts, or databases support completion. To help improve

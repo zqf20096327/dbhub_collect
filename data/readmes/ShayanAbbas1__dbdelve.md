@@ -45,8 +45,9 @@ until the quarantine flag is cleared.
 **Linux** (x86_64 or aarch64): `yay -S dbdelve-bin` from the AUR, or the
 tarball or AppImage from [the latest release][releases].
 
-**Windows** (x86_64): unzip the zip from [the latest release][releases] and run
-`dbdelve.exe`.
+**Windows** (x86_64): run the installer from [the latest release][releases],
+or unzip the zip and run `dbdelve.exe`. The installer asks for AppData (just
+for you) or Program Files (all users).
 
 Updating, the `.dmg`, Linux requirements, building from source and where your
 data lives are all in [docs/install.md](docs/install.md).
@@ -143,6 +144,15 @@ runs each (2026-10-11, M1 Pro, 32 GB):
 \* The whole 1M-row table pulled into memory on purpose, with the row limit
 off. Method and full results in [BENCHMARKS.md](BENCHMARKS.md).
 
+## Logs and bug reports
+
+DBDelve keeps a diagnostic log on your machine and never sends it anywhere. To
+attach it to an issue, use **Help → Copy Diagnostics** and paste; **Help → Open
+Logs Folder** shows the files. If the default log doesn't show the problem, turn
+on **Verbose logging** in Settings and reproduce it.
+
+Read a log before you post it and remove anything sensitive. A verbose one can
+hold hostnames, database names and anything a database driver logs.
 
 ## License
 

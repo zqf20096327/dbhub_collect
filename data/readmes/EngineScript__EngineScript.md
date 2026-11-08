@@ -156,7 +156,7 @@ Want to support EngineScript? [Sponsor this project](https://github.com/sponsors
 |**`es.install`**|Runs the main EngineScript install script|
 |**`es.menu`**|EngineScript menu|
 |**`es.permissions`**|Resets the permissions of all files in the WordPress directory *(server-wide)*|
-|**`es.restart`**|Restarts Nginx and PHP|
+|**`es.restart`**|Restarts Nginx and PHP-FPM, and starts Redis if it is down|
 |**`es.sites`**|Lists all WordPress sites installed on the server with status information|
 |**`es.update`**|Updates EngineScript|
 |**`es.variables`**|Opens the variable file in Nano. This file resets when EngineScript is updated|
@@ -180,7 +180,6 @@ EngineScript includes a comprehensive web-based admin control panel accessible a
 |NGINX MAINLINE|1.31.8|<https://nginx.org/en/download.html>|
 |NGINX CACHE PURGE|3.0.4|<https://github.com/nginx-modules/ngx_cache_purge>|
 |NGINX HEADERS MORE|0.41|<https://github.com/openresty/headers-more-nginx-module>|
-|NGINX PATCH: Dynamic TLS Records|Latest|<https://github.com/nginx-modules/ngx_http_tls_dyn_size>|
 |OPENSSL|4.1.0|<https://www.openssl.org/source/>|
 |PCRE2|10.49|<https://github.com/PCRE2Project/pcre2/releases>|
 |ZLIB|1.3.2|<https://github.com/madler/zlib>|

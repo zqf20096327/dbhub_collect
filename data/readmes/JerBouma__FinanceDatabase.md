@@ -4,7 +4,8 @@
 [![GitHub Sponsors](https://img.shields.io/badge/Sponsor_this_Project-grey?logo=github)](https://github.com/sponsors/JerBouma)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-grey?logo=buymeacoffee)](https://www.buymeacoffee.com/jerbouma)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-grey?logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/boumajeroen/)
-<!-- Hidden until the MCP server is published: [![MCP Server](https://img.shields.io/badge/MCP_Server-grey?logo=modelcontextprotocol)](#mcp-server) -->
+[![MCP Server](https://img.shields.io/badge/MCP_Server-grey?logo=modelcontextprotocol)](https://www.jeroenbouma.com/projects/financedatabase/mcp)
+[![Download MCP Bundle](https://img.shields.io/badge/Download_MCP_Bundle-grey?logo=anthropic)](https://github.com/JerBouma/FinanceDatabase/releases/latest/download/financedatabase.mcpb)
 [![Documentation](https://img.shields.io/badge/Documentation-grey?logo=readme)](https://www.jeroenbouma.com/projects/financedatabase)
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/financedatabase)](https://pypi.org/project/financedatabase/)
 [![PYPI Version](https://img.shields.io/pypi/v/financedatabase)](https://pypi.org/project/financedatabase/)
@@ -20,42 +21,36 @@ Some key statistics of the database:
 
 <!-- STATISTICS:START (generated weekly by scripts/update_readme_stats.py from database/; edits between these markers are overwritten) -->
 
-<div align="center">
-
-![symbols](https://img.shields.io/badge/symbols-310%2C146-0A66C2?style=flat-square) ![equities](https://img.shields.io/badge/equities-120%2C742-2EA44F?style=flat-square) ![ETFs](https://img.shields.io/badge/ETFs-43%2C963-8250DF?style=flat-square) ![countries](https://img.shields.io/badge/countries-118-BF8700?style=flat-square) ![updated](https://img.shields.io/badge/updated-2026--10--07-57606A?style=flat-square)
-
-</div>
-
 | | Asset class | Symbols | Exchanges | Coverage |
 | :-: | :-- | --: | --: | :-- |
-| 🏢 | **Equities** | 120,742 | 87 | 11 sectors · 69 industries · 118 countries |
-| 📦 | **ETFs** | 43,963 | 64 | 599 issuers · 35 categories |
-| 💼 | **Funds** | 58,011 | 34 | 1,560 fund families · 71 categories |
-| 📈 | **Indices** | 80,287 | 63 | 42 categories |
-| 💱 | **Currencies** | 2,556 | – | 178 currencies |
-| 🪙 | **Cryptocurrencies** | 3,378 | – | 352 coins · 12 quote currencies |
-| 🏦 | **Money Markets** | 1,209 | 2 | 126 fund families |
-| | **Total** | **310,146** | | |
+| 🏢 | **Equities** | 121,559 | 87 | 11 sectors · 75 industries · 118 countries |
+| 📦 | **ETFs** | 32,047 | 63 | 636 issuers · 32 categories |
+| 💼 | **Funds** | 57,761 | 29 | 1,534 fund families · 70 categories |
+| 📈 | **Indices** | 82,370 | 64 | 42 categories |
+| 💱 | **Currencies** | 2,516 | – | 177 currencies |
+| 🪙 | **Cryptocurrencies** | 5,783 | – | 672 coins · 12 quote currencies |
+| 🏦 | **Money Markets** | 1,225 | 4 | 131 fund families |
+| | **Total** | **303,261** | | |
 
 <!-- STATISTICS:END -->
 
-<!-- Hidden until the MCP server is published.
 ___
-**🔌 The Finance Database is also available as an [MCP Server](#mcp-server)**
+**🔌 The Finance Database is also available as an [MCP Server](https://www.jeroenbouma.com/projects/financedatabase/mcp)**
 
 Explore all 300,000+ symbols from Claude, Copilot, Cursor, Windsurf or any MCP-compatible client without writing code. No API key needed.
 
-- **Local:** `uvx --from "financedatabase[mcp]" financedatabase-mcp-setup` — sets up your client config automatically. See [MCP Server](#mcp-server) for manual setup.
+- **Hosted:** connect to `https://financedatabase.jeroenbouma.com/mcp` — nothing to install and no API key.
+- **Local:** `uvx --from "financedatabase[mcp]" financedatabase-mcp-setup` — sets up your client config automatically. See [MCP Server Documentation](https://www.jeroenbouma.com/projects/financedatabase/mcp#local-clients) for manual setup.
 ___
--->
 
 # Table of Contents
 
 1. [Installation](#installation)
 2. [Functionality](#functionality)
-3. [Questions & Answers](#questions--answers)
-4. [Contributing](#contributing)
-5. [Contact](#contact)
+3. [MCP Server](#mcp-server)
+4. [Questions & Answers](#questions--answers)
+5. [Contributing](#contributing)
+6. [Contact](#contact)
 
 # Installation
 
@@ -104,8 +99,8 @@ A portion of the output is shown below. The tables in this section are cut off t
 
 | symbol   | name                     | currency   | sector                 | industry                                   | exchange   | market               | country       | market_cap   | isin         |
 |:---------|:-------------------------|:-----------|:-----------------------|:-------------------------------------------|:-----------|:---------------------|:--------------|:-------------|:-------------|
-| AAPL     | Apple Inc.               | USD        | Information Technology | Technology Hardware, Storage & Peripherals | NMS        | NASDAQ Global Select | United States | Mega Cap     | US0378331005 |
-| ASML.AS  | ASML Holding N.V.        | EUR        | Information Technology | Semiconductors & Semiconductor Equipment   | AMS        | Euronext Amsterdam   | Netherlands   | Mega Cap     | NL0010273215 |
+| AAPL     | Apple Inc.               | USD        | Information Technology | Computers & Hardware                       | NMS        | NASDAQ Global Select | United States | Mega Cap     | US0378331005 |
+| ASML.AS  | ASML Holding N.V.        | EUR        | Information Technology | Semiconductors & Chip Equipment            | AMS        | Euronext Amsterdam   | Netherlands   | Mega Cap     | NL0010273215 |
 | 7203.T   | Toyota Motor Corporation | JPY        | Consumer Discretionary | Automobiles                                | JPX        | Tokyo Stock Exchange | Japan         | Mega Cap     | JP3633400001 |
 | NESN.SW  | Nestle S.A.              | CHF        | Consumer Staples       | Food Products                              | EBS        | SIX Swiss Exchange   | Switzerland   | Mega Cap     | CH0038863350 |
 | SAP.DE   | SAP SE                   | EUR        | Information Technology | Software                                   | GER        | XETRA                | Germany       | Mega Cap     | DE0007164600 |
@@ -117,7 +112,7 @@ And below the actively listed equities are counted per sector.
   <img alt="Sectors" src="https://raw.githubusercontent.com/JerBouma/FinanceDatabase/main/assets/readme/sectors-light.png">
 </picture>
 
-Each asset class has the same three functions: `select` to filter on the database's categories, `search` to look for any text in any column and `show_options` to see which values a category can take. The asset classes are `fd.Equities()`, `fd.ETFs()`, `fd.Funds()`, `fd.Indices()`, `fd.Currencies()`, `fd.Cryptos()` and `fd.MoneyMarkets()`.
+Each asset class has the same three functions: `select` to filter on the database's categories, `search` to look for any text in any column and `show_options` to see which values a category can take. The asset classes are `fd.Equities()`, `fd.ETFs()`, `fd.Indices()`, `fd.Currencies()` and `fd.Cryptos()`, which are updated weekly from official exchange and market sources.
 
 Three capabilities cut across all of them:
 
@@ -137,7 +132,7 @@ options = fd.show_options("equities")
 options["sector"]
 ```
 
-This returns the eleven sectors used for equities, which approximate GICS:
+This returns the eleven sectors used for equities:
 
 ```text
 ['Communication Services', 'Consumer Discretionary', 'Consumer Staples',
@@ -159,8 +154,8 @@ equities.show_options(
 Which returns:
 
 ```text
-['Banks', 'Capital Markets', 'Consumer Finance',
- 'Diversified Financial Services', 'Insurance']
+['Banks', 'Capital Markets', 'Consumer Lending', 'Insurance',
+ 'Payments & Specialty Finance']
 ```
 
 And below the number of companies in each of these industries is shown. Each company is counted once, however many exchanges it is listed on: listings that share an ISIN, share class FIGI, website or the first word of their name (such as Aegon and its perpetual bonds) are combined.
@@ -185,7 +180,7 @@ equities.select(
 )
 ```
 
-This returns 181 companies, of which a few of the larger ones are shown below.
+This returns 194 companies, of which a few of the larger ones are shown below.
 
 | symbol   | name                             | currency   | sector     | industry   | exchange   | market                  | country       | market_cap   |
 |:---------|:---------------------------------|:-----------|:-----------|:-----------|:-----------|:------------------------|:--------------|:-------------|
@@ -195,12 +190,7 @@ This returns 181 companies, of which a few of the larger ones are shown below.
 | CINF     | Cincinnati Financial Corporation | USD        | Financials | Insurance  | NMS        | NASDAQ Global Select    | United States | Large Cap    |
 | PGR      | Progressive Corporation          | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
 
-Without `only_primary_listing=True`, the same query returns 454 listings on 23 exchanges, because every exchange a company trades on is shown by default. Progressive, for example, also appears as `PGV.F` (Frankfurt), `PGV.SG` (Stuttgart), `PGR.MX` (Mexico) and `P1GR34.SA` (B3). Primary listings are the symbols without an exchange suffix, which makes the option mostly useful for US companies. For companies elsewhere, filter on the `exchange` or `market` instead. The chart below shows how the Dutch insurers' listings are spread over the markets.
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JerBouma/FinanceDatabase/main/assets/readme/listings-dark.png">
-  <img alt="Listings" src="https://raw.githubusercontent.com/JerBouma/FinanceDatabase/main/assets/readme/listings-light.png">
-</picture>
+Without `only_primary_listing=True`, the same query returns 455 listings on 23 exchanges, because every exchange a company trades on is shown by default. Progressive, for example, also appears as `PGV.F` (Frankfurt), `PGV.SG` (Stuttgart), `PGR.MX` (Mexico) and `P1GR34.SA` (B3). The primary listing of a company is its listing on the main exchange of its home market, or without one its listing on the largest main exchange abroad. It is worked out from the data itself, so it works for companies anywhere: for ASML it is `ASML.AS` on Euronext Amsterdam, not `ASML` on NASDAQ or `ASMLF` over the counter. To get the listings in a particular country instead, such as the US listings of ASML, filter on the `exchange`, `market` or `currency`.
 
 For the Netherlands, it makes sense to select the market "Euronext Amsterdam" (exchange "AMS"), here together with the market cap:
 
@@ -232,23 +222,23 @@ If the categorization doesn't lead to the results you are looking for, `search` 
 # Search for robotics or education companies with equipment on the Frankfurt Stock Exchange
 equities.search(
     summary=["Robotics", "Education"],
-    industry_group="Equipment",
+    industry="Equipment",
     market="Frankfurt",
     index=".F",
 )
 ```
 
-This returns 60 instruments listed on the Frankfurt Stock Exchange, in an industry group containing "Equipment" and with "Robotics" or "Education" in their summary. Filtering on `index=".F"` is an alternative way to find the exchange or market you are looking for.
+This returns the instruments listed on the Frankfurt Stock Exchange in an industry containing "Equipment" and with "Robotics" or "Education" in their summary. Filtering on `index=".F"` is an alternative way to find the exchange or market you are looking for.
 
-| symbol   | name                                                        | currency   | sector                 | industry                                       | exchange   | market                   | country        | market_cap   |
-|:---------|:------------------------------------------------------------|:-----------|:-----------------------|:-----------------------------------------------|:-----------|:-------------------------|:---------------|:-------------|
-| 089.F    | Cambium Networks Corporation                                | EUR        | Information Technology | Communications Equipment                       | FRA        | Frankfurt Stock Exchange | Cayman Islands | Micro Cap    |
-| 109.F    | Castlight Health, Inc.                                      | EUR        | Health Care            | Health Care Technology                         | FRA        | Frankfurt Stock Exchange | United States  | Small Cap    |
-| 1KT.F    | Keysight Technologies Inc                                   | EUR        | Information Technology | Electronic Equipment, Instruments & Components | FRA        | Frankfurt Stock Exchange | United States  | Large Cap    |
-| 1N1.F    | Nanalysis Scientific Corp.                                  | EUR        | Information Technology | Electronic Equipment, Instruments & Components | FRA        | Frankfurt Stock Exchange | Canada         | Nano Cap     |
-| 1YO.F    | Yangtze Optical Fibre And Cable Joint Stock Limited Company | EUR        | Information Technology | Communications Equipment                       | FRA        | Frankfurt Stock Exchange | China          | Small Cap    |
+| symbol | name                                                        | currency | sector                 | industry                              | exchange | market                   | country        | market_cap |
+|:-------|:------------------------------------------------------------|:---------|:-----------------------|:--------------------------------------|:---------|:-------------------------|:---------------|:-----------|
+| 1YO.F  | Yangtze Optical Fibre And Cable Joint Stock Limited Company | EUR      | Information Technology | Networking & Communications Equipment | FRA      | Frankfurt Stock Exchange | China          | Large Cap  |
+| 2IU.F  | Boxlight Corporation                                        | EUR      | Information Technology | Networking & Communications Equipment | FRA      | Frankfurt Stock Exchange | United States  | Nano Cap   |
+| 49V.F  | Vertiv Holdings Co                                          | EUR      | Industrials            | Electrical Equipment                  | FRA      | Frankfurt Stock Exchange | United States  | Large Cap  |
+| A1Z1.F | eEnergy Group Plc                                           | EUR      | Industrials            | Electrical Equipment                  | FRA      | Frankfurt Stock Exchange | United Kingdom | Nano Cap   |
+| A8B.F  | Ambarella, Inc.                                             | EUR      | Information Technology | Semiconductors & Chip Equipment       | FRA      | Frankfurt Stock Exchange | United States  | Mid Cap    |
 
-And below the 60 results are counted per industry.
+And below the results are counted per industry.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JerBouma/FinanceDatabase/main/assets/readme/search-dark.png">
@@ -282,25 +272,25 @@ For example, see some of the Vanguard bond ETFs listed in Berlin below:
 | 025L.BE  | Vanguard Total International Bond Index Fund ETF Shares         | EUR        | Fixed Income     | Investment Grade Bonds | Vanguard Asset Management | BER        |
 | 025N.BE  | Vanguard Long-Term Corporate Bond Index Fund ETF Shares         | EUR        | Fixed Income     | Corporate Bonds        | Vanguard Asset Management | BER        |
 
-The same applies to `search`, for example to find the funds that focus on pension plans:
+The same applies to `search`, for example to find semiconductor indices across providers and countries:
 
 ```python
-# Initialize the Funds database
-funds = fd.Funds()
+# Initialize the Indices database
+indices = fd.Indices()
 
-# Search for funds with "Pension" in their summary
-funds.search(summary="Pension")
+# Search for indices with "Semiconductor" in their name
+indices.search(name="Semiconductor")
 ```
 
-Which returns 628 funds, of which a few are shown below:
+Which returns semiconductor indices from the US, South Korea and Taiwan, including their price, net and total return variants, of which a few are shown below:
 
-| symbol       | name                                | currency   | category_group   | category                 | family                           | exchange   |
-|:-------------|:------------------------------------|:-----------|:-----------------|:-------------------------|:---------------------------------|:-----------|
-| 0P000015HA.F | Casermed Protección 6 PP            | EUR        | Financials       | Allocation               | Sa Nostra Seguros de Vida SA     | FRA        |
-| 0P000015V5.F | BK Revalorización Europa 2022 PP    | EUR        | Financials       | Bonds                    | Bankinter                        | FRA        |
-| 0P000015VC.F | Bankia Protegido Renta 2023 PP      | EUR        | Financials       | Bonds                    | Bankia Fondos                    | FRA        |
-| 0P000017AE.F | Santander Universidades RF Mixta PP | EUR        | Fixed Income     | Bonds                    | Santander Asset Management SGIIC | FRA        |
-| 0P000017AF.F | OpenBank Monetario PP               | EUR        | Cash             | Money Market Instruments | Santander Asset Management SGIIC | FRA        |
+| symbol   | name                                | currency | category_group         | category   | exchange |
+|:---------|:------------------------------------|:---------|:-----------------------|:-----------|:---------|
+| ^SOX     | PHLX Semiconductor                  | USD      | Information Technology | Technology | NIM      |
+| ^ICESEMI | ICE Semiconductor Index             | USD      | Information Technology | Technology | NYS      |
+| ^NQSSSE  | Nasdaq US Smart Semiconductor Index | USD      | Information Technology | Technology | NIM      |
+| ^KQ47    | Kosdaq Semiconductors Index         | KRW      | Information Technology | Technology | KOE      |
+| SEC.TW   | TSEC semiconductor subindex         | TWD      | Information Technology | Technology | TAI      |
 
 And below all actively listed ETFs are divided over their category groups.
 
@@ -309,7 +299,7 @@ And below all actively listed ETFs are divided over their category groups.
   <img alt="ETFs" src="https://raw.githubusercontent.com/JerBouma/FinanceDatabase/main/assets/readme/etfs-light.png">
 </picture>
 
-The categories of each asset class can again be found with `show_options`, e.g. `fd.Indices().show_options(selection="category")` returns the 42 index categories, from 'Corporate Bonds' and 'Emerging Markets' to 'Small Cap' and 'Value'. Cryptocurrencies are selected on `cryptocurrency` and `currency`, currencies on `base_currency` and `quote_currency` and money markets on `currency` and `family`. **Find the Notebook [here](https://www.jeroenbouma.com/projects/financedatabase/getting-started) and the full documentation [here](https://www.jeroenbouma.com/projects/financedatabase).**
+The categories of each asset class can again be found with `show_options`, e.g. `fd.Indices().show_options(selection="category")` returns the 42 index categories, from 'Corporate Bonds' and 'Emerging Markets' to 'Small Cap' and 'Value'. Cryptocurrencies are selected on `cryptocurrency` and `currency` and currencies on `base_currency` and `quote_currency`. **Find the Notebook [here](https://www.jeroenbouma.com/projects/financedatabase/getting-started) and the full documentation [here](https://www.jeroenbouma.com/projects/financedatabase).**
 
 ### Combining with the Finance Toolkit
 
@@ -389,21 +379,32 @@ And below these and other profitability ratios of ASR Nederland, each with its l
 
 This works for the other asset classes too. For example, Ethereum quoted in BTC, CAD, EUR, GBP and USD can be loaded with `fd.Cryptos().select(cryptocurrency="ETH").to_toolkit(api_key=...)`, after which `get_historical_data(period="quarterly")` returns its quarterly returns in each currency. **This is just a small snippet of what is available within the Finance Toolkit, see the GitHub page of the Finance Toolkit [here](https://github.com/JerBouma/FinanceToolkit) or the example Notebook [here](https://www.jeroenbouma.com/projects/financetoolkit/getting-started) for more information.**
 
-<!-- Hidden until the MCP server is published; add "MCP Server" back to the Table of Contents as well.
-
 # MCP Server
 
-The Finance Database MCP Server gives any AI assistant that supports the [Model Context Protocol](https://modelcontextprotocol.io) (MCP) direct access to the database. Ask in plain English for, say, every mid cap semiconductor company in Taiwan or the bond ETFs of a given issuer, and the assistant queries the database on your behalf. No API key is needed. The data is downloaded once, cached locally and checked for updates at most once a day, exactly like the Python package.
+The Finance Database MCP Server gives any AI assistant that supports the [Model Context Protocol](https://modelcontextprotocol.io) (MCP) direct access to the database. Ask in plain English for, say, every mid cap semiconductor company in Taiwan or the bond ETFs of a given issuer, and the assistant queries the database on your behalf. No API key is needed. Find the tools, example prompts and how to host the server yourself in the [MCP Server Documentation](https://www.jeroenbouma.com/projects/financedatabase/mcp).
+
+### Remote server
+
+Connect directly to the hosted server at `https://financedatabase.jeroenbouma.com/mcp`. Nothing needs to be installed locally and no API key or sign-in is required. See the [privacy policy](PRIVACY.md) for what the hosted server processes.
+
+| Client | Steps |
+|:---|:---|
+| **Claude Desktop** | Customize → Connectors → Add custom connector → paste the URL |
+| **Claude.ai** | Customize → Connectors → Add custom connector → paste the URL |
+| **Claude Code** | `claude mcp add --transport http finance-database https://financedatabase.jeroenbouma.com/mcp` |
+| **VS Code** | Command Palette → MCP: Add Server → HTTP → paste the URL |
+| **Cursor** | Settings → Features → MCP Servers → Add new → http → paste the URL |
+| **Windsurf** | Settings → MCP Servers → Add Server → Remote/HTTP → paste the URL |
 
 ### Local installation
 
-Run the setup wizard — it locates your client's config file (Claude Desktop, Claude Code, VS Code, Cursor, Gemini or Windsurf) and adds the server automatically:
+Run the setup wizard — it locates your client's config file and writes the MCP entry automatically:
 
 ```bash
 uvx --from "financedatabase[mcp]" financedatabase-mcp-setup
 ```
 
-For manual config, add the following to your client's MCP config file (e.g. `claude_desktop_config.json`, `.cursor/mcp.json`; VS Code's `.vscode/mcp.json` uses `servers` instead of `mcpServers`):
+For manual config, add the following to your client's MCP config file (e.g. `claude_desktop_config.json` or `.cursor/mcp.json`; VS Code's `.vscode/mcp.json` uses `servers` instead of `mcpServers`):
 
 ```json
 {
@@ -416,30 +417,7 @@ For manual config, add the following to your client's MCP config file (e.g. `cla
 }
 ```
 
-For Claude Code: `claude mcp add finance-database -- uvx --from "financedatabase[mcp]" financedatabase-mcp`. To serve over HTTP instead of stdio, use `financedatabase-mcp --transport streamable-http --port 8000` or the included `Dockerfile` and `docker-compose.yml`. `financedatabase-mcp-inspector` opens the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to try the tools in a browser.
-
-### Tools
-
-| Tool | What it does |
-|:-----|:-------------|
-| `equities`, `etfs`, `funds`, `indices`, `currencies`, `cryptos`, `moneymarkets` | List the instruments of an asset class matching its `select()` filters (e.g. `country`, `sector`, `industry`, `market_cap` for equities; `category_group`, `category`, `family` for ETFs) and/or a free-text `query` on symbol and name. Filters accept several comma-separated values. Supports `include_delisted`, `only_primary_listing`, `show_columns`, `include_summary`, `limit` and `offset`. |
-| `search_instruments` | Find a symbol by ticker, name or ISIN across all asset classes at once. |
-| `show_options` | Show the valid values of a filter (e.g. every sector or country), optionally narrowed by other filters. |
-| `search_categories` | List the asset classes with their size, filters and description. |
-
-Every response is compact JSON with `total`, `returned`, `offset`, `columns` and `rows`, at most 200 rows per call (25 by default), with a `_notes` hint on how to get the next page. Summaries are left out unless asked for and truncated to 300 characters, so a response never contains the full dataset. Invalid filter values return the package's error message together with suggestions such as "Did you mean 'Information Technology'?".
-
-### Example prompts
-
-- *"Which Dutch financial companies are Large or Mega Cap?"*
-- *"Find all mid cap semiconductor companies in Taiwan and list their exchanges."*
-- *"What ETFs does Vanguard offer in the Fixed Income category group?"*
-- *"Which ticker belongs to ISIN US0378331005, and on which exchanges is it listed?"*
-- *"List the industries in the Health Care sector and how many German companies are in each."*
-
-Combine it with the [Finance Toolkit MCP Server](https://www.jeroenbouma.com/projects/financetoolkit/mcp) to go from a list of symbols to their financial statements, ratios and prices.
-
--->
+Alternatively, download the [Finance Database MCPB bundle](https://github.com/JerBouma/FinanceDatabase/releases/latest/download/financedatabase.mcpb) and open it with Claude Desktop.
 
 # Questions & Answers
 
@@ -447,36 +425,46 @@ This section includes frequently asked questions. If you have any questions that
 
 > **How is the data obtained?**
 
-The data is an aggregation of various publicly available sources. I strictly maintain the rule that all data in this database must be freely accessible to everyone. Data requiring API keys or paid subscriptions is never included. Information that companies charge for is typically owned and maintained by those companies, making public sharing of such data a violation of their Terms of Service (ToS). However, publicly available data can be freely shared (read more about the legality of web scraping [here](https://techcrunch.com/2022/04/18/web-scraping-legal-court/)). This database will always remain <u>completely free</u>.
+The data is an aggregation of publicly available sources: the official listing directories that exchanges publish (such as Nasdaq Trader, HKEX, NSE, the Japan Exchange Group, ASX, TSX, Deutsche Börse Xetra, Euronext and SIX Swiss Exchange), open reference data (OpenFIGI, SEC EDGAR, the ISO 4217 currency lists, CoinGecko) and contributions from the community. I strictly maintain the rule that all data in this database must be freely accessible to everyone. Data requiring paid subscriptions is never included. Information that companies charge for is typically owned and maintained by those companies, making public sharing of such data a violation of their Terms of Service (ToS). However, publicly available data can be freely shared (read more about the legality of web scraping [here](https://techcrunch.com/2022/04/18/web-scraping-legal-court/)). This database will always remain <u>completely free</u>.
 
 > **What categorization method is used?**
 
-The categorization for Equities is based on a loose approximation of GICS (Global Industry Classification Standard). This database attempts to reflect sectors and industries as accurately as possible through manual curation, without collecting any actual data from MSCI's proprietary sources. The official GICS datasets curated by MSCI remain the most up-to-date, paid solution and were not used in developing any part of this database. All other categorizations in the database are independently developed and can be freely modified.
+Equities are classified in this database's own three levels: 11 sectors, which are divided into industry groups and then industries. Every valid combination is listed in [`scripts/categories.json`](https://github.com/JerBouma/FinanceDatabase/blob/main/scripts/categories.json). The categories are curated by hand and from public sources, and the weekly update classifies new companies the same way. All categorizations in the database are independently developed and can be freely modified.
 
 > **How can I find out which countries, sectors and/or industries exist within the database without needing to check the database manually?**
 
 For this you can use the `show_options` function, either for an asset class as a whole (`fd.show_options("equities")`), which doesn't require any data to be loaded, or on a loaded asset class to see the options that remain after filtering. See [Exploring the Options](#exploring-the-options) for more information.
 
-> **When I try collect data I notice that not all tickers return output, why is that?**
+> **When I try to collect data I notice that not all tickers return output, why is that?**
 
 Some tickers are merely holdings of companies and therefore do not really have any data attached to them. Therefore, it makes sense that not all tickers return data. If you are still in doubt, search the ticker on Google to see if there is really no data available. If you can't find anything about the ticker, consider updating the database by visiting the [Contributing Guidelines](https://github.com/JerBouma/FinanceDatabase/blob/main/CONTRIBUTING.md).
 
-> **How does the database handle changes to companies over time - like symbol/exchange migration, mergers, bankruptcies, or symbols getting reused?**
+> **How is the database kept up to date?**
 
-For American exchanges, the database automatically updates every Sunday using data from [this repository](https://github.com/rreichel3/US-Stock-Symbols). This process includes checks for market cap changes and updates asset classifications accordingly. Delisted tickers are intentionally retained for historical research purposes.
+Every Sunday (and after every change to the database) an automated update runs on GitHub Actions:
 
-While professional financial data services like Bloomberg charge over $25,000 annually for comprehensive market data maintenance, this database relies on community contributions. When companies outside American exchanges undergo changes (migrations, mergers, bankruptcies), we depend on community members to identify and update these entries.
+| Asset class | What the weekly update does | Source |
+|:--|:--|:--|
+| **Equities** | Adds new listings on NASDAQ, NYSE and NYSE American and refreshes their market cap tiers; adds new equities in Hong Kong, India, Japan, Australia and Canada. A ticker that is replaced by a new one is marked delisted. Bonds, notes, warrants and other papers that are not company shares are kept out. | [US-Stock-Symbols](https://github.com/rreichel3/US-Stock-Symbols), HKEX, NSE, JPX, ASX, TSX/TSXV |
+| **ETFs** | Adds new ETFs in the United States, Hong Kong, India, Japan, Canada, Germany (Xetra), Euronext (Amsterdam, Paris, Brussels, Lisbon, Oslo) and Switzerland. A new line of an existing fund takes its name and categories; blank categories are filled from the fund's other listings or, where clearly decisive, from its name. | Nasdaq Trader, HKEX, NSE, JPX, TSX, Deutsche Börse, Euronext, SIX, Börse Frankfurt |
+| **Cryptocurrencies** | Adds the coins in the top 500 by market cap against the usual quote currencies and removes coins that are no longer listed anywhere. | CoinGecko |
+| **Currencies** | Adds new currencies (such as SLE or ZWG) with their usual pairs and removes withdrawn ones (such as HRK after Croatia adopted the euro). | ISO 4217 (SIX) |
+| **Indices** | Adds the indices Euronext publishes and keeps the categories of ETF iNAVs in line with the index they track. | Euronext |
 
-Most companies don't change so rapidly that the database becomes obsolete - major changes like Facebook's rebrand to META are quickly incorporated. Even when companies go bankrupt, their ticker information remains valuable for historical analysis.
+Each source is applied on its own, so a source that is unavailable or changes its format is skipped for that week without affecting the others, and implausible changes (such as a large share of market cap tiers changing at once) are not applied. Before anything is committed, the update is checked against the previous version of the database and undone if it would introduce duplicate symbols, symbols in two asset classes, changed columns or a large loss of rows. Delisted tickers are kept on purpose, marked as delisted, for historical research. The scripts and their rules are described in [scripts/README.md](https://github.com/JerBouma/FinanceDatabase/blob/main/scripts/README.md).
 
-If you notice outdated information, please consider contributing through the [Contributing Guidelines](https://github.com/JerBouma/FinanceDatabase/blob/main/CONTRIBUTING.md).
+Not everything can be automated. Classifications of existing companies, corporate events outside the automated sources (mergers, renames, migrations) and exchanges without a public listing directory still rely on the community. If you notice outdated information, please consider contributing through the [Contributing Guidelines](https://github.com/JerBouma/FinanceDatabase/blob/main/CONTRIBUTING.md).
+
+> **What happened to Funds and Money Markets?**
+
+Since October 2026, funds and money markets are no longer maintained. Unlike exchange-listed instruments, mutual and money market funds have no public source that keeps them current worldwide, and the data had become outdated (many funds closed or merged, many new ones missing). `fd.Funds()` and `fd.MoneyMarkets()` remain available in the Python package as they are, with a warning when loaded, but they are no longer part of the MCP server. Funds that trade on a stock exchange under a regular ticker, such as listed open-ended funds in China or listed funds on Euronext Amsterdam, were moved to the ETFs so they stay maintained and searchable.
 
 > **Is the data downloaded every time I use the package?**
 
 No. Each dataset is downloaded once and cached in your user cache folder (or the folder set in `FINANCEDATABASE_CACHE_DIR`). Once a day the package checks for a newer version and only downloads it when it changed; offline, the cached copy is used. Queries run lazily with [Polars](https://pola.rs/) and return pandas by default, or Polars with `as_pandas=False`, e.g. `equities.select(country="Canada", as_pandas=False)`.
 
 # Contributing
-First off all, thank you for taking the time to contribute (or at least read the Contributing Guidelines)! 🚀
+First of all, thank you for taking the time to contribute (or at least read the Contributing Guidelines)! 🚀
 
 ___
 
@@ -489,10 +477,13 @@ Below are those that made significant contributions to the project. Thank you!
 
 | User              | Contribution |
 | ----------------- | ------------ |
-| [dokson](https://github.com/dokson) | Made very significant contributions to the quality of the database in #138, #139, #140, #141, #142, #143, #144, #145, #146 and #147. |
+| [dokson](https://github.com/dokson) | Made very significant contributions to the quality of the database in #138, #139, #140, #141, #142, #143, #144, #145, #146 and #147, added the MIC column (#149), enriched the FIGIs and added 709 missing tickers (#150, #151) and fixed the CI workflows (#154). |
+| [JonArnfred](https://github.com/JonArnfred) | Built the identifier validation that now checks every pull request (#159), filled missing share class FIGIs (#158), made the database workflow preserve CSV values exactly as written (#166) and fixed the test suite (#160). |
+| [AlfaStake](https://github.com/AlfaStake) | Added ISIN codes for ETFs (#124) and corrected and enriched 229 equity ISINs (#126). |
+| [pettijohn](https://github.com/pettijohn) | Added missing currencies and company names from SEC data (#135, #136). |
 | [desaijimmy](https://github.com/desaijimmy)        | Made changes to Equities dataset including the Split of Daimler to Mercedes-Benz and Daimler Trucks |
 | [nindogo](https://github.com/nindogo)        | Introduced a variety of new equities from the Nairobi Securities Exchange and introduced the country Kenya into the dataset. |
-| [colin99d](https://github.com/colin99d)        | Helped in the conversion of the Finance Database package to Object-Orientated, making the code much more efficient. |
+| [colin99d](https://github.com/colin99d)        | Helped in the conversion of the Finance Database package to Object-Oriented, making the code much more efficient. |
 
 # Contact
 If you have any questions about the FinanceDatabase or would like to share with me what you have been working on, feel free to reach out to me via:

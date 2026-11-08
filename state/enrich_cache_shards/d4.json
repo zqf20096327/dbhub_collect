@@ -27,7 +27,7 @@
   "commit_90d": 12,
   "rel_ver": "v1.6.8",
   "rel_pub": "2026-09-08",
-  "rel_days": 60,
+  "rel_days": 61,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -53,7 +53,7 @@
   "commit_90d": 644,
   "rel_ver": "v2.2.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 17,
+  "rel_days": 18,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -62,7 +62,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 32,
-  "enriched_at": "20261107",
+  "enriched_at": "20261108",
   "lang": {
    "Clojure": 57,
    "Kotlin": 39,
@@ -73,7 +73,7 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261107",
-   "release": "20261107",
+   "release": "20261108",
    "security": "20261027"
   },
   "rel_notes": [
@@ -104,7 +104,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"2cae527f1416b8eb4ec7f610e895a52e797fdf0020ad928a217f3434c2f1531d\""
+   "release": "W/\"bbc45ccd6a37f5be269b41ba080e59217a3203cd26ff339d52c857c8b5aab4ca\""
   },
   "rel_dates": [
    "2026-10-21",
@@ -142,7 +142,7 @@
   "commit_7d": 2,
   "rel_ver": "v3.7.3",
   "rel_pub": "2026-10-23",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -197,12 +197,12 @@
   ]
  },
  "snowflakedb/snowflake-connector-python": {
-  "commit_90d": 71,
+  "commit_90d": 69,
   "commit_7d": 5,
-  "rel_ver": "v4.7.5",
-  "rel_pub": "2026-09-21",
-  "rel_days": 6,
-  "rel_n90": 7,
+  "rel_ver": "v4.8.1",
+  "rel_pub": "2026-10-26",
+  "rel_days": 13,
+  "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 5,
@@ -223,14 +223,57 @@
    "Shell": 1,
    "Dockerfile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261108",
+  "etag": {
+   "release": "W/\"de68fc4a59686d2602b8690d059b01975a19fe5769b342cd580f6dc573ea340d\"",
+   "security": "W/\"db8558adff99fce21b831ae16b2b551009f665dd0bceb182b959b8a7308f2ec3\""
+  },
+  "rel_dates": [
+   "2026-10-26",
+   "2026-09-30",
+   "2026-09-21",
+   "2026-09-16",
+   "2026-09-03"
+  ],
+  "rel_notes": [
+   {
+    "t": "v4.8.1",
+    "d": "2026-10-26",
+    "n": "- v4.8.1(Oct 26,2026)\n  - Fixed `write_pandas` identifier quoting. Parquet field paths are quoted, Iceberg option values are escaped string literals, and `quote_identifiers=False` accepts only valid unquoted identifiers.\n  - Dropped support for Python 3.10. The minimum supported version is now Python 3.11.\n  - Bumped vendored `urllib3` to `2.8.0`. This includes the upstream fix for importing the connector on Python built against OpenSSL 4, where `ssl.PROTOCOL_TLSv1` no longer exists (SNOW-4232077).\n  - Fixe"
+   },
+   {
+    "t": "v4.8.0",
+    "d": "2026-09-30",
+    "n": "- Fixed external-browser (SSO) authentication to validate the `Origin` header on the local callback server, rejecting tokens delivered from unexpected origins. A trailing slash in the origin (e.g. `https://account.snowflakecomputing.com/`) is now accepted on par with the bare origin, matching JDBC and other driver behaviour. Preconnect probe connections (empty recv) no longer count against the retry budget and no longer abort the login flow.\n- Added the `SNOWFLAKE_TLS_CIPHERS` environment variable to restri"
+   },
+   {
+    "t": "v4.7.5",
+    "d": "2026-09-21",
+    "n": "* Fixed a TLS handshake failure that cannot succeed on a retry — a minimum-version mismatch, an untrusted certificate, a hostname mismatch — being reported by `connect()` as a generic `250001: Could not connect to Snowflake backend after N attempt(s)` alongside a firewall-troubleshooting hint. The network layer already identified and named such failures, but the authentication layer retried them until the login timeout expired and then replaced the diagnosis. They now surface as `NonRetryableTlsError` ("
+   },
+   {
+    "t": "v4.7.4",
+    "d": "2026-09-16",
+    "n": "- Fixed missing retries on transient HTTP failures when fetching an OAuth access token from the IdP token endpoint (`OAUTH_CLIENT_CREDENTIALS` and `OAUTH_AUTHORIZATION_CODE`). Token requests now retry transport errors, HTTP 408/429, and 5xx responses (SNOW-3984430, #3003).\r\n  - Fixed a bug where a TLS handshake terminated by the peer (`SSLError` containing `SysCallError(-1, 'Unexpected EOF')`) was classified as non-retryable and surfaced as an `OperationalError`, unlike `ECONNRESET`. Such handshake `Unexpec"
+   },
+   {
+    "t": "v4.7.3",
+    "d": "2026-09-03",
+    "n": "- The `WORKLOAD_IDENTITY` authenticator runs only against recognized Snowflake hosts: the connection host is normalized and suffix-anchored against `snowflakecomputing.com`, `.cn`, and `.mil` before the workload-identity flow proceeds. The `SNOWFLAKE_WIF_ALLOWED_HOST_SUFFIXES` environment variable additively extends the recognized-host list (SNOW-3675580).\n- Applied secret masking to the `snowflake.connector` loggers by default, independent of how application logging is configured. The same filter also cove"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  }
  },
  "vincent-herlemont/native_db": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "0.8.2",
   "rel_pub": "2025-07-08",
-  "rel_days": 487,
+  "rel_days": 488,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -270,7 +313,7 @@
   "commit_7d": 5,
   "rel_ver": "v4.0.0",
   "rel_pub": "2026-05-22",
-  "rel_days": 169,
+  "rel_days": 170,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -313,7 +356,7 @@
   "commit_7d": 0,
   "rel_ver": "4.0",
   "rel_pub": "2026-07-04",
-  "rel_days": 126,
+  "rel_days": 127,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -361,7 +404,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-07-03",
-  "rel_days": 127,
+  "rel_days": 128,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -378,7 +421,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2023-09-30",
-  "rel_days": 1134,
+  "rel_days": 1135,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -435,7 +478,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1",
   "rel_pub": "2017-05-23",
-  "rel_days": 3414,
+  "rel_days": 3456,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -455,7 +498,7 @@
   "commit_7d": 0,
   "rel_ver": "3.1.1",
   "rel_pub": "2023-02-27",
-  "rel_days": 1349,
+  "rel_days": 1350,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -501,7 +544,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.2.0",
   "rel_pub": "2019-03-05",
-  "rel_days": 2804,
+  "rel_days": 2805,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -558,7 +601,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-07-11",
-  "rel_days": 1580,
+  "rel_days": 1581,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -595,7 +638,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.7.2",
   "rel_pub": "2024-12-16",
-  "rel_days": 691,
+  "rel_days": 692,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -631,7 +674,7 @@
   "commit_7d": 1,
   "rel_ver": "v2.15.6.1",
   "rel_pub": "2026-09-21",
-  "rel_days": 47,
+  "rel_days": 48,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -656,7 +699,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.2.2",
   "rel_pub": "2022-11-28",
-  "rel_days": 1440,
+  "rel_days": 1441,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -676,7 +719,7 @@
  "reshadman/laravel-optimistic-locking": {
   "rel_ver": "1.1.0",
   "rel_pub": "2019-01-11",
-  "rel_days": 2857,
+  "rel_days": 2858,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -711,7 +754,7 @@
  "Sina-Ghaderi/goshkan": {
   "rel_ver": "goshkan-0.2.6",
   "rel_pub": "2022-02-04",
-  "rel_days": 1737,
+  "rel_days": 1738,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -802,7 +845,7 @@
  "United-Codes/uc-local-apex-dev": {
   "rel_ver": "v26.4",
   "rel_pub": "2026-09-03",
-  "rel_days": 65,
+  "rel_days": 66,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -911,7 +954,7 @@
  "TencentCloud/terraform-provider-tencentcloudenterprise": {
   "rel_ver": "v3.1012.33",
   "rel_pub": "2026-10-09",
-  "rel_days": 29,
+  "rel_days": 30,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1006,7 +1049,7 @@
  "mergestat/scribe": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2023-01-29",
-  "rel_days": 1378,
+  "rel_days": 1379,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1172,7 +1215,7 @@
  "adamghill/dj-lite-tenant": {
   "rel_ver": "0.2.0",
   "rel_pub": "2026-05-19",
-  "rel_days": 172,
+  "rel_days": 173,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1223,7 +1266,7 @@
  "ansible-collections/community.cassandra": {
   "rel_ver": "latest",
   "rel_pub": "2026-09-27",
-  "rel_days": 0,
+  "rel_days": 42,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1271,7 +1314,7 @@
  "mahmoudsamy7729/fastapi-saas-starter": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-12-27",
-  "rel_days": 315,
+  "rel_days": 316,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1292,7 +1335,7 @@
  "andrewferrier/memy": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-08-16",
-  "rel_days": 83,
+  "rel_days": 84,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1313,7 +1356,7 @@
  "ratchet-run/ratchet": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 42,
+  "rel_days": 43,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -1334,7 +1377,7 @@
  "OthmaneBlial/rustframe": {
   "rel_ver": "v0.1.0-rc.4",
   "rel_pub": "2026-09-08",
-  "rel_days": 60,
+  "rel_days": 61,
   "rel_n90": 4,
   "rel_pre": true,
   "rel_none": false,
@@ -1382,7 +1425,7 @@
  "darkterminal/libsql-client-php": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2024-05-19",
-  "rel_days": 902,
+  "rel_days": 903,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1416,7 +1459,7 @@
  "Trivadis/plsql-cop-cli": {
   "rel_ver": "v5.0.1",
   "rel_pub": "2024-03-26",
-  "rel_days": 956,
+  "rel_days": 957,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1447,7 +1490,7 @@
  "mfscpayload-690/network-intrusion-log-manager": {
   "rel_ver": "initial",
   "rel_pub": "2025-08-07",
-  "rel_days": 457,
+  "rel_days": 458,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1468,7 +1511,7 @@
  "20minutes/pg-rabbitmq-fdw": {
   "rel_ver": "1.0.2",
   "rel_pub": "2018-03-16",
-  "rel_days": 3158,
+  "rel_days": 3159,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1486,7 +1529,7 @@
  "ucsandman/declick": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 64,
+  "rel_days": 65,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1534,7 +1577,7 @@
  "ARPA-SIMC/dballe": {
   "rel_ver": "v9.11-1",
   "rel_pub": "2025-06-27",
-  "rel_days": 498,
+  "rel_days": 499,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1614,7 +1657,7 @@
  "MikeAmputer/ClickHouse.Facades": {
   "rel_ver": "3.2.0",
   "rel_pub": "2026-08-23",
-  "rel_days": 76,
+  "rel_days": 77,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1631,7 +1674,7 @@
  "markusbegerow/local-llm-chat-ssms": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-11-18",
-  "rel_days": 354,
+  "rel_days": 355,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1693,7 +1736,7 @@
  "ulovecode/gdcache": {
   "rel_ver": "v0.2.18",
   "rel_pub": "2021-10-12",
-  "rel_days": 1852,
+  "rel_days": 1853,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1710,7 +1753,7 @@
  "hstptcn5/Catena": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-07-25",
-  "rel_days": 105,
+  "rel_days": 106,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1761,7 +1804,7 @@
  "geoffreylgv/WorldCountryAPI": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-04-09",
-  "rel_days": 1308,
+  "rel_days": 1309,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1804,7 +1847,7 @@
  "oracle/oraclejet-tooling": {
   "rel_ver": "21.0.0",
   "rel_pub": "2026-08-17",
-  "rel_days": 82,
+  "rel_days": 83,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1853,7 +1896,7 @@
  "susomejias/rembric": {
   "rel_ver": "server-v0.28.16",
   "rel_pub": "2026-09-27",
-  "rel_days": 41,
+  "rel_days": 42,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1893,7 +1936,7 @@
  "Spartacus-shoulder-kinematics-dataset/shoulder-kinematics": {
   "rel_ver": "0.3.1",
   "rel_pub": "2025-04-05",
-  "rel_days": 581,
+  "rel_days": 582,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1928,7 +1971,7 @@
  "tidbcloud/tidbcloud-cli": {
   "rel_ver": "v1.0.0-beta.11",
   "rel_pub": "2025-12-23",
-  "rel_days": 319,
+  "rel_days": 320,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1970,7 +2013,7 @@
  "quarkiverse/quarkus-jdbc-sqlite4j": {
   "rel_ver": "0.0.8",
   "rel_pub": "2025-10-24",
-  "rel_days": 379,
+  "rel_days": 380,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1987,7 +2030,7 @@
  "ajistyle/apollo-dameng": {
   "rel_ver": "v2.1.0-dameng",
   "rel_pub": "2026-02-13",
-  "rel_days": 267,
+  "rel_days": 268,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2013,7 +2056,7 @@
  "gzorm/gosqlx": {
   "rel_ver": "v0.0.11",
   "rel_pub": "2025-05-15",
-  "rel_days": 541,
+  "rel_days": 542,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2055,7 +2098,7 @@
  "Ranchero-Software/RSDatabase": {
   "rel_ver": "2.0.0",
   "rel_pub": "2023-08-27",
-  "rel_days": 1168,
+  "rel_days": 1169,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2102,7 +2145,7 @@
  "6enta0/CPAplus": {
   "rel_ver": "v7.2.101-cpa.1",
   "rel_pub": "2026-07-26",
-  "rel_days": 104,
+  "rel_days": 105,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2129,7 +2172,7 @@
  "MercuryTechnologies/sqkon": {
   "rel_ver": "3.0.1",
   "rel_pub": "2026-07-01",
-  "rel_days": 129,
+  "rel_days": 130,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2240,7 +2283,7 @@
  "RayElg/pgmqtt": {
   "rel_ver": "0.5.1",
   "rel_pub": "2026-09-23",
-  "rel_days": 45,
+  "rel_days": 46,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2267,7 +2310,7 @@
  "wasm-forge/ic-rusqlite": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-04-25",
-  "rel_days": 196,
+  "rel_days": 197,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2291,7 +2334,7 @@
  "GenKnot/MischicatBot": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2026-03-27",
-  "rel_days": 225,
+  "rel_days": 226,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2833,7 +2876,7 @@
   "commit_7d": 2,
   "rel_ver": "3.12.2",
   "rel_pub": "2026-10-30",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -3021,7 +3064,7 @@
  "VheissuLabs/tql": {
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-10-02",
-  "rel_days": 36,
+  "rel_days": 37,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3152,7 +3195,7 @@
  "shipap/vless-vpn-shop-telegram-bot": {
   "rel_ver": "v0.1.0-rc.1",
   "rel_pub": "2026-10-15",
-  "rel_days": 23,
+  "rel_days": 24,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -3268,7 +3311,7 @@
  "haoyuant/tomrade": {
   "rel_ver": "v0.28.0-beta.1",
   "rel_pub": "2026-11-05",
-  "rel_days": 2,
+  "rel_days": 3,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,

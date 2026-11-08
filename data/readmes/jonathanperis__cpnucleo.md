@@ -1,0 +1,133 @@
+# cpnucleo
+
+> A hands-on .NET 10 architecture laboratory: compare implementations, explore tradeoffs, and verify the behavior you learn.
+
+[![Build Check](https://github.com/jonathanperis/cpnucleo/actions/workflows/build-check.yml/badge.svg)](https://github.com/jonathanperis/cpnucleo/actions/workflows/build-check.yml) [![Main Release](https://github.com/jonathanperis/cpnucleo/actions/workflows/main-release.yml/badge.svg)](https://github.com/jonathanperis/cpnucleo/actions/workflows/main-release.yml) [![CodeQL](https://github.com/jonathanperis/cpnucleo/actions/workflows/codeql.yml/badge.svg)](https://github.com/jonathanperis/cpnucleo/actions/workflows/codeql.yml)
+
+**[Learning paths](https://cpnucleo.jonathanperis.tech/docs/learning-lab/)** · **[Pages documentation](https://cpnucleo.jonathanperis.tech/docs/)** · **[Live demo](https://app-cpnucleo.jonathanperis.tech/)**
+
+## Purpose
+
+Cpnucleo is a project-management sandbox for learning application and platform engineering. Its breadth is intentional: REST and gRPC, EF Core and Dapper, domain modeling, authentication, real-time updates, observability, containers, and deployment share one inspectable example.
+
+The goal is a reliable learning baseline with explicit experiments, rather than a claim that every demonstrated technique is a complete production solution.
+
+## Start locally
+
+Prerequisites: Docker with Compose v2. For source development and tests, use the .NET SDK in `global.json`, Node.js in `.nvmrc`, and Bun 1.4.2. The package manifests declare the minimum supported Node version.
+
+```sh
+git clone https://github.com/jonathanperis/cpnucleo.git
+cd cpnucleo
+docker compose -f compose.lab.yaml up --build -d
+docker compose -f compose.lab.yaml run --rm seed
+```
+
+Open **http://localhost:5400**. The disposable lab account is `demo@cpnucleo.local` with password `LocalLearning@123`. These are local example credentials, not a production account. The login form never prefills credentials.
+
+| Local service | Address |
+|---|---|
+| WebClient | http://localhost:5400 |
+| WebApi | http://localhost:5100 |
+| IdentityApi | http://localhost:5200 |
+| PostgreSQL | localhost:15432 |
+| gRPC (`full` profile) | localhost:5300; health/readiness on 5301 |
+| Grafana (`observability` profile) | http://localhost:3000 |
+
+Add optional services:
+
+```sh
+docker compose -f compose.lab.yaml --profile full --profile observability up --build -d
+```
+
+Seeding is explicit. `tiny` creates 3 projects and 30 tasks; `realistic` creates 50 projects and 500 tasks. To **replace only your disposable lab data**:
+
+```sh
+docker compose -f compose.lab.yaml run --rm seed --reset-lab --Seed:Profile=realistic
+```
+
+The existing million-row CSV importer remains an advanced, explicit load-test tool. Production deployment never invokes it automatically.
+
+## Implementation map
+
+| Surface | Implementation |
+|---|---|
+| REST | FastEndpoints; EF Core, explicit Dapper and generic Dapper/UoW examples |
+| gRPC | FastEndpoints Remote Messaging, Dapper, shared contracts |
+| Shared use case | `Application/Features/Projects/CreateProject` |
+| Domain | Entities, factory/update behavior, repository ports and password-hasher abstraction |
+| Identity | OpenID Connect provider (Open.IdentityServer): authorization code with PKCE, client credentials, one-time refresh tokens with replay detection, revocation and server-side sign-out; rotating RS256 keys published as JWKS; Argon2id and per-login lockout |
+| UI | Astro static routes, native TypeScript controllers, Tailwind CSS |
+| Database | PostgreSQL; EF migrations shared by both persistence strategies |
+| Delivery | GitHub Actions, GHCR immutable tags, Hostinger Docker Manager |
+| Observability | OpenTelemetry traces, metrics and logs; optional local Grafana LGTM |
+
+Both transports expose 55 CRUD operations across 11 resources. Normal removal is soft deletion, guarded by relationship triggers. Every batch removal is atomic; version-aware project updates reject stale writes. Errors share one JSON envelope (`statusCode`, `message`, `errors`). List pages are bounded to 100 rows and support search and batched relation lookups.
+
+The Astro UI preserves CRUD forms, pagination, relation labels/search, native details dialogs, counters, OpenID Connect sign-in (authorization code with PKCE), inactivity expiry, refresh token rotation, server-side sign-out, cross-tab logout, themes, and service checks. It shows field-level API errors, hides administrator-only actions from non-admin sessions, and serves a CSP derived from its build-time API URLs. Every page of the WebClient and the documentation site is an Astro page; tests enforce it. Server-sent events combine immediate local notifications with a 15-second cross-instance refresh and client reconnection.
+
+## Maturity and boundaries
+
+| Status | Capability |
+|---|---|
+| Working baseline | Authenticated CRUD, soft deletion, PostgreSQL-backed tests, native Astro client, immutable deployments |
+| Verified examples | Project concurrency conflicts, transactional batches, REST/gRPC parity, duplicate-login contention, externally written SSE updates |
+| Incremental pilot | Shared Application use cases and richer domain behavior |
+| Foundation/exercise | Tenant isolation: tenant context types and informational claims exist, but shared workspace records are not tenant-isolated |
+| Experiment | Native AOT and Dapper.AOT; installation/build flags alone do not prove compatibility |
+
+Authorization is shared by both transports and both persistence styles. Catalog data is readable by everyone and writable by administrators. Projects and their work are visible and writable to project members only, and members record only their own hours. User administration requires an administrator. By default the seeded demo account (`demo@cpnucleo.local`) is the administrator; set `CPNUCLEO_ADMIN_LOGINS` to a comma-separated list to choose others instead (the list replaces the default). In production the demo password is `CPNUCLEO_DEMO_PASSWORD` from the demo import, so keep it private. Membership is not tenant isolation.
+
+## Verify
+
+Five test projects cover architecture, application behavior, security, endpoint units, and isolated PostgreSQL-backed integration scenarios:
+
+```sh
+dotnet test cpnucleo.slnx
+dotnet test tests/Architecture.Tests/
+```
+
+Integration tests create and dispose their own PostgreSQL container; they do not use your configured application database. Test counts come from the runner, not hardcoded documentation.
+
+From `src/WebClient` (jsdom tests need a real Node from `.nvmrc`, not a Bun `node` shim):
+
+```sh
+bun install --frozen-lockfile
+bun run typecheck
+bun run test
+bun audit
+```
+
+The frontend test command builds static pages, then tests native DOM interactions against generated markup. From `docs`, run `bun install --frozen-lockfile && bun run build && bun audit`. From the root, run `python3 scripts/check-docs-drift.py --built-site` to check documentation contracts, generated links, fragments and assets. See the [docs contributor guide](docs/README.md) and [audit/enhancement record](docs/audit-2026-09.md).
+
+## Deployment
+
+Production is a **standalone** Compose configuration:
+
+```sh
+docker compose --env-file .env -f compose.prod.yaml up -d
+```
+
+Use `.env.hostinger.example` to configure production secrets, hosts and immutable image tags. Do not layer the development/base file into production: Compose preserves published ports during merging.
+
+The release pipeline tests the exact amd64 image tags, applies additive database migrations before API startup, deploys through Hostinger, and verifies liveness and database readiness. `/healthz` checks the process; `/readyz` also checks that the database has the newest migration. The legacy `TRIM` flag currently configures ReadyToRun/self-contained publishing, not IL trimming. Native AOT is disabled in the standard release.
+
+## Repository layout
+
+```text
+src/Domain                 Domain behavior and ports
+src/Application            Shared use-case pilot
+src/Infrastructure         EF Core, Dapper, migrations, hashing and seed tools
+src/WebApi                 REST
+src/GrpcServer              gRPC handlers
+src/GrpcServer.Contracts    Remote commands/results
+src/IdentityApi             OpenID Connect provider
+src/WebClient              Astro and native TypeScript
+tests/                     Five .NET suites; frontend tests live with source
+labs/                      Reproducible learning experiments
+docs/wiki/                 Published learning and technical documentation
+```
+
+## Contributing and license
+
+Use a branch and PR; merge through rebase after CI passes. Community guidelines are maintained in [jonathanperis/.github](https://github.com/jonathanperis/.github). Licensed under [MIT](LICENSE).

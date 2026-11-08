@@ -1,11 +1,11 @@
 {
  "meilisearch/meilisearch": {
   "commit_7d": 12,
-  "commit_90d": 355,
-  "rel_ver": "v1.54.3",
-  "rel_pub": "2026-10-01",
-  "rel_days": 3,
-  "rel_n90": 12,
+  "commit_90d": 313,
+  "rel_ver": "v1.56.1",
+  "rel_pub": "2026-11-02",
+  "rel_days": 6,
+  "rel_n90": 16,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 229,
-  "enriched_at": "20261004",
+  "enriched_at": "20261108",
   "lang": {
    "Rust": 100,
    "Shell": 0,
@@ -21,16 +21,91 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261108",
+   "release": "20261108",
+   "security": "20261108"
+  },
+  "etag": {
+   "release": "W/\"d486d613efebd9baeccc476690a5446db1edad67b67801470ef1d05a14932a4b\"",
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_dates": [
+   "2026-11-02",
+   "2026-11-02",
+   "2026-10-26",
+   "2026-10-12",
+   "2026-10-01",
+   "2026-10-01",
+   "2026-10-01",
+   "2026-09-29",
+   "2026-09-28",
+   "2026-09-21",
+   "2026-09-07",
+   "2026-08-13",
+   "2026-08-10",
+   "2026-08-10",
+   "2026-08-10",
+   "2026-08-10"
+  ],
+  "rel_notes": [
+   {
+    "t": "v1.56.1",
+    "d": "2026-11-02",
+    "n": "- Existing databases encountering this issue can be fixed by adding a new document containing the new nested fields."
+   },
+   {
+    "t": "v1.55.1",
+    "d": "2026-11-02",
+    "n": "Meilisearch v1.55.1 introduces important security fixes. Upgrading from v1.55.0 and earlier is recommended for all users.\r\n\r\nSee the [release notes for Meilisearch v1.56.1](https://github.com/meilisearch/meilisearch/releases/tag/v1.56.1) for details.\r\n\r\n**Full Changelog**: https://github.com/meilisearch/meilisearch/compare/v1.55.0...v1.55.1"
+   },
+   {
+    "t": "v1.56.0",
+    "d": "2026-10-26",
+    "n": "### ✨ Enhancement\r\n\r\n- Introduce `sampledCount` to compute the facet distribution by @Kerollmops in https://github.com/meilisearch/meilisearch/pull/6649\r\n    It is a new sorting option when retrieving the facet distribution. It is less precise than by `count` but provides a rough estimate of the facet distribution. Note that the count of documents for each facet is exhaustive but the list of facets is not and some facets that would have been listed by using the by `count` method can be ignored/skipped.\r\n-"
+   },
+   {
+    "t": "v1.55.0",
+    "d": "2026-10-12",
+    "n": "> This fix introduces a breaking change in the Meilisearch API. Because the previous behavior would corrupt the embeddings in the database, this is allowed by our back-compatibility policy.\nTo avoid a performance sink when using the `rankingScoreThreshold` parameter in a search, Meilisearch now guarantees that **the search will stop after evaluating the first document whose score is below the threshold**. Previously Meilisearch would try to evaluate more documents, which could lead to evaluating all documen"
+   },
+   {
+    "t": "v1.54.3",
+    "d": "2026-10-01",
+    "n": "This release contains an important stability fix for Meilisearch. Update from v1.54.2 is recommended.\r\n\r\nSee https://github.com/meilisearch/meilisearch/pull/6658 for details"
+   },
+   {
+    "t": "v1.53.3",
+    "d": "2026-10-01",
+    "n": "This release contains an important stability fix for Meilisearch. Update from v1.53.2 is recommended.\r\n\r\nSee https://github.com/meilisearch/meilisearch/pull/6658 for details"
+   },
+   {
+    "t": "v1.52.4",
+    "d": "2026-10-01",
+    "n": "This release contains an important stability fix for Meilisearch. Update from v1.52.3 is recommended.\r\n\r\nSee https://github.com/meilisearch/meilisearch/pull/6658 for details"
+   },
+   {
+    "t": "v1.54.2",
+    "d": "2026-09-29",
+    "n": "Meilisearch v1.54.2 contains an important fix for users of the `dynamicSearchRule` experimental feature.\r\n\r\n# 🦋 Fixes\r\n\r\n- Trying to process, display, delete or cancel dynamic search rules update tasks that were created in Meilisearch v1.53 or prior no longer causes internal errors. By @dureuill in https://github.com/meilisearch/meilisearch/pull/6651. Thanks to @connorabbas for their report in https://github.com/meilisearch/meilisearch/issues/6646 ❤️"
+   },
+   {
+    "t": "v1.54.1",
+    "d": "2026-09-28",
+    "n": "### 🪲 Bug fixes\r\n\r\n- Make the embedder setting change succeed when the embedder's API key is expired by @ManyTheFish in https://github.com/meilisearch/meilisearch/pull/6640\r\n- Ignore geo errors when updating or deleting existing docs by @dureuill in https://github.com/meilisearch/meilisearch/pull/6638\r\n\r\n### 🔩 Miscellaneous\r\n\r\n- Aggregate the analytics from the MCP route by @Kerollmops in https://github.com/meilisearch/meilisearch/pull/6639"
+   },
+   {
+    "t": "v1.54.0",
+    "d": "2026-09-21",
+    "n": "- If upgrading with `--upgrade-db`, rules will be migrated automatically."
+   }
+  ]
  },
  "dotnetcore/FreeSql": {
   "commit_7d": 1,
   "commit_90d": 13,
   "rel_ver": "v3.5.311",
   "rel_pub": "2026-07-31",
-  "rel_days": 99,
+  "rel_days": 100,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -69,8 +144,8 @@
   ]
  },
  "Jwuthri/Tracely-ai": {
-  "commit_90d": 209,
-  "commit_7d": 0,
+  "commit_90d": 180,
+  "commit_7d": 1,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -85,19 +160,23 @@
    "HTML": 0,
    "Shell": 0
   },
-  "enriched_at": "20261104",
+  "enriched_at": "20261108",
   "dim_ts": {
-   "commit": "20261104",
-   "release": "20261104",
+   "commit": "20261108",
+   "release": "20261108",
    "security": "20261104"
-  }
+  },
+  "etag": {
+   "release": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_dates": []
  },
  "MatrixAges/polywise": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v0.1.3",
   "rel_pub": "2026-06-10",
-  "rel_days": 150,
+  "rel_days": 151,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -157,7 +236,7 @@
   "commit_7d": 0,
   "rel_ver": "v7.0.3",
   "rel_pub": "2026-01-30",
-  "rel_days": 281,
+  "rel_days": 282,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -203,7 +282,7 @@
   "commit_7d": 320,
   "rel_ver": "v0.51.4",
   "rel_pub": "2026-10-27",
-  "rel_days": 11,
+  "rel_days": 12,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -243,7 +322,7 @@
   "commit_7d": 41,
   "rel_ver": "VI.2026a",
   "rel_pub": "2026-06-02",
-  "rel_days": 158,
+  "rel_days": 159,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -287,7 +366,7 @@
   "commit_7d": 14,
   "rel_ver": "v1.3.0",
   "rel_pub": "2026-11-03",
-  "rel_days": 4,
+  "rel_days": 5,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -327,7 +406,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.0.0",
   "rel_pub": "2024-12-17",
-  "rel_days": 690,
+  "rel_days": 691,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -350,7 +429,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.1",
   "rel_pub": "2026-09-02",
-  "rel_days": 66,
+  "rel_days": 67,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -372,7 +451,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.11",
   "rel_pub": "2026-07-13",
-  "rel_days": 117,
+  "rel_days": 118,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -394,7 +473,7 @@
   "commit_7d": 52,
   "rel_ver": "backend-v0.17.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 19,
+  "rel_days": 20,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -440,7 +519,7 @@
   "commit_7d": 7,
   "rel_ver": "v0.25.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 19,
+  "rel_days": 20,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -467,7 +546,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.12.0",
   "rel_pub": "2016-03-05",
-  "rel_days": 3899,
+  "rel_days": 3900,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -487,7 +566,7 @@
   "commit_7d": 2,
   "rel_ver": "v2.0.0",
   "rel_pub": "2024-03-21",
-  "rel_days": 961,
+  "rel_days": 962,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -527,7 +606,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.16.5",
   "rel_pub": "2025-06-18",
-  "rel_days": 507,
+  "rel_days": 508,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -564,7 +643,7 @@
  "ibrahim317/cursor-chat-transfer": {
   "rel_ver": "v0.0.16",
   "rel_pub": "2026-06-06",
-  "rel_days": 154,
+  "rel_days": 155,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -581,7 +660,7 @@
  "senko/dante": {
   "rel_ver": "0.1.1",
   "rel_pub": "2024-09-17",
-  "rel_days": 781,
+  "rel_days": 782,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -598,7 +677,7 @@
  "darshanDevrai/brahmand": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2025-09-18",
-  "rel_days": 415,
+  "rel_days": 416,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -644,7 +723,7 @@
  "FirebirdSQL/fdb": {
   "rel_ver": "v2.0.4",
   "rel_pub": "2025-07-22",
-  "rel_days": 432,
+  "rel_days": 474,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -664,7 +743,7 @@
  "yanstu/FilmTrack": {
   "rel_ver": "v0.5.1",
   "rel_pub": "2026-06-08",
-  "rel_days": 152,
+  "rel_days": 153,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -700,7 +779,7 @@
  "nMoncho/helenus": {
   "rel_ver": "v1.10.0",
   "rel_pub": "2026-07-23",
-  "rel_days": 66,
+  "rel_days": 108,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -721,7 +800,7 @@
  "FedericoCeratto/nim-lmdb": {
   "rel_ver": "0.1.1",
   "rel_pub": "2019-02-17",
-  "rel_days": 2820,
+  "rel_days": 2821,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -765,7 +844,7 @@
  "auspham/SpringBoot-ReactJS-SocialMedia": {
   "rel_ver": "v2.2.0",
   "rel_pub": "2019-11-14",
-  "rel_days": 2550,
+  "rel_days": 2551,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -785,7 +864,7 @@
  "Wave-RF/WaveHouse": {
   "rel_ver": "clients/ts/v0.1.1",
   "rel_pub": "2026-08-20",
-  "rel_days": 79,
+  "rel_days": 80,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -821,7 +900,7 @@
  "swiftlang/swift-toolchain-sqlite": {
   "rel_ver": "1.0.13",
   "rel_pub": "2026-09-12",
-  "rel_days": 56,
+  "rel_days": 57,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -857,7 +936,7 @@
  "Joris-van-der-Wel/node-pg-large-object": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2015-09-04",
-  "rel_days": 4082,
+  "rel_days": 4083,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -891,7 +970,7 @@
  "SuperiorServers/gm_tmysql4": {
   "rel_ver": "4.6",
   "rel_pub": "2026-09-03",
-  "rel_days": 65,
+  "rel_days": 66,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -939,7 +1018,7 @@
  "dokku/dokku-clickhouse": {
   "rel_ver": "2.1.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 44,
+  "rel_days": 45,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1007,7 +1086,7 @@
  "danger-ahead/flutter_dictionary": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2021-08-01",
-  "rel_days": 1924,
+  "rel_days": 1925,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1058,7 +1137,7 @@
  "FurryCoders/FALocalRepo": {
   "rel_ver": "v4.5.3",
   "rel_pub": "2025-11-29",
-  "rel_days": 343,
+  "rel_days": 344,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1127,7 +1206,7 @@
  "AmbitionEng/django-pgstats": {
   "rel_ver": "1.6.0",
   "rel_pub": "2025-11-30",
-  "rel_days": 342,
+  "rel_days": 343,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1165,7 +1244,7 @@
  "openises/tickets": {
   "rel_ver": "v3.44.6",
   "rel_pub": "2026-08-20",
-  "rel_days": 79,
+  "rel_days": 80,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1235,7 +1314,7 @@
  "BlackIQ/Ashley": {
   "rel_ver": "Ashley-V-0.1.7",
   "rel_pub": "2021-01-17",
-  "rel_days": 2120,
+  "rel_days": 2121,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1348,7 +1427,7 @@
  "PCIRCLE-AI/memesh": {
   "rel_ver": "v4.10.8",
   "rel_pub": "2026-09-27",
-  "rel_days": 41,
+  "rel_days": 42,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -1423,7 +1502,7 @@
  "ov-sa/DBify.library": {
   "rel_ver": "v.2.3.2",
   "rel_pub": "2023-07-11",
-  "rel_days": 1215,
+  "rel_days": 1216,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1441,7 +1520,7 @@
  "NicholasMata/sqlserver.nvim": {
   "rel_ver": "v1.0.0-rc.5",
   "rel_pub": "2026-09-26",
-  "rel_days": 42,
+  "rel_days": 43,
   "rel_n90": 5,
   "rel_pre": true,
   "rel_none": false,
@@ -1462,7 +1541,7 @@
  "keynmol/twotm8": {
   "rel_ver": "v0.0.3",
   "rel_pub": "2022-11-19",
-  "rel_days": 1449,
+  "rel_days": 1450,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1528,7 +1607,7 @@
  "Entity-Access/entity-access": {
   "rel_ver": "v1.1.4",
   "rel_pub": "2026-03-20",
-  "rel_days": 232,
+  "rel_days": 233,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1546,7 +1625,7 @@
  "little-brother/sqlite-extensions": {
   "rel_ver": "1.0.0",
   "rel_pub": "2024-01-26",
-  "rel_days": 1016,
+  "rel_days": 1017,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1578,7 +1657,7 @@
  "AhmedHatemS/Course-Management-System": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2021-03-19",
-  "rel_days": 2059,
+  "rel_days": 2060,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1608,7 +1687,7 @@
  "smashboy/prismagram": {
   "rel_ver": "v0.1.2",
   "rel_pub": "2023-03-15",
-  "rel_days": 1333,
+  "rel_days": 1334,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1672,7 +1751,7 @@
  "satyamkale27/Go-social": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-10-26",
-  "rel_days": 377,
+  "rel_days": 378,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1762,7 +1841,7 @@
  "Shopify/activerecord-rescue_from_duplicate": {
   "rel_ver": "v0.2.7",
   "rel_pub": "2026-08-26",
-  "rel_days": 73,
+  "rel_days": 74,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1785,7 +1864,7 @@
  "blackms/aistack": {
   "rel_ver": "v1.6.1",
   "rel_pub": "2026-01-30",
-  "rel_days": 281,
+  "rel_days": 282,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2422,7 +2501,7 @@
    "lang": "20261002"
   },
   "rel_pub": "2026-10-31",
-  "rel_days": 7,
+  "rel_days": 8,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_notes": [
@@ -2548,7 +2627,7 @@
  "falsea3/plugboard": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-02",
-  "rel_days": 36,
+  "rel_days": 37,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2694,7 +2773,7 @@
  "dmw-net/xiaomoAgent": {
   "rel_ver": "v0.2.6",
   "rel_pub": "2026-10-20",
-  "rel_days": 18,
+  "rel_days": 19,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2846,7 +2925,7 @@
  "ukimaka/OctoBeat": {
   "rel_ver": "0.1",
   "rel_pub": "2026-11-02",
-  "rel_days": 5,
+  "rel_days": 6,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -2897,6 +2976,30 @@
    "security": "20261104",
    "contrib": "20261104",
    "lang": "20261104"
+  }
+ },
+ "aggressive-labs/phoenix_pubsub_postgresql": {
+  "etag": {
+   "release": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\"",
+   "security": "\"7fa22a6451e8957c336b717a87c2e81f3bf6c1db54faeb553e384e84161143bb\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "Elixir": 100
+  },
+  "enriched_at": "20261108",
+  "dim_ts": {
+   "release": "20261108",
+   "security": "20261108",
+   "contrib": "20261108",
+   "lang": "20261108"
   }
  }
 }
