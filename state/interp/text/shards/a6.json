@@ -2534,5 +2534,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c8dffca274c6": {
+  "identity": {
+   "one_liner": "嵌入式属性图数据库，采用列式存储并实现 Cypher 查询",
+   "review": "Kuzu 是由 Kùzu Inc. 开发的嵌入式图数据库，针对大型数据库上的复杂分析负载设计，实现 Cypher 查询语言并内置全文搜索与向量索引。项目已归档，官方扩展服务器不再提供；v0.11.3 预装 algo/fts/json/vector 四个扩展，旧版本或未预装扩展需自行搭建本地扩展服务器（提供 Docker 镜像）。采用 MIT 许可证。",
+   "highlights": [
+    "支持属性图数据模型与 Cypher 查询语言，提供全文搜索与向量索引",
+    "采用列式磁盘存储、CSR 邻接表索引、向量化查询处理器与多核查询并行，支持串行化 ACID 事务",
+    "提供 Wasm (WebAssembly) 绑定，可在浏览器中运行；扩展框架支持运行时动态加载功能"
+   ],
+   "use_cases": [
+    "应用内嵌入式图数据存储与查询（无服务器集成）",
+    "浏览器端图数据库场景（通过 Wasm 绑定）",
+    "需要图上全文检索或向量检索的分析负载"
+   ]
+  },
+  "sha": "c8dffca274c6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a1f42e96316d": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的轨迹级 CI/CD 平台，将生产失败固化为可回归的 CI 用例",
+   "review": "Tracely 通过 OTLP 接收 Agent 运行轨迹，用 LLM-as-judge 与结构化检查自动评分，将失败按签名与语义聚类成 issue，并把失败轨迹固化为附带 fail-to-pass 契约的密封回归用例。CI 中用录制的工具与 LLM fixtures 离线重放，不需 API key。技术栈含 ClickHouse、Postgres、Redis、MinIO，需 Docker 部署。",
+   "highlights": [
+    "通过 OTLP/HTTP 接收轨迹，将 agent.id、conversation.id 等 Agent 语义提升为索引列，支持会话线程分组与瀑布图查看",
+    "提供 LLM-as-judge（会话/运行/span 级）与无模型结构化检查两类评估器，失败按结构签名与嵌入聚类成 issue",
+    "回归用例以录制 fixtures 离线重放，`tracely gate` 输出非零退出码、commit status 与 PR 评论；支持多轮 scenario 与红队对抗目标"
+   ],
+   "use_cases": [
+    "为生产环境中的 AI Agent 建立失败检测、聚类与回归测试流程的团队",
+    "在 CI 中以离线 fixture 重放方式阻止引入已知失败的 PR 合并",
+    "需要 LLM 评估器校准、失败率/延迟/成本趋势分析以及 Slack/邮件/webhook 告警流的多 Agent 系统运维"
+   ]
+  },
+  "sha": "a1f42e96316d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec976e8d130e": {
+  "identity": {
+   "one_liner": "基于 redis-py 子类化的 Python Redis 工具库，可作 drop-in 替换",
+   "review": "Walrus 通过子类化并扩展 redis-py 客户端实现，可在不学习新库的情况下替换使用，同时新增部分较新命令的支持，包括流和消费者组。它提供 Hash、List、Set、Sorted Set 等数据类型的 Python 容器类，适合需要在 Python 中操作 Redis 的开发者。",
+   "highlights": [
+    "子类化 redis-py，可作为其直接替换使用",
+    "为 Hash、List、Set、Sorted Set、HyperLogLog、BitField、BloomFilter、Streams 等提供容器类",
+    "包含缓存装饰器、全文搜索、图存储、速率限制和锁定等实现"
+   ],
+   "use_cases": [
+    "需要以 Python 对象方式操作 Redis 各类数据结构的开发",
+    "使用 Redis 流与消费者组处理消息",
+    "为函数与方法调用添加缓存、速率限制或分布式锁"
+   ]
+  },
+  "sha": "ec976e8d130e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "768cb938a65c": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 和 Razor Pages 的自托管个人博客平台",
+   "review": "Moonglade 是一个面向开发者的自托管博客系统，构建于 ASP.NET Core / .NET 10 与 Razor Pages 之上，提供文章发布（Markdown/Mermaid、定时发布、草稿）、评论互动、RSS/Atom/sitemap 等发现协议及管理后台。默认数据库为 PostgreSQL，亦可配置为 SQL Server；数据库升级需管理员手动执行 SQL 脚本，不支持自动迁移。README 要求不用于面向中国大陆用户提供服务。",
+   "highlights": [
+    "支持文章发布、草稿、定时发布、Markdown 与 Mermaid 图表、评论管理、Webmention 及数据导入导出",
+    "提供 RSS、Atom、OPML、OpenSearch、sitemap、IndexNow 等发现与互操作能力，并包含健康检查",
+    "默认使用 PostgreSQL，可显式配置为 SQL Server；提供 Docker Compose 部署与 xUnit 测试项目"
+   ],
+   "use_cases": [
+    "开发者自托管个人博客站点",
+    "需要 TOTP 双因素登录管理后台的博客部署",
+    "基于 Docker Compose 或云上/本地环境的 .NET 应用部署实践"
+   ]
+  },
+  "sha": "768cb938a65c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

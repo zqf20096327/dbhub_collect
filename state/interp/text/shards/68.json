@@ -2878,5 +2878,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "55aad5913d69": {
+  "identity": {
+   "one_liner": "NebulaGraph：分布式图数据库，存算分离，支持openCypher查询",
+   "review": "NebulaGraph 是一个开源分布式图数据库，采用存储与计算分离架构，通过 RAFT 协议实现数据一致性，使用兼容 OpenCypher 的查询语言，并提供基于角色的访问控制与图分析算法。适用于需处理大规模图数据的场景，由 C++ 编写，遵循 Apache 2.0 协议，可源码构建或部署于 AWS。",
+   "highlights": [
+    "采用对称分布式架构与存储计算分离设计，支持水平扩展",
+    "通过 RAFT 协议提供数据一致性，并提供基于角色的访问控制",
+    "查询语言兼容 OpenCypher，内置多种图分析算法"
+   ],
+   "use_cases": [
+    "社交媒体与推荐系统中的图数据存储与查询",
+    "知识图谱构建与管理",
+    "安全分析与资金流向等关系型数据分析"
+   ]
+  },
+  "sha": "55aad5913d69",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c796df18e55": {
+  "identity": {
+   "one_liner": "带故障注入的工具环境，按系统副作用评估与后训练 LLM 代理",
+   "review": "ResolveLab 提供注入并发冲突、重试后丢失确认等故障的 HTTP 服务（FastAPI 实现），代理在其上执行工具调用；评分基于服务器状态、提交日志和读取版本而非模型自述。同一环境的教师标签经重放验证，可生成 DAgger 等训练数据。面向需要评估或后训练工具使用型代理的研究者，支持 Ollama、OpenAI 兼容服务等多种模型接入，评估无需 GPU，复现训练需约 8 GB 显存。",
+   "highlights": [
+    "CaseDesk 服务注入 If-Match 冲突(412)、Retry-After(429)、502、中途权限撤销等故障，评分来自服务器状态、提交日志与读取版本",
+    "教师标签通过重放验证：标签仅当教师从该状态继续并通过 grader v2 时保留；CaseDeskEnv 提供 reset/step/state 接口与稀疏可验证奖励",
+    "已发布研究可在无 GPU 下重放审计，测试输入与权重哈希锁定，修改研究核心代码会触发 CI 失败"
+   ],
+   "use_cases": [
+    "用本地模型或 OpenAI 兼容服务在注册测试集上评估工具使用代理的副作用表现",
+    "生成经过重放验证的 DAgger/行为克隆训练数据，用 LoRA 在单张 8 GB GPU 上复现已注册研究",
+    "作为 RL 环境训练代理，或在未见过的生成 API 方言上测试技能迁移"
+   ]
+  },
+  "sha": "0c796df18e55",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

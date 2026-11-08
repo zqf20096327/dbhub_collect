@@ -2887,5 +2887,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "47e1a1d2e434": {
+  "identity": {
+   "one_liner": "基于 Apache Arrow、DataFusion 与 Parquet 的开源时序数据库",
+   "review": "InfluxDB 3 Core 是用于采集、处理、转换和存储事件与时序数据的数据库，面向需要实时写入和快速查询响应的场景，如仪表盘、监控与自动化方案。其采用无盘架构（对象存储或本地磁盘），以 Parquet 格式持久化，内置 Python VM 支持插件与触发器。写入兼容 1.x/2.x API，查询支持 SQL、InfluxQL 与 Flight SQL，HTTP 服务运行在 8181 端口。项目以 MIT/Apache-2.0 双许可发布，自 2025 年 4 月起正式可用。",
+   "highlights": [
+    "支持对象存储（S3、Azure、GCP）或本地磁盘的 Parquet 持久化",
+    "提供 SQL、InfluxQL、Flight SQL 查询语言，兼容 InfluxDB 1.x/2.x 写入 API 与 Line protocol 写入格式",
+    "内置 Python VM，用于插件和触发器"
+   ],
+   "use_cases": [
+    "传感器数据、服务器、应用性能与网络监控",
+    "金融市场与交易分析",
+    "需要近实时数据展示的仪表盘与交互式界面"
+   ]
+  },
+  "sha": "47e1a1d2e434",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e116a799e6f3": {
+  "identity": {
+   "one_liner": "基于 Rust 与 GPUI 构建的跨平台多引擎数据库客户端",
+   "review": "DBDelve 是一个用 Rust 和 GPUI 编写的桌面数据库客户端，支持 Postgres、MySQL、SQLite、MongoDB、Redis、ClickHouse 等多种数据库，并提供 ODBC 桥接访问 Db2 等其他数据库。面向开发者与数据库使用者，提供网格编辑、查询计划查看、Schema 感知补全、SSH 隧道（复用本机 ssh）、CSV/Excel/Parquet 文件查询等功能。安装覆盖 macOS（Homebrew，需清除 quarantine 标志）、Linux（AUR/AppImage）和 Windows。",
+   "highlights": [
+    "支持 Postgres、MySQL/MariaDB、SQLite、MongoDB、Redis、ClickHouse 等多种数据库，可通过 ODBC 桥接连接其他数据库",
+    "提供网格单元编辑（生成 UPDATE 语句供确认后执行）、CSV/TSV/JSON 数据导入、行面板查看与 JSON 高亮",
+    "基于本机 ssh 实现 SSH 隧道，支持连接项目分组、标题栏着色区分环境及只读/读写权限模式"
+   ],
+   "use_cases": [
+    "在 macOS、Linux 或 Windows 上连接并管理多种数据库引擎，包括从 DBeaver 或 TablePlus 导入已有连接配置",
+    "将 CSV、Excel、Parquet、JSON 数据文件拖入窗口，通过内置 DuckDB 在内存中直接查询",
+    "查看 Explain Analyze 查询计划并识别行数误估，借助 Schema 感知补全编写查询"
+   ]
+  },
+  "sha": "e116a799e6f3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8f9dcc15aa3": {
+  "identity": {
+   "one_liner": "基于 id 操作资源集合的 lodash/lowdb 辅助工具",
+   "review": "lodash-id 为 lodash、underscore 或 lowdb 提供一组按 id 操作文档集合的方法，包含 getById、insert、upsert、updateById、replaceById、removeById 等 CRUD 函数，插入时自动生成 id 并在 id 重复时抛错。可通过覆写 _.id 与 _.createId 自定义 id 字段名与生成算法。适用于在 JavaScript 对象集合上按文档结构管理数据的场景。",
+   "highlights": [
+    "提供 getById、insert、upsert、updateById、updateWhere、replaceById、removeById、removeWhere、createId 九个方法",
+    "插入时自动设置 id，id 与已有文档重复时抛出错误",
+    "id 字段名与 id 生成算法可通过覆写 _.id 和 _.createId 自定义，兼容 underscore"
+   ],
+   "use_cases": [
+    "配合 lowdb 在 JSON 文件数据库中按 id 管理文档",
+    "为内存中的对象集合补充按 id 的增删改查能力",
+    "需要自定义 id 字段名或 id 生成规则的项目"
+   ]
+  },
+  "sha": "e8f9dcc15aa3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab4bae9bc318": {
+  "identity": {
+   "one_liner": "基于 LSM-Tree 的 C++20 KV 存储引擎，支持 Redis RESP 协议子集",
+   "review": "Tiny-LSM 是一个教学性质的 KV 数据库实现，以 LSM-Tree 为存储引擎，使用 xmake 构建。它提供 C++ 库接口，并部分兼容 Redis RESP 协议，可通过 xmake run server 启动后用 redis-cli 连接。核心组件包含 SkipList、MemTable、SST、WAL 与 MVCC 事务。README 标明项目仍在开发中，当前版本不稳定，Redis 命令仅支持常用子集。",
+   "highlights": [
+    "实现 WiscKey 风格键值分离：超过阈值的 value 写入 VLog，SST 中仅存 12 字节引用，VLog 记录带 CRC32 校验，阈值可在 config.toml 中配置（0 为关闭）",
+    "事务支持 MVCC 与三种隔离级别（Read Uncommitted、Read Committed、Repeatable Read 为默认），含同步 WAL 与崩溃恢复",
+    "提供 Python SDK（sdk 目录下构建），并附 sst_visualize.py 等调试工具"
+   ],
+   "use_cases": [
+    "学习 LSM-Tree 存储引擎实现（项目提供分步 Lab 课程、博客/知乎文章与视频课程）",
+    "作为教学或实验环境中的 Redis 后端（仅支持部分 Redis 命令，需查看 TODO 确认支持范围）",
+    "作为 C++ 库嵌入应用，进行 KV 读写、范围查询等操作"
+   ]
+  },
+  "sha": "ab4bae9bc318",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

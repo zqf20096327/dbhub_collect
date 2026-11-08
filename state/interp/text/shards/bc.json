@@ -2486,5 +2486,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "38eeed8b9c40": {
+  "identity": {
+   "one_liner": "基于 BoltDB 的 Go 工具包，为键值存储提供索引与查询层",
+   "review": "Storm 是一个操作 BoltDB 的 Go 工具包，在键值存储之上提供结构体 CRUD、字段索引、唯一约束和基于 Matcher 的 Select 查询系统。它支持事务、嵌套 bucket、内置 JSON/GOB/Sereal/Protobuf/MessagePack 编解码，也可直接访问底层 Bolt 连接。MIT 协议开源，需 Go 环境安装。注：README 提示扩展查询及 Badger 支持可另见 Genji 项目。",
+   "highlights": [
+    "通过结构体标签声明主键、索引与唯一约束，Save 自动创建 bucket 和索引",
+    "提供 One/Find/All/Range/Prefix 等取数方法，以及基于 q.Matcher 组合的 Select 高级查询，支持 Limit/Skip/Reverse",
+    "支持事务、自增主键、嵌套 bucket（Node 可链式创建层级）及 JSON、GOB、Sereal、Protocol Buffers、MessagePack 等编解码器"
+   ],
+   "use_cases": [
+    "在 Go 应用中以结构体形式管理 BoltDB 数据，需要索引查询而非裸键值操作",
+    "需要嵌套 bucket 层级组织数据或使用简单键值存取的场景",
+    "应用启动时用 Init 预建 bucket 与索引，或结构变更后用 ReIndex 重建索引"
+   ]
+  },
+  "sha": "38eeed8b9c40",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

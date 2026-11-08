@@ -18542,5 +18542,3392 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "2d8206c7ce87+2": {
+  "fn": "pgcentralfoundation/pgrx",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    11,
+    [
+     "GitHub Actions badge",
+     "crates.io badge",
+     "docs.rs badge",
+     "Twitter Follow",
+     "[Discord Chat][Discord]"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    19,
+    11,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     " + **Please join our [Discord Server][Discord].**"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    19,
+    20
+   ],
+   [
+    "replace",
+    21,
+    22,
+    20,
+    21,
+    [
+     " + **We are also in need of financial sponsorship.**"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    21,
+    24
+   ],
+   [
+    "replace",
+    25,
+    33,
+    24,
+    32,
+    [
+     "- **A fully managed development environment with `cargo-pgrx`**",
+     " + `cargo pgrx new`: Create new extensions quickly",
+     " + `cargo pgrx init`: Install new (or register existing) PostgreSQL installs",
+     " + `cargo pgrx run`: Run your extension and interactively test it in `psql` (or `pgcli`)",
+     " + `cargo pgrx test`: Unit-test your extension across multiple PostgreSQL versions",
+     " + `cargo pgrx package`: Create installation packages for your extension",
+     " + `cargo pgrx migrate`: Optionally build upgrade scripts from one small SQL file per change",
+     " + More in the `README.md`!"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    32,
+    33
+   ],
+   [
+    "replace",
+    34,
+    37,
+    33,
+    36,
+    [
+     " + Support from Postgres 15 to Postgres 19 from the same codebase",
+     " + Use Rust feature gating to use version-specific APIs",
+     " + Seamlessly test against all versions"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    36,
+    37
+   ],
+   [
+    "replace",
+    38,
+    42,
+    37,
+    41,
+    [
+     " + Implement extensions entirely in Rust",
+     " + Automatic mapping for many Rust types into PostgreSQL",
+     " + SQL schemas generated automatically (or manually via `cargo pgrx schema`)",
+     " + Include custom SQL with `extension_sql!` & `extension_sql_file!`"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    41,
+    42
+   ],
+   [
+    "replace",
+    43,
+    47,
+    42,
+    46,
+    [
+     " + On verified target C profiles, pgrx automatically transpiles nearly all of PostgreSQL's function-style C `#define` macros into Rust `macro_rules!` macros during binding generation",
+     " + Use them through `pgrx::`, with C semantics determined by the selected PostgreSQL installation, compiler flags, and target",
+     " + Call macros with their original C names and `!`; handwritten function-style macro helpers have been removed",
+     " + See Using PostgreSQL C macros for extension examples and the transpiler architecture for implementation details"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    46,
+    47
+   ],
+   [
+    "replace",
+    48,
+    53,
+    47,
+    52,
+    [
+     " + Translates Rust `panic!`s into Postgres `ERROR`s that abort the transaction, not the process",
+     " + Memory Management follows Rust's drop semantics, even in the face of `panic!` and `elog(ERROR)`",
+     " + `#[pg_guard]` procedural macro to ensure the above",
+     " + Postgres `Datum`s are `Option<T> where T: FromDatum`",
+     " - `NULL` Datums are safely represented as `Option::<T>::None`"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    52,
+    53
+   ],
+   [
+    "replace",
+    54,
+    58,
+    53,
+    57,
+    [
+     " + Annotate functions with `#[pg_extern]` to expose them to Postgres",
+     " + Return `pgrx::iter::SetOfIterator<'a, T>` for `RETURNS SETOF`",
+     " + Return `pgrx::iter::TableIterator<'a, T>` for `RETURNS TABLE (...)`",
+     " + Create trigger functions with `#[pg_trigger]`"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    57,
+    58
+   ],
+   [
+    "replace",
+    59,
+    65,
+    58,
+    64,
+    [
+     " + `#[derive(PostgresType)]` to use a Rust struct as a Postgres type",
+     " - By default, represented as a CBOR-encoded object in-memory/on-disk, and JSON as human-readable",
+     " - Supports `#[pg_binary_protocol]` to generate binary protocol send/recv functions",
+     " - Provide custom in-memory/on-disk/human-readable representations",
+     " + `#[derive(PostgresEnum)]` to use a Rust enum as a Postgres enum",
+     " + Composite types supported with the `pgrx::composite_type!(\"Sample\")` macro"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    64,
+    65
+   ],
+   [
+    "replace",
+    66,
+    68,
+    65,
+    67,
+    [
+     " + Safe access into SPI",
+     " + Transparently return owned Datums from an SPI context"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    67,
+    68
+   ],
+   [
+    "replace",
+    69,
+    76,
+    68,
+    75,
+    [
+     " + Safe access to Postgres' `MemoryContext` system via `pgrx::PgMemoryContexts`",
+     " + Executor/planner/transaction/subtransaction hooks",
+     " + Safely use Postgres-provided pointers with `pgrx::PgBox<T>` (akin to `alloc::boxed::Box<T>`)",
+     " + `#[pg_guard]` proc-macro for guarding `extern \"C-unwind\"` Rust functions that need to be passed into Postgres",
+     " + Access Postgres' logging system through `eprintln!`-like macros",
+     " + Direct `unsafe` access to large parts of Postgres internals via the `pgrx::pg_sys` module",
+     " + New features added regularly!"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    85,
+    75,
+    84
+   ],
+   [
+    "replace",
+    85,
+    86,
+    84,
+    85,
+    [
+     "target limits."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    88,
+    85,
+    87
+   ],
+   [
+    "replace",
+    88,
+    89,
+    87,
+    88,
+    [
+     "Cross-compiling."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    99,
+    88,
+    98
+   ],
+   [
+    "replace",
+    99,
+    106,
+    98,
+    105,
+    [
+     " - Debian-likes: `apt install clang llvm libclang-dev`",
+     " - RHEL-likes: `yum install clang llvm`",
+     " - Windows: download installers from https://github.com/llvm/llvm-project/releases",
+     " - `pgrx-pg-sys` uses the driver to find the target's system headers, to check the C macro profile against the PostgreSQL headers and to compile its native support archive, including the `cshim` feature. Its major version must match `libclang`. pgrx uses `CLANG_PATH` when it is set; otherwise it uses the first match among the `CLANG` recorded in a `pg_config` program's `--configure` output, the `clang` installed with `libclang`, and `clang-<major>` or `clang` on `PATH`.",
+     " - The archiver is `llvm-ar` from the driver's LLVM release, or `llvm-lib` for Windows targets. pgrx looks for `llvm-ar-<major>` beside a `clang-<major>` driver, then `llvm-ar` beside the driver or beside its resolved path, such as Debian's `/usr/lib/llvm-<major>/bin/llvm-ar`. Without one, builds for Unix targets use the system `ar`, which works for native builds but may not index objects built for another target.",
+     " - A failure to generate the C macros stops the build with an error that names the cause.",
+     " - A driver that loads a default configuration file, as Gentoo's Clang does, is refused. Set `CLANG_NO_DEFAULT_CONFIG=1` to build without it."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    105,
+    106
+   ],
+   [
+    "replace",
+    107,
+    112,
+    106,
+    111,
+    [
+     " - Linux and macOS: a host C compiler, which builds the generator's SHA-256 backend",
+     " - Windows: MSVC, which Rust's MSVC targets need for linking",
+     "- PostgreSQL's build dependencies ‡",
+     " - Debian-likes: `sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache pkg-config`",
+     " - RHEL-likes: `sudo yum install -y bison-devel readline-devel zlib-devel openssl-devel wget ccache && sudo yum groupinstall -y 'Development Tools'`"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    126,
+    111,
+    125
+   ],
+   [
+    "replace",
+    126,
+    127,
+    125,
+    126,
+    [
+     "The Mac C compiler (clang) and related tools are bundled with Xcode."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    129,
+    126,
+    128
+   ],
+   [
+    "replace",
+    129,
+    130,
+    128,
+    129,
+    [
+     "For additional C libraries, it's easiest to use Homebrew. In particular,"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    148,
+    129,
+    147
+   ],
+   [
+    "replace",
+    148,
+    172,
+    147,
+    148,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    184,
+    148,
+    160
+   ],
+   [
+    "replace",
+    184,
+    189,
+    160,
+    161,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    203,
+    161,
+    175
+   ],
+   [
+    "replace",
+    203,
+    204,
+    175,
+    176,
+    [
+     " └── lib.rs"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    224,
+    176,
+    196
+   ],
+   [
+    "delete",
+    224,
+    225,
+    196,
+    196
+   ],
+   [
+    "equal",
+    225,
+    231,
+    196,
+    202
+   ],
+   [
+    "replace",
+    231,
+    267,
+    202,
+    203,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    273,
+    203,
+    209
+   ],
+   [
+    "replace",
+    273,
+    380,
+    209,
+    210,
+    [
+     "…（107 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    382,
+    210,
+    212
+   ],
+   [
+    "replace",
+    382,
+    390,
+    212,
+    220,
+    [
+     " --> pgrx/src/lib.rs:151:5",
+     " |",
+     "151 | / assert!(",
+     "152 | | same_slice(pg_sys::FMGR_ABI_EXTRA, b\"xPostgreSQL\\0\"),",
+     "153 | | \"Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?\",",
+     "154 | | );",
+     " | |_____^ the evaluated program panicked at 'Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?', pgrx/src/lib.rs:151:5",
+     " |"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    392,
+    220,
+    222
+   ],
+   [
+    "delete",
+    392,
+    393,
+    222,
+    222
+   ],
+   [
+    "equal",
+    393,
+    394,
+    222,
+    223
+   ],
+   [
+    "replace",
+    394,
+    410,
+    223,
+    224,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    416,
+    224,
+    230
+   ],
+   [
+    "replace",
+    416,
+    422,
+    230,
+    231,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    433,
+    231,
+    242
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "8bcf798e01a1+2": {
+  "fn": "influxdb-rs/influxdb-rust",
+  "clean_ver": "2",
+  "raw_lines": 34,
+  "ops": [
+   [
+    "replace",
+    0,
+    34,
+    0,
+    27,
+    [
+     "This crate is looking for maintainers: #185 ",
+     "",
+     " <img",
+     " alt=\"rust-influxdb\"",
+     " src=\"https://i.imgur.com/4k7l8XJ.png\"",
+     " width=250px />",
+     "",
+     " Unofficial InfluxDB Driver for Rust ",
+     "",
+     " <a href=\"https://crates.io/crates/influxdb\">",
+     "",
+     " </a>",
+     " <a href=\"https://github.com/influxdb-rs/influxdb-rust/actions/workflows/rust.yml\">",
+     " Build Status",
+     " </a>",
+     " <a href=\"https://influxdb-rs.github.io/influxdb-rust/tarpaulin-report.html\">",
+     " Coverage Report",
+     " </a>",
+     " <a href=\"https://docs.rs/influxdb\">",
+     " Documentation Status",
+     " </a>",
+     " <a href=\"https://www.rust-lang.org/en-US/\">",
+     " Build with Rust",
+     " </a>",
+     " <a href=\"https://github.com/rust-lang/rust/releases/tag/1.71.0\">",
+     " Minimum Rust Version: 1.71.0",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    48,
+    27,
+    41
+   ],
+   [
+    "replace",
+    48,
+    49,
+    41,
+    42,
+    [
+     "* Swappable HTTP backends (see below)"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    64,
+    42,
+    57
+   ],
+   [
+    "replace",
+    64,
+    104,
+    57,
+    58,
+    [
+     "…（40 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    129,
+    58,
+    83
+   ],
+   [
+    "replace",
+    129,
+    148,
+    83,
+    84,
+    [
+     "[License: MIT][__link9]"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "ecf3abbfcfd2+2": {
+  "fn": "Sets88/dbcls",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "DbCls is a terminal database client in which a SQL editor and visidata work as one thing: you write the query in an editor with syntax highlighting and schema-aware autocomplete, and its result opens straight away as an interactive table you can filter, sort, pivot, reshape, chart and drill into. On top of that sits a pipeline language that turns the editor into the place multi-step work happens — \"collect ids from one query, run them against every shard, show progress\" — right inside the `.sql` file, instead of in a throwaway Python script."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    25,
+    3,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "- MySQL, PostgreSQL, ClickHouse, SQLite — and Cassandra / ScyllaDB through the driver plugin in `plugins/cassandra`"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    32,
+    26,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "This page is the short version. The details live in `docs/`:"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    33,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "|Page|What is in it|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    43,
+    36,
+    43,
+    [
+     "|Configuration and connections|Command line options, the config file, several connections and tabs, describing a connection in the editor, Unix sockets and SSH tunnels, logging|",
+     "|Editor|Hotkeys, fold blocks, syntax highlighting, key remapping and `Alt` on macOS, the `Ctrl+X` prefix, autocomplete, beautify, browsing and editing tables|",
+     "|Results in VisiData|Sheets, DB-aware hotkeys, JSON / URL / size column types, aggregators, charts, exporting, cross-sheet references, expression functions|",
+     "|Pipelines|The language: steps, control flow, functions, live sheets (`.WATCH`), prompts, helpers, templates, examples|",
+     "|LLM chat|Setup, the chat window, questions from the model, approving tool calls, how the answer arrives|",
+     "|Plugins|Writing a plugin, where plugins are loaded from, settings, the plugin API, the bundled plugins|",
+     "|Screen lock and password safety|Locking the terminal after inactivity, keeping passwords off disk|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    53,
+    43,
+    53
+   ],
+   [
+    "replace",
+    53,
+    54,
+    53,
+    54,
+    [
+     "anything is committed. See Editor Commands."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    54,
+    55
+   ],
+   [
+    "replace",
+    55,
+    56,
+    55,
+    56,
+    [
+     "Editor"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    60,
+    56,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     "and an in-terminal chart. See Data Visualization."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    61,
+    62
+   ],
+   [
+    "replace",
+    62,
+    63,
+    62,
+    63,
+    [
+     "Data"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    68,
+    63,
+    68
+   ],
+   [
+    "replace",
+    68,
+    69,
+    68,
+    69,
+    [
+     "Pipelines."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    69,
+    70
+   ],
+   [
+    "replace",
+    70,
+    71,
+    70,
+    71,
+    [
+     "Pipelines"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    75,
+    71,
+    75
+   ],
+   [
+    "replace",
+    75,
+    76,
+    75,
+    76,
+    [
+     "query, then a pipeline. See LLM Chat."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    76,
+    77
+   ],
+   [
+    "replace",
+    77,
+    78,
+    77,
+    78,
+    [
+     "LLM chat"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    85,
+    78,
+    85
+   ],
+   [
+    "replace",
+    85,
+    86,
+    85,
+    86,
+    [
+     "Cassandra / ScyllaDB is not part of the package: it is a driver plugin in this repository, loaded from a checkout."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    92,
+    86,
+    92
+   ],
+   [
+    "replace",
+    92,
+    93,
+    92,
+    93,
+    [
+     "The LLM chat needs nothing installed — it talks to the endpoint over the standard library and is switched on by configuration alone."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    119,
+    93,
+    119
+   ],
+   [
+    "replace",
+    119,
+    123,
+    119,
+    120,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    120,
+    123
+   ],
+   [
+    "replace",
+    126,
+    127,
+    123,
+    124,
+    [
+     "in Configuration and connections; `F1` inside dbcls"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    135,
+    124,
+    132
+   ],
+   [
+    "replace",
+    135,
+    136,
+    132,
+    133,
+    [
+     "- Cassandra / ScyllaDB — as a driver plugin: `pip install scylla-driver` and start with `--plugin-dir ./plugins`"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    133,
+    134
+   ],
+   [
+    "replace",
+    137,
+    138,
+    134,
+    135,
+    [
+     "A database not on this list is added from outside, without touching dbcls: a plugin registers its own engine with `setup.add_engine(...)`, and it is then a `--engine`, an `\"engine\"` in the config file and an entry in the connection form like any other. `plugins/cassandra` is the worked example."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    140,
+    135,
+    137
+   ],
+   [
+    "replace",
+    140,
+    143,
+    137,
+    138,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    144,
+    138,
+    139
+   ],
+   [
+    "replace",
+    144,
+    146,
+    139,
+    140,
+    [
+     "here"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "d4ba2383990e+2": {
+  "fn": "RohanNagar/thunder",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    1,
+    [
+     "thunder "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    1,
+    2
+   ],
+   [
+    "replace",
+    6,
+    7,
+    2,
+    3,
+    [
+     " A fully customizable user management REST API. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    3,
+    4
+   ],
+   [
+    "replace",
+    8,
+    28,
+    4,
+    22,
+    [
+     " <a href=\"https://github.com/RohanNagar/thunder/actions?query=workflow%3ACI+branch%3Amaster\">",
+     " Build Status",
+     " </a>",
+     " <a href=\"https://codecov.io/gh/RohanNagar/thunder\">",
+     " Coverage Status",
+     " </a>",
+     " <a href=\"https://search.maven.org/artifact/com.sanctionco.thunder/client\">",
+     " Maven Central",
+     " </a>",
+     " <a href=\"http://javadoc.io/doc/com.sanctionco.thunder/client\">",
+     " Javadoc",
+     " </a>",
+     " <a href=\"https://hub.docker.com/r/rohannagar/thunder\">",
+     " Docker Pulls",
+     " </a>",
+     " <a href=\"https://www.codetriage.com/rohannagar/thunder\">",
+     " Open Source Helpers",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    22,
+    23
+   ],
+   [
+    "replace",
+    29,
+    32,
+    23,
+    24,
+    [
+     " Read the Documentation"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    24,
+    25
+   ],
+   [
+    "replace",
+    33,
+    40,
+    25,
+    30,
+    [
+     " Features •",
+     " Running Locally •",
+     " Running on Kubernetes •",
+     " Client Libraries •",
+     " Changelog"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    53,
+    30,
+    43
+   ],
+   [
+    "replace",
+    53,
+    56,
+    43,
+    46,
+    [
+     " - Docker Hub",
+     " - GitHub Container Registry",
+     "- Multiple native client libraries"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    88,
+    46,
+    78
+   ],
+   [
+    "replace",
+    88,
+    89,
+    78,
+    79,
+    [
+     "The official Thunder Docker image is published on Docker Hub."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    95,
+    79,
+    85
+   ],
+   [
+    "replace",
+    95,
+    97,
+    85,
+    87,
+    [
+     "Full documentation can be found on ReadTheDocs.",
+     "For Thunder development documentation, refer to the wiki"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    87,
+    88
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "1757da76dce2+2": {
+  "fn": "haxsd/haxsd-byok",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    6,
+    0,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    7,
+    [
+     "Release",
+     "Platform",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "下载 Windows 安装包 · 用户指南 · 故障排查 · 简体中文 · English · Русский"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    15,
+    10,
+    11,
+    [
+     "haxsd byok 主界面"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    24,
+    11,
+    20
+   ],
+   [
+    "replace",
+    24,
+    25,
+    20,
+    21,
+    [
+     "|客户端|接管方式|说明|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    21,
+    22
+   ],
+   [
+    "replace",
+    26,
+    31,
+    22,
+    27,
+    [
+     "|Cursor|官方 / 本地 / 混合模型来源 + 本机代理与本地 CA|只用自配模型选本地，官方模型同时可用选混合；本地模式不在模型库的模型会被明确拒绝，不会静默走官方。本地/混合模式下长会话的上下文压缩（自动与手动摘要）由本应用网关执行，官方模式仍由 Cursor 自己压缩|",
+     "|Devin|可选本机网关 + 自选模型与模型映射|自选模型直接出现在 Devin 原生选择器；保留官方目录；按端点设置结构识别的补丁，带备份恢复与自定义安装目录|",
+     "|Codex（ChatGPT 客户端）|本机网关 + “应用到 Codex”|保留工具、终端、审批、沙箱与任务循环，只替换推理；支持 Responses / Chat Completions / Anthropic；只改 `config.toml` 受管字段，撤销即恢复|",
+     "|Claude Code CLI|本机 Anthropic 网关（`/v1/messages`）+ 写入 `~/.claude/settings.json` 的 `env`|已有 Anthropic API Key、Bedrock/Vertex/Foundry、`apiKeyHelper` 或受管配置时不覆盖|",
+     "|Claude Desktop|本机 Anthropic 网关 + `%LOCALAPPDATA%\\Claude-3p\\configLibrary` 下的 profile|组织策略托管时只读，只给手工配置引导|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    27,
+    28
+   ],
+   [
+    "replace",
+    32,
+    33,
+    28,
+    29,
+    [
+     "各网关默认关闭，只监听 `127.0.0.1`。受管配置、端口修改等细节见 用户指南 与 Codex 接入。"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    29,
+    32
+   ],
+   [
+    "replace",
+    36,
+    42,
+    32,
+    38,
+    [
+     "|客户端|本机接管可用|仍需官方账号或云端|",
+     "|---|---|---|",
+     "|Cursor|Agent / Chat / Plan、本机子代理与工具、Rules / Skills / MCP、Checkpoint|Cloud Agents、Projects、Bugbot、Automations、Tab 补全、CLI / IDE 插件、Remote Control|",
+     "|Codex|本地 Agent / TUI / exec、Plan、工具、审批、沙箱、多会话、MCP / Skills / Plugins / Hooks、图片输入|ChatGPT Work、Codex Cloud、Remote Control、官方托管搜索 / 图像 / 语音|",
+     "|Devin|Cascade、Devin Local、本机工具、Rules / Memories / MCP、模型映射、Checkpoint|账号套餐与额度、Tab / Command / embedding、Devin Cloud、远程索引、Slack / Linear / Jira / Teams / GitHub 集成|",
+     "|Claude|Claude Code CLI、本机子代理与后台会话、MCP / Skills / Hooks、Checkpoint / Rewind / 自动压缩、本机 IDE 集成|Cloud session、Teleport、Ultrareview、云端定时任务、Remote Control、供应商侧 WebSearch / WebFetch、CLI 到 Desktop 的 handoff|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    49,
+    38,
+    45
+   ],
+   [
+    "replace",
+    49,
+    50,
+    45,
+    46,
+    [
+     "1. 从 Releases 下载名称含 `x64-setup.exe` 的安装包并安装。"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    52,
+    46,
+    48
+   ],
+   [
+    "replace",
+    52,
+    54,
+    48,
+    50,
+    [
+     "4. **用 Devin**：添加自选模型（直接出现在原生选择器）或映射已有 Devin 模型，再选默认模型、启用网关并保存；自定义安装目录在「高级」填写。重启应用后按 Devin 接入 写入接入配置并验证。",
+     "5. **用 Codex**：在「Codex」页选择模型、启用网关并保存，点「应用到 Codex」，然后重新打开客户端或新建会话；详见 Codex 接入。"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    56,
+    50,
+    52
+   ],
+   [
+    "replace",
+    56,
+    57,
+    52,
+    53,
+    [
+     "地址填写、升级、备份与恢复的完整步骤见 用户指南。"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    53,
+    54
+   ],
+   [
+    "replace",
+    58,
+    59,
+    54,
+    55,
+    [
+     "模型库与连接测试"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    55,
+    63
+   ],
+   [
+    "replace",
+    67,
+    68,
+    63,
+    64,
+    [
+     "- Claude 订阅账号接入（说明）用订阅 OAuth 作为模型来源，可能违反 Anthropic 的条款并导致限流或封号；优先使用 Anthropic API Key。本应用不伪装客户端，也无法保证平台不处罚。"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    73,
+    64,
+    69
+   ],
+   [
+    "replace",
+    73,
+    75,
+    69,
+    71,
+    [
+     "- **怎么回滚？** 切回官方模式后 Cursor 不再经过本地网关；Codex 侧撤销“应用到 Codex”恢复原配置；Claude 侧在对应标签页撤销接管，移除写入 `settings.json` 的键或 Desktop 的 profile。详见 用户指南。",
+     "- **和 cursor-byok 是什么关系？** 同一作者的两个独立产品，数据目录、标识和更新渠道都不同，互不影响；本项目在其基础上重做，见 UPSTREAM.md。"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    71,
+    74
+   ],
+   [
+    "replace",
+    78,
+    79,
+    74,
+    75,
+    [
+     "开发环境、构建与验证见 开发说明（常用命令在根目录 `Makefile`）；第三方组件与许可见 THIRD_PARTY_NOTICES.md。遇到问题先看 故障排查，再提 Issue，附上版本与出错步骤（勿附 Key、CA 私钥或数据库）。"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    75,
+    76
+   ],
+   [
+    "replace",
+    80,
+    81,
+    76,
+    77,
+    [
+     "基于 leookun/cursor-byok，沿用 MIT 许可证。"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "b1e328689e78+2": {
+  "fn": "datastax-archive/workshop-cassandra-fundamentals",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "delete",
+    6,
+    8,
+    6,
+    6
+   ],
+   [
+    "equal",
+    8,
+    10,
+    6,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "> 🔖 Accessing HANDS-ON"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    14,
+    9,
+    12
+   ],
+   [
+    "replace",
+    14,
+    25,
+    12,
+    20,
+    [
+     "1. Objectives",
+     "2. Frequently asked questions",
+     "3. Materials for the Session",
+     "4. Create your Database",
+     "5. Create tables",
+     "6. Execute CRUD operations",
+     "7. Homework",
+     "8. What's NEXT "
+    ]
+   ],
+   [
+    "equal",
+    25,
+    40,
+    20,
+    35
+   ],
+   [
+    "replace",
+    40,
+    43,
+    35,
+    36,
+    [
+     " 1️⃣ Can I run this workshop on my computer? "
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    36,
+    37
+   ],
+   [
+    "replace",
+    44,
+    54,
+    37,
+    44,
+    [
+     " There is nothing preventing you from running the workshop on your own machine. If you do so, you will need the following:",
+     "",
+     " git installed on your local system",
+     "",
+     "In this readme, we try to provide instructions for local development as well - but keep in mind that the main focus is development on Gitpod, hence we can't guarantee live support about local development in order to keep on track with the schedule. However, we will do our best to give you the info you need to succeed.",
+     "",
+     " 2️⃣ What other prerequisites are required? "
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    44,
+    45
+   ],
+   [
+    "replace",
+    55,
+    65,
+    45,
+    51,
+    [
+     "",
+     " You will need enough *real estate* on screen, we will ask you to open a few windows and it would not fit on mobiles (tablets should be OK)",
+     " You will need an Astra account: don't worry, we'll work through that in the following",
+     " As \"Intermediate level\" we expect you to know what java and Spring are. ",
+     "",
+     " 3️⃣ Do I need to pay for anything for this workshop? "
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    51,
+    52
+   ],
+   [
+    "replace",
+    66,
+    71,
+    52,
+    55,
+    [
+     " No. All tools and services we provide here are FREE. FREE not only during the session but also after.",
+     "",
+     " 4️⃣ Will I get a certificate if I attend this workshop? "
+    ]
+   ],
+   [
+    "equal",
+    71,
+    73,
+    55,
+    57
+   ],
+   [
+    "delete",
+    73,
+    75,
+    57,
+    57
+   ],
+   [
+    "equal",
+    75,
+    81,
+    57,
+    63
+   ],
+   [
+    "replace",
+    81,
+    87,
+    63,
+    67,
+    [
+     "- Slide deck",
+     "- Discord chat",
+     "- Questions and Answers",
+     "- Twitch backup"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    94,
+    67,
+    74
+   ],
+   [
+    "replace",
+    94,
+    97,
+    74,
+    75,
+    [
+     "Leveraging Database creation guide create a database. *Right-Click the button* with *Open in a new TAB.*"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    75,
+    78
+   ],
+   [
+    "replace",
+    100,
+    103,
+    78,
+    81,
+    [
+     "|**Database Name**|`workshops`|",
+     "|**Keyspace Name**|`sensor_data`|",
+     "|**Regions**|Select `GOOGLE CLOUD`, then an Area close to you, then a region with no LOCKER 🔒 icons, those are the region you can use for free.|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    117,
+    81,
+    95
+   ],
+   [
+    "replace",
+    117,
+    118,
+    95,
+    96,
+    [
+     "🏠 Back to Table of Contents"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    131,
+    96,
+    109
+   ],
+   [
+    "replace",
+    131,
+    135,
+    109,
+    110,
+    [
+     " Show me! "
+    ]
+   ],
+   [
+    "equal",
+    135,
+    157,
+    110,
+    132
+   ],
+   [
+    "replace",
+    157,
+    158,
+    132,
+    133,
+    [
+     "Keyspaces in CQL"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    170,
+    133,
+    145
+   ],
+   [
+    "replace",
+    170,
+    171,
+    145,
+    146,
+    [
+     "USE keyspace"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    201,
+    146,
+    176
+   ],
+   [
+    "replace",
+    201,
+    202,
+    176,
+    177,
+    [
+     "A table created"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    219,
+    177,
+    194
+   ],
+   [
+    "replace",
+    219,
+    231,
+    194,
+    195,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    239,
+    195,
+    203
+   ],
+   [
+    "replace",
+    239,
+    242,
+    203,
+    204,
+    [
+     " This table has a major issue... can you guess what it is? "
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    204,
+    205
+   ],
+   [
+    "replace",
+    243,
+    246,
+    205,
+    206,
+    [
+     "The SIZE. The more the sensors capture information the bigger the partitions become. There is a good practice rule stating that the upper limit for a partition is 100MB or 100k records. You need to split values across multiple partitions. This technique is called bucketing. "
+    ]
+   ],
+   [
+    "equal",
+    246,
+    253,
+    206,
+    213
+   ],
+   [
+    "replace",
+    253,
+    259,
+    213,
+    214,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    273,
+    214,
+    228
+   ],
+   [
+    "replace",
+    273,
+    274,
+    228,
+    229,
+    [
+     "A table created"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    277,
+    229,
+    232
+   ],
+   [
+    "replace",
+    277,
+    278,
+    232,
+    233,
+    [
+     "A table created"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    288,
+    233,
+    243
+   ],
+   [
+    "replace",
+    288,
+    289,
+    243,
+    244,
+    [
+     "🏠 Back to Table of Contents"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    307,
+    244,
+    262
+   ],
+   [
+    "replace",
+    307,
+    313,
+    262,
+    263,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    329,
+    263,
+    279
+   ],
+   [
+    "replace",
+    329,
+    346,
+    279,
+    280,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    360,
+    280,
+    294
+   ],
+   [
+    "replace",
+    360,
+    465,
+    294,
+    295,
+    [
+     "…（105 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    465,
+    494,
+    295,
+    324
+   ],
+   [
+    "replace",
+    494,
+    500,
+    324,
+    325,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    500,
+    518,
+    325,
+    343
+   ],
+   [
+    "replace",
+    518,
+    524,
+    343,
+    344,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    524,
+    543,
+    344,
+    363
+   ],
+   [
+    "delete",
+    543,
+    544,
+    363,
+    363
+   ],
+   [
+    "equal",
+    544,
+    550,
+    363,
+    369
+   ],
+   [
+    "replace",
+    550,
+    555,
+    369,
+    370,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    555,
+    570,
+    370,
+    385
+   ],
+   [
+    "replace",
+    570,
+    573,
+    385,
+    386,
+    [
+     " Can you explain the error message ? "
+    ]
+   ],
+   [
+    "equal",
+    573,
+    576,
+    386,
+    389
+   ],
+   [
+    "delete",
+    576,
+    579,
+    389,
+    389
+   ],
+   [
+    "equal",
+    579,
+    597,
+    389,
+    407
+   ],
+   [
+    "replace",
+    597,
+    598,
+    407,
+    408,
+    [
+     "Looking at ```PRIMARY KEY ((sensor, date), timestamp)```, we know that **sensor**, **date** and **timestamp** are used to define uniqueness of the row. We'll need all of them to update our record (plus, of course, some of the data columns, otherwise we are not changing anything in that row!)."
+    ]
+   ],
+   [
+    "equal",
+    598,
+    605,
+    408,
+    415
+   ],
+   [
+    "replace",
+    605,
+    612,
+    415,
+    416,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    612,
+    620,
+    416,
+    424
+   ],
+   [
+    "replace",
+    620,
+    628,
+    424,
+    425,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    628,
+    654,
+    425,
+    451
+   ],
+   [
+    "replace",
+    654,
+    665,
+    451,
+    452,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    665,
+    673,
+    452,
+    460
+   ],
+   [
+    "replace",
+    673,
+    685,
+    460,
+    461,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    685,
+    691,
+    461,
+    467
+   ],
+   [
+    "replace",
+    691,
+    692,
+    467,
+    468,
+    [
+     "Deleting in CQL"
+    ]
+   ],
+   [
+    "equal",
+    692,
+    724,
+    468,
+    500
+   ],
+   [
+    "replace",
+    724,
+    727,
+    500,
+    501,
+    [
+     " Can you find what the table looks like ? "
+    ]
+   ],
+   [
+    "equal",
+    727,
+    728,
+    501,
+    502
+   ],
+   [
+    "replace",
+    728,
+    729,
+    502,
+    503,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    729,
+    731,
+    503,
+    505
+   ],
+   [
+    "replace",
+    731,
+    739,
+    505,
+    513,
+    [
+     " network TEXT,",
+     " week DATE,",
+     " date_hour TIMESTAMP,",
+     " sensor TEXT,",
+     " avg_temperature FLOAT,",
+     " latitude DECIMAL,",
+     " longitude DECIMAL,",
+     " PRIMARY KEY ((network,week),date_hour,sensor)"
+    ]
+   ],
+   [
+    "equal",
+    739,
+    741,
+    513,
+    515
+   ],
+   [
+    "delete",
+    741,
+    745,
+    515,
+    515
+   ],
+   [
+    "equal",
+    745,
+    752,
+    515,
+    522
+   ],
+   [
+    "replace",
+    752,
+    754,
+    522,
+    524,
+    [
+     "- Complete the mini-course Cassandra Query Language and take a screenshot of the final screen (\"Congratulations!\" on the left + console output on the right).",
+     "- Complete the mini-course \"Cassandra Data Modeling / Digital Library\" (link for hands-on at the bottom of the lessons). Take a screenshot of the final screen (\"Congratulations!\" on the left + console output on the right)."
+    ]
+   ],
+   [
+    "equal",
+    754,
+    755,
+    524,
+    525
+   ],
+   [
+    "replace",
+    755,
+    756,
+    525,
+    526,
+    [
+     "Don't forget to submit your homework and be awarded a nice verified badge!"
+    ]
+   ],
+   [
+    "equal",
+    756,
+    760,
+    526,
+    530
+   ],
+   [
+    "replace",
+    760,
+    761,
+    530,
+    531,
+    [
+     "Go take a look at DataStax for Developers to see what else is possible."
+    ]
+   ],
+   [
+    "equal",
+    761,
+    765,
+    531,
+    535
+   ],
+   [
+    "replace",
+    765,
+    766,
+    535,
+    536,
+    [
+     "Don't forget to submit your homework and be awarded a nice verified badge!"
+    ]
+   ],
+   [
+    "equal",
+    766,
+    767,
+    536,
+    537
+   ],
+   [
+    "replace",
+    767,
+    768,
+    537,
+    538,
+    [
+     "Badge"
+    ]
+   ],
+   [
+    "equal",
+    768,
+    772,
+    538,
+    542
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "871835ecacfb+2": {
+  "fn": "HowProgrammingWorks/indexedDB",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "3. Open in browser: `http://127.0.0.1:8000/`"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    11,
+    7,
+    11
+   ],
+   [
+    "replace",
+    11,
+    16,
+    11,
+    16,
+    [
+     " - Goal: fast, minimal, no intermediate abstractions layer, everything just hardcoded in imperative code without abstractions",
+     " - No schemas, just raw `indexedDB.open`, `transaction`, `objectStore`, logic written inline per action",
+     " - Structure: single file",
+     " - Pros: fully transparent usage of IndexedDB",
+     " - Cons: unable to write unittests, no reusability, poor maintainability"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    24,
+    17,
+    24,
+    [
+     " - Goal: maximum DDD and Cleal/Layered architecture compliance and code maintainability",
+     " - Abstractions for every responsibility: Database, Repository, Service, UserModel, UserRepository, UserService, Logger",
+     " - Utilities like `exec()` to improve domain code readability and semantics",
+     " - Actions with autobinding to UI: `action(id, callback)`",
+     " - Structure: splitted in 4 modules, multiple classes",
+     " - Pros: testable, proper Separation of Concerns, validation, UI actions, extendable logic",
+     " - Cons: verbose, ceremonies, boilerplate, cognitive heavy, slower to write, overhead for simple apps"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    34,
+    25,
+    34,
+    [
+     " - Goal: minimal yet structured and reusable IndexedDB access",
+     " - Wrapped indexedDB API with DSL for queries and scemas, but without ceremonies, minimal pragmatic solution: just Database and Logger",
+     " - Actions actions with autobinding to UI still via `action(id, handler)`, Logger class reused from `Enterprise` implementation",
+     " - Structure: 2 modules (for db wrapper and for domain code)",
+     " - Declatative DSLs (Domain Specific Language), like:",
+     " - Queries: `db.select({ store: 'user', where: { age: 18 }, order: { name: 'asc' } });`",
+     " - Schemas: `{ user: { id: { type: 'int', primary: true }, name: { type: 'str'...`",
+     " - Pros: low ceremony, readable and maintainable, declaratice queries and schemas",
+     " - Cons: DSL adds learning curve, SRP (Single Responsibility Principle) and SoC (Separation of Concerns) partially compliance"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    36,
+    34,
+    36
+   ],
+   [
+    "delete",
+    36,
+    37,
+    36,
+    36
+   ],
+   [
+    "equal",
+    37,
+    38,
+    36,
+    37
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "48cefa766dd7+2": {
+  "fn": "cuongdinhngo/code-atlas",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "measured per language."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    17,
+    10,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "> Reproduce it"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    30,
+    18,
+    30
+   ],
+   [
+    "replace",
+    30,
+    34,
+    30,
+    31,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    46,
+    31,
+    43
+   ],
+   [
+    "replace",
+    46,
+    55,
+    43,
+    44,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    80,
+    44,
+    69
+   ],
+   [
+    "replace",
+    80,
+    82,
+    69,
+    71,
+    [
+     "(074). It pays off on relationship questions, and an",
+     "agent is far likelier to use it once told when to: install the agent brief."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    85,
+    71,
+    74
+   ],
+   [
+    "replace",
+    85,
+    86,
+    74,
+    75,
+    [
+     "MCP client talks stdio to the language-agnostic core, which drives per-language adapters over a versioned JSONL contract, stores a symbol graph in SQLite, and feeds a deterministic onboarding layer with an opt-in LLM package behind three seams."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    94,
+    75,
+    83
+   ],
+   [
+    "replace",
+    94,
+    95,
+    83,
+    84,
+    [
+     "|Language|Parser|Status|"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    84,
+    85
+   ],
+   [
+    "replace",
+    96,
+    101,
+    85,
+    90,
+    [
+     "|PHP (8.5 grammar, 8.1+ runtime)|nikic/php-parser|**Available** — see `adapters/php/`|",
+     "|TypeScript / JavaScript (Node ≥ 18)|TypeScript compiler API|**Available** — see `adapters/typescript/`|",
+     "|T-SQL (Node ≥ 18)|purpose-built scanner, no production dependencies|**Available** — see `adapters/sql/`|",
+     "|Python (≥ 3.12 grammar)|stdlib `ast`|**Available** — see `adapters/python/`|",
+     "|C# / .NET|Roslyn|Deferred — see Roadmap|"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    104,
+    90,
+    93
+   ],
+   [
+    "replace",
+    104,
+    105,
+    93,
+    94,
+    [
+     "(`scripts/edge_health_report.py`); PHP is the depth standard:"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    94,
+    95
+   ],
+   [
+    "replace",
+    106,
+    107,
+    95,
+    96,
+    [
+     "|Adapter|`HEURISTIC` share of `CALLS`|Pinned sample|Report|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    96,
+    97
+   ],
+   [
+    "replace",
+    108,
+    112,
+    97,
+    101,
+    [
+     "|PHP|**1–4 %**|symfony/demo · brick/math · laravel|137|",
+     "|TypeScript/JavaScript|54.1%|`ky`|153|",
+     "|Python|82.2%|`flask`|227|",
+     "|T-SQL|not measured this way — floors and layer shape instead|SQL samples|233|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    125,
+    101,
+    114
+   ],
+   [
+    "replace",
+    125,
+    126,
+    114,
+    115,
+    [
+     "8.1** with **Composer** for PHP, **Node.js ≥ 18** for TypeScript/JavaScript"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    155,
+    115,
+    144
+   ],
+   [
+    "replace",
+    155,
+    156,
+    144,
+    145,
+    [
+     "then install that file (`releasing.md` has the steps):"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    172,
+    145,
+    161
+   ],
+   [
+    "replace",
+    172,
+    173,
+    161,
+    162,
+    [
+     "fires twice (`contrib/claude-code/`)."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    181,
+    162,
+    170
+   ],
+   [
+    "replace",
+    181,
+    186,
+    170,
+    171,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    194,
+    171,
+    179
+   ],
+   [
+    "replace",
+    194,
+    196,
+    179,
+    180,
+    [
+     " Wiring it by hand, or running the server from a container "
+    ]
+   ],
+   [
+    "equal",
+    196,
+    201,
+    180,
+    185
+   ],
+   [
+    "replace",
+    201,
+    202,
+    185,
+    186,
+    [
+     "`adapters/php/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    227,
+    186,
+    211
+   ],
+   [
+    "replace",
+    227,
+    229,
+    211,
+    212,
+    [
+     "`.code-atlas/` is refused, as on the host. See `docker/`."
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    212,
+    213
+   ],
+   [
+    "replace",
+    230,
+    232,
+    213,
+    214,
+    [
+     " On native Windows "
+    ]
+   ],
+   [
+    "equal",
+    232,
+    237,
+    214,
+    219
+   ],
+   [
+    "replace",
+    237,
+    238,
+    219,
+    220,
+    [
+     " never eaten by POSIX quoting (the table needs `$env:CA_TRUST_PROJECT_FILE = '1'` — see the config table):"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    245,
+    220,
+    227
+   ],
+   [
+    "replace",
+    245,
+    246,
+    227,
+    228,
+    [
+     " Or set the env var in PowerShell: `$env:CA_TYPESCRIPT_CMD = 'node C:\\code-atlas\\adapters\\typescript\\index.js --server'`."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    228,
+    229
+   ],
+   [
+    "replace",
+    247,
+    248,
+    229,
+    230,
+    [
+     " then reboot): `Set-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\FileSystem' LongPathsEnabled 1`."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    230,
+    231
+   ],
+   [
+    "replace",
+    249,
+    250,
+    231,
+    232,
+    [
+     " file as changed and reparses the world."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    232,
+    233
+   ],
+   [
+    "replace",
+    251,
+    253,
+    233,
+    235,
+    [
+     " or put it on a **Dev Drive** — the AV scan dominates cold reads. For very large repos, WSL2 on the",
+     " Linux-native filesystem is fastest."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    235,
+    236
+   ],
+   [
+    "replace",
+    254,
+    255,
+    236,
+    237,
+    [
+     " use WSL2 or the container if you can't install them natively."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    259,
+    237,
+    241
+   ],
+   [
+    "delete",
+    259,
+    260,
+    241,
+    241
+   ],
+   [
+    "equal",
+    260,
+    263,
+    241,
+    244
+   ],
+   [
+    "replace",
+    263,
+    264,
+    244,
+    245,
+    [
+     "`docs/runbooks/onboarding-a-repo.md`."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    267,
+    245,
+    248
+   ],
+   [
+    "replace",
+    267,
+    268,
+    248,
+    249,
+    [
+     "Every release is an entry in `CHANGELOG.md` and a `vX.Y.Z` tag; commits after a tag are"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    272,
+    249,
+    253
+   ],
+   [
+    "replace",
+    272,
+    273,
+    253,
+    254,
+    [
+     "|Installed with|Upgrade|"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    274,
+    254,
+    255
+   ],
+   [
+    "replace",
+    274,
+    277,
+    255,
+    258,
+    [
+     "|`uv tool install git+…@vX.Y.Z` / `pipx install git+…@vX.Y.Z`|`uv tool install --force git+https://github.com/cuongdinhngo/code-atlas.git@vX.Y.Z` / `pipx install --force git+https://github.com/cuongdinhngo/code-atlas.git@vX.Y.Z` — `upgrade` never moves a pin, and the `SessionStart` hook names this command|",
+     "|a checkout and `scripts/setup.py`|`git pull`, then re-run `python3 scripts/setup.py /abs/path/to/your-project`|",
+     "|the Claude Code plugin|`claude plugin marketplace remove code-atlas`, then `claude plugin marketplace add cuongdinhngo/code-atlas#vX.Y.Z`, then `claude plugin install code-atlas@code-atlas`, then restart. Also upgrade the tool install that puts the scripts on `PATH`|"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    297,
+    258,
+    278
+   ],
+   [
+    "replace",
+    297,
+    298,
+    278,
+    279,
+    [
+     " `uv tool upgrade` fails halfway with `os error 32`. Re-run it after disconnecting."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    303,
+    279,
+    284
+   ],
+   [
+    "replace",
+    303,
+    304,
+    284,
+    285,
+    [
+     " `get_index_status` and the state line lead with `rebuild required`."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    305,
+    285,
+    286
+   ],
+   [
+    "replace",
+    305,
+    306,
+    286,
+    287,
+    [
+     " dependencies when the entry says so. An adapter on an older contract fails the handshake."
+    ]
+   ],
+   [
+    "equal",
+    306,
+    325,
+    287,
+    306
+   ],
+   [
+    "replace",
+    325,
+    326,
+    306,
+    307,
+    [
+     "|Question|Tool|"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    307,
+    308
+   ],
+   [
+    "replace",
+    327,
+    339,
+    308,
+    320,
+    [
+     "|Who calls this? What implements it? Where is it referenced?|`find_callers` · `find_implementations` · `find_references`|",
+     "|What breaks if I change these files?|`impact`, and `impact_modules` for the same radius rolled up to business modules|",
+     "|What is dead code here?|`find_orphans` · `reachable_from`|",
+     "|How does A reach B?|`explain_path`|",
+     "|Show me this symbol, without the rest of the file|`read_symbol` · `file_outline`|",
+     "|I did not write this repo — where do I start reading?|`architecture_overview` · `guided_tour` · `generate_onboarding`|",
+     "|Are any of these ten names already taken?|`search_symbol` with a list of `queries` — one call, not ten|",
+     "|Did this change break an architectural rule?|`check_architecture_rules` · `diff_architecture`|",
+     "|What happens when a user does X — entry to data?|`trace_capability`, one entry, file or module per call|",
+     "|Draw me this type and its ancestry|`class_diagram`|",
+     "|Which writers of this table omit a defaulted column?|`check_column_defaults` (T-SQL)|",
+     "|Is something *missing* here — an unchecked call site, an untested symbol?|**none of them** — use `grep`, and see what it cannot answer|"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    340,
+    320,
+    321
+   ],
+   [
+    "replace",
+    340,
+    341,
+    321,
+    322,
+    [
+     "**All 26 tools, what each returns, and which take a list of subjects: `docs/TOOLS.md`.**"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    350,
+    322,
+    331
+   ],
+   [
+    "replace",
+    350,
+    351,
+    331,
+    332,
+    [
+     "ignored (design)."
+    ]
+   ],
+   [
+    "equal",
+    351,
+    379,
+    332,
+    360
+   ],
+   [
+    "replace",
+    379,
+    381,
+    360,
+    362,
+    [
+     "Full detail: `docs/design/payload.md` ·",
+     "`docs/design/impact-and-claims.md`."
+    ]
+   ],
+   [
+    "equal",
+    381,
+    386,
+    362,
+    367
+   ],
+   [
+    "replace",
+    386,
+    387,
+    367,
+    368,
+    [
+     "|What|Result|Where|"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    388,
+    368,
+    369
+   ],
+   [
+    "replace",
+    388,
+    394,
+    369,
+    375,
+    [
+     "|Tokens to reach a resolved answer, vs grep-and-read|**~69× cheaper** on pinned public PHP repos (symfony/demo · brick/math) — 8/8 correct, recall 1.0, precision 1.0; 18×–117× per relation question, 4.5× on an onboarding lookup. Re-measured 2026-09-27: 70.2×|`tokens-to-answer.md`|",
+     "|Answer correctness, blind field round|**8 of 8 checked claims exact, zero false statements**|PLAN §19|",
+     "|Cost of the *n*-th parallel agent|**~70 MB PSS**; the 925 MB index costs **0 MB** (page-cached, never mmapped)|`parallel-agents.md`|",
+     "|Five agents vs one|**4.3× throughput**, 1.3 % of RAM, zero `SQLITE_BUSY` reaching a caller|same|",
+     "|Incremental no-op rebuild, large index|**56.1 s → 2.113 s (26×)**|PLAN §19|",
+     "|Onboarding lookups vs hand-mapping|**cheaper, 12/12 correct, recall 1.0**|`121_onboarding-question-class.md`|"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    411,
+    375,
+    392
+   ],
+   [
+    "replace",
+    411,
+    412,
+    392,
+    393,
+    [
+     "|Environment|`.code-atlas.toml`|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    412,
+    413,
+    393,
+    394
+   ],
+   [
+    "replace",
+    413,
+    426,
+    394,
+    407,
+    [
+     "|`CA_DB_PATH`|`db_path`|`.code-atlas/graph.db`|index location (relative to the repo root). Inside the repo it must not be a link or tracked by git; only the env var may point outside|",
+     "|`CA_WORKERS`|`workers`|`max(1, min(cpu-2, 8))`|adapter processes during a build|",
+     "|`CA_PAGE_LIMIT`|`page_limit`|`50`|query-time row ceiling for search/nav tools (no rebuild). Pre-259 `CA_MAX_RESULTS` does **not** set this|",
+     "|`CA_MAX_CANDIDATES`|`max_candidates`|`50`|build-time resolver fan-out (**rebuild** to apply). `CA_MAX_RESULTS` / project-file `max_results` still alias here|",
+     "|`CA_IMPACT_DEPTH` / `CA_IMPACT_MAX_NODES`|`impact_depth` / `impact_max_nodes`|`2` / `500`|hops and node budget for one impact query|",
+     "|`CA_MAX_FILE_BYTES`|`max_file_bytes`|`4194304` (4 MiB)|a source file above this is skipped, never truncated and never sent to an adapter; `get_index_status` and the build summary count it as `skipped.oversize`. The project file cannot raise it past 64 MiB|",
+     "|`CA_ENTRY_POINTS`|`entry_points`|unset|file globs that seed reachability. **`reachable_from` and `find_orphans` need this** — unset, they report *no roots configured* rather than guessing, and `get_index_status` nominates candidate globs with a file count for you to choose from|",
+     "|`CA_STUB_ROOTS`|`stub_roots`|unset|dependency roots (e.g. `vendor`) to index declarations-only, so third-party signatures resolve|",
+     "|`CA_INDIRECTION_RULES`|`indirection_rules`|unset|JSON rule files mapping framework indirection to edges. **`find_view_data` needs this**|",
+     "|`CA_ARCHITECTURE_RULES`|`architecture_rules`|unset|JSON rule files of path-set dependency constraints. **`check_architecture_rules` needs this**|",
+     "|`CA_TOOLS`|`tools`|all 24|comma-separated tool allow-list — see the six-tool preset below|",
+     "|`CA_<LANG>_CMD`|`[adapter_cmd].<lang>`|—|the **complete argv** that launches one adapter in server mode. The file table is honoured only with `CA_TRUST_PROJECT_FILE=1`|",
+     "|`CA_TRUST_PROJECT_FILE`|— (env only)|unset|`1` lets the repo's own `[adapter_cmd]`, `host_root` and `container_root` choose the argv and the path mapping. Unset, any of them there is a loud error: a repo you index must not pick the command code-atlas runs|"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    431,
+    407,
+    412
+   ],
+   [
+    "replace",
+    431,
+    438,
+    412,
+    413,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    451,
+    413,
+    426
+   ],
+   [
+    "replace",
+    451,
+    452,
+    426,
+    427,
+    [
+     "`which_tool` prompt and `contrib/skill/`. Nothing has to be installed in your repo"
+    ]
+   ],
+   [
+    "equal",
+    452,
+    457,
+    427,
+    432
+   ],
+   [
+    "replace",
+    457,
+    458,
+    432,
+    433,
+    [
+     "`docs/TOOLS.md`."
+    ]
+   ],
+   [
+    "equal",
+    458,
+    460,
+    433,
+    435
+   ],
+   [
+    "replace",
+    460,
+    461,
+    435,
+    436,
+    [
+     "no network. An opt-in package, `onboarding_llm/`, plugs into three seams"
+    ]
+   ],
+   [
+    "equal",
+    461,
+    471,
+    436,
+    446
+   ],
+   [
+    "replace",
+    471,
+    472,
+    446,
+    447,
+    [
+     "`ci.yml` runs them. It exits non-zero if a check **failed or was"
+    ]
+   ],
+   [
+    "equal",
+    472,
+    485,
+    447,
+    460
+   ],
+   [
+    "replace",
+    485,
+    486,
+    460,
+    461,
+    [
+     "kept — and what a legitimate skip looks like are in `AGENTS.md`."
+    ]
+   ],
+   [
+    "equal",
+    486,
+    489,
+    461,
+    464
+   ],
+   [
+    "replace",
+    489,
+    490,
+    464,
+    465,
+    [
+     "|Doc|Answers|"
+    ]
+   ],
+   [
+    "equal",
+    490,
+    491,
+    465,
+    466
+   ],
+   [
+    "replace",
+    491,
+    496,
+    466,
+    471,
+    [
+     "|`docs/TOOLS.md`|all 26 tools, the operator prompts, the opt-in hooks, and which tools take a list of subjects|",
+     "|`docs/design/`|why an answer is shaped the way it is — payload · indexing & search · impact & claims|",
+     "|`docs/PLAN.md`|the authoritative design, and **§19** — the decision log: what was measured, what was refuted|",
+     "|`docs/CONVENTION.md`|naming, repo layout, and **§6** — the payload contract every tool answer obeys|",
+     "|`docs/ENGINEERING_RULES.md`|the binding *how we build* rules, several CI-gated|"
+    ]
+   ],
+   [
+    "equal",
+    496,
+    498,
+    471,
+    473
+   ],
+   [
+    "replace",
+    498,
+    504,
+    473,
+    479,
+    [
+     "onboarding a large legacy repo ·",
+     "tokens-to-answer ·",
+     "parallel agents ·",
+     "cross-repo validation ·",
+     "field retro ·",
+     "tool-recognition probe."
+    ]
+   ],
+   [
+    "equal",
+    504,
+    505,
+    479,
+    480
+   ],
+   [
+    "replace",
+    505,
+    507,
+    480,
+    482,
+    [
+     "Contributors start at `CONTRIBUTING.md`, agents at `AGENTS.md`;",
+     "vulnerabilities go through `SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    507,
+    509,
+    482,
+    484
+   ],
+   [
+    "replace",
+    509,
+    523,
+    484,
+    485,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    523,
+    524,
+    485,
+    486
+   ],
+   [
+    "replace",
+    524,
+    526,
+    486,
+    487,
+    [
+     "MIT — see `LICENSE`. © 2026 Cuong Ngo."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
  }
 }

@@ -17839,5 +17839,2105 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "5be23ec1eab9+2": {
+  "fn": "liliang-cn/cortexdb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Go Reference CI codecov License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "The CortexDB live view"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    20,
+    10,
+    20,
+    [
+     "|||",
+     "|---|---|",
+     "|Go library|`go get github.com/liliang-cn/cortexdb/v2`|",
+     "|Claude Code|`/plugin marketplace add liliang-cn/cortexdb`, then `/plugin install cortexdb@cortexdb`|",
+     "|Codex|`codex plugin marketplace add liliang-cn/cortexdb && codex plugin add cortexdb@cortexdb`|",
+     "|Claude Code mod (optional)|`/plugin install cortexdb-live@cortexdb`|",
+     "|DeepSeek Harness|`dsh plugin --profile web add \"github:liliang-cn/cortexdb#semver:^2&path:/plugins/dsh-cortexdb-memory\"` (guide)|",
+     "|Obsidian|unzip a release's `cortexdb-obsidian.zip` into `<vault>/.obsidian/plugins/` (guide)|",
+     "|Shared-brain server|`go install github.com/liliang-cn/cortexdb/v2/cmd/cortexdb-grpc@latest`|",
+     "|Clients|`cargo add cortexdb-client` · `pip install cortexdb-client` · `npm install cortexdb-client`|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    35,
+    20,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "recall. See the plugin guide for setup and"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    40,
+    36,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "`cortexdb-live` is an optional mod that runs inside Claude Code on top of the `cortexdb` plugin. Install it after the plugin:"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    52,
+    41,
+    52
+   ],
+   [
+    "replace",
+    52,
+    56,
+    52,
+    53,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    84,
+    53,
+    81
+   ],
+   [
+    "replace",
+    84,
+    107,
+    81,
+    104,
+    [
+     "|Variable|Meaning|",
+     "|---|---|",
+     "|`CORTEXDB_PATH`|Database file (default `~/.cortexdb/cortexdb.db`)|",
+     "|`CORTEXDB_REMOTE`|Use a shared `cortexdb-grpc` at `host:port` (plaintext) or `https://host` (TLS, behind a proxy) instead of a local file|",
+     "|`CORTEXDB_GRPC_TOKEN`|Bearer token for that server|",
+     "|`CORTEXDB_GRPC_ADDR`|Server listen address (default `127.0.0.1:47821`)|",
+     "|`CORTEXDB_EMBED_BASE_URL` / `CORTEXDB_EMBED_API_KEY`|`cortexdb-mcp-stdio`: OpenAI-compatible embeddings endpoint and its key (fall back to `OPENAI_BASE_URL` / `OPENAI_API_KEY`); unset = lexical mode|",
+     "|`OPENAI_BASE_URL` / `OPENAI_API_KEY`|Server: the embeddings endpoint and key (`cortexdb-grpc` reads only these, not `CORTEXDB_EMBED_BASE_URL`); unset = lexical mode|",
+     "|`CORTEXDB_EMBED_MODEL` / `CORTEXDB_EMBED_DIM`|Embedding model and dimension, for both (default `text-embedding-3-small` / `1536`)|",
+     "|`CORTEXDB_VECTOR_INDEX` / `CORTEXDB_BINARY_OVERSAMPLE`|Server: `hnsw` (default) or, on a SQLite store, `binary` (1-bit codes in memory, 1/32 of the vectors, each search rescored from the stored vectors, no snapshot); the oversample is the binary shortlist multiplier, from 1 to 1000 (default `8`)|",
+     "|`CORTEXDB_REVIEW_GATE`|Server and `cortexdb-mcp-stdio`: `1` leaves proposed and rejected documents and memories out of search and recall (default off; a curation filter, not access control)|",
+     "|`CORTEXDB_SLOW_MS`|Server: log calls slower than this, with the time each stage took (default `1000`, `0` = none)|",
+     "|`CORTEXDB_TRACE` / `CORTEXDB_TRACE_FILE`|Server: log every call; also append the records to a JSON-lines file|",
+     "|`CORTEXDB_LOG_FORMAT` / `CORTEXDB_LOG_LEVEL`|Server: `text` (logfmt, default) or `json`; `debug`, `info` (default), `warn`, `error`|",
+     "|`CORTEXDB_TRACE_MAX_MB` / `CORTEXDB_TRACE_KEEP` / `CORTEXDB_TRACE_MAX_AGE_DAYS`|Server: rotate the trace file at this size (`100`), keep this many old files (`5`) for at most this many days (`30`)|",
+     "|`CORTEXDB_EMBED_PROBE_SECONDS`|Server: probe the embedder this often, for `/healthz` and `/metrics` (default `60`, `0` = off)|",
+     "|`CORTEXDB_RECALL_LOG`|Server and `cortexdb-mcp-stdio`: `1` keeps a log of recalls — queries included — for the `/recalls` page and the `recall_log_*` tools (default off)|",
+     "|`CORTEXDB_RECALL_LOG_DAYS` / `CORTEXDB_RECALL_LOG_MAX_ROWS`|How long (`30` days) and how many (`100000`) recalls the log keeps|",
+     "|`CORTEXDB_MEDIA_VISION_URL` / `CORTEXDB_MEDIA_VISION_MODEL`|Server and `cortexdb-mcp-stdio`: an Ollama vision model that captions images and video frames for `ingest_media` (e.g. `http://localhost:11434` / `qwen3.5:4b`)|",
+     "|`CORTEXDB_MEDIA_TRANSCRIBE_URL` / `CORTEXDB_MEDIA_TRANSCRIBE_MODEL` / `CORTEXDB_MEDIA_TRANSCRIBE_API_KEY`|An OpenAI-compatible `…/v1` transcription endpoint for audio and the sound of videos (OpenAI, or whisper.cpp's `whisper-server --inference-path /v1/audio/transcriptions --convert`)|",
+     "|`CORTEXDB_MEDIA_EMBED_URL` / `CORTEXDB_MEDIA_EMBED_MODEL` / `CORTEXDB_MEDIA_EMBED_API_KEY`|A CLIP-style embedding endpoint (infinity's `/embeddings` with `modality`) that puts images, video frames and text in one space, so an image is found by what it shows and `search_media` takes an image as the query|",
+     "|`CORTEXDB_MEDIA_EMBED_AUDIO` / `CORTEXDB_MEDIA_EMBED_MIN_SCORE`|`1` when that model embeds sound too (CLAP); the cosine a media vector must reach to be a hit (`0.2`)|",
+     "|`CORTEXDB_MEDIA_FRAME_INTERVAL` / `CORTEXDB_MEDIA_MAX_BYTES`|Seconds between the video frames captioned (`10`, `0` = none; needs `ffmpeg`), and the size cap of one file (32 MiB)|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    104,
+    107
+   ],
+   [
+    "replace",
+    110,
+    111,
+    107,
+    108,
+    [
+     "Website · Guide (full feature reference) · Examples · Changelog · 中文"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    113,
+    108,
+    110
+   ],
+   [
+    "delete",
+    113,
+    114,
+    110,
+    110
+   ],
+   [
+    "equal",
+    114,
+    115,
+    110,
+    111
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "9e74338aa28e+2": {
+  "fn": "spica-engine/spica",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "# Spica - development engine Build status"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    1,
+    4
+   ],
+   [
+    "replace",
+    10,
+    11,
+    4,
+    5,
+    [
+     "|Modules|Version|Tests|Used In Enterprise Project|"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    5,
+    6
+   ],
+   [
+    "replace",
+    12,
+    29,
+    6,
+    22,
+    [
+     "|Data Modeling|Release|:white_check_mark:|:white_check_mark:|",
+     "|Realtime Database|Release|:white_check_mark:|:white_check_mark:|",
+     "|Cloud Functions|Release|:white_check_mark:|:white_check_mark:|",
+     "|Identity and Access Management|Release|:white_large_square:|:white_check_mark:|",
+     "|Storage (CDN)|Release|:white_check_mark:|:white_check_mark:|",
+     "|Dashboards|Release|:white_check_mark:|:white_check_mark:|",
+     "|**Features**||||",
+     "|Auto-Generated REST API|Release|:white_check_mark:|:white_check_mark:|",
+     "|WebHooks|Release|:white_check_mark:|:white_check_mark:|",
+     "|Custom OAuth & SAML|Beta|:white_check_mark:|:white_large_square:|",
+     "|GraphQL|Beta|:white_check_mark:|:white_large_square:|",
+     "|ACL Rules|Release|:white_check_mark:|:white_check_mark:|",
+     "|Asset System|Beta|:white_large_square:|:white_large_square:|",
+     "|Monitoring Tools|Beta|:white_check_mark:|:white_large_square:|",
+     "|Identity Activity Monitoring|Release|:white_check_mark:|:white_check_mark:|",
+     "|Instance Stats|Alpha|:white_check_mark:|:white_check_mark:|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    43,
+    22,
+    36
+   ],
+   [
+    "replace",
+    43,
+    44,
+    36,
+    37,
+    [
+     "Important: To run serve command, you must have Docker and NodeJs installed on your development environment."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    73,
+    37,
+    66
+   ],
+   [
+    "replace",
+    73,
+    83,
+    66,
+    67,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    85,
+    67,
+    69
+   ],
+   [
+    "replace",
+    85,
+    86,
+    69,
+    70,
+    [
+     "You can see full documentation on spicaengine/docs"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    70,
+    73
+   ],
+   [
+    "replace",
+    89,
+    90,
+    73,
+    74,
+    [
+     "Click here and you will see `Examples & Starters` section in our official web page. "
+    ]
+   ],
+   [
+    "equal",
+    90,
+    92,
+    74,
+    76
+   ],
+   [
+    "replace",
+    92,
+    98,
+    76,
+    77,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    100,
+    77,
+    79
+   ],
+   [
+    "replace",
+    100,
+    105,
+    79,
+    84,
+    [
+     "|Package|Status|Description|",
+     "|:------:|:------:|:------:|",
+     "|spicaengine/api|Docker Image Version (latest semver) Docker Image Size (latest semver) Docker Pulls|API server of spica|",
+     "|spicaengine/spica|Docker Image Version (latest semver) Docker Image Size (latest semver) Docker Pulls|Dashboard for spica|",
+     "|spicaengine/mongoreplicationcontroller|Docker Image Version (latest semver) Docker Image Size (latest semver) Docker Pulls|Kubernetes controller for MongoDB replication|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    109,
+    84,
+    88
+   ],
+   [
+    "replace",
+    109,
+    115,
+    88,
+    94,
+    [
+     "|:------:|:------:|:------:|:------:|",
+     "|`@spica/cli`|npm (scoped)|CLI for controlling the API.|JS|",
+     "|`@spica-devkit/database`|npm (scoped)|Development package for interacting with the APIs database directly.|JS|",
+     "|`@spica-devkit/bucket`|npm (scoped)|Development package for interacting with the Bucket APIs.|JS|",
+     "|`@spica-devkit/storage`|npm (scoped)|Development package for the Storage module.|JS|",
+     "|`@spica-devkit/identity`|npm (scoped)|Development package for the Identity module.|JS|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    117,
+    94,
+    96
+   ],
+   [
+    "replace",
+    117,
+    120,
+    96,
+    97,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    97,
+    98
+   ],
+   [
+    "replace",
+    121,
+    124,
+    98,
+    99,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    99,
+    100
+   ],
+   [
+    "delete",
+    125,
+    126,
+    100,
+    100
+   ],
+   [
+    "equal",
+    126,
+    127,
+    100,
+    101
+   ],
+   [
+    "delete",
+    127,
+    130,
+    101,
+    101
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "ffdc26701f84+2": {
+  "fn": "Hello-CTF/NexTerm",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "NexTerm"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    1,
+    6
+   ],
+   [
+    "replace",
+    8,
+    11,
+    6,
+    9,
+    [
+     "Website",
+     "Release",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "**中文** | English · 官网与在线演示 · 下载 · 部署服务端"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    20,
+    12,
+    13,
+    [
+     " NexTerm 的终端与命令块界面（示例数据）"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    30,
+    13,
+    23
+   ],
+   [
+    "replace",
+    30,
+    31,
+    23,
+    24,
+    [
+     "同步不是端到端加密：登录时密码会发送给服务端，请只登录你信任的服务端并使用 HTTPS（详见安全说明）。完整功能见功能说明。"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    24,
+    27
+   ],
+   [
+    "replace",
+    34,
+    42,
+    27,
+    35,
+    [
+     "|平台|安装包（Releases）|",
+     "|---|---|",
+     "|Windows (amd64 / arm64)|`nexterm-desktop_windows_<架构>_x.y.z.exe`|",
+     "|macOS (Apple Silicon / Intel)|`nexterm-desktop_macos_<架构>_x.y.z.dmg`|",
+     "|Linux 桌面 (amd64 / arm64)|`nexterm-desktop_linux_<架构>_x.y.z.deb`|",
+     "|Android (arm64，预览版)|`nexterm-desktop_android_arm64_x.y.z.apk`|",
+     "|iOS / iPadOS (预览版)|TestFlight|",
+     "|Linux 服务端 / 懒猫微服|见部署服务端 / 应用中心（仅 amd64）|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    45,
+    35,
+    38
+   ],
+   [
+    "replace",
+    45,
+    47,
+    38,
+    39,
+    [
+     " 安装提示 "
+    ]
+   ],
+   [
+    "equal",
+    47,
+    51,
+    39,
+    43
+   ],
+   [
+    "delete",
+    51,
+    53,
+    43,
+    43
+   ],
+   [
+    "equal",
+    53,
+    69,
+    43,
+    59
+   ],
+   [
+    "replace",
+    69,
+    70,
+    59,
+    60,
+    [
+     "安装输出会打印一次超级管理员 `admin` 的初始密码。服务默认只监听 `127.0.0.1:8080`，执行 `ssh -L 8080:127.0.0.1:8080 用户@服务器` 后打开 `http://localhost:8080`。升级、回滚、反向代理、外部数据库和多用户限制见服务端部署说明。"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    73,
+    60,
+    63
+   ],
+   [
+    "replace",
+    73,
+    74,
+    63,
+    64,
+    [
+     "功能说明 · 安全说明 · AI 信息脱敏 · 设备接入 · 服务端部署 · 本地数据库环境"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    82,
+    64,
+    72
+   ],
+   [
+    "replace",
+    82,
+    83,
+    72,
+    73,
+    [
+     "工具链、测试与协作约定见 AGENTS.md。"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    85,
+    73,
+    75
+   ],
+   [
+    "replace",
+    85,
+    87,
+    75,
+    76,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "e817d23e2712+2": {
+  "fn": "brakmic/purescript-pouchdb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "PouchDB Bindings for PureScript (Work in Progress)"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "PouchDB is an open-source Database inspired by Apache CouchDB that runs in the browser."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    10,
+    5,
+    10
+   ],
+   [
+    "replace",
+    10,
+    21,
+    10,
+    19,
+    [
+     "- Create database",
+     "- Get db-information",
+     "- Delete database",
+     "- Put document",
+     "- Post document",
+     "- Fetch document",
+     "- Delete document",
+     "- Batch upload",
+     "- Fetch a batch of documents"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    52,
+    19,
+    50
+   ],
+   [
+    "replace",
+    52,
+    53,
+    50,
+    51,
+    [
+     "*then open* http:://localhost:8080"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    58,
+    51,
+    56
+   ],
+   [
+    "delete",
+    58,
+    60,
+    56,
+    56
+   ],
+   [
+    "equal",
+    60,
+    61,
+    56,
+    57
+   ],
+   [
+    "replace",
+    61,
+    63,
+    57,
+    58,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "7e361be4aa43+2": {
+  "fn": "innovayse/hostpanel",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "Hostpanel"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    1,
+    2
+   ],
+   [
+    "replace",
+    8,
+    9,
+    2,
+    3,
+    [
+     " HostPanel "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    3,
+    4
+   ],
+   [
+    "replace",
+    10,
+    14,
+    4,
+    6,
+    [
+     " Self-hosted billing, domains and provisioning for web hosting companies. ",
+     " Client portal, admin panel and API in one open-source stack. Install it with one command."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    6,
+    7
+   ],
+   [
+    "replace",
+    15,
+    22,
+    7,
+    12,
+    [
+     " License: AGPL v3",
+     " Docker Hub",
+     " CI",
+     " Hostpanel.Sdk on NuGet",
+     " Chat on Discord"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    12,
+    13
+   ],
+   [
+    "replace",
+    23,
+    31,
+    13,
+    19,
+    [
+     " Website ·",
+     " Documentation ·",
+     " Plugin marketplace ·",
+     " Plugin SDK ·",
+     " Releases ·",
+     " Discord"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    19,
+    20
+   ],
+   [
+    "replace",
+    32,
+    40,
+    20,
+    24,
+    [
+     " Try the demo: ",
+     " client portal ·",
+     " admin panel ",
+     " Sample data, reset regularly. The demo sign-in details are on each login page. "
+    ]
+   ],
+   [
+    "equal",
+    40,
+    50,
+    24,
+    34
+   ],
+   [
+    "replace",
+    50,
+    52,
+    34,
+    36,
+    [
+     " interfaces. You can add your own with the plugin SDK, without changing the core, or install a",
+     " ready-made one from the plugin marketplace."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    36,
+    37
+   ],
+   [
+    "replace",
+    53,
+    54,
+    37,
+    38,
+    [
+     " that sets up HTTPS for you."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    57,
+    38,
+    41
+   ],
+   [
+    "replace",
+    57,
+    58,
+    41,
+    42,
+    [
+     "|Admin dashboard|Clients|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    42,
+    43
+   ],
+   [
+    "replace",
+    59,
+    64,
+    43,
+    48,
+    [
+     "|Admin dashboard|Clients list|",
+     "|**Invoices**|**Products**|",
+     "|Invoices list|Products list|",
+     "|**Client portal**|**Client area**|",
+     "|Client portal home page|Client area dashboard|"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    69,
+    48,
+    53
+   ],
+   [
+    "replace",
+    69,
+    70,
+    53,
+    54,
+    [
+     "|Area|What you get|"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    54,
+    55
+   ],
+   [
+    "replace",
+    71,
+    86,
+    55,
+    70,
+    [
+     "|Billing and invoices|Invoices, transactions, credits, quotes, billable items, promotions, aging and income reports|",
+     "|Multi-currency|Several currencies with rates, resolved per client|",
+     "|Domains and TLD pricing|Domain search and registration through registrar plugins, per-TLD pricing, renewals and renewal e-mails|",
+     "|Hosting provisioning|Products and services, orders, automatic account creation, suspension and termination on your servers|",
+     "|Support tickets|Client tickets, predefined replies, announcements, network issues|",
+     "|Knowledge base|Public articles for the storefront, managed from the admin panel|",
+     "|Storefront content|Testimonials, partners, projects and FAQs in English, Russian and Armenian, managed from the admin panel; empty sections are hidden|",
+     "|Client portal|Order, pay invoices, manage services and domains, open tickets; three switchable storefront designs, brandable without code|",
+     "|Admin panel|Clients, orders, products, gateways, integrations, e-mail templates, plugins, reports, audit log|",
+     "|Demo mode|Fake payments, registrar and provisioning, caught mail, fixed sample data reset on a schedule, on a network isolated from production|",
+     "|Languages|English, Russian and Armenian in both the portal and the admin panel|",
+     "|Plugin marketplace|plugins-hostpanel.innovayse.com lists installable plugins, among them the payment gateways Stripe, PayPal, Inecobank, Idram and Ameriabank. See Payment gateways|",
+     "|Plugin SDK|`Hostpanel.Sdk` (MIT, a NuGet package, developed in hostpanel-sdk) for your own payment, registrar, provisioning, identity, fulfilment and hosted plugins|",
+     "|Integrations|Payments: bank transfer built in; card and bank gateways install as plugins. Registrars: Namecheap, Name.am. Control panels: CWP7, Plesk, cPanel. Notifications: Telegram|",
+     "|Data import from WHMCS|A PHP addon you install in WHMCS. HostPanel pulls clients, contacts, products, orders, services, domains, invoices, transactions, quotes, tickets, announcements, knowledge base, downloads and network issues from it, page by page. See Moving from another billing system|"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    70,
+    71
+   ],
+   [
+    "replace",
+    87,
+    88,
+    71,
+    72,
+    [
+     "See the open feature requests"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    72,
+    76
+   ],
+   [
+    "replace",
+    92,
+    95,
+    76,
+    79,
+    [
+     "This table compares what HostPanel and WHMCS offer today. WHMCS facts come from its own pricing page, its",
+     "documentation and the",
+     "module list of its publisher, WebPros."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    79,
+    80
+   ],
+   [
+    "replace",
+    96,
+    97,
+    80,
+    81,
+    [
+     "||HostPanel|WHMCS|"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    81,
+    82
+   ],
+   [
+    "replace",
+    98,
+    106,
+    82,
+    90,
+    [
+     "|License|AGPL-3.0, full source on GitHub|Commercial licence. Its PHP files are encoded and need the ionCube Loader|",
+     "|Cost|No licence fee|Monthly plans, priced by the number of active clients|",
+     "|Where it runs|Self-hosted, with Docker|Self-hosted, or WHMCS Cloud run by the vendor|",
+     "|Control panels|CWP7, Plesk|cPanel, Plesk, DirectAdmin and others|",
+     "|Domain registrars|Namecheap, Name.am|Many, including Namecheap, OpenSRS and Nominet|",
+     "|Payment gateways|Bank transfer built in, gateways as plugins|Many, including Authorize.net, BitPay and bank transfer|",
+     "|Extensions|A plugin SDK (MIT) and a plugin marketplace with a small but growing catalogue|A large marketplace of third-party modules|",
+     "|Moving over|An importer that pulls your data out of WHMCS|Not applicable|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    115,
+    90,
+    99
+   ],
+   [
+    "replace",
+    115,
+    116,
+    99,
+    100,
+    [
+     "- A catalogue of ready-made modules as large as WHMCS has. The plugin marketplace is new and still small."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    119,
+    100,
+    103
+   ],
+   [
+    "replace",
+    119,
+    121,
+    103,
+    105,
+    [
+     "Full guides are in the documentation: quick start,",
+     "requirements and install."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    105,
+    106
+   ],
+   [
+    "replace",
+    122,
+    123,
+    106,
+    107,
+    [
+     "On a Linux server with Docker and Compose v2, point the DNS of your"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    136,
+    107,
+    120
+   ],
+   [
+    "replace",
+    136,
+    137,
+    120,
+    121,
+    [
+     "**HTTPS is automatic.** The bundled Caddy edge obtains and renews Let's Encrypt"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    139,
+    121,
+    123
+   ],
+   [
+    "replace",
+    139,
+    140,
+    123,
+    124,
+    [
+     "|Setting|Flag|Environment variable|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    124,
+    125
+   ],
+   [
+    "replace",
+    141,
+    145,
+    125,
+    129,
+    [
+     "|Install directory (default `/opt/hostpanel`)|`--dir`|`HOSTPANEL_DIR`|",
+     "|Release to install (default `latest`)|`--version`|`HOSTPANEL_VERSION`|",
+     "|Plain HTTP on port 8080 behind your own TLS proxy|`--no-tls`|`HOSTPANEL_TLS=off`|",
+     "|Non-interactive answers||`HOSTPANEL_DOMAIN`, `HOSTPANEL_ADMIN_DOMAIN`, `HOSTPANEL_ADMIN_EMAIL`|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    160,
+    129,
+    144
+   ],
+   [
+    "replace",
+    160,
+    161,
+    144,
+    145,
+    [
+     "Everything is published to **one repository, `innovayse/hostpanel`**."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    163,
+    145,
+    147
+   ],
+   [
+    "replace",
+    163,
+    164,
+    147,
+    148,
+    [
+     "|Component|Pinned to a release|Moving|"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    148,
+    149
+   ],
+   [
+    "replace",
+    165,
+    168,
+    149,
+    152,
+    [
+     "|API|`innovayse/hostpanel:api-<version>`|`innovayse/hostpanel:api-latest`|",
+     "|Client portal|`innovayse/hostpanel:client-<version>`|`innovayse/hostpanel:client-latest`|",
+     "|Admin panel|`innovayse/hostpanel:admin-<version>`|`innovayse/hostpanel:admin-latest`|"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    188,
+    152,
+    172
+   ],
+   [
+    "replace",
+    188,
+    189,
+    172,
+    173,
+    [
+     "|Task|How|"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    173,
+    174
+   ],
+   [
+    "replace",
+    190,
+    195,
+    174,
+    179,
+    [
+     "|Upgrade|Re-run the install script (an existing `.env` is kept; with `--version` it moves `IMAGE_TAG`; the database is backed up to `backups/` first, and `install.sh --rollback` goes back to the backed up version and data), or `docker compose -f docker-compose.hub.yml pull && docker compose -f docker-compose.hub.yml up -d`|",
+     "|Pin a version|Set `IMAGE_TAG=1.4.0` in `.env` instead of `latest`|",
+     "|Logs|`docker compose -f docker-compose.hub.yml logs -f hostpanel-api` (or `hostpanel-client`, `hostpanel-admin`)|",
+     "|Back up the database|`docker compose -f docker-compose.hub.yml exec -T hostpanel-db sh -c 'pg_dump -U \"$POSTGRES_USER\" \"$POSTGRES_DB\"' > backup.sql`, or snapshot the `hostpanel_pgdata` volume|",
+     "|Keep certificates|Do not delete the `hostpanel_caddydata` volume; re-issuing can hit Let's Encrypt rate limits|"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    210,
+    179,
+    194
+   ],
+   [
+    "replace",
+    210,
+    212,
+    194,
+    196,
+    [
+     "production stack on the same host. See docker/README.md. A public instance is running: the",
+     "client portal and the admin panel."
+    ]
+   ],
+   [
+    "equal",
+    212,
+    228,
+    196,
+    212
+   ],
+   [
+    "replace",
+    228,
+    229,
+    212,
+    213,
+    [
+     "|Variable|Description|"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    213,
+    214
+   ],
+   [
+    "replace",
+    230,
+    239,
+    214,
+    223,
+    [
+     "|`AUTH_MODE`|`local` (standalone, email and password, optional TOTP) or `sso` (single sign-on through an external identity provider, needs an optional private package)|",
+     "|`DOMAIN` / `ADMIN_DOMAIN`|Public hosts of the portal and the admin panel|",
+     "|`ASPNETCORE_ENVIRONMENT`|`Production` for a real install: no demo data, no seeded accounts|",
+     "|`JWT_SECRET`|JWT signing key, at least 32 characters|",
+     "|`ENCRYPTION_KEY`|Encrypts stored server passwords and API tokens (`openssl rand -base64 32`)|",
+     "|`POSTGRES_PASSWORD`, `RABBITMQ_PASSWORD`|Database and broker passwords|",
+     "|`SMTP_HOST`, `SMTP_PORT`, `SMTP_ENCRYPTION`, `SMTP_FROM`|Outgoing mail; `SMTP_ENCRYPTION` is `tls`, `ssl` or `none` and is never guessed from the port|",
+     "|`IMAGE_TAG`, `DOCKERHUB_NAMESPACE`|Which published images `docker-compose.hub.yml` runs|",
+     "|`NUXT_PUBLIC_PORTAL_*`|Storefront template, name, logo and colours (the name falls back to `Hostpanel`; no operator brand is built in), see docs/operators/storefront.md|"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    256,
+    223,
+    240
+   ],
+   [
+    "replace",
+    256,
+    257,
+    240,
+    241,
+    [
+     "innovayse/hostpanel-sdk. After a plain `git clone`, and after every pull"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    259,
+    241,
+    243
+   ],
+   [
+    "replace",
+    259,
+    260,
+    243,
+    244,
+    [
+     "||URL|"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    261,
+    244,
+    245
+   ],
+   [
+    "replace",
+    261,
+    265,
+    245,
+    249,
+    [
+     "|Client portal|http://localhost:3001|",
+     "|Admin panel|http://localhost:5174|",
+     "|API docs (Swagger)|http://localhost:5149/swagger|",
+     "|Dev mail inbox|http://localhost:8027|"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    267,
+    249,
+    251
+   ],
+   [
+    "replace",
+    267,
+    268,
+    251,
+    252,
+    [
+     "Every compose stack (shared, dev, prod, platform, demo, hub) is described in docker/README.md."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    298,
+    252,
+    282
+   ],
+   [
+    "replace",
+    298,
+    299,
+    282,
+    283,
+    [
+     "|Part|Technology|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    283,
+    284
+   ],
+   [
+    "replace",
+    300,
+    306,
+    284,
+    290,
+    [
+     "|Backend `backend/`|ASP.NET Core 9, Wolverine, EF Core, PostgreSQL|Clean Architecture: `Domain` (entities, rules) <- `Application` (CQRS handlers, validators) <- `Infrastructure` (EF Core, integrations) <- `API` (thin controllers)|",
+     "|Messaging|RabbitMQ with the Wolverine outbox|Reliable events between modules|",
+     "|Client portal `client/`|Nuxt 4, Vue 3, TypeScript, Tailwind, Pinia|Server-rendered storefront; pages own data and SEO, `templates/` hold the switchable designs|",
+     "|Admin panel `admin/`|Vite, Vue 3, TypeScript, Tailwind|Single-page app served by nginx|",
+     "|Plugins|`Hostpanel.Sdk` and `Innovayse.Providers.*`|Six plugin types behind small interfaces, loaded at run time: payment, registrar and provisioning providers, plus fulfilment (`IFulfilmentPlugin`: deliver digital products after payment, advise on refunds), identity (`IClientResolver`: decide which client a signed-in user acts for) and hosted (`IHostedPlugin`: a background worker). The integrations listed under Features are built into the core; payment gateways such as card processors are not built in and are installed as plugins. The core names no deployment-specific plugin namespace; an architecture test enforces it|",
+     "|Auth|ASP.NET Core Identity, JWT in an httpOnly cookie|`local` mode by default|"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    312,
+    290,
+    296
+   ],
+   [
+    "replace",
+    312,
+    317,
+    296,
+    301,
+    [
+     "Start with docs/developers/write-a-plugin.md (also on the",
+     "documentation site). The contract lives in the",
+     "`Hostpanel.Sdk` package, and",
+     "Publishing a plugin explains how to list one on the",
+     "marketplace. In short:"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    319,
+    301,
+    303
+   ],
+   [
+    "replace",
+    319,
+    320,
+    303,
+    304,
+    [
+     " block (the HTTP routes the plugin answers), a `ui` block (menus, pages and slot widgets) and `externalOrigins`."
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    304,
+    305
+   ],
+   [
+    "replace",
+    321,
+    323,
+    305,
+    307,
+    [
+     " `header`, `text`, `stat`, `table`, `form`, `action`, `link`, `badge`, `empty`, `alert`, `tabs`, `chat` and `progress`. The",
+     " panels render it as text, never as HTML, in the visitor's language."
+    ]
+   ],
+   [
+    "equal",
+    323,
+    325,
+    307,
+    309
+   ],
+   [
+    "replace",
+    325,
+    327,
+    309,
+    311,
+    [
+     " `/api/client/plugins/{id}/...` and `/api/admin/plugins/{id}/ext/...`. Anything undeclared, disabled or not permitted for the",
+     " caller answers the same 404."
+    ]
+   ],
+   [
+    "equal",
+    327,
+    328,
+    311,
+    312
+   ],
+   [
+    "replace",
+    328,
+    330,
+    312,
+    314,
+    [
+     " **Allow unsigned plugins** (off by default, audited) or pin archive digests with `Plugins:TrustedPackageSha256`. With no",
+     " plugin installed the panels look exactly as the core ships them."
+    ]
+   ],
+   [
+    "equal",
+    330,
+    350,
+    314,
+    334
+   ],
+   [
+    "replace",
+    350,
+    355,
+    334,
+    339,
+    [
+     " The client portal is at http://localhost:3001. Both come with sample data.",
+     "4. **Pick an issue** labelled `good first issue`",
+     " and leave a comment saying you are taking it.",
+     "5. **Make the change, run the tests** (see Run from source) and open a pull request **against",
+     " `develop`**. A first review comes within 3 working days."
+    ]
+   ],
+   [
+    "equal",
+    355,
+    356,
+    339,
+    340
+   ],
+   [
+    "replace",
+    356,
+    357,
+    340,
+    341,
+    [
+     "More detail, including the rules for pull requests, is in CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    357,
+    360,
+    341,
+    344
+   ],
+   [
+    "replace",
+    360,
+    367,
+    344,
+    351,
+    [
+     "- **Contributing:** start with good first issues,",
+     " read CONTRIBUTING.md and the Code of Conduct. Questions go to",
+     " Discussions.",
+     "- **Community:** chat and ask questions on Discord.",
+     "- **Documentation:** hostpanel.innovayse.com/docs. Product site: hostpanel.innovayse.com.",
+     "- **Changes and help:** see the CHANGELOG for release notes and SUPPORT.md for where to get help.",
+     "- **Security:** report problems privately as described in SECURITY.md, not in a public issue."
+    ]
+   ],
+   [
+    "equal",
+    367,
+    368,
+    351,
+    352
+   ],
+   [
+    "replace",
+    368,
+    370,
+    352,
+    354,
+    [
+     " GNU Affero General Public License v3.0 or later: use, modify and self-host it, including commercially. If you",
+     " run a modified version as a network service, offer your users its source."
+    ]
+   ],
+   [
+    "equal",
+    370,
+    371,
+    354,
+    355
+   ],
+   [
+    "replace",
+    371,
+    375,
+    355,
+    359,
+    [
+     " innovayse/hostpanel-sdk, where it is developed and published) is under the",
+     " MIT License and ships as the `Hostpanel.Sdk` NuGet package,",
+     " so a plugin may be free or paid, open or closed source, as its author decides. Everything else in this repository stays",
+     " AGPL-3.0-or-later."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "5c85fb6c3e8d+2": {
+  "fn": "pazti/Rizz-Base",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     " a key derived from your passphrase."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     " typed API backed by a Go engine."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     " decrypted JSON snapshot when you need an interoperable backup."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     " realtime cloud platform. Queries scan a Lobby in memory; there are no indexes."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    31,
+    17,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "installer script,"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    41,
+    32,
+    41
+   ],
+   [
+    "replace",
+    41,
+    42,
+    41,
+    42,
+    [
+     "On Windows, inspect the PowerShell installer"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    53,
+    42,
+    53
+   ],
+   [
+    "replace",
+    53,
+    55,
+    53,
+    55,
+    [
+     "using the instructions in Engine installation, or",
+     "build the engine from source."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    74,
+    55,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     "See engine installation for version pinning, manual"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    85,
+    75,
+    85
+   ],
+   [
+    "replace",
+    85,
+    88,
+    85,
+    88,
+    [
+     "constructor option, `RIZZBASE_BINARY`, or `PATH`. See the Node.js guide,",
+     "Python SDK guide, installers and conformance details,",
+     "conformance fixtures, and runnable examples."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    113,
+    88,
+    113
+   ],
+   [
+    "replace",
+    113,
+    135,
+    113,
+    114,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    142,
+    114,
+    121
+   ],
+   [
+    "replace",
+    142,
+    145,
+    121,
+    124,
+    [
+     "The repository includes interactive Notes and",
+     "Todo list apps. They demonstrate persistent data,",
+     "filtered/ordered queries, and updates. See how to run the examples."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    172,
+    124,
+    151
+   ],
+   [
+    "replace",
+    172,
+    178,
+    151,
+    152,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    182,
+    152,
+    156
+   ],
+   [
+    "replace",
+    182,
+    183,
+    156,
+    157,
+    [
+     "beginner-friendly guide and API reference."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    209,
+    157,
+    183
+   ],
+   [
+    "replace",
+    209,
+    210,
+    183,
+    184,
+    [
+     "query details."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    226,
+    184,
+    200
+   ],
+   [
+    "replace",
+    226,
+    228,
+    200,
+    202,
+    [
+     "SDK backup API and",
+     "rotation procedure."
+    ]
+   ],
+   [
+    "equal",
+    228,
+    232,
+    202,
+    206
+   ],
+   [
+    "replace",
+    232,
+    234,
+    206,
+    208,
+    [
+     " a secrets manager. Do not commit, log, print, or place it in command-line",
+     " arguments. The SDK sends it only to its local engine over stdin."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    208,
+    209
+   ],
+   [
+    "replace",
+    235,
+    238,
+    209,
+    212,
+    [
+     " Wrong passphrases and damaged ciphertext fail authentication. There is no",
+     " passphrase recovery; rotation requires the current passphrase and a protected",
+     " plaintext JSON export/import migration."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    239,
+    212,
+    213
+   ],
+   [
+    "replace",
+    239,
+    241,
+    213,
+    215,
+    [
+     " `RIZZBASE_BINARY`, or `PATH`, in that order. It checks the engine's reported",
+     " version and project format before using it."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    215,
+    216
+   ],
+   [
+    "replace",
+    242,
+    245,
+    216,
+    219,
+    [
+     " contains decrypted data and must be protected accordingly. A local file lock",
+     " blocks a second writer; after a crash, check that no process is still writing",
+     " before manually removing its adjacent `.lock` directory."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    246,
+    219,
+    220
+   ],
+   [
+    "replace",
+    246,
+    247,
+    220,
+    221,
+    [
+     " bounded by the 64 MiB encoded-project file limit."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    221,
+    222
+   ],
+   [
+    "replace",
+    248,
+    250,
+    222,
+    224,
+    [
+     " Project size scaling proposal. The 64 MiB",
+     " limit remains unchanged unless an approved implementation increases it."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    224,
+    225
+   ],
+   [
+    "replace",
+    251,
+    253,
+    225,
+    227,
+    [
+     " measured engine benchmarks before choosing a Lobby",
+     " capacity."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    227,
+    228
+   ],
+   [
+    "replace",
+    254,
+    255,
+    228,
+    229,
+    [
+     " backup, or UI connection. The Go API and CLI have their own documented limits."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    262,
+    229,
+    236
+   ],
+   [
+    "replace",
+    262,
+    267,
+    236,
+    237,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    275,
+    237,
+    245
+   ],
+   [
+    "replace",
+    275,
+    278,
+    245,
+    248,
+    [
+     "See SDK guide, file format and Go API,",
+     "contributing and security. Rizzbase is",
+     "licensed under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
  }
 }

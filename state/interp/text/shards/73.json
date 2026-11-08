@@ -2783,5 +2783,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0b2bcce0c9fa": {
+  "identity": {
+   "one_liner": "React Native 的 Firebase 模块集合，以 JS 层桥接 iOS/Android 原生 SDK",
+   "review": "React Native Firebase 是一组连接 Firebase 服务的 React Native 模块，以 monorepo 形式维护，主入口为 @react-native-firebase/app。每个模块是轻量 JavaScript 层，桥接 iOS 与 Android 的原生 Firebase SDK，覆盖 Analytics、Auth、Firestore、Crashlytics、Cloud Messaging 等服务，接口设计对应 Firebase Web SDK。适用于在 React Native 应用中集成 Firebase 能力的开发者。",
+   "highlights": [
+    "模块测试覆盖率超过 95%，内置 TypeScript 类型支持",
+    "API 对应 Firebase Web SDK，可在 React Native 中作为其替代使用",
+    "包含 Analytics、Authentication、Cloud Firestore、Crashlytics、Cloud Messaging 等多个模块"
+   ],
+   "use_cases": [
+    "React Native 应用需要接入 Firebase 认证、数据库或推送通知等原生服务",
+    "跨 iOS 与 Android 平台复用 Firebase 相关代码",
+    "将使用 Firebase Web SDK 的跨端代码迁移到 React Native 环境"
+   ]
+  },
+  "sha": "0b2bcce0c9fa",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cd0a54e029c2": {
+  "identity": {
+   "one_liner": "以内嵌库形式运行于后端的关系型数据层，含实时同步与协作能力",
+   "review": "Jazz 是一个以库形式嵌入后端运行的数据层，提供表、blob、持久流、协作富文本及声明式权限，数据保存在所在部署平台的存储中，无需单独数据库服务器。支持浏览器、移动端在自有域名下实时查询同步，客户端可切换为本地优先模式并在设备上运行同一 Rust 引擎。当前为 2.0 alpha 版本，采用 MIT 许可证。",
+   "highlights": [
+    "作为服务端导入的库运行，模式与权限由部署代码定义，数据存储于所在平台的存储中",
+    "支持浏览器、移动端与后端客户端的实时查询同步，写入后查询结果保持更新",
+    "客户端可切换本地优先模式，在设备上运行同一 Rust 引擎并执行相同查询"
+   ],
+   "use_cases": [
+    "希望将数据层嵌入现有后端（Vercel、自有服务器等）而无需运行数据库服务的应用",
+    "需要浏览器/移动端组件内直接实时查询并自动同步更新的协作类应用",
+    "需要离线使用与即时读取的本地优先应用（Web、React Native）"
+   ]
+  },
+  "sha": "cd0a54e029c2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3495bc0b9d88": {
+  "identity": {
+   "one_liner": "Rust 嵌入式向量数据库，用热冷双层架构实现 ANN 检索",
+   "review": "SatoriDB 是一个用 Rust 编写的嵌入式向量数据库，通过 cargo add satoridb 以库形式引入，无需外部服务。它面向超出内存规模的数据集做 ANN 检索：内存中的量化 HNSW 索引负责将查询路由到候选桶，磁盘上的向量桶由绑核的 Glommio 工作线程借助 io_uring 并行扫描，并通过 k-means 聚类与后台再平衡维持桶大小。README 标注其仅支持 Linux（需 io_uring、内核 5.8+），并提供同步与异步两套 API，持久化由 Walrus 加 RocksDB 承担。",
+   "highlights": [
+    "双层检索架构：RAM 中标量量化（f32→u8）的 HNSW 路由索引在 O(log N) 内定位 top-K 桶，仅扫描候选桶而非全量数据",
+    "基于 Glommio 与 io_uring 的绑核共享无关（shared-nothing）工作线程，距离计算等路径使用 AVX2/AVX-512 SIMD 实现",
+    "向量经 k-means 分桶，桶超过阈值（默认 2000）时后台再平衡器自动分裂；fsync 频率可在每次写入到不同步之间配置"
+   ],
+   "use_cases": [
+    "需要将向量检索嵌入单进程应用、不引入外部服务的 Rust 项目",
+    "数据集规模超出内存、依赖磁盘存储的向量检索场景",
+    "LLM/RAG 流程中的嵌入向量存储与最近邻查询"
+   ]
+  },
+  "sha": "3495bc0b9d88",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

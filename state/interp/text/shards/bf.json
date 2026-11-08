@@ -2857,5 +2857,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8aa411e1a630": {
+  "identity": {
+   "one_liner": "内置 Redis Cluster 的 Docker 镜像，从源码构建 Redis 并自动组建集群。",
+   "review": "该项目提供从源码构建并自动组建 Redis Cluster 的 Docker 镜像，容器内运行 3 主 3 从共 6 个实例，端口 7000-7005。README 明确其定位为本机运行，用于演示、展示和开发用途，作者用它开发 redis-py-cluster 客户端；不适用于 Kubernetes 或生产/测试环境。镜像需 Docker 1.10 以上，支持通过环境变量调整节点数、初始端口、Sentinel 及绑定地址。",
+   "highlights": [
+    "容器内运行 6 个 Redis 实例（3 主 3 从，端口 7000-7005），可通过 INITIAL_PORT、MASTERS、SLAVES_PER_MASTER 等环境变量调整节点数",
+    "支持通过 -e SENTINEL=true 启用与主节点数量相同的 Sentinel 节点（端口 5000-5002）",
+    "提供 docker-hub 多版本预构建镜像（6.0/6.2/7.0/7.2 等小版本标签），并支持 --build-arg 构建任意 Redis 版本"
+   ],
+   "use_cases": [
+    "在本地机器快速启动 Redis 集群，用于演示和展示",
+    "开发与调试 Redis Cluster 客户端代码",
+    "通过环境变量配置不同节点数或启用 Sentinel 的本地测试环境"
+   ]
+  },
+  "sha": "8aa411e1a630",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

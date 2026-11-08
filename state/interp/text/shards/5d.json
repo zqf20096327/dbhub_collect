@@ -2535,5 +2535,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a931d6a55710": {
+  "identity": {
+   "one_liner": "开源向量数据库，核心以 C++ 实现并行图遍历向量索引",
+   "review": "Epsilla 是一个开源向量数据库，核心用 C++ 编写，采用并行图遍历技术做向量索引，README 称其在保持 99.9% 以上精度的同时检索速度较快。它提供数据库、表、字段等概念，向量仅作为一种字段类型。可通过 Docker 部署并用 Python 客户端或 REST API 访问；Python 直接嵌入库方式为实验性功能。",
+   "highlights": [
+    "支持嵌入向量的相似度搜索、元数据过滤以及稠密与稀疏向量融合的混合搜索",
+    "内置嵌入生成能力，提供自然语言输入输出的检索方式",
+    "提供 Python/JavaScript/Ruby 客户端与 REST API，并与 LangChain、LlamaIndex 集成"
+   ],
+   "use_cases": [
+    "为大语言模型应用提供向量存储与检索能力",
+    "需要对嵌入向量做元数据过滤或混合搜索的生产场景",
+    "作为 DBaaS 之外的自托管向量数据库部署"
+   ]
+  },
+  "sha": "a931d6a55710",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32835d2e5fdc": {
+  "identity": {
+   "one_liner": "基于 FastAPI 的非官方守望先锋数据 API，通过抓取暴雪页面提供英雄、地图与玩家数据",
+   "review": "OverFast API 是一个非官方的守望先锋数据 API，通过解析暴雪官方页面提供英雄、游戏模式、地图列表及玩家生涯数据。面向需要读取守望先锋数据的开发者，提供 Docker Compose 一键部署，公开实例带速率限制。其缓存层将响应封装为 SWR 信封存入 Valkey，由 nginx 直接判断新鲜度并返回，过期数据由 taskiq 后台 worker 异步刷新；玩家档案另持久化至 PostgreSQL。代码采用 DDD 分层，需自建 `.env` 并设置必填的 POSTGRES_PASSWORD。",
+   "highlights": [
+    "提供英雄、角色、游戏模式、地图列表与玩家生涯数据端点，数据源为暴雪官方页面解析",
+    "实现 Stale-While-Revalidate 缓存机制：nginx 依据 Valkey 中的 SWR 信封直接返回新鲜数据，过期数据由 taskiq worker 异步刷新",
+    "玩家生涯数据持久化于 PostgreSQL，任务队列基于 Valkey 列表实现，并通过 SET NX 去重；对 Blizzard 请求采用 TCP Slow Start + AIMD 限流"
+   ],
+   "use_cases": [
+    "需要以结构化 JSON 形式读取守望先锋英雄属性、地图和游戏模式信息的应用",
+    "查询并跟踪玩家生涯统计数据（时长转为秒、百分比转为整数）的工具或数据管道",
+    "自托管部署：通过 Docker Compose 运行私有实例以获得更高的请求吞吐"
+   ]
+  },
+  "sha": "32835d2e5fdc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

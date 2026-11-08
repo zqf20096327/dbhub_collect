@@ -3066,5 +3066,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ac355b8ebf79": {
+  "identity": {
+   "one_liner": "PostgreSQL 假想索引扩展，无需实际建索引即可验证查询计划",
+   "review": "HypoPG 是一个 PostgreSQL 扩展，用于创建假想（虚拟）索引——这类索引不占用 CPU、磁盘等资源。使用者通过 hypopg_create_index 提交 CREATE INDEX 语句，再运行不含 ANALYZE 的 EXPLAIN 查看优化器是否会使用该索引。假想索引仅存在于当前后端会话，不影响并发连接；仅支持 EXPLAIN（不带 ANALYZE），且不保存数据，升级时需删除后重建扩展。",
+   "highlights": [
+    "通过 hypopg_create_index 函数以常规 CREATE INDEX 语句创建不消耗资源的虚拟索引",
+    "支持 hypopg_list_indexes、hypopg()、hypopg_drop_index、hypopg_reset 等查看、管理与清除假想索引的功能",
+    "提供 hypopg_hide_index / hypopg_unhide_index / hypopg_unhide_all_indexes 用于在当前会话的 EXPLAIN 中隐藏或恢复已有真实索引"
+   ],
+   "use_cases": [
+    "在不实际创建索引、不消耗 CPU 和磁盘资源的前提下，验证特定索引能否改变问题查询的执行计划",
+    "数据库管理员在做索引调优前评估 PostgreSQL 优化器是否会选用候选索引",
+    "通过隐藏现有索引来观察查询计划在不同索引组合下的变化"
+   ]
+  },
+  "sha": "ac355b8ebf79",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d9cd34cd9ed": {
+  "identity": {
+   "one_liner": "按自治级别编目的 Data Agents 论文清单，配套综述",
+   "review": "该仓库是《A Survey of Data Agents》论文的配套资源清单，收录与数据代理（Data Agents）相关的论文与材料。它借鉴 SAE J3016 自动驾驶分级，提出 L0-L5 六级自治分类，并按自治级别和数据任务（数据管理、数据准备、数据分析）两重维度组织论文条目，每条附发表 venue 与年份。仓库另含 SIGMOD 2026 三小时教程的讲义链接。内容覆盖配置调优、查询优化、数据清洗、NL2SQL 等方向，收录时间跨度为 2022-2025 年。",
+   "highlights": [
+    "按 L0-L5 自治级别与数据任务（管理/准备/分析）两维度索引论文",
+    "收录配置调优、查询优化、数据清洗、集成、发现、NL2SQL、NL2VIS 等子方向文献",
+    "提供配套综述论文与 SIGMOD 2026 教程讲义的链接"
+   ],
+   "use_cases": [
+    "查找特定数据任务（如数据清洗、NL2SQL）方向的 LLM 相关论文",
+    "按自治级别定位数据代理研究的成熟度与已有工作",
+    "配合综述论文建立对数据代理领域的结构化认知"
+   ]
+  },
+  "sha": "1d9cd34cd9ed",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8daf9de30b50": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，以事实台账机制防止内容杜撰",
+   "review": "ResumeForge 是一个本地优先的求职材料工作台，覆盖从解析职位描述、匹配分析、简历生成到导出投递的流程。采用 FastAPI + React + SQLite，无需注册账号，数据留在本机。其核心机制是将事实与措辞分离管理：生成内容逐条比对 Profile 库，不符即触发防杜撰警告；含【待补】标记时导出被阻止。另提供求职进度跟踪、模拟面试等功能。",
+   "highlights": [
+    "提供事实台账机制：生成内容与 Profile 库逐条比对，名称不符触发防杜撰警告，含未填写标记的文档阻止导出",
+    "简历工作台提供排版参数、分页报告与 A4 精确预览三区联动，预览直接渲染导出 PDF",
+    "支持批量职位解析、逐个匹配分析、AI 职位对比（2-12 个）及后台任务，结果存入分析历史"
+   ],
+   "use_cases": [
+    "需要在本地管理多份 JD、简历版本与投递进度的求职者",
+    "希望控制 AI 生成内容中的事实准确性、避免虚构经历的简历撰写场景",
+    "需要将 Profile 库材料按不同计划（Plan）裁剪后生成简历或填写网页表单的场景"
+   ]
+  },
+  "sha": "8daf9de30b50",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b36abff1d9d2": {
+  "identity": {
+   "one_liner": "SurrealDB 的 JavaScript SDK，支持连接远程实例与内嵌引擎",
+   "review": "该仓库是 SurrealDB 官方 JavaScript SDK 的 monorepo，提供连接远程 SurrealDB 实例的客户端库（支持查询、实时订阅、会话），并附带 Node.js/Bun/Deno 与浏览器端的内嵌引擎包。开发要求 Bun 环境，支持 Deno、Node.js、Bun 及浏览器，内嵌引擎以 peer dependency 形式单独安装，允许使用者自选 SurrealDB 引擎版本。",
+   "highlights": [
+    "主包 `surrealdb` 提供连接、查询、实时订阅与会话功能",
+    "提供浏览器（mem://、indxdb://）与 Node.js/Bun/Deno 两类内嵌引擎包",
+    "支持 Deno、Node.js、Bun 与 Web 浏览器四种运行环境，兼容 TypeScript 5/6"
+   ],
+   "use_cases": [
+    "在 JavaScript/TypeScript 应用中连接并查询远程 SurrealDB 实例",
+    "在浏览器或 Node.js 进程中以内嵌方式运行 SurrealDB 引擎",
+    "基于 WebSocket 或 HTTP 协议的实时数据订阅场景"
+   ]
+  },
+  "sha": "b36abff1d9d2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "479ec74dd849": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 React 19 的后台管理系统基础框架，含 RBAC 与审批流。",
+   "review": "该项目是一个 monorepo 管理后台基础工程，提供用户/角色/菜单、行级数据权限、审批工作流、文件存储、AI 助手和开放 API 等模块，供团队在其上开发业务系统使用。前端为 React 19 + shadcn/ui，后端为 FastAPI + SQLAlchemy 异步，支持 PostgreSQL、SQL Server、MySQL 三种数据库切换。运行需 Node ≥ 22.13、Python ≥ 3.10、uv 和 Docker；移动端部分功能无自动化测试。",
+   "highlights": [
+    "RBAC 权限含行级数据范围，规则基于模型列配置，多标签页基于 React 19 <Activity> 保留状态",
+    "支持审批工作流（表单设计器、流程树、或签/会签、超时处理）及权限绑定的 AI 助手（pydantic-ai，写入操作需确认并留审计日志）",
+    "支持 PostgreSQL / SQL Server / MySQL 三种数据库，通过 DATABASE_TYPE 切换，共享同一迁移链"
+   ],
+   "use_cases": [
+    "需要登录、权限、组织结构、审批、文件等基础模块作为底座的新管理系统开发",
+    "需要在 PostgreSQL、SQL Server 或 MySQL 环境中部署的管理后台项目",
+    "需要 Web、桌面端（Electron）与移动端（Expo）共用同一 API 的多端场景"
+   ]
+  },
+  "sha": "479ec74dd849",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

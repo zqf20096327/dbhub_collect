@@ -2853,5 +2853,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2daa936b3a16": {
+  "identity": {
+   "one_liner": "Realm 移动数据库的 Kotlin SDK，基于 Kotlin Multiplatform 和 Android 平台。",
+   "review": "该仓库是 Realm 移动数据库的 Kotlin SDK 源码，运行于 Kotlin Multiplatform 与 Android 平台。数据模型采用面向对象定义（继承 RealmObject），通过 RealmConfiguration 打开数据库，提供查询、写入、更新、删除及基于 Flow 的数据变更观测。README 声明 Atlas Device Sync 及相关 SDK 已于 2024 年 9 月宣布弃用，不含同步功能的版本为 3.0.0+ 或 community 分支。依赖版本需符合兼容矩阵（Kotlin 2.0.20+ 等）。",
+   "highlights": [
+    "面向对象数据模型，通过继承 RealmObject 定义实体，无需 ORM",
+    "所有数据结构支持基于协程 Flow 的异步变更观测（Realm、RealmObject、RealmList、查询结果）",
+    "查询语言受 Apple NSPredicate 启发，支持通过 Flow 观测查询结果变化"
+   ],
+   "use_cases": [
+    "在 Android 或 Kotlin Multiplatform 应用中进行本地持久化存储",
+    "需要以 Flow 方式订阅数据对象或查询结果变更的界面更新场景",
+    "从 Realm Java 迁移或从 Realm Kotlin 早期 beta 版本升级的项目"
+   ]
+  },
+  "sha": "2daa936b3a16",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "320d70afaae6": {
+  "identity": {
+   "one_liner": "Go 实现的可嵌入分布式内存数据存储与缓存，兼容 RESP 协议。",
+   "review": "SugarDB 是用 Go 编写的分布式内存数据存储与缓存，既可作为 Go 库嵌入现有项目，也可作为独立服务运行。它提供 List、Set、Sorted Set、Hash 等数据结构，使用 RAFT 算法实现复制集群，支持 AOF 与快照持久化，并采用 RESP 协议，因此可搭配现有 Redis 客户端使用。Roadmap 中的 Sharding、Transactions 等功能尚未实现。",
+   "highlights": [
+    "支持嵌入式 Go 库与客户端-服务器两种运行模式，嵌入式实例可加入集群",
+    "使用 RAFT 算法实现复制集群，支持 AOF 与快照持久化",
+    "实现 ACL 认证授权、分布式 Pub/Sub、TLS/mTLS、Lua/JavaScript 等多种命令扩展方式"
+   ],
+   "use_cases": [
+    "Go 项目中通过 import 方式内嵌内存数据存储",
+    "需要容错复制集群的内存缓存场景",
+    "使用现有 Redis 客户端连接的客户端-服务器部署"
+   ]
+  },
+  "sha": "320d70afaae6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "129ce0265b2a": {
+  "identity": {
+   "one_liner": "面向 Neo4j 的 Java 对象-图映射（OGM）库，基于注解 POJO 与 Cypher。",
+   "review": "Neo4j-OGM 是 Neo4j 官方的 Java 对象-图映射库，用于将带注解的 POJO 领域对象（@NodeEntity、@Relationship）映射到图数据库，通过 SessionFactory/Session 执行 save/load 操作，针对基于服务器并使用 Cypher 的部署方式设计。适合在 Java 应用中持久化图数据的开发者。当前版本 5.0.11，测试默认用 TestContainers 和 neo4j:5 镜像；嵌入式驱动模块为 GPL v3，其余模块为 Apache 2.0。",
+   "highlights": [
+    "通过 @NodeEntity、@Relationship 等注解将 POJO 映射为图节点与关系，持久化时级联保存关联对象",
+    "提供 SessionFactory/Session API 进行实体的 save 与 load 操作，面向使用 Cypher 的服务器版 Neo4j",
+    "提供 Quarkus 扩展与 Spring Data Neo4j 5 的 fork 两种官方框架集成，支持 Maven/Gradle 引入"
+   ],
+   "use_cases": [
+    "Java 应用中以面向对象方式读写 Neo4j 图数据，避免手写 Cypher 映射逻辑",
+    "在 Quarkus 或 Spring（兼容 Spring Data Neo4j 5 API）项目中集成 Neo4j 持久层",
+    "需要通过属性文件或编程方式配置连接，并对领域实体进行级联持久化与加载的场景"
+   ]
+  },
+  "sha": "129ce0265b2a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d6ac8a3b07eb": {
+  "identity": {
+   "one_liner": "Google Firebase iOS 库的 Combine 封装，以响应式发布者处理回调。",
+   "review": "CombineFirebase 是 Firebase iOS SDK 的 Combine 封装，用发布者替代异步回调，覆盖 Database、Firestore、RemoteConfig、Storage、Auth、Functions 六个模块，各模块可单独以 CocoaPods 子pod 引入；SwiftPM 支持处于 beta 状态，需 Xcode 12+。要求 iOS/tvOS 13.0+、macOS 10.15+（Combine 的系统门槛）。适用于使用 Combine 的 SwiftUI/UIKit 项目。",
+   "highlights": [
+    "以 Combine 发布者封装 Firebase 异步回调，覆盖 Database、Firestore、RemoteConfig、Storage、Auth、Functions 六个子模块",
+    "支持 CocoaPods 按模块分 pod 安装，SwiftPM 安装处于 beta 状态",
+    "提供 Database 写入/事务、Firestore 批量写/事务/实时监听、Storage 上传下载、Auth 注册登录等用法示例"
+   ],
+   "use_cases": [
+    "使用 Combine 框架（SwiftUI 或响应式架构）并接入 Firebase 的 iOS/tvOS/macOS 应用",
+    "需要将 Firebase 回调代码迁移为声明式订阅链的项目",
+    "仅需 Firebase 部分模块（如 Firestore、Storage）并希望按子 pod 单独引入的场景"
+   ]
+  },
+  "sha": "d6ac8a3b07eb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

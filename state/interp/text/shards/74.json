@@ -2549,5 +2549,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2aa4a1b328ea": {
+  "identity": {
+   "one_liner": "Rust 编写的轻量级 schema-less 搜索后端，返回标识符的索引服务。",
+   "review": "Sonic 是一个用 Rust 实现的搜索后端，接收搜索文本与标识符元组并提供查询、自动补全与拼写纠正。它只索引词到 ID 的映射，不存储文档原文，需配合外部数据库使用；交互仅通过基于 TCP 的 Sonic Channel 协议，无 HTTP 接口。README 提及其在负载下查询响应处于微秒级、内存占用约 30MB。项目正处于 v2 重构期，master 分支仅接受 bug 修复。",
+   "highlights": [
+    "以集合和桶组织搜索词，支持运行中动态插入与删除索引条目，后台任务负责索引合并",
+    "支持基于词图的实时自动补全（suggest）与搜索词拼写纠正，兼容 80+ 种语言的 Unicode 文本并自动去停用词",
+    "通过 Sonic Channel TCP 协议进行搜索、数据摄取与管理操作，提供 NodeJS、Rust、PHP 官方客户端库"
+   ],
+   "use_cases": [
+    "需要微秒级响应、低内存占用的应用内搜索（README 提及 Crisp 平台用于搜索消息、会话、联系人、帮助文档等）",
+    "为最终用户搜索框构建实时词语建议功能",
+    "已有外部数据库、只需词索引返回对象 ID 再回源取数的场景"
+   ]
+  },
+  "sha": "2aa4a1b328ea",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c86e8a9bccee": {
+  "identity": {
+   "one_liner": "基于 Asp.Net Core 与 EF Core 的自托管实时数据库服务端",
+   "review": "SapphireDb 是运行在 Asp.Net Core 和 EF Core 之上的实时数据库服务端，为客户端生成通用 API 以实现数据实时同步。使用者需将 DbContext 改为继承 SapphireDbContext，并在 Startup.cs 中注册服务与更新管道。提供 RedisSync、HttpSync 服务端扩展包及 JS、Angular 客户端，采用 MIT 许可证。",
+   "highlights": [
+    "基于 EF Core DbContext 提供 CRUD 操作、模型验证、joins/includes 与服务器端复杂查询",
+    "包含授权、消息传递与离线支持能力",
+    "提供 SapphireDb.RedisSync、SapphireDb.HttpSync 扩展及 JS/NodeJs/React/Svelte/Angular 客户端包"
+   ],
+   "use_cases": [
+    "在自有 .Net 服务器上运行实时数据同步的应用后端",
+    "在 .Net 项目中通过 EF Core DbContext 生成供多客户端使用的实时数据 API",
+    "结合 React、Svelte、Angular、NodeJs 等客户端构建实时应用"
+   ]
+  },
+  "sha": "c86e8a9bccee",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b62aa39bc90c": {
+  "identity": {
+   "one_liner": "C++17 实现的 Raft 共识库及其分片 KV 存储系统",
+   "review": "eRaft 是一个 C++17 库，实现 Raft 共识算法，并在其上构建分片键值存储。包含 raft、kvraft、shardctrler、shardkv 四个模块，支持领导者选举、日志复制、快照持久化及跨组数据迁移。依赖 gRPC、Protobuf、RocksDB，通过 CMake 构建，README 未提供独立部署文档。",
+   "highlights": [
+    "提供 header-only 公共 API（include/raft/*.h）与 InMemPeer 内存传输用于单进程测试，gRPC 支持真实网络部署",
+    "raft 模块实现领导者选举、日志复制、快照与持久化；Persister 提供 readPersist()/persist() 崩溃恢复",
+    "shardkv 模块支持跨组数据迁移、垃圾回收与并发重配置，kvraft 提供客户端去重与线性一致语义"
+   ],
+   "use_cases": [
+    "需要 Raft 共识能力的 C++ 分布式系统开发",
+    "需要容错或分片键值存储的分布式存储场景",
+    "单进程内快速测试（InMemPeer）及基于 gRPC 的网络部署"
+   ]
+  },
+  "sha": "b62aa39bc90c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

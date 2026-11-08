@@ -2772,5 +2772,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ccb2702d4686": {
+  "identity": {
+   "one_liner": "以 Docker 容器抓取 Garmin 健康数据写入 InfluxDB，供 Grafana 长期可视化",
+   "review": "该项目提供 Docker 化的 Python 脚本，从 Garmin 服务器抓取心率、睡眠、压力、GPS 训练轨迹等健康指标，写入本地 InfluxDB，并通过自动预配置的 Grafana 面板展示长期趋势。支持定时自动同步与历史数据回填，适用于希望自托管、本地保存 Garmin 数据的用户。安装需 Linux 环境或 Windows 下的 WSL，凭据经 OAuth 令牌保存，中国区账户需设置 GARMINCONNECT_IS_CN。",
+   "highlights": [
+    "自动定时抓取心率、步数、睡眠（含 SpO2、HRV）、压力、Body Battery、卡路里及训练 GPS 轨迹等指标并写入 InfluxDB",
+    "支持历史数据回填（通过 MANUAL_START_DATE/MANUAL_END_DATE 环境变量指定日期范围）",
+    "附带自动预配置的 Grafana 面板（Garmin-Stats）及基于 StrengthExerciseSet 等测量值的力量训练专用面板"
+   ],
+   "use_cases": [
+    "自托管环境中长期保存并可视化 Garmin 健康数据",
+    "在 Grafana 中组合多指标面板、查看原始数据趋势或导出数据做进一步分析",
+    "力量训练者追踪各动作 1RM 进展、训练量与个人纪录"
+   ]
+  },
+  "sha": "ccb2702d4686",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7ee4af95aa64": {
+  "identity": {
+   "one_liner": "Scala 编写的 Neo4j 轻量级、类型安全、异步驱动，不绑定副作用实现",
+   "review": "neotypes 是面向 Neo4j 的 Scala 驱动，供 Scala 开发者在应用中读写图数据库。核心模块只依赖 Neo4j Java 驱动，generic 模块依赖 Shapeless；通过类型类在编译期派生 Scala 类型与数据库值之间的转换，避免 Scala 与 Java 类型来回转换。支持 Scala 2.13 与 3.3，以 SBT/Maven 依赖方式引入。",
+   "highlights": [
+    "支持标准 Scala 类型的直接读写，可通过类型类添加自定义类型支持",
+    "core 模块仅依赖 Neo4j Java 驱动，generic 模块仅依赖 Shapeless",
+    "通过附加模块支持 Future、cats-effect、ZIO、Monix 等副作用实现及 Akka/Pekko/fs2/ZIO/Monix 流"
+   ],
+   "use_cases": [
+    "在 Scala 2.13/3.3 项目中以类型安全方式访问 Neo4j 图数据库",
+    "使用 typelevel、ZIO、Monix 等效果系统并需要异步驱动集成",
+    "需要将查询结果以流形式处理（Akka Stream、fs2、ZStream 等）"
+   ]
+  },
+  "sha": "7ee4af95aa64",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

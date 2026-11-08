@@ -2706,5 +2706,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f3185fc5a125": {
+  "identity": {
+   "one_liner": "面向 Flutter 的异步 NoSQL 数据库，通过注解生成集合模式与查询。",
+   "review": "Isar 是为 Flutter 提供的 NoSQL 数据库，支持 iOS、Android 与桌面平台。开发者通过 @collection 注解标注 Dart 类，由 build_runner 生成模式代码后，使用 Isar.openAsync 打开数据库实例。提供 CRUD、基于索引的查询、JSON 支持与数据库观察者功能，并附带实时调试工具 Isar Inspector。README 提示当前 v4 尚未可用于生产，生产环境建议使用 v3。",
+   "highlights": [
+    "通过 @collection 注解与 build_runner 生成代码，提供静态类型的查询构建器",
+    "默认异步，支持并行查询与多 isolate；具备 ACID 语义",
+    "支持组合与多条目索引、全文检索、JSON、查询观察者，并提供 Isar Inspector 实时查看集合与数据"
+   ],
+   "use_cases": [
+    "Flutter 移动与桌面应用的本地数据持久化",
+    "需要在事务提交后监听集合、对象或查询变化的应用界面更新",
+    "单元测试或纯 Dart 项目中通过 initializeIsarCore 自动下载对应平台二进制后使用"
+   ]
+  },
+  "sha": "f3185fc5a125",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "988ae2a7179f": {
+  "identity": {
+   "one_liner": "游戏AI与数据挖掘领域的开放资源清单，收录数据集、API与工具",
+   "review": "该仓库是一个精选清单（awesome list），面向在数字游戏中从事人工智能或数据挖掘工作的开发者与研究者。内容按 API、人工智能平台、书籍、数据集等分类编排，收录约 25 个游戏数据 API、30 余个 AI 研究平台与竞赛环境，以及大量具体游戏数据集。仓库采用 CC-BY-4.0 许可，通过 issue 和 pull request 接受社区贡献，由 GitHub Workflow 持续检查。",
+   "highlights": [
+    "收录 Battle.net、Steam Web API、PokéAPI、OpenDota 等 25 个游戏数据 API 条目",
+    "包含 Malmo、microRTS、StarCraft AI Competition 等 30 余个 AI 研究平台与竞赛环境",
+    "数据集部分涵盖 CS:GO、League of Legends、Dota 2、宝可梦、桌游等多个游戏的对局、玩家与评论数据"
+   ],
+   "use_cases": [
+    "为游戏 AI 研究寻找可用的训练数据集或实验环境",
+    "为数据挖掘项目查找游戏对局、玩家行为或评论数据源",
+    "通过游戏官方或第三方 API 获取实时游戏数据"
+   ]
+  },
+  "sha": "988ae2a7179f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2fbce02682fb": {
+  "identity": {
+   "one_liner": "为 Deno 运行时开发的 MongoDB 数据库驱动，支持 Deno Deploy。",
+   "review": "deno_mongo 是面向 Deno 的 MongoDB 驱动，也可在 Deno Deploy 上运行。通过 deno.land 以 URL 方式导入，提供连接、集合访问、插入、查询、聚合、更新、替换、删除、游标及 GridFS 等接口。README 提示：Deno 已支持 npm 模块，官方 npm:mongodb 驱动功能覆盖更广；若需完整 MongoDB 特性可选用之。",
+   "highlights": [
+    "支持插入、查询、计数、聚合管道、更新、替换、删除等 MongoDB 操作，并提供游标 skip/limit 方法",
+    "包含 GridFS 实现，通过 openUploadStream 上传文件流",
+    "支持 Deno Deploy，且 README 说明 Deno 亦可使用 npm:mongodb 驱动作为替代"
+   ],
+   "use_cases": [
+    "在 Deno 或 Deno Deploy 应用中连接 MongoDB 进行基本 CRUD 与聚合操作",
+    "需要用 GridFS 上传/读取文件流的 Deno 项目",
+    "以 deno test -A 配合 Docker 本地 MongoDB（docker run mongo）进行驱动测试"
+   ]
+  },
+  "sha": "2fbce02682fb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "02a41f12abf5": {
+  "identity": {
+   "one_liner": "基于 node_redis 的轻量封装，为 Redis 客户端提供 async/await 与 Promise 支持。",
+   "review": "这是一个对 node_redis 库的轻量封装，面向 Node.js 开发者。它对 node_redis 的 API 几乎不做修改，仅为每个命令追加 Promise 的 resolve/reject 回调，从而支持 async/await 用法。安装通过 npm，MIT 协议发布；命令与配置说明需参考 node_redis 文档。",
+   "highlights": [
+    "通过 asyncRedis.createClient() 创建支持 Promise 的客户端",
+    "通过 decorate() 方法为已有的 node_redis 连接追加 Promise 支持",
+    "对 node_redis API 改动极小，仅为每个命令追加 resolve/reject 回调"
+   ],
+   "use_cases": [
+    "在 Node.js 项目中以 async/await 方式调用 Redis 命令",
+    "为已存在的 node_redis 连接添加 Promise 支持",
+    "沿用 node_redis 命令与配置，同时使用 Promise 风格 API"
+   ]
+  },
+  "sha": "02a41f12abf5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3e14030d2010": {
+  "identity": {
+   "one_liner": "开源自改进上下文框架，通过查询意图账本将重复查询固化为工具",
+   "review": "Skardi 是一个面向 AI agent 的数据查询框架：agent 通过统一 SQL 入口查询多种数据源，并在 ai_context 中声明查询目的；系统将每次查询写入 SQLite/Postgres 审计账本，重复出现的查询可被提升为命名 pipeline 或例程。项目处于 Beta 阶段，API 可能变动。",
+   "highlights": [
+    "提供联邦 SQL 查询能力，通过 ctx.yaml 声明数据源，支持 Postgres、S3 Parquet、MongoDB、Lance 等",
+    "以 SQLite/Postgres 账本记录每次查询及其 ai_context（purpose、session_id、task），账本按 (session_id, created_at) 索引",
+    "生成的 pipeline 以 YAML 形式落地，可同时以 shell、REST 和 MCP（stdio 与 HTTP 两种传输）方式调用"
+   ],
+   "use_cases": [
+    "为 AI agent 提供跨多数据源的统一查询入口",
+    "从查询记录中识别重复模式，将其转化为可复用的 pipeline 或定时例程",
+    "通过 auto-context 等技能将文档或数据存储转化为可检索的上下文服务"
+   ]
+  },
+  "sha": "3e14030d2010",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

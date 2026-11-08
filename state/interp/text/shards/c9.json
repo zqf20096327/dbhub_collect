@@ -2342,5 +2342,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "66f077e09f54": {
+  "identity": {
+   "one_liner": "在云平台上自动引导、监控、快照和恢复 etcd 集群的运维组件",
+   "review": "etcd-cloud-operator 用于替代 etcd 二进制运行，基于云提供商信息与集群自身状态自动处理 etcd 的配置与生命周期，涵盖集群扩缩、定期快照上传加密外部存储、少数成员故障恢复与仲裁丢失后的灾难重建。面向在 AWS 或 Kubernetes 上运行 etcd 的用户，通过 YAML 配置 TLS、ACL 与 JWT 认证。README 注明目前仅支持 AWS 和 Kubernetes 两种运行环境。",
+   "highlights": [
+    "从各成员定期对全键值空间做快照并上传至加密外部存储，可在任意集群或实例上恢复",
+    "少数成员故障时自动重启并重新加入集群，必要时以干净状态重新加入或替换整个实例；多数成员同时故障时可基于最新数据修订重建新集群",
+    "支持通过 YAML 配置客户端/对等 TLS 加密认证（可自动生成自签名证书）、init-acl 与 JWT 认证令牌"
+   ],
+   "use_cases": [
+    "在 AWS 上通过 Terraform 模块部署由该 operator 管理的 etcd 集群",
+    "在 Kubernetes 上通过 Helm chart 以 3 节点 StatefulSet 运行托管 etcd",
+    "本地通过 Docker 单行命令体验 3 节点部署"
+   ]
+  },
+  "sha": "66f077e09f54",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2553,5 +2553,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c3859e361fd7": {
+  "identity": {
+   "one_liner": "MongoDB 官方 Go 语言驱动，用于在 Go 程序中连接和操作 MongoDB。",
+   "review": "该仓库是 MongoDB 官方支持的 Go 驱动，当前为 v2 版本，通过 mongo.Client 提供连接、插入、查询等数据库操作，数据以 bson 类型编解码。要求 Go 1.25 及以上、MongoDB 4.4 及以上，遵循语义化版本，采用 Apache License 许可。适用于需要在 Go 应用中访问 MongoDB 的开发者，支持通过连接串参数启用 Snappy、Zlib、Zstd 网络压缩。",
+   "highlights": [
+    "支持通过 go get 安装 v2 模块，提供 mongo.Connect、Ping、InsertOne、游标查询等 API",
+    "支持 Snappy、Zlib、Zstd 三种网络压缩算法，可在连接串或 ClientOptions 中配置",
+    "提供bson.D 等类型用于文档编解码，查询可返回 Cursor 或 SingleResult"
+   ],
+   "use_cases": [
+    "在 Go 服务端或工具程序中读写 MongoDB 集合文档",
+    "需要客户端与服务器间网络压缩以减少带宽的部署",
+    "从驱动 1.x 迁移到 2.0 并参考官方迁移指南升级的项目"
+   ]
+  },
+  "sha": "c3859e361fd7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2d3f23a90d84": {
+  "identity": {
+   "one_liner": "本地运行的 MongoDB MCP 服务器，通过自然语言执行查询、聚合与性能分析",
+   "review": "MongoDB Lens 是一个实现 Model Context Protocol 的本地 MCP 服务器，供 Claude Desktop、Cursor 等客户端以自然语言操作 MongoDB 数据库。它提供约 40 个工具（查询、聚合、索引管理、事务、GridFS、地理查询等）、12 类资源与 14 个提示模板；删除类操作需两步确认，支持多连接别名切换与配置文件/环境变量覆盖。可通过 NPX、Docker Hub 或源码方式运行，Node.js 要求 >= v18.x。",
+   "highlights": [
+    "提供约 40 个 MCP 工具，覆盖查询、聚合管道、explain、索引、事务、GridFS、文本与地理查询",
+    "内置两步确认机制保护删除文档/集合/数据库等破坏性操作，并支持可配置的查询限制",
+    "支持多连接别名、自动重连、schema 推断缓存，可通过 ~/.mongodb-lens.jsonc 配置及 CONFIG_* 环境变量覆盖"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor 等 MCP 客户端中用自然语言查询和管理 MongoDB 数据",
+    "通过 explain-query、analyze-query-patterns 等工具分析查询执行计划与优化建议",
+    "用 sql-to-mongodb、aggregation-builder 等提示模板辅助编写聚合管道与数据库建模"
+   ]
+  },
+  "sha": "2d3f23a90d84",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f5822c8928c3": {
+  "identity": {
+   "one_liner": "基于 Dear ImGui 用 C++ 编写的跨平台数据库客户端",
+   "review": "DearSQL 是一个用 C++ 与 Dear ImGui 编写的跨平台数据库客户端，同一二进制可作 GUI、终端 TUI、MCP 服务器和 SQL 语言服务器运行。它支持 SQLite、PostgreSQL、MySQL、MongoDB、Redis 等多种数据源及 S3 存储，提供模式浏览、可编辑数据表格、SQL 编辑器与查询计划分析，并可将保存的连接（凭据加密）作为工具提供给 Claude Code、Codex 等 AI 编码代理，写操作需用户批准。",
+   "highlights": [
+    "支持 SQLite、DuckDB、PostgreSQL、MySQL、MariaDB、SQL Server、Oracle、MongoDB、Redis、Cassandra 及 S3 兼容对象存储",
+    "同一二进制提供四种运行模式：GUI（--tui 之外的桌面界面）、终端 TUI、MCP 服务器与 SQL 语言服务器（LSP）",
+    "提供模式浏览、可编辑数据表格、带补全和语法检查的 SQL 编辑器、图表、JSON 视图与查询计划警告（全表扫描、重复扫描、大排序、估算偏差）"
+   ],
+   "use_cases": [
+    "在 macOS、Linux（GTK4 + OpenGL）、Windows（DirectX 11）上浏览和查询多种数据库",
+    "将数据库工具通过 MCP 或命令行接入 Claude Code、Codex 等 AI 编码代理，由代理读取模式并执行经批准的查询",
+    "用 Explain/Analyze 检查查询计划，并通过 review_indexes 类工具查看缺失或冗余索引"
+   ]
+  },
+  "sha": "f5822c8928c3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab3330d022a1": {
+  "identity": {
+   "one_liner": "Kotlin 多平台封装的 Couchbase Lite 嵌入式 NoSQL 数据库库",
+   "review": "Kotbase 为 Couchbase Lite 嵌入式 JSON 文档数据库提供 Kotlin 多平台 API，覆盖 Android/JVM、iOS/macOS 原生平台（Linux/Windows 原生为实验性支持），API 与官方 Java/Android KTX SDK 对齐，可通过更换 import 包名迁移。发布于 Maven Central，社区版开源，企业版生产使用需 Couchbase 授权。",
+   "highlights": [
+    "提供 SQL++、键值、全文搜索与向量搜索查询，支持可观察的查询、文档、数据库和复制器",
+    "通过 Sync Gateway 或 Capella App Services 实现点对点与云到边数据同步",
+    "包含 KTX、Kermit 日志、AndroidX Paging 分页等扩展库，分社区版与企业版构件"
+   ],
+   "use_cases": [
+    "跨 Android、iOS、JVM 共享数据层代码的 Kotlin 多平台移动/桌面应用",
+    "需要与 Couchbase Server 或 Capella 进行云端到边缘数据同步的客户端场景",
+    "已有 Couchbase Lite Java SDK Kotlin 代码、希望迁移到多平台 API 的项目"
+   ]
+  },
+  "sha": "ab3330d022a1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

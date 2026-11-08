@@ -17998,5 +17998,2161 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "ab3a3cb44fc0+2": {
+  "fn": "apitap/apitap-lib",
+  "clean_ver": "2",
+  "raw_lines": 20,
+  "ops": [
+   [
+    "equal",
+    0,
+    20,
+    0,
+    20
+   ],
+   [
+    "replace",
+    20,
+    25,
+    20,
+    21,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    33,
+    21,
+    29
+   ],
+   [
+    "replace",
+    33,
+    38,
+    29,
+    30,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    49,
+    30,
+    41
+   ],
+   [
+    "replace",
+    49,
+    59,
+    41,
+    47,
+    [
+     "**Contents** — At a glance · Why apitap ·",
+     "Quick start · Connection URLs · The API ·",
+     "How a transfer runs · Incremental sync ·",
+     "Batch CDC · Cross-source SQL · Guarantees · Operating it ·",
+     "Performance, measured · Type mapping ·",
+     "Roadmap · Development"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    62,
+    47,
+    50
+   ],
+   [
+    "replace",
+    62,
+    63,
+    50,
+    51,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    51,
+    52
+   ],
+   [
+    "replace",
+    64,
+    73,
+    52,
+    61,
+    [
+     "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)|",
+     "|**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (REST catalogs with bearer auth)|",
+     "|**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "|**SQL**|`apitap.sql()` joins and aggregates tables of different databases (TPC-H Q3–Q10, Q12, Q14, Q18, Q19 across Postgres × MySQL) in apitap's own Rust engine, exact, in a 256 MB container; into a DataFrame, a destination, or an incremental view|",
+     "|**DataFrames**|`apitap.read()` → polars, pyarrow, duckdb, pandas through the Arrow C stream protocol, zero-copy, no pyarrow dependency|",
+     "|**Runtime**|CPython ≥ 3.9, one `abi3` wheel (`manylinux_x86_64`); the engine is Rust, nothing in the data path is Python|",
+     "|**Memory**|bounded by *pipes × buffers*, planned from the container's cgroup limits — never by table size; a 256 MB container moves 100 GB|",
+     "|**Version**|0.66.0 — pin exactly while pre-1.0 (`apitap==0.66.0`)|",
+     "|**License**|MIT|"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    87,
+    61,
+    75
+   ],
+   [
+    "replace",
+    87,
+    91,
+    75,
+    79,
+    [
+     " peak RSS 170.8 MB; the same table also completes inside a **44 MB** cap. On",
+     " three dedicated machines the same zero-config call takes **30.3 s** (~3.3 GB/s).",
+     " The tools we compared against were OOM-killed in ~21 s on the small box and had",
+     " landed zero rows when cut on the big one."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    79,
+    80
+   ],
+   [
+    "replace",
+    92,
+    94,
+    80,
+    82,
+    [
+     " Postgres → ClickHouse in **18.4 s** at a 119 MB peak; MySQL → ClickHouse in",
+     " **36.1 s** at 99 MB. walshadow and ingestr were OOM-killed in every leg."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    82,
+    83
+   ],
+   [
+    "replace",
+    95,
+    101,
+    83,
+    89,
+    [
+     " apitap **12 s**, ape-dts 22 s, ingestr 78 s, pipelinewise 227 s, all row-matched.",
+     " A **30-table group** in one slot sustains **1.90M changes/min** pure catch-up on",
+     " half a core, checksum-exact, under 200 MB. At fleet scale (180M changes from",
+     " four sharded Postgres into one ClickHouse, both movers capped at 6 CPU / 2 GB)",
+     " apitap verifies 400/400 tables in 125 s of apply work at ~3 µs of CPU per",
+     " change; PeerDB had not finished when the 30-minute cap fell."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    89,
+    90
+   ],
+   [
+    "replace",
+    102,
+    104,
+    90,
+    92,
+    [
+     " tying raw SQL run inside Postgres itself; polars/connectorx is OOM-killed on",
+     " that box and ADBC takes 45 s."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    123,
+    92,
+    111
+   ],
+   [
+    "replace",
+    123,
+    168,
+    111,
+    112,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    176,
+    112,
+    120
+   ],
+   [
+    "replace",
+    176,
+    177,
+    120,
+    121,
+    [
+     "|scheme|form|notes|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    121,
+    122
+   ],
+   [
+    "replace",
+    178,
+    188,
+    122,
+    132,
+    [
+     "|Postgres|`postgres://user:pass@host:5432/db?sslmode=verify-full`|`sslmode` = `disable` · `prefer` · `require` · `verify-full` (`verify-ca` is refused by name — it cannot be expressed safely). TLS is **required for any non-loopback host** by default since 0.62 (`sslmode=verify-full`, appending to a URL that says nothing); Unix sockets and loopback are untouched, and a set `PGSSLMODE` counts as your explicit choice. A cleartext or MD5 password request on a channel that is not `verify-full` is refused (`APITAP_ALLOW_INSECURE_AUTH=1` overrides). Unqualified table names mean `public.`|",
+     "|MySQL / MariaDB|`mysql://user:pass@host:3306/db?ssl-mode=verify_identity`|TLS is **required for any non-loopback host** since 0.55.1; `ssl-mode` = `disabled` (send in clear, on purpose) · `required` (encrypt, no verify) · `verify_identity` (default off-loopback; `verify_ca` is refused). Tables are `db.table`; the URL's database is the default|",
+     "|ClickHouse|`clickhouse://user:pass@host:8123/db` · `clickhouse+https://…:8443/db`|HTTP interface; `wait_end_of_query=1` so a failed INSERT is a failed run; `session_timezone=UTC`; every request pins `limit=0`, `offset=0` and `*_overflow_mode=throw`, so a source user needs `readonly=2` (not 1)|",
+     "|BigQuery|`bigquery://project/dataset?credentials=/path/key.json[&location=EU]`|service-account key; `GOOGLE_APPLICATION_CREDENTIALS` is the fallback. Bulk modes use the free load/copy-job path and work on sandbox projects; CDC needs billing (row-level DML)|",
+     "|GCS|`gcs://bucket[/prefix]?format=csv\\|parquet[&credentials=…]`|`csv` = one composed `.csv.gz` per table (atomic visibility); `parquet` = a directory of ZSTD parts|",
+     "|S3-compatible|`s3://bucket[/prefix]?format=parquet[&endpoint=…][&region=…][&access_key_id=…&secret_access_key=…][&session_token=…]`|`AWS_*` env vars are the fallback; an explicit `endpoint` means path-style (MinIO, R2, OVH/Scaleway/Hetzner); SigV4 signed by hand, no SDK|",
+     "|Iceberg|`iceberg://catalog-host[:port]/namespace?warehouse=…[&base=…][&token=…][&tls=0\\|1][&endpoint=…][&region=…][&access_key_id=…&secret_access_key=…]`|a REST catalog that takes a bearer `token` or none (Lakekeeper, Polaris, Nessie, R2 Data Catalog); not AWS Glue REST or S3 Tables, which need SigV4-signed catalog calls; a token is static, so one that expires mid-run fails the run (nothing is committed); format-version 2, single-level namespace, data on `s3://`|",
+     "|Google Sheets|`gsheets://<spreadsheet_id>?credentials=/path/key.json`|tabs are tables, row 1 the header, every column nullable text as displayed|",
+     "|GitHub files|`github://owner/repo[/dir]?ref=main`|`.csv` files are tables (RFC 4180, streamed); `GITHUB_TOKEN`/`GH_TOKEN` for private repos and the 5,000/h rate limit|",
+     "|GitHub API|`github+api://owner/repo`|`issues`, `pull_requests`, `commits`, `stargazers`, `releases`, `issue_comments`, `workflow_runs`, `branches`, `tags`, `labels` as typed tables plus a `raw` jsonb column; incremental where the API filters server-side|"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    203,
+    132,
+    147
+   ],
+   [
+    "replace",
+    203,
+    204,
+    147,
+    148,
+    [
+     "|option|applies to|meaning|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    148,
+    149
+   ],
+   [
+    "replace",
+    205,
+    216,
+    149,
+    160,
+    [
+     "|`table` / `tables` / `schema`|all|exactly one: a table (`schema.table` or bare), a list of tables, a `{table: mode}` dict (per-table modes; all `log_based` members share one slot), or every base table of a schema|",
+     "|`dest_table`|single table|destination name; defaults to `table`. Multi-table runs keep source names|",
+     "|`mode`|all|`replace` · `append` · `merge` · `log_based`|",
+     "|`cursor`|append/merge/read|integer or date/timestamp column; default = the integer primary key|",
+     "|`parallel`|bulk/read|concurrent range pipes; default auto from the cgroup's CPU **and** memory; an explicit value is never overridden|",
+     "|`chunk_bytes`|bulk|bytes coalesced per send, default 4 MiB (floor 64 KiB); the planner thins it to 2 MiB on memory-capped boxes|",
+     "|`durable`|Postgres dest|`False` loads through an UNLOGGED staging table (~30% less wall); the swapped-in table stays unlogged until `ALTER TABLE … SET LOGGED`|",
+     "|`engine`, `order_by`, `on_cluster`|ClickHouse dest|engine of the created table (any MergeTree family, Replicated included), its ORDER BY (default the cursor; the dedup key for Replacing engines), and `ON CLUSTER` DDL (requires a `Replicated*` engine). `append` into an existing table treats it as the authority and only checks engine family, arguments and ORDER BY agree|",
+     "|`partition_by`|ClickHouse, BigQuery changelog|a column name = monthly partitions on it (both engines), or a verbatim ClickHouse expression; a `{table: clause}` dict for multi-table runs; default monthly on `_apitap_at`|",
+     "|`changelog`|`log_based` into ClickHouse/BigQuery|`True` appends every change with `_apitap_op` (`I`/`U`/`D`/`T`, `B` for the bootstrap baseline), `_apitap_lsn`, `_apitap_seq`, `_apitap_at`, and derives a ` __current` view — nothing is ever updated or deleted|",
+     "|`slots`|`log_based`, many tables, Postgres|drain the group over N replication slots in parallel (cut deterministically from the sorted table list; changing N renames the slots and is refused until the old state is cleared)|"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    232,
+    160,
+    176
+   ],
+   [
+    "replace",
+    232,
+    233,
+    176,
+    177,
+    [
+     "|`Reader` method|what you get|"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    177,
+    178
+   ],
+   [
+    "replace",
+    234,
+    239,
+    178,
+    183,
+    [
+     "|`.to_polars()` · `.to_arrow()` · `.to_pandas()`|the whole table, built as one batch per pipe in Rust (fewest FFI crossings)|",
+     "|`.lazy()`|a polars LazyFrame over the stream; `.collect(engine=\"streaming\")` runs in constant memory; the query's column projection **and** a conservative subset of its filter (arithmetic, comparisons, AND/OR, string `=`) are pushed into the SQL|",
+     "|`.batches()`|small polars DataFrames, one per Arrow batch|",
+     "|`.to_parquet(path, compression=\"zstd\", row_group_bytes=None)`|table → Parquet file at constant memory; returns the row count|",
+     "|`__arrow_c_stream__`|`pl.DataFrame(reader)`, `pa.table(reader)`, DuckDB, pandas — zero-copy|"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    255,
+    183,
+    199
+   ],
+   [
+    "replace",
+    255,
+    256,
+    199,
+    200,
+    [
+     " row estimate. Everything that can fail on types fails here."
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    200,
+    201
+   ],
+   [
+    "replace",
+    257,
+    261,
+    201,
+    205,
+    [
+     " (`parallel × 6`, so stragglers balance); a PK-less Postgres table splits",
+     " by `ctid` page ranges (PG 14+ TID range scans); anything else streams as one",
+     " span. A `delta` predicate (append/merge) and the lazy plugin's pushed-down",
+     " filter ride inside every span statement."
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    205,
+    206
+   ],
+   [
+    "replace",
+    262,
+    263,
+    206,
+    207,
+    [
+     " that the source can produce for every column:"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    207,
+    208
+   ],
+   [
+    "replace",
+    264,
+    273,
+    208,
+    217,
+    [
+     "|route|how bytes move|",
+     "|---|---|",
+     "|Postgres → Postgres|raw binary `COPY` passthrough: no row decode at all, like `psql \\|psql` without the shell|",
+     "|Postgres → ClickHouse|binary `COPY` transcoded in flight to `RowBinary` (byte swaps, epoch rebasing, exact `numeric → Decimal`); TSV only for types RowBinary cannot carry|",
+     "|Postgres → MySQL|binary `COPY` rendered in flight as `LOAD DATA` text (exact `numeric` to `DECIMAL(65,30)`, `bytea` as HEX)|",
+     "|Postgres → BigQuery / GCS / S3 / Iceberg|binary `COPY` → typed Parquet column chunks (ZSTD-1), no `arrow` dependency; small cores take the CSV+gzip lane into BigQuery|",
+     "|MySQL → ClickHouse / Postgres / MySQL|binary-protocol rows read by apitap's own MySQL wire client and encoded straight into RowBinary / binary `COPY` / `LOAD DATA` text — one dispatch and at most one copy per cell|",
+     "|ClickHouse → ClickHouse|`RowBinary` relayed untouched, every column cast server-side to the exact destination type so the bytes are correct by construction|",
+     "|Sheets / GitHub → any|text rows framed into the destination's format|"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    275,
+    217,
+    219
+   ],
+   [
+    "replace",
+    275,
+    277,
+    219,
+    221,
+    [
+     " identity is created; it mirrors the source DDL on same-engine routes and",
+     " maps types losslessly otherwise."
+    ]
+   ],
+   [
+    "equal",
+    277,
+    278,
+    221,
+    222
+   ],
+   [
+    "replace",
+    278,
+    281,
+    222,
+    225,
+    [
+     " destination loader (one `COPY`, one HTTP `INSERT`, one `LOAD DATA`, one",
+     " resumable upload…), coalescing to `chunk_bytes` and recycling its buffers.",
+     " A failed pipe cancels its siblings before anything is swept."
+    ]
+   ],
+   [
+    "equal",
+    281,
+    282,
+    225,
+    226
+   ],
+   [
+    "replace",
+    282,
+    286,
+    226,
+    230,
+    [
+     " then `DROP` + `RENAME` (Postgres, one transaction), `EXCHANGE TABLES`",
+     " (ClickHouse), `RENAME TABLE` (MySQL), a copy job (BigQuery), a snapshot",
+     " commit (Iceberg), or a server-side copy of parts (GCS/S3). A 0-row source",
+     " never touches an existing table."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    313,
+    230,
+    257
+   ],
+   [
+    "replace",
+    313,
+    320,
+    257,
+    264,
+    [
+     " destination (`dest_table, source_id, cursor_col, watermark, mode, last_rows,",
+     " synced_at`), written in the same transaction as the data on Postgres; on",
+     " Iceberg it is a table property committed in the same snapshot. On",
+     " ClickHouse, MySQL and BigQuery (no cross-statement transaction) the next run",
+     " takes the *greatest* of the state row and `max(cursor)` in the data — a crash",
+     " between the two costs a bounded re-read, never a skip. BigQuery's state table",
+     " is append-only (no DML on sandbox projects); readers take the newest row."
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    264,
+    265
+   ],
+   [
+    "replace",
+    321,
+    323,
+    265,
+    267,
+    [
+     " watermark, so `TRUNCATE` is a legitimate resync. `replace` clears every",
+     " source's state for the table."
+    ]
+   ],
+   [
+    "equal",
+    323,
+    324,
+    267,
+    268
+   ],
+   [
+    "replace",
+    324,
+    327,
+    268,
+    271,
+    [
+     " or concurrently written tables use `merge` with an `updated_at` cursor, or",
+     " CDC. A state row written by a different cursor, or by a CDC drain (whose",
+     " watermark is an LSN), is **refused**, never silently reinterpreted."
+    ]
+   ],
+   [
+    "equal",
+    327,
+    328,
+    271,
+    272
+   ],
+   [
+    "replace",
+    328,
+    329,
+    272,
+    273,
+    [
+     " supported: each (table, source) has its own watermark."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    370,
+    273,
+    314
+   ],
+   [
+    "replace",
+    370,
+    371,
+    314,
+    315,
+    [
+     "|destination|shape|notes|"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    372,
+    315,
+    316
+   ],
+   [
+    "replace",
+    372,
+    377,
+    316,
+    321,
+    [
+     "|Postgres|temp tables + `COPY` + `DELETE USING` + `INSERT SELECT`, one tx per table-window|a destination FK pointing into the group is refused at admission; a PK is added after bootstrap|",
+     "|ClickHouse|MergeTree family; lightweight `DELETE` (patch parts on 25.7+)|`Replicated*` and `ON CLUSTER` tables are refused for CDC unless `APITAP_CH_CDC_ALLOW_REPLICATED=1` **and** the URL names one node; `changelog=True` makes a window one `INSERT` and never mutates a part|",
+     "|MySQL|`TEMPORARY` tables + `LOAD DATA LOCAL` + `DELETE … JOIN` + `INSERT SELECT`, one tx|GTID-enforced destinations work|",
+     "|BigQuery|all-STRING staging table + one `MERGE` per table inside a fenced transaction|needs a **billed** project (DML); `changelog=True` replaces the ~7 s MERGE floor with a load job plus one `INSERT … SELECT`|",
+     "|Iceberg|data file + equality-delete file + watermark properties in **one** snapshot|single-column integer/text/uuid key, unpartitioned tables, format v2; Iceberg drains are the one destination the concurrency guard does not cover|"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    402,
+    321,
+    346
+   ],
+   [
+    "replace",
+    402,
+    403,
+    346,
+    347,
+    [
+     "` __current` stays correct); row stores and Iceberg refuse it."
+    ]
+   ],
+   [
+    "equal",
+    403,
+    422,
+    347,
+    366
+   ],
+   [
+    "replace",
+    422,
+    423,
+    366,
+    367,
+    [
+     "|piece|supported|"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    424,
+    367,
+    368
+   ],
+   [
+    "replace",
+    424,
+    430,
+    368,
+    374,
+    [
+     "|joins|`INNER JOIN … ON a.k = b.k` or the comma form with the equalities in `WHERE`|",
+     "|`WHERE`|per-table conditions (comparisons, `BETWEEN`, `IN`, `LIKE`, `IS NULL`, `AND`/`OR`/`NOT`, date literals, folded constants) are pushed to that table's server; an `OR` across tables (TPC-H Q19) is checked here per matched row, its single-table parts implied to each server too|",
+     "|subqueries|`IN` / `EXISTS` / `NOT IN` / `NOT EXISTS (SELECT …)`, including `IN (SELECT k … GROUP BY k HAVING SUM/COUNT/AVG(…) > x)` (TPC-H Q18)|",
+     "|expressions|arithmetic in aggregates, `CASE WHEN … THEN … END` over one table, `EXTRACT(YEAR FROM col)`, derived tables `FROM (SELECT … ) AS t` without GROUP BY|",
+     "|aggregates|`SUM`, `COUNT(*)`, `COUNT(col)`, `MIN`, `MAX`, `AVG`; decimals exact (i128, digit for digit), integer overflow widened, floats f64|",
+     "|result|`GROUP BY` (columns of any joined table), `ORDER BY` (exact for decimals), `LIMIT`|"
+    ]
+   ],
+   [
+    "equal",
+    430,
+    473,
+    374,
+    417
+   ],
+   [
+    "replace",
+    473,
+    474,
+    417,
+    418,
+    [
+     "|query|wall|peak|floor||query|wall|peak|floor|"
+    ]
+   ],
+   [
+    "equal",
+    474,
+    475,
+    418,
+    419
+   ],
+   [
+    "replace",
+    475,
+    481,
+    419,
+    425,
+    [
+     "|Q3|41.2 s|175 MB|20.3 s||Q9|72.8 s|191 MB|48.1 s|",
+     "|Q4|14.7 s|126 MB|11.8 s||Q10|24.8 s|206 MB|14.0 s|",
+     "|Q5|29.9 s|138 MB|26.3 s||Q12|13.1 s|106 MB|16.3 s|",
+     "|Q6|3.4 s|51 MB|3.0 s||Q14|12.3 s|160 MB|5.6 s|",
+     "|Q7|25.6 s|165 MB|18.3 s||Q18|57.5 s|222 MB|37.9 s|",
+     "|Q8|35.6 s|140 MB|28.7 s||Q19|11.8 s|52 MB|8.3 s|"
+    ]
+   ],
+   [
+    "equal",
+    481,
+    498,
+    425,
+    442
+   ],
+   [
+    "replace",
+    498,
+    501,
+    442,
+    445,
+    [
+     " operation; readers never see a partial table and a mid-run failure leaves",
+     " the previous table untouched. **0-row guard:** an empty source never wipes a",
+     " destination."
+    ]
+   ],
+   [
+    "equal",
+    501,
+    502,
+    445,
+    446
+   ],
+   [
+    "replace",
+    502,
+    507,
+    446,
+    451,
+    [
+     " (exact `NUMERIC` up to `DECIMAL(65)`, `BIGINT UNSIGNED` → `numeric(20,0)`,",
+     " UTC-normalized timestamps, `jsonb` round trips); a value a destination",
+     " cannot hold — `NaN` into MySQL, `infinity` dates, a year outside MySQL's",
+     " range — fails the run instead of being coerced. The 15-column benchmark",
+     " schema is asserted byte-faithful, values and column types, in the test suite."
+    ]
+   ],
+   [
+    "equal",
+    507,
+    508,
+    451,
+    452
+   ],
+   [
+    "replace",
+    508,
+    520,
+    452,
+    464,
+    [
+     " source, nonce) is part of every staging name, so a run can only publish what",
+     " it minted; a second run is refused at `prepare` with `LockedError` naming",
+     " the run that holds the table. A run announces itself *before* it looks, so",
+     " two runs starting in the same instant cannot both proceed (when each sees",
+     " the other, both fail loudly with nothing written). Drains are guarded the",
+     " same way against bulk runs and against each other, across versions since",
+     " 0.55.1. A drain renews a **lease** while it runs and every write it makes is",
+     " conditional on that lease, so a drain killed outright stops blocking its",
+     " table once the lease lapses (`APITAP_LEASE_TTL_SECS`, 300 s) and the next",
+     " run resumes from the watermark; a killed *bulk* run's staging holds data and",
+     " must be dropped by hand — the error names it, and nothing collects it on a",
+     " guess."
+    ]
+   ],
+   [
+    "equal",
+    520,
+    521,
+    464,
+    465
+   ],
+   [
+    "replace",
+    521,
+    529,
+    465,
+    473,
+    [
+     " buffer cap, a half-open replication socket (TCP keepalive plus a 120 s",
+     " silence budget, `APITAP_REPLICATION_SILENCE_SECS`), a lost slot, a foreign",
+     " key into a CDC group, a non-UTF-8 MySQL column, a `REPLICA IDENTITY NOTHING`",
+     " table, a cursor or lane mismatch in `_apitap_state`, an ambiguous Iceberg",
+     " commit (settled by the client-chosen snapshot id, never assumed failed) —",
+     " each is a named error before or instead of a wrong write. One source feeding",
+     " two destinations gets two slots, because slot names carry the destination's",
+     " identity."
+    ]
+   ],
+   [
+    "equal",
+    529,
+    530,
+    473,
+    474
+   ],
+   [
+    "replace",
+    530,
+    535,
+    474,
+    479,
+    [
+     " Postgres auth refused off a verified channel; credentials only in the",
+     " `Authorization` header, never in a URL or a log line; a `Link` header that",
+     " leaves the GitHub API host is not followed; every wire decoder is run",
+     " against mutated and truncated input in the test suite, and lengths a peer",
+     " chooses are capped before they become allocations."
+    ]
+   ],
+   [
+    "equal",
+    535,
+    536,
+    479,
+    480
+   ],
+   [
+    "replace",
+    536,
+    541,
+    480,
+    485,
+    [
+     " Airflow and systemd send — as a request to land the window in flight,",
+     " advance the watermark and exit 0, and chains to any handler your process",
+     " installed; a second SIGTERM is not absorbed. Bulk runs and a CDC table's",
+     " first (bootstrap) run stay killable, since a half-done bulk load has nothing",
+     " worth keeping."
+    ]
+   ],
+   [
+    "equal",
+    541,
+    574,
+    485,
+    518
+   ],
+   [
+    "replace",
+    574,
+    575,
+    518,
+    519,
+    [
+     "|variable|default|effect|"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    576,
+    519,
+    520
+   ],
+   [
+    "replace",
+    576,
+    599,
+    520,
+    543,
+    [
+     "|`APITAP_PROGRESS` / `APITAP_PROGRESS_INTERVAL`|auto · 2 s / 30 s|`0` silences, `json` structures; the cadence in seconds|",
+     "|`APITAP_MEM_BUDGET`|the cgroup limit|plan pipes, batches and windows against a smaller number in a shared container (`200M`, `1G`)|",
+     "|`APITAP_GRACEFUL_STOP`|`1`|`0` = die on the first SIGTERM instead of landing the window|",
+     "|`APITAP_LEASE_TTL_SECS`|`300` (30–3600)|how long a drain's claim outlives its last renewal|",
+     "|`APITAP_CDC_WINDOW_BYTES`|auto (≤ 24 MiB)|bytes buffered per CDC window; 32 MiB is the measured best at 256 MB|",
+     "|`APITAP_WINDOW_MAX_SECS`|`3600`|wall-clock cap on one window|",
+     "|`APITAP_TX_BUF_BYTES`|256 MiB|the one-transaction buffer cap behind the refusal|",
+     "|`APITAP_REPLICATION_SILENCE_SECS`|`120`|silence budget on the replication socket (lower only)|",
+     "|`APITAP_READ_COALESCE_US`|`5000` (µs)|how long the plain-TCP replication reader may wait for its window to fill before one `recvfrom` — epoll wakes on the first arrival, so each read otherwise carried ~5 KB; the 5 ms knee measured −6% CPU/change (the 0.59.0 `APITAP_READ_LOWAT` receive watermark was reverted: ET epoll parked the reader past `wal_sender_timeout`); a read that already has data is never delayed, so keepalives still flow; `0`/`off` disables (the A/B control)|",
+     "|`APITAP_DECODE_WORKMEM`|server value|per-session `logical_decoding_work_mem`, ≤ 256 MiB|",
+     "|`APITAP_CDC_APPLY_LANES`|auto (ClickHouse `min((mem−96 MiB)/20 MiB, 16·cores)` clamped 1–16; BigQuery ≤ 8; Postgres/MySQL 1)|concurrent table applies per window|",
+     "|`APITAP_CH_MAX_BODY`|one request per pipe|cap each ClickHouse request body (`512K`, `64M`) for a proxy with a body limit|",
+     "|`APITAP_CH_CDC_ALLOW_REPLICATED`|unset|allow CDC into a `Replicated*` table when the URL names a single node|",
+     "|`APITAP_HTTP_CONNECT_TIMEOUT` / `APITAP_HTTP_READ_TIMEOUT`|`15` s / off|connect deadline; the read timeout is a *total* request deadline and stays off because a long load sends nothing until it is done — TCP keepalive detects dead peers instead|",
+     "|`APITAP_ALLOW_INSECURE_AUTH`|`0`|accept a cleartext/MD5 password request on an unverified Postgres channel|",
+     "|`APITAP_SLOT_WAL_WARN`|`4G`|retained-WAL threshold for the warning|",
+     "|`APITAP_PG_BINARY`|auto|binary `pgoutput`: on by default for ClickHouse lanes whose every column type has a binary renderer (else text); `1` forces on, `0` forces off|",
+     "|`APITAP_STATE_DIR`|`~/.apitap/views`|where `apitap.sql(mode=\"log_based\")` keeps each view's state|",
+     "|`APITAP_SQL_BUILD_BYTES`|40% of the memory limit|the bytes an `apitap.sql()` key map may hold before the join splits into key-range passes|",
+     "|`APITAP_SQL_SNAPSHOT`|`1`|`0` = each `apitap.sql()` statement in its own snapshot (rows an UPDATE moves mid-query can be lost)|",
+     "|`APITAP_SQL_KEY_FILTER` / `APITAP_SQL_PUSH_ARGS`|`0`|opt-in work on the source: a key bitmap filter / the aggregate argument computed by Postgres|",
+     "|`APITAP_SQL_VIEW_PG_AGG`|`0`|`1` lets an incremental view's first run aggregate the non-GROUP BY Postgres side on its server|",
+     "|`APITAP_DEBUG`|off|per-phase timings on stderr|"
+    ]
+   ],
+   [
+    "equal",
+    599,
+    610,
+    543,
+    554
+   ],
+   [
+    "replace",
+    610,
+    611,
+    554,
+    555,
+    [
+     "|you see|why|do|"
+    ]
+   ],
+   [
+    "equal",
+    611,
+    612,
+    555,
+    556
+   ],
+   [
+    "replace",
+    612,
+    625,
+    556,
+    569,
+    [
+     "|`invalid port number`, or a connect error naming a host you never typed|a password with `@ / ? # : [ ]` is being read as URL syntax|`quote(password, safe='')` before building the URL|",
+     "|`mysql source connect TLS: server does not support TLS`|TLS is required off-loopback and the server has none|add `?ssl-mode=disabled` to send in clear on purpose, or enable TLS|",
+     "|`sslmode=verify-ca is not implemented`|chain-only verification cannot be expressed safely|use `verify-full` or `require`|",
+     "|`postgres source connect TLS: server does not support TLS`, or a certificate error naming a private CA|TLS is required off-loopback by default and the server has none / a CA rustls's roots do not carry|set `?sslmode=require` (encrypt, no verify) or `?sslmode=disable` (clear, on purpose) in the URL, or point `sslrootcert=/path/ca.crt` at its CA|",
+     "|ClickHouse `413 Payload Too Large`|a proxy (nginx) caps request bodies|`APITAP_CH_MAX_BODY=512K` (bulk: also `chunk_bytes=256*1024`)|",
+     "|`log_based: … Replicated… refused`|CDC into a replicated/cluster table would apply on one replica|point at one node and set `APITAP_CH_CDC_ALLOW_REPLICATED=1`, or use a non-replicated table|",
+     "|`locked: another apitap run is already loading this table`|a live peer, or a dead one's leftovers|wait; a dead drain clears itself after the lease TTL; a dead bulk run's object is named in the message — drop it once|",
+     "|`wal_status = lost` / `binlog … purged`|the schedule paused past the source's retention|clear the table's `_apitap_state` rows (both `t` and `schema.t` spellings) and re-run: it re-bootstraps|",
+     "|`one transaction … exceeds the cap`|a source transaction bigger than the buffer|split the writer's transaction, or raise `APITAP_TX_BUF_BYTES` within the box|",
+     "|`state row tracks cursor 'x'` / `is CDC-managed`|the table is owned by another lane or cursor|keep that lane, or clear the state rows to hand it over|",
+     "|`column 'c' is in the WAL but not in the … target`|the source gained a column|`mode=\"replace\"` once to realign, then resume|",
+     "|`string column … charset latin1`|non-UTF-8 text cannot round-trip through the CDC lane|convert the column to `utf8mb4`|",
+     "|BigQuery CDC fails on DML|sandbox (no-billing) project|CDC into BigQuery needs billing; bulk modes work on sandbox|"
+    ]
+   ],
+   [
+    "equal",
+    625,
+    637,
+    569,
+    581
+   ],
+   [
+    "replace",
+    637,
+    638,
+    581,
+    582,
+    [
+     "|route|apitap|ingestr 1.0.75|dlt default|dlt + pyarrow|"
+    ]
+   ],
+   [
+    "equal",
+    638,
+    639,
+    582,
+    583
+   ],
+   [
+    "replace",
+    639,
+    645,
+    583,
+    589,
+    [
+     "|Postgres → Postgres|**20.2 s**|500 s|2,604 s|708 s|",
+     "|Postgres → ClickHouse|**9.9 s**|111 s|1,893 s|360 s|",
+     "|MySQL → ClickHouse|**10.4 s**|97 s|2,231 s|failed (type inference)|",
+     "|MySQL → Postgres|**22.5 s**|481 s|2,899 s|failed (type inference)|",
+     "|Postgres → MySQL|**64.3 s**|366 s|329.7 s at 1M (52×)|181.5 s at 1M (28×)|",
+     "|Postgres → BigQuery|**28.4 s**|860 s|2,160 s|—|"
+    ]
+   ],
+   [
+    "equal",
+    645,
+    654,
+    589,
+    598
+   ],
+   [
+    "replace",
+    654,
+    655,
+    598,
+    599,
+    [
+     "|job|apitap|the other tool|"
+    ]
+   ],
+   [
+    "equal",
+    655,
+    656,
+    599,
+    600
+   ],
+   [
+    "replace",
+    656,
+    662,
+    600,
+    606,
+    [
+     "|Postgres → ClickHouse, 10 × 1M rows, one call|**18.4 s**, 119 MB peak, 30/30 MATCH|walshadow 0.1.2: OOM-killed 6/6 legs (needs ~550 MB; lands all ten at 1 GB in ~125 s)|",
+     "|MySQL → ClickHouse, 10 × 1M rows, one call|**36.1 s**, 99 MB peak, 30/30 MATCH|ingestr 1.1.61: OOM-killed 6/6 legs, 0 rows|",
+     "|Postgres → ClickHouse **CDC**, 30 tables, 30M-row bootstrap|**63.8 s**, 105 MB peak, 60/60 MATCH; then 2.97M changes at a flat 65.6 MB|walshadow: OOM-killed 8/8 legs, ≤ 70,656 rows|",
+     "|MySQL → ClickHouse **CDC**, 30 tables, 30M-row bootstrap|**106.2 s**, 119 MB peak, 60/60 MATCH; then 2.97M changes at a flat 55.5 MB|ingestr: refuses ClickHouse as a CDC destination|",
+     "|Postgres → ClickHouse, 5M rows, apitap.dev/lab rig|**25.6 s** (29.1 s at 1 GB / 2 vCPU — fewer pipes, less insert contention)|ingestr 1.1.1 201 s; dlt 1.29 + pyarrow OOM-killed|",
+     "|TPC-H, 10 tables × 1M / × 5M, Postgres → Postgres, one `schema=` call|**33 s / 168 s**, **52–53 MB** peak, 10/10|dlt OOM-killed in 7–14 s; ingestr (10 sequential invocations) 327 s / 1,238 s|"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    673,
+    606,
+    617
+   ],
+   [
+    "replace",
+    673,
+    674,
+    617,
+    618,
+    [
+     "|shape|result|"
+    ]
+   ],
+   [
+    "equal",
+    674,
+    675,
+    618,
+    619
+   ],
+   [
+    "replace",
+    675,
+    684,
+    619,
+    628,
+    [
+     "|650K-event window, Postgres → Postgres, every tool at 0.5 vCPU / 256 MB|**apitap 12 s** · ape-dts 22 s · ingestr 78 s · pipelinewise 227 s; apitap's 12 s is the same on a 16-core box|",
+     "|650K-event backlog, MySQL → ClickHouse|**15.6 s**; ape-dts had not converged at 900 s|",
+     "|10 tables, 40M changes per source, 80M total|MySQL binlog **84K changes/s** (5 cols, updates) to **135K/s** (inserts); Postgres WAL **51K/s** (5 cols) to **34K/s** (15 wide cols) — the wide-row figure is 92% of what `pg_recvlogical` manages in the same cage just receiving the stream|",
+     "|`changelog=True` vs replica|free on the Postgres lane; **+34%** on MySQL (**113.8K/s**)|",
+     "|30 tables in one group, 15 columns, 0.5 CPU|**31,679 changes/s = 1.90M/min** pure catch-up (15.35 µs of client CPU per change, 163 MB, 30/30); ~**1.50M/min** paced by a 35K/s writer. Flat above 1 CPU: a single-threaded drain and one `walsender` are the ceiling the 3M/min design removes|",
+     "|1 table, 0.59.0 wheel|kept up with a **2.19M/min** writer for 150 s at **0.40 core**, 101 MB peak, digest matched|",
+     "|100 tables, 100M changes, 1 core|`slots=4`: **278,947 changes/s** (2.29× one slot)|",
+     "|180M changes, 4 sharded Postgres → 1 ClickHouse, both movers at 6 CPU / 2 GB|apitap **125 s** of apply work, 400/400 tables verified, ~3 µs CPU/change; PeerDB (its own best configuration) DNF at ~89% when the 30-minute cap fell, ~47 µs/change, 5.9 of 6 cores pegged (n=1 per leg)|",
+     "|the stress question: 1M changed rows per table per minute × 30 tables at 0.5 CPU|**no** — the slot was lost before a change committed, and the refusal said so|"
+    ]
+   ],
+   [
+    "equal",
+    684,
+    718,
+    628,
+    662
+   ],
+   [
+    "replace",
+    718,
+    719,
+    662,
+    663,
+    [
+     "|Postgres|ClickHouse|MySQL|BigQuery|Iceberg / Parquet|"
+    ]
+   ],
+   [
+    "equal",
+    719,
+    720,
+    663,
+    664
+   ],
+   [
+    "replace",
+    720,
+    731,
+    664,
+    675,
+    [
+     "|`int2` · `int4` · `int8`|`Int16` · `Int32` · `Int64`|`SMALLINT` · `INT` · `BIGINT`|`INT64`|`long`|",
+     "|`float4` · `float8`|`Float32` · `Float64`|`FLOAT` · `DOUBLE`|`FLOAT64`|`float` · `double`|",
+     "|`numeric(p,s)`, p ≤ 38|`Decimal(p,s)`|`DECIMAL(p,s)` (≤ 65,30)|`NUMERIC` / `BIGNUMERIC`|`decimal(p,s)`|",
+     "|`numeric` unconstrained|`Float64`|`DOUBLE` (range-checked)|`BIGNUMERIC`, exact (FLOAT64 before 0.65.0)|text lane|",
+     "|`bool`|`UInt8`|`TINYINT(1)`|`BOOL` (INT64 on the text lane before 0.65.0)|`boolean`|",
+     "|`date`|`Date32`|`DATE`|`DATE`|`date`|",
+     "|`timestamp` · `timestamptz`|`DateTime64(6)` · `DateTime64(6,'UTC')`|`DATETIME(6)` (UTC session)|`DATETIME` · `TIMESTAMP`|`timestamp` · `timestamptz`|",
+     "|`uuid`|`UUID`|`CHAR(36)`|`STRING`|`string`|",
+     "|`text` · `varchar(n)` · `bpchar` · `json`|`String`|`LONGTEXT` · `VARCHAR(n)`|`STRING`|`string`|",
+     "|`jsonb`|`String`|`JSON`|`STRING`|`string`|",
+     "|`bytea`|`String` holding the `\\x`-hex text|`LONGBLOB` (via HEX)|`BYTES` (STRING `\\x`-hex text before 0.65.0)|`binary`|"
+    ]
+   ],
+   [
+    "equal",
+    731,
+    744,
+    675,
+    688
+   ],
+   [
+    "replace",
+    744,
+    768,
+    688,
+    689,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    768,
+    800,
+    689,
+    721
+   ],
+   [
+    "delete",
+    800,
+    801,
+    721,
+    721
+   ],
+   [
+    "equal",
+    801,
+    802,
+    721,
+    722
+   ],
+   [
+    "delete",
+    802,
+    803,
+    722,
+    722
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "faf22a1b81b6+2": {
+  "fn": "apache/doris-thirdparty",
+  "clean_ver": "2",
+  "raw_lines": 19,
+  "ops": [
+   [
+    "delete",
+    0,
+    19,
+    0,
+    0
+   ],
+   [
+    "equal",
+    19,
+    25,
+    0,
+    6
+   ],
+   [
+    "replace",
+    25,
+    31,
+    6,
+    12,
+    [
+     "|Lib Name|Branch|Description|Base version|Source URL|Latest Tag|CHANGELOG|",
+     "|--------|--------|------------------------------------------------------------|------------|------------------------------------------------------------|----------|---|",
+     "|libhdfs3|libhdfs3|designed as an alternative implementation of libhdfs, is implemented based on native Hadoop RPC protocol and HDFS data transfer protocol. It gets rid of the drawbacks of JNI, and it has a lightweight, small memory footprint code base. In addition, it is easy to use and deploy.|Master|HAWQ_depends|libhdfs3-v2.3.5|CHANGELOG|",
+     "|bdbje|bdbje|Berkley Database Java Edition - build and runtime support.|18.3.12|bdbje Maven src|bdbje-18.3.14-doris-snapshot|CHANGELOG|",
+     "|datatables|datatables||1.12.1||1.12.1|CHANGELOG|",
+     "|clucene|clucene|CLucene is a C++ port of Lucene. It is a high-performance, full-featured text search engine written in C++. CLucene is faster than lucene as it is written in C++.|2.4.1|cluence|2.4.4|CHANGELOG|"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "2c474cc7cee4+2": {
+  "fn": "Soda-null/whale-be-friends",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Dafeiyu, a blue-haired whale girl, at the windowsill of her lakeside cottage"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "**English** · 中文"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "▶ Watch one day of hers: a one-minute demo (mp4, 23 MB, downloads when opened, in Chinese)"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    23,
+    7,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "Her little daily life: diary, white rice, flowers, goldfish"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    31,
+    24,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "You need a DeepSeek API key and a computer. A computer that **stays on** is best: when it sleeps, she can't reply."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    72,
+    32,
+    72
+   ],
+   [
+    "replace",
+    72,
+    73,
+    72,
+    73,
+    [
+     "- **Changing her personality:** her persona is `docs/persona_zh.md`, plain Chinese written to her. Edit it, then run `install.sh update`."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    77,
+    73,
+    77
+   ],
+   [
+    "replace",
+    77,
+    78,
+    77,
+    78,
+    [
+     "She chats with you on WeChat from her little cottage"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    78,
+    79
+   ],
+   [
+    "replace",
+    79,
+    80,
+    79,
+    80,
+    [
+     "How a message becomes a reply"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    85,
+    80,
+    85
+   ],
+   [
+    "replace",
+    85,
+    95,
+    85,
+    86,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    97,
+    86,
+    88
+   ],
+   [
+    "replace",
+    97,
+    98,
+    88,
+    89,
+    [
+     "How she remembers and forgets"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    89,
+    90
+   ],
+   [
+    "replace",
+    99,
+    100,
+    90,
+    91,
+    [
+     "Her cottage is real in the program"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    91,
+    92
+   ],
+   [
+    "replace",
+    101,
+    102,
+    92,
+    93,
+    [
+     "The design docs are in Chinese: architecture · how memory works (forgetting curve, remembering makes it stick, nightly tidy-up) · how she goes online · her cottage · every design decision and why."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    107,
+    93,
+    98
+   ],
+   [
+    "replace",
+    107,
+    111,
+    98,
+    102,
+    [
+     "1. `AGENTS.md`: the rules for working here (`CLAUDE.md` links to it).",
+     "2. `STATUS.md`: where things stand and what's next.",
+     "3. `docs/architecture_zh.md`: the modules and how one message flows through them.",
+     "4. `docs/README.md`: what each file in `docs/` is."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    125,
+    102,
+    116
+   ],
+   [
+    "replace",
+    125,
+    136,
+    116,
+    117,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    138,
+    117,
+    119
+   ],
+   [
+    "replace",
+    138,
+    139,
+    119,
+    120,
+    [
+     "License: MIT."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "a6179c5c6df3+2": {
+  "fn": "ilhamnadhif/ternarygrid",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "Bahasa Indonesia"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "TernaryGrid: navigator, SQL editor and result grid"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    16,
+    12,
+    16
+   ],
+   [
+    "replace",
+    16,
+    22,
+    16,
+    22,
+    [
+     " CockroachDB, ClickHouse, Cassandra / ScyllaDB, Redis, MongoDB and Elasticsearch / OpenSearch, all",
+     " with drivers written in Rust (no Java, no Oracle Client). Compatible products have their own entry",
+     " with the right defaults: YugabyteDB, TimescaleDB, Supabase, Neon, Redshift, AlloyDB, Greenplum,",
+     " QuestDB, CrateDB, TiDB, OceanBase, Doris, StarRocks, SingleStore, PlanetScale, Azure SQL Database,",
+     " Amazon Keyspaces, Valkey, Dragonfly, KeyDB, MongoDB Atlas, FerretDB, Amazon DocumentDB, Azure",
+     " Cosmos DB for MongoDB and Amazon OpenSearch Service."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    26,
+    23,
+    26,
+    [
+     " the navigator, big hashes and lists read page by page), `mongosh` statements",
+     " (`db.users.find({age: {$gt: 30}})`, aggregations, the data tab's filter takes a query document),",
+     " and Elasticsearch SQL or Kibana-style requests (`GET /logs/_search` + JSON) with hits as rows."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    29,
+    27,
+    29,
+    [
+     " `:name` / `${name}` parameters, `@set` / `@include` / `@export`, formatter, outline, error markers,",
+     " explain plans (text, tree, diagram) and a searchable query history."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    29,
+    30
+   ],
+   [
+    "replace",
+    30,
+    32,
+    30,
+    32,
+    [
+     " transaction, foreign key navigation, server- or client-side filter and sort, record / JSON / XML",
+     " views, value panels, charts and a map for geometry columns."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    32,
+    33
+   ],
+   [
+    "replace",
+    33,
+    34,
+    33,
+    34,
+    [
+     " `DELETE`/`UPDATE` without `WHERE` and `DROP`, read-only connections, a separate session per editor."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    34,
+    35
+   ],
+   [
+    "replace",
+    35,
+    38,
+    35,
+    38,
+    [
+     " keychain (macOS Keychain, Windows Credential Manager, GNOME Keyring / KWallet) or an encrypted vault",
+     " with a master password — never in a file. A connection dropped while the computer slept or the",
+     " network was away connects again by itself."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    40,
+    38,
+    40
+   ],
+   [
+    "replace",
+    40,
+    43,
+    40,
+    43,
+    [
+     " migration between databases, mock data, ER diagrams, visual query builder, schema and data compare",
+     " (with Liquibase output), table designer, tasks and scheduler, backup / restore, session and lock",
+     " manager, server dashboard and PostgreSQL debugger."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    47,
+    44,
+    47,
+    [
+     " side panel: it opens on the database of the tab in use, knows all its schemas, writes and explains",
+     " SQL, keeps its conversations and, if you allow it, reads data with read-only queries. It asks",
+     " before each statement that changes anything."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    47,
+    48
+   ],
+   [
+    "replace",
+    48,
+    51,
+    48,
+    51,
+    [
+     " connection › schema and a search box for every command, object and script (`⇧⌘P`), an icon rail",
+     " (navigator, projects, history, tasks), and a status bar with the transaction mode. Light and dark",
+     " themes (View → Theme or the sun / moon button in the top bar), customisable shortcuts, no telemetry."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    53,
+    51,
+    53
+   ],
+   [
+    "replace",
+    53,
+    57,
+    53,
+    55,
+    [
+     " A table",
+     " ER diagram of the sample database"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    60,
+    55,
+    58
+   ],
+   [
+    "replace",
+    60,
+    61,
+    58,
+    59,
+    [
+     "Every release is built for macOS, Windows and"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    63,
+    59,
+    61
+   ],
+   [
+    "replace",
+    63,
+    71,
+    61,
+    69,
+    [
+     "|System|Download|",
+     "|---|---|",
+     "|macOS 12 or later (Apple Silicon, Intel)|`TernaryGrid-<version>.dmg`, or the one-line installer / Homebrew|",
+     "|Windows 10 / 11 (x64)|`TernaryGrid-<version>-windows-x64-setup.exe` (installer) or `-windows-x64.zip` (portable)|",
+     "|Ubuntu 22.04+, Debian 12+, Linux Mint, Pop!_OS|`TernaryGrid-<version>-linux-amd64.deb` (`arm64` on ARM)|",
+     "|Fedora, RHEL / Rocky / Alma 9+, openSUSE|`TernaryGrid-<version>-linux-x86_64.rpm` (`aarch64` on ARM)|",
+     "|Arch Linux, Manjaro, EndeavourOS|`TernaryGrid-<version>-linux-x86_64.pkg.tar.zst` (`aarch64` on ARM)|",
+     "|Any other Linux|`TernaryGrid-<version>-linux-x86_64.AppImage` or `.tar.gz` (`aarch64` on ARM)|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    91,
+    69,
+    89
+   ],
+   [
+    "replace",
+    91,
+    92,
+    89,
+    90,
+    [
+     "> Security**, and click **Open Anyway** next to “TernaryGrid was blocked…”."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    122,
+    90,
+    120
+   ],
+   [
+    "replace",
+    122,
+    127,
+    120,
+    121,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    151,
+    121,
+    145
+   ],
+   [
+    "replace",
+    151,
+    152,
+    145,
+    146,
+    [
+     " **Create sample database** to try everything on a small SQLite shop database."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    154,
+    146,
+    148
+   ],
+   [
+    "replace",
+    154,
+    155,
+    148,
+    149,
+    [
+     " (ascending → descending → off); `⌘S` saves the changes."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    165,
+    149,
+    159
+   ],
+   [
+    "replace",
+    165,
+    166,
+    159,
+    160,
+    [
+     " version and code signature);"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    167,
+    160,
+    161
+   ],
+   [
+    "replace",
+    167,
+    168,
+    161,
+    162,
+    [
+     " opens it again; the previous copy is put back if anything goes wrong."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    172,
+    162,
+    166
+   ],
+   [
+    "replace",
+    172,
+    173,
+    166,
+    167,
+    [
+     "CHANGELOG.md). The one-line installer above also updates, and Homebrew users update"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    191,
+    167,
+    185
+   ],
+   [
+    "replace",
+    191,
+    204,
+    185,
+    198,
+    [
+     "|Action|Shortcut|",
+     "|---|---|",
+     "|Execute statement / selection|`⌘↩`|",
+     "|Execute script|`⌥X`|",
+     "|Execute in a new result tab|`⇧⌘↩`|",
+     "|Explain plan|`⇧⌘E`|",
+     "|Cancel query|`⌘.`|",
+     "|New SQL editor|`⌘]`|",
+     "|Active connection / schema|`⌘9` / `⌘0`|",
+     "|Format SQL|`⇧⌘F`|",
+     "|Autocomplete|`⌃Space`|",
+     "|Command palette|`⇧⌘P`|",
+     "|Save script / data|`⌘S`|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    212,
+    198,
+    206
+   ],
+   [
+    "replace",
+    212,
+    220,
+    206,
+    214,
+    [
+     "||Target|Measured|",
+     "|---|---|---|",
+     "|Binary size (macOS)|no limit|59 MB|",
+     "|Cold start to first frame|< 1 s|≈ 0.12 s|",
+     "|Idle memory|< 120 MB|≈ 88 MB|",
+     "|3 connections + 5 result tabs|< 250 MB|≈ 94 MB|",
+     "|1 M rows scroll|< 16 ms / frame|p95 0.5 ms|",
+     "|Typing in a 50 000-line script|< 16 ms / frame|p95 0.5 ms|"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    224,
+    214,
+    218
+   ],
+   [
+    "replace",
+    224,
+    226,
+    218,
+    220,
+    [
+     " provider and to GitHub for the update check (one anonymous request for the latest release when",
+     " TernaryGrid starts and every 6 hours; asked once, changeable in Settings → General)."
+    ]
+   ],
+   [
+    "equal",
+    226,
+    227,
+    220,
+    221
+   ],
+   [
+    "replace",
+    227,
+    229,
+    221,
+    223,
+    [
+     " Credential Manager, the Secret Service on Linux) or in `vault.bin` (Argon2id +",
+     " XChaCha20-Poly1305); configuration files are written with mode 0600."
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    223,
+    224
+   ],
+   [
+    "replace",
+    230,
+    232,
+    224,
+    226,
+    [
+     " `~/Library/Application Support/dev.ternarygrid.TernaryGrid/` on macOS, `%APPDATA%\\ternarygrid\\TernaryGrid\\` on Windows and",
+     " `~/.config/ternarygrid/` + `~/.local/share/ternarygrid/` on Linux (or `TERNARYGRID_HOME` / `--portable`)."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    239,
+    226,
+    233
+   ],
+   [
+    "replace",
+    239,
+    249,
+    233,
+    234,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    256,
+    234,
+    241
+   ],
+   [
+    "replace",
+    256,
+    265,
+    241,
+    250,
+    [
+     "|Crate|Role|",
+     "|---|---|",
+     "|`ternarygrid-app`|The application: window, tabs, navigator, execution engine, CLI|",
+     "|`ternarygrid-core`|Shared contract: values, driver/session traits, metadata, DDL, dialects, row store, UI strings|",
+     "|`ternarygrid-sql`|Tokenizer, splitter, formatter, autocomplete, analysis, parameters|",
+     "|`ternarygrid-driver-*`|PostgreSQL, MySQL, SQLite, SQL Server, Oracle, ClickHouse, Cassandra, Redis, MongoDB, Elasticsearch drivers|",
+     "|`ternarygrid-editor` / `ternarygrid-grid` / `ternarygrid-visual`|Editor widget, data grid, diagrams and charts|",
+     "|`ternarygrid-config` / `ternarygrid-net`|Settings, secrets, importers / SSH tunnels and proxies|",
+     "|`ternarygrid-transfer` / `ternarygrid-compare` / `ternarygrid-tasks` / `ternarygrid-ai`|Data transfer, compare, tasks, AI|"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    266,
+    250,
+    251
+   ],
+   [
+    "replace",
+    266,
+    268,
+    251,
+    253,
+    [
+     "More in docs/ARCHITECTURE.md and the DBeaver parity matrix in",
+     "docs/PARITY.md."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    272,
+    253,
+    257
+   ],
+   [
+    "replace",
+    272,
+    274,
+    257,
+    259,
+    [
+     " BigQuery and DuckDB are not, nor Neo4j (its Rust driver brings a second TLS crypto library).",
+     " Oracle uses Oracle's own Rust driver, still a beta."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    279,
+    259,
+    264
+   ],
+   [
+    "delete",
+    279,
+    280,
+    264,
+    264
+   ],
+   [
+    "equal",
+    280,
+    281,
+    264,
+    265
+   ],
+   [
+    "delete",
+    281,
+    283,
+    265,
+    265
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "9da8082c31f9+2": {
+  "fn": "nick-keller/electron-appstack",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Electron AppStack logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "**Documentation: electron-appstack.com**"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Copy the template with degit:"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    21,
+    11,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "This is a pnpm monorepo with two packages:"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    27,
+    23,
+    27,
+    [
+     "|Folder|Description|",
+     "|------------------------|---------------------------------------------------------------------------------------------|",
+     "|`template/`|The Electron app template. This is what users clone with degit.|",
+     "|`docs/`|The documentation website, built with Next.js and Nextra, deployed at electron-appstack.com.|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    40,
+    27,
+    40
+   ],
+   [
+    "replace",
+    40,
+    51,
+    40,
+    51,
+    [
+     "|Command|Description|",
+     "|--------------------|-----------------------------------------------|",
+     "|`pnpm dev:template`|Run the Electron template in development mode|",
+     "|`pnpm dev:docs`|Run the documentation website on localhost:3000|",
+     "|`pnpm build`|Build both packages|",
+     "|`pnpm typecheck`|Type check both packages|",
+     "|`pnpm test`|Run the template unit tests|",
+     "|`pnpm check`|Lint and check formatting with Biome|",
+     "|`pnpm check:fix`|Fix lint and formatting issues|",
+     "|`pnpm lock:template`|Regenerate `template/package-lock.json`|",
+     "|`pnpm update:boilerplates`|Refresh GitHub stats and Electron versions in `docs/data/boilerplates.json`|"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    57,
+    51,
+    57
+   ],
+   [
+    "replace",
+    57,
+    61,
+    57,
+    58,
+    [
+     "Electron AppStack is free, source-available software under the Electron AppStack License. You can use and modify it to build commercial apps and sell them, but not sell the boilerplate itself or publish it as a competing starter kit."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
  }
 }

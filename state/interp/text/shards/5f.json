@@ -2774,5 +2774,92 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0e2cf0100907": {
+  "identity": {
+   "one_liner": "开源系统设计面试闪卡集，含230余张卡片",
+   "review": "Design Deck 是一个开源的闪卡集合，包含230余张卡片，内容涉及缓存、数据库、HTTP、Kafka、网络、可靠性、可扩展性、安全等系统设计主题（依据主题标签），用于系统设计面试准备。卡片托管于 deckly.dev 在线使用。README 文本较短，具体卡片内容组织方式需访问在线版本确认。",
+   "highlights": [
+    "包含230余张系统设计主题闪卡",
+    "提供在线访问版本（deckly.dev）",
+    "覆盖缓存、数据库、网络、安全等多个主题领域"
+   ],
+   "use_cases": [
+    "系统设计面试准备",
+    "按主题卡片形式复习分布式与架构概念"
+   ]
+  },
+  "sha": "0e2cf0100907",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "812855e5a08f": {
+  "identity": {
+   "one_liner": "基于 LevelDB 的 JS 运行时 RDF 四元组图数据库，支持 SPARQL 查询。",
+   "review": "Quadstore 是一个用 TypeScript 编写、面向浏览器、Node.js、Deno、Bun 等 JavaScript 运行时的 RDF 四元组存储（triplestore）。它实现 RDF/JS 的 Sink、Source 和 Store 接口，并通过 quadstore-comunica 提供 SPARQL 查询支持；存储后端为任何实现 AbstractLevel 接口的库，如 classic-level、memory-level、browser-level。项目不内置 RDF 解析/序列化功能，需 Node.js >= 18。",
+   "highlights": [
+    "实现 RDF/JS 的 Sink、Source 和 Store 接口，可与 n3 等解析/序列化库配合",
+    "支持通过 quadstore-comunica 执行 SPARQL 查询，并可原生查询跨命名图",
+    "存储后端可替换（AbstractLevel 接口），支持磁盘、内存与浏览器 IndexedDB"
+   ],
+   "use_cases": [
+    "在 Node.js/Deno/Bun 服务端或浏览器中持久化与查询 RDF/链接数据",
+    "需要以流式方式解析 Turtle 等 RDF 文件并写入存储的场景",
+    "需要跨命名图进行匹配查询或配合 Comunica 执行 SPARQL 查询的应用"
+   ]
+  },
+  "sha": "812855e5a08f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d85fd65d8125": {
+  "identity": {
+   "one_liner": "基于 Rust 的 Firebase 实时数据库客户端库",
+   "review": "firebase-rs 是一个用 Rust 编写的 Firebase 库，面向需要在 Rust 程序中访问 Firebase 实时数据库的开发者。它提供无认证与带 AUTH_KEY 两种初始化方式，通过 at() 方法定位嵌套对象路径，支持字符串或泛型读取、自定义键或自动键写入、更新数据，并可通过查询参数过滤排序。文档发布于 docs.rs。",
+   "highlights": [
+    "支持 Server-Sent Events 流式读取实时事件（with_realtime_events + listen）",
+    "支持泛型载荷（Serialize/Deserialize 结构体）读取与写入数据",
+    "支持 with_params 构建查询：start_at、order_by、equal_to 等参数"
+   ],
+   "use_cases": [
+    "在 Rust 应用中读写 Firebase 实时数据库的嵌套路径数据",
+    "监听 Firebase 数据变更事件流（Server-Sent Events）",
+    "使用泛型结构体反序列化单条或全部记录"
+   ]
+  },
+  "sha": "d85fd65d8125",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "98a8bdea06d0": {
+  "identity": {
+   "one_liner": "基于 SurrealDB 的 DEFINE 定义生成 zod schema 与 TypeScript 客户端的代码生成器",
+   "review": "该工具读取 SurrealDB 数据库中的 DEFINE 定义，据此生成 zod schema 和基础 TypeScript 客户端代码。可提供 .surql schema 文件（通过 Docker 运行临时内存实例加载），或直接连接运行中的数据库。作者定位其为起点而非替代完整 ORM。2.x 版改用 surrealdb 包，移除 memory 连接选项，需连接真实实例。",
+   "highlights": [
+    "提供 CLI（npx surql-gen）与 npm 包（@sebastianwessel/surql-gen）两种使用方式，支持配置文件与命令行参数合并（CLI 优先）",
+    "支持输入 schema 文件或目录（递归加载 .surql/.surrealql 文件，可用 .ignore 模式排除），或直接连接已有 SurrealDB 实例",
+    "生成代码分为 _generated 子目录（每次运行覆盖）与其他子目录（首次生成后不再修改），生成的 schema 片段兼容 Zod 3 和 Zod 4"
+   ],
+   "use_cases": [
+    "使用 Surrealist 设计数据库 schema 后，导出 .surql 文件生成对应的 zod 校验 schema",
+    "为连接 SurrealDB 的 TypeScript 项目生成带类型的基础客户端代码",
+    "生成的 zod schema 可用于 CIRQL"
+   ]
+  },
+  "sha": "98a8bdea06d0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

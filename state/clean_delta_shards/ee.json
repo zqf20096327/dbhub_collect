@@ -17943,5 +17943,3566 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "363a44dae73f+2": {
+  "fn": "eugenioenko/autentico",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "Go Version",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    10,
+    7,
+    8,
+    [
+     " Auténtico first-run onboarding and admin UI"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    8,
+    9
+   ],
+   [
+    "replace",
+    11,
+    16,
+    9,
+    12,
+    [
+     " From an empty directory to a running identity provider. ",
+     " Onboarding, self-signup, registering a client, 2FA enrollment, and the audit log. ",
+     " Same walkthrough as an MP4 → "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    23,
+    12,
+    19
+   ],
+   [
+    "delete",
+    23,
+    25,
+    19,
+    19
+   ],
+   [
+    "equal",
+    25,
+    27,
+    19,
+    21
+   ],
+   [
+    "replace",
+    27,
+    28,
+    21,
+    22,
+    [
+     "Access the full documentation at getautentico.dev"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    22,
+    25
+   ],
+   [
+    "replace",
+    31,
+    32,
+    25,
+    26,
+    [
+     "Try Autentico instantly: Launch a Live Demo"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    38,
+    26,
+    32
+   ],
+   [
+    "replace",
+    38,
+    41,
+    32,
+    33,
+    [
+     "Share your use case in Discussions"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    58,
+    33,
+    50
+   ],
+   [
+    "delete",
+    58,
+    60,
+    50,
+    50
+   ],
+   [
+    "equal",
+    60,
+    72,
+    50,
+    62
+   ],
+   [
+    "delete",
+    72,
+    74,
+    62,
+    62
+   ],
+   [
+    "equal",
+    74,
+    75,
+    62,
+    63
+   ],
+   [
+    "replace",
+    75,
+    104,
+    63,
+    64,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    123,
+    64,
+    83
+   ],
+   [
+    "replace",
+    123,
+    124,
+    83,
+    84,
+    [
+     "- **Resource Owner Password Credentials** — supported for legacy client compatibility (see ROPC note); required email verification also applies to non-admin password grants"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    163,
+    84,
+    123
+   ],
+   [
+    "delete",
+    163,
+    165,
+    123,
+    123
+   ],
+   [
+    "equal",
+    165,
+    167,
+    123,
+    125
+   ],
+   [
+    "replace",
+    167,
+    180,
+    125,
+    136,
+    [
+     "|Layer|Choice|Rationale|",
+     "|-----------|-----------------------------|-------------------------------------------------------------|",
+     "|Language|Go 1.23|Single-binary deployment, strong concurrency, type safety|",
+     "|Database|SQLite (`modernc.org/sqlite`)|No CGo, no external server, sufficient for IdP write patterns|",
+     "|JWT Signing|RS256 (RSA 2048)|Asymmetric — relying parties verify without holding secrets|",
+     "|WebAuthn|`go-webauthn/webauthn`|Standards-compliant FIDO2/WebAuthn implementation|",
+     "|TOTP|RFC 6238 compliant|Compatible with Google Authenticator, Authy, 1Password, etc.|",
+     "|CSRF|`gorilla/csrf`|Protects browser-facing form endpoints|",
+     "|Admin UI|React + Ant Design (Vite)|Embedded into the binary via `go:embed`|",
+     "|Testing|Testify + in-memory SQLite|Isolated, fast unit and integration tests|",
+     "|Docs|Swagger/OpenAPI|Interactive API reference|"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    187,
+    136,
+    143
+   ],
+   [
+    "replace",
+    187,
+    214,
+    143,
+    170,
+    [
+     "|Package|Role|",
+     "|-------------------|--------------------------------------------------------------------------------|",
+     "|`pkg/authorize`|Authorization endpoint — renders login page, validates client and redirect URI|",
+     "|`pkg/login`|Login form submission, credential validation, MFA challenge creation|",
+     "|`pkg/mfa`|MFA challenge verification, TOTP enrollment, email OTP delivery|",
+     "|`pkg/passkey`|WebAuthn registration and authentication ceremony handlers|",
+     "|`pkg/trusteddevice`|Trusted device token issuance and cookie management|",
+     "|`pkg/token`|Token endpoint — authorization code exchange, refresh, revocation|",
+     "|`pkg/session`|OAuth2 session lifecycle and admin session management|",
+     "|`pkg/idpsession`|IdP-level SSO sessions — cross-request browser sessions|",
+     "|`pkg/client`|OAuth2 client registration, CRUD, and authentication|",
+     "|`pkg/user`|User identity management — CRUD, authentication, lockout|",
+     "|`pkg/groupclaim`|Group custom claims — admin CRUD, inherited through membership|",
+     "|`pkg/userclaim`|Custom per-user claims — CRUD and token/UserInfo embedding|",
+     "|`pkg/signup`|Self-service user registration flow|",
+     "|`pkg/onboarding`|First-run admin account creation|",
+     "|`pkg/appsettings`|Runtime settings — DB persistence, loading into config|",
+     "|`pkg/introspect`|Token introspection endpoint|",
+     "|`pkg/userinfo`|UserInfo endpoint|",
+     "|`pkg/wellknown`|OIDC discovery document and JWKS|",
+     "|`pkg/middleware`|CORS, CSRF, logging, admin auth, audience validation|",
+     "|`pkg/cleanup`|Background goroutine for expired record purging|",
+     "|`pkg/account`|Account self-service API and embedded React Account UI (from `pkg/account/dist`)|",
+     "|`pkg/admin`|Embedded Admin UI (static files + stats handler)|",
+     "|`pkg/config`|Bootstrap and runtime configuration|",
+     "|`pkg/db`|SQLite initialization, schema, and incremental migrations|",
+     "|`pkg/key`|RSA key loading (env or ephemeral) and JWK Set generation|"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    231,
+    170,
+    187
+   ],
+   [
+    "replace",
+    231,
+    232,
+    187,
+    188,
+    [
+     "|Concurrency|Error rate|Login p95|Token p95|Assessment|"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    188,
+    189
+   ],
+   [
+    "replace",
+    233,
+    237,
+    189,
+    193,
+    [
+     "|20 VUs|0%|248ms|300ms|Comfortable — imperceptible to users|",
+     "|100 VUs|0%|1.19s|1.56s|Sustained load — fully functional|",
+     "|200 VUs|0%|2.37s|2.94s|Moderate pressure — noticeable but acceptable|",
+     "|500 VUs|0%|5.76s|7.34s|Stress ceiling — degraded experience|"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    240,
+    193,
+    196
+   ],
+   [
+    "replace",
+    240,
+    241,
+    196,
+    197,
+    [
+     "See `stress/README.md` for the full methodology and how to reproduce these numbers."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    249,
+    197,
+    205
+   ],
+   [
+    "delete",
+    249,
+    251,
+    205,
+    205
+   ],
+   [
+    "equal",
+    251,
+    264,
+    205,
+    218
+   ],
+   [
+    "replace",
+    264,
+    265,
+    218,
+    219,
+    [
+     "Download the latest binary from GitHub Releases, then:"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    270,
+    219,
+    224
+   ],
+   [
+    "replace",
+    270,
+    275,
+    224,
+    225,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    338,
+    225,
+    288
+   ],
+   [
+    "delete",
+    338,
+    340,
+    288,
+    288
+   ],
+   [
+    "equal",
+    340,
+    353,
+    288,
+    301
+   ],
+   [
+    "replace",
+    353,
+    379,
+    301,
+    327,
+    [
+     "|Variable|Description|Default|",
+     "|--------------------------------|--------------------------------------------------------------|-----------------------|",
+     "|`AUTENTICO_APP_URL`|Base URL (used to derive issuer, domain, port)|`http://localhost:9999`|",
+     "|`AUTENTICO_APP_OAUTH_PATH`|Path prefix for OAuth2 endpoints|`/oauth2`|",
+     "|`AUTENTICO_DB_FILE_PATH`|SQLite database file path|`./autentico.db`|",
+     "|`AUTENTICO_PRIVATE_KEY`|Base64-encoded RSA private key PEM|_(generated by init)_|",
+     "|`AUTENTICO_TOTP_ENCRYPTION_KEY`|Required persistent base64-encoded 32-byte TOTP encryption key; generated by init|_(generated by init)_|",
+     "|`AUTENTICO_ACCESS_TOKEN_SECRET`|HMAC secret for access token signing|_(generated by init)_|",
+     "|`AUTENTICO_REFRESH_TOKEN_SECRET`|HMAC secret for refresh token signing|_(generated by init)_|",
+     "|`AUTENTICO_CSRF_SECRET_KEY`|Secret for CSRF token generation|_(generated by init)_|",
+     "|`AUTENTICO_CSRF_COOKIE_NAME`|CSRF cookie name|`_gorilla_csrf`|",
+     "|`AUTENTICO_TRUSTED_DEVICE_COOKIE_NAME`|Trusted-device cookie name|`autentico_trusted_device`|",
+     "|`AUTENTICO_FEDERATION_COOKIE_NAME`|Federation browser-cookie base name (automatic secure `__Host-` prefix)|`autentico_federation`|",
+     "|`AUTENTICO_PASSKEY_REGISTRATION_COOKIE_NAME`|Passkey-registration cookie base name (automatic secure `__Host-` prefix)|`autentico_passkey_registration`|",
+     "|`AUTENTICO_FORWARD_AUTH_COOKIE_PREFIX`|App-session/flow cookie prefix (automatic `__Host-` for HTTPS apps)|`autentico_fa_`|",
+     "|`AUTENTICO_CSRF_SECURE_COOKIE`|Require Secure flag on CSRF cookie|`true`|",
+     "|`AUTENTICO_REFRESH_TOKEN_COOKIE_ONLY`|**Opt-in security enhancement.** Delivers the refresh token as an `HttpOnly` cookie instead of in the JSON response body, preventing JavaScript (including XSS) from reading it. Non-standard — only enable if your client reads the refresh token from a cookie.|`false`|",
+     "|`AUTENTICO_IDP_SESSION_SECURE`|Require Secure flag on IdP session cookie|`true`|",
+     "|`AUTENTICO_JWK_CERT_KEY_ID`|Key ID (`kid`) in the JWK Set|`autentico-key-1`|",
+     "|`AUTENTICO_TRUSTED_PROXIES`|Comma-separated proxy CIDRs allowed to supply client IPs via X-Forwarded-For; empty uses network peer|_(empty)_|",
+     "|`AUTENTICO_RATE_LIMIT_RPS`|Sustained requests/sec per IP on auth endpoints (0 = disabled)|`5`|",
+     "|`AUTENTICO_RATE_LIMIT_BURST`|Burst size for the per-second limiter|`10`|",
+     "|`AUTENTICO_RATE_LIMIT_RPM`|Sustained requests/min per IP (long-term cap)|`20`|",
+     "|`AUTENTICO_RATE_LIMIT_RPM_BURST`|Burst size for the per-minute limiter|`20`|",
+     "|`AUTENTICO_ANTI_TIMING_MIN_MS`|Minimum random delay (ms) on auth responses to prevent timing-based user enumeration (0 + 0 = disabled)|`50`|",
+     "|`AUTENTICO_ANTI_TIMING_MAX_MS`|Maximum random delay (ms); must be > min, otherwise disabled|`150`|"
+    ]
+   ],
+   [
+    "equal",
+    379,
+    386,
+    327,
+    334
+   ],
+   [
+    "replace",
+    386,
+    421,
+    334,
+    369,
+    [
+     "|Setting Key|Description|Default|",
+     "|--------------------------------|------------------------------------------------------|----------------|",
+     "|`access_token_expiration`|Access token lifetime|`15m`|",
+     "|`refresh_token_expiration`|Refresh token lifetime|`720h` (30 days)|",
+     "|`authorization_code_expiration`|Auth code lifetime|`10m`|",
+     "|`access_token_audience`|JWT `aud` claim (JSON array)|`[]`|",
+     "|`auth_mode`|`password` \\|`password_and_passkey` \\|`passkey_only`|`password`|",
+     "|`mfa_enabled`|Require MFA for all users|`false`|",
+     "|`mfa_method`|`totp` \\|`email`|`totp`|",
+     "|`trust_device_enabled`|Allow users to bypass MFA on trusted devices|`false`|",
+     "|`trust_device_expiration`|Trusted device token lifetime|`720h` (30 days)|",
+     "|`sso_session_idle_timeout`|IdP session idle timeout (`0` = disabled); resets on login and token refresh|`4h`|",
+     "|`sso_session_max_age`|Absolute max session lifetime (`0` = disabled)|`720h` (30 days)|",
+     "|`allow_self_signup`|Allow end users to register their own accounts|`false`|",
+     "|`account_lockout_max_attempts`|Failed logins before account lock|`5`|",
+     "|`account_lockout_duration`|How long the account stays locked|`15m`|",
+     "|`passkey_rp_name`|WebAuthn relying party name shown to users|`Autentico`|",
+     "|`cleanup_interval`|How often expired records are purged|`6h`|",
+     "|`cleanup_retention`|Minimum age for a record to be eligible for cleanup|`24h`|",
+     "|`validation_min_username_length`|Minimum username length|`4`|",
+     "|`validation_max_username_length`|Maximum username length|`64`|",
+     "|`validation_min_password_length`|Minimum password length|`6`|",
+     "|`validation_max_password_length`|Maximum password length|`64`|",
+     "|`validation_username_is_email`|Require username to be a valid email format|`false`|",
+     "|`validation_email_required`|Require email field at registration|`false`|",
+     "|`smtp_host`|SMTP server hostname|_(empty)_|",
+     "|`smtp_port`|SMTP server port|`587`|",
+     "|`smtp_username`|SMTP authentication username|_(empty)_|",
+     "|`smtp_password`|SMTP authentication password|_(empty)_|",
+     "|`smtp_from`|From address for outbound email|_(empty)_|",
+     "|`theme_title`|Page title shown on login/MFA pages|`Autentico`|",
+     "|`theme_logo_url`|URL to a logo image displayed on login page|_(empty)_|",
+     "|`theme_css_inline`|Inline CSS injected into login page `<style>`|_(empty)_|",
+     "|`theme_css_file`|Path to a CSS file loaded at runtime|_(empty)_|",
+     "|`footer_links`|JSON array of `{label, url}` links for login footer|`[]`|"
+    ]
+   ],
+   [
+    "equal",
+    421,
+    426,
+    369,
+    374
+   ],
+   [
+    "replace",
+    426,
+    438,
+    374,
+    384,
+    [
+     "|Field|Description|",
+     "|-------------------------------|---------------------------------------------------------------|",
+     "|`access_token_expiration`|Token lifetime for this client's tokens|",
+     "|`refresh_token_expiration`|Refresh token lifetime for this client|",
+     "|`authorization_code_expiration`|Auth code TTL|",
+     "|`allowed_audiences`|Additional `aud` values in tokens for this client|",
+     "|`allow_self_signup`|Override self-signup in both the login page and signup submission|",
+     "|`sso_session_idle_timeout`|Override idle timeout for this client's login page (not enforced by the background cleanup sweep, which uses the global value)|",
+     "|`trust_device_enabled`|Override password/magic-link MFA bypass and device creation for this client|",
+     "|`trust_device_expiration`|Trust duration for this client's users|"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    443,
+    384,
+    389
+   ],
+   [
+    "replace",
+    443,
+    450,
+    389,
+    394,
+    [
+     "|Mode|Behavior|",
+     "|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`password`|Standard username + password. MFA is applied on top if `mfa_enabled` is true.|",
+     "|`password_and_passkey`|Users can authenticate with either password or a registered passkey. Password flow optionally includes MFA.|",
+     "|`passkey_only`|Password authentication is disabled. Users authenticate exclusively with passkeys. New users can sign up when self-signup is enabled.|"
+    ]
+   ],
+   [
+    "equal",
+    450,
+    469,
+    394,
+    413
+   ],
+   [
+    "delete",
+    469,
+    471,
+    413,
+    413
+   ],
+   [
+    "equal",
+    471,
+    476,
+    413,
+    418
+   ],
+   [
+    "delete",
+    476,
+    478,
+    418,
+    418
+   ],
+   [
+    "equal",
+    478,
+    521,
+    418,
+    461
+   ],
+   [
+    "replace",
+    521,
+    527,
+    461,
+    462,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    527,
+    553,
+    462,
+    488
+   ],
+   [
+    "delete",
+    553,
+    555,
+    488,
+    488
+   ],
+   [
+    "equal",
+    555,
+    571,
+    488,
+    504
+   ],
+   [
+    "replace",
+    571,
+    575,
+    504,
+    508,
+    [
+     " - Username (if `allow_username_change` is enabled)",
+     " - Email (if `allow_email_change` is enabled)",
+     " - First name, last name, phone number, profile picture URL, locale",
+     " - Street address, city, state/region, postal code, country"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    624,
+    508,
+    557
+   ],
+   [
+    "delete",
+    624,
+    626,
+    557,
+    557
+   ],
+   [
+    "equal",
+    626,
+    630,
+    557,
+    561
+   ],
+   [
+    "replace",
+    630,
+    643,
+    561,
+    574,
+    [
+     "|Endpoint|Method|Description|",
+     "|------------------------------------------|--------|---------------------------------------------|",
+     "|`/.well-known/openid-configuration`|GET|OIDC discovery document|",
+     "|`/oauth2/.well-known/jwks.json`|GET|JWK Set — public keys for token verification|",
+     "|`/oauth2/certs`|GET|Alias for JWKS (legacy path)|",
+     "|`/oauth2/authorize`|GET|Authorization endpoint — renders login page|",
+     "|`/oauth2/token`|POST|Token endpoint — code exchange, refresh, ROPC|",
+     "|`/oauth2/protocol/openid-connect/token`|POST|Keycloak-compatible token path|",
+     "|`/oauth2/userinfo`|GET/POST|UserInfo endpoint|",
+     "|`/oauth2/protocol/openid-connect/userinfo`|GET/POST|Keycloak-compatible userinfo path|",
+     "|`/oauth2/introspect`|POST|Token introspection (RFC 7662)|",
+     "|`/oauth2/revoke`|POST|Token revocation (RFC 7009)|",
+     "|`/oauth2/logout`|POST|Session logout|"
+    ]
+   ],
+   [
+    "equal",
+    643,
+    646,
+    574,
+    577
+   ],
+   [
+    "replace",
+    646,
+    655,
+    577,
+    586,
+    [
+     "|Endpoint|Method|Description|",
+     "|---------------------------------|--------|---------------------------------------------------|",
+     "|`/oauth2/login`|POST|Username/password form submission|",
+     "|`/oauth2/mfa`|GET/POST|MFA challenge render and verification|",
+     "|`/oauth2/signup`|GET/POST|Self-service user registration (when enabled)|",
+     "|`/onboard`|GET/POST|First-run admin onboarding (disabled after first user)|",
+     "|`/oauth2/passkey/login/begin`|GET|Begin WebAuthn authentication/registration ceremony|",
+     "|`/oauth2/passkey/login/finish`|POST|Complete WebAuthn authentication ceremony|",
+     "|`/oauth2/passkey/register/finish`|POST|Complete WebAuthn registration ceremony|"
+    ]
+   ],
+   [
+    "equal",
+    655,
+    658,
+    586,
+    589
+   ],
+   [
+    "replace",
+    658,
+    665,
+    589,
+    596,
+    [
+     "|Endpoint|Method|Description|",
+     "|------------------------------|------|-------------------------------|",
+     "|`/oauth2/register`|POST|Register a new OAuth2 client|",
+     "|`/oauth2/register`|GET|List all registered clients|",
+     "|`/oauth2/register/{client_id}`|GET|Get a specific client|",
+     "|`/oauth2/register/{client_id}`|PUT|Update a client's configuration|",
+     "|`/oauth2/register/{client_id}`|DELETE|Deactivate a client|"
+    ]
+   ],
+   [
+    "equal",
+    665,
+    668,
+    596,
+    599
+   ],
+   [
+    "replace",
+    668,
+    677,
+    599,
+    608,
+    [
+     "|Endpoint|Method|Description|",
+     "|-------------------------|-------------------|----------------------------|",
+     "|`/admin/api/users`|GET/POST|List or create users|",
+     "|`/admin/api/users`|PUT/DELETE|Update or deactivate users|",
+     "|`/admin/api/users/unlock`|POST|Unlock a locked user account|",
+     "|`/admin/api/clients`|GET/POST/PUT/DELETE|Client management|",
+     "|`/admin/api/sessions`|GET/DELETE|Session management|",
+     "|`/admin/api/stats`|GET|Dashboard statistics|",
+     "|`/admin/api/settings`|GET/PUT|Read/update runtime settings|"
+    ]
+   ],
+   [
+    "equal",
+    677,
+    680,
+    608,
+    611
+   ],
+   [
+    "replace",
+    680,
+    683,
+    611,
+    614,
+    [
+     "|Endpoint|Method|Description|",
+     "|--------|------|-------------------------------------------|",
+     "|`/user`|POST|Create a user (for API-driven provisioning)|"
+    ]
+   ],
+   [
+    "equal",
+    683,
+    686,
+    614,
+    617
+   ],
+   [
+    "replace",
+    686,
+    707,
+    617,
+    636,
+    [
+     "|Endpoint|Method|Description|",
+     "|---------------------------------------|------------|----------------------------------------------|",
+     "|`/account/api/settings`|GET|UI configuration (auth mode, field visibility)|",
+     "|`/account/api/profile`|GET / PUT|Get or update user profile|",
+     "|`/account/api/password`|POST|Change password|",
+     "|`/account/api/sessions`|GET|List active OAuth sessions|",
+     "|`/account/api/sessions/{id}`|DELETE|Revoke a session|",
+     "|`/account/api/passkeys`|GET|List registered passkeys|",
+     "|`/account/api/passkeys/register/begin`|POST|Begin WebAuthn registration ceremony|",
+     "|`/account/api/passkeys/register/finish`|POST|Complete WebAuthn registration ceremony|",
+     "|`/account/api/passkeys/{id}`|PATCH/DELETE|Rename or remove a passkey|",
+     "|`/account/api/mfa`|GET|Get MFA status|",
+     "|`/account/api/mfa/totp/setup`|POST|Initialize TOTP enrollment (returns QR code)|",
+     "|`/account/api/mfa/totp/verify`|POST|Confirm TOTP enrollment with a 6-digit code|",
+     "|`/account/api/mfa/totp`|DELETE|Disable TOTP|",
+     "|`/account/api/trusted-devices`|GET|List trusted devices|",
+     "|`/account/api/trusted-devices/{id}`|DELETE|Revoke a trusted device|",
+     "|`/account/api/connected-providers`|GET|List connected external providers|",
+     "|`/account/api/connected-providers/{id}`|DELETE|Disconnect an external provider|"
+    ]
+   ],
+   [
+    "equal",
+    707,
+    710,
+    636,
+    639
+   ],
+   [
+    "replace",
+    710,
+    717,
+    639,
+    644,
+    [
+     "|Grant Type|Use Case|",
+     "|-----------------------------|---------------------------------------------------------------|",
+     "|`authorization_code` (+ PKCE)|Web apps, SPAs, native apps. The recommended default.|",
+     "|`refresh_token`|Obtaining new access tokens without re-authenticating the user.|",
+     "|`password` (ROPC)|Legacy clients and trusted internal tooling. Use with caution.|"
+    ]
+   ],
+   [
+    "equal",
+    717,
+    726,
+    644,
+    653
+   ],
+   [
+    "replace",
+    726,
+    740,
+    653,
+    654,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    740,
+    750,
+    654,
+    664
+   ],
+   [
+    "replace",
+    750,
+    757,
+    664,
+    665,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    757,
+    765,
+    665,
+    673
+   ],
+   [
+    "replace",
+    765,
+    796,
+    673,
+    674,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    796,
+    804,
+    674,
+    682
+   ],
+   [
+    "replace",
+    804,
+    811,
+    682,
+    683,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    811,
+    814,
+    683,
+    686
+   ],
+   [
+    "delete",
+    814,
+    816,
+    686,
+    686
+   ],
+   [
+    "equal",
+    816,
+    843,
+    686,
+    713
+   ],
+   [
+    "delete",
+    843,
+    845,
+    713,
+    713
+   ],
+   [
+    "equal",
+    845,
+    865,
+    713,
+    733
+   ],
+   [
+    "replace",
+    865,
+    872,
+    733,
+    734,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    872,
+    888,
+    734,
+    750
+   ],
+   [
+    "replace",
+    888,
+    907,
+    750,
+    751,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    907,
+    936,
+    751,
+    780
+   ],
+   [
+    "replace",
+    936,
+    937,
+    780,
+    781,
+    [
+     "**Upgrading to v3 (schemas 15 and 17):** schema 15 invalidates all existing tokens and OAuth/SSO sessions; schema 17 encrypts existing TOTP enrollments without resetting them. Stop the application and prepare a persistent `AUTENTICO_TOTP_ENCRYPTION_KEY` first (run `autentico init` on an existing `.env`, or supply the key through the environment). Run `autentico migrate`, read the warnings, and type the target schema shown (`19`). For unattended deployments, use `autentico migrate --approve-major=15,17` (or `--approve-major=17` from schema 15 or 16). These are database schema numbers, not release numbers. Restart only after migration succeeds, and keep the encryption key for future restarts and restores. Docker users should run migration as a one-off container against the existing database volume. See the v3 migration guide for key setup, Docker Compose commands, backup behavior, and recovery."
+    ]
+   ],
+   [
+    "equal",
+    937,
+    965,
+    781,
+    809
+   ],
+   [
+    "delete",
+    965,
+    967,
+    809,
+    809
+   ],
+   [
+    "equal",
+    967,
+    971,
+    809,
+    813
+   ],
+   [
+    "replace",
+    971,
+    972,
+    813,
+    814,
+    [
+     "See the ForwardAuth integration guide for the proxy contract, complete tested configurations, cookie handling and the Docker/Chromium black-box suite (`python3 tests/proxy/run.py --binary \"$PWD/autentico\"`)."
+    ]
+   ],
+   [
+    "equal",
+    972,
+    1021,
+    814,
+    863
+   ],
+   [
+    "replace",
+    1021,
+    1022,
+    863,
+    864,
+    [
+     "|Phase|Spec|Status|"
+    ]
+   ],
+   [
+    "equal",
+    1022,
+    1023,
+    864,
+    865
+   ],
+   [
+    "replace",
+    1023,
+    1033,
+    865,
+    875,
+    [
+     "|1|RFC 6749 — OAuth 2.0 Core|✅ Done|",
+     "|2|RFC 6750 — Bearer Token Usage|✅ Done|",
+     "|3|RFC 7636 — PKCE|✅ Done|",
+     "|4|RFC 7009 — Token Revocation|✅ Done|",
+     "|5|RFC 7662 — Token Introspection|✅ Done|",
+     "|6|OIDC Core 1.0|✅ Done|",
+     "|7|OIDC Discovery 1.0|✅ Done|",
+     "|8|OIDC RP-Initiated Logout 1.0|✅ Done|",
+     "|9|RFC 7591 — Dynamic Client Registration|✅ Done|",
+     "|10|RFC 8414 — Authorization Server Metadata|✅ Done|"
+    ]
+   ],
+   [
+    "equal",
+    1033,
+    1042,
+    875,
+    884
+   ],
+   [
+    "replace",
+    1042,
+    1043,
+    884,
+    885,
+    [
+     "These were identified *by reading the RFCs line-by-line*, not by observing runtime failures — a class of issues that typical test suites miss. See `rfc/rfc.md` for the full bug inventory, MUST/SHOULD/MAY compliance tables, and per-phase test lists. All protocol-facing code now carries inline comments referencing the exact spec section that mandates the behavior."
+    ]
+   ],
+   [
+    "equal",
+    1043,
+    1046,
+    885,
+    888
+   ],
+   [
+    "replace",
+    1046,
+    1047,
+    888,
+    889,
+    [
+     "Auténtico passes the OpenID Foundation `oidcc-basic-certification-test-plan` — the official conformance test suite for Basic OpenID Providers. The suite covers the full Authorization Code flow: discovery, authorization, token exchange, token refresh, ID token validation, UserInfo, and session management."
+    ]
+   ],
+   [
+    "equal",
+    1047,
+    1060,
+    889,
+    902
+   ],
+   [
+    "replace",
+    1060,
+    1061,
+    902,
+    903,
+    [
+     "Stress tests using k6 exercise the full PKCE auth code flow (authorize → login → token exchange → introspect → refresh). See the performance benchmarks for results and `stress/README.md` for the full methodology, test profiles, and how to reproduce."
+    ]
+   ],
+   [
+    "equal",
+    1061,
+    1067,
+    903,
+    909
+   ],
+   [
+    "replace",
+    1067,
+    1068,
+    909,
+    910,
+    [
+     "- RFC audit artifacts: see `rfc/rfc.md`"
+    ]
+   ],
+   [
+    "equal",
+    1068,
+    1069,
+    910,
+    911
+   ],
+   [
+    "replace",
+    1069,
+    1070,
+    911,
+    912,
+    [
+     "- Load testing: see `stress/README.md`"
+    ]
+   ],
+   [
+    "equal",
+    1070,
+    1072,
+    912,
+    914
+   ],
+   [
+    "delete",
+    1072,
+    1074,
+    914,
+    914
+   ],
+   [
+    "equal",
+    1074,
+    1097,
+    914,
+    937
+   ],
+   [
+    "replace",
+    1097,
+    1109,
+    937,
+    938,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1109,
+    1115,
+    938,
+    944
+   ],
+   [
+    "replace",
+    1115,
+    1118,
+    944,
+    945,
+    [
+     "For a complete working example using Playwright, see the test fixture guide in the documentation."
+    ]
+   ],
+   [
+    "equal",
+    1118,
+    1130,
+    945,
+    957
+   ],
+   [
+    "replace",
+    1130,
+    1133,
+    957,
+    958,
+    [
+     "The pre-generated HTML API reference is available at `/docs/index.html` in the repository, and hosted at GitHub Pages."
+    ]
+   ],
+   [
+    "equal",
+    1133,
+    1135,
+    958,
+    960
+   ],
+   [
+    "replace",
+    1135,
+    1143,
+    960,
+    961,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1143,
+    1144,
+    961,
+    962
+   ],
+   [
+    "replace",
+    1144,
+    1149,
+    962,
+    963,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1149,
+    1150,
+    963,
+    964
+   ],
+   [
+    "replace",
+    1150,
+    1153,
+    964,
+    965,
+    [
+     "GNU GENERAL PUBLIC LICENSE. See `LICENSE` for the full text."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "d483eecac67a+2": {
+  "fn": "jensteichert/colt",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    7,
+    [
+     "Build & Tests",
+     "Coverage Status",
+     "Go.Dev reference",
+     "CodeQL",
+     "Go Report Card"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    7,
+    8
+   ],
+   [
+    "replace",
+    9,
+    10,
+    8,
+    9,
+    [
+     "The MongoDB ODM for Go i've always wanted. Inspired by Mongoose."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    9,
+    10
+   ],
+   [
+    "replace",
+    11,
+    12,
+    10,
+    11,
+    [
+     "Colt wraps the official mongo-go-driver."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    11,
+    13
+   ],
+   [
+    "replace",
+    14,
+    15,
+    13,
+    14,
+    [
+     "- Go 1.18 or higher. Colt leverages Generics to provide type-safe methods and decoding of documents."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    27,
+    14,
+    26
+   ],
+   [
+    "replace",
+    27,
+    56,
+    26,
+    27,
+    [
+     "…（29 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    68,
+    27,
+    39
+   ],
+   [
+    "replace",
+    68,
+    75,
+    39,
+    40,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    102,
+    40,
+    67
+   ],
+   [
+    "delete",
+    102,
+    104,
+    67,
+    67
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "dc0121ecf155+2": {
+  "fn": "apache/iotdb-mcp-server",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "English | 中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    37,
+    3,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     "the same rules. See session policy administration"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    47,
+    38,
+    47
+   ],
+   [
+    "replace",
+    47,
+    50,
+    47,
+    50,
+    [
+     " - `FROM` targets use explicit `root...` paths.",
+     " - Projection expressions should usually use measurement names instead of full `root...` paths.",
+     " - `IOTDB_DATABASE` is only a connection/session hint; tree SQL still needs explicit root paths."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    50,
+    51
+   ],
+   [
+    "replace",
+    51,
+    53,
+    51,
+    53,
+    [
+     " - `FROM` targets use table names in the current database.",
+     " - Projection expressions use column names."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    57,
+    53,
+    57
+   ],
+   [
+    "replace",
+    57,
+    70,
+    57,
+    70,
+    [
+     " - Execute SHOW/COUNT queries to read metadata from the database",
+     " - Input:",
+     " - `query_sql` (string): The SHOW/COUNT SQL query to execute",
+     " - Supported query types:",
+     " - SHOW DATABASES [path]",
+     " - SHOW TIMESERIES [path]",
+     " - SHOW CHILD PATHS [path]",
+     " - SHOW CHILD NODES [path]",
+     " - SHOW DEVICES [path]",
+     " - COUNT TIMESERIES [path]",
+     " - COUNT NODES [path]",
+     " - COUNT DEVICES [path]",
+     " - Returns: Query results as array of objects"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    70,
+    71
+   ],
+   [
+    "replace",
+    71,
+    77,
+    71,
+    77,
+    [
+     " - Execute SELECT queries to read data from the database",
+     " - Input:",
+     " - `query_sql` (string): The SELECT SQL query to execute (using TREE dialect, time using ISO 8601 format, e.g. 2017-11-01T00:08:00.000)",
+     " - Supported functions:",
+     " - SUM, COUNT, MAX_VALUE, MIN_VALUE, AVG, VARIANCE, MAX_TIME, MIN_TIME, etc.",
+     " - Returns: Query results as array of objects"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    77,
+    78
+   ],
+   [
+    "replace",
+    78,
+    91,
+    78,
+    91,
+    [
+     " - Execute multiple readonly SQL statements in parallel and store each result in ResultStore",
+     " - Input:",
+     " - `sqls` (array): Explicit single SQL statements, or",
+     " - `sql_template` + `param_sets`: Repeated SQL template with parameter objects",
+     " - `max_concurrency` (integer): Concurrent statement limit, default 4",
+     " - `worker_pool_size` (integer): Thread worker pool size, default follows concurrency and is capped by `IOTDB_SQL_EXECUTOR_BATCH_MAX_WORKER_POOL_SIZE` (default 16)",
+     " - `per_item_timeout_ms` (integer): Per-statement wait timeout, default 60000",
+     " - `batch_timeout_ms` (integer): Whole-batch wait timeout, default 300000",
+     " - `max_result_rows_per_item` / `max_result_bytes_per_item`: Per-statement result quota, defaults 10000 rows and 16 MiB",
+     " - `max_batch_result_rows` / `max_batch_result_bytes`: Whole-batch result quota, defaults 100000 rows and 64 MiB",
+     " - Template placeholders:",
+     " - `{{name}}` for SQL literals, `{{name:path}}` for IoTDB paths, `{{name:identifier}}` for SQL identifiers",
+     " - Returns: Batch summary plus per-statement `result_id`, row count, preview rows, and paging metadata"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    91,
+    92
+   ],
+   [
+    "replace",
+    92,
+    99,
+    92,
+    99,
+    [
+     " - Read multiple ResultStore pages in one MCP call",
+     " - Input:",
+     " - `pages` (array): Page request objects with `result_id` plus optional `cursor`, `offset`, `limit`, and `owner_session_id`",
+     " - `default_limit` (integer): Default page size for items without `limit`",
+     " - `max_pages` / `max_total_rows`: Per-call quotas, defaults 32 pages and 10000 rows",
+     " - `continue_on_error` (boolean): Return per-item errors instead of aborting, default true",
+     " - Returns: Batch page summary plus per-page rows, cursors, and errors"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    99,
+    100
+   ],
+   [
+    "replace",
+    100,
+    106,
+    100,
+    106,
+    [
+     " - Execute a query and export the results to a CSV or Excel file",
+     " - Input:",
+     " - `query_sql` (string): The SQL query to execute (using TREE dialect)",
+     " - `format` (string): Export format, either \"csv\" or \"excel\" (default: \"csv\")",
+     " - `filename` (string): Optional filename for the exported file. If not provided, a unique filename will be generated.",
+     " - Returns: Information about the exported file and a preview of the data (max 10 rows)"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    106,
+    107
+   ],
+   [
+    "replace",
+    107,
+    115,
+    107,
+    115,
+    [
+     " - Execute AINode `CALL INFERENCE(...)` SQL and return the result set",
+     " - Input:",
+     " - `inference_sql` (string): A single Tree-dialect SQL statement starting with `CALL INFERENCE`",
+     " - Validates model id, quoted input SELECT SQL, explicit non-wildcard columns,",
+     " and supported parameters (`generateTime`, `outputLength`) before execution",
+     " - Permission metadata: model management is reported through the advisory MCP",
+     " policy layer. In strict mode, `IOTDB_ENABLE_MODEL_MANAGEMENT=true` and",
+     " `IOTDB_MODEL_ALLOWED_USERS` are enforced."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    115,
+    116
+   ],
+   [
+    "replace",
+    116,
+    122,
+    116,
+    122,
+    [
+     " - Build and validate AINode `CALL INFERENCE(...)` SQL from structured fields",
+     " - Input:",
+     " - `model_id` (string): Registered AINode model id",
+     " - `input_sql` (string): Bounded Tree-dialect SELECT query used as model input",
+     " - `output_length` (int): Forecast output length (default: 96)",
+     " - `generate_time` (bool): Whether to request a Time column (default: false)"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    126,
+    122,
+    126
+   ],
+   [
+    "replace",
+    126,
+    127,
+    126,
+    127,
+    [
+     " - Execute `SHOW FUNCTIONS` for the selected IoTDB target."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    127,
+    128
+   ],
+   [
+    "replace",
+    128,
+    131,
+    128,
+    131,
+    [
+     " - Build a read-only UDF `SELECT` from structured inputs.",
+     " - Tree form: `SELECT UDF(measurement, \"k\"=\"v\") FROM root.sg.d1 ...`",
+     " - Table form: `SELECT UDF(column, \"k\"=\"v\") FROM table ...`"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    131,
+    132
+   ],
+   [
+    "replace",
+    132,
+    133,
+    132,
+    133,
+    [
+     " - Execute the validated UDF query and return a ResultStore-backed preview."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    133,
+    134
+   ],
+   [
+    "replace",
+    134,
+    135,
+    134,
+    135,
+    [
+     " - Execute the validated UDF query and export the result set to CSV or Excel."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    145,
+    135,
+    145
+   ],
+   [
+    "replace",
+    145,
+    149,
+    145,
+    149,
+    [
+     " - Execute SELECT queries to read data from the database",
+     " - Input:",
+     " - `query_sql` (string): The SELECT SQL query to execute (using TABLE dialect, time using ISO 8601 format, e.g. 2017-11-01T00:08:00.000)",
+     " - Returns: Query results as array of objects"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    154,
+    149,
+    154
+   ],
+   [
+    "replace",
+    154,
+    157,
+    154,
+    157,
+    [
+     " - Get a list of all tables in the database",
+     " - No input required",
+     " - Returns: Array of table names"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    160,
+    157,
+    160
+   ],
+   [
+    "replace",
+    160,
+    164,
+    160,
+    164,
+    [
+     " - View schema information for a specific table",
+     " - Input:",
+     " - `table_name` (string): Name of table to describe",
+     " - Returns: Array of column definitions with names and types"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    164,
+    166
+   ],
+   [
+    "replace",
+    166,
+    172,
+    166,
+    172,
+    [
+     " - Execute a query and export the results to a CSV or Excel file",
+     " - Input:",
+     " - `query_sql` (string): The SQL query to execute (using TABLE dialect)",
+     " - `format` (string): Export format, either \"csv\" or \"excel\" (default: \"csv\")",
+     " - `filename` (string): Optional filename for the exported file. If not provided, a unique filename will be generated.",
+     " - Returns: Information about the exported file and a preview of the data (max 10 rows)"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    177,
+    172,
+    177
+   ],
+   [
+    "replace",
+    177,
+    186,
+    177,
+    186,
+    [
+     "|Option|Environment Variable|Default Value|Description|",
+     "|-------------|--------------------|-------------|--------------------------------|",
+     "|--host|IOTDB_HOST|127.0.0.1|IoTDB host address|",
+     "|--port|IOTDB_PORT|6667|IoTDB port|",
+     "|--user|IOTDB_USER|root|IoTDB username|",
+     "|--password|IOTDB_PASSWORD|empty|IoTDB password|",
+     "|--database|IOTDB_DATABASE|test|Table dialect: current database name. Tree dialect: optional session/root scope hint; queries still use explicit `root...` paths.|",
+     "|--sql-dialect|IOTDB_SQL_DIALECT|table|SQL dialect: tree or table|",
+     "|--export-path|IOTDB_EXPORT_PATH|/tmp|Path for exporting query results|"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    240,
+    186,
+    240
+   ],
+   [
+    "replace",
+    240,
+    247,
+    240,
+    241,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    271,
+    241,
+    265
+   ],
+   [
+    "replace",
+    271,
+    290,
+    265,
+    266,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    314,
+    266,
+    290
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "c62efa423bf5+2": {
+  "fn": "ltoddy/leetcode",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    3,
+    1,
+    1
+   ],
+   [
+    "equal",
+    3,
+    14,
+    1,
+    12
+   ],
+   [
+    "delete",
+    14,
+    16,
+    12,
+    12
+   ],
+   [
+    "equal",
+    16,
+    32,
+    12,
+    28
+   ],
+   [
+    "delete",
+    32,
+    34,
+    28,
+    28
+   ],
+   [
+    "equal",
+    34,
+    36,
+    28,
+    30
+   ],
+   [
+    "replace",
+    36,
+    37,
+    30,
+    31,
+    [
+     "see more"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    31,
+    34
+   ],
+   [
+    "replace",
+    40,
+    41,
+    34,
+    35,
+    [
+     "本项目配置了一个 skill，让 AI 助手能直接从 LeetCode 中国站拉取题目并初始化题解。"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    51,
+    35,
+    45
+   ],
+   [
+    "delete",
+    51,
+    52,
+    45,
+    45
+   ],
+   [
+    "equal",
+    52,
+    53,
+    45,
+    46
+   ],
+   [
+    "replace",
+    53,
+    55,
+    46,
+    47,
+    [
+     "GitHub license"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "3f6ce63693f0+2": {
+  "fn": "egerkuzma/kuztds",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "**English** · Русский"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    8,
+    4,
+    8,
+    [
+     "CI",
+     "Go Report Card",
+     "Go version",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    21,
+    8,
+    21
+   ],
+   [
+    "replace",
+    21,
+    24,
+    21,
+    22,
+    [
+     "A flow in the admin panel: visitors fall down the trunk, each stream branches off to its destination"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    26,
+    22,
+    24
+   ],
+   [
+    "replace",
+    26,
+    50,
+    24,
+    25,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    57,
+    25,
+    32
+   ],
+   [
+    "replace",
+    57,
+    59,
+    32,
+    34,
+    [
+     " laptop-class M1, p50 ~1 ms, **0 errors**. The core IP lookup is **~9 ns** with",
+     " zero allocations."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    34,
+    35
+   ],
+   [
+    "replace",
+    60,
+    62,
+    35,
+    37,
+    [
+     " 400 concurrent connections. In a head-to-head benchmark it is **~135× faster**",
+     " than a classic PHP TDS — which *collapses* under the very same load."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    37,
+    38
+   ],
+   [
+    "replace",
+    63,
+    65,
+    38,
+    40,
+    [
+     " one long-running process; logs are written **asynchronously** to ClickHouse, so",
+     " the hot path never blocks on disk."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    40,
+    41
+   ],
+   [
+    "replace",
+    66,
+    68,
+    41,
+    43,
+    [
+     " parameterized queries, `X-Forwarded-For` and `CF-IPCountry` believed only",
+     " from trusted proxies, JSON-only input."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    43,
+    44
+   ],
+   [
+    "replace",
+    69,
+    73,
+    44,
+    48,
+    [
+     " as they work (drag streams to reorder, line widths follow the traffic),",
+     " conditions and outputs shown as words and rows instead of `|`-separated",
+     " strings, a visitor test that shows which rule stopped whom, dashboard, logs,",
+     " conversions, `.dat` editor, automation. No Node build, no separate web server."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    48,
+    49
+   ],
+   [
+    "replace",
+    74,
+    76,
+    49,
+    51,
+    [
+     " fresh, checks your domains with VirusTotal, watches the disk and reports",
+     " conversions to Telegram."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    51,
+    52
+   ],
+   [
+    "replace",
+    77,
+    78,
+    52,
+    53,
+    [
+     " runs without them and simply skips the corresponding features."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    53,
+    54
+   ],
+   [
+    "replace",
+    79,
+    80,
+    54,
+    55,
+    [
+     " integration + an embedded-JS syntax check, all green in CI."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    85,
+    55,
+    60
+   ],
+   [
+    "delete",
+    85,
+    87,
+    60,
+    60
+   ],
+   [
+    "equal",
+    87,
+    91,
+    60,
+    64
+   ],
+   [
+    "replace",
+    91,
+    92,
+    64,
+    65,
+    [
+     " CDN's `CF-IPCountry` for the country)."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    65,
+    66
+   ],
+   [
+    "replace",
+    93,
+    94,
+    66,
+    67,
+    [
+     " hosting networks away from an offer."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    98,
+    67,
+    71
+   ],
+   [
+    "replace",
+    98,
+    99,
+    71,
+    72,
+    [
+     " (`utm_source=fb`), and arbitrary IP lists."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    105,
+    72,
+    78
+   ],
+   [
+    "replace",
+    105,
+    106,
+    78,
+    79,
+    [
+     " Baidu/Others), empty UA/referer/language, IPv6, reverse DNS (PTR), UA blacklist."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    108,
+    79,
+    81
+   ],
+   [
+    "replace",
+    108,
+    109,
+    81,
+    82,
+    [
+     " normal stream while still logging them."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    113,
+    82,
+    86
+   ],
+   [
+    "replace",
+    113,
+    115,
+    86,
+    88,
+    [
+     " pages, JSON API responses, stub, …) — including **`group`: hand the visitor",
+     " to another group**, so flows can be chained."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    88,
+    89
+   ],
+   [
+    "replace",
+    116,
+    119,
+    89,
+    92,
+    [
+     " [OPERATOR] [DOMAIN] [USERAGENT] [CID] [ASN] [ORG] [TIMEZONE] [UTC]",
+     " [PAR-1..5] [()COUNTRY()] [()CITY()]",
+     " [RANDNUM-a-b] [RANDSTR-(set)-n] [RANDLINE-(file)-n] [RANDDFL-(dir)-n]`."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    92,
+    93
+   ],
+   [
+    "replace",
+    120,
+    121,
+    93,
+    94,
+    [
+     " `evenly` (Redis counter)."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    94,
+    95
+   ],
+   [
+    "replace",
+    122,
+    124,
+    95,
+    97,
+    [
+     " `.dat`), `[REMOTE]` (fetch external content with caching), CURL redirect",
+     " (fetch + find/replace), `api_mac` (mac code in API responses)."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    127,
+    97,
+    100
+   ],
+   [
+    "replace",
+    127,
+    129,
+    100,
+    102,
+    [
+     " databases are re-read in the background when their files change — admin",
+     " edits and fresh downloads go live without restarting the engine."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    102,
+    103
+   ],
+   [
+    "replace",
+    130,
+    133,
+    103,
+    106,
+    [
+     " Google and Bing publish), MaxMind-format database downloads, VirusTotal",
+     " checks of the domains streams send to, free-disk alerts, keyword-file",
+     " cleanup, Telegram notifications for all of it and for new conversions."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    106,
+    107
+   ],
+   [
+    "replace",
+    134,
+    135,
+    107,
+    108,
+    [
+     " rules in place."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    143,
+    108,
+    116
+   ],
+   [
+    "replace",
+    143,
+    145,
+    116,
+    118,
+    [
+     " following the traffic; drag to reorder; edit in a drawer; send a stream on",
+     " to another flow; **test a visitor** and see which condition stopped them."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    118,
+    119
+   ],
+   [
+    "replace",
+    146,
+    149,
+    119,
+    122,
+    [
+     " chart, a **performance table by flow and stream** (hits / unique / bots /",
+     " conversions / profit / CR, sortable, CSV) and breakdowns (country/device/OS/",
+     " browser/source/network)."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    122,
+    123
+   ],
+   [
+    "replace",
+    150,
+    151,
+    123,
+    124,
+    [
+     " country flags, and a detail view per visit (network, User-Agent, referer)."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    124,
+    125
+   ],
+   [
+    "replace",
+    152,
+    155,
+    125,
+    126,
+    [
+     " lookup tool, the automation page, password change. Light and dark theme."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    165,
+    126,
+    136
+   ],
+   [
+    "replace",
+    165,
+    166,
+    136,
+    137,
+    [
+     "Flow"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    171,
+    137,
+    142
+   ],
+   [
+    "replace",
+    171,
+    172,
+    142,
+    143,
+    [
+     "Test a visitor"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    178,
+    143,
+    149
+   ],
+   [
+    "replace",
+    178,
+    179,
+    149,
+    150,
+    [
+     "Stream editor"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    182,
+    150,
+    153
+   ],
+   [
+    "replace",
+    182,
+    183,
+    153,
+    154,
+    [
+     "Flows"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    187,
+    154,
+    158
+   ],
+   [
+    "replace",
+    187,
+    188,
+    158,
+    159,
+    [
+     "Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    192,
+    159,
+    163
+   ],
+   [
+    "replace",
+    192,
+    193,
+    163,
+    164,
+    [
+     "Logs"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    197,
+    164,
+    168
+   ],
+   [
+    "replace",
+    197,
+    198,
+    168,
+    169,
+    [
+     "Tools"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    201,
+    169,
+    172
+   ],
+   [
+    "replace",
+    201,
+    204,
+    172,
+    173,
+    [
+     "Automation"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    209,
+    173,
+    178
+   ],
+   [
+    "replace",
+    209,
+    210,
+    178,
+    179,
+    [
+     "|Binary|Port|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    179,
+    180
+   ],
+   [
+    "replace",
+    211,
+    215,
+    180,
+    184,
+    [
+     "|`cmd/engine`|`:8080`|The hot path — traffic handling. A long-running process.|",
+     "|`cmd/admin`|`:8090`|REST API + embedded admin SPA (`internal/admin/web`, `go:embed`).|",
+     "|`cmd/cron`|—|Background jobs: list and geo database updates, VirusTotal, disk, Telegram. Talks to the others through files only.|",
+     "|`cmd/apiclient`|`:9090`|Client to install on a landing/donor page (calls the engine via `?api=`).|"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    222,
+    184,
+    191
+   ],
+   [
+    "replace",
+    222,
+    238,
+    191,
+    192,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    243,
+    192,
+    197
+   ],
+   [
+    "replace",
+    243,
+    246,
+    197,
+    198,
+    [
+     "Full details: `docs/ARCHITECTURE.md`."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    262,
+    198,
+    214
+   ],
+   [
+    "replace",
+    262,
+    263,
+    214,
+    215,
+    [
+     "Performance benchmark on Apple M1"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    215,
+    216
+   ],
+   [
+    "replace",
+    264,
+    265,
+    216,
+    217,
+    [
+     "|Scenario|Requests/sec|p50|p99|Errors|"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    266,
+    217,
+    218
+   ],
+   [
+    "replace",
+    266,
+    269,
+    218,
+    221,
+    [
+     "|**Full pipeline** · cookie uniqueness · async log → ClickHouse (302)|**~30,000**|~1 ms|~11 ms|0|",
+     "|Uniqueness by IP · Redis `SETNX` on every request (200)|~16,000|~2.6 ms|~10 ms|0|",
+     "|Active bot detection · search-engine IP lists + signatures (200)|~13,000|~3 ms|~16 ms|0|"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    280,
+    221,
+    232
+   ],
+   [
+    "delete",
+    280,
+    282,
+    232,
+    232
+   ],
+   [
+    "equal",
+    282,
+    289,
+    232,
+    239
+   ],
+   [
+    "replace",
+    289,
+    290,
+    239,
+    240,
+    [
+     "KuzTDS vs zTDS — head-to-head benchmark"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    291,
+    240,
+    241
+   ],
+   [
+    "replace",
+    291,
+    292,
+    241,
+    242,
+    [
+     "||KuzTDS (Go)|zTDS (PHP)|"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    293,
+    242,
+    243
+   ],
+   [
+    "replace",
+    293,
+    297,
+    243,
+    247,
+    [
+     "|Single thread|**11,352 req/s** · p50 80 µs|84 req/s · p50 ~10 ms|",
+     "|8 concurrent|**23,626 req/s** · 0 errors|collapses (errors, multi-second tails)|",
+     "|50 concurrent|**27,800 req/s** · 0 errors|collapses (mostly errors)|",
+     "|Scaling|flat to 400 concurrent, **0 errors**|degrades from 2 concurrent, fails by 8|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    314,
+    247,
+    264
+   ],
+   [
+    "replace",
+    314,
+    315,
+    264,
+    265,
+    [
+     "Methodology and caveats — see Performance above. These are"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    317,
+    265,
+    267
+   ],
+   [
+    "delete",
+    317,
+    319,
+    267,
+    267
+   ],
+   [
+    "equal",
+    319,
+    346,
+    267,
+    294
+   ],
+   [
+    "replace",
+    346,
+    351,
+    294,
+    295,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    358,
+    295,
+    302
+   ],
+   [
+    "replace",
+    358,
+    365,
+    302,
+    303,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    395,
+    303,
+    333
+   ],
+   [
+    "delete",
+    395,
+    397,
+    333,
+    333
+   ],
+   [
+    "equal",
+    397,
+    400,
+    333,
+    336
+   ],
+   [
+    "replace",
+    400,
+    401,
+    336,
+    337,
+    [
+     "written to files in the repo**. Full reference: `docs/USAGE.md`."
+    ]
+   ],
+   [
+    "equal",
+    401,
+    403,
+    337,
+    339
+   ],
+   [
+    "replace",
+    403,
+    404,
+    339,
+    340,
+    [
+     "|Variable|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    404,
+    405,
+    340,
+    341
+   ],
+   [
+    "replace",
+    405,
+    418,
+    341,
+    354,
+    [
+     "|`KUZTDS_LISTEN`|listen address (default `:8080`)|",
+     "|`KUZTDS_DATA_DIR`|directory of `.dat` lists (IP, wap, signatures, separation)|",
+     "|`KUZTDS_GROUPS_FILE`|JSON groups config (source of truth)|",
+     "|`KUZTDS_TRUSTED_PROXIES`|trusted proxy CIDRs for `XFF`/`CF` (comma-separated)|",
+     "|`KUZTDS_GEO_DB`|path to a MaxMind-format City or Country `.mmdb` (optional; without it the country comes from `CF-IPCountry`)|",
+     "|`KUZTDS_ASN_DB`|path to a MaxMind-format ASN `.mmdb` (optional; enables the ASN / organization filters)|",
+     "|`KUZTDS_RELOAD_INTERVAL`|how often changed files are re-read (default `1m`)|",
+     "|`KUZTDS_REDIS_ADDR` / `_PASSWORD`|Redis (uniq/limit/firewall)|",
+     "|`KUZTDS_CLICKHOUSE_ADDR` / `_DB` / `_USER` / `_PASSWORD`|ClickHouse (logs)|",
+     "|`KUZTDS_POSTBACK_KEY`|key for the `?pb=` postback|",
+     "|`KUZTDS_API_KEY`|key for the `?api=` client mode|",
+     "|`KUZTDS_KEYS_DIR`|directory for collected keywords|",
+     "|`KUZTDS_TRASH_MODE` / `_URL`|behaviour for an unknown group (0=200,1=redirect,2=403,3=404)|"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    446,
+    354,
+    382
+   ],
+   [
+    "replace",
+    446,
+    447,
+    382,
+    383,
+    [
+     "|Variable|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    448,
+    383,
+    384
+   ],
+   [
+    "replace",
+    448,
+    456,
+    384,
+    392,
+    [
+     "|`KUZTDS_ADMIN_LISTEN`|address (default `:8090`)|",
+     "|`KUZTDS_ADMIN_USER`|login (default `admin`)|",
+     "|`KUZTDS_ADMIN_PASSWORD_HASH`|argon2id hash|",
+     "|`KUZTDS_ADMIN_PASSWORD_FILE`|hash file (takes priority; UI password changes are written here)|",
+     "|`KUZTDS_ENGINE_URL`|engine base URL (for group links in the UI)|",
+     "|`KUZTDS_GROUPS_FILE` / `KUZTDS_DATA_DIR` / `KUZTDS_KEYS_DIR`|same paths as the engine|",
+     "|`KUZTDS_GEO_DB` / `KUZTDS_ASN_DB`|same paths as the engine (IP lookup, visitor test)|",
+     "|`KUZTDS_CRON_FILE`|the cron service's config file (enables the Automation page)|"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    458,
+    392,
+    394
+   ],
+   [
+    "replace",
+    458,
+    459,
+    394,
+    395,
+    [
+     "|Variable|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    459,
+    460,
+    395,
+    396
+   ],
+   [
+    "replace",
+    460,
+    464,
+    396,
+    400,
+    [
+     "|`KUZTDS_CRON_FILE`|its config (JSON, written by the admin; default `cron.json`). State is kept next to it in `<file>.status.json`|",
+     "|`KUZTDS_DATA_DIR` / `KUZTDS_KEYS_DIR` / `KUZTDS_GROUPS_FILE`|same paths as the engine|",
+     "|`KUZTDS_GEO_DB` / `KUZTDS_ASN_DB`|where downloaded databases are put — the config chooses what to download, never where to write|",
+     "|`KUZTDS_CLICKHOUSE_*`|only for conversion notifications|"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    472,
+    400,
+    408
+   ],
+   [
+    "replace",
+    472,
+    500,
+    408,
+    409,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    500,
+    511,
+    409,
+    420
+   ],
+   [
+    "delete",
+    511,
+    513,
+    420,
+    420
+   ],
+   [
+    "equal",
+    513,
+    516,
+    420,
+    423
+   ],
+   [
+    "replace",
+    516,
+    518,
+    423,
+    425,
+    [
+     " a **flow**. It holds defaults (`redirect`/`out`/`header`),",
+     " uniqueness/firewall settings, and a list of **streams**."
+    ]
+   ],
+   [
+    "equal",
+    518,
+    519,
+    425,
+    426
+   ],
+   [
+    "replace",
+    519,
+    520,
+    426,
+    427,
+    [
+     " picks the **first active stream that passes all of its rules**; order matters."
+    ]
+   ],
+   [
+    "equal",
+    520,
+    521,
+    427,
+    428
+   ],
+   [
+    "replace",
+    521,
+    522,
+    428,
+    429,
+    [
+     " them in a loop. If no stream matches, the group defaults / `trash` mode apply."
+    ]
+   ],
+   [
+    "equal",
+    522,
+    523,
+    429,
+    430
+   ],
+   [
+    "replace",
+    523,
+    526,
+    430,
+    433,
+    [
+     " visitor to another group, whose streams are then tried with the same visitor.",
+     " Chains are limited to three hops; a link to a missing or disabled group",
+     " answers like an unknown group."
+    ]
+   ],
+   [
+    "equal",
+    526,
+    527,
+    433,
+    434
+   ],
+   [
+    "replace",
+    527,
+    530,
+    434,
+    435,
+    [
+     " redirect, `403`, or `404`."
+    ]
+   ],
+   [
+    "equal",
+    530,
+    536,
+    435,
+    441
+   ],
+   [
+    "replace",
+    536,
+    537,
+    441,
+    442,
+    [
+     "|Flag|Meaning (list filters)|Meaning (device/operator)|"
+    ]
+   ],
+   [
+    "equal",
+    537,
+    538,
+    442,
+    443
+   ],
+   [
+    "replace",
+    538,
+    541,
+    443,
+    446,
+    [
+     "|`0`|**off** — filter not applied|—|",
+     "|`1`|**exclude** — reject on match (blacklist)|block this device/operator|",
+     "|`2`|**include** — reject on absence of a match (whitelist)|require (whitelist)|"
+    ]
+   ],
+   [
+    "equal",
+    541,
+    549,
+    446,
+    454
+   ],
+   [
+    "delete",
+    549,
+    551,
+    454,
+    454
+   ],
+   [
+    "equal",
+    551,
+    555,
+    454,
+    458
+   ],
+   [
+    "replace",
+    555,
+    556,
+    458,
+    459,
+    [
+     "|Type|Result|"
+    ]
+   ],
+   [
+    "equal",
+    556,
+    557,
+    459,
+    460
+   ],
+   [
+    "replace",
+    557,
+    569,
+    460,
+    472,
+    [
+     "|`http_redirect`|`302` with `Location: <out>`|",
+     "|`meta_refresh`, `js_redirect`, `iframe_redirect`, `iframe_selection`, `js_selection`|HTML that navigates the browser|",
+     "|`javascript`|`200` JS body|",
+     "|`show_text`|`200` plain text|",
+     "|`show_page_html`|`200` HTML page wrapping `<out>`|",
+     "|`under_construction`|`200` stub page|",
+     "|`stop`|`200`, empty body|",
+     "|`403_forbidden`, `404_not_found`, `500_server_error`|error pages|",
+     "|`api`|`200` JSON `{out,type,country,device,…}` (for api clients)|",
+     "|`show_out`|`200` JSON `{out,type:1,mac}`|",
+     "|`curl`|fetch a URL server-side, apply find/replace, return the body|",
+     "|`group`|hand the visitor to the group named in `out`|"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    584,
+    472,
+    487
+   ],
+   [
+    "delete",
+    584,
+    586,
+    487,
+    487
+   ],
+   [
+    "equal",
+    586,
+    593,
+    487,
+    494
+   ],
+   [
+    "replace",
+    593,
+    594,
+    494,
+    495,
+    [
+     " the visitor as a bot."
+    ]
+   ],
+   [
+    "equal",
+    594,
+    595,
+    495,
+    496
+   ],
+   [
+    "replace",
+    595,
+    596,
+    496,
+    497,
+    [
+     " serve bots a **separate** output (`bot_redirect`)."
+    ]
+   ],
+   [
+    "equal",
+    596,
+    597,
+    497,
+    498
+   ],
+   [
+    "delete",
+    597,
+    599,
+    498,
+    498
+   ],
+   [
+    "equal",
+    599,
+    617,
+    498,
+    516
+   ],
+   [
+    "delete",
+    617,
+    619,
+    516,
+    516
+   ],
+   [
+    "equal",
+    619,
+    629,
+    516,
+    526
+   ],
+   [
+    "replace",
+    629,
+    632,
+    526,
+    529,
+    [
+     " a time chart with hover values, the **performance table** by flow and stream",
+     " (sortable, CSV, click to open the flow), breakdowns by country, device, OS,",
+     " browser, source and network."
+    ]
+   ],
+   [
+    "equal",
+    632,
+    633,
+    529,
+    530
+   ],
+   [
+    "replace",
+    633,
+    643,
+    530,
+    540,
+    [
+     " draws it as it works: the entry, a **trunk** the visitors fall down, a",
+     " **branch** per stream to its destination, the default at the bottom; widths",
+     " and labels are the traffic of the period. Drag a stream by its handle to",
+     " reorder, flip its switch, duplicate it or move it to another flow from its",
+     " menu. Click a stream to edit it in a **drawer**: *When* (only the conditions",
+     " it carries; 23 kinds behind \"Add condition\" — geo, time zone, ASN,",
+     " organization, operator, IP list, device, brand, OS, browser, language,",
+     " referer, domain, keyword, URL parameter, User-Agent, unique, days of week,",
+     " impression limit), *Then* (type, output, variants — or another flow), *Bots*,",
+     " *Advanced*, and a note shown on the canvas."
+    ]
+   ],
+   [
+    "equal",
+    643,
+    644,
+    540,
+    541
+   ],
+   [
+    "replace",
+    644,
+    647,
+    541,
+    544,
+    [
+     " referer, keyword, URL parameters → the path through the flow, the matched",
+     " stream, and for every other stream the condition that stopped the visitor.",
+     " Works on unsaved edits and follows links to other flows."
+    ]
+   ],
+   [
+    "equal",
+    647,
+    648,
+    544,
+    545
+   ],
+   [
+    "replace",
+    648,
+    649,
+    545,
+    546,
+    [
+     " period, IP field, humans/bots, CSV export; a row opens the visit's detail."
+    ]
+   ],
+   [
+    "equal",
+    649,
+    650,
+    546,
+    547
+   ],
+   [
+    "replace",
+    650,
+    651,
+    547,
+    548,
+    [
+     " flow and day. **Lists** — editor for `.dat` files."
+    ]
+   ],
+   [
+    "equal",
+    651,
+    652,
+    548,
+    549
+   ],
+   [
+    "replace",
+    652,
+    653,
+    549,
+    550,
+    [
+     " lists it is in, and the state of the geo databases."
+    ]
+   ],
+   [
+    "equal",
+    653,
+    654,
+    550,
+    551
+   ],
+   [
+    "replace",
+    654,
+    655,
+    551,
+    552,
+    [
+     " settings, last result and \"Run now\"; Telegram with a test message."
+    ]
+   ],
+   [
+    "equal",
+    655,
+    656,
+    552,
+    553
+   ],
+   [
+    "delete",
+    656,
+    658,
+    553,
+    553
+   ],
+   [
+    "equal",
+    658,
+    666,
+    553,
+    561
+   ],
+   [
+    "replace",
+    666,
+    671,
+    561,
+    566,
+    [
+     " that never reached ClickHouse rides along in headers, so it can be scraped",
+     " without a metrics endpoint: `X-Events-Lost: <total>` and",
+     " `X-Events-Lost-Detail: full=<n> queue=<n> insert=<n> late=<n>` (the intake",
+     " channel was full / the batch queue was full / the insert failed / the event",
+     " arrived during shutdown). The same counters are logged on exit."
+    ]
+   ],
+   [
+    "equal",
+    671,
+    679,
+    566,
+    574
+   ],
+   [
+    "delete",
+    679,
+    681,
+    574,
+    574
+   ],
+   [
+    "equal",
+    681,
+    701,
+    574,
+    594
+   ],
+   [
+    "replace",
+    701,
+    704,
+    594,
+    595,
+    [
+     "`docs/STATUS.md`."
+    ]
+   ],
+   [
+    "equal",
+    704,
+    711,
+    595,
+    602
+   ],
+   [
+    "replace",
+    711,
+    733,
+    602,
+    603,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    733,
+    734,
+    603,
+    604
+   ],
+   [
+    "delete",
+    734,
+    736,
+    604,
+    604
+   ],
+   [
+    "equal",
+    736,
+    743,
+    604,
+    611
+   ],
+   [
+    "replace",
+    743,
+    746,
+    611,
+    612,
+    [
+     "via env only. Full model: `docs/SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    746,
+    748,
+    612,
+    614
+   ],
+   [
+    "replace",
+    748,
+    755,
+    614,
+    615,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    755,
+    756,
+    615,
+    616
+   ],
+   [
+    "replace",
+    756,
+    758,
+    616,
+    617,
+    [
+     "MIT."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
  }
 }

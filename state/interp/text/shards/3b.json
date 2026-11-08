@@ -2427,5 +2427,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "835a9c32aee4": {
+  "identity": {
+   "one_liner": "为 MongoDB 提供分支、时间回溯与撤销的版本控制工具，面向 AI Agent。",
+   "review": "Argon 是一个 Go 编写的 MongoDB 数据版本控制工具：通过元数据指针创建分支，checkout 将分支物化为真实的 MongoDB 数据库，任何驱动可直接连接；写入经 change-stream 捕获为历史，支持 diff、三方合并、按 actor 撤销和数据集 pin。历史保留依赖快照加保留窗口 GC，集合删除/重命名和索引不纳入版本化，发布前需停止写入。提供 CLI、本地 Web 控制台、MCP 服务与 Python SDK，面向需要在 AI Agent 工作流中管理数据变更回滚的开发者。",
+   "highlights": [
+    "分支通过一次元数据写入创建，checkout 后由真实 mongod 提供服务，支持 pymongo、mongoose、mongosh 及索引、聚合、事务",
+    "基于 change-stream 捕获文档级历史，支持按 LSN 或时间戳查询、按 actor 标签撤销、三方合并预览与沙箱 TTL 管理",
+    "提供 MCP 接口（13 个工具）、Python SDK 与 LangGraph 适配器，本地 Web 控制台包含 UI 与 REST API"
+   ],
+   "use_cases": [
+    "为 AI Agent 创建带 TTL 的一次性沙箱分支，运行结束后 diff、合并或撤销整个会话",
+    "将生产数据导入为项目后，以数据 PR 形式预览并应用三方合并变更",
+    "按时间戳或 actor 标签回滚误写入，用 pin 保护关键数据状态免受 GC 与重置影响"
+   ]
+  },
+  "sha": "835a9c32aee4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

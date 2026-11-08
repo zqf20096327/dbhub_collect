@@ -2780,5 +2780,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1f1c5ca75e7b": {
+  "identity": {
+   "one_liner": "基于 DuckDB 与 React 的无人机飞行日志本地分析面板，支持插件解析自定义格式",
+   "review": "Open DroneLog 是一款用于整理和分析无人机飞行日志的应用，支持 DJI（.txt）、Litchi CSV 和 Airdata CSV 导入，并以 Tauri v2 桌面应用、Docker 部署的 Web 应用及 Android APK 形式分发。数据存储在本地 DuckDB 数据库中，首次导入 DJI 日志时需联网获取密钥。面向希望本地管理飞行记录的无人机用户。",
+   "highlights": [
+    "支持 DJI .txt、Litchi CSV、Airdata CSV 导入，并可通过 parsers.json 配置外部解析插件，导入时基于机身序列号、电池序列号和起飞时间去重",
+    "提供交互式飞行地图（3D 地形、卫星/地形/OpenStreetMap 图层、0.5x-16x 回放）与遥测图表（高度、速度、电池、电芯电压、GPS 等），数据分析由 DuckDB 查询并对大数据集自动降采样",
+    "数据存储于本地 DuckDB，无需云端上传（首次导入 DJI 密钥除外），支持 CSV/JSON/GPX/KML 导出、多 Profile 数据隔离与备份恢复"
+   ],
+   "use_cases": [
+    "在本地集中整理、去重并检索多架无人机与多块电池的飞行日志",
+    "查看飞行轨迹回放、遥测曲线与电池健康/循环次数追踪",
+    "生成 A4 版式的飞行报告（可打印为 PDF）或分享用 FlyCard 图片"
+   ]
+  },
+  "sha": "1f1c5ca75e7b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74c0f0664891": {
+  "identity": {
+   "one_liner": "Go 实现的 9Router LLM 代理网关，单二进制含内嵌 Svelte 仪表盘",
+   "review": "9router-go 是 9Router 的 Go 重写版，为 Claude Code、Cursor、Cline 等 CLI 工具提供指向 40+ 提供商、100+ 模型的本地代理（默认端口 20130）。功能包含 RTK 工具输出压缩、组合路由策略与多账户轮询；数据存于 SQLite，可与 Node.js 版 9Router 直接共用同一数据库文件，无需迁移。运行时无需 Node.js。",
+   "highlights": [
+    "提供 fallback、round-robin、sticky、capacity、fusion 五种组合路由策略，支持每组合配置模型响应超时与宽限期",
+    "与 9Router 共享同一 SQLite 数据库 schema，启动时仅做增量式结构补全，不执行破坏性迁移",
+    "支持 OpenAI Chat、Claude Messages、Gemini、Ollama 兼容等多种 API 格式，内置 systemd/launchd/OpenRC/runit/cron/Windows 计划任务的服务安装"
+   ],
+   "use_cases": [
+    "为多种 AI 编码 CLI 工具提供统一的本地代理端点，接入多个模型提供商",
+    "从 Node.js 版 9Router 切换到 Go 二进制运行时，保留原有连接、组合与用量数据",
+    "需要开机自启、后台守护进程管理的本地 LLM 网关部署场景"
+   ]
+  },
+  "sha": "74c0f0664891",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae88fc371265": {
+  "identity": {
+   "one_liner": "TDengine 的 ADO.NET 提供程序，支持原生库、WebSocket、RESTful 三种连接协议。",
+   "review": "IoTSharp.Data.Taos 是面向 TDengine 的 ADO.NET 数据提供程序，供 .NET 开发者通过 TaosConnection 访问 TDengine。其通过连接字符串的 Protocol 参数切换 Native、WebSocket、RESTful 或云服务 DSN 四种接入方式；其中 WebSocket、Cloud DSN、Native 均支持 Schemaless 与 Stmt 参数化，RESTful 则不支持这两项能力。发布于 NuGet，附带 EF Core 与健康检查组件。",
+   "highlights": [
+    "提供原生动态库（依赖 libtaos，需安装 TDengine-client）、WebSocket、RESTful、云服务 DSN 四种连接方式",
+    "通过 Schemaless 实现 ExecuteBulkInsert 批量插入，支持行协议与 JSON 协议两种写入格式",
+    "通过 Stmt 实现参数化执行，WebSocket 与 Cloud DSN 连接为纯 C# 实现、无外部依赖"
+   ],
+   "use_cases": [
+    ".NET 应用中通过 ADO.NET 接口读写 TDengine 时序数据库",
+    "物联网数据采集场景下以 Schemaless 方式批量写入表数据",
+    "Asp.Net Core 项目中集成 TDengine 健康检查"
+   ]
+  },
+  "sha": "ae88fc371265",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

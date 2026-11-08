@@ -2776,5 +2776,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8973202bd37c": {
+  "identity": {
+   "one_liner": "面向 Web2 与 Web3 的去中心化数据库，支持 Redis RESP 与 MySQL 协议接口",
+   "review": "IceFireDB 是用 Go 编写的去中心化 KV 数据库，提供 Redis RESP 兼容命令与 MySQL 协议接口，覆盖字符串、哈希、列表、集合、有序集合等数据类型。存储层支持 goleveldb、hybriddb、badger、IPFS、OSS、CRDT 等后端并按 GA/Beta/Experimental 分级，写入经 Raft 日志落盘。适合需要在既有 Redis/MySQL 应用上叠加分布式同步与去中心化存储的团队；SCAN 类游标语义与 Redis 有差异需注意。",
+   "highlights": [
+    "支持 Redis RESP 协议的多数据类型命令（Strings/Hashes/Lists/Sets/Sorted Sets）及 SCAN/HSCAN 等扫描命令",
+    "存储后端矩阵分级：goleveldb 与 hybriddb 为 GA，badger、ipfs-synckv 为 Beta，IPFS、OSS、CRDT 为 Experimental，均接入 CI",
+    "写入经 Raft 日志并默认 fsync 后确认，可经 --nosync 关闭同步换取速度；混合共识结合 Raft（站点内）与 P2P CRDT（跨站点）"
+   ],
+   "use_cases": [
+    "以 Redis 客户端直接接入、需 Raft 分布式一致性或 CRDT 跨站点同步的 KV 存储场景",
+    "通过 IceFireDB-Redis-Proxy / SQLProxy 为既有 Redis、MySQL 应用引入 P2P 数据同步",
+    "需要 IPFS 等去中心化存储后端的 Web3 数据持久化场景"
+   ]
+  },
+  "sha": "8973202bd37c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f9bd1fbf23c7": {
+  "identity": {
+   "one_liner": "ArangoDB 官方 Go 语言驱动，用于连接和操作 ArangoDB 数据库",
+   "review": "该项目是 ArangoDB 数据库的官方 Go 驱动，供 Go 开发者在应用中访问 ArangoDB。项目提供 Version 2（v2/ 目录）与 Version 1 两条版本线：V1 已标记废弃，不再增加新功能，README 建议使用 V2。文档含教程、代码示例与参考文档，并给出各驱动版本对应的 Go 版本（1.21–1.25）及 ArangoDB 3.10/3.11/3.12 兼容性矩阵。",
+   "highlights": [
+    "官方 Go 驱动，支持 ArangoDB 3.10、3.11、3.12 版本（V2 系列 2.1.0–2.2.0）",
+    "提供 Version 2 与 Version 1 两条版本线，V1 已废弃且不再接收新功能",
+    "提供教程、代码示例和参考文档，并给出各驱动版本对应的 Go 构建测试版本表"
+   ],
+   "use_cases": [
+    "在 Go 应用程序中连接并操作 ArangoDB 数据库",
+    "需要将旧版 V1 驱动迁移到 V2 的项目",
+    "按 Go 版本（1.21–1.25）或 ArangoDB 版本选择匹配驱动版本的开发场景"
+   ]
+  },
+  "sha": "f9bd1fbf23c7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "71da2361c7db": {
+  "identity": {
+   "one_liner": "Fastify 的 MongoDB 连接插件，在服务器各处共享同一 MongoDB 连接池",
+   "review": "该插件为 Fastify 服务器提供 MongoDB 连接共享能力，底层使用官方 MongoDB 驱动（v7.x.x），register 时传入的选项会透传给 Mongo 客户端。它在 fastify 实例上装饰 mongo 对象，暴露 client、ObjectId 和 db 属性；注册时需提供 URL 或自行传入已配置的 MongoClient 实例。",
+   "highlights": [
+    "在服务器各部分共享同一 MongoDB 连接池，底层使用官方 mongodb 驱动 v7.x.x",
+    "在 fastify 实例上装饰 mongo 对象，包含 client、ObjectId、db 三个属性，并可直接从插件导入 ObjectId",
+    "支持传入预配置的 MongoClient 实例，以及通过 name 选项连接多个 MongoDB 集群"
+   ],
+   "use_cases": [
+    "Fastify 应用中需要在路由、服务等各处访问同一 MongoDB 连接的场景",
+    "通过传入自定义 MongoClient 或配置 database/name 选项，管理多数据库或多集群连接",
+    "编写涉及 MongoDB 连接的 Fastify 测试时，需注意手动调用 fastify.close 以终止连接"
+   ]
+  },
+  "sha": "71da2361c7db",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a85ad39dbbb": {
+  "identity": {
+   "one_liner": "Couchbase Lite 的跨平台 C++ 核心引擎，实现 CRUD、查询与同步复制。",
+   "review": "LiteCore 是 Couchbase Lite 各平台实现所共用的核心库，提供数据库 CRUD、查询、文档版本管理与同步复制的跨平台 C++ 实现，上层通过语言绑定封装。它运行于 macOS、iOS、Android、Unix 和 Windows。官方明确不建议在其他项目中直接使用其 API（不稳定），建议改用 Couchbase Lite for C。",
+   "highlights": [
+    "提供数据库 CRUD、查询、文档版本管理与复制/同步的跨平台 C++（C++20）实现",
+    "支持 Clang（15+）、G++（11+）与 MSVC 编译，提供 CMake（iOS 除外）与 Xcode 工程",
+    "包含 CppTests 与 C4Tests 两套测试二进制，基于 Catch2 框架"
+   ],
+   "use_cases": [
+    "需要调试或在 LiteCore 层面扩展 Couchbase Lite 的开发者",
+    "为 Couchbase Lite 添加平台绑定或语言绑定",
+    "参与该项目贡献（PR 需通过 CI 构建与测试）"
+   ]
+  },
+  "sha": "8a85ad39dbbb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e97ed7a4a9bd": {
+  "identity": {
+   "one_liner": "运行于浏览器 WASM 的 IndexedDB 键值数据库引擎抽象层",
+   "review": "IndxDB 是面向运行在浏览器中的 WASM 应用的键值数据库引擎抽象层，构建在 IndexedDB 之上。它提供多版本并发控制（MVCC）、支持回滚的事务、可序列化的隔离事务，以及 ACID 中的原子性、一致性与隔离性，允许多个读操作并发进行而无需加锁。适合需要在浏览器端使用带事务保障的键值存储的 WASM 开发者。",
+   "highlights": [
+    "提供基于 IndexedDB 的键值数据库抽象层",
+    "实现多版本并发控制，支持无锁的多读并发",
+    "支持可序列化、隔离的事务，含回滚，提供 ACID 中的原子性、一致性与隔离性"
+   ],
+   "use_cases": [
+    "浏览器中 WASM 应用的本地键值数据存储",
+    "需要事务与回滚能力的浏览器端数据管理",
+    "多读并发场景下的 IndexedDB 封装"
+   ]
+  },
+  "sha": "e97ed7a4a9bd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

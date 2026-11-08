@@ -2645,5 +2645,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "272c1bf4853b": {
+  "identity": {
+   "one_liner": "纯 Go 编写的可嵌入持久化键值数据库，基于 WiscKey 设计",
+   "review": "BadgerDB 是用纯 Go 实现的可嵌入、持久化键值数据库，无 Cgo 依赖，作为图数据库 Dgraph 的底层存储。设计基于 WiscKey 论文，将键与值分离写入以降低写放大，并针对 SSD 优化。支持并发 ACID 事务（SSI 隔离级别）、TTL、快照和带版本的迭代器 API。需 Go 1.23 及以上，通过 go get 引入，另提供离线备份/恢复的 CLI 工具。",
+   "highlights": [
+    "支持并发 ACID 事务，提供可串行化快照隔离（SSI）保证",
+    "采用 LSM 树加值日志（value log）的 WiscKey 设计，提供按键排序访问与键-值-版本三维访问",
+    "提供 CLI 工具支持离线备份/恢复"
+   ],
+   "use_cases": [
+    "作为 Go 应用内嵌的持久化键值存储库",
+    "需要事务保证的本地数据存储场景",
+    "作为上层系统（如图数据库、追踪平台、消息队列）的底层存储引擎"
+   ]
+  },
+  "sha": "272c1bf4853b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "387f07c1b270": {
+  "identity": {
+   "one_liner": "自托管建筑行业开源ERP，含工程量清单、CAD/BIM算量与5D成本建模",
+   "review": "面向建筑施工企业的自托管ERP平台，提供工程量清单（BOQ）编辑、DWG/PDF/BIM算量、4D进度与5D成本建模及投标功能。采用AGPL-3.0许可，内置120,000+条成本项（覆盖40+市场）、44种界面语言和190+模块。支持桌面应用、pip或Docker三种安装方式，并提供293个引导案例与视频教程。",
+   "highlights": [
+    "支持BIM、DWG、PDF三种来源的算量提取，并可结合可配置的LLM提供商辅助估算",
+    "内置9个成本数据库，包含120,000+条计价项目，覆盖中国、土耳其、巴西等40+市场",
+    "界面提供44种语言翻译，支持阿拉伯语等从右至左书写语言"
+   ],
+   "use_cases": [
+    "编制符合DIN 276、NRM、CSI MasterFormat等30+地区标准的工程量清单与投标报价",
+    "从DWG/PDF图纸或BIM模型中提取工程量并推入BOQ",
+    "项目群预算、发票与挣值的多币种跟踪分析"
+   ]
+  },
+  "sha": "387f07c1b270",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b3bbc7f1179": {
+  "identity": {
+   "one_liner": "连接 Snowflake 的 Python 驱动，遵循 DB API 2.0，不依赖 JDBC/ODBC",
+   "review": "这是 Snowflake 官方的 Python 连接器，实现 Python DB API 2.0 规范，供开发者用 Python 编写连接 Snowflake 并执行标准操作的应用。可通过 pip 安装于 Linux、macOS、Windows（需 Python 3.11+），支持 PEP-517 或 Docker 脚本自行构建 wheel 包。默认在日志中掩码令牌、密码等敏感信息，并可按需关闭遥测；不支持 GCP 区域端点。",
+   "highlights": [
+    "遵循 Python DB API 2.0 规范，连接 Snowflake 并执行标准数据库操作，不依赖 JDBC/ODBC",
+    "默认对自身及 botocore、boto3、aiohttp 等第三方日志记录器输出中的令牌、密码、私钥进行掩码，可用环境变量关闭",
+    "提供 cosign 包签名验证流程，并可通过会话参数或连接属性关闭遥测数据收集"
+   ],
+   "use_cases": [
+    "在 Python 应用中读写 Snowflake 数据，替代使用 JDBC/ODBC 驱动的 Java 或 C/C++ 方案",
+    "需要日志中掩码敏感凭据、或需验证安装包签名的企业数据管道",
+    "在 Linux/macOS/Windows 上以 pip 安装方式集成 Snowflake 的数据工程脚本"
+   ]
+  },
+  "sha": "5b3bbc7f1179",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "499ed9e5f802": {
+  "identity": {
+   "one_liner": "一套用于编写交互式 Web 服务的现代 C++20 库集合。",
+   "review": "ThorsAnvil 是一组基于 C++20 的库，包含异步 IO（ThorsSocket）、HTTP 服务器（Nisse）、JSON/BSON/YAML 序列化（ThorsSerializer）、MongoDB wire protocol 客户端（ThorsMongo）、Slack API/Bot 库及加密工具。面向需要构建 Web 服务、对接 MongoDB 或 Slack 的 C++ 开发者，通过声明式序列化减少样板代码。可通过 brew、Conan、源码编译或 header-only 分支安装；Windows 构建需加 /Zc:preprocessor 标志。",
+   "highlights": [
+    "支持将 C++ 对象自动序列化为 JSON / BSON / YAML，无需手写序列化代码",
+    "提供异步 IO 库，以 std::iostream 接口统一访问文件、管道、套接字与 TLS 套接字",
+    "ThorsMongo 直接收发 MongoDB wire protocol 消息，支持集合中对象的插入、更新与查找"
+   ],
+   "use_cases": [
+    "构建基于 C++ 的异步 HTTP/REST Web 服务",
+    "在 C++ 项目中直接与 MongoDB 集合并传输 C++ 对象",
+    "开发对接 Slack API 与 Webhook 的 Slack 机器人"
+   ]
+  },
+  "sha": "499ed9e5f802",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

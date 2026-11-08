@@ -2135,5 +2135,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f5a025e8606d": {
+  "identity": {
+   "one_liner": "用 Go 语言实现的 LevelDB 键值数据库。",
+   "review": "该项目在 Go 语言中实现 LevelDB 键值数据库，安装只需 go get 命令，要求 go1.14 或更新版本。API 提供打开/创建数据库、Get/Put 读写、迭代器遍历（含 Seek 定位、范围与前缀子集迭代）、批量写入及布隆过滤器选项。返回的 DB 实例可被多个 goroutine 并发调用；读取返回的切片不可被修改。",
+   "highlights": [
+    "以纯 Go 实现 LevelDB 键值数据库，要求 go1.14 及以上版本",
+    "DB 实例的方法可从多个 goroutine 并发调用",
+    "提供迭代器（Seek 定位、范围/前缀子集遍历）、批量写入和布隆过滤器配置"
+   ],
+   "use_cases": [
+    "Go 项目中嵌入本地键值存储",
+    "需要按键范围或前缀遍历数据的场景",
+    "需要将多次写操作合并为批次提交的场景"
+   ]
+  },
+  "sha": "f5a025e8606d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "982e83fc1c04": {
+  "identity": {
+   "one_liner": "基于 Cassandra 二进制协议与 CQL3 的 C# 客户端驱动库",
+   "review": "DataStax C# Driver 是面向 Apache Cassandra（2.0+）与 DataStax Enterprise（4.8+）的 .NET 客户端库，通过 Cassandra 二进制协议和 CQL v3 与集群通信，面向 .NET Framework 4.5.2 和 .NET Standard 2.0 开发者。它提供同步/异步 API、预编译与批量语句、连接池、自动节点发现与重连，内置 Mapper 与 LINQ 组件减少实体映射样板代码，并支持 DSE Graph 与地理空间类型。可通过 NuGet 安装。",
+   "highlights": [
+    "支持同步与异步 API，提供 Simple、Prepared 与 Batch 语句及异步 IO、并行执行和请求流水线",
+    "提供连接池、自动节点发现、自动重连，以及可配置的负载均衡与重试策略",
+    "内置 Mapper 和 LINQ 组件支持行与实体映射、UDT 映射和结果自动分页；额外提供 DSE Graph 集成与地理空间类型序列化"
+   ],
+   "use_cases": [
+    "在 .NET/.NET Core 应用中连接和查询 Apache Cassandra 2.0+ 或 DSE 4.8+ 集群",
+    "需要预编译语句、批量原子写入或异步执行高并发查询的应用",
+    "使用 DataStax Astra 云数据库或需要 DSE Graph、地理空间类型访问的项目"
+   ]
+  },
+  "sha": "982e83fc1c04",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17c74793114d": {
+  "identity": {
+   "one_liner": "纯 Go 编写的嵌入式内存键值数据库，支持类 Redis 命令并持久化到磁盘",
+   "review": "FlashDB 是纯 Go 实现的嵌入式内存键值数据库，数据可持久化到磁盘，支持 SET、SORTED SET、HASH、STRING 四种数据结构的类 Redis 操作。读写须在事务中执行，同一时刻允许单个写事务与多个并发读事务，事务失败时回滚。通过 go get 引入使用，配置路径留空则不持久化。项目处于早期开发阶段，采用 MIT 许可证。",
+   "highlights": [
+    "支持 SET、SORTED SET、HASH、STRING 数据结构及类 Redis 命令",
+    "使用追加写日志文件持久化到磁盘，可配置过期 TTL 淘汰",
+    "基于锁实现 ACID 事务，支持回滚，允许多读单写"
+   ],
+   "use_cases": [
+    "作为库嵌入 Go 应用中提供内存键值存储",
+    "需要 Redis 风格数据结构操作但以库形式集成的场景",
+    "学习构建简单 ACID 数据库的参考实现"
+   ]
+  },
+  "sha": "17c74793114d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

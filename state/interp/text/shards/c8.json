@@ -2703,5 +2703,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2d8206c7ce87": {
+  "identity": {
+   "one_liner": "用 Rust 开发 PostgreSQL 扩展的框架",
+   "review": "pgrx 是一个用于以 Rust 编写 PostgreSQL 扩展的框架，支持 Postgres 15 至 19rc1。它通过 cargo-pgrx 提供创建、初始化、运行、测试和打包的完整开发流程，自动从 Rust 代码生成 SQL schema，并提供 #[pg_extern]、#[pg_trigger] 等过程宏暴露 UDF 与触发器，将 Rust panic 转换为 Postgres ERROR。适合希望使用 Rust 编写扩展的开发者；需要 Rust 工具链、libclang 11+ 及 C 编译环境。",
+   "highlights": [
+    "通过 cargo-pgrx 提供 new/init/run/test/package/migrate 等子命令管理扩展开发全流程",
+    "支持从同一代码库面向 Postgres 15 到 19，并可用 Rust feature gating 调用版本特定 API",
+    "通过 #[derive(PostgresType)] 等宏将 Rust 类型映射为 Postgres 自定义类型，自动生成 SQL schema"
+   ],
+   "use_cases": [
+    "用 Rust 编写 PostgreSQL 用户自定义函数（UDF）、触发器与自定义类型",
+    "需在多个 PostgreSQL 版本上运行和测试同一扩展代码库",
+    "需要安全访问 SPI、MemoryContext 或执行器/规划器等 Postgres 内部机制"
+   ]
+  },
+  "sha": "2d8206c7ce87",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2d7985fd917f": {
+  "identity": {
+   "one_liner": "通过 trait 与 QueryBuilder 重写自动缓存 Laravel Eloquent 模型查询的 PHP 包",
+   "review": "该包为 Laravel Eloquent 模型提供自动 select 查询缓存：模型引入 Cacheable trait 后，包会重写原生 QueryBuilder，捕获相同查询并返回缓存值，无需手动调用缓存。支持 Redis、memcached 等缓存后端，可按模型覆盖 TTL、前缀等配置，并提供 withoutCache、flushCache 方法。README 提醒重写 QueryBuilder 会带来性能开销，不适合频繁变更的实体。",
+   "highlights": [
+    "通过添加 Cacheable trait 使任意 Eloquent 模型查询自动走缓存，无需手动缓存调用",
+    "支持 Redis、memcached 等缓存后端，TTL、前缀、唯一查询等配置可按模型覆盖",
+    "提供 withoutCache() 跳过缓存与 flushCache() 手动清空缓存；更新、插入、删除时自动刷新缓存"
+   ],
+   "use_cases": [
+    "为查询频繁但数据变化较少的模型自动缓存查询结果，降低数据库负载",
+    "在不改动现有查询代码的情况下为 Laravel 项目引入查询级缓存",
+    "对特定模型按需设置缓存时长、前缀等参数"
+   ]
+  },
+  "sha": "2d7985fd917f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2893,5 +2893,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e900ef634bf0": {
+  "identity": {
+   "one_liner": "本地插件，将编码代理的工具输出拦截到沙箱与 SQLite 索引，按需检索",
+   "review": "Context Mode 是一个运行在本地的插件，供 Claude Code、Codex、Gemini CLI 等 10 个编码代理使用。它通过 hooks 将工具执行放入本地沙箱，完整输出存入本机 SQLite 索引（每项目一个 context.db），代理只拿回所需片段。README 基准称在 36 条原始输出≥10KB 的记录中，中位节省 99.4% 字节。插件标注 ELv2 许可（source-available）且免费；另有单独收费的 Context Mode Gateway 托管服务。需 Node 24.15.0+，Windows 需 Git Bash。",
+   "highlights": [
+    "支持 10 个编码代理（Claude Code、Codex、Gemini CLI、Qwen Code、Pi、OpenCode、Copilot CLI、Kiro、VS Code、ZCode），提供 9 个 MCP 工具（ctx_execute、ctx_index、ctx_search 等）",
+    "工具输出在本地沙箱执行，完整结果存入 ~/.context-mode 下的 SQLite 索引（含 FTS5 搜索），代理通过脚本只取所需输出",
+    "声明零遥测、安装后可离线运行；提供 /ctx-doctor 自检命令，CI 在 Linux、macOS、Windows 上测试全部 10 个代理的安装流程"
+   ],
+   "use_cases": [
+    "让编码代理抓取网页或大文件时减少进入上下文窗口的输出量",
+    "在代理中处理大规模 JSON/日志等数据并只返回查询结果（如统计 syslog 中的认证失败记录）",
+    "需要使用数据完全留存在本机、不产生遥测上传的本地开发环境"
+   ]
+  },
+  "sha": "e900ef634bf0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e28b024d982f": {
+  "identity": {
+   "one_liner": "adminMongo：跨平台的 MongoDB Web 图形管理界面，基于 Node.js 运行",
+   "review": "adminMongo 是一个基于 Node.js 的跨平台 Web GUI，用于管理 MongoDB 连接与数据库，支持数据库/集合/文档的增删改查、索引管理、JSON 导出和服务器监控，可通过 npm 安装、打包为 Electron 应用或部署到 Docker/Heroku。连接信息以明文存储在配置文件中，README 提示不宜在缺乏安全措施的生产或公网服务器上运行；副本集多主机连接串与复合 ID 索引不受支持。",
+   "highlights": [
+    "支持连接级管理多个数据库，可创建/删除数据库、集合、文档、索引及用户，并进行备份/恢复",
+    "查询支持 BSON 和 EJSON 格式，集合可导出为 JSON，提供分页浏览和 JSON 语法高亮编辑",
+    "提供服务器监控（Beta，默认定期采集并本地存储 24 小时），支持应用级密码认证、环境变量/Docker 配置及 context 路径以适配 Nginx 反向代理"
+   ],
+   "use_cases": [
+    "开发或测试环境中通过浏览器管理本地或远程 MongoDB 实例（包括 mLab 等托管服务）",
+    "需要打包为 Electron 桌面应用或部署到 Docker/Heroku 运行",
+    "通过 Nginx 反向代理并以 context 路径方式托管，配合密码认证进行受控访问"
+   ]
+  },
+  "sha": "e28b024d982f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3b3778db16b0": {
+  "identity": {
+   "one_liner": "运行于 Python 进程内的持久化嵌入式图数据库，内置链式查询语言 Torque。",
+   "review": "CogDB 是一个用 Python 实现的嵌入式三元组图数据库，数据以 Node→Edge→Node 模型组织，无需服务器，pip 安装后直接在 Python 进程内运行，也可在 Jupyter/Colab 中使用。它提供链式查询语言 Torque（out/inc/has/filter/bfs/dfs 等）、JSON 与 CSV/N-Triples 导入、基于 SimSIMD 的向量相似度检索，还可通过 HTTP 将图提供给其他进程查询。适合在 Python 应用、笔记本环境中构建知识图谱、做语义检索与关系查询。",
+   "highlights": [
+    "以三元组（Node→Edge→Node）存储数据，支持 put/putj/update/load_csv/N-Triples 等多种写入与导入方式",
+    "内置链式查询 API Torque，支持双向遍历、BFS/DFS、过滤、分页、tag/back，并提供 show()/view() 图可视化",
+    "基于 SimSIMD 支持词向量嵌入的 k 近邻与余弦相似度阈值检索，可与图遍历组合使用，还可通过 HTTP 提供远程查询"
+   ],
+   "use_cases": [
+    "在 Jupyter/Colab 等交互环境中构建和可视化知识图谱、社交网络等关系数据",
+    "Python 应用内的嵌入式图存储与关系查询，无需部署数据库服务器",
+    "结合词嵌入做语义搜索与推荐类查询，或将 CSV/N-Triples 数据加载为可遍历的图"
+   ]
+  },
+  "sha": "3b3778db16b0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

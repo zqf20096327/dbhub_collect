@@ -3086,5 +3086,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "19ccea6f54a7": {
+  "identity": {
+   "one_liner": "可直接在页面上编辑内容的 Svelte 网站框架，内容存储于 SQLite",
+   "review": "Editable 用于构建无需另接 CMS 的 Svelte 网站：编辑者登录后直接在页面上修改内容（⌘/Ctrl+E），而组件、布局与内容模型保留在用户自有的 Git 仓库中。编辑引擎基于 Svedit，通过 Node、TextProperty、MediaProperty、NodeArrayProperty 等原语使组件可编辑。运行需 Git、pnpm 和 Node.js 26，通过 clone stable 分支并配置 .env 启动。",
+   "highlights": [
+    "提供 Node、TextProperty、MediaProperty、NodeArrayProperty 等原语，将 Svelte 组件接入页面内编辑",
+    "每个站点位于独立的 Git 仓库，可通过 upstream 远程拉取上游更新",
+    "基于 Svedit 编辑引擎，schema 定义内容规则，支持文本标记、注释与节点数组的插入、排序和复制粘贴"
+   ],
+   "use_cases": [
+    "开发者自建可由非技术人员在页面上直接编辑的 Svelte 网站",
+    "需要代码与内容同仓库管理、不引入独立 CMS 的站点项目",
+    "通过自定义 schema 与组件扩展自定义内容类型的场景"
+   ]
+  },
+  "sha": "19ccea6f54a7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b128763073f0": {
+  "identity": {
+   "one_liner": "基于深度神经网络的云原生语义搜索系统，以微服务编排实现索引与检索",
+   "review": "GNES（Generic Neural Elastic Search）是一个基于深度神经网络的云原生语义搜索系统，面向需要文本、图像、视频等语义检索的开发者。系统由 Preprocessor、Encoder、Indexer、Router 四类微服务组成，通过 Docker Swarm/Kubernetes 编排，编码与索引逻辑以 YAML 配置；模型以 Docker 容器形式作为插件经 GNES Hub 加载。可通过 Docker 镜像或 pip 安装，默认安装不含深度学习依赖。",
+   "highlights": [
+    "支持 text-to-text、image-to-image、video-to-video 及 any-to-any 的索引与语义搜索",
+    "编码器、索引器、预处理器、路由器各自运行在独立容器中，通过版本化 API 通信，可由 Docker Swarm/Kubernetes 编排",
+    "提供 gnes.flow Python API 定义工作流，可导出为 Docker Swarm/Kubernetes YAML 配置"
+   ],
+   "use_cases": [
+    "构建基于相似度的图像、文本或短视频检索系统",
+    "需要在 Docker Swarm/Kubernetes 等编排环境下以微服务方式部署搜索服务",
+    "通过 GNES Hub 将自有模型打包为 Docker 容器插件接入搜索流程"
+   ]
+  },
+  "sha": "b128763073f0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1397d02aa59e": {
+  "identity": {
+   "one_liner": "rqlite 的基于 Promise 的 TypeScript/JavaScript 客户端库，通过 HTTP API 访问数据",
+   "review": "rqlite-js 是 rqlite（基于 SQLite 构建的轻量级分布式数据库）的 JavaScript/TypeScript 客户端，供 Node.js（>=20.19）和浏览器使用。它封装 /db/query、/db/execute、/db/backup、/status 等 HTTP 端点，本身不生成 SQL，仅接受 SQL 字符串或参数化语句数组。零运行时依赖，类型声明内置，支持 ESM/CJS 双构建。README 强调含外部输入时应使用参数化语句以防 SQL 注入。",
+   "highlights": [
+    "提供 query/execute、批量语句、事务（transaction/atomic）、一致性级别（none/weak/strong/linearizable）及参数化语句支持",
+    "支持 301/302 重定向至 leader、非 leader 读的 round-robin 多主机、认证、备份/恢复流（Node Readable stream）与 /status 客户端",
+    "零运行时依赖，使用原生 fetch，内置 TypeScript 类型声明，ESM+CJS 双构建"
+   ],
+   "use_cases": [
+    "在 Node.js 或浏览器应用中通过 HTTP API 访问 rqlite 集群进行读写",
+    "需要对含用户输入的查询使用参数化语句和事务的批量写入场景",
+    "配合可选的第三方 SQL 构建器（如 Knex）生成 SQL 后经本客户端执行"
+   ]
+  },
+  "sha": "1397d02aa59e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

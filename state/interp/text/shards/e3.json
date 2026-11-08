@@ -2670,5 +2670,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d0e5f9de3f0b": {
+  "identity": {
+   "one_liner": "Vue.js 的 Firebase 绑定库，提供响应式数据同步",
+   "review": "VueFire 为 Vue 应用提供 Firebase（Realtime Database 与 Cloud Firestore）的数据绑定，自动监听嵌套引用的变化并同步到组件。兼容 Vue 2.7 与 Vue 3，支持 Composition 与 Options API，并可配合 Vuex、Pinia 使用。安装时需同时安装 firebase 包；另有 Nuxt 版本，当前标记为稳定。",
+   "highlights": [
+    "兼容 Vue 2.7 与 Vue 3，支持 Composition 与 Options API",
+    "面向 Modular Firebase >=9 设计，支持 tree shaking",
+    "自动监听嵌套引用的变化，支持 Vuex 与 Pinia 中的 ref"
+   ],
+   "use_cases": [
+    "在 Vue 组件中读写 Realtime Database 或 Cloud Firestore 数据",
+    "Nuxt 应用集成 Firebase（README 提供不同套餐的示例）",
+    "需要将 Firebase 数据以 Vue ref 形式接入状态管理的项目"
+   ]
+  },
+  "sha": "d0e5f9de3f0b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f7beecd3a01": {
+  "identity": {
+   "one_liner": "联邦学习学术资源清单，按顶会顶刊分类收录论文、框架与数据集",
+   "review": "该仓库以 Awesome 列表形式组织联邦学习学术资料，将论文按 AI、机器学习、数据挖掘、安全、CV、NLP、IR、数据库、网络、系统等会议/期刊类别分组，并收录图数据与表格数据方向的联邦学习条目、workshop 与特刊信息。维护者已于 2024/09/30 博士毕业后转为按月或季度更新，作者机构与开源代码信息不再维护。配套项目 FL-paper-update-tracker 用于自动追踪论文更新。",
+   "highlights": [
+    "按会议与期刊类别（IJCAI、NeurIPS、ICML、KDD、CCS、CVPR 等）分类收录联邦学习论文",
+    "包含图数据/图神经网络与表格数据方向的联邦学习论文检索链接",
+    "提供配套项目 FL-paper-update-tracker 自动追踪 FL 论文更新"
+   ],
+   "use_cases": [
+    "按研究领域或会议检索联邦学习相关论文",
+    "关注联邦学习 workshop、特刊与会议信息",
+    "结合配套 tracker 持续跟踪新发表论文"
+   ]
+  },
+  "sha": "5f7beecd3a01",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "db5bbb1a0ef5": {
+  "identity": {
+   "one_liner": "实现 Firebase WebSocket 协议的服务器，用于测试中模拟 Firebase",
+   "review": "firebase-server 实现 Firebase WebSocket 协议服务器，可在本地模拟 Firebase Realtime Database，用于测试场景。通过 npm 安装后可在代码中以 new FirebaseServer(端口, 名称, 初始数据) 启动，也提供 CLI 支持指定端口、绑定 IP、种子数据、安全规则与 REST API。注意 README 声明项目已停止维护，仅发布安全相关修复，官方建议迁移至 Firebase 本地模拟器。",
+   "highlights": [
+    "支持编程方式和 CLI 两种方式启动服务器，可通过 -d/-f 选项加载初始数据、-r 加载安全规则",
+    "提供 close/getValue/exportData/setRules/setAuthSecret/setTime 等实例 API，规则验证基于 targaryen 库",
+    "支持启用 REST API、守护进程运行、写入 PID 文件及通过 debug 环境变量输出日志"
+   ],
+   "use_cases": [
+    "在 Mocha 等测试框架中启动本地 Firebase 服务器，供 Firebase 客户端连接进行测试",
+    "通过 CLI 快速启动带初始数据和自定义认证密钥的模拟服务器",
+    "需要设置服务器时间或导出含 priority 值数据的测试场景"
+   ]
+  },
+  "sha": "db5bbb1a0ef5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6bef784654de": {
+  "identity": {
+   "one_liner": "从 .NET 代码内启动真实 PostgreSQL 服务器的嵌入式库",
+   "review": "该库用于在 .NET 代码和测试中启动真实 PostgreSQL 服务器，支持 Windows、Linux（glibc/musl）和 macOS，无需 Docker 或本地安装 Postgres。首次启动按平台下载并校验二进制文件并缓存共享，后续启动约需一秒；支持版本规格解析、命名实例持久化数据及扩展安装。适用于 .NET 8 及以上。注意服务器仅监听 localhost 并使用 trust 认证，且不能以 root/Administrator 运行。",
+   "highlights": [
+    "支持 Windows x64、Linux x64/arm64（glibc 或 musl）、macOS x64/arm64，目标 .NET 8/9/10/11",
+    "支持精确版本（如 17.6.0）或规格（17、latest）解析，下载经校验和验证并按用户共享缓存",
+    "提供命名实例（跨运行保留数据）与 xUnit fixture 共享服务器"
+   ],
+   "use_cases": [
+    "在本地开发和集成测试中运行真实 PostgreSQL，无需 Docker 或本地安装",
+    "在 CI 流水线中共享服务器并缓存二进制文件",
+    "需要随库安装 Postgres 扩展归档的场景"
+   ]
+  },
+  "sha": "6bef784654de",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bc5d53ea9f48": {
+  "identity": {
+   "one_liner": "BoJack 是一个用 Crystal 编写的键值存储，提供服务器与控制台客户端",
+   "review": "BoJack 是用 Crystal 语言实现的键值存储服务器，附带命令行控制台，默认监听 127.0.0.1:5000。支持 set/get/delete/increment 等命令及列表 append/pop 操作。README 明确其尚缺集群、安全层、Unix Socket 等功能。构建依赖 Crystal 0.24.x 和 LLVM 开发文件，适合想阅读或贡献代码的开发者。",
+   "highlights": [
+    "提供 server 与 console 两个 CLI 命令，支持 hostname/port/log/log-level 等参数配置",
+    "支持 set、get、delete、increment、append、pop、size、ping 八个命令，delete 支持 * 删除全部键",
+    "已有 Crystal、Python、Ruby、Elixir 四种语言的客户端"
+   ],
+   "use_cases": [
+    "学习 NoSQL 键值存储实现方式的开发者阅读源码",
+    "本地开发环境中的简单键值读写与列表操作",
+    "为该仓库贡献代码或适配新语言客户端"
+   ]
+  },
+  "sha": "bc5d53ea9f48",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

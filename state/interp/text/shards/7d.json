@@ -2823,5 +2823,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5b6798afa0a4": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3.4 与 Vue 2.6 的人力资源管理系统，集成 Flowable 审批流与 RAG 智能问答。",
+   "review": "一套前后端分离的全栈人事管理系统，覆盖组织架构、员工档案、RBAC 权限、考勤加班、薪资与五险一金等业务模块，并通过 Flowable 8.0 实现请假加班审批流转。另提供基于 PostgreSQL/pgvector 与 Spring AI 的知识库问答，注入员工部门岗位上下文。存储采用 MySQL、Redis、pgvector、MinIO 多引擎架构，本地依赖由 Docker Compose 编排，适合作为企业人事系统的学习或部署参考项目。",
+   "highlights": [
+    "覆盖组织架构、员工档案、RBAC 权限、考勤打卡、加班假期、薪资与五险一金配置等人事业务模块，审批流转由 Flowable 8.0 引擎实现，流程表存放于独立的 hrm_flowable 库",
+    "集成 RAG 知识库问答：内置文档切块与向量化 ETL 流水线，向量存储于 PostgreSQL/pgvector，问答兼容 DashScope / OpenAI 规范并注入员工部门、岗位等上下文",
+    "采用 MySQL + Redis + PostgreSQL/pgvector + MinIO 混合存储，鉴权为 httpOnly Cookie 双 Token（Access + Refresh）机制，本地中间件由 docker-compose 统一编排并提供数据库初始化脚本"
+   ],
+   "use_cases": [
+    "企业人事部门的员工、考勤、薪资及请加班审批流程管理",
+    "基于企业政策制度文档的知识库智能问答，供员工自助查询人事咨询问题",
+    "作为 Spring Boot 3.4 + Flowable + Spring AI RAG 全栈实现的本地开发与学习参考"
+   ]
+  },
+  "sha": "5b6798afa0a4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4dd37176e908": {
+  "identity": {
+   "one_liner": "Coltt：支持多向量检索与HNSW/FLAT索引、面向边缘与生产环境的向量数据库。",
+   "review": "Coltt 是一个从零构建的向量数据库，支持 HNSW、FLAT 及基于复合键的多向量检索（CFLAT），并提供量化选项与内部数据分片设计以降低锁竞争。README 给出两种集群方案：前置负载均衡器（副本/分片两种模式），或基于 NATS JetStream 的多主复制（采用 last-writer-wins 策略，避免全局锁）。作者说明开发在业余时间进行，性能可能因开发中而波动。",
+   "highlights": [
+    "支持 HNSW、FLAT 索引与量化，HNSW 图以二进制格式存储并同时冗余写入内部 KV 存储",
+    "CFLAT 复合 FLAT 索引实现对两个向量按重要性合并评估的多向量检索",
+    "集群支持负载均衡器（副本/分片）与 JetStream 多主两种部署架构，多主模式下采用 last-writer-wins 写冲突处理"
+   ],
+   "use_cases": [
+    "边缘环境或小规模生产环境的向量检索部署",
+    "基于自然语言查询的语义检索场景",
+    "需要批量写入与大量读取的向量服务（依赖分片锁机制缓解瓶颈）"
+   ]
+  },
+  "sha": "4dd37176e908",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "37588f56a404": {
+  "identity": {
+   "one_liner": "IBM Cloud 上的 Python Flask 示例应用教程，通过 Cloudant 存储数据",
+   "review": "该仓库提供一个 Python Flask 示例应用及配套教程，实现接收 UI 请求的 REST API，并将数据持久化到 Cloudant NoSQL 数据库。教程面向 IBM Cloud 用户，覆盖本地运行、通过 manifest.yml 以 Cloud Foundry 方式部署、绑定 Cloudant 服务等步骤；凭证通过 VCAP_SERVICES 环境变量读取，本地运行则使用 vcap-local.json 文件。另有 README-kubernetes.md 提供容器部署说明。",
+   "highlights": [
+    "提供 Flask 实现的 REST API，接收 UI 请求并将数据写入 Cloudant NoSQL 数据库",
+    "支持通过 Cloud Foundry CLI 部署到 IBM Cloud，附带 manifest.yml 配置文件",
+    "通过 VCAP_SERVICES 环境变量读取云端凭证，本地运行支持 vcap-local.json 配置"
+   ],
+   "use_cases": [
+    "在 IBM Cloud 上搭建并部署 Python Flask 应用",
+    "学习 Cloud Foundry 应用部署流程与 manifest.yml 配置",
+    "练习在应用中连接并使用 Cloudant NoSQL 数据库"
+   ]
+  },
+  "sha": "37588f56a404",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

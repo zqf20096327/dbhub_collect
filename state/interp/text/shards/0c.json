@@ -3069,5 +3069,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4dc20893884b": {
+  "identity": {
+   "one_liner": "SQL Server 健康检查与性能调优存储过程集合，安装即可运行",
+   "review": "一组针对 Microsoft SQL Server 的存储过程脚本，用于服务器健康检查和性能调优。面向管理 SQL Server 的 DBA、系统管理员和开发者。核心组件包括 sp_Blitz（整体健康检查）、sp_BlitzCache（资源消耗查询分析）、sp_BlitzIndex（索引分析）、sp_BlitzFirst（实时慢查询排查）、sp_BlitzBackups 与 sp_DatabaseRestore（备份恢复）。通过 Install-All-Scripts.sql 一键安装，需授予 VIEW SERVER STATE 等权限；不支持 Azure SQL DB，Linux 上 sp_DatabaseRestore 不可用。",
+   "highlights": [
+    "sp_Blitz 生成按优先级排序的服务器问题清单，支持将输出写入表以跟踪配置历史，可通过表配置跳过指定检查或数据库",
+    "sp_BlitzCache 读取计划缓存，默认返回资源消耗最多的 10 个查询",
+    "支持 Windows/Linux 上的 SQL Server 及 Amazon RDS，提供一次性服务器级权限配置脚本"
+   ],
+   "use_cases": [
+    "对托管 SQL Server 的实例进行日常或每周健康检查并输出优先级排序的问题列表",
+    "定位当前消耗资源最多的查询以及缺失或拖慢性能的索引",
+    "排查服务器当前变慢的原因（sp_BlitzFirst）"
+   ]
+  },
+  "sha": "4dc20893884b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "007c11f5c465": {
+  "identity": {
+   "one_liner": "基于 MongoDB 的后端服务，将数据 API、账号权限等以配置方式提供",
+   "review": "RESTHeart 是构建在 MongoDB 之上的应用后端，面向 Web、移动、AI 与 IoT 应用开发者。它把账号、权限、数据 API、实时数据、邮件、支付等常见后端功能以配置而非代码的形式提供，超出部分可用 Java、Kotlin、JavaScript 或 TypeScript 编写插件扩展。核心采用 AGPL v3 许可，事务与变更流需副本集，向量搜索依赖 mongot。",
+   "highlights": [
+    "基于数据库 schema 生成 REST API，支持 CRUD、聚合、过滤、排序、分页与 JSON Schema 校验，并提供 GraphQL 映射与 WebSocket/SSE 实时数据",
+    "内置账号体系（注册、登录、邮箱验证、密码重置、令牌）与基于数据的 ACL 规则授权，支持 JWT、OAuth2、LDAP",
+    "提供 MCP 服务器、写入时计算嵌入的 RAG 流程，以及 Java/Kotlin/JS/TS 插件框架和 Prometheus 兼容监控端点"
+   ],
+   "use_cases": [
+    "为 Web 和移动应用快速搭建数据 API 与账号权限后端",
+    "构建需要向量检索与 MCP 接入的 AI 代理和 RAG 应用",
+    "通过 MQTT 桥接和 SSE 实现物联网数据接入与仪表盘事件流"
+   ]
+  },
+  "sha": "007c11f5c465",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "84df6e52c49f": {
+  "identity": {
+   "one_liner": "用 Go 编写的内存缓存，兼容 RESP 协议",
+   "review": "kache 是一个用 Go 实现的内存缓存数据库，目标是对齐 Redis 兼容语义。服务端默认监听 7088 端口，使用 RESP 协议，同时支持简单文本协议，可通过 telnet 或 netcat 直接发送命令；配置采用 TOML 文件，日志支持 json 与 logfmt 格式。项目使用 mage 作为构建工具，需要 Go 1.10+，仓库中还包含配套的 kache-cli 客户端工具。",
+   "highlights": [
+    "支持 RESP 协议与简单文本协议，可用 telnet/netcat 连接并执行命令",
+    "通过 --config 加载 TOML 配置文件，日志支持 json 与 logfmt 格式",
+    "提供 kache 与 kache-cli 两个二进制构建目标，使用 mage 完成构建与测试"
+   ],
+   "use_cases": [
+    "需要与 Redis 兼容协议交互的本地内存缓存服务",
+    "通过 telnet/netcat 直接调试命令的简单键值存储场景",
+    "Go 学习者阅读从零实现的内存数据库代码"
+   ]
+  },
+  "sha": "84df6e52c49f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "16ee6af6f24a": {
+  "identity": {
+   "one_liner": "DataStax 出品的 Apache Cassandra 入门实操教程仓库",
+   "review": "该仓库是 DataStax 开发者布道团队的两小时 Cassandra 入门工作坊配套材料，面向想学习该数据库的开发者。内容基于 Astra DB 云服务，通过示例应用 ChatSandra 讲解建表、反规范化数据建模（按用户/按房间两张表）及 CRUD 操作。完成练习、两门迷你课程并提交截图可获取认证徽章。",
+   "highlights": [
+    "提供基于 Astra DB 的逐步实操练习：创建 keyspace、用 CQL 建表、执行 CRUD 操作",
+    "讲解按查询设计表的数据建模方法，示例含 posts_by_user 与 posts_by_room 两张分区键不同的反规范化表",
+    "仓库包含演示材料、练习、视频、Discord 频道、问答及含徽章认证的作业流程"
+   ],
+   "use_cases": [
+    "开发者按自身节奏学习 Cassandra 基础：CQL 基本命令、键空间与表结构",
+    "希望完成作业流程并获取认证徽章的学习者",
+    "参考基于查询需求设计 Cassandra 表结构（反规范化、分区键选择）的入门示例"
+   ]
+  },
+  "sha": "16ee6af6f24a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9a326f444f5": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Firebase 的全栈应用启动模板，内置认证与 Firestore 数据工具",
+   "review": "这是一个用于构建全栈 Web 应用的启动模板，组合 Next.js 16（App Router）、React 19、Tailwind CSS 与 TypeScript，后端使用 Firebase Auth 与 Firestore。模板内置邮箱/密码登录注册流程、全局 AuthContext、路由保护示例及类型化 Firestore 读写工具。使用者需自备 Firebase 项目并配置六个 NEXT_PUBLIC_ 环境变量，Node.js 要求 20.19+/22.13+/24+。README 说明这些前端配置值非机密，数据保护依赖 Firestore 安全规则。",
+   "highlights": [
+    "提供邮箱/密码认证流程及全局 React Auth Context（useAuthContext）",
+    "包含类型化 addData/getData Firestore 工具，统一返回 { result, error } 形状",
+    "内置 GitHub Actions 工作流：CI 构建检查、依赖审查、Dependabot 自动合并与变基"
+   ],
+   "use_cases": [
+    "需要快速搭建 Next.js + Firebase 全栈应用的起点项目",
+    "需要现成邮箱/密码认证与路由保护模式的前端项目",
+    "需要 CI、依赖审查与发布流程配置的模板化工程"
+   ]
+  },
+  "sha": "a9a326f444f5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

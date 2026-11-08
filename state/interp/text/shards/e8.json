@@ -2538,5 +2538,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "515029ec0c92": {
+  "identity": {
+   "one_liner": "基于 Rust 解析器的 Postgres 迁移与 SQL 静态检查工具",
+   "review": "Squawk 是一个用于检查 Postgres 迁移脚本和 SQL 文件的 linter，面向需要在数据库变更流程中引入自动检查的开发团队。它内置一套规则，可通过 --exclude、squawk-ignore 注释或 .squawk.toml 配置文件排除规则；除 CLI 外还提供 npm、PyPI、Docker、VSCode 插件、WASM 网页版等安装方式，并可通过子命令在 GitHub PR 上发表评论。实现上使用基于 rust-analyzer 的解析器生成 CST，再在其上构建 AST 进行规则检查。",
+   "highlights": [
+    "提供 CLI、npm、PyPI、Docker、VSCode 插件与浏览器 WASM 版等多种使用方式",
+    "支持通过 --exclude、squawk-ignore 注释、squawk-ignore-file 及 .squawk.toml 配置文件禁用规则",
+    "包含 upload-to-github 子命令，可在 GitHub Pull Request 中创建评论；解析器基于 rust-analyzer 构建 CST/AST"
+   ],
+   "use_cases": [
+    "在 CI 或 pre-commit 钩子中检查 Postgres 迁移 SQL 文件",
+    "通过 GitHub 集成对 Pull Request 中的迁移变更进行规则评论",
+    "本地或浏览器中快速检查单个 SQL 文件的规则违规"
+   ]
+  },
+  "sha": "515029ec0c92",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5a01de17acd3": {
+  "identity": {
+   "one_liner": "内嵌于应用进程的内存键值存储库，兼容 Redis API（RESP）。",
+   "review": "RedisLess 是一个以 Rust 编写、通过 FFI 暴露给多语言的嵌入式内存键值库。安装对应语言的库后，它会监听本地端口（默认 16379/16739，可改），现有 Redis 客户端无需修改代码即可连接。适用于应用间共享小数据集（约 2 GB 以下）的场景；README 明确说明尚未达到生产可用状态，且非 1:1 的 Redis 实现。",
+   "highlights": [
+    "嵌入应用进程运行，无需单独部署 Redis 服务端，兼容 Redis API（RESP）",
+    "通过 Rust FFI 导出函数，提供 NodeJS、Python、Golang 客户端库，Java 客户端在计划中",
+    "本地监听端口可配置，连接地址形如 redis://localhost:16379"
+   ],
+   "use_cases": [
+    "多个应用之间的分布式锁",
+    "应用间共享小于 2 GB 的数据集",
+    "读多于写的缓存场景（写多于读或数据超过 2 GB 的场景 README 建议使用 Redis）"
+   ]
+  },
+  "sha": "5a01de17acd3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

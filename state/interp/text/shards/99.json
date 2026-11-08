@@ -2464,5 +2464,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "49e1b784a55e": {
+  "identity": {
+   "one_liner": "基于 Valkey 的开源键值引擎，通过 spill 模块将被逐出的键透明持久化到磁盘。",
+   "review": "DiceDB 是 Valkey（Redis 的分支）的一个分支，扩展了内存缓存之外的分层存储能力，同时保持与 Valkey/Redis 工具链和 SDK 兼容。其核心 dicedb-spill 模块基于 RocksDB，将被逐出的键写入磁盘并在缓存未命中时恢复，从而在固定内存预算内支持更大的工作集。适合已有 Redis/Valkey 使用经验、需要磁盘分层存储的团队；README 同时提到日志和代码中仍可能保留 Valkey 引用。",
+   "highlights": [
+    "与 Valkey 和 Redis 的工具链及 SDK 生态兼容，兼容的客户端均可连接",
+    "提供 dicedb-spill 模块，将被逐出的键透明持久化到 RocksDB 并在缓存未命中时恢复，支持设置内存上限",
+    "支持 Linux、macOS、OpenBSD、NetBSD、FreeBSD，含大/小端及 32/64 位架构，可用 Docker 镜像或源码构建运行"
+   ],
+   "use_cases": [
+    "在固定内存预算内运行大于内存容量的键值工作集的场景",
+    "需与现有 Redis/Valkey 客户端和工具链兼容的部署环境",
+    "需源码编译或 Docker 快速启动的自托管键值存储场景"
+   ]
+  },
+  "sha": "49e1b784a55e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fdb44163322d": {
+  "identity": {
+   "one_liner": "用 C89 实现的 LevelDB 键值存储，基于 LSM 树",
+   "review": "lcdb 是 LevelDB 的 C89 语言移植版本，为 C 项目 mako 的 UTXO 数据库而开发，提供 LSM 树键值存储。API 模仿 LevelDB 的 C++ 接口，支持免 pthread 构建（压缩在主线程执行），可交叉编译到 mingw 和 WASI。构建依赖平台提供 stdint.h；README 注明项目尚不成熟，API 可能出现破坏性变更。",
+   "highlights": [
+    "以 C89 编写，仅需平台提供 <stdint.h>，可运行于 Windows 9x 及早于 POSIX.1-2001 的 unix 系统",
+    "支持 mingw 和 wasi-sdk 交叉编译，仓库附带对应构建脚本",
+    "API 模仿 LevelDB 的 C++ API，可关闭 pthread 支持（压缩在主线程执行）"
+   ],
+   "use_cases": [
+    "需要纯 C 依赖（不链接 libstdc++）的 LSM 键值存储场景",
+    "需要移植到旧平台或交叉编译（mingw/WASI）的嵌入式或工具链环境",
+    "为 UTXO 索引等需要高写入吞吐的应用提供存储层"
+   ]
+  },
+  "sha": "fdb44163322d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

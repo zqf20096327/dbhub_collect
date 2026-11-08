@@ -20121,5 +20121,3344 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "3bd9b5195f20+2": {
+  "fn": "ClickHouse/clickhouse-odbc",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# ODBC Driver for ClickHouse "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Build and Test - Linux",
+     "Build and Test - macOS",
+     "Build and Test - Windows"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "## Introduction "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "For more information on ClickHouse go to ClickHouse home page."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "For more information on what ODBC is go to ODBC Overview."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "The canonical repo for this driver is located at https://github.com/ClickHouse/clickhouse-odbc."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "See LICENSE file for licensing information."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    41,
+    18,
+    20,
+    [
+     "## Table of contents  ",
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    45,
+    20,
+    24
+   ],
+   [
+    "replace",
+    45,
+    46,
+    24,
+    25,
+    [
+     "- Releases"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    55,
+    25,
+    34
+   ],
+   [
+    "replace",
+    55,
+    56,
+    34,
+    35,
+    [
+     "If you have Homebrew installed (usually applicable to macOS only, but can also be available in Linux), just execute:"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    61,
+    35,
+    40
+   ],
+   [
+    "replace",
+    61,
+    62,
+    40,
+    41,
+    [
+     "If you don't see a package that matches your platforms under Releases, or the version of your system is significantly different than those of the available packages, or maybe you want to try a bleeding edge version of the code that hasn't been released yet, you can always build the driver manually from sources:"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    41,
+    42
+   ],
+   [
+    "replace",
+    63,
+    64,
+    42,
+    43,
+    [
+     "- Building from sources"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    43,
+    44
+   ],
+   [
+    "replace",
+    65,
+    66,
+    44,
+    45,
+    [
+     "Note, that it is always a good idea to install the driver from the corresponding **native** package (if one is supported for your platform, like `.msi`, etc., which you can also easily create if you are building from sources), than use the binaries that were manually copied to a destination folder."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    69,
+    45,
+    48
+   ],
+   [
+    "replace",
+    69,
+    73,
+    48,
+    49,
+    [
+     "（目录 4 行略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    86,
+    49,
+    62
+   ],
+   [
+    "replace",
+    86,
+    89,
+    62,
+    65,
+    [
+     "- Configuration: MDAC/WDAC (Microsoft/Windows Data Access Components)",
+     "- Configuration: UnixODBC",
+     "- Configuration: iODBC"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    65,
+    68
+   ],
+   [
+    "replace",
+    92,
+    115,
+    68,
+    91,
+    [
+     "|Parameter|Default value|Description|",
+     "|:---------------------:|:----------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`Url`|empty|URL that points to a running ClickHouse instance, may include username, password, port, database, etc. Also, see URL query string|",
+     "|`Proto`|deduced from `Url`, or from `Port` and `SSLMode`: `https` if `443` or `8443` or `SSLMode` is not empty, `http` otherwise|Protocol, one of: `http`, `https`|",
+     "|`Server` or `Host`|deduced from `Url`|IP or hostname of a server with a running ClickHouse instance on it|",
+     "|`Port`|deduced from `Url`, or from `Proto`: `8443` if `https`, `8123` otherwise|Port on which the ClickHouse instance is listening|",
+     "|`Path`|`/query`|Path portion of the URL|",
+     "|`UID` or `Username`|`default`|User name|",
+     "|`PWD` or `Password`|empty|Password|",
+     "|`Database`|`default`|Database name to connect to|",
+     "|`Timeout`|`30`|Connection timeout|",
+     "|`VerifyConnectionEarly`|`off`|Verify the connection and credentials during `SQLConnect` and similar calls (adds a typical overhead of one trivial remote query execution), otherwise, possible connection-related failures will be detected later, during `SQLExecute` and similar calls|",
+     "|`SSLMode`|empty|Certificate verification method (used by TLS/SSL connections), one of: `allow`, `prefer`, `require`. With `allow` the server certificate is not verified at all (neither the trust chain nor the host name); with any other value the connection fails if the certificate is not trusted or does not match the host name|",
+     "|`PrivateKeyFile`|empty|Client certificate for TLS/SSL connections. On Linux and macOS: path to the private key file (PEM). On Windows: the subject common name of a certificate in the `CurrentUser\\MY` (Personal) certificate store, or a store reference in the form `CurrentUser\\MY\\<SHA-1 thumbprint>`; PKCS#12 (`.pfx`/`.p12`) files are not supported, import them into the store instead|",
+     "|`CertificateFile`|empty|Path to the client certificate file (PEM), used by TLS/SSL connections on Linux and macOS, ignored on Windows (the certificate comes from the store, see `PrivateKeyFile`); if the private key and the certificate are stored in the same file, this can be empty if `PrivateKeyFile` is specified|",
+     "|`CALocation`|empty|Path to the file or directory containing the CA/root certificates, used by TLS/SSL connections on Linux and macOS, ignored on Windows (the system certificate store is used)|",
+     "|`HugeIntAsString`|`off`|Report integer column types that may underflow or overflow 64-bit signed integer (`SQL_BIGINT`) as a `String`/`SQL_VARCHAR`|",
+     "|`DriverLog`|`on` if `CMAKE_BUILD_TYPE` is `Debug`, `off` otherwise|Enable or disable the extended driver logging|",
+     "|`DriverLogFile`|`\\temp\\clickhouse-odbc-driver.log` on Windows, `/tmp/clickhouse-odbc-driver.log` otherwise|Path to the extended driver log file (used when `DriverLog` is `on`)|",
+     "|`AutoSessionId`|`off`|Auto generate session_id required to use some features of CH (e.g. TEMPORARY TABLE)|",
+     "|`ClientName`|empty|Sets additional information about the calling application. This string will be used as a prefix for the User-Agent header.|",
+     "|`Compression`|`off`|Enables compression for data sent from ClickHouse to the driver|",
+     "|SqlCompatibilitySetting|`off`|Enables query settings such as `cast_keep_nullable` and `prefer_column_name_to_alias` that make ClickHouse behave more like a traditional relational database.|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    122,
+    91,
+    98
+   ],
+   [
+    "replace",
+    122,
+    126,
+    98,
+    102,
+    [
+     "|Parameter|Default value|Description|",
+     "|:--------------:|:-----------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`database`|`default`|Database name to connect to|",
+     "|`default_format`|`ODBCDriver2`|Default wire format of the resulting data that the server will send to the driver. Formats supported by the driver are: `ODBCDriver2` and `RowBinaryWithNamesAndTypes` (experimental)|"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    134,
+    102,
+    110
+   ],
+   [
+    "replace",
+    134,
+    137,
+    110,
+    113,
+    [
+     " - Enabling driver manager tracing: MDAC/WDAC (Microsoft/Windows Data Access Components)",
+     " - Enabling driver manager tracing: UnixODBC",
+     " - Enabling driver manager tracing: iODBC"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    146,
+    113,
+    122
+   ],
+   [
+    "replace",
+    146,
+    150,
+    122,
+    126,
+    [
+     " - Clang 4 and later",
+     " - GCC 7 and later",
+     " - Xcode 10 and later (on macOS 10.14 and later)",
+     " - Microsoft Visual Studio 2017 and later"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    155,
+    126,
+    131
+   ],
+   [
+    "replace",
+    155,
+    159,
+    131,
+    132,
+    [
+     "（目录 4 行略）"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    162,
+    132,
+    135
+   ],
+   [
+    "replace",
+    162,
+    171,
+    135,
+    144,
+    [
+     "|Option|Default value|Description|",
+     "|:------------------------------------:|:----------------------------------------------------------:|:---------------------------------------------------------------------------------------|",
+     "|`CMAKE_BUILD_TYPE`|`RelWithDebInfo`|Build type, one of: `Debug`, `Release`, `RelWithDebInfo`|",
+     "|`CH_ODBC_ALLOW_UNSAFE_DISPATCH`|`ON`|Allow unchecked handle dispatching (may slightly increase performance in some scenarios)|",
+     "|`CH_ODBC_ENABLE_INSTALL`|`ON`|Enable install targets (required for packaging)|",
+     "|`CH_ODBC_ENABLE_TESTING`|inherits value of `BUILD_TESTING`|Enable test targets|",
+     "|`CH_ODBC_DEFAULT_DSN_ANSI`|`ClickHouse DSN (ANSI)`|Default ANSI DSN name|",
+     "|`CH_ODBC_DEFAULT_DSN_UNICODE`|`ClickHouse DSN (Unicode)`|Default Unicode DSN name|",
+     "|`TEST_DSN_LIST`|`${CH_ODBC_DEFAULT_DSN_ANSI};${CH_ODBC_DEFAULT_DSN_UNICODE}`|`;`-separated list of DSNs, each test will be executed with each of these DSNs|"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    184,
+    144,
+    157
+   ],
+   [
+    "replace",
+    184,
+    185,
+    157,
+    158,
+    [
+     "#### iODBC "
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    158,
+    159
+   ],
+   [
+    "replace",
+    186,
+    187,
+    159,
+    160,
+    [
+     "Execute the following in the terminal (assuming you have Homebrew installed):"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    193,
+    160,
+    166
+   ],
+   [
+    "replace",
+    193,
+    194,
+    166,
+    167,
+    [
+     "#### UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    194,
+    195,
+    167,
+    168
+   ],
+   [
+    "replace",
+    195,
+    196,
+    168,
+    169,
+    [
+     "Execute the following in the terminal (assuming you have Homebrew installed):"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    204,
+    169,
+    177
+   ],
+   [
+    "replace",
+    204,
+    205,
+    177,
+    178,
+    [
+     "#### UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    205,
+    212,
+    178,
+    185
+   ],
+   [
+    "replace",
+    212,
+    213,
+    185,
+    186,
+    [
+     "#### iODBC "
+    ]
+   ],
+   [
+    "equal",
+    213,
+    222,
+    186,
+    195
+   ],
+   [
+    "replace",
+    222,
+    223,
+    195,
+    196,
+    [
+     "#### UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    223,
+    230,
+    196,
+    203
+   ],
+   [
+    "replace",
+    230,
+    231,
+    203,
+    204,
+    [
+     "#### iODBC "
+    ]
+   ],
+   [
+    "equal",
+    231,
+    247,
+    204,
+    220
+   ],
+   [
+    "replace",
+    247,
+    248,
+    220,
+    221,
+    [
+     "- Installing and Configuring the ODBC Software"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    221,
+    222
+   ],
+   [
+    "replace",
+    249,
+    250,
+    222,
+    223,
+    [
+     "Note, that the keys are subject to \"Registry Redirection\" mechanism, with caveats."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    253,
+    223,
+    226
+   ],
+   [
+    "replace",
+    253,
+    255,
+    226,
+    228,
+    [
+     "- odbcinst.ini.sample",
+     "- odbc.ini.sample"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    264,
+    228,
+    237
+   ],
+   [
+    "replace",
+    264,
+    267,
+    237,
+    240,
+    [
+     "- unixODBC without the GUI",
+     "- odbcinst - An unixODBC tool for manipulating configuration files",
+     "- unixODBC - An ODBC implementation for Unix - for description of recognized run-time environment variables"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    270,
+    240,
+    243
+   ],
+   [
+    "replace",
+    270,
+    272,
+    243,
+    245,
+    [
+     "- odbcinst.ini.sample",
+     "- odbc.ini.sample"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    290,
+    245,
+    263
+   ],
+   [
+    "replace",
+    290,
+    292,
+    263,
+    265,
+    [
+     "- What's an odbc.ini and what do I put in it?",
+     "- What's a libiodbc and what goes in my Driver= lines in odbc.ini?"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    295,
+    265,
+    268
+   ],
+   [
+    "replace",
+    295,
+    297,
+    268,
+    270,
+    [
+     "- odbcinst.ini.sample",
+     "- odbc.ini.sample"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    302,
+    270,
+    275
+   ],
+   [
+    "replace",
+    302,
+    305,
+    275,
+    278,
+    [
+     "- 5.8.1 Enabling ODBC Tracing on Windows",
+     "- ODBC Troubleshooting: How to Enable Driver-manager Tracing",
+     "- Enabling Tracing"
+    ]
+   ],
+   [
+    "equal",
+    305,
+    310,
+    278,
+    283
+   ],
+   [
+    "replace",
+    310,
+    312,
+    283,
+    285,
+    [
+     "- ODBC Troubleshooting: How to Enable Driver-manager Tracing",
+     "- How do I turn unixODBC tracing on or off?"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    317,
+    285,
+    290
+   ],
+   [
+    "replace",
+    317,
+    319,
+    290,
+    292,
+    [
+     "- ODBC Troubleshooting: How to Enable Driver-manager Tracing",
+     "- Tracing Application Behavior"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    322,
+    292,
+    295
+   ],
+   [
+    "replace",
+    322,
+    323,
+    295,
+    296,
+    [
+     "#### Build-time dependencies "
+    ]
+   ],
+   [
+    "equal",
+    323,
+    328,
+    296,
+    301
+   ],
+   [
+    "replace",
+    328,
+    329,
+    301,
+    302,
+    [
+     "You will need to install WiX toolset to be able to generate `.msi` packages. You can download and install it from WiX toolset home page."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    330,
+    302,
+    303
+   ],
+   [
+    "replace",
+    330,
+    331,
+    303,
+    304,
+    [
+     "#### Build steps "
+    ]
+   ],
+   [
+    "equal",
+    331,
+    349,
+    304,
+    322
+   ],
+   [
+    "replace",
+    349,
+    357,
+    322,
+    323,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    357,
+    380,
+    323,
+    346
+   ],
+   [
+    "replace",
+    380,
+    381,
+    346,
+    347,
+    [
+     "#### Build-time dependencies "
+    ]
+   ],
+   [
+    "equal",
+    381,
+    384,
+    347,
+    350
+   ],
+   [
+    "replace",
+    384,
+    385,
+    350,
+    351,
+    [
+     "Install Homebrew using the following command, and follow the printed instructions on any additional steps required to complete the installation:"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    390,
+    351,
+    356
+   ],
+   [
+    "replace",
+    390,
+    391,
+    356,
+    357,
+    [
+     "Then, install the latest Xcode from App Store. Open it at least once to accept the end-user license agreement and automatically install the required components."
+    ]
+   ],
+   [
+    "equal",
+    391,
+    401,
+    357,
+    367
+   ],
+   [
+    "replace",
+    401,
+    402,
+    367,
+    368,
+    [
+     "#### Build-time dependencies: iODBC "
+    ]
+   ],
+   [
+    "equal",
+    402,
+    410,
+    368,
+    376
+   ],
+   [
+    "replace",
+    410,
+    411,
+    376,
+    377,
+    [
+     "#### Build-time dependencies: UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    411,
+    419,
+    377,
+    385
+   ],
+   [
+    "replace",
+    419,
+    420,
+    385,
+    386,
+    [
+     "#### Build steps "
+    ]
+   ],
+   [
+    "equal",
+    420,
+    433,
+    386,
+    399
+   ],
+   [
+    "replace",
+    433,
+    438,
+    399,
+    400,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    461,
+    400,
+    423
+   ],
+   [
+    "replace",
+    461,
+    462,
+    423,
+    424,
+    [
+     "#### Build-time dependencies: UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    462,
+    473,
+    424,
+    435
+   ],
+   [
+    "replace",
+    473,
+    474,
+    435,
+    436,
+    [
+     "#### Build-time dependencies: iODBC "
+    ]
+   ],
+   [
+    "equal",
+    474,
+    485,
+    436,
+    447
+   ],
+   [
+    "replace",
+    485,
+    486,
+    447,
+    448,
+    [
+     "#### Build steps "
+    ]
+   ],
+   [
+    "equal",
+    486,
+    505,
+    448,
+    467
+   ],
+   [
+    "replace",
+    505,
+    509,
+    467,
+    468,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    509,
+    526,
+    468,
+    485
+   ],
+   [
+    "replace",
+    526,
+    527,
+    485,
+    486,
+    [
+     "#### Build-time dependencies: UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    527,
+    534,
+    486,
+    493
+   ],
+   [
+    "replace",
+    534,
+    535,
+    493,
+    494,
+    [
+     "#### Build-time dependencies: iODBC "
+    ]
+   ],
+   [
+    "equal",
+    535,
+    542,
+    494,
+    501
+   ],
+   [
+    "replace",
+    542,
+    543,
+    501,
+    502,
+    [
+     "#### Build steps "
+    ]
+   ],
+   [
+    "equal",
+    543,
+    544,
+    502,
+    503
+   ],
+   [
+    "replace",
+    544,
+    545,
+    503,
+    504,
+    [
+     "Assuming, that the system `cc` and `c++` are pointing to the compilers that satisfy the minimum requirements from Building from sources."
+    ]
+   ],
+   [
+    "equal",
+    545,
+    548,
+    504,
+    507
+   ],
+   [
+    "replace",
+    548,
+    550,
+    507,
+    509,
+    [
+     "- Kitware APT Repository",
+     "- Installing CMake"
+    ]
+   ],
+   [
+    "equal",
+    550,
+    563,
+    509,
+    522
+   ],
+   [
+    "replace",
+    563,
+    567,
+    522,
+    523,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    567,
+    581,
+    523,
+    537
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "88c6060b0003+2": {
+  "fn": "django-commons/django-valkey",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "delete",
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    "equal",
+    1,
+    2,
+    0,
+    1
+   ],
+   [
+    "delete",
+    2,
+    3,
+    1,
+    1
+   ],
+   [
+    "equal",
+    3,
+    5,
+    1,
+    3
+   ],
+   [
+    "replace",
+    5,
+    7,
+    3,
+    5,
+    [
+     " :target: https://pypi.org/project/django-valkey/",
+     " :alt: Pypi"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    9,
+    5,
+    7
+   ],
+   [
+    "replace",
+    9,
+    11,
+    7,
+    9,
+    [
+     " :target: https://img/pypi.org/project/django-valkey/",
+     " :alt: Python versions"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    13,
+    9,
+    11
+   ],
+   [
+    "replace",
+    13,
+    15,
+    11,
+    13,
+    [
+     " :target: https://django-valkey.readthedocs.io/en/latest/",
+     " :alt: docs"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    17,
+    13,
+    15
+   ],
+   [
+    "replace",
+    17,
+    19,
+    15,
+    17,
+    [
+     " :target: https://pepy.tech/project/django-valkey",
+     " :alt: downloads/month"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    17,
+    19
+   ],
+   [
+    "replace",
+    21,
+    23,
+    19,
+    21,
+    [
+     " :target: https://djangopackages.org/packages/p/django-valkey/",
+     " :alt: Published on Django Packages"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    25,
+    21,
+    23
+   ],
+   [
+    "delete",
+    25,
+    26,
+    23,
+    23
+   ],
+   [
+    "equal",
+    26,
+    64,
+    23,
+    61
+   ],
+   [
+    "delete",
+    64,
+    65,
+    61,
+    61
+   ],
+   [
+    "equal",
+    65,
+    77,
+    61,
+    73
+   ],
+   [
+    "replace",
+    77,
+    78,
+    73,
+    74,
+    [
+     " python -m pip install django-valkey"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    83,
+    74,
+    79
+   ],
+   [
+    "replace",
+    83,
+    84,
+    79,
+    80,
+    [
+     " python -m pip install django-valkey[libvalkey]"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    89,
+    80,
+    85
+   ],
+   [
+    "replace",
+    89,
+    90,
+    85,
+    86,
+    [
+     " python -m pip install django-valkey[lz4]"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    86,
+    89
+   ],
+   [
+    "replace",
+    93,
+    94,
+    89,
+    90,
+    [
+     " python -m pip install django-valkey[zstd] # not needed since python 3.14"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    97,
+    90,
+    93
+   ],
+   [
+    "replace",
+    97,
+    98,
+    93,
+    94,
+    [
+     " python -m pip install django-valkey[brotli]"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    103,
+    94,
+    99
+   ],
+   [
+    "replace",
+    103,
+    104,
+    99,
+    100,
+    [
+     " python -m pip install django-valkey[msgpack]"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    107,
+    100,
+    103
+   ],
+   [
+    "replace",
+    107,
+    111,
+    103,
+    104,
+    [
+     " python -m pip install django-valkey[msgspec]"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    116,
+    104,
+    109
+   ],
+   [
+    "delete",
+    116,
+    117,
+    109,
+    109
+   ],
+   [
+    "equal",
+    117,
+    125,
+    109,
+    117
+   ],
+   [
+    "delete",
+    125,
+    126,
+    117,
+    117
+   ],
+   [
+    "equal",
+    126,
+    129,
+    117,
+    120
+   ],
+   [
+    "replace",
+    129,
+    132,
+    120,
+    123,
+    [
+     " Copyright (v) 2024 Amirreza Sohrabi far",
+     " Copyright (c) 2011-2016 Andrey Antukh <niwi@niwi.nz>",
+     " Copyright (c) 2011 Sean Bleier"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    123,
+    124
+   ],
+   [
+    "replace",
+    133,
+    134,
+    124,
+    125,
+    [
+     " All rights reserved."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    125,
+    126
+   ],
+   [
+    "replace",
+    135,
+    145,
+    126,
+    136,
+    [
+     " Redistribution and use in source and binary forms, with or without",
+     " modification, are permitted provided that the following conditions",
+     " are met:",
+     " 1. Redistributions of source code must retain the above copyright",
+     " notice, this list of conditions and the following disclaimer.",
+     " 2. Redistributions in binary form must reproduce the above copyright",
+     " notice, this list of conditions and the following disclaimer in the",
+     " documentation and/or other materials provided with the distribution.",
+     " 3. The name of the author may not be used to endorse or promote products",
+     " derived from this software without specific prior written permission."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    136,
+    137
+   ],
+   [
+    "replace",
+    146,
+    156,
+    137,
+    147,
+    [
+     " THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS`` AND ANY EXPRESS OR",
+     " IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES",
+     " OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.",
+     " IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,",
+     " INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT",
+     " NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,",
+     " DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY",
+     " THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT",
+     " (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF",
+     " THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "4db44cae4b1b+2": {
+  "fn": "Reshiru/Blazor.IndexedDB.Framework",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# ARCHIVED: Blazor.IndexedDB.Framework"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    36,
+    1,
+    36
+   ],
+   [
+    "replace",
+    36,
+    40,
+    36,
+    37,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    50,
+    37,
+    47
+   ],
+   [
+    "replace",
+    50,
+    56,
+    47,
+    48,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    78,
+    48,
+    70
+   ],
+   [
+    "replace",
+    78,
+    79,
+    70,
+    71,
+    [
+     "Licensed under the MIT license."
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "abc0790a89d9+2": {
+  "fn": "n1kozor/Tree-Monk",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "TreeMonk"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    1,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "🌐 treemonk.eu · ⬇️ Download · 🐛 Issues"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    19,
+    12,
+    17,
+    [
+     "Website",
+     "Microsoft Store",
+     "Latest release",
+     "License: PolyForm Noncommercial",
+     "Platforms"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    17,
+    19
+   ],
+   [
+    "delete",
+    21,
+    25,
+    19,
+    19
+   ],
+   [
+    "equal",
+    25,
+    29,
+    19,
+    23
+   ],
+   [
+    "replace",
+    29,
+    30,
+    23,
+    24,
+    [
+     " No cloud, no account, no telemetry — your family data stays with you."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    24,
+    25
+   ],
+   [
+    "replace",
+    31,
+    32,
+    25,
+    26,
+    [
+     " (see License)."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    34,
+    26,
+    28
+   ],
+   [
+    "replace",
+    34,
+    35,
+    28,
+    29,
+    [
+     " being the obvious exception)."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    29,
+    30
+   ],
+   [
+    "replace",
+    36,
+    38,
+    30,
+    32,
+    [
+     " lets your own scripts — or an AI assistant you connect — read and (if you",
+     " allow it) edit your tree. Off by default."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    42,
+    32,
+    36
+   ],
+   [
+    "replace",
+    42,
+    43,
+    36,
+    37,
+    [
+     " Download TreeMonk from the Microsoft Store"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    37,
+    40
+   ],
+   [
+    "replace",
+    46,
+    49,
+    40,
+    43,
+    [
+     " **Microsoft Store**",
+     " (verified install, automatic updates) — or grab `TreeMonk-Setup-x.y.z.exe`",
+     " from the **Releases page**"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    43,
+    44
+   ],
+   [
+    "replace",
+    50,
+    52,
+    44,
+    46,
+    [
+     " **Releases page** or",
+     " **treemonk.eu**"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    62,
+    46,
+    56
+   ],
+   [
+    "replace",
+    62,
+    63,
+    56,
+    57,
+    [
+     "A full gallery and feature tour lives on **treemonk.eu**."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    97,
+    57,
+    91
+   ],
+   [
+    "replace",
+    97,
+    98,
+    91,
+    92,
+    [
+     "> treemonk.eu."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    114,
+    92,
+    108
+   ],
+   [
+    "replace",
+    114,
+    115,
+    108,
+    109,
+    [
+     " changes unless you turn it on."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    109,
+    110
+   ],
+   [
+    "replace",
+    116,
+    119,
+    110,
+    113,
+    [
+     " needs the Bearer token generated in Settings. Writes sit behind a second",
+     " toggle, go through the same repository layer as the UI (so the audit log and",
+     " undo history are kept), and open windows refresh live."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    113,
+    114
+   ],
+   [
+    "replace",
+    120,
+    123,
+    114,
+    117,
+    [
+     " `http://127.0.0.1:27007/docs` for the built-in offline documentation",
+     " (English · Deutsch · Magyar · Français) and `http://127.0.0.1:27007/api/v1/openapi.json`",
+     " for the OpenAPI 3.1 spec."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    125,
+    117,
+    119
+   ],
+   [
+    "delete",
+    125,
+    127,
+    119,
+    119
+   ],
+   [
+    "equal",
+    127,
+    134,
+    119,
+    126
+   ],
+   [
+    "replace",
+    134,
+    135,
+    126,
+    127,
+    [
+     "local API is"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    137,
+    127,
+    129
+   ],
+   [
+    "delete",
+    137,
+    139,
+    129,
+    129
+   ],
+   [
+    "equal",
+    139,
+    146,
+    129,
+    136
+   ],
+   [
+    "replace",
+    146,
+    150,
+    136,
+    140,
+    [
+     " `xcode-select -s /Applications/Xcode.app/Contents/Developer`). CommandLineTools",
+     " alone is not enough — `better-sqlite3`'s postinstall rebuilds against Electron",
+     " and its C++ headers are only on the full Xcode toolchain. Linux/Windows builds",
+     " work fine with just the OS package manager's toolchain."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    155,
+    140,
+    145
+   ],
+   [
+    "replace",
+    155,
+    173,
+    145,
+    146,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    189,
+    146,
+    162
+   ],
+   [
+    "delete",
+    189,
+    191,
+    162,
+    162
+   ],
+   [
+    "equal",
+    191,
+    199,
+    162,
+    170
+   ],
+   [
+    "replace",
+    199,
+    200,
+    170,
+    171,
+    [
+     " **Node 22.12+** — see Prerequisites above. Then:"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    208,
+    171,
+    179
+   ],
+   [
+    "replace",
+    208,
+    212,
+    179,
+    183,
+    [
+     " Open the `.dmg`, drag `TreeMonk.app` to **Applications**. On the",
+     " **first launch**, right-click the app → **Open** → **Open** in the",
+     " dialog (one-time Gatekeeper bypass; subsequent launches are normal",
+     " double-click)."
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    183,
+    184
+   ],
+   [
+    "replace",
+    213,
+    216,
+    184,
+    187,
+    [
+     " If `npm install`'s postinstall fails with `'climits' file not found`,",
+     " your toolchain isn't pointing at full Xcode —",
+     " `xcode-select -s /Applications/Xcode.app/Contents/Developer`."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    218,
+    187,
+    189
+   ],
+   [
+    "replace",
+    218,
+    222,
+    189,
+    191,
+    [
+     " Watch → Custom → Releases) — if/when a paid Apple Developer ID is",
+     " set up, the build pipeline can sign and notarize automatically."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    229,
+    191,
+    198
+   ],
+   [
+    "replace",
+    229,
+    235,
+    198,
+    199,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    244,
+    199,
+    208
+   ],
+   [
+    "delete",
+    244,
+    246,
+    208,
+    208
+   ],
+   [
+    "equal",
+    246,
+    257,
+    208,
+    219
+   ],
+   [
+    "replace",
+    257,
+    258,
+    219,
+    220,
+    [
+     "free to read, build and modify, but the **PolyForm Noncommercial License 1.0.0**"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    264,
+    220,
+    226
+   ],
+   [
+    "replace",
+    264,
+    265,
+    226,
+    227,
+    [
+     "For a commercial license, please get in touch via treemonk.eu."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    267,
+    227,
+    229
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "1bbc1db8e875+2": {
+  "fn": "hexxla/hexxladb",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "HexxlaDB"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    1,
+    6
+   ],
+   [
+    "replace",
+    8,
+    18,
+    6,
+    12,
+    [
+     "CI",
+     "Integration",
+     "Go Reference",
+     "Go 1.27",
+     "Version",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    23,
+    12,
+    17
+   ],
+   [
+    "delete",
+    23,
+    25,
+    17,
+    17
+   ],
+   [
+    "equal",
+    25,
+    29,
+    17,
+    21
+   ],
+   [
+    "replace",
+    29,
+    38,
+    21,
+    28,
+    [
+     "|Primitive|Description|",
+     "|-------------|-----------------------------------------------------------------------------|",
+     "|**Cell**|A record at `(q, r)` — content, tags, provenance, confidence, validity window|",
+     "|**Seam**|Conflict or supersession marker linking two cells|",
+     "|**Edge**|Directed relationship between cells (graph overlay)|",
+     "|**Facet**|Summary or annotation with a source-content hash checked by `UpdateFacet`|",
+     "|**Embedding**|Vector stored alongside a cell for HNSW similarity search|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    47,
+    28,
+    37
+   ],
+   [
+    "replace",
+    47,
+    48,
+    37,
+    38,
+    [
+     "evidence workloads: `examples/`."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    55,
+    38,
+    45
+   ],
+   [
+    "replace",
+    55,
+    59,
+    45,
+    46,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    46,
+    54
+   ],
+   [
+    "replace",
+    67,
+    100,
+    54,
+    55,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    116,
+    55,
+    71
+   ],
+   [
+    "replace",
+    116,
+    128,
+    71,
+    72,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    136,
+    72,
+    80
+   ],
+   [
+    "replace",
+    136,
+    147,
+    80,
+    81,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    159,
+    81,
+    93
+   ],
+   [
+    "replace",
+    159,
+    181,
+    93,
+    94,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    198,
+    94,
+    111
+   ],
+   [
+    "replace",
+    198,
+    199,
+    111,
+    112,
+    [
+     "> the remote-access example."
+    ]
+   ],
+   [
+    "equal",
+    199,
+    215,
+    112,
+    128
+   ],
+   [
+    "replace",
+    215,
+    216,
+    128,
+    129,
+    [
+     "the `OPERATIONS.md` runbook before publication or"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    129,
+    130
+   ],
+   [
+    "delete",
+    217,
+    219,
+    130,
+    130
+   ],
+   [
+    "equal",
+    219,
+    232,
+    130,
+    143
+   ],
+   [
+    "delete",
+    232,
+    234,
+    143,
+    143
+   ],
+   [
+    "equal",
+    234,
+    236,
+    143,
+    145
+   ],
+   [
+    "replace",
+    236,
+    249,
+    145,
+    158,
+    [
+     "|Capability|HexxlaDB|Vector DBs|Graph DBs|General KV|",
+     "|----------------------------------|:------:|:--------:|:-------:|:--------:|",
+     "|Semantic search (HNSW)|✓|✓|—|—|",
+     "|Structured filters in same query|✓|partial|✓|✓|",
+     "|Contradiction tracking|✓|—|—|—|",
+     "|Supersession chains|✓|—|—|—|",
+     "|Deterministically bounded context|✓|—|—|—|",
+     "|Spatial locality (ring walks)|✓|—|—|—|",
+     "|Graph pathfinding (Dijkstra, BFS)|✓|—|✓|—|",
+     "|MVCC time-travel|✓|—|—|partial|",
+     "|Provenance + confidence per memory|✓|—|—|—|",
+     "|Embedded (no network)|✓|—|—|✓|",
+     "|Encryption at rest|✓|varies|—|✓|"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    253,
+    158,
+    162
+   ],
+   [
+    "replace",
+    253,
+    254,
+    162,
+    163,
+    [
+     "See `ENCRYPTION.md` for the exact threat model and"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    163,
+    164
+   ],
+   [
+    "delete",
+    255,
+    257,
+    164,
+    164
+   ],
+   [
+    "equal",
+    257,
+    260,
+    164,
+    167
+   ],
+   [
+    "replace",
+    260,
+    261,
+    167,
+    168,
+    [
+     "Public API guide: `docs/hexxladb/API_REFERENCE.md`"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    168,
+    169
+   ],
+   [
+    "replace",
+    262,
+    283,
+    169,
+    188,
+    [
+     "|Operation|What it does|",
+     "|-------------------------------------------------------|-----------------------------------------------------------------------|",
+     "|`FindFreeCellPlacement`|Select a collision-safe cell key near a caller-owned semantic anchor|",
+     "|`PutCell` / `GetCell` / `DeleteCell`|Store, retrieve, or tombstone a memory|",
+     "|`PutEmbedding` / `SearchByEmbedding`|Store a vector; HNSW nearest-neighbor search|",
+     "|`PutEmbeddingWithOptions` / `RebuildEmbeddingIndex`|Defer graph work for bulk ingestion, then validate and publish atomically|",
+     "|`SearchByEmbeddingWithStats`|Search with the selected HNSW/flat path and effective breadth|",
+     "|`QueryCells` / `SearchCells`|Hybrid ANN+filter search or multi-term lexical search|",
+     "|`LoadContext` / `LoadContextFOV` / `LoadContextVoronoi`|Result-bounded context assembly — ring walk, FOV, or multi-seed Voronoi|",
+     "|`FindEdgePath` / `WalkEdges`|Weighted shortest path and BFS reachability over cell edges|",
+     "|`NewSuperHexSummaryIndex` + summary methods|Rebuildable aperture-7 occupancy summaries maintained from changelog|",
+     "|`MarkConflict` / `MarkSupersedes` / `FindSeams`|Record and retrieve contradictions and supersessions|",
+     "|`ViewAt` / `ViewAtTime` / `SnapshotDiff`|MVCC time-travel and change detection|",
+     "|`ReadChangelogSince` / durable consumer cursor methods|Consume and checkpoint the optional recoverable at-least-once changefeed|",
+     "|`WriteStats` / `GroupWALStats`|Observe write contention, phase timing, and WAL batching|",
+     "|`BackupTo` / `StorageStats` / `ReclaimTail` / `CompactWithOptions`|Back up an open database and manage physical storage|",
+     "|`PreflightCompactTo` / migration preflights|Validate maintenance paths, source state, credentials, and conservative capacity|",
+     "|`MigrateV1ToV2` / `MigrateToAuthenticated`|Source-preserving offline migration into MVCC v2 or authenticated encrypted v3|",
+     "|`HealthCheck`|Fail closed on malformed visible records and optionally validate secondary indexes|"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    294,
+    188,
+    199
+   ],
+   [
+    "replace",
+    294,
+    312,
+    199,
+    217,
+    [
+     "|Operation|Median|Five-sample range|Workload|",
+     "|---------|------|-----------------|--------|",
+     "|`GetCell`, plaintext v1|2.08 µs|1.48–4.79 µs|2,000 cells|",
+     "|`GetCell`, plaintext MVCC v2|17.9 µs|15.4–22.2 µs|2,000 cells|",
+     "|`GetCell`, authenticated MVCC v3|16.4 µs|10.3–18.8 µs|2,000 cells|",
+     "|`PutCell`, MVCC|122 µs|93.1–139 µs|one indexed cell and durable commit|",
+     "|`BatchPutCells`, MVCC|51.1 µs/cell|48.9–55.1 µs/cell|100 cells per durable commit|",
+     "|`WalkRing`|17.7 µs|14.9–27.9 µs|radius 2, 2,000-cell database|",
+     "|`QueryCells`, combined filters|128 µs|126–201 µs|radius 5 + source + confidence, 2,000 cells|",
+     "|`LoadContext`|470 µs|406–496 µs|radius 5, 64-cell result limit, 2,000 cells|",
+     "|`LoadContextFOV`|132 µs|125–142 µs|open radius 5, 2,000 cells|",
+     "|`LoadContextVoronoi`|604 µs|505–729 µs|four seeds, radius 4, 2,000 cells|",
+     "|`FindSeams`|610 µs|585–616 µs|100 seams, radius 3|",
+     "|`SearchCells`, lexical|4.84 ms|4.41–5.34 ms|one term, 2,000 cells|",
+     "|`QueryCells`, embedding|837 µs|667 µs–1.04 ms|500 identical 32d vectors, unfiltered top 10|",
+     "|`HealthCheck`|1.26 ms|1.18–1.36 ms|2,000 cells, all optional checks enabled|",
+     "|MVCC latest resolution|4.74 µs|4.49–7.76 µs|one key with 6,000 retained versions|",
+     "|`SnapshotDiff`|430 µs|383–589 µs|500 retained writes|"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    318,
+    217,
+    223
+   ],
+   [
+    "replace",
+    318,
+    319,
+    223,
+    224,
+    [
+     "`PERFORMANCE_EVIDENCE.md`. Benchmark"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    322,
+    224,
+    227
+   ],
+   [
+    "delete",
+    322,
+    324,
+    227,
+    227
+   ],
+   [
+    "equal",
+    324,
+    326,
+    227,
+    229
+   ],
+   [
+    "replace",
+    326,
+    337,
+    229,
+    240,
+    [
+     "|Example|Run|What it covers|",
+     "|--------------------------------------------------------------------------|---------------------------------|---------------------------------------------------------------------|",
+     "|Conversational Memory|`task demo`|Cells, seams, tags, MVCC, queries, context, FOV, pathfinding|",
+     "|LLM Context Engine|`task demo-llm`|Ollama embeddings, semantic search, supersession, FOV|",
+     "|Spatial Algorithms|`task demo-spatial`|FOV, radial context, Voronoi, Dijkstra, BFS — side-by-side|",
+     "|Remote Access Owner Service|`task demo-remote`|Loopback service, authentication, admission, and single file owner|",
+     "|Performance Evidence|`task evidence-observe`|Dijkstra, FOV, super-hex sync, allocation, and storage observations|",
+     "|Write-path Evidence|`task evidence-write-path`|Bounded write latency, throughput, allocation, and file growth|",
+     "|Vector Scale Evidence|`task evidence-vector-scale`|Synchronous/deferred HNSW build, recall, reopen, churn, memory, and disk|",
+     "|Lattice Placement Evidence|`task evidence-lattice-placement`|Placement stability and semantic/spatial divergence|",
+     "|Conservative Pilot Soak|`task soak-pilot`|Sustained mixed load, SLO gates, encrypted backup/restore, resources|"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    338,
+    240,
+    241
+   ],
+   [
+    "replace",
+    338,
+    341,
+    241,
+    242,
+    [
+     "The LLM example requires Ollama: `ollama pull all-minilm && task demo-llm`"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    346,
+    242,
+    247
+   ],
+   [
+    "replace",
+    346,
+    350,
+    247,
+    251,
+    [
+     " and exactly one process owns a database's files. Remote clients must use an",
+     " application-owned transport with authentication, authorization, admission,",
+     " and TLS. The bounded remote-access example",
+     " validates that boundary but is not a production service product."
+    ]
+   ],
+   [
+    "equal",
+    350,
+    357,
+    251,
+    258
+   ],
+   [
+    "replace",
+    357,
+    359,
+    258,
+    260,
+    [
+     " the candidate/provisional inventory and measurable graduation gates are in",
+     " `VERSIONING.md`."
+    ]
+   ],
+   [
+    "equal",
+    359,
+    360,
+    260,
+    261
+   ],
+   [
+    "replace",
+    360,
+    367,
+    261,
+    266,
+    [
+     " `MigrateV1ToV2` or the preflighted `hexxladb migrate-v1-to-v2` workflow with",
+     " a distinct destination. Use `MigrateToAuthenticated` or",
+     " `hexxladb migrate-to-authenticated` for a source-preserving v1/v2-to-v3",
+     " upgrade. Incomplete candidates are refused or removed; older libraries refuse",
+     " v3 and there is no downgrade writer."
+    ]
+   ],
+   [
+    "equal",
+    367,
+    370,
+    266,
+    269
+   ],
+   [
+    "replace",
+    370,
+    382,
+    269,
+    279,
+    [
+     "|Document|What's inside|",
+     "|------------------------------------------------------------------|--------------------------------------------------------|",
+     "|`CONFIGURATION.md`|All `Options` fields, common configs, encryption setup|",
+     "|`API_REFERENCE.md`|Task-oriented public API guide|",
+     "|`HEXXLA.md`|Memory model: hex lattice, seams, validity, supersession|",
+     "|`HEXXLA_DB.md`|Storage layout, key encoding, HNSW keyspace|",
+     "|`OPERATIONS.md`|Production ops, benchmarks, backup, encryption|",
+     "|`PERFORMANCE_EVIDENCE.md`|Correctness, performance, and storage evidence|",
+     "|`ROADMAP.md`|What's next and what's out of scope|",
+     "|`VERSIONING.md`|Compatibility matrix, API inventory, and v1 gates|"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    385,
+    279,
+    282
+   ],
+   [
+    "replace",
+    385,
+    389,
+    282,
+    284,
+    [
+     "- **Hexxla** — spatial LLM memory and reasoning stack",
+     "- **Mosaic** — local MCP server for structured agent memory on HexxlaDB"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    391,
+    284,
+    286
+   ],
+   [
+    "replace",
+    391,
+    403,
+    286,
+    287,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    403,
+    404,
+    287,
+    288
+   ],
+   [
+    "replace",
+    404,
+    407,
+    288,
+    289,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "d0f5b6ddefa2+2": {
+  "fn": "alaturqua/dbt-hodor",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "dbt-hodor: Hold Old Data, Or Rebuild"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    1,
+    2
+   ],
+   [
+    "replace",
+    8,
+    9,
+    2,
+    3,
+    [
+     " dbt-hodor "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    3,
+    4
+   ],
+   [
+    "replace",
+    10,
+    17,
+    4,
+    9,
+    [
+     " CI",
+     " Python 3.10 or newer",
+     " dbt-core 1.12",
+     " Apache-2.0",
+     " Documentation"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    9,
+    10
+   ],
+   [
+    "replace",
+    18,
+    19,
+    10,
+    11,
+    [
+     "**Documentation** | **Interactive guide** with a run simulator | **Design spec**"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    11,
+    12
+   ],
+   [
+    "replace",
+    20,
+    21,
+    12,
+    13,
+    [
+     "dbt-hodor is a free, self-hosted alternative to dbt Labs' dbt State. It runs inside dbt. For every selected node it decides whether to reuse the object that is already in the warehouse or to build it again. A node is reused when its logic has not changed and its upstream data has not changed since the last build."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    13,
+    14
+   ],
+   [
+    "replace",
+    22,
+    23,
+    14,
+    15,
+    [
+     "It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Trino table, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. It supports the `databricks`, `trino`, `snowflake` and `duckdb` adapters on dbt-core: see Adapters. On dbt v2 it runs as a local state server, `dbt-hodor serve`: see dbt v2 and dbt-core and dbt v2."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    15,
+    16
+   ],
+   [
+    "replace",
+    24,
+    25,
+    16,
+    17,
+    [
+     "> **Status: early development.** hodor has end-to-end tests on dbt-duckdb. Live tests ran on a Databricks SQL warehouse (dbt-core, including a clone, and dbt v2), on Trino with the Iceberg connector and on a Lakebase Postgres store. The live test for Snowflake exists, but did not run for the current version. The test docs list what they cover. It has not run in a large production project yet. Before enabling reuse in production, run in shadow mode for at least a week of scheduled runs and review its decisions. See the rollout guidance. Changes between releases, including the breaking ones, are in Upgrading."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    36,
+    17,
+    28
+   ],
+   [
+    "replace",
+    36,
+    38,
+    28,
+    30,
+    [
+     "1. **Hashes the logic.** For a seed this is the CSV file. Otherwise the compiled SQL is normalized with sqlglot (in the dialect of the target's adapter), so case, quoting, comments and table aliases do not count as changes. Values that differ on every run, such as `invocation_id`, are replaced first. The node config is hashed as well.",
+     "2. **Checks the upstream data.** Each upstream table has a data version. On Databricks it comes from the Delta commit history; maintenance commits such as `OPTIMIZE` or `VACUUM` do not count as data changes. On Trino it comes from the Iceberg snapshot history or the Delta Lake commit history, on Snowflake from `SYSTEM$LAST_CHANGE_COMMIT_TIME` with the `created` and `last_ddl` times, and on DuckDB it is a content fingerprint. See Adapters."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    45,
+    30,
+    37
+   ],
+   [
+    "replace",
+    45,
+    46,
+    37,
+    38,
+    [
+     "Every failure leads to a build, never to a reuse. An error while deciding, a store that cannot be read, a table whose data version is unknown, an input hodor cannot trace (for example `read_files(...)`): in each case the node builds as plain dbt would. hodor does not fail a dbt run, with three exceptions: a `state:` selector that cannot compare fails the run; an incremental node whose partial clone cannot be dropped fails that node; and on dbt-core, `--defer` without `--state` fails the run when hodor cannot supply the base target. See Decision rules and Defer without --state."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    38,
+    41
+   ],
+   [
+    "replace",
+    49,
+    67,
+    41,
+    59,
+    [
+     "|Reason|Decision|",
+     "|---|---|",
+     "|`full_refresh`|build|",
+     "|`unsupported`|build|",
+     "|`no_history`|build|",
+     "|`relation_missing`|build|",
+     "|`code_changed`|build|",
+     "|`config_changed`|build|",
+     "|`target_modified`|build|",
+     "|`select_star_view`|build|",
+     "|`view_unchanged`|reuse|",
+     "|`unknown_upstream`|build|",
+     "|`upstream_code_changed`|build|",
+     "|`same_second_read` (dbt v2)|build|",
+     "|`no_new_data`|reuse|",
+     "|`within_lag_tolerance`|reuse|",
+     "|`new_upstream_data`|build|",
+     "|`volatile_sql`|build|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    70,
+    59,
+    62
+   ],
+   [
+    "replace",
+    70,
+    78,
+    62,
+    70,
+    [
+     "|Reason|Decision|",
+     "|---|---|",
+     "|`hodor_error`|build, after a failure inside hodor|",
+     "|`store_slow` (dbt v2)|build, when the records are not loaded within the 30 seconds shared by the run|",
+     "|`cloned_from_base`|clone from the base target, instead of a build|",
+     "|`pre_cloned_from_base` (dbt-core)|clone, then build on top|",
+     "|`clone_registered` (dbt v2)|the server accepts a clone dbt asked for itself|",
+     "|`clones_off` (dbt v2)|the server declines such a clone because clones are off|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    70,
+    71
+   ],
+   [
+    "replace",
+    79,
+    80,
+    71,
+    72,
+    [
+     "`dbt-hodor explain -s <model>` shows the reason for one node, with the hashes and upstream data versions it compared. The full rules are in Decision rules."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    72,
+    75
+   ],
+   [
+    "replace",
+    83,
+    88,
+    75,
+    80,
+    [
+     "|Mode|Behavior|",
+     "|---|---|",
+     "|`off`|hodor does nothing.|",
+     "|`shadow` (default)|hodor decides and records, but every node builds. Use it to check the decisions before you trust them.|",
+     "|`on`|hodor reuses nodes.|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    106,
+    80,
+    98
+   ],
+   [
+    "replace",
+    106,
+    116,
+    98,
+    108,
+    [
+     "|Key|Default|Values|",
+     "|---|---|---|",
+     "|`lag_tolerance`|`45m`|`0s`, `45m`, `4h`, `1d`, `1w`, integer seconds, or `{count: 4, period: hour}`|",
+     "|`require_fresh_data_from`|`any`|`any`: build when any upstream has new data. `all`: build only when all of them have.|",
+     "|`compare_unrendered_code`|`false`|`true`: build only when both the rendered and the unrendered code changed|",
+     "|`execute_hooks_on_any_reuse`|`false`|`true`: run pre- and post-hooks on a reused node. `execute_hooks_on_reuse` is also accepted.|",
+     "|`evaluate_volatile_sql`|auto|Auto: volatile functions such as `current_date()`, `current_user()` and `current_timestamp()` count as an upstream that changes, unless they only fill a stamp column. `true`: stamp columns count too. `false`: they never count (the dbt State default).|",
+     "|`defer_to_target`|none|A target name such as `prod`: the target whose latest records state selection, defer and clone compare with. Unset: those features are off. Also a `profiles.yml` target key.|",
+     "|`allow_clones`|`true`|`false`: never clone this node from the base target. An invalid value warns and counts as `false`. Also a `profiles.yml` target key. Not read on dbt v2, where clones are off unless `dbt-hodor serve --allow-clones` (or `HODOR_ALLOW_CLONES=true`).|",
+     "|`pre_clone`|`false`|`true`: an incremental node whose code changed is cloned from the base target, then runs on top of the clone. Also a `profiles.yml` target key. Not read on dbt v2, where the node builds.|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    121,
+    108,
+    113
+   ],
+   [
+    "replace",
+    121,
+    133,
+    113,
+    125,
+    [
+     "|Profile key|Env var|Default|Values|",
+     "|---|---|---|---|",
+     "|`hodor_mode`|`HODOR_MODE`|`shadow`|`off`, `shadow`, `on`|",
+     "|`hodor_store`|`HODOR_STORE`|`trino` on the `trino` adapter, `delta` on every other adapter|`delta`, `duckdb`, `postgres` (alias `lakebase`), `trino`|",
+     "|`hodor_database`|`HODOR_DATABASE`|the target's `catalog` (or `database`), for `delta` and `trino` only|Databricks or Trino catalog, or Postgres database (required). Not used by `duckdb`|",
+     "|`hodor_schema`|`HODOR_SCHEMA`|none for `delta`, `trino` and `postgres` (required); `main` for `duckdb`|schema name|",
+     "|`hodor_table`|`HODOR_TABLE`|`hodor_state`|table name|",
+     "|`hodor_path`|`HODOR_PATH`|`.hodor/state.duckdb`|DuckDB database file, for `duckdb`|",
+     "|`hodor_metadata_threads`|`HODOR_METADATA_THREADS`|`8`|1-64|",
+     "|`hodor_lookback_days`|`HODOR_LOOKBACK_DAYS`|`90`|1-3650|",
+     "|`hodor_endpoint`, `hodor_host`, `hodor_port`, `hodor_user`, `hodor_password`, `hodor_sslmode`|`HODOR_ENDPOINT`, `HODOR_HOST`, `HODOR_PORT`, `HODOR_USER`, `HODOR_PASSWORD`, `HODOR_SSLMODE`|`hodor_port` `5432`, `hodor_sslmode` `require`, the others none|The connection of the `postgres` store: `hodor_endpoint` for Lakebase, or `hodor_host` for any other Postgres. See Configuration|",
+     "|`dbt-hodor serve` flags (dbt v2)|`HODOR_STORE`, `HODOR_PATH`, the store variables, `HODOR_LOOKBACK_DAYS`, `HODOR_ALLOW_CLONES`|see dbt v2|`--project-dir`, `--port`, `--store`, `--path`, `--allow-clones`. The server reads no `profiles.yml`|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    138,
+    125,
+    130
+   ],
+   [
+    "replace",
+    138,
+    139,
+    130,
+    131,
+    [
+     "Each store has its own page: State stores."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    131,
+    132
+   ],
+   [
+    "replace",
+    140,
+    146,
+    132,
+    138,
+    [
+     "|Store|Location|Created on first use|",
+     "|---|---|---|",
+     "|`delta`|`<hodor_database>.<hodor_schema>.<hodor_table>`|the table only. The schema must exist, because creating one needs catalog-level grants|",
+     "|`trino`|`<hodor_database>.<hodor_schema>.<hodor_table>` in a Trino catalog|the table only. The schema must exist|",
+     "|`duckdb`|table `<hodor_schema>.<hodor_table>` in the file `hodor_path`|the file, the schema and the table|",
+     "|`postgres` (alias `lakebase`)|`<hodor_schema>.<hodor_table>` in the Postgres database `hodor_database`|the schema, the table and a lookup index (see Postgres)|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    153,
+    138,
+    145
+   ],
+   [
+    "replace",
+    153,
+    166,
+    145,
+    146,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    172,
+    146,
+    152
+   ],
+   [
+    "replace",
+    172,
+    173,
+    152,
+    153,
+    [
+     "Supported: models materialized as `table`, `incremental` (append, merge, delete+insert, insert_overwrite, replace_where; an unset strategy counts as merge) and `view`, seeds, snapshots, and data tests (generic and singular), on `dbt-databricks` 1.13.0, `dbt-duckdb`, `dbt-trino` 1.11.0 and `dbt-snowflake` 1.12.4 (state in DuckDB or Postgres; see Data versions), with dbt-core 1.12.x. Trino support covers the Iceberg and Delta Lake connectors; see Data versions."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    176,
+    153,
+    156
+   ],
+   [
+    "replace",
+    176,
+    177,
+    156,
+    157,
+    [
+     "Slim CI: `--defer` and `--favor-state` are supported, and each push of a pull request reuses what the last push built. See Slim CI. With `defer_to_target` naming a base target in the same state store, hodor can also answer `state:` selectors and defer without `--state`, and clone an unchanged table or incremental model from the base target instead of building it; see Cloning. A `state:` selector that cannot be compared fails the run."
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    157,
+    158
+   ],
+   [
+    "replace",
+    178,
+    179,
+    158,
+    159,
+    [
+     "dbt v2: `dbt-hodor serve` answers dbt 2.0.8 over its state protocol, with the `databricks`, `spark`, `snowflake`, `bigquery` and `redshift` dialects, state selection and defer, and clones on Databricks, Spark, Snowflake and BigQuery. It is tested with requests recorded from dbt 2.0.8, with unit and server tests, and with 13 live tests that ran dbt 2.0.8 against a Databricks SQL warehouse. Clones are off unless the server starts with `--allow-clones`. See dbt v2."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    159,
+    160
+   ],
+   [
+    "replace",
+    180,
+    184,
+    160,
+    161,
+    [
+     " A pull request builds its changed model in the CI catalog, reads unchanged parents from the base target through defer, and keeps its build records apart from the base target"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    191,
+    161,
+    168
+   ],
+   [
+    "replace",
+    191,
+    192,
+    168,
+    169,
+    [
+     "Requires uv. Local development and tests run on DuckDB, with no Databricks access."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    200,
+    169,
+    177
+   ],
+   [
+    "replace",
+    200,
+    201,
+    177,
+    178,
+    [
+     "The live Databricks test is opt-in: see docs/development.md."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    178,
+    179
+   ],
+   [
+    "replace",
+    202,
+    203,
+    179,
+    180,
+    [
+     "`dbt-hodor` is available on PyPI:"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    211,
+    180,
+    188
+   ],
+   [
+    "replace",
+    211,
+    216,
+    188,
+    189,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    189,
+    190
+   ],
+   [
+    "replace",
+    217,
+    220,
+    190,
+    191,
+    [
+     "Apache-2.0. NOTICE carries the attribution for the derived files and the trademark"
+    ]
+   ]
+  ],
+  "at": "2026-11-08"
+ },
+ "868ce9823be8+2": {
+  "fn": "kritzerenkrieg/wagoya",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "It runs as a single static binary (no CGO, pure-Go SQLite) and links to WhatsApp as a companion device through whatsmeow."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    62,
+    5,
+    62
+   ],
+   [
+    "replace",
+    62,
+    63,
+    62,
+    63,
+    [
+     "|`PROVIDER`|Auth|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    63,
+    64
+   ],
+   [
+    "replace",
+    64,
+    67,
+    64,
+    67,
+    [
+     "|`anthropic` (default)|`ANTHROPIC_API_KEY`|Claude Messages API with tool loop, server-side web search/fetch, image input|",
+     "|`anthropic`|`CLAUDE_CODE_OAUTH_TOKEN`|Claude Code CLI in headless mode (subscription), all local tools off|",
+     "|`openrouter`|`OPENROUTER_API_KEY`|Any OpenRouter model (e.g. DeepSeek), OpenRouter web tools, image fallback for text-only models|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    89,
+    67,
+    89
+   ],
+   [
+    "replace",
+    89,
+    90,
+    89,
+    90,
+    [
+     "All settings live in `.env`; see `.env.example` for every key. The main ones:"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    90,
+    91
+   ],
+   [
+    "replace",
+    91,
+    92,
+    91,
+    92,
+    [
+     "|Key|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    92,
+    93
+   ],
+   [
+    "replace",
+    93,
+    106,
+    93,
+    106,
+    [
+     "|`PROVIDER`|`anthropic`|`anthropic` or `openrouter`|",
+     "|`MODEL`|`claude-haiku-5-5` / `deepseek/deepseek-v4.1-flash-1017`|Model ID for the chosen provider|",
+     "|`EFFORT`|`low`|Reasoning effort|",
+     "|`WHITELIST`||Owner phone numbers (resolved to LIDs)|",
+     "|`BOT_NAME`|`Claude`|Name used in prompts and mentions|",
+     "|`HISTORY_LIMIT`|`64`|Recent messages per chat sent as context|",
+     "|`CONTEXT_TOKENS`|`128000`|Input cap per request|",
+     "|`WEB_TOOLS`|`true`|Web search and link reading|",
+     "|`API_TOOLS`|`true`|`http_request` (everyone) and MCP tools (owners)|",
+     "|`MCP_CONFIG`|`data/mcp.json`|MCP servers file|",
+     "|`EMBED_MODEL`|`openai/text-embedding-3-small`|Embedding model for hybrid fact search, via OpenRouter (needs `OPENROUTER_API_KEY`); `off` for keywords only|",
+     "|`SEND_INTERVAL`|`3s`|Global gap between outgoing messages|",
+     "|`DENY_COOLDOWN`|`1m`|Per-chat cooldown for the denial reply|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    113,
+    106,
+    113
+   ],
+   [
+    "replace",
+    113,
+    118,
+    113,
+    114,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    120,
+    114,
+    116
+   ],
+   [
+    "replace",
+    120,
+    121,
+    116,
+    117,
+    [
+     "Design notes: `ARCHITECTURE.md`. Every design choice, with its reason: `DECISIONS.md`. Plan: `ROADMAP.md`."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    134,
+    117,
+    130
+   ]
+  ],
+  "at": "2026-11-08"
  }
 }
