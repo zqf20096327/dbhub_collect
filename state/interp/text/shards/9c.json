@@ -3170,5 +3170,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8db1f29c3321": {
+  "identity": {
+   "one_liner": "非官方 Clojure 版 Firestore API，封装 firebase-admin 提供读写、实时流与事务。",
+   "review": "firestore-clj 是基于 com.google.firebase/firebase-admin 封装的 Clojure 库，提供对 Google Firestore 的单次读写、批量写入、事务和实时数据流式读取。函数均有类型标注以避免反射。项目在 Clojars 发布（1.2.1 起为 lurodrigo/firestore-clj，旧版本为 polvo/firestore-clj），README 中注明项目正在寻找维护者。",
+   "highlights": [
+    "支持单次读写、批量写入、事务，以及通过 ->atom/->stream/add-listener 获取实时数据",
+    "提供 filter=、order-by、limit 等查询函数与对应 Java API 的映射，可用 pull/pullv 将结果转为 Clojure 数据",
+    "提供 update-field!、map!、delete-all! 等便捷函数，delete-all! 以批量方式分批查询和删除"
+   ],
+   "use_cases": [
+    "在 Clojure 项目中通过服务账号凭据或 GCP 默认凭据连接 Firestore 读写数据",
+    "需要将文档或查询结果物化为 atom 或 Manifold stream 以监听实时更新的场景",
+    "本地开发时通过 emulator-client 连接 Firestore 模拟器进行测试"
+   ]
+  },
+  "sha": "8db1f29c3321",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "801db755cf1c": {
+  "identity": {
+   "one_liner": "Trickster Online KR 2014 客户端的开源服务器模拟器",
+   "review": "tPoseidon 是面向 Trickster Online KR 2014 客户端的服务器模拟器，在本机运行登录、频道、主控、系统、游戏等服务端进程，账户与角色数据存于 PostgreSQL（14+）。项目处于 beta 阶段，提供命令行工具、控制面板和可自定义的玩家启动器，但不分发游戏客户端，需自备 KR 2014 客户端，部分系统尚未完成。",
+   "highlights": [
+    "在本机运行游戏所需的全部服务端（登录、频道、主控、系统、游戏），依赖 PostgreSQL 14+ 存储账户与角色数据",
+    "提供 tposeidon 命令行工具完成安装、启动、账户管理与客户端启动，支持 Windows 与 Linux x64",
+    "附带可定制启动器，通过服务器 web 端口（默认 9990）完成登录验证与客户端更新校验"
+   ],
+   "use_cases": [
+    "为自己或朋友搭建本地/局域网 Trickster Online 私人服务器",
+    "为社区主机提供带账户管理、角色栏位配置与 GM 工具的服务端",
+    "为玩家生成带自定义名称、标志与服务器地址的专属启动器"
+   ]
+  },
+  "sha": "801db755cf1c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "26b1eaad63d5": {
+  "identity": {
+   "one_liner": "Django+React 开源框架，通用功能以版本化包交付，AI 编码代理只写业务域代码",
+   "review": "Karni 是面向 AI 编码代理的 Django + React 框架：序列化器、权限、admin、登录页、React 界面等通用代码随 Python 包 karni、npm 包 @karni/ui 版本化发布，代理仅编写模型、访问规则等业务域逻辑。通过 karni.yaml 声明应用，karni build 生成代码、迁移并跑测试，karni check 在代理手写框架内置功能时使构建失败。适用于与编码代理协作的 Django+React 项目开发。",
+   "highlights": [
+    "以 karni（Python）与 @karni/ui（React）版本化包交付 API、admin、RBAC、界面等通用代码，并经 karni upgrade 逐版迁移",
+    "从 karni.yaml 经 karni plan / karni build 生成模块、类型、种子数据与测试，并提供六种 recipe 应用模板",
+    "提供 AGENTS.md 规则文件、MCP 服务器与 karni context / check / why 等命令，karni check 可在构建阶段拦截重复实现"
+   ],
+   "use_cases": [
+    "与 AI 编码代理协作搭建 Django + React 全栈应用，由代理只编写业务模型与领域逻辑",
+    "以一行描述配合 recipe（如预订、商店、CRM）快速生成含权限、admin、测试的应用骨架",
+    "需要统一升级通用代码的项目组合：上游修复通过包升级与 codemod 传播到各项目"
+   ]
+  },
+  "sha": "26b1eaad63d5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9b9e4d5d7526": {
+  "identity": {
+   "one_liner": "基于 pi 编码 agent 的个人助理运行时，提供证据绑定记忆、四态裁决与多通道接入。",
+   "review": "Tree-Agent 将 @earendil-works/pi-coding-agent 作为可替换内核进行封装，提供持久记忆、多通道接入（CLI/Web/Telegram/飞书/QQ）、工具治理与记忆抽取评测。每条记忆绑定编号事件与逐字引文，裁决状态由数据库决定，置信度不足只存 tentative 且不注入。依赖 Node/npm，通过 serve 命令起服务，Web 通道默认仅监听 127.0.0.1 并要求 Bearer token。",
+   "highlights": [
+    "记忆系统采用证据→主体→裁决三层结构，支持 create/correct/invalidate/contest 四态，引文须为对应编号事件的子串且来源限定为用户消息",
+    "记忆检索使用 bge-m3 向量加 SQLite 余弦相似度，阈值按模型自适应，并附带 recall@5 评测基准",
+    "接入层支持 Telegram、飞书（长连接/webhook 双传输）、QQ（OneBot v11）与 Web 通道，通过 claimMessage 实现消息幂等去重"
+   ],
+   "use_cases": [
+    "需要跨 IM 渠道（飞书/QQ/Telegram）接入且共享同一份记忆的个人助理部署",
+    "对记忆来源可追溯、可人工裁决争议槽位有要求的长期助理场景",
+    "以 CLI 任务队列方式运行、要求崩溃后状态可恢复的 agent 服务"
+   ]
+  },
+  "sha": "9b9e4d5d7526",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

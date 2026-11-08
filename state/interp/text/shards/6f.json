@@ -2872,5 +2872,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "75dd06b8bd2e": {
+  "identity": {
+   "one_liner": "Énóis 社交网络的 Spring Boot 4 后端，采用六边形架构与 MariaDB。",
+   "review": "该仓库是巴西技术从业者社交网络 Énóis 的后端 API，包含业务规则、授权、内容审核、钱包（Faísca）与集成。基于 Java 25 与 Spring Boot 4，按功能模块组织为六边形架构，含 identity、feed、media 等 10 个模块，使用 Flyway 管理迁移，开发环境用 H2 内存库、生产环境用 MariaDB 11.4。无默认 profile，打包后必须显式指定 SPRING_PROFILES_ACTIVE 才能启动。以 GPL-3.0 许可发布，面向参与该项目的贡献者与自部署使用者。",
+   "highlights": [
+    "提供 REST API，通过 Swagger UI 与 OpenAPI JSON 公开文档，含 health/metrics/Prometheus 监控端点",
+    "实现 TOTP 两步验证（需环境变量 REDE_SECURITY_ENCRYPTION_KEY，AES-256-GCM 加密密钥），以及可经环境变量切换的 ImageKit/S3 双媒体存储",
+    "支持 dev/hml/prd 三个 profile 对应 H2 与 MariaDB，包含 24 个集成测试与 docker compose 启动方式"
+   ],
+   "use_cases": [
+    "为 enois.ia.br 前端（enois-frontend 仓库）提供后端 API 服务",
+    "开发者按 CONTRIBUTING.md 流程参与贡献，本地以 dev profile + H2 快速运行",
+    "自托管部署：通过 docker compose 或打包 jar，搭配 MariaDB 11.4 运行生产环境"
+   ]
+  },
+  "sha": "75dd06b8bd2e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1c5af53b4fc6": {
+  "identity": {
+   "one_liner": "基于 sled 持久化并实现 Redis 协议的键值数据库，支持 JSON 操作。",
+   "review": "Escanor 是一个使用 Rust 编写的键值数据库，以 sled 作为持久化层，实现 Redis 协议，可直接兼容现有 Redis 客户端与库。除常规键值命令外，提供 JSET/JGET/JPATH/JMERGE 等 JSON 文档操作命令，并支持地理空间命令与过期设置。项目自述为个人业余项目，欢迎贡献者参与；提供 Windows、Mac、Linux 预编译二进制，可通过 cargo 运行服务端与附带的 CLI 客户端。",
+   "highlights": [
+    "以 sled 为持久化层，实现 Redis 协议，可与 Redis 客户端和库配合使用",
+    "支持 JSON 文档操作命令（JSET/JSETR/JGET/JPATH/JMERGE/JINCRBY），可修改 JSON 内部数组元素",
+    "异步非阻塞服务端，附送 CLI 客户端，支持地理空间命令与 EXPIRE/TTL 等键过期命令"
+   ],
+   "use_cases": [
+    "需要在现有 Redis 客户端基础上存储和操作 JSON 文档的场景",
+    "希望从源码构建学习 Rust 数据库实现或参与贡献的开发者",
+    "需要键值存储附带地理半径查询（GEORADIUS）功能的应用"
+   ]
+  },
+  "sha": "1c5af53b4fc6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3693a897624": {
+  "identity": {
+   "one_liner": "为 Livebook 提供数据库连接的 Kino 集成库",
+   "review": "KinoDB 是 Livebook 的数据库集成组件，用于在 Livebook 交互式笔记本中连接数据库。它以 Elixir 包形式发布，通过 Mix.install/2 引入即可使用，版本示例为 ~> 0.5.0，版权归属 Dashbit。适合在笔记本环境中查询和探索数据库的用户。",
+   "highlights": [
+    "通过 Mix.install/2 安装，支持在 Livebook 中直接加载使用",
+    "为 Livebook 提供与 Kino 结合的数据库集成",
+    "以 Hex 包形式分发，版本示例为 ~> 0.5.0"
+   ],
+   "use_cases": [
+    "在 Livebook 笔记本中连接并查询数据库",
+    "以交互式单元格方式浏览数据库数据",
+    "为 Elixir 数据工作流引入数据库集成"
+   ]
+  },
+  "sha": "c3693a897624",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5954df093b7d": {
+  "identity": {
+   "one_liner": "为 PouchDB 提供 GeoJSON 空间查询的插件，基于 R-Tree 索引与 DE-9IM 谓词。",
+   "review": "该插件扩展 PouchDB，使库内 GeoJSON 对象可按十个 DE-9IM 空间谓词（如 within、intersects、contains）查询。写入时经 RBush 建立 R-Tree 索引，查询先取候选几何再按谓词过滤，返回满足条件的文档 ID。浏览器端需另行引入 Turf 与 de9im 依赖；直接操作底层 tree 可能与数据库状态不同步。",
+   "highlights": [
+    "支持 contains、coveredby、covers、crosses、disjoint、equals、intersects、overlaps、touches、within 十种 DE-9IM 空间谓词查询",
+    "插入数据时使用 RBush 自动建立 R-Tree 空间索引，查询返回满足谓词的文档 ID 数组",
+    "提供 add、load、remove 等数据库方法及可直接访问的 tree 索引接口，用于页面刷新后从磁盘重载数据"
+   ],
+   "use_cases": [
+    "在浏览器或 Node 应用中对 PouchDB 内存储的 GeoJSON 数据执行空间关系查询",
+    "应用重启或页面刷新后通过 tree 接口重建空间索引",
+    "需要按空间谓词（如判断哪些几何位于某多边形内）检索文档 ID 的场景"
+   ]
+  },
+  "sha": "5954df093b7d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f6b39c7839c9": {
+  "identity": {
+   "one_liner": "基于 Tauri/Rust 的 Gmail 多账户桌面客户端，本地缓存直连 Gmail API。",
+   "review": "Mailboat 是一个 GPL-3.0 的开源桌面应用，面向使用多个 Gmail 账户的 macOS 与 Windows 用户。它直接调用 Gmail API 并在本地 SQLite（FTS5）缓存邮件，支持统一收件箱、Gmail 快捷键、命令面板和规则编辑。需用户自行创建 Google 凭据完成配置，登录每七天过期一次；项目处于早期开发阶段（0.1.0），未做第三方安全审计。",
+   "highlights": [
+    "多账户统一收件箱，线程不跨账户合并，本地全文搜索（SQLite FTS5）合并 Gmail 搜索语法",
+    "邮件内容经 Rust 清洗后在无脚本的沙箱视图中渲染，移除已知追踪像素；凭据存于 macOS Keychain / Windows 凭据管理器",
+    "通过 MCP 允许 Claude Desktop / Claude Code 搜索、读取邮件并保存草稿，默认关闭且不可发送；AI 功能可经 Apple Intelligence 或用户自己的 Claude/ChatGPT 订阅使用"
+   ],
+   "use_cases": [
+    "在同一窗口管理个人、工作、学校等多个 Gmail 账户的收发与搜索",
+    "偏好键盘操作（Gmail 原生快捷键、⌘K 命令面板）的桌面邮件处理流程",
+    "在本地环境试用面向 Claude 等 AI 应用的 MCP 邮件读取与草稿能力"
+   ]
+  },
+  "sha": "f6b39c7839c9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

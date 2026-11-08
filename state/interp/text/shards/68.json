@@ -2922,5 +2922,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "82fcb286e1a5": {
+  "identity": {
+   "one_liner": "Laravel 应用层资源预留包，提供有状态预订生命周期与多驱动存储",
+   "review": "Laravel Reservation 是一个面向 Laravel 应用的资源预留包，用于临时锁定座位、库存等资源并管理其完整生命周期（held/confirmed/cancelled/过期）。它提供流式 API、Eloquent 集成、路由中间件与 cache/database 双存储后端，可通过 Reservation::extend() 注册自定义驱动。要求 Laravel 11-13+ 与 PHP 8.2+，使用 database 驱动需发布并执行迁移。",
+   "highlights": [
+    "提供 held、confirmed、cancelled 生命周期状态机，含自动过期与原子并发保护",
+    "支持 cache（Redis/Memcached/Array）与 database 两种存储后端，并可按请求切换或通过 Reservation::extend() 注册自定义驱动",
+    "内置 HasReservations Eloquent trait、ReserveResource 路由中间件（失败自动取消）及 ReservationHeld 等事件分发"
+   ],
+   "use_cases": [
+    "票务/座位与酒店房间的临时锁位，支付期间防止重复预订",
+    "电商结账流程中的库存预留与限量商品发售",
+    "预约时段、设备租赁或限时优惠券的时限性资源占用"
+   ]
+  },
+  "sha": "82fcb286e1a5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a3270171899c": {
+  "identity": {
+   "one_liner": "解密微信 4.1+ 本地 SQLCipher 数据库并导出聊天记录的命令行工具/智能体技能包",
+   "review": "wxbak 是面向微信 4.1+ 的本地数据库解密与聊天记录导出工具，运行于 Windows（需 Python ≥ 3.9、管理员权限、微信已登录）。它从微信进程内存的 Config.Cipher 结构提取 32 字节密钥，解密 message_*.db 主库与 -wal 文件后按发言人、时间戳拆分为 txt/json。可作智能体技能安装或命令行使用；提供 selftest 离线自检与 doctor 环境诊断，未覆盖公众号消息库。",
+   "highlights": [
+    "支持微信 4.1+，从进程内存的 com.Tencent.WCDB.Config.Cipher 结构提取 32 字节密钥，并自动发现数据目录、message_*.db 分片与多账号",
+    "一并解密 -wal 文件，发言人依据 Name2Id.real_sender_id 字段解析，输出 txt/json 并还原引用、转账、红包等富媒体为可读文本",
+    "提供 selftest 离线自检、doctor 环境诊断、extract 失败分级诊断，以及 prepublish_check.py 隐私自检脚本"
+   ],
+   "use_cases": [
+    "导出并备份自己在 Windows 上登录的微信 4.1+ 聊天记录为可读文本",
+    "本地取证或个人数据分析：按发言人、时间戳逐条解析聊天内容",
+    "作为智能体技能接入支持 Agent Skills 的宿主，通过自然语言指令触发导出流程"
+   ]
+  },
+  "sha": "a3270171899c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

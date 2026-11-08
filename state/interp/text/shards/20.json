@@ -2631,5 +2631,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "19da6ef14574": {
+  "identity": {
+   "one_liner": "读取 MySQL binlog 生成 Parquet 副本，用 DuckDB 执行重查询的分析工具",
+   "review": "DBTrail 通过复制协议读取 MySQL/MariaDB/RDS/Aurora 的 binlog，在本地磁盘或 S3 维护 Parquet 列式副本，用 DuckDB 响应查询，可通过 MySQL 端口将重读请求自动路由到副本。支持 AS OF 时间旅行查询、行级撤销 SQL 生成和 MCP 接入。需要在 MySQL 上无需安装任何组件，但要求 ROW binlog、全行镜像及每表主键，副本数据存在秒到分钟级延迟。",
+   "highlights": [
+    "以复制协议读取 binlog，不在 MySQL 上安装插件、代理或触发器",
+    "在同一连接上路由：写事务与键查询发往 MySQL，重读由 Parquet 副本回答",
+    "支持 AS OF 时间点查询、行历史查看与生成撤销 SQL，并提供 MCP 工具"
+   ],
+   "use_cases": [
+    "为报表、看板（Metabase/Grafana）等重分析查询提供独立于主库的查询入口",
+    "需要回溯表的历史版本或撤销误操作的 DBA 场景",
+    "托管云数据库（RDS/Aurora）上无法部署插件的 HTAP 读取副本方案"
+   ]
+  },
+  "sha": "19da6ef14574",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1c90c3cb621a": {
+  "identity": {
+   "one_liner": "基于 C++17 与 gRPC 的内存型 KV 缓存中间件，参考 Redis 设计。",
+   "review": "MiniKV 是一个参考 Redis 源码思路实现的内存 KV 数据库，采用 C++17 编写，通过 gRPC 实现客户端与服务端通信，使用读写锁保证并发安全。支持 string 与 list 两种 value 类型、键的增删改查及正则查找，并提供 kvctl 命令行工具。构建依赖 grpc、protobuf、gflags，通过 cmake 与 make 编译后运行 kvserver 即可。README 注明尚未做性能优化，TPS 为 10000+。",
+   "highlights": [
+    "基于 gRPC 实现客户端与服务端通信，读写锁保证并发安全，支持 string 与 list 类型的键增删改查及正则查找键",
+    "支持数据快照持久化，由后台线程定时写入自定义数据帧格式，服务启动时自动读取快照",
+    "底层存储模仿 Redis 哈希表设计：拉链法解决冲突、智能指针管理内存、过期键过期表与惰性删除、双哈希表渐进式 rehash（后台线程定时计算负载因子触发）"
+   ],
+   "use_cases": [
+    "需要内存型 KV 缓存中间件的 C++ 后端服务场景",
+    "学习 Redis 哈希表、渐进式 rehash、过期键删除等机制的参考实现",
+    "通过 kvctl 命令行对远程 KV 服务进行键值读写与查找"
+   ]
+  },
+  "sha": "1c90c3cb621a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

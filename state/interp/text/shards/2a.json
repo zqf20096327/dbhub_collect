@@ -2552,5 +2552,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4ac181f8f11c": {
+  "identity": {
+   "one_liner": "基于 PHP 与 CodeIgniter 的自托管电商商店脚本",
+   "review": "hobrtEcom 是一个用 PHP 8.1+ 与 MySQL/MariaDB 搭建的自托管电商脚本，基于 CodeIgniter 框架。通过浏览器安装器完成部署，支持产品、订单、优惠券等管理，内置网页模板编辑器、可选的 MCP 服务器（供 AI 代理管理店铺）、广告追踪与 Conversion API、可隐藏的管理登录地址等插件。支持从 2019/2023 版本升级，并带有一键更新与文件备份机制。",
+   "highlights": [
+    "提供浏览器引导的安装器，写入配置文件后自动锁定；支持从旧版本升级并保留数据",
+    "内置可选 MCP 服务器，AI 代理可通过密钥以只读或完全访问权限管理产品、订单、优惠券等",
+    "插件面板提供 Facebook/TikTok 像素、Google Tag Manager、GA4 及服务器端 Conversion API 事件上报"
+   ],
+   "use_cases": [
+    "搭建支持货到付款等支付方式的独立电商商店",
+    "希望通过 AI 代理（如 Claude Code、Cursor）以自然语言管理商品与订单",
+    "需要服务器端转化事件上报以应对广告拦截的场景"
+   ]
+  },
+  "sha": "4ac181f8f11c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "83e0d064fb06": {
+  "identity": {
+   "one_liner": "封装 Google Cloud SDK 的 Docker 容器，用于简化 BigQuery 导出与云操作。",
+   "review": "这是一个基于 Docker 的容器镜像，将 Google Cloud SDK 环境打包，用户无需自行安装配置 SDK 即可运行 BigQuery 任务。核心用法是通过 .sql 文件定义查询、.env 文件定义导出作业，将查询结果导出为 gzip 压缩的 CSV，并可传输到 Amazon S3。适用于需要以容器方式运行 Google Cloud 操作的团队。注意：容器不验证 SQL，查询需自行测试。",
+   "highlights": [
+    "支持 BigQuery 数据导出（导入功能标注为 WIP），可将查询结果导出为 gzip 压缩的逗号分隔 ASCII 文件",
+    "通过 .sql 文件与 .env 作业配置文件定义导出任务，支持批量导出、Cron 定时运行及 Service Account 授权（卷挂载或授权文件）",
+    "支持创建 BigQuery 数据集/临时表、Google Storage 生命周期策略、数据传输到 Amazon S3，并可运行 SDK 支持的任意命令"
+   ],
+   "use_cases": [
+    "以容器方式运行 Google Cloud SDK 命令（如 gcloud、gsutil），无需在本地维护 SDK 环境",
+    "定时或批量将 BigQuery 查询结果导出到 Google Cloud Storage 或 Amazon S3",
+    "使用项目提供的 SQL Recipes 处理 DoubleClick、AdWords、Google Analytics 360 等数据源的导出"
+   ]
+  },
+  "sha": "83e0d064fb06",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "21f27943fb56": {
+  "identity": {
+   "one_liner": "将策略文件编译为 Postgres 行级安全策略的应用内授权工具",
+   "review": "rowstile 让开发者在一个策略文件中描述谁可访问哪些行，由 rowstile 命令将其编译为视图、RLS 策略、触发器维护的继承表及 authz.* 函数，策略变更以迁移形式适配 Alembic、Prisma、Drizzle Kit、Flyway 等工具。适用于数据在单个 Postgres 库、行权限依赖其他行的应用（共享、分组、嵌套目录、多租户）；不适用于跨库判定访问或通过 Supabase Data API 直连的场景。0.1.0 处于 beta，未经外部安全审计。",
+   "highlights": [
+    "策略文件编译为普通 SQL（RLS 策略、视图、触发器表、函数），无需在数据库旁运行独立授权服务",
+    "策略变更以迁移输出，适配 Alembic、Django、Prisma、Drizzle Kit、Rails、Flyway 等 14 种迁移工具",
+    "提供 Python（FastAPI/SQLAlchemy 等）与 TypeScript（Next.js/Prisma/Drizzle 等）SDK，及 LSP、VS Code/Zed 扩展和 PR 策略评审 CI 模板"
+   ],
+   "use_cases": [
+    "单 Postgres 库中行权限依赖其他行的应用：所有者、团队成员、向下传递权限的目录、租户与用户间共享",
+    "准备引入独立授权服务或手写 RLS 难以测试和修改时，改用策略文件方案",
+    "需要共享、群组、嵌套文件夹、多租户等授权模型的 Next.js/Prisma、FastAPI/SQLAlchemy 等应用"
+   ]
+  },
+  "sha": "21f27943fb56",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea0deed639a0": {
+  "identity": {
+   "one_liner": "基于 Tauri+SQLite 的本地优先 Windows 陪伴型 AI Agent",
+   "review": "小茉是一个运行在 Windows 桌面的陪伴型 AI Agent，不自带模型，需接入任意 OpenAI 兼容 API。核心机制是用 SQLite 在本机保存聊天记录、关系事件记忆与媒体库，并按私聊与各 QQ 群划分独立记忆空间；主动对话以可查、可取消的计划实现。支持 QQ 私聊/群聊、微信私聊、语音与图片理解。注意所有 /api/* 无鉴权，公网暴露需自行处理。",
+   "highlights": [
+    "支持长期记忆，将用户提及的信息保存为关系事件，按私聊与 QQ 群分别存储",
+    "支持主动对话计划，可在界面中查看与取消，并设有夜间免打扰与每日上限",
+    "支持 QQ 私聊/群聊、微信私聊、语音消息、语音转文字、回复朗读与图片生成"
+   ],
+   "use_cases": [
+    "需要 AI 记住过往对话内容的长期陪伴聊天场景",
+    "通过 QQ/微信与多个联系人或群聊交互的场景",
+    "需要在 Windows 本机保存聊天数据与媒体文件、不依赖托管服务的场景"
+   ]
+  },
+  "sha": "ea0deed639a0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

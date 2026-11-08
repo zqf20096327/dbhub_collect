@@ -2776,5 +2776,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e5720a6aeb5e": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，由网关在回复前注入相关记忆，MCP 工具供主动读写",
+   "review": "Stiller Brain 是用 Python 与 SQLite 实现的 LLM 长期记忆服务，包含情感、学习、工具、规划等模块。AI 通过 MCP 工具写入与修改记忆，ST 网关按当前对话语境在回复前将相关记录注入上下文，也支持仅连接 MCP 的主动查询模式。部署依赖 OpenAI 兼容网关与 MCP 工具续轮能力，提供 Windows/Linux 安装向导及 Android 手机部署实验入口，为非商业源码预览。",
+   "highlights": [
+    "提供 ST 网关与 MCP 工具两种接入方式，可指向同一份数据；网关使用 OpenAI 兼容 Chat Completions 接口，MCP 使用带认证的 Streamable HTTP",
+    "记忆模块覆盖自我定义、情感、学习、工具、规划与幻觉黑匣子，保存正文、摘要与历史版本；支持自写提醒、主动整理、情绪词表与图片附件",
+    "完整工具目录 54 项，另有 tool_profile=daily 日常档 8 个入口；提供注入开关、人称校对与按模块的浮现模式设置"
+   ],
+   "use_cases": [
+    "为具备 MCP 与工具续轮能力的模型客户端接入自动记忆注入，使对话话题接续过往记录",
+    "由部署者在 Windows/Linux 电脑或 VPS（含 Android Termux 实验路线）自建私有记忆服务",
+    "AI 主动保存经历、归纳整理旧记录、写提醒并按版本回看修改历史"
+   ]
+  },
+  "sha": "e5720a6aeb5e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb45f4969c98": {
+  "identity": {
+   "one_liner": "基于 Red Hat 软件集合的 Redis 容器镜像 Dockerfile 仓库",
+   "review": "该仓库提供 Redis 6/7 的容器镜像 Dockerfile，支持 RHEL 8/9、Fedora 和 CentOS Stream 9 三种基础镜像，发布在 Quay.io 与 Red Hat Container Catalog。面向 OpenShift 及一般容器用户，可用 podman 或 docker 拉取；自建镜像时 RHEL 版需在已订阅的 RHEL 机器上执行 make build。",
+   "highlights": [
+    "提供 Redis 6 与 Redis 7 两个版本的镜像构建支持",
+    "支持 RHEL 8/9、Fedora、CentOS Stream 9 三类基础镜像",
+    "通过 make build/test 命令构建与测试，可用 podman 或 docker 拉取运行"
+   ],
+   "use_cases": [
+    "在 OpenShift 或一般容器环境中部署 Redis",
+    "在 RHEL/Fedora/CentOS Stream 上自行构建指定版本的 Redis 镜像",
+    "对构建出的 Redis 镜像运行测试应用程序验证"
+   ]
+  },
+  "sha": "bb45f4969c98",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "40c23809fcbd": {
+  "identity": {
+   "one_liner": "用 Go 泛型封装 database/sql 样板代码的 DAO 库",
+   "review": "这是一个 Go 语言代码示例项目，通过泛型封装 database/sql 的重复代码，无需引入额外依赖。项目包含 config、db 单例初始化包，like 和 user 两个实体/DAO 示例包，以及测试辅助工具。运行方式依赖环境变量配置（支持 direnv）和 docker-compose 启动数据库，通过 make db-init 初始化、make test 执行测试。作者配套 Medium 博客文章解释代码细节。",
+   "highlights": [
+    "使用 Go 泛型减少 database/sql 样板代码，不依赖第三方库",
+    "提供 config 与 db 单例包，通过 Init() 初始化、Instance() 访问",
+    "包含 like、user 示例包（实体、DAO 及测试）和测试辅助工具"
+   ],
+   "use_cases": [
+    "学习如何用泛型抽象 database/sql 访问层样板代码",
+    "作为 Go 项目中 DAO 层组织的参考结构",
+    "配合作者的 Medium 文章进行代码讲解与演示"
+   ]
+  },
+  "sha": "40c23809fcbd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a2375f2b2a8c": {
+  "identity": {
+   "one_liner": "基于 Hugo 的个人博客源码仓库，主题为数据库、PostgreSQL 与云退出",
+   "review": "该仓库是 Ruohang Feng（Vonng）个人博客的源码，内容涵盖 PostgreSQL、数据库与云退出等技术话题。站点使用 Hugo Extended 0.168.0 构建，通过 Hugo Modules 引用 OINK 主题（在 go.mod 中固定版本）。提供 make dev/build/check 三个命令分别用于本地开发、生产构建与严格校验。推送到 main 分支即触发 Cloudflare Pages 与 GitHub Pages 的自动发布，无手动部署步骤。内容采用 CC BY 4.0 许可。",
+   "highlights": [
+    "提供 make dev/build/check 三套构建命令，本地开发与生产构建可覆盖主题路径和端口",
+    "推送到 main 分支即自动发布，由 Cloudflare Pages 和 GitHub Actions 工作流分别构建两个站点",
+    "主题 OINK 通过 Hugo Modules 依赖管理，版本固定在 go.mod 中"
+   ],
+   "use_cases": [
+    "需要搭建 Hugo 博客并了解其构建与发布流程的开发者",
+    "关注 PostgreSQL、数据库及云退出技术话题的读者",
+    "希望参考 Hugo Modules 主题管理与 CI 自动发布实践的站点维护者"
+   ]
+  },
+  "sha": "a2375f2b2a8c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e60a2ea404d3": {
+  "identity": {
+   "one_liner": "基于程序化渲染、无需图像生成的浏览器/ESP32 AI 电子宠物",
+   "review": "Tidbit 是一个运行在浏览器和 ESP32 屏幕上的 AI 宠物助手。模型只输出情绪、手势与台词（单个形象约 400 字节 DNA、回复约 150 字节），由程序化渲染器以 60 fps 绘制，不生成图像。它支持记忆、提醒、任务、SKILL.md 技能，并可调用任意 API 或 webhook。运行需 Node 22.19+ 和 pnpm 11，无 API key 时以规则大脑离线运行，许可证为 MIT。",
+   "highlights": [
+    "程序化渲染器以 60 fps 实时绘制宠物形象，不使用图像或视频生成",
+    "支持接入任意 AI 提供商（Anthropic、OpenAI、Google、Groq、Ollama 等）或无密钥离线运行",
+    "提供记忆、提醒、任务归档、SKILL.md 技能，以及调用任意 API/webhook 的能力"
+   ],
+   "use_cases": [
+    "在浏览器中运行带情绪与手势动画的虚拟宠物",
+    "将 Home Assistant、n8n、Zapier、ntfy 等服务接入为宠物可执行的动作",
+    "在 ESP32 AMOLED 屏幕上以本地设备形态运行语音助手"
+   ]
+  },
+  "sha": "e60a2ea404d3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

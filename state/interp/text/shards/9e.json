@@ -2777,5 +2777,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "30cade030f97": {
+  "identity": {
+   "one_liner": "通过tidy R API查询CELLxGENE harmonised单细胞图谱的接口包",
+   "review": "CuratedAtlasQueryR提供R语言查询接口，用于以编程方式探索和检索经harmonised、curation和重注释的CELLxGENE人类单细胞图谱数据，可按细胞、样本或数据集层级基于过滤条件获取数据。数据托管于ARDC Nectar Research Cloud，多数功能需网络连接。适合需要在R中按条件提取单细胞counts与元数据的用户，安装依赖devtools从GitHub安装。",
+   "highlights": [
+    "支持以dplyr管道过滤metadata，按tissue、疾病等条件检索原始counts、CPM或指定基因子集",
+    "可将结果提取为SingleCellExperiment或Seurat对象，并支持保存为.rds或HDF5格式",
+    "提供get_unharmonised_metadata()获取各数据集的非统一元数据，附加Azimuth和SingleR来源的细胞注释列"
+   ],
+   "use_cases": [
+    "按组织或疾病条件以编程方式批量下载单细胞RNA测序counts用于下游分析",
+    "查询统一化元数据并在全组织范围内可视化特定基因的转录分布",
+    "获取跨数据集的细胞类型注释（含harmonised与原始注释）用于整合分析"
+   ]
+  },
+  "sha": "30cade030f97",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "22925e7de0cd": {
+  "identity": {
+   "one_liner": "聚合拨测监控、公开状态页与值班呼叫的服务，基于 Rust 单二进制自托管。",
+   "review": "uptimepage 是一个用 Rust 编写的可用性监控与状态页系统，支持 HTTP、TCP、ICMP、DNS、TLS 证书过期、cron 心跳及无头浏览器登录流程等九类检查，并提供事件管理、值班轮换与升级策略。部署形态为托管服务或自托管，自托管需 Postgres 与 ClickHouse 两个数据库，许可证为 AGPL-3.0。配置可通过 REST API、Terraform provider 或 MCP server 以代码方式驱动。",
+   "highlights": [
+    "支持 9 种检查类型，最小间隔可低至 10 秒，并可从多区域运行探测代理",
+    "内置公开状态页（HTML + JSON + RSS），支持维护窗口、事件记录与访客订阅",
+    "提供 REST API、scoped token、官方 Terraform provider 与 MCP server，支持 Slack、PagerDuty、webhook 等 14 类告警通道"
+   ],
+   "use_cases": [
+    "SaaS 团队为客户提供包含 90 天历史、支持订阅更新的公开服务状态页",
+    "SRE 团队将监控目标与通知通道以 Terraform 代码管理，并按轮换与升级策略呼叫值班人员",
+    "自托管用户在自己的服务器上运行多区域拨测，数据存于自有 Postgres 与 ClickHouse"
+   ]
+  },
+  "sha": "22925e7de0cd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9bec33ae1af": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 Express 的电商 REST API，含用户、商品、评论与订单接口",
+   "review": "这是一个使用 Node.js 和 Express.js 构建的电商 REST API，数据存储于 MongoDB（通过 Mongoose 操作），认证采用 JWT 并配合 cookie（依赖 cookie-parser）。提供用户注册登录、商品的增删改查与图片上传（Cloudinary）、评论管理和订单管理等端点。安装需克隆仓库后 npm install，在根目录 .env 配置 PORT、MONGO_URL、JWT_SECRET、JWT_LIFETIME，再以 npm run dev 启动。适合作为电商后端学习或后端服务参考，采用 MIT 许可证。",
+   "highlights": [
+    "提供用户认证（注册、登录、登出）及用户资料与密码更新端点",
+    "提供商品、评论、订单的增删改查 REST 端点，并支持商品图片上传至 Cloudinary",
+    "基于 MongoDB/Mongoose 存储数据，使用 JWT 进行认证"
+   ],
+   "use_cases": [
+    "为电商前端应用提供用户、商品、评论与订单的后端接口",
+    "作为 Node.js + Express + MongoDB 构建 REST API 的参考实现",
+    "本地部署运行需配置 .env 中的端口、MongoDB 连接串与 JWT 密钥"
+   ]
+  },
+  "sha": "a9bec33ae1af",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ac1bfea7f23d": {
+  "identity": {
+   "one_liner": "Go 编写的自托管短链接服务，单二进制部署，支持 PostgreSQL/SQLite 与可选 Redis。",
+   "review": "Redrx 是一个用 Go 编写的自托管 URL 短链接服务，面向需要自行部署和管理短链的个人或团队。它以约 25 MB 的单一静态二进制分发，模板与静态资源内嵌；后端使用 PostgreSQL 或 SQLite（纯 Go 驱动），可选 Redis 用于共享限流与 GeoIP 缓存。支持密码保护短链、有效期调度、多目标轮转跳转，并通过本地 MaxMind GeoLite2 数据提供点击分析。需注意 Docker 容器以 UID/GID 10001 运行，挂载目录需预先调整属主。",
+   "highlights": [
+    "模板与静态资源内嵌，编译为约 25 MB 的单一静态二进制，无外部运行时依赖",
+    "支持密码保护短链、start_at/end_at 有效期窗口、单短链多目标轮转跳转，以及可自定义颜色的 SVG/PNG 二维码生成",
+    "每次跳转请求都会实时复查钓鱼黑名单，后台定期更新钓鱼源并可选自动删除恶意短链；内置 Prometheus /metrics 端点"
+   ],
+   "use_cases": [
+    "在自有服务器上部署短链接服务，配合自定义域名与二维码用于内容分发",
+    "需要用同一短链在多个目标地址间轮转流量的场景",
+    "希望限制公开注册或匿名建链、并对短链做钓鱼域名筛查的自托管部署"
+   ]
+  },
+  "sha": "ac1bfea7f23d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1f572f64595": {
+  "identity": {
+   "one_liner": "Apache CouchDB 的 CI 支持仓库，提供构建依赖脚本与 Docker 镜像",
+   "review": "该仓库为 Apache CouchDB 的持续集成提供支持：包含在多平台（容器内外）安装构建依赖的脚本，以及构建 Docker 容器的 build.sh 工具，容器内含 Erlang、Elixir、Node 及 SpiderMonkey 1.8.5 等构建 CouchDB 所需依赖。镜像发布于 Docker Hub，供 Apache Jenkins 在每次提交和 PR 时构建验证 CouchDB，覆盖 Linux、macOS、BSD、Windows 及多 Erlang 版本。可通过环境变量覆盖 Erlang/Node/Elixir 版本，并支持 Buildx 多架构镜像构建。维护者与 PMC 成员是主要使用者。",
+   "highlights": [
+    "提供 build.sh 脚本，构建包含 CouchDB 全部构建依赖的平台镜像，发布到 Docker Hub（debian/ubuntu/centos 系列）",
+    "支持通过 ERLANGVERSION、NODEVERSION、ELIXIRVERSION 环境变量覆盖工具版本",
+    "使用 Docker Buildx 支持本地 qemu 模拟或远程 ssh worker 的多架构镜像构建（arm64、s390x、ppc64le 等）"
+   ],
+   "use_cases": [
+    "为 Apache Jenkins CI 提供 CouchDB 在多 OS、多 Erlang 版本下的构建与测试环境",
+    "为发布流程构建二进制包与 Docker 镜像所需的依赖环境",
+    "为新增 OS 版本、平台或架构（如 NetBSD、OpenBSD、armhf）扩展 CouchDB 构建支持"
+   ]
+  },
+  "sha": "f1f572f64595",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "48dd23406557": {
+  "identity": {
+   "one_liner": "SlicingDice 数据仓库与分档数据库服务的官方 JavaScript 客户端",
+   "review": "该客户端封装了 SlicingDice（一种以 SQL 和 API 方式提供的数据仓库/分析数据库服务）的 API 调用逻辑，面向需要在 JavaScript/Node.js 环境中接入该服务的开发者。通过 `npm install slicerjs` 安装后，可执行建列、插入数据、实体/事件计数、聚合、top values、存储查询管理及 SQL 查询等操作；方法为 API 端点的薄封装，参数与返回值为与 API 端点语法一致的 JSON-like 对象。版本 v2.1.0，MIT 许可。",
+   "highlights": [
+    "提供覆盖 API 端点的完整方法集：数据库/列管理、insert 插入、countEntity/countEvent 计数、aggregation 聚合、topValues、数据提取（result/score）与 sql() 查询",
+    "方法为 API 端点的薄层封装，参数与返回值是与端点语法一致的 JSON-like Object",
+    "通过 npm 安装（npm install slicerjs），仓库附 tests 与 examples 目录，MIT 许可"
+   ],
+   "use_cases": [
+    "在 Node.js 或浏览器 JavaScript 项目中写入与查询 SlicingDice 数据仓库",
+    "构建需要实体计数、时间序列事件计数、聚合与 top values 等分析查询的应用",
+    "以 SQL 语句方式对 SlicingDice 执行查询与插入操作"
+   ]
+  },
+  "sha": "48dd23406557",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

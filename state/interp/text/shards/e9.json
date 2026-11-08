@@ -3318,5 +3318,157 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "67aef7eee5cc": {
+  "identity": {
+   "one_liner": "本地 MCP 服务器，以 SQLite/PostgreSQL 存储并检索 AI 编码代理的项目记忆",
+   "review": "Krusch Context MCP 是一个 MCP 服务器，为 Cursor、Claude Code、Windsurf 等编码代理提供跨会话的项目记忆，记录决策、不变量、经验教训等五类事实。仅提供 5 个工具动词，默认使用 SQLite（node:sqlite），含近似重复检测、谱系追踪与 span 溯源漂移校验；无 Ollama 或 API 密钥时以离线关键词模式运行。需 Node.js ≥ 22，通过 npx krusch-context-mcp init 初始化。",
+   "highlights": [
+    "提供 retrieve/remember/revise/nudge/health 共 5 个 MCP 工具动词，约 350 prompt tokens",
+    "默认 SQLite 存储，支持 Float32Array 向量与 Porter-stemmed FTS5 词法索引，STORAGE_MODE=postgres 可切换 PostgreSQL/pgvector",
+    "写入采用 5 类封闭分类法，近重复检测（余弦相似度 ≥ 0.85）、强制失效原因、span 溯源 SHA-256 锚点与漂移自愈"
+   ],
+   "use_cases": [
+    "在多会话编码工作流中保留架构决策与项目不变量",
+    "提交前用 nudge 审计 diff 是否违反活跃约束",
+    "完全本地/离线环境下运行代理记忆（无 GPU、无云端依赖）"
+   ]
+  },
+  "sha": "67aef7eee5cc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a05cc4410951": {
+  "identity": {
+   "one_liner": "基于 IntelliJ 平台的 Elasticsearch/OpenSearch 图形化查询管理客户端插件",
+   "review": "该插件运行于 JetBrains IDE 内，用于连接本地、服务器或云端 Elasticsearch 及 OpenSearch 集群，执行查询与集群管理。支持多种连接方式（SSL、SSH、AWS 签名等），数据以表格或 JSON 视图浏览，文档可直接增删改。安装方式为 JetBrains Marketplace，文档需另行查阅官方页面。",
+   "highlights": [
+    "支持创建多个连接，认证方式包含 Authorization、SSL、SSH、AWS Signature",
+    "表格与 JSON 两种视图浏览数据，支持分页、排序及 KQL 过滤",
+    "提供 QueryDSL 与 REST API 自动补全，并支持 CSV/JSON/Bulk API/Dump 格式的数据导入导出"
+   ],
+   "use_cases": [
+    "在 IDE 中日常查询和管理 Elasticsearch 或 OpenSearch 集群数据",
+    "批量导入导出集群数据（CSV、JSON、Dump 等）",
+    "在项目中保存并分享 .es 请求文件与常用查询"
+   ]
+  },
+  "sha": "a05cc4410951",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f5012b65116": {
+  "identity": {
+   "one_liner": "基于 Mongoose 的零样板 MongoDB 封装层，单例配置后全局调用",
+   "review": "kilic.db 是运行于 Node.js 的 Mongoose 封装命令层，提供 config/create/get/update/delete/find/count/aggregate/backup 等精简命令集，面向 Node.js 项目开发者。通过 db.config() 一次性配置后全局使用，支持连接远程 MongoDB 或内置 mongodb-memory-server-core 本地模式，并将数据以 EJSON 格式持久化到 .kd 文件。需 Node.js 20.19.0 及以上，mongoose 为可选依赖。",
+   "highlights": [
+    "create() 使用 $setOnInsert 原子 upsert，写入方法拒绝空过滤器和空数据",
+    "支持本地内存模式，数据写入 .kd 文件并通过 EJSON 实现 BSON 值往返",
+    "提供 aggregate() 流水线、find() 游标模式及 db.model() 原生 Mongoose 访问"
+   ],
+   "use_cases": [
+    "需要一处配置、多文件调用 MongoDB 的 Node.js 项目",
+    "无 MongoDB 服务器的脚本、原型或测试，可用本地 .kd 文件持久化",
+    "导出、迁移、回填等需要游标迭代或聚合管道的数据处理任务"
+   ]
+  },
+  "sha": "5f5012b65116",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "83c0a8638a1c": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的本地记忆控制平面，含审计记录与受治理的上下文注入",
+   "review": "AtMem 是一个本地优先的 Agent 记忆控制平面，为 OpenClaw、Pydantic AI、LangChain/LangGraph 或自定义 Agent 提供受策略治理的长期记忆。它记录模型与工具事件（Agent Black Box），所有集成默认以 shadow 模式启动，经仪表盘审查后显式激活注入；AtBot 作为自动安装的伴随组件仅负责提议与排序，授权、存储与删除由 AtMem 完成。记忆数据存于本地 SQLite（可选 SQLCipher 加密），本地记忆操作不依赖外部 API。",
+   "highlights": [
+    "提供 shadow 模式：先学习并展示将检索的内容，经显式激活后才修改模型上下文",
+    "内置离线基准测试（atmem benchmark run），覆盖抽取、矛盾、召回、注入、隐私、投毒等 24 个用例",
+    "支持本地 Ollama、OpenAI 兼容模型、托管提供方或确定性回退，API 密钥仅存于环境变量"
+   ],
+   "use_cases": [
+    "为需要可审计记忆机制的 Agent 应用提供本地长期记忆存储与受治理检索",
+    "多框架（OpenClaw/Pydantic AI/LangGraph）Agent 项目统一接入记忆控制平面",
+    "需要在激活前审查记忆注入行为、或在本地基准用例上验证记忆质量的开发流程"
+   ]
+  },
+  "sha": "83c0a8638a1c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0063f2762331": {
+  "identity": {
+   "one_liner": "LeetCode 题目解答集合仓库",
+   "review": "该仓库收录作者对 LeetCode 题目的解答。从主题标签看，内容覆盖算法、数据结构、数学与 SQL（数据库）类题目。README 仅含标题一行，未提供安装运行方式、语言选择及题目组织结构等信息，使用者需直接浏览仓库内容查看各题解法。",
+   "highlights": [
+    "包含算法与数据结构类题目的解答",
+    "包含 SQL 与数学类题目的解答"
+   ],
+   "use_cases": [
+    "LeetCode 练习者查阅特定题目的参考解法",
+    "SQL 与算法学习时对照题目实现方式"
+   ]
+  },
+  "sha": "0063f2762331",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63fdb8db4065": {
+  "identity": {
+   "one_liner": "Cassandra 侧车应用，通过 JMX 提供 REST 备份与恢复",
+   "review": "Icarus 是与 Apache Cassandra 实例同机部署的 sidecar，通过 JMX 与 Cassandra 通信，内置 Esop 实现备份和恢复。它以两种模式运行：响应 REST 请求的长驻服务，或 CLI 工具。全局请求时，接收请求的实例作为协调者，向各节点分发操作并分阶段推进。每个实例需能看到与 Cassandra 相同的目录结构以读写 SSTables。被 Instaclustr 的 cassandra-operator 和 Orange 的 CassKop 用于集群备份恢复。",
+   "highlights": [
+    "支持服务器与 CLI 双模式，同一 JAR 内含 Esop 备份恢复实现",
+    "提供 REST 接口（默认 127.0.0.1:4567），操作通过 JSON 请求体提交并可通过 GET 查询状态",
+    "全局备份/恢复采用协调者模式：接收 globalRequest 的实例向各节点分发请求并按阶段推进"
+   ],
+   "use_cases": [
+    "在 Kubernetes 中配合 Cassandra operator 进行集群备份与恢复",
+    "对单节点 Cassandra 按指定 keyspace 或表执行备份/恢复",
+    "通过 RPM/DEB 包或 JAR 将备份恢复能力部署到已有 Cassandra 集群"
+   ]
+  },
+  "sha": "63fdb8db4065",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dd181739e095": {
+  "identity": {
+   "one_liner": "Rust 编写的通用数据库，兼容 MySQL，面向 AI 代理与 HTAP",
+   "review": "MyDB 是用 Rust 编写的通用数据库，通过 SQL 接口提供事务、实时分析、向量与 BM25 混合检索及模型调用，目标用户是应用和 AI 代理。1.2.0 为公开预览版，官方声明尚非生产级 MySQL 替代品，磁盘格式不保证向后兼容。默认端口 8738，初始账号 root/root 仅限回环连接。",
+   "highlights": [
+    "提供 SQL 模型调用函数（AI_GENERATE、AI_EMBED）与原生 VECTOR 类型、BM25+RRF 混合检索",
+    "默认启用自动 Zone Map，按块统计跳过不匹配谓词的数据块；支持在线索引与主键创建",
+    "提供 REST SQL API（HTTPS 参数化 SQL、事务、NDJSON 流式）与可选 MCP Server；兼容 MySQL 客户端、JDBC 驱动与 binlog"
+   ],
+   "use_cases": [
+    "需要通过 SQL 调用文本生成与嵌入服务构建 RAG 或知识库的场景",
+    "事务与分析混合负载的本地评估与受控环境验证",
+    "复用现有 MySQL 客户端/JDBC 进行数据管理、在线 DDL 与实时分析"
+   ]
+  },
+  "sha": "dd181739e095",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

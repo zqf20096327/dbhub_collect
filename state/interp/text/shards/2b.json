@@ -2816,5 +2816,114 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6f4c61345db5": {
+  "identity": {
+   "one_liner": "React+Firestore增删改查示例应用，附Vite开发模板",
+   "review": "该项目是配合 Firestore CRUD 教程文章的 React 示例仓库，主题为用 React 19 与 Firebase 10+ 构建 Firestore 增删改查 Web 应用。仓库本身是一个 Vite 模板，提供 React 开发环境、HMR 热更新及 ESLint 规则配置，适合跟随教程学习的开发者使用。README 正文以模板配置说明为主，教程完整内容需访问外部文章链接。",
+   "highlights": [
+    "提供基于 Vite 的 React 最小化配置，含 HMR 热更新与 ESLint 规则",
+    "使用 @vitejs/plugin-react（Babel）或 @vitejs/plugin-react-swc（SWC）实现 Fast Refresh",
+    "README 包含扩展 ESLint 配置与 React 专属 lint 插件的安装说明"
+   ],
+   "use_cases": [
+    "跟随配套教程学习 Firestore CRUD 操作的开发者",
+    "需要 React 19 + Vite 项目初始模板时作为起步代码",
+    "参考 ESLint 类型感知规则与 React lint 插件配置"
+   ]
+  },
+  "sha": "6f4c61345db5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a2e8da6bd33f": {
+  "identity": {
+   "one_liner": "通过 BigQuery Storage API 与多进程并行，把 BigQuery 表分块读取为 pandas DataFrame 的 Python 工具。",
+   "review": "bqfetch 是一个 Python 库，用于将 GCP BigQuery 表读取为 pandas DataFrame。它先按指定索引列取值并按可用内存与 CPU 核数分块，再通过 BigQuery Storage API 并行拉取各临时表后合并。使用时需提供服务账号 JSON 文件，通过 pip 安装，采用 MIT 许可证。README 说明：索引列取值需分布均匀，否则分块大小估算不可靠；增加核数不一定提升速度，因为读取受网络带宽限制。",
+   "highlights": [
+    "支持按 chunk 大小（by_chunk_size_in_GB）或块数（by_nb_chunks）两种方式对表分块，通过临时表与 BigQuery Storage API 读取后合并",
+    "支持 multiprocessing、billiard、joblib 三种并行后端，nb_cores=-1 时使用机器全部核数",
+    "提供 verbose 模式显示可用内存与表大小等信息"
+   ],
+   "use_cases": [
+    "读取超出单机内存的大表，以分块方式逐段加载为 DataFrame",
+    "利用多核并行拉取 BigQuery 表数据用于数据分析流程",
+    "在 GCP 计算引擎等按核分配带宽的场景下并行读取以提升带宽"
+   ]
+  },
+  "sha": "a2e8da6bd33f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1be275f539cd": {
+  "identity": {
+   "one_liner": "基于 Mistral Small 模型的自然语言查询关系数据库示例项目",
+   "review": "这是 AWS 提供的示例项目，用 Mistral Small 模型（经 SageMaker JumpStart 一键部署或通过 Bedrock API 调用）将自然语言问题转换为 SQL 查询，并在 Redshift 上执行后将表格结果交由模型解读为自然语言回答。流程包含 SQL 出错时的重试机制。示例数据源为 Redshift 的 TICKIT 数据库，需 ml.g5.48xlarge 实例配额，推荐在 SageMaker Studio 中运行配套 notebook。",
+   "highlights": [
+    "支持从 SageMaker JumpStart 一键部署 Mistral Small，或通过 Amazon Bedrock API 调用",
+    "实现自然语言到 SQL 的转换、查询执行、出错重试，以及将查询结果解读为自然语言回答",
+    "架构文档说明可扩展到 RDS、Aurora、Athena、Snowflake 等关系数据源"
+   ],
+   "use_cases": [
+    "业务人员无需编写 SQL，用自然语言查询 Redshift 等数据库中的数据",
+    "在 SageMaker Studio 中学习 Text2SQL 的端到端实现流程",
+    "作为构建自然语言数据问答应用的参考架构"
+   ]
+  },
+  "sha": "1be275f539cd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5336b1959479": {
+  "identity": {
+   "one_liner": "VeighNa框架的MongoDB数据库适配接口，基于pymongo实现",
+   "review": "该仓库是VeighNa框架的MongoDB数据库接口，基于pymongo 4.11.3开发。供使用VeighNa框架并需以MongoDB作为数据库存储的用户使用，通过VeighNa全局配置填写database.name、host、port、database等字段完成接入，其中用户名与密码为可选项。",
+   "highlights": [
+    "基于pymongo 4.11.3开发，实现MongoDB数据库接口",
+    "通过VeighNa全局配置接入，需填写名称、地址、端口、实例四个必填字段",
+    "支持可选配置用户名与密码用于连接认证"
+   ],
+   "use_cases": [
+    "在VeighNa框架中使用MongoDB作为数据存储后端",
+    "需要按地址、端口、实例等参数配置数据库连接的部署场景"
+   ]
+  },
+  "sha": "5336b1959479",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2a6ad23e84be": {
+  "identity": {
+   "one_liner": "自托管轻量级 ERP 系统，进销存、财务、人事模块基于 Node.js 与 SQLite 运行。",
+   "review": "x.erp 是一个面向中小企业的自托管 ERP 系统，实现商品库存、出入库单据、销售采购、客户供应商往来、财务收支与人事档案等模块。数据存于本地 SQLite，支持多仓库、批次保质期、序列号与移动加权平均成本核算。可通过飞牛 fnOS、Docker 或 Node.js 22+ 直接运行，浏览器多人使用，UI 为简体中文。",
+   "highlights": [
+    "支持多仓库与调拨、出入库审核、多单位换算、批次保质期、序列号逐件登记与扫码录入",
+    "提供移动加权平均成本核算、收发存汇总、往来对账单、库龄分析与库存提醒推送（企业微信/钉钉/飞书/Webhook）",
+    "数据存于本地 SQLite，每日自动备份并支持 JSON 导出导入；提供 Docker、Windows 安装包、安卓客户端与飞牛 fpk 多种部署方式"
+   ],
+   "use_cases": [
+    "中小企业在 NAS 或本地服务器上自托管管理进销存与往来财务",
+    "多仓库/门店场景下分开记账库存，并按仓库统计收发存与明细账",
+    "离线或局域网环境中通过浏览器或安卓客户端进行出入库、盘点与扫码作业"
+   ]
+  },
+  "sha": "2a6ad23e84be",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

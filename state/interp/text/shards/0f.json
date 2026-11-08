@@ -2631,5 +2631,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a6d82aaeb6b2": {
+  "identity": {
+   "one_liner": "本地优先的技能管理 MCP 服务器，用语义检索为代理按需推荐技能",
+   "review": "the-librarian 是一个 MCP 服务器，把大型 SKILL.md 技能集合留在磁盘上，不进入代理上下文。代理用自然语言描述意图，服务器通过 Ollama 嵌入做语义检索，经 MMR 多样性选择与时效衰减排序，代理只回写使用结果，人工依据 librarian_stats 做筛选决策。全流程本地运行：Python 3.12+、SQLite、可选 Apple Intelligence。适合维护大量代理技能并希望按任务按需取用的用户。",
+   "highlights": [
+    "提供 librarian_find/librarian_get/librarian_report 等 6 个 MCP 工具，覆盖检索、读取、结果上报、重建索引与统计",
+    "检索管线包含 Ollama 嵌入、余弦相似度、MMR 多样性选择与时效衰减，可选 AFM 重排序与本地软过滤",
+    "递归扫描 SKILL.md 文件，查询与结果均写入日志，支持通过环境变量与 server.py 顶部参数调整行为"
+   ],
+   "use_cases": [
+    "代理技能集合较大、希望按任务语义按需加载而非全部装入上下文",
+    "基于使用日志定期清理从未被推荐或成功率低的技能",
+    "配合 Claude Code 等支持 MCP 的代理使用（附示例配置与教学用技能）"
+   ]
+  },
+  "sha": "a6d82aaeb6b2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e561813e6d9d": {
+  "identity": {
+   "one_liner": "从 .arc 文件生成 DynamoDB 数据访问层的 JavaScript 库",
+   "review": "该项目读取 .arc 文件中定义的 @tables 和 @indexes，生成按表名组织的客户端对象，方法来自 DynamoDB.DocumentClient。生成的表遵循 appname-staging-tablename 和 appname-production-tablename 命名格式，并通过 NODE_ENV 自动解析 TableName。npm start 会启动本地 Dynalite 实例并预填表。注意：README 标注该仓库已弃用，使用者需自行评估其后续维护情况。",
+   "highlights": [
+    "依据 .arc 文件生成包含 put、get、delete、query、scan、update 方法的客户端对象",
+    "基于 NODE_ENV 在 testing（本地内存）、staging 与 production 表之间自动区分 TableName",
+    "提供 db（底层 DynamoDB 客户端）与 doc（DocumentClient）两种连接方式"
+   ],
+   "use_cases": [
+    "使用 Architect（.arc）框架并需要从配置文件生成 DynamoDB 访问代码的 Lambda 应用",
+    "本地开发与测试：通过 npm run create 建表、npm start 启动 Dynalite 实例联调",
+    "同一份代码在 staging 与 production 环境中无需修改即可连接对应表"
+   ]
+  },
+  "sha": "e561813e6d9d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8abc92451bb1": {
+  "identity": {
+   "one_liner": "配套直播课程的 Python 教程仓库，含笔记、源码与博客系列",
+   "review": "该仓库是一套面向初学者至进阶者的 Python 教程合集，随一门直播课程同步建设，包含笔记、源码、练习材料、项目及博客文章链接。内容从编程入门、环境搭建到字符串、列表、字典、循环、函数、异常处理、迭代器与生成器等主题，共 50 余篇文章，其中第 50 课标注尚未发布。README 说明其定位是先打 Python 基础再进入 Django Web 开发，维护者欢迎通过 Fork 与 Pull Request 参与贡献。",
+   "highlights": [
+    "提供 50 余篇结构化 Python 博客文章，覆盖基础语法到迭代器、生成器、模块等主题",
+    "包含笔记、源码、练习材料与项目文件",
+    "欢迎通过 Pull Request 贡献内容"
+   ],
+   "use_cases": [
+    "Python 初学者按系列文章学习基础语法与数据结构",
+    "学习 Django Web 开发前先行打 Python 基础",
+    "配合直播课程作为讲义与源码参考"
+   ]
+  },
+  "sha": "8abc92451bb1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c349871235d8": {
+  "identity": {
+   "one_liner": "用于连接 MongoDB 数据库的 Python 示例脚本。",
+   "review": "该项目包含一个示例 Python 脚本，用于演示如何连接 MongoDB 数据库。README 内容较短，仅说明脚本用途并列出三个特性词条，未提供安装步骤、依赖说明或代码用法文档。适用于需要参考 MongoDB 连接脚本写法的使用者，使用前需自行确认环境配置。",
+   "highlights": [
+    "提供一个用于连接 MongoDB 数据库的 Python 示例脚本",
+    "仓库主题标签包含 python、mongodb、database 等关键词",
+    "README 中列出 Fast、Compact、Easy 三个特性词条（原文未附具体说明）"
+   ],
+   "use_cases": [
+    "参考 Python 连接 MongoDB 的脚本写法",
+    "作为数据库连接示例代码的模板",
+    "学习 MongoDB 相关 Python 项目结构"
+   ]
+  },
+  "sha": "c349871235d8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3a0da646bc6": {
+  "identity": {
+   "one_liner": "用于证据化数字企业孪生的时序图平台，Go 后端加 PostgreSQL 双时态账本。",
+   "review": "ONTOVELA Open 是 ONTOVELA 平台的 Apache-2.0 开发者发行面，将物理、组织、流程、agent 与机器人状态写入带证据引用的双时态图，供规划、模拟与审计查询使用。它包含版本化 OpenAPI 契约、Go/Python/TypeScript SDK、本地二进制与 Docker 快速启动、32 个协议适配器及示例场景。状态内核、多租户控制面与企业连接器不在本仓库内。",
+   "highlights": [
+    "每条状态断言携带来源、证据引用、事件时间、系统时间、状态种类与置信度，六种状态（observed/reported/derived/inferred/predicted/simulated）严格分离且 simulated 不会转为真实运行状态",
+    "提供双时态历史（as_of 事件时间 / as_known 系统时间）重建、可解释的权威排序消解（显式 unknown/conflicted 结果）、签名快照 diff 与变更订阅",
+    "覆盖 32 个协议适配器（MQTT、ROS 2、OPC UA、Modbus、Kafka/NATS、CAN 等），共享同一载荷契约，并保持租户范围、幂等写入与状态种类完整性"
+   ],
+   "use_cases": [
+    "需要区分观测、推断与模拟数据并保留可审计证据链的企业运营状态管理",
+    "仓储机器人、工业协议（OPC UA/Modbus/Profinet）等场景的实时状态接入与影响分析",
+    "基于快照与 sim-to-real 对比的规划验证与事件复盘（仓库参考场景、事件响应、供应链反事实示例）"
+   ]
+  },
+  "sha": "c3a0da646bc6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3c14d70d06b1": {
+  "identity": {
+   "one_liner": "自托管的表格数据 UI 框架，基于 Preact + Hono + SQLite",
+   "review": "OpenTable 是面向 OpenClaw 社区的开源表格 UI 框架，用于自托管构建数据看板、CRM 和类表格应用。支持多表、动态列、排序过滤分页和 CSV 导出，行数据以 JSON 存储在 SQLite 中，列变更无需迁移表结构。提供人类点击编辑与 ?agent=true 参数切换的自动化代理两种界面。需 Node.js 20+，MIT 许可。",
+   "highlights": [
+    "支持多表管理与动态列（添加、重命名、拖拽排序、类型变更），并提供列级排序、过滤、分页与 CSV 导出",
+    "行数据以 JSON 对象存储于 SQLite，列操作仅修改元数据，无需 ALTER TABLE 迁移",
+    "提供双模式 UI：人类交互模式与 ?agent=true 的自动化代理模式（显式按钮、更大点击目标）"
+   ],
+   "use_cases": [
+    "自托管构建 SaaS 数据看板或 CRM 类工具",
+    "搭建类电子表格的数据管理应用",
+    "为浏览器自动化代理提供可操作的数据表格界面"
+   ]
+  },
+  "sha": "3c14d70d06b1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e9d9d6e32b8e": {
+  "identity": {
+   "one_liner": "Dyson HJ10 净化器 Web 仪表盘：经 Dyson 云读取实时空气质量与滤芯寿命，TiDB 存历史",
+   "review": "这是一个面向 Dyson HushJet Purifier Compact（HJ10）用户的非官方 Web 仪表盘，通过社区逆向的 MyDyson API 经 MQTT over TLS 读取当前空气质量、滤芯寿命等状态，并将数据存入 TiDB/MySQL 以生成 15 分钟粒度历史图表与每日摘要。前端为 Vite/React/Recharts，后端为 Express/tRPC，可部署于 Render 免费实例，用 GitHub Actions 每 15 分钟定时同步。依赖 Dyson 云接口，接口变更即失效。",
+   "highlights": [
+    "经 Dyson 云 API 与 AWS IoT（MQTT 3.1.1 over TLS websocket）读取设备状态、传感器数据与故障报告，无需与净化器同网",
+    "将 Dyson 仅保留一周的 15 分钟历史均值及室外空气质量逐次复制入 TiDB，实现长期历史与室内外对比图表",
+    "提供密码登录、Drizzle 迁移、Vitest 测试及 GitHub Actions 定时同步（日志中隐藏数值与序列号）"
+   ],
+   "use_cases": [
+    "在浏览器中查看 HJ10 的实时空气质量、滤芯寿命、Wi-Fi 信号与固件状态",
+    "长期保存并回看 PM2.5/PM10、风扇转速历史及每日摘要（含 WHO 24 小时均值超标标记）",
+    "对比室内与室外空气质量，或离网外随时读取净化器数据"
+   ]
+  },
+  "sha": "e9d9d6e32b8e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

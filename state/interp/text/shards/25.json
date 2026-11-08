@@ -2974,5 +2974,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "77a162282c70": {
+  "identity": {
+   "one_liner": "Laravel 数据库粘性包：基于缓存在同一用户的连续请求间保持读写连接粘性",
+   "review": "这是一个 Laravel 扩展包，通过缓存机制让同一用户在最近数秒内的连续请求保持数据库主从读写粘性状态，解决读写分离下主从延迟导致的数据不一致问题。适用于采用数据库主从读写分离架构的 Laravel 应用。要求 PHP 8.2+、Laravel 11-13，默认需手动在 config/app.php 注册 ConnectionServiceProvider（不支持包自动发现），缓存驱动推荐 redis 或 memcached，默认粘性 TTL 为 5 秒，可自定义解析器与队列 worker 行为。",
+   "highlights": [
+    "支持在 HTTP 请求间传递数据库粘性状态，队列 worker 默认读主库，可通过 ShouldAssumeFresh 等接口改读从库",
+    "粘性判定源可替换：默认基于远程 IP，可切换为基于认证用户 ID 的解析器（需注册中间件）",
+    "粘性 TTL 默认 5 秒，可通过 config/database.php 的 stickiness_ttl 配置项调整"
+   ],
+   "use_cases": [
+    "读写分离架构下，用户写入后立即读取需读到最新数据的场景",
+    "基于认证用户而非 IP 判定粘性来源的多用户应用",
+    "需要精确控制队列任务读主库或从库的队列消费场景"
+   ]
+  },
+  "sha": "77a162282c70",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42cfd243631b": {
+  "identity": {
+   "one_liner": "基于 JSON 文件的 Node.js 本地 NoSQL 数据库类库",
+   "review": "native-json-db 是一个在本地服务器上以 JSON 文件存储数据的 NoSQL 类库，通过 JSONDB 类实现集合式的增删改查操作，并使用 JSON Schema 进行数据校验。作者在 README 中注明该库不适用于大量用户写入的大规模场景，建议用于个人应用或作品集项目。支持 TypeScript 编写，通过 npm 安装，兼容 ES modules 与 commonjs 导入。",
+   "highlights": [
+    "提供 connect、create、findOne、findMany、findOneAndUpdate、updateMany、findOneAndDelete、deleteMany 等基于 Promise 的集合操作方法",
+    "使用 JSON Schema 对写入数据进行校验，数据不符合集合 schema 时抛出 614 错误",
+    "更新操作支持 $inc、$dec、$push、$pop 等特殊属性，以及 writeSync、indentSpace 等连接选项"
+   ],
+   "use_cases": [
+    "Node.js/TypeScript 个人项目中以 JSON 文件形式本地存储数据",
+    "作品集或演示项目中实现类 MongoDB 风格的集合式数据读写",
+    "需要基于 JSON Schema 校验数据结构的小型本地数据管理场景"
+   ]
+  },
+  "sha": "42cfd243631b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42d87c47d2b3": {
+  "identity": {
+   "one_liner": "React+Flask+MongoDB的新冠疫情数据聚合展示应用",
+   "review": "该应用将新冠疫情相关信息分为四个板块：数据集、统计与时序分析、新闻、疫苗分发。Flask 后端从 data.gov、The Covid Tracking Project、newsapi.org、cdc.gov 等外部 API 获取 JSON 数据并处理后，以 REST 接口返回给 React 前端，用 Chart.js 和 D3.js 呈现图表与美国地图。适合需要按主题聚合公开疫情数据的场景。",
+   "highlights": [
+    "后端通过 Flask 路由对接 6 个外部 API（含 data.gov CKAN、NewsAPI、The Covid Tracking Project、cdc.gov），处理后以 REST 形式返回前端",
+    "支持可调节参数的动态时序图表、变化率图表、疫苗剂量柱状图及带 ICU 容量数据的美国各州地图可视化",
+    "数据集与新闻板块包含标题、作者、发布机构、日期、描述及下载/原文链接"
+   ],
+   "use_cases": [
+    "集中浏览来自政府与公共机构的新冠数据集及其元数据",
+    "以图表形式查看每日病例、住院等指标的时间序列及其变化率",
+    "按地区查看疫苗剂量发运与接种统计，并通过美国地图观察各州接种进度与 ICU 容量"
+   ]
+  },
+  "sha": "42d87c47d2b3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

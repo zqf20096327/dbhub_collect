@@ -2537,5 +2537,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a207b25c99c9": {
+  "identity": {
+   "one_liner": "BigchainDB 官方示例与教程实验库，含服务端部署及 Python/JS 客户端教程",
+   "review": "该仓库汇集 BigchainDB 相关的服务端、客户端教程、示例应用与实验性代码，通过 Docker Compose 编排 BigchainDB 服务器与 RethinkDB，提供 Python 和 JavaScript 教程演示 CREATE、TRANSFER 交易、资产与未花费输出、可分割资产等操作，另含 ReactJS 前端示例应用。README 明确声明内容已过时且不再维护，示例可能与最新版 BigchainDB 不兼容，仓库以只读模式保留。",
+   "highlights": [
+    "提供基于 Docker/Make 的一键启动方案，编排 BigchainDB 服务器与 RethinkDB 服务",
+    "包含 Python 与 JavaScript 两套客户端教程，覆盖基本交易、资产与未花费输出、可分割资产、加密条件脚本等主题",
+    "内含带 ReactJS 前端的示例应用，可通过 Docker 容器在本地端口访问"
+   ],
+   "use_cases": [
+    "需要了解 BigchainDB 交易模型（CREATE/TRANSFER、资产、UTXO）的本地实验环境搭建",
+    "学习 Python 或 JavaScript 驱动与 BigchainDB HTTP API 的交互方式",
+    "查阅 BigchainDB 早期示例应用与实验性代码的历史实现"
+   ]
+  },
+  "sha": "a207b25c99c9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4b6ce60cbd88": {
+  "identity": {
+   "one_liner": "Emacs Lisp 库，通过 PostgreSQL 前后端 wire 协议连接访问 PostgreSQL 数据库",
+   "review": "pg-el 是一个面向开发者而非最终用户的 Emacs Lisp 库，在 socket 层实现 PostgreSQL 的网络协议，使 Emacs 程序可直接读写 PostgreSQL。支持 SCRAM-SHA-256、MD5、密码认证，TLS 连接，预编译语句和 COPY 协议。不含面向最终用户的浏览编辑界面，该需求由 PGmacs 等项目承担。",
+   "highlights": [
+    "支持 SCRAM-SHA-256、MD5、密码认证及基于 GnuTLS 的 TLS 加密连接（含客户端证书）",
+    "通过扩展查询协议实现预编译语句，支持 COPY 协议在 Emacs 缓冲区与 PostgreSQL 间导入导出 CSV/TSV 数据",
+    "支持 LISTEN/NOTIFY 异步通知，可解析整数、浮点、数组、JSON/JSONB 等类型为 Emacs Lisp 对象，解析可由用户扩展"
+   ],
+   "use_cases": [
+    "在 Emacs Lisp 程序中直接查询和写入 PostgreSQL 数据库",
+    "基于 PostgreSQL LISTEN/NOTIFY 构建发布-订阅模式的事件通信",
+    "在 Emacs 缓冲区与数据库之间批量导入导出预格式化数据（CSV/TSV）"
+   ]
+  },
+  "sha": "4b6ce60cbd88",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "512a385d5388": {
+  "identity": {
+   "one_liner": "基于 Swift 与 Firebase 的 iOS 聊天应用教程示例项目",
+   "review": "MessagingAppTutorial 是一个 iOS 消息应用教程的配套代码仓库，使用 Swift 编写并依赖 Firebase（通过 CocoaPods 安装 Pods）。使用者需下载代码、安装依赖、替换为自己的 Firebase GoogleService-Info.plist 配置后方可运行。README 指出完整教学以 YouTube 播放列表形式提供，运行失败时也需回到教程查看。",
+   "highlights": [
+    "使用 Swift 与 Xcode 开发的 iOS 应用项目",
+    "依赖 Firebase 服务，通过 CocoaPods 安装第三方 Pods",
+    "配套 YouTube 视频教程播放列表，逐步讲解实现过程"
+   ],
+   "use_cases": [
+    "跟随视频教程学习使用 Firebase 构建 iOS 消息应用",
+    "作为 Swift + Firebase 项目的参考代码结构",
+    "iOS 入门者练习 Pods 安装与 Firebase 配置流程"
+   ]
+  },
+  "sha": "512a385d5388",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1c7e34fbe0ef": {
+  "identity": {
+   "one_liner": "SaaS 启动模板，预集成 BetterAuth 多租户认证、Resend 邮件与 R2 存储的 monorepo。",
+   "review": "clean-stack 是一个面向 SaaS 开发者的单体仓库模板，后端采用 Bun 与 Hono，前端为 Vite + React 19 + TanStack，数据层为 Drizzle ORM 与 PostgreSQL。它预置了认证（BetterAuth）、多租户、邮件（Resend）与对象存储（R2/S3 等），并声明遵循 Clean Architecture 与 DDD。README 标明项目处于开发中状态，不提供支持或 SLA。",
+   "highlights": [
+    "提供两种运行方式：本地 Bun/pnpm 或 Docker Compose 全容器化（develop.watch 热重载）",
+    "每个业务表从首个迁移即含 organizationId 外键，配 ScopedRepository 做租户隔离；授权谓词在服务端中间件、路由守卫与 UI 组件间复用同一 SSOT",
+    "包含事务性 outbox + Postgres LISTEN/NOTIFY 事件分发、100 个类型化事件、append-only audit_log 与 HMAC 签名的 webhooks"
+   ],
+   "use_cases": [
+    "需要开箱即用认证、多租户与合规功能（SSO/SCIM、GDPR 流程）的 SaaS 项目起步",
+    "希望以 Bun + Hono + Drizzle 技术栈并按 Clean Architecture/DDD 组织代码的团队",
+    "使用 AI 编程助手协作开发，依赖根目录及各包 CLAUDE.md 上下文文件的项目"
+   ]
+  },
+  "sha": "1c7e34fbe0ef",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a6179c5c6df3": {
+  "identity": {
+   "one_liner": "用 Rust 编写的原生 SQL 数据库客户端，单二进制、无 JVM/Electron，支持多种数据库。",
+   "review": "TernaryGrid 是一个面向 macOS、Windows 和 Linux 的 SQL 数据库客户端，用 Rust 编写，不依赖 JVM 或 Electron。它提供 SQL 编辑器、数据网格和对象导航，支持 PostgreSQL、MySQL、SQLite、SQL Server、ClickHouse、Redis、MongoDB、Elasticsearch 等数据源，并包含 SSH 隧道连接、密钥链密码存储、CSV/JSON 等格式导入导出、ER 图和任务调度功能。可通过 dmg、安装包、包管理器或从源码构建安装。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite、SQL Server、Oracle、ClickHouse、Cassandra、Redis、MongoDB、Elasticsearch 等多种数据源，驱动均以 Rust 实现",
+    "SQL 编辑器包含基于 schema 的自动补全、模板、参数（:name / ${name}）、格式化、explain plan 和查询历史；数据网格支持内联编辑、外键导航、服务端或客户端过滤排序",
+    "连接支持 SSH 隧道、SOCKS5/HTTP 代理和 SSL，密码存于系统密钥链或带主密码的加密 vault；可从 DBeaver、~/.pgpass 和 URL 导入连接配置"
+   ],
+   "use_cases": [
+    "需要在一个客户端中访问多种 SQL 数据库及 Redis/MongoDB/Elasticsearch 的开发者与 DBA",
+    "希望从 DBeaver 迁移连接配置的用户（支持直接导入）",
+    "需要在无 WHERE 的 DELETE/UPDATE、DROP 操作上获得确认机制或使用只读连接的环境"
+   ]
+  },
+  "sha": "a6179c5c6df3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

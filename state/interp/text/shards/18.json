@@ -2447,5 +2447,136 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d3df4d1960da": {
+  "identity": {
+   "one_liner": "面向 Go 的 SurrealDB ORM 与查询构建器，通过代码生成提供类型安全的数据库访问层。",
+   "review": "SOM 是一个 SurrealDB 的对象映射与查询构建库，通过 go run 命令扫描嵌入 som.Node[T] 的模型定义并生成客户端代码，开发者使用生成代码进行数据库操作。项目目前处于早期实验阶段，README 明确警告可能存在导致数据损坏的未知缺陷，不建议用于生产环境，且 API 可能出现破坏性变更。仅支持最新版本 Go，已测试 SurrealDB 3.3.5。",
+   "highlights": [
+    "提供代码生成方式（go run ... <input_dir> <output_dir>）生成类型安全的数据库访问客户端代码",
+    "支持多种 Go 基础类型及其指针与切片形式，包括 string、各类有符号/无符号整数、浮点数、time.Time、uuid.UUID 等",
+    "ID 类型支持 som.ULID、som.UUID、som.Rand、som.String 及自定义键结构"
+   ],
+   "use_cases": [
+    "在 Go 项目中通过模型定义与代码生成访问 SurrealDB",
+    "需要类型安全的 SurrealDB 查询操作的非生产环境试验项目",
+    "配合 SurrealDB 3.3.5 版本进行库功能开发与反馈贡献"
+   ]
+  },
+  "sha": "d3df4d1960da",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "19e1d8880392": {
+  "identity": {
+   "one_liner": "基于 Terraform 与 Ansible 在云端部署 ScyllaDB 演示环境的项目",
+   "review": "该仓库提供基于 Terraform 和 Ansible 的工具，用于在云环境中搭建 ScyllaDB 的 DEMO 与 PoC，内置三个演示场景：ScyllaDB Cloud 百万操作/秒、ScyllaDB Enterprise 百万操作/秒、3 到 6 节点扩容。用户通过 Docker 运行 Web UI，在界面上选择演示并触发 terraform init/apply。使用前需具备 AWS CLI、AWS 账户及 ScyllaDB Cloud API 密钥。",
+   "highlights": [
+    "包含三个演示项目：ScyllaDB Cloud 百万操作/秒、ScyllaDB Enterprise 百万操作/秒、3 到 6 节点扩容",
+    "通过 Web UI 选择演示并配置集群规模与工作负载，底层执行 terraform init 和 terraform apply",
+    "以 Docker 容器运行（镜像基于 Alpine），默认使用 5000 端口，支持在容器 shell 内手动执行 terraform 命令"
+   ],
+   "use_cases": [
+    "搭建 ScyllaDB 云端演示或 PoC 环境",
+    "演示 ScyllaDB 集群从 3 节点扩容到 6 节点的过程",
+    "本地开发修改 Terraform 实现后重新构建运行演示"
+   ]
+  },
+  "sha": "19e1d8880392",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "50d37a41c0e7": {
+  "identity": {
+   "one_liner": "符合 Go database/sql 接口的 Cassandra CQL 驱动，封装 gocql",
+   "review": "该驱动为 gocql 提供了一层 database/sql 接口封装，使 Go 开发者能以标准 database/sql 的方式访问 Cassandra 的 CQL 查询。安装通过 go get 完成，godoc 提供简单 SQL select 示例。README 提示：使用 Query/QueryContext 读取完数据后，需检查 rows.Close 和 Err 返回的错误。适合需要在 database/sql 抽象层操作 Cassandra 的场景。",
+   "highlights": [
+    "实现 Go 内置 database/sql 接口，底层封装 github.com/gocql/gocql",
+    "通过 go get github.com/MichaelS11/go-cql-driver 安装",
+    "godoc 提供 SQL select 示例"
+   ],
+   "use_cases": [
+    "在已使用 database/sql 的 Go 项目中访问 Cassandra",
+    "需要用标准 SQL 风格接口执行 CQL 查询的场景"
+   ]
+  },
+  "sha": "50d37a41c0e7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7ee8d53a1472": {
+  "identity": {
+   "one_liner": "只读 Rust 库与 CLI，读取 ChessBase 数据库格式并导出 PGN。",
+   "review": "cbvault 是一个 Rust 库和命令行工具，用于读取 ChessBase 的 .cbh/.2cbh/.cbv/.cbz 格式并提供 PGN 导出，面向需要从 Rust 访问 ChessBase 数据的开发者。它基于 gigachess 棋规内核实现走法与 FEN/SAN/UCI，通过零分配的 GameSink 接口输出对局，支持 Rayon 有序并行转换。项目处于 alpha 阶段：2CBH 严格校验未完成，罕见注释、多媒体、真实 Chess960 尚未全面验证，且只读、不支持写入。",
+   "highlights": [
+    "支持读取 .cbh 家族（头信息、走法、注释、名称库、超 4 GiB 的 .cbj 宽索引）及 Chess960、自定义开局设置，并提供 PGN 导出",
+    "提供零分配的 GameSink 转换接口与按对局编号有序的 convert_parallel 并行转换；.cbv 容器四种块模式均可解码，全部成员字节级还原",
+    "走法生成、合法性判定、Zobrist 哈希等统一来自 gigachess 单一内核；.cbz 支持全部三种密码长度规则"
+   ],
+   "use_cases": [
+    "将 ChessBase 数据库批量转换为 PGN，供其他引擎或分析工具读取",
+    "在 Rust 程序中以流式、零分配方式遍历大规模 ChessBase 对局库进行统计或索引",
+    "解包 .cbv/.cbz 归档以获取内部成员文件"
+   ]
+  },
+  "sha": "7ee8d53a1472",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c474cc7cee4": {
+  "identity": {
+   "one_liner": "基于 DeepSeek 与微信的带记忆、情绪与小日子的自托管 AI 朋友",
+   "review": "Whale Be Friends 是一个自托管的 AI 朋友项目，基于 DeepSeek API，通过微信或终端与用户聊天。它实现记忆与遗忘机制（夜间整理、遗忘曲线）、情绪状态、日程起居模拟，角色基于 DeepSeek 吉祥物的同人设定“大肥鱼”。需自备 DeepSeek API 密钥并保持电脑开机；数据存于本地 data/fish.db。定位为粉丝项目，与 DeepSeek 和腾讯无关联。",
+   "highlights": [
+    "记忆系统包含遗忘与纠错：小事数周后淡忘，被纠正后记住更正",
+    "程序内模拟小日子：每晚写日记整理记忆，按时间做饭、冰箱消耗、星期二菜店关门",
+    "支持微信收发文字、图片与表情包，可主动发消息，无每日上限；也可在终端聊天"
+   ],
+   "use_cases": [
+    "想在微信上与一个有人设和长期记忆的角色日常聊天的个人用户",
+    "希望全部聊天与记忆数据留在本地、自行付费调用 DeepSeek API 的自托管使用者",
+    "想阅读中文设计文档并修改人设、记忆机制的二次开发者"
+   ]
+  },
+  "sha": "2c474cc7cee4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "785168237c25": {
+  "identity": {
+   "one_liner": "自托管的跨设备个人助理，以屏幕边缘宠物形式保存与整理内容",
+   "review": "Butler 2.0 是一个自托管的个人助理系统：服务端用 Deno 与 PostgreSQL 构建，通过 Docker Compose 部署在用户自己的 Linux 服务器上，客户端包括原生 Android 应用、GNOME Shell 扩展、Web 端与 Windows 桌面端。用户从任意应用分享内容后，系统调用 AI 生成标题、摘要、标签并按主题归档，支持语义搜索与向库提问。设备间经服务器中转同步消息、剪贴板与文件，桌面宠物可执行保存、翻译等操作。AI 依赖外部密钥（Claude、Gemini 及备选服务），桌面宠物仅覆盖 Android 与 GNOME。",
+   "highlights": [
+    "支持从任意 Android 应用分享保存内容，由 AI 生成标题、摘要、标签与主题集合，并提供语义搜索和基于资料库的问答",
+    "在 Android 与 GNOME 上提供屏幕边缘宠物入口，可执行保存、复制、分析、翻译等操作，Android 端支持离线使用后同步",
+    "设备间经自建服务器中转实现跨端发送、双向剪贴板同步、远程响铃与手机控制笔记本，并支持 MCP 连接与定时/邮件/ Webhook 触发的自动化任务"
+   ],
+   "use_cases": [
+    "在自有服务器上集中保存网页、视频、截图等内容并按主题检索",
+    "在手机与笔记本之间同步剪贴板、文件与提醒",
+    "通过 MCP 连接与 Recipes 将重复操作配置为定时或事件触发的自动化流程"
+   ]
+  },
+  "sha": "785168237c25",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

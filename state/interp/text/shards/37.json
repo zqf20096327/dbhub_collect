@@ -2770,5 +2770,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e639b1a95558": {
+  "identity": {
+   "one_liner": "面向 LLM agent 的持久化记忆库，基于 SQLite/PostgreSQL 存储",
+   "review": "Octop Memory 是为 LLM agent 提供持久化、可迁移记忆的 Python 库，供个人助手、多 agent 宿主等使用。它将对话事件经抽取与晋升流程转为 AtomCard 事实，并提供全文检索、召回和 .hmpkg 导入导出；支持 Python API、CLI、JSON-RPC 三种接入方式。需 Python 3.12+，自动抽取需注入 LLMClient，向量搜索目前未经验证、默认关闭。",
+   "highlights": [
+    "零核心依赖起步，手动存储与基于 SQLite/FTS5 的词法召回无需模型",
+    "提供 Python MemoryService、JSON-RPC bridge 及 OpenClaw/Hermes 宿主适配器，共享同一运行时",
+    "支持 SQLite 与 PostgreSQL 后端，通过 .hmpkg 包在宿主间导出/导入记忆"
+   ],
+   "use_cases": [
+    "为个人助手跨会话保存偏好与项目决策上下文",
+    "在支持 OpenClaw、Hermes 等宿主之间迁移累积的记忆",
+    "通过 Python API 或 JSON-RPC 为自定义 agent 接入记忆运行时"
+   ]
+  },
+  "sha": "e639b1a95558",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb5d497b6a4a": {
+  "identity": {
+   "one_liner": "基于 PouchDB 的 ORM，提供 TypeScript 类型化模型与命名集合",
+   "review": "PouchORM 在 PouchDB 之上提供类型化模型与命名集合，含查询、写入辅助函数、可选的 class-validator 校验、变更钩子与同步管理。使用时需通过 npm 安装并搭配 PouchDB peer 依赖，Node 环境要求 Node.js 20+，发布为 CommonJS 并附 TypeScript 声明。集合标识存储于文档的 $collectionType 字段，需在构建与发布间保持稳定，压缩混淆不得改变其持久化值。",
+   "highlights": [
+    "为 PouchDB 提供 TypeScript 类型化模型和命名集合，包含查询与写入辅助函数",
+    "可选集成 class-validator 校验，支持变更钩子与同步管理",
+    "每个文档以 $collectionType 字段持久化集合标识，保留底层 PouchDB 数据库访问"
+   ],
+   "use_cases": [
+    "在 Node.js 20+ 环境中以类型安全模型操作 PouchDB 文档",
+    "需要对文档写入进行 class-validator 校验的 TypeScript 项目",
+    "使用 PouchDB 同步并需要集中管理同步与变更钩子的应用"
+   ]
+  },
+  "sha": "bb5d497b6a4a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c79fc6b29265": {
+  "identity": {
+   "one_liner": "SADU：减少 JDBC 样板代码的 Java SQL 工具库",
+   "review": "SADU 是一个 Java 工具库，在保留手写 SQL 的前提下减少 JDBC 样板代码。它提供基于 HikariCP 的数据源、管理资源/参数/结果/错误的查询构建器、行映射以及数据库结构更新器，按模块划分依赖。支持 PostgreSQL、MariaDB、MySQL、SQLite，要求 Java 21 及以上，需自备数据库 JDBC 驱动，采用 LGPL-3.0-or-later 许可。",
+   "highlights": [
+    "提供 HikariCP 数据源、处理资源与参数的查询构建器、行映射和数据库结构更新器",
+    "支持 PostgreSQL、MariaDB、MySQL 和 SQLite 四种数据库",
+    "按模块拆分，可仅引入所需模块；主依赖 sadu 包含除 sadu-testing 外的全部模块"
+   ],
+   "use_cases": [
+    "使用 Java 21+ 并希望继续手写 SQL、减少 JDBC 样板代码的项目",
+    "基于 PostgreSQL、MariaDB、MySQL 或 SQLite 的应用数据库访问层",
+    "需要管理数据库 schema 更新（updater）的项目"
+   ]
+  },
+  "sha": "c79fc6b29265",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c6a00513d13a": {
+  "identity": {
+   "one_liner": "收录高精度垂直激发能的量子化学基准数据库",
+   "review": "QUESTDB 是一个面向电子结构计算领域的高精度激发能数据库，提供分子结构、垂直激发能、振子强度及带电激发（价态/双电离/芯电离能）等数据，数据以 .xlsx 与 .json 格式组织。数据来源包括 FCI、CC3、CCSDTQ、CASPT2/NEVPT2 等方法，附带 Python 脚本用于生成保持分布特征的子集及数据转换分析。适用于方法开发者与基准测试研究者。",
+   "highlights": [
+    "数据由 FCI、CC3、CCSDT、CCSDTQ、CC4、CASPT2/3、NEVPT2 等方法计算得到，覆盖小分子、自由基、带电物种与过渡金属配合物，并包含双激发与分子内电荷转移态",
+    "以 .xlsx/.json 格式组织，提供 .py 脚本用于生成 50/100/200 等规模的代表性子集，支持自定义过滤与基于遗传算法（optuna）的子集优化",
+    "包含 charged/ 目录下的电离能数据集，涵盖内/外价层 IP、双电离能 DIP 与芯电离能"
+   ],
+   "use_cases": [
+    "对新激发态方法（TD-DFT、波函数方法等）进行基准测试",
+    "训练或评估机器学习激发态模型时可生成小子集以控制计算成本",
+    "辅助解释实验光谱与光化学过程"
+   ]
+  },
+  "sha": "c6a00513d13a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

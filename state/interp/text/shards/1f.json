@@ -3063,5 +3063,136 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "82adc5eac1ac": {
+  "identity": {
+   "one_liner": "按主题分类的 LeetCode 题目清单，由 LeetHub v2 生成",
+   "review": "该仓库是一份通过 LeetHub v2 自动生成的 LeetCode 题目集合，按 Database、Array、Two Pointers、Math、Dynamic Programming 等主题以表格形式列出题号与题目名称。主题标签与描述提到 SQL 练习，README 中 Database 类别包含 181、182、183、196 等十余道 SQL 题。仓库未提供安装运行说明，仅作为题目录入的索引。",
+   "highlights": [
+    "按 Database、Array、Two Pointers、Dynamic Programming 等十余个主题分类组织题目",
+    "Database 类别收录 0181、0182、0183、0196、0607、0610、0620、0627、1245 共 9 道 SQL 题",
+    "由 LeetHub v2 工具生成，每道题以编号-名称形式列出"
+   ],
+   "use_cases": [
+    "按算法或数据库主题查找对应 LeetCode 题目编号",
+    "记录个人已完成的 SQL 与算法题目清单"
+   ]
+  },
+  "sha": "82adc5eac1ac",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a205a155be14": {
+  "identity": {
+   "one_liner": "PHP+SQLite 开源 CMS，页面以静态 HTML 文件输出，人和 AI 代理经 MCP 共同编辑",
+   "review": "AgeCMS 是基于 PHP 8.1+ 与 SQLite 的内容管理系统，页面保存为 HTML 文件由 Web 服务器直接返回。它面向网站所有者与 AI 代理场景：代理通过 MCP 网关（JSON-RPC、Bearer 令牌、角色）编辑站点，所有修改写入带 SHA-256 链的修订日志并可回滚；单日修改超过 15% 页面会触发回滚并向 Telegram 发送通知。安装脚本支持 Debian/Ubuntu 一条命令部署，可配置 nginx/Apache 与 Let's Encrypt，也支持 FTP 部署到无 SSH 主机，或让 AI 代理按 AGENTS.md 完成安装。",
+   "highlights": [
+    "Shadow Cache 机制将页面存为 assets/cache/<slug>.html，由 nginx/Apache 直接返回，无需 PHP 参与",
+    "AI 代理通过 MCP 网关（POST /admin/mcp.php，JSON-RPC 2.0，Bearer 令牌与角色）访问；/AGENT.md 提供代理指引，一次性邀请码可兑换令牌",
+    "修订以 RFC 6902 补丁记录，含 SHA-256 链与 SQLite 触发器禁止修改或删除；回滚生成新修订；熔断机制在单令牌日修改超 15% 页面时回滚并冻结、通知 Telegram"
+   ],
+   "use_cases": [
+    "需要让 AI 代理安全编辑网站内容、且要求修改有日志和回滚能力的站点",
+    "Debian/Ubuntu 服务器上通过一条命令部署 PHP+SQLite 网站，或无 SSH 主机上通过 FTP 安装",
+    "从 WordPress、OpenCart 等平台迁移站点（含按地址抓取的「精确复刻」模式，需可选安装 Node.js 与 Chrome）"
+   ]
+  },
+  "sha": "a205a155be14",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "46b44ad8934f": {
+  "identity": {
+   "one_liner": "讲解 Apache Cassandra 概念及其 Java 应用方式的技术书籍",
+   "review": "这是一本由 Otávio Santana 撰写的关于 Apache Cassandra 的书籍，面向 Java 开发者。内容涵盖非关系型数据库基础、节点与集群层面的读写机制、CQL 语言的实操用法，并介绍建模技巧及 DataStax Mapper、Spring Data Cassandra、Hibernate OGM Cassandra、Eclipse JNoSQL 等映射框架。",
+   "highlights": [
+    "介绍 Cassandra 的层次结构、读写、节点运作及集群内编排等概念",
+    "讲解 Cassandra Query Language（CQL）的实践操作与建模技巧",
+    "涵盖 DataStax Mapper、Spring Data Cassandra、Hibernate OGM Cassandra、Eclipse JNoSQL 四种映射框架"
+   ],
+   "use_cases": [
+    "Java 开发者学习 Cassandra 核心概念与集群机制",
+    "为 Java 项目选择 Cassandra 映射/集成框架",
+    "基于 CQL 进行数据建模的参考阅读"
+   ]
+  },
+  "sha": "46b44ad8934f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "28cc4075ecd0": {
+  "identity": {
+   "one_liner": "让 Metabase 连接 FirebirdSQL 数据库的驱动插件",
+   "review": "该插件为 BI 平台 Metabase 提供 FirebirdSQL 数据库驱动，通过将 JAR 放入 plugins 目录加载，支持连接字符串与表单两种配置方式。标准版基于 Jaybird 6.x 支持 Firebird 2.5–5.0，另提供捆绑 Jaybird 2.2.15 的 legacy 版覆盖 Firebird 1.5–2.5，两者可共存。不同驱动版本对 Metabase 0.53+/0.57+ 有对应要求。",
+   "highlights": [
+    "提供标准与 legacy 两个驱动包，分别覆盖 Firebird 2.5–5.0 和 1.5–2.5，legacy 版注册为独立驱动名称且可与标准版共存",
+    "支持原生 SQL 查询、MBQL 可视化查询、数据库模式同步、时间分组与字段过滤模板标签",
+    "提供源码构建脚本（Java 21+、Clojure CLI）及包含 Metabase 与 Firebird 2.5/4.0 实例的 Docker 测试环境"
+   ],
+   "use_cases": [
+    "需要用 Metabase 的可视化图表和仪表盘查询 Firebird 数据库的场景",
+    "仍运行 Firebird 1.5/2.x 旧版本数据库、需通过 legacy 驱动接入 BI 分析的场景",
+    "需要从源码构建或本地开发调试 Metabase 驱动的场景"
+   ]
+  },
+  "sha": "28cc4075ecd0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "099e368c628f": {
+  "identity": {
+   "one_liner": "ArangoDB Java 驱动的 Clojure 薄封装接口库",
+   "review": "clj-arangodb 为 ArangoDB 官方 Java 驱动和 velocypack 库提供 Clojure 封装，供 Clojure 开发者操作 ArangoDB。函数是对应 Java 方法的 Clojure 风格版本，选项以 map 传入；查询结果通过 from-entity 适配为数据，文档默认以 VPackSlice 经 cheshire 解析，也可指定 BaseDocument、String、Map 等返回类型，并可扩展 serialize-doc/deserialize-doc 多方法自定义序列化。README 自述该封装较薄且不完整，有效选项需查阅 Java API 文档。",
+   "highlights": [
+    "连接管理、数据库与集合的创建及检查操作，选项以 keyword 或 string 键的 map 传入",
+    "文档插入与读取，返回类型支持 VPackSlice、BaseDocument、String、java.util.Map，可经多方法扩展自定义序列化",
+    "AQL 查询可用 Clojure 数据结构表示，含图查询示例"
+   ],
+   "use_cases": [
+    "在 Clojure 项目中连接并操作 ArangoDB 服务器（建库、建集合、读写文档）",
+    "通过 Clojure 数据结构执行 AQL 查询，包括图查询",
+    "需要自定义 JSON 序列化/反序列化行为的 ArangoDB 集成场景"
+   ]
+  },
+  "sha": "099e368c628f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cc123b68d681": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 MongoDB 的本地认证演示应用，使用 bcrypt 哈希与 cookie 会话。",
+   "review": "该项目是一个半成品应用的演示外壳，包含五个页面（首页、/dashboard、/settings、/register、/login），实现注册、登录、修改凭据和删除账户功能。密码经 bcrypt 哈希后存入 MongoDB Atlas 数据库，认证与会话通过名为 token 的 cookie 管理，API 以 serverless 函数形式托管在 ZEIT Now 上。适合希望查看源码了解其实现方式的访问者。限制：演示账户 ty 无法更新资料或删除账户（返回 403），数据库使用免费套餐。",
+   "highlights": [
+    "支持用户注册与登录，密码经 bcrypt 哈希后存储于 MongoDB Atlas 管理的数据库",
+    "认证与会话通过名为 token 的 cookie 实现，支持浏览器会话级过期或两周有效期（remember me）",
+    "用户可在 Settings 页面修改用户名、密码或删除账户，重复用户名会被拒绝；未登录访问受保护页面会被重定向到登录页"
+   ],
+   "use_cases": [
+    "需要查看本地认证（bcrypt 哈希 + cookie 会话）实现方式的源码参考",
+    "演示 Next.js serverless 函数与 MongoDB Atlas 的配合使用",
+    "作为包含注册、登录、仪表盘与设置页面的多页面应用示例"
+   ]
+  },
+  "sha": "cc123b68d681",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

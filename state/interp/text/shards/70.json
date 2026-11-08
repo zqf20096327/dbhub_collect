@@ -2718,5 +2718,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cffee2afe2e0": {
+  "identity": {
+   "one_liner": "在 PostgreSQL 内调用 libcurl 传输数据的扩展，经白名单控制可达 URL",
+   "review": "pg_curl 是一个 PostgreSQL 扩展，在 SQL 中暴露 curl_easy 系列函数，用于以 URL 语法发起 HTTP、FTP、SMTP、SFTP 等多种协议的数据传输，README 给出 GET、表单/JSON POST、邮件、FTP 上传下载等 SQL 函数示例。它提供 pg_curl.whitelist GUC 限制角色可访问的 file:// 与 http(s):// 前缀，并对本地文件、套接字、重定向目标逐项检查；其他协议在白名单生效时被拒绝。适合需要在数据库内部发起网络请求的 Postgres 使用者。",
+   "highlights": [
+    "通过封装 libcurl 在 SQL 中提供 HTTP GET/POST、JSON、multipart、邮件、FTP 上传下载等传输函数",
+    "提供 pg_curl.whitelist GUC，按角色限制可访问的 file:// 与 http(s):// URL 前缀，并在请求 URL、本地文件/套接字选项及每个重定向目标处进行检查",
+    "提供 pg_curl.transaction GUC，将 curl 句柄置于事务内存上下文以便事务结束时自动清理"
+   ],
+   "use_cases": [
+    "在 SQL 函数或查询中直接调用 HTTP API 或发送邮件",
+    "在数据库会话内上传/下载文件（FTP、SFTP、file:// 等）",
+    "由超级用户按角色配置 URL 白名单后，向应用角色开放受限的网络访问"
+   ]
+  },
+  "sha": "cffee2afe2e0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cc0461ceec29": {
+  "identity": {
+   "one_liner": "连接 CouchDB 的 R 语言客户端接口包",
+   "review": "sofa 是 rOpenSci 维护的 R 包，提供从 R 访问 CouchDB 数据库的接口，支持 CouchDB v2/v3 及 Cloudant 等兼容服务。通过 Cushion 连接类封装主机、端口、用户凭据等配置，可执行 ping 等操作。适用于需要在 R 环境中读写 CouchDB 数据的用户，使用前需自行启动 CouchDB 实例。基于 MIT 许可，可从 CRAN 或 GitHub 安装。",
+   "highlights": [
+    "支持 CouchDB v2 和 v3 版本",
+    "通过 Cushion 连接类配置 host、transport、port、用户名密码及自定义 headers",
+    "无参数创建 Cushion 时默认连接本机 CouchDB，可连接 Cloudant 等远程兼容服务"
+   ],
+   "use_cases": [
+    "在 R 脚本或分析流程中连接本地或远程 CouchDB 实例",
+    "连接 Cloudant 等 CouchDB 兼容服务（端口需设为 NULL）",
+    "从 CRAN 或 GitHub 安装后配合官方文档使用"
+   ]
+  },
+  "sha": "cc0461ceec29",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "371423ecb7d4": {
+  "identity": {
+   "one_liner": "演示用 NodeJS 命令行工具，将 IOTA Tangle 用作 JSON 数据存储。",
+   "review": "该仓库是配套文章的教程代码，运行于 NodeJS 的命令行工具（无 UI），演示如何把 IOTA Tangle 当作数据库存储 JSON 数据。通过 init 生成各表的索引与数据地址，支持 create/read/update/delete 操作，大数据自动拆分为多笔交易；更新实际是先移除旧 id 再新增，删除仅从索引移除哈希，Tangle 上的数据本身不被删除。适用于学习 Tangle 存储机制的开发者，源码为 TypeScript，需先经 tsc 构建。",
+   "highlights": [
+    "以命令行方式实现表的初始化、创建、读取、更新、删除操作，数据源为 JSON 文件",
+    "超过单笔交易容量限制的 JSON 会自动拆分存储到多笔交易",
+    "索引与数据交易均使用 RSA-SHA256 签名和验证，密钥可替换为自有密钥"
+   ],
+   "use_cases": [
+    "学习 IOTA Tangle 作为存储机制的教程实践",
+    "为表结构化 JSON 数据生成可追溯的索引并通过浏览器链接查看",
+    "需要 RSA 签名验证的 Tangle 数据写入场景"
+   ]
+  },
+  "sha": "371423ecb7d4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

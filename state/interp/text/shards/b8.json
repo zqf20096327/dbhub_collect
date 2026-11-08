@@ -2615,5 +2615,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "971ba7f57032": {
+  "identity": {
+   "one_liner": "基于 Airflow 编排的每日天气 ETL 管道，经 Docker 运行并接入 PostgreSQL 与 Metabase。",
+   "review": "该项目是一个数据工程实践项目：用 Airflow DAG weather_etl 每日从 OpenWeatherMap API 抓取 10 个英国城市的温度、湿度、天气描述，写入 PostgreSQL 的 weather 表，并通过 Metabase 生成可视化看板。面向数据工程学习者与需要天气数据管道示例的用户。组件全部由 Docker Compose 部署，端口已修改以避免本地冲突；.env 被 Git 忽略以保存 API 密钥等敏感信息。城市列表与采集字段在 README 中固定列出。",
+   "highlights": [
+    "Airflow DAG weather_etl 按 @daily 调度，抓取 10 个英国城市的温度、湿度、天气描述与日期",
+    "数据写入 PostgreSQL weather 表（字段含 id、city、temperature、humidity、weather_description、date）",
+    "整套组件（Airflow 2.9.1、PostgreSQL 13、pgAdmin 4、Metabase）由 Docker Compose 启动，通过 Docker 内网互联"
+   ],
+   "use_cases": [
+    "学习 Apache Airflow 编排 API 数据的 ETL 流程",
+    "搭建基于 Docker Compose 的 Airflow + PostgreSQL + Metabase 本地数据栈",
+    "定时采集并存储多城市天气数据，用于 Metabase 看板分析"
+   ]
+  },
+  "sha": "971ba7f57032",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7e0804d7ab2e": {
+  "identity": {
+   "one_liner": "为 Knex.js 提供 Firebird 数据库支持的方言（客户端）库",
+   "review": "该库为 SQL 查询构建器 Knex.js 实现 Firebird 方言，底层基于 node-firebird-driver-native 驱动；无法使用该原生驱动时可退回 1.x 版本（基于 node-firebird）。支持通过 Knex 的 timeout 取消长耗时查询（含等待锁的查询）。适用于在 Node.js 项目中用 Knex 操作 Firebird 的开发者。使用 ESM 默认导出，CommonJS 下需取 .default。",
+   "highlights": [
+    "提供 Knex.js 的 Firebird 方言（客户端）实现",
+    "基于 node-firebird-driver-native 驱动，1.x 版本基于 node-firebird",
+    "支持通过 Knex 的 timeout 取消长时间运行的查询（含等待锁的查询）"
+   ],
+   "use_cases": [
+    "在 Node.js 项目中使用 Knex.js 查询构建器访问 Firebird 数据库",
+    "需要取消长时间运行或等待锁的查询的场景",
+    "无法使用原生驱动时改用基于 node-firebird 的 1.x 版本"
+   ]
+  },
+  "sha": "7e0804d7ab2e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "28c417fe8c9e": {
+  "identity": {
+   "one_liner": "基于 SQLite 的分布式数据层库，支持复制、同步与故障转移",
+   "review": "Sirannon 是一个 TypeScript 编写的开源 SQLite 库，将本地 SQLite 数据库扩展为可通过 HTTP/WebSocket 访问、支持主从复制与设备离线同步的数据层。核心规范在 packages/spec 中以语言无关方式定义，TypeScript 包为参考实现。提供查询事务、CDC、live queries、迁移、备份、加密等能力；核心引擎、服务端、主从复制与 etcd 故障转移标记为 Stable，设备同步为 Experimental。",
+   "highlights": [
+    "提供主从复制，主节点用 Hybrid Logical Clock 标记变更并经 gRPC（mTLS）发送到副本，由 etcd 协调器记录写权威并支持自动故障转移",
+    "支持设备离线优先同步：设备先写本地库，控制器通过 push、live pull、快照重同步与迁移握手实现双向同步",
+    "包含 CDC、live queries、迁移（校验和与 user_version 记录）、增量备份、AEGIS-256/SQLCipher 加密及 better-sqlite3、Node、wa-sqlite 等 5 种可插拔驱动"
+   ],
+   "use_cases": [
+    "需要将本地 SQLite 应用扩展为 HTTP/WebSocket 服务或多节点复制的 Node.js 项目",
+    "需要离线写入并在联网后双向同步数据的设备端应用",
+    "需要主从读副本、基于 etcd 的故障转移或增量备份/加密等运维能力的数据层"
+   ]
+  },
+  "sha": "28c417fe8c9e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "662c9196aeb0": {
+  "identity": {
+   "one_liner": "位于编码代理与 Git 之间的事务型治理工具，用工作区隔离、AST 门禁与 2PC 合并管控代理提交。",
+   "review": "Nomos 是一个 Go 编写的 CLI 工具，运行在编码代理（如 Claude Code、Cursor 等）与 Git 仓库之间。它通过 nomos init 注入代理协议文件与 Git 钩子，将任务隔离在独立 git worktree 中，在合并前运行 42 项多语言 AST 检查（检测空桩、跳过的测试等），并以带 Git Notes 凭据的两阶段提交方式合并到 main。适用于希望在代理工作流中加入确定性检查边界的开发团队。",
+   "highlights": [
+    "在合并到 main 前运行 42 项 AST 与工具链质量门禁，覆盖 Go、TypeScript、Python、Rust、Ruby、C/C++、Java、Kotlin、C# 九种语言",
+    "将 INT-* 规格任务与 SUB-* 代码任务分离为因果 DAG，任务在隔离的 git worktree 沙箱中执行，main 分支直接提交会被拦截",
+    "提供基于 SQLite WAL 的混合向量与词法记忆库（mneme.db），并支持 Claude Code、Gemini CLI、OpenCode 等生命周期钩子安装"
+   ],
+   "use_cases": [
+    "团队使用 AI 编码代理开发 Go/多语言项目，需要在合并前自动检测空桩代码、被跳过的测试和覆盖率下降",
+    "需要防止代理直接修改 main 分支，将任务隔离在独立 worktree 中并保留合并审计凭据",
+    "希望代理跨会话保留架构决策上下文，或对代理的出站访问（域名、凭据泄露）进行声明式限制"
+   ]
+  },
+  "sha": "662c9196aeb0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

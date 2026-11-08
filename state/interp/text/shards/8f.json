@@ -2621,5 +2621,114 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e42205251d17": {
+  "identity": {
+   "one_liner": "基于 Boost.Asio 的 C++20/26 Web 框架，含 PMR 内存池与反射路由",
+   "review": "Hical 是一个面向 C++ 开发者的 HTTP/WebSocket 服务端框架，基于 Boost.Asio 与协程实现异步 I/O，支持 C++26 反射自动注册路由和 JSON 序列化，并提供 C++20 宏回退方案；数据库模块依赖 Boost.MySQL（Boost 1.85+），HTTP 客户端与 HTTP/2 默认关闭需单独编译开关。可通过 vcpkg、Conan 或 CMake 安装，要求 GCC 14+/Clang 20+/MSVC 2022+ 与 CMake 3.28+。",
+   "highlights": [
+    "使用 picohttpparser 零拷贝解析 HTTP，自研 WebSocket（RFC 6455）支持 permessage-deflate 压缩、Hub 广播与心跳",
+    "提供 PMR 三级内存池与连接级 ReadBufferPool，请求路径配合栈数组与 FixedBuffer 实现零堆分配",
+    "内置洋葱模型中间件（CORS、Session、日志、OpenAPI 3.0 文档生成）及协程连接池、自动事务与慢查询检测的数据库中间件"
+   ],
+   "use_cases": [
+    "用 C++20/26 构建需要原生 HTTP/WebSocket 协议栈的服务端应用",
+    "需要数据库连接池与事务管理的 Boost.MySQL 后端 API 服务",
+    "需要 OpenAPI 3.0 文档自动生成与 SSL/TLS、Docker 部署的 REST 服务项目"
+   ]
+  },
+  "sha": "e42205251d17",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "581cbe9a4b7b": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL LISTEN/NOTIFY 的 Phoenix PubSub 适配器",
+   "review": "这是一个 Elixir 的 Phoenix PubSub 适配器，利用 PostgreSQL 原生的 LISTEN/NOTIFY 机制在多个 Phoenix 节点间分发消息，适合已使用 PostgreSQL 且不希望引入 Redis 或分布式 Erlang 集群的项目。它通过 Postgrex 进行数据库连接，将消息序列化、压缩并以 Base85 编码以符合 NOTIFY 载荷限制，安装时需在 mix.exs 添加依赖并在监督树中配置 name 与 repo。",
+   "highlights": [
+    "使用 PostgreSQL 原生 LISTEN/NOTIFY 机制分发消息",
+    "支持广播与节点间直接消息传递，消息经 Erlang term 序列化、压缩并用 Base85 编码",
+    "自动检测节点名（Erlang 节点名或系统主机名），并可通过 :node_name 覆盖"
+   ],
+   "use_cases": [
+    "多个 Phoenix 节点需要通过共享 PostgreSQL 数据库进行通信的场景",
+    "希望复用现有 PostgreSQL 而不新增 Redis 等额外基础设施的项目",
+    "已配置 Ecto.Repo 的 Phoenix 应用需要 PubSub 功能"
+   ]
+  },
+  "sha": "581cbe9a4b7b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a0b2eefc123b": {
+  "identity": {
+   "one_liner": "面向计算机科学学习路线与资源的整理仓库",
+   "review": "该仓库面向对计算机科学职业方向感兴趣的人群，提供学习路线图与相关资源的汇总。根据仓库描述，其内容按循序渐进的方式组织，主题标签涵盖数据结构、数据库、面向对象编程与数据科学等方向。README 正文较简短，说明项目开放使用并附有联系邮箱。",
+   "highlights": [
+    "提供计算机科学学习路线图与资源汇总",
+    "主题标签覆盖数据结构、数据库、面向对象编程、数据科学等方向",
+    "README 声明项目可供他人使用并提供联系方式"
+   ],
+   "use_cases": [
+    "初学者按步骤规划计算机科学学习路径",
+    "查找数据结构与数据库等主题的学习资源",
+    "按标签浏览特定方向（如数据科学）的路线内容"
+   ]
+  },
+  "sha": "a0b2eefc123b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8b2ca9beecfe": {
+  "identity": {
+   "one_liner": "jQuery 插件 $.couch，用于在浏览器端通过 HTTP 与 CouchDB 服务器通信",
+   "review": "该项目提供 $.couch 库，用于在网页中与 CouchDB 服务器通信。仓库内容包含测试套件，通过 bower 安装依赖后，需在 CouchDB 端启用 CORS 并重启服务，再用浏览器打开 test/runner.html 运行测试。适用于需要在浏览器端连接 CouchDB 的前端开发者。",
+   "highlights": [
+    "提供 $.couch，用于与 CouchDB 服务器通信",
+    "包含基于浏览器运行的测试套件（test/runner.html）",
+    "依赖通过 bower 安装，测试要求启用 CORS"
+   ],
+   "use_cases": [
+    "在浏览器端 JavaScript 中访问 CouchDB 数据库",
+    "验证 $.couch 与 CouchDB 服务器的兼容性测试"
+   ]
+  },
+  "sha": "8b2ca9beecfe",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61966457904a": {
+  "identity": {
+   "one_liner": "只读的 macOS 原生查看器，用于快速浏览大型 Parquet、CSV/TSV、JSONL、SQLite 与 DuckDB 文件",
+   "review": "Scan 是一款运行在 Apple Silicon Mac 上的只读文件查看器，面向需要查看大型表格数据文件的用户。它以 DuckDB 作为查询引擎，配合自绘 AppKit 表格渲染，支持过滤、排序、分组、导出，以及基于 Apple 端侧模型的自然语言查询（需 macOS 26）。远程 Parquet 通过 HTTP range 请求按需读取。应用为 ad hoc 签名，首次启动可能需在系统设置中确认。",
+   "highlights": [
+    "打开 Parquet、CSV、TSV、JSONL/NDJSON、gzip 压缩格式、SQLite 与 DuckDB 文件，且不修改文件",
+    "通过 DuckDB WHERE 表达式进行过滤、多列排序与分组，并可导出为 CSV、JSON、JSON Lines 或 Parquet",
+    "支持通过 HTTPS 远程预览 Parquet 文件（使用 HTTP range 请求），并可经 CLI `scan` 命令打开本地或远程文件"
+   ],
+   "use_cases": [
+    "在 Mac 上浏览数 GB 级别的 Parquet/CSV 数据文件而不下载或复制全部内容",
+    "直接预览 Hugging Face 等平台上的远程 Parquet 数据集",
+    "从终端用 `scan` 命令快速查看数据文件或通过 Finder Quick Look 预览前 10 行"
+   ]
+  },
+  "sha": "61966457904a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2746,5 +2746,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "21483986e57c": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的多租户用户行为分析（UBA）平台，事件经 Kafka 入 OLAP 数仓",
+   "review": "GoWind UBA 是用 Go/go-kratos 编写的用户行为分析平台，提供事件、漏斗、留存、归因、路径、分群及游戏专项共 25 个分析模型。数据由 Web/C# SDK 经 Collector 写入 Kafka，由 Doris Routine Load（ClickHouse 路径当前为编译期关闭）入仓，前端为 Vue 3 + Ant Design Vue，报表可对接 Superset。适用对象是自建行为分析的企业与游戏团队；部署依赖 PostgreSQL、Kafka、Doris 等较多组件。",
+   "highlights": [
+    "提供 25 个分析模型，覆盖通用行为分析、用户深度洞察和游戏专项（关卡/LTV/滚服留存/PCU/经济系统）三类",
+    "事件采集链路为 SDK → Collector → Kafka → Doris Routine Load 入仓，ClickHouse 分支存在但当前编译期常量设为 false",
+    "多租户数据隔离，JWT 鉴权与 Casbin/OPA 权限引擎，Docker 提供完整模式与仅中间件两种部署方式，MIT 协议开源"
+   ],
+   "use_cases": [
+    "网站/网页产品的事件、漏斗、留存、路径等用户行为分析，通过 Web SDK 埋点接入",
+    "Unity/Godot 游戏的关卡卡关率、付费分层、LTV、区服留存与经济系统监控",
+    "需要分群、指标阈值告警、定时报告与 Webhook 告警的自建数据增长/风控场景"
+   ]
+  },
+  "sha": "21483986e57c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74ea24230bae": {
+  "identity": {
+   "one_liner": "Rust+GPUI 原生桌面数据库客户端，统一管理多种数据源",
+   "review": "FluxDB 是用 Rust + GPUI 构建的桌面数据库客户端与 SQL 编辑器，不依赖 Electron 或 WebView，提供 macOS、Windows、Linux 安装包。它将 MySQL、PostgreSQL、SQLite、MongoDB、Redis 等 11 种数据源纳入同一工作流，提供 SQL 补全、数据编辑回写、表结构设计、ER 图、导入导出与备份恢复；AI Agent 的写入类操作需用户审批。备份依赖本机 mysqldump/pg_dump 等客户端工具。",
+   "highlights": [
+    "支持 MySQL、MariaDB、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、MongoDB、Redis 等 11 种数据源的连接、查询与数据编辑",
+    "提供 SQL 补全、表结构设计、基于外键的 ER 图（可导出 JSON/DBML/Mermaid/SVG）及 TXT/CSV/JSON/XML 导入导出",
+    "内置可选 AI Agent，写入类工具（db.run、redis.execute 等）需审批，密钥走受控存储"
+   ],
+   "use_cases": [
+    "需要在同一桌面客户端中管理关系型数据库、MongoDB 与 Redis 的开发者",
+    "需要 SQL 编辑、数据导入导出与表结构设计、ER 图查看的数据库日常操作",
+    "需要带审批边界的 AI 辅助编写 SQL、生成报表的场景"
+   ]
+  },
+  "sha": "74ea24230bae",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "217c7183bbaa": {
+  "identity": {
+   "one_liner": "一份 Redis 学习资源指南，汇集路线图、文档与课程链接",
+   "review": "该仓库是 Guia Dev Brasil 系列下的 Redis 学习资源目录，以葡语文本为主并提供多语言翻译入口。内容包含学习路线图、官方文档索引、葡语及英语课程、书籍清单等分类链接，并给出从基础数据结构到集群、向量检索的十条学习步骤。面向入门及希望进阶 Redis 的开发者，本身不含代码或教程正文，仅组织外部资源链接，社区可通过 PR 补充更新。",
+   "highlights": [
+    "提供从基础、数据结构、持久化到集群与 Redis Stack/向量检索的十条学习路径，每步附对应资源链接",
+    "收录约 28 项 Redis 官方文档链接，覆盖数据类型、Streams、Sentinel、Cluster、安全与 RESP 协议等主题",
+    "分类整理课程（Alura、Redis University 等）、书籍、YouTube 频道等资源，并提供十余种语言的翻译版本入口"
+   ],
+   "use_cases": [
+    "初学者按路线图查找 Redis 学习材料与官方文档入口",
+    "开发者寻找特定主题（如持久化、Streams、Redlock）的官方参考链接",
+    "社区贡献者协作维护和扩充 Redis 学习资源清单"
+   ]
+  },
+  "sha": "217c7183bbaa",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "08edcbab9d39": {
+  "identity": {
+   "one_liner": "面向多智能体团队的共享记忆系统，含GAMR检索引擎与知识图谱",
+   "review": "EcoDB 是一个为多智能体团队设计的共享记忆系统，支持多个智能体跨项目存储、检索和治理知识，提供工作区隔离与角色权限。核心是 10 阶段 GAMR 检索流水线，结合 Apache AGE 知识图谱与多模态嵌入，提供 40 个 MCP 工具、REST API 及 Electron 桌面面板，通过 Docker 部署，并内置 LoCoMo 基准评测脚本。",
+   "highlights": [
+    "10 阶段 GAMR 检索流水线：查询分类、向量检索、BM25、图扩展、新鲜度、矛盾检测与可选交叉编码器重排",
+    "基于 Apache AGE 的知识图谱，支持约 100 个规范谓词、邻居遍历、最短路径与 GLiNER 实体抽取",
+    "支持文本、图像、文档（PDF/DOCX/PPTX/音频）多模态存储与检索，并提供定时后台单元进行记忆整合、前瞻提取与技能蒸馏"
+   ],
+   "use_cases": [
+    "多智能体团队需要跨项目共享与治理知识库的场景",
+    "需要知识图谱遍历与跨模态（文本-图像）检索的知识管理",
+    "使用 MCP 协议接入工具的智能体系统集成"
+   ]
+  },
+  "sha": "08edcbab9d39",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5be217f81cc2": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理持久记忆层，以单个 SQLite 文件存储，提供 MCP 接入",
+   "review": "MemOS 是一个面向 AI 代理与 LLM 应用的持久记忆层，数据保存在用户本地的单个 SQLite 文件中，无需云端或 API 密钥。它提供 TypeScript SDK、CLI、MCP 服务器和 HTTP API 四种使用方式，通过 connect 命令可为 Claude Code、Cursor 等 MCP 客户端自动写入配置。npm 包版本可能滞后于 main 分支，最新源码构建为 v1.6.27。",
+   "highlights": [
+    "混合检索：SQLite FTS5 与 embeddings 融合并做相关性门控",
+    "图记忆：支持 relates_to、contradicts、supports、derived_from、temporal_precedes 类型化边，及 validFrom/validTo 时间有效性与信任分数、来源溯源",
+    "四种接入面（TypeScript SDK、CLI、MCP 服务器、HTTP API）共享同一存储，适配 OpenAI、Anthropic、LangChain、CrewAI、Ollama 等"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等 MCP 客户端提供跨会话持久记忆",
+    "将本地笔记文件夹导入并可检索的本地知识记忆库",
+    "导入 ChatGPT/Claude 记忆并导出为 JSON/Markdown/Obsidian 格式"
+   ]
+  },
+  "sha": "5be217f81cc2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

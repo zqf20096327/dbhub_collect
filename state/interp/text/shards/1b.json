@@ -3051,5 +3051,246 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6028b0443493": {
+  "identity": {
+   "one_liner": "开源 text-to-SQL 引擎，可在自有数据库上调节各阶段设置并进行评测",
+   "review": "mnemiq 是 Apache-2.0 的自然语言查询数据库引擎，面向需要在自有数据上部署和度量 text-to-SQL 的团队。其核心机制是将生成 SQL 的模型与决定是否执行的确定性层分离：查询须为只读、通过权限校验、按源方言编译并通过 EXPLAIN，否则返回带原因的拒绝。流水线各阶段（模型、检索、增强、阈值）均为可配置项，并内置评测框架，按返回数据而非 SQL 字符串比对结果。",
+   "highlights": [
+    "确定性决策层在执行前校验只读、权限、方言编译与 EXPLAIN，拒绝时给出原因",
+    "流水线各阶段（模型选择、检索量、语义增强、拒绝阈值、行列策略）均为可配置设置，支持命名 profile 与 sweep 调参",
+    "内置评测框架，按返回数据评分并区分正确、拒绝、错误三个数字，支持 BIRD、Spider 等基准"
+   ],
+   "use_cases": [
+    "在企业自有数据库（Postgres、DuckDB、Oracle、Databricks 等）上部署自然语言查询并按行/列策略控制访问",
+    "在自己的问题和 schema 上测量不同模型与配置下的 text-to-SQL 表现，诊断失败原因",
+    "通过任意 OpenAI 兼容端点（vLLM、Ollama 等）接入本地模型运行，数据不出自有环境"
+   ]
+  },
+  "sha": "6028b0443493",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9569d38d2459": {
+  "identity": {
+   "one_liner": "Node-RED 节点集，用于与 Firebase Realtime Database 读写及订阅数据",
+   "review": "该包为 Node-RED 提供 4 个节点（in/get/out/On Disconnect），可对 Firebase Realtime Database 进行添加、修改、读取数据，并按指定路径订阅变更，值变化时输出 payload。写入支持 SET/PUSH/UPDATE/REMOVE 等操作，认证支持匿名、邮箱、私钥与自定义 Token。v0.9 起要求 Node.js >=22。适合在 Node-RED 流程中接入 RTDB 的用户。",
+   "highlights": [
+    "包含 Firebase in、get、out、On Disconnect 4 个节点，支持订阅路径数据变更、按查询约束排序读取、多种写入及断连时写入操作",
+    "Path 字段自动补全、查询约束可编辑列表、输入错误提示、拖放 JSON 文件自动填充等编辑器功能",
+    "支持 Anonymous、Email、Private Key、Custom Token 四种认证方式"
+   ],
+   "use_cases": [
+    "在 Node-RED 流程中实时接收 Firebase RTDB 指定路径的数据变化",
+    "通过流程节点对 RTDB 执行 SET/PUSH/UPDATE/REMOVE 等数据写入操作",
+    "在客户端断开连接时向数据库写入预设数据（On Disconnect 节点）"
+   ]
+  },
+  "sha": "9569d38d2459",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "246df5704b80": {
+  "identity": {
+   "one_liner": "immudb 官方 Python 客户端 SDK，基于 gRPC 实现带密码学验证的读写",
+   "review": "immudb-py 是 immudb 数据库的官方 Python 客户端，通过 gRPC 与 immudb 服务器通信，要求 Python 3.6+ 且服务器需预先运行。除传统 get/set 读写外，客户端实现了密码学验证与状态更新协议；提供 PersistentRootService 将验证状态持久化到磁盘，以检测两次运行之间的服务端篡改。默认 RootService 仅存于内存，且实现非线程/进程安全，多进程需为每个实例指定独立状态文件。",
+   "highlights": [
+    "提供 set/get 与 verifiedSet/verifiedGet 两类读写接口，后者执行密码学验证并可在校验失败时抛出 VerificationException",
+    "支持原子多键读写，所有条目全部持久化或全部不写入",
+    "通过 PersistentRootService 将验证状态保存到磁盘，并支持服务器端私钥签名与客户端公钥自动验签"
+   ],
+   "use_cases": [
+    "需要以 Python 应用读写 immudb 数据库并进行条目级密码学验证的场景",
+    "多进程应用中需为每个实例持久化独立验证状态文件的场景",
+    "需要用户与权限管理（创建用户、授予数据库权限、修改密码）的场景"
+   ]
+  },
+  "sha": "246df5704b80",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a8af84e9a8cd": {
+  "identity": {
+   "one_liner": "通过 MinIO 提供的 S3 兼容 REST API 访问 FishBase 与 SeaLifeBase 数据",
+   "review": "该项目提供 FishBase 与 SeaLifeBase 数据的程序化访问端点，原基于 Ruby 的自定义 API 已废弃，现以 MinIO 服务器提供符合 AWS S3 v4 REST API 的标准接口，支持读取 Parquet 文件。可通过 duckdb、boto、Apache Arrow 等 S3 客户端工具直接查询。适合需要以编程方式读取鱼类学数据的用户。",
+   "highlights": [
+    "提供 fishbase 与 sealifebase 两个数据端点，以 Parquet 文件形式供读取",
+    "由 MinIO 服务器提供，符合 AWS S3 v4 REST API",
+    "支持直接 REST 查询及 boto、Apache Arrow、duckdb 等 S3 客户端访问"
+   ],
+   "use_cases": [
+    "用 Python（duckdb/boto）读取鱼类物种 Parquet 数据",
+    "通过任意 S3 兼容工具进行 REST 查询"
+   ]
+  },
+  "sha": "a8af84e9a8cd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e70dc7e8edad": {
+  "identity": {
+   "one_liner": "基于 HTTP 的 JavaScript 驱动，用于从 serverless/edge 函数连接 TiDB Serverless。",
+   "review": "该项目提供 @tidbcloud/serverless 包，通过兼容 fetch API 的 HTTP 方式连接 TiDB Serverless，面向 Vercel Edge Functions、Cloudflare Workers 等需要 HTTP 外部连接的 serverless/edge 平台。支持无状态连接、有状态连接（实验性）和交互式事务（实验性）三种模式，npm 安装后用 connect() 创建连接并 execute() 执行参数化 SQL；同连接上的重叠操作会被拒绝，空闲 10 分钟的连接或事务会被自动关闭/回滚。",
+   "highlights": [
+    "提供无状态连接（默认）、有状态连接与交互式事务（均为实验性）三种使用方式",
+    "支持 ? 与 :name 两种占位符的参数化查询，占位符仅在引号与注释外替换",
+    "支持 Bun、Deno、Cloudflare Workers、Vercel、Netlify 等 serverless/edge 环境，并提供 MCP 配置示例（注明勿用于生产）"
+   ],
+   "use_cases": [
+    "在 Vercel Edge Functions 或 Cloudflare Workers 等边缘环境中查询 TiDB Serverless",
+    "需要保持会话状态的多次查询场景（使用实验性有状态连接，用后需 close()）",
+    "需要交互式事务的场景（空闲 10 分钟未提交将自动回滚）"
+   ]
+  },
+  "sha": "e70dc7e8edad",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a605960a08f": {
+  "identity": {
+   "one_liner": "按分类整理的免费编程、AI与数据科学书籍链接合集",
+   "review": "该仓库收录作者在互联网上找到的可免费获取的书籍，按AI与机器学习、数学、数据科学与分析、数据库、软件工程、图像处理等类别组织，并提供英文与德文书籍。内容仅供教育与个人学习用途，README未附书籍详情说明，使用前需自行核对各资源的许可状态。",
+   "highlights": [
+    "包含AI与机器学习、数学、数据科学、数据库、软件工程、图像处理七个分类",
+    "提供英文与德文两种语言的书籍",
+    "声明仅供教育与个人学习用途"
+   ],
+   "use_cases": [
+    "按主题查找免费编程与AI相关书籍资源",
+    "用于个人学习与教育参考",
+    "按分类浏览数据库、数学等方向的学习材料"
+   ]
+  },
+  "sha": "8a605960a08f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ff2b16ffa53": {
+  "identity": {
+   "one_liner": "面向 Node.js/Electron 的轻量 NoSQL 库，将数据存于本地 JSON 文件并提供仿 MongoDB 风格 API",
+   "review": "minim-json-db 是一个用于 Node.js 与 Electron 应用的 NoSQL 数据库实现，将集合文档存储在本地 .json 文件中，提供 insert、find、findOne、update、remove 等 MongoDB 风格的集合方法。它适合需要在本地持久化少量结构化数据的应用；所有方法返回 Promise，需异步调用；集合默认创建于系统应用数据目录，也可通过参数指定文件路径。",
+   "highlights": [
+    "提供 insert、find、findOne、update、remove、clear、drop、sync 等集合方法，API 风格仿照 MongoDB",
+    "将集合文档持久化为本地 .json 文件，默认存放于各操作系统的应用数据目录，支持通过参数指定路径",
+    "插入对象时若无 id 字段会自动生成通用唯一标识符；find 查询支持对象精确匹配和函数过滤两种方式"
+   ],
+   "use_cases": [
+    "Electron 桌面应用的本地数据持久化",
+    "Node.js 应用中小规模结构化数据的 JSON 文件存储",
+    "希望使用仿 MongoDB 集合操作接口读写本地数据的场景"
+   ]
+  },
+  "sha": "4ff2b16ffa53",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a8ea30448fd9": {
+  "identity": {
+   "one_liner": "基于 Kafka 复制更新的 Java 嵌入式多主键值内存数据库",
+   "review": "ReplicaMap 是一个 Java 库，将 ConcurrentMap 接口的更新通过 Apache Kafka 复制到多个副本，实现最终一致的多主键值存储。它以 Kafka 为唯一依赖，使用 data、ops、flush 三个 topic 分别存放键值快照、操作日志与刷盘请求，适合已有 Kafka 集群的 Java 应用在进程间共享可变状态。键值需正确实现 hashCode/equals，且更新为最终一致，跨分区无程序顺序保证。",
+   "highlights": [
+    "实现 ConcurrentMap 接口的多主复制，所有副本可写，支持 putIfAbsent、replace 等原子操作及返回 CompletableFuture 的异步方法",
+    "支持 Optimized Compute：将 compute/merge 的函数序列化后在各副本执行一次，无需重试循环；支持分片配置、单个 topic 存多个 map、包装任意线程安全 Map 实现",
+    "通过 Kafka Log Compaction 持久化数据，flush 以 Kafka 事务写入，启动时从 data topic 加载快照并从精确位置重放 ops 日志"
+   ],
+   "use_cases": [
+    "在已有 Kafka 集群的多个 Java 进程之间共享可变状态，无需部署额外基础设施",
+    "高竞争计数器递增或对大值做小更新等场景，通过序列化 compute/merge 函数避免重试与全量传输",
+    "复用已存在的 compacted Kafka topic 作为分布式键值数据存储"
+   ]
+  },
+  "sha": "a8ea30448fd9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6f2ec26354ef": {
+  "identity": {
+   "one_liner": "面向 MongoDB 的迁移 CLI，基于原生 Node.js 驱动执行迁移",
+   "review": "Mongogrator 是一个用于 MongoDB 的数据库迁移命令行工具，支持 TypeScript 和 JavaScript 项目。通过 init 初始化配置文件，add 创建迁移文件，list 查看各迁移的执行状态，migrate 执行迁移并将记录写入配置指定的日志集合。迁移通过 MongoDB 原生 Node.js 驱动执行，适用于需要在开发和生产阶段管理 MongoDB 结构与数据变更的开发者。",
+   "highlights": [
+    "提供 init/add/list/migrate 等命令管理迁移的创建、查看与执行",
+    "迁移文件以 TypeScript 或 JavaScript 编写，通过 MongoDB 原生 Node.js 驱动执行",
+    "迁移执行记录写入配置指定的日志集合，list 命令显示 NOT MIGRATED 或 MIGRATED 状态"
+   ],
+   "use_cases": [
+    "在开发和生产阶段为 MongoDB 数据库创建并执行迁移",
+    "需要以表格形式查看各迁移文件的执行状态",
+    "生产环境中通过指定配置文件路径执行迁移（如 mongogrator migrate /dist）"
+   ]
+  },
+  "sha": "6f2ec26354ef",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f1bff8cbb7d6": {
+  "identity": {
+   "one_liner": "基于 Firebase 实时数据库的餐厅餐桌排队与预订演示应用",
+   "review": "该项目实现一个餐厅餐桌预订应用，前台登录后可将顾客加入等待队列并按先来后到顺序分配餐桌，顾客通过手机号登录可实时查看排队情况。数据存储于 Firebase Realtime Database，认证采用匿名登录。项目未处理并发写入，切换登录角色需删除并重装应用，适用于演示 Firebase 数据库基础用法。",
+   "highlights": [
+    "前台可将顾客加入等待队列、释放已占用餐桌并按队列顺序分配餐桌，支持按姓名或手机号搜索等待顾客",
+    "顾客登录后可实时查看等待队列状态，应用在线时接收餐桌分配消息",
+    "基于 Firebase Realtime Database 存储数据，采用匿名登录认证，登录类型保存在 Userdefaults 中以区分前台与顾客角色"
+   ],
+   "use_cases": [
+    "作为学习 Firebase Realtime Database 基本用法的示例项目",
+    "用于餐厅前台记录等待顾客并按先后顺序分配餐桌的流程演示",
+    "用于体验前台与顾客两种角色视角下的排队管理交互"
+   ]
+  },
+  "sha": "f1bff8cbb7d6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "50ffda662eae": {
+  "identity": {
+   "one_liner": "Android 离线 MiSight SQLite 快照查看器，无 INTERNET 权限",
+   "review": "一款运行于 Android 的离线数据库查看器，用于查看 MiSight SQLite 快照。支持两种数据来源：导入数据库副本（无需 root），或通过 su 授权读取本机主库与备份库。提供概览统计、分页筛选、JSON 导出等功能；主库和 WAL 读取上限各为 256 MB，不修改系统数据库，也不负责停止采集。",
+   "highlights": [
+    "支持导入 SQLite 副本或通过 root 读取本机主库，读取前后校验 SHA-256",
+    "支持按事件类型、日期、包名、字段内容筛选，并可导出全部匹配记录为 JSON",
+    "应用无 INTERNET 权限，不内置分析统计 SDK"
+   ],
+   "use_cases": [
+    "在离线设备上查看导入的 MiSight 数据库快照内容",
+    "在 root 设备上读取本机 MiSight 主库和备份库记录",
+    "导出筛选后的记录为 JSON 进行留存"
+   ]
+  },
+  "sha": "50ffda662eae",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

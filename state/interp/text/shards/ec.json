@@ -2559,5 +2559,181 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fca67c6a95ca": {
+  "identity": {
+   "one_liner": "用于在 Kubernetes 上部署和管理 Qdrant 向量数据库集群的 Operator",
+   "review": "该项目是一个 Kubernetes Operator，通过 QdrantCluster 和 QdrantCollection 两个 CRD 管理 Qdrant 向量数据库集群，支持单/多节点部署、集群扩缩、API 密钥认证、TLS 加密及快照备份至 S3 兼容存储。需要 Kubernetes 1.26+，默认不配置副本、资源和持久化。项目处于开发阶段，可能有破坏性变更，与 Qdrant 官方无隶属关系，采用 MIT 许可证。",
+   "highlights": [
+    "支持创建单节点与多节点 Qdrant 集群及集群扩缩，通过 QdrantCluster/QdrantCollection 两个 CRD 声明式管理",
+    "提供 API 密钥认证（读写/只读）与 TLS 加密（客户端和节点间通信），均支持自动生成或用户自备证书/密钥",
+    "支持即时与定时快照备份，可存入任意 S3 兼容存储；Operator 自身以 leader 选举集群模式运行"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中以声明式方式部署和运维 Qdrant 向量数据库（含副本、分片、量化等集合配置）",
+    "需要 TLS 加密、API 密钥认证及定时快照备份到 S3 的向量数据库运维场景",
+    "基于 PDF 文档问答（RAG）类应用的本地化向量检索后端部署"
+   ]
+  },
+  "sha": "fca67c6a95ca",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "198385a06cd8": {
+  "identity": {
+   "one_liner": "Monarch ORM：面向 MongoDB 的 TypeScript 类型安全对象文档映射器",
+   "review": "Monarch ORM 是一个面向 TypeScript 开发者的 MongoDB ODM。通过 createSchema() 定义集合结构，经 defineSchemas() 汇总并可用 withRelations() 声明 one/many 关联，再由 createDatabase() 生成带类型的集合访问层。插入与更新输入会经 schema 解析（含 transforms 与校验）；未定义 _id 时默认 objectId()，插入时可省略。关联 populate 依赖 to 字段索引，否则触发全表扫描。通过 npm install monarch-orm 安装。",
+   "highlights": [
+    "提供类型推断的查询方法：insertOne/insertMany、find/findOne/findById、updateOne/updateMany、findOneAndUpdate、replaceOne、delete 系列等，支持 select/omit/sort/limit/skip/populate",
+    "支持 schema 的 transforms、默认值、校验、virtuals、重命名与默认 omit 规则；更新操作中 $set 输入同样经过 schema 解析",
+    "支持 one 与 many 两种类型化关联及 populate，可按关系设置默认排序/限制等选项，集合可自动初始化索引与 JSON Schema 校验"
+   ],
+   "use_cases": [
+    "需要为 MongoDB 集合建立 TypeScript 类型化数据模型与 schema 校验的 Node.js 后端项目",
+    "需要在集合间定义并 populate 关联关系（外键或数组引用）的应用",
+    "数据模型需按模块拆分定义，再合并为统一 schema 的多模块项目"
+   ]
+  },
+  "sha": "198385a06cd8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7c37fce7d7c9": {
+  "identity": {
+   "one_liner": "SurrealDB 的官方 C 语言 SDK",
+   "review": "这是 SurrealDB 官方为 C 语言提供的 SDK，用于在 C 程序中连接并操作 SurrealDB 数据库。README 显示其可连接内存实例、SurrealKV 或远程服务，通过包含 surrealdb.h 头文件并调用 sr_surreal_t 等接口使用。适用于需要在 C 环境中接入数据库的场景。需注意 cbindgen 存在头文件排序问题，可能导致链接失败，可通过使用已发布的头文件或手动重排绕过。",
+   "highlights": [
+    "支持连接内存实例、SurrealKV 或远程 SurrealDB 实例",
+    "通过 C 头文件 surrealdb.h 提供接口",
+    "由 SurrealDB 官方维护"
+   ],
+   "use_cases": [
+    "在 C 项目中访问 SurrealDB 数据库",
+    "连接 SurrealKV 或远程数据库实例",
+    "使用内存模式运行数据库的场景"
+   ]
+  },
+  "sha": "7c37fce7d7c9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7604dc4f18b0": {
+  "identity": {
+   "one_liner": "SurrealDB 基准测试工具集合仓库，汇总多个性能测试套件入口",
+   "review": "该仓库作为索引，收录用于测试、比较和改进 SurrealDB 性能的基准测试工具，各工具存放在独立仓库。包含 crud-bench、ann-benchmarks、go-ycsb 和 nosqlbench 四项。部分工具需克隆 surrealdb 分支并分别构建运行，nosqlbench 相关改动尚未发布。",
+   "highlights": [
+    "收录四类基准测试工具：crud-bench、ann-benchmarks、go-ycsb 与 nosqlbench，各自位于独立仓库",
+    "crud-bench 基于 Rust 构建并依赖 Docker，可对本地嵌入模式或通过 WebSocket 端点对远程 SurrealDB 运行基准测试",
+    "ann-benchmarks 用于近似与精确最近邻算法测试，包含预生成数据集及函数完整性测试套件；go-ycsb 为 YCSB 的 Golang 移植版"
+   ],
+   "use_cases": [
+    "对嵌入式、网络化及远程部署的数据库运行 CRUD 负载基准，监测查询与性能变化",
+    "对向量数据集测试近似/精确最近邻算法的性能",
+    "使用 YCSB 工作负载对本地或远程 SurrealDB 服务器执行加载与运行测试"
+   ]
+  },
+  "sha": "7604dc4f18b0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d7f93e3bffc": {
+  "identity": {
+   "one_liner": "Radinus 是基于 Tauri v2 + Rust + SQLite 的个人财务管理软件",
+   "review": "Radinus 是 GNU GPL v3 许可的个人财务管理软件，用于记录多银行账户、交易、支票、周期操作、预算与统计视图。技术栈为 Tauri v2 + Rust + SQLite，应用、数据库与设置集中于单一文件夹，可从 USB 驱动器运行。它支持 OFX 标准的银行对账单导入，以及从 Windows 版 Radinus 1.9.3 备份迁移，面向原版本已有用户与 macOS 用户。",
+   "highlights": [
+    "支持多银行账户、交易（含子交易与自动 Complement 拆分）、支票、周期操作、预算、六个交叉统计视图、仪表盘与余额变化图表",
+    "支持 OFX 标准的银行对账单导入和 Radinus 1.9.3 Windows 版 zip 备份迁移",
+    "完全便携：应用、数据库、设置、附件、日志均存于单一文件夹，不向该文件夹外写入"
+   ],
+   "use_cases": [
+    "个人银行账户与日常收支交易的记录和预算管理",
+    "通过 OFX 导入银行对账单进行账目核对",
+    "从 Windows 版 Radinus 1.9.3 的 zip 备份迁移历史数据"
+   ]
+  },
+  "sha": "5d7f93e3bffc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "18302c5a0b17": {
+  "identity": {
+   "one_liner": "面向 Rajagiri 学院师生的校园社交网络平台，Flutter+Firebase 实现",
+   "review": "Rajagiri Connect 是面向 Rajagiri 学院学生的社交网络平台，用于连接学长、学弟与教师并共享信息资源。前端使用 Flutter，后端使用 Firebase。README 提供 Flutter+VS Code 的安装步骤和 Android 运行方式，并提示需在 build.gradle 中修改数据库配置才能将数据存入自己的数据库。",
+   "highlights": [
+    "用户可创建包含个人信息与兴趣领域的账户",
+    "教师可发布通知和图片，全部账户持有者可见",
+    "应用内提供通知与图片发布专页，学生可查看教师发布的更新"
+   ],
+   "use_cases": [
+    "在校师生间共享通知与信息资源",
+    "按兴趣连接学长、学弟与教师的校内社交",
+    "作为 Flutter+Firebase 的学院小型项目参考"
+   ]
+  },
+  "sha": "18302c5a0b17",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a17f26d66d70": {
+  "identity": {
+   "one_liner": "开源自托管配送管理系统，含快递员 Flutter 应用与 COD 结算",
+   "review": "Logistico 是 Apache-2.0 协议的开源物流软件，面向配送公司，覆盖下单、仓储与卡车调度、快递员应用、货到付款结算、退货与公开追踪。默认阿拉伯语 RTL 布局并支持英语，内置伊拉克 18 省区域数据。技术栈为 .NET 10、Blazor WebAssembly、PostgreSQL 与 Flutter，可通过 docker compose 一键启动并载入演示数据。",
+   "highlights": [
+    "提供订单、仓库分拣枢纽、卡车干线、快递员应用、COD 现金结算与退货的完整流程管理",
+    "Flutter 移动端按登录角色（商家、快递员、管理者）显示不同界面，支持条码枪与摄像头扫码",
+    "界面默认阿拉伯语 RTL 布局，附英语；API 按五种办公角色及 Courier/Seller 角色鉴权"
+   ],
+   "use_cases": [
+    "配送公司自托管管理订单、分拣、干线运输与快递员日常派送",
+    "支持货到付款模式并需进行快递员收款核销与商家结算的公司",
+    "面向伊拉克市场运营，需要省份地址、地标地址与 ASYCUDA 报关工作台的企业"
+   ]
+  },
+  "sha": "a17f26d66d70",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f5a384bc8b2": {
+  "identity": {
+   "one_liner": "面向小内存 VPS 的自托管 PaaS，以 Rust 单二进制运行 Next.js/Node 无状态应用。",
+   "review": "Rustle 用于在单台 1 vCPU/1 GB VPS 上部署来自 GHCR 公私镜像的无状态 Next.js/Node 应用：构建在 GitHub Actions 完成，VPS 只拉取镜像，Caddy 负责 HTTPS 证书的获取与续期。平台为单个约 5 MB 的 Rust 二进制，内嵌 WebAssembly 仪表盘，README 记载空闲 RSS 5.8 MB。目前处于 pre-release 状态，尚未在真实 VPS 上验证过，仅支持无状态应用、单管理员、单服务器，数据库需外接（如 Neon、Supabase）。",
+   "highlights": [
+    "以单个 Rust 二进制运行，内嵌 WebAssembly 仪表盘，README 记载空闲 RSS 为 5.8 MB，systemd 硬上限 48 MB",
+    "容器不挂载 Docker socket，无发布端口、无 capabilities、有 RAM 上限，密钥静态加密存储",
+    "支持按 digest 拉取、健康检查、Caddy 路由切换与一键回滚；自更新仅接受 ed25519 签名版本"
+   ],
+   "use_cases": [
+    "在 1 vCPU / 1 GB 小型 VPS 上自托管无状态 Next.js/Node 应用",
+    "需要在已运行 Caddy/Compose 站点的服务器上追加部署路由的机器",
+    "希望在 VPS 上省下平台内存、构建过程交给 GitHub Actions 的个人项目部署"
+   ]
+  },
+  "sha": "3f5a384bc8b2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

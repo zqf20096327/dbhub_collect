@@ -3216,5 +3216,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2e134cf52a1c": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Go FIFO 与优先级队列库，支持确认、批量出队与文件级隔离",
+   "review": "sqliteq 是一个用 Go 编写的、以 SQLite 为存储的队列库，提供 FIFO 与优先级两种队列，并实现确认（ack）、去重入队 EnqueueOnce、批量出队和组提交。默认每个队列一个 SQLite 文件以避免写锁竞争，也可用 WithSingleFile 合并为单文件。面向需要在 Go 程序中获得持久化队列的开发者；要求 Go 1.24+、cgo 与 C 编译器，且建议每个数据库文件只由一个进程使用。",
+   "highlights": [
+    "提供 FIFO 队列和优先级队列（数字越小越先出队），支持确认机制：未确认的条目在下次打开文件时回到队列",
+    "批量出队 DequeueBatchWithAckIds 在一条 SQL 语句中取出多个条目，每条带独立 ack id；EnqueueOnce 按 id 去重",
+    "同一文件上的并发 Enqueue/Acknowledge 共享一个事务（组提交），队列对象线程安全，并实现 varmq 的持久化队列接口"
+   ],
+   "use_cases": [
+    "Go 应用中的持久化任务队列，进程重启后未确认任务可恢复为待处理状态",
+    "需要优先级调度的作业处理（如 README 示例中的邮件、索引重建类任务）",
+    "作为 varmq 的持久化存储适配器，向 worker 池提供队列数据源"
+   ]
+  },
+  "sha": "2e134cf52a1c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d1a768d7c451": {
+  "identity": {
+   "one_liner": "本地运行的 AI 长篇网文写作工作台，以分层记忆与结构化设定档案支撑逐章生成。",
+   "review": "Novel Smith 是一个基于 Next.js 与 Electron 的开源桌面写作工坊，用于从灵感、世界观、章纲到逐章正文的 AI 辅助长篇创作。数据存于本地 SQLite 单文件，AI 生成需用户自配 LLM API Key，去 AI 味检测等部分功能为纯本地规则、无需 Key。适用于写作中长篇网文、需长期维护人设与伏笔的作者。",
+   "highlights": [
+    "分层记忆引擎：近 4 章全文 + 近 3 章摘要 + 远层 AI 压缩装配上下文，并配 S/A/B/C 四级事件衰减",
+    "全部稿件存于本地单一 SQLite 文件，无账号、无云服务；AI 功能使用用户自己的 API Key",
+    "支持 TXT / Markdown / HTML / EPUB / DOCX 五格式本地导出，桌面版安装包带自动更新"
+   ],
+   "use_cases": [
+    "写作或计划写作中长篇网文/小说，需要跨章维护人设、伏笔与世界观设定",
+    "介意稿件上传云端，希望在本地完成 AI 起草与稿件管理",
+    "对未发表稿件做离线去 AI 味检测（12 条本地规则，不联网、不调模型）"
+   ]
+  },
+  "sha": "d1a768d7c451",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "626c7e4277b9": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 AT Protocol OAuth 的 Bluesky 登录全栈模板项目。",
+   "review": "这是一个用于在 Next.js 应用中接入 Bluesky（AT Protocol）OAuth 登录的样板项目，面向希望快速搭建登录流程的开发者。技术栈为 Next.js 15（App Router）、Bun、Prisma、PostgreSQL 与 iron-session，内置 AuthState/AuthSession 两个数据模型存储 OAuth 状态与会话，依赖 Bun 运行时和 PostgreSQL，环境变量需配置数据库连接串、公开 URL 和 32 位 Cookie 密钥，支持 Vercel 或手动部署，采用 MIT 许可证。",
+   "highlights": [
+    "通过 @atproto/oauth-client-node 实现 AT Protocol OAuth 登录，包含跳转授权、回调换 token、拉取用户资料的完整流程",
+    "内置 Prisma 模型 AuthState 与 AuthSession，将 OAuth 状态参数和会话数据存入 PostgreSQL",
+    "会话通过 iron-session 写入加密 Cookie，环境变量含 POSTGRES_URL、NEXT_PUBLIC_URL、COOKIE_PASSWORD 三项必填项"
+   ],
+   "use_cases": [
+    "为需要 Bluesky 账号登录的 Next.js Web 应用提供起步代码",
+    "作为学习 AT Protocol OAuth 接入流程的参考实现",
+    "需要 Vercel 或自托管部署、搭配 PostgreSQL 的认证项目模板"
+   ]
+  },
+  "sha": "626c7e4277b9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

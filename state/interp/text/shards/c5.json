@@ -2740,5 +2740,158 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "14a418c4000e": {
+  "identity": {
+   "one_liner": "Badger DB 的非官方命令行客户端，用于在终端查看数据库内容",
+   "review": "badger-cli 是面向 Badger 键值数据库的命令行工具，README 未标注官方归属，属第三方实现。它提供一组基础命令，供使用者通过终端查看数据库中的条目。安装与使用方式在现有文档中未展开，具体命令集需参考源码。",
+   "highlights": [
+    "提供针对 Badger Database 的命令行界面",
+    "包含一组基础命令集",
+    "支持在命令行中查看数据库内的条目"
+   ],
+   "use_cases": [
+    "开发时在终端直接查看 Badger 数据库中的数据",
+    "无需自写脚本即可检查本地 Badger 存储内容"
+   ]
+  },
+  "sha": "14a418c4000e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b24929ecee2": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式键值数据库，结合 B+ Tree 读与 LSM Tree 写的混合设计",
+   "review": "Mace 是用 Rust 编写的嵌入式键值数据库，存储设计组合了 B+ Tree 式读取路径与 LSM Tree 式日志结构写入。提供 MVCC 快照隔离、ACID 事务、崩溃恢复、CRC 校验和可选 Zstd 压缩，支持 Linux、Windows、FreeBSD 和 macOS，通过 Cargo 引入，库 crate 发布名为 mace-kv 并另附独立发布的离线维护 CLI（mace-kv-cli）。README 称存储格式与公共 API 已基本稳定，适用于需要进行嵌入式存储方案生产评估的 Rust 开发者；跨版本的破坏性磁盘格式变更需执行一次离线重建迁移。",
+   "highlights": [
+    "支持并发 MVCC 快照隔离读写与崩溃安全的 ACID 事务提交、中止和恢复",
+    "大值与索引分离存储，支持按 bucket 启用 Zstd 压缩与 Merge Operator",
+    "持久化记录带 CRC 校验，跨重启和崩溃验证；提供独立发布的离线维护 CLI mace-kv"
+   ],
+   "use_cases": [
+    "在 Rust 应用中嵌入本地键值存储，需要事务与快照隔离读写的场景",
+    "面向 SSD/NVMe 存储介质、需要日志结构写入设计的应用",
+    "需要对现有数据库做离线维护和版本迁移的运维场景"
+   ]
+  },
+  "sha": "2b24929ecee2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6fc39f6d18c3": {
+  "identity": {
+   "one_liner": "基于 Redis 存储 ChatGPT 聊天历史记录的 Python 包",
+   "review": "redis-chatgpt 是一个 Python 包，用于将聊天消息历史存入 Redis 数据库，通过 RedisManager 提供写入（set）、读取（get_data）和截断会话（truncate_conversation）接口。适合需要在 ChatGPT 应用中保存短期会话记忆的开发者，安装后需自备 Redis 服务，另含 FastAPI + Docker 的示例。",
+   "highlights": [
+    "通过 RedisManager 类连接 Redis，支持指定 host 和 port",
+    "提供 set_data、get_data 写入和读取聊天历史",
+    "truncate_conversation 支持通过 overwrite 参数选择是否更新 Redis 数据库"
+   ],
+   "use_cases": [
+    "为基于 OpenAI API 的聊天机器人保存会话历史",
+    "在 Redis 中管理对话的短期记忆存储",
+    "配合 FastAPI 和 Docker 部署聊天记录读写服务"
+   ]
+  },
+  "sha": "6fc39f6d18c3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "334e44139b51": {
+  "identity": {
+   "one_liner": "基于 Req 的 Elixir Snowflake 驱动，通过 REST API 支持 JSON 与 Arrow 两种结果解码。",
+   "review": "req_snowflake 是一个社区维护的 Elixir Snowflake 连接库，复用 Snowflake 各官方语言驱动所用的 REST API 发送查询与插入。它支持 JSON 解码（可选用 Jiffy）与经 snowflake_arrow_elixir 的 Arrow 解码，提供异步查询与查询 ID 轮询。当前不支持 MFA，需用户名密码或私钥认证；配合 Ecto 需开启 QUOTED_IDENTIFIERS_IGNORE_CASE。",
+   "highlights": [
+    "通过 Snowflake REST API 执行查询与插入，支持 JSON 与 Arrow 两种行解码方式",
+    "提供异步查询选项：可返回查询 ID，或按可配置间隔轮询结果",
+    "支持 Table 集成按需下载与解码数据块，并可传递 Snowflake 会话参数"
+   ],
+   "use_cases": [
+    "在 Elixir 应用中直接查询 Snowflake 数据并解码结果集",
+    "处理大体量结果时通过 Table 流式枚举，仅下载所需数据块",
+    "在 Livebook 中通过 kino_db 连接 Snowflake 账户、执行查询并切片查看数据"
+   ]
+  },
+  "sha": "334e44139b51",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9b03091cae33": {
+  "identity": {
+   "one_liner": "Godot 4 的 2D 冒险/解谜游戏开发插件，低代码构建游戏内容",
+   "review": "Fart Engine 是 Godot 4 游戏引擎的插件，用于以较少代码创建 2D 冒险和解谜类游戏。README 给出完整的安装流程：下载仓库压缩包，将 addons 与 Data 文件夹复制到项目 res:// 目录，并在项目设置的插件页启用。文档明确声明项目仍在开发中，功能不完整且不稳定，不建议用于正式项目。",
+   "highlights": [
+    "提供 Godot 4 插件形式，需 Godot 4.0 或更高版本",
+    "支持按 F5 运行示例游戏查看效果",
+    "安装方式为复制 addons 与 Data 文件夹到项目 res:// 目录并在插件设置中启用"
+   ],
+   "use_cases": [
+    "在 Godot 4 中制作 2D 冒险游戏",
+    "在 Godot 4 中制作 2D 解谜游戏",
+    "需要以少量代码搭建游戏原型的开发者"
+   ]
+  },
+  "sha": "9b03091cae33",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d3afb7bf1cd": {
+  "identity": {
+   "one_liner": "Rust 编写的单二进制博客引擎，内置管理后台与 Let's Encrypt HTTPS",
+   "review": "Bloogla 是一个用 Rust 编写、以单个可执行文件分发的博客引擎（MIT 许可），把网站前台、管理面板和 HTTPS 证书管理集中在同一程序中，数据存放在单一文件夹内。面向想自托管博客的个人用户，支持 Windows、Linux（x86_64/ARM）与 Docker 部署，不依赖 PHP 或数据库服务器。内置 WordPress 导入导出、每日备份和签名更新机制；README 未提及多站点或静态导出等能力。",
+   "highlights": [
+    "单文件运行网站、管理面板与自动获取的 Let's Encrypt HTTPS 证书，支持 Docker、Linux 与 Windows 部署",
+    "提供可视化编辑器、草稿与定时发布、修订历史、标签、KaTeX 公式、评论、RSS、站点地图与内置无 Cookie 统计",
+    "包含七个主题（支持明暗模式），主题为纯 HTML/CSS；支持从 WordPress 导入内容并以 WordPress 文件或 Markdown 导出"
+   ],
+   "use_cases": [
+    "在自有服务器或 Docker 环境中自托管个人博客或作品集网站",
+    "将现有 WordPress 博客的内容（文章、页面、评论、图片）迁移到独立单二进制程序运行",
+    "需要内置 HTTPS、每日备份与签名更新且不维护 PHP 或数据库服务器的低维护站点部署"
+   ]
+  },
+  "sha": "1d3afb7bf1cd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5fee40ec07e7": {
+  "identity": {
+   "one_liner": "版本绑定的 GaussDB/openGauss 源码知识工程工具，含 CLI 与审阅流程",
+   "review": "该项目是一套围绕 GaussDB/openGauss 源码的知识工程工具，基于本地已有源码、设计文档和可选 ECS 编译调用图，生成全仓学习计划、结构化知识与 Wiki，通过 kb.cmd CLI 驱动学习、双阶段审阅、多服务器按模块协作和覆盖验收，结果存入 SQLite 与 wiki.git。默认策略为 PostgreSQL 家族（20 领域），2.3 版本在公开 openGauss 场景验证，专有版本需首次实际接入核验。",
+   "highlights": [
+    "提供 kb.cmd/sh CLI，实现计划生成、持续学习任务、研究与知识双阶段审阅及覆盖账管理",
+    "支持多服务器按模块协作：签名材料包分发、结果导入、反馈回传，重复导入幂等",
+    "coverage 命令列出未覆盖文件、未闭合模块、未决问题等，验收需开发/测试/review 三类检索用例"
+   ],
+   "use_cases": [
+    "团队对大型数据库源码（openGauss/GaussDB）进行版本绑定的持续模块化学习与知识审阅",
+    "多台服务器成员离线分工学习，经材料包交换汇总到协调端审阅",
+    "为开发、测试、review 场景提供带证据的源码知识查询与覆盖验收"
+   ]
+  },
+  "sha": "5fee40ec07e7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

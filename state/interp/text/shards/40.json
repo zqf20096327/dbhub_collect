@@ -3073,5 +3073,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "10c28dc092cf": {
+  "identity": {
+   "one_liner": "面向开源集群数据库的分布式备份系统，以服务端+CLI/HTTP操作备份与恢复。",
+   "review": "Astacus 是一个集群数据库备份系统，支持 M3 与 Apache Cassandra 等开源集群数据库。它采用通用核心加数据库专属 API 的架构，在各节点运行 server 进程，通过 CLI 或 HTTP 接口执行备份、恢复、列表与按保留策略清理。配置为 YAML/JSON 格式，可指向本地目录、S3 或 GCS 等对象存储。需注意仓库已不再活跃维护，且文档自述配置说明不足。",
+   "highlights": [
+    "支持多节点部署，在待备份集群的每个节点运行 astacus server，备份/恢复/清理操作通过 CLI 或 HTTP 接口触发，同一时刻仅运行一个操作",
+    "备份目标支持本地目录、Amazon S3、Google GCS 等对象存储位置，并可配置多个备份站点以支持云迁移期间的迁移切换",
+    "采用通用代码与数据库专属代码分离的设计，专属部分通过简单 API 实现；支持按相同内容复用 blob 的机制"
+   ],
+   "use_cases": [
+    "对 M3 或 Apache Cassandra 集群进行周期性备份（如通过 cron 定时调用 astacus backup）",
+    "需要将集群备份恢复到原集群或进行数据还原时使用 astacus restore",
+    "云服务迁移期间需要从旧备份存储位置切换到新位置的场景"
+   ]
+  },
+  "sha": "10c28dc092cf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

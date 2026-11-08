@@ -2770,5 +2770,203 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "26912fef4904": {
+  "identity": {
+   "one_liner": "为 Apache CouchDB 提供类 MongoDB 查询语言的 JSON HTTP 接口。",
+   "review": "Mango 是 Apache CouchDB 的查询语言接口镜像仓库，通过 `/dbname/_query` 单一 POST 端点接收 JSON 动作（insert、find、update、delete、create_index、list_indexes），返回 JSON 结果。面向不熟悉 HTTP/文档数据库的用户，find 等操作要求选择器可由现有索引满足。注意：批量动作不保证原子性与隔离性，排序方向目前仅支持 asc。",
+   "highlights": [
+    "提供单一 HTTP POST 端点 /dbname/_query，支持单条或批量 JSON 动作",
+    "支持 insert/find/update/delete 四种 CRUD 操作及 create_index、list_indexes 索引操作",
+    "find/update/delete 支持读写仲裁参数，find 默认返回 limit 25、支持 skip/sort/fields"
+   ],
+   "use_cases": [
+    "希望用类 MongoDB 语法查询 CouchDB 文档的场景",
+    "需要为选择器字段创建 JSON 索引（含多字段复合索引）的数据库",
+    "在既有 CouchDB REST API 之外并行使用查询接口且不改变现有行为的部署"
+   ]
+  },
+  "sha": "26912fef4904",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "75058c5d00cf": {
+  "identity": {
+   "one_liner": "基于 Uber Fx 依赖注入的 Go 服务构建框架库",
+   "review": "go-service 是一个用于构建 Go 服务的框架库（v2），本身不含可执行入口，由服务自行定义 main 并导入。它以 Uber Fx/Dig 为核心组织依赖注入，提供 module.Library/Server/Client 三个模块包，涵盖配置、传输、遥测、加密、缓存等子系统，支持 JSON/HJSON/TOML/YAML 配置格式及 file:/env: 配置源，长驻服务建议从 go-service-template 模板启动。",
+   "highlights": [
+    "通过 Fx 提供 module.Library、module.Server、module.Client 三个模块包，用于组合配置、传输、遥测、健康检查等子系统",
+    "配置解码支持 JSON、HJSON、TOML、YAML 格式，配置源支持 file:、env: 前缀及按扩展名的默认目录查找",
+    "字段支持 source string（env:/file:/字面量）用于读取密钥、DSN 等敏感值，并提供 config.NewConfig[T] 完成解码、空值检测与验证"
+   ],
+   "use_cases": [
+    "从 go-service-template 生成并组合模块包构建长驻后台服务",
+    "通过 go-client-template 与 module.Client 构建短生命周期的控制、迁移或批处理命令",
+    "在已有模块中以依赖方式引入，复用配置解码、编码器注册表、传输层与协议辅助包"
+   ]
+  },
+  "sha": "75058c5d00cf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9236d09f8b31": {
+  "identity": {
+   "one_liner": "个人学习笔记仓库，用 Git 集中备份多领域笔记",
+   "review": "该仓库用于集中备份作者的学习笔记，内容以 Markdown 文档为主，代码存放在其他位置。目录按主题组织，涵盖数据结构、算法、操作系统、计算机网络、Linux、Git 等。从标签看还涉及 Android、Java、数据库内容。适合想阅读中文个人学习笔记的读者参考。",
+   "highlights": [
+    "按主题分类组织笔记，包含数据结构、算法、操作系统、计算机网络、Linux、Git、Markdown、Vim 等条目",
+    "仓库主题标签涉及 Android、数据库、Git、Java、Linux 等领域",
+    "笔记统一备份于此，代码备份到其他位置"
+   ],
+   "use_cases": [
+    "查阅计算机基础领域（数据结构、算法、操作系统、网络）的中文学习笔记",
+    "了解 Android、Java、Linux 等方向的个人学习记录",
+    "作为个人笔记集中备份仓库的组织方式参考"
+   ]
+  },
+  "sha": "9236d09f8b31",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f176af90bbd": {
+  "identity": {
+   "one_liner": "面向 AI 辅助开发的治理型工作流编排框架",
+   "review": "Orchestra 是在兼容编码宿主（如 Claude Code 等）之上运行的编排层，按架构、实现、UI/UX、数据、安全、测试、文档等专家角色路由任务，保留证据并设置人工门控。它本身不是 AI 模型；最新公开发布版本为 v1.11.0，开发分支的后续工作未随发布提供。",
+   "highlights": [
+    "按专家角色协调任务，包含验证、安全审查（Cipher/Dagger）与人工受控边界",
+    "提供自适应记忆（本地观察、opt-in 只读上下文、影子模式）与 Scribe 文档模式（SPEC_TO_SYSTEM/SYSTEM_TO_DOCS/RECONCILE）",
+    "权限模型声明工具访问、测试通过、记忆置信均不等于授权或批准"
+   ],
+   "use_cases": [
+    "在兼容编码宿主中编排多专家 AI 协作的开发任务",
+    "需要基于证据的验证流程与人工合并/部署门控的团队",
+    "文档需求重建、缺口识别与漂移对账（Scribe 六维蓝图）"
+   ]
+  },
+  "sha": "5f176af90bbd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a420fa61e142": {
+  "identity": {
+   "one_liner": "基于事务机制的 ArangoDB 数据库迁移工具与 CLI",
+   "review": "arango-migrate 是一个面向 ArangoDB 的数据库迁移工具和命令行程序，以 TypeScript 编写，通过包管理器作为开发依赖安装。它在事务中运行单个迁移，迁移失败时保持数据库处于有效状态；通过 step 函数向事务添加操作，并提供 up/down 生命周期函数、可选的前后钩子与 dry-run 支持。配置写在项目根目录的 config.migrate.js 中。",
+   "highlights": [
+    "以事务方式执行迁移，up/down 函数通过 step 函数将 ArangoDB 操作加入事务，迁移失败时保持数据库有效状态",
+    "提供可选的 before/after 钩子和 dry-run 支持",
+    "CLI 支持 -i 初始化迁移文件、-u 运行未应用的迁移、-t 指定执行到某一版本号"
+   ],
+   "use_cases": [
+    "需要对 ArangoDB 集合（含 edge collection）和文档进行版本化迁移的项目",
+    "需要在迁移失败时通过事务回滚保持数据库状态一致的场景",
+    "需要执行迁移前先 dry-run 或添加前后钩子的流程"
+   ]
+  },
+  "sha": "a420fa61e142",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "abe4dc83879b": {
+  "identity": {
+   "one_liner": "常驻 IRC bouncer，服务端终结 IRC 协议并暴露 REST API 与 PWA 客户端",
+   "review": "grappa-irc 由服务器 grappa 和 PWA 客户端 cicchetto 组成：服务器侧以 Elixir/OTP 为每个 (user, network) 运行受监督会话进程，终结上游 IRC 并将消息、频道等以 JSON 资源经 REST 和 Phoenix Channels WebSocket 推送；客户端不做 IRC 协议解析，界面仿 irssi。滚动记录存于 SQLite，认证经 SASL 桥接 NickServ，可自托管于 VPS，支持 Docker、.deb、AUR 等安装方式。",
+   "highlights": [
+    "每个 (user, network) 对应一个受监督 OTP 进程，会话崩溃后自动重启且 SQLite 回滚记录保留",
+    "IRC 在服务端终结，客户端只消费 JSON 资源与事件流，回滚分页、模式、昵称变更等均为 JSON",
+    "提供单容器部署与多架构（amd64/arm64）发布镜像，操作接口为 bin/grappa CLI"
+   ],
+   "use_cases": [
+    "从手机或浏览器访问常驻 IRC 会话，界面保持 irssi 形态",
+    "在任意 VPS 上自托管 IRC bouncer，配合自有 ircd（仅需 CAP LS + SASL）使用",
+    "需要服务端统一持有已读状态与回滚记录的 IRC 部署"
+   ]
+  },
+  "sha": "abe4dc83879b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a326a36e5e48": {
+  "identity": {
+   "one_liner": "SSMS 22 的开源扩展套件，集成架构浏览、格式化与监控面板",
+   "review": "SQLExtended 是面向 SQL Server Management Studio 22 的免费开源 VSIX 扩展，提供架构浏览与搜索、基于 ScriptDom 的 T-SQL 格式化、IntelliSense 补全、四个实时监控面板、按文件夹导出架构以便 diff，以及结果网格工具。需要 Windows 与 .NET Framework 4.8；仅支持 SSMS 22，部分功能通过反射访问 SSMS 内部接口，官方无公开 API，SSMS 升级可能使相关路径失效。",
+   "highlights": [
+    "提供架构缓存驱动的对象浏览、SQL Search 全文搜索（基于 SQLite 索引）与 F12 打开定义",
+    "包含基于 ScriptDom 的 T-SQL 格式化器，支持预设与单规则应用（大小写、分号、去括号等）",
+    "提供 Performance、Agent Jobs、Always On、Replication 四个实时监控面板，仅实时显示不持久化"
+   ],
+   "use_cases": [
+    "需要在 SSMS 22 中搜索对象名、列与模块定义的数据库开发者",
+    "需要将数据库架构导出为无时间戳的文件夹树以便工具对比的服务器管理员",
+    "需要在多服务器多数据库上并行执行同一脚本并合并结果的运维团队（ScriptCast）"
+   ]
+  },
+  "sha": "a326a36e5e48",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49c1441dc883": {
+  "identity": {
+   "one_liner": "SurrealDB 的 Kotlin 框架库，含连接 API 与对象映射两层实现",
+   "review": "KSDB 是面向 Kotlin 的 SurrealDB 库，分两部分：API 层以抽象类 SurrealDB 处理同步/异步连接与请求（每个函数返回 Task）；框架层通过 TableHandler 与 @Table/@Id 注解实现记录到对象的自动映射，支持增删改查、Query 过滤、实体关系，以及 Crypto/Random/Session/Math 等字段注解。适用于需要在 Kotlin 项目中以 ORM 方式操作 SurrealDB 的开发者。MIT 许可，随机数与日期适配等功能仍在待办清单中。",
+   "highlights": [
+    "API 层提供同步与异步两种连接方式，函数返回 Task 或 CompletableFuture",
+    "TableHandler 支持 @Table/@Id 注解的实体自动映射、按 ID 或 Query 查找、删除与更新",
+    "提供 Crypto、Random、Session、Math 等字段注解，调用 SurrealQL 内置函数"
+   ],
+   "use_cases": [
+    "Kotlin 项目中通过对象映射方式读写 SurrealDB 记录",
+    "使用字段注解自动生成哈希、随机值或调用数据库数学函数",
+    "执行自定义 SurrealQL 查询及按条件过滤实体"
+   ]
+  },
+  "sha": "49c1441dc883",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "57f060a0526c": {
+  "identity": {
+   "one_liner": "OceanBase 4.x MySQL 模式 SQL 解析器，纯 Go 实现并支持版本门控。",
+   "review": "该项目用 goyacc 移植 OceanBase 官方 Bison 文法，纯 Go 解析 MySQL 模式 SQL，输出带源码 Span 的类型化 AST，支持 round-trip 重建、JSON 双向序列化和按 OceanBase 版本限定语法面的特性门控，面向需要在 Go 程序中解析 OceanBase SQL 的集成方。已实现官方 4.2.5 文法全部 91 个 stmt 分支；不支持全裸用户名@主机写法，部分语法为超集。",
+   "highlights": [
+    "通过 WithVersion 按版本区间做特性门控，拒绝目标版本之外的语法",
+    "提供 parse->format->parse 幂等的规范重建、多行缩进输出、Visitor 遍历与 JSON 双向序列化",
+    "语句级与表达式级精确 [Start,End) 源码位置，运行期零外部依赖"
+   ],
+   "use_cases": [
+    "在 Go 程序中解析、遍历或重建 OceanBase MySQL 模式 SQL",
+    "需要针对特定 OceanBase 版本（如 4.2.5）做语法校验的集成场景",
+    "对 SQL 文本进行格式化、JSON 序列化处理或构建分析工具"
+   ]
+  },
+  "sha": "57f060a0526c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

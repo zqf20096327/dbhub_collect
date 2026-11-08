@@ -2769,5 +2769,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7f5d73af66e7": {
+  "identity": {
+   "one_liner": "Realm Flutter 与 Dart SDK 的官方示例代码集合仓库",
+   "review": "该仓库包含演示 Realm Flutter SDK 和 Realm Dart SDK 用法的多个示例项目，涵盖本地 Realm 数据库、集合变更订阅以及与 Atlas Device Sync 的 Flexible Sync 数据同步。面向使用 Realm 包构建 Flutter 或 Dart 应用的开发者，官方主 SDK 代码位于 realm-dart 仓库。",
+   "highlights": [
+    "包含本地 Realm 使用的 Dart 控制台示例（Realm Dart sample）",
+    "提供 Flutter 与 Dart 两种 Flexible Sync 示例，演示与 Atlas App Services 的设备同步",
+    "包含订阅 Realm 集合变更的 Time Track 示例与预置 realm 文件的 Bundled realm 示例"
+   ],
+   "use_cases": [
+    "初次接触 Realm SDK 的开发者参考 Quick Start 及示例上手",
+    "需要将 Flutter 应用数据持久化到本地 Realm 的场景",
+    "需要通过 Atlas Device Sync 将设备数据同步到 Atlas App Services 的场景"
+   ]
+  },
+  "sha": "7f5d73af66e7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fa36f8789e0": {
+  "identity": {
+   "one_liner": "Dgraph 备份恢复 CLI 工具，通过 AWS S3 存取备份归档",
+   "review": "dgbr 是一个用 Go 编写的命令行工具，用于将 Dgraph 数据库备份到 AWS S3 存储桶或从中恢复。备份流程为：请求 Dgraph 导出数据库、打包归档并上传至 S3；恢复则从 S3 下载归档，解压后通过 live loader 导入数据和 schema。适用于需要管理 Dgraph 备份的运维人员，需提供 AWS 密钥、存储桶和区域参数；备份要求 Dgraph alpha 启动时指定 export 路径并具备相应读写权限。README 说明该项目已用于生产环境并计划持续维护。",
+   "highlights": [
+    "backup 子命令将 Dgraph 导出数据打包为 zip 并上传至指定 S3 存储桶",
+    "restore 子命令从 S3 下载归档，解压后通过 live loader 导入数据与 schema",
+    "支持通过 cron 脚本配置周期性（如每小时、每日）备份"
+   ],
+   "use_cases": [
+    "对运行中的 Dgraph 数据库执行定期 S3 远程备份",
+    "从 S3 存储桶中的 zip 归档恢复 Dgraph 数据库和 schema",
+    "结合 cron 实现小时级或日级的自动化备份任务"
+   ]
+  },
+  "sha": "9fa36f8789e0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cff66e181d74": {
+  "identity": {
+   "one_liner": "Rust 语言的 Redis 客户端库，提供简化 API 与自动连接/订阅恢复机制",
+   "review": "simple_redis 是一个 Rust 库，为常见 Redis 操作提供简化 API，通过单一 client 接口访问全部功能，无需并行管理连接与 pubsub 实体。它在每次操作前校验内部连接，出错时自动重连；pubsub 消息获取出错时自动重建订阅。代价是每步操作的 PING 开销。安装方式为在 Cargo.toml 中添加依赖，当前版本 0.6.5，采用 Apache 2 许可证。",
+   "highlights": [
+    "提供覆盖常见 Redis 操作的简化 API，全部通过单一 client 接口访问",
+    "每次操作前校验内部连接，连接异常时自动分配新连接",
+    "pubsub 拉取消息出错时自动重建内部 pubsub 并重新发起订阅请求"
+   ],
+   "use_cases": [
+    "Rust 项目中执行常见 Redis 操作（如通过 create 连接后读写数据）",
+    "需要 Redis 发布/订阅流程并希望错误后自动恢复订阅的场景",
+    "希望以单一客户端接口使用 Redis、不自行管理连接生命周期的应用"
+   ]
+  },
+  "sha": "cff66e181d74",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2dec6159eb94": {
+  "identity": {
+   "one_liner": "基于微服务架构的 StackOverflow 克隆问答系统",
+   "review": "SmoresUnderflow 是一个以问答社区 StackOverflow 为原型复刻的项目，采用 Koa、MongoDB、Redis、Elasticsearch、RabbitMQ、Nginx 等组件构建的微服务架构，前端使用 React。功能包括带邮箱验证的用户注册、发布带媒体的问题与回答、投票及按时间戳等条件搜索过滤。README 提供基于 Ansible 与 PM2 的部署说明，并给出 MongoDB 分片、Redis 缓存与 ELK 栈的实例部署建议。",
+   "highlights": [
+    "支持带邮箱验证的用户注册、发布含媒体的问题与回答、投票功能",
+    "支持按时间戳、查询、数量等条件对问题进行搜索与过滤，搜索由 Elasticsearch 实现",
+    "使用 PM2 管理进程、Nginx 负载均衡、RabbitMQ 消息队列，并提供 Ansible 部署 playbook"
+   ],
+   "use_cases": [
+    "学习微服务架构下问答类应用的组件组合与部署方式",
+    "参考 MongoDB 分片集群、Redis 缓存与 ELK 栈的实例部署方案",
+    "作为问答社区功能的实现样例，如注册验证、投票、搜索过滤等"
+   ]
+  },
+  "sha": "2dec6159eb94",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "40569675d3ba": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 MongoDB 的酒店/机票预订应用",
+   "review": "这是一个用于 DBMS 课程的票务预订应用，支持酒店与航班预订。用户端提供预订、取消与查看已订酒店功能；管理端支持添加酒店、办理客户入住/退房并统计客户数。技术栈为 Node.js、Express.js、MongoDB、Mongoose，集成 Passport.js 实现登录认证，用户需登录后才能预订。README 注明尚未加入交易功能。",
+   "highlights": [
+    "用户端支持预订酒店、取消酒店和查看已订酒店",
+    "管理端通过 /hotelAdmin 路由添加酒店，通过 /manage-page/:id 路由按唯一 id 查看入住/退房客户记录",
+    "使用 Passport.js 实现登录与注册认证，登录后方可预订"
+   ],
+   "use_cases": [
+    "DBMS 课程项目演示",
+    "酒店预订与入住管理流程练习",
+    "Node.js + MongoDB Web 后端开发学习参考"
+   ]
+  },
+  "sha": "40569675d3ba",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "559d7138a9bc": {
+  "identity": {
+   "one_liner": "面向 .NET 的嵌入式面向对象数据库，以 XML/JSON 等可读文件存储",
+   "review": "XOD 是一个运行于 .NET 8/9 的嵌入式数据库库，对象直接存入 XML、JSON 或 Brotli 压缩二进制文件，类定义即模式，无需安装服务器。写入带预写日志（.xwal）保证事务性。适用于拥有自身数据目录的桌面应用或单进程服务；多个进程同时写同一库、高频单行写（README 注明 SQLite 约快十倍）及复制/集群场景不适用。",
+   "highlights": [
+    "支持 XML、JSON、Brotli 压缩二进制三种存储格式，XodMigrator 可在不加载模型程序集的情况下转换格式",
+    "提供主键、唯一键、二级索引、事务与预写日志、AES-256-GCM 属性加密、流式分页查询及一/多对多连接",
+    "进程内并发模型为多读者加排队写者，附带统计、转换、加密的命令行工具"
+   ],
+   "use_cases": [
+    "桌面应用或无服务器环境中需要数据文件可 diff、可备份、可提交的应用",
+    "批量导入、按键查找、索引查询和分页为主要负载的场景",
+    "以文件夹形式整体拷贝或纳入版本管理的数据存储"
+   ]
+  },
+  "sha": "559d7138a9bc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "719e6c051aa1": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的学习模式插件，将工作内容转为可复习、可纠正的本地解释。",
+   "review": "dsh-explain 是 DeepSeek Harness（DSH）的学习模式插件，把已完成的回答中的概念转换为结构化解释，并通过本地 SQLite 进行间隔复习调度。它使用独立的辅助模型调用与调度器，不改动主 agent。数据存储在 $DSH_HOME 下，可查看、纠正或遗忘模型推断。需 Node.js >=24.9，通过 DSH 插件机制安装，MIT 协议。",
+   "highlights": [
+    "将完成回答或选中文本转为可编辑的 /explain 草稿，支持自动评估与复习调度（recall/application/distinction 三级）",
+    "学习数据本地存储于 SQLite，提供带版本导出、类型确认清除及推断纠正机制（显式偏好→用户纠正→模型推断）",
+    "通过官方 DSH 扩展点实现，无需修补 DSH，已在 29 个 DSH 源版本上运行 108 项测试"
+   ],
+   "use_cases": [
+    "希望在本地持续记录并复习工作中遇到的概念与术语的开发者",
+    "需要查看并纠正模型对个人偏好与熟悉度的推断的用户",
+    "使用 DSH Web 并希望以辅助模型驱动间隔复习的工作流"
+   ]
+  },
+  "sha": "719e6c051aa1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

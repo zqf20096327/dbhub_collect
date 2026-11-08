@@ -2965,5 +2965,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "68cab271fd98": {
+  "identity": {
+   "one_liner": "Space Merchant Realms 太空游戏的开源游戏引擎",
+   "review": "这是太空贸易游戏 Space Merchant Realms 的开源引擎，基于 PHP8 与 MySQL 实现，通过 Docker Compose 部署 traefik、smr、smtp 等服务，并用 flyway 管理数据库补丁。适合想自建 MMO 风格网页游戏的开发者或 SMR 玩家。管理员账号需注册后运行脚本赋权，创建游戏依赖 Universe Generator 工具并手动启用。",
+   "highlights": [
+    "通过 Docker Compose 运行，使用 flyway 进行 MySQL 数据库初始化与版本补丁管理",
+    "基于 PHPUnit 的单元与集成测试体系，集成测试通过 BaseIntegrationSpec 在测试后清理数据表",
+    "内置 Universe Generator 工具用于生成游戏宇宙，并通过 postfix/OpenDKIM 服务发送注册码等邮件"
+   ],
+   "use_cases": [
+    "自托管运行 Space Merchant Realms 太空游戏服务器",
+    "参与引擎二次开发与贡献代码（附编码规范与测试指南）",
+    "在本地通过 phpMyAdmin 检查与调试游戏数据库"
+   ]
+  },
+  "sha": "68cab271fd98",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "103dd797304c": {
+  "identity": {
+   "one_liner": "Rust + SQLite 实现的 Halogen LLM 推理服务器实时监控仪表盘",
+   "review": "该项目为 Halogen LLM 推理服务器提供实时仪表盘。单进程 Rust Collector 每秒读取 Halogen 的 /metrics，历史数据存入 SQLite，并将实时数据推送到 Svelte 网页；展示状态、吞吐、KV 池、缓存命中等指标，支持 Live 到 30 天的时间范围。限制：因 Halogen 每次被读取会重置吞吐计数器，Collector 必须是唯一读取者，不可再为 Halogen 添加 Prometheus 抓取任务。提供 Docker Compose 部署和内置模拟器。",
+   "highlights": [
+    "单进程 Rust Collector 每秒读取 Halogen /metrics，历史存入 SQLite，实时推送至网页",
+    "展示状态/吞吐/KV 池/缓存命中率等指标，时间范围覆盖 Live 至 30 天，Outages 显示为间隙、Restarts 显示为标记",
+    "提供 fake-halogen 模拟器与 Docker Compose 部署，支持深浅主题"
+   ],
+   "use_cases": [
+    "监控 Halogen LLM 推理服务器的运行状态与性能指标",
+    "查看历史时间段（最长 30 天）的推理吞吐、KV 池与缓存表现",
+    "无需真实服务器时用内置模拟器演示或开发仪表盘"
+   ]
+  },
+  "sha": "103dd797304c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "55c786caf98f": {
+  "identity": {
+   "one_liner": "React Native + Firebase Firestore CRUD 教程示例应用",
+   "review": "该仓库是配套 React Native Firestore CRUD 教程的示例项目，基于 React Native 构建，可运行于 Android 与 iOS。README 主体为通用的 React Native 运行指引：启动 Metro 开发服务器、通过 npm/Yarn 构建运行应用、iOS 需先执行 bundle install 与 pod install 安装 CocoaPods 依赖，并支持 Fast Refresh 热更新。适合跟随教程学习 Firestore 增删改查的开发者，但 README 本身未包含 CRUD 具体实现细节。",
+   "highlights": [
+    "提供 Android 与 iOS 双平台的构建与运行命令（npm/Yarn）",
+    "支持 Fast Refresh，保存后自动更新应用界面",
+    "iOS 端包含 CocoaPods 依赖安装流程说明"
+   ],
+   "use_cases": [
+    "跟随教程学习 React Native 与 Firestore 的 CRUD 操作",
+    "作为 React Native 移动应用开发的起步模板",
+    "在 Android 模拟器、iOS 模拟器或真机上运行示例应用"
+   ]
+  },
+  "sha": "55c786caf98f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "80beb716c2ab": {
+  "identity": {
+   "one_liner": "基于 NestJS 的自托管媒体下载 API，用队列与 SSE 跟踪任务",
+   "review": "Snagbox 是一个可自托管的下载服务，将公开 URL 转为媒体文件：提交任务后经 Redis（或内存）队列处理，通过 SSE 查看进度，用带签名过期参数的链接取回文件。面向需要 API 化下载能力的开发者，支持视频/音频、字幕、缩略图、时间裁剪等选项，配有 API key、限流与 HMAC 回调机制；需 Postgres，Node 22 运行，作者提示使用者自行遵守各站点条款与版权法。",
+   "highlights": [
+    "支持单条与批量下载任务，队列使用 Redis，未配置时回退到内存",
+    "提供 SSE 进度事件、Prometheus 指标、结构化日志与 HMAC 签名的完成回调",
+    "支持本地磁盘或 S3 兼容存储（含 R2/MinIO），文件链接带过期时间与签名"
+   ],
+   "use_cases": [
+    "自托管下载 API，通过 REST 接口为应用或前端提供媒体文件",
+    "需要批量下载与任务进度跟踪的自动化流程",
+    "部署于 Docker Compose 或 Railway 的私有下载服务"
+   ]
+  },
+  "sha": "80beb716c2ab",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "91dfc61ccae2": {
+  "identity": {
+   "one_liner": "TypeScript 编写的模型/集合库，支持 MongoDB、CouchDB 等多数据库",
+   "review": "Octonom 是一个用 TypeScript 编写的模型与集合库，采用模型与集合分离的设计：模型带 schema、支持实例校验、不依赖具体存储；集合负责与数据库读写，并将原始数据库对象与类型化模型实例相互映射，内置 MongoCollection、CouchCollection 等。适用于 NodeJS 与浏览器环境，类可通过继承扩展。",
+   "highlights": [
+    "模型为带类型属性的 TypeScript/ES6 类，实例可校验，与具体存储方式解耦",
+    "集合负责数据库读写，自动在原始数据对象与模型实例之间映射",
+    "支持多数据库（如 MongoDB、CouchDB），可在 NodeJS 和浏览器中运行"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中以类模型方式操作文档数据库数据",
+    "需要在多数据库间保持模型层复用、统一数据访问接口的场景",
+    "需要可校验的类型化模型并与持久层解耦的应用开发"
+   ]
+  },
+  "sha": "91dfc61ccae2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

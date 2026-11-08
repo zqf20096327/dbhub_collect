@@ -2248,5 +2248,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8028542359b6": {
+  "identity": {
+   "one_liner": "PostgreSQL 数据分层扩展，单表透明跨越热分区与 Iceberg 冷存储",
+   "review": "pgEdge ColdFront 是运行在 PostgreSQL 内部的数据分层与分区生命周期管理工具：一张表的热数据存于 PostgreSQL 分区，旧数据存到 S3 兼容、Azure 或 GCS 上的 Apache Iceberg。它重写每条 SQL 语句到对应层，应用看到单一关系，冷层可读可写。当前为 BETA 版本，README 标明不用于生产。支持 PostgreSQL 16/17/18，依赖 pg_duckdb 与 Lakekeeper 目录，提供 archiver、partitioner、compactor 命令行工具。",
+   "highlights": [
+    "在 PostgreSQL 内重写 SELECT/INSERT/UPDATE/DELETE 到对应存储层，应用侧呈现单一关系",
+    "冷数据以 Apache Iceberg 格式存于 S3 兼容、Azure 或 GCS 对象存储，冷层可读写",
+    "设置存储在服务器内，无独立配置文件；含 archiver、partitioner、compactor 三个命令行工具"
+   ],
+   "use_cases": [
+    "需要将表中较旧行归档到对象存储 Iceberg、同时在 PostgreSQL 保留近期行的场景",
+    "使用 pgEdge Spock 多节点部署且需要分区生命周期管理的环境",
+    "通过 Docker Compose（含 SeaweedFS local-store 配置）搭建开发测试环境进行评估"
+   ]
+  },
+  "sha": "8028542359b6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "86f686f01917": {
+  "identity": {
+   "one_liner": "从 CSV/SQLite/JSON/Parquet 生成并验证 ISO 20022 pain.001/pain.008 支付文件的 Python 工具",
+   "review": "Pain001 是一个 Python 库（3.11+），从 CSV、SQLite、JSON、JSONL、Parquet 等表格数据生成 pain.001 与 pain.008 XML，写入前经捆绑的 XSD 验证，并提供 CLI、REST API、MCP 与 LSP 服务。适合需要在本地构建支付文件管线并自行对接银行的开发者。注意它不做真实结算或银行连通，XSD 通过不等于银行接受。",
+   "highlights": [
+    "支持 pain.001.001.03–13 和 pain.008.001.02/.08 的 XML 生成，输出前经捆绑 XSD 验证，并支持流式分块生成并重算控制总额",
+    "提供 CLI、REST API（pain001 serve）、MCP 服务、CSV 语言服务器，以及 pain.002/camt.053 的解析与合成构建",
+    "可通过插件扩展加载器、校验器与 scheme（XLSX、MT101），支持 CEL 规则、XML-DSig 签名、SFTP 上传等可选 extras"
+   ],
+   "use_cases": [
+    "从 CSV、SQLite、JSON 或 Parquet 数据批量生成符合 XSD 的 ISO 20022 支付/直接借记文件",
+    "搭建包含 CLI、REST 或 MCP 接口的支付文件处理管线，用于本地测试与校验流程",
+    "用 mockbank 合成 pain.002 回执与 camt.053 报文做测试，或将 pain.001 投影为 Open Banking/NextGenPSD2 JSON"
+   ]
+  },
+  "sha": "86f686f01917",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4e38dee5af92": {
+  "identity": {
+   "one_liner": "基于 Firebase REST API 的 Lua 数据库绑定库",
+   "review": "lua-firebase 为 Lua 提供 Firebase 数据库的 REST 绑定，实现 get/put/post/patch/delete 五个数据操作函数，并包含邮箱登录、注册、刷新令牌、删除账号、改密码/邮箱等认证函数。依赖 luarocks 安装的 http 和 lua-cjson，仅能在类 Unix 系统（Linux、macOS 等）上运行，lua-http 无法安装的平台不可用。",
+   "highlights": [
+    "提供 get/put/post/patch/delete 五个数据库操作函数，数据可传入 Lua 表或 JSON 字符串",
+    "包含邮箱注册、登录、刷新 ID 令牌、修改密码/邮箱、删除账号等认证函数",
+    "支持解码标志（dflag）控制返回 Lua 表或 JSON 字符串"
+   ],
+   "use_cases": [
+    "在 Lua 程序中通过 REST API 读写 Firebase 实时数据库",
+    "需要以邮箱方式管理 Firebase 用户账号（注册、登录、改密等）",
+    "运行于 Linux/macOS 等类 Unix 环境的 Lua 项目接入 Firebase"
+   ]
+  },
+  "sha": "4e38dee5af92",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8ada3fa6b22": {
+  "identity": {
+   "one_liner": "基于 Next.js、FastAPI 与 OceanBase 的公共自行车租赁管理课程实验系统",
+   "review": "该项目是西安交通大学《数据库前沿技术》课程的本地开发作业，实现城市公共自行车租赁管理业务，包含用户与射频卡管理、租车/还车、充值与历史记录等功能，并提供 B+ 树、冲突可串行性判别、Paxos 模拟等算法的独立实现与测试。支持 SQLite 快速预览和 Docker 部署 OceanBase 两种运行方式。README 说明其包含演示账户与模拟数据，未接入真实支付与硬件，正式实验需自行在 OceanBase 上运行十万级关联数据并记录结果。",
+   "highlights": [
+    "提供 Next.js 管理前端、FastAPI REST API 与 OceanBase MySQL 数据模型，包含六张业务表的建表 SQL 及 CRUD、JOIN、在线结构变更、逻辑备份恢复脚本",
+    "支持 SQLite 本地预览与 Docker Compose 部署 OceanBase 两种运行方式，后端首次启动自动建库建表并插入演示数据",
+    "包含 B+ 树、冲突可串行性判别、Single-Decree Paxos 模拟、散列索引演示的独立实现，附带 pytest 自动化测试与索引查询延迟对比实验页面"
+   ],
+   "use_cases": [
+    "数据库课程作业：在 OceanBase 上完成索引性能、高并发、在线变更与备份恢复等实验",
+    "本地体验前后端：用 SQLite 模式快速运行租车流程演示页面",
+    "教学演示：运行 B+ 树、可串行性判别、Paxos 等算法脚本并查看自动化测试"
+   ]
+  },
+  "sha": "c8ada3fa6b22",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

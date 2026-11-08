@@ -2700,5 +2700,203 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "61480db4aa99": {
+  "identity": {
+   "one_liner": "基于 chubbyphp-framework 的 Petstore API 骨架项目",
+   "review": "该项目是一个用于构建 API 的 PHP 骨架（skeleton），基于 chubbyphp-framework，并附带 Docker 与 Keycloak 环境。它提供 Pet 资源的完整 CRUD 接口、OIDC 认证、Swagger/OpenAPI 文档端点以及 PostgreSQL 数据访问，代码按 Collection、Dto、Model、ORM、Parsing、Repository、RequestHandler、ServiceFactory 分层组织。适用于希望参照现成目录结构与配置方式搭建 API 项目的 PHP 8.3+ 开发者，也可用于了解 chubbyphp 组件体系与 Keycloak OIDC 集成的实际用法。需注意 README 中的示例密码与密钥为开发环境默认值。",
+   "highlights": [
+    "提供 Pet 资源的 CRUD 接口（GET/POST/PUT/DELETE）及分页、排序、过滤的集合查询",
+    "/api 路由通过 chubbyphp-oidc 保护，集成 Keycloak 作为身份提供方，支持授权码流+PKCE 与密码授予两种客户端",
+    "提供 Swagger/OpenAPI 文档端点，并通过 docker compose 编排 php、Keycloak、PostgreSQL 等容器"
+   ],
+   "use_cases": [
+    "以该骨架为起点创建基于 chubbyphp-framework 的 PHP API 项目",
+    "参考其目录分层与 OIDC/Keycloak 配置实现 API 认证方案",
+    "在 Docker 环境中演示和测试包含数据库、认证与日志的完整 API 栈"
+   ]
+  },
+  "sha": "61480db4aa99",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d4ba2383990e": {
+  "identity": {
+   "one_liner": "基于 Dropwizard 的可定制用户管理 REST API 服务",
+   "review": "Thunder 是一个用户管理 REST API 服务，面向需要在应用中管理用户数据的开发者。它将用户数据存储于 AWS DynamoDB 或 MongoDB，提供 CRUD 接口，并通过 AWS SES 实现邮箱验证。用户属性可自定义并带校验，支持 Basic Auth 与 OAuth 2.0 认证，服务端对密码做哈希处理。项目通过 Maven 构建，提供 Docker 镜像与 Helm Chart，可本地运行或部署在 Kubernetes 上。",
+   "highlights": [
+    "提供用户 CRUD 操作的 REST API，后端支持 AWS DynamoDB 或 MongoDB",
+    "内置基于 AWS SES 的邮箱验证流程，邮件内容可自定义",
+    "生成 OpenAPI (Swagger) 规范，包含 metrics 与 healthchecks，支持 Basic Auth 和 OAuth 2.0"
+   ],
+   "use_cases": [
+    "需要统一管理应用用户数据（创建、查询、更新、删除）并做密码存储的服务",
+    "需要邮箱验证注册流程的用户系统",
+    "在 Kubernetes 环境中通过 Helm Chart 部署用户管理服务"
+   ]
+  },
+  "sha": "d4ba2383990e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6dae449d5702": {
+  "identity": {
+   "one_liner": "纯 Python 实现的 CUBRID 数据库 DB-API 2.0 驱动，支持 asyncio 与 SSL/TLS",
+   "review": "pycubrid 是面向 CUBRID 数据库的纯 Python 驱动，实现 PEP 249（DB-API 2.0）接口，供需要在 Python 中连接 CUBRID 的开发者使用。它直接实现 CUBRID CAS 协议，无需编译 C 扩展，通过 pip 安装即可使用；另提供 pycubrid.aio 异步接口。需运行 Python 3.11+，且 CUBRID 服务器（10.2+）需自行部署。注意线程安全级别为 1，连接不可跨线程共享，参数风格为 qmark。",
+   "highlights": [
+    "实现 PEP 249 (DB-API 2.0) 接口，含完整标准异常层级、类型对象与游标接口，支持同步与 asyncio 异步连接",
+    "支持 SSL/TLS（sync 与 async），可通过 ssl=True 或自定义 SSLContext 启用；支持 CLOB/BLOB 读写与 executemany 批量操作",
+    "纯 Python 实现，直接连接 CUBRID CAS 协议，无需编译；带 py.typed 标记（PEP 561），CI 验证覆盖 CUBRID 10.2/11.0/11.2/11.4"
+   ],
+   "use_cases": [
+    "Python 应用程序通过 DB-API 2.0 标准接口连接和操作 CUBRID 数据库",
+    "基于 asyncio 事件循环的高并发应用，需要异步数据库连接（pycubrid.aio）",
+    "需要加密连接的场景：通过 ssl=True 或自定义 SSLContext 启用 TLS（最低 TLS 1.2）"
+   ]
+  },
+  "sha": "6dae449d5702",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3ac0b3f2dede": {
+  "identity": {
+   "one_liner": "面向 Go-Kratos 微服务生态的代码生成工具集，含 CLI 与 Wails 桌面端",
+   "review": "GoWind Toolkit 包含 gow CLI 与基于 Wails（Go + Vue 3）的桌面应用，用于 Go-Kratos 微服务开发：支持项目脚手架、从数据库 Schema 生成 Ent/GORM 模型与 gRPC/REST Proto 定义及 Wire 注入、从 OpenAPI 生成 Vue3/React 前端管理页、watch 热重载运行、DDL 逆向导出迁移文件。数据源支持 MySQL/PostgreSQL 连接串与 DDL 文本，SQLite 需先导出 DDL 再导入。适用于使用 Kratos 框架的 Go 后端团队。",
+   "highlights": [
+    "通过 gow CLI 与桌面 UI 支持项目脚手架、服务添加、数据库驱动 CRUD 代码生成（Ent/GORM、protobuf gRPC/REST、Wire）",
+    "基于 OpenAPI 3.0 生成 Vue 3 + Element Plus、Vue 3 + Vben Admin、React + Ant Design Pro 三种前端管理页代码，CLI 与桌面端共用同一生成引擎",
+    "gow run --watch 监听文件变更仅重建受影响服务，编译失败保持旧进程；gow migrate 离线导出 ent schema 为 DDL，--versioned 模式生成 atlas/golang-migrate/goose/flyway/liquibase 等格式的增量迁移"
+   ],
+   "use_cases": [
+    "基于 Go-Kratos 的微服务项目创建、服务添加与日常开发运行（热重载、编译、环境检查）",
+    "从 MySQL/PostgreSQL Schema 或 DDL 文件批量生成后端 ORM 模型、Proto 定义与前端 CRUD 管理页面",
+    "将 ent schema 导出为 DDL 基线或对接真实数据库生成版本化迁移脚本，以及通过 gow extract 拆分服务模块"
+   ]
+  },
+  "sha": "3ac0b3f2dede",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e30626ba115": {
+  "identity": {
+   "one_liner": "基于 Node.js、Express 与 MongoDB 的餐厅网站应用",
+   "review": "这是一个使用 Node.js 与 MongoDB 构建的餐厅网站应用，采用 MVC 概念组织代码，数据层包含用户、食物、饮品、餐桌、厨师、服务员、客户、订座与账单等集合的 schema。README 提供安装步骤：npm install 安装依赖、创建 restaurant 数据库，并可用 seeder 脚本写入假数据。适合作为餐厅业务场景的学习与参考项目。",
+   "highlights": [
+    "基于 Node.js、Express、MongoDB 与 HTML5/CSS3 技术栈",
+    "采用 MVC 架构组织代码",
+    "提供 seeder 脚本生成假数据，定义 9 类数据 schema（用户、食物、饮品、餐桌、厨师、服务员、客户、订座、账单）"
+   ],
+   "use_cases": [
+    "学习 Node.js + MongoDB + MVC 的 Web 应用结构",
+    "参考餐厅食物、餐桌、订座、账单等数据模型设计",
+    "运行演示用餐厅网站应用"
+   ]
+  },
+  "sha": "1e30626ba115",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "deab4afab7e9": {
+  "identity": {
+   "one_liner": "C 实现的极简键值数据库，磁盘持久化叠加内存哈希表缓存",
+   "review": "Zu 是用 C 编写的键值数据库，数据持久化到本地二进制文件 dump.zdb，首次 get 访问时将条目载入内存哈希表实现 O(1) 查找，支持 LRU 淘汰、TTL 与缓存命中统计。提供交互式命令行和默认端口 1337 的 REST API。项目处于 Alpha 阶段，仅支持 POSIX 系统，配置需修改 config.h 后重新编译。",
+   "highlights": [
+    "数据自动持久化到二进制文件 dump.zdb，内存哈希表缓存提供 O(1) 平均查找",
+    "缓存采用 LRU 淘汰策略，条目带 TTL（默认 60 秒）、命中计数与最后访问时间",
+    "提供交互式命令行与 REST API（/health、/get、/set），内置 benchmark 和 cache_status 监控命令"
+   ],
+   "use_cases": [
+    "开发与实验环境中需要本地持久化键值存储的场景",
+    "学习 C 语言实现的缓存与数据库机制",
+    "通过 REST API 进行简单键值读写的小型服务集成"
+   ]
+  },
+  "sha": "deab4afab7e9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee6188050aa8": {
+  "identity": {
+   "one_liner": "本地 AI 会话归档工具，将多工具会话记录统一为可检索档案",
+   "review": "Polylogue 将本地 AI 工具（Claude Code、Codex、Gemini CLI 等）的会话文件及 ChatGPT、claude.ai 等网页聊天的导出数据，保留原始字节并解析为统一的会话与谱系模型，供人和代理通过命令行、MCP 或 Web 工作台检索、阅读与标注。支持独立 SQLite 运行或 Sinex 主模式部署，守护进程读取工具自身数据无需配置。",
+   "highlights": [
+    "读取各 AI 工具原生写入的数据文件，运行守护进程即可自动采集，网页聊天通过数据导出和浏览器扩展导入",
+    "所有命令同时提供 CLI、MCP 和 HTTP 接口，代理与用户使用相同功能",
+    "提供查询语言（如 repo:、since: 过滤）、全文搜索、注解，以及 demo tour 示例归档"
+   ],
+   "use_cases": [
+    "将分散在不同 AI 工具（编码代理、网页聊天）中的会话历史集中为本地可审计档案",
+    "为 AI 代理提供 MCP 接口，从历史归档中检索上下文用于新会话",
+    "按仓库、时间等条件查询并检索历史会话内容"
+   ]
+  },
+  "sha": "ee6188050aa8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29c3f6c7199c": {
+  "identity": {
+   "one_liner": "基于 RAG 的企业交互式操作手册平台，AI 回答引用内部文档来源",
+   "review": "该项目是一个企业操作手册 Web 平台：用户按角色和所属区域查看流程并逐步执行，AI 助手基于内部文档做 RAG 问答并注明来源。权限过滤在数据库层（PostgreSQL + pgvector）于模型读取内容之前执行。前端 Next.js，后端 NestJS，AI 调用 Amazon Bedrock，部署于 AWS。MIT 许可，支持 Docker Compose 本地启动。",
+   "highlights": [
+    "AI 助手采用 RAG 方式仅基于内部文档作答，并在回答中引用来源文档",
+    "权限过滤在数据库层实现，在模型读取内容之前生效",
+    "支持 PDF 与文本文档的上传和处理，提供三种角色（管理员、主管、员工）与区域划分"
+   ],
+   "use_cases": [
+    "企业内按部门分发操作流程，员工按步骤执行并记录进度",
+    "基于内部手册的受限问答场景，需要回答附带出处",
+    "文档内容需按用户权限过滤后再检索的项目"
+   ]
+  },
+  "sha": "29c3f6c7199c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb7a2557cdd1": {
+  "identity": {
+   "one_liner": "Hermes Agent 插件：主代理保持聊天响应，子代理后台执行并经校验、上报与记账。",
+   "review": "该插件为 Hermes Agent 提供委托治理能力：为主代理回合设 60/120 秒时间预算，30 秒后前台命令转入后台；为子代理附加对话、记忆与任务记录的结构化简报；对重复工具调用在第 3、5 次分别警告与停止；未带证据的完成报告会被标记核查，未上报结果通过消息注入追送。所有任务写入 SQLite 账本，每聊天保留 20 条、7 天。插件本身不调用模型。",
+   "highlights": [
+    "主代理回合 60/120 秒时间预算，超 30 秒的前台命令经 yield 机制转入后台",
+    "delegate_task 调用前检查简报（context <120 字符或文件冲突），通过后附加用户近 6 条消息、USER.md/MEMORY.md 及运行中子代理信息",
+    "跨整个运行追踪子代理工具调用，第 3 次重复警告、第 5 次停止并要求报告 blocked；决策型问题上报 needs_decision"
+   ],
+   "use_cases": [
+    "通过即时通讯应用与 Hermes 交互，需要聊天在长时间构建或调试期间保持响应的场景",
+    "多个子代理并行执行后台任务、需要避免文件冲突与重复循环的场景",
+    "网关可能中途重启、需要任务记录与中断任务事后告知的场景"
+   ]
+  },
+  "sha": "eb7a2557cdd1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

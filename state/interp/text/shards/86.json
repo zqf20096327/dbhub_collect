@@ -2778,5 +2778,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a41fa87a6633": {
+  "identity": {
+   "one_liner": "以 ring 局部性坐标为数据模型边界的文档/向量数据库，先定界再检索",
+   "review": "KoutenDB 是一个以局部性优先为设计核心的文档与向量数据库，用 Nim 编写。应用将相关数据放入显式 ring 坐标，检索时先在 ring 边界内取有界工作集，再执行精确余弦排序、过滤与投影，面向 RAG/AI 检索、租户级 Web 系统等已知读取范围的场景。README 包含可复现基准与 72 小时三节点浸泡测试记录；README 也注明能量实验为范围有限的结果。",
+   "highlights": [
+    "支持文档存储、向量检索（ring 定界后精确余弦排序）、子环 bundle 读取及过滤器/投影/排序",
+    "提供 CLI、嵌入式 Nim API、自托管服务器镜像，并发布 Rust/TypeScript/Python/PHP/C++/Go 驱动",
+    "README 附带基准、72 小时集群浸泡测试结果及复现命令；v0.12.0 记录 72 小时三节点磁盘持久化运行且校验通过"
+   ],
+   "use_cases": [
+    "RAG 与 AI 检索：在向量排序前先缩小候选集",
+    "租户/用户/产品等可命名作用域的应用数据读取",
+    "多关联子集的一次性 bundle 读取（如个人资料、订单、通知）"
+   ]
+  },
+  "sha": "a41fa87a6633",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9a01309b19a6": {
+  "identity": {
+   "one_liner": "用于下载美国交通部航班准点数据并加载MonetDB做基准测试的工具集",
+   "review": "该项目提供脚本自动化下载美国交通部统计局的航班准点与延误表格数据，经轻度清洗后按较规范的表结构载入数据库，并附带2000-2008年数据的基准查询及参考结果文件，用于DBMS测试。目前仅支持将数据加载到MonetDB，依赖bash、unzip、wget等Unix命令行工具，适用于需要在MonetDB上复现该数据集基准测试的用户。",
+   "highlights": [
+    "提供自动化脚本，完成数据下载、清洗与按schema加载入数据库",
+    "包含针对2000-2008年数据的基准查询集，并附带查询参考结果文件用于比对",
+    "通过 run_benchmark_queries.sh 运行基准查询，可用 diff 与 expected_results/ 目录比对验证结果"
+   ],
+   "use_cases": [
+    "在MonetDB上构建USDT航班准点数据集用于DBMS测试与基准测试",
+    "以参考结果文件校验查询执行的正确性",
+    "复现基于该数据集的数据库性能对比实验"
+   ]
+  },
+  "sha": "9a01309b19a6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0ca87c15d9ed": {
+  "identity": {
+   "one_liner": "SurrealDB 的独立 Go 客户端，通过 RPC WebSocket 接口访问数据库",
+   "review": "SDBC（SurrealDB Client）是面向 SurrealDB 多模型数据库的第三方 Go 客户端库，供需要以纯 Go 访问 SurrealDB 的开发者使用。它实现 SurrealDB 的 RPC（WebSocket）接口，覆盖 query、select、create、relate、live 等操作，并映射其多数数据类型。项目处于早期开发阶段，README 明确说明尚未稳定、不可用于生产环境。",
+   "highlights": [
+    "纯 Go 实现，不依赖 CGO",
+    "实现 SurrealDB 的 RPC（WebSocket）接口，支持 query、select、create、insert、update、upsert、relate、delete、live 等操作",
+    "支持 schema-full 与 schema-less 数据处理，覆盖 string、int、datetime、record 等数据类型（geometry、range 等尚未实现）"
+   ],
+   "use_cases": [
+    "Go 项目中通过 RPC 接口连接 SurrealDB 执行 SQL 风格查询与图关系操作",
+    "需要纯 Go 依赖（无 CGO）访问 SurrealDB 的场景",
+    "配合 SOM 直接使用的开发场景"
+   ]
+  },
+  "sha": "0ca87c15d9ed",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "39dd2230c8f0": {
+  "identity": {
+   "one_liner": "Rust 编写的内存多模型数据库，支持 Redis 协议、SQL 与 Cypher 查询引擎",
+   "review": "MemFlux 是一个用 Rust 编写的实验性内存多模型数据库，支持键值、JSON、列表/集合和属性图数据。可通过兼容 Redis 协议的服务器运行，也可经 C 兼容 FFI 嵌入 Python 等应用进程内使用。内置 SQL 与 Cypher 引擎并支持互相查询，采用 MVCC 实现快照隔离。项目处于 pre-alpha 阶段，存在崩溃与数据损坏风险，不适合生产环境。",
+   "highlights": [
+    "支持键值、JSON 文档、列表/集合与属性图多种数据模型，内置 SQL 与 Cypher 查询引擎，可在 SQL FROM 子句中嵌入 Cypher 查询",
+    "采用 MVCC 架构提供快照隔离，通过 WAL 与周期性快照实现可配置的持久化，支持 LRU/LFU/ARC 等内存淘汰策略",
+    "可作为 TCP 服务器（RESP 协议，默认监听 127.0.0.1:8360）运行，也可通过 C 兼容 FFI 嵌入应用内进程调用"
+   ],
+   "use_cases": [
+    "需要同时用 SQL 与 Cypher 查询关系型、JSON 与图数据的实验或学习项目",
+    "希望以 Redis 兼容客户端连接，或通过 Python（ctypes/FFI）在进程内直接操作内存数据库的场景",
+    "希望参与 Rust 数据库内核开发、贡献代码或研究 MVCC/WAL/查询执行器实现的开发者"
+   ]
+  },
+  "sha": "39dd2230c8f0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29c9158ee3d2": {
+  "identity": {
+   "one_liner": "本地优先桌面应用：同步游戏发售数据到本地库，记录通关日志并生成年度回顾",
+   "review": "Game Release Tracker 是一款基于 Electron、React、TypeScript、Fastify 与 SQLite 的本地优先桌面应用，面向玩家：从 IGDB 同步所关注发行商的即将发售游戏，记录通关日志与评分，提供随机选游戏功能，并将全年游玩数据整理为五章节可视化年度回顾。应用分窗口、引擎、桌面外壳三个进程，API 密钥经系统机制加密，支持 Windows 安装包与 Linux .deb/AppImage，无账号与云端依赖。",
+   "highlights": [
+    "从 IGDB API 同步发售数据到本地 SQLite 数据库，按月分组并支持按类型、平台过滤与手动添加",
+    "通关日志自动匹配 IGDB 封面与详情，年度回顾含五个章节并可导出为图片",
+    "575 项自动化测试，CI 在每次变更时构建并以新用户身份启动打包应用逐屏检查，提供 Windows 安装包与 Linux .deb/AppImage"
+   ],
+   "use_cases": [
+    "跟踪所关注发行商的即将发售游戏并设置倒计时",
+    "以日志形式记录已通关游戏的时间、平台、评分与笔记",
+    "无法决定玩什么时按类型、主题、平台、评分或年份随机抽取 IGDB 目录中的游戏"
+   ]
+  },
+  "sha": "29c9158ee3d2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

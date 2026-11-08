@@ -3161,5 +3161,203 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0f1fbcc3dc3b": {
+  "identity": {
+   "one_liner": "纯 Go 实现的 Yjs CRDT 移植，与 yjs 13.x 逐字节线格式兼容",
+   "review": "Ygo 是 Yjs CRDT 框架的纯 Go 移植，面向需要在自己的栈中实现多人协作编辑的 Go、iOS、Android 开发者。它逐字节兼容 yjs@13.6.33 的 V1/V2 线格式，通过 287 个跨语言 fixture 双向验证；内置 UndoManager、快照、子文档与可嵌入的 y-websocket 客户端。限制包括：Hocuspocus 暂不互通、Android 构建损坏、部分 Xml/Text 深度观察未实现。",
+   "highlights": [
+    "纯 Go、无 CGO，可在 go tool dist list 全部 47 个目标上以 CGO_ENABLED=0 编译（SQLite 存储与 yserve 除外，见平台限制）",
+    "V1/V2 线格式与 yjs@13.6.33 逐字节兼容，经 287 个跨语言 fixture 场景双向验证并在 CI 中运行",
+    "提供共享类型（Map/Array/Text/XML/Awareness）、UndoManager、快照、子文档、变更观察者，以及内置 SQLite 持久化与文档版本化的 y-websocket 单二进制服务器 yserve"
+   ],
+   "use_cases": [
+    "在 Go 后端或 CLI/机器人中读写、同步与 Yjs 客户端互通的协作文档",
+    "通过 gomobile 生成的 iOS xcframework，在 Swift/Kotlin 移动应用中嵌入离线优先的协作编辑能力",
+    "自托管 yserve 为 y-websocket JavaScript 客户端提供带 SQLite 持久化与版本化的同步服务，或多实例经 NATS 背板水平扩展"
+   ]
+  },
+  "sha": "0f1fbcc3dc3b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4156d927fce4": {
+  "identity": {
+   "one_liner": "针对湖仓存储系统的开源基准测试工具，改编 TPC-DS 对比三引擎",
+   "review": "LHBench 是一个面向湖仓存储系统的基准测试项目，运行于 AWS EMR，当前支持 Apache Iceberg、Apache Hudi 和 Delta Lake 三种存储引擎。它改编 TPC-DS 以测试端到端负载，包含四项测试，用于在统一环境下对比不同湖仓引擎的差异，适合需要评估湖仓存储方案与复现实验结果的数据工程师。",
+   "highlights": [
+    "包含 TPC-DS、TPC-DS Refresh、Merge 微基准和 Large File Count 四项测试，覆盖更新实现、元数据处理与端到端性能",
+    "运行在 AWS EMR（基于 Spark 3.3.0），数据存储于 AWS S3",
+    "支持 Apache Iceberg、Apache Hudi、Delta Lake 三种存储引擎，配套 CIDR 2023 论文与复现说明"
+   ],
+   "use_cases": [
+    "在 AWS EMR/S3 环境中对比 Delta Lake、Hudi、Iceberg 的端到端与更新性能",
+    "研究 CoW 与 MoR 更新策略在合并时间与查询延迟上的差异",
+    "通过大规模文件数测试考察各引擎的元数据处理方式"
+   ]
+  },
+  "sha": "4156d927fce4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "43e6667252eb": {
+  "identity": {
+   "one_liner": "面向 CUBRID 数据库的 SQLAlchemy 方言，提供 ORM、Alembic 迁移与异步支持",
+   "review": "这是 SQLAlchemy 2.0–2.1 版本的 CUBRID 数据库方言，供使用 Python 与 CUBRID 的开发者接入 ORM、模式反射和 Alembic 迁移。它通过 pycubrid 纯 Python 驱动或 CUBRIDdb C 扩展连接，支持同步与异步引擎。需自行运行 CUBRID 服务器（10.2–11.4）；不支持 RETURNING、序列和跨 schema 反射。",
+   "highlights": [
+    "支持 SQLAlchemy 2.0–2.1 API 与三种驱动选项：pycubrid、aiopycubrid（异步）、CUBRIDdb（C 扩展）",
+    "提供 CUBRID 特有 DML 构造（ON DUPLICATE KEY UPDATE、MERGE、REPLACE INTO）及标准/CUBRID 类型映射",
+    "内置 Alembic 迁移支持，并支持三种 CUBRID MVCC 隔离级别"
+   ],
+   "use_cases": [
+    "在 Python 应用中以 ORM 方式读写 CUBRID 数据库",
+    "使用 Alembic 对 CUBRID 数据库执行版本化 schema 迁移",
+    "在 asyncio 应用中通过 aiopycubrid 驱动进行异步数据库访问"
+   ]
+  },
+  "sha": "43e6667252eb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fc74fe2ef3df": {
+  "identity": {
+   "one_liner": "将九个编码助手渠道封装为 OpenAI/Anthropic 兼容 API 的凭证池网关",
+   "review": "Coding2API 基于 FastAPI，把 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce、小浣熊等上游渠道统一封装为 OpenAI/Responses/Anthropic 兼容接口，提供公共凭证池、健康度调度、会话粘性、按人用量统计与三角色管理台。需 Python 3.12+ 或 Docker 部署；README 标明为逆向接口，仅供学习研究，未做安全审计。",
+   "highlights": [
+    "提供 /v1/chat/completions（流式/非流式）、/v1/responses、/v1/messages、/v1/models 等兼容端点",
+    "实现公共凭证池、健康度调度、到期额度优先与会话粘同一凭证，支持 模型@渠道 强制指定上游",
+    "包含三角色权限、审计日志、额度探测、每日签到与 CodeBuddy 成长中心自动化"
+   ],
+   "use_cases": [
+    "用 OpenAI 兼容客户端或 Claude Code/Codex CLI 接入多个上游渠道的模型",
+    "团队共享凭证池并按人统计请求、token 与成本（含月度账单导出）",
+    "本地或内网部署统一管理多渠道凭证的额度探测与签到任务"
+   ]
+  },
+  "sha": "fc74fe2ef3df",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bd843d351ab9": {
+  "identity": {
+   "one_liner": "自托管的 MCP 服务器，用于让 AI 客户端连接并操作 Couchbase 数据",
+   "review": "该项目提供两个 MCP 服务器：operational 服务器通过 couchbase Python SDK 连接 Capella 或自托管的 Couchbase 集群，提供 52 个工具；operational-insights 服务器连接自托管 Operational Insights 集群，提供 13 个工具。默认只读模式，写工具不加载，支持 STDIO 与 Streamable HTTP 传输及 OAuth 2.1。经 PyPI、Docker 或源码分发，需 Python 3.11+。",
+   "highlights": [
+    "默认只读模式，写工具不加载，可禁用单个工具或要求用户确认，支持用户名密码或 mTLS 证书认证",
+    "operational 服务器包含集群健康、schema 发现、KV 操作、SQL++ 查询、索引、全文与向量搜索等 52 个工具",
+    "支持 STDIO 本地传输和带 OAuth 2.1、健康检查、审计日志的 Streamable HTTP 传输"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor、VS Code 等 MCP 客户端中通过自然语言查询 Couchbase 的 bucket、schema、文档或执行 SQL++ 查询",
+    "检查集群健康状况、服务状态、索引统计与查询性能分析",
+    "在 CB_MCP_READ_ONLY_MODE=false 时执行文档写入、scope/collection 创建与索引管理等写操作"
+   ]
+  },
+  "sha": "bd843d351ab9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3209c90ec6f1": {
+  "identity": {
+   "one_liner": "增强 PyMongo 的轻量工具集，提供声明式模式与数据库连接插件",
+   "review": "marrow.mongo 是一组小型工具库，用于在不引入完整活动记录式对象文档映射器的前提下增强 PyMongo 驱动的使用体验。它提供可变映射形式的声明式模式（document mapper），并包含面向 WebCore 框架的数据库连接插件，以及将 Python 标准日志写入 MongoDB 的适配器。适用于希望在 PyMongo 之上获得模式定义与日志/连接集成、又不想承担完整 ODM 复杂度的 Python 开发者。依赖 pymongo（>3.2）、Python 2.7+/3.2+ 或 PyPy，通过 pip install marrow.mongo 安装，采用 MIT 许可证发布。",
+   "highlights": [
+    "提供声明式模式（可变映射形式）用于增强 PyMongo，而非取代原生驱动",
+    "包含 WebCore Web 框架的轻量数据库连接插件",
+    "提供 Python 标准 logging 适配器，可将日志写入 MongoDB"
+   ],
+   "use_cases": [
+    "在 Python 项目中为 MongoDB 文档定义声明式 schema，同时保留对 PyMongo 的直接使用",
+    "在 WebCore 框架应用中集成 MongoDB 数据库连接",
+    "需要将 Python 标准日志输出持久化到 MongoDB 的场景"
+   ]
+  },
+  "sha": "3209c90ec6f1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fead475497ae": {
+  "identity": {
+   "one_liner": "DuckDB 扩展，通过 Apache Arrow IPC 以任意语言扩展 DuckDB",
+   "review": "VGI（Vector Gateway Interface）是一个 DuckDB 扩展，允许用户用 Python、TypeScript、Go、Rust 等语言编写 worker 来扩展 DuckDB，通信基于 Apache Arrow IPC，无需编写 C++ 或编译。适合需要在 DuckDB 中接入自研逻辑或非 C++ 语言库的分析开发者。完整文档、安装方式、函数参考和 cookbook 示例见官网文档站。README 未给出具体 API 细节，使用前需查阅文档。",
+   "highlights": [
+    "支持用 Python、TypeScript、Go、Rust 等语言编写 DuckDB worker",
+    "基于 Apache Arrow IPC 进行数据交换",
+    "无需 C++ 代码或编译过程"
+   ],
+   "use_cases": [
+    "在 DuckDB 查询中调用自定义语言的函数逻辑",
+    "为 DuckDB 接入已有 Python/Go/Rust 等语言的库",
+    "无需编译工具链的 DuckDB 功能扩展开发"
+   ]
+  },
+  "sha": "fead475497ae",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "66a41f1658a6": {
+  "identity": {
+   "one_liner": "基于 Flask 的项目模板，内置 JWT 认证与基础 REST API 模块",
+   "review": "这是一个用于快速启动 Flask 项目的样板项目，面向需要搭建后端 API 的 Python 开发者。它提供基于 JWT 的开箱即用认证模块、可用于扩展新 API 端点的基础模块（支持 GET/POST 方法），以及可添加到任意端点的认证检查装饰器。安装需通过 pipenv 管理依赖，使用 Makefile 命令完成数据库迁移，并要求自行编辑 .env 中的密钥。自定义视图和 API 端点的文档位于项目 wiki。",
+   "highlights": [
+    "提供基于 JWT 的开箱即用认证模块和认证检查装饰器",
+    "包含可扩展的基础 API 模块，支持 GET、POST 方法",
+    "通过 pipenv 和 Makefile 管理依赖、数据库迁移、运行与测试"
+   ],
+   "use_cases": [
+    "快速启动新的 Flask 后端项目",
+    "需要内置用户认证的 REST API 开发",
+    "基于 Base.py 创建自定义 API 视图"
+   ]
+  },
+  "sha": "66a41f1658a6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "938d5df9f835": {
+  "identity": {
+   "one_liner": "将 Teams、Outlook 邮件、会议与 OneNote 缓存同步为本地可搜索归档的 CLI 工具",
+   "review": "m365crawl 是一款面向 AI agent 的命令行工具，读取本机已登录的 Teams 和 Outlook 桌面应用缓存，将聊天、邮件、日历及会议纪要同步到本地 SQLite 归档，支持全文检索与 SQL 查询，每条结果带稳定 ID、链接和覆盖状态。默认只读，写操作需手动开启。依赖桌面应用缓存，覆盖范围有限；macOS 需 Full Disk Access 授权，Windows 提供免签名压缩包。",
+   "highlights": [
+    "从桌面应用缓存同步 Teams 聊天/频道、Outlook 邮件、日历与会议纪要，无需 API token 或应用注册",
+    "本地 SQLite 归档支持全文检索和 SQL 查询，提供 coverage 命令区分真实零值与未覆盖日期",
+    "默认只读；手动运行 writes on 后 agent 可代为发送消息和邮件，并记录操作原因"
+   ],
+   "use_cases": [
+    "让 AI agent 检索历史聊天和邮件以恢复工作上下文",
+    "会前准备：汇总议程、与会者、会议聊天及相关邮件",
+    "追踪未读消息、标记邮件和特定话题的讨论线索"
+   ]
+  },
+  "sha": "938d5df9f835",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

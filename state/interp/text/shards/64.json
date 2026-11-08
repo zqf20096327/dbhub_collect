@@ -2770,5 +2770,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "13abc0252950": {
+  "identity": {
+   "one_liner": "进程内嵌入式图数据库，Rust核心，内置向量检索与GQL查询语言",
+   "review": "OverGraph 是一个以 Rust 编写、运行在进程内的嵌入式图数据库，数据库即磁盘上的一个目录，无需独立服务。它通过 napi-rs 与 PyO3 提供原生 Node.js 和 Python 绑定，支持函数式 API 与 GQL/Cypher 风格字符串两种方式操作同一引擎，内置 HNSW 稠密向量、稀疏关键词向量检索及混合融合，并提供时间性边、权重边、衰减评分等图原语。性能数据为 v0.18 之前的历史基准，作者建议按自身负载重跑基准。",
+   "highlights": [
+    "同一引擎内包含图邻接索引、HNSW 稠密向量索引与稀疏倒排索引，向量检索可限定在图邻域内进行",
+    "提供 GQL/Cypher 风格查询语言，覆盖图读写、图模式 DDL 与属性索引 DDL，并支持参数、explain/profile 与异步调用",
+    "显式写事务：本地暂存有序变更、可读自身未提交写入，以乐观冲突检测原子提交；快照读与写并发"
+   ],
+   "use_cases": [
+    "为 AI agent 存储对话、工具输出与实体关系记忆，按语义相似度检索并自动衰减过期上下文",
+    "构建知识图谱与 RAG 管道，将向量相似度与图结构（如受限跳数的邻域过滤）结合在单次查询中",
+    "社交网络分析、推荐与欺诈检测等场景中的度中心性、最短路径、个性化 PageRank 等图算法计算"
+   ]
+  },
+  "sha": "13abc0252950",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bc0224548b70": {
+  "identity": {
+   "one_liner": "Rust/egui 编写的 GPU 渲染桌面客户端，用于连接数据库、对象存储与服务器。",
+   "review": "OpenVClient 是一个用 Rust 与 egui 编写的开源桌面客户端，运行于 macOS、Windows 和 Linux。它将 SQL 数据库、MongoDB、Redis、Elasticsearch、S3/Azure 存储、SSH 和 Docker 等连接集中在一个窗口内管理，提供 SQL 编辑、表浏览、文件管理和 SSH 终端等功能。当前处于 1.0.0 公测阶段，无遥测，密码存于操作系统钥匙串。备份还原功能依赖外部工具在 PATH 中。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQL Server、SQLite、ClickHouse、GaussDB 等 SQL 引擎，含自动补全、EXPLAIN 图形化执行计划、表数据编辑与 CSV/JSON/SQL 等格式导入导出",
+    "提供 S3 兼容存储、Azure Blob、FTP/FTPS、SFTP 的文件管理，支持上传、下载、预览与共享链接（SAS、presigned URL）",
+    "内置 Redis 键浏览、MongoDB 文档操作、Elasticsearch/OpenSearch 索引与搜索、RabbitMQ 队列管理、SSH 终端与 Docker 容器管理"
+   ],
+   "use_cases": [
+    "日常编写与执行 SQL，通过对象树浏览库表结构、查看执行计划、编辑表数据",
+    "通过环境标签、只读连接和删除操作前的名称确认，在生产环境中执行监控、会话管理与备份恢复等运维任务",
+    "在客户端内管理服务器：SSH 终端与 SFTP 浏览、Docker 容器/镜像/卷操作，以及云存储文件的浏览与传输"
+   ]
+  },
+  "sha": "bc0224548b70",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

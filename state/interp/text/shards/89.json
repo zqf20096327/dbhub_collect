@@ -2486,5 +2486,136 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "33783cb08499": {
+  "identity": {
+   "one_liner": "面向 AI agent 的记忆数据库，Rust 实现，融合语义、词法、实体图与时序检索。",
+   "review": "Brain 是一个用 Rust 编写的记忆数据库，存储 Memory、Entity、Statement、Relation 四类记录，写入路径内置三级抽取管道（模式→GLiNER→LLM），检索通过倒数排名融合合并语义（HNSW）、词法（BM25）与实体图三路结果。面向需要为 AI agent 保存记忆的应用开发者，通过二进制线协议（CBOR）访问，提供 Rust/Python/TypeScript SDK。项目为 Linux-only，仅支持 Apache-2.0 开源版本。",
+   "highlights": [
+    "提供 ENCODE/RECALL/PLAN/REASON/FORGET 等操作原语，语义、词法、实体图三路检索经倒数排名融合排序",
+    "记录携带出处证据链、置信度与双时态时间戳，区分学习时间与有效时间",
+    "镜像内置 bge-small-en-v1.5 与 gliner-small-v2.1 模型，启动无需外网下载；租户隔离基于 API key 派生的 space 标识"
+   ],
+   "use_cases": [
+    "为 agent 应用持久化对话事实、用户偏好与实体关系等类型化记忆",
+    "需要按来源、置信度和时间有效性追溯记忆的场景",
+    "多租户 agent 平台中按 space 隔离各用户或工作区的记忆数据"
+   ]
+  },
+  "sha": "33783cb08499",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e3c397aa42c2": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，在用户登录时执行 login() 函数，模拟登录触发器。",
+   "review": "login_hook 是一个 PostgreSQL 扩展，通过 session_preload_libraries 加载共享库，在每次为用户会话启动新进程时执行用户自编的 login_hook.login() 函数，用于实现类似 Oracle after logon 触发器的登录逻辑。适用于 PG 14–16（17 建议改用原生登录事件触发器，PG 19 后停止维护）。需注意函数必须有 public 执行权限，且函数内异常若未处理会导致普通用户无法登录。",
+   "highlights": [
+    "通过 session_preload_libraries 在会话进程启动时自动调用 login_hook.login() 函数，dblink/fdw 发起的会话也会触发",
+    "提供 is_executing_login_hook() 检测函数是否在登录钩子控制下被调用，以及 get_login_hook_version() 返回编译版本",
+    "超级用户在 login() 函数出错时仍可登录并收到警告，普通用户则被立即登出"
+   ],
+   "use_cases": [
+    "在 PG 14–16 上实现用户登录时执行自定义逻辑，如设置会话参数或创建临时表",
+    "从 Oracle 迁移到 PostgreSQL 时复现 after logon 触发器行为",
+    "热备（hot standby）自动故障转移环境中，配合 server_promotion_hook 在备库提升为主库时初始化会话数据"
+   ]
+  },
+  "sha": "e3c397aa42c2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5aef0d509ac5": {
+  "identity": {
+   "one_liner": "基于 Bubbletea 的键盘驱动 MongoDB 终端 UI 客户端",
+   "review": "lazymongo 是一个用 Go 编写的 MongoDB 终端界面，运行时以侧边栏树浏览数据库与集合，用分页表格查看文档。支持在 $EDITOR 中增删改文档、MongoDB 查询表达式过滤、聚合管道、explain plan、schema 推断、索引管理、JSON/CSV 导入导出及 change stream 监听。watch 模式要求副本集，聚合结果自动附加 $limit 1000。适用于习惯键盘操作的开发者与 DBA 的日常数据查看和维护。",
+   "highlights": [
+    "提供文档增删改（$EDITOR 编辑）、查询过滤、排序、聚合管道与 explain plan 查看",
+    "支持索引列表/创建/删除、schema 推断、JSON/JSONL/NDJSON/CSV 导入导出、change stream 监听",
+    "支持多连接配置文件（named profiles）、6 种主题、自更新命令，提供 macOS/Linux/Windows 二进制与 go install 安装方式"
+   ],
+   "use_cases": [
+    "在终端中浏览和编辑 MongoDB 文档，无需打开图形客户端",
+    "排查查询性能：查看 explain plan 中 COLLSCAN/IXSCAN 并按提示补建索引",
+    "观察集合的实时变更（需副本集）或批量导入导出 JSON/CSV 数据"
+   ]
+  },
+  "sha": "5aef0d509ac5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d386a9f30ff2": {
+  "identity": {
+   "one_liner": "基于 TypeORM 语法与插件化架构的 ORM + ODM 对象映射库",
+   "review": "ThothOM 是面向 TypeScript 的对象映射器，融合 ORM 与 ODM，语法基于 TypeORM。核心包只提供类型定义，数据库连接由独立插件实现，可通过 npm tag `thothom` 检索插件。需开启实验性装饰器，仅支持 Data Mapper 模式，设计上面向微服务与 serverless 项目。",
+   "highlights": [
+    "核心包通过 @thothom/core 提供 Column、Entity、PrimaryGeneratedColumn 等装饰器与 Repository 类型",
+    "插件化架构：核心包负责类型，连接与读写由插件（如 Connection 类）实现，插件可由社区创建",
+    "配置默认封装在类内部，不依赖全局作用域，也可通过 setGlobalConnection() 启用全局连接"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中以统一语法接入 SQL 或 NoSQL 数据库（需有对应插件）",
+    "微服务或 serverless 项目中的数据建模与访问",
+    "开发者希望基于既有插件扩展新数据库集成"
+   ]
+  },
+  "sha": "d386a9f30ff2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b9b823f2d707": {
+  "identity": {
+   "one_liner": "实现 /_cluster_setup 端点的 CouchDB 集群搭建模块",
+   "review": "couchdb-setup 是 Apache CouchDB 的一个模块，实现 /_cluster_setup HTTP 端点，用于管理 CouchDB 集群的搭建流程。用户可通过 Fauxton 界面或直接 POST JSON 请求（含 enable_cluster、add_node、finish_cluster 等 action 字段）完成节点启用、添加和集群收尾，模块内部处理 Erlang Cookie 分发与系统数据库创建。适合需要以程序化方式或图形界面部署多节点 CouchDB 集群的运维人员。该端点是带 action 字段的状态机而非 REST 风格接口，搭建期间需一个协调节点且所有节点需互相可达，状态持久化在 README 中标记为待定。",
+   "highlights": [
+    "实现 /_cluster_setup HTTP 端点，通过带 action 字段的 JSON POST 请求驱动状态机完成集群搭建",
+    "支持 Fauxton 图形界面与纯 HTTP 两种搭建路径，可在全部节点上重复执行 enable_cluster 与 add_node 操作",
+    "在协调节点上自动生成并分发 Erlang Cookie，并在 finish_cluster 阶段创建 _users、_replicator 等系统端点"
+   ],
+   "use_cases": [
+    "以 HTTP 请求方式程序化部署多节点 CouchDB 集群",
+    "通过 Fauxton 界面向导式完成集群启用与节点添加",
+    "在单节点安装上启用集群模式并绑定公开地址与端口"
+   ]
+  },
+  "sha": "b9b823f2d707",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "684d9a7ca1c2": {
+  "identity": {
+   "one_liner": "Isar 数据库进阶教程的配套课程源码文件库",
+   "review": "该仓库包含 YouTube 上 Mobterest《Advanced Isar Database Tutorial》课程的全部文件，使用 Dart 编写，版本为 v3.1.0。README 本身未包含安装步骤或运行说明，使用者需观看配套视频课程了解文件的用法与课程内容。",
+   "highlights": [
+    "提供 Advanced Isar Database Tutorial 课程（v3.1.0）的全部配套文件",
+    "使用 Dart 语言编写",
+    "配套 YouTube 视频教程供观看"
+   ],
+   "use_cases": [
+    "学习 Flutter/Dart 移动端本地存储中 Isar 数据库的开发者",
+    "跟随 YouTube 课程进行配套代码实践的学员"
+   ]
+  },
+  "sha": "684d9a7ca1c2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

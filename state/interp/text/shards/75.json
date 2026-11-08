@@ -2843,5 +2843,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "662ec32cc689": {
+  "identity": {
+   "one_liner": "面向台湾中小学的单校自架排课与调代课系统",
+   "review": "该系统是一个面向台湾国小、国中、高中职的纯 Web 排课与调代课系统，以教学组长日常工作流程为中心设计。它包含学期基础资料管理、手动拖拉排课与基于 OR-Tools CP-SAT 引擎的自动排课，以及学期中的请假登记、代课指派、调课验证、站内与 Email 通知、月结钟点统计等功能。系统通过 Docker Compose 部署在校内单台主机上，采用 PostgreSQL 16 存储数据，界面为繁体中文并使用台湾教育术语；设计为单校自架模式，不提供多租户 SaaS。",
+   "highlights": [
+    "自动排课采用 OR-Tools CP-SAT 引擎，含 H1–H10 硬约束与 S1–S8 软约束加权，无解时以教务语言输出冲突定位并支持部分排课",
+    "通过 Docker Compose 一键部署六容器（web/api/worker/worker-ops/postgres/redis），支持一键安装脚本与 x86-64、ARM64 架构",
+    "调代课流程包含请假登记、代课推荐、调课验证、A4 公告打印、Excel 月结统计，课表可导出 Excel/PDF/PNG 格式"
+   ],
+   "use_cases": [
+    "国小、国中、高中职教学组需要完成学期排课、配课与课表发布的场景",
+    "学期中处理教师请假、代课指派、调课安排及代课钟点月结统计的教务工作",
+    "学校需在校内自架系统且要求数据不出校的环境部署"
+   ]
+  },
+  "sha": "662ec32cc689",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "160f253c9984": {
+  "identity": {
+   "one_liner": "基于 sled 的 Rust 嵌入式键值存储，内置 TTL 与访问频率计数的数据生命周期管理。",
+   "review": "EpochDB 是一个构建于 sled 之上的 Rust 嵌入式键值存储库，通过 crate 引入（epoch-db = \"0.3.0\"）。它将数据的访问频率与年龄纳入管理：按可配置的宽限期和频率阈值自动清理旧数据，并采用多树结构分离热点元数据与大体积数据。适用于需要管理会话、缓存等有生命周期数据的 Rust 应用。",
+   "highlights": [
+    "基于可配置宽限期与频率阈值自动清理旧数据",
+    "多树结构分离频繁更新的元数据与大体积数据块",
+    "核心操作线程安全，频率计数通过 compare-and-swap 循环原子更新，并继承 sled 写前日志的崩溃安全性"
+   ],
+   "use_cases": [
+    "用户会话管理",
+    "API 响应缓存",
+    "需要过期与频率淘汰机制的嵌入式数据存储场景"
+   ]
+  },
+  "sha": "160f253c9984",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4de5f84981c7": {
+  "identity": {
+   "one_liner": "分布式 SQL 数据库，CP 系统，Raft 复制并兼容 PostgreSQL 线协议。",
+   "review": "Tardigrade 是一个分布式 SQL 数据库，实现可串行化事务，按 range 使用 Raft 复制，兼容 PostgreSQL 线协议。作为 CP 系统，通过拒绝服务而非数据分叉来应对少数派分区故障。面向需要强一致与分区容错的场景。项目采用 AGPLv3 或更高版本许可，文档目录保留了 CockroachDB 的设计笔记与 RFC 供参考。",
+   "highlights": [
+    "支持可串行化事务，每个 range 使用 Raft 复制",
+    "兼容 PostgreSQL 线协议",
+    "少数派分区故障时以拒绝工作方式保证不产生数据分歧"
+   ],
+   "use_cases": [
+    "需要可串行化事务与强一致性的应用",
+    "通过 PostgreSQL 驱动连接的现有客户端",
+    "可容忍少数派分区期间拒绝服务的部署环境"
+   ]
+  },
+  "sha": "4de5f84981c7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

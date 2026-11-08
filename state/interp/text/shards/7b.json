@@ -3089,5 +3089,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "083e3addc33f": {
+  "identity": {
+   "one_liner": "面向 Claude Code 与 Codex 的任务管理器与跨会话知识库记忆层",
+   "review": "flow 是一个用 Go 编写的 CLI 工具，为 Claude Code 和 Codex 提供项目、任务、简报、进度笔记和 playbook 管理，并通过 ~/.flow/kb/ 下的 markdown 知识库在会话中实时采集事实（scoop）、在 flow done 时从转录中提取知识（sweep）。安装需下载 macOS 二进制并运行 flow init 写入 skill 与 SessionStart hook。支持多终端复用会话、背景代理模式；仅覆盖 macOS 环境。",
+   "highlights": [
+    "提供 scoop（会话中实时追加事实）与 sweep（flow done 时重读转录提取知识）两种知识库写入机制",
+    "支持 iTerm2、Warp、Terminal.app、kitty、zellij、Rex 等多终端，FLOW_TERM=bg 可无终端启动后台代理",
+    "playbook 以冻结快照生成新任务与全新会话，实现可复用的周期性工作流程"
+   ],
+   "use_cases": [
+    "需要 Claude 跨会话延续项目决策与约定知识的长周期开发工作",
+    "每周评审、每日 PR 分诊、值班轮换等周期性重复任务的编排",
+    "在同一代码库上并行多个任务并在数天或数周后恢复原会话"
+   ]
+  },
+  "sha": "083e3addc33f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d76ac5b9bffa": {
+  "identity": {
+   "one_liner": "基于 Orleans 的事件溯源数据库与处理运行时，附多语言 gRPC 客户端",
+   "review": "Cratis Chronicle 是 MIT 许可的开源事件溯源数据库与处理运行时，供需要保留变更历史（而不仅是当前状态）的应用使用。内核基于 Microsoft Orleans 构建，通过声明式投影生成读模型，Reactors 在事件到达时执行代码；存储可插拔（MongoDB 默认、PostgreSQL、SQL Server、SQLite）。客户端边界为 gRPC/protobuf 契约，提供 .NET、TypeScript、Kotlin/Java、Elixir 客户端，Python 尚未发布；README 明确其合规机制不等于应用本身合规。",
+   "highlights": [
+    "事件追加不可变，支持显式修订与抹除操作；每个事件带时间戳、关联 ID、因果 ID 与自定义标签",
+    "支持声明式投影、Reducers、Reactors 与 Observers 四类事件处理方式，及 PII 字段加密与主体密钥擦除",
+    "多租户命名空间隔离、追加时服务端约束校验，Web Workbench 与 CLI 提供检查能力但不可变更数据"
+   ],
+   "use_cases": [
+    "需要事件日志记录领域事实并构建可查询读模型的 .NET/CQRS/DDD 应用",
+    "跨语言系统：TypeScript、Kotlin/Java 或 Elixir 服务通过 gRPC 契约接入同一事件存储",
+    "涉及个人数据的场景，需要 PII 加密、密钥擦除与事件修订等合规件随机制"
+   ]
+  },
+  "sha": "d76ac5b9bffa",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "25b8979c8af4": {
+  "identity": {
+   "one_liner": "基于 Bash 编写的控制台虚拟机管理器，通过 SSH 管理 KVM/Libvirt 虚拟机。",
+   "review": "bashvm 是用 Bash 编写的控制台虚拟机管理工具，供管理员在服务器上管理虚拟机。它不依赖管理守护进程或 Web 界面，仅需 SSH 访问即可运行；安装脚本会部署 qemu-kvm、libvirt、cloud-init、dnsmasq 等依赖包，虚拟机信息存于 bashvm.db 数据库文件，更新时需手动备份该文件。",
+   "highlights": [
+    "以 Bash 脚本实现，通过控制台运行，仅需 SSH 访问即可管理虚拟机",
+    "安装脚本自动安装 qemu-kvm、libvirt-daemon-system、cloud-init、dnsmasq、sqlite3 等依赖包",
+    "使用 bashvm.db（SQLite）文件存储数据，支持手动迁移升级"
+   ],
+   "use_cases": [
+    "在 Debian/Ubuntu 服务器（amd64）上通过 SSH 命令行管理虚拟机",
+    "在 Raspberry Pi OS Lite、Ubuntu Server 等 arm64 设备上运行虚拟机管理",
+    "不希望部署 Web 管理界面或重型管理守护进程的宿主机环境"
+   ]
+  },
+  "sha": "25b8979c8af4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "88a0c2df5a98": {
+  "identity": {
+   "one_liner": "基于 Rust+Tauri 的桌面端多引擎数据库管理工具，支持 130+ 数据库与云服务。",
+   "review": "DBine 是 AddLayer 开发的桌面数据库管理应用（Apache 2.0，Windows/macOS/Linux），覆盖关系、文档、键值、时序等 130+ 引擎与云服务。技术栈为 Tauri 2、Rust 核心、Vue 3 UI。提供连接管理（SSH 隧道、云 IAM 登录、密钥管理器集成）、SQL 编辑器、脚本执行、Profiler、模式比较与查询构建等。README 未说明移动端或 Web 版本。",
+   "highlights": [
+    "单一桌面应用连接 130+ SQL 与 NoSQL 数据库及云服务（AWS IAM、Google Cloud IAM、Microsoft Entra ID 登录托管数据库）",
+    "编辑器按引擎方言自动补全，支持多语句脚本执行、会话级事务、查询取消与图形化执行计划",
+    "内置 Profiler 实时采集数据库查询、SSH 隧道（含堡垒机链）、1Password/Vault/Azure Key Vault 等密钥来源集成"
+   ],
+   "use_cases": [
+    "需要在同一工具中管理多种数据库引擎（MySQL、MongoDB、ClickHouse、Redis 等）的开发者与 DBA",
+    "通过 SSH 隧道或云 IAM 短期令牌连接生产/托管数据库，并配合企业密钥管理器取凭据",
+    "排查数据库上各客户端的实时查询（Profiler、进程监控、锁高亮与终止会话）"
+   ]
+  },
+  "sha": "88a0c2df5a98",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

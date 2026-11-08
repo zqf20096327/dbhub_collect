@@ -2731,5 +2731,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "582e627f5a46": {
+  "identity": {
+   "one_liner": "以 AWS Route53 为存储后端、提供 DynamoDB 兼容 API 的实验性数据库前端",
+   "review": "Dyna53 是一个数据库前端，实现 DynamoDB API 的一个有限子集（建表、写入条目、基本查询），数据实际存储在后端 AWS Route53 DNS 服务中。项目目标包括兼容 DynamoDB 客户端与工具并支持运行 YCSB 基准。README 明确声明它是玩笑性质，非生产就绪服务，与 Amazon AWS 无关联，使用会产生 AWS 费用。",
+   "highlights": [
+    "实现 DynamoDB API 的有限子集，支持建表、put item 和基本查询",
+    "以 AWS Route53 DNS 服务作为数据存储与查询后端",
+    "可运行 YCSB for DynamoDB 基准测试"
+   ],
+   "use_cases": [
+    "使用现有 DynamoDB 客户端和工具进行实验",
+    "运行 YCSB 基准测试",
+    "探索 DNS 服务作为存储层的概念验证"
+   ]
+  },
+  "sha": "582e627f5a46",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f7b3138b7e97": {
+  "identity": {
+   "one_liner": "运行于 Windows 本机的 QQ 邮箱作业收发统计与提醒工具。",
+   "review": "这是一个面向班级作业收集场景的 Windows 本机 Python 工具，供班长等班级管理者使用。它通过 IMAP 按需扫描 QQ 邮箱收件箱，依据作业标识、日期范围和已登记的唯一学号统计 PDF 作业提交情况，支持下载附件、导出到桌面、生成提醒草稿并经 SMTP 批量发送。数据保存在本机 SQLite，服务仅监听 127.0.0.1。限制：仅扫描 INBOX、不支持 OCR、学号须事先登记且唯一。",
+   "highlights": [
+    "通过 IMAP 按需扫描收件箱，按固定作业标识、日期范围和关键词筛选 PDF，并记录邮件主题、发件地址、接收时间和 Message-ID",
+    "支持从 .docx/.xlsx/.doc/.xls 及可选中文字的 PDF 识别花名册，身份信息冲突时标记待确认而不自动归属",
+    "附件按 SHA-256 校验并保留来源清单，授权码以 Windows DPAPI 加密存于本机，服务仅监听 127.0.0.1"
+   ],
+   "use_cases": [
+    "按作业名称和日期范围统计班级成员的 PDF 作业提交、未交和迟交名单",
+    "向未提交且邮箱已核实的成员批量发送一次性的催交提醒",
+    "按班级/小组分类筛选成员，逐人发送独立批量通知（单次上限 200 人）"
+   ]
+  },
+  "sha": "f7b3138b7e97",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

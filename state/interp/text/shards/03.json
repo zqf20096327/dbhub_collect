@@ -3161,5 +3161,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7b47d7173752": {
+  "identity": {
+   "one_liner": "C 语言编写的单线程事件循环内存键值数据库",
+   "review": "fkvs 是用 C 编写的内存型键值数据结构存储与数据库，采用单线程、非阻塞 I/O 多路复用事件循环。README 说明它是作者从零原理学习构建类 Redis 键值存储并逐步推向生产可用的实验项目。支持 Docker 部署或源码构建（Ubuntu 20+/macOS 13+），Linux 上默认启用 jemalloc，默认端口 5995，附带 fkvs-cli 客户端。",
+   "highlights": [
+    "提供 SET/GET/DEL/INCR/DECR 等字符串命令，SET 支持原子设置 TTL",
+    "支持 EXPIRE/TTL/PERSIST 键过期管理及 PING/INFO/KEYS 服务器命令",
+    "提供交互式与非交互式客户端，支持 Docker 运行与 jemalloc 分配器"
+   ],
+   "use_cases": [
+    "通过源码构建学习键值存储与事件循环的底层实现",
+    "需要在内存中存取带 TTL 的键值对的场景",
+    "作为轻量键值服务的本地开发与实验环境"
+   ]
+  },
+  "sha": "7b47d7173752",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "25f636357e79": {
+  "identity": {
+   "one_liner": "SurrealQL 的 tree-sitter 语法定义，提供解析与高亮支持",
+   "review": "该项目为 tree-sitter 提供 SurrealQL（SurrealDB 查询语言）的语法定义，可通过 cargo 或 pip 安装，包含 examples 目录展示支持的语法特性。仓库已归档为只读状态，作者建议转向官方的 SurrealQL Tree Sitter，新项目应优先考虑官方版本。",
+   "highlights": [
+    "为 tree-sitter 提供 SurrealQL 语法定义",
+    "支持通过 cargo（crates.io）和 pip（PyPI）安装",
+    "发布包含 CI 工作流校验"
+   ],
+   "use_cases": [
+    "为编辑器或工具链添加 SurrealQL 语法解析与代码高亮",
+    "需要解析 SurrealDB 查询语句的 Rust 或 Python 项目",
+    "维护依赖此包的历史项目的兼容场景"
+   ]
+  },
+  "sha": "25f636357e79",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "94eb9cb32b12": {
+  "identity": {
+   "one_liner": "本地 LLVM 调查工作台，结合模型辅助路由、隔离编译器执行与证据追踪",
+   "review": "LLVMBugSquad 是一个本地单用户工作台，用于调查 LLVM 优化器报告：用户提交问题描述、精简 IR 与期望行为，经 TypeSafe/Jev 适配器路由后，在禁网的非 root Docker 容器中运行固定的 opt、FileCheck 与 lit 流程，结果以含哈希的清单导出为 ZIP。后端 Python/FastAPI+SQLite，前端 Next.js+SSE。注意 live API 与端到端验证尚未完成，默认回放模式使用合成数据，且服务无认证、需绑定本机回环地址。",
+   "highlights": [
+    "在禁网、只读根文件系统、带资源限制与取消机制的非 root Docker 容器中运行固定的 opt、FileCheck 与 focused lit 流程，不执行上传的 RUN 注释",
+    "SQLite 持久化运行记录、有序事件与工件，使用事务准入、请求指纹与幂等键；SSE 携带序列 ID 支持断线重连",
+    "清单包含输入与工件哈希、工具命令和构建身份，源码摘录引用具体上游提交并通过完整性校验，导出保留 replay/live 标签"
+   ],
+   "use_cases": [
+    "调查 LLVM 优化器报告：提交精简 IR 与期望行为，运行 DSE 或 InstCombine 配方并用 FileCheck 评估 CHECK 指令",
+    "在无 API key 或 Docker 的环境下通过回放 fixture（dse-alias、InstCombine、provider-unavailable 等）演示完整工作流",
+    "通过 /api/runs/{id}/export 下载包含报告、清单、事件与工件的 ZIP 以留存可复现证据"
+   ]
+  },
+  "sha": "94eb9cb32b12",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

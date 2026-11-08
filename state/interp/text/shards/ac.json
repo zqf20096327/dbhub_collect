@@ -2777,5 +2777,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "66f983fd52ae": {
+  "identity": {
+   "one_liner": "基于 Python 和 pytest 的 Apache Cassandra 多节点集群分布式测试套件",
+   "review": "该项目是 Apache Cassandra 的分布式测试集合，用于测试需要多个 Cassandra 实例协同才能验证的功能，单元级可测代码则放在 Cassandra 主仓库。测试通过 pytest 框架执行，依赖 JDK 8、Python 3、libev 和 CCM 工具，运行时需指定已编译的 Cassandra 源码目录或版本号。每个测试会启动全新集群并在结束后拆除，失败的节点日志保存在 logs/<timestamp> 目录下供分析。适合参与 Cassandra 开发与测试编写的贡献者。",
+   "highlights": [
+    "通过 pytest 执行，每个测试生成新的临时集群并在结束后拆除",
+    "支持按文件、类或单个用例运行，并提供 --count 选项重复执行以验证稳定性",
+    "测试失败时将节点日志保存到 logs/<timestamp> 目录；内置 SIGABRT 信号处理和 --setup-plan 等调试工具"
+   ],
+   "use_cases": [
+    "为 Cassandra 开发新功能时编写和运行多节点功能测试",
+    "重复运行测试用例以验证其稳定性",
+    "调试集群行为：查看失败节点日志、排查挂起测试或未清理的实例"
+   ]
+  },
+  "sha": "66f983fd52ae",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b5582287564": {
+  "identity": {
+   "one_liner": "自托管邮件客户端，单容器聚合多个 IMAP 邮箱，数据存于单个 SQLite 文件。",
+   "review": "nexmail 是一个自托管 Web 邮件客户端，将多个 IMAP 邮箱聚合在同一界面，以单容器部署、单 SQLite 文件存储。功能涵盖会话视图、全文检索、规则、联系人、任务、日历与 OpenID Connect 登录。README 明确项目仍处早期（0.29.0），建议先在不重要的邮箱上试用。适合已在家自托管服务、希望本地保管邮件的用户。",
+   "highlights": [
+    "支持多 IMAP 邮箱并排及合并的 All inboxes 视图，标签以 IMAP keywords 存储在服务器侧",
+    "提供全文搜索及按需的 IMAP SEARCH，搜索界面标注覆盖范围；支持任务（可同步 Todoist/nextasks）、CardDAV/CalDAV 连接与定时发送、撤回发送",
+    "支持多用户与 OpenID Connect 登录，本地网络上的服务器/地址簿连接需管理员在 Administration 下批准"
+   ],
+   "use_cases": [
+    "家庭实验室（homelab）环境中自托管个人邮件的统一收发与检索",
+    "需要浏览器端替代方案、在桌面与手机布局下管理多个 IMAP 邮箱的用户",
+    "需要将邮件转为任务并同步到 Todoist 或自托管 nextasks 的工作流"
+   ]
+  },
+  "sha": "6b5582287564",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "99dfa17b6b0d": {
+  "identity": {
+   "one_liner": "自托管状态页与在线监测工具，单个 Go 二进制配 SQLite 存储",
+   "review": "heron 是一个自托管的状态页与可用性监测系统，用 Go 编写并以单个二进制文件运行，数据存储于 SQLite。它检查网站、TCP 端口、数据库、游戏服务器等目标，自动开启和关闭故障事件，并提供可视化编辑的公开状态页。适合需要在自有服务器上部署监控面板的团队或个人；要求 Linux 服务器，建议配置指向该服务器的域名。",
+   "highlights": [
+    "支持 HTTP(S)、TCP、ping、DNS、Postgres、Redis、SMTP、IMAP、Docker 容器、gRPC 及 Minecraft/Steam 服务器等多种监测类型，并提供用于 cron 任务的 Push 监测",
+    "内置 Let's Encrypt 自动 HTTPS 与 Web 安装器，公开页面通过 Server-Sent Events 实时更新，可用可视化编辑器排版",
+    "提供 Telegram、Discord、签名 Webhook 告警，事件自动开合、维护窗口、审计日志，以及 Owner/Admin/Viewer 三种角色管理"
+   ],
+   "use_cases": [
+    "在自有 VPS 或 homelab 服务器上部署面向访客的公开服务状态页",
+    "监测网站、API、数据库、容器和游戏服务器的可用性，并在故障时通过 Telegram/Discord/Webhook 接收通知",
+    "多人协作运维场景：按角色分配权限，通过审计日志追踪变更记录"
+   ]
+  },
+  "sha": "99dfa17b6b0d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0aee493316a5": {
+  "identity": {
+   "one_liner": "基于 Node.js 的 Telegram 群管机器人，支持 MongoDB 持久化",
+   "review": "Nexalo 是一个用 Node.js 编写的 Telegram 机器人，提供群组管理（踢人、封禁、禁言、警告）、音乐视频下载、娱乐命令和工具类功能，数据通过 MongoDB 持久化。命令以文件形式放在 commands 目录，bot 自动加载，支持 adminOnly、ownerOnly、category 等属性，README 还给出警告、群设置、用户数据等集合的 schema 示例。适合想自建 Telegram 群管/娱乐 bot 的 JavaScript 开发者；运行需 Node.js v16+、MongoDB v4+ 及 BotFather 签发的 bot token，配置通过 .env 环境变量完成。",
+   "highlights": [
+    "提供群组管理功能：kick、ban、mute、warn",
+    "命令以模块化文件存放于 commands 目录并被自动加载，支持 adminOnly/ownerOnly/category 等属性",
+    "通过 MongoDB 集合（warnings、settings、userdata）持久化数据，配置经 .env 环境变量读取"
+   ],
+   "use_cases": [
+    "自建 Telegram 群组管理机器人",
+    "为 Telegram bot 编写和扩展自定义命令",
+    "需要 MongoDB 存储用户数据（如警告记录、余额）的聊天机器人场景"
+   ]
+  },
+  "sha": "0aee493316a5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "71a48845bdca": {
+  "identity": {
+   "one_liner": "以远程 MCP 服务器形式提供的自托管团队知识库，供 Claude 等 MCP 客户端读写。",
+   "review": "Thaliyola 是一个自托管的团队知识库，以远程 MCP 服务器形式向 Claude Code、claude.ai 等客户端提供搜索、读取与写入工具。它本身不含 LLM，推理由客户端完成，服务器负责存储、检索、版本与人工审核：所有 Agent 写入均以提案形式经人批准后发布。支持团队/项目/library 三级范围、混合语义搜索、跨项目共享与影响通知。需 Postgres（pgvector）与本地或 S3 兼容存储。",
+   "highlights": [
+    "提供 20 余个 MCP 工具：混合关键词与语义搜索、文章/发现读取、浏览、上下文加载、提案写入与审核队列",
+    "所有写入均为提案，经人工审核后发布；写入时进行密钥与个人数据脱敏和版本冲突检查",
+    "使用 Postgres 全文索引（GIN）与 HNSW 向量索引实现混合搜索，内置 bge-small-en-v1.5 嵌入模型，无需外部 API，可设 EMBEDDINGS=off 降级为关键词搜索"
+   ],
+   "use_cases": [
+    "团队成员的多个 Claude 客户端共享同一份项目设计文档、API 契约、runbook 与历史调查结论",
+    "Agent 将事故根因、已知问题等以提案形式沉淀，经人工审核后纳入知识库并触发下游影响通知",
+    "通过 docs_* 工具让 Agent 按提交为代码仓库生成或更新文档页面，并为每个论断附带 repo:// 源码行证据"
+   ]
+  },
+  "sha": "71a48845bdca",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5cce7ea0422": {
+  "identity": {
+   "one_liner": "本地桌面 ERD 编辑器，以单个 .erd.json 文件存储整个项目",
+   "review": "这是一款基于 Tauri 2 与 Vue 3 构建的本地数据库图表（ERD）桌面编辑器，面向需要在本地绘制数据表与关系的开发者。用户在无限画布上编辑表和关系，整个项目保存在一个 .erd.json 文件中，可由命令行打开，第二次启动会将文件交给已运行窗口。它支持导出 SQL、DBML、PNG、SVG、Markdown，界面提供英文和波斯语（RTL）两种语言，采用 MIT 许可证。Linux 平台运行需要安装 webkit2gtk 等依赖库。",
+   "highlights": [
+    "以单个 .erd.json 文件存储整个项目，附带 JSON Schema 与文件格式文档",
+    "支持导出 SQL、DBML、PNG、SVG、Markdown 格式",
+    "提供 Agent skill 文档，供 AI 编码代理读取和编辑 .erd.json 文件"
+   ],
+   "use_cases": [
+    "在本地桌面环境中绘制和编辑数据库表结构与关系图",
+    "将 .erd.json 纳入 Git 仓库进行版本管理，或交由 AI 代理读取编辑",
+    "从图表生成 SQL / DBML 供数据库建库使用"
+   ]
+  },
+  "sha": "b5cce7ea0422",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4d61047e2fa8": {
+  "identity": {
+   "one_liner": "本地优先的开源磁盘存储管理工具，分析占用并给出可解释的空间回收建议。",
+   "review": "TidBit 是一个开源、本地优先的存储管理器，用于浏览磁盘使用情况、随时间追踪变化并排查异常增长。其建议机制强调可解释性以帮助用户安全释放空间。README 仅含项目描述，安装方式、支持平台与依赖等细节需查阅仓库其他文档确认。",
+   "highlights": [
+    "提供磁盘使用情况浏览与随时间变化的追踪功能",
+    "支持排查磁盘空间的异常增长",
+    "提供可解释的建议，辅助用户安全回收空间"
+   ],
+   "use_cases": [
+    "需要查看本机磁盘占用分布的场景",
+    "排查磁盘空间突然减少的原因",
+    "希望在删除文件前获得依据说明的空间清理"
+   ]
+  },
+  "sha": "4d61047e2fa8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

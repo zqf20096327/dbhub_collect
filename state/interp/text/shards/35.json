@@ -2511,5 +2511,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7e9b33373f07": {
+  "identity": {
+   "one_liner": "用于在 NestJS 应用中集成 Neo4j 图数据库的模块",
+   "review": "nest-neo4j 是一个 NestJS 模块，通过 npm 安装后以 forRoot 方法注册并传入 Neo4j 连接信息。它提供可注入的 Neo4jService，暴露 read/write 及会话获取方法，可指定数据库执行 Cypher 查询。适用于使用 NestJS 且需要连接 Neo4j 的 Node.js/TypeScript 项目。",
+   "highlights": [
+    "提供 forRoot 方法注册模块并配置 Neo4j 连接",
+    "Neo4jService 为 @Injectable，可注入任意构造函数",
+    "支持 read/write 方法执行查询，可指定 database 与参数"
+   ],
+   "use_cases": [
+    "在 NestJS 后端中连接并查询 Neo4j",
+    "按读写分离方式获取 Session 执行 Cypher 语句",
+    "Node.js/TypeScript 项目中集成 Neo4j（参考 Neo4j GraphAcademy）"
+   ]
+  },
+  "sha": "7e9b33373f07",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c15254bed25f": {
+  "identity": {
+   "one_liner": "扫描分析 MongoDB 性能问题的命令行诊断工具",
+   "review": "Monaliza 是一个用 Go 编写的命令行工具，用于扫描和分析 MongoDB 数据库中的性能问题，目标是定位可能导致 CPU 高消耗的因素。它输出所有数据库与集合的名称、索引信息以及慢查询统计，并从本地日志文件或 Docker/Podman 容器中读取 COLLSCAN 日志到 colout.txt。适合需要排查 MongoDB 性能问题的运维与开发人员，需自行编译或从 Releases 下载，支持通过 URI 连接远程实例，采用 GPL-3.0 许可证。",
+   "highlights": [
+    "输出所有数据库和集合的名称、索引及慢查询统计",
+    "支持通过 --db_uri 连接远程 MongoDB，并可指定单一数据库扫描",
+    "支持将结果保存为 Excel 文件（result.csv），并可从本地文件、Docker 或 Podman 容器读取日志"
+   ],
+   "use_cases": [
+    "排查 MongoDB 高 CPU 消耗问题",
+    "收集数据库集合、索引与慢查询信息用于分析",
+    "从 Docker/Podman 容器中运行的 MongoDB 实例读取 COLLSCAN 日志"
+   ]
+  },
+  "sha": "c15254bed25f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "871835ecacfb": {
+  "identity": {
+   "one_liner": "IndexedDB 示例库，以原生、企业分层、DSL 三种实现对同一数据库操作",
+   "review": "该仓库提供 IndexedDB 的三套示例实现：原生 API 版、分层架构封装版和 DSL 声明式封装版，各自以单文件或多模块结构组织。README 逐项列出每种实现的目标、结构、优缺点，用于展示不同抽象层级下访问浏览器 IndexedDB 的写法差异。安装依赖后通过 node 启动本地服务器在浏览器查看，面向学习 IndexedDB 用法的开发者。",
+   "highlights": [
+    "提供原生、企业分层、Pragmatic DSL 三种 IndexedDB 实现，含代码结构与各自优劣说明",
+    "DSL 版支持声明式查询与模式定义，如 db.select 按 store/where/order 查询",
+    "企业版实现 Database、Repository、Service 等分层抽象，并提供 UI 自动绑定的 action 方法"
+   ],
+   "use_cases": [
+    "学习 IndexedDB 原生 API 的 open、transaction、objectStore 用法",
+    "对比不同抽象层级封装 IndexedDB 的代码组织方式",
+    "了解声明式 DSL 查询与模式定义在浏览器存储中的写法"
+   ]
+  },
+  "sha": "871835ecacfb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23f3b885ac1a": {
+  "identity": {
+   "one_liner": "基于 Apache Arrow Flight 的分布式向量引擎，用于 Agent 内存共享",
+   "review": "Longbow 是一个用 Go 编写的分布式向量引擎，通过 Apache Arrow Flight 协议（gRPC/HTTP2）对外提供服务，面向 AI/Agent 工作负载。它采用 shared-nothing 架构，用一致性哈希和 SWIM 协议管理成员关系，内置 HNSW 检索（支持 Dense+Sparse 混合与元数据过滤），数据落在内存存储并以 WAL 加 Parquet 快照持久化，可通过环境变量配置内存上限。README 给出了源码编译、本地集群脚本、Docker 镜像与基准测试脚本等运行方式。",
+   "highlights": [
+    "支持 float32/16/64、整型、complex 及 turboquant 等向量类型（128–3072 维），部分维度有专用 SIMD 内核",
+    "数据端口（3000）与元数据端口（3001）分离，Prometheus 指标暴露在 9090 端口",
+    "GPU 加速需单独编译 macOS Metal 或 Linux CUDA 二进制，否则回退 CPU 执行"
+   ],
+   "use_cases": [
+    "Agent 记忆的向量存取与相似度检索",
+    "需要元数据条件过滤的向量搜索场景",
+    "本地或集群环境下的向量服务部署与基准测试"
+   ]
+  },
+  "sha": "23f3b885ac1a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "46110a69240b": {
+  "identity": {
+   "one_liner": "演示如何对 Firebase 数据库及其安全规则运行自动化单元测试的示例项目。",
+   "review": "该项目是一个演示仓库，展示如何对 Firebase 数据库和安全规则执行自动化单元测试。使用者需安装 Node 与 Yarn，并在 Firebase 控制台创建项目后，将项目配置填入 src/firebase.config.js，通过 firebase login/init 初始化，并把管理员私钥 JSON 重命名为 firebase-admin.json 放到根目录。它提供 yarn test-once 单次运行和 watch 模式两种测试方式，支持以指定 UID 模拟已认证用户运行测试；默认测试依赖数据库中存在 /user/joshua 数据。",
+   "highlights": [
+    "提供 yarn test-once 与 yarn test（watch 模式）两种运行测试的方式",
+    "支持以 Firebase 控制台中的用户 UID 执行已认证身份的测试",
+    "通过 firebase deploy --only database 部署 database.rules.json 中的数据库规则"
+   ],
+   "use_cases": [
+    "为 Firebase 数据库和安全规则编写并运行自动化单元测试",
+    "在修改 *.js 文件时通过 watch 模式持续运行测试",
+    "以已认证用户的 UID 验证数据库规则的访问行为"
+   ]
+  },
+  "sha": "46110a69240b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2787,5 +2787,201 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aa6ddcb8d86d": {
+  "identity": {
+   "one_liner": "基于 Pydantic 的 Python Elasticsearch/OpenSearch ORM，仅异步接口",
+   "review": "ESORM 让开发者以 Pydantic 模型定义 Elasticsearch 文档，由库自动创建索引与映射，并执行保存、加载与搜索操作，同时支持 OpenSearch。仅提供异步 API，无同步接口；支持 Python 3.10–3.14、ElasticSearch 8.x/9.x（7.x 需用 0.7.x 版本）、OpenSearch 2.x/3.x；通过 opensearch extra 安装可获得 OpenSearch 支持；Watchers 功能仅限 Elasticsearch。适合需要在 Python 异步应用（如 FastAPI）中操作 ES 文档的开发者。",
+   "highlights": [
+    "以 Pydantic 模型定义文档，自动创建索引与映射，支持 CRUD、部分更新与 bulk 操作",
+    "仅异步 API，全量类型注解，提供查询构建器与查询/聚合的 TypedDict",
+    "通过 opensearch-py 客户端支持 OpenSearch，同一代码可运行于两类服务器"
+   ],
+   "use_cases": [
+    "在 Python 异步应用（含 FastAPI）中以 ORM 方式读写 Elasticsearch 文档",
+    "需要同一套代码同时兼容 Elasticsearch 与 OpenSearch 的项目",
+    "使用 dense_vector 字段进行向量相似度搜索的场景"
+   ]
+  },
+  "sha": "aa6ddcb8d86d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f12d59fe72b1": {
+  "identity": {
+   "one_liner": "基于 React、Express、Firebase 与 Google Generative AI 的简历分析与职位匹配 Web 应用",
+   "review": "AI Career Forge 是一个全栈 Web 应用，提供简历上传解析（PDF/DOCX）、AI 评分反馈、简历生成、简历与职位描述匹配及求职信生成功能，面向求职者使用。前端采用 React + Vite + TypeScript，后端为 Express，认证由 Firebase 承担，数据存储于 Firestore。README 注明后端测试仅完成搭建、实际测试可能尚未编写，且封面信功能为仪表盘结构所暗示。",
+   "highlights": [
+    "支持 PDF 与 DOCX 简历上传解析（Multer + pdf-parse + Mammoth），并通过 Google Generative AI 提供分析评分",
+    "后端暴露 /api 下的 RESTful 端点，覆盖认证、简历上传/分析、简历生成与下载、职位匹配、求职建议，均以 Firebase ID Token 验证",
+    "数据存储使用 Firebase Firestore，保存用户信息、简历元数据、解析内容、分析结果与匹配结果"
+   ],
+   "use_cases": [
+    "上传已有简历（PDF/DOCX）获取 AI 生成的反馈与评分",
+    "根据职位描述对比简历内容，评估匹配程度",
+    "基于用户提供的信息生成新简历并下载，或生成求职信"
+   ]
+  },
+  "sha": "f12d59fe72b1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f0916525690": {
+  "identity": {
+   "one_liner": "基于 Firebase 邮箱密码认证的 Android 登录注册应用",
+   "review": "该项目是一个使用 Firebase Authentication 实现邮箱密码登录与注册的 Android 应用，包含登录、注册、仪表盘三个 Activity 及对应布局文件。README 提供预编译 APK，并说明接入自建 Firebase 数据库需下载并替换 google-services.json、在控制台启用邮箱密码认证。注册后需点击邮件中的链接完成邮箱验证方可登录。",
+   "highlights": [
+    "通过 Firebase Authentication 实现邮箱密码的注册、登录与邮箱验证流程",
+    "代码包含 login.java、Register.java、DashboardActivity.java 三个 Activity 及对应的三个布局文件",
+    "提供预编译 APK（APK 文件夹及 app/release 目录），并支持替换 google-services.json 接入自己的 Firebase 数据库"
+   ],
+   "use_cases": [
+    "学习 Firebase Authentication 邮箱密码认证在 Android 应用中的接入方式",
+    "作为包含注册、邮箱验证、登录流程的 Android 应用参考实现",
+    "接入自建 Firebase 项目后作为具有用户登录功能的 App 运行使用"
+   ]
+  },
+  "sha": "2f0916525690",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eea34f573db3": {
+  "identity": {
+   "one_liner": "Swift 编写的离线优先对象缓存层，用于 iOS/macOS 应用",
+   "review": "Papyrus 为 Swift 应用提供对象缓存层，定位介于将 API 原始响应存文件与使用 Realm 等完整数据库之间，用于构建离线优先应用。任何遵循 Papyrus 协议（Codable、Equatable、Identifiable 组合）的类型均可存取，支持按 ID 或集合查询、过滤、排序、删除，并通过 AsyncThrowingStream 观察增删改变更。要求 iOS 15+/macOS 12+，通过 Swift Package Manager 安装。",
+   "highlights": [
+    "存储任何遵循 Papyrus 协议（Codable + Equatable + Identifiable）的类型",
+    "支持按 ID 或集合查询，集合查询可过滤、排序，并通过 AsyncThrowingStream 观察对象的增删改变更",
+    "提供将新获取对象合并入本地集合的函数"
+   ],
+   "use_cases": [
+    "为 API 响应建立本地缓存，实现离线优先的 iOS/macOS 应用",
+    "先返回缓存数据、再请求 API 并合并更新的数据加载流程",
+    "在 SwiftUI/AsyncAlgorithms 场景中观察集合变化并驱动界面刷新"
+   ]
+  },
+  "sha": "eea34f573db3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9043a35f9996": {
+  "identity": {
+   "one_liner": "Proteus 是用于 ArangoDB 的 Scala 客户端驱动",
+   "review": "Proteus 提供面向 ArangoDB 的 Scala API，通过 ArangoClient、DocumentClient、GraphClient 三个客户端封装数据库、集合、文档与图的增删改查操作。它兼容 ArangoDB v3.6.x，0.7.0 以上版本基于 Scala 2.13 构建并发布于 Maven Central，可通过 sbt 或 maven 引入。配置通过 ProteusConfig case class 完成，可从 application.conf 生成。适合在 Scala 应用中操作 ArangoDB 的开发者；Graph API 尚在开发中。",
+   "highlights": [
+    "提供数据库、集合、文档三级 API，支持创建/删除集合及文档的增删改查",
+    "提供 Graph API，支持创建图、顶点/边集合及顶点、边的增删操作",
+    "通过 ProteusConfig 配置主机、用户等参数，支持从 application.conf 读取"
+   ],
+   "use_cases": [
+    "在 Scala 应用中读写 ArangoDB 文档数据",
+    "通过代码管理 ArangoDB 数据库与集合",
+    "在 Scala 项目中对 ArangoDB 图结构进行顶点/边的创建与删除"
+   ]
+  },
+  "sha": "9043a35f9996",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4524c8bd9b92": {
+  "identity": {
+   "one_liner": "基于 AWS DynamoDB 与 Application Auto Scaling 的数据存储与分片管理 Node.js 库",
+   "review": "OST Storage（@ostdotcom/storage）是一个 Node.js 库，包含数据库存储库及配套服务，提供数据分片库与服务。它封装 DynamoDB 的表管理、增删改查、批量读写等接口，封装 Application Auto Scaling 的目标注册与策略管理接口，并通过 available_shards 和 managed_shards 两张表实现分片的注册、配置与分配。方法参数遵循 AWS DynamoDB 文档，使用者需具备 AWS 连接配置。",
+   "highlights": [
+    "封装 DynamoDB 接口，提供建表（含自动扩缩配置的 createTableMigration）、查询、扫描、批量读写、持续备份等操作",
+    "提供分片管理 API，基于 available_shards 与 managed_shards 表实现分片的新增、配置（共享/独占）、分配与查询",
+    "封装 Application Auto Scaling 接口，支持注册/注销可扩展目标及创建/删除扩缩策略"
+   ],
+   "use_cases": [
+    "在 Node.js 应用中以统一接口读写 AWS DynamoDB 数据",
+    "需要按 identifier/client 管理多分片分配的场景（如多租户数据划分）",
+    "为 DynamoDB 表配置读写自动扩缩策略的运维流程"
+   ]
+  },
+  "sha": "4524c8bd9b92",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8297a894f816": {
+  "identity": {
+   "one_liner": "Apache CouchDB 的配置应用，代码已并入主仓库",
+   "review": "该仓库原为 Apache CouchDB 的配置应用代码，采用 Erlang 实现。README 仅注明配置应用已迁移至主仓库，此处为迁移后保留的镜像，未提供安装、使用或文档说明。查阅 CouchDB 配置相关代码需前往主仓库。",
+   "highlights": [
+    "曾作为 Apache CouchDB 的 config 应用代码仓库",
+    "配置应用代码已迁移至 CouchDB 主仓库"
+   ],
+   "use_cases": [
+    "查找 CouchDB 历史版本中配置应用的源码",
+    "从旧链接或引用跳转时定位迁移提示"
+   ]
+  },
+  "sha": "8297a894f816",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a418c5d4525c": {
+  "identity": {
+   "one_liner": "基于 FastAPI 的威胁情报实体提取平台，集成 NER、ATT&CK 识别与联网情报扩线",
+   "review": "ThreatLens-API 是一个面向威胁情报分析的实体提取平台，提供 NER 实体提取、MITRE ATT&CK 技术识别和联网情报扩线三类能力。NER 侧支持 gliner/ioc-finder/iocextract 多模型与自动分流，ATT&CK 识别基于 tram(SciBERT)、attack-auto 及 qwen3 检索输出技术编号与战术映射，情报扩线对接微步在线、奇安信 TI 平台并使用 Playwright 维护登录态。技术栈为 FastAPI + Vue3 + PostgreSQL，通过 Docker Compose 部署；联网情报功能需配置平台账号密钥。",
+   "highlights": [
+    "NER 提取支持 gliner-x-large、ioc-finder、iocextract 及 auto 智能分流，可自定义标签、分块处理并缓存复用结果",
+    "ATT&CK 识别支持 tram(SciBERT)、attack-auto 中英语言路由与 qwen3 检索，输出技术编号与战术映射",
+    "任务调度包含异步队列、Worker 状态监控、结果缓存 TTL 与成功/失败/重试的 Webhook 回调"
+   ],
+   "use_cases": [
+    "对威胁情报报告等文本批量提取 IOC 与实体并标注原文位置",
+    "将威胁文本映射到 MITRE ATT&CK 技术编号与战术阶段",
+    "通过微步在线、奇安信平台对提取实体进行联网情报扩线"
+   ]
+  },
+  "sha": "a418c5d4525c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "744973001fb8": {
+  "identity": {
+   "one_liner": "基于 Bun 的本地 AI 路由网关，统一 OpenAI 兼容端点接入多个上游服务商",
+   "review": "KhatamRouter 是一个运行于 Bun 的本地 AI 路由网关，对外暴露统一的 OpenAI 兼容 /v1 端点，将请求翻译并转发至 40 多个上游服务商（OpenAI、Anthropic、Gemini 等格式）。面向使用 Claude Code、Cursor 等 AI 客户端、需要聚合多服务商与多账号凭据的开发者。项目基于 decolua/9router 分叉，采用多进程集群、bun:sqlite（WAL）持久化、可选 Redis 协调；仅支持 Bun 运行时，README 明确提示默认密码与密钥需在暴露前修改。",
+   "highlights": [
+    "提供 OpenAI 兼容 /v1/* 端点（chat/completions、messages、responses、embeddings），翻译 OpenAI、Anthropic Claude、Google Gemini 三种上游格式，支持 40+ 服务商",
+    "基于 node:cluster 的多进程模型（默认 max(1, nproc-2) 个 worker），使用 bun:sqlite WAL 持久化与 5 秒 TTL 内存 LRU 缓存，可选 Redis 提供跨 worker 事件广播与分布式登录限流",
+    "包含按 API key 的每日/每周/每月消费限额与 request_cost_ledger 账表、请求走私缓解、可选的 LoopGuard 滑动窗口循环检测、实时 Web 仪表盘"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex、Cline 等 OpenAI 兼容客户端提供本地聚合接入点，统一管理多服务商 API key 与 OAuth 凭据",
+    "配置模型组合（combo）路由，在配额耗尽或 5xx 故障时按预设候选自动切换到下一个组合",
+    "需要按 key 设置消费上限、记录请求成本、并通过 Web 仪表盘查看使用指标与凭据的本地部署场景"
+   ]
+  },
+  "sha": "744973001fb8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

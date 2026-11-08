@@ -2525,5 +2525,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "776cb118629e": {
+  "identity": {
+   "one_liner": "基于对象存储（S3/GCS/Azure Blob）的键值数据库，用 Go 编写。",
+   "review": "IsleDB 是用 Go 编写的键值数据库，以对象存储（S3、GCS、Azure Blob 或兼容 S3 的存储）作为持久层。它提供点读、范围扫描、迭代器、快照、TTL 等能力，采用单写者（跨进程 fenced）加多个独立读服务的架构。可作为 Go 库使用，也可通过 HTTP 服务供任意语言调用。适合写入可批量发布、秒级新鲜度可接受的场景；不支持多键事务、二级索引和查询语言，本地 file:// 与 mem:// 存储仅用于开发。",
+   "highlights": [
+    "提供点读、范围扫描、迭代器、快照、TTL、删除及可选的变更订阅（keys-only 或全量值）",
+    "单写者 + 多独立读进程架构：writer、reader、maintenance、cache 四种服务均可独立运行，任意语言可通过 HTTP 访问",
+    "读路径支持可配置本地缓存与每区域可选共享读缓存（isledb cache），通过长轮询获知新提交"
+   ],
+   "use_cases": [
+    "以对象存储作为持久性与容量层、写入可缓冲并批量发布的数据存储场景",
+    "读流量需要独立扩缩、无需维护数据库副本的服务架构",
+    "与 AI/数据管道相关的键值流式写入与读取（标签含 ai、edge-data-streaming）"
+   ]
+  },
+  "sha": "776cb118629e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "85f06ea40485": {
+  "identity": {
+   "one_liner": "面向学生与开发者的 MongoDB 进阶课程教材库",
+   "review": "该仓库是 César Casas 面向 EducaciónIT 学生的 MongoDB 进阶课程资料，课程目标为讲授基础、中级及部分高级概念，涵盖与 SQL 系统的差异、CRUD 操作、简单与复杂索引（如地理空间索引）等内容。教学工具使用 RoboMongo 客户端，示例代码基于 Node.js 编写。内容分为三节课的大纲列出。",
+   "highlights": [
+    "课程大纲分三节课，覆盖 NoSQL 概念、CRUD、操作符、索引（组合、排序、多键）、集合方法与文档校验器等主题",
+    "教学示例使用 Node.js 编写，并配合 RoboMongo 客户端工具",
+    "包含 $exists、$type、$mod、$regex、$text、$where 等操作符及 capped collections、Tailable 等集合特性内容"
+   ],
+   "use_cases": [
+    "学生或开发者系统学习 MongoDB 从基础到进阶的概念",
+    "准备按三节课大纲组织 MongoDB 教学或培训",
+    "查阅操作符、索引类型、集合方法等主题的知识点清单"
+   ]
+  },
+  "sha": "85f06ea40485",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d177dd8b044e": {
+  "identity": {
+   "one_liner": "用 Rust 编写的可扩展关系数据库，几乎全模块为插件接口",
+   "review": "turborel 是一个用 Rust 编写的关系数据库系统，可作为库嵌入，也可通过 turboreld 以服务器形式运行，用 turborel 命令行客户端进行 SQL 查询。其存储引擎、索引、数据类型、认证、传输协议等均为可替换的插件接口。项目处于 alpha 阶段（版本 0.0.0），SQL、API、协议与文件格式均可能随构建变化。",
+   "highlights": [
+    "支持完整 SQL-86 与 SQL-92，并逐步实现到 SQL:2023 的后续标准",
+    "事务默认 READ COMMITTED，最高 SERIALIZABLE，通过 MVCC、WAL、检查点与恢复支持多线程并崩溃存活",
+    "存储引擎、索引、优化器规则、认证、传输与线路协议等均为插件接口，可替换或扩展"
+   ],
+   "use_cases": [
+    "作为嵌入式库集成进 Rust 应用",
+    "通过 TCP、Unix 套接字或 Windows 命名管道以服务端方式供多客户端查询",
+    "需要可替换存储引擎或自定义认证、协议等组件的数据库实验与研究"
+   ]
+  },
+  "sha": "d177dd8b044e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

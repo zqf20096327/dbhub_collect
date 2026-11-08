@@ -2560,5 +2560,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bb8d7a0a559a": {
+  "identity": {
+   "one_liner": "基于 Promise 的 IndexedDB 封装，提供模型化 ORM 与查询构建器。",
+   "review": "该库将浏览器 IndexedDB 封装为基于 Promise 的 API。开发者可通过配置定义数据库结构、索引与版本，自动生成表对应的模型实例，并支持继承 Model 类编写自定义 ORM 类以实现作用域查询和自定义关系。查询构建器同时覆盖索引列与非索引列的过滤条件。需注意：索引查询一次仅允许一个，非索引查询为性能较重的操作，插入时自动写入 createdAt/updatedAt 时间戳。",
+   "highlights": [
+    "支持创建带索引和版本的数据库结构，并提供多表间关系定义",
+    "提供 create/find/first/all 等系列 Promise API，插入时自动添加 createdAt/updatedAt 时间戳",
+    "查询构建器支持索引查询、非索引条件组合、嵌套属性点表示法及 multiEntry 数组索引搜索"
+   ],
+   "use_cases": [
+    "需要在浏览器端以模型和 ORM 方式读写 IndexedDB 的 JavaScript 应用",
+    "需要对索引列执行范围查询（gte/gt/lte/lt/between）或对非索引列组合过滤的场景",
+    "需要通过扩展 Model 类实现自定义关系和作用域查询的项目"
+   ]
+  },
+  "sha": "bb8d7a0a559a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1fc0eac7f605": {
+  "identity": {
+   "one_liner": "go-core 是一个集成配置读取、日志、数据库与 Redis 初始化的 Go Web 脚手架",
+   "review": "go-core 提供 Go Web 应用的启动脚手架，用于统一处理全局配置读取、zap 日志初始化、GORM 数据库连接、Redis 客户端初始化及 HTTP Server 启动。要求项目根目录含 resources 文件夹与 active.yaml，通过激活不同环境配置文件（dev/fat/uat/pro）区分部署环境，适合按此规范组织的 Go 项目。",
+   "highlights": [
+    "支持从全局配置文件读取配置，通过 active.yaml 激活指定环境配置文件",
+    "集成 zap 日志组件、GORM 数据库连接与 Redis 客户端的初始化",
+    "内置 HTTP Server 启动流程"
+   ],
+   "use_cases": [
+    "需要统一初始化日志、数据库与 Redis 连接的 Go Web 项目",
+    "通过配置文件区分开发、UAT、FAT、生产等多环境部署",
+    "团队希望按统一目录与配置规范组织 Go Web 应用的场景"
+   ]
+  },
+  "sha": "1fc0eac7f605",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f49984094b6f": {
+  "identity": {
+   "one_liner": "SurrealDB 的 Elixir 驱动，提供对官方 NodeJS 客户端 API 的对应封装。",
+   "review": "surrealdb_ex 是连接 SurrealDB 的 Elixir 驱动，发布于 Hex.pm，通过 mix.exs 依赖安装。API 函数签名遵循官方 NodeJS 客户端库的格式，支持查询、插入、更新、删除等操作；所有函数为同步调用，并提供基于 Task 的异步签名变体。适合需要在 Elixir 项目中操作 SurrealDB 的开发者。",
+   "highlights": [
+    "支持查询、插入、更新、删除等数据操作，覆盖官方 NodeJS 库中的函数",
+    "所有函数默认同步调用，并附带基于 Task 的异步签名变体",
+    "通过 config/*.exs 文件配置连接参数，测试套件包含单元与集成测试"
+   ],
+   "use_cases": [
+    "在 Elixir/Erlang 项目中连接并操作 SurrealDB 数据库",
+    "熟悉官方 NodeJS 客户端 API、希望在 Elixir 中沿用相同函数签名的场景",
+    "需要用 Task 异步处理查询结果并自行控制结果处理的场景"
+   ]
+  },
+  "sha": "f49984094b6f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dbac23566413": {
+  "identity": {
+   "one_liner": "Scala Slick 的 DuckDB 扩展，提供 DuckDB JDBC 的 Slick Profile 与类型化 JSON 映射。",
+   "review": "slick-duckdb 是为 Slick 提供 DuckDB 方言的 Scala 扩展库，通过 DuckDBProfile 让 Scala 代码以类型安全方式读写内存中的 DuckDB 数据。除基础表映射外，还封装了 JSON 创建、提取、标量与变更函数，以及 TIMESTAMPTZ_NS 时间戳和 insert returning。适用于使用 Scala/Slick 技术栈并借助 DuckDB JDBC 做数据分析的项目。未映射全部 DuckDB 特性，Blob 以字节数组处理，不支持 DuckDB 扩展相关语法。",
+   "highlights": [
+    "提供 DuckDBProfile，支持 DuckDB JDBC 1.3.2.0 至 2.0.0.0 版本",
+    "封装 JSON 创建、提取（json_extract、-> 等）、八个标量函数与 json_set/insert/replace/remove 变更函数（变更需 JDBC 2.0+）",
+    "提供 TimestampTzNs 类型映射 DuckDB 的 TIMESTAMPTZ_NS 列，并在 JDBC 2.0+ 支持插入后返回生成键和指定列"
+   ],
+   "use_cases": [
+    "Scala/Slick 项目中通过 JDBC 连接 DuckDB 进行内存数据分析查询",
+    "在 Slick 查询中直接使用 DuckDB 的 JSON 函数与 JSON 路径提取",
+    "需要纳秒精度时区时间戳列或插入后返回生成键的场景"
+   ]
+  },
+  "sha": "dbac23566413",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "62cf6c9aed08": {
+  "identity": {
+   "one_liner": "圣克拉拉大学数据仓库与商业智能课程的教材与实验仓库",
+   "review": "该仓库是 Santa Clara 大学 MSIS-2419 研究生课程（数据仓库与商业智能）的教学资料，包含 10 周 20 次课的教学大纲、Marimo 笔记本和实验。课程以 DuckDB 为 SQL 引擎、Python 为语言，围绕披萨店案例构建 Medallion（Bronze/Silver/Gold）数据仓库与星型模型，含 20 个随堂实验与团队项目。学习方式：克隆仓库后按 syllabus/ 下各周文件夹逐周打开笔记本。",
+   "highlights": [
+    "提供 10 周 20 次课程的完整教学材料，每节课附带 30 分钟随堂实验（Marimo 笔记本 + 实验单）",
+    "以披萨店为贯穿案例，实现从 POS 与外卖数据到 Bronze→Silver→Gold 星型模型、KPI 与仪表盘的端到端管道",
+    "技术栈为 DuckDB、Marimo、Python、Tableau，安装仅需 pip 一条命令，无需部署服务器"
+   ],
+   "use_cases": [
+    "作为高校数据仓库/BI 课程的教学参考材料与实验练习",
+    "用于自学 SQL 分析、星型模型设计、缓慢变化维度与 Medallion 架构",
+    "作为构建 ETL/ELT 增量管道（含迟到数据与修正处理）的实践示例"
+   ]
+  },
+  "sha": "62cf6c9aed08",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

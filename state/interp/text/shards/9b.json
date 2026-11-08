@@ -2664,5 +2664,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5b3689b70417": {
+  "identity": {
+   "one_liner": "自托管工作流自动化平台，以 PostgreSQL 为持久化步骤队列驱动可视化编排。",
+   "review": "Euron WorkflowEngine 是 MIT 许可的开源工作流自动化平台，由 FastAPI、Next.js 和 PostgreSQL 16 构建，可在本地 Docker Compose 运行，也可通过 Terraform 部署至 AWS。支持 HMAC 签名 webhook、时区感知 cron、内部事件总线三类触发方式，步骤为持久化状态，失败后可从失败步骤恢复而不重跑已成功部分；队列由 Postgres `SKIP LOCKED` 实现，无需独立消息中间件，Valkey 仅承担领导者选举与信号。",
+   "highlights": [
+    "提供 21 种节点（HTTP、JMESPath 转换、条件/循环/合并/等待、SES 邮件、Slack、S3、SQS、Postgres 查询）与 React Flow 画布编辑器",
+    "步骤支持指数退避重试、节点级与执行级超时、取消、死信队列及从失败步骤恢复",
+    "凭据采用 KMS 信封加密，API 不返回密钥值，并含 SSRF 出站防护与附加式审计日志"
+   ],
+   "use_cases": [
+    "需要本地或自有 AWS 基础设施上运行 webhook、定时任务与事件驱动的自动化流程",
+    "订单履行、库存低量报表、线索分发、发票批处理、故障告警等，仓库附 7 个模板可直接使用",
+    "使用 Terraform（13 个模块、3 套环境）部署，且本地通过模拟 S3/SQS/SES/KMS 复现生产架构"
+   ]
+  },
+  "sha": "5b3689b70417",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb5d7e85d798": {
+  "identity": {
+   "one_liner": "Chromium IndexedDB 连接寿命与已确认写入恢复研究的公开数据与分析工件包",
+   "review": "这是研究 Chromium SQLite 后端 IndexedDB 在单主机前瞻实验中连接寿命与已确认写入恢复情况的公开工件包，面向需要复核或复现统计结果的科研人员。包含 930 个实验槽位的原始证据、分析脚本、冻结协议与 OSF 预注册材料；Git 仓库只含协议、脚本和派生表格，完整逐试验证据需从发布 ZIP 下载并用 SHA-256 校验。复现仅需 Python 3.11+ 标准库，绘图需 Matplotlib 与 NumPy；包内无软件许可证授权。",
+   "highlights": [
+    "提供 930 个注册实验槽位（929 条结果记录、95 个必选单元）的数据、分析代码、冻结设计与诊断证据，含 Clopper-Pearson 精确区间、Holm 校正与 Newcombe 方法等统计复现脚本",
+    "支持逐表复现论文全部主表、次表与 A1–A9 单元表，主重算独立核对 11,140 个作用域内原始哈希",
+    "附带 OSF 预注册包（含协议与设计清单 SHA-256），并发布 v1.1.0 补充证据"
+   ],
+   "use_cases": [
+    "复现或审计该 IndexedDB 连接寿命与写入恢复研究中的统计表与图形",
+    "在预注册协议框架下核查实验槽位分配、端点判定与排除处置记录",
+    "查阅 Chromium SQLite 后端 IndexedDB 持久化行为的前瞻实验原始证据"
+   ]
+  },
+  "sha": "bb5d7e85d798",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

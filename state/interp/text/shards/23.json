@@ -2690,5 +2690,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3ad37df335b1": {
+  "identity": {
+   "one_liner": "SurrealDB 官方 Java SDK，线程安全原生客户端，支持嵌入式与远程连接。",
+   "review": "这是 SurrealDB 的官方 Java SDK，发布于 Maven Central，供 Java/Android 开发者接入 SurrealDB。它提供线程安全的原生客户端，支持嵌入式内存模式（'memory'）与远程连接两种方式，零外部依赖。POJO 支持 Java 8+，record 类型需 JDK 16+；开发时需先以 cargo 构建底层组件再运行 Gradle 测试。",
+   "highlights": [
+    "线程安全原生客户端，零依赖，支持 'memory' 嵌入式模式与远程连接",
+    "支持 create/select 使用可变 POJO（Java 8+）与不可变 record（JDK 16+）",
+    "提供 live queries：通过 selectLive 订阅表变更，按 id 执行 kill 终止"
+   ],
+   "use_cases": [
+    "在 Java 8/11/17/21/25 项目中通过 Maven 或 Gradle 集成 SurrealDB",
+    "需要订阅数据库表实时变更的应用（如实时数据库场景）",
+    "涉及地理空间数据读写（含 IoT 相关场景）的 Java/Android 项目"
+   ]
+  },
+  "sha": "3ad37df335b1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "64f4b85e6822": {
+  "identity": {
+   "one_liner": "以 HTTP/2 流式 NDJSON 封装 DuckDB 的独立 REST 微服务。",
+   "review": "Ducktape 是一个独立微服务，通过 REST API 对 DuckDB 提供写入（Append）、查询（Query）和事务内执行（Execute）能力。它将 DuckDB 的 CGO 依赖隔离在网络边界之后，使纯 Go 应用无需嵌入 DuckDB 即可读写，后端可指向本地文件或 MotherDuck。MIT 许可，支持 Docker 部署，端口默认 8080。",
+   "highlights": [
+    "通过 HTTP/2 流式 NDJSON 写入，底层使用 DuckDB 的 Appender API 实现类型感知的行插入",
+    "提供 /api/append、/api/query、/api/execute 三个端点，Execute 在事务内运行 SQL 语句，支持 rcfile 初始化脚本连接 ducklake",
+    "附带 Go 客户端库，并支持通过环境变量配置端口、日志级别与 Appender 刷写阈值"
+   ],
+   "use_cases": [
+    "Go 项目需访问 DuckDB 但希望避免 CGO 导致的交叉编译与 CI/CD 复杂化",
+    "实时流式摄入场景，将数据追加到本地 DuckDB 文件或 MotherDuck",
+    "任何能产出 NDJSON 的服务以 HTTP 方式查询或写入 DuckDB"
+   ]
+  },
+  "sha": "64f4b85e6822",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

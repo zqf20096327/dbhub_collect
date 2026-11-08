@@ -2745,5 +2745,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "359f8bfcfb1d": {
+  "identity": {
+   "one_liner": "基于 Express 和 MongoDB 的 MVC 结构 Web 应用样板项目",
+   "review": "Essential-kit 是一个 Web 应用样板项目，预置 MVC 目录结构、MongoDB 数据库模型、Pug 模板引擎、CSRF 防护和 404 页面。面向希望减少初始化配置工作的 Express 开发者。通过克隆仓库、npm install 并配置 .env 中的 DB_HOST 后即可运行；端口默认 3333，可在 .env 中自定义。表单验证与认证功能在 README 中标注为尚未提供。",
+   "highlights": [
+    "提供 MVC 文件夹结构和 MongoDB 数据库模型",
+    "内置 Pug 模板引擎（可替换）和 CSRF 防护",
+    "通过 npm run essential 启动，默认运行于 http://localhost:3333，端口可在 .env 中配置"
+   ],
+   "use_cases": [
+    "快速搭建基于 Express + MongoDB 的 MVC 结构 Web 应用原型",
+    "作为 Node.js 初学者了解 MVC 目录组织的起点",
+    "需要预置 CSRF 防护和模板引擎的项目初始化"
+   ]
+  },
+  "sha": "359f8bfcfb1d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "93fbec429bbf": {
+  "identity": {
+   "one_liner": "面向 Go 应用的数据库抽象层，统一记录、查询与事务接口",
+   "review": "DALgo 为 Go 应用提供统一的数据访问 API，覆盖记录读写、查询、事务、钩子与层级键映射，存储后端可替换。适用需要将业务代码与具体数据库客户端解耦的开发者。核心接口为 dal.DB 与各类 Session；不支持的能力由适配器返回 dal.ErrNotSupported。可通过 go get 安装，内置内存适配器用于测试。",
+   "highlights": [
+    "提供统一接口操作记录、查询、事务，支持 SQL 与 NoSQL 多种适配器",
+    "内置内存适配器，可用于测试业务逻辑",
+    "提供泛型 dal.Collection[K,T] 类型化集合句柄与层级键映射"
+   ],
+   "use_cases": [
+    "业务代码需要与具体数据库客户端解耦的项目",
+    "需要用内存适配器测试数据访问逻辑的应用",
+    "同时使用 Firestore 类文档库与关系型数据库的系统"
+   ]
+  },
+  "sha": "93fbec429bbf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7cfba76e9985": {
+  "identity": {
+   "one_liner": "读取 OPC UA/DA 数据并实时写入 MongoDB 的 C# 工具",
+   "review": "OPC2MongoDB 是一个用 C# 编写的工具，连接 OPC UA 和 OPC DA 服务器，按配置的读取间隔轮询数据、订阅事件，并将数据实时写入 MongoDB。使用者需在 opc2mongodb.conf 中配置 MongoDB 连接串、OPC 服务器地址、采集间隔、证书及标签清单。依赖 fork 版 h-OPC 库与官方 MongoDB C# 驱动，需要 .NET Framework 4.6 或更高版本，Releases 页提供可执行文件。",
+   "highlights": [
+    "支持连接 OPC UA 和 OPC DA 服务器，可轮询数据并订阅事件",
+    "通过单个配置文件定义 MongoDB 连接、采集间隔、证书与 OPC 标签列表",
+    "基于 C# 实现，依赖 h-OPC fork 与官方 MongoDB C# 库，需 .NET Framework 4.6+"
+   ],
+   "use_cases": [
+    "需要将 OPC UA/DA 服务器数据写入 MongoDB 存储的环境",
+    "SCADA 数据采集与历史数据落库场景",
+    "需为多个 OPC 服务器按标签配置采集并区分集合的场景"
+   ]
+  },
+  "sha": "7cfba76e9985",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "363a18984cc6": {
+  "identity": {
+   "one_liner": "Windows 本地 MCP 服务器，为 Claude 提供代码、包与项目上下文及受审批的编辑构建能力",
+   "review": "Waymark 是一个运行在 Windows 上的本地 MCP 服务器（v0.2，MIT），面向 C#、Python 和 TypeScript/JavaScript 开发者，供 claude.ai 与 Claude Code 使用。它按项目锁定的版本读取 NuGet/PyPI/npm 包的真实 API 签名，基于 Roslyn 和 tree-sitter 建立语法索引，支持文件编辑、构建测试命令和功能地图记忆，默认操作需在本机审批，并在输出中隐藏可识别的密钥。安装通过 install.cmd 完成，依赖 .NET 10 SDK 与 47100/47101 端口，claude.ai 接入需 ngrok 隧道。README 明确说明没有沙箱，安全机制非保证。",
+   "highlights": [
+    "pkg_find/pkg_expand 读取项目所固定版本的真实包 API 签名（NuGet 编译包、PyPI wheel、npm 声明文件），并支持带命名空间重命名的跨工作区文件/目录复制",
+    "code_search/outline/method/callers/types 基于 Roslyn 与 tree-sitter 语法索引读取代码，文件监视器保持索引更新，不存储源码文本；memorise/recall 可按功能名保存与复用探索过的类型和行范围",
+    "命令类工具（cmd_project/cmd_git/cmd_proc/cmd_shell）每个操作可设为 Off/Ask/Auto，审批仅限本机，所有调用有审计记录，支持 Pause all 一键暂停"
+   ],
+   "use_cases": [
+    "让 Claude 在编辑和构建 C#/Python/Node 项目时核对所固定版本的包成员签名",
+    "在大型工作区中分层浏览代码骨架并按需展开，或按功能名召回之前探索过的代码位置",
+    "通过本机审批流程让 Claude 执行构建、测试、运行等命令，同时隐藏工具输出中的密钥"
+   ]
+  },
+  "sha": "363a18984cc6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

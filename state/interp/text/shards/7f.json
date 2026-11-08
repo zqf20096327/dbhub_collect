@@ -2351,5 +2351,203 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7214830d3fea": {
+  "identity": {
+   "one_liner": "基于 CLIProxyAPI 的定制构建层，内嵌 SQLite 用量服务与账号巡检调度器。",
+   "review": "该项目不 fork upstream，而是以 patch 与 overlay 维护对 router-for-me/CLIProxyAPI 后端及其管理前端 CLIProxyAPI Management Center 的定制，发布时拉取 upstream 最新 release 应用定制层生成 Pro 产物。核心增加 SQLite 用量持久化、账号巡检调度、代理池与 OAuth 账号策略等模块，面向需要这些扩展功能的 CLIProxyAPI 使用者。需注意前端部分功能依赖 Pro 后端 API，单用 upstream 后端时对应页面无数据。",
+   "highlights": [
+    "内嵌 SQLite usage service，暴露 /v0/management/usage 系列 API，支持 JSONL/NDJSON 导入导出与 WebDAV 备份恢复",
+    "账号巡检调度器支持 Codex、Claude、Antigravity、Gemini CLI、Kimi、xAI，可将巡检结果持久化并自动执行启用、禁用、删除、刷新令牌",
+    "二进制内建代理池（HTTP/SOCKS 节点汇聚为本地 SOCKS5，支持轮询、加权、健康隔离）与按提供商 OAuth 套餐配置的账号策略"
+   ],
+   "use_cases": [
+    "需要持久化保存请求用量、模型价格与配额缓存并进行备份恢复的 CLIProxyAPI 部署",
+    "需要对多个提供商 OAuth 账号进行定时巡检、限制检查与自动化账号管理的场景",
+    "需要将多个代理节点汇聚为本地 SOCKS5 地址并按策略调度账号的部署环境"
+   ]
+  },
+  "sha": "7214830d3fea",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "14c728bb0046": {
+  "identity": {
+   "one_liner": "桌面本地优先日记笔记应用，Markdown 存于 SQLite，支持双链与 PDF",
+   "review": "Zorite 是一款桌面端每日日记笔记应用，页面按 Logseq 方式组织但以普通文档而非大纲方式编辑。笔记以 Markdown 形式存储在本地 SQLite 数据库中，支持 [[wiki-links]]、标签、反链、白板、PDF 阅读批注、LaTeX 公式渲染。无云服务和账户。用 Rust 编写，基于 GPUI（Zed 的 UI 框架），提供 macOS、Windows、Linux 安装包。",
+   "highlights": [
+    "笔记存于本地 SQLite 文件，支持 SQLCipher AES-256 全库加密、密钥链存储与闲置自动锁定",
+    "PDF 查看器支持虚拟化分页、目录、文本搜索、批注高亮、AcroForm 表单填写，并可将笔记导出为带样式的 PDF",
+    "提供 trigram 全文搜索索引、图谱视图、块引用（(( 与 ^id 锚点）、笔记嵌入（![[Note]]），并有 Obsidian 与 Logseq 导入器和 Markdown 导出"
+   ],
+   "use_cases": [
+    "在桌面端维护本地优先的每日日记与双链笔记，无需云账户",
+    "阅读和批注 PDF 文献，将高亮链接回笔记页面并填写 PDF 表单",
+    "从 Obsidian 或 Logseq 迁移现有 vault/graph 数据，或导出为纯 Markdown 资产目录"
+   ]
+  },
+  "sha": "14c728bb0046",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f97a96a7be1": {
+  "identity": {
+   "one_liner": "基于 IndexedDB 的浏览器端持久化键值存储，提供简化 API。",
+   "review": "idb-kv-store 在 IndexedDB 之上封装键值存取接口，支持回调与 Promise 两种风格，提供事务、范围查询和迭代器，并通过 BroadcastChannel 在多实例、窗口与 Web Worker 间广播 add/set/remove 变更事件。同一数据库名的实例共享数据。变更事件依赖浏览器实现 BroadcastChannel API，可用 IdbKvStore.BROADCAST_SUPPORT 检测。",
+   "highlights": [
+    "提供 set/get/add/remove/clear/keys/values/json/count/iterator 等异步 API，回调与 Promise 两种调用方式",
+    "支持原子事务（readwrite/readonly 模式），完成后自动提交，可调用 abort() 回滚",
+    "通过 BroadcastChannel 广播跨实例/窗口/Worker 的变更事件，可用 opts.disableBroadcast 关闭"
+   ],
+   "use_cases": [
+    "需要在浏览器中持久化键值数据、且数据规模超出 localStorage 约束的场景",
+    "多个标签页、窗口或 Web Worker 需要共享并监听同一份数据变更的场景",
+    "需要将多个读写操作打包为原子事务执行的浏览器端存储操作"
+   ]
+  },
+  "sha": "8f97a96a7be1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d9afed8bb131": {
+  "identity": {
+   "one_liner": "R4CouchDB 是一套基于 list 连接对象的 R 与 CouchDB 交互函数集",
+   "review": "R4CouchDB 是 R 语言包，提供对 CouchDB 数据库与文档的基础管理操作，包括添加、获取和删除，社区贡献的 cdbAddDocS() 也包含在内。所有 cdb 函数通过 cdbIni() 生成的 list 连接对象获取参数并返回结果，默认服务器为 localhost。包托管于 CRAN，测试假设本地 5984 端口运行可写的 CouchDB 实例。",
+   "highlights": [
+    "提供数据库与文档的添加、获取、删除等基础管理操作函数",
+    "所有 cdb 函数以 cdbIni() 生成的 list 对象传递连接配置与数据，含 serverName、digits 等默认值",
+    "可通过 install.packages(\"R4CouchDB\") 从 CRAN 安装，cdbListDB() 可列出服务器上的数据库"
+   ],
+   "use_cases": [
+    "在 R 环境中对本地 CouchDB（默认 http://localhost:5984）进行文档增删读取",
+    "以 list 连接对象方式管理 CouchDB 连接配置",
+    "结合 CouchDB wiki 中的使用示例学习 R 与 CouchDB 交互"
+   ]
+  },
+  "sha": "d9afed8bb131",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dec79cba44b8": {
+  "identity": {
+   "one_liner": "读取服务器访问日志的自托管网站分析工具",
+   "review": "Skald 通过解析 Web 服务器访问日志统计网站流量，将每个请求归入五类（真人、AI 助手、搜索引擎、机器人扫描器、自有流量），并提供线索与收入归因及安全扫描分析。无需 Cookie 或浏览器脚本，数据存于自有服务器。README 未说明给谁用，适合需要日志级流量记录的网站运营场景。双计数审计机制下，两套解析结果不一致时当天数据将被 withheld 而非估计。",
+   "highlights": [
+    "按五类分组统计访问日志，五类之和与日志完全对应，包含 JavaScript 统计工具无法记录的 AI 爬虫与机器人请求",
+    "独立审计进程用另一套解析规则重算每个数字，两套计数不一致时当天数据被搁置而非猜测填充",
+    "安全模块从同一日志识别扫描器、攻击尝试与伪造浏览器 UA，并生成 nginx/Cloudflare/fail2ban 封禁名单"
+   ],
+   "use_cases": [
+    "统计 AI 助手与爬虫对站点的抓取行为，包括训练抓取、实时问答与引用点击三类归因",
+    "追踪来自 ChatGPT、Perplexity 等 AI 回答的无 referrer 点击（标注为 likely，不混入真实计数）",
+    "从访问日志识别探测 .env、wp-login 等路径的扫描行为并生成封禁名单"
+   ]
+  },
+  "sha": "dec79cba44b8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f6ce63693f0": {
+  "identity": {
+   "one_liner": "Go 编写的自托管流量分发系统（TDS），内置管理面板，支持 ClickHouse 与 Redis。",
+   "review": "KuzTDS 是一个用 Go 编写的自托管流量分发系统，根据规则将访问者重定向到目标页或以 iframe/JS/内联内容等形式呈现，并区分机器人与真实用户、记录访问日志。面向需要自行部署流量分流的运营者。项目由四个二进制组成：引擎、内嵌管理面板的后台服务、定时任务服务和落地页客户端。ClickHouse 与 Redis 为可选依赖，缺失时对应功能被跳过。",
+   "highlights": [
+    "支持按地理（国家/城市/时区）、ASN/运营商、设备/OS/浏览器、语言、referer、URL 参数、IP 列表、每周时间表等条件分流，提供 18 种输出类型和宏替换",
+    "管理面板通过 go:embed 内嵌于二进制，包含流量图绘制、访客测试、仪表盘、日志筛选、转化记录等功能，无需 Node 构建或独立 Web 服务器",
+    "状态数据驻留进程内存并在文件变更时后台原子热重载；日志异步写入 ClickHouse，计数与会话使用 Redis；包含 cmd/cron 后台服务用于更新 IP 列表与 geo 数据库、VirusTotal 检查和 Telegram 通知"
+   ],
+   "use_cases": [
+    "需要根据访问者属性（地理、设备、来源等）将点击路由到不同落地页或 offer 的流量分发场景",
+    "需要区分搜索引擎机器人并记录完整访问日志与转化（postback）数据的自托管部署",
+    "希望以单二进制运行、ClickHouse/Redis 可选的轻量部署环境"
+   ]
+  },
+  "sha": "3f6ce63693f0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c78398ed20cc": {
+  "identity": {
+   "one_liner": "面向 Windows 的 AI 伴侣运行时，提供持久记忆、版本化人格与 QQ 私聊入口。",
+   "review": "PCAR 是一个运行于 Windows 的 AI 伴侣项目，基于 Python 3.12 与 uv 部署，包含 Tkinter 桌面工作台和通过 NapCat/AstrBot 桥接的本人 QQ 好友私聊两种入口。它使用 SQLite 类本地数据库存储人格、会话与记忆，人格设定支持版本比较与回退，自动记忆整理设有每小时 60 次的调用额度限制。项目无独立安装包，组件路径存在本机约定，仅支持私聊单联系人场景。",
+   "highlights": [
+    "支持 Tkinter 桌面工作台与本人 QQ 好友纯文本私聊双入口，最近会话按人格、渠道及账号范围分开",
+    "提供持久记忆机制：自动提取、独立复核、版本化发布，不确定项隔离，人格核心不自动改写",
+    "人格设定支持编辑、版本比较与回退；端口默认绑定回环地址，数据目录可用环境变量覆盖"
+   ],
+   "use_cases": [
+    "在 Windows 本机运行一个带长期记忆与版本化人格设定的聊天陪伴程序",
+    "通过 NapCat 与 AstrBot 桥接，与本人 QQ 账号进行好友私聊",
+    "需要会话摘要、记忆撤回、备份导出等本地持久化管理能力的单机部署场景"
+   ]
+  },
+  "sha": "c78398ed20cc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "868ce9823be8": {
+  "identity": {
+   "one_liner": "Go 编写的 WhatsApp LLM 机器人，带全局人物记忆与可编辑人设。",
+   "review": "wagoya 是一个用 Go 编写的 WhatsApp 机器人，通过 whatsmeow 以伴随设备方式接入 WhatsApp，支持私聊（仅白名单）和群组 @提及/回复触发。核心机制是按 WhatsApp 身份（LID/号码）建立跨聊天的人物档案库，用 SQLite FTS5 加嵌入实现事实检索，由模型通过受校验的工具写入记忆，事实带来源与信任级别。以单个静态二进制运行（无 CGO），支持 anthropic 或 openrouter 提供商，配置集中于 .env。",
+   "highlights": [
+    "以 LID 为键的人物档案跨聊天共享，事实带来源与信任级别，支持 FTS5 与嵌入混合检索，无条目上限",
+    "模型通过 save_fact/invalidate_fact 等受校验工具自行写记忆，后台管理器每 16 条消息或 10 分钟静默后自增事实",
+    "支持 MCP 工具、http_request（拒绝回环/私网/元数据地址）、提醒任务持久化、人设以纯语言修改且带版本历史"
+   ],
+   "use_cases": [
+    "个人或小组在 WhatsApp 中使用一个有人设与长期记忆的助手号码",
+    "需要跨群组记住成员信息（职业、偏好、昵称）的社群群聊场景",
+    "通过 MCP 工具或 http_request 让机器人在聊天中查询外部 API 与网页"
+   ]
+  },
+  "sha": "868ce9823be8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61407e3de071": {
+  "identity": {
+   "one_liner": "通过 MCP 让多台电脑上的编程智能体共享任务板与上下文的点对点协作工具",
+   "review": "Coopagents 用 MCP 协议连接不同机器上的 Claude Code、Codex 等编程智能体，提供共享任务板、直接提问、任务交接与交付证据追踪（分支、commit、PR）。数据存于主机 SQLite，P2P 连接基于 iroh，无需服务器或账号。提供 Agent 托管的 P2P 模式和自托管服务两种运行方式。当前最新可安装版本为 0.9.0，1.0.0rc1 尚未发布。",
+   "highlights": [
+    "通过 MCP 发现队友的智能体、发送请求并跟踪读取、处理、解决状态",
+    "共享任务板支持认领工作、报告进度与查看依赖，任务可关联 Git 对象作为交付证据",
+    "P2P 模式基于 iroh 公钥认证，直连失败时回落到加密中继，无需公 IP 或端口转发"
+   ],
+   "use_cases": [
+    "小团队中成员使用不同编程智能体（如一人用 Claude Code、一人用 Codex）并希望共享项目上下文",
+    "跨机器交付协作中需要将任务追踪到分支、commit、PR 等交付证据",
+    "不想部署独立服务时，由一台主机运行 P2P 空间供成员直连协作"
+   ]
+  },
+  "sha": "61407e3de071",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

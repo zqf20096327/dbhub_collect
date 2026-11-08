@@ -3179,5 +3179,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2b69b0f34d1f": {
+  "identity": {
+   "one_liner": "单二进制 OLTP 数据库服务器，编译执行 T-SQL 及存储过程",
+   "review": "LionSQL 是用 Go 编写的单可执行文件 OLTP 数据库服务器，编译并执行 Microsoft T-SQL 与存储过程，同时提供 PGWire v3 与 TDS 双协议接入。支持 macOS、Linux 及 Windows 单文件版，内置 Web 管理界面、REST CRUD 接口与静态网页托管。提供内存 OCC 与 WiredTiger MVCC 两种存储引擎，快照隔离下读写互不阻塞。",
+   "highlights": [
+    "同时监听 PostgreSQL v3 协议（5433 端口）与 MSSQL TDS 协议（1433 端口），可用 psql、sqlcmd、SSMS 及各语言驱动连接",
+    "支持 CREATE PROCEDURE、函数、触发器、IF/WHILE/TRY-CATCH、游标等 T-SQL 过程语法，查询与存储过程统一在寄存器式 VDBE 虚拟机上执行并提供 EXPLAIN BYTECODE",
+    "提供内存 OCC 引擎与 WiredTiger MVCC 磁盘引擎两种存储后端，支持 WAL 流复制、在线热备份与基于 goroutine 的内置连接池"
+   ],
+   "use_cases": [
+    "需要执行 MSSQL T-SQL 存储过程且希望单二进制部署的 OLTP 应用",
+    "使用 pgx、psycopg2、GORM 等 PostgreSQL 生态驱动接入的应用集成",
+    "通过内置 Web Studio 进行表结构浏览、SQL 查询、备份恢复等数据库管理操作"
+   ]
+  },
+  "sha": "2b69b0f34d1f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e696430141a1": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 代理记忆 CLI，只读取多源数据生成带引用的本地上下文",
+   "review": "Mora 是一个面向 MCP 代理（如 Claude Code、Codex）的本地记忆 CLI，用 Go 编写。它把 Gmail、Google/Apple 日历、iMessage、WhatsApp、文件（含 PDF/Word）和 GitHub Issues 只读复制为本地 Markdown 与 SQLite 索引，代理通过 `mora mcp serve` 检索；保存用 `mora write`，MCP 写入受 mcp_write_policy 控制。当前为 alpha，仅覆盖单设备 Claude Code 的 Bash 警告规则。",
+   "highlights": [
+    "只读接入 Gmail、Google Calendar、iMessage、WhatsApp、Apple Calendar、文件（PDF/Word）和 GitHub Issues，默认不上传",
+    "通过 MCP 服务器（mora mcp serve）向 Claude Code、Codex 等客户端提供搜索、读取、write_memory 等工具",
+    "保存和搜索路径不调用 AI 模型，可选本地 Ollama 模型改进搜索"
+   ],
+   "use_cases": [
+    "在本地统一检索邮件、日历、消息、文件和 GitHub Issues",
+    "为 MCP 代理提供带引用的本地上下文，并按策略控制代理写入",
+    "用 Bash 警告规则（mora rules/hook）在 Claude Code 中提醒代理避免重复错误"
+   ]
+  },
+  "sha": "e696430141a1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2510,5 +2510,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "eafea3260b8d": {
+  "identity": {
+   "one_liner": "用单个 YAML 文件定义后端的单二进制 Supabase 兼容服务器",
+   "review": "instancez 是一个以单个 YAML 文件为 schema 的自托管后端服务器，兼容 @supabase/supabase-js 等 Supabase 客户端，提供认证、PostgREST 风格 REST API、RPC、存储和 RLS。它以单个自包含二进制运行，inz dev 会对比 YAML 与数据库差异并自动应用增量迁移，适合希望以声明式 YAML 管理后端的开发者与 LLM 编码代理。注意尚不支持 Realtime/websockets，存储图片缩放仅支持 JPEG/PNG。",
+   "highlights": [
+    "以一个 instancez.yaml 声明表、RLS、存储、RPC 与函数，保存时对数据库应用增量迁移",
+    "兼容 @supabase/supabase-js 等 Supabase 客户端，支持 auth、REST、RPC 与存储",
+    "以单个自包含二进制运行于本地、Docker、Kubernetes、VM 或 AWS Lambda，并附带面向编码代理的 agent skill"
+   ],
+   "use_cases": [
+    "用 supabase-js 快速搭建需要认证与 RLS 的本地或自托管应用后端",
+    "由 LLM/编码代理读取与维护 YAML schema 并生成数据库应用代码",
+    "以单二进制+Postgres 形式在 Docker、Lambda 等环境部署 SaaS 后端"
+   ]
+  },
+  "sha": "eafea3260b8d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4350908760bf": {
+  "identity": {
+   "one_liner": "面向大学生的学期选课排课 Web 应用，检测时间冲突",
+   "review": "这是一个为巴博尔努什罗瓦尼工业大学开发的学期排课 Web 应用，界面以波斯语（RTL）为主。它从外部 JSON 数据源读取各院系开课目录，学生可按学分、教师、性别等条件筛选课程，将所选课程映射到周六至周五的周课表网格上，添加课程时检测上课时间与考试时间的重叠。技术栈为 Next.js 13、MUI v5、PostgreSQL + Prisma，账号体系使用 JWT 与 bcrypt，短信验证码依赖 Kavenegar 服务。",
+   "highlights": [
+    "支持从外部 JSON 源加载多院系课程目录，按学院、学分（0.5–6）、课程名/代码/教师搜索，并支持波斯字符归一化与性别分组筛选",
+    "将所选课程渲染为周六至周五的周课表网格，添加课程时检测同日上课时间重叠，有考试时间元数据时可提示考试日期冲突",
+    "基于 PostgreSQL + Prisma 持久化学生账号（bcrypt 哈希）与已保存选课，登录后自动加载历史选稿；通过 Kavenegar 提供 OTP 短信与密码找回流程"
+   ],
+   "use_cases": [
+    "大学生在选课前浏览开课目录、组合周课表并排查时间冲突",
+    "已注册账号的学生保存并恢复选课草稿，登录后继续规划下学期课表",
+    "通过短信 OTP 完成手机号验证与密码找回的自助账号管理"
+   ]
+  },
+  "sha": "4350908760bf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e02025ac2deb": {
+  "identity": {
+   "one_liner": "基于 Universal Sentence Encoder 的语义图数据库 Python 库",
+   "review": "YassQueenDB 是一个图数据库 Python 库，用于以图格式存储、分析和检索文本数据。它通过 Universal Sentence Encoder 生成向量嵌入，支持语义搜索、文本摘要和关键词提取，并提供图的创建、节点/边的增删及文件存取功能。该库仅处理文本数据，使用前需下载并加载编码器模型，在大规模数据集上速度受系统资源影响。",
+   "highlights": [
+    "提供图的创建、选择、删除，以及节点和边的添加与删除操作",
+    "支持基于 Universal Sentence Encoder 生成文本嵌入并进行节点语义搜索",
+    "包含文本摘要、关键词提取、Laplacian eigenmaps 降维，以及图与文件间的保存和加载"
+   ],
+   "use_cases": [
+    "将段落拆分为句子并建为节点，进行语义检索",
+    "对文本数据进行嵌入、摘要和关键词提取以建立索引",
+    "对图结构数据执行降维并持久化到文件"
+   ]
+  },
+  "sha": "e02025ac2deb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fcc6e2a26051": {
+  "identity": {
+   "one_liner": "用于在 AWS 上部署管理 ElastiCache Redis 集群的 Terraform 模块",
+   "review": "这是一个 Terraform 模块，用于在 AWS 上创建和管理 ElastiCache Redis 集群，面向使用基础设施即代码的运维与开发团队。它封装了复制组、子网组、安全组、参数组等资源，支持配置实例类型、节点数、VPC/子网、静态加密（KMS）、自动快照、慢日志与引擎日志输出，并可启用 CloudWatch 告警及经 SNS/Lambda 转发 Slack 通知。需 Terraform >= 1.0 与 AWS provider >= 4.23。注意默认 create_random_password 为 true，自定义密码需将该变量设为 false。",
+   "highlights": [
+    "支持配置实例类型、节点数、VPC/子网、安全组、CIDR 访问控制及 Redis 引擎版本",
+    "支持多可用区部署与自动故障转移、静态加密（自定义 KMS 密钥或 AWS 托管）、每日自动快照与最终快照",
+    "可配置 CloudWatch 指标告警，并通过 SNS 与 Lambda 将通知发送至 Slack；支持慢日志与引擎日志输出到 CloudWatch Logs 或 Kinesis Firehose"
+   ],
+   "use_cases": [
+    "在 AWS 上以 Terraform 声明式创建带副本组与多可用区的 Redis 集群",
+    "需要静态加密、安全组访问控制与自动快照备份的 Redis 部署",
+    "需要将 Redis 性能告警接入 CloudWatch/SNS 并推送 Slack 通知的监控场景"
+   ]
+  },
+  "sha": "fcc6e2a26051",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

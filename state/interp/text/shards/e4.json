@@ -2605,5 +2605,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d49b25a799d3": {
+  "identity": {
+   "one_liner": "基于向量时钟追踪因果性的多主分布式键值数据库",
+   "review": "Sucredb 是用 Rust 编写的多主键值分布式数据库，存储层基于 RocksDB，兼容 Redis Cluster 客户端协议的一个小子集。它通过向量时钟变体追踪因果关系，写入冲突时保留多版本而不丢弃，支持 Dynamo/Cassandra 风格的一致性级别（One/Quorum/All），目前处于 Alpha 状态，仅支持基础 KV、Hash、Set 及专用 Counter 类型。",
+   "highlights": [
+    "任意持有分区的副本节点均可处理读写，冲突写入以多版本形式保留，基于向量时钟追踪因果性",
+    "支持 One/Quorum/All 三种 Dynamo 风格一致性级别参数；Hash/Set/Counter 为 CRDT 类型，操作无需携带上下文",
+    "兼容 Redis Cluster 客户端，存储基于 RocksDB，使用 `cargo install .` 安装，支持以种子节点方式组建集群"
+   ],
+   "use_cases": [
+    "需要保留冲突版本而非覆盖的最终一致键值存储场景",
+    "使用现有 Redis Cluster 客户端接入的多主写入集群环境",
+    "依赖 CRDT 类型（计数器、集合、哈希）且写入分散在多节点的应用"
+   ]
+  },
+  "sha": "d49b25a799d3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "09685fac55dc": {
+  "identity": {
+   "one_liner": "本地的AI编码代理历史索引，支持关键词+语义混合搜索",
+   "review": "Callimachus 是一个本地优先的桌面应用，将 13 种 AI 编码代理（Claude Code、Codex、Cursor、Gemini CLI 等）的会话记录索引到一个本地 SQLite 库中。搜索采用 SQLite FTS5 关键词与 sqlite-vec 设备端语义相似度经 Reciprocal Rank Fusion 融合的混合排序。提供 Tauri 桌面界面、CLI（cal）、MCP 服务器和 VS Code/Cursor 扩展，适合需要在本地集中检索和复用 AI 编码历史的开发者。注意 Linux 需 glibc 2.38+，旧版本应用无法打开已升级的索引。",
+   "highlights": [
+    "将 13 种编码代理的对话索引到本地 SQLite 存储，数据保留在本地，语义搜索在设备端运行（sqlite-vec，无云端调用）",
+    "支持按文件路径搜索触及相关代码的线程（file: 语法与 cal files 命令），并可按来源、项目、标签等过滤",
+    "提供 MCP 服务器、CLI（cal）、VS Code/Cursor 扩展，以及可引用线程来源的 Ask 模式 RAG 问答"
+   ],
+   "use_cases": [
+    "集中检索散落在多个 AI 编码工具中的历史会话，按关键词、语义或文件路径查找",
+    "为项目沉淀决策、gotcha 和 TODO 记忆，并注入 Claude Code/Codex/Gemini CLI 等代理的会话上下文",
+    "通过 MCP 服务器或 Ask 模式让代理/聊天基于自身历史回答问题"
+   ]
+  },
+  "sha": "09685fac55dc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8682bbd3308f": {
+  "identity": {
+   "one_liner": "Udemy React Native 与 Redux 课程的配套项目代码仓库",
+   "review": "该仓库包含 Udemy 课程《The Complete React Native and Redux Course》的配套项目，含 Albums、Auth、Manager 三个示例，涉及基础 UI 组件、Firebase 身份验证、Redux 与 Redux Thunk、导航及 Firebase 数据存储。仓库仅列出项目模块与技术要点，未提供安装与运行说明，学习者需结合课程资源使用。",
+   "highlights": [
+    "包含 Albums（基础 UI 组件）和 Auth（Firebase 身份验证）等课程项目",
+    "Manager 项目使用 Redux、Redux Thunk、导航与 Firebase 数据存储",
+    "附有 Udemy 课程资源链接"
+   ],
+   "use_cases": [
+    "配合 Udemy 课程进行 React Native 与 Redux 学习",
+    "查阅 Firebase 认证与数据存储的示例代码",
+    "了解 Redux 与 Redux Thunk 在移动应用中的组织方式"
+   ]
+  },
+  "sha": "8682bbd3308f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "48740d804a4d": {
+  "identity": {
+   "one_liner": "基于 Electron 的桌面数据库管理工具，界面参考 Navicat，支持 19 种数据库。",
+   "review": "DBPanda 是一款在 Windows/Linux/macOS 上运行的桌面数据库连接管理工具，基于 Electron 构建，界面与操作参考 Navicat。支持 MySQL、PostgreSQL、SQLite、SQL Server、ClickHouse、OceanBase、Oracle 及 Redis、MongoDB 等 19 种数据库，提供 SQL 编辑器、可视化表设计器、导入导出、结构/数据同步、多库广播执行等功能。凭据经 Electron safeStorage 加密保存；Redis、Elasticsearch、MongoDB 仅支持只读浏览。",
+   "highlights": [
+    "支持 19 种关系型与非关系型数据库连接，可通过导入 Navicat 导出的 .ncx 文件批量迁移连接配置",
+    "提供表数据行内编辑、筛选构建器、按方言生成的可视化表设计器与 SQL 预览、CSV/Excel/JSON/SQL INSERT/Markdown 多格式导出",
+    "内置数据传输、结构同步、数据同步、多库广播执行、跨库联邦查询、SQL 回滚快照（SQL 后悔药）与表结构历史记录等工具"
+   ],
+   "use_cases": [
+    "需要在统一桌面客户端中管理多种数据库（如 MySQL、PostgreSQL、Oracle、ClickHouse）连接并执行日常查询与表维护",
+    "分库分表或多环境下需将同一条 SQL 在多个数据库批量执行并汇总结果",
+    "需要对表结构变更留档、生成迁移/回滚脚本，或对误执行的 UPDATE/DELETE 生成反向 SQL 进行撤销"
+   ]
+  },
+  "sha": "48740d804a4d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ef325c610e19": {
+  "identity": {
+   "one_liner": "在 SQL Server 内运行的存储过程式 AI 索引调优工具，收集诊断并调用 Azure OpenAI 生成建议",
+   "review": "该项目以 T-SQL 存储过程形式部署在用户数据库内，收集缺失索引、重复索引、非 SARGable 谓词、Query Store 查询等诊断数据，经 sp_invoke_external_rest_endpoint 调用用户自有的 Azure OpenAI 部署，将建议存入 AIIndexTuner 表并可按阈值创建经验证的索引。需要 SQL Server 2025 或对应更新策略的 Azure 平台。适用于希望用 T-SQL 与可调度作业运行索引调优流程的 DBA。",
+   "highlights": [
+    "单个存储过程完成诊断收集、模型调用、建议存储与应用，支持 SQL Server Agent 作业调度",
+    "变更控制参数（@AllowColumnstore、@AllowDropIndex、@MaxNewIndexes、优先级与置信度阈值）在提示和应用两端双重强制执行",
+    "收集缺失索引重叠、重复与前缀重叠索引、计划缓存 TOP 语句、非 SARGable 谓词、Query Store 7 天查询、低基数偏斜列等诊断信息"
+   ],
+   "use_cases": [
+    "对 SQL Server 2025 / Azure SQL 数据库定期运行索引建议收集并存入表供审查",
+    "通过 @Mode = 'CREATE' 在变更控制阈值内自动创建经验证的非聚集索引或索引扩宽",
+    "按 @SchemaName / @TableName 过滤，针对特定表进行索引诊断与调优"
+   ]
+  },
+  "sha": "ef325c610e19",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

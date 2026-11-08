@@ -2659,5 +2659,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6821415f9ed6": {
+  "identity": {
+   "one_liner": "Snowflake 官方 PHP PDO 驱动，实现通过 PDO 扩展连接 Snowflake 数据库",
+   "review": "该项目是 Snowflake 提供的 PHP PDO 驱动，供需要从 PHP 应用访问 Snowflake 数据库的开发者使用。驱动以 PHP 扩展形式提供，需从源码编译，支持 Linux、macOS 和 Windows（仅 x64、线程安全版 PHP），支持 PHP 8.1–8.4，依赖 php-pdo 与 php-json 扩展，并需配置 cacert.pem 证书。目前不支持 GCP 区域端点，region 参数已弃用。",
+   "highlights": [
+    "实现 PHP Data Objects (PDO) 接口，用于连接 Snowflake 数据库",
+    "支持 Linux、macOS 和 Windows（仅 x64 架构）构建，支持 PHP 8.1 至 8.4 版本",
+    "提供 cacert.pem 证书配置及日志目录、日志等级等 ini 配置项"
+   ],
+   "use_cases": [
+    "在 PHP Web 应用（Apache/nginx 等服务器环境）中访问 Snowflake 数据库",
+    "需要以 PDO 统一接口集成 Snowflake 数据源的 PHP 项目",
+    "在 Linux、macOS 或 Windows 上自行编译安装 PHP 数据库扩展"
+   ]
+  },
+  "sha": "6821415f9ed6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7412a74e13e3": {
+  "identity": {
+   "one_liner": "RocksDB 的 Objective-C 封装，提供持久化键值存储接口。",
+   "review": "ObjectiveRocks 为 Facebook 的 RocksDB 提供 Objective-C 封装，将底层 C++ 实现抽象为 Objective-C 风格 API，包含 Put/Get/Delete、迭代器、快照、WriteBatch、列族和自定义比较器等功能。面向 iOS/macOS 开发者，可通过 Carthage 或 git 子模块集成；iOS 目标构建的是功能子集 RocksDB Lite 版本。",
+   "highlights": [
+    "提供 Get/Put/Delete 基本操作、WriteBatch 原子写入、快照、Checkpoint、迭代器与前缀查找，支持列族和自定义 Comparator",
+    "纯 Objective-C 接口，可在 Swift 项目中使用，测试代码已移植到 Swift",
+    "当前封装 RocksDB v6.2.4，基于 MIT 许可证，支持 Carthage 与手动子模块两种安装方式"
+   ],
+   "use_cases": [
+    "iOS/macOS 应用中需要嵌入式持久化键值存储的场景",
+    "需要通过 WriteBatch 原子更新多个键值或跨列族写入的场景",
+    "需要快照或 Checkpoint 进行时间点一致性读取的场景"
+   ]
+  },
+  "sha": "7412a74e13e3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0fae9204f5cb": {
+  "identity": {
+   "one_liner": "基于 pybind11 的 Python 异步 RocksDB 客户端。",
+   "review": "rocksdb-python 是一个面向 Python 3.8+ 的 RocksDB 客户端库，通过 asyncio 提供异步 API，底层基于 pybind11 与本地 RocksDB 共享库构建。安装时需先自行编译并安装 RocksDB（支持系统级安装或通过环境变量指定路径），再通过 pip 安装本包。README 明确说明其不完全支持 RocksDB，仅覆盖基本用法，采用 MIT 许可证。",
+   "highlights": [
+    "基于 asyncio 提供异步客户端 API，要求 Python 3.8+",
+    "通过 pybind11 绑定本地编译的 RocksDB 共享库",
+    "提供 pip 安装方式，也支持从源码安装开发版本"
+   ],
+   "use_cases": [
+    "在 asyncio 项目中读写 RocksDB 键值数据",
+    "需要嵌入式本地键值存储的 Python 应用",
+    "仅需 RocksDB 基本读写功能的场景"
+   ]
+  },
+  "sha": "0fae9204f5cb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fff793de7e3e": {
+  "identity": {
+   "one_liner": "基于 Go 的微信公众号事件分发网关，多下游 Webhook 订阅投递",
+   "review": "该项目以 Go 单二进制实现微信公众号事件的接收与转发，用于多业务系统同时消费微信推送的场景。收到消息后先落库并向微信回复 success，再由后台 Worker 异步按 JSON Filter 规则过滤并投递到各订阅方 Webhook，支持指数退避重试与手动重放。存储依赖嵌入式 SQLite，提供内嵌 Web 管理控制台，需自行配置微信开发者凭据。",
+   "highlights": [
+    "支持明文、兼容与安全模式（AES-256-CBC）解析，落库后快速回复 success，分发由后台 Worker 异步执行",
+    "订阅方可用 JSON Filter 按 msgTypes、events、eventKeyPrefixes 过滤，失败投递按阶梯间隔退避重试最多 6 轮，支持手动重放",
+    "内置 Go 单二进制嵌入的 Web 管理控制台，数据存储使用纯 Go 实现的嵌入式 SQLite（WAL 模式），出站消息支持 HMAC-SHA256 签名"
+   ],
+   "use_cases": [
+    "多个系统需同时消费微信公众号事件（菜单点击、关注归因、消息内容等）的接入层",
+    "需要事件先落库应答微信再异步分发，以规避微信回调响应时限的消息处理流程",
+    "希望将微信 Token/AES 凭据集中在网关托管、下游通过 HMAC 验签接收数据的企业部署"
+   ]
+  },
+  "sha": "fff793de7e3e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5544ba43bc7e": {
+  "identity": {
+   "one_liner": "面向 Filament 的演示模式插件，用持久 SQLite 沙箱与角色切换展示面板",
+   "review": "这是 Laravel 12/13 与 Filament 4/5 的插件，将选中的模型数据批量复制到独立 SQLite 沙箱，供演示面板操作并在退出后保留、之后恢复，不影响生产库；附带独立角色切换器（默认适配 Spatie Permission，非 Spatie 需自定义授权策略）。依赖 PHP 8.2+、PDO SQLite，且应用迁移须兼容 SQLite。文档明确其为应用级隔离而非安全边界，数据不匿名化，租户面板需显式集成，多服务器部署需共享存储。",
+   "highlights": [
+    "从所选模型以可恢复的分批进度复制数据到持久 SQLite 沙箱，退出后可随时恢复，无过期或定时清理",
+    "提供独立角色切换器（/demo-mode/roles），默认适配 Spatie Permission，也可通过 ApplicationAdapter/RoleSwitcher 接口自定义",
+    "在演示运行期间隔离 Laravel 数据库连接、磁盘、缓存与 Redis 操作，并抑制邮件、队列任务和外部通知渠道"
+   ],
+   "use_cases": [
+    "向客户或内部演示 Filament 面板工作流，而不改动生产数据",
+    "用单一选定角色展示不同角色下的权限与界面表现",
+    "在应用更新后缺少表或列时，通过恢复页重建沙箱并保留选定的起始数据"
+   ]
+  },
+  "sha": "5544ba43bc7e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23d4a8d6c8bb": {
+  "identity": {
+   "one_liner": "为 TiDB 数据库调用生成 OpenTelemetry 埋点的 Dart 桥接包",
+   "review": "otel_tidb 是一个 Dart 包，用于将 TiDB（分布式 HTAP SQL 数据库）的客户端调用接入 OpenTelemetry 追踪。它为每次调用包裹一个 CLIENT 类型的 span，并按 OpenTelemetry 语义约定附加厂商特定属性；提供 tracedTidb 包装函数，也支持通过 runWithoutTidbInstrumentationAsync 在代码块内临时关闭埋点。适用于在 Dart 应用中使用 TiDB 并需要链路追踪数据的开发者。",
+   "highlights": [
+    "为每次 TiDB 调用生成 CLIENT 类型的 span，并按 OpenTelemetry 语义约定附加厂商特定属性",
+    "提供 tracedTidb 包装函数用于追踪调用",
+    "支持通过 runWithoutTidbInstrumentationAsync 在指定代码块内抑制埋点"
+   ],
+   "use_cases": [
+    "在 Dart 应用中对 TiDB 数据库调用进行 OpenTelemetry 链路追踪",
+    "在内部同步逻辑中临时关闭数据库埋点以减少 span 数量",
+    "将 TiDB 调用数据接入遵循 OpenTelemetry 语义约定的观测系统"
+   ]
+  },
+  "sha": "23d4a8d6c8bb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

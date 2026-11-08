@@ -3049,5 +3049,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e4eba7ca6d0a": {
+  "identity": {
+   "one_liner": "基于 WebSocket 文本协议的 SurrealDB Elixir SDK",
+   "review": "Surrealix 是用于 SurrealDB 的 Elixir SDK，通过 WebSocket 文本协议通信，其 API 依据 SurrealDB 文档经代码生成保持同步，文档示例直接引用官方文档。面向使用 Elixir 访问 SurrealDB 的开发者。支持 live query 回调、断线重连（含重跑 on_auth 回调与重建订阅）、Telemetry 事件；on_auth 为非阻塞调用，需用 wait_until_auth_ready 等待。以 mix 依赖方式安装。",
+   "highlights": [
+    "通过代码生成与 SurrealDB WebSocket API 保持同步，文档展示官方原始示例",
+    "支持 live_query 回调，重连后在 SocketState 上重新建立订阅",
+    "发布 :telemetry 事件（exec_method 的 start/stop/exception），并提供 Telemetry.Logger"
+   ],
+   "use_cases": [
+    "Elixir 应用中通过 WebSocket 连接 SurrealDB 执行 signin/use/query 等操作",
+    "需要监听 LIVE SELECT 变更并处理回调的实时订阅场景",
+    "需要断线自动重连、认证恢复与订阅重建的长连接服务"
+   ]
+  },
+  "sha": "e4eba7ca6d0a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "93e050dc9fb2": {
+  "identity": {
+   "one_liner": "React+RethinkDB changefeeds 同步 Redux 的全栈起步模板",
+   "review": "这是一个全栈项目模板，组合 React 服务端渲染（SSR）、Webpack、Redux 与 Socket.io，并通过 RethinkDB changefeeds 将数据库变更同步到 Redux 应用状态。面向需要快速搭建带实时数据库的前端项目的开发者。使用方式为 clone 后 npm install，先运行 RethinkDB 并手动创建 webstarter 库与 appState 表，再执行 npm run universal:dev 启动，访问 127.0.0.1:8081。",
+   "highlights": [
+    "集成 React SSR、Webpack、Redux 与 Socket.io",
+    "通过 RethinkDB changefeeds 将数据库变更同步到 Redux store",
+    "提供 clone-install-run 三步启动流程与数据探索查询示例"
+   ],
+   "use_cases": [
+    "需要数据库状态与前端 Redux 同步的全栈项目起点",
+    "使用 universal/isomorphic React + SSR 的应用开发",
+    "学习 Socket.io 与 RethinkDB changefeeds 结合的实践参考"
+   ]
+  },
+  "sha": "93e050dc9fb2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab390c83b03b": {
+  "identity": {
+   "one_liner": "SQL Server 演示文稿与示例代码合集，按演讲活动编目",
+   "review": "该仓库收录作者在 SQL Saturday、Data Saturday、Global Azure、Delphi Day 等线上线下活动中演讲所用的实验、幻灯片与演示脚本，按年份（2018–2026）以表格形式列出活动、主题、材料和视频链接。主题涵盖 SQL Server 2025/2022 新特性、锁与并发、死锁排查、数据库维护、tSQLt 单元测试及 T-SQL 性能等。适合希望获取特定演讲配套代码与幻灯片的数据库从业者按条目检索。",
+   "highlights": [
+    "按年份编目 2018–2026 年各活动的演讲材料，含幻灯片、演示脚本及 Vimeo/YouTube 视频链接",
+    "演示主题覆盖 SQL Server 2025/2022 引擎特性、Optimized Locking、死锁识别与处理、Azure SQL 弹性作业维护、tSQLt 单元测试与 T-SQL 性能技巧",
+    "每个条目提供活动、会次、材料、视频四列索引，多数附可点击的幻灯片与演示下载链接"
+   ],
+   "use_cases": [
+    "查找特定 SQL Server 主题（如锁机制、执行计划、查询存储）演讲的配套演示代码与幻灯片",
+    "参考数据库维护、死锁排查或 tSQLt 单元测试等场景的示例脚本",
+    "按活动或年份浏览作者历届技术分享的完整材料清单"
+   ]
+  },
+  "sha": "ab390c83b03b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb0649d78b25": {
+  "identity": {
+   "one_liner": "基于规则决策引擎的多机器人 AI 代理编排器，SQLite 事件日志实现可审计可回放。",
+   "review": "这是一个本地优先的多机器人 AI 代理编排参考实现。它将 LLM 输出仅作为观察输入，由确定性的 Observe→Decide→Act 规则引擎决定下一步动作，所有决策、工具调用写入可回放的 SQLite 事件日志。内置 fake provider 可离线运行 CI，真实模型需配置对应 API key。适合需要决策可解释和运行留痕的代理开发场景。",
+   "highlights": [
+    "模型只返回 TOOL/HANDOFF/DONE 文本指令，工具执行由规则引擎决定，每条决策记录包含所用观察和被拒动作的 RationaleTrace",
+    "每次运行生成追加式 SQLite 事件日志，replay 与 report 命令不调用模型提供方，支持中断运行的检查点恢复",
+    "包含双时代协议的 MCP stdio 客户端、122 个离线内置工具、文件式人工审批门，工具访问受允许列表与按机器人作用域约束"
+   ],
+   "use_cases": [
+    "需要事后复盘代理行为并解释每步决策依据的调试与审计场景",
+    "不希望模型直接执行工具、要求工具调用经过允许列表审批的流程控制场景",
+    "无 API 凭据环境下通过 fake provider 验证代理运行时的 CI 与演示场景"
+   ]
+  },
+  "sha": "eb0649d78b25",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49d80d2842bb": {
+  "identity": {
+   "one_liner": "本地优先的渗透测试情报库，SQLite 为核心，供 MCP/CLI/桌面端共享读写",
+   "review": "Cortex 是面向授权渗透测试的本地情报存储工具，以单个 SQLite 文件为共享记忆，提供 stdio MCP 服务器（7 个工具）、ctx 命令行和桌面/Web 界面（含 3D Memory Nebula）三种访问方式。适用于拥有或获书面授权测试系统的使用者，仅限本机或可信内网部署；Web 模式默认仅监听 127.0.0.1，无多用户账户，部分功能（Re-test lab、模型配置）在 Web 模式下不可用。",
+   "highlights": [
+    "以单个 SQLite 文件为共享存储，MCP 服务器、ctx CLI、桌面/Web UI 三端读写同一数据库",
+    "提供 7 个 MCP 工具，可自动检测并写入 Claude Code / DSH / Codex / Cursor / WorkBuddy / ZCode 的 MCP 配置与技能",
+    "Web 模式内置每运行一次的临时令牌、会话 Cookie、Bearer 认证、CSP、无 CORS 及按 IP 限流等安全机制，非回环绑定需显式 --allow-intranet"
+   ],
+   "use_cases": [
+    "授权渗透测试中由 AI 代理与人工共享同一份本地漏洞/资产情报记录",
+    "在可信内网中通过 ctx web 提供浏览器访问的测试数据看板",
+    "用 ctx init / ctx doctor 统一管理各代理客户端的 MCP 配置并检查数据库与运行环境"
+   ]
+  },
+  "sha": "49d80d2842bb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

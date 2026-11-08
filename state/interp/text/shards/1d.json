@@ -2351,5 +2351,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "093099b43cbe": {
+  "identity": {
+   "one_liner": "基于 Erlang/OTP 与 PostgreSQL 的可私有部署即时通讯平台后端",
+   "review": "IMBoy 是一个可私有部署的即时通讯平台，本仓库包含其 Erlang/OTP 后端、数据库迁移与部署配置，Flutter 客户端与 React 管理后台在独立仓库。一期交付能力含单聊、群聊、好友间一对一音视频（RTC）、企业组织与 RBAC、客服坐席等，采用 Handler→Logic→DS→Repo 的调用链，支持 Docker Compose 单节点部署。许可证为 BSL 1.1，四年后转 MPL 2.0。",
+   "highlights": [
+    "提供 HTTP API 与 WebSocket 长连接，使用 PostgreSQL 持久化，附件经 Garage S3 直传",
+    "支持单聊、群聊、多端同步、消息推送，以及已登录好友间基于 WebRTC 的一对一语音/视频（可通过 features.rtc=false 关闭）",
+    "提供 Docker Compose 单节点生产部署与一条命令的演示评估方式，Helm/Kubernetes 为实验性"
+   ],
+   "use_cases": [
+    "需要私有部署即时通讯服务（单聊/群聊/推送）的团队自建后端",
+    "企业内部组织与 RBAC、人工客服坐席与访客 Widget 等 IM 业务场景",
+    "本地快速评估：docker compose 启动 demo 后访问 /api/v1/init"
+   ]
+  },
+  "sha": "093099b43cbe",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f8618fc38bd4": {
+  "identity": {
+   "one_liner": "基于 Azure Functions 与 Cosmos DB（Mongo API）的游戏排行榜 REST API 起始套件",
+   "review": "该项目是一个起始套件，用于搭建存储游戏分数的 RESTful 排行榜 API，后端为 Express Node.js 应用托管在 Azure Function 上，数据存于 Cosmos DB（MongoDB API，经 Mongoose 访问），并提供 Unity 客户端 SDK。支持 ARM 模板一键部署，也可用 Dockerfile 在 Docker 或 Kubernetes 上运行。需注意分数对象不可变（无更新方法），认证未实现，仅要求请求携带两个客户端身份头，需自行接入校验机制。",
+   "highlights": [
+    "提供 RESTful 排行榜 API：写入分数、查询用户最高分、最新分数、当日与全时段 Top 榜、按分数取周边排名用户等操作",
+    "支持 Azure ARM 模板一键部署（Consumption/App Service 两种计划），部署含 Cosmos DB、存储账户、Azure Function 与 Application Insights",
+    "提供 Unity 客户端示例及 SDK，代码可经 Dockerfile 运行于 Docker 容器和 Kubernetes 集群"
+   ],
+   "use_cases": [
+    "为 Unity 等游戏接入分数排行榜的后端服务搭建起点",
+    "在 Azure 订阅中快速部署含监控（Application Insights）的 Node.js 无服务器 API 示例",
+    "作为在 Azure Functions 上结合 Express、Mongoose 与 Cosmos DB Mongo API 的技术参考实现"
+   ]
+  },
+  "sha": "f8618fc38bd4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f679151c0a70": {
+  "identity": {
+   "one_liner": "MongoDB 异步 Python 视频课程，涵盖 Beanie ODM 与 FastAPI 集成",
+   "review": "这是 Talk Python 出品的 7 小时视频课程，教授用 Python 异步技术操作 MongoDB，内容包括文档数据库原理、MongoDB 安装配置、Beanie 与 Pydantic 数据建模、FastAPI 集成、索引设计与 Locust 压力测试。面向有基础 Python 和数据库知识的开发者。课程所用工具免费，多数开源。",
+   "highlights": [
+    "课程时长 7 小时，覆盖 Beanie ODM、Pydantic、FastAPI 与 Locust 压力测试工具",
+    "包含 MongoDB 安装配置、shell 命令、数据建模、索引设计及自托管部署等内容",
+    "课程选用的工具均为免费，多数为开源或提供免费替代品"
+   ],
+   "use_cases": [
+    "希望学习在 Python 中以异步方式使用 MongoDB 的开发者",
+    "需要将 Beanie/Pydantic 与 FastAPI 集成构建 Web API 的场景",
+    "想了解文档数据库建模权衡与 MongoDB 自托管部署的学习者"
+   ]
+  },
+  "sha": "f679151c0a70",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7e361be4aa43": {
+  "identity": {
+   "one_liner": "自托管虚拟主机计费与自动化平台，基于 ASP.NET Core 9 + Vue 3 + PostgreSQL。",
+   "review": "HostPanel 是一个面向虚拟主机销售商的自托管系统，提供客户门户、发票、支付、域名管理和服务器自动开通功能，含管理面板与 API。技术栈为 ASP.NET Core 9、Vue 3、Nuxt 4 与 PostgreSQL，通过 Docker 一条命令安装并由 Caddy 自动配置 HTTPS。支付网关、域名注册商和控制面板以插件形式接入；暂无自动税额计算与欺诈检查，税务和欺诈标记需人工操作。",
+   "highlights": [
+    "提供发票、多币种、域名注册与续费、自动开通/暂停/终止账户、工单、知识库和审计日志等功能",
+    "支付网关、注册商和控制面板通过小接口接入，附 MIT 许可的 Hostpanel.Sdk 和插件市场，内置银行转账，可选装 Stripe、PayPal、Namecheap、Name.am、cPanel、Plesk、CWP7、Telegram 等插件",
+    "提供从 WHMCS 导入数据的 PHP 插件，以及独立演示模式：模拟支付/注册商/开通、测试收件箱、按计划重置数据并运行在隔离网络"
+   ],
+   "use_cases": [
+    "自建销售主机和域名业务，需要客户门户、开票、收款与服务器自动开通流程",
+    "从 WHMCS 迁移数据到自托管开源计费系统",
+    "通过演示模式在隔离环境中评估或展示完整功能流程"
+   ]
+  },
+  "sha": "7e361be4aa43",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

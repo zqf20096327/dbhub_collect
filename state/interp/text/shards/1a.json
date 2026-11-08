@@ -2482,5 +2482,181 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "49be75db4577": {
+  "identity": {
+   "one_liner": "搜索项目代码与文档，为 AI 任务组装相关上下文的 Node.js 工具",
+   "review": "n2-arachne 是一个基于 Node.js 22+ 的工具，用于搜索项目代码和文档，找出 AI 在当前任务中应读取的部分。工作流程为读取项目文件、构建搜索索引、检索相关内容，使用 SQLite 存储，通过 MCP 连接 AI 应用。安装需从 GitHub release 下载 tgz 包，读取 PDF/Office 文档可能需平台特定解析器，SQLite 构建失败需平台 C/C++ 构建工具。",
+   "highlights": [
+    "读取项目文件并构建可搜索索引，用于定位函数或配置等内容",
+    "支持搜索代码及 PDF/Office 等文档（部分格式需平台特定解析器）",
+    "通过 MCP 连接 AI 应用，多个 N2 模块可共享同一 mimir.db 数据库"
+   ],
+   "use_cases": [
+    "在大型项目中查找函数或配置项",
+    "为模型请求收集相关文本段落",
+    "将源码文件夹建索引后供 AI 应用检索上下文"
+   ]
+  },
+  "sha": "49be75db4577",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "28d9c645b16e": {
+  "identity": {
+   "one_liner": "面向 Go 服务的模块化工具包，按需组合数据、任务与可观测能力",
+   "review": "Arkoren 是一组 Go 模块，提供 HTTP、缓存、数据库、存储、队列、调度、安全、AI 与可观测等服务接口，应用代码面向统一服务契约编写，在构造时选择后端驱动（如 PostgreSQL、Redis、Temporal、Stripe）。核心模块无第三方依赖，驱动为独立 Go module，可按需安装。要求 Go 1.27+，项目处于 pre-1.0 阶段，v0 小版本可能破坏 API。",
+   "highlights": [
+    "核心模块无第三方依赖，采用 stdlib-first 设计，围绕 net/http、context.Context 和 log/slog 组合",
+    "数据、消息、队列、支付、加密、LLM 等服务均提供多后端驱动，各含本地 Memory 驱动或测试替身",
+    "每个服务契约附带一致性测试套件，驱动模块独立版本化，MIT 许可"
+   ],
+   "use_cases": [
+    "需要在本地内存实现与生产后端（PostgreSQL、Redis、S3 等）之间切换的 Go 服务开发",
+    "构建包含后台任务队列、定时调度与工作流的微服务",
+    "为应用接入 OpenTelemetry 可观测性与 OAuth 2/OIDC 认证等横切能力"
+   ]
+  },
+  "sha": "28d9c645b16e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52f1f1adafb5": {
+  "identity": {
+   "one_liner": "RxJava 封装的 Android Firebase 客户端库",
+   "review": "RxFirebase 是 Ezhome 发布的 Android 库，将 Firebase 客户端操作封装为 RxJava 实现，当前支持 Firebase Authentication（RxFirebaseAuth）与 Firebase Database（RxFirebaseDatabase）。开发者需在 Firebase 控制台配置包名与 google-services.json 后使用，可通过 observeOn 指定观察线程。库发布于 jCenter，使用需自行配置 Firebase 实例规则与数据。",
+   "highlights": [
+    "提供 RxFirebaseAuth 与 RxFirebaseDatabase 两个模块，分别对应 Firebase 认证与数据库",
+    "支持通过 observeOn 指定值事件观察的调度线程",
+    "发布于 jCenter，通过 Gradle 依赖 com.ezhome:rxfirebase:2.2.0 引入"
+   ],
+   "use_cases": [
+    "Android 应用中以 RxJava 风格调用 Firebase 认证",
+    "以 Observable 方式监听 Firebase Database 的值事件",
+    "基于自有 Firebase 实例快速搭建带示例数据的演示应用"
+   ]
+  },
+  "sha": "52f1f1adafb5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3afe457d6ed": {
+  "identity": {
+   "one_liner": "受 Django ORM 启发的 Python Redis ORM，提供带字段模型的 CRUD 操作",
+   "review": "这是一个 Python 编写的 Redis ORM 库，作者因 redis-py 提供的抽象层级较低而编写，供需要在 Redis 中操作带字段模型的 Python 开发者使用。它通过 RedisRoot 管理模型注册与连接配置（prefix、connection_pool 等），RedisModel 提供 CRUD 和 TTL，字段支持自动序列化/反序列化与过滤。需自备 Redis 服务器（v3+），通过 pip 安装。",
+   "highlights": [
+    "提供 13 种内置字段类型（RedisString、RedisJson、RedisForeignKey、RedisManyToMany 等），支持自动序列化/反序列化、TTL、默认值与 choices",
+    "支持 16 种过滤操作符（exact、contains、gte、range、isnull 等）及深度过滤",
+    "RedisRoot 提供 economy、save_consistency、use_keys 等配置项，操作可以非阻塞方式在后台创建 asyncio 任务"
+   ],
+   "use_cases": [
+    "需要在 Redis 中以模型化字段方式存储和查询数据的 Python 项目",
+    "使用 Redis 作为缓存或存储并需要字段级 TTL 与过滤查询的场景",
+    "希望用 asyncio 非阻塞方式执行 Redis 读写操作的应用"
+   ]
+  },
+  "sha": "b3afe457d6ed",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d7845569523": {
+  "identity": {
+   "one_liner": "Java 编写的命令行 SDF 化学文件解析器，支持多种输出格式",
+   "review": "SDFEater 是一个用 Java 编写、通过命令行运行的 SDF 化学文件格式解析器，支持 Java 8 及以上版本，也提供 Docker 镜像。它读取 SDF 文件并转换为多种输出格式，包括 Cypher（用于导入 Neo4j 图数据库）、JSON-LD、RDFa、SMILES、InChI 等，部分 RDF 输出基于 MolecularEntity profile。项目提供 JAR 发行包和 Docker 镜像两种运行方式，示例数据来自 ChEBI 和 DrugBank。",
+   "highlights": [
+    "支持 14 种输出格式，包括 cypher、jsonld、turtle、ntriples、rdfxml、smiles、inchi 等",
+    "提供 JAR 包和 Docker 镜像两种运行方式，支持 Java 8+",
+    "Cypher 输出可附带元素周期表原子数据，支持导入 Neo4j 图数据库"
+   ],
+   "use_cases": [
+    "将 ChEBI 或 DrugBank 的 SDF 文件转换为 RDF 结构化数据格式（JSON-LD、RDFa、Microdata）用于网页",
+    "将化学分子数据转换为 Cypher 语句导入 Neo4j 图数据库",
+    "从 SDF 文件中提取 SMILES 或 InChI 纯文本数据"
+   ]
+  },
+  "sha": "5d7845569523",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f4873d448259": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3.3 与 Vue 3 的 RAG 学习助手全栈系统",
+   "review": "该系统整合资料解析、Qdrant 向量检索、AI 总结出题、在线练习、错题复盘与学习分析，并提供支持 SSE 流式回复和工具调用的 Agent 学习助手。面向 AI 应用学习者与课程设计场景，README 明确将其定位为实战与简历参考项目。支持 Mock 模式，无真实模型 Key 也可演示流程；商用需自行确认依赖与模型服务许可。",
+   "highlights": [
+    "RAG 检索支持引用页码、相似度、章节信息，内置 Hit@K / Recall@K / MRR 评测，可导入 CMRC2018 数据集做批量检索验证",
+    "Agent 助手支持 SSE 流式回复与工具调用轨迹，可查询资料、题集、练习记录等系统上下文",
+    "支持 Docker Compose 一键部署及 Vercel + Render + Aiven + Qdrant Cloud 线上部署，数据库迁移由 Flyway 管理"
+   ],
+   "use_cases": [
+    "RAG 工程化与 Agent 工具调用的学习实战练习",
+    "课程设计或毕业设计项目参考",
+    "个人作品集与简历项目展示"
+   ]
+  },
+  "sha": "f4873d448259",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "77b3b1ddd9a0": {
+  "identity": {
+   "one_liner": "自托管的 Claude Code 多智能体工厂，用评审、QA 和裁判闸门决定合并",
+   "review": "Hivemill 是一个自托管的多智能体软件开发编排工具，基于 Claude Code 构建，CLI 命令为 factory。用户向 boss 角色描述需求，director 组建团队，coder 开分支并发起 PR，reviewer 审查 diff，QA 运行真实测试，judge 仅在两者通过时合并。写入者不能审查或合并；状态存于 SQLite 并带只追加事件日志。需 Debian/Ubuntu 与已登录的 Claude Code，占用用户自己的 Claude 用量，Web UI 为只读且无鉴权。",
+   "highlights": [
+    "固定角色分工（boss/director/coder/reviewer/QA/judge），各角色有独立提示词与权限，由 hooks 强制而非依赖信任",
+    "裁判仅在 reviewer 与 QA 均通过时合并 PR，否则附带发现退回；判定存入 SQLite 只追加事件日志",
+    "spawn gate 根据 RAM、负载与 Claude 进程数排队新智能体，可在单台普通 VM 上运行"
+   ],
+   "use_cases": [
+    "在自托管单机上以带审查与测试闸门的流程将需求转化为 PR",
+    "希望目标、任务、消息与判定可审计（SQLite+事件日志+Markdown 导出）的个人或小团队",
+    "需要在 RAM/负载受限环境中排队运行多个 Claude Code 智能体的场景"
+   ]
+  },
+  "sha": "77b3b1ddd9a0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1adcd9312492": {
+  "identity": {
+   "one_liner": "基于 Rust 的终端数据库客户端，以 TUI 交互编辑 PostgreSQL/MySQL 数据。",
+   "review": "datarig 是一个运行于终端的数据库客户端，使用 Rust 编写，通过 Ratatui 构建界面，连接 PostgreSQL 和 MySQL。用户在结果网格中编辑单元格时，Changes 面板列出对应的 SQL 语句，Apply 时在单个事务中执行；查询计划支持以树、火焰图、矩形树等多种视图展示 EXPLAIN 输出。项目处于 pre-1.0 阶段，MySQL 仅部分实现。",
+   "highlights": [
+    "提供表格数据编辑：修改单元格、增删行，所有变更以待执行 SQL 形式在 Changes 面板中列出，Apply 时在单事务内执行，危险语句执行前需确认",
+    "支持 EXPLAIN 和 EXPLAIN ANALYZE，以树形、icicle、火焰图、矩形树、时间轴等多种视图呈现查询计划",
+    "提供连接配置文件（含只读配置）、SSH 隧道、TLS、连接池支持，以及带补全和 vim 按键的 SQL 编辑器"
+   ],
+   "use_cases": [
+    "在终端中浏览、编辑和导出 PostgreSQL/MySQL 表数据，需在执行前逐条确认 SQL",
+    "分析慢查询的执行计划，以多种可视化视图查看各节点耗时占比",
+    "通过只读配置文件连接生产环境，防止写入语句发出；区分 PROD/STG 等环境标记"
+   ]
+  },
+  "sha": "1adcd9312492",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

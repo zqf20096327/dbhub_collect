@@ -2539,5 +2539,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e1869f2fb109": {
+  "identity": {
+   "one_liner": "Apache Doris 的 Stream Load 数据加载命令行工具，支持并行导入",
+   "review": "doris-streamloader 是 Apache Doris 官方仓库下的数据加载工具，用于通过 Stream Load 接口向 Doris 导入本地文件。它会自动切分数据文件并行加载，支持一次导入多个文件或目录（含 * 通配符），失败后可从断点恢复并自动重试。使用时通过命令行参数指定源文件、FE 或 BE 地址、Stream Load 头（与 curl 用法一致）、目标库和表。构建需 Go 1.19.9 以上，采用 Apache-2.0 协议。",
+   "highlights": [
+    "自动切分数据文件并执行并行加载，支持多文件、目录及路径遍历，源文件可用 * 通配符",
+    "失败或取消后可从上一次位置恢复加载，并具备自动重试机制",
+    "header 参数兼容 curl Stream Load 的全部头配置，多个头用 ? 分隔"
+   ],
+   "use_cases": [
+    "需要将本地 CSV 等文件批量导入 Doris 指定库表的场景",
+    "源数据分散在多个目录和文件、希望一条命令完成导入的场景",
+    "大文件导入时希望切分并行加载、且需要断点续传与自动重试的场景"
+   ]
+  },
+  "sha": "e1869f2fb109",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f77eda6c5736": {
+  "identity": {
+   "one_liner": "面向乌拉圭 WhatsApp 群组、带里奥普拉塔河口音人格的 AI 聊天机器人",
+   "review": "ClaudIA 是一个 WhatsApp 群聊机器人，基于 SawBot-MD 修改而来，面向乌拉圭一个朋友群组。它以 Baileys 连接 WhatsApp，在多 AI 提供商（Gemini 为主，Groq、OpenRouter、NVIDIA、Cerebras 作后备）支撑下实现群聊对话、语音合成、事实核查、群记忆，并提供游戏、UruCoins 虚拟经济、群管理与购销等命令。功能与该群组的使用习惯绑定，部分功能依赖 Gemini 付费计划。",
+   "highlights": [
+    "支持在群聊中按触发条件用多个 AI 模型回答，命令请求经 JSON 输出解析，并按提供商顺序提供后备切换",
+    "包含小游戏与 UruCoins 经济系统（赌场、每日任务、商店、排行榜）及按群组的开关与时段控制命令",
+    "提供群管理功能：机器人内角色、警告与黑名单、不活跃成员标记与移除流程、入群申请审批、消息发送限速与隐私说明"
+   ],
+   "use_cases": [
+    "为朋友或社区 WhatsApp 群组部署带个性化对话、游戏与虚拟经济的机器人",
+    "需要群组秩序维护工具（警告、黑名单、不活跃清理、入群审批）的群管理场景",
+    "在群内提供音乐/视频下载、天气、翻译、航空气象（METAR/TAF）等实用命令"
+   ]
+  },
+  "sha": "f77eda6c5736",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3facaada0adb": {
+  "identity": {
+   "one_liner": "仿人脑海马五环节的本地 SQLite 情感加权记忆层，供长期陪伴机器人使用。",
+   "review": "该库为长期陪伴型机器人提供记忆管理，将对话编码为含情绪权重的事件，支持巩固、情绪加权遗忘、联想召回与确定度标注，数据存储于本地 SQLite 文件且零第三方依赖。可通过 npm 作为库引入、以 HTTP 服务方式接入任意语言，或安装为 DSH 插件，派生自 dsh-hippocampus 项目并保留其记忆内核。",
+   "highlights": [
+    "按事件编码、巩固、遗忘、联想召回、元记忆五环节处理对话记忆",
+    "支持情绪加权遗忘与三级确定度标注，改口后旧事实自动作废",
+    "零第三方依赖，仅使用 Node 内置 SQLite，按人/频道隔离记忆"
+   ],
+   "use_cases": [
+    "为长期运行的陪伴机器人或聊天机器人添加记忆层",
+    "通过 HTTP 服务让任意语言编写的程序接入记忆功能",
+    "作为 DSH 插件在即时通讯或网页场景中管理对话记忆"
+   ]
+  },
+  "sha": "3facaada0adb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf73095c2632": {
+  "identity": {
+   "one_liner": "纯本地存储的 macOS/Windows 桌面待办工具，基于 Tauri 2 + React + SQLite。",
+   "review": "一个运行在 macOS 和 Windows 上的待办事项桌面应用，数据以 SQLite 存储在本地，无账号与云同步。它支持自然语言录入任务、到点系统通知提醒，并在菜单栏/托盘常驻提供快捷记录入口，同一套代码可构建 iOS/Android 移动端。适合不想依赖云端服务的个人用户；macOS 产物未签名公证，分发需自行签名。",
+   "highlights": [
+    "支持自然语言录入（如「明天 3 点 提交周报」），自动拆分标题与时间，到点发系统通知且同一任务只提醒一次",
+    "菜单栏/托盘常驻，通过 ⌘⇧Space 弹出快捷记录；macOS 上快捷窗口以非激活 NSPanel 形式浮于全屏应用之上",
+    "数据存于本地 SQLite 文件；同一套前端与 Rust 代码可构建 iOS/Android，窄屏自动切换为整屏布局加底部标签栏"
+   ],
+   "use_cases": [
+    "在 macOS/Windows 桌面上以菜单栏快捷方式记录和查看当日及未来任务",
+    "不依赖账号与云同步、仅需本地保存待办数据的个人使用场景",
+    "基于 Tauri 2 学习或复用桌面/移动端跨平台应用构建方式（含移动端适配与打包脚本）"
+   ]
+  },
+  "sha": "cf73095c2632",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

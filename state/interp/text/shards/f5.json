@@ -2508,5 +2508,183 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4db44cae4b1b": {
+  "identity": {
+   "one_liner": "Blazor 的 IndexedDB 接口框架，提供类 EFCore 的异步 API",
+   "review": "该项目为 Blazor 客户端应用提供访问浏览器 IndexedDB 的接口，API 风格类似 EFCore 且为异步。开发者通过继承 IndexedDb 定义 code-first 模型，仅 IndexedSet<> 类型属性会被映射，实体需含 Id 或 Key 特性标注的属性，经 IIndexedDbFactory 创建连接。仓库已标记 ARCHIVED，安装方式为 NuGet 包。",
+   "highlights": [
+    "支持连接创建数据库及记录的增、删、改操作，通过 SaveChanges 保存",
+    "采用 code-first 模型定义，实体需包含 Id 属性或 Key 特性标注属性",
+    "通过 NuGet 包安装，依赖 IJSRuntime 与 JavaScript 互操作"
+   ],
+   "use_cases": [
+    "Blazor 客户端应用需要在浏览器端本地存储结构化数据",
+    "希望在 IndexedDB 上使用类似 EFCore 的 code-first 模型与增删改 API",
+    "Blazor WebAssembly 应用中做浏览器内数据的 CRUD 操作"
+   ]
+  },
+  "sha": "4db44cae4b1b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3b73ee1430b0": {
+  "identity": {
+   "one_liner": "ark.db 是面向 Node 与浏览器的 JSON 数据库模块，支持 MongoDB 适配",
+   "review": "ark.db 是一个以 JSON 文件为存储的数据库模块，提供 Node 端 Database 类、浏览器端 LocalStorage 类以及 MongoDB 适配器。安装方式为 npm 或 yarn 安装，浏览器端通过 unpkg 引入脚本使用。要求 Node.js 版本高于 12，数据文件路径可由用户指定，支持相对路径。",
+   "highlights": [
+    "提供 Database、LocalStorage、MongoDB 三种适配器，分别用于 Node、浏览器和 MongoDB 连接",
+    "支持点号表示法和相对路径，可指定 JSON 数据文件的保存位置",
+    "2.0.0 起所有方法为同步，2.6.0 版本使用 TypeScript 重写"
+   ],
+   "use_cases": [
+    "Node.js 项目中以 JSON 文件方式读写结构化数据",
+    "浏览器端通过 LocalStorage 适配器在页面中存取数据",
+    "已有 MongoDB 实例时通过适配器连接指定 schema 进行操作"
+   ]
+  },
+  "sha": "3b73ee1430b0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "69b840a83065": {
+  "identity": {
+   "one_liner": "基于 Rust 的内存型、有序键值缓存数据库，用 B-tree 存储单一类型数据",
+   "review": "CachewDB 是一个内存键值数据库，数据不持久化，通过 Cargo 构建运行。它以 B-tree 按键排序存储数据，整个实例只支持一种值类型（STR/INT/FLOAT/BOOL/JSON），带密码认证和自定义 CASP socket 协议，并附带 CLI 客户端。支持并发客户端，持久化尚未实现，仍在其待办列表中。",
+   "highlights": [
+    "数据存于内存且不持久化，使用 B-tree 按键排序存储，支持 GET RANGE/DEL RANGE 等范围操作",
+    "实例采用单一值类型，支持 STR、INT（32位）、FLOAT（32位）、BOOL、JSON"
+   ],
+   "use_cases": [
+    "需要按键范围读取或删除的内存键值缓存场景",
+    "值类型统一（如全字符串或全整数）的存储需求",
+    "通过自定义 CASP 协议与 CLI 客户端进行本地或网络键值读写"
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "sha": "69b840a83065",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "894ab525886c": {
+  "identity": {
+   "one_liner": "面向具身智能与机器人的嵌入式多模态数据库，单库提供 SQL 引擎与向量/时序/文本/空间索引。",
+   "review": "MoteDB 是用 Rust 编写的嵌入式列式存储数据库，无需独立守护进程，直接以库的形式集成到应用中。它通过 SQL 接口统一处理表格、向量（DiskANN）、全文（倒排索引）、空间（i-Octree）等数据类型，支持 MVCC 快照隔离的 ACID 事务。面向具身智能与机器人场景，提供 MCAP 录制数据导入、episode 轨迹建模等能力。项目处于 pre-1.0 阶段：Rust API 与存储引擎已稳定，SQL 覆盖面与多语言 FFI 仍在演进中。",
+   "highlights": [
+    "单一嵌入式库内支持四种模态：向量（DiskANN/Vamana 图索引）、全文（倒排索引 BM25）、空间（3D i-Octree）与表格（B-tree），并支持 RRF 混合检索融合 BM25 与向量排序",
+    "基于列式 SSTable 存储与 mmap 零拷贝读取，写入路径为 WAL 加列式缓冲自动落盘，事务采用 VersionStore MVCC 快照隔离；支持 zstd 页级压缩（compact 模式磁盘占用约缩小 40-50%）",
+    "提供 Rust（crates.io，stable）、Python（PyPI，stable）、Node.js（npm，preview）、Go（cgo，preview）四种语言绑定，含 CLI 导入 MCAP 与 motedb-cli doctor 自检工具"
+   ],
+   "use_cases": [
+    "机器人数据采集与回放：通过 CLI 或 Python 接口导入 MCAP 录制文件，每 topic 生成一张表，含时间戳自动索引与 _uid 去重支持断点续传",
+    "多模态检索应用：在同一 SQL 查询中混合使用向量近邻（ORDER BY col <-> ?）、全文 MATCH 与空间 ST_DISTANCE/KNN 检索",
+    "边缘/嵌入式部署：提供 edge 预设（低内存、周期 fsync）、可关闭默认特性以裁剪构建体积，支持 aarch64 目标平台"
+   ]
+  },
+  "sha": "894ab525886c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ebca614b5af2": {
+  "identity": {
+   "one_liner": "基于 LevelDB 的 Node.js 持久化队列",
+   "review": "Qool 是一个以 LevelDB 为存储后端的 Node.js 队列库，依赖 level-bytewise。它提供严格的 FIFO 出队顺序，数据持久保存，支持带超时的租约（lease）机制，可作为嵌入式库在应用内使用。注意 Enqueue/Dequeue 操作在底层批量处理，同一 tick 内只能保留最后一个回调。未实现 length 属性，条目过期等功能尚在 TODO 中。",
+   "highlights": [
+    "基于 LevelDB 存储，数据持久化，可嵌入应用",
+    "支持严格 FIFO 顺序与带超时的 lease（租约）出队",
+    "提供 peek 操作，Enqueue/Dequeue 底层批量处理、回调同步调用"
+   ],
+   "use_cases": [
+    "Node.js 应用中需要持久化任务队列的场景",
+    "需要租约/超时机制处理消息的消费-确认流程",
+    "需要嵌入应用内、不想部署独立队列服务的场景"
+   ]
+  },
+  "sha": "ebca614b5af2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "908cb7af505e": {
+  "identity": {
+   "one_liner": "基于Arduino与Firebase的智能停车管理系统，含服务端、前端与移动端。",
+   "review": "这是一个面向ATL的智能停车项目，由服务端、前端、Flutter移动端和Arduino控制代码四部分组成。系统将停车场划分为若干塔（tower），每个塔再分为若干车位（index），Arduino用于控制塔，前端用于查看车位状态。README中Firebase部分标注为待补充。",
+   "highlights": [
+    "项目包含服务端、前端、Flutter移动端和Arduino代码四个部分",
+    "停车结构按塔（tower）划分，塔内再划分为车位（index）",
+    "Arduino代码用于控制停车塔"
+   ],
+   "use_cases": [
+    "需要实时查看车位状态的管理场景",
+    "通过移动端应用跟踪停车场使用情况",
+    "使用Arduino硬件控制停车塔的部署场景"
+   ]
+  },
+  "sha": "908cb7af505e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c6f14461ac1": {
+  "identity": {
+   "one_liner": "基于 p5.js 与 Firebase 的在线涂鸦绘制与保存 Web 应用",
+   "review": "WebPaint 是一个浏览器端绘图应用，使用 p5.js 实现绘制，通过 Firebase Realtime Database 保存涂鸦数据，可随时重新打开已保存作品，并支持将画作下载为 jpg。前端采用 Vanilla JS（ES6）、jQuery、Bootstrap 与 Font Awesome。本地运行需克隆仓库、npm install 后用 firebase serve 启动，访问 localhost:5000。适合想在网页上作画并留存作品、或学习 p5.js 与 Firebase 集成的开发者。",
+   "highlights": [
+    "支持保存涂鸦到 Firebase Realtime Database 并重新加载打开",
+    "支持将涂鸦下载为 jpg 图片",
+    "本地构建仅需 npm install 并通过 firebase serve 运行于 localhost:5000"
+   ],
+   "use_cases": [
+    "在浏览器中绘制涂鸦并保存以便日后打开",
+    "下载涂鸦为 jpg 图片",
+    "学习 p5.js 绘图与 Firebase 数据库存储的集成实践"
+   ]
+  },
+  "sha": "0c6f14461ac1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b568275a89f8": {
+  "identity": {
+   "one_liner": "自托管的 Sentry 兼容错误追踪器，单容器 + SQLite，内置 MCP 服务",
+   "review": "OpenFault 是可自托管的错误追踪系统，兼容 Sentry SDK，只需替换 DSN 即可接入。单容器运行，内嵌 SQLite 存储，内存占用低于 100 MB。提供 Web 向导初始化组织和项目，支持 MCP 协议供编码代理读取和处理问题。README 明确标注处于早期开发阶段，尚未可用于生产环境。",
+   "highlights": [
+    "兼容 Sentry SDK 的错误采集，支持 issues、releases 和 breadcrumbs",
+    "内置 MCP 服务器，Claude Code、Cursor 等代理可通过其读取和分诊问题",
+    "支持 iOS 崩溃 dSYM 符号化，及邮件、Slack、Discord、Teams 告警和每日 S3/R2 备份"
+   ],
+   "use_cases": [
+    "自托管环境中替代外部 SaaS 错误收集服务，保留现有 Sentry SDK",
+    "让编码代理通过 MCP 接口读取和分诊线上错误",
+    "iOS 应用崩溃日志的符号化与推送告警"
+   ]
+  },
+  "sha": "b568275a89f8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

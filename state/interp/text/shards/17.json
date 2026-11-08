@@ -3285,5 +3285,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "672b28f2f483": {
+  "identity": {
+   "one_liner": "自托管的办公室 3D 打印请求管理看板，邀请制+阶段流转",
+   "review": "Pretty Please Print 是一个面向小型办公室（约五人一printer 场景）的自托管 3D 打印请求管理系统。用户上传 .stl/.3mf 模型或提交 Printables 链接，打印机负责人在 Requested→Accepted→Printing→Delivery 看板上推进工单。技术栈为 Next.js、Prisma、PostgreSQL，通过 Docker Compose 部署，仅支持 linux/amd64，生产环境强制 TLS。无公开注册，仅邀请制，可选接入 OIDC 单点登录。",
+   "highlights": [
+    "支持 .stl/.3mf 上传（按字节校验、测量包围盒）及 Printables 链接导入（默认关闭），浏览器内 3D 查看器渲染网格",
+    "提供邀请制账户、可选 OIDC 单点登录、审计日志、每工单评论线程与邮件通知（可选）",
+    "提供 OpenAPI 3.1 描述的 JSON API 与 /docs Swagger 控制台，并支持一键发送模型到本地切片器（PrusaSlicer、OrcaSlicer、Cura 等）"
+   ],
+   "use_cases": [
+    "小型办公室内多人共用一台 3D 打印机的请求排队与状态跟踪",
+    "打印负责人管理成员、材料/颜色目录、优先级队列与历史记录",
+    "自托管 homelab 部署，配合反向代理与已有 OIDC 服务（Authentik、Keycloak 等）使用"
+   ]
+  },
+  "sha": "672b28f2f483",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f7042be7c42e": {
+  "identity": {
+   "one_liner": "跨运行时 TypeScript API 框架，以函数命名约定推导 HTTP 路由。",
+   "review": "Jetpath 是一个可在 Node.js、Deno、Bun 以及 AWS Lambda、Cloudflare Workers 上运行的 API 框架。开发者按 GET_users_$id 这类命名约定编写函数，框架据此映射到 /users/:id 等端点；默认零配置，提供 TypeScript 类型支持。使用 npx jetpath new-project 或 npm install jetpath 安装，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持 Node.js、Deno、Bun、AWS Lambda 和 Cloudflare Workers 多运行时",
+    "通过函数命名约定（如 GET_users_$id）推导 HTTP 路由，无需显式路由配置",
+    "提供 TypeScript 类型定义，并附带 Claude Code 技能文件供 AI 编码助手使用"
+   ],
+   "use_cases": [
+    "用 TypeScript/JavaScript 编写跨多个运行时的 HTTP API 服务",
+    "部署到 AWS Lambda、Cloudflare Workers 等无服务器环境",
+    "从零创建新 API 项目或接入既有项目"
+   ]
+  },
+  "sha": "f7042be7c42e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "76e7a84aff5d": {
+  "identity": {
+   "one_liner": "纯 Go 实现的 LevelDB，兼容其存储格式并提供简洁接口。",
+   "review": "该项目用纯 Go 编写 LevelDB 键值存储，遵循 LevelDB 存储格式但不复刻官方实现细节，仅导出顶层包以保持接口简洁。支持并发压实、批量写入、迭代器和快照等操作。README 明确说明项目处于早期开发阶段，不应视为稳定，不可用于生产环境。适合希望以 Go 库形式使用 LevelDB 存储格式的开发者。",
+   "highlights": [
+    "以纯 Go 实现，遵循 LevelDB 存储格式，其他包均为内部包，仅导出顶层包",
+    "支持通过 CompactionConcurrency 选项控制压实（compaction）并发度",
+    "提供读写、批量写入、迭代器和快照等使用接口"
+   ],
+   "use_cases": [
+    "需要在 Go 项目中以库形式使用 LevelDB 存储格式的键值读写",
+    "希望对压实并发度进行配置控制的场景",
+    "需要批量写入、迭代或快照等键值存储操作的场景"
+   ]
+  },
+  "sha": "76e7a84aff5d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "27066f21127b": {
+  "identity": {
+   "one_liner": "基于 Python 标准库的多智能体终端工程运行时，含 SQLite WAL 记忆",
+   "review": "IVA 是一个运行于终端的多智能体工程助手，面向需要在本地进行代码修复、架构设计与自动化研究的开发者。项目基于 Python 3.10+ 标准库实现，声明无第三方 PyPI 运行时依赖，可在 Linux、macOS、Windows、Docker、树莓派等环境运行。核心机制包括 100 个嵌入式专家、16 个能力族、10 层 SQLite WAL 记忆数据库、沙箱隔离及 12 阶段推理流程。",
+   "highlights": [
+    "基于 Python 3.10+ 标准库，声明 0 个第三方 PyPI 运行时依赖，支持通过一行安装脚本部署",
+    "包含 100 个嵌入式专家合约与 16 个能力族，使用 10 层 SQLite WAL 数据库在会话间持久化记忆",
+    "提供 7 个终端交互向导，涵盖架构设计、网站生成、CI 修复、Playwright 浏览器驱动、Gemini 媒体合成、MCP 工具调用等"
+   ],
+   "use_cases": [
+    "粘贴文件路径进行 AST 解析、语法错误定位并生成补丁的自动化 CI 修复",
+    "在 Linux 服务器、SSH 会话、无头 Docker 容器或树莓派等无 GUI 环境中运行终端智能体",
+    "通过 Context7、Tavily 等 21 个预连接 MCP 工具进行文档查询与网络检索"
+   ]
+  },
+  "sha": "27066f21127b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

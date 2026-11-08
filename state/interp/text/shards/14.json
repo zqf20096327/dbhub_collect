@@ -2817,5 +2817,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "93e0fda9d392": {
+  "identity": {
+   "one_liner": "为 GraphQL 查询生成单条 Neo4j 查询的解析器",
+   "review": "该项目是 Facebook GraphQL 的 Neo4j 查询解析器，用于 Node 环境。它要求先在 Neo4j 中以 class 节点、property/extends 关系构建 schema，数据节点通过 instance_of 关系关联到 schema 节点。解析时遍历 GraphQL 请求生成单条 Neo4j 查询，而非逐节点回查数据库；需自备 Neo4j 实例作为持久层。",
+   "highlights": [
+    "遍历 GraphQL 请求生成单条 Neo4j 查询，而非每个节点单独查询数据库",
+    "通过 class 节点及 property、extends 关系在图数据库中定义 schema，支持类型继承",
+    "类之间的其他关系对应 GraphQL 对象类型上的列表属性"
+   ],
+   "use_cases": [
+    "已部署 Neo4j 图数据库并希望以 GraphQL 语法查询其中数据的 Node.js 项目",
+    "schema 已按 class/property/instance_of 结构建模的 Neo4j 实例",
+    "包含多层级关联查询（如 influences 嵌套）的 GraphQL 场景"
+   ]
+  },
+  "sha": "93e0fda9d392",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e817d23e2712": {
+  "identity": {
+   "one_liner": "PureScript 语言的 PouchDB 绑定库",
+   "review": "该项目为 PureScript 提供 PouchDB 的绑定，封装建库、删除库、文档增删读取与批量操作等接口。PouchDB 是受 Apache CouchDB 启发、运行在浏览器中的数据库，支持离线本地存储并在恢复联网后与 CouchDB 及兼容服务器同步。项目处于开发中（Work in Progress），适用于需要在 PureScript 项目中调用 PouchDB 的开发者。构建依赖 bower、npm 和 gulp，附演示应用与测试。",
+   "highlights": [
+    "实现数据库创建、信息获取与删除操作",
+    "支持文档的 put/post 存入、读取与删除，以及批量上传和批量读取",
+    "提供演示应用构建流程和 npm test 测试入口"
+   ],
+   "use_cases": [
+    "在 PureScript 项目中通过类型化绑定调用 PouchDB",
+    "构建支持离线存储、联网后与 CouchDB 同步的浏览器应用",
+    "运行仓库自带的 Hapi 演示应用（npm start，localhost:8080）以查看 PouchDB 输出"
+   ]
+  },
+  "sha": "e817d23e2712",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cdffc299cf5f": {
+  "identity": {
+   "one_liner": "面向 Java 的 MongoDB ORM/ODM 库，以统一接口操作数据库。",
+   "review": "Milkshake 是一个 Java 语言的 MongoDB ORM/ODM 库，为应用提供统一的数据库操作方式，支持实体与仓库两级 CRUD，并复用数据库连接。README 说明其设计动因是减少直接使用驱动接入多种数据库的繁琐；实体校验、连接重启等特性尚在待办清单中，尚未实现。",
+   "highlights": [
+    "提供实体与仓库两种层级的 CRUD 操作（已在待办清单中标记完成）",
+    "支持数据库连接复用",
+    "计划提供实体校验能力（required、unique、length、min、max 等，尚未完成）"
+   ],
+   "use_cases": [
+    "Java 项目中需要通过统一接口操作 MongoDB 数据",
+    "需要在应用中定义数据存储结构并配合实体与仓库模式组织代码",
+    "希望复用数据库连接、减少重复建连的场景"
+   ]
+  },
+  "sha": "cdffc299cf5f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d0f5b6ddefa2": {
+  "identity": {
+   "one_liner": "dbt 插件，按代码哈希与上游数据版本决定复用或重建节点",
+   "review": "dbt-hodor 是一个自托管的 dbt 状态插件，对 run/build/test/seed/snapshot 中每个选定节点，通过 sqlglot 规范化编译 SQL 计算逻辑哈希，并检查上游数据版本（Delta 提交历史、Iceberg 快照等），输出复用或重建决策及原因码。状态存于 Databricks Delta 表、Trino、Postgres 或本地 DuckDB。默认 shadow 模式只记录不跳过；遵循 fail open，任何判断失败均回退为普通构建。README 标注项目处于早期开发阶段，尚未在大规模生产项目中运行。",
+   "highlights": [
+    "用 sqlglot 按目标方言规范化编译 SQL 计算哈希，并叠加节点配置哈希；SQL 字节级不变时跳过分析，1 万个模型哈希约 0.1 秒",
+    "上游数据版本按适配器取自 Delta 提交历史、Iceberg 快照、SYSTEM$LAST_CHANGE_COMMIT_TIME 或 DuckDB 内容指纹，OPTIMIZE/VACUUM 等维护提交不计为数据变化",
+    "提供 off/shadow/on 三种模式与每个节点的决策原因码，支持 dbt-hodor explain 查看单个节点的比较细节"
+   ],
+   "use_cases": [
+    "希望在自托管环境中基于代码与上游数据变化做节点级增量构建的 dbt 项目",
+    "计划上线前先用 shadow 模式审计决策、再切换为复用模式的数据团队",
+    "使用 Databricks、Trino（Iceberg/Delta）、Snowflake 或 DuckDB 适配器并需要本地化状态存储的 CI 或调度流水线"
+   ]
+  },
+  "sha": "d0f5b6ddefa2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9258ed288ed": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 的本地优先跨平台 AI 编程桌面客户端，接入多模型驱动代码与浏览器操作",
+   "review": "ReinAgent 是一个基于 Tauri 2 与 React 19 构建的跨平台桌面 AI 编程客户端，面向开发者，将多种大模型接入本地工作区，以自然语言驱动文件读写、命令执行与浏览器操作。数据以 SQLite WAL 和本地 JSON 形式留存本地。提供 Linux/Windows/macOS 预编译单文件，免安装运行；支持局域网直连或 Cloudflare 隧道实现手机远程访问，并内置 MCP 服务端供外部模型反向调用。",
+   "highlights": [
+    "支持四档审批模式（plan/ask/edit/full）与基于前像快照的逐轮代码改动撤销，包含 SHA-256 指纹 TOCTOU 冲突防护",
+    "原生实现 MCP 2024-11-05 协议服务端，经 HTTP/SSE 暴露 15 个工具，同时作为客户端接入外部 MCP 服务器；支持 Chat Completions、Anthropic Messages、Responses、Google Generative AI 四种协议",
+    "支持 SSH 远程工作区（ssh:// 地址）、Cron 周期任务、子代理并行派发，以及局域网/Cloudflare 隧道/自定义域名三种远程访问模式"
+   ],
+   "use_cases": [
+    "在本地工作区以自然语言执行代码读写、命令执行与网页抓取等开发任务",
+    "通过手机扫码（局域网或 Cloudflare 隧道）远程审批与监控桌面端 Agent 任务",
+    "管理本地 Markdown 知识库、知识图谱抽取与 AI 辅助笔记整理"
+   ]
+  },
+  "sha": "a9258ed288ed",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "48cefa766dd7": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 服务器，将代码库索引为 SQLite 符号图并提供关系查询工具。",
+   "review": "code-atlas 是一个本地 MCP 服务器，把 PHP、TypeScript/JavaScript、Python、T-SQL 代码库解析为 SQLite 符号图，在索引期解析跨文件边，向 AI 编码代理以行形式返回调用者、实现、影响范围等已解析关系。面向让 AI 代理读取大型代码库（>10k 文件）的场景。需 Python ≥3.12 及目标语言运行时，通过 setup.py 脚本、uvx/pipx 或 Claude Code 插件安装，仅可从该仓库安装（未发布 PyPI）。",
+   "highlights": [
+    "提供 26 个 MCP 工具，涵盖搜索、读取、导航与影响分析，全部离线运行于本地 SQLite",
+    "支持 PHP、TypeScript/JavaScript、Python、T-SQL 四种语言的适配器，未解析的 CALLS 边标记为 HEURISTIC 并按语言统计占比",
+    "通过基于 git diff 的增量更新维护索引，提供 CycloneDX SBOM 与签名构建溯源的发布验证"
+   ],
+   "use_cases": [
+    "让 AI 编码代理查询大型陌生代码库中的调用关系、实现定位与影响范围",
+    "为需要可核查、可计数答案的代理工作流提供符号级导航数据",
+    "在本地离线环境中对 PHP、TS/JS、Python 或 T-SQL 项目建立符号图索引"
+   ]
+  },
+  "sha": "48cefa766dd7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

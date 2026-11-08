@@ -2734,5 +2734,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3e734d288843": {
+  "identity": {
+   "one_liner": "面向 Rust 的强类型 MongoDB 驱动，通过 derive 宏映射文档",
+   "review": "Avocado 是一个 Rust 语言编写的 MongoDB 驱动，通过 #[derive(Doc)] 过程宏将 Rust 类型映射为 MongoDB 文档。默认启用 schema_validation 特性，创建集合时可附加由 magnet 生成的 JSON Schema 校验；raw_uuid 特性提供以 UUID 作为 _id 字段的扩展方法。README 提示大量插入复杂类型时 schema 校验可能较慢。文档可通过 cargo doc --open 本地查看。",
+   "highlights": [
+    "提供 #[derive(Doc)] 过程宏，将 Rust 类型映射为 MongoDB 文档",
+    "默认启用 schema_validation 特性，empty_collection() 创建集合时附加 JSON Schema 校验",
+    "raw_uuid 特性提供以 UUID 作为 _id 字段的扩展方法"
+   ],
+   "use_cases": [
+    "在 Rust 项目中操作 MongoDB 数据库",
+    "需要 MongoDB 端 JSON Schema 校验、且数据库同时被其他驱动或工具访问的场景",
+    "调试和验证 Avocado 驱动自身行为"
+   ]
+  },
+  "sha": "3e734d288843",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c2b4bcc4928a": {
+  "identity": {
+   "one_liner": "为 RocksDB 提供网络访问服务的 KV 服务器",
+   "review": "RocksServer 是一个基于 RocksDB 与 LibEvent 构建的键值存储服务器，用 C++11 编写。它通过定义的协议对外提供键值的读写、删除、自增和按前缀遍历等操作，并提供 PHP、D、Node.js 客户端驱动，也允许按协议自实现客户端。通过实现 RequestBase 接口并以插件形式编译部署，可扩展新的请求处理逻辑；配置经 config.ini 定制，采用 BSD 许可证发布。",
+   "highlights": [
+    "支持按键或批量键的读取、写入、删除、存在性检查与数值自增，以及按键前缀或 seek 键遍历键值对",
+    "基于 C++11 实现，依赖 RocksDB 与 LibEvent，通过 config.ini 配置运行",
+    "支持通过实现 RequestBase 接口编写插件（.so）扩展请求处理，并提供协议描述供自建客户端"
+   ],
+   "use_cases": [
+    "需要以客户端/服务器方式远程访问 RocksDB 键值数据的场景",
+    "已有 PHP、D 或 Node.js 技术栈并需读写后端 RocksDB 的应用",
+    "需要自定义请求处理逻辑、以插件方式扩展 KV 服务接口的场景"
+   ]
+  },
+  "sha": "c2b4bcc4928a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d177e17d267d": {
+  "identity": {
+   "one_liner": "基于 PHP PDO 的 Laravel ODBC/Snowflake 连接包",
+   "review": "该包为 Laravel 框架提供 ODBC 与 Snowflake 数据库连接支持，通过 PDO 类实现与 Eloquent ORM 及 Illuminate 组件的集成，而非使用 odbc_* 函数。支持通用 ODBC 驱动、Snowflake ODBC 及 snowflake_pdo 原生扩展三种方式，提供自定义 QueryGrammar/SchemaGrammar，可通过 DSN 或动态参数配置连接。要求 PHP 8.x，经 Composer 安装。",
+   "highlights": [
+    "通过 PDO 类连接 ODBC 数据源，支持 Eloquent ORM 与 Illuminate 组件常规用法",
+    "提供 ODBC 通用、Snowflake（经 ODBC 或 snowflake_pdo PHP 扩展）多种驱动方式",
+    "支持自定义 QueryGrammar/SchemaGrammar 及基于连接的选项（如 LIKE 编译为 ILIKE、列名大小写设置）"
+   ],
+   "use_cases": [
+    "在 Laravel 项目中通过 Eloquent 访问 Snowflake 数据仓库",
+    "连接已配置 odbcinst.ini 数据源或仅有驱动文件路径的 ODBC 数据库",
+    "需要为特定 ODBC 连接定制查询语法与模式的场景"
+   ]
+  },
+  "sha": "d177e17d267d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e09aa2894d54": {
+  "identity": {
+   "one_liner": "GaussDB 数据库智能体后端，在 Kubernetes 中按用户隔离运行 opencode 诊断技能。",
+   "review": "该项目提供 GaussDB 智能体的后端部分，包含接入网关（认身份、分配环境、反向代理）、每用户隔离的 opencode 运行时环境、知识库导入环境和标准知识库镜像，状态统一存放在 NAS 卷上。代码实际在测试仓库维护，本仓库通过脚本从发布标签生成交付分支。适合需要为 GaussDB/openGauss 搭建多用户智能体诊断平台的团队；需配套前端和上游 SSO。",
+   "highlights": [
+    "包含接入网关、用户运行时环境、知识库导入环境、标准知识库 Job 等组件的 K8s 部署清单，状态存于单个 RWX 卷",
+    "诊断分支提供 17 个诊断技能与 137 条白名单 DML；凭据代理使令牌、私钥、模型 Key 不进入模型所在容器",
+    "文档覆盖部署方案、发版台手册、前端接口说明、机器可读接口契约（OpenAPI 与 reports-contract.json）及 48 题验收题库"
+   ],
+   "use_cases": [
+    "在 K8s 集群中为多名 DBA/运维用户提供 GaussDB/openGauss 诊断对话环境",
+    "通过 kbimport 环境导入官方文档集、网页剪藏、扫描件 PDF 等构建知识库",
+    "使用发版台在跳板机上执行资源扫描、变更预览、按槽位替换与冒烟验证的发布流程"
+   ]
+  },
+  "sha": "e09aa2894d54",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

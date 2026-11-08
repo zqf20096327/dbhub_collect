@@ -2768,5 +2768,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ceddab7e94de": {
+  "identity": {
+   "one_liner": "基于改进 Radix Trie 的排序数据结构服务器，支持前缀扫描与磁盘持久化。",
+   "review": "Treds 是用 Go 实现的键值类数据结构服务器，内部采用修改版 Radix Trie，叶节点通过双向链表连接以按字典序返回数据，单线程事件循环驱动，并将数据持久化到磁盘。提供 KV、Sorted Map、List、Set、Hash 五类存储及 DELPREFIX、LNGPREFIX、PPUBLISH 等前缀相关命令。README 注明当前值仅支持字符串/数字类型。适合需要在扫描操作中获得有序结果、以公共前缀组织键的场景。",
+   "highlights": [
+    "SCANKEYS/SCANKVS/KEYS/KVS 等扫描命令按字典序返回结果，且支持游标分页；KEYS 支持任意合法正则",
+    "提供 DELPREFIX（按前缀批量删除并返回数量）、LNGPREFIX（最长前缀匹配）、PPUBLISH（向名称以给定前缀开头的通道发布消息）等命令",
+    "实现 Sorted Map 存储，支持按字典序与按分数两种范围查询（含正向与反向），并支持 EXPIRE/TTL 过期机制"
+   ],
+   "use_cases": [
+    "需要按前缀批量查询、扫描或删除键的键值存储场景",
+    "需要按字典序或分数区间遍历有序键值对的场景",
+    "需要持久化到磁盘且值仅限字符串/数字的缓存或 NoSQL 存储场景"
+   ]
+  },
+  "sha": "ceddab7e94de",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e64a836a476e": {
+  "identity": {
+   "one_liner": "CrateDB 的 Rails ActiveRecord 适配器，基于 crate_ruby HTTP 驱动",
+   "review": "该项目为 Ruby on Rails 提供 CrateDB 数据库的 ActiveRecord 适配器，通过 crate_ruby 驱动以 HTTP 方式连接。支持数组与嵌套对象列类型、迁移定义。仅兼容 Rails 4.1.x；不支持索引增删，模型主键需自行生成（如 UUID）；CrateDB 为最终一致，写入后立即查询除主键查询外不可见。项目已归档不再维护，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "通过 database.yml 配置 adapter: crate 并指定 host/port 接入 Rails",
+    "迁移中支持 t.array 创建数组列、t.object 定义嵌套对象及其 schema 行为（strict|dynamic|ignored）",
+    "复用 ActiveRecord #serialize 机制并提供 CrateObject 模块实现对象序列化"
+   ],
+   "use_cases": [
+    "在 Rails 4.1.x 应用中以 ActiveRecord 访问 CrateDB",
+    "需要存储数组类型字段（如标签、整数列表）的场景",
+    "需要在迁移中定义嵌套对象 schema 的模型设计"
+   ]
+  },
+  "sha": "e64a836a476e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f4f3b458004a": {
+  "identity": {
+   "one_liner": "为 Convex 数据库提供浏览器可视化界面的 MCP 服务器与 CLI 工具",
+   "review": "该项目为 Convex 数据库提供模式浏览器、仪表盘与关系图可视化，通过浏览器 UI 与终端输出并行展示。支持直接 CLI、MCP 服务器（Claude、Cursor、Codex 等）和 Claude 插件三种使用方式，基于 Deploy Key 认证，按项目目录读取 .env.local 配置。注意 README 已标注项目归档、不再维护，官方建议改用 Convex 仪表盘内置的模式可视化器。",
+   "highlights": [
+    "提供模式浏览器（图视图/列表视图/文档浏览）、组件浏览器和实时指标仪表盘",
+    "基于外键模式自动检测表关系，生成 Mermaid ER 图，支持 SVG 导出与终端 ASCII 输出",
+    "包含表写入热力图、模式漂移视图（声明与推断字段对比）和来自日志的写入冲突报告"
+   ],
+   "use_cases": [
+    "在终端或 MCP 客户端中浏览和查看 Convex 部署的数据库模式与关系",
+    "为多个 Convex 项目配置 Deploy Key 并按目录切换部署连接",
+    "通过自然语言指令（如\"展示我的 Convex 模式\"）触发对应可视化工具"
+   ]
+  },
+  "sha": "f4f3b458004a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "652d4814a894": {
+  "identity": {
+   "one_liner": "自用虚拟聊天伙伴后端，兼容运行 AstrBot 陪伴插件",
+   "review": "这是作者自用的虚拟聊天伙伴后端，基于 Python 3.12 与 Quart/Hypercorn，使用 SQLite 存储，配零构建的 HTML/JS 面板，默认监听 6191 端口。核心机制是实现一个宿主兼容层，使 astrbot_plugin_private_companion 等插件无需改源码即可运行，已打通命令派发、LLM 钩子、模型端口、投递端口四条链路。面向单用户部署在自己电脑或服务器上；令牌必填，绑定 0.0.0.0 时需自行前置 TLS 反代。",
+   "highlights": [
+    "提供 65 条 HTTP 路由，其中 /v1/* 为 OpenAI 兼容接口并支持 SSE 流式",
+    "实现 AstrBot 插件宿主兼容层，支持插件热重载、删除与 README 查看，不需要重启服务",
+    "提供人设 CRUD、多轮记忆、总结自动化、主动消息投递与生图功能"
+   ],
+   "use_cases": [
+    "在个人电脑或服务器上运行陪伴类 AstrBot 插件并配合网页面板使用",
+    "需要以 OpenAI 兼容接口对接上游 LLM 的单人聊天后端",
+    "将 AstrBot 插件在不修改其源码的前提下接入自定义前端（手机 App 接入尚在计划中）"
+   ]
+  },
+  "sha": "652d4814a894",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

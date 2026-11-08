@@ -2697,5 +2697,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e16b1877593d": {
+  "identity": {
+   "one_liner": "拦截 Plex 的 SQLite 调用并转发到 PostgreSQL 的 shim 库，无需改 Plex 源码",
+   "review": "这是一个用 Rust 编写的插层库，运行时拦截 Plex Media Server 的 SQLite 调用并转交 PostgreSQL，面向自托管 Plex 的用户。提供 macOS（ARM64）、Linux 原生与多架构 Docker 三种部署方式，附带 SQLite↔PostgreSQL 迁移脚本和 schema/数据修复工具 doctor.sh。README 注明 PostgreSQL 需将 max_connections 设为至少 200；macOS 安装方式需在 Plex 升级后重新执行安装脚本。",
+   "highlights": [
+    "以 shim 方式拦截 SQLite 调用并转发至 PostgreSQL，无需修改 Plex 源码",
+    "提供 SQLite→PostgreSQL 与 PostgreSQL→SQLite（beta）迁移脚本，以及检查并修复 schema 与数据问题的 doctor.sh",
+    "支持 macOS ARM64、Linux x86_64/ARM64 原生安装及 x86_64+ARM64 多架构 Docker 镜像，通过环境变量配置 TCP 或 Unix socket 连接"
+   ],
+   "use_cases": [
+    "希望将 Plex 媒体库数据从 SQLite 迁移到 PostgreSQL 存储的自托管部署",
+    "使用 rclone 等远程媒体挂载的 Plex 环境",
+    "已有 SQLite 媒体库并需整体迁移（含元数据、海报与 blobs.db 缩略图）的场景"
+   ]
+  },
+  "sha": "e16b1877593d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb74d8d501fa": {
+  "identity": {
+   "one_liner": "Firebase 实时数据库的 Swift 封装，提供 get/set/delete/increment 方法",
+   "review": "FirebaseHelper 是基于 Swift 4 编写的 Firebase 实时数据库封装库，通过 CocoaPods 安装。它将 get、set、delete、increment 四类常用操作封装为可变参数路径的方法，回调返回 Result 或 Error。初始化时需传入 DatabaseReference。对于查询、observe 等复杂操作，可通过 makeReference 生成引用后继续使用原生 API。适用于在 iOS 项目中调用 Firebase 实时数据库的开发者。",
+   "highlights": [
+    "提供 get、set、delete、increment 四类操作方法，路径以可变参数形式传入",
+    "get 返回 Result<DataSnapshot, Error>，其余操作返回 Error?",
+    "提供 makeReference 方法生成 DatabaseReference，可配合查询和 observe 使用"
+   ],
+   "use_cases": [
+    "iOS 应用中读取、写入、删除 Firebase 实时数据库数据",
+    "对数据库节点数值执行 increment 递增操作",
+    "构建 DatabaseReference 以执行原生查询与监听（observe）"
+   ]
+  },
+  "sha": "bb74d8d501fa",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "018ef760f3ab": {
+  "identity": {
+   "one_liner": "Fastify 插件，封装 Mongoose ODM 连接 MongoDB",
+   "review": "fastify-mongoose 是一个 Fastify 框架插件，底层使用 Mongoose ODM 连接 MongoDB。开发者通过 fastify.register 注册并传入 uri 选项后，可在 fastify.mongo.db 访问 Mongoose 连接，通过 fastify.mongo.ObjectId 使用 ObjectId。自 0.3.0 起支持多数据库连接，但不再使用 Mongoose 默认连接，需使用插件返回的 db 客户端。适用于已使用 Fastify 和 Mongoose 的 Node.js 项目。",
+   "highlights": [
+    "通过 fastify.mongo.db 提供访问 Mongoose 连接",
+    "通过 fastify.mongo.ObjectId 提供 ObjectId 访问",
+    "0.3.0 及以上版本支持连接多个不同数据库"
+   ],
+   "use_cases": [
+    "Fastify 项目中通过 Mongoose ODM 操作 MongoDB",
+    "需要在一个应用中连接多个 MongoDB 数据库的场景",
+    "遵循 js-standard-style 风格的 Node.js 项目集成 Mongoose"
+   ]
+  },
+  "sha": "018ef760f3ab",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

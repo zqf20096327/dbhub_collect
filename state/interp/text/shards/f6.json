@@ -3249,5 +3249,202 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5a63db628e0e": {
+  "identity": {
+   "one_liner": "基于内嵌 NATS JetStream 的高可用 SQLite 集群，支持多协议接入",
+   "review": "HA 是一个提供复制能力的分布式 SQLite 集群，内嵌 NATS JetStream 做数据复制，可配置 2PC、leader 或 leaderless 模式。它对外提供 PostgreSQL/MySQL Wire Protocol、HTTP、gRPC 及 Go/JDBC 驱动接入，适合需要以 SQLite 为存储并接入多种客户端协议的后端场景。发布二进制为纯 Go 驱动编译，不支持动态加载 C 扩展。",
+   "highlights": [
+    "支持 HTTP API、gRPC、database/sql Go 驱动、JDBC 驱动及 MySQL/PostgreSQL Wire Protocol 接入",
+    "通过内嵌或外部 NATS 服务器进行数据复制，提供 2PC、leader-based、leaderless 集群模式及自定义冲突解决策略",
+    "支持 CDC 实时数据流、跨分片查询（SQL hints）、事务撤销回滚，并可代理复制 PostgreSQL/MySQL 等数据库"
+   ],
+   "use_cases": [
+    "需要多副本 SQLite 数据库并通过 psql/mysql 等现有客户端直接访问的场景",
+    "通过代理与 CDC 将 PostgreSQL、MySQL 或 Debezium 源（如 Oracle）数据复制到边缘节点",
+    "使用 go-ha 驱动或 ha-sync 扩展建立本地读写/只读副本的应用部署"
+   ]
+  },
+  "sha": "5a63db628e0e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79c286810332": {
+  "identity": {
+   "one_liner": "Android 库，按地理位置查询 Firebase 实时数据库",
+   "review": "GeoFirebase 是一个 Android 库，用于基于经纬度和半径对 Firebase Real-Time Database 执行地理位置查询。使用者需让数据模型继承库提供的 GeoPod，并通过匿名实例化 GeoEvent 传入经纬度、半径、模型类及数据库节点路径来完成查询，数据结构由开发者自行指定。上传数据用原生 Firebase API 即可。运行需在项目中配置 google-services.json 和 Google Maps API key。",
+   "highlights": [
+    "支持以经纬度为中心、指定半径查询 Firebase Real-Time Database",
+    "模型继承 GeoPod，查询通过匿名实例化 GeoEvent 类实现，节点路径和过滤节点作为参数传入",
+    "数据写入不限定方式，setValue 或 updateChildren 均可，库只负责按指定节点查询"
+   ],
+   "use_cases": [
+    "在 Android 应用中按位置范围检索存储于 Firebase 的地点类数据（如店铺位置）",
+    "需要在自行定义的数据结构上执行地理查询的项目",
+    "将查询结果标记到 Google Maps 地图上的场景"
+   ]
+  },
+  "sha": "79c286810332",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e668488e1ff6": {
+  "identity": {
+   "one_liner": "怪物猎人系列游戏数据集，以 JSON 文件提供怪物、任务与环境生物数据",
+   "review": "该仓库是一个怪物猎人系列游戏的数据集，覆盖 MHFU 到 MH Wilds 等多部作品，内容包含怪物、任务（Quests）与环境生物（Endemic Life）三类数据。数据以 JSON 文件形式提供，怪物条目按名称字母序排列，图标存放在 icons 文件夹中供数据引用。文档给出了怪物、任务、环境生物三种数据结构示例，字段含 MongoDB 风格的 $oid 标识，主题标签含 mongo。README 未提供安装或运行说明，数据维护通过仓库的讨论区征集纠错与补充。",
+   "highlights": [
+    "以 JSON 文件提供怪物、任务、环境生物三类数据，覆盖 MHFU、MH3U、MH4U、MHGU、MHW（含冰原）、MH Rise（含 Sunbreak）、MH Wilds、MHST 等作品",
+    "数据结构采用 MongoDB 风格的 _id/$oid 字段，怪物条目按名称字母序排列",
+    "配套 icons 文件夹存放数据引用的图标文件"
+   ],
+   "use_cases": [
+    "为怪物猎人相关的查询工具或百科类应用提供数据源",
+    "需要按游戏作品检索怪物、任务或环境生物信息的开发场景",
+    "导入 MongoDB 等 NoSQL 数据库进行存储与查询"
+   ]
+  },
+  "sha": "e668488e1ff6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3fad4c6c7868": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL v14+ 实例的监控管理平台，整合 MCP Server、采集器与可选 AI 代理。",
+   "review": "pgEdge AI DBA Workbench 是一个用于监控和管理 PostgreSQL v14+ 实例（含 Supabase、Amazon RDS）的统一环境。项目由 Collector、Server、Alerter、Client 四个组件构成：采集指标并集中存储、提供 MCP 工具与资源、基于阈值与 AI 异常检测生成告警、提供 Web 界面。它将 Spock 复制状态等数据源暴露给语言模型，支持云端 LLM 与 Ollama 本地模型切换，适用于隔离或安全环境。可通过二进制文件、源码构建、Docker 容器或 pgEdge 软件包安装。",
+   "highlights": [
+    "包含 Collector、Server、Alerter、Client 四个组件，分别负责指标采集存储、MCP 工具提供、告警评估与 Web 界面",
+    "支持切换云端 LLM（如 Claude）与 Ollama 本地托管模型，可在隔离环境中运行",
+    "通过 MCP 将 Spock 复制状态、集群配置和运行指标等数据源暴露给语言模型"
+   ],
+   "use_cases": [
+    "监控任意 PostgreSQL v14+ 实例，包括 Supabase 与 Amazon RDS 部署",
+    "使用自然语言查询、分析和管理分布式集群",
+    "在气隙或安全环境中部署数据库监控与诊断工作流"
+   ]
+  },
+  "sha": "3fad4c6c7868",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9a36d21a7d8a": {
+  "identity": {
+   "one_liner": "声明式数据库变更管理工具，覆盖模式迁移与推理状态",
+   "review": "Ptah 是用 Go 编写的开源数据库变更管理工具，比较期望模式与在线数据库，生成版本化迁移或直接执行计划；另可编排持久化推理状态迁移：构建候选生成、调用外部嵌入端点、验证后切换并提供回滚。提供无需 Go 工具链的 CLI 和 Go 包两种形态。项目处于 pre-GA 阶段，命令树与公共 API 仍可能变动；YDB 支持需单独安装 provider。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite、SQL Server、ClickHouse、CockroachDB 等 13 种数据库，YDB 经独立 provider 支持",
+    "提供版本化迁移与直接 schema 变更两种工作流，schema 来源可为 SQL、YAML、HCL、DBML、Go 注解或在线数据库",
+    "CLI 可脱离 Go 工具链运行，drift 检测命令以退出码表达结果，可用于 CI 门禁"
+   ],
+   "use_cases": [
+    "将 schema 变更以 SQL 文件形式纳入代码审查与部署历史",
+    "检测并修复数据库与期望 schema 之间的漂移",
+    "在活跃生成继续服务查询的同时迁移向量嵌入等持久化推理状态"
+   ]
+  },
+  "sha": "9a36d21a7d8a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "94a9b6e2d44a": {
+  "identity": {
+   "one_liner": ".NET 10 项目管理实验沙盒，对比 REST/gRPC 与 EF Core/Dapper 实现。",
+   "review": "cpnucleo 是一个面向应用与平台工程学习者的 .NET 10 项目管理沙盒。它在同一套代码中提供 REST（FastEndpoints）与 gRPC 两种传输、EF Core 与 Dapper 两种持久化、Astro 前端、PostgreSQL 存储、OpenID Connect 认证和 OpenTelemetry 可观测性，并用 Docker Compose 一键启动、可执行契约测试验证行为。README 明确它是学习基线而非完整生产方案，租户隔离仅为类型与声明层面的练习。",
+   "highlights": [
+    "REST 与 gRPC 共暴露 11 个资源、55 个 CRUD 操作，采用软删除、原子批量操作和版本感知并发更新",
+    "身份服务实现授权码+PKCE、客户端凭证、一次性刷新令牌重放检测、RS256 密钥轮换（JWKS）与 Argon2id 哈希",
+    "五个测试项目覆盖架构、应用行为、安全、端点单元和 PostgreSQL 容器隔离的集成测试"
+   ],
+   "use_cases": [
+    "动手对比 REST/gRPC 与 EF Core/Dapper 的不同实现方式",
+    "学习 OpenID Connect 认证流程、软删除与并发冲突处理等具体机制",
+    "通过 OpenTelemetry 与可选 Grafana 本地栈演练可观测性与容器化部署"
+   ]
+  },
+  "sha": "94a9b6e2d44a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79f8dcaad02c": {
+  "identity": {
+   "one_liner": "围绕共享 Project Brain 构建的智能体式软件工程平台",
+   "review": "DevMind 是一个智能体式软件工程系统，通过统一的 Project Brain（十层知识图谱）整合 AST 符号、调用图、路由守卫、文档等信息，提供代码智能、安全分析、代码审查等九项能力规划。采用 tree-sitter 解析、PostgreSQL/pgvector 存储、FastAPI 与 Next.js/LangGraph 构建的非单体架构。注意：README 状态为 Specification to Building，九项能力均标注 Planned，截图基于示例数据，实际功能尚未实现。",
+   "highlights": [
+    "基于 tree-sitter AST 与静态策略求解的确定性优先分析，发现按 E0-E3 证据分级标注",
+    "默认 metadata_only 同步模式下源码文件内容与凭据文件不上传，含密钥脱敏与隐私边界账本",
+    "技术栈包含 FastAPI、LangGraph、Next.js、PostgreSQL 与 pgvector（768 维），并提供 VS Code 本地扫描插件"
+   ],
+   "use_cases": [
+    "希望本地扫描、控制源码上传边界的开发团队进行架构图谱与符号关系检索",
+    "对代码库中路由守卫缺失等跨模块安全问题进行静态策略分析",
+    "围绕统一知识库开展代码审查、Bug 历史记录与架构文档同步的工作流规划"
+   ]
+  },
+  "sha": "79f8dcaad02c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0ab527e570d": {
+  "identity": {
+   "one_liner": "本地优先、fail-closed 的 AI 代理 API/MCP 流量网关与防火墙 SDK",
+   "review": "Mont 是一个面向 AI 代理流量的本地网关与防火墙，提供 Express 中间件、无代码反向代理和 MCP 代理三种使用方式，数据存于内嵌 SQLite，无需 Redis 或云服务。规则按路由与负载分层判定，支持审批、预算、重复防护、MCP 工具默认拒绝及哈希链审计日志。需 Node.js 20.17+ 或 Docker；许可为离线 Ed25519 密钥，Community 版免费，Pro/Agency 功能按订阅授权。",
+   "highlights": [
+    "支持三种部署形态：Express 中间件、无代码反向代理、MCP 代理（stdio、Streamable HTTP、HTTP+SSE）",
+    "提供按路由与负载的规则判定、每路由限流、支出预算、重复操作防护与人工审批队列",
+    "包含 fail-closed 机制与哈希链审计账本，数据存于内嵌 SQLite（WAL），许可密钥离线校验"
+   ],
+   "use_cases": [
+    "为商店或 SaaS API 前置网关，控制 AI 代理的退款、发信等写操作并设置消费预算",
+    "在 Claude、Cursor 等 MCP 客户端与工具服务器之间做默认拒绝的工具调用过滤与审批",
+    "需要留存的合规/审计场景，导出防篡改审计日志供退款争议或审计取证"
+   ]
+  },
+  "sha": "c0ab527e570d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b034aea91f29": {
+  "identity": {
+   "one_liner": "基于 Symfony 7.4 的医院护士模拟管理 REST API，用于 DAW 课程教学项目",
+   "review": "Nurse Simulator 是西班牙 STUCOM 学院 DAW 课程 pr03 实践项目，由四人小组开发。它提供护士列表查询、按名称检索和登录验证三个 REST 端点，数据读取自 data/nurses.json（含 1000 条记录）。README 明确说明此为教学初期阶段：密码以明文存储，后续阶段才计划引入 Doctrine ORM、关系数据库与密码哈希。项目附带 Postman 测试集合。",
+   "highlights": [
+    "提供三个端点：GET /nurse/index 返回全部护士、GET /nurse/name/{name} 大小写不敏感按名检索、POST /nurse/login 验证凭据",
+    "数据从 data/nurses.json 文件读取，包含 1000 条护士记录",
+    "仓库包含可导入的 Postman 测试集合及各端点执行证据，使用 GitHub Actions 进行 CI/CD"
+   ],
+   "use_cases": [
+    "用于 Web 应用开发（DAW）课程的 Symfony 后端入门教学与小组协作实践",
+    "作为学习 REST API 端点设计、Postman 测试及 Git 分支工作流的示例项目"
+   ]
+  },
+  "sha": "b034aea91f29",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

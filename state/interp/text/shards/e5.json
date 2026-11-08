@@ -2527,5 +2527,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ed402f3f7367": {
+  "identity": {
+   "one_liner": "基于 Dgraph 数据库的 GraphQL 后端模板，由 Schema 生成数据库接口",
+   "review": "graphql-editor 团队提供的后端模板，底层运行 Dgraph 数据库，通过将 GraphQL Schema 注入 Dgraph 来获得带 GraphQL 接口的数据存储。使用者需安装 Docker、jq 与 npm，将 schema.graphql 内容注入后即可用 GraphQL 客户端查询。注意 Dgraph 的 schema 只支持类型、接口和枚举，且 schema 文件中不能包含注释。",
+   "highlights": [
+    "依据 GraphQL Schema 生成带 GraphQL 接口的数据库存储",
+    "提供生成 JavaScript/TypeScript 客户端库及补全库的脚本",
+    "支持浏览器/React Native 与 Node 环境的客户端代码生成"
+   ],
+   "use_cases": [
+    "以 GraphQL Schema 为起点快速搭建带数据库的后端项目",
+    "为前端项目生成对应的 JS/TS 查询客户端库",
+    "学习或实验 Dgraph 的 GraphQL 接口功能"
+   ]
+  },
+  "sha": "ed402f3f7367",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8bde95adcff1": {
+  "identity": {
+   "one_liner": "管理与查询 Weaviate 向量数据库的 VS Code 扩展，内置 GraphQL 界面",
+   "review": "Weaviate Studio 是一个 VS Code 扩展，用于连接、管理和查询 Weaviate 向量数据库实例，面向使用 Weaviate 的开发者与运维人员。它通过侧边栏面板管理多个连接，提供 GraphQL 查询编辑器、数据浏览、生成式搜索、RBAC 用户管理、集群监控和备份恢复等功能，支持本地、自托管与云端实例。凭据经 VS Code secret storage 存储，连接可设为只读模式以限制写操作。",
+   "highlights": [
+    "支持同时管理多个 Weaviate 连接（本地、自托管、云），凭据存于 VS Code secret storage，并可设置连接级只读保护",
+    "提供 Monaco 驱动的 GraphQL 编辑器、含四种向量搜索模式（Text/Object/Vector/Hybrid）的 Data Explorer，以及结果导出为 JSON/CSV",
+    "包含基于 Weaviate 服务端生成式模块的 RAG 聊天界面（多集合检索、来源标注）、RBAC 用户角色管理，以及覆盖 filesystem/S3/GCS/Azure 的备份与恢复"
+   ],
+   "use_cases": [
+    "在 VS Code 内浏览、过滤、检索和导出 Weaviate 集合数据，替代浏览器切换",
+    "通过 GraphQL 编辑器编写和测试模式感知查询，并在 Data Explorer 中查看表格/JSON 结果",
+    "配置 Weaviate RBAC 角色、用户与 API 密钥轮换，以及对生产连接启用只读模式"
+   ]
+  },
+  "sha": "8bde95adcff1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "265be7fc2ed6": {
+  "identity": {
+   "one_liner": "用 docker-compose 运行 Neo4j 单机或集群的配置仓库",
+   "review": "该仓库通过一组 docker-compose 配置文件和环境变量模板，用于在本地或开发环境启动 Neo4j v4/v5 的单实例或集群。README 给出克隆仓库、符号链接 .env 模板、按版本选择 compose 文件启动的步骤，并记录默认访问凭据、备份与恢复命令、Apoc 插件安装及 Nexus 数据集的上传下载方式。备份部分依赖 bind mount 的 /backups 目录。",
+   "highlights": [
+    "提供 Neo4j v4 与 v5 的单实例及集群 docker-compose 配置文件",
+    "包含基于 neo4j-admin 的在线备份、restore 与离线 load 命令示例",
+    "提供从 Nexus 检索数据集的脚本及大数据集手动上传的 curl 命令"
+   ],
+   "use_cases": [
+    "需要用 docker-compose 在本地启动 Neo4j 开发数据库的场景",
+    "需要搭建 Neo4j v4/v5 集群进行测试的环境",
+    "需要对 Neo4j 数据库执行备份、恢复或加载预置数据集的操作"
+   ]
+  },
+  "sha": "265be7fc2ed6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c76d1ea3325c": {
+  "identity": {
+   "one_liner": "基于 PySide6 的取证工作台，从海康威视、大华、TVT 录像机磁盘镜像中识别并提取系统日志",
+   "review": "这是一款面向数字取证（DFIR）从业者的桌面工具，用于从海康威视、大华、TVT 的 DVR/NVR 磁盘镜像（Raw/DD、E01）中识别和提取系统日志，是 HikvisionLogAnalyzer 的后继项目。它采用案例文件夹加工作区的组织结构，每次提取生成独立工作区，记录 UTC 时间戳的过程日志；长任务可取消并标记为不完整。此外还支持海康配置备份解密（有导出码时解密、无导出码时生成 hashcat 26401 哈希行），以及对未知镜像的熵扫描定位。构建面向 Windows，需通过 run_dev.bat 或 build.bat 运行。",
+   "highlights": [
+    "支持 Raw/DD（.001/.dd/.img/.bin）与 EnCase E01（经 libewf-python）镜像格式，覆盖海康 HIKFAT/RATS 记录、大华 GPT/XFS SQLite 数据库和 TVT 变长 mlogtype 记录",
+    "支持海康配置备份处理：依据导出码进行 AES-128-ECB 解密并校验校验和，无导出码时生成 hashcat 模式 26401 哈希行及命令",
+    "提供只读熵扫描功能，可全盘或指定区域扫描，结果流式写入临时 SQLite 数据库以限制内存占用"
+   ],
+   "use_cases": [
+    "对海康威视、大华、TVT 录像机磁盘镜像开展日志提取与检查",
+    "在拥有或未拥有导出码的情况下处理海康配置备份文件",
+    "对未知格式的镜像进行熵扫描以定位进一步检查的区域"
+   ]
+  },
+  "sha": "c76d1ea3325c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

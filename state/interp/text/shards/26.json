@@ -2813,5 +2813,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "43974ecc3e24": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 CLI，覆盖本地开发与 ClickHouse Cloud 的命令行工具",
+   "review": "clickhousectl（chctl）是 ClickHouse 官方命令行工具，面向使用本地或云端 ClickHouse 的开发与运维人员。它支持安装/切换本地 ClickHouse 版本、运行隔离服务器和执行 SQL，管理 AWS/GCP/Azure 上的 Cloud 服务、Managed Postgres、ClickPipes 数据管道和 ClickStack 可观测性资源，并可向编码代理安装官方 skills。浏览器 OAuth 仅支持只读操作，写操作需 API key；Managed Postgres 相关命令为 beta。",
+   "highlights": [
+    "支持本地安装/切换 ClickHouse 版本、运行数据隔离的命名服务器（数据保存在 .clickhouse/）并可执行 SQL",
+    "可从终端创建、配置、扩缩、备份和查询 ClickHouse Cloud 服务，管理 ClickPipes 与 ClickStack 资源",
+    "支持 npm/uv/pipx/pip/cargo 等多种安装方式，结构化命令支持 --json 输出，可向 claude/codex 等编码代理安装官方 skills"
+   ],
+   "use_cases": [
+    "本地开发：在项目目录中运行隔离的 ClickHouse 或 Docker 版 Postgres 服务器并执行查询",
+    "云服务运维：通过 API key 在终端管理 ClickHouse Cloud 服务、备份与查询",
+    "数据接入：通过 ClickPipes 从 S3 加载文件或以 CDC 方式复刻 Postgres 数据到 ClickHouse Cloud"
+   ]
+  },
+  "sha": "43974ecc3e24",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f770c63aca8": {
+  "identity": {
+   "one_liner": "用单一 C# 代码库构建全栈 Web 应用的 .NET 框架",
+   "review": "Rask 是一个面向个人开发者或小团队的 .NET 全栈 Web 框架，UI、数据、认证、后台任务等均在同一 C# 代码库中实现，基于 ASP.NET Core 和 EF Core 构建。组件支持服务端渲染或 WebAssembly 运行，内置功能默认记录在应用自身的 SQLite 数据库中。项目处于 1.0 之前的阶段，API 可能在次版本间变动。",
+   "highlights": [
+    "页面为 C# 组件，服务端渲染并通过 WebSocket 将状态变更以最小差异流式推送到浏览器，也可选择 --template wasm-hosted 在浏览器端运行 WebAssembly 应用",
+    "认证、后台任务、邮件、缓存、事件和文件存储默认开启，记录保存在应用自身的 SQLite 数据库，无需额外消息代理或 Redis 服务",
+    "提供 rask new / dev / db / deploy 命令行流程，rask deploy 可通过 SSH 将裸 VPS 部署为带自动 HTTPS 与零停机切换的 Docker 站点"
+   ],
+   "use_cases": [
+    "单人开发者或小团队构建并部署完整的 Web 产品",
+    "需要以单一 SQLite 数据库承载应用全部内置功能记录的项目",
+    "已有 ASP.NET 项目希望以单个 NuGet 包引入全栈能力（Rask.Server 或 Rask.Wasm）"
+   ]
+  },
+  "sha": "7f770c63aca8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cd40957a5fef": {
+  "identity": {
+   "one_liner": "本地离线存档 Garmin Connect 健康数据的 Windows 桌面应用",
+   "review": "Garmin Local Archive 是一款 Windows 桌面应用，通过 API 同步或导入 Garmin GDPR 导出 ZIP，将健康数据以 JSON、Excel、HTML 等格式存于本地，并提供多种仪表板、内置 Chat 和 MCP 服务器供 AI 查询。适合想在本地长期保存与分析个人健康数据的 Garmin 用户。注意 GUI 仅支持 Windows，存档为明文存储，依赖非官方的 python-garminconnect。",
+   "highlights": [
+    "支持实时 API 同步与 GDPR 导出 ZIP 批量导入两种数据获取方式，含按日断点续传",
+    "内置健康分析、时序、热力图、睡眠等多类仪表板，可输出 HTML、Excel、JSON，并可导出 InfluxDB Line Protocol",
+    "提供 MCP 服务器与 Chat 功能，可接入 Ollama 本地模型或云端 AI 后端查询存档数据"
+   ],
+   "use_cases": [
+    "在本地长期保存并分析 Garmin 健康数据，构建个人仪表板",
+    "通过 MCP 服务器或本地 AI 模型（如 Ollama）离线查询自己的健康数据",
+    "从 Garmin GDPR 导出恢复 API 已不提供的多年历史数据"
+   ]
+  },
+  "sha": "cd40957a5fef",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec31f79bd92f": {
+  "identity": {
+   "one_liner": "自托管的团队工作区，让小团队与其 AI 编码代理在同一台 Linux 服务器上协作开发。",
+   "review": "DevDash 把一台自有的 Ubuntu Linux 服务器变成团队与 AI 代理共享的开发环境：项目以共享 git checkout 形式存放，每个代理会话可在独立 git worktree 中运行以避免冲突。它通过 Claude Agent SDK 驱动 Claude Code、通过 Agent Client Protocol 连接 OpenCode，成员各自以真实 Linux 用户隔离运行，DevDash 本身不以 root 运行。需 Node 24 与自有服务器和域名，许可证为 PolyForm Noncommercial，仅限非商业用途。",
+   "highlights": [
+    "支持 Claude Code（Agent SDK）与 OpenCode（ACP）两种编码代理，每个成员用自己的账号登录，会话可在聊天视图与代理原始终端应用间切换",
+    "每个代理会话在独立 git worktree 中运行，结果可作为分支、pull request 或合并交付；会话可设为私有或与指定成员共享",
+    "内置个人代理 Hamasa（跨项目问答、定时任务、创建任务与笔记）与 Autopilot（按成员自定义的绿/黄/红三级规则自动处理例程决策，红级请求始终等待本人）"
+   ],
+   "use_cases": [
+    "小团队在自有的单台 Linux 服务器上与 AI 编码代理并行开发多个项目",
+    "成员需要在离开时由自动化规则处理会话中的例程提问与审批，并将需人工处理的事项集中到一页",
+    "需要按成员隔离 Linux 用户、账号与网络访问的自托管开发环境"
+   ]
+  },
+  "sha": "ec31f79bd92f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

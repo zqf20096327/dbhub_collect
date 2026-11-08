@@ -2443,5 +2443,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "78822c77a9ac": {
+  "identity": {
+   "one_liner": "FalkorDB 图数据库的 Python 客户端库",
+   "review": "falkordb-py 是连接 FalkorDB 图数据库的 Python 客户端，通过 pip 安装，支持执行 Cypher 查询。它基于 redis 库实现，提供同步与异步两种接口，支持 hiredis 解析器加速大型结果解析，并支持 Sentinel 故障转移。写操作在连接中断时默认不重试，以避免重复执行。",
+   "highlights": [
+    "提供同步（falkordb.FalkorDB）与异步（falkordb.asyncio.FalkorDB）两种客户端接口",
+    "支持可选安装 hiredis 解析器以加速大型结果（如向量属性）的解析",
+    "支持 Sentinel 故障转移，master 切换后自动重连到新 master，且可配置 retry 策略与 retry_writes"
+   ],
+   "use_cases": [
+    "在 Python 应用中执行 Cypher 查询读写 FalkorDB 图数据库",
+    "需要异步并发访问图数据库的场景（配合 BlockingConnectionPool）",
+    "部署了 Sentinel 主从架构、需要故障转移重连的 FalkorDB 集群接入"
+   ]
+  },
+  "sha": "78822c77a9ac",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9bd4664912c9": {
+  "identity": {
+   "one_liner": "面向 Web 的本地文档型数据库，借鉴 Firestore 数据模型",
+   "review": "LavaStore 是一个用于 Web 开发的本地持久化数据库，采用受 Cloud Firestore 启发的文档导向数据模型，以文档—集合树形结构组织数据。使用者通过 new LavaStore('id') 创建实例，配合 InsurePath、Add、SetPath 等方法建立结构；提供 TypeScript 类型支持，可通过 npm 安装。README 中异步特性尚在开发中，示例代码存在未完成部分。",
+   "highlights": [
+    "采用文档导向数据模型，文档包含子集合与字段，集合包含子文档，数据跨会话持久保存",
+    "提供 TypeScript 类型支持，公开 API 包含 LavaStore、LSDocument、LSCollection 等类",
+    "支持 LavaStore QL 查询语言扩展，可通过 npm i lavastore 安装"
+   ],
+   "use_cases": [
+    "Web 应用中在浏览器本地保存会话间数据",
+    "需要类似 Firestore 文档/集合结构但无需云端服务的本地数据存储",
+    "TypeScript 项目中需要类型化的本地持久化方案"
+   ]
+  },
+  "sha": "9bd4664912c9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8ce7b5bc4204": {
+  "identity": {
+   "one_liner": "NestJS 六边形架构脚手架，含 JWT 认证、可切换存储、React Email 邮件与模块脚手架生成",
+   "review": "这是一个基于 NestJS 10 + TypeScript + Drizzle ORM (PostgreSQL) 的后端项目模板，采用六边形架构组织代码。内置 JWT 双 token 认证、本地/S3 存储驱动、React Email 模板邮件，并提供 pnpm new:module 命令生成完整 CRUD 模块。使用 Docker、pnpm，提供 Postman 集合与 Swagger 文档。需自行调整生成的实体字段并执行 db:push 建表。",
+   "highlights": [
+    "提供 pnpm new:module 脚手架命令，生成 entity、port、5 个 use-cases、DTO、controller、Drizzle schema/repo 及分页列表的完整模块",
+    "存储与邮件通过 port/adapter 模式实现，存储驱动（local/s3，兼容 MinIO/R2）与邮件驱动（smtp/log）均可通过环境变量切换",
+    "认证实现 access + refresh token 双密钥 JWT、bcrypt 密码哈希、全局 JwtAuthGuard 及 @Public() 装饰器，异常通过 DomainExceptionFilter 输出带 code 的统一错误结构"
+   ],
+   "use_cases": [
+    "以 NestJS 启动采用六边形架构分层的新后端项目",
+    "需要本地或 S3（含 MinIO/R2）文件存储及 React Email 邮件模板的 API 服务",
+    "使用 email/password 登录、access/refresh token 刷新机制的用户认证场景"
+   ]
+  },
+  "sha": "8ce7b5bc4204",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6e411b48ad15": {
+  "identity": {
+   "one_liner": "自托管的开源渗透测试报告平台，支持AI起草发现与品牌化报告输出",
+   "review": "Pental Report 是运行在自有服务器上的开源渗透测试报告系统，采用 AGPL-3.0 许可。它以 Docker 部署并自带 PostgreSQL，团队可协作撰写漏洞发现，用自配 API 密钥和提示词由 AI 从证据起草内容，最终导出带企业品牌的 PDF 或 Word 报告。内置 CVSS 3.1/4.0、OSSTMM、PTES 等 22 份清单与 21 份操作手册。可通过 Tailscale 或自有域名共享给团队。",
+   "highlights": [
+    "通过一条安装命令在 Docker 中运行，附带 PostgreSQL 数据库，支持 macOS、Linux 与 Windows",
+    "内置 22 份清单与 21 份操作手册，覆盖 OSSTMM 3、PTES、NIST SP 800-115、OWASP WSTG/ASVS/MASVS、MITRE ATT&CK 等方法论",
+    "支持 CVSS 3.1 与 4.0 评分、可自定义发现字段、复测记录，以及带企业品牌设置的 PDF/Word 报告导出"
+   ],
+   "use_cases": [
+    "渗透测试团队在自有服务器或 Tailscale 网络内协作编写和管理测试项目报告",
+    "安全公司按自身品牌模板生成交付给客户的 PDF/Word 渗透测试报告",
+    "测试过程中按 OSSTMM、PTES、OWASP 等方法论清单逐项执行并记录证据"
+   ]
+  },
+  "sha": "6e411b48ad15",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "81d6b1d5bf78": {
+  "identity": {
+   "one_liner": "基于 Tauri 与 Rust 的桌面 SQL 客户端，支持多种数据库。",
+   "review": "SQL Pro 是一个桌面 SQL 客户端，用于连接 MySQL、PostgreSQL、SQL Server、SQLite 和 MariaDB。项目采用 Tauri v2（Rust 后端）与 Vue 3 + TypeScript 前端构建，提供脚本化安装（shell/PowerShell）及 Homebrew、deb/rpm、AppImage 等安装方式。应用未签名，从浏览器下载的安装包在 macOS 和 Windows 上会显示警告。开发者可通过 bun 运行 tauri dev 进行开发。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQL Server、SQLite 和 MariaDB 连接",
+    "可在 macOS（Apple silicon 和 Intel）、Windows（64 位 Intel/AMD/ARM）和 Linux（64 位 Intel/AMD/ARM）上运行",
+    "提供 curl 脚本、Homebrew cask、deb/rpm/AppImage 和 PowerShell 等多种安装方式"
+   ],
+   "use_cases": [
+    "需要在桌面端查看和操作多种数据库表数据的场景",
+    "希望在 macOS、Windows 或 Linux 上使用本地 SQL 客户端的用户",
+    "开发者基于 Tauri/Vue/Rust 技术栈参与或学习桌面应用开发"
+   ]
+  },
+  "sha": "81d6b1d5bf78",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

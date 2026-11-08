@@ -2924,5 +2924,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f54a68131703": {
+  "identity": {
+   "one_liner": "本地运行的媒体整理工具，以 Rust 感知哈希去重并结合端侧 AI 分类。",
+   "review": "Clean-Backup 是一个本地媒体库管理工具，提供感知哈希去重、EXIF 按日期整理、MobileNetV3 场景分类和 YuNet/ArcFace 人脸识别分组。核心哈希由 Rust 实现并通过 PyO3 暴露给 Python，整体打包为单一 Docker 镜像，全部模型本地推理，不上传数据；云同步（Google Drive、S3）为可选功能。适用于需要在本地整理照片/视频库并通过 React 面板人工审核操作的用户。",
+   "highlights": [
+    "基于 DCT 感知哈希（Rust + Rayon 并行）检测缩放、重压缩或转格式后的视觉重复文件，Hamming 距离阈值可调",
+    "使用 ONNX Runtime 在本地运行 MobileNetV3 场景分类（15 类）与 YuNet 人脸检测 + ArcFace 人脸分组，低置信结果进入人工审核队列",
+    "所有文件操作记录日志并支持事务性撤销与会话回滚；可选 Google Drive / S3 增量同步（SHA-256 清单）"
+   ],
+   "use_cases": [
+    "整理跨设备积累、包含重复照片和视频的本地媒体库",
+    "按拍摄日期归类文件并使用本地人脸识别建立人物分组",
+    "通过 watcher 监控 drop 文件夹，自动执行分类→整理→去重→同步流水线"
+   ]
+  },
+  "sha": "f54a68131703",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

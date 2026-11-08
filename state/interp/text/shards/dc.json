@@ -2297,5 +2297,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cbab024d5921": {
+  "identity": {
+   "one_liner": "在 AWS 上部署 ScyllaDB 集群的 Terraform 模块",
+   "review": "这是一个 Terraform 模块，用于在 AWS 上部署 ScyllaDB 集群，并同时部署 Scylla Monitoring Stack 以采集集群指标。使用者通过在 main.tf 中引用该模块并配置参数，运行 terraform apply 创建集群，terraform destroy 销毁集群；作者另提供配套的 scylla-bench 压测模块。适用于需要在 AWS 上以基础设施即代码方式管理 ScyllaDB 集群生命周期的团队。",
+   "highlights": [
+    "通过 Terraform 模块在 AWS 上部署 ScyllaDB 集群",
+    "随集群一同部署 Scylla Monitoring Stack 监控指标",
+    "提供 terraform apply/destroy 命令创建与销毁集群"
+   ],
+   "use_cases": [
+    "在 AWS 上以 IaC 方式创建 ScyllaDB 集群",
+    "部署后需要监控 Scylla 集群指标的场景",
+    "搭配 terraform-aws-scylla-bench 进行集群压测"
+   ]
+  },
+  "sha": "cbab024d5921",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "24a9bd986cca": {
+  "identity": {
+   "one_liner": "基于 Firebase 与 Kitsu API 的动漫播放网站模板",
+   "review": "这是一个用于搭建动漫在线播放网站的 HTML/CSS/JavaScript 模板，面向想自建播放站点的用户。它通过 Kitsu API 获取动漫数据，剧集播放源以 iframe 链接形式存入 Firebase 数据库，部署前需在 config.js 中填入自己的 Firebase 配置。README 未说明播放源内容的授权情况，使用者需自行确认合规性。",
+   "highlights": [
+    "使用 HTML/CSS/JavaScript 编写，配置 Firebase 后即可运行",
+    "对接 kitsu.io API 获取动漫数据",
+    "支持手机与电脑页面显示，提供英文版本"
+   ],
+   "use_cases": [
+    "搭建以 iframe 嵌入剧集源的动漫播放网站",
+    "学习 Firebase 数据库存储与前端页面结合的项目示例",
+    "作为基于 Kitsu API 获取动漫信息的开发模板"
+   ]
+  },
+  "sha": "24a9bd986cca",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "04ec949f4b82": {
+  "identity": {
+   "one_liner": "基于 Django、MongoDB 与 d3.js 的 IoT 传感器数据流可视化 Web 控制台",
+   "review": "该项目源于 HEIG-VD 学士论文，实现了一个用于探索 IoT 传感器数据的 Web 图形控制台：后端用 Django 与 MongoDB 存储，前端以 d3.js 渲染聚合、气泡地图、图表等可视化，并支持直方图滑块形式的 crossfilter 交互过滤。性能方面通过聚合、索引与服务器/客户端分担负载处理。适合需要监控事件现场传感器数据的 IoT 工程师。",
+   "highlights": [
+    "支持以热力图、聚合、气泡地图、图表等方式在地图上呈现位置、速度、方向等传感器数据",
+    "提供基于直方图滑块的 crossfilter 交互式数据过滤",
+    "通过聚合、索引及服务器/客户端负载分配处理数据规模"
+   ],
+   "use_cases": [
+    "大型活动（如音乐节）参与者的实时位置监控与热力图展示",
+    "对历史传感器测量数据进行交互式探索浏览",
+    "IoT 工程师查看数据库中数据流的概况"
+   ]
+  },
+  "sha": "04ec949f4b82",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8521e3e52c91": {
+  "identity": {
+   "one_liner": "基于 Kubernetes 的 GaussDB/openGauss 诊断智能体，以 opencode 为核心、Pod 无状态、状态存 NAS 的容器化交付方案。",
+   "review": "该项目将 opencode 与 GaussDB/openGauss DBA 技能集容器化部署到 Kubernetes，为行内应用/运维 DBA 提供诊断与知识库导入能力。每个用户对应一个无状态 runtime Pod，会话状态存于 NAS 的 RWX PVC；诊断与知识库导入分属不同镜像，并通过 delivery/transform.py 生成行内交付分支。部署方式支持 K8s 清单、离线镜像包与单机 Docker 演示。",
+   "highlights": [
+    "提供 runtime、kb-import、kbstd、frontend 等多个镜像，覆盖诊断、知识库导入、官方文档集安装与前端大盘，Pod 无状态且数据按工号存放于 NAS",
+    "支持 Top SQL、慢 SQL、健康检查、WDR、死锁日志解析、时段体检等诊断能力，SQL 白名单共 137 条",
+    "知识库支持 word/pdf/txt/照片/PPT/网页剪藏等多源导入，按八类类型与 L0–L3 渐进式披露组织，向量库基于 sqlite-vec"
+   ],
+   "use_cases": [
+    "行内 DBA 通过 Web 或 CLI 使用诊断智能体排查 GaussDB/openGauss 的性能、锁、膨胀等问题",
+    "管理员在导入容器内整理工单、规范、案例等材料并建立可检索的知识库",
+    "实施团队按交付手册在 Kubernetes 或单机 Docker 环境完成部署、升级与回滚"
+   ]
+  },
+  "sha": "8521e3e52c91",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

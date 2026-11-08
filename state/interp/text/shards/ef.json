@@ -2725,5 +2725,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b15ff1476897": {
+  "identity": {
+   "one_liner": "S3 原生向量与全文搜索引擎，对象存储为唯一数据源，节点无状态",
+   "review": "Zeppelin 是用 Rust 编写的 Apache-2.0 开源搜索引擎，将向量、索引、WAL 与 manifest 全部存于对象存储，节点无状态，任意节点可服务任意命名空间。支持 IVF 索引、量化、BM25 全文检索与属性预过滤，通过 HTTP API 提供 upsert/query/delete 操作。目前为 pre-1.0 版本，磁盘格式尚无稳定性保证，GCS/Azure 后端仅在模拟器上验证过。",
+   "highlights": [
+    "向量（IVF-Flat/Hierarchical ANN、2-bit RaBitQ 等量化）与 BM25 全文检索（倒排索引、多字段 rank_by）混合查询",
+    "对象存储为唯一数据源，支持 S3/MinIO/GCS/Azure Blob/local 后端，启动时实时验证存储能力",
+    "提供按查询选择的一致性级别、RoaringBitmap 属性预过滤、RBAC/审计日志/委托令牌等安全机制，以及 zeppelin_advisor 硬件与配置推荐工具"
+   ],
+   "use_cases": [
+    "自托管向量检索服务，以对象存储为主要存储成本",
+    "需要向量与全文（BM25）混合检索的应用",
+    "基于 S3 兼容存储、希望节点无状态可弹性伸缩的检索部署"
+   ]
+  },
+  "sha": "b15ff1476897",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4f49108b6f3e": {
+  "identity": {
+   "one_liner": "基于 Flask + SQLite 的个人 GitHub 项目每日推荐器，用反馈学习口味",
+   "review": "StarScout 每天通过 GitHub Search API 和 Trending 页采集新项目，将仓库文本哈希为 TF-IDF 向量，用 SGD 逻辑回归学习用户 👍/👎 反馈形成口味画像，按口味、质量、新鲜度三路加权排序并推荐。面向想在单机环境发现新兴开源项目的个人用户；无 GPU 依赖，未认证时 Search API 限速 10 次/分钟。",
+   "highlights": [
+    "提供采集、画像、排序、反馈闭环，约 1800 行代码，单机 SQLite 运行，无需 GPU",
+    "使用 blake2b 哈希生成 4096 维 TF-IDF 向量，配合带 L2 正则的 SGD 逻辑回归学习偏好",
+    "推荐理由由模型权重反查生成，仅允许用户实际点赞或引导页勾选过的 topic 出现在理由中"
+   ],
+   "use_cases": [
+    "每日追踪 GitHub 上 star 快速增长的早期新项目",
+    "通过网页界面 👍/👎/🔖 交互持续调整个人推荐列表",
+    "本地运行 demo 数据或对照实验（demo_learn.py）观察反馈前后推荐差异"
+   ]
+  },
+  "sha": "4f49108b6f3e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

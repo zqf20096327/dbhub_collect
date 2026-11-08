@@ -2900,5 +2900,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "19683a013e97": {
+  "identity": {
+   "one_liner": "基于Databricks的银行数据工程项目，采用Bronze-Silver-Gold湖屋架构构建端到端流水线",
+   "review": "该项目演示从SQL Server摄取银行客户、账户和交易数据的完整数据工程流程：用pyodbc以Python提取并导出CSV，上传至Databricks Volume后，按Medallion架构分层处理——Bronze层保留源数据可追溯性，Silver层做清洗、类型转换和质量检查，Gold层生成业务聚合指标，再通过Databricks Workflow编排调度，最终产出BI仪表板。适合作为银行金融数据管道的学习或参考实现。",
+   "highlights": [
+    "支持从SQL Server经pyodbc提取数据并以CSV形式接入Databricks Volume",
+    "实现Bronze-Silver-Gold（Medallion）三层架构，包含数据清洗、类型转换与质量检查",
+    "提供Databricks Workflow编排及仪表板展示交易笔数、总金额、活跃客户数、Top 10客户、渠道与CREDIT/DEBIT分析等指标"
+   ],
+   "use_cases": [
+    "需要将SQL Server业务数据迁移至Databricks湖屋架构的场景",
+    "银行或金融领域的交易数据清洗、分层加工与KPI指标分析",
+    "学习Medallion架构与Databricks Workflow流水线编排的实现方式"
+   ]
+  },
+  "sha": "19683a013e97",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01dd62d11bdc": {
+  "identity": {
+   "one_liner": "基于 CouchbaseLite 的 Android 本地文档数据库 Kotlin 封装库",
+   "review": "StorageDone-Android 是一个 Kotlin 库，底层使用 CouchbaseLite，用于在 Android 应用中读写本地文档数据库。开发者定义数据模型后，通过 StorageDoneDatabase 对象执行插入、读取、删除等操作；支持主键插入或更新、协程挂起版本、查询操作符、排序、实时查询、高级查询和全文检索。通过 JitPack 以 gradle 依赖引入，采用 MIT 许可证。",
+   "highlights": [
+    "提供基于 try-catch 封装的操作符（如 +=）执行插入、更新、删除等数据库操作",
+    "所有操作提供协程 suspending 版本，可通过 database.suspending 扩展调用",
+    "支持主键、条件查询、多字段排序、实时查询、limit/skip 高级查询和全文检索索引"
+   ],
+   "use_cases": [
+    "Android 应用中需要本地存储结构化数据模型（如缓存列表数据）的场景",
+    "需要使用协程进行异步数据库读写的 Kotlin 项目",
+    "需要对本地数据进行条件过滤、排序或全文搜索的场景"
+   ]
+  },
+  "sha": "01dd62d11bdc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "383c1d5a8235": {
+  "identity": {
+   "one_liner": "连接 PMM 2/3 与 MCP 客户端的社区服务器，默认只读",
+   "review": "该服务器为 Percona Monitoring and Management 2.x/3.x 实现 Model Context Protocol 接口，供 Claude 等 MCP 客户端读取 MySQL、MongoDB、PostgreSQL 的指标、Query Analytics、告警和仪表盘。安装需 Python 3.11+ 和 uv，通过 PMM_URL 与 Grafana 服务账户令牌连接，默认以 Viewer 令牌只读运行；写操作（静默、注释）需 PMM_ALLOW_WRITE=1、Editor/Admin 令牌且每次调用 confirm=true。未覆盖 firing 状态告警及 ProxySQL/HAProxy。",
+   "highlights": [
+    "提供 PromQL 即时/区间查询、指标与标签发现，及 QAN 慢查询分析（含经校验的 ClickHouse SELECT）",
+    "默认只读，凭 Viewer 令牌运行；写工具默认关闭且先 dry-run，需显式确认",
+    "TLS 默认验证并支持自定义 CA，SQL 仅接受单条 SELECT/WITH 且行数与时间窗口设上限"
+   ],
+   "use_cases": [
+    "在 Claude 客户端中查看数据库监控状态、 firing 告警和仪表盘 PromQL/SQL",
+    "用自然语言查询慢查询详情、每服务负载与指标时间序列",
+    "在维护期间显式开启写权限后创建/删除告警静默、添加部署注释标记"
+   ]
+  },
+  "sha": "383c1d5a8235",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

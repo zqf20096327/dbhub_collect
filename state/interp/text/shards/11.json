@@ -2963,5 +2963,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4f3129edf0dc": {
+  "identity": {
+   "one_liner": "RixxDB 是一个版本化的嵌入式强一致键值数据库",
+   "review": "RixxDB 是一个以 Go 库形式分发的嵌入式键值数据库，通过 go get 引入项目。它运行在内存中，内置加密、压缩与条目版本管理，采用 MVCC 实现多读并发与事务回滚，数据持久化依赖可配置的追加写入文件。README 未提供 API 文档、性能数据与使用示例。",
+   "highlights": [
+    "支持内置加密、压缩与条目版本管理",
+    "实现 MVCC 与含回滚的事务，允许多个读取者并发访问且不加锁",
+    "提供升序、降序、范围及层级范围的灵活数据迭代方式"
+   ],
+   "use_cases": [
+    "Go 项目中需要以库形式嵌入运行的键值存储场景",
+    "需要条目版本控制与事务回滚能力的数据管理场景",
+    "依赖追加写入文件进行数据持久化的应用场景"
+   ]
+  },
+  "sha": "4f3129edf0dc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d19e3bf70f78": {
+  "identity": {
+   "one_liner": "FlaxKV：提供类 Python 字典接口的持久化键值数据库",
+   "review": "FlaxKV 是一个持久化键值数据库，提供与 Python 字典相似的接口，默认以 LevelDB 作为后端，支持 pip 安装。写入经缓冲调度以减少频繁落盘开销，设计上避免写操作阻塞用户进程，并自动管理资源释放。其局限包括：多进程环境下因延迟写入，跨进程读取通常有数秒延迟，需调用 write_immediately() 立即写入；默认不支持 Tuple、Set 值类型。",
+   "highlights": [
+    "提供类似 Python 字典的接口，操作 LevelDB 等键值数据库，资源可自动释放",
+    "写入采用缓冲调度机制，写操作不阻塞用户进程，且具备原子性与线程安全",
+    "使用 benchmark 脚本测试 numpy 向量（1000 维）的读写遍历"
+   ],
+   "use_cases": [
+    "保存简单键值结构数据",
+    "需要高频插入/更新数据的场景",
+    "机器学习中存储 embeddings、图像、文本等键值结构的大数据集"
+   ]
+  },
+  "sha": "d19e3bf70f78",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7bda5b1e4cd0": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 共享项目记忆服务器，用 SQLite 存储，供多个 AI 应用读写",
+   "review": "FlowState 是一个本地 MCP 服务器，为 Claude、ChatGPT、Cursor、Grok 等客户端提供同一份项目记忆，内容包含待办、变更、决策、问题与经验，数据保存在本机单个 SQLite 文件中。AI 开始工作时读取简报并记录过程，下一个会话或应用可接续。多个代理并发时支持待办认领机制，决策冲突会进入人工审核队列。可选的站外功能（GitHub 私有仓库备份、Cloudflare Tunnel、relay）需自行开启；默认仅每日一次检查新版，可用命令关闭。许可证为 MIT。",
+   "highlights": [
+    "本地优先：数据存于本机单个 SQLite 文件，除可选备份/隧道/中继外不上传；每日版本检查可关闭",
+    "多客户端并发使用：支持待办认领（默认 15 分钟、可至 120 分钟）、会话摘要、来源记录（应用/模型/机器/身份方式）",
+    "决策冲突处理：自动标记疑似冲突并生成争议卡片，人工通过审核队列裁决，未保留的条目标记为 superseded 而非删除"
+   ],
+   "use_cases": [
+    "在多个 AI 应用间保持同一项目上下文，接续上一次会话的工作",
+    "多个 AI 代理同时运行于同一项目时避免重复处理同一待办",
+    "需要本机存储项目记忆、或经隧道/中继从手机与局域网远程访问的场景"
+   ]
+  },
+  "sha": "7bda5b1e4cd0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9a1b1079bbb": {
+  "identity": {
+   "one_liner": "Go CLI 脚手架，生成仅 API、仅 Postgres 的 Gin 服务并自动注册代码",
+   "review": "Bogie 是一个 Go CLI，通过 rails new 风格的生成器创建基于 Gin、sqlc、goose、River 和 Kamal 2 的 API 服务骨架。生成器写入模型、控制器、迁移等文件时同步完成路由注册，并提供 d 销毁与 doctor 校验。生成的应用不依赖 Bogie 本身，但固定使用 Postgres 与 Gin，不可选型。适合需要在 Go 中沿用类似 Rails 工作流的团队。",
+   "highlights": [
+    "提供 g/d 生成与销毁命令，覆盖 scaffold、model、controller、job、authentication、config 等，生成时写入注册标记",
+    "集成 sqlc、goose、River（可选 --jobs）、加密 credentials、Kamal 2 部署配置，生成应用含 bin/ci 流水线与 AGENTS.md",
+    "支持 model:sync 跟随手写迁移同步字段，doctor 检查注册标记完整性；生成应用仅依赖 Postgres（端口 5440），需 Go 1.26+"
+   ],
+   "use_cases": [
+    "需要 API-only、Postgres-only Go 服务且希望工具链选型已定的团队",
+    "从 Rails 迁移到 Go 后沿用生成器式开发流程的场景",
+    "需要本地 CI 流水线与 Kamal 2 部署配置随服务一同生成的项目"
+   ]
+  },
+  "sha": "a9a1b1079bbb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

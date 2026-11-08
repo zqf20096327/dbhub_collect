@@ -2607,5 +2607,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "193cad5fb637": {
+  "identity": {
+   "one_liner": "本地运行的 iOS/macOS 文档问答应用，含 OCR、混合检索与页码引用",
+   "review": "OpenIntelligence 是一款原生 iOS/macOS 应用，用于对本地 PDF、Office 文件、图片、音视频等做问答检索。导入后进行抽取、分块、嵌入并建立向量与全文索引，检索采用向量与 BM25 并行、经 RRF 融合、交叉编码器重排与 MMR 多样化，答案附带可点击引用。摄取、索引、检索与验证均在设备本地完成，无账户和上传；iOS/macOS 27 上可选择经 Apple Private Cloud Compute 生成最终答案。Pages/Numbers/Keynote 须先导出。",
+   "highlights": [
+    "支持 PDF、Office、代码、图片、音频、视频等多格式导入，含 Vision OCR 兜底；10MB 以上 PDF 走流式分批导入并按页设检查点",
+    "混合检索：稠密向量与 BM25 并行，经 Reciprocal Rank Fusion 合并、交叉编码器重排、MMR 多样化",
+    "每个答案携带执行回执徽章标注实际运行位置，验证门可将未通过校验的答案标记或替换为拒答"
+   ],
+   "use_cases": [
+    "对医疗、法律、财务等不便上传的本地敏感文档做带引用的问答",
+    "在飞行模式或无网络环境下离线检索与答疑",
+    "需要答案可溯源核查的文档研究、合同或报告查阅场景"
+   ]
+  },
+  "sha": "193cad5fb637",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f6d8b8150ba8": {
+  "identity": {
+   "one_liner": "本地 MCP 记忆服务器，用单个 SQLite 文件实现跨客户端共享的代理记忆",
+   "review": "linksee-memory 是一个本地运行的 MCP 记忆服务器，将项目决策和经验存入机器上的单个 SQLite 文件（~/.linksee-memory/memory.db），供 Claude Code、Cursor、Windsurf、Codex、Gemini CLI 等客户端共同读写。在 Claude Code 中通过 hooks 实现 session 开始时的决策回注入、编辑前警告，以及基于 violation_signal 的漂移检测；其他客户端需依赖代理调用 remember/recall。无同步、无云服务。适合需要在新会话或不同客户端间延续项目决策上下文的开发者。",
+   "highlights": [
+    "多个客户端通过 stdio 命令读写同一个本地 SQLite 文件（含 FTS5），无网络调用，遥测默认关闭",
+    "Claude Code hooks 提供 Stop 自动保存、SessionStart 决策摘要回注入、编辑前基于 anchor 匹配的警告/阻止（guard 失败时放行）",
+    "记忆按机器共享而非按仓库，支持 supersedes 记录新旧决策、entity 标签过滤和 drift 检测"
+   ],
+   "use_cases": [
+    "在新会话或新客户端中恢复此前的项目决策与原因",
+    "在编辑代码前检查实现是否与已记录决策冲突",
+    "通过复制 ~/.linksee-memory/ 目录将项目记忆交接给他人或另一台机器"
+   ]
+  },
+  "sha": "f6d8b8150ba8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb227d506c3c": {
+  "identity": {
+   "one_liner": "面向 Mojo 的 SQLite 绑定，含安全 API、事务与基于编译期反射的 ORM",
+   "review": "该项目为 Mojo 语言提供 SQLite 绑定，采用三层结构：底层 FFI、安全的 Database/Statement/Row API，以及基于 morph 编译期反射的 ORM，支持无需手写 SQL 的基础 CRUD。事务通过 with 语句实现成功提交、异常回滚。通过 pixi 安装，MIT 协议，附有分步示例与测试脚本。",
+   "highlights": [
+    "提供 raw FFI、Database/Statement/Row 安全 API 与基于 morph 的 ORM 三层设计",
+    "支持 Python 风格的 with 事务语义：成功自动提交、异常自动回滚",
+    "支持 String、Int、Int64、Float64、Float32、Bool、BLOB 与 Optional[T] 等类型"
+   ],
+   "use_cases": [
+    "在 Mojo 项目中进行 SQLite 数据库的 CRUD 操作",
+    "需要事务保证的写入场景，如转账类演示应用",
+    "服务端逐行读取查询结果、构建响应体的场景"
+   ]
+  },
+  "sha": "eb227d506c3c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "97e86632b465": {
+  "identity": {
+   "one_liner": "自托管营养追踪应用，用趋势体重实测TDEE，经MCP接入AI教练",
+   "review": "tdeemon 是一个自托管的营养与热量追踪应用，基于 Go 与 SQLite，单容器部署。它根据用户记录的饮食和趋势体重变化实测 TDEE，并评估增肌/减脂阶段进度。计划调整仅通过用户确认的提案进行，代码内强制下限。内置 MCP 服务器提供 23 个工具供 Claude、Codex 或本地模型作为 AI 教练使用。不支持英制单位与 Android 健康集成。",
+   "highlights": [
+    "提供实测 TDEE 及置信区间，每周自动或由 AI 教练在代码强制的限额内提出调整提案，用户可接受或撤销",
+    "内置 MCP 服务器，含 23 个工具和三个教练会话，支持 Claude、Codex、Hermes 或本地模型",
+    "支持摄像头扫码、食谱按份记录、Apple Health（经 Health Auto Export）、多用户家庭共享，数据可导出为 JSON 和 CSV 的 ZIP"
+   ],
+   "use_cases": [
+    "想自托管并自己称量大部分饮食的用户的热量与宏量营养追踪",
+    "通过 MCP 客户端用自然语言让 AI 模型记录饮食和查询进度",
+    "配合 Apple Health 数据在本地服务器管理多人家庭的饮食计划"
+   ]
+  },
+  "sha": "97e86632b465",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

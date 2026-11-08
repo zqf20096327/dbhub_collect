@@ -2822,5 +2822,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a89d37c7726b": {
+  "identity": {
+   "one_liner": "基于 SQLite3 扩展的 WordPress 持久对象缓存插件，可用 APCu 加速。",
+   "review": "该插件为 WordPress 提供持久对象缓存后端，使用 PHP 的 SQLite3 扩展存储缓存数据，可选配合 igbinary 序列化与 APCu 共享内存加速，写入时同时更新 APCu 与 SQLite 以支持 WP-CLI 场景。适用于单服务器站点配置；README 明确指出 SQLite 在多 Web 服务器负载均衡环境下无法正常工作。通过 WordPress 插件目录安装，需 wp-config.php 中配置缓存键盐值等常量。",
+   "highlights": [
+    "使用 PHP SQLite3 扩展实现持久对象缓存，依赖 igbinary 与 APCu 时可自动启用，缺失也能运行",
+    "缓存数据同时写入 APCu 与 SQLite 并保持两处同步，兼容 WP-CLI 进程读取",
+    "提供 WP-CLI 命令、统计页面，以及序列化方式、数据库文件路径、超时、journal 模式、WAL 检查点频率等多个 wp-config.php 配置项"
+   ],
+   "use_cases": [
+    "运行于单一 Web 服务器且 PHP 环境含 SQLite3 扩展的 WordPress 站点",
+    "主机未提供 Redis 或 Memcached 缓存服务器的托管环境",
+    "多站点共处同一服务器时，通过设置各站点不同的 WP_CACHE_KEY_SALT 隔离缓存数据"
+   ]
+  },
+  "sha": "a89d37c7726b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f8997b744ae": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core MVC 的个人与财务管理 Web 应用，含预算表格引擎",
+   "review": "Maroik 是一个以 ASP.NET Core MVC 实现的 Web 应用，面向个人与业务管理场景，提供费用记录、电子表格式预算、日历与邮件提醒、公告板、个人看板、文件盘及基于角色的用户管理。财务金额以 numeric(20,4) 存储，预算表在服务端按公式重算；采用 DDD 与整洁架构，提供 Deploy.sh 部署脚本、每日备份与恢复流程，作者单独开发并在生产环境自托管。",
+   "highlights": [
+    "提供文件盘、看板、日历、公告板、收支记录与年度预算电子表格等模块，金额按 numeric(20,4) 精度存储",
+    "预算表支持 Excel 兼容公式（如 =SUM、=ACTUAL），每次请求在服务端由存储的输入重算，下载时写入计算值",
+    "提供 Deploy.sh 部署脚本（本地构建或跟随 GitHub main）、每日 04:00 备份、从备份恢复及 Cloudflare Tunnel/Caddy 等接入方式"
+   ],
+   "use_cases": [
+    "个人或家庭记收支、做年度预算并导出 Excel 报表",
+    "需要日历事件、邮件提醒、公告板与个人看板的内部站点",
+    "在自有 Ubuntu 服务器上自托管的完整 Web 应用与数据备份恢复方案"
+   ]
+  },
+  "sha": "7f8997b744ae",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "899d85c3876f": {
+  "identity": {
+   "one_liner": "操作 FoundationDB 数据库的 NodeJS 库",
+   "review": "该库为 NodeJS 环境提供访问 FoundationDB 的接口，包含分布式锁与工作队列等相关能力。项目由 Openland 维护，采用 MIT 许可证发布，文档托管在 fdb.openland.com。README 内容较简，具体 API 用法需查阅其文档站点获取。",
+   "highlights": [
+    "提供在 NodeJS 中读写 FoundationDB 的接口",
+    "主题标签显示支持分布式锁与工作队列场景",
+    "以 MIT 许可证开源"
+   ],
+   "use_cases": [
+    "在 NodeJS 服务中存取 FoundationDB 数据",
+    "需要基于 FoundationDB 实现分布式锁的场景",
+    "构建基于 FoundationDB 的工作队列"
+   ]
+  },
+  "sha": "899d85c3876f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1757da76dce2": {
+  "identity": {
+   "one_liner": "Windows x64 本地模型网关，为多款 AI 客户端接入自配模型 API",
+   "review": "这是一个运行于 Windows x64 的桌面应用，充当本地模型网关，让 Cursor、Devin、Codex、Claude Code CLI 与 Claude Desktop 使用用户自行配置的 OpenAI 或 Anthropic 协议模型服务。它自带模型库、连接测试、调用记录与 Token 统计，配置写入客户端本地文件且可撤销恢复。模型服务需用户自备，登录、套餐与厂商云端功能仍由原客户端管理。",
+   "highlights": [
+    "模型库支持 OpenAI Chat/Responses 与 Anthropic 协议，含连接测试；各网关默认关闭且只监听 127.0.0.1",
+    "按客户端以不同方式接管：修改 Cursor 模型来源、Codex config.toml 受管字段、Claude settings.json 的 env 或 Desktop profile，均可回滚",
+    "记录每次调用的成败、耗时、Token 用量及按参考单价估算的金额，数据存储在本机数据库"
+   ],
+   "use_cases": [
+    "在 Cursor 等客户端中同时使用官方模型与自配模型（混合模式）",
+    "为 Claude Code CLI 或 Claude Desktop 指定自有的 Anthropic 兼容 API 端点",
+    "本机统计 AI 编码工具的 Token 消耗与估算成本"
+   ]
+  },
+  "sha": "1757da76dce2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ba1028bbcd2d": {
+  "identity": {
+   "one_liner": "集成 Firebase 认证、Firestore 与云函数的 Flutter 应用模板",
+   "review": "这是一个 Flutter 应用模板，演示三类 Firebase 服务的接入方式：Authentication（邮箱密码注册登录）、Cloud Firestore（投票数据实时读写与监听更新）和 Cloud Functions（含一个基于 Nodemailer 的 HTTP 函数用于发送预设邮件，并内置防刷限制）。适合学习 Firebase 与 Flutter 集成的开发者。使用 Cloud Functions 需启用 Blaze 计划并配置邮件账号凭据。",
+   "highlights": [
+    "包含 Flutter 端 Dart 代码，使用 Authentication、Cloud Firestore、Cloud Functions 三项服务",
+    "包含一个 HTTP 云函数 EmailSender，通过 Nodemailer 发送预配置邮件",
+    "邮件发送功能含防滥用机制，当前会话需间隔至少一分钟"
+   ],
+   "use_cases": [
+    "作为创建基于 Firebase 服务的 Flutter 应用的起始模板",
+    "学习 Flutter 与 Firebase 认证、Firestore 实时监听的集成方式",
+    "参考通过 HTTP 云函数调用发送邮件的实现示例"
+   ]
+  },
+  "sha": "ba1028bbcd2d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

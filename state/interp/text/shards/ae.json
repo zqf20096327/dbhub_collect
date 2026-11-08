@@ -2732,5 +2732,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c5afb5b0fc53": {
+  "identity": {
+   "one_liner": "在 GitHub Actions 中安装并启动 Redis/Valkey 服务器的 Action",
+   "review": "这是一个 GitHub Actions 自定义 Action，用于下载、缓存指定版本的 Redis 或 Valkey 并启动 redis-server。区别于 Docker service 方案，它不依赖 Linux 容器，可在矩阵测试的多操作系统 runner 上运行，也满足 Test::RedisServer 等需要本机 redis-server 的测试工具。支持通过输入项配置版本、端口、TLS、redis.conf 附加配置及是否自动以守护进程启动。",
+   "highlights": [
+    "支持 redis/valkey 两种发行版及 latest、主版本、次版本、补丁版本多种版本语法",
+    "可选自动以守护进程启动 redis-server，或仅安装 redis-server/redis-cli 等命令",
+    "支持配置监听端口、TLS 端口、附加 redis.conf 配置，输出端口、Unix socket 路径、TLS 证书目录等"
+   ],
+   "use_cases": [
+    "在 GitHub Actions 工作流中为测试提供本机 Redis 实例",
+    "跨操作系统矩阵测试中运行 Redis/Valkey",
+    "配合 Test::RedisServer 等需要本机 redis-server 的测试工具"
+   ]
+  },
+  "sha": "c5afb5b0fc53",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "055b5b1d5838": {
+  "identity": {
+   "one_liner": "在 GKE 集群上以脚本一键部署 Apache Cassandra 的概念验证项目",
+   "review": "这是 GoogleCloudPlatform 下的概念验证项目：通过 create.sh 等脚本创建 Kubernetes Engine 集群并用 StatefulSets、PersistentVolume、PodDisruptionBudget、反亲和调度等清单安装 Cassandra 环。它面向需要在 GKE 上运行有状态数据库的运维人员，README 明确建议能用托管数据库时优先使用托管方案。运行需满足 GCP 配额（至少 3 个 n1-standard-4 与 3 个 n1-standard-1 节点、30 CPU、12 个在用 IP），仅支持 macOS 或 Cloud Shell。",
+   "highlights": [
+    "提供脚本化的一键创建、验证、删除 Cassandra 数据库与 GKE 集群",
+    "使用 StatefulSets 控制器，具备稳定网络标识、持久存储、有序部署与滚动更新等特性",
+    "包含专为 Kubernetes 构建的 Cassandra 容器，内置就绪/存活探针、dumb-init 信号处理与 JSON 日志编码"
+   ],
+   "use_cases": [
+    "在 GKE 上验证 StatefulSets、PV/PDB、反亲和与 taints 部署 Cassandra 环的配置方式",
+    "学习 Kubernetes 有状态应用清单与专用容器的组织结构",
+    "通过 Cloud Shell 快速搭建可验证、可删除的 Cassandra 演示环境"
+   ]
+  },
+  "sha": "055b5b1d5838",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2956842e61f": {
+  "identity": {
+   "one_liner": "嵌入 Python 进程的无服务器 SQL 数据库 MonetDBLite 的 Python 包",
+   "review": "MonetDBLite 是基于开源 MonetDB 的无服务器 SQL 数据库，直接运行在 Python 进程内，无需安装外部软件，依赖 numpy。通过 init 指定数据库目录，用 sql() 执行查询，结果以 NumPy masked array 字典返回；提供 create/insert 接口，支持事务、多客户端并行查询，可通过 shutdown 切换数据库目录。注意：该仓库已归档，官方指向替代项目 MonetDB/e 及其 Python 绑定。",
+   "highlights": [
+    "无服务器运行于 Python 进程内，仅依赖 numpy，无需安装外部软件",
+    "查询结果以列名为键的 NumPy masked array 字典返回，可经 pandas.DataFrame.from_dict 转为 DataFrame",
+    "支持事务、自动写盘、多客户端并行执行查询（每个进程仅允许一个实例）"
+   ],
+   "use_cases": [
+    "在 Python 应用中嵌入 SQL 数据库进行本地数据分析",
+    "将 NumPy 数组数据写入 SQL 表并通过 SQL 查询检索",
+    "需要并行执行多个查询和事务的进程内数据处理流程"
+   ]
+  },
+  "sha": "f2956842e61f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a4f60bac7de4": {
+  "identity": {
+   "one_liner": "基于 Helm 在 Kubernetes 上部署和管理 MongoDB 集群的 Terraform 模块",
+   "review": "该 Terraform 模块通过 Helm Chart 在 Kubernetes 上部署 MongoDB 集群，面向使用 AWS EKS、Azure AKS 与 GCP GKE 的运维团队。可配置卷大小、架构、副本数与命名空间创建，并集成备份恢复（S3/GCS/Azure 存储）、密钥管理与 Prometheus exporter 部署。默认 chart 版本 15.6.12，应用版本 7.0.12，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持在 EKS、AKS、GKE 集群上部署 MongoDB，可配置副本数、存储卷大小、架构与命名空间",
+    "提供定时全量备份与从存储桶恢复数据库的功能，凭据可写入 AWS Secrets Manager、Azure Key Vault 或 GCP Secrets Manager",
+    "可选部署 MongoDB exporter，向 Prometheus 输出指标以供 Grafana 展示"
+   ],
+   "use_cases": [
+    "在多云 Kubernetes 集群上以基础设施即代码方式部署高可用 MongoDB 集群",
+    "需要按 cron 计划执行数据库全量备份并从存储桶恢复数据的环境",
+    "已运行 Prometheus/Grafana 并需采集 MongoDB 监控指标的团队"
+   ]
+  },
+  "sha": "a4f60bac7de4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aa1b93a27668": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Java/Kotlin 消息与任务队列库",
+   "review": "Kolbasa 是一个纯 Kotlin 编写的 JVM 库，以 PostgreSQL 10+ 作为存储实现消息与任务队列，供使用 JVM 语言且已有 PostgreSQL 的应用引入。它支持消息去重、发送延迟、可见性超时、元字段过滤与排序、死信与归档队列、批量发送、外部事务上下文（依赖 JDBC Connection），可通过 per-queue SQL 函数从触发器入队，并要求 JVM 17+，通过 Maven Central 引入。",
+   "highlights": [
+    "支持事务性发送、消息去重、发送延迟、可见性超时、可配置重试次数、死信队列与归档队列",
+    "支持按一个或多个元字段过滤和排序接收消息，过滤排序在 PostgreSQL 侧执行",
+    "提供批量发送（分块处理与 PartialInsert 失败模式）、外部事务上下文、SQL 直接入队、跨服务器分片、OpenTelemetry 与 Prometheus 集成"
+   ],
+   "use_cases": [
+    "已在用 PostgreSQL 的 JVM 应用需要消息/任务队列而不引入独立消息中间件",
+    "需要与业务事务绑定的消息发送（如注册失败则任务不入队）",
+    "需要延迟投递、重试、死信与归档留存的异步任务处理场景"
+   ]
+  },
+  "sha": "aa1b93a27668",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8807b04e2f79": {
+  "identity": {
+   "one_liner": "V 语言的 Redict/Redis 客户端库，兼容 Redis <=7.2.4",
+   "review": "redict 是面向 V 语言开发者的 Redict 客户端库，兼容 Redis 7.2.4 及更早版本。它提供连接池，支持连接、哈希、列表、集合、流、字符串等命令类别。安装方式为 v install。项目仍在开发中，Pub/Sub、事务、流水线等列为目标尚未实现。",
+   "highlights": [
+    "提供连接池机制",
+    "支持 connection、generic、hash、list、set、stream、string 等类别的命令",
+    "通过 v install einar-hjortdal.redict 安装"
+   ],
+   "use_cases": [
+    "V 语言项目需要读写 Redis 兼容数据库的场景",
+    "使用 Redict 或 Redis <=7.2.4 作为后端存储的应用开发",
+    "需要连接池管理多个 Redis 连接的服务程序"
+   ]
+  },
+  "sha": "8807b04e2f79",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

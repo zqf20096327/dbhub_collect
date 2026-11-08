@@ -2950,5 +2950,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "73f81e2b168e": {
+  "identity": {
+   "one_liner": "通过分析少量 JSON 样本数据的规则来批量生成真实感模拟数据的库",
+   "review": "Blowson（原名 JSON Data Extender）是一个 Node.js 库，用于将少量 JSON 样本数据扩展为大批量模拟数据，服务于前端优先（Frontend First）开发流程。它分析样本中 id 间隙、值范围、方向、字段间规则等特征来生成新条目，无需配置。通过 npm 安装，可作为函数调用或全局 CLI 使用。",
+   "highlights": [
+    "根据键名或内容自动检测字段类型，支持 id、age、email、日期时间等 27 种键名检测及文本、数值、布尔等类型推断",
+    "检测样本中的值范围、数值方向、重复值枚举、步长、浮点精度及字段间大小关系等规则并用于生成",
+    "提供库函数和全局 CLI 两种使用方式，接受 JSON 字符串或 JS 对象输入"
+   ],
+   "use_cases": [
+    "前端优先开发流程中生成大规模模拟 API 数据，用于 UI 开发和测试",
+    "填充数据库时生成含关联字段（如 user_id）且符合取值范围和约束规则的样本数据",
+    "在真实用户数据产生之前，为演示和测试生成接近真实形态的样例数据集"
+   ]
+  },
+  "sha": "73f81e2b168e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f42a378aca7": {
+  "identity": {
+   "one_liner": "企业能力规划编译器：将业务架构编译为可校验、运行时中立的执行计划",
+   "review": "ORCHADYN Open 将业务目标、受治理的能力、组织授权与约束转化为可在执行前校验的计划，并投影到代理图、工作流等异构运行时。仓库仅包含 Apache-2.0 的文档、SDK、示例与 API 定义；AGPL 规划内核与闭源实现（ORCHADYN-ee）不在本仓库，产品为未发布的 0.1.0 引导版本，无功能集成。",
+   "highlights": [
+    "将 Goal、Capability、Authority、Constraint、Plan 作为一等规划语义，计划与运行时实现解耦",
+    "计划可记录授权者、传递的权限与预算、所需证据及被否决的备选方案",
+    "本仓库提供 Apache-2.0 许可的文档、无依赖 Go SDK、OpenAPI 契约与二进制发布清单"
+   ],
+   "use_cases": [
+    "在业务目标与受治理的执行决策之间做规划分解与委派策略制定",
+    "需要将同一份计划投影到代理框架、工作流引擎或机器人任务等不同运行时的团队",
+    "基于公开 OpenAPI 契约或 Go SDK 集成规划能力的企业开发场景"
+   ]
+  },
+  "sha": "3f42a378aca7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c7b7cffd580": {
+  "identity": {
+   "one_liner": "在单机上创建、运行和管理多个独立 Neo4j 实例的 shell 管理脚本",
+   "review": "neo4j_manager 是一个单机多 Neo4j 实例管理工具，通过 manage.sh 脚本实现实例的创建、启动、配置与管理，支持为每个实例挂载 apoc 与 GDS 插件。使用前需手动下载 neo4j community unix 版 tar 包及 apoc、GDS 的 standalone jar 放入指定目录，初始化后可创建默认实例，并提供查询实例 bolt 端口等监控命令。适用于社区版且面向 unix 环境。",
+   "highlights": [
+    "通过 manage.sh 命令创建、运行、配置和管理多个 standalone Neo4j 实例",
+    "支持为实例安装 apoc 与 graph-data-science（GDS）插件",
+    "提供 find_bolt_port 等实例监控相关命令"
+   ],
+   "use_cases": [
+    "在一台机器上运行多个相互独立的 Neo4j 社区版实例",
+    "需要为各实例配置 apoc 或 GDS 插件的环境",
+    "需要查询各实例 bolt 端口以便连接与监控"
+   ]
+  },
+  "sha": "2c7b7cffd580",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a47271a51e53": {
+  "identity": {
+   "one_liner": "基于 Bun 与 SQLite FTS5 本地索引并检索多款 CLI agent 会话历史",
+   "review": "Nekyia 是一个终端工具，读取本机上 Claude Code、Codex、Cursor、Copilot CLI、opencode 等多款 agent CLI 的会话记录，用 SQLite FTS5 建立全文索引，支持按关键词、文件、时间范围检索，并可恢复会话或生成移交上下文。需要 Bun 1.4+，不运行于 Node。首次索引前会请求确认；部分已索引旧会话需 --rebuild 才能补充文件操作记录。",
+   "highlights": [
+    "统一检索多款 agent CLI 的会话历史，含 .jsonl.zst 压缩转录",
+    "SQLite FTS5 全文搜索，支持短语匹配、时间过滤与 JSON 输出",
+    "本地运行，无网络服务、API key 或遥测；支持遗忘会话与排除目录"
+   ],
+   "use_cases": [
+    "找回并恢复之前的 CLI agent 会话以继续工作",
+    "查询某个文件曾被哪些会话触碰（nek blame）或查看目录操作时间线（nek timeline）",
+    "以 --json 输出让自动化脚本或 agent 决策是否信任索引摘要"
+   ]
+  },
+  "sha": "a47271a51e53",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

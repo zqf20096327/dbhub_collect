@@ -2549,5 +2549,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bf01f489780a": {
+  "identity": {
+   "one_liner": "Python 优先向量数据库，Rust 存储/检索引擎，支持嵌入式、HTTP 服务与分片集群三种部署形态。",
+   "review": "LynseDB 是面向 AI 应用的向量数据库：Python 客户端 API，底层为 Rust 实现的存储与检索核心。同一客户端 API 可连接嵌入式模式、HTTP 服务模式（含 API 密钥、健康检查等运维端点）或由协调者管理的分片集群。需 Python 3.9+，通过 pip 安装 lynsedb；嵌入式模式限定单进程持有数据目录。",
+   "highlights": [
+    "同一 VectorDBClient API 覆盖嵌入式、HTTP 服务与协调者分片集群三种部署形态，集群含哈希分桶路由、副本写入镜像与主节点故障提升",
+    "检索功能包含稠密/稀疏向量、SQL 风格元数据过滤、BM25、混合检索、命名字段与外部重排钩子，索引支持 FLAT、HNSW、IVF、SPANN、DiskANN 及量化索引",
+    "除嵌入向量外，原生提供坐标（Haversine）、二进制指纹（Hamming/Tanimoto 等）、数值特征与概率分布等领域的距离度量"
+   ],
+   "use_cases": [
+    "RAG、语义搜索、Agent 记忆、文档问答等需要在本地原型与服务/集群间平滑迁移的检索场景",
+    "需要按坐标、分子指纹、传感器曲线或分布数据做相似度检索的应用",
+    "多进程或多服务共享向量数据的部署，可通过 HTTP 服务模式或集群模式运行"
+   ]
+  },
+  "sha": "bf01f489780a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ce4649adbe9": {
+  "identity": {
+   "one_liner": "用于管理 Elasticsearch 实例与集群的 Ansible 模块集合。",
+   "review": "community.elastic 是一个 Ansible 集合，提供与 Elasticsearch 实例和集群交互的模块，涵盖索引、快照、用户、角色、keystore、Logstash 管道等资源的管理。面向使用 Ansible 进行 Elasticsearch 运维自动化的用户。支持 Elasticsearch 服务器 7、8、9 版本，但 Python 的 elasticsearch 库版本需与服务器版本对应。模块在 Debian 和 RHEL 系发行版上经过测试。",
+   "highlights": [
+    "包含 elastic_bulk、elastic_index、elastic_snapshot、elastic_user、elastic_role 等 16 个模块，覆盖索引、集群设置、快照、用户与角色等资源管理",
+    "支持 Elasticsearch 服务器 7、8、9 版本，要求 Python elasticsearch 库版本与服务器版本对齐",
+    "提供 elastic_bulk（Bulk API 文档操作）与 elastic_reindex（源到目标文档复制）等数据操作模块"
+   ],
+   "use_cases": [
+    "通过 Ansible 剧本批量管理 Elasticsearch 索引、生命周期、快照及快照仓库",
+    "自动化管理 Elasticsearch 用户、角色与 keystore 条目",
+    "使用 Bulk API 批量写入或操作文档，以及在源索引与目标索引之间复制文档"
+   ]
+  },
+  "sha": "6ce4649adbe9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1ac64f06859": {
+  "identity": {
+   "one_liner": "将从 GeoNames 下载的世界城市和国家数据导入 MongoDB 的 Python 脚本",
+   "review": "该项目用 Python 脚本把 GeoNames 的城市数据（人口大于 15000 的 23328 个城市）和 252 个国家数据写入 MongoDB，形成 cities 与 countries 两个集合。数据源可通过 update.py 更新；字段、语言过滤、货币符号等在 settings.py 配置。依赖仅为官方 pymongo，需 Python 3。重复运行会先删除旧集合再重建。",
+   "highlights": [
+    "生成 cities（23328 条）和 countries（252 条）两个 MongoDB 集合",
+    "运行 python update.py 可从 GeoNames 更新源数据",
+    "支持在 settings.py 中移除不需要的字段、按语言过滤国家、补充 GeoNames 未含的货币符号"
+   ],
+   "use_cases": [
+    "需要在 MongoDB 中存储可更新的世界城市和国家数据",
+    "任何语言的应用通过查询 MongoDB 消费城市/国家数据",
+    "只需特定人口规模或特定语言国家数据集的地理位置功能"
+   ]
+  },
+  "sha": "e1ac64f06859",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e9a2eda99a0a": {
+  "identity": {
+   "one_liner": "VS Code 中的 Apache Cassandra 工作台扩展，支持 CQL 模板、自动补全与查询执行",
+   "review": "该扩展是一个 Visual Studio Code 插件，用于设计和查询 Apache Cassandra 数据库，提供 CQL 生成模板、自动补全和内联代码装饰。它支持 Cassandra 2.* 和 3.* 版本，通过 `.cassandraWorkbench.jsonc` 配置文件管理集群连接。使用前需在命令面板运行生成配置命令，且脚本执行有限制：不允许单脚本包含多条 SELECT 语句，也不允许 SELECT 与数据/结构变更语句混合执行。PasswordAuthenticator 模式下连接用户需对 system_schema 等系统键空间具有 SELECT 权限。",
+   "highlights": [
+    "提供生成模板、自动补全和内联代码装饰，用于编写 CQL",
+    "支持 Apache Cassandra 2.* 和 3.* 版本，含 AllowAllAuthenticator 与 PasswordAuthenticator 两种认证模式",
+    "提供键绑定（如 CTRL+ENTER 执行脚本）和面板中按正则排除键空间的配置项"
+   ],
+   "use_cases": [
+    "在 VS Code 中连接并查询 Cassandra 集群",
+    "借助模板和自动补全编写 CQL 脚本",
+    "通过侧边栏面板浏览和管理多个集群连接与键空间"
+   ]
+  },
+  "sha": "e9a2eda99a0a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bf8d9ac673e5": {
+  "identity": {
+   "one_liner": "基于 Python 的轻量级 Redis 数据查看与管理 Web 工具",
+   "review": "Redis Marshal 是一个用 Python 2.7 编写的 Redis 数据浏览 Web 工具，面向需要查看和管理 Redis 键值的开发者与运维人员。目前仅支持 Strings 和 Hashes 类型，提供 glob 模式键搜索、按 type/key/ttl 排序、批量删除、哈希表单编辑及命令执行。无内置认证，需借助 Nginx/Caddy 反向代理加 Basic-Auth；可用 Docker 或本地 python2 运行。",
+   "highlights": [
+    "支持 Strings 和 Hashes 数据类型，基于 glob 模式进行键搜索",
+    "提供按类型、键名和 TTL 排序、批量键删除、自动生成哈希编辑表单和命令执行",
+    "依赖随源码内置，无需 pip 安装，支持 Docker/docker-compose 部署"
+   ],
+   "use_cases": [
+    "查看和检索 Redis 中的字符串与哈希数据",
+    "批量删除匹配模式的键或通过表单编辑哈希属性",
+    "通过 Docker Compose 快速启动 Redis 数据查看界面"
+   ]
+  },
+  "sha": "bf8d9ac673e5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b53d1d6436e8": {
+  "identity": {
+   "one_liner": "美国数据中心、加密矿场及配套电厂的带来源引用数据集与地图站点",
+   "review": "Compute Atlas 收录美国境内数据中心、加密矿场及其配套电厂的记录，覆盖从提议、获批、在建到运行各阶段，并记录能耗、水耗、补贴、就业、排放与社区反应等字段。每条记录需至少一个带 URL 和检索日期的公开来源，提交须经维护者人工审核后上线。数据按 CC BY 4.0 开放，面向记者、研究者、地方官员及周边居民。技术栈为 Next.js、Postgres/Drizzle、MapLibre，未设数据库时可用 JSON 快照运行。",
+   "highlights": [
+    "记录含 facilityType 区分的数据中心、加密矿场、电厂三类，字段涵盖状态、置信度、容量、排放、水耗、补贴与社区信息，并附状态历史与来源引用",
+    "所有候选记录以 pending 状态进入队列，需人工审核；发现管道通过本地模型对每条引用 URL 与其支撑的论断做机器比对",
+    "记录由 Zod 判别联合模式校验，测试套件在每次 PR 验证全部记录；未配置 DATABASE_URL 时可从 data/facilities.json 快照渲染整站"
+   ],
+   "use_cases": [
+    "按状态、运营商、类型、容量过滤浏览设施数据，用于报道、研究或地方政务参考",
+    "引用单条设施页面及其访问日期进行学术引用或数据再利用（CC BY 4.0）",
+    "通过贡献表单提交新设施或带来源的勘误，经人工审核后进入数据集"
+   ]
+  },
+  "sha": "b53d1d6436e8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c2e721fca3d5": {
+  "identity": {
+   "one_liner": "PHP/SQLite 后台加纯静态 HTML 输出的扁平文件 CMS",
+   "review": "Clodd CMS 是一个扁平文件 CMS：作者在 Markdown 中撰写文章和页面，发布后系统生成静态 HTML 交由 Nginx 直接服务，公共访问路径不含 PHP。内置 PHP/SQLite 管理面板，单管理员账户，支持 bcrypt、CSRF 防护与可选 TOTP 两步验证。生成文件、媒体和数据库写入项目目录以持久化，提供 Docker 快速启动和 VPS 部署文档。",
+   "highlights": [
+    "发布时生成静态 HTML 文件，公共页面在服务阶段无需 PHP",
+    "内置管理面板支持文章、页面、aside 短笔记、分类标签、草稿预览与定时发布",
+    "支持 Atom/RSS/JSON Feed、Microformats2、webmention 收发、Micropub 端点及 Mastodon/Bluesky/Pixelfed 同步"
+   ],
+   "use_cases": [
+    "用 Markdown 写博客并由 Nginx 服务静态页面的个人网站",
+    "IndieWeb 场景：Micropub 客户端发帖、webmention 互动展示、跨平台同步",
+    "从 Micro.blog 或 WordPress 通过 WXR 导入迁移存量内容"
+   ]
+  },
+  "sha": "c2e721fca3d5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

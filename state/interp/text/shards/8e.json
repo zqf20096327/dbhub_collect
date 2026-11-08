@@ -2083,5 +2083,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "73e737575733": {
+  "identity": {
+   "one_liner": "自托管 Git 服务器，对象存储存 pack、Postgres 存分支历史",
+   "review": "Aspen 是一个自托管的 Git 服务器，通过 HTTP 和 SSH 说标准 Git 协议，无需修改客户端即可使用原生 git。它将 pack 存入对象存储（S3 兼容），在 PostgreSQL（单机可用 SQLite）中维护分支版本链，推送仅对分支指针做 compare-and-swap，从而避免仓库级锁。面向大量 agent、CI 和人同时推送/拉取的仓库。当前为 pre-alpha：无正式发布版，存储格式可能变化，需从源码构建。",
+   "highlights": [
+    "推送的 pack 不解包，补齐缺失基对象后作为自包含 pack 存入对象存储，fetch 直接流式返回已存 pack 或发放 packfile URI 链接",
+    "每分支为数据库中的版本链，推送仅需对该分支 tip 做一次 compare-and-swap，不同分支的推送互不等待",
+    "单二进制运行：云端配 PostgreSQL 加任意 S3 兼容桶，单机用 aspen dev 配 SQLite 加本地目录；提供 mirror 模式置于 GitHub/GitLab 之前"
+   ],
+   "use_cases": [
+    "数百个 agent 与 CI 任务向同一仓库的不同分支并发推送、每次推送后拉取的场景",
+    "通过 mirror 模式在现有 GitHub/GitLab 前试用而无需迁移仓库",
+    "本地开发与测试：aspen dev 以 SQLite 和本地目录单进程运行完整服务"
+   ]
+  },
+  "sha": "73e737575733",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9a7b47f25fb8": {
+  "identity": {
+   "one_liner": "Go 与 Scheme 实现的列式内存 SQL 数据库，兼容 MySQL 协议",
+   "review": "MemCP 是一个 GPL-3.0 开源、持久化的列式内存 SQL 数据库，用 Go 实现存储引擎与协议层，Scheme 实现 SQL 解析与查询优化。采用主/增量（main/delta）架构，后台将增量合并进压缩列存储，数据可从内存换出并按需加载。目标用户是需要同时进行事务写入、全文搜索与分析查询的应用，如 ERP 类系统。目前为 Beta 状态，官方要求在切换生产前验证查询、持久化与备份流程。",
+   "highlights": [
+    "支持 MySQL 线协议连接，并通过 HTTP 端点提供 MySQL、PostgreSQL、T-SQL 方言 SQL 及 SPARQL 查询",
+    "列式存储采用位打包整数、字典、范围与稀疏等压缩表示，自动从访问模式派生复合索引",
+    "包含基于代价的查询计划器、EXPLAIN 多级计划输出、管理仪表盘及可选的实验性 JIT 编译器"
+   ],
+   "use_cases": [
+    "需要持续写入并同时执行搜索、过滤与聚合分析的应用（如 ERP 场景）",
+    "希望以现有 MySQL 客户端/连接器接入自托管列式分析负载的评估或受控 Beta 部署",
+    "需要同一引擎覆盖事务、分页列表、全文式搜索与 SPARQL/RDF 查询的混合负载场景"
+   ]
+  },
+  "sha": "9a7b47f25fb8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e0a75fc66dd": {
+  "identity": {
+   "one_liner": "Apache HBase 的 C/C++ 原生客户端库",
+   "review": "这是一个实现 HBase 客户端的 C/C++ 库，面向需要在非 Java 环境中访问 HBase 的开发者。其核心以 C++ 实现，同步与异步版本构建在同一基础之上，C 库作为 C++ 之上的薄封装。项目通过 Docker 提供一致的构建环境，使用 Buck 构建系统。README 未包含安装使用的完整说明。",
+   "highlights": [
+    "以 C++ 实现核心，提供同步与异步两种接口，C 库作为其薄封装",
+    "公开 C 文件以 hbase_ 前缀命名，C API 与类型定义使用 hb_ 前缀，typedef 以 _t 结尾",
+    "构建环境基于 Docker，使用 Buck 构建系统"
+   ],
+   "use_cases": [
+    "需要在 C/C++ 应用中访问 HBase 的开发场景",
+    "需要同步或异步 HBase 客户端接口的项目",
+    "希望基于 opaque 指针类型保持二进制兼容性的集成场景"
+   ]
+  },
+  "sha": "9e0a75fc66dd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1bbc1db8e875": {
+  "identity": {
+   "one_liner": "Go 嵌入式数据库，以六边形网格坐标组织记录并内置冲突追踪",
+   "review": "HexxlaDB 是一个以 Go 库形式分发的嵌入式数据库，记录存于六边形网格 (q,r) 坐标，检索以环形向外扩展并受结果数上限约束。核心原语包括 cell、seam（冲突/取代标记）、边、facet 和 HNSW 向量；支持 MVCC 快照、来源与置信度标注、确定性上下文组装。它不做语义位置推断，也不调用嵌入服务，向量需由应用提供；无守护进程、无网络依赖，远程访问需自建服务边界。MIT 协议，附运维 CLI 与迁移工具。",
+   "highlights": [
+    "支持六边形坐标存储、环形检索、MVCC 时间旅行（ViewAt/SnapshotDiff）与结果数受限的上下文组装",
+    "内建 seam 机制显式记录冲突与取代关系，并提供 Dijkstra/BFS 图遍历与 HNSW 相似度检索",
+    "新库默认使用 XChaCha20-Poly1305 认证加密格式 v3，CLI 支持带 --dry-run 的压缩与迁移预检"
+   ],
+   "use_cases": [
+    "为 Agent/LLM 应用组装有界上下文候选，并在应用侧完成排序与 token 裁剪",
+    "游戏世界状态存储：FOV 可见性、径向上下文、寻路与存档回滚",
+    "带时间有效性的知识图谱、传感器标注层或事件溯源审计日志"
+   ]
+  },
+  "sha": "1bbc1db8e875",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4f708ea10b63": {
+  "identity": {
+   "one_liner": "基于 Streamlit + Firebase + Gemini 函数调用的药房管理自动化应用",
+   "review": "该项目实现面向药房管理员与顾客的自动化应用：管理员登录后可生成公告并发布到 Telegram、增删药品、更新库存与订单状态；顾客可检索药品、询价、下单、取消订单并获取基于症状的建议，操作均通过向 Gemini 发送提示词触发函数调用完成。数据存于 Firebase，支持访客模式，提供 Dockerfile 与 CI 工作流部署方式。",
+   "highlights": [
+    "通过 Gemini 函数调用，在单条提示中同时执行发公告、改库存、删药品、更新订单等多项操作",
+    "管理员端支持登录验证，公告经由 Telegram Bot 发布到指定频道和群组，库存或药品变动时发送 Telegram 通知",
+    "用户端支持免注册的访客模式，可查询药品可用性与价格，并基于症状和订单状态获取 LLM 建议"
+   ],
+   "use_cases": [
+    "药房管理员通过自然语言提示完成公告发布、药品录入、库存与订单状态管理",
+    "顾客以对话方式查询药品库存与价格、下单、取消订单或查看订单状态",
+    "作为演示如何将 LLM 函数调用与 Firebase、Telegram Bot 集成的参考样例"
+   ]
+  },
+  "sha": "4f708ea10b63",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6a1045922cf3": {
+  "identity": {
+   "one_liner": "AI 编程助手每日签到自动化工具箱，多域 CLI + 系统级定时调度",
+   "review": "auto-signin-kit 是一个面向 WorkBuddy/CodeBuddy、Qoder CN、Trae CN、豆包电脑版的每日签到自动化工具，为希望免去手动签到的个人用户提供 CLI 与定时调度两种运行方式。工具从桌面客户端本地数据读取凭据，将签到命令注册为系统级定时任务（Windows 任务计划程序/launchd/crontab），结果写入 SQLite 台账并提供本地 Web 管理台查看。需要注意：任务仅在用户登录会话中运行，豆包域仅支持 Windows；README 声明仅供个人学习研究使用，使用风险由使用者承担。",
+   "highlights": [
+    "支持 WorkBuddy/CodeBuddy、Qoder CN、Trae CN、豆包四类目标的签到、连登兑换、断登补签与任务奖励领取，领取接口幂等可重复执行",
+    "内置 schedule 域将签到命令注册为系统级定时任务（schtasks/launchd/crontab），并支持 init 一键初始化与 YAML 配置修改触发时间",
+    "每个命令输出一行 JSON 事件，签到结果写入 SQLite 台账，可选本地 Web 管理台（仅绑定 127.0.0.1）查看看板与管理调度任务"
+   ],
+   "use_cases": [
+    "每天需在多个 AI 编程助手平台签到领取积分/Credits、希望一次配置后由定时任务自动执行的个人用户",
+    "需要查看历史签到记录与失败原因（通过 SQLite 台账、JSON 日志或 Web 管理台）的本地自动化环境",
+    "需要接入新签到目标并保持域独立扩展的多域 CLI 项目开发场景"
+   ]
+  },
+  "sha": "6a1045922cf3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d34413cbf3af": {
+  "identity": {
+   "one_liner": "面向印度银行生态的100%离线个人财务应用，单二进制内嵌React前端与SQLite。",
+   "review": "LocalFinance是一个完全离线运行的个人财务记录与分析工具，面向使用印度银行和信用卡对账单的用户。它以Go编写的单文件可执行程序分发，通过go:embed打包React 19前端和纯Go SQLite库，数据存储在本地SQLite文件中。核心机制包括自动识别银行格式的可插拔解析引擎、内存内解密加密PDF、SHA-256哈希去重与幂等upsert。部分银行格式尚在计划中，软件按\"AS IS\"以MIT许可提供，不提供财务建议。",
+   "highlights": [
+    "支持解析HDFC、ICICI、Axis、Union Bank等的PDF（含密码加密文件，内存内无损解密）、CSV及Excel对账单，通用CSV引擎可处理任意银行的CSV导出",
+    "内置印度交易描述正则清洗引擎，提取UPI收款人/VPA、UTR号、POS商户名，并采集信用卡账单周期、到期日、最低还款额与积分",
+    "通过嵌入的Goose自动执行数据库迁移，交易以SHA-256哈希去重，upsert保留用户自定义分类、标签与备注"
+   ],
+   "use_cases": [
+    "批量导入多年期印度银行储蓄/活期账户及信用卡账单，在本地整理交易记录与分类",
+    "在无网络环境下管理个人财务数据，不依赖云同步或第三方账户聚合服务",
+    "对Splitwise群组CSV导入支出，并将其与银行流水映射核对"
+   ]
+  },
+  "sha": "d34413cbf3af",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2808,5 +2808,113 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "67d23017a17e": {
+  "identity": {
+   "one_liner": "Intel 出品的大数据分析引擎模块化加速工具库",
+   "review": "BDTK 是一组用于加速大数据分析框架的原生库，包含基于 LLVM 与 Arrow 的 SQL JIT 编译器 Cider、利用 Intel IAA/QAT 硬件的压缩编解码器，以及哈希表、表达式求值、关系代数算子等可复用模块，通过 Velox-Plugin 以插件方式接入 Presto。需注意 Intel 已停止维护该项目，不再接受补丁，需使用者自行 fork。构建需 Docker 环境，make 编译。",
+   "highlights": [
+    "提供基于 LLVM 与 Substrait 协议的模块化 JIT SQL 编译器 Cider，支持 Arrow 列式数据格式",
+    "提供基于 Intel IAA/QAT 硬件加速器的压缩编解码库，可用于 Hadoop/Spark 压缩加速",
+    "实现哈希表、表达式求值、HashAggregation/HashJoin 等可复用 SQL 算子模块"
+   ],
+   "use_cases": [
+    "为 Presto/Spark 等 SQL 前端引擎接入硬件压缩与原生执行加速",
+    "数据分析方案开发者复用 JIT 库、算子等构建块搭建 SQL 引擎",
+    "寻求基于 Intel 架构（AVX-512、IAA、QAT）优化的数据工程场景"
+   ]
+  },
+  "sha": "67d23017a17e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "efe32f36f8ae": {
+  "identity": {
+   "one_liner": "以 RxJava 封装 Firebase 认证与实时数据库的 Android 库",
+   "review": "EasyFirebase 是面向 Android 开发者的封装库，提供 Google 登录和 Firebase 实时数据库的 RxJava 接口。登录通过 EasyFirebaseAuth 的 signInWithGoogle 返回 Observable，数据库层 EasyFirebaseDb 支持创建、查询对象，并可通过实现 RxFirebaseConverter 做数据转换，依赖 JitPack 依赖坐标引入。",
+   "highlights": [
+    "提供 signInWithGoogle 方法，以 Observable 形式封装 Google 登录流程",
+    "EasyFirebaseDb 支持 addNew 写入数据、getObject/getChildsObjects 以 Observable 查询对象",
+    "通过 RxFirebaseConverter 接口实现自定义数据转换"
+   ],
+   "use_cases": [
+    "Android 应用中集成 Firebase Google 登录",
+    "以 RxJava 风格读写 Firebase 实时数据库",
+    "通过 Observable.zip 组合多个数据库查询实现关联读取"
+   ]
+  },
+  "sha": "efe32f36f8ae",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e26ef726f393": {
+  "identity": {
+   "one_liner": "基于 RocksDB 的键值存储，通过 REST 接口读写数据",
+   "review": "HurmaDB 是一个基于 RocksDB 的键值存储，提供 REST API 进行读写操作。它创建于 2017 年，最初用于教学目的，目前是一个个人兴趣项目。构建依赖 CMake、g++ 和 librocksdb，测试、基准、静态分析等流程通过 make 和配套脚本完成，项目定位不面向生产环境。",
+   "highlights": [
+    "基于 RocksDB LSM-tree 实现键值存储",
+    "通过 REST 接口（如 PUT /v1/kv/{key}）读写 JSON 数据",
+    "包含测试、基准测试、Valgrind、静态分析、代码覆盖率等开发工具链"
+   ],
+   "use_cases": [
+    "学习 RocksDB 与 LSM-tree 存储引擎的教学参考",
+    "需要通过 HTTP REST 接口访问键值数据的场景",
+    "阅读 C++ 存储系统源码的资料"
+   ]
+  },
+  "sha": "e26ef726f393",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "106e523a9639": {
+  "identity": {
+   "one_liner": "VeighNa框架基于arctic库实现的MongoDB数据库接口",
+   "review": "该适配器为VeighNa交易平台提供Arctic数据库接口，基于arctic库连接MongoDB存取数据。用户在VeighNa全局配置中填写database.name、host、port等字段即可使用；host、port、实例名为必填项，用户名与密码仅在MongoDB启用认证时需要填写。",
+   "highlights": [
+    "基于arctic库实现，通过MongoDB存储数据",
+    "通过VeighNa全局配置完成连接，支持带认证与无认证的MongoDB实例"
+   ],
+   "use_cases": [
+    "VeighNa用户需要以Arctic格式在MongoDB中存储行情等数据",
+    "已有MongoDB部署环境并希望接入VeighNa框架的数据管理"
+   ]
+  },
+  "sha": "106e523a9639",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7071c4d572d0": {
+  "identity": {
+   "one_liner": "本地运行的国际象棋学习应用，含 Rust 引擎复盘、AI 导师、题库与课程",
+   "review": "GrandMentor 是一个在本地计算机上运行的国际象棋学习应用，用 Rust 和原生 JS 编写，数据存于单个 SQLite 文件。它提供人机对弈、复盘讲解、战术题、交互课程、开局与残局训练等功能，通过二维码可将手机作为客户端连接使用。适合想在本地环境练习国际象棋的学习者。",
+   "highlights": [
+    "内置 Rust 引擎（README 称每秒搜索约 200 万局面），支持逐手复盘与语言解释",
+    "包含 4,200 道 Lichess 战术题、12 门课程 69 节交互课、约 280 个开局与 41 项残局训练",
+    "本地运行，数据存于单个 SQLite 文件，支持备份、局域网内手机配对与离线练习"
+   ],
+   "use_cases": [
+    "与不同等级内置 bot 对弈并获得实时教练提示与复盘",
+    "从 Lichess 题库做题、按弱点生成每周训练集",
+    "残局与开局记忆训练，以及本地 PGN 导入导出分析"
+   ]
+  },
+  "sha": "7071c4d572d0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

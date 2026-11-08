@@ -2509,5 +2509,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "83252cfa2ea0": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 TUI 漏洞发现分诊工具，兼作 MCP 服务器",
+   "review": "Cerno 将 Nessus 导出文件与 nuclei 结果导入本地 SQLite 数据库，在交互式 TUI 中按严重级别、主机等条件浏览并审阅发现，可对受影响主机:端口一键启动 nmap、NetExec、nuclei、Metasploit 或自定义命令，并记录跨扫描的验证结论。同时以 MCP 服务器形式暴露同一数据库，供 Claude CLI 等 MCP 客户端查询。要求 Python 3.11+，支持 Linux/macOS，Windows 未测试；可通过 pipx 安装，配置存于 ~/.cerno/config.yaml。面向渗透测试与安全评估人员做多扫描器结果的验证工作流。",
+   "highlights": [
+    "将 .nessus 文件与 nuclei JSON/JSONL 结果解析导入本地 SQLite 数据库（~/.cerno/cerno.db），审阅状态、会话与工具历史持久化保存",
+    "提供交互式 TUI，支持按严重级别、主机、可利用性过滤，多选操作、主机对比与 CVE 提取",
+    "内置 MCP 服务器，允许 MCP 客户端（如 Claude CLI）以编程方式查询发现结果并生成命令；可配置经 proxychains4 路由工具流量"
+   ],
+   "use_cases": [
+    "对多台扫描器（Nessus 与 nuclei）产出的数百条漏洞发现进行汇总、过滤与人工分诊验证",
+    "在审阅某条发现时直接针对其受影响主机和端口启动 nmap NSE、NetExec、nuclei、Metasploit 等验证工具",
+    "通过 MCP 客户端（如 Claude CLI）以编程方式查询发现数据并驱动验证流程"
+   ]
+  },
+  "sha": "83252cfa2ea0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

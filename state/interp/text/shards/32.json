@@ -2351,5 +2351,92 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2e10e5baf978": {
+  "identity": {
+   "one_liner": "Python 静态 SQL 类型检查工具，从 SQL 与 schema 推断行和参数类型",
+   "review": "sqlty 读取以 `--sql` 标记的 SQL 字符串和 CREATE TABLE schema，生成 `SQL[T]` 包装类型，由 mypy、pyright 或 ty 检查行与参数类型，无需数据库连接。适用于在 Python 3.14+ 中直接书写 SQL 字面量、面向 PostgreSQL/SQLite/MySQL 的项目。引擎为 Rust（sqlparser-rs）。当前为 Beta 版，不支持 ORM 和运行时构建的 SQL。",
+   "highlights": [
+    "提供 rewrite、check、strip 等命令，rewrite 与 strip 只改动包装类型不改动 SQL 本身",
+    "支持 TypedDict、NamedTuple、dataclass 和 Pydantic 模型的行类型检查，以及 `?`、`$1`、`%s`、`:name` 占位符的参数检查",
+    "提供 `sqlty breaking` 命令在滚动部署场景比较新旧 schema 兼容性"
+   ],
+   "use_cases": [
+    "以字符串字面量书写 SQL 的 PostgreSQL/SQLite/MySQL Python 项目做静态类型检查",
+    "在 CI 中检测 schema 迁移与现有查询类型不一致",
+    "为使用 Claude Code 等编码代理的项目提供 file:line 格式的问题报告与配套 skills"
+   ]
+  },
+  "sha": "2e10e5baf978",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf824bf41760": {
+  "identity": {
+   "one_liner": "基于 YAML 低代码定义流式/批量数据管道的框架",
+   "review": "DataYoga 是一个构建与运行流式或批量数据管道的框架，管道通过 YAML 声明式文件以低代码方式定义。Job 由多个 Step 组成，每个 Step 执行一个 Block，支持读写关系型与非关系型数据库、本地及云存储、调用外部 API 等。自带的 Runtime 提供校验、错误处理、指标与凭据管理，支持异步、多线程、多进程运行。适合需要用声明式配置搭建数据转换管道的 Python 用户，可通过 pip 安装。",
+   "highlights": [
+    "支持流式和批量两种管道模式，通过 YAML 声明式文件定义",
+    "Block 可读写关系型/非关系型数据库与本地/云存储，并可调用外部 API 做数据富化",
+    "Runtime 提供校验、错误处理、指标、凭据管理，支持异步、多线程与多进程及缓冲、限流策略"
+   ],
+   "use_cases": [
+    "从数据库、文件或云存储读取数据并做多步转换后写入目标",
+    "通过外部 API 对数据字段进行富化或结构修改",
+    "使用 pip 与 datayoga init/run 命令快速搭建并运行数据管道项目"
+   ]
+  },
+  "sha": "cf824bf41760",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a422a472cdf8": {
+  "identity": {
+   "one_liner": "用于 SurrealDB 的 Rust 迁移引擎，将迁移与 Schema 文件嵌入二进制执行",
+   "review": "surrealdb_migration_engine 是一个面向 SurrealDB 的数据库迁移引擎，基于 Migrations（针对既有 schema 的变更）与 Schemas（建立库结构）两类查询文件，通过 rust_embed 将迁移目录编译进 Rust 二进制，运行时执行。引擎在库内创建 migrations 表跟踪已运行项，所有变更在单个事务中完成，一处失败整体回滚。适用于在 Rust 应用或独立可执行文件中集成 SurrealDB 结构与数据迁移。",
+   "highlights": [
+    "通过 rust_embed 将迁移与 schema 文件编译进二进制，运行时按序执行",
+    "在数据库内创建 migrations 表跟踪已运行的迁移文件",
+    "所有迁移与 schema 变更在单个事务中执行，任一失败则全部回滚"
+   ],
+   "use_cases": [
+    "嵌入 Rust 应用，使每次运行程序时 schema 保持最新",
+    "构建独立的精简可执行文件，按需触发迁移或 schema 创建"
+   ]
+  },
+  "sha": "a422a472cdf8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a0dbef2ee12c": {
+  "identity": {
+   "one_liner": "基于 SQLite 的泛基因组图谱（GBZ）与比对记录（GAF）文件格式",
+   "review": "该项目将泛基因组图谱（GBZ 格式）及其上的序列比对（GAF 格式）存储为 SQLite 数据库文件，提供 gbz-base 与 gaf-base 两个 Rust 命令行工具完成构建、排序与查询，支持子图、snarl 及比对记录的局部提取，无需将整个图载入内存。适用于需要即时访问部分图数据的交互式应用；官方提示数据库文件放在快速本地 SSD 上可获得更好性能，GAF-base 格式仍在开发中。",
+   "highlights": [
+    "提供 GBZ-base 与 GAF-base 两种基于 SQLite 的文件格式，支持从 GBZ 图和排序后的 GAF 文件构建数据库",
+    "gbz-base query 支持按样本/contig/偏移、节点、snarl 边界等方式提取子图，输出 GFA 或 JSON，并可提取与子图重叠的比对记录",
+    "支持 --context、--limit、单倍型路径折叠（WT:i 标签）等查询选项，可将 GAF-base 解压回 GAF 格式"
+   ],
+   "use_cases": [
+    "交互式应用中即时访问泛基因组图的局部子图而无需整体加载",
+    "对已比对到泛基因组图的 GAF 测序读段建立可查询数据库并按子图区域提取",
+    "构建无参考依赖的 GAF-base 或通过 --chains 预置链信息处理非典型图组件"
+   ]
+  },
+  "sha": "a0dbef2ee12c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2440,5 +2440,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "80c91067929f": {
+  "identity": {
+   "one_liner": "不依赖 JDBC 的 Clojure Postgres 客户端，经 socket 直连",
+   "review": "clunk 是一个 Clojure/ClojureScript 的 Postgres 客户端库，不依赖 JDBC，直接通过 socket 与 Postgres 通信（Node 上仅需 Node 本身）。它提供 execute（返回 CompletableFuture）、流式 plan、取消令牌、连接池、LISTEN/NOTIFY 以及可选的 core.async API。参数经扩展查询协议单独发送，支持 libpq 风格的 sslmode TLS 配置。适用于在 JVM 或 Node 上以纯 Clojure 访问 Postgres、需要流式处理或连接池的场景；项目 README 注明作者处于实验阶段。",
+   "highlights": [
+    "不依赖 JDBC，直接经 socket 连接 Postgres，支持 JVM 与 Node，核心依赖仅 Clojure 本身",
+    "提供 execute（CompletableFuture）、plan 流式逐批读取、:cancel 取消令牌、按需建连的连接池及 LISTEN/NOTIFY 支持",
+    "参数通过扩展查询协议发送无需转义，TLS 支持 :verify-full/:verify-ca/:require/:prefer/:disable 等 libpq 风格 sslmode"
+   ],
+   "use_cases": [
+    "在 JVM 或 Node 的 Clojure 项目中不经 JDBC 访问 Postgres",
+    "Web 服务中需要连接池共享、异步 Ring 处理器或大结果集流式输出",
+    "需要消费 Postgres LISTEN/NOTIFY 通知或以 core.async channel 处理行流的场景"
+   ]
+  },
+  "sha": "80c91067929f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

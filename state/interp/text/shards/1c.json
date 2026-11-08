@@ -2908,5 +2908,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c7ecdc05b78": {
+  "identity": {
+   "one_liner": "开源浏览器端 ERD 可视化设计工具，支持 AI 代理编辑与七种数据库 DDL 导出",
+   "review": "ERD Designer 是一个开源的数据库模式可视化设计工具，可在浏览器、VSCode 或 Google Drive 中拖拽设计表与关系。.erd 文件为纯 JSON 格式，可纳入 Git 差异审查。AI 代理可通过 MCP 服务器或插件（CLI + skill）直接编辑图表。代理插件与 MCP 功能标记为实验性。采用 Apache License 2.0。",
+   "highlights": [
+    "提供浏览器、VSCode 扩展和 Google Drive 应用三种使用方式，.erd 文件为纯 JSON 格式",
+    "内置 MCP 服务器与代理插件（CLI + skill），AI 代理可通过工具目录添加表、列、关系并导出 DDL",
+    "支持导出 PostgreSQL、MySQL、MariaDB、MS SQL Server、SQLite、BigQuery、Snowflake 七种数据库的 DDL，并可导入 DDL 生成图表"
+   ],
+   "use_cases": [
+    "在画布上以拖拽方式设计表结构与 1:1 / 1:N 关系，自动同步外键",
+    "通过 Claude Code 或 GitHub Copilot CLI 让编码代理直接编辑 .erd 文件并生成 DDL",
+    "使用 @kajitiluna/erd-cli 对比 .erd 版本差异或检测线上数据库与设计的偏差（只读 SELECT）"
+   ]
+  },
+  "sha": "0c7ecdc05b78",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4119c707492f": {
+  "identity": {
+   "one_liner": "自托管多用户成绩追踪与考试规划应用，Docker+SQLite 运行",
+   "review": "GradeShelf 是一个自托管的成绩记录与考试规划应用，支持成绩单、加权平均分、学期/半年制评分量表、考试计划、笔记与附件，并可导出 PDF/ZIP。面向需要私有部署成绩管理的个人或学校场景。账号由管理员创建并分配角色，支持可选 2FA 和 OpenID Connect SSO 登录，管理员无法查看他人数据。基于 Next.js、TypeScript、Better Auth 和 Prisma，通过 Docker Compose 部署，使用 SQLite 数据库，镜像提供 amd64/arm64 版本。不接入云服务或遥测。提供英语与德语界面，支持 ICS 日历订阅和备份/恢复脚本。",
+   "highlights": [
+    "支持简单成绩、固定百分比权重和分组评估，按成绩单选择评分量表，可按学年两学期或高中四学期划分",
+    "提供考试规划、条目级笔记与附件（默认单文件 10 MiB、每条目 10 个文件、每用户可配置上限），可导出 ZIP 或可读 PDF 报告",
+    "支持私有账号（管理员管理角色、可选 2FA）与 OpenID Connect SSO 登录，所选成绩单可订阅 ICS 日历"
+   ],
+   "use_cases": [
+    "个人或家庭自托管记录多学期成绩并追踪加权平均分",
+    "学校场景中由管理员创建学生账号、各自独立记录成绩与附件",
+    "将计划中的考试同步到 Apple Calendar、Outlook 等 ICS 兼容日历，并在考后补录成绩"
+   ]
+  },
+  "sha": "4119c707492f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3fe9e5f85bc7": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis 兼容键值服务器，采用 256 分片架构与 SSD 持久化",
+   "review": "ForgeKV 是一个用 Rust 实现的 Redis 兼容键值服务器，支持 RESP2 协议与 Strings、Hashes、Lists、Sets、Sorted Sets、Streams、Pub/Sub 等命令族，现有 Redis 客户端无需修改即可连接。其核心机制是 256 分片锁架构，每个分片拥有独立的 WAL 与 memtable，使写入吞吐随客户端线程数扩展；持久化基于 SSD。安装可通过 Docker（forgekv/forgekv 镜像，监听 6379 端口）或源码编译（需 Rust 1.75+）。许可证为 source-available，仅限评估与非商业用途自托管。",
+   "highlights": [
+    "支持 RESP2 协议，覆盖 Strings、Hashes、Lists、Sets、Sorted Sets、Streams、Pub/Sub、事务、Lua 脚本及 JSON、Bloom Filter 等模块命令",
+    "256 分片架构，每分片独立 WAL、memtable 与 RwLock，LPUSH/HSET/SADD 等命令使用批量写入减少锁获取次数",
+    "支持可选的 zstd 值压缩（默认关闭）、FORGEKV.COMPRESS 迁移任务与 COMPACT FULL 磁盘空间回收"
+   ],
+   "use_cases": [
+    "需要 SSD 持久化键值存储的部署环境",
+    "使用现有 Redis 客户端与工具链、以 Docker 或源码方式自托管键值服务的场景",
+    "评估与非商业用途下运行键值服务器进行测试与基准复现（提供 benchmark 脚本）"
+   ]
+  },
+  "sha": "3fe9e5f85bc7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bf7daea0b3ee": {
+  "identity": {
+   "one_liner": "自托管中文多平台发布中枢，一次写作同步发布到 15 个平台。",
+   "review": "Harbor 是面向中文写作者的自托管发布中枢，提供一次编写、发布到 15 个平台并原地更新已发布副本的能力。技术栈为 FastAPI 后端、Vue 3 前端（可选 Tauri 桌面壳）、SQLite 存储，集成 Playwright 浏览器登录与 MCP 服务。README 注明 Docker 部署未验证、Tauri 桌面端仅在 Windows 上验证过，多数平台适配器未经真实 DOM 回归测试。",
+   "highlights": [
+    "内置 15 个平台适配器（知乎、掘金、CSDN、微信公众号、小红书等），每个适配器声明其支持的发布、草稿、更新、标签等能力，不支持的操作在 UI 中置灰",
+    "提供 32 个工具的 MCP 服务器，支持 stdio、streamable-http 和 SSE 传输，非环回传输要求 bearer token",
+    "本地 SQLite（WAL + FTS5 全文检索）存储与内容寻址去重媒体库，可导出带 YAML front-matter 的 Markdown 供 Hexo、Hugo、Obsidian 使用"
+   ],
+   "use_cases": [
+    "中文技术写作者需要将同一篇文章发布到多个内容平台并保持各副本同步更新",
+    "通过 Claude Code、Cursor 等 MCP 客户端以工具调用方式驱动发布流水线",
+    "需要本地化、可导出为 Markdown 的文章库管理，含标签治理与全文搜索"
+   ]
+  },
+  "sha": "bf7daea0b3ee",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee7a8db1c95a": {
+  "identity": {
+   "one_liner": "自托管的 AI 令牌池：OpenAI 兼容网关，成员密钥、配额与泄露检测",
+   "review": "Tributary 是一个可自托管的开源 AI 网关，用于组织内部共享自有的上游模型额度：成员各持独立 API 密钥，网关在每个上游调用前完成计量、配额校验和 IP 指纹记录，池主密钥以信封加密存储并留存审计日志。适用于需要管理团队 AI 用量的管理员。采用 FSL-1.1-ALv2 许可，每个版本两年后转为 Apache-2.0；当前为 v0.1.3 pre-alpha。",
+   "highlights": [
+    "提供 OpenAI 兼容的网关，池可接受任意 OpenAI 兼容端点及 Gemini 密钥（不翻译原生 Gemini API 格式）",
+    "实现每成员独立密钥、配额、IP 指纹检测（如跨国密钥共享）、用途分类器和不可变审计日志",
+    "单容器部署：Rust 后端（axum）+ Next.js 仪表盘，上游密钥静态信封加密，支持 SQLite 与 Postgres"
+   ],
+   "use_cases": [
+    "组织管理员向成员分发密钥并控制各自的模型用量与配额",
+    "自托管场景下希望供应商密钥不出本地、由本机容器运行的组织",
+    "出现异常使用信号（密钥共享、不可能旅行）时通过审核队列人工复查"
+   ]
+  },
+  "sha": "ee7a8db1c95a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "af639b6852fe": {
+  "identity": {
+   "one_liner": "基于 Node.js/Express 与 MySQL 的固定价格融资模拟教学 Web 应用。",
+   "review": "BankFlex 用于模拟资产按预定总转售价购买与转售：输入购买价、期限与首付，服务器按购买价一次性收取 7.5% 商业加成计算转售价、余额与月供，结果存入 MySQL 并提供 CRUD、统计仪表盘与 Chart.js 图表。项目声明使用虚构数据，不含用户账户与认证，仅面向本地教学运行。界面为法语，前端依赖 CDN 加载 Bootstrap 与 Chart.js。",
+   "highlights": [
+    "提供按 7.5% 商业加成一次性计算转售价、余额与月供的模拟引擎，金额四舍五入到分",
+    "包含模拟记录的 CRUD REST API（/api/simulations）及统计端点（/api/statistiques）与两张 Chart.js 动态图表",
+    "支持只读演示模式：写入请求返回 403，计算、历史与图表仍可访问"
+   ],
+   "use_cases": [
+    "教学场景中演示固定价格融资的计算流程与数据存储",
+    "本地学习 Node.js/Express/MySQL 全栈开发与 REST API 构建",
+    "演示带统计图表与只读模式的响应式 Web 应用"
+   ]
+  },
+  "sha": "af639b6852fe",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

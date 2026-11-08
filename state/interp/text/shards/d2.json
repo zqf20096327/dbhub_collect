@@ -2881,5 +2881,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7c0850fb4b36": {
+  "identity": {
+   "one_liner": "DefraDB 的 Rust 实现：P2P 文档数据库，内置 CRDT、访问控制与 GraphQL。",
+   "review": "这是 DefraDB 的完整 Rust 实现，提供文档存储、CRDT 数据结构、访问控制（ACP）与 GraphQL 查询引擎，面向嵌入式、边缘、浏览器（WASM）与服务器部署，并与 Go 版 DefraDB v1.0.0-rc1 网络互通。存储基于纯 Rust 的 Regolith LSM-tree 引擎，支持磁盘或内存运行。库使用者通过 `defra-node` crate（如 0.5 版）以库形式嵌入，也可经 C 兼容 FFI 供 Go 等语言调用。",
+   "highlights": [
+    "提供 GraphQL 查询引擎，支持查询、变更、订阅、聚合与 explain，覆盖 defradb 测试套件",
+    "支持 P2P 复制（libp2p 与可选 iroh 传输）与本地 Zanzibar、链上 Vera 访问控制",
+    "提供 Postgres 协议兼容连接（实验性）、C 兼容 FFI 静态库与 WASM 浏览器客户端"
+   ],
+   "use_cases": [
+    "需要在边缘或嵌入式设备上运行文档数据库并进行 P2P 数据复制的场景",
+    "需要浏览器（WASM）中运行数据库客户端的场景",
+    "Go 与 Rust 混合环境中需要两套 DefraDB 节点互通复制的场景"
+   ]
+  },
+  "sha": "7c0850fb4b36",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b7242b270c74": {
+  "identity": {
+   "one_liner": "基于 Next.js 16 服务端优先架构的多租户 SaaS 脚手架",
+   "review": "Dimah Starter 是一个 MIT 许可的 Next.js 16 多租户 SaaS 起步模板，面向需要在服务器端完成认证、权限与数据读写的开发者。项目内置 Better Auth 组织与角色体系、Drizzle + PostgreSQL 数据层、oRPC 接口、S3 直传、以及中英文/波斯语（RTL）的 next-intl 国际化。所有读取走带标签的 'use cache'，所有写入为 Server Action 并通过 updateTag 使缓存失效。README 注明尚未包含计费、CMS 与分析功能，部署需 Node.js ≥ 22、pnpm 12 及 PostgreSQL。",
+   "highlights": [
+    "基于 Better Auth 实现组织、邀请、owner/admin/member 角色及平台管理面板，权限检查覆盖页面与数据读取",
+    "读取经由按用户或组织打标签的 'use cache' 条目，写入全部为 Server Action 并调用 updateTag 精确失效缓存，会话不做缓存",
+    "支持任意 S3 兼容存储（S3、R2、MinIO）的签名直传，内置上传配额与过期文件清理命令"
+   ],
+   "use_cases": [
+    "需要组织/成员角色隔离的多租户 SaaS 产品起点",
+    "需要英文与波斯语 RTL 双语界面的面向中东市场的应用",
+    "作为在 AI 编码代理（Claude Code、Cursor 等）辅助下开发的项目模板，配套 AGENTS.md 与 docs/agents/ 任务指南"
+   ]
+  },
+  "sha": "b7242b270c74",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

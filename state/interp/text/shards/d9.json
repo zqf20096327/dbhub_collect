@@ -2822,5 +2822,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d5352c46af10": {
+  "identity": {
+   "one_liner": "开源自托管的笔记与任务应用，以类型化对象与每日笔记组织内容",
+   "review": "Vasta 是一个 AGPL-3.0 协议的开源应用，将页面、任务、书籍、人物等作为可自定义类型与属性的对象管理，并为每天生成笔记。它以本地优先方式运行，每台设备在 SQLite 中保留副本，通过自托管服务器（单容器）同步，支持离线编辑合并。可通过 Docker 部署服务器或使用桌面应用本机启动，支持通过 MCP 端点供外部代理读写笔记。项目目前处于 alpha 阶段，README 建议用户做好备份，且暂不保存 Markdown 文件、不支持原生手机应用与多人同时编辑同一笔记。",
+   "highlights": [
+    "本地优先架构：每台设备保留 SQLite 副本，离线编辑可在设备间合并，通过自托管服务器同步",
+    "自定义类型系统：属性支持文本、数字、日期、选择、关系、公式，可切换列表、表格、看板、画廊等视图",
+    "提供 MCP 端点和 vasta CLI，供代理执行搜索、查询、创建对象与快速记录；应用本身不内置 AI、不保存模型密钥"
+   ],
+   "use_cases": [
+    "在个人电脑本地运行或 Docker 自托管，管理笔记、任务与每日笔记，无需依赖第三方云服务",
+    "通过 MCP 端点或命令行让代理程序读取笔记、批量创建任务或记录习惯",
+    "与多人共享空间协作，使用看板、评论、@提及、通知和 iCal 日历集成"
+   ]
+  },
+  "sha": "d5352c46af10",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8754f805455": {
+  "identity": {
+   "one_liner": "每30分钟自动生成的DMR用户数据库，含多机型格式",
+   "review": "该项目提供每30分钟自动生成的DMR用户ID数据库，覆盖Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017及Pi-Star等多种设备格式，共约31.8万条记录。相较已验证版本，BETA版收录新注册用户但数据可能不完整。README给出修改Pi-Star更新脚本以替换数据库源的SSH操作步骤，并提示MD-380/390自编辑时需在首行填写字符数。",
+   "highlights": [
+    "每30分钟自动重新生成，新注册DMR用户自动加入",
+    "提供Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017及Pi-Star等多种设备专用格式",
+    "包含约31.8万条用户记录，并附各格式条目数与文件头部差异说明"
+   ],
+   "use_cases": [
+    "为Pi-Star热点替换DMR ID数据库源",
+    "向Ailunce HD1、Anytone、Tytera等对讲机导入最新用户呼号数据",
+    "需要包含最新注册用户（数据可能不完整）的场景"
+   ]
+  },
+  "sha": "e8754f805455",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "04d07316e25b": {
+  "identity": {
+   "one_liner": "实验性持久化键值数据库，通过 TCP 提供类 Redis 命令接口",
+   "review": "Miniredis 是一个用 Go 编写的实验性键值持久化数据库，源自 GDG Istanbul Golang Workshop 项目。它监听 TCP 连接，客户端可发送 SET、GET、MSET、MGET、DEL、DBSIZE、KEYS 等命令进行数据读写。README 未说明生产可用性，使用前需注意其定位为实验项目。",
+   "highlights": [
+    "支持 SET/GET/MSET/MGET/DEL/DBSIZE/KEYS 七个命令",
+    "数据持久化，通过 TCP 端口提供服务",
+    "任何能建立 TCP 连接的客户端均可发送命令"
+   ],
+   "use_cases": [
+    "用于 Go 语言 Workshop 等教学演示场景",
+    "需要简单键值存储并支持 TCP 命令访问的实验项目",
+    "作为阅读和学习 Go 网络与持久化实现的代码示例"
+   ]
+  },
+  "sha": "04d07316e25b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74a480e4b063": {
+  "identity": {
+   "one_liner": "TiDB SQL 层的实验性 Rust 实现，以只读节点接入现有集群",
+   "review": "该项目是 TiDB SQL 层的 Rust 移植原型，以只读节点形式加入 Go TiDB 集群，通过 --pd 连接 PD，复用集群的 TSO、schema 与 KV 路径，目前仅支持整数主键单表 SELECT 的自动提交读，并要求结果与 Go TiDB 完全一致，适合参与 Rust 移植实践或搭建对照测试环境的开发者。",
+   "highlights": [
+    "实现批量/异步 TSO 获取、schema 缓存与乐观校验，通过 etcd 注册为 TiDB 服务器并参与 MDL 同步",
+    "MySQL 协议支持原生密码与 caching_sha2_password、TLS、文本/二进制结果集及 prepared statements",
+    "行解码与下推求值使用 vendored 的 TiKV tidb_query_* crates，指标名称与 Go TiDB v8.5.8 对齐，可接入原版 Grafana 面板"
+   ],
+   "use_cases": [
+    "在现有 TiDB 集群中挂载 Rust 只读节点，承担 sysbench oltp_read_only 类型的自动提交读负载",
+    "作为 Go TiDB 的行为对照实现，用 tools/ab 在同集群比对查询结果与性能数据",
+    "研究 TiDB SQL 层（parser、ranger、coprocessor DAG、MySQL 协议）的 Rust 移植路径"
+   ]
+  },
+  "sha": "74a480e4b063",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

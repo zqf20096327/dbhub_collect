@@ -2594,5 +2594,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c62efa423bf5": {
+  "identity": {
+   "one_liner": "用 C++、Rust、Python 撰写 LeetCode 题解的个人题库仓库",
+   "review": "该仓库收录 LeetCode 算法题的 C++、Rust、Python 题解，供刷题练习者参考。作者在 README 中说明了使用 C++ 标准库头文件的原因，并配置了一个 skill：AI 助手可通过自然语言从 LeetCode 中国站拉取题目，自动生成带测试用例的 Rust/Python 模板文件。内容为个人解题记录，题解覆盖范围以仓库实际文件为准。",
+   "highlights": [
+    "提供同一题目的 C++、Rust、Python 多语言题解",
+    "内置 skill，支持 AI 助手通过自然语言从 LeetCode 中国站拉取题目",
+    "初始化后自动生成带测试用例的 Rust/Python 模板文件"
+   ],
+   "use_cases": [
+    "练习 LeetCode 算法题时参考多语言实现",
+    "通过 AI 助手快速拉取题目并生成带测试的初始模板",
+    "准备 NOIP/ICPC 等竞赛时进行算法与数据结构练习"
+   ]
+  },
+  "sha": "c62efa423bf5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "944783122c01": {
+  "identity": {
+   "one_liner": "基于文件的无服务器关系型数据库，以 TypeScript 实现并支持 ACID 事务",
+   "review": "Inibase 是一个用 TypeScript 编写、面向 Node.js 的文件型关系数据库，数据按数据库/表/列组织为独立文件，写入走预写日志并配合每表写锁与 fsync 实现崩溃恢复，提供 begin/commit/rollback 多表事务 API 与内置缓存、gzip 压缩、表单校验。安装方式为 npm/pnpm/yarn/bun 安装 inibase；Windows 需额外安装 zcat、sed、gzip 等 Unix 工具或使用 WSL。事务内不支持读己之写，且每表每次事务仅限一次变更。",
+   "highlights": [
+    "单表 DML 具备崩溃原子性，多表事务通过 begin/commit/rollback API 实现，含级联删除与崩溃恢复",
+    "按列文件存储，支持列投影、内置缓存、基于 Node.js zlib 的 gzip 压缩及可选增量更新日志（log: true）",
+    "提供表连接、内置表单校验与唯一值约束，读取无需加锁并采用乐观版本重试机制"
+   ],
+   "use_cases": [
+    "Node.js/TypeScript 项目中无需独立数据库服务进程的文件存储场景",
+    "需要多表写入原子性与崩溃恢复的应用（如订单与关联表的一致性写入）",
+    "关注磁盘占用与内存使用的本地数据管理场景（README 称经 100,000 至 4,000,000 条记录测试）"
+   ]
+  },
+  "sha": "944783122c01",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "54ae5067338e": {
+  "identity": {
+   "one_liner": "Snowflake 内基于 Streams 和 Tasks 构建 JSON 数据管道的教程项目",
+   "review": "该项目是一个教程仓库，演示在 Snowflake 中构建 JSON 数据管道：将 JSON 文件加载至含 VARIANT 列的 raw_json_table，经存储过程提取到 transformed_json_table，再通过用户自定义函数转换写入 final_table。管道为增量式，依靠 raw_data_stream 和 transformed_data_stream 两个流跟踪表变更（CDC），根任务每分钟调度执行。适用于需要在 Snowflake 内实现 JSON 数据分步转换的开发者。仓库自述无需额外前置条件，所需内容均包含于仓库内。",
+   "highlights": [
+    "使用两个流（raw_data_stream、transformed_data_stream）跟踪表变更，实现增量处理，无需每次全表重载",
+    "根任务 extract_json_data 每分钟调度并调用存储过程，后续任务 aggregate_final_data 作为工作流在其后运行",
+    "使用两个虚拟仓库分工：load_wh 用于加载 JSON 数据，task_wh 用于运行提取与转换的存储过程"
+   ],
+   "use_cases": [
+    "需要将 JSON 文件分阶段提取、结构化并转换为最终报表表的场景",
+    "需要基于变更数据捕获（CDC）只处理新增或修改数据的持续加载流程",
+    "学习 Snowflake Streams、Tasks 与存储过程组合使用的教程参考"
+   ]
+  },
+  "sha": "54ae5067338e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a6ba297e3639": {
+  "identity": {
+   "one_liner": "在 DuckDB/PostgreSQL/SQLite/Spark 内部加速偏斜稀疏关系 join-聚合的扩展",
+   "review": "Tessera 是一个以扩展形式接入 DuckDB、PostgreSQL、SQLite 和 Spark 的算子库，用于加速按值对计数或求和的 join-聚合查询。它不构建连接行，而是将查询实现为稀疏矩阵乘积，高频值的稠密核心块在 CPU 矩阵加速器（AMX）上运行，由成本模型为每个查询选择稠密边界。SQL 无需改动，结果保持与引擎原计划一致，超出内存限制的结果写入磁盘。适合需要在现有数据库内运行词共现、item-to-item 推荐、共同邻居计数等查询的用户。",
+   "highlights": [
+    "以稀疏路径加 AMX 稠密核心计算 XᵀX 矩阵乘积，单遍读取输入，不生成连接行",
+    "通过成本模型为每个查询选择稠密边界，HAVING 和 ORDER BY ... LIMIT 触发的剪枝保持结果精确",
+    "接入各引擎规划器并遵循其取消、线程数、错误和内存限制，二进制包支持 Linux x86-64 与 macOS Apple silicon"
+   ],
+   "use_cases": [
+    "在现有数据库引擎中运行词共现、共同邻居计数等按值对计数的 join-聚合查询",
+    "对 MovieLens 评分、新闻文章或基因网络等偏斜稀疏数据做 item-to-item 推荐类统计",
+    "在 DuckDB-WASM 浏览器环境或 pandas DataFrame、CSV、Parquet 文件上运行同一 SQL 的余弦或 Pearson 相关计算"
+   ]
+  },
+  "sha": "a6ba297e3639",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

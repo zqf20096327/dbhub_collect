@@ -2880,5 +2880,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dd3d17075811": {
+  "identity": {
+   "one_liner": "基于感知哈希与Elasticsearch的大规模图像相似匹配库",
+   "review": "一个Python图像匹配库，为每张图像计算pHash感知哈希值，并据此进行相似度比较；借助Elasticsearch作为后端存储实现可扩展检索。支持在线URL与本地文件两种输入方式，通过pip安装numpy、scipy及本仓库，使用前需运行Elasticsearch服务。",
+   "highlights": [
+    "为图像计算pHash感知哈希值，基于哈希比较相似度",
+    "使用Elasticsearch作为后端数据库，支持大规模图像的可扩展搜索",
+    "同时支持提供URL或本地文件路径两种图像输入方式"
+   ],
+   "use_cases": [
+    "在大型图像库中检索与目标图像相似的图片",
+    "需要将图像搜索能力集成到Python项目的场景",
+    "希望通过Docker/容器化环境部署图像检索服务的场景"
+   ]
+  },
+  "sha": "dd3d17075811",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab821a3ae109": {
+  "identity": {
+   "one_liner": "自托管的错误追踪服务，兼容 Sentry SDK，Rust 引擎加 Postgres 双容器部署",
+   "review": "Epure 是一个面向一两人规模 SaaS 团队的错误追踪服务，由单个 Rust 二进制和 PostgreSQL 16 组成，通过 docker compose 部署为两个容器。它读取官方 Sentry SDK 上报的事件（改 DSN 即可接入），但只存错误，不存 traces、replay、profiling 等载荷，需将对应采样率设为 0。引擎为 AGPL-3.0，CLI 与 MCP 客户端为 Apache-2.0，项目处于 Beta 阶段。",
+   "highlights": [
+    "兼容官方 Sentry SDK 协议，更换 DSN 即可接入，回滚只需恢复原 DSN",
+    "两个容器部署（引擎加 Postgres 16），ingest 先返回 202，worker 异步写入分组",
+    "提供 MCP 服务供编码代理读取 issue，支持 sourcemaps、回归检测、webhook 告警、RBAC 与 PostgreSQL RLS"
+   ],
+   "use_cases": [
+    "已有 Sentry SDK 的中小团队希望自托管错误追踪并保留原接入方式",
+    "一两人开发的 SaaS 产品需要一个部署简单、固定成本的错误收集面板",
+    "想让 Claude 等编码代理通过 MCP 直接读取错误 issue 进行排查"
+   ]
+  },
+  "sha": "ab821a3ae109",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

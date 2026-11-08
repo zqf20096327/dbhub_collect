@@ -2518,5 +2518,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "363a44dae73f": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 OAuth2/OIDC 身份提供方，单二进制加 SQLite 运行。",
+   "review": "Autentico 是用 Go 实现的自托管 OAuth2/OIDC 身份提供方，将登录、MFA、Passkey、会话管理、令牌签发与管理界面打包为单个二进制文件，状态存储于单个 SQLite 文件。支持 Authorization Code + PKCE、刷新令牌、令牌内省与吊销、OIDC Discovery、RS256 JWT、WebAuthn、TOTP 与邮件 OTP，可经 Keycloak 兼容路径迁移。README 说明 SQLite 串行写入且不能跨主机水平扩展，不适合需要多区域部署或 SCIM/LDAP 等企业功能的组织。",
+   "highlights": [
+    "实现 OAuth2/OIDC 协议，含 Authorization Code + PKCE、Refresh Token、Token Introspection（RFC 7662）、Token Revocation（RFC 7009）、OIDC Discovery 与 RS256 JWT 签发",
+    "支持 WebAuthn Passkey、TOTP、邮件 OTP 三类认证因素，提供 password、password_and_passkey、passkey_only 三种模式并可在运行时切换",
+    "单二进制内嵌 SQLite 与编译打包的 React 管理界面，支持动态客户端注册与按客户端的配置覆盖"
+   ],
+   "use_cases": [
+    "为小型团队产品或内部自托管应用提供 OAuth2/OIDC 登录与用户集中管理",
+    "作为 CI/测试套件中的真实 OIDC 测试基座（README 称启动约 375ms，无需 Docker 或 mock）",
+    "开发者需要运行中的真实 OIDC 实现进行对接调试或从 Keycloak 迁移评估"
+   ]
+  },
+  "sha": "363a44dae73f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e32fc6fe241b": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展目录工具，收集 APT/RPM 元数据并构建包可用性矩阵",
+   "review": "pgext 是 PGEXT.CLOUD 网站背后的目录数据与 Go 应用，收录 2,703 条扩展条目和 620 条打包记录，覆盖 PG 14–18 与 16 种 Linux OS/架构组合。CLI 可收集 APT/RPM 仓库元数据、构建可用性矩阵，pgext serve 将目录以 Web 应用和 JSON API 提供，数据存于 PostgreSQL 并嵌入二进制。适合需要查找特定 PG 版本与系统下扩展包的用户。",
+   "highlights": [
+    "收集 APT/RPM 仓库元数据并构建按 PG 版本、OS、架构、仓库维度的包可用性矩阵",
+    "提供 Web 应用与 JSON 查询 API，Web 资源嵌入二进制，数据存储于 PostgreSQL",
+    "目录含 2,703 条扩展条目、16 个分类，提供英文与中文使用指南"
+   ],
+   "use_cases": [
+    "按分类、许可证、语言或 PostgreSQL 版本查找扩展",
+    "查询特定 PG 版本和 Linux 系统下的可用扩展包、版本、校验和与下载链接",
+    "规划扩展安装所需的依赖、preload 与兼容性信息"
+   ]
+  },
+  "sha": "e32fc6fe241b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7e48b62044b6": {
+  "identity": {
+   "one_liner": "基于事务性发件箱模式的 Kotlin/JVM 可靠消息投递库",
+   "review": "Okapi 是一个实现事务性发件箱模式的 Kotlin/JVM 库：消息在业务事务内写入数据库 outbox 表，再异步投递到 HTTP webhook 或 Kafka，从而避免数据库提交与投递之间丢消息，且无需分布式事务。支持 PostgreSQL、MySQL 8+，提供 Spring Boot 自动配置，也可在 JVM 任意位置手动装配。要求 JDK 21+，Apache-2.0 协议。投递可能重复，消费者需基于 x-outbox-id 头做幂等去重；消息顺序仅为尽力而为。",
+   "highlights": [
+    "消息与业务写入在同一数据库事务中提交，支持 PostgreSQL、MySQL 8+，投递通道为 HTTP webhook 和 Kafka",
+    "后台调度器轮询待投递行，使用 FOR UPDATE SKIP LOCKED 认领，支持按投递类型划分 worker，可配置轮询间隔、批大小、并发数与重试上限（默认重试 5 次后标记 FAILED）",
+    "每条消息附带跨重试稳定的 x-outbox-id 头供消费者去重；提供 Spring Boot 自动配置、Liquibase 建表，以及 Maven Central 发布的 BOM 依赖管理"
+   ],
+   "use_cases": [
+    "Kotlin/Java 服务需要在业务事务提交后可靠发出事件或 webhook 通知，且不引入分布式事务",
+    "混合使用 HTTP webhook 与 Kafka 两种投递通道，并希望由数据库状态机（PENDING/DELIVERED/FAILED）跟踪投递结果",
+    "部署多个处理实例的团队，需通过 SKIP LOCKED 认领和不同 worker 处理不同投递类型来分散投递负载"
+   ]
+  },
+  "sha": "7e48b62044b6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e700291602f4": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 MongoDB 图形客户端，沿用 Robomongo 界面与工作流",
+   "review": "rustyrobo 是 Robomongo/Robo 3T 的独立 Rust 重写版，提供资源管理器、查询标签页、内嵌 mongo shell 和文档编辑等功能，支持 MongoDB 3.6 至 8.x。面向需要本地 MongoDB 图形工具的用户，各平台提供预编译单文件二进制，也可用 Rust 1.88+ 从源码构建。项目未复用 Robomongo 代码，采用 Apache-2.0 许可。",
+   "highlights": [
+    "支持 MongoDB 3.6 至 8.x，内嵌 mongo shell，提供集合、索引、用户和函数管理",
+    "提供 SSH 隧道（agent、加密密钥、host-key 校验）、JSON/CSV 导入导出及 mongodump 格式的备份恢复",
+    "提供字段名与操作符自动补全、查询历史（Ctrl+H）、表格视图内编辑和收藏脚本管理"
+   ],
+   "use_cases": [
+    "在图形界面中浏览、查询和编辑 MongoDB 集合与文档",
+    "通过 SSH 隧道连接远程 MongoDB 实例进行管理",
+    "以 JSON/CSV 导入导出查询结果，或执行 mongodump/mongorestore 格式的数据库备份恢复"
+   ]
+  },
+  "sha": "e700291602f4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7fefcd02c452": {
+  "identity": {
+   "one_liner": "Rust 编写的单机内存优先向量数据库，HNSW 检索 + pgwire/HTTP 接口",
+   "review": "HouyiDB 是一个用 Rust 实现的单机、内存优先向量数据库，提供 HNSW 向量检索、PAX 行列混存、pg_wire 与 HTTP 双接口，并通过 WAL 与磁盘快照支持 kill -9 后重启恢复。面向需要嵌入向量存储与检索的 AI/RAG 应用开发者，可通过 Docker、源码构建运行，附 Python、TypeScript、Go 等六语言 SDK 及 MCP server。",
+   "highlights": [
+    "提供 pg_wire（text/binary）与 HTTP 双接口，支持带 payload 的 upsert、SQL 混合检索与谓词下推 bitset 剪枝",
+    "实现 HNSW 双速写入（HotBuffer + Async-Builder）、SIMD 距离计算（NEON/AVX feature 隔离）及 Clustered/PQ/HII-L0 多后端",
+    "通过 WAL（异步写线程 + checkpoint/rotate）、磁盘快照与冷启动实现重启恢复；提供 C ABI 轻量索引支持 iOS/Android"
+   ],
+   "use_cases": [
+    "LLM/RAG 应用中嵌入向量的存储与近似最近邻检索",
+    "通过 pgwire 客户端或六语言 SDK（含 LangChain/LlamaIndex adapter）集成向量检索",
+    "通过 MCP server 接入 Claude Code、Cursor、Cline 等客户端进行检索与写入"
+   ]
+  },
+  "sha": "7fefcd02c452",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

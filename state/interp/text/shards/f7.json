@@ -2969,5 +2969,92 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2b4bde59bccc": {
+  "identity": {
+   "one_liner": "格鲁吉亚主题数据集的编目仓库，按类别收录数据链接与来源",
+   "review": "该仓库收录与格鲁吉亚相关的数据集链接，按金融经济、房地产、人口、选举、语言学、调查、地图等类别组织，每条记录标注数据来源及部分附带可视化链接。数据多为 CSV/XLS 格式，由维护者汇总，社区可通过 issue 或 pull request 添加新数据集。适用于需要格鲁吉亚本地公开数据的分析人员。",
+   "highlights": [
+    "按金融经济、人口、选举、语言学、调查、地图等类别整理数据集链接",
+    "收录 2001-2017 每日汇率、2016 议会选举、格语词汇库、地区 GeoJson 等数据",
+    "贡献要求注明数据来源与版权，首选 CSV 或 XLS 格式并提供说明文档"
+   ],
+   "use_cases": [
+    "需要格鲁吉亚公开数据用于分析或研究",
+    "查找格语语言学相关词汇与文本数据集",
+    "获取格鲁吉亚地区边界与人口分布地理数据"
+   ]
+  },
+  "sha": "2b4bde59bccc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fff05d25cf0": {
+  "identity": {
+   "one_liner": "Rust 语言的 ArangoDB 查询构建器层，用于生成 AQL 查询。",
+   "review": "arangoq 是一个面向 Rust 的 ArangoDB 查询构建层，通过 ArangoConnection 建立连接并生成查询。README 提到其设计目标包含对插入攻击的韧性，并提供了与 arangors 不同的功能定位。需注意该项目处于 pre-semver 阶段，小版本号递增即可能包含破坏性变更；actix actor 特性已弃用。作者声明仅做了手动测试，使用需自担风险。",
+   "highlights": [
+    "提供 ArangoConnection 连接方式以构建 ArangoDB 查询",
+    "设计上考虑了对插入攻击的韧性",
+    "提供可选的 actix actor 查询实现特性（已标记弃用）"
+   ],
+   "use_cases": [
+    "需要在 Rust 中以查询构建器方式访问 ArangoDB 的项目",
+    "使用多模型数据库（文档/图/键值）的 Rust 应用"
+   ]
+  },
+  "sha": "9fff05d25cf0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "941ba1af2257": {
+  "identity": {
+   "one_liner": "跨平台 C++ 开发库，提供网络、配置、加密等模块化组件。",
+   "review": "NexusForce 是一个现代 C++ 库（V2.0.0），包含网络协议、配置文件解析、加解密、字符编码等组件，供 C++ 开发者在项目中调用，也可作为了解底层实现的学习资源。它支持 C++14/17/20，覆盖 Windows、Linux、macOS、FreeBSD 的 x86_64、ARM64、RISC-V、LoongArch 架构，各组件标注了对应的 RFC、NIST、ISO 等标准；SHA-1 和 MD5 被标记为仅用于历史兼容场景。",
+   "highlights": [
+    "支持 C++14/17/20，覆盖 Windows/Linux/macOS/FreeBSD 上的 x86_64、ARM64、RISC-V、LoongArch 目标，Tier 1 平台由 CI 保证",
+    "网络组件实现 HTTP/1.1、HTTP/2（HPACK）、WebSocket（permessage-deflate）、DNS、SMTP、ICMP 等，并声明遵循对应 RFC 标准",
+    "提供 JSON（RFC 8259）、TOML 1.0.0、YAML 1.2 解析，AES-256（ECB/CBC/GCM）、ChaCha20-Poly1305 加密及 SHA-2 哈希"
+   ],
+   "use_cases": [
+    "需要在多平台（含 ARM64、RISC-V、LoongArch）构建的 C++ 项目中引入网络、加密、配置解析等基础组件",
+    "需要按 RFC/NIST 等标准实现的协议与算法（如 HTTP/2、WebSocket、AES-256-GCM、DNS 查询）的场景",
+    "作为阅读源码以理解协议与算法底层实现的学习资源"
+   ]
+  },
+  "sha": "941ba1af2257",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "177ab7cd20e7": {
+  "identity": {
+   "one_liner": "Go database/sql 的免 cgo SQLite 驱动，经 LLVM 将 SQLite C 代码编译为 Go 汇编。",
+   "review": "该驱动实现 Go database/sql 接口，数据存于 SQLite。目标用户是希望以 CGO_ENABLED=0 构建单个静态二进制并交叉编译的 Go 程序。核心机制是用 LLVM 将 SQLite 3.54.1 的 C 源码转译为 Go 汇编，而非 C 转 Go 或 WebAssembly 方案。内置基于 S3/R2/MinIO 的实时备份复制。当前版本 v0.1，API 未定；不支持加载扩展与共享缓存，需 Go 1.26.6–1.27。",
+   "highlights": [
+    "以 CGO_ENABLED=0 构建，支持 linux/darwin 的 amd64 与 arm64 以及 windows amd64，可在 scratch 镜像中运行",
+    "将多个 goroutine 的自动提交写语句合并为一个事务提交，写操作排队而非返回 database is locked 错误",
+    "内置实时备份：每次提交约一秒后写入 S3、Cloudflare R2 或 MinIO，恢复时校验文件并运行 integrity_check，副本布局与 Litestream 兼容"
+   ],
+   "use_cases": [
+    "需要单二进制部署到 VPS 并以 SQLite 存储数据的 Go 应用",
+    "无 C 编译器环境下的交叉编译与 scratch 容器镜像构建",
+    "需要将 SQLite 提交实时复制到 S3/R2/MinIO 并支持按时间点恢复的场景"
+   ]
+  },
+  "sha": "177ab7cd20e7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

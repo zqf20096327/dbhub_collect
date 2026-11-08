@@ -2646,5 +2646,113 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0eff6a6ead2a": {
+  "identity": {
+   "one_liner": "ArangoDB 的低层 C++ 驱动库，现已废弃并合并回主仓库",
+   "review": "fuerte 是用于 ArangoDB 内部通信的 C++ 库，即 ArangoDB 的低层 C++ 驱动。README 未提供安装或使用说明，仅声明该独立仓库已废弃，后续在 ArangoDB 主仓库中维护。README 内容极少，除废弃声明外无可验证的功能细节。",
+   "highlights": [
+    "作为 ArangoDB 内部通信使用的 C++ 库",
+    "维护地点已迁移至 ArangoDB 主仓库"
+   ],
+   "use_cases": [
+    "需要了解 ArangoDB 相关 C++ 代码所在位置的维护者",
+    "引用此仓库地址的用户需转向 ArangoDB 主仓库查找后续版本"
+   ]
+  },
+  "sha": "0eff6a6ead2a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7ce157b280d9": {
+  "identity": {
+   "one_liner": "为 Rust 类型生成 MongoDB 风格 JSON/BSON schema 的过程宏库",
+   "review": "Magnet 由 magnet_schema 与 magnet_derive 两个 crate 组成，通过 BsonSchema trait 和派生宏为 Rust 领域模型类型生成符合 MongoDB 格式的 JSON schema 文档。主要面向使用 Avocado 或 MongoDB Rust 驱动的开发者，用于校验可序列化类型；支持泛型、枚举及多种 Serde 重命名约定。",
+   "highlights": [
+    "提供 BsonSchema trait，返回描述类型结构的 Bson Document",
+    "通过派生宏为结构体、newtype、元组结构和枚举自动生成 schema，支持 Serde 的 tagging 与 rename 约定",
+    "为 HashMap/BTreeMap、VecDeque、Range、ObjectId、uuid 等常见类型提供内置实现，支持泛型类型与 min/max 等字段属性"
+   ],
+   "use_cases": [
+    "在 MongoDB Rust 驱动或 Avocado 中对可序列化类型进行 schema 校验",
+    "为使用 Serde 的 Rust 领域模型生成 MongoDB 风格的 JSON schema 文档",
+    "为含泛型参数的自定义类型派生 BSON schema 实现"
+   ]
+  },
+  "sha": "7ce157b280d9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2009bf4b759": {
+  "identity": {
+   "one_liner": "Apache Ignite 官网源码仓库，基于 Docusaurus 构建静态站点",
+   "review": "本仓库托管部署于 ignite.apache.org 的 Apache Ignite 官网源码。站点使用 Docusaurus 静态站点生成器构建，博客文章采用 MDX 格式。文档独立构建后挂载于 /docs/ignite2/、/docs/ignite3/ 与 /releases/ 路径下，涵盖 Ignite 2.x、3.x 文档及 API 文档。项目遵循 Apache License 2.0，适合需要维护或翻译该官网内容的贡献者使用。",
+   "highlights": [
+    "基于 Docusaurus 构建，npm run build 可生成静态文件至 build/ 目录",
+    "本地开发支持热更新，npm start 后在 http://localhost:3000 打开浏览器",
+    "分别挂载 Ignite 2.x、3.x 文档及 Javadoc/Scaladoc 等 API 文档"
+   ],
+   "use_cases": [
+    "为 Apache Ignite 官网提交内容修改或博客文章",
+    "本地运行并预览官网站点改动",
+    "生成静态站点文件用于部署"
+   ]
+  },
+  "sha": "d2009bf4b759",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bda293065976": {
+  "identity": {
+   "one_liner": "基于RAG的开源文档问答平台，支持版面感知解析与服务器端引用构建",
+   "review": "DocuMind 是一个可私有部署的文档智能平台，用于上传、解析 PDF/DOCX/XLSX 等文档并基于内容进行对话问答。它使用 IBM Docling 做版面感知解析，本地生成 384 维向量存入 Qdrant，答案由 Gemini 生成，而引用信息由后端从向量元数据构建。技术栈为 Next.js + FastAPI + PostgreSQL + Celery + Redis，通过 Docker Compose 可启动含七个服务的完整栈；生成环节需要提供 Gemini API Key。",
+   "highlights": [
+    "使用 IBM Docling 解析文档版面、标题层级与表格为 Markdown，支持 PDF、DOCX、XLSX、PPTX、TXT、CSV、MD 格式，单文件上限 25 MB",
+    "向量嵌入通过 Sentence Transformers（all-MiniLM-L6-v2，384 维）本地生成，向量检索在 Qdrant 中执行并强制 user_id 与 document_id 过滤",
+    "引用由 FastAPI 后端依据向量元数据（chunk_id、section、score）构建，检索分数低于 0.35 时不调用 LLM 并返回确定性拒绝消息"
+   ],
+   "use_cases": [
+    "对包含表格与多栏版式的技术文档、报告进行结构化预览与语义检索",
+    "需要在本地部署并对文档访问实施按用户隔离的问答场景",
+    "基于 Docker Compose 的单机部署环境，运行含文档处理流水线的完整服务栈"
+   ]
+  },
+  "sha": "bda293065976",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b78ba4423615": {
+  "identity": {
+   "one_liner": "Go 静态分析 linter，报告在事务内误用其来源数据库句柄的代码",
+   "review": "txbypass 是一个 Go linter，通过静态分析识别在事务回调中使用了外层数据库句柄（如 r.db 而非 tx）的代码——这类写入游离于事务之外，回滚后仍会留存。支持 database/sql、gorm、pgx、bun、ent、MongoDB 等库，可自动读取项目内自定义事务辅助函数。适用于使用这些库编写事务代码的 Go 项目。限制：单连接上的事务、savepoint 及部分回调模式不在读取范围。",
+   "highlights": [
+    "提供 outer-handle 与 outer-context 两条规则，可通过命令行标志或 golangci-lint 配置启停",
+    "支持 database/sql、sqlx、pgx v4/v5、gorm、bun、ent、go-redis、MongoDB 等 20 余个库的事务 API",
+    "可自动识别项目内自定义的事务辅助函数（invoker/begin），并支持通过 //txbypass:ignore 与 //txbypass:invokes 指令控制"
+   ],
+   "use_cases": [
+    "CI 或 go vet / golangci-lint 流程中检测事务内误用外层连接句柄的代码",
+    "使用多种 Go 数据库库且需要统一事务规范的代码库审查",
+    "识别回滚后仍写入、锁等待、读不到未提交数据等游离于事务之外的操作"
+   ]
+  },
+  "sha": "b78ba4423615",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

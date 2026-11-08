@@ -2622,5 +2622,225 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "08a437ee1334": {
+  "identity": {
+   "one_liner": "ArangoDB 的 Go 语言驱动，附内置内存测试数据库",
+   "review": "aranGoDriver 是用 Go 编写的 ArangoDB 驱动，通过 Session 连接数据库，支持数据库、集合、文档、图和用户的常见操作，并提供 AQL 游标查询与迁移机制（迁移记录写入 _system 库的 migrations 集合，按名称识别仅执行一次）。适合需要在 Go 应用中操作 ArangoDB、并希望用内存数据库跑测试的开发者。README 标明部分功能实现为 simple/基础层面。",
+   "highlights": [
+    "提供数据库、用户、集合（含边集合）、文档、图的创建/删除/列表等操作接口",
+    "支持 AQL 查询（简单游标）与按名称识别的迁移机制",
+    "内置嵌入式内存数据库，可运行 go test 而不依赖真实数据库"
+   ],
+   "use_cases": [
+    "在 Go 应用中连接并操作 ArangoDB（集合、文档、图等）",
+    "用 AQL 执行简单游标查询",
+    "通过内存数据库运行单元测试，或在各环境执行一次性数据库迁移"
+   ]
+  },
+  "sha": "08a437ee1334",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a123f4454e31": {
+  "identity": {
+   "one_liner": "macOS 原生数据库客户端，Swift/AppKit 实现，支持 9 类数据库引擎",
+   "review": "BerryDB 是一款面向 macOS 开发者、数据工程师和 DBA 的数据库客户端，使用 Swift 6 与 AppKit 构建界面，数据网格基于 NSTableView。它通过原生驱动连接 PostgreSQL、MySQL、SQL Server、SQLite、Redis/Valkey、MongoDB、DynamoDB、Elasticsearch 和 Qdrant，凭据存于 macOS Keychain，支持 SSH 隧道与 TLS。默认结果集上限 1000 行。安装支持 Homebrew cask 或下载 DMG，要求 macOS 15 及以上。",
+   "highlights": [
+    "支持 9 类数据库引擎（SQL、键值、文档、向量、搜索），各自使用原生协议驱动，如 PostgresNIO、MySQLNIO、libsqlite3、FreeTDS",
+    "流式数据网格：查询运行中按批次加载行，仅渲染屏幕内单元格，结果默认上限 1000 行",
+    "提供 AI SQL 助手（云端或 Apple Intelligence 本地模型）、内置 SSH 隧道、MCP 架构工具供编码代理读取缓存 schema"
+   ],
+   "use_cases": [
+    "在同一工作区内查询生产 PostgreSQL、检查 Redis 缓存、管理 MongoDB 集合或本地打开 SQLite WAL 文件",
+    "通过内置 SSH 隧道经堡垒机访问数据库，凭据与 SSH 密钥口令由 macOS Keychain 管理",
+    "让 Claude Code、Codex 等编码代理通过本地 MCP 辅助程序读取表、列、索引等 schema 信息，可按连接开启受限的只读查询"
+   ]
+  },
+  "sha": "a123f4454e31",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "71106770c691": {
+  "identity": {
+   "one_liner": "只读 PowerShell 脚本，对 SQL Server/RDS/Azure SQL 做 27 项安全检查并生成 HTML 报告",
+   "review": "Get-SqlSafe 社区版是 Sarpedon Quality Lab 发布的免费 PowerShell 脚本，运行 27 项核心检查，覆盖认证暴露、sysadmin 成员、xp_cmdshell、孤立账户、审计缺口、跨库所有权链等基线指标，结果输出为本地 HTML 报告。脚本只读，不修改服务器配置或数据，支持 SQL Server、AWS RDS 与 Azure SQL Database。官方注明它识别风险指标，不构成完整安全审计或渗透测试。",
+   "highlights": [
+    "运行 27 项核心检查，覆盖认证、特权访问、服务器级权限、危险配置、审计可见性与孤立账户等领域",
+    "只读执行，不修改 SQL Server 或数据库配置及用户数据，SQL Server/RDS 检查无需外部 PowerShell 模块",
+    "提供 GUI 与控制台两种运行模式，支持 Windows/SQL 认证、Azure Entra 交互式登录及加密选项"
+   ],
+   "use_cases": [
+    "DBA 或安全人员对 SQL Server 实例做安全姿态的初次基线检查",
+    "在 EDR/XDR 受控环境或自动化流程中通过控制台模式运行并输出运行日志",
+    "评估 Amazon RDS 或 Azure SQL Database 上的托管 SQL 实例权限与配置风险"
+   ]
+  },
+  "sha": "71106770c691",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5be312b9283a": {
+  "identity": {
+   "one_liner": "面向 Roblox 的无会话锁事件溯源数据存储库，状态为对已验证操作的折叠",
+   "review": "Ledger 是一个 Roblox 数据存储库，采用事件溯源机制：开发者不直接写入状态，而是提交带名称的操作，由自定义 reducer 验证后保存，每条变更恰好应用一次。适用于 Roblox 服务器端开发者。状态为验证操作的折叠结果，无需会话锁即可让所有服务器达成一致，支持跨服写入离线玩家数据。限制：基于 Roblox 平台，状态由操作推导而非直接存储。",
+   "highlights": [
+    "无锁设计：每台服务器对同一操作得到相同结果，无会话锁",
+    "事务支持：最多 29 个玩家或键，全部生效或全部不生效",
+    "类型化操作：操作命名一次后每次写入均经类型检查；写入幂等，重试只应用一次"
+   ],
+   "use_cases": [
+    "跨服经济系统：金币消费并发时 reducer 只接受其一",
+    "限量物品销售：多服务器同时售卖不超卖",
+    "全局计数器：各服务器累加，读取无额外开销"
+   ]
+  },
+  "sha": "5be312b9283a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a295369642ad": {
+  "identity": {
+   "one_liner": "面向 MonetDB 的 TPC-H 基准测试辅助工具集",
+   "review": "该仓库为 TPC-H 基准在 MonetDB 上的使用提供辅助：包含自动化脚本，完成数据生成、建库（含 schema 与约束）和数据加载；附 22 条查询文件、对应预期结果文件及 dbgen 子模块。用户需递归克隆仓库，并用 bash、unzip 等工具及已运行的 MonetDB。当前仅支持 MonetDB；仓库不含基准规格说明，也不含实际执行基准查询的代码。",
+   "highlights": [
+    "提供 setup-tpch-db 脚本，自动化 TPC-H 数据生成、建库与数据加载流程",
+    "包含基准全部 22 条查询的 SQL 文件及各自的预期结果文件，可用于结果比对",
+    "以子模块形式集成 dbgen 数据生成工具（维护于 eyalroz/tpch-dbgen）"
+   ],
+   "use_cases": [
+    "为 MonetDB 准备含 TPC-H 模式与数据的测试数据库",
+    "生成指定 scale factor 的 TPC-H 数据集并加载入库",
+    "将查询执行结果与预期结果文件进行 diff 比对以做一致性检查"
+   ]
+  },
+  "sha": "a295369642ad",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b4762dfdde9": {
+  "identity": {
+   "one_liner": "纯 Go 实现的轻量级嵌入式数据库，灵感来自 lowdb",
+   "review": "go-store 是一个用纯 Go 编写的嵌入式数据库库，不依赖外部包。它通过泛型化的 Adapter 接口（Read/Write 两个方法）实现数据读写，内置 JSON 适配器和内存适配器，也允许开发者自行实现接口扩展存储后端。适合需要在本地以文件形式持久化 Go 结构体数据的开发者。",
+   "highlights": [
+    "纯 Go 实现，无外部依赖，通过 go get 安装",
+    "内置 JSON 适配器（读写 JSON 文件）和内存适配器（进程退出后数据丢失）",
+    "提供泛型 Adapter 接口（Read/Write），可实现自定义适配器接入"
+   ],
+   "use_cases": [
+    "以 JSON 文件形式在本地持久化 Go 结构体数据",
+    "单元测试或快速测试场景中使用内存适配器",
+    "通过实现 Adapter 接口接入自定义存储后端"
+   ]
+  },
+  "sha": "2b4762dfdde9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0bb4d1d072f6": {
+  "identity": {
+   "one_liner": "Go 编写的分布式任务编排器，以 Postgres outbox 保证任务持久与恢复。",
+   "review": "Orqestra 是一个用 Go 实现的分布式后台任务编排器，将持久化、队列与执行分离：任务先经事务性 outbox 写入 Postgres，再中继到 Redis，服务器重启时可从数据库恢复中断任务。Worker 通过双向 gRPC 流连接服务器。面向需要在多节点环境可靠执行定时与依赖工作流的团队，依赖 Postgres 与 Redis 运行。",
+   "highlights": [
+    "支持基于 depends_on 的 DAG 工作流、Cron 调度及通过 $PREVIOUS_OUTPUT 的步骤间输出传递（上限 64 KB）",
+    "提供指数退避重试、服务器重启后的任务恢复，以及 REST 端点的 API key 认证",
+    "队列后端通过接口封装 Redis，CLI 支持任务提交、查询与工作流管理"
+   ],
+   "use_cases": [
+    "定时执行的备份、压缩、上传等多步骤流水线",
+    "需要步骤依赖顺序与并行执行的批处理工作流",
+    "服务器或 worker 故障后需从数据库恢复队列的任务场景"
+   ]
+  },
+  "sha": "0bb4d1d072f6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "82efa8477f40": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库浏览器，含工作区、外键导航、沙箱编辑与 EF Core 桥接",
+   "review": "FerretSharp 是一个面向 .NET 开发者的 Oracle 数据库浏览器，基于 .NET 10，运行于 Windows，采用 MIT 许可证。它按连接提供工作区，每个工作区拥有独立数据库会话；支持在网格中浏览与编辑数据、沿外键或 EF Core 模型中的导航关系跳转、在事务中提交或回滚更改，并提供 LINQ 控制台显示生成的 SQL。界面提供英语和德语两种语言。",
+   "highlights": [
+    "提供按连接的工作区，每个工作区拥有独立数据库会话，支持独立过滤与编辑；生产连接默认只读，由 Oracle 侧强制",
+    "支持右键单元格沿外键跳转到被引用行或引用行，包含仅存在于 EF Core DbContext 导航中的关系，并可将该关系生成为真实外键",
+    "包含 LINQ 控制台与 SQL 编辑器，可查看生成语句及执行计划；网格编辑与语句共享同一撤销/重做历史，更改以事务提交或回滚"
+   ],
+   "use_cases": [
+    ".NET 开发者在开发、测试或生产 Oracle 环境中按实体与属性名称浏览和查询数据",
+    "在沙箱事务中以分步状态（pending、written、committed）编辑表数据并按需回滚",
+    "通过关系图、路径查找与关系导航排查表间的外键及 EF Core 模型关系"
+   ]
+  },
+  "sha": "82efa8477f40",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f3fd7f0d9de": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件全文检索数据库，含 BM25F 排序",
+   "review": "Persia DB 是一个以 Rust 编写、以库形式链接的嵌入式全文检索数据库，数据存于单个 .persia 文件，通过 WAL 写入文档、合并不可变段，并提供基于 BM25F 的排序检索。项目处于 pre-alpha 阶段（524 项 MVP 任务完成 329 项），对外导出的 Db 门面、查询松弛（M8）及 Go/TypeScript SDK 均未实现，crate 未发布到 crates.io，需以 git 依赖引入，格式 1.0 在 v1.0 前不稳定。",
+   "highlights": [
+    "以库形式嵌入进程，无守护进程与配置文件，数据存于单文件容器，段不可变并通过 CRC32C 校验，支持 zstd 块压缩",
+    "提供 BM25F 评分排序、过滤器、排序、分面与分页；通过 persia-cli 可检查、校验、清理容器与段文件",
+    "内置基于 UAX #29 与 NFKC（Unicode 17.0.0）的分词分析器及六种语言的词干提取器，死空间在死字节达阈值时自动压缩回收"
+   ],
+   "use_cases": [
+    "需要在应用进程内运行、以本地单文件存储文档并可执行全文排序检索的场景",
+    "需要通过 CLI 对段与容器文件进行校验、检查与临时文件清理的运维场景",
+    "指定字段类型（text/keyword/i64/f64/bool/datetime/stored）的集合 schema 数据写入与查询场景"
+   ]
+  },
+  "sha": "5f3fd7f0d9de",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee05ea4d645a": {
+  "identity": {
+   "one_liner": "基于 FlightAware AeroAPI 追踪四架飞行俱乐部飞机并推送到 Tidbyt 显示的 Pixlet 应用",
+   "review": "该仓库是一个面向 Texins Flying Club 会员的 Tidbyt 像素屏应用，通过 FlightAware AeroAPI v4 查询 McKinney 国家机场（KTKI）四架飞机的状态，用 pixlet 渲染 64×32 WebP 图像并经 Tidbyt Cloud API 推送显示。支持 auto/board/cycle/demo 四种显示模式，API 密钥存于本地 .env。定时更新可由 GitHub Actions、cron 或循环脚本实现。",
+   "highlights": [
+    "通过 FlightAware AeroAPI v4 读取四架飞机的实时状态，空中时显示航线、起降时间、地速、航向、高度与最近城市",
+    "提供 auto、board、cycle、demo 四种显示模式，demo 模式以模拟飞行渲染、不消耗 API 配额",
+    "内置 GitHub Actions 定时工作流，在美中时间 7:00–21:00 每小时渲染并推送"
+   ],
+   "use_cases": [
+    "在自己的 Tidbyt 设备上查看 Texins Flying Club 四架飞机的起降与空中遥测状态",
+    "无 Tidbyt 设备时用 pixlet serve 在浏览器本地预览渲染效果",
+    "通过 GitHub Actions 或 cron 定时刷新屏幕上的航班状态信息"
+   ]
+  },
+  "sha": "ee05ea4d645a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

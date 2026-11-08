@@ -3399,5 +3399,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a7d5e227e32c": {
+  "identity": {
+   "one_liner": "x6-k6 的 MongoDB 扩展，在 k6 性能测试脚本中读写 MongoDB",
+   "review": "xk6-mongo 是 k6 的扩展，通过 xk6 重新编译 k6 二进制后，可在 JavaScript 测试脚本中调用 MongoDB 的 CRUD、聚合、BulkWrite、索引管理、Change Streams 和事务等 API。面向需要在性能测试中让虚拟用户直接操作 MongoDB 的测试工程师。事务与 Change Streams 要求副本集或分片集群；连接超时 10 秒，操作超时 30 秒。",
+   "highlights": [
+    "提供 CRUD、Upsert、Aggregate、Distinct、CountDocuments、BulkWrite 等数据库操作 API",
+    "支持基于 Session 的事务和 Change Streams（需副本集），并提供索引的创建、删除与列举",
+    "连接超时 10 秒、操作超时 30 秒，可配置连接池的 max/min pool size"
+   ],
+   "use_cases": [
+    "在 k6 负载测试脚本中生成或校验 MongoDB 数据",
+    "验证 MongoDB 副本集/分片集群在并发写入下的事务行为",
+    "编写包含聚合管道、索引管理与批量写入的数据层测试场景"
+   ]
+  },
+  "sha": "a7d5e227e32c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8fa6718f6dac": {
+  "identity": {
+   "one_liner": "面向 Node.js 与浏览器的对象关系映射与应用数据访问框架",
+   "review": "Nymph.js 是一个为 Node.js 和浏览器提供的应用数据与访问框架，包含 ORM、查询语言、用户组管理与访问控制、REST 服务器、PubSub 实时协作服务器及客户端。后端支持 SQLite3、MySQL、PostgreSQL，可开发用 SQLite、生产用 MySQL/Postgres。多个包按需组合使用，主要变更记录见 README 的 Breaking Changes 章节。",
+   "highlights": [
+    "ORM 支持嵌套原子事务和查询语言，后端可选 SQLite3、MySQL 或 PostgreSQL",
+    "提供 Express 中间件形式的 REST 服务器与基于 WebSocket 的 PubSub 服务器，可订阅实体、查询和 UID 的变更",
+    "Tilmeld 提供用户与组管理、细粒度访问控制、认证服务及 XSRF 防护"
+   ],
+   "use_cases": [
+    "需要在 Node.js 与浏览器间共享数据访问层并做实时协作更新的应用",
+    "需要在开发环境用 SQLite、生产环境用 MySQL/PostgreSQL 的项目",
+    "需要用户注册、登录与访问控制的 Web 应用，可配合 Tilmeld 相关组件使用"
+   ]
+  },
+  "sha": "8fa6718f6dac",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "07295ef5dc76": {
+  "identity": {
+   "one_liner": "纯 Go 实现的 Redis 风格内存键值存储，TCP 文本协议访问",
+   "review": "FurrDB 是用纯 Go 标准库实现的内存键值存储，通过 TCP 自定义文本协议提供服务，支持字符串、列表、集合类型及 TTL。写命令以 AOF 日志持久化，启动时重放恢复状态；脚本经 SHA256 哈希注册后可按哈希调用，脚本仅允许白名单命令。配置（默认端口 7070）目前为硬编码，无外部依赖。",
+   "highlights": [
+    "提供基于 TCP 的自定义文本协议，命令包括 SET/GET/DEL、LPUSH/LRANGE、SADD/SREM、EXPIRE/TTL、SNAPSHOT 等",
+    "写命令记录到 append-only 文件（默认 aof.log），启动时重放以恢复状态，脚本及其哈希同样持久化",
+    "内置脚本管理器：脚本以 SHA256 哈希存于内存，支持 LET/IF/END 嵌入式 DSL，仅允许白名单命令并有脚本长度限制"
+   ],
+   "use_cases": [
+    "需要纯 Go、零外部依赖的嵌入式键值存储的学习或实验场景",
+    "通过 telnet 或自带 CLI 客户端进行本地交互式命令调试（REPL 模式可直接对进程内存储执行命令）",
+    "以 AOF 日志和快照进行简单持久化的小型单机应用场景"
+   ]
+  },
+  "sha": "07295ef5dc76",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "99e4c96675ef": {
+  "identity": {
+   "one_liner": "Postgres 线协议代理，将租户行迁至其自有数据库且应用无需改动。",
+   "review": "LokaDB 是一个 Postgres 线协议代理，用于多租户 SaaS 场景：应用仅改连接字符串，代理用真实 Postgres 解析器解析语句、识别所属组织，将选定表按组织分区，移出的组织通过 postgres_fdw 外表或直连路径读写其自有数据库，并借客户网络内 agent 发起的出站双向 TLS 隧道传输流量。适用对象是需满足客户数据驻留要求的 SaaS 团队。限制包括约 1000 组织时吞吐下降、不支持跨云与客户库的原子提交等。",
+   "highlights": [
+    "支持任意经 Postgres 协议通信的应用，覆盖简单与扩展协议（预编译语句、二进制参数），已用 Laravel、Django、Go 三种未修改应用做端到端测试",
+    "将选定表原地转为按组织分区表：留在云中的组织用本地分区，移出的组织用指向其自有数据库的 postgres_fdw 外表，迁移在线进行且可回退",
+    "客户网络内 agent 通过出站双向 TLS 隧道连接云中 relay，云侧不主动连入客户网络；支持一次性令牌注册、证书自动续期与撤销"
+   ],
+   "use_cases": [
+    "企业客户要求数据存于自有 Postgres 的多租户 SaaS，需将单个组织在线迁出而不重写应用",
+    "客户数据库位于远程网络、云侧不可直接访问，需经出站隧道传输该组织流量的场景（可选 fdw+direct 或 direct 路由）",
+    "已迁移组织的 schema 需与云库保持同步（迁移语句回放到每个客户库），以及需要将组织迁回云库的场景"
+   ]
+  },
+  "sha": "99e4c96675ef",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

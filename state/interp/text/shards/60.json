@@ -2836,5 +2836,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ed4e4a904051": {
+  "identity": {
+   "one_liner": "AI 原生金融智能平台，将财务数据建模为知识图谱供 AI 查询与操作",
+   "review": "开源 AI 原生金融平台，面向会计核算、财务报告与投资管理场景。核心机制是将交易、事实与计算结构建模为知识图谱，每个租户拥有独立图数据库实例；提供 RoboLedger 会计与 RoboInvestor 投资组合两个扩展，写入采用带规则的分子信封结构。部署依赖 AWS CloudFormation，本地可通过 Docker 运行完整技术栈。",
+   "highlights": [
+    "每租户获得专属图数据库实例，本体、分类与计算结构可读取导出",
+    "RoboLedger 提供信息/事件/分类账三种 Block Molecule，支持 XBRL 2.1 报告生成（Arelle 校验）与 QuickBooks ELT（dbt/Dagster）",
+    "读写分离：读取走 GraphQL，写入为带 Idempotency-Key 与 SSE 进度流的命名 OperationEnvelope 操作"
+   ],
+   "use_cases": [
+    "会计期末结账、多期财务报表生成与 XBRL 报告发布",
+    "私有公司股权持仓登记、成本基础跟踪及与发行方报告的关联分析",
+    "加载并查询 SEC XBRL 公开申报数据用于上下文挖掘与对标"
+   ]
+  },
+  "sha": "ed4e4a904051",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7535dc65462f": {
+  "identity": {
+   "one_liner": "DuckDB 扩展，通过 PRAGMA 对视图执行增量视图维护",
+   "review": "该扩展为 DuckDB 提供增量视图维护（IVM）能力。用户为基表变更准备对应的 delta 表（含 BOOL 型多重性列标记插入或删除），再调用 PRAGMA ivm_upsert 对视图执行增量更新，结果写入 delta_result 表。SQL 支持范围有限：仅 SELECT、FILTER、GROUP BY、PROJECTION，聚合仅支持 SUM 与 COUNT；连接、嵌套子查询及 HAVING 等子句不受支持。构建时需将代码放入 DuckDB 项目目录并修改构建配置后用 make 编译。",
+   "highlights": [
+    "通过 PRAGMA ivm_upsert 对视图执行增量计算，变更结果输出到 delta_result 表",
+    "以 delta 表加 _duckdb_ivm_multiplicity 列建模基表的插入与删除，更新按删除加插入处理",
+    "支持含 GROUP BY 的视图，聚合支持 SUM 与 COUNT"
+   ],
+   "use_cases": [
+    "在 DuckDB 中对基于基表的聚合视图做增量更新而非全量重算",
+    "将基表变更批量写入 delta 表后统一处理视图增量",
+    "参与 DuckDB 扩展开发，按仓库流程编译并运行 unittest 测试"
+   ]
+  },
+  "sha": "7535dc65462f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "21bd2071fcd8": {
+  "identity": {
+   "one_liner": "收录曾登上 Hacker News 的 GitHub 仓库的可自托管搜索站",
+   "review": "HackerGit 汇总自 2007 年以来在 Hacker News 上分享过的所有 GitHub 仓库，数据来自 Algolia HN API、官方 HN API 与 GitHub GraphQL API，存入单个约 200 MB 的 SQLite 文件，支持按 points、评论数、发布者 karma、stars 搜索排序，用 Python 标准库实现，无 pip 依赖。适合想自托管 HN-GitHub 索引站或为 README 添加 HN 徽章的开发者。",
+   "highlights": [
+    "纯 Python 标准库实现，无需 pip install 或构建步骤，运行 python3 server.py 即可启动",
+    "提供 JSON API（搜索、仓库详情、用户 karma、统计）与 SVG/PNG 徽章、分享卡片端点",
+    "后台更新线程每 10 分钟拉取新帖，更新周期内以单事务重建汇总表"
+   ],
+   "use_cases": [
+    "搜索和排序历史上在 HN 上出现过的 GitHub 项目",
+    "在 README 中嵌入显示仓库 HN 表现的徽章或排名卡片",
+    "基于其 JSON API 做二次查询或数据分析"
+   ]
+  },
+  "sha": "21bd2071fcd8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

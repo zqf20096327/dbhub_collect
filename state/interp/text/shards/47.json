@@ -2840,5 +2840,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3d5144ed95c4": {
+  "identity": {
+   "one_liner": "基于 pdo_lake 扩展的 Laravel 数据库驱动，连接 TiDB Cloud Lake 与 Databend。",
+   "review": "lake-php-laravel 是为 TiDB Cloud Lake 和 Databend 提供的 Laravel 数据库驱动，底层依赖 pdo_lake 扩展，注册了独立的 lake 连接驱动，包含查询语法、模式语法、schema builder 等组件。面向使用 Laravel 13（PHP 8.4+）访问 Lake/Databend 的开发者。查询层支持 JSON 路径编译、日期函数、MERGE INTO 的 upsert，驱动层提供 stage 传输与批量加载等方法；但主键、外键、自增列、嵌套事务等特性在编译时抛出 LogicException。",
+   "highlights": [
+    "提供 lake 连接驱动，包含独立的 query grammar、schema grammar、schema builder 与 post processor",
+    "查询支持 JSON 路径编译（如 whereJsonContains 等使用 Lake JSON 函数）、whereDate 系列日期函数、upsert 编译为 MERGE INTO、whereFullText 编译为 match()",
+    "驱动操作经 LakeConnection.run() 统一处理，包含日志记录、QueryExecuted 事件分发、QueryException 报错、pretend() 跳过；提供 uploadToStage、streamLoad、presign 等 stage 传输与批量加载方法"
+   ],
+   "use_cases": [
+    "Laravel 应用需要读写 TiDB Cloud Lake 或 Databend 数据库",
+    "项目涉及 stage 文件传输或批量数据加载场景",
+    "需要反倒排索引（fullText）与向量、geometry 等扩展列类型的数据建表"
+   ]
+  },
+  "sha": "3d5144ed95c4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2585,5 +2585,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "705c8d096eca": {
+  "identity": {
+   "one_liner": "封装 PouchDB 的糖衣 API 库，统一文档返回格式并提供便捷方法",
+   "review": "Pouchy 是对 PouchDB 的封装扩展库，用于浏览器和 Node.js 环境。它在 PouchDB 之上标准化文档返回格式（统一 _id/_rev 位于文档顶层），提供 .all()、.clear() 等便捷方法，并预加载 pouchdb-find 插件、支持声明式同步配置。需要本地持久化时须自行安装 leveldb 等适配器。适合使用 PouchDB 并希望减少样板代码的开发者。",
+   "highlights": [
+    "代理 PouchDB API，可直接当作 PouchDB 实例使用",
+    "统一各方法返回文档中 _id/_rev 的位置与格式",
+    "提供 .all()、.clear()/.deleteAll()、返回文档数组的 .find 等方法，预加载 pouchdb-find 插件"
+   ],
+   "use_cases": [
+    "在浏览器（IndexedDB/WebSQL）或 Node.js（配合 leveldb 适配器落盘）中使用 PouchDB 存储",
+    "构建与远程 CouchDB/PouchDB 实例复制的本地数据库",
+    "简化 PouchDB 开发中 _id/_rev 管理与常用查询的样板代码"
+   ]
+  },
+  "sha": "705c8d096eca",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4f8e50922809": {
+  "identity": {
+   "one_liner": "LoopBack 框架的 ArangoDB 数据源连接器，基于 Node.js 实现。",
+   "review": "该模块为 LoopBack 框架提供 ArangoDB 连接器，供 LoopBack 应用通过数据源配置访问 ArangoDB。2.x 版本仅支持 Node v4.x 与 v6.x；若使用 ArangoDB 2.8.x 需在配置中指定旧版本。项目自身测试默认连接 localhost:8529 的服务器，可通过项目根目录或用户主目录下的 .loopbackrc（JSON 格式）自定义连接设置，但该配置方式已被标记为弃用，应用内配置应参考 LoopBack 官方文档。仅当服务器启用认证时才需提供用户名和密码。许可证为 MIT。",
+   "highlights": [
+    "为 LoopBack 框架提供 ArangoDB 数据源连接器",
+    "支持通过 JSON 格式的 .loopbackrc 文件自定义连接配置（host、端口、用户名/密码）",
+    "针对 ArangoDB 2.8.x 提供旧版本兼容的配置选项"
+   ],
+   "use_cases": [
+    "LoopBack 应用需要连接 ArangoDB 作为数据源",
+    "使用 ArangoDB 2.8.x 的项目迁移至连接器 2.x 版本",
+    "本地开发与测试时自定义 ArangoDB 服务器连接参数"
+   ]
+  },
+  "sha": "4f8e50922809",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb7c95b507eb": {
+  "identity": {
+   "one_liner": "读取 MoneyWiz SQLite 数据库的 Python API 库",
+   "review": "moneywiz-api 是一个 Python 库，用于读取 MoneyWiz 应用的 SQLite 数据库文件，通过 pip 安装，提供 MoneywizApi 与 MoneyWiz 两种加载方式。其 SchemaProfile 机制将数据类字段映射到数据库列名并支持转换器，可基于 DEFAULT_SCHEMA_PROFILE 定制字段映射，另提供 moneywiz-cli 交互式命令行。项目处于早期阶段，面向需要在 Python 中访问 MoneyWiz 数据的用户。",
+   "highlights": [
+    "提供 MoneywizApi 与 MoneyWiz 两级 API，加载记录前自动从数据库路径解析并校验 SchemaProfile",
+    "SchemaProfile 支持字段到数据库列的映射与转换器，可基于 DEFAULT_SCHEMA_PROFILE 定制",
+    "附带 moneywiz-cli 交互式 shell；单元测试无需数据库，集成测试通过 MONEYWIZ_TEST_DB_PATH 环境变量 opt-in"
+   ],
+   "use_cases": [
+    "在 Python 脚本或应用中读取本地 MoneyWiz SQLite 数据库的记录",
+    "需要自定义数据库字段映射或适配不同 schema 的分析任务",
+    "通过命令行交互式查看 MoneyWiz 数据"
+   ]
+  },
+  "sha": "eb7c95b507eb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d78e9ccc939": {
+  "identity": {
+   "one_liner": "面向市政人员与市民的城市事件管理平台，基于Spring Boot与PostGIS",
+   "review": "UrbanPulse 用于登记、分类、跟踪与分析市民上报的城市事件，服务对象为市政工作人员（Web 端）和市民（React Native 移动端）。后端为 Java 25/Spring Boot，数据库用 PostgreSQL/PostGIS 与 Flyway 迁移，API 由 OpenAPI 3.1 契约定义并提供 Swagger UI。README 明确标注项目仍在开发中，照片上传展示、分配表单等功能列为 Planned；事件流转使用乐观锁定并记录审计日志。",
+   "highlights": [
+    "基于 OpenAPI 3.1 契约提供 17 个已实现的事件管理操作，含 JWT 认证与基于角色的权限检查",
+    "数据库模式由 Flyway 迁移创建，使用 PostgreSQL 18 与 PostGIS 3.6 存储位置数据",
+    "前端为 pnpm workspace，包含市政人员 Web 应用（React/Vite）与市民移动应用（React Native/Expo）"
+   ],
+   "use_cases": [
+    "登记、按角色分类与跟踪市民上报的城市事件及其状态历史",
+    " Municipal staff: 通过 Web 端筛选列表处理事件收件箱并查看详情",
+    "市民通过移动端上报带位置的事件并查看自己的报告记录"
+   ]
+  },
+  "sha": "1d78e9ccc939",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2737,5 +2737,269 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "22dab168c2bc": {
+  "identity": {
+   "one_liner": "Go 编写的基于 LSM 树的键值数据库",
+   "review": "keydb 是用 Go 编写的键值数据库，采用 LSM 树结构存储数据，键长度上限为 1024 字节，支持键压缩以便在同一表中存储时间序列数据。提供事务接口（BeginTX/Put/Commit），并附带 dbdump/dbload 工具用于数据库备份恢复。该项目已声明弃用，作者建议改用 robaho/leveldb。适合需要在 Go 程序中嵌入键值存储的开发者。",
+   "highlights": [
+    "基于 LSM 树实现，支持事务写入（BeginTX/Put/Commit）",
+    "键长上限 1024 字节，支持压缩键以存储时间序列数据",
+    "提供 dbdump/dbload 工具将数据库保存/恢复为单文件"
+   ],
+   "use_cases": [
+    "Go 程序中的嵌入式键值存储",
+    "时间序列数据（如市场行情数据）的本地存储",
+    "需要通过 keydbr 进行远程访问或多进程共享的场景"
+   ]
+  },
+  "sha": "22dab168c2bc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c0806c2c239": {
+  "identity": {
+   "one_liner": "基于 Olist 电商数据集的端到端数据工程项目，覆盖 ETL 到 Power BI 报表。",
+   "review": "ShopFlow DataOps 是一个数据工程实践项目，读取 Olist 巴西电商公开数据集的 CSV 文件，用 Python/Pandas 做抽取与校验后加载到 SQL Server，按星型模型组织维度表与事实表，并提供四个 SQL 分析视图供 Power BI 展示。项目含 41 个 pytest 测试，CI 由 Docker 内运行的 Jenkins 管道执行，用 Jira 管理任务。原始 CSV 不纳入版本控制，EUR 换算使用固定演示汇率。",
+   "highlights": [
+    "实现从 CSV 抽取、SQL Server 星型模型加载到 Power BI 报表的完整数据管道",
+    "包含 41 个 pytest 测试，覆盖数据校验、ETL 转换和 SQL 加载器的事务回滚场景",
+    "Jenkins 管道在 Docker 中运行，通过 Poll SCM 监控 GitHub main 分支并生成 JUnit 测试报告"
+   ],
+   "use_cases": [
+    "学习或演示从原始 CSV 到 BI 仪表盘的端到端数据工程流程",
+    "作为数据质量对账的参考实现，源数据与数仓金额差异为 0.00 BRL",
+    "练习 Docker + Jenkins 持续集成与 pytest 自动化测试的数仓项目"
+   ]
+  },
+  "sha": "2c0806c2c239",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9de5feb5d3ce": {
+  "identity": {
+   "one_liner": "面向 Deno 的嵌入式持久化 NoSQL 数据库，采用 MongoDB 风格查询 API",
+   "review": "DnDB 是一个用 JS 编写、面向 Deno 运行时并支持 TypeScript 的嵌入式持久化数据库，灵感来自 NeDB。它将集合实例化为用户指定的文件，通过流式读写和默认 4096 字节的缓冲区处理数据，查询语法模拟 MongoDB API，支持异步 Promise 或回调两种调用方式。项目目前处于 Beta 阶段，部分配置选项和排序、跳过等功能仍在路线图中。",
+   "highlights": [
+    "支持 insert、find、findOne、update、updateOne、remove、removeOne 等异步 API，可通过 Promise 或回调调用",
+    "查询支持比较运算符（$lt/$gte 等）、逻辑运算符（$or/$and 等）、$regex 及点号嵌套查询，find 可指定投影字段",
+    "数据持久化到指定文件，支持 autoload 自动加载与自定义缓冲区大小（默认 4096 字节），文档自动生成 RFC4122 UUID 作为 _id"
+   ],
+   "use_cases": [
+    "Deno 或 TypeScript 项目中需要本地文件持久化 JSON 数据存储的场景",
+    "需要使用 MongoDB 风格查询语法但运行于嵌入式环境的应用",
+    "单进程应用的文档级增删改查，如小型服务端数据存储"
+   ]
+  },
+  "sha": "9de5feb5d3ce",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fa1d9383b94f": {
+  "identity": {
+   "one_liner": "基于 eBPF 内核追踪的服务器网络依赖记录工具，存储于 PostgreSQL 并以 Grafana 展示。",
+   "review": "shawk 在每台主机上用 eBPF 追踪所有进程的 TCP/UDP 及 Unix stream socket 连接，无需插桩即可覆盖 cron 任务和第三方软件；agent 每 15 秒以 OTLP 上报，由 OpenTelemetry Collector connector 写入 PostgreSQL 并将指标送 Prometheus，Grafana 提供仪表盘。它记录每台主机的观测时段，可区分「未被使用」与「未被观测」。要求 Linux BTF 内核（5.14+，Unix socket 追踪需 BPF trampoline）、PostgreSQL 14+、Prometheus 3 与 Grafana；不追踪 datagram Unix socket 与 RDMA 传输。",
+   "highlights": [
+    "内核 eBPF 追踪全部进程的 TCP/UDP 与 Unix stream socket 连接，无需按语言或协议插桩",
+    "同目标服务的流量在内核聚合，TCP 仅在连接状态变化时追踪，agent 不采样，低频任务（如每月一次的作业）也被记录",
+    "记录主机观测时段与丢包时段，支持用 SQL（shawk_v1 视图）查询如「过去 90 天谁连接过某数据库」并判断是否在观测中"
+   ],
+   "use_cases": [
+    "系统变更前排查依赖：确认哪些进程仍在使用某个数据库、主机或服务",
+    "部署后比对：通过 Grafana Changes 仪表盘查看新出现或消失的依赖",
+    "集群可观测性建设：agent 经 OTLP 汇聚到 Collector，指标与 OBI 应用层指标共享同一 job 命名"
+   ]
+  },
+  "sha": "fa1d9383b94f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "762f45df2706": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 + SQLite 的 Windows 本地离线题库与组卷桌面软件",
+   "review": "TK试题题库是一款运行于 Windows 10/11 x64 的桌面软件，用于题目录入、分类检索、选题组卷、分页排版和 Word/Excel 导入导出，面向教师个人和教育机构。数据默认保存在本机 SQLite 数据库，v0.1.85 起本地功能免费且无需注册激活；Word 文档由本机 Rust 模块读写，不依赖 Office。小程序发布为可选联网功能。安装包未经 Authenticode 签名。",
+   "highlights": [
+    "支持单选、多选、填空、判断、简答及自定义题型，含图片、表格、数学公式与富文本编辑，并可从 Word .docx / Excel .xlsx 批量导入",
+    "提供手动选题与随机抽题、试卷分页排版与打印、重复题检测、回收站、.tqb 备份恢复和数据目录迁移",
+    "基于 Tauri 2、Vue 3、TypeScript、Rust 与 SQLite 构建，使用 Tiptap 与 canvas-editor 实现录题和试卷编辑，源码采用 MIT 许可证"
+   ],
+   "use_cases": [
+    "教师或机构在本地整理 Word/Excel 中的既有试题，建立可检索、可查重的分类题库",
+    "手动选题或按学科/章节/标签条件随机抽题，经分页排版后导出 Word 试卷或直接打印",
+    "需要定期备份、迁移题库数据，或按需将选定试卷发布到配套小程序供学员手机答题"
+   ]
+  },
+  "sha": "762f45df2706",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "84a59aae8130": {
+  "identity": {
+   "one_liner": "人工整理的人和小鼠配体-受体互作对数据库",
+   "review": "CellTalkDB 通过文本挖掘并人工核实 STRING 蛋白互作，收录人源 LR 对 3,398 条、鼠源 2,033 条。面向使用 scRNA-seq 研究细胞间通讯的研究者，可将 LR 对下载后替换 SoptSC、SingleCellSignalR、CellPhoneDB 等工具的底层库；也提供改造版 R 包 scsrctdb-1.0（需 R>3.6），含 cell_signaling 与 visualize 函数，并提供 NCBI 基因符号校正参数 gene_resive。",
+   "highlights": [
+    "提供人工核实的人（3,398 对）与小鼠（2,033 对）配体-受体互作数据及注释文件，可在 database/ 与 data/ 目录下载",
+    "提供修改版 R 包 scsrctdb-1.0（基于 SingleCellSignalR，替换其底层数据库），支持 cell_signaling 分析与 visualize 可视化",
+    "支持将 LR 对替换入 SoptSC、SingleCellSignalR、CellPhoneDB 等工具的底层库"
+   ],
+   "use_cases": [
+    "用 scRNA-seq 数据推断人/小鼠细胞间通讯时，替换既有工具的 LR 数据库",
+    "使用 scsrctdb 包在单细胞转录组数据上运行 cell_signaling 分析并绘图",
+    "需要按 NCBI Gene 数据库校正基因符号后再比对 LR 对的场景"
+   ]
+  },
+  "sha": "84a59aae8130",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29bf467766f7": {
+  "identity": {
+   "one_liner": "基于 DuckDB 扩展的 GPU 加速 SQL 执行引擎，支持 Apple Metal 与 CUDA 双后端",
+   "review": "gpudb 是以 DuckDB Community Extension 形式发布的 GPU 加速组件，包含 extension 与 wrapper 两部分：extension 提供 gpu_* 函数，wrapper（gpudb 命令行与 gpudb.connect()）使已有 DuckDB SQL 无需改写即可在 GPU 上执行，并按测量结果决定由 GPU 还是 DuckDB 应答。适用于已有 DuckDB 分析负载的用户。限制包括：Apple Silicon 需 macOS 15+，Linux 需 glibc 2.34+，窗口函数、DOUBLE 聚合等语句仍留在 DuckDB。",
+   "highlights": [
+    "以 DuckDB Community Extension 安装，支持 DuckDB ≥ 1.5.5，提供 Metal 与 CUDA 两种后端",
+    "通过 gpudb shell 或 gpudb.connect() 使普通 DuckDB SQL 无需修改即可路由到 GPU，未达阈值时由 DuckDB 执行并返回相同结果",
+    "提供 gpu_upload、gpu_sum_resident、fused join-聚合等显式 gpu_* 函数，支持列常驻 GPU 内存与 DECIMAL 128 位求和"
+   ],
+   "use_cases": [
+    "已有 DuckDB 应用、BI 工具与 ORM 的 Python 接入，将 duckdb.connect 替换为 gpudb.connect()",
+    "对超过一百万行的大表反复执行相同聚合、GROUP BY、top-k 查询的仪表盘与监控场景",
+    "支持多表 JOIN、子查询、CTE 的 TPC-H 类分析查询的 Notebook 交互式探索"
+   ]
+  },
+  "sha": "29bf467766f7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d6a78e0a3dcf": {
+  "identity": {
+   "one_liner": "华为云 OBS 对象存储服务的 Node.js SDK，通过 ObsClient 封装 REST API",
+   "review": "该仓库是华为云对象存储服务（OBS）的 Node.js SDK，以 ObsClient 类提供桶与对象的操作接口，面向使用 JavaScript/Node.js 访问华为云 OBS 的开发者。SDK 包含上传下载（含断点续传 uploadFile/downloadFile）、分页列举、对象标签与元数据设置、桶事件通知等 API，并支持通过 max_connections、http_agent 等参数在初始化时配置 HTTP 连接行为。README 内容为各版本更新日志。",
+   "highlights": [
+    "提供 ObsClient 类，覆盖桶/对象的增删查改、标签、元数据、事件通知等 API",
+    "支持断点续传上传下载（uploadFile/downloadFile）及 ProgressCallback 进度回调",
+    "初始化时可配置最大 HTTP 连接数、HTTP(S) agent、user_agent 等参数"
+   ],
+   "use_cases": [
+    "在 Node.js 应用中读写华为云 OBS 桶与对象",
+    "需要断点续传或上传/下载进度回调的大文件传输场景",
+    "对对象设置标签、元数据、保留策略（WORM）等管理操作"
+   ]
+  },
+  "sha": "d6a78e0a3dcf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d4e55955b53": {
+  "identity": {
+   "one_liner": "分布式可自托管的服务可用性监控系统，以单个 Go 二进制运行",
+   "review": "SolidPing 是一个自托管的分布式可用性监控工具，面向需要监控服务的开发与运维人员。它提供 44 种检查类型，支持多区域 worker 和私有 agent，并包含状态页、事件管理与值班升级机制。数据默认存于 /data 卷中的 SQLite，生产环境可通过 SP_DB_TYPE/SP_DB_URL 环境变量切换为 PostgreSQL，迁移在首次启动时自动执行。许可证为 AGPL-3.0。",
+   "highlights": [
+    "提供 44 种检查类型，涵盖 HTTP/TCP/UDP/ICMP/DNS、SSL 证书、多类数据库与消息队列，以及沙箱 JS 脚本和无头浏览器检查",
+    "支持多区域 worker、私有 agent、状态页、事件管理与值班升级",
+    "可经 Docker、二进制、Homebrew、Helm chart 等多种方式部署，配置全部通过 SP_ 环境变量完成"
+   ],
+   "use_cases": [
+    "对网站、API、数据库、消息队列等多类服务进行定时可用性巡检",
+    "使用 heartbeat 检查监控 cron 任务或 CI 的执行是否按时发生",
+    "通过多区域 worker 与私有 agent 监控内网或不同地域的服务，并向外发布状态页"
+   ]
+  },
+  "sha": "5d4e55955b53",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0bfe4fd99eaa": {
+  "identity": {
+   "one_liner": "DuckDB 扩展，自动为 SQL 聚合查询注入隐私保护噪声",
+   "review": "该扩展是 DuckDB 的社区插件，通过 PRIVACY_KEY、PRIVACY_LINK、PROTECTED 三种 DDL 声明隐私结构，透明改写聚合查询计划。提供两种机制：PAC 模式基于 64 个并行子样本的方差校准噪声，提供经验性成员推理攻击抗性与互信息界；DP-elastic 模式用弹性敏感度从外键连接结构推导敏感度并注入 Laplace 噪声，给出形式化 (ε,δ)-DP 保证。适用于需在 DuckDB v1.5+ 上做隐私保护分析的用户，可经 community 安装或以 WASM 在浏览器运行。限制：不支持窗口函数与 EXCEPT/INTERSECT，嵌套聚合和全外连接被拒绝。",
+   "highlights": [
+    "提供 PAC 与 DP-elastic 两种隐私模式，SQL 语法无需改动，查询计划透明改写",
+    "通过 PRIVACY_LINK 外键链在连接中传播隐私单元，DP 模式可自动推导连接路径",
+    "支持 SUM、COUNT、AVG、COUNT(DISTINCT) 等聚合，提供 dp_epsilon、pac_mi 等参数与噪声结果对比工具"
+   ],
+   "use_cases": [
+    "需要防止成员推理攻击的聚合分析查询（PAC 模式）",
+    "需要形式化 (ε,δ)-差分隐私证书的数据发布场景（DP-elastic 模式）",
+    "在浏览器中通过 WASM 版本体验或演示隐私查询"
+   ]
+  },
+  "sha": "0bfe4fd99eaa",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3885c500fb7": {
+  "identity": {
+   "one_liner": "基于 Go 与 Fyne 的 BoltDB 桌面/移动端查看器，支持桶树浏览与键值检索。",
+   "review": "这是一个用 Go 和 Fyne 编写的 BoltDB（bbolt）图形查看工具，由 v1 分支的 Flutter 版本重写而来，面向需要检查 BoltDB 文件内容的开发者。它以只读方式打开数据库，支持桶树浏览、全文件键的扁平表格、前缀搜索和多种编码读取；删除操作需显式开启编辑开关。桌面端用 go build 构建，移动端通过 Fyne 工具链打包 Android/iOS 应用，并对大文件设置了预览、分页等读取上限。",
+   "highlights": [
+    "以桶树和扁平表格两种视图浏览 BoltDB 键值，桶嵌套按路径逐段解析，支持键名包含 / 的情况",
+    "默认只读浏览，值可按 Base64/Raw/Hex 读取并复制，大值截断预览、导出时写入完整值；删除键/桶需显式开启 Allow edits 开关",
+    "支持桌面与移动端：窄屏采用单页导航布局，扁平表格按可见行（每格 512 B）与 200 行分页延迟读取，并定义了预览、桶列表、搜索结果等读取上限"
+   ],
+   "use_cases": [
+    "检查或调试本地 BoltDB/bbolt 数据库文件的内容与结构，无需先写代码",
+    "在无可用数据库文件时，通过 Sample 功能生成演示库来学习嵌套桶等结构",
+    "在 Android 或 iOS 手机上查看 BoltDB 文件（需 Fyne 工具链打包）"
+   ]
+  },
+  "sha": "c3885c500fb7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "19fcbb302482": {
+  "identity": {
+   "one_liner": "面向 Firebase/FDB 的响应式 ORM 框架，简化复杂数据结构建模。",
+   "review": "Realtime 是一个 Swift ORM 框架，通过继承 Object 类并用 Property、Reference、File 等属性包装器定义数据模型，完整支持 Firebase Realtime Database，部分支持 FoundationDB。内置事务写入、UITableView/UICollectionView 自动更新数据源，并附 NodeJS 模块。要求 Xcode 9+、Swift 4.1+，对象不可跨线程传递。",
+   "highlights": [
+    "支持通过 Object 子类定义模型，包含属性、引用、关系、文件、集合等类型，属性基于 @propertyWrapper 实现",
+    "提供 Transaction 对象执行写入操作，支持 UITableView/UICollectionView 数据源自动更新，Forms 模块支持 Combine",
+    "完整支持 Firebase Realtime Database 与 Firebase Storage，支持 SwiftPM 和 CocoaPods 安装"
+   ],
+   "use_cases": [
+    "iOS 应用中使用 Firebase Realtime Database 存储复杂关系型数据结构",
+    "需要数据变更自动驱动 UI 更新的移动端列表/表单界面",
+    "Vue.js 应用可配合仓库 js 目录下的 NodeJS 模块使用"
+   ]
+  },
+  "sha": "19fcbb302482",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

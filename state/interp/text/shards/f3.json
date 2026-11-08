@@ -2900,5 +2900,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e0871b36b87e": {
+  "identity": {
+   "one_liner": "受 Laravel Eloquent 启发的 JavaScript/TypeScript MongoDB ORM 库",
+   "review": "Mongoloquent 是面向 Node.js 环境的 MongoDB ORM 库，供 JavaScript/TypeScript 开发者使用，语法设计参考 Laravel Eloquent。它同时提供 ORM 与 Query Builder 两种数据交互方式，支持多种关系类型、多数据库连接及测试环境；文档托管于 mongoloquent.com。",
+   "highlights": [
+    "提供 ORM 与 Query Builder 两种方式与 MongoDB 数据交互",
+    "支持 TypeScript 类型安全及多种关系类型",
+    "支持多数据库连接与测试环境"
+   ],
+   "use_cases": [
+    "Node.js 项目中通过模型操作 MongoDB 数据",
+    "需要 Query Builder 构建查询的场景",
+    "依赖多数据库连接的应用"
+   ]
+  },
+  "sha": "e0871b36b87e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e69722a120d1": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Python 磁盘持久化缓存库，提供 Django 后端与进程安全缓存。",
+   "review": "diskcache-community 是 python-diskcache 的社区维护分支，包名改为 diskcache_community 安装，保留原 cache.db 模式、文件布局与序列化格式，可与上游包共存于同一环境。它基于标准库 sqlite3 纯 Python 实现，提供 Cache、FanoutCache、DjangoCache 等键值缓存，并针对 CVE-2025-69872 新增可选的 SafeDisk。适用于需持久化缓存且上游已停止发版的场景。",
+   "highlights": [
+    "提供 Cache、FanoutCache、DjangoCache，支持过期、标签、大小限制及 LRU/LFU 等淘汰策略，支持多 SQLite 文件分片",
+    "包含持久化 Deque 与 Index，以及带防击穿的 memoize、跨进程锁、信号量等配方；线程/进程安全并支持 fork",
+    "新增可选 SafeDisk/SafeJSONDisk 限制反序列化类型，缓存目录以 0700 权限创建，只读目录自动以只读打开；纯 Python 无需服务器或编译器"
+   ],
+   "use_cases": [
+    "需要跨进程、跨重启持久化的 Python 函数结果记忆化",
+    "为 Django 项目提供磁盘持久化缓存后端",
+    "缓存目录可能被不可信写入方访问，需要限制 pickle 反序列化风险的场景"
+   ]
+  },
+  "sha": "e69722a120d1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7a0dab191bbb": {
+  "identity": {
+   "one_liner": "Go 编写的向量数据库，用于向量存储、索引与相似度检索。",
+   "review": "Kikiola 是一个用 Go 实现的向量数据库，提供向量的存储、索引和检索功能，服务端默认运行在 localhost:3400。它支持多语言与文本嵌入、高维向量、并发写入以及嵌入重排序（带相关性分数），可存储文档、图片、音视频等对象。需要安装 Go，通过克隆仓库、go build 编译、go run 启动；测试用 go test ./...。项目采用 MIT 许可证。",
+   "highlights": [
+    "支持张量压缩、多语言嵌入与高维向量存储",
+    "支持并发与多写入，采用多节点/分片的分布式存储方式",
+    "支持带相关性分数的嵌入重排序，可处理文档、图片、音频、视频等对象"
+   ],
+   "use_cases": [
+    "相似度检索与推荐系统场景",
+    "人工智能与机器学习应用中的向量存储与查询",
+    "文档、图片、音视频及多语言文本的嵌入生成与存储"
+   ]
+  },
+  "sha": "7a0dab191bbb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "030e3517478b": {
+  "identity": {
+   "one_liner": "通过 npx 一键安装的 AI 编码代理工具集，提供记忆、代码搜索与安全执行等 7 个模块。",
+   "review": "KruschStack 是一个 MIT 协议的开源工具集，整合记忆管理、Git/AST 代码搜索、两阶段提交代码执行、前端设计工具与任务路由等组件，以 MCP 协议对外提供 39 个工具。支持两种安装方式：npx krusch-stack init（Node >= 22，基于 node:sqlite）或 docker compose 启动 PostgreSQL 16 + pgvector。README 中包含大量基准测试成绩与评估细节，部分提交处于待榜单审核状态，读者可参考其 BENCHMARKS.md 核实。",
+   "highlights": [
+    "提供 39 个 MCP 工具，覆盖工作记忆、Git/AST 依赖图、文件检索、两阶段提交式代码修改与任务路由",
+    "支持零配置 npx 安装（node:sqlite 存储）和 Docker 全栈部署（PostgreSQL 16 + pgvector）",
+    "自动配置 Claude Code、Cursor、Windsurf、Antigravity 的 MCP 接入"
+   ],
+   "use_cases": [
+    "为基于 Claude Code、Cursor 等工具的编码代理添加记忆与代码检索能力",
+    "需要分阶段执行（2PC 日志 + 原子重命名）的代码修改工作流",
+    "本地或容器化部署的 AI 代理开发与基准评估环境"
+   ]
+  },
+  "sha": "030e3517478b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

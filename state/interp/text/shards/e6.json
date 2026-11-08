@@ -2846,5 +2846,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cd436805659a": {
+  "identity": {
+   "one_liner": "基于 Lambda@Edge 与 CloudFront 的电商 A/B 测试演示项目",
+   "review": "该项目演示如何在电商网站的边缘节点（CloudFront 与源站之间）实现 A/B 测试，包含五个可独立部署的模块：随机分流、Cookie 粘性分流、以及分别基于 CloudFront KeyValueStore、S3 配置文件和 DynamoDB 的动态权重调整方案。面向开发者、解决方案架构师和项目经理，需具备云计算经验，附带逐步操作的 workshop 与测试脚本。",
+   "highlights": [
+    "提供五个可独立部署的模块，覆盖随机分流、Cookie 粘性分流和动态权重调整三种场景",
+    "通过 CloudFront Functions 实现 URL 重写与 Cookie 设置，通过 Lambda@Edge 实现需网络调用的配置读取",
+    "使用 CDK 部署，支持从 CloudFront KeyValueStore、S3 或 DynamoDB 动态修改实验权重而无需重新部署"
+   ],
+   "use_cases": [
+    "电商网站首页布局改版的流量分流与效果验证",
+    "需要为回访用户保持一致页面体验的粘性分流场景",
+    "需要在不重新部署代码的情况下实时调整分流比例的场景"
+   ]
+  },
+  "sha": "cd436805659a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d0c55fef6966": {
+  "identity": {
+   "one_liner": "本地运行的编码代理记忆库，按日期索引并供多工具检索过往工作记录",
+   "review": "Thenwise 是一个运行在本地的插件，为 Claude Code、Copilot CLI、Codex 和 Antigravity 提供共享的过往聊天、提交、PR 和笔记记忆，使用 SQLite 存储。安装后首次会话会后台读取历史，运行无需模型、API key 或账号。可通过 thenwise vault write 导出为 Markdown 笔记，支持导出脱敏后分享。",
+   "highlights": [
+    "支持 Claude Code、Copilot CLI、Codex、Antigravity 及 Cursor、Gemini CLI、OpenCode 等工具共享同一本地记忆",
+    "提供 memory_why、memory_read、memory_tried、memory_asof、memory_trace 等查询机制，按日期与来源返回结果",
+    "无需模型、API key 或账号；提供 thenwise setup、doctor、export、import、vault write、asof 等命令"
+   ],
+   "use_cases": [
+    "回溯项目中某个决策、尝试过的方案或某天的代码状态",
+    "多工具或跨会话场景下延续此前的工作进度",
+    "将记忆导出为 Markdown 笔记，或脱敏后交给新成员/承包商查阅"
+   ]
+  },
+  "sha": "d0c55fef6966",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b3d978c4946": {
+  "identity": {
+   "one_liner": "面向 Flutter/Dart 的类型安全 Firestore ODM，通过代码生成提供类型化查询与写入。",
+   "review": "firestore_odm 是 Flutter/Dart 生态的 Firestore ODM 包，定位为 cloud_firestore_odm 的后续维护版本。开发者用注解描述文档模型后，由 build_runner 生成类型化的查询、部分更新、聚合、事务和流式监听代码，字段名拼写错误或类型不匹配会在编译期报错。要求 Dart 3.8+ 与 cloud_firestore 6，支持 Android、iOS、macOS、Windows 和 web。",
+   "highlights": [
+    "基于 @firestoreOdm 注解和 build_runner 代码生成，提供类型化的过滤（含 & 与 |）、嵌套字段访问、排序分页、聚合、事务与批量写入",
+    "支持 patchAll/deleteAll 批量操作，并按 Firestore 单批 500 条写入限制自动分块；兼容普通 Dart 类、freezed 和 json_serializable 模型",
+    "DateTime、GeoPoint、DocumentReference、Blob 按 Firestore 原生类型存储；提供从 cloud_firestore_odm 迁移的 codemod 命令"
+   ],
+   "use_cases": [
+    "Flutter 应用中以类型安全方式读写、查询和订阅 Cloud Firestore 文档",
+    "从已停止发版的 cloud_firestore_odm（依赖 cloud_firestore 5）迁移到 cloud_firestore 6 / firebase_core 4 的项目",
+    "需要按查询条件批量更新或删除文档、执行类型化聚合与事务的 Firestore 数据层"
+   ]
+  },
+  "sha": "6b3d978c4946",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1283efabcf04": {
+  "identity": {
+   "one_liner": "多 LLM 提供商支持的通用聊天机器人平台，含 MCP、RAG 与语音对话",
+   "review": "KateChat 是一个通用聊天机器人平台，可作为定制聊天系统的基础。前端为 React/TypeScript，后端为 Node.js GraphQL API（另有 Rust 实现），支持 AWS Bedrock、OpenAI、Yandex AI 及 OpenAI 兼容端点，实时通信基于 GraphQL 订阅和 WebSocket。使用需自行提供 LLM API 密钥，本地运行需 Node.js 24，也可用 Docker Compose 部署。",
+   "highlights": [
+    "支持多 LLM 提供商并可在会话中切换模型，兼容 OpenAI 协议的自定义 REST 端点（如 Ollama）",
+    "实现 RAG（PDF/DOCX/TXT 经 Docling 解析，向量存储于 PostgreSQL/SQLite/MS SQL），并支持外部与内部 MCP 服务器（含工具调用审批机制）",
+    "提供语音对话（WebRTC/WebSocket 实时模型）、图片输入与生成、浏览器端 Pyodide Python 执行，以及基于 SQS+Redis 的分布式消息队列"
+   ],
+   "use_cases": [
+    "搭建需要接入多个 LLM 提供商并支持会话内切换模型的自定义聊天应用",
+    "需要文档 RAG 问答、MCP 工具调用或语音交互的企业内部助手场景",
+    "基于可定制配置（品牌、模型、功能开关）快速部署生产级聊天服务"
+   ]
+  },
+  "sha": "1283efabcf04",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

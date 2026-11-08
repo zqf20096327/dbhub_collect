@@ -2943,5 +2943,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1fa04f28e90c": {
+  "identity": {
+   "one_liner": "解析与调试复合唯一标识符（UUID、ULID、Snowflake 等）的 CLI 工具",
+   "review": "uuinfo 是用 Rust 编写的命令行工具，用于解析带有内置结构（时间戳、随机数、节点、序列）的唯一标识符。它自动检测 ID 格式，输出包含各字段拆解、按类型着色位图的数据卡片，并支持 JSON、短格式、二进制等多种输出。当自动检测不确定时，可用 -e 展示全部可能结果，或用 -f 强制指定格式；Snowflake 类 ID 因仅为数字，必须强制指定变体。安装方式覆盖 Homebrew、APT、静态二进制、Scoop 和 cargo，3-Clause BSD 许可。适合需要还原 ID 中时间戳、节点等内嵌信息的开发与运维人员。",
+   "highlights": [
+    "支持多种 ID 格式：128 位（UUID v1–v8、ULID、TypeID、KSUID 等）、64 位（Twitter/Discord/Instagram 等 Snowflake 变体、TSID、SCRU64）、ASCII 类（CUID、Nano ID、Sqids 等），以及 MongoDB ObjectId、IPFS CID、IPv4/IPv6 等网络标识",
+    "提供自动检测、-e 全格式解析、-f 强制格式三种解析模式，Snowflake 变体可按时间排序比对辅助识别",
+    "输出支持卡片（含 ANSI 着色位图与十六进制/二进制表示）、short、JSON、binary 四种形式，支持 STDIN 管道输入和 --epoch 自定义纪元覆盖"
+   ],
+   "use_cases": [
+    "调试数据库或分布式系统日志中出现的 ID，还原其中内嵌的时间戳、节点、序列等信息",
+    "遇到来源不明或可能对应多种格式的 ID 时，用 -e 查看全部解析结果或用 -f 强制格式消歧",
+    "通过 JSON 输出将解析结果接入 jq 或其他命令行工具进行自动化处理"
+   ]
+  },
+  "sha": "1fa04f28e90c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e64b0e524f82": {
+  "identity": {
+   "one_liner": "面向代码优先数据栈的反向 ETL 工具，用 YAML 声明从数仓回写外部系统的同步",
+   "review": "drt 是一个开源反向 ETL 命令行工具，用于把数仓数据同步到 Slack、HubSpot 等外部目的地，配置以 YAML 存放在用户仓库中。命令风格仿照 dbt（init/run/plan/apply），支持 plan/apply 审查写入、delete 守卫、fill_empty 写入策略、MCP 服务器与 Claude Code 技能。当前处于 v0.x 阶段；plan 功能要求目的地是可读回的 SQL 数据库或数仓。",
+   "highlights": [
+    "提供 drt plan/drt apply 工作流：plan 只读生成变更集，apply 在数据或配置变更时拒绝写入，并支持 max_delete_pct 删除守卫与 write_policy: fill_empty 策略",
+    "内置 MCP 服务器（drt mcp run）暴露约 20 个工具，并提供 Claude Code 技能用于生成、调试和审查同步配置",
+    "源连接器包含 BigQuery、DuckDB、PostgreSQL、Snowflake、SQLite、Redshift、ClickHouse、MySQL 等，可通过 pip extras 安装，核心以 Apache 2.0 开源"
+   ],
+   "use_cases": [
+    "数据团队需要将仓库中的模型结果定期回写到 CRM、Slack 等业务工具，且配置希望版本化在 Git 中经 PR 审查",
+    "需要通过 GitHub Actions、cron 或 Dagster/Airflow/Prefect 以 CLI 方式调度同步（提供退出码与 --output json）",
+    "希望在写入前人工或 AI 辅助审查行级变更，并对删除操作设置百分比守卫"
+   ]
+  },
+  "sha": "e64b0e524f82",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb5d7dfca559": {
+  "identity": {
+   "one_liner": "面向 AI 代理的自托管记忆操作系统，把对话编目成档案卡并提供四通道召回。",
+   "review": "Mnemosyne-OS 是一个自托管的 AI 代理记忆系统，用 PostgreSQL 16 + pgvector + FastAPI 实现。它将每轮对话按规则提取为目录卡（档案号、实体、证据、回溯指针），提供精确/关键词/时间/语义四通道召回、两跳溯源、服务端日常任务（润色、去重、日记）与分层保留机制。通过 Hermes 记忆提供器（14 个工具）、REST API、Python SDK 和 MCP 接入，模型端点需兼容 OpenAI。要求 Python 3.11+、8GB 内存和一个 LLM/embedding 端点；换 embedding 模型需全量重建索引。",
+   "highlights": [
+    "卡片结构由规则提取生成，不消耗 LLM token；归档号、证据、实体字段禁止模型改写，支持归档号→卡片→sid→原始对话的两跳溯源",
+    "服务端召回提供精确/关键词/时间三通道（纯 SQL），语义通道由客户端获取并合并；每通道按排名衰减打分后加权融合，重复项降权不删除",
+    "包含四个 cron 定时任务：每日润色、每周去重（仅标记）、每日日记（仅从真实卡片生成）、会话缺口回填；技术栈为 PostgreSQL 16 + pgvector（1024 维 HNSW）+ FastAPI"
+   ],
+   "use_cases": [
+    "需要长期记忆和可验证溯源的长时运行 AI 代理：每次召回可通过档案号回溯到原始对话记录",
+    "自托管私有部署场景：支持仅 API、API+内网页面、公网私有站点（passkey 登录）三种运行形态",
+    "代理日常使用记录与回顾：每日自动从真实卡片生成日记条目，含 Diary/Heart/Stream 三种视图，无事件之日会如实记录"
+   ]
+  },
+  "sha": "eb5d7dfca559",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

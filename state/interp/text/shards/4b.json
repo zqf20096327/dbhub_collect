@@ -2319,5 +2319,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "765fdd20aa59": {
+  "identity": {
+   "one_liner": "FoundationDB C API 的 Haskell FFI 绑定库",
+   "review": "该库为 Haskell 提供 FoundationDB C 客户端的 FFI 绑定，覆盖全部 C API，并实现标准 tuple、subspace 和 directory 层。使用者可通过 Transaction monad 定义事务。支持 FoundationDB 5.2.x–7.1.x，需按安装版本设置构建标志。作者注明目录分区尚未实现，directory 层是库中较少被测试的部分。",
+   "highlights": [
+    "包含对 FoundationDB 全部 C API 的 FFI 绑定",
+    "提供用于定义事务的 Transaction monad，并实现 tuple、subspace、directory 层",
+    "支持 FoundationDB 5.2.x 至 7.1.x，可通过构建标志适配指定版本"
+   ],
+   "use_cases": [
+    "在 Haskell 项目中以事务方式读写 FoundationDB",
+    "需要 tuple、subspace 或 directory 层实现的 FoundationDB 应用",
+    "基于 fdb.options 生成 Options 模块以对接客户端选项"
+   ]
+  },
+  "sha": "765fdd20aa59",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a6190805fe16": {
+  "identity": {
+   "one_liner": "Laravel 数据库安全工具包，lint 迁移实际发出的 SQL 并审计在线 schema。",
+   "review": "SQLens for Laravel 是一个 Composer 包，面向 PostgreSQL 18+ / MySQL 8.4+ 上的 Laravel 12/13 应用。它读取迁移实际发出的 SQL（含 DB::statement），检查锁与停机风险、down() 是否存在并反转 up()，审计在线 schema、检测漂移与安全问题，并以 pass/fail/undetermined 三值输出结果。运行只需目录读取权限，不写入被检查数据库；默认连接为 SQLite 时不适用。",
+   "highlights": [
+    "读取迁移实际发出的 SQL，原始 DB::statement 与 Schema::table 同样被判定",
+    "八套检查套件：lint、audit、security、deploy、analyse、format、guard、agent，含 PHPStan 扩展与 MCP server",
+    "以只读会话运行：仅读取目录与状态视图、不持自身锁、不写入被检数据库，会话密封需服务器拒绝写入予以证明"
+   ],
+   "use_cases": [
+    "迁移上线前在 CI 中 lint 其发出的 SQL，评估锁与停机风险",
+    "对指定连接的在线 schema 做漂移与安全审计",
+    "在部署脚本中按 online/blocking/rewrite 分类判断是否需要维护窗口"
+   ]
+  },
+  "sha": "a6190805fe16",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

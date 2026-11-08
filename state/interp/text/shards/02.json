@@ -2733,5 +2733,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "867518f64b0f": {
+  "identity": {
+   "one_liner": "TDengine 官方 Python 连接器，提供数据写入、查询与订阅接口",
+   "review": "taospy 是 TDengine 官方 Python 连接器，供 Python 开发者访问 TDengine 数据库，支持数据写入、查询、订阅、schemaless 写入和参数绑定。包含两个模块：taos 模块基于 C 客户端库通信，taosrest 模块封装 RESTful API、无需安装 C 库；另有基于 Rust/WebSocket 的 taos-ws-py。API 符合 Python DB API 2.0（PEP-249），要求 Python >= 3.7，且需已部署并启动 taosd 和 taosAdapter。采用 MIT 许可证。",
+   "highlights": [
+    "提供符合 Python DB API 2.0（PEP-249）的接口，支持数据写入、查询、订阅、schemaless 写入与参数绑定",
+    "包含 taos（基于 C 客户端库）和 taosrest（封装 RESTful API、无需 C 库）两个模块",
+    "测试框架为 pytest，提供构建、打包与 CI/CD 工作流，许可证为 MIT"
+   ],
+   "use_cases": [
+    "Python 应用程序写入和查询 TDengine 数据",
+    "物联网时序数据采集场景下进行 schemaless 写入与数据订阅",
+    "不便安装 C 客户端库的环境中使用 RESTful 方式访问 TDengine"
+   ]
+  },
+  "sha": "867518f64b0f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7635469ea3cd": {
+  "identity": {
+   "one_liner": "在 TypeScript 中编写 SQL，由类型检查器直接解析并推导行与参数的精确类型。",
+   "review": "TypeSQL 是一个用于 TypeScript 的类型安全 SQL 库，支持 PostgreSQL、SQLite、MySQL 和 MariaDB。它在类型检查器内解析 SQL，不需要代码生成、数据库连接或构建步骤。查询会对照描述表结构的 DB 类型进行校验，该类型可从迁移文件、现有数据库生成，或复用 Kysely、Drizzle、Prisma 的定义。运行时 @typesql/core 体积小于 3 kB（minified+gzipped）且无依赖，MIT 协议。",
+   "highlights": [
+    "在 TypeScript 类型检查器内解析 SQL，直接推导查询行类型与参数类型，无需代码生成、数据库连接或构建步骤",
+    "支持 PostgreSQL、SQLite、MySQL、MariaDB，并提供对应驱动适配包（pg、postgres.js、node:sqlite、better-sqlite3、bun:sqlite、mysql2、mariadb connector 等）",
+    "提供 VS Code 扩展（Marketplace 与 Open VSX），在 sql() 字符串内实现表和列补全、语法高亮，编辑器悬停显示行类型并标注 SQL 错误"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中直接编写 SQL 并获得类型检查，而不引入代码生成流程",
+    "已使用 Kysely、Drizzle 或 Prisma 的项目，可直接复用其 schema 类型定义接入 TypeSQL",
+    "需要通过迁移文件或现有数据库生成 DB 类型来校验查询的团队工作流"
+   ]
+  },
+  "sha": "7635469ea3cd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "45fe77327d32": {
+  "identity": {
+   "one_liner": "面向 Node.js 集群应用的类 Redis 内存数据库库",
+   "review": "memshared 是一个运行在 Node.js 集群（cluster 模块）环境中的类 Redis 内存数据库库，适合希望在架构中减少外部 Redis 依赖的开发者。它通过共享内存供多个 worker 进程读写数据，并提供迁移到真正内存数据库的路径。README 明确说明大量 Redis 命令尚未实现，功能以 MIT 协议开源。",
+   "highlights": [
+    "支持 Node.js cluster 模块的多进程共享内存数据存取",
+    "提供 PM2 部署方式的启动脚本示例",
+    "README 列出未实现命令清单并接受贡献补全"
+   ],
+   "use_cases": [
+    "Node.js 集群应用中多 worker 进程间的内存数据共享",
+    "暂不需要部署独立 Redis 服务的简单架构项目",
+    "作为迁移到独立内存数据库前的过渡方案"
+   ]
+  },
+  "sha": "45fe77327d32",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "02015131b31d": {
+  "identity": {
+   "one_liner": "基于 EDN 迁移文件的 Clojure 版 CouchDB 数据迁移工具",
+   "review": "FlyCouchDB 是用 Clojure 编写的 Apache CouchDB 迁移工具，机制类似关系型数据库中的 Flyway。迁移以 EDN 文件定义，按版本号和子版本号排序执行，工具记录已运行的迁移并从上次位置继续。支持创建/删除数据库、创建视图、重命名键、编辑与插入文档及组合操作，可打包为 JAR 或 WAR 运行于 Java 项目、JBoss、Tomcat、Jetty 等环境。",
+   "highlights": [
+    "迁移以 V{版本}_{子版本}__描述.edn 文件定义，按版本顺序执行并避免重复应用",
+    "提供创建/删除数据库、创建视图、重命名键、编辑/插入文档及组合操作等迁移动作",
+    "可作为 Clojure 项目运行，也可打包为可执行 JAR 或部署为 WAR（支持 JBoss/WildFly、Tomcat、Jetty）"
+   ],
+   "use_cases": [
+    "为 schemaless 的 CouchDB 数据中隐含的结构演进维护有序迁移列表",
+    "在多个 CouchDB 实例间同步应用相同的数据结构变更",
+    "初始化数据库或通过插入文档动作生成初始/测试数据"
+   ]
+  },
+  "sha": "02015131b31d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e27bb95c812e": {
+  "identity": {
+   "one_liner": "学业监测与预测平台，FastAPI 微服务架构，Docker Compose 一键部署",
+   "review": "SIMPA 是一个用于记录成绩与出勤、计算统计指标并按回归模型预测学业风险的 Web 平台，面向学校管理者、协调员和教师等角色。项目采用 FastAPI 微服务拆分（auth、academico、analitico 等），各服务独立容器与数据库，通过 nginx 网关路由，并以 RabbitMQ 事件驱动 worker 重算风险。提供 JWT RS256 认证、Swagger 文档及演示账号，属 UniEVANGÉLICA 人工智能课程的项目作业。",
+   "highlights": [
+    "微服务架构：gateway、auth、academico、analitico、analitico-worker 各自独立容器与数据库，Docker Compose 单命令启动",
+    "支持 JWT RS256 认证、按成绩事件异步重算学业风险、回归预测及 Excel/PDF 报告生成（openpyxl、reportlab）",
+    "每个服务提供 Swagger 文档，Alembic 迁移随服务启动自动执行，内置可重复运行的 seed 与演示账号"
+   ],
+   "use_cases": [
+    "记录班级、课程、学生、成绩与出勤并计算统计指标",
+    "以带理由的风险分级和回归预测跟踪学生学业风险历史",
+    "作为微服务 + RabbitMQ + Docker Compose 架构的教学参考项目运行"
+   ]
+  },
+  "sha": "e27bb95c812e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

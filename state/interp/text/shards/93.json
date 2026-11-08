@@ -2855,5 +2855,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "252e4916fd69": {
+  "identity": {
+   "one_liner": "面向 SingleStoreDB 的示例 Jupyter Notebook 集合",
+   "review": "该仓库提供一组可在 SingleStoreDB 上使用的 Jupyter Notebook 示例。README 内容较简短，仅说明其为 SingleStoreDB 的示例 Notebook 集合，未给出安装步骤或详细用法。使用者需自行准备 SingleStoreDB 环境和 Python/Jupyter 运行环境，并结合主题标签推断其围绕 SQL、Python 展开。",
+   "highlights": [
+    "提供可在 SingleStoreDB 上运行的 Jupyter Notebook 示例",
+    "基于 Python 与 SQL 与 SingleStoreDB 交互",
+    "以 Notebook 形式组织示例内容"
+   ],
+   "use_cases": [
+    "在 Jupyter 环境中连接 SingleStoreDB 执行 SQL 查询",
+    "参考 Notebook 示例学习 SingleStoreDB 的使用方式",
+    "作为编写数据库相关 Notebook 的起点模板"
+   ]
+  },
+  "sha": "252e4916fd69",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b70a4d0d6e1": {
+  "identity": {
+   "one_liner": "为 Chalmers IT 学生分会构建的成员与身份管理系统，提供 OAuth2 SSO",
+   "review": "Gamma 是 Chalmers IT 学生分会的成员与身份管理系统，作为成员、群组、OAuth2 客户端和 API 密钥的中心目录。基于 Java 25 与 Spring Boot 实现，使用 PostgreSQL、Flyway 迁移、Redis 会话缓存和 Thymeleaf + HTMX 界面。配置全部由环境变量驱动，开发时可通过 Testcontainers 自动启动依赖服务；README 明确说明目前没有 Java 单元/集成测试，仅依赖 Playwright E2E 测试，且 v3 起生产部署强制要求配置 OAuth2 签名密钥。",
+   "highlights": [
+    "实现 OAuth2 Authorization Server，用 RSA 密钥签发 ID 与访问令牌，通过 /oauth2/jwks 发布公钥并支持密钥轮换",
+    "提供 INFO、ACCOUNT_SCAFFOLD、ALLOW_LIST、CLIENT 等类型的预共享 API 密钥用于服务间访问",
+    "采用六边形架构与 DDD：不可变领域记录、Facade、AccessGuard 授权检查、JPA 实体与领域模型分离"
+   ],
+   "use_cases": [
+    "为学生会组织集中管理成员、群组与权限，并向内部服务提供单点登录",
+    "为接入的应用注册 OAuth2 客户端（openid profile email scope）并通过 API 密钥读取成员与群组信息",
+    "作为学习 Spring Boot 六边形架构、Flyway 迁移与 Playwright E2E 测试编排的参考项目"
+   ]
+  },
+  "sha": "5b70a4d0d6e1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "779eae0ef692": {
+  "identity": {
+   "one_liner": "嵌入式 Zanzibar 风格授权引擎，权限写入与应用事务合并提交",
+   "review": "pemba 是面向 Rust 和 Python 的进程内授权库，将关系数据存放在应用自身的 SQLite 或 Postgres 数据库中，使业务行与授权关系的写入合并到同一事务提交或回滚。适用于单应用或共享同一数据库的少量服务。当前版本 0.4.0，不支持 caveats、过期关系与 Watch，无分布式引擎。",
+   "highlights": [
+    "权限写入可加入应用已打开的 SQLite/Postgres 事务，行与关系一起提交或回滚，无需 outbox 或对账任务",
+    "支持联合/交集/排除运算符、箭头、主题集、通配符与递归数据，schema 语言为 SpiceDB 的严格子集",
+    "提供 explain traces 显示授权结果由哪条关系给出或拒绝，附浏览器 playground 在本地运行真实引擎"
+   ],
+   "use_cases": [
+    "单应用或少数共享一个数据库的服务需要细粒度共享权限且不想部署独立授权服务",
+    "需要排查某次权限检查为何通过或被拒绝，通过 explain traces 追溯授权来源",
+    "已有 SpiceDB schema 但规模在单数据库范围内的项目，可直接迁移 schema 与关系数据"
+   ]
+  },
+  "sha": "779eae0ef692",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2918,5 +2918,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "979704f9f516": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 Firebase 的租车应用示例项目",
+   "review": "这是一个由 Jakub Sobański 编写后端、Martin Gogołowicz 设计 UI 的 Flutter 租车应用项目，运行需自备 Firebase 数据库并在 AndroidManifest.xml 中配置 API 密钥。应用包含首页、详情页和登录面板，支持深色与浅色两种主题模式。使用 Flutter 2.8.1 并启用空安全，下载后需执行 flutter pub get 安装依赖。",
+   "highlights": [
+    "提供首页与详情页以及登录面板功能",
+    "支持深色与浅色模式切换",
+    "基于 Firebase 存储数据，可展示来自数据库的车辆统计信息"
+   ],
+   "use_cases": [
+    "作为 Flutter 与 Firebase 结合开发的示例参考",
+    "用于学习租车类应用的页面结构与登录实现",
+    "作为深色/浅色主题适配的界面展示项目"
+   ]
+  },
+  "sha": "979704f9f516",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5efb1cf4e963": {
+  "identity": {
+   "one_liner": "基于 Django 的音频访谈收集与问答转录网站",
+   "review": "Palanaeum 是一个用于收集音频访谈并转录其中问答内容的网站，基于 Django 框架开发，使用 Django REST Framework 的 token 认证提供 API 访问。项目提供 Docker Compose 一键启动方案，适合开发者本地部署或自行搭建站点使用。README 提到在 Django 开发服务器上音频播放不支持跳转到指定位置，需在 Nginx 等正式服务器上运行。部署后需执行数据库迁移、创建超级用户并配置 Sites 模块中的域名信息。",
+   "highlights": [
+    "提供 Docker Compose 一键启动方案，源码修改在容器中自动生效",
+    "提供基于 DRF token 的 API 认证机制，可为用户生成认证令牌",
+    "支持通过 Django manage.py 执行数据库迁移和创建超级用户"
+   ],
+   "use_cases": [
+    "收集并整理音频访谈内容，转录其中的问答对",
+    "开发者本地搭建和调试网站开发环境",
+    "为授权用户提供 API 令牌以进行无限访问的接口调用"
+   ]
+  },
+  "sha": "5efb1cf4e963",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e40f9e8835d": {
+  "identity": {
+   "one_liner": "基于 NATS 在 PostgreSQL 与端侧 SQLite/PGlite/DuckDB 等本地库间做双向同步的引擎",
+   "review": "ZeBridge 以 PostgreSQL 为权威端，通过 NATS 将数据同步到各设备的本地副本（SQLite、PGlite、DuckDB 或 PostgreSQL），设备离线时写入进入 outbox 队列，重连后由 PostgreSQL 依据规则裁决冲突。后端只需负责登录并发一次性邀请码，无需另建写 API。面向 B2B 多租户运营类应用，README 明确说明不针对每用户单租户的 B2C 场景。",
+   "highlights": [
+    "客户端提供 query/mutate/request/ingest 统一接口，mutate 内含版本管理、outbox、重试与 PostgreSQL 裁决结果处理",
+    "支持浏览器、Node、Python、Dart/Flutter、React Native、Android 及 C ABI 绑定，本地引擎可选 SQLite、PGlite、DuckDB 或 PostgreSQL",
+    "设备通过一次性邀请码注册并获取按租户限定的 NATS 凭证；responder 服务以只读身份应答 query.<tenant>.<name>，可多实例共享队列组负载"
+   ],
+   "use_cases": [
+    "每个客户组织为租户的 B2B 应用（外勤、车队、站点），设备在弱网或断网时继续工作",
+    "浏览器或移动端需要本地真实数据库并以该数据库 SQL 直接查询的场景",
+    "通过 responder 在 NATS 上提供路由、搜索、分析等服务，客户端无需 HTTP 端点与额外凭证即可调用"
+   ]
+  },
+  "sha": "1e40f9e8835d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5d1169012ed": {
+  "identity": {
+   "one_liner": "基于 DuckDB 的临时数据沙箱，通过 MCP 与 REST API 供 AI 代理查询分析。",
+   "review": "SpotDB 是一个面向 LLM 与代理工作流的临时数据沙箱，支持通过 Homebrew 安装后启动服务，上传 CSV 并用 SQL 查询。它提供 MCP 与 REST 两种访问接口，具备快照与护栏机制，用于隔离分析数据、避免代理直接访问生产数据库。提供浏览器端 Explorer UI，本地运行无需额外基础设施。",
+   "highlights": [
+    "提供临时性数据沙箱，支持上传 CSV 后以 SQL 查询数据",
+    "同时提供 MCP API 与 REST API 两种数据访问方式",
+    "支持快照功能，可恢复到指定时间点的数据状态"
+   ],
+   "use_cases": [
+    "让 AI 代理在隔离环境中分析 CSV 数据",
+    "在不接入生产数据库的前提下做临时数据探索",
+    "通过 REST API 将 SQL 查询能力集成到传统系统"
+   ]
+  },
+  "sha": "b5d1169012ed",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f02ec083e5c4": {
+  "identity": {
+   "one_liner": "数据库管理系统课程实验代码仓库，收录 PL/SQL 实验程序",
+   "review": "该仓库用于存放 CSL 333 与 AIL 202 两门数据库管理系统课程的实验代码，面向参与 Hacktoberfest 的贡献者。仓库规定了文件命名格式并禁止重复提交；README 中列出已包含的 PL/SQL 实验，如计算圆面积、账户处理及异常处理等程序。",
+   "highlights": [
+    "提供 Hacktoberfest 活动的贡献支持，违规提交将被标记为 spam",
+    "包含 PL/SQL 实验代码，如 areaofcircle、account 等示例文件",
+    "要求文件按 __ExpNo._ExperimentName__ 格式命名且不允许重复提交"
+   ],
+   "use_cases": [
+    "查阅或提交 CSL 333 与 AIL 202 课程数据库实验代码",
+    "参与 Hacktoberfest 活动进行开源贡献",
+    "参考 PL/SQL 基础实验程序，包括异常处理等内容"
+   ]
+  },
+  "sha": "f02ec083e5c4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

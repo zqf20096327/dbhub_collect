@@ -2894,5 +2894,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "29746ecdb749": {
+  "identity": {
+   "one_liner": "QQNT 数据库解密、消息解析导出与好友信息浏览的一站式 Python 流水线工具",
+   "review": "该项目面向需要在 Android 或 Linux 上读取 QQNT 本地 SQLite 数据库的用户，提供数据库密钥计算、sqlcipher 解密、消息解析导出、好友列表查询与本地 WebUI。其内置轻量 protobuf 解析器处理大库锁页迁移与 WAL 读取；README 声明仅供学习交流，导出内容不可用于法律取证。",
+   "highlights": [
+    "支持通过 sqlcipher 解密 QQNT 数据库文件，并处理超过 1 GiB 大库解密时报 malformed 的问题，同时读取 -wal 文件数据",
+    "提供 key、db、legacy、friends、web、t28 等 CLI 子命令，消息可导出为 TXT、MD、HTML 格式",
+    "除 Python 外的运行时依赖均为可选，QQ 私有目录仅做只读操作，提权通过 fork sudo 子进程完成"
+   ],
+   "use_cases": [
+    "在 Android 终端或 Linux PC 上解密并导出个人 QQNT 聊天记录",
+    "解析数据库中的好友信息（含已删除好友、分组、亲密度等）并通过本地 WebUI 浏览",
+    "作为数据库与 protobuf 二进制的研究分析工具（Table2D/Trowel 套件）"
+   ]
+  },
+  "sha": "29746ecdb749",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "175eead4c366": {
+  "identity": {
+   "one_liner": "在 pandas DataFrame 与 AWS DynamoDB 之间传输数据的 Python 库",
+   "review": "dynamo-pandas 是一个 Python 包，提供 put_df 和 get_df 等函数，用于将 pandas DataFrame 的行写入 DynamoDB 表，以及按主键或全表扫描读取条目到 DataFrame。它自动处理 DynamoDB 原生不支持的类型（如 datetime64、timedelta64、可空整数）的序列化与反序列化；要求表已创建且包含主键列，读取返回基础类型，需用 dtype 参数指定目标类型。依赖 Python>=3.9、pandas>=1.2、boto3，适用于需在分析代码与 DynamoDB 间批量读写数据的场景。",
+   "highlights": [
+    "自动将 pandas/numpy 数据类型转换为 DynamoDB 支持的类型",
+    "提供 put_df/get_df 高层接口，支持按 key 读取、全表扫描及 dtype 指定返回类型",
+    "不默认安装 boto3，便于构建 Lambda 层，可用 dynamo-pandas[boto3] 一并安装"
+   ],
+   "use_cases": [
+    "将分析产生的 DataFrame 批量写入 DynamoDB 表",
+    "按主键批量读取表条目到 DataFrame 做数据处理",
+    "在 AWS Lambda 中打包使用（不带入 boto3 依赖）"
+   ]
+  },
+  "sha": "175eead4c366",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "38840d69af3e": {
+  "identity": {
+   "one_liner": "自托管万智牌卡牌库存服务器，基于 FastAPI 与 React 构建",
+   "review": "OpenMTG 是面向自行部署用户的 MTG 卡牌收藏管理服务器，提供卡牌登记、组牌、价格追踪、愿望单、卡牌交易与借出记录等功能，支持多账户隔离。技术上使用 FastAPI、React 与 PostgreSQL/SQLite，通过 Docker Compose 部署，默认监听 8080 端口；数据库后端在首次部署时选定且不可切换。项目自 v1.10.0 起声明进入功能完备阶段，转入维护模式。采用 AGPL-3.0 许可证。",
+   "highlights": [
+    "支持通过 Scryfall 模糊搜索添加卡牌，自动按可配置间隔刷新价格，并记录品相、闪卡、语言、版本等属性",
+    "提供组牌器（主牌/备牌/指挥官分区）、卡组统计（平均 CMC、法力曲线、颜色分布）以及 Moxfield/MTGO/Arena 牌表导入",
+    "包含多账户隔离、卡牌交易（双方确认自动转移）、借出追踪、卡牌照片上传、Showroom 公开展示及 Home Assistant 集成"
+   ],
+   "use_cases": [
+    "个人或家庭自托管环境中管理 MTG 卡牌收藏并追踪市值与价格历史",
+    "同一实例上的多位用户进行卡牌交易、借出登记与组牌分析",
+    "通过 Showroom 在电视、平板或信息亭上公开展示精选卡组（不暴露完整收藏）"
+   ]
+  },
+  "sha": "38840d69af3e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f70e37198320": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 微服务与 React 的云文件管理系统，实现文件存储、分享与用户管理",
+   "review": "FileVault 是一个自托管的云文件管理系统，提供文件上传下载、文件夹管理、回收站、文件分享、邮件 OTP 注册与管理后台统计等功能。后端采用 Java 21 与 Spring Boot，前端为 React 19 + TypeScript，数据存储于 PostgreSQL，Redis 用于 OTP 校验缓存，RabbitMQ 处理消息，全部组件可通过 docker compose 一键启动。适合需要私有化部署文件存储的个人或团队。文档注明总存储配额为 100 GB，并开放全部 REST API 与 Swagger 文档。",
+   "highlights": [
+    "支持文件与文件夹的上传（拖拽）、下载（流式）、预览、重命名、收藏、回收站恢复与彻底删除，并提供按类别（文档/图片/视频/音频/归档/代码）的存储用量统计",
+    "提供 JWT Access/Refresh Token 认证、邮箱 6 位 OTP 验证（Redis 校验、60 秒重发计时）、忘记/重置密码流程，以及基于 ROLE_ADMIN 的管理面板（用户封禁、角色变更、广播/定向通知）",
+    "通过 Docker Compose 一键运行 PostgreSQL 16、Redis 7、RabbitMQ 3、Nginx、后端与前端，前端访问 80/5173 端口，API 位于 8080 并附 Swagger 文档"
+   ],
+   "use_cases": [
+    "搭建私有云盘：个人或小团队需要类似网盘的文件存储、分类浏览与文件分享功能且自行部署",
+    "内部文件共享平台：需要用户注册审批、角色管理、管理员封禁用户与发送通知的组织环境",
+    "全栈学习参考：项目暴露完整的 auth/users/files/folders/admin/notifications REST API 与微服务组件（Redis、RabbitMQ、PostgreSQL）的 Docker 编排配置，可用于学习 Spring Boot + React 组合的工程实现"
+   ]
+  },
+  "sha": "f70e37198320",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c32d3dc3be65": {
+  "identity": {
+   "one_liner": "通过 gRPC 扩展访问 TiKV RawKV/TxnKV API 的 PHP 客户端库",
+   "review": "该库为 PHP 8.2+ 提供 TiKV 的 RawKV 与 TxnKV 两套客户端接口，依赖 PECL gRPC 扩展（>=1.57），Composer 安装时强制校验。支持 CRUD、批量操作、扫描、TTL、CAS 等原子操作及 TLS。项目处于 pre-1.0 阶段，0.x 版本间可能存在破坏性变更，README 给出了锁定小版本号的安装建议。当前版本 v0.14.0，尚未发布到 Packagist，需在 composer.json 中手动配置仓库地址。",
+   "highlights": [
+    "提供 RawKV 与 TxnKV 两套 API 客户端，支持 CRUD、批量操作、前缀扫描、TTL 与 compareAndSwap 等原子操作",
+    "通过 ext-grpc 扩展通信，内置区域缓存、重试预算机制，并提供 Prometheus 指标导出与结构化追踪回调接口",
+    "公开 API 有稳定性承诺表，其余内部命名空间可在任意版本变更；异常体系包含七种事务异常及可重试性矩阵文档"
+   ],
+   "use_cases": [
+    "PHP 项目需要直接读写 TiKV 集群的键值数据（RawKV 模式，含 TTL 场景）",
+    "需要在 PHP 中使用 TiKV 事务能力（TxnKV 乐观/悲观事务）的应用",
+    "需要对键值访问进行指标采集与链路追踪的可观测性集成场景"
+   ]
+  },
+  "sha": "c32d3dc3be65",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

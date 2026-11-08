@@ -2949,5 +2949,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4b0da8df4795": {
+  "identity": {
+   "one_liner": "用于 Apache Cassandra 的 Ansible 集合，提供模块与角色实现运维自动化",
+   "review": "community.cassandra 是 Ansible 生态中面向 Apache Cassandra 的社区集合，包含 4 个角色（防火墙、安装、Linux 系统设置、软件仓库配置）和数十个模块，可用于管理 keyspace、表、角色、压缩、清理、节点退役等操作。角色支持 Debian 系与 RHEL 系发行版。cassandra_role、cassandra_keyspace、cassandra_table 模块支持 consistency_level 参数，不支持的读写级别回退为默认 LOCAL_ONE。集合当前支持 Cassandra 5.0/4.1/4.0，3.11 与 2.2 已在后续版本中移除，采用 GPL v3.0 或更高版本许可。",
+   "highlights": [
+    "提供 4 个角色用于在 Debian 系与 RHEL 系发行版上准备并安装 Cassandra",
+    "包含数十个模块，覆盖 keyspace、表、角色管理及压缩、清理、节点退役等运维操作",
+    "cassandra_role/keyspace/table 模块支持通过 consistency_level 参数设置一致性级别，默认 LOCAL_ONE"
+   ],
+   "use_cases": [
+    "批量部署和配置 Cassandra 节点",
+    "通过 Ansible 剧本执行集群运维操作，如 cleanup、flush、decommission、removenode",
+    "管理 keyspace、表与角色的生命周期并控制一致性级别"
+   ]
+  },
+  "sha": "4b0da8df4795",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4da75777b2cf": {
+  "identity": {
+   "one_liner": "ArangoDB 旧版在线文档源码仓库，基于 Jekyll 构建多版本文档站点",
+   "review": "该仓库包含发布于 arangodb.com/docs/ 的 ArangoDB 各版本文档源码，现已弃用，新文档迁移至 arangodb/docs-hugo。文档用 Markdown 编写，经 Jekyll 生成静态站点，内容按版本目录（如 3.8、3.9）组织并拆分为 Manual、AQL、HTTP 等 books。贡献者需签署 Apache 2 CLA，可通过 Netlify 自动预览或本地 Jekyll/Docker 容器构建。",
+   "highlights": [
+    "包含 ArangoDB 所有已发布版本文档，按版本目录组织，拆分为 Manual、AQL、HTTP、Drivers、ArangoGraph 等多个 books",
+    "支持 Jekyll 本地构建与 arangodb/arangodb-docs Docker 容器两种构建方式，并集成 Netlify PR 自动预览",
+    "内容使用 Markdown 扩展 Liquid 模板编写，通过符号链接复用跨版本内容，提供 htmltest 检查内部链接"
+   ],
+   "use_cases": [
+    "查阅或贡献旧版本 ArangoDB（如 3.8–3.12）官方文档源码",
+    "为多版本文档站点搭建 Jekyll 静态构建流程",
+    "需要本地离线运行 ArangoDB 旧版文档站点"
+   ]
+  },
+  "sha": "4da75777b2cf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bd5d579eb941": {
+  "identity": {
+   "one_liner": "VeighNa框架基于plyvel实现的LevelDB数据库接口",
+   "review": "该仓库为VeighNa交易框架提供LevelDB数据库适配层，底层依赖plyvel。Linux与Windows通过pip自动安装对应plyvel包；macOS需手动修改plyvel源码setup.py中的编译参数后再本地安装。使用时在VeighNa全局配置中填写database.name与database.database（数据库名，如vnpy_data）字段即可接入。",
+   "highlights": [
+    "基于plyvel库实现LevelDB数据库接口，供VeighNa框架调用",
+    "Linux与Windows环境下自动安装适配的plyvel与plyvel-win32",
+    "通过全局配置字段database.name和database.database完成接入"
+   ],
+   "use_cases": [
+    "VeighNa框架用户需要以LevelDB作为行情或交易数据存储时",
+    "在Linux/Windows环境中以pip方式部署VeighNa数据库后端",
+    "macOS用户按文档手动编译安装plyvel后接入VeighNa"
+   ]
+  },
+  "sha": "bd5d579eb941",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ac2e9698427": {
+  "identity": {
+   "one_liner": "基于 Mongo Scala Driver 封装的 DAO 模式 Scala 库",
+   "review": "Mongocamp MongoDB Driver 是一个 Scala 库，对 mongo-scala-driver（5.1.x）进行封装，通过配置文件完成数据库连接设置，并为集合和 GridFS 提供 DAO 模式，支持 case class 自动转换。适用于在 Scala 项目中操作 MongoDB 的开发者。支持 MongoDB 4.4 至 8.2 版本，Scala 3 与 2.13 双发布，采用 Apache 2 许可证。",
+   "highlights": [
+    "提供集合与 GridFS 的 DAO 模式，支持 case class 自动转换",
+    "支持配置文件建库、压缩器、Change Stream、Reactive Streams 及集合同步",
+    "GridFS 支持从 InputStream 上传、下载到 OutputStream，并提供隐式转换与本地 mongo-java-server 测试支持"
+   ],
+   "use_cases": [
+    "Scala 应用中以 DAO 模式访问 MongoDB 集合并执行 CRUD 操作",
+    "通过 GridFS 存储 and 读取文件流数据",
+    "使用 mongo-java-server 在本地运行测试并编写 specs2 规格测试"
+   ]
+  },
+  "sha": "6ac2e9698427",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

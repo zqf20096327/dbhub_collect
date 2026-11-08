@@ -2414,5 +2414,181 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b057e3adc3d2": {
+  "identity": {
+   "one_liner": "Tauri+Rust 桌面 AI 小说创作软件，多代理协作并管理故事资产",
+   "review": "StoryMoss（草苔）是一款基于 Tauri、React 与 Rust 的桌面小说写作应用，提供幕前沉浸写作与幕后资产管理双界面。它集成多代理创作流程（导演/管理/编审/主创）、知识图谱、伏笔追踪、前文检索与质量门机制，支持 OpenAI、Anthropic、Ollama 等模型接入。可从官网或 GitHub Releases 安装预构建版本，也可用 Node.js 与 Rust 1.95.0 从源码构建。面向需要长篇叙事资产管理的小说作者。",
+   "highlights": [
+    "提供幕前写作与幕后工作室双界面，包含角色、世界观、场景、知识图谱、伏笔看板等故事资产管理功能",
+    "实现导演/管理/编审/主创多代理协作流程，每章经加权质量门检查后交付，支持 OpenAI、Anthropic、Ollama 与本地 API 多模型路由",
+    "续写前检索前文原文以只读块注入上下文，改稿后可标记下游章纲待重规划；支持从源码运行（Rust 1.95.0、Node.js 20 LTS）或下载预构建安装包"
+   ],
+   "use_cases": [
+    "长篇小说创作中管理角色、世界观与伏笔等跨章资产",
+    "使用本地或云端 LLM 进行多代理协作式续写与章节审校",
+    "修改早期章节后需重算下游摘要、章纲等关联物料的场景"
+   ]
+  },
+  "sha": "b057e3adc3d2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7c253de0d0f9": {
+  "identity": {
+   "one_liner": "ClickHouse 数据库备份工具，支持备份到 S3 兼容存储并从备份恢复。",
+   "review": "ch-backup 是面向 ClickHouse DBMS 的备份工具，用于将 MergeTree 引擎族的数据表备份到 S3 兼容存储，并在原始数据损坏时恢复。它以数据分片（part）为单位进行去重（默认开启），支持跨存储桶/端点复制备份、分片下载失败重试、跳过云存储部分的恢复，以及副本表的 schema-only 恢复模式。通过 make build 生成 Python wheel 包，可用 pip 或 uv tool install 安装。仅覆盖 MergeTree 表，不处理其他引擎。",
+   "highlights": [
+    "将 MergeTree 引擎族表备份到 S3 兼容存储并支持恢复，支持 part 级去重",
+    "支持将备份复制到其他 S3 桶、端点或 backup.path_root，可生成 JSON 报告",
+    "恢复过程在分片下载/复制失败时记录 invalid 状态，支持 --keep-going 继续恢复及重试无效分片"
+   ],
+   "use_cases": [
+    "需要将 ClickHouse MergeTree 表备份至 S3 兼容存储并在数据损坏时恢复的场景",
+    "需要将备份复制到其他 S3 存储位置做副本保存的场景",
+    "副本集群中恢复单副本数据、其余副本使用 schema-only 加速恢复的场景"
+   ]
+  },
+  "sha": "7c253de0d0f9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b77b1211083b": {
+  "identity": {
+   "one_liner": "个人后端学习笔记仓库，按书籍与源码阅读条目整理",
+   "review": "该仓库是作者 TauWoo 自 2018 年 5 月起维护的个人后端学习笔记集，内容以 Markdown 目录和任务清单形式组织，涵盖 Python、Go、Java 等高级语言，数据结构、操作系统等计算机基础课程，以及数据挖掘与实际生产问题笔记（如 prepared_statement、面经）。条目带复选框标记完成状态，可视为学习进度的公开记录，供学习笔记整理与查阅使用。",
+   "highlights": [
+    "以书籍为单元组织笔记，覆盖 Python（NumPy、Python3 CookBook、Tornado、effective-python）、Go（The Way to Go）、Java 等语言学习条目",
+    "包含数据结构、操作系统、计算机网络等计算机基础课程笔记，多数条目附有子主题的完成勾选记录",
+    "设有 issues 章节，记录实际生产场景问题笔记，如 prepared_statement 使用与面试经验"
+   ],
+   "use_cases": [
+    "查阅作者整理的 Go、Python、数据结构、操作系统等主题的学习笔记条目",
+    "参考其中记录的实际生产问题笔记，如 prepared_statement 的使用事项",
+    "作为按书籍规划学习路径、用任务清单追踪进度的仓库组织方式的示例"
+   ]
+  },
+  "sha": "b77b1211083b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2818676d525e": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 Firebase Firestore 的跨平台库存管理系统",
+   "review": "这是一个使用 Flutter 与 Dart 编写、以 Firebase Firestore 存储数据的库存管理应用，面向需要管理商品、客户、分类、用户、交易与订单的用户。系统提供实时库存查看、图表展示及订单 PDF 报告生成，运行环境要求 Flutter SDK、Dart、Git 与 Firebase 账号。",
+   "highlights": [
+    "支持 macOS、Windows 与 Web 三个平台运行",
+    "包含商品、客户、分类、用户、交易、订单六个管理模块",
+    "使用 Firebase Firestore 存储数据，可生成订单 PDF 报告并以图表展示库存数据"
+   ],
+   "use_cases": [
+    "需要记录商品库存水平与详情的库存跟踪",
+    "对订单进行创建、查看与生成 PDF 报告",
+    "按分类组织商品并管理用户角色与权限"
+   ]
+  },
+  "sha": "2818676d525e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "913621cff4ad": {
+  "identity": {
+   "one_liner": "Mongit：以 Reddit 评论为存储介质、仿 MongoDB 接口的 JavaScript 数据库实验项目",
+   "review": "Mongit 将 Reddit 版块中的帖子作为数据库、帖子下的加密评论作为数据条目，通过 Reddit API 读写数据，提供仿 MongoDB 的 find/insert/remove/update 等 REPL 操作接口。条目采用 AES256 加密。项目为 HackRU 2014 黑客马拉松产出的概念验证，README 明确不建议用于生产环境。适用于想体验或研究这种存储思路的开发者。",
+   "highlights": [
+    "通过 Reddit API 将帖子评论解析为 JSON 条目，提供 find、insert、remove、update 等仿 MongoDB 风格的操作",
+    "所有条目使用 AES256 加密",
+    "支持 use/show dbs/show collections 等 REPL 命令切换数据库与集合"
+   ],
+   "use_cases": [
+    "不想购买和搭建数据库时的云端数据存储尝试",
+    "学习或演示基于第三方平台 API 构建存储机制的原理",
+    "黑客松或个人实验项目中的概念验证场景"
+   ]
+  },
+  "sha": "913621cff4ad",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c4419f9b4e08": {
+  "identity": {
+   "one_liner": "自托管 NoSQL+向量数据库 Montycat 的异步 Python 客户端",
+   "review": "该仓库是 Montycat 数据库的官方异步 Python 客户端。Montycat 是以 Rust 实现的自托管 NoSQL 与向量数据库，服务器内置 ONNX 嵌入引擎（需 semantic 版），提供语义、BM25 关键词与混合三种检索模式，也支持自带外部向量。客户端经 pip 安装，基于 asyncio，提供 Schema 定义、实时订阅与批量更新等接口，面向构建 RAG、AI 代理记忆等应用的 Python 开发者。语义检索需搭配 semantic 版服务器。",
+   "highlights": [
+    "提供 SEMANTIC（kNN 余弦相似度）、KEYWORD（BM25）、HYBRID（RRF 融合）三种检索模式，并支持精确硬过滤",
+    "semantic 版服务器内置 ONNX 嵌入引擎，默认使用 bge-small 模型，嵌入在本机完成；亦支持自带 1–4096 维预计算向量",
+    "基于 asyncio 的全异步客户端 API，包含 Schema 运行时校验、按键或 keyspace 的实时订阅、update_bulk 批量更新"
+   ],
+   "use_cases": [
+    "为 LLM 应用构建 RAG 检索管道与语义搜索",
+    "AI 代理/聊天机器人的持久化长期记忆存储",
+    "需要结构化存储与向量检索共存于同一系统的异步应用"
+   ]
+  },
+  "sha": "c4419f9b4e08",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0d9e8b44b5bd": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 C++ 单头文件键值存储库，提供类 map 接口。",
+   "review": "sqlitemap 是一个 C++17 编写的单头文件库，通过封装 SQLite 提供类 map 的键值持久化接口，依赖仅需 SQLite。支持事务控制、多表、四种操作模式（创建/只读/重写/新建）及自定义编解码器，可通过 cereal、nlohmann::json、zlib 等示例扩展复杂数据类型。需要持久化键值存储的 C++ 项目可使用，集成方式包括直接引入头文件、CMake FetchContent、vcpkg 或 conan。",
+   "highlights": [
+    "单头文件实现，仅需 SQLite 依赖，支持 CMake FetchContent、CPM、vcpkg、conan 安装",
+    "支持显式事务（begin_transaction/commit/rollback）与自动提交模式，默认不自动提交",
+    "支持自定义键值编解码器，并提供 sqlitemap_t 辅助别名按模板参数自动选择编解码配置"
+   ],
+   "use_cases": [
+    "需要在 C++ 程序中以 map 风格 API 实现持久化键值存储的场景",
+    "需要存储结构体等复杂数据类型的项目，可借助自定义编解码器序列化为 blob 或 JSON",
+    "需要事务保证或只读/重建等不同数据库打开模式的应用"
+   ]
+  },
+  "sha": "0d9e8b44b5bd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb1670bc8037": {
+  "identity": {
+   "one_liner": "一个在 Tidbyt 设备上展示即将上映电影的 Pixlet 应用",
+   "review": "该项目是一个 Pixlet 应用，从 TMDB 读取未来 6 周内美国院线上映的影片，按热度取前 3 部并按上映顺序逐行显示片名与日期。通过 GitHub Actions 每日渲染并推送到 Tidbyt 设备轮播，也可本地用 pixlet 运行。需要配置 TMDB API 密钥及设备 ID 与 API Token。",
+   "highlights": [
+    "按 TMDB 热度选取未来 6 周内美国院线（含有限上映）影片前 3 部，排除已上映影片",
+    "每部影片一行显示片名（过长滚动）与日期，本周内日期以黄色高亮",
+    "内置 GitHub Actions 工作流每日约东部时间 6 点自动渲染并推送，以 movies 槽位加入设备轮播"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上展示即将上映的院线新片与上映日期",
+    "本地使用 pixlet serve 预览或调试应用",
+    "通过 push.sh 手动推送应用，或用 pixlet delete 从轮播中移除"
+   ]
+  },
+  "sha": "cb1670bc8037",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2452,5 +2452,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c1a162243634": {
+  "identity": {
+   "one_liner": "OstrichDB 的终端数据库管理工具，用 Odin 编写，通过 CLP 令牌查询数据。",
+   "review": "OstrichDB CLI 是用 Odin 编写的终端数据库管理工具，面向需要在命令行管理数据的用户。数据按记录-簇-集合三层组织，查询采用命令、位置、参数三类令牌（CLP）构成的点号语法，支持点号路径定位和 && 链式查询。需要 macOS/Linux 系统并安装 Go 与 Odin 才能构建，也可通过 Docker 运行；自然语言查询为实验性功能，且仅支持 Unix 系统。",
+   "highlights": [
+    "提供 CLI 手动查询、内置 HTTP 服务器和实验性自然语言查询三种交互方式",
+    "实现用户认证、角色访问控制、集合加密解密及锁定/只读等权限管理",
+    "支持 .csv 与 .json 文件导入、备份、查询历史和内置基准测试"
+   ],
+   "use_cases": [
+    "在终端通过点号语法直接管理 OstrichDB 中的记录、簇与集合",
+    "启用内置 HTTP 服务器后，用其他语言编写的客户端访问数据库",
+    "导入现有 .csv/.json 文件并按层级结构组织数据"
+   ]
+  },
+  "sha": "c1a162243634",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6a36d3e9824c": {
+  "identity": {
+   "one_liner": "Apache Cassandra 的 Sidecar 伴随服务，提供含 CDC 变更流至 Kafka 的能力",
+   "review": "该项目是 Apache Cassandra 数据库的伴随进程（Sidecar），以 Java 实现，通过读取 sidecar.yaml 配置与本地 Cassandra 实例（4.0+，依赖虚拟表特性）交互运行，当前处于 WIP 状态。它支持将开启 CDC 的表变更以 Avro 序列化发布到 Kafka，并提供 CDC/Kafka 配置的 HTTP API。面向需要管理 Cassandra 节点或接出变更数据的运维与开发人员。",
+   "highlights": [
+    "支持 Cassandra 4.0+，通过虚拟表读取实例信息，二进制发行版经 bin/cassandra-sidecar 启动",
+    "内置 CDC 功能：跟踪启用 CDC 的表，将变更以 Avro 格式发布到 Kafka，支持 STATIC/KEYSPACE/KEYSPACETABLE/TABLE/MAP 等主题命名方式与 log_only 模式",
+    "提供 CDC 与 Kafka 生产者的 REST 配置接口，内置 CachingSchemaStore 自动将 CQL 表结构转换为 Avro schema 并定期刷新"
+   ],
+   "use_cases": [
+    "为 Cassandra 集群节点部署伴随服务，进行配置管理",
+    "将 Cassandra 表的增量变更（INSERT/UPDATE/DELETE）流式写入 Kafka 供下游消费",
+    "在开发环境中通过 Gradle 运行并连接本地或 CCM 多节点集群进行测试"
+   ]
+  },
+  "sha": "6a36d3e9824c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a34ad64cd693": {
+  "identity": {
+   "one_liner": "LEAV Engine：基于 ArangoDB 的 NoCode 平台，将数据建模为应用",
+   "review": "LEAV Engine 是一个 NoCode/LowCode 平台的开源 monorepo，用于为应用设计和运行数据模型，底层使用 ArangoDB 存储数据，主要用 TypeScript 编写，包含 core、automate 和前端应用等子项目。安装通过 Docker Compose 完成，数据库在服务初始化时自动创建，默认库名为 leav_core，默认账户为无密码的 root。README 未提供数据建模的具体操作说明，需参考其用户文档与开发者文档。",
+   "highlights": [
+    "提供 Docker Compose 一键部署，访问地址为 http://core.leav.localhost，支持通过 Traefik 配置 HTTPS 和 Let's Encrypt 证书",
+    "采用 Yarn Workspaces 管理的 monorepo 结构，应用位于 apps/、共享库位于 libs/，共享库以 @leav 前缀发布到 GitLab npm registry",
+    "提供 logs、debug、automate 等 Docker profiles，可按需启用 elasticsearch、redis-commander、preview-generator 等服务"
+   ],
+   "use_cases": [
+    "希望通过 Docker 本地或自托管方式搭建 NoCode 数据建模平台的团队",
+    "基于 ArangoDB 构建和管理应用数据模型的项目",
+    "需要以开发模式从源码运行或参与贡献该 monorepo 的开发者"
+   ]
+  },
+  "sha": "a34ad64cd693",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

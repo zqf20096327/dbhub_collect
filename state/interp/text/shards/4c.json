@@ -2962,5 +2962,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "17eed4fb9510": {
+  "identity": {
+   "one_liner": "连接 InfluxDB 的 R 语言接口包，支持时间序列数据的读写与查询",
+   "review": "influxdbr 是一个 R 包，用于从 InfluxDB 服务器读取和写入时间序列数据，并提供 InfluxDB 查询语言（IQL）的封装函数来管理远程数据库。它支持 xts 和 data.frame（tibble）两种数据格式的写入，查询结果可返回 tibble 或 xts 类型。数据写入时不含 NA 值，可通过 CRAN 或 GitHub 安装。",
+   "highlights": [
+    "通过 influx_write 支持写入 xts 对象和 data.frame（tibble），xts 的列名映射为 field key，属性保留为 tag",
+    "提供 influx_query 和 influx_select 两个查询函数，返回类型可配置为 tibble 或 xts，支持 simplifyList 扁平化结果以配合管道工作流",
+    "提供 create_database、show_measurements 等封装函数用于管理远程数据库，支持通过 host/port 或 group 配置文件建立连接"
+   ],
+   "use_cases": [
+    "在 R 工作流中与 InfluxDB 服务器交互，读取和写入时间序列数据",
+    "使用 xts 或 tidyverse 风格（tibble/dplyr 管道）处理时序数据的用户",
+    "通过 IQL 封装函数远程创建数据库、管理并查询 InfluxDB 实例"
+   ]
+  },
+  "sha": "17eed4fb9510",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dc289ed372ed": {
+  "identity": {
+   "one_liner": "Postgres 扩展，用 SQL 行存储与驱动 AI 工作流与智能体记忆",
+   "review": "Percolate 是一个 Postgres 扩展（SQL + Rust/pgrx 解析器）及配套 Python worker 与 Agent Runtime，将智能体、工作流、运行记录和文档全部表示为数据库行，用户通过 psql 用 SQL 定义、启动、审批和查询流程。支持 P8QL 查询语言、YAML 工作流编译为行、人审信号步骤、失败重试与断点续跑。提供 Docker Compose、Kubernetes Helm 图表和安装到自建 PostgreSQL 19 三种部署方式。",
+   "highlights": [
+    "智能体、工作流、任务与运行历史均以行存储，全部通过 SQL 定义、启动、审批与查询，状态不驻留于 worker 或运行时进程",
+    "工作流以 YAML 定义并编译为行，支持 needs 依赖并发、agent 步骤、signal 人工审批步骤，任务失败后按更长等待间隔重试并从既有行继续",
+    "内置 P8QL 查询语言与 aiq 模块，可对注册的实体表做模糊查找、对文本源做全文检索，同一查询可在流程步骤内复用"
+   ],
+   "use_cases": [
+    "需要用 SQL 定义、监控和审批带人工环节的 AI 工作流（如告警诊断、事件处理台）",
+    "基于会话与文档构建智能体记忆，并可按日期读取记忆",
+    "LangGraph、Mem0、Zep 用户希望在 Postgres 内获得持久化工作流或 SQL 可查询的智能体记忆"
+   ]
+  },
+  "sha": "dc289ed372ed",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "38cd9c9b4aa6": {
+  "identity": {
+   "one_liner": "Neo4j 的 Node.js 对象图映射封装库，通过 bolt 协议连接",
+   "review": "OGMNeo 是面向 Node.js 开发者的 Neo4j OGM 封装层，提供节点创建/查询、关系建立与查找、索引管理及 Cypher 执行等 API。其 Operation API 可将多个读写操作组装进同一事务并支持失败回滚与批量执行；通过 bolt 协议连接数据库。该库已标记为弃用，不再维护更新，README 提示新使用需注意此状态。",
+   "highlights": [
+    "提供节点与关系的创建、查询 API，基于 bolt 协议连接 Neo4j",
+    "提供 Operation API 与 Transactional API，可将多个读写操作置于同一事务并支持回滚",
+    "支持批量操作合并到单事务执行，以及通过 logCypherEnabled 在控制台输出生成的 Cypher"
+   ],
+   "use_cases": [
+    "在 Node.js 应用中封装 Neo4j 的节点与关系读写操作",
+    "需要将多个数据库操作组合到同一事务中并支持失败回滚的场景",
+    "需要创建/删除属性索引或直接执行 Cypher 语句的场景"
+   ]
+  },
+  "sha": "38cd9c9b4aa6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "479838b89d44": {
+  "identity": {
+   "one_liner": "基于 Rust 与 GPUI 构建的本地优先 SQL 桌面工作台",
+   "review": "BarSQL 是一款运行于 Windows、macOS 和 Linux 的桌面 SQL 客户端，用 Rust 编写，UI 基于 Zed 编辑器背后的 GPUI 框架。它支持 PostgreSQL、MySQL/MariaDB、SQL Server、ClickHouse、Turso/libSQL 和 SQLite，各引擎使用原生驱动。数据存储于可随程序移动的 BarSQL-data 文件夹。采用 GPL-3.0-only 许可证，无账号与遥测。",
+   "highlights": [
+    "通过原生驱动连接六类数据库，支持 SSL/TLS、SSH 隧道和只读模式",
+    "提供 schema 感知自动补全、多语句脚本、ER 图、schema 对比、CSV/SQL 导入导出和结果图表",
+    "内置 MCP 服务器，允许 AI 助手按授权范围读写数据库"
+   ],
+   "use_cases": [
+    "在同一桌面应用中管理多种 SQL 数据库连接",
+    "需要便携部署的场景：数据可存于 USB 或网络驱动器",
+    "让 AI 助手经 MCP 访问数据库并进行受限修改"
+   ]
+  },
+  "sha": "479838b89d44",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2670,5 +2670,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "464c4d9c5364": {
+  "identity": {
+   "one_liner": "基于 Pydantic V2 的 MongoDB Python ODM 库",
+   "review": "PyODMongo 是一个将 Python 类映射到 MongoDB 文档的对象文档映射器，其 DbModel 继承自 Pydantic V2 的 BaseModel，可复用校验器、字段与模型配置。提供异步（AsyncDbEngine）与同步（DbEngine）两种引擎，通过 pip 安装，采用 MIT 许可证，适合需要在 Python 中操作 MongoDB 数据的开发者。",
+   "highlights": [
+    "DbModel 继承 Pydantic V2 的 BaseModel，支持校验器、字段和模型配置",
+    "提供查询构建器，用 Python 代码构造查询",
+    "同时提供 AsyncDbEngine 异步引擎和 DbEngine 同步引擎"
+   ],
+   "use_cases": [
+    "使用 Pydantic 模型定义 MongoDB 集合与文档结构",
+    "通过 Python 代码构建 MongoDB 查询而无需手写查询字符串",
+    "在 FastAPI/asyncio 项目中以异步方式操作 MongoDB"
+   ]
+  },
+  "sha": "464c4d9c5364",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f48f80a915e5": {
+  "identity": {
+   "one_liner": "非官方 Cordova 插件，为 iOS、Android 和浏览器提供 Realm 移动数据库接口",
+   "review": "该插件通过 JavaScript 接口在 Cordova 应用中访问 Realm 移动数据库，覆盖 iOS、Android 和浏览器平台。使用前需在项目根目录创建 realmrc.json 定义 schema，插件据此生成原生类，schema 变更后须重新构建。README 明确声明这是开发中的非官方项目，API 可能变化，不建议在生产环境使用。",
+   "highlights": [
+    "支持 iOS、Android 和浏览器三个平台，浏览器平台需配合 cdv-realm 服务端运行",
+    "提供查询构建器 API，包含 between、equalTo、contains 等条件方法，支持 or/not 逻辑组合与 beginGroup/endGroup 分组",
+    "通过 realmrc.json 文件定义 schema 并生成原生类，提供 create、delete、findAllSorted 等实例方法"
+   ],
+   "use_cases": [
+    "Cordova 混合应用中需要在 iOS 和 Android 上本地存储结构化数据的场景",
+    "需要使用构建器模式编写带排序、分组逻辑的复杂条件查询的场景",
+    "希望用同一套 Realm 数据访问接口在浏览器端调试 Cordova 应用的场景"
+   ]
+  },
+  "sha": "f48f80a915e5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7da591ecd802": {
+  "identity": {
+   "one_liner": "基于 CodeIgniter 4 框架的 RESTful API 项目起始模板，内置多种认证方式",
+   "review": "该项目是基于 CodeIgniter 4 的 RESTful API 应用起始模板，供需要用 PHP 构建 API 的开发者使用。开发者通过 Composer 创建项目或手动下载安装后，配置 .env 或 App/Config/Restfull 目录即可。核心机制是自定义控制器继承 RestfullApi 类，API 管理配置可存于数据库或文件（$cekfrom 参数切换），运行方式支持 spark serve 或部署到 xamp/wamp 环境。",
+   "highlights": [
+    "支持 JWT、Basic、Key、Token 四种认证方式",
+    "API 管理配置可选用数据库或文件两种存储方式",
+    "提供 Composer 安装与手动下载两种安装途径，可用 php spark serve 本地运行"
+   ],
+   "use_cases": [
+    "使用 CodeIgniter 4 框架开发 RESTful API 时的项目起始模板",
+    "需要为 API 接口配置多种认证方式的 PHP 项目",
+    "在 xamp/wamp 本地环境或通过 spark 命令运行 API 服务"
+   ]
+  },
+  "sha": "7da591ecd802",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "142a24955c93": {
+  "identity": {
+   "one_liner": "TiDB Rust 版（tidb-rs）的测试清单与迁移进度追踪项目",
+   "review": "该项目为 TiDB SQL 层的 Rust 重写（tidb-rs）提供进度追踪：枚举 TiDB v8.5.8 的全部 Go 单元测试与集成测试，建立测试到函数、功能的覆盖映射，并记录 tidb-rs 跑集成测试的逐语句结果。数据以排序 TSV 存放便于 git diff 审查，构建为 tracker.db 后可通过 Datasette 浏览。面向参与或评估 tidb-rs 迁移的开发者。",
+   "highlights": [
+    "提供测试到 Go 函数的逐项覆盖映射，用 idf 特异性权重将测试关联到功能，原始覆盖数据（13.5M 行）以带 sha256 的 release asset 发布",
+    "R1 报告按文件统计 tidb-rs 与 Go TiDB 集成测试读取语句的逐条匹配结果、每处 mismatch 及原因分类",
+    "基于 Go AST/type-check 的静态引用图（cmd/refgraph），记录 pkg/ 下每个函数对函数、接口方法、类型与变量的引用"
+   ],
+   "use_cases": [
+    "查询某功能被哪些测试覆盖，或某测试触达哪些功能与函数",
+    "评估 tidb-rs 对 TiDB 集成测试读取语句的兼容程度，定位具体 mismatch 行与原因",
+    "筛选覆盖映射不完整或缺失的测试及其原因，作为迁移工作清单"
+   ]
+  },
+  "sha": "142a24955c93",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

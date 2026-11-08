@@ -2449,5 +2449,201 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aed53e8dee2d": {
+  "identity": {
+   "one_liner": "开源家谱记录数据库与搜索引擎，基于 MongoDB，支撑 FreeREG/FreeCEN/FreeBMD",
+   "review": "MyopicVicar 由慈善组织 Free UK Genealogy 开发，采用 Apache 2.0 许可证，用于存储与检索家谱记录，驱动 FreeREG（教区登记）与 FreeCEN（英国人口普查）数据库，并计划用于 FreeBMD 新版。系统以 MongoDB 支持异构记录检索，志愿者的数据以电子表格提交，由协调员负责元数据与质量控制。本地开发通过 bin/setup 快速启动；README 提示旧版 PDF 安装指南（Ruby 2.4/Refinery 时期）已存档废弃。",
+   "highlights": [
+    "使用 MongoDB 支持对异构家谱记录的检索",
+    "志愿者可提交电子表格形式的数据，由协调员提供元数据、质量控制与协作管理",
+    "本地开发环境提供 doc/DEVELOPMENT_SETUP.md 与 bin/setup 快速启动脚本"
+   ],
+   "use_cases": [
+    "为教区登记（FreeREG）、英国人口普查（FreeCEN）及民事登记索引（FreeBMD）等家谱数据库提供底层存储与搜索",
+    "组织志愿者以电子表格形式参与记录录入，并由数据管理员进行质量管控",
+    "构建需要跨异构记录检索的开放式家谱信息应用"
+   ]
+  },
+  "sha": "aed53e8dee2d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e135f1e970c6": {
+  "identity": {
+   "one_liner": "管理 Valkey 四种拓扑的 Kubernetes operator，以 CRD 声明化编排故障转移与扩缩容。",
+   "review": "wellcake 提供 valkey-operator 控制器与 Helm charts，通过 ValkeyCluster/ValkeyACL 两个 CRD 管理 Standalone、Replication、Sentinel、Cluster 四种拓扑，内置 operator 驱动的主从切换、滚动重启、Slot 迁移、S3 备份与密码/TLS 轮换。项目处于 experimental 阶段，API 为 v1alpha1/v1beta1，README 建议先在非关键环境运行。",
+   "highlights": [
+    "支持 Standalone、Replication、Sentinel、Cluster 四种拓扑，提供 Cache/Durable 双配置档与分 Region 异步复制",
+    "Replication 拓扑下每 15 秒 TCP 探测并按 offset 提升副本，滚动重启默认关闭、经注解开启后先切换再重启旧主节点",
+    "Valkey 9.1+ 上 reshard 使用 Atomic Slot Migration，支持 S3 定时备份与免重启的密码/TLS 证书轮换"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上以声明式 CRD 部署和维护 Valkey 缓存或持久化集群",
+    "需要 operator 执行故障转移、slot 重分片、quorum 丢失恢复等运维流程的团队",
+    "通过 Helm 或 OCI chart 在 valkey-system 命名空间安装 operator 并按拓扑部署集群"
+   ]
+  },
+  "sha": "e135f1e970c6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30bdc15e6fb1": {
+  "identity": {
+   "one_liner": "Vapor 框架的 MongoDB Provider，通过 Fluent 驱动接入 MongoDB。",
+   "review": "该包为 Vapor Web 框架提供 MongoDB 支持，以 Provider 形式注册到 Droplet，并将 Fluent 的驱动配置为 mongo。使用者通过 Package.swift 引入依赖，凭 url 连接数据库，配置文件可放在 secrets 目录避免提交，也支持代码内手动配置。适用于使用 Vapor 2 并以 MongoDB 作数据存储的 Swift 服务端项目，已在 macOS 与 Ubuntu 上测试。",
+   "highlights": [
+    "以 Provider 形式加入 Droplet，并在 fluent.json 中将 driver 设为 mongo 启用",
+    "支持 JSON 配置文件与代码内手动配置两种方式",
+    "主机与端口可选，配置文件可置于 secrets 目录且默认被 .gitignore 排除"
+   ],
+   "use_cases": [
+    "为 Vapor 项目接入 MongoDB 作为数据库驱动",
+    "需要将数据库凭据与代码分离管理的部署场景",
+    "在 macOS 或 Ubuntu 上开发 Swift 服务端应用"
+   ]
+  },
+  "sha": "30bdc15e6fb1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "194e12d24969": {
+  "identity": {
+   "one_liner": "已归档的 R 语言 Elasticsearch DSL 包，仓库停止维护",
+   "review": "elasticdsl 曾是一个面向 R 用户的 Elasticsearch DSL 包，主题标签显示其通过 HTTP 与 JSON 与 Elasticsearch 交互。仓库现已归档，状态标记为 Abandoned，原 README 内容移至 README-NOT.md 文件。需要了解原始功能说明的读者可查阅该文件。",
+   "highlights": [
+    "仓库已归档，项目状态标记为 Abandoned",
+    "原始 README 内容保存在仓库的 README-NOT.md 文件中"
+   ],
+   "use_cases": [
+    "查阅 README-NOT.md 了解该项目原先提供的 Elasticsearch DSL 功能",
+    "作为 R 语言封装 Elasticsearch 的历史项目参考"
+   ]
+  },
+  "sha": "194e12d24969",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0191bc52389c": {
+  "identity": {
+   "one_liner": "Go 编写的 MongoDB oplog 监听器，将集合变更事件推送到 Kafka 主题",
+   "review": "该工具监听 MongoDB 集合的 insert、update、delete 等 oplog 事件，并将其分发到指定的 Kafka 主题；同时提供 replay 模式，可将集合全部文档一次性写入 Kafka。运行依赖 librdkafka 库，支持通过二进制、Docker 镜像或源码构建部署，配置可通过环境变量、.env 文件和命令行参数设置，面向需要将 MongoDB 变更流入 Kafka 的使用者。",
+   "highlights": [
+    "监听 MongoDB 集合变更事件（insert/update/delete 等），并写入用户指定的 Kafka 主题",
+    "提供 replay 模式，可将集合文档批量初始化到 Kafka，Kafka 消息携带 x-origin 头区分 watcher 与 replay 来源",
+    "支持 MongoDB 聚合管道过滤、change stream 起始点配置、Graylog 日志、Prometheus 指标、OpenTelemetry 追踪与 pprof 调试"
+   ],
+   "use_cases": [
+    "需要将 MongoDB 集合的变更操作持续发布到 Kafka 供下游消费的场景",
+    "首次初始化时需要将集合现有文档批量导入 Kafka 主题的场景",
+    "在 Kubernetes 等环境中需要通过环境变量配置并配合 MongoDB 副本集运行的场景"
+   ]
+  },
+  "sha": "0191bc52389c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea41b1df1100": {
+  "identity": {
+   "one_liner": "单文件可执行的向量数据库，GPU 常驻向量并支持精确扫描检索。",
+   "review": "VEC 提供两个可执行文件：vec 将向量驻留在 NVIDIA GPU 显存，vec-cpu 使用系统内存并实现相同的线上命令。它支持 TCP 与本地管道/套接字两种传输，附带 C++、Python、Node.js、Delphi 等 SDK。数据库采用精确扫描，GPU QUERY 最多返回 16 条记录，CPU 可通过 --topk 指定。构建 GPU 版需要 CUDA 工具包，CPU 版仅支持 fp32。",
+   "highlights": [
+    "GPU 版将向量驻留显存，CPU 版使用内存并实现相同线上命令，通过 TCP 1920 端口或本地管道/套接字访问",
+    "支持 PUSH/QUERY/QID/GET/UPDATE/DELETE 等命令，以及 DBSCAN 聚类、最远点采样等 CLUSTER/DISTINCT/REPRESENT 操作",
+    "提供 C++ 头文件、Python/NumPy、Node.js、TypeScript 声明、Delphi 五种 SDK，持久化基于 .tensors/.meta/.hashes/.data 文件，脏库每 60 秒自动保存"
+   ],
+   "use_cases": [
+    "需要通过 SDK（C++/Python/Node/Delphi）在 NVIDIA GPU 上进行向量最近邻查询的应用",
+    "使用 --memory 模式运行纯内存、无持久化读写的向量检索服务",
+    "需要对已存向量做 DBSCAN 聚类、最远点采样或按标签检索的场景"
+   ]
+  },
+  "sha": "ea41b1df1100",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13972c32d443": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 与 React 19 的 AI 桌面控制中心，含多 Agent 调度与本地网关守护",
+   "review": "YunTuAI 是面向 Windows / macOS 的 AI 桌面应用展示版仓库，保留完整源码但移除运行时二进制与安装包。它以单窗口承载对话工作台、Agent 指挥中心、技能工坊与知识库助手，前端用 React 19 + Zustand，原生层为 Rust 的 46 个模块，本地 SQLite 存会话，通过启动门控的网关状态机避免假就绪。适合需要本地多模型客户端与桌面 Agent 工作流的开发者参考，构建需 Node.js 20+ 与 Rust stable，首次构建需运行 prepare:openclaw 准备运行时目录。",
+   "highlights": [
+    "提供多模型切换（DeepSeek / 火山方舟 / 小米 MiMo 等）、多 Agent 创建与状态总览，每个 Agent 含独立会话数、技能数与沙箱开关",
+    "内置技能工坊提供 80+ 工具与技能，支持搜索安装、精选同步与 SKILL.md 生成；文档处理走本地 OCR 与 PDF / Excel / Office 解析，不上传原件",
+    "网关以 establish → healthy → degraded → reconnect 状态机管理，支持健康检查、断线重连与自动拉起；IPC 采用分类授权策略与 token 失效自动重试"
+   ],
+   "use_cases": [
+    "在 Windows / macOS 桌面端集中管理多个 AI Agent 会话与本地技能工具",
+    "参考网关生命周期状态机、IPC 鉴权策略与 SQLite 备份机制的桌面端工程实现",
+    "以本地方式处理图片表格 OCR 与 PDF / Excel / Office 文档，原件不上传"
+   ]
+  },
+  "sha": "13972c32d443",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7774c6552630": {
+  "identity": {
+   "one_liner": "基于 Rust 与 QuickJS 双运行时的自托管定时任务面板",
+   "review": "这是一个跑在自有设备上的定时任务工具，通过浏览器网页添加任务、设置 cron 执行时间并查看日志。面向需要在旧手机、树莓派或低配 ARM 盒子上长期挂服务的用户。它以单个静态 musl 二进制加一个 SQLite 文件运行，不依赖云服务或数据库服务器；插件默认跑在内置 QuickJS 中，也可切换 Node/Bun。仓库当前未附带开源许可证文件。",
+   "highlights": [
+    "支持 Shell、Python、JavaScript 脚本任务，通过文件头 @name/@cron 声明，支持 5 段和 6 段 cron 表达式",
+    "提供插件系统：默认运行于内置 QuickJS，可切换 Node 20.6+ 或 Bun 1.0+，插件可使用 host-api 的日志、SQLite、HTTP、WebSocket 等能力",
+    "以单静态 musl 二进制分发（aarch64/armv7/x86_64），数据持久化为 SQLite 文件，任务失败时支持推送到 pushplus、Telegram、邮件等 10 个渠道"
+   ],
+   "use_cases": [
+    "在树莓派、旧手机（Termux）或低配 ARM 盒子上长期运行定时签到、备份、清理类任务",
+    "用 JavaScript 插件把一组重复操作做成按钮或定时任务，通过插件商城从 GitHub Release 安装",
+    "通过 systemd、反向代理或出站隧道（Cloudflare Tunnel、frp、Tailscale）做服务化部署与远程访问"
+   ]
+  },
+  "sha": "7774c6552630",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "05213b823592": {
+  "identity": {
+   "one_liner": "用 Shell 脚本创建、启动和删除多版本本地数据库实例的管理工具",
+   "review": "DBDB 是一套 Shell 脚本，用于在本地按名称创建、启动、停止、重启、删除多个 MySQL、PostgreSQL、MongoDB、Redis、Memcached 实例，并支持指定版本。数据目录与实例名绑定，clone 目录须保持 dbdb 名称以便脚本按路径判断数据库类型。适用于需要在本机并行运行多套数据库的开发者，也提供 Agent Skill 供 Claude Code 等调用。",
+   "highlights": [
+    "支持 MySQL（5.7.31–9.2.0）、PostgreSQL（12.6/13.2）、MongoDB（6.0/7.0）、Redis（6.2/7.2）、Memcached 1.6.31 的多版本实例管理",
+    "每个数据库提供 create/start/stop/restart/port/status/connect/delete 等统一命令，端口可指定或用 random 随机分配",
+    "connect.sh 可将参数直接传给客户端执行查询，并附带 Agent Skill（skills/dbdb），通过 DBDB_HOME 供 AI 代理使用"
+   ],
+   "use_cases": [
+    "在本机同时运行多个不同版本、不同名称的数据库实例进行开发或测试",
+    "通过 crontab @reboot 在机器启动时自动拉起指定数据库实例",
+    "在 Claude Code 等 AI 代理中安装 Skill，让其按需创建并连接临时数据库"
+   ]
+  },
+  "sha": "05213b823592",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2661,5 +2661,203 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3e3a7ed5b73c": {
+  "identity": {
+   "one_liner": "基于 React 与 Firebase 实时数据库的餐厅响应式 PWA 网站",
+   "review": "这是一个面向餐厅展示场景的响应式网站项目，使用 create-react-app 结构搭建，页面数据从 Firebase Realtime Database 请求读取，菜单、优惠等内容通过修改数据库数据即可更新，无需改动代码。路由采用 React Router 的 HashBrowserRouter，并托管在 Firebase 上，适合开发者学习或复用组件搭建类似站点。",
+   "highlights": [
+    "使用 Firebase Realtime Database 作为数据源，组件读取数据库数据显示内容",
+    "采用 React 函数组件与类容器结构，基于 create-react-app 模板构建",
+    "使用 React Router 的 HashBrowserRouter 进行路由，并符合 PWA 应用标准"
+   ],
+   "use_cases": [
+    "为餐厅或本地商铺搭建可动态更新菜单与优惠信息的展示网站",
+    "学习 React Router 路由与 Firebase 实时数据库的集成方式",
+    "复用项目中的组件与代码开发自己的响应式网站（需保留版权声明）"
+   ]
+  },
+  "sha": "3e3a7ed5b73c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fcb5753706b8": {
+  "identity": {
+   "one_liner": "面向 ArangoDB 3.11+ 的 .NET 驱动，提供文档 API、AQL 查询与 LINQ 转换。",
+   "review": "coronabytes/dotnet-arangodb 是 ArangoDB 的 .NET Standard 2.0/2.1、.NET 8/10 驱动，通过 NuGet 包 Core.Arango 安装。它封装数据库、集合、文档的增删改查操作，支持以插值字符串绑定参数生成 AQL、异步枚举流式读取，并将 C# LINQ 表达式翻译为 AQL。适用于需要在 .NET/AspNetCore 应用中访问 ArangoDB 的开发者；README 标注 LINQ 支持仍为 WIP，且 .NET 10 下 LINQ Contains 需强制类型转换。",
+   "highlights": [
+    "支持 System.Text.Json 与 Newtonsoft.Json 两种序列化器，可选 PascalCase/camelCase 命名策略，DateTimeOffset 可配置为 Unix 毫秒时间戳序列化",
+    "AQL 查询通过 FormattableString 插值生成绑定参数（含集合参数 @C1），提供 QueryProfile/BeforeRequest/AfterResponse 等查询日志与 HTTP 追踪配置钩子",
+    "提供 LINQ-to-AQL 翻译（源自 ra0o0f/arangoclient.net，内置 relinq）、ToAql() 调试输出、ExecuteStreamAsync 分批异步枚举，以及 AspNetCore DI 扩展 services.AddArango()"
+   ],
+   "use_cases": [
+    "在 .NET 8/.NET 10 或 .NET Standard 项目中通过文档 API 对 ArangoDB 集合执行创建、批量读取与更新",
+    "在 AspNetCore 服务中通过依赖注入使用 IArangoContext，并配置查询日志与 HTTP 级追踪",
+    "用 LINQ 或带参数绑定的 AQL 编写查询，含 GEO_DISTANCE 计算、DOCUMENT() 关联查找与子查询 LET 子句"
+   ]
+  },
+  "sha": "fcb5753706b8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b7c815d5e0f": {
+  "identity": {
+   "one_liner": "基于 RediStack 的 Swift async/await Redis 客户端",
+   "review": "Perfect-Redis 是面向 Perfect 生态的 Redis 客户端，供服务端 Swift（macOS/iOS/Linux）开发者使用。RedisClient 为 actor，提供 async throws API，命令以 RESP bulk string 发送。基于 swift-server/RediStack 构建，支持哈希/列表/集合封装、发布订阅、MULTI 事务和命令超时。限制包括仅 RESP2、无 TLS、不支持重连与连接池；上游 RediStack 已被标记弃用。",
+   "highlights": [
+    "RedisClient 为 actor，全 API 使用 async/await，命令与参数以 RESP bulk string 发送，键值可含任意字节",
+    "提供发布订阅（messages 流）、multi 事务闭包及 RedisHash/RedisList/RedisSet 封装，并可通过 sendCommandAsRESP 发送任意命令",
+    "commandTimeout 为单次调用总预算，涵盖事务等待、订阅变更、在途命令与回复；取消或超时会关闭连接"
+   ],
+   "use_cases": [
+    "Perfect-Session 的 PerfectSessionRedis 模块用其存储会话",
+    "在 Swift 6.2 服务端项目中通过 SwiftPM 接入 Redis 读写、发布订阅与事务操作",
+    "配合 docker 运行 redis:7 执行 REDIS_TESTS=1 的实服务器测试套件"
+   ]
+  },
+  "sha": "6b7c815d5e0f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6f9ada5abd14": {
+  "identity": {
+   "one_liner": "基于 PHP 的 LeetCode 算法题解集合，持续更新",
+   "review": "该仓库收录以 PHP 编写的 LeetCode 算法题解，并定期更新。按主题标签可见覆盖数组、二分查找、二叉树、位运算、广度/深度优先搜索、数据库、动态规划、贪心等类别，适合以 PHP 为主要语言练习算法题的开发者查阅参考。README 内容较短，各题解的详细说明需进入对应目录查看。",
+   "highlights": [
+    "提供基于 PHP 语言的 LeetCode 算法题目解答",
+    "题解定期更新",
+    "覆盖数组、二分查找、二叉树、位运算、BFS、DFS、数据库、动态规划、贪心等多个算法主题"
+   ],
+   "use_cases": [
+    "使用 PHP 学习或练习 LeetCode 算法题时查阅参考解法",
+    "需要特定算法主题（如动态规划、二叉树等）的 PHP 实现示例",
+    "参与 Hacktoberfest 等开源贡献活动时寻找算法类仓库"
+   ]
+  },
+  "sha": "6f9ada5abd14",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f7ec7485bd86": {
+  "identity": {
+   "one_liner": "基于 Ionic 3 与 Firebase 的跨平台移动应用演示项目",
+   "review": "CityScape 是一个示例应用，用于演示跨平台移动应用中的安全机制、社交登录与实时数据，技术栈为 Ionic 3、Angular、Cordova 与 Firebase。README 包含环境要求（Node.js、Cordova、Ionic CLI）、安装步骤、开发服务器启动与 iOS/Android 构建命令，适合希望参考该框架组合的开发者。",
+   "highlights": [
+    "使用 Ionic 3 与 Firebase 实现 Facebook 登录、Firebase 认证与实时数据库",
+    "支持 ionic serve 启动开发服务器，源文件变更后自动重载",
+    "通过 ionic cordova build 命令构建 iOS 与 Android 应用，产物存放于 platform/ 目录"
+   ],
+   "use_cases": [
+    "学习 Ionic 3 与 Firebase 的集成方式",
+    "参考移动端社交登录与实时数据的实现",
+    "构建并运行 iOS/Android 跨平台应用示例"
+   ]
+  },
+  "sha": "f7ec7485bd86",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fadc52fb38d1": {
+  "identity": {
+   "one_liner": "Erlang 的 JSON NIF 库，提供 decode/encode 接口",
+   "review": "Jiffy 是一个以 C/C++ 实现的 Erlang JSON NIF 库，用于在 Erlang 项元与 JSON 之间相互转换。它提供 jiffy:decode/1,2 和 jiffy:encode/1,2 两个接口，支持 maps 返回、键去重、字符串拷贝、预编码 JSON 拼接等选项；二进制仅支持 UTF-8。README 明确其设计取向为正确性优先于性能，并通过 bytes_per_red 控制让出调度器以减少对系统整体性能的影响。适用于 Erlang/CouchDB 相关项目中处理 JSON 数据的场景。",
+   "highlights": [
+    "提供 jiffy:decode/1,2 与 jiffy:encode/1,2 接口，实现 Erlang 项元与 JSON 的相互转换",
+    "decode 支持 return_maps、dedupe_keys、copy_strings、return_trailer、null_term 等选项，encode 支持 uescape、pretty、force_utf8 等选项",
+    "支持 {json, IoData} 元组将预编码 JSON 原样拼入输出，且通过 bytes_per_red 选项控制 NIF 让出调度的行为"
+   ],
+   "use_cases": [
+    "在 Erlang 应用中解析与生成 JSON 数据",
+    "需要将 JSON null 映射为 undefined 或 nil 等自定义项元的解码场景",
+    "需要在编码结果中原样嵌入预先生成的 JSON 片段的场景"
+   ]
+  },
+  "sha": "fadc52fb38d1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "104992a6ad73": {
+  "identity": {
+   "one_liner": "自托管二维码桌点餐应用，供客人手机点餐、厨房与传菜屏接单",
+   "review": "TavoloFlow 是一个面向小型餐厅（主要为在意大利的中餐厅）的可自托管二维码桌边点餐系统：客人扫桌码用手机点餐，厨房和传菜屏按 10–30 秒轮询刷新显示菜品，老板在收银后结账。技术栈为 ASP.NET Core 10 + PostgreSQL 18 + React 19 SPA，经 Caddy 共享单一 HTTPS 源，Docker Compose 部署于单台 VPS。它不处理在线支付、不含出票打印和外卖功能，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "三语界面（英语/意大利语/中文），员工区可安装为 PWA；厨房屏支持按菜品或订单分组、提示音与分类过滤",
+    "针对并发与断网场景的实现：固定顺序行锁、数据库层不变式（每桌仅一个进行中到访）、账单乐观版本校验、带客户端请求 ID 的幂等订单",
+    "提供 Docker Compose 一键演示（含虚构 Demo Ramen 餐厅数据）与生产部署脚本（迁移、夜间备份、回滚），后端集成测试在 Testcontainers 启动的真实 PostgreSQL 上运行"
+   ],
+   "use_cases": [
+    "小型堂食餐厅（如在意中餐厅）希望客人扫桌码自主点餐、厨房与传菜位用平板跟单",
+    "平台管理员需为多家餐厅创建账号、配置主题并线下记录服务期与年费的多租户运营场景",
+    "开发者想学习或在其自有服务器上运行一套完整的 ASP.NET Core + React + PostgreSQL 点餐系统"
+   ]
+  },
+  "sha": "104992a6ad73",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "03cf4c4eea94": {
+  "identity": {
+   "one_liner": "原生 macOS 应用，本机接收 OTLP 并即时展示追踪与日志",
+   "review": "Magnife 是一款原生 macOS 应用，在本机 127.0.0.1 的 4317（gRPC）和 4318（HTTP）端口接收 OTLP 数据，展示追踪、日志及慢 SQL、N+1、HTTP 错误等检测结果，数据以 SQLite 持久化。面向在 Mac 上以 .NET、Go、Node、Python 或 Java 接入 OpenTelemetry 的后端与全栈开发者。架构上由 Go 写入进程与 SwiftUI 只读应用共享一个数据库文件，需 macOS 26 及以上。",
+   "highlights": [
+    "内置 OTLP 接收器监听 127.0.0.1:4317（gRPC）与 4318（HTTP/protobuf/JSON），应用启动即监听；追踪数据以 SQLite（WAL 模式）本地持久化，重启后可查看",
+    "提供瀑布图与 span 详情、按级别/服务过滤的日志视图、⌘K 查询语言搜索，以及命名查询与路由的慢 SQL、N+1、失败 HTTP 检测",
+    "附带 MCP 服务器 magnife-mcp，向 Claude Code、Codex、Cursor 等编码代理提供七个只读工具（列出追踪、读取 span、搜索日志、对比追踪等），并支持通过 OTLP JSON Lines 文件导入导出追踪"
+   ],
+   "use_cases": [
+    "本地开发时查看本机服务的 OpenTelemetry 追踪与日志，替代在 Docker 中运行收集器或浏览器查看器",
+    "排查本地请求中的慢 SQL、N+1 查询与失败 HTTP 调用等具体问题点",
+    "让接入 MCP 的编码代理读取本地追踪数据，在修改代码时查询运行时表现"
+   ]
+  },
+  "sha": "03cf4c4eea94",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "59bf5f805dc2": {
+  "identity": {
+   "one_liner": "基于华为云 DAS 管控面的 GaussDB 数据面 MCP 服务器，三层安全防护下执行 SQL。",
+   "review": "该项目是一个 MCP 服务器，供 Dify、Claude Code 等 AI 客户端查询与操作华为云 GaussDB 业务数据。SQL 经 DAS 管控面 HTTPS 接口执行，无需数据库端口公网可达；提供 11 个工具，按 READ/WRITE/DANGEROUS 三通道分类，每次调用执行一条语句。对 Oracle 兼容（A）库的语法做了实测验证。许可证为 MIT。",
+   "highlights": [
+    "SQL 经 DAS 管控面 HTTPS 接口执行，数据库端口零公网可达，部署位置只需能访问华为云管控面",
+    "三层安全机制：SQL 白名单通道锁、只读/受限账号、凭证域分离（密码不进入执行链路），每次调用写 JSONL 审计",
+    "提供 11 个工具覆盖只读查询、DML、DDL、执行计划、元数据浏览与 DAS 连接注册，含建库 verified 确认与会话失效自愈机制"
+   ],
+   "use_cases": [
+    "AI 客户端（Dify、Claude Code 等）在本地或云上通过 MCP 查询与操作 GaussDB 业务数据",
+    "对 Oracle 兼容（A/ORA）库执行 MERGE INTO、DUAL、MINUS、DECODE、NVL 等语句",
+    "通过 streamable-http + Bearer token 部署为远程 MCP 服务并记录审计日志"
+   ]
+  },
+  "sha": "59bf5f805dc2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

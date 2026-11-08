@@ -3036,5 +3036,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "11c7d956f977": {
+  "identity": {
+   "one_liner": "面向 FastAPI 的内置认证与管理后台框架",
+   "review": "FastFort 为 FastAPI 项目提供 Django 风格的管理后台与认证体系：通过 @admin.register 注册模型生成列表、筛选、增删改页面，支持 Session 与 JWT（OAuth 2 形状）登录、Argon2id 哈希、审计日志与登录记录。适配 SQLAlchemy 2.0 与 Tortoise ORM，支持 SQLite/PostgreSQL/MySQL。无需 Node.js 构建步骤，通过 uv add \"fastfort[sqlalchemy]\" 安装。",
+   "highlights": [
+    "支持 Django 风格模型注册（list_display、list_filter、fieldsets 等），管理界面无需 JavaScript 即可完成核心操作",
+    "提供 Session 与 JWT 双认证、refresh token 轮换与重用检测、bearer_user 依赖项供业务路由使用",
+    "适配 SQLAlchemy 2.0 与 Tortoise ORM 两种 ORM，支持 SQLite、PostgreSQL、MySQL 三种数据库"
+   ],
+   "use_cases": [
+    "需要为 FastAPI 应用快速搭建带认证的管理后台",
+    "需要 OAuth 2 形状的 token 端点供前端或第三方集成调用",
+    "需要管理 PostGIS 地理数据或 pgvector 向量检索的 PostgreSQL 项目"
+   ]
+  },
+  "sha": "11c7d956f977",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3b17fed1c12d": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis 兼容内存键值数据库，实现 RESP 协议",
+   "review": "Redistill 是一个用 Rust 编写的内存键值数据库，实现 Redis 的 RESP 协议，可配合现有 Redis 客户端使用，默认监听 6379 端口。它采用多线程架构与无锁读取，支持 string 和 hash 数据类型、TTL、LRU 等淘汰策略，可选启用 RDB 快照与 AOF 持久化（默认关闭）。README 说明尚无复制功能，也未提供多键事务，MIT 协议开源。",
+   "highlights": [
+    "实现 Redis RESP 协议，支持 SET/GET/MSET/HSET/INCR/EXPIRE/SCAN 等 Redis 命令",
+    "多线程架构与无锁读取，支持通过 redistill.toml 配置分片数、内存上限与淘汰策略（allkeys-lru、allkeys-s3fifo 等）",
+    "可选 RDB 快照与 AOF 持久化，AOF 支持 always/everysec/no 三种 fsync 模式；默认两者均关闭"
+   ],
+   "use_cases": [
+    "会话存储：借助 TTL 过期与键值读写命令",
+    "API 响应缓存与限流计数器：使用 INCR/DECR 与 TTL 命令",
+    "需要 Redis 客户端兼容、但可接受单机部署（暂无复制）的场景"
+   ]
+  },
+  "sha": "3b17fed1c12d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

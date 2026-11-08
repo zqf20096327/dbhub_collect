@@ -2508,5 +2508,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c1a2e78db97": {
+  "identity": {
+   "one_liner": "AI 代理工具调用运行时审计与拦截平台，执行前决策并留存防篡改证据。",
+   "review": "PANOPTIS（曾名 AgentWatch）位于代理与工具之间，对经过强制集成路由的调用在运行前决策、运行后检查输出，并提供可独立验证的 Merkle 封存证据。面向需要控制代理工具调用的开发者，通过 protect_tool 包装 Python 函数或接入 LangChain、LangGraph、AutoGen、MCP 网关等。其规则基于模式与解析器，仅覆盖已知形式，非沙箱，集成也只覆盖经包装的调用。",
+   "highlights": [
+    "十步决策管线在工具运行前拦截破坏性参数、注入输出等，被拒绝的调用不执行，管线内部失败也转为拒绝",
+    "证据面按每 200 条或 30 秒封存为 Merkle 段，锚头存于存储之外，独立校验器可检测编辑、重排与截断",
+    "支持影子回放：用记录的证据应答工具调用，对比新旧模型的轨迹，不接触真实环境"
+   ],
+   "use_cases": [
+    "为代理工具调用加入运行前拦截与人工审批流程",
+    "需要对代理执行记录做防篡改存证与独立校验",
+    "在换用新模型前用录制的证据回放对比行为差异"
+   ]
+  },
+  "sha": "6c1a2e78db97",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f37dd158fddf": {
+  "identity": {
+   "one_liner": "Flutter 构建的本地优先跨平台 AI 聊天客户端，支持 13 个 AI 平台与 MCP 工具调用。",
+   "review": "LumenFlow 是一款面向 Android、iOS、Windows、Linux 和 macOS 用户的 AI 聊天应用，采用 Flutter 构建。它通过协议适配器接入 13 类 AI 平台（OpenAI、Claude、Gemini、DeepSeek 等），内置 AgentRunner 工具循环并支持 Streamable HTTP MCP 服务器。会话、消息与凭据存储于设备本地 SQLite 数据库，支持 TXT/JSON/PDF 导出，PDF 嵌入 Noto Sans SC 字体以保证中日韩文本显示。构建需 Flutter 3.47.8+，Android 最低支持 Android 10。",
+   "highlights": [
+    "支持 13 类 AI 平台，内置 Chat Completions、Responses、Claude Messages、Gemini Interactions 四种协议适配器，提供流式响应与思维摘要输出",
+    "内置时间、计算器、文本工具，并可连接 Streamable HTTP MCP 服务器，通过带迭代预算的 AgentRunner 统一执行模型/工具循环",
+    "本地 SQLite 存储会话、消息与附件，支持 TXT/JSON/PDF/归档格式导出，以及 JSON 设置备份与恢复"
+   ],
+   "use_cases": [
+    "需要在手机或桌面端同时接入多个 AI 平台并切换使用的个人用户",
+    "需要通过 MCP 协议为模型接入外部工具的场景",
+    "需要会话数据完全保存在本地设备并进行 PDF/TXT 导出的使用场景"
+   ]
+  },
+  "sha": "f37dd158fddf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6f042b481022": {
+  "identity": {
+   "one_liner": "逐模块构建的 ETF 投研 Agent 学习项目，含可运行代码与双语文章",
+   "review": "这是一个以逐模块演进方式构建 ETF 投研 Agent 的开源教学项目，面向学习 Agent 工程的开发者。每个模块对应一篇讲解工程决策的文章和一份可运行实现，默认示例使用离线合成文档和脚本化 Gateway 固件，无需模型密钥。README 明确声明其非实时基金研究或交易服务，completed 仅表示执行完成，答案质量未经验证；需 Node.js 26.8.1–26.x。",
+   "highlights": [
+    "每个模块包含一篇工程决策解析文章与对应的可运行实现，支持离线运行（默认示例无需模型密钥）",
+    "每次运行在 runs/ 目录生成独立结果目录，包含 report.md、manifest.json 与 run.jsonl，可用 --observe 命令检查",
+    "提供从 v0.x 到 v0.25 的版本演进记录、文章与代码映射及验证证据索引"
+   ],
+   "use_cases": [
+    "学习 Agent 工程的机制实现（持久执行、检查点、任务调度、能力准入等）",
+    "对照架构文章查阅可运行代码与验证证据",
+    "离线复现合成文档对比流程并审计运行产物"
+   ]
+  },
+  "sha": "6f042b481022",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "38dae3453b69": {
+  "identity": {
+   "one_liner": "本地加密的 AI 代理记忆库，提供信任状态检索与哈希链审计日志",
+   "review": "Kibisis 是 Perseus Computing 开源的（MIT 许可）代理记忆存储库，提供 Rust 和 Python 两种实现，数据存于本机单个 SQLite 文件，条目内容用 AES-256-GCM 加封，可选 SQLCipher 全文件加密。它为 AI 代理提供按范围、信任状态和日期的检索，通过墓碑机制使删除不可重写，并用 fencing token 租约实现单写者协调。当前为 0.1.0-alpha 预发布版本。",
+   "highlights": [
+    "Python 库中条目内容采用 AES-256-GCM 加密，加载 SQLCipher 后可加密整个数据库文件，且默认不建立任何出站网络连接",
+    "每条记忆具有 candidate、verified、disputed、revoked 四种信任状态，支持按日期查询当时有效的内容，MCP recall() 会隐匿被撤销及冲突的匹配并说明",
+    "所有写入、归档、墓碑和清除操作记录在同一事务的哈希链日志中；租约使用递增 fencing token，实现单机多进程的单写者协调"
+   ],
+   "use_cases": [
+    "需要将 AI 代理的决策、偏好与代码事实等记忆保留在本地并加密存储的场景",
+    "多个进程或线程需要协调访问同一记忆资源、要求单写者保障的场景",
+    "需要人工审核代理写入内容、并对变更保留防篡改审计记录的代理工作流"
+   ]
+  },
+  "sha": "38dae3453b69",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

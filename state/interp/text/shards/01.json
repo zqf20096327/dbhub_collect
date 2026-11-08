@@ -2700,5 +2700,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fe7307e81496": {
+  "identity": {
+   "one_liner": "单二进制 SQL 数据库 MCP 服务器，内置只读默认模式与 PII 脱敏",
+   "review": "dbmcp 是一个以单二进制分发的 MCP 服务器，用于将 AI 助手连接到 MySQL/MariaDB、PostgreSQL 或 SQLite，无需 Python、Node 或 Docker 运行时。它提供 schema 发现、读写查询、DDL 与 explain 等 MCP 工具，默认开启只读模式（DBMCP_DB_READ_ONLY=true）隐藏写入类工具，并支持 PII 脱敏、stdio/HTTP 两种传输和 SSH 隧道。适合需要在 Claude Desktop、Cursor 等 MCP 客户端中安全访问数据库的开发者。",
+   "highlights": [
+    "单二进制约 7 MB，无 Python/Node/Docker 运行时依赖，支持 npm（npx -y @haymon-ai/dbmcp）等方式安装",
+    "提供 schema 发现（listDatabases/listTables/listViews/listTriggers/listFunctions 等）、readQuery/writeQuery、DDL 与 explainQuery 等 MCP 工具，只读模式隐藏写入工具",
+    "支持 stdio 与 HTTP 传输、DBMCP_* 环境变量/env 文件/YAML 配置分层解析，以及带 known_hosts 校验与自动重连的内嵌 SSH 隧道（MySQL/MariaDB/PostgreSQL）"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor、VS Code 等 MCP 客户端中以只读默认模式接入 SQL 数据库，供 AI 助手进行 schema 探索与查询",
+    "通过 HTTP 传输与 bearer token 在远程/多客户端场景下运行数据库 MCP 服务",
+    "通过内嵌 SSH 客户端经堡垒机访问 MySQL/MariaDB/PostgreSQL 数据库"
+   ]
+  },
+  "sha": "fe7307e81496",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "55dee2f6510d": {
+  "identity": {
+   "one_liner": "React+Redux+Node 用户注册登录认证的起始套件",
+   "review": "该项目是基于 Create React App 的起步模板，包含 React、Redux、Bootstrap 前端与 Express、Sequelize 后端，实现登录和用户注册页面。README 提供客户端与服务端两套脚本：客户端运行在 3000 端口，服务端在 8080 端口提供 API；数据库通过 db:setup 一条命令完成创建、迁移和种子数据填充。集成 Jest、Istanbul、ESLint 用于测试覆盖和代码检查，采用 MIT 许可证。",
+   "highlights": [
+    "提供登录（Sign In）和注册（Register）页面",
+    "提供 db:create、db:migrate、db:seed、db:setup 等数据库脚本，基于 server/db 配置运行",
+    "集成 Jest 测试、Istanbul 覆盖率和 ESLint 检查脚本"
+   ],
+   "use_cases": [
+    "需要带用户注册登录功能的 React+Node 项目起点",
+    "需要前后端分离结构并配套数据库迁移脚本的模板场景",
+    "学习 React+Redux+Express+Sequelize 全栈组合的项目结构"
+   ]
+  },
+  "sha": "55dee2f6510d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "90267582a8e5": {
+  "identity": {
+   "one_liner": "Rust 编写的属性图数据库，统一 MVCC、时间旅行、分支与复制的提交流。",
+   "review": "frankengraphdb 是一个以 Rust（nightly，禁止 unsafe）实现的属性图数据库，支持 GQL（ISO/IEC 39075:2024）语言，提供嵌入式库、服务器与 CLI 三种形态。核心机制包括 fountain 编码提交流、三层温度分级存储和 DBSP 风格增量引擎。需注意：README 以目标完成态撰写，截至 2026-10-17 快速示例中 11 条语句仅 6 条可按原文运行，尚无发布版或安装包。",
+   "highlights": [
+    "将 MVCC、可查询历史（FOR SYSTEM_TIME AS OF/BETWEEN）、git 风格零拷贝分支、复制与变更订阅统一到单一 fountain 编码提交流",
+    "执行层将二进制哈希连接、worst-case-optimal 多路连接与分解中间结果纳入同一 Free-Join 算子族，附带可审计回放的计划证书",
+    "全工作区 forbid unsafe_code，仅 SIMD/arena/VFS 边界带标量回退；依赖为封闭宇宙（std + 三个自有基础库，经 deny.toml 枚举固定）"
+   ],
+   "use_cases": [
+    "需要时间旅行查询与数据库分支（fork/合并/丢弃）的图数据分析",
+    "在同一规划器内融合 ANN、BM25 与图扩展的检索流程（hybrid.search 算子）",
+    "需要确定性可复现结果（同状态+同查询+同策略生成字节相同结果）的验证型环境"
+   ]
+  },
+  "sha": "90267582a8e5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dc0e05097f5c": {
+  "identity": {
+   "one_liner": "基于 Sub2API 的非官方可扩展 AI API 网关分支",
+   "review": "sub2api-custom 是 Wei-Shaw/sub2api 的非官方分支，提供带路由、配额策略与供应商集成的 AI API 网关，使用 Go、Vue、PostgreSQL、Redis 构建。相对上游增加分组级每用户并发上限、API 密钥同平台回退分组、单机多窗口 Codex 指纹等扩展；需从源码构建，上游镜像不含这些功能。采用 LGPL-3.0 协议，README 提示使用可能违反上游服务商条款。",
+   "highlights": [
+    "为每个分组提供可选的每用户并发上限，按用户和分组独立计数",
+    "API 密钥可选择同平台回退分组，主分组无可用账号时启用并应用其定价倍率与用量归属",
+    "提供单机多窗口 Codex 指纹，为账号生成稳定设备身份，溢出窗口以子代理形式呈现"
+   ],
+   "use_cases": [
+    "需要按用户/分组维度细化并发与配额管理的 API 网关部署",
+    "已有 Sub2API 部署且需要 Codex 指纹扩展与回退分组能力的团队",
+    "通过 Docker Compose 在 Linux 上自托管 AI API 网关的场景"
+   ]
+  },
+  "sha": "dc0e05097f5c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8bbf28208c06": {
+  "identity": {
+   "one_liner": "基于Java与Firebase的Android食谱管理应用，采用MVVM架构",
+   "review": "这是一个使用Java在Android Studio中开发的食谱管理Android应用，接入Firebase数据库实现实时数据存储与用户认证。用户可添加、分类自己的食谱，创建个人资料并浏览社区中他人分享的食谱。README提到项目采用组件化组织，包含Models、Fragments、Adapters和Activities，并集成了一个外部API；运行需自备Firebase账号并在项目中添加配置文件。",
+   "highlights": [
+    "使用Firebase实现实时数据存储与读取，并提供Firebase用户认证",
+    "项目按Models、Fragments、Adapters、Activities组件组织，Model层通过Firebase管理食谱数据",
+    "集成外部API以提供附加功能，支持在RecyclerView或ListView中展示食谱列表"
+   ],
+   "use_cases": [
+    "个人食谱的添加、分类与集中管理",
+    "创建用户资料并向社区分享自己的食谱",
+    "浏览和尝试其他用户分享的食谱"
+   ]
+  },
+  "sha": "8bbf28208c06",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2395,5 +2395,92 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0d78d368651a": {
+  "identity": {
+   "one_liner": "fsp：扫描 APK 提取 Firebase 项目信息并检测 Firestore 安全规则漏洞的工具",
+   "review": "FireStorePwn（fsp）是一款安全测试工具，通过解析 APK 提取 Firestore 数据库信息，并在有或无身份验证的情况下检测安全规则是否存在配置问题。安装方式为下载脚本到 /bin/fsp 并赋予执行权限，运行时传入 APK 路径，可选用邮箱密码或令牌进行认证扫描。适用于渗透测试人员评估 Android 应用的 Firestore 数据库安全配置。",
+   "highlights": [
+    "扫描 APK 并检测 Firestore 数据库安全规则，支持无认证和带认证两种测试方式",
+    "带认证扫描支持邮箱+密码或令牌（token）两种凭据形式",
+    "通过 wget 下载单个脚本文件到 /bin 并加执行权限即可安装"
+   ],
+   "use_cases": [
+    "对 Android 应用的 Firestore 安全规则配置进行漏洞评估",
+    "渗透测试中验证数据库在无认证或持有测试账号凭据时的访问暴露情况"
+   ]
+  },
+  "sha": "0d78d368651a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d814eb856a89": {
+  "identity": {
+   "one_liner": "基于 Firebase Realtime Database 的 Connect/Express 会话存储",
+   "review": "connect-session-firebase 是一个兼容 Connect/Express 的会话存储，通过 Firebase SDK 将会话数据写入 Firebase Realtime Database。安装时需同时添加 firebase-admin 作为对等依赖，且主版本号需匹配。使用时先初始化 firebase-admin 数据库实例并传入 FirebaseStore，Express 4 用户需传入 express-session 以扩展其 Store。适用于已使用 Firebase 的 Node.js 项目。",
+   "highlights": [
+    "支持传入已初始化的 Firebase 数据库实例，可自定义会话存储的子引用路径（默认 sessions）",
+    "提供 reapInterval 配置定期清理过期会话（默认 6 小时），并可指定清理回调",
+    "README 提醒使用公开 Firebase 数据库时需配置只读/写入规则以保障安全"
+   ],
+   "use_cases": [
+    "在 Connect 或 Express 应用中将会话数据持久化到 Firebase Realtime Database",
+    "已部署 firebase-admin 并持有 Firebase IAM 服务账号凭据的 Node.js 项目",
+    "需要配置过期会话自动清理间隔及清理回调的应用"
+   ]
+  },
+  "sha": "d814eb856a89",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d22c1db1a1b": {
+  "identity": {
+   "one_liner": "连接 Neo4j 数据库的 Dart 驱动，基于 Neo4j HTTP API 实现图数据操作",
+   "review": "Neo4Driver 是一个 Dart 语言包，通过 Neo4j 的 HTTP API（默认端口 7474）与数据库通信，供 Dart/Flutter 项目使用。初始化时以用户名、密码、地址和数据库名配置客户端，之后可调用方法执行节点与关系的增删改查、按属性或标签查询、Dijkstra 最短路径计算及图投影创建。安装方式为在 pubspec.yaml 中添加依赖并运行 pub get。",
+   "highlights": [
+    "支持节点的创建、删除、按 ID/属性/标签查询与更新",
+    "提供关系的创建、查找、存在性判断与更新操作",
+    "包含 Dijkstra 最短路径计算、两点距离计算和图投影创建"
+   ],
+   "use_cases": [
+    "在 Dart 或 Flutter 应用中读写 Neo4j 图数据库",
+    "需要按属性、标签或 ID 检索节点和关系的场景",
+    "涉及最短路径计算或图投影的图分析任务"
+   ]
+  },
+  "sha": "1d22c1db1a1b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4aadc4498a2f": {
+  "identity": {
+   "one_liner": "只读查看 PlayStation 游戏 PKG/ISO/镜像内容的跨平台桌面工具",
+   "review": "PSGame-Viewer 是用 C++17 和 Qt 6 编写的桌面程序，用于只读查看 PS2/PS3/PS4/PS5 的 PKG、ISO、exFAT、PFS 等文件，展示标题、Title ID、封面、奖杯和文件列表，并支持重命名与批处理。适合维护 PlayStation 游戏文件集合的用户。程序为便携式设计，配置与数据保存在可执行文件旁，未提取时不修改原文件。",
+   "highlights": [
+    "支持 PS2 ISO、PS3 PKG/游戏文件夹、PS4 PKG（含 FPKG 与分割件）、PS5 PKG/exFAT/PFSC/ffpkg 等多种格式的只读读取",
+    "提供规格卡、封面画廊、文件树、解密奖杯列表及 param.sfo/param.json 详情标签页",
+    "支持按模板重命名与递归批量重命名（含撤销日志），基于 SQLite 的游戏库，并提供 --info 命令行模式输出纯文本"
+   ],
+   "use_cases": [
+    "在不解压、不修改原文件的前提下查看 PKG/ISO 内的元数据、文件列表与奖杯信息",
+    "按统一命名规则整理本地 PlayStation 游戏文件（单文件或整文件夹批量重命名）",
+    "通过 --info 命令行输出供脚本和其他工具读取文件信息"
+   ]
+  },
+  "sha": "4aadc4498a2f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

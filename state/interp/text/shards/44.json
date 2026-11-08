@@ -2641,5 +2641,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f64c880991b9": {
+  "identity": {
+   "one_liner": "封装 Neo4j Python Driver 的 Python 类，用方法调用替代常见 Cypher 查询",
+   "review": "Neointerface 是 GlaxoSmithKline 开发的 Python 类，包装官方 Neo4j Python Driver，提供面向常见图数据库操作的方法，减少编写 Cypher 的需求，高级用户也可直接传入 Cypher。支持 Pandas DataFrame 与字典和 Neo4j 节点间的互转；部分功能依赖 APOC 库，RDF 功能需额外安装 n10s。README 注明在 Neo4j 4.3.6 与 4.4.11 版本上测试。",
+   "highlights": [
+    "提供 load_df / get_df 方法，实现 Pandas DataFrame 与 Neo4j 节点之间的双向转换",
+    "提供 load_dict 方法，将嵌套字典写入图数据库并指定根节点标签",
+    "支持通过环境变量（NEO4J_HOST/NEO4J_USER/NEO4J_PASSWORD）配置连接，可选启用 APOC 与 RDF 功能"
+   ],
+   "use_cases": [
+    "希望以 Python 方法调用而非手写 Cypher 操作 Neo4j 的开发者",
+    "需要在 Pandas DataFrame 与图数据库之间导入导出数据的分析流程",
+    "将嵌套字典等结构化数据写入 Neo4j 并构建节点关系的场景"
+   ]
+  },
+  "sha": "f64c880991b9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c9aec1063277": {
+  "identity": {
+   "one_liner": "连接 PostgreSQL/MongoDB/RethinkDB，以 TypeScript 生成后台管理与数据分析面板。",
+   "review": "AntelopeJS DMS 是一个自托管的 Apache-2.0 开源系统：用户填入数据库连接串后，由 Claude Code 或 Codex 等外部编码代理生成后台管理与统计面板，页面以 TypeScript 类形式写入用户仓库，DMS 自身不附带 AI 模型。生成的页面默认只读，需按表开启编辑后才生成增删改路由；运行依赖 Node.js、Docker Compose 及一个 MongoDB 存放 DMS 自身数据。适合需要自托管内部工具并希望产出代码留在自己仓库的团队。",
+   "highlights": [
+    "支持 PostgreSQL、MongoDB、RethinkDB 三种数据库连接，读取 schema 后按表生成页面",
+    "Builder 的每次编辑经全项目类型检查通过后写入 TypeScript 文件",
+    "包含登录、成员、多租户 SaaS 模式、实时更新及可嵌入 AdonisJS 6 的运行方式"
+   ],
+   "use_cases": [
+    "为 ERP、CRM 等已有数据库搭建内部后台管理界面",
+    "搭建多数据源的业务数据统计面板",
+    "在现有 AntelopeJS/AdonisJS 项目中集成后台与权限体系"
+   ]
+  },
+  "sha": "c9aec1063277",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "46f5c2ab648a": {
+  "identity": {
+   "one_liner": "用于 Convex 的级联删除组件，基于已有索引声明关系并批量清理关联文档",
+   "review": "这是一个面向 Convex 后端的级联删除组件：开发者用现有索引声明表间关系，调用 deleteWithCascade 时按依赖顺序删除记录及其所有子记录，大树由 Convex 调度器分批处理，批内原子执行，并以访问追踪防循环。适合使用 Convex 且需要清理关联文档（如用户→帖子→评论）的项目。安装需 npm 引入并在 convex.config.ts 注册组件。采用 Apache-2.0 许可证。",
+   "highlights": [
+    "提供 deleteWithCascade 方法，一次调用按正确顺序删除记录及其全部已配置的依赖记录，返回各表删除数量",
+    "基于调度器的分批处理大型删除树，批内删除为原子操作，并通过 visited 追踪防止循环关系导致死循环",
+    "提供可打补丁的安全 db 助手（对直接 .delete() 抛错）、带按表计数的删除日志（支持响应式查询），以及启动时的索引配置校验"
+   ],
+   "use_cases": [
+    "删除父记录（如用户）时需自动清理多层子记录（帖子、评论）的 Convex 应用",
+    "希望强制所有删除走级联流程、禁止绕过级联直接删除的开发团队",
+    "需要审计或展示每次级联删除了哪些表及数量的应用"
+   ]
+  },
+  "sha": "46f5c2ab648a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8b5083aa7af2": {
+  "identity": {
+   "one_liner": "基于 PHP + MySQL 的 API 发布、文档展示与调用统计管理系统",
+   "review": "该系统面向个人站长、小型团队或学习者，用于自部署管理 API 接口：提供接口增删与启停、文档展示、在线测试、每日与累计调用统计及后台面板。要求 Linux、Nginx/Apache、PHP 8.0+、MySQL 5.7+；提供浏览器安装向导自动导入数据库，README 提示上线前需自行完成安全审计。",
+   "highlights": [
+    "支持 API 接口的新增、编辑、启用停用，并生成请求示例、参数说明、返回示例和在线测试入口",
+    "通过在接口中引入 api_stats.php 并传入别名，实现每日与累计调用次数统计",
+    "提供浏览器安装向导，自动导入 install/api.sql 并生成 includes/database.php 配置"
+   ],
+   "use_cases": [
+    "个人站长或小型团队自行部署 API 发布与文档展示站点",
+    "需要记录各接口每日及累计调用次数的场景",
+    "学习者部署后进行 PHP 接口的二次开发"
+   ]
+  },
+  "sha": "8b5083aa7af2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

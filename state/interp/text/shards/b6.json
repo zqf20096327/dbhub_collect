@@ -2814,5 +2814,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "26563fb5c347": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 DeepSeek Harness 跨会话长期记忆插件",
+   "review": "dsh-engram 是 DeepSeek Harness 的跨会话长期记忆插件，将记忆存入纯本地 SQLite，通过 FTS5 关键词与本地向量嵌入做 RRF 混合检索，并用「房间#桩位」坐标组织记忆宫殿信息架构。提供 23 个窄参数工具、证据门判定、SM-2 间隔重复复习与 Web 管理面板，一条命令安装后默认即可使用；嵌入引擎为可选依赖，弱网安装时跳过并降级为纯关键词检索。",
+   "highlights": [
+    "混合检索：FTS5（含中文 2-gram）与本地向量（Xenova 多语言 MiniLM，384 维）RRF 融合，嵌入不可用时自动降级纯关键词并显式标记",
+    "证据门：engram_assess 由代码强制「声称充足 + 本批次有效证据 + nextStrategy=answer」三者齐备才判充足",
+    "来源审计：每条记忆记录来源会话、轮次与事件 seq，含取代链、矛盾边与操作日志；支持 Markdown/JSON 导出与 Obsidian/Logseq 友好镜像"
+   ],
+   "use_cases": [
+    "为使用 DeepSeek Harness 的编码 agent 提供跨会话记忆，会话开始注入用户画像、检索历史事实",
+    "按仓库隔离项目约定记忆（project-<hash>.db 按 git origin 隔离），个人偏好与项目知识分库管理",
+    "含密钥/个人信息的会话内容入库场景：入库前正则脱敏并替换为 [REDACTED:<类型>] 标记"
+   ]
+  },
+  "sha": "26563fb5c347",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "36999fd348ea": {
+  "identity": {
+   "one_liner": "将数据库迁移作为 Kubernetes 资源的 Flyway Operator。",
+   "review": "该项目是一个 Kubernetes Operator，提供 Migration 自定义资源，用于声明要迁移的数据库和要应用的 SQL。Operator 调用 Flyway 执行迁移，将结果报告为 Applied、Progressing 或 Failed 条件，并且仅在 SQL 镜像或设置更改时才重新运行。它面向 GitOps 工作流，可通过 OLM、Helm 或 kustomize 安装，需要 Kubernetes 1.35+（OpenShift 4.22+）。SQL 文件被打包在用户提供的容器镜像中，重试次数和时间限制均为有限值。",
+   "highlights": [
+    "提供 Migration CRD，声明数据库与 SQL 容器镜像，由 Operator 调用 Flyway 执行",
+    "仅在新 SQL 镜像或配置变更时重新运行迁移，状态以 Applied/Progressing/Failed 条件展示",
+    "提供 Prometheus 指标、Grafana 仪表盘、Argo CD 集成，发布件带 cosign 签名"
+   ],
+   "use_cases": [
+    "在 GitOps 流程中以声明式方式管理数据库 schema 迁移",
+    "让 Argo CD 等待迁移完成后再发布应用，避免应用先于 schema 部署",
+    "替代应用启动时或 CI 脚本中手动执行迁移的流程"
+   ]
+  },
+  "sha": "36999fd348ea",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0a0a12dbd316": {
+  "identity": {
+   "one_liner": "面向 Linux 原生微信 4.x 的只读解密、WAL 合并与 HTTP 导出管道",
+   "review": "该项目提供一套针对 Linux 原生微信 4.x 的数据导出流程：通过 GDB 附加进程提取密钥，只读拷贝并解密 WCDB 数据库，合并 WAL 帧后经 HTTP/Webhook 供下游消费，可对接飞书、Dify 等个人 AI 助理系统。适用于 Homelab 用户；服务默认仅监听 127.0.0.1，密钥提取需 ptrace 权限，远程 VPS 部署未经作者验证。",
+   "highlights": [
+    "只读拷贝解密，不修改微信原库，原生实现 WAL 帧解析与内存合并以捕获增量消息",
+    "采用 UTC 时间戳加 PID 的版本树，经 os.replace 原子切换 current 软链接并支持回滚脚本",
+    "提供可选媒体富化层（默认关闭），支持图片落盘、视频元数据提取、语音自带转文字读取及文件附件解析"
+   ],
+   "use_cases": [
+    "Homelab 家庭服务器上对 Linux 原生微信进行定时增量解密与归档",
+    "通过客户端脚本或 Webhook 将聊天快照推送到飞书、Dify 等下游 AI 助理系统",
+    "为只读容器编排或 systemd 环境提供统一数据契约的消息导出（与 wx-pad-exporter 共享 schema）"
+   ]
+  },
+  "sha": "0a0a12dbd316",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

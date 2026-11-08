@@ -3040,5 +3040,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2bdd7a6961b8": {
+  "identity": {
+   "one_liner": "面向预嵌入数据集的 Python 库，用于加载和编目向量数据集",
+   "review": "Pinecone Datasets 是一个 Python 库，用于加载预嵌入（pre-embedded）数据集，支持按名称从 Pinecone 公共数据集目录（默认端点为 GCS）加载数据。数据基于 pandas 构建，documents 和 queries 以懒加载 DataFrame 提供，并支持按批次迭代文档用于写入向量索引。开发安装说明见 MAINTAINERS.md。",
+   "highlights": [
+    "通过 list_datasets 和 load_dataset 按名称加载公共目录中的数据集",
+    "documents 与 queries 为懒加载的 pandas DataFrame，支持全部 pandas API",
+    "提供 iter_documents(batch_size) 和 iter_queries 迭代器用于批量写入索引或基准测试"
+   ],
+   "use_cases": [
+    "加载 Pinecone 公共预嵌入数据集（如 quora_all-MiniLM-L6-bm25）进行实验",
+    "将数据集分批 upsert 到向量索引",
+    "构建自有的数据目录（data catalog）"
+   ]
+  },
+  "sha": "2bdd7a6961b8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a78a310c6584": {
+  "identity": {
+   "one_liner": "基于 Sequel 连接 Snowflake 数据库的 Ruby 适配器 gem",
+   "review": "sequel-snowflake 是一个 Ruby gem，为 Sequel 提供 Snowflake 数据库适配器，通过 `adapter: :snowflake` 建立连接。与 ODBC 适配器不同，它为返回值提供类型转换。使用前需安装 unixODBC 及 Snowflake ODBC 驱动，并可能需配置 DriverManagerEncoding 为 UTF-16。运行测试需要真实 Snowflake 账号。README 声明该项目已停止维护，作者建议由新维护者接手或使用 fork。",
+   "highlights": [
+    "通过 `Sequel.connect(adapter: :snowflake, drvconnect: conn_str)` 连接 Snowflake 数据库",
+    "为查询返回值提供类型支持（区别于 ODBC 适配器）",
+    "提供 CI 工作流，在 Ruby 3.3 与 3.4 上运行针对真实 Snowflake 的测试"
+   ],
+   "use_cases": [
+    "在 Ruby 应用中通过 Sequel ORM 访问 Snowflake 数据库",
+    "需要 Snowflake 返回值具备正确类型的 Sequel 项目",
+    "搭建或接手维护该适配器的开发环境"
+   ]
+  },
+  "sha": "a78a310c6584",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3258df11f7c2": {
+  "identity": {
+   "one_liner": "Yii 框架的 Redis 连接扩展，含缓存/会话处理器与 ActiveRecord",
+   "review": "该扩展为 Yii 框架提供 Redis 连接支持，内置 Cache 与 Session 存储处理器，并实现 ActiveRecord 模式以便将活动记录存入 Redis。可通过 Composer 安装，需 Redis 2.6.12+、PHP 7.4-8.0 及 Filter 扩展。README 明确警告：Yii3 DB 不计划官方支持 Redis，建议改用 predis 或 phpredis，使用时应注意该限制。",
+   "highlights": [
+    "提供 Redis 连接支持及 Cache、Session 存储处理器",
+    "实现 ActiveRecord 模式，可将活动记录存储于 Redis",
+    "支持 Redis 4-6 版本与 PHP 7.4-8.0，采用 BSD 许可证开源"
+   ],
+   "use_cases": [
+    "在 Yii 应用中以 Redis 作为缓存存储后端",
+    "将 PHP 会话数据保存到 Redis",
+    "以 ActiveRecord 方式操作 Redis 中的数据存储"
+   ]
+  },
+  "sha": "3258df11f7c2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

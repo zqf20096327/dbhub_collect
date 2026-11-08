@@ -3016,5 +3016,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5a069678cf17": {
+  "identity": {
+   "one_liner": "Vertica 分析数据库的官方原生 Go 客户端驱动",
+   "review": "vertica-sql-go 是 Vertica 官方提供的原生 Go 驱动，实现 Go database/sql 标准接口，供在 Go 程序中访问 Vertica 分析数据库的开发者使用。支持服务端绑定参数、TLS 连接、OAuth 认证、连接负载均衡与备份节点，可通过临时文件分页读取大结果集；参数绑定仅限 SQL 字面值，不支持动态拼接表/字段名。",
+   "highlights": [
+    "实现 Go database/sql 标准接口，支持服务端预处理语句与命名参数",
+    "连接参数支持 TLS 模式、OAuth 令牌、连接负载均衡与备份主机列表",
+    "提供多级日志控制和基于临时文件的大结果集分页机制"
+   ],
+   "use_cases": [
+    "在 Go 应用中通过 database/sql 访问 Vertica 数据库并执行查询与写入",
+    "需要 TLS 加密或 OAuth 认证的 Vertica 连接场景",
+    "大结果集查询的内存控制与分批迭代读取"
+   ]
+  },
+  "sha": "5a069678cf17",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3aa63519c9f4": {
+  "identity": {
+   "one_liner": "为 InfluxDB 提供高可用复制与按 series 分区扩展的非官方集群系统",
+   "review": "该项目通过集群代理进程（influxc）与 etcd 实现 InfluxDB 的多节点部署：写入默认按副本冗余，定义分区键后可按整条 series 分区分布，查询根据分区键自动路由到持有数据的节点。支持 docker-compose 和 Kubernetes 启动，README 明确标注尚未经过生产高负载测试。",
+   "highlights": [
+    "支持通过 SQL 命令（CREATE PARTITION KEY / SET REPLICATION FACTOR / REMOVE NODE / SHOW NODES）在运行中的部署上管理分区、副本因子与节点",
+    "写入在目标节点不可用时暂存于代理的持久存储，节点恢复后回补数据；分区键变更可在不停机情况下完成",
+    "采用一致性哈希，新增或移除节点不触发全量重分区"
+   ],
+   "use_cases": [
+    "将已有单节点 InfluxDB 扩展为多节点部署以增加副本或分区数据",
+    "需要横向扩容存储与写入容量的时间序列部署",
+    "通过 docker-compose 或 Kubernetes 本地搭建 InfluxDB 集群进行测试"
+   ]
+  },
+  "sha": "3aa63519c9f4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f57619bc72a9": {
+  "identity": {
+   "one_liner": "按难度整理的 LeetCode SQL 题目解答集合",
+   "review": "该仓库收录作者完成的 LeetCode 数据库题目解答，按 Easy/Medium/Hard 难度分类，当前累计 196 题（Easy 89、Medium 80、Hard 27）。解答为作者个人练习积累，适合备考 LeetCode 数据库题、按难度检索他人解法的学习者参考。需注意部分题目可能涉及 LeetCode Premium 内容。",
+   "highlights": [
+    "包含 196 道 LeetCode SQL 题目解答，按 Easy（89）、Medium（80）、Hard（27）三级难度分类",
+    "持续更新，作者以个人求解进度为准",
+    "覆盖 leetcode-premium 与 advanced-sql 等主题标签对应的题目类型"
+   ],
+   "use_cases": [
+    "备考 LeetCode 数据库题时按难度查找参考解法",
+    "SQL 练习者对照他人解法核对思路",
+    "按 advanced-sql 等标签检索特定类型题目解答"
+   ]
+  },
+  "sha": "f57619bc72a9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c1ff11a69fd": {
+  "identity": {
+   "one_liner": "基于 Node.js/TypeScript 的 Neo4j 数据库迁移 CLI 工具，按序执行版本化 Cypher 脚本",
+   "review": "Morpheus 是一个面向 Neo4j 的数据库迁移命令行工具，用 TypeScript 编写，npm 包名为 morpheus4j。它读取 neo4j/migrations 目录下以 V版本__描述.cypher 命名的迁移文件，按序在事务中执行 Cypher 语句，并在数据库中记录已执行迁移的 crc32 校验和以防重复执行或篡改。提供 init/create/migrate/validate/delete/clean/info 等命令，支持环境变量配置连接，并附 NestJS 集成模块。需要 Neo4j 4.4.4 或 5.x。",
+   "highlights": [
+    "迁移文件使用 .cypher 扩展名和 semver 版本命名（如 V1_0_0__create_users.cypher），每条语句以分号结尾",
+    "提供 migrate、create、validate、delete、clean、info、init、autocomplete 等 CLI 命令，migrate 支持 --dry-run 和 PER_MIGRATION/PER_STATEMENT 事务模式",
+    "通过 crc32 校验和追踪已执行迁移，已执行文件不可修改，支持 MORPHEUS_HOST/PORT/USERNAME/PASSWORD 等环境变量及 NestJS 模块集成"
+   ],
+   "use_cases": [
+    "需要对 Neo4j 图数据库执行版本化 schema 与数据变更管理的 Node.js 项目",
+    "使用 NestJS 后端、希望以模块方式在应用内运行迁移的团队",
+    "需要通过 validate 命令核对本地迁移文件与数据库执行状态一致性的 CI/CD 流程"
+   ]
+  },
+  "sha": "8c1ff11a69fd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

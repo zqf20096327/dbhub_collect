@@ -2667,5 +2667,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8b35e9e12d45": {
+  "identity": {
+   "one_liner": "基于 Reactor 的 Java 响应式数据库引擎，封装 RocksDB 键值存储与 Lucene 搜索",
+   "review": "CavalliumDB Engine 是用 Java 17+ 和 Project Reactor 编写的响应式数据库引擎，提供键值存储与搜索引擎两类抽象，内置 RocksDB 持久化、内存 ConcurrentSkipListMap、Lucene 持久/内存索引四种实现。作者声明这是个人项目、API 不稳定、缺乏测试，定位为构建 DBMS 的底层引擎而非 DBMS 本身。",
+   "highlights": [
+    "基于 Project Reactor 提供 key-value 存储与搜索引擎的响应式抽象，可扩展更多实现",
+    "RocksDB 实现支持快照、多列数据库、写前日志与损坏恢复；Lucene 实现支持排序、模糊搜索、N-gram 分词与结果过滤",
+    "提供可序列化查询格式、基于 Netty 5 缓冲区的直接字节缓冲，以及由 YAML 定义生成 Java record 与版本化编解码器的数据生成器"
+   ],
+   "use_cases": [
+    "需要在其上构建自定义 DBMS 或数据抽象层的 Java 响应式应用",
+    "使用 RocksDB 做持久化键值存储并同时需要 Lucene 全文检索的场景",
+    "构建和分析临时索引的内存搜索场景"
+   ]
+  },
+  "sha": "8b35e9e12d45",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1f7085f4124d": {
+  "identity": {
+   "one_liner": "面向 DuckDB 与 MotherDuck 的 SQLAlchemy 方言，含迁移支持",
+   "review": "duckdb-sqlalchemy 是一个 SQLAlchemy 方言（duckdb_engine 的分支），让 Python 开发者通过 create_engine() 以 SQLAlchemy Core、ORM 和 pandas 工作流访问本地 DuckDB（内存或文件）与 MotherDuck 云数据仓库。支持表结构反射、Parquet/CSV 查询、批量插入与 COPY 助手、Alembic 迁移；连接 MotherDuck 需设置 MOTHERDUCK_TOKEN。要求 Python 3.10+、SQLAlchemy 2.0+、DuckDB 1.3.0–1.5.x。",
+   "highlights": [
+    "支持 SQLAlchemy Core、ORM 会话、表/视图/列/约束反射，以及 pandas 与 Apache Arrow 集成",
+    "通过同一方言连接本地 DuckDB 与 MotherDuck，支持认证、数据库附加、连接池与读扩展",
+    "提供 Alembic 迁移支持，驱动名保持 duckdb://，从 duckdb_engine 迁移只需更换安装包并更新导入"
+   ],
+   "use_cases": [
+    "在 Python 数据工程流水线中以 SQLAlchemy 接口查询本地 DuckDB 文件或内存库",
+    "通过 SQLAlchemy 访问 MotherDuck 云数据仓库并配置读扩展副本",
+    "对 Parquet/CSV 文件组合 SQL 查询，或在 pandas/Jupyter 中读取分析结果"
+   ]
+  },
+  "sha": "1f7085f4124d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0f955b4161f0": {
+  "identity": {
+   "one_liner": "自托管电动汽车充电记录面板，通过车企 API 自动追踪成本、电量与 CO2。",
+   "review": "一个用 Flask 和 SQLite 构建的自托管电动汽车充电追踪应用，本地运行于笔记本、NAS 或树莓派，数据不留第三方。它通过 API 连接 15 个品牌（Kia、Hyundai、Tesla、VW 集团、Renault、Polestar 等）自动获取 SoC、里程等数据，并提供仪表盘、PDF 报告、ENTSO-E 电网 CO2 强度、AC/DC/PV 分账、OBD 电池读取和多语言界面。README 明确标注项目为 AI 辅助编写、按现状提供且不与车企关联，部分品牌 API 未获官方支持。",
+   "highlights": [
+    "通过车辆 API 连接 15 个 EV 品牌，支持多车/车队管理与每车独立凭证及每日配额计数",
+    "提供仪表盘、PDF 报告、CSV/XLSX 导入导出、ENTSO-E 每小时 CO2 强度获取与 OBD/ELM327 电芯读取",
+    "支持 6 种语言、深色模式，并提供演示数据播种脚本 tools/seed_demo.py"
+   ],
+   "use_cases": [
+    "希望长期（非车企 App 的 30-90 天限制）本地保存充电、成本与 CO2 记录的 EV 车主",
+    "管理多辆电动车并按车辆分账、追踪德国 THG 配额补贴的车队/家庭用户",
+    "在笔记本、NAS 或 Raspberry Pi 上自托管并导入 CSV 批量维护充电数据的场景"
+   ]
+  },
+  "sha": "0f955b4161f0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae78dddd98e7": {
+  "identity": {
+   "one_liner": "内嵌式 Rust 数据库，在单一 .tapir 文件中统一 SQL、向量、图与文档模型。",
+   "review": "TapirusDB 是一个嵌入应用的 Rust 数据库，将关系表、向量搜索、图和 JSON 文档 API 放在同一个运行时与 .tapir 文件中，AI 记忆检索结合 BM25、嵌入、时间与重要性权重，并与 SQL 共享事务。面向本地单进程应用（含 WASM 浏览器场景）。SQL 为文档化的子集，不支持独立并发 SQL 读，仅主 crate 禁用 unsafe。",
+   "highlights": [
+    "提供 SQL（文档化子集）、向量、图和 JSON 文档四种模型，默认 Quad 引擎在同一 .tapir 文件中运行",
+    "AI 源检索结合 BM25、外部嵌入、时间与重要性评分，支持命名空间/会话过滤和来源引用，可与 SQL 在同一事务中执行",
+    "提供 Rust WASM 工作区以打开和导出原生 .tapir 文件，并将浏览器快照保存至 IndexedDB"
+   ],
+   "use_cases": [
+    "在 Rust、Node.js 或浏览器本地应用中嵌入 SQL、向量与文档记忆的统一数据层",
+    "为 LLM 应用存储文本与嵌入并检索带来源引用的上下文，事务与 SQL 数据一致",
+    "通过 Micro/Quad 离线桥接在物联网设备与本地 AI 记忆之间导入导出已提交数据槽"
+   ]
+  },
+  "sha": "ae78dddd98e7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "911ec1614d6c": {
+  "identity": {
+   "one_liner": "本地语音转提示词流水线，含悬浮胶囊界面，基于 Faster-Whisper 与内嵌 LLM",
+   "review": "该项目将语音输入转换为结构化提示词并自动粘贴到当前光标处。面向使用 NVIDIA GPU 的 Windows 用户。语音识别由 Faster-Whisper 完成，文本整理由 llama-cpp-python 内嵌运行 Qwen 2.5 1.5B GGUF 模型实现，全程本地执行；另含 PostgreSQL 16 批量入库链路、Web 仪表盘与 38 个单元测试。README 中的 Windows 快捷键、Win32 自动粘贴等机制表明其平台绑定较深。",
+   "highlights": [
+    "提供 F8 全局快捷键录音、VAD 静音自动结束与自动粘贴（Ctrl+V）注入当前窗口的桌面流程",
+    "支持 code、commit、english、clean 四种提示词预设，clean 模式直接输出转写文本不经 LLM",
+    "包含 PostgreSQL 16 批量处理链路（SHA-256 去重）与 Web 监控仪表盘，附 38 个单元测试"
+   ],
+   "use_cases": [
+    "开发时口述生成代码指令或 Conventional Commits 提交信息",
+    "需全程本地离线处理的语音转写场景",
+    "批量语音数据入库与 LLMOps 监控分析"
+   ]
+  },
+  "sha": "911ec1614d6c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9cd6ea8bfc69": {
+  "identity": {
+   "one_liner": "本地 CLI 工具，将编码代理事件推送到 Tidbyt/Tronbyt 显示器",
+   "review": "该工具是一个运行于 macOS/Linux 的 Python 命令行程序，无需第三方包依赖，通过本地 Pixlet 渲染图像并经 /push 端点推送到 Tidbyt 或 Tronbyt 设备。内置引导式 setup 保存凭据并安装 Claude Code 钩子；notify 命令可被其他代理或脚本调用。仅支持 Claude Code 钩子的自动安装，Windows 尚不支持。",
+   "highlights": [
+    "提供 setup/test/doctor/notify/install-hook 等子命令，凭据以 0600 权限存于 XDG 配置目录",
+    "自动安装 Claude Code 钩子（attention/complete），钩子异步运行且仅发送项目名与事件标签",
+    "支持 --source/--event/--message 参数的通用 notify 调用，含 10 秒冷却与同设备告警跳过机制"
+   ],
+   "use_cases": [
+    "在 Tidbyt/Tronbyt 屏幕上接收 Claude Code 权限请求、空闲或响应完成通知",
+    "通过脚本或其他代理工具（OpenCode、Codex、cmux 等）调用 notify 推送自定义告警",
+    "用 doctor 命令在不推送图像的前提下检查配置权限、API 认证与渲染链路"
+   ]
+  },
+  "sha": "9cd6ea8bfc69",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

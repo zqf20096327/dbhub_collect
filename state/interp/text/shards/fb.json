@@ -2502,5 +2502,114 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "165fa082ed4e": {
+  "identity": {
+   "one_liner": "Zig 编写的轻量级键值存储服务器，支持 TCP 与 Unix socket 两种接口。",
+   "review": "Zentropy 是用 Zig 实现的内存键值存储服务器，同时提供 TCP 和 Unix socket 接口，使用文本协议通信，通过密码配置进行访问控制。README 附带了与 Redis 的性能对比数据。可通过 Homebrew 安装或下载二进制手动部署，官方提供 Python 和 PHP 客户端库，也可用 netcat 直接测试。",
+   "highlights": [
+    "同时支持 TCP 与 Unix socket 双接口，文本协议可通过 netcat 直接交互",
+    "手动内存管理，无垃圾回收器，支持多客户端并发处理",
+    "提供 zentropy.conf 配置文件，可设置绑定地址、端口与密码；官方提供 Python 和 PHP 客户端库"
+   ],
+   "use_cases": [
+    "需要本地或网络键值缓存服务的应用场景",
+    "通过 Python 或 PHP 客户端库集成的后端服务开发",
+    "使用 netcat 或 Unix socket 进行本地进程间键值读写"
+   ]
+  },
+  "sha": "165fa082ed4e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a75c14fd639f": {
+  "identity": {
+   "one_liner": "本地单用户权限网关，为 AI 代理提供带审批与审计的连接器操作",
+   "review": "AIPermission 是运行在本机的单用户开发者网关：用户把各连接器（Postgres、SQL Server、Redis、Kubernetes、S3、SSH 等）的凭据存入 SQLCipher 加密的本地数据库，AI 通过 MCP 令牌只能请求已授权的 target/profile/action 组合，网关按规则执行阻断、弹审批或直接运行。仅限本机部署（端口绑定 127.0.0.1），不支持远程多用户或团队 RBAC；审计记录受保留策略控制、可被删除，非不可变外部档案。",
+   "highlights": [
+    "内置 11 类连接器，统一走同一套项目、凭据、权限、审批、历史与审计管线",
+    "每条权限可配置为 blocked / approval_required / always_run 三种规则，审批携带上下文快照，相关变更会使请求过期",
+    "运行数据存于 SQLCipher 加密的本地 SQLite，连接器凭据不通过 MCP 或 REST API 返回给 AI 客户端"
+   ],
+   "use_cases": [
+    "让 AI 助手通过 MCP 安全操作本机开发基础设施（数据库、消息队列、Kubernetes、S3 等）",
+    "对 AI 发起的写入、迁移等敏感操作先经人工审批再执行",
+    "个人开发工作区内集中管理连接器凭据并保留加密操作历史"
+   ]
+  },
+  "sha": "a75c14fd639f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c63a6eaaa2e8": {
+  "identity": {
+   "one_liner": "基于 boto3 的 Python DynamoDB ORM，提供字段模型与查询链式语法",
+   "review": "dynamodb-py 是面向 Python 应用的 Amazon DynamoDB ORM，基于 boto3 构建，供需要以模型方式操作 DynamoDB 的开发者使用。它提供 Model 定义、多种字段类型（含 DateTime、List、Dict 等，以 ISO 8601 字符串等形式存储）以及 query/where/limit 链式查询和关联支持；README 同时说明 DynamoDB 不支持复杂关系查询与事务，需要这些能力的场景不适用。安装需通过 git+https 从 GitHub 直接 pip 安装。",
+   "highlights": [
+    "提供 Model/Table 定义与 CharField、IntegerField、FloatField、DictField、ListField 等多种字段类型",
+    "支持 query().where().limit().all() 链式查询语法，可带索引或不带索引查询",
+    "字段可设置默认值，支持普通值或 lambda 形式"
+   ],
+   "use_cases": [
+    "需要以 ORM 方式在 Python 中读写 DynamoDB 表的项目",
+    "数据模型简单、以键值/条件查询为主、不依赖复杂关系查询与事务的 DynamoDB 应用"
+   ]
+  },
+  "sha": "c63a6eaaa2e8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "47b47d113a81": {
+  "identity": {
+   "one_liner": "为 Gufo 推理服务器提供本地统计面板与 HTTP/SSE/WebSocket 代理的应用",
+   "review": "Gufo Dashboard 是一个部署在本地的统计仪表盘与代理服务，客户端将请求经其转发至 Gufo 推理服务器时，会按模型记录令牌用量、吞吐、首字延迟、缓存命中等指标并存入 SQLite。它支持 Chat Completions、Completions、Responses、Messages 等 OpenAI 兼容端点及 WebSocket 代理；无内置认证与 TLS，仅适用于可信本地网络，需自行限制访问地址。",
+   "highlights": [
+    "代理 HTTP、SSE 与双向 WebSocket（含文本和二进制音频）响应，覆盖 Chat Completions、Completions、Responses、Messages 及 Gufo 原生 /completion 端点",
+    "统计存入 SQLite，支持可配置保留期、每日汇总，按模型分别记录吞吐、首字延迟、缓存命中与草稿接受率",
+    "可选内容捕获（默认关闭）与投影端口模式，支持 Python（3.12+，uv）或 Docker Compose 部署，前端无构建步骤"
+   ],
+   "use_cases": [
+    "在本地或私有网络中运行 Gufo 推理服务器，需要通过代理查看各模型的请求指标与延迟分位的场景",
+    "需要审计通过代理的问答文本（可选功能，含保留期与删除控制）的自托管部署",
+    "需要通过投影端口为无法修改请求体的客户端注入 projection 字段并对比普通与投影请求"
+   ]
+  },
+  "sha": "47b47d113a81",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1f018f90fdcb": {
+  "identity": {
+   "one_liner": "本地优先的 Google Drive 桌面/移动客户端，用 SQLite 索引与本地加密保险库",
+   "review": "Project Sunflower 是面向 Windows 和 Android 的 Google Drive 客户端与照片套件，将元数据、索引和浏览从云端往返中解耦：桌面端以 Tauri v2 内嵌 Node.js 与 Fastify 服务，数据落在本地 SQLite（WAL+FTS5）；移动端经 Capacitor 直连 Drive v3 REST 并缓存到 IndexedDB。提供 AES-256-GCM 客户端加密保险库与 FFmpeg 按需转码；桌面端免安装依赖，移动端支持 Android 8.0 及以上。",
+   "highlights": [
+    "桌面端为自包含安装包，内嵌 Node.js 运行时与 Fastify 服务，首次启动自动执行 7 个数据库迁移",
+    "SQLite FTS5 trigram 索引支持对 10 万以上文件的子串与前缀搜索",
+    "零知识加密保险库：客户端经 Argon2id/PBKDF2 派生密钥，文件以 AES-256-GCM 加密后传输"
+   ],
+   "use_cases": [
+    "浏览和管理含数十万级条目的 Google Drive 照片/视频库，需本地索引与快速检索",
+    "需要客户端加密保险库存放私密照片的场景",
+    "在 Android 设备上离线浏览已缓存的云盘媒体与相册"
+   ]
+  },
+  "sha": "1f018f90fdcb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2377,5 +2377,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3f87f5462966": {
+  "identity": {
+   "one_liner": "为协作应用提供客户端本地数据库与后台同步引擎",
+   "review": "Tandem 为每个客户端提供本地可查询数据库，写入先本地生效，再由后台同步引擎推送到服务器，并在服务器数据返回时重放本地未确认变更。面向构建协作或多端同步应用的开发者，提供 TypeScript 包（core、server、React 绑定），服务器端支持 PostgreSQL、MySQL、D1、JSON 文件等存储适配器。项目处于 pre-1.0 阶段，API 可能变更。",
+   "highlights": [
+    "写入先在客户端本地生效，服务器拒绝时回滚；同步通过 push/pull 与 rebase 机制完成",
+    "支持 select、where、orderBy、limit、offset 及 with 关系的类型化查询，并提供变更时自动重跑的 live query 订阅",
+    "客户端可选 IndexedDB 持久化，并在多浏览器标签页间共享；服务器存储适配器包含 PostgreSQL、MySQL、D1 与 JSON 文件"
+   ],
+   "use_cases": [
+    "构建多客户端实时协作应用（如文档、待办、聊天）",
+    "需要在浏览器离线或弱网环境下本地读写、后台同步的数据应用",
+    "使用 React 并需要订阅式数据绑定的前端项目"
+   ]
+  },
+  "sha": "3f87f5462966",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "515b9a8d60ac": {
+  "identity": {
+   "one_liner": "Kotlin 多平台注解驱动的存储库，基于 SQLite/IndexedDB/内存引擎",
+   "review": "Rekords 是一个 Kotlin Multiplatform 存储库，用于以 @Rekord 注解类定义数据模型，配合版本化 schema 与迁移，在 SQLite、IndexedDB 或内存引擎上读写。模型由 kotlinx.serialization 映射，无代码生成步骤，API 不依赖 SQL。支持过滤、排序、分页、嵌套记录、事务、Flow 观察及 AES 字段加密。迁移失败会保留原存储并在下次操作时重试。适合需要在多目标平台共享存储逻辑、偏好与平台无关 API 的 Kotlin 开发者。",
+   "highlights": [
+    "通过 @Rekord 注解和 kotlinx.serialization 映射 Kotlin 类，无代码生成步骤",
+    "提供过滤器（含嵌套过滤、Glob 模式、全文搜索）、排序、分页、事务和 Flow 观察查询",
+    "支持版本化 schema 与事务内迁移，并提供 AES 字段加密模块 rekords-crypto"
+   ],
+   "use_cases": [
+    "Kotlin 多平台项目中在 Android、iOS、JVM、JS/Wasm 等目标间共享持久化代码",
+    "需要在内存引擎上运行测试或作为缓存的场景",
+    "对单个字段进行确定性或随机化 AES 加密存储的需求"
+   ]
+  },
+  "sha": "515b9a8d60ac",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "606a1c369d81": {
+  "identity": {
+   "one_liner": "面向小商户的多租户 ERP，以 Django+React 实现库存、销售、复式记账与薪酬",
+   "review": "Karobar ERP 是一个多租户 ERP 系统，一套部署可服务多个商户，各租户拥有独立的仓库、客户、账簿与员工，每笔单据自动生成复式日记账分录。面向使用纸质账本或电子表格的小店、批发商和分销商。当前为 v0.3.0 预发布版，库存与会计功能已可用，采购与销售仍在路线图中，安装依赖 Docker、Python 3.12 与 Node 22。",
+   "highlights": [
+    "多租户架构，一套安装服务多个商户，按模块划分角色与权限，并记录所有变更的审计日志",
+    "库存支持多仓库、批次与有效期、条码、低库存提醒，以及 FIFO 或移动平均计价；每张单据生成复式分录",
+    "界面提供英语、乌尔都语和阿拉伯语，阿拉伯语等支持从右到左布局"
+   ],
+   "use_cases": [
+    "经营纸账本或电子表格的小型商店、批发商和分销商管理库存、销售与账目",
+    "需要 GST/VAT 销售税报表和月度工资单的小企业的财务与人事管理",
+    "希望以 Docker 自托管、单实例服务多个独立商户的部署场景"
+   ]
+  },
+  "sha": "606a1c369d81",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b710c8958bb2": {
+  "identity": {
+   "one_liner": "Linux 桌面活动记录应用，以日历热力图展示并本地 SQLite 存储。",
+   "review": "Heatmap 是基于 Tauri 2（Rust + React/TypeScript）构建的 Linux 桌面应用，用于记录习惯、学习时长、提交、锻炼、心情等活动，并以每个方格显示日期数字的日历热力图呈现。数据保存在本地单个 SQLite 文件中，无需账号与联网。支持 JSON/CSV 导入导出与备份，安装提供 .deb 与 AppImage，Android 为实验性支持。",
+   "highlights": [
+    "支持月度/年度热力图视图、四个桌面小组件和一句话快速录入（如 coding 90m yesterday）",
+    "数据存储于本地单个 SQLite 文件，提供 JSON/CSV 导入导出与一键备份",
+    "核心逻辑位于无 GUI 依赖的 core/ 模块，含 57 个 Rust 测试与 21 个前端测试"
+   ],
+   "use_cases": [
+    "记录习惯、学习时长、锻炼、心情并按日历热力图查看",
+    "从本地 Git 仓库自动统计每日提交并跟踪连续打卡目标",
+    "通过桌面小组件或全局快捷键快速记录当日活动"
+   ]
+  },
+  "sha": "b710c8958bb2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

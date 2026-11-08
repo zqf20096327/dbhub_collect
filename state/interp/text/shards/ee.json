@@ -2811,5 +2811,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d04d372b80ad": {
+  "identity": {
+   "one_liner": "PostgreJS：Node.js/Bun 下的 PostgreSQL 驱动，直接实现 wire 协议，无 libpq 依赖",
+   "review": "PostgreJS 是一个用 TypeScript 编写的 PostgreSQL 驱动，运行于 Node.js 和 Bun，不依赖 libpq 或原生扩展，通过自行实现的 wire 协议与数据库通信。它以 ESM 格式发布，提供基于 Promise 的 API，内置连接池、预编译语句、服务端游标、LISTEN/NOTIFY、COPY 流、逻辑复制、两阶段提交、多主机故障转移和 SCRAM 通道绑定等功能，并可通过 SQB、Kysely、Drizzle、TypeORM、Prisma 等适配器接入 ORM。README 中的性能与内存数据来自项目自建基准测试（doc/BENCHMARKS.md），对比结论未经第三方验证。",
+   "highlights": [
+    "纯 TypeScript 实现 PostgreSQL wire 协议，无 libpq 与原生二进制依赖，npm install 即用",
+    "支持二进制格式编解码（125 种类型解码）、连接池、预编译语句、服务端游标、COPY 流、逻辑复制、LISTEN/NOTIFY、两阶段提交、多主机、SCRAM 通道绑定",
+    "CI 在 Node 20/22/24/26 与 PostgreSQL 12/16/18、以及 Bun 的组合上运行同一测试套件，README 声明支持 Cloudflare Workers（含 doc/CLOUDFLARE-WORKERS.md 说明）"
+   ],
+   "use_cases": [
+    "在 Node.js 或 Bun 中以驱动层方式直连 PostgreSQL，不引入 ORM 框架",
+    "基于 Kysely、Drizzle、TypeORM、Prisma、SQB、Joist 等 ORM 构建应用并替换其底层连接",
+    "需要服务端游标、COPY 批量导入导出、逻辑复制或两阶段提交等 PostgreSQL 高级功能的 Node/Bun 应用"
+   ]
+  },
+  "sha": "d04d372b80ad",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f10d948cd2b9": {
+  "identity": {
+   "one_liner": "TiDB 的 ActiveRecord 适配器，基于 mysql2 适配器扩展实现兼容",
+   "review": "这是一个面向 Ruby on Rails 应用的数据库适配器 gem，使 ActiveRecord 能够以 TiDB 作为后端数据库。它是对 mysql2 适配器的轻量扩展，解决 TiDB 6.0 之前版本遗留的兼容性问题，支持 ActiveRecord 5.2、6.1 和 7.0，通过 Gemfile 安装并在 database.yml 中配置 adapter: tidb 使用。README 声明该 gem 目前不再维护：TiDB 6.0 之后的版本及 TiDB Cloud/Serverless 可直接使用 mysql2 gem 连接。另提供 Sequence 主键辅助方法、TLS 连接选项及本地 tiup playground 测试流程。许可证为 Apache 2.0。",
+   "highlights": [
+    "提供 adapter: tidb 配置方式，通过 Gemfile 引入 gem 后即可在 Rails 应用中连接 TiDB",
+    "扩展 mysql2 适配器，包含 Sequence 主键迁移支持及 nextval 等 SEQUENCE 交互辅助方法",
+    "支持 TLS 连接选项（ssl_mode、sslca、sslcert 等），并支持通过 activerecord-cte gem 使用 CTE 查询"
+   ],
+   "use_cases": [
+    "Rails 应用需要连接运行 TiDB 6.0 之前版本（存在兼容性遗留问题）的 TiDB 数据库",
+    "需要在 ActiveRecord 迁移与模型中使用 TiDB 的 SEQUENCE 功能",
+    "需要通过 TLS 连接 TiDB Cloud 并验证服务器证书的 Rails 项目"
+   ]
+  },
+  "sha": "f10d948cd2b9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e96695e90091": {
+  "identity": {
+   "one_liner": "面向 OCaml 5 + Eio 的 RESP3 协议 Valkey 客户端库",
+   "review": "ocaml-valkey 是为 OCaml 5.3+ 与 Eio 编写的 Valkey 7.2+ 客户端，仅支持 RESP3 协议，不含 RESP2 回退。当前为 alpha 状态（v0.4.0 已发布至 opam），提供约 140 个类型化命令封装、集群路由（CRC16 槽位哈希、MOVED/ASK 重试）、批处理、事务、客户端缓存、pub/sub、TLS 与 AWS IAM 认证。适合使用 OCaml 5 effects 并发模型访问 Valkey 的开发者，官方文档含从旧 OCaml Redis 客户端迁移的对照指南。",
+   "highlights": [
+    "基于 Eio 的 effects 风格并发，仅支持 RESP3，针对 Valkey 8/9 特性（hash field TTL、分片 pub/sub 等）提供封装",
+    "包含集群路由（槽位哈希、拓扑发现、MOVED/ASK 重定向）、批处理（scatter-gather 与 MULTI/EXEC 原子模式）、阻塞命令 lease pool 与客户端缓存（Default/BCAST/OPTIN 三种模式）",
+    "支持 TLS/mTLS、AWS ElastiCache IAM 认证（纯 OCaml SigV4 签名与自动刷新 token）、OpenTelemetry 观测，以及 Search/JSON/Bloom 模块的类型化封装"
+   ],
+   "use_cases": [
+    "在 OCaml 5 + Eio 项目中通过 RESP3 访问 Valkey 单机或集群",
+    "需要客户端缓存失效推送、WATCH 事务守卫或跨槽位 HLL 合并等集群操作的键值存储应用",
+    "连接启用 IAM 认证的 AWS ElastiCache，或需要 TLS 连接的生产部署"
+   ]
+  },
+  "sha": "e96695e90091",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7882ba509804": {
+  "identity": {
+   "one_liner": "Rust 编写的 headless CMS，单二进制加 Postgres，按内容类型生成 REST API",
+   "review": "TachyonCMS 是用 Rust 编写的无头内容管理系统，依赖一个二进制文件和一个 Postgres 数据库，根据用户定义的内容类型生成 REST API。当前为 pre-alpha 阶段：内容 API、登录、访问规则、草稿与发布已可用，但管理界面、媒体和 GraphQL 尚未实现，官方提示勿部署于公网。支持 Docker、发行包和源码三种运行方式。",
+   "highlights": [
+    "支持通过 API 定义集合与多种字段类型，包括关系字段、地图点位（可按距离检索）、JSON、分组与可重复数组等，并提供虚拟字段与 join 字段",
+    "提供草稿、定时发布、版本历史与软删除；查询支持过滤、排序、游标分页、字段选择与关系填充（depth/maxDepth 控制）",
+    "认证支持会话 Cookie、bearer token 与作用域 API key；内置四种角色并支持自定义角色，访问规则可作用于集合、全局或字段层级，规则支持基于 $user 的过滤条件"
+   ],
+   "use_cases": [
+    "为网站或应用提供内容 API 后端，前端通过 REST 接口读取已发布内容",
+    "需要细粒度访问控制的多人内容团队，如访客仅见已发布内容、作者仅见自己草稿",
+    "需要版本历史、草稿定时发布与软删除回收站的内容发布流程（当前仅限非公网环境使用）"
+   ]
+  },
+  "sha": "7882ba509804",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

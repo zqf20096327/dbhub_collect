@@ -2303,5 +2303,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0707ad6aaec6": {
+  "identity": {
+   "one_liner": "基于 Zig 编写的零依赖内存键值缓存系统，兼容类 Redis 命令协议。",
+   "review": "zcached 是用 Zig 编写的内存缓存系统，支持字符串、整数、浮点数、列表等数据类型的读写。项目无第三方依赖（TLS 依赖的 openssl 为可选项），通过事件化 I/O 和多线程处理并发。默认监听 7556 端口，无内置 CLI，需用 netcat 等工具发送协议命令，安装构建细节见 installation.md。",
+   "highlights": [
+    "以 Zig 实现，除可选的 openssl 外无第三方依赖，可在装有 Zig 编译器的系统上编译运行",
+    "支持 SET、GET、PING 等命令，值类型涵盖字符串、整数、浮点数和列表",
+    "采用事件化 I/O 与多线程处理并发连接，支持 TLS 加密传输"
+   ],
+   "use_cases": [
+    "需要进程内存缓存的键值存取场景，如临时数据读写",
+    "已有 Zig 编译器环境、希望减少第三方依赖部署的缓存服务",
+    "通过 netcat 或自定义客户端按其文本协议与服务端交互的开发调试"
+   ]
+  },
+  "sha": "0707ad6aaec6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "33ea1bd4fa6b": {
+  "identity": {
+   "one_liner": "按知识领域分类整理的面试题合集仓库，用于面试准备",
+   "review": "该仓库是作者为准备面试从多方搜集整理的面试题合集，题目按领域分文件夹存放，涵盖 C++、Java、Hadoop、机器学习等方向，适合面试前突击复习。使用方式为网页直接查看或将仓库 clone 到本地用支持 markdown 语法的编辑器阅读；他人可通过 fork 后提交 pull request 补充题目，提交前需检查是否重复，且不得照搬他人整理好的合集。",
+   "highlights": [
+    "题目按不同知识领域划分为多个文件夹组织",
+    "内容以 markdown 格式存放，支持本地编辑器查看",
+    "通过 fork 与 pull request 流程接受社区提交题目"
+   ],
+   "use_cases": [
+    "面试前按领域突击复习常见面试题",
+    "按 C++、Java、大数据、机器学习等方向检索题目",
+    "向项目提交自己面试中遇到的问题供他人参考"
+   ]
+  },
+  "sha": "33ea1bd4fa6b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a9a6e23e42b": {
+  "identity": {
+   "one_liner": "面向材料科学与化学实验数据的图结构存储模式库",
+   "review": "LabGraph 定义了一套基于图结构的模式，用于存储材料科学与化学领域的实验数据，通过 pip install labgraph-db 安装。作者将其用作自动化实验室的中央数据库，Sample 图可在 Python 中用 Sample.plot() 绘制，安装 graphviz 后可获得层次化布局。项目仍在开发中，文档持续演进。",
+   "highlights": [
+    "定义基于图的实验数据存储模式，面向化学与材料科学",
+    "提供 Sample.plot() 在 Python 中绘制样品图，安装 graphviz 后采用层次化布局",
+    "可作为自动化实验室的中央数据库使用"
+   ],
+   "use_cases": [
+    "存储与组织化学/材料科学实验数据",
+    "作为自动化实验室的中央数据协调库",
+    "对样品关系图进行可视化绘制"
+   ]
+  },
+  "sha": "8a9a6e23e42b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "388f2ac1cb8c": {
+  "identity": {
+   "one_liner": "Exasol 数据库的 MCP 服务器，通过工具向 LLM 暴露元数据读取与 SQL 查询执行",
+   "review": "该项目是一个 Model Context Protocol 服务器，让连接的 LLM 客户端读取 Exasol 数据库元数据（模式、表、视图、函数、UDF）并执行数据读取类 SQL 查询。面向使用 MCP 客户端（如 Claude Desktop）并希望其访问 Exasol 数据库的用户。通过 uv 安装运行，凭据经环境变量配置；README 明确说明 LLM 行为不可完全预测，需使用方自行治理。",
+   "highlights": [
+    "枚举数据库对象（模式、表、视图、函数、UDF 脚本），支持过滤与关键字搜索，并可描述对象的列、约束及参数",
+    "执行给定的 SQL 数据读取查询",
+    "支持本地进程方式或远程 HTTP 服务器方式部署，经环境变量及可选 JSON 文件配置"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 等 MCP 客户端中接入 Exasol 数据库，供 LLM 查询元数据与执行读取查询",
+    "通过 exasol-mcp-server-http 将服务器部署为远程 HTTP 服务",
+    "以 Python 包装器（mcp_server()）集成到自定义部署环境"
+   ]
+  },
+  "sha": "388f2ac1cb8c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2862,5 +2862,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "193da8e7d8db": {
+  "identity": {
+   "one_liner": "Go语言学习知识库，覆盖基础语法到云原生的文档与代码实践合集",
+   "review": "GoGetit 是一个 Go 语言学习资料库，按 12 个章节组织内容：Go 基础、操作系统、网络、数据库、算法与数据结构、容器化、中间件、云原生，并附书籍汇总、推荐项目和高频面试题。项目由社区成员分领域认领维护，采用 Apache 协议，提供 issues 和邮件渠道接收贡献与反馈。",
+   "highlights": [
+    "内容覆盖 Go 基础语法、并发、Goroutine、网络、数据库、算法、数据结构等 12 个领域目录",
+    "包含 Go 实现分布式、gRPC、Docker 容器化、可观测性等实践的代码部分",
+    "设有高频面试题汇总章节，并提供书籍汇总与推荐项目列表"
+   ],
+   "use_cases": [
+    "Go 语言初学者按目录系统学习基础语法、并发与网络编程",
+    "准备面试的开发者查阅算法刷题指导、高频题总结与面试题汇总",
+    "开发者参考 Go 实现数据库、容器化、微服务与可观测性的实践代码"
+   ]
+  },
+  "sha": "193da8e7d8db",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c1465a754384": {
+  "identity": {
+   "one_liner": "自托管事务邮件 API：Bun + Elysia 构建的 REST 发信服务，单容器部署",
+   "review": "BunMail 是一个自托管的事务邮件发送服务，基于 TypeScript、Bun、Elysia 与 Drizzle ORM，数据存储于 PostgreSQL，以单个 Docker 容器发布，面向需要程序化发送事务邮件的开发者。它提供 REST API、Web 控制台、DKIM 签名、带重试的邮件队列、Webhook、模板与入站 SMTP。发送时直接投递到收件方 MX 服务器，发件域名须先注册并配置 SPF/DKIM/DMARC 记录，否则返回 422 拒绝；生产模式仅监听 127.0.0.1:3000，需经反向代理加 TLS 访问。",
+   "highlights": [
+    "提供 REST 发信 API 与 SMTP 提交两种接入方式，支持幂等键、批量发送（单请求最多 100 封）与最多 10 个附件",
+    "内置 Postgres 队列，带 MTA 风格退避重试（临时失败最长 48 小时）、多副本安全与按提供商限速",
+    "支持 DKIM 自动生成与密钥轮换、SPF/DKIM/DMARC 每日校验、HMAC 签名 Webhook、入站 SMTP、软删除回收站与抑制列表"
+   ],
+   "use_cases": [
+    "在自有服务器上通过 API 或 SMTP 发送注册验证、通知等事务邮件，替代按量计费的 SaaS 邮件服务",
+    "接收入站邮件并在控制台查看、回复，配合 Webhook 处理退信、投诉与退订事件",
+    "为域名集中管理 SPF/DKIM/DMARC 配置校验并查看 DMARC 聚合报告"
+   ]
+  },
+  "sha": "c1465a754384",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0e4bd6504d25": {
+  "identity": {
+   "one_liner": "Rust 实现的 Zero-Mem 无 token 记忆系统，为 Hermes Agent 提供本地 SQLite 存储与检索",
+   "review": "zeromem 是 Zero-Mem 论文（arXiv:2607.29377）的 Rust 实现，为 Hermes Agent 提供记忆后端：逐字保存每条消息至本地单个 SQLite 文件，通过实体图、时间线层级、BM25 与稠密向量三种索引检索，全程不调用 LLM。使用方式包括 Hermes 插件、Python 库、CLI（zm）和 Claude Code 集成。README 附论文到模块的对照表及 LoCoMo 检索基准数据，并说明与官方实现的偏差（启发式 NER、bge-small 嵌入）。",
+   "highlights": [
+    "每条消息逐字存入本地单个 SQLite 文件，存取和搜索不消耗 token，仅在模型读取结果时产生 token 开销",
+    "每轮对话按三种方式索引：实体图、时间线/窗口/片段层级、BM25 加稠密向量，查询经确定性画像路由后融合两路检索分数，任一步骤均不调用 LLM",
+    "索引可从 turns 记录重建，避免索引与数据漂移；支持 Hermes 插件、Python（uv add zeromem）、CLI 和 Claude Code 四种接入方式"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 或 Claude Code 提供跨会话的本地记忆存储与召回",
+    "非英语会话场景下切换 multilingual-e5-small 嵌入模型使用（BM25 与实体提取仍以英语为主）",
+    "通过 Python 库或 CLI 将对话记录（JSONL）导入本地库并执行检索查询"
+   ]
+  },
+  "sha": "0e4bd6504d25",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

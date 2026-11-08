@@ -2201,5 +2201,181 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "03989f55c5f6": {
+  "identity": {
+   "one_liner": "基于 Java Spring Boot 的博客 RESTful API，含 JWT 认证与限流。",
+   "review": "该仓库提供管理博客文章与用户认证的 RESTful 后端 API，技术栈包括 Java 24、Spring Boot 3.5、Spring Security、Spring Data JPA、PostgreSQL，使用 JWT 做认证，通过 Docker Compose 一键启动，并附带 Swagger UI 文档与 HTTP 请求示例文件。项目面向想学习 Spring 全栈后端开发及参与开源贡献的开发者，README 声明项目处于活跃开发中、尚未完成，功能与文档可能变动；仓库不包含前端页面。",
+   "highlights": [
+    "提供博客 CRUD 接口（/api/v1/blogs），删除时在服务层先移除点赞、收藏等关联记录",
+    "基于 JWT 的认证，多数接口需 Bearer Token，当前用户从 JWT claim uid 解析",
+    "使用 Resilience4j 实现限流（默认接口 20 次/60 秒，认证接口 5 次/60 秒）与熔断器（数据库故障时返回 503）"
+   ],
+   "use_cases": [
+    "作为学习 Spring Boot、Spring Security、JPA 等技术组合的实践项目",
+    "为前端应用或客户端提供博客文章与用户认证的后端 API",
+    "参与开源贡献，仓库标注 good-first-issue 并欢迎各经验水平开发者"
+   ]
+  },
+  "sha": "03989f55c5f6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e9e15bc6fc18": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 agent 优先 CLI 分层任务管理器",
+   "review": "Jobs 是一个 CLI 任务管理工具，供 AI 编码代理生成并执行分层计划：代理读取 job schema 后编写带 YAML 块的 Markdown 计划，经 job import 导入本地 SQLite 数据库，支持阻塞项、验收标准与层级结构，并附带 dashboard。项目定位为本地优先，不做代理编排或消息传递。安装支持 Homebrew 与 go install，采用 MIT 许可。",
+   "highlights": [
+    "计划以 Markdown + fenced YAML 格式编写，导入前可用 --dry-run 检查错误",
+    "数据存储在本地 .jobs.db（SQLite），通过提交 .jobs/log/ 实现多机同步，各机追加各自日志文件",
+    "提供 job serve 仪表盘，含层级计划视图、参与者视图、事件日志和时间线回放（Time Travel）"
+   ],
+   "use_cases": [
+    "让编码代理按带验收标准的分层计划执行本地开发任务",
+    "多个代理在同一计划上协作并记录归属（opt-in）",
+    "暂停任务后在不同机器或不同模型/新上下文中恢复执行"
+   ]
+  },
+  "sha": "e9e15bc6fc18",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ce45be045528": {
+  "identity": {
+   "one_liner": "将官方 influxdb-php 客户端集成为 Symfony 服务的 Bundle",
+   "review": "该 Bundle 把官方 influxdb/influxdb-php 客户端接入 Symfony，通过服务容器暴露 HTTP 与 UDP 两种数据库连接，并提供连接注册表、事件派发写入（含 kernel.terminate 阶段的延迟合并写入）、数据库创建/删除命令及可选表单类型。适用于需要在 Symfony 应用中读写 InfluxDB 的开发者；事件监听器可覆盖或禁用以自定义日志与错误处理。",
+   "highlights": [
+    "以服务形式提供 HTTP 与 UDP 连接，并支持多连接配置与注册表获取",
+    "支持通过事件派发写入数据点，可在 kernel.terminate 事件中合并为一次写入",
+    "提供数据库创建/删除命令与可选的预定义表单类型"
+   ],
+   "use_cases": [
+    "Symfony 项目中接入 InfluxDB 时序数据的读写",
+    "在请求过程中收集测量点、请求结束后批量写入的场景",
+    "需要自定义写入监听器以附加日志或错误处理的集成"
+   ]
+  },
+  "sha": "ce45be045528",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c92e75c4f0dc": {
+  "identity": {
+   "one_liner": "SQL Server on Linux 的 Kubernetes Operator，自动化单实例与 Always On AG 生命周期",
+   "review": "这是一个面向 Kubernetes 集群的 SQL Server on Linux 管理器，提供 SQLServerInstance（单 Pod + PVC + Service）和 SQLServerAvailabilityGroup（多副本 AG）两种 CRD。Operator 通过 T-SQL 自动引导 AG、管理证书端点认证，并作为外部集群管理器替代 Pacemaker 角色执行自动与计划内故障转移。需 Go 1.25+ 与 Kubernetes v1.11.3+ 集群，核心安装无需 cert-manager，启用准入 Webhook 时则需要。",
+   "highlights": [
+    "提供 SQLServerInstance 与 SQLServerAvailabilityGroup 两个 CRD，分别管理独立实例与多副本 Always On 可用性组",
+    "在 clusterType: EXTERNAL 下实现自动故障转移：基于 Pod 就绪探针与 sp_server_diagnostics 双层健康信号判定主副本降级",
+    "通过 preStop 钩子在滚动更新或节点排空前执行 ALTER AVAILABILITY GROUP FAILOVER，实现计划内故障转移"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上以声明式方式部署和管理独立 SQL Server 实例",
+    "需要自动故障转移与读写监听器 Service 的多副本 Always On 可用性组部署",
+    "通过 CRD YAML 与示例配置进行 AG 拓扑配置与故障转移测试"
+   ]
+  },
+  "sha": "c92e75c4f0dc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d14b3b6c4db5": {
+  "identity": {
+   "one_liner": "非官方的 Apache IoTDB 每夜构建版本发布仓库，通过 GitHub Actions 自动构建。",
+   "review": "该仓库为 Apache IoTDB 时序数据库提供非官方的 nightly 构建产物下载，官方稳定版发布频率较低，需要最新二进制文件的用户可通过在此仓库新建 issue 自动触发 CI 构建流程。README 列出了 0.12.x 与 0.13.x 版本对 Java 8/11/17 的兼容性表格，并指引稳定版下载与问题反馈渠道。",
+   "highlights": [
+    "提供 Apache IoTDB nightly 构建的下载入口",
+    "通过新建 issue 自动触发新的构建流程",
+    "以兼容性表格列出 0.12.x/0.13.x 对 Java 8、11、17 的支持状态"
+   ],
+   "use_cases": [
+    "需要获取 Apache IoTDB 最新构建二进制文件的场景",
+    "需要验证特定版本与 Java 8/11/17 兼容性的场景",
+    "等待官方稳定版发布期间获取每日构建版本的场景"
+   ]
+  },
+  "sha": "d14b3b6c4db5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "26a0585c0fbc": {
+  "identity": {
+   "one_liner": "以 JSON 格式收录《古兰经》多版本译本的数据库仓库",
+   "review": "该仓库以 JSON 格式整理《古兰经》的多种译本文本，包含阿拉伯语原文、音译（Transliteration）以及逐词（Word by Word）翻译等特殊内容，数据来源标注为 IA Awakened Dataset。README 主要内容为各译本的条目简介，未提供安装或运行说明。适合需要在应用中读取经文译本数据的开发者，或需要多译本对照文本的研究者使用。",
+   "highlights": [
+    "提供 JSON 格式的《古兰经》译本集合，涵盖数十种不同译者的版本",
+    "包含阿拉伯语原文、语音音译文本及 2020/2021 版逐词翻译",
+    "收录 Corpus.Quran 语法形态标注资源及多种注释型译本"
+   ],
+   "use_cases": [
+    "开发需要读取《古兰经》文本或译本数据的应用程序",
+    "多译本对照阅读与文本研究",
+    "面向非阿拉伯语读者的音译和逐词学习场景"
+   ]
+  },
+  "sha": "26a0585c0fbc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1c826814abda": {
+  "identity": {
+   "one_liner": "终端中的 MongoDB 日志与 profile 分析器，基于 Bun + OpenTUI 的键盘驱动 TUI。",
+   "review": "MongoScope 是在终端运行的 MongoDB 日志与运行状态分析工具，面向使用 MongoDB 的开发者与运维人员。它从日志文件或实时 system.profile 聚合慢查询模式，展示 currentOp、COLLSCAN、副本集延迟与索引信息。程序需要真实交互式 TTY，不能通过管道输出；连接凭据存入系统 keychain，不可用时以明文写入 ~/.config/mongoscope/config.json。",
+   "highlights": [
+    "从日志文件或实时 system.profile 聚合慢查询模式，支持导出 JSON/CSV/Markdown",
+    "提供 currentOp、COLLSCAN 标记、kill-op、副本集拓扑/oplog 窗口/延迟曲线、$indexStats 索引清单",
+    "支持 curl 安装脚本（含校验和验证、版本锁定）、--log-path/--uri 等 CLI 参数及键盘快捷键操作"
+   ],
+   "use_cases": [
+    "解析 /var/log/mongodb 下的 MongoDB 日志，分析慢查询模式并导出报告",
+    "连接运行中的实例查看 currentOp、副本集延迟与心跳/选举状态",
+    "查看索引清单与 $indexStats，从慢查询跳转到相关索引"
+   ]
+  },
+  "sha": "1c826814abda",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f0c95277f13e": {
+  "identity": {
+   "one_liner": "Swift 原生 Apple Mail MCP 服务器，提供 59 个邮件操作工具与 SQLite 毫秒级搜索。",
+   "review": "面向 macOS 上通过 MCP 协议操作 Apple Mail 的用户（如 Claude 客户端），提供 59 个工具，涵盖邮件读取、搜索、撰写、归档、邮箱与规则管理。核心机制是用 SQLite 缓存索引实现毫秒级搜索，需授予完全磁盘访问权限才能生效；撰写工具不通过 AppleScript 注入正文。插件安装含签名公证的二进制与安全规则，MCP-only 方式为精简安装路径。",
+   "highlights": [
+    "提供 59 个 MCP 工具，搜索基于 SQLite 索引，覆盖主题/发件人/收件人/日期字段",
+    "包含 .emlx 解析器、单次最多 50 封邮件的批量 Markdown 导出，以及 plain/markdown/html 三种撰写格式",
+    "提供 Developer ID 签名并公证的二进制，附带 /archive-mail 命令族、破坏性操作确认规则与过期二进制检测钩子"
+   ],
+   "use_cases": [
+    "让支持 MCP 的 AI 客户端在 macOS 上读取、搜索和批量导出本地 Apple Mail 邮件",
+    "通过工具撰写邮件、创建草稿、回复与转发，并管理邮箱、规则、签名与 VIP",
+    "通过分类策略工具对邮件执行带审计的受控移动（仅移入废纸篓，不做永久删除）"
+   ]
+  },
+  "sha": "f0c95277f13e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

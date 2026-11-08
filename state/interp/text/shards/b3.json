@@ -2959,5 +2959,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "da895d99ced0": {
+  "identity": {
+   "one_liner": "基于 Badger 的纯 Go 嵌入式无模式磁盘文档数据库",
+   "review": "Cete 是构建在 Badger 之上的纯 Go 嵌入式数据库，供 Go 程序内嵌使用，采用无模式文档模型并以自定义 MessagePack 存储数据。当前处于 alpha 阶段，README 明确不建议用于生产环境，且可能发布破坏性变更。它不支持事务，单文档更新通过 Update 方法与计数器机制处理。",
+   "highlights": [
+    "提供索引、复合索引与多索引（标签）支持，范围查询默认按升序返回",
+    "无模式文档存储，写字盘时对字段名做透明压缩",
+    "无锁读写，线程安全，通过 Update 方法与计数器实现安全的单文档更新"
+   ],
+   "use_cases": [
+    "Go 程序中需要内嵌式磁盘存储、且不需要事务的场景",
+    "需要按二级索引或复合索引查询无模式文档的应用",
+    "以并发写入为主的本地数据存储需求（README 提到顺序写入较慢）"
+   ]
+  },
+  "sha": "da895d99ced0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a566eb65b85": {
+  "identity": {
+   "one_liner": "基于 Claude Code 事件钩子的本地实时用量与成本监控工具",
+   "review": "claudestat 通过挂接 Claude Code 和 OpenCode 的事件流，实时记录令牌消耗、工具调用、成本、配额与多智能体编排数据，全部存于本地 SQLite，不依赖云端。适用于使用 AI 编码代理且关注实时开销的开发者。要求 Node.js >= 22，通过 npm 全局安装后执行 claudestat setup 安装钩子并注册守护进程。",
+   "highlights": [
+    "实时追踪每次工具调用的时长与令牌成本，数据以 SQLite 本地存储",
+    "提供配额告警（70%/85%/95%）与可选的 kill switch，并内置循环检测功能",
+    "内置 MCP 服务器，可在终端内通过 Claude 查询自身的用量与成本"
+   ],
+   "use_cases": [
+    "在编码会话进行中监控令牌与 API 成本、消耗速率",
+    "排查多智能体/subagent 编排中的上下文抖动与循环行为",
+    "在配额耗尽前获得告警并阻止新会话启动"
+   ]
+  },
+  "sha": "1a566eb65b85",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d927d50981a7": {
+  "identity": {
+   "one_liner": "基于 CodeIgniter、jQuery 与 AJAX 的花盆 CRUD 示例应用，含浇水提醒",
+   "review": "该应用为花盆数据提供增删改查界面，并通过定时任务在需要浇水时发送邮件通知。使用 PHP CodeIgniter 3.1.4、jQuery、JavaScript 和 Twitter Bootstrap 构建。安装需导入 sqldump 建库、启用 Apache mod_rewrite、配置 .htaccess 与数据库设置，并运行 bower install。提醒依赖 cron 每 5 分钟执行一次，且需正确配置邮件服务器。",
+   "highlights": [
+    "提供花盆数据的 CRUD 操作界面",
+    "包含浇水提醒通知功能，通过 cron 每 5 分钟运行 notifier cron 命令触发",
+    "使用 CodeIgniter 3.1.4 框架，前端基于 jQuery 与 Twitter Bootstrap"
+   ],
+   "use_cases": [
+    "学习 CodeIgniter 与 jQuery/AJAX 实现 CRUD 的参考示例",
+    "需要基于定时任务的邮件通知功能的场景",
+    "花盆养护记录与浇水提醒管理"
+   ]
+  },
+  "sha": "d927d50981a7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ddd343ab020": {
+  "identity": {
+   "one_liner": "十七份授权 Android 应用静态逆向与本地数据取证报告集",
+   "review": "本仓库公开高德、小红书、支付宝、微信、拼多多等十七份授权样本的静态逆向报告，涵盖网络协议、签名认证、风控组件与本地存储结构。内容为脱敏的版本、哈希、函数地址、数据库 Schema 与代码片段，不提供可绕过风控的方法，并附只读检查工具。",
+   "highlights": [
+    "包含样本清单、APK 哈希、ELF/DEX 符号、函数地址与 SQL 表结构等可验证内容",
+    "所有行值、账号、密钥、真实请求响应均已脱敏，秘密经环境变量传入不写入仓库",
+    "tools/ 提供只读 SQLite 检查、APK 字符串搜索与发布前脱敏扫描脚本"
+   ],
+   "use_cases": [
+    "安全研究与防御验证的样本结构参考",
+    "数字取证与本地数据库结构分析",
+    "数据可移植性相关的存储格式研究"
+   ]
+  },
+  "sha": "5ddd343ab020",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2727,5 +2727,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "58749bec8add": {
+  "identity": {
+   "one_liner": "自托管的 ClickHouse 团队 Web 控制台，内置 RBAC、集群监控与 AI SRE。",
+   "review": "CHouse UI 是一个面向自运维 ClickHouse 团队的自托管 Web 控制台，以 React 19 SPA 加 Bun+Hono 服务端实现：ClickHouse 凭据保留在服务端加密存储，所有请求经应用层 RBAC 与表级数据访问规则校验，状态存于 SQLite 或 PostgreSQL。AI SRE 仅以只读方式运行根因扫描，写操作需审批；默认 Helm 安装为单副本，高可用需改用 PostgreSQL 并扩副本。",
+   "highlights": [
+    "应用层 RBAC，含六个内置角色与自定义角色、表级数据访问规则、OIDC/OAuth2/SAML SSO 与审计日志",
+    "监控查询日志、实时查询（可 kill）、复制、内存与 CPU 分解、容量预测，无需额外 exporter",
+    "提供 chouse CLI 与 MCP 端点（PAT 或 OAuth），CLI 与 AI 代理与 UI 使用同一套 API"
+   ],
+   "use_cases": [
+    "团队需要不向浏览器下发 ClickHouse 连接凭据、由服务端托管凭据并控制访问权限的场景",
+    "多 ClickHouse 集群的统一监控与告警（Slack、Google Chat、Telegram、邮件）场景",
+    "需要通过 CLI 或 MCP 端点让脚本和 AI 代理调用与 UI 相同受控 API 的自动化场景"
+   ]
+  },
+  "sha": "58749bec8add",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "12b4bed9ef4e": {
+  "identity": {
+   "one_liner": "TypeDynamo 是一个面向 TypeScript/Node.js 的 DynamoDB ORM，以类型化仓储封装 CRUD 操作。",
+   "review": "TypeDynamo 是运行于 Node.js 环境的 TypeScript ORM，用于操作 AWS DynamoDB。它通过 define 方法将普通 TS 类声明为表和索引，提供 find/save/update/delete 四个高层方法，方法签名基于表声明生成类型约束，内置分页、表达式解析器，并对 Scan、BatchGetItem、BatchWrite 的结果数量限制做了处理。使用前需配置 AWS 访问密钥。update 方法不支持批量操作。",
+   "highlights": [
+    "提供 find/save/update/delete 四个高层 CRUD 方法，支持链式与 Promise 风格调用",
+    "find() 根据表键声明与传入参数自动选择 GetItem、Query、Scan 或 BatchGetItem 请求",
+    "save() 支持单条与批量写入，内置处理 BatchWrite 的数量限制"
+   ],
+   "use_cases": [
+    "在 Node.js 后端应用中通过 TypeScript 操作 DynamoDB",
+    "同时适用于 serverless 与 serverfull 项目结构",
+    "需要以类型安全方式执行 DynamoDB 的查询、过滤与条件写入/删除"
+   ]
+  },
+  "sha": "12b4bed9ef4e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "07976f50e70b": {
+  "identity": {
+   "one_liner": "运行于 Postgres/Supabase 的开源复式记账核心",
+   "review": "Ekwo OS 是一个面向 Postgres 的复式记账核心，以迁移形式安装到用户自有的 Supabase 项目中，配命令行工具与 MCP 服务器供人或 AI 代理操作账簿。借贷平衡与期间锁定由数据库触发器强制执行；各国税制、科目表与申报栏目以数据形式提供，覆盖 README 列出的约 180 个国家的国家包。许可证为 AGPL-3.0，需自备 Supabase 项目。",
+   "highlights": [
+    "复式平衡与期间锁定由数据库触发器强制执行，凭证（发票）与账务（分录）分为两层",
+    "提供 CLI（npx ekwo-os init）与 MCP 服务器（本地 npx @ekwo-ai/mcp 或托管地址）两种操作入口",
+    "包含固定资产、预算、企业所得税与电子发票模块，各模块为独立 schema，按公司启用"
+   ],
+   "use_cases": [
+    "想以自有数据库保存账簿数据并通过 AI 代理记账的公司",
+    "在同一套安装中为多家公司做账的会计师事务所",
+    "需要以数据而非代码形式承载税务规则的复式记账核心的开发者"
+   ]
+  },
+  "sha": "07976f50e70b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eaf7363c96ad": {
+  "identity": {
+   "one_liner": "面向 DeepSeek Harness 的本地文档知识库插件，滑窗切片加混合检索返回带 [n] 标记的可核验结果",
+   "review": "dsh-library 是一个 DeepSeek Harness 社区插件，把本地 md/txt 文档导入为 agent 可查询的知识库：按路径读取、滑窗切片并写入宿主 dsh_library 存储域（JSON 或 SQLite）。检索采用语义与关键词混合打分、MMR 重排与中段规避，引用可逐条核验，删除带残留探测。默认零模型下载、零网络请求。适合在 DeepSeek Harness 环境中需要本地文档检索的开发者；仅支持 md/txt，不支持 PDF/docx。",
+   "highlights": [
+    "提供 library_add/remove/list/search 等工具：按路径导入文档、删除时用确定性签名探测索引残留、混合检索返回带 [n] 来源标记的结果页",
+    "默认使用内置确定性哈希嵌入，零模型下载、零网络请求；可配置 command 或 ollama 后端替换嵌入来源",
+    "包含 library_cite_check（模糊词面加语义双重校验引用）与 library_diagnose（切片统计、重复检测、自检索探针）"
+   ],
+   "use_cases": [
+    "在 DeepSeek Harness 中让 agent 导入本地 md/txt 文档并带 [n] 引用回答问题",
+    "需要核验答案中引用编号有效性，或在删除文档后复查索引残留的场景",
+    "无网络、无模型下载的本地检索环境，或通过本地 Ollama/外部命令接入更强语义嵌入"
+   ]
+  },
+  "sha": "eaf7363c96ad",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d86d069ebfe": {
+  "identity": {
+   "one_liner": "面向 AI 应用的向量数据库框架，提供统一接口连接数据",
+   "review": "vectorstores 是一个用于 AI 应用的向量数据库框架，提供统一接口完成数据摄取、写入向量库和后续查询。基于 LlamaIndex.TS 的 fork，包体积 77.5kb (gzip)，可与 Vercel AI SDK 配合使用。通过 @vectorstores/core 安装，向量库和文件读取器以 provider 包（如 @vectorstores/weaviate）形式按需添加。",
+   "highlights": [
+    "提供数据摄取、加载至向量数据库和查询的统一接口",
+    "包体积 77.5kb (gzip)，支持 Node.js >= 20、Deno、Bun、Nitro 及部分受限的 Edge Runtime/Cloudflare Workers",
+    "基于 LlamaIndex.TS fork，功能聚焦于向量数据库；提供本地与 StackBlitz 在线示例"
+   ],
+   "use_cases": [
+    "在 JS/TS 环境中为 AI 应用接入向量数据库存储与检索数据",
+    "将 LlamaIndex.TS 项目替换为更聚焦向量库的实现",
+    "配合 Vercel AI SDK 构建数据接入流程"
+   ]
+  },
+  "sha": "5d86d069ebfe",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "00d16ff3cdcf": {
+  "identity": {
+   "one_liner": "协调 Codex、Claude Code 与 Pi 多智能体的沙箱协作工具",
+   "review": "pairtask 将 Codex、Claude Code 和 Pi 三类 AI 编码智能体置于同一共享工作区，支持智能体互相发消息、分组和互相审查代码，操作者通过单一聊天界面指挥。消息持久化并需确认送达；默认以容器沙箱运行，消息代理位于无网络容器中，通过共享 Unix socket 通信。支持通过 LAN 或 tailnet 配对两台机器的工作区。面向需要在多智能体间协调编码与代码审查的开发者，需 Python 3.9+、Git 及 Incus（macOS 经 Colima）等前提条件。",
+   "highlights": [
+    "让 Codex、Claude Code 与 Pi 共享同一工作区并互相通信，可运行多个实例并分组到房间",
+    "支持 /review 命令将 GitHub pull request 分派给智能体审查并发布结果",
+    "跨机器配对工作区，可控制对方能访问哪些智能体，经 TLS 身份密钥固定中继通信"
+   ],
+   "use_cases": [
+    "让一个智能体实现代码变更、另一个智能体进行审查的多智能体协作流程",
+    "两台机器上的团队成员共享工作区，互相使用对方智能体做代码审查",
+    "在不直接暴露宿主机的前提下于容器沙箱中运行 AI 编码智能体"
+   ]
+  },
+  "sha": "00d16ff3cdcf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c5e684f090d": {
+  "identity": {
+   "one_liner": "GEOROC 2.0 数据库的交互式 Jupyter 教程笔记本，演示 API 数据访问与地球化学分析",
+   "review": "该仓库是一个 Jupyter 笔记本，用于演示 GEOROC 岩石地球化学数据库 2.0 版的功能。笔记本分三部分：通过 DIGIS API 发送请求获取数据、对返回数据进行格式化与清洗、以及可视化——包括复现 Garcia 等 1989 年关于夏威夷海底拉斑玄武岩玻璃的论文图表。使用前需向 DIGIS-Info 申请 API key；可通过 Binder 在线运行或本地安装 Jupyter。",
+   "highlights": [
+    "通过 DIGIS API 查询并检索 GEOROC 数据库中的岩石与矿物地球化学分析数据",
+    "演示数据格式化、清洗、重采样及多种可视化方法（使用 pandas、geopandas、seaborn、matplotlib 等库）",
+    "包含复现 Garcia et al. (1989) 地球化学论文图表的完整示例"
+   ],
+   "use_cases": [
+    "学习如何通过 API 编程访问 GEOROC 地球化学数据库",
+    "地球化学研究中数据获取、清洗与可视化流程的教学演示",
+    "复现或参考已有地球化学出版物的可视化方法"
+   ]
+  },
+  "sha": "2c5e684f090d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

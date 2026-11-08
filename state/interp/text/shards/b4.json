@@ -3262,5 +3262,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d55a058fb3fd": {
+  "identity": {
+   "one_liner": "为CloudNativePG构建的含TimescaleDB与PostGIS扩展的PostgreSQL容器镜像",
+   "review": "该项目在CloudNativePG官方operand镜像基础上追加TimescaleDB、TimescaleDB Toolkit、PostGIS与pgRouting扩展层，发布至ghcr.io。镜像沿用上游Docker Bake构建流程，以USER 26运行可直接用于Cluster资源。面向在Kubernetes上通过CloudNativePG运维PostgreSQL、需时序与地理扩展的团队。生产使用建议采用不可变日期标签或digest。Apache 2.0许可。",
+   "highlights": [
+    "基于官方CloudNativePG operand镜像，以USER 26及上游entrypoint运行，可直接用于Cluster；每镜像发布SBOM、provenance及cosign签名",
+    "覆盖PostgreSQL 14–18、Debian bookworm/trixie、standard与system两种flavour、linux/amd64与arm64，扩展版本按PG大版本与发行版固定",
+    "每次构建相关PR构建三个代表性镜像并验证扩展按固定版本加载；Renovate跟踪apt固定版本，每周在最新基础上重建"
+   ],
+   "use_cases": [
+    "在CloudNativePG管理的Kubernetes集群中运行同时需要TimescaleDB时序与PostGIS/postgis_topology地理扩展的PostgreSQL实例",
+    "通过ClusterImageCatalog按digest引用镜像，或使用不可变日期标签固定扩展与PG小版本",
+    "使用system flavour镜像配合内置Barman Cloud进行集群内备份"
+   ]
+  },
+  "sha": "d55a058fb3fd",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c896f525e94e": {
+  "identity": {
+   "one_liner": "面向 AI 代理的开源后端即服务，代理经 CLI/SDK/MCP 自主开通与付费。",
+   "review": "run402 是为 AI 代理与编码代理设计的开源后端基础设施：代理可通过 CLI、TypeScript SDK 或 MCP 工具开通 Postgres 数据库、认证、文件存储、serverless 函数与站点托管，并以 x402（Base 上的 USDC）或 MPP 方式自主付费。仓库采用 MIT 许可，核心运行时部分独立于 Apache-2.0 的 run402-core 仓库；提供 testnet 免费原型层。适合需要端到端自动化部署的代理场景，操作以 CLI 与声明式清单为主，无控制台依赖。",
+   "highlights": [
+    "提供 CLI、类型化 SDK（Node 22/Deno/Bun/V8 isolates）、MCP 服务器与 OpenClaw skill 等多种接口，均基于同一 SDK 内核",
+    "支持 x402（USDC on Base）与 MPP（pathUSD on Tempo、Bitcoin Lightning sats）支付，含幂等键、回执校验与恢复路径定义",
+    "部署流程支持 run402.deploy.json / .ts 清单的本地校验（--check）、网关审核计划（--plan）与部署后 HTTP 验证"
+   ],
+   "use_cases": [
+    "代理或 CI 脚本中自动开通数据库、存储、认证并部署应用",
+    "在 Claude Desktop、Cursor、Claude Code 等 MCP 原生宿主中作为工具调用后端操作",
+    "代理以自有身份与支出策略为他人组织执行受限授权的后端任务"
+   ]
+  },
+  "sha": "c896f525e94e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5cec87cae468": {
+  "identity": {
+   "one_liner": "基于 Spring JdbcTemplate 的轻量级 Java ORM 框架",
+   "review": "tiny-jdbc 是一款基于 Spring JDBC 的 ORM 框架，通过 BaseDao 泛型基类提供实体映射 CRUD、原生 SQL 操作和分页查询，配合 QueryCriteria/UpdateCriteria 条件构造器使用。实体通过 @Table/@Id/@Column 注解映射表结构。依赖 Maven starter 接入，兼容 SpringBoot2 与 3。多数据源场景下分页方言识别存在配置边界，文档给出了限制说明。",
+   "highlights": [
+    "提供 BaseDao 通用 CRUD 方法，支持实体映射与原生 SQL 两种操作方式",
+    "条件构造器与 SQL 构造器支持 Lambda 调用形式",
+    "支持多种主键生成策略（自增、UUID、雪花ID、NanoId、ULID、sequence、自定义等）与多数据库分页方言，兼容 SpringBoot2/3"
+   ],
+   "use_cases": [
+    "SpringBoot 项目中的单库或多数据源数据库访问层开发",
+    "需要同时使用原生 SQL 与实体类映射操作的数据访问场景",
+    "使用 MySQL、Oracle、PostgreSQL、达梦、人大金仓等多种数据库并需分页的项目"
+   ]
+  },
+  "sha": "5cec87cae468",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "88b320137520": {
+  "identity": {
+   "one_liner": "在终端执行 Firebase Realtime Database 与 Cloud Firestore 查询的 CLI 工具",
+   "review": "Fireshell 是一个基于 Node.js 的命令行工具，用于在终端直接执行 Realtime Database 和 Cloud Firestore 的增删改查查询。首次运行时通过交互式提示生成 config.json 完成连接配置，查询以 db 变量开头并按 Firebase SDK 语法链式书写。需安装 Node.js 与 npm，配置文件须包含 projectId 键。",
+   "highlights": [
+    "支持 Realtime Database 与 Cloud Firestore 两种服务的连接与查询",
+    "查询以 db 变量为起点，按 Firebase SDK 链式语法执行增删改查",
+    "提供 set-config、reset、firerun 三个 CLI 命令，其中 firerun 支持从文件批量执行查询并输出结果到文件"
+   ],
+   "use_cases": [
+    "在终端中直接对 Firebase 数据库执行调试或操作查询",
+    "通过输入文件批量执行多条数据库查询并保存输出结果",
+    "在 Realtime Database 与 Firestore 之间切换连接配置"
+   ]
+  },
+  "sha": "88b320137520",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "576641c3328f": {
+  "identity": {
+   "one_liner": "PHP 数据源抽象层，将数据库、JSON、XML、CSV 等统一为 Row 迭代器",
+   "review": "Anydataset Core 是 Anydataset 项目的核心模块，为 PHP 提供与具体数据源无关的抽象层。不同来源（数据库、JSON、XML、CSV、定宽文件、NoSQL 等）经 getIterator() 返回统一的 Row 对象迭代器；同一个 IteratorFilter 既可过滤内存数据，也可转换为数据库查询的 WHERE 子句。通过 composer 安装，测试使用 phpunit。文本文件、XML、JSON 等实现仅支持读取，核心与数据库驱动支持读写。",
+   "highlights": [
+    "为数据库、JSON、XML、CSV、定宽文本文件、NoSQL 等数据源提供统一的 Row 对象迭代器接口",
+    "IteratorFilter 支持 SQL 类语法过滤，同一过滤器可作用于内存数据或转换为数据库 WHERE 子句",
+    "提供 JSON、XML、数组间的格式转换（Formatter）以及字段校验，支持自定义数据源实现"
+   ],
+   "use_cases": [
+    "PHP 项目需以同一套代码读取多种数据源（关系数据库、MongoDB、JSON、文本文件等）",
+    "需要将内存数据集与数据库查询共用同一过滤逻辑",
+    "需在不同格式（JSON/XML/数组）间转换数据或按规则校验字段"
+   ]
+  },
+  "sha": "576641c3328f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4eaaaead5b7d": {
+  "identity": {
+   "one_liner": "离线优先开源财务软件，复式记账内核加插件化架构，SQLCipher 加密单文件存储",
+   "review": "BOKI 是基于 Vue 3 + NestJS 的离线优先记账软件，面向小微企业、个体工商户与代理记账场景。内核仅保留复式记账引擎（科目、凭证、期初、公司上下文），其余功能通过 14 个官方插件按需安装；数据存于 SQLCipher 加密 SQLite 单文件，由 vault.key 主密钥派生子密钥，密钥丢失则数据库无法打开。",
+   "highlights": [
+    "复式记账凭证录入，借贷必相等由前后端双重校验，已审核凭证禁止修改删除；提供资产负债表、利润表、科目余额表等报表并支持导出 Excel",
+    "数据库 SQLCipher 兼容整库加密默认开启，附件用 AES-256-GCM 加密，备份恢复前强制校验密钥一致性",
+    "AI 链路可离线运行：本地 OCR（PP-OCRv4）解析发票生成凭证，本地语音识别（sherpa-onnx）与本地大模型（Ollama/llama.cpp/vLLM）支持问答查询"
+   ],
+   "use_cases": [
+    "小微企业与个体工商户的日常记账、票据识别与报表出具",
+    "代理记账公司通过多公司隔离功能在一个账号内管理多家记账主体",
+    "内网或断网环境的私有化部署，可使用 Windows 离线安装包，同机充当局域网服务器供浏览器访问"
+   ]
+  },
+  "sha": "4eaaaead5b7d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

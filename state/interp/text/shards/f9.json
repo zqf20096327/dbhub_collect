@@ -2491,5 +2491,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2f4078a935ff": {
+  "identity": {
+   "one_liner": "Apache CouchDB 的纯 Erlang 插件系统概念验证模块",
+   "review": "这是 Apache CouchDB 镜像仓库中一个插件机制的概念验证分支（1867-feature-plugins）。它新增 /_plugins HTTP API 与 Futon 插件页面，管理员通过 POST 名称、URL、版本和校验和，系统下载对应 Erlang 版本的 .tar.gz 二进制包、校验 SHA 哈希后解压并加载。仅支持纯 Erlang 插件，采用无加密的信任模型，解压路径仍使用 /tmp，作者注明有待完善之处。",
+   "highlights": [
+    "提供 /_plugins HTTP 端点与 Futon 页面（/_utils/plugins.html），支持一键安装插件",
+    "下载 .tar.gz 二进制包并按 base64 SHA 哈希校验后加载 Erlang 应用与 .ini 配置",
+    "校验 Erlang 版本匹配，不匹配则拒绝安装"
+   ],
+   "use_cases": [
+    "在 CouchDB 中安装 GeoCouch 等纯 Erlang 插件",
+    "通过 HTTP 调用自动化部署 CouchDB 插件",
+    "研究 CouchDB 插件系统的早期设计实现"
+   ]
+  },
+  "sha": "2f4078a935ff",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb78025e04ae": {
+  "identity": {
+   "one_liner": "TiDB Cloud 的 Terraform Provider，以代码方式管理 TiDB Cloud 配置",
+   "review": "这是 tidbcloud 组织维护的 Terraform Provider，用户通过编写 Terraform 配置文件管理 TiDB Cloud 资源，如 Serverless 集群。运行需 Terraform ≥1.0 与 TiDB Cloud API 公私钥（可用环境变量注入），部署后输出集群连接串。项目基于 Go 开发，可从源码构建，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持通过 terraform init/apply 工作流创建 TiDB Cloud Serverless 集群并输出 connection_strings",
+    "API 凭据支持 provider block 配置或 TIDBCLOUD_PUBLIC_KEY/TIDBCLOUD_PRIVATE_KEY 环境变量两种方式",
+    "支持通过 TIDBCLOUD_HOST 等环境变量覆盖 API 端点，可从源码构建并使用 dev_overrides 调试"
+   ],
+   "use_cases": [
+    "以声明式配置文件创建和管理 TiDB Cloud 集群资源",
+    "在 CI 流水线中通过密钥存储注入 API key 执行基础设施变更",
+    "开发者使用本地构建的 provider 二进制进行调试和二次开发"
+   ]
+  },
+  "sha": "bb78025e04ae",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

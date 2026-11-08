@@ -2579,5 +2579,136 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ab3a3cb44fc0": {
+  "identity": {
+   "one_liner": "基于 Rust 引擎、以有界内存在数据库间搬移整表的 Python 传输工具。",
+   "review": "apitap 是一个通过各数据库自有线协议（二进制 COPY、RowBinary、LOAD DATA、逻辑复制/binlog）在 Postgres、MySQL、ClickHouse、BigQuery 等之间搬移整表的传输引擎。Python 包为 Rust 引擎的薄绑定，单次调用完成，无守护进程和本地状态文件。内存占用按管道×缓冲区规划，受容器 cgroup 限制约束，与表大小无关。当前版本 0.66.0，MIT 协议，仅提供 manylinux_x86_64 的 abi3 wheel，要求 CPython ≥ 3.9。",
+   "highlights": [
+    "支持 replace（原子交换）、append、merge（Postgres/Iceberg）和基于日志的批量 CDC 四种传输模式，可在一次调用中按表混用模式",
+    "apitap.sql() 可在其自身 Rust 引擎中对不同数据库的表做跨源连接与聚合，结果可输出为 polars/pyarrow/duckdb/pandas 等 DataFrame（经 Arrow C 流协议零拷贝）",
+    "支持 Postgres、MySQL/MariaDB、ClickHouse、Google Sheets、GitHub 文件/API 作为来源，BigQuery、GCS、S3 兼容存储、Iceberg REST catalog 等作为目标"
+   ],
+   "use_cases": [
+    "在 Postgres、MySQL、ClickHouse、BigQuery 之间做整表批量搬移或增量同步（append/merge，按 cursor 字段）",
+    "从 Postgres/MySQL 读取 WAL/binlog，将批量 CDC 写入 Postgres、ClickHouse、MySQL、BigQuery 或 Iceberg",
+    "跨多个数据源执行 SQL 连接聚合（如 Postgres × MySQL 的表），或在受限内存容器中定期运行 ETL 任务（可由 cron、Airflow、Kubernetes 调度）"
+   ]
+  },
+  "sha": "ab3a3cb44fc0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "139f8ed91b75": {
+  "identity": {
+   "one_liner": "基于 SQLite 与遗忘曲线的陪伴型 AI 本地记忆卡系统",
+   "review": "whale-card 是一张本地运行的数字记忆卡，为陪伴型 AI 提供跨窗口、跨设备的持久记忆。它以 SQLite 存储三级记忆池（短期/中期/长期），按六类分区执行差异化衰减，用哈希链时间线保证记录连续可验证，并通过本地 HTTP 服务（127.0.0.1:8848）向会话通道提供上下文。依赖 Python 3.10+、numpy 和 bge-base-zh-v1.5 嵌入模型。README 注明许可仅限卡作者指定的个人使用，未开放通用授权。",
+   "highlights": [
+    "三级记忆池（短期/中期/长期）配合六类分区差异化衰减率，实现模拟遗忘曲线的记忆淘汰与巩固机制",
+    "时间线采用哈希链结构，verify_chain 可检测记录是否被篡改或跳号，链断裂时不自动修复",
+    "身份锚以 sha256 校验 6 条核心事实，启动不匹配即拒绝加载；离线超 24 小时自动补写离线记忆"
+   ],
+   "use_cases": [
+    "为陪伴型 AI 会话提供跨窗口、跨设备的一致记忆与上下文",
+    "需要记录长时间跨度交互并模拟自然遗忘的个人 AI 记忆场景",
+    "本地单机环境下以 HTTP 接口接入 LLM 会话通道（如 DSH）的记忆服务"
+   ]
+  },
+  "sha": "139f8ed91b75",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f85a641b5898": {
+  "identity": {
+   "one_liner": "CodeIgniter 数据库迁移管理控制器，网页方式执行迁移",
+   "review": "该项目包含一个控制器和一个视图文件，用于在 CodeIgniter 项目中管理数据库迁移。用户将 Migrate.php 与 migrate.php 两个文件上传到项目的 application 目录后，访问 site_url('migrate') 即可使用页面界面操作迁移。README 未说明具体功能细节与框架版本要求，使用前需自行验证兼容性。",
+   "highlights": [
+    "提供 Migrate.php 控制器与 migrate.php 视图两个文件，上传至 application 目录即可使用",
+    "通过访问 site_url('migrate') 路由打开迁移管理页面",
+    "README 附带界面预览截图"
+   ],
+   "use_cases": [
+    "在 CodeIgniter 项目中通过网页界面执行数据库迁移",
+    "需要在部署环境里管理迁移而不编写命令行操作时使用"
+   ]
+  },
+  "sha": "f85a641b5898",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9f6942dfa194": {
+  "identity": {
+   "one_liner": "自托管服务器管理面板：Agent 上报监控，面板下发 sing-box 配置",
+   "review": "apsp 是自托管的服务器管理与配置面板，用 Rust 编写的 Agent 主动连接面板上报指标并应用面板编译的 sing-box 配置包，服务器无需开放入站管理端口。面向需要集中管理多台服务器及其用户订阅、流量计费的管理者。注意当前为未发布开发基线，不支持旧数据库自动升级，面板依赖 Docker、Compose 与 Python 3，许可证为 AGPL-3.0-only。",
+   "highlights": [
+    "面板保存期望状态并确定性编译成各服务器配置包，Agent 主动连接上报指标、比对并应用配置，服务器不开放入站管理端口",
+    "sing-box 作为独立系统服务运行，流量按用户只计一次、重启后不重复不丢失，支持逐用户、逐节点的流量账本",
+    "Agent 支持 Linux systemd/OpenRC、macOS launchd、FreeBSD rc.d 与 Windows 计划任务，二进制经签名验证下载"
+   ],
+   "use_cases": [
+    "集中管理分散在多家提供商的服务器：看板监控、延迟丢包检测、网络诊断",
+    "为多台服务器下发 sing-box 节点、链路与用户套餐配置，记录逐用户流量账本",
+    "记录服务器资产、成本、到期与续费，配置离线/资源/到期/流量告警与通知"
+   ]
+  },
+  "sha": "9f6942dfa194",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "29ca6856f971": {
+  "identity": {
+   "one_liner": "基于手指使用映射的打字教学与测速应用",
+   "review": "sqwer 是一个开源打字练习与测速工具，除记录速度和错误外，还会分析用户每个按键实际使用的手指，生成手指使用画像，并据此组织课程、练习测试和竞技等级。面向想改进打字习惯的学习者。技术栈为 SvelteKit + TypeScript + PostgreSQL（含嵌入式 PGlite），采用 GPL-3.0 许可证。注意生产字体未包含在仓库中，安装时会以 Roboto Flex 替代。",
+   "highlights": [
+    "记录每个按键对应的手指及使用情境，生成手指使用画像并提供逐键指导",
+    "提供从主键位行开始的课程、游戏、计时/词数测试、XP 与排行榜",
+    "无需账号即可使用，数据保存在浏览器本地；未配置 DATABASE_URL 时自动使用嵌入式 PostgreSQL（PGlite）"
+   ],
+   "use_cases": [
+    "希望了解并纠正个别按键手指习惯的打字学习者",
+    "想运行本地打字练习站点、无需配置外部数据库的开发者",
+    "通过速度等级和排行榜进行竞技练习的用户"
+   ]
+  },
+  "sha": "29ca6856f971",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51abfcab633a": {
+  "identity": {
+   "one_liner": "供房产经纪人向客户分享看房清单的房源列表应用",
+   "review": "Open Houses 是一个面向房产经纪人的 Web 应用：经纪人可创建账号、按日期和开放屋时间组织房源清单，并以链接形式分享给客户用于安排一天内连续看房。站点支持按“是否有即将开放的开放屋”等条件筛选房源。技术栈基于 Node/Express，数据存储使用 MySQL，需配置 RealtyAPI 密钥与数据库环境变量后方可本地运行。",
+   "highlights": [
+    "注册用户可创建、保存房源清单并将每份清单以链接分享",
+    "清单可按日期和开放屋时间组织，形成连续看房行程",
+    "支持密码加密（bcrypt）、分页、客户端缓存与懒加载（Intersection Observer）"
+   ],
+   "use_cases": [
+    "经纪人为客户整理一天内可连续看房的房源行程",
+    "按开放屋时间筛选房源供客户浏览",
+    "通过链接向客户分享私人房源清单"
+   ]
+  },
+  "sha": "51abfcab633a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

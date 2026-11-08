@@ -2710,5 +2710,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "52a6aaa1f185": {
+  "identity": {
+   "one_liner": "基于 Go 与 DuckDB 构建的 Snowflake 模拟器，用于本地开发与测试。",
+   "review": "该项目在本地运行一个模拟 Snowflake SQL 接口的服务，底层将 Snowflake 语法翻译为 DuckDB 执行，支持 gosnowflake 驱动协议与 REST API v2 两种访问方式。面向需要在本地或 CI 中运行 Snowflake 兼容 SQL 的开发与测试人员。README 明确指出不支持认证、集群、Time Travel、外部 Stage 及 JS 存储过程等特性，仅用于开发测试场景。",
+   "highlights": [
+    "支持 gosnowflake 驱动协议及 REST API v2 端点，可通过 Docker 一条命令启动，默认内存模式运行",
+    "实现 Snowflake 到 DuckDB 的 SQL 翻译，覆盖 SELECT/DML/DDL/事务/MERGE INTO/COPY INTO 及 IFF、NVL、DATEADD 等函数映射",
+    "支持位置参数绑定（:1、?），通过 PORT、DB_PATH、STAGE_DIR 环境变量配置；二进制发布仅限 Linux x86_64，其余平台使用 Docker"
+   ],
+   "use_cases": [
+    "本地集成测试：无需 Snowflake 凭据即可通过 gosnowflake 或任意语言的 REST API 执行 SQL",
+    "CI 流程中对 Snowflake SQL 运行冒烟测试",
+    "在连接真实 Snowflake 前验证 Snowflake 风格 SQL 的行为"
+   ]
+  },
+  "sha": "52a6aaa1f185",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dafb38a3cfe8": {
+  "identity": {
+   "one_liner": "基于 mongosh 的 NeoVim 前端插件，在 Vim 中查询与编辑 MongoDB 文档",
+   "review": "mongo.nvim 是一个 NeoVim 插件，调用 mongosh 执行 MongoDB 查询：通过 :Mongoquery 运行脚本并在临时 buffer 显示结果，:Mongoedit 生成 replaceOne 脚本用于编辑单个文档并写回数据库。作者在 NeoVim 0.7.2 与 0.8.0 上开发测试，未在其他版本验证，需 PATH 中有 mongosh 可执行文件。适合希望在 Vim 环境中操作 MongoDB 的用户。",
+   "highlights": [
+    "提供 :Mongoconnect、:Mongoquery、:Mongoexecute、:Mongocollections 等命令，支持连接缓存、按 buffer 或选区执行查询并在临时 buffer 显示结果",
+    "提供 :Mongoedit 命令生成 replaceOne 脚本，可自动推断 collection 与 _id（基于 buffer 标签数据与 Treesitter 上下文）",
+    "通过 :Mongorefresh 刷新当前 buffer 数据，支持 Packer 安装"
+   ],
+   "use_cases": [
+    "在 NeoVim 中编写并执行 MongoDB 查询脚本",
+    "以 Vim 编辑能力修改 MongoDB 单个文档并写回数据库",
+    "浏览当前连接数据库的 collections 列表并从 stub-query 起步"
+   ]
+  },
+  "sha": "dafb38a3cfe8",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b80e25b0203e": {
+  "identity": {
+   "one_liner": "基于 Spring Cloud 微服务的 BOSS 直聘招聘数据分析与可视化平台",
+   "review": "BossAnalyze 是一个面向求职者、HR 与市场分析师的招聘数据分析平台，通过爬取 BOSS 直聘数据，提供薪资分析、职位趋势、简历管理与可视化看板。后端为 Java 17 + Spring Cloud 微服务，结合 Spark 计算、MySQL/MongoDB/Redis/HDFS 混合存储；前端正用 Nuxt 4 重构，简历编辑等路由尚未完成，且仓库不含 Docker 编排，外部基础设施需自行配置。",
+   "highlights": [
+    "支持城市、职位、行业、公司规模等多维度交叉分析与薪资、职位可视化看板",
+    "后端采用 Spring Cloud 微服务（Consul、OpenFeign、LoadBalancer），集成 Spark 4.0 处理大规模招聘数据",
+    "已完成 RBAC 权限控制、简历管理、薪资分析与职位分析模块，混合使用 MySQL、MongoDB、HDFS、MinIO 存储"
+   ],
+   "use_cases": [
+    "求职者查看地区与行业薪资分布、技能需求等市场数据",
+    "HR 或市场分析师进行职位趋势与人才分布的可视化分析",
+    "作为学习 Spring Cloud、Spark 与混合存储架构的实战项目参考"
+   ]
+  },
+  "sha": "b80e25b0203e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6dcda64a5b64": {
+  "identity": {
+   "one_liner": "NestJS 的 Couchbase 集成模块，基于 Repository 模式操作文档",
+   "review": "该包为 NestJS 提供 Couchbase 数据库模块，以 couchbase SDK 作为数据提供者，通过 @Entity 装饰器声明实体与 bucket 的映射，在模块中注册仓库后，服务层可用 InjectRepository 注入 Repository 执行文档操作。安装时需同时安装 couchbase 依赖，采用 MIT 许可证。",
+   "highlights": [
+    "提供 @Entity 装饰器，将类映射到指定的 Couchbase bucket（bucket 名可选）",
+    "实现 Repository 模式，通过 InjectRepository 在服务中注入仓库处理文档操作",
+    "以 npm 包 @scalio-oss/nest-couchbase 发布，依赖 couchbase SDK"
+   ],
+   "use_cases": [
+    "NestJS 应用中需要对 Couchbucket bucket 中的文档进行增删改查",
+    "希望在 NestJS 中以实体类和仓库模式组织数据访问层",
+    "基于 Couchbase 构建的 Node.js 后端服务集成"
+   ]
+  },
+  "sha": "6dcda64a5b64",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e28a3dd3464": {
+  "identity": {
+   "one_liner": "跨平台桌面数据库客户端，内置模式感知的 AI 助手与 MCP 服务器",
+   "review": "SoftDB 是基于 Wails v3（Go + React 19）构建的桌面数据库管理工具，支持 PostgreSQL、MySQL、MariaDB、SQLite、MongoDB、Redshift 和 Redis 的连接、浏览与管理。提供 Monaco SQL 编辑器、可视化表结构设计、ER 图、查询历史与安全模式等功能；AI 助手将数据库模式注入 OpenAI 提示，并内置 MCP 服务器供 Claude、Cursor 等 AI 工具调用 8 个工具。适合需要在本地统一管理多种数据库并借助 AI 辅助查询的开发者与 DBA。",
+   "highlights": [
+    "支持 7 种数据库（PostgreSQL、MySQL、MariaDB、SQLite、MongoDB、Redshift、Redis），提供三级树浏览与多连接标签页",
+    "内置基于 OpenAI 的 AI 助手，自动注入表结构与列类型上下文，按连接隔离聊天历史",
+    "内置 MCP 服务器，提供 list_tables、execute_query 等 8 个工具，凭据不暴露给 AI 且结果上限 1000 行"
+   ],
+   "use_cases": [
+    "需要在同一桌面应用中连接和浏览多种类型数据库的场景",
+    "通过 MCP 让 Claude、Cursor 等 AI 工具浏览模式并执行查询的场景",
+    "通过 SSH 隧道或安全模式（阻止 DROP/DELETE 等破坏性查询）连接远程数据库的场景"
+   ]
+  },
+  "sha": "1e28a3dd3464",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

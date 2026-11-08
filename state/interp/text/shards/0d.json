@@ -2744,5 +2744,181 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4e7e8d4c18d1": {
+  "identity": {
+   "one_liner": "基于 FFI 调用 DuckDB C API 的 PHP 客户端库",
+   "review": "该库为 PHP 提供 DuckDB 客户端 API，通过 FFI 调用官方 C API，而非仅作封装，还提供 PHP 风格的方法。支持持久连接、预处理语句、Appender 数据加载，并可查询远程 Parquet/CSV 文件。需要 PHP 8.3+、ext-ffi 与 x64 平台，支持 Linux、Windows 和 macOS。",
+   "highlights": [
+    "通过 FFI 使用 DuckDB 官方 C API，支持 Linux、Windows 和 macOS",
+    "提供持久连接、预处理语句和 Appender 数据加载方式",
+    "自 1.2.0 起支持全部 DuckDB 数据类型到 PHP 类型的映射，含 HUGEINT、嵌套类型等"
+   ],
+   "use_cases": [
+    "在 PHP 应用中创建并查询 DuckDB 内存或文件数据库",
+    "对本地或远程 Parquet/CSV 数据文件执行 SQL 聚合与汇总分析",
+    "使用 Appender 向 DuckDB 表批量加载数据"
+   ]
+  },
+  "sha": "4e7e8d4c18d1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49fdf418276f": {
+  "identity": {
+   "one_liner": "Apache IoTDB 时序数据库的 Go 语言客户端库，通过 Session/SessionPool 与服务端通信",
+   "review": "该仓库是 Apache IoTDB（面向物联网的时序数据库）的 Go 客户端，供需要在 Go 程序中读写 IoTDB 数据的开发者使用。它提供 Session 与 SessionPool 两层接口，支持单机、集群及 doubleLive 配置的连接池，支持 TLS/mTLS 连接加密。要求 golang >= 1.25，依赖 thrift 0.23.0，且与旧版 rel/0.13 分支使用的 thrift v0.14.1 接口不兼容。",
+   "highlights": [
+    "提供 Session 与 SessionPool 两种接入方式，SessionPool 封装会话复用，需在使用后调用 PutBack 归还连接",
+    "支持在 Config、ClusterConfig、PoolConfig 上配置 TLS，并可添加 CertFile/KeyFile 实现 mTLS 客户端认证",
+    "支持 standalone、cluster、doubleLive 三种部署形态的连接配置；查询可设置超时参数（毫秒，0 表示不限时）"
+   ],
+   "use_cases": [
+    "在 Go 应用中对 Apache IoTDB 执行建存储组、查询等时序数据操作",
+    "需要连接池化、集群或 doubleLive 部署下管理 IoTDB 会话连接的服务端程序",
+    "需要通过 TLS/mTLS 与 IoTDB 服务端建立加密连接的场景"
+   ]
+  },
+  "sha": "49fdf418276f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b1c936e99f1c": {
+  "identity": {
+   "one_liner": "基于 Discord.js v14 与 MongoDB 的定制 Discord 机器人",
+   "review": "Gidget 是一个定制 Discord 机器人，源起于 Wow Wow Discord 服务器，使用 Discord.js v14 与 Discord API 交互，数据存储于 MongoDB Atlas 并通过 Mongoose 访问。README 提供公开邀请链接与支持服务器，也开放源码供学习或把命令加入其他机器人实例；自托管需自行准备 MongoDB 数据库并修改部分代码。",
+   "highlights": [
+    "使用 Discord.js v14.x 与 Discord API 交互，数据存储于 MongoDB Atlas，通过 Mongoose 访问",
+    "包含命令/事件处理器基础与反应角色（reaction-role）系统",
+    "支持 DM 私信频道，部分命令可在私信中使用"
+   ],
+   "use_cases": [
+    "将公开机器人 Gidget#2936 添加到自己的 Discord 服务器",
+    "阅读源码学习机器人工作机制，或将 Gidget 命令集成到其他机器人实例",
+    "自托管部署（需自行配置 MongoDB 数据库并调整代码）"
+   ]
+  },
+  "sha": "b1c936e99f1c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a0b737516c92": {
+  "identity": {
+   "one_liner": "基于 HTTP API 操作 ArangoDB 多模型数据库的 Ruby Gem",
+   "review": "ArangoRB 是一个用于在 Ruby 中访问 ArangoDB 的 Gem，基于 ArangoDB 的 HTTP API 实现，覆盖 Server、Database、Collection、Document、Graph、AQL、Transaction 等类。README 声明该项目已停止维护，作者推荐转向 arango-driver 项目。已测试组合为 ArangoDB 3.0–3.4 与 Ruby 2.3.x，依赖 HTTParty、Oj 和 connection_pool 三个 Gem。",
+   "highlights": [
+    "提供 Server、Database、Collection、Document、Graph、AQL 等类，映射 ArangoDB 的文档、图和键值数据模型",
+    "支持连接池、实例缓存、异步请求管理和 AQL 查询分批取回",
+    "所有类实例可通过 to_h 方法转换为 Hash，并支持 verbose 调试输出"
+   ],
+   "use_cases": [
+    "在 Ruby 应用中通过 HTTP API 管理和查询 ArangoDB 数据库",
+    "执行 AQL 图查询并分批获取大量结果文档",
+    "管理 ArangoDB 的用户、索引、事务、批量请求和 Foxx 实例等资源"
+   ]
+  },
+  "sha": "a0b737516c92",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3cca1550f90b": {
+  "identity": {
+   "one_liner": "自托管开源发票系统，Bun+Hono+React 构建于单一 SQLite 文件之上",
+   "review": "Inkvoice 是一个可自托管的开源发票管理仪表板，提供发票全生命周期、报价、周期性账单、费用追踪、多币种及报表功能，面向自由职业者和小团队。技术栈为 Bun + Hono + React，数据存储于单个 SQLite 文件，以单一 Docker 容器分发，支持 Dokploy/Coolify 一键部署，也可选用其托管云服务。生产环境要求 JWT_SECRET 至少 32 字符，官方建议保留 512 MB 内存上限。",
+   "highlights": [
+    "提供发票生命周期管理（草稿/发送/已付/作废）、报价转发票、定时自动生成周期性发票，以及浏览器打印导出的 Mustache 模板 PDF",
+    "支持 Stripe 与 PayPal 在线收款、多币种实时汇率、德国电子发票模块（XRechnung/ZUGFeRD/PEPPOL，默认关闭）及多种可导出 CSV 的报表",
+    "单容器部署，数据存于单个 SQLite 文件，提供多用户角色权限、活动日志、内置英/土/西/德/法五语界面，并配有 iOS/Android 移动应用"
+   ],
+   "use_cases": [
+    "自由职业者或小团队自托管管理发票、报价、费用并接受在线付款",
+    "需要多币种记账和税务汇总、应收账款账龄等报表导出的场景",
+    "面向德国市场需开具 XRechnung/ZUGFeRD 电子发票或通过 PEPPOL 网络收发账单的企业"
+   ]
+  },
+  "sha": "3cca1550f90b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7d94d3ff4f3": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 168 个 SKILL.md 技能目录，按路由提供软件工程方法",
+   "review": "该仓库收录 168 个 Markdown 技能文件，分 18 类，覆盖架构、数据库、安全、移动端、AI、SaaS、DevOps 等领域，供 Claude Code、Codex 等可读 Markdown 的代理按任务路由加载。根技能定义基线规则，仓库含 242 条路由测试样例、272 项测试和带日期的来源记录门控。其中包含对 Chwezi Product Excellence Standard 的强制执行规则，该标准仅约束 Chwezi 自有应用。",
+   "highlights": [
+    "提供 168 个活跃 SKILL.md 技能，分 18 个类别，另有 78 个别名重定向",
+    "包含 242 条路由测试样例与目录守卫脚本 scripts/skill_catalog_guardrails.py",
+    "输出架构记录、OpenAPI 契约、威胁模型、CI/CD 配置等工程产物"
+   ],
+   "use_cases": [
+    "在 AI 编码代理中按任务名称加载对应工程技能，如 API 契约设计或安全审计",
+    "生成带证据的可复查产物，如威胁模型、测试策略和发布证据包",
+    "为多租户 SaaS、移动端或游戏项目获取分类技能指引"
+   ]
+  },
+  "sha": "a7d94d3ff4f3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "73f18a813a3c": {
+  "identity": {
+   "one_liner": "React.js 与 Firebase 的认证加 Firestore 数据库配置教程",
+   "review": "这是一份教程型仓库，以分章节步骤讲解如何在 Vite 创建的 React 项目中接入 Firebase 认证与 Firestore 数据库。内容包含 firebase.js 初始化、AuthContext 状态管理、登录与仪表盘组件、.env 密钥配置，以及在 Firebase 控制台启用 Email/Password 认证和 Firestore 的操作流程，适合希望搭建前端加后端原型网站的开发者。",
+   "highlights": [
+    "通过 AuthContext 组件将认证状态与登录、注册、登出方法以 React Context 形式提供给全应用",
+    "Dashboard 组件演示按用户 ID 关联的 Firestore 数据写入，含计数器递增与时间戳示例",
+    "使用 .env 文件存放 Firebase 配置键值，认证状态通过 Cookie 在刷新后维持一段时间"
+   ],
+   "use_cases": [
+    "为 React 或 Next.js 项目添加邮箱密码注册登录功能",
+    "搭建包含用户级数据读写的全栈演示应用",
+    "学习 Firebase 控制台中认证与 Firestore 的开通配置流程"
+   ]
+  },
+  "sha": "73f18a813a3c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61105c321647": {
+  "identity": {
+   "one_liner": "基于 Node.js、Express、MongoDB 与 EJS 模板的 CRUD 示例应用",
+   "review": "该项目是一个使用 Node.js、Express、MongoDB 和 EJS 模板引擎实现的增删改查（CRUD）应用。README 提供了启动 MongoDB 服务、创建 test 数据库与 users 集合、插入示例数据的完整命令，面向需要了解 Express 与 MongoDB 基本操作的读者。运行前需在本地准备好 MongoDB 服务。",
+   "highlights": [
+    "使用 Node.js、Express、MongoDB 与 EJS 模板引擎实现增删改查功能",
+    "README 包含 MongoDB 服务启动、状态检查及数据库、集合创建的命令示例",
+    "提供向 users 集合插入文档与查询数据的示例记录"
+   ],
+   "use_cases": [
+    "学习 Express 与 MongoDB 的基本 CRUD 操作流程",
+    "作为搭建简单 Web 应用的起始模板",
+    "练习 MongoDB 命令行下的数据库与集合操作"
+   ]
+  },
+  "sha": "61105c321647",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

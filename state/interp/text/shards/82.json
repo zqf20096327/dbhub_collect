@@ -2896,5 +2896,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3974c7c010b5": {
+  "identity": {
+   "one_liner": "基于 Node.js、Express 与 SQLite 的 IPTV 频道与播放列表管理面板",
+   "review": "该项目是一个自托管的 IPTV 管理面板，通过 Xtream Codes API 连接上游提供商，聚合频道并生成自定义 M3U 播放列表，支持多用户配置、EPG 集成、分类管理和用户并发流限制，面向需要整理自有 IPTV 服务的用户。内置 SSRF 防护、JWT 认证、速率限制等安全机制；项目声明不提供任何内容或订阅。支持 Docker、Debian/Ubuntu 脚本及 Proxmox LXC 部署。",
+   "highlights": [
+    "通过 Xtream Codes API 连接多个提供商，支持连接池与轮询回退，可配置每小时/每天/每周自动同步",
+    "提供 EPG 电子节目指南集成、M3U 播放列表生成、HDHomeRun 设备模拟（用于对接 Plex、Emby、Jellyfin）及点播/剧集代理",
+    "内置 SSRF 防护、JWT 认证、Bcrypt 哈希、速率限制、IP 封锁与 Helmet.js 安全头，支持多核集群与可选 Redis 流跟踪"
+   ],
+   "use_cases": [
+    "自托管管理自有 IPTV 服务，为多个用户分配不同频道分类与并发连接数",
+    "生成自定义 M3U 播放列表供外部播放器使用，或模拟 HDHomeRun 接入 Plex/Emby/Jellyfin",
+    "将多个上游提供商账户池化，在连接数达到上限时自动切换可用账户"
+   ]
+  },
+  "sha": "3974c7c010b5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8539fd276697": {
+  "identity": {
+   "one_liner": "本地优先的桌面密码管理器，无账户无云，主密码加密本地保险库",
+   "review": "CipherMoth 是一款本地优先的密码管理器，面向希望在自有设备上管理密码、不需要账户与云同步的个人用户。条目内容以 AES-256-GCM 加密存储，主密码经 Argon2id 派生密钥；支持 FIDO2 安全密钥作为第二因子。README 明确说明该项目未经独立安全审计，且主密码无法由他人重置。提供 macOS/Windows/Linux 桌面包及 Docker 自托管版本。",
+   "highlights": [
+    "条目全部字段（含名称、附件、2FA 密钥）以 AES-256-GCM 加密，主密码经 Argon2id 派生密钥封装随机 256 位保险库密钥",
+    "支持可选 FIDO2 安全密钥（如 YubiKey）作为第二因子、离线恢复码、生物识别解锁，并提供密码生成器、健康检查、CSV 导入与 .cmbackup 加密备份",
+    "提供浏览器扩展（Chrome/Brave/Firefox，按需填充）、自托管 Docker 版（localhost:3000）及 CLI"
+   ],
+   "use_cases": [
+    "在个人桌面设备上离线管理密码、2FA 令牌与安全笔记",
+    "需要持有加密备份文件、自主控制数据与更新节奏的个人用户",
+    "通过 Docker 在自有服务器上运行自托管版本，配合浏览器扩展按需填充登录信息"
+   ]
+  },
+  "sha": "8539fd276697",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "865587e90377": {
+  "identity": {
+   "one_liner": "本地优先的桌面媒体库应用，扫描、缩略图、搜索与播放视频照片音频，全离线运行",
+   "review": "Meguri 是一款 Electron 桌面应用，用于浏览、搜索和播放本地视频、图片与音频。它递归扫描指定文件夹，用内置 ffmpeg 生成 WebP 缩略图，元数据存于 SQLite（唯一原生依赖），播放经本地 HTTP 服务器流式传输。支持 Windows/macOS/Linux 安装包及 AUR；macOS 版本尚未公证，首次启动需手动放行。",
+   "highlights": [
+    "递归扫描文件夹，基于 mtime/size 做增量扫描，并通过内容哈希跟踪文件的移动与重命名",
+    "全文搜索（FTS5），支持按标签、类型、评分及多种日期范围过滤排序，条件以可移除徽章展示",
+    "提供时间线视图、2D/3D 图谱视图、文件夹视图、全屏随机 Discovery 与自动连播的 Playlist 播放"
+   ],
+   "use_cases": [
+    "在本地磁盘整理和浏览大量视频、照片、音乐文件，无需上传云端",
+    "按日期时间线回看、通过图谱按标签关联探索、或用 Discovery 随机重访旧素材",
+    "将任意列表（合集、稍后观看、搜索结果、文件夹）作为全屏播放列表自动连播"
+   ]
+  },
+  "sha": "865587e90377",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "847a0dcec81e": {
+  "identity": {
+   "one_liner": "开源订阅/用量/AI 计费引擎，跑在自己的支付网关账户上",
+   "review": "Two Minute Billing 是面向 SaaS、AI 与用量计费业务的开源订阅计费平台，提供计划管理、用量计量、AI 模型定价、预付积分、发票、税务、催收与 MRR 报表等模块。它本身不处理资金流转，支付通过用户自己的支付网关账户完成；可免费自托管（AGPL-3.0，Docker 部署）或使用官方 Cloud，并提供带幂等键的 REST API 与 TypeScript SDK。",
+   "highlights": [
+    "支持订阅计划（含按比例升降级、试用、暂停）、用量计量与费率卡计价，内置带日期的 AI 模型价格表与预付积分",
+    "支持 12 个支付网关（Stripe、Razorpay、Adyen、PayPal 等），按币种和支付方式路由，卡信息直达网关",
+    "内置基于追加式复式账本的收入报表（MRR、ARR、流失、留存、队列分析），并提供带幂等键的 REST API、签名 webhooks 和 TypeScript SDK"
+   ],
+   "use_cases": [
+    "SaaS 产品的订阅计费：计划、席位、附加项、试用与升降级按比例计费",
+    "AI 或用量型产品：按模型/token 用量计价、预付积分、消费限额与自动充值",
+    "需要印度 GST、VAT 或美国销售税发票，以及多网关、多币种路由的自托管计费系统"
+   ]
+  },
+  "sha": "847a0dcec81e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

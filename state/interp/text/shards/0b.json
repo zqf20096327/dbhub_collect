@@ -2398,5 +2398,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "043c3606f970": {
+  "identity": {
+   "one_liner": "面向多 Agent 开发的本地优先任务与上下文管理器，桌面、MCP、CLI 共用同一 SQLite 事实源。",
+   "review": "AyanamiTaskManager（ATM）是一个运行在 Windows 上的 Electron/Rust 桌面应用，把项目的计划、任务、进度、阻塞、长期记录和 Session 交接存入本地 SQLite 数据库，供 Codex、Claude Desktop、Claude Code、Kimi Code 等 Agent 通过 MCP 工具读取和写入。Agent 开工时调用 atm_begin 获取 brief 接续工作；桌面界面与 Agent 读写同一数据库。采用 AGPL-3.0-only 许可，服务仅监听 loopback，不依赖云端账号；手机同步为可选功能，需自建中继且内容端到端加密。",
+   "highlights": [
+    "提供 13 个 MCP 工具，按 core/memory/actions 三个 Profile 划分，支持开工 brief、任务领取、进度记录、交接与跨项目知识库检索",
+    "桌面端支持任务列表、看板、时间线、层级四种视图，按项目聚合 Agent Session 并显示 Git 分支与工作区状态，含备份恢复与导入导出",
+    "3.0 版以 Rust 重写核心并合并为单一进程，发布链包含四层验证（SOURCE_DONE 到 INSTALLED_VERIFIED），每个 Release 附带 test-report 与 SHA256SUMS"
+   ],
+   "use_cases": [
+    "多个 AI Agent 跨 Session 协作开发同一项目时，通过 brief 与结构化记录接续上下文，避免依赖聊天记录回顾项目历史",
+    "在桌面端集中查看多个受管项目的进行中、受阻、等待任务和在线 Agent 状态",
+    "以共享知识库存放跨项目的规范、接口约定和排障经验，通过不可变的 id@revisionId 引用"
+   ]
+  },
+  "sha": "043c3606f970",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d1a30317897c": {
+  "identity": {
+   "one_liner": "Java 库，用统一 API 构建并运行 SQL 与 NoSQL 数据库查询",
+   "review": "Querity 是一个可扩展的 Java 查询构建器，用于在应用中创建并运行数据库查询，面向需要以统一方式查询多种数据库的 Java 开发者。它以模块化方式提供 JPA、Spring Data MongoDB、Elasticsearch 等支持，包含过滤、排序、分页、投影、聚合子句等功能，并提供面向 REST API 的文本查询语言解析器。要求 Java 17+，Spring 模块需 Spring Boot 4，发布于 Maven Central，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持简单与嵌套条件（AND/OR/NOT）过滤、排序、分页、投影及 GROUP BY/HAVING 聚合子句",
+    "以模块化方式支持 SQL（经 JPA）、MongoDB 和 Elasticsearch，Spring 模块为 Spring Boot starter",
+    "提供 querity-parser 模块解析文本查询语法，并支持 DTO 层属性名映射与数据库原生表达式"
+   ],
+   "use_cases": [
+    "需要在同一 Java 应用中以统一 API 查询 SQL、MongoDB 或 Elasticsearch",
+    "为 REST API 提供可解析的文本查询语言并做 JSON 序列化/反序列化",
+    "构建含聚合、函数表达式和分页的数据库查询"
+   ]
+  },
+  "sha": "d1a30317897c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d8c4097af2bc": {
+  "identity": {
+   "one_liner": "面向 RAG 的零中间件混合检索服务，结合向量搜索、实体图 PPR 与 RRF 融合。",
+   "review": "Fast-AtomRAG Core 是一个低延迟检索服务，用于为 RAG 流水线返回上下文原子（atoms）及路由决策，本身不生成答案，需下游接入任意 LLM 生成器。核心机制包括基于共享实体的 2–3 跳图谱检索、本地前推式 Personalized PageRank（仅触及种子邻域）、RRF 融合以及遵循时延 SLA 的自校准路由器。运行时依赖仅 FastAPI、uvicorn、pydantic、prometheus-client 和 numpy，持久化采用 SQLite WAL 模式，内存状态仅在提交后变更。支持俄语 Snowball 与英语 Porter 词干化及字符三元组兜底匹配。局限包括：嵌入器为词法特征哈希、不捕捉同义改写，索引由单进程持有，横向扩展方案仅记录于 ADR 演进路径。",
+   "highlights": [
+    "提供向量搜索与实体图（AEG）检索双通道，通过 RRF 或线性融合合并结果，可经共享实体实现 2–3 跳检索",
+    "内置自校准路由器，基于各检索模式的滚动 p95 时延执行 SLA 过滤；SQLite（WAL）为持久化数据源，写入失败返回 503 且不影响内存状态",
+    "纯 stdlib 实现领域层（PPR、融合、路由、词干化），运行时依赖仅 FastAPI/uvicorn/pydantic/prometheus-client/numpy，无需向量数据库"
+   ],
+   "use_cases": [
+    "为 AI 代理或 RAG 应用提供低延迟检索后端：服务返回上下文原子与路由决策，下游自行接入 LLM 生成答案",
+    "需要跨实体多跳关联的知识检索场景：目标文本与查询无共享词汇时，可经实体图链路找到相关原子",
+    "俄英双语语料的索引与检索：内置 Snowball-RU/Porter-EN 词干化与三元组兜底，可将屈折变体归并为同一图节点"
+   ]
+  },
+  "sha": "d8c4097af2bc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8458761df127": {
+  "identity": {
+   "one_liner": "基于 CodeIgniter 的网站版 SPP 学费缴费管理应用",
+   "review": "这是一个基于 CodeIgniter 框架和 PHP 的网站应用，用于管理学校 SPP（学费）缴费。README 列出其功能包括多用户登录、仪表盘、SPP 数据、班级数据、学生数据、缴费交易和报表，并给出默认登录账号 admin1/admin。README 未提供安装步骤与系统要求说明。",
+   "highlights": [
+    "提供多用户登录和仪表盘",
+    "包含 SPP、班级、学生数据管理及缴费交易功能",
+    "提供报表（Laporan）功能"
+   ],
+   "use_cases": [
+    "学校学费（SPP）缴费记录管理",
+    "学生与班级信息维护",
+    "缴费报表查询与生成"
+   ]
+  },
+  "sha": "8458761df127",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7857756b620f": {
+  "identity": {
+   "one_liner": "一套批处理脚本与工具链，用于简化在 Windows 上构建 CouchDB。",
+   "review": "Glazie 由 Apache CouchDB 社区维护，包含批处理文件、PowerShell 脚本和工具链配置，用于在 64 位 Windows 上自动化安装依赖并编译 CouchDB。流程基于 Chocolatey 安装 Visual Studio 2022 工具链、Erlang、SpiderMonkey 91、ICU、OpenSSL 3 等组件，再通过 configure.ps1 与 Makefile.win 完成构建、测试和 MSI 安装包制作。文档要求使用专用构建机或 VM 并做快照，仅支持 64 位构建，依赖安装耗时超过一小时。",
+   "highlights": [
+    "通过 PowerShell 脚本和 Chocolatey 自动安装 Visual Studio 2022 工具链、NodeJS、Python 3、MSYS2、VCPkg 等构建依赖",
+    "提供 shell.ps1 初始化环境，支持 configure.ps1、make -f Makefile.win 完成构建、测试与安装包生成",
+    "附带 download_extract_rc.ps1 脚本及 sha256/sha512 校验、gpg 验证命令，用于发布工程师处理 RC 源码包"
+   ],
+   "use_cases": [
+    "在 64 位 Windows 7+ 或 VM 环境中从源码编译 CouchDB（CouchDB 2.0 起仅支持 64 位构建）",
+    "为 CouchDB Windows 版本生成 MSI 安装包并执行测试",
+    "发布工程师下载、校验和提取 CouchDB 候选版本源码包，或通过 msiexec 静默安装/卸载 CouchDB"
+   ]
+  },
+  "sha": "7857756b620f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fb2bee94a3e1": {
+  "identity": {
+   "one_liner": "面向 .NET 10 的达梦数据库第三方 .NET 库适配包与实库兼容测试项目",
+   "review": "该项目为达梦数据库提供四个 .NET 运行时适配包，覆盖 FlexLabs Upsert、TickerQ、Hangfire、OpenIddict，并对 ASP.NET Core Identity 与 EFCore.NamingConventions 做原生兼容验证。面向需要在 .NET 10 中接入达梦的开发者。包版本为预发布阶段，未发布到 NuGet.org，需本地打包后使用；各库存在已记录的边界限制，如 Hangfire 同 schema 写事务串行化、Identity 未验收 Passkey 等。",
+   "highlights": [
+    "提供四个运行时适配包：W.FlexLabs.Upsert.Dameng、W.TickerQ.Dameng、W.Hangfire.Dameng、W.OpenIddict.Dameng，并在同一达梦实例的六套隔离资源上运行实库测试",
+    "scripts/verify-packages.sh 可在不连接数据库的情况下生成适配包与补丁包，并检查依赖、包哈希、程序集及错误包源等失败场景",
+    "适配包版本为 0.1.0-preview.1，WDriver EF 扩展处于预发布阶段，仓库未发布到 NuGet.org"
+   ],
+   "use_cases": [
+    "在 .NET 10 项目中使用达梦数据库并接入 FlexLabs Upsert、TickerQ、Hangfire 或 OpenIddict",
+    "对 ASP.NET Core Identity 与 EFCore.NamingConventions 在达梦上做原生兼容性验证与接入参考",
+    "需要通过本地 NuGet 源引入达梦适配包并复跑实库测试或包验证流程"
+   ]
+  },
+  "sha": "fb2bee94a3e1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

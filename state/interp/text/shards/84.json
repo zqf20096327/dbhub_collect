@@ -2732,5 +2732,203 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9005e937f1f5": {
+  "identity": {
+   "one_liner": "Snowflake 数据库的 C/C++ 客户端连接库，提供 SQL 连接接口",
+   "review": "libsnowflakeclient 是 Snowflake 官方的 C/C++ 连接器，用于在 C/C++ 应用中建立与 Snowflake 服务的连接并执行 SQL 操作。构建需 gcc/g++ 8.3+、cmake 3.17+（Linux/macOS）或 Visual Studio 2017-2022（Windows），测试依赖 jq 和 Python 3.7+ 并需配置 parameters.json 中的账户连接信息。项目以 Apache 2.0 许可发布，支持 HTTP/HTTPS 代理；当前不支持 GCP 区域端点。",
+   "highlights": [
+    "提供基于连接参数和环境变量两种方式的 HTTP/HTTPS 代理配置，连接参数优先于环境变量",
+    "支持 OCSP 证书吊销检查，可通过进程级、连接级或环境变量方式开启（默认关闭）",
+    "提供 cmake 构建脚本，支持 Linux/macOS/Windows，包含 gprof 性能分析和 Valgrind 内存检查流程"
+   ],
+   "use_cases": [
+    "在 C/C++ 应用程序中连接 Snowflake 并执行 SQL 查询",
+    "在受限网络环境中通过 HTTP/HTTPS 代理访问 Snowflake 服务",
+    "为其他语言客户端库（如需要 C 接口封装的场景）提供底层连接实现"
+   ]
+  },
+  "sha": "9005e937f1f5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c1ba4549c747": {
+  "identity": {
+   "one_liner": "Nebula mesh VPN 的自托管控制平面，集中签发证书与管理主机。",
+   "review": "nebula-mesh 为 Slack 的 Nebula mesh VPN 提供自托管管理层，负责证书签发、轮换、吊销和配置分发，面向需要统一管理 Nebula 网络的运维人员。它由 Go 编写的单个服务端二进制和主机端 agent 组成，数据存于 SQLite（WAL），UI 用 htmx 构建；支持本地账户、OIDC 和 TOTP 2FA，agent 通过轮询拉取更新并以 SIGHUP 重载 Nebula。",
+   "highlights": [
+    "提供 Web UI、REST API 和 CLI 三种接口，单服务端二进制加主机端 agent 两个静态文件（各约 15–25 MiB），无外部依赖",
+    "实现 PKI 生命周期管理：每操作员独立 CA（SQLite 内 AES-256-GCM 信封加密）、一次性令牌零信任注册、基于 blocklist 的吊销与 CA 轮换",
+    "包含审计日志、每网络防火墙规则分发、/healthz 与 /readyz 端点、Prometheus /metrics 导出器及证书到期告警"
+   ],
+   "use_cases": [
+    "在单台 VM 上自托管管理 Nebula mesh 网络的证书签发与配置分发",
+    "移动端（iOS/Android）主机通过二维码包注册加入 mesh 网络",
+    "通过 OIDC（Keycloak/Authentik/Okta 等）和多操作员隔离信任域实现团队化的网络管理"
+   ]
+  },
+  "sha": "c1ba4549c747",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "67c3939fb23f": {
+  "identity": {
+   "one_liner": "基于 ømq+sled 的嵌入式无锁 Redis 风格键值数据存储",
+   "review": "ZEDIS 是一个嵌入式键值数据存储，采用无锁（lock-free）设计，支持类似 Redis 的操作与发布/订阅功能，且为 brokerless 架构，底层依赖 ømq 与 sled 实现。README 提供 cargo install 安装方式，使用说明与示例位于其文档中。",
+   "highlights": [
+    "嵌入式运行，无锁（lock-free）设计",
+    "提供 Redis 风格接口与 pub/sub 发布订阅支持",
+    "brokerless 架构，基于 ømq 与 sled 构建"
+   ],
+   "use_cases": [
+    "需要在应用内嵌使用键值数据存储的场景",
+    "需要发布/订阅消息模式的场景",
+    "使用 Rust 工具链并通过 cargo 安装依赖的项目"
+   ]
+  },
+  "sha": "67c3939fb23f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "55a3ed9d2e8b": {
+  "identity": {
+   "one_liner": "面向小型电商的 Node.js/Express REST API，用 MongoDB 存储买家、卖家与商品数据。",
+   "review": "这是一个基于 Node.js、Express、MongoDB（Mongoose）的电商 REST API，README 标明面向小型电商业务。提供买家与卖家的注册、登录、登出及资料增删改查端点，卖家可添加、编辑、删除和查看商品；认证采用 JWT token（存于用户 tokens 数组）。购买端点已完成所有权转移逻辑，但 Stripe 支付、购物车、运输支持等列为待添加功能，部分端点标注 In Progress。部署需自行配置 .env 中的端口与 MongoDB 地址。",
+   "highlights": [
+    "提供买家/卖家的注册、登录、登出及 /me 资料 GET/PATCH/DELETE 端点，认证使用 bearer JWT token",
+    "提供商品管理端点（添加、编辑、删除、列出卖家商品），并定义 Product、Seller、Buyer、Transactions 四个 Mongoose schema",
+    "购买端点 /buyer/buy/:id 实现商品所有者从卖家到买家的转移逻辑；Stripe 支付、购物车、标准化错误码等标注为待添加功能"
+   ],
+   "use_cases": [
+    "需要为小型电商网站快速搭建后端买家/卖家/商品接口的场景",
+    "作为 Node.js + Express + Mongoose 构建 REST API 的代码结构参考",
+    "需要基于 JWT 认证的用户注册登录与商品所有权管理模型的项目"
+   ]
+  },
+  "sha": "55a3ed9d2e8b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f123837beb59": {
+  "identity": {
+   "one_liner": "Rust 编写的本地 MCP 记忆服务器，提供混合检索与时序知识图谱。",
+   "review": "MemoryPilot 是一个面向 AI 编码助手（Cursor、Claude 等）的 MCP 记忆服务器，为跨会话对话提供持久化检索。README 称其为纯 Rust 单二进制、全本地运行、无 API 调用；检索采用 BM25 与 jina-embeddings-v5 的 RRF 融合加交叉编码器重排，并包含时序知识图谱、记忆自动分类与压缩。许可为 Source Available。README 中所有基准分数均由各项目作者自行发布、未经独立复现。",
+   "highlights": [
+    "混合检索：BM25 + jina-embeddings-v5 RRF 融合，可选交叉编码器自适应重排（可通过 MEMORYPILOT_CROSS_RERANK 开关）",
+    "包含时序知识图谱、GraphRAG、记忆自动分类、自动压缩（Auto-Compaction）与 Memory Capsules",
+    "单一 Rust 二进制、零运行时依赖，支持 HTTP API 与签名自动更新，检索模型本地运行（int8 ONNX）"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Code、Claude Desktop、VS Code、Windsurf、Codex、ChatGPT 等 MCP 客户端提供跨会话记忆检索",
+    "在本地离线环境中按模糊描述查找过去的 Cursor 或 Claude 对话",
+    "需要多语言（README 称支持 100+ 语言）记忆存储与检索的项目工作流"
+   ]
+  },
+  "sha": "f123837beb59",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "adb0413cd88b": {
+  "identity": {
+   "one_liner": "在自有 PostgreSQL 中实现 BM25+向量+RRF 混合检索的 TypeScript 库",
+   "review": "searchgres.js 是一个 TypeScript 库，在 PostgreSQL 内组合 BM25 关键词检索、向量检索（HNSW）、RRF 融合排序及树路径/JSONB/时间/正则过滤。索引为普通 Postgres schema，直接 SQL 可访问。使用需 PostgreSQL 18 加 pgvector、pg_textsearch、ltree 扩展，Node ≥22 或 Bun ≥1.4，不含用户与权限模型。",
+   "highlights": [
+    "index.search() 依据传入参数推断检索模式：仅语义走 HNSW 余弦，仅全文走 BM25，两者同传走 RRF 混合检索，仅过滤时按 UUIDv7 顺序做 keyset 分页",
+    "索引由记录表、SQL 例程与原生索引组成：pgvector 的 HNSW（或 pg_vectorsearch 的 PRISM）、pg_textsearch 的 BM25、层次与时间的 GiST、元数据的 GIN",
+    "新写入记录对 BM25 和过滤器即时可见，向量通过内置嵌入队列的 processEmbeddings() 或并发安全的 EmbeddingWorker 补齐"
+   ],
+   "use_cases": [
+    "为应用构建关键词与语义混合搜索或托管搜索 API",
+    "通过代码、SQL 或触发器从既有表建立索引管道",
+    "自行控制分块与生成阶段的 RAG 检索，以及检索后重排阶段"
+   ]
+  },
+  "sha": "adb0413cd88b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7b188d40caf2": {
+  "identity": {
+   "one_liner": "自托管可观测性平台，基于 OpenTelemetry 与 ClickHouse 统一管理日志、指标、链路等遥测数据",
+   "review": "ObserveCraft 是一个 MIT 许可的自托管可观测性平台，将日志、指标、链路、仪表盘、监控告警、事件管理和 CI 可见性集成在同一系统内，使用 Rust (axum) API 与 ClickHouse 列式存储构建，数据先写入 Kafka 再落库。面向需要在自己网络内持有遥测数据的团队，接入层兼容 Datadog API 与 Agent 格式，管理员密码通过首次启动日志中的一次性链接设置。",
+   "highlights": [
+    "接入支持 OTLP（HTTP :4318 / gRPC :4317）以及 Datadog API 与 Agent 格式，Fluent Bit、Vector、Logstash 等可通过 Datadog 输出接入",
+    "intake 在响应前将接受的数据写入 Kafka，存储中断或进程重启时数据不丢失，并支持基于 Kafka 的 live tail",
+    "提供日志查询语言、按组织划分的日志索引（含保留期与每日配额）、S3 兼容存储的 Parquet 归档与 DuckDB 归档检索"
+   ],
+   "use_cases": [
+    "团队希望以自托管方式集中存储与查询日志、指标和链路数据，不将遥测数据传出自身网络",
+    "已使用 Datadog Agent、dd-trace 库或 DogStatsD 客户端，通过更换 URL 和 API key 将数据接入自有存储",
+    "基于 OpenTelemetry CI/CD 语义约定查看 CI 流水线、不稳定测试与 DORA 指标"
+   ]
+  },
+  "sha": "7b188d40caf2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0ccfb86055eb": {
+  "identity": {
+   "one_liner": "本地优先的个人财富数据套件，采集多机构账户数据并汇入统一本地库。",
+   "review": "wealthdb 采集银行、券商、养老金及私募平台的持仓、交易与文档，汇入单一本地数据库（DuckDB，Medallion 分层），通过 CLI、本地仪表盘或 MCP 供 AI Agent 以只读方式查询净值、收益、敞口、收支与现金流。采集器使用完整权限凭证模拟浏览器登录，README 要求使用者自行完成安全审计，并声明不适用于无法审计的用户。",
+   "highlights": [
+    "从任一日期、单一币种计算净值与配置，基金可穿透到底层持仓，按资产类别、行业、国家等维度汇总",
+    "提供时间加权与资金加权收益、成本基础与税批重建（默认 FIFO）、收益率与久期利率敏感性",
+    "报告通过 CLI（表格/CSV/JSON）、本地仪表盘（wealthdb web）和只读 MCP 服务器（wealthdb mcp）三种途径访问，支持隐私模式隐藏金额"
+   ],
+   "use_cases": [
+    "整合多个银行、券商与养老金账户的家庭资产负债与持仓视图",
+    "计算各账户、组合及整体的收益并对照基准，区分储蓄与市场损益",
+    "让 AI Agent 通过 MCP 只读查询完整财务报表，而不接触银行凭证"
+   ]
+  },
+  "sha": "0ccfb86055eb",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9da8082c31f9": {
+  "identity": {
+   "one_liner": "Electron + TypeScript 桌面应用模板，集成 React、tRPC、SQLite 与自动更新",
+   "review": "一个 pnpm monorepo，包含 Electron 应用模板和 Next.js/Nextra 文档网站两部分。模板自带 React、TypeScript、tRPC、SQLite（Drizzle）、自动更新、代码签名与 Stripe 许可证密钥等功能，供开发者通过 degit 复制后用 npm 安装使用。许可证允许商用，但禁止转售模板或作为竞争性 starter 发布。开发需 Node.js 22.12+ 与 pnpm，模板自身必须自包含，因为 degit 只复制该目录。",
+   "highlights": [
+    "模板内置 React、tRPC、SQLite（Drizzle ORM）、shadcn/ui、electron-vite，含自动更新、代码签名与 Stripe 许可证密钥功能",
+    "提供 degit 一键复制模板流程（npx degit ... && npm install && npm run dev），模板附带适配克隆者的 README、AGENTS.md 与 GitHub workflows",
+    "monorepo 内含文档站点（Next.js + Nextra，MDX 内容）、类型检查、单元测试与 Biome lint/格式化脚本，并通过 pnpm lock:template 维护模板自身的 package-lock.json"
+   ],
+   "use_cases": [
+    "以该模板为起点创建 Electron 桌面应用，需要 React + TypeScript + SQLite 技术栈",
+    "桌面应用需要自动更新、代码签名发布或基于 Stripe 的许可证密钥分发",
+    "需要为商业用途构建并售卖基于该模板的桌面软件（须遵守其源可用许可证条款）"
+   ]
+  },
+  "sha": "9da8082c31f9",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

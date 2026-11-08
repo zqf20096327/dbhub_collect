@@ -3028,5 +3028,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5dde79d91f15": {
+  "identity": {
+   "one_liner": "基于 libmongoc 的 Swift 封装库，用于访问 MongoDB 服务器",
+   "review": "Perfect-MongoDB 是 MongoDB C 驱动 libmongoc 的 Swift 封装，覆盖客户端与连接池、数据库、集合、游标、BSON 文档和 GridFS。版本 4 面向 Swift 6 构建，保留既有公开 API，新增 Codable 与 async/await 接口。适用于服务端 Swift 项目；运行依赖系统安装 libmongoc 2.x，单个 MongoClient 及其派生对象非线程安全。",
+   "highlights": [
+    "封装 libmongoc 2.x，覆盖客户端、连接池、数据库、集合、游标、BSON 文档与 GridFS",
+    "提供 BSONEncoder/BSONDecoder 将 Codable 类型映射为 BSON 文档，支持日期、二进制、UUID、ObjectId 等原生 BSON 类型",
+    "支持 async/await：withClient 将阻塞驱动操作移出协作线程池，find 以 AsyncSequence 流式返回结果"
+   ],
+   "use_cases": [
+    "在 macOS 或 Linux 上以服务端 Swift 访问 MongoDB 服务器",
+    "在 Swift 6 并发项目中通过 MongoClientPool 与 withClient 共享连接执行查询",
+    "需要对 GridFS 或 BSON 文档进行 Swift 编程读写"
+   ]
+  },
+  "sha": "5dde79d91f15",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0027abccd7e7": {
+  "identity": {
+   "one_liner": "Milvus 向量数据库官方网站源码，基于 Next.js 构建",
+   "review": "该仓库包含 Milvus 官网（milvus.io）的站点源码，面向需要维护或参与官网建设的开发者与文档贡献者。项目使用 Next.js、Tailwind CSS 与 Shadcn UI 技术栈，依赖 pnpm 管理包，并通过 git submodule 引入内容模块。贡献流程要求从 preview 分支检出新分支再提交 PR。",
+   "highlights": [
+    "基于 Next.js、Tailwind CSS 和 Shadcn UI 构建的开发站点",
+    "通过 git submodule 引入子模块，使用 pnpm 安装依赖",
+    "提供本地开发流程：复制 .env.production 生成开发环境配置后以 pnpm run dev 启动"
+   ],
+   "use_cases": [
+    "为 Milvus 官网贡献文档、页面或修复",
+    "本地搭建和预览 milvus.io 站点内容",
+    "作为基于 Next.js + Shadcn UI 构建站点的参考实现"
+   ]
+  },
+  "sha": "0027abccd7e7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fde4d6f607ac": {
+  "identity": {
+   "one_liner": "内存键值数据库，兼容 RESP 协议，支持持久化与权限控制。",
+   "review": "tellydb 是一个内存键值数据库项目。命令在单线程中顺序执行，I/O 读写由多线程处理，支持客户端流水线发送多个命令。数据保存在 .telly 文件中，由外部线程异步写入并保证保存过程的原子性。可通过独立密码与命令级权限控制客户端访问，提供哈希表、列表、双精度等多种数据类型、键过期和多数据库功能，适合需要兼容 Redis 客户端接入的场景。",
+   "highlights": [
+    "遵循 RESP2/RESP3 协议，可被 Redis 客户端连接",
+    "支持异步持久化：数据库保存至单个文件，写入过程具备原子性",
+    "提供哈希表、列表、双精度等数据类型，支持键过期、多数据库及基于密码的命令级权限"
+   ],
+   "use_cases": [
+    "通过现有 Redis 客户端访问的内存键值存储",
+    "需要将数据库持久化到单文件并进行异步保存的场景",
+    "需按命令粒度授权多客户端访问的部署环境"
+   ]
+  },
+  "sha": "fde4d6f607ac",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b6109d190a3a": {
+  "identity": {
+   "one_liner": "Home Assistant 附加组件，通过 Selenium 无头浏览器读取 EduVulcan 电子日志数据并生成实体与 Lovelace 卡片",
+   "review": "Vultron 是一个 Home Assistant 附加组件（也可 Docker 运行），使用 Selenium 无头 Chromium 登录 EduVulcan.pl 电子校历系统，提取成绩、考勤、消息、课程表、活动等数据存入 SQLite，并为每个学生生成传感器及配套 Lovelace JavaScript 卡片。安装前需先在网页端登录并接受条款、切换每个孩子的档案；README 明示使用该项目违反 EduVulcan 条款。支持多子女账户与可选 GPE Gdańsk 数据源。",
+   "highlights": [
+    "使用 Selenium 无头浏览器登录并提取 EduVulcan 数据，存储于 SQLite，自动为家长账户下所有学生生成独立传感器集",
+    "内置调度机制：工作日 40-60 分钟随机间隔拉取，周末固定时段拉取，01:00-05:59 停止活动，连续登录被拒时自动延长间隔并在两次拒绝后停止",
+    "自动在 Lovelace 资源中注册多张 JavaScript 卡片（成绩、消息、课程表、考勤、幼儿园系列等），并提供 Node-RED、原生自动化与 blueprint 示例"
+   ],
+   "use_cases": [
+    "家长或学生在 Home Assistant 中查看 EduVulcan 电子日志的成绩、消息、课程表与考勤数据",
+    "通过 HA 自动化在新成绩或消息到达时接收通知",
+    "有幼儿园账户的家庭单独获取出勤记录、食谱、费用等数据"
+   ]
+  },
+  "sha": "b6109d190a3a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c6fbcfd90e4f": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 的桌面工具，通过 ADB 与 CDP 调试 Android WebView 应用",
+   "review": "Capubridge 是一款面向调试 Android Chromium WebView 应用的开发者桌面工具，提供 ADB 设备管理、CDP 目标发现与端口转发、内置 Vue/React DevTools、IndexedDB/LocalStorage/Cache API/OPFS/SQLite 存储浏览、网络抓包、logcat、性能监控、scrcpy 投屏及会话录制回放。仅支持暴露可调试 CDP 目标的 WebView；React Native Hermes 与 iOS WebKit 不在范围内。提供 macOS/Windows/Linux 安装包，需设备开启 USB 调试并安装 ADB。",
+   "highlights": [
+    "自动发现设备上可调试的 WebView 目标，并为每台设备自动转发 CDP 端口；通过 CDP Runtime.evaluate 写入实际设备上的 IndexedDB 等存储",
+    "在文档开始时注入后端并经 CDP 桥接官方 Vue/React DevTools，无需修改被调试应用；目标需满足条件（Vue 需开启 __VUE_PROD_DEVTOOLS__）",
+    "提供基于租约的 logcat 流、进程级 CPU/内存/网络监控、scrcpy 投屏与触摸/键盘注入、DOM+网络+控制台会话录制与逐帧回放"
+   ],
+   "use_cases": [
+    "调试运行在 Android WebView 中的 Capacitor/Ionic 应用，需要浏览或修改设备上的 IndexedDB、LocalStorage、SQLite 数据",
+    "排查混合应用的 HTTP 请求、控制台日志与 logcat，并录制回放复现问题的会话",
+    "在真实 Android 设备上查看 Vue/React 组件树与状态，或通过 scrcpy 在桌面投屏操作设备"
+   ]
+  },
+  "sha": "c6fbcfd90e4f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f218b6e2c5cc": {
+  "identity": {
+   "one_liner": "运行在 Tidbyt 上的当日天气应用，用 Pixlet 构建并通过 GitHub Actions 每 10 分钟推送渲染结果。",
+   "review": "这是一个为 Tidbyt 硬件设备编写的天气应用，源码位于 apps/weather/ 目录，使用 Pixlet 框架开发。屏幕分三行显示当前温度、全天天气摘要和未来 16 小时逐时趋势，数据来自无需密钥的 Open-Meteo 接口。部署方式依赖 GitHub Actions 定时渲染推送到设备，需配置设备 ID 与 API Token 密钥。默认地点为匹兹堡 Friendship，温度单位为华氏度。",
+   "highlights": [
+    "提供三行信息布局：当前温度与今日高低温、全天天气摘要语、未来 16 小时逐时降雨概率条形图与温度趋势线",
+    "数据源为 Open-Meteo，免费且无需 API 密钥",
+    "通过 GitHub Actions 每 10 分钟渲染并以 dayweather 槽位推送到设备"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上展示当日天气与逐时降雨预报",
+    "通过 pixlet serve 本地预览后用 push.sh 推送到自有设备",
+    "作为 Pixlet 应用模板，供开发者在独立文件夹中添加自己的应用"
+   ]
+  },
+  "sha": "f218b6e2c5cc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

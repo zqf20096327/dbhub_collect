@@ -2364,5 +2364,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "45ffcd6f52cc": {
+  "identity": {
+   "one_liner": "基于SQLite索引的代码库持久记忆层，供编程代理进行快速证据检索",
+   "review": "unified-brain 是 DevLoops 发布的开源框架，用 tree-sitter 读取仓库完整 git 历史，把每个符号（函数、类型、宏、配置项）连同引入提交存入仓库内的 SQLite 数据库。摄入阶段不调用 LLM，检索通过嵌入加判定模型 Jev 完成，最终由用户自选的 writer 模型生成答案；支持 Ask 问答与提交区间的 Timeline 审查报告，结果可作为感知层经 MCP 接入 Cursor、OpenCode、Claude Code 等工具。需 Python 3.11 及 OpenRouter、嵌入、writer 三类 API 密钥；Jev 目前为闭源依赖。",
+   "highlights": [
+    "用 tree-sitter 解析 git 历史，将全部符号版本及引入提交存入仓库内单个 SQLite 库（.unified-brain.db），摄入阶段不调用 LLM",
+    "提供 Ask 与 Timeline 两种查询：按任意提交回答代码行为问题，或对提交区间内每个变更符号给出带证据链的判定",
+    "在 xz 基准（74 分制）上提供 coverage（70/74）与 cheap（68.75/74）两套可切换配置，评测结果保存在 evals/results/"
+   ],
+   "use_cases": [
+    "查询代码库中某符号在指定提交时的实现及变更原因",
+    "审查提交区间内代码改动是否与提交信息相符或存在缺陷",
+    "为 Cursor、OpenCode、Claude Code 等工具经 MCP 提供代码历史证据检索"
+   ]
+  },
+  "sha": "45ffcd6f52cc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f9dd69e14744": {
+  "identity": {
+   "one_liner": "TypeScript 实现的 Active Record 模式数据建模库",
+   "review": "Odin 是 Foxify 生态下的 Node.js 数据建模库，以 Active Record 模式将数据操作封装在模型中。开发者通过定义 Schema 描述字段类型，库据此提供校验，并可生成 GraphQL Schema 与 JSON Schema。已实现 CRUD、embedMany/hasMany/hasOne 及多态关联等能力；hooks、migrations、seeding 等仍在路线图中未完成。需 Node.js 8 以上。",
+   "highlights": [
+    "以 Schema 校验为基础的模型定义，支持 TypeScript 与 ES6 编写",
+    "基于模型 Schema 生成 GraphQL Schema 与 JSON Schema",
+    "已实现 CRUD 操作及 embedMany、hasMany、hasOne、morphMany、morphOne 等关联方式"
+   ],
+   "use_cases": [
+    "在 Node.js/TypeScript 项目中按 Active Record 模式组织数据模型",
+    "需要从同一模型定义生成 GraphQL 或 JSON Schema 的服务端开发",
+    "使用 MongoDB 存储（主题标签包含 mongodb）并通过模型管理关联与增删改查"
+   ]
+  },
+  "sha": "f9dd69e14744",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cab302489f09": {
+  "identity": {
+   "one_liner": "Trino 的 ADBC 驱动，通过 Arrow 列式接口连接查询 Trino",
+   "review": "该项目为 Trino 数据库提供 ADBC 驱动，独立开发，与 Trino 官方无隶属关系。预编译构建发布于 Columnar CDN，可通过支持 ADBC Driver Manifest 的工具（如 dbc）安装，也支持自行构建。README 提供 Go、Python、R、Rust 四种语言的使用示例，面向需要在各语言中通过 ADBC 访问 Trino 的开发者。",
+   "highlights": [
+    "提供符合 ADBC 规范的 Trino 驱动，主题标签包含 adbc、arrow",
+    "预编译构建发布于 Columnar CDN，可通过 dbc 等支持 Driver Manifest 的工具安装",
+    "提供 Go、Python、R、Rust 四种语言的示例代码"
+   ],
+   "use_cases": [
+    "在 Python、Go、R、Rust 等语言中通过 ADBC 接口查询 Trino",
+    "需要基于 Arrow 的数据库访问层的应用程序集成",
+    "希望从 Columnar CDN 获取预编译驱动的部署环境"
+   ]
+  },
+  "sha": "cab302489f09",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0ce63f8627e6": {
+  "identity": {
+   "one_liner": "面向 Couchbase 的 Java 数据库迁移框架，基于注解管理变更集。",
+   "review": "CouchVersion 是一个 Java 迁移框架，用于管理 Couchbase 数据库的变更并与应用同步，适用于使用 Couchbase 的 Java/Spring 开发者。变更以 @ChangeLog/@ChangeSet 注解的 Java 类和方法定义，已执行的变更记录在 dbChangeLog 文档中；通过 couchversion_lock 文档实现锁机制避免多实例并发迁移。该项目是 MongoBee 的 fork，当前版本 0.5.1，集合支持在测试中。",
+   "highlights": [
+    "通过 @ChangeLog 和 @ChangeSet 注解以 Java 类和方法定义变更集，不使用 XML/JSON/YML 文件",
+    "支持 Spring 集成（单例 bean 自动执行迁移、复用 AbstractCouchbaseConfiguration、@Profile 按环境激活）和非 Spring 场景（手动调用 execute()）",
+    "内置锁机制：迁移前写入 couchversion_lock 文档，其他实例按指数间隔等待至多 5 分钟；@ChangeSet 支持 runAlways、restartInterrupted、retries 参数"
+   ],
+   "use_cases": [
+    "Java 应用中管理 Couchbase 数据桶结构或数据的版本化变更",
+    "Spring/Spring Data Couchbase 应用在启动时自动执行数据库迁移",
+    "多实例部署环境下需要避免迁移并发冲突的场景"
+   ]
+  },
+  "sha": "0ce63f8627e6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "440ce8852b7b": {
+  "identity": {
+   "one_liner": "面向 MIRAS 艺术画廊员工的 Django + MongoDB 管理系统",
+   "review": "该系统面向 MIRAS 艺术画廊的员工，用于售卖和取消门票、预订和取消活动，并跟踪所有即将举行的活动。后端采用 Python，前端使用 HTML/CSS 与 Django 框架实现，数据存储于 MongoDB Atlas 云数据库。README 未提供安装步骤与运行说明，使用前需自行配置环境；问题可通过邮件联系作者。",
+   "highlights": [
+    "基于 Python 与 Django 构建后端，前端使用 HTML/CSS",
+    "使用 MongoDB Atlas 作为数据库存储",
+    "支持门票售卖/取消、活动预订/取消及活动跟踪功能"
+   ],
+   "use_cases": [
+    "画廊员工售票与退票操作",
+    "活动预订与取消管理",
+    "查看和跟踪即将举行的活动列表"
+   ]
+  },
+  "sha": "440ce8852b7b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1ede204ad7f7": {
+  "identity": {
+   "one_liner": "本地优先的项目管理桌面应用，Tauri+SQLite，无需账户完全离线",
+   "review": "Avenqor 是面向 Windows 与 Android 的本地项目管理应用，供学生团队、独立开发者与内容创作者使用。工作按工作区-项目-任务三层组织，数据存于单个 SQLite 文件，不联网、无账户。当前为单用户设计，手机与电脑间无同步，只能通过备份文件迁移数据；应用未做代码签名，安装时系统会提示警告。",
+   "highlights": [
+    "支持工作区/项目/任务三层结构，含看板（四列拖拽）、日历、清单、笔记、彩色标签与项目文档",
+    "支持 Ctrl+K 全局搜索，任务进度由 Done 状态任务自动计算，活动历史由 SQLite 触发器原子写入",
+    "支持导出/恢复 JSON 备份文件，恢复前强制安全备份并完整校验文件"
+   ],
+   "use_cases": [
+    "在无网络环境下管理小组作业或开发项目的任务、截止日期与文档",
+    "在个人电脑或 Android 手机上离线维护多项目工作流",
+    "通过备份导出/导入在电脑与手机之间迁移数据"
+   ]
+  },
+  "sha": "1ede204ad7f7",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

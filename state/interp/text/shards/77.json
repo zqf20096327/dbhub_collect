@@ -2948,5 +2948,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3b001dc5e015": {
+  "identity": {
+   "one_liner": "自托管的持久记忆 MCP 服务器与本地 AI 编码工作区",
+   "review": "SynaBun 是一个开源的自托管 AI 工作区，核心是一个持久记忆 MCP 服务器，将跨会话的记忆存于本地单个 SQLite 文件中。它为 Claude Code、Codex、Gemini CLI、OpenCode 提供记忆工具，并在本地 Web 界面中展示 3D 记忆地图、终端与文件浏览器。需 Node.js 22.19 以上，通过 npm 全局安装运行；不含模型访问，需使用用户自己的工具账户。",
+   "highlights": [
+    "提供 remember、recall、reflect、forget、restore 等记忆工具的 MCP 服务器，支持关键词与语义检索，数据存于本地 SQLite 文件",
+    "Neural Interface 本地 Web 界面（端口 3344）包含 3D 记忆地图、终端、文件浏览器、白板，以及 Claude Code、Codex、OpenCode 的并排侧面板",
+    "SynaBun Assistant 可规划任务并分派给编码代理执行，支持任务模板的循环与定时自动化、浏览器工具、WhatsApp 消息接入"
+   ],
+   "use_cases": [
+    "在 Claude Code、Codex、OpenCode 等工具间保持跨会话的项目上下文与决策记录",
+    "集中查看、编辑、检索多个 AI 工具的记忆，并通过备份与版本历史防止数据丢失",
+    "将可重复任务保存为模板，以循环或定时方式自动化执行"
+   ]
+  },
+  "sha": "3b001dc5e015",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4b464ec9bea1": {
+  "identity": {
+   "one_liner": "DuckDB WASM 的易用封装与 Drizzle ORM 驱动库",
+   "review": "该项目包含两个包：@proj-airi/duckdb-wasm 为 @duckdb/duckdb-wasm 提供封装，@proj-airi/drizzle-duckdb-wasm 提供 Drizzle ORM 驱动，通过 duckdb-wasm:// 连接字符串创建数据库实例。它是 Project AIRI 的组成部分，其记忆层同时使用 DuckDB WASM 与 PGLite 作为嵌入式数据库。README 记录了与 Vite 的已知兼容问题及 optimizeDeps 排除的解决方式。",
+   "highlights": [
+    "提供 @proj-airi/duckdb-wasm 封装包与 @proj-airi/drizzle-duckdb-wasm 驱动包，通过 npm/pnpm/yarn 安装",
+    "以 duckdb-wasm://?bundles=import-url 连接字符串方式创建 Drizzle ORM 数据库实例",
+    "提供基于 Web 浏览器的 Playground，可本地运行 play:dev 启动"
+   ],
+   "use_cases": [
+    "在浏览器环境中通过 Drizzle ORM 操作 DuckDB WASM 数据库",
+    "作为 Project AIRI 类 AI 记忆系统的嵌入式存储层",
+    "需要快速在 Vite/Web 项目中集成 DuckDB WASM 的开发者"
+   ]
+  },
+  "sha": "4b464ec9bea1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "47ccefd49e59": {
+  "identity": {
+   "one_liner": "将 ICIJ FinCen Files 数据集导入 Neo4j 图数据库的导入与探索方案",
+   "review": "该项目将 ICIJ FinCen Files 调查数据（约 10 万笔交易）整理为 Neo4j 图数据库可导入的形式，提供从网站抓取的 JSON 与官方 CSV 两种数据的 Cypher 导入脚本、预置 dump 文件及 Bloom 视图配置。适用于希望本地或云端在 Neo4j 中探索该数据集的用户；README 提供演示服务器、Sandbox、Desktop 与 Aura 多种运行方式，dump 导入需数据库停机或使用相应加载命令。",
+   "highlights": [
+    "提供 fincen.cypher 与 fincen_csv.cypher 两套 Cypher 导入脚本，分别对应抓取的 JSON 数据与官方 CSV 数据",
+    "提供 fincen.dump 预置数据库文件，支持 Neo4j Aura、Neo4j Desktop 及 neo4j-admin load 导入",
+    "内置示例 Cypher 查询（最大 Filing、实体交易量排名、银行间资金流向）及可导入的 Neo4j Bloom perspective 配置文件"
+   ],
+   "use_cases": [
+    "调查记者或研究人员在图数据库中查询和可视化 FinCen Files 交易数据",
+    "在 Neo4j Bloom 中按 Filing Entity、金额规模等维度交互式浏览数据",
+    "学习用 Cypher 编写资金流向类图查询的参考示例"
+   ]
+  },
+  "sha": "47ccefd49e59",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "66febad3eff4": {
+  "identity": {
+   "one_liner": "Linux 自托管服务器控制面板，基于 Python/Flask + Alpine.js，MIT 开源",
+   "review": "VortexPanel 是面向 Linux 服务器的开源控制面板，用于管理网站、数据库与应用部署。它支持 Nginx/Apache/OpenLiteSpeed/Caddy 四种 Web 服务器、MySQL/MariaDB/PostgreSQL/MongoDB 数据库，内置 WP Toolkit、ModSecurity WAF、Fail2ban、防火墙管理与 27 项一键安装的 App Store。安装脚本面向 Debian/Ubuntu 及 RHEL 系等多发行版，面板自身支持 HTTPS 与 2FA。README 包含与其他面板的功能对比表，解读时应以实际功能清单为准。",
+   "highlights": [
+    "支持管理 Nginx、Apache2、OpenLiteSpeed、Caddy 四种 Web 服务器及 PHP 多版本按站点配置",
+    "内置 WP Toolkit（WordPress 一键安装、暂存克隆、安全扫描）、Git 部署与网站导入向导",
+    "安全模块包含 UFW/firewalld 防火墙、Fail2ban、ModSecurity（OWASP CRS v4）、面板 2FA（TOTP）与 Argon2id 密码哈希"
+   ],
+   "use_cases": [
+    "在自有 VPS 或服务器上通过 Web 界面集中管理网站、SSL 证书、数据库与防火墙",
+    "托管并部署 WordPress、Laravel、Go、Node.js、Python 等多种应用",
+    "从 cPanel、aaPanel、HestiaCP 等面板迁移站点（备份归档导入或服务器间迁移）"
+   ]
+  },
+  "sha": "66febad3eff4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ac7293642e58": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 MCP 记忆服务，向量化检索加 wikilink 图扩展查询 markdown 笔记",
+   "review": "sqlite-graph-memory 是面向 Claude Code、Cursor、Codex 等 MCP 客户端的记忆层：对任意 markdown 文件夹（含 Obsidian 仓库）建立索引，检索时先向量定位入口，再沿笔记中手写的 [[wikilinks]] 做 1 跳图扩展补充候选。仅用单个 SQLite 文件存储，无图数据库、无 ETL 流程。状态为试点（pilot），跨编码重排序默认关闭，作者标注测试覆盖不均。",
+   "highlights": [
+    "提供 MCP 服务器和 CLI 三命令：sgm-index 索引、sgm-ask 查询、sgm-mcp 服务",
+    "图扩展不物化进 SQL，查询时从笔记解析 wikilink，限 1 跳/40 邻居，与笔记自动保持同步",
+    "[lite] 后端用 ONNX Runtime，155MB 安装；支持增量索引，仅重建新增或变更笔记"
+   ],
+   "use_cases": [
+    "让编码代理在会话间从个人 markdown/Obsidian 笔记中检索上下文",
+    "单用户知识库的轻量 Graph RAG 检索层",
+    "需要衡量图扩展对自身笔记检索收益的评测场景"
+   ]
+  },
+  "sha": "ac7293642e58",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9ee86a2bdcc3": {
+  "identity": {
+   "one_liner": "Rust 实现的 WhatsApp MCP 服务器与后台广播调度器",
+   "review": "Wasche 是用 Rust 编写的 WhatsApp Model Context Protocol (MCP) 服务器与持久后台调度器，供 Claude、Cursor 等 AI 客户端通过 MCP 工具操作多个 WhatsApp 账号，包括发消息、发媒体、同步联系人及执行群发活动。采用主守护进程加 MCP 桥接架构避免端口与数据库锁冲突，使用 SQLite 存储会话密钥、队列和投递日志，内置 SolidJS SPA 控制面板（127.0.0.1:3030）。支持 npx 直接运行或以 Rust 1.88+ / Node 20+ 源码构建。",
+   "highlights": [
+    "提供 34 个 MCP 工具，覆盖账号生命周期、直发消息、联系人同步、群发活动、队列管理和投递日志 7 类功能",
+    "支持多发送账号池化与并行 worker，含打字状态模拟、随机消息间隔抖动和 3 次熔断器等节奏控制机制",
+    "使用 SQLite 持久化 Noise E2EE 会话密钥、活动队列与审计日志，仪表盘 SPA 经 rust-embed 嵌入二进制"
+   ],
+   "use_cases": [
+    "让 MCP 兼容的 AI 代理安全地编排多个 WhatsApp 号码发送消息或媒体附件",
+    "需要定时、可暂停/恢复并带投递日志审计的批量消息活动",
+    "本地运行带 Web 面板的多账号 WhatsApp 消息调度管理"
+   ]
+  },
+  "sha": "9ee86a2bdcc3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

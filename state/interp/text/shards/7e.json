@@ -3275,5 +3275,221 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b5df7d307350": {
+  "identity": {
+   "one_liner": "C 语言嵌入式键值存储，绕过 SQL 层直接使用 SQLite B-tree 引擎。",
+   "review": "SNKV 是用 C 编写的嵌入式键值存储，调用 SQLite 的 B-tree 存储引擎但不经过 SQL 解析器与查询计划器，以单头文件形式集成，采用 Apache-2.0 许可证。面向需要嵌入式 KV 存储的 C 项目，支持 ACID 事务、WAL、逐值加密与 TTL；依赖 SQLite 分页层，因此 sqlite3 命令行工具无法直接读取其数据库文件。",
+   "highlights": [
+    "提供 ACID 事务与 WAL 模式（并发读、单写者），并附带断电测试套件，在每个写入与同步点模拟崩溃",
+    "支持逐值 XChaCha20-Poly1305 加密（Argon2id 派生密钥）、按键 TTL、列族、前缀迭代器，以及基于 usearch 的 HNSW 向量索引",
+    "单头文件集成，经 Valgrind 检测，兼容 SQLite 页/WAL 层工具（如 LiteFS）"
+   ],
+   "use_cases": [
+    "以 C 语言集成、读多写少或混合负载的嵌入式键值存储场景",
+    "需要原生 TTL 的会话、缓存或租约管理",
+    "嵌入式或内存受限目标设备上的本地数据存储"
+   ]
+  },
+  "sha": "b5df7d307350",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "def789416aa4": {
+  "identity": {
+   "one_liner": "面向测试场景的JDBC驱动，可手动定义语句行为",
+   "review": "Acolyte 是一个用于模拟与测试的 JDBC 驱动，适用于任何依赖 JDBC 的 JVM 语言代码。用户通过 StatementHandler 定义哪些语句被支持及其返回结果，无需搭建真实数据库或完整 schema。获取连接走标准 DriverManager 与 JDBC URL。要求 Java 1.6+，数据类型转换有限、不支持二进制类型与事务仅伪支持。",
+   "highlights": [
+    "通过 DriverManager.getConnection 与 jdbc:acolyte: URL 获取连接，可由持久层代码经标准机制解析",
+    "以 StatementHandler/CompositeHandler 定义受支持的查询与更新及其结果",
+    "提供 Acolyte Studio（CLI/GUI）与 ReactiveMongo 模块，用于从既有数据库提取数据及测试 ReactiveMongo 持久层"
+   ],
+   "use_cases": [
+    "对依赖 JDBC 的持久层代码进行单元测试，使各测试相互隔离",
+    "模拟数据库边缘情况（如不可恢复/意外异常）以验证持久层的错误处理",
+    "配合 Play Framework Anorm、Youtube Vitess 等项目的测试场景使用"
+   ]
+  },
+  "sha": "def789416aa4",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9467447d48e0": {
+  "identity": {
+   "one_liner": "基于 React 与 Firebase 的多面板管理系统，含角色认证与路由保护",
+   "review": "该项目是包含 Admin、Brand、Bank 三个面板的 React 应用，使用 Material UI 构建界面、Cloud Firestore 存储数据，并实现基于角色的认证授权与路由保护。README 提供了内置的登录凭据用于运行项目，运行需 Node v16.16.0 与 npm v8.11.0。README 未说明部署方式，也未列出除演示视频外的功能细节。",
+   "highlights": [
+    "包含 Admin Panel、Brand Panel、Bank Panel 三个面板",
+    "实现基于角色的认证、授权与受保护路由",
+    "使用 Cloud Firestore 作为数据库，React 与 Material UI 构建 UI"
+   ],
+   "use_cases": [
+    "作为基于 React 与 Firebase 的管理面板开发参考",
+    "学习基于角色的认证授权与受保护路由的实现方式",
+    "演示三类用户（管理员、品牌用户、银行用户）分别登录各自面板的场景"
+   ]
+  },
+  "sha": "9467447d48e0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9ceccc999758": {
+  "identity": {
+   "one_liner": "面向 Dgraph 的 TypeScript 工具集，包含查询构建器与 gRPC 客户端",
+   "review": "Dgraphium 是一组用 TypeScript 编写的工具集合，面向分布式图数据库 Dgraph，包含 @dgraphium/core 查询构建器和 @dgraphium/client gRPC 客户端两个包，各包另有独立文档。README 未说明运行环境要求，使用前需查阅各包文档。",
+   "highlights": [
+    "提供 @dgraphium/core 查询构建器（QueryBuilder）",
+    "提供 @dgraphium/client Dgraph gRPC 客户端",
+    "使用 TypeScript 编写，通过 npm 分发"
+   ],
+   "use_cases": [
+    "在 Node.js/JavaScript 项目中以编程方式构建 Dgraph 查询",
+    "通过 gRPC 协议连接并操作 Dgraph 数据库"
+   ]
+  },
+  "sha": "9ceccc999758",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ccd8481bd4ce": {
+  "identity": {
+   "one_liner": "IndexedDB 网页数据库操作封装类",
+   "review": "该项目是一个面向浏览器的网页数据库操作类，基于 IndexedDB 实现网页端数据存取的封装，主题标签还涉及 cookie 与缓存技术。目标用户为网页应用开发者。README 仅包含标题和在线文档链接，安装方式、使用示例及具体 API 均需查阅其在线文档获取。",
+   "highlights": [
+    "基于 IndexedDB 提供网页数据库操作封装",
+    "以类（class）形式组织，供网页应用调用",
+    "提供在线文档链接"
+   ],
+   "use_cases": [
+    "网页应用中的客户端数据缓存与存储",
+    "需要在浏览器端使用 IndexedDB 的前端项目"
+   ]
+  },
+  "sha": "ccd8481bd4ce",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0476c3e8dbc": {
+  "identity": {
+   "one_liner": "一个用于在 GitHub Actions 中安装指定版本 duckdb 运行时的 Action。",
+   "review": "该项目是一个 GitHub Action，用于在 CI 工作流中安装 duckdb 命令行运行时。用户可通过 version 输入指定版本，未指定时安装最新版本；解析最新版本时可通过 github-token 进行 GitHub API 认证以避免 403 速率限制。适用于需要在流水线中使用 DuckDB 的开发者。",
+   "highlights": [
+    "支持通过 version 输入指定要安装的 duckdb 版本，未指定时安装最新版本",
+    "支持通过 github-token 参数为 GitHub API 调用提供认证，默认使用 ${{ github.token }}",
+    "提供两个使用示例：指定版本（v2.0.0）与不指定参数直接引用"
+   ],
+   "use_cases": [
+    "在 GitHub Actions 工作流中安装 duckdb 以运行数据分析或 SQL 处理步骤",
+    "在 CI 中执行与数据质量相关的 SQL 检查流程",
+    "在组织或仓库级别统一维护所使用的 duckdb 版本"
+   ]
+  },
+  "sha": "c0476c3e8dbc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4155592545c1": {
+  "identity": {
+   "one_liner": "基于 Django 的 Tribal Wars 游戏外行动协调计划工具，Docker 部署",
+   "review": "plemiona-planer 是一个 Django 应用，用于为 Tribal Wars（波蘭語 Plemiona）游戏的外部协调者创建作战计划（outlines）。后端使用 PostgreSQL，镜像内含 nginx + uwsgi 与 schedule 定时任务库，同步村庄、玩家、世界数据，支持 Prometheus 指标、Stripe 付费账户与 AWS SES/SMTP 邮件，提供 arm64/amd64 镜像，测试覆盖率约 85%，界面支持英语与波兰语翻译。",
+   "highlights": [
+    "提供 TWP-server Docker 镜像（python:3.15 基础，nginx + uwsgi + schedule），支持 linux/amd64 与 linux/arm64，4.0.0 起定时任务由主镜像运行",
+    "支持 Prometheus 指标导出接口、Stripe 密钥配置、AWS SES 邮件发送及数据库 SSL 连接等环境变量配置",
+    "定时任务以 JOB_MIN_INTERVAL/JOB_MAX_INTERVAL（默认 10-15 分钟）更新村庄、玩家、世界数据，JOB_LIFETIME_MAX_SECS 可限制任务运行时长"
+   ],
+   "use_cases": [
+    "为 Tribal Wars/Plemiona 游戏部落的 off-game 协调者搭建计划创建与数据同步服务",
+    "通过 docker-compose 与 PostgreSQL 自托管部署，可配置免费账户目标数上限与付费账户验证"
+   ]
+  },
+  "sha": "4155592545c1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d23eb4189274": {
+  "identity": {
+   "one_liner": "语音优先、本地优先的个人记账应用，一句话生成账单并写入本地 SQLite",
+   "review": "声账是面向 18–35 岁中国内地个人用户的记账应用，按住按钮说话后由火山流式 ASR 转写、DeepSeek 提取金额、分类、日期等字段，多笔账单写入本地 SQLite，保存后 8 秒内可整批撤销。客户端用 Expo/React Native，语音链路经 Fastify WebSocket 网关，需自配 DEEPSEEK_API_KEY 与火山 ASR 密钥。项目处于内测阶段，尚未上架应用商店，金额统一以整数分存储，客户端与服务端共用 Zod 契约。",
+   "highlights": [
+    "语音流式录音接火山 ASR 实时转写，DeepSeek 结构化提取后一句话可生成多笔账单",
+    "账单首先写入本地 SQLite，登录与云备份不是记账前置条件，支持手动记账兜底、JSON 备份/恢复与 CSV 导出",
+    "仓库包含 162 项自动化测试与 200 条中文 TTS 语音基线，Android 内测 APK 经 EAS Build 构建，纯 JS 更新走 EAS Update OTA"
+   ],
+   "use_cases": [
+    "午餐、打车等日常付款后说一句“午饭 25，咖啡 18”快速记多笔账",
+    "忘记分类或金额时用手动记账和计算键盘补齐",
+    "需要本地留存账单数据、按月统计分类下钻并导出 CSV/JSON 的个人记账场景"
+   ]
+  },
+  "sha": "d23eb4189274",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bee6e00bbf9a": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 Gemini API 的本地运行 WhatsApp 个人 AI 助手",
+   "review": "Friday AI 是连接 WhatsApp 的个人 AI 助手，通过 whatsapp-web.js 以配套设备方式登录，调用 Google Gemini 实现对话、图片理解与生成、语音转写与语音回复、贴纸制作和社交视频下载。个人自用项目，按原样提供；依赖本地 ffmpeg/yt-dlp，部分功能受模型配额与平台变化影响。",
+   "highlights": [
+    "支持私聊/群聊对话（群聊仅在消息以配置的机器人名称开头时响应）、图片理解与文生图、语音转写及语音回复",
+    "可将图片转为 WebP 贴纸（512×512 画布，可加题字或居中裁剪），支持下载公开 TikTok/Instagram 视频（限 64MB、3 分钟，转 H.264/AAC MP4）",
+    "提供按序处理的消息队列、聊天与生图各自的模型回退链、每账户本地记忆（30 条、每条 500 字符，拒绝保存密码/密钥类内容）"
+   ],
+   "use_cases": [
+    "在个人 WhatsApp 账号中接入可配置的 Gemini 对话、识图与语音交互",
+    "将聊天图片快速转成 WhatsApp 贴纸或按文字提示生成图片",
+    "在明确请求时下载公开社交视频并转换为 WhatsApp 兼容格式"
+   ]
+  },
+  "sha": "bee6e00bbf9a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "650b71b926e6": {
+  "identity": {
+   "one_liner": "阿里云 PolarDB 的 Swift SDK，封装 2017-08-01 版 API 接口。",
+   "review": "该仓库提供阿里云 PolarDB（API 版本 2017-08-01）的 Swift SDK，面向 iOS/macOS 开发者，用于在 Swift 应用中调用 PolarDB 的 OpenAPI 接口。支持 Carthage 与 Swift Package Manager 两种安装方式，要求 Swift 5.6 及以上。注意：仓库描述标注为 Go SDK，但 README 内容为 Swift SDK；README 未列出具体接口清单与使用示例，需参考 OpenAPI 开发者门户文档。采用 Apache-2.0 许可证。",
+   "highlights": [
+    "支持 Carthage 与 Swift Package Manager 两种集成方式",
+    "要求 iOS 13.3+ / macOS 10.15+、Xcode 11.3+、Swift 5.6",
+    "基于 Apache-2.0 许可证开源"
+   ],
+   "use_cases": [
+    "在 iOS/macOS 应用中调用阿里云 PolarDB 管理 API",
+    "通过 Swift Package Manager 管理依赖的 Xcode 项目集成阿里云服务"
+   ]
+  },
+  "sha": "650b71b926e6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

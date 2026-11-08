@@ -2851,5 +2851,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c8d68f8821d5": {
+  "identity": {
+   "one_liner": "MongoDB 学习路线图项目，以大纲与 PDF 图组织学习主题",
+   "review": "该项目提供一份 MongoDB 学习路线图，面向想从零开始学习 MongoDB 的开发者。内容以大纲形式列出六大板块：数据库基础、设计工具、驱动、GUI 客户端、MongoDB 核心概念（CRUD、聚合、索引、副本、分片、安全等）及托管方案，并提供 PDF 版本下载，支持马拉地语与英语。路线图以 2021 年为版本，学习材料本身需配合官方文档使用。",
+   "highlights": [
+    "大纲覆盖数据库基础、设计工具、驱动、GUI 客户端、MongoDB 概念与托管六大板块",
+    "提供可下载的 PDF 版本路线图，内容含英语与马拉地语",
+    "MongoDB 概念部分细分为 CRUD、聚合管道、数据建模、事务、索引、复制、分片、安全等主题"
+   ],
+   "use_cases": [
+    "为从零学习 MongoDB 的开发者提供主题清单与学习路径参考",
+    "查找数据库设计、GUI 客户端与托管方案的工具名称线索",
+    "作为整理 MongoDB 知识点（聚合、索引、分片、安全等）的目录框架"
+   ]
+  },
+  "sha": "c8d68f8821d5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "59323c75c087": {
+  "identity": {
+   "one_liner": "基于特征扩展 Eloquent 的 Laravel 模型缓存包，支持依赖索引精准失效",
+   "review": "一个面向 Laravel 的 Eloquent 模型缓存包，通过 HasModelCaching 特征启用，提供 remember()/auto_remember 等缓存读取方式，并记录模型主键到缓存键的依赖索引，使子模型更新时仅失效相关缓存键而非全量刷新。缓存键包含 SQL、绑定、预载、分页与 morph 映射等信息；支持 morph map 版本号与多租户上下文回调，生产环境建议使用 Redis（依赖索引可用原生 Redis sets）。",
+   "highlights": [
+    "通过依赖索引实现子模型更新时的精准缓存失效，新增/恢复记录时按模型类级键失效列表页缓存",
+    "缓存键包含模型类、SQL 与绑定、嵌套预载、分页参数、morph map 版本及可选租户/认证上下文",
+    "提供 Artisan 命令用于预热、检查和刷新依赖索引追踪的缓存条目"
+   ],
+   "use_cases": [
+    "父查询缓存需要随子模型变更而失效的应用",
+    "多租户或多用户场景下查询结果随租户/用户上下文变化的读取缓存",
+    "高流量的 Laravel 列表/详情接口读写（配合 Redis 驱动）"
+   ]
+  },
+  "sha": "59323c75c087",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b14f2f7d451c": {
+  "identity": {
+   "one_liner": "为 Laravel 提供 Couchbase 的缓存、会话、数据库与队列扩展包",
+   "review": "这是一个面向 Laravel 5.1 至 5.6 的 Composer 扩展包，为 Couchbase 提供数据库、缓存、会话和队列四类驱动，依赖 PHP ext-couchbase 扩展。数据库层支持 N1QL 查询、视图查询、可调一致性级别及有限的 Schema 支持；另提供管理索引的 Artisan 命令。注意 couchbase-memcached 驱动已标记为不推荐，Eloquent 支持尚未实现。",
+   "highlights": [
+    "提供数据库、缓存、会话、队列四类服务提供者，支持 Laravel 包自动发现",
+    "数据库驱动支持 N1QL 查询（含 upsert）、RETURNING 子句、视图查询及 NOT_BOUNDED/REQUEST_PLUS 等一致性级别设置",
+    "内置 Artisan 命令用于创建/删除主索引与二级索引、列出索引及插入设计文档"
+   ],
+   "use_cases": [
+    "在 Laravel 应用中以 Couchbase 作为数据库后端，通过 N1QL 执行增删改查",
+    "将 Couchbase bucket 用作缓存或会话存储驱动",
+    "基于 Couchbase bucket 运行队列任务处理（queue:work）"
+   ]
+  },
+  "sha": "b14f2f7d451c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "28fa9291ded5": {
+  "identity": {
+   "one_liner": "面向.NET后端服务的框架，提供运行时原语、数据访问与事件通信的模块化组件集合。",
+   "review": "CoreEx是一个由多个NuGet包组成的.NET框架，用于构建企业后端服务。核心包提供运行时原语，其余包按需添加AspNetCore集成、事件发布订阅、数据库访问、校验等能力。它将异常到HTTP响应映射、领域事件发布、单元OfWork等.NET未内置标准化的场景给出统一实现，采用可选模块化设计，抽象接口可替换扩展。适用于使用.NET构建微服务与事件驱动服务的团队。",
+   "highlights": [
+    "提供类型化异常体系并自动映射HTTP状态码与ProblemDetails序列化，包含Result<T>类型的Railway-Oriented Programming支持",
+    "数据层支持ADO.NET抽象、Entity Framework Core与Azure Cosmos DB，共享IUnitOfWork事务编排，含SQL Server与PostgreSQL实现及OpenTelemetry指标",
+    "事件消息支持EventData与CloudEvents格式转换、事务性outbox中继，以及Azure Service Bus的命令队列/事件主题路由与死信处理"
+   ],
+   "use_cases": [
+    "构建需要统一错误响应格式、校验与幂等键处理的ASP.NET Core Web API服务",
+    "实现事件驱动或最终一致性的微服务架构，需事务性发布领域事件",
+    "管理带缓存与有效期校验的引用数据，以及跨SQL Server、PostgreSQL、Cosmos DB的数据访问"
+   ]
+  },
+  "sha": "28fa9291ded5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7af68d9ab201": {
+  "identity": {
+   "one_liner": "用 Go 编写的图数据库，支持本地与分布式模式",
+   "review": "Bubba DB 是一个用 Go 语言实现的图数据库，源自 Innopolis 大学高级数据库课程作业。它提供数据库、节点、关系和属性的创建、查询与删除 API，支持 local 和 distributed 两种模式，属性值支持整数、浮点数和字符串三种类型。README 未完整展示存储结构细节，API 用法示例位于 main.go。",
+   "highlights": [
+    "支持以 local 或 distributed 模式创建数据库，可切换、删除数据库",
+    "提供节点、关系及属性的创建 API，属性值支持 integer、double、string 类型",
+    "提供按 id 获取节点和删除节点的操作，并通过 go test 运行测试"
+   ],
+   "use_cases": [
+    "学习图数据库的存储结构与 API 设计",
+    "需要以本地或分布式模式存储节点与关系数据的场景",
+    "作为 Go 语言数据库课程的参考实现"
+   ]
+  },
+  "sha": "7af68d9ab201",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2335,5 +2335,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "054ca9aed0f0": {
+  "identity": {
+   "one_liner": "基于 Neo4j 的互联网资源知识图谱数据库",
+   "review": "Internet Yellow Pages（IYP）是一个互联网知识数据库，汇集 AS 号、IP 前缀、域名等互联网资源的信息，以 Neo4j 图数据库存储，通过 Cypher 查询。面向需要分析互联网拓扑与资源关系的研究者和运维人员。部署需 Docker Compose、约 100GB 磁盘和至少 2GB 内存，数据来自按日期组织的数据库 dump 文件；首次加载耗时较长，且 data 目录已含数据库时初始化会失败。",
+   "highlights": [
+    "汇集 ASN、IP 前缀、域名等互联网资源信息并以知识图谱形式组织",
+    "提供在线原型（iyp.iijlab.net）供直接查询，支持 Cypher 语句",
+    "提供按年月日组织的数据库 dump，可经 Docker Compose 部署本地实例"
+   ],
+   "use_cases": [
+    "查询 AS 与 IXP、国家等实体间的成员归属等关系（如示例中查找 AS2497 所在的 IXP 及国家）",
+    "需要离线本地运行互联网资源图谱数据库的环境",
+    "通过公开原型或教程学习互联网拓扑相关查询"
+   ]
+  },
+  "sha": "054ca9aed0f0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a310785d2ac": {
+  "identity": {
+   "one_liner": "基于 Redis v6 讲解底层原理与多语言应用实践的教学项目",
+   "review": "本项目讲解 Redis 底层原理及常见场景应用，演示代码基于 Redis v6。面向希望学习 Redis 数据结构用法的开发者，为 Python 提供 redis 库、Java 提供 jedis 库的操作示例。内容按 String、List、Set、Sorted Sets、Hash、HyperLogLog、Bitmap 等数据结构组织，以问题形式覆盖分布式锁、消息队列、排行榜、短网址等场景，接受 Issues 反馈和 Pull Request 补充。",
+   "highlights": [
+    "演示代码基于 Redis v6 稳定版本",
+    "提供 Python（redis 库）与 Java（jedis 3.7.0）两种语言的客户端示例",
+    "按 String、List、Set、Sorted Sets、Hash、HyperLogLog、Bitmap 等数据结构组织应用场景讲解"
+   ],
+   "use_cases": [
+    "学习 Redis 各数据结构在分布式锁、消息队列、点赞等场景下的实现方式",
+    "参考粉丝关注、积分排行榜、搜索自动补全等功能的 Redis 实现示例",
+    "配合 Python 或 Java 客户端库练习 Redis 的各项操作"
+   ]
+  },
+  "sha": "8a310785d2ac",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5c0ef082e88b": {
+  "identity": {
+   "one_liner": "可自部署的设计师个人网站与内容管理系统，前后台、API 与数据库齐全。",
+   "review": "该仓库提供面向设计师、独立开发者和自由职业者的单站长网站应用，包含 Next.js 前台、Arco 后台、NestJS API、MySQL 8 数据库与 Redis 缓存。内容经草稿、预览、发布流程管理，图片保存在本地服务器；需 Node.js 24、MySQL 8 与 Redis 运行，不支持纯静态托管。",
+   "highlights": [
+    "发布流程包含草稿、签名预览、版本恢复、冲突检查与失败重试，MySQL 为权威数据源，Redis 按版本缓存公开 JSON，TTL 300 秒",
+    "本地图片媒体库区分私有原件与已发布副本，生成缩略图；后台支持富文本与外链文章、分类、SEO 设置",
+    "提供 Docker Compose、Nginx 和宝塔 Node 项目部署方式，认证采用 Argon2id、Cookie 会话与 CSRF 校验"
+   ],
+   "use_cases": [
+    "设计师或独立开发者自建个人作品与项目展示网站",
+    "需要在独立后台管理文章、课程与联系方式并长期记录作品的创作者",
+    "以 Docker 或宝塔方式自托管、媒体保存在自有服务器的单站点部署"
+   ]
+  },
+  "sha": "5c0ef082e88b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b777082cb7a": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与微信小程序的门诊预约挂号与智能导诊平台",
+   "review": "该平台包含微信小程序患者端与 Spring Boot 管理后台，提供科室浏览、医生查询、排班预约、挂号单管理与基于关键词映射的智能导诊；后端以 JWT 鉴权、MySQL 存储，号源扣减用条件 UPDATE 防并发超卖。微信登录为演示实现，未含支付与短信通知，适用于课程演示或二次开发参考。",
+   "highlights": [
+    "提供未来 7 天排班预约、就诊人管理与挂号单状态流转（已预约→已签到→已完成/取消）",
+    "TriageEngine 维护 130 余条症状关键词到科室的映射，含否定描述剥离与急症优先提示",
+    "号源扣减使用带 remain_count>0 条件的 UPDATE 语句，以影响行数判断避免超卖"
+   ],
+   "use_cases": [
+    "患者通过微信小程序在线预约挂号与按症状查询推荐科室",
+    "管理员维护科室、医生、排班并处理挂号单状态",
+    "作为 Spring Boot + 小程序挂号业务的教学演示或二次开发基础"
+   ]
+  },
+  "sha": "2b777082cb7a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

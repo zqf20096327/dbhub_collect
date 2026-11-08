@@ -2995,5 +2995,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "692f58728677": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis 兼容字符串 KV 服务器，支持 RESP2 协议与 AOF 持久化",
+   "review": "kvred 是用 Rust 和 Tokio 实现的 Redis 兼容字符串键值服务器，通过 TCP 提供 RESP2 协议，支持 PING/GET/SET/DEL/EXISTS 五个命令。所有写命令经单一写序列化器追加到 AOF，按 always/everysec/none 三种 fsync 策略落盘，启动时重放 AOF 恢复状态并支持 AOF 重写压缩。项目定位为系统学习实现，不支持 TTL、事务、复制、集群等特性，适合作为理解协议解析、写顺序与持久化权衡的参考代码，可用 redis-cli 连接测试。",
+   "highlights": [
+    "实现 RESP2 协议解析与编码，处理部分读取、单缓冲多帧及二进制安全载荷",
+    "通过单一写序列化器保证全局写顺序，支持 always/everysec/none 三种 fsync 持久化策略",
+    "启动时重放 AOF 恢复数据，支持 AOF 重写压缩，并提供基准测试脚本与报告生成工具"
+   ],
+   "use_cases": [
+    "作为学习 Rust 异步网络服务、RESP 协议与 AOF 持久化机制的实现参考",
+    "测试不同 fsync 策略下的写入吞吐与延迟权衡",
+    "作为支持 redis-cli 的轻量字符串 KV 服务运行使用"
+   ]
+  },
+  "sha": "692f58728677",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "093c1778f3ce": {
+  "identity": {
+   "one_liner": "自托管的 AI 原生数据决策智能体：自然语言问数、分析、判定与行动闭环",
+   "review": "Trove 是一个开源、自托管的 AI 数据决策智能体，用户用自然语言提问，得到由真实 SQL 支撑、执行前后均经校验的 Markdown 答案。其核心机制是一份人工确认的语义模型（semantics.yml）划定可答边界，模型外的提问会被拒绝并附扩展路径。问数之外还提供归因分析、零 LLM 阈值判定与行动提案审批链路。需要 Python ≥ 3.12 与 uv，支持 CLI、Docker Compose 部署，接入 PostgreSQL、MySQL、ClickHouse、Snowflake 等数据源，对话需自备 LLM 凭证。",
+   "highlights": [
+    "基于语义层（semantics.yml）编译 SQL：能编译的编译、缺词表的补全、模型外的拒绝并草拟扩展，另有 dbt Semantic Layer 与 Cube 的导入命令",
+    "SQL 生成后经零 LLM 规则链、AST 防火墙、执行代价守卫与带版本回归的反思循环校验",
+    "判定规则用语义模型词汇声明，由确定性引擎零 LLM 定时求值，触发带证据 SQL 与原始行，行动提案经人工审批后外送并做效果验收"
+   ],
+   "use_cases": [
+    "业务人员用自然语言查询数据库并获取带证据的分析结果",
+    "对指标做定时阈值监控与异常判定，触发后走提案审批与外送流程",
+    "对已建语义层（dbt/Cube）的团队导入既有模型并提供问数与归因分析能力"
+   ]
+  },
+  "sha": "093c1778f3ce",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5369449228e0": {
+  "identity": {
+   "one_liner": "将 Fitbit Air 数据经 Google Health API 同步到本地 SQLite 并通过 MCP 接入 Claude 的工具集。",
+   "review": "fitbit-air-coach 提供 sync、analysis、coach、dashboard 四个模块：用用户自建的 OAuth 客户端从 Google Health API v4 读取 27 类健康数据写入 Mac 本地 SQLite，经 launchd 每 2 小时同步；分析生成睡眠、恢复等评分并附文献引用；通过本地 MCP 服务器供 Claude Desktop 或 Claude Code 读取只读 SQL。仅支持 macOS、Python 3.12，分析组合未经临床验证。",
+   "highlights": [
+    "支持 27 种 Google Health 数据类型，可回填至 2015 年，含 3 天重叠同步与每日 14 天迟到数据重扫描",
+    "所有 API 原始载荷逐字保存在 raw_points 表，可经 fitbit-air rebuild 离线重建清洗表",
+    "每项评分在 evidence.toml 中标注研究来源，数据不足时标注 building baseline"
+   ],
+   "use_cases": [
+    "Mac 用户本地化同步与查询 Fitbit Air 健康数据",
+    "通过 Claude Desktop 进行晨间签到、周回顾或跑步计划对话",
+    "仅使用 CLI 查看每日安全检查、评分与报告而不接入任何 AI 服务"
+   ]
+  },
+  "sha": "5369449228e0",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ef9349d41719": {
+  "identity": {
+   "one_liner": "面向 Windows 的免费 PHP/Laravel 本地开发服务器集成环境",
+   "review": "SoftNix Server 是一款运行于 Windows 的本地开发环境，用于运行 PHP 与 Laravel 项目。它集成 Apache/Nginx、多版本 PHP、MySQL/MariaDB/PostgreSQL、Redis、phpMyAdmin、Mailpit 等组件，通过点击界面管理服务，支持 .test 域名与 HTTPS。安装器约 2 MB，首次启动按需从各组件官网下载；仅支持 Windows 10/11，默认占用 80/443/3306 端口。",
+   "highlights": [
+    "支持 Apache（mod_php）与 Nginx（FastCGI）两种 Web 服务器，可随时切换，并提供 PHP 8.2–8.5 多版本一键切换",
+    "内置 Realtime 模式：启动 Redis、Laravel Reverb WebSocket 服务器与队列进程，并支持局域网 WiFi 分享与二维码访问",
+    "提供数据库快照与还原、Xdebug 调试、php.ini 编辑、Mailpit 本地邮件捕获、SSH 增量部署等工具"
+   ],
+   "use_cases": [
+    "在 Windows 上本地开发与调试 PHP、Laravel、WordPress 项目",
+    "通过 WebSocket 与队列在真实手机（同一局域网）上测试实时应用与通知",
+    "生成临时公网链接用于客户演示或支付 webhook（Stripe 等）测试"
+   ]
+  },
+  "sha": "ef9349d41719",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

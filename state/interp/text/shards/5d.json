@@ -2579,5 +2579,181 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ed7ff08d511d": {
+  "identity": {
+   "one_liner": "基于 Erlang VM 的分布式 NoSQL 数据库，兼容 Redis 协议",
+   "review": "RemixDB 是一个实现 Redis 协议的分布式 NoSQL 数据库，构建于 Erlang VM（BEAM）之上，面向并发与分布式原语。客户端可直接使用现有 Redis 驱动连接。项目尚在开发中，未支持全部 Redis 命令，过期/TTL、有序集合、Pub/Sub、Lua 脚本等均未实现；主从复制与自动故障转移规划中。适合想试用 Redis 协议替代实现并参与早期项目的开发者。",
+   "highlights": [
+    "实现 Redis 协议，客户端无需专用驱动即可连接",
+    "提供 Docker 镜像，也支持通过 mix release 在本地构建运行",
+    "README 附有 redis-benchmark 在 M1 iMac 上的 GET 压测数据"
+   ],
+   "use_cases": [
+    "作为 Redis 协议兼容的键值存储用于开发与试验环境",
+    "使用现有 Redis 客户端/驱动接入的键值读写场景",
+    "Erlang/Elixir 生态下并发与分布式原语的研究参考"
+   ]
+  },
+  "sha": "ed7ff08d511d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf24973fd671": {
+  "identity": {
+   "one_liner": "Neo4j 图数据库与 Cypher 学习笔记集，含认证备考材料",
+   "review": "该项目是作者备考 Neo4j 认证的过程笔记，内容覆盖图数据库基础概念（节点、标签、关系、属性）、Neo4j 核心机制（Index-free adjacency、ACID、集群、Bolt 协议）以及分十六个部分的 Cypher 查询语言教程，附电影与 Northwind 示例。提供 PDF 版本下载，适合想系统学习 Neo4j 的初学者阅读。",
+   "highlights": [
+    "包含十六部分的 Cypher 查询语言分步讲解及应用示例（Movies、Northwind）",
+    "介绍图数据库核心概念：节点、标签、关系、属性，及关系模型与图模型对照表",
+    "覆盖 Neo4j 关键机制说明：Index-free adjacency、ACID 事务、集群、Bolt 协议与工具"
+   ],
+   "use_cases": [
+    "备考 Neo4j 认证（Certified Neo4j Professional）时参考复习",
+    "初学者学习图数据库基础概念与 Cypher 查询语言",
+    "了解关系型数据库与图数据库在建模上的对应与差异"
+   ]
+  },
+  "sha": "cf24973fd671",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "14282cba63aa": {
+  "identity": {
+   "one_liner": "基于 C# .NET 10 与 ASP.NET Core 的模拟交易订单管理后端系统",
+   "review": "这是一个后端交易订单管理系统，基于 .NET 10、ASP.NET Core Web API、EF Core 10 与 SQL Server 2022 构建，提供金融品种管理、买卖订单注册与模拟执行、持仓跟踪及组合估值功能。订单执行使用 SQL 事务保证一致性，测试以 SQLite 内存库隔离运行。项目明确限定为模拟交易，不涉及真实市场交易或金融交易。适合希望本地运行完整 REST API 学习订单-持仓流程的开发者。",
+   "highlights": [
+    "提供金融品种 CRUD、买卖订单注册与执行、持仓聚合共 16 个 REST 端点，并附带 Swagger/OpenAPI 文档",
+    "BUY 执行时重算加权平均成本，SELL 持仓不足时返回 HTTP 409 并拒绝执行，订单与持仓更新使用 SQL 事务",
+    "包含 16 个通过的 xUnit 自动化测试，使用 SQLite 内存数据库隔离运行；支持 Docker Compose 部署 SQL Server"
+   ],
+   "use_cases": [
+    "需要本地模拟交易订单与持仓管理流程的后端开发练习环境",
+    "作为 ASP.NET Core Web API + EF Core Code First + Docker Compose 的参考实现进行阅读",
+    "通过 Swagger UI 调用 REST 端点，验证订单状态流转与估值计算逻辑"
+   ]
+  },
+  "sha": "14282cba63aa",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "77b31a25917b": {
+  "identity": {
+   "one_liner": "COCONUT 天然产物数据库的编译器，读取分子文件、计算属性并存入 MongoDB",
+   "review": "该项目是 COCONUT 天然产物数据库的数据编译工具，读取 SMILES、SDF、MOL、csv、tsv 等格式文件，检查分子错误与连通性，计算分子参数和性质，结果存入 MongoDB。面向需要构建或维护 COCONUT 数据库的开发者。运行依赖 Java 8 及 localhost 默认端口的 MongoDB；相似度计算步骤需要较大内存，且需自备合成分子数据集（如 ZINC15）用于 NP-likeness 分数等比较。",
+   "highlights": [
+    "读取 SMILES、SDF、MOL、csv、tsv 多种分子文件格式",
+    "检查分子错误与连通性，并计算大量分子参数与性质",
+    "提供分子相似度计算、CNPid 生成、分子名称整理等独立运行选项"
+   ],
+   "use_cases": [
+    "从原始分子文件构建 COCONUT 数据库并存入 MongoDB",
+    "重新计算数据库中缺失的分子特征",
+    "从 ChEBI、PubChem、CMAUP 导入分子名称并进行清理和注释级别重算"
+   ]
+  },
+  "sha": "77b31a25917b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4e1067e7bf23": {
+  "identity": {
+   "one_liner": "开源无损照片编辑器，支持RAW处理、目录索引与色彩管理",
+   "review": "Capture Moment 是一款 GPLv3 许可的开源无损照片编辑应用，面向专业及高级业余摄影师，覆盖 Windows、macOS、Linux 并规划移动端。它通过 OpenImageIO 读取主流 RAW 格式，调整参数以 XMP sidecar 文件保存，用 SQLite 建立照片目录索引；OpenColorIO 色彩管理与 DCP 相机配置文件目前为计划集成项。项目以 C++ 与 Qt6/QML 构建，使用 CMake 构建，支持 Vcpkg、Homebrew、apt/dnf 等包管理方式。",
+   "highlights": [
+    "通过 OpenImageIO 读取主流 RAW 格式，并采用基于 tile 的缓存机制",
+    "无损编辑管线：调整参数存储于 XMP sidecar 文件，目录索引基于 SQLite",
+    "性能计算通过 Halide 实现，界面使用 Qt6 Quick/QML"
+   ],
+   "use_cases": [
+    "需要对 RAW 文件进行无损编辑与参数回溯的摄影工作流",
+    "需要在本地用 SQLite 索引、按集合与关键词检索大量照片的场景",
+    "跨 Windows/macOS/Linux 桌面环境使用同一照片目录的团队或个人"
+   ]
+  },
+  "sha": "4e1067e7bf23",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe18d5c837ec": {
+  "identity": {
+   "one_liner": "VeighNa框架基于influxdb-client的InfluxDB数据库接口",
+   "review": "该仓库是VeighNa（vnpy）框架的数据库适配模块，基于influxdb-client封装，用于连接InfluxDB 2.0以上版本。使用前需在VeighNa全局配置中填写地址、端口、Bucket、Organization及API Token等字段，以实现行情或交易数据的InfluxDB存储。仅适用于InfluxDB 2.0以上环境。",
+   "highlights": [
+    "基于influxdb-client开发，支持InfluxDB 2.0以上版本",
+    "通过VeighNa全局配置字段（host、port、Bucket、Organization、API Token）接入",
+    "配置映射InfluxDB 2.x的Bucket与Organization概念"
+   ],
+   "use_cases": [
+    "为VeighNa量化系统接入InfluxDB时序数据库存储",
+    "管理InfluxDB 2.0以上版本实例的数据读写",
+    "需要按Bucket/Organization方式组织数据库配置的场景"
+   ]
+  },
+  "sha": "fe18d5c837ec",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fddd2d55f681": {
+  "identity": {
+   "one_liner": "Rust 编写的独立向量数据库，用 HNSW 索引与磁盘存储实现相似度检索",
+   "review": "Blaze-DB 是一个 Rust 实现的独立向量数据库，面向需要嵌入向量存储与相似度检索的开发者。核心机制包括 HNSW 图索引、多距离度量（余弦/欧氏/点积）、LRU 索引缓存与内存映射文件读取，支持 Docker 部署和 CLI 查询。README 明确标注项目尚在开发中，部分功能（如客户端文本分块、备份边缘场景）仍待完善。",
+   "highlights": [
+    "实现 HNSW 图结构进行近似最近邻搜索，支持 Cosine、Euclidean、Dot Product 三种距离度量",
+    "索引以二进制/JSON 格式存储在磁盘，使用内存映射文件与 LRU 缓存进行读取，写入采用临时文件加原子重命名的崩溃安全方式",
+    "提供 blaze-server 与 blaze-client 两个二进制，以及 blzdb bench 基准命令，可在隔离环境中模拟并发读写"
+   ],
+   "use_cases": [
+    "对产品描述、文本等内容的嵌入向量进行语义相似度搜索（如 README 中的 Amazon 商品数据集查询示例）",
+    "需要通过 Docker 自托管向量检索服务的场景",
+    "在本地磁盘上存储与检索向量索引，配合 CLI 客户端执行 top-k 查询"
+   ]
+  },
+  "sha": "fddd2d55f681",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6e0457f0b4af": {
+  "identity": {
+   "one_liner": "开源桌面应用，用 Kanban 看板组织多个 AI 代理协作运行。",
+   "review": "Tyslin Studio 是一个开源桌面应用（Electron），用于运行由多个 AI 代理组成的团队：Lead 代理在看板上规划任务并分派给运行在 Claude Code、Codex、Gemini CLI 等适配器上的工作者代理，每个文件变更以 diff 形式等待用户批准。提供 20 个预设团队模板、Markdown 记忆、MCP 集成与预算控制。目前处于 beta，Linux 测试较充分，macOS/Windows 构建未签名；需要 Node.js 22 从源码构建。",
+   "highlights": [
+    "通过 Agent Client Protocol 驱动 Claude Code、Codex、Gemini CLI、Hermes、Goose 等代理适配器，内置模型支持 Anthropic、OpenAI、Gemini API key 或本地 Ollama",
+    "提供 20 个团队模板，每个含目标、五步计划、起始卡片与技能；内置 Kanban 看板、Inbox、Telegram/Slack 通知与月度预算控制",
+    "数据存储于本地 SQLite 数据库与按团队组织的文件夹，记忆为纯 Markdown 并可同步 Google Drive；密钥经操作系统钥匙串加密，无分析收集"
+   ],
+   "use_cases": [
+    "在本地机器上用自己的 API key 或订阅账号编排多代理团队执行内容写作、SEO、开发、客服等工作流",
+    "需要以 diff 审批方式控制代理文件修改并设置月度预算的使用场景",
+    "通过 MCP 服务器接入 GitHub、Linear、Stripe 等工具扩展代理能力"
+   ]
+  },
+  "sha": "6e0457f0b4af",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

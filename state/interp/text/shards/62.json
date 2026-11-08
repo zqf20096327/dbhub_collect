@@ -2788,5 +2788,225 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "27b540a1d9c3": {
+  "identity": {
+   "one_liner": "为 AI Agent 提供基于 WAL+快照与 blake3 哈希链的可验证持久化状态存储服务。",
+   "review": "AgentState 是一个面向 AI Agent 的状态存储服务，用 Rust 编写，通过 HTTP/gRPC API 提供 Agent 状态的读写、查询与 SSE/gRPC 订阅，内置分布式租约。其持久化采用 WAL+快照机制，并通过 blake3 哈希链、运行时不变量、LTL 时序属性检查和断言验证四层机制记录与校验状态变更。提供 Python、TypeScript、Go SDK，可经 Docker、Compose 或 Helm 部署，附带 Prometheus 指标端点。",
+   "highlights": [
+    "持久化采用 WAL+快照机制，支持通过 ?at=RFC3339 参数查询历史时间点状态",
+    "每次写入扩展 blake3 哈希链，提供 chain-verify 端点校验记录完整性",
+    "支持 JSON 规则的运行时不变量校验、LTL 时序属性检查及带证明 DAG 的断言验证，内置 healthcare/finance/tax/legal 四个领域包"
+   ],
+   "use_cases": [
+    "需要按标签/JSONPath 查询并通过 SSE/gRPC 订阅状态变更的多 Agent 状态管理",
+    "需要对状态写入施加规则校验并保留可校验审计链的场景",
+    "通过 LTL 属性文件在 CI 中对 WAL 历史执行离线属性检查"
+   ]
+  },
+  "sha": "27b540a1d9c3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2bcb1ab57dd6": {
+  "identity": {
+   "one_liner": "Zig 编写的内存键值数据库，基于事件循环与批处理协议，支持 AOF 持久化。",
+   "review": "Rapto 是一个用 Zig 编写的内存 NoSQL 数据库，包含服务器与 Zig 客户端 API。其核心机制是 batch：一组不可分割（但非原子）的查询可在一次请求中发送，基于此派生出 Cursor、Lock（CAS）等结构。服务器为单线程，基于 epoll 事件轮询；客户端 API 经 zig fetch 获取。项目自述处于不成熟阶段，其他语言客户端与文档尚在计划中。",
+   "highlights": [
+    "单线程事件驱动服务器，基于 epoll 的事件轮询可独立优化",
+    "批处理（batch）作为协议基础原语，支持不可分割的多查询发送，并提供 Cursor、Lock 等派生结构",
+    "支持多 glob 模式的键扫描，以及基于批次序列化并带时间戳的 AOF 持久化"
+   ],
+   "use_cases": [
+    "需要内存键值存储且使用 Zig 技术栈的应用",
+    "需将多条查询合并在单次请求中以摊薄 RTT 的客户端通信场景",
+    "需按模式匹配扫描或删除键、或通过锁构建 CAS 类操作的场景"
+   ]
+  },
+  "sha": "2bcb1ab57dd6",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e431b271d387": {
+  "identity": {
+   "one_liner": "本地优先桌面知识工作台：无限画布组织资料，本地AI生成带引用出处答案",
+   "review": "Knovum 是一款基于 Tauri 2 与 Vue 3 的桌面知识工作台，面向研究、学习与创作场景。用户在无限画布（Space）上放置笔记、网页、录屏、PDF 等素材，提问可返回定位到具体段落、时间戳或页码的引用。资料以 SQLite 与本地向量索引（LanceDB）存储，转录、OCR、嵌入等在本地运行；云端模型为可选的自带密钥方式。需注意安装包尚未经 Apple 公证或 Authenticode 签名，Linux 与 Windows ARM 暂不支持。",
+   "highlights": [
+    "本地混合检索：Qwen3 嵌入与 LanceDB 实现关键词加向量语义搜索，支持单 Space 或跨 Space 查询",
+    "端侧 AI 能力：Whisper 转录、说话人分离、OCR、背景移除、图像放大等在本地运行，模型首次使用时下载并经 SHA-256 校验",
+    "知识对象与溯源：内置六种知识对象类型和十种关系类型，生成结果记录引擎、模型、输入与修订，引用随源文件变更标记为 detached"
+   ],
+   "use_cases": [
+    "将网页、视频、录音、PDF 等研究素材汇集在同一画布，提问并按引用定位核对原始出处",
+    "本地转录会议录音（含时间戳与说话人）并做语义搜索",
+    "通过 MCP 将本地 Space 提供给桌面 Agent 使用，或将选中素材导出为 DOCX、PDF、PPTX 等格式"
+   ]
+  },
+  "sha": "e431b271d387",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "843803ae1ff1": {
+  "identity": {
+   "one_liner": "基于 Docker Compose 的三节点 ScyllaDB 本地测试集群",
+   "review": "该项目通过 Docker Compose 部署包含三个节点的 ScyllaDB 集群，供本地测试使用。README 要求先配置内核参数 fs.aio-max-nr（提供 make setup 命令自动设置为 1048576），随后 docker compose up 启动。集群内节点经 ws-scylla 网络以 9042 端口互访，对外则映射为 localhost 的 9040–9042 端口，适用于需要在本地运行多节点 ScyllaDB 的开发者。",
+   "highlights": [
+    "提供三节点 ScyllaDB 集群的 Docker Compose 配置，附带 make setup 命令自动配置 fs.aio-max-nr 内核参数",
+    "节点通过 ws-scylla Docker 网络在 9042 端口内部互访，对外映射至 localhost 的 9040、9041、9042 端口",
+    "支持通过 cqlsh 与 nodetool 管理集群，并提供 Cassandra JS Driver 与 JDBC 连接示例"
+   ],
+   "use_cases": [
+    "在本地环境搭建多节点 ScyllaDB 集群进行测试",
+    "通过 Docker 网络将应用服务接入集群内部节点",
+    "使用 CQLSH、Nodetool 或外部驱动（含 DataGrip JDBC）连接和查询数据库"
+   ]
+  },
+  "sha": "843803ae1ff1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c56bb25db28": {
+  "identity": {
+   "one_liner": "基于 PHP 的 Web 相册程序，用于托管和分享图片。",
+   "review": "Phyxo 是一个 Web 相册项目，用于在网站上存储和分享图片。运行环境要求 PHP 8.4.0 以上，数据库通过 DBAL 支持 MySQL、PostgreSQL、SQLite 等引擎。可通过 FTP 上传解包后经 Web 界面安装，也可从源码用 Composer 部署，并提供命令行安装命令。",
+   "highlights": [
+    "通过 DBAL 支持 MySQL、PostgreSQL、SQLite 等数据库引擎",
+    "提供 Web 界面安装流程，也提供 phyxo:install 与 phyxo:user:create 命令行安装方式",
+    "测试体系包含 Behat 行为测试与 PHPUnit 单元测试，并可生成覆盖率报告"
+   ],
+   "use_cases": [
+    "在自有网站或虚拟主机上部署图片分享相册",
+    "需要自选数据库引擎（MySQL/PostgreSQL/SQLite）的图片托管场景",
+    "参与 PHP 项目开发与测试实践（项目标记 looking-for-contributors，文档与测试仍在完善中）"
+   ]
+  },
+  "sha": "4c56bb25db28",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "75b7e22cccf5": {
+  "identity": {
+   "one_liner": "基于 SQLAlchemy 与 Firebase 的双写数据库适配层",
+   "review": "firebase-alchemy 是一个 Python 库，通过 Adaptor 和 ModelManager 将 SQL 表与 Firebase 分支同步：用 SQL 定义结构、执行查询和维护关系，同时把消息类数据推送到 Firebase 供客户端实时监听。使用时需具备 SQLAlchemy 基础，通过继承 FireMix 声明双存表，可选 validator 校验消息格式；README 标注其处于开发状态。",
+   "highlights": [
+    "通过 FireMix 混入类使 SQLAlchemy 模型同时写入 SQL 和 Firebase，由 ModelManager 协调增删和推送操作",
+    "服务端可用 SQL 方式执行查询和关系管理，并通过 get_path 获取 Firebase 路径供客户端直接监听",
+    "提供 validator 参数校验推送到 Firebase 的消息结构"
+   ],
+   "use_cases": [
+    "需要同时存储用户、支付等关系型数据并实时分发聊天消息的 Web 服务",
+    "客户端需长连接实时读写 Firebase、服务端用 SQL 控制权限与定位的应用架构",
+    "按 workflow2 模式由服务器下发路径后客户端直接与 Firebase 交互的场景"
+   ]
+  },
+  "sha": "75b7e22cccf5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "67f7b6e2c209": {
+  "identity": {
+   "one_liner": "SRC资产测绘监控流水线，以单一SQLite串联采集、增差与本地仪表盘",
+   "review": "srcradar 是面向 SRC 运营场景的信息采集流水线，用 Go 与 Python 实现。它将企业业务与其范围资产、主动测绘（子域名枚举、DNS 解析、端口与 HTTP 探测）、每日快照增量 diff 及本地可视化仪表盘串成一条链路，所有输出写入共享的 SQLite 数据库，按业务名隔离。项目仅做信息收集、不含漏洞利用，README 要求使用者持有合法书面授权，合规责任由操作者承担；外部依赖 ProjectDiscovery 工具链需通过 install.sh 自行安装。",
+   "highlights": [
+    "主干包含 pdtm（主动测绘四阶段编排）、daily（定时任务、快照 diff 与本地仪表盘）、manage（业务录入），默认安装并自动运行",
+    "全部输出汇入单一 SQLite（db/recon.sqlite3），按业务名隔离，支持业务键不变量与每日 03:00（北京时间）定时增量报告",
+    "提供 ./srcradar 分发器与 Docker 单容器部署，仪表盘默认仅绑定 127.0.0.1:8765，数据库通过命名卷持久化"
+   ],
+   "use_cases": [
+    "持有 SRC 协议、渗透测试授权或自有资产白名单的授权信息收集场景",
+    "需要对已授权业务资产做每日增量监测与本地可视化查看的 SRC 运营流程",
+    "通过可选插件扩展 URL 资产扫描、健康检查、加密报告推送或中国区工商/ICP 备案查询"
+   ]
+  },
+  "sha": "67f7b6e2c209",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb7b45388761": {
+  "identity": {
+   "one_liner": "C23/raylib 桌面三盲训练器，含机械校验公式库与 FSRS-5 记忆调度",
+   "review": "blind-trainer 是一个面向 3BLD（三盲）选手的桌面训练程序，覆盖 3-style 练习、记忆训练与计时复原，同时内置多项目公式库（CFOP、OH、2x2 至 7x7、金字塔、五魔方、斜转、SQ-1、FTO）。所有公式经模拟魔方机械验证，记忆音节由遗传算法生成，训练卡片由 FSRS-5 调度，数据存于 SQLite。需 LLVM 23 工具链与 Python 3 构建，通过 bt.py 驱动。",
+   "highlights": [
+    "每条公式通过事件引擎或模拟魔方机械验证，采用 Speffz 字母方案与浮动缓冲执行模型",
+    "记忆音节由遗传优化器按词频加权分配，可用 bt.py ga 重新生成",
+    "所有训练位置由 FSRS-5 间隔重复调度，支持 CPU 与可选 CUDA 双构建通道及模糊测试门禁"
+   ],
+   "use_cases": [
+    "3BLD 选手进行 3-style 公式练习、记忆流训练与计时复原复盘",
+    "多项目魔方玩家按 FSRS-5 间隔重复安排各事件案例的公式练习",
+    "需要离线桌面环境、本地 SQLite 数据存储的魔方训练场景"
+   ]
+  },
+  "sha": "eb7b45388761",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e50522bc330": {
+  "identity": {
+   "one_liner": "基于黑马点评魔改的本地生活服务平台，含 Lua 秒杀与自研任务链/状态机双引擎",
+   "review": "RushRate 是一个 Java 学习项目，在黑马点评基础上重构为 9 模块 DDD 架构，运行于 JDK 21 与 Spring Boot 3.2。核心实现 Redis Lua 原子预扣加 RocketMQ 异步建单的秒杀链路，配本地消息表、建单校验、恢复任务、对账补偿四级兜底，并提供任务链与状态机两个自研引擎。需 JDK 21、MySQL 8、Redis、RocketMQ，Maven 打包后以 jar 启动，README 明示仅用于个人学习。",
+   "highlights": [
+    "秒杀链路在单个 Lua 脚本内原子完成请求去重、库存校验、一人一单与扣减，配对账日志与异常工单分级处置",
+    "自研可编排任务链引擎（五阶段流水线、注解驱动、CPU/IO 双线程池隔离）与 CBB 状态机引擎（任务状态落库、失败策略分层、resume CAS 抢占）",
+    "包含 7 类 JVM 故障注入开关、JMeter 压测脚本与 Prometheus 指标端点 /actuator/prometheus，仓库内归档五轮压测结果与多份负结果实验记录"
+   ],
+   "use_cases": [
+    "学习 Redis Lua 秒杀、多级缓存、消息可靠性等机制在 DDD 多模块架构下的落地方式",
+    "参照其故障注入与压测工具链演练 JVM 问题定位流程（Arthas、jstack、JMeter）",
+    "复用或研究任务链引擎与状态机引擎的编排、断点持久化与失败重试设计"
+   ]
+  },
+  "sha": "9e50522bc330",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c60a480e2ead": {
+  "identity": {
+   "one_liner": "基于React与Spring Boot的前后端分离学习与在线考试平台",
+   "review": "Nexora 是一个全栈学习管理与在线考试平台，面向学生与管理员两类角色：学生可浏览课程、报名学习、参加考试并查看成绩、成绩单和证书；管理员通过集中面板管理课程、题目、报名与成绩。后端基于 Spring Boot 提供 REST API，采用 JWT 认证和基于角色的访问控制，前端通过 VITE_API_URL 环境变量配置后端地址。数据库兼容 MySQL，官方部署使用 Vercel、Render 与 TiDB Cloud Starter。",
+   "highlights": [
+    "采用 JWT 认证与基于角色的访问控制，配合 Spring Security、密码哈希和 Bean Validation 请求校验",
+    "后端提供认证、课程、报名、考试、题目与学业管理等 REST API，前端通过集中式 API 配置读取 VITE_API_URL 自动拼接 /api 路径",
+    "数据库表由 Hibernate ddl-auto=update 自动管理，支持通过 DB_URL、DB_USERNAME、DB_PASSWORD、JWT_SECRET 环境变量配置"
+   ],
+   "use_cases": [
+    "需要同时管理课程发布、题库与考试成绩的教学管理场景",
+    "学生在线选课学习、参加考试并获取成绩单与证书的场景",
+    "作为前后端分离架构（React + Spring Boot + MySQL 兼容数据库）的学习或参考部署项目"
+   ]
+  },
+  "sha": "c60a480e2ead",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

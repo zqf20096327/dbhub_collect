@@ -2537,5 +2537,113 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8fb2fe1b00f3": {
+  "identity": {
+   "one_liner": "SurrealDB 官方的 Model Context Protocol (MCP) 服务器。",
+   "review": "SurrealMCP 是 SurrealDB 官方提供的 MCP 服务器，用于让支持 Model Context Protocol 的客户端接入 SurrealDB。README 说明该项目已并入 SurrealDB 与 SurrealDB Cloud，源码转移到 SurrealDB 主仓库维护，最新信息需查阅官方文档，本仓库不再承载完整安装与使用说明。",
+   "highlights": [
+    "作为 SurrealDB 的官方 MCP 服务器实现",
+    "已整合进 SurrealDB 与 SurrealDB Cloud，源码位于 SurrealDB 主仓库"
+   ],
+   "use_cases": [
+    "为支持 MCP 协议的客户端提供访问 SurrealDB 的服务端入口",
+    "在 SurrealDB 或 SurrealDB Cloud 环境中启用 MCP 相关能力"
+   ]
+  },
+  "sha": "8fb2fe1b00f3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "73f6f7175aa1": {
+  "identity": {
+   "one_liner": "运行于 Deno 环境的 MongoDB 数据迁移 CLI 工具",
+   "review": "Exodus 是一个基于 Deno 运行时、用 TypeScript 编写的 MongoDB 迁移命令行工具，面向需要在 Deno 环境中管理 MongoDB 数据库变更的开发者。它提供 init/create/fwd/full/back/log 等命令实现增量迁移与回滚，迁移状态记录在数据库的 migrationLog 集合中；另提供 dbInit/extract/apply 命令用于整库数据迁移，依赖 deno_mongo 驱动，部分命令需加 --unstable 标志运行。",
+   "highlights": [
+    "提供 fwd/full 增量或一次性应用迁移，back 命令逐个回滚，log 命令查看迁移状态",
+    "通过 deno_mongo 驱动操作数据库，并支持 client.runCommand 直接执行 MongoDB 数据库命令",
+    "支持整库迁移：extract 提取集合数据到本地目录，apply 写入目标数据库，可选 keepId 保留文档 id"
+   ],
+   "use_cases": [
+    "在 Deno 项目中对 MongoDB 数据库进行结构变更的版本化管理与回滚",
+    "将现有 MongoDB 数据库的数据提取并迁移到另一个 MongoDB 数据库",
+    "团队协作中通过迁移文件模板（fwd/back）统一管理数据库变更记录"
+   ]
+  },
+  "sha": "73f6f7175aa1",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0fd8e8674eaa": {
+  "identity": {
+   "one_liner": "在 Kubernetes 上创建、配置和管理 Dgraph 集群的 Operator",
+   "review": "该项目是一个 Kubernetes Operator，用 Go 编写，通过声明式配置在 Kubernetes 集群上创建、配置和管理 Dgraph 图数据库集群。README 仅含一行描述，安装方式、自定义资源定义及版本兼容性等细节需查阅项目其他文档确认。",
+   "highlights": [
+    "在 Kubernetes 上创建 Dgraph 集群",
+    "配置和管理 Dgraph 集群的运行状态",
+    "使用 Go 语言实现"
+   ],
+   "use_cases": [
+    "在 Kubernetes 环境中部署 Dgraph 图数据库集群",
+    "以声明式方式管理 Dgraph 集群配置",
+    "云原生环境中运维 Dgraph 数据库"
+   ]
+  },
+  "sha": "0fd8e8674eaa",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9a5c90926d74": {
+  "identity": {
+   "one_liner": "本地优先的受治理 NL2SQL 数据分析平台，以强制语义层与策略管道约束生成 SQL",
+   "review": "QueryForge 是一个本地优先的 AI 数据分析平台，将自然语言问题转换为可审计的只读 SQLite 查询，面向需要在生成 SQL 上施加治理的数据使用者。其机制包括：YAML 语义模型提供业务上下文、SQLGlot AST 解析加命名策略在执行前拦截、有界反思修复重试、持久化运行工件与 Trust Trace。默认仅支持本地单用户的只读 SQLite 分析；查询默认要求已验证的语义模型且需先完成物理发布。",
+   "highlights": [
+    "生成 SQL 经 SQLite AST 解析、只读单语句检查与命名策略校验后才执行，策略拒绝返回结构化 SQL_SECURITY_ERROR",
+    "YAML 语义模型定义实体、维度、度量、粒度、关系与质量规则，并提供语义模型生成脚本与漂移检查工作流",
+    "提供 CLI、REST/SSE、MCP 接口与 Studio 工作台，支持计划预览、流式进度、报告生成与运行历史导出/重放"
+   ],
+   "use_cases": [
+    "在治理边界内用自然语言查询本地 SQLite 数据（如 CSV/Parquet 上构建的资产）",
+    "在数据域中管理语义契约、策略与运行历史，追踪每次查询的 SQL 与策略决策",
+    "将 NL2SQL 流程通过 MCP 或 REST/SSE 集成到其他工具链"
+   ]
+  },
+  "sha": "9a5c90926d74",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6a7375b37b9a": {
+  "identity": {
+   "one_liner": "DSH 插件：SQLite 项目记忆加可回滚上下文回收与摘要压实",
+   "review": "这是 DeepSeek Harness（DSH 0.2.x 桌面版）的一个插件，为会话提供持久化项目记忆和上下文窗口管理。记忆侧用自带 SQLite 库（memories.db）存语料，经 MiniLM WASM 本地向量加全文 0.7/0.3 混合检索并注入 m[0] 基线；上下文侧提供 ctx_reduce/ctx_expand 工具，删除以占位符落地且可恢复。依赖 Node ≥ 22.19，经 dsh plugin add 安装后热加载。压实接管 registerCompactionEngine 默认关闭。",
+   "highlights": [
+    "项目记忆存于插件自有 SQLite 库，支持全文 0.7 + 向量 0.3 混合检索，向量嵌入由 onnxruntime-web WASM 本地运行，无需 API 密钥",
+    "ctx_reduce 仅排队删除、以 [dropped §N§] 占位符落地，ctx_expand 可原地恢复原文；historian 以 p1–p4 四级摘要作区间替换发布",
+    "全局域共享中 staging 可自动化，发布需人工审批（审批卡 / ctx-global approve）；维护 tick 每 30 分钟执行归档、验证与向量回填"
+   ],
+   "use_cases": [
+    "长会话中需跨重启保留项目知识、并以混合检索回注给模型的 DSH 桌面用户",
+    "工具输出占用上下文窗口、需要按 §N§ 标签排队回收且可恢复原文的场景",
+    "机器/组织级记忆共享流程需保留人工发布审批环节的团队"
+   ]
+  },
+  "sha": "6a7375b37b9a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

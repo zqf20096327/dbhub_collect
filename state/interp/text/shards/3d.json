@@ -3291,5 +3291,70 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "704b8bdd5c7a": {
+  "identity": {
+   "one_liner": "CouchDB 集群操作的代理函数集合，用于集群节点的远程过程调用端点",
+   "review": "fabric 是 Apache CouchDB 内部组件，为集群操作提供一组代理函数，作为各集群节点上的远程过程端点。例如创建数据库时，每个存储分片的节点需接收并执行 fabric 函数，处理请求的节点汇总各节点结果后响应客户端。它与 CouchDB 内的 Rexi 应用配合使用，需 Erlang R13B03 以上并用 rebar 构建，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "为 CouchDB 集群操作提供代理函数，充当各节点上的远程过程端点",
+    "在处理请求的节点上汇总各分片节点的执行结果并返回客户端",
+    "依赖 Erlang R13B03 及以上版本，使用 rebar 构建"
+   ],
+   "use_cases": [
+    "作为 CouchDB 集群部署中各节点间协调数据库操作（如创建数据库）的内部组件",
+    "在需要向多个分片节点分发请求并汇总结果的场景中使用"
+   ]
+  },
+  "sha": "704b8bdd5c7a",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c368bfed3395": {
+  "identity": {
+   "one_liner": "基于 MCP 的 AI 编码代理项目记忆服务器，内置 SQLite 存储、FTS5 搜索与防循环死胡同记录",
+   "review": "agent-memory-mcp 是一个供 MCP 兼容客户端（Claude Code、Cursor、Windsurf、Cline、Google Antigravity 等）调用的记忆服务器，按项目保存架构笔记和失败记录，并提供跨项目全局知识库。它依赖 Node.js 22.5+/24+ 原生 node:sqlite（WAL 模式），无需 Docker 或原生编译；提供 15 个 MCP 工具，含 FTS5 BM25 全文搜索、文件锚定过期检测和 token 预算中间件。数据全部保存在本地，宣称零遥测，采用 MIT 许可。",
+   "highlights": [
+    "提供 15 个 MCP 工具，覆盖项目记忆的保存、读取、更新、软删除和修订备份，以及死胡同记录与按错误消息、关键词或文件路径的检索",
+    "支持跨项目全局知识库（~/.ag-memory-mcp/global.db），可通过 promote_to_global 将项目记忆提升为 g- 前缀全局节点，并按技术栈和类别过滤检索",
+    "内置输出 token 预算中间件，以约 4 字符/token 估算并在句子边界截断超限响应（默认上限 3000，可通过 AG_MEMORY_MAX_RESPONSE_TOKENS 或 config.json 配置），并在 global.db 中记录 token 指标"
+   ],
+   "use_cases": [
+    "在多个仓库或微服务之间沉淀框架缺陷与约定：将某项目验证过的模式提升为全局知识，供其他项目通过 g- ID 读取",
+    "减少调试循环：代理遇到错误时用 check_dead_ends 检索已记录的 error_loop 与 architectural 死胡同，依赖升级后可用 reopen_dead_end 附理由重新开放",
+    "修改代码前用 get_file_memories 读取锚定到目标文件的笔记与死胡同；read_memory_node 会比对磁盘 mtime 提示记忆过期"
+   ]
+  },
+  "sha": "c368bfed3395",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e0c12d768b2f": {
+  "identity": {
+   "one_liner": "面向小微企业的 WhatsApp 诈骗鉴别服务，转发文本/截图/语音/PDF 即返回判定。",
+   "review": "VIGÍA 是 Meta 黑客松期间构建的项目：小微企业将可疑文本、截图、语音或 PDF 转发到 WhatsApp 号码或邮箱，系统以 Meta 模型加确定性规则返回'诈骗/合法/存疑'判定及理由，并在判定为诈骗时通知团队成员。运行时使用 Muse Spark 1.3、SAM 3.1 和 Muse Voice Transcribe 三种模型，其余环节为确定性代码。README 附带 231 例评估集的度量数据与回归门槛，无托管实例，需本机 Docker 与 uv 运行 `make demo`。",
+   "highlights": [
+    "支持文本、截图、语音、PDF、链接等多渠道输入，输出三分类判定及理由，诈骗时向团队发出警告",
+    "三模型分工：Muse Spark 负责分析循环与附件读取，SAM 3.1 裁剪二维码/Logo，Voice Transcribe 转写语音，二维码解码在代码中完成",
+    "内置 231 例评估集与度量工具，docs-check 会在指标漂移时使构建失败；提供 OWASP 类别对应的安全测试"
+   ],
+   "use_cases": [
+    "小微企业在无安全团队的情况下鉴别可疑消息并同步团队成员",
+    "需复现模型评估流程的开发者（make evals 重跑 231 例评估）",
+    "基于 FastAPI + Postgres 的多模态判定管道本地部署与二次开发"
+   ]
+  },
+  "sha": "e0c12d768b2f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

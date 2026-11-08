@@ -2804,5 +2804,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8fe8e8443972": {
+  "identity": {
+   "one_liner": "基于 migrate-mongo 的 TypeScript MongoDB 迁移工具，提供 CLI 与库两种用法",
+   "review": "mongo-migrate-ts 是一个在 TypeScript 项目中运行 MongoDB 迁移的库，基于 migrate-mongo 并加入 TypeScript 支持。通过 npm 安装后可用 CLI 执行 init、new、up 等命令，也可在代码中调用 mongoMigrateCli。迁移实现 MigrationInterface 的 up/down 方法，可在方法内使用 session 与事务。2.x 版本将迁移记录从绝对路径改为相对路径，并提供 fix-paths 命令转换旧数据。适合需要在 TS 项目中管理 MongoDB 数据库结构变更的开发者使用。",
+   "highlights": [
+    "提供 CLI 命令（init、new、up 等）与编程接口 mongoMigrateCli 两种使用方式",
+    "迁移文件实现 MigrationInterface，up/down 方法中可创建 session 使用 MongoDB 事务",
+    "支持 ts-node 直接运行，配置项包含 migrationsDir、uri 及时间戳格式等"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中以版本化方式管理 MongoDB 的集合与索引变更",
+    "需要对迁移的 up/down 操作使用 MongoDB 事务保证原子执行的场景",
+    "从 1.x 升级到 2.x 时用 fix-paths 命令修正数据库中已存的迁移路径记录"
+   ]
+  },
+  "sha": "8fe8e8443972",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a34283f2875e": {
+  "identity": {
+   "one_liner": "免费多人地理猜位置游戏，支持对战、社区地图与自托管部署。",
+   "review": "GeoDuels 是一个多人地理游戏项目，玩家根据街景猜测位置并进行对战，提供社区地图与竞技功能。README 主要内容为部署说明：开发环境依赖 Docker、Go、Node 与 Overmind，Postgres 与 NATS 由 Docker 运行，其余服务通过 Procfile 本地启动；生产环境用 compose.yaml 运行发布镜像（amd64/arm64），支持 Caddy TLS 或接入自备反向代理，db-migrate 服务在启动前完成数据库迁移。",
+   "highlights": [
+    "提供 Docker Compose 自托管方案，发布镜像覆盖 amd64 与 arm64",
+    "开发环境通过 Procfile 与 Air 实现代码修改后自动重建重启",
+    "内置 db-migrate 服务，在使用数据库的服务启动前完成 schema 迁移"
+   ],
+   "use_cases": [
+    "本地搭建开发环境并参与项目贡献",
+    "在自有服务器上以 Docker Compose 部署实例，可搭配 Caddy TLS 或 nginx 反向代理",
+    "构建自定义镜像以运行自己的修改版本"
+   ]
+  },
+  "sha": "a34283f2875e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee2c46178d7c": {
+  "identity": {
+   "one_liner": "Apache IoTDB 时序数据库的文档站点源码，基于 VuePress 构建",
+   "review": "该仓库包含 Apache IoTDB 官网与文档站点的源码，供文档贡献者和站点维护者使用。站点基于 VuePress 构建，通过 npm run dev 本地调试、npm run build 生成产物；Markdown 文件编译为 HTML，并区分英文与中文两套语言路径（/ 与 /zh/），内容按 UserGuide、SystemDesign 等目录组织。",
+   "highlights": [
+    "基于 VuePress 构建，支持 npm run dev 热更新调试和 npm run build 生产构建",
+    "Markdown 文档编译为 HTML，一级标题自动生成侧边栏条目",
+    "提供中英文双语站点配置，通过 / 和 /zh/ 路径区分语言版本"
+   ],
+   "use_cases": [
+    "为 Apache IoTDB 文档站贡献或修改用户指南、系统设计等文档",
+    "维护站点导航栏、侧边栏及多语言配置",
+    "在文档页面中添加交互式 Vue 组件"
+   ]
+  },
+  "sha": "ee2c46178d7c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ee9b0199933": {
+  "identity": {
+   "one_liner": "alt:V 多人游戏服务器的开源登录认证资源，基于 MongoDB 存储账户",
+   "review": "altv-os-auth 是面向 alt:V 游戏模式的服务端资源，通过 alt:V 事件机制完成用户登录认证，账户数据存入 MongoDB 的 accounts 集合，并通过 auth:Done 等事件向其他资源提供账号 id、用户名、邮箱等标识信息。依赖 NodeJS 13+、MongoDB 及 chalk、simplymongo、sjcl，通过 config.json 配置数据库连接，可选配置用户名密码。",
+   "highlights": [
+    "通过 alt:V 事件发射器（playerConnect、auth:Done、auth:Open）实现认证流程与其他资源解耦",
+    "账户数据写入 MongoDB 的 accounts 集合，连接地址、库名、用户名密码均可通过 config.json 配置",
+    "支持 altv-pkg 安装器一键安装，也可通过 git clone 部署到 resources 目录"
+   ],
+   "use_cases": [
+    "为 alt:V 游戏模式添加基于邮箱/密码的账户登录系统",
+    "需要在多个资源间共享已认证用户的数据库 id、用户名、邮箱等标识信息的场景",
+    "生产环境需要为 MongoDB 连接配置可选用户名密码鉴权的部署"
+   ]
+  },
+  "sha": "5ee9b0199933",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

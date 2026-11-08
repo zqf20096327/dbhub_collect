@@ -2733,5 +2733,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5cca201c00fe": {
+  "identity": {
+   "one_liner": "本地运行的 AI 交易日志，导入券商 CSV 重建往返交易并生成 KPI 与 Claude 分析。",
+   "review": "一个运行在本机的交易日志应用：导入券商 CSV 后用确定性代码重建往返交易（含部分成交、加仓、做空），计算胜率、盈利因子、回撤等统计，可选接入 Claude 对交易日记做分析。数据存于单个 SQLite 文件，无账户、无遥测，MIT 许可。支持股票、期权、期货，内置 Thinkorswim 与 Interactive Brokers 导入器。核心计算不依赖 AI，AI 与 Alpaca 行情均为可选外部服务。",
+   "highlights": [
+    "支持股票、期权、期货的往返交易重建，自动合并部分成交、加仓与做空，统计胜率、盈利因子、期望、回撤、MFE/MAE 等指标",
+    "Exit Lab 在历史一分钟价格上回放已完成交易，对比实际出场与目标价、收盘持有、移动止损等规则的假设结果；Leak Finder 按入场时已知条件分组识别亏损交易组",
+    "本地优先：数据存于单个 SQLite 文件，后端仅监听 localhost，无账户与遥测；交易重建与统计为带测试的确定性代码"
+   ],
+   "use_cases": [
+    "日内交易者导入券商成交记录，自动重建往返交易并跟踪胜率、盈利因子等绩效指标",
+    "持有交易日记的用户通过 Claude 分析获得按流程维度的当日评级与 Leaks 解释（需自备 Anthropic API key）",
+    "想复盘出场规则的交易者用 Exit Lab 在历史一分钟价格上对比不同止损止盈规则的假设结果"
+   ]
+  },
+  "sha": "5cca201c00fe",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61b99fcbf405": {
+  "identity": {
+   "one_liner": "基于 5sim.net API 接口的 Discord 临时手机号 OTP 验证码接收机器人",
+   "review": "这是一个部署在 Discord 上的机器人项目，通过 5sim.net API 获取临时手机号并查询验证码，供需要在多个平台注册账号的用户接收 OTP 验证码使用。运行依赖 Python、5sim.net 账户、MongoDB 及自建的 Discord Bot。README 特别提示应自行部署实例：API 密钥存于数据库中，机器人部署者可查看。验证码通过 Discord 隐藏 embed 仅对使用者本人可见。",
+   "highlights": [
+    "通过 5sim.net API 获取多国可选的临时手机号并查询 OTP 验证码",
+    "使用 Discord slash commands 交互，响应以仅本人可见的隐藏 embed 展示",
+    "通过 MongoDB 存储用户及其 API 密钥"
+   ],
+   "use_cases": [
+    "自托管实例后使用临时号码接收各平台注册验证码",
+    "开发者在自建 MongoDB 与 Discord Bot 环境中部署机器人",
+    "通过 issues 或 Discord 提交功能建议与协作"
+   ]
+  },
+  "sha": "61b99fcbf405",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fbae3b022fae": {
+  "identity": {
+   "one_liner": "只读 sidecar，对外提供 RustChain 硬件真实性证明查询",
+   "review": "该项目是运行在 RustChain 节点旁的只读 sidecar，从 miner_attest_recent 表读取 RIP-PoA 判定，以带 Ed25519 签名的 JSON 回应外部查询，说明对端是真实硬件还是 VM/模拟环境。每次响应附 scope 声明，仅证明物理存在与非模拟，不证明工作质量。面向需要验证 AI agent 或 DePIN 节点硬件身份的开发者。当前为单节点签名版本。",
+   "highlights": [
+    "只读读取节点的 miner_attest_recent 表，不写入或修改共识节点",
+    "响应包含 scope 声明与 Ed25519 签名，签名字段不含裸 verified",
+    "提供 mcp_tool.py 中的 rustchain_verify_hardware 工具及 18 项契约测试"
+   ],
+   "use_cases": [
+    "外部 AI agent 通过 HTTP 或 MCP 查询对端硬件真实性",
+    "DePIN 系统验证节点是否为物理硬件而非 VM/模拟环境",
+    "在 RustChain 节点旁部署 oracle 并经 nginx 反代提供服务"
+   ]
+  },
+  "sha": "fbae3b022fae",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cfb0dbda630c": {
+  "identity": {
+   "one_liner": "基于 PM2 的 Elasticsearch 集群监控模块",
+   "review": "pm2-elasticsearch 是一个 PM2 模块，用于通过 Keymetrics 监控 Elasticsearch 集群。通过 `pm2 install` 安装后，可用 `pm2 set` 配置目标集群 URI（默认 http://localhost:9200/），URI 支持 simple auth 认证，也可由环境变量 PM2_ELASTICSEARCH_URI 提供。适用于已使用 PM2 与 Keymetrics 的运维环境。",
+   "highlights": [
+    "通过 `pm2 install pm2-elasticsearch` 安装为 PM2 模块",
+    "支持通过 `pm2 set` 配置 elasticsearchUri，默认指向 http://localhost:9200/",
+    "支持 simple auth（user:password@host:port）及 PM2_ELASTICSEARCH_URI 环境变量配置"
+   ],
+   "use_cases": [
+    "在 Keymetrics 仪表盘中监控 Elasticsearch 集群",
+    "对运行于 PM2 环境的节点进行集群连接配置与监控",
+    "需要认证访问（simple auth）的 Elasticsearch 集群监控"
+   ]
+  },
+  "sha": "cfb0dbda630c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "107ec03e9e54": {
+  "identity": {
+   "one_liner": "本地优先的开源发票与财务文档生成应用，含 BYOK AI 辅助",
+   "review": "Billframe 是一个 MIT 许可的本地优先开票与财务文档应用，基于 Expo/React Native 和 SQLite 运行于 Android 与 Web，面向自由职业者、个体承包商和小微企业。它内置 40 多种单据模板，金额计算使用 BigInt 最小货币单位以避免浮点误差；AI 对话起草默认走本地确定性规则引擎，用户可自配 Groq/Gemini/OpenAI 密钥启用云端推理，密钥存于系统安全存储。需 Node.js 18+ 并通过 Expo CLI 构建。",
+   "highlights": [
+    "本地 SQLite 存储客户、目录与单据数据，核心开票、估价单、送货单、收据与打印功能可离线运行",
+    "支持 B2B GST 税务发票、Rule 55 送货单、贷记/借记通知单、薪资单与房租收据等 40 多种法定与商业文档类型",
+    "内置本地确定性策略引擎，用户可在设置中配置自己的 Groq/Gemini/OpenAI API 密钥进行对话式文档起草"
+   ],
+   "use_cases": [
+    "为需符合 GST 合规的客户生成含 CGST/SGST 或 IGST 拆分的税务发票与送货单",
+    "在无网络环境下生成报价单、收据及 80mm 热敏 POS 小票并打印",
+    "生成含 EPF、ESI 等法定扣款项的薪资单及用于 HRA 减税申报的房租收据"
+   ]
+  },
+  "sha": "107ec03e9e54",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ffce96e6b20": {
+  "identity": {
+   "one_liner": "面向德国自由职业者的本地记账桌面应用，基于 Tauri 2 与 SQLite",
+   "review": "Midnight 是一款运行于 macOS 的本地簿记应用，面向德国的自由职业者与自雇人士，覆盖收支、发票、客户、工时、文档存储、报表与所得税预估。发票通过 LaTeX 生成 PDF，并支持 ZUGFeRD/Factur-X 与 XRechnung 电子发票；另附 MCP 服务器可直接读写同一数据库。PDF 生成需安装 MacTeX 或 TeX Live，应用未经 Apple 公证，首次启动需手动放行。",
+   "highlights": [
+    "发票支持编号序列、增值税与折扣、§19 UStG 小企业方案，PDF 经 xelatex 生成，并可导出 ZUGFeRD/Factur-X（EN 16931）与 XRechnung 3.0 电子发票",
+    "内置工时追踪与项目预算，未计费时间可生成草稿发票；支出类别预填德国 EÜR 常见项目，PDF 收据可提取名称、金额与日期",
+    "附带 midnight-mcp MCP 服务器（stdio），可在应用关闭时读写同一数据库，支持限制为只读及排除客户数据"
+   ],
+   "use_cases": [
+    "德国自由职业者或自雇人士本地管理收支、发票、EÜR 类别与年度所得税预估",
+    "按项目记录工时并将未计费时间生成草稿发票、导出工时表",
+    "通过 MCP 服务器将记账数据接入支持 MCP 的客户端进行读写操作"
+   ]
+  },
+  "sha": "2ffce96e6b20",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

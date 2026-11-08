@@ -3119,5 +3119,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fd104f817f1e": {
+  "identity": {
+   "one_liner": "纯 Swift 编写的 CouchDB/Cloudant 客户端库，供 Kitura 应用连接 NoSQL 数据库",
+   "review": "Kitura-CouchDB 是纯 Swift 实现的客户端库，使 Kitura 应用能连接 CouchDB 或 Cloudant 数据库。通过 CouchDBClient 管理数据库连接与创建、获取、删除数据库，Database 类以回调式 API 对文档、文档数组、设计文档及附件执行增删改查。文档需实现 Document 协议并含 _id 与 _rev 字段。采用 Apache 2.0 许可证。",
+   "highlights": [
+    "提供 CouchDBClient 类，通过 ConnectionProperties 初始化连接，支持创建、获取和删除数据库",
+    "Database 类支持对单个文档、文档数组、设计文档及文档附件执行 CRUD 请求",
+    "文档模型基于 Document 协议，包含 _id（未设置时自动分配 UUID）和 _rev（用于防止并发更新冲突）字段"
+   ],
+   "use_cases": [
+    "Kitura 应用需要读写 CouchDB 或 Cloudant 数据库的场景",
+    "需要对 JSON 文档执行增删改查操作的服务端 Swift 项目",
+    "需要管理设计文档和文档附件的 NoSQL 应用"
+   ]
+  },
+  "sha": "fd104f817f1e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b2a0ecdf3b2": {
+  "identity": {
+   "one_liner": "演示 MongoDB 4.0 多文档事务的 Python 示例代码库",
+   "review": "该仓库包含一组 Python 示例程序，以航班订座流程（分配座位、支付、更新审计计数三个集合操作）演示 MongoDB 4.0 的多文档事务功能。代码基于 PyMongo 3.7.1 构建，含事务重试函数和基于 Change Streams 的集合监视脚本。事务仅在副本集上可用，且 featureCompatibility 须设为 4.0，需 Python 3.6 及以上环境。",
+   "highlights": [
+    "transactions_main.py 支持 --usetxns 参数，可将跨三个集合的写入操作包裹在 ACID 事务中执行",
+    "transactions_retry.py 提供事务重试函数，kill_primary.py 可定期终止副本集 primary 以模拟选举",
+    "watch_transactions.py 基于 MongoDB Change Streams 实时监视集合变更"
+   ],
+   "use_cases": [
+    "Python 开发者学习 MongoDB 多文档事务 API 的客户端会话用法",
+    "演示在副本集 primary 选举期间事务与重试机制的行为",
+    "需要将现有串行多集合写入代码改为事务方式的场景参考"
+   ]
+  },
+  "sha": "5b2a0ecdf3b2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "656be55b0c1e": {
+  "identity": {
+   "one_liner": "基于 Glommio 的实时数据库服务器，兼容 Firebase RTDB 客户端 SDK",
+   "review": "Lark 是一个用 Rust 基于 Glommio 编写的实时数据库服务器，在多客户端间同步 JSON 树并支持可选持久化，边缘组件用 Go 实现 WebSocket、WebTransport 和 REST 连接终止。它设计为与 Firebase Realtime Database SDK（含 JS SDK）即插兼容，开发者可迁移实时数据库部分而继续使用 Firebase Auth、Hosting 等其他功能。采用 AGPL v3 许可证，处于 0.x 阶段，另有托管服务 Lark Cloud 运行同一代码库。",
+   "highlights": [
+    "在多个客户端间同步 JSON 树，支持可选数据持久化",
+    "主体用 Rust 基于 Glommio 实现，边缘组件以 Go 终止 WebSocket、WebTransport 和 REST HTTP 连接",
+    "与 Firebase Realtime Database SDK 即插兼容，包括 Firebase JS SDK"
+   ],
+   "use_cases": [
+    "为 Web 应用提供实时数据同步（配合 @lark-sh/client）",
+    "迁移现有基于 Firebase RTDB SDK 的应用，同时继续使用 Firebase Auth、Hosting、Storage",
+    "部署自托管实时数据库并自行管理数据与备份"
+   ]
+  },
+  "sha": "656be55b0c1e",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d9d63d203e9d": {
+  "identity": {
+   "one_liner": "在 Neo4j 查询结果与 graphology 图结构之间双向转换的工具库",
+   "review": "graphology-neo4j 提供 cypherToGraph、cypherProjectionToGraph 两个方法，将 Cypher 查询结果或投影查询解析为 graphology 图实例，并通过 exportToCypher 将图导出为含 CREATE 语句的 Cypher 脚本。neo4j-driver 与 graphology 为 peer dependencies，需自行安装。生成的图为允许自环的多重有向图；Neo4j 的标签与关系类型不存在于 graphology 中，默认存入 @id、@labels、@type 属性，可通过 opts 配置映射。适用于已在 JavaScript/TypeScript 项目中使用 graphology 并需读取 Neo4j 数据的开发者。",
+   "highlights": [
+    "提供 cypherToGraph 方法，解析 Cypher 查询返回的 Node、Relationship、Path 及其数组并生成 graphology 图实例",
+    "提供 cypherProjectionToGraph 方法，基于节点查询（须含 id 字段）与关系查询（须含 source、target 字段）两条 Cypher 投影查询构建图",
+    "提供 exportToCypher 方法，将 graphology 图导出为包含 CREATE 指令的 Cypher 脚本；Neo4j 的 id、labels、type 默认映射到 @id、@labels、@type 属性且可通过 opts 自定义"
+   ],
+   "use_cases": [
+    "在 TypeScript/JavaScript 应用中将 Neo4j 查询结果加载为 graphology 图，用于后续图计算或可视化",
+    "通过节点查询与关系查询两条 Cypher 投影语句自定义导入图的节点与边",
+    "将内存中的 graphology 图导出为 Cypher CREATE 脚本，用于写入 Neo4j 数据库"
+   ]
+  },
+  "sha": "d9d63d203e9d",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a39d82a91707": {
+  "identity": {
+   "one_liner": "一份DuckDB SQL练习指南，用于学习分析型数据库与SQL技能",
+   "review": "该仓库是一份DuckDB实操指南，DuckDB是一个分析型SQL数据库。内容包括使用DuckDB、练习中等至专家级纯SQL题目，以及在Python中使用DuckDB。适合希望学习DuckDB并提升SQL能力的使用者。",
+   "highlights": [
+    "提供DuckDB上手指南，覆盖这一分析型SQL数据库的使用",
+    "包含中等至专家难度的纯SQL练习题",
+    "包含在Python中使用DuckDB的内容"
+   ],
+   "use_cases": [
+    "学习DuckDB分析型数据库的基本使用",
+    "通过分级SQL题目进行SQL练习",
+    "了解在Python环境中调用DuckDB"
+   ]
+  },
+  "sha": "a39d82a91707",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "abbb9841a29b": {
+  "identity": {
+   "one_liner": "基于 NestJS 的咖啡店平台后端，含 OTP 认证与 EDA 架构",
+   "review": "Cafino 是一个咖啡店平台的 NestJS 后端，实现约 90 个 API 接口，覆盖用户资料、商品目录、购物车、订单、折扣码、Zarinpal 支付及工单支持等模块。数据层使用 PostgreSQL 与 TypeORM，采用模块化加事件驱动架构，部署通过 Docker Compose 完成，适合开发者作为真实项目的实现参考。",
+   "highlights": [
+    "提供手机号 OTP 登录、JWT、Passport、自定义限流与 Cloudflare Turnstile 等认证安全机制",
+    "集成 Zarinpal 支付网关与 AWS S3 图片上传，使用 Winston 日志并支持 Telegram 告警",
+    "通过 Docker Compose 一键部署，附带 Swagger API 文档与 Adminer 管理界面"
+   ],
+   "use_cases": [
+    "学习 NestJS 模块化与事件驱动架构的实战实现",
+    "作为餐厅/咖啡类点单系统的后端起点",
+    "参考 OTP 登录、限流与 Docker 部署的完整工程配置"
+   ]
+  },
+  "sha": "abbb9841a29b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2949,5 +2949,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d80df886ec5f": {
+  "identity": {
+   "one_liner": "面向 Firebase 的无依赖 React Hooks 库，含 6 个模块",
+   "review": "react-firehooks 是一个用于 Firebase 的 React Hooks 集合，不依赖其他运行时包。它包含 app-check、auth、database、firestore、messaging、storage 六个模块，Hooks 可从主入口或按模块子路径导入以利于 tree-shaking。要求 Firebase 10.5.0+ 与 React 16.8.0+。其代码库为全新编写，导出与 react-firebase-hooks 几乎相同的 Hooks，采用 MIT 许可。",
+   "highlights": [
+    "提供覆盖 app-check、auth、database、firestore、messaging、storage 六个模块的 React Hooks",
+    "支持通过 react-firehooks/<module> 子路径导入，用于改善 tree-shaking 和包体积",
+    "不包含运行时依赖，兼容 Firebase 10.5.0+ 与 React 16.8.0+"
+   ],
+   "use_cases": [
+    "在 React 应用中以 Hooks 方式读取和写入 Firebase 数据（如 Firestore、Realtime Database）",
+    "在组件中集成 Firebase 身份认证、App Check、消息推送或存储功能",
+    "需要按模块引入以控制打包体积的 Firebase + React 项目"
+   ]
+  },
+  "sha": "d80df886ec5f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c21ff0ce306": {
+  "identity": {
+   "one_liner": "自托管 OPNsense 防火墙群管理平台，基于 PHP/MySQL，按客户与站点分组。",
+   "review": "OPNManager 是一个自托管 Web 应用，用于集中监控、备份和更新多台 OPNsense 防火墙，面向 MSP 和 IT 团队。防火墙按客户与站点分组，Agent 以 OPNsense 插件形式每两分钟签到上报遥测。更新通过 canary/pilot/production 环逐层手动推进，避免同时更新 CARP 对成员。配置备份需手动标记基线后比对漂移，不做自动恢复；AI 安全报告默认关闭。",
+   "highlights": [
+    "Agent 每 2 分钟签到，上报网关延迟、VPN 隧道、CARP、服务状态、证书到期及吞吐/CPU/内存/磁盘趋势",
+    "配置按计划备份并支持标记基线做漂移比对，差异按规则描述呈现，无自动恢复",
+    "更新以活动形式经 canary/pilot/production 环手动推进，CARP 对成员不同时更新"
+   ],
+   "use_cases": [
+    "托管服务商按客户和站点分组管理多台客户防火墙",
+    "IT 团队集中监控防火墙连通性健康并处理事件而非告警邮件",
+    "在维护窗口内分批灰度推送防火墙系统更新"
+   ]
+  },
+  "sha": "0c21ff0ce306",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c5e78ff6022b": {
+  "identity": {
+   "one_liner": "开源可自托管的聊天平台，提供文字频道、语音、视频与屏幕共享。",
+   "review": "Voxpery 是一个开源、可自托管的社区聊天平台，提供文字频道、私信、语音频道、屏幕共享和内容管理功能，可在浏览器使用或安装 Windows、macOS、Linux 桌面客户端。技术栈为 Rust/Axum、React/TypeScript、PostgreSQL、Redis、LiveKit 和 Tauri，可使用 Docker Compose 部署完整组件（含 LiveKit、PostgreSQL、Redis）。采用 AGPL-3.0 许可证，README 提及其规模仍较小、集成与企业工具不如大型平台。",
+   "highlights": [
+    "支持文字频道、私信、语音频道、屏幕共享与管理功能",
+    "提供浏览器访问及 Windows/macOS/Linux 桌面应用（.deb、.rpm、Flatpak、AUR），桌面端基于 Tauri",
+    "可通过 Docker Compose 部署 Web 应用、服务端、LiveKit、PostgreSQL 和 Redis，并支持数据导出与账户删除"
+   ],
+   "use_cases": [
+    "需要自托管并掌控数据的社区聊天部署",
+    "在浏览器或桌面端进行文字与语音协作、屏幕共享",
+    "基于 Rust/Axum 与 LiveKit 技术栈进行二次开发或贡献代码"
+   ]
+  },
+  "sha": "c5e78ff6022b",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "81b9cbbfd052": {
+  "identity": {
+   "one_liner": "Rust 嵌入式向量数据库，支持元数据过滤、持久化及可选 Python/WASM 接口",
+   "review": "VecStore 是一个以 Rust 库形式嵌入应用的向量数据库，可将向量与元数据一同存储、按相似度检索并持久化到磁盘；通过 Cargo feature 提供可选的 Python 与 WebAssembly 接口。项目处于 alpha 阶段（0.1.x），API 与文件格式可能变更，README 建议评估时使用可再生数据。GPU、server、分布式等组件为可选依赖，默认快速上手示例未覆盖这些配置。",
+   "highlights": [
+    "支持向量与元数据一同存储，检索时可按元数据过滤",
+    "提供持久化能力，示例中演示保存后重新打开 store",
+    "通过 Cargo feature 提供可选 Python 与 WASM 接口，GPU/server/embedding/分布式为可选组件"
+   ],
+   "use_cases": [
+    "需要在 Rust 应用内嵌向量检索且数据不出应用进程的场景",
+    "带元数据过滤条件的相似记录搜索",
+    "通过 Python 接口或 WASM 在 Python 项目或浏览器环境中调用向量存储"
+   ]
+  },
+  "sha": "81b9cbbfd052",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe4c316be6fa": {
+  "identity": {
+   "one_liner": "基于摄像头姿态识别的运动陪练与校园运动社区，前后端一体部署。",
+   "review": "MoveMate 是一个整合训练计划、AI 动作计数、语音陪练与校园组局功能的运动社区项目，面向校园运动人群。前端用 React 18 + TypeScript + MediaPipe 在浏览器本地做姿态分析，后端支持 Express + node:sqlite 本机部署，或 Cloudflare Workers + Durable Objects 云端部署。动作库含 1,329 项，但仅 384 项有照片示范、43 个支持摄像头识别；素材文件不包含在 Git 仓库中，完整构建需单独配置。",
+   "highlights": [
+    "摄像头动作识别在浏览器本地经 MediaPipe 分析，支持 20 种动作的自适应识别与三种姿态模型档位",
+    "支持本机部署（Express + node:sqlite，无需额外安装 PostgreSQL/Redis）与 Cloudflare Workers + Durable Objects 云端部署两种运行方式",
+    "包含训练计划模板、XP 成长体系、找搭子组局（发局/聊天/签到/到场确认）与可选小智语音接入"
+   ],
+   "use_cases": [
+    "校园用户进行组队运动活动与个人训练记录管理",
+    "在本地部署一个带摄像头动作计数与训练计划的健身应用",
+    "需要图文动作库浏览与训练历史导入导出数据的场景"
+   ]
+  },
+  "sha": "fe4c316be6fa",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2661,5 +2661,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "328866a5a447": {
+  "identity": {
+   "one_liner": "本地优先的编码代理会话分析工具，读取多代理日志生成可检索的 SQLite 档案",
+   "review": "Decant 由 Dosu 开发，读取 Claude Code、Codex、Gemini CLI、Cursor CLI 等编码代理在本机写入的会话日志，索引到 ~/.decant 下未加密的 SQLite 档案并提供全文检索。运行时不发出网络请求，通过本地 Web UI 或 CLI 查看 token、成本与耗时统计。支持 macOS/Linux，暂无原生 Windows 二进制，档案含会话中的代码与凭据，权限为 owner-only。",
+   "highlights": [
+    "支持读取 Claude Code、Codex、Gemini CLI、OpenCode、Cursor CLI、GitHub Copilot CLI 及 VS Code Copilot Chat 的会话日志，并可导入 ATIF 轨迹",
+    "将所有会话写入单个 SQLite 档案，提供针对提示、响应、工具名称与输入的全文检索，并统计 token、估算成本、上下文窗口与代理耗时",
+    "提供本地 Web UI、CLI（支持 --json 与 --db 等全局参数）以及附带 OpenAPI 3.1 契约的本地 HTTP API，支持导出 Markdown、JSON、trajectory-v1 与 ATIF 格式"
+   ],
+   "use_cases": [
+    "按代理、模型、项目、仓库、结果和日期查看编码代理的 token 与成本消耗及文件热点、工具和 MCP 使用情况",
+    "全文检索本地留存的历史会话内容与完整对话记录，或导出为 HTML 报告用于分享前的审阅",
+    "在不联网的环境中对多个编码代理的会话日志进行本地索引与查询"
+   ]
+  },
+  "sha": "328866a5a447",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bccfb62b23c3": {
+  "identity": {
+   "one_liner": "面向 JVM 的轻量数据库映射库，通过注解接口在运行时自动生成实现",
+   "review": "Weightless 是运行于 JVM 的数据库映射库，当前支持 MongoDB。开发者定义普通 Java 类和带 @Create 等方法/参数级注解的 Access 接口，库在运行时自动实现该接口，无需手写实现类；通过连接串构建实例后用 get() 获取接口实例。定位为低门槛、少定制项的设计，可通过同一数据库逐个集合迁移脱离该库。经 Maven 引入，当前版本 0.1.1-beta。",
+   "highlights": [
+    "通过注解接口在运行时自动生成数据访问实现，无需手写实现类",
+    "当前支持 MongoDB，以 mongodb:// 连接串配置数据库",
+    "经 Maven Central 提供 weightless-orm 依赖"
+   ],
+   "use_cases": [
+    "需要将 Java 对象存入 MongoDB 并快速建立数据库连接的项目",
+    "希望以接口+注解方式定义数据操作、减少实现代码的开发流程",
+    "项目成熟后需逐个集合从该库迁移到自定义方案、保持同一数据库的场景"
+   ]
+  },
+  "sha": "bccfb62b23c3",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ce74718e88fc": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地证据式记忆系统，单 Rust 二进制加 SQLite 存储",
+   "review": "Kimetsu 是一个为 Claude Code、Codex 等代理提供记忆的 Rust 工具，每项目一个 SQLite 文件。默认记忆管道不调用 LLM，使用 FTS5、本地嵌入和本地重排进行检索；通过引用机制提升有效记忆、按半衰期衰减失效建议。注意基准数据为作者自报且部分为抽样切片，LongMemEval 仅用 200 题子集。",
+   "highlights": [
+    "默认存储与检索流水线零 LLM 调用，本地运行、可离线使用",
+    "支持通过 MCP 接入 Claude Code、Codex、Cursor、Grok Bot、Pi、OpenClaw 等宿主",
+    "提供 brain export/import 打包共享，导出前自动脱敏凭据与 PII，支持 Ed25519 签名与密钥白名单隔离"
+   ],
+   "use_cases": [
+    "希望编码代理跨会话保留项目约定、失败模式与常用命令的开发团队",
+    "离线或不希望记忆数据出本机的环境",
+    "通过导出/导入签名包为新成员或新机器快速分发项目记忆"
+   ]
+  },
+  "sha": "ce74718e88fc",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "417fb6c41a9f": {
+  "identity": {
+   "one_liner": "DSH 聊天驱动的数据库管理插件，覆盖 9 种数据库并内置项目级授权与审计",
+   "review": "这是运行于 DSH 宿主的插件，通过单一 DatabaseManager 工具让模型在对话中执行查询、写语句、脚本与数据传输，并配套右侧栏管理台与 SQL 控制台。授权按项目路径存储 ro/rw，危险语句需一次性 challengeId 确认，全部执行追加写入 audit.jsonl。支持 MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦、SQL Server、Redis、MongoDB；需 DSH 桌面端 0.2.0-rc.2+ 与 Node.js ≥ 22，Redis 仅以 envelope 表降级参与传输。",
+   "highlights": [
+    "提供查询、执行、schema 浏览、分页预览与沙箱脚本（node:vm，60 秒超时强杀，仅注入 db 句柄）六类 action",
+    "实现项目路径→连接→ro/rw 三级授权，授权变更立即作废旧会话；危险语句经绑定语句 SHA256、5 分钟有效的一次性 challengeId 确认",
+    "支持 8 种 kind 的原生表级数据传输与自动建表，含 insert/ignore/replace/truncate 写入模式与 keyset/范围/偏移分页策略"
+   ],
+   "use_cases": [
+    "在 DSH 对话中按项目授权查询、浏览与写入多种关系型和 NoSQL 数据库",
+    "通过右侧栏 SQL 控制台进行多标签编辑、事务执行与结果导出",
+    "在同类或异构数据库之间进行库表级数据迁移（Redis 经 __redis_keys envelope 降级参与）"
+   ]
+  },
+  "sha": "417fb6c41a9f",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2819,5 +2819,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dc0121ecf155": {
+  "identity": {
+   "one_liner": "基于 MCP 协议的 Apache IoTDB 服务器，支持树模型与表模型两种 SQL 方言的查询交互。",
+   "review": "该项目实现 Model Context Protocol 服务端，用于连接 Apache IoTDB 时序数据库，供 MCP 宿主代理系统调用。它按 IOTDB_SQL_DIALECT 配置区分树模型与表模型两套工具：树模型提供元数据查询、SELECT、批量只读执行、CSV/Excel 导出及 AINode 模型推理；表模型提供 read_query、list_tables、describe_table 等工具。权限默认为 advisory 模式，由宿主代理负责用户确认；可通过环境变量配置 strict 强制阻断。连接目标需经显式登录验证后注册，密码在响应中被脱敏。不暴露资源和 prompts。",
+   "highlights": [
+    "支持 Tree 与 Table 两种 SQL 方言，通过 IOTDB_SQL_DIALECT 环境变量切换",
+    "提供批量只读 SQL 并行执行与 ResultStore 分页读取工具，含并发数、超时和行数/字节配额限制",
+    "查询结果可导出为 CSV 或 Excel 文件；权限模型默认 advisory，可配置为 strict 模式由服务端阻断操作"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端对 IoTDB 执行 SQL 查询与元数据浏览",
+    "将时序查询结果批量导出为 CSV/Excel 文件",
+    "调用 AINode 注册模型对 IoTDB 数据执行推理预测"
+   ]
+  },
+  "sha": "dc0121ecf155",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c85d3a230f37": {
+  "identity": {
+   "one_liner": "连接 MongoDB 分子数据库的跨平台分子及属性可视化浏览器",
+   "review": "stk-vis 是一款跨平台桌面应用，用于浏览本地或远程 MongoDB 分子数据库中的分子及其属性。分子由配套 Python 库 stk 写入数据库，用户只需下载应用并填入连接 URL 即可查看。功能包括 3D 交互渲染、2D 投影、属性表格、按属性排序及构建单元溯源；支持公共或带用户权限的私有数据库。",
+   "highlights": [
+    "提供 3D 交互式分子渲染与 2D 分子投影，两者均可开关",
+    "将数据库中存入的分子属性以表格形式展示，并支持按属性值排序",
+    "对由构建单元构成的分子，可逐级查看其构建单元来源"
+   ],
+   "use_cases": [
+    "计算化学团队存入分子，合成协作方通过连接 URL 浏览并筛选候选分子",
+    "浏览 stk 进化算法运行后沉积到数据库中的分子结果",
+    "个人用户将大量分子文件集中到数据库后统一管理与查看"
+   ]
+  },
+  "sha": "c85d3a230f37",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d346930d522c": {
+  "identity": {
+   "one_liner": "开源 MIT 协议的 Next.js SaaS 启动套件，内置认证、支付与管理面板。",
+   "review": "这是一个基于 Next.js 16、TypeScript、Prisma 和 PostgreSQL 的 SaaS 应用模板，集成 Better Auth 认证与 Stripe 支付，适合希望自建订阅制产品的开发者。项目以 MIT 协议发布，支持自托管，无需专有 CLI 或框架层；Stripe Checkout、Webhooks、管理面板、i18n、邮件事务等功能均包含在免费层中。运行需 Node 24+ 与 PostgreSQL 数据库，各功能通过环境变量按需启用。",
+   "highlights": [
+    "提供 Better Auth 认证（Google/GitHub OAuth、magic link、邮箱密码、自托管 TOTP 两步验证与会话管理）",
+    "提供 Stripe Checkout、Customer Portal、签名验证的 Webhooks、订阅与一次性支付、促销码及 PDF 发票",
+    "内置管理面板（用户管理、搜索分页、MRR 指标）、MDX 博客、next-intl 国际化与 Vitest/Playwright 测试"
+   ],
+   "use_cases": [
+    "开发多层级订阅或一次性付费的 SaaS 产品",
+    "需要自托管、数据存储在自有 PostgreSQL 数据库中的应用",
+    "构建面向多语言用户、需要内容博客与 SEO 支持的产品站点"
+   ]
+  },
+  "sha": "d346930d522c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c5113c251caf": {
+  "identity": {
+   "one_liner": "基于 Jupyter Notebook 的数据分析示例集，包含多个公开数据集分析案例。",
+   "review": "这是一个以 Jupyter Notebook 为载体的数据分析示例集合，包含印度进出口、美国边境口岸、波士顿住房、印度犯罪率、员工薪酬、印度军费等六个主题的分析。面向数据分析入门者，需 Python 3.6+ 及 numpy、pandas、matplotlib、seaborn、sklearn 等依赖。README 未说明各分析的代码结构细节。",
+   "highlights": [
+    "包含六个公开数据集的分析笔记本：印度进出口、美国边境过境、波士顿住房、印度犯罪率、员工薪酬、印度军费",
+    "依赖 numpy、pandas、matplotlib、seaborn、sklearn 实现",
+    "采用 MIT 许可证开源，支持 Fork 后贡献改进"
+   ],
+   "use_cases": [
+    "数据分析初学者作为 Jupyter Notebook 入门练习材料",
+    "参考特定数据集（如进出口、住房数据）的分析流程",
+    "参与 Hacktoberfest 等开源贡献活动"
+   ]
+  },
+  "sha": "c5113c251caf",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30fe1f1bcaa5": {
+  "identity": {
+   "one_liner": "华为云开发隧道服务，经云端网关中继访问本地服务，无需公网入站端口。",
+   "review": "DevBridge 是华为云提供的开发隧道服务，用于在不开放公网入站端口的前提下远程访问本地服务。其机制为 Host 与 Connect 两端均向云端 Gateway 发起出站 WebSocket 连接，控制信道传递会合信令，数据信道以 SSH over WebSocket 实现端口转发，认证采用 JWT。提供 CLI 与 Go SDK 两种使用方式，支持隧道与端口管理、Token 签发、自动重连等能力。该项目声明无 SLA，不适用于生产环境或关键数据。",
+   "highlights": [
+    "Host 与 Connect 均通过出站 WebSocket + TLS 1.3 连接 Gateway，Host 侧无需公网入站端口或防火墙规则",
+    "提供隧道管理、端口绑定（HTTP/HTTPS/Auto、匿名访问）、JWT Token 签发、SSO/API Key 认证及自动重连等能力，支持 CLI 与 Go SDK",
+    "CLI 支持 HTTP echo、URI ping 调试工具及中英双语输出，Go SDK 以 Go API 形式提供 CLI 核心能力"
+   ],
+   "use_cases": [
+    "开发者在无公网 IP 或不便开放入站端口的设备上，向他人或远端环境暴露本地运行的开发服务",
+    "在本地设备与远程设备间建立端口转发，通过本地监听器访问远端隧道",
+    "以 Go SDK 集成隧道与端口管理能力到自有工具链中"
+   ]
+  },
+  "sha": "30fe1f1bcaa5",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

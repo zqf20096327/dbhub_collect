@@ -2834,5 +2834,136 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "649c63e29fee": {
+  "identity": {
+   "one_liner": "基于 RHEL/Fedora/CentOS 的 MongoDB 容器镜像，面向 OpenShift 使用",
+   "review": "该仓库包含用于 OpenShift 的 MongoDB 镜像 Dockerfiles，用户可在 RHEL、Fedora 和 CentOS 三种基础镜像间选择。README 未列出受支持的 MongoDB 版本与变体，使用细节需查阅 OpenShift 官方文档，适合需要在 OpenShift 上运行 MongoDB 的用户。",
+   "highlights": [
+    "提供 MongoDB 容器镜像的 Dockerfiles",
+    "支持 RHEL、Fedora、CentOS 三种基础镜像选择",
+    "面向 OpenShift 及一般容器使用"
+   ],
+   "use_cases": [
+    "在 OpenShift 集群中部署 MongoDB",
+    "基于 RHEL/Fedora/CentOS 构建自定义 MongoDB 镜像"
+   ]
+  },
+  "sha": "649c63e29fee",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e85b403a6351": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 MPV 的多源聚合流媒体播放应用，支持影视、动漫与 IPTV。",
+   "review": "Nivio 是一个 Flutter 编写的开源流媒体客户端，聚合电影、剧集、动漫与直播 IPTV 的元数据和播放链接，本身不托管内容。集成 Rust P2P 引擎（rqbit）实现磁力链边下边播，通过定制 mpv 构建在 Android 上输出 HDR10/HLG 与硬件杜比视界。面向想要自建播放前端的用户，自托管需配置 Firebase 项目与 TMDB API Key。",
+   "highlights": [
+    "支持磁力链接的即时 BT 流式播放，内嵌 Rust rqbit 引擎通过 C-FFI 绑定",
+    "Android 上实现 HDR10/HLG 真实输出、硬件杜比视界解码及 HDR 转 SDR 色调映射",
+    "支持 AniList、MyAnimeList、Simkl 双向同步观看记录，及 M3U/Xtream Codes 的 IPTV 播放"
+   ],
+   "use_cases": [
+    "在 Android 手机、Android TV/Google TV、Windows 与 Linux 上播放多源影视与动漫",
+    "通过 M3U 播放列表或 Xtream Codes 观看直播电视与体育频道",
+    "自托管部署：需自行准备 Firebase 项目、TMDB API Key，可选配置 Supabase 以启用 Watch Party 同步观看"
+   ]
+  },
+  "sha": "e85b403a6351",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5fea91d5eaa2": {
+  "identity": {
+   "one_liner": "面向高校图书馆的 Spring Boot REST API，以 Docker Compose 与 PostgreSQL 运行",
+   "review": "Libro 是为 Aklan State University（ASU-CCS）图书馆编写的图书管理系统 REST API，管理实体书目副本、用户账户和借阅记录。每条目录记录对应一册实体副本，借阅期 14 天、每人最多 3 笔在借、逾期禁止新借。技术栈为 Java 25 / Spring Boot 4.1.2 / PostgreSQL 18，Flyway 管理数据库迁移，通过 HS256 JWT Bearer 做无状态认证，四个角色在路由与服务层控制。部署需要 Docker Engine 与 Compose 插件，通过 `docker compose up --build` 启动，`.env` 需自行配置数据库凭据、管理员密码哈希和 JWT 密钥。Swagger UI 默认关闭。",
+   "highlights": [
+    "支持按书名、作者、类型或替换成本检索、筛选、排序、分页副本，并提供馆藏与类型统计",
+    "实现 Flyway 迁移、Hibernate 启动时 schema 验证、Testcontainers 集成测试和行级锁以防止并发重复借出",
+    "通过 Docker Compose 部署，暴露 /livez 与 /readyz 健康探针，并在私有管理端口提供 Prometheus 指标"
+   ],
+   "use_cases": [
+    "高校图书馆或类似机构管理实体书籍借阅",
+    "需要 JWT 认证、角色权限控制和借阅规则限制的多用户 API 场景",
+    "学习 Spring Boot + PostgreSQL + Docker Compose 完整交付流程的项目参考"
+   ]
+  },
+  "sha": "5fea91d5eaa2",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dfe4f8ca5d11": {
+  "identity": {
+   "one_liner": "面向 Spigot 插件开发的模块化 Java 库",
+   "review": "PluginBase 是一个用于构建 Spigot 插件的模块化 Java 库，分为 core、games、sql、mongo、redis 等模块。核心模块提供调度器、文本与本地化、GUI、命令框架（Lamp）等；games 模块用状态机方式组织多阶段小游戏；数据模块基于 HikariCP、MongoDB 和 Redis pub-sub。要求 Java 17+，Spigot 1.8.8+，Adventure API 需 Paper。",
+   "highlights": [
+    "包含 core、games、sql、mongo、redis 五个模块，提供调度、文本、GUI、命令框架、小游戏状态系统及 SQL/MongoDB/Redis 支持",
+    "SQL 模块基于 HikariCP 连接池，支持预处理语句、结果集处理与同步/异步查询",
+    "基于 Redis 发布订阅实现跨服通信，支持对象传输"
+   ],
+   "use_cases": [
+    "开发包含多阶段流程的 Minecraft 小游戏插件",
+    "需要连接 SQL/MongoDB 数据库或实现 Redis 跨服通信的插件",
+    "需要 HEX 颜色、Adventure 文本与本地化/翻译系统的插件"
+   ]
+  },
+  "sha": "dfe4f8ca5d11",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3e6712d5adda": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式多模型数据库，融合图、文档与 HNSW 向量检索",
+   "review": "BikoDB 是一个以 Rust workspace 组织的嵌入式图数据库运行时，将并发图引擎、文档存储、HNSW 向量索引与 SQL/Cypher/Gremlin 子集查询解析器整合在同一个 Database 门面之下，主要面向在 Rust 进程内集成多模型存储的开发者。图核心与嵌入式 API 已标记为稳定，查询以读操作为主；向量搜索、HTTP 路由、集群与 Python/Node 绑定均为实验性，跨模型事务与冲突检测尚未形成公开契约。通过 cargo build 构建即可运行，MIT 许可。",
+   "highlights": [
+    "单一代码库提供图（节点/边）、文档集合（嵌套字段过滤）与 HNSW 向量索引三种模型及跨模型桥接方法",
+    "支持 SQL、Cypher、Gremlin 三种语言的文档化读取子集（如 MATCH/WHERE/RETURN、g.V() 遍历等）",
+    "内置图事务层（缓冲写入、commit/rollback、可选 WAL 提交流程）及 ResourceMonitor、AccessTracker、EXPLAIN 等观测原语"
+   ],
+   "use_cases": [
+    "需要在 Rust 应用内嵌运行的图数据存储与图算法计算",
+    "同一数据集上混合图遍历、文档过滤查询与向量相似度检索的场景",
+    "使用 Cypher 或 Gremlin 子集语法读取图数据的嵌入式集成开发"
+   ]
+  },
+  "sha": "3e6712d5adda",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "72294549c09c": {
+  "identity": {
+   "one_liner": "PHP 流式 SQL 查询构建器，生成 SQL 语句与参数数组",
+   "review": "EasyQuery 是一个 PHP 库，用于以链式方法构建 SQL 语句，build() 返回带占位符的 SQL 和分离的参数数组，由调用方通过 PDO、MySQLi 或 FlightPHP SimplePdo 等连接执行。支持 SELECT/INSERT/UPDATE/DELETE/COUNT、JOIN、子查询、UNION、批量写入及 raw() 原生表达式，通过 Composer 安装或手动引入文件，无必选依赖，不负责数据库连接本身。",
+   "highlights": [
+    "链式 API 构建 SELECT/INSERT/UPDATE/DELETE/COUNT，支持 JOIN、子查询、UNION 与聚合函数",
+    "build() 返回 sql 与 params 数组，参数绑定由数据库驱动处理",
+    "提供 insertBatch/updateBatch/upsertBatch/deleteBatch、when() 条件链、raw()/rawSafe() 原生表达式"
+   ],
+   "use_cases": [
+    "与 PDO、MySQLi 或 FlightPHP SimplePdo 等数据库连接配合生成查询",
+    "需要以参数化方式构建含 JOIN、聚合、批量写入的 SQL 语句",
+    "动态条件查询（如筛选排序字段来自用户输入）需配合 safeIdentifier() 校验列名"
+   ]
+  },
+  "sha": "72294549c09c",
+  "source": "readme",
+  "generated_at": "2026-11-08",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
