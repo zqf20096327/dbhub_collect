@@ -19,7 +19,7 @@ on:
   workflow_dispatch:           # 手动触发（可勾选重试拒收 / 调批量，吃满单窗 6h）
     inputs:
       retry_rejected:
-        description: '同时重试历史拒收项（捞回 944 条用）'
+        description: '同时重试历史拒收项（同 sha 拒收也重跑）'
         type: boolean
         default: false
       max_items:
@@ -27,9 +27,11 @@ on:
         type: number
         default: 50000
       mode:
-        description: '解析模式（v4=判定卷·最新，v4t=文本卷·头部，v3/v2=旧版回滚）'
+        # 2026-11-08 收敛：v3/v2 已无旧缓存可续（G2 层化删除），选中=空缓存全量
+        # 重烧旧通道，非回滚；如需真回滚走 pre-g2 tag + 备份恢复，不走 dispatch。
+        description: '解析模式（v4=判定卷·最新，v4t=文本卷·头部）'
         type: choice
-        options: [v4, v4t, v3, v2]
+        options: [v4, v4t]
         default: v4
 permissions:
   contents: write
@@ -52,13 +54,13 @@ jobs:
 
       - run: pip install requests
 
-      # 库名候选提名（README 更新后刷新；全文扫描，无 API 成本）
-      - name: db_scan（刷新候选库清单）
-        run: python interpret/db_scan.py
+      # 2026-11-08 起 db_scan 步移除：v4 判定卷 cands={} 不投喂、v4t/desc/词控三
+      # 层均不读 db_scan.json（下游 dbhub_page/dbhub_kb 亦无消费，已验证），唯一
+      # 消费者 v3/v2 回滚模式已随旧缓存退役（G2 层化）。数据文件留在仓里不刷新。
 
       # 断点续跑：sha 缓存命中自动跳过；额度耗尽（1113）脚本自带窗口等待。
       # 定时窗预算 100min（给 db_scan 和提交留余量）；手动触发吃满 6h
-      - name: AI 解读（v4 判定卷默认；dispatch 可切 v4t 文本卷 / v3 旧版回滚）
+      - name: AI 解读（v4 判定卷默认；dispatch 可切 v4t 文本卷）
         env:
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
           AI_BASE_URL: https://open.bigmodel.cn/api/coding/paas/v4
@@ -119,7 +121,7 @@ jobs:
           git config user.name "zqf20096327"
           git config user.email "zqf20096327@users.noreply.github.com"
           git add state/interp state/interp_state.json \
-                  state/db_scan.json state/manual_review.json
+                  state/manual_review.json
           [ -d state/clean_delta_shards ] && git add state/clean_delta_shards \
                   || echo "::warning::clean_delta_shards 未生成（B1 落档缺失，解读本体不受影响）"
           git diff --cached --quiet && { echo "无变更"; exit 0; }
