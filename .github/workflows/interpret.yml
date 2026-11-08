@@ -78,6 +78,41 @@ jobs:
           python interpret/interpret.py --mode "$MODE" --concurrency 4 \
             --max-items "$LIMIT" --max-minutes "$BUDGET" $EXTRA
 
+      # 四层全覆盖（1108 起）：v4 主步之外，文本卷/desc/词控做增量补跑——定时窗与新
+      # 仓从此四层都有覆盖（此前只有 v4 夜跑，新仓的 text/desc/词控无人写）。
+      # continue-on-error：任一层失败只告警不拖死其他层与提交步（层内断点自会续跑）。
+      - name: 文本卷增量（v4t·新仓补身份）
+        if: ${{ github.event.inputs.mode == '' || github.event.inputs.mode == 'v4' }}
+        continue-on-error: true
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: https://open.bigmodel.cn/api/coding/paas/v4
+          AI_MODEL: glm-5.3-flash
+        run: |
+          python interpret/interpret.py --mode v4t --concurrency 4 \
+            --max-items 400 --max-minutes 40
+
+      - name: desc 降级层（无 README 新仓）
+        if: ${{ github.event.inputs.mode == '' || github.event.inputs.mode == 'v4' }}
+        continue-on-error: true
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: https://open.bigmodel.cn/api/coding/paas/v4
+          AI_MODEL: glm-5.3-flash
+        run: |
+          python interpret/run_desc.py --concurrency 4 --max-minutes 10
+
+      - name: domain_tags 词控层增量
+        if: ${{ github.event.inputs.mode == '' || github.event.inputs.mode == 'v4' }}
+        continue-on-error: true
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: https://open.bigmodel.cn/api/coding/paas/v4
+          AI_MODEL: glm-5.3-flash
+        run: |
+          python interpret/run_domain_tags.py --concurrency 4 \
+            --max-items 400 --max-minutes 40
+
       # 与采集并行时推送可能撞车：重试 + 变基，最多 5 轮
       - name: 提交并推送状态
         run: |
