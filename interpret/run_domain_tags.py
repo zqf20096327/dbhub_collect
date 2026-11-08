@@ -65,12 +65,23 @@ def load_pairs(pool: dict[str, dict] | None = None) -> tuple[list[tuple[str, str
     """readme_state 里 done/oversized 且在池的 (fn, sha)；返回待办与跳过原因。"""
     rs = json.loads((STATE / "readme_state.json").read_text(encoding="utf-8"))
     pool = pool if pool is not None else load_pool()
+    # 2026-11-08 三层口径对齐（用户裁定：来源唯一）：补仓库静默黑名单，与
+    # interpret.py run()/run_text() 同源 config/exclude_repos.txt——400 家族
+    # 必败仓不再每窗重烧（此前本层缺这道过滤）
+    rb_p = ROOT / "config" / "exclude_repos.txt"
+    repo_bl: set = set()
+    if rb_p.is_file():
+        repo_bl = {ln.strip() for ln in rb_p.read_text(encoding="utf-8-sig").splitlines()
+                   if ln.strip() and not ln.startswith("#")}
     skip = Counter()
     seen_sha: dict[str, str] = {}
     pairs: list[tuple[str, str]] = []
     for fn, rec in (rs.get("items") or {}).items():
         if fn not in pool:
             skip["out_of_pool"] += 1
+            continue
+        if fn in repo_bl:
+            skip["repo_blacklist"] += 1
             continue
         if rec.get("status") not in ("done", "oversized"):
             skip["no_readme"] += 1
@@ -180,6 +191,10 @@ def main() -> int:
             skip["rejected_same_sha"] += 1
             continue
         todo.append((fn, sha))
+    # 2026-11-08 三层口径对齐：排序从字典序（继承 readme_state 迭代序）改为
+    # stars 降序——与 judge/v4t 同款。字典序在 limit 截断时样本全偏 0-9/A-Z
+    # 开头 tail 仓（G4-3 采样偏差同因），star 降序保证截断优先保头部
+    todo.sort(key=lambda x: -int((pool.get(x[0]) or {}).get("stars") or 0))
     if a.limit:
         todo = todo[:a.limit]
     log.info("待办 %d 条（跳过：%s）", len(todo),

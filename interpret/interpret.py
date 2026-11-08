@@ -1535,7 +1535,14 @@ def run_text(args):
         repo_bl = {ln.strip() for ln in _rb_p.read_text(encoding="utf-8-sig").splitlines()
                    if ln.strip() and not ln.startswith("#")}
     todo: list[tuple[str, str]] = []
-    n_skip = {"out_of_pool": 0, "below_star": 0, "no_readme": 0, "already": 0, "blacklist": 0}
+    n_skip = {"out_of_pool": 0, "below_star": 0, "no_readme": 0, "already": 0,
+              "blacklist": 0, "rejected_same_sha": 0, "mirror_same_sha": 0}
+    # 2026-11-08 三层口径对齐（用户裁定：来源唯一）：拒收守卫 + 班内镜像去重 +
+    # already 补台账，全部照 judge/词控同款——此前本层缺这三道，拒收 sha 每窗
+    # 重烧、同班 fork 双烧、镜像仓 fn 级台账有洞
+    rejected_sha = {v.get("sha") for v in text_store.state().values()
+                    if v.get("status") == "rejected"}
+    seen_sha: set[str] = set()
     for fn, rec in rstate.get("items", {}).items():
         if fn not in pool:
             n_skip["out_of_pool"] += 1
@@ -1551,8 +1558,17 @@ def run_text(args):
             n_skip["below_star"] += 1
             continue
         if sha in text_store:          # G1-6b：查重看文本层库存（裸 sha）
+            if text_store.state().get(fn, {}).get("status") != "done":
+                text_store.mark(fn, sha, "done")   # 补台账，不刷新已完成项的 at
             n_skip["already"] += 1
             continue
+        if sha in rejected_sha and not args.retry_rejected:
+            n_skip["rejected_same_sha"] += 1
+            continue
+        if sha in seen_sha:
+            n_skip["mirror_same_sha"] += 1
+            continue
+        seen_sha.add(sha)
         todo.append((fn, sha))
     todo.sort(key=lambda x: -((pool.get(x[0]) or {}).get("stars") or 0))
     total = len(todo)
