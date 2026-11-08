@@ -33,14 +33,14 @@ npx backupdrill backup
 
 ## Use it from Claude Code or Cursor
 
-The [`plugin/`](plugin/) folder is a plugin for Claude Code and Cursor. It teaches the agent to run `estimate`, `backup`, `drill` and `restore` for you, keeps your keys in a gitignored `.env.backupdrill` that the agent never opens, and always does a dry run before a restore. In Claude Code:
+The [`plugin/`](https://github.com/backupdrill/cli/tree/main/plugin) folder is a plugin for Claude Code and Cursor. It teaches the agent to run `estimate`, `backup`, `drill` and `restore` for you, keeps your keys in a gitignored `.env.backupdrill` that the agent never opens, and always does a dry run before a restore. In Claude Code:
 
 ```
 /plugin marketplace add backupdrill/cli
 /plugin install backupdrill@backupdrill
 ```
 
-Details are in [plugin/README.md](plugin/README.md).
+Details are in [plugin/README.md](https://github.com/backupdrill/cli/blob/main/plugin/README.md).
 
 ## Use it from Pi
 
@@ -50,7 +50,7 @@ This npm package is also a Pi package. Installing it gives Pi the same skill the
 pi install npm:backupdrill
 ```
 
-Start a new Pi session and ask it to back up your Supabase project or run a restore drill. The skill runs the CLI through `npx`, so Node.js 20 or newer has to be on your `PATH`. Everything else it needs, and where your keys go, is in [plugin/README.md](plugin/README.md).
+Start a new Pi session and ask it to back up your Supabase project or run a restore drill. The skill runs the CLI through `npx`, so Node.js 20 or newer has to be on your `PATH`. Everything else it needs, and where your keys go, is in [plugin/README.md](https://github.com/backupdrill/cli/blob/main/plugin/README.md).
 
 ## Usage
 
@@ -178,6 +178,8 @@ Prove a backup is restorable, without touching anything real — `drill` restore
 backupdrill drill                    # latest snapshot; add --snapshot <timestamp> to pick one
 backupdrill drill --verify-all-files # also checksum every Storage file, not just a sample
 ```
+
+After the restore, the drill counts the rows of every table in the sandbox and compares each count with the number of rows that table has in the backup file. One row more or less in any table fails the drill. The backup's count comes from reading the dump itself, not from your database, so this adds no queries against production; it costs the drill one extra read of the dump. Materialized views and partitioned parent tables have no rows of their own in the dump, and tables created by an extension hold rows the extension adds itself, so these are checked for being non-empty instead. `restore` runs the same comparison on the target project.
 
 Backups record your installed Postgres extensions in the manifest, and the drill pre-installs them in the sandbox before restoring — including switching to a pgvector-enabled sandbox image when your database uses `vector` columns.
 
@@ -332,7 +334,7 @@ Add the secrets under Settings → Secrets and variables → Actions:
 
 The action's README lists every input and output.
 
-Prefer a plain workflow file? [`examples/scheduled-backup.yml`](examples/scheduled-backup.yml) runs the backup without the action and without a drill. Copy it into your own repo at `.github/workflows/scheduled-backup.yml` and add the same secrets. (It lives under `examples/` here so GitHub doesn't try to run it in this repo.) It runs daily and can also be started by hand from the Actions tab.
+Prefer a plain workflow file? [`examples/scheduled-backup.yml`](https://github.com/backupdrill/cli/blob/main/examples/scheduled-backup.yml) runs the backup without the action and without a drill. Copy it into your own repo at `.github/workflows/scheduled-backup.yml` and add the same secrets. (It lives under `examples/` here so GitHub doesn't try to run it in this repo.) It runs daily and can also be started by hand from the Actions tab.
 
 Before switching to a **daily** schedule, read the egress-cost section above — every run is egress on your Supabase bill.
 
