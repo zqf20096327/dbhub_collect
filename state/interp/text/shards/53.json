@@ -3006,5 +3006,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b4674ffc00fa": {
+  "identity": {
+   "one_liner": "比较两个 MySQL/PostgreSQL/SQLite 数据库并生成双向迁移 SQL 的命令行工具",
+   "review": "DBDiff 比较本地或远程的两个数据库，生成可执行且带 DOWN 回滚的 schema 与数据迁移脚本，内置迁移运行器，也可配合 Flyway、Liquibase 等工具使用。适用于需要数据库版本控制的团队。需注意 enum 标签删除/重排等场景存在已知限制，且 Supabase 托管 schema 默认不在比较范围内。",
+   "highlights": [
+    "通过 --driver 支持 MySQL 8.0+、PostgreSQL 14+ 与 SQLite 3.x，用 DSN URL 连接本地或远程库",
+    "生成同一文件内的 UP/DOWN SQL，覆盖表、视图、触发器、函数、枚举、RLS 策略与数据等对象",
+    "内置 migration:up/down/status/validate/repair/baseline 运行器，并支持 YAML 配置忽略指定表或字段"
+   ],
+   "use_cases": [
+    "团队或企业中对数据库 schema 与数据变更做版本控制",
+    "在本地、远程或 Supabase 环境之间同步数据库结构",
+    "配合 Flyway、Liquibase、Laravel Migrations 等迁移工具生成变更脚本"
+   ]
+  },
+  "sha": "b4674ffc00fa",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6e4225992513": {
+  "identity": {
+   "one_liner": "Render 平台的 Django 示例应用，支持一键部署并连接 PostgreSQL。",
+   "review": "该仓库是按照 Render 快速入门指南创建的 Django 示例应用，配置为使用 Render 上的 PostgreSQL 数据库。面向希望在 Render 平台部署 Django 应用的开发者。部署方式包含两种：Fork 仓库后通过页面按钮一键部署，或参照官方文档手动部署。示例应用已部署在 django.onrender.com 可供访问。",
+   "highlights": [
+    "提供可直接一键部署到 Render 的 Django 示例应用",
+    "已配置为使用 Render 上的 PostgreSQL 数据库",
+    "提供手动部署的官方文档链接"
+   ],
+   "use_cases": [
+    "学习在 Render 平台部署 Django 应用的流程",
+    "作为 Django 加 PostgreSQL 项目的基础模板",
+    "演示 Render Blueprint 一键部署功能的使用"
+   ]
+  },
+  "sha": "6e4225992513",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7b522cd931eb": {
+  "identity": {
+   "one_liner": "drt 是基于 YAML 配置、以 CLI 运行的开源反向 ETL 工具",
+   "review": "drt 是一个开源反向 ETL 工具，将数据仓库中的数据同步到业务工具侧，采用 dbt 风格的 YAML 声明式配置并纳入 Git 管理。用户通过 drt init 初始化项目、drt plan 预览变更、drt apply 写入，支持 BigQuery、DuckDB、PostgreSQL、Snowflake 等源。内置 MCP 服务器和 Claude Code 技能，可用于 AI 环境中运行与调试同步。",
+   "highlights": [
+    "提供 drt plan / drt apply 工作流，apply 在数据或配置变更后拒绝写入，并支持 max_delete_pct 等删除防护",
+    "支持 write_policy: fill_empty 写入策略，仅填充目标为空的字段",
+    "内置 MCP 服务器（约 20 个工具）与 Claude Code 技能，提供连接器、CLI、同步引擎，Apache 2.0 协议"
+   ],
+   "use_cases": [
+    "将数据仓库中的模型结果同步回 Slack、HubSpot、Google Sheets 等业务工具",
+    "在 GitHub Actions、Dagster、Airflow、Prefect 等编排环境中以 CLI 方式运行同步",
+    "借助 MCP 服务器或 Claude Code 技能，在 AI 工具中生成、验证和运行同步配置"
+   ]
+  },
+  "sha": "7b522cd931eb",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "20a68f4e0cca": {
+  "identity": {
+   "one_liner": "本地优先的文档语义搜索工具，用嵌入向量存于 SQLite 实现检索。",
+   "review": "DocFinder 是一个运行在本机的语义文档搜索与问答桌面应用，支持 PDF、DOCX、PPTX、EPUB 等格式索引，嵌入向量存于 SQLite，内置本地 GGUF 模型并可接 Ollama 服务。需 Python 3.10+ 从源码运行或下载各平台安装包。许可证为 AGPL-3.0。",
+   "highlights": [
+    "支持 PDF、Word、PowerPoint、OpenDocument、HTML、EPUB、Markdown 等格式的语义搜索",
+    "提供基于本地模型的文档问答聊天，并可连接 Ollama 服务器更换嵌入与聊天模型",
+    "自动检测 GPU 运行时（Apple Metal/MPS、NVIDIA CUDA、AMD ROCm），含 100% 隐私模式阻止远程调用"
+   ],
+   "use_cases": [
+    "在不联网的本机环境中对多格式文档建立语义索引与检索",
+    "对私人文档进行本地问答，避免数据离开本机",
+    "利用自有 Ollama 服务器定制嵌入与聊天模型"
+   ]
+  },
+  "sha": "20a68f4e0cca",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8d4e0e0bcda4": {
+  "identity": {
+   "one_liner": "将 Apple Health 数据导出或同步至自有数据库的开源 iOS 应用与自托管栈",
+   "review": "PulsHealth 由 iOS 应用、自托管服务端和开放同步协议组成，用于将 iPhone/iPad 上的 Apple Health 数据导出为 CSV、JSON 或 JSONL 文件，或同步到用户自有的 PostgreSQL + TimescaleDB 数据库，并附带 Web 仪表盘、Grafana 和 API。应用只读取 Health 数据不做修改；自托管后端处于 0.x 预发布阶段，AI 工具读取的记录会共享给所选 AI 提供商。",
+   "highlights": [
+    "提供文件导出（CSV、JSON、JSONL）与数据库同步两种工作流，可指定健康数据类型、日期范围和格式",
+    "自托管栈基于 Docker，包含 PostgreSQL + TimescaleDB、Web 仪表盘、Grafana 和 API，支持只读 MCP 接入 AI 助手",
+    "包含开放同步协议及 Python + SQLite 接收端示例，并提供 Home Assistant 集成"
+   ],
+   "use_cases": [
+    "将 Apple 健康历史数据导出为文件或同步到自有 PostgreSQL 数据库，使用 SQL、Grafana 仪表盘进行查询与可视化",
+    "通过只读 MCP 工具让 AI 助手读取健康数据（注意记录会共享给所选 AI 提供商）",
+    "基于同步协议编写自定义接收端，或通过 Product API 构建应用与集成"
+   ]
+  },
+  "sha": "8d4e0e0bcda4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a5d03427dc33": {
+  "identity": {
+   "one_liner": "自托管的单文件工作数据库，人类与 AI 代理经同一引擎操作。",
+   "review": "weave 是一个 MIT 许可的自托管工作数据库，将空间、表、记录、双向关系与 Markdown 文档存于单个 SQLite 文件，由一个 Node 进程提供 Web UI、REST API、CLI 和内置 MCP 服务器。README 要求 Node ≥ 22.16，运行时依赖为 0，需从 git clone 运行，也可用 Docker。MCP 服务器默认列出 17 个工具，最多可开放 65 个。",
+   "highlights": [
+    "数据模型包含空间、表、实体，字段类型涵盖文本、日期、select、双向关系、lookup、rollup、公式、workflow 状态及多个 Markdown 文档字段",
+    "内置 stdio MCP 服务器（默认 17 个工具，可配至全部 65 个）、REST API 与 CLI，作用于同一数据文件",
+    "提供 undo 工具、文档修订版本（可浏览与恢复），以及基于 SQLite FTS5 的跨工作区 ⌘K 搜索"
+   ],
+   "use_cases": [
+    "在本地笔记本或自有服务器上托管工作数据库，数据留存于自有磁盘，无账号与遥测",
+    "将 Claude Code、Cursor、Gemini CLI 等 stdio MCP 客户端接入同一套表结构，由 AI 代理读写记录与文档",
+    "从一个 git checkout 或单个容器运行，通过 weav 云端备份加密归档或在工作区间迁移工作区"
+   ]
+  },
+  "sha": "a5d03427dc33",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

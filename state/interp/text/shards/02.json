@@ -2843,5 +2843,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "01bb2e5de256": {
+  "identity": {
+   "one_liner": "基于 SQLite 的分布式数据层库：本地 SQL 保持可用并支持同步与复制",
+   "review": "Sirannon 是一个开源 SQLite 库，让应用从本地文件扩展到 HTTP/WebSocket 服务和主从复制时复用同一套 SQL。核心引擎包含查询、事务、CDC、live queries、迁移、备份与加密；TypeScript 包是语言无关规范（packages/spec）的参考实现。设备同步为实验性功能；服务器默认拒绝网络 SQL，需设置 acceptSql: true。",
+   "highlights": [
+    "通过 SQLite 触发器实现 CDC，并支持 live queries 与 React useLiveQuery hook",
+    "主从复制使用 Hybrid Logical Clock 标记变更，经 gRPC 双向 TLS 传输，etcd 协调器负责主节点权威与故障转移",
+    "支持多驱动（better-sqlite3、Node、wa-sqlite、Bun、Expo）及 AEGIS-256/SQLCipher 4 静态加密"
+   ],
+   "use_cases": [
+    "将本地 SQLite 应用扩展为可通过 HTTP/WebSocket 访问的服务",
+    "离线优先的设备与服务器双向数据同步",
+    "需要主从复制与 etcd 故障转移的多节点集群"
+   ]
+  },
+  "sha": "01bb2e5de256",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3040,5 +3040,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6fc23364dd04": {
+  "identity": {
+   "one_liner": "自托管小型 VPN 管理面板：多协议节点管理，一人一条订阅链接",
+   "review": "Mistgate 是一个面向自用场景（家人、朋友、社区或小团队）的自托管 VPN 面板，支持 Hysteria2、VLESS REALITY 和 AmneziaWG 协议。它由两个 Go 静态二进制和 SQLite 组成，无需 Docker 和独立数据库，可从浏览器通过 SSH 添加节点，内置每 5 分钟的客户端视角健康检查与 Telegram 告警，并提供 MCP 接口供外部 AI 代理读取与规划变更。项目目前处于 beta 阶段，1.0 前设置、存储和节点协议仍可能变动，尚未支持 VMess、Trojan、Shadowsocks 等协议。",
+   "highlights": [
+    "支持 Hysteria2（含 Salamander 混淆与端口跳跃）、VLESS REALITY、AmneziaWG 2.0/3.1 及实验性 MTProto，节点添加通过浏览器 SSH 完成，包含 host key 固定与 UFW/firewalld 端口配置",
+    "每 5 分钟以客户端方式连接各节点做健康检查，节点上的 doctor 提供 21 项主机检查与 8 项需确认的修复；支持节点间加密中继与按网络的可达性探测（Globalping 等）",
+    "面板空闲内存 16-20 MiB，更新采用金丝雀分批发布与健康门控，节点可自动回滚；内置助手与 MCP 服务器可让 AI 代理读取节点、测试路径并提交待审批的变更"
+   ],
+   "use_cases": [
+    "为家人、朋友或小团队共享少量自有 VPN 服务器，每人一条订阅链接自动获取全部节点",
+    "通过 Telegram 告警和定时客户端视角检查，远程掌握多节点健康状况与流量",
+    "需要外部 AI 代理（通过 MCP）读取节点状态、测试路径并协助规划配置变更的运维场景"
+   ]
+  },
+  "sha": "6fc23364dd04",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "533986e70ddc": {
+  "identity": {
+   "one_liner": "面向 Roblox 的无锁事件溯源数据存储库，状态为经校验操作的折叠",
+   "review": "Ledger 是一个 Roblox 数据存储库，采用事件溯源模式：开发者不直接写入状态，而是提交带名称的变更操作（op），由自有 reducer 校验合法性后各服务器恰好保存一次。适用于 Roblox 游戏服务端开发，支持跨服写入离线玩家、最多 29 个键的事务、迁移等。通过 Wally、模型文件或 roblox-ts 安装，MIT 协议。",
+   "highlights": [
+    "无锁设计：状态由校验后的操作折叠生成，不使用会话锁，服务器崩溃后无需等待租约",
+    "支持事务，单次事务最多涉及 29 个玩家或键，全部成功或全部不执行",
+    "写入幂等，重试的写入只应用一次；操作带类型，写入时统一校验"
+   ],
+   "use_cases": [
+    "多服务器并发写入玩家数据（如金币扣减、限量道具售卖）需保持结果一致的 Roblox 游戏",
+    "跨服写入离线玩家数据或共享实体存储（如氏族、挂单列表、世界纪录）",
+    "全局计数器与交易进行中仍可变动的余额类场景"
+   ]
+  },
+  "sha": "533986e70ddc",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df31741d1fd4": {
+  "identity": {
+   "one_liner": "基于共享 SQLite 的四个图原生 MCP 服务器，供 MCP 客户端调用",
+   "review": "该项目是《Graph-Native Agents》第5-8章的配套实现，将四个 MCP 服务器打包：graph-memory（双时态记忆）、graph-rag（图检索）、graph-build（图构建）、graph-agent（技能规划）。为 zcode/Claude Code 等 MCP 客户端提供图原生能力。四个服务器共享一个 SQLite 存储、互不调用，可按需挂载。仅依赖 mcp 和 networkx，默认离线运行、零 API key；生成式步骤由调用方模型承担，服务端只做确定性图计算。",
+   "highlights": [
+    "提供 memory/rag/build/agent 四个 MCP 服务器，共享同一 SQLite 存储，服务器之间零相互调用",
+    "graph-memory 记录双时间戳、以 contradicts 边保留冲突记忆、支持按时间点查询与时间衰减；graph-rag 提供三种检索模式并返回带引用 ID 的证据三元组",
+    "运行时不做概率计算，检索、规划（A*）、验证均为确定性图计算，自带 55 条离线断言测试"
+   ],
+   "use_cases": [
+    "为 zcode、Claude Code、Cursor 等 MCP 客户端挂载跨会话图记忆与可审计检索",
+    "无网络、无 API key 环境下的文档抽取、图质量检查与技能规划",
+    "学习或复现《Graph-Native Agents》第5-8章中图原生 Agent 的工程实现"
+   ]
+  },
+  "sha": "df31741d1fd4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

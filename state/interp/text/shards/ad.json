@@ -2757,5 +2757,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6acd1078b121": {
+  "identity": {
+   "one_liner": "opencode 服务器的独立 Rust 实现，兼容 v1/v2 API",
+   "review": "ocserve 是 opencode 服务器的独立 Rust 实现，提供相同的 HTTP/SSE 接口，官方客户端无需修改即可连接。覆盖冻结于 1.19.5 的 v1 契约（188 项操作）与 2.2.5 的 v2 契约（169 项操作，需 OCSERVE_V2=1 开启 v2 专有集合）。支持增量清理数据库、会话导入与 systemd 用户服务安装，数据目录可经 OCSERVE_DATA_DIR 覆盖。",
+   "highlights": [
+    "实现 v1 契约 188/188 项操作与 v2 契约 169/169 项操作，经对冻结上游二进制的差分回放校验",
+    "v2 专有操作由 OCSERVE_V2=1 门控，未开启时对相应请求返回 JSON 404",
+    "以 SQLite 存储，执行增量 vacuum 与保留环，并提供从上游数据库导入会话的命令（支持 --limit、--session、--bulk、--force）"
+   ],
+   "use_cases": [
+    "在不运行上游 opencode 二进制的机器上，为官方 TUI 或 web 客户端提供同接口的服务端",
+    "需要将 opencode 历史迁移到新的本地数据目录并通过 import 命令采纳指定会话",
+    "通过 cargo install、预编译二进制或源码构建部署，可用附带脚本安装为 systemd 用户服务"
+   ]
+  },
+  "sha": "6acd1078b121",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

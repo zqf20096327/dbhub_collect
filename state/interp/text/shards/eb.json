@@ -2932,5 +2932,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2d5fb1038b31": {
+  "identity": {
+   "one_liner": "自托管的数据库备份工具，支持 PITR 与恢复验证",
+   "review": "Databasus 是一款基于 Docker 部署的开源备份工具，核心面向 PostgreSQL（物理与逻辑备份），也支持 MySQL、MariaDB、MongoDB 的逻辑备份。它通过 WAL 流实现时间点恢复（PITR），并在每次备份后启动数据库容器执行真实恢复以验证备份可用性。支持多存储目标、保留策略、加密与通知渠道，需自备加密密钥备份。",
+   "highlights": [
+    "支持 PostgreSQL 物理备份（全量+增量+WAL 流）实现时间点恢复（PITR），并支持 MySQL、MariaDB、MongoDB 逻辑备份",
+    "提供恢复验证机制：启动数据库容器执行真实恢复并生成逐表行数报告",
+    "备份文件采用 AES-256-GCM 加密，支持本地、S3、Azure Blob、FTP、SFTP 等多存储目标与 GFS 等保留策略"
+   ],
+   "use_cases": [
+    "需要 PostgreSQL 时间点恢复（PITR）能力的灾备场景",
+    "需要定期验证备份可用性而非仅校验文件完整性的运维流程",
+    "自托管环境中需要对多数据库、多存储目标统一管理备份的团队"
+   ]
+  },
+  "sha": "2d5fb1038b31",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "18a58b02a504": {
+  "identity": {
+   "one_liner": "DuckDB 的 Rust 绑定库，提供 rusqlite 风格的类型安全 API",
+   "review": "duckdb-rs 为 DuckDB 提供 Rust 封装，通过 libduckdb-sys 声明其 C API。开发者可执行 SQL、使用参数绑定，并经 Cargo feature 启用 Arrow、Parquet、JSON 读写、自定义表/标量函数及扩展构建。可用 bundled 特性从源码编译链接，或链接系统库。版本号第二位编码对应 DuckDB 版本。",
+   "highlights": [
+    "提供类型安全的 SQL 查询 API，接口设计参考 rusqlite",
+    "原生读写 Arrow、Parquet、JSON、CSV 格式",
+    "支持通过 vtab/vscalar 等特性创建自定义表函数、标量函数及可加载扩展"
+   ],
+   "use_cases": [
+    "在 Rust 应用中嵌入 DuckDB 执行分析查询与批量写入（appender API）",
+    "查询内存中的 Arrow RecordBatch 或直接读取 Parquet 文件",
+    "用 Rust 编写可加载或静态链接的 DuckDB 扩展"
+   ]
+  },
+  "sha": "18a58b02a504",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

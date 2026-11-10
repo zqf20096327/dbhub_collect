@@ -2949,5 +2949,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d4837d90da79": {
+  "identity": {
+   "one_liner": "C#/.NET 编写的 SQL 分布式数据库，Raft 复制的事务性 KV 存储层",
+   "review": "CamusDB 是用 C# 在 .NET 上实现的 SQL 分布式数据库，SQL 接口之下是 Raft 复制、支持事务的键值存储层。默认串行化隔离与强一致性，支持写时复制数据库分支、已删除对象恢复和 AS OF 历史读；底层使用 RocksDB 持久化，客户端经 JSON/HTTP 或 gRPC 访问。README 提示部分特性尚不成熟，API 与存储格式可能在版本间变化。",
+   "highlights": [
+    "默认串行化隔离，采用悲观两阶段锁、范围/谓词锁与 wait-die 死锁避免，跨分区写入经 Raft 上的两阶段提交协调",
+    "支持 CREATE DATABASE … BRANCH FROM 的写时复制分支、SHOW ORPHAN TABLES/RELINK TO 恢复已删除对象，以及 AS OF SYSTEM TIME 多版本历史读",
+    "同一引擎可编译为 WebAssembly 在浏览器运行，可一键启动三节点 Raft 集群演示"
+   ],
+   "use_cases": [
+    "需要串行化隔离与强一致性默认保障的事务型 SQL 工作负载",
+    "生产库的临时分支克隆、模式迁移演练、按 PR 的临时数据库",
+    "误删数据的读取恢复与历史时点查询"
+   ]
+  },
+  "sha": "d4837d90da79",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0babbcc170d3": {
+  "identity": {
+   "one_liner": "openGauss 社区的开源多主关系型数据库，采用存算分离 RAC 架构",
+   "review": "oGRAC 是 openGauss 社区开发的多主关系型数据库，采用存算分离架构，实现计算、内存、存储三层池化，通过全局分布式缓存、分布式 MVCC、分布式锁等技术支持集群多读多写，由 CMS、SQL 引擎、存储引擎、DSS 和工具组成。以 C 语言编写，使用 cmake/make 构建，依赖 GNU Bison 3.6.4+。提供单节点（仅限开发调试，不支持多写）和双节点两种部署形态，许可证为 MulanPSL-2.0。",
+   "highlights": [
+    "采用存算分离架构，各计算节点对等，任一节点均可执行 DDL/DML/DCL 并共享读写同一份存储数据",
+    "包含 CMS 集群管理服务、DSS 分布式存储服务，DSS 支持集中式和分布式存储形态",
+    "提供 smoke 精简回归用例集（28 个用例）和全量回归（201 个用例），自动化验证可通过三条命令完成"
+   ],
+   "use_cases": [
+    "需要集中式存储、多节点可写的关系型数据库部署场景",
+    "基于 openEuler 20.03/22.03/24.03 环境进行数据库源码编译、单元测试与二次开发",
+    "个人开发调试使用单节点模式（仅限开发验证，不适用于生产环境）"
+   ]
+  },
+  "sha": "0babbcc170d3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

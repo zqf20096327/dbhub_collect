@@ -18460,5 +18460,2108 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "dba52b9b2bd7+2": {
+  "fn": "datasifaw/MiniBank_Cpp",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "equal",
+    0,
+    7,
+    0,
+    7
+   ],
+   [
+    "delete",
+    7,
+    9,
+    7,
+    7
+   ],
+   [
+    "equal",
+    9,
+    31,
+    7,
+    29
+   ],
+   [
+    "replace",
+    31,
+    50,
+    29,
+    30,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    62,
+    30,
+    42
+   ],
+   [
+    "replace",
+    62,
+    74,
+    42,
+    43,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    90,
+    43,
+    59
+   ],
+   [
+    "replace",
+    90,
+    96,
+    59,
+    65,
+    [
+     "|Choix|Action|",
+     "|---|---|",
+     "|`1`|Sauvegarder la banque active dans `data/minibank.txt`|",
+     "|`2`|Charger `data/minibank.txt` et, après confirmation, restaurer son état|",
+     "|`3`|Demander explicitement la récupération de `data/minibank.bak` et, après confirmation, restaurer son état|",
+     "|`0`|Revenir au menu principal|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    161,
+    65,
+    130
+   ],
+   [
+    "delete",
+    161,
+    162,
+    130,
+    130
+   ],
+   [
+    "equal",
+    162,
+    174,
+    130,
+    142
+   ],
+   [
+    "delete",
+    174,
+    175,
+    142,
+    142
+   ],
+   [
+    "equal",
+    175,
+    176,
+    142,
+    143
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "ae17e0889e96+2": {
+  "fn": "alphafox02/ransack",
+  "clean_ver": "2",
+  "raw_lines": 18,
+  "ops": [
+   [
+    "equal",
+    0,
+    18,
+    0,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "|Capability|Status|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    32,
+    20,
+    32,
+    [
+     "|LTE survey (`cell_search` + MIB)|Validated OTA|LimeSDR Mini 2, live cells on bands 5 and 71|",
+     "|LTE SIB1 identity (PLMN/TAC/cell-id)|Link-margin limited|MIB decodes on weak signal; SIB1 needs a few dB more|",
+     "|5G NR survey + SIB1|Validated OTA|Live NR cell on n25|",
+     "|2G/GSM survey — gr-gsm on SDR|Validated OTA|Parse confirmed against a live osmo-nid cell|",
+     "|2G/GSM survey — OsmocomBB phone|Validated OTA|`cell_log` through a Motorola C118|",
+     "|NB-IoT find (`cell_search_nbiot`)|Validated|Syncs to anchors; `--decode` (SIB1-NB) needs signal margin|",
+     "|Modem DIAG ingest (QCSuper)|Validated|Captures 2G/3G/4G/5G; ransack parses LTE SIB1 today (3G/UMTS not yet)|",
+     "|Rayhunter connector|Tested|Firmware v0.6.1 - v0.11.2|",
+     "|LTE identity (LTESniffer DL/UL)|Parser validated|Self-test passes; live TMSI/IMSI pending decodable coverage|",
+     "|LTE activity (FALCON PDCCH)|File-validated|Real O2-DE recording; live capture pending|",
+     "|REST/SSE API + daemon|Validated|Crash recovery, idempotent operations, socket activation|",
+     "|Sensor fusion + gpsd geotag|Validated|Cross-RAT merge on PLMN + cell-id; RSRP-weighted tower estimate|"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    36,
+    32,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     "DragonOS Resolute (Ubuntu 26.04), where the cellular toolchain it"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    37,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "provide those tools yourself (see Install). Treat 26.04 Resolute as the target."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    43,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "|RAT|Survey|Wraps|Identity / deeper|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    47,
+    48
+   ],
+   [
+    "replace",
+    48,
+    54,
+    48,
+    54,
+    [
+     "|2G / GSM|`ransack-gsm`|gr-gsm `grgsm_scanner`, or OsmocomBB on a Calypso phone|`ransack-imsi` (IMSI/TMSI)|",
+     "|LTE / 4G|`ransack`, `ransack-sweep`|srsRAN `cell_search` + `srsue`, tshark SIB decode|`ransack-lte-ue` (LTESniffer), `ransack-pdcch` (FALCON)|",
+     "|NB-IoT|`ransack-nbiot`|srsRAN `cell_search_nbiot` + `npdsch_ue`||",
+     "|5G NR|`ransack-nr`|Sni5Gect scanner (SSB, then MIB/SIB1)||",
+     "|modem (2G-5G)|`ransack-modem`|QCSuper reading a Qualcomm DIAG stream||",
+     "|recorded|`ransack-rayhunter`|EFF Rayhunter recordings + its alerts||"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    65,
+    54,
+    65
+   ],
+   [
+    "replace",
+    65,
+    66,
+    65,
+    66,
+    [
+     "|SDR|LTE / NB-IoT|GSM|5G NR|LTE identity|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    66,
+    67
+   ],
+   [
+    "replace",
+    67,
+    71,
+    67,
+    71,
+    [
+     "|LimeSDR (`driver=lime`)|yes|yes|||",
+     "|USRP B210 / X310|yes|yes|yes (UHD only)|downlink 1 SDR; uplink needs 2x B210 + GPSDO|",
+     "|bladeRF|yes|yes|||",
+     "|Pluto / HackRF / RTL-SDR|NB-IoT: experimental|via SoapySDR|||"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    81,
+    71,
+    81
+   ],
+   [
+    "replace",
+    81,
+    85,
+    81,
+    82,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    93,
+    82,
+    90
+   ],
+   [
+    "replace",
+    93,
+    100,
+    90,
+    91,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    152,
+    91,
+    143
+   ],
+   [
+    "replace",
+    152,
+    155,
+    143,
+    146,
+    [
+     " `ANTHROPIC_API_KEY`; DragonOS's `dragon-rf-agent` reads `dragon-brain`'s key from",
+     " `/etc/dragon-brain.conf`, then `~/.config/dragon-brain.conf`, then the environment. Without a key the",
+     " CLIs, TUI, and API still work fully."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    146,
+    147
+   ],
+   [
+    "replace",
+    156,
+    157,
+    147,
+    148,
+    [
+     " driving the gateway cannot trigger a subscriber-identity capture — that plane is CLI-only."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    183,
+    148,
+    174
+   ],
+   [
+    "replace",
+    183,
+    184,
+    174,
+    175,
+    [
+     "|Sensor|Needs|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    175,
+    176
+   ],
+   [
+    "replace",
+    185,
+    192,
+    176,
+    183,
+    [
+     "|LTE / NB-IoT|srsRAN 4G (`cell_search`, `srsue`, `cell_search_nbiot`, `npdsch_ue`)|",
+     "|5G NR|Sni5Gect|",
+     "|GSM / identity|gr-gsm, OsmocomBB, an IMSI-catcher|",
+     "|modem|QCSuper + a rooted Qualcomm phone or DIAG modem|",
+     "|LTE identity|LTESniffer (uplink: 2x B210 + GPSDO) and/or ltesniffer-dl (downlink, one SDR)|",
+     "|LTE activity|FALCON|",
+     "|geotagging|gpsd (optional; positions are null without a fix)|"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    219,
+    183,
+    210
+   ],
+   [
+    "replace",
+    219,
+    221,
+    210,
+    211,
+    [
+     "GPL-2.0-or-later, Copyright 2025-2026 CEMAXECUTER LLC. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "c0eff9254191+2": {
+  "fn": "shannonchimutengo/hotel-management-system",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "hotel-menu"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    6,
+    2,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "www.techtarget.com."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "replace",
+    12,
+    20,
+    12,
+    20,
+    [
+     " if(room_number.getText().equals(\"\")||",
+     " Objects.equals(bed_field.getSelectedItem(), \"\") ||price_field.getText().equals(\"\"))",
+     " {",
+     " JOptionPane.showMessageDialog(null,",
+     " \"Please Fill All Details\",",
+     " \"VALUE ERROR\",",
+     " JOptionPane.ERROR_MESSAGE,panel_exit);",
+     " }else {"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    26,
+    21,
+    26,
+    [
+     " allRoomsDatabase();",
+     " select_all_rows();",
+     " }",
+     " });",
+     " allocate_customer.addActionListener(onclick ->{"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    32,
+    27,
+    32,
+    [
+     " String selected_room = (String) customer_room_number_field.getSelectedItem();",
+     " checkin_database_connection();",
+     " try {",
+     " Class.forName(\"com.mysql.jdbc.Driver\");",
+     " Connection connection = DriverManager.getConnection(databaseUrl,username,password);"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    32,
+    33
+   ],
+   [
+    "replace",
+    33,
+    35,
+    33,
+    35,
+    [
+     " Statement statement = connection.createStatement();",
+     " statement.executeUpdate(\"update all_rooms set status = 'booked' where room_number = '\"+selected_room+\"';\");"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    38,
+    36,
+    38,
+    [
+     " connection.close();",
+     " System.out.println(selected_room);"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    38,
+    39
+   ],
+   [
+    "replace",
+    39,
+    44,
+    39,
+    44,
+    [
+     " }catch(ClassNotFoundException | SQLException e){",
+     " JOptionPane.showMessageDialog(null,",
+     " \"Failed to update room status\",",
+     " \"Table Error\",",
+     " JOptionPane.ERROR_MESSAGE,panel_exit);"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    44,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    46,
+    47
+   ],
+   [
+    "replace",
+    47,
+    48,
+    47,
+    48,
+    [
+     " allocate_customer.setEnabled(false);"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    48,
+    49
+   ],
+   [
+    "replace",
+    49,
+    57,
+    49,
+    50,
+    [
+     " ### }); // actionListener"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    50,
+    51
+   ],
+   [
+    "insert",
+    58,
+    58,
+    51,
+    57,
+    [
+     " ## Database Details ",
+     "",
+     " **The database used in this project is Maria Db through Xampp**",
+     " - String username = \"root\";",
+     " - String password = \"\";",
+     " - String databaseUrl = \"jdbc:mysql://localhost:3306/signup\";"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "b05215169e00+2": {
+  "fn": "JuliusFo/FerretSharp",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "FerretSharp logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " FerretSharp "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    10,
+    4,
+    6,
+    [
+     " An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ",
+     " safe sandbox editing and a bridge to your EF Core model."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    19,
+    7,
+    13,
+    [
+     " CI",
+     " Test coverage",
+     " Latest release",
+     " .NET 10",
+     " Windows",
+     " MIT license"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    13,
+    14
+   ],
+   [
+    "replace",
+    20,
+    24,
+    14,
+    15,
+    [
+     " FerretSharp: a filtered table with C# property names and enum names in the grid"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    35,
+    15,
+    26
+   ],
+   [
+    "replace",
+    35,
+    36,
+    26,
+    27,
+    [
+     " so two workspaces can look at (and later edit) the same table independently."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    27,
+    28
+   ],
+   [
+    "replace",
+    37,
+    38,
+    28,
+    29,
+    [
+     " exist only in your EF Core model, without a foreign-key constraint."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    29,
+    30
+   ],
+   [
+    "replace",
+    39,
+    40,
+    30,
+    31,
+    [
+     " read-only by default, enforced by Oracle itself."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    31,
+    32
+   ],
+   [
+    "replace",
+    41,
+    42,
+    32,
+    33,
+    [
+     " console that shows the SQL your code really sends."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    47,
+    33,
+    38
+   ],
+   [
+    "replace",
+    47,
+    49,
+    38,
+    40,
+    [
+     "- Several connections open at once, one shown: switch from DEV to PROD and back ( Alt + O ) without",
+     " disconnecting – tabs, grids and open transactions stay as they were."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    40,
+    41
+   ],
+   [
+    "replace",
+    50,
+    52,
+    41,
+    43,
+    [
+     " own per connection. A connection the VPN dropped can come back by itself (a setting, off by default): only when no",
+     " uncommitted work would be lost, with pauses between the attempts and never after a refused login."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    43,
+    44
+   ],
+   [
+    "replace",
+    53,
+    56,
+    44,
+    47,
+    [
+     " views on request in a section of their own. **Right-click an object** (or the head of its tab) to open it in a view,",
+     " as `SELECT *` in the SQL editor, as its DbSet in the LINQ console, in the designer or on another connection, and to",
+     " copy its name, `OWNER.NAME`, entity or link. A tab can be duplicated with its filters or shown in the explorer."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    47,
+    48
+   ],
+   [
+    "replace",
+    57,
+    58,
+    48,
+    49,
+    [
+     " own height) – kept after a restart; a double click on the edge goes back to the default."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    49,
+    50
+   ],
+   [
+    "replace",
+    59,
+    60,
+    50,
+    51,
+    [
+     " Appearance*)."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    51,
+    52
+   ],
+   [
+    "replace",
+    61,
+    62,
+    52,
+    53,
+    [
+     " (also by its C# entity name), or \">\" to find an action with its shortcut."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    53,
+    54
+   ],
+   [
+    "replace",
+    63,
+    65,
+    54,
+    56,
+    [
+     " exact numbers beyond `decimal`, LOB previews, pinned columns, column search (Ctrl+F). The row selection follows the",
+     " keyboard as in the Windows Explorer: Shift+↑/↓, Ctrl+A, Space."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    56,
+    57
+   ],
+   [
+    "replace",
+    66,
+    67,
+    57,
+    58,
+    [
+     " set the filters first, then load (*Settings › Data view*)."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    58,
+    59
+   ],
+   [
+    "replace",
+    68,
+    70,
+    59,
+    61,
+    [
+     " statement (the grid's own or a short `SELECT t.*`) and its execution plan at any time. Combine rows with **OR** and **NOT** groups (NOT treats NULL as C# does,",
+     " so the grid and a LINQ `Where` keep the same rows)."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    61,
+    62
+   ],
+   [
+    "replace",
+    71,
+    74,
+    62,
+    65,
+    [
+     " `ID IN (SELECT …)` on other tables, nested as deep as you like – with completion of the columns and tables, the",
+     " conditions last applied to the table, and the filter bar's filter as a start. The tab stays a table tab: edit, jump",
+     " along foreign keys, count and export as usual. A new tab can start with it (*Settings › Data view*)."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    65,
+    66
+   ],
+   [
+    "replace",
+    75,
+    76,
+    66,
+    67,
+    [
+     " belongs to the table name, so it works on Dev, Test and Prod alike."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    67,
+    68
+   ],
+   [
+    "replace",
+    77,
+    79,
+    68,
+    70,
+    [
+     " address Teams and tickets make clickable, never SQL. A click opens the table in FerretSharp after asking, on the",
+     " connection that fits or one you choose."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    70,
+    71
+   ],
+   [
+    "replace",
+    80,
+    84,
+    71,
+    75,
+    [
+     " `4711 · PetersPizza`; a name can join several columns (`Müller - Hans`) and follow one more foreign key; a value",
+     " without a referenced row says \"not found\". The same in the results of the SQL editor and the LINQ console, for",
+     " columns read from a table. The display columns live in one file you",
+     " can share with your team through your repository."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    75,
+    76
+   ],
+   [
+    "replace",
+    85,
+    86,
+    76,
+    77,
+    [
+     " synonyms, DDL."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    77,
+    78
+   ],
+   [
+    "replace",
+    87,
+    89,
+    78,
+    80,
+    [
+     " the schema or public) or drop one, after the confirmation every schema change gets. \"Synonyms of the schema\" in the",
+     " command palette lists the schema's private synonyms with their targets and marks those leading nowhere, to clean up."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    80,
+    81
+   ],
+   [
+    "replace",
+    90,
+    94,
+    81,
+    85,
+    [
+     " granted by whom and whether with grant option. Grant one (to a user, a role or PUBLIC, on the whole object or on columns,",
+     " optionally with a synonym in the user's schema) or revoke one; before a revoke it says what goes along (all columns, what was passed on). The DDL view adds the GRANT",
+     " statements. \"Privileges in the schema\" in the command palette lists them for all objects, by grantee – and the objects",
+     " a user has no privilege on yet, to grant it right there."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    85,
+    86
+   ],
+   [
+    "replace",
+    95,
+    97,
+    86,
+    88,
+    [
+     " errors marked), parameters per subprogram and overload, compile errors and dependencies – and a search through all",
+     " PL/SQL of the schema. Nothing is run or compiled."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    88,
+    89
+   ],
+   [
+    "replace",
+    98,
+    100,
+    89,
+    91,
+    [
+     " request, editable like the grid); select several rows and compare them side by side with the differences marked",
+     " ( Alt + Enter ). The same for the results of the SQL editor and the LINQ console."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    91,
+    92
+   ],
+   [
+    "replace",
+    101,
+    104,
+    92,
+    95,
+    [
+     " file has real numbers, dates and true/false (text stays text, nothing runs as a formula), a frozen header with a filter,",
+     " and the labels and values of the grid – C# names, enum members, display columns. Save the selected rows or **all rows",
+     " of the filter**: those are read in the background, with a cancel button in the status bar."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    95,
+    96
+   ],
+   [
+    "replace",
+    105,
+    106,
+    96,
+    97,
+    [
+     " rows of the filter."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    97,
+    98
+   ],
+   [
+    "replace",
+    107,
+    108,
+    98,
+    99,
+    [
+     " and copy them as shown, as a table or as an `IN` list; rows not loaded are read in the background, with cancel."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    110,
+    99,
+    101
+   ],
+   [
+    "replace",
+    110,
+    111,
+    101,
+    102,
+    [
+     " handles to go further, kinds of relationship to switch off, zoom, copy as Mermaid for a ticket."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    102,
+    103
+   ],
+   [
+    "replace",
+    112,
+    114,
+    103,
+    105,
+    [
+     " without a limit, in a diagram of all of them; leave out tables every way passes, and turn a way into a query. Drag the",
+     " list's right edge to make it wider or narrower."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    105,
+    106
+   ],
+   [
+    "replace",
+    115,
+    119,
+    106,
+    110,
+    [
+     " chosen by condition and order), tick columns, add conditions – and get LINQ in the style of query extensions (an",
+     " expression per value, LinqKit, a DTO or your own mapping lines), the SQL with the right joins, a preview of the rows",
+     " or a view. LINQ and SQL find the same rows; the LINQ console runs it with its parameters. Drag the panel's left",
+     " edge to make it wider or narrower."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    110,
+    111
+   ],
+   [
+    "replace",
+    120,
+    121,
+    111,
+    112,
+    [
+     " relationship; a click opens a row filtered, marked rows go to another connection (below)."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    112,
+    113
+   ],
+   [
+    "replace",
+    122,
+    123,
+    113,
+    114,
+    [
+     " against the one before tinted, inserted and deleted rows marked."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    114,
+    115
+   ],
+   [
+    "replace",
+    124,
+    142,
+    115,
+    123,
+    [
+     " Context menu with foreign-key navigation, including a relationship from the C# model",
+     "",
+     " Foreign-key navigation ",
+     " Right-click a cell: jump to the referenced row, or to the rows that reference it – with counts, loaded lazily.",
+     " Each jump opens a new tab with the filter already applied; Alt + ← takes you back.",
+     " Relationships that exist only as navigations in your DbContext are marked \"from C# model\". The same works in the",
+     " results of the SQL editor and the LINQ console, for columns read from a table. In the \"Constraints\" view, \"Create",
+     " constraint\" turns such a relationship into a real foreign key: the table designer opens with it filled in."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    123,
+    126
+   ],
+   [
+    "replace",
+    145,
+    149,
+    126,
+    127,
+    [
+     " Pending and written changes in the grid and in the open changes beside it, with undo up to an action"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    151,
+    127,
+    129
+   ],
+   [
+    "replace",
+    151,
+    152,
+    129,
+    130,
+    [
+     " rows locked), then *committed* – each state visible in the grid."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    130,
+    131
+   ],
+   [
+    "replace",
+    153,
+    155,
+    131,
+    133,
+    [
+     " one history – take back the last one or everything up to an action, and apply it again. Pending edits have their own",
+     " Ctrl + Z / Ctrl + Y in the grid."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    133,
+    134
+   ],
+   [
+    "replace",
+    156,
+    157,
+    134,
+    135,
+    [
+     " with their SQL, what was taken back – one click from the counts in the status bar."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    135,
+    136
+   ],
+   [
+    "replace",
+    158,
+    165,
+    136,
+    143,
+    [
+     " deleted since – whoever changed them (your app, a job, a colleague). Oracle compares the committed state with the",
+     " state at the start (flashback query with `MINUS`), so only the rows that differ come over the line; changed cells",
+     " show their value at the start. Start, compare and discard from the workspace's menu, add a table with its filter",
+     " from the tab menu (*Compare this tab*). Reaches back as far as the database's undo does; tables of other owners need",
+     " the right `FLASHBACK`. The start point can also lie at a time you choose (*Start comparison from…*), and ticked rows",
+     " are set back to it as pending changes of the table's tab – a deleted row inserted again, a changed one with its old",
+     " values, a new one deleted – written the usual way, one Ctrl + Z takes them back."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    143,
+    144
+   ],
+   [
+    "replace",
+    166,
+    169,
+    144,
+    147,
+    [
+     " 5, 15, 60 minutes ago), with the tab's filter, read only, in a tab of its own – filter, sort, export, the form and FK",
+     " jumps stay at that point. Reads committed data on a session of its own; the dialog says how far the database's undo",
+     " reaches where the right on `V$UNDOSTAT` is there."
+    ]
+   ],
+   [
+    "equal",
+    169,
+    171,
+    147,
+    149
+   ],
+   [
+    "replace",
+    171,
+    172,
+    149,
+    150,
+    [
+     " (text in the code editor with line wrap, JSON/XML coloring and JSON indenting)."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    150,
+    151
+   ],
+   [
+    "replace",
+    173,
+    180,
+    151,
+    158,
+    [
+     " point to the old key – along constraints and relationships without one (manual, by convention, from the C# model) –",
+     " and asks first if there are any; behind a constraint Oracle refuses the change, nothing is changed along.",
+     "- **One value for many cells**: type it into one of the marked cells and press Ctrl + Enter , or",
+     " paste a copied value with Ctrl + V – into the marked cells, the selected rows or just the focused",
+     " cell, no double click needed (a cell copied with Ctrl + C pastes back whole, line breaks and",
+     " NULL included); Del sets marked cells to NULL, Ctrl + D fills them down –",
+     " checked per column, pending like any edit, and one step for Ctrl + Z ."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    158,
+    159
+   ],
+   [
+    "replace",
+    181,
+    182,
+    159,
+    160,
+    [
+     " single workspace on purpose by typing the connection's name."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    160,
+    161
+   ],
+   [
+    "replace",
+    183,
+    185,
+    161,
+    163,
+    [
+     " of another connection – checked against its tables first, existing rows skipped, updated or the copy stopped, previewed",
+     " as a table or a diagram, written as one action of its transaction (undo, commit as usual)."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    163,
+    164
+   ],
+   [
+    "replace",
+    186,
+    210,
+    164,
+    178,
+    [
+     " Table designer in tabs: a changed and a new column, the head with the statements it will run and Run, Save and Close, and a C# tab for the new column",
+     "",
+     " Table designer ",
+     " Change the columns, keys, checks and foreign keys of a table in tabs, add indexes (each column ascending or",
+     " descending) or create a new table. Choose the tablespace of a new table, of a new index and of the indexes new keys",
+     " and foreign keys bring along – suggested from where the table's or schema's others lie. Rename",
+     " existing constraints (a key takes its index along), give a check a new condition – added before the old one goes –",
+     " or a foreign key another delete rule. A new foreign key finds its table in a searchable list (also by C# name, each",
+     " table with its primary key) and suggests it from the column's name or a relationship of your C# model. You see the DDL before it runs – and the property and configuration lines",
+     " for your entity – and what Oracle would refuse with the data at hand is reported up front. Run, Save and Close stay",
+     " in view at the top, and a locked workspace shows as a bar across the designer. ",
+     " Audit tables and their trigger come from a template file (your company's pattern, or a built-in one) and",
+     " follow the table's changes; a trigger is switched on only once it compiles. Each connection group – or a single",
+     " connection – can have its own template."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    213,
+    178,
+    181
+   ],
+   [
+    "replace",
+    213,
+    217,
+    181,
+    182,
+    [
+     " SQL editor with bind variables and a result grid"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    182,
+    183
+   ],
+   [
+    "replace",
+    218,
+    222,
+    183,
+    187,
+    [
+     "- SQL editor (Monaco) per workspace: Ctrl + Enter runs the statement at the cursor (statements end",
+     " at `;` or a line with only `/`),",
+     " Alt + X the whole script, with progress and cancel; queries everywhere, `INSERT`/`UPDATE`/`DELETE`/",
+     " `MERGE` only in writable workspaces, inside their transaction (and part of its undo history)."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    187,
+    188
+   ],
+   [
+    "replace",
+    223,
+    226,
+    188,
+    191,
+    [
+     " (\"your workspace “Bug 3711”\", with a button to go there, or another session with user, machine and program) – and shows",
+     " long operations (full scans, sorts) as a progress bar with Oracle's estimate of the time left. Needs read access to",
+     " `V$SESSION` and `V$SESSION_LONGOPS`."
+    ]
+   ],
+   [
+    "equal",
+    226,
+    227,
+    191,
+    192
+   ],
+   [
+    "replace",
+    227,
+    229,
+    192,
+    194,
+    [
+     " confirmation; the explorer and open tabs follow the new schema. Triggers are switched on only once they compile,",
+     " compile errors are marked in the editor."
+    ]
+   ],
+   [
+    "equal",
+    229,
+    232,
+    194,
+    197
+   ],
+   [
+    "replace",
+    232,
+    236,
+    197,
+    201,
+    [
+     " file with a description and typed parameters in its head – in your personal folder, one per connection group or a general one (e.g. a shared",
+     " repository). The explorer lists them as a tree (*Scripts*); a click opens one in a new tab without running it, and the",
+     " panel beside the history inserts one at the cursor. A tab opened from a script saves only when asked and reloads when",
+     " the file changes on disk (format: `docs/sql-scripts.md`)."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    201,
+    202
+   ],
+   [
+    "replace",
+    237,
+    239,
+    202,
+    204,
+    [
+     " as in a table – also with the quoted aliases EF Core writes and through synonyms. Columns of a result can be pinned;",
+     " the tab keeps them for every result it shows."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    241,
+    204,
+    206
+   ],
+   [
+    "replace",
+    241,
+    245,
+    206,
+    207,
+    [
+     " Execution plan dialog"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    249,
+    207,
+    211
+   ],
+   [
+    "replace",
+    249,
+    251,
+    211,
+    213,
+    [
+     " columns (type, length, NULL, default, identity), keys, foreign keys, checks and indexes. Sides with the same definition",
+     " share a colour; names Oracle generated (`SYS_C…`) are matched by content."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    252,
+    213,
+    214
+   ],
+   [
+    "replace",
+    252,
+    253,
+    214,
+    215,
+    [
+     " hints – and opens in the SQL editor of the target connection. Comparisons can be saved and copied as Markdown."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    215,
+    216
+   ],
+   [
+    "replace",
+    254,
+    256,
+    216,
+    218,
+    [
+     " – `ALTER TABLE … ADD` with their comments and the foreign keys made only of them, to copy or to open in the SQL",
+     " editor of another connection."
+    ]
+   ],
+   [
+    "equal",
+    256,
+    259,
+    218,
+    221
+   ],
+   [
+    "replace",
+    259,
+    263,
+    221,
+    222,
+    [
+     " LINQ console with completion, the SQL EF Core generates and the result"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    270,
+    222,
+    229
+   ],
+   [
+    "replace",
+    270,
+    271,
+    229,
+    230,
+    [
+     " when editing – flags enums as a list of check boxes – including `[Display]` names from your resources."
+    ]
+   ],
+   [
+    "equal",
+    271,
+    272,
+    230,
+    231
+   ],
+   [
+    "replace",
+    272,
+    278,
+    231,
+    237,
+    [
+     " entities and properties without counterpart, columns whose type, NULL, length or precision does not fit",
+     " (`DateTimeOffset` on `DATE`, `HasMaxLength(200)` on `VARCHAR2(100)`, each with what will fail), relationships only in",
+     " the model or only in the database, and columns no code uses. Tiles with the counts, sections that fold, and what to do",
+     " about each entry: create the entity or the constraint, copy the property or navigation code, or mark a table as meant",
+     " to have no entity – in a file you can share through your repository (audit tables are left out by themselves).",
+     " Computed from what is loaded: no query of its own."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    280,
+    237,
+    239
+   ],
+   [
+    "replace",
+    280,
+    282,
+    239,
+    241,
+    [
+     " cancellation token are recognized. FerretSharp shows the SQL EF Core would send and runs it in the workspace's session,",
+     " so your uncommitted changes are visible. Completion knows your DbSets, properties, enums and the LINQ/EF methods."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    283,
+    241,
+    242
+   ],
+   [
+    "replace",
+    283,
+    285,
+    242,
+    244,
+    [
+     " the entity class and its `IEntityTypeConfiguration` for a table the model does not know yet (or the property and",
+     " configuration line for a new column), in the style of your project."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    244,
+    245
+   ],
+   [
+    "replace",
+    286,
+    289,
+    245,
+    248,
+    [
+     " see every statement it sends through EF Core, grouped by origin (LINQ, lazy loading, raw SQL, `SaveChanges` …), the",
+     " most frequent and most expensive ones, and N+1 patterns. Look a statement up in V$SQL of the app's connection with its",
+     " plan, or open it in the SQL editor. Local apps of your own user only, EF Core 7 or later for the origin."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    290,
+    248,
+    249
+   ],
+   [
+    "replace",
+    290,
+    297,
+    249,
+    256,
+    [
+     " wait for, a chart of up to the last hour – and its top statements by CPU, time, executions or reads, either for the time",
+     " you watch or since each was loaded (like SQL Developer’s reports), with plan, Excel export and the sessions running",
+     " right now. Only views outside the Diagnostics and Tuning Pack; needs `SELECT_CATALOG_ROLE` or grants on the V$ views.",
+     " A statement's details open in a dialog with folding parts (SQL, origin in code, plan) and step through the list. With a",
+     " linked C# project they name the methods of your solution that may send it – guessed from its tables and the columns it",
+     " filters by, ranked, with a meter of how much of the statement each covers – and a click opens the line in Visual Studio.",
+     " Projects of the solution that are not built are marked there, as their methods are missing, with *Build projects* at hand."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    256,
+    257
+   ],
+   [
+    "replace",
+    298,
+    302,
+    257,
+    261,
+    [
+     " read from the compiled code – a click opens the line in Visual Studio. Properties no code uses are marked, and the",
+     " designer warns before dropping a column the code still uses. Uses open in your *work clone* of the connection group.",
+     " Columns your code filters on (`Where`, `Any`, `First…`) without an index that starts with them are marked.",
+     " Projects not built are named; *Build projects* builds the solution and shows how many of its projects are done."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    261,
+    262
+   ],
+   [
+    "replace",
+    303,
+    304,
+    262,
+    263,
+    [
+     " you link that instead – names, enums and relationships without a build and without running the project's code."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    311,
+    263,
+    270
+   ],
+   [
+    "replace",
+    311,
+    312,
+    270,
+    271,
+    [
+     " alias); no Oracle client installation needed."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    316,
+    271,
+    275
+   ],
+   [
+    "replace",
+    316,
+    319,
+    275,
+    278,
+    [
+     "1. Download `FerretSharp-win-Setup.exe` from the latest release",
+     " and run it – it installs FerretSharp for your user (no admin rights) with shortcuts on the desktop and in the start",
+     " menu. The installer is not signed, so Windows SmartScreen warns once: *More info › Run anyway*."
+    ]
+   ],
+   [
+    "equal",
+    319,
+    320,
+    278,
+    279
+   ],
+   [
+    "replace",
+    320,
+    322,
+    279,
+    281,
+    [
+     " hourly, daily, only at start, or off) and shows it in the status bar; *Download* fetches it, *Restart now* installs it. Nothing is downloaded or installed without your",
+     " click. The update dialog loads the images of the release notes from this repository on GitHub."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    349,
+    281,
+    308
+   ],
+   [
+    "replace",
+    349,
+    350,
+    308,
+    309,
+    [
+     "|Keys|Action|"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    351,
+    309,
+    310
+   ],
+   [
+    "replace",
+    351,
+    365,
+    310,
+    324,
+    [
+     "|Ctrl + Shift + O|Switch connection|",
+     "|Alt + O|Back to the previous open connection (it stays connected in the background)|",
+     "|Ctrl + Enter|Apply filters · run the statement at the cursor (SQL) · run the code (LINQ)|",
+     "|F5|Refresh|",
+     "|Ctrl + F|Find a column · search in the editor|",
+     "|Alt + ← / Alt + →|Back / forward along foreign-key jumps|",
+     "|Alt + Enter|Form view of the focused row · compare the selected rows|",
+     "|Alt + ↑ / Alt + ↓|Previous / next row in the form|",
+     "|Ctrl + Z / Ctrl + Y|Undo / redo a pending edit in the grid|",
+     "|Ctrl + S|Write pending changes (no commit)|",
+     "|Ctrl + Shift + Enter|Commit|",
+     "|Ctrl + Shift + U|Show or hide the open changes|",
+     "|Ctrl + Shift + Q / Ctrl + Shift + L|New SQL editor / new LINQ console|",
+     "|Alt + X|Run the whole SQL script|"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    376,
+    324,
+    335
+   ],
+   [
+    "replace",
+    376,
+    378,
+    335,
+    337,
+    [
+     "- Integration tests start Oracle Free in Docker (Testcontainers) and are skipped",
+     " when Docker is not available."
+    ]
+   ],
+   [
+    "equal",
+    378,
+    379,
+    337,
+    338
+   ],
+   [
+    "replace",
+    379,
+    382,
+    338,
+    341,
+    [
+     " `artifacts/coverage/report`. The coverage badge counts unit and integration tests over `FerretSharp.Core` and",
+     " `FerretSharp.UI` without generated code and Razor markup (`tests/coverage.config`); the report of each CI run is",
+     " attached to it as an artifact."
+    ]
+   ],
+   [
+    "equal",
+    382,
+    383,
+    341,
+    342
+   ],
+   [
+    "replace",
+    383,
+    384,
+    342,
+    343,
+    [
+     " working tree including uncommitted changes – CI tests on Linux first, so platform differences show up before a push."
+    ]
+   ],
+   [
+    "equal",
+    384,
+    385,
+    343,
+    344
+   ],
+   [
+    "replace",
+    385,
+    386,
+    344,
+    345,
+    [
+     " `samples/` contains a matching EF Core project."
+    ]
+   ],
+   [
+    "equal",
+    386,
+    387,
+    345,
+    346
+   ],
+   [
+    "replace",
+    387,
+    388,
+    346,
+    347,
+    [
+     " `dotnet publish src/FerretSharp.App -c Release -r win-x64 --self-contained -o <folder>`."
+    ]
+   ],
+   [
+    "equal",
+    388,
+    389,
+    347,
+    348
+   ],
+   [
+    "replace",
+    389,
+    392,
+    348,
+    351,
+    [
+     "**Tech stack:** .NET 10, WPF host with Blazor Hybrid (WebView2), AG Grid Community,",
+     "Monaco Editor, Oracle.ManagedDataAccess.Core, Roslyn for the LINQ console,",
+     "SpreadCheetah for the Excel export, Velopack for install and updates."
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    351,
+    352
+   ],
+   [
+    "replace",
+    393,
+    395,
+    352,
+    354,
+    [
+     "**Design notes:** CHANGELOG.md lists every release; architecture decisions are in",
+     "docs/decisions, ideas in docs/backlog.md (both in German)."
+    ]
+   ],
+   [
+    "equal",
+    395,
+    397,
+    354,
+    356
+   ],
+   [
+    "replace",
+    397,
+    400,
+    356,
+    357,
+    [
+     "MIT. AG Grid Community and Monaco Editor are included under their MIT licenses, the icons come from"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

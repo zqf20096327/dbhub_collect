@@ -3038,5 +3038,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "28e463ea9415": {
+  "identity": {
+   "one_liner": "用OCaml编写的带Web界面的开源家谱软件",
+   "review": "GeneWeb是Daniel de Rauglaudre于1998年创建、用OCaml编写的开源家谱软件，通过Web界面管理家族谱系数据库。支持GEDCOM导入导出，可本地运行或部署为Web服务器，默认端口2317。7.1版本引入与Geneanet共享的新数据库格式，旧库需用gwu导出后以gwc重建，且重建后无法被旧版本读取。适用于个人及协作式家谱数据管理。",
+   "highlights": [
+    "支持GEDCOM格式的完整导入与导出",
+    "提供细粒度访问控制，用于保护在世人员信息",
+    "可本地运行或部署为Web服务器，通过浏览器在 http://localhost:2317 访问"
+   ],
+   "use_cases": [
+    "个人或团队协作维护大型家谱数据库",
+    "在GeneWeb与GEDCOM格式之间转换家谱数据",
+    "在本地或自建服务器上托管带访问控制的家谱网站"
+   ]
+  },
+  "sha": "28e463ea9415",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9ea3f89951e8": {
+  "identity": {
+   "one_liner": "基于文件的 Node.js 无服务器关系型数据库，提供 ACID 事务",
+   "review": "iniBase 是一个纯 TypeScript 编写的基于文件的关系型数据库，数据以表和列为单位存入独立文件，通过 Node.js 的 npm/pnpm/yarn/bun 安装。单表 DML 具备崩溃原子性，多表原子性通过 begin/commit/rollback 事务 API 提供，并有事务内限制（如无读己之写、每表仅一次变更、禁 DDL）。Windows 环境需额外安装 zcat、sed、gzip 等 Unix 命令。",
+   "highlights": [
+    "写入前日志加崩溃恢复，单表 DML 崩溃原子，多表事务支持级联删除原子执行",
+    "按列文件存储，支持 gzip 压缩、增量写入日志、内置缓存与列投影、表连接",
+    "读取无锁，采用乐观版本重试；支持 begin/commit/rollback 事务接口与模式校验"
+   ],
+   "use_cases": [
+    "Node.js 应用中需要文件级存储与 ACID 保证的嵌入式数据管理",
+    "需要事务化级联删除与崩溃恢复的场景",
+    "不适合安装独立数据库服务的无服务器环境（Windows 需装 Unix 工具或 WSL）"
+   ]
+  },
+  "sha": "9ea3f89951e8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a1fafd6ddf94": {
+  "identity": {
+   "one_liner": "自托管 MG 车辆仪表盘与行程记录 Web 应用，接入 SAIC iSmart API",
+   "review": "GarageStack 是一个面向现代 SAIC 产 MG 车（MG4、MG5、ZS EV、HS PHEV 等）的自托管 Web 应用，通过登录官方 iSmart 后端 API 获取车辆数据，提供实时仪表盘、自动行程记录、能耗统计与远程控制。技术栈为 .NET/C#，依赖 PostgreSQL，以 Docker 单容器或 Compose 部署。限制：仅支持使用 iSmart 应用的车辆，且与官方 App 不能同时登录同一账号。",
+   "highlights": [
+    "提供实时仪表盘（油量、电池、胎压、门窗、空调），卡片按 HEV/PHEV/BEV 车型自动显示隐藏",
+    "行程在停车数分钟后自动存入数据库，可在地图上按道路绘制并生成热力图，支持公务/通勤/私人标记与表格导出",
+    "通过 MQTT discovery 自动接入 Home Assistant，支持 OpenID Connect 单点登录（Authentik、Authelia、Keycloak 等）"
+   ],
+   "use_cases": [
+    "为 EV/PHEV/HEV 车主搭建自托管车辆数据看板与行程日志",
+    "生成含地址与里程表的税务行程记录表并按月/年导出",
+    "集成 Home Assistant 与 gethomepage.dev 仪表板的智能家居环境"
+   ]
+  },
+  "sha": "a1fafd6ddf94",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d4b56b34bb84": {
+  "identity": {
+   "one_liner": "非官方 Helm Chart，用于在 Kubernetes 上部署联邦健身追踪平台 FitPub",
+   "review": "这是一个由第三方独立维护的 Helm Chart，用于将 FitPub 部署到 Kubernetes 集群，不隶属于 FitPub 官方项目。它要求外部提供启用 PostGIS 扩展的 PostgreSQL 数据库，内置非 root 运行、只读根文件系统、探针、PDB、Ingress/HPA/NetworkPolicy 等选项，并通过 kind 中的真实 PostGIS 启动做 CI 验证。适合需要在 Kubernetes 上自托管 FitPub 的运维人员。",
+   "highlights": [
+    "以非 root 用户（UID 1001）运行，默认 readOnlyRootFilesystem，符合受限的 Pod Security Standard",
+    "提供可选 Ingress、HPA、NetworkPolicy、ServiceMonitor，以及 extraEnv/volumes/sidecars 等扩展点",
+    "发布至 GitHub Pages 和 GHCR OCI registry，带 GPG/cosign 签名；CI 在 kind 中配合真实 PostGIS 执行安装与健康检查"
+   ],
+   "use_cases": [
+    "在 Kubernetes 1.26+ 集群上部署自托管的 FitPub 实例，需自备带 PostGIS 的 PostgreSQL",
+    "通过 charts 值文件定制生产部署：外部 Secret、上传 PVC、Markdown 法律页面挂载、JVM 内存参数",
+    "用 scripts/local-quickstart.sh 在 kind/minikube 上快速启动一套含临时 PostGIS 的本地实例"
+   ]
+  },
+  "sha": "d4b56b34bb84",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

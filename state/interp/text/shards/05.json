@@ -2619,5 +2619,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a12336cc59c9": {
+  "identity": {
+   "one_liner": "以 Markdown 文件为数据源的 AI 代理长期记忆运行时，本地检索无需 API key。",
+   "review": "agent-memory 是面向 AI 代理（含 Claude Code、Codex CLI、Muse Code 等）的长期记忆运行时：一条记忆对应一个 Markdown 文件，SQLite 索引仅作可重建缓存。检索走 FTS5/BM25 加可选向量融合，返回路径与摘要而非粘贴文本，代理可按 outline/full 分层读取。写入在对话边界触发，睡眠时段的 Manage 层做整合，删除仅以提案形式等待确认。需 Python 3.12+ 与 uv，目前只能从源码 checkout 安装，尚未发布 PyPI 包。",
+   "highlights": [
+    "单存储多宿主：Claude Code、Codex CLI、Muse Code 等通过同一 Agent Memory Store 共享记忆，库内不含 LLM 客户端，无需 API key",
+    "三层读取路径（MEMORY.md 注入、FTS5/BM25 recall、目录树 ls/grep），召回返回 L0 列表和文件路径，支持 --as-of 按日期回溯",
+    "索引可随时删除重建而不丢数据，supersede 保留链条；睡眠时段整合可新增/更新，删除只以提案形式给出"
+   ],
+   "use_cases": [
+    "多个代理 CLI 之间共享同一份长期记忆存储",
+    "需要本地优先、可 grep/git 管理记忆文件且不想引入 API key 计费的开发环境",
+    "会话结束后仍需回忆历史决策、修正/合并/取代旧记忆的代理工作流"
+   ]
+  },
+  "sha": "a12336cc59c9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee3be09392d0": {
+  "identity": {
+   "one_liner": "面向 Elixir 的持久化工作流执行引擎，步骤结果存入 PostgreSQL 并支持断点恢复",
+   "review": "Durable 是一个 Elixir 工作流引擎，用户以普通步骤编写工作流，每个步骤的执行结果持久化到 PostgreSQL，运行可在崩溃、部署或长时间等待后恢复。包含核心包 :durable 与基于 LiveView 的 :durable_dashboard 监控面板，均发布于 Hex。README 主体为 monorepo 工程说明，具体 API 用法需查阅其官网文档。",
+   "highlights": [
+    "工作流以普通步骤编写，每个步骤的执行结果持久化到 PostgreSQL",
+    "运行在崩溃、部署或长时间等待后可恢复",
+    "配套 LiveView Web 仪表盘用于监控和管理工作流"
+   ],
+   "use_cases": [
+    "需要跨崩溃、部署或长时间等待继续执行的 Elixir 后台任务流程",
+    "通过 Web 仪表盘监控和管理工作流运行状态",
+    "作为参考接入 :durable 与 :durable_dashboard 的 Phoenix 应用开发"
+   ]
+  },
+  "sha": "ee3be09392d0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c59b81179206": {
+  "identity": {
+   "one_liner": "自托管邮件客户端，单容器单 SQLite 文件聚合多个 IMAP 邮箱。",
+   "review": "nexmail 是一个自托管 Web 邮件客户端，以单个 Docker 容器运行，数据存于单个 SQLite 文件，无需额外数据库或云账户。面向已在家自托管服务的人群，支持多 IMAP 邮箱、全文搜索、规则、任务、日历、CardDAV 联系人、多用户及 OpenID Connect 登录。README 提醒项目尚处早期（0.29.1），建议先在可承受问题的邮箱上试用。",
+   "highlights": [
+    "支持多个 IMAP 邮箱并列展示，外加合并的 All inboxes 视图，并提供全文搜索及按需的服务器端 IMAP SEARCH",
+    "邮件规则可在每次同步后对新邮件执行移动、标记、旗标和标签操作；标签以 IMAP keywords 存储在服务器上",
+    "提供任务列表（可关联 Todoist 或 nextasks）、vCard/CardDAV 联系人同步、CalDAV 日历接入、定时发送与撤回发送、外出自动回复、.ics 会议邀请处理等功能"
+   ],
+   "use_cases": [
+    "将多个 IMAP 邮箱（如 iCloud 和其他 IMAP 服务）聚合到一个自托管的 Web 界面统一收发管理",
+    "在家庭服务器（homelab）上以单容器部署个人邮件客户端，数据保留在本地 SQLite 文件",
+    "需要在手机上使用适配移动布局的邮件、日历、任务一体界面，并通过 OIDC 多用户登录"
+   ]
+  },
+  "sha": "c59b81179206",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fb31b239814f": {
+  "identity": {
+   "one_liner": "TikVoz 是一款将 TikTok LIVE 评论、礼物等事件转为语音播报的 Android 应用。",
+   "review": "TikVoz 是一款 Android 应用，运行时读取指定 TikTok 直播间产生的评论、礼物、关注和点赞事件，按用户设置的过滤规则以语音形式播报。支持调整语音档案、语速和消息队列，并在界面中显示最近十条事件与直播计数。安装要求 Android 9 及以上 64 位系统，APK 约 48.31 MB。适合直播期间无法查看屏幕的主播使用。",
+   "highlights": [
+    "支持按事件类型选择播报内容，并可配置是否朗读用户名和表情符号",
+    "提供语音样本试听、语音档案、语速及消息队列设置",
+    "显示最近十条直播事件和计数器，并通过系统通知查看连接状态"
+   ],
+   "use_cases": [
+    "主播在直播过程中通过语音获知评论、礼物和关注等事件",
+    "直播结束后查阅最近十条事件和各类计数",
+    "在 TikTok 应用内通过通知栏检查连接状态或断开连接"
+   ]
+  },
+  "sha": "fb31b239814f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

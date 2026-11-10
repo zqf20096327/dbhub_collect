@@ -2810,5 +2810,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d0d7c23090af": {
+  "identity": {
+   "one_liner": "本地优先的编码代理会话日志归档与用量分析工具",
+   "review": "Decant 读取本机上 Claude Code、Codex、Gemini CLI 等多种编码代理已写入的会话日志，以及导入的 ATIF 轨迹，归档到一个支持全文检索的 SQLite 库，并提供本地 Web UI、CLI 与 HTTP API 查看令牌、估算费用、上下文窗口和耗时统计。运行时不发出外部网络请求（更新检查默认关闭）；归档文件未加密但权限为 owner-only。提供 npm、Homebrew、shell 安装器与 Docker，目前无原生 Windows 二进制。",
+   "highlights": [
+    "读取 8 类日志源（含 Claude Code、Codex、Cursor CLI、VS Code Copilot Chat），统一存入一个 SQLite 归档，支持对提示、回复、工具名与工具输入做全文检索",
+    "按代理、模型、项目、仓库、结果和日粒度统计令牌、估算费用、上下文窗口与耗时；支持导出 Markdown、JSON、trajectory-v1 与 ATIF 格式",
+    "本地 HTTP API 附 OpenAPI 3.1 契约，运行时默认无出站网络调用，归档以 0600 权限创建"
+   ],
+   "use_cases": [
+    "在本地检索和分析多个编码代理的历史会话记录与工具调用",
+    "统计令牌消耗与估算费用，定位文件热点与 MCP 服务使用情况",
+    "生成可分享的 HTML 分析报告或导出会话轨迹用于留存与复盘"
+   ]
+  },
+  "sha": "d0d7c23090af",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d23f2f5a9f34": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 8 与 SQL Server 的临床 EMR 教学模拟平台，含 14 个病历模块",
+   "review": "该项目是面向临床与护理教育的电子病历训练平台，为学生和督导提供无真实患者风险的病历记录练习环境。采用 Clean Architecture 分为 Domain、Application、Infrastructure 与 MVC 四层，数据层使用 SQL Server 及存储过程。许可为非商业评估性质，禁止商业部署；需自行执行 SQL 脚本初始化数据库。",
+   "highlights": [
+    "提供 14 个临床文档模块，覆盖 ADDS 预警评分、GCS、Braden、FRAT 跌倒风险、常规/PRN 用药、静脉输液与液体平衡、摄食记录、RISKMAN 事件报告及维多利亚产科记录等",
+    "区分学生与督导角色，包含双签名核对、按角色标记的病程记录及督导批量重置模拟数据的工具",
+    "按 Clean Architecture 分层实现，前端以 Bootstrap 5 与异步 AJAX 路由构成单页式交互"
+   ],
+   "use_cases": [
+    "医学院校与护理培训中开展电子病历书写与评分练习",
+    "督导人员初始化场景、重置模拟数据并查看学生练习进度",
+    "在不接触真实患者数据的环境下演练病情恶化预警与用药核对流程"
+   ]
+  },
+  "sha": "d23f2f5a9f34",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cfb37397f0f4": {
+  "identity": {
+   "one_liner": "Hermes Agent 的本地只读监控插件，以 Web Dashboard 形式实时展示运行状态",
+   "review": "驿览（原名 Hermes HUD）是一个面向 Hermes Agent 用户的非官方 Dashboard 插件，以只读方式采集 state.db、cron、日志等本地数据源，通过共享快照缓存与 WebSocket 增量事件流提供约 2 秒级的实时面板，覆盖会话、Token/费用、技能、定时任务、错误事故等维度。它不修改 Hermes 核心，默认监听 127.0.0.1 且无出站遥测；实测标注为 macOS，Linux 待社区验证，升级后需自行核验兼容性。",
+   "highlights": [
+    "对 Hermes 核心数据全程只读（SQLite mode=ro + query_only，不锁 Gateway），仅写自身 telemetry 数据，默认监听 127.0.0.1 且无出站遥测",
+    "通过共享快照缓存与 WebSocket 增量事件流实现约 2 秒级刷新，REST 与 WS 不重复采集，并提供轮询兜底",
+    "提供多 Tab 面板：健康检查、实时活动、Token/费用估算（区分已知估算/未验证值/未知定价）、对话记录、时间线、技能分析、定时任务、渠道、错误事故与系统存储"
+   ],
+   "use_cases": [
+    "在本机实时查看 Hermes Agent 的会话活动、模型调用与 Token/费用估算趋势",
+    "通过健康分、错误指纹聚合与事故时间线排查 Gateway、Cron、渠道抖动等运行问题",
+    "通过可选脚本将新事故/升级/恢复事件推送到 Telegram 或飞书做本地告警"
+   ]
+  },
+  "sha": "cfb37397f0f4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

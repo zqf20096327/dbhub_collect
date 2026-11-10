@@ -2681,5 +2681,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b5b33405aaaf": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的开源上下文服务，将会话外记忆与工作交接保存为可修订工件",
+   "review": "PowerContext 是面向 AI Agent 的开源上下文服务，将决策、约束、进展等持久上下文存储在会话之外的修订化工件中，供后续会话、其他 Agent 或人接续工作。提供 Memory、Handoff、Experience、Skill 四类服务，通过 HTTP/MCP、Python Client、CLI 与 Dashboard 访问。使用 Python 3.11+、Git 与 uv，通过交互式向导安装；支持 macOS 与 Linux，Windows 为实验性支持。Scope ID 仅用于选择数据，不做身份验证或授权。",
+   "highlights": [
+    "Memory 以 FAMILY/ARTIFACT_ID@REVISION 形式保存修订化工件，历史版本可读取与恢复；显式写入无需模型 API",
+    "Handoff 按 Work Contract、Prepared Handoff、Acknowledgement、Task Outcome 四步记录工作连续性",
+    "PreparedContext 召回应用共享字节预算，返回 ready 或 empty；Experience 与 Skill 需经 Review Inbox 审批后才参与召回"
+   ],
+   "use_cases": [
+    "在多个会话或 Claude Code、Codex 等不同 Agent 之间保持任务上下文延续",
+    "将 Agent 进行中的工作交接给其他 Agent 或团队成员",
+    "以生成、审批、导出分离的流程管理可复用的经验与技能条目"
+   ]
+  },
+  "sha": "b5b33405aaaf",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ea3f51d059b": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码会话索引工具，支持混合检索与 MCP 服务",
+   "review": "Callimachus 是一个本地优先的桌面应用（Tauri 2 + Rust + React 19），将 13 种 AI 编码工具（如 Claude Code、Codex、Cursor、Gemini CLI 等）的会话记录统一索引到本地 SQLite 存储，提供关键词（FTS5/BM25）与设备端语义（sqlite-vec）的混合检索，并附带 MCP 服务器、CLI 和 VS Code/Cursor 扩展。面向需要在本地检索与复用 AI 编码历史的开发者。采用 AGPL-3.0 许可，Linux 需 glibc 2.38+。",
+   "highlights": [
+    "将 13 种 AI 编码代理的会话索引到本地 SQLite 存储，数据保留在用户机器上",
+    "通过 SQLite FTS5 关键词与 sqlite-vec 设备端语义相似度进行 Reciprocal Rank Fusion 混合检索，支持按来源、项目、标签过滤",
+    "提供 MCP 服务器、独立 cal/callimachus-mcp 二进制、CLI 命令与 VS Code/Cursor 扩展，并支持将项目记忆发布为仓库内 JSONL 文件"
+   ],
+   "use_cases": [
+    "在本地集中检索多个 AI 编码工具产生的历史会话与涉及过的文件路径",
+    "通过会话启动钩子或 AGENTS.md 管理块向各编码代理注入项目决策、注意事项等持久记忆",
+    "团队通过提交仓库内的 decisions/gotchas JSONL 文件共享提炼的事实"
+   ]
+  },
+  "sha": "5ea3f51d059b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

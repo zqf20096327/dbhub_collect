@@ -2886,5 +2886,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e081e9792de3": {
+  "identity": {
+   "one_liner": "自托管的浏览器界面编码代理，单 Python 程序、无构建无数据库。",
+   "review": "Tacit 是一个本地运行的编码代理：单个 Python 程序直接提供网页界面，用户在浏览器中让代理读取文件、运行命令、编辑代码、搜索网页。数据以纯文件存于 ~/.tacit，无数据库和账户，请求只发往用户配置的模型提供商。需 Python 3.10+，可通过安装脚本或手动 venv 启动；每轮请求的固定前缀开销（约768–2,264 token）由测试重新推导并显示。",
+   "highlights": [
+    "单 Python 程序提供纯网页界面，无构建步骤、无数据库、无账户，数据以纯文件存于 ~/.tacit",
+    "每轮固定前缀 token 开销被测量并显示，六个内置配置文件约 768–2,264 token，并有测试从代码重新推导",
+    "每轮运行在独立子进程中，支持两阶段停止：协作取消后超时进程树终止；能力默认关闭，记忆与学习需手动启用"
+   ],
+   "use_cases": [
+    "在本地浏览器环境中运行编码代理，处理本机项目文件的读取、命令执行与代码编辑",
+    "需要模型提供商与密钥由用户自行配置、数据留在本机的自托管使用方式",
+    "关注提示词固定开销、上下文压缩与按需加载工具能力的长会话工作流"
+   ]
+  },
+  "sha": "e081e9792de3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f4ed7e39c11a": {
+  "identity": {
+   "one_liner": "将TypeScript、Go和PostgreSQL翻译为Lean 4并证明源码性质的翻译工具",
+   "review": "Tolean读取TypeScript纯函数、含副作用的Go代码及sqlc风格的PostgreSQL查询，生成可读的Lean 4定义供编写定理证明，最终由`lake build`内核检查。它只接受各语言的一个子集，拒绝其余代码并报告文件、行号与原因。CI可用`tolean translate --check`校验生成代码是否与提交副本一致。",
+   "highlights": [
+    "支持TypeScript纯函数、含副作用的Go代码（转为状态单子）及sqlc格式的PostgreSQL查询",
+    "Go接口函数可在证明中插入模型，PostgreSQL查询带READ COMMITTED隔离级别模型",
+    "提供`tolean chain trust`列出每条定理的信任链，文档站点与浏览器内playground可用"
+   ],
+   "use_cases": [
+    "为排序、认证等组件编写前/后置条件与不变量并证明",
+    "在CI中生成并检查Lean副本，保持生成代码与源码同步",
+    "将Go业务代码的定理与基于翻译查询的存储契约证明相衔接"
+   ]
+  },
+  "sha": "f4ed7e39c11a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3446,5 +3446,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "522eb22677e9": {
+  "identity": {
+   "one_liner": "Go database/sql 包的 MySQL/MariaDB 纯 Go 驱动实现",
+   "review": "该驱动实现 Go 标准库 database/sql/driver 接口，导入后即可使用完整 database/sql API 访问 MySQL 与 MariaDB。安装通过 go get 完成，配置经由 DSN 字符串或 Config 结构体。维护者官方支持 MySQL 8.0+ 与 MariaDB 10.11+，TiDB 由 PingCAP 支持而 Percona Server 等需自行排查问题。",
+   "highlights": [
+    "纯 Go 实现，无 C 绑定，支持 TCP/IPv4、TCP/IPv6、Unix 域套接字及自定义协议连接",
+    "支持大于 16MB 的查询、LOAD DATA LOCAL INFILE 文件白名单与 io.Reader、zlib/zstd 压缩",
+    "通过 DSN 参数可配置字符集、排序规则、占位符插值、连接存活检查等行为"
+   ],
+   "use_cases": [
+    "Go 应用中通过 database/sql API 访问 MySQL 或 MariaDB 数据库",
+    "需要 Unix 域套接字或 TCP/IPv6 等多种连接方式的数据库客户端",
+    "需要配置连接生命周期管理（SetConnMaxLifetime 等）的连接池场景"
+   ]
+  },
+  "sha": "522eb22677e9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b7e0a8cafa1": {
+  "identity": {
+   "one_liner": "基于 Bun 的后端框架，内置 SQLite ORM、认证、任务队列与可观测性",
+   "review": "Yatta 是运行于 Bun 的 TypeScript 后端框架，提供路由、基于 bun:sqlite 的 ORM、认证、任务队列、缓存、对象存储、邮件与实时通信等模块，各引擎可独立引入。应用代码无需构建步骤，TypeScript 直接运行；内置双工作池运行时将 CPU 任务与 I/O 任务分离。部分协议（WebDAV、OAuth/OIDC）状态默认存于进程内存，多节点部署时需注意。",
+   "highlights": [
+    "内置 8 个功能引擎（api/db/auth/jobs/cache/storage/mail/realtime/observe/otel），支持 TypeScript module augmentation 实现类型化键",
+    "预挂载 gRPC-Web、WebDAV、DoH、WebFinger、OAuth 2.0、OIDC、MCP 七个协议入口，均可独立导入配置",
+    "观测模块在数据不足时返回 unknown/no-data 状态而非推断结论，分析结论附带证据与局限性说明"
+   ],
+   "use_cases": [
+    "需要零构建、TypeScript 直接运行的后端服务开发",
+    "单机或自托管部署的 API 服务与后台任务处理",
+    "需要内置可观测性仪表盘（/_yatta）的 Bun 应用"
+   ]
+  },
+  "sha": "2b7e0a8cafa1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

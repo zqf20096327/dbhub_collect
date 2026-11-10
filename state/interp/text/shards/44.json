@@ -2729,5 +2729,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d8b60a863766": {
+  "identity": {
+   "one_liner": "Rust 编写的开源湖仓引擎，以 PostgreSQL 协议提供 SQL、增量计算与向量检索，数据存于对象存储",
+   "review": "LakeSoul 是 LF AI & Data 沙箱项目，用 Rust 实现，在用户自有对象存储上提供共享目录、主键 upsert、增量 SQL、pgvector 兼容向量检索和 Python SDK。客户端通过 psql 或 Python 直连；需注意 UPDATE/DELETE/COPY 等语句会被拒绝，写入须为自动提交。采用 Apache 2.0 许可。",
+   "highlights": [
+    "实现 PostgreSQL wire 协议、扩展查询协议与 pg_catalog，支持 CREATE TABLE 与 INSERT ... ON CONFLICT，执行于湖仓引擎而非 Postgres 扩展",
+    "支持会话级增量 SQL：INSERT ... SELECT 仅读取游标后的提交并写入变更行，且记录已消费窗口以支持重试；支持 CREATE SUBSCRIPTION 订阅源 PostgreSQL 进行 CDC 同步",
+    "提供 pgvector 兼容 SQL、写入时维护的 IVF + RaBitQ ANN 索引与 Tantivy BM25 全文检索；Python SDK 经 Rust IO 层直读对象存储，输出 Arrow/Daft/Ray/Torch 数据集"
+   ],
+   "use_cases": [
+    "通过 psql/JDBC 或 BI 工具（如 Superset、Metabase）以 SQL 直接查询对象存储上的湖仓表",
+    "将源 PostgreSQL 数据库通过订阅 CDC 同步到 LakeSoul 表并做增量更新",
+    "Python 训练/分析流水线（PyTorch、Ray、Daft、Pandas、DuckDB）直读同一份湖仓数据，含向量相似度与全文检索查询"
+   ]
+  },
+  "sha": "d8b60a863766",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7a8696650869": {
+  "identity": {
+   "one_liner": "dft 是基于 DataFusion 的多接口 SQL 工具套件，含 TUI、CLI、REPL 与服务器。",
+   "review": "dft 是一套基于 Apache DataFusion 的应用集合，提供 TUI、REPL、CLI、FlightSQL 服务器和 HTTP 服务器五种接口，共享同一执行引擎。它支持查询 S3、本地文件和 HuggingFace 数据集，内置 Delta Lake、Vortex 表格式与 WASM UDF 扩展，可通过 DDL 文件在启动时加载表定义。面向需要用 SQL 查询文件数据的开发者，CLI 与 REPL 默认可用，TUI 和服务器需启用对应 feature 编译。",
+   "highlights": [
+    "支持从 S3、本地文件系统和 HuggingFace 数据集查询文件，内置 Delta Lake 与 Vortex 表格式支持",
+    "提供 TUI、REPL、CLI、FlightSQL、HTTP 五种接口，全部共享同一执行引擎",
+    "内置基准测试，输出逻辑规划、物理规划、执行三阶段计时及统计，支持 CSV 导出"
+   ],
+   "use_cases": [
+    "在终端中以 TUI 或 REPL 交互方式探索和查询本地或 S3 上的文件数据",
+    "通过 CLI 从文件或命令行执行脚本化 SQL 查询",
+    "部署 FlightSQL 或 HTTP 服务器，为程序化访问提供 SQL 接口"
+   ]
+  },
+  "sha": "7a8696650869",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a0761fa43e57": {
+  "identity": {
+   "one_liner": "自托管个人站，将笔记、动态、作品等页面以夜空主题整合呈现",
+   "review": "sora-to-ki 是一个可自托管的个人站点源码，包含笔记（MDX）、动态、作品、收藏、日志、照片、留言等页面，用于搭建 koimsurai.com 这类单人网站。前端采用 React 19 与 TanStack Start，后端为 Rust（axum + SQLite），通过 Docker Compose 部署，内置 Caddy 自动配置 HTTPS，支持繁中、简中、英、日、韩五种语言，登录依赖 GitHub 或 Google OAuth，许可证为 AGPL-3.0。",
+   "highlights": [
+    "通过 Docker Compose 部署，内置 Caddy 自动配置 HTTPS，首次启动提供设置向导（GitHub/Google 登录认领站点）",
+    "MDX 文章支持 GFM 及二十余种自定义块，服务端编译高亮；支持五种语言、定时发布、RSS 与 30 天回收站",
+    "提供 MCP server（31 个工具）供 AI 助手通过管理 API 撰写文章、发布动态、上传图片和编辑设置；数据库每日备份至 ./backups"
+   ],
+   "use_cases": [
+    "在一台装有 Docker 的服务器上搭建包含笔记、动态、作品集、照片等模块的个人站点",
+    "需要多语言（繁中/简中/英/日/韩）文章发布与翻译管理的写作者",
+    "允许 AI 助手通过 MCP 工具或命令行协助完成站点部署与内容管理的场景"
+   ]
+  },
+  "sha": "a0761fa43e57",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

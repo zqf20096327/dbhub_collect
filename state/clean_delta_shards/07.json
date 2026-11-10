@@ -16207,5 +16207,1015 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "16b35bcc6f00+2": {
+  "fn": "yandex/ch-backup",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    4,
+    [
+     "license",
+     "tests status",
+     "chat",
+     "Python"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    17,
+    4,
+    17
+   ],
+   [
+    "delete",
+    17,
+    18,
+    17,
+    17
+   ],
+   [
+    "equal",
+    18,
+    59,
+    17,
+    58
+   ],
+   [
+    "replace",
+    59,
+    68,
+    58,
+    67,
+    [
+     " target. The table uses the target server's default MergeTree storage policy",
+     " (including a `replicated_merge_tree` override), which must contain a local disk.",
+     " Dynamic `disk(...)` expressions and target engine defaults specifying `disk`",
+     " instead of a policy are not supported by this adaptation.",
+     " If removing `disk` would require replacing an existing table (including a",
+     " detached table or a table with the same UUID), restore stops before deleting",
+     " any database or table, even with `--keep-going`. Cloud parts would not be",
+     " restored after that deletion. Use an empty destination, or explicitly remove",
+     " the existing table after deciding that its data can be discarded."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    67,
+    68
+   ],
+   [
+    "replace",
+    69,
+    71,
+    68,
+    70,
+    [
+     " are removed as whole rules. DELETE, conditional DELETE, RECOMPRESS, GROUP BY,",
+     " column TTLs and available MOVE rules are preserved."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    70,
+    71
+   ],
+   [
+    "replace",
+    72,
+    73,
+    71,
+    72,
+    [
+     " local disk, in volume priority and disk order."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    106,
+    72,
+    105
+   ],
+   [
+    "replace",
+    106,
+    115,
+    105,
+    106,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    128,
+    106,
+    119
+   ],
+   [
+    "replace",
+    128,
+    130,
+    119,
+    120,
+    [
+     " Example "
+    ]
+   ],
+   [
+    "equal",
+    130,
+    144,
+    120,
+    134
+   ],
+   [
+    "replace",
+    144,
+    175,
+    134,
+    135,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    135,
+    136
+   ],
+   [
+    "delete",
+    176,
+    178,
+    136,
+    136
+   ],
+   [
+    "equal",
+    178,
+    185,
+    136,
+    143
+   ],
+   [
+    "replace",
+    185,
+    203,
+    143,
+    144,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    232,
+    144,
+    173
+   ],
+   [
+    "replace",
+    232,
+    244,
+    173,
+    174,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    250,
+    174,
+    180
+   ],
+   [
+    "replace",
+    250,
+    257,
+    180,
+    181,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    262,
+    181,
+    186
+   ],
+   [
+    "replace",
+    262,
+    269,
+    186,
+    193,
+    [
+     " with data, and `--all` skips backups without data. The filter uses the data size in backup",
+     " metadata, including deduplicated and detached parts. Override it with",
+     " `--only-with-data` / `--no-only-with-data`. Backups explicitly selected by name are copied",
+     " regardless of this setting. Schema-only and access-control-only backups are excluded too:",
+     " access entities and other definitions do not count as table data. To preserve all created",
+     " snapshots, including permission changes in access-only backups, use",
+     " `copy --all --no-only-with-data` or set `copy.only_with_data: false`."
+    ]
+   ],
+   [
+    "equal",
+    269,
+    270,
+    193,
+    194
+   ],
+   [
+    "replace",
+    270,
+    272,
+    194,
+    196,
+    [
+     " also saves a JSON report (schema version 1) once the command finishes, including failures",
+     " and handled termination signals. Any failure gives a nonzero exit code."
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    196,
+    197
+   ],
+   [
+    "replace",
+    273,
+    286,
+    197,
+    210,
+    [
+     " Local planning errors are collected per part or metadata file; available independent objects",
+     " are still copied and the incomplete backup remains failed. Each plan's destinations are validated",
+     " before any writes. Unreadable target backups reserve their names and do not block independent",
+     " backups; unusable deduplication links are materialized from the source when possible.",
+     " Shared configuration, listing, lock and executor failures still stop the run.",
+     " Object counters include rewritten metadata tarballs and count only confirmed completions.",
+     " `known_bytes_copied` sums source sizes of successfully copied objects, excluding rewritten",
+     " tarballs whose final stored sizes are not known. Operations without a confirmed result are",
+     " not counted as successes. Storage credentials are not included in the report.",
+     " Error details spill to temporary files above 64 KiB per backup and JSON output is streamed,",
+     " so large failure reports do not accumulate entirely in RAM. Copy tasks are drained in batches",
+     " of at most 256 objects; the validated object plan and backup metadata still take memory",
+     " proportional to their size."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    287,
+    210,
+    211
+   ],
+   [
+    "replace",
+    287,
+    291,
+    211,
+    215,
+    [
+     " with `meta.metadata_encrypted=false`. This does not change `meta.encrypted`, which describes",
+     " encryption of data and schema. DDL, access control, named collections and UDF definitions",
+     " retain their encryption. The public JSON exposes names, paths, sizes, checksums, deduplication",
+     " links, labels and failure messages; do not put secrets in labels."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    215,
+    216
+   ],
+   [
+    "replace",
+    292,
+    302,
+    216,
+    226,
+    [
+     " `encryption.type=nacl` and no `encryption.key` configured on either side. Encryption settings",
+     " (`encryption.type`, `encryption.chunk_size`, and keys when provided) and `compression.type`",
+     " must match between the copy configs. Restore still needs the original encryption key.",
+     " Reading and restoring old backups remains supported, including encrypted full JSON and",
+     " S3 metadata archives. Missing encryption flags keep their historical defaults of `true`.",
+     " Legacy encrypted metadata, including metadata of deduplication dependencies, still requires",
+     " its original key when it must be read. Local deduplicated parts can be materialized from",
+     " the file list in the selected backup without reading the owner's metadata.",
+     " To start an independent series of keyless-copyable backups,",
+     " set `backup.deduplication_start_time` to the beginning of the series when enabling the new format."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    226,
+    227
+   ],
+   [
+    "replace",
+    303,
+    308,
+    227,
+    232,
+    [
+     " on the server side if both buckets belong to the same S3 service and are accessible with the same",
+     " credentials; otherwise, data is streamed through ch-backup. `disabled` always streams objects.",
+     " Objects transformed by encryption or decryption are streamed in `auto` mode. The setting is read",
+     " from the merged target configuration and can be overridden with",
+     " `--target-config-parameter copy.server_side_copy_mode '\"strict\"'`."
+    ]
+   ],
+   [
+    "equal",
+    308,
+    309,
+    232,
+    233
+   ],
+   [
+    "replace",
+    309,
+    313,
+    233,
+    237,
+    [
+     " be copied on the server side, it is reported as failed; `--keep-going` continues independent",
+     " objects and backups, but the command still exits with an error. The mode is incompatible with",
+     " `copy.cloud_storage.encrypt_data=true`. Already encrypted objects can be copied unchanged.",
+     " Reading, rewriting and publishing backup metadata still uses ch-backup."
+    ]
+   ],
+   [
+    "equal",
+    313,
+    314,
+    237,
+    238
+   ],
+   [
+    "replace",
+    314,
+    331,
+    238,
+    255,
+    [
+     " interrupted, the copy remains in the state `creating` or `failed`, and the next run of the command",
+     " resumes it. Confirmed copies are recorded in the copy context, a journal kept in the target storage",
+     " under `<backup>/copy_context/`. It is saved when 10000 confirmations accumulate or the first",
+     " confirmation arrives 60 seconds after the previous save, and when copying fails or is interrupted by",
+     " a signal. The next run skips an object only if the context records it with the",
+     " same source, target and size and the target storage still holds it with that size: size alone does not",
+     " establish that the contents are correct, and a failed or partial delete may have removed recorded",
+     " objects. Other objects are overwritten. If the target listing or a context file cannot be read, the",
+     " affected objects are copied again. `objects_skipped` in the report counts skipped objects. Before",
+     " copying, resuming holds the listing of the target backup in memory, comparable to the object plan.",
+     " `--no-resume` (or `copy.resume: false`) ignores records of previous runs and overwrites all objects;",
+     " the run still records confirmed copies, so an interrupted run should be repeated with `--no-resume`",
+     " to overwrite every object.",
+     " The context is not copied with the backup and is deleted together with it.",
+     " Completed backups are skipped.",
+     " When a linked part has already been materialized in a successfully copied backup, subsequent",
+     " backups reuse that copy, including mutation-renamed parts and full cloud-storage backups."
+    ]
+   ],
+   [
+    "equal",
+    331,
+    332,
+    255,
+    256
+   ],
+   [
+    "replace",
+    332,
+    382,
+    256,
+    306,
+    [
+     " and metadata of object storage disks kept in their buckets, rewriting the metadata to reference",
+     " the copied data. Backups without such data, including ones created with",
+     " `--copy-cloud-storage-data`, are copied entirely by `files`, and their scope `cloud_storage` is",
+     " completed right away. `--scope` (can be given multiple times) copies only the specified scopes,",
+     " overriding `copy.scopes` in the configuration (default: `[files, cloud_storage]`). For example,",
+     " `copy: {scopes: [cloud_storage]}` selects only object storage copying. The list must be non-empty.",
+     " The setting is read from the merged target configuration, so it can be set in the main config,",
+     " `--target-config` or `--target-config-parameter copy.scopes '[\"files\"]'`.",
+     " Each run chooses its own copy mode with `copy.server_side_copy_mode`. `files`",
+     " also copies the original disk metadata into",
+     " `<backup>/copy_context/<id>/source/` and saves the list of its objects in",
+     " `<backup>/copy_context/<id>/manifest/files.jsonl.gz` (locations and sizes, without credentials). A",
+     " run without `files` does not access the source storage: it takes copies from the target storage",
+     " (the specified ones, or with `--all` every copy whose `cloud_storage` is not completed, or the",
+     " newest of them for `LAST`), reads the copy's full metadata and disk metadata from `source/`,",
+     " copies disk metadata that needs no rewriting from there and checks `files` by the manifest.",
+     " The copy retains the original cloud storage location until it is published as `created`. So `files` must be copied first, from a",
+     " host with access to the source storage; `cloud_storage` needs only access to the buckets of the",
+     " disks. A scope that is not copied is planned only if it is completed, to check it with the same",
+     " settings as copying it, so copying only the scope `files` needs no settings of object storage data",
+     " while `cloud_storage` is not completed. Statuses of the scopes (`pending`, `completed`, `failed`)",
+     " are saved in `meta.copy` of the copy, for example `state: creating, copy: {scopes: {files:",
+     " completed, cloud_storage: pending}, updated_at: ...}`, where `updated_at` is when copying was last",
+     " saved. `list -av` shows these values in the `copy` column; `list -av --format json` includes",
+     " the same `copy` object. Backups without `meta.copy` have an empty cell or JSON `null`.",
+     " The listing reads light metadata, including the saved copy scopes and timestamp.",
+     " The copy becomes `created` once every scope is completed. Until then the report shows the",
+     " backup as `partial` with `backup_state: creating`, and the command exits with 0 if the copied",
+     " scopes succeed. Saved statuses are not trusted: a scope that is not copied is completed only if",
+     " the copy context and the target listing confirm all its objects, otherwise it becomes `pending`",
+     " again, e.g. after a failed delete. `--no-resume` overwrites objects of the scopes that are copied",
+     " and still checks the other scopes this way. Between scopes, the copy is in the state `creating`.",
+     " Copies in `creating` or `failed` with `files: completed` and `cloud_storage: pending` or `failed`",
+     " follow `backup.retain_count` and `backup.retain_time` in `purge` just like `created` backups,",
+     " regardless of `updated_at`. If retained backups include partial copies but none is complete,",
+     " `purge` also keeps the newest complete backup.",
+     " `delete --purge-partial` keeps these copies; explicit deletion by",
+     " name is still available. Other incomplete copies retain the temporary protection from `purge`",
+     " and `delete --purge-partial` while their `updated_at` is within",
+     " `backup.retain_incomplete_copy_time` (7 days by default, empty to disable).",
+     " Before relying on these retention rules, upgrade every node and scheduled job that can run",
+     " `purge` or `delete --purge-partial` against the same storage to a version implementing them.",
+     " Older versions can still delete backups protected by these rules.",
+     " With `--keep-going`, objects of a scope that failed to copy are listed in",
+     " `<backup>/copy_context/<id>/failed/<scope>.jsonl.gz` (source and target keys, size and error) and",
+     " the scope becomes `failed`; the next run of the scope copies only unconfirmed objects. The list is",
+     " rewritten by each run of the scope in which objects fail and removed once the scope completes.",
+     " Disk metadata that cannot be planned is not copied, so it never overwrites rewritten disk",
+     " metadata; a later run copies it. Copy scopes of one backup one after another: the local lock",
+     " serializes runs on one host, runs on different hosts require `lock.zk_flock`."
+    ]
+   ],
+   [
+    "equal",
+    382,
+    383,
+    306,
+    307
+   ],
+   [
+    "replace",
+    383,
+    386,
+    307,
+    310,
+    [
+     " failure cleanup. To coordinate copy with delete and purge across processes, enable `lock.zk_flock`",
+     " and use the same ZooKeeper ensemble and lock path for every operation on the respective storage.",
+     " Locking remains optional; the local file lock retains its shared semantics."
+    ]
+   ],
+   [
+    "equal",
+    386,
+    387,
+    310,
+    311
+   ],
+   [
+    "replace",
+    387,
+    389,
+    311,
+    313,
+    [
+     " source and target light-metadata reads at copy startup (default: `4`, positive integer).",
+     " Each batch holds at most this many reads; set `1` for sequential reading."
+    ]
+   ],
+   [
+    "equal",
+    389,
+    390,
+    313,
+    314
+   ],
+   [
+    "replace",
+    390,
+    393,
+    314,
+    317,
+    [
+     " full-metadata prefetch for `copy.deduplication_age_limit` (default: `2`). The limit includes",
+     " the candidate being indexed and queued reads; indexing remains sequential. Set `1` for",
+     " sequential loading. Increasing it retains more full metadata in memory."
+    ]
+   ],
+   [
+    "equal",
+    393,
+    394,
+    317,
+    318
+   ],
+   [
+    "replace",
+    394,
+    398,
+    318,
+    322,
+    [
+     " present in the target storage, the deduplication link is kept. A link to a local part is also kept",
+     " if the copy of that backup is not completed but already holds files of the part, e.g. after its",
+     " scope `files`, as deduplication of new backups does. Otherwise, the data part is copied",
+     " into the copied backup. `--all` copies older backups first, so deduplication is kept in the target storage."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    399,
+    322,
+    323
+   ],
+   [
+    "replace",
+    399,
+    425,
+    323,
+    349,
+    [
+     " independent deduplication window for active parts on local disks. The default `{days: 0}`",
+     " disables this additional lookup; a zero duration keeps the existing source-link behavior.",
+     " The value accepts the same units as a Python `timedelta` (weeks through microseconds),",
+     " with finite nonnegative numbers. Target command-line configuration overrides the target file,",
+     " which overrides the main configuration, following the usual recursive merge rules.",
+     " When enabled, copy matches parts by database, table, name (allowing mutation suffix changes),",
+     " checksum, disk, size, file list, layout and encryption, even if source stores the part anew",
+     " or links to a different owner. The newest matching physical owner with available files is used.",
+     " Its original backup `start_time` must be within the period before the start of the copy command;",
+     " both bounds are inclusive and fixed before resolving `LAST` or waiting for locks.",
+     " Owners without a timestamp or with a future timestamp are skipped. Copying preserves the",
+     " original timestamp. A recent reference does not extend an old owner's window.",
+     " This additional lookup reuses only TAR parts, whose stored archive size can be checked.",
+     " Legacy per-file parts are copied from source because their metadata has no individual file sizes.",
+     " This applies to source links too: without an eligible target owner, the part is copied from source.",
+     " The window is independent of `backup.deduplication_age_limit`, `deduplication_start_time`",
+     " and `deduplicate_parts`; historical backups copied with `--all` use the same current-time bound.",
+     " Reading full metadata and listing part files in eligible target backups costs additional S3",
+     " requests. Each candidate's full metadata is read once for the index, file listings are grouped",
+     " by table, and index memory grows with the number of physical local parts in the window.",
+     " The index retains a fixed-size fingerprint of each file list instead of its file names.",
+     " Loading a candidate still requires memory proportional to that backup's full metadata.",
+     " Existing completed copies are skipped and existing duplicates are not compacted.",
+     " Cloud-storage and detached parts retain their existing behavior. Restore uses the existing",
+     " link format; delete and purge preserve referenced parts in partially deleted owners until",
+     " the references are removed, even when an owner is outside the deduplication window."
+    ]
+   ],
+   [
+    "equal",
+    425,
+    426,
+    349,
+    350
+   ],
+   [
+    "replace",
+    426,
+    429,
+    350,
+    353,
+    [
+     " bucket. Copying them moves that data into the target backup bucket, including linked parts when",
+     " their owning backup is absent there. No ClickHouse disk credentials or `--target-cloud-storage-bucket`",
+     " are needed; restore and deletion use the normal full-backup behavior."
+    ]
+   ],
+   [
+    "equal",
+    429,
+    430,
+    353,
+    354
+   ],
+   [
+    "replace",
+    430,
+    477,
+    354,
+    401,
+    [
+     " objects are copied to the bucket set with `--target-cloud-storage-bucket` under",
+     " `<--target-cloud-storage-path>/<backup name>/`, so the copy doesn't depend on the source cluster.",
+     " The location of the source objects is taken from ClickHouse configuration of the disk (so the command",
+     " should be run on a host of the source cluster), or it can be set with `--cloud-storage-source-bucket` and",
+     " `--cloud-storage-source-path`. Credentials can be overridden in the `copy.cloud_storage` config section.",
+     " Disk metadata is unencrypted by default (`cloud_storage.encryption=false`); the saved flag",
+     " continues to control reading of older encrypted archives. Before uploading an unencrypted",
+     " archive, ch-backup rejects malformed or unsupported disk metadata, unexpected trailing content",
+     " and nonempty inline file data.",
+     " Each file is limited to 1 MiB, checked and archived from the same bounded memory buffer.",
+     " Larger disk metadata files also require `cloud_storage.encryption=true`.",
+     " Such files require `cloud_storage.encryption=true`, and copying that backup requires a key.",
+     " The flag only controls disk metadata. By default, blobs retain the encryption applied by ClickHouse",
+     " or S3. Set `copy.cloud_storage.encrypt_data=true` to encrypt copied blobs in the streaming pipeline.",
+     " Encryption settings come from the top-level `encryption` section by default; values under",
+     " `cloud_storage.data_encryption` override them, allowing a dedicated key on keyless copy workers.",
+     " The copy metadata stores the encryption type and chunk size, but never the key. An already encrypted",
+     " cloud-data copy cannot be encrypted again. Encrypting data of backups created with",
+     " `cloud_storage.copy_data=true` is not supported.",
+     " Restore decrypts encrypted blobs into `restore.cloud_storage.decryption_staging` before",
+     " creating the temporary ClickHouse disk. By default staging uses the destination disk's",
+     " endpoint, bucket and credentials; disks without static credentials use the storage SDK's",
+     " normal environment/provider chain. Overriding the staging endpoint or bucket requires both",
+     " `access_key_id` and `secret_access_key`. The staging path is exclusive to one restore and must",
+     " not overlap the encrypted source prefix in the same bucket, because ch-backup removes everything",
+     " below it before and after restore. Reserve staging capacity for the full restored cloud-storage",
+     " data volume. Decryption and downloading disk metadata a second time make this restore slower than",
+     " an unencrypted cloud-data restore.",
+     " To use a separate worker, provide source endpoint, bucket, path and credentials explicitly;",
+     " neither a local ClickHouse configuration nor a connection to the source server is required.",
+     " Without the original disk configuration, leave the source path unset for V5 metadata to",
+     " copy its full object keys as stored; set the source prefix for older relative-key metadata.",
+     " Source endpoint, bucket and path overrides are applied independently: omitted fields retain the",
+     " values from stored source metadata or disk configuration. An explicitly empty source path selects",
+     " the bucket root.",
+     " A source endpoint from backup metadata must match the configured backup-storage or ClickHouse-disk",
+     " endpoint (ignoring trailing slashes). To copy from another endpoint, set",
+     " `copy.cloud_storage.source.endpoint_url` explicitly in the target configuration.",
+     " Otherwise, copy fails before making requests to the stored endpoint.",
+     " For version-5 metadata containing full object keys, a source path override replaces the original",
+     " prefix from stored source metadata or disk configuration. Copy fails before writing if that prefix",
+     " is unknown or a key is outside it. Without a path override, full keys are read as stored.",
+     " Restore of the copy uses the copied objects by default; they must be accessible with credentials of the",
+     " object storage disk of the host where the backup is restored. Note that these objects are not removed",
+     " when the copy is deleted, and they're stored for each copied backup separately.",
+     " Restore preserves the HTTP/HTTPS scheme of the stored endpoint. Its `--cloud-storage-source-endpoint`",
+     " option accepts a full HTTP(S) URL or `host[:port]`; the latter uses the original disk's scheme."
+    ]
+   ],
+   [
+    "equal",
+    477,
+    478,
+    401,
+    402
+   ],
+   [
+    "replace",
+    478,
+    485,
+    402,
+    409,
+    [
+     " or restore handlers only.",
+     " Export requires `SHOW HANDLERS`, `SELECT ... system.handlers`, and a server setting",
+     " `display_secrets_in_show_and_select=1` plus grant `displaySecretsInShowAndSelect` if you have any secrets.",
+     " In the latter case, any `[HIDDEN]`, including literals, is rejected.",
+     " Restore requires `CREATE HANDLER` and `DROP HANDLER` for replacements.",
+     " Identical definitions are skipped; changed definitions use non-atomic `DROP/CREATE`.",
+     " Concurrent handler DDL is unsupported. Stop other changes to the selected handlers during restore."
+    ]
+   ],
+   [
+    "equal",
+    485,
+    486,
+    409,
+    410
+   ],
+   [
+    "replace",
+    486,
+    490,
+    410,
+    414,
+    [
+     " for changes, preserving dependencies. Entities absent from the backup remain; XML-defined",
+     " target entities are skipped. Parents omitted from the backup must already exist. Replacing",
+     " shared parents or resources can affect other entities. Type conflicts and server restrictions",
+     " abort restore; concurrent workload/resource DDL is unsupported."
+    ]
+   ],
+   [
+    "equal",
+    490,
+    500,
+    414,
+    424
+   ],
+   [
+    "replace",
+    500,
+    509,
+    424,
+    425,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    509,
+    610,
+    425,
+    526
+   ],
+   [
+    "replace",
+    610,
+    627,
+    526,
+    527,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    627,
+    641,
+    527,
+    541
+   ],
+   [
+    "replace",
+    641,
+    642,
+    541,
+    542,
+    [
+     "Unit tests are implemented based on pytest testing framework."
+    ]
+   ],
+   [
+    "equal",
+    642,
+    651,
+    542,
+    551
+   ],
+   [
+    "replace",
+    651,
+    653,
+    551,
+    553,
+    [
+     "Docker is used as a virtualization technology and",
+     "Behave as a testing framework."
+    ]
+   ],
+   [
+    "equal",
+    653,
+    709,
+    553,
+    609
+   ],
+   [
+    "replace",
+    709,
+    711,
+    609,
+    611,
+    [
+     " IDs and actual ClickHouse versions. Features not started after a failure have",
+     " status `not_run`, distinct from version skips."
+    ]
+   ],
+   [
+    "equal",
+    711,
+    712,
+    611,
+    612
+   ],
+   [
+    "replace",
+    712,
+    717,
+    612,
+    617,
+    [
+     " including skipped scenarios. `saved-logs/` contains the selected container logs",
+     " described above, on both success and failure. Failure-only stage diagnostics",
+     " are written to `stage-failures.jsonl`; worker logs and container diagnostics",
+     " are retained for failed runs. Exit codes, report completeness and stage failures",
+     " determine the result; unfinished scenarios cannot turn a run green."
+    ]
+   ],
+   [
+    "equal",
+    717,
+    720,
+    617,
+    620
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "f41a385be4e7+2": {
+  "fn": "meat-daemon-404/dsh-plugin-immune",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    1,
+    [
+     "dsh-immune — self-evolving pitfall immunity"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    1,
+    2
+   ],
+   [
+    "replace",
+    6,
+    7,
+    2,
+    3,
+    [
+     " Your coding agents stop re-debugging what they already fixed. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    3,
+    4
+   ],
+   [
+    "replace",
+    8,
+    16,
+    4,
+    10,
+    [
+     " npm version",
+     " CI",
+     " coverage 82.6%",
+     " MIT",
+     " node ≥22.5",
+     " Listed on DSH Plugin Hub"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    10,
+    11
+   ],
+   [
+    "replace",
+    17,
+    22,
+    11,
+    12,
+    [
+     " 97.54% agreement replaying 20,100 real tool calls · 0 false negatives · zero runtime dependencies"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    12,
+    13
+   ],
+   [
+    "replace",
+    23,
+    25,
+    13,
+    16,
+    [
+     " measured, not asserted — how the number was produced ",
+     "",
+     " English | 简体中文 "
+    ]
+   ],
+   [
+    "equal",
+    25,
+    30,
+    16,
+    21
+   ],
+   [
+    "replace",
+    30,
+    35,
+    21,
+    24,
+    [
+     " immune demo: distill, recall, inject",
+     " the immune dashboard: KPI row, by-model attribution, rule table",
+     " The dashboard as any install sees it — the capture uses demo rules, not a private library. "
+    ]
+   ],
+   [
+    "equal",
+    35,
+    170,
+    24,
+    159
+   ],
+   [
+    "replace",
+    170,
+    177,
+    159,
+    160,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    238,
+    160,
+    221
+   ],
+   [
+    "replace",
+    238,
+    239,
+    221,
+    222,
+    [
+     "Rules land between ` ` markers. Everything outside them is left alone, angle brackets inside rules are stripped, and re-running rewrites the block instead of appending."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    258,
+    222,
+    241
+   ],
+   [
+    "replace",
+    258,
+    264,
+    241,
+    247,
+    [
+     "||dsh-plugin-immune|deja-vu|mem0|claude-memory-compiler|",
+     "|---|---|---|---|---|",
+     "|Keeps|failure→success pairs distilled into rules|full session transcripts|conversation facts|compiled skill files|",
+     "|Delivery|injected before the repeat, via hooks|search on demand (MCP/TUI)|SDK-level recall|skill file, read by the model|",
+     "|Dependencies|none (`node:sqlite` FTS5)|one Go binary|Python + store|Node|",
+     "|Hosts|DSH, ZCode native; Claude Code & Codex via `connect`|Claude Code, Codex, Cursor, 36+|any via SDK|Claude Code|"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    283,
+    247,
+    266
+   ],
+   [
+    "replace",
+    283,
+    284,
+    266,
+    267,
+    [
+     "For the full list of decisions and the ones that were tried and reverted, read AGENTS.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

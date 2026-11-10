@@ -2439,5 +2439,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5b9815e945b3": {
+  "identity": {
+   "one_liner": "基于 Flask+SQLite 的学生请假与学术 accommodation 审批系统原型，含企业设计包",
+   "review": "该项目围绕一个需求提供三份产出：可运行的 Flask+SQLite 请假审批原型、面向 HKUST(GZ) 的企业级设计提案包，以及促成它们的个人创意作业。系统实现两级审批、CSRF 防护、附件访问控制，并基于学生课表预览请假将影响的课程。README 以版本编年史记录 v0.6.0 至 v1.19.1 的演进，当前状态以 CHANGELOG、CI 结果与痛点文档为准，原型与提案、缺口分析三者区分明确。",
+   "highlights": [
+    "提供两级审批流、CSRF 防护与附件访问控制，并根据学生课表预览请假影响课程",
+    "支持逐版本迭代的安全与工程能力，包括登录限流持久化、批量审批原子事务、OIDC SSO、ClamAV 兼容的恶意软件扫描与备份恢复",
+    "CI 包含单元测试与冒烟检查，README 声明 225+ 单元测试与 247 项冒烟检查"
+   ],
+   "use_cases": [
+    "高校教务或学生事务部门部署学生请假申请与审批流程",
+    "需要审批工作流、附件管理与审计记录的教学管理系统开发参考",
+    "课程作业或教学场景中演示 Flask 应用从原型到企业设计包的演进过程"
+   ]
+  },
+  "sha": "5b9815e945b3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c9f67946662": {
+  "identity": {
+   "one_liner": "Rust 编写的单二进制事件流平台，实现 Kafka 协议并内置 SQL、全文与向量查询。",
+   "review": "Chronik Stream 是一个用 Rust 实现的事件流平台，实现 24 个 Kafka wire protocol API，可被现有 Kafka 客户端直接使用。核心机制是写入 WAL 确认后由后台异步建立列式、Tantivy 全文、HNSW 向量索引，各能力按 topic 配置独立开关。支持 Docker、二进制或源码运行，集群模式基于 Raft，最少 3 节点。",
+   "highlights": [
+    "实现 24 个 Kafka wire protocol API，可通过 kafka-topics.sh、KafkaProducer 等客户端直接读写",
+    "按 topic 配置启用 SQL（DataFusion/Arrow/Parquet）、全文搜索（Tantivy BM25）、向量搜索（HNSW）能力，索引在 produce 确认后后台异步进行",
+    "支持 Docker、预编译二进制、源码编译三种安装方式；集群模式使用 Raft 共识，支持零停机添加节点"
+   ],
+   "use_cases": [
+    "以 Kafka 协议写入事件并用 POST /_sql 直接做 SQL 聚合查询（如按城市统计订单）",
+    "对消息内容做全文检索（如日志、工单查询），通过 POST /_search 接口访问",
+    "对事件做向量语义检索或通过 /_query 用 RRF 融合多模态查询结果，供 AI 应用读取"
+   ]
+  },
+  "sha": "8c9f67946662",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30c92a04b44f": {
+  "identity": {
+   "one_liner": "面向房产经纪的开放看房房源列表分享工具，基于 RealtyAPI 与 MySQL",
+   "review": "Open Houses 是一个供房产经纪人使用的 Web 应用：经纪人可按开放看房日期筛选房源，将候选房源整理成按日期和看房时间排序列表，并通过链接分享给客户。用户需注册登录才能保存和分享列表；密码使用 bcrypt 哈希存储，数据存于 MySQL/TiDB，房源数据来自 RealtyAPI，需配置其 API 密钥。",
+   "highlights": [
+    "支持按开放看房日期等条件筛选和搜索房源，列表按日期与看房时间组织",
+    "注册用户可将房源保存为列表并以链接分享，拥有私有个人页面",
+    "实现 bcrypt 密码哈希、分页、客户端缓存与 Intersection Observer 懒加载"
+   ],
+   "use_cases": [
+    "经纪人筛选当天有开放看房的房源并生成 tour 排期列表",
+    "通过链接向客户分享一日多套房源的看房安排",
+    "本地部署后作为房源搜索与列表管理的内部工具运行"
+   ]
+  },
+  "sha": "30c92a04b44f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

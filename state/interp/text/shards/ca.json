@@ -2695,5 +2695,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bb09866fce83": {
+  "identity": {
+   "one_liner": "基于 BM25 多跳检索的 AI 代理持久化记忆、反思与安全库",
+   "review": "CogniCore 是一个 Python 库兼 MCP 服务器，为 AI 代理提供跨会话持久记忆、反思和安全过滤，不依赖向量数据库或嵌入服务，BM25 多跳检索在进程内运行。通过钩子自动保存 Claude Code/Codex 会话并在另一代理中恢复，数据存于本地 SQLite。基础安装仅依赖 numpy、jsonschema、requests，需 Python 3.10+；词法检索在查询与会话词汇不一致时会漏检，语义检索需安装 [memory] 扩展。",
+   "highlights": [
+    "提供会话自动保存与恢复，支持 Claude Code 与 Codex 间交接，任意 MCP 客户端可调用 cognicore_save_session/resume_session",
+    "内置 BM25/TF-IDF 多跳检索、反思、提示注入拦截（NexusShield）、事件记录与分支重放、Ed25519 签名的记忆导出导入（fail-closed 验证）",
+    "自带 MCP 服务器（含托管端点与 OAuth 2.1 授权）及 CLI（benchmark、arena、memory viewer 等）"
+   ],
+   "use_cases": [
+    "在多个编码代理间延续同一任务的上下文，避免重复解释",
+    "为自研代理函数或流程添加跨运行经验记忆与失败教训反思",
+    "通过 MCP 为 Claude Code、Cursor 等客户端接入无代码改动的持久记忆"
+   ]
+  },
+  "sha": "bb09866fce83",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79dc51e47671": {
+  "identity": {
+   "one_liner": "台湾中小学单校自架的排课与调代课 Web 系统，含 OR-Tools 自动排课引擎",
+   "review": "面向台湾国小、国中、高中职教学组长，覆盖学期基础资料、配课、手动与自动排课、请假代课调课、通知与钟点统计。采用 Vue 3 + FastAPI + PostgreSQL，OR-Tools CP-SAT 求解器支持硬软约束与冲突说明。单校部署设计，不支持多租户；经 Docker Compose 一键安装，提供示范数据供试用。",
+   "highlights": [
+    "自动排课基于 OR-Tools CP-SAT，支持 H1–H10 硬约束与 S1–S8 软约束加权，无解时输出冲突定位并支持部分排课",
+    "提供请假登记、代课推荐、调课验证、站内与 Email 通知、A4 公告打印及月结钟点统计（Excel）",
+    "课程表可导出 Excel / PDF（内嵌中文字型）/ PNG，支持每日自动备份与 RBAC 四级角色"
+   ],
+   "use_cases": [
+    "学校教务处在校内单台主机自架部署排课系统，数据留存校内",
+    "教学组长进行学期排课、老师请假后的代课指派与调课处理",
+    "通过示范数据（虚构国中 18 班、48 位教师、384 笔配课）演示完整排课与调代课流程"
+   ]
+  },
+  "sha": "79dc51e47671",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "af53d77f59aa": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件全文检索数据库，通过 BM25F 排序返回结果。",
+   "review": "Persia DB 是一个以 Rust 库形式链接使用的嵌入式全文检索数据库，将索引、文档与元数据存入单个 .persia 文件，经 WAL 写入、段合并后用 BM25F 打分执行排序检索。项目当前处于 pre-alpha 阶段，尚未导出计划的 Db 门面 API，也无 crates.io 发布，需以 git 依赖方式引入 persia-engine 使用；格式 1.0 在 v1.0 发布前不稳定。适用于愿意跟进早期阶段的 Rust 开发者本地集成检索场景。",
+   "highlights": [
+    "通过 persia-engine 提供创建/打开数据库文件、经 WAL 写入与提交文档、合并段，以及在集合快照上执行 BM25F 排序检索（含过滤、排序、分面、分页）的库 API",
+    "数据存储在单个 .persia 容器文件（可选 .persia.blobs 包），段不可变，索引格式、分析器与查询执行均在仓库内实现，通过工作区允许清单约束直接依赖",
+    "提供 persia CLI 用于检查段与容器、校验 CRC、转储词项与倒排表、清理临时文件及只读整库校验；支持 zstd 块压缩、CRC32C 校验与自动压缩回收空间"
+   ],
+   "use_cases": [
+    "在 Rust 应用进程内为文档集合构建全文索引并执行排序检索，无需独立服务进程",
+    "对现有 .persia 数据文件做只读完整性校验、段统计查看与词项/倒排检查",
+    "以 git 依赖方式参与项目的早期开发与测试（README 明确提示生产检索需求应使用已发布工具）"
+   ]
+  },
+  "sha": "af53d77f59aa",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

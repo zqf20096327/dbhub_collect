@@ -3106,5 +3106,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c7f113b3e6e3": {
+  "identity": {
+   "one_liner": "本地运行的多AI代理聊天应用，汇集Codex、Claude Code等并共享记忆。",
+   "review": "MADRE 是一个在本地电脑上运行的应用（打开于 127.0.0.1），将 Codex、Claude Code、Gemini、Cursor、OpenCode、Grok 等已有的 AI 会话汇入同一个聊天界面，各代理可读取彼此的发言，共享一份记忆。默认只读，权限分 #0 到 #4 由用户逐条解锁。需 Node 22.5+ 和至少一个 AI 会话；采用 Business Source License 1.1，每版发布四年后转为 AGPL v3，个人及 10 人以内团队免费。",
+   "highlights": [
+    "在同一聊天中接入 Codex、Claude Code、Gemini、Cursor、OpenCode 和 Grok，各代理可读取其他代理的消息",
+    "代理默认只读，权限分 #0–#4 五级，支持撤销操作",
+    "本地运行、无账户，通过 npx 或 Windows 安装包部署，附诊断命令 doctor"
+   ],
+   "use_cases": [
+    "在同一界面内同时使用多个 AI 编码代理并让它们互相看到对话内容",
+    "为多个项目集中管理 AI 会话，通过 Coordinator 机制统筹",
+    "在无云端、无账户的环境下本地运行 AI 代理协作"
+   ]
+  },
+  "sha": "c7f113b3e6e3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c359ab4de53a": {
+  "identity": {
+   "one_liner": "基于 MCP 的自托管 AI 代理语义记忆服务，单 Rust 二进制加 SQLite 存储。",
+   "review": "OmniMem 是一个自托管的语义记忆服务，通过 MCP 协议向 AI 编码代理提供跨会话、跨机器的持久记忆。它将情节记录、项目上下文、RSS 知识、偏好和技能五类记忆存入单一 SQLite 文件，嵌入模型 all-MiniLM-L6-v2 经 ONNX Runtime 本地运行。提供 macOS/Windows/Linux 托盘应用与 `omnimem serve` 无头服务器两种形态，MIT 许可。确认与拒绝操作仅限用户执行。",
+   "highlights": [
+    "五类记忆（情节、项目上下文、知识、偏好、技能）联合检索，召回排序综合相似度、生命周期状态、经验权重、日期与信任度等因素",
+    "以流式 HTTP 提供 49 个 MCP 工具，支持 OAuth 2.1 登录与共享令牌认证；内置墓地（失败尝试记录）、经验评分、矛盾检测、语义去重与技能编译器",
+    "单二进制运行于 SQLite，本地嵌入不需 API 调用，支持 Windows x64、macOS Apple silicon、Linux x86_64/arm64 桌面与服务器部署，另有 Docker 镜像"
+   ],
+   "use_cases": [
+    "为 Claude Code、Claude Desktop、Cursor、GitHub Copilot 等 MCP 客户端配置共享的持久记忆",
+    "在服务器部署并通过反向代理，使多台机器上的多个代理读取同一份记忆",
+    "记录已知失败方案并在会话中拦截重复尝试（通过 omnimem hook 的 Claude Code 钩子）"
+   ]
+  },
+  "sha": "c359ab4de53a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b519bd3041a": {
+  "identity": {
+   "one_liner": "基于 Docker Compose 的本地 HTTPS WordPress 部署，使用专用 TiDB 数据库与账户",
+   "review": "该项目提供一套 Docker Compose 编排，用于在本机运行以 TiDB 为后端数据库的 WordPress，仅对外发布 127.0.0.1 上的 https://localhost:8443。要求 Docker Engine 28+ 与 Python 3.9+，通过 setup.py 生成数据库、表前缀与密钥等配置。四类服务均以非 root 运行，WordPress 不可访问通用外网出口，更新需重建镜像。",
+   "highlights": [
+    "仅发布本地 HTTPS 端口 8443，WordPress 自身不暴露端口，MySQL TLS 由 WordPress 直连 TiDB 端到端加密",
+    "数据库连接走 WordPress→db-relay→database-gateway→TiDB 固定链路，运行时拒绝 root 身份、test 库与默认 wp_ 前缀，并校验 schema 范围内的授权",
+    "记录结构化 wordpress_security 审计事件（登录、角色变更、密码重置等），特权事件另存于持久卷中并轮转保留"
+   ],
+   "use_cases": [
+    "在本机搭建以 TiDB 为数据库的 WordPress 开发或测试环境",
+    "需要限制 WordPress 出站网络仅访问数据库的部署场景",
+    "依赖数据库账户最小权限与本地 HTTPS 安装流程的演示或评估环境"
+   ]
+  },
+  "sha": "1b519bd3041a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2946,5 +2946,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a12a92cef68e": {
+  "identity": {
+   "one_liner": "基于 Rust 与 GPUI 的原生桌面工作区，集成数据库、SSH、远程桌面与 AI 工具。",
+   "review": "Navop 以同一原生核心发布三款应用：Navop 全功能版、Navop Shell（远程操作）、Navop Data（数据库工具），面向需要同时管理多种数据库和远程服务器的开发者与运维人员。它用 GPUI 实现 GPU 渲染、不含 WebView；内置 MySQL、PostgreSQL、SQLite、DuckDB、SQL Server、Oracle 连接，ClickHouse、达梦、人大金仓等以扩展驱动提供。许可为 Apache-2.0 及补充条款，提供 sha256 校验文件，macOS 首次运行需手动清除隔离标志。",
+   "highlights": [
+    "内置 MySQL、PostgreSQL、SQLite、DuckDB、SQL Server、Oracle 等数据库支持，ClickHouse、TDengine、达梦、KingbaseES、OceanBase、openGauss 等通过可安装扩展驱动提供",
+    "提供 SSH/SFTP/FTP 终端与文件管理、端口转发、RDP/VNC 远程桌面，Windows 下可嵌入 MSTSC ActiveX 控件，其他平台使用纯 Rust 的 IronRDP 后端",
+    "三个应用共享 AI 工作台、Notes、团队同步、扩展市场和 Public MCP 服务器，可通过 CLI 与 Agent Skill 向外部 Codex、Claude 等 MCP 客户端暴露工具"
+   ],
+   "use_cases": [
+    "在同一桌面环境中连接并查询多种数据库、执行 SQL、查看执行计划、绘制 ER 图与进行数据迁移",
+    "管理远程服务器：SSH 终端、SFTP 文件传输、端口转发与 RDP/VNC 远程桌面操作",
+    "通过 Public MCP 和 @navop/cli 将主机工具接入 Codex、Claude Code 等外部代理与自动化流程"
+   ]
+  },
+  "sha": "a12a92cef68e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ba47cec184d3": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 OAuth2/OIDC 身份提供者，单二进制 + SQLite 存储全部状态",
+   "review": "Autentico 用 Go 实现标准 OAuth2 与 OIDC 协议，覆盖登录、MFA、Passkey、会话与令牌签发，整个身份服务运行于单个二进制文件，数据存于一个 SQLite 文件，无需外部数据库或缓存。适合需要自建认证的小团队、内部工具与独立开发者；不支持横向扩展及 SCIM、LDAP 联邦等企业特性。",
+   "highlights": [
+    "实现 Authorization Code + PKCE、Refresh Token、Token Introspection（RFC 7662）、Token Revocation（RFC 7009）、OIDC Discovery 与 RS256 签名 JWT",
+    "支持 WebAuthn/Passkey、TOTP 与 Email OTP 三类 MFA，以及密码/Passkey/仅 Passkey 三种认证模式，可运行时切换",
+    "内置编译进二进制的管理界面，支持动态客户端注册、每客户端配置覆盖、自助注册与审计日志"
+   ],
+   "use_cases": [
+    "小团队或独立开发者为产品自托管用户认证，不引入外部身份平台",
+    "内部工具与自托管应用集中管理用户、会话与客户端",
+    "CI/测试套件中以真实 OIDC 提供者作为测试夹具（README 称启动约 375ms，无需 Docker 或 mock）"
+   ]
+  },
+  "sha": "ba47cec184d3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d9462182e3f8": {
+  "identity": {
+   "one_liner": "本地优先的渗透测试情报记忆库，以 SQLite 为核心供 MCP、CLI 与桌面端共享。",
+   "review": "Cortex 是一个面向授权渗透测试的本地记忆中枢，将测试数据存于单个 SQLite 文件，供 AI 代理（stdio MCP 服务器，含 7 个工具）、终端 CLI（ctx）与桌面仪表盘读写。需 Node >= 22.12，MIT 协议；Web UI 仅限本机或可信内网使用，无多用户账户。",
+   "highlights": [
+    "提供纯 stdio MCP 服务器（7 个工具）、ctx CLI 与桌面/Web 仪表盘，共享同一 SQLite 数据库",
+    "ctx init 自动检测本地代理并写入 MCP 配置、技能与系统级规则，支持中英文技能语言",
+    "Web 服务默认仅绑定 127.0.0.1，内网绑定需显式 --allow-intranet，并含令牌登录、同源校验与 CORS 关闭等安全机制"
+   ],
+   "use_cases": [
+    "授权渗透测试过程中统一管理测试数据与上下文记忆",
+    "让 Claude Code、DSH、Codex、Cursor 等代理通过 MCP 读写同一份本地测试记忆",
+    "在本机或可信内网以桌面应用或浏览器查看漏洞面板、资产与 3D 记忆星云"
+   ]
+  },
+  "sha": "d9462182e3f8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

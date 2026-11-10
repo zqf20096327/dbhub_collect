@@ -14447,5 +14447,984 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "69455b5e9683+2": {
+  "fn": "davefatkin/EinVault",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Ein, the EinVault mascot"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    8,
+    4,
+    6,
+    [
+     "License: MIT",
+     "Version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    6,
+    9
+   ],
+   [
+    "replace",
+    11,
+    12,
+    9,
+    10,
+    [
+     "Want a look before you self-host? There's a read-only demo at **demo.einvault.app**. Pick a role and explore; nothing you do there sticks."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    10,
+    12
+   ],
+   [
+    "replace",
+    14,
+    49,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    71,
+    13,
+    35
+   ],
+   [
+    "replace",
+    71,
+    72,
+    35,
+    36,
+    [
+     "EinVault dashboard"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    75,
+    36,
+    39
+   ],
+   [
+    "replace",
+    75,
+    76,
+    39,
+    40,
+    [
+     "Companion overview"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    79,
+    40,
+    43
+   ],
+   [
+    "replace",
+    79,
+    80,
+    43,
+    44,
+    [
+     "Caretaker dashboard"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    44,
+    45
+   ],
+   [
+    "replace",
+    81,
+    84,
+    45,
+    48,
+    [
+     "|Member dashboard (mobile)|Caretaker dashboard (mobile)|",
+     "|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------|",
+     "|Member dashboard mobile|Caretaker dashboard mobile|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    48,
+    49
+   ],
+   [
+    "replace",
+    85,
+    88,
+    49,
+    50,
+    [
+     "More screenshots"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    93,
+    50,
+    55
+   ],
+   [
+    "replace",
+    93,
+    94,
+    55,
+    56,
+    [
+     "Download `docker-compose.prod.yml` and set your domain before starting:"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    116,
+    56,
+    78
+   ],
+   [
+    "replace",
+    116,
+    134,
+    78,
+    96,
+    [
+     "||Default|Description|",
+     "|-----------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`TZ`|`UTC`|Container timezone. Set to your local timezone (e.g. `America/New_York`, `Europe/London`) so dates and times display correctly. Celebration notifications go out at 09:00 in this zone (UTC if unset).|",
+     "|`UPLOAD_MAX_MB`|`10`|Maximum size in MB for image (photo and avatar) uploads. `BODY_SIZE_LIMIT` is derived from the larger of this and `VIDEO_MAX_MB` at container start.|",
+     "|`VIDEO_MAX_MB`|`100`|Maximum size in MB for journal video uploads. Videos are stored as-is unless transcoding is enabled (see below).|",
+     "|`MAX_DAILY_MEDIA`|`5`|Maximum number of journal photos and videos (combined) per companion per day. (Renamed from `MAX_DAILY_PHOTOS`, still honored with a deprecation warning.)|",
+     "|`MAX_NOTE_MEDIA`|`10`|Maximum number of photos and videos (combined) attached to a single note.|",
+     "|`MAX_DOCUMENTS_PER_COMPANION`|`200`|Maximum number of documents (uploads and Paperless references combined) stored per companion.|",
+     "|`REMINDER_UNDO_SECONDS`|`7`|Default undo window (seconds) when dismissing a Reminder. `0` disables the undo window. Each user can override in their settings.|",
+     "|`CALENDAR_FEED_HISTORY_DAYS`|`90`|Days of past events the calendar feed includes. `0` includes all history (larger feeds).|",
+     "|`CALENDAR_FEED_ENABLED`|`true`|Set `false` to disable the calendar feed endpoint entirely.|",
+     "|`API_TOKENS_ENABLED`|`true`|Set `false` to disable the Bearer-token API (token creation and the `/api/logs`, `/api/journal`, `/api/quick-logs` endpoints) entirely.|",
+     "|`API_RATE_LIMIT_PER_MINUTE`|`30`|Bearer API requests allowed per client IP per minute. Behind a reverse proxy, set adapter-node's `ADDRESS_HEADER` so each client gets its own budget.|",
+     "|`DEMO_MODE`|`false`|Enable read-only public demo mode. See Running a demo instance.|",
+     "|`user`|`1000:1000`|UID:GID the container runs as. Change if your `./data` directory has different ownership.|",
+     "|`./data` volume|`./data`|Where the database and uploads are stored on the host.|",
+     "|`DATABASE_URL`|`/data/einvault.db`|Database path inside the container. Unlikely to need changing.|",
+     "|`TWOFA_ENC_KEY`|-|32-byte base64 key (`openssl rand -base64 32`) that encrypts stored TOTP secrets. Required to enable two-factor authentication.|"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    145,
+    96,
+    107
+   ],
+   [
+    "replace",
+    145,
+    156,
+    107,
+    118,
+    [
+     "||Default|Description|",
+     "|-----------------------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`VIDEO_TRANSCODE`|`false`|Enable background transcoding of uploaded videos to a web-playable MP4 plus a poster.|",
+     "|`VIDEO_KEEP_ORIGINAL`|`true`|Keep the original source file alongside the transcoded copy. The original is never served; it is retained for re-encoding or backup. `false` discards it.|",
+     "|`VIDEO_TRANSCODE_MAX_MB`|`VIDEO_MAX_MB`|Skip transcoding (store as-is) for inputs larger than this.|",
+     "|`VIDEO_TRANSCODE_MAX_SECONDS`|`600`|Skip transcoding for inputs longer than this.|",
+     "|`VIDEO_TRANSCODE_MAX_WIDTH`|`4096`|Skip transcoding for inputs wider than this.|",
+     "|`VIDEO_TRANSCODE_MAX_HEIGHT`|`4096`|Skip transcoding for inputs taller than this.|",
+     "|`VIDEO_FFMPEG_PATH`|`/usr/bin/ffmpeg`|Absolute path to the `ffmpeg` binary. Override if it lives elsewhere (e.g. `/opt/homebrew/bin/ffmpeg` on macOS).|",
+     "|`VIDEO_FFPROBE_PATH`|`/usr/bin/ffprobe`|Absolute path to the `ffprobe` binary.|",
+     "|`VIDEO_TMP_DIR`|`<data>/transcode-tmp`|Scratch directory for in-progress transcodes. Must be on disk with room for the source plus output. Do not point it at the in-memory `/tmp` tmpfs.|"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    165,
+    118,
+    127
+   ],
+   [
+    "replace",
+    165,
+    175,
+    127,
+    137,
+    [
+     "||Default|Description|",
+     "|------------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`STORAGE_BACKEND`|`local`|`local` writes to `./data/uploads`. `s3` writes new uploads to the configured bucket. Reads always honor the per-row provider, so switching does not invalidate old rows.|",
+     "|`S3_ENDPOINT`|-|Full endpoint URL, e.g. `https://s3.garage.example.com` or `https://s3.us-east-1.amazonaws.com`.|",
+     "|`S3_BUCKET`|-|Bucket name. Must already exist and should be private.|",
+     "|`S3_REGION`|`auto`|Region. For non-AWS providers, `auto` usually works.|",
+     "|`S3_ACCESS_KEY_ID`|-|Access key. Scope it to this bucket only.|",
+     "|`S3_SECRET_ACCESS_KEY`|-|Secret key.|",
+     "|`S3_FORCE_PATH_STYLE`|`false`|Set to `true` for Garage, MinIO, and older S3 deployments. Leave `false` for AWS and R2.|",
+     "|`S3_PRESIGN_TTL_SECONDS`|`300`|Lifetime of presigned download URLs. Shorter is stricter, longer improves browser cache reuse on reload.|"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    182,
+    137,
+    144
+   ],
+   [
+    "replace",
+    182,
+    187,
+    144,
+    149,
+    [
+     "||Default|Description|",
+     "|-----------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`IMMICH_URL`|-|Base URL of your Immich server, e.g. `http://immich.local:2283`. No trailing slash. Required if `IMMICH_API_KEY` is set.|",
+     "|`IMMICH_API_KEY`|-|API key. Required permissions: `asset.read`, `asset.view`. Generate in Immich → Account Settings → API Keys. Required if `IMMICH_URL` is set.|",
+     "|`IMMICH_ALBUM_ID`|-|If set, the picker only shows assets in this album. If unset, the picker shows the user's most recent assets across the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    194,
+    149,
+    156
+   ],
+   [
+    "replace",
+    194,
+    195,
+    156,
+    157,
+    [
+     "When `PAPERLESS_URL` and `PAPERLESS_API_TOKEN` are set, members and admins get an \"Add from Paperless\" option on the Documents tab that searches a Paperless-ngx instance and attaches a document by reference. The document stays in Paperless; EinVault stores only a reference and proxies reads through the server using the token. EinVault never uploads to or deletes from Paperless. Caretakers cannot use the picker. EinVault serves the archived (OCR'd PDF) version of each referenced document."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    198,
+    157,
+    160
+   ],
+   [
+    "replace",
+    198,
+    203,
+    160,
+    165,
+    [
+     "||Default|Description|",
+     "|---------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`PAPERLESS_URL`|-|Base URL of your Paperless-ngx instance, e.g. `http://paperless.local:8000`. No trailing slash. Required if `PAPERLESS_API_TOKEN` is set.|",
+     "|`PAPERLESS_API_TOKEN`|-|API token. Generate in Paperless under Settings → \"My Profile\". Use a dedicated user limited to the documents you want visible. Required if `PAPERLESS_URL` is set.|",
+     "|`PAPERLESS_TAG_ID`|-|If set, only documents carrying this Paperless tag ID can be searched and imported. Strongly recommended; without it every member can search the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    210,
+    165,
+    172
+   ],
+   [
+    "replace",
+    210,
+    218,
+    172,
+    180,
+    [
+     "||Default|Description|",
+     "|-------------|-------|-------------------------------------------------------------------------------------------------------------------------------|",
+     "|`SMTP_HOST`|-|SMTP server hostname. Required (with `SMTP_FROM`) to enable email.|",
+     "|`SMTP_PORT`|`587`|SMTP port. Use `465` with `SMTP_SECURE=true` for implicit TLS, or `587` (default) for STARTTLS.|",
+     "|`SMTP_SECURE`|`false`|`true` = implicit TLS (port 465). `false` = STARTTLS upgrade on connect.|",
+     "|`SMTP_USER`|-|SMTP username. Leave unset for unauthenticated relays.|",
+     "|`SMTP_PASS`|-|SMTP password. Leave unset for unauthenticated relays.|",
+     "|`SMTP_FROM`|-|RFC 5322 From address shown to recipients, e.g. `EinVault <einvault@example.com>`. Required (with `SMTP_HOST`) to enable email.|"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    221,
+    180,
+    183
+   ],
+   [
+    "replace",
+    221,
+    222,
+    183,
+    184,
+    [
+     "When `NTFY_URL` is set, EinVault can publish push notifications via ntfy. This configures the server only (base URL and optional access token). Each user sets their own topic name under Settings -> Notifications; a non-empty topic is that user's opt-in for pushes scoped to what they can see in the app (reminders due, shift alerts, celebrations). The notification scheduler runs when either SMTP or ntfy is configured. The forgot-password flow remains email-only."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    225,
+    184,
+    187
+   ],
+   [
+    "replace",
+    225,
+    230,
+    187,
+    192,
+    [
+     "||Default|Description|",
+     "|-------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`NTFY_URL`|-|ntfy server base URL, e.g. `https://ntfy.sh` or a self-hosted instance. No topic in the URL.|",
+     "|`NTFY_TOKEN`|-|Bearer token for self-hosted ntfy servers with auth enabled. Used for every publish regardless of topic.|",
+     "|`NOTIFY_SCAN_INTERVAL_MS`|`60000`|How often the notification scheduler scans for due reminders, shift alerts, and celebrations, in milliseconds. Values below 250 fall back to the default. Mainly useful for automated tests.|"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    259,
+    192,
+    221
+   ],
+   [
+    "replace",
+    259,
+    268,
+    221,
+    230,
+    [
+     "|||",
+     "|-------------------|---------------------------------------|",
+     "|Runs as root|No (runs as `node`, UID 1000)|",
+     "|`no-new-privileges`|Enabled|",
+     "|Linux capabilities|All dropped|",
+     "|Root filesystem|Read-only|",
+     "|Writable `/tmp`|tmpfs, 64 MB|",
+     "|CPU limit|0.5 cores (raise for video transcoding)|",
+     "|Memory limit|256 MB (raise for video transcoding)|"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    271,
+    230,
+    233
+   ],
+   [
+    "replace",
+    271,
+    278,
+    233,
+    240,
+    [
+     "|Tag|Description|",
+     "|--------------|---------------------------------------------------|",
+     "|`latest`|Latest stable release (published on version tags)|",
+     "|`x.y.z`|Pinned release|",
+     "|`x.y`|Latest patch of a minor release|",
+     "|`main`|Latest commit on `main`, unstable, for testing only|",
+     "|`sha-<commit>`|Specific commit build, useful for rollback|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    281,
+    240,
+    243
+   ],
+   [
+    "replace",
+    281,
+    282,
+    243,
+    244,
+    [
+     "Each release image carries a Sigstore-signed SLSA provenance attestation and a SPDX SBOM, and only ships after Trivy clears the OS and library packages on both `linux/amd64` and `linux/arm64`. See SECURITY.md for the verification commands."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    288,
+    244,
+    250
+   ],
+   [
+    "delete",
+    288,
+    290,
+    250,
+    250
+   ],
+   [
+    "equal",
+    290,
+    300,
+    250,
+    260
+   ],
+   [
+    "delete",
+    300,
+    302,
+    260,
+    260
+   ],
+   [
+    "equal",
+    302,
+    325,
+    260,
+    283
+   ],
+   [
+    "replace",
+    325,
+    334,
+    283,
+    284,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    353,
+    284,
+    303
+   ],
+   [
+    "delete",
+    353,
+    355,
+    303,
+    303
+   ],
+   [
+    "equal",
+    355,
+    360,
+    303,
+    308
+   ],
+   [
+    "delete",
+    360,
+    362,
+    308,
+    308
+   ],
+   [
+    "equal",
+    362,
+    373,
+    308,
+    319
+   ],
+   [
+    "replace",
+    373,
+    379,
+    319,
+    325,
+    [
+     "|Variable|Description|",
+     "|--------------------|---------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_ISSUER_URL`|IdP base URL. Discovery happens at `<issuer>/.well-known/openid-configuration`. e.g. `https://auth.example.com`|",
+     "|`OIDC_CLIENT_ID`|Client ID registered with your IdP.|",
+     "|`OIDC_CLIENT_SECRET`|Client secret. Omit for public clients (PKCE-only).|",
+     "|`OIDC_REDIRECT_URI`|Must match what's registered with the IdP. e.g. `https://einvault.yourdomain.com/auth/oidc/callback`|"
+    ]
+   ],
+   [
+    "equal",
+    379,
+    382,
+    325,
+    328
+   ],
+   [
+    "replace",
+    382,
+    392,
+    328,
+    338,
+    [
+     "|Variable|Default|Description|",
+     "|-------------------------------|----------------------|-----------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_SCOPES`|`openid profile email`|Space-separated scopes requested from the IdP.|",
+     "|`OIDC_PROVIDER_NAME`|`SSO`|Display label on the login button.|",
+     "|`OIDC_ALLOW_SIGNUP`|`false`|If `true`, auto-creates accounts for users who authenticate but have no matching record. See below.|",
+     "|`OIDC_DEFAULT_ROLE`|`member`|Role assigned to auto-created users. Allowed: `member`, `caretaker`. Admin can only be granted via groups.|",
+     "|`OIDC_ADMIN_GROUPS`|_(unset)_|Comma-separated. Users whose `groups` claim contains any value here are promoted to admin on every login.|",
+     "|`OIDC_POST_LOGOUT_REDIRECT_URI`|_(unset)_|If set and the IdP advertises `end_session_endpoint`, logout triggers RP-initiated logout at the IdP.|",
+     "|`OIDC_STATE_SECRET`|_(random)_|Pin a long random string. Without it, in-flight logins break across server restarts.|",
+     "|`OIDC_ALLOW_INSECURE_HTTP`|`false`|Allows plain-HTTP issuer URLs. Exists for automated tests against a local mock IdP. Never set this in production.|"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    416,
+    338,
+    362
+   ],
+   [
+    "replace",
+    416,
+    417,
+    362,
+    363,
+    [
+     "By default, logout destroys the local EinVault session and returns the user to `/auth/login`. Set `OIDC_POST_LOGOUT_REDIRECT_URI` (and register it with your IdP) to also end the IdP session via RP-initiated logout."
+    ]
+   ],
+   [
+    "equal",
+    417,
+    420,
+    363,
+    366
+   ],
+   [
+    "replace",
+    420,
+    428,
+    366,
+    372,
+    [
+     "|Provider|Notes|",
+     "|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|**Authelia**|Register the redirect URI under the OIDC client config. Set `client_secret_basic` (default) or `none` for public clients.|",
+     "|**Authentik**|Create an OAuth2/OIDC provider; scope mapping for `groups` is built-in. `OIDC_ADMIN_GROUPS` matches the `groups` claim directly.|",
+     "|**Keycloak**|Add a \"Group Membership\" mapper to the client with token claim name `groups` and \"Full group path\" off. EinVault does not read `realm_access.roles`. Add the redirect URI to \"Valid Redirect URIs\".|",
+     "|**PocketID**|Public-client first; omit `OIDC_CLIENT_SECRET`. Register the redirect URI in the client settings.|"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    459,
+    372,
+    403
+   ],
+   [
+    "delete",
+    459,
+    461,
+    403,
+    403
+   ],
+   [
+    "equal",
+    461,
+    480,
+    403,
+    422
+   ],
+   [
+    "replace",
+    480,
+    505,
+    422,
+    447,
+    [
+     "|Method & path|Body|Purpose|",
+     "|-----------------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`GET /api/companions`|-|List the companions the token user may target (members/admins: all active; caretakers: assigned). Returns `{ companions: [...] }` with each companion's full profile. Use this to discover `companionId`s.|",
+     "|`GET /api/companions/{companionId}`|-|Get one companion. Full-scope tokens get the full profile; write-scope tokens get the minimal projection (no PII). An id the token can't reach reads as `404`, same as unknown, so it can't be used to probe which ids exist; an archived companion reads as `404` too, not as a retrievable \"deleted\" record. Returns `{ companion }`.|",
+     "|`POST /api/logs`|`{ companionId or companionIds, type, subtypes?, notes?, durationMinutes?, loggedAt? }`|Log a daily event. `type` is one of `walk`, `meal`, `bathroom`, `litter`, `treat`, `play`, `grooming`, `other`. Each species allows a subset (a cat has no `bathroom`, a dog no `litter`, and an `other` companion has neither those nor `walk`); a type any target companion can't have is rejected with `400 typeNotAllowedForSpecies`. `subtypes` is an optional array of kinds valid for that type (e.g. `[\"pee\"]` for `bathroom`, `[\"leash\"]` for `walk`; the full list per type is in `/api/docs`); a value that no target companion can take is rejected with `400 invalidSubtype`, and one that fits only some targets is kept for those and dropped for the rest. Returns `201 { ids, eventGroupId }`.|",
+     "|`GET /api/logs`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back logged events for a companion, newest first. Each event includes its `subtypes` (`null` when none were logged). Returns `{ events: [...] }`.|",
+     "|`GET /api/journal`|query `?companionId=&date=` (`date` defaults to today)|Read back the journal entry for a companion/day. Returns `{ entry }` (or `{ entry: null }`).|",
+     "|`POST /api/journal`|`{ companionId, date?, body?, mood? }`|Upsert the journal entry for a day (`date` defaults to today). Sending both `body` and `mood` replaces them; omitting a key leaves that field untouched, so a mood-only or body-only post won't wipe the other. Caretaker tokens may only write today. Returns `201 { id, companionId, date }`.|",
+     "|`GET /api/notes`|query `?companionId=&tag=&match=&pinned=`|List a companion's notes, pinned first. Repeat `tag` to filter by several (up to 20); `match=all` returns only notes with every tag, default `any`. Full-scope tokens only, for members and admins. Returns `{ notes: [...], hasMore }`.|",
+     "|`POST /api/notes`|`{ companionId, title, body?, tags?, pinned?, sharedWithCaretakers? }`|Create a note. `body` is markdown (up to 20000 characters), `title` up to 200, and up to 10 tags of 32 characters each. Returns `201 { id, companionId }`.|",
+     "|`GET /api/notes/{id}`|-|Read one note.|",
+     "|`PATCH /api/notes/{id}`|`{ title?, body?, tags?, pinned?, sharedWithCaretakers? }`|Partial update; `tags` replaces the whole set. Returns the updated note.|",
+     "|`DELETE /api/notes/{id}`|-|Delete a note. Returns `204`.|",
+     "|`GET /api/quick-logs`|-|List the token user's enabled quick logs so a device can discover their ids. Returns `{ quickLogs: [...] }`.|",
+     "|`POST /api/quick-logs/{id}/execute`|`{ companionIds?, loggedAt? }` (optional)|Run a configured quick log. With no body it uses the quick log's remembered/assigned companions, so a physical button only needs the URL and token. Returns `201 { ids }`.|",
+     "|`POST /api/health-events`|`{ companionId, type, title, notes?, occurredAt?, vetName?, vetClinic? }`|Log a health event. `type` is one of `vet_visit`, `vaccination`, `medication`, `procedure`, `other`. `occurredAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/health-events`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back health events for a companion, newest first by `occurredAt`. Returns `{ events: [...] }`.|",
+     "|`POST /api/weight`|`{ companionId, weight, unit, notes?, recordedAt? }`|Log a weight entry. `unit` is `kg`, `lbs`, `g`, or `oz`. `recordedAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/weight`|query `?companionId=`|Read back weight entries for a companion, newest first by `recordedAt`. Returns `{ entries: [...] }`.|",
+     "|`GET /api/reminders`|query `?companionId=&status=due\\|all`|List reminders. Default `status=due` lists not-yet-completed reminders oldest-due first; `status=all` also includes completed reminders, ordered by due date (newest first). Omit `companionId` to list across every companion the token user may access. Returns `{ reminders: [...] }`.|",
+     "|`POST /api/reminders/{id}/complete`|-|Mark a reminder done. A recurring reminder spawns its next occurrence. Returns `200 { id, completedAt, nextReminderId }` (`nextReminderId` is `null` for a one-off).|",
+     "|`GET /api/medications`|query `?companionId=&status=active\\|all`|List medications. Default `status=active`; caretakers only ever see active ones. Write-scope tokens may call it so a device can find ids; they get active medications only, with just `id`, `companionId`, `name`, `active` and `nextDueAt`. Returns `{ medications: [...] }`.|",
+     "|`POST /api/medications/{id}/doses`|`{ givenAt?, note? }` (optional)|Record a dose. Completes the matching linked reminder occurrence (a missed one from an earlier day, or one due within 3 hours of `givenAt`), otherwise logs a standalone dose. Returns `201 { doseId, completedReminderId }`; a `givenAt` before the start date is `400 givenBeforeStart`, one more than 5 minutes in the future is `400 givenInFuture` (up to 5 minutes ahead counts as now), an ended medication is `409 medicationEnded`.|",
+     "|`GET /api/shifts`|query `?from=&to=` (both optional `YYYY-MM-DD`)|List the caretaker shift schedule, most recent shifts first (up to 200; use `from`/`to` to window further back). Admins and members see every shift; a caretaker sees only their own. Returns `{ shifts: [...] }`.|",
+     "|`GET /api/users`|-|List the user roster, scoped to what the token user may see: an admin sees everyone, a member sees everyone except admins, a caretaker sees only themselves. Returns `{ users: [...] }` with `id`, `displayName`, `role`, `isActive` per user, plus `username` (omitted for a member-role token, since a member has no need to see other users' login identifiers).|"
+    ]
+   ],
+   [
+    "equal",
+    505,
+    513,
+    447,
+    455
+   ],
+   [
+    "delete",
+    513,
+    515,
+    455,
+    455
+   ],
+   [
+    "equal",
+    515,
+    526,
+    455,
+    466
+   ],
+   [
+    "delete",
+    526,
+    528,
+    466,
+    466
+   ],
+   [
+    "equal",
+    528,
+    533,
+    466,
+    471
+   ],
+   [
+    "replace",
+    533,
+    534,
+    471,
+    472,
+    [
+     "- **Session-based auth:** custom sessions with bcryptjs password hashing; optional OIDC SSO via `openid-client`"
+    ]
+   ],
+   [
+    "equal",
+    534,
+    536,
+    472,
+    474
+   ],
+   [
+    "delete",
+    536,
+    538,
+    474,
+    474
+   ],
+   [
+    "equal",
+    538,
+    539,
+    474,
+    475
+   ],
+   [
+    "replace",
+    539,
+    546,
+    475,
+    476,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    546,
+    547,
+    476,
+    477
+   ],
+   [
+    "replace",
+    547,
+    549,
+    477,
+    478,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "2d2264c9896d+2": {
+  "fn": "neondatabase/neon-pkgs",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "The monorepo for Neon's open-source JavaScript/TypeScript SDKs, libraries, CLIs, and framework plugins. Each folder under `packages/` is an independently versioned, separately published package; they share tooling (pnpm workspaces, Biome, tsdown, Vitest, Changesets) but ship on their own cadence."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Apps and starters that work with these packages live in `neondatabase/examples`."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "replace",
+    12,
+    16,
+    12,
+    16,
+    [
+     "|Package|Description|",
+     "|---|---|",
+     "|`neon`|The Neon CLI. Install this package for the `neon` command.|",
+     "|`neonctl`|Compatibility package that delegates to `neon`. Provides the legacy `neonctl` command (plus `neon`) and is what Homebrew builds from.|"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    16,
+    19
+   ],
+   [
+    "replace",
+    19,
+    24,
+    19,
+    24,
+    [
+     "|Package|Description|",
+     "|---|---|",
+     "|`@neon/config`|Config-as-Code for Neon: `defineConfig` types + the pure diff engine and Neon API adapter behind a `neon.ts` policy.|",
+     "|`@neon/config-runtime`|Runtime for `neon.ts` policies — `inspect` / `plan` / `apply` (push/pull) plus function bundling and deploy.|",
+     "|`@neon/env`|Resolve and inject a branch's Neon env (`fetchEnv` / `parseEnv`, `neon-env run`) from a `neon.ts` policy.|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    27,
+    24,
+    27
+   ],
+   [
+    "replace",
+    27,
+    35,
+    27,
+    35,
+    [
+     "|Package|Description|",
+     "|---|---|",
+     "|`@neon/sdk`|The official TypeScript SDK for the Neon API — a modern, Fetch-based client generated from Neon's OpenAPI spec (successor to `@neondatabase/api-client`).|",
+     "|`@neon/tools`|Type-safe agent tools for the `@neon/sdk` ergonomic client, with MCP, Eve, and Mastra adapters.|",
+     "|`@neon/effect`|Effect v4 bindings for the `@neon/sdk` ergonomic client: Effects, paginated Streams, tagged errors and request cancellation on interruption.|",
+     "|`@neon/functions`|Runtime helpers for Neon Functions: `waitUntil`, `upgradeWebSocket` (fetch handler or Hono route via `@neon/functions/hono`), `attachDatabasePool`, and `parseTriggerInvocation` (`@neon/functions/triggers`).|",
+     "|`@neon/ai-sdk-provider`|Community Vercel AI SDK provider for the Neon AI Gateway.|",
+     "|`@neon/convex-to-postgres`|Migrate a Convex deployment to Neon Postgres with `npx @neon/convex-to-postgres` or as a library: generate DDL (including Neon Lakebase Search indexes) from a Convex schema and load a `convex export` snapshot.|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    38,
+    35,
+    38
+   ],
+   [
+    "replace",
+    38,
+    45,
+    38,
+    45,
+    [
+     "|Package|Description|",
+     "|---|---|",
+     "|`@neon/realtime`|Typed backend and browser SDKs for defining and consuming live queries in realtime.|",
+     "|`@neon/realtime-react`|React provider and hook for live-query subscriptions.|",
+     "|`@neon/realtime-tanstack`|TanStack DB collection integration for live-query subscriptions.|",
+     "|`@neon/realtime-drizzle`|Drizzle adapter for type-safe live queries.|",
+     "|`@neon/realtime-kysely`|Kysely adapter for type-safe live queries.|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    48,
+    45,
+    48
+   ],
+   [
+    "replace",
+    48,
+    54,
+    48,
+    54,
+    [
+     "|Package|Description|",
+     "|---|---|",
+     "|`@neon/auth`|Authentication adapters for Neon Auth (Supabase-compatible and Better Auth APIs), with React, Next.js, and framework-agnostic server toolkit entrypoints.|",
+     "|`@neon/postgrest-js`|Generic PostgreSQL client for the Neon Data API without built-in authentication.|",
+     "|`@neon/neon-js`|Unified client combining Neon Auth and the Neon Data API, with automatic token injection into database queries.|",
+     "|`@neon/oauth`|OAuth helpers for apps that use Neon Auth as an OAuth provider: PKCE sign-in, access-token verification, and MCP server protection (with Hono, Express, Next.js and `node:http` adapters).|"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    70,
+    54,
+    70
+   ],
+   [
+    "replace",
+    70,
+    71,
+    70,
+    71,
+    [
+     "This is a pnpm workspace. Internal dependencies are linked with `workspace:*`, so changes to one package are immediately visible to its dependents without republishing."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    71,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     "Contributing to this repo requires **Node.js >= 22** and pnpm — pnpm itself needs Node 22.13+, and regenerating the `@neon/sdk` types needs Node 22.18+. The **published packages** support **Node.js >= 20.19** at runtime (see each package's README and `CONTRIBUTING.md`). From the repo root:"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    92,
+    75,
+    92
+   ],
+   [
+    "replace",
+    92,
+    93,
+    92,
+    93,
+    [
+     "Versioning is driven by Changesets. Add a changeset describing your change (`pnpm changeset`), and a maintainer applies the version bumps + changelogs (`pnpm changeset version`) on a release PR. Publishing to npm runs from a separate workflow once that PR lands on `main`."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    95,
+    93,
+    95
+   ],
+   [
+    "delete",
+    95,
+    96,
+    95,
+    95
+   ],
+   [
+    "equal",
+    96,
+    97,
+    95,
+    96
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

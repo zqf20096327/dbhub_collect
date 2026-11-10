@@ -2596,5 +2596,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7fb92981db9f": {
+  "identity": {
+   "one_liner": "为 pytest 提供数据库与云模拟器容器的即用型 fixture 插件",
+   "review": "pytest-databases 是一个 pytest 插件，通过 fixture 管理数据库与云模拟器服务在 Docker 或 Podman 容器中的启动与关闭。基础包不绑定数据库驱动依赖，支持 PostgreSQL、MySQL、Oracle、Redis、BigQuery 模拟器等 20+ 服务，可通过 CLI 选项、pyproject.toml 和环境变量配置。使用需容器运行时环境。",
+   "highlights": [
+    "提供 20+ 数据库及云模拟器服务的容器 fixture，基础包不含数据库驱动依赖",
+    "支持 Docker 与 Podman 运行时，含 pytest-xdist 隔离与会话所有权管理",
+    "支持 PostgreSQL 模板数据库克隆隔离及无容器的嵌入式 PostgreSQL（initdb/postgres 二进制）"
+   ],
+   "use_cases": [
+    "为集成测试自动启动和销毁数据库容器服务",
+    "在 CI 中以容器方式运行针对多种数据库版本的测试",
+    "通过 BigQuery、Azurite、LocalStack 等模拟器在本地测试云服务相关代码"
+   ]
+  },
+  "sha": "7fb92981db9f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "857df04b2657": {
+  "identity": {
+   "one_liner": "桌面端 GitHub PR 审查工具，本地镜像缓存实现快速打开",
+   "review": "PR Cockpit 是一款面向 macOS 和 Linux 的 GitHub PR 审查桌面应用，通过 webhook 保持本地镜像更新，使队列、diff、检查日志从磁盘读取。面向使用 GitHub 进行代码审查的开发者，支持键盘操作，并提供 CLI 供编码代理调用。需 Git 2.38+，不支持 Windows，GitHub 仍是数据源。",
+   "highlights": [
+    "本地镜像由 webhook 保持同步，队列、diff、检查日志与评审线程从磁盘渲染",
+    "提供 pr-cockpit CLI，可配合编码代理使用，并支持全局快捷键唤起搜索面板",
+    "队列按 ready to merge、your move、waiting 分组，支持堆叠 PR、提醒延迟与分组过滤"
+   ],
+   "use_cases": [
+    "维护多个仓库 PR 队列并按状态决定处理顺序",
+    "在编辑器或代理工作流中通过键盘和 CLI 快速调取 PR 上下文",
+    "审查中直接编辑文件提交补丁或交由配置的编码代理处理"
+   ]
+  },
+  "sha": "857df04b2657",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d1bbc963cc7": {
+  "identity": {
+   "one_liner": "汇总法国2027年总统选举投票意向民调数据的开源数据库仓库。",
+   "review": "该项目以CSV和JSON文件汇总法国2027年总统选举各民调机构的投票意向数据，包含候选人名单、民调假设情景、样本量、调查机构等元数据。贡献者通过提交Pull Request添加民调，GitHub Actions自动校验CSV格式与数据一致性并生成合并文件。适合需要读取结构化选举民调数据的研究者或开发者。",
+   "highlights": [
+    "提供合并后的民调数据CSV文件与JSON数据流，含民调机构、调查日期、样本量、误差区间等字段",
+    "由GitHub Actions自动校验CSV格式、数据一致性并生成合并文件",
+    "按结构化目录组织：candidats.csv（候选人）、hypotheses.csv（假设情景）、polls/<poll_id>.csv（各民调结果）"
+   ],
+   "use_cases": [
+    "读取2027年法国总统选举投票意向的结构化民调数据",
+    "按候选人或假设情景检索、分析历次民调结果",
+    "以Pull Request方式贡献新民调数据，由自动校验流程合并"
+   ]
+  },
+  "sha": "6d1bbc963cc7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fba4a77a9dd": {
+  "identity": {
+   "one_liner": "面向 Java 的 CQRS/事件溯源框架，PostgreSQL 存储，多框架集成。",
+   "review": "StreamRune 是一个 Java 事件溯源框架，提供事件存储、命令总线、投影、 Saga 等模块，支持 Spring Boot、Quarkus 和 Micronaut 集成，并通过 crypto-shredding 模块支持事件负载加密（配合 Vault、AWS KMS 等密钥源）。项目尚未正式发布，仅提供 Maven 快照仓库中的 1.0.0-alpha-SNAPSHOT 预览版；要求 Java 25 和 PostgreSQL 17+（PostgreSQL 存储模块），采用 BSL 1.1 许可。适合需要在 Java 技术栈中试验事件溯源与 GDPR 相关加密删除机制的开发者提前评估。",
+   "highlights": [
+    "提供 core、runtime、postgres、test 等 16 个 Maven 模块，涵盖事件存储契约、命令总线、投影与事务性 outbox（Kafka/RabbitMQ）",
+    "支持 Spring Boot、Quarkus、Micronaut 三种框架集成，并提供 crypto-shredding 加密模块，密钥可存于目录、PostgreSQL、HashiCorp Vault 或 AWS KMS",
+    "自 1.0.0 起遵循语义化版本，公开 API 涵盖配置键、指标名、健康组件名与数据库迁移 schema"
+   ],
+   "use_cases": [
+    "在 Java 项目中实现事件溯源与 CQRS 架构，使用 PostgreSQL 作为事件存储",
+    "需要基于加密删除（crypto-shredding）满足 GDPR 数据删除要求的团队",
+    "通过事务性 outbox 向 Kafka 或 RabbitMQ 发布事件的集成场景"
+   ]
+  },
+  "sha": "9fba4a77a9dd",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df633a9c31f3": {
+  "identity": {
+   "one_liner": "基于 React、Flask 与 TiDB Cloud 的 HR 员工管理全栈应用",
+   "review": "该项目实现 HR 用户登录注册、JWT 鉴权与员工记录的增删改查，数据存于 TiDB Cloud 的 hr_users 与 employees 表，涵盖部门、入职日期、背景调查、培训、绩效考核等字段。前端部署于 Vercel，Flask 后端部署于 Render。README 要求 secrets 不入库，并提醒上线前将 CORS 收紧到指定来源。",
+   "highlights": [
+    "使用 Flask-JWT-Extended 对员工相关接口做 Bearer Token 鉴权，Flask-Bcrypt 处理密码哈希",
+    "提供 /api/login、/api/register、/api/employees 等 REST 接口，支持员工记录的查看、新增、更新与删除",
+    "通过 mysql-connector-python 连接 TiDB Cloud，支持 Vercel（前端）与 Render + Gunicorn（后端）部署流程"
+   ],
+   "use_cases": [
+    "HR 团队集中管理员工档案与入职相关信息（部门、角色、文档、培训、试用期、绩效评估等）",
+    "作为前后端分离 + 云数据库的全栈应用部署与运行参考",
+    "学习 Flask REST API、JWT 鉴权与 TiDB Cloud 接入的实践示例"
+   ]
+  },
+  "sha": "df633a9c31f3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

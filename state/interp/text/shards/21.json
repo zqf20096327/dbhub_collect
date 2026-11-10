@@ -2968,5 +2968,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "97a3a84a6522": {
+  "identity": {
+   "one_liner": "Rust 编写的 PII 与机密检测脱敏引擎，提供 CLI、网关、Postgres 扫描与 WASM 形态。",
+   "review": "Censgate Redact 是一个用 Rust 实现的开源（Apache-2.0）工具集，用于在提示词、代码和数据库中检测并脱敏 PII 与机密信息，面向在 CI 中拦截机密、清点 Postgres 中 PII 或向模型提供商发送提示词的团队。它包含 CLI、OpenAI 兼容网关、只读 Postgres 扫描器、redact-core 库、REST API 和模式版 WASM，并可通过 redact-verify 离线校验带哈希链与 Rekor 锚定的证据包。默认编译 61 种实体类型，NER 默认关闭，README 中的 32× Presidio 数据是特定负载下的延迟测量而非质量评分。",
+   "highlights": [
+    "提供 CLI（cargo install redact-cli）、REST API（/api/v1/analyze 与 /api/v1/anonymize）、redact-core 库及仅模式引擎的 WASM 构建多种使用形态",
+    "默认编译 61 种实体类型（可用 redact --format json list-entities 查看），支持 ISO 639-1 语言提示（默认 en），NER 为可选 ONNX 模块且默认关闭",
+    "证据包采用哈希链与 Ed25519 签名，通过 Merkle 包含与 Rekor 回执进行外部锚定，redact-verify 可离线校验且无 redact-core 依赖"
+   ],
+   "use_cases": [
+    "在 CI 或 pre-commit 钩子中以 redact analyze --fail-on-detect 拦截文本中的机密信息（确定性模式引擎，无网络调用）",
+    "用 redact-scan 只读扫描 Postgres（建议副本/暂存库），生成仅含位置与计数的报告，作为 GDPR Art.30 处理活动记录清点输入",
+    "通过 OpenAI 兼容网关在提示词发送至模型提供商前脱敏，并生成可交由第三方离线验证的证据包"
+   ]
+  },
+  "sha": "97a3a84a6522",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

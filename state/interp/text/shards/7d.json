@@ -2955,5 +2955,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d13d982c96f9": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的自托管长期记忆系统，将对话按规则编目为可溯源卡片",
+   "review": "Mnemosyne-OS 为长期运行的 AI Agent 提供记忆管理服务：每轮对话经规则抽取生成含档号、实体、证据与 sid 指针的目录卡片（不消耗 LLM token），检索在服务端一次调用融合精确/关键词/时间/语义四通道，支持两跳溯源回原始记录。依赖 PostgreSQL 16 与 pgvector，需接入一个 OpenAI 兼容的 LLM/嵌入端点。适合需要长期记忆、人工抽检与自托管的 Agent 场景；检索基于目录卡片，新装实例需先运行卡片生成任务。",
+   "highlights": [
+    "规则抽取生成目录卡片，含档号、实体、证据与回溯原文的 sid 指针",
+    "四通道检索（精确/关键词/时间/1024 维 pgvector 语义）在服务端单次调用融合，通道内按 K/(K+rank) 衰减",
+    "服务端定时任务（polish/dedupe/diary/gap-sweep），去重仅标记不删除；提供 Hermes 记忆 provider、REST API、Python SDK 与 MCP 接入"
+   ],
+   "use_cases": [
+    "为长期运行的 AI Agent 持久化对话记忆并支持溯源验证",
+    "自托管部署的记忆服务（API-only、局域网页面或带通行密钥的私网站点三种形态）",
+    "通过人工反馈修正检索结果并沉淀为测试用例的 human-in-the-loop 记忆维护"
+   ]
+  },
+  "sha": "d13d982c96f9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

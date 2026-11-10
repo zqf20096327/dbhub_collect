@@ -2893,5 +2893,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "eff6ddf3e615": {
+  "identity": {
+   "one_liner": "基于 WASM 组件模型的确定性工作流运行时",
+   "review": "Obelisk 是一个以 WASM Component Model 与 WIT 接口构建的确定性工作流运行时，以单一二进制形式执行工作流、活动与 webhook 端点，执行日志持久化到 SQLite 或 PostgreSQL。提供 CLI、REST API 与内置 Web UI（默认 8080 端口）用于查看执行轨迹、事件与日志。当前处于 pre-release 阶段，CLI、REST API、WIT 与数据库 schema 可能变动；主代码采用 AGPL-3.0，wit/ 目录为 MIT。",
+   "highlights": [
+    "工作流由运行时保证确定性，依赖持久化执行日志实现可回放与崩溃恢复；活动要求幂等并支持错误、超时及 WASM trap 自动重试",
+    "通过 WIT IDL 生成 API 绑定，实现端到端类型安全；支持结构化并发的子执行与 work stealing 执行器",
+    "内置 Web UI 支持查看部署图、执行轨迹、事件与日志，并提供带回溯的时间旅行调试器；CLI 输出支持 NDJSON 结构化结果"
+   ],
+   "use_cases": [
+    "需要沙箱化与可审计执行的 AI 辅助代码运行",
+    "带重试与错误处理的周期性任务与后台作业",
+    "包含多步骤逻辑的批处理任务与端到端测试自动化"
+   ]
+  },
+  "sha": "eff6ddf3e615",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b64bd3eac1d": {
+  "identity": {
+   "one_liner": "基于声明式 YAML 配置的 PostgreSQL 与 PgBouncer Prometheus 指标导出器",
+   "review": "pg_exporter 是一个用 Go 编写的 Prometheus 导出器，用于采集 PostgreSQL 与 PgBouncer 的监控指标。它通过声明式 YAML 配置定义采集项，支持按 PostgreSQL 版本划分查询分支，内置配置含 460 个指标、96 个采集分支。默认监听 9630 端口，提供 RPM/DEB 包、Docker 镜像及 HTTP 健康检查接口。",
+   "highlights": [
+    "通过声明式 YAML 定义指标，内置配置包含 460 个指标、96 个采集分支、59 个命名空间",
+    "支持 PostgreSQL 10–18 及 19 RC1（legacy 配置支持 9.1–9.6）与 PgBouncer 1.26.1",
+    "支持多数据库自动发现、按采集器配置超时/缓存/跳过条件，并提供 HTTP 健康检查端点"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 实例或集群部署 Prometheus 监控指标采集",
+    "监控 PgBouncer 连接池指标",
+    "通过自定义 YAML 配置扩展或裁剪需要采集的指标项"
+   ]
+  },
+  "sha": "6b64bd3eac1d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5a06d353272d": {
+  "identity": {
+   "one_liner": "自托管的 GitHub Actions 临时 runner 车队控制器，单 Go 二进制+SQLite，无需 Kubernetes",
+   "review": "Zoomies 是一个自托管的 GitHub Actions runner 车队控制器，面向需要管理自有 CI 机器的开发团队。它以 workflow_job webhook 驱动调度，为每个作业启动一次性 runner 并在结束后销毁，通过 GitHub App 认证生成单次 JIT 注册令牌。状态存于 SQLite，支持 Prometheus 指标与夜间备份到 S3 兼容存储。README 提供测试支持矩阵，部署前应先阅读。",
+   "highlights": [
+    "每个作业分配全新临时 runner，作业结束即销毁；以 GitHub App 身份认证并自行签发单次 JIT 注册令牌，无需手动粘贴令牌",
+    "一个控制器管理多台主机上的 agent，agent 仅出站连接（NAT 主机免入站规则），提供 Ubuntu 22.04/24.04/26.04、Debian 12/13、Fedora 42、Rocky Linux 9 的 amd64 与 arm64 runner 镜像",
+    "包含十四页实时 Web UI（事件流原地更新）、Prometheus 指标、结构化日志、任务历史、审计记录，以及带加密的夜间 SQLite 备份到多个 S3 兼容目标"
+   ],
+   "use_cases": [
+    "个人或组织需要为 GitHub Actions 提供自托管 runner，且不希望引入 Kubernetes",
+    "利用家庭实验室或已有私有硬件（通过内建 Tailcat 私有连接）运行 CI，无需公网 IP 或端口转发",
+    "需要按队列自动伸缩 runner 车队，并通过 Web UI 观测任务排队、启动与主机利用率"
+   ]
+  },
+  "sha": "5a06d353272d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "99422d8a85b3": {
+  "identity": {
+   "one_liner": "自托管服务器管理面板，经 Rust Agent 上报监控并事务化下发 sing-box 配置",
+   "review": "apsp 是一个用于统一管理多台服务器的自托管面板：每台服务器安装 Agent，主动连接面板上报指标并应用由面板编译的 sing-box 配置包，面板还记录资产、费用与续费。Agent 采用出站连接，服务器无需开放入站管理端口；sing-box 作为独立系统服务运行，面板离线不影响已应用配置。当前为未发布开发基线，不支持旧数据库自动升级，许可证为 AGPL-3.0-only。",
+   "highlights": [
+    "Agent 主动连接面板上报指标与应用配置，服务器无需开放入站管理端口；支持 Linux systemd/OpenRC、macOS launchd、FreeBSD rc.d 与 Windows 计划任务",
+    "面板将服务配置、用户和授权编译为每台服务器的 sing-box 配置包，运行时基于上游 sing-box 1.14.2 加本地补丁并启用统计 API",
+    "包含逐用户、逐节点的流量账本与资产费用记录，提供 Passkey 用户自助门户、TOTP 管理员二步验证、API 令牌与审计"
+   ],
+   "use_cases": [
+    "在单一面板中集中管理分布在不同服务商的多台服务器及其服务配置",
+    "记录服务器资产、成本、到期与续费，并配置离线、资源、流量等告警通知",
+    "向用户提供含订阅与流量用量的自助查看页面"
+   ]
+  },
+  "sha": "99422d8a85b3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

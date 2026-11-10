@@ -3083,5 +3083,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c2ef1e17ced": {
+  "identity": {
+   "one_liner": "基于 Upjet 从 Terraform 资源生成 OCI 托管资源的 Crossplane 提供程序",
+   "review": "该项目为 Oracle 云基础设施（OCI）的 Crossplane 提供程序，使用 Upjet 代码生成工具构建，依据 OCI Terraform 资源生成符合 XRM 规范的托管资源。运行于 Kubernetes 集群之上，需先安装 Crossplane 1.10 及集群 1.25.3+。适合需要在 Kubernetes 中以声明式方式管理 OCI 资源的团队，官方提供 Quick Start 指南及内部镜像仓库自建指南。",
+   "highlights": [
+    "基于 Upjet 从 OCI Terraform 资源生成 XRM 规范的托管资源",
+    "提供 Quick Start 指南，演示用 provider-oci-objectstorage 创建 bucket",
+    "支持为内部镜像仓库自行构建、配置和安装该提供程序"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群上通过 Crossplane 声明式管理 OCI 资源",
+    "使用 provider-oci-objectstorage 创建对象存储 bucket",
+    "企业构建适用于内部镜像仓库的自定义 OCI 提供程序"
+   ]
+  },
+  "sha": "0c2ef1e17ced",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b714afa2521": {
+  "identity": {
+   "one_liner": "Go 嵌入式数据库，以稀疏六边形网格存储记录并支持环形扫描上下文检索",
+   "review": "HexxlaDB 是以库形式在 Go 进程内直接运行并查询的嵌入式数据库，记录以单元形式存放于稀疏六边形网格。它提供词法与向量检索、环形扩展、图边遍历及可见性检索，每个单元可携带来源、置信度与有效期窗口，seams 记录单元间的矛盾与取代关系。锚点坐标、半径和标签由应用自行选择；提交串行化，相关写入需在 DB.Update 中批量执行以共享持久化提交。",
+   "highlights": [
+    "以稀疏六边形网格组织记录，按主题锚点与受限半径放置单元，标签可跨网格定位记录",
+    "QueryCells 支持词法搜索、结构化过滤与可选向量相似检索（HNSW 为近似），MaxScanRows 可做带行数上限的精确评分扫描，LoadContext 支持环形扫描、按边类型遍历并解析取代关系，LoadContextFOV 依据调用方透明度规则做可见性选择",
+    "单元支持 provenance、confidence、有效期窗口，seams 记录矛盾与取代；配套终端 TUI 浏览器（task tui）与基准工具（task bench-api）"
+   ],
+   "use_cases": [
+    "为 LLM/agent 应用按主题分组存放记忆记录，检索种子后扩展邻近单元并按应用自有的词预算装配提示上下文",
+    "需要记录并解析记录间矛盾（seams）与取代链的应用，如知识维护与修订场景",
+    "需要空间化检索的应用，可用六边形距离限定扫描范围或用 FOV 可见性规则选取单元"
+   ]
+  },
+  "sha": "6b714afa2521",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c22d94cf3711": {
+  "identity": {
+   "one_liner": "将策略文件编译为 Postgres 行级安全策略的授权工具",
+   "review": "rowstile 把声明式的策略文件编译成 Postgres 的视图、触发器维护表、行级安全策略及 authz.* 函数，应用通过 act_as 或 API key 标识请求者后由 RLS 过滤读写。策略变更以迁移形式输出，兼容 Alembic、Prisma、Drizzle 等多种迁移工具，无需额外运行授权服务。适用于数据在单一 Postgres 中、访问权限依赖行间关系（所有者、团队、共享、租户）的应用；项目处于 beta 阶段，尚未经外部安全审计。",
+   "highlights": [
+    "策略文件编译为 SQL 行级安全策略、视图、触发器表和 authz.* 函数，无需独立授权服务",
+    "策略变更以迁移形式发布，兼容 Alembic、Django、Prisma、Drizzle Kit、Flyway 等迁移工具",
+    "提供 Python 与 TypeScript SDK、编辑器扩展（VS Code/Zed/Tree-sitter）、CI 策略评审及浏览器 playground"
+   ],
+   "use_cases": [
+    "应用数据集中在一个 Postgres 数据库中，行访问权限依赖所有者、嵌套团队、文件夹继承、租户或用户间共享",
+    "原本计划引入需与数据库保持同步的独立授权服务，或手写 RLS 难以测试和维护",
+    "需要实现共享、分组、嵌套目录和多租户的细粒度访问控制的应用"
+   ]
+  },
+  "sha": "c22d94cf3711",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

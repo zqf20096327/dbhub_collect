@@ -2973,5 +2973,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d074f623ad9d": {
+  "identity": {
+   "one_liner": "Flutter 平台的 SQLite 插件，通过后台线程执行数据库操作",
+   "review": "sqflite 是 Flutter 应用接入 SQLite 数据库的插件，支持 iOS、Android 和 macOS。它提供事务与批量操作、打开数据库时的版本管理，以及 insert/query/update/delete 辅助方法；在 iOS 和 Android 上数据库操作于后台线程执行。桌面端需改用 sqflite_common_ffi，Web 支持尚为实验性。",
+   "highlights": [
+    "支持事务与批量操作",
+    "数据库打开时自动进行版本管理",
+    "iOS 和 Android 上数据库操作在后台线程执行"
+   ],
+   "use_cases": [
+    "Flutter 移动应用（iOS/Android/macOS）的本地数据持久化",
+    "需要事务或批量写入的应用",
+    "通过 sqflite_common_ffi 在 Linux/Windows/DartVM 中使用 SQLite"
+   ]
+  },
+  "sha": "d074f623ad9d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f31cd4db35d2": {
+  "identity": {
+   "one_liner": "自托管短链接服务：单个 Go 二进制加一个 SQLite 文件运行",
+   "review": "Sani 是一个自托管链接缩短器，附带文本与文件分享功能，面向单一管理员使用。核心机制为一个 Go 二进制内嵌管理界面、SQLite 存元数据与文本、本地目录存文件，跳转目标缓存在内存中，无需外部数据库或缓存服务。限制方面，设计上只支持单实例单管理员，不面向多用户或主备部署，文件分享需另配一个文件域名。",
+   "highlights": [
+    "跳转目标缓存在内存中，提供总点击、每日点击、来源统计，并过滤爬虫与预取等点击",
+    "支持每链接过期时间、访问次数上限、临时/永久跳转、Unicode slug 与彩色标签",
+    "提供 /api/v1 与 /api/admin/v1 接口、API token、书签工具、Android 分享及 Shlink/CSV/JSON 导入"
+   ],
+   "use_cases": [
+    "个人或小团队自托管域名下的短链接生成与点击统计",
+    "临时分享文本片段、配置代码或文件（默认最大 99 MB）",
+    "通过 API token 与脚本、快捷指令集成批量创建短链"
+   ]
+  },
+  "sha": "f31cd4db35d2",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2edb04f36e73": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的事务性 Outbox Spring Boot Starter，支持多通道管道与可插拔 Sink。",
+   "review": "该项目是一个面向 Java 21 与 Spring Boot 3.2+/4.x 应用的事务性 Outbox Starter，用于将事件写入与业务同一事务内落库（PostgreSQL 为事实来源），再经内存或 Redis 唤醒队列由 publisher worker 分发到应用提供的 OutboxSink。核心机制包括按通道隔离的管道、fluent API、分区表 schema、Micrometer 指标与健康指示器；不含 HTTP 幂等，需单独组合幂等 starter。",
+   "highlights": [
+    "支持多通道隔离管道：每通道独立 table → queue → publisher worker → OutboxSink",
+    "队列实现可在 memory 与 Redis 间选择，type=auto 时按上下文中是否存在 StringRedisTemplate 解析",
+    "提供事件级 Micrometer 指标（入队/出队/发布/恢复）与名为 outbox 的健康指示器"
+   ],
+   "use_cases": [
+    "微服务中需在同一事务内持久化业务数据与待发布事件的场景",
+    "同一应用部分实例有 Redis、部分没有，需要自动选择队列实现的部署",
+    "需要按通道隔离事件流（如 payments 与 webhooks 分开投递到 Kafka 或 REST）的应用"
+   ]
+  },
+  "sha": "2edb04f36e73",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

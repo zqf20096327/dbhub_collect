@@ -3166,5 +3166,95 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e413b0531329": {
+  "identity": {
+   "one_liner": "面向 Debian 13 VPS 的 WordPress 专用服务器管理面板，单 Go 二进制实现站点隔离托管。",
+   "review": "WP Panel 是运行在 Debian 13 上的 WordPress 专用服务器管理面板，目标用户为在 VPS 上托管 WordPress 网站的管理员。它通过一键脚本安装 Nginx、PHP 8.3、MariaDB、Redis 等组件，为每个网站创建独立系统用户、PHP-FPM Pool 和数据库实现站点隔离，并提供 SSL 证书、备份、更新管理和 `wpp` 命令行工具。不支持 Docker、邮件、FTP 及 Java/Python/Node 运行环境，且无单站资源配额。",
+   "highlights": [
+    "每个网站运行于独立系统用户、PHP-FPM Pool、MariaDB 数据库与数据库用户，PHP 经 open_basedir 限制访问本站目录",
+    "提供 Let's Encrypt 自动申请与到期前 30 天自动续签、网站与数据库备份并支持同步到另一台服务器或 S3 兼容存储",
+    "面板为单一 Go 二进制（Gin + SQLite WAL，端口 8443 HTTPS），前端资源经 go:embed 内嵌，约 20 MB，组件均通过 APT 安装"
+   ],
+   "use_cases": [
+    "在 Debian 13 VPS 上托管多个相互隔离的 WordPress 网站",
+    "在两台相同版本的 WP Panel 服务器之间搬迁 WordPress 或通用 PHP 网站",
+    "集中查看各站 WordPress 版本、插件与主题待更新项并执行更新前自动备份与失败恢复"
+   ]
+  },
+  "sha": "e413b0531329",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8c9aa7b16f5": {
+  "identity": {
+   "one_liner": "微信小程序内容管理系统，Spring MVC 后台加小程序客户端",
+   "review": "xcxcms 是一套资讯/内容管理方案：后台基于 Spring MVC 4.3 + MyBatis + MySQL + AdminLTE，提供文章、分类、轮播图和账号管理，小程序客户端通过 GET JSON 接口展示列表与详情。部署方式为 Maven 打 war 包运行于 Tomcat 8/9，需修改数据库、服务端 IP、小程序 ROOT_URL 三处配置。README 声明原始项目为 2017-2018 年学习型项目，本版本修复 Bug、做安全加固并补齐测试与 CI，仅供学习交流。",
+   "highlights": [
+    "提供文章、分类、轮播图、账号四个管理模块，支持图片上传白名单校验与权重排序",
+    "小程序数据接口全部为 GET 返回 JSON，文章分页每页 15 条，详情接口不存在时返回 HTTP 404",
+    "包含登录拦截、连续失败 5 次锁定 10 分钟、XSS 转义等安全机制，并带 7 个单元测试用例和 GitHub Actions CI（JDK 8/17 矩阵）"
+   ],
+   "use_cases": [
+    "学习 Spring MVC + MyBatis + 小程序前后端联调的完整流程",
+    "搭建后台维护文章、小程序展示资讯列表与详情的内容站点",
+    "作为 Tomcat war 部署、SSL 配置、MySQL 初始化等 Java Web 运维实践的参考项目"
+   ]
+  },
+  "sha": "b8c9aa7b16f5",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61011e031c05": {
+  "identity": {
+   "one_liner": "用 Trie 存储 JSON 日志键集合并按类型列存值的 Rust 日志存储",
+   "review": "kibbr 是一个用于结构化 JSON 日志的存储系统：每行的键集合作为 shape 存于内存 Trie 中一次，值追加为磁盘上的类型化列。定位在热搜索集群与冷归档之间的数据（约 3 天到 6 个月）。通过 cargo 安装或 Docker 运行，提供 TrieQL 查询语言、HTTP API 和内置 Web 控制台。注意它不做全文搜索、尚不支持 schema 合并，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "键集合存入内存 Trie，值以类型化列追加到磁盘，各列按行组选择去重、delta、varint 或 zstd 编码",
+    "支持写入前日志（WAL）回放、Trie 可重建、SIGTERM 下冲洗与检查点退出",
+    "提供 /ingest 实时写入、kibbr load 批量导入、kibbr compact 压缩已完成的天数据，附带 Vector 与 Kubernetes 部署配置"
+   ],
+   "use_cases": [
+    "键集合少、自由文本占比低的应用日志存储",
+    "热搜索与冷归档之间的可查询中间层",
+    "通过 POST /ingest 或 kibbr load 写入、用 TrieQL 与内置控制台查询"
+   ]
+  },
+  "sha": "61011e031c05",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ce4cf395c95": {
+  "identity": {
+   "one_liner": "Node.js 无主分布式定时调度库，靠原子认领选 runner",
+   "review": "anarchon 是面向 Node.js 集群的定时与间隔任务调度库。每个实例运行相同代码，通过对 Redis、PostgreSQL、SQLite 等后端执行 Lua 原子认领，保证每个时间槽只有一个实例运行；默认 lease 策略让备份实例在 runner 停止续约后重新认领并从头开始任务。安装需 pnpm/npm 添加 anarchon 及所选后端驱动。它是调度器而非队列，运行可能被跳过，任务处理函数需幂等。",
+   "highlights": [
+    "支持 cron 与 interval 调度，所有实例基于同一时间网格计算槽位",
+    "支持 Redis/Valkey、PostgreSQL、SQLite、RabbitMQ、NATS JetStream 等多种后端"
+   ],
+   "use_cases": [
+    "多实例 Node.js 集群中的定时任务去重执行",
+    "需要处理实例崩溃、滚动部署等故障场景的调度",
+    "自带 Redis、PostgreSQL 或 SQLite 等存储的环境"
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "sha": "6ce4cf395c95",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

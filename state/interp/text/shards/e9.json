@@ -3470,5 +3470,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5d02814541c1": {
+  "identity": {
+   "one_liner": "开源自托管 agentic 运维平台，用 AI 智能体执行带审批门控的运维工作流",
+   "review": "Nudgebee 是面向云、SRE、DevOps 与 FinOps 团队的开源 agentic 运维平台，提供事故调查、云与 Kubernetes 资源浪费识别、数据库诊断及基于 Temporal 的 runbook 自动化。平台支持自托管并允许自带 LLM 模型，修复动作可配置人工审批，并记录审计日志。依赖组件含 Postgres、Redis、RabbitMQ、Qdrant 与 Temporal，可通过 Docker Compose 本地运行或 Helm 部署到 Kubernetes，许可证为 BSL 1.1。",
+   "highlights": [
+    "提供事故调查、资源优化、runbook 自动化、Kubernetes/云/数据库诊断等 agentic 能力",
+    "支持自托管、无使用遥测，允许选择自己的 LLM 提供商，修复步骤可要求人工审批并记录审计日志",
+    "本地开发基于 Docker Compose（Postgres、Redis、RabbitMQ、Qdrant、Temporal），并提供公开的 Helm OCI chart 用于 Kubernetes 部署"
+   ],
+   "use_cases": [
+    "SRE/DevOps 团队希望在带审批门控的前提下让 AI 智能体调查告警并执行修复",
+    "FinOps/云成本团队识别未使用和超配的资源并获得 right-sizing 建议",
+    "需要将重复性修复固化为可按告警、计划或聊天触发并留有审计记录的 runbook 的团队"
+   ]
+  },
+  "sha": "5d02814541c1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2387935a3cb3": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的网页搜索插件，提供多引擎/平台搜索、SQLite 缓存与证据包输出",
+   "review": "该插件是 DeepSeek Harness（DSH）宿主的网页搜索扩展，面向 DSH 用户，通过 web_index 与 web_call 两个常驻工具按需披露 27 个动作。搜索覆盖 ddg/bing/Exa/Jina 等引擎及 GitHub、B站、知乎等平台，支持证据包模式返回评分摘录与缺口；缓存采用 SQLite 加内存 LRU 双层结构。安装需 DSH 宿主 0.2.x 线本插件经 cordis Context API 实现设置卡片通道，不依赖宿主私有方法；0.1.x 宿主固定使用 0.1.15 旧版。",
+   "highlights": [
+    "证据包模式返回按任务评分的摘录与未满足缺口，27 个动作通过 web_index/web_call 两个常驻工具按需披露",
+    "支持 ddg/bing/Exa/Jina 等网页引擎与 GitHub、B站、YouTube、知乎、Reddit、X 等平台后端，统一探测、冷却与回退机制",
+    "SQLite 与内存 LRU 双层缓存，包含查询历史管理及可导入导出的站点提取规则；设置卡片支持 agent 覆盖层的采纳与撤销"
+   ],
+   "use_cases": [
+    "在 DSH 宿主中为 agent 提供多引擎与平台来源的网页搜索能力",
+    "以证据包模式执行有明确任务目标的查询，返回评分摘录与缺口清单",
+    "通过 opencli 使用日常 Chrome 登录态访问需登录的平台（如知乎、小红书、Reddit、X）"
+   ]
+  },
+  "sha": "2387935a3cb3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51749b3d5bb0": {
+  "identity": {
+   "one_liner": "基于 BNF 文法的 SQL 随机生成与执行对比测试工具",
+   "review": "go-randgen 是 PingCAP 开源的数据库模糊测试工具，通过 zz 文件（Lua 脚本）定义表结构与数据、通过兼容 mysql randgen 的 yy 文法文件生成随机 SQL。提供 gentest、gendata、gensql、exec 四个子命令，exec 可在两个 DSN 上执行同一 SQL 并转储结果不一致项。内嵌 Lua 代码在受限环境运行，纯 Go 实现，也可作为库调用。",
+   "highlights": [
+    "内置 zz 文件，仅提供 yy 文件即可生成 SQL；支持 --skip-zz 跳过 DDL 生成",
+    "支持 yy 语法的 gendata/gensql/gentest/exec 子命令，exec 可对比两个 DSN 的 SQL 执行结果（默认不比较顺序）",
+    "嵌入 Lua 代码块运行于受限环境（禁用文件系统、进程等访问，单代码块限时 1 秒），生成的 SQL 经语句类别校验；导出函数无状态，可作 Go 库调用"
+   ],
+   "use_cases": [
+    "为数据库或 SQL 兼容层批量生成随机测试 SQL（如窗口函数、函数类查询场景）",
+    "在两个数据库实例上执行相同随机 SQL，对比并转储结果不一致的语句",
+    "通过 Go API 在程序中嵌入 SQL 生成能力（cmd 包下的实现可作为库用法示例）"
+   ]
+  },
+  "sha": "51749b3d5bb0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "14c4803a6a6d": {
+  "identity": {
+   "one_liner": "OceanBase 与 seekdb 训练营赛事的实时排行榜看板，支持筛选、预测与 MCP 查询",
+   "review": "该项目为 OceanBase 数据库大赛与 seekdb AI 训练营提供实时榜单页面，包含总榜、加赛榜及 11 个赛道成绩。数据来自官方公开接口，实时服务不可用时回退到每 10 分钟更新的快照。提供省份筛选、队伍搜索与关注、出分耗时预测（含 80% 区间）、分数线分布及 CSV 导出；另提供免 API Key 的只读 MCP 接口供 AI 客户端查询。基于 bun 运行，可部署至 Cloudflare Worker 或 GitHub Pages。",
+   "highlights": [
+    "提供总榜与 11 个赛道榜单的实时查看，支持省份筛选、关键词搜索、队伍关注与 CSV 导出",
+    "基于历史出分记录提供提交后的预计出分时刻与 80% 区间预测，并展示近 24 小时实际预测误差",
+    "提供公开只读、免 API Key 的 Streamable HTTP MCP 接口，支持榜单发现、队伍搜索、跨赛题成绩查询与出分时刻估计"
+   ],
+   "use_cases": [
+    "参赛者实时查看自己及他队在总榜与各赛道的成绩、名次变化和晋级形势",
+    "关注特定省份或学校的榜单分布时按省份筛选并查看省内名次与学校统计",
+    "通过 MCP 接口让 Claude Code、Codex、Cursor 等 AI 客户端查询榜单与赛题出分估计"
+   ]
+  },
+  "sha": "14c4803a6a6d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

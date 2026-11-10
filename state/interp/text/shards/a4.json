@@ -2531,5 +2531,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2c2732edb34b": {
+  "identity": {
+   "one_liner": "本地视频全文检索工具，索引语音、屏幕文字与场景描述到 SQLite",
+   "review": "vgrep 对本机文件夹中的视频建立索引：用 Whisper 提取带词级时间戳的语音，对每 2 秒采样的帧做 OCR 读取屏幕文字，并用本地视觉模型为镜头切换生成场景描述，三者写入同一 SQLite FTS5 索引。搜索返回文件、秒数、命中信号与跳转播放命令，并提供 Web UI 和 MCP 服务器。适合需要在大量本地视频中按内容定位具体时刻的用户。场景索引依赖自建的 OpenAI 兼容视觉模型服务。",
+   "highlights": [
+    "提供三种信号索引：Whisper 语音转写（词级时间戳）、每 2 秒帧采样的 RapidOCR 屏幕文字、VLM 场景描述，统一写入 SQLite FTS5，结果按 bm25 排序",
+    "索引按信号可断点续传，done 表记录各文件已完成的信号，文件大小或 mtime 变化时自动重新索引；--embed 可启用词法与向量混合检索",
+    "提供 Web UI（绑定 127.0.0.1，支持 HTTP Range 拖动播放）和 MCP 服务器，暴露 search_videos、get_moments、list_videos 三个工具供代理引用具体时刻"
+   ],
+   "use_cases": [
+    "在会议录像、课程或演讲视频中按一句台词或幻灯片文字定位到具体秒数并跳转播放",
+    "通过 MCP 让代理搜索本地视频库并引用 `文件 @ 时间戳` 形式的出处",
+    "仅用 --signals speech,ocr 快速建立可用索引，场景描述后续补齐（README 实测场景索引速度约慢两个数量级）"
+   ]
+  },
+  "sha": "2c2732edb34b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

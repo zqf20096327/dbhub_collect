@@ -2856,5 +2856,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c56888dca04f": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的后端技能集，约束认证、数据与迁移默认行为",
+   "review": "backendskills 为 Claude Code、Codex、Cursor 等代理提供三个技能：api-endpoint、data-integrity、db-migration，分别约束查询权限范围、读写竞争处理与数据库迁移流程。README 附带基准：15 个任务、150 次运行中严重错误从 25 降至 2，但差距主要来自 login-rate-limit 和 rename-column 两个任务，且启用后每轮运行成本从 $0.06 升至 $0.11。通过 npx skills add 安装。",
+   "highlights": [
+    "包含 api-endpoint、data-integrity、db-migration 三个技能，覆盖查询权限范围、并发写入、在线迁移等默认行为",
+    "每个技能含 'Make it yours' 区块，可写入团队约定（如下迁移、API 文档格式），未设置时代码库既有写法",
+    "附带 bench/ 目录，包含 15 个后端任务的基准任务集、原始运行记录与复现方法"
+   ],
+   "use_cases": [
+    "在 Claude Code、Codex、Cursor 中生成涉及认证、支付、数据库变更的后端代码",
+    "将团队规范（迁移方向、错误格式、API 文档）注入代理的默认行为",
+    "复现 bench/ 中 15 个后端任务的代理行为基准测试"
+   ]
+  },
+  "sha": "c56888dca04f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3048c1254e1": {
+  "identity": {
+   "one_liner": "Docker 化的备份服务，自动备份所有运行中的数据库容器",
+   "review": "该项目是一个 Docker 容器形式的备份服务，通过 Docker API 发现运行中的数据库容器，对其中的 Postgres、MariaDB、MySQL 执行自动导出备份。备份计划由环境变量以 cron 表达式或间隔秒数配置，各数据库容器通过 jan-di.database-backup 前缀的标签单独配置账号、压缩、加密和保留策略。适合使用 Docker Compose 部署数据库、需要统一备份入口的运维场景。",
+   "highlights": [
+    "支持 Postgres（≤18）、MariaDB、MySQL，容器类型可经镜像名自动识别",
+    "提供 gzip/zstd 压缩、AES 加密，并支持按数量和年龄的保留策略清理旧备份",
+    "提供 OpenMetrics 监控端点（默认端口 9639）与 Healthchecks.io 集成，镜像支持 amd64/arm64"
+   ],
+   "use_cases": [
+    "对同一 Docker 引擎上的多个数据库容器进行集中定时备份",
+    "需要为备份文件配置压缩、加密与自动清理策略的场景",
+    "多实例部署中通过 WHITELIST/BLACKLIST 或 INSTANCE_ID 划分备份范围"
+   ]
+  },
+  "sha": "c3048c1254e1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "194c0e53ebf5": {
+  "identity": {
+   "one_liner": "Go 编写的单二进制 CMS，内置 SQLite 与 HTMX 管理后台",
+   "review": "ocms-go 是用 Go 和 SQLite 构建的内容管理系统，编译为单个二进制文件运行，无需外部数据库配置。它面向需要自托管网站内容的用户，提供 HTMX/Alpine.js 服务端渲染管理后台和带 API Key 认证的 REST API。支持主题与模块系统、多语言内容、表单构建、媒体库、webhooks 与 SEO 元数据；生产环境下强制启用双因素认证，许可证为 GPL-3.0。",
+   "highlights": [
+    "单二进制部署，内嵌 SQLite 数据库并自动执行迁移，支持源码构建与 Docker Compose 启动",
+    "提供 REST API（Bearer Token 认证、按键细粒度权限、速率限制）与可选启用的 MCP 端点供 AI 代理读取内容",
+    "内置主题导入/切换、模块生命周期钩子与迁移、多语言 URL 前缀与 RTL 支持，以及 HMAC-SHA256 签名的 webhooks 与死信队列"
+   ],
+   "use_cases": [
+    "需要单文件部署、不依赖 Node 构建链或 PHP 运行时的自托管内容站点",
+    "通过 REST API 或 MCP 端点将内容供外部应用或 AI 代理读取的 headless 场景",
+    "需要多语言页面、表单收集与 RSS/Atom 订阅的多语言网站"
+   ]
+  },
+  "sha": "194c0e53ebf5",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e64919f52f88": {
+  "identity": {
+   "one_liner": "本地运行的 AI 长篇网文写作工具，用分层记忆与设定自动建档辅助成书",
+   "review": "novel-smith 是一个基于 Next.js、Electron 和本地 SQLite 的 AI 长篇网文写作工作台，面向需要长期维护人设、伏笔和世界观的中长篇写作者。核心机制是分层记忆引擎：近章全文加摘要加远章压缩要点装配上下文，并按 S/A/B/C 四级衰减事件；每章写完后自动抽取人物、地点、势力生成角色卡与世界书。AI 生成正文需自配 LLM API Key；去 AI 味检测、拆书分析、五格式导出等功能在本地离线运行。数据存于单一本地文件，README 声明无账号、无云服务、无遥测。",
+   "highlights": [
+    "分层记忆引擎按近 4 章全文、近 3 章摘要、远楼层压缩三层装配上下文，事件按 S/A/B/C 四级衰减",
+    "数据存储于本地单一 SQLite 文件，正文与 API Key 不出本机，提供 TXT/Markdown/HTML/EPUB/DOCX 五格式本地导出",
+    "内置 12 条本地规则的去 AI 味检测，纯正则与统计实现，零 LLM 调用、零网络请求"
+   ],
+   "use_cases": [
+    "撰写需要长期维护人设、伏笔、世界观的中长篇网文或小说",
+    "在意稿件隐私、希望写作数据完全保留在本机的作者",
+    "采用 AI 起草、作者审改的协作式写作流程"
+   ]
+  },
+  "sha": "e64919f52f88",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab06e1558aa9": {
+  "identity": {
+   "one_liner": "Java Swing 桌面选课系统，基于 MVC 架构与 JDBC 访问 SQLite 数据库。",
+   "review": "这是 Vanier College 编程模式课程（420-301-VA）的项目作业，实现一个包含学生、教师、管理员三种角色的桌面选课系统。技术上采用 MVC 分层，通过 JDBC 对 SQLite 执行 CRUD，界面为 Swing 桌面 GUI，支持英文/法文双语切换。仓库按三个交付阶段组织，附带 ER 图与类图文档，最终交付包含可运行 JAR。",
+   "highlights": [
+    "学生可实时查看席位余量进行选课与退课，教师可查看课程详情、学生名单与课表，管理员可增删改课程、管理选课并生成报告",
+    "采用 MVC 架构，应用 Factory 与 Singleton 设计模式，集合处理使用 Stream 与 lambda",
+    "通过 ResourceBundle 与 Locale 实现英文/法文国际化，配有基于测试驱动方式的单元测试"
+   ],
+   "use_cases": [
+    "课程作业或教学场景中展示 MVC、设计模式与 JDBC 的综合应用",
+    "需要桌面端三角色（学生/教师/管理员）选课管理的场景",
+    "学习 ResourceBundle 国际化与 SQLite 数据访问的参考实现"
+   ]
+  },
+  "sha": "ab06e1558aa9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3064cc1bc8bd": {
+  "identity": {
+   "one_liner": "单二进制封装的文件式 PostgreSQL，一个 .pgdb 即数据库",
+   "review": "minipg 将 PostgreSQL 以单个 .pgdb 目录的形式呈现，通过内嵌 postgres:18-alpine 镜像并借助 hyper9（h9）hypervisor 直接运行 Alpine 的 Postgres 二进制，无需安装内核、VM 镜像或 Docker。面向需要在本地或 CI 中以文件方式使用 Postgres 的开发者。README 明确标注处于早期阶段，h9 为研究原型，原生后端下性能低于原生运行（无连接池场景受影响），且不支持 JIT。",
+   "highlights": [
+    "一个二进制即可运行：内嵌 postgres:18-alpine 根文件系统，无需安装或配置，支持多 Postgres 大版本按需下载",
+    "提供 shell/serve/run/dump/restore/url 等子命令，可生成 postgres:// 连接串并自动注入 DATABASE_URL，停止状态的 .pgdb 可像目录一样复制",
+    "Linux 构建为静态 musl 二进制，无需特权或 /dev/kvm（原生后端需 Linux 5.11+），可在容器和 GitHub runner 上直接用于 CI"
+   ],
+   "use_cases": [
+    "本地开发：以 .pgdb 文件形式创建、携带和备份单个 Postgres 数据库",
+    "CI 测试：minipg init + minipg run -- go test 的最小测试作业",
+    "将 Postgres 作为应用随附数据文件分发，通过 url/env/run 对接应用进程"
+   ]
+  },
+  "sha": "3064cc1bc8bd",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

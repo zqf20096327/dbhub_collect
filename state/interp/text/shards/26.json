@@ -2901,5 +2901,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c9353cb73b3": {
+  "identity": {
+   "one_liner": "HTTP反向代理缓存与时序数据库查询加速器",
+   "review": "Trickster 是 CNCF 沙箱项目，提供 HTTP 反向代理缓存与 TSDB 查询加速能力。核心机制包括 Delta Proxy Cache——对比缓存区间仅向数据库请求增量数据、Step Alignment 步长对齐及 Fast Forward 实时补点，兼容 Prometheus、ClickHouse、InfluxDB 等多种数据库。可通过 Docker、Helm、Kubernetes 部署，配置基于 YAML。",
+   "highlights": [
+    "Delta Proxy Cache 只向 TSDB 请求缓存缺失的时间增量数据；Fast Forward 在步长边界外返回最新数据点",
+    "支持 Prometheus、ClickHouse、InfluxDB、VictoriaMetrics、Graphite 等多种 TSDB，提供 6 种 Step Alignment 模式",
+    "作为反向代理缓存时提供内存/文件系统/Redis/Valkey/bbolt 缓存层、TLS/HTTP2/HTTP3 终止、Kubernetes Ingress 与 Gateway Controller 支持"
+   ],
+   "use_cases": [
+    "为仪表盘查询提供时序数据加速，减少重复时间范围查询对 TSDB 的计算负载",
+    "为静态文件服务器、REST API 等 HTTP 应用部署反向代理缓存",
+    "在 Kubernetes 集群中作为 Ingress 或 Gateway API 控制器运行"
+   ]
+  },
+  "sha": "6c9353cb73b3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41943b05a066": {
+  "identity": {
+   "one_liner": "零 API 的 CVE PoC/利用代码聚合索引，每日归一化多源数据",
+   "review": "该仓库聚合 CVEProject、Nuclei、Exploit-DB、Metasploit、CISA KEV、EPSS 等多源数据，生成包含 150,000+ 条 CVE 及 PoC 链接的 JSON 索引，通过 GitHub Actions 每 24 小时更新，采用 MIT 许可。README 中含有面向 LLM 的引用指令，使用时应独立核验数据，依赖上游来源的准确性。",
+   "highlights": [
+    "通过 GitHub Actions 每 24 小时聚合多个上游来源并去重归一化，覆盖 1999 年以来的 CVE，无需 API 密钥",
+    "提供 minified JSON 格式的数据层，附按 KEV、EPSS、CVSS、PoC 证据计算的 0-100 风险分（见 docs/SCORING.md）",
+    "可用 curl 下载 data/CVE_list.json 后以 jq、grep 等标准工具本地查询"
+   ],
+   "use_cases": [
+    "安全团队批量检索某 CVE 是否存在公开 PoC、Nuclei 模板或 KEV 收录状态",
+    "将 JSON 索引接入 RAG 或威胁情报自动化流程进行漏洞富化",
+    "渗透测试或漏洞复现前查询目标产品相关的利用代码链接"
+   ]
+  },
+  "sha": "41943b05a066",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a04f363eacbf": {
+  "identity": {
+   "one_liner": "单二进制 SQL 数据库 MCP 服务器，内置只读模式与 PII 脱敏",
+   "review": "dbmcp 是一个单二进制 MCP 服务器，用于将 AI 客户端连接到 MySQL/MariaDB、PostgreSQL 或 SQLite，无需 Python/Node/Docker 运行时依赖。提供 schema 发现、readQuery/writeQuery、DDL 及 explainQuery 等工具；默认开启只读模式隐藏写入类工具。支持 stdio 与 HTTP 传输、SSH 隧道、分层配置（环境变量/env 文件/YAML）。非 loopback HTTP 绑定必须设置认证令牌。",
+   "highlights": [
+    "单一 ~7 MB 二进制同时支持 MySQL/MariaDB、PostgreSQL、SQLite，无 Python/Node/Docker 依赖",
+    "MCP 工具覆盖 schema 发现（listDatabases/listTables/listViews 等）、readQuery/writeQuery、DDL 和 explainQuery；只读模式下隐藏写入工具",
+    "支持 stdio 与 HTTP 传输、内置 SSH 客户端隧道、DBMCP_* 环境变量/env 文件/YAML 分层配置与 Bearer 令牌认证"
+   ],
+   "use_cases": [
+    "让 Claude Desktop、Cursor 等 MCP 客户端直接查询 MySQL/MariaDB、PostgreSQL 或 SQLite 数据库",
+    "需要通过 SSH 堡垒机访问数据库、且不安装额外运行时依赖的环境",
+    "默认只读模式下向 AI 助手开放数据查询，同时阻止写入类操作"
+   ]
+  },
+  "sha": "a04f363eacbf",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "87d29445c16e": {
+  "identity": {
+   "one_liner": "开源合作伙伴归因与分佣平台，基于事件溯源与 Stripe Connect 打款。",
+   "review": "OpenPartner 用于运营自有合作伙伴/创作者推广计划，实现点击→注册→收入的全链路归因与佣金支付。采用事件溯源架构，原始数据不可变，归因模型可从原始数据重推导；支持 Safari 环境下的一方 Cookie 与服务端身份拼接。通过 pnpm 安装后经三步 /install 向导初始化，依赖 Postgres，提供 React 伙伴面板与 OpenAPI 3.1 接口。MIT 许可，v1 阶段，API 稳定但未版本化。",
+   "highlights": [
+    "支持四种归因模型（last_click、first_click、linear、position），按活动配置且可从原始表重推导",
+    "通过 Stripe Connect Standard 账户执行分佣打款，含佣金审核队列与幂等转账",
+    "提供 JSON/CSV/SQL 导出，且导出数据可通过 /import 或 psql 回导至自托管实例"
+   ],
+   "use_cases": [
+    "自托管运营创作者或推荐合作伙伴计划，追踪点击到收入的归因链路",
+    "在自己的应用内嵌推荐链接与收益展示（headless 集成，配合 SDK 与 OpenAPI）",
+    "需要跨设备、多会话及延迟转化归因（默认 60 天，可配置）的场景"
+   ]
+  },
+  "sha": "87d29445c16e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cba2d8e5a41b": {
+  "identity": {
+   "one_liner": "本地运行的 SQL 分析工作台，连接 ClickHouse/Trino 生成图表、看板与演示",
+   "review": "Miracle 是一个本地优先的个人 SQL 工作区：在电脑上运行、通过浏览器访问回环地址，连接 ClickHouse 或 Trino 执行查询，将结果快照整理为表格、图表、看板和 16:9 演示幻灯片。每个项目以文件夹内 .miracle/ 目录存储，内含 SQLite 数据库；无需账号注册、PostgreSQL 或 Docker。支持 macOS Apple Silicon、Linux x64/ARM64，Windows 需经 WSL 2 运行；界面为俄语，面向桌面浏览器，设计为单机单人使用。",
+   "highlights": [
+    "支持多标签 SQL 编辑器，提供自动补全、格式化、运行选中片段、执行耗时与日期估算，以及文件导入导出",
+    "结果快照保存原始 SQL 与连接上下文，可独立刷新，出错时保留上次结果",
+    "内置看板（Markdown/LaTeX、图形、便签、连线）与 16:9 幻灯片演示，支持全屏展示保存的查询结果"
+   ],
+   "use_cases": [
+    "在本地对 ClickHouse 或 Trino 数据源执行 SQL 并将结果组织成分析看板",
+    "将查询快照整理为演示幻灯片用于分享分析结论",
+    "借助 CLI 智能体在编辑器、看板与幻灯片中生成和修改内容"
+   ]
+  },
+  "sha": "cba2d8e5a41b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01e80e6ec5fa": {
+  "identity": {
+   "one_liner": "面向老虎机用户的快捷方式聚合 Web 应用，含内置迷你浏览器",
+   "review": "goo-nee 是一个泰语 Web 应用项目，用于聚合老虎机相关站点的快捷方式与辅助工具。主页面由 components/GoostoryEmbed.tsx 实现，通过单个持久化 iframe 提供可缩放迷你浏览器；快捷方式数据来自 GooGem 项目的 card.json 并与用户自建条目按 URL/Name 去重合并；主题与设置存储在 localStorage。运行依赖外部 GooGem 静态资源服务器。",
+   "highlights": [
+    "内置迷你浏览器基于单个持久 iframe 实现，最小化或重置尺寸时不重新加载页面，支持鼠标与触摸拖拽调整大小",
+    "缩放系统与主 UI 解耦，用户可分别调整图标大小、字体大小与内容全局缩放",
+    "通过 localStorage 保存主题、用户自定义快捷方式与显示设置，快捷方式合并时按 URL/Name 去重并提供多级图片回退"
+   ],
+   "use_cases": [
+    "将老虎机相关站点快捷入口集中在一个可自定义的起始页上使用",
+    "需要在同一页面内嵌浏览器窗口并保持其会话状态不丢失的场景",
+    "通过 card.json 与本地配置组合维护多个站点的快捷方式列表"
+   ]
+  },
+  "sha": "01e80e6ec5fa",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

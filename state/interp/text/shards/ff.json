@@ -3059,5 +3059,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "924f9b8ba38f": {
+  "identity": {
+   "one_liner": "将 OpenFGA 模式编译为 PostgreSQL 内 SQL 权限函数的编译器",
+   "review": "Melange 读取 .fga 授权模式文件，在迁移时分析各关系的模式（直接、并集、排除、tuple-to-userset 等），为每个关系生成专用 PL/pgSQL 函数并安装到现有 PostgreSQL 数据库中。运行时权限检查是对 check_permission() 的一次函数调用，数据通过用户自定义的 melange_tuples 视图直接读取应用表，无需独立元组存储与同步。支持 OpenFGA Schema 1.1 除 conditions 外的特性。适用于希望权限检查在数据库内运行的项目。",
+   "highlights": [
+    "将 OpenFGA Schema 1.1 模式编译为 PL/pgSQL 函数，角色层级在编译期解析并内联，运行时无需递归查找",
+    "权限检查通过读取用户定义的 melange_tuples 视图直接访问现有表，无独立元组存储；同事务内可见未提交变更，可用于触发器与 RLS 策略",
+    "提供 CLI（migrate/validate/diff/explain/expand/doctor）及可选 Go、TypeScript 客户端，melange studio 提供只读本地 Web 控制台"
+   ],
+   "use_cases": [
+    "应用数据已存于 PostgreSQL，需在同一数据库内执行关系型权限检查（RBAC/ReBAC）的场景",
+    "需要权限检查在事务内感知未提交数据、用于触发器或行级安全策略的场景",
+    "已使用 OpenFGA 模式定义权限、希望以 SQL 函数形式部署检查逻辑的项目"
+   ]
+  },
+  "sha": "924f9b8ba38f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8b54ddb920d4": {
+  "identity": {
+   "one_liner": "基于 TiKV 存储的 DynamoDB 兼容 HTTP 服务，实验性实现 DynamoDB API 子集",
+   "review": "TiKronos 是一个独立运行的 Kotlin 应用（Ktor、Netty、Java 21），对外提供 DynamoDB 兼容的 HTTP API，底层由单独部署的 PD 和 TiKV 提供事务性持久化存储。项目处于实验阶段，仅实现 DynamoDB 的一个子集，未达到完整 API 对等。适合希望将现有 DynamoDB 客户端接入 TiKV 集群的开发者；使用持久数据前需阅读兼容性指南和运维升级要求。",
+   "highlights": [
+    "支持表管理、条目 CRUD、条件写入、Query、Scan、批量操作和二级索引",
+    "支持 TTL 和 DynamoDB Streams（有文档化的兼容性限制）",
+    "通过 Docker Compose 快速启动，API 仅暴露在回环地址，命名卷可保留数据"
+   ],
+   "use_cases": [
+    "将现有 DynamoDB 客户端接入已有 TiKV 集群进行表和条目读写",
+    "在本地开发环境中用 Docker Compose 搭建 DynamoDB 兼容 API 做功能测试",
+    "结合 quickstart 中的 Terraform locking 指引做基于 TiKV 的锁存储场景"
+   ]
+  },
+  "sha": "8b54ddb920d4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

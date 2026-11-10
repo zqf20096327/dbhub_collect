@@ -26532,5 +26532,689 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "8f8fd9fc2779+2": {
+  "fn": "pgcentralfoundation/pgrx",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    11,
+    [
+     "GitHub Actions badge",
+     "crates.io badge",
+     "docs.rs badge",
+     "Twitter Follow",
+     "[Discord Chat][Discord]"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    19,
+    11,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     " + **Please join our [Discord Server][Discord].**"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    19,
+    20
+   ],
+   [
+    "replace",
+    21,
+    22,
+    20,
+    21,
+    [
+     " + **We are also in need of financial sponsorship.**"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    21,
+    24
+   ],
+   [
+    "replace",
+    25,
+    34,
+    24,
+    33,
+    [
+     "- **A fully managed development environment with `cargo-pgrx`**",
+     " + `cargo pgrx new`: Create new extensions quickly",
+     " + `cargo pgrx init`: Install new (or register existing) PostgreSQL installs",
+     " + `cargo pgrx run`: Run your extension and interactively test it in `psql` (or `pgcli`)",
+     " + `cargo pgrx test`: Unit-test your extension across multiple PostgreSQL versions",
+     " + `cargo pgrx regress`: Run SQL regression tests and compare their output with expected files",
+     " + `cargo pgrx package`: Create installation packages for your extension, including RPM and DEB packages on Linux",
+     " + `cargo pgrx migrate`: Optionally build upgrade scripts from one small SQL file per change",
+     " + More in the `README.md`!"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    33,
+    34
+   ],
+   [
+    "replace",
+    35,
+    38,
+    34,
+    37,
+    [
+     " + Support from Postgres 15 to Postgres 19 from the same codebase",
+     " + Use Rust feature gating to use version-specific APIs",
+     " + Seamlessly test against all versions"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    37,
+    38
+   ],
+   [
+    "replace",
+    39,
+    43,
+    38,
+    42,
+    [
+     " + Implement extensions entirely in Rust",
+     " + Automatic mapping for many Rust types into PostgreSQL",
+     " + SQL schemas generated automatically (or manually via `cargo pgrx schema`)",
+     " + Include custom SQL with `extension_sql!` & `extension_sql_file!`"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    42,
+    43
+   ],
+   [
+    "replace",
+    44,
+    48,
+    43,
+    47,
+    [
+     " + During binding generation, pgrx transpiles nearly all of PostgreSQL's function-style C `#define` macros into Rust `macro_rules!` macros",
+     " + Call them through `pgrx::` with their original C names and `!`, such as `pgrx::VARSIZE_ANY!(ptr)`",
+     " + Their behavior follows the selected PostgreSQL installation, compiler flags, and target",
+     " + See Using PostgreSQL C macros for extension examples and the transpiler architecture for implementation details"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    47,
+    48
+   ],
+   [
+    "replace",
+    49,
+    54,
+    48,
+    53,
+    [
+     " + Translates Rust `panic!`s into Postgres `ERROR`s that abort the transaction, not the process",
+     " + Memory Management follows Rust's drop semantics, even in the face of `panic!` and `elog(ERROR)`",
+     " + `#[pg_guard]` procedural macro to ensure the above",
+     " + Postgres `Datum`s are `Option<T> where T: FromDatum`",
+     " - `NULL` Datums are safely represented as `Option::<T>::None`"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    53,
+    54
+   ],
+   [
+    "replace",
+    55,
+    59,
+    54,
+    58,
+    [
+     " + Annotate functions with `#[pg_extern]` to expose them to Postgres",
+     " + Return `pgrx::iter::SetOfIterator<'a, T>` for `RETURNS SETOF`",
+     " + Return `pgrx::iter::TableIterator<'a, T>` for `RETURNS TABLE (...)`",
+     " + Create trigger functions with `#[pg_trigger]`"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    58,
+    59
+   ],
+   [
+    "replace",
+    60,
+    66,
+    59,
+    65,
+    [
+     " + `#[derive(PostgresType)]` to use a Rust struct as a Postgres type",
+     " - By default, represented as a CBOR-encoded object in-memory/on-disk, and JSON as human-readable",
+     " - Supports `#[pg_binary_protocol]` to generate binary protocol send/recv functions",
+     " - Provide custom in-memory/on-disk/human-readable representations",
+     " + `#[derive(PostgresEnum)]` to use a Rust enum as a Postgres enum",
+     " + Composite types supported with the `pgrx::composite_type!(\"Sample\")` macro"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    65,
+    66
+   ],
+   [
+    "replace",
+    67,
+    69,
+    66,
+    68,
+    [
+     " + Safe access into SPI",
+     " + Transparently return owned Datums from an SPI context"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    68,
+    69
+   ],
+   [
+    "replace",
+    70,
+    77,
+    69,
+    76,
+    [
+     " + Safe access to Postgres' `MemoryContext` system via `pgrx::PgMemoryContexts`",
+     " + Executor/planner/transaction/subtransaction hooks",
+     " + Safely use Postgres-provided pointers with `pgrx::PgBox<T>` (akin to `alloc::boxed::Box<T>`)",
+     " + `#[pg_guard]` proc-macro for guarding `extern \"C-unwind\"` Rust functions that need to be passed into Postgres",
+     " + Access Postgres' logging system through `eprintln!`-like macros",
+     " + Direct `unsafe` access to large parts of Postgres internals via the `pgrx::pg_sys` module",
+     " + New features added regularly!"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    76,
+    85
+   ],
+   [
+    "replace",
+    86,
+    88,
+    85,
+    87,
+    [
+     "target limits.",
+     "A cross build has further requirements; see Cross-compiling."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    87,
+    91
+   ],
+   [
+    "replace",
+    92,
+    99,
+    91,
+    98,
+    [
+     " - Debian-likes: `apt install clang llvm libclang-dev`",
+     " - RHEL-likes: `yum install clang llvm`",
+     " - Windows: download installers from https://github.com/llvm/llvm-project/releases",
+     " - `pgrx-pg-sys` uses the driver to find the target's system headers, to check the C macro profile against the PostgreSQL headers and to compile its native support archive, including the `cshim` feature. Its major version must match `libclang`. pgrx uses `CLANG_PATH` when it is set; otherwise it uses the first match among the `CLANG` recorded in a `pg_config` program's `--configure` output, the `clang` installed with `libclang`, and `clang-<major>` or `clang` on `PATH`.",
+     " - The archiver is `llvm-ar` from the driver's LLVM release, or `llvm-lib` for Windows targets. pgrx looks for `llvm-ar-<major>` beside a `clang-<major>` driver, then `llvm-ar` beside the driver or beside its resolved path, such as Debian's `/usr/lib/llvm-<major>/bin/llvm-ar`. Without one, builds for Unix targets use the system `ar`, which works for native builds but may not index objects built for another target.",
+     " - A failure to generate the C macros stops the build with an error that names the cause.",
+     " - A driver that loads a default configuration file, as Gentoo's Clang does, is refused. Set `CLANG_NO_DEFAULT_CONFIG=1` to build without it."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    98,
+    99
+   ],
+   [
+    "replace",
+    100,
+    105,
+    99,
+    104,
+    [
+     " - Linux and macOS: a host C compiler, which builds the generator's SHA-256 backend",
+     " - Windows: MSVC, which Rust's MSVC targets need for linking",
+     "- PostgreSQL's build dependencies ‡",
+     " - Debian-likes: `sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache pkg-config`",
+     " - RHEL-likes: `sudo yum install -y bison-devel readline-devel zlib-devel openssl-devel wget ccache && sudo yum groupinstall -y 'Development Tools'`"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    119,
+    104,
+    118
+   ],
+   [
+    "replace",
+    119,
+    120,
+    118,
+    119,
+    [
+     "The Mac C compiler (clang) and related tools are bundled with Xcode."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    122,
+    119,
+    121
+   ],
+   [
+    "replace",
+    122,
+    123,
+    121,
+    122,
+    [
+     "For additional C libraries, it's easiest to use Homebrew. In particular,"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    141,
+    122,
+    140
+   ],
+   [
+    "replace",
+    141,
+    165,
+    140,
+    141,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    177,
+    141,
+    153
+   ],
+   [
+    "replace",
+    177,
+    182,
+    153,
+    154,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    196,
+    154,
+    168
+   ],
+   [
+    "replace",
+    196,
+    197,
+    168,
+    169,
+    [
+     " └── lib.rs"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    217,
+    169,
+    189
+   ],
+   [
+    "delete",
+    217,
+    218,
+    189,
+    189
+   ],
+   [
+    "equal",
+    218,
+    224,
+    189,
+    195
+   ],
+   [
+    "replace",
+    224,
+    261,
+    195,
+    196,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    280,
+    196,
+    215
+   ],
+   [
+    "replace",
+    280,
+    387,
+    215,
+    216,
+    [
+     "…（107 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    389,
+    216,
+    218
+   ],
+   [
+    "replace",
+    389,
+    397,
+    218,
+    226,
+    [
+     " --> pgrx/src/lib.rs:151:5",
+     " |",
+     "151 | / assert!(",
+     "152 | | same_slice(pg_sys::FMGR_ABI_EXTRA, b\"xPostgreSQL\\0\"),",
+     "153 | | \"Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?\",",
+     "154 | | );",
+     " | |_____^ the evaluated program panicked at 'Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?', pgrx/src/lib.rs:151:5",
+     " |"
+    ]
+   ],
+   [
+    "equal",
+    397,
+    399,
+    226,
+    228
+   ],
+   [
+    "delete",
+    399,
+    400,
+    228,
+    228
+   ],
+   [
+    "equal",
+    400,
+    401,
+    228,
+    229
+   ],
+   [
+    "replace",
+    401,
+    428,
+    229,
+    230,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    439,
+    230,
+    241
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "0c2ef1e17ced+2": {
+  "fn": "oracle/crossplane-provider-oci",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "`crossplane-provider-oci` is a Crossplane provider for Oracle Cloud Infrastructure (OCI) that is built using Upjet code generation tools."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Upjet creates XRM-conformant managed resources for the OCI APIs based on OCI Terraform Resources."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    9,
+    5,
+    9
+   ],
+   [
+    "replace",
+    9,
+    16,
+    9,
+    16,
+    [
+     "- Git 2.25 (recommended)",
+     "- Terraform 1.4.6 (recommended)",
+     "- Go 1.26.10 (required build baseline)",
+     "- Goimports",
+     "- Kubectl 5.0.1 (recommended)",
+     "- Helm 3.11.2 (recommended)",
+     "- Docker 20.10.20 (recommended)"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    20,
+    17,
+    20,
+    [
+     " - OCI Container Engine for Kubernetes (Oracle's Kubernetes offering)",
+     " - Rancher Desktop (for local development)",
+     "- Crossplane 1.10 (recommended)"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    51,
+    20,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "To get started with using the OCI official provider-family, follow our Quick Start guide. This guide provides a step-by-step walkthrough of creating a bucket with `provider-oci-objectstorage`."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    52,
+    53
+   ],
+   [
+    "replace",
+    53,
+    55,
+    53,
+    54,
+    [
+     "To build your own OCI Crossplane provider for internal registry, refer to our Building a Crossplane Provider guide. This guide provides detailed instructions on building, configuring, and installing `crossplane-provider-oci`"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    57,
+    54,
+    56
+   ],
+   [
+    "replace",
+    57,
+    59,
+    56,
+    57,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    57,
+    58
+   ],
+   [
+    "replace",
+    60,
+    61,
+    58,
+    59,
+    [
+     "Consult the security guide for our responsible security vulnerability disclosure process."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    59,
+    62
+   ],
+   [
+    "delete",
+    64,
+    67,
+    62,
+    62
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

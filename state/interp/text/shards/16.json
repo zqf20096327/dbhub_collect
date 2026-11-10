@@ -3353,5 +3353,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dac54df76ff9": {
+  "identity": {
+   "one_liner": "基于事务性发件箱模式的 Kotlin/JVM 可靠消息投递库",
+   "review": "Okapi 是运行在 JVM 上的 Kotlin 库，实现事务性发件箱模式：消息与业务数据在同一数据库事务中写入 PostgreSQL 或 MySQL 8+，随后由后台调度器异步投递到 HTTP webhook 或 Kafka。支持 Spring Boot 自动配置，也可在 JVM 任意位置手动装配。使用方需注意消息可能重复投递，需依赖 x-outbox-id 头做消费端去重；MySQL 下调度事务须运行在 READ COMMITTED 隔离级别。需 JDK 21+，Apache-2.0 协议。",
+   "highlights": [
+    "在同一数据库事务内写入业务数据与发件箱消息，无需分布式事务，支持 PostgreSQL 与 MySQL 8+ 存储",
+    "通过 FOR UPDATE SKIP LOCKED 认领待投递行，支持按投递类型划分 worker，重试采用带抖动的指数退避，可配置轮询间隔、批次大小、最大重试次数与并发数",
+    "每次投递附带 x-outbox-id 头（UUID，跨重试稳定），所有投递类型均适用；HTTP 与 Kafka 的失败分类由各自 deliverer 决定"
+   ],
+   "use_cases": [
+    "Kotlin/Java Spring Boot 服务在数据库事务提交后需向其他服务发送 webhook 或 Kafka 消息，且不允许消息因进程崩溃而丢失的场景",
+    "消费端可基于 x-outbox-id 做幂等处理的集成链路，容忍重复投递但不接受消息丢失",
+    "多个 worker 分担不同投递类型的部署形态，或仅需发布、禁用本机投递（okapi.processor.enabled=false）的实例"
+   ]
+  },
+  "sha": "dac54df76ff9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8aa7399d8e52": {
+  "identity": {
+   "one_liner": "达梦数据库的第三方 Entity Framework Core 10 关系型提供程序",
+   "review": "该项目是面向达梦 DM8 的独立维护 EF Core 10 提供程序，默认使用官方 DM.DmProvider ADO.NET 驱动，可选扩展包切换到 W.DamengProvider 驱动。通过 options.UseDameng 接入 DbContext，支持键生成、乐观并发、事务、迁移与反向工程。注意：不创建物理数据库，DDL 迁移因达梦隐式提交不具备原子性，无界字符串映射为 NCLOB 后键/索引需配置有限长度。",
+   "highlights": [
+    "提供 UseDameng 与 UseDamengWithWDriver 两种接入方式，值生成使用带前缀的专用 API（如 UseDamengIdentityColumn）避免与其他 EF 提供程序扩展方法冲突",
+    "真实数据库回归覆盖 CRUD、键生成回读、乐观并发、事务、迁移、Unicode/CJK 及反向工程；无界 string/byte[] 分别映射 NCLOB/BLOB",
+    "仓库附带可安装的达梦 SQL 方言 Agent Skill，并支持 dotnet ef 迁移脚本生成与幂等脚本守卫机制"
+   ],
+   "use_cases": [
+    "在 .NET 10 / EF Core 10 项目中通过 ORM 访问已有达梦 DM8 数据库的用户模式",
+    "需要为达梦执行 EF Core 迁移（含幂等脚本）或进行数据库反向工程脚手架的场景",
+    "需要官方驱动与 W 驱动双驱动并行、或要求异步网络 I/O 的达梦接入场景（W 驱动异步路径已实库验证）"
+   ]
+  },
+  "sha": "8aa7399d8e52",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

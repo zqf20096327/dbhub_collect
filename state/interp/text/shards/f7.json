@@ -3056,5 +3056,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "32b60228e1dc": {
+  "identity": {
+   "one_liner": "运行在 Cloudflare Workers 上的多租户 SaaS 起始项目，含 CLI 与共享 zod 契约。",
+   "review": "Rocketflare 是一个单仓库 SaaS 脚手架，供开发者复制后改造为内部工具或 B2B 产品。它在 Cloudflare Workers 上实现多租户隔离、认证、后台任务、实时通知、文件存储、AI 层（聊天/Agent/检索）与 CLI。采用契约→schema→路由→页面的开发流程，首次本地运行无需外部凭证；提供 /rf-setup、/rf-adapt 等命令由编码代理驱动，并支持 /rf-upgrade 同步后续版本。",
+   "highlights": [
+    "支持 TENANCY_MODE=multi|single 两种租户模式，每个域表携带 tenant_id 并预置 RLS 策略（默认不启用，可切换为 enforce）",
+    "认证包含魔法链接、Google/Microsoft OAuth、任意 OIDC 发行方、租户 API 密钥，以及 CSRF 防护与 KV 滑动窗口限流",
+    "AI 层提供分级 provider 解析（租户密钥→平台密钥→Workers AI），基于 Workflows 的 Agent 运行，pgvector 混合检索（向量+tsvector，RRF 融合）"
+   ],
+   "use_cases": [
+    "构建需要多租户与角色权限的 B2B SaaS 产品",
+    "搭建内部工具，需要登录、后台任务与实时通知",
+    "需要聊天、Agent 与文档检索功能的 AI 应用原型起步"
+   ]
+  },
+  "sha": "32b60228e1dc",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

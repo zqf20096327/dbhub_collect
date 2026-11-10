@@ -2520,5 +2520,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "55243a20e8b3": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，网关回复前注入相关记忆并提供 MCP 工具",
+   "review": "Stiller Brain 是一个用 Python 与 SQLite 实现的 LLM 长期记忆后端，由 AI 通过 MCP 工具自写记忆，ST 网关在新消息到达、模型回复前按话题相关性注入记忆线索。提供自我定义、情感、学习、工具、规划等模块及自写提醒、版本回看。适用于支持 OpenAI 兼容接口与 MCP 的客户端；自动浮现需网关或等价宿主能力，当前版本为测试预览。",
+   "highlights": [
+    "提供两种接入方式：ST 网关在回复前按语境注入相关记忆，或仅连接 MCP 工具由 AI 主动查询、保存、修改",
+    "包含自我定义、情感脑、学习脑、工具脑、规划脑、幻觉黑匣子等模块，记录保留原文与版本历史，支持自写提醒与情绪词表",
+    "支持短期换窗交接（最近 30 分钟内最多 3 条正文）、记忆注入开关按模块控制，以及 Windows/Linux/Android Termux 本地部署"
+   ],
+   "use_cases": [
+    "为具备 MCP 工具调用能力的 LLM 客户端构建可跨会话延续话题的记忆库",
+    "需要 AI 主动保存经历、整理归纳、管理自写提醒与计划的个人部署场景",
+    "宿主开发者按网关接口或 MCP Streamable HTTP 协议进行适配接入"
+   ]
+  },
+  "sha": "55243a20e8b3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7999bbf57290": {
+  "identity": {
+   "one_liner": "用于在 Kubernetes 上部署 PgDog 连接池的 Helm Chart",
+   "review": "该项目是 PgDog 的官方 Helm Chart，面向需要在 Kubernetes 集群中以高可用方式运行 PgDog PostgreSQL 连接池的运维人员。它以 StatefulSet/Deployment 形式部署，通过 values.yaml 映射 pgdog.toml 与 users.toml 的全部配置（camelCase 命名），默认镜像版本取自 Chart.yaml 的 appVersion，并支持以 tag 或 digest 固定镜像。",
+   "highlights": [
+    "支持 pgdog.toml 和 users.toml 的全部配置项，以 camelCase 形式在 values.yaml 中声明",
+    "内置 PodDisruptionBudget、Pod 反亲和与多可用区拓扑分布等部署选项",
+    "支持 ExternalSecrets 集成、引用既有 Secret 提供 users.toml/pgdog.toml，以及可选 Prometheus sidecar 与 Grafana remote write"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中部署 PgDog 并管理数据库连接与用户配置",
+    "通过 StatefulSet 的 PVC 持久化两阶段提交 WAL 目录",
+    "需要凭据经 ExternalSecrets 或既有 Secret 注入、避免明文密码写入 values.yaml 的部署"
+   ]
+  },
+  "sha": "7999bbf57290",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23b77342cd10": {
+  "identity": {
+   "one_liner": "面向代码代理的治理框架，提供 SQLite FTS5 索引的 Context Engine 与 CLI 流程编排",
+   "review": "rods-sdk 是一个面向代码代理的治理框架，通过 npm 全局安装，提供 Context Engine（基于 SQLite FTS5 的分块索引检索）、RTK 输出压缩、版本化于 .ai/ 目录的治理规则，以及 rods init/doctor/run 等 CLI 命令。支持 Codex、Claude、Gemini 等 CLI 作为执行 harness，在隔离 worktree 中运行 flow。其 --local-only 模式按 README 说明仍被有意锁定，需 harness 提供结构化证明方可启用。",
+   "highlights": [
+    "提供基于 SQLite FTS5 的项目分块索引检索，供代理在打开文件前获取压缩上下文",
+    "包含 rods init/doctor/run/flow run 等 CLI 命令，支持临时 branch 与 worktree、测试 gate、结构化评审及迭代上限",
+    "本地模式由 LocalOnlyGate 控制，要求验证本地模型、harness 路由及操作系统级网络隔离，云回退路径返回 FEATURE_NOT_AVAILABLE"
+   ],
+   "use_cases": [
+    "为使用 Codex、Claude 或 Gemini CLI 的团队建立版本化的代理治理规则与技能",
+    "在大型项目中为代理提供索引化上下文检索以减少读取原始文件",
+    "在隔离 worktree 中运行开发-评审流程并生成待人工应用的补丁"
+   ]
+  },
+  "sha": "23b77342cd10",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b05215169e00": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库浏览器，支持工作区、外键导航与 EF Core/LINQ 集成",
+   "review": "FerretSharp 是一个运行在 Windows、基于 .NET 10 的 Oracle 数据库浏览工具，采用 MIT 许可发布。它面向日常使用 Oracle 数据库的 .NET 开发者，提供按连接划分的工作区（各自持有独立数据库会话）、外键导航、显式事务控制的沙箱编辑，以及读取 EF Core 模型并附带 LINQ 控制台的功能。README 说明界面支持英语和德语，生产连接默认为只读。",
+   "highlights": [
+    "支持工作区机制：每个工作区拥有独立数据库会话与独立的标签页、过滤器，多个连接可同时打开并切换",
+    "支持外键导航与基于 EF Core 模型的关系跳转，LINQ 控制台可显示代码实际发送的 SQL",
+    "编辑流程分为 pending、written、committed 三种状态，在显式事务中提交或回滚，生产连接默认由 Oracle 强制只读"
+   ],
+   "use_cases": [
+    ".NET 开发者按应用实体/属性名浏览 Oracle 表数据，并沿外键或 EF Core 导航关系追查数据",
+    "需要分工作区独立查看和编辑同一张表的场景（如按 bug 或导出任务组织）",
+    "在 LINQ 控制台中查看代码生成的 SQL 及其执行计划，进行查询调适"
+   ]
+  },
+  "sha": "b05215169e00",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

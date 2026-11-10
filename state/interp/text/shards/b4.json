@@ -3394,5 +3394,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f8f5c88f9924": {
+  "identity": {
+   "one_liner": "开源自托管的文档、数据库、白板与日志一体化工作区",
+   "review": "Flowplan 是一个基于 Next.js 与 PostgreSQL（默认 SQLite）的开源协作工作区，将文档编辑、多视图数据库、白板、每日日志、项目管理、表单与无代码工作流整合在一个页面树中，支持实时协作。面向需要自托管知识库与项目管理的团队，通过单条 Docker 命令或 Compose/Helm 部署，数据存于 /app/data 卷。",
+   "highlights": [
+    "文档、数据库（10 种视图）、白板、日志、项目工单、表单与画布式无代码工作流集成于一个页面树，支持实时协作",
+    "默认单容器运行 SQLite，可切换 PostgreSQL 并以多实例集群模式扩展；支持 OIDC/LDAP/SCIM 单点登录与两因子认证",
+    "导入 Notion、Confluence、AFFiNE、AppFlowy、Obsidian、Evernote 等，导出为 Markdown、CSV、PDF、Word 等格式，可定时导出到 S3 或 Git"
+   ],
+   "use_cases": [
+    "团队自托管的知识库与文档协作平台",
+    "以看板、时间线和燃尽图管理项目工单与迭代",
+    "通过 Docker 单容器在个人服务器或内网部署的私有数据工作区"
+   ]
+  },
+  "sha": "f8f5c88f9924",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1d7aec1f6117": {
+  "identity": {
+   "one_liner": "brudi：通过 YAML 配置调用原生工具生成并恢复备份的命令行工具",
+   "review": "brudi 是一个命令行备份工具，将 mysqldump、mongodump、pg_dump、tar、redis-cli、restic 等已有二进制封装为统一的 YAML 配置流程，可在一步中完成源数据备份并接 restic 增量加密存储，也提供对应的恢复命令。运行依赖相应工具已安装，或直接使用内置全部依赖的 Docker 镜像；pg_dump 需与服务器版本完全一致。",
+   "highlights": [
+    "支持 fsbackup、tar、mysqldump、mongodump、pgdump、redisdump 六种备份源及对应的恢复命令",
+    "以 --restic 标志在备份后执行 restic 存储并可配合 --restic-forget 执行保留策略",
+    "配置键均可通过环境变量覆盖，敏感信息可不经 YAML 文件写入"
+   ],
+   "use_cases": [
+    "需要以统一 YAML 配置和单条命令管理多种数据库与文件备份的服务器运维场景",
+    "已有 restic 仓库、希望复用现有环境变量与保留策略的环境",
+    "Kubernetes CronJob 中运行备份任务（快照以稳定的 brudi-<kind> 主机名分组）"
+   ]
+  },
+  "sha": "1d7aec1f6117",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "af3ad018c746": {
+  "identity": {
+   "one_liner": "为 CloudNativePG 构建的含 TimescaleDB 与 PostGIS 扩展的 PostgreSQL 容器镜像",
+   "review": "该项目在官方 CloudNativePG PostgreSQL 操作镜像上叠加扩展层，提供包含 TimescaleDB、TimescaleDB Toolkit、PostGIS 及 pgRouting 的容器镜像，发布于 ghcr.io。面向使用 CloudNativePG 运维 PostgreSQL 集群并需要时序或地理空间扩展的用户。扩展版本按 PostgreSQL 大版本与发行版固定，镜像附带 SBOM、来源证明与 cosign 签名。TimescaleDB 未为 PostgreSQL 14 的 trixie 发布软件包，该组合不提供镜像。",
+   "highlights": [
+    "基于官方 CloudNativePG 操作镜像，以 USER 26 运行并保留上游 entrypoint，可直接用于 Cluster 资源",
+    "覆盖 PostgreSQL 14–18，Debian bookworm 与 trixie 两种发行版、standard 与 system 两种类型，构建于 linux/amd64 与 linux/arm64",
+    "每个发布镜像附 SBOM、provenance 与 cosign 签名，并经冒烟测试验证扩展可用；提供 ClusterImageCatalog 按主版本以 digest 引用镜像"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上通过 CloudNativePG 运行带 TimescaleDB 时序扩展的 PostgreSQL 集群",
+    "在同一集群镜像中使用 PostGIS、postgis_topology 与 pgRouting 处理地理空间数据",
+    "需要扩展版本固定、按 digest 引用不可变镜像标签的生产环境部署"
+   ]
+  },
+  "sha": "af3ad018c746",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6c10320b8685": {
+  "identity": {
+   "one_liner": "基于 PHP 与 MySQL 的开源电商网店系统，采用模块化架构。",
+   "review": "modified 是一个基于 PHP 与 MySQL/MariaDB 的开源电商网店系统，面向需要在生产环境运营网店的商户与开发者。README 提到项目由社区维护并持续更新，系统支持模块扩展、支付与配送集成、多语言，并提供文档安装指南。README 未给出具体系统要求与版本号，安装细节需查阅其官方文档。",
+   "highlights": [
+    "提供完整的电商网店功能，采用模块化架构并支持通过模块进行扩展",
+    "支持支付与配送集成以及多语言",
+    "技术栈为 PHP、MySQL/MariaDB、JavaScript 与 HTML/CSS"
+   ],
+   "use_cases": [
+    "搭建并长期运营多语言在线商店",
+    "通过模块和自定义开发扩展网店功能",
+    "开发者参与社区维护并进行定制化开发"
+   ]
+  },
+  "sha": "6c10320b8685",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d266679c259a": {
+  "identity": {
+   "one_liner": "PostgreSQL 向量相似度检索扩展，结合 RaBitQ 量化与倒排/图索引",
+   "review": "vchord 是 PGSTY 维护的 PostgreSQL 扩展，作为 pgvecto.rs 的后继版本，用于向量相似度检索。它通过 RaBitQ 量化压缩向量，提供 vchordrq（倒排文件）与 vchordg（单层图）两类索引，并在库内完成重排序。支持 PostgreSQL 14–18，采用 AGPL-3.0 许可，需加入 shared_preload_libraries 后重启生效。",
+   "highlights": [
+    "直接索引 pgvector 的 vector、halfvec 类型，支持 <->、<#>、<=> 距离算子及多向量 MaxSim（@#）检索",
+    "提供原生 4-bit（rabitq4）与 8-bit（rabitq8）量化向量类型，并在数据库内执行重排序",
+    "通过层级 K-means 或外部索引预计算构建索引，并支持降维与采样控制构建期内存"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中存储和检索大规模向量数据（README 给出单机 1 亿至 10 亿向量的部署配置示例）",
+    "基于 pgvector 数据类型叠加量化索引的现有应用改造",
+    "需要向量检索与全文检索（配合 vchord_bm25、pg_tokenizer）组合的场景"
+   ]
+  },
+  "sha": "d266679c259a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

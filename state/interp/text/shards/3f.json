@@ -3043,5 +3043,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5bba49456a62": {
+  "identity": {
+   "one_liner": "面向技术从业者的巴西社交网络 Énóis 的后端 API，基于 Spring Boot 4 与六边形架构。",
+   "review": "该项目是巴西技术社区社交网络 Énóis（enois.ia.br）的后端服务，实现业务规则、授权、审核、钱包（Faísca）与集成，前端通过 API 与其交互。采用 Spring Boot 4（Java 25）、六边形架构（端口与适配器）、Flyway 数据库迁移，测试用 H2，生产用 MariaDB 11.4。模块包含身份、动态、媒体、社区等十个。采用 GPL-3.0 许可。运行需 JDK 25 与 Maven，通过 SPRING_PROFILES_ACTIVE 指定环境配置，无默认配置文件。",
+   "highlights": [
+    "按六边形架构组织，模块包含 identity、feed、media、network、profile、messaging、notifications、search、community、admin",
+    "支持 dev（H2 内存库）、hml 与 prd（MariaDB）三种环境配置，打包后无配置文件则拒绝启动",
+    "媒体存储支持通过环境变量切换 ImageKit 与 S3 提供商，已存资产按数据库中的 URL 继续由原提供商提供"
+   ],
+   "use_cases": [
+    "为 Énóis 社交网络的前端与开发者门户提供后端 API 服务",
+    "需要按功能模块划分的六边形架构参考实现的项目",
+    "面向巴西技术社区的社交平台部署，含 MariaDB 生产环境与 docker-compose 本地运行"
+   ]
+  },
+  "sha": "5bba49456a62",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee8157697388": {
+  "identity": {
+   "one_liner": "本地优先的 CLI agent 会话记忆层，将多工具会话索引到 SQLite + FTS5。",
+   "review": "sessiongrep 用 provider 适配器把 Claude Code、Codex CLI、Cursor、Antigravity、Pi 的会话记录归一化后写入本地 SQLite（FTS5 全文索引），提供 CLI、TUI 检索，并通过 MCP server 供 agent 程序化搜索历史。只索引对话文本，排除工具调用输出；单静态二进制、无守护进程。当前为 v0.1 早期版本，搜索仅基于关键词，无语义检索，Cursor/Antigravity 不支持会话恢复。",
+   "highlights": [
+    "将五种 CLI agent 工具的会话规范化为统一 Session 模型，写入带 FTS5 虚拟表的 SQLite（WAL 模式），每次读取命令前自动增量重索引",
+    "提供 MCP server，暴露 search_sessions、get_session、list_sessions、timeline_for_repo、get_resume_command 五个工具供 agent 调用",
+    "仅索引提示词与回复文本，排除工具调用输出、注入上下文和子 agent 记录；运行于本地，无网络调用，对源文件只读"
+   ],
+   "use_cases": [
+    "按主题、仓库、provider 或时间检索分散在各 CLI 工具中的历史会话记录",
+    "让 AI agent 通过 MCP 搜索并引用自身过往会话的推理过程",
+    "导出指定 Claude/Codex 会话（含工具调用与 token 用量）为 JSONL 文件用于研究分析"
+   ]
+  },
+  "sha": "ee8157697388",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d9f1c5bc4184": {
+  "identity": {
+   "one_liner": "面向 SaaS 客服工单的支持工作台，通过 MCP 工具提出修复建议并由人工审批执行",
+   "review": "一个用于 SaaS 客服工单的支持运营工作台：调查员通过受权限定的 MCP 工具读取账户与事件数据，检索版本化流程文档并生成修复建议；操作员审批后 worker 执行一次操作并重新读取账户验证结果。技术栈为 Python 3.12、FastAPI、PostgreSQL 17、React、TypeScript，支持 Docker Compose 部署与本地开发。README 注明这是可运行的组合展示项目，连接的 SaaS 为合成有状态实验环境，不含真实客户或支付；生产使用需接入真实业务连接器与组织策略。",
+   "highlights": [
+    "通过 stdio MCP 适配器提供七个类型化工具，委托访问绑定租户、操作者、运行与 worker 租约",
+    "提案由后端控制，含不可变载荷、摘要与预期账户版本，仅操作员可决策；模型无法自行批准操作",
+    "支持可复现的 Offline 工具驱动模式与基于 OpenRouter 免费模型的 Live 模式，运行记录包含模型 ID、token 用量与工具证据"
+   ],
+   "use_cases": [
+    "演示与评估 LLM 人在环审批流程（调查-审批-执行-验证）的组合项目",
+    "本地研究 MCP 工具调用、PostgreSQL 全文检索与幂等外部操作的实现方式",
+    "搭建隔离演示工作区，用于测试审批限制与工单流程编排"
+   ]
+  },
+  "sha": "d9f1c5bc4184",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3e20459018b0": {
+  "identity": {
+   "one_liner": "隐私优先的 GitHub README 访客计数徽章服务",
+   "review": "ProfilePulse 是一个可自托管的 GitHub 个人主页徽章服务，基于 FastAPI 和 PostgreSQL，通过统计 GitHub Camo 代理请求与直接请求生成访问计数。它不存储原始 IP 和 User-Agent，指纹采用按日轮换的 HMAC-SHA256，原始日志保留 30 天后清除。README 明确说明计数为估算值，静态图片无法验证真实访问。支持 Docker 部署，MIT 协议。",
+   "highlights": [
+    "支持 unique/today/loads/windows 等多种计数指标，及 label、color、split 等徽章样式参数",
+    "访客指纹使用 HMAC-SHA256 加 UTC 日期盐值，每 24 小时轮换，不存储原始 IP 和 User-Agent",
+    "原始命中日志按 30 天保留期自动清理，仅保留聚合计数，含速率限制与可选 GitHub 用户名校验"
+   ],
+   "use_cases": [
+    "为 GitHub 个人 README 添加访问量徽章并自托管部署",
+    "需要不存储个人隐私数据的访客统计方案",
+    "面向 Render/Neon 等平台部署的轻量 FastAPI+PostgreSQL 项目实践"
+   ]
+  },
+  "sha": "3e20459018b0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

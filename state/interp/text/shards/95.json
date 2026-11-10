@@ -2908,5 +2908,161 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "87b3927f10ed": {
+  "identity": {
+   "one_liner": "SQLite 灾难恢复工具，以后台进程增量复制变更到文件或 S3",
+   "review": "Litestream 是面向 SQLite 的独立灾难恢复工具，作为后台进程运行，将数据库变更增量复制到另一文件或 S3。它仅通过 SQLite API 与数据库通信。运行时会在源库创建 _litestream_lock 表用于协调 WAL 检查点，因此源库 schema 会发生变化。适合使用 SQLite 并需要异地副本的部署场景。",
+   "highlights": [
+    "作为后台进程运行，将 SQLite 变更增量复制到另一文件或 S3",
+    "仅通过 SQLite API 访问数据库，运行时通过 _litestream_lock 表协调 WAL 检查点同步"
+   ],
+   "use_cases": [
+    "需要将 SQLite 数据库增量复制到 S3 等远端存储做灾难恢复的场景",
+    "以单机 SQLite 为存储、需要后台持续备份副本的应用部署",
+    "运行于 Kubernetes 或 systemd 等环境下的 SQLite 备份进程管理"
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "sha": "87b3927f10ed",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "83b9c5aae580": {
+  "identity": {
+   "one_liner": "CUBRID 数据库的 Python 示例集，覆盖快速上手、迁移、模板与性能模式。",
+   "review": "该项目是 CUBRID Lab 维护的 Python 示例集合（MIT 协议），包含快速入门脚本、Java/CUBRIDdb 到 pycubrid 的迁移指南、FastAPI/Flask/Django/Celery/Pandas/Streamlit 等生产模板，以及性能模式与反模式章节。所有示例通过 Docker Compose 连接同一 CUBRID 实例（localhost:33000/testdb），需 Python 3.11+，依赖 pycubrid 与 sqlalchemy-cubrid 驱动。",
+   "highlights": [
+    "提供快速入门、迁移指南、生产模板、性能模式、常见陷阱与基础操作六类内容，示例基于 pycubrid 和 sqlalchemy-cubrid",
+    "性能章节给出实测数据：批量提交约从 28 提升至 1279 行/秒，连接池复用约从 5.9ms 降至 0.8ms/查询（pycubrid 1.10.0）",
+    "通过 Makefile 管理 Docker 环境，支持 make test 离线校验与 make verify 在线完整验证"
+   ],
+   "use_cases": [
+    "初学者从零建立第一个 CUBRID + Python 连接与 CRUD 流程",
+    "从 Java JDBC 或 CUBRIDdb 驱动迁移到 Python/pycubrid",
+    "基于 FastAPI、Flask、Django、Celery、Pandas 等模板搭建连接 CUBRID 的应用起点"
+   ]
+  },
+  "sha": "83b9c5aae580",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5a378b7d7648": {
+  "identity": {
+   "one_liner": "自托管开源 CRM，Go + React，内置线索表单与 AEO 报告",
+   "review": "面向小型销售与支持团队的自托管 CRM，提供线索、客户、公司、五阶段商机流水、工单与任务等模块，并支持四种角色。技术上为单个 Go API 二进制加静态 React UI，数据库可选 SQLite 或 MySQL/MariaDB；线索获取表单以一段 script 标签嵌入网站，提交直接转为线索。SQLite 模式写入串行化且数据库文件须位于本地文件系统。",
+   "highlights": [
+    "支持 JWT 与 HMAC-SHA256 API Key 认证及基于角色的访问控制",
+    "内置表单构建器，嵌入网页后提交自动生成线索，含多层垃圾提交防护与可选双重确认",
+    "提供 AEO 报告，追踪 Anthropic、OpenAI、Gemini 等多个 LLM 端点对品牌的提及"
+   ],
+   "use_cases": [
+    "小型团队自托管统一管理销售线索、商机与支持工单",
+    "在自有网站上嵌入线索获取表单并实现邮件双重确认",
+    "通过 LLM 端点定期检测品牌在 AI 回答中的可见性"
+   ]
+  },
+  "sha": "5a378b7d7648",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c82dee0f9a8f": {
+  "identity": {
+   "one_liner": "基于 Django Ninja Extra 的 Django+Postgres 项目样板，采用类控制器构建 REST API",
+   "review": "这是一个为构建 REST API 提供起点的项目模板，面向使用 Django 与 PostgreSQL 的开发团队。它基于 Django Ninja Extra 的类控制器模式，内置 JWT、魔法链接、OTP、2FA、API Key 等认证方式，集成 Valkey 缓存、Celery 任务队列、Centrifugo 实时通信，并提供 justfile 命令实现克隆后一条命令完成环境搭建。todos 应用包含四种控制器变体供对照；官方仅支持 Django 5.2 LTS，6.0 需手动测试。",
+   "highlights": [
+    "支持 JWT、魔法链接、6 位 OTP、双因素认证与 API Key 多种认证方式，含速率限制与防暴力破解",
+    "集成 Celery 后台任务（可选 Huey、django-q2、django-rq、Dramatiq）、Valkey 缓存与 Centrifugo WebSocket 实时通信",
+    "todos 应用提供声明式、基础、部分、完整服务层四种控制器变体，暴露相同的 CRUD 路由"
+   ],
+   "use_cases": [
+    "以 Django Ninja 技术栈启动新的 REST API 项目，需要认证、缓存、任务队列等现成集成",
+    "团队需要对照不同抽象层级的类控制器写法，以选择适合自身的服务层模式",
+    "需要 Docker/K8s Helm 部署配置、结构化日志与分布式追踪的可观测 API 后端"
+   ]
+  },
+  "sha": "c82dee0f9a8f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "257db5d54db2": {
+  "identity": {
+   "one_liner": "用 Rust 从零编写的 SQL 数据库，分层 crate 实现存储与查询。",
+   "review": "onyxdb 是一个仅依赖标准库、用 Rust 从零实现的 SQL 数据库项目，提供类似 SQLite 的 SQL、可崩溃恢复的存储、事务及自定义协议的多客户端访问。项目按 crate 分层（vfs、pagefile、bufpool、wal、btree、lsm、mvcc、sql 等），按里程碑逐步交付可运行版本。目前仅 vfs、pagefile、bufpool 完成，多数 crate 仍处于规划中。构建与测试通过 cargo test、clippy、fmt 完成，工具链版本已固定。",
+   "highlights": [
+    "分层 crate 架构，依赖仅指向下层，禁止 unsafe，全部文件 I/O 经由 vfs trait",
+    "存储包含固定大小校验页、槽页、空闲链、缓冲池及写前日志（WAL），支持崩溃与撕裂写入模拟",
+    "按里程碑交付可运行版本，M1 已支持在 kill -9 后可恢复的键值存取"
+   ],
+   "use_cases": [
+    "学习数据库内部实现（B+树、LSM、MVCC、WAL、查询引擎）的工程细节",
+    "需要查看逐层设计说明与架构文档的读者",
+    "在 Rust 环境中通过 cargo 命令构建、测试和查阅文档"
+   ]
+  },
+  "sha": "257db5d54db2",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c1a4d32be313": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 Moqui 企业应用框架，XML 规范加嵌入式 Postgres 与 JavaScript 引擎。",
+   "review": "MR Moqui 是 Moqui Java 框架的 Rust 重实现，面向构建企业级应用的开发者与从 Java 版迁移的部署方。它保留 XML 作为配置、实体、服务和屏幕的规范语言，将实体门面、服务门面等性能敏感部分移入 Rust，脚本与模板统一使用 JavaScript（quickjs-oxide）。项目处于早期开发阶段，首次发布前数据模型与存储布局不稳定，变更不含迁移，旧数据库可能需清空重载。",
+   "highlights": [
+    "默认使用嵌入式 Postgres（postgresql_embedded），配置外部数据库时切换为外部 Postgres",
+    "组件可提供链接进二进制的 Rust 服务、工具、资源方案和模板渲染器， alongside component.xml 与 Cargo.toml",
+    "集群成员通过共享数据库表互相发现，缓存失效与通知经客户端证书 TLS 的 gRPC 扇出"
+   ],
+   "use_cases": [
+    "部署企业级应用（如 ERP、群组协作、商店/博客套件）并需要 Rust 运行时与嵌入式数据库的一体化打包",
+    "将现有 Moqui Java 部署或组件迁移到 Rust 实现（README 提供 Moqui Java 迁移说明）",
+    "使用 XML Screens 结合 JavaScript 脚本与模板开发服务端应用，或在客户端渲染屏幕"
+   ]
+  },
+  "sha": "c1a4d32be313",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ad56d67752a8": {
+  "identity": {
+   "one_liner": "位于编码代理与 Git 之间的事务性治理运行时，以工作区隔离与 AST 门禁强制规范落地。",
+   "review": "Nomos 是用 Go 编写的开源工具（Apache 2.0），运行在 Claude Code、Cursor、Aider 等编码代理与 Git 仓库之间。它通过 git worktree 隔离任务、以 INT-*/SUB-* DAG 分离规范与代码，在合并前运行 42 项多语言 AST 检查，并用两阶段提交合并到 main。安装方式为安装脚本加 nomos init 初始化。",
+   "highlights": [
+    "支持 42 项多语言 AST 质量门禁，覆盖 Go、TypeScript、Python、Rust、Ruby、C/C++、Java、Kotlin、C#，检测空存根、跳过的测试、超长函数等",
+    "使用隔离的 git worktree 沙箱和 INT-*/SUB-* 因果 DAG，任务状态机为 IDLE→PLAN→EDIT→REVIEW→SYNC→LEARN",
+    "门禁失败时输出结构化 NomosError（含文件、行号与修复指令），并通过 Git Notes 附加验证回执后执行两阶段提交合并"
+   ],
+   "use_cases": [
+    "在多个编码代理工具写入同一仓库时保持任务隔离与 main 分支合并前的强制检查",
+    "检测代理生成代码中的空存根、被删除或跳过的断言等模式（基于 AST 规则）",
+    "通过 AGENTS.md/CLAUDE.md 注入与 Git 钩子，让现有代理工作流自动执行 nomos task/verify/sync 生命周期"
+   ]
+  },
+  "sha": "ad56d67752a8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

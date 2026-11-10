@@ -2764,5 +2764,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "49f8318f3cb4": {
+  "identity": {
+   "one_liner": "本地优先的知识管理 CLI，用 SQLite 存储内容并提供全文与语义检索",
+   "review": "bkmr 是一个用 Rust 编写的本地知识管理工具，将 URL 书签、代码片段、Shell 脚本、Markdown、环境变量和纯文本存入本地 SQLite 数据库，并提供全文检索（FTS）与基于本地 ONNX 嵌入的语义检索，通过 RRF 融合为混合搜索。它面向开发者与 AI Agent：支持 JSON 输出、非交互模式、`_mem_` 系统标签实现 Agent 长期记忆的读写，并附带可安装到 Agent skills 目录的 bkmr-memory 技能。每条记录至多一个系统标签，由内容类型决定默认动作（如打开浏览器、复制到剪贴板、执行脚本）。提供 `history`/`restore` 记录与恢复记忆的历史状态，可经 cargo 安装。",
+   "highlights": [
+    "支持全文检索、基于本地嵌入的离线语义检索，以及二者经 RRF 融合的混合搜索（hsearch）",
+    "提供 JSON 输出、非交互模式等程序化 CLI 选项，并通过 `_mem_` 系统标签为 AI Agent 提供持久记忆读写接口",
+    "内置 LSP 服务器将 `_snip_` 片段注入编辑器补全列表，另有 Neovim 与 IntelliJ 平台插件"
+   ],
+   "use_cases": [
+    "为 AI Agent 建立本地持久化长期记忆，存储事实并供后续混合检索读取",
+    "集中管理书签、代码片段、Shell 命令与 Markdown 文档，按内容类型触发对应动作",
+    "在编辑器内通过 LSP 补全快速插入代码片段"
+   ]
+  },
+  "sha": "49f8318f3cb4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4605ad3f8230": {
+  "identity": {
+   "one_liner": "一个内置 PostgreSQL、TimescaleDB 等扩展的 Home Assistant 数据库插件",
+   "review": "这是一个 Home Assistant OS 插件（也提供独立 Docker 镜像），打包 PostgreSQL 服务器并附带 TimescaleDB、PostGIS、pgVector、pgAgent 等扩展和 psql 客户端，用于为 Home Assistant recorder、Grafana 等应用提供 SQL 与时序数据存储。默认监听 5432 端口，支持通过选项自定义 postgresql.conf 参数和 pg_hba.conf 认证规则；新装默认密码为 homeassistant，需尽快修改。",
+   "highlights": [
+    "在单个容器/插件内提供 PostgreSQL、TimescaleDB、PostGIS、pgVector、pgAgent 及 psql 客户端",
+    "支持通过 postgresql_settings 以 name=value 列表自定义 PostgreSQL 服务器参数，配置错误不会阻止启动",
+    "支持通过 pg_hba_config 追加自定义认证规则，新安装默认使用 scram-sha-256 认证"
+   ],
+   "use_cases": [
+    "为 Home Assistant recorder 或 LTSS 历史数据提供 PostgreSQL/时序存储",
+    "搭配 Grafana 等支持 PostgreSQL 协议的工具对智能家居传感器数据进行查询和仪表展示",
+    "需要在比 Home Assistant 主机更强的独立机器上以 Docker 方式运行数据库的场景"
+   ]
+  },
+  "sha": "4605ad3f8230",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0165984e2801": {
+  "identity": {
+   "one_liner": "面向 OpenShift 的 Web 应用模板，用 GitHub Actions 部署并附带示例应用栈",
+   "review": "该仓库是 bcgov 提供的项目模板，用户可基于它快速创建仓库，将示例 Web 应用栈（Postgres/Flyway、TypeScript/Nest.js 后端、Caddy+Coraza WAF 前端）通过 GitHub Actions 部署到 OpenShift。提供 scripts/ 目录下的安装脚本，默认预览、加 --apply 才执行变更；依赖 DEV/TEST/PROD 三个命名空间（licence plate 命名）。需要 OpenShift 命名空间权限与 GitHub 仓库管理员权限。",
+   "highlights": [
+    "包含 PR 流水线、ghcr.io 镜像发布、OpenShift Templates、Flyway 数据库迁移与 Prometheus 指标导出",
+    "提供滚动更新、HPA 资源调节、pod 反亲和、中断预算及 startup/readiness/liveness 探针配置",
+    "setup 脚本默认预览变更，仅在传入 --apply 时修改，可重复运行且只改动有差异的部分"
+   ],
+   "use_cases": [
+    "在 OpenShift 集群上部署包含前后端和数据库的示例 Web 应用栈",
+    "为团队建立基于 Pull Request 的 CI/CD 流程及 DEV/TEST/PROD 命名空间配置",
+    "通过 setup.sh 等脚本批量创建 OpenShift 服务账号与 GitHub environments、secrets 和变量"
+   ]
+  },
+  "sha": "0165984e2801",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8288585509fc": {
+  "identity": {
+   "one_liner": "基于 Spring Cloud 微服务的 BOSS 直聘招聘数据分析与可视化平台",
+   "review": "BossAnalyze 是一个基于微服务架构的 BOSS 直聘招聘数据分析与可视化平台，面向求职者、HR、教育机构与市场分析师。系统采用 Java 17 + Spring Boot 3.4.5/Spring Cloud 后端，配合 Spark、MySQL、MongoDB、Redis、HDFS 与 RustFS 对象存储，前端正由 Vue 3 重建为 Nuxt 4 + shadcn-vue。已实现招聘分析、访问看板、RBAC 权限、简历 API 与 AI 接口；智能推荐、薪资预测等仍在规划中，简历编辑 UI 为重建占位。",
+   "highlights": [
+    "提供城市、职位、薪资及学历/经验坐标的招聘分析，无数据时保留真实空态",
+    "实现登录、会话撤销及用户、角色、菜单的后端 RBAC 授权管理",
+    "提供 MongoDB 简历持久化与 RustFS（S3 兼容）图片上传/读取，AI 接口具备内部认证与来源/字节校验"
+   ],
+   "use_cases": [
+    "求职者查看不同城市、职位、行业的薪资分布与技能需求",
+    "企业 HR 与市场分析师获取招聘市场趋势的统计可视化数据",
+    "作为 Spring Cloud + Spark + 多存储组件组合的全链路数据架构参考实现"
+   ]
+  },
+  "sha": "8288585509fc",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae17e0889e96": {
+  "identity": {
+   "one_liner": "多制式蜂窝基站勘测平台，融合多传感器数据入库 SQLite 并提供 REST/SSE 与 MCP 接口",
+   "review": "ransack 面向 DragonOS 的授权安全研究场景，将 SDR、root 过的 Qualcomm 手机、Rayhunter 等传感器的勘测结果融合进单一 SQLite 库，LTE/5G NR/2G/NB-IoT 小区按 PLMN 与小区标识合并为同一行。守护进程 ransackd 提供版本化 REST/SSE API，不重新实现 DSP 而是驱动 srsRAN、gr-gsm 等既有工具；勘测为被动只收，用户身份捕获是独立的需人工触发的 CLI 通道，须针对自有网络或授权环境使用。",
+   "highlights": [
+    "支持 LTE、5G NR、2G/GSM、NB-IoT 勘测，跨制式小区在共享 cells 表中按 PLMN 与 cell-id 合并",
+    "提供 127.0.0.1:8082 上的版本化 REST/SSE API，支持事件重放、GeoJSON 输出与 CSV 导出",
+    "通过能力描述符接入 dragon-mcp-gateway 暴露 MCP 工具，且仅暴露被动勘测能力"
+   ],
+   "use_cases": [
+    "对自有或授权测试环境进行被动蜂窝基站勘测与记录",
+    "基于勘测结果在授权范围内进行后续频率/小区定位监测",
+    "将多传感器观测汇聚为统一数据库供 API 或 MCP 智能体查询"
+   ]
+  },
+  "sha": "ae17e0889e96",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

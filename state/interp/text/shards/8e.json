@@ -2237,5 +2237,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "45b1cc1bc983": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Go 队列库，提供 FIFO 与优先级队列及确认机制",
+   "review": "sqliteq 是一个 Go 语言的队列库，将 FIFO 和优先级队列存储在 SQLite 文件中，提供确认、批量出队、去重入队、任务结果与取消、队列暂停等接口。默认每个队列一个文件以分离写锁，需要 Go 1.27 及 cgo（依赖 mattn/go-sqlite3）。它实现了 VarMQ 的队列接口，也影响 VarMQ 部分功能（如无 JobReader，单任务读取返回 501）。",
+   "highlights": [
+    "提供 FIFO 与优先级两种队列，支持确认、批量出队和按任务 ID 去重入队",
+    "同文件上的并发 Enqueue/Acknowledge 共享组提交事务，跨进程支持任务结果通知、取消与持久化暂停",
+    "默认每队列一个 SQLite 文件，支持线程安全地在多个 goroutine 间共享队列对象"
+   ],
+   "use_cases": [
+    "为 VarMQ 提供持久化队列存储（需 VarMQ ≥ v1.11.0）",
+    "需要任务确认、去重或跨重启保留队列状态的 Go 后台任务处理",
+    "需要暂停/恢复、任务取消与结果查询的跨进程队列场景"
+   ]
+  },
+  "sha": "45b1cc1bc983",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6fa98e530ff8": {
+  "identity": {
+   "one_liner": "本地运行的代码符号与调用图索引器，通过MCP为AI编程代理提供图感知代码搜索。",
+   "review": "GraphRelay 是单个 Rust 二进制（gr），将代码库索引为符号和调用图，经 MCP、REST 和 Web UI 提供代码搜索。检索融合 SQLite FTS5/BM25 词法匹配、调用图扩展和 personalized PageRank，不使用 embeddings。项目处于早期阶段；其自建基准显示与无工具基线的覆盖率差异区间跨零，同时每次提问减少约 30% 工具调用但成本增约 30%。无 Intel macOS 官方构建，需自行编译。",
+   "highlights": [
+    "提供 search_code、inspect、trace_impact、watch_status 四个 MCP 工具，支持基于调用图的调用方/被调用方追踪与影响面分析",
+    "通过 tree-sitter 支持 31 种语言（Rust、TypeScript/JavaScript、Python、Go、Java、C/C++ 等），可选 SCIP 索引器提供编译器级跨文件边",
+    "单二进制运行，代码留在本机，无需 Python/Node/数据库服务/云账户/API key；另含带调用图可视化的 Web UI"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、OpenCode、Amp、Codex 等 MCP 客户端提供代码库结构化检索工具",
+    "开发者通过 Web UI 探索代码库中的符号定义、调用方与被调用方",
+    "评估函数变更的影响范围（trace_impact 返回调用方）"
+   ]
+  },
+  "sha": "6fa98e530ff8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

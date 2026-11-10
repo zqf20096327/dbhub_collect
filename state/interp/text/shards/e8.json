@@ -2648,5 +2648,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3bea4973dc58": {
+  "identity": {
+   "one_liner": "基于 SSH 的无 Agent Linux 服务器监控与交互式管理工具",
+   "review": "Pantau 是一个 Go 编写的服务器监控与远程管理工具，通过标准 OpenSSH 连接采集 Linux 与 Windows 主机的资源指标，无需在被管机器上安装守护进程。数据存于内嵌 SQLite，前端资源经 go:embed 打包为单个二进制。部署方式包括直接运行二进制、Docker Compose 或 systemd 服务，支持 CLI 标志与环境变量配置端口、数据库路径等参数。",
+   "highlights": [
+    "无 Agent 架构：仅通过 SSH（端口 22）与 POSIX 命令采集 CPU、内存、磁盘、进程与端口信息，支持 Linux 与 Windows 主机",
+    "期望状态基线与漂移检测：监控容器停止、服务失败、定时任务消失、磁盘超阈值，并自动提取 journalctl/docker logs/事件日志中的崩溃信息",
+    "内置多标签 Web 终端、SFTP 文件编辑器、SSH 隧道端口转发，以及基于内存管道的跨主机文件流式传输"
+   ],
+   "use_cases": [
+    "管理无外网或受限环境（如内网、隔离网络）中的中小规模 Linux/Windows 服务器集群",
+    "排查磁盘占用问题：目录体积分层分析、大文件发现、已删除但被进程占用的幽灵文件检测与日志安全截断",
+    "集中运维操作：浏览器内执行远程命令、编辑配置文件、访问远程私有端口服务，无需切换外部终端工具"
+   ]
+  },
+  "sha": "3bea4973dc58",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dd852a9b3ba9": {
+  "identity": {
+   "one_liner": "面向 hermes-agent 的插件，将本地文件与网页构建为带逐字引用校验的知识库",
+   "review": "MemoBase 是 hermes-agent 的 MIT 许可插件，将 PDF、DOCX、网页、YouTube、音频与 Obsidian 笔记读入单个 SQLite 数据库，提供混合检索（FTS5 全文 + 向量，RRF 合并）。回答流程包含充分性门槛、逐字引用核对与无依据时拒绝四个环节。通过 install.sh/install.ps1 一键安装，支持无 API 密钥的本地关键词模式，需 Python 3.11+ 与 hermes-agent ≥0.18。",
+   "highlights": [
+    "支持 PDF、DOCX、HTML、MD、TXT、CSV、网页、YouTube（含整频道）、音频转写（Whisper 带时间码）及 Obsidian vault 只读导入",
+    "混合检索：FTS5/BM25 俄语词干化 + BGE-M3 向量搜索，RRF 合并，可选 Cohere 重排",
+    "回答内置引用逐字核验、SSRF 防护、文档注入防护与访客集合配额/隔离机制"
+   ],
+   "use_cases": [
+    "在 hermes-agent 中对本地文档库提问并要求可核对出处（含页面/时间码引用）",
+    "构建不依赖 PyTorch 的本地 RAG 库，数据保存在单个 SQLite 文件中",
+    "为 Obsidian vault、YouTube 频道或音视频录音建立可搜索索引"
+   ]
+  },
+  "sha": "dd852a9b3ba9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

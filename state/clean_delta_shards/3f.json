@@ -15737,5 +15737,2048 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "98cb31062a1b+2": {
+  "fn": "KirtiRamchandani/memory.cpp",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    14,
+    0,
+    12
+   ],
+   [
+    "replace",
+    14,
+    18,
+    12,
+    16,
+    [
+     "CI",
+     "Release",
+     "License: MIT",
+     "Local-first"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    20,
+    17,
+    18,
+    [
+     "Quick start · Why · Compiler · Benchmark · CLI · Paper · Positioning"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    18,
+    19
+   ],
+   [
+    "replace",
+    21,
+    22,
+    19,
+    20,
+    [
+     "memory.cpp demo — real command output"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    20,
+    21
+   ],
+   [
+    "replace",
+    23,
+    28,
+    21,
+    22,
+    [
+     " Real terminal output (`scripts/render_demo.py` re-records it). Note the two `cache-hash` calls for different tasks return the same blake3 prefix hash. "
+    ]
+   ],
+   [
+    "equal",
+    28,
+    55,
+    22,
+    49
+   ],
+   [
+    "delete",
+    55,
+    57,
+    49,
+    49
+   ],
+   [
+    "equal",
+    57,
+    63,
+    49,
+    55
+   ],
+   [
+    "replace",
+    63,
+    73,
+    55,
+    56,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    78,
+    56,
+    61
+   ],
+   [
+    "delete",
+    78,
+    80,
+    61,
+    61
+   ],
+   [
+    "equal",
+    80,
+    82,
+    61,
+    63
+   ],
+   [
+    "replace",
+    82,
+    91,
+    63,
+    70,
+    [
+     "|Failure mode|What happens in practice|Why it costs a provider|",
+     "|---|---|---|",
+     "|**Repeated prefill**|The same repo facts, traces, and file summaries are reprocessed every related turn.|More compute before the first output token; higher latency on long prompts.|",
+     "|**KV-cache growth**|Every unnecessary input token contributes attention state.|Higher memory pressure → lower concurrency, harder scheduling.|",
+     "|**Cache misses**|Stable repo facts are mixed with task text, timestamps, logs, and tool output.|Prompt caching and prefix reuse stop working.|",
+     "|**Stale context**|Old decisions and obsolete docs get retrieved because they look relevant.|Wrong patches, repeat loops, lower trust in agent output.|",
+     "|**Unmanaged memory**|Memory grows with no proof, lifecycle, or contradiction handling.|Persistent memory becomes a reliability and security risk.|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    98,
+    70,
+    77
+   ],
+   [
+    "replace",
+    98,
+    103,
+    77,
+    78,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    105,
+    78,
+    80
+   ],
+   [
+    "replace",
+    105,
+    116,
+    80,
+    89,
+    [
+     "|Layer|Purpose|Result|",
+     "|---|---|---|",
+     "|**MemoryIR**|A formal IR for repo facts, decisions, traces, tests — each with source anchor, trust, freshness, sensitivity, token cost, and cache role.|Every pack is an explainable compiled artifact, not a loose bundle of text.|",
+     "|**Stable prefix + fresh suffix**|Durable repo knowledge is separated from volatile task state, logs, and errors. The stable prefix excludes task text and is `blake3`-hashed.|Same repo state → same prefix across tasks → real prompt-cache reuse.|",
+     "|**Negative memory**|Stale docs, wrong fixes, generated files, misleading traces, and superseded decisions are remembered as *exclusions*.|The model gets less harmful context, not just more context.|",
+     "|**Freshness proofs**|Memories are tied to source files, hashes, commits, tests, or human confirmation.|Old or unsupported memories are rejected before they enter the prompt.|",
+     "|**KV-aware optimizer**|Context is scored by `utility / cost`, where cost includes tokens and volatility — not relevance alone.|Small high-signal facts beat large weakly-useful files.|",
+     "|**Rehydratable handles**|Packs can ship compact facts plus `mem://file/...#L10-L50` handles.|Exact code is loaded only when needed; tiny upfront token load.|",
+     "|**Ledger + lockfile**|Every pack records included/excluded memory, proof state, cache regions, and hashes.|Agent context becomes reproducible and auditable.|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    125,
+    89,
+    98
+   ],
+   [
+    "replace",
+    125,
+    126,
+    98,
+    99,
+    [
+     "|Strategy|Tokens|Cacheable prefix|Reduction vs raw|Stale|Contradictions|Secrets|Task success|"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    99,
+    100
+   ],
+   [
+    "replace",
+    127,
+    135,
+    100,
+    108,
+    [
+     "|raw full context|638|0|0.0%|9|9|3|0/3|",
+     "|grep|233|0|63.5%|3|3|2|0/3|",
+     "|BM25|638|0|0.0%|9|9|3|0/3|",
+     "|embedding retrieval|638|0|0.0%|9|9|3|0/3|",
+     "|CAMC − no negative memory|521|318|18.3%|0|0|3|3/3|",
+     "|CAMC − no freshness proofs|383|186|40.0%|9|9|0|0/3|",
+     "|CAMC − no canonical prefix|266|0|58.3%|0|0|0|3/3|",
+     "|**full CAMC**|**266**|**186**|**58.3%**|**0**|**0**|**0**|**3/3**|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    151,
+    108,
+    124
+   ],
+   [
+    "replace",
+    151,
+    152,
+    124,
+    125,
+    [
+     "tasks*. Full numbers, charts, and the reproduce command: **BENCHMARKS.md**."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    154,
+    125,
+    127
+   ],
+   [
+    "replace",
+    154,
+    157,
+    127,
+    128,
+    [
+     "Ollama / SGLang, run `scripts/runtime_bench.py`."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    160,
+    128,
+    131
+   ],
+   [
+    "replace",
+    160,
+    172,
+    131,
+    143,
+    [
+     "|Area|Commands|",
+     "|---|---|",
+     "|**Compile**|`compile` · `cache-manifest` · `cache-hash` · `ir inspect` · `optimize --objective kv_efficiency \\|-O3 \\|-Oz`|",
+     "|**Freshness & safety**|`prove` · `audit-stale` · `negative add/list/explain` · `explain-exclusions` · `write-firewall` · `poison`|",
+     "|**Cost & cache**|`tokens --provider …` · `kv-sim --model llama-3.1-8b` · `cache-plan` · `kv-report`|",
+     "|**Reproducibility**|`lock` · `lock diff` · `reproduce` · `ledger latest/show/export` · `verify-pack`|",
+     "|**Self-healing**|`gc --apply` · `contradictions scan/resolve` · `merge --prefer-newer`|",
+     "|**Governance**|`invariants extract` · `contract add/check` · `ci-check --require-rules` (PR gate)|",
+     "|**Distribution**|`autolearn` · `mcp install --client claude` · `multi-agent-plan` · `view --agent security`|",
+     "|**Research**|`minimize --must-include …` · `autopsy` · `fuzz-context` · `debt` · `bench camc` · `paper run`|",
+     "|**Memory vault**|`remember` · `recall` · `ask` · `inbox review` · `entity` · `session` · `insight`|",
+     "|**Provider packs**|`pack --for claude\\|codex\\|gemini\\|cursor\\|continue\\|mcp` · `attach` · `agents-score`|"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    143,
+    144
+   ],
+   [
+    "replace",
+    173,
+    176,
+    144,
+    145,
+    [
+     "Full reference: docs/cli.md. API/SDK surface: docs/api.md."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    183,
+    145,
+    152
+   ],
+   [
+    "replace",
+    183,
+    190,
+    152,
+    159,
+    [
+     "|System|Primary role|memory.cpp difference|",
+     "|---|---|---|",
+     "|Supermemory|Broad cloud context + retrieval for agents|Local-first, repo-specific, compiler-oriented: cache layout, stale exclusion, prefix stability, measurement|",
+     "|Mem0|Persistent cross-session/agent memory|Repository context *compilation*, source-anchored freshness, negative memory, KV-aware packing|",
+     "|Honcho|Stateful agent/entity memory|Deterministic local reports, MemoryIR, cache manifests, freshness proofs, reproducible ledgers|",
+     "|Vector DB / RAG|Top-k similarity retrieval|Not top-k: a compiler that excludes, proves, and cache-optimizes the minimal sufficient context|",
+     "|Provider prompt caching|Runtime prefix reuse|memory.cpp *produces* the byte-stable prefix that makes prompt caching actually hit|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    159,
+    160
+   ],
+   [
+    "replace",
+    191,
+    194,
+    160,
+    161,
+    [
+     "Full table: docs/competitive-positioning.md."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    201,
+    161,
+    168
+   ],
+   [
+    "replace",
+    201,
+    204,
+    168,
+    169,
+    [
+     "resources by default. See SECURITY.md and docs/safety.md."
+    ]
+   ],
+   [
+    "equal",
+    204,
+    215,
+    169,
+    180
+   ],
+   [
+    "replace",
+    215,
+    216,
+    180,
+    181,
+    [
+     "`crates/memory-core` (`ir`, `prefix`, `cache_manifest`,"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    219,
+    181,
+    184
+   ],
+   [
+    "replace",
+    219,
+    224,
+    184,
+    185,
+    [
+     "MIT © KirtiRamchandani"
+    ]
+   ],
+   [
+    "equal",
+    224,
+    226,
+    185,
+    187
+   ],
+   [
+    "delete",
+    226,
+    228,
+    187,
+    187
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "6079155e7043+2": {
+  "fn": "751K/Flatradar",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Website User Guide Support GitHub Sponsors License Release Python iOS Android"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "> 中文版：README_cn.md"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    7,
+    5,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "flatradar.app and can also be self-hosted. It tracks"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    21,
+    8,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "|Path|Best for|Start here|"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    27,
+    23,
+    27,
+    [
+     "|**Hosted service**|Most people|Open flatradar.app. The first sign-in creates an account automatically; set filters and notification channels in the panel. Nothing to install.|",
+     "|**Mobile apps**|Alerts on your phone|iOS · Android APK|",
+     "|**Desktop builds**|macOS / Windows|Download from Releases|",
+     "|**Self-hosting**|Your own instance, database and delivery|Quick start below: one Python command on your own computer, or Docker for a public server. About 2 GB of RAM; a public server may also need a residential proxy.|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    30,
+    27,
+    30
+   ],
+   [
+    "replace",
+    30,
+    33,
+    30,
+    33,
+    [
+     "Guide: flatradar.app/guide ·",
+     "Support: flatradar.app/support ·",
+     "support@flatradar.app"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    40,
+    33,
+    40
+   ],
+   [
+    "delete",
+    40,
+    42,
+    40,
+    40
+   ],
+   [
+    "equal",
+    42,
+    44,
+    40,
+    42
+   ],
+   [
+    "replace",
+    44,
+    45,
+    42,
+    43,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    43,
+    44
+   ],
+   [
+    "replace",
+    46,
+    52,
+    44,
+    50,
+    [
+     "|**Coverage**|Seven platforms: Holland2Stay, OurDomain, OurCampus, Xior, Magis, Student Experience and Plaza. Polling tightens during the hours when new listings tend to appear|",
+     "|**Alert channels**|Web, Telegram, Email, WhatsApp, iOS push, Android push, iMessage; several may be enabled at once|",
+     "|**Filters**|Maximum rent, minimum area, minimum floor, type, occupancy, city, neighbourhood, platform, contract type, tenant requirements, and others|",
+     "|**Views**|List, map, calendar, dashboard and charts, in English or Chinese|",
+     "|**Multiple users**|Supported. Guest, user and admin roles; every user keeps independent filters and credentials|",
+     "|**Automatic booking and applications**|Holland2Stay stops at the payment page; Plaza applications can be submitted automatically and are off by default — see Auto-booking|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    55,
+    50,
+    53
+   ],
+   [
+    "replace",
+    55,
+    56,
+    53,
+    54,
+    [
+     "|Platform|Coverage|Scraper maturity|Booking|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    54,
+    55
+   ],
+   [
+    "replace",
+    57,
+    64,
+    55,
+    62,
+    [
+     "|Holland2Stay|Any Dutch city you configure|Proven — the bulk of what lands|Auto-booking supported|",
+     "|OurDomain|Amsterdam Diemen / South-East|Proven|Notify only (booking flow built, not enabled)|",
+     "|Xior|Any of 30 buildings across 14 cities|Proven|Notify only (booking flow built, not enabled)|",
+     "|OurCampus|Amsterdam Diemen (1 building)|Checked against real markup; very low volume|Notify only|",
+     "|Magis|17 buildings across 5 cities (9 in Eindhoven)|Verified against live data; plain HTTP, no anti-bot|Notify only|",
+     "|Student Experience|Amsterdam (4 sites) and Leiden|Verified against live data; the listing date lives only on the detail page, so each unit costs an extra request|Notify only|",
+     "|Plaza|13 Dutch cities|Verified against live data; a paid account (€27.50/yr) is required to *apply*, not to see listings|Automatic applications supported, off by default|"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    70,
+    62,
+    68
+   ],
+   [
+    "replace",
+    70,
+    72,
+    68,
+    70,
+    [
+     "H2S.md, XIOR.md, OURDOMAIN.md,",
+     "PLAZA.md and SCRAPING_RECON.md."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    75,
+    70,
+    73
+   ],
+   [
+    "replace",
+    75,
+    76,
+    73,
+    74,
+    [
+     "|Interface|Status|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    74,
+    75
+   ],
+   [
+    "replace",
+    77,
+    83,
+    75,
+    79,
+    [
+     "|Web dashboard|Stable — the primary interface for self-hosting|",
+     "|iOS app|Maintenance — on the App Store, feature-complete for current scope|",
+     "|Android app|Beta — signed `.apk`, sideload it. FCM push verified. Not going to Play Store — direct download is the distribution channel|",
+     "|Desktop packages|macOS `.dmg` and Windows `.zip` from Releases|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    79,
+    82
+   ],
+   [
+    "replace",
+    86,
+    87,
+    82,
+    83,
+    [
+     "||Minimum|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    83,
+    84
+   ],
+   [
+    "replace",
+    88,
+    97,
+    84,
+    91,
+    [
+     "|RAM|**2 GB**|Each Cloudflare-protected source keeps a headless Chromium resident (~200–400 MB each). 1 GB is only enough for a single source.|",
+     "|Disk|~1.5 GB|The patched Chromium alone unpacks to ~700 MB|",
+     "|Docker|Engine 20.10+ with the Compose plugin|Only for the public deployment. `docker compose`, not the old `docker-compose` script|",
+     "|Python|3.11+|For running on your own computer. The Docker image ships 3.11; CI and desktop builds use 3.12|",
+     "|OS|Any for personal use; Linux for a server|See the macOS note below|",
+     "|Network|Residential or mobile proxy may be required|Some platforms have returned 403 to datacenter exit IPs. Cloud deployment reads `HTTPS_PROXY`; a proxy account is an extra cost, and none of it is needed for the hosted service|",
+     "|Domain|Optional|Needed only for the public deployment|"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    136,
+    91,
+    130
+   ],
+   [
+    "replace",
+    136,
+    137,
+    130,
+    131,
+    [
+     "are covered in DEPLOYMENT.md."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    156,
+    131,
+    150
+   ],
+   [
+    "replace",
+    156,
+    158,
+    150,
+    152,
+    [
+     " server's exit is blocked. Datacenter exits have previously received 403s;",
+     " availability depends on the actual network and platform response."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    152,
+    153
+   ],
+   [
+    "replace",
+    159,
+    160,
+    153,
+    154,
+    [
+     " refuses to send them."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    154,
+    155
+   ],
+   [
+    "replace",
+    161,
+    162,
+    155,
+    156,
+    [
+     " the HTTPS deployment."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    213,
+    156,
+    207
+   ],
+   [
+    "replace",
+    213,
+    214,
+    207,
+    208,
+    [
+     " buildings — both are required; ticking only cities does nothing."
+    ]
+   ],
+   [
+    "equal",
+    214,
+    215,
+    208,
+    209
+   ],
+   [
+    "replace",
+    215,
+    216,
+    209,
+    210,
+    [
+     " expected sources report data."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    210,
+    211
+   ],
+   [
+    "replace",
+    217,
+    219,
+    211,
+    213,
+    [
+     " secrets and proxy configuration; writing runtime keys back into `.env`",
+     " overrides the dashboard."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    234,
+    213,
+    228
+   ],
+   [
+    "delete",
+    234,
+    236,
+    228,
+    228
+   ],
+   [
+    "equal",
+    236,
+    249,
+    228,
+    241
+   ],
+   [
+    "replace",
+    249,
+    250,
+    241,
+    242,
+    [
+     " system settings (`app_settings`)"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    264,
+    242,
+    256
+   ],
+   [
+    "delete",
+    264,
+    266,
+    256,
+    256
+   ],
+   [
+    "equal",
+    266,
+    270,
+    256,
+    260
+   ],
+   [
+    "replace",
+    270,
+    271,
+    260,
+    261,
+    [
+     "|What|Where|Edited via|"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    272,
+    261,
+    262
+   ],
+   [
+    "replace",
+    272,
+    275,
+    262,
+    265,
+    [
+     "|Per-user: channels, filters, auto-booking|SQLite `user_configs`|Dashboard → Users|",
+     "|System: sources, cities, intervals|SQLite `app_settings`|Dashboard → Settings|",
+     "|Deployment: credentials, paths, timezone, base URL|`.env`|Text editor|"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    285,
+    265,
+    275
+   ],
+   [
+    "replace",
+    285,
+    286,
+    275,
+    276,
+    [
+     "|Group|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    287,
+    276,
+    277
+   ],
+   [
+    "replace",
+    287,
+    290,
+    277,
+    280,
+    [
+     "|Server credentials|Passwords, API keys, encryption key and proxy URLs. Per-user platform and channel credentials are stored encrypted in user configuration.|",
+     "|Deployment facts|`DB_PATH`, `TIMEZONE`, `PUBLIC_BASE_URL`, `SESSION_COOKIE_SECURE`, `SUPPORT_EMAIL`. `DB_PATH` must be available before opening the database.|",
+     "|Thresholds and switches|Notification channel toggles, quotas and other advanced settings; most have defaults.|"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    293,
+    280,
+    283
+   ],
+   [
+    "replace",
+    293,
+    294,
+    283,
+    284,
+    [
+     "|Key|Default|What it controls|"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    284,
+    285
+   ],
+   [
+    "replace",
+    295,
+    301,
+    285,
+    291,
+    [
+     "|`WEB_PASSWORD`|—|**Required.** The container refuses to start without it|",
+     "|`HTTPS_PROXY`|—|Proxy for scraping when the server's exit is blocked|",
+     "|`PUBLIC_BASE_URL`|—|Required for verification emails; without a valid HTTPS URL the service refuses to generate the link|",
+     "|`MONITOR_HEARTBEAT_MAX_AGE`|`900`|How long the monitor may be silent before `/health` reports unhealthy|",
+     "|`HEALTH_*` / `WATCHDOG_*`|see `.env.example`|Thresholds for the data-degradation alerts behind `/monitoring`|",
+     "|`STALE_RESERVED_HOURS` / `STALE_OCCUPIED_HOURS`|`0.5` / `2`|How long a listing must be absent from the feed before it is inferred Reserved, then Occupied — see Listing status|"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    302,
+    291,
+    292
+   ],
+   [
+    "replace",
+    302,
+    303,
+    292,
+    293,
+    [
+     "The full list is in .env.example, which documents every key;"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    358,
+    293,
+    348
+   ],
+   [
+    "delete",
+    358,
+    360,
+    348,
+    348
+   ],
+   [
+    "equal",
+    360,
+    375,
+    348,
+    363
+   ],
+   [
+    "replace",
+    375,
+    385,
+    363,
+    364,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    400,
+    364,
+    379
+   ],
+   [
+    "replace",
+    400,
+    401,
+    379,
+    380,
+    [
+     "Architecture: listing status and completeness."
+    ]
+   ],
+   [
+    "equal",
+    401,
+    404,
+    380,
+    383
+   ],
+   [
+    "delete",
+    404,
+    406,
+    383,
+    383
+   ],
+   [
+    "equal",
+    406,
+    422,
+    383,
+    399
+   ],
+   [
+    "replace",
+    422,
+    423,
+    399,
+    400,
+    [
+     "directly and does not guarantee a successful rental. See Plaza."
+    ]
+   ],
+   [
+    "equal",
+    423,
+    429,
+    400,
+    406
+   ],
+   [
+    "replace",
+    429,
+    430,
+    406,
+    407,
+    [
+     "(`bookers/rentcafe.py`). Captcha solving and parts of"
+    ]
+   ],
+   [
+    "equal",
+    430,
+    433,
+    407,
+    410
+   ],
+   [
+    "replace",
+    433,
+    434,
+    410,
+    411,
+    [
+     "|Platform|Reached|Missing|"
+    ]
+   ],
+   [
+    "equal",
+    434,
+    435,
+    411,
+    412
+   ],
+   [
+    "replace",
+    435,
+    439,
+    412,
+    416,
+    [
+     "|Xior|A real account reached the application form and saved a draft (2026-08-03)|Saving after the system uploads the ID document has not been verified. A draft **does not hold the unit**; the next page asks for IBAN/SWIFT.|",
+     "|OurDomain|Entry leg verified against the live site (2026-08-04): floorplans → available units → terms POST|The post-login path needs real-account verification. If the application form is missing, the implementation retries unit selection once and aborts if the form is still unavailable.|",
+     "|OurCampus|`OurCampusBooker` registered and credentials can be entered in the panel, but **off for users** (not in `_AUTO_BOOK_SOURCES`). Verified with a real account: unit selection, terms page, Start Application (v3 accepted first try) and login all work|Landing on Applicant Info after login does not work yet. The premise that starting an application holds the unit is disproved: the site states it only enters you into the lottery|",
+     "|Magis|Nothing|Booking flow has never been scouted|"
+    ]
+   ],
+   [
+    "equal",
+    439,
+    441,
+    416,
+    418
+   ],
+   [
+    "replace",
+    441,
+    444,
+    418,
+    419,
+    [
+     "> self-host to use it."
+    ]
+   ],
+   [
+    "equal",
+    444,
+    458,
+    419,
+    433
+   ],
+   [
+    "replace",
+    458,
+    459,
+    433,
+    434,
+    [
+     "|Symptom|Cause and fix|"
+    ]
+   ],
+   [
+    "equal",
+    459,
+    460,
+    434,
+    435
+   ],
+   [
+    "replace",
+    460,
+    473,
+    435,
+    448,
+    [
+     "|No alerts at all, dashboard shows stale listings|The monitor process is down. `supervisorctl status` to confirm, then `supervisorctl start monitor`. `/health` returns 503 once the heartbeat is older than `MONITOR_HEARTBEAT_MAX_AGE`.|",
+     "|A source shows `down` or `warn` on `/monitoring`|The card lists which rule fired. See health and troubleshooting.|",
+     "|Need logs from a specific time window|`/logs` filters server-side by keyword, level and `since`/`until` — it is not limited to what is currently on screen.|",
+     "|Logs repeat `H2S source 熔断`|Cloudflare is blocking your exit IP. The breaker pauses that one source and retries a single city later. If it persists, set `HTTPS_PROXY`.|",
+     "|Logs repeat `CF 挑战 ... 未解开`|Same cause — usually IP reputation rather than anything local.|",
+     "|One platform always returns 0 listings|May be genuine. Check whether the round was marked complete; see listing status and completeness.|",
+     "|A listing you know is taken still shows as available|Its city was not completely scanned, so it never became eligible for convergence. Check `(complete/targets)` on `/monitoring`.|",
+     "|A batch of listings turned Occupied at once|Expected if they carry the **inferred** badge — that is aging catching up after a restart or a threshold change, and it generates no notifications. Without the badge, the platform actually reported it.|",
+     "|Logs repeat `抓到 0 个单元，第 N/3 轮`|Normal. An empty result from OurDomain/OurCampus has to repeat for 3 rounds before it counts, so a single bad round cannot converge a whole building.|",
+     "|Container gets OOM-killed|Raise `mem_limit`. Each Cloudflare-protected source holds a resident browser.|",
+     "|Container will not start, log says `FATAL`|The entrypoint preflight. Either `Caddyfile` still says `your.domain.com` or `WEB_PASSWORD` is empty. Both are refusals to expose an unauthenticated panel.|",
+     "|Cannot sign in after setting `WEB_PASSWORD`|The username is `admin` unless you set `WEB_USERNAME`.|",
+     "|`supervisorctl` says \"no such file\"|Its socket is not at the default path. Add `-c /etc/supervisor/conf.d/app.conf`.|"
+    ]
+   ],
+   [
+    "equal",
+    473,
+    478,
+    448,
+    453
+   ],
+   [
+    "delete",
+    478,
+    480,
+    453,
+    453
+   ],
+   [
+    "equal",
+    480,
+    482,
+    453,
+    455
+   ],
+   [
+    "replace",
+    482,
+    483,
+    455,
+    456,
+    [
+     "|Document|For|"
+    ]
+   ],
+   [
+    "equal",
+    483,
+    484,
+    456,
+    457
+   ],
+   [
+    "replace",
+    484,
+    495,
+    457,
+    466,
+    [
+     "|User Guide|Panel settings and daily use|",
+     "|DEPLOYMENT.md|Docker topology, Caddy and TLS, ports, logs, and using a different reverse proxy|",
+     "|ARCHITECTURE.md|System architecture, key failure boundaries and troubleshooting entry points|",
+     "|API.md|Backend contracts for mobile and integrations|",
+     "|CHANGELOG.md|Release history|",
+     "|H2S.md · H2S_BOOKING_OPS.md · RENTCAFE.md · XIOR.md · OURDOMAIN.md · PLAZA.md · SCRAPING_RECON.md|Per-platform research; `RENTCAFE.md` covers the booking flow shared by Xior, OurDomain and OurCampus, and `PLAZA.md` covers Plaza booking only — Plaza's scraping side, with Magis and Student Experience, is in `SCRAPING_RECON.md`|",
+     "|iOS_README.md|iOS client — moved to FlatRadar-iOS|",
+     "|ANDROID_PLAN.md|Android client — moved to FlatRadar-Android|",
+     "|dataflow_en.mmd · dataflow_ch.mmd|Full scrape/notify flow as a Mermaid diagram|"
+    ]
+   ],
+   [
+    "equal",
+    495,
+    502,
+    466,
+    473
+   ],
+   [
+    "replace",
+    502,
+    505,
+    473,
+    476,
+    [
+     "- Sponsor via GitHub Sponsors or",
+     " flatradar.app/donate.",
+     "- Questions and bug reports: flatradar.app/support."
+    ]
+   ],
+   [
+    "equal",
+    505,
+    507,
+    476,
+    478
+   ],
+   [
+    "replace",
+    507,
+    510,
+    478,
+    479,
+    [
+     "PolyForm Noncommercial License 1.0.0 — free for personal and other"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "31044585ced6+2": {
+  "fn": "JasperFx/fisher",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "Discord",
+     "Nuget Package",
+     "Nuget"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    11,
+    8,
+    9,
+    [
+     " Fisher logo"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "**Documentation: fisher.jasperfx.net**"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    15,
+    12,
+    13,
+    [
+     "Fisher is Marten and Polecat for SQLite —"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    34,
+    13,
+    32
+   ],
+   [
+    "replace",
+    34,
+    35,
+    32,
+    33,
+    [
+     "> differ. The migration guide"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    43,
+    33,
+    41
+   ],
+   [
+    "replace",
+    43,
+    44,
+    41,
+    42,
+    [
+     "> migration guide"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    69,
+    42,
+    67
+   ],
+   [
+    "replace",
+    69,
+    77,
+    67,
+    68,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    79,
+    68,
+    70
+   ],
+   [
+    "replace",
+    79,
+    81,
+    70,
+    72,
+    [
+     "See Getting Started for the full walkthrough, and",
+     "Why Fisher? for where it fits and where it does not."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    98,
+    72,
+    89
+   ],
+   [
+    "replace",
+    98,
+    99,
+    89,
+    90,
+    [
+     "migration guide for the behaviours that differ."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    109,
+    90,
+    100
+   ],
+   [
+    "replace",
+    109,
+    112,
+    100,
+    101,
+    [
+     " JasperFx logo"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    118,
+    101,
+    107
+   ],
+   [
+    "replace",
+    118,
+    119,
+    107,
+    108,
+    [
+     "Become a Sponsor on GitHub by sponsoring monthly or one time."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    108,
+    111
+   ],
+   [
+    "replace",
+    122,
+    123,
+    111,
+    112,
+    [
+     "You need the **.NET 10 SDK** (available here) and the .NET 9"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    141,
+    112,
+    130
+   ],
+   [
+    "replace",
+    141,
+    142,
+    130,
+    131,
+    [
+     "VitePress site, as the other JasperFx projects are."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    150,
+    131,
+    139
+   ],
+   [
+    "replace",
+    150,
+    156,
+    139,
+    140,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    140,
+    141
+   ],
+   [
+    "delete",
+    157,
+    158,
+    141,
+    141
+   ],
+   [
+    "equal",
+    158,
+    159,
+    141,
+    142
+   ],
+   [
+    "delete",
+    159,
+    162,
+    142,
+    142
+   ],
+   [
+    "equal",
+    162,
+    163,
+    142,
+    143
+   ],
+   [
+    "replace",
+    163,
+    167,
+    143,
+    144,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "6e653c87dd0a+2": {
+  "fn": "tachyon-cms/tachyoncms",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    9,
+    2,
+    7,
+    [
+     " CI",
+     " License: MIT",
+     " OpenSSF Scorecard",
+     " OpenSSF Best Practices",
+     " Discussions"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    15,
+    7,
+    13
+   ],
+   [
+    "replace",
+    15,
+    16,
+    13,
+    14,
+    [
+     "The full documentation, with a step-by-step tutorial and a complete API reference, is at **docs.tachyoncms.com**."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    36,
+    14,
+    34
+   ],
+   [
+    "replace",
+    36,
+    37,
+    34,
+    35,
+    [
+     "- Errors in the standard RFC 9457 format, each with a request ID you can find in the logs."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    35,
+    40
+   ],
+   [
+    "replace",
+    42,
+    44,
+    40,
+    42,
+    [
+     "- Build pages from blocks, and write long-form text as rich text, in JSON or Markdown. Read it back as JSON, HTML, Markdown or plain text with `?format=`. Pages and rich text shows how.",
+     "- Write in drafts and publish when you're ready, now or at a set time. Every document can keep its history, show what changed between any two versions and go back to one, and a deleted document waits in the trash until you restore it or delete it for good. Drafts, versions and publishing shows how."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    49,
+    42,
+    47
+   ],
+   [
+    "replace",
+    49,
+    50,
+    47,
+    48,
+    [
+     "Each release ships a signed image. This starts Postgres and TachyonCMS side by side:"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    55,
+    48,
+    53
+   ],
+   [
+    "replace",
+    55,
+    60,
+    53,
+    54,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    64,
+    54,
+    58
+   ],
+   [
+    "replace",
+    64,
+    65,
+    58,
+    59,
+    [
+     "Download the archive for your platform from the latest release. There are Linux builds (x86_64 and arm64, static) and macOS builds (Intel and Apple silicon). Then point it at a Postgres database:"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    75,
+    59,
+    69
+   ],
+   [
+    "replace",
+    75,
+    76,
+    69,
+    70,
+    [
+     "You'll need Rust (stable), Docker, and `sqlx-cli` if you plan to change queries."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    114,
+    70,
+    108
+   ],
+   [
+    "replace",
+    114,
+    118,
+    108,
+    109,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    144,
+    109,
+    135
+   ],
+   [
+    "replace",
+    144,
+    145,
+    135,
+    136,
+    [
+     "|Role|Can|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    136,
+    137
+   ],
+   [
+    "replace",
+    146,
+    150,
+    137,
+    141,
+    [
+     "|Viewer|read|",
+     "|Author|create content, and change or delete what they created|",
+     "|Editor|change all content and globals|",
+     "|Admin|everything, including content types, users and roles|"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    179,
+    141,
+    170
+   ],
+   [
+    "replace",
+    179,
+    188,
+    170,
+    171,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    209,
+    171,
+    192
+   ],
+   [
+    "replace",
+    209,
+    219,
+    192,
+    193,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    252,
+    193,
+    226
+   ],
+   [
+    "replace",
+    252,
+    271,
+    226,
+    227,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    292,
+    227,
+    248
+   ],
+   [
+    "replace",
+    292,
+    296,
+    248,
+    249,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    318,
+    249,
+    271
+   ],
+   [
+    "replace",
+    318,
+    319,
+    271,
+    272,
+    [
+     "- `text` links to the `pages` document whose slug is `install`. You can only name documents you can read; anything else gets the same 422 as a slug that doesn't exist. One write names at most 1,000 documents this way."
+    ]
+   ],
+   [
+    "equal",
+    319,
+    322,
+    272,
+    275
+   ],
+   [
+    "replace",
+    322,
+    323,
+    275,
+    276,
+    [
+     "- `<u>…</u>` is underline and ` ` (or ` `, ` `) is a hard break. That's all the HTML there is."
+    ]
+   ],
+   [
+    "equal",
+    323,
+    324,
+    276,
+    277
+   ],
+   [
+    "replace",
+    324,
+    325,
+    277,
+    278,
+    [
+     "Markdown that doesn't fit is refused with a 422 and the line it's on, never half-converted: `line 3: raw HTML isn't allowed; the only tags are <u>…</u> and `, or ``line 3: unknown directive `:::aside` ``. A value can be up to 1 MiB, a numbered list starts at 1,000,000 at most, a NUL character is refused anywhere, and so is a directive straight after a task box (`- [ ] ::cta{…}`). Some things have no Markdown at all: subscript and superscript come out as plain text, and cell spans and `newTab` are dropped."
+    ]
+   ],
+   [
+    "equal",
+    325,
+    328,
+    278,
+    281
+   ],
+   [
+    "replace",
+    328,
+    329,
+    281,
+    282,
+    [
+     "- A table cell holding several blocks, or one block that isn't a paragraph, becomes one paragraph, with ` ` between the blocks."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    343,
+    282,
+    296
+   ],
+   [
+    "replace",
+    343,
+    344,
+    296,
+    297,
+    [
+     "A link to a document goes to its collection's `url`, here `/{slug}`; without one, it's the link text alone. Block fields become `data-*` attributes (`ctaLabel` is `data-cta-label`), and anything that isn't a plain value is written as JSON. A relationship node is a ` ` around the linked document's first text field. Text is escaped, every `href` is checked again on the way out, and `newTab` links get `target=\"_blank\" rel=\"noopener noreferrer\"`. As `text`, you get the words alone, the rich text inside block nodes included."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    420,
+    297,
+    373
+   ],
+   [
+    "replace",
+    420,
+    421,
+    373,
+    374,
+    [
+     "|Right|Admin, Editor|Author|Viewer, signed out|"
+    ]
+   ],
+   [
+    "equal",
+    421,
+    422,
+    374,
+    375
+   ],
+   [
+    "replace",
+    422,
+    425,
+    375,
+    378,
+    [
+     "|`readDrafts`|every document|their own|no|",
+     "|`readVersions`|every document|their own|no|",
+     "|`publish`|every document|no|no|"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    469,
+    378,
+    422
+   ],
+   [
+    "replace",
+    469,
+    481,
+    422,
+    423,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    481,
+    491,
+    423,
+    433
+   ],
+   [
+    "replace",
+    491,
+    496,
+    433,
+    434,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    496,
+    497,
+    434,
+    435
+   ],
+   [
+    "replace",
+    497,
+    499,
+    435,
+    436,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

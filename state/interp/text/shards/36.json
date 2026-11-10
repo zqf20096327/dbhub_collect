@@ -2763,5 +2763,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c8cecf9d9a03": {
+  "identity": {
+   "one_liner": "开源自托管 PostgreSQL 发行版，集成 HA、备份、监控与 626 个扩展",
+   "review": "Pigsty 是一个 PostgreSQL 发行版，通过 Ansible 声明式配置在裸 Linux 上部署 PG 集群，内置 Patroni 高可用、pgBackRest PITR、pgBouncer 连接池和 Victoria/Grafana 监控栈，支持 12 种 PG 内核分支与 626 个扩展。适合需要在自有主机上运维 PostgreSQL 及 Supabase 等周边软件的团队。要求管理员具备免密 SSH 与 sudo 权限。",
+   "highlights": [
+    "提供基于 Patroni、pgBackRest、pgBouncer、HAProxy 与 Etcd 的 PostgreSQL HA 集群部署，支持 PITR 与同步/异步复制",
+    "打包 12 种 PG 内核（如 Citus、Babelfish、IvorySQL、PolarDB）和 626 个扩展，覆盖 16 个 Linux 平台",
+    "内置 INFRA/NODE/ETCD/PGSQL 等模块，基于 300+ 参数的单配置文件声明部署，兼容 Vagrant/OpenTofu"
+   ],
+   "use_cases": [
+    "在自有服务器或数据中心自托管带高可用与监控的 PostgreSQL 集群",
+    "需要特定 PG 内核或扩展组合的部署，如 Citus 水平分片、Babelfish SQL Server 兼容",
+    "自托管 Supabase、Odoo、Dify 等 PG 周边软件"
+   ]
+  },
+  "sha": "c8cecf9d9a03",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4555152dc0a9": {
+  "identity": {
+   "one_liner": "分析型数据库基准测试套件，基于真实流量数据集运行 43 条查询",
+   "review": "ClickBench 是 ClickHouse 维护的分析型数据库基准项目，用于测量各类 DBMS 在点击流、Web 分析、日志与事件数据负载下的表现。数据集来自真实生产流量的匿名化记录，约 1 亿行单表，包含 43 条 SQL 查询。项目提供各系统的安装、加载、运行脚本及结果提交规范，测试以单节点为主、串行执行查询。适合数据库开发者与选型者参考。",
+   "highlights": [
+    "提供约 1 亿行、源自真实流量匿名化的公开数据集，支持 CSV/TSV/JSONlines/Parquet 多格式下载",
+    "基准流程以 shell 脚本文档化，覆盖安装、数据加载、查询执行与结果收集，可在云 VM 上复现",
+    "包含 43 条查询，覆盖全表扫描、过滤扫描、索引查找与主要关系操作，并含可选的并发 QPS 测试"
+   ],
+   "use_cases": [
+    "数据库开发者为自己的系统提交基准结果并与收录系统对照",
+    "测试环境搭建：在指定 EC2 实例类型上复现数据加载与查询计时",
+    "评估系统在存储吞吐、CPU 核数、单核性能与内存带宽等硬件维度上的表现"
+   ]
+  },
+  "sha": "4555152dc0a9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dc4b58808954": {
+  "identity": {
+   "one_liner": "Rust 嵌入式 SQL 数据库，数据存于可插拔 KV 存储引擎",
+   "review": "KiteSQL 是一个用 Rust 编写的嵌入式关系数据库，运行在应用进程内，无需外部服务。它支持大部分 SQL 2016 语法，可直接执行 SQL 或使用类型化 ORM。存储后端可插拔：RocksDB、LMDB、内存或 SlateDB over S3，其中 LMDB 后端提供零拷贝读取。提供 Shell、WebAssembly 和 Python 绑定，采用 Apache 2.0 许可证。适合需要在应用内嵌 SQL 能力的 Rust 开发者。",
+   "highlights": [
+    "支持大部分 SQL 2016 语法，提供类型化 ORM 与 schema 迁移（orm feature）",
+    "存储后端可插拔：RocksDB、LMDB、内存、SlateDB over S3（异步 API）",
+    "LMDB 上实现零拷贝读取，字符串以 Cow::Borrowed 形式从 mmap 文件进入结构体"
+   ],
+   "use_cases": [
+    "在 Rust 应用中嵌入 SQL 数据库，无需部署独立数据库服务",
+    "基于 Amazon S3 或兼容存储（MinIO、R2）构建异步 API 的数据存取层",
+    "通过内存后端（build_in_memory）运行测试或处理临时数据"
+   ]
+  },
+  "sha": "dc4b58808954",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

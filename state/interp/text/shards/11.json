@@ -3051,5 +3051,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7559cca91579": {
+  "identity": {
+   "one_liner": "自托管的开源阅读与写作工作台，集中管理书籍、摘录与笔记",
+   "review": "Nostos 是一个自托管应用，把电子书（EPUB/PDF）、有声书与纸质书目录汇入同一书库，摘录和笔记绑定来源页码，可在写作室中通过 @ 引用带出处插入草稿，并导出为带脚注的多种格式。技术栈为 .NET 后端加 Angular 前端，单 Docker 容器运行 SQLite。注意 TXT 和 MOBI 仅可存储、暂不支持阅读。",
+   "highlights": [
+    "支持 EPUB、PDF 阅读器与有声书播放器（MP3/M4A/M4B），多文件有声书按一本书播放；高亮和笔记附着于来源位置",
+    "Brain 模块用 [[Topic]] 链接跨书笔记；写作室输入 @ 可检索并插入带署名的摘录，导出带脚注的 Word、PDF、Markdown 或富文本",
+    "单 Docker 容器运行（SQLite），支持导出 .nostos 归档与 Markdown 笔记包，提供 OPDS，可从 Kobo、KOReader、Kindle 剪报和 Readwise CSV 导入高亮"
+   ],
+   "use_cases": [
+    "个人自托管书库：集中阅读电子书、听有声书并管理纸质书目录",
+    "从阅读中积累摘录与主题笔记，再将引文用于写作草稿并带出处导出",
+    "在 Unraid、CasaOS、Raspberry Pi 等 64 位设备上以 Docker 部署，数据保存于本地 /data 卷"
+   ]
+  },
+  "sha": "7559cca91579",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e5314c1a803f": {
+  "identity": {
+   "one_liner": "自托管可观测性平台，基于 OpenTelemetry 与 ClickHouse 统一存储日志、指标与链路。",
+   "review": "ObserveCraft 是一个自托管的开源可观测性平台，MIT 许可，用 Rust (axum) API 与 ClickHouse 存储，接收的数据先写入 Kafka 再处理以避免中断丢数据。支持日志、指标、链路、APM、监控器、事件与 CI 可见性。可通过 OTLP 或 Datadog Agent/API 格式发送数据，适合希望自行控制遥测数据存储的团队。",
+   "highlights": [
+    "摄入端在接受数据前先写入 Kafka，处理重启或存储故障时不丢数据；日志支持按组织索引、S3 归档（Parquet）与 DuckDB 归档检索",
+    "接收 OTLP（HTTP :4318 / gRPC :4317）及 Datadog Agent、API 与 DogStatsD 格式；Fluent Bit、Vector、Logstash 可通过 Datadog 输出接入",
+    "内置监控器（指标/APM/日志/变更）、事件管理、DORA 指标、持续性能剖析，以及密码+MFA、SAML 2.0、OIDC、RBAC 的多组织租户认证"
+   ],
+   "use_cases": [
+    "在自有网络内集中存储与查询日志、指标和链路数据",
+    "从 Splunk 或 Datadog 迁移：提供 SPL 翻译、告警/仪表盘导入，兼容 Datadog Agent 仅改 URL 与 key 即可接入",
+    "CI/CD 可见性：通过 OpenTelemetry CI/CD 语义约定计算 DORA 指标并管理 flaky 测试"
+   ]
+  },
+  "sha": "e5314c1a803f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a90c01826eb3": {
+  "identity": {
+   "one_liner": "基于 Python+SQLite 的命令-line 库存与食物浪费追踪工具",
+   "review": "PantryTrack 是面向小型餐厅、咖啡馆和烘焙店的命令行库存与浪费追踪工具，采用本地 SQLite 单文件存储，无需服务器或账户。支持 CSV 导入物品、记录进货/消耗/浪费（含原因）、低库存提醒、按供应商生成补货清单（可导出 CSV），并用 pandas 和 matplotlib 生成用量与浪费成本报告及图表。可作为库被导入使用，仅要求 Python 3.10+。",
+   "highlights": [
+    "提供 add/import/receive/use/waste/count/list/low-stock/reorder/report/history 等命令，覆盖入库、消耗、浪费、盘点与补货流程",
+    "所有数据存于本地单个 SQLite 文件，可通过 --db 参数或 PANTRYTRACK_DB 环境变量指定数据库路径",
+    "report 命令使用 pandas 生成用量与浪费报告，使用 matplotlib 生成浪费成本图表；支持导出 CSV"
+   ],
+   "use_cases": [
+    "小型餐饮商户日常盘点库存、记录进货与厨房消耗",
+    "记录食物浪费原因与成本并生成图表用于分析",
+    "在实体盘点后修正库存数量，生成按供应商分组的补货订单清单"
+   ]
+  },
+  "sha": "a90c01826eb3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d6838b02fdd": {
+  "identity": {
+   "one_liner": "自托管的 Web 数据库客户端，支持 MySQL、MariaDB、PostgreSQL 及兼容引擎",
+   "review": "Flase 是一个以 Docker 容器部署的 Web 数据库管理工具，连接 MySQL、MariaDB、PostgreSQL 及 TiDB、CockroachDB、YugabyteDB 等兼容引擎。提供类电子表格数据网格、SQL 控制台、ER 图、导入导出、服务器监控、用户权限管理等功能，支持 SSH 隧道和 TLS 连接。密码不存储在服务器端，服务器可强制只读连接。适用于需要在浏览器中管理自建或云数据库的开发者与运维人员，采用 AGPL v3+ 许可证。",
+   "highlights": [
+    "提供虚拟化数据网格，仅渲染可见行列，支持内联编辑、多选、查找替换及 TSV/CSV/JSON/XML/Markdown/HTML/LaTeX/SQL INSERT 复制格式",
+    "SQL 控制台支持多语句执行、查询历史、SQL 补全、树状执行计划、:name 参数绑定，并对无 WHERE 的 UPDATE/DELETE 下划线提示",
+    "支持流式 SQL dump 导入导出（含 gzip）、CSV 导入与列映射、可视化查询构建器、ER 图、跨库 schema 对比与迁移脚本生成"
+   ],
+   "use_cases": [
+    "通过浏览器集中管理多个 MySQL/MariaDB/PostgreSQL 数据库，替代 phpMyAdmin 或 Adminer 的工作流",
+    "部署于数据库所在内网，由管理员预定义连接并强制只读，用于生产数据的查询与查看",
+    "通过 SSH 隧道经跳板机访问仅内网可达的数据库"
+   ]
+  },
+  "sha": "5d6838b02fdd",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

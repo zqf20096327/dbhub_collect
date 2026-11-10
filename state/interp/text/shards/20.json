@@ -2675,5 +2675,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3a2fad1bedaf": {
+  "identity": {
+   "one_liner": "基于 SQLite 持久记忆与 System One 判决模型的代码库问答与审计层",
+   "review": "unified-brain 读取仓库完整 git 历史，用 tree-sitter 将每个符号（函数、类型、宏、配置项）及其引入提交存入仓库内 SQLite 数据库，检索时经嵌入与判决模型筛选证据，再由用户自选的 writer 模型一次性作答，提供 Ask 问答与提交范围 Timeline/报告两类功能，可通过 MCP 接入 Cursor、OpenCode、Claude Code 等 harness。判决模型目前为托管服务（pplx-decider 或 Jev），无法本地运行；需 OpenRouter、嵌入与 writer 三方 API 密钥。",
+   "highlights": [
+    "索引阶段不调用 LLM，仅一次嵌入；数据库写入仓库内 .unified-brain.db 文件",
+    "每个问题平均读取约 80k token，问题间状态不累积",
+    "判决模型支持 Apache-2.0 的 pplx-decider（27B）或 Jev，按 profile 配置 coverage/cheap 两档"
+   ],
+   "use_cases": [
+    "对指定提交范围生成符号变更报告，附判决所用证据（diff、调用者、追踪链）",
+    "面向需要跨版本理解代码演化的开发者的仓库问答",
+    "通过 MCP 在现有 coding agent harness 中接入检索能力"
+   ]
+  },
+  "sha": "3a2fad1bedaf",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

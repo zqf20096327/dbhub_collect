@@ -2640,5 +2640,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fff281256fae": {
+  "identity": {
+   "one_liner": "自托管的 Excalidraw 白板应用，带账号、文件夹与搜索，数据存于自有 Postgres。",
+   "review": "Excaliself 将 Excalidraw 画布封装为一个可自部署的应用，提供实时协作、团队空间、文件夹、搜索与回收站等组织功能，绘图数据存储在自有的 Postgres 数据库中，适用于需要在自有服务器上托管团队白板的场景。部署提供 Docker Compose、Coolify 与 Railway 三条路径，镜像预构建于 ghcr.io，支持 amd64 与 arm64，还内置 MCP 服务器供 AI 客户端接入。README 提及镜像需从 ghcr.io 拉取，源码构建约需 4 GB 内存，公开访问需自行配置 HTTPS 反向代理。",
+   "highlights": [
+    "提供实时协作编辑，支持分享链接（含无账号访客）、实时光标与跟随模式",
+    "内置 MCP 服务器（/api/mcp），支持 Claude 等 AI 客户端查找、读取、创建、导出绘图并提出修改，修改需用户点击 Apply 后生效",
+    "支持 Docker Compose、Coolify、Railway 三种部署方式，启动时自动执行数据库迁移，并提供 OIDC/Google Workspace/Microsoft Entra ID 单点登录"
+   ],
+   "use_cases": [
+    "在自有服务器上为团队搭建带账号体系和共享空间的白板，替代外部托管服务的数据存放位置",
+    "需要多人同时编辑同一张图并保留历史组织结构（文件夹、星标、回收站）的团队",
+    "接入 MCP 客户端，由 AI 搜索、读取或起草 Mermaid 流程图等绘图后再人工确认应用修改"
+   ]
+  },
+  "sha": "fff281256fae",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "505150f409df": {
+  "identity": {
+   "one_liner": "将巴西邮政 e-DNE 数据导入数据库的命令行工具",
+   "review": "该工具用 Python 编写，可从 Correios 官网下载最新 e-DNE Básico 文本文件，解析后写入由 SQLAlchemy 支持的任意数据库（PostgreSQL、MySQL、SQLite 等），并创建原始 DNE 中不包含的统一 CEP 查询表。提供 CLI 与 Python API 两种使用方式，导入在事务中执行，失败时回滚。数据每半月更新一次，重新运行 load 命令即可刷新。",
+   "highlights": [
+    "支持通过 SQLAlchemy 连接 PostgreSQL、MySQL、SQLite、SQL Server、Oracle 等数据库",
+    "自动下载最新 e-DNE Básico，也支持通过 --dne-source 指定本地 ZIP、目录或 URL 作为数据源",
+    "更新过程在原子事务中执行，出错时回滚并保留旧数据"
+   ],
+   "use_cases": [
+    "为应用自建本地 CEP 邮编查询数据库，避免每次请求外部服务",
+    "定期（每半月）运行 load 命令保持邮政数据更新，且不中断在线服务",
+    "作为 Python 库嵌入项目，按命名约定重命名表以集成到既有数据库 schema"
+   ]
+  },
+  "sha": "505150f409df",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3477510f4af": {
+  "identity": {
+   "one_liner": "面向 Hermes Agent 的非侵入式 AST 级功能增强补丁集",
+   "review": "hermes-patches 为 Hermes Agent 源码提供 AST 级非侵入式补丁注入，覆盖 Token 计量页脚、Telegram 菜单汉化、SQLite 外键自愈与防删护栏、思考过程净化、长消息切分等 8 个模块。面向在生产环境运行 Hermes Agent 并有中文界面与稳定性需求的用户。支持 pip/pipx、一键脚本、交互式控制台三种安装方式，含编译预检、.bak 备份、幂等执行与 --uninstall 回滚。README 未说明补丁对 Hermes 上游版本兼容性保障机制。",
+   "highlights": [
+    "采用 AST 级代码注入，修改前经 py_compile 编译预检，并以 os.replace 原子置换，首次修改生成 .bak 备份，支持 --uninstall 回滚",
+    "提供 footer、menu、db、clean-think、smart-split、terminal-cwd、state-guard、quote-blocks 共 8 个可独立启用的补丁，支持 --only/--skip 选择与 --status 查看应用状态",
+    "安装脚本自动寻径 Hermes 源码路径、初始化 config.yaml、清理字节码缓存、配置 systemd ExecStartPre 升级自愈守护并平滑重启 hermes-gateway 服务"
+   ],
+   "use_cases": [
+    "运行 Hermes Agent Telegram Bot 且需要中文菜单、长消息切分与流式静默控制的环境",
+    "生产环境中需对 SQLite state 库增加 busy_timeout 与防误删护栏的部署",
+    "需要查看 Prompt 总量、缓存命中率、输出 Token 等运行时指标的运维场景"
+   ]
+  },
+  "sha": "b3477510f4af",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

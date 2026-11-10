@@ -3104,5 +3104,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a36c99fbcbf5": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 用量追踪器，以 SQLite 持久化并提供内置仪表盘",
+   "review": "CPA Usage Keeper 是面向 CLIProxyAPI（CPA）的用量追踪工具，独立部署，通过 CPA 管理接口采集用量数据并存入 SQLite，内置仪表盘展示用量分析、请求详情、凭据配额等信息。要求 CPA v8.0.12+ 并开启 usage-statistics-enabled；多个采集端共连一个 CPA 实例时须都使用订阅模式。支持 Docker Compose、Docker、Homebrew 及各平台二进制部署，默认启用登录保护（需设置 LOGIN_PASSWORD）。",
+   "highlights": [
+    "将 CPA 用量持久化到 SQLite，支持定时备份",
+    "按模型、API Key 和提供商分析用量、缓存与估算成本；可检查并导出请求详情，查看成功率、首 token 时间（TTFT）与总延迟",
+    "监控凭据健康状况与剩余配额，支持刷新配额、编辑优先级，并可提供按单个 API Key 限定的只读用量视图"
+   ],
+   "use_cases": [
+    "已部署 CLIProxyAPI 的用户需要保留历史用量记录并按模型、Key、提供商分析成本",
+    "需要排查请求成功率、TTFT、延迟等请求级性能指标",
+    "需要跟踪凭据配额变化及 Codex 配额历史"
+   ]
+  },
+  "sha": "a36c99fbcbf5",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "04686204911c": {
+  "identity": {
+   "one_liner": "无需 cgo 的 Go SQLite 访问库，通过子进程管道通信实现。",
+   "review": "Sqinn-Go 是一个 Go 库，用于访问 SQLite 数据库，不使用 cgo。它以子进程方式启动 Sqinn（一个 C 语言程序），通过 stdin/stdout 进行进程间通信，由子进程完成 SQLite 操作。适用于不希望安装 gcc 或需要 Go 交叉编译的场景。限制包括：无内置连接池、非 database/sql 驱动、仅覆盖部分 SQLite C API，且目标机器需单独部署 Sqinn 可执行文件。",
+   "highlights": [
+    "通过 os/exec 启动 Sqinn 子进程，以 stdin/stdout 通信完成 SQLite 操作，Go 侧不依赖 cgo",
+    "内置 linux_amd64 与 windows_amd64 的预编译 Sqinn，也可自行编译并指定路径",
+    "提供高层 Exec/Query 接口；每个函数调用伴随一次进程间通信往返"
+   ],
+   "use_cases": [
+    "开发与部署环境无法安装 gcc，但需要交叉编译含 SQLite 的 Go 程序",
+    "构建过程中追求纯 Go 工具链编译而非 cgo 编译的项目",
+    "单实例 Sqinn 即可满足的非并发或可自行管理多实例的场景"
+   ]
+  },
+  "sha": "04686204911c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "153b80175083": {
+  "identity": {
+   "one_liner": "Rust 表数据迁移引擎，Python 单行调用，在受限内存下搬运整表",
+   "review": "apitap 是一个数据库间整表传输引擎，提供 Python 绑定（pip 安装，abi3 wheel，CPython ≥3.9），数据路径由 Rust 实现。支持 Postgres、MySQL/MariaDB、ClickHouse、BigQuery 及 GCS/S3/Iceberg 等目标，提供 replace/append/merge/log_based 模式，通过二进制 COPY、RowBinary、binlog 等线格式并行传输，内存按容器 cgroup 限制规划。适用于数据管道、ELT 作业与增量同步场景。",
+   "highlights": [
+    "支持 postgres、mysql、clickhouse、gsheets、github 等来源，及 bigquery、s3、gcs、iceberg 等目标，提供 replace/append/merge/log_based 传输模式",
+    "apitap.sql() 可在 Rust 引擎中跨不同数据库执行连接与聚合查询，结果经 Arrow C 流协议输出为 polars/pyarrow/duckdb/pandas",
+    "内存上限按管道数与缓冲区、依容器 cgroup 限制规划，与表大小无关；README 记录 256 MB 容器传输 100 GB 表的测试数据"
+   ],
+   "use_cases": [
+    "在不同数据库（如 Postgres→ClickHouse）间批量迁移或定期刷新整表，可由 cron、Airflow 或 Kubernetes 调度",
+    "基于 Postgres WAL 或 MySQL binlog 的批量 CDC 增量同步到 Postgres、ClickHouse、BigQuery 或 Iceberg",
+    "对来自多个数据库的表执行跨源 SQL 连接与聚合，结果写入 DataFrame 或目标库"
+   ]
+  },
+  "sha": "153b80175083",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4f6b39a2c306": {
+  "identity": {
+   "one_liner": "读取 Kobo 设备 SQLite 数据库并在浏览器中导出书籍标注的工具",
+   "review": "Kobo Note Up 是一个基于 Next.js 的浏览器端工具，通过读取 Kobo 阅读器 .kobo 目录下的 KoboReader.sqlite 文件，展示书籍与标注并导出为 Markdown 或纯文本。用户经 USB 连接设备后选择文件夹即可使用，无需安装。数据由 SQL.js 在本地处理，仅读取数据库不写入。适用对象为需要导出侧载书籍（PDF/EPUB）标注的 Kobo 用户。",
+   "highlights": [
+    "读取 KoboReader.sqlite 文件，支持侧载 PDF/EPUB 与商店书籍的标注导出",
+    "基于 SQL.js 在浏览器中本地处理，数据不上传，仅读取不写入设备数据库",
+    "支持导出 Markdown 与纯文本，可单本或整库导出；支持 Chrome、Edge、Firefox、Safari、Opera"
+   ],
+   "use_cases": [
+    "导出侧载书籍的阅读标注与笔记",
+    "将标注整理为 Markdown 文件供 Obsidian/Notion 等笔记工具使用",
+    "无需安装软件、在浏览器中离线批量查看与导出 Kobo 图书库内容"
+   ]
+  },
+  "sha": "4f6b39a2c306",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "09285d772737": {
+  "identity": {
+   "one_liner": "俄罗斯某高校数据库课程作业，用 PostgreSQL 设计 MAI STORE 商店仓库管理数据库",
+   "review": "该项目是《数据库设计与维护》课程的第 1 次家庭作业文档，围绕莫斯科航空学院官方网店 MAI STORE 的仓库业务，描述了商品、供应商、仓库等实体，并用用例方法列出数据录入、编辑、删除、查找等需求。主题标签显示采用 PostgreSQL 与关系模型，当前内容为需求与领域分析，面向学习数据库设计流程的学生与教学场景。",
+   "highlights": [
+    "描述网店仓库领域的六个实体：生产商、供应商、供货、商品、商品库存、仓库",
+    "以用例（прецедент）方式列出增、改、删、按参数查询与排序等需求",
+    "为后续考试作业提供可复用的领域描述文档"
+   ],
+   "use_cases": [
+    "数据库课程作业的场景分析参考",
+    "教学演示如何从领域描述推导实体与需求",
+    "仓库/网店后台信息系统的需求建模示例"
+   ]
+  },
+  "sha": "09285d772737",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

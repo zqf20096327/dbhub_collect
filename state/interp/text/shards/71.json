@@ -2605,5 +2605,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8d4457b8305b": {
+  "identity": {
+   "one_liner": "本地优先的个人助手：Rust 核心运行 agent 循环、记忆与工具，客户端经 JSON-RPC 通信",
+   "review": "Joyczl-agent（代号 Joy）是一个 local-first 个人助手，Rust 实现状态存储、推理循环与工具，TypeScript 负责仪表盘和聊天网关，Python 仅作薄 SDK。适合希望在本地运行 AI 助手、通过 CLI/网页/Telegram 等网关对话并管理个人记忆与日程的用户。核心机制包括：joyczl-protocol 作为跨语言契约唯一来源、单进程持有 state.db、工具失败以文本返回模型而非中断循环。写文件、执行命令、子代理委派等能力默认关闭，需设 JOY_WRITE/JOY_EXEC/JOY_DELEGATE 环境变量开启。",
+   "highlights": [
+    "提供终端 REPL、本地仪表盘（localhost:7777）及 Telegram/Discord/WeChat/Lark 四种聊天网关接入",
+    "支持语义事实（FTS5，兼容中日韩字符）、带日期的情景记忆和程序化 Skills 三类记忆，并带检索门控",
+    "内置 11+ 个工具（记忆读写、日历 ICS、网页搜索、文件读写、沙箱命令执行等），并可接入 MCP 服务器"
+   ],
+   "use_cases": [
+    "在个人电脑本地运行助手，管理语义记忆、情景记录与日程事件（ICS/Apple Calendar 同步）",
+    "通过 Telegram、Discord、WeChat、Lark 等聊天平台接入同一助手实例",
+    "以 JSON-RPC over stdio 协议开发自定义客户端（CLI、仪表盘、Python SDK 均为该协议客户端）"
+   ]
+  },
+  "sha": "8d4457b8305b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6da0464cdbe0": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 CMS，单二进制加 Postgres 运行，内置可视化建站与 MCP 服务。",
+   "review": "Hatamoto 是一个用 Go 实现的开源 CMS，站点、后台、JSON API、MCP 端点和插件运行时都在单一进程中运行，数据存储使用 Postgres。它面向自托管网站运营者，提供博客编辑器、可视化页面构建器、SEO 检查、无 Cookie 统计和 WordPress 导入功能。项目状态为 v1，插件 SDK 为 v0，SDK 在次要版本间仍可能变更。许可证为 Apache-2.0，默认不开启遥测。",
+   "highlights": [
+    "单个 Go 二进制加一个 Postgres 数据库即可运行，包含站点、后台、JSON API、MCP 端点、后台任务和插件运行时",
+    "插件和主题为签名的 WebAssembly 包，安装前显示签名者与所需权限，更新失败的健康检查会自动回滚",
+    "内置 MCP 服务器，AI 代理可通过 API key（按 scope 限制）进行内容、页面构建、媒体、SEO 和分析操作"
+   ],
+   "use_cases": [
+    "自托管博客或企业站点，需服务器端渲染、页面缓存、表单、菜单和重定向等内置功能",
+    "需要将 WordPress 站点迁移并保持旧 URL 可访问的场景",
+    "希望让 AI 代理通过 MCP 发布内容，或分析 AI 爬虫抓取行为的站点"
+   ]
+  },
+  "sha": "6da0464cdbe0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "88de2181a97b": {
+  "identity": {
+   "one_liner": "一个自托管 Web 界面，统一浏览和编辑 PostgreSQL、Redis 与 Kafka 数据",
+   "review": "Kizuna 是一个用 Go 和 React 构建的自托管数据库客户端，通过单一容器（约 25 MB，amd64/arm64）在同一个 Web 界面（默认监听 127.0.0.1:9090）中提供对 PostgreSQL、Redis 和 Kafka 的浏览、编辑与消息操作。其关键机制是跨源链接：将 Kafka 消息字段映射到 Redis 键和 PostgreSQL 行，可一键跳转。面向工程师、分析师与支持团队；README 说明它无内置认证，设计为单机单用户使用。",
+   "highlights": [
+    "支持 PostgreSQL（SQL 控制台、外键导航、DDL、EXPLAIN）、Redis（多类型键编辑器、内置 CLI、Cluster/Sentinel）与 Kafka（消息搜索、Multi/Loop 生产者、消费者组偏移重置）",
+    "跨源链接可在 Kafka、Redis、PostgreSQL 之间按字段值互相跳转，自动生成过滤条件与面包屑",
+    "单 Go 二进制内嵌 React 前端，前端资源随二进制分发，不发起对外请求；连接密码以 AES-256-GCM 加密存于本地卷"
+   ],
+   "use_cases": [
+    "在同一界面中排查分布在 Kafka 事件、Redis 键和 PostgreSQL 表中的同一条记录",
+    "需要浏览、编辑 PostgreSQL 表/执行 SQL、管理 Redis 键、查看与生产 Kafka 消息的日常数据操作",
+    "通过 Docker 单容器在本地或私有环境中运行数据管理工具（需注意无认证，仅默认绑定 127.0.0.1）"
+   ]
+  },
+  "sha": "88de2181a97b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b48e91e5b0ac": {
+  "identity": {
+   "one_liner": "Android 课程表与任务管理应用，含 Ktor 服务器与 Telegram 机器人",
+   "review": "UniFlow 是一个用于查看课程表和管理学习任务的三组件项目：Android 客户端（Kotlin/Jetpack Compose）、Ktor+SQLite 后端服务器，以及通过 Telegram 接收任务指令的独立机器人进程。客户端用 Room 缓存最近一次拉取的任务列表，断网时仍可查看。需 JDK 21、Android SDK 36 构建；任务路由无账号登录，README 建议仅在本机 127.0.0.1 使用。",
+   "highlights": [
+    "任务包含科目、标题、期限与完成标记，可通过应用内界面或 Telegram 命令添加，服务器经 Exposed 写入 SQLite",
+    "提供 GET/POST/PUT/DELETE 的 /tasks REST API，JSON 格式，科目与标题为必填并有长度上限",
+    "应用保存 Room 缓存以在无连接时展示列表，Telegram 机器人仅接受指定私聊命令并用共享密钥调用内部路由"
+   ],
+   "use_cases": [
+    "需要本地自托管服务器管理课程任务并在手机上查看",
+    "通过 Telegram 私聊命令远程添加学习任务",
+    "作为 Kotlin、Jetpack Compose、Ktor、Room、Exposed 组合的完整三端示例项目"
+   ]
+  },
+  "sha": "b48e91e5b0ac",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2928,5 +2928,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ac6ead964685": {
+  "identity": {
+   "one_liner": "WorkBuddy 本地数据迁移 CLI，基于 SQLite 修改 user_id 实现跨设备与跨账号数据搬运。",
+   "review": "这是一组面向 WorkBuddy 用户的 Python 脚本，用于跨设备打包迁移项目会话，以及在切换账号后将旧账号留存在磁盘上的对话记录、长期记忆、MCP 连接器合并到当前账号。工作原理是修改 SQLite 数据库中的 user_id 字段并处理 WAL checkpoint，支持国内版/国际版目录、自动备份与回滚。限制：仅适用于 WorkBuddy 本地数据，无第三方依赖但需 Python 3.8+。",
+   "highlights": [
+    "提供 migrate_project.py、migrate.py、migrate_session.py 三个脚本，支持无参数运行进入交互向导，无需知道 user_id",
+    "迁移前自动备份数据库、记忆与连接器，支持 --rollback 回滚，并执行 SQLite WAL checkpoint",
+    "跨平台路径自动重映射（macOS/Windows/Linux），同一导出包重复导入不产生重复会话"
+   ],
+   "use_cases": [
+    "家用与办公两台电脑使用不同账号交替进行同一项目，需携带项目会话与工作区记忆",
+    "WorkBuddy 切换账号或重新登录后，恢复旧账号的对话记录、长期记忆和 MCP 连接器",
+    "将单个对话在国内版与国际版之间迁移，或在迁移前用 --diagnose 查看账号数据分布"
+   ]
+  },
+  "sha": "ac6ead964685",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "58bda56b53b7": {
+  "identity": {
+   "one_liner": "面向 Chalmers IT 学生分部的会员与身份管理系统，充当 OAuth2 SSO 中心目录。",
+   "review": "Gamma 是为 Chalmers IT 学生分部构建的会员与身份管理系统，作为成员、群组、OAuth2 客户端与 API 密钥的中央目录。基于 Java 25 与 Spring Boot 实现，使用 PostgreSQL 16+（Flyway 迁移）和 Redis 7+ 存储与缓存，UI 采用 Thymeleaf + HTMX。架构遵循领域驱动设计与六边形（端口与适配器）模式；目前仓库内没有 Java 单元/集成测试，验证依赖 Playwright E2E 测试。",
+   "highlights": [
+    "提供 OAuth2 授权服务器能力，通过 /oauth2/jwks 发布公钥，支持 RSA 签名密钥的配置与轮换流程",
+    "签发带作用域的 API 密钥（INFO、ACCOUNT_SCAFFOLD、ALLOW_LIST、CLIENT 四类），经 Authorization 头以 pre-shared 方案调用",
+    "支持 Testcontainers 自动启动 PostgreSQL 与 Redis 的本地开发模式，以及 mock.json 数据加载和首个启动时自动创建管理员"
+   ],
+   "use_cases": [
+    "为学生分部类组织管理会员、群组与权限，并作为成员信息的中央目录",
+    "为内部服务接入 OAuth2 登录或以预共享 API 密钥进行服务间调用",
+    "作为六边形架构 + DDD 的 Spring Boot 参考实现用于开发学习与研究"
+   ]
+  },
+  "sha": "58bda56b53b7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

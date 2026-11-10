@@ -3168,5 +3168,114 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fae3ec5579b8": {
+  "identity": {
+   "one_liner": "基于 DSL 与 KSP 的 Kotlin 多平台 SQLite ORM 库",
+   "review": "SQLlin 是面向 Kotlin Multiplatform 的 ORM 库，底层使用 SQLite，通过 Kotlin 代码以 DSL 形式编写 SQL 语句，并由 Kotlin 编译器进行验证。它包含 sqllin-driver（底层多平台 SQLite API）、sqllin-dsl（SQL DSL 实现）与 sqllin-processor（KSP 注解处理生成代码）三部分，序列化基于 kotlinx.serialization。适合使用 Kotlin 多平台开发并需要本地 SQLite 存储的开发者。",
+   "highlights": [
+    "支持 Android、JVM、iOS、macOS、watchOS、tvOS、Linux、Windows 等多平台",
+    "通过 DSL 用 Kotlin 代码编写 SQL 语句，由 Kotlin 编译器验证",
+    "基于 kotlinx.serialization 直接插入和查询 Kotlin 对象，可选 sqllin-dsl-paging 提供 PagingSource"
+   ],
+   "use_cases": [
+    "Kotlin Multiplatform 项目中的本地 SQLite 数据存储",
+    "需要以类型安全 DSL 方式编写 SQL 查询的场景",
+    "结合 androidx.paging 对查询结果分页加载的场景"
+   ]
+  },
+  "sha": "fae3ec5579b8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e9688d801c7c": {
+  "identity": {
+   "one_liner": "将 Adobe Commerce 数据库降级为 Magento 开源版的 SQL 迁移脚本集",
+   "review": "该项目提供一组 SQL 脚本，通过删除 staging 相关表与属性、保留 staging 模式下最新版本数据，实现 Adobe Commerce 到 Magento Open Source 的数据库 schema 降级，且不改动业务数据。最初为 Magento Commerce 2.2.* 开发，已在 Adobe Commerce 2.4.7-p3 上测试。使用者需通过 mysql 命令行执行脚本，迁移前需将索引模式切换为 manual。",
+   "highlights": [
+    "包含针对 Attributes、Authorization、SalesRule、CatalogRule、Category、Product、CMS、EE Tables、Wishlist、CatalogInventory、Customer、Quote、Sales 等模块的即用型 SQL 脚本",
+    "在降级数据库 schema 的同时不修改数据，并保留产品与分类在 staging 模式下的最新版本",
+    "支持通过 mysql 命令行执行，兼容 Adobe Commerce 2.4.*（经 2.4.7-p3 测试）"
+   ],
+   "use_cases": [
+    "需要将 Adobe Commerce（EE）数据库迁移至 Magento Open Source（CE）的运维场景",
+    "去除 Adobe Commerce 特有的 staging（草稿与定时发布）表和属性"
+   ]
+  },
+  "sha": "e9688d801c7c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5acea1d4bb5b": {
+  "identity": {
+   "one_liner": "基于 MCP 的编码代理跨会话共享记忆，笔记以 Markdown 文件存储。",
+   "review": "Renor Engine 是一个通过 Model Context Protocol 为编码代理提供记忆的服务端：代理保存的决定、修正与事实以纯 Markdown 存入本地文件夹，SQLite 维护可随时重建的搜索索引，任何 MCP 客户端（Claude Code、Codex、Cursor、Grok 等）可在下一会话检索。提供托管与自托管两种方式，自托管无需账号与 API 密钥，需 Node.js 22.16+。许可证为 Apache-2.0（1.0.0 为 AGPL-3.0，CLI/SDK/集成文件为 MIT）。",
+   "highlights": [
+    "记忆以纯 Markdown 文件存储在用户拥有的文件夹，SQLite 索引可从 Markdown 重建",
+    "提供 search、remember_fact、note 等本地 MCP 工具；自托管默认关键词检索并支持词干重试，可选启用混合（关键词+语义）搜索",
+    "支持通过 RENOR_CONNECTION_NAME 为多个代理启动独立连接并使用多代理（hive）工具；内置 status 与只读的 doctor 健康检查命令"
+   ],
+   "use_cases": [
+    "在多个编码代理（Claude Code、Codex、Cursor、Grok、Gemini、VS Code 等）之间共享项目决定与事实，跨会话检索",
+    "在本地文件夹自托管记忆存储，无需账号或 API 密钥",
+    "通过 Docker 或服务器部署，并让多个代理连接同一份记忆"
+   ]
+  },
+  "sha": "5acea1d4bb5b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d17197f830cf": {
+  "identity": {
+   "one_liner": "Vikunja 的本地优先 TUI 任务客户端，本地 SQLite 存储后台同步",
+   "review": "tui-do 是用 Rust 编写的终端客户端，连接自托管的 Vikunja 任务服务。所有读取来自本地 SQLite 存储，写入采用乐观提交并在后台同步，服务器不可达时可继续操作。通过 tui-do login 配置服务器地址和 API token，以单二进制分发。README 提示它会真实删除、修改服务器数据，使用前需备份。",
+   "highlights": [
+    "本地 SQLite 存储响应全部读取，启动与编辑不依赖网络，服务器离线时可用",
+    "写入先落本地队列后台同步，失败只阻塞单个任务；支持撤销/重做",
+    "支持快速添加语法、Markdown/HTML 任务描述渲染、标签/优先级/截止日期/项目及模糊选择器"
+   ],
+   "use_cases": [
+    "在 tmux 或终端会话中操作 Vikunja 任务而不切换到网页界面",
+    "无网络环境（如通勤途中）下排队任务，恢复连接后同步",
+    "从 shell 或 agent 脚本通过 tui-do add 创建任务供界面拾取"
+   ]
+  },
+  "sha": "d17197f830cf",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cc46e3be258a": {
+  "identity": {
+   "one_liner": "基于 Spring Boot、Vue 3 与 MySQL 的自然语言驱动 MES 制造执行系统",
+   "review": "AI-MES Copilot 是一个以智能调光台灯为业务场景的 MES 系统，覆盖采购、库存、生产、质量、设备与发货全链。用户通过 AI 工作台用自然语言完成 39 项查询与办理能力；写操作需经预览、确认、执行、回查流程，并复核权限与前置条件。环境要求 JDK 21、Node.js 24、MySQL 8.0。项目已完成课程交付并以 MIT 许可证开源，后端为 Spring Boot、前端为 Vue 3。",
+   "highlights": [
+    "提供 39 项业务能力：20 项查询与分析、19 项直接办理，通用查询通过受权限控制的资源目录覆盖更多业务数据",
+    "写操作采用预览、确认、执行、回查流程，执行时复核权限、单据状态、前置条件和重复请求，并保留执行记录",
+    "支持自动化规则扫描、事件触发、多步任务与通知预警；阶段 2 新增私有知识向量 RAG、图谱问答与人脸登录"
+   ],
+   "use_cases": [
+    "通过自然语言查询产量、合格数、安全库存缺口等生产数据",
+    "以对话方式创建生产订单、排产、生成父子工单、领料、派工、报工及发货等业务办理",
+    "用于多轮追问与上下文理解场景，获取业务结论、表格、图表及来源引用"
+   ]
+  },
+  "sha": "cc46e3be258a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

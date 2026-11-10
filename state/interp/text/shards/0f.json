@@ -2785,5 +2785,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8f8fd9fc2779": {
+  "identity": {
+   "one_liner": "用 Rust 开发 PostgreSQL 扩展的框架，含自动化开发环境 cargo-pgrx",
+   "review": "pgrx 是一个用 Rust 编写 PostgreSQL 扩展的框架，由 pgCentral Foundation 维护。它通过 #[pg_extern]、#[pg_trigger] 等过程宏将 Rust 函数暴露为 SQL 可调用对象，自动生成 SQL schema，并将 Rust panic 转换为 Postgres ERROR。配套的 cargo-pgrx 提供从创建、初始化、运行测试到打包 RPM/DEB 的完整命令链，支持 Postgres 15 至 19rc1。适用于希望以 Rust 编写 UDF、自定义类型和触发器的扩展开发者。",
+   "highlights": [
+    "cargo-pgrx 提供 new/init/run/test/regress/package 等子命令，可自动下载并编译多版本 PostgreSQL 并打包 RPM/DEB",
+    "通过过程宏（#[pg_extern]、#[pg_trigger]、#[derive(PostgresType)] 等）生成 SQL 接口，支持 RETURNS SETOF/TABLE、自定义类型与枚举",
+    "将 Rust panic! 转换为中止事务而非进程的 Postgres ERROR，NULL 值以 Option<T> 表示"
+   ],
+   "use_cases": [
+    "用 Rust 编写 PostgreSQL 自定义函数、触发器和自定义数据类型",
+    "同一代码库需测试和构建面向 Postgres 15–19 多个版本的扩展",
+    "需要为扩展生成 Linux RPM/DEB 安装包或运行 SQL 回归测试"
+   ]
+  },
+  "sha": "8f8fd9fc2779",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "581440bed9bd": {
+  "identity": {
+   "one_liner": "自托管开源发票系统，Bun+Hono+React 单容器运行，数据存 SQLite。",
+   "review": "Inkvoice 是面向自由职业者和小团队的自托管开票应用，提供发票全生命周期管理、报价、费用追踪、多币种与报表功能，数据存储于单个 SQLite 文件。支持 Stripe/PayPal 在线收款及德国电子发票（XRechnung/ZUGFeRD）与 PEPPOL 传输。以 Docker 容器部署，需设置 JWT_SECRET、ADMIN_PASS 等环境变量，并提供云托管版本。",
+   "highlights": [
+    "发票全生命周期（草稿→发送→已付→作废）、报价转发票、定期自动生成循环发票，PDF 可经浏览器打印对话框导出并用 Mustache 模板自定义",
+    "多币种实时汇率、费用追踪、客户对账单，以及税额汇总、应收账龄、损益等报表并可导出 CSV",
+    "支持通过 Stripe 与 PayPal 在线收款，包含 XRechnung 3.0/ZUGFeRD 电子发票生成与 PEPPOL 网络收发模块"
+   ],
+   "use_cases": [
+    "自由职业者或小团队需要自托管的开票与收款管理工具",
+    "需向德国或欧洲客户出具符合 EN 16931 的电子发票并通过 PEPPOL 传输",
+    "已有 Docker/Dokploy/Coolify 环境，希望用单容器和 SQLite 文件管理账务数据"
+   ]
+  },
+  "sha": "581440bed9bd",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "036eab90111f": {
+  "identity": {
+   "one_liner": "面向图书馆管理的 Spring Boot REST API，以 Docker Compose 与 PostgreSQL 部署。",
+   "review": "Libro 是为 Aklan State University 计算机学院图书馆构建的图书管理 REST API，管理实体书籍副本、用户账户与借阅历史。它采用 Java 25、Spring Boot、JPA 与 PostgreSQL，通过 Flyway 管理 schema、JWT 做无状态认证，并经 Docker Compose 启动整个技术栈。适合需要按副本追踪借阅的机构部署使用；公共 OCI 实例尚未部署，需本地运行。",
+   "highlights": [
+    "目录支持按书名、作者、类型、价格搜索、过滤、排序与分页，并提供借阅规则（14 天、最多三笔在借、逾期禁止续借）",
+    "四种角色（STUDENT/FACULTY/ADMINISTRATOR/LIBRARIAN）在路由与服务层校验，采用 HS256 JWT Bearer、BCrypt 密码及按 IP 限流",
+    "Flyway 拥有 schema 并在启动时由 Hibernate 校验；并发借出通过行锁与活跃借阅唯一索引处理；提供 /livez、/readyz 探针与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "高校或机构图书馆管理实体书籍副本、读者账户与借阅记录",
+    "作为 JWT 认证、Flyway 迁移、Testcontainers 集成测试与 Docker Compose 部署的参考实现",
+    "需要健康探针、Prometheus 指标与 CI/CD（GitHub Actions）流水线的服务部署场景"
+   ]
+  },
+  "sha": "036eab90111f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5635f38b4c7": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 服务器，将代码库索引为 SQLite 符号图并提供关系查询工具",
+   "review": "code-atlas 是一个本地运行的 MCP 服务器，用各语言的解析器把代码库解析为 SQLite 符号图，在索引时解析跨文件边，以行结果形式回答调用者、实现、影响范围等问题。核心不含 LLM、离线运行，通过版本化 JSONL 契约驱动各语言适配器。支持 PHP、TypeScript/JavaScript、Python、T-SQL，提供 26 个工具，需 Python ≥3.12 及目标语言运行时。README 注明各适配器解析深度不同，未固定到定义的 CALLS 边标记为 HEURISTIC。",
+   "highlights": [
+    "支持 PHP、TypeScript/JavaScript、Python、T-SQL 四种语言的适配器，共提供 26 个 MCP 工具，全部离线运行于本地 SQLite，无图数据库服务器",
+    "在索引时解析跨文件边并标注解析方式，无法固定的 CALLS 边标记为 HEURISTIC，各适配器解析深度有量化报告",
+    "支持通过 git diff 做增量更新，可经 setup.py 自动写入 .mcp.json，也提供 Claude Code 插件、容器运行及带 SBOM 与签名证明的发布校验"
+   ],
+   "use_cases": [
+    "让 AI 编码代理在大型代码库（如超 1 万文件）中回答调用关系、实现定位、影响范围等关系型问题",
+    "需要结果可核验而非仅看似合理的代理读取场景，替代 grep 后逐文件阅读的流程",
+    "配合 Claude Code 作为插件安装，为多个项目提供代码导航与索引查询能力"
+   ]
+  },
+  "sha": "b5635f38b4c7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

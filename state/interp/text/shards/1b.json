@@ -3292,5 +3292,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "22e2b37562f0": {
+  "identity": {
+   "one_liner": "面向原生 SQL 的轻量化 Go 数据库操作库",
+   "review": "sqlmer 基于 database/sql 提供 Go 语言的原生 SQL 操作接口，支持 MySQL、SQLite、SQL Server 三种数据库。它提供命名参数、slice 展开 IN 查询、Map/Struct 结果映射、嵌套事务、Context 超时控制，并通过 wrap 装饰器注入慢日志等逻辑。适合继续手写 SQL 但希望减少扫描样板代码的项目。",
+   "highlights": [
+    "支持命名参数与索引参数混用，map/struct 参数可自动合并，slice/array 参数可展开用于 IN 查询",
+    "支持将查询结果映射为 Map 或 Go struct，含驼峰与下划线命名模糊匹配；提供增强版 sql.Rows/sql.Row 的 SliceScan/MapScan",
+    "提供嵌套事务 API，所有操作有 Context 版本，可通过 wrap 包以装饰器方式注入慢日志、监控指标、链路追踪逻辑"
+   ],
+   "use_cases": [
+    "需要继续直接编写原生 SQL，同时使用命名参数和 IN 查询展开的项目",
+    "需要将查询结果装载到 Map 或 struct 而不想手写 rows.Scan 的 Go 应用",
+    "需要在同一套 API 下统一处理 MySQL、SQLite、SQL Server 并使用事务与 Context 超时控制的场景"
+   ]
+  },
+  "sha": "22e2b37562f0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "190e2e28f521": {
+  "identity": {
+   "one_liner": "自托管 AI 导师，将书籍、在线文档和视频转为课程",
+   "review": "Tutor 是一个在本地运行的个人学习工具，把 EPUB/PDF、在线文档和 YouTube 视频（由 Gemini 模型生成字幕）整理为概念图和课程。它提取各章节概念，通过诊断测试区分已掌握与待学内容，再逐个讲解并附书中引用。需要自备 Anthropic、OpenAI、OpenRouter 或 Google 的 API 密钥；macOS/Windows 有免终端打包版，也可用 Node.js 22+ 从源码运行。数据存储在本地 data/ 目录。",
+   "highlights": [
+    "支持 EPUB、PDF、在线文档、YouTube 视频三种材料来源，一个科目可合并为一张概念图",
+    "通过诊断测试标记概念状态（已知/学习中/已掌握），逐概念教学并出题，支持争议评分",
+    "提供 macOS/Windows 打包下载与源码两种安装方式，配置通过 .env 或设置页完成"
+   ],
+   "use_cases": [
+    "将一本电子书或在线教程系统化拆解为可追踪的概念课程",
+    "结合同一主题的书、文档和视频课程进行交叉学习",
+    "自托管运行、使用自选 LLM 提供商的个性化学习环境"
+   ]
+  },
+  "sha": "190e2e28f521",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c63d7005e7d6": {
+  "identity": {
+   "one_liner": "S3 兼容对象存储的多租户控制平面，经预签名 URL 转移字节",
+   "review": "Paladin 是一个用 Go 编写的多租户控制平面，用于 S3 兼容对象存储。应用使用租户作用域的凭证而非直接持有存储凭证，Paladin 依据 Cedar 策略检查请求、按租户解析后端与桶、计量配额并写入审计。它不代理对象流量，字节经预签名 URL 在客户端与存储后端之间传输；自身仅调用 S3 管理桶与对象。适用对象：需要在 Kubernetes 上为多个租户统一管理对象存储访问、配额与审计的平台团队。依赖 PostgreSQL 16+ 与一个 S3 兼容存储，经两个 Helm chart 部署；许可证为 AGPL-3.0-only，目前仅支持 main 分支，暂不接受 PR。",
+   "highlights": [
+    "提供 Connect API、Next.js Web 控制台、Go 与 Python SDK，以及面向 AI agent 的 MCP 服务器，同一组操作经多种入口暴露",
+    "按角色拆分为 api、admin、mcp、worker、dispatcher、ingest、console 七种 Deployment；worker 负责桶预置、批处理、生命周期与后端间迁移",
+    "Helm chart 发布于 GHCR，镜像用 Sigstore 无密钥签名并附带 SPDX SBOM；事件以 CloudEvents 1.0 格式投递至 webhook 与消息代理"
+   ],
+   "use_cases": [
+    "为多个租户统一签发租户作用域凭证、Cedar 策略与配额，避免应用直接持有存储凭证",
+    "AI agent 经 MCP 以工具形式调用租户、桶与对象管理操作",
+    "基于 presigned URL 的对象上传下载场景，API 只承载元数据，控制平面不代理字节流量"
+   ]
+  },
+  "sha": "c63d7005e7d6",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

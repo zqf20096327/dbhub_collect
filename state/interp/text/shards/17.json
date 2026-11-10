@@ -3373,5 +3373,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "335b9f30fcd4": {
+  "identity": {
+   "one_liner": "Rust 异步 SQL 工具箱，通过宏在编译期校验原生 SQL 查询",
+   "review": "SQLx 是一个纯 Rust 编写的异步 SQL 库，提供 PostgreSQL、MySQL/MariaDB 和 SQLite 驱动，面向需要在 Rust 应用中执行数据库操作的异步开发者。其核心机制是通过 query! 系列宏在编译期连接开发数据库验证 SQL，而非提供 DSL 或 ORM 映射。支持连接池、嵌套事务、行流式读取，SQLite 驱动依赖 libsqlite3 C 库，MSSQL 支持已在 0.7 移除。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite 四种数据库，Postgres 与 MySQL 驱动为纯 Rust 实现",
+    "通过宏将原生 SQL 在编译期连接开发数据库进行校验，无需 DSL",
+    "内置 sqlx::Pool 连接池，支持嵌套事务与保存点、行流式读取、语句预编译缓存"
+   ],
+   "use_cases": [
+    "在 tokio 等 Rust 异步运行时中执行参数化查询并防止 SQL 注入",
+    "需要在编译期校验 SQL 正确性、可使用数据库扩展语法的项目",
+    "需要运行时切换数据库驱动的应用（AnyPool 按 URL scheme 连接）"
+   ]
+  },
+  "sha": "335b9f30fcd4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec0d7b9179f6": {
+  "identity": {
+   "one_liner": "可调优、可评测的开源 text-to-SQL 引擎，在你的自有数据库上运行",
+   "review": "mnemiq 是 Apache-2.0 的自然语言查询数据库引擎，将问答到 SQL 之间的各环节暴露为可配置项。模型仅负责提出 SQL，确定性层负责裁决：校验只读、权限、方言编译与 EXPLAIN，不通过则拒绝并说明原因。内置评测工具按返回数据而非 SQL 字符串评分，分别统计正确、拒绝、错误三类结果。访问采用 fail-closed 角色机制，支持本地运行与自选模型。",
+   "highlights": [
+    "支持将模型选择、schema 检索量、语义富集层级、拒绝阈值、行列策略等环节作为配置项，并以命名 profile 存储，请求可无重启切换",
+    "访问控制为 fail-closed：必须提供角色（环境变量或 OIDC 令牌），无角色则拒绝；权限在 schema 检索前生效",
+    "内置评测工具，按查询返回的数据评分，将正确、拒绝、错误分别计数，可运行 BIRD mini-dev、Spider 1.0、Spider 2.0-lite 基准"
+   ],
+   "use_cases": [
+    "在企业自有数据仓库上部署自然语言查询，并按自身数据与问题集调优、评测配置",
+    "需要只读保障、行列级权限策略与审计追踪的自然语言数据分析场景",
+    "评估不同 LLM（本地或托管）在特定 schema 上的 text-to-SQL 表现，定位因业务定义缺失导致的问题"
+   ]
+  },
+  "sha": "ec0d7b9179f6",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6c42eb13c019": {
+  "identity": {
+   "one_liner": "基于 Electron 的本地优先媒体库，扫描本地视频照片并生成缩略图与标签",
+   "review": "Meguri 是一款离线运行的桌面应用，用于浏览、搜索和播放本地视频、图片与音频，采用 Electron + TypeScript + React 构建，数据存于 SQLite，缩略图由内置 ffmpeg 静态二进制生成。它递归扫描指定文件夹并跟踪文件的移动与重命名；无遥测、无账户、不上传文件。macOS 版本尚未公证，首次启动需手动放行。",
+   "highlights": [
+    "提供全文搜索（FTS5）、标签、评分、日期范围过滤，及自动打标签规则（正则、关键词、文件夹）",
+    "通过内置 ffmpeg 为图片和视频生成 WebP 缩略图，悬停可浏览视频场景预览",
+    "以本地 HTTP 服务器流式播放视频，非 faststart 容器即时转封装为 fragmented MP4"
+   ],
+   "use_cases": [
+    "整理和检索磁盘上的大量本地视频、照片与音频文件",
+    "全屏连播播放列表（如按文件夹浏览音乐专辑）或随机探索库中内容",
+    "离线环境下对本地媒体打标签、评分并查看播放历史时间线"
+   ]
+  },
+  "sha": "6c42eb13c019",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

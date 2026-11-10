@@ -2910,5 +2910,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "791f078697b4": {
+  "identity": {
+   "one_liner": "独立本机记忆服务与DSH插件，以原话为事实来源提供持久记忆",
+   "review": "忆核大脑是一个独立运行的本机记忆服务，为DSH（DeepSeek Harness）宿主提供长期记忆存储：原话即刻入库并可检索，后台批量生成摘要与事实，检索带回出处证据。适用于需要会话长期记忆的个人本机部署，需Python 3.10+，服务仅监听本机。数据存于独立SQLite数据目录，提供旧库迁移、备份导出与回滚路径；跨会话检索默认关闭，多人部署需另行实现身份与权限管理。",
+   "highlights": [
+    "原话持久化存储并提供词法索引、可选语义索引与异步摘要/事实独立索引，检索经四路候选加entity_relation一跳关系候选后排序去重回读证据",
+    "提供 /brain 3D首页与 /panel 控制面板，支持记忆查看、手写、置顶归档、显式删除、自然语言试搜、SQLite备份与JSON导出",
+    "后台整理按批量化调度（默认每批12条消息、最长积累900秒），管理口令自动生成本机保存，Windows下密钥以DPAPI加密"
+   ],
+   "use_cases": [
+    "为DSH宿主的AI对话提供可回溯出处的长期记忆",
+    "个人本机部署的记忆数据管理与旧库迁移",
+    "需要本地规则作息、生活事件与待办记录的本地生活层场景"
+   ]
+  },
+  "sha": "791f078697b4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5e9b186df0f": {
+  "identity": {
+   "one_liner": "逐模块构建的 ETF 投研 Agent 学习项目，含可运行代码与验证证据。",
+   "review": "这是一个以「边构建边学习」为形式的 ETF 投研 Agent 项目，面向学习 Agent 工程的开发者。每个模块对应一篇架构文章和一份可运行实现，从离线合成文档对比起步，无需模型密钥。每次运行在 runs/ 目录生成 report.md、manifest.json 与 run.jsonl，支持 CLI 检查。README 明确声明其非实盘基金研究或交易服务，答案质量未作评审。",
+   "highlights": [
+    "提供中英双语模块文章与可运行代码的对照，包含文章到代码的映射",
+    "每次运行生成独立目录，含 report.md、manifest.json 与 run.jsonl，可用 --observe 命令检查",
+    "默认示例使用脚本化 Gateway fixtures，离线运行，不需要模型密钥；另有独立的受限 live runner"
+   ],
+   "use_cases": [
+    "开发者学习 Agent 工程机制（持久化执行、检查点、任务调度等）",
+    "将架构文章与对应可运行代码进行核对阅读",
+    "在本地以合成文档复现 Agent 执行路径并查看证据回读"
+   ]
+  },
+  "sha": "b5e9b186df0f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8ef51c746dce": {
+  "identity": {
+   "one_liner": "面向 MCP 智能体的本地优先记忆 CLI，读取多源数据生成带引用的本地上下文",
+   "review": "Mora 是用 Go 编写的本地记忆 CLI（macOS 签名应用 + brew 安装，也提供 Linux/Windows 安装脚本），把 Gmail、Google Calendar、iMessage、WhatsApp、文件、GitHub Issues 等只读数据复制为本地 Markdown 库与 SQLite 索引，经 MCP 供 Claude Code、Codex 等智能体检索；支持 mora write 保存笔记、Bash 规则警告及 agent 写入策略。README 标注为 alpha 软件，长条目按 16KB/64KB 截断。",
+   "highlights": [
+    "以只读方式读取 Gmail、Google/Apple 日历、iMessage、WhatsApp Desktop、指定文件（含 PDF/Word）与 GitHub Issues，写入本地 Markdown 库与 SQLite 索引",
+    "通过 `mora mcp serve` 提供 MCP 工具（搜索、读取、简报、write_memory 等），并支持 Claude Code Bash 调用的警告规则（opt-in，仅警告不拦截）",
+    "保存与检索路径不调用 AI 模型（可选本地 Ollama 改进搜索）；MCP write_memory 默认 tentative 策略，低风险写入带标签，其余进入提案队列"
+   ],
+   "use_cases": [
+    "让 Claude Code / Codex 等智能体检索本地邮件、日历、消息与文件作为带引用上下文",
+    "用 `mora write` 或 MCP write_memory 让智能体保存会话中的决策与笔记",
+    "为 Claude Code 的 Bash 调用配置规则文件，在命令匹配时向智能体发出提醒"
+   ]
+  },
+  "sha": "8ef51c746dce",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4d197caa8ecf": {
+  "identity": {
+   "one_liner": "面向 GaussDB/openGauss 源码的知识工程工具链，生成学习计划并沉淀为 SQLite/Wiki 知识库",
+   "review": "该工程读取源码、用户手册、历史特性名与 compile_commands.json，生成模块/功能特性/主干流程的学习计划，由 Claude Code 宿主 Agent 与原生子 Agent 执行研究，经两阶段审阅后写入 SQLite 知识库并导出已审 Wiki。面向需要系统学习数据库内核源码的工程团队，支持多人协作与 ECS 图挂接；公开实测覆盖 openGauss 全仓，公司专有版本需自行验收。",
+   "highlights": [
+    "生成模块功能课程（PLAN.md/PLAN.json/WORK-PACKAGES.csv）及全仓覆盖记录，包括无调用边、无历史特性名的文件",
+    "以 SQLite 为权威记录、wiki.git 为知识修订、blobs/ 为冻结原文，导出含四角色视图的已审 Wiki",
+    "支持多人协作流程（team assign/open/export/receive/sync）与 batch 子会话租约机制"
+   ],
+   "use_cases": [
+    "团队按模块系统学习 openGauss/GaussDB 内核源码并沉淀已审知识",
+    "基于 compile_commands.json 与 ECS 图做全仓构建上下文盘点与责任覆盖验收",
+    "多服务器协作分工学习，经中央审阅统一同步知识库"
+   ]
+  },
+  "sha": "4d197caa8ecf",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

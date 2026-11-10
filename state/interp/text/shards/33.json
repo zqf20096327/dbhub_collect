@@ -2598,5 +2598,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "55b3345e153d": {
+  "identity": {
+   "one_liner": "让 AI 代理在 Postgres 分支上写数据的数据库，按规则合并",
+   "review": "Chronos DB 面向希望 AI 代理修改真实数据但不逐条人工审查的团队。每次代理运行获得一个独立的 copy-on-write 世界（分支），运行结束后显示逐行差异；符合合并策略（如 max_deletes=0、max_rows、review_tables）的变更自动合并，否则进入人工审核。支持 Postgres wire 协议和 MCP 服务器，可独立承载数据或附着在已有 Postgres 旁、以单个校验事务写回。引擎源码采用 BUSL-1.1 许可，目前为 0.4.9 公测版，仅实现 Postgres 16 的部分 SQL。",
+   "highlights": [
+    "每次代理运行在独立的 copy-on-write 世界（分支）中进行，fork 仅复制指针，约 2 微秒完成",
+    "合并时在单事务内检查行冲突、约束、合并策略与 merge check，冲突以行形式返回；附着模式下写回原 Postgres",
+    "提供 MCP 服务器与 Chronos Studio（变更审阅、网格浏览、词/过滤/向量搜索、表关系图），支持向量搜索"
+   ],
+   "use_cases": [
+    "让 AI 代理在隔离分支上清洗或修改 CRM 等业务数据，变更符合规则自动落地、超规则进入人工审核",
+    "附着在已有 Postgres 旁，代理的合并变更经检查后以单事务写回生产库",
+    "通过 MCP 将数据库接入 Claude Code 等客户端，代理默认只能读、fork 和修改自己 fork 的世界"
+   ]
+  },
+  "sha": "55b3345e153d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

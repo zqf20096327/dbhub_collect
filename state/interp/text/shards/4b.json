@@ -2363,5 +2363,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "232b1f65d146": {
+  "identity": {
+   "one_liner": "原生 macOS 应用，将 GitHub Stars 同步为本地可搜索、可问答的知识库",
+   "review": "Starcat 是一款原生 macOS 应用，面向 Star 数量较多、需要管理这些仓库的用户。它通过 GitHub OAuth 登录后增量同步 Stars 到本地 SQLite，提供标签、笔记、阅读状态、FTS5 与语义搜索、README 渲染，并可将部分仓库摄入为私有知识库，通过 FTS5、嵌入与 RRF 混合检索实现带引用的 RAG 问答。官方版本的核心功能免费，Pro 工作流与更高 AI 配额需内购或 Direct 许可；需 macOS 15 及以上。",
+   "highlights": [
+    "本地优先：标签、笔记、阅读状态与 RAG 分块存于本地 SQLite，GitHub 令牌与 AI 密钥存于 Keychain；支持 FTS5 关键词搜索、基于嵌入的语义搜索及 FTS5+嵌入+RRF 的混合检索，RAG 回答带可跳转到证据分块的引用",
+    "AI 能力经 BYOK 或自托管代理接入 Gemini、OpenAI、Claude、DeepSeek、Ollama；提供 README 摘要与标签建议（需人工确认）、仓库问答、笔记草稿与 README 翻译",
+    "附带 codebase-memory-mcp（符号级知识图谱与 3D 视图）和 codeflow（架构体检）两个内嵌分析器，并通过 CLI、MCP、浏览器插件、Alfred/Raycast/uTools 读取同一本地数据"
+   ],
+   "use_cases": [
+    "整理和检索大量 GitHub Stars：打标签、记录阅读状态与私有笔记、按 Health 或自定义规则建立智能集合",
+    "将值得保留的仓库摄入为私有知识库，用带引用的 RAG 问答查找用法、构建方式或某功能所在位置",
+    "在不克隆代码的情况下拉取仓库源码，查看符号级知识图谱或进行架构分析；或通过 CLI/MCP/浏览器插件在其他工具中使用同一份本地数据"
+   ]
+  },
+  "sha": "232b1f65d146",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fc72de0e76c3": {
+  "identity": {
+   "one_liner": "将十个编码渠道封装为 OpenAI/Responses/Anthropic 兼容 API 的凭证池网关",
+   "review": "该项目基于 FastAPI 将 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce、小浣熊、灵犀等渠道的接口封装为 OpenAI/Responses/Anthropic 兼容 API，供已有 OpenAI 兼容客户端的用户接入。核心机制包括公共凭证池、健康度调度与会话粘性、按凭证加载模型列表、额度探测与每日签到、按人用量统计与月度账单。项目使用逆向接口，README 注明未经安全审计，仅供学习研究；公网部署需自备反向代理、鉴权与 IP 白名单。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages、/v1/models 等兼容端点，支持流式与非流式",
+    "实现公共凭证池：加密入库、设备码登录、多账号切换、额度探测与每日签到",
+    "按健康度调度选号，支持 模型@渠道 强制指定、到期额度优先与多轮对话凭证粘性"
+   ],
+   "use_cases": [
+    "将多个编码渠道凭证集中托管，供 OpenAI 兼容客户端（如 Codex CLI、Claude Code）统一调用",
+    "团队场景下按人统计请求、token 与成本，并导出月度账单",
+    "个人部署用于学习研究各渠道私有协议的封装与调度机制"
+   ]
+  },
+  "sha": "fc72de0e76c3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -16104,5 +16104,1639 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "51dcc17031c2+2": {
+  "fn": "tinbase/tinbase",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "tinbase logo "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "A pure-JS backend built on PGlite (Postgres compiled to WASM), with an embedded-native-Postgres and an ultralight pure-JS (`@tinbase/pg-mem`) engine too. One command, real Row Level Security, and 1:1 with Supabase's APIs and migration conventions."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    17,
+    7,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "- **Three engines, one API.** Default is embedded native Postgres 17 (macOS/Linux): ~59 MB of RAM at boot, PocketBase-class footprint, zero semantic differences; the first run downloads ~12 MB of binaries. `--engine wasm` runs PGlite (Postgres compiled to WASM) instead - portable, browser-ready, and the default on Windows. `--engine pgmem` is an ultralight pure-JS in-memory engine for local dev / previews - see Engines."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "- **Runs real projects unchanged.** A project's `CREATE EXTENSION` statements for extensions tinbase can't install (pg_cron, pg_net, http, hypopg, …) are skipped rather than aborting; `CREATE INDEX CONCURRENTLY` is applied without the (transaction-illegal) `CONCURRENTLY`; each migration runs with a fresh `search_path` like the Supabase CLI; and Vault, pgmq, cron, pg_net, and `moddatetime` are emulated. As a test, Cap-go/capgo's **335 migrations + seed apply and query cleanly**."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    53,
+    20,
+    53
+   ],
+   [
+    "replace",
+    53,
+    62,
+    53,
+    54,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    70,
+    54,
+    62
+   ],
+   [
+    "replace",
+    70,
+    85,
+    62,
+    63,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    89,
+    63,
+    67
+   ],
+   [
+    "replace",
+    89,
+    90,
+    67,
+    68,
+    [
+     "- **native** (default on macOS/Linux): embedded native Postgres 17. First run downloads platform binaries (~12 MB, from theseus-rs/postgresql-binaries, cached in `~/.cache/tinbase`), then `initdb` with memory-lean settings. ~59 MB RAM at boot. Listens only on a private unix socket (0700 dir, trust auth) - never TCP. macOS/Linux on x64/arm64."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    92,
+    68,
+    70
+   ],
+   [
+    "replace",
+    92,
+    93,
+    70,
+    71,
+    [
+     "- **pgmem** (`--engine pgmem`): an ultralight, pure-JS, in-memory engine via `@tinbase/pg-mem` — our fork of pg-mem — **no WASM**, so it's the lightest option for the browser (RapidNative local-dev / previews). The fork adds the Postgres surface real projects rely on: **PL/pgSQL, triggers, row-level-security policies, correlated subqueries, `information_schema` constraints, MERGE, range/full-text types, and declarative partitioning**. A full Supabase-style bootstrap and real migration sets now apply **unchanged — nothing skipped** (RLS/trigger/PL-pgSQL DDL runs). Runs the REST CRUD surface, email/password auth, **edge functions, realtime (broadcast/presence + `postgres_changes`), and database webhooks**. Caveats vs the Postgres engines: `LISTEN`/`NOTIFY` are no-ops, so realtime/webhook change events are synthesized in JS by the REST layer (every write goes through it in-process); the engine runs with superuser rights, so **RLS policies are created but not enforced per-request** (events are delivered unfiltered, not per-subscriber); **cron** and **pgmq** are absent. Local-dev / preview only — never production."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    112,
+    71,
+    90
+   ],
+   [
+    "replace",
+    112,
+    120,
+    90,
+    91,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    134,
+    91,
+    105
+   ],
+   [
+    "replace",
+    134,
+    146,
+    105,
+    117,
+    [
+     "|Service|Endpoint|Coverage|",
+     "|---|---|---|",
+     "|REST (PostgREST)|`/rest/v1`|select with embedded resources (to-one, to-many, many-to-many via junction, nested, `!inner`, aliases, hints, casts, JSON paths), all common filter operators incl. `or`/`and` trees, full-text search, order/limit/offset (top-level and per-embed), `single`/`maybeSingle`, `count`, insert/bulk insert, upsert (merge/ignore), update, delete, `Prefer` handling, RPC (scalar, `setof`, void, filters on results), PostgREST-shaped errors|",
+     "|Auth (GoTrue)|`/auth/v1`|email/password signup + sign-in, anonymous sign-in, email OTP / magic links / recovery, phone (SMS OTP) sign-in, signup and phone change through Supabase's `[auth.sms.twilio]` provider, session refresh with rotation, `getUser`, `updateUser`, sign-out, admin user CRUD (service key), GoTrue-shaped errors. JWTs are HS256 via WebCrypto; passwords are PBKDF2|",
+     "|Storage|`/storage/v1`|bucket CRUD, upload (raw + multipart), download (with byte ranges), public objects, signed URLs, signed upload URLs, list with folder entries, move/copy, remove, size/MIME limits, a project-wide storage quota. Metadata lives in `storage.objects` with RLS enforced; bytes go through a pluggable driver (fs in Node, memory anywhere)|",
+     "|Edge Functions|`/functions/v1`|`supabase.functions.invoke()` - Supabase-style `Deno.serve(handler)` functions (with `Deno.env`) run unchanged, as do `export default` handlers; loaded from `supabase/functions/<name>/index.{ts,js,mjs}` by the CLI or passed via `createBackend({ functions })`. Web-API functions work as-is; `npm:`/`jsr:`/URL imports still need bundling|",
+     "|Queues (pgmq)|`pgmq.*`|Message queues via a pure-SQL pgmq subset (create/send/read/pop/delete/archive, visibility timeouts). Call from SQL or `supabase.schema('pgmq').rpc(...)`. No extension|",
+     "|Cron|`cron.*`|Scheduled jobs, drop-in with pg_cron's API — `cron.schedule(name, '*/5 * * * *', 'sql')` (also the `'N seconds'` form), `cron.unschedule(...)`, and the `cron.job` / `cron.job_run_details` tables. Schedules match in **UTC**, like hosted pg_cron; an in-process scheduler runs due jobs and logs to `cron.job_run_details`. Jobs run while tinbase is up, with service-role privileges. No extension|",
+     "|HTTP from SQL (pg_net)|`net.*`|`net.http_post` / `net.http_get` / `net.http_delete(...)` enqueue a request that an in-process worker sends, recording the reply in `net._http_response`. Lets a cron job or trigger call an Edge Function or any URL — the common Supabase `cron.schedule(..., $$ select net.http_post(...) $$)` pattern works unchanged. No extension|",
+     "|Database Webhooks|config|Fire HTTP requests on table INSERT/UPDATE/DELETE with Supabase's exact payload (`type`/`table`/`schema`/`record`/`old_record`). Configured via `createBackend({ webhooks })`, `backend.webhooks.register()`, or `supabase/webhooks.json`. Built on the CDC pipeline — no extension needed|",
+     "|Studio (Admin UI)|`/_/`|A Supabase-Studio-style dashboard (React + Radix + Tailwind) with real URL routing and a command palette: table editor (filters, sorting, inline type-aware editing, FK navigation, RLS + role preview), database section (schema visualizer, tables, functions, triggers, enums, indexes, migrations, policies, roles), authentication, storage, edge functions, realtime, automations (cron/queues/webhooks), logs, SQL editor, settings, and a live Advisor. One self-contained HTML file (works in the single binary); log in with the service_role key|",
+     "|Realtime|`/realtime/v1`|Phoenix protocol (v1 JSON and v2 array/binary serializers), `postgres_changes` (INSERT/UPDATE/DELETE, filters) fed by triggers + `pg_notify`, broadcast (incl. binary payloads), presence. WebSocket server is a ~150-line RFC 6455 implementation - no `ws` dependency|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    158,
+    117,
+    129
+   ],
+   [
+    "replace",
+    158,
+    166,
+    129,
+    130,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    239,
+    130,
+    203
+   ],
+   [
+    "replace",
+    239,
+    240,
+    203,
+    204,
+    [
+     "tinbase ships with a built-in dashboard at `/_/` - the same shape as Supabase Studio, with real URL routing (deep links, back/forward), a `Ctrl+K` command palette, light/dark theming, and drag-resizable panels:"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    273,
+    204,
+    237
+   ],
+   [
+    "replace",
+    273,
+    274,
+    237,
+    238,
+    [
+     "Memory footprint comparison"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    238,
+    239
+   ],
+   [
+    "replace",
+    275,
+    276,
+    239,
+    240,
+    [
+     "Measured on an Apple Silicon Mac (48 GB), macOS 15. Same workload for all three: boot with one migrated table, then 1,000 single-row inserts followed by 1,000 filtered list queries. Memory is physical footprint (`vmmap`) for native processes and the sum of `docker stats` for containers. Reproduce with `bench/footprint.ts`; raw numbers in `bench/results.json`."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    240,
+    241
+   ],
+   [
+    "replace",
+    277,
+    287,
+    241,
+    251,
+    [
+     "||tinbase (single binary)|tinbase (native)|tinbase (pg-mem)|tinbase (wasm)|PocketBase v0.39.5|Supabase local|",
+     "|---|---|---|---|---|---|---|",
+     "|Database|real Postgres 17 + RLS|real Postgres 17 + RLS|in-memory, pure-JS¹|real Postgres (PGlite) + RLS|SQLite|Postgres 17|",
+     "|Runtime memory at boot|49 MB|59 MB|71 MB|~610 MB²|15 MB|1,441 MB|",
+     "|Runtime memory after workload|66 MB|100 MB|185 MB|~640 MB²|24 MB|1,626 MB|",
+     "|Data on disk (1k rows)|39 MB|39 MB|0 (in-memory)|40 MB|7 MB|70 MB|",
+     "|Install size|92 MB (58 MB binary + PG)|36 MB³|6.7 MB³|27 MB³|30 MB|2,291 MB⁴|",
+     "|Processes|2|2|1|1|1|12 containers + Docker|",
+     "|1,000 inserts|0.4 s|0.5 s|0.8 s|0.8 s|0.3 s|1.1 s|",
+     "|1,000 filtered reads|0.3 s|0.4 s|0.8 s|0.9 s|0.3 s|1.0 s|"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    288,
+    251,
+    252
+   ],
+   [
+    "replace",
+    288,
+    289,
+    252,
+    253,
+    [
+     "¹ **pgmem** is a pure-JS in-memory engine (local dev / preview) via the `@tinbase/pg-mem` fork. It now runs PL/pgSQL, triggers and RLS-policy DDL (migrations apply unchanged, nothing skipped), but the engine runs as superuser so RLS isn't enforced per-request (realtime/webhook events are unfiltered), and **cron**/**pgmq** are absent. Pure JS (no WASM), the lightest option for the browser. See Engines."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    303,
+    253,
+    267
+   ],
+   [
+    "replace",
+    303,
+    311,
+    267,
+    275,
+    [
+     "|Module|Coverage|Supported|Missing|",
+     "|---|---|---|---|",
+     "|Database (`postgrest-js`)|~85%|full filter grammar, embeds (to-one/to-many/m2m/nested/`!inner`), JSON paths, upsert, count, single/maybeSingle, RPC|aggregates in select, full spread embeds, `.explain()`, `.csv()`, geojson|",
+     "|Auth (`auth-js`)|~80%|email/password, anonymous sign-in, OTP + magic links + password recovery (pluggable mailer), OAuth providers (Google/GitHub presets + generic) with PKCE and identity linking, refresh rotation, user updates, admin CRUD|MFA, SSO/SAML, phone auth|",
+     "|Storage (`storage-js`)|~80%|buckets, upload/download, signed URLs + signed uploads, list/move/copy/remove, size/MIME limits|resumable (TUS) uploads, image transformations|",
+     "|Realtime (`realtime-js`)|~85%|postgres_changes with filters + **per-subscriber RLS filtering** (INSERT/UPDATE), broadcast (incl. binary), presence, v1+v2 serializers|per-row DELETE RLS, private channel auth, DB-triggered broadcast|",
+     "|Edge Functions (`functions-js`)|~70%|`invoke()`; **Deno.serve/Deno.env-style functions run unchanged** + export-default; auth context, project-dir loading|`npm:`/`jsr:`/URL import resolution, `supabase functions deploy`|",
+     "|Type generation|~85%|`tinbase gen types typescript` → `Database` type (Tables/Views/Functions/Enums/Relationships)|composite-type args, multi-schema output|"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    333,
+    275,
+    297
+   ],
+   [
+    "replace",
+    333,
+    336,
+    297,
+    298,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    338,
+    298,
+    300
+   ],
+   [
+    "replace",
+    338,
+    339,
+    300,
+    301,
+    [
+     "tinbase was built for lifo - a project that maps Linux APIs into the browser - to let **Expo apps run fully in the browser with full-stack capability** (database, auth, storage, realtime, no server). It is part of RapidNative. That origin drives the architecture:"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    345,
+    301,
+    307
+   ],
+   [
+    "replace",
+    345,
+    346,
+    307,
+    308,
+    [
+     "tinbase is built by the team behind **RapidNative** — AI that"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    349,
+    308,
+    311
+   ],
+   [
+    "replace",
+    349,
+    355,
+    311,
+    317,
+    [
+     "|Project|What it is|",
+     "|---|---|",
+     "|RapidNative|AI that generates production-ready React Native apps and UIs from a prompt|",
+     "|Lifo|Linux APIs in the browser — real dev tooling with no VM and no container|",
+     "|ORCHD|A multi-tenant workload orchestrator — per-tenant workloads that sleep when idle and wake on the next request|",
+     "|jetplane|A Metro plugin and a thin dev server for Expo — many dev environments per machine|"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    356,
+    317,
+    318
+   ],
+   [
+    "replace",
+    356,
+    357,
+    318,
+    319,
+    [
+     "See them all on rapidnative.com/open-source."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "59ae300a4e64+2": {
+  "fn": "jatixs/tgbotvpscp",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "EN English | RU Русский"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    7,
+    2,
+    3,
+    [
+     " VPS Manager Telegram Bot"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    3,
+    4
+   ],
+   [
+    "replace",
+    8,
+    20,
+    4,
+    14,
+    [
+     " Version 1.27.3",
+     " Build 98",
+     " Python",
+     " GitHub Stars",
+     " Downloads",
+     " Tests",
+     " License GPL-3.0",
+     " Aiogram 3.x",
+     " Docker",
+     " Platform Ubuntu 20.04+"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    14,
+    15
+   ],
+   [
+    "replace",
+    21,
+    25,
+    15,
+    17,
+    [
+     " v1.27.3 — профессиональная экосистема для мониторинга и управления серверной инфраструктурой ",
+     " (Systemd / Docker / API / WebUI / PWA / Multi-Node / Remote SSH / Backup Manager)"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    17,
+    18
+   ],
+   [
+    "replace",
+    26,
+    33,
+    18,
+    19,
+    [
+     " VPS Manager Web UI & PWA Showcase"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    19,
+    22
+   ],
+   [
+    "replace",
+    36,
+    47,
+    22,
+    31,
+    [
+     "1. О проекте",
+     "2. Ключевые возможности",
+     "3. Архитектура",
+     "4. Быстрый старт",
+     "5. Веб-интерфейс",
+     "6. Безопасность",
+     "7. Структура проекта",
+     "8. Документация",
+     "9. Лицензия"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    61,
+    31,
+    45
+   ],
+   [
+    "replace",
+    61,
+    64,
+    45,
+    48,
+    [
+     "- 🎯 **Централизованное управление** — один интерфейс для всех серверов ",
+     "- 📈 **Мониторинг в реальном времени** — мгновенные обновления без перезагрузки ",
+     "- 🔐 **Безопасность** — защита корпоративного уровня с WAF и аудитом "
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    48,
+    49
+   ],
+   [
+    "replace",
+    65,
+    68,
+    49,
+    50,
+    [
+     "- 📱 **Мобильность** — управление с телефона через Telegram "
+    ]
+   ],
+   [
+    "equal",
+    68,
+    139,
+    50,
+    121
+   ],
+   [
+    "delete",
+    139,
+    141,
+    121,
+    121
+   ],
+   [
+    "equal",
+    141,
+    149,
+    121,
+    129
+   ],
+   [
+    "replace",
+    149,
+    160,
+    129,
+    130,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    170,
+    130,
+    140
+   ],
+   [
+    "replace",
+    170,
+    173,
+    140,
+    141,
+    [
+     "📖 Подробнее: ARCHITECTURE.md"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    191,
+    141,
+    159
+   ],
+   [
+    "replace",
+    191,
+    201,
+    159,
+    169,
+    [
+     "1. Получите токен бота в @BotFather",
+     "2. Узнайте свой Telegram ID через @userinfobot",
+     "3. Настройте **Telegram Login Widget (OIDC)** в @BotFather для входа в веб-панель:",
+     " - Отправьте команду `/mybots` и выберите вашего бота.",
+     " - Перейдите в **Bot Settings** ➔ **Login Widget** (или откройте веб-интерфейс BotFather через кнопку в меню).",
+     " - **Client ID**: числовой идентификатор вашего бота (совпадает с цифрами токена до двоеточия `:`, например `1234567890`).",
+     " - **Client Secret**: нажмите **Generate Secret** (или **View Secret**) в настройках Login Widget и скопируйте сгенерированный секретный ключ.",
+     " - В разделе **Allowed URLs** добавьте точный адрес страницы входа вашей панели:",
+     " `https://<ваш_домен_или_ip>/login` (например: `https://dashboard.example.com/login`), а также корень `https://<ваш_домен_или_ip>/`.",
+     " > ⚠️ **Важно:** Telegram OIDC строго проверяет `redirect_uri`. Если точный адрес со страницей `/login` не добавлен в Allowed URLs, при попытке входа Telegram вернет ошибку `redirect_uri required`."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    242,
+    169,
+    210
+   ],
+   [
+    "replace",
+    242,
+    243,
+    210,
+    211,
+    [
+     "1. Откройте @BotFather в Telegram и отправьте команду `/mybots`."
+    ]
+   ],
+   [
+    "equal",
+    243,
+    248,
+    211,
+    216
+   ],
+   [
+    "replace",
+    248,
+    251,
+    216,
+    219,
+    [
+     " - `https://<домен_панели>/login` (например: `https://dashboard.example.com/login`)",
+     " - `https://<домен_панели>/`",
+     " *(Если URL со страницей `/login` не указан, при входе Telegram вернёт ошибку `redirect_uri required`)*."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    253,
+    219,
+    221
+   ],
+   [
+    "delete",
+    253,
+    255,
+    221,
+    221
+   ],
+   [
+    "equal",
+    255,
+    383,
+    221,
+    349
+   ],
+   [
+    "delete",
+    383,
+    385,
+    349,
+    349
+   ],
+   [
+    "equal",
+    385,
+    432,
+    349,
+    396
+   ],
+   [
+    "delete",
+    432,
+    434,
+    396,
+    396
+   ],
+   [
+    "equal",
+    434,
+    440,
+    396,
+    402
+   ],
+   [
+    "replace",
+    440,
+    488,
+    402,
+    403,
+    [
+     "…（48 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    488,
+    490,
+    403,
+    405
+   ],
+   [
+    "replace",
+    490,
+    493,
+    405,
+    406,
+    [
+     "📖 Подробная документация: ARCHITECTURE.md"
+    ]
+   ],
+   [
+    "equal",
+    493,
+    498,
+    406,
+    411
+   ],
+   [
+    "replace",
+    498,
+    504,
+    411,
+    417,
+    [
+     "- 📖 **ARCHITECTURE.md** — Полная архитектура проекта",
+     "- 🛡️ **SECURITY.md** — Безопасный деплой, HTTPS и миграция агентов",
+     "- 🛠️ **CONTRIBUTING.md** — Разработка и тестирование",
+     "- 🧩 **custom_module.md** — Создание модуля для бота",
+     "- 💻 **web_module.md** — Создание веб-модуля (WebUI + Бот)",
+     "- 📝 **CHANGELOG.md** — История изменений"
+    ]
+   ],
+   [
+    "equal",
+    504,
+    513,
+    417,
+    426
+   ],
+   [
+    "replace",
+    513,
+    524,
+    426,
+    427,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    524,
+    532,
+    427,
+    435
+   ],
+   [
+    "replace",
+    532,
+    540,
+    435,
+    436,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    540,
+    548,
+    436,
+    444
+   ],
+   [
+    "replace",
+    548,
+    553,
+    444,
+    445,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    553,
+    561,
+    445,
+    453
+   ],
+   [
+    "replace",
+    561,
+    569,
+    453,
+    454,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    570,
+    454,
+    455
+   ],
+   [
+    "delete",
+    570,
+    572,
+    455,
+    455
+   ],
+   [
+    "equal",
+    572,
+    601,
+    455,
+    484
+   ],
+   [
+    "replace",
+    601,
+    604,
+    484,
+    485,
+    [
+     "📖 Полная документация API: ARCHITECTURE.md#api"
+    ]
+   ],
+   [
+    "equal",
+    604,
+    611,
+    485,
+    492
+   ],
+   [
+    "replace",
+    611,
+    613,
+    492,
+    494,
+    [
+     "1. 🐛 **Сообщить о баге** — Issues",
+     "2. 💡 **Предложить функцию** — Discussions"
+    ]
+   ],
+   [
+    "equal",
+    613,
+    623,
+    494,
+    504
+   ],
+   [
+    "replace",
+    623,
+    637,
+    504,
+    505,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    638,
+    505,
+    506
+   ],
+   [
+    "delete",
+    638,
+    640,
+    506,
+    506
+   ],
+   [
+    "equal",
+    640,
+    643,
+    506,
+    509
+   ],
+   [
+    "replace",
+    643,
+    646,
+    509,
+    510,
+    [
+     "Этот проект распространяется под лицензией **GPL-3.0**. См. файл LICENSE для деталей."
+    ]
+   ],
+   [
+    "equal",
+    646,
+    651,
+    510,
+    515
+   ],
+   [
+    "replace",
+    651,
+    656,
+    515,
+    518,
+    [
+     "- 📧 Почта: jatix.com@mail.ru",
+     "- 💬 Telegram: @jatix",
+     "- 🌐 GitHub: @jatixs"
+    ]
+   ],
+   [
+    "equal",
+    656,
+    663,
+    518,
+    525
+   ],
+   [
+    "replace",
+    663,
+    664,
+    525,
+    526,
+    [
+     "- ☕ **Донат**"
+    ]
+   ],
+   [
+    "equal",
+    664,
+    665,
+    526,
+    527
+   ],
+   [
+    "replace",
+    665,
+    666,
+    527,
+    530,
+    [
+     " Версия: 1.27.3 (Build 98) ",
+     " Лицензия: GPL-3.0 license ",
+     " Статус: Релиз "
+    ]
+   ],
+   [
+    "equal",
+    666,
+    667,
+    530,
+    531
+   ],
+   [
+    "replace",
+    667,
+    674,
+    531,
+    532,
+    [
+     " Сделано с ❤️ для сообщества DevOps"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "783a9824bec4+2": {
+  "fn": "Kuangcp/DB-G",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "DB-G 图标"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    7,
+    2,
+    3,
+    [
+     " 简体中文 · English"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    9,
+    3,
+    5
+   ],
+   [
+    "replace",
+    9,
+    10,
+    5,
+    6,
+    [
+     "Listed on Awesome MyGo"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    15,
+    7,
+    9,
+    [
+     "对标 db-k 的数据库客户端（Go + mygo）。",
+     "**已完成与后续规划见 `Roadmap.md`**"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    34,
+    9,
+    28
+   ],
+   [
+    "replace",
+    34,
+    35,
+    28,
+    29,
+    [
+     "|平台|文件|运行要求|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    29,
+    30
+   ],
+   [
+    "replace",
+    36,
+    38,
+    30,
+    32,
+    [
+     "|Windows x64|`db-g-setup-<版本>-amd64.exe`|Windows 10 / 11；每用户安装，支持签名自动更新|",
+     "|Linux x64|`db-g-<版本>-linux-amd64.tar.gz`（含 `install.sh`）或 `db-g_<版本>_amd64.deb`|GTK 3（Arch `gtk3`、Debian/Ubuntu `libgtk-3-0`、Fedora `gtk3`）；归档解压后运行 `sh install.sh` 安装到用户目录|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    45,
+    32,
+    39
+   ],
+   [
+    "replace",
+    45,
+    47,
+    39,
+    41,
+    [
+     " 百万行级视口布局，性能基准见 docs/spike-results.md 的 A1 一节）；",
+     " 编辑器/结果分隔线按窗口高度取比例，`Alt+D` 随时隐藏/显示结果区"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    41,
+    42
+   ],
+   [
+    "replace",
+    48,
+    49,
+    42,
+    43,
+    [
+     " （行号/截断徽章/错误横幅/停止取消/500 行与 1MB/16MB 预算）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    43,
+    44
+   ],
+   [
+    "replace",
+    50,
+    51,
+    44,
+    45,
+    [
+     " （JSON 持久化/新建/编辑/删除/状态点）；SQLite 对象树（懒加载）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    45,
+    46
+   ],
+   [
+    "replace",
+    52,
+    57,
+    46,
+    51,
+    [
+     " 子文件夹上移到父级）、文件夹折叠与子项计数；每个数据源显示对应品牌图标；",
+     " 连接行/文件夹行无边框，悬停浅底；**Ctrl+拖动**排序、把连接或文件夹拖入文件夹；",
+     " 顶部搜索框按连接名/文件夹名/**已加载对象名**过滤并自动展开命中（只覆盖已加载对象）；",
+     " 连接弹窗可选所属文件夹；连接行右键菜单：**复制数据源**（同文件夹生成副本、",
+     " 名称自动去重）、**删除连接**（仍需二次确认）"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    51,
+    52
+   ],
+   [
+    "replace",
+    58,
+    60,
+    52,
+    54,
+    [
+     " 单组最多 5000）；查询在后台线程，连接/展开不再同步拉全量对象；",
+     " 编辑器补全目录只取前 2000 条，避免 6 万张表把 UI 和补全拖死"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    54,
+    55
+   ],
+   [
+    "replace",
+    61,
+    63,
+    55,
+    57,
+    [
+     " 连接身份指纹一致时展开零查询，过期先用后刷；删除连接、改目标地址、",
+     " 手动「重载对象树」会自动清理缓存"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    65,
+    57,
+    59
+   ],
+   [
+    "replace",
+    65,
+    66,
+    59,
+    60,
+    [
+     " 超时后主动取消驱动的语句并在结果区显示「查询超时（Ns），已取消」"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    60,
+    61
+   ],
+   [
+    "replace",
+    67,
+    72,
+    61,
+    66,
+    [
+     " —— 连接、执行、对象树、列目录（含主键）、补全、导出；四个驱动都实现了对象",
+     " DDL 查看；PostgreSQL / MySQL / ClickHouse 支持顶栏切换 schema/库（MySQL/CK 显示库名，",
+     " PG 显示「库.schema」），切换后补全、DDL、裸表名查询都跟随当前 schema；",
+     " MySQL 连接不填默认库时也能按库惰性加载对象与列目录；",
+     " PostgreSQL 支持写操作，ClickHouse 只读"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    66,
+    67
+   ],
+   [
+    "replace",
+    73,
+    80,
+    67,
+    74,
+    [
+     " `~/.config/db-g/consoles/<connectionID>-<consoleID>.sql`；标签条/工作区切换、防抖自动落盘、",
+     " Ctrl+S 立即保存、重启恢复工作区与控制台正文/光标。**关闭标签（×）只是移出当前",
+     " 工作区，文件保留**；右键「删除…」才删元数据与 .sql。侧栏每个数据源下列出它的",
+     " 全部控制台，可重新打开。标签按「数据源 / 控制台」显示（单控制台时省略控制台名），",
+     " 放不下的标签收进标签条末尾的 More 菜单，工作区切换器始终可见；**新建控制台只在",
+     " 侧栏数据源下的入口**。**按住 Ctrl 拖动标签**调整工作区内顺序；**Ctrl+Tab** 在最近",
+     " 使用的两个控制台之间切换（Alt-Tab 式）。"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    74,
+    75
+   ],
+   [
+    "replace",
+    81,
+    101,
+    75,
+    95,
+    [
+     " **多语句执行**（有选区跑选区、无选区跑光标语句；逐条顺序执行、失败即停、",
+     " 结果按语句分 Tab、编辑器行底色标记语句状态）；",
+     " **结果区**：**单元格级选择**（两级高亮：选中格最深、所在行浅色、其余行斑马纹",
+     " 交替，`Ctrl+C` 复制选区（单格时只复制该格））、整行复制、右键「复制本行 → INSERT」；",
+     " 多行多列选区右键「**复制选区**」子菜单（TSV / 含表头 TSV / CSV），或",
+     " 「**导出选区**」子菜单导出为 CSV / JSON / SQL INSERT；",
+     " **查看完整内容**：合法 JSON 渲染成可折叠树（键排序、展开/收起、类型着色、",
+     " 复制原文），其它内容按原文本；右键表头排序（NULL 总在最后）与每列筛选、",
+     " **取更多**（派生表分页追加）、**导出** CSV / JSON / SQL INSERT",
+     " （含全量流式导出，重新执行查询）；",
+     " **结果钉住**：图钉把查询结果固定成最左侧结果 Tab（仅查询结果，最多 10 个），",
+     " 新执行时 pinned Tab 保留在左、新结果追加到右；切控制台各自保留，重启消失（内存态）；",
+     " **结果区底栏**：显示当前数据库名、数据源版本（连接后异步读取）与数据源标签；",
+     " 每个数据源最多 3 个彩色标签，在连接弹窗里输入后 Enter 添加（可模糊搜索复用已有标签），",
+     " 标签右侧 × 移除，点色块循环换色；",
+     " **SQL 历史**（每个数据源一个 `history/<connectionID>.jsonl`，最多保留 5000 条，",
+     " 到 6000 条才惰性裁剪；面板展示最近 100 条可插入/复制，完整记录直接看文件）；",
+     " **对象树**双击插入预览 SQL（复用该数据源已有控制台并追加带分号的 `SELECT ... LIMIT 200`，没有才新建；不自动执行）、右键查看 DDL（只读 SQL 编辑器：保守格式化 +",
+     " 语法高亮 + 鼠标选中部分复制；选中对象后 `Ctrl+Q` 也可打开）；",
+     " **保守 SQL 格式化**（只改空白与关键字大小写，可撤销）"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    103,
+    95,
+    97
+   ],
+   [
+    "replace",
+    103,
+    106,
+    97,
+    100,
+    [
+     " 提交前逐条参数化 SQL 预览，**单事务**执行，影响行数 ≠ 1 整体回滚；",
+     " JOIN / 视图 / 主键不在结果里 / 别名表达式列一律只读（工具条显示原因）；",
+     " 写操作需要驱动声明 `CapEditableResult` + 实现 `Transactional`（sqlite / mysql 均已实现）"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    100,
+    101
+   ],
+   [
+    "replace",
+    107,
+    116,
+    101,
+    110,
+    [
+     " `Ctrl+Space` 显式触发；表/视图目录按连接缓存（TTL 5 分钟，顶栏「设置」里",
+     " 可手动「刷新补全缓存」）；**关键字/类型/函数随数据源方言**（MySQL 的",
+     " AUTO_INCREMENT / ENGINE / GROUP_CONCAT，PostgreSQL 的 RETURNING / SERIAL，",
+     " ClickHouse 的 LowCardinality / DateTime64，SQLite 的 AUTOINCREMENT 等），",
+     " 编辑器语法高亮同步使用同一份方言词表；列补全按**光标所在语句/子查询引用的表**提示",
+     " （FROM · JOIN · UPDATE · INTO，支持多表 JOIN、别名与 CTE 展开；**函数/表达式",
+     " 括号内（sum、avg、coalesce、WHERE (…)）也照常补列**；语句里没有表时不出列）；",
+     " FROM/JOIN/UPDATE/INTO 后正在写表名时优先提示表/视图；相邻语句漏写分号时，",
+     " 补全按行首 `SELECT`/`INSERT` 等关键字隔开，不会把下一条语句的表混进当前补全"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    110,
+    111
+   ],
+   [
+    "replace",
+    117,
+    118,
+    111,
+    112,
+    [
+     " 建议作为补全菜单第一项（Detail「AI」），Tab 才插入；光标/正文版本变化后旧建议自动丢弃"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    112,
+    113
+   ],
+   [
+    "replace",
+    119,
+    122,
+    113,
+    116,
+    [
+     " 任意 OpenAI-compatible 服务；默认只发送表结构 + 当前 SQL，样本/历史/错误日志逐项开启；",
+     " 发送前可查看完整上下文；流式回复，生成的 SQL 需用户点「插入 SQL」才进入编辑器；",
+     " 设置窗口「AI」分区配置服务地址/模型/API Key（本机加密）；会话按工作区保存，支持多段历史切换与新建（搜索、滚动分页）；标题默认取首条消息截取，可在设置里开关 AI 生成标题"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    116,
+    117
+   ],
+   [
+    "replace",
+    123,
+    126,
+    117,
+    120,
+    [
+     " 节点按代价着色并显示 rows/actual；支持 SQLite `EXPLAIN QUERY PLAN`、PostgreSQL JSON、",
+     " MySQL JSON/TREE、ClickHouse JSON，解析失败回退原始结果；ANALYZE 每次确认且只允许",
+     " SELECT/WITH；可一键把计划树交给 AI 做诊断"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    120,
+    121
+   ],
+   [
+    "replace",
+    127,
+    128,
+    121,
+    122,
+    [
+     " 结果用 diff 预览，用户点「应用修复」或「应用并执行」才改编辑器；模型没返回 SQL 代码块时明确报错"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    129,
+    122,
+    123
+   ],
+   [
+    "replace",
+    129,
+    130,
+    123,
+    124,
+    [
+     " 默认弹窗提醒，连接档案可开启「高危 SQL 直接阻断」；不依赖 AI，AI 只负责解释"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    124,
+    125
+   ],
+   [
+    "replace",
+    131,
+    136,
+    125,
+    130,
+    [
+     " 0600；存量明文加载时自动加密回写，密钥变更导致解不开时给出警告并要求重填）；",
+     " 连接档案**导出/导入**（默认不含密码；导入去重、id 冲突重映射；设置窗口操作）；",
+     " 连接弹窗「复制」按 key: value 复制，**包含明文密码**；「测试连接」等待中可随时",
+     " **取消**；",
+     " 侧栏状态点：灰=未连接、绿=连接中、红=打开失败（悬停看原因）。"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    130,
+    131
+   ],
+   [
+    "replace",
+    137,
+    140,
+    131,
+    134,
+    [
+     " （纯文本：时间、级别、标签、消息、key=value；一次启动一个文件，`0600`）；",
+     " 记录启动/连接/执行（SQL 截断到 200 字符，不再记录结果）/控制台/补全加载失败/panic",
+     " 堆栈；设置窗口可打开日志目录。DSN 与密码字段自动脱敏。"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    134,
+    135
+   ],
+   [
+    "replace",
+    141,
+    145,
+    135,
+    139,
+    [
+     " `Ctrl+Enter` 执行、`Ctrl+S` 保存、`Ctrl+C` 复制（编辑器内为复制文本、结果区为复制单元格）、",
+     " `Ctrl+Y` 复制当前行、`Ctrl+D` 删除当前行/选区、`Ctrl+Shift+F` 格式化、",
+     " `Ctrl+Tab` 切换最近使用的控制台、`Alt+D` 显隐结果区、`Ctrl+Q` 查看所选对象 DDL、",
+     " `Alt+\\` 请求 AI 内联补全"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    139,
+    140
+   ],
+   [
+    "replace",
+    146,
+    148,
+    140,
+    142,
+    [
+     " 圆角、界面字号，修改即时生效并存 `~/.config/db-g/theme.json`；支持主题文件",
+     " 导出/导入（带 app/version 校验，非法字段逐项忽略）；设置窗口「外观」分区实时预览"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    142,
+    143
+   ],
+   [
+    "replace",
+    149,
+    156,
+    143,
+    150,
+    [
+     " （同一路径复用，不复制文件）；8 MiB 上限，非 UTF-8 / 含 NUL / 非 `.sql` 直接拒绝；",
+     " 写回时保留原文件 BOM、换行风格与权限；",
+     " 编辑防抖自动写回原文件；每秒、窗口获得焦点、执行/保存前检查磁盘变化——",
+     " 本地干净自动重载，本地有改动则暂停自动写并在编辑器上方提示",
+     " 「重新加载 / 保留本地 / 另存为」，执行或保存前弹窗确认；",
+     " 写盘前校验磁盘内容，绝不覆盖外部编辑；文件缺失不擅自重建（可重新创建/另存为），",
+     " 启动时从工作区移除；删除控制台只解除绑定，保留用户文件"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    150,
+    151
+   ],
+   [
+    "replace",
+    157,
+    162,
+    151,
+    156,
+    [
+     " 或当前运行版本更新时，顶栏设置图标右侧出现安装/升级图标；确认后把当前程序原子复制到",
+     " `bin/db-g`，写入 `version`（`build=10000` 数值 + 展示版本），并生成",
+     " `~/.local/share/applications/db-g.desktop` 与 `~/.local/share/icons/db-g.png`",
+     " （desktop 的 Icon 用绝对路径，不依赖图标缓存），之后可从应用菜单启动；",
+     " 路径遵循 `XDG_CONFIG_HOME` / `XDG_DATA_HOME`"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    156,
+    157
+   ],
+   [
+    "replace",
+    163,
+    164,
+    157,
+    158,
+    [
+     " Release；应用内置 mygo 原生更新窗口，自动检查、下载、校验签名并在下次启动生效"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    158,
+    159
+   ],
+   [
+    "replace",
+    165,
+    167,
+    159,
+    161,
+    [
+     " 编辑区、结果区、功能界面三套字体（字体族 + 字号，功能界面字号跟随外观），带实时预览，",
+     " 存 `~/.config/db-g/fonts.json`（旧 `editor.json` 自动迁移）"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    175,
+    161,
+    169
+   ],
+   [
+    "replace",
+    175,
+    179,
+    169,
+    170,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    183,
+    170,
+    174
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

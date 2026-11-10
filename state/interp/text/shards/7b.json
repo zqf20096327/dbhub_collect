@@ -3177,5 +3177,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "925389106ee0": {
+  "identity": {
+   "one_liner": "ClickHouse：开源列式数据库，实时生成分析报表",
+   "review": "ClickHouse 是一个开源列式数据库管理系统，用于实时生成分析数据报告，采用 C++ 编写，支持分布式部署。安装方式为通过 shell 脚本一键下载，覆盖 Linux、macOS 和 FreeBSD 平台。该项目由 ClickHouse 公司维护，提供云端托管服务，按月发布版本并举办社区发布电话会议，同时运营文档、教程、Slack/Telegram 社区等配套资源。",
+   "highlights": [
+    "列式存储架构，支持实时生成分析数据报告",
+    "提供 Linux/macOS/FreeBSD 平台的脚本安装方式",
+    "以 Apache 2.0 许可证开源，附带官方云端服务选项"
+   ],
+   "use_cases": [
+    "搭建分析型数据报表查询系统",
+    "部署小型分析集群（官方教程提供搭建与查询指引）",
+    "使用托管服务快速启动查询而不做本地安装"
+   ]
+  },
+  "sha": "925389106ee0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "54cbd12d78c4": {
+  "identity": {
+   "one_liner": "数据转换、集成与可视化一体化软件，基于热加载插件架构连接多种数据源",
+   "review": "MetaForge 是一款集数据转换、集成与可视化于一体的软件，面向需要统一管理多种数据源的用户。它提供数据源管理、SQL 查询控制台、数据集构建、仪表盘与报表、工作流、文件存储及通知等功能，连接器、转换器和存储后端均以热加载插件形式实现。运行需 JDK 21、Node.js 20 与 pnpm，支持 Docker 部署，元数据库默认内嵌 H2，也可选用 MySQL、PostgreSQL 等。",
+   "highlights": [
+    "支持在单一控制台连接、测试和管理 50+ 种数据源，涵盖关系型、NoSQL、大数据引擎、消息队列与文件系统",
+    "提供 IDE 风格 SQL 编辑器（语法高亮、格式化、执行历史与导出）、可复用数据集及拖拽式仪表盘",
+    "连接器、转换器与存储后端均为热加载插件；支持 S3/OSS/HDFS 文件读写、钉钉与邮件通知及可配置 AI 提供商的对话助手"
+   ],
+   "use_cases": [
+    "在统一控制台中集中管理 ClickHouse、Hive、ElasticSearch 等多种数据源并执行查询",
+    "通过工作流串联数据任务，并调度与分享报表",
+    "从表或临时查询构建可复用数据集，制作图表与监控视图"
+   ]
+  },
+  "sha": "54cbd12d78c4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "38dc068f86d8": {
+  "identity": {
+   "one_liner": "纯C零依赖的列式分析引擎，列分析+图遍历共享单一DAG流水线",
+   "review": "Rayforce是纯C编写的可嵌入分析引擎，提供Rayfall类Lisp查询语言、C API和Python绑定。查询经懒执行DAG、多遍优化器与执行期字节码编译，以1024行morsel并行执行；内置图算法与HNSW向量索引。make lib可构建为仅依赖libc/libm/pthreads的静态库嵌入应用。MIT许可。",
+   "highlights": [
+    "懒执行DAG配多遍优化器（类型推断、常量折叠、谓词/投影下推等），执行期将元素级子树编译为字节码，在1024行morsel批次上并行求值",
+    "图引擎提供双向CSR存储及BFS、Dijkstra、A*、PageRank、Louvain等算法，支持因子化执行；含多度量HNSW向量索引和可下推过滤条件的ANN查询",
+    "自研buddy分配器与slab缓存，COW引用计数，不使用系统分配器；支持mmap列式存储、CSV并行解析、splayed与按日期分区表"
+   ],
+   "use_cases": [
+    "将分析引擎以静态库形式嵌入C/C++应用，可通过链接期section GC剔除不需要的解析器等组件",
+    "时间序列与列式数据分析，通过Rayfall REPL或C API进行select、join、pivot、窗口等查询",
+    "图结构数据分析场景，如图遍历、PageRank、社区检测，或结合HNSW做带过滤条件的近邻检索"
+   ]
+  },
+  "sha": "38dc068f86d8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "62bc42c71369": {
+  "identity": {
+   "one_liner": "离线优先的自托管任务规划器，以可视化周时间线组织任务",
+   "review": "Will Be Done 是一个面向个人周计划的本地优先任务管理器：任务可放置到周时间线列中拖拽调整，离线时读写浏览器端本地数据库，联网后跨设备同步。底层使用作者自研的 HyperDB 数据层。自托管仅需一条 Docker 命令，默认 SQLite 存储，无需 Redis 或外部数据库服务；另有云版本通过付费计划盈利，自托管版本无付费功能限制。",
+   "highlights": [
+    "支持 Docker 单命令自托管，默认 SQLite 存储，可选 Turso Cloud 或 tursod，无需 Redis、外部数据库或 S3",
+    "提供 HTTP API（自托管在 /api/docs），用 Bearer token 访问任务、项目、日程等数据",
+    "支持 Vim 键位导航、循环任务模板、思维导图、Stash 焦点列表，以及 Todoist/TickTick 导入"
+   ],
+   "use_cases": [
+    "个人每周任务规划与拖拽式日程再平衡",
+    "离线环境下的任务读写，恢复联网后多设备同步",
+    "自托管保存个人任务数据，避免交由第三方托管"
+   ]
+  },
+  "sha": "62bc42c71369",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

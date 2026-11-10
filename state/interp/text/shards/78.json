@@ -2336,5 +2336,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b73284f96852": {
+  "identity": {
+   "one_liner": "SQLite 数据库引擎源码仓库，含自 2000 年起的完整源码与构建脚本",
+   "review": "该仓库是 SQLite 数据库引擎源码树的 Git 镜像，官方权威版本由 Fossil 分布式版本控制系统管理，check-in 名称与 Git 命名不一致。源码属公有领域，因此通常不接受 pull request。支持 configure/make 或 MSVC 构建 sqlite3 CLI 与 amalgamation 文件 sqlite3.c，部分测试目标需 TCL 8.6+。适合需要从源码编译或审阅 SQLite 实现的开发者。",
+   "highlights": [
+    "包含自 2000-05-29 起的 SQLite 完整源代码、部分测试与文档",
+    "支持 Unix（configure + make）和 Windows MSVC（make.bat/Makefile.msc）构建，可生成 sqlite3、sqlite3.c（amalgamation）与 sqldiff",
+    "源码处于公有领域；src/、test/、tool/、ext/、doc/ 目录分别存放核心源码、TCL 测试脚本、构建工具（含 Lemon 解析器生成器）及扩展如 FTS5、RTREE"
+   ],
+   "use_cases": [
+    "需要自行从源码编译 SQLite 命令行工具、sqlite3.c amalgamation 或 sqldiff 的开发者",
+    "通过 Fossil 或镜像获取指定历史版本源码，并依据 manifest.uuid 核对官方 check-in 名称、验证代码完整性",
+    "需要构建带 FTS5、RTREE 等扩展的 SQLite 或使用 tclextension-install 安装 TCL 扩展并运行 test/releasetest 的场景"
+   ]
+  },
+  "sha": "b73284f96852",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb344f132039": {
+  "identity": {
+   "one_liner": "终端内 MongoDB 日志与性能分析 TUI，按查询形状聚合慢查询并展示运行态信息。",
+   "review": "MongoScope 是一个终端 TUI 工具，用于解析 mongod 日志文件或连接活库读取 system.profile，将慢查询按形状分组并按次数、延迟和执行计划排序，同时提供 currentOp、副本集延迟、索引统计和日志尾随等标签页。面向在服务器上无 GUI、通过 SSH 排查 MongoDB 问题的开发与运维人员。单二进制运行，静态解析默认读取最后 100k 行日志；root 属主的日志目录可通过短时 sudo 读取，程序本身不以 root 运行。基于 Bun 与 OpenTUI 构建，MIT 协议。",
+   "highlights": [
+    "按查询形状（shape）聚合 mongod 日志中的慢查询，附次数、平均耗时、examined/returned、执行计划与趋势 sparkline，可导出 JSON/CSV/Markdown",
+    "提供 Live Ops（currentOp、COLLSCAN 高亮、kill-op、collection top）、副本集拓扑与 oplog 窗口、索引清单与 $indexStats、日志尾随五类面板",
+    "单二进制、键盘驱动，支持 --log-path / --uri 等 CLI 参数，连接凭据可存入 OS keychain（Bun.secrets），多主题配置持久化"
+   ],
+   "use_cases": [
+    "故障排查后拿到一份 mongod.log，需要在终端里快速查看慢查询模式、扫描行数与执行计划",
+    "自托管 MongoDB 且不使用 Atlas 工具，凭文件访问权限或连接字符串做日志与 system.profile 分析",
+    "通过 SSH 登录数据库主机的现场处置：查看 currentOp、COLLSCAN、副本延迟、选举与索引构建进度"
+   ]
+  },
+  "sha": "cb344f132039",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f22bcc85e0a0": {
+  "identity": {
+   "one_liner": "为编码代理提供本地记忆的 MCP 服务器，单二进制加单 SQLite 文件。",
+   "review": "palace-rs 是一个用 Rust 编写的 MCP 服务器，为 Claude Code、Cursor、Gemini CLI 等编码代理在会话之间保存决策、命令和偏好。它将文本按原文存入单个 SQLite 文件，使用 ONNX Runtime 在本地 CPU 上生成嵌入（默认 all-MiniLM-L6-v2），检索融合 BM25 与余弦相似度，并通过用户级 hooks 在会话启动和提交提示时自动注入相关记忆。macOS Intel 平台不受支持，嵌入模型需首次联网下载。",
+   "highlights": [
+    "以 MCP 服务器运行，数据存储在单一 SQLite 文件，嵌入在本地 CPU 上通过 ONNX Runtime 计算",
+    "检索融合 BM25 关键词评分与本地嵌入余弦相似度，按 preference/decision/how_to 等意图分类加权，结果附带评分来源分解",
+    "提供四个用户级 hooks：会话启动注入协议与近期日记，提示提交时检索匹配内容，停止时写入日记与决策"
+   ],
+   "use_cases": [
+    "让编码代理跨会话记住项目决策、修复记录与个人偏好，无需重复解释架构",
+    "在完全离线或不出网的环境管理代理记忆（首次下载嵌入模型除外）",
+    "在多个代理工具（Claude Code、Codex、Cursor 等）之间共享同一份项目记忆"
+   ]
+  },
+  "sha": "f22bcc85e0a0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a92d4a490de6": {
+  "identity": {
+   "one_liner": "个人财富管理套件，将多机构账户数据采集到本地 DuckDB 并生成统一报告。",
+   "review": "wealthdb 从银行、券商、养老金和私募平台采集持仓、交易与文档，整合到本地数据库，通过 CLI、本地仪表盘和 MCP 服务器输出净值、收益、穿透持仓、收益率与现金流报告。数据默认留在本机；README 明确警示采集器持有完全权限凭证，要求使用前自行完成安全审计。",
+   "highlights": [
+    "提供按日期和币种查询的净值与资产配置报告，支持时间加权与资金加权收益计算及基准对比",
+    "将基金穿透至底层股票和债券，按资产类别、行业、国家等维度汇总真实敞口",
+    "通过 MCP 服务器向 AI 代理提供只读报告查询，无写入工具且数据库以只读方式挂载"
+   ],
+   "use_cases": [
+    "需要跨多家机构账户统一查看家庭净资产、持仓与现金流的家庭",
+    "希望用 AI 代理以只读方式查询个人财务数据而不暴露银行凭证的用户",
+    "需要计算各账户、组合及整体投资回报并区分内部转账的场景"
+   ]
+  },
+  "sha": "a92d4a490de6",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49ce96368f71": {
+  "identity": {
+   "one_liner": "基于 RAG 的学习助手，仅根据用户上传材料作答并附页面引用",
+   "review": "面向准备技术面试的编程初学者，该应用支持上传 PDF/MD/TXT 材料，生成带页码引用的问答、经逐字校验的高亮、闪卡和模拟面试题。混合检索（关键词+语义，RRF 融合）配合 pgvector 实现；引用、高亮、评分均由代码逐字校验而非依赖 AI。界面与示例材料为巴西葡萄牙语，不支持扫描版 PDF，API 无登录仅限本机访问。",
+   "highlights": [
+    "检索采用关键词与语义混合搜索，用 Reciprocal Rank Fusion 合并结果；引用需逐字存在于文档中，由代码而非 AI 校验",
+    "模拟面试支持 Free/Guided/STAR 三种作答格式，评分由代码计算（60% 内容 + 40% 形式），Gemini 输出经 Zod schema 校验",
+    "Docker Compose 一键启动三个容器，合计内存占用约 200 MB，可运行于 Gemini 免费额度，带每分钟 20 次请求限制"
+   ],
+   "use_cases": [
+    "初学者上传讲义与笔记，针对 junior 开发面试进行带引用来源的问答复习",
+    "生成闪卡（间隔重复）与选择题/开放题模拟考试进行练习",
+    "按自定义标准在 PDF 上做多色高亮并跳转定位原文段落"
+   ]
+  },
+  "sha": "49ce96368f71",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

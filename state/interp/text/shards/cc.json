@@ -2758,5 +2758,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d2a953082682": {
+  "identity": {
+   "one_liner": "自托管的 webhook 收件箱服务，将 HTML 表单提交转发到多种通知渠道。",
+   "review": "HookForms 是一个自托管的 webhook 收件箱服务：将 HTML 表单指向 /hooks 端点后，提交内容会以对应平台格式送达 Discord、Slack、Teams、Telegram、ntfy、邮箱或任意 webhook URL。0.2 版为单容器 Rust 二进制 + SQLite 文件存储，通过 Docker Compose 或 cargo 运行，数据库在首次启动时自动创建迁移。",
+   "highlights": [
+    "支持 Discord、Slack、Teams、Telegram、ntfy、email 及任意 webhook URL，可按 URL 自动识别渠道类型，同一收件箱多渠道并行通知",
+    "邮件支持 Gmail (OAuth)、Resend、SendGrid、SMTP，可全局或按收件箱配置；可选 Cloudflare Turnstile 防机器人",
+    "0.2.0 为单容器 Rust 二进制，数据存于 SQLite 卷，提供 import-postgres 命令从 0.1 Python 版 Postgres 数据导入"
+   ],
+   "use_cases": [
+    "为静态站点或自建网站的 HTML 联系表单提供无后端的提交接收入口",
+    "需要将表单或 webhook 事件推送到即时通讯渠道（Discord/Slack/Telegram 等）的团队",
+    "从 0.1 Python/Postgres 版本迁移并保持 API 与 API key 兼容的既有部署"
+   ]
+  },
+  "sha": "d2a953082682",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74d0b9a4c403": {
+  "identity": {
+   "one_liner": "Laravel 数据库安全工具包，静态解析迁移实际发出的 SQL，检测锁与停机风险",
+   "review": "这是 Composer 包，为 Laravel 应用（PHP 8.4+、Laravel 12/13、PostgreSQL 18+/MySQL 8.4+）提供迁移风险检查：读取迁移真正生成的 SQL（包括 DB::statement），审计线上 schema，检测漂移与安全问题。结果只有 pass/fail/undetermined 三值，会话只读、不加锁、不写入，未获取权限时报告 undetermined 而非申请更高权限。",
+   "highlights": [
+    "lint 迁移实际发出的 SQL，给出锁与停机风险的三值结果：pass、fail 或带命名原因的 undetermined",
+    "只读检查：读目录与状态视图、自设会话超时、不加锁不写入，debt ledger 存于仓库文件",
+    "提供 lint/audit/security/deploy/analyse/format/guard/agent 八个套件，通过 Artisan 命令运行"
+   ],
+   "use_cases": [
+    "部署前检查迁移对 PostgreSQL/MySQL 的锁与停机影响，判断是否需要维护窗口",
+    "在 CI 中以确定性守卫拦截迁移风险，输出 pass/fail/undetermined",
+    "以最小权限角色（pg_monitor 或 performance_schema 读取）审计线上 schema 与安全配置"
+   ]
+  },
+  "sha": "74d0b9a4c403",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8890b8b8211e": {
+  "identity": {
+   "one_liner": "面向 SQL Server 的默认只读 MCP 服务器，提供模式发现、SELECT 查询与执行计划分析。",
+   "review": "这是一个 .NET 实现的 Model Context Protocol 服务器，连接一个或多个 Microsoft SQL Server，提供 schema 元数据读取、仅限 SELECT 的查询（结果以 CSV 内联或快照返回）、执行计划分析以及需显式开启的写操作工具。配置基于多 profile 合并机制（appsettings.json、环境变量），行数、超时等有硬性上限。运行需 .NET 10.0 及以上运行时、SQL Server 和连接字符串，可通过 NuGet 包、dotnet 全局工具或源码运行。",
+   "highlights": [
+    "默认只读：SQL 经 ScriptDom 解析，仅接受单个 SELECT 批处理，拒绝 SELECT INTO、变量赋值、NEXT VALUE FOR、外部数据源函数及加锁提示（NOLOCK 等仍允许）",
+    "提供 list_profiles、get_object、run_query、analyze_query、run_command 五个工具；run_query 的 snapshot=true 和实际计划分析可经 MCP Tasks 协议异步轮询",
+    "多 profile 配置支持 appsettings.json、分层环境变量与扁平环境变量按字段合并；行数上限（内联 1000/快照 50000）与超时上限在启动时钳制并记录警告"
+   ],
+   "use_cases": [
+    "让 LLM 智能体安全地探索 SQL Server 数据库结构与数据（默认仅 SELECT）",
+    "对只读查询进行执行计划分析，获取成本、操作符、基数、缺失索引等摘要",
+    "通过 Entra/Azure AD 认证连接 Azure SQL，或以多个 profile 从单一部署管理多台服务器"
+   ]
+  },
+  "sha": "8890b8b8211e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

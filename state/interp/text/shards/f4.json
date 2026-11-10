@@ -2865,5 +2865,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f5e59f6bf2ff": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 与 Razor Pages 的自托管个人博客平台",
+   "review": "Moonglade 是面向开发者的自托管博客系统，提供文章发布、评论互动、RSS/Atom、站点管理等功能，作者即 https://edi.wang 的实际使用者。技术上采用 .NET 10 + Razor Pages + Entity Framework Core，默认 PostgreSQL，亦可配置 SQL Server。部署限制：不支持大陆用户服务，数据库升级需手动执行 SQL 脚本，不支持子路径部署。",
+   "highlights": [
+    "支持文章发布、定时发布、草稿、Markdown/Mermaid、评论、Webmention 等内容与互动功能",
+    "支持 PostgreSQL（默认）与 SQL Server 两种数据库，提供 Docker Compose 部署方案",
+    "界面支持 en-US、zh-Hans、zh-Hant、de-DE、ja-JP、fr-FR 六种语言，并提供 RSS、Atom、OPML、OpenSearch、FOAF、sitemap、IndexNow 等互操作能力"
+   ],
+   "use_cases": [
+    "开发者自托管个人博客站点",
+    "需要 Markdown/HTML 编辑、定时发布与多语言界面的内容发布场景",
+    "基于 Docker Compose 与 PostgreSQL 的小规模本地或云端部署"
+   ]
+  },
+  "sha": "f5e59f6bf2ff",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7eb788216061": {
+  "identity": {
+   "one_liner": "单二进制本地项目管理工具，CLI+Web UI+AI 代理技能，基于 SQLite",
+   "review": "Pad 是一个用 Go 编写的本地优先项目管理工具，将任务、想法、计划、文档等组织为带类型字段集合，数据存储在本机 SQLite。它提供 CLI、运行于 localhost:7777 的 Web UI，以及可安装到 Claude Code、Cursor、Codex 等 AI 编码工具的 /pad 技能，代理操作在活动流中署名记录。需 Go 1.26+ 与 Node.js 22+ 从源码构建，可选 Pad Cloud 实现同步。",
+   "highlights": [
+    "单二进制部署，包含 CLI、本地 Web UI（localhost:7777）与 AI 代理技能，数据存于本地 SQLite",
+    "内置任务、想法、计划、文档、约定、剧本六种集合，支持自定义类型字段与自动引用编号（TASK-5 等）",
+    "通过 pad agent install 为 Claude Code、Cursor、Windsurf、Codex、OpenCode、GitHub Copilot、Amazon Q、JetBrains Junie 安装 /pad 技能"
+   ],
+   "use_cases": [
+    "开发者在本机管理个人或小团队项目的任务、计划与文档",
+    "让 AI 编码代理读写项目条目、遵循项目约定与多步工作流",
+    "需离线运行或数据保留在本地的项目管理场景；跨设备协作时可迁移至 Pad Cloud"
+   ]
+  },
+  "sha": "7eb788216061",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "83231fea3663": {
+  "identity": {
+   "one_liner": "Armbian 终端配置工具，通过交互菜单自动化常见系统管理任务",
+   "review": "Armbian Config 是一个终端运行的配置工具，随 Armbian 镜像预装，用于单板计算机的初始设置、网络配置、软件安装、内核固件管理及桌面环境管理。基于 Bash 与 whiptail 实现交互菜单，模块与任务经 JSON 配置组装生成；也声明兼容其他 systemd 加 APT 的发行版。以 GPL v3.0 分发。",
+   "highlights": [
+    "提供交互式终端菜单（whiptail），覆盖初始设置、网络、软件安装、内核/固件管理等任务",
+    "模块化架构：模块以 JSON 配置描述，经 config-assemble.sh 脚本组装为运行时",
+    "附带 Python 文档生成器与基于 Bats 的测试，CI 覆盖 JSON 校验、shell lint 与打包"
+   ],
+   "use_cases": [
+    "单板计算机（SBC）开机后的初始化配置与系统准备，可在本地终端或 SSH 下运行",
+    "在 Armbian 或其他 systemd/APT 兼容发行版上管理软件安装、网络与防火墙设置",
+    "开发者本地组装运行时（tools/config-assemble.sh）并运行单元测试进行功能验证"
+   ]
+  },
+  "sha": "83231fea3663",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "572ae67325d6": {
+  "identity": {
+   "one_liner": "单二进制 Go MCP 服务器，基于 whatsmeow 将个人 WhatsApp 账户暴露为 MCP 工具。",
+   "review": "该项目用 Go 编写，以单二进制形式运行 whatsmeow 驱动的常驻进程，在 127.0.0.1:8765 提供 MCP 端点与 /pair 配对页面，并用本地 SQLite 缓存消息，供 Claude Code、Cursor 等多个 MCP 客户端共享。默认提供 43 个工具，覆盖消息收发、群组、媒体、隐私等；支持 -read-only 只读模式。构建需 Go 1.26+ 且启用 CGO，使用前需扫码配对个人 WhatsApp 账号。",
+   "highlights": [
+    "默认提供 43 个 MCP 工具，涵盖搜索缓存会话、发送文本/文件/语音/投票/联系人卡片、管理群组与隐私设置",
+    "本地 SQLite 缓存会话与联系人，HTTP 常驻进程可供多个 MCP 客户端共享，支持 MCP 2026-07-28 及更早版本",
+    "支持 -read-only 只读模式（15 个工具）、可选语音转写（需自配 speech-to-text 端点）及 WhatsApp Business 标签只读工具（共 47 个）"
+   ],
+   "use_cases": [
+    "让支持 HTTP MCP 的 AI 客户端（如 Claude Code、Cursor）读取和搜索本地缓存的 WhatsApp 聊天记录并代发消息",
+    "需要将个人 WhatsApp 账户以只读方式接入 AI 助手、限制发送与账号变更操作的场景",
+    "本地管理群组、媒体下载与按需转写语音消息的自托管工作流"
+   ]
+  },
+  "sha": "572ae67325d6",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "67ea04bb2fdb": {
+  "identity": {
+   "one_liner": "Rust+GPUI 编写的 Windows/Linux 原生代码编辑器，内置 AI 代理面板与只读查看器",
+   "review": "FluxCode 是用 Rust 与 GPUI（GPU 绘制）编写的 Windows/Linux 代码编辑器，提供 ACP 代理面板、内置 Git、Python 友好终端及 PDF/ZIP/SQLite 等只读查看，声称无遥测，仅自行发起更新检查请求。尚无语言服务器、调试器与扩展系统，暂无正式版本号。安装为解压后运行安装脚本，无需管理员/root 权限。",
+   "highlights": [
+    "支持通过 ACP 运行任意代理（如 OpenCode、Mura），提供三级访问权限、每轮更改撤销与本地记忆",
+    "包含约 200 种语言的语法着色、多根工作区、内置 Git 操作与 Go to File 快速查找",
+    "可只读查看十六进制、PDF、Office、ZIP 与 SQLite 文件；无遥测，仅含更新检查请求"
+   ],
+   "use_cases": [
+    "需要 AI 代理辅助编辑且可控权限的 Windows/Linux 开发者",
+    "需在代码旁查看日志、数据库或文档的场景",
+    "从源码构建的 Rust 项目开发与测试"
+   ]
+  },
+  "sha": "67ea04bb2fdb",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3194,5 +3194,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "29a5c07a6114": {
+  "identity": {
+   "one_liner": "本地优先的文献 RAG 工具包，含冻结证据、人工标注与可复现离线流程。",
+   "review": "Scholar RAG Agent 是一个 Python 工具包与 FastAPI 服务，用于在本地论文语料上构建可审计的文献检索与问答流程。默认无需模型凭据，提供 fake 适配器演示流程但不生成真实科学总结。数据经 SQLite 持久化，支持混合与图检索、证据预览、人工筛选与批注，并提供 BibTeX 导出、静态 HTML 离线阅读等可复现输出。README 提示该服务无鉴权，应仅在本机回环地址使用。",
+   "highlights": [
+    "提供 FastAPI 服务与浏览器界面，支持证据预览、来源追溯、运行历史与冻结证据导出（JSON/Markdown/CSV/BibTeX/静态 HTML）",
+    "支持人工论文筛选队列、TF-IDF+朴素贝叶斯的筛选排序（仅排序不决定）、append-only 的筛选与答案评审历史",
+    "支持冻结段落的人工批注（校验 SHA-256 与 Unicode 偏移）、近重复证据折叠、每篇文档块数限额与最少证据文档数等证据策略"
+   ],
+   "use_cases": [
+    "对自有小规模论文语料做检索、对比问题与研究假设探索，并核查答案背后的原文片段",
+    "论文筛选场景：保存入选/排除/待定决策、按排序优先审阅、导出筛选结果与进度报告",
+    "需要可审计留痕的文献工作流：保存命名文献集合、记录人工意见、离线阅读与引用导出"
+   ]
+  },
+  "sha": "29a5c07a6114",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "791c556bb0c0": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 MCP 共享记忆服务器，跨客户端持久化可检索",
+   "review": "Ogham MCP 是一个为 AI 编码代理提供共享记忆的 MCP 服务器，用 Postgres（pgvector + 全文检索 RRF 融合）存储记忆并支持带类型边知识图谱的检索，可被 Claude Code、OpenCode、Codex 等多个客户端共用。需自备 Supabase/Neon 或自托管 Postgres 数据库，支持 uvx、Docker、源码安装和 HTTP 多代理模式；依赖 Python 3.13+，MIT 许可。",
+   "highlights": [
+    "混合检索：pgvector 余弦相似度 + PostgreSQL 全文检索，经 RRF 融合，单条 SQL 查询完成，可选 FlashRank 重排",
+    "支持存储记忆、决策、偏好、事实与事件，含更新、强化、矛盾操作，以及类型边图谱的 store_triple/query_join 两事实联接查询",
+    "提供 Wiki 层（将标签记忆合成缓存 markdown 页）与 Open Knowledge Format（markdown + 自包含图谱查看器的可移植打包，OKF v0.1）"
+   ],
+   "use_cases": [
+    "多个 AI 编码客户端（Claude Code、Cursor、OpenCode 等）之间共享持久化项目上下文，避免重复解释",
+    "跨会话保存和检索决策、偏好、代码库要点等结构化记忆",
+    "需要查询两事实之间关系路径的场景（类型边图谱 join 查询）"
+   ]
+  },
+  "sha": "791c556bb0c0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f9f9b71be5f": {
+  "identity": {
+   "one_liner": "桌面应用+CLI+MCP服务器的多数据库性能分析工具",
+   "review": "Culprit SQL Studio 是一款运行于 macOS、Linux 和 Windows 的数据库性能分析工具，提供桌面应用、独立 CLI 和 MCP 服务器三种形态，支持 SQL Server、PostgreSQL、TimescaleDB、YugabyteDB、MySQL、MariaDB 和 SQLite。它将查询统计、执行计划、等待事件和 schema 上下文整合到同一工作流，按影响排序发现项并附证据、建议修复和验证步骤；功能随引擎和登录权限不同而有差异，数据库修复仅为建议需人工审核。",
+   "highlights": [
+    "按影响排序的发现项，包含证据、建议修复 SQL 和验证步骤，支持通过 HypoPG 测试假设索引",
+    "提供执行计划图表/树形/表格视图、计划对比、阻塞链追踪、死锁记录查看和部署前后时段比较",
+    "内置 MCP 服务器供 Claude Code、Cursor 等 MCP 客户端使用，支持连接级权限控制和本地审计日志"
+   ],
+   "use_cases": [
+    "排查慢查询、计划退化、缺失或冗余索引、阻塞与死锁等数据库性能问题",
+    "在 CI 中用 lint-sql 对迁移文件做阻断索引、外键缺失等检查并以 SARIF 格式输出",
+    "将发现项和计划简报共享给编码代理或团队成员，附验证步骤与代码位置回溯"
+   ]
+  },
+  "sha": "5f9f9b71be5f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ef2f3096d45": {
+  "identity": {
+   "one_liner": "Open.Database.Extensions：基于 ADO.NET 扩展方法的流式命令库，自动处理连接、参数与行映射。",
+   "review": "ODX 是一个 .NET 数据访问工具库，用流式命令封装连接创建、参数添加、执行、行映射与资源释放等 ADO.NET 模板代码，SQL 由用户自行编写。Core 包与任意 ADO.NET 提供程序配合，另有 Channel、Dataflow 及 SQL Server 专用包。提供 Map<T>() 按名称匹配列与属性，支持事务与异步终端。当前版本 11 为候选版，目标 netstandard2.0/2.1 与 net10.0，MIT 许可。",
+   "highlights": [
+    "提供流式命令 API，终端包括 ExecuteNonQuery、ExecuteScalar、ToArray、ToList、FirstOrDefault，且均有异步版本",
+    "Map<T>() 按名称（忽略大小写与下划线）将列匹配到公开可写属性与构造函数参数，支持通过 RowMap<T> 声明列重命名映射",
+    "附带 Channel 与 Dataflow 扩展包，可将行流式写入 Channel<T> 或数据流块"
+   ],
+   "use_cases": [
+    "希望直接手写 SQL 并减少 ADO.NET 样板代码的 .NET 应用",
+    "需要将查询结果映射到对象或通过 Channel/Dataflow 流式处理行的场景",
+    "使用 SQL Server 存储过程或需要一次性事务表达式的数据访问代码"
+   ]
+  },
+  "sha": "6ef2f3096d45",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2976,5 +2976,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6b1def697c63": {
+  "identity": {
+   "one_liner": "Go 类型安全动态配置库，经 Postgres/SQLite 轮询同步配置与功能开关",
+   "review": "nasa 是 Go 语言的运行时动态配置与功能开关库，配置存于 Postgres 或 SQLite 表 t_nasa，经 Poller 定时拉取并以类型化、无阻塞的 UFO[T] 字段供代码读取，含可选内置 Web UI。仅依赖 Go 标准库，要求 Go ≥ 1.24 和已有的 *sql.DB 连接；Web UI 本身不提供鉴权，需部署在网关、VPN 或反向代理之后。当前处于 v0 阶段，核心语义与表结构已声明稳定。",
+   "highlights": [
+    "支持任意 JSON 可序列化类型及 time.Duration、time.Time 等，读取 .Get() 返回值拷贝且不阻塞",
+    "类型不匹配或数据库故障时保留最后有效值，删除覆盖行后自动回退到代码内默认值",
+    "内置 Web UI 提供四种键状态标记、两步 diff 提交、布尔开关撤销、搜索与明暗主题"
+   ],
+   "use_cases": [
+    "无需重新构建部署即可在运行时关闭功能或调整限流、超时等参数",
+    "多个 Go 服务基于已有的 Postgres/SQLite 连接接入动态配置",
+    "配合内部网关或反向代理鉴权，为运维提供可视化配置面板"
+   ]
+  },
+  "sha": "6b1def697c63",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

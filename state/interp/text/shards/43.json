@@ -2518,5 +2518,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1683347199d3": {
+  "identity": {
+   "one_liner": "RushDB：单二进制图数据库，写入 JSON 自动推断类型并建图，支持多种查询语言",
+   "review": "RushDB 是用 Rust 实现的单二进制图数据库，面向需要存储记录及其关系并检索的 AI 应用开发者。写入嵌套 JSON 时按值推断类型、将嵌套对象转为关联记录；查询可选用 JSON 查询语言、SQL（PostgreSQL 协议）、Gremlin、Cypher、GQL 或 Mongo 风格文档，另支持向量与 BM25 全文搜索。openCypher、GQL、Bolt 为候选状态，不支持原生 Windows。",
+   "highlights": [
+    "写入任意 JSON，按值推断类型，嵌套对象自动生成关联记录，并维护可查询的标签/属性/关系目录",
+    "同一份数据支持 JSON 查询、SQL、Gremlin、SQL/PGQ、Mongo 风格文档，以及 openCypher、ISO GQL（候选状态），并提供精确与 HNSW 向量索引、BM25 全文及混合搜索",
+    "包含 WAL、MVCC、多语句事务、可恢复到时间点的备份和异步流复制；通过 HTTP、PostgreSQL 协议、gRPC、Bolt 协议提供服务"
+   ],
+   "use_cases": [
+    "以 JSON 记录及其关系为数据模型、需要用 SQL 或 Cypher 等多种语言查询的自托管后端",
+    "需要向量、全文或混合搜索能力配合图关系查询的应用",
+    "通过 Docker、Helm 或云平台部署的单节点图数据库；需 Raft 集群或分片生产化时 README 标注为预览状态"
+   ]
+  },
+  "sha": "1683347199d3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df657dc07612": {
+  "identity": {
+   "one_liner": "Phalcon 生态的数据库迁移工具，自动检测数据库变更并生成迁移。",
+   "review": "phalcon/migrations 提供 generate 与 run 命令，用于从现有数据库表结构生成迁移文件，并在其他环境执行以建立相同结构。面向使用 Phalcon 框架的 PHP 项目。运行要求 PHP >= 8.2、Phalcon >= 5.0.0，Linux 下还需 ext-posix 扩展，通过 Composer 以开发依赖安装。",
+   "highlights": [
+    "自动检测数据库变更并生成迁移文件，无需手写迁移",
+    "通过 CLI 命令执行 generate、run、list 操作",
+    "支持配置文件（如 migrations.php）或 CLI 参数指定配置"
+   ],
+   "use_cases": [
+    "在多环境间同步数据库表结构",
+    "为已有数据库表结构生成迁移文件纳入版本管理",
+    "基于 Phalcon 5 框架的 PHP 项目数据库变更管理"
+   ]
+  },
+  "sha": "df657dc07612",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "77e42af29dfc": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 MCP 工具服务器，以单一二进制提供 40 个文件、远程与逆向分析工具。",
+   "review": "agent-tool 是一个 MCP 协议工具服务器，为 Claude Code、Cursor、Codex 等 AI 编码代理提供 40 个工具，覆盖编码感知的文件读写、SSH/SFTP、进程管理、MySQL/Redis 查询、DAP 调试器和 x86/x64 PE/ELF 静态分析。默认 core profile 仅暴露 11 个 schema 以限制上下文体积，大输出默认 32K 字符截断并支持分页。以 Go 编写，跨平台运行。",
+   "highlights": [
+    "默认 core profile 暴露 11 个 schema，core-lite 为 5 个（read/write/edit/grep/toolbox），支持 profile 切换与按操作加载 schema",
+    "Edit/Read/Write/Grep 等文件工具保持缩进与文件编码（EUC-KR、Shift-JIS、GB18030 等），支持 dry_run、截断提示与确定性分页",
+    "包含 DAP 调试器（dlv/debugpy/codelldb）与静态二进制分析：x86/x64 反编译为 C、PDB/DWARF 类型读取、xref、函数发现、ARM/ARM64 反汇编"
+   ],
+   "use_cases": [
+    "在非 UTF-8 编码或 Tab 缩进的遗留项目中让 AI 代理安全编辑文件",
+    "通过 SSH/SFTP 与 MySQL/Redis 工具远程执行命令、传输文件和查询数据库",
+    "对 PE/ELF 二进制进行反编译、反汇编、交叉引用与调试等逆向分析工作流"
+   ]
+  },
+  "sha": "77e42af29dfc",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2bbf795fbb3e": {
+  "identity": {
+   "one_liner": "基于图结构的共享任务跟踪器，供 AI 代理与人类协作使用",
+   "review": "Skein 是一个供人类与 AI 代理共同使用的共享任务跟踪系统，将任务、会话、决策与知识集中存储，跨项目、机器和会话保留历史。任务间以依赖关系组成图结构，代理通过 MCP 接口连接，使用 API 密钥认证。部署依赖 Docker Compose（2.23.1+）或 Kubernetes，后端为 Go，前端为 React，许可证为 BSL 1.1。",
+   "highlights": [
+    "通过 MCP 服务器（`http://localhost:8080/mcp`）与 per-user API 密钥接入 AI 代理，支持跨机器、跨会话在任务中直接对话",
+    "任务以图结构管理依赖与认领（claims），并包含基于 pgvector/外部 Ollama 的语义搜索与重复任务检测（含已关闭任务）",
+    "自托管部署路径涵盖 Docker Compose 与 Kubernetes，依赖 PostgreSQL、Valkey、NATS 与 S3 兼容存储，附件存储可选 Garage、SeaweedFS、RustFS 或外部 S3"
+   ],
+   "use_cases": [
+    "需要人类与多个 AI 代理（包括代理再派生的子代理）在同一个任务队列中委托、跟进并查看完整历史的团队",
+    "希望将任务、决策与研究笔记沉淀为跨会话共享知识库的自托管场景",
+    "使用 MCP 兼容的 LLM 代理客户端、并可通过 API 密钥认证接入任务系统的环境"
+   ]
+  },
+  "sha": "2bbf795fbb3e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

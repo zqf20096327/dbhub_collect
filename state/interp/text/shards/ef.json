@@ -2769,5 +2769,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a8b6ab8b2847": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，以事实台账防止内容虚构",
+   "review": "ResumeForge 是一个本地运行的求职材料工具，覆盖从职位解析、匹配分析、简历生成到导出投递与模拟面试的流程。基于 FastAPI、React 和 SQLite，无需账号登录，数据保留在本机。其核心机制是将事实与措辞分离：生成内容逐条比对 Profile 库，不一致时触发防虚构警告，含【待补】标记时阻止导出。1.0 版数据库升级到 2.0 时会归档到 legacy-archive 目录并从空库开始。",
+   "highlights": [
+    "按条目比对 Profile 库生成防虚构警告，未填【待补】标记时阻止导出并列出位置",
+    "支持排版参数与 A4 精确预览联动，预览直接渲染导出 PDF",
+    "支持多职位批量匹配分析、AI 职位对比及多格式导出"
+   ],
+   "use_cases": [
+    "在不联网或不愿注册账号的前提下管理简历与求职进度",
+    "需要核对生成简历中的学校、公司、项目等信息是否属实",
+    "追踪多个职位的投递状态并整理面试复盘材料"
+   ]
+  },
+  "sha": "a8b6ab8b2847",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32f6caf40ec0": {
+  "identity": {
+   "one_liner": "基于 JSON 语法的 TypeScript ORM，以实体类为模式，支持 SQL 数据库与 MongoDB。",
+   "review": "UQL 是一个以 JSON 语法书写查询的 TypeScript ORM，同时覆盖关系型数据库与 MongoDB。面向需要跨 Node、Bun、边缘运行时及浏览器运行同一套数据层代码的开发者。其机制包括：实体类即模式（支持 TC39 装饰器或 defineEntity 数据式声明）、无代码生成与 reflect-metadata、内置迁移 CLI（generate/up 两步）、多租户过滤器、软删除、sql() 原生语句嵌入，以及基于所选字段的叶子级类型检查。",
+   "highlights": [
+    "同一查询 API 支持 PostgreSQL、MySQL、MariaDB、MSSQL、SQLite、Turso、libSQL、Cloudflare D1、CockroachDB 及 MongoDB 等多种数据库",
+    "实体可用 TC39 装饰器类或 defineEntity 数据式声明，安装无需编译器标志或 reflect-metadata",
+    "查询结果按所选字段推导类型，包含填充关系与 JSON/JSONB 点路径的校验，且无代码生成步骤"
+   ],
+   "use_cases": [
+    "在 Node、Bun、Cloudflare Workers、AWS Lambda、Vercel 等运行时复用同一套数据访问代码的项目",
+    "需要通过迁移 CLI 管理 SQL 数据库 schema 变更的 TypeScript 服务",
+    "希望将同一查询语法经由 HTTP、tRPC 或 oRPC 暴露给浏览器，并以过滤器限制用户可见范围的场景"
+   ]
+  },
+  "sha": "32f6caf40ec0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74886529a915": {
+  "identity": {
+   "one_liner": "Tiger Cloud 的命令行工具，含管理数据库服务和供 AI 助手调用的 MCP 服务器",
+   "review": "Tiger CLI 是 Tiger Cloud 的命令行界面，用于管理和查询数据库服务，面向使用 Tiger Cloud 托管 Postgres 的开发者与运维人员。它提供服务生命周期（创建、fork、启停、调整规格）、psql 连接、SQL 查询、schema 查看及指标读取等命令；内置 MCP 服务器可由 `tiger mcp install` 接入 Claude Code 等 AI 助手，暴露服务管理与 db_query、db_schema 等工具，并代理文档语义搜索服务器 pg-aiguide。MCP 复用 CLI 登录凭据，需先 `tiger auth login`；destructive 命令要求输入服务 ID 确认，HTTP 模式下 db_query 仅接受内联 SQL。",
+   "highlights": [
+    "提供服务创建、fork、启停、resize、密码更新、日志与指标时间序列等命令，服务可用 ID 或名称引用（名称须精确且唯一）",
+    "内置 MCP 服务器，支持 stdio 与 Streamable HTTP 两种传输，暴露 service_*、db_query、db_schema 等工具，并代理 view_skill 与 search_docs 文档工具",
+    "提供 `tiger skills install` 为 AI 编码代理安装 PostgreSQL 与 TimescaleDB 技能"
+   ],
+   "use_cases": [
+    "在终端或脚本中管理 Tiger Cloud 数据库服务的生命周期与查询",
+    "为 Claude Code 等 AI 助手配置 MCP，使其能创建服务、执行 SQL 并读取 schema 与文档",
+    "通过 `tiger upgrade` 以校验和验证方式升级 CLI，或通过 Homebrew/apt/yum/Go 安装"
+   ]
+  },
+  "sha": "74886529a915",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42c3e55837fb": {
+  "identity": {
+   "one_liner": "自托管的邮件 API 服务，基于 Bun 与 Elysia 构建，单容器运行",
+   "review": "BunMail 是一个面向开发者的自托管事务性邮件服务，以 TypeScript 编写，运行于 Bun 与 Elysia 之上，数据存储使用 PostgreSQL。它提供 REST API、Web 控制台、DKIM 签名、带重试的邮件队列、Webhook、模板、入站 SMTP 及回收站功能，并以单个 Docker 容器交付。部署时需配置真实主机名，通过反向代理对外暴露，生产模式要求先注册并验证发件域名（SPF/DKIM/DMARC）方可发送。",
+   "highlights": [
+    "提供 REST 发送 API、SMTP 提交、入站 SMTP 接收，支持 DKIM 签名与 SPF/DKIM/DMARC 的 DNS 校验",
+    "邮件队列基于 PostgreSQL，含最长 48 小时的重试退避与租约式崩溃恢复，支持多副本运行（可选 Redis 共享限流）",
+    "支持 Mustache 风格模板、HMAC 签名的 Webhook 事件、幂等键、批量发送（单请求最多 100 封）及附件（默认总量 5MB）"
+   ],
+   "use_cases": [
+    "在自己的服务器上通过 API 发送事务性邮件（验证码、通知、回执等）",
+    "为支持 Nodemailer 或 SMTP 提交的应用提供发信网关",
+    "接收入站邮件并通过 Webhook 或仪表盘处理与回复"
+   ]
+  },
+  "sha": "42c3e55837fb",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f689d40a68f": {
+  "identity": {
+   "one_liner": "面向 .NET 的嵌入式对象数据库，数据以可读的 XML/JSON 文件形式存储。",
+   "review": "XOD 是嵌入 .NET 应用的对象数据库，将对象持久化为可编辑、可 diff 的 XML/JSON/Brotli 文件，无需服务器与迁移配置。通过属性特性声明主键、唯一键和二级索引，写入事务记录于写前日志 .xwal。支持 .NET 8/9，Apache-2.0 许可。README 注明单行写循环场景下性能不及 SQLite，且不适用于多进程写或复制/集群场景。",
+   "highlights": [
+    "数据以 XML、JSON 或 Brotli 压缩二进制三种格式存储，可通过 XodMigrator 在格式间转换，且无需模型程序集",
+    "写入具有事务性并记录到写前日志 .xwal；进程内并发为多读者加排队写者（约 140,000 次读/秒）",
+    "提供主键、唯一键、二级索引，一/多对多/自关联，级联删除、[Required] 校验、AES-256-GCM 属性加密、Select<T>(skip,take) 流式读取，附命令行工具"
+   ],
+   "use_cases": [
+    "拥有自身数据目录的桌面应用或服务，需要可复制、可提交（git）的数据库",
+    "无法运行数据库服务器的设备或单进程场景",
+    "以批量加载、按键查找、索引查询和分页读取为主的读多写少工作负载"
+   ]
+  },
+  "sha": "3f689d40a68f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a25d48adeff": {
+  "identity": {
+   "one_liner": "Rust 编写的多数据库 SQL 客户端，单二进制、无 JVM/Electron",
+   "review": "TernaryGrid 是一款面向 macOS、Windows 和 Linux 的 SQL 数据库客户端，使用 Rust 与 egui 构建，单个二进制文件，不依赖 JVM 或 Electron。它通过 Rust 原生驱动连接 PostgreSQL、MySQL、SQLite、SQL Server、ClickHouse 等，并提供 SQL 编辑器、数据网格、SSH 隧道连接与从 DBeaver 导入连接等功能。安装提供 dmg、安装包、deb/rpm、AppImage 及 cargo 源码构建；macOS 版本尚未经 Apple 公证，浏览器下载会被 Gatekeeper 拦截。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、Oracle、ClickHouse、Redis、MongoDB、Elasticsearch 等多种数据库，驱动以 Rust 编写",
+    "SQL 编辑器包含基于 schema 的自动补全、`:name`/`${name}` 参数、`@set`/`@include`/`@export`、explain 计划与查询历史；数据网格支持内联编辑、外键导航、服务端/客户端筛选排序与图表",
+    "支持 SSH 隧道、SOCKS5/HTTP 代理与 SSL 连接，密码存于系统钥匙串或加密 vault；可从 DBeaver、~/.pgpass 和 URL 导入连接"
+   ],
+   "use_cases": [
+    "需要在一个客户端中同时管理 SQL 数据库及 Redis/MongoDB/Elasticsearch 的开发者",
+    "从 DBeaver 迁移连接配置、希望以单文件应用在 macOS/Windows/Linux 上运行的用户",
+    "需要通过 SSH 隧道或代理连接数据库、并要求密码存入系统钥匙串的环境"
+   ]
+  },
+  "sha": "1a25d48adeff",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

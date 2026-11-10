@@ -2377,5 +2377,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f812f364ad2e": {
+  "identity": {
+   "one_liner": "自托管电子书库服务器，集成 KOReader 同步与阅读统计",
+   "review": "Tome 是一个自托管电子书库服务器，基于 FastAPI、React 和 SQLite 构建，以单个 Docker 镜像发布。它面向使用 KOReader 电纸书的自托管用户，通过自定义 TomeSync 插件记录阅读会话并双向同步进度，内置 EPUB/CBZ/PDF 阅读器、OPDS 订阅和阅读统计。需要设置 TOME_SECRET_KEY，数据存储在 /data、/books、/bindery 三个挂载卷。",
+   "highlights": [
+    "通过自定义 KOReader 插件实现阅读会话记录和设备与浏览器间的双向进度同步",
+    "内置 EPUB、CBZ/CBR 漫画和 PDF 阅读器，支持双页、RTL、条漫滚动模式",
+    "提供 OPDS 订阅、Hardcover 同步、OIDC 单点登录和基于会话数据的阅读统计"
+   ],
+   "use_cases": [
+    "自托管个人电子书与漫画库，在浏览器和电纸书设备上阅读",
+    "追踪 KOReader 设备上的阅读会话、进度和统计数据",
+    "家庭 NAS 或小型服务器上部署，通过 OPDS 客户端浏览和下载书籍"
+   ]
+  },
+  "sha": "f812f364ad2e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "524d60e4c159": {
+  "identity": {
+   "one_liner": "轻量级 PHP 框架，按请求路径映射命名空间控制器方法",
+   "review": "SlightPHP 是一个 PHP 路由框架，请求路径映射到命名空间控制器的公开方法（如 /home/main/entry 对应 Home\\MainController::Entry()）。响应输出、权限与输入校验由应用自身负责。需 PHP 8.0+、PDO 和 Redis 扩展，通过 Composer 安装；插件提供 Config、Db、Tpl 等组件。6.2 版本引入路径深度限制及配置、模板、验证码、日志格式变更，升级需阅读迁移说明。",
+   "highlights": [
+    "按请求路径加载命名空间控制器并调用公开方法，默认路径最多 10 段，可经 setMaxDepth 调整",
+    "插件经 Composer 加载，包含 \\SlightPHP\\Config、\\SlightPHP\\Db、\\SlightPHP\\Tpl 等组件",
+    "6.2.0 加强配置、模板、多语言、验证码和日志处理，支持 JSON 日志格式"
+   ],
+   "use_cases": [
+    "构建基于路径路由的 PHP Web 应用",
+    "需要 Composer 依赖管理与数据库（PDO/MySQL）、Redis 集成的后端服务",
+    "需要多语言、验证码、模板渲染等内置插件的 PHP 项目"
+   ]
+  },
+  "sha": "524d60e4c159",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e6577affc549": {
+  "identity": {
+   "one_liner": "GaussDB 数据库智能体后端，在 Kubernetes 上提供网关、诊断技能与知识库。",
+   "review": "该项目是 GaussDB 智能体的后端部分，将 opencode 与诊断技能部署进 Kubernetes，包含接入网关、按工号隔离的用户环境（Pod 或固定池化槽位）、知识库导入环境与标准知识库镜像，状态存储在 NAS 的 RWX 卷上。适用于需要为 DBA 提供对话式诊断与知识库查询能力的团队，与前端方在同一仓库联合开发，v1.4.7 起代码在测试仓库维护、本仓库只提供脚本自动生成的交付分支。",
+   "highlights": [
+    "提供 17 个诊断技能、137 条白名单 DML 与知识库导入技能包，通过 diag 与 kbimport 两个交付分支分发",
+    "接入网关负责工号认证（上游 SSO 头 + 信任凭据）、环境分配与对话/报告接口反向代理，凭据代理使令牌与模型 Key 不进模型容器",
+    "包含发版台（资源扫描、变更预览、按槽位在线替换、冒烟验证）、128 条白名单脚本清单及 11 方面 48 题的验收题库与契约测试"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中为多名 DBA 提供按工号隔离的 GaussDB/openGauss 诊断对话环境",
+    "通过知识库导入环境进行官方文档集（CHM）、网页剪藏、扫描件 PDF 与 PPT 的知识库入库",
+    "按部署上线方案与发版台手册执行首次部署、版本升级与回滚"
+   ]
+  },
+  "sha": "e6577affc549",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

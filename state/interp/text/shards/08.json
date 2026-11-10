@@ -2816,5 +2816,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "293a4f9de624": {
+  "identity": {
+   "one_liner": "基于代码贡献流程的电影、剧集和游戏主题歌数据库",
+   "review": "ThemerrDB 收录电影、电视剧和视频游戏的主题歌数据，以 JSON 文件形式发布在 gh-pages 分支，每日 UTC 12:00 更新一次。贡献者无需克隆仓库或提交 PR，只需按模板开 issue 并附 YouTube URL，工作流会自动校验并由审核者批准后写入数据库。使用时按媒体类型加第三方数据库 ID（如 themoviedb、igdb、imdb）拼 URL 获取 JSON，其中 youtube_theme_url 键指向主题歌视频；imdb 目录可能因条目缺少 imdb_id 而不全。",
+   "highlights": [
+    "提供按 URL 约定访问的 JSON 条目，youtube_theme_url 键指向主题歌 YouTube 视频",
+    "支持 games、game_collections、game_franchises、movies、movie_collections、tv_shows 六类媒体，映射 igdb、themoviedb、imdb 三种外部数据库 ID",
+    "采用 issue 提交加工作流自动校验、审核者打标签后自动更新数据库分支的流程"
+   ],
+   "use_cases": [
+    "为媒体服务器类项目按 themoviedb/igdb/imdb ID 查询并获取对应主题歌视频 URL",
+    "需要程序化提取 YouTube 主题歌音频的场景（可配合 YT-DLP、youtube_dl 等库）",
+    "社区协作式补充影视和游戏主题歌条目，无需本地开发环境"
+   ]
+  },
+  "sha": "293a4f9de624",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb89764c5320": {
+  "identity": {
+   "one_liner": "基于 Claude 的 LLM agent，调研联系人并从简历生成个性化求职邮件",
+   "review": "coldmail 面向求职者（如实习申请者）：读取简历生成结构化画像，用 Claude agent 调研目标岗位的联系人并记录来源与 hooks，按信任度排序查找邮箱，围绕对方工作撰写个性化邮件。用户在界面中审核每封邮件后才通过本人 Gmail 发送，带每日 50 封上限。分 laptop 版（本地运行、送入 Gmail 草稿）和 website 版（Render + Postgres 多用户）两个分支。",
+   "highlights": [
+    "用 Claude agent 按书面 playbook 调研联系人，输出经 schema 校验，每个人与 hook 附带可打开的来源 URL",
+    "按信任顺序查找邮箱：公开页面 → Apollo → Hunter（验证）→ 姓名模式推测，并标注可信级别",
+    "发送前需人工审核每封邮件；Gmail 仅申请 send-only 权限，token 加密存储，laptop 版数据全部留在本地 data/ 目录"
+   ],
+   "use_cases": [
+    "申请实习或岗位时，为每位相关联系人（招聘经理、团队负责人、创始人）生成有针对性的 cold email",
+    "在本地用 Node 22.9+ 与 Claude Code 运行 laptop 版，审核后的邮件进入 Gmail 草稿",
+    "通过 product 分支部署多用户网站版，运行在 Render 与 Neon 免费层上"
+   ]
+  },
+  "sha": "bb89764c5320",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

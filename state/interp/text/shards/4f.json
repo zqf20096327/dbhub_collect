@@ -3041,5 +3041,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "11028322a768": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 服务器，将代码、文档与基础设施索引为持久知识图。",
+   "review": "codebase-memory-mcp 是一个 MCP 服务器，用 C 后端将代码符号、文档、架构决策和基础设施配置（Docker、Kubernetes、Terraform 等）解析为本地持久知识图，支持 Cypher 查询。面向开发者及其编码代理（如 Claude Code、Cursor 等），安装器支持 46 种客户端集成，暴露 17 个 MCP 工具。索引与图查询在本地完成，无需托管服务或 API key；附带的可视化组件 CBM Lens 处于开放测试阶段（v0.0.1）。",
+   "highlights": [
+    "原生 C 后端暴露 17 个 MCP 工具，使用内置语法解析多种语言与文件格式，并为受支持语言提供 Hybrid LSP 类型解析",
+    "安装器支持 46 种自动或条件的客户端集成，包括配置、skills、agent profiles 和 hooks",
+    "索引范围覆盖代码之外的文档段落、PDF 页面及 Docker、Kubernetes、Helm、Terraform/OpenTofu、Ansible、Make、CI 等基础设施配置"
+   ],
+   "use_cases": [
+    "通过 MCP 为编码代理提供符号、依赖与调用路径等结构化上下文，用于查找不熟悉的功能或跨服务追踪调用",
+    "评估某次代码变更可能影响的符号范围，并查找相关测试（实验性 Smart CI 结合静态关系与逐测试覆盖率）",
+    "使用 CBM Lens 可视化浏览架构图、3D Galaxy 图与源码阅读器，本地处理、源码分析不出机器的场景"
+   ]
+  },
+  "sha": "11028322a768",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1eb882b8ad28": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 PostgreSQL 的自托管 AI Agent 后端，兼容 LangGraph SDK",
+   "review": "Aegra 是一个自托管的 AI Agent 后端服务，供已使用 LangGraph 的开发者在自有基础设施上运行 Agent 应用。它实现 LangSmith Deployments 的 API，现有 LangGraph SDK 代码无需修改即可连接。技术栈为 FastAPI、PostgreSQL（检查点持久化与 pgvector 向量存储）、Redis（任务队列与 SSE pub/sub）。要求 Python 3.12+ 和 Docker/Podman，通过 aegra-cli 初始化项目或 docker compose 启动，默认端口 2026。许可证为 Apache 2.0。",
+   "highlights": [
+    "兼容 LangGraph SDK 与 API，支持 Agent Chat UI、LangGraph Studio、CopilotKit",
+    "支持 Agent Protocol v2 线程级 SSE 流式传输、human-in-the-loop 恢复与断线重连事件回放",
+    "内置 Redis 任务队列（每实例 30 并发 run、租约式崩溃恢复）、cron 定时任务、JWT/OAuth/Firebase 认证、pgvector 语义存储及 OTLP 链路追踪"
+   ],
+   "use_cases": [
+    "在自有服务器或 Kubernetes 上部署 LangGraph Agent 服务，数据留存于自有 PostgreSQL",
+    "需要 cron 定时触发 Agent 运行或人工审批环节的应用",
+    "需将追踪数据发送到 Langfuse、Phoenix 等 OTLP 后端的可观测性场景"
+   ]
+  },
+  "sha": "1eb882b8ad28",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

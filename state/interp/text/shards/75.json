@@ -2909,5 +2909,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "64abc5d534ba": {
+  "identity": {
+   "one_liner": "巴西电子眼全国公开数据库：官方采集器+API，Python 3 仅标准库实现",
+   "review": "Bunda de Urso 是一个巴西雷达测速与电子监控设备的全国性开放登记项目，采集官方数据源（DNIT、PRF、ANTT、DER、Detran 等），记录坐标、限速、设备状态并保留来源文档（SHA-256 哈希、URL、采集日期）。架构分两块：独立运行的采集/标准化进程，以及读取本地 SQLite 数据库的 Web/API 查询接口。代码仅用 Python 3 标准库，无 pip 依赖，经 nginx+fcgiwrap 执行；数据库含 78 张表，同时生成 PostgreSQL DDL。适合应用开发者、导航工具、研究者与公民查询。",
+   "highlights": [
+    "采集器支持官方数据源发现与下载，包含超时、重试、429/5xx 处理、Retry-After 及 HTTP 缓存（ETag/Last-Modified/304）",
+    "API 可输出 JSON、XML、TXT、NDJSON、EDIFACT、DIF 多种格式，支持按经纬度半径查询",
+    "源文件保留 SHA-256 哈希、URL、采集与发布日期，冲突记录保持可追溯；模式由 build_schema.py 一次性生成 SQLite 与 PostgreSQL 两份 DDL"
+   ],
+   "use_cases": [
+    "为导航应用、地图项目提供雷达位置与状态数据的查询接口",
+    "审计和核对官方发布的电子监控设备信息及其出处",
+    "按位置检索周边测速设备（经纬度+半径查询）"
+   ]
+  },
+  "sha": "64abc5d534ba",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

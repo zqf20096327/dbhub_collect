@@ -3075,5 +3075,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "32298781b1fe": {
+  "identity": {
+   "one_liner": "基于 Postgres 检查点的 Rust 持久化工作流库",
+   "review": "DBOS Transact 是一个 Rust 库，通过在 Postgres 中逐步记录工作流的检查点，使程序在崩溃、重启后能从上次完成的步骤恢复执行。它以库形式引入，除 Postgres 外无其他外部依赖或独立编排服务。当前 0.6 为预发布版本，不建议用于生产，API 可能在版本间发生不兼容变更；工作流体要求确定性，非确定性操作需放入 steps。",
+   "highlights": [
+    "以库形式提供，仅依赖 Postgres，无独立编排服务，可渐进式集成到现有项目",
+    "工作流每一步在 Postgres 中生成检查点，进程停止后可从检查点恢复并继续执行",
+    "提供 starter、widget store、queue patterns 等示例应用，覆盖崩溃恢复、结账中断、限流与去抖等场景"
+   ],
+   "use_cases": [
+    "需在进程崩溃或重启后恢复执行的长时任务，如数据同步、支付流程",
+    "AI agent 等运行时间从分钟到数周的应用",
+    "需要公平排队、速率限制、去抖等队列模式的程序"
+   ]
+  },
+  "sha": "32298781b1fe",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "14d77e774368": {
+  "identity": {
+   "one_liner": "跨平台 PlayStation 游戏文件查看器，只读解析 PKG/ISO/镜像而无需解包",
+   "review": "PSGame-Viewer 是一个 C++17/Qt 6 编写的桌面工具，用于只读查看 PS2–PS5 的 PKG、ISO、exFAT/PFS 等镜像，展示标题、封面、奖杯和文件列表，支持免解包提取单个文件与批量重命名，提供 GUI 和 --info 命令行两种入口。便携式运行，设置与缓存存放在程序目录；构建需 Qt 6.5+、CMake 3.21+、zlib。测试夹具均为合成生成，不含版权数据。",
+   "highlights": [
+    "支持 PS2 ISO、PS3 PKG/ISO/文件夹、PS4/PS5 PKG、exFAT/ffpfsc/ffpkg 镜像的只读解析，含分卷识别",
+    "从容器内直接读取封面与解密奖杯列表（含 240×240 图标），支持免解包提取单个文件或全部",
+    "提供 GUI 与命令行 --info 输出，批量重命名带实时预览、撤销与回滚日志，库记录用 SQLite 存储"
+   ],
+   "use_cases": [
+    "检查 PlayStation 游戏文件的标题 ID、区域、版本、固件要求等元数据",
+    "整理游戏收藏：按模板批量重命名文件并保留可回滚日志",
+    "脚本化批量读取游戏文件信息（--info 输出纯文本可管道处理）"
+   ]
+  },
+  "sha": "14d77e774368",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

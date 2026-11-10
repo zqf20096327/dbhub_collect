@@ -2621,5 +2621,48 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "299271226d6f": {
+  "identity": {
+   "one_liner": "面向 Convex 应用开发者的 10 个编码代理技能集合，通过 npx 安装",
+   "review": "该项目提供一组 SKILL.md 技能文件，覆盖工作流（PRD、任务追踪、文档同步、git 安全）、编码、安全检查与写作四类，通过 npx builder-skills 安装到 Claude Code、Codex、Cursor、OpenCode 等代理的技能目录。附带 init 命令生成 task.md、changelog.md、SECURITY.md 等项目文件；Convex API 知识已移至官方技能，本仓库只覆盖外围环节。Apache-2.0 许可。",
+   "highlights": [
+    "包含 10 个技能：workflow、create-prd、git-safety、sec-check、write 等，安装为可编辑的普通文件",
+    "sec-check 内置密钥扫描脚本与逐函数清单，要求先证明攻击路径再判定问题",
+    "支持 --target 指定 claude/codex/cursor/opencode/agents 目录，--link 以符号链接安装，并提供 JS API 编程访问"
+   ],
+   "use_cases": [
+    "使用编码代理开发 Convex 应用时，为代理添加项目工作流与安全检查规则",
+    "初始化项目文档结构：task.md、changelog.md、files.md、SECURITY.md 等",
+    "在部署前或仓库公开前运行 sec-check 扫描泄漏密钥与无鉴权函数"
+   ]
+  },
+  "sha": "299271226d6f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "adba0b0385ea": {
+  "identity": {
+   "one_liner": "以子进程形式通过 stdin/stdout 访问 SQLite 的可执行程序",
+   "review": "Sqinn 是一个可执行程序，从 stdin 读取请求、转发给 SQLite 并将响应写入 stdout，用于无法调用 C API 的编程环境。请求与响应采用二进制协议，协议规范见 rfc.txt，另有 Go 语言绑定 sqinn-go。限制包括单线程串行处理，且仅支持 SQLite C API 的一个子集，不支持 SQL 中断、增量 blob I/O、vfs 及扩展函数等。",
+   "highlights": [
+    "通过 stdin/stdout 与 SQLite 通信，使用文档化的二进制协议（rfc.txt）",
+    "提供执行 SQL 语句和查询数据库行的功能，发布页提供 linux/windows/macos amd64 及 macos-arm64 预编译二进制",
+    "包含 build.sh/build.bat 构建脚本，支持 gcc/cl.exe/clang 编译，并附 CI 工作流"
+   ],
+   "use_cases": [
+    "编程语言无法直接调用 SQLite C API 或没有可用语言绑定，但支持创建子进程（fork/exec）的场景",
+    "需要以子进程方式隔离 SQLite 访问、通过标准流读写数据库的程序"
+   ]
+  },
+  "sha": "adba0b0385ea",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2241,5 +2241,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "933ab93f2322": {
+  "identity": {
+   "one_liner": "从富途 OpenD 采集港股逐笔行情并写入按日分文件的 SQLite WAL 数据库。",
+   "review": "该项目以队列加批量写入的方式将富途 OpenD 推送的港股逐笔成交落入每日 SQLite WAL 库，配套品质报告、经 SHA-256 校验的 zstd 日终归档、systemd 部署及 Telegram 告警。面向需要留存港股 tick 数据的个人或研究者；依赖有效的港股行情权限，采集队列位于内存，进程中断期间可能缺数据。",
+   "highlights": [
+    "提供 mock 回放模式，无需富途账户即可用 Docker 体验查询与工具",
+    "日终归档流程包含一致性备份、zstd 压缩、SHA-256 校验与 manifest 发布，保留策略只清理通过校验的旧日库",
+    "附 CLI 工具 hk-tickctl 支持 status 查看与 validate 校验 schema、覆盖率及品质指标，Telegram 可发送健康摘要与 systemd OnFailure 通知"
+   ],
+   "use_cases": [
+    "长期采集港股逐笔成交数据供量化回测等研究用途",
+    "需要按香港交易日切分、带校验归档与保留策略的行情数据运维",
+    "无账户环境下通过 Docker mock 回放熟悉查询与归档工具链"
+   ]
+  },
+  "sha": "933ab93f2322",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

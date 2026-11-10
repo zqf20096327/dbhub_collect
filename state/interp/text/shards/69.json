@@ -3196,5 +3196,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "73eca203e5ef": {
+  "identity": {
+   "one_liner": "将 API/MCP 服务/数据库等编译为命令行动词的工具",
+   "review": "declick 是一个把 API 规范、MCP 服务器、SQLite 数据库、CLI 帮助等源编译成命名动词 CLI 的编译器，面向在 shell 中操作工具的 AI agent。核心机制：所有适配器遵循统一输出契约（describe 不足 2000 字符、五个退出码、单一信封）。要求 Node 24+，零运行时依赖，内置十种引擎，支持 compose 链式组合与 setup 快照回滚。",
+   "highlights": [
+    "内置十种引擎（openapi/postman/har/graphql/mcp/sqlite/cli/web/desktop/compose），零运行时依赖",
+    "所有生成的适配器遵循统一输出契约：describe 输出低于 2000 字符，超过时分页并支持 --grep/--offset 等分页参数",
+    "declick setup 写入前做字节级快照，--revert 可精确撤销，且快照不依赖 declick 包本身"
+   ],
+   "use_cases": [
+    "将 OpenAPI/GraphQL/Postman 集合等 API 规范编译为供 AI agent 调用的 CLI 动词",
+    "把现有 MCP 服务器转换为适配器，降低客户端上下文中工具列表占用",
+    "用 compose 将多步调用链（如按宠物 id 查主人）固化为单个动词"
+   ]
+  },
+  "sha": "73eca203e5ef",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0431295e7816": {
+  "identity": {
+   "one_liner": "自托管的信用卡账单邮件解析、交易明细与到期提醒 Web 工具",
+   "review": "这是一个面向个人自托管用户的信用卡账单管理工具，通过 IMAP 读取银行账单邮件，用内置解析器提取账期、应还金额、卡尾与交易明细，支持还款登记、年费提醒和多渠道推送。基于 React 与 MySQL，提供官方 Docker 镜像部署，解析器按已获得的银行邮件模板校准，覆盖约二十家中国银行。",
+   "highlights": [
+    "支持绑定多个 IMAP 邮箱，通过发件人、标题和模板特征匹配解析器提取账单摘要与交易明细，同步不将邮件标记为已读",
+    "完整卡号、有效期和 CVV 采用环境主密钥与用户 PIN 双密钥的 AES-256-GCM 加密保存",
+    "内置 Bark、ntfy、Telegram Bot、Server酱等推送渠道及自定义 HTTP 推送，同一渠道当日提醒合并为一条批量通知"
+   ],
+   "use_cases": [
+    "个人用户将多家银行信用卡账单邮件自动解析为结构化数据，集中查询还款与交易明细",
+    "为还款日、出账日、年费日及房租等固定/动态账单配置周期提醒并推送到手机",
+    "在 NAS 或家用服务器上以 Docker 方式部署自托管账单管理系统"
+   ]
+  },
+  "sha": "0431295e7816",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13eaf6aada8c": {
+  "identity": {
+   "one_liner": "一个面向 AI 编码代理的一体化 MCP 工具集，整合记忆、代码搜索、执行与评估。",
+   "review": "KruschStack 将其生态中的 7 个组件（工作记忆、Git/AST 图、文件检索、2PC 分阶段执行 harness、前端设计、工作区枢纽、任务路由）整合为单个 MCP 网关，提供 39 个带注解的工具。支持 npx 一条命令安装（基于 Node 22 的 node:sqlite），或通过 docker compose 运行 PostgreSQL 16 + pgvector 栈。自动配置 Claude Code、Cursor、Windsurf 与 Antigravity。README 含大量自测基准数据，其部分提交仍处排队待榜单收录状态。",
+   "highlights": [
+    "通过 npx krusch-stack init 一条命令安装全部 7 个支柱组件，并提供 doctor 子命令验证各组件状态",
+    "以 MCP 网关形式暴露 39 个带注解工具，覆盖上下文记忆、Git/AST 符号搜索、文件分页读取、2PC 分阶段代码应用与任务路由",
+    "默认存储为 Node 22 原生 node:sqlite，可选 docker compose 方式运行 PostgreSQL 16 + pgvector"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Windsurf、Antigravity 等编码代理添加记忆与代码库检索能力",
+    "需要以分阶段、可拒绝/中止方式（2PC 写前日志 + 原子重命名）执行代理代码修改的场景",
+    "本地或容器化部署包含 LLM 路由与诊断的代理工具栈"
+   ]
+  },
+  "sha": "13eaf6aada8c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e37978a725de": {
+  "identity": {
+   "one_liner": "Dyson HushJet HJ10 净化器的网页仪表盘，经 Dyson 云读取数据并存储于 TiDB",
+   "review": "这是一个面向 Dyson HushJet Purifier Compact（HJ10）机主的非官方网页仪表盘。前端为 Vite+React+Recharts，后端为 Express+tRPC，数据经 MyDyson App API 与 AWS IoT（MQTT over TLS）读取，历史数据存入 TiDB（Drizzle）。支持控制净化器、查看 7 天历史、室外空气对比与家庭事件备注。依赖社区逆向的 API，Dyson 可随时更改；需部署 Render 服务并配置数据库。",
+   "highlights": [
+    "通过 Dyson 云 API 实时读取空气质量、滤芯寿命、28 项自检结果、Wi-Fi 信号与固件状态",
+    "支持远程控制电源、Auto、风速 1-10、夜间模式、睡眠定时与持续监测，仅限 admin 角色",
+    "复制 Dyson 云端 7 天 15 分钟均值历史至 TiDB，并提供室外 AQI/PM 对比、每日汇总与备注标注图表"
+   ],
+   "use_cases": [
+    "在家中或远程查看 HJ10 的实时空气质量与滤芯状态",
+    "追踪室内外 PM2.5 等指标的历史趋势与每日汇总",
+    "记录做饭、开窗等家庭事件，对照图表观察其对室内空气的影响"
+   ]
+  },
+  "sha": "e37978a725de",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

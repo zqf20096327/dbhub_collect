@@ -2901,5 +2901,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5f4c7f73c761": {
+  "identity": {
+   "one_liner": "连接 ClickHouse 与 Python 生态的数据库驱动库",
+   "review": "clickhouse-connect 是 ClickHouse 官方的 Python 驱动，通过 HTTP 接口连接 ClickHouse Cloud 或自建实例，返回 Pandas、NumPy、PyArrow、Polars 数据结构。同时提供面向 Superset 的 SQLAlchemy 方言（clickhousedb://）及 Alembic 迁移支持。要求 Python 3.10+；SQLAlchemy 方言功能限于 Core 操作，不提供完整 ORM。1.0 版本相对 0.x 有破坏性变更。",
+   "highlights": [
+    "支持返回 Pandas、NumPy、PyArrow、Polars 数据格式，通过 HTTP 接口与 ClickHouse 通信",
+    "提供 SQLAlchemy 方言，支持 SELECT/JOIN、轻量级 DELETE、物化 CTE 及 Alembic schema 迁移",
+    "提供基于 aiohttp 的原生 async 客户端及实验性 chDB 内嵌引擎后端"
+   ],
+   "use_cases": [
+    "在 Python 数据分析流程中读取 ClickHouse 数据为 DataFrame/Arrow 表",
+    "为 Apache Superset 接入 ClickHouse 数据源",
+    "使用 Alembic 管理 ClickHouse 表结构迁移"
+   ]
+  },
+  "sha": "5f4c7f73c761",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c59fbd5dfc15": {
+  "identity": {
+   "one_liner": "开源语义层运行时，统一建模并可导入15+格式语义模型",
+   "review": "Sidemantic 是开源语义运行时，用于定义或导入度量模型后通过 SQL、CLI、Python、HTTP、PostgreSQL 协议和 MCP 一致查询。支持 DuckDB、PostgreSQL、BigQuery、Snowflake 等数据库，提供 uvx 安装、golden 测试、模型校验及 Docker 部署，适合数据分析工程团队与 AI 代理场景。",
+   "highlights": [
+    "支持导入 Cube、MetricFlow、LookML、Power BI TMDL/DAX 等 15+ 语义格式，并可转换为 Sidemantic YAML",
+    "提供 CLI、语义 SQL、Python、HTTP/Arrow、PostgreSQL wire protocol、MCP 等多种查询接口",
+    "基于 SQLGlot 生成 SQL，支持自动跨模型 JOIN、预聚合路由与谓词下推"
+   ],
+   "use_cases": [
+    "将既有 BI/度量模型（Power BI、LookML、dbt MetricFlow 等）迁移或统一到单一语义层",
+    "通过 PostgreSQL wire protocol 或 HTTP API 向 Tableau、DBeaver 等 BI 工具暴露治理度量",
+    "为 AI 代理与 notebook 提供度量查询入口（MCP、Jupyter widget、浏览器演示）"
+   ]
+  },
+  "sha": "c59fbd5dfc15",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1eb45df1ca76": {
+  "identity": {
+   "one_liner": "hermes-agent 的对话记忆插件，基于本地 SQLite 与混合检索自动记忆和召回事实",
+   "review": "MemoHood 是一个为 hermes-agent 提供的对话记忆插件，作为 memory.provider 运行。它在每轮回答前通过混合检索（FTS5/BM25 加向量搜索，经 RRF 融合，可选 Cohere 重排）自动召回相关事实，并在后台用 LLM 提取事实，矛盾时采用 SUPERSEDE 机制将旧事实标记为过时而非覆盖。数据存储于本地 SQLite，依赖 Python 3.11+，支持关键词免费模式，配置 Cloudflare/Gemini/Cohere 密钥后可启用向量检索与语义抽取，安装脚本支持一键部署。",
+   "highlights": [
+    "混合检索：FTS5/BM25 全文搜索（含俄语词干化）与向量搜索经 RRF 融合，可选 Cohere 重排",
+    "SUPERSEDE 版本管理：新事实取代旧事实，旧记录进入带日期的历史，可通过 memohood_fetch 查询",
+    "夜间后台任务执行置信度衰减（指数曲线）、去重、索引重建；pinned 事实不受衰减影响"
+   ],
+   "use_cases": [
+    "需要跨会话保留用户事实、决策与偏好的 hermes-agent 部署",
+    "对话中含修正、偏好、长期信息（如姓名、过敏史）需持续更新的场景",
+    "希望本地存储记忆数据、通过配置密钥控制外部模型调用的场景"
+   ]
+  },
+  "sha": "1eb45df1ca76",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3e9a5a57625b": {
+  "identity": {
+   "one_liner": "校园充电桩空位实时查询与到达预测的多端系统，App+网页+Node服务端+P2P共享",
+   "review": "该项目面向武汉纺织大学阳光校区，用于查询充电桩端口空置状态并生成到达预测。架构包含Android WebView App、Vue3网页、Node/TypeScript服务端，节点间通过libp2p+gossipsub广播快照实现去中心化共享；token仅在本地抓取使用，不进入P2P广播。数据来自用户本人账号的公开H5接口，频率受限。许可为PolyForm Noncommercial 1.0.0，禁止商业使用，非OSI开源许可。",
+   "highlights": [
+    "提供Android App、网页、Node/TypeScript服务端三种形态，端口状态按free/busy/unavailable/unknown四组归一并保留原文",
+    "节点间通过libp2p + gossipsub广播快照实现P2P共享，节点身份采用peerId白名单，消息层默认只信任nodes.json中的节点",
+    "上传接口使用设备级HMAC签名+时间戳窗口+nonce防重放，token采用AES-256-GCM加密存储；支持Docker一条命令部署与每日自动更新回退"
+   ],
+   "use_cases": [
+    "查询武汉纺织大学阳光校区充电桩的实时空位与到达预测",
+    "在校园内搭建多节点快照共享服务，通过P2P网络同步数据",
+    "学习基于libp2p/gossipsub的去中心化快照广播与节点白名单机制"
+   ]
+  },
+  "sha": "3e9a5a57625b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bfedff428972": {
+  "identity": {
+   "one_liner": "基于 Symfony 7.4 的医院护士数据模拟与管理 RESTful API",
+   "review": "该项目是巴塞罗那 STUCOM 学院 DAW 课程 pr03 实践教学项目，由四人小组以 Symfony 7.4 与 PHP 8.2+ 构建。通过 Doctrine ORM 连接 Supabase 上的 PostgreSQL，实现护士记录的增删改查、按名称检索及登录验证，密码经 Bcrypt 哈希存储。仓库包含 Postman 集合、UML 图和 4 条 GitHub Actions 流水线（PHPUnit、Newman、代码规范、安全审计），克隆后需 PHP 8.2+ 与 Composer 运行。",
+   "highlights": [
+    "提供 7 个 REST 端点：注册、全量列表、按 ID/名称查询（大小写不敏感）、更新、删除及登录校验",
+    "包含 4 条 GitHub Actions 流水线，覆盖 PHPUnit 11 单元测试（59 项测试/139 项断言）、Newman E2E 测试、PSR-12 规范检查与依赖安全审计",
+    "数据层由 Doctrine ORM 映射 Nurse 实体至 PostgreSQL（Supabase 托管），并保留 data/nurses.json 本地数据集"
+   ],
+   "use_cases": [
+    "作为 Symfony REST API 与 Doctrine ORM 的教学示例项目",
+    "用于 DAW 等课程中团队协作流程（分支、GitHub Projects、Pull Request、CI 流水线）的实践参考",
+    "需一套护士人员记录管理端点及配套 Postman 测试集合时可直接导入使用"
+   ]
+  },
+  "sha": "bfedff428972",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "65c585562978": {
+  "identity": {
+   "one_liner": "用 Rust 实现分布式 HTAP 数据库的 Lab 式设计文档集",
+   "review": "该项目目前仅包含设计文档，不含实现代码。文档集规划了一个 Rust 分布式 HTAP 数据库的分层架构与 L0–L14 递进实验，覆盖算子、RBO/CBO、执行计划等功能域，并通过 C-/F-/AC- 等编号建立跨文档追溯链。面向博士研究与高阶数据库实验，作为后续实现的契约与验收依据使用。",
+   "highlights": [
+    "拆分为 L0–L14 递进 Lab 实验，每个 Lab 含前置依赖、交付物、Definition of Done 与可复现脚本",
+    "建立 C-、OP-、R-、CB-、PL-、F-、AC- 等统一编号体系，形成功能点到验收项的双向追溯链",
+    "技术选型明确：tokio、tonic/gRPC、RocksDB binding，自研 Block 列式内存格式，不使用现成查询引擎作内核"
+   ],
+   "use_cases": [
+    "作为分布式 HTAP 数据库研究与博士课题的实验设计蓝本",
+    "作为数据库内核开发团队的分层设计与验收规范参考",
+    "用于系统设计文档与实现之间的追溯管理和量化验收"
+   ]
+  },
+  "sha": "65c585562978",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

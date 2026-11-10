@@ -2988,5 +2988,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "059f4cc03b32": {
+  "identity": {
+   "one_liner": "Rust 编写的可嵌入多模型 SQL 引擎，可直接查询应用现有存储",
+   "review": "GlueSQL 是用 Rust 编写的可嵌入 SQL 数据库引擎，把 SQL 解析、规划与执行能力带入应用自身存储，无需把数据迁入独立数据库。使用者通过实现 Store/StoreMut 存储接口接入自有数据源，也可使用内存、文件、Redb、SlateDB 等参考实现；并提供 npm 包供浏览器与 Node.js 使用。限制方面，各存储后端的能力与限制需查阅存储文档。",
+   "highlights": [
+    "提供 SQL 与 Rust Query Builder 两种查询接口，均经由同一引擎执行；Query Builder 直接构建可执行语句计划",
+    "支持 schema-defined 与 schemaless 表共存查询，含 MAP/LIST 半结构化值，二者可在同一查询中连接",
+    "通过 Store（读）与 StoreMut（写）两个 trait 实现自定义存储适配，官方提供内存、文件、Redb、SlateDB、Mongo、Redis、CSV/JSON/Parquet、Git 等参考实现"
+   ],
+   "use_cases": [
+    "对现有 CSV/JSON/Parquet 文件或 MongoDB/Redis 数据直接执行 SQL 查询而不迁移数据",
+    "需要嵌入式持久化存储的场景（本地 Redb、S3/R2 上的 SlateDB、文件系统）",
+    "浏览器与 Node.js 应用中使用 SQL（基于 WebAssembly 的 JS 包，支持内存、localStorage、OPFS 存储）"
+   ]
+  },
+  "sha": "059f4cc03b32",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5e8eabdefe53": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件：审批门写入 SQLite，冻结快照注入下次会话",
+   "review": "dsh-memento 是面向 DeepSeek Harness 的社区记忆插件，提供类型安全的 ctx.memory 接缝、零依赖 SQLite 提供方（node:sqlite、WAL、0600 权限）与 memory 工具。记忆分 user/agent 两轨、user-global/workspace 两层并按 agentPreset 隔离，每轨每层有硬字符预算（默认 user 2000/agent 4000）；写入经 writePolicy（ask/auto/off）审批门并落审计行，快照在会话首次组装提示时冻结注入 systemPrompt。检索为大小写不敏感子串，vector 为可选；另附只读 stdio MCP 入口。适合需要在会话间保留带审计的记忆的使用者。",
+   "highlights": [
+    "提供两轨（user/agent）×两层（user-global/workspace）×按 agentPreset 隔离的记忆结构，每轨每层有硬字符预算，写满返回结构化错误而非截断",
+    "所有写路径（add/replace/remove/seed）经服务内部审批门，被拒写入同样落 *-denied 审计行，审计可由 approval/asked+approval/decided 与插件审计表重建",
+    "提供只读 stdio MCP 服务器（dsh-memento-mcp），以 readOnly 模式打开数据库，供外部 MCP 客户端检索与统计"
+   ],
+   "use_cases": [
+    "需要在多次会话间保存用户事实与环境约定、并要求每次写入可审批可审计的场景",
+    "通过 /memory 命令或 Web 面板浏览、导出、导入记忆条目的本地管理",
+    "用 Claude、Codex 等 MCP 客户端经只读入口检索已有记忆库"
+   ]
+  },
+  "sha": "5e8eabdefe53",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b6d7b794d6d1": {
+  "identity": {
+   "one_liner": "VAST Database 的 Python SDK，提供事务性模式管理与 Arrow 列式数据读写",
+   "review": "该 SDK 是 VAST Database 与 VAST Catalog 的 Python 客户端，用于管理 schema/表、执行查询和数据修改。运行要求 Linux、Python 3.10–3.13、VAST 集群 5.0.0-sp10 及以上，连接凭据可从 AWS 风格环境变量读取。查询返回 pyarrow.RecordBatchReader，需在事务开启期间消费；支持分区表、快照读取和向量检索等示例。",
+   "highlights": [
+    "提供 schema/表管理、数据导入、查询与修改，操作以事务组织",
+    "支持谓词下推过滤，并可与 PyArrow 和 DuckDB 直接集成",
+    "通过 VAST Catalog 查询文件系统，示例涵盖 Parquet 直接导入与向量检索（需 ADBC）"
+   ],
+   "use_cases": [
+    "在 VAST 集群上用 Python 进行 OLAP 风格的列式数据导入与查询",
+    "直接基于 VAST 上已有的 Parquet 文件建表而无需客户端复制",
+    "对含向量索引的列执行最近邻搜索，或用 DuckDB 做查询后处理"
+   ]
+  },
+  "sha": "b6d7b794d6d1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7ec4b5daa2f7": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 记忆服务器，为多个 AI 应用提供共享项目记忆，数据存于本机 SQLite 文件。",
+   "review": "FlowState 是一个开源的本地 MCP 服务器，为 Claude、ChatGPT、Cursor 等 MCP 客户端提供共享的项目记忆（决策、待办、变更、经验），供同时使用多个 AI 工具的开发者跨会话延续上下文。数据存储在本机单个 SQLite 文件中，可选远程备份、隧道或中继。冲突仅做标记和配对提示，最终由用户在审查队列中裁定；每条变更记录来源、模型与机器信息。",
+   "highlights": [
+    "基于本地 SQLite 文件存储，多个 AI 应用可同时读取并写入同一份项目记忆",
+    "内置待办认领机制（默认 15 分钟，可至 120 分钟），支持多代理并行工作时的任务协调",
+    "自动检测可能冲突的决策并加入审查队列，冲突卡片提供双方主张与证据片段"
+   ],
+   "use_cases": [
+    "在同一项目的多个 AI 聊天或工具之间延续上下文，避免每次重新说明背景",
+    "多个代理同时处理同一项目时通过 todo 认领与冲突标记协调工作",
+    "通过中继或自建隧道，在手机等远程设备上查看项目状态与待审查事项"
+   ]
+  },
+  "sha": "7ec4b5daa2f7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2664,5 +2664,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "293cdbf1259d": {
+  "identity": {
+   "one_liner": "以 Docker Compose 运行 FreePBX 17 + Asterisk 21 的 VoIP PBX 容器方案",
+   "review": "该项目用 Docker Compose 将 FreePBX 17、Asterisk 21、PHP 8.2 与独立 MariaDB 打包为多容器应用，供需要快速部署 SIP 通话 PBX 的管理员使用。构建时固定基础镜像摘要并校验安全更新包的 SHA-256；RTP 端口通过宿主机 iptables 手动暴露以规避 Docker 大端口段的内存问题；不支持 DAHDI 通道。含 Fail2ban、postfix 邮件与 logrotate 配置。",
+   "highlights": [
+    "提供 FreePBX 17.0.21、Asterisk 21.10.2、PHP 8.2、MariaDB 10.11 的多容器组合，支持数据持久化",
+    "构建流程固定 Debian 基础镜像摘要与快照源，按 packages.tsv 安装安全更新并校验 SHA-256",
+    "通过 run.sh 配置宿主机 iptables 暴露 RTP 端口（可用 --rtp 覆盖默认 16384-32767），支持 certbot Let's Encrypt TLS"
+   ],
+   "use_cases": [
+    "在 Docker 环境中部署 SIP 通话 PBX 系统",
+    "需要固定镜像版本、可复现构建的 PBX 部署",
+    "通过 HTTPS 管理界面并配置邮件通知的语音管理平台"
+   ]
+  },
+  "sha": "293cdbf1259d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eacceb3035c7": {
+  "identity": {
+   "one_liner": "面向 Agent 的中文优先长期记忆库，SQLite 存储 + BM25 检索",
+   "review": "Brain4Agent 将 Agent 对话轮次存入单个 SQLite 文件，按会话为单位用 BM25 检索，核心路径不调用模型。面向需要持久化对话上下文的 Agent 开发者，提供 CLI、MCP 服务器与 Python 库三种使用方式。检索返回缺失词证据而非置信分，支持中文、日文、韩文等 CJK 分词（依赖可选的 jieba 词典，缺失时降级为字符 bigram）；记忆条目携带 tags、superseded_by、refs 等调用方提供的元数据。",
+   "highlights": [
+    "检索基于 BM25，核心路径无模型调用，查询耗时为毫秒级",
+    "支持 CLI、MCP 服务器（五个工具）与 Python 库 MemoryStore 三种接口，写入支持 batch 批量提交",
+    "记忆条目支持 tags、superseded_by、refs 元数据及独立索引文本，检索返回 corpus_missing / missing_terms 证据字段"
+   ],
+   "use_cases": [
+    "为 Agent 会话积累的决策背景、失败尝试等上下文提供跨会话检索",
+    "需要日文、韩文、中文查询直接可用的本地记忆存储（本地 SQLite 单文件，local-first）",
+    "通过 MCP 服务器为支持 MCP 的客户端提供记忆读写工具"
+   ]
+  },
+  "sha": "eacceb3035c7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a56e5efaf546": {
+  "identity": {
+   "one_liner": "用 supacraft.json 声明整个后端，单二进制运行 REST/实时/MCP 服务",
+   "review": "SupaCraft 是一个 Go 编写的开源后端：数据库、认证、自定义端点、定时任务等全部在 supacraft.json 中声明式定义，由单个二进制读取并基于 SQLite 运行。它内置 MCP 服务器，Claude Code、Cursor 等 AI 代理可通过 MCP 生成并修改配置，每次改动先经校验再保存。迁移仅做增量新增，不删除或重命名既有数据。适合 MVP、原型、内部工具等场景。",
+   "highlights": [
+    "提供 JWT 认证、Google/GitHub/OpenID Connect 登录、角色权限与行级策略，以及文件上传（本地磁盘、S3、GCS、Azure、FTP 等）、邮件、Webhook、后台任务与 WebSocket 实时订阅",
+    "内置 MCP 服务器，AI 代理可构建、测试和部署项目；配置在保存前经过校验，含列类型、引用存在性、步骤字段、cron 表达式等检查",
+    "生成 OpenAPI 3.1 文档，附种子数据与请求级测试（测试运行于全新数据库），单个 serve 进程可通过 X-Tenant-ID 托管多个项目"
+   ],
+   "use_cases": [
+    "通过自然语言描述让 AI 代理生成 REST API 的 MVP 与原型开发",
+    "需要 SQLite 存储、认证、文件上传、定时任务的小型内部工具",
+    "在一台服务器上集中托管多个小型后端项目（多租户部署）"
+   ]
+  },
+  "sha": "a56e5efaf546",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed7b463b5801": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 Gemini 的多云 Kubernetes 可观测性与 AIOps 运维平台。",
+   "review": "CloudPulse AI 是一个面向多云 Kubernetes 与微服务环境的可观测性运维平台，提供拓扑爆炸半径计算、SLO 监测、FinOps 成本治理、RAG 基础设施问答与自愈工作流。后端为 FastAPI + PostgreSQL + Redis + ChromaDB，前端为 React 18。默认运行于确定性演示模式，无需云凭据；实时模式需配置 Gemini API。支持 Docker Compose 一键启动，采用 MIT 许可证。",
+   "highlights": [
+    "集成 Gemini LLM 推理与本地确定性 SRE 引擎自动回退，基于 ChromaDB 向量库实现带证据引用的 RAG 基础设施问答",
+    "支持多云（AWS/GCP/Azure/K8s）资产盘点、依赖拓扑图、SPOF 检测与标记 SIMULATION ONLY 的故障传播模拟",
+    "内置多租户 RBAC、JWT 吊销、OpenTelemetry 分布式追踪与 WebSockets 亚秒级指标流"
+   ],
+   "use_cases": [
+    "多云 Kubernetes 集群与微服务的指标、日志、链路统一监控与 SLO 错误预算预测",
+    "运维团队通过自然语言 RAG 对话查询集群遥测并进行多阶段审批的自愈修复操作",
+    "企业 FinOps 成本治理：预算违规告警、成本异常检测、闲置与孤儿资源识别"
+   ]
+  },
+  "sha": "ed7b463b5801",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

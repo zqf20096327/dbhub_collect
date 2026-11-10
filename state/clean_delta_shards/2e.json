@@ -22200,5 +22200,1214 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "f3b5773c1dd7+2": {
+  "fn": "mr-grj/ciphermoth",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    8,
+    0,
+    6
+   ],
+   [
+    "replace",
+    8,
+    18,
+    6,
+    12,
+    [
+     "CI",
+     "Release",
+     "License",
+     "Python",
+     "SQLite",
+     "Desktop"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    32,
+    12,
+    26
+   ],
+   [
+    "replace",
+    32,
+    33,
+    26,
+    27,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    27,
+    28
+   ],
+   [
+    "replace",
+    34,
+    40,
+    28,
+    34,
+    [
+     "|**First run: set up your master password**|**The vault**|",
+     "|Set up your vault|Vault overview|",
+     "|**Add a password, generate a strong one**|**Vault health, computed on your device**|",
+     "|Add password with generator|Vault health report|",
+     "|**The browser extension, only when you ask**|**Light, following your system**|",
+     "|Browser extension popup, dark|Browser extension popup, light|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    34,
+    37
+   ],
+   [
+    "replace",
+    43,
+    44,
+    37,
+    38,
+    [
+     "**Download the latest release**. No Python, Docker, or developer tools needed."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    38,
+    39
+   ],
+   [
+    "replace",
+    45,
+    46,
+    39,
+    40,
+    [
+     "|Your machine|Download|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    40,
+    41
+   ],
+   [
+    "replace",
+    47,
+    53,
+    41,
+    47,
+    [
+     "|macOS, Apple Silicon (M-series)|`darwin-aarch64.dmg`|",
+     "|macOS, Intel|`darwin-x86_64.dmg`|",
+     "|Windows, Intel/AMD|`windows-x86_64.exe`|",
+     "|Windows, ARM64|`windows-aarch64.exe`|",
+     "|Linux, Intel/AMD|`linux-x86_64.AppImage` or `.deb`|",
+     "|Linux, ARM64|`linux-aarch64.AppImage` or `.deb`|"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    58,
+    47,
+    52
+   ],
+   [
+    "replace",
+    58,
+    59,
+    52,
+    53,
+    [
+     "These are free, unsigned-publisher downloads: macOS may require **System Settings → Privacy & Security → Open Anyway**, and Windows may show a SmartScreen warning. Only approve a download you obtained from this project's release page. Organizational policies may prevent installation. Installation details and updates explain the limits; never disable OS protections globally."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    66,
+    53,
+    60
+   ],
+   [
+    "replace",
+    66,
+    67,
+    60,
+    61,
+    [
+     "Then open **http://localhost:3000**. CONTRIBUTING.md covers manual setup and servers. Coming from 2.0 or PostgreSQL? Read the upgrade procedure first; those vaults are never converted automatically."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    80,
+    61,
+    74
+   ],
+   [
+    "replace",
+    80,
+    81,
+    74,
+    75,
+    [
+     "- store a username, website, tags, folders, a two-factor (TOTP) secret, and your own custom fields alongside each entry, all encrypted, entry names included (see Security)"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    94,
+    75,
+    88
+   ],
+   [
+    "replace",
+    94,
+    95,
+    88,
+    89,
+    [
+     "- a **browser extension** for Chrome, Brave and Firefox (other Chromium browsers should work too) that fills a login on the page you're on **only when you ask** (toolbar button or Ctrl/⌘+Shift+L): nothing appears inside pages, nothing fills on page load, no \"save this login?\" nagging. It unlocks with your master password or hands off to CipherMoth for a security key, and its session can only fill: it searches your logins and reads a password only when you fill or copy, and cannot read notes, history or attachments or export anything. No CipherMoth account, ever: it talks only to your own CipherMoth (the desktop app on the same computer, through native messaging with a code you confirm once per browser, or your own server), and only the page's origin is sent to find matches (docs/EXTENSION.md)"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    117,
+    89,
+    111
+   ],
+   [
+    "replace",
+    117,
+    118,
+    111,
+    112,
+    [
+     "How it works (the full specification is docs/VAULT_FORMAT.md):"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    120,
+    112,
+    114
+   ],
+   [
+    "replace",
+    120,
+    122,
+    114,
+    116,
+    [
+     " master password with **Argon2id** (OWASP 2024 interactive profile, a random salt per vault). A password commitment derived through the same Argon2id work rejects wrong passwords without a cheaper guessing path; a wrong password cannot unwrap the key.",
+     " New vaults require a reasonably strong master password (12+ characters, mixed types), enforced by the Python core;"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    116,
+    117
+   ],
+   [
+    "replace",
+    123,
+    127,
+    117,
+    121,
+    [
+     " 2FA secret, description, tags, folder, custom fields, password history, favorite flag and type, and each attachment's",
+     " name, type and bytes. Every encrypted value is bound to its own record, so it cannot be swapped into another entry",
+     " without being detected. Entries are found by name through a keyed hash (HMAC-SHA256) of the name, never a plaintext",
+     " copy;"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    121,
+    122
+   ],
+   [
+    "replace",
+    128,
+    130,
+    122,
+    124,
+    [
+     " ones are in the trash, timestamps, attachment sizes, approximate entry sizes, which entries share a name (an entry and",
+     " its trashed copies) and your timeout settings. This is encryption of each entry, not of the whole file;"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    124,
+    125
+   ],
+   [
+    "replace",
+    131,
+    132,
+    125,
+    126,
+    [
+     " open nothing in the vault afterwards (older snapshots and backups keep the password they were made with);"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    126,
+    127
+   ],
+   [
+    "replace",
+    133,
+    136,
+    127,
+    130,
+    [
+     " (WebAuthn PRF / hmac-secret, after its PIN) joins the master password before the vault key is unwrapped, and every",
+     " unlock also verifies the key's signature over a fresh challenge. Without the key, the vault file does not even let",
+     " anyone test password guesses (details);"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    130,
+    131
+   ],
+   [
+    "replace",
+    137,
+    139,
+    131,
+    133,
+    [
+     " It resets a forgotten master password and is replaced after use. Whoever holds it holds the vault, so keep it offline",
+     " (details);"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    133,
+    134
+   ],
+   [
+    "replace",
+    140,
+    142,
+    134,
+    136,
+    [
+     " secret only that device's Secure Enclave or passkey can produce after checking your fingerprint or face. Anyone that",
+     " device accepts can open the vault (details);"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    136,
+    139
+   ],
+   [
+    "replace",
+    145,
+    150,
+    139,
+    144,
+    [
+     " byte for byte, and your settings, encrypted with AES-256-GCM under Argon2id with the backup's own random salt and",
+     " your master password. A wrong password, a damaged or cut-off file changes nothing on restore. A backup is the",
+     " portable copy; a **snapshot** (`ciphermoth-admin snapshot`, see docs/UPDATING.md)",
+     " is a raw local copy of the vault file for recovering this installation. Check that a browser download actually",
+     " saved the backup file; the app cannot verify browser saving and does not label entries as safely backed up;"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    164,
+    144,
+    158
+   ],
+   [
+    "replace",
+    164,
+    165,
+    158,
+    159,
+    [
+     "To report a vulnerability, see SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    168,
+    159,
+    162
+   ],
+   [
+    "replace",
+    168,
+    169,
+    162,
+    163,
+    [
+     "|Layer|Tech|"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    170,
+    163,
+    164
+   ],
+   [
+    "replace",
+    170,
+    177,
+    164,
+    171,
+    [
+     "|Backend|Python 3.13, FastAPI, SQLAlchemy 2.0, aiosqlite|",
+     "|Database|SQLite 3.53 (one file, WAL, full sync)|",
+     "|Frontend|React 19, Vite, MUI v9, easy-peasy|",
+     "|Package manager|uv (backend), npm (frontend)|",
+     "|Desktop|Tauri 2, Rust, PyInstaller onedir|",
+     "|Browser extension|Manifest V3, TypeScript, Preact, esbuild (reproducible), Playwright|",
+     "|Infrastructure|Docker, Docker Compose v2, GitHub Actions|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    180,
+    171,
+    174
+   ],
+   [
+    "replace",
+    180,
+    187,
+    174,
+    181,
+    [
+     "- **CONTRIBUTING.md** - hacking on CipherMoth, self-hosting on a server, configuration, and updates",
+     "- **docs/UPDATING.md** - desktop installation and updates, Docker snapshots and older vaults",
+     "- **desktop/README.md** - native builds, data paths and desktop internals",
+     "- **docs/EXTENSION.md** - the browser extension: install, connect, what it can and cannot do, checking a download",
+     "- **docs/CLI.md** - the `ciphermoth` command-line reference. A plain Docker install already has it: `install.sh` leaves a `cip` script in your CipherMoth folder, so `./cip password list` just works (no Python, no clone)",
+     "- **SECURITY.md** - reporting a vulnerability",
+     "- Logo, wordmark, and favicon live in `docs/brand/`"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    189,
+    181,
+    183
+   ],
+   [
+    "replace",
+    189,
+    191,
+    183,
+    184,
+    [
+     "MIT: see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "597f3adf0a3f+2": {
+  "fn": "aipermission/aipermission",
+  "clean_ver": "2",
+  "raw_lines": 24,
+  "ops": [
+   [
+    "replace",
+    0,
+    24,
+    0,
+    3,
+    [
+     "AIPermission logo",
+     " AIPermission ",
+     " Local permission gateway for AI agents. "
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    3,
+    4
+   ],
+   [
+    "replace",
+    25,
+    26,
+    4,
+    19,
+    [
+     " Let AI assistants operate developer-owned systems through scoped connector",
+     " actions without giving the assistant your credentials.",
+     "",
+     " Quick Start",
+     " ·",
+     " MCP Setup",
+     " ·",
+     " Connectors",
+     " ·",
+     " Documentation",
+     "",
+     " Local-only",
+     " MCP",
+     " Docker",
+     " License"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    19,
+    22
+   ],
+   [
+    "replace",
+    29,
+    34,
+    22,
+    25,
+    [
+     " ClickHouse &middot; Docker &middot; Kafka / Redpanda &middot; Kubernetes ",
+     " Mail &middot; Postgres &middot; RabbitMQ &middot; Redis / Valkey ",
+     " S3 &middot; SQL Server &middot; SSH "
+    ]
+   ],
+   [
+    "equal",
+    34,
+    36,
+    25,
+    27
+   ],
+   [
+    "replace",
+    36,
+    37,
+    27,
+    28,
+    [
+     "Explore connector capabilities and setup."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    44,
+    28,
+    35
+   ],
+   [
+    "replace",
+    44,
+    51,
+    35,
+    42,
+    [
+     "|You keep control of|The AI gets|",
+     "|---|---|",
+     "|connector credentials|scoped MCP connector actions|",
+     "|project and token visibility|only visible target/profile references|",
+     "|Disabled, Prompt, or Always rules|execution after the effective rule is checked|",
+     "|local approval decisions|bounded action results and status|",
+     "|encrypted history and audit|no raw credential values|"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    55,
+    42,
+    46
+   ],
+   [
+    "replace",
+    55,
+    56,
+    46,
+    47,
+    [
+     "connector catalog is the canonical current list and owns"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    62,
+    47,
+    53
+   ],
+   [
+    "replace",
+    62,
+    64,
+    53,
+    55,
+    [
+     "SQL Server setup and TLS and",
+     "Explicit SQL Execution."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    77,
+    55,
+    68
+   ],
+   [
+    "replace",
+    77,
+    78,
+    68,
+    69,
+    [
+     "capacity and retention guidance rather than"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    95,
+    69,
+    86
+   ],
+   [
+    "replace",
+    95,
+    97,
+    86,
+    88,
+    [
+     "project principles, threat model,",
+     "and credential boundary before using it"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    101,
+    88,
+    92
+   ],
+   [
+    "replace",
+    101,
+    103,
+    92,
+    94,
+    [
+     "the client after upgrading its interpreter. See the changelog",
+     "and native dependency inventory, including"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    115,
+    94,
+    106
+   ],
+   [
+    "replace",
+    115,
+    116,
+    106,
+    107,
+    [
+     " current effective rule."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    107,
+    108
+   ],
+   [
+    "replace",
+    117,
+    118,
+    108,
+    109,
+    [
+     " also expose live local console surfaces."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    124,
+    109,
+    115
+   ],
+   [
+    "replace",
+    124,
+    125,
+    115,
+    116,
+    [
+     "AIPermission demo: AI operates through approval-based connector access"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    116,
+    117
+   ],
+   [
+    "replace",
+    126,
+    129,
+    117,
+    120,
+    [
+     "|Human approval|Live connector console|",
+     "|---|---|",
+     "|Approval prompt|Persistent console|"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    120,
+    121
+   ],
+   [
+    "replace",
+    130,
+    133,
+    121,
+    124,
+    [
+     "|Token-scoped access|Auditable history|",
+     "|---|---|",
+     "|Token permissions|History detail|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    191,
+    124,
+    182
+   ],
+   [
+    "replace",
+    191,
+    192,
+    182,
+    183,
+    [
+     "Docker Runtime for Windows line endings, host"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    218,
+    183,
+    209
+   ],
+   [
+    "replace",
+    218,
+    219,
+    209,
+    210,
+    [
+     "See Projects. Project Vault is a separate project-scoped"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    210,
+    211
+   ],
+   [
+    "replace",
+    220,
+    221,
+    211,
+    212,
+    [
+     "Project Vault."
+    ]
+   ],
+   [
+    "equal",
+    221,
+    244,
+    212,
+    235
+   ],
+   [
+    "replace",
+    244,
+    246,
+    235,
+    237,
+    [
+     "MCP Client Setup. The MCP tool contract is",
+     "documented in MCP Tools."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    258,
+    237,
+    249
+   ],
+   [
+    "replace",
+    258,
+    259,
+    249,
+    250,
+    [
+     " credential, and action checks pass"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    269,
+    250,
+    260
+   ],
+   [
+    "replace",
+    269,
+    270,
+    260,
+    261,
+    [
+     "MCP Permission Flow."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    277,
+    261,
+    268
+   ],
+   [
+    "replace",
+    277,
+    280,
+    268,
+    271,
+    [
+     " credential data to the AI client. Permitted target output remains untrusted;",
+     " see the credential boundary for the",
+     " exact class-specific response and redaction contract."
+    ]
+   ],
+   [
+    "equal",
+    280,
+    283,
+    271,
+    274
+   ],
+   [
+    "replace",
+    283,
+    285,
+    274,
+    276,
+    [
+     " tabs. Focus and bounded status checks reconcile other clients; browser",
+     " notifications cannot unlock a database or grant authorization."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    276,
+    277
+   ],
+   [
+    "replace",
+    286,
+    287,
+    277,
+    278,
+    [
+     " data and may contain secrets."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    288,
+    278,
+    279
+   ],
+   [
+    "replace",
+    288,
+    294,
+    279,
+    285,
+    [
+     " mandatory boundary; pattern matching for arbitrary output remains",
+     " best-effort. Disabling optional pattern rules does not disable the mandatory",
+     " credential boundary. See the",
+     " redaction guarantee matrix,",
+     " and do not intentionally print credentials into action output or console",
+     " transcripts."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    285,
+    286
+   ],
+   [
+    "replace",
+    295,
+    296,
+    286,
+    287,
+    [
+     " privilege."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    287,
+    288
+   ],
+   [
+    "replace",
+    297,
+    300,
+    288,
+    291,
+    [
+     " truncate or repair a returned name before a later operation. Connector",
+     " contracts reject identities that cannot cross their action boundary losslessly;",
+     " see the MCP connector boundaries."
+    ]
+   ],
+   [
+    "equal",
+    300,
+    301,
+    291,
+    292
+   ],
+   [
+    "replace",
+    301,
+    304,
+    292,
+    295,
+    [
+     " original request and idempotency key, and reconcile `outcome_unknown` before",
+     " another external attempt; see the",
+     " operator retry guidance."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    305,
+    295,
+    296
+   ],
+   [
+    "replace",
+    305,
+    308,
+    296,
+    299,
+    [
+     " database password. Changing the active database password does not re-encrypt",
+     " existing snapshots or backups; review old copies separately if a password",
+     " was compromised. See encrypted storage."
+    ]
+   ],
+   [
+    "equal",
+    308,
+    309,
+    299,
+    300
+   ],
+   [
+    "replace",
+    309,
+    310,
+    300,
+    301,
+    [
+     " local security boundary."
+    ]
+   ],
+   [
+    "equal",
+    310,
+    313,
+    301,
+    304
+   ],
+   [
+    "replace",
+    313,
+    319,
+    304,
+    310,
+    [
+     "- Security Policy",
+     "- Threat Model",
+     "- Credential Boundary",
+     "- Storage Encryption",
+     "- Backup And Restore",
+     "- Native Dependencies"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    325,
+    310,
+    316
+   ],
+   [
+    "replace",
+    325,
+    326,
+    316,
+    317,
+    [
+     "AIPermission Backup."
+    ]
+   ],
+   [
+    "equal",
+    326,
+    335,
+    317,
+    326
+   ],
+   [
+    "replace",
+    335,
+    336,
+    326,
+    327,
+    [
+     "Database Migration."
+    ]
+   ],
+   [
+    "equal",
+    336,
+    370,
+    327,
+    361
+   ],
+   [
+    "replace",
+    370,
+    373,
+    361,
+    364,
+    [
+     "Read CONTRIBUTING and",
+     "Development Testing before opening a pull",
+     "request. Releases use RELEASE_CHECKLIST.md."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    388,
+    364,
+    379
+   ],
+   [
+    "replace",
+    388,
+    389,
+    379,
+    380,
+    [
+     "Add A Connector."
+    ]
+   ],
+   [
+    "equal",
+    389,
+    395,
+    380,
+    386
+   ],
+   [
+    "replace",
+    395,
+    396,
+    386,
+    387,
+    [
+     "docs/index.md is the canonical navigation and ownership index."
+    ]
+   ],
+   [
+    "equal",
+    396,
+    406,
+    387,
+    397
+   ],
+   [
+    "replace",
+    406,
+    407,
+    397,
+    398,
+    [
+     "The public roadmap is in docs/ROADMAP.md."
+    ]
+   ],
+   [
+    "equal",
+    407,
+    408,
+    398,
+    399
+   ],
+   [
+    "replace",
+    408,
+    409,
+    399,
+    400,
+    [
+     "For a reproducible bug, open a bug report."
+    ]
+   ],
+   [
+    "equal",
+    409,
+    410,
+    400,
+    401
+   ],
+   [
+    "replace",
+    410,
+    412,
+    401,
+    403,
+    [
+     "SECURITY.md, not a public issue. Design proposals can start in",
+     "GitHub Discussions."
+    ]
+   ],
+   [
+    "equal",
+    412,
+    414,
+    403,
+    405
+   ],
+   [
+    "delete",
+    414,
+    415,
+    405,
+    405
+   ],
+   [
+    "equal",
+    415,
+    416,
+    405,
+    406
+   ],
+   [
+    "delete",
+    416,
+    421,
+    406,
+    406
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

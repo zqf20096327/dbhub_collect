@@ -2985,5 +2985,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e69ce40ef2bb": {
+  "identity": {
+   "one_liner": "兼容 Neo4j Bolt/Cypher 的图+向量+时序 MVCC 数据库",
+   "review": "NornicDB 是用 Go 编写的图数据库，在同一引擎中实现图遍历、向量检索（HNSW）与基于 MVCC 的历史读取，存储层提供快照隔离与提交时冲突检测。它兼容 Neo4j 的 Bolt/Cypher 协议，并提供 REST、GraphQL 及 Qdrant 风格的 gRPC 接口，支持 CPU、CUDA、Metal、Vulkan 多后端部署，可通过 Homebrew 或 Docker 安装。适用于知识系统、智能体记忆与 Graph-RAG 场景；其官方基准数据为项目自测结果。",
+   "highlights": [
+    "兼容 Neo4j Bolt/Cypher 协议，并提供 REST、GraphQL 与 Qdrant 兼容 gRPC 接口",
+    "存储层实现快照隔离（MVCC），支持 as-of 历史读取与提交时冲突检测",
+    "支持 CPU/CUDA/Metal/Vulkan 多硬件后端，内置托管嵌入与混合检索"
+   ],
+   "use_cases": [
+    "智能体记忆与 Graph-RAG 检索管线",
+    "需要图遍历与向量检索共存的知识系统",
+    "需要历史版本读取与审计记录的规范化事实存储"
+   ]
+  },
+  "sha": "e69ce40ef2bb",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1aab0a33e2bd": {
+  "identity": {
+   "one_liner": "基于 Bash 脚本的多版本数据库版本管理器，按指定版本创建和运行本地数据库实例",
+   "review": "DBDB 是一组 Shell 脚本，用于在本机下载并运行指定版本的 MySQL、PostgreSQL、MongoDB、Redis、Memcached 和 Meilisearch。用户通过 create/start/stop/connect 等子脚本以名称、版本、端口管理实例，数据与脚本路径关联。适合需要临时运行特定数据库版本的开发者与测试人员，也可通过内置的 Agent Skill 供 AI 编码代理调用。脚本通过路径中的 /dbdb/<类型> 判定数据库种类，因此克隆目录名不可更改。",
+   "highlights": [
+    "为每种支持的数据库提供 create/start/stop/restart/port/status/connect/delete 等统一子脚本",
+    "支持多版本实例，如 MySQL 5.7.31–9.2.0、PostgreSQL 12.6/13.2、Redis 6.2.14/7.2.5、MongoDB 6.0.24/7.0.21、Memcached 1.6.31、Meilisearch 1.56.1",
+    "connect.sh 可将参数透传给客户端以执行非交互查询，并附带 skills/dbdb Agent Skill 供 AI 代理使用"
+   ],
+   "use_cases": [
+    "在本地按需启动指定版本的数据库实例用于开发或测试",
+    "以随机端口或 create-start.sh 一键创建并启动临时数据库",
+    "在 Claude Code 等代理环境中通过 Agent Skill 创建数据库服务器"
+   ]
+  },
+  "sha": "1aab0a33e2bd",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

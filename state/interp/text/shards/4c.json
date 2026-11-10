@@ -3050,5 +3050,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cf323edc41bc": {
+  "identity": {
+   "one_liner": "从表格数据生成并校验 ISO 20022 pain.001/pain.008 支付文件的 Python 工具",
+   "review": "Pain001 是一个 Python 库与 CLI，从 CSV、SQLite、JSON、JSONL、Parquet 等行式数据生成 pain.001.001.03–13 与 pain.008 XML，写入前按内置 XSD 校验，并支持 pain.002/camt.053 解析与构造。面向支付文件管道开发者，另提供 REST API、MCP、LSP 服务与 SFTP 上传。README 明确不提供 EBICS/AS2/SWIFT 连接与真实清算，校验通过不等于银行受理。",
+   "highlights": [
+    "支持 pain.001.001.03–13 与 pain.008.001.02/.08 生成，输出前按内置 XSD 校验",
+    "提供 CLI、REST API（pain001 serve）、MCP 服务器（pain001 mcp）与 CSV 语言服务器（pain001-lsp-builtin）",
+    "支持插件扩展 loader/validator/scheme/writer，可选 CEL 规则、XML-DSig 签名、SFTP 上传与 asyncio 适配"
+   ],
+   "use_cases": [
+    "从 CSV/数据库/Parquet 等行式数据批量生成 pain.001 贷记或 pain.008 直接借记 XML 文件",
+    "在 CI 或 pre-commit 流程中对已有支付文件做 XSD 与 scheme 校验并输出 SARIF 报告",
+    "用 mockbank 与 pain.002/camt.053 构造器搭建含银行回执的集成测试环境"
+   ]
+  },
+  "sha": "cf323edc41bc",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a86faf23aa0c": {
+  "identity": {
+   "one_liner": "面向 AI agent 的后端基础设施：Postgres、认证、存储、无服务器函数与分阶段部署，agent 经 CLI/SDK/MCP 自主开通并付费。",
+   "review": "run402 是一个开源的后端即服务项目，面向自主 AI agent 和编程 agent 提供机器可直接驱动的后端：一次调用可开通 Postgres 数据库、REST API、用户认证、内容寻址文件存储、静态站点托管、无服务器函数与图像生成。agent 通过 CLI、TypeScript SDK 或 MCP 工具完成开通、部署与检查，无需人工登录控制台或复制 API key。付费以 x402（Base 链 USDC）或 MPP（Tempo 链 pathUSD、比特币闪电网络 sats）结算，测试网原型层免费。代码为 monorepo：本仓库持有 agent 交互面（MIT），自托管运行时在 run402-core（Apache-2.0），托管云控制平面为专有。",
+   "highlights": [
+    "提供 CLI、类型化 TypeScript SDK、MCP 服务器与 OpenClaw skill 等多种接口，共享同一类型化内核 @run402/sdk",
+    "支持通过 run402 up 完成清单驱动的分阶段部署，包含 --check 本地校验、--plan 网关审查与 --require-plan 复核；部署后可按 verify.http[] 执行 HTTP 验证",
+    "支付采用 x402/MPP 结算，CLI、SDK 与 MCP 三种接口返回统一的 x402-commerce-result.v1 结算字段，并提供幂等键、收据校验与明确的恢复路径"
+   ],
+   "use_cases": [
+    "自主 agent 或编程 agent 端到端开通与部署后端资源（数据库、认证、存储、站点、函数）",
+    "在终端脚本、CI 或 agent 控制的 shell 中以 JSON 输入输出方式操作后端并执行部署",
+    "通过 MCP 主机（如 Claude Desktop、Cursor、Cline、Claude Code）以工具形式调用 run402 操作"
+   ]
+  },
+  "sha": "a86faf23aa0c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe708980bff9": {
+  "identity": {
+   "one_liner": "可自托管的工作区：页面、数据库、消息与邮件，含实时协作与内置 MCP 服务器",
+   "review": "Leafdesk 将块编辑器页面、行即页面的数据库、团队消息和成员个人邮箱（Gmail、Microsoft 365 或 IMAP/SMTP）整合在同一工作区，通过 OAuth 2.1 的 MCP 服务器让 Claude 等 AI 助手在用户批准后读写工作区。用一条 docker compose 命令部署于自有服务器，数据存于 PostgreSQL；AGPL-3.0 许可，若修改后通过网络提供服务须开源改动。",
+   "highlights": [
+    "数据库支持表格、看板、日历、时间线、仪表盘等视图，含关系、公式、汇总与按钮",
+    "内置 MCP 服务器，AI 助手经 OAuth 2.1 批准后可搜索、读取和编辑工作区",
+    "支持导入 Notion、Obsidian、Logseq、Confluence 等多种来源，并可同步 Jira、GitHub PR、PostgreSQL 表等数据"
+   ],
+   "use_cases": [
+    "需要自托管、数据存于自己 PostgreSQL 的团队知识库与项目数据库",
+    "将邮箱与数据库记录关联管理、用 AI 摘要邮件线程并起草回复的场景",
+    "让 Claude 等 MCP 客户端在受控权限下读写团队工作区"
+   ]
+  },
+  "sha": "fe708980bff9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d9d5373b227a": {
+  "identity": {
+   "one_liner": "带长期记忆的资料阅读助手，用seekdb检索加PowerContext记忆",
+   "review": "读伴是一个面向读论文人群的资料阅读助手，支持对 md/txt/pdf 语料提问并返回带文件、页、行号的引用。核心机制：seekdb 做 NGRAM 全文索引与候选检索，PowerContext 跨进程保存解释深度、薄弱点和阅读进度。默认抽取式回答、不调用生成模型；PDF 仅文本层抽取，无 OCR，单机单用户、无鉴权。",
+   "highlights": [
+    "seekdb 提供 NGRAM 全文索引、MATCH-AGAINST 候选检索与按文档的结构化过滤，回答每条结论附可回查的文件页/行引用",
+    "PowerContext 持久化画像、薄弱点、阅读进度与问答摘要，跨进程复用并影响下次召回与复习清单",
+    "内置中文问题命中英文论文的人工术语表跨语言扩展，附 9 个 pytest 用例与 21 题评测（Hit@3 0.9048，citation_valid 1.0）"
+   ],
+   "use_cases": [
+    "论文与笔记分散存放时，按中文提问定位英文论文中的具体页码或笔记行号",
+    "跨多次会话续读资料，依据记录的进度与薄弱点获取复习清单和更基础的补充说明",
+    "需要引用可回查、不调用生成模型的抽取式问答场景（扫描件 PDF 不支持）"
+   ]
+  },
+  "sha": "d9d5373b227a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

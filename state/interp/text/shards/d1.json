@@ -2545,5 +2545,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4c155fb750f3": {
+  "identity": {
+   "one_liner": "自托管的数据库与有状态服务编排控制平面，无需 Kubernetes。",
+   "review": "Karakoram 是一个用 Go 编写的多平台控制平面，通过 REST API、karactl CLI 和 Web UI 在自有基础设施（Zerops、Dokploy 或 Nomad）上编排数据库与有状态服务，支持 MongoDB、PostgreSQL、MySQL、Elasticsearch 等十余种引擎的部署、备份和恢复。项目处于 pre-1.0 阶段（v0.4.7），Dokploy 与 Nomad 提供方为实验性质，副本数不保证独立主机，控制平面仅单副本。Apache 2.0 许可，维护者受雇于 Zerops。",
+   "highlights": [
+    "目录驱动创建引擎集群，支持 PostgreSQL Patroni HA、MongoDB 分片、MySQL Group Replication、PXC Galera 等多种拓扑",
+    "内置 S3 兼容备份存储、调度与恢复，部分引擎支持 PITR（如 pgBackRest、XtraBackup、PBM）",
+    "提供 REST API、karactl CLI、Web UI 及 MCP 接口，含 OIDC/RBAC 访问控制与审计"
+   ],
+   "use_cases": [
+    "在自有 Zerops、Dokploy（Docker Swarm）或 Nomad 集群上自托管数据库与有状态服务",
+    "需要统一管理多引擎数据库备份、恢复与备份演练的运维场景",
+    "多项目命名空间下需要 RBAC 与审计的团队数据库管理"
+   ]
+  },
+  "sha": "4c155fb750f3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ba2c2dd47c35": {
+  "identity": {
+   "one_liner": "自托管的 Archive.org 媒体库管理器，本地 SQLite 存储",
+   "review": "ArchivePlayer 是一个面向 Archive.org 内容的自托管媒体库管理器，适合想在本地整理和观看互联网档案馆公开视频的个人用户。它通过 Archive.org Metadata API 搜索或按 URL 添加条目，数据存于本地 SQLite；播放进度、剧集选择均在浏览器界面完成，TMDB 元数据为可选项。限制：仅支持 Windows 10/11 x64，内容直接流自 Archive.org，加载与缓冲取决于其服务。",
+   "highlights": [
+    "支持 Archive.org 实时搜索、视频过滤与直接 URL/标识符添加",
+    "本地 SQLite 存储，无遥测、无云依赖，支持单机多用户认证",
+    "可选 TMDB 集成提供海报与剧集元数据，未配置时按文件名解析剧集信息"
+   ],
+   "use_cases": [
+    "个人整理并观看互联网档案馆的公有领域或用户上传视频",
+    "按自定义分类组织收藏，并通过进度条继续观看",
+    "离线环境下无需 API key 即可运行，配置后获取 TMDB 海报与剧集信息"
+   ]
+  },
+  "sha": "ba2c2dd47c35",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9d75f2b51f21": {
+  "identity": {
+   "one_liner": "面向生产排障的只读 MCP 服务，凭 Web 控制台注册目标供 AI 按名查询",
+   "review": "DrPanda MCP 是一个基于 Python/FastMCP 的只读 MCP 服务，用于生产环境排障：管理员在 Web 控制台注册 MySQL、MongoDB、Elasticsearch、Redis、GitLab、RabbitMQ、Kafka 等连接，AI 客户端（Cursor、Codex、DeepSeek Harness）通过 Streamable HTTP 携带 Bearer Token 调用 /mcp，模型只能传 environment 与 target 名称，不能自填主机、账号和密码。服务内置只读工具白名单、连接测试与按操作者审计。Kafka、CLS、GitLab 工具尚未经真实上游端到端验证。",
+   "highlights": [
+    "提供 28 个只读工具，覆盖 MySQL、MongoDB、Elasticsearch、Redis、GitLab、CLS、RabbitMQ、Kafka、Nacos、Jenkins 十类组件",
+    "实现三层边界：仅可访问控制台注册目标、仅执行只读白名单、Web 登录与 MCP Token 独立并按操作者审计",
+    "首次运行支持 SQLite/MySQL/PostgreSQL 配置存储，密钥加密存放，默认监听 127.0.0.1:8111"
+   ],
+   "use_cases": [
+    "管理员让 AI 客户端按目标名查询生产数据库、日志、消息队列而不直接暴露凭据",
+    "提供 investigate_error 提示词，从错误症状出发组织排障路径",
+    "通过 setup.sh 以 systemd 方式部署到新机器并配置 MySQL/Redis 等额外依赖"
+   ]
+  },
+  "sha": "9d75f2b51f21",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

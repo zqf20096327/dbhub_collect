@@ -18838,5 +18838,264 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "1ed7c30e196c+2": {
+  "fn": "SimpleAI2026/SimpleBase",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    17,
+    6,
+    17,
+    [
+     "|亮点|说明|",
+     "|---|---|",
+     "|**单二进制、零外部依赖起步**|`./build.sh dev` 一条命令拉起后端与控制台；本地默认本地盘，不需要 Postgres / Redis / S3。前端经 `go:embed` 打进同一个二进制|",
+     "|**每项目一个单文件库**|项目数据落在一个 DuckDB 或 SQLite 文件里，SQL 表、集合文档、KV 共用；S3 模式以「不可变快照 + manifest」同步，节点丢盘可只凭 S3 恢复|",
+     "|**SQL + 文档 + KV 三种模型同库**|参数化 SQL / 批量事务；JSON 集合支持 filter、投影、patch、导入导出、字段 schema；KV 支持 String / Hash / List / Set / ZSet / TTL|",
+     "|**进程内 Go 云函数**|自研 `gofunction` 解释器，单文件 `package main` 即可部署；版本、试跑、激活分离，试跑不过不上线；`/go/:project/:fn/:export` 直接 HTTP 调用|",
+     "|**自动化全家桶**|cron / interval / once 定时任务、记录与对象事件触发器、SSE 实时订阅（支持 `Last-Event-ID` 回放）、项目级备份与恢复|",
+     "|**本地开发、云端幂等重放**|`simplebase.json` 声明库、迁移、集合、函数、定时任务；`simplebase dev plan/apply` 先查后写，重复执行全部 skip，迁移只追加、改动已应用迁移会被拒绝；远端写入必须 `--yes`|",
+     "|**LLM 网关 + 云助手**|OpenAI 兼容 `chat/completions`、`responses`、`models`；云助手经 CLI 技能操作项目资源，破坏性命令需发起人确认，只读助手 fail-closed|",
+     "|**安全默认值**|API Key HMAC 存储、权限位 + Scoped Key（资源 / 动作 / 字段级）、跨项目 403、系统库只读、SQL 守卫（拒绝清单 / 多语句 / 行数与超时）、密钥不得进 YAML、审计与日志脱敏|",
+     "|**可验证的样例**|`examples/` 4 个业务站点 + 15 个能力用例，`scripts/examples-verify/verify.sh` 双实例模拟「本地 → 云端」逐站验证|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    24,
+    17,
+    24
+   ],
+   [
+    "replace",
+    24,
+    41,
+    24,
+    25,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    57,
+    25,
+    41
+   ],
+   [
+    "replace",
+    57,
+    58,
+    41,
+    42,
+    [
+     "首次用引导账号 `simplebase2026` / `simplebase2026` 登录（首次登录必须改密），右上角创建项目，在「设置 → 连接」签发 API Key。完整步骤见 5 分钟上手。"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    75,
+    42,
+    59
+   ],
+   [
+    "replace",
+    75,
+    76,
+    59,
+    60,
+    [
+     "教程见 本地开发、云端重放；AI 编码代理使用 `skills/simplebase`。"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    89,
+    60,
+    73
+   ],
+   [
+    "replace",
+    89,
+    103,
+    73,
+    87,
+    [
+     "|能力|主要路径|权限|",
+     "|---|---|---|",
+     "|数据库|`POST/GET/DELETE /databases`|建删 `database:admin`，读 `database:read`|",
+     "|SQL|`/databases/:id/query`、`/execute`、`/batch`|读 / 写|",
+     "|集合|`/databases/:id/data/collections/:c/documents`（含 batch / export / import）|读 / 写|",
+     "|KV|`POST /kv`|读 / 写|",
+     "|对象存储|`/s3/objects`、`/s3/presign`、`/s3/link`|读 / 写|",
+     "|云函数|`/gofunctions`、`POST /go/:projectID/:name/:export`|写 / 读|",
+     "|定时任务 / 触发器|`/cron-jobs`、`/function-triggers`|写 / `project:admin`|",
+     "|实时订阅|`GET /realtime`（SSE）|读|",
+     "|备份|`/backups`（需 `backup.enabled`）|`project:admin`|",
+     "|LLM|`/v1/chat/completions`、`/v1/responses`、`/v1/models`|`llm:invoke`|",
+     "|云助手|`/agents`、`/agent-threads/:id/runs`|读 / 写|",
+     "|配额与审计|`/quota`、`/audit`、`/logs`|读|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    87,
+    88
+   ],
+   [
+    "replace",
+    104,
+    105,
+    88,
+    89,
+    [
+     "完整说明见 `docs/` 与 `docs/cli.md`。"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    108,
+    89,
+    92
+   ],
+   [
+    "replace",
+    108,
+    109,
+    92,
+    93,
+    [
+     "详见 docs/ops/deployment.md。要点：副本数为 1（滚动升级先停旧再起新）；S3 bucket 私有并开启 TLS、SSE-KMS、版本控制；`auth.api_key_hash_secret` 只从环境变量注入，更换会使全部 Key 失效；浏览器直连需显式开启 CORS，且前端生产包不得包含写权限 Key。"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    116,
+    93,
+    100
+   ],
+   [
+    "replace",
+    116,
+    130,
+    100,
+    101,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    135,
+    101,
+    106
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "32298781b1fe+2": {
+  "fn": "dbos-inc/dbos-transact-rust",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    4,
+    0,
+    2
+   ],
+   [
+    "replace",
+    4,
+    8,
+    2,
+    3,
+    [
+     "#### Documentation &nbsp;&nbsp;•&nbsp;&nbsp; API reference &nbsp;&nbsp;•&nbsp;&nbsp; Examples &nbsp;&nbsp;•&nbsp;&nbsp; Github &nbsp;&nbsp;•&nbsp;&nbsp; Discord"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    38,
+    3,
+    33
+   ],
+   [
+    "replace",
+    38,
+    39,
+    33,
+    34,
+    [
+     "The demo apps are in their own repository:"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    34,
+    35
+   ],
+   [
+    "replace",
+    40,
+    43,
+    35,
+    38,
+    [
+     "- The starter is durable execution in one page: launch a workflow, crash the app mid-run, restart it, and execution resumes at the step after the last one that finished.",
+     "- The widget store is an online storefront that survives being killed mid-checkout.",
+     "- Queue patterns shows fair queueing, rate limits and debouncing."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    45,
+    38,
+    40
+   ],
+   [
+    "replace",
+    45,
+    55,
+    40,
+    41,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

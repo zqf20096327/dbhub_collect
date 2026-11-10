@@ -2929,5 +2929,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3f9bd5cb669a": {
+  "identity": {
+   "one_liner": "基于 Oracle AI Database 构建和评估 GenAI 应用的开源 Agent 工具包",
+   "review": "Oracle 开源的 AI Optimizer 是用于构建、测试和评估 GenAI 应用的平台，提供 FastAPI 服务（含 REST API 与 MCP 端点）和可选 Streamlit 客户端。其 AgentSpec 定义加载到 LangGraph 运行时，支持 LLM-only 代理、基于 SQLcl MCP 的 NL2SQL 代理和向量检索 RAG 流程，数据保留在 Oracle AI Database 中。可通过裸机、容器或 OCI IaC 部署，需自备语言与嵌入模型。",
+   "highlights": [
+    "Server 暴露 REST API 和 MCP 端点，AgentSpec 定义在 LangGraph 运行时中加载",
+    "支持 OCI GenAI、OpenAI、Cohere、Ollama、vLLM 等多种模型提供方和运行时",
+    "提供文档切分嵌入、向量库刷新、Q&A 数据集评估及 Oracle Deep Data Security 策略应用"
+   ],
+   "use_cases": [
+    "在 Oracle AI Database 上搭建受控数据的 NL2SQL 与向量检索 RAG 应用",
+    "配置和评估语言/嵌入模型与 Q&A 数据集",
+    "通过 REST API 或 MCP 将代理能力集成到外部应用"
+   ]
+  },
+  "sha": "3f9bd5cb669a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8d741d224c8b": {
+  "identity": {
+   "one_liner": "为 Claude 提供只读访问 Quicken For Mac 财务数据的 MCP 服务器与技能",
+   "review": "该项目通过 Claude Skill 和 MCP 服务器两种形式，让 Claude 读取 Quicken For Mac 的 Core Data SQLite 数据库，用于查询账户、交易、分类支出、投资持仓等。数据库始终以只读方式打开；需要 Quicken 应用处于打开状态。MCP 形式提供 8 个预置工具，技能形式由 Claude 直接编写 SQL；还附 qmac 命令行工具和 CSV 导出脚本。适用于在 macOS 上使用 Quicken 并希望通过 Claude 查询个人财务数据的用户。",
+   "highlights": [
+    "提供 Skill 与 MCP 服务器两种形式，共享同一份 schema 知识（docs/schema.md）",
+    "MCP 服务器包含 list_accounts、query_transactions、spending_by_category 等 8 个预置工具，raw_query 支持 500 行上限的任意 SELECT 查询",
+    "包含 qmac 命令行工具与 export_sovereign_csv.py 脚本，可将数据库导出为 CSV 文件及 schema.json"
+   ],
+   "use_cases": [
+    "通过 Claude 查询账户余额、分类月度支出趋势、投资持仓等 Quicken 财务数据",
+    "在 Cursor、Cline 等不支持加载技能的 MCP 客户端中调用类型化工具查询财务数据",
+    "将 Quicken 中的完整财务历史导出为规范化 CSV 供 DuckDB、Pandas、PostgreSQL 等工具加载分析"
+   ]
+  },
+  "sha": "8d741d224c8b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f089b06a6f1b": {
+  "identity": {
+   "one_liner": "单 Go 二进制的类 SmokePing 延迟监测工具，内置 Web UI 与 SQLite",
+   "review": "fogping 是一个 Linux 下的网络延迟监测工具，通过 ICMP/TCP 探测目标并绘制延迟图表，数据存于内嵌 SQLite，目标经 Web UI 管理。以单二进制或 Docker 部署，端口固定 8518，支持多用户登录、历史保留期设置（默认/上限 93 天）及前后期曲线对比。需配置 ping_group_range 才能非特权运行 ICMP。Apache 2.0 许可。",
+   "highlights": [
+    "以单个 Go 二进制发布，内嵌 SQLite 存储，Web 端口固定为 8518",
+    "支持 PING 与 TCP 两类目标探测，图表可叠加前期中位数虚线进行对比",
+    "支持多用户登录、目标列表 JSON 导入导出，历史保留可设为最多 93 天"
+   ],
+   "use_cases": [
+    "对网络目标进行长期延迟与丢包曲线记录",
+    "自托管部署，经反向代理或仅监听 127.0.0.1 供内网查看",
+    "通过 JSON 导入导出在 fogping/pingping 之间迁移目标列表"
+   ]
+  },
+  "sha": "f089b06a6f1b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0ec2188de3b7": {
+  "identity": {
+   "one_liner": "自托管的任务与笔记应用，含紧急闹钟提醒和双向日历同步。",
+   "review": "AllisWell 是一个自托管的效率工具，提供任务、项目、清单和 Markdown 笔记管理。核心机制包括穿透静音模式的紧急闹钟提醒、基于 RFC 5545 改进的每月重复规则（不跳过二月）、双向 Google Calendar 同步，以及供 Claude/ChatGPT 调用的远程 MCP 服务器。技术上采用 Flutter 客户端加 Node.js/MySQL 后端，通过 docker compose 一键部署，数据存储在命名卷中。许可为 PolyForm Noncommercial，个人使用免费，不支持商业用途；macOS 目前需从源码构建。",
+   "highlights": [
+    "紧急任务提醒以真实闹钟声音穿透静音模式与专注模式，重复响铃直至确认，并支持贪睡预设",
+    "支持按日/周/月/年重复规则，含每月最后一天、第几个星期几等规则，保存前预览未来五个日期",
+    "内置远程 MCP 服务器（OAuth 2.1 + PKCE），25 个工具覆盖任务/笔记/搜索，所有写入需审批且无删除工具"
+   ],
+   "use_cases": [
+    "在自有服务器上用 Docker 部署个人任务与笔记管理，数据存于本地数据库",
+    "需要穿透静音模式的强提醒场景，如服药、缴费等逾期会反复响铃的任务",
+    "在 Claude 或 ChatGPT 中通过 MCP 连接器查询和管理个人待办事项"
+   ]
+  },
+  "sha": "0ec2188de3b7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c7c956d0827": {
+  "identity": {
+   "one_liner": "自托管的团队+AI编码代理协作工作区，运行于自有Linux服务器",
+   "review": "DevDash 是一个自托管工作区，供小型团队与其编码代理在自有 Linux 服务器上协作开发。每个成员是独立 Linux 用户，会话以成员身份运行 Claude Code 或 OpenCode；每个会话使用独立 git worktree 实现并行工作。内置个人代理 Hamasa 与规则驱动的 Autopilot。许可证为 PolyForm Noncommercial，仅限非商业用途，要求 Node 24 与 Ubuntu 24.04。",
+   "highlights": [
+    "每个会话可选择 Claude Code（经 Agent SDK）或 OpenCode（经 Agent Client Protocol），支持 Anthropic、OpenAI、Google、OpenRouter、GitHub Copilot 及本地模型等多种模型来源",
+    "每个会话在独立的 git worktree 中工作，成员以各自 Linux 用户身份运行，DevDash 本身不以 root 运行",
+    "Autopilot 按用户编写的三档（绿/黄/红）规则代答常规问题与审批，决策通过 autopilot_log 工具记录，红档请求始终等待用户处理"
+   ],
+   "use_cases": [
+    "小型团队在同一服务器上共享项目代码库并与编码代理并行协作",
+    "成员外出时代理按规则处理会话中的例行提问、审批与停滞会话的推进",
+    "非商业场景下的自托管部署，数据保留在自有机器上，不依赖 SaaS 账号"
+   ]
+  },
+  "sha": "4c7c956d0827",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

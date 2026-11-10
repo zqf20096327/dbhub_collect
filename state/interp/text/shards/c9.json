@@ -2496,5 +2496,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c75a2c9a38c5": {
+  "identity": {
+   "one_liner": "自托管的 Danbooru 风格标签式个人图片库，基于 Go 单二进制与 SQLite",
+   "review": "Monbooru 是一个用于整理本地媒体收藏的自托管 booru 风格图库，支持图片、视频、GIF 和 CBZ/ZIP 漫画存档，可手动打标或用 ONNX 模型（WD14、JoyTag 等）本地自动打标，并读取 A1111/Forge 与 ComfyUI 的生成元数据。程序本身不联网，在线功能由可选的 monloader 提供。项目明确说明面向局域网使用，不建议直接暴露到公网。",
+   "highlights": [
+    "支持 JPEG、PNG、WebP、AVIF、JPEG XL、GIF、MP4、WebM，CBZ/ZIP 漫画存档以内置阅读器作为单条目读取；通过 SHA-256 去重，文件监视器在数秒内感知新增、移动和删除的文件",
+    "每个图库为一个 SQLite 文件，程序是内嵌 Web 资源的单个 Go 二进制文件；图片保留为普通文件和文件夹，数据库与缩略图存于独立数据目录",
+    "提供标签合并、别名、implication、自定义分类等标签管理，以及带通配符、OR、排除、保存搜索和多维过滤的搜索；附带 REST API、OpenAPI 规范、插件与主题机制"
+   ],
+   "use_cases": [
+    "整理本地图片、视频与漫画收藏，按标签浏览和检索",
+    "用 ONNX 模型在本地对图片自动打标，并记录 AI 生图工具（A1111/Forge、ComfyUI）的生成参数",
+    "在局域网内以 Docker 或独立二进制部署个人图库，配合 monloader 从支持的 booru 站点下载并导入文件与元数据"
+   ]
+  },
+  "sha": "c75a2c9a38c5",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d80bf217a7da": {
+  "identity": {
+   "one_liner": "运行于 Postgres/Supabase 的开源复式记账核心，国家规则以数据形式提供",
+   "review": "Ekwo OS 是部署在自有 Supabase/Postgres 项目上的复式记账核心，采用 AGPL-3.0 许可。它以数据库 schema 实现借贷平衡校验与期间锁定，国家税务规则、科目表和报表作为版本化数据包提供，并附带命令行工具 ekwo 和 MCP 服务器供人及 AI 代理操作账簿。无需独立服务器，通过 npx ekwo-os init 安装，适合需自持数据的企业、会计师事务所及需要记账核心的开发者。",
+   "highlights": [
+    "复式记账规则由数据库触发器强制执行：分录不平衡不可过账，锁定期间拒绝写入",
+    "国家规则（税码、科目表、申报栏位）以数据行形式提供，按国家数据包安装；附固定资产、预算、企业所得税、电子发票模块",
+    "提供命令行 ekwo 与 MCP 服务器（托管或 npx 本地运行），可从账簿生成 FEC、XBRL、Peppol UBL、Factur-X 等法定格式文件"
+   ],
+   "use_cases": [
+    "企业在自有 Supabase 项目中自持账簿数据，配合 AI 代理记账、对账并准备增值税申报",
+    "会计师事务所在同一安装中管理多家公司账簿",
+    "开发者需要以数据而非代码承载税务规则的复式记账核心"
+   ]
+  },
+  "sha": "d80bf217a7da",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "783a9824bec4": {
+  "identity": {
+   "one_liner": "Go 编写的本地桌面 SQL 客户端，单可执行文件支持 SQLite/MySQL/PostgreSQL/ClickHouse",
+   "review": "DB-G 是一个基于 Go 与 mygo 构建的桌面数据库客户端，用于连接和查询 SQLite、MySQL、PostgreSQL、ClickHouse 四类数据源。它以单个可执行文件分发，无 Java/Electron/WebView 运行时；提供对象树、SQL 补全、结果编辑导出、执行计划与 AI 辅助等功能。适合需要在本机管理多种数据库的开发者；Linux 版依赖 GTK 3，ClickHouse 仅支持只读。",
+   "highlights": [
+    "单可执行文件运行，支持 SQLite、MySQL、PostgreSQL（pgx）与 ClickHouse 四类数据源，包含对象树、补全、DDL 查看、导出（CSV/JSON/SQL INSERT）",
+    "写操作限定单表且含主键的结果集，以单事务提交，影响行数不符即回滚；内置高危 SQL 本地规则拦截与密码 AES-256-GCM 本机加密",
+    "元数据按页加载并带 24 小时磁盘缓存；快捷键可改绑；AI 补全与 Chat-to-SQL 默认连本地 Ollama，也可配置 OpenAI-compatible 服务"
+   ],
+   "use_cases": [
+    "在本机同时管理 SQLite、MySQL、PostgreSQL、ClickHouse 连接并执行日常查询与导出",
+    "对单表结果进行受控编辑（逐条参数化预览、单事务提交），或通过 EXPLAIN 查看多方言执行计划",
+    "在网络受限或不愿上传数据的环境下，使用本地 Ollama 等模型辅助生成与修复 SQL"
+   ]
+  },
+  "sha": "783a9824bec4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

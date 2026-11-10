@@ -2862,5 +2862,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9e7ea9f7d14a": {
+  "identity": {
+   "one_liner": "自托管上下文编译器，将 git 中的团队知识按 token 预算打包经 MCP 提供给编码代理",
+   "review": "briefd 是用 Go 编写的自托管服务，把存放在 git 仓库中的团队 Markdown 知识（术语、业务规则、约定、项目文档）索引到 SQLite，供编码代理通过 MCP 或 REST 按需检索。它提供 compile_bundle、search_context 等 7 个工具，所有返回上下文的接口接受 max_tokens 参数且不超出预算；代理不能直接写索引，只能通过 propose_update 开分支/PR，由人工合并后生效。部署形态为单个静态二进制加一个 SQLite 文件，可用 serve 共享实例或 mcp 以 stdio 单机运行。",
+   "highlights": [
+    "提供 MCP 与 REST 双接口，含 7 个工具（compile_bundle、search_context、propose_update 等），所有返回上下文的接口支持 max_tokens 硬预算",
+    "检索采用 SQLite FTS5（BM25）与 multilingual-e5-small 嵌入的混合方案，经倒数排名融合，纯 Go 实现，无需外部向量库或 CGO",
+    "知识仓库以 git 为唯一事实来源，代理通过 propose_update 提交 PR 修改，支持 Obsidian vault、wikilinks 链接图及可选的 Confluence Cloud 读取"
+   ],
+   "use_cases": [
+    "团队在同一领域维护多个项目，希望以 git 管理术语、业务规则和编码约定，并让各编码代理按任务按需获取",
+    "需要控制每次会话注入的知识 token 量，或以 stdio 模式供 Claude Desktop、Cursor 等单机客户端使用",
+    "使用 Obsidian vault 存放团队知识，希望为代理提供文档链接、反链及缺失链接、知识缺口等维护信号"
+   ]
+  },
+  "sha": "9e7ea9f7d14a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

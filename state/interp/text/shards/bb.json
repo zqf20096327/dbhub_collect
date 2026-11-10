@@ -2867,5 +2867,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "31044585ced6": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Marten API 事件存储与文档数据库，属 Critter Stack。",
+   "review": "Fisher 是 JasperFx Critter Stack 中面向 SQLite 的事件溯源与文档存储库，提供与 Marten 相同的 API，数据库为进程内单文件，无需安装服务器。1.0 版支持 LINQ 查询、五种投影、异步投影守护进程、多租户等；与 Marten 仅保证 API 可移植而非行为等价，且单库文件只允许一个写入者。",
+   "highlights": [
+    "提供与 Marten 相同 API 的事件溯源与文档存储，通过 dotnet add package Fisher 安装并经 AddFisher 进行 DI 注册",
+    "支持五种投影形态及三种生命周期（含复合投影）、异步投影守护进程、订阅、事件重写、DCB 标签与两种多租户模式",
+    "通过 JasperFx.Events.ComplianceTests 全部 64 套件 795 项测试，附带 Fisher.AspNetCore 与 Fisher.EntityFrameworkCore 伴生包"
+   ],
+   "use_cases": [
+    "在 .NET 应用中需要事件溯源与文档存储且希望数据库为进程内文件、无需部署数据库服务器的场景",
+    "数据库每租户一文件的多租户应用，借助文件级隔离同时获得并发能力",
+    "已在 Marten/Polecat 上编写的代码需在 SQLite 存储上编译运行的场景（注意并发、排序规则、时间戳精度等行为差异）"
+   ]
+  },
+  "sha": "31044585ced6",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "21d73efb932b": {
+  "identity": {
+   "one_liner": "命令行工具：经 LinkedIn DMA 数据可携 API 同步个人数据到本地 SQLite 并可查询",
+   "review": "Activout.MemberData 是一个命令行工具（member），通过 LinkedIn 官方 Member Data Portability API 把用户自己的 LinkedIn 数据（人脉、消息、邀请、职位、技能等）同步到本地 SQLite 数据库，支持只读 SQL 查询和只读 SQL 查询，也可供 Claude Code、Codex 等 AI 编码代理读取。仅适用于 EEA 和瑞士的 LinkedIn 会员，需要自建 LinkedIn 开发者应用并管理访问令牌；README 标注为概念验证项目，未获 LinkedIn 背书。",
+   "highlights": [
+    "通过 LinkedIn 官方 Member Data Portability API 下载人脉、消息、邀请、职位、技能等数据到本地 SQLite 数据库",
+    "提供只读 SQL 查询、数据浏览、令牌密钥链存储、同步状态检查等命令，输出支持 JSON 或表格格式",
+    "内置 agent skill 安装功能，可配置到 Claude Code、Codex 等编码代理的 skills 目录；提供 .NET 库包 Activout.MemberData"
+   ],
+   "use_cases": [
+    "技术用户想定期同步并在本地以 SQL 查询自己的 LinkedIn 数据",
+    "想让自己使用的 AI 编码代理基于本地 LinkedIn 数据回答问题（如人脉查询）",
+    "作为 .NET 库集成到自己的程序中，调用 Member Snapshot、Changelog 和 Authorization API"
+   ]
+  },
+  "sha": "21d73efb932b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ebb8563e7fd3": {
+  "identity": {
+   "one_liner": "读取 ChessBase 数据库格式（.cbh/.cbv 等）的 MIT 协议 Rust 库与命令行工具。",
+   "review": "cbvault 是一个用 Rust 编写的只读库与 CLI，用于读取 ChessBase 数据库格式，包括经典 .cbh 家族、.cbv/.cbz 容器和 2CBH 记录。它依赖 gigachess 作为唯一棋规核心，提供基于 GameSink 的流式转换接口、有序并行转换和 PGN 导出，通过 cargo add cbvault 安装，已发布 v0.1.0。README 明确标注项目处于 alpha 阶段，列出尚未支持的功能，且与 ChessBase 公司无关联；性能数据来自未随仓库分发的授权数据库。",
+   "highlights": [
+    "提供对 .cbh 家族（含棋谱、注释、名册、.cbj 宽索引）、.cbv/.cbz 容器及 2CBH 格式的读取",
+    "提供 GameSink 零分配流式转换接口与按对局编号有序输出的并行转换 convert_parallel",
+    "支持顺序与 Rayon 并行两种 PGN 导出方式，并支持 DES-ECB 三种密钥规则的 .cbz 解密"
+   ],
+   "use_cases": [
+    "从 ChessBase 数据库中批量导出对局为 PGN 格式",
+    "为下游引擎或分析工具提供位置键和棋谱的流式转换管道",
+    "解包 .cbv/.cbz 归档中的成员文件用于自有数据库流程"
+   ]
+  },
+  "sha": "ebb8563e7fd3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

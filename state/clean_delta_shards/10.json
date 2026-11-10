@@ -17423,5 +17423,582 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "71b85ca4f9d9+2": {
+  "fn": "albert-canfield/apitame",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "apitame: tame any API or database for AI agents. One command turns an OpenAPI or Swagger spec or a PostgreSQL, MySQL or SQLite database into a safe MCP server plus an agent skill (SKILL.md) for Claude Code, Codex, Cursor, VS Code and Gemini CLI. Stripe"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    11,
+    2,
+    7,
+    [
+     " npm version",
+     " CI",
+     " MIT license",
+     " Node 22.14+",
+     " MCP"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    7,
+    8
+   ],
+   [
+    "replace",
+    12,
+    15,
+    8,
+    9,
+    [
+     " Turn any OpenAPI spec or SQL database into a safe MCP server, plus agent skills. One command. "
+    ]
+   ],
+   [
+    "equal",
+    15,
+    25,
+    9,
+    19
+   ],
+   [
+    "replace",
+    25,
+    28,
+    19,
+    20,
+    [
+     " Terminal demo: apitame init turns a 38-endpoint GitHub API spec into 8 read-only tools, inspect shows about 60% fewer tokens, test passes and add-to installs it in Claude Code"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    69,
+    20,
+    61
+   ],
+   [
+    "replace",
+    69,
+    70,
+    61,
+    62,
+    [
+     "The connection string is saved to `.env` (never to the config file). Use a read-only role: docs/sql.md has a two-line setup."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    62,
+    63
+   ],
+   [
+    "replace",
+    71,
+    72,
+    63,
+    64,
+    [
+     "DuckDB's driver is an optional extra (its native binary adds 40 to 120 MB), so it is not part of the default install: run apitame with `npx -p apitame -p @duckdb/node-api@1.5.6-r.1 apitame <command>` (the tested release), and `add-to` writes client configs that do the same. DuckDB runs in a separate process with memory, thread and time limits. See DuckDB."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    86,
+    64,
+    78
+   ],
+   [
+    "replace",
+    86,
+    88,
+    78,
+    79,
+    [
+     " Claude Code (<code>.mcp.json</code>) "
+    ]
+   ],
+   [
+    "equal",
+    88,
+    93,
+    79,
+    84
+   ],
+   [
+    "replace",
+    93,
+    99,
+    84,
+    85,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    103,
+    85,
+    89
+   ],
+   [
+    "replace",
+    103,
+    107,
+    89,
+    90,
+    [
+     " Codex (<code>~/.codex/config.toml</code>) "
+    ]
+   ],
+   [
+    "equal",
+    107,
+    116,
+    90,
+    99
+   ],
+   [
+    "replace",
+    116,
+    120,
+    99,
+    100,
+    [
+     " Cursor (<code>.cursor/mcp.json</code>) "
+    ]
+   ],
+   [
+    "equal",
+    120,
+    125,
+    100,
+    105
+   ],
+   [
+    "replace",
+    125,
+    131,
+    105,
+    106,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    135,
+    106,
+    110
+   ],
+   [
+    "replace",
+    135,
+    139,
+    110,
+    111,
+    [
+     " VS Code (<code>.vscode/mcp.json</code>) "
+    ]
+   ],
+   [
+    "equal",
+    139,
+    144,
+    111,
+    116
+   ],
+   [
+    "replace",
+    144,
+    150,
+    116,
+    117,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    152,
+    117,
+    119
+   ],
+   [
+    "replace",
+    152,
+    156,
+    119,
+    120,
+    [
+     " Gemini CLI and Claude Desktop "
+    ]
+   ],
+   [
+    "equal",
+    156,
+    159,
+    120,
+    123
+   ],
+   [
+    "replace",
+    159,
+    162,
+    123,
+    124,
+    [
+     "Prefer HTTP? `npx apitame serve --transport http` listens on `http://127.0.0.1:3333/mcp` (destructive actions are approved in the client: right away for clients on MCP protocol 2026-07-28, with `--sessions` for older clients). To share it with a team, `http.oauth` lets your identity provider sign each user in and apitame check their access tokens, and `http.oauth.permissions` gives each scope or client its own tools and writes. More in docs/clients.md. The container image (`ghcr.io/albert-canfield/apitame`) and docs/deploy.md cover running it behind a reverse proxy with TLS."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    188,
+    124,
+    150
+   ],
+   [
+    "replace",
+    188,
+    192,
+    150,
+    151,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    198,
+    151,
+    157
+   ],
+   [
+    "replace",
+    198,
+    211,
+    157,
+    170,
+    [
+     "|Layer|What it does|",
+     "|---|---|",
+     "|Read-only mode (default)|Write operations are not exposed as tools, and `call_operation` refuses them. Anything other than GET, HEAD and OPTIONS counts as a write unless you mark it as a read.|",
+     "|Allowlist|In `read-write` mode, only operations in `writes.allow` run. Wildcards like `create*` work.|",
+     "|Confirmation|DELETE and anything named like delete, remove, purge, cancel or bulk is destructive and always needs approval, through MCP elicitation or a one-time token bound to the exact arguments.|",
+     "|Dry run|`\"dryRun\": true` on any write returns the exact request (or, for SQL, the affected row count in a rolled-back transaction) without changing anything.|",
+     "|Validation|Arguments are checked against the operation's schema before anything is sent. Unknown parameters are rejected.|",
+     "|Limits|Per-request timeout and response size cap. Large JSON is trimmed to fit, with a note saying how much was kept.|",
+     "|Secrets|Credentials come only from environment variables or a secret manager, read through its CLI at startup (inline secrets in the config are refused), and are redacted from results, errors, logs and previews, even when an API echoes them back.|",
+     "|HTTP transport|Loopback only by default, with Host and Origin checks. Listening on another interface requires a bearer token, or OAuth access tokens from your identity provider.|",
+     "|Outgoing requests|Path parameters cannot be `.` or `..`; credentials never follow a redirect to another host; files are passed inline, never as local paths, and uploads are capped.|",
+     "|Rate limits|By default 120 calls and 20 writes per minute, so a looping agent cannot hammer an API or database. With OAuth, each user can also get a budget of their own.|",
+     "|Audit log|Optional JSON Lines record of every write attempt (blocked, dry run, confirmed, sent) and every refused query, with secrets redacted.|"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    221,
+    170,
+    180
+   ],
+   [
+    "replace",
+    221,
+    222,
+    180,
+    181,
+    [
+     "Read docs/safety.md for the full model, including what apitame does not protect against."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    225,
+    181,
+    184
+   ],
+   [
+    "replace",
+    225,
+    234,
+    184,
+    193,
+    [
+     "|Command|What it does|",
+     "|---|---|",
+     "|`apitame init `|Introspect an OpenAPI or Swagger file or URL, a `postgres://` or `mysql://` URL, or a SQLite or DuckDB file. Writes `apitame.config.yaml` and `skills/`.|",
+     "|`apitame serve`|Run the MCP server over stdio (default) or `--transport http`. With `--watch`, config and spec edits apply live and clients are told the tools changed.|",
+     "|`apitame inspect`|List tools, access levels and estimated token cost. `--max-tokens <n>` fails CI when the tool list grows past a budget.|",
+     "|`apitame diff <old-spec> [new-spec]`|Show what a new version of the spec changes for the agent: operations added, removed or renamed, access level changes, new writes that a wildcard in `writes.allow` would let through, config entries left behind and token cost. `--fail-on new-writes` blocks a pull request in CI. Never calls the API.|",
+     "|`apitame test`|Call every read tool against a local mock built from the spec (or `--live`, which also validates responses), and prove that blocked writes are refused. For SQL, check every table and try known injection payloads.|",
+     "|`apitame add-to <client>`|Print or `--write` the config for `claude-code`, `codex`, `cursor`, `vscode`, `gemini` or `claude-desktop`, and install the skills.|",
+     "|`apitame doctor`|Check the setup end to end: config, environment variables, secret manager references, `.env` safety, API or database connectivity and credentials, whether the database role could write, skills and client configs, and for HTTP deployments authentication, the OAuth issuer and keys and the public URL behind the proxy (`--host 0.0.0.0`).|"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    193,
+    194
+   ],
+   [
+    "replace",
+    235,
+    236,
+    194,
+    195,
+    [
+     "Full reference: docs/cli.md."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    245,
+    195,
+    204
+   ],
+   [
+    "replace",
+    245,
+    256,
+    204,
+    205,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    258,
+    205,
+    207
+   ],
+   [
+    "replace",
+    258,
+    259,
+    207,
+    208,
+    [
+     "Every field is documented in docs/configuration.md."
+    ]
+   ],
+   [
+    "equal",
+    259,
+    264,
+    208,
+    213
+   ],
+   [
+    "replace",
+    264,
+    270,
+    213,
+    219,
+    [
+     "|Example|Operations|One tool per endpoint|apitame (read-only)|Saved|",
+     "|---|---:|---:|---:|---:|",
+     "|Petstore|19|~2,046 tokens, 19 tools|~855 tokens, 5 tools|58%|",
+     "|GitHub subset|38|~5,522 tokens, 38 tools|~2,218 tokens, 8 tools|60%|",
+     "|Stripe (full public spec)|612|~434,000 tokens, 612 tools|~4,600 tokens, 12 tools|99%|",
+     "|GitHub REST (full public spec)|1,242|~421,000 tokens, 1,242 tools|~9,300 tokens, 12 tools|98%|"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    273,
+    219,
+    222
+   ],
+   [
+    "replace",
+    273,
+    274,
+    222,
+    223,
+    [
+     "Tokens are only part of the story. A tool-selection eval runs the same tasks on the curated, one-tool-per-endpoint and search-only surfaces and measures success, calls and cost; results will be published there whatever they show."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    277,
+    223,
+    226
+   ],
+   [
+    "replace",
+    277,
+    278,
+    226,
+    227,
+    [
+     "There is good prior work here. This table is our honest reading as of 13 October 2026; docs/landscape.md has the details and sources."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    227,
+    228
+   ],
+   [
+    "replace",
+    279,
+    289,
+    228,
+    238,
+    [
+     "||apitame|FastMCP `from_openapi`|Executor|mcp-openapi-server|openapi-mcp-generator|MCP Toolbox for Databases|DBHub|",
+     "|---|---|---|---|---|---|---|---|",
+     "|Inputs|OpenAPI 3.x, Swagger 2.0, PostgreSQL, MySQL, SQLite, DuckDB|OpenAPI (in Python code)|OpenAPI, GraphQL, MCP|OpenAPI|OpenAPI|20+ databases|6 SQL engines|",
+     "|Runs as|CLI plus a config file|Python framework|Daemon, desktop app or hosted|CLI proxy|Generated Node project|Go server|Node server|",
+     "|Tool surface|Grouped task tools (capped) plus search and call|One per endpoint, or search and call, or code mode|Code mode, or search and invoke|One per endpoint, or 3 discovery tools|One per endpoint|Hand-written toolsets|2 tools plus custom|",
+     "|Read-only by default|Yes|No|Partial|No|No|No|Partial|",
+     "|Enforced write confirmation|Yes|Advisory|Yes|No|No|No|No|",
+     "|Dry run for writes|Yes|No|No|No|No|No|No|",
+     "|Generated skills|Yes, also over MCP|No|No|No|No|Partial|No|",
+     "|Token report|Yes, with CI budget|No|No|No|No|No|Partial|"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    294,
+    238,
+    243
+   ],
+   [
+    "replace",
+    294,
+    297,
+    243,
+    246,
+    [
+     "- `examples/petstore`: the classic Petstore. Runs against the public demo server.",
+     "- `examples/github-subset`: 38 real GitHub endpoints with bearer auth, search and pagination.",
+     "- `examples/postgres-shop`: a shop database (Docker Compose or SQLite) with named queries and a read-only role."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    299,
+    246,
+    248
+   ],
+   [
+    "replace",
+    299,
+    306,
+    248,
+    249,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    308,
+    249,
+    251
+   ],
+   [
+    "replace",
+    308,
+    318,
+    251,
+    261,
+    [
+     "- Configuration reference",
+     "- CLI reference",
+     "- Safety model",
+     "- OpenAPI sources",
+     "- SQL sources",
+     "- Skills",
+     "- Client setup",
+     "- Deploying over HTTP (container image, reverse proxy, OAuth)",
+     "- Architecture",
+     "- Design decisions"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    320,
+    261,
+    263
+   ],
+   [
+    "replace",
+    320,
+    323,
+    263,
+    264,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    324,
+    264,
+    265
+   ],
+   [
+    "replace",
+    324,
+    326,
+    265,
+    266,
+    [
+     "MIT © Albert Canfield"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

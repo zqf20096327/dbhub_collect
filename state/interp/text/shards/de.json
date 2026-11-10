@@ -2961,5 +2961,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1ed7c30e196c": {
+  "identity": {
+   "one_liner": "单二进制后端服务，集成SQL/文档/KV数据库、对象存储、云函数与定时任务",
+   "review": "SimpleBase 是一个以单个 Go 二进制运行的后端服务，提供 SQL 表、JSON 集合与 KV 三种数据模型（落盘为 DuckDB 或 SQLite 单文件），并包含对象存储、进程内 Go 云函数、定时任务、事件触发器、SSE 实时订阅、备份恢复与 LLM 网关，附带 Vue 控制台与 CLI。本地默认用本地盘，生产可切换 S3 作持久层；部署为单写实例（副本数为 1），建多个用户库会被拒绝。适合需要单进程自托管后端能力的开发者。",
+   "highlights": [
+    "支持 SQL 参数化查询/事务、JSON 集合（filter/投影/patch/导入导出）与 KV（String/Hash/List/Set/ZSet/TTL）共用一个单文件库",
+    "提供 gofunction 解释器运行的云函数、cron/interval/once 定时任务、事件触发器与 SSE 实时订阅（支持 Last-Event-ID 回放）",
+    "包含 API Key HMAC 存储、权限位与 Scoped Key、SQL 守卫、审计日志脱敏，以及 OpenAI 兼容的 LLM 网关接口"
+   ],
+   "use_cases": [
+    "单进程自托管后端：本地以本地盘起步，生产切换到 S3 兼容存储作在线持久层",
+    "通过 simplebase.json 声明库/迁移/函数/定时任务，实现本地开发与云端幂等重放部署",
+    "需要 LLM 网关、云助手及自动化任务（定时/触发/订阅）的业务站点开发"
+   ]
+  },
+  "sha": "1ed7c30e196c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a731ff7a505a": {
+  "identity": {
+   "one_liner": "基于 NestJS 12 与 Vue 3.5 的 pnpm monorepo 全栈管理后台模板",
+   "review": "栖梧是一个 MIT 许可的全栈管理后台模板，使用 NestJS 12、Vue 3.5、Element Plus、MySQL 和 Redis，面向需要后台管理系统的开发者。校验规则通过 @qiwu/shared 共享包供表单与接口共用；多租户、MCP、即时通讯等模块默认关闭，需按开关启用。运行需 Node 22、pnpm 11.28.3、MySQL（最低 8.0.17）与 Redis ≥ 7.0，当前部署采用构建产物和本地 git，暂无 Docker 支持。",
+   "highlights": [
+    "提供 RBAC 权限与五种数据权限范围，覆盖 ORM 查询和手写 SQL；支持代码生成、BPMN 工作流、Excel 导入导出、任务队列与 OAuth2/SSO",
+    "zod 校验规则写在 @qiwu/shared 包中，表单与接口共用同一套规则；多租户、微信公众号、MCP、即时通讯等模块按开关启用，默认关闭且关闭时不加载",
+    "pnpm workspace 管理服务端、Web 与共享契约；提供 pnpm verify 静态检查与 pnpm ci:local 本地完整闸门，含单元、端到端、Playwright 与冒烟测试"
+   ],
+   "use_cases": [
+    "需要用户、角色、部门、岗位与数据权限管理的后台系统开发",
+    "需要 BPMN 流程审批与动态表单的业务系统",
+    "需要可选 uni-app 移动端（H5/App/微信小程序）与多租户能力的项目"
+   ]
+  },
+  "sha": "a731ff7a505a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "57fb00746043": {
+  "identity": {
+   "one_liner": "面向 Go-Kratos 微服务的 CLI 与桌面端代码生成工具集",
+   "review": "该项目为 Go-Kratos 微服务生态提供 gow CLI 与 Wails (Vue 3) 桌面客户端两种使用方式，功能涵盖项目脚手架、从数据库 Schema 生成 Ent/GORM 模型与 Protobuf gRPC/REST 定义、Wire 依赖注入、基于 OpenAPI 的前端页面生成、watch 模式运行、ent schema 逆向导出 DDL 及配置导出到 Consul/Etcd/Nacos。面向使用 Kratos 框架进行微服务与配套管理页面的开发者；Oracle 连接不能作为生成数据源，模块提取默认会删除源端文件。",
+   "highlights": [
+    "支持从 MySQL/PostgreSQL/SQLite 数据源、DDL 文件或 ent/gorm 源码目录生成 CRUD 代码、Ent/GORM 模型、proto 定义与 Wire 注入代码",
+    "基于 OpenAPI 3.0 规范生成 Vue3 + Element Plus、Vue3 + Vben Admin、React + Ant Design Pro 三种框架的管理页面代码",
+    "提供 watch 模式增量重建、微服务模块提取、ent schema 离线导出 DDL 及版本化迁移文件生成"
+   ],
+   "use_cases": [
+    "为 Kratos 微服务项目创建脚手架并从数据库表生成后端 gRPC/REST 服务代码",
+    "从 proto 或 OpenAPI 定义批量生成配套的前端管理页面及 TS/Dart 客户端 SDK",
+    "在开发过程中实现服务热重载运行、配置导出到远程配置中心以及 schema 迁移脚本管理"
+   ]
+  },
+  "sha": "57fb00746043",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "72133a56d045": {
+  "identity": {
+   "one_liner": "基于 Java 21 + Jersey + Tomcat 的血糖数据 REST API",
+   "review": "HealthBlood 512 是一个血糖数据管理 REST API，实现用户和血糖测量记录的增删改查，基于 Java 21、Jersey 4、Tomcat 11 与 MySQL/TiDB 构建。项目保留原始上下文路径 `/API_HealthBlood_512`，同时提供浏览器短路径路由。支持本地 NetBeans/Ant 构建部署、Docker 运行，以及通过 render.yaml 部署到 Render 免费版并连接 TiDB Cloud。数据库凭据通过环境变量配置，仓库中不保存凭据。内置 Swagger UI 测试页与 Bruno 请求集合，并提供包含 34 项测试的 PowerShell 测试脚本。",
+   "highlights": [
+    "提供用户与血糖测量记录的完整 CRUD 接口，含级联删除（cascade=true）与 GET 浏览器路由变体",
+    "数据库连接通过 DB_HOST/DB_PORT/DB_URL 等环境变量配置，支持 MySQL 8 本地与 TiDB Cloud 云端两种环境",
+    "WAR 内自带 Swagger UI 测试页（openapi.json），并提供 Bruno 集合与 34 项端点测试的 PowerShell 脚本"
+   ],
+   "use_cases": [
+    "需要将血糖/用户测量数据通过 REST 接口进行增删改查管理的应用后端",
+    "在 Render 免费版与 TiDB Cloud Starter 上以零支出方式托管小型 Java Web 服务的部署实践",
+    "作为 Java 21 + Jersey + Tomcat 11 技术栈的本地开发与 Docker 部署示例项目"
+   ]
+  },
+  "sha": "72133a56d045",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

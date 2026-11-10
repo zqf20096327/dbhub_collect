@@ -2925,5 +2925,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "16b35bcc6f00": {
+  "identity": {
+   "one_liner": "ClickHouse 数据库备份工具，将 MergeTree 表备份到 S3 兼容存储并支持恢复",
+   "review": "ch-backup 是 Yandex 开源的 ClickHouse 备份工具，可将 MergeTree 引擎族表备份到 S3 兼容存储，并在原数据损坏时恢复。它支持分区级别的去重（默认启用），提供失败分区重试、无云存储恢复、备份跨桶复制等能力。仅覆盖 MergeTree 表，依赖配置文件设置存储参数，通过 pip 或 uv tool 安装运行。",
+   "highlights": [
+    "对 MergeTree 引擎族表执行备份，支持写入 S3 兼容存储并从中恢复",
+    "支持分区（part）级去重，可通过配置启用或设定起始时间排除较早备份",
+    "支持备份复制到其他 S3 桶/端点，恢复时提供 --keep-going 失败继续、--skip-cloud-storage、--schema-only 等模式"
+   ],
+   "use_cases": [
+    "在原数据损坏时从 S3 兼容存储恢复 ClickHouse MergeTree 表数据",
+    "备份副本迁移或容灾场景，将备份复制到其他 S3 桶或端点",
+    "复制表的恢复：在一个副本恢复数据，其他副本用 --schema-only 加速同步"
+   ]
+  },
+  "sha": "16b35bcc6f00",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

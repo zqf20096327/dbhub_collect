@@ -28167,5 +28167,1515 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "dac54df76ff9+2": {
+  "fn": "softwaremill/okapi",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "Maven Central",
+     "CI",
+     "Kotlin",
+     "JVM",
+     "License",
+     "Ask a question"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    19,
+    8,
+    19
+   ],
+   [
+    "delete",
+    19,
+    21,
+    19,
+    19
+   ],
+   [
+    "equal",
+    21,
+    31,
+    19,
+    29
+   ],
+   [
+    "replace",
+    31,
+    36,
+    29,
+    30,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    38,
+    30,
+    32
+   ],
+   [
+    "replace",
+    38,
+    39,
+    32,
+    33,
+    [
+     "Liquibase creates the `okapi_outbox` table on startup — no changelog edits on your side. See Database schema."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    46,
+    33,
+    40
+   ],
+   [
+    "replace",
+    46,
+    51,
+    40,
+    41,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    59,
+    41,
+    49
+   ],
+   [
+    "replace",
+    59,
+    74,
+    49,
+    50,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    82,
+    50,
+    58
+   ],
+   [
+    "replace",
+    82,
+    83,
+    58,
+    59,
+    [
+     "Runnable, self-contained applications live in okapi-examples. Each one is an independent Gradle project that consumes okapi as a published dependency, with its own `docker-compose.yml` for the databases and brokers it needs."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    93,
+    59,
+    69
+   ],
+   [
+    "replace",
+    93,
+    94,
+    69,
+    70,
+    [
+     "- **Duplicate delivery is possible.** A crash between a successful delivery and the status update means the message may be sent again after restart. If processing a message more than once would cause unwanted effects, make the consumer idempotent. okapi sends your payload, your configured headers, and an `x-outbox-id` header to deduplicate on — see Deduplicating on `x-outbox-id`."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    131,
+    70,
+    107
+   ],
+   [
+    "replace",
+    131,
+    132,
+    107,
+    108,
+    [
+     "|Property|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    108,
+    109
+   ],
+   [
+    "replace",
+    133,
+    143,
+    109,
+    119,
+    [
+     "|`okapi.processor.enabled`|`true`|Set `false` to disable delivery entirely (e.g. on instances that only publish).|",
+     "|`okapi.processor.interval`|`1s`|How often the scheduler polls for pending entries.|",
+     "|`okapi.processor.batch-size`|`10`|Maximum entries claimed per worker per tick.|",
+     "|`okapi.processor.max-retries`|`5`|Retries after the initial attempt before an entry becomes `FAILED`.|",
+     "|`okapi.processor.initial-backoff`|`10s`|Delay before the first retry of a retriable failure.|",
+     "|`okapi.processor.backoff-multiplier`|`2.0`|Factor applied to the delay for each further retry (>= 1).|",
+     "|`okapi.processor.max-backoff`|`10m`|Upper bound on the delay between retries.|",
+     "|`okapi.processor.backoff-jitter`|`0.2`|Fraction (0 to 1) by which each delay is shortened at random, so entries that failed together do not retry together.|",
+     "|`okapi.processor.concurrency`|`1`|Parallel workers per tick, each claiming its own batch. Tune based on database capacity and delivery latency; see Performance.|",
+     "|`okapi.processor.transport-dispatch`|`parallel`|How a batch spanning several `MessageDeliverer` beans is dispatched: `parallel` (all groups but one go to a virtual thread each — N transports use N-1 extra threads — while the last runs inline on the calling thread, so the batch costs ~`max(Tᵢ)`) or `sequential` (one group after another, all on the calling thread). Use `sequential` only if a custom deliverer depends on caller thread context — MDC, security context, or a transaction-bound resource such as a connection obtained via `DataSourceUtils`, since a group on a virtual thread does not inherit the caller's transaction. Batches with a single delivery type always run inline, regardless of this setting.|"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    148,
+    119,
+    124
+   ],
+   [
+    "replace",
+    148,
+    149,
+    124,
+    125,
+    [
+     "|Property|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    125,
+    126
+   ],
+   [
+    "replace",
+    150,
+    154,
+    126,
+    130,
+    [
+     "|`okapi.purger.enabled`|`true`|Set `false` to manage retention yourself (partitioning, external cron).|",
+     "|`okapi.purger.retention`|`7d`|How long delivered entries are kept.|",
+     "|`okapi.purger.interval`|`1h`|How often the purger runs.|",
+     "|`okapi.purger.batch-size`|`100`|Rows deleted per batch; each batch is its own transaction.|"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    130,
+    133
+   ],
+   [
+    "replace",
+    157,
+    158,
+    133,
+    134,
+    [
+     "|Property|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    134,
+    135
+   ],
+   [
+    "replace",
+    159,
+    162,
+    135,
+    138,
+    [
+     "|`okapi.liquibase.enabled`|`true`|Set `false` if your application manages the outbox schema itself.|",
+     "|`okapi.liquibase.changelog-table`|`okapi_databasechangelog`|Liquibase tracking table for okapi's migrations.|",
+     "|`okapi.liquibase.changelog-lock-table`|`okapi_databasechangeloglock`|Liquibase lock table for okapi's migrations.|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    165,
+    138,
+    141
+   ],
+   [
+    "replace",
+    165,
+    166,
+    141,
+    142,
+    [
+     "|Property|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    167,
+    142,
+    143
+   ],
+   [
+    "replace",
+    167,
+    169,
+    143,
+    145,
+    [
+     "|`okapi.datasource-qualifier`|unset|Bean name of the outbox `DataSource`. When unset, the single or `@Primary` `DataSource` is used.|",
+     "|`okapi.transaction-manager-qualifier`|unset|Bean name of the outbox `PlatformTransactionManager`. When unset, it is resolved automatically. Set explicitly in multi-PTM setups — see Transactions.|"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    172,
+    145,
+    148
+   ],
+   [
+    "replace",
+    172,
+    173,
+    148,
+    149,
+    [
+     "|Property|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    149,
+    150
+   ],
+   [
+    "replace",
+    174,
+    176,
+    150,
+    152,
+    [
+     "|`okapi.metrics.enabled`|`true`|Set `false` to disable okapi's Micrometer autoconfiguration. Logs a startup warning when disabled.|",
+     "|`okapi.metrics.refresh-interval`|`15s`|How often gauges poll the store. Each refresh runs two queries, wrapped in a single read-only transaction when a transaction manager is available.|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    204,
+    152,
+    180
+   ],
+   [
+    "replace",
+    204,
+    205,
+    180,
+    181,
+    [
+     "`okapi-core` has no framework dependencies, so any JVM service can use it, from a Ktor app to a background worker. You assemble the pieces yourself — create the store, the deliverer, and the processor, start an `OutboxScheduler`, and hand it a `TransactionRunner` (a one-method interface wrapping a block in whatever transaction mechanism you already use). Copy the database-specific SQL linked in Database schema into your application's migrations."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    221,
+    181,
+    197
+   ],
+   [
+    "replace",
+    221,
+    223,
+    197,
+    199,
+    [
+     "- **PostgreSQL:** 001 table and initial indexes, 002 route-aware claim index, 003 `TIMESTAMPTZ` timestamp columns, 004 retry backoff column and claim index (its second changeset must run outside a transaction)",
+     "- **MySQL:** 001 table and initial indexes, 002 route-aware claim index, 003 `DATETIME(6)` timestamp columns, 004 retry backoff column and claim index"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    199,
+    202
+   ],
+   [
+    "replace",
+    226,
+    227,
+    202,
+    203,
+    [
+     "PostgreSQL's `003` converts the timestamp columns from `TIMESTAMP` (the okapi JVM's local wall-clock time) to `TIMESTAMPTZ`. It reads existing values in the session `TimeZone`; pgjdbc sets that to the JVM default zone, so the bundled Liquibase changelog converts them correctly when it runs inside the application. When applying it by hand, run it inside a transaction (`psql -1`) after `SET TIME ZONE '<zone your okapi JVMs run in>'` in the same session. It takes an `ACCESS EXCLUSIVE` lock: it first waits (up to 30 s, then fails and retries on the next start) for open transactions on `okapi_outbox`, queuing every other statement on the table meanwhile, and then, unless the session zone is UTC (PostgreSQL 12+), rewrites the table while reads and writes wait. 1.x instances keep working after it, apart from one failed poll per pooled connection. See UPGRADING.md for when the in-app conversion uses the wrong zone. See UPGRADING.md."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    203,
+    204
+   ],
+   [
+    "replace",
+    228,
+    229,
+    204,
+    205,
+    [
+     "MySQL's `003` converts the timestamp columns from `TIMESTAMP(6)`, which ends in January 2038, to `DATETIME(6)` holding UTC. Stop every 1.x instance, publishers included, before it runs: 1.x writes these columns in the JVM zone. It copies the table; it first waits (up to 30 s, then fails and retries on the next start) for open transactions on `okapi_outbox` to finish, queuing every other statement on the table meanwhile, and then blocks writes, including `publish()`, until the copy finishes. See UPGRADING.md, including when rows written by 1.x can read back shifted."
+    ]
+   ],
+   [
+    "equal",
+    229,
+    232,
+    205,
+    208
+   ],
+   [
+    "replace",
+    232,
+    233,
+    208,
+    209,
+    [
+     "|Table|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    209,
+    210
+   ],
+   [
+    "replace",
+    234,
+    237,
+    210,
+    213,
+    [
+     "|`okapi_outbox`|Outbox entries. Name is fixed.|",
+     "|`okapi_databasechangelog`|Liquibase history for okapi's migrations (configurable; Liquibase integration only).|",
+     "|`okapi_databasechangeloglock`|Liquibase lock for okapi's migrations (configurable; Liquibase integration only).|"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    276,
+    213,
+    252
+   ],
+   [
+    "replace",
+    276,
+    277,
+    252,
+    253,
+    [
+     "|Metric|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    278,
+    253,
+    254
+   ],
+   [
+    "replace",
+    278,
+    284,
+    254,
+    260,
+    [
+     "|`okapi.entries.delivered`|Counter|Successfully delivered entries|",
+     "|`okapi.entries.retry.scheduled`|Counter|Failed attempts rescheduled for retry|",
+     "|`okapi.entries.failed`|Counter|Permanently failed entries|",
+     "|`okapi.batch.duration`|Timer|Processing time per batch; under the scheduler from the claim until the transaction has committed (not including listener callbacks)|",
+     "|`okapi.entries.count`|Gauge|Current entry count (tag: `status`)|",
+     "|`okapi.entries.lag.seconds`|Gauge|Age of the oldest entry (tag: `status`)|"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    305,
+    260,
+    281
+   ],
+   [
+    "replace",
+    305,
+    310,
+    281,
+    284,
+    [
+     " <a href=\"https://softwaremill.com/transactional-outbox-with-okapi/\">",
+     " Okapi module architecture",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    311,
+    284,
+    285
+   ],
+   [
+    "replace",
+    311,
+    314,
+    285,
+    286,
+    [
+     " From Reliable Message Delivery: the Transactional Outbox Pattern With Okapi."
+    ]
+   ],
+   [
+    "equal",
+    314,
+    315,
+    286,
+    287
+   ],
+   [
+    "replace",
+    315,
+    316,
+    287,
+    288,
+    [
+     "|Module|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    317,
+    288,
+    289
+   ],
+   [
+    "replace",
+    317,
+    326,
+    289,
+    298,
+    [
+     "|`okapi-core`|Abstractions, processing loop, scheduling, retry policy. No framework dependencies.|",
+     "|`okapi-postgres`|PostgreSQL storage via plain JDBC (`FOR UPDATE SKIP LOCKED`)|",
+     "|`okapi-mysql`|MySQL 8+ storage via plain JDBC|",
+     "|`okapi-http`|HTTP webhook delivery (JDK `HttpClient`)|",
+     "|`okapi-kafka`|Kafka topic publishing|",
+     "|`okapi-spring-boot`|Spring Boot autoconfiguration — selects a store module and wires registered deliverers and metrics|",
+     "|`okapi-exposed`|Exposed ORM integration for transactions and connections|",
+     "|`okapi-micrometer`|Micrometer counters, timers and gauges|",
+     "|`okapi-bom`|Version alignment for all of the above|"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    329,
+    298,
+    301
+   ],
+   [
+    "replace",
+    329,
+    330,
+    301,
+    302,
+    [
+     "|Dependency|Supported|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    331,
+    302,
+    303
+   ],
+   [
+    "replace",
+    331,
+    335,
+    303,
+    307,
+    [
+     "|Java|21+|Required|",
+     "|Spring Boot|3.5.x, 4.0.x|`okapi-spring-boot`|",
+     "|Kafka Clients|3.9.x, 4.x|Included transitively by `okapi-kafka`; you can override the version in your build.|",
+     "|Exposed|1.x|`okapi-exposed`|"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    342,
+    307,
+    314
+   ],
+   [
+    "replace",
+    342,
+    343,
+    314,
+    315,
+    [
+     "Performance depends on the selected transport, database, batch size, concurrency and downstream latency. See `benchmarks/` for methodology and measured results."
+    ]
+   ],
+   [
+    "equal",
+    343,
+    353,
+    315,
+    325
+   ],
+   [
+    "replace",
+    353,
+    360,
+    325,
+    326,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    362,
+    326,
+    328
+   ],
+   [
+    "replace",
+    362,
+    363,
+    328,
+    329,
+    [
+     "okapi is built and maintained by SoftwareMill. We offer commercial development services — get in touch to learn more."
+    ]
+   ],
+   [
+    "equal",
+    363,
+    365,
+    329,
+    331
+   ],
+   [
+    "replace",
+    365,
+    367,
+    331,
+    332,
+    [
+     "Copyright (C) 2026 SoftwareMill. Licensed under the Apache License 2.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "a58b45c6df09+2": {
+  "fn": "josortmel/EcoDB",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "EcoDB: Collective AI memory infrastructure"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    13,
+    2,
+    9,
+    [
+     " Release",
+     " License",
+     " Python",
+     " MCP Tools",
+     " LangChain",
+     " Dashboard",
+     " Docker"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    9,
+    10
+   ],
+   [
+    "replace",
+    14,
+    17,
+    10,
+    11,
+    [
+     " EcoDB in motion — GAMR search, knowledge graph, ingestion, and the desktop dashboard"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    28,
+    11,
+    22
+   ],
+   [
+    "replace",
+    28,
+    29,
+    22,
+    23,
+    [
+     "|Problem|Vector search|EcoDB GAMR|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    23,
+    24
+   ],
+   [
+    "replace",
+    30,
+    35,
+    24,
+    29,
+    [
+     "|\"What's connected to X?\"|Doesn't know|Graph traversal (Apache AGE)|",
+     "|Latest decision vs. stale one|Treats them equally|Temporal freshness scoring|",
+     "|Two memories that contradict|Returns both silently|Detects and flags contradictions|",
+     "|Text query finding an image|Not possible|Cross-modal search (text ↔ image)|",
+     "|Agent A's notes vs. Agent B's|No distinction|Governed visibility by workspace/project|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    38,
+    29,
+    32
+   ],
+   [
+    "replace",
+    38,
+    41,
+    32,
+    33,
+    [
+     " EcoDB multimodal memory — what goes in"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    44,
+    33,
+    36
+   ],
+   [
+    "replace",
+    44,
+    45,
+    36,
+    37,
+    [
+     "Jina v4 embeds text and images into the same 512-dimensional vector space. A text query retrieves relevant images. An image query retrieves relevant text. Search results mix memories, document chunks, and graph discoveries in a single ranked response, with images returned inline."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    56,
+    37,
+    48
+   ],
+   [
+    "replace",
+    56,
+    59,
+    48,
+    49,
+    [
+     " EcoDB benchmarks on LoCoMo (ACL 2024)"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    49,
+    50
+   ],
+   [
+    "replace",
+    60,
+    61,
+    50,
+    51,
+    [
+     "Evaluated on LoCoMo (Maharana et al., ACL 2024), a long-context conversational memory benchmark. 10 conversations, 1,982 queries, session-level retrieval:"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    51,
+    52
+   ],
+   [
+    "replace",
+    62,
+    63,
+    52,
+    53,
+    [
+     "|Metric|K=5|K=10|K=20|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    53,
+    54
+   ],
+   [
+    "replace",
+    64,
+    66,
+    54,
+    56,
+    [
+     "|**Recall@5**|0.914|0.906|**0.922**|",
+     "|**Recall@10**|*|0.931|**0.959**|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    71,
+    56,
+    61
+   ],
+   [
+    "replace",
+    71,
+    72,
+    61,
+    62,
+    [
+     "10 conversations, no exclusions. Full methodology and scripts in `eval/`."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    83,
+    62,
+    73
+   ],
+   [
+    "replace",
+    83,
+    84,
+    73,
+    74,
+    [
+     "|Config|p50|p95|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    74,
+    75
+   ],
+   [
+    "replace",
+    85,
+    87,
+    75,
+    77,
+    [
+     "|Standard (limit=5)|44ms|44ms|",
+     "|Full pipeline (limit=20, graph discovery)|44ms|48ms|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    92,
+    77,
+    82
+   ],
+   [
+    "replace",
+    92,
+    93,
+    82,
+    83,
+    [
+     "We also maintain a harder internal benchmark against EcoDB's production corpus: 1,400+ memories across multiple languages and dozens of topics, paragraph-level retrieval instead of session-level. This is where we explore our margin of improvement. It's the benchmark that still challenges the system. Detailed methodology and results in `eval/BENCHMARKS.md`."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    98,
+    83,
+    88
+   ],
+   [
+    "replace",
+    98,
+    101,
+    88,
+    89,
+    [
+     " EcoDB desktop dashboard — quick tour"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    108,
+    89,
+    96
+   ],
+   [
+    "replace",
+    108,
+    109,
+    96,
+    97,
+    [
+     "- **Memory Agent** — the metacognition surface: schedule the reflection cells, review consolidated clusters, and track foresights, distilled skills, and run telemetry (see Metacognition)."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    117,
+    97,
+    105
+   ],
+   [
+    "replace",
+    117,
+    120,
+    105,
+    106,
+    [
+     " GAMR: 10-stage scoring pipeline"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    125,
+    106,
+    111
+   ],
+   [
+    "replace",
+    125,
+    128,
+    111,
+    112,
+    [
+     " Knowledge graph as a make-sense layer"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    140,
+    112,
+    124
+   ],
+   [
+    "replace",
+    140,
+    141,
+    124,
+    125,
+    [
+     "GLiNER extracts entities from every memory and document chunk at ingestion time and links them to the graph automatically. But automatic extraction alone generates noise. EcoDB combines GLiNER with an **entity dictionary**, a curated list of allowed entities with canonical names and aliases. Dictionary matches take priority over raw NER predictions. Entities that don't match the dictionary are flagged as candidates for human review."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    148,
+    125,
+    132
+   ],
+   [
+    "replace",
+    148,
+    151,
+    132,
+    133,
+    [
+     " EcoDB metacognition — cell workers turn raw memories into consolidated knowledge"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    154,
+    133,
+    136
+   ],
+   [
+    "replace",
+    154,
+    155,
+    136,
+    137,
+    [
+     "|Cell|What it does|Produces|"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    137,
+    138
+   ],
+   [
+    "replace",
+    156,
+    160,
+    138,
+    142,
+    [
+     "|**Consolidation**|Clusters related memories across time horizons (weekly → monthly → quarterly → yearly) and narrates each cluster. Each closed week's thematic clusters are woven into one unified weekly narrative (week rollup), with the themes preserved beneath it for drill-down|Telescopic memory: a zoomable summary of what happened|",
+     "|**Foresight extraction**|Scans recent memories for temporal signals (deadlines, scheduled events) above a confidence threshold|Foresights: events the system expects, urgency-scored|",
+     "|**Skill distillation**|Finds cases that share a task type with a high success rate and abstracts the procedure|Skills: reusable steps, tools, and failure modes|",
+     "|**Identity tension**|Compares how an agent behaves against how it describes itself|Tensions: gaps between observed and declared traits|"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    182,
+    142,
+    164
+   ],
+   [
+    "replace",
+    182,
+    187,
+    164,
+    165,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    194,
+    165,
+    172
+   ],
+   [
+    "replace",
+    194,
+    199,
+    172,
+    173,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    203,
+    173,
+    177
+   ],
+   [
+    "replace",
+    203,
+    204,
+    177,
+    178,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    178,
+    179
+   ],
+   [
+    "replace",
+    205,
+    251,
+    179,
+    225,
+    [
+     "|**Memory**||",
+     "|`search`|GAMR search (10-stage). Text and image queries, cross-modal|",
+     "|`search_recent`|Recent memories with filters (agent, tags, date range)|",
+     "|`get_relevant_context`|Context injection — returns formatted context block for LLM consumption|",
+     "|`save_memory`|Store memory with optional image (auto-embeds, auto-extracts entities, auto-links graph)|",
+     "|`read_memory`|Read a memory by UUID|",
+     "|`delete_memory`|Soft-delete to recycle bin|",
+     "|`unarchive_memory`|Restore from recycle bin|",
+     "|`view_image`|View image attached to a memory, inline to the LLM|",
+     "|**Knowledge Graph**||",
+     "|`save_triple`|Add relationship to knowledge graph|",
+     "|`save_triples_batch`|Batch add triples (max 100)|",
+     "|`delete_triple`|Remove a graph relationship|",
+     "|`neighbors`|Graph neighbors at depth N|",
+     "|`path_between`|Shortest path between two nodes|",
+     "|`search_nodes`|Fuzzy search nodes by name|",
+     "|`graph_status`|Graph statistics (nodes, triples, predicates)|",
+     "|**Identity**||",
+     "|`load_identity`|Load agent identity fragments (ordered narrative)|",
+     "|`save_identity`|Save agent identity (versioned snapshot)|",
+     "|**Documents**||",
+     "|`register_document`|Register document for ingestion (PDF, DOCX, audio)|",
+     "|`document_status`|Check document processing status|",
+     "|`search_in_document`|Search within a specific document's chunks|",
+     "|`read_document`|Read document metadata and chunks|",
+     "|`list_documents`|List documents with filters|",
+     "|`reindex_document`|Re-queue document for processing|",
+     "|`unlink_document`|Soft-delete a document|",
+     "|`classify_document`|Set document trust tier (0–3)|",
+     "|`confirm_document_relation`|Confirm related document pair|",
+     "|**Governance**||",
+     "|`review_alias_candidate`|Approve or reject entity alias candidate|",
+     "|`merge_entities`|Soft-merge source entity into target|",
+     "|`undo_merge`|Revert a merge operation|",
+     "|`seed_dictionary`|Bulk-add entries to entity dictionary|",
+     "|`validate_link`|Validate entity↔memory link|",
+     "|`get_graph_vocabulary`|Read entity dictionary and approved predicates|",
+     "|**Metacognition**||",
+     "|`search_clusters`|Semantic search over fractal memory clusters (cosine + label BM25)|",
+     "|`list_clusters`|List an agent's clusters by level / status|",
+     "|`read_cluster`|Read a cluster's narrative (+ optional members / sources)|",
+     "|`get_telescopic_view`|Load an agent's full fractal memory chain (yearly → weekly + last 3 days)|",
+     "|`get_progressive_view`|Progressive-zoom boot: each layer compresses the previous, closed periods are never re-read. One call loads an agent's whole memory (size-annotated for MCP hosts)|",
+     "|`fractal_search`|Drill-down navigation: enter at the highest abstraction, zoom by id (quarter → month → week → themes → raw memories), optional semantic ranking per scope|",
+     "|`get_briefing`|Agent briefing: foresights + tensions + telescopic summary|",
+     "|`narrate_cluster`|Write / update a cluster narrative (owner-only)|"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    264,
+    225,
+    238
+   ],
+   [
+    "replace",
+    264,
+    265,
+    238,
+    239,
+    [
+     "The package lives in the repo at `ecodb-langchain/` and installs from source (not yet on PyPI):"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    278,
+    239,
+    252
+   ],
+   [
+    "replace",
+    278,
+    286,
+    252,
+    253,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    288,
+    253,
+    255
+   ],
+   [
+    "replace",
+    288,
+    289,
+    255,
+    256,
+    [
+     "|Interface|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    290,
+    256,
+    257
+   ],
+   [
+    "replace",
+    290,
+    296,
+    257,
+    263,
+    [
+     "|`EcoDBClient`|Sync `httpx` client with JWT auth, 1:1 with the MCP surface|",
+     "|`EcoDBRetriever`|`BaseRetriever` over GAMR search → `list[Document]` (semantic + graph + temporal)|",
+     "|`EcoDBMemory`|Durable cross-session LangChain memory|",
+     "|`make_ecodb_tools(client)`|13 native tools: search, recent, save, graph nav, clusters, telescopic, briefing|",
+     "|`build_ecodb_agent()`|Prebuilt LangGraph ReAct agent, model-agnostic|",
+     "|`load_ecodb_mcp_tools()` / `build_ecodb_agent_from_mcp()`|Full 40-tool parity via `langchain-mcp-adapters`|"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    301,
+    263,
+    268
+   ],
+   [
+    "replace",
+    301,
+    304,
+    268,
+    269,
+    [
+     " EcoDB architecture"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    312,
+    269,
+    277
+   ],
+   [
+    "replace",
+    312,
+    313,
+    277,
+    278,
+    [
+     "|Service|Role|Size|"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    314,
+    278,
+    279
+   ],
+   [
+    "replace",
+    314,
+    320,
+    279,
+    285,
+    [
+     "|`postgres`|Storage + vector index + knowledge graph|640 MB|",
+     "|`api`|FastAPI, GAMR engine, auth, CRUD|10 GB|",
+     "|`embeddings`|Jina v4 embedding model (GPU)|10 GB|",
+     "|`ner`|GLiNER named entity recognition|8.3 GB|",
+     "|`mcp`|MCP protocol server|280 MB|",
+     "|`llm`|llama.cpp + Qwen 2.5 3B (optional)|2.2 GB|"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    327,
+    285,
+    292
+   ],
+   [
+    "replace",
+    327,
+    328,
+    292,
+    293,
+    [
+     "Docling parses PDFs, Word documents, HTML, and PowerPoint into structured chunks. Audio files go through Whisper for transcription. Each chunk inherits document metadata (tags, project, workspace) and is tracked through a lifecycle: pending → processing → indexed → error."
+    ]
+   ],
+   [
+    "equal",
+    328,
+    341,
+    293,
+    306
+   ],
+   [
+    "replace",
+    341,
+    344,
+    306,
+    307,
+    [
+     " Governance model and roadmap"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    347,
+    307,
+    310
+   ],
+   [
+    "replace",
+    347,
+    348,
+    310,
+    311,
+    [
+     "|Role|Scope|Can do|"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    349,
+    311,
+    312
+   ],
+   [
+    "replace",
+    349,
+    353,
+    312,
+    316,
+    [
+     "|**Superuser**|Global|Everything. Manage organizations, users, agents, ontology.|",
+     "|**CEO**|Organization|Manage workspaces and projects within their org. Admin operations (entity dictionary, trust tiers, merges) scoped to org data.|",
+     "|**Workspace Lead**|Department|Manage projects and members within their workspace.|",
+     "|**Project Member**|Project|Read/write within assigned projects.|"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    381,
+    316,
+    344
+   ],
+   [
+    "replace",
+    381,
+    382,
+    344,
+    345,
+    [
+     "For the complete architecture — authentication flow, data isolation model, admin operations, and design decisions — see `docs/architecture/multi-tenant.en.md`."
+    ]
+   ],
+   [
+    "equal",
+    382,
+    472,
+    345,
+    435
+   ],
+   [
+    "replace",
+    472,
+    473,
+    435,
+    436,
+    [
+     "|Variable|Purpose|Default|"
+    ]
+   ],
+   [
+    "equal",
+    473,
+    474,
+    436,
+    437
+   ],
+   [
+    "replace",
+    474,
+    482,
+    437,
+    445,
+    [
+     "|`ECODB_ENV`|Runtime environment (`development`/`production`)|`development`|",
+     "|`DATABASE_URL`|PostgreSQL DSN|dev default (`localhost:5435`)|",
+     "|`ECODB_JWT_SECRET`|JWT signing secret|dev-only default — refused in production|",
+     "|`ECODB_API_KEY_PEPPER`|API key hash pepper|dev-only default — refused in production|",
+     "|`ECODB_API_KEY`|API key for MCP server|— generate with `bootstrap_first_apikey.py`|",
+     "|`INTERNAL_BROADCAST_SECRET`|Worker → API broadcast auth|no default — generate with `openssl rand -hex 32`|",
+     "|`ECODB_CORS_ORIGINS`|Allowed CORS origins|`http://localhost:8080,http://localhost:8091`|",
+     "|`HF_CACHE_PATH`|HuggingFace model cache path|named volume `hf_cache`|"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    496,
+    445,
+    459
+   ],
+   [
+    "replace",
+    496,
+    501,
+    459,
+    464,
+    [
+     "- `docs/architecture/multi-tenant.en.md`: Multi-tenant architecture — isolation model, auth flow, key rotation, rate limiting, design decisions",
+     "- `docs/architecture/`: System briefs on governance, ingestion, intelligence, product design",
+     "- `docs/migration-v0.8-to-v0.9.md`: Migration guide from v0.8.x to v0.9.0",
+     "- `eval/`: Benchmark framework, paper baseline comparison, and golden set evaluation",
+     "- `CHANGELOG.md`: Version history"
+    ]
+   ],
+   [
+    "equal",
+    501,
+    508,
+    464,
+    471
+   ],
+   [
+    "replace",
+    508,
+    514,
+    471,
+    472,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    514,
+    517,
+    472,
+    475
+   ],
+   [
+    "replace",
+    517,
+    522,
+    475,
+    476,
+    [
+     "PolyForm Noncommercial 1.0.0. Free for personal, educational, and noncommercial use. Commercial deployment requires a separate license from Eco Consulting."
+    ]
+   ],
+   [
+    "equal",
+    522,
+    524,
+    476,
+    478
+   ],
+   [
+    "replace",
+    524,
+    526,
+    478,
+    480,
+    [
+     "- @josortmel",
+     "- @EcoConsulting"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

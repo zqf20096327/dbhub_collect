@@ -2628,5 +2628,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1eaecf05a36c": {
+  "identity": {
+   "one_liner": "开源职位搜索引擎，从企业 ATS 页面抓取并归一化去重后提供分面检索。",
+   "review": "freehire 是一个开源职位聚合检索系统：通过各 ATS 平台适配器抓取公司官网招聘页的职位，归一化为统一 schema 并按键去重，再经 Meilisearch 提供分面全文检索。面向求职者，同时提供 HTTP API、CLI、MCP 服务器供程序化访问。爬取、索引等任务由独立的一次性 worker 完成，适合 cron 调度；通过 Docker Compose 可自托管，MIT 许可。",
+   "highlights": [
+    "从 Workday、Greenhouse、Lever、Ashby、iCIMS 等 ATS 平台直接抓取职位并链接到原始发布页， postings 归一化为单一 schema 并按稳定键去重",
+    "提供无需密钥的公开 HTTP API、CLI 与 MCP 服务器，支持按地区、工作形式、资历、技能、薪资等维度分面检索",
+    "除检索外还包含 CV 构建、申请看板、邮件收件箱关联、事件账本及五个预设的进程内 agent；爬取/富化/索引/通知均为独立一次性 worker"
+   ],
+   "use_cases": [
+    "自托管个人或团队职位检索服务，通过 curl 访问 /api/v1/jobs 等端点查询职位",
+    "为求职 agent 或 ChatGPT/Claude 等工具接入 MCP 服务器或公开 API，程序化读取职位数据",
+    "为招聘数据应用补充数据源：在 boards 目录表加一行即可添加公司，或实现新的 ATS 适配器接入未覆盖平台"
+   ]
+  },
+  "sha": "1eaecf05a36c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d32df1068746": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis 兼容内存 KV 存储与 PostgreSQL 查询缓存代理",
+   "review": "FyroDB 是一个用 Rust 编写的单一二进制程序，包含两个功能：兼容 RESP2/RESP3 协议的内存 KV 存储引擎，以及实现 PostgreSQL 线协议的查询缓存代理。支持字符串、哈希、列表、集合、有序集合、JSON、流、向量检索、全文检索等数据类型，并包含 Lua 脚本引擎与发布/订阅。代理模式下应用只需修改连接串即可将相同 SQL 的结果缓存于内存。提供 Docker 镜像与 cargo 构建，Apache 2.0 许可。",
+   "highlights": [
+    "KV 引擎实现 RESP2/RESP3 协议，支持 Hash、List、Set、Sorted Set、JSON、Stream、Bitmap、HyperLogLog、地理空间、向量检索与全文检索等数据类型",
+    "缓存代理实现 PostgreSQL 线协议，按 SQL 模式缓存查询结果，后续相同查询从内存返回",
+    "配置项包含认证密码、键数量上限、RDB 快照路径、代理缓存 TTL 与 dual/cache-only 模式等环境变量"
+   ],
+   "use_cases": [
+    "需要兼容 Redis 客户端的内存 KV 存储，用于缓存、计数器与发布/订阅消息",
+    "在应用不改代码的前提下，为 PostgreSQL 数据库添加查询结果缓存",
+    "使用向量检索或全文检索能力支撑检索类业务查询"
+   ]
+  },
+  "sha": "d32df1068746",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "59b6811b389f": {
+  "identity": {
+   "one_liner": "DMR 用户 ID 数据库 BETA 版，每 30 分钟自动生成，供多品牌电台使用",
+   "review": "该项目提供 DMR 用户 ID 数据库的 BETA 版本，每 30 分钟自动重新生成，新注册的 DMR 用户会被自动加入。包含针对 Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017 及 Pi-Star 的多种格式，并附 Pi-Star SSH 接入方法。注意 MD-2017 数据库仅容纳前 10 万条用户，且 BETA 版数据可能不完整。",
+   "highlights": [
+    "每 30 分钟自动生成更新，BETA 版含 317119 条用户记录",
+    "提供 Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017 和 Pi-Star 多种设备格式",
+    "README 提供通过 SSH 修改脚本将数据库接入 Pi-Star 的操作步骤"
+   ],
+   "use_cases": [
+    "为 Ailunce、Anytone、Tytera 等数字电台写入最新 DMR 用户呼号数据库",
+    "通过修改 HostFilesUpdate.sh 脚本将 Pi-Star 数据源替换为该 BETA 数据库",
+    "需要获取最新注册 DMR 用户 ID（可接受信息不完整）的场景"
+   ]
+  },
+  "sha": "59b6811b389f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "131eac509254": {
+  "identity": {
+   "one_liner": "托管 ADO.NET OceanBase 连接器，同一协议栈支持 MySQL 与 Oracle 租户模式",
+   "review": "OceanBaseConnector 是一个面向 OceanBase 的纯托管 ADO.NET 驱动，供 .NET 应用通过标准 Connection/Command/Reader API 访问 MySQL 兼容与 Oracle 兼容两种租户模式。其实现共享协议基础设施，按模式保留各自的 SQL、绑定、类型与元数据；驱动处于实验阶段，历史实测仅覆盖 Windows 上的部分 OceanBase 4.4.2.2 直连场景，且不承诺完整复刻原生 MySQL 或 Oracle 驱动行为。",
+   "highlights": [
+    "提供连接、命令、参数、读取器、事务及可选依赖注入集成，目标 netstandard2.0/2.1 与 net8.0/9.0/10.0",
+    "支持 TLS（默认 VerifyFull）、客户端证书与池化、XA 事务、多服务器地址、日志/追踪/指标",
+    "实现 Oracle 存储过程、OUT 参数、REF CURSOR、LOB 定位器、复杂类型、数组绑定及 MySQL 服务器端预编译、多结果集、流式读取等特性子集"
+   ],
+   "use_cases": [
+    ".NET 应用直连 OceanBase MySQL 或 Oracle 兼容租户执行 SQL 与存储过程",
+    "需要 TLS/客户端证书、连接池、XA 或依赖注入集成的企业数据访问场景",
+    "按官方文档索引核对功能与验证矩阵后评估部署可行性的项目"
+   ]
+  },
+  "sha": "131eac509254",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

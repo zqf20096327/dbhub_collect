@@ -2944,5 +2944,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "20756314d8b3": {
+  "identity": {
+   "one_liner": "基于邮箱域名验证发放 Discord 身份组的 Node.js 机器人",
+   "review": "这是一个通过邮箱所有权验证 Discord 成员的机器人：用户提交指定域名（如 .edu、企业域）的邮箱，输入收到的 6 位验证码后获得已验证身份组。面向高校、公司、组织等需限制成员来源的服务器。支持斜杠命令配置域名通配符、黑名单、按域名分配不同身份组；可使用托管版，也可用 Docker 或手动方式自托管，自托管需在配置文件中填写 Discord token 与 SMTP 信息，支持 SQLCipher 加密数据库。",
+   "highlights": [
+    "支持通配符域名白名单（如 @*.edu）、邮箱黑名单及按域名分配不同身份组",
+    "提供 /setup 引导向导、/testmail 投递测试、验证日志频道、错误通知等管理命令",
+    "自托管支持 Docker 镜像与手动安装（Node.js ≥ v16.15.0），可通过 DB_ENCRYPTION_KEY 启用 SQLCipher (AES-256) 数据库加密"
+   ],
+   "use_cases": [
+    "高校服务器：要求成员用 .edu 邮箱验证以授予学生身份组",
+    "企业或组织服务器：以公司域名邮箱验证员工身份",
+    "需要按不同邮箱域名区分授予身份组的社区服务器"
+   ]
+  },
+  "sha": "20756314d8b3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c1572b3461e": {
+  "identity": {
+   "one_liner": "基于Java的服务层，通过PostgreSQL线协议在网络上共享DuckDB数据库",
+   "review": "SlackerDB是Java实现的服务层，将DuckDB接入网络：以PostgreSQL线协议对外提供服务，使标准PostgreSQL客户端（JDBC、psql等）无需专用驱动即可连接，并让多个客户端会话共享同一DuckDB文件。支持标准jar启动，也可作为库嵌入Java应用。构建需JDK 21、Maven 3.9.16，可选Node v24用于控制台；提供离线Maven仓库打包方案。",
+   "highlights": [
+    "实现PostgreSQL线协议与数据字典模拟，JDBC、ODBC、libpq、psql等标准客户端可直接连接",
+    "支持多会话并发访问同一DuckDB数据库，包含连接池与每会话状态管理",
+    "提供COPY IN/OUT批量导入导出、注册SQL为HTTP端点、WebSocket异步SQL及PF4J插件系统"
+   ],
+   "use_cases": [
+    "为支持PostgreSQL连接的BI工具、仪表盘和报表应用提供分析数据引擎",
+    "多个团队并发查询同一份.duckdb文件而无需迁移数据",
+    "在Java应用内嵌入网络化分析存储并对外提供数据访问入口"
+   ]
+  },
+  "sha": "8c1572b3461e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "11d0eb65a9ef": {
+  "identity": {
+   "one_liner": "在 dbt 内逐节点判定复用或重建的自托管状态工具",
+   "review": "dbt-hodor 运行于 dbt 内部，对每个选中节点哈希其编译 SQL 与配置，并检查上游表的数据版本，逻辑与上游数据均未变化时返回 reuse，否则返回 build 并附带原因码。状态存于 Delta、Trino、Postgres 或本地 DuckDB，不需 dbt 平台账号。默认为 shadow 模式：只记录决策、全部构建。README 明确其处于早期开发阶段，尚未在大规模生产项目中运行。",
+   "highlights": [
+    "用 sqlglot 按目标方言归一化 SQL 后哈希，大小写、引号、注释和别名不视为变更；无代码变化时直接复用上次的哈希分析",
+    "上游数据版本分别来自 Delta 提交历史（忽略 OPTIMIZE/VACUUM）、Iceberg 快照、Snowflake SYSTEM$LAST_CHANGE_COMMIT_TIME 或 DuckDB 内容指纹",
+    "失败即构建：判定出错、存储不可读或上游不可追踪时节点按普通 dbt 方式构建，不会中断运行"
+   ],
+   "use_cases": [
+    "在 Databricks、Trino、Snowflake 或 DuckDB 上的调度化 dbt run/build/test/seed/snapshot 中跳过未变化节点",
+    "通过读取与 dbt State 相同的 state: 配置块，在不使用 dbt 平台账号的项目里做基于状态的增量构建",
+    "以默认 shadow 模式先运行一个调度周期、比对决策记录后再启用复用"
+   ]
+  },
+  "sha": "11d0eb65a9ef",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32d739a4d56b": {
+  "identity": {
+   "one_liner": "面向餐饮小商户的自托管库存与利润管理 Web 应用",
+   "review": "Kulakan 是一个为餐饮类小微企业设计的自托管 Web 应用，将配方、原材料库存、生产成本、菜单利润与现金预算连接在同一流程中。技术栈为 Laravel + React 19 + Inertia.js + PostgreSQL 16，MIT 协议开源，支持 Docker 本地部署。核心机制包括按 BOM 原子化扣减库存、WAC 加权平均成本计算、基于现金预算的补货规划，以及 Owner/Staff 双角色权限。",
+   "highlights": [
+    "按配方 BOM 与损耗系数在订单创建时自动扣减原材料库存",
+    "以加权平均成本法（WAC）自动重算菜单成本，使用 bcmath 扩展处理货币精度",
+    "提供基于预算约束的补货规划器，支持 draft→approved→ordered→purchased 四阶段状态流转"
+   ],
+   "use_cases": [
+    "咖啡店、咖啡馆、小吃店管理原材料库存与菜单成本",
+    "店主按可用现金规划采购清单并生成 PO 发送给供应商",
+    "收银与后厨之间通过订单状态流转（preparing/ready/completed）协调出餐"
+   ]
+  },
+  "sha": "32d739a4d56b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3069,5 +3069,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "da219a845f8d": {
+  "identity": {
+   "one_liner": "文本到SQL的访问控制层，按调用者权限裁剪送入LLM的表结构",
+   "review": "schemagate 是一个面向文本到SQL（text-to-SQL）应用的 schema 选择工具：在调用方发起提问时，先按其权限（principal 与角色）过滤数据库表目录，仅将被允许且相关的表 DDL 写入提示词，从而避免受限表出现在提示中，也减少提示词 token 消耗。它通过 pip 安装，依赖 SQLAlchemy，可离线运行（BM25 加哈希向量化的选择器不调用模型），支持 Postgres、Oracle、MySQL、SQL Server、SQLite，可集成 LangChain、LlamaIndex、MCP 等代理。需注意：裁剪可能导致问题所需表未被选中，README 自述在部分基准上覆盖率非 100%。",
+   "highlights": [
+    "按调用者的 principal 与角色过滤表目录，无权读取的表不出现在提示词中",
+    "选择器离线运行（BM25 + 哈希 n-gram 向量化器），不调用模型，无 API 密钥即可使用",
+    "支持 Postgres、Oracle、MySQL、SQL Server、SQLite，兼容 LangChain、LlamaIndex、MCP 及任意 SQL 代理"
+   ],
+   "use_cases": [
+    "为大模型 SQL 代理（LangChain/LlamaIndex/MCP）构建按身份过滤的 schema 注入流程",
+    "大表数量数据库上减少文本到SQL提示词的 token 消耗",
+    "在行级安全（RLS）场景下避免模型对不可读表生成有效但返回空结果的 SQL"
+   ]
+  },
+  "sha": "da219a845f8d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a30920448c3f": {
+  "identity": {
+   "one_liner": "基于 React 与 Express 的项目任务管理系统，含 RBAC 与实时通知",
+   "review": "该仓库是一个前后端分离的项目与任务管理系统：前端使用 React 19/Vite，后端为 Node.js Express，数据存储于 MySQL/TiDB Cloud，通过 Socket.io 推送实时通知。内置六种角色（Admin、Manager、Storyboard、Animation、Designer、Programmer）的 RBAC 权限、JWT/OTP 认证、Excel/CSV 用户导入预览、个人看板与 FullCalendar 双向拖拽，并提供泰/英双语界面。适用于需要角色分级与实时协作的团队任务管理场景。",
+   "highlights": [
+    "支持六种角色的 RBAC 权限矩阵、JWT 登录、6 位 OTP 密码找回与首次登录强制改密",
+    "提供项目进度自动计算、个人 Kanban 看板、FullCalendar 双向拖拽排期与 Socket.io 实时通知",
+    "支持 Excel/CSV 用户导入与预览、Cloudinary 文件存储，兼容 MySQL/TiDB 等数据库，界面支持泰英双语切换"
+   ],
+   "use_cases": [
+    "团队项目与任务的分配、进度跟踪与实时协作",
+    "需要按角色（如管理员、项目经理、成员）控制操作权限的组织",
+    "通过 Excel 批量导入/导出用户并自动发送临时密码欢迎邮件的场景"
+   ]
+  },
+  "sha": "a30920448c3f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

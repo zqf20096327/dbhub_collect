@@ -2629,5 +2629,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5b125f1863bf": {
+  "identity": {
+   "one_liner": "ioBroker 的 SQL 历史数据适配器，将状态历史写入多种 SQL 数据库",
+   "review": "该适配器是 ioBroker 平台的一个组件，用于把状态历史数据保存到 PostgreSQL、MySQL、Microsoft SQL Server 或 SQLite 数据库。它提供防抖时间、阻断时间、仅记录变化值、最小差值、保留期和 RAM 缓冲等记录控制选项，并提供统计页查看各数据点的存储量与时间范围。数据库需另行安装（SQLite 除外），SQLite 需要系统编译工具。",
+   "highlights": [
+    "支持将状态历史写入 PostgreSQL、MySQL、MS-SQL 和 SQLite 四种数据库，可配置主机、端口、Unix socket（仅 MySQL）、加密与并行请求",
+    "提供防抖时间、阻断时间、仅记录变化值、最小差值、0/null 与负值过滤、别名 ID、保留期及 RAM 缓冲条数等逐数据点记录设置",
+    "数据库表结构公开：sources、datapoints 及按类型分表的 ts_number、ts_string、ts_bool、ts_counter，记录时间戳、值、ack、来源与质量码"
+   ],
+   "use_cases": [
+    "为 ioBroker 中的数据点持久化数值、字符串、布尔及计数器状态历史",
+    "通过 Statistics 页查看各 ID 的存储类型、值数量、估算大小与时间范围，并经确认后清理旧数据",
+    "自建 SQL 查询直接读取表结构进行历史数据分析或与外部工具集成"
+   ]
+  },
+  "sha": "5b125f1863bf",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f3b5773c1dd7": {
+  "identity": {
+   "one_liner": "本地优先的桌面密码管理器，以主密码加密本地保管库，无账号与遥测",
+   "review": "CipherMoth 是一款运行于用户自有硬件上的本地密码管理器，支持 macOS、Windows、Linux 桌面端安装包及 Docker 自托管版本。它使用 Argon2id 派生密钥并以 AES-256-GCM 加密条目，支持 FIDO2 安全钥匙、TOTP、CSV 导入与浏览器扩展。README 说明该项目未经第三方安全审计，主密码丢失且无恢复码时无法找回保管库。",
+   "highlights": [
+    "采用 Argon2id 派生密钥并以 AES-256-GCM 加密条目内容，包括名称、历史记录与附件（单个附件上限 5 MB）",
+    "支持可选 FIDO2 安全钥匙作为第二因素、离线恢复码、Touch ID/Passkey 生物解锁，以及内置 TOTP 动态码生成",
+    "提供 Chrome/Brave/Firefox 浏览器扩展（经原生消息通信，仅按需填充）、CLI 工具、加密完整备份（.cmbackup）与从 Chrome、Bitwarden、KeePass 等的 CSV 导入"
+   ],
+   "use_cases": [
+    "希望在个人电脑上离线管理密码、自行控制备份且不使用账号同步服务的用户",
+    "需要本地保管密码、2FA 密钥、安全笔记与相关文件附件的个人使用场景",
+    "通过 Docker 在自有服务器上部署自托管版本并通过浏览器或 CLI 访问保管库"
+   ]
+  },
+  "sha": "f3b5773c1dd7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

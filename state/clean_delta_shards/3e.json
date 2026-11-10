@@ -17696,5 +17696,849 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "73eca203e5ef+2": {
+  "fn": "ucsandman/declick",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "The saving is measured, not claimed: against nine real MCP servers (258 tools), the raw tool listing an MCP client puts in context is 236,818 bytes and `declick describe` is 58,309, a 4.1x reduction. `node scripts/bench-tokens.mjs` reproduces it on your own adapters; the method and the caveats are in docs/bench.md."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    10,
+    6,
+    10,
+    [
+     "npm",
+     "ci",
+     "node",
+     "license"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "declick compiling the National Weather Service, Openverse, a GraphQL API, a SQLite database, the gh binary, an MCP server and GitHub's 1,224-verb REST spec, then making live calls, hitting a governance block, and listing the audit log"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    40,
+    12,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "3. **A rules block.** Adds a fenced block between ` ` and ` ` markers to `CLAUDE.md` or `AGENTS.md`, telling the agent to reach for a declick adapter before an MCP call, WebFetch, a browser read or raw curl. Running setup again replaces the block in place instead of duplicating it."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    59,
+    41,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     "|Engine|Source|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    60,
+    61
+   ],
+   [
+    "replace",
+    61,
+    71,
+    61,
+    71,
+    [
+     "|openapi|`spec.json`, `spec.yaml`, `https://.../openapi.json` (openapi 3 and swagger 2, json or yaml, through a built-in YAML parser)|",
+     "|postman|`collection.json` (postman v2.1), `insomnia.json` (v4 export)|",
+     "|har|`capture.har` from a browser network capture; `--host api.example.com` picks the API host|",
+     "|graphql|`graphql:https://.../graphql`, `schema.json`, `schema.graphql`; `--url` gives a schema file its endpoint|",
+     "|mcp|`mcp:<command args>` for stdio servers, `mcp:https://host/mcp` for streamable http|",
+     "|sqlite|`sqlite:<path>` or `data.db`: tables and views become list/get/insert/update/delete plus a parameterized `query`|",
+     "|cli|`cli:<binary> [fixed args]`, compiled from the tool's own `--help`|",
+     "|web|`web:https://<site> --recipes <dir>`: a real browser over CDP, and a miss returns the elements that are there instead of a screenshot|",
+     "|desktop|`app:<window title>` on Windows through deskclaw UI Automation. `declick engines` reports it as not ready, Windows only, on any other platform|",
+     "|compose|`compose:<chain.json>`: a chain of verbs from adapters you already built becomes one verb with one envelope (see \"Compose verbs\")|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    82,
+    71,
+    82
+   ],
+   [
+    "replace",
+    82,
+    94,
+    82,
+    83,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    112,
+    83,
+    101
+   ],
+   [
+    "replace",
+    112,
+    113,
+    101,
+    102,
+    [
+     "|Guarantee|Detail|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    102,
+    103
+   ],
+   [
+    "replace",
+    114,
+    133,
+    103,
+    122,
+    [
+     "|`<name> describe`|Whole surface in under 2000 characters, about 500 tokens. Verbs, one line purpose, required args, base URL or window. A surface over the 2000 char ceiling pages itself: the page ends with a footer naming how many verbs are left, the total, and the flags that reach them (`--grep text`, `--offset N`, `--limit N`, `--verb v`). `--full` adds flag detail plus a `->` line showing each verb's compiled `returns` (shape and field names, or the `--rows` path), `--json` gives the same as data (`verbs[].returns` is always present there, `null` when the spec has no response schema).|",
+     "|`--json`|Default when stdout is not a TTY. Success: `{ok:true, data, meta:{count, truncated}}`. Failure: `{ok:false, error, exit}` plus `data` when the engine has a payload (an API error body, a desktop tree diff). `--json false` forces text.|",
+     "|`--fields a,b`|Project only named fields, dotted paths allowed (`--fields error.code,items.0.name`), resolved per row. Applies to top-level arrays and objects. A field list that matches nothing anywhere is exit 1 naming the available keys; a partial miss shows up in `meta.unknownFields`.|",
+     "|`--limit N`|Cap list output. Default 50. Must be a positive integer; anything else, including `0`, is exit 1.|",
+     "|`--rows path`|Unwrap a dotted array field inside a response object instead of projecting the object itself. `meta.rows` names the path, `meta.extra` carries the sibling fields (cursor, total, etc). Without `--rows`, a verb whose compiled `returns.rowsPath` names one is auto-unwrapped only when `--fields` or `--limit` is passed, so an unfiltered call returns the resource as the API sent it; `rowsPath` is compiled only for a list-shaped property, and `describe`/`manifest`/management output is never auto-unwrapped.|",
+     "|`--where k=v`|Filter a list before `--fields` and `--limit`. Repeatable and comma-separable, dotted paths allowed, every condition has to hold. Operators: `k=v`, `k!=v`, `k~re` (case-insensitive regex), `k>n`, `k>=n`, `k<n`, `k<=n`, `k=*` (present and not null). `meta.where` is `{matched, of}` and `meta.count` is what matched. A condition on a verb that answers with one object is exit 1. See \"Filter a list before it reaches the model\".|",
+     "|`--dry-run`|Every mutating verb accepts it, prints what it would do, and sets `meta.dryRun: true`. Management commands that write (`add`, `build`, `accept`, `import`, `skill`, `remove`, `path --install`, `desk arm\\|disarm`) accept it too; `author`, `repair` and `ui` have no preview and refuse it.|",
+     "|`--each file`|Run the verb once per item in a file of inputs (`-` for stdin), in order, and get one envelope back: `data` is one entry per item, `meta` carries `count`, `failed` and `each: true`. Exit 0 when every item is ok, otherwise the exit of the first that was not. Each item is guarded and shaped on its own; `--dry-run` previews every item and an item can never cancel it. A failing item does not stop the rest; a blocked one does. See \"Run a verb over a list\".|",
+     "|`--no-defaults`|Ignore `~/.declick/<name>/defaults.json` for this call. `DECLICK_DEFAULTS=off` does the same for every call. See \"Flag defaults per adapter\".|",
+     "|`--max-bytes N`|Ceiling on the bytes `data` may carry, default 8192, `0` off, `DECLICK_MAX_BYTES` moves the default. Applied after `--where`, `--rows`, `--fields` and `--limit`; never to `--dry-run`, `--help` or `describe`. Over the cap: `meta.truncated: true`, `meta.capped: {bytes, max, hint}`, exit still 0. See \"A ceiling on one answer\".|",
+     "|`--cache <s>`|Answer a read-only verb from the response the wire already gave, when one is younger than `<s>` seconds. `meta.cache` is `{hit, age}` or `{hit: false, stored}`. Exit 1 on a mutating verb; `--dry-run`, `--cache 0` and `DECLICK_CACHE=off` bypass it. See \"Cache a read\".|",
+     "|Streams|A `text/event-stream` response is read as it arrives instead of buffered whole: `data` is an array of parsed events, and when the timeout budget runs out mid-stream you get every event that already came in, `meta.stream.truncatedByTimeout: true`, `meta.truncated: true` and exit 0, not an error.|",
+     "|Flags|`--flag value` and `--flag=value` both work. Boolean flags (`--json`, `--dry-run`, `--full`, `--help`) never consume the next argument, so order does not matter. Unknown flags are exit 1, never ignored. `--` ends flags.|",
+     "|Request flags|Verbs on the engines that speak HTTP (openapi, postman, har) also take `--header 'K: V'` (repeatable), `--base-url <url>` or `--server <index\\|description>` (or `DECLICK_<NAME>_BASE_URL`), `--content-type <type>` to pick among the declared body types, `--body @file` / `--body-file <path>` / `--body -` for stdin, `--output <path>` for a binary response, `--retry N` and `--timeout <ms>`, `--verbose` (`meta.request`, `meta.response`, `meta.status`) and `--curl` (a runnable line with every secret masked as its env name). `describe --full` lists them. Each takes a value, so a bare `--retry` is exit 1, not a silent default.|",
+     "|Exit codes|0 ok, 1 error, 2 not found (adapter, verb, window or element), 3 blocked (governance, deskclaw unarmed or STOP), 4 auth needed.|",
+     "|Mutating flag|The manifest marks each verb `mutating: true/false`. The runtime and the authoring replay route mutating verbs through the DashClaw guard when `DASHCLAW_API_KEY` is set (see Governance). With no key set they run normally, nothing is written to stderr, and the envelope records `governance: {enabled: false, decision: \"skipped\", reason: \"no guard configured\"}`.|",
+     "|Auth|The manifest names required env keys only. At runtime declick reads `process.env` first, then `~/.creds/vault.env` (`CREDS_VAULT` overrides), for just those names. `declick auth <name>` reports which keys are present and from where. Secrets never land in a manifest.|",
+     "|SKILL.md|Generated from the manifest: when to use, the describe output, three runnable examples, the `declick run` fallback, the exit codes that apply to that engine. Never overwrites a skill declick did not write.|",
+     "|Lint|`declick lint <name>` fails the build on: describe over 2000 chars, duplicate or reserved verb names (`describe`), flags or args that collide with the contract flags, descriptions over 80 chars or spanning lines, a relative or templated base URL, a path parameter with no arg, an invalid desktop recipe, or a value that looks like a secret. A failed build prints the first eight errors and a count of the rest.|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    142,
+    122,
+    131
+   ],
+   [
+    "replace",
+    142,
+    150,
+    131,
+    132,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    164,
+    132,
+    146
+   ],
+   [
+    "replace",
+    164,
+    165,
+    146,
+    147,
+    [
+     "|Operator|Means|"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    147,
+    148
+   ],
+   [
+    "replace",
+    166,
+    171,
+    148,
+    153,
+    [
+     "|`k=v`|equal. A number compares as a number (`id=7`), a bool as a bool (`done=true`), everything else as an exact string|",
+     "|`k!=v`|not equal, which includes a row with no value at that path|",
+     "|`k~re`|case-insensitive regex (`name~^a`, `url~github`)|",
+     "|`k>n` `k>=n` `k<n` `k<=n`|numeric comparison; a value that is not a number fails the condition|",
+     "|`k=*`|present and not null|"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    267,
+    153,
+    249
+   ],
+   [
+    "replace",
+    267,
+    274,
+    249,
+    250,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    280,
+    250,
+    256
+   ],
+   [
+    "replace",
+    280,
+    281,
+    256,
+    257,
+    [
+     "The cli engine does not care who wrote the binary. CLI-Anything generates a Python CLI per application and publishes them through `cli-hub`; declick compiles any of them, and `cli-hub` itself, into an adapter with the same contract as everything else:"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    312,
+    257,
+    288
+   ],
+   [
+    "replace",
+    312,
+    313,
+    288,
+    289,
+    [
+     "The guard is DashClaw, the approval and policy layer for unattended agents from the same author: it intercepts a risky action before it runs and blocks it, or asks a person to approve it from anywhere, with one click. declick talks to it over one HTTP call per mutating verb. Nothing below is required. With no key set, a mutating verb runs, nothing is written to stderr, and the envelope records `governance.enabled` false with the reason `no guard configured`. Site: dashclaw.io."
+    ]
+   ],
+   [
+    "equal",
+    313,
+    374,
+    289,
+    350
+   ],
+   [
+    "replace",
+    374,
+    375,
+    350,
+    351,
+    [
+     "The full recipe step vocabulary, a worked recipe, the tree-diff envelope, the manifest field reference and every environment variable are in docs/REFERENCE.md."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    388,
+    351,
+    364
+   ],
+   [
+    "replace",
+    388,
+    389,
+    364,
+    365,
+    [
+     "|Command|What it gives you|"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    390,
+    365,
+    366
+   ],
+   [
+    "replace",
+    390,
+    414,
+    366,
+    390,
+    [
+     "|`declick doctor`|node version, home, whether `~/.declick/bin` is on PATH (with the fix), skill dirs, vault, deskclaw presence and arm state, `claude` on PATH, governance config, engine readiness, and integration state (has `setup` run, which clients have the rules block and hook, how many MCP servers are adapted). `blocking` and `warnings` are separate lists and `healthy` is true only when `blocking` is empty, so a fresh home with nothing on PATH is healthy with one warning. Exit 1 only when node is too old.|",
+     "|`declick daemon [start\\|stop\\|status]`|the warm MCP server pool. `start` launches a detached per-user daemon, `status` is `{running, pid, started, servers:[{adapter, pid, calls, idleMs}]}` and exit 2 when nothing is running, `stop` shuts it down and waits for it to go. With no action it reports status.|",
+     "|`declick setup [--dry-run] [--no-adopt] [--no-rules] [--no-hook] [--no-path] [--revert] [--keep-adapters]`|wire declick into the agents on this machine: PATH, adapters for their MCP servers, a rules block, the Claude Code hook; `--revert` undoes it byte for byte; `--dry-run` previews with no writes|",
+     "|`declick uninstall [--yes] [--keep-adapters]`|revert setup if it ran, then delete `~/.declick` entirely and print the `npm rm -g declick` line; refuses without `--yes`; `--dry-run` lists what would go|",
+     "|`declick list`|every adapter: engine, source, verb names, auth keys, last run, last error. A corrupt manifest is one broken row, not a crash.|",
+     "|`declick describe <n> [--full] [--verb v] [--grep text] [--offset N] [--limit N]`|the surface as text or data, paged instead of printed whole when it is large|",
+     "|`declick manifest <n> [--verb v]`|the compiled contract: http method, path, query, body props, or recipe steps|",
+     "|`declick run <n> <verb> [args] [--flags]`|invoke a verb without touching PATH|",
+     "|`declick status [<n>]`|last run, last error with the tree diff, pending proposals, stored recipes|",
+     "|`declick auth <n>`|which env keys are missing and where present ones came from; exit 4 when any is missing|",
+     "|`declick add --name n [--verbs a,b \\|--tag t] [--engine e] [--host h] [--url u] [--force] [--dry-run]`|build from any source in the engine table above; `--verbs` or `--tag` subsets a large spec, `--engine` overrides detection, `--host` picks the API host in a HAR capture, `--url` gives a GraphQL schema file its endpoint, `--force` overwrites a launcher or skill name collision (a name that already resolves on PATH, such as `calc` on Windows, is refused without it), `--dry-run` compiles and lints without writing (refused for `--goal` authoring, which has no preview)|",
+     "|`declick build <n> [--dry-run]` / `declick lint <n>` / `declick skill [<n>] [--print] [--force] [--dry-run]`|recompile from the stored source, check the contract, regenerate SKILL.md without refetching; `--print` writes one adapter's SKILL.md text to stdout instead of disk, `--dry-run` lists the paths it would write|",
+     "|`declick remove <n> [<verb>] [--force] [--dry-run]`|delete the manifest, the launcher and the skill, or just one verb. Removing a verb exits 2 if it does not exist, exit 1 if the adapter is not desktop-engine (its verbs come from the spec, not per-verb files) or if it is the last recipe without `--force`; deleting the last verb removes the whole adapter (`adapterRemoved: true`). `--dry-run` previews what would be deleted.|",
+     "|`declick export <n>` / `declick import [<file>\\|-] [--force] [--dry-run]`|a JSON bundle of manifest, recipes and defaults that rebuilds on another machine through lint. `import` reads `export`'s envelope as it comes, so `declick export petstore \\|declick import -` round-trips. It refuses to replace an adapter of the same name whose `source`, `engine` or `baseUrl` differs (`data.diff`) unless `--force`; the write is transactional, rolling back only what that import created on failure. `--dry-run` validates and previews without writing.|",
+     "|`declick store [set <dir\\|https://...>\\|push <n>\\|--all\\|pull [n]] [--force] [--no-git] [--dry-run]`|share adapters through a team-wide directory, git checkout or https base of export bundles; no action prints status (`new`, `update`, `in-sync`, `local-only`) per adapter|",
+     "|`declick engines [--source x]` / `declick version` / `declick path [--install] [--dry-run]`|which engines this build has and what a source would compile to, which build, where things are; `--dry-run` on `path --install` previews without touching PATH|",
+     "|`declick author`, `repair`, `proposals`, `accept [--dry-run]`, `recipes`, `recipe`, `desk status \\|arm [min] \\|disarm [--dry-run]`|the desktop authoring loop; `author` and `repair` have no `--dry-run` preview|",
+     "|`declick commands` / `declick <cmd> --help`|the whole command surface as data, and one row (flags, examples, whether it previews) for one command. The shipped `declick` skill is rendered from the same table, so it cannot drift.|",
+     "|`declick audit [--adapter n] [--since 10m] [--failed] [--sum]`|one line per invocation from `~/.declick/audit.jsonl`, newest first: what ran, what governance decided, redacted args, bytes and ms. `--sum` totals them per adapter instead|",
+     "|`declick desk windows \\|tree <window> \\|read <window> <path> \\|clipboard get\\|set \\|arm [min] \\|disarm`|the desktop as data: `tree` takes `--depth N`, `--type Button`, `--grep re`, `--interactive`; `read` takes `--prop value\\|name\\|text\\|toggle\\|selected\\|enabled`|",
+     "|`declick web tree <url> [--selector css] [--grep re]` / `declick web text <url> [--selector css] [--grep re]`|`tree` is a page as a tree of elements a recipe can click, interactive ones first, instead of a screenshot; `text` is the page's visible text as numbered lines. `--grep` filters either one (role, name and href for `tree`; the line for `text`) and exits 2 when nothing matches, so `declick web text <url> --grep \"privacy policy\"` answers \"does the page say X\" in one call|",
+     "|`declick defaults <n> [--verb v] [--set k=v] [--unset k] [--clear] [--dry-run]`|flag defaults for one adapter, printed, set, unset or cleared. `--set` and `--unset` repeat; without `--verb` they edit the `*` scope that applies to every verb. Every `--set` is checked against the flags that scope has, so a typo cannot be written|",
+     "|`declick import --example [--engine e]` / `declick manifest --schema`|a minimal valid bundle, and the manifest field reference as data|",
+     "|`declick ui [--port N] [--open] [--allow-authoring]`|the human page|"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    416,
+    390,
+    392
+   ],
+   [
+    "replace",
+    416,
+    419,
+    392,
+    393,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    455,
+    393,
+    429
+   ],
+   [
+    "delete",
+    455,
+    456,
+    429,
+    429
+   ],
+   [
+    "equal",
+    456,
+    457,
+    429,
+    430
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "131eac509254+2": {
+  "fn": "cocosip/obconnector-dotnet",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "CI/CD",
+     "NuGet",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    14,
+    5,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "Start with the documentation index:"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    22,
+    16,
+    22,
+    [
+     "- Feature and capability matrix: MySQL/Oracle scope and implemented subsets.",
+     "- Missing-feature and verification matrix: code limits, optional candidates and deployment blockers.",
+     "- Acceptance criteria: required behavior, complete live suites, failure/skip and cleanup rules.",
+     "- Development tracking list: open tasks, server prerequisites and scope decisions.",
+     "- Compatibility and retained TLS/environment limitations.",
+     "- Connection strings: every keyword, default, validation rule and example."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    30,
+    22,
+    30
+   ],
+   [
+    "replace",
+    30,
+    34,
+    30,
+    34,
+    [
+     "|Package|Purpose|",
+     "|---|---|",
+     "|`OceanBaseConnector`|Connections, commands, parameters, readers and transactions.|",
+     "|`OceanBaseConnector.DependencyInjection`|Optional dependency injection integration.|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    45,
+    34,
+    45
+   ],
+   [
+    "replace",
+    45,
+    58,
+    45,
+    46,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    60,
+    46,
+    48
+   ],
+   [
+    "replace",
+    60,
+    61,
+    48,
+    49,
+    [
+     "For the complete keyword list, defaults and validation rules see the connection string reference."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    49,
+    52
+   ],
+   [
+    "replace",
+    64,
+    65,
+    52,
+    53,
+    [
+     "Modern data sources offer `OceanBaseDataSourceBuilder.UseClientCertificate(...)`. Build captures an owned copy even with pooling disabled, so the original can be disposed after Build succeeds. Source connections inherit fixed configuration. Certificate rotation uses a new data source; dispose the old source and close its borrowed connections when retiring that identity. Pooled borrow does not repeat TLS validation. See the client certificate contract for ownership and rotation limits."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    53,
+    54
+   ],
+   [
+    "replace",
+    66,
+    67,
+    54,
+    55,
+    [
+     "For enterprise trust or certificate pinning, set `OceanBaseConnection.RemoteCertificateValidationCallback` before Open, or use `OceanBaseDataSourceBuilder.UseRemoteCertificateValidationCallback(...)`. This requires `TLS Mode=VerifyFull`. A callback replaces the platform validation decision and must handle certificate, chain, hostname and revocation errors; null retains platform validation. Ordinary pools isolate callback instances by reference. Validation runs at physical TLS establishment, not at each pooled borrow; rebuild/dispose the data source when retiring a trust policy. See the TLS API contract."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    72,
+    55,
+    60
+   ],
+   [
+    "replace",
+    72,
+    73,
+    60,
+    61,
+    [
+     "set `Use Affected Rows=true` to request changed rows. See the configuration reference."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    87,
+    61,
+    75
+   ],
+   [
+    "replace",
+    87,
+    88,
+    75,
+    76,
+    [
+     "- Text multi-statements are opt-in with `Allow Multi Statements=true`. Oracle named and MySQL positional inputs support numbers, strings, binary, JSON (MySQL), NChar/NVarchar2 (Oracle) and NULL, plus MySQL DATE/DATETIME/TIMESTAMP/TIME and Oracle DATE/TIMESTAMP/TIMESTAMP WITH TIME ZONE/TIMESTAMP WITH LOCAL TIME ZONE/INTERVAL YEAR TO MONTH/INTERVAL DAY TO SECOND. Oracle national inputs use ASCII Unicode literals, preserving characters outside the client charset; national result decoding requires fresh trusted state and uses the supported explicit encoding mappings. MySQL strings tolerate SQL_MODE changes but require stable parsing character sets. Binary Input streams use bounded client-literal encoding; MySQL scalar Output/InputOutput/ReturnValue positions use private user variables, with atomic publication after the script and a hidden output SELECT complete; reader close drains the active script. Script or output-query errors preserve prior parameter values but do not undo successful SQL. Stream/locator/complex outputs, Oracle script outputs, Prepare and server cursors remain unsupported. Oracle named complex input support is limited to the documented D-02d1 through D-02d3 and D-04f subsets. See compatibility for limits."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    90,
+    76,
+    78
+   ],
+   [
+    "replace",
+    90,
+    94,
+    78,
+    82,
+    [
+     "- MySQL stored procedures support binary InputOutput streams through prepared SET/CALL, with caller-owned sources and outputs published after complete results. See INOUT stream evidence.",
+     "- Opt-in client prepare fallback accepts MySQL BIT/YEAR inputs using exact numeric literals after a validated unsupported-Prepare response. See fallback evidence and deployment limits.",
+     "- Explicit MySQL JSON inputs also support that opt-in fallback, using fresh session charset/SQL_MODE facts and ordinary string literals. JSON syntax remains server-validated; see JSON fallback evidence.",
+     "- MySQL DATE/DATETIME/TIME inputs also support opt-in fallback, retaining exact input precision and current-session TIMESTAMP conversion. TIME cap fractions have server-specific binary/text differences; see temporal evidence and the completed/remaining checkpoint."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    96,
+    82,
+    84
+   ],
+   [
+    "replace",
+    96,
+    99,
+    84,
+    87,
+    [
+     "- Oracle binary InputOutput streams use the existing prepared piece upload and retain caller ownership. Outputs follow server metadata: the verified anonymous procedure wrapper returns RAW content as CHAR hex text. See Oracle INOUT stream evidence.",
+     "- Complex LOB inputs support named BLOB bytes/CLOB text and anonymous BLOB/CLOB arrays of session-bound locator handles. Single-statement Oracle Text/StoredProcedure named locator inputs use validated constructors with hidden root LOB binds; independent scalar and specified resource outputs, batch input-only subsets, and specified mixed batch routine-barrier output combinations are supported. Complex locator InputOutput and multi-statement expansion remain unsupported; see the complex type input contract.",
+     "- CLOB locator parameters convert inline content in a sending copy for configured client charsets (V1; V2 on authenticated OceanBase4.4.1+). Original handles and UTF-8 readers retain their bytes; see the charset contract."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    87,
+    88
+   ],
+   [
+    "replace",
+    100,
+    104,
+    88,
+    92,
+    [
+     "- MySQL ARRAY values use the existing String parameter/result path. Current direct acceptance covers INT nesting and single-level TINYINT/SMALLINT/BIGINT/FLOAT/DOUBLE/VARCHAR arrays. Results preserve the server representation: FLOAT array text may round values, and VARCHAR array text may contain raw control characters and incomplete JSON escaping. Do not assume lossless text rebinding or JSON parsing; see compatibility.",
+     "- Named Oracle OBJECT/collection values support exact INTERVAL YEAR TO MONTH and DAY TO SECOND members in binary inputs/results and PL OUT/INOUT, including named client-constructor inputs. Use the existing interval provider values. Named OBJECT and nested OBJECT text results also decode exact INTERVAL members from the preloaded declaration (D-04f3; Oracle 4.4.2.2 direct, 24/24). Unknown declarations or malformed values are rejected; collection and other unsupported complex text shapes retain their guards. Canonical anonymous INTERVAL factories also support the verified ExecuteArray DML input/RETURNING subset (D-04f1); current PL outputs with unknown precision are rejected. Anonymous INTERVAL result descriptors now reuse the embedded-precision codec; explicitly declared precision-9 PL local collection OUT has initial direct evidence (D-04f2), but extended live acceptance is incomplete after endpoint handshake failures. Ordinary anonymous 0x17 binding and dedicated multi-send acceptance remain open. See D-04f in the roadmap.",
+     "- `GetSchema` exposes 20 Oracle-mode / 18 MySQL-mode collections, including views, indexes, keys/constraints, foreign keys, sequences and users; Oracle also provides named types and synonyms. `Restrictions` describes exact bound filters; static `DataTypes` reports CLR/provider mappings and conditional codec support. See the Schema contract for permissions and mode limits; real directory/OBProxy validation remains open.",
+     "- `OceanBaseParameter.DecimalScale` declares signed decimal scale, including Oracle NUMBER negative scales. Values requiring rounding are rejected; MySQL retains its narrower limits. See the parameter contract for precedence and mode bounds. Real-server declared-scale validation remains open."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    92,
+    93
+   ],
+   [
+    "replace",
+    105,
+    106,
+    93,
+    94,
+    [
+     "- `CredentialProvider` and modern builder `UseCredentialProvider` obtain one immutable credential per logical Open, including pool reuse. Higher versions retire old sessions without interrupting active borrowers; expiry, cancellation and refresh failures fail closed. Providers own caching/refresh and remain caller-owned. See the credential contract."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    94,
+    95
+   ],
+   [
+    "replace",
+    107,
+    110,
+    95,
+    98,
+    [
+     "- `Pooling=true` reuses authenticated physical sessions, validates reused sessions, resets them before return, and supports `Min Pool Size`, `Max Pool Size`, `Pool Wait Timeout`, `Connection Idle Lifetime` and `Connection Lifetime`; `Min Pool Size` prewarms physical sessions before a borrow and rolls back sessions still idle after a failed warmup, preserving sessions already borrowed by concurrent Opens. Recognized user session-state and temporary-object statements discard the physical session instead of returning it to the pool. Opening inside an ambient `TransactionScope` enlists one local transaction through the coordinator single-resource slot. A second database resource and distributed promotion are rejected. Lost COMMIT responses report InDoubt; automatic `OpenAsync` initialization observes the opening cancellation token and discards an interrupted session. Cancelling that token after Open completes does not cancel the transaction. See the ambient contract.",
+     "- `OceanBaseConnection.ClearPool(connection)` closes idle sessions for that identity and discards borrowed sessions when returned. `ClearAllPools()` clears ordinary registry pools; private data sources use `source.Clear()` or `ClearPool` with one of their connections. Active commands continue, and new Opens remain available. See the pool clearing contract.",
+     "- Every connection confirms `ob_version()` and the tenant compatibility mode; MySQL-mode opens also require `@@autocommit` enabled, rejecting sessions whose implicit transactions this provider could not commit. Oracle opens explicitly confirm `set autocommit = 1`; pool return repeats it after successful reset, discarding the session on failure. See the Oracle baseline contract. Recognized version formats are accepted; versions beyond the recorded deployment and OBProxy still need real-server validation."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    117,
+    98,
+    105
+   ],
+   [
+    "replace",
+    117,
+    118,
+    105,
+    106,
+    [
+     "Requires the .NET 11 SDK and a .NET 10 runtime. Tests target and run on .NET 10. Certificate creation/import, TLS/mTLS handshakes and TLS consumer tests belong to the separate security acceptance suite, outside the main solution and CI. Real-database integration tests never run in CI or a plain dotnet test; they need an explicit opt-in and a configured environment (integration guide)."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    136,
+    106,
+    124
+   ],
+   [
+    "replace",
+    136,
+    137,
+    124,
+    125,
+    [
+     "This repository and Locus share the same CI/CD conventions: pushes to the default branch and pull requests compile and test, and only a version tag publishes. Other branches (including `dev`) trigger nothing."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    125,
+    126
+   ],
+   [
+    "replace",
+    138,
+    139,
+    126,
+    127,
+    [
+     "The workflow builds and tests on Windows and Linux for pull requests targeting `master`, pushes to `master`, and version tag pushes."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    127,
+    128
+   ],
+   [
+    "replace",
+    140,
+    146,
+    128,
+    134,
+    [
+     "|Event|Build and test|Pack and verify NuGet consumers|Publish to NuGet and GitHub Releases|",
+     "|---|---|---|---|",
+     "|Pull request to `master`|Yes|No|No|",
+     "|Push to `master`|Yes|Yes|No|",
+     "|Version tag push|Yes|Yes|Yes, after both operating systems pass|",
+     "|Other branch push|No|No|No|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    151,
+    134,
+    139
+   ],
+   [
+    "replace",
+    151,
+    152,
+    139,
+    140,
+    [
+     "Publication uses nuget.org trusted publishing, so no long-lived API key is stored: the publish job exchanges the workflow's GitHub OIDC token for a one-hour nuget.org API key immediately before pushing. Before the first tag release, sign in to nuget.org as the `virtual` profile that owns both package IDs and add a trusted publishing policy for repository owner `cocosip`, repository `obconnector-dotnet`, workflow file `ci-cd.yml`, and an empty environment. The workflow uses `GITHUB_TOKEN` with `contents: write` to create the GitHub Release."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    140,
+    141
+   ],
+   [
+    "replace",
+    153,
+    154,
+    141,
+    142,
+    [
+     "Each release records the non-merge commits since the previous reachable version tag, a comparison link, and install commands for both packages. The first release includes the initial commit history. These notes and the verified `.nupkg` files are attached to the GitHub Release; each NuGet package's release notes link to it. Notes are generated from Git history, so use descriptive commit subjects. This does not replace the outstanding publication review in the verification status."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    159,
+    142,
+    147
+   ],
+   [
+    "replace",
+    159,
+    171,
+    147,
+    159,
+    [
+     "- Connection strings",
+     "- Feature and capability matrix",
+     "- Missing-feature and verification matrix",
+     "- Development tracking list",
+     "- Constraint and known limitations",
+     "- API reference and architecture",
+     "- Failure handling and recovery",
+     "- Diagnostics",
+     "- Credential provision and rotation",
+     "- Database acceptance guide",
+     "- Integration test guide",
+     "- Connector/J architecture reference"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    173,
+    159,
+    161
+   ],
+   [
+    "replace",
+    173,
+    175,
+    161,
+    162,
+    [
+     "MIT. See third-party notices."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

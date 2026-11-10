@@ -2617,5 +2617,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2f74c044be4f": {
+  "identity": {
+   "one_liner": "Zig 编写的 Postgres 兼容数据库，面向多租户重负载场景",
+   "review": "Egres 是用 Zig 从零实现的 Postgres 兼容数据库，定位重负载、多租户工作负载，并非 Postgres 重写。单节点无需参数即可运行，数据与 WAL 存于 egres-data 目录，在 3210 端口接受 psql 等 pgwire 客户端。可用官方脚本安装或以 Zig 0.16.0 从源码构建；项目采用 Apache 2.0 许可，主要代码由 AI 代理编写、人工审阅。",
+   "highlights": [
+    "支持 pgwire 协议，可用 psql 直连（默认端口 3210）",
+    "单节点内置存储引擎与写前日志（WAL），Jepsen 测试覆盖 pgwire 上的快照隔离与进程崩溃/暂停场景",
+    "提供 Linux x86_64 与 Apple Silicon 发布包（附 SHA256SUMS），从源码构建仅需 Zig 0.16.0，无需 gcc/clang"
+   ],
+   "use_cases": [
+    "需要 Postgres 客户端兼容接入的多租户 OLTP 负载",
+    "希望在单机以零配置快速运行数据库实例的开发与测试环境",
+    "基于主题标签（S3/对象存储、Raft、LSM-tree）的存储架构调研与学习"
+   ]
+  },
+  "sha": "2f74c044be4f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8e3b44656f4": {
+  "identity": {
+   "one_liner": "基于 C++ 和 Dear ImGui 构建的跨平台数据库客户端。",
+   "review": "DearSQL 是一个用 C++ 和 Dear ImGui 编写的数据库客户端，可在图形界面、终端 TUI、MCP 服务器和语言服务器四种形态下使用同一个二进制文件。它支持 SQLite、PostgreSQL、MySQL、Redis 等多种数据源及 S3 兼容存储，并可为编码代理提供受控的数据库工具。写操作需用户通过 --allow-writes 批准。",
+   "highlights": [
+    "支持 SQLite、DuckDB、PostgreSQL、MySQL、MongoDB、Redis 等多种数据源及 S3 兼容对象存储",
+    "同一二进制提供 GUI、--tui 终端模式、--mcp MCP 服务器和 --lsp 语言服务器",
+    "包含模式浏览、可编辑数据表格、带补全的 SQL 编辑器、查询计划分析（Explain/Analyze）等功能"
+   ],
+   "use_cases": [
+    "在 macOS、Linux 或 Windows 桌面上浏览和管理多种数据库",
+    "在终端中通过 TUI 或命令行查询数据库及本地 SQLite/DuckDB/CSV 文件",
+    "通过 MCP 将数据库模式查询、分析和受控写入能力接入 Claude Code、Codex 等编码代理"
+   ]
+  },
+  "sha": "c8e3b44656f4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d0b668f35955": {
+  "identity": {
+   "one_liner": "自托管的多 LLM 工作流上下文中间件，以版本化、可评审的共享上下文库为核心",
+   "review": "Cohereny 将系统提示、领域知识、工具模式、路由规则等内容置于应用代码之外，作为经评审后生效的版本化块，按组织/团队/项目/个人范围组织，运行时按工作流步骤组装并按路由规则分发到对应模型。面向需要多人协作治理 LLM 上下文的团队。依赖 PostgreSQL 16+、Redis 7+、OpenID Connect 提供方与 LiteLLM 网关；项目尚未发布 1.0，API 不稳定，官方声明不适用于生产环境。",
+   "highlights": [
+    "支持版本化上下文块、评审生命周期与按范围生效的审批（含 strict/direct 范围与晋升机制），组合时实施隐私棘轮：深层范围只能收紧继承的隐私规则",
+    "在 /v1/complete 与工作流的每次模型调用前替换标识符（邮箱、电话、IBAN、德国税号等），运行记录以占位符存储，映射按运行加密并可审计地还原",
+    "提供图定义、分支与汇合、带四眼审批 human_review 门的工作流运行器，以及应用不可触碰的只追加审计日志（API 以无表所有权的数据库角色运行）"
+   ],
+   "use_cases": [
+    "多模型多步骤 LLM 工作流中，集中管理并按步骤组装提示与上下文",
+    "需要人工评审、四眼审批与可审计运行记录的 LLM 治理流程",
+    "数据在进入模型前需替换个人标识符并保留加密映射的场景"
+   ]
+  },
+  "sha": "d0b668f35955",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

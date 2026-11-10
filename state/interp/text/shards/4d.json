@@ -2686,5 +2686,70 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8fcfb2e8aba2": {
+  "identity": {
+   "one_liner": "FLibrary 是基于 Qt6/SQLite3 的电子书库编目工具",
+   "review": "FLibrary 是一个开源（MIT）的电子图书馆编目程序，用 C++/Qt6 编写，依赖 SQLite3 存储数据，支持 epub 与 fb2 格式。README 主要内容为 Windows、Linux、macOS 三平台的构建说明：使用 CMake 与 Conan 管理依赖，提供批处理/脚本生成安装包、便携压缩包及 DMG。macOS 脚本支持 arm64 与 x86_64 双架构构建并执行签名与 DMG 校验。文档未详述具体功能界面。",
+   "highlights": [
+    "基于 C++23、Qt6（最低 6.10.0）、SQLite3 构建，使用 CMake 与 Conan 2 管理依赖",
+    "提供三平台构建脚本：Windows 生成安装器与便携版，Linux 生成便携压缩包或 DEB 包，macOS 生成 DMG",
+    "macOS 脚本支持 arm64/x86_64 双架构构建、ad-hoc 签名、DMG 校验及 bundle 内绝对路径检查"
+   ],
+   "use_cases": [
+    "需要本地编目管理 epub/fb2 电子书藏书的个人用户",
+    "希望自行从源码在 Windows/Linux/macOS 编译打包 Qt 桌面应用的开发者"
+   ]
+  },
+  "sha": "8fcfb2e8aba2",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "49ff91550e52": {
+  "identity": {
+   "one_liner": "单机自托管的 AI 智能体长期记忆服务，基于 FastAPI 与 SQLite 内核",
+   "review": "aiduMEI 是运行在本机的长期记忆服务（Python/FastAPI，MIT），通过钩子接入 Claude Code、Codex CLI、Hermes 等宿主：对话前注入相关记忆，对话后写入原文，会话结束提炼精华。f0.8 版默认使用自研 native 单库 SQLite 内核，正文、全文索引、向量同库存储。数据全部落在本机，不支持互不信任的多用户隔离，一个服务实例对应一个主人。",
+   "highlights": [
+    "native 内核将正文、FTS5 trigram 全文索引、向量、历史、墓碑写入同一 memory.db，检索为全文与向量两路 RRF 融合",
+    "提供 connect_host.py 一条命令接入宿主并当场验收，支持 REST API 与 MCP（6 工具）两种接入面",
+    "删除操作同步清理索引与派生内容并留墓碑快照，可通过 /tombstone/restore 恢复"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex CLI、Hermes 等宿主智能体提供跨会话的长期记忆存取",
+    "需要数据留在本机、可备份可恢复的自托管部署场景",
+    "通过 MCP 协议向支持该协议的客户端提供记忆增删查工具"
+   ]
+  },
+  "sha": "49ff91550e52",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9c3c40fd3227": {
+  "identity": {
+   "one_liner": "面向 Linux 二合一设备的 Rust/GTK4 手写笔记与 PDF 批注应用",
+   "review": "UniNote 是一个用 Rust 编写、基于 GTK4/Libadwaita/Cairo 的 Linux 桌面手写笔记应用，面向高校 STEM 课堂与研究场景。它提供矢量笔迹管线、PDF 幻灯片批注、无限白板与 A4 笔记本，笔迹数据以 SQLite WAL 模式存储。支持 MPP、ELAN、Wacom 等触控笔协议与 Wayland 桌面。当前版本 0.5.2，采用 GPL-3.0 许可证，提供 Arch Linux 包与 Flatpak 安装方式。",
+   "highlights": [
+    "矢量笔迹管线：Catmull-Rom 样条转贝塞尔曲线，配合 One Euro 滤波与掌部拒绝状态机",
+    "通过 poppler-glib 对 PDF 幻灯片做非破坏性批注，并可经 cairo::PdfSurface 导出多页矢量 PDF",
+    "内嵌 SQLite 3（WAL 模式）持久化，支持通过 Online Backup API 导出单文件备份"
+   ],
+   "use_cases": [
+    "在带触控笔的 Linux 二合一设备上进行课堂手写笔记",
+    "对 PDF 讲义与幻灯片做矢量批注并导出",
+    "在无限白板上绘制推导图与工程草图"
+   ]
+  },
+  "sha": "9c3c40fd3227",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

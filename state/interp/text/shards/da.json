@@ -2887,5 +2887,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6e6235137708": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 10 与 Clean Architecture/CQRS 的仓库库存管理系统",
+   "review": "该项目是一个仓库库存管理系统（WHMS），后端为 ASP.NET Core 10 无头 API，采用 Clean Architecture、CQRS、MediatR、Repository Pattern 与 EF Core；前端提供 Razor Pages 加 Vue.js 界面，使用 AdminLTE 模板和 Syncfusion 组件。功能覆盖销售、采购、调拨、盘点、报废与报表，并通过 IsDemoVersion 设置区分演示与生产模式，生产模式要求外部注入 JWT 密钥和管理员密码。",
+   "highlights": [
+    "提供销售、采购、发货、收货、调拨、调整、退货、报废、盘点与事务/库存/移动报表等功能模块",
+    "后端实现 Clean Architecture、CQRS（MediatR）、Repository Pattern，使用 EF Core、AutoMapper、FluentValidation、Serilog，认证采用 ASP.NET Identity 加 JWT",
+    "支持 Docker Compose 演示栈一键运行，通过 IsDemoVersion 设置与 .env/环境变量/user-secrets 注入生产密钥"
+   ],
+   "use_cases": [
+    "需要库存、订单与仓库操作（收发货、调拨、盘点）管理的系统开发参考",
+    "学习 Clean Architecture 与 CQRS/MediatR 在 ASP.NET Core 项目中的组织方式",
+    "通过 Docker Compose 演示栈快速本地体验，或部署为需要自管密钥的生产库存系统"
+   ]
+  },
+  "sha": "6e6235137708",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "70c4083285db": {
+  "identity": {
+   "one_liner": "Rust 编写的 DynamoDB 模拟器，以 SQLite 为底层存储。",
+   "review": "Dynoxide 是一个用 Rust 实现的 DynamoDB 模拟器，以 SQLite 作为存储层，面向本地开发、测试和 CI 场景。它可作为 HTTP 服务器、面向编码代理的 MCP 服务器、可嵌入 Rust/iOS 的库，并编译为 WebAssembly 在浏览器运行；提供 npm、Homebrew、Cargo、Docker 等安装方式。项目声明非生产环境替代品，备份、全局表等云专属操作未实现，事务竞争错误也未模拟。",
+   "highlights": [
+    "实现 DynamoDB API，覆盖表、条目、query/scan、批次、事务、PartiQL、Streams、TTL、标签，支持 GSI/LSI、完整表达式语法及兼容的分页、验证与错误码",
+    "提供四种运行形态：HTTP 服务器、MCP 服务器、可嵌入的 Rust 库（含内存模式 Database::memory()）、WebAssembly 浏览器构建",
+    "通过公开的 Parity Suite 一致性测试套件对照真实 AWS DynamoDB 持续验证；以单一静态二进制分发，支持 Testcontainers 与 GitHub Actions 集成"
+   ],
+   "use_cases": [
+    "本地开发与集成测试中替代 DynamoDB 服务端点，AWS SDK 客户端直接指向本地 HTTP 端口",
+    "CI 流水线（GitHub Actions、Testcontainers、Docker）中运行依赖 DynamoDB 的测试套件",
+    "编码代理通过 MCP 服务器操作 DynamoDB，或 Rust/iOS 应用内嵌内存数据库进行隔离测试"
+   ]
+  },
+  "sha": "70c4083285db",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ca613b3284be": {
+  "identity": {
+   "one_liner": "Telegram Mini App 与 Web 应用的 monorepo 启动模板",
+   "review": "gramkit 是一个面向 Telegram Mini App 与 Web 应用的 monorepo 启动模板，包含 React（Next.js 16）与 Vue 3 两套前端模板，以及共享的 FastAPI 后端核心，提供认证、基于角色的访问控制、YooKassa 与 Telegram Stars 支付、机器人通知、后台任务和管理面板。Telegram 功能可选项，BOT__TOKEN 留空即为标准 Web 应用。README 载明在 2 vCPU 上以每核一个 worker 实测 1,300 并发用户。",
+   "highlights": [
+    "提供 React 与 Vue 两套前端模板及共享 FastAPI 后端核心，支持 OpenAPI 生成 TypeScript hooks",
+    "集成 YooKassa 与 Telegram Stars 支付、基于用户本地时间的通知引擎、ARQ 后台任务与夜间数据库备份",
+    "附带 Claude Code 配置（CLAUDE.md、规则、hooks、MCP）与基于 testcontainers 的并行测试套件"
+   ],
+   "use_cases": [
+    "开发 Telegram Mini App 或纯 Web 应用",
+    "需要内置支付（YooKassa/Telegram Stars）与订阅管理的项目",
+    "需要管理面板、通知推送与后台任务的 FastAPI 应用"
+   ]
+  },
+  "sha": "ca613b3284be",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dac32a9ca37d": {
+  "identity": {
+   "one_liner": "基于 SQL 工单库的 AI 编码 agent 编排框架，单 Go 二进制运行",
+   "review": "jobshop 是一个工作流执行框架，把任务拆为带阻塞关系的工单，交给通过 Agent Client Protocol（ACP）运行的 agent 会话处理。状态存于 SQLite 或 Postgres，每个会话在独立的 git worktree 和沙箱中工作。提供 GitHub/Linear 工单接入、PR 评审合并、触发器、web UI 与 A2A 网关。适合需要跨会话保持状态、按事件拆分路由任务的开发者；使用前需阅读 MANIFESTO.md，Desk 前端资产需自行构建。",
+   "highlights": [
+    "以单个 Go 二进制配合 SQLite 或 Postgres 存储运行，支持任意 ACP 兼容 agent（jcode、claude code、gemini cli 等）认领工单",
+    "工单支持阻塞边、认领与评论；工作流按步骤跨池运行，带重试和升级到人工的机制",
+    "提供 Webhook 和轮询方式的 GitHub/Linear 接入，内置 issue 到 PR 评审合并、triage、CI 修复等示例流程（packs/）"
+   ],
+   "use_cases": [
+    "将 GitHub 或 Linear issue 自动转为工单并驱动 agent 会话产出可评审合并的 PR",
+    "需要跨会话保持状态、将大任务拆分为多步骤并路由到不同 agent 池的场景",
+    "通过 cron、事件、计数或 Starlark 处理器触发工单或运行的自定义自动化流程"
+   ]
+  },
+  "sha": "dac32a9ca37d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b0fb25fb9b6": {
+  "identity": {
+   "one_liner": "考公刷题项目的第三方一键部署指南，含重组题库脚本与部署工具",
+   "review": "该仓库不是刷题程序本身，而是官方项目 ERRRC/kaogong-shuati 的第三方部署指南（2026-10-31 基于官方文档整理），提供百度搭子一键部署话术、官方命令行部署步骤、MCP server（提供 get_guide 等三个工具，仅限百度搭子调用）与常见问题排查。目标用户是想本地部署考公刷题系统的个人备考者；注意题库版权仅限个人学习，且未实测完整启动流程。",
+   "highlights": [
+    "提供百度搭子一键部署流程与官方命令行部署步骤（克隆后须先运行 tools/reassemble-tiku.mjs 重组分卷题库，再启动 server.mjs 于 3000 端口）",
+    "内置零依赖 MCP server（mcp-server.mjs），读取 guide.json，提供 get_guide / search_guide / get_project_info 三个工具，仅限百度搭子宿主调用",
+    "列出数据文件说明与常见问题排查，包括 Node 22.5+ 要求、practice.db 本地迁移与 AI 网关配置要点"
+   ],
+   "use_cases": [
+    "不熟悉命令行的个人备考者，通过百度搭子对话式部署官方考公刷题系统到本机",
+    "按官方方式本地部署时查阅数据文件说明、启动命令与常见报错排查",
+    "在百度搭子工作区中注册 MCP 工具以检索该部署指南的内容"
+   ]
+  },
+  "sha": "1b0fb25fb9b6",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2921,5 +2921,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "58b8b60cf1e8": {
+  "identity": {
+   "one_liner": "自托管家庭墙面显示面板，聚合日历、家务、餐单与购物清单",
+   "review": "Prism 是一个自托管的家庭信息面板，运行在墙挂屏幕、平板或手机浏览器上，展示日历、天气、家务、购物清单和照片。数据存于本地 Postgres，无需账号，成员用 PIN 登录。提供 Home Assistant 插件和 Docker（amd64/arm64）两种部署方式，内含 Redis。许可证为 PolyForm Noncommercial，仅限个人非商业用途，不可作为付费服务运行。",
+   "highlights": [
+    "支持 Google、iCloud 和 iCal 日历接入，用于墙面显示当日日程、天气和生日提醒",
+    "包含家务积分功能：孩子完成家务、家长审批后积分累计到自定义奖励目标",
+    "支持食谱 ingredients 加入购物清单、条码扫描，以及推送至 Kroger 系列商店购物车"
+   ],
+   "use_cases": [
+    "家庭在厨房或客厅墙挂屏幕上集中展示日程、天气和生日提醒",
+    "有子女的家庭通过积分制管理家务，将完成情况与奖励目标关联",
+    "想在自有 NAS 或树莓派上运行家庭看板、避免订阅付费服务的场景"
+   ]
+  },
+  "sha": "58b8b60cf1e8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e43f6b69386a": {
+  "identity": {
+   "one_liner": "嵌入式代理记忆数据库，单文件内统一关系、图与向量存储及MVCC事务",
+   "review": "contextdb 是一个以 Rust 库和 CLI 形式发布的嵌入式数据库，在统一 MVCC 事务下提供关系 SQL、SQL/PGQ 风格图查询和 pgvector 风格向量检索，数据存于单文件。面向构建代理记忆系统的开发者。无内置 schema，策略约束（状态机、DAG、传播）由引擎强制。当前仅支持精确向量搜索，索引路由不可用；Python/TypeScript 绑定尚在路线图上。",
+   "highlights": [
+    "在同一 MVCC 事务中原子更新关系行、图邻接结构和向量数据，读快照跨三类数据保持一致",
+    "引擎强制 STATE MACHINE、IMMUTABLE、DAG、PROPAGATE、RETAIN/TTL 等策略约束，支持事务内触发处理器与提交后投递的 sink",
+    "实例间通过加密身份票据双向同步，同 LAN 经 iroh 直连，离线优先，冲突策略按表声明"
+   ],
+   "use_cases": [
+    "为代理、设备或服务提供独立运行的单文件记忆存储",
+    "需要数据库层状态机与图约束（如决策流转记录）的工作流",
+    "多机环境下的离线优先知识同步，含无服务器 LAN 场景"
+   ]
+  },
+  "sha": "e43f6b69386a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "342a68cbc77d": {
+  "identity": {
+   "one_liner": "基于 Sub2API 的非官方可扩展 AI API 网关，支持路由与配额策略。",
+   "review": "该项目是 Wei-Shaw/sub2api 的非官方分支（Fork），实现带路由、配额策略和上游服务商集成的 AI API 网关。相比上游，它增加了分组级每用户并发上限、API 密钥同平台回退分组、Codex 多窗口指纹、账户请求展示等扩展功能，需从源码构建部署（Linux 下提供 Docker 安装脚本），采用 LGPL-3.0 许可。README 提示使用可能违反上游服务商条款，风险由用户自行承担。",
+   "highlights": [
+    "为每个分组提供可选的每用户并发上限，按用户和分组独立计数",
+    "API 密钥可选择同平台回退分组，主分组无可用账户时启用回退",
+    "提供单机多窗口 Codex 指纹，按账户稳定设备身份，溢出请求渲染为子代理"
+   ],
+   "use_cases": [
+    "需要从源码构建并自行部署 Sub2API 扩展功能的场景",
+    "需要对分组内用户并发和 API 密钥回退分组进行细粒度管理的网关部署",
+    "已有 Docker 环境并希望使用宿主机更新器维护源码构建的运维场景"
+   ]
+  },
+  "sha": "342a68cbc77d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

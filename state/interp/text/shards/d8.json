@@ -3040,5 +3040,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "45e292487622": {
+  "identity": {
+   "one_liner": "离线优先的内存数据网格，带 CRDT 同步与 Rust 服务器",
+   "review": "TopGun v2 是一个离线优先的实时数据同步系统：TypeScript 客户端将数据存于内存并持久化到 IndexedDB，断网时本地读写可用，重连后通过 LWW-Map/OR-Map CRDT 与逻辑时钟自动合并冲突，服务端以 Rust 编写并使用内嵌 redb 存储，无需独立数据库。适用于构建离线可用的协作与实时应用；当前为单节点稳定版本，多节点 Raft 共识仍在路线图中。",
+   "highlights": [
+    "客户端读写不等待网络，变更持久化到 IndexedDB，重连后增量同步（基于 Merkle 树比较），冲突经 LWW-Map 与 OR-Map 自动合并",
+    "服务器为 Rust（axum WebSocket），数据存于内嵌 redb 存储（数据目录 + WAL），支持 Docker 多架构镜像与 npx 预编译二进制启动",
+    "提供精确匹配 + BM25 全文 + 语义向量的三路混合搜索（RRF 融合），内置 HNSW 向量库，并通过 MCP 服务器供 AI 客户端（Claude Desktop、Cursor）读写数据"
+   ],
+   "use_cases": [
+    "需要离线工作、重连后自动同步的实时 Web 应用（提供 React hooks 与浏览器/Node SDK）",
+    "自托管的实时数据后端：单节点部署即可运行，含 JWT 认证与 ACL 配置",
+    "AI 代理场景：通过 MCP 让 Claude Desktop、Cursor 等客户端查询、修改和订阅应用数据"
+   ]
+  },
+  "sha": "45e292487622",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

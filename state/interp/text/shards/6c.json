@@ -2931,5 +2931,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cc37a2752dea": {
+  "identity": {
+   "one_liner": "由 Video2Book 从86门网课音频重构的教材、笔记与逐字稿合辑",
+   "review": "本仓库收录86门真实网课的三类派生文本产物：791册模块合辑全书、1092篇复习笔记、4052份逐字稿，覆盖计算机、数学、法学、医学、经济等方向，全部由 Video2Book 从课程音频自动生成。产物按 PXX_ 与 模块XX_ 双编号可互相追溯；文本约195MB，音频未入库。内容属二次整理，非官方版本，仅供个人学习使用。",
+   "highlights": [
+    "提供模块合辑全书、复习笔记、逐字稿三类产物，仓库文本约195MB，音频未入库",
+    "复习笔记开头的知识拓扑树支持通过 VS Code Markmap 插件预览，或导入 XMind 生成脑图",
+    "配套 GitHub Pages 在线阅读站，支持 KaTeX 公式渲染、Typora 风格标题自动编号与多端自适应"
+   ],
+   "use_cases": [
+    "对长视频课程内容进行文本化通读与考前速查",
+    "将复习笔记导入 Markmap/XMind 生成思维导图进行知识盘点",
+    "通过逐字稿核对讲师原话，或基于音频运行 Video2Book 流程制作自定义课程文本"
+   ]
+  },
+  "sha": "cc37a2752dea",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5609b65476ba": {
+  "identity": {
+   "one_liner": "Go 嵌入式文档数据库，内含 btree/WAL 引擎，支持类 MongoDB 查询",
+   "review": "Any Store 是一个面向 Go 的嵌入型文档数据库，通过 go get 引入后作为库在进程内运行。它基于自研 btree/pager/WAL 引擎，提供类 MongoDB 查询、索引、全文与向量搜索、聚合管道及 ACID 事务。适合需要在 Go 应用内嵌数据存储、且不希望依赖 CGO 的开发者。注意单写者事务模型：写事务同一时刻全局只有一个，且无隐藏 rowid，文档 id 即 btree 键。",
+   "highlights": [
+    "支持类 MongoDB 查询语法（$eq/$in/$gt、$set/$inc 等修改器）、聚合管道、复合/唯一/稀疏/多键索引及成本型查询规划器",
+    "内置 btree/WAL 存储引擎，提供快照隔离读事务与跨进程并发读写同一数据库文件，含页级校验和与可选 AES-GCM/ChaCha20-Poly1305 加密",
+    "纯 Go 实现无 CGO，可运行于 js/wasm；全文搜索基于 BM25 的倒排索引，向量搜索支持 IVF-SQ、HNSW 与暴力扫描"
+   ],
+   "use_cases": [
+    "在 Go 应用（含 wasm 环境）中嵌入无需外部数据库进程的文档存储",
+    "需要多进程同时读写同一数据库文件的本地应用",
+    "需要文档查询、全文检索或向量搜索组合的本地数据管理场景"
+   ]
+  },
+  "sha": "5609b65476ba",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a6a97b29313b": {
+  "identity": {
+   "one_liner": "面向 DeepSeek Harness 的 Super Chat 面板插件，将聊天消息转为 Superagent Tickets",
+   "review": "dsh-super-chat 是 DSH Web 配置文件的插件，提供单一消息流聊天面板，通过 SQLite 存储消息与主题标签，并以 `super-chat` Source 将消息派发为 Superagent Tickets。无原型时回退到单个 DSH Session。安装需 DSH 0.2.1-rc.5+ 与 Node.js 22.19+；面板无审批界面，asking 预设可能使回合处于等待状态。",
+   "highlights": [
+    "单一消息流存储于 SQLite 索引表，主题为消息上的标签，一条消息可携带多个标签并出现在所有匹配视图中",
+    "标签作为派发线索：有标签消息的首个标签选择 `super-chat:topic:<topicId>` 线程，无标签消息进入 `super-chat:general` 由 Superagent 评估处理",
+    "可选 WeChat 文件传输助手桥接进程，按需启动，以 `@topic` 标记消息，无命令系统"
+   ],
+   "use_cases": [
+    "在 DSH Web 配置文件中通过统一聊天面板向 Superagent 提交任务并接收带标签的回复",
+    "通过微信文件传输助手以自然语言远程发送带主题标签的消息",
+    "安装 dsh-superagent-prototype 时将聊天消息以 Tickets 形式派发给编排器与 worker"
+   ]
+  },
+  "sha": "a6a97b29313b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

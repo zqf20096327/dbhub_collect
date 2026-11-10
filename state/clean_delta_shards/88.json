@@ -30048,5 +30048,524 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "11d0eb65a9ef+2": {
+  "fn": "alaturqua/dbt-hodor",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "dbt-hodor: Hold Old Data, Or Rebuild"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    1,
+    2
+   ],
+   [
+    "replace",
+    8,
+    9,
+    2,
+    3,
+    [
+     " dbt-hodor "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    3,
+    4
+   ],
+   [
+    "replace",
+    10,
+    17,
+    4,
+    9,
+    [
+     " CI",
+     " Python 3.10 or newer",
+     " dbt-core 1.12",
+     " Apache-2.0",
+     " Documentation"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    9,
+    10
+   ],
+   [
+    "replace",
+    18,
+    19,
+    10,
+    11,
+    [
+     "**Documentation** | **Interactive guide** with a run simulator | **Design spec**"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    11,
+    12
+   ],
+   [
+    "replace",
+    20,
+    21,
+    12,
+    13,
+    [
+     "dbt-hodor is a free, self-hosted alternative to dbt Labs' dbt State. It runs inside dbt. For every selected node it decides whether to reuse the object that is already in the warehouse or to build it again. A node is reused when its logic has not changed and its upstream data has not changed since the last build."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    13,
+    14
+   ],
+   [
+    "replace",
+    22,
+    23,
+    14,
+    15,
+    [
+     "It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Trino table, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. It supports the `databricks`, `trino`, `snowflake` and `duckdb` adapters on dbt-core: see Adapters. On dbt v2 it runs as a local state server, `dbt-hodor serve`: see dbt v2 and dbt-core and dbt v2."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    15,
+    16
+   ],
+   [
+    "replace",
+    24,
+    25,
+    16,
+    17,
+    [
+     "> **Status: early development.** hodor has end-to-end tests on dbt-duckdb. Live tests ran on a Databricks SQL warehouse (dbt-core, including a clone, and dbt v2), on Trino with the Iceberg connector and on a Lakebase Postgres store. The live test for Snowflake exists, but did not run for the current version. The test docs list what they cover. It has not run in a large production project yet. Before enabling reuse in production, run in shadow mode for at least a week of scheduled runs and review its decisions. See the rollout guidance. Changes between releases, including the breaking ones, are in Upgrading."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    36,
+    17,
+    28
+   ],
+   [
+    "replace",
+    36,
+    38,
+    28,
+    30,
+    [
+     "1. **Hashes the logic.** For a seed this is the CSV file. Otherwise the compiled SQL is normalized with sqlglot (in the dialect of the target's adapter), so case, quoting, comments and table aliases do not count as changes. Values that differ on every run, such as `invocation_id`, are replaced first. The node config is hashed as well.",
+     "2. **Checks the upstream data.** Each upstream table has a data version. On Databricks it comes from the Delta commit history; maintenance commits such as `OPTIMIZE` or `VACUUM` do not count as data changes. On Trino it comes from the Iceberg snapshot history or the Delta Lake commit history, on Snowflake from `SYSTEM$LAST_CHANGE_COMMIT_TIME` with the `created` and `last_ddl` times, and on DuckDB it is a content fingerprint. See Adapters."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    45,
+    30,
+    37
+   ],
+   [
+    "replace",
+    45,
+    46,
+    37,
+    38,
+    [
+     "Every failure leads to a build, never to a reuse. An error while deciding, a store that cannot be read, a table whose data version is unknown, an input hodor cannot trace (for example `read_files(...)`): in each case the node builds as plain dbt would. hodor does not fail a dbt run, with three exceptions: a `state:` selector that cannot compare fails the run; an incremental node whose partial clone cannot be dropped fails that node; and on dbt-core, `--defer` without `--state` fails the run when hodor cannot supply the base target. See Decision rules and Defer without --state."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    38,
+    41
+   ],
+   [
+    "replace",
+    49,
+    67,
+    41,
+    59,
+    [
+     "|Reason|Decision|",
+     "|---|---|",
+     "|`full_refresh`|build|",
+     "|`unsupported`|build|",
+     "|`no_history`|build|",
+     "|`relation_missing`|build|",
+     "|`code_changed`|build|",
+     "|`config_changed`|build|",
+     "|`target_modified`|build|",
+     "|`select_star_view`|build|",
+     "|`view_unchanged`|reuse|",
+     "|`unknown_upstream`|build|",
+     "|`upstream_code_changed`|build|",
+     "|`same_second_read` (dbt v2)|build|",
+     "|`no_new_data`|reuse|",
+     "|`within_lag_tolerance`|reuse|",
+     "|`new_upstream_data`|build|",
+     "|`volatile_sql`|build|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    70,
+    59,
+    62
+   ],
+   [
+    "replace",
+    70,
+    78,
+    62,
+    70,
+    [
+     "|Reason|Decision|",
+     "|---|---|",
+     "|`hodor_error`|build, after a failure inside hodor|",
+     "|`store_slow` (dbt v2)|build, when the records are not loaded within the 30 seconds shared by the run|",
+     "|`cloned_from_base`|clone from the base target, instead of a build|",
+     "|`pre_cloned_from_base` (dbt-core)|clone, then build on top|",
+     "|`clone_registered` (dbt v2)|the server accepts a clone dbt asked for itself|",
+     "|`clones_off` (dbt v2)|the server declines such a clone because clones are off|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    70,
+    71
+   ],
+   [
+    "replace",
+    79,
+    80,
+    71,
+    72,
+    [
+     "`dbt-hodor explain -s <model>` shows the reason for one node, with the hashes and upstream data versions it compared. The full rules are in Decision rules."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    72,
+    75
+   ],
+   [
+    "replace",
+    83,
+    88,
+    75,
+    80,
+    [
+     "|Mode|Behavior|",
+     "|---|---|",
+     "|`off`|hodor does nothing.|",
+     "|`shadow` (default)|hodor decides and records, but every node builds. Use it to check the decisions before you trust them.|",
+     "|`on`|hodor reuses nodes.|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    106,
+    80,
+    98
+   ],
+   [
+    "replace",
+    106,
+    116,
+    98,
+    108,
+    [
+     "|Key|Default|Values|",
+     "|---|---|---|",
+     "|`lag_tolerance`|`45m`|`0s`, `45m`, `4h`, `1d`, `1w`, integer seconds, or `{count: 4, period: hour}`|",
+     "|`require_fresh_data_from`|`any`|`any`: build when any upstream has new data. `all`: build only when all of them have.|",
+     "|`compare_unrendered_code`|`false`|`true`: build only when both the rendered and the unrendered code changed|",
+     "|`execute_hooks_on_any_reuse`|`false`|`true`: run pre- and post-hooks on a reused node. `execute_hooks_on_reuse` is also accepted.|",
+     "|`evaluate_volatile_sql`|auto|Auto: volatile functions such as `current_date()`, `current_user()` and `current_timestamp()` count as an upstream that changes, unless they only fill a stamp column. `true`: stamp columns count too. `false`: they never count (the dbt State default).|",
+     "|`defer_to_target`|none|A target name such as `prod`: the target whose latest records state selection, defer and clone compare with. Unset: those features are off. Also a `profiles.yml` target key.|",
+     "|`allow_clones`|`true`|`false`: never clone this node from the base target. An invalid value warns and counts as `false`. Also a `profiles.yml` target key. Not read on dbt v2, where clones are off unless `dbt-hodor serve --allow-clones` (or `HODOR_ALLOW_CLONES=true`).|",
+     "|`pre_clone`|`false`|`true`: an incremental node whose code changed is cloned from the base target, then runs on top of the clone. Also a `profiles.yml` target key. Not read on dbt v2, where the node builds.|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    121,
+    108,
+    113
+   ],
+   [
+    "replace",
+    121,
+    134,
+    113,
+    126,
+    [
+     "|Profile key|Env var|Default|Values|",
+     "|---|---|---|---|",
+     "|`hodor_mode`|`HODOR_MODE`|`shadow`|`off`, `shadow`, `on`|",
+     "|`hodor_store`|`HODOR_STORE`|`trino` on the `trino` adapter, `delta` on every other adapter|`delta`, `duckdb`, `postgres` (alias `lakebase`), `trino`|",
+     "|`hodor_database`|`HODOR_DATABASE`|the target's `catalog` (or `database`), for `delta` and `trino` only|Databricks or Trino catalog, or Postgres database (required). Not used by `duckdb`|",
+     "|`hodor_schema`|`HODOR_SCHEMA`|none for `delta`, `trino` and `postgres` (required); `main` for `duckdb`|schema name|",
+     "|`hodor_table`|`HODOR_TABLE`|`hodor_state`|table name|",
+     "|`hodor_path`|`HODOR_PATH`|`.hodor/state.duckdb`|DuckDB database file, for `duckdb`|",
+     "|`hodor_metadata_threads`|`HODOR_METADATA_THREADS`|`8`|1-64|",
+     "|`hodor_lookback_days`|`HODOR_LOOKBACK_DAYS`|`90`|1-3650|",
+     "|`hodor_auto_prune`|`HODOR_AUTO_PRUNE`|`false`|`true` deletes records older than `hodor_lookback_days` at the end of each run|",
+     "|`hodor_endpoint`, `hodor_host`, `hodor_port`, `hodor_user`, `hodor_password`, `hodor_sslmode`|`HODOR_ENDPOINT`, `HODOR_HOST`, `HODOR_PORT`, `HODOR_USER`, `HODOR_PASSWORD`, `HODOR_SSLMODE`|`hodor_port` `5432`, `hodor_sslmode` `require`, the others none|The connection of the `postgres` store: `hodor_endpoint` for Lakebase, or `hodor_host` for any other Postgres. See Configuration|",
+     "|`dbt-hodor serve` flags (dbt v2)|`HODOR_STORE`, `HODOR_PATH`, the store variables, `HODOR_LOOKBACK_DAYS`, `HODOR_ALLOW_CLONES`|see dbt v2|`--project-dir`, `--port`, `--store`, `--path`, `--allow-clones`. The server reads no `profiles.yml`|"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    139,
+    126,
+    131
+   ],
+   [
+    "replace",
+    139,
+    140,
+    131,
+    132,
+    [
+     "Each store has its own page: State stores."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    132,
+    133
+   ],
+   [
+    "replace",
+    141,
+    147,
+    133,
+    139,
+    [
+     "|Store|Location|Created on first use|",
+     "|---|---|---|",
+     "|`delta`|`<hodor_database>.<hodor_schema>.<hodor_table>`|the table only. The schema must exist, because creating one needs catalog-level grants|",
+     "|`trino`|`<hodor_database>.<hodor_schema>.<hodor_table>` in a Trino catalog|the table only. The schema must exist|",
+     "|`duckdb`|table `<hodor_schema>.<hodor_table>` in the file `hodor_path`|the file, the schema and the table|",
+     "|`postgres` (alias `lakebase`)|`<hodor_schema>.<hodor_table>` in the Postgres database `hodor_database`|the schema, the table and a lookup index (see Postgres)|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    154,
+    139,
+    146
+   ],
+   [
+    "replace",
+    154,
+    167,
+    146,
+    147,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    173,
+    147,
+    153
+   ],
+   [
+    "replace",
+    173,
+    174,
+    153,
+    154,
+    [
+     "Supported: models materialized as `table`, `incremental` (append, merge, delete+insert, insert_overwrite, replace_where; an unset strategy counts as merge) and `view`, seeds, snapshots, and data tests (generic and singular), on `dbt-databricks` 1.13.0, `dbt-duckdb`, `dbt-trino` 1.11.0 and `dbt-snowflake` 1.12.4 (state in DuckDB or Postgres; see Data versions), with dbt-core 1.12.x. Trino support covers the Iceberg and Delta Lake connectors; see Data versions."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    177,
+    154,
+    157
+   ],
+   [
+    "replace",
+    177,
+    178,
+    157,
+    158,
+    [
+     "Slim CI: `--defer` and `--favor-state` are supported, and each push of a pull request reuses what the last push built. See Slim CI. With `defer_to_target` naming a base target in the same state store, hodor can also answer `state:` selectors and defer without `--state`, and clone an unchanged table or incremental model from the base target instead of building it; see Cloning. A `state:` selector that cannot be compared fails the run."
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    158,
+    159
+   ],
+   [
+    "replace",
+    179,
+    180,
+    159,
+    160,
+    [
+     "dbt v2: `dbt-hodor serve` answers dbt 2.0.8 over its state protocol, with the `databricks`, `spark`, `snowflake`, `bigquery` and `redshift` dialects, state selection and defer, and clones on Databricks, Spark, Snowflake and BigQuery. It is tested with requests recorded from dbt 2.0.8, with unit and server tests, and with 13 live tests that ran dbt 2.0.8 against a Databricks SQL warehouse. Clones are off unless the server starts with `--allow-clones`. See dbt v2."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    160,
+    161
+   ],
+   [
+    "replace",
+    181,
+    185,
+    161,
+    162,
+    [
+     " A pull request builds its changed model in the CI catalog, reads unchanged parents from the base target through defer, and keeps its build records apart from the base target"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    192,
+    162,
+    169
+   ],
+   [
+    "replace",
+    192,
+    193,
+    169,
+    170,
+    [
+     "Requires uv. Local development and tests run on DuckDB, with no Databricks access."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    201,
+    170,
+    178
+   ],
+   [
+    "replace",
+    201,
+    202,
+    178,
+    179,
+    [
+     "The live Databricks test is opt-in: see docs/development.md."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    179,
+    180
+   ],
+   [
+    "replace",
+    203,
+    204,
+    180,
+    181,
+    [
+     "`dbt-hodor` is available on PyPI:"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    212,
+    181,
+    189
+   ],
+   [
+    "replace",
+    212,
+    217,
+    189,
+    190,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    190,
+    191
+   ],
+   [
+    "replace",
+    218,
+    221,
+    191,
+    192,
+    [
+     "Apache-2.0. NOTICE carries the attribution for the derived files and the trademark"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

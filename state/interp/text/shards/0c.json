@@ -3223,5 +3223,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "89c92e6f1938": {
+  "identity": {
+   "one_liner": "基于 Rust 与 GPUI 的跨平台多引擎数据库客户端",
+   "review": "DBDelve 是用 Rust 和 GPUI 编写的桌面数据库客户端，支持 macOS、Linux 和 Windows。它连接 Postgres、MySQL、MongoDB、Redis、ClickHouse 等数据库，未装驱动的数据库可经内置 ODBC 桥接访问。提供表格网格编辑、CSV/TSV/JSON 导入、查询计划展示、按 schema 补全、可重绑快捷键，SSH 隧道通过系统 ssh 运行。应用未公证，macOS 需手动清除隔离属性。",
+   "highlights": [
+    "支持 Postgres、MySQL、MariaDB、SQLite、MongoDB、Redis、ClickHouse 等引擎，其他数据库可经内置 ODBC 桥接访问",
+    "单元格编辑前生成 UPDATE 语句供确认；CSV/TSV/JSON 导入逐行预览后才执行",
+    "命令面板统一管理命令、表、保存的查询、历史与连接，快捷键均可重绑定"
+   ],
+   "use_cases": [
+    "开发者在桌面端查询和编辑多引擎数据库中的数据",
+    "将 CSV、Excel、Parquet、JSON 数据文件拖入窗口，以 DuckDB 在内存中查询",
+    "需要通过本机 ssh 配置、agent 和硬件密钥建立 SSH 隧道访问远程数据库的场景"
+   ]
+  },
+  "sha": "89c92e6f1938",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fcfa8ebcdd82": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的 Go 全栈无头内容平台，Protobuf 为单一 API 契约",
+   "review": "GoWind Content Hub 是基于 go-kratos 的无头内容管理系统，以 Protobuf 作为统一 API 契约并生成 Go/TypeScript/OpenAPI 代码，提供 REST 与 gRPC 双协议服务。后端使用 Ent ORM，支持 PostgreSQL/MySQL；内置多租户隔离、菜单/接口/数据三级 RBAC、原生多语言，附 Vue 管理后台及 Vue/React/Taro/Flutter 四套前台。需 Go 1.25+、Docker、Node.js 与 buf 工具链运行。",
+   "highlights": [
+    "以 Protobuf 为单一 API 契约，经 buf.build 生成 Go/TypeScript/OpenAPI 代码，REST 与 gRPC 双协议接口",
+    "多租户数据隔离，支持菜单权限、接口权限、数据权限三级 RBAC 与按钮级控制，内容/菜单/提示统一翻译管理",
+    "提供 Vue（Nuxt）、React（Next.js）、Taro、Flutter 四套前台及 GraphQL 只读内容查询端点，支持 10 个社交平台内容分发"
+   ],
+   "use_cases": [
+    "需要多租户与细粒度权限管控的企业内容管理平台搭建",
+    "同一份内容分发到官网（Vue/React SSR）、微信小程序（Taro）、移动 App（Flutter）等多渠道",
+    "面向出海业务的内容站点，需要原生多语言与社交平台分发（微信公众号、Mastodon、Bluesky 等）"
+   ]
+  },
+  "sha": "fcfa8ebcdd82",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c1387419cfe3": {
+  "identity": {
+   "one_liner": "Home Assistant Assist 代理的长期语义记忆集成，基于 SQLite 与向量相似度检索。",
+   "review": "这是一个 Home Assistant 自定义集成，为 Assist LLM 代理提供跨会话持久记忆。它自动向每个 Assist 代理暴露 add_memory、search_memory、delete_memory 工具，并向自动化脚本提供四个服务。记忆按 Wing→Room 层级组织，支持 private/common 作用域与 L0–L3 分层（L0/L1 的接线尚在路线图中）。存储在本地 SQLite（WAL 模式），需 HA ≥ 2025.11.3，支持 HACS 或手动安装。",
+   "highlights": [
+    "通过向量相似度（可选用 Ollama、OpenAI 兼容端点或内置 TF-IDF 三种嵌入引擎）实现语义检索，无语义命中时回退到关键词匹配",
+    "提供三个自动暴露给 Assist 代理的 LLM 工具和四个 supports_response=OPTIONAL 的 HA 服务",
+    "记忆按 Wing→Room 层级与 private/common 作用域组织，数据全部保存在本地 SQLite（WAL 模式）"
+   ],
+   "use_cases": [
+    "让 Assist 代理在跨对话中记住用户事实与偏好（如过敏、设备习惯）",
+    "在自动化和脚本中写入、列出、检索、删除持久记忆",
+    "按 household/personal 等分区管理家庭与个人数据，并以 private 作用域限制代理间共享"
+   ]
+  },
+  "sha": "c1387419cfe3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "998ca35c3de2": {
+  "identity": {
+   "one_liner": "收录免费开发者工具的精选清单，含自动可用性检测",
+   "review": "该项目是一个开发者免费工具精选列表，收录 55 款工具，覆盖 AI 编码代理、云托管、数据库、DevOps、安全、自托管等 16 个分类，每条条目包含用途、定价模式和在线状态。面向寻找免费或免费额度工具的开发者与独立开发者。列表通过 GitHub Actions 每晚自动检测各工具站点可用性，标注 MIT 许可证，接受社区通过 PR 贡献新工具。",
+   "highlights": [
+    "收录 55 款工具，分为 AI 编码、云托管、数据库等 16 个分类，每条标注用途与定价模式",
+    "通过 GitHub Actions 每晚自动检测工具在线状态（状态码 <500 为在线，超时或 >=500 为离线）",
+    "采用 MIT 许可证，支持通过 Pull Request 和 Issue 提交新工具"
+   ],
+   "use_cases": [
+    "查找特定类别（如数据库、托管、监控）的免费或免费额度工具",
+    "为独立项目或个人开发选型时浏览免费工具选项",
+    "按定价模式（Free Tier、Open Source、Freemium）筛选工具"
+   ]
+  },
+  "sha": "998ca35c3de2",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a58b45c6df09": {
+  "identity": {
+   "one_liner": "面向多智能体团队的共享记忆系统，含GAMR检索管线与知识图谱",
+   "review": "EcoDB 是一套为多智能体团队设计的共享记忆基础设施，提供跨项目的知识存取、工作区隔离与角色权限。核心是 10 阶段 GAMR 检索管线（向量、BM25、图扩展、新鲜度、矛盾检测等组合评分），基于 Apache AGE 在 PostgreSQL 内实现知识图谱，通过 Jina v4 嵌入支持文本与图像的跨模态检索，并以 MCP 工具、REST API 和 Electron 桌面面板访问。定时后台任务可对记忆做整合与技能提炼。",
+   "highlights": [
+    "10 阶段 GAMR 评分管线，组合向量检索、BM25、图扩展、新鲜度评分与矛盾检测，README 报告 p95 延迟约 48ms（RTX 2080 Ti）",
+    "基于 Apache AGE 的知识图谱，含约 100 个规范谓词与 GLiNER 实体抽取加实体字典校验",
+    "跨模态检索：文本与图像嵌入同一 512 维向量空间，支持 PDF/DOCX/PPTX/音频文档入库；提供 40 个 MCP 工具与 Electron 桌面面板"
+   ],
+   "use_cases": [
+    "多个 AI 智能体需在同一知识库中协作并按工作区隔离权限的团队场景",
+    "需要跨文本与图像检索、以及通过知识图谱探索实体关联关系的记忆管理",
+    "对长对话记忆做批量召回评估（README 提供了 LoCoMo 基准与 eval/ 脚本）"
+   ]
+  },
+  "sha": "a58b45c6df09",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

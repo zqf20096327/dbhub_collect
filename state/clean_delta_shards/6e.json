@@ -19862,5 +19862,471 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "c359ab4de53a+2": {
+  "fn": "richarvey/OmniMem",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "OmniMem"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " Test coverage "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     " omnimem.org · Developed on Squarecows, mirrored to GitHub · Issues on GitHub "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    28,
+    5,
+    26
+   ],
+   [
+    "replace",
+    28,
+    31,
+    26,
+    27,
+    [
+     "> 7.0.3 is the first release of OmniMem 7: one app in place of the four containers 6.x ran. The installers for every platform are on the releases page. Running 6.x? See Coming from 6.x: the 6.x Docker stack stays on the `v6.7.x` branch, and its one-line installer still works."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    41,
+    27,
+    37
+   ],
+   [
+    "delete",
+    41,
+    43,
+    37,
+    37
+   ],
+   [
+    "equal",
+    43,
+    45,
+    37,
+    39
+   ],
+   [
+    "replace",
+    45,
+    46,
+    39,
+    40,
+    [
+     "Everything is on the releases page, each file with a `.sha256` beside it."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    40,
+    41
+   ],
+   [
+    "replace",
+    47,
+    48,
+    41,
+    42,
+    [
+     "|Where|Download|What you get|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    42,
+    43
+   ],
+   [
+    "replace",
+    49,
+    54,
+    43,
+    48,
+    [
+     "|Windows 10 and 11 (x64)|`OmniMem-<version>-x64.msi`|The tray app, installed for you alone with no administrator needed. Not signed yet, so SmartScreen asks first: **More info**, then **Run anyway**|",
+     "|macOS 13.4 or later (Apple silicon)|`OmniMem-<version>-arm64.dmg`|The menu bar app: drag it to Applications. There's no Intel build. `omnimem-<version>-macos-arm64.tar.gz` is the bare binary|",
+     "|Linux desktop (amd64, arm64)|`omnimem-desktop-<version>-linux-<arch>.flatpak`|The tray app with everything it needs: `flatpak install --user` the file. `omnimem-desktop-<version>-linux-<arch>.tar.gz` is the same app for systems without Flatpak, needing GTK 3, WebKitGTK 4.1 and libayatana-appindicator3|",
+     "|Linux server (amd64, arm64)|`omnimem_<version>_<arch>.deb`, `omnimem-<version>-1.<x86_64\\|aarch64>.rpm`|The headless server as the `omnimem` systemd service, configured in `/etc/omnimem/omnimem.env`, with its data in `/var/lib/omnimem`. `omnimem-<version>-linux-<arch>.tar.gz` has an `install.sh` for other distributions|",
+     "|Docker (amd64, arm64)|`richarvey/omnimem:<version>`|The same server as a container, with one `/data` volume. See the Docker guide|"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    63,
+    48,
+    57
+   ],
+   [
+    "replace",
+    63,
+    66,
+    57,
+    58,
+    [
+     "The server hands its own usage guide to every agent that connects, so there's no instructions file to copy around. The quick start covers the rest."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    75,
+    58,
+    67
+   ],
+   [
+    "replace",
+    75,
+    76,
+    67,
+    68,
+    [
+     "- **Skills**: SKILL.md documents compiled from your experience in a domain, so the agent works your way from the first prompt. Nothing changes without your say-so. See the skill compiler."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    68,
+    70
+   ],
+   [
+    "delete",
+    78,
+    80,
+    70,
+    70
+   ],
+   [
+    "equal",
+    80,
+    85,
+    70,
+    75
+   ],
+   [
+    "replace",
+    85,
+    96,
+    75,
+    86,
+    [
+     "- **Hooks for Claude Code**: memory that works without the agent choosing to use it, because mostly it doesn't. `omnimem hook` puts the project's briefing in the opening context of every session, stops a tool call that repeats a known dead end before it runs (handing back what failed and what worked instead), and records what a session changed when it ends. `omnimem install-hooks` sets them up. Over ten paired runs on one task, every attempt at the abandoned approach was stopped, no treated run hit a failing test suite against 8 of 10 without, and it cost 27% less.",
+     "- **The graveyard**: every dead end is logged with what you tried, why it failed and how long it cost you. The agent checks it before suggesting a library or pattern.",
+     "- **Experience scoring**: something that took four attempts and a weird workaround to crack is gold. The harder it was, the more readily it comes back.",
+     "- **Memory lifecycle**: `ACTIVE → DEPRIORITISED → ARCHIVED → DELETED`. \"Forget about X\" usually means stop bringing it up, not wipe it from existence.",
+     "- **Contradiction detection**: a quick check on every write, and a deeper look with Claude Haiku when you want one.",
+     "- **Semantic deduplication**: near-duplicates get flagged as they're written and cleaned up in bulk with `find_duplicates()`.",
+     "- **One-call briefing**: `briefing()` hands over project context, experience stats, stale memories, new articles, contradictions and skill suggestions in one go.",
+     "- **The skill compiler**: turns reinforced lessons and dead ends into loadable skills, behind a propose-and-accept gate so a one-off opinion can't quietly become policy.",
+     "- **Auto-maintenance**: duplicates archived, contradictions flagged, expired articles tidied, all in the background.",
+     "- **Licence and provenance**: every memory records whether it can be redistributed and who's speaking (you, the agent, or a source it retrieved), so a later session can tell evidence from inference.",
+     "- **Trust**: whether OmniMem believes a memory, not just whether it shows it. A fact it extracted for itself waits for you to confirm it, one side of a confirmed contradiction is marked disputed, a memory a newer one replaced folds into it, and one you've judged wrong never comes back. Only you can confirm or reject, in the settings window or the terminal, never an agent."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    105,
+    86,
+    95
+   ],
+   [
+    "delete",
+    105,
+    107,
+    95,
+    95
+   ],
+   [
+    "equal",
+    107,
+    109,
+    95,
+    97
+   ],
+   [
+    "replace",
+    109,
+    110,
+    97,
+    98,
+    [
+     "One memory for all of them: claude.ai, Claude Code, Claude Desktop, Cursor, GitHub Copilot, GitLab Duo, AWS Kiro, OpenCode, OpenAI Codex CLI and Open Design. 49 tools, served over streamable HTTP."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    98,
+    99
+   ],
+   [
+    "replace",
+    111,
+    114,
+    99,
+    100,
+    [
+     "Run it on one machine and put it behind a reverse proxy, and every laptop and agent you use shares the same memory. A shared token covers your own clients; OAuth 2.1 with a login page covers claude.ai and anything else that signs in. See multiple machines."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    121,
+    100,
+    107
+   ],
+   [
+    "replace",
+    121,
+    140,
+    107,
+    108,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    142,
+    108,
+    110
+   ],
+   [
+    "replace",
+    142,
+    145,
+    110,
+    111,
+    [
+     "Over the network it answers `/mcp`, the OAuth routes and `/healthz`, and that's the whole list. The settings window talks to the process directly, so there's no dashboard port for anyone else to find. More in the architecture doc."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    155,
+    111,
+    121
+   ],
+   [
+    "delete",
+    155,
+    157,
+    121,
+    121
+   ],
+   [
+    "equal",
+    157,
+    163,
+    121,
+    127
+   ],
+   [
+    "replace",
+    163,
+    164,
+    127,
+    128,
+    [
+     "7.0.8 adds trust. The first start moves the database to schema version 5, and 7.0.7 can't open it afterwards, so take a backup first if you might go back."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    178,
+    128,
+    142
+   ],
+   [
+    "delete",
+    178,
+    180,
+    142,
+    142
+   ],
+   [
+    "equal",
+    180,
+    187,
+    142,
+    149
+   ],
+   [
+    "replace",
+    187,
+    190,
+    149,
+    150,
+    [
+     "The tools, the vectors and your compiled skills behave as they did, so nothing needs retuning. Recall scoring has three deliberate changes since 6.x: recency declines from day one rather than staying flat for 90 days (older memories rank a little lower; nothing extra is dropped), an abandoned outcome no longer scores 0.1, and recording an abandonment no longer suppresses anything. Your agents just need their URL changing from `/sse` to `/mcp`. 3.x backups import the same way. If your 6.x install is a clone of this repository, run `git checkout v6.7.x` in it before you next `git pull`: `main` is 7 now and has no Compose file. The quick start has the details, and 6.x itself carries on in the `v6.7.x` branch."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    193,
+    150,
+    153
+   ],
+   [
+    "replace",
+    193,
+    194,
+    153,
+    154,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    195,
+    154,
+    155
+   ],
+   [
+    "replace",
+    195,
+    209,
+    155,
+    169,
+    [
+     "|Quick start|Installing, building from source, moving from 6.x, connecting your agent|",
+     "|Hooks for Claude Code|Briefing at session start, dead ends stopped before they run, sessions recorded|",
+     "|Configuration|Every setting, for the desktop app and headless installs|",
+     "|Features in depth|Lifecycle, graveyard, experience scoring, dedup, contradictions, briefing|",
+     "|The skill compiler|Compiling experience into loadable skills|",
+     "|MCP tool reference|All 49 tools|",
+     "|RSS and knowledge|Passive knowledge ingestion and promotion|",
+     "|Multiple machines|Reverse proxies, OAuth 2.1 for claude.ai, troubleshooting|",
+     "|Settings panel|The desktop app's window, page by page|",
+     "|Architecture|The process, the recall pipeline, design decisions|",
+     "|Atlas evidence|Each Agent Memory Atlas mark, the code that earns it and the test that fails without it|",
+     "|Memory type specs|The storage model, field by field|",
+     "|Connection guides|Per-agent setup|",
+     "|Deployment guides|Docker · macOS · Raspberry Pi · AWS · GCP · Linux + Tailscale Funnel|"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    169,
+    170
+   ],
+   [
+    "replace",
+    210,
+    213,
+    170,
+    171,
+    [
+     "Per-namespace specs, if you want to know exactly what gets stored and by whom: overview · episodic · project · knowledge · preference · skill"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    215,
+    171,
+    173
+   ],
+   [
+    "replace",
+    215,
+    222,
+    173,
+    174,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    174,
+    175
+   ],
+   [
+    "delete",
+    223,
+    224,
+    175,
+    175
+   ],
+   [
+    "equal",
+    224,
+    225,
+    175,
+    176
+   ],
+   [
+    "delete",
+    225,
+    229,
+    176,
+    176
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

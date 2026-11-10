@@ -2926,5 +2926,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ee63f45479db": {
+  "identity": {
+   "one_liner": "开源跨平台数据库巡检与运维平台，覆盖22种数据库、839条巡检规则",
+   "review": "RaccoonX（前身为DBCheck）是面向DBA、数据库工程师、DevOps与基础设施团队的数据库巡检与运维平台。它统一管理数据源，执行巡检并生成Word报告，包含慢查询分析、锁诊断、索引健康、配置基线等模块，可接本地Ollama或云端API做AI辅助诊断，并提供MCP Server（12个工具）供Claude、Cursor等客户端调用。支持Docker与源码部署，镜像含amd64/arm64架构，Python 3.10+可从源码运行。",
+   "highlights": [
+    "支持22种数据库与数据系统，内置839条巡检规则，可自动生成Word巡检报告",
+    "提供插件系统、DAG工作流编排、定时任务（Cron+Email/Webhook通知）与免登录分享报告链接",
+    "通过本地Ollama或兼容云API实现AI辅助诊断与RAG知识库，MCP Server暴露12个工具（9只读+3需审批写入）"
+   ],
+   "use_cases": [
+    "多数据库混合环境（MySQL、PostgreSQL、Oracle、国产数据库等）的定期巡检与报告生成",
+    "慢SQL分析、锁阻塞链与死锁诊断、索引健康与配置基线核查",
+    "信创合规评估与跨实例配置漂移检测、容量预测"
+   ]
+  },
+  "sha": "ee63f45479db",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e4f796b54356": {
+  "identity": {
+   "one_liner": "基于 Effect v4 的公开 monorepo，构建面向独立知识产权律师的引用溯源工作台",
+   "review": "beep-effect 是一个 Effect v4 monorepo，包含 Prose-to-Proof 工作台：文档输入后由模型提出候选主张，仅当引用片段与原文一致且律师批准后才写入实践记忆。面向独立知识产权律师，默认本地存储，含 Tauri 桌面端、只读 MCP 服务器。代码强制类型化错误、第三方 SDK 限制在 driver 层；README 声明这不是社区入门套件，git 中不含真实客户文件。",
+   "highlights": [
+    "域代码不使用 async/await 与 try/catch，错误作为类型化值追踪，依赖通过 Layer 注入",
+    "CI 门槛包含覆盖率回退、属性测试、JSDoc 棘轮、秘密扫描与 SAST，棘轮只收紧不放松",
+    "代理工具调用默认拒绝，需显式授权，判定记录写入哈希链式只追加日志"
+   ],
+   "use_cases": [
+    "为文档中的主张建立可验证的原文引用溯源",
+    "研究以 CI 门禁与授权记录约束编码代理的工程实践",
+    "阅读基于 Effect v4、Turborepo、Drizzle、PostgreSQL 的 monorepo 架构参考"
+   ]
+  },
+  "sha": "e4f796b54356",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "56446753fb2c": {
+  "identity": {
+   "one_liner": "生成合成产品分析事件数据与隐藏基准真值，用于测试 Agent 的信号发现能力",
+   "review": "dryfit 是一个 Python 数据生成工具：按 YAML 配置生成 PostHog 风格的合成事件数据写入 PostgreSQL 的 events 表，同时输出 ground_truth.json 与 manifest.json 作为隐藏基准真值，供测试 AI Agent 在信号发现任务上的表现。包含 15 个场景（posthog_web、telegram_chat 基线及 13 个商业模式变体），信号以事件序列代理实现。注意：项目已不在活跃开发中。",
+   "highlights": [
+    "提供 15 个场景配置，含两个基线（posthog_web、telegram_chat）与 13 个 PostHog 商业模式变体",
+    "每次运行写入 PostgreSQL events 表并生成 ground_truth.json、manifest.json，真值文档引用实际生成的 event_id",
+    "支持 --dry-run、--skip-db-write、--output-dir 等参数，并附带 Docker Compose 检查栈（PostgreSQL + Grafana 预置仪表盘）"
+   ],
+   "use_cases": [
+    "为评测 AI Agent 的产品信号发现任务生成可复现的合成数据集",
+    "通过配置文件按商业模式（席位制、计量计费、交易量、存储、功能门控等）定制事件数据",
+    "借助 Grafana 仪表盘可视化检查生成的事件数据"
+   ]
+  },
+  "sha": "56446753fb2c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

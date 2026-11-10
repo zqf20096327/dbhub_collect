@@ -2645,5 +2645,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9b33031a0acf": {
+  "identity": {
+   "one_liner": "Rust 的 SQLite 库，通过过程宏在编译期校验 SQL 并生成类型安全方法",
+   "review": "Sqlitex 是面向 Rust 开发者的 SQLite 库。它提供 #[sqlitex] 过程宏，通过内置 SQL 解析器和类型推断，在编译期校验查询语句并自动生成带正确类型签名的方法。支持四种模式：结构体内联 schema、指向 .sql 文件（会监听文件变动触发重编译）、指向现有 .db 文件、以及指向编号迁移文件夹（自动生成原子化的 migrate() 方法）。需注意 sql 文件必须放在 Cargo.toml 所在根目录。",
+   "highlights": [
+    "通过 #[sqlitex] 宏实现编译期 SQL 校验与类型检查，并支持 IDE 悬停查看 SQL 代码",
+    "自动缓存并复用 prepared statements，默认应用 busy_timeout=5000 和 foreign_keys=ON 的 PRAGMA 设置",
+    "支持 BLOB、事务、Postgres 风格 :: 类型转换语法，以及 sql_escape_hatch! 宏处理编译期校验误报的语句"
+   ],
+   "use_cases": [
+    "希望在 Rust 项目中获得 SQL 编译期类型保证的 SQLite 应用开发",
+    "需要管理带编号迁移文件的数据库 schema 演进流程",
+    "依赖 rust-analyzer 等工具进行开发、希望在 IDE 中直接查看与校验 SQL 的场景"
+   ]
+  },
+  "sha": "9b33031a0acf",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2591,5 +2591,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6745038abcea": {
+  "identity": {
+   "one_liner": "嵌入式分布式 SQLite 引擎库，基于 Raft 实现数据复制与自动故障转移",
+   "review": "dqlite 是一个 C 语言库，在 SQLite 基础上扩展网络协议，将多个应用实例组成高可用集群，不依赖外部数据库。它采用 libuv 单线程异步实现，基于 Raft 算法复制数据，仅支持 Linux 且需内核原生异步 I/O 支持。提供 Go 语言绑定，适合需要在应用内嵌 SQLite 复制能力的开发者。",
+   "highlights": [
+    "基于 Raft 算法实现数据复制，具备高可用与自动故障转移",
+    "使用 libuv 的异步单线程实现，并采用针对 SQLite 数据类型优化的自定义线协议",
+    "遵循带静态链接例外条款的 LGPLv3 许可，支持静态链接集成"
+   ],
+   "use_cases": [
+    "在多个应用实例间复制 SQLite 数据，构建无需外部数据库的高可用集群",
+    "嵌入 C/C++ 或 Go（通过 go-dqlite 绑定）应用程序，提供嵌入式 SQL 引擎",
+    "运维场景中使用 dqlite-utils 检查实例状态、加载节点快照或查看历史数据库状态"
+   ]
+  },
+  "sha": "6745038abcea",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4f537f1e5283": {
+  "identity": {
+   "one_liner": "在 Render 上部署 Ghost 博客的模板仓库",
+   "review": "该仓库是一个用于在 Render 平台运行 Ghost 博客的模板。它使用官方 Ghost Docker 镜像，通过 Render Disks 提供持久化 SSD 存储以保存上传文件与内容，并支持 MySQL 作为 Ghost 的后端数据库。按 Ghost 更新日志，Ghost 5.0 起仅支持 MySQL 8，SQLite 仅限开发环境。适合需要在 Render 上自托管 Ghost 的用户。",
+   "highlights": [
+    "使用官方 Ghost Docker 镜像",
+    "通过 Render Disks 为上传文件和内容提供持久化 SSD 存储",
+    "支持 MySQL 作为 Ghost 的后端数据库"
+   ],
+   "use_cases": [
+    "在 Render 平台上部署 Ghost 博客",
+    "为 Ghost 配置持久化存储与 MySQL 数据库",
+    "自托管 Ghost 内容站点"
+   ]
+  },
+  "sha": "4f537f1e5283",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e04ada1ca41": {
+  "identity": {
+   "one_liner": "基于 Rust 的 AI 员工/数字同事平台，含桌面端、服务器与 MCP 集成",
+   "review": "Wrok Bot（OpenMyBot）是用 Rust 构建的 AI 员工平台，包含桌面宿主、服务器、Web 界面及开发中的移动客户端，桌面端采用 Tauri，数据存储使用 PostgreSQL。项目处于开发与验证阶段，macOS 为首个发布平台。README 明确说明发布验证尚未完成，安装、凭据保护与签名安装包验证仍在进行中。",
+   "highlights": [
+    "核心以 Rust 实现，桌面端使用 Tauri，数据层使用 PostgreSQL，提供浏览器与计算机交互、MCP 服务器及插件式渠道绑定",
+    "服务器默认监听 127.0.0.1，远程部署要求同机 TLS 反向代理、HTTPS 公共 URL 与 64 位十六进制共享密钥",
+    "提供本地检查命令集，包括格式检查、测试、fixtures 校验、i18n 检查与设计 lint，以及基于 Python 3 与 Gitleaks 的提交前守卫脚本"
+   ],
+   "use_cases": [
+    "需要在 macOS 上本地运行的 AI 工作台与数字同事场景",
+    "需要浏览器自动化与人工接管、本地计算机交互的工作流",
+    "需要通过 MCP 主机接入 Agent 插件包及自建模型连接的集成场景"
+   ]
+  },
+  "sha": "8e04ada1ca41",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df3318cc9e34": {
+  "identity": {
+   "one_liner": "在 Tidbyt 设备上显示 Sleeper 梦幻联赛实时对局数据的展示应用",
+   "review": "该项目在 Tidbyt 硬件上展示作者 Sleeper 梦幻联盟的实时对局：第一屏显示双方实时比分与预测总分，后续屏幕每屏展示两名首发球员的名称、位置、NFL 球队、比赛状态和得分。通过 GitHub Actions 在 NFL 比赛时段约每 5 分钟自动运行一次更新。团队昵称和屏幕切换时间可在 config.json 中配置。",
+   "highlights": [
+    "第一屏展示双方实时比分（领先方绿色标识）与预测总分",
+    "球员状态用颜色区分：黄色进行中、白色已结束、灰色未开始并显示开球时间、红色 OUT 表示缺席",
+    "使用 Sleeper 官方预测结合联盟计分规则计算预测总分：已结束球员计实际得分、未开始球员计预测值、进行中球员计实际得分加剩余时间预测"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上查看 Sleeper 梦幻联赛对局的实时比分与球员状态",
+    "跟踪首发球员的比赛进行状态（未开始/进行中/已结束/缺席）",
+    "基于 Sleeper 联赛计分规则查看预测总分对比"
+   ]
+  },
+  "sha": "df3318cc9e34",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

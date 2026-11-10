@@ -3491,5 +3491,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ab04394bfe01": {
+  "identity": {
+   "one_liner": "基于 OpenAI Apps SDK 的电影发现 MCP 服务器示例，可部署到 Render。",
+   "review": "该仓库提供用 TypeScript 编写的示例应用，实现电影搜索、片单、观看记录、偏好设置及 AI 推荐等 MCP 工具，电影数据来自 TMDB。面向希望学习 OpenAI Apps SDK、MCP 工具实现与 Render 部署的开发者。通过 render.yaml 蓝图自动配置 PostgreSQL、Valkey 缓存与前后端服务；认证采用简化 API key 方式，README 建议生产环境改用 OAuth 2.0。",
+   "highlights": [
+    "提供 search_movies、discover_movies、片单增删、观看记录、偏好设置等 MCP 工具，实现在 backend/src/tools/",
+    "支持 OpenAI、Anthropic、Gemini 三种 LLM 提供商，按可用 API key 自动检测，仅 get_recommendations 工具需要 LLM key",
+    "包含 movie-poster、movie-list、preferences 三类交互式 widget，通过 _meta 字段与 window.openai.callTool() 实现状态更新"
+   ],
+   "use_cases": [
+    "部署到 Render 后在 ChatGPT 中通过 MCP 连接使用电影搜索、片单管理与 AI 推荐",
+    "fork 仓库作为学习 MCP 工具实现与 OpenAI Apps SDK widget 机制的示例项目",
+    "在 Claude Desktop、Cursor 等其他 MCP 客户端中以文本响应方式使用（无 widget）"
+   ]
+  },
+  "sha": "ab04394bfe01",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5e19617c60f9": {
+  "identity": {
+   "one_liner": "本地优先的 AI Agent 观测与评测工具，将记录存入本机 SQLite 索引",
+   "review": "coding.sh 是一款开源（MIT）的 AI Agent 观测与评测工具，面向使用 Claude Code、Codex CLI 等编码 Agent 的开发者。它通过 hooks、转录和代理捕获 prompt、工具调用、token、延迟等数据，存入本机 SQLite，可在本地 viewer 浏览、CLI 全文检索、经 MCP 查询，并支持把失败会话转为可回放的 eval、配对统计对比实验。需 Node 22.15+，无运行时依赖；目前为 pre-1.0（0.1.4），部分 Agent 适配器仅经 fixture 测试，Windows 下部分捕获未验证。",
+   "highlights": [
+    "通过 hooks/转录/API 代理/OTel collector 捕获 Claude Code、Codex CLI 等十余种 Agent 及自定义应用的会话，含 prompt、工具调用、文件改动、token 与延迟",
+    "提供本地 viewer、CLI 命令（sessions/show/search/usage 等，均支持 --json）与 MCP 服务器查询；eval、对比实验与 benchmark 生成静态报告页",
+    "生产模式 `coding.sh serve` 可后接 SQLite/Postgres/ClickHouse，提供 TypeScript SDK（npm）与 Python SDK，并可对接多家 LLM 网关关联计费成本"
+   ],
+   "use_cases": [
+    "查看本机各编码 Agent 的历史会话内容、耗时与估算成本",
+    "将失败会话转为可回放 eval，用配对统计 A/B 对比 prompt、模型与 harness 变更",
+    "在无外部数据流出的前提下汇总记录团队或个人 Agent 用量（数据默认留在本机，secrets 在写入前脱敏）"
+   ]
+  },
+  "sha": "5e19617c60f9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2de785f54bb9": {
+  "identity": {
+   "one_liner": "自托管的笔记、任务与共享清单应用，单 Go 容器加一个 SQLite 文件。",
+   "review": "MindSift 是一个自托管应用，把想法捕捉、分类整理、任务看板、大纲笔记、共享清单和日志整合在一个容器里，数据存于单个 SQLite 文件。它面向个人、家庭和小团队，支持多人实时协作编辑、离线使用，并内置 MCP 服务器与 REST API 供 AI 代理和智能家居调用。部署方式为 Docker 容器或安装脚本，首次启动通过向导创建管理员账号。",
+   "highlights": [
+    "提供快速捕捉与分类流程：输入栏、语音输入（可接自建 Whisper 服务器）、手机分享菜单和 API，之后在分类卡片堆中逐一处理为任务、笔记或清单项",
+    "支持大纲笔记多人同时编辑且互不覆盖，可离线工作， Wiki 链接可指向单个条目，/secret 存储加密隐藏值，/canvas 在笔记内绘图",
+    "内置 MCP 服务器与带作用域密钥的 REST API，支持 claude.ai 与 ChatGPT 通过 OAuth 连接；提供邀请码、注册模式、组织、分组、自动备份与恢复等用户管理功能"
+   ],
+   "use_cases": [
+    "个人或家庭自托管部署，用于随手记录想法、整理任务清单和共享购物/打包清单",
+    "小团队协作撰写大纲笔记、管理任务看板，并通过邮件、推送、Discord 或 webhook 接收提醒和每日摘要",
+    "将任务、清单和笔记接入 AI 代理（通过 MCP）或 Home Assistant、curl 脚本等（通过 REST API）"
+   ]
+  },
+  "sha": "2de785f54bb9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

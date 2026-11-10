@@ -2875,5 +2875,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f26478ea954f": {
+  "identity": {
+   "one_liner": "基于 Alpine 的 PostgreSQL+PostGIS+TimescaleDB Docker 镜像",
+   "review": "该项目提供集成 PostgreSQL 18.6、PostGIS 3.7.0 与 TimescaleDB 2.31.0 的 Docker 镜像，基于 Alpine Linux 构建，需通过 docker build 本地构建或拉取使用。README 说明可通过 docker-compose 同时运行镜像与 pgAdmin4（端口 5433，默认账号密码见文档），并支持用 buildx 构建 amd64 与 arm64 多架构镜像。适用于需要同时启用地理空间与时序扩展的部署环境；注意 PostgreSQL 18+ 数据目录路径为 /var/lib/postgresql 下的主版本子目录。",
+   "highlights": [
+    "镜像包含 PostgreSQL 18.6、PostGIS 3.7.0 与 TimescaleDB 2.31.0，基于 Alpine Linux",
+    "提供 docker-compose 方式同时运行数据库与 pgAdmin4，PostgreSQL 监听 5432 端口",
+    "支持通过 buildx 构建并发布 linux/amd64 与 linux/arm64 多架构镜像"
+   ],
+   "use_cases": [
+    "需要同时使用地理空间扩展（PostGIS）与时序扩展（TimescaleDB）的 PostgreSQL 容器化部署",
+    "本地开发或测试环境中通过 docker-compose 一并运行数据库与 pgAdmin4 管理界面",
+    "在 amd64 与 arm64 不同架构主机上部署同一套数据库镜像"
+   ]
+  },
+  "sha": "f26478ea954f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a1266c907ce1": {
+  "identity": {
+   "one_liner": "自托管 AI API 成本记录账本，按日期分档模型单价精确计费",
+   "review": "这是一个自托管的 AI API 成本追踪系统：应用侧上报每次请求的 token 数，系统按带日期、分档的模型价格表计算费用，按项目、提供商和模型展示支出，支持月度预算与告警。提示词与响应内容不被传输或存储，仅记录 token 数。面向需要自建成本记录的开发者与团队，通过 Docker Compose 或 Vercel 部署，MIT 许可。",
+   "highlights": [
+    "对输入、缓存输入、缓存写入与输出分别计价，支持按提示长度分档的费率，金额以精确小数存储",
+    "价格表按生效日期版本化管理，价格变更不改动历史成本记录；支持 Anthropic、OpenAI 和 Google 模型",
+    "提供 POST /api/usage 接口、TypeScript 与 Python 客户端，以及支持 GenAI token 属性的 OpenTelemetry 接入；项目可设月度预算并在 80% 和 100% 时告警"
+   ],
+   "use_cases": [
+    "需要按项目、提供商和模型查看每日/每月 AI API 支出并绘制趋势图的团队",
+    "需要在消费前查询剩余预算额度、或通过 webhook/Slack/邮件接收预算告警的应用",
+    "需要与提供商账单核对成本（npm run reconcile）、并导出 CSV 或 FOCUS 报表的场景"
+   ]
+  },
+  "sha": "a1266c907ce1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2788,5 +2788,92 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6bb5b738f843": {
+  "identity": {
+   "one_liner": "单 SQLite 文件内的本地优先 AI 记忆库，内置知识图谱与本体约束",
+   "review": "CortexDB 是一个用 Go 编写的 AI 记忆库，将向量检索、全文搜索和 RDF 知识图谱存入单个 SQLite 文件，无需运行独立服务，也可切换到 PostgreSQL + pgvector。它面向使用 Claude Code、Codex 等 agent 的开发者，通过插件提供 /remember、/recall 及自动召回；未配置嵌入模型时退回词法检索。提供 Go 库、多语言客户端和共享 gRPC 服务器。",
+   "highlights": [
+    "支持向量索引（HNSW、IVF、flat、二进制编码）、FTS5 全文搜索及混合与图检索",
+    "包含 RDF 1.2 知识图谱，支持 SPARQL 1.1/1.2、RDFS 与 OWL 2 RL 推理、SHACL 校验及只读 Cypher",
+    "提供多种集成方式：Go 库、Claude Code/Codex/Obsidian 插件、MCP 工具，以及 Rust/Python/JavaScript 客户端"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex 等 AI agent 提供跨会话持久记忆与上下文召回",
+    "多 agent 或多机器通过 cortexdb-grpc 共享同一份记忆与图谱",
+    "在资源受限设备上以 SQLite 单文件运行本地记忆检索（提供 EmbeddedConfig）"
+   ]
+  },
+  "sha": "6bb5b738f843",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f80e4f4ec682": {
+  "identity": {
+   "one_liner": "自托管音乐与播客流媒体服务器，使用 SQLite 后端",
+   "review": "cumu 是一个自托管的音乐与播客流媒体服务器，用于在私有服务器上存储和串流个人音频内容。面向希望在自有环境管理音乐库的用户。它支持一行脚本在多种 Linux 发行版上安装，使用 SQLite 存储数据，提供 PWA 离线模式，不收集遥测数据；音频存储路径、端口、存储配额等均可通过环境变量配置，默认存储上限为 50 GB。",
+   "highlights": [
+    "支持一键安装脚本，可运行于 Debian、Ubuntu、Proxmox LXC、Fedora、Arch 等环境",
+    "通过环境变量配置端口、音乐存储路径、SQLite 数据库路径及存储配额（默认 50 GB）",
+    "通过 cron（Linux）与 Watchtower（Docker）实现每日自动更新"
+   ],
+   "use_cases": [
+    "在个人服务器或 LXC 容器上自托管音乐库并串流播放",
+    "以 Docker Compose 或 .deb 包方式部署私有播客/音乐服务",
+    "需要通过环境变量与反向代理（TRUST_PROXY）定制运行配置的场景"
+   ]
+  },
+  "sha": "f80e4f4ec682",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8d97220df91": {
+  "identity": {
+   "one_liner": "基于 Actix-web 与 PostgreSQL 的 Rust Todo 示例应用，用于在 Render 部署",
+   "review": "该仓库是一个 Actix-web Todo 示例项目，基于官方 todo 示例构建，使用 PostgreSQL 数据库，可在 Render 平台部署。面向希望在 Render 上运行 Rust Web 应用的开发者作为起始模板。README 未说明本地运行步骤，部署方式需参考 Render 官方部署指南，线上示例地址为 actix-todo.onrender.com。",
+   "highlights": [
+    "提供 Actix-web 框架编写的 Todo Web 应用示例",
+    "使用 PostgreSQL 作为数据库",
+    "提供 Render 平台的部署文档链接与线上示例地址"
+   ],
+   "use_cases": [
+    "作为在 Render 部署 Rust Actix Web 应用的起始模板",
+    "参考官方 todo 示例结合 PostgreSQL 的实现方式"
+   ]
+  },
+  "sha": "e8d97220df91",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "44497ecb9417": {
+  "identity": {
+   "one_liner": "面向自主AI代理的强化执行核心与遥测总线参考实现",
+   "review": "该项目提供两部分：一个基于 JSONL 事件流的遥测总线（transponder/observer/rotate/log_sync），以及实现 ADR-0011–0016 的可执行参考核心，含 RFC 8785 规范化、HMAC 能力令牌、SQLite WAL CAS 账本与异常检测。参考核心未接入运行中的代理，仅作为规格实现；src/ 部分要求 Python 3.12、SQLite≥3.35 与 pydantic≥2.6。许可证尚未确定。",
+   "highlights": [
+    "遥测层仅依赖 Python 3.10+ 标准库，通过 flock+fsync 原子追加事件，事件契约 v1.0 定义 9 种事件枚举",
+    "参考核心实现 RFC 8785 (JCS) 规范化、HMAC 能力令牌验证、带重放保护的 compare-and-swap 提交与事务性 outbox",
+    "包含基于 MAD/Huber 的异常检测器、LoopCircuitBreaker 循环熔断器及 waterfilling 上下文分配器"
+   ],
+   "use_cases": [
+    "为多核代理系统搭建本地事件流遥测与只读观测（trace 树、handoff 深度、孤儿 spawn 检测）",
+    "作为设计文档 ADR-0011–0016 安全路径的可执行规格参考",
+    "需要 systemd 定时部署、事件轮转归档与 git 批量同步的 Linux/macOS 环境观测方案"
+   ]
+  },
+  "sha": "44497ecb9417",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

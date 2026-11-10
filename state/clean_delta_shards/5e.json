@@ -18422,5 +18422,1073 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "44d445347a68+2": {
+  "fn": "MaroShim/LionSQL",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    11,
+    4,
+    11,
+    [
+     "Version",
+     "Go Version",
+     "License: GPL v3",
+     "Platform",
+     "Architecture",
+     "Website",
+     "Compatibility: MSSQL 2019 & PG 15"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    15,
+    12,
+    13,
+    [
+     "(한국어 문서는 README.ko.md, 호환성 사양은 COMPATIBILITY.ko.md를 참조하세요.)"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    23,
+    13,
+    21
+   ],
+   [
+    "delete",
+    23,
+    24,
+    21,
+    21
+   ],
+   [
+    "equal",
+    24,
+    28,
+    21,
+    25
+   ],
+   [
+    "replace",
+    28,
+    73,
+    25,
+    26,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    26,
+    27
+   ],
+   [
+    "delete",
+    74,
+    76,
+    27,
+    27
+   ],
+   [
+    "equal",
+    76,
+    83,
+    27,
+    34
+   ],
+   [
+    "replace",
+    83,
+    85,
+    34,
+    36,
+    [
+     " - **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding.",
+     " - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    36,
+    37
+   ],
+   [
+    "replace",
+    86,
+    87,
+    37,
+    38,
+    [
+     " Handles 10,000+ simultaneous connections over lightweight Go goroutines, eliminating connection bottlenecks without external poolers."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    94,
+    38,
+    45
+   ],
+   [
+    "replace",
+    94,
+    95,
+    45,
+    46,
+    [
+     " Full support for `CREATE PROCEDURE`, scalar and Table-Valued Functions (TVF), and `AFTER` / `INSTEAD OF` triggers."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    46,
+    47
+   ],
+   [
+    "replace",
+    96,
+    97,
+    47,
+    48,
+    [
+     " Supports conditional branching (`IF...ELSE`), loops (`WHILE`), exception handling (`TRY...CATCH`), local variables (`@var`), table variables, session variables, and cursors."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    48,
+    49
+   ],
+   [
+    "replace",
+    98,
+    99,
+    49,
+    50,
+    [
+     " Window functions (`ROW_NUMBER`, `RANK`), JSON extraction functions, foreign keys with cascading actions, `TRUNCATE TABLE`, and `SELECT ... INTO`."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    102,
+    50,
+    53
+   ],
+   [
+    "replace",
+    102,
+    103,
+    53,
+    54,
+    [
+     " Both interactive queries (`SELECT`, `INSERT`, `UPDATE`, `DELETE`) and stored procedures execute on the exact same register-based VDBE virtual machine, complete with bytecode disassembly support (`EXPLAIN BYTECODE`)."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    54,
+    55
+   ],
+   [
+    "replace",
+    104,
+    105,
+    55,
+    56,
+    [
+     " Parameterized queries are compiled directly into bytecode during preparation and cached, completely eliminating query re-parsing overhead on subsequent executions."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    56,
+    57
+   ],
+   [
+    "replace",
+    106,
+    108,
+    57,
+    59,
+    [
+     " - **Ultra Fast-Path**: In-house zero-allocation Pratt parser delivering sub-microsecond parsing for high-frequency queries.",
+     " - **Full-Spec Fallback**: Official Microsoft T-SQL parser invoked automatically on advanced syntax (bracket escapes, vendor options) to ensure 100% grammar compatibility."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    59,
+    60
+   ],
+   [
+    "replace",
+    109,
+    110,
+    60,
+    61,
+    [
+     " Composable iterator execution (Hash Join, Index Scan, GroupBy) with streaming batches, featuring an automatic disk spill to external merge sort when query memory limits are exceeded."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    61,
+    62
+   ],
+   [
+    "replace",
+    111,
+    112,
+    62,
+    63,
+    [
+     " Leverages table statistics (cardinality, distinct counts, histograms) and multi-column extended statistics to optimize join orders and generate efficient execution plans."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    63,
+    66
+   ],
+   [
+    "replace",
+    115,
+    117,
+    66,
+    68,
+    [
+     " - **In-Memory OCC Engine**: Delivers 218,000+ TPS (and up to 1,066k tpmC in kernel TPC-C, 759k tpmC in T-SQL VDBE runtime, and 376k tpmC over network wire with an ultra-low 0.00%~3.4% abort rate) based on concurrent SkipList indexes and Optimistic Concurrency Control.",
+     " - **WiredTiger MVCC Disk Engine**: Delivers 141,000+ TPS (and up to 1,184k tpmC in kernel TPC-C, 863k tpmC in T-SQL VDBE runtime, and 352k tpmC over network wire) with full ACID durability backed by lock-free B+Trees."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    68,
+    69
+   ],
+   [
+    "replace",
+    118,
+    119,
+    69,
+    70,
+    [
+     " Multi-version update chains are maintained in memory and only latest committed versions are written to disk, completely eliminating table bloat and Autovacuum I/O storms."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    70,
+    71
+   ],
+   [
+    "replace",
+    120,
+    121,
+    71,
+    72,
+    [
+     " Readers never block writers and writers never block readers, ensuring long-running analytical queries or backups never stall online transaction processing."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    72,
+    73
+   ],
+   [
+    "replace",
+    122,
+    123,
+    73,
+    74,
+    [
+     " Captures live, compressed `.tar.gz` database backups without interrupting active transaction traffic. Supported seamlessly via CLI, REST API, and Web Studio."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    74,
+    75
+   ],
+   [
+    "replace",
+    124,
+    125,
+    75,
+    76,
+    [
+     " Supports real-time WAL stream replication from Primary to Replicas with zero-downtime failover."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    128,
+    76,
+    79
+   ],
+   [
+    "replace",
+    128,
+    129,
+    79,
+    80,
+    [
+     " Database kernel, wire protocol listeners, REST API, and web studio packaged into a single static executable with zero external runtime dependencies (officially supported on macOS and Linux)."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    80,
+    81
+   ],
+   [
+    "replace",
+    130,
+    131,
+    81,
+    82,
+    [
+     " Zero-install browser dashboard (`/_/`) featuring visual schema explorer, inline data grid editor, SQL query console, real-time event stream viewer, and request activity logs."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    82,
+    83
+   ],
+   [
+    "replace",
+    132,
+    133,
+    83,
+    84,
+    [
+     " Host single HTML files or flat static frontend SPA builds directly on `:8090` without Nginx or Caddy, eliminating CORS while accessing database APIs under the same origin (Guide)."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    84,
+    85
+   ],
+   [
+    "replace",
+    134,
+    135,
+    85,
+    86,
+    [
+     " Instant REST endpoints generated automatically for all tables upon creation, with boolean filtering, sorting, and pagination."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    86,
+    87
+   ],
+   [
+    "replace",
+    136,
+    137,
+    87,
+    88,
+    [
+     " Lightweight client SDK served directly by the standalone executable, supporting Browsers, Node.js, Bun, and Deno."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    88,
+    89
+   ],
+   [
+    "replace",
+    138,
+    141,
+    89,
+    90,
+    [
+     " Authentication-based data access control (RLS), asynchronous webhooks, 5-field cron automation scheduler, and built-in SMTP mailer."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    150,
+    90,
+    99
+   ],
+   [
+    "replace",
+    150,
+    152,
+    99,
+    101,
+    [
+     " - macOS: `brew install wiredtiger`",
+     " - Linux (Ubuntu/Debian): `sudo apt-get install libwiredtiger-dev`"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    159,
+    101,
+    108
+   ],
+   [
+    "replace",
+    159,
+    164,
+    108,
+    109,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    172,
+    109,
+    117
+   ],
+   [
+    "replace",
+    172,
+    182,
+    117,
+    118,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    190,
+    118,
+    126
+   ],
+   [
+    "replace",
+    190,
+    205,
+    126,
+    127,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    213,
+    127,
+    135
+   ],
+   [
+    "replace",
+    213,
+    216,
+    135,
+    136,
+    [
+     "The Web Studio provides immediate visual table inspection, real-time query execution, stored procedure inspection, and one-click database backup/restore. See the Web Studio User Guide for full operational instructions."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    229,
+    136,
+    149
+   ],
+   [
+    "replace",
+    229,
+    235,
+    149,
+    150,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    259,
+    150,
+    174
+   ],
+   [
+    "delete",
+    259,
+    261,
+    174,
+    174
+   ],
+   [
+    "equal",
+    261,
+    269,
+    174,
+    182
+   ],
+   [
+    "replace",
+    269,
+    300,
+    182,
+    183,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    308,
+    183,
+    191
+   ],
+   [
+    "replace",
+    308,
+    323,
+    191,
+    192,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    331,
+    192,
+    200
+   ],
+   [
+    "replace",
+    331,
+    344,
+    200,
+    201,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    352,
+    201,
+    209
+   ],
+   [
+    "replace",
+    352,
+    366,
+    209,
+    210,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    366,
+    367,
+    210,
+    211
+   ],
+   [
+    "delete",
+    367,
+    369,
+    211,
+    211
+   ],
+   [
+    "equal",
+    369,
+    374,
+    211,
+    216
+   ],
+   [
+    "replace",
+    374,
+    375,
+    216,
+    217,
+    [
+     "|Flag|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    375,
+    376,
+    217,
+    218
+   ],
+   [
+    "replace",
+    376,
+    389,
+    218,
+    231,
+    [
+     "|`-http`|`127.0.0.1:8090`|HTTP service and embedded Web Studio address|",
+     "|`-pg`|`127.0.0.1:5433`|PostgreSQL wire protocol listen address|",
+     "|`-tds`|`127.0.0.1:1433`|Microsoft SQL Server TDS protocol listen address|",
+     "|`-dir`|`data`|Database storage directory|",
+     "|`-engine`|`wiredtiger`|Storage engine backend (`wiredtiger` or `memory`)|",
+     "|`-ephemeral`|`false`|Disable WAL/AOF persistence for in-memory engine (pure RAM)|",
+     "|`-replica-of`|`\"\"`|Primary server URL to stream WAL from (runs as read-only replica)|",
+     "|`-node-id`|`\"node-1\"`|Unique cluster node identifier for replication tracking|",
+     "|`-work-mem`|`64MB`|Default memory limit per query operator before spill-to-disk|",
+     "|`-max-workers`|`NumCPU * 4`|Maximum concurrent query execution workers|",
+     "|`-max-idle-sessions`|`64`|Maximum idle storage sessions to retain in pool|",
+     "|`-auth`|`false`|Enforce JWT authentication on protected REST endpoints|",
+     "|`-seed`|`true`|Seed sample accounts and `TransferFunds` procedure on startup|"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    398,
+    231,
+    240
+   ],
+   [
+    "replace",
+    398,
+    412,
+    240,
+    241,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    412,
+    420,
+    241,
+    249
+   ],
+   [
+    "replace",
+    420,
+    428,
+    249,
+    250,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    436,
+    250,
+    258
+   ],
+   [
+    "replace",
+    436,
+    444,
+    258,
+    259,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    444,
+    445,
+    259,
+    260
+   ],
+   [
+    "delete",
+    445,
+    447,
+    260,
+    260
+   ],
+   [
+    "equal",
+    447,
+    452,
+    260,
+    265
+   ],
+   [
+    "replace",
+    452,
+    453,
+    265,
+    266,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    454,
+    266,
+    267
+   ],
+   [
+    "replace",
+    454,
+    477,
+    267,
+    288,
+    [
+     "|`GET`|`/api/health`|Service health and version check|",
+     "|`GET`|`/api/pool/stats`|Realtime worker pool and connection pooler metrics|",
+     "|`GET`|`/api/realtime`|Server-Sent Events (SSE) live data mutation stream|",
+     "|`POST`|`/api/sql`|Execute SQL/T-SQL statement directly (`{\"sql\": \"...\"}`)|",
+     "|`GET`|`/api/tables`|List all tables and schemas|",
+     "|`POST`|`/api/tables`|Create a new table|",
+     "|`GET`|`/api/tables/{name}/records`|Get records with pagination, sorting, and search|",
+     "|`POST`|`/api/tables/{name}/records`|Insert a new record|",
+     "|`PATCH`|`/api/tables/{name}/records/{pk}`|Update a record by primary key|",
+     "|`DELETE`|`/api/tables/{name}/records/{pk}`|Delete a record by primary key|",
+     "|`GET`|`/api/procs`|List all registered stored procedures|",
+     "|`POST`|`/api/procs`|Register a stored procedure script|",
+     "|`POST`|`/api/procs/{name}/exec`|Execute stored procedure via JSON parameters|",
+     "|`GET`|`/api/backup`|Stream live `.tar.gz` snapshot hot backup|",
+     "|`POST`|`/api/backup`|Create backup file on server (`{\"target\": \"path\"}`)|",
+     "|`POST`|`/api/restore`|Restore database from archive file or multipart upload|",
+     "|`GET`|`/api/replication/status`|Get node replication role, LSN, lag, and replica list|",
+     "|`GET`|`/api/replication/stream`|Stream chunked WAL frames to connected replicas|",
+     "|`POST`|`/api/replication/ack`|Report follower heartbeat and replayed LSN|",
+     "|`POST`|`/api/replication/promote`|Promote replica to active primary node|",
+     "|`POST`|`/api/replication/demote`|Demote primary node to follower under a new primary|"
+    ]
+   ],
+   [
+    "equal",
+    477,
+    482,
+    288,
+    293
+   ],
+   [
+    "replace",
+    482,
+    483,
+    293,
+    294,
+    [
+     "### Master Technical Documentation Directory (doc/README.md)"
+    ]
+   ],
+   [
+    "equal",
+    483,
+    485,
+    294,
+    296
+   ],
+   [
+    "replace",
+    485,
+    486,
+    296,
+    297,
+    [
+     "### Official Application Integration Guides (guide/README.md)"
+    ]
+   ],
+   [
+    "equal",
+    486,
+    489,
+    297,
+    300
+   ],
+   [
+    "replace",
+    489,
+    494,
+    300,
+    305,
+    [
+     "- **Official Web SDK & HTML Embedding Guide**: Universal zero-dependency client library and HTML embedding patterns for Web, Node.js, Bun, and Deno.",
+     "- **Auto-Generated RESTful CRUD API**: Zero-code `/api/records/:table` endpoints with rich boolean filter expressions.",
+     "- **Webhooks & Row-Level Security (RLS)**: Non-blocking mutation webhooks with HMAC signatures and declarative `@auth` access rules.",
+     "- **Cron Jobs Scheduler & SMTP Mailer**: Embedded 5-field cron automation and transactional HTML email dispatching.",
+     "- **HTTP REST API & Realtime SSE Specification**: OpenAPI-style endpoint documentation and JavaScript EventSource examples."
+    ]
+   ],
+   [
+    "equal",
+    494,
+    496,
+    305,
+    307
+   ],
+   [
+    "replace",
+    496,
+    505,
+    307,
+    316,
+    [
+     "- **System Architecture Specification**: Exhaustive technical specification covering Volcano iterators, dual-parser decoupling, and storage backends.",
+     "- **Architecture Decision Records (ADRs)**: Historical log of 18 foundational architectural decisions (ADR-001 through ADR-018).",
+     "- **VDBE Bytecode Virtual Machine Internals**: Register allocation, opcode instruction set architecture (ISA), and procedural execution.",
+     "- **Storage Engine Mechanics (WiredTiger & Memory OCC)**: Lock-free B+Trees, hazard pointers, OCC validation, and AOF log compaction.",
+     "- **Cost-Based Optimizer & Volcano Pipeline Internals**: Equi-depth histograms, physical cost formulas, and external merge sort.",
+     "- **Multi-Wire Protocol Internals**: Binary framing for PostgreSQL v3, TDS 7.x/8.0, and goroutine connection pooler.",
+     "- **Virtual System Catalog & Data Dictionary**: System views (`sys.*`, `information_schema.*`), data types, and tool compatibility.",
+     "- **High Availability & Disaster Recovery**: Multi-node replication topology, 1-writer multi-reader WAL streaming, failover, and recovery SLAs.",
+     "- **Extension & Driver Development Guide**: Dual-track UDFs (Go native SPI + Wasm sandbox), pluggable storage engines, and fallback parsers."
+    ]
+   ],
+   [
+    "equal",
+    505,
+    507,
+    316,
+    318
+   ],
+   [
+    "replace",
+    507,
+    525,
+    318,
+    334,
+    [
+     "- **T-SQL & SQL Syntax Reference Guide**: Complete language reference for procedures, triggers, UDFs, TVFs, and queries.",
+     "- **Percentile & Quantile Analytics**: Continuous/discrete quantiles (`PERCENTILE_CONT`, `PERCENTILE_DISC`), `MEDIAN`, and streaming `APPROX_PERCENTILE` (T-Digest).",
+     "- **In-Engine Text & Log Analytics**: Zero-copy `GREP`, `REGEXP_LIKE`, and `AWK` / `SPLIT_PART` filter and extraction operators.",
+     "- **Observability, Metrics & Telemetry Guide**: Prometheus time-series metrics, health probes, alerting rules, and Grafana integration.",
+     "- **Production Deployment & Operations Runbook**: Systemd services, Docker deployment, 1-writer replication failover, and security hardening.",
+     "- **Performance Tuning & Benchmark Guide**: High-concurrency banking benchmark harness, TPS measurement, and memory tuning.",
+     "- **Local Testing & Regression Guide**: Build and test pipeline, running single tests, build tags, regression test map, and TPC-C performance regression procedure.",
+     "- **Data Import & Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "- **Security Policy & Threat Model**: RBAC access control, SQL injection immunity, and vulnerability disclosure.",
+     "- **Engineering Roadmap & Milestones**: Versioned engineering milestones from single-node OLTP to Always On HA and decoupled HTAP.",
+     "- **Actionable Engineering Backlog (TODO.md)**: Immediate, daily task backlog and prioritized operational execution tracker.",
+     "- **Developer & AI Handover Context Notes**: Shared brain, engineering invariants, why alternatives were spec'd out, fragile landmines, and upcoming refactoring context.",
+     "- **Troubleshooting, Error Diagnostics & FAQ**: Port conflicts, serialization conflicts, slow query tuning, and client driver setup.",
+     "- **Contributing & Development Guide**: Engineering standards, 3-stage verification pipeline, and pull request checklist.",
+     "- **Contributor Covenant Code of Conduct**: Standards, pledge, enforcement responsibilities, and guidelines.",
+     "- **Changelog & Release Notes**: Semantic versioning history and release notes."
+    ]
+   ],
+   [
+    "equal",
+    525,
+    541,
+    334,
+    350
+   ],
+   [
+    "replace",
+    541,
+    542,
+    350,
+    351,
+    [
+     " Requires 100% PASS across all packages with **0 data races**."
+    ]
+   ],
+   [
+    "equal",
+    542,
+    543,
+    351,
+    352
+   ],
+   [
+    "replace",
+    543,
+    545,
+    352,
+    354,
+    [
+     " - **Extended Integration Smoke Test**:",
+     " Verifies all 13 core architecture domains from `notes/TEST_VERIFICATION_REPORT.ko.md` in ~3 seconds (see `scripts/README.md`):"
+    ]
+   ],
+   [
+    "equal",
+    545,
+    553,
+    354,
+    362
+   ],
+   [
+    "replace",
+    553,
+    555,
+    362,
+    364,
+    [
+     " - **SQLLogicTest (SLT) 107-Suite Full Corpus (551,217 Queries) Oracle Verification (100% PASS)**:",
+     " Runs full black-box regression across official SQLite test suites (`select1~5.test`), specification clauses (`evidence/*`), B-Tree index paths (`index/*`), synthetic fuzzing expressions (`random/*`), and curated edge suites (see Verification Report, Guide, and Babelfish T-SQL Integration Report):"
+    ]
+   ],
+   [
+    "equal",
+    555,
+    559,
+    364,
+    368
+   ],
+   [
+    "replace",
+    559,
+    564,
+    368,
+    369,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    564,
+    566,
+    369,
+    371
+   ],
+   [
+    "replace",
+    566,
+    570,
+    371,
+    373,
+    [
+     " - Conventional Commits format (`feat`, `fix`, `docs`, `refactor`, `test`).",
+     " - Zero decorative emojis in code, logs, comments, and commit messages."
+    ]
+   ],
+   [
+    "equal",
+    570,
+    572,
+    373,
+    375
+   ],
+   [
+    "delete",
+    572,
+    573,
+    375,
+    375
+   ],
+   [
+    "equal",
+    573,
+    574,
+    375,
+    376
+   ],
+   [
+    "replace",
+    574,
+    575,
+    376,
+    377,
+    [
+     "LionSQL is free open-source software licensed under the **GNU General Public License v3 (GPL-3.0-or-later)**. See LICENSE for the full canonical license text."
+    ]
+   ],
+   [
+    "equal",
+    575,
+    579,
+    377,
+    381
+   ],
+   [
+    "replace",
+    579,
+    584,
+    381,
+    385,
+    [
+     " - Copyright (c) MongoDB, Inc.",
+     " - Copyright (c) Keith Bostic and Michael Cahill.",
+     " - Licensed under the **GNU General Public License (GPLv2 or GPLv3)**.",
+     " - When LionSQL is built with `-tags wiredtiger`, it links with `libwiredtiger` governed by its respective GPL terms."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

@@ -2647,5 +2647,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cd30bbe8f733": {
+  "identity": {
+   "one_liner": "演示 Symfony 应用 Monolog 日志可观测性配置的示例项目",
+   "review": "这是一个基于 Symfony 8.1 的演示应用，用于展示如何配置 Monolog 及配套的可观测性栈。所有日志记录发送到 Vector，再分发至 ClickHouse、Elasticsearch 和 Loki，分别通过 Redash、Kibana 和 Grafana 查看。项目提供 Docker 环境，需安装 Docker 与 Castor，首次运行前需配置 /etc/hosts 域名指向，通过 castor start 启动。运行时 Traefik 绑定 80/443 端口，使用自签名证书；Redash 需以预设账号登录。内置日志生成器可回填历史数据用于填充仪表盘。",
+   "highlights": [
+    "日志记录经 Vector 分发到 ClickHouse、Elasticsearch 和 Loki，分别以 Redash、Kibana、Grafana 查看",
+    "Docker 环境包含 nginx + PHP 8.5、PostgreSQL、Traefik 及带 Composer 与 QA 工具的 builder 容器",
+    "castor start 自动预置 Kibana、Grafana、Redash 仪表盘，并提供日志生成按钮可回填指定时间窗口的日志数据"
+   ],
+   "use_cases": [
+    "学习 Symfony 应用中 Monolog 与可观测性栈的配置方式",
+    "本地运行包含 ClickHouse、Elasticsearch、Loki 三套日志后端的完整演示环境",
+    "为演讲或培训演示日志采集与仪表盘（附带法语文档幻灯片）"
+   ]
+  },
+  "sha": "cd30bbe8f733",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "597f3adf0a3f": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理权限网关，凭据加密存储并支持人工审批",
+   "review": "AIPermission 是单用户本地开发网关，用于让 AI 助手通过 MCP 令牌以受限的连接器操作访问开发者自有系统，而无需把凭据交给 AI。凭据保存在 SQLCipher 加密的本地 SQLite 数据库中，每条权限规则可设为 blocked/approval_required/always_run，操作结果写入加密的本地历史与审计记录。当前为 pre-1.0 开发者软件，仅限本机运行，不是远程多用户服务。",
+   "highlights": [
+    "内置 11 类连接器（ClickHouse、Docker、Kafka、Kubernetes、Mail、Postgres、RabbitMQ、Redis、S3、SQL Server、SSH），共用同一套权限、审批、历史与审计管线",
+    "每条令牌/目标/凭据/操作权限解析为 blocked、approval_required 或 always_run 规则，待审批请求携带上下文快照，环境变化会使请求过期",
+    "凭据仅存在于网关内部，不通过 MCP 或 REST API 返回；运行数据存储于 SQLCipher 加密的本地 SQLite 数据库，历史与审计受保留策略控制且可删除"
+   ],
+   "use_cases": [
+    "开发者希望 AI 助手对本地或自有基础设施执行受限操作，并在真实系统上先走人工审批流程",
+    "需要把数据库、容器、消息队列等连接器的凭据与 AI 客户端隔离，仅暴露目标/配置文件的引用",
+    "对 AI 执行的连接器操作需要留存在本地的历史与审计记录（接受保留策略可删除的限制）"
+   ]
+  },
+  "sha": "597f3adf0a3f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

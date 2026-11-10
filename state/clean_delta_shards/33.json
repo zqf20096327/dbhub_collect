@@ -15729,5 +15729,1575 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "c82dee0f9a8f+2": {
+  "fn": "mattjaikaran/django-ninja-boilerplate",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "> **Architecture Note:** This boilerplate uses Django Ninja Extra which extends Django Ninja with class-based API controllers, dependency injection, and permissions. Instead of function-based views, you write clean controller classes with decorators like `@api_controller` and `@http_get`."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    15,
+    10,
+    15,
+    [
+     "Python 3.13",
+     "Django 5.2",
+     "License: MIT",
+     "Code style: Ruff",
+     "OpenAPI"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    15,
+    18
+   ],
+   [
+    "replace",
+    18,
+    29,
+    18,
+    29,
+    [
+     "|Feature|Benefit|",
+     "|--------------------------------|---------------------------------------------------------------------------|",
+     "|**One-command setup**|`just setup` gets you from clone to running in under 2 minutes|",
+     "|**Class-based controllers**|Clean, organized API code with Django Ninja Extra|",
+     "|**Enterprise features built-in**|Audit logging, feature flags, observability - no need to add later|",
+     "|**Multiple auth methods**|JWT, magic links, OTP codes, 2FA, API keys - ready for web, mobile, and M2M|",
+     "|**Full observability**|Distributed tracing, metrics, structured logging out of the box|",
+     "|**SDK generation**|Auto-generate TypeScript and Python clients from your API|",
+     "|**Production-ready**|Docker, K8s Helm charts, PaaS configs - deploy anywhere|",
+     "|**Lean tests**|Smoke, permission, contract, and load tests; Playwright journeys verify features|",
+     "|**Progressive patterns**|Four `todos` controller variants show every abstraction level side-by-side|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    34,
+    29,
+    34
+   ],
+   [
+    "replace",
+    34,
+    40,
+    34,
+    40,
+    [
+     "|#|Pattern|Routes|File|When to Use|",
+     "|---|------------------------|-------------------------|--------------------------------|---------------------------------------------------------------------------------------------|",
+     "|1|**Declarative**|`GET /api/todos-declarative/`|`todo_controller_declarative.py`|Learning the framework; teams that want every error path explicit with no decorator magic|",
+     "|2|**Basic**|`GET /api/todos-basic/`|`todo_controller_basic.py`|Small projects; minimal abstraction with `get_object_or_404`|",
+     "|3|**Partial**|`GET /api/todos-partial/`|`todo_controller_partial.py`|Mix-and-match: reads are plain, writes use `log_api_call`|",
+     "|4|**Full (service layer)**|`GET /api/todos/`|`todo_controller.py`|**Recommended for production.** Controller is a thin HTTP adapter; all logic in `TodoService`|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    45,
+    40,
+    45
+   ],
+   [
+    "replace",
+    45,
+    78,
+    45,
+    46,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    46,
+    48
+   ],
+   [
+    "replace",
+    80,
+    81,
+    48,
+    49,
+    [
+     "The `TodoService` (`todos/services/todo_service.py`) centralises all business logic — filtering, ordering, ORM calls, and 404 handling — so it can be shared across controllers and tested independently without HTTP context. See `todos/README.md` for full details on each pattern."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    88,
+    49,
+    56
+   ],
+   [
+    "replace",
+    88,
+    117,
+    56,
+    57,
+    [
+     "…（29 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    124,
+    57,
+    64
+   ],
+   [
+    "replace",
+    124,
+    129,
+    64,
+    69,
+    [
+     " - Traditional email/password login",
+     " - Passwordless magic links",
+     " - **6-digit OTP codes** for mobile/iOS apps (SMS, email, push)",
+     " - Two-factor authentication (2FA)",
+     " - Rate limiting and brute force protection"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    132,
+    69,
+    72
+   ],
+   [
+    "replace",
+    132,
+    133,
+    72,
+    73,
+    [
+     "- **Real-Time Messaging** - Centrifugo WebSocket server with JWT auth, channel namespaces, presence, and history"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    151,
+    73,
+    91
+   ],
+   [
+    "replace",
+    151,
+    173,
+    91,
+    92,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    183,
+    92,
+    102
+   ],
+   [
+    "replace",
+    183,
+    192,
+    102,
+    103,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    199,
+    103,
+    110
+   ],
+   [
+    "replace",
+    199,
+    209,
+    110,
+    120,
+    [
+     "- **Django 5.2 LTS** - The only supported version; `just test-django6` runs the suite on 6.0 by hand (see `DEPENDENCIES.md`)",
+     "- **Django Ninja** - Fast API framework",
+     "- **Django Ninja Extra** - Class-based controllers",
+     "- **Django Ninja JWT** - JWT authentication",
+     "- **PostgreSQL** - Primary database",
+     "- **Valkey** - Caching and task broker (Redis-compatible, BSD license)",
+     "- **Celery** - Default task backend; Huey, django-q2, django-rq, and Dramatiq are also supported",
+     "- **Centrifugo** - Real-time WebSocket messaging",
+     "- **Pydantic** - Data validation",
+     "- **orjson** - High-performance JSON (global renderer)"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    214,
+    120,
+    125
+   ],
+   [
+    "replace",
+    214,
+    220,
+    125,
+    131,
+    [
+     "- **uv** - Package management (replaces pip/poetry)",
+     "- **Ruff** - Linting and formatting (replaces flake8/black/isort)",
+     "- **ty** - Type checking (alongside mypy)",
+     "- **Pydantic** - Validation engine behind Django Ninja; its Rust core is pinned by Pydantic, not by `pyproject.toml`",
+     "- **orjson** - JSON serialization (2-10x faster than stdlib)",
+     "- **django-vcache** - Cache I/O driver (default backend)"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    223,
+    131,
+    134
+   ],
+   [
+    "replace",
+    223,
+    227,
+    134,
+    138,
+    [
+     "- **pytest** - Testing framework",
+     "- **Factory Boy** - Test data generation",
+     "- **Docker** - Containerization (OrbStack optimized)",
+     "- **Django Unfold** - Modern admin panel"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    265,
+    138,
+    176
+   ],
+   [
+    "replace",
+    265,
+    270,
+    176,
+    177,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    278,
+    177,
+    185
+   ],
+   [
+    "replace",
+    278,
+    288,
+    185,
+    186,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    296,
+    186,
+    194
+   ],
+   [
+    "replace",
+    296,
+    310,
+    194,
+    195,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    330,
+    195,
+    215
+   ],
+   [
+    "replace",
+    330,
+    339,
+    215,
+    216,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    346,
+    216,
+    223
+   ],
+   [
+    "replace",
+    346,
+    347,
+    223,
+    224,
+    [
+     "|Profile|Services|"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    348,
+    224,
+    225
+   ],
+   [
+    "replace",
+    348,
+    358,
+    225,
+    235,
+    [
+     "|`dev`|db, valkey, django|",
+     "|`test`|db, valkey|",
+     "|`prod`|db-prod, valkey-prod, django-prod, celery-worker-prod, celery-beat-prod, nginx|",
+     "|`single`|db-single, redis, app|",
+     "|`celery`|db, valkey, celery-worker, celery-beat|",
+     "|`realtime`|valkey, centrifugo|",
+     "|`realtime-prod`|db-prod, valkey-prod, centrifugo-prod|",
+     "|`monitoring`|valkey, flower, jaeger|",
+     "|`huey`, `django-q`, `django-rq`, `dramatiq`|db, valkey, and one worker per backend|",
+     "|`observability`|jaeger|"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    397,
+    235,
+    274
+   ],
+   [
+    "replace",
+    397,
+    406,
+    274,
+    275,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    406,
+    429,
+    275,
+    298
+   ],
+   [
+    "replace",
+    429,
+    437,
+    298,
+    299,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    437,
+    447,
+    299,
+    309
+   ],
+   [
+    "replace",
+    447,
+    452,
+    309,
+    310,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    452,
+    462,
+    310,
+    320
+   ],
+   [
+    "replace",
+    462,
+    476,
+    320,
+    321,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    476,
+    512,
+    321,
+    357
+   ],
+   [
+    "replace",
+    512,
+    537,
+    357,
+    358,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    537,
+    561,
+    358,
+    382
+   ],
+   [
+    "replace",
+    561,
+    567,
+    382,
+    383,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    567,
+    577,
+    383,
+    393
+   ],
+   [
+    "replace",
+    577,
+    586,
+    393,
+    394,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    586,
+    596,
+    394,
+    404
+   ],
+   [
+    "replace",
+    596,
+    604,
+    404,
+    405,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    604,
+    608,
+    405,
+    409
+   ],
+   [
+    "replace",
+    608,
+    609,
+    409,
+    410,
+    [
+     "See FEATURE_GENERATION.md for details."
+    ]
+   ],
+   [
+    "equal",
+    609,
+    612,
+    410,
+    413
+   ],
+   [
+    "replace",
+    612,
+    613,
+    413,
+    414,
+    [
+     "This boilerplate includes an optional GraphQL API setup using Strawberry GraphQL. GraphQL is not included by default since REST APIs (via Django Ninja) are the primary interface."
+    ]
+   ],
+   [
+    "equal",
+    613,
+    633,
+    414,
+    434
+   ],
+   [
+    "replace",
+    633,
+    641,
+    434,
+    442,
+    [
+     " - `schema.py` - Main schema combining Query and Mutation",
+     " - `queries.py` - `me`, `user(id)` and the staff-only `users` query",
+     " - `mutations.py` - `updateUser` and `deleteAccount` for the current user",
+     " - `types.py` - Strawberry types for models",
+     " - `context.py` - Custom context class with user access",
+     " - `permissions.py` - `IsAuthenticated` and `IsStaff` permission classes",
+     " - `user_service.py` - All user queries, scoped to the viewer; resolvers hold",
+     " no ORM code"
+    ]
+   ],
+   [
+    "equal",
+    641,
+    642,
+    442,
+    443
+   ],
+   [
+    "replace",
+    642,
+    643,
+    443,
+    444,
+    [
+     " `GET /api/graphql/`"
+    ]
+   ],
+   [
+    "equal",
+    643,
+    661,
+    444,
+    462
+   ],
+   [
+    "replace",
+    661,
+    665,
+    462,
+    463,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    665,
+    677,
+    463,
+    475
+   ],
+   [
+    "replace",
+    677,
+    686,
+    475,
+    476,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    686,
+    725,
+    476,
+    515
+   ],
+   [
+    "replace",
+    725,
+    729,
+    515,
+    516,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    729,
+    733,
+    516,
+    520
+   ],
+   [
+    "replace",
+    733,
+    734,
+    520,
+    521,
+    [
+     "Playwright journeys in the frontend repo verify features end to end. See `docs/product/README.md` for the spec and tag format."
+    ]
+   ],
+   [
+    "equal",
+    734,
+    737,
+    521,
+    524
+   ],
+   [
+    "replace",
+    737,
+    738,
+    524,
+    525,
+    [
+     "API contract tests validate responses against the OpenAPI specification using Schemathesis:"
+    ]
+   ],
+   [
+    "equal",
+    738,
+    743,
+    525,
+    530
+   ],
+   [
+    "replace",
+    743,
+    748,
+    530,
+    531,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    748,
+    759,
+    531,
+    542
+   ],
+   [
+    "replace",
+    759,
+    760,
+    542,
+    543,
+    [
+     "Load testing with Locust for performance validation:"
+    ]
+   ],
+   [
+    "equal",
+    760,
+    765,
+    543,
+    548
+   ],
+   [
+    "replace",
+    765,
+    776,
+    548,
+    549,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    776,
+    792,
+    549,
+    565
+   ],
+   [
+    "replace",
+    792,
+    802,
+    565,
+    566,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    802,
+    810,
+    566,
+    574
+   ],
+   [
+    "replace",
+    810,
+    823,
+    574,
+    575,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    823,
+    840,
+    575,
+    592
+   ],
+   [
+    "replace",
+    840,
+    851,
+    592,
+    593,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    851,
+    859,
+    593,
+    601
+   ],
+   [
+    "replace",
+    859,
+    883,
+    601,
+    602,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    883,
+    891,
+    602,
+    610
+   ],
+   [
+    "replace",
+    891,
+    896,
+    610,
+    611,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    896,
+    906,
+    611,
+    621
+   ],
+   [
+    "replace",
+    906,
+    916,
+    621,
+    622,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    916,
+    924,
+    622,
+    630
+   ],
+   [
+    "replace",
+    924,
+    934,
+    630,
+    631,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    934,
+    942,
+    631,
+    639
+   ],
+   [
+    "replace",
+    942,
+    965,
+    639,
+    640,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    965,
+    1000,
+    640,
+    675
+   ],
+   [
+    "replace",
+    1000,
+    1010,
+    675,
+    676,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1010,
+    1020,
+    676,
+    686
+   ],
+   [
+    "replace",
+    1020,
+    1033,
+    686,
+    687,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1033,
+    1041,
+    687,
+    695
+   ],
+   [
+    "replace",
+    1041,
+    1064,
+    695,
+    696,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1064,
+    1072,
+    696,
+    704
+   ],
+   [
+    "replace",
+    1072,
+    1088,
+    704,
+    705,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1088,
+    1102,
+    705,
+    719
+   ],
+   [
+    "replace",
+    1102,
+    1119,
+    719,
+    736,
+    [
+     "|Action|Description|",
+     "|-------------------|-------------------------------------|",
+     "|`CREATE`|New record created|",
+     "|`UPDATE`|Record updated|",
+     "|`DELETE`|Record permanently deleted|",
+     "|`SOFT_DELETE`|Record soft deleted (is_active=False)|",
+     "|`RESTORE`|Soft-deleted record restored|",
+     "|`LOGIN`|User logged in|",
+     "|`LOGOUT`|User logged out|",
+     "|`LOGIN_FAILED`|Failed login attempt|",
+     "|`PASSWORD_CHANGE`|User changed password|",
+     "|`PASSWORD_RESET`|Password reset performed|",
+     "|`API_REQUEST`|API endpoint accessed|",
+     "|`PERMISSION_CHANGE`|User permissions modified|",
+     "|`EXPORT`|Data exported|",
+     "|`IMPORT`|Data imported|",
+     "|`CUSTOM`|Custom audit action|"
+    ]
+   ],
+   [
+    "equal",
+    1119,
+    1128,
+    736,
+    745
+   ],
+   [
+    "replace",
+    1128,
+    1132,
+    745,
+    746,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1132,
+    1145,
+    746,
+    759
+   ],
+   [
+    "replace",
+    1145,
+    1146,
+    759,
+    760,
+    [
+     "See docs/API_KEYS.md for full documentation."
+    ]
+   ],
+   [
+    "equal",
+    1146,
+    1151,
+    760,
+    765
+   ],
+   [
+    "replace",
+    1151,
+    1152,
+    765,
+    766,
+    [
+     "|Backend|Install extra|Start|"
+    ]
+   ],
+   [
+    "equal",
+    1152,
+    1153,
+    766,
+    767
+   ],
+   [
+    "replace",
+    1153,
+    1158,
+    767,
+    772,
+    [
+     "|**Celery** (default)|Base dependency|`just dev`|",
+     "|**Huey**|`uv sync --extra huey`|`just dev`|",
+     "|**django-q2**|`uv sync --extra django-q`|`just dev`|",
+     "|**django-rq**|`uv sync --extra django-rq`|`just dev`|",
+     "|**Dramatiq**|`uv sync --extra dramatiq`|`just dev`|"
+    ]
+   ],
+   [
+    "equal",
+    1158,
+    1163,
+    772,
+    777
+   ],
+   [
+    "replace",
+    1163,
+    1168,
+    777,
+    778,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1168,
+    1170,
+    778,
+    780
+   ],
+   [
+    "replace",
+    1170,
+    1171,
+    780,
+    781,
+    [
+     "See docs/TASK_BACKENDS.md for comparison and setup."
+    ]
+   ],
+   [
+    "equal",
+    1171,
+    1178,
+    781,
+    788
+   ],
+   [
+    "replace",
+    1178,
+    1184,
+    788,
+    789,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1184,
+    1196,
+    789,
+    801
+   ],
+   [
+    "replace",
+    1196,
+    1197,
+    801,
+    802,
+    [
+     "The boilerplate includes Centrifugo for real-time WebSocket communication. Centrifugo runs as a standalone server — Django stays WSGI and publishes events via HTTP."
+    ]
+   ],
+   [
+    "equal",
+    1197,
+    1217,
+    802,
+    822
+   ],
+   [
+    "replace",
+    1217,
+    1227,
+    822,
+    823,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1227,
+    1238,
+    823,
+    834
+   ],
+   [
+    "replace",
+    1238,
+    1243,
+    834,
+    839,
+    [
+     "|Namespace|Pattern|Features|",
+     "|---------------|-------------------------|----------------------------|",
+     "|`chat`|`chat:<conversation_id>`|Presence, history (100 msgs)|",
+     "|`notifications`|`notifications:<user_id>`|History (50 msgs, 24h TTL)|",
+     "|`organization`|`organization:<org_id>`|Presence, history (50 msgs)|"
+    ]
+   ],
+   [
+    "equal",
+    1243,
+    1244,
+    839,
+    840
+   ],
+   [
+    "replace",
+    1244,
+    1245,
+    840,
+    841,
+    [
+     "See docs/REALTIME.md for full setup guide, client integration examples, and production deployment."
+    ]
+   ],
+   [
+    "equal",
+    1245,
+    1258,
+    841,
+    854
+   ],
+   [
+    "replace",
+    1258,
+    1275,
+    854,
+    855,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1275,
+    1285,
+    855,
+    865
+   ],
+   [
+    "replace",
+    1285,
+    1302,
+    865,
+    866,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1302,
+    1312,
+    866,
+    876
+   ],
+   [
+    "replace",
+    1312,
+    1342,
+    876,
+    877,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1342,
+    1352,
+    877,
+    887
+   ],
+   [
+    "replace",
+    1352,
+    1384,
+    887,
+    888,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1384,
+    1394,
+    888,
+    898
+   ],
+   [
+    "replace",
+    1394,
+    1402,
+    898,
+    899,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1402,
+    1430,
+    899,
+    927
+   ],
+   [
+    "replace",
+    1430,
+    1436,
+    927,
+    928,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1436,
+    1444,
+    928,
+    936
+   ],
+   [
+    "replace",
+    1444,
+    1449,
+    936,
+    937,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1449,
+    1462,
+    937,
+    950
+   ],
+   [
+    "replace",
+    1462,
+    1470,
+    950,
+    951,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1470,
+    1482,
+    951,
+    963
+   ],
+   [
+    "replace",
+    1482,
+    1497,
+    963,
+    964,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1497,
+    1507,
+    964,
+    974
+   ],
+   [
+    "replace",
+    1507,
+    1513,
+    974,
+    975,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1513,
+    1538,
+    975,
+    1000
+   ],
+   [
+    "replace",
+    1538,
+    1552,
+    1000,
+    1001,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1552,
+    1560,
+    1001,
+    1009
+   ],
+   [
+    "replace",
+    1560,
+    1572,
+    1009,
+    1010,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1572,
+    1585,
+    1010,
+    1023
+   ],
+   [
+    "replace",
+    1585,
+    1586,
+    1023,
+    1024,
+    [
+     "Upgrading an existing platform? Read UPGRADING.md first:"
+    ]
+   ],
+   [
+    "equal",
+    1586,
+    1604,
+    1024,
+    1042
+   ],
+   [
+    "replace",
+    1604,
+    1610,
+    1042,
+    1043,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1610,
+    1618,
+    1043,
+    1051
+   ],
+   [
+    "replace",
+    1618,
+    1622,
+    1051,
+    1052,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1622,
+    1624,
+    1052,
+    1054
+   ],
+   [
+    "replace",
+    1624,
+    1625,
+    1054,
+    1055,
+    [
+     "See `deploy/` for detailed deployment configurations:"
+    ]
+   ],
+   [
+    "equal",
+    1625,
+    1665,
+    1055,
+    1095
+   ],
+   [
+    "replace",
+    1665,
+    1679,
+    1095,
+    1096,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1679,
+    1689,
+    1096,
+    1106
+   ],
+   [
+    "replace",
+    1689,
+    1694,
+    1106,
+    1107,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1694,
+    1708,
+    1107,
+    1121
+   ],
+   [
+    "replace",
+    1708,
+    1709,
+    1121,
+    1122,
+    [
+     "See docs/openapi/README.md for detailed documentation."
+    ]
+   ],
+   [
+    "equal",
+    1709,
+    1713,
+    1122,
+    1126
+   ],
+   [
+    "replace",
+    1713,
+    1714,
+    1126,
+    1127,
+    [
+     "SKILLS.md for the index."
+    ]
+   ],
+   [
+    "equal",
+    1714,
+    1715,
+    1127,
+    1128
+   ],
+   [
+    "replace",
+    1715,
+    1716,
+    1128,
+    1129,
+    [
+     "|Skill|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    1716,
+    1717,
+    1129,
+    1130
+   ],
+   [
+    "replace",
+    1717,
+    1721,
+    1130,
+    1134,
+    [
+     "|`django-ninja-dev`|Controllers, schemas, services|",
+     "|`docker-compose-profiles`|The Compose file and its profiles|",
+     "|`rtk-ripgrep`|Searching with ripgrep|",
+     "|`system-design-atlas`|The admin architecture map|"
+    ]
+   ],
+   [
+    "equal",
+    1721,
+    1726,
+    1134,
+    1139
+   ],
+   [
+    "replace",
+    1726,
+    1736,
+    1139,
+    1140,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

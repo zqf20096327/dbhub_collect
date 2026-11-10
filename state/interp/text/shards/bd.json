@@ -3297,5 +3297,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0ced1d0c1856": {
+  "identity": {
+   "one_liner": "本地优先的 AI 长期记忆库，基于 SQLite + 人工审核闸门，经 MCP 接入多个代理。",
+   "review": "memory-eternal 是一个本地运行的 AI 代理长期记忆系统，数据存于本机 SQLite 和 Markdown，不依赖云服务。其核心机制是写入闸门：代理只能提议记忆卡片，新卡片进入待审队列，由人通过 Web UI、TUI 或 CLI 批准后才进入主库；每次状态变更写入 SQLite 层强制的不可变审计日志。检索用 FTS5 + BM25，按 README 记载召回不需模型调用。提供 token 账本记录召回注入量、蒸馏调用次数与有用性反馈。适合同时使用多个 MCP 客户端、希望人工把关记忆内容的开发者。",
+   "highlights": [
+    "提供人工审核队列：代理可提交或修订记忆卡片，但批准/拒绝由人在 Web UI、TUI 或 CLI 中执行，主库仅包含已批准卡片",
+    "在 SQLite 层实现不可变审计日志，记录每次状态变更的 who/what/when/why；内置 token 账本统计召回注入量、蒸馏调用与有用性反馈",
+    "单一 SQLite 库通过 MCP、DSH 插件、hooks、CLI/TUI 与浏览器多入口共享；召回基于 FTS5 + BM25，支持将批准卡片提升为每会话自动注入的核心记忆"
+   ],
+   "use_cases": [
+    "多会话开发项目中保留决策与坑点上下文，避免每次会话重复解释背景",
+    "需要人工把关 AI 记忆内容、防止错误事实被自动写入召回的场景",
+    "同时使用 Claude Code、Codex、Cursor 或其他 MCP 客户端并希望共享同一份本地记忆库"
+   ]
+  },
+  "sha": "0ced1d0c1856",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

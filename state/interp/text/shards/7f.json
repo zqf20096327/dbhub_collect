@@ -2549,5 +2549,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "60c7d33984f2": {
+  "identity": {
+   "one_liner": "面向 AI 代理记忆的 Rust 认知感知存储引擎，带 HNSW、知识图谱与 WAL",
+   "review": "MenteDB 是用 Rust 从底层实现的 AI 代理记忆数据库引擎，支持云托管与自托管（cargo install、Docker）两种运行方式，提供 Python/TypeScript SDK、REST API、CLI 及 LangChain、CrewAI、MCP 集成。核心是 process_turn 单次调用完成嵌入、混合检索、写入推断与抽取；语义事实抽取等富化流程需配置 LLM 提供商（Anthropic、OpenAI、Ollama、Bedrock），基础管线不依赖 LLM。",
+   "highlights": [
+    "提供 process_turn 单次调用管线：嵌入、混合检索、情景存储、写入时质量过滤、去重与矛盾检测",
+    "混合检索将 HNSW 向量相似度与 BM25 通过倒数排名融合，并支持标签、时间与有效性过滤及可选重排",
+    "内置 MQL 查询语言，支持布尔逻辑、ORDER BY 排序与 AS OF 时间点查询；记忆节点带双时区 valid_from/valid_until 字段"
+   ],
+   "use_cases": [
+    "为 AI 代理（Python/Node/Rust 应用）提供跨轮次持久记忆与上下文组装",
+    "通过 MCP 一行命令接入 Claude Code、Cursor、Copilot 等现有 AI 工具",
+    "需要多代理隔离（带 ACL 的记忆空间）或按时间点回溯记忆有效性的应用"
+   ]
+  },
+  "sha": "60c7d33984f2",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e4eb1f7058f3": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的混合检索 TypeScript 库，融合 BM25 与向量搜索及 RRF。",
+   "review": "searchgres.js 是开源 TypeScript 库，在 PostgreSQL 中实现 BM25、HNSW 向量搜索、RRF 混合排序与结构化过滤，由库管理搜索 schema、索引和嵌入流程。适合希望在自控数据库内搭建检索或 RAG 能力的开发者。需 PostgreSQL 18 及 pgvector、pg_textsearch、ltree 扩展，Node ≥22 或 Bun ≥1.4；核心不含用户与授权模型。",
+   "highlights": [
+    "支持 BM25、HNSW 向量搜索、RRF 混合检索及按树路径、JSONB、时间范围和正则的组合过滤",
+    "搜索索引为普通 PostgreSQL schema，支持事务、备份、复制与直接 SQL 访问",
+    "内置嵌入队列，提供 processEmbeddings() 与并发安全的 EmbeddingWorker；仓库附带 CLI、MCP 工具和 Docker Compose 评估环境"
+   ],
+   "use_cases": [
+    "在自有 PostgreSQL 中实现应用搜索或托管搜索 API",
+    "基于自有分块与生成流程构建 RAG 检索层",
+    "通过代码、SQL 或触发器从现有表构建索引管道"
+   ]
+  },
+  "sha": "e4eb1f7058f3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ab2ecd35f15": {
+  "identity": {
+   "one_liner": "Windows 本地开发环境管理器，集运行时、站点、数据库与受信 HTTPS 于一体",
+   "review": "OLS 是面向 Windows 的本地开发环境管理器，通过一个核心引擎 ols-core 同时提供桌面 GUI、CLI、MCP 服务器和本地 HTTP API 四种接口。站点、数据库与运行时按项目隔离，各站点可绑定本地域名并使用内置 CA 签发的受信 HTTPS 证书。第三方运行时与数据库不随安装包附带，按需下载或注册本机已有安装。",
+   "highlights": [
+    "一个核心引擎驱动桌面 GUI、CLI（olsc）、Stdio MCP 服务器（供 Claude Desktop、Cursor 等调用）与本地 JSON API（127.0.0.1:7420）四种接口",
+    "支持 PHP、Node.js、Python 运行时多版本并存，可通过 Nginx/Apache/Caddy 托管站点，下载含 SHA-256 校验并支持手动离线安装",
+    "内置设备端 CA 生成受信本地 HTTPS 证书，支持任意域名与通配符子域名；另有 Docker/Compose 管理与隧道分享功能"
+   ],
+   "use_cases": [
+    "在 Windows 上为多个项目配置隔离的 PHP/Node/Python 运行时与本地域名站点",
+    "让 AI 编码助手通过 MCP 协议检查和操作本地开发环境",
+    "管理本机 Docker 容器与 Compose 项目，或将本地站点通过隧道对外分享"
+   ]
+  },
+  "sha": "2ab2ecd35f15",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

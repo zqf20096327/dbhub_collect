@@ -3359,5 +3359,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "441371b564a1": {
+  "identity": {
+   "one_liner": "自托管 AI agent 运行时，基于 Claude Agent SDK 构建",
+   "review": "Nerve 是一个自托管的 AI agent 运行时，围绕 Claude Agent SDK 构建，提供持久记忆、定时任务、可学习技能和多渠道通信（Web UI、Telegram、Slack、cron）。支持个人助手与任务型 worker 两种模式，worker 采用计划驱动并在执行前需人工批准。安装需 Python 3.13+、uv、Node.js 22.12+，可通过一键脚本或 Docker 部署。",
+   "highlights": [
+    "双层持久记忆：热记忆（MEMORY.md）注入每次会话，深度记忆（memU）提供语义检索，SQLite 持久化并含变更审计日志",
+    "定时会话支持隔离、持久、主会话三种模式，基于 APScheduler，内置收件箱处理、任务规划等定时任务",
+    "多渠道接入共享同一引擎：Web UI（WebSocket 流式）、Telegram 机器人、Slack 机器人（外向连接可运行于 NAT 后）"
+   ],
+   "use_cases": [
+    "部署个人助理，同步邮件、记忆偏好并管理任务",
+    "搭建任务型 worker，监控 CI、审查 PR 并在批准后修复问题",
+    "通过 cron 定时执行简报、报告或轻量提醒类会话"
+   ]
+  },
+  "sha": "441371b564a1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dcf97b789009": {
+  "identity": {
+   "one_liner": "Pumping Station One 会员管理系统，基于微服务与 PostgreSQL 通知机制",
+   "review": "Deep Harbor CRM 是为会员制创客空间 Pumping Station: One 编写的会员管理CRM，供管理员与会员两类门户使用。系统由 Flask 服务组成，按业务服务与worker服务分层，DHDispatcher 监听 Postgres 通知并触发服务；集成 Active Directory、RFID 门禁、Azure B2C 与 Mailgun。部署需 Docker Compose，且多个组件需按实际环境修改 config.ini 与身份认证代码。",
+   "highlights": [
+    "按业务服务与 worker 服务分层，通过 web service API 通信，DHDispatcher 监听 Postgres 数据库变更通知并调用相应服务",
+    "包含 Active Directory 集成（DH2AD）、RFID 门禁管理（DH2RFID）及 Waiver Forever webhook 接收（WF2DH）等组件",
+    "提供 docker-compose.yaml 及 start/stop/reset 脚本，通过 Nginx 路由请求到各组件"
+   ],
+   "use_cases": [
+    "会员制创客空间或共享工作室的会员账户、缴费、门禁与设备授权管理",
+    "需要将会员身份数据同步到 Active Directory 并通过 RFID 控制器管理门禁标签的环境",
+    "已使用 Azure B2C 做身份管理、Waiver Forever 做免责签署的组织，或愿意修改认证代码适配其他系统的团队"
+   ]
+  },
+  "sha": "dcf97b789009",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7b5821486625": {
+  "identity": {
+   "one_liner": "基于 Bun 的多进程 AI 路由网关，提供统一 OpenAI 兼容端点与仪表盘。",
+   "review": "KhatamRouter 在 AI 客户端与 40+ 上游模型提供商之间充当代理，将请求翻译为 OpenAI、Anthropic、Gemini 等格式，并实现模型组合路由、自动故障转移、多账号轮换、凭据管理与用量追踪。运行于 Bun，使用 bun:sqlite（WAL 模式）持久化，可选 Redis 做分布式协调。本项目派生自 decolua/9router，并采用 Vanszs/VansRouter 的部分 provider 定义。",
+   "highlights": [
+    "提供统一 OpenAI 兼容 /v1/* 端点（chat/completions、messages、responses、embeddings），在 OpenAI、Anthropic Claude、Google Gemini 格式间做翻译，支持 40+ 上游提供商",
+    "通过 node:cluster supervisor 按 CPU 核数启动多个 worker（默认 max(1, nproc - 2)，可经 KHATAM_WORKERS 配置），热路径使用 5 秒 TTL 的内存 LRU 缓存",
+    "内置按 API key 的每日/每周/每月消费上限与 request_cost_ledger 交易表，以及可组合配置的失败冷却与组合配额故障转移策略"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex、Cline 等开发工具提供单一本地端点，聚合多个模型提供商凭据并自动刷新 token",
+    "需要模型组合路由、多账号轮换与自动故障转移的本地多进程 AI 网关部署",
+    "需要对 API key 设置分级消费限额、成本账本与工具调用循环检测的用量管控场景"
+   ]
+  },
+  "sha": "7b5821486625",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "471571e79408": {
+  "identity": {
+   "one_liner": "面向单台自托管服务器的私有运维面板，仅经 WireGuard VPN 访问",
+   "review": "NODO 是一个用 Go 与 Svelte 编写、以 SQLite 存储的开源（MIT）运维面板，整合监控、告警、容器管理、备份状态与安全信息。面向管理单台 VPS 的单人运维者，要求以 wg-easy 方式访问，不对外暴露端口；含 18 条告警规则、每分钟指标采集与审计日志，不支持多服务器或多用户。",
+   "highlights": [
+    "提供主机与容器监控（CPU/内存/磁盘/uptime，逐分钟保存 7 天、逐小时一年）、18 条告警规则及邮件/Telegram 通知",
+    "提供容器启停操作、crontab 任务管理、备份状态检查、fail2ban 管理与 Docker 磁盘清理功能",
+    "面板以单 Go 二进制嵌入 Svelte 应用、无发布端口运行，仅绑定 WireGuard 网关；TLS 经 Cloudflare DNS-01 获取，支持 TOTP、passkey 与仅追加审计日志"
+   ],
+   "use_cases": [
+    "单人管理一台运行数十个 Docker 容器的 VPS，希望从手机查看健康状态并执行常见修复操作",
+    "要求管理面板不暴露公网、仅通过 WireGuard VPN 访问的自托管环境",
+    "需要整合 uptime 检查、备份文件状态、SSH 登录记录与 crontab 任务到单一界面的 homelab 场景"
+   ]
+  },
+  "sha": "471571e79408",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

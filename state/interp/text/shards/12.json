@@ -2465,5 +2465,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "523ad06727e9": {
+  "identity": {
+   "one_liner": "自托管页面浏览与访客统计服务，单个 Go 二进制加一张 Postgres 表",
+   "review": "urlstat 用于统计网页和 GitHub 仓库的浏览量与访客数。页面嵌入一段脚本或仓库放置徽章即可计数，数据写入单张 Postgres 表，由公共仪表盘展示总量、日图表、来源、设备信息和路径分组。登录用户可查看具体访客、清理爬虫数据和管理允许的站点。需注意访客仅按 IP 区分，同 IP 多人算一位。",
+   "highlights": [
+    "提供 GitHub 徽章、页面内 PV/UV 展示元素和可缩放的公共仪表盘",
+    "记录访问来源（含 utm_source 标签）、设备/系统/浏览器，并将爬虫与人分开统计",
+    "登录后可逐条查看访客浏览记录，按页面或阈值批量删除数据，并一键管理允许计数的站点与账户"
+   ],
+   "use_cases": [
+    "为自托管网站统计各页面的浏览量和独立访客",
+    "在 GitHub README 中放置徽章统计仓库被浏览次数",
+    "按路径分组查看站点某一板块（如 /blog）的流量与来源分布"
+   ]
+  },
+  "sha": "523ad06727e9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b5ea2699ce8": {
+  "identity": {
+   "one_liner": "基于 Bun、ElysiaJS 与 Drizzle ORM 的 B2B SaaS 多租户后端样板",
+   "review": "Bedest 是一个面向 B2B SaaS 后端的 TypeScript 样板项目，技术栈为 Bun + ElysiaJS + Drizzle ORM + PostgreSQL。它通过 PostgreSQL 行级安全实现租户隔离，内置基于角色的访问控制、套餐门控、HttpOnly Cookie 会话（含刷新令牌轮换与复用检测）、追加式审计日志、WebSocket 通知、S3/本地存储和后台任务调度。可复用构件位于独立包 bedest-core。运行需 Bun 1.3.14+ 与 PostgreSQL 16，经 bun install、配置 .env 并执行角色供给脚本启动。",
+   "highlights": [
+    "使用 PostgreSQL 行级安全（RLS）强制租户隔离，API 以非特权角色连接，查询在 tenantScope 或 systemScope 事务中运行",
+    "提供追加式审计日志：路由声明 audit 元数据，响应后写入并经 scrub() 清除敏感字段，数据库通过权限与触发器拒绝 UPDATE/DELETE",
+    "内置账户体系（会话列表与撤销、登录锁定、密码重置、邮件邀请）、WebSocket 实时通知、S3/MinIO/本地存储及带集群级锁的后台任务调度"
+   ],
+   "use_cases": [
+    "从零搭建需要数据库级租户隔离的 B2B SaaS 后端",
+    "需要会话管理、审计日志、文件上传、实时通知等后端基础能力的项目",
+    "基于 Bun 与 ElysiaJS 生态快速启动强类型 REST API 服务（含 Swagger 与类型化客户端 SDK）"
+   ]
+  },
+  "sha": "5b5ea2699ce8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1535127fe17": {
+  "identity": {
+   "one_liner": "Orca 编辑器的数据库插件，在编辑器标签页内查询 PostgreSQL、MySQL/MariaDB 和 SQLite。",
+   "review": "DB Studio 是一个 Orca 插件，让使用者在 Orca 内连接并查询 PostgreSQL、MySQL/MariaDB 和 SQLite，无需切换窗口。它支持保存连接、从工作区 .env 读取 DATABASE_URL 提供按工作区分组的连接，查询文档为带连接行注释的 .sql 文件。查询结果有行数与体积上限（默认 100 行，最高 5000 行/约 900KB），查询超时默认 30 秒、上限 110 秒。安装需 Orca 1.4.248+，通过指纹批准授予 secrets、storage、workspace 等权限。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite 三种引擎，统一的面板、编辑器与结果网格，驱动层为纯 JavaScript 无原生模块",
+    "查询结果通过游标流式读取，到达行数或体积上限即停止；支持取消运行中的查询（PostgreSQL 用 pg_cancel_backend，MySQL/MariaDB 用 KILL QUERY，SQLite 停止查询线程）",
+    "SQL 编辑器基于 CodeMirror 6，提供方言感知高亮和基于实时 schema 的表/列/关键字自动补全；大整数与十进制数以字符串传输保持精确"
+   ],
+   "use_cases": [
+    "在 Orca 中并行运行多个代理（各自工作树）时，直接在编辑器内检查代理写入的数据表",
+    "从工作区 .env 自动发现数据库连接，按工作区查看和查询对应数据库",
+    "以 .sql 文件形式编写、运行并保留 SQL 查询，通过网格查看结果与单元格完整值"
+   ]
+  },
+  "sha": "e1535127fe17",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

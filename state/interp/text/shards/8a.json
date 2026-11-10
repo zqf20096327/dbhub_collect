@@ -2791,5 +2791,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b209ad80932c": {
+  "identity": {
+   "one_liner": "跨14种SQL方言的数据库结构对比与迁移工具，含本地Web UI",
+   "review": "FoxSchema 用于对比两个数据库的结构差异并生成迁移 DDL，支持 PostgreSQL、MySQL、Oracle、SQL Server、ClickHouse 等 14 种方言。提供 Compare、SQL 编辑器、快照、数据对比与 Workflow 模块，可通过 npm、Homebrew 或 Docker 安装，CLI 支持 headless/CI 运行。生成 DDL 默认 dry-run，Workflow 引擎为独立进程且 Docker 镜像默认不启动。MongoDB/Redis 仅支持 SQL 子集编辑，无结构对比。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、Oracle、Db2、ClickHouse 等 14 种 SQL 方言的结构对比与迁移 DDL 生成，默认 dry-run",
+    "提供快照时间线、迁移提交至 Git、多目的地 SQL 运行、笔记本单元格（支持 @js/@ts 代码单元格）等编辑器功能",
+    "数据对比按主键顺序比较 2,000 行，应用最多 2,000 条变更并生成可恢复的备份快照"
+   ],
+   "use_cases": [
+    "跨方言（如 Postgres 到 MySQL）的结构差异检查与迁移脚本生成",
+    "CI/CD 中通过 foxschema compare/migrate 命令以 headless 方式执行结构对比与迁移",
+    "团队场景下的结构快照管理、GRANT/REVOKE 权限构建与访问报告"
+   ]
+  },
+  "sha": "b209ad80932c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e07e73b1ac9d": {
+  "identity": {
+   "one_liner": "为编码代理提供本地 SQLite 技能记忆层，记录、召回、强化并衰减过程性技能。",
+   "review": "skillmem 为 Claude Code、Codex CLI 等六个代理工具提供本地持久化的技能与记忆层，存储过程（触发、步骤、结果、教训）而非事实。强度依据外部证据（如 test_passed 需 test-witness 钩子见证）而非代理自报提升，未用技能按 Ebbinghaus 日程衰减并归档。每条记忆带来源标记，仅所有者可批准为规则；无 API key、无云服务。注意 test_passed 只能证明测试通过而非技能有效，CLI/HTTP 调用者的证据不校验。",
+   "highlights": [
+    "本地运行：SQLite + FTS5 BM25 + Snowball 词干化（英/俄）+ 本地 ONNX 嵌入模型，CPU 离线检索，读写无 LLM 调用",
+    "通过六个事件钩子（SessionStart 至 SessionEnd）自动召回，另提供 9 个 MCP 工具；多代理共享同一数据库并按来源记录作者",
+    "编辑历史追加至 SHA256 哈希链，skillmem verify 可检测事后篡改；export-all 导出为带 YAML frontmatter 的 markdown 并可重导入"
+   ],
+   "use_cases": [
+    "使用 Claude Code 或 Codex CLI 等代理进行开发，希望跨会话保留任务执行过程与经验",
+    "需要区分所有者规则与代理自写记忆，并对导入或代理生成的内容做来源隔离的团队",
+    "在离线或本机环境中存储记忆，不接受云端或 API key 依赖的个人开发者"
+   ]
+  },
+  "sha": "e07e73b1ac9d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4769923efdfa": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 SQLite 的英语词典 REST API 服务",
+   "review": "Xoctionary 使用 Next.js 路由处理器与 Node.js 内置 node:sqlite 模块，将词典数据集发布为版本化 REST 接口（/xpi/v1），提供精确查词、前缀搜索、词性过滤、随机词条、统计与健康检查端点，并以 Zod 做参数校验、支持限流与 OpenAPI 输出，适合自托管使用。",
+   "highlights": [
+    "提供 /xpi/v1 版本化端点：精确查词、搜索分页、随机词条、统计与健康检查",
+    "使用 Zod 校验请求参数，SQLite 查询采用参数化方式，并内置限流与请求 ID 追踪",
+    "暴露机器可读的 OpenAPI 契约，词库来自 CloudBytes Academy 开源词典数据"
+   ],
+   "use_cases": [
+    "需要本地或自托管英语词典查询接口的开发场景",
+    "为应用集成按词性过滤、前缀搜索与分页的词典数据检索",
+    "学习 Next.js 路由处理器与 node:sqlite 构建 REST API 的参考实现"
+   ]
+  },
+  "sha": "4769923efdfa",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

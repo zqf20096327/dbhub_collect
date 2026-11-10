@@ -2482,5 +2482,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c95017a3af48": {
+  "identity": {
+   "one_liner": "TimescaleDB：以 PostgreSQL 扩展形式提供的时间序列实时分析数据库",
+   "review": "TimescaleDB 是一个 PostgreSQL 扩展，用于对时间序列和事件数据执行实时分析，通过 CREATE EXTENSION 后调用 tsdb.hypertable 将普通表转换为超表。它支持按时间自动分块、列式存储压缩、time_bucket 聚合函数以及可增量刷新的 continuous aggregates。安装可用一键脚本或 Docker 镜像 timescale/timescaledb-ha:pg18，脚本仅适用于本地开发测试。适合需在 PostgreSQL 生态内处理时序数据的开发者。",
+   "highlights": [
+    "将 PostgreSQL 表转换为 hypertable，按时间自动分块分区以限定查询扫描范围",
+    "支持列式存储写入与向量化查询，并可采用 continuous aggregates 在后台增量刷新预聚合数据",
+    "提供 time_bucket 函数用于时序聚合，支持数据保留策略与分层存储"
+   ],
+   "use_cases": [
+    "IoT 传感器数据等高频时序数据的存储与聚合查询",
+    "金融市场行情数据、加密货币 tick 数据的分析",
+    "应用事件日志记录与基于时间的实时分析"
+   ]
+  },
+  "sha": "c95017a3af48",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "917ea62269b1": {
+  "identity": {
+   "one_liner": "基于 Spark DataSourceV2 API 的 ClickHouse 连接器",
+   "review": "该连接器基于 Apache Spark DataSourceV2 API 实现，用于在 Spark 作业中读写 ClickHouse。支持 Java 8/17、Scala 2.12/2.13 与 Spark 3.3–4.0，自 0.8.0 起仅保留 HTTP 协议（依赖 ClickHouse JDBC 0.9.4），groupId 已迁移为 com.clickhouse.spark。构建使用 Gradle，集成测试依赖 Docker。注意连接器默认发送匿名使用统计，可通过配置关闭。",
+   "highlights": [
+    "基于 Apache Spark DataSourceV2 API 实现，支持 Spark 3.3、3.4、3.5 和 4.0",
+    "支持 HTTP 协议（自 0.6.0 起为默认，0.8.0 起移除 gRPC），依赖 ClickHouse 官方 Java/JDBC 客户端",
+    "提供基于 Testcontainers 和 Docker Compose 的集成测试，可指定自定义 ClickHouse 镜像"
+   ],
+   "use_cases": [
+    "在 Spark 批处理或 SQL 作业中读写 ClickHouse 数据",
+    "基于 Spark 与 ClickHouse 组合的数据集成/ETL 流水线",
+    "针对不同 Spark、Scala 版本组合构建与测试连接器，或对自定义 ClickHouse 服务端镜像做兼容性验证"
+   ]
+  },
+  "sha": "917ea62269b1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9731d54d283b": {
+  "identity": {
+   "one_liner": "面向 Claude Code 和 Codex 的任务管理器与知识库记忆层",
+   "review": "flow 是一个用 Go 编写的命令行工具，将任务与 Claude Code 或 Codex 会话绑定：通过问答生成结构化任务简报，在新终端标签页中启动会话，并维护 ~/.flow 下的知识库。每次会话通过 scoop 机制实时记录事实，任务关闭时由 sweep 读取完整记录并写入知识库。playbook 支持将周期性工作定义为可复用的运行快照。macOS 二进制分发，需通过 flow init 接入 harness 配置。",
+   "highlights": [
+    "通过 ~/.flow/kb/ 下五个 markdown 分类存储持久事实，会话中由 scoop 实时追加，flow done 时由无头 Claude 读取完整记录补充提取",
+    "flow do 在 iTerm2、Warp、Terminal.app、kitty、zellij、Rex 中启动会话标签，或以 FLOW_TERM=bg 作为 Claude 后台代理运行，后续调用恢复同一会话",
+    "playbook 以冻结快照方式生成新任务与会话，支持 weekly-review 等周期性工作流"
+   ],
+   "use_cases": [
+    "在多个 Claude Code / Codex 会话间延续项目上下文，避免重复说明背景",
+    "将周报、PR 分拣、值班等周期性工作定义为 playbook 并按需运行",
+    "通过 flow transcript 读取关联任务的决策记录以补充上下文"
+   ]
+  },
+  "sha": "9731d54d283b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

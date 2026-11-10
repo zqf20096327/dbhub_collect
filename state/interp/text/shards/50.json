@@ -3080,5 +3080,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7ecc0205c95e": {
+  "identity": {
+   "one_liner": "自托管多用户日程预约应用，Quarkus + Postgres 构建的 Calendly 替代品",
+   "review": "calit 是一个自托管的多用户预约排期应用，每位用户拥有独立的预约页面（/<username>/<slug>），包含各自的会议类型、可用时间与 Google 账号。基于 Quarkus 与 PostgreSQL 构建，以无状态副本形式运行于负载均衡之后。预约可同步至 Google Calendar 并自动生成 Meet 链接，页面为服务端渲染，运行时无需 JavaScript。部署需 PostgreSQL 与 SMTP 服务器（必填），通过 Docker Compose 可快速启动，首次访问 /setup 创建管理员账号，无默认密码。许可证为 AGPL-3.0。",
+   "highlights": [
+    "每用户独立预约页面，支持按类型缓冲时间、最短通知期、预约时间范围与特定日期可用性覆盖",
+    "可选 Google Calendar 同步（自动生成 Meet 链接）、OIDC/SSO 登录、审批流程与提醒邮件",
+    "内置滥用防护（Cloudflare Turnstile 或自托管 ALTCHA、蜜罐、按邮箱每日上限）与 GDPR 工具（数据导出/擦除、保留窗口、可自定义隐私政策页面）"
+   ],
+   "use_cases": [
+    "需要自托管预约页面、不使用按席位计费 SaaS 的团队或个人",
+    "多用户/多租户场景下的独立排期页面管理",
+    "需要审批流、SSO 登录与 GDPR 合规工具的预约流程"
+   ]
+  },
+  "sha": "7ecc0205c95e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "13a50cb279bd": {
+  "identity": {
+   "one_liner": "C++17 编写的 MySQL/PostgreSQL/openGauss 异构数据迁移工具",
+   "review": "mini-migrator 是用 C++17 编写的异构数据迁移工具，支持 MySQL、PostgreSQL、openGauss 三者间的七种全量迁移方向，并提供行数与 checksum 校验；CDC 仅支持 MySQL binlog 源，PostgreSQL 源需 wal2json 逻辑解码。构建依赖 libmysqlclient 和 libpq，支持 make 或 CMake，模块（pg_cdc、repair 等）可编译期或运行期禁用。README 标注不支持 BIT/ENUM/SET/GEOMETRY 列类型，DM8 未实现。",
+   "highlights": [
+    "支持 mysql2pg、mysql2og、pg2mysql、pg2og、og2pg、og2mysql、mysql2mysql 七种方向的全量迁移及行数与 checksum 校验",
+    "CDC 基于 MySQL binlog ROW 事件，支持 DDL 同步、binlog 轮转跟随、位点持久化断点续传（--resume 需单列主键）",
+    "提供多语言 Web 面板（中/英/俄）、Prometheus 指标端点 /metrics，--repair 可按主键修复校验差异后复检"
+   ],
+   "use_cases": [
+    "MySQL、PostgreSQL、openGauss 三种数据库之间的全量数据迁移与一致性校验",
+    "以 MySQL 为源的全量加 binlog 增量（CDC）持续同步",
+    "迁移后差异修复、断点续传及 Prometheus 指标接入的运维监控场景"
+   ]
+  },
+  "sha": "13a50cb279bd",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

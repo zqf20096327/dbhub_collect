@@ -2708,5 +2708,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "93f5529c1632": {
+  "identity": {
+   "one_liner": "Go+React 编写的多租户虚拟主机控制面板，面向 WordPress/PHP 托管",
+   "review": "Jabali Panel 是一个运行于 Debian 13 的托管控制面板，用 Go 编写单体面板二进制并内嵌 React SPA，特权操作交由 root 属主的 Unix-socket 代理执行。面向主机服务商和管理员，支持 PHP-FPM 隔离、Stalwart 邮件、PowerDNS、restic 备份等模块化安装；README 未说明 Windows 支持或非 Debian 发行版兼容性。",
+   "highlights": [
+    "每用户独立 Linux 账户，配 per-user PHP-FPM、cgroup v2 与 POSIX 配额，SSH 默认经 bubblewrap 沙箱运行",
+    "采用数据库为事实源的 60 秒协调器，收敛 nginx vhost、PHP 池、邮箱、DKIM、DNS、SSL 与配额",
+    "集成 CrowdSec WAF、restic 加密备份、Stalwart 邮件、PowerDNS DNSSEC，并支持 cPanel/WHM 迁移与 15 个应用的 WordPress 一键目录"
+   ],
+   "use_cases": [
+    "在单一 Debian 13 服务器上向多用户提供 WordPress/PHP 托管并需租户隔离",
+    "从 cPanel/WHM 或外部邮件服务器迁移站点与邮箱",
+    "需要 DNS、邮件、SSL、备份统一管理且带审计日志的自托管主机环境"
+   ]
+  },
+  "sha": "93f5529c1632",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5751986fa7ff": {
+  "identity": {
+   "one_liner": "基于 Next.js + PostgreSQL 的 AI Agent 埋点采集与行为分析后台",
+   "review": "暖屿是一个可独立运行的 AI 产品数据分析后台，覆盖埋点上报、Bad Case 复盘与用户行为分析。产品侧通过 HTTP 接口上报事件即可接入，无需改后台代码；人工评审记录存入 reviews 表作为坏例子率分母。默认不存聊天原文，user_id_hash 仅接受十六进制摘要，明文 PII 会被拒绝。适合需要区分用户/会话口径的 AI 产品团队自部署。",
+   "highlights": [
+    "提供埋点上报、人工评审、Case 建立与 JSON 导出、行为钻取等 API，鉴权用 x-api-key Header",
+    "支持 D0–D7 留存队列矩阵、行为漏斗与 DAU/WAU 指标，并能自动标注用户口径或会话口径",
+    "数据库连接串可指向任意 Postgres（含 Supabase），明文 PII 默认丢弃，聊天原文需显式开启存储"
+   ],
+   "use_cases": [
+    "AI Agent 产品上线路径复盘：查看事件时间线、按状态/模型/错误码筛选并一键建 Case",
+    "分析用户行为漏斗与留存：通过钻取接口查看卡在某一步或某队列日的具体账号",
+    "埋点数据质量自检：通过 /health 的 A01–A11 检查项（含用户标识覆盖度）验证接入情况"
+   ]
+  },
+  "sha": "5751986fa7ff",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

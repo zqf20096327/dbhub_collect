@@ -2842,5 +2842,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7b5ec49d24dd": {
+  "identity": {
+   "one_liner": "自托管的键盘驱动开源 issue 跟踪器，含周期、项目、wiki 与 AI 助手",
+   "review": "Kuayle 是一个可自托管的 issue 跟踪与项目管理系统，覆盖 issue、周期、跨团队项目、wiki 与每日日志，并集成可配置工作流的编码代理与 OpenAI 兼容的 AI 助手。后端为 Go，前端为 SvelteKit，依赖 PostgreSQL 与 Redis，提供 Docker Compose 参考部署栈和官方 CLI。README 明确说明当前版本为可运行的 MVP，不含 SSO 等企业身份模块，运维、备份与更新由使用者自行负责。",
+   "highlights": [
+    "提供 issue、带燃尽图和速率图的周期、含甘特视图的跨团队项目、版本历史与 wiki 等功能，实时更新经 WebSocket 推送并支持只读公开链接",
+    "内置 AI 助手与 Dev Machines（默认关闭），可将 issue 委派给 Claude Code、Codex、OpenCode 等编码代理，工作流步骤经可视化编辑器配置",
+    "单一 Apache 2.0 仓库，提供 Docker Compose 自托管栈、make 开发命令、GitHub App 集成、webhook、以及官方 CLI 与 Rust SDK"
+   ],
+   "use_cases": [
+    "团队在自己的服务器上自托管 issue 跟踪与迭代管理，且希望不依赖付费版本或按用户计费",
+    "将编码代理接入 issue 流程，让代理在自托管开发机上实现、测试并提交 PR",
+    "开发者在本地通过 Docker 与 make 命令运行前后端进行开发与测试"
+   ]
+  },
+  "sha": "7b5ec49d24dd",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "734596e75e0a": {
+  "identity": {
+   "one_liner": "Go 编写的单节点事件溯源数据库，内置哈希链与 GDPR 删除能力",
+   "review": "GenesisDB 是一个用 Go 编写的单节点事件溯源数据库，以静态二进制发布，无运行时依赖。每个事件为 CloudEvents 1.0 记录并组织在层级主体树中，事件经 SHA-256 链式相连，支持原子批量提交、GDBQL 查询语言、SSE 实时订阅。个人数据以引用载荷存储，可事后擦除且哈希链保持有效。它面向构建事件驱动应用的开发者；项目声明其非分布式数据库，不提供复制或共识机制。",
+   "highlights": [
+    "每个事件为 CloudEvents 1.0 记录，组织在层级主体树（如 /customer/42/address）中；支持带前置条件的原子批量提交与 GDBQL 查询语言",
+    "事件以 SHA-256 链接，GET /api/v2/admin/audit 可校验整个存储；支持可选 Ed25519 事件签名与离线验证",
+    "个人数据以引用载荷存储，可通过单次请求擦除且哈希链保持有效，并写入审计记录"
+   ],
+   "use_cases": [
+    "为事件驱动应用提供事件存储，配合 CQRS 架构使用",
+    "需要按 GDPR 要求擦除个人数据同时保留事件溯源结构的场景",
+    "嵌入 Go 程序内部运行（store.Open）或作为 1.x 闭源版本的替代部署"
+   ]
+  },
+  "sha": "734596e75e0a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "55c7a256c421": {
+  "identity": {
+   "one_liner": "单二进制 Go + SQLite 自托管网站统计分析工具",
+   "review": "Plost 是一个面向个人自托管的网站分析程序，用 Go 编写并以 SQLite 存储，全部功能打包在一个约 24 MB 的二进制文件中。它提供访客、来源、设备、事件等统计，不保存原始 IP。部署时直接运行程序、创建管理员账号，并在网页中插入一段脚本即可开始收集数据，支持从 Umami 迁移历史数据。",
+   "highlights": [
+    "界面、脚本与 SQLite 数据库打包在单个约 24 MB 二进制中，运行时只需指定监听地址和数据目录",
+    "提供访客数、浏览量、跳出率、实时在线、流量来源、UTM、访客画像、自定义事件与站点证书/域名到期监控",
+    "不保存原始 IP、不做跨月追踪；支持两步验证、Passkey 登录、加密备份并可同步到 Cloudflare R2 或 S3"
+   ],
+   "use_cases": [
+    "在小型 VPS 上自托管网站访问统计，不依赖 Docker、Node 或 PostgreSQL",
+    "需要从 Umami 平滑迁移历史数据并保持统计口径一致",
+    "生成只读或公开统计链接，与团队或客户共享站点数据"
+   ]
+  },
+  "sha": "55c7a256c421",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf89618f9a7e": {
+  "identity": {
+   "one_liner": "基于DM8168课程环境的双耳空间音频实验，Q15 FIR分块处理与FIFO管道链路",
+   "review": "该项目面向DM8168课程实验场景，从单声源生成左右耳双耳信号：ALSA采集经audio FIFO进入ARM后端，由CPU或RPE插件执行有状态双耳Q15 FIR滤波（64位累加、int16饱和），再回写FIFO播放。配套Qt客户端（经独立低频支路预览，不读取主FIFO）与HRIR导入工具。v0.1为CPU原型，真实RPE绑定与板端实时性、30分钟稳定性验证尚未完成。",
+   "highlights": [
+    "提供连续Q15双耳FIR处理，支持最多1024抽头，历史样本跨块保留，方向切换采用1024帧交叉淡化",
+    "提供HRIR导入工具，记录SHA256、采样率与转换信息，非48kHz默认拒绝导入，超抽头上限拒绝而非静默截断",
+    "提供文件与Linux FIFO两种后端及独立Qt客户端，--backend rpe在缺少课程RPE插件时明确失败，不以CPU冒充DSP"
+   ],
+   "use_cases": [
+    "在DM8168课程实验中先以CPU原型验证双耳FIR数据流与数值行为，再逐步接入真实TI RPE插件",
+    "导入课程HRIR数据（16位单声道WAV）生成指定方向的双耳渲染输出并导出逐块耗时CSV",
+    "在旧课程Qt4.6环境或普通Linux Qt5环境构建控制界面，进行方向切换、旁路与波形预览操作"
+   ]
+  },
+  "sha": "cf89618f9a7e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

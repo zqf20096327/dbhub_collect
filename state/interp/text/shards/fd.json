@@ -3224,5 +3224,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bafcc8351cbe": {
+  "identity": {
+   "one_liner": "Rust + egui 编写的原生桌面数据库客户端，支持 PostgreSQL、MySQL、SQLite 与 BigQuery。",
+   "review": "Tabletist 是用 Rust 和 egui 编写的桌面数据库客户端，运行于 Linux、macOS 和 Windows，连接 PostgreSQL、MySQL、SQLite 和 BigQuery。功能包括保存连接（带环境标签）、SSH 隧道、系统钥匙环存密码、表格网格编辑（保存时合并到单事务并检测他人改动）、SQL 编辑器、只读事务保护、CSV/JSON 等格式导出。BigQuery 连接为只读。安装提供 brew cask、Windows 安装包、AppImage 和源码构建，Linux 二进制需 glibc 2.39+。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 和 BigQuery 连接，提供 TLS（含 sslmode 值）与 SSH 隧道（密码、密钥文件或 agent），密码存于系统钥匙环",
+    "表格编辑以单事务保存，检测并发改动并逐行询问处理；只读连接和生产库上的 SQL 运行于回滚型只读事务",
+    "SQL 编辑器支持语句补全、格式化、行数限制与超时；数据可复制或导出为 CSV、TSV、JSON、JSON Lines、SQL INSERT、Markdown"
+   ],
+   "use_cases": [
+    "开发者需要图形界面浏览和编辑 PostgreSQL、MySQL、SQLite 数据表",
+    "需要通过 SSH 隧道访问远程数据库并区分 dev/staging/production 环境",
+    "BigQuery 用户需以服务账号密钥浏览数据并执行 SELECT 查询（只读）"
+   ]
+  },
+  "sha": "bafcc8351cbe",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52db9b0f5237": {
+  "identity": {
+   "one_liner": "在 Render 平台上托管 WordPress 的部署模板",
+   "review": "该仓库是用于在 Render 平台运行 WordPress 的模板，包含部署所需的配置。它使用官方 WordPress Docker 镜像，通过 Render 磁盘提供持久化 SSD 存储保存内容，数据库使用 Render 托管的 MySQL。README 仅包含部署文档链接，未提供本地开发或自定义配置说明。",
+   "highlights": [
+    "使用官方 WordPress Docker 镜像运行",
+    "通过 Render Disks 提供持久化 SSD 存储用于内容存储",
+    "使用 Render 托管的 MySQL 作为数据库"
+   ],
+   "use_cases": [
+    "在 Render 平台一键部署自托管 WordPress 站点",
+    "需要持久化磁盘保存媒体与站点内容的场景",
+    "使用托管 MySQL 作为 WordPress 数据库的部署"
+   ]
+  },
+  "sha": "52db9b0f5237",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ce1ab642f19": {
+  "identity": {
+   "one_liner": "AGPL v3 开源个人理财应用，内置 MCP 服务器供 AI 客户端查询管理财务",
+   "review": "Finlynq 是一个开源（AGPL v3）个人理财应用，支持预算、组合投资、目标、贷款与多种格式导入，并内置一方 MCP 服务器（54 个 HTTP / 89 个 stdio 工具），可从 Claude、Cursor 等客户端读写财务数据。可通过 Docker 自托管（需配置 JWT 密钥等三个环境变量）或使用其免费云服务；敏感字段以基于用户密码派生密钥的 AES-256-GCM 信封加密存储。",
+   "highlights": [
+    "提供一方 MCP 服务器，包含 54 个 HTTP 与 89 个 stdio 工具，覆盖账户、交易、预算、目标、贷款、组合、汇率、文件导入等读写操作",
+    "支持 CSV、Excel、OFX/QFX、PDF 导入，提供预算、组合、目标、贷款、规则与自动分类功能",
+    "采用 AES-256-GCM 信封加密（scrypt 派生 KEK），MCP 集成支持 OAuth 2.1 + 动态客户端注册及 Bearer API key"
+   ],
+   "use_cases": [
+    "希望在 Claude、Cursor、Windsurf 等 MCP 客户端中查询和管理个人财务数据",
+    "需要用 Docker 自托管个人理财应用，或直接使用托管云服务",
+    "需要导入 CSV/Excel/OFX/QFX/PDF 账单并管理预算、目标与贷款"
+   ]
+  },
+  "sha": "4ce1ab642f19",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dbd330226afb": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的编码代理记忆系统，通过 MCP 接入多种 AI 代理",
+   "review": "Kimetsu 是一个 Rust 编写的代理记忆工具，为 Claude Code、Codex、Cursor 等提供跨会话记忆。默认管线不调用 LLM，使用 FTS5、本地嵌入与本地交叉编码器做存储检索；记忆按引用被提升、未用内容按半衰期衰减。项目单文件分发，记忆数据为一个 SQLite 文件；基准分数为 README 自报数据，附复现工具。",
+   "highlights": [
+    "默认记忆管线零 LLM 调用：FTS5 + 本地嵌入 + 本地交叉编码器，支持离线运行",
+    "记忆按模型引用提升、未用记忆按半衰期衰减，支持冲突检测与自适应 token 预算注入",
+    "记忆为单项目一个 SQLite 文件，可导出签名 pack（Ed25519/BLAKE3），导出前自动脱敏凭据与 PII"
+   ],
+   "use_cases": [
+    "通过 MCP 或 hooks 接入 Claude Code、Codex、Cursor 等代理，实现会话间上下文延续",
+    "团队共享记忆：通过签名 pack 导入导出，或经 Kimetsu Remote 在 HTTP 上共享每仓库大脑",
+    "独立终端助手：用 kimetsu chat / ask 在终端中直接查询和记录项目经验"
+   ]
+  },
+  "sha": "dbd330226afb",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ff36c867709c": {
+  "identity": {
+   "one_liner": "面向 AI 工作负载的去中心化编排控制平面，基于租约的作业所有权管理",
+   "review": "AetherGrid 是一个 AI 工作负载控制平面，按资源需求匹配作业与计算节点并管理其完整生命周期。采用 FastAPI、PostgreSQL、React、Docker 构建。核心机制包括时限租约保证作业单一所有者、租户级数据隔离、API key 权限范围控制，以及通过 ADR 记录设计决策。定位为运行 AI 作业且需要审计能力的平台与基础设施团队。",
+   "highlights": [
+    "作业通过时限租约实现排他性所有权，租约释放与结果上报均按租约身份校验（ADR 0034/0036/0038）",
+    "每条租户记录强制携带租户字段，读取按键、节点、作业、worker 和事件按租户范围隔离",
+    "除根路径和健康探测外所有路由要求 API key，扩权操作需显式 scope；提供升级演练流程比对前后版本数据与 schema"
+   ],
+   "use_cases": [
+    "多个团队或客户共享一个集群、各自运行在独立租户内的 AI 计算调度",
+    "节点掉线、网络分区或 worker 重启后需要自动恢复作业状态的故障场景",
+    "需要对作业执行、租户隔离和升级过程保留可审计决策记录（ADR）的环境"
+   ]
+  },
+  "sha": "ff36c867709c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

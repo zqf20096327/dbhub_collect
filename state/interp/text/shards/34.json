@@ -2976,5 +2976,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "199fcec377e4": {
+  "identity": {
+   "one_liner": "MemoTalk S1 录音笔工作台，实现录音导入、转录、AI 归类与检索",
+   "review": "OpenMinutes 是一个运行于 Floatboat 桌面 Workbench 运行时的开源应用，配合 memotalk-sdk 硬件客户端使用。它将 MemoTalk S1 录音笔的 MP3 文件经 ffmpeg 转为 16 kHz PCM16 后通过 Host ASR 转录，再由 Host LLM 生成标题、摘要、分类、标签与行动项，数据存储于 SQLite。ASR 与 LLM 调用依赖 Host 能力，仓库本身不包含模型 API 密钥，且 macOS 和 Linux 支持为实验性。",
+   "highlights": [
+    "左侧导航含六个固定页面：录音、录音笔、实时字幕、今日、日历、分类，每条录音带九种阶段标签并支持批量转录与归类",
+    "转录解码为 16 kHz 单声道 PCM16 并存储全文与带时间戳的分段，支持 HTTP Range 播放与按句跳转",
+    "录音笔同步支持无线快速传输（Wi-Fi 热点 + FTP）与蓝牙两种通道，大批量默认无线且失败时回退蓝牙"
+   ],
+   "use_cases": [
+    "将 MemoTalk S1 录音批量同步或从本地文件夹导入后转录、归类并全文检索复盘",
+    "通过实时字幕流式识别录音笔音频并保存录音与文本",
+    "在日历中将录音关联到日程事件并生成会议摘要"
+   ]
+  },
+  "sha": "199fcec377e4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "46a9f1a4ee6b": {
+  "identity": {
+   "one_liner": "Linux 透明代理网关，单二进制+SQLite 控制面渲染下发配置",
+   "review": "EdgeRouteGW 是部署在局域网的 Linux 透明代理网关，支持 TPROXY 全局接管及基于 OSPF 的 Fake-IP/真实 IP 旁路两种模式。2.0 采用单二进制加 SQLite 的声明式控制面，将配置渲染为 Xray、Mosdns、nftables、FRR 与内核 WireGuard 配置并自动回退。面向家庭与小办公室场景，提供 Web 界面、deb 包安装，需独立 VM/LXC 运行，支持 Debian 12/13 与 Ubuntu 22.04/24.04。",
+   "highlights": [
+    "三种接管模式：TPROXY 全局网关、Fake-IP+OSPF 旁路、真实 IP+OSPF 旁路",
+    "声明式控制面：配置落成期望状态后渲染 Xray/Mosdns/nftables/FRR/内核 WireGuard 配置，出错自动回退",
+    "内置 Mosdns DNS 分流、节点故障转移与负载均衡组、页面内组件更新与 Trace 观测"
+   ],
+   "use_cases": [
+    "家庭或小办公室设备将网关/DNS 指向网关实现全局接管",
+    "主路由通过 OSPF 引流、不改设备配置的旁路部署",
+    "托管 VPS 一键部署 WireGuard 或 VLESS-REALITY 服务端生成节点"
+   ]
+  },
+  "sha": "46a9f1a4ee6b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2731,5 +2731,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "99a1078bcc77": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 记忆服务器，用 SQLite/PostgreSQL 为 AI 编码代理持久化项目决策。",
+   "review": "这是一个面向 AI 编码代理（Cursor、Claude Code、Windsurf、Antigravity）的本地 MCP 服务器，通过 5 个动词（retrieve/remember/revise/nudge/health）跨会话存储与检索项目决策、规则与教训。默认使用 SQLite，支持切换 PostgreSQL 与 pgvector；嵌入可选 Ollama、OpenRouter 或纯离线关键词模式。运行需 Node.js 22+，通过 npx init 初始化 .agent/context.db。README 明确其不含代码索引功能。",
+   "highlights": [
+    "提供 5 个 MCP 工具：retrieve、remember、revise、nudge、health，覆盖读取、写入、修订、差异审计与健康报告",
+    "写入采用封闭五类分类（decision/invariant/bug/lesson/blocker），含近似重复检测（余弦相似度 ≥0.85）、强制失效原因和基于 SHA-256 锚点的代码漂移自愈",
+    "默认 SQLite（含 FTS5 词法索引与二进制向量存储），可切换 PostgreSQL + pgvector；无 Ollama 或 API 密钥时以 100% 离线关键词模式运行"
+   ],
+   "use_cases": [
+    "在 Cursor、Claude Code、Windsurf 等 IDE 会话间持久化架构决策、不变量与 bug 诊断",
+    "提交前用 nudge 工具按活动不变量检查待提交的代码差异",
+    "多机器多代理场景下使用 PostgreSQL 模式集中管理共享记忆"
+   ]
+  },
+  "sha": "99a1078bcc77",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0920279926c4": {
+  "identity": {
+   "one_liner": "开源 AI 会话记忆工具包，将记忆存入本地 SQLite 并经 MCP 工具读写",
+   "review": "Cairn Memory 是 Cairn.ink 开源的 AI 记忆工具包，面向 Claude Code 和 Codex 用户，用于在会话间保存偏好与项目决策。每条记忆附带 Source Receipt（提交原文），支持保存、检查、修订和逻辑删除；本地模式存 SQLite 无需账号，托管模式连 cairn.ink 需认证。当前为开发者预览版，语义召回需自备 OpenAI 密钥，默认提取功能未达其声明的来源支持标准。",
+   "highlights": [
+    "提供 8 个 MCP 记忆工具：remember_memory、inspect_memory、correct_memory、forget_memory 等，保存/修订/删除均在所检查的修订版本上进行",
+    "每条记忆附带 Source Receipt 提交原文，支持列出记忆、按 ID 检查修订与凭据",
+    "本地模式将数据存于用户自己的 SQLite 文件，无需 Cairn 账号；无模型密钥时 contextRead 使用 BM25，配置 OPENAI_API_KEY 后启用有界嵌入语义召回"
+   ],
+   "use_cases": [
+    "为 Claude Code 或 Codex 会话保存偏好与项目决策，在新会话中通过 MCP 工具检索并按需修订或遗忘",
+    "在本地 SQLite 中自行掌控 AI 记忆数据，检查每条记忆的来源文本后进行更正",
+    "基于 MCP 或 JavaScript（openMemoryCore 库）构建自己的记忆层集成"
+   ]
+  },
+  "sha": "0920279926c4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9a9f8ae0f97a": {
+  "identity": {
+   "one_liner": "基于 .NET 与 Avalonia 的开源 PostgreSQL 图形客户端，采用 NativeAOT 构建",
+   "review": "pgNimbus 是一个面向 PostgreSQL 的桌面 GUI 客户端，使用 .NET 和 Avalonia 编写并以 NativeAOT 方式发布，支持 Windows、macOS（beta）和 Linux（beta）。它提供 SQL 编辑器、流式结果网格、EXPLAIN 计划树、服务器活动监控、基于 pg_dump/pg_restore 的备份还原，以及 SSH 隧道与 TLS 连接。项目于 2026 年 9 月发布 1.0，采用 MIT 许可；安全审查由项目内部完成，并非第三方审计。",
+   "highlights": [
+    "采用 NativeAOT 构建的桌面程序，支持 Windows、macOS（Apple Silicon，beta）与 Linux（beta）安装",
+    "提供 SQL 编辑、安全模式分阶段编辑、EXPLAIN 树视图、锁树、pg_stat_statements 慢查询、LISTEN/NOTIFY 监控与 pg_dump/pg_restore 备份还原",
+    "支持多种格式的连接字符串（postgres:// URI、JDBC URL、libpq 关键字、psql 命令行）、SSH 隧道与可验证的 TLS 连接"
+   ],
+   "use_cases": [
+    "日常查询、浏览和编辑 PostgreSQL 表数据的开发者",
+    "需要查看执行计划、锁等待和慢查询的数据库运维人员",
+    "需要通过 SSH 隧道或 TLS 连接远程或托管 Postgres 服务的场景"
+   ]
+  },
+  "sha": "9a9f8ae0f97a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3ee5bf5f7ffe": {
+  "identity": {
+   "one_liner": "C++20 编写的 ERP 应用开发平台，以元数据描述驱动生成数据库、表单与报表",
+   "review": "OES 是面向业务应用（库存、会计、薪资、销售等）的 source-available 开发平台，用 C++20 实现。开发者以元数据描述业务对象，用内置脚本语言编写业务规则，平台据此生成数据库表、表单和报表并随配置变更同步数据库。提供设计器、编译器、调试器、应用服务器、集群与 MCP 服务器。当前为 2.0.0-preview.1，数据库格式可能变化，且不从 1.x 迁移。",
+   "highlights": [
+    "内置查询语言、脚本语言（含 LINQ 编译为字节码）与报表设计器，支持信息、积累、会计、计算四类登记簿",
+    "提供远程调试器、基于 diff 的模式变更应用、行级安全与按角色叠加的权限模型",
+    "内置 MCP 服务器（132 个工具），供 AI 助手读写元数据、执行代码、查询数据和驱动调试器"
+   ],
+   "use_cases": [
+    "构建库存、会计、薪资、销售等业务记账类应用",
+    "在 Firebird 或 PostgreSQL 上部署带集群与应用服务器的多库业务系统",
+    "让 AI 编码助手通过 MCP 工具参与配置的读写、构建与检查"
+   ]
+  },
+  "sha": "3ee5bf5f7ffe",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

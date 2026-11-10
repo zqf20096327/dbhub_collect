@@ -2904,5 +2904,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fd07acdc0534": {
+  "identity": {
+   "one_liner": "基于国家地名信息库的中国省地县乡四级行政区划数据集，提供 SQLite 与 JSON 格式",
+   "review": "该项目收录全国 34 个省级、333 个地级、2,847 个县级、38,723 个乡级行政区划，数据来源于国家地名信息库，提供 SQLite 数据库与 JSON 文件两种格式。项目包含采集、验收、清洗、导入四个 Python 脚本组成的更新流程，采用分层数据目录与按批次归档管理。适用于需要中国行政区划代码数据的开发者，乡级类型信息接口未提供、字段留空。",
+   "highlights": [
+    "提供省、地、县、乡四级共 41,937 条区划数据的 SQLite 数据库与 JSON 格式",
+    "包含 fetch/verify/clean/import 四个脚本，实现采集对账、两接口交叉比对验收与数量守恒清洗",
+    "数据按 raw/processed/archive 分层管理，processed 文件通过 meta 字段回指原始文件"
+   ],
+   "use_cases": [
+    "为表单或系统提供中国行政区划级联选择数据",
+    "需要行政区划代码与层级关系的数据库初始化",
+    "定期同步最新区划数据并保留历史归档批次"
+   ]
+  },
+  "sha": "fd07acdc0534",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "748308b87d99": {
+  "identity": {
+   "one_liner": "Windows x64 本地模型网关，让多家 AI 客户端使用自配模型 API",
+   "review": "这是一个运行在 Windows x64 上的桌面应用，作为本地网关接管 Cursor、Devin、Codex、Claude Code CLI 与 Claude Desktop 的模型请求，将其指向用户自配的 OpenAI 或 Anthropic 协议服务。内置模型库、连接测试、调用记录与 Token 用量统计，各网关默认关闭且只监听 127.0.0.1。安装需下载 Releases 中的安装包并自备可用模型服务；登录、套餐与厂商云端功能仍由客户端管理，不涉及绕过。",
+   "highlights": [
+    "支持 OpenAI Chat / Responses 与 Anthropic 协议的模型库，带连接测试",
+    "记录每次调用的成败、耗时、Token 用量及估算金额",
+    "网关默认关闭且只监听 127.0.0.1，支持切换回官方模式回滚"
+   ],
+   "use_cases": [
+    "希望继续使用现有客户端界面、同时改用自配模型服务的开发者",
+    "需要统计本机模型调用的 Token 用量与成本估算的场景",
+    "需要在本机管理和切换多家 AI 客户端模型来源的桌面用户"
+   ]
+  },
+  "sha": "748308b87d99",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f7872a99caff": {
+  "identity": {
+   "one_liner": "基于 modernc.org/sqlite 的纯 Go GORM SQLite 驱动",
+   "review": "该项目为 GORM 提供基于 modernc.org/sqlite 的纯 Go SQLite 驱动，无需 CGO，可交叉编译到 Go 支持的平台。作为 go-gorm/sqlite（官方 CGO 驱动）的替代，它兼容 GORM 测试套件（12k+ 用例），默认启用 JSON1、FTS5、R-Tree 等扩展。支持 _pragma、_txlock、_time_format 等驱动参数及 mattn/go-sqlite3 风格的简写参数。注意 SQLite 单写者限制，README 建议配合 WAL 模式与连接池设置缓解 SQLITE_BUSY。",
+   "highlights": [
+    "纯 Go 实现，无需 C 编译器或外部库，可交叉编译到任意 Go 支持的平台",
+    "通过 GORM 完整测试套件（12k+ 用例），在 Linux、macOS、Windows 上测试",
+    "默认启用 JSON1、Math 函数、FTS5、R-Tree 和 Geopoly 扩展"
+   ],
+   "use_cases": [
+    "CGO 不可用或需要交叉编译的 Go + GORM 项目",
+    "需要 FTS5、R-Tree、Geopoly 等 SQLite 扩展的 GORM 应用",
+    "通过 DSN 参数配置 WAL 模式、事务锁、时间序列化等行为的场景"
+   ]
+  },
+  "sha": "f7872a99caff",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0f782cdab17c": {
+  "identity": {
+   "one_liner": "自托管的 Facebook/Instagram 等社媒自动化平台，含发布排期与收件箱。",
+   "review": "PostStack 是一个自托管、源码可用的社媒管理工具，覆盖 Facebook、Instagram、YouTube、Telegram 与 Gmail，提供发布排期、关键词自动回复、drip 序列和联系人 CRM。基于 Docker Compose 一键启动，OAuth 令牌采用 AES-256-GCM 加密。管理自己账号无需通过 Meta App Review；成员目前仅有 owner 单一角色，权限控制有限。",
+   "highlights": [
+    "支持关键词、评论转私信、story 回复等多种触发条件的自动回复规则，回复文本可经 OpenAI 兼容端点改写",
+    "提供统一收件箱、全文检索联系人 CRM、定时消息序列，并开放带 Bearer 密钥的 REST API 与 Scalar 文档",
+    "内置安全机制：AES-256-GCM 令牌加密、webhook HMAC 签名验证、JWT 会话失效与认证端点限速"
+   ],
+   "use_cases": [
+    "为自有 Facebook/Instagram 账号部署私信、评论自动回复与 drip 序列，无需 Meta App Review",
+    "通过 REST API 与 n8n/Zapier 集成，构建自定义社媒自动化前端或流程",
+    "需要数据留在自有服务器、并需手动管理多平台会话分配给团队成员的独立从业者或机构"
+   ]
+  },
+  "sha": "0f782cdab17c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f41a385be4e7": {
+  "identity": {
+   "one_liner": "为编码代理提取失败-修复对生成规则的自我演进防错插件",
+   "review": "dsh-immune 在编码代理的工具调用由失败转为修复成功时，将该配对蒸馏为规则存入库中；后续运行时把匹配当前工作的规则注入上下文。通过插件包支持 DSH 与 ZCode 原生安装，并可用 immune connect 以 hooks 方式接入 Claude Code 和 Codex CLI；提供 audit 回放本地历史、seed 预置规则包、export/import 共享、rewrite/consolidate 规则治理，以及 immune doctor 自检。要求 Node ≥22.5。",
+   "highlights": [
+    "在工具调用失败后修复成功时将配对保存为规则，并在后续运行中按匹配注入上下文",
+    "immune audit 可回放本机 ZCode 会话库、Codex rollout 文件和 Claude Code transcripts 生成报告并蒸馏规则",
+    "支持规则导出为 SKILL.md、JSON 快照导入导出、规则改写与近重复合并，并提供 immune doctor 环境自检"
+   ],
+   "use_cases": [
+    "希望编码代理不重复已修复过的工具调用错误",
+    "从既有会话历史中提取可复用的避坑规则",
+    "团队间共享已验证的规则库"
+   ]
+  },
+  "sha": "f41a385be4e7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

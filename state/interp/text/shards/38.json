@@ -3164,5 +3164,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "33be68ff6d55": {
+  "identity": {
+   "one_liner": "基于 Svelte 的页内编辑网站框架，内容直接在页面上编辑",
+   "review": "Editable 用于构建可直接在页面上编辑的 Svelte 网站，无需外接 CMS。适合希望自持代码库、又让编辑者在线改内容的开发者。其机制是以 path 寻址文档节点，通过 Node、TextProperty、MediaProperty、NodeArrayProperty 等原语将 Svelte 组件接入编辑器（编辑引擎为 Svedit），内容存于 SQLite，站点以模板形式克隆并保留 upstream 便于升级。需 Git、pnpm 与 Node.js 26，自定义样式文件在拉取上游更新时可能需手动合并。",
+   "highlights": [
+    "提供 Node、TextProperty、MediaProperty、NodeArrayProperty 等原语，使 Svelte 组件可被页内编辑",
+    "使用 Svedit 作为编辑引擎，schema 定义内容规则，节点属性带类型并可被 pnpm check 校验",
+    "每个站点是独立 git 仓库，可通过 upstream 远程合并上游 stable 分支的更新"
+   ],
+   "use_cases": [
+    "开发者搭建由非技术人员在线编辑内容、代码归自己所有的 Svelte 网站",
+    "需要自定义内容类型与组件、同时保留可视化编辑能力的站点项目",
+    "基于模板快速启动一个可编辑站点，并通过 git upstream 跟进上游发布版本"
+   ]
+  },
+  "sha": "33be68ff6d55",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7df7d89f25b": {
+  "identity": {
+   "one_liner": "AI 代理长期记忆库，单 Rust 二进制本地运行，混合检索。",
+   "review": "Uteke 是一个为 AI 代理提供长期记忆的开源工具（Apache-2.0），以单个 Rust 二进制运行，离线可用、无需 API key，通过 MCP（stdio/HTTP）或 CLI 接入 Claude Code、Cursor 等客户端，多个代理可通过 Rooms 共享同一记忆存储并带作者归属。检索路径不调用 LLM，由本地向量与 SQLite 全文搜索按 RRF 融合排序；首次运行需下载约 200 MB 嵌入模型。支持 Docker、Homebrew、Cargo 等安装方式，也可选用官方托管云。",
+   "highlights": [
+    "提供本地向量与 SQLite 全文搜索的 RRF 融合检索，查询不调用 LLM",
+    "通过 MCP stdio/Streamable HTTP 或 CLI 接入任意 MCP 客户端，Rooms 支持多代理共享记忆并记录作者",
+    "包含时间点回溯（--at）、关系图、记忆衰减、tombstone 拒绝写入等记忆管理功能"
+   ],
+   "use_cases": [
+    "为 Claude Code、Claude Desktop、Cursor 等 MCP 客户端配置统一的本地长期记忆",
+    "多代理/团队场景下在同一 Room 中共享记忆并追踪每条记忆的写入者",
+    "需数据不出本机时自行托管，或通过 Uteke Cloud 在多设备间使用同一记忆"
+   ]
+  },
+  "sha": "a7df7d89f25b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1f5584ec7724": {
+  "identity": {
+   "one_liner": "单文件 PHP + SQLite 的自托管无 Cookie 网站分析工具",
+   "review": "Puls 是一个自托管 Web 分析程序，由一个 PHP 文件和内置 SQLite 数据库构成，无框架、无依赖，可在普通 PHP 主机上运行，目标用户为自行运营中小型网站的站长。访客识别使用每日删除盐值的哈希，不存储 Cookie 和 IP 地址。README 指出其限制：单站点月页面浏览量达百万级时，按页面或渠道过滤的视图需读取该时段全部浏览记录，耗时可能达数秒。",
+   "highlights": [
+    "单个 PHP 文件配合 SQLite 运行于 PHP 8.3+ 主机，也提供 Docker 部署，无 Node、无独立数据库服务器、无构建步骤",
+    "不使用 Cookie，不存储 IP 地址；访客 ID 为加盐哈希，盐值当日删除；跟踪脚本 gzip 后小于 2.5 KB 并通过 sendBeacon 发送",
+    "提供自定义事件（含漏斗、CSV 导出）、目标、机器人分类统计（AI 爬虫、搜索引擎、监控、社交预览）、404 与重定向记录、JSON/CSV 只读 API 及 ⌘K 命令面板"
+   ],
+   "use_cases": [
+    "在共享主机或 Laravel Forge 等 PHP 托管环境中自行部署、不依赖独立数据库服务器的网站流量统计",
+    "需要无 Cookie、无指纹采集、希望无需同意弹窗运行的隐私导向网站分析",
+    "管理多个站点或客户站点：一个面板管理多站点分组、按站点限制用户权限、提供只读分享链接"
+   ]
+  },
+  "sha": "1f5584ec7724",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0e55ec32b5e2": {
+  "identity": {
+   "one_liner": "PostgreSQL 迁移 SQL 静态检查工具，含 12 条规则、CLI 与 GitHub Action。",
+   "review": "LockGuard 是一个 PostgreSQL 迁移 SQL 静态分析工具，基于 libpg_query（WASM）解析语法，在迁移发布前检查索引、外键、类型变更、NOT NULL、lock_timeout 等 12 类已知的锁风险。面向使用 PostgreSQL 的开发团队，提供 CLI、GitHub Action、JSON/Markdown/SARIF 报告及分阶段迁移草稿生成。基于语法解析，不执行 SQL，无法识别的构造会标记 LG-000 需人工审查。",
+   "highlights": [
+    "提供 12 条静态规则（LG-001 至 LG-012），覆盖索引、外键、列类型变更、NOT NULL、锁超时等操作",
+    "CLI 支持检查文件/目录、相对基线的变更文件以及 Git 暂存区内容，输出终端、JSON、Markdown、SARIF 格式报告",
+    "提供 GitHub Action 接入 CI，并可生成多阶段迁移草稿及有限的 CREATE INDEX 与超时自动修复"
+   ],
+   "use_cases": [
+    "在 CI（GitHub Action）中对 PR 中的迁移 SQL 自动执行锁风险检查",
+    "本地发布前检查迁移文件或暂存区中的 SQL 变更",
+    "为高风险 DDL 生成分阶段迁移草稿供人工审查"
+   ]
+  },
+  "sha": "0e55ec32b5e2",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2833,5 +2833,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4b6e14f39cdc": {
+  "identity": {
+   "one_liner": "面向AI代理的代码索引MCP服务器，单二进制+SQLite索引，支持1C:Enterprise导出解析",
+   "review": "该项目是一个MCP服务器，通过tree-sitter解析源码为AST，将符号、函数体、调用关系存入SQLite，向AI代理提供search_function、get_callers、find_path等代码查询工具，以替代模型逐文件遍历。支持14种语言，bsl-indexer构建版本额外处理1C配置导出并提供元数据与调用图工具。服务器只读索引，需另运行daemon后台构建；HTTP默认仅监听127.0.0.1。适用于将代码库接入Claude Code、Cursor等MCP客户端的场景。",
+   "highlights": [
+    "提供32个MCP工具，包括函数/类全文搜索、调用图查询（get_callers、find_path、get_call_tree）、文件读取与grep",
+    "tree-sitter解析14种语言，支持Conifugurator与1C:EDT导出格式，88284文件配置全量索引耗时5分51秒，HTTP查询响应约10ms",
+    "单二进制运行（39-41MB），支持stdio和HTTP两种接入方式，可配置只监听loopback并校验Host头"
+   ],
+   "use_cases": [
+    "为接入MCP客户端（Claude Code、Cursor、VS Code等）的AI代理提供代码搜索与导航能力，减少上下文token消耗",
+    "索引1C:Enterprise配置导出，供代理查询对象结构、表单处理器、事件订阅、数据链接与调用链",
+    "团队部署共享索引服务器：deploy/目录提供Docker、systemd及Web管理面板，一个服务器可服务多个代码库"
+   ]
+  },
+  "sha": "4b6e14f39cdc",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "185a50bc079b": {
+  "identity": {
+   "one_liner": "面向 PHP 的 libSQL 社区 SDK，以 Rust 编写的原生扩展实现本地与远程连接",
+   "review": "turso-client-php 是面向 PHP 应用的 libSQL 社区 SDK，以 Rust 编写为原生 PHP 扩展。它通过 New LibSQL(\"file:example.db\") 方式使用，支持本地、内存、远程、远程副本及离线写入等多种连接模式，并提供事务、预处理语句与批量执行。支持 PHP 8.1–8.5（TS/NTS），可经 turso-php-installer Composer 包安装，源码构建需 Rust nightly 工具链，MIT 协议开源。",
+   "highlights": [
+    "支持 local、in-memory、remote、remote replica、offline-writes 多种连接模式，offline-writes 兼容 libsql-server（sqld）",
+    "提供事务、预处理语句与批量执行能力",
+    "通过 Composer 包 turso-php-installer 交互式或非交互式安装，支持 Linux、macOS、Windows、WSL"
+   ],
+   "use_cases": [
+    "PHP 应用接入 SQLite 或 libSQL 数据库",
+    "需要远程连接、副本或离线写入的 libSQL 场景",
+    "需要事务、预处理语句、批量执行的 PHP 数据库操作"
+   ]
+  },
+  "sha": "185a50bc079b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0065d4eb4d20": {
+  "identity": {
+   "one_liner": "终端内运行的 PostgreSQL/MySQL 数据库客户端，基于 Rust 与 Ratatui 构建",
+   "review": "datarig 是一个运行在终端里的数据库客户端，使用 Rust 编写为单一原生二进制，支持 PostgreSQL 与 MySQL 连接。它提供表格数据编辑、SQL 补全、查询计划可视化和服务器监控。编辑产生的变更在 Apply 前以 SQL 形式列出并需确认；项目处于 pre-1.0 阶段，MySQL 仅部分实现，配置格式和按键绑定可能变动。",
+   "highlights": [
+    "数据编辑的变更以精确 SQL 列出，Apply 在单个事务中执行，危险语句需先确认；只读配置在发送前拒绝写入，PostgreSQL 上由服务端强制执行",
+    "支持 EXPLAIN 与 EXPLAIN ANALYZE 查询计划，以树、冰柱图、火焰图、矩形树图、时间线等多种视图展示",
+    "结果网格支持搜索、单元格编辑、导出（Excel/Parquet）与图表；结果分页加载且不在服务端保留事务、锁或快照"
+   ],
+   "use_cases": [
+    "在终端中通过键盘（Vim 按键）浏览和编辑 PostgreSQL/MySQL 数据库表数据",
+    "分析慢查询的执行计划，查看各节点耗时占比",
+    "监控数据库服务器的负载图表、活动会话、锁等待与复制状态"
+   ]
+  },
+  "sha": "0065d4eb4d20",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e55ae5f2763": {
+  "identity": {
+   "one_liner": "纯 Python 实现的 CUBRID 数据库 DB-API 2.0 (PEP 249) 驱动，支持 asyncio 与 SSL/TLS",
+   "review": "pycubrid 是连接 CUBRID 数据库的纯 Python 驱动，无需 C 扩展编译，直接实现 CUBRID CAS 线协议。提供同步与 asyncio（pycubrid.aio）两套 API，遵循 PEP 249 规范（paramstyle 为 qmark），支持 LOB、事务、模式内省及 SSL/TLS。也可作为 sqlalchemy-cubrid 方言的底层驱动。限制：线程安全级别为 1（连接不可跨线程共享），不支持多结果集，需 Python 3.11+ 和 CUBRID 10.2+。",
+   "highlights": [
+    "纯 Python 实现，pip 安装无需编译；threadsafety 为 1，paramstyle 为 qmark",
+    "提供 pycubrid.aio 异步 API（AsyncConnection/AsyncCursor），同步与异步连接均可启用 SSL/TLS",
+    "支持 LOB（CLOB/BLOB）读写、executemany 批量操作、autocommit 控制及 get_schema_info 模式内省"
+   ],
+   "use_cases": [
+    "Python 应用对 CUBRID 数据库执行参数化查询、事务和 CRUD 操作",
+    "asyncio 应用中通过 async/await 访问 CUBRID 的并发场景",
+    "配合 sqlalchemy-cubrid 使用 SQLAlchemy 2.0 的 ORM、Core 与 Alembic 迁移"
+   ]
+  },
+  "sha": "1e55ae5f2763",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c233e019bf0a": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理记忆控制平面，带审计记录与治理式检索",
+   "review": "AtMem 是一个本地优先的代理记忆控制平面，为 OpenClaw、Pydantic AI、LangChain/LangGraph 或自定义代理提供受治理的长期记忆。它记录模型与工具事件，所有集成默认以 shadow 模式启动，需显式激活注入；AtBot 作为随装组件负责提议与排序，记忆的授权、存储与删除由 AtMem 完成。本机记忆操作无需外部 API；2.3.15b1 为 beta，稳定版为 2.3.14。",
+   "highlights": [
+    "支持 pip 安装，兼容 OpenClaw、Pydantic AI、LangChain/LangGraph 及自定义代理，本地记忆无需外部 API",
+    "提供 shadow 模式、审计式事件记录（Agent Black Box）、SQLCipher 加密迁移与离线 benchmark（24 个用例）",
+    "内置 AtBot 组件与本地向量索引，支持 Ollama、本地 OpenAI 兼容模型或托管提供方"
+   ],
+   "use_cases": [
+    "需要为 AI 代理接入可控、可审计长期记忆的本地部署",
+    "希望在激活前先以 shadow 模式审查记忆检索效果的集成场景",
+    "跨编码代理共享项目记忆或记录任务状态（Governed Task State）的工作流"
+   ]
+  },
+  "sha": "c233e019bf0a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee0ac8a0a741": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3.3 与 Vue 3 的 AI 学习助手全栈系统，内置 RAG 检索与评测。",
+   "review": "该项目实现资料解析、向量检索、AI 总结/出题、在线练习、错题复盘和学习分析的完整流程，后端为 Spring Boot 3.3 + Java 17 + MySQL + Redis + Qdrant，前端为 Vue 3 + Element Plus。支持 OpenAI-compatible、DeepSeek 等接口及 Mock 模式，可 Docker Compose 一键启动或部署到 Vercel/Render/Aiven/Qdrant Cloud。README 定位其适合课程设计与简历项目；扫描版 PDF 需先 OCR，生产环境须显式配置密钥。",
+   "highlights": [
+    "资料支持 TXT/PDF/DOCX 解析，经分段与 Embedding 后存入 Qdrant，检索预览展示相似度、页码与章节信息",
+    "内置 RAG 评测集管理，支持 Hit@K、Recall@K、MRR 与耗时统计，可导入 CMRC2018 批量验证",
+    "Agent 学习助手支持 SSE 流式回复与工具调用轨迹，可查询资料、题集、练习记录等系统上下文"
+   ],
+   "use_cases": [
+    "学习 RAG 工程化流程与检索评测方法",
+    "作为课程设计或作品集的全栈参考案例",
+    "个人学习资料的总结、出题与错题复盘管理"
+   ]
+  },
+  "sha": "ee0ac8a0a741",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

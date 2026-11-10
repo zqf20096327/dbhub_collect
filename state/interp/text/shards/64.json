@@ -2814,5 +2814,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e71ebe4569b9": {
+  "identity": {
+   "one_liner": "在 SQL Server 内运行的存储过程，采集索引诊断并调用 Azure OpenAI 生成与落地索引建议",
+   "review": "这是一个以单个 T-SQL 存储过程（dbo.sp_AIIndexTuner）实现的索引调优工具：采集缺失索引、重复索引、计划缓存语句、非 SARGable 谓词、Query Store 查询、统计信息等诊断数据，发送到用户自己的 Azure OpenAI 部署，将建议写入 AIIndexTuner 表，并可在 @Mode='CREATE' 下创建经验证的新索引。面向使用 SQL Server 2025、Azure SQL 及 Fabric SQL Database 的 DBA。依赖 sp_invoke_external_rest_endpoint，暂不支持 SQL Server 2022 及更早版本，仅支持 OpenAI 模型。",
+   "highlights": [
+    "以存储过程形式在数据库内运行，采集缺失索引、索引重叠与冗余、非 SARGable 谓词、Query Store 慢查询、低基数倾斜列等诊断数据",
+    "建议按类别（CreateIndex/DropIndex/ConsolidateIndex 等）、优先级、置信度与预估存储变化存储于表中",
+    "更改控制参数（@AllowColumnstore、@AllowDropIndex、@MaxNewIndexes 等）在提示词与应用环节双重强制执行，可经 SQL Server Agent 定时调度"
+   ],
+   "use_cases": [
+    "需要定时收集索引诊断并生成索引创建/删除建议的 SQL Server 数据库维护",
+    "在允许范围内自动创建经服务器验证的非聚集行存储或列存储索引（含 ONLINE = ON 构建）",
+    "识别非 SARGable 谓词、重复与冗余索引、倾斜低基数列等具体索引问题以供 DBA 审核处理"
+   ]
+  },
+  "sha": "e71ebe4569b9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c4ca29bd83a7": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 技能库管理插件，支持目录限量、正文按需加载与中文关键词检索。",
+   "review": "该插件为 DSH 宿主管理外部 SKILL.md 技能库，通过 SkillProvider 注册、每库 maxVisible 限量、get() 时读盘的懒加载机制控制提示词 token 占用；隐藏技能可通过 /名字、search、load 或库入口索引取回。零 npm 依赖，配置存放于 ~/.dsh/skill-jnkgg/config.json。适用于需要在 DSH 中挂载大型技能库并管理目录可见性的使用者。",
+   "highlights": [
+    "向 ctx.skills 注册 SkillProvider，使外部目录技能支持 /名字 调用与 skill 工具",
+    "每库 maxVisible 限量展示，超出条目降级为 user-invocable，不删除；正文 get() 时才读盘",
+    "skill_jnkgg 工具提供 status/search/load/list/analyze/config/rescan 操作，支持中文关键词与字面重合、词干变体、中英混排匹配"
+   ],
+   "use_cases": [
+    "在 DSH 中挂载数十条以上规模的 SKILL.md 技能库，同时控制每轮提示词 token 开销",
+    "需要中文关键词检索、隐藏技能可恢复取回的技能库维护场景",
+    "通过可视化设置页管理多个技能库路径、可见上限与 token 预算"
+   ]
+  },
+  "sha": "c4ca29bd83a7",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -15478,5 +15478,1331 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "2387935a3cb3+2": {
+  "fn": "anweat/dsh-web-search-pro",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "English | 中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "DeepSeek Harness（DSH）的增强型网页搜索插件：多引擎搜索、平台搜索、持久化缓存和证据包，常驻上下文只有两个工具。"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    15,
+    5,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "|项|范围|"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    22,
+    17,
+    22,
+    [
+     "|dsh-web-search-pro|`0.2.4`|",
+     "|DSH 宿主（peer）|`>=0.2.0-rc.2 <0.2.1-0 \\|\\|>=0.2.1-rc.2 <0.2.2-0 \\|\\|>=0.2.2-rc.1 <0.2.3-0`；实测 `0.2.0-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.4`、`0.2.1-rc.5`、`0.2.2-rc.1`|",
+     "|cordis（peer）|`~4.0.4 \\|\\|~4.1.0`（0.2.2 线宿主带 4.1.x）|",
+     "|可选配套 `@anweat/dsh-browser`|`^0.2.0`（0.2.1 线宿主上必须是 `0.2.2` 起；0.2.2 线宿主上请用 `0.2.3` 或更新）|",
+     "|DSH 0.1.x 宿主或 dsh-browser 0.1.x|固定使用 `dsh-web-search-pro@0.1.15`，不再更新|"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "**0.2.2 线的设置卡片通道**：宿主 0.2.2-rc.1 的 `connection.rpc.handle()` 在 cordis 4.1 下对外部插件抛错（根因在宿主 `dsh-client-connection` 的 `register()` 读 `owner.webServer`，而 cordis 4.1 按服务的定义处检查 `inject`）。插件经一个自带 `webServer` 的派生上下文调用 `handle`（`ctx.extend({ webServer: ctx.get('webServer') })`），只用公开的 Context API，不依赖宿主的私有方法；三条宿主线（0.2.0-rc.2、0.2.1-rc.5、0.2.2-rc.1）用同一写法。做法来自 anweat/dsh-browser#49（@shuaigekda）。挂载失败时插件在控制台打一行警告并照常运行（卡片的实时状态、agent 修改面板、CLI 试运行不可用）。详见 CHANGELOG 与 验证记录。"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "历史版本的兼容表见 CHANGELOG，peer 范围的写法见 兼容范围。"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    43,
+    26,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     "更多（新用户第一次安装的注意事项、排障）见 安装与首次使用；升级见 CHANGELOG。"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    51,
+    44,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "- **可选依赖**：浏览器插件 `@anweat/dsh-browser`（`read.snapshot`、`read.fetch mode=playwright`、搜索页类平台；有 Chrome / Edge 就直接用，不用下载 Chromium）；`npm i -g @jackwener/opencli` 加它的 Browser Bridge 扩展（小红书 / 知乎 / Reddit / X，用你日常 Chrome 的登录态，见 平台登录态）；bili、yt-dlp、gh 等 CLI 由 `sources.deps` 检测。"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    67,
+    52,
+    67
+   ],
+   [
+    "replace",
+    67,
+    68,
+    67,
+    68,
+    [
+     "读页用 `read.fetch`（长页传 `offset` 续读），不知道用哪个来源就问 `search.recommend`。更多用法见 搜索用法与证据包。"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    73,
+    68,
+    73
+   ],
+   [
+    "replace",
+    73,
+    74,
+    73,
+    74,
+    [
+     "|组|动作|用途|"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    74,
+    75
+   ],
+   [
+    "replace",
+    75,
+    82,
+    75,
+    82,
+    [
+     "|`search`|`run` `recommend`|多引擎 / 平台搜索与证据包；按任务推荐至多 3 个来源|",
+     "|`read`|`fetch` `contents` `snapshot`|可读化抓取与续读；Exa 批量正文；浏览器快照|",
+     "|`history`|`list` `replay` `expand` `export` `delete`|查询历史的列出、回放、展开证据块、导出、删除|",
+     "|`sources`|`status` `deps` `install`|后端探测与诊断；外部依赖检测与安装|",
+     "|`rules`|`list` `upsert` `remove` `import` `export`|按站点提取规则|",
+     "|`cache`|`clear` `stats`|缓存清理与统计|",
+     "|`config`|`inspect` `set_order` `set_confidence` `upsert_cli` `remove_cli` `reset` `export`|agent 覆盖层：运行时调整搜索顺序、置信度、自定义 CLI|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    82,
+    83
+   ],
+   [
+    "replace",
+    83,
+    84,
+    83,
+    84,
+    [
+     "完整参数、审批规则、输出预算与旧工具映射见 工具与动作。"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    89,
+    84,
+    89
+   ],
+   [
+    "replace",
+    89,
+    90,
+    89,
+    90,
+    [
+     "|键|默认值|说明|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    90,
+    91
+   ],
+   [
+    "replace",
+    91,
+    100,
+    91,
+    100,
+    [
+     "|`engines`|`[ddg, bing, exa, seam, jina]`|通用搜索的回退顺序|",
+     "|`sources.priority` / `sources.disabled`|空|提前 / 完全不用的来源 id（如 `disabled: [deepseek]`）|",
+     "|`searchMaxResults`|`8`|普通搜索的默认结果数|",
+     "|`evidence.jevMode`|`off`|博查 Jev 评分：`off` \\|`shadow` \\|`control` \\|`hybrid`（付费，默认不调用）|",
+     "|`evidence.sourcePolicy`|`default`|`anonymous-only` = 自动规划绝不用需要 Key / 账号 / 登录的来源|",
+     "|`deepseekFetch`|`false`|`true` = `read.fetch` 可用 DeepSeek Fetch API（按请求计费）|",
+     "|`fetchDefaultChars`|`20000`|`read.fetch` 默认返回字符数|",
+     "|`toolSurface`|`indexed`|`flat` = 每个动作一个工具（仅对照与调试）；**需重启**|",
+     "|`registerProvider`|`false`|让宿主内置 `web_search` / `web_fetch` 经过本插件；**需重启**|"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    100,
+    101
+   ],
+   [
+    "replace",
+    101,
+    102,
+    101,
+    102,
+    [
+     "需要重启插件的只有 `toolSurface`、`registerProvider`、`providerId`、`timeoutMs`、`memoryCacheEntries`、`dbPath`、`verbose`、`playwright.snapshotDir`。全部键与默认值见 配置参考。"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    105,
+    102,
+    105
+   ],
+   [
+    "replace",
+    105,
+    106,
+    105,
+    106,
+    [
+     "详细文档（中文）在 docs/："
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    106,
+    107
+   ],
+   [
+    "replace",
+    107,
+    111,
+    107,
+    111,
+    [
+     "- 使用：安装与首次使用 · 搜索用法与证据包 · 工具与动作 · 历史管理",
+     "- 配置：配置参考 · 设置面板 · 来源与引擎 · 内置 web 工具路由 · Jev 评分",
+     "- 平台与 CLI：平台登录态 · CLI 适配与自定义 CLI · 外部依赖 · 自定义平台 · 浏览器脚本与自动化分层",
+     "- 版本与开发：兼容范围 · CHANGELOG · 开发 · 设计与调研记录 · 验证记录"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    113,
+    111,
+    113
+   ],
+   [
+    "delete",
+    113,
+    114,
+    113,
+    113
+   ],
+   [
+    "equal",
+    114,
+    115,
+    113,
+    114
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "c56888dca04f+2": {
+  "fn": "globalmpc/backendskills",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "Same prompt without and with backendskills: password guessing is blocked, a rename no longer breaks a rolling deploy, critical mistakes 25 → 2"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    15,
+    6,
+    15
+   ],
+   [
+    "replace",
+    15,
+    35,
+    15,
+    33,
+    [
+     "|Task|Haiku 5.5|Sonnet 5.5|",
+     "|---|---|---|",
+     "|`checkout`|1/5 → 0/5|2/5 → 0/5|",
+     "|`get-order`|0/5 → 0/5|0/5 → 0/5|",
+     "|`login-rate-limit`|5/5 → 0/5|5/5 → 0/5|",
+     "|`orders-check-constraint`|0/5 → 0/5|1/5 → 0/5|",
+     "|`orders-index`|0/5 → 0/5|0/5 → 0/5|",
+     "|`orders-pagination`|0/5 → 0/5|0/5 → 0/5|",
+     "|`orders-with-items`|0/5 → 0/5|0/5 → 0/5|",
+     "|`payment-webhook`|1/5 → 2/5|0/5 → 0/5|",
+     "|`product-discount`|0/5 → 0/5|0/5 → 0/5|",
+     "|`product-reviews`|0/5 → 0/5|0/5 → 0/5|",
+     "|`refund`|0/5 → 0/5|0/5 → 0/5|",
+     "|`rename-column`|5/5 → 0/5|5/5 → 0/5|",
+     "|`transfer`|0/5 → 0/5|0/5 → 0/5|",
+     "|`update-profile`|0/5 → 0/5|0/5 → 0/5|",
+     "|`wallet-adjustments`|0/5 → 0/5|0/5 → 0/5|",
+     "|**All**|**12/75 → 2/75**|**13/75 → 0/75**|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    41,
+    33,
+    39
+   ],
+   [
+    "replace",
+    41,
+    43,
+    39,
+    41,
+    [
+     " written into each skill's \"Make it yours\" section (`bench/skills-overlay`). The",
+     " whole with-skills arm uses that version. As shipped, those lines say \"not set\"."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    41,
+    42
+   ],
+   [
+    "replace",
+    44,
+    45,
+    42,
+    43,
+    [
+     " (Sonnet $0.20 vs $0.12, Haiku $0.019 vs $0.012)."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    43,
+    44
+   ],
+   [
+    "replace",
+    46,
+    49,
+    44,
+    47,
+    [
+     " 20 Sonnet with-skills runs on `rename-column`, 1 on `orders-index`, 4 Opus. Each run's reason is its",
+     " `error_reason` in `runs.jsonl`. The 21 Opus runs there are a partial run, not part of the results.",
+     "Every raw run, the tasks and how to rerun it are in `bench/`."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    56,
+    47,
+    54
+   ],
+   [
+    "replace",
+    56,
+    58,
+    54,
+    56,
+    [
+     "Codex and other `AGENTS.md` agents: append `dist/AGENTS.md`. Cursor: copy",
+     "`dist/cursor/` into `.cursor/rules/`."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    61,
+    56,
+    59
+   ],
+   [
+    "replace",
+    61,
+    66,
+    59,
+    64,
+    [
+     "|Skill|What the agent does by default|",
+     "|---|---|",
+     "|`api-endpoint`|Scopes every query to the caller, turns bad input into a 4xx, rate-limits login and costly routes|",
+     "|`data-integrity`|Locks or conditional updates for read-then-write, UNIQUE constraints, idempotency keys on anything that charges or sends|",
+     "|`db-migration`|Expand then contract, concurrent indexes, lock timeouts, batched backfills, down migrations|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    71,
+    64,
+    69
+   ],
+   [
+    "replace",
+    71,
+    76,
+    69,
+    70,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "d23f2f5a9f34+2": {
+  "fn": "SagarBiswas-MultiHAT/FedUni-Clinical-EMR-Simulator",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     "EMR Simulator Banner"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    3,
+    6
+   ],
+   [
+    "replace",
+    8,
+    16,
+    6,
+    14,
+    [
+     ".NET 8.0",
+     "Architecture",
+     "Database",
+     "Clinical Modules",
+     "License",
+     "Build Status",
+     "Security Policy",
+     "Sponsor SagarBiswas-MultiHAT on Polar.sh"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    22,
+    15,
+    16,
+    [
+     "Explore Modules • System Architecture • Quick Start • Security & IP • Contributing"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    28,
+    16,
+    22
+   ],
+   [
+    "delete",
+    28,
+    30,
+    22,
+    22
+   ],
+   [
+    "equal",
+    30,
+    40,
+    22,
+    32
+   ],
+   [
+    "delete",
+    40,
+    42,
+    32,
+    32
+   ],
+   [
+    "equal",
+    42,
+    44,
+    32,
+    34
+   ],
+   [
+    "replace",
+    44,
+    62,
+    34,
+    50,
+    [
+     "|Module|Purpose|Key Clinical Capabilities|",
+     "|:---|:---|:---|",
+     "|**ADDS Chart**|Adult Deterioration Detection System|Multi-vital entry (RR, HR, BP, SpO2, Temp, Consciousness), color-coded threshold scoring, alert triggers.|",
+     "|**Neurological Chart**|Glasgow Coma Scale (GCS) Assessment|Eye, verbal, and motor scoring, pupil size and reaction tests, bilateral limb response tracking.|",
+     "|**Braden Scale**|Pressure Injury Risk Management|Sensory, moisture, activity, mobility, nutrition, and friction scoring with automated risk categorization.|",
+     "|**Fall Risk Assessment (FRAT)**|Patient Fall Prevention|Multi-factor risk scoring, automated overrides for sedation and acute mobility changes, targeted clinical interventions.|",
+     "|**Medication Regular Chart**|Scheduled Drug Administration|Prescription scheduling, dosage checks, multi-shift administration logs, co-signing validation.|",
+     "|**Medication PRN Chart**|As-Needed Medication Tracking|Real-time interval checks, indication verification, post-administration outcome reviews.|",
+     "|**Medication Master List**|Formulary Management|Supervisor catalog control, active drug lists, and lab-specific formulary isolation.|",
+     "|**IV Fluid Chart & Orders**|Intravenous Fluid Therapy|Physician fluid order tracking, rate calculations, bag change verifications, student administration records.|",
+     "|**Fluid Balance Chart**|24-Hour Input / Output Management|Detailed intake (IV, oral, enteral) versus output (urine, vomitus, drainage, gastric) with automated balance calculation.|",
+     "|**Food Intake Monitoring**|Nutritional Care Tracking|Seven-period meal monitoring, portion estimation, special diet flags, and feeding assistance notes.|",
+     "|**Progress Notes**|Multidisciplinary Clinical Notes|Chronological notes auto-stamped with author role (Student vs Supervisor) and shift context.|",
+     "|**RISKMAN Reporting**|Clinical Incident & Hazard Analysis|50-field comprehensive clinical incident reporting with dedicated high-fidelity print stylesheets.|",
+     "|**Victorian Maternity Record**|Specialized Obstetric Tracking|Clinical assessment documentation modeled after regional healthcare maternity templates.|",
+     "|**Supervisor Command Center**|Simulation Control|Bulk lab resets, single-patient wipes, scenario initialization, and cohort progress oversight.|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    71,
+    50,
+    59
+   ],
+   [
+    "replace",
+    71,
+    96,
+    59,
+    60,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    105,
+    60,
+    69
+   ],
+   [
+    "delete",
+    105,
+    107,
+    69,
+    69
+   ],
+   [
+    "equal",
+    107,
+    113,
+    69,
+    75
+   ],
+   [
+    "replace",
+    113,
+    131,
+    75,
+    76,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    76,
+    77
+   ],
+   [
+    "delete",
+    132,
+    134,
+    77,
+    77
+   ],
+   [
+    "equal",
+    134,
+    140,
+    77,
+    83
+   ],
+   [
+    "replace",
+    140,
+    145,
+    83,
+    86,
+    [
+     "- **.NET 8.0 SDK** or newer",
+     "- **Microsoft SQL Server Express** (2019 or 2022 recommended)",
+     "- **SQL Server Management Studio (SSMS)** or Azure Data Studio"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    155,
+    86,
+    96
+   ],
+   [
+    "delete",
+    155,
+    157,
+    96,
+    96
+   ],
+   [
+    "equal",
+    157,
+    171,
+    96,
+    110
+   ],
+   [
+    "delete",
+    171,
+    173,
+    110,
+    110
+   ],
+   [
+    "equal",
+    173,
+    191,
+    110,
+    128
+   ],
+   [
+    "delete",
+    191,
+    193,
+    128,
+    128
+   ],
+   [
+    "equal",
+    193,
+    198,
+    128,
+    133
+   ],
+   [
+    "replace",
+    198,
+    203,
+    133,
+    138,
+    [
+     "|Lab Location|Username|Purpose|",
+     "|:---|:---|:---|",
+     "|Berwick Campus Lab|`berlab`|Clinical Nursing Practice Station|",
+     "|Mt Helen Campus Lab|`mthlab`|Clinical Simulation Laboratory|",
+     "|Gippsland Campus Lab|`giplab`|Acute Patient Care Ward|"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    205,
+    138,
+    140
+   ],
+   [
+    "replace",
+    205,
+    210,
+    140,
+    145,
+    [
+     "|Location|Username|Privileges|",
+     "|:---|:---|:---|",
+     "|Berwick Supervisor|`bersuper`|Scenario control, record audit, student reset|",
+     "|Mt Helen Supervisor|`mthsuper`|Scenario control, record audit, student reset|",
+     "|Gippsland Supervisor|`gipsuper`|Scenario control, record audit, student reset|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    212,
+    145,
+    147
+   ],
+   [
+    "delete",
+    212,
+    214,
+    147,
+    147
+   ],
+   [
+    "equal",
+    214,
+    224,
+    147,
+    157
+   ],
+   [
+    "replace",
+    224,
+    227,
+    157,
+    158,
+    [
+     "For complete terms, review the LICENSE.md file."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    230,
+    158,
+    161
+   ],
+   [
+    "replace",
+    230,
+    233,
+    161,
+    162,
+    [
+     "We take healthcare simulation software security seriously. If you discover a potential vulnerability, please review our Security Policy and report it responsibly rather than posting publicly."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    238,
+    162,
+    167
+   ],
+   [
+    "replace",
+    238,
+    243,
+    167,
+    170,
+    [
+     "Support on Polar.sh",
+     "Portfolio",
+     "Agency"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    248,
+    170,
+    175
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "5c8cea313960+2": {
+  "fn": "ezeparziale/fastapi-api-template",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    128,
+    1,
+    127
+   ],
+   [
+    "replace",
+    128,
+    133,
+    127,
+    132,
+    [
+     "|Endpoint|Probe|Checks|On failure|",
+     "|--------------|---------|---------------------------------|----------|",
+     "|`/health/live`|Liveness|Process only|Never 503|",
+     "|`/health/ready`|Readiness|Database (required) + Redis (optional)|`503` when the database is down|",
+     "|`/health`|Legacy|Database only|`503` when the database is down|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    135,
+    132,
+    134
+   ],
+   [
+    "replace",
+    135,
+    136,
+    134,
+    135,
+    [
+     " not cause the container to be restarted."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    135,
+    136
+   ],
+   [
+    "replace",
+    137,
+    139,
+    136,
+    138,
+    [
+     " optional dependency: an outage is reported as `redis_status: \"unhealthy\"` but",
+     " the API stays ready. When caching is disabled it reports `\"disabled\"`."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    138,
+    139
+   ],
+   [
+    "replace",
+    140,
+    142,
+    139,
+    141,
+    [
+     " `HEALTHCHECK` calls). New deployments should point liveness probes to",
+     " `/health/live` and readiness probes to `/health/ready`."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    251,
+    141,
+    250
+   ],
+   [
+    "replace",
+    251,
+    253,
+    250,
+    252,
+    [
+     "2. **Open Grafana** on http://localhost:3000 with `admin` / `admin`.",
+     " The data sources and the dashboards are provisioned automatically."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    261,
+    252,
+    260
+   ],
+   [
+    "replace",
+    261,
+    266,
+    260,
+    265,
+    [
+     " - `Overview / Golden Signals`: traffic, errors, latency and saturation, the",
+     " entry point",
+     " - `App Logs`: log lines plus the share of logs per level",
+     " - `Request Metrics`: throughput, latency percentiles and error rate",
+     " - `APM / Service Overview`: service graph, span RED metrics and recent traces"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    265,
+    266
+   ],
+   [
+    "replace",
+    267,
+    269,
+    266,
+    268,
+    [
+     " Or query the data sources by hand from Grafana > **Explore**: `Tempo` for",
+     " traces, `Prometheus` for metrics, `Loki` for logs."
+    ]
+   ],
+   [
+    "equal",
+    269,
+    272,
+    268,
+    271
+   ],
+   [
+    "replace",
+    272,
+    279,
+    271,
+    278,
+    [
+     "|Service|URL|",
+     "|----------|----------------------|",
+     "|Grafana|http://localhost:3000|",
+     "|Alloy UI|http://localhost:12345|",
+     "|Prometheus|http://localhost:9090|",
+     "|Tempo|http://localhost:3200|",
+     "|Loki|http://localhost:3100|"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    293,
+    278,
+    292
+   ],
+   [
+    "replace",
+    293,
+    294,
+    292,
+    293,
+    [
+     " they are grouped as `unmatched` with `label_replace()`."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    293,
+    294
+   ],
+   [
+    "replace",
+    295,
+    296,
+    294,
+    295,
+    [
+     " a quiet dashboard never looks broken."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    312,
+    295,
+    311
+   ],
+   [
+    "replace",
+    312,
+    314,
+    311,
+    313,
+    [
+     " `latency_bucket`, `size_total`), labeled by `service`, `span_name`,",
+     " `span_kind` and `status_code`."
+    ]
+   ],
+   [
+    "equal",
+    314,
+    315,
+    313,
+    314
+   ],
+   [
+    "replace",
+    315,
+    316,
+    314,
+    315,
+    [
+     " between a `client` and a `server`, which draw the node graph."
+    ]
+   ],
+   [
+    "equal",
+    316,
+    320,
+    315,
+    319
+   ],
+   [
+    "replace",
+    320,
+    322,
+    319,
+    321,
+    [
+     " PromQL panel. It resolves the `traces_service_graph_*` series through the",
+     " Prometheus data source linked under `serviceMap` in the Tempo data source."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    323,
+    321,
+    322
+   ],
+   [
+    "replace",
+    323,
+    325,
+    322,
+    324,
+    [
+     " push into it; without that flag the generator logs remote-write failures and",
+     " the dashboard stays empty."
+    ]
+   ],
+   [
+    "equal",
+    325,
+    343,
+    324,
+    342
+   ],
+   [
+    "replace",
+    343,
+    355,
+    342,
+    343,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    356,
+    343,
+    344
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "dcf97b789009+2": {
+  "fn": "pumpingstationone/deepharbor",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Also note that Pumping Station One uses Azure B2C for identity management; if you are not using Azure B2C, you will need to modify the authentication and authorization code in both the DHAdminPortal and DHMemberPortal components to reflect your identity management system."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "The Deep Harbor CRM was written to support membership at Pumping Station: One. It's meant to be performant and flexable, subscribing to the concept of _\"You don't know what you don't know.\"_ What this means is that the system is designed to be easy to extend and modify to fit new situations with minimal changes."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    75,
+    7,
+    75
+   ],
+   [
+    "delete",
+    75,
+    76,
+    75,
+    75
+   ],
+   [
+    "equal",
+    76,
+    81,
+    75,
+    80
+   ],
+   [
+    "replace",
+    81,
+    82,
+    80,
+    81,
+    [
+     " Ensure that Docker and Docker Compose are installed on your machine. You can download them from the Docker website."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    88,
+    81,
+    87
+   ],
+   [
+    "replace",
+    88,
+    89,
+    87,
+    88,
+    [
+     " Use the provided `start_dh.sh` script to set up and start all necessary components. This script will handle starting the database, web portals, dispatcher, and services."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    88,
+    91
+   ],
+   [
+    "replace",
+    92,
+    93,
+    91,
+    92,
+    [
+     " To stop all components, use:"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    92,
+    95
+   ],
+   [
+    "replace",
+    96,
+    97,
+    95,
+    96,
+    [
+     " If you need to reset everything (including the database), use:"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    96,
+    99
+   ],
+   [
+    "replace",
+    100,
+    101,
+    99,
+    100,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    100,
+    101
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

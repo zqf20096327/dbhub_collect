@@ -18417,5 +18417,1923 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "036eab90111f+2": {
+  "fn": "kyledelfin2006/libro-library-system",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Libro - Library Management System "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Libro system logo"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    12,
+    4,
+    10,
+    [
+     "CI",
+     "CD",
+     "Java",
+     "Spring Boot",
+     "PostgreSQL",
+     "Docker"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    15,
+    10,
+    13
+   ],
+   [
+    "replace",
+    15,
+    16,
+    13,
+    14,
+    [
+     "Libro is a Spring Boot REST API for the library of Aklan State University – College of Computer Studies (ASU-CCS). It manages physical book copies, user accounts, and loan history. Each catalog record is one physical copy, which keeps loan history accurate per copy (see Domain Decisions)."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    18,
+    14,
+    16
+   ],
+   [
+    "replace",
+    18,
+    51,
+    16,
+    17,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    17,
+    20
+   ],
+   [
+    "replace",
+    54,
+    55,
+    20,
+    21,
+    [
+     "- **Loans:** students and faculty borrow for 14 days, up to three active loans each; overdue loans block new checkouts. See the Loan Implementation Guide."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    21,
+    22
+   ],
+   [
+    "replace",
+    56,
+    57,
+    22,
+    23,
+    [
+     "- **Security:** stateless HS256 JWT Bearer authentication, BCrypt passwords, per-IP rate limits on login and signup, and a uniform JSON error contract. See the JWT Authentication Design."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    59,
+    23,
+    25
+   ],
+   [
+    "replace",
+    59,
+    65,
+    25,
+    31,
+    [
+     "|Layer|Technology|",
+     "|---|---|",
+     "|Language and framework|Java 25, Spring Boot 4.1.2 (Web, Data JPA, Security, OAuth2 Resource Server, Validation)|",
+     "|Data|PostgreSQL 18, Flyway 13.3.0, Hibernate with schema validation|",
+     "|Build and test|Maven, JUnit 5, Mockito, Testcontainers, JaCoCo|",
+     "|Delivery|Docker, Docker Compose, Caddy, GitHub Actions, Trivy|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    72,
+    31,
+    38
+   ],
+   [
+    "replace",
+    72,
+    76,
+    38,
+    39,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    39,
+    41
+   ],
+   [
+    "replace",
+    78,
+    79,
+    41,
+    42,
+    [
+     "The single-module codebase groups `auth`, `book`, `loan`, `user`, `audit`, and `info` by feature, then by layer. Controllers accept and return DTOs; services own business rules, transactions, and entity-to-DTO mapping; repositories own persistence. Shared responses, errors, request IDs, time handling, and OpenAPI configuration live in `global`. Flyway owns the schema, and Hibernate validates it at startup. Architecture Overview shows the request and data flows; its Design Rules section records the package decision."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    42,
+    45
+   ],
+   [
+    "replace",
+    82,
+    88,
+    45,
+    51,
+    [
+     "|Change|Result|",
+     "|---|---|",
+     "|Standardized feature packages and moved DTO mapping into services|Controllers stay focused on HTTP, and JPA entities do not cross the API boundary.|",
+     "|Moved account ownership and target-role rules into `UserAccessPolicy`|One policy handles student, faculty, assistant, and librarian account operations.|",
+     "|Introduced shared not-found and invalid-request exception types|Expected client errors have consistent status codes; unexpected faults get a generic 500 response.|",
+     "|Layered the test profile over runtime configuration|Tests exercise the real application defaults with only test-specific overrides.|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    91,
+    51,
+    54
+   ],
+   [
+    "replace",
+    91,
+    98,
+    54,
+    61,
+    [
+     "|Problem|Project change|",
+     "|---|---|",
+     "|Entity types and database columns disagreed at startup|Made Flyway the sole schema authority, aligned migrations with JPA, and kept Hibernate schema validation enabled.|",
+     "|Container startup could race PostgreSQL readiness|Added a database health check and made the app wait for a healthy database.|",
+     "|Concurrent checkout could assign one copy twice|Added row locking, a database unique index for active loans, and PostgreSQL concurrency tests.|",
+     "|HTTP-only or mocked tests could miss real persistence errors|Split fast unit/MVC tests from Testcontainers integration tests that exercise migrations, JPA, constraints, and loan races.|",
+     "|Scattered account rules and error handling were hard to audit|Centralized target-role/ownership checks in `UserAccessPolicy` and mapped client failures through shared exception types.|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    61,
+    62
+   ],
+   [
+    "replace",
+    99,
+    100,
+    62,
+    63,
+    [
+     "The Development Problems Solved guide traces more issues from symptom to fix and verification. The Engineering Reference documents current code contracts and test boundaries."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    63,
+    66
+   ],
+   [
+    "replace",
+    103,
+    104,
+    66,
+    67,
+    [
+     "> **Try Libro:** Demo patron accounts are documented below. The public OCI instance is not deployed yet; seed them locally to use the API now. Staff credentials stay private."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    107,
+    67,
+    70
+   ],
+   [
+    "replace",
+    107,
+    111,
+    70,
+    74,
+    [
+     "|Role|University ID|Password|Seed method|",
+     "|---|---|---|---|",
+     "|`STUDENT`|`2025-0001`|`DemoPatron@2026`|`bash scripts/seed-demo.sh --patrons-only`|",
+     "|`FACULTY`|`2025-0002`|`DemoPatron@2026`|`bash scripts/seed-demo.sh` (requires a librarian)|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    74,
+    75
+   ],
+   [
+    "replace",
+    112,
+    113,
+    75,
+    76,
+    [
+     "After starting the local stack, use the first command to create the student. The full seed also creates the faculty account and sample books and prompts for the librarian password. See Demo Accounts for staff-account setup and Local Setup for the optional first-librarian bootstrap. No public instance is available yet."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    132,
+    76,
+    95
+   ],
+   [
+    "replace",
+    132,
+    133,
+    95,
+    96,
+    [
+     " In PowerShell, use `Copy-Item .env.example .env` for the last command. Set your own PostgreSQL credentials, `LIBRO_ADMIN_PASSWORD_HASH` (a BCrypt hash of a password you choose), and `LIBRO_JWT_SECRET_BASE64` (`openssl rand -base64 32`). The Operations Runbook shows hash generation. `.env` is git-ignored."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    140,
+    96,
+    103
+   ],
+   [
+    "replace",
+    140,
+    141,
+    103,
+    104,
+    [
+     "3. Check readiness at `http://localhost:8080/readyz`. Seed the demo student or create your own student through signup, then follow the login example."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    104,
+    105
+   ],
+   [
+    "replace",
+    142,
+    143,
+    105,
+    106,
+    [
+     "Swagger UI and `/v3/api-docs` are off unless `LIBRO_API_DOCS_ENABLED=true`, which you can set in your local `.env` (the template leaves it `false`). To run the app outside Docker, enable the TLS proxy profile, or provision the first librarian, see Local Setup and Configuration."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    148,
+    106,
+    111
+   ],
+   [
+    "replace",
+    148,
+    149,
+    111,
+    112,
+    [
+     "Copy `.env.example` for the local template. The settings below cover the app and Compose; blank optional values disable the related feature."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    112,
+    113
+   ],
+   [
+    "replace",
+    150,
+    169,
+    113,
+    132,
+    [
+     "|Variable|Required|Default or purpose|",
+     "|---|---|---|",
+     "|`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`|Yes for Compose|Set your own database name, role, and password.|",
+     "|`LIBRO_ADMIN_PASSWORD_HASH`|First startup of an empty database|BCrypt hash for Flyway V2's library-assistant account; may be blank once V2 has run.|",
+     "|`LIBRO_JWT_SECRET_BASE64`|Yes|No default; must decode to at least 32 random bytes.|",
+     "|`LIBRO_JWT_ISSUER`, `LIBRO_JWT_AUDIENCE`|No|`libro-api` for both.|",
+     "|`LIBRO_JWT_ACCESS_TOKEN_TTL_SECONDS`|No|`900` seconds.|",
+     "|`LIBRO_CORS_ALLOWED_ORIGINS`|No|Blank denies cross-origin browser access; accepts comma-separated exact origins.|",
+     "|`SERVER_FORWARD_HEADERS_STRATEGY`|No|`none`; use `native` only behind a trusted proxy with no direct app ingress.|",
+     "|`LIBRO_LOGIN_RATE_LIMIT_REQUESTS`, `LIBRO_LOGIN_RATE_LIMIT_WINDOW_SECONDS`|No|`20` requests per `60` seconds per client IP.|",
+     "|`LIBRO_SIGNUP_RATE_LIMIT_REQUESTS`, `LIBRO_SIGNUP_RATE_LIMIT_WINDOW_SECONDS`|No|`10` requests per `3600` seconds per client IP.|",
+     "|`LIBRO_RATE_LIMIT_MAX_TRACKED_CLIENT_ROUTES`|No|`10000` in-memory client/route counters.|",
+     "|`LIBRO_BOOTSTRAP_LIBRARIAN_UNIVERSITY_ID`, `LIBRO_BOOTSTRAP_LIBRARIAN_EMAIL`, `LIBRO_BOOTSTRAP_LIBRARIAN_FIRST_NAME`, `LIBRO_BOOTSTRAP_LIBRARIAN_LAST_NAME`, `LIBRO_BOOTSTRAP_LIBRARIAN_PASSWORD_HASH`|No|Set all five together to create the first librarian once; supply a BCrypt hash.|",
+     "|`LIBRO_API_DOCS_ENABLED`|No|`false`; `true` serves Swagger UI and `/v3/api-docs` publicly.|",
+     "|`LIBRO_ENVIRONMENT_NAME`|No|`local`; staff-visible label returned by `/app/info`.|",
+     "|`LIBRO_DOMAIN`|For the TLS proxy|`localhost` locally; set a real host name for deployment.|",
+     "|`MANAGEMENT_SERVER_PORT`|No|`9091`; private Actuator health and Prometheus port.|",
+     "|`LIBRO_DATA_DIR`|Production deploy only|Block-volume path for database data, backups, and release state.|",
+     "|`LIBRO_BACKUP_BUCKET`|No|Optional OCI Object Storage bucket for off-host backups.|"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    174,
+    132,
+    137
+   ],
+   [
+    "replace",
+    174,
+    178,
+    137,
+    141,
+    [
+     "|Secret|Purpose|",
+     "|---|---|",
+     "|`OCI_HOST`, `OCI_USER`|SSH target and deploy user.|",
+     "|`OCI_SSH_KEY`, `OCI_SSH_KNOWN_HOSTS`|Deploy private key and verified host key.|"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    141,
+    142
+   ],
+   [
+    "replace",
+    179,
+    180,
+    142,
+    143,
+    [
+     "Image publishing uses GitHub's built-in `GITHUB_TOKEN`. The runbook setup explains the environment, repository variable `OCI_DEPLOY_ENABLED`, and branch checks."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    183,
+    143,
+    146
+   ],
+   [
+    "replace",
+    183,
+    184,
+    146,
+    147,
+    [
+     "Real `.env` files and private keys are git-ignored. Keep passwords, JWT keys, and staff credentials out of commits and logs. See CI/CD and DevOps for production handling."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    224,
+    147,
+    187
+   ],
+   [
+    "replace",
+    224,
+    230,
+    187,
+    193,
+    [
+     "|Area|Representative endpoints|Access|",
+     "|---|---|---|",
+     "|Books|`GET /app/books/all`, `GET /app/books/query`, `GET /app/books/{id}`, `POST /app/books/add`|All roles read; library assistants and librarians write. Book responses include advisory `available`; query supports `available` and `copyStatus`.|",
+     "|Users|`POST /app/users/signup`, `GET /app/users`, `GET /app/users/me`, `GET /app/users/{universityId}`, `PUT /app/users/{universityId}/password/reset`|Signup is public; the staff directory supports scoped `role` and text `q` filters. Profiles and resets remain role scoped.|",
+     "|Loans|`POST /app/loans/{bookId}`, `PUT /app/loans/{loanId}/return`, `GET /app/loans/me`, `GET /app/loans`, `GET /app/loans/activity`, `GET /app/loans/top-titles`|Students/faculty borrow and return their own loans; staff get scoped lists and chart aggregates.|",
+     "|Staff|`GET /app/info`, `GET /app/audit`|Staff can see safe build details and role-scoped change history.|"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    193,
+    194
+   ],
+   [
+    "replace",
+    231,
+    232,
+    194,
+    195,
+    [
+     "Successful responses use an `ApiResponse` envelope; errors use `ErrorResponse` with a `requestId` and optional stable `code`. List results are paginated (default size 12, maximum 100). Enable `LIBRO_API_DOCS_ENABLED=true` locally for `/swagger-ui.html` and `/v3/api-docs`; they are off by default. See the Engineering Reference for the API inventory and response contracts, and the Roles and JWT Guide for permissions."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    243,
+    195,
+    206
+   ],
+   [
+    "replace",
+    243,
+    253,
+    206,
+    207,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    257,
+    207,
+    211
+   ],
+   [
+    "replace",
+    257,
+    258,
+    211,
+    212,
+    [
+     "Every pull request and every push to `main` runs three parallel checks in `.github/workflows/ci.yml`:"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    212,
+    213
+   ],
+   [
+    "replace",
+    259,
+    264,
+    213,
+    218,
+    [
+     "|Check|What it proves|",
+     "|---|---|",
+     "|`unit-test`|Unit and MVC tests, with an 80% line-coverage floor|",
+     "|`integration-test`|Flyway migrations, schema validation, and loan concurrency against PostgreSQL 18|",
+     "|`security-scan`|Trivy finds no fixable HIGH or CRITICAL issues in dependencies or the container image|"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    267,
+    218,
+    221
+   ],
+   [
+    "replace",
+    267,
+    268,
+    221,
+    222,
+    [
+     "After CI passes on a `main` push, `.github/workflows/cd.yml` builds and scans one immutable ARM64 image on a native ARM runner and publishes it to GitHub Container Registry by commit SHA. A manual `workflow_dispatch` can also build and publish; pull requests that change the CD workflow or Dockerfile get a build-and-scan dry run without publishing. The deploy job runs only when the repository variable `OCI_DEPLOY_ENABLED=true` and the `production` environment's required reviewers approve it."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    277,
+    222,
+    231
+   ],
+   [
+    "replace",
+    277,
+    278,
+    231,
+    232,
+    [
+     "`scripts/deploy.sh` already does the deploy step by hand: it backs up the database, starts the new image, runs a smoke test (readiness, login, authenticated read, anonymous rejection), and restarts the previous image if anything fails. Flyway migrations are forward-only, so database recovery uses `scripts/restore.sh`. `backup.sh` and `seed-demo.sh` cover backups and demo data. The pipeline stages, environments, rollback, and monitoring are in CI/CD and DevOps; first deploy, manual update, restore, and automation setup are in the Operations Runbook."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    281,
+    232,
+    235
+   ],
+   [
+    "replace",
+    281,
+    282,
+    235,
+    236,
+    [
+     "On a provisioned VM, use `scripts/deploy.sh` for a manual release or the runbook's update procedure for a rollback. If a release applied a bad database migration, restore the pre-deploy backup; an application image rollback cannot reverse Flyway migrations."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    287,
+    236,
+    241
+   ],
+   [
+    "replace",
+    287,
+    288,
+    241,
+    242,
+    [
+     "Run `./mvnw verify` for unit/MVC tests and the 80% line-coverage gate. Run `./mvnw -Pintegration -DskipUTs -Djacoco.haltOnFailure=false verify` for the PostgreSQL suite (unit tests run once, in the first command); it needs Docker and a test-only `LIBRO_ADMIN_PASSWORD_HASH` in the shell environment, because Maven does not load Compose's `.env`. On Windows, use `mvnw.cmd`. The Engineering Reference explains test scope and where to add coverage."
+    ]
+   ],
+   [
+    "equal",
+    288,
+    291,
+    242,
+    245
+   ],
+   [
+    "replace",
+    291,
+    304,
+    245,
+    258,
+    [
+     "|Start here for|Document|",
+     "|---|---|",
+     "|System design, flows, and data model|Architecture|",
+     "|Current repository map, API inventory, configuration, and tests|Engineering Reference|",
+     "|Proposed UI, backend, and OCI implementation work|Implementation Plans and Development Roadmap|",
+     "|Running and configuring a local stack|Local Setup|",
+     "|Public patron logins and private staff-account policy|Demo Accounts|",
+     "|Physical-copy and loan decisions|Domain Decisions and Loan Implementation Guide|",
+     "|Role boundaries and authentication internals|Roles and JWT Guide and JWT Authentication Design|",
+     "|API documentation conventions|API Documentation Guideline|",
+     "|Pipeline, infrastructure, and recovery|CI/CD and DevOps and Operations Runbook|",
+     "|Engineering choices and institutional domain|Development Problems Solved and Institutional Context|",
+     "|Remaining work and contribution rules|Development Roadmap and Agent and Contributor Guide|"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    311,
+    258,
+    265
+   ],
+   [
+    "replace",
+    311,
+    320,
+    265,
+    266,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    322,
+    266,
+    268
+   ],
+   [
+    "replace",
+    322,
+    323,
+    268,
+    269,
+    [
+     "Start with Architecture and Reference for how the system works, the Engineering Reference for contracts and configuration, and Development Problems Solved for the engineering decisions behind it. Institutional Context explains the ASU-CCS user domain."
+    ]
+   ],
+   [
+    "equal",
+    323,
+    325,
+    269,
+    271
+   ],
+   [
+    "replace",
+    325,
+    328,
+    271,
+    272,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    330,
+    272,
+    274
+   ],
+   [
+    "replace",
+    330,
+    339,
+    274,
+    283,
+    [
+     "|Area|State|",
+     "|---|---|",
+     "|Catalog, accounts, roles, JWT authentication, loans|Implemented and covered by unit, MVC, and PostgreSQL tests|",
+     "|CI (`unit-test`, `integration-test`, `security-scan`)|Running on every pull request and push to `main`; required by branch protection on `main`|",
+     "|Container image and Compose stack|Implemented, with health checks|",
+     "|Deploy, rollback, backup, and smoke-test scripts; runbook|Implemented and rehearsed locally|",
+     "|CD workflow (ARM64 build, scan, publish, gated deploy)|Implemented; deploy job off until the VM exists|",
+     "|OCI VM|Not provisioned; see the Operations Runbook and Roadmap|",
+     "|Open items|TLS with a real domain, login-failure and rate-limit alerts, and an independent security review before public exposure|"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    340,
+    283,
+    284
+   ],
+   [
+    "replace",
+    340,
+    341,
+    284,
+    285,
+    [
+     "The Development Roadmap tracks the detail."
+    ]
+   ],
+   [
+    "equal",
+    341,
+    343,
+    285,
+    287
+   ],
+   [
+    "replace",
+    343,
+    345,
+    287,
+    288,
+    [
+     "This project is licensed under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "1f5584ec7724+2": {
+  "fn": "webready-se/puls",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "delete",
+    0,
+    4,
+    0,
+    0
+   ],
+   [
+    "equal",
+    4,
+    8,
+    0,
+    4
+   ],
+   [
+    "replace",
+    8,
+    9,
+    4,
+    5,
+    [
+     "Self-hosted web analytics in a single PHP file and SQLite. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    5,
+    7
+   ],
+   [
+    "replace",
+    11,
+    14,
+    7,
+    10,
+    [
+     "Tests",
+     "Latest release",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    10,
+    11
+   ],
+   [
+    "replace",
+    15,
+    21,
+    11,
+    12,
+    [
+     " The Puls dashboard: pageviews, visitors, bounce rate and time per visitor with trends, a chart with a release marker and a note, a summary row, and goals with targets"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    24,
+    12,
+    15
+   ],
+   [
+    "replace",
+    24,
+    25,
+    15,
+    16,
+    [
+     "On any host with PHP 8.3 or newer, download the latest release, then:"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    38,
+    16,
+    29
+   ],
+   [
+    "replace",
+    38,
+    39,
+    29,
+    30,
+    [
+     "That's it. Docker, Nginx, Laravel Forge and shared hosting without SSH are covered in Install and run."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    53,
+    30,
+    44
+   ],
+   [
+    "replace",
+    53,
+    54,
+    44,
+    45,
+    [
+     "Bots and crawlers, grouped as monitor, search engine, AI and social, with the most crawled pages, the latest bot activity and pages to fix"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    59,
+    45,
+    50
+   ],
+   [
+    "replace",
+    59,
+    60,
+    50,
+    51,
+    [
+     "Opening an event: a daily trend with release and note markers, then the values grouped by location"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    51,
+    52
+   ],
+   [
+    "replace",
+    61,
+    62,
+    52,
+    53,
+    [
+     "Two saved cards: CTA clicks by placement and sign-ups by plan, each with a count, a change against the previous period and a sparkline"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    71,
+    53,
+    62
+   ],
+   [
+    "replace",
+    71,
+    72,
+    62,
+    63,
+    [
+     "- **Teams and clients:** one dashboard for many sites, sites in groups, users limited to their own sites, read-only share links, a JSON and CSV API"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    76,
+    63,
+    67
+   ],
+   [
+    "replace",
+    76,
+    78,
+    67,
+    68,
+    [
+     " More screenshots "
+    ]
+   ],
+   [
+    "equal",
+    78,
+    81,
+    68,
+    71
+   ],
+   [
+    "replace",
+    81,
+    82,
+    71,
+    72,
+    [
+     "The pageview chart with the previous period drawn behind each bar"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    85,
+    72,
+    75
+   ],
+   [
+    "replace",
+    85,
+    86,
+    75,
+    76,
+    [
+     "The events list next to visitor countries"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    76,
+    79
+   ],
+   [
+    "replace",
+    89,
+    92,
+    79,
+    80,
+    [
+     "The dashboard in light mode"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    95,
+    80,
+    83
+   ],
+   [
+    "replace",
+    95,
+    96,
+    83,
+    84,
+    [
+     "||What you run|Database|Cookies|Hosted version|License|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    84,
+    85
+   ],
+   [
+    "replace",
+    97,
+    103,
+    85,
+    91,
+    [
+     "|**Puls**|One PHP file on any PHP 8.3 host, or Docker|SQLite, built in|None|No|MIT|",
+     "|GoatCounter|One Go binary|SQLite or PostgreSQL|None|Free, donation-supported|EUPL (modified)|",
+     "|Umami|Node.js app, or Docker|PostgreSQL|None|Free tier and paid plans|MIT|",
+     "|Plausible CE|Docker Compose, 2 GB RAM recommended|PostgreSQL and ClickHouse|None|Paid|AGPL-3.0|",
+     "|Matomo|PHP app|MySQL or MariaDB|Yes by default, can be turned off|Paid|GPL-3.0|",
+     "|Google Analytics|Nothing, Google hosts it|Google's servers|Yes|Free|Proprietary|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    91,
+    92
+   ],
+   [
+    "replace",
+    104,
+    105,
+    92,
+    93,
+    [
+     " From each project's own documentation, October 2026. Corrections are welcome as issues or pull requests. "
+    ]
+   ],
+   [
+    "equal",
+    105,
+    120,
+    93,
+    108
+   ],
+   [
+    "replace",
+    120,
+    121,
+    108,
+    109,
+    [
+     "You decide what your sites send. Keeping personal data out of URLs shows how to drop search terms, ids and personal links before they reach Puls."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    124,
+    109,
+    112
+   ],
+   [
+    "replace",
+    124,
+    129,
+    112,
+    117,
+    [
+     "- Install and run: release download, shared hosting, Nginx, Apache, Laravel Forge, Docker, upgrading",
+     "- Tracking and integrations: script attributes, custom events, frameworks (Next.js, Astro, Laravel, Statamic, React), auto events, server-side bot tracking, reverse proxies",
+     "- Configuration and CLI: `.env` settings, users and access, share links, excluding your own visits, white-label, every CLI command",
+     "- Read API: JSON and CSV with a share token, also for your AI assistant",
+     "- Changelog and roadmap"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    132,
+    117,
+    120
+   ],
+   [
+    "replace",
+    132,
+    133,
+    120,
+    121,
+    [
+     "Give your assistant a read-only token, and it can see what your visitors do before it changes something, and whether the change made a difference. `?api&format=md` is a report written for it, where nothing a visitor's browser sent can pass itself off as an instruction. `llms.txt` tells an agent how to read an install. Puls itself never calls an AI service."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    135,
+    121,
+    123
+   ],
+   [
+    "replace",
+    135,
+    137,
+    123,
+    124,
+    [
+     "MIT. Made by Webready in Sweden. The dashboard uses the Figtree typeface, under the SIL Open Font License (`public/fonts/OFL.txt`)."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "362334e42c0c+2": {
+  "fn": "shangyunqiang1/DSH_Eplan",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "把 Bochica 的 EPLAN 能力移植成 **DeepSeek Harness 插件（bundle）**："
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    3,
+    8
+   ],
+   [
+    "replace",
+    8,
+    12,
+    8,
+    12,
+    [
+     " 2026 / 2027 / EEC Pro（`rag2025.covaga.xyz` 不存在），EPLAN_Skills 也写明「P8 2025 的接口应结合本机核对」。",
+     " 本插件一方面解析本机安装的 `Eplan.EplApi.*u.xml`（12 个程序集、36,493 个成员）生成 API 索引，另一方面",
+     " 一次性爬取官方帮助站的 `Plattform/2025` 用户手册（2,691 页：对话框、设置、命令、概念、提示信息）——两者",
+     " 都是版本精确、全程离线、每条结果带官方帮助页 URL。"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    15,
+    13,
+    15,
+    [
+     " 本机）；本插件改为一次性爬取官方帮助站 `www.eplan.help`，写入本地 SQLite（`data\\eplan2026-help.sqlite` 等），",
+     " 之后所有检索都在本机完成，不再联网。同时补上了原方案完全没有的 **2025 平台用户手册**（2,691 页）。"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    22,
+    15,
+    22
+   ],
+   [
+    "replace",
+    22,
+    30,
+    22,
+    30,
+    [
+     "|MCP 服务器|工具前缀|说明|",
+     "|---|---|---|",
+     "|`eplan`|`mcp__eplan__*`|本地 EPLAN 自动化。eplan-mcp v1.3.0（上游 tag，commit `77a78f63`；与 Bochica 同源），discovery 模式发布 15 个工具（12 个连接/动作目录核心 + 3 个发现元工具，含 `eplan_list_dialogs` / `eplan_click_dialog_button` 用于 EPLAN 被弹窗卡住时）；约 236 个隐藏类型化工具（full 模式共 248 个）通过 `eplan_tools_call` 调用，约 1150 个原始 action 通过 `eplan_action_run` 调用。每个工具带 MCP 注解与 `canary-ecad/eplan` 安全事实。通过 Remote Client 驱动正在运行的 EPLAN。|",
+     "|`eplan2025`|`mcp__eplan2025__*`|EPLAN P8 2025.0.3 的 .NET **API 离线参考**（36,493 个成员，全文检索 + 按成员/类型查看，带 Source URL）。**纯本地**。|",
+     "|`eplan2025guide`|`mcp__eplan2025guide__*`|P8 2025 **平台用户手册**离线索引（2,691 页：对话框/Settings、命令调用路径、工艺流程、提示信息；`_search` / `_get` / `_stats`）。**纯本地**。|",
+     "|`eplan2026`|`mcp__eplan2026__*`|本地爬取的 P8 2026 API 参考 + 平台帮助（SQLite FTS5，`category` 区分 API/User Guide）。**纯本地**。|",
+     "|`eplan2027`|`mcp__eplan2027__*`|本地爬取的 P8 2027 API 参考 + 平台帮助，支持按页读取。**纯本地**。|",
+     "|`eecpro`|`mcp__eecpro__*`|本地爬取的 EEC Pro 2026 帮助（参考公式、EEC CAD/PLC/脚本、管理、参考命令）。**纯本地**。|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    48,
+    30,
+    48
+   ],
+   [
+    "replace",
+    48,
+    57,
+    48,
+    57,
+    [
+     "|Bochica|本插件|",
+     "|---|---|",
+     "|`eplan`（stdio，`EPLAN_MCP_MODE=full`，248 工具）|`eplan`（stdio，默认 `discovery`，15 工具 = 12 核心 + 3 元工具），需要时可切回 full|",
+     "|`eplan-docs-2027`（https://rag2027.covaga.xyz/mcp，必选）|`eplan2027`（**改为本地爬取**，同一套 2027 帮助页）|",
+     "|`eplan-docs-2026`（https://rag2026.covaga.xyz/mcp，可选）|`eplan2026`（**改为本地爬取**，同一套 2026 帮助页）|",
+     "|`eec-pro-docs`（https://rageecpro.covaga.xyz/mcp，可选）|`eecpro`（**改为本地爬取**，EEC Pro 2026 官方帮助）|",
+     "|—（无 2025）|`eplan2025` + `eplan2025guide`（**新增**，本地离线：API 索引 + 平台用户手册）|",
+     "|`eplan-scripting-skill` / `eec-pro-skill`|`skills/eplan-scripting` / `skills/eec-pro-development`（MIT，保留许可证与出处）|",
+     "|Consult / Tasks / Draw 三种系统提示|`index.js` 的 `eplan:integration` 区块 + `eplan` / `eplan-docs` / `eplan-setup` 技能|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    63,
+    57,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     " **文件 → 设置 → 工作站 → 接口 → 远程访问** 勾选「允许通过 Remote Client 远程访问」。"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    64,
+    65
+   ],
+   [
+    "replace",
+    65,
+    68,
+    65,
+    68,
+    [
+     " 默认复用 EPLAN_Skills 环境（实际解释器路径由 `setup.ps1` 探测并写入 `runtime\\python-path.txt`），",
+     " 也可用 `-Python <路径>` 指定；setup 还会回退到 Bochica 内置解释器、`py` 启动器和 PATH。",
+     " **vendor 已随插件入库，不依赖 Bochica 安装目录。**"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    70,
+    68,
+    70
+   ],
+   [
+    "replace",
+    70,
+    71,
+    70,
+    71,
+    [
+     " 2025 的 API 索引完全来自本机安装的 XML。"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    76,
+    71,
+    76
+   ],
+   [
+    "replace",
+    76,
+    80,
+    76,
+    77,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    100,
+    77,
+    97
+   ],
+   [
+    "replace",
+    100,
+    110,
+    97,
+    107,
+    [
+     "|检查|期望|",
+     "|---|---|",
+     "|`mcp__eplan__eplan_versions`|`2025` / `2025.0.3`，runtime `netfx`|",
+     "|`mcp__eplan__eplan_status`|`connected: false` 直到 `eplan_connect`；连接后 `api_loaded: true`|",
+     "|`mcp__eplan__eplan_tools_search({query:\"pdf\"})`|返回 `eplan_export_pdf_project` 等类型化工具|",
+     "|`mcp__eplan2025__eplan2025_stats`|EPLAN 2025.0.3，36,493 个成员，库大小约 35 MB|",
+     "|`mcp__eplan2025__eplan2025_get({name:\"Eplan.EplApi.DataModel.ProjectManager.OpenProject\"})`|3 个重载，含参数/返回/异常/备注|",
+     "|`mcp__eplan2025guide__eplan2025_guide_stats`|2,691 页平台手册，库大小约 11 MB|",
+     "|`mcp__eplan2025guide__eplan2025_guide_search({query:\"connection numbering\"})`|返回对话框/流程页，带 `/Plattform/2025/Content/htm/` Source URL|",
+     "|`mcp__eplan2026__eplan_stats` / `mcp__eplan2027__eplan2027_stats` / `mcp__eecpro__eecpro_stats`|各自报告本地页数与库大小|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    120,
+    107,
+    117
+   ],
+   [
+    "replace",
+    120,
+    122,
+    117,
+    119,
+    [
+     " `HKLM\\SOFTWARE\\EPLAN\\EPLAN W3\\Platform`（含 WOW6432Node）→ `Program Files` / `Program Files (x86)`",
+     " 下的 `EPLAN\\Platform` 与 `Platform*` 兄弟目录」。识别到的版本与 runtime 以标签显示在框下方。"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    119,
+    120
+   ],
+   [
+    "replace",
+    123,
+    125,
+    120,
+    122,
+    [
+     " `…\\Platform`），或点「浏览…」用内置目录浏览器逐级点选（盘符、上级目录、子目录，含",
+     " `Bin\\Eplan.EplApi.RemoteClientu.dll` 的目录高亮），再点「保存」。回车等于「保存」，「检测」只校验不写入。"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    122,
+    123
+   ],
+   [
+    "replace",
+    126,
+    128,
+    123,
+    125,
+    [
+     " `set EPLAN_PLATFORM_ROOT`，vendor 的 `eplan_connection.py:58` 就用这个值扫版本 —— **不改 vendor 代码**。",
+     " 文件缺失或路径失效时启动器打印一条 stderr 提示并回落到默认路径，不会让服务器起不来。"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    129,
+    125,
+    126
+   ],
+   [
+    "replace",
+    129,
+    130,
+    126,
+    127,
+    [
+     " 服务器只在进程启动时读一次。设置页底部也写了这句提示。"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    127,
+    128
+   ],
+   [
+    "replace",
+    131,
+    132,
+    128,
+    129,
+    [
+     " 命令行指定用 `-PlatformRoot <路径>` 或环境变量 `EPLAN_PLATFORM_ROOT`。"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    143,
+    129,
+    140
+   ],
+   [
+    "replace",
+    143,
+    144,
+    140,
+    141,
+    [
+     " 顶部操作区同时出现 **「更新到 x.y.z」** 按钮（在「卸载」左边）。"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    141,
+    142
+   ],
+   [
+    "replace",
+    145,
+    146,
+    142,
+    143,
+    [
+     " 并提供「检查更新」按钮和 GitHub Release 链接。"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    150,
+    143,
+    147
+   ],
+   [
+    "replace",
+    150,
+    155,
+    147,
+    152,
+    [
+     "|文件|作用|",
+     "|---|---|",
+     "|`versions.json`|发布台账，最新在前；同时就是 GitHub `main` 上的远端清单|",
+     "|`lib/versions.js`|`POST /api-eplan/version`（状态）、`POST /api-eplan/version/update`（更新）；`compareVersions`、`versionStatus`、`applyUpdate`|",
+     "|`client.js`|通过 `plugins.detail.{badge,actions,section}` 三个宿主插槽注入徽标、按钮、版本记录节|"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    159,
+    152,
+    156
+   ],
+   [
+    "replace",
+    159,
+    160,
+    156,
+    157,
+    [
+     " 远端取不到（离线/404）时回落本地台账，`source` 显示 `offline`，界面照常可用。"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    157,
+    158
+   ],
+   [
+    "replace",
+    161,
+    162,
+    158,
+    159,
+    [
+     " 否则把 `package.json#version` 对齐到目标版本——`link:` 安装本来就指向工作树，文件已就位即可生效。"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    175,
+    159,
+    172
+   ],
+   [
+    "replace",
+    175,
+    176,
+    172,
+    173,
+    [
+     "> GitHub Release 附件"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    184,
+    173,
+    181
+   ],
+   [
+    "replace",
+    184,
+    185,
+    181,
+    182,
+    [
+     " （12 个文件；`assembly` 名从文件名推断，因为 XML 内的 `<assembly><name>` 通常为空）。"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    182,
+    183
+   ],
+   [
+    "replace",
+    186,
+    187,
+    183,
+    184,
+    [
+     " 其中 36,478 个有文档文本。按程序集：DataModel 22,823、AF 3,666、MasterData 3,327、Base 1,527 等。"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    195,
+    184,
+    192
+   ],
+   [
+    "replace",
+    195,
+    197,
+    192,
+    194,
+    [
+     " `meta(key, value)`、FTS5 虚表 `fts(name, member_name, summary, params)`（external content，`bm25` 加权",
+     " name 8 / member_name 6 / summary 1 / params 0.5）。"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    194,
+    195
+   ],
+   [
+    "replace",
+    198,
+    202,
+    195,
+    199,
+    [
+     " - `eplan2025_search({query, topK, kind, assembly})` — FTS5 前缀检索；短词、点号全名、中文走 LIKE 回退。",
+     " - `eplan2025_get({name})` — 按全名/签名头/短成员名/类型名解析，一次返回所有重载（参数、返回、异常、备注、Source URL）。",
+     " - `eplan2025_type({type})` — 类型摘要 + 方法/属性/字段/事件分组列表。",
+     " - `eplan2025_stats()` — 版本、构建时间、来源目录、计数、库大小。"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    199,
+    200
+   ],
+   [
+    "replace",
+    203,
+    205,
+    200,
+    202,
+    [
+     " `https://www.eplan.help/en-us/Infoportal/Content/api/2025/<Assembly>u~<Type>[~<Member>(<Args>)].html`",
+     " （`{}` 显示为 `<>`，参数用短类型名，如 `OpenProject(String,OpenMode)`）。"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    210,
+    202,
+    207
+   ],
+   [
+    "replace",
+    210,
+    211,
+    207,
+    208,
+    [
+     " 页名清单取自同目录的 `sitemap.xml`（2,693 个 HTML 条目）。"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    212,
+    208,
+    209
+   ],
+   [
+    "replace",
+    212,
+    213,
+    209,
+    210,
+    [
+     " 也就是「这个按钮在哪、这个选项什么意思」这类问题。"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    210,
+    211
+   ],
+   [
+    "replace",
+    214,
+    215,
+    211,
+    212,
+    [
+     " 把代码里的类型/成员（如 `PathMap.ReSubstitutePath`）丢给 `eplan2025_search`。"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    212,
+    213
+   ],
+   [
+    "replace",
+    216,
+    218,
+    213,
+    215,
+    [
+     " `eplan2025_guide_stats()`；Source URL 形如",
+     " `https://www.eplan.help/en-us/Infoportal/Content/Plattform/2025/Content/htm/<page>.htm`。"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    220,
+    215,
+    217
+   ],
+   [
+    "replace",
+    220,
+    222,
+    217,
+    219,
+    [
+     " `Plattform/2023/...` 路径。因此 `guide` 模式只取页名、再按本版本目录重拼 URL",
+     " （`load_sitemap(..., flatten_prefix=…)`），这也是它需要 `--version` 的原因。"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    232,
+    219,
+    229
+   ],
+   [
+    "replace",
+    232,
+    271,
+    229,
+    230,
+    [
+     "…（39 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    279,
+    230,
+    238
+   ],
+   [
+    "replace",
+    279,
+    281,
+    238,
+    240,
+    [
+     " FTS5 虚表 `fts(title, body)`（external content），`meta` 存版本/来源/构建时间/计数；",
+     " `page` 上的 AFTER INSERT/UPDATE/DELETE 触发器和 FTS 同步，爬完还会统一 `rebuild` 一次。"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    287,
+    240,
+    246
+   ],
+   [
+    "replace",
+    287,
+    288,
+    246,
+    247,
+    [
+     " 每页保留原始 Source URL，回答可精确引用。"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    290,
+    247,
+    249
+   ],
+   [
+    "replace",
+    290,
+    297,
+    249,
+    256,
+    [
+     "|文档集|规模|构成|正文字符|库大小|",
+     "|---|---|---|---|---|",
+     "|2025 API（XML）|36,493 个成员|type 1,246 / method 8,064 / property 15,287 / field 11,895 / event 1|—|35.5 MB|",
+     "|2025 平台手册|2,691 页|topic 2,691（sitemap 全量）|6.3 M|11.6 MB|",
+     "|2026|25,024 页|member 20,281 / topic 2,981 / type 1,018 / members 714 / namespace 30|33.5 M|72.2 MB|",
+     "|2027|26,360 页|member 21,391 / topic 3,037 / type 1,115 / members 781 / namespace 36|34.9 M|75.2 MB|",
+     "|EEC Pro 2026|1,971 页|topic 1,971（sitemap 全量）|2.1 M|4.3 MB|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    256,
+    257
+   ],
+   [
+    "replace",
+    298,
+    302,
+    257,
+    261,
+    [
+     " 2026 API 爬取约 34 分钟（22,346 页，10.8 页/秒，12 线程），2027 约 37 分钟（23,647 页，10.7 页/秒），",
+     " EEC Pro 约 5 分钟（1,971 页，7.2 页/秒，8 线程）；2025/2026/2027 平台手册各约 6 分钟",
+     " （2,691 / 2,705 / 2,748 页，7.9 页/秒，10 线程）。2026/2027 的手册页并入同一个库",
+     " （topic 页从 278 → 2,981、291 → 3,037），靠 `category` 区分 API 与 User Guide。"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    310,
+    261,
+    269
+   ],
+   [
+    "replace",
+    310,
+    331,
+    269,
+    270,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    331,
+    339,
+    270,
+    278
+   ],
+   [
+    "replace",
+    339,
+    341,
+    278,
+    280,
+    [
+     " `cwd` 为 `vendor\\eplan-mcp\\eplan-p8-mcp-server\\mcp_server`。默认 `EPLAN_MCP_MODE=discovery`；",
+     " 改成 `full` 可获得 248 个独立工具（每个请求都要携带全部 schema，token 成本高）。"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    344,
+    280,
+    283
+   ],
+   [
+    "replace",
+    344,
+    345,
+    283,
+    284,
+    [
+     " `launch-docs2027.cmd` 启动 `server\\docs\\server.py --docset …`，只读本地库。**默认关闭**（见下）。"
+    ]
+   ],
+   [
+    "equal",
+    345,
+    400,
+    284,
+    339
+   ],
+   [
+    "replace",
+    400,
+    424,
+    339,
+    340,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    428,
+    340,
+    344
+   ],
+   [
+    "replace",
+    428,
+    449,
+    344,
+    365,
+    [
+     "|现象|处理|",
+     "|---|---|",
+     "|会话里没有 EPLAN 工具|服务器没起来。在终端运行 `scripts\\launch-eplan-mcp.cmd` 看 stderr；确认 `runtime\\python-path.txt` 指向真实解释器。|",
+     "|EPLAN 装在非默认目录，`eplan_versions` 报 `No EPLAN installation found under …`|在 设置 → 插件 → dsh-eplan 里选对根目录（要选到 `…\\EPLAN\\Platform` 这一层，含 `2025.0.3` 子目录），然后**重新加载 `eplan` MCP 客户端**。|",
+     "|设置页改了路径但报错还在|`PLATFORM_ROOT` 在服务器进程启动时读一次。到插件页把 `eplan` 条目停用再启用，或重启 DSH；用 `GET /api-eplan/health` 可确认宿主侧插件已加载。|",
+     "|设置 → 插件 → dsh-eplan 里没有「EPLAN Platform 目录」|插件没重新加载：改动 `client.js`/`index.js` 后需要重启 DSH（或触发 profile 重组合）才会下发新 bundle。|",
+     "|插件列表里六行又变成同一个 `@deepseek-ai/dsh-mcp-client`|`mcp\\<row>\\` 小包丢了，或 `package.json` 少了 `./mcp/*` 三个导出（`./mcp/*`、`./mcp/*/locale/en.json`、`./mcp/*/locale/zh.json`）；注意不能写成 `./mcp/*/locale/*.json`，Node 只替换一个 `*`。|",
+     "|在插件页打开了 2026/2027，重启后又关了|开关写在 profile 的 `cordis.patch.yml`；如果那里没有、只有插件包里的 `disabled: true`，就说明插件包被重装覆盖了。重新在插件页打开即可，插件包的默认值不会被改成 2025 以外。|",
+     "|设置页显示「未检测到」但 EPLAN 确实装了|手动粘贴路径，或用浏览器按钮从盘符逐级进去；也确认安装目录下确实有 `<版本>\\Bin\\Eplan.EplApi.RemoteClientu.dll`。|",
+     "|详情页没有「更新到 …」按钮和版本记录|三点依次排查：`client.js` 是否含 `plugins.detail.section`（旧 bundle 没有）；`POST /api-eplan/version` 是否 200（`lib/versions.js` 没注册说明 `index.js` 版本旧）；`versions.json` 首条是否高于 `package.json#version`——没有更高版本时按钮按设计不显示。|",
+     "|`ModuleNotFoundError: mcp` / `clr`|解释器不对。`setup.ps1 -Python <带 mcp 和 pythonnet 的 python>`。|",
+     "|`eplan_connect` 报 gRPC \"failed to connect to all addresses\"|未开远程访问 / EPLAN 没启动 / 端口不是 49152。让用户用 `netstat -ano|findstr LISTENING` 对照 EPLAN.exe 的 PID 查真实端口。|",
+     "|连到了错误的 EPLAN 版本 / `eplan_connect` 回报 2026|只装 2025 时自动检测仍可能报 2026：显式 `eplan_connect({version:\"2025\"})` 再让服务器加载 DLL；一个进程只能加载一个大版本，换版本要重启 DSH。v1.3.0 的 2027 专用工具仅对 2027 生效。|",
+     "|EPLAN 突然不响应、两分钟后断连|2025 的 `eplan_dataportal_add_to_download_list` 会弹出 Data Portal 模态窗口且脚本不返回：让用户在该窗口下载并关闭后再继续；期间不要重复排队。|",
+     "|`eplan2025_search` 没结果 / stats 找不到库|重建索引；确认 `--xml-dir` 指向已安装平台的 `Bin`。|",
+     "|查界面/流程找不到，但 API 能查到|用错了服务：改用 `eplan2025_guide_search`（2025 手册）或 2026/2027 的 `category:\"User Guide\"`。|",
+     "|2025 手册搜不到，但 `eplan2025_guide_stats` 页数正常|全文索引与页表不同步：`build-help-index.py reindex --out data\\eplan2025-guide.sqlite`。|",
+     "|2026/2027/EEC Pro 工具消失或 stats 页数极少|对应本地库缺失或爬取未完成。重跑 `build-help-index.py`（会断点续爬）；或运行对应 `launch-docs*.cmd` 看 stderr。|",
+     "|2025、2026 都查不到某个名字|它可能是 EPLAN 动作或界面选项而非 .NET 成员，改用 `eplan_action_catalog` / 手册检索。|",
+     "|工具已出现但技能列表里没有|技能目录按会话构建：新开会话或重启 DSH 即可，无需重装。|",
+     "|中文输出乱码|两端均已强制 UTF-8；若仍乱码，检查是否绕过了 `.cmd` 启动器直接运行 `.py`。|"
+    ]
+   ],
+   [
+    "equal",
+    449,
+    451,
+    365,
+    367
+   ],
+   [
+    "replace",
+    451,
+    455,
+    367,
+    368,
+    [
+     "本插件 MIT。第三方组件与文档版权见 THIRD_PARTY_NOTICES.md；上游均为 MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

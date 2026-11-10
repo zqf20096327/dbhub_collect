@@ -2710,5 +2710,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "11828c64983c": {
+  "identity": {
+   "one_liner": "个人学习笔记仓库，汇总CS、云原生、区块链、Golang等系列学习资料",
+   "review": "这是作者 cubxxw 维护的个人学习手册仓库，收录计算机基础、Docker/Kubernetes 云原生、以太坊/比特币/Fabric 区块链教程及 Golang 学习笔记。内容部分迁移至其自建 CubDoc 文档站，并附博客与知乎专栏订阅列表。作者同时运营 kubecub 开源社区。仓库遵循 CC BY-NC-SA 4.0 协议，非商业使用。",
+   "highlights": [
+    "覆盖 Go 语言基础到进阶、Docker/Kubernetes 云原生、CS 基础课程、区块链（eth/btc/fabric）等多个系列笔记",
+    "提供 CubDoc 文档站（Vue.js 渲染）浏览形式，支持保存为 PDF",
+    "README 内含博客专栏与知乎专栏文章列表，通过 GitHub Actions 每个工作日自动更新"
+   ],
+   "use_cases": [
+    "后端开发方向学习者查阅 Go 语言与云原生（Docker/K8s）相关笔记",
+    "了解区块链基础知识、工程师路线与共识算法等入门内容",
+    "参与开源贡献者通过 fork、clone 与提交 issue/pr 协作补充内容"
+   ]
+  },
+  "sha": "11828c64983c",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e62ecb808fd1": {
+  "identity": {
+   "one_liner": "纯 TypeScript 实现的 PostgreSQL 驱动，直接对接线协议，支持 Node.js、Bun 与 Cloudflare Workers。",
+   "review": "PostgreJS 是一个面向 Node.js 与 Bun 的 PostgreSQL 客户端驱动，不依赖 libpq 或原生扩展，以 TypeScript 直接实现 PostgreSQL 线协议，并以 ESM 格式发布。README 称其提供连接池、预编译语句、服务端游标、COPY 流、逻辑复制、两阶段提交、LISTEN/NOTIFY、多主机故障转移与 SCRAM 通道绑定等能力，并支持 TC39 显式资源管理（using）。README 中的性能与内存对比数据来自项目自身的基准测试套件（见 doc/BENCHMARKS.md），非独立验证。安装方式为 npm install postgrejs。",
+   "highlights": [
+    "纯 TypeScript 实现 PostgreSQL 线协议，无原生依赖，以 ESM 发布并附带类型定义",
+    "支持二进制与文本线格式、逐列格式选择、自动预编译语句、动态 sql 标签、逐查询类型映射与 AbortSignal 取消/超时",
+    "内置连接池、事务与保存点 API、服务端游标、COPY 流、逻辑复制、大对象、两阶段提交、多主机与 LISTEN/NOTIFY"
+   ],
+   "use_cases": [
+    "在 Node.js 或 Bun 中直接访问 PostgreSQL，不引入 libpq 或原生模块构建环节",
+    "在 Cloudflare Workers 等无原生模块的运行时中连接 PostgreSQL（README 注明 Workers 未纳入 CI 矩阵，行为说明见 doc/CLOUDFLARE-WORKERS.md）",
+    "作为 TypeORM、Drizzle、Kysely、Prisma、SQB、Joist 等 ORM/查询构建器的底层驱动，通过适配器替换 pg 连接"
+   ]
+  },
+  "sha": "e62ecb808fd1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "31764c8f8422": {
+  "identity": {
+   "one_liner": "面向 Claude Code 的触发式项目记忆层，在 PreToolUse 边界执行记忆规则",
+   "review": "harness-memory 通过 Claude Code 钩子从会话中提取策略与教训（如用户纠正、失败命令），在工具执行前的 PreToolUse 边界以 advise/confirm/soft_deny/deny 四级规则执行。数据存于项目内 .harness-memory/ 目录（SQLite+快照），无需账号或遥测，热路径只读预计算 JSON。适用于希望把个人纠正固化为自动规则的开发者；当前仅支持 Claude Code，学习功能需本机 claude CLI 登录。",
+   "highlights": [
+    "在 PreToolUse 阶段以 advise/confirm/soft_deny/deny 四级 enforcement 映射到 permissionDecision",
+    "记忆由 episode→extraction→validation→reconcile 单一写入路径生成，原始事件仅存于逐会话 ledger",
+    "无账号、无遥测、无常驻进程、每次工具调用不调 LLM，热路径读取一个预计算 JSON 文件"
+   ],
+   "use_cases": [
+    "把会话中输入的纠正（如改用 pnpm test、指定包路径）固化为可在工具执行前拦截或提示的规则",
+    "在项目 CLAUDE.md、AGENTS.md 或 Claude 自动记忆笔记中已有要点时，通过 hm import 转为人类记忆并生效",
+    "在 Windows/macOS/Linux 本地离线运行（Node ≥ 20，SQLite 经 sql.js/WASM，无原生依赖）"
+   ]
+  },
+  "sha": "31764c8f8422",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

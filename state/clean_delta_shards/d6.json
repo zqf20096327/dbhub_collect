@@ -17716,5 +17716,1103 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "5609b65476ba+2": {
+  "fn": "anyproto/any-store",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Go Reference",
+     "Go Report Card",
+     "MIT License"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    11,
+    5,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "* **Mongo-style queries** — `$eq/$in/$gt/...`, logical operators, dot-path fields, modifiers (`$set`, `$inc`, ...). Formal semantics in docs/query-filter-contract.md."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    17,
+    14,
+    17,
+    [
+     "* **Full-text search** — btree-resident inverted index with BM25 ranking via `$text`: phrases, prefixes, anchored and per-field matching for search-as-you-type. See docs/full-text-search.md.",
+     "* **Vector search** — btree-resident ANN indexes (IVF-SQ, HNSW, brute-force) via `$knn`. See docs/vector-search.md and docs/vector-engine.md.",
+     "* **Aggregation** — MongoDB-style pipelines: shaping (`$match`, `$group`, `$sort`, `$unwind`, `$facet`, ...), computed expressions (arithmetic, conditionals, comparisons, date math), field-to-field `$expr` predicates, primary-key `$lookup` joins, and materialization via `$merge`/`$out` — with planner pushdown. See docs/aggregation.md."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    21,
+    17,
+    21
+   ],
+   [
+    "replace",
+    21,
+    23,
+    21,
+    23,
+    [
+     "* **Streaming iterators** — low-memory scans with a cursor API; AnyEnc arena encoding minimizes GC churn.",
+     "* **Cross-platform** — pure Go, no CGO; runs anywhere Go runs, including `js/wasm` (see wasm/)."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    45,
+    23,
+    45
+   ],
+   [
+    "replace",
+    45,
+    80,
+    45,
+    46,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    82,
+    46,
+    48
+   ],
+   [
+    "replace",
+    82,
+    83,
+    48,
+    49,
+    [
+     "The full end-to-end example lives in `example/` and the API docs."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    111,
+    49,
+    77
+   ],
+   [
+    "replace",
+    111,
+    116,
+    77,
+    78,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    143,
+    78,
+    105
+   ],
+   [
+    "replace",
+    143,
+    151,
+    105,
+    106,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    165,
+    106,
+    120
+   ],
+   [
+    "replace",
+    165,
+    166,
+    120,
+    121,
+    [
+     "`$match`/`$sort`/`$limit` prefixes are pushed down into the index planner; the rest streams through the pipeline. Expressions compute derived values in `$project`/`$addFields`/`$group` (arithmetic, `$cond`/`$switch`, comparisons, `$dateDiff`-family date math over the first-class dateTime type); `$expr` brings field-to-field predicates into `$match`; `$lookup` resolves object-id relations as primary-key point lookups; `$facet` runs N sub-pipelines over one scan; `$merge`/`$out` materialize results into a collection where they are indexable like any other data. Operator reference and Mongo divergences: docs/aggregation.md."
+    ]
+   ],
+   [
+    "equal",
+    166,
+    179,
+    121,
+    134
+   ],
+   [
+    "replace",
+    179,
+    187,
+    134,
+    135,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    197,
+    135,
+    145
+   ],
+   [
+    "replace",
+    197,
+    198,
+    145,
+    146,
+    [
+     "Conceptually mirrors SQLite's `cksumvfs`, generalized to also surface AEAD failures via the same API."
+    ]
+   ],
+   [
+    "equal",
+    198,
+    203,
+    146,
+    151
+   ],
+   [
+    "replace",
+    203,
+    213,
+    151,
+    152,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    215,
+    152,
+    154
+   ],
+   [
+    "replace",
+    215,
+    216,
+    154,
+    155,
+    [
+     "The page-1 DB header (first 100 bytes) is outside the per-page hash; its invariants are validated separately at open. Full design: docs/btree/specs/integrity.md."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    230,
+    155,
+    169
+   ],
+   [
+    "replace",
+    230,
+    231,
+    169,
+    170,
+    [
+     "An independent Go implementation following design conventions from SQLCipher (BSD-3-Clause) — reserved-tail page overhead, the page-1 plaintext-prefix rule, PBKDF2-HMAC-SHA256 key derivation. No SQLCipher code is included; the cryptography is Go-native and uses AEAD rather than SQLCipher's encrypt-then-MAC construction. Not SQLCipher-compatible on disk. See NOTICE.md."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    234,
+    170,
+    173
+   ],
+   [
+    "replace",
+    234,
+    239,
+    173,
+    178,
+    [
+     "* **API reference** — pkg.go.dev/github.com/anyproto/any-store/v2",
+     "* **Query semantics** — docs/query-filter-contract.md",
+     "* **Full-text search** — docs/full-text-search.md",
+     "* **Vector search** — docs/vector-search.md, docs/vector-engine.md",
+     "* **Aggregation** — docs/aggregation.md"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    242,
+    178,
+    181
+   ],
+   [
+    "replace",
+    242,
+    256,
+    181,
+    182,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    258,
+    182,
+    184
+   ],
+   [
+    "replace",
+    258,
+    259,
+    184,
+    185,
+    [
+     "Any Store is released under the MIT License — see LICENSE.md."
+    ]
+   ],
+   [
+    "equal",
+    259,
+    260,
+    185,
+    186
+   ],
+   [
+    "replace",
+    260,
+    261,
+    186,
+    187,
+    [
+     "The storage engine derives from SQLite (public domain) and follows page-encryption design conventions from SQLCipher (BSD-3-Clause). Neither project's source is included. Attribution and scope: NOTICE.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "c4ce437f96a3+2": {
+  "fn": "catzoidhub/DevCatz",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "DevCatz "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    10,
+    2,
+    9,
+    [
+     " DevCatz ",
+     " Finally, someone herds the cats. ",
+     "",
+     " Website ·",
+     " Download ·",
+     " Docs ·",
+     " Community"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    9,
+    12
+   ],
+   [
+    "replace",
+    13,
+    14,
+    12,
+    13,
+    [
+     "Part of Catzoid — free, open-source developer tools with nine lives. All cats, no catch: no"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    23,
+    13,
+    22
+   ],
+   [
+    "replace",
+    23,
+    24,
+    22,
+    23,
+    [
+     "- **The family** — databases open in DBCatz, sites become DialCatz environments."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    27,
+    23,
+    26
+   ],
+   [
+    "replace",
+    27,
+    28,
+    26,
+    27,
+    [
+     "Download the DMG from catzoid.com/devcatz/download — it picks the right"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    39,
+    27,
+    38
+   ],
+   [
+    "replace",
+    39,
+    40,
+    38,
+    39,
+    [
+     "latest release. It is not code-signed yet (see Code signing below)."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    42,
+    39,
+    41
+   ],
+   [
+    "replace",
+    42,
+    43,
+    41,
+    42,
+    [
+     "latest release. The AppImage offers to install itself into"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    54,
+    42,
+    53
+   ],
+   [
+    "replace",
+    54,
+    55,
+    53,
+    54,
+    [
+     "Found a bug? Use **Help → Report a Bug…** in the app, or open an issue."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    60,
+    54,
+    59
+   ],
+   [
+    "replace",
+    60,
+    61,
+    59,
+    60,
+    [
+     "SignPath Foundation, which asks for a project with more public use first — stars, forks,"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    60,
+    61
+   ],
+   [
+    "replace",
+    62,
+    63,
+    61,
+    62,
+    [
+     "by Apple. Linux packages are built by GitHub Actions from this repository too, and are not signed either. Full policy: catzoid.com/legal/code-signing."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    67,
+    62,
+    66
+   ],
+   [
+    "replace",
+    67,
+    68,
+    66,
+    67,
+    [
+     "Claude by Anthropic, an AI assistant. They decide what the cat does, designs"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    75,
+    67,
+    74
+   ],
+   [
+    "delete",
+    75,
+    76,
+    74,
+    74
+   ],
+   [
+    "equal",
+    76,
+    77,
+    74,
+    75
+   ],
+   [
+    "delete",
+    77,
+    87,
+    75,
+    75
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "a29a5dba8d9f+2": {
+  "fn": "FoxofCAUC/Persona-Centric-Agent-Runtime",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    12,
+    8,
+    12,
+    [
+     "Version",
+     "Python",
+     "Platform",
+     "MIT 开源协议"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "产品方向与大肥鱼参考线 · 当前状态 · 快速开始 · 文档导航"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    14,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "阶段6后台百轮、记忆修复及阶段7正式交付验收已完成；M8.D已交付自动覆盖、独立复核、事实更正与局部修复。工程、隔离真实、正式短验收、清理及验收限流偏差分别记录于当前状态和实施记录。后台仍随工作台启停，不宣称无人值守或G-AUTO通过。"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    22,
+    19,
+    20,
+    [
+     "M8.E规定范围已交付。工作台和托盘运行期间自动工作，退出确认注销本次Bot并释放所属组件。当前正式组合已完成两小时白天连续观察，详情见实施记录及当前状态。G-AUTO后续仍需世界知识、时效学习与联合验收。"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    20,
+    21
+   ],
+   [
+    "replace",
+    23,
+    24,
+    21,
+    22,
+    [
+     "完整施工指导 · 大肥鱼参考结论 · 源码交付清单 · 当前M8.A交接"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    22,
+    23
+   ],
+   [
+    "replace",
+    25,
+    26,
+    23,
+    24,
+    [
+     "M8.A受管整理统一了授权、领取、逐次调用额度和原回执恢复；工程、真实验证和正式接入进度见实施记录及验收手册。后台仍随工作台启停，未知调用不会因重启自动重发。"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    24,
+    25
+   ],
+   [
+    "replace",
+    27,
+    28,
+    25,
+    26,
+    [
+     "自动记忆按角色一次性开启，新建、原生导入和复制默认关闭。开启后有效对话按最多10轮自动提取和独立复核，明确更正形成版本，无法裁定的内容隔离；不需要逐批提交或批准。处理覆盖、记忆处置和可用摘要分别显示，详见M8.D操作与验收手册。"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    26,
+    27
+   ],
+   [
+    "replace",
+    29,
+    30,
+    27,
+    28,
+    [
+     "当前自动整理额度为每小时60次、滚动24小时240次，提取、复核、修复与重试共同计数。人工手动调用不设次数额度，仍记录真实用量；其他原本不限额的自动项保持不限额。详见额度规则。"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    35,
+    28,
+    33
+   ],
+   [
+    "replace",
+    35,
+    45,
+    33,
+    43,
+    [
+     "|能力|当前实现|",
+     "|---|---|",
+     "|双入口私聊|Tkinter 工作台与本人 QQ 好友纯文本私聊；记忆取用受人格、渠道及账号范围约束，近期会话分开|",
+     "|人物资料与关系|人格有独立身份，可编辑核心、表达和关系，比较版本并回退|",
+     "|连续消息|有序受理、队列及按人格/入口配置的5秒缓冲，失败后显式恢复|",
+     "|长对话与记忆|会话摘要、长期记忆、来源修订与撤回，避免失效材料重新带回|",
+     "|日常整理|一次性开启后的自动提取、独立复核和版本化发布；不确定项隔离，不自动改写人格核心或显式关系|",
+     "|角色材料检索|已有本地语义检索与选材能力；并不保证选中材料就能改善表达|",
+     "|会话与引用|工作集召回、会话封存与接续、主题整理、档案查询及本人 QQ 原生引用|",
+     "|运行管理|本机服务、独立QQ桥接环境、手动临时状态、备份导出和凭据保护|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    60,
+    43,
+    58
+   ],
+   [
+    "replace",
+    60,
+    74,
+    58,
+    59,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    100,
+    59,
+    85
+   ],
+   [
+    "replace",
+    100,
+    101,
+    85,
+    86,
+    [
+     "部署后配置Bot QQ与本人QQ，启动服务、登录并核对OneBot。详见 QQ部署与启停。本人私聊支持非空文字附一个QQ原生引用；群聊、临时私聊、其他联系人、纯引用及其他媒体仍拒绝。引用仅恢复同人格与同QQ身份范围的本地档案，不从平台自动取回历史。"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    108,
+    86,
+    93
+   ],
+   [
+    "replace",
+    108,
+    114,
+    93,
+    94,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    118,
+    94,
+    98
+   ],
+   [
+    "replace",
+    118,
+    125,
+    98,
+    105,
+    [
+     "|位置|内容|",
+     "|---|---|",
+     "|Git仓库|源码、模板、测试、进度和验收手册|",
+     "|`D:\\Persona-Centric Agent Runtime\\data\\database`|数据库、人格、会话、记忆及版本事实|",
+     "|数据根目录下 `config` / `runtime`|配置、DPAPI密文、实例状态与锁|",
+     "|`logs` / `backups` / `exports`|元数据日志、备份、导出及本机验收证据|",
+     "|`.venv` / `components` / `cache` / `tmp`|依赖环境、独立组件、缓存与临时文件|"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    132,
+    105,
+    112
+   ],
+   [
+    "replace",
+    132,
+    133,
+    112,
+    113,
+    [
+     "自然交流、人物差异和长期相处仍需真实体验验证。新实验不会因离线通过就自动成为正式默认；已知的历史待验项继续保留，详见当前状态。"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    138,
+    113,
+    118
+   ],
+   [
+    "replace",
+    138,
+    150,
+    118,
+    130,
+    [
+     "|想了解什么|文档|",
+     "|---|---|",
+     "|产品目标、开发取舍与外部参考|AI伴侣产品方向与大肥鱼参考线|",
+     "|当前版本、进度和缺口|当前状态|",
+     "|后续开发指导|现状与路线衔接|",
+     "|人格与关系操作|M5使用说明 · 真人手册|",
+     "|记忆与每日整理|M4使用说明 · 补验跟踪|",
+     "|窗口与QQ基础部署|M2部署与启停，其中阶段版本描述为历史基线|",
+     "|命令行持久化接口|M1操作说明|",
+     "|现有架构与历史规划|架构 · 历史开发路线|",
+     "|开发交接与验收操作|交接 · 验收目录|",
+     "|历史说明与更新|纠偏前README原文 · 更新记录|"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    162,
+    130,
+    142
+   ],
+   [
+    "replace",
+    162,
+    163,
+    142,
+    143,
+    [
+     "默认按改动影响运行必要的局部检查，遵循分级验证原则。全量测试入口为 `.\\scripts\\test.ps1`，需要D盘项目环境及独立AstrBot SDK环境，不是每次文档或局部修订的必做步骤。核心持久化测试可单独运行："
+    ]
+   ],
+   [
+    "equal",
+    163,
+    168,
+    143,
+    148
+   ],
+   [
+    "replace",
+    168,
+    169,
+    148,
+    149,
+    [
+     "离线验证使用隔离数据、模拟模型和模拟QQ。真实调用、用户体验和实际QQ投递分别记录，不能相互冒充。用户偏好与具体出戏点是产品判断的重要依据；工程检查负责发现缺陷，不替代体验判断。提交前请阅读协作约定。"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    172,
+    149,
+    152
+   ],
+   [
+    "replace",
+    172,
+    173,
+    152,
+    153,
+    [
+     "部分工作台基础代码经授权从既有TRPG项目复用，当前运行不依赖其源码，详见 复用记录。仓库不分发NapCat、QQ或AstrBot二进制，第三方组件遵循各自许可和使用条件。"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    153,
+    154
+   ],
+   [
+    "replace",
+    174,
+    175,
+    154,
+    155,
+    [
+     "本项目采用 **MIT 开源协议**，版权声明为 `Copyright (c) 2026 FoxofCAUC`。第三方代码、组件及资源仍遵循各自许可证和使用条件；本项目的 MIT 声明不替代其许可。"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "a1adea1bd514+2": {
+  "fn": "whynpc9/W.DamengProvider",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "从 NuGet 安装。已发布版本见 NuGet 包页面。"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    14,
+    9,
+    14
+   ],
+   [
+    "replace",
+    14,
+    20,
+    14,
+    20,
+    [
+     "|目标框架|说明|",
+     "|---|---|",
+     "|`net9.0`、`net10.0`|支持现代目标框架的全部功能，无额外运行时 NuGet 依赖。|",
+     "|`net8.0`|额外依赖 `Microsoft.Bcl.Cryptography 10.0.12`。|",
+     "|`net6.0`|额外依赖 `Microsoft.Bcl.TimeProvider 8.0.1`。由于 .NET 6 没有 `DbDataSource`，`DmDataSource` 不能通过该基类或 `DbProviderFactory` 多态使用。|",
+     "|`netstandard2.1`|供 .NET Core 3.1 应用和 Standard 2.1 类库使用；不支持 TLS、`DbBatch`、DateOnly/TimeOnly 映射，且只能显式选择 `PlaintextAllowed` 连接。|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "各目标的验证结果见 0.3.2 发布记录。运行时是否仍受微软支持，请单独查看 .NET 生命周期政策。"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    31,
+    22,
+    31
+   ],
+   [
+    "replace",
+    31,
+    42,
+    31,
+    32,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    54,
+    32,
+    44
+   ],
+   [
+    "replace",
+    54,
+    60,
+    44,
+    50,
+    [
+     "|开发痛点|官方驱动实测行为|W.DamengProvider|",
+     "|---|---|---|",
+     "|存储过程参数名写错|未知名称会回退为按参数集合位置绑定，可能把值传给错误的参数|直接拒绝未知名称，不猜测调用者意图|",
+     "|函数返回值不放在参数集合首位|`ReturnValue` 位于不同位置时可能得到不同、甚至错误的结果|支持放在集合中的不同位置，返回结果一致|",
+     "|存储过程需要七位小数秒|时间输入会由七位降为六位，例如 `.1234567` 被舍入为 `.123457000`|已验证的服务器环境下保留 CLR 的 100ns 精度，不做隐式舍入|",
+     "|读取带时区的时间列|`GetValue` 返回 `DateTime`，无法通过返回值保留原始偏移|返回 `DateTimeOffset`，明确保留时区偏移|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    65,
+    50,
+    55
+   ],
+   [
+    "replace",
+    65,
+    66,
+    55,
+    56,
+    [
+     "以上官方行为来自 `DM.DmProvider 8.3.1.47463` 实测；过程相关测试使用 DM 8.1.5.60，不代表所有官方版本。详见过程对比记录和时间精度说明。"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    70,
+    56,
+    60
+   ],
+   [
+    "replace",
+    70,
+    71,
+    60,
+    61,
+    [
+     "- **事务**：默认隔离级别为 `ReadCommitted`。保存点和其他隔离级别取决于服务器能力，详见事务说明。"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    78,
+    61,
+    68
+   ],
+   [
+    "replace",
+    78,
+    79,
+    68,
+    69,
+    [
+     "完整支持边界见实现与兼容性文档。本项目不附带达梦服务端或第三方原生库。"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    69,
+    72
+   ],
+   [
+    "replace",
+    82,
+    88,
+    72,
+    78,
+    [
+     "- 0.3.2 发布记录",
+     "- 0.3.1 发布记录",
+     "- 路线图与待验证事项",
+     "- 发布指南",
+     "- 本地达梦测试环境",
+     "- 构建脚本与测试配置入口"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    78,
+    82
+   ],
+   [
+    "replace",
+    92,
+    94,
+    82,
+    83,
+    [
+     "Apache-2.0。包含上游 DM 的 C# 代码贡献和本项目修改，详见 THIRD-PARTY-NOTICES.md 与 LICENSE。"
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

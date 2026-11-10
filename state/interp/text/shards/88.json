@@ -2627,5 +2627,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7c6463200b2d": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件，本地 SQLite + Markdown 存储",
+   "review": "dsh-mneme 是面向 DeepSeek Harness（DSH）宿主的跨会话记忆插件，将对话中的偏好、决定等信息写入本机 SQLite 并同步 Markdown 文件。内置 autoDream 后台巩固、四种检索路径（关键词/向量/BM25/实体）、记忆面板，并以 MCP 服务器、CLI 和 10 个模型工具暴露能力。通过 dsh plugin add 安装，支持 npm/Git/tarball/本地目录四种来源；部分功能如作用域隔离、实体提取、仓库地志默认关闭，需在设置面板手动开启。",
+   "highlights": [
+    "提供四路检索：关键词、向量、BM25 与实体检索，向量检索可配置为本地 Embedding 离线运行",
+    "记忆写入本机 SQLite 并与 Markdown 文件双向同步，人工编辑优先于机器覆盖",
+    "包含 autoDream 后台巩固机制，自动整理时留有输入快照、决策明细与结果哈希的可回放凭证"
+   ],
+   "use_cases": [
+    "多会话 AI 编程助手需要跨会话保留用户偏好与项目上下文",
+    "多 Agent、多项目环境需要对记忆按作用域隔离",
+    "需要本地化、离线运行且可导出为可读 Markdown 的记忆管理"
+   ]
+  },
+  "sha": "7c6463200b2d",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "91bdf5b5ec4e": {
+  "identity": {
+   "one_liner": "基于 eBPF/UProbes 的 PostgreSQL 锁活动追踪工具集",
+   "review": "该项目包含四个 eBPF 追踪器和一个可视化脚本，分别追踪 PostgreSQL 的表级重锁、LWLock、行级锁和自旋锁延迟，输出带时间戳的连续锁事件与统计信息。需要 Linux 环境与 root 权限运行，依赖发行版的 python3-bpfcc 包，支持 PostgreSQL 14 至 18，通过 pip 安装后以指定 postgres 二进制路径或 PID 启动追踪。",
+   "highlights": [
+    "提供 pg_lock_tracer、pg_lw_lock_tracer、pg_row_lock_tracer、pg_spinlock_delay_tracer 四个追踪器，分别覆盖表级锁、轻量锁、行级锁与自旋锁延迟",
+    "支持事件过滤（TRANSACTION/QUERY/TABLE/LOCK/INVALIDATION/ERROR）、指定锁事件的栈回溯、JSON 行格式输出及锁统计信息",
+    "包含 animate_lock_graph 脚本，可从追踪输出生成动画锁图"
+   ],
+   "use_cases": [
+    "需要观察 pg_locks 表无法提供的连续锁请求与持锁时序时的运行时追踪",
+    "定位某次锁请求在源码中的触发位置（结合 -s 参数查看栈回溯）",
+    "排查自旋锁延迟问题，获取 SpinDelayStatus 的旋转次数、延迟次数与源码位置信息"
+   ]
+  },
+  "sha": "91bdf5b5ec4e",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "123ff6ec3ed1": {
+  "identity": {
+   "one_liner": "面向具身智能与机器人的 Rust 嵌入式多模态数据库，单库支持向量、文本、空间与时序检索",
+   "review": "MoteDB 是用 Rust 编写的嵌入式列式数据库，以单一库文件形式运行，无守护进程，面向具身智能与机器人场景。它通过 SQL 提供向量（DiskANN）、全文（BM25 倒排）、三维空间（i-Octree）和表格检索，并包含 MVCC 快照隔离、WAL 恢复、MCAP 导入与数据集快照等机制。项目处于 pre-1.0 阶段：Rust API 与存储引擎已稳定，SQL 覆盖面和多语言 FFI 仍在演进，Node.js 与 Go 绑定为 preview 状态。",
+   "highlights": [
+    "单引擎支持四种索引：表格 B-tree、向量 DiskANN（`ORDER BY col <-> ? LIMIT k`）、全文倒排（MATCH/BM25，含 RRF 混合检索与 snippet 摘要）、空间 i-Octree（ST_DISTANCE、KNN、半径搜索）",
+    "提供 ASOF JOIN（帧与关节状态按时间戳对齐）、CREATE EPISODE TABLE 轨迹分段、COMMIT/EXPORT DATASET 快照固定与导出，以及 `motedb import mcap` 一键导入机器人记录（按 topic 建表、`_uid` 去重支持断点续导）",
+    "内嵌 ACID：WAL 崩溃恢复、MVCC 快照隔离、mmap 零拷贝读取、zstd 压缩（约 40-50% 缩减）、Rust/Python SDK 标记为 stable，Node.js（napi-rs）与 Go（cgo）为 preview，支持禁用默认特性的精简边缘构建"
+   ],
+   "use_cases": [
+    "机器人在本机端（如 arm64 边缘设备）以嵌入式方式存储和查询多模态运行数据：图像/关节向量、传感器时序、日志文本与三维位姿",
+    "将 MCAP 录制文件导入为可 SQL 查询的数据集，配合 ASOF JOIN 和 episode 分段做帧-状态对齐与轨迹检索分析",
+    "在应用内构建混合检索（BM25 全文 + 向量 RRF 融合），或对不断演进的表打快照并导出为独立数据库文件用于数据集分发"
+   ]
+  },
+  "sha": "123ff6ec3ed1",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "28b9d476aafb": {
+  "identity": {
+   "one_liner": "基于SQLite FTS5对指定本地文件做BM25检索，供AI代理引用源文件的记忆工具",
+   "review": "这是一个供AI代理使用的本地记忆检索工具，用SQLite FTS5对用户显式指定的文件建立BM25索引，返回带路径和片段的引用，并通过content hash检查索引与源文件是否一致。需要Python 3.11+，处于alpha阶段，不依赖托管服务、向量库或embedding模型，仅索引用户列出的路径。",
+   "highlights": [
+    "提供bam CLI（build/query/inspect/update/serve）与Python API（memory_query），serve支持JSON Lines的stdio协议",
+    "支持--strict模式：要求结果匹配查询全部词项，对无答案查询返回空，默认模式以or策略标记部分匹配",
+    "索引前跳过含密钥路径并按常见模式脱敏，支持--dry-run，数据库路径不存在时直接报错"
+   ],
+   "use_cases": [
+    "为AI代理检索本地文档、runbook、bug日志、ADR等已信任文件并返回行级引用",
+    "本地优先、隐私敏感场景：不依赖托管服务或向量数据库的记忆检索",
+    "需要检测索引过期（bam inspect报告content hash不匹配）并按需重建索引的工作流"
+   ]
+  },
+  "sha": "28b9d476aafb",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dcf1d3d105a9": {
+  "identity": {
+   "one_liner": "macOS 原生数据工作台，连接数据库、查询并生成图表与报表",
+   "review": "RockxyBase 是一款面向 Mac 用户的闭源商业软件（仓库仅发布版本与接收反馈），提供数据库连接、SQL 编辑、数据建模、图表与报表构建等功能。它支持 PostgreSQL 17 与 SQL Server 2022，需 macOS 26.5 及以上版本，当前为公开测试版（0.3.0）。",
+   "highlights": [
+    "支持通过 TLS 直连或 SSH 隧道连接 PostgreSQL 17（含 Supabase、Neon）与 SQL Server 2022，凭据存于 macOS 钥匙串",
+    "内置 SQL 编辑器（补全、执行计划、事务、取消）与原生结果网格，支持表剖析、分布与离群值检查",
+    "支持 CSV 与 Excel 导入本地数据库，可构建含页、切片器、钻取与交叉筛选的报表，只读连接在接口层强制执行"
+   ],
+   "use_cases": [
+    "在 Mac 上以原生应用查询和探索 PostgreSQL 或 SQL Server 数据库",
+    "建立数据模型（关系、度量、计算字段）并生成图表与多页报表",
+    "将 CSV/Excel 文件导入本地数据库后进行查询与可视化分析"
+   ]
+  },
+  "sha": "dcf1d3d105a9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

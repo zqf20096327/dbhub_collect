@@ -2659,5 +2659,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0d1111cd9bbb": {
+  "identity": {
+   "one_liner": "面向 Sigma 检测标准的 Rust 工具链，覆盖解析、评估、关联与规则转换",
+   "review": "RSigma 是用 Rust 实现的 Sigma 规则工具集，包含 YAML 解析器、规则评估引擎、linter（90 项检查）、格式化器、LSP/MCP 服务器及流式守护进程。它支持 JSON、syslog、EVTX、OTLP 等多种输入格式，提供规则编写、测试、部署、告警分诊到 ATT&CK 覆盖统计的完整流程，适合安全检测工程团队使用。分发形式包括 Docker 镜像与 Linux/macOS/Windows 预编译二进制，代码以多个 crate 组织并采用 MIT 许可证。",
+   "highlights": [
+    "将 Sigma YAML 解析为强类型 AST，编译为优化匹配器并对日志事件实时评估，支持滑动/滚动/会话窗口等有状态关联",
+    "内置 linter 依据 Sigma v2.1.0 规范执行 90 项检查，LSP 服务器提供诊断、补全与格式化，MCP 服务器将工具链暴露给 AI 代理",
+    "支持 JSON、syslog、logfmt、CEF、EVTX、OTLP 等输入格式及自动检测，可转换规则为 PostgreSQL/TimescaleDB、LynxDB、Fibratus 后端查询，并通过 sigma-cli 委托 30+ pySigma 后端"
+   ],
+   "use_cases": [
+    "以检测即代码方式管理 Sigma 规则仓库：lint、backtest 并通过 GitHub Action 在 CI 中做字段漂移与覆盖率检查",
+    "作为长驻流式检测守护进程接入 NATS JetStream、OTLP 等日志源，执行关联检测并输出到 webhook 或 OTLP 采集器",
+    "将 Sigma 规则转换为数据库查询，对 PostgreSQL/TimescaleDB 归档日志进行只读狩猎与规则起草调优"
+   ]
+  },
+  "sha": "0d1111cd9bbb",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e2f9a2a1ca35": {
+  "identity": {
+   "one_liner": "基于 ThinkPHP 6 与 Vue 3 的前后端分离社区论坛系统",
+   "review": "Candy BBS 是一个由后端 API、论坛前端、后台前端三个模块组成的社区论坛系统，后端基于 ThinkPHP 6 与 MySQL，前端使用 Vue 3 与 Element Plus 构建，前后台共用同一套 Model 与 Service。它内置 50 张数据表、Web 安装向导、RBAC 权限、内容审核队列与 Feed 订阅，适合需要自建论坛站点并自行运维 PHP 环境的团队。",
+   "highlights": [
+    "前后端分离，后端统一提供 RESTful API 与 RSS/Atom/JSON Feed/OPML 订阅入口，论坛前端与后台前端各为独立的 Vue 3 SPA",
+    "内置 Web 安装向导，自动完成环境检测、导入 schema.sql 与 seed.sql 并生成 .env，含敏感词库、审核队列、RBAC、数据库备份等后台功能",
+    "提供积分、签到、抽奖、红包、竞拍、悬赏等以独立 Service 实现的玩法模块，含 50 张 ca_ 前缀数据表与 JWT 双端 Token 鉴权"
+   ],
+   "use_cases": [
+    "需要完整社区功能（发帖、回复、私信、版主管理、内容审核）的自建论坛站点",
+    "需要后台运营配置、数据看板与多域名分离部署（API/论坛/管理端）的团队",
+    "希望二次开发论坛玩法或替换前端 UI、复用后端 API 的开发者"
+   ]
+  },
+  "sha": "e2f9a2a1ca35",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "71b85ca4f9d9": {
+  "identity": {
+   "one_liner": "把 OpenAPI 规范或 SQL 数据库转换为 MCP 服务器与代理技能的命令行工具",
+   "review": "apitame 是一个 TypeScript 编写的命令行工具，通过 npx apitame init 命令将 OpenAPI/Swagger 规范或 PostgreSQL、MySQL、SQLite、DuckDB 数据库转换为 MCP 服务器，并生成 SKILL.md 技能文件，供 Claude Code、Codex、Cursor、VS Code、Gemini CLI 等客户端使用。端点按任务分组为少量工具，默认只读；写操作需配置允许列表，破坏性操作需人工确认，SQL 查询经词法分析器与解析器校验后只读执行。需要 Node.js 22.14 及以上版本，采用 MIT 许可证。",
+   "highlights": [
+    "将 OpenAPI 3.0/3.1 或 Swagger 2.0 规范的端点分组为任务级工具，并提供 search_operations 与 call_operation 处理剩余端点",
+    "SQL 支持包含 list_tables、describe_table 与仅 SELECT 的 query，经词法分析器与 SQL 解析器校验后以只读方式运行，带行数限制与超时",
+    "凭证仅从环境变量或密钥管理器（1Password、AWS Secrets Manager、Google Secret Manager）读取，并从结果、错误、日志与预览中脱敏"
+   ],
+   "use_cases": [
+    "为已有 OpenAPI 规范的 REST API 生成供 AI 编码代理调用的 MCP 工具集",
+    "为 PostgreSQL/MySQL/SQLite 数据库提供受行数限制、超时与解析校验约束的只读查询通道",
+    "需要写操作带允许列表、参数规则与人工确认流程的代理集成场景"
+   ]
+  },
+  "sha": "71b85ca4f9d9",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

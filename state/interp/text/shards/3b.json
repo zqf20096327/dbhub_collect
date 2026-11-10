@@ -2645,5 +2645,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "684726bb96c4": {
+  "identity": {
+   "one_liner": "Django 的 Valkey 缓存与会话后端，fork 自 django-redis",
+   "review": "django-valkey 是面向 Django 的 Valkey 缓存和会话后端，BSD 许可，fork 自 django-redis 项目。它使用 valkey-py 原生 URL 连接串，提供可插拔的客户端、解析器和序列化器，支持异步、主/从配置和 Unix 套接字。要求 Python 3.11+、Django 5.2+、valkey-py 6.0.2+、Valkey 服务端 7.2.6+；集群支持仍待完善。",
+   "highlights": [
+    "作为 Django 的缓存和会话后端运行，采用 valkey-py 原生 URL 连接字符串",
+    "客户端、解析器、序列化器均可插拔，默认客户端支持主/从配置和异步",
+    "通过 pip extras 提供 libvalkey C 绑定及 lz4/zstd/brotli 压缩、msgpack/msgspec 序列化选项"
+   ],
+   "use_cases": [
+    "为 Django 5.2+ 项目接入 Valkey 服务端（7.2.6+）作为缓存存储",
+    "将 Valkey 用作 Django 会话存储，支持 Unix 套接字和无限超时配置",
+    "从 django-redis 迁移到 Valkey 的项目（该项目为其 fork）"
+   ]
+  },
+  "sha": "684726bb96c4",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0d728c114a9b": {
+  "identity": {
+   "one_liner": "基于XXL-JOB 2.5.0改造、适配达梦数据库的任务调度系统",
+   "review": "该项目基于XXL-JOB 2.5.0版本改造，使其可运行于达梦数据库。使用方式与原项目一致，文档参考官方站点。适用于需要在达梦环境中部署分布式任务调度的团队，限制是版本固定于2.5.0。",
+   "highlights": [
+    "基于XXL-JOB 2.5.0版本改造",
+    "适配达梦数据库",
+    "使用文档沿用原XXL-JOB项目"
+   ],
+   "use_cases": [
+    "在达梦数据库环境中部署XXL-JOB任务调度",
+    "已使用达梦数据库且需保留原有XXL-JOB 2.5.0使用方式的系统",
+    "信创环境下需要任务调度组件的项目"
+   ]
+  },
+  "sha": "0d728c114a9b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "007734680b44": {
+  "identity": {
+   "one_liner": "基于 pdo_lake 扩展的 Laravel 数据库驱动，连接 TiDB Cloud Lake 与 Databend。",
+   "review": "该包为 Laravel 提供 lake 连接驱动，包含独立的查询语法、模式语法、schema builder 与后处理器，面向使用 TiDB Cloud Lake 或 Databend 的 Laravel 13 项目。支持 JSON 路径编译、MERGE INTO 实现的 upsert、倒排索引全文检索及 stage 文件传输等驱动操作；不支持主键、自增列、嵌套事务等，编译时抛出 LogicException。需 PHP 8.4+ 并加载 pdo_lake 扩展 0.1.5+。",
+   "highlights": [
+    "提供 lake 连接驱动，支持 JSON 路径、全文检索（需倒排索引）、upsert 编译为 MERGE INTO，事务映射为 BEGIN/COMMIT/ROLLBACK",
+    "schema builder 支持 variant、array、vector、geometry 等列类型及倒排索引、ngram 索引、cluster key 管理",
+    "暴露 Pdo\\Lake 驱动操作：stage 上传下载、loadData/streamLoad 批量加载、预签名 URL、会话切换与查询控制"
+   ],
+   "use_cases": [
+    "在 Laravel 应用中读写 TiDB Cloud Lake 或 Databend 数据库",
+    "需要对 JSON 列进行路径查询和 contains/overlaps 等操作的场景",
+    "需要通过 stage 上传文件或批量加载数据到 Lake 的 ETL 流程"
+   ]
+  },
+  "sha": "007734680b44",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

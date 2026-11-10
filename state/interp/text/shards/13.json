@@ -3252,5 +3252,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aa95dc13b586": {
+  "identity": {
+   "one_liner": "可克隆的 ABAP 应用服务器：转译 ABAP，本地数据库上实现 /IWBEP/ OData v2 网关运行时",
+   "review": "open-steamgate 将真实 ABAP 代码（_MPC_EXT/_DPC_EXT Gateway 类、CDS 视图、AMDP、报表）交叉转译后在本地数据库上运行，向 Fiori Elements 提供 OData，支持 Eclipse ADT 编辑和 SAP GUI DIAG 连接，不依赖 SAP 系统。它定位为 ERP 之下的语言运行时层而非 ERP 本身，语言、字典、Open SQL 均为子集实现。数据库通过接口支持 sql.js、SQLite、DuckDB、PostgreSQL、HANA，可用浏览器、Docker、单二进制、VS Code 等方式运行。",
+   "highlights": [
+    "实现 classic code-based SEGW 服务的 /IWBEP/ OData v2 运行时，含 $filter、$batch、$expand、深插入、函数导入、媒体实体等，底层为 ABAP 实现的 if_http_extension",
+    "数据库位于十一方法接口之后，可切换 sql.js、SQLite、DuckDB、PostgreSQL 或 HANA；系统内容以 abapGit 文件形式落盘于 git 仓库",
+    "提供浏览器 service worker（离线可用）、Docker 多架构镜像、单文件 Bun 可执行文件、VS Code 扩展和源码运行五种方式，可加载 abapGit 仓库作为层"
+   ],
+   "use_cases": [
+    "在本地运行经典 SEGW 代码式 Gateway 服务并用 Fiori Elements 应用访问其 OData",
+    "用 Eclipse ADT 或 VS Code 编辑、激活 ABAP 代码并运行 ABAP Unit，变更以 abapGit 文件形式保存",
+    "从 A4H 等环境迁移现有 ABAP 代码到本地运行时，README 提供文档说明其与 A4H 的能力差异"
+   ]
+  },
+  "sha": "aa95dc13b586",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0a941a463593": {
+  "identity": {
+   "one_liner": "将 SWIVEL 手机日志与 Kismet 捕获合并为 SQLite 库的追踪器分析工具。",
+   "review": "DEBRIEF 读取 SWIVEL 手机导出的 NDJSON 和 Kismet 的 .kismet 捕获文件，离线合并、富化后写入单一 SQLite 数据库，识别 Find My/Tile 追踪器、跨地点出现的设备、evil-twin 网络及 Kismet IDS 告警，并生成不含坐标的 HTML 报告。输出附带 _source 与 _confidence 字段，随机化地址不赋予厂商信息。需先运行 fetch 下载 IEEE、Bluetooth SIG 等公开注册表。",
+   "highlights": [
+    "合并 SWIVEL(.ndjson/.json/WigleCSV) 与 Kismet 捕获为单一 SQLite 数据库，run 命令按内容哈希增量累积并重新评分",
+    "按蓝牙广播签名识别 Find My 与 Tile 追踪器，并以地址在 200 米以上、跨 5 分钟以上出现在 ≥2 个地点的规则标记 followed 设备，参数可通过 --follow-distance 等调整",
+    "默认离线运行，所有富化字段携带 _source 与 _confidence 标注，随机化地址的厂商信息标记为 withheld"
+   ],
+   "use_cases": [
+    "分析多地点出行捕获记录，查询同一设备地址是否在多个相距较远的地点重复出现",
+    "检测同一 Wi-Fi 网络先后呈现开放与 WPA2 的 security_conflict 信号及 Kismet 捕获的 deauth 等 IDS 告警",
+    "对无法外传的本地捕获数据使用 Datasette 或 SQL 浏览设备、日常重复出现设备（regulars）与附近 ALPR 摄像头距离"
+   ]
+  },
+  "sha": "0a941a463593",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

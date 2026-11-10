@@ -21269,5 +21269,3603 @@
    ]
   ],
   "at": "2026-11-08"
+ },
+ "7c6463200b2d+2": {
+  "fn": "slow-stack/mneme",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Mneme — cross-session memory for AI agents"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " dsh-mneme "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    16,
+    4,
+    12,
+    [
+     " npm version",
+     " npm downloads",
+     " license",
+     " CI",
+     " node",
+     " tests",
+     " coverage",
+     " Awesome"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    12,
+    13
+   ],
+   [
+    "replace",
+    17,
+    22,
+    13,
+    14,
+    [
+     " 🌏 简体中文 · English "
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    14,
+    17
+   ],
+   [
+    "replace",
+    25,
+    26,
+    17,
+    18,
+    [
+     "**dsh-mneme** 是 DeepSeek Harness (DSH) 的跨会话记忆插件。它不只「存得下」，更「管得好」：后台自动去重合并、矛盾先冻结等你裁决、全程可回放审计、记忆只落在本机，还支持导出成人可读的 Markdown。"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    31,
+    18,
+    23
+   ],
+   [
+    "replace",
+    31,
+    32,
+    23,
+    24,
+    [
+     "|日期|版本|头条|"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    24,
+    25
+   ],
+   [
+    "replace",
+    33,
+    41,
+    25,
+    33,
+    [
+     "|2026-11-07|**v0.12.0**|**pin 从「按类型猜」变成你亲手钉的事实，检索热路径快 5.6 倍** — 这一版两条主线都指向同一件事：把「看起来对」换成「查得到」。① **pin 显式化**：此前「钉住」只是按记忆类型推断（`constraint` / `preference` 天然算钉），于是被钉的 `pattern` 一条都留不住；现在另开 `pinned_memories` 表（独立表非布尔列，回退只需一条 `DROP`——但 `DROP` 前先导出这张表，pin 选择是独立事实，`memories` 那边还在也恢复不了）配 `memory_pin`（取消钉选是同一个工具传 `unpin: true`，没有单独的 unpin 工具），钉住的行在注入里优先占位。顺带修掉两处旁路：pin 筛选发生在 hybrid 合并**之后**，而合并结果已按 `poolSize` 封顶（生产 `maxItems=5` → 10 条），规则窗口里的 pin 行一条都进不了候选池——真库副本实测 pin 注入 2/5 → 5/5、注入总数 7 → 10，且原有条目只后移、无一条被挤出；判据也从「表里有几行」改成「有几条能用」，因为 pin 行会在 `memories` 那边被归档 / 遗忘 / 硬删而 pin 表一无所知，旧判据只要剩一行就一直判 explicit、可选集恒为空且永不回落（`pinnedStats.source` 因此分 `explicit` / `fallback-none-usable` / `type-fallback` 三档，静默降级必须留痕）。默认 `pinnedInjectBudget = 0`——**默认状态下 pin 池整体关闭、钉住的行不会因为被钉就抢占注入位次**，要显式把预算设成正数才启用；关着时注入序列与改前逐条相同。② **「Agent 眼中的你」自动事实**：从记忆里派生出可核验的事实条目，按身份分卡维护、参与注入、面板可增删改（`profileFactsEnabled` 默认关）。③ **性能**：向量解析缓存上限写死 4000 而活跃带向量行已 6730，扫到第 4001 条就开始驱逐自己刚填的条目——四轮实测命中率恒 **0.0%**，缓存等于不存在；改成跟工作集自适应再用内存预算封顶，A/B 1.8–2.4s → 370–424ms，同时存储换 `Float32Array`（55.5MB → 29.7MB），并摘掉「只 `SELECT id` 却带 `embedding != ''`」的谓词（SQL 层 265ms → 96ms）。④ 修 \\#579：仓库地志三个只读工具的错误分支返回 schema 之外的字段、宿主直接判 `invalid output`（感谢 @Oscar-Williams）；更危险的一条是检索把「页读不到」静默 `continue` 成「0 hits」，现在保留已读到的命中、单独列出读不到的页。⑤ 修 \\#590：严格寻址把「一张身份卡都没建」也判成「没有这张卡」，而 DS Bot 这类宿主里所有 bot 会话共用同一 `agentPreset` 且建成就不可变，于是唯一那张人格卡静默失效——判据改成「有没有键」而不是「有没有可用的卡」。|",
+     "|2026-11-05|**v0.11.0**|**记忆开始读得懂一个仓库** — 这一版把仓库地志（chorography）从零推到能看能查：读一个 JS/TS 仓库的文件树与 import 图，划分模块、在 `<repo>/.chorography/` 下写出 Markdown 地志页（T0 骨架零模型零网络，`plan.yaml` 做正面控制，`CHORO:HUMAN` 保留区跨重生成逐字节存活），再由 T1 逐模块跑一次 headless 会话补上架构/约定/技术栈/构建四段语义正文与可核验的 claims——生成吃的是宿主已有的模型额度，不要求额外模型商密钥。消费面三张脸同时接上：面板第二座位、三个只读工具、`/choro/*` 读路由，以及每轮开局那一小块标题级提纲注入与只读 `/choro` 命令（**只提示过期、绝不自动重跑**）。`chorographyEnabled` 默认关，wiki 行与记忆行物理隔离、永不进巩固与质量过滤的任何行池。另修 #573：宽态侧栏的记忆入口落在「更多」行下面，点开更多时被菜单盖住。|",
+     "|2026-11-03|**v0.10.1**|**打开记忆详情不再崩掉整个宿主** — 0.10.0 里点开侧边栏任意一条记忆的详情抽屉，渲染进程立刻抛 `ReferenceError: provenance is not defined`，整个宿主跟着重启、进行中的会话被打断，100% 复现（#553）。根因是两个隔了三千多行的组件：`MemoryDrawer` 的归因 effect 与渲染块在读 `provenance` / `setProvenance`，而那句 `useState` 落在了同文件**上一个**组件 `EntityPanel` 里——`EntityPanel` 里那份是纯死代码，整个函数体除声明外对 `provenance` 零引用。这个形状躲得过眼睛（隔三千行、同名 state 看着完全正常）、语法检查（`provenance` 是合法标识符，只是不在作用域里）和原有用例（只读源码字符串，从不执行组件），所以补的不是「锁一个名字」的用例，而是按组件扫「调了 `setXxx(` 却没有声明」。同版带上 v0.10.0 之后合入的图谱锚定层收尾（#24）：Tag 与向量两路起点接线、被动确认补上复核出口|",
+     "|2026-11-02|**v0.10.0**|**记忆开始按「哪一轮」算账，而不只是「哪一段」** — 这一版补的都是同一件事：给已经发生的事补上它自己的身份。① **蒸馏有了运行身份**（#512）：此前归因只到「会话区间」——那是**输入**的坐标，不是**运行**的身份，于是「这段原文被重蒸过几次、哪一轮失败了」库里一个字都没存。现在窗口级记 `distill_runs`（含 `ok`/`degraded`/`noop`/`failed`/`aborted` 与 `audit_id`），行级另开 `memory_mints` 记「这条记忆出生自哪一轮巩固」；历史行一律留空**不猜**，模型流失败与解析失败也真记一行。② **溯源补上反方向**（#524）：`GET /memory/provenance?sessionId=<sid>` 让「这个会话蒸出了哪几个窗口」可直接查，此前只能从一条记忆往回找；两个主键互斥，`limit` 越界直接 400 而不静默截断，撞上限带 `truncated: true`。③ **闸门落到单个会话**（#539）：`sessionGateEnabled` 让指定会话与子代理「不进不出」（不注入、不蒸馏，`memory_*` 与 `set_scope_state` 调用一律被拒），其余会话照常——此前能关的只有全局，关插件会连带打死别的会话。子代理判据只认宿主自己的委派标记，`parentSession` **不是**判据：本机 641 个真实会话头逐条核过，用它会把 3 个 fork 出来的主会话判成子代理。④ **防谄媚补到写入面**（#530）：蒸馏与总览的提示词此前对谄媚一字未提，而这两处写出的内容完全不过写入准入——现在补上「立场纪律」四条（不记对用户性格能力的评价、助手推断不写成事实、冲突如实记录、`importance` 只看事实对后续工作的影响面而不因用户满意或情绪抬高）与「叙述纪律」，且排在与时间换算的指令之前。另修 `differentiate` 的正反馈闭环（同一段注记追加到两侧正文 → 向量靠拢 → 下一轮再判重复，实测单条堆 19 段、正文膨胀到 2200+ 字，现在只落账本不改正文，#533）、sleep 冲突相位的输入侧预算与续排（单请求曾打满 163,054 / 163,840 token，分批后隔夜才轮到，现在一轮跑完接着追，#529）、面板「最近巩固」不再把一次整理的回执冒充巩固（#495），以及面板在 320–519px 上原本根本没有断点（#542）。|",
+     "|2026-10-30|**v0.9.5**|**记忆能安全地递出去，也能整包收回来** — 「分享记忆」从一个文件变成有协议的动作（#386）：包只含活跃行，scope 与 home 前缀不进包，命中密钥 / PII 的行整条不进；出包先给报告再给文件，超水位回 413、按类型或标签分批；收包一条不合格整包拒、干跑为默认、按 `share_external_id` 幂等，`undo-share` 整包物删，所以收回后还能再导。来源也第一次可查：`GET /memory/provenance`（#421，@z2Ace0107 实现），409 与 503 分开答「用户关了」与「装配坏了」。另修同标题重复入库（#505）、扫描谎报「没东西可扫」（#515）与未围栏的巩固 prompt（#501）。|",
+     "|2026-10-21|**v0.9.4**|**三条链各自补上「最后一环」** — 这一版的三件事同一种形状：东西早就造好了，只差没人能叫它。① **agent 主动整理**（#231）：引擎在 v0.8 就落在 `src/organize.js`（先 dryRun 出比对报告 → agent 判断 → apply 落库，筛除只归档不删，全程复用 `dream_runs` 回执），可它**没有任何调用入口**——工具表里没有它、两张 API 脸 0 命中、全仓 `.organize(` 零调用点，只有测试能调到。现在它有工具了：`memory_organize`，`organizeEnabled` 默认关（关 = 工具根本不注册，模型看不到就不会调）。② **画像能被反向提取了**（#497）：面板「用户画像」加一个按钮，读活跃记忆、花一次宿主模型调用，产一段「助手眼中的用户」**草稿**——**只出草稿**：采用是你在面板上再点一次，你手写的原文不会被模型改写；空库和模型不配合都直接报错，绝不回一张空草稿冒充「这次没提炼出东西」（`profileExtractEnabled` 默认关）。③ **人格不再无条件进别人的会话**：`default` 卡以前会落给所有没建卡的身份，于是宿主里自带身份的外部 bot 每一帧都收到两句「你是谁」撞在一起，而界面上「关掉这张卡」实际不生效——新增 `personaStrictAddressing`（默认关，历史行为逐字节不变）把「身份没建卡」与「卡被显式关掉」都收回到不注入。同版补上蒸馏的**转录围栏 + 解析失败护栏**（#494：一条会话被同一个窗口卡死、重试 20 次越试越贵的根因；失败行现在恒带原始输出形状，事后能回答「模型到底吐了什么」），并把面板里那段自称「注入生效文本」的只读区改成由后端渲染——它以前既没有人格三行也没有表头和前缀，标题却承诺了模型实际看到的东西。|",
+     "|2026-10-20|**v0.9.3**|**M.O. 从「挖得出来」跑到「会被叫去挖」** — 沉淀链的算法自 v0.9.1 起就写完了（多帧 zstd → 重复序列 → 缺席对照 → draft 草稿），可它在运行时**没有任何调用点**：全仓引用只出现在测试里。机器挖得出来、却永远不会被叫去挖——缺的从来不是算法，是**归属**与**触发**。这一版把三处接上：按会话头里的 `cwd` 反查项目桶（桶名是路径的**有损**变形，规则不在本仓，查不到就整跑跳过，而不是降级成全局普查——后者会把 A 项目的动作算到 B 头上，且结果看起来完全正常）；新增 `nudgeForProject` 把「归属 → 挖掘 → 落盘」收成一个入口；挂 `turn/end` 按项目跑，冷却 10 分钟、单次预算 4 秒、延到宏任务、一次一个项目、抛错只 `warn`。**它只产提议，不产草稿**（#489）：升格仍然要人批，面板也多了「现在沉淀一次」，与自动跑同一条入口、区别只有不改仓库。同版修掉三处「坏了却不报」：作用域反查自 v0.8.0 起每次都抛错走降级、canonical 归一与成员校验静默失效（#487）；`/nudge` 的写盘口只拦 `PUT`/`POST`，带 token 的 `PATCH`/`DELETE` 会静默写盘、归属解析不看预算、桶名边收边截把「没看全」报成「确实没有」；多帧 zstd 的反证断言绑了 Node 的整块解语义，24.22.0 起过期（#490）。|",
+     "|2026-10-19|**v0.9.2**|**让「看不见的失败」显形** — 这一版修的大多不是「缺功能」，是「坏了却不报」：功能开关一直是启动期生效，面板「已改」只说明值进了库，于是新增第三态「待重启」（#481）；巩固的 `dreamMaxTokens` 默认值被原样当 `max_tokens` 发出去，撞上服务商上限后 180 次巩固 0 次成功，现在面板能改、超上限还会按服务商自己声明的上限自动降级（#478）；自动蒸馏写入的行 100% 拿不到向量，注释承诺的「提交后补跑」从未存在（#477）；CLI 把 `--` 开头的值当成新旗标——这个缺陷只在 token 前两位恰好掷中 `-`（约 1/4096）时现形，潜伏了整整一个发布周期。另新增作用域级可逆闸门（#471，默认关）：让一路记忆能被单独按下与松开，不改配置、不重启。|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    33,
+    34
+   ],
+   [
+    "replace",
+    42,
+    43,
+    34,
+    35,
+    [
+     "> 只记大改动，逐条细节见 CHANGELOG。"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    50,
+    35,
+    42
+   ],
+   [
+    "replace",
+    50,
+    51,
+    42,
+    43,
+    [
+     "|场景|没装插件|装了插件|"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    43,
+    44
+   ],
+   [
+    "replace",
+    52,
+    55,
+    44,
+    47,
+    [
+     "|周一聊完项目需求，周三继续|\"能再描述一下你的项目吗？\"|\"你指的是上周提到的博客重构吗？当时你说想用 Astro。\"|",
+     "|告诉 AI 你的编码习惯|每轮都要重复交代|一次设定，长期生效|",
+     "|整理大量资料后关窗口|资料丢了|自动归档，随时检索找回|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    68,
+    47,
+    60
+   ],
+   [
+    "replace",
+    68,
+    69,
+    60,
+    61,
+    [
+     "> **它和 Zep / Mem0 / Letta / Hindsight 比呢？** 有一张逐项对照表——存储底座、检索、写入时抽取、离线巩固、冲突处理、遗忘、作用域、可审计性、多宿主、离线、许可证共 11 行，**「—」不等于「差」**：能力对比。"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    84,
+    61,
+    76
+   ],
+   [
+    "replace",
+    84,
+    85,
+    76,
+    77,
+    [
+     "|来源|填什么|备注|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    77,
+    78
+   ],
+   [
+    "replace",
+    86,
+    90,
+    78,
+    82,
+    [
+     "|**npm 包名**|`@modusensus/dsh-mneme`|推荐；可带版本 `@0.9.0`|",
+     "|**Git 仓库**|`git+https://github.com/slow-stack/mneme.git#path:/dsh-mneme`|`#path:` 不可省。省掉装到的是仓库根那份壳（`0.0.0`、无 `dsh` 字段），宿主不会把它当插件|",
+     "|**tarball**|`C:\\\\path\\\\to\\\\modusensus-dsh-mneme-0.9.0.tgz`|在 `dsh-mneme/` 里 `npm pack` 产出；`pnpm pack` 会因 bin 脚本 CRLF 失败|",
+     "|**本地目录**|`C:\\\\path\\\\to\\\\mneme\\\\dsh-mneme`|**必须是绝对路径**；相对路径会被宿主直接拒掉（`a local path must be absolute`）|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    110,
+    82,
+    102
+   ],
+   [
+    "replace",
+    110,
+    111,
+    102,
+    103,
+    [
+     "|需求|配置项|默认值|改法|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    103,
+    104
+   ],
+   [
+    "replace",
+    112,
+    116,
+    104,
+    108,
+    [
+     "|完全离线运行|`embedProvider`|`openai`|改为 `local`|",
+     "|后台自动整理记忆|`autoDream`|`true`|改为 `false` 可关|",
+     "|自动提取结构化实体|`entityExtractionEnabled`|`false`|改为 `true`|",
+     "|多 Agent / 多项目记忆隔离|`scopeEnabled`（需要更强隔离再加 `strictScope`，硬隔离只对显式声明生效）|`false`|改为 `true`|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    108,
+    109
+   ],
+   [
+    "replace",
+    117,
+    118,
+    109,
+    110,
+    [
+     "> 以上均在 DSH 设置面板 → 记忆库设置 中修改。完整配置见 配置章节。"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    129,
+    110,
+    121
+   ],
+   [
+    "replace",
+    129,
+    136,
+    121,
+    122,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    155,
+    122,
+    141
+   ],
+   [
+    "replace",
+    155,
+    156,
+    141,
+    142,
+    [
+     "默认关（`actionPipelineEnabled`）。设计取舍与踩过的坑见 docs/WORKFLOWS.md。"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    159,
+    142,
+    145
+   ],
+   [
+    "replace",
+    159,
+    160,
+    145,
+    146,
+    [
+     "> 面板内置中英双语，跟随你的 DSH 界面语言显示。以下为中文截图，英文版请切至文末 English 段落。"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    146,
+    147
+   ],
+   [
+    "replace",
+    161,
+    165,
+    147,
+    149,
+    [
+     " 记忆库浏览 ",
+     " 记录、浏览与筛选你的记忆。 "
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    149,
+    150
+   ],
+   [
+    "replace",
+    166,
+    170,
+    150,
+    152,
+    [
+     " 实体与关系图谱 ",
+     " 自动从记忆里提炼实体，构建带属性的关系图谱。 "
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    152,
+    153
+   ],
+   [
+    "replace",
+    171,
+    175,
+    153,
+    155,
+    [
+     " 状态与审计 ",
+     " 状态面板一眼看清向量索引、LLM 消耗与自动巩固记录。 "
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    155,
+    156
+   ],
+   [
+    "replace",
+    176,
+    180,
+    156,
+    158,
+    [
+     " 记忆库设置 ",
+     " 检索、实体抽取与记忆巩固开关都在设置里一站式配置。 "
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    158,
+    159
+   ],
+   [
+    "replace",
+    181,
+    185,
+    159,
+    161,
+    [
+     " 帮助与反馈 ",
+     " 可选写保护 Token，以及本地化的反馈通道，让记忆库完全本地、可审计。 "
+    ]
+   ],
+   [
+    "equal",
+    185,
+    205,
+    161,
+    181
+   ],
+   [
+    "replace",
+    205,
+    206,
+    181,
+    182,
+    [
+     "|客户端|挂载方式|"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    207,
+    182,
+    183
+   ],
+   [
+    "replace",
+    207,
+    213,
+    183,
+    189,
+    [
+     "|**Claude Code**|项目根 `.mcp.json`：`{\"mcpServers\": {\"mneme-memory\": {\"command\": \"mneme-mcp\", \"env\": {\"MNEME_TOKEN\": \"<你的token>\"}}}}`|",
+     "|**Cursor**|设置 → MCP → Add Server，command 填 `mneme-mcp`，env 加 `MNEME_TOKEN`|",
+     "|**Codex**|`~/.codex/config.toml`：`[mcp_servers.mneme-memory]` 段，`command = \"mneme-mcp\"`，`env = { MNEME_TOKEN = \"<你的token>\" }`|",
+     "|**Hermes**|`~/.hermes/config.yaml` 的 `mcp_servers:` 段：`mneme-memory: {command: \"mneme-mcp\", env: {MNEME_TOKEN: \"<你的token>\"}}`，重启生效|",
+     "|**OpenCode**|`opencode.json`：`{\"mcp\": {\"mneme-memory\": {\"type\": \"local\", \"command\": [\"mneme-mcp\"], \"environment\": {\"MNEME_TOKEN\": \"<你的token>\"}}}}`|",
+     "|**OpenClaw**|`openclaw mcp add mneme-memory --command mneme-mcp --env MNEME_TOKEN=<你的token>`，或 Control UI → Settings → MCP|"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    189,
+    190
+   ],
+   [
+    "replace",
+    214,
+    215,
+    190,
+    191,
+    [
+     "> **旧挂载兼容**：已部署的 `dsh-mneme-mcp` + `DSH_MNEME_TOKEN` 写法继续有效（bin 与 env 变量均保留，无需迁移）。未全局安装 npm 包时，把 `command` 换成 `npx` 并追加参数 `-p mneme-memory mneme-mcp`（Claude Code/OpenCode 写进 args 数组，Codex 写 `args = [\"-p\", \"mneme-memory\", \"mneme-mcp\"]`）。配置细节与安全注意事项见完整文档。"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    229,
+    191,
+    205
+   ],
+   [
+    "replace",
+    229,
+    230,
+    205,
+    206,
+    [
+     "|项目|平台|说明|"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    206,
+    207
+   ],
+   [
+    "replace",
+    231,
+    232,
+    207,
+    208,
+    [
+     "|Mneme-Bridge|DeepSeek 网页端|浏览器扩展 + 本地服务：网页端会话蒸馏进 mneme 记忆库、DSH 侧记忆按话题回注，两侧共享同一份记忆。embedded（挂载 lib）与 remote（standalone API，不开 DSH 时配合上面的 daemon）双模式|"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    208,
+    209
+   ],
+   [
+    "replace",
+    233,
+    234,
+    209,
+    210,
+    [
+     "> 想被收录？在 Discussions 开帖介绍你的项目，或直接提 PR 补充本表。"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    237,
+    210,
+    213
+   ],
+   [
+    "replace",
+    237,
+    238,
+    213,
+    214,
+    [
+     "|文档|路径|"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    239,
+    214,
+    215
+   ],
+   [
+    "replace",
+    239,
+    253,
+    215,
+    229,
+    [
+     "|插件完整文档（功能 / 安装 / 配置 / 架构）|dsh-mneme/README.md|",
+     "|stdio MCP server——Claude Code / Cursor 等任意 MCP 客户端接入记忆六件套|dsh-mneme/README.md · MCP Server|",
+     "|独立服务 daemon（不开 DSH 常驻数据面）|dsh-mneme/docs/DAEMON.md|",
+     "|配置说明（全键参考）|dsh-mneme/docs/CONFIGURATION.md|",
+     "|蒸馏原文留存与记忆级溯源（#399）|dsh-mneme/docs/DISTILL.md|",
+     "|记忆分享包：出包与收包（`dsh-mneme share` / `receive` / `undo-share`）|dsh-mneme/docs/SHARE.md|",
+     "|实体结构化设计|dsh-mneme/docs/ENTITIES.md|",
+     "|工作流（M.O.）：本体住仓库、证据住记忆库|dsh-mneme/docs/WORKFLOWS.md|",
+     "|语义架构|dsh-mneme/docs/SEMANTIC.md|",
+     "|本地模型部署指南|dsh-mneme/docs/LOCAL_MODEL.md|",
+     "|与 Zep / Mem0 / Letta / Hindsight 的能力对比|docs/COMPARISON.md|",
+     "|版本历史|dsh-mneme/CHANGELOG.md|",
+     "|安全策略|SECURITY.md|",
+     "|行为守则（署名归人、按证据分配发言权）|CODE_OF_CONDUCT.md|"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    260,
+    229,
+    236
+   ],
+   [
+    "replace",
+    260,
+    261,
+    236,
+    237,
+    [
+     "|版本|主题|状态|"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    237,
+    238
+   ],
+   [
+    "replace",
+    262,
+    271,
+    238,
+    247,
+    [
+     "|**v0.3**|记忆基因：实体 / 属性（带时间轴）/ 关系|✅|",
+     "|**v0.4**|Sleep Mode：空闲四阶段深度维护|✅|",
+     "|**v0.5**|召回融合与记忆可视化：BM25 + 图谱 + 热记忆|✅|",
+     "|**v0.6**|会话生命周期：删对话 ≠ 删记忆|✅|",
+     "|**v0.7**|自进化记忆：热度衰减 + 睡眠双保护 + 桌面端工作台/功能开关|✅|",
+     "|**v0.8**|作用域隔离（agent/workspace 双维隔离 + 检索加权 + opt-in 硬过滤）+ 冲突队列人工裁决 + 归属显式声明 + 生态化（stdio MCP server / 图召回轴 / 冷启动 / 注入截断与状态条 / 蒸馏可靠性 / 注入形态与 agent 主动整理接口 / 配置说明与 issue 模板）|✅ 已发布（至 v0.8.16）|",
+     "|**v0.9**|M.O.（Modus Operandi）beta：项目级工作流本体 + 候选分层与升格判据 + 面板清单/图同屏；设置面板按「新手之外」重划折叠线（#427）；安全审计与供应链加固（声明式路由鉴权、OSV 阻断、发布签名）；**v0.9.1 补上写侧**：执行窗口、运行账、归属候选、观察旁挂与脱节检出、步骤 `assert`/`optional`、沉淀链草稿挖掘、人格定义页（按 agent 多卡）；**v0.9.2 让看不见的失败显形**：功能开关第三态「待重启」、作用域级可逆闸门（#471）、巩固 `max_tokens` 超上限自动降级（#478）；**v0.9.3 接通自动沉淀**：按会话头 `cwd` 反查项目桶、挂 `turn/end`、冷却 10 分钟、单次预算 4 秒，只产提议不产草稿（#489），并修作用域反查自 v0.8.0 起静默降级（#487）、`/nudge` 写盘口漏拦 `PATCH`/`DELETE`、多帧 zstd 反证断言绑 Node 整块解语义（#490）；**v0.9.4 补上三条链的最后一环**：agent 主动整理接口有了工具（`memory_organize`，`organizeEnabled` 默认关，关时模型根本看不到它）、画像可以从记忆提取**草稿**（`profileExtractEnabled` 默认关，只出草稿、采用是用户再点一次，手写的原文不被模型改写）、人格 `default` 卡不再无条件进「没建卡」的身份（#497，`personaStrictAddressing` 默认关），面板那段「注入生效文本」改成由后端单源渲染，另补蒸馏转录围栏与解析失败护栏（#494）；**v0.9.5 让记忆递得出去也收得回来**：分享包 `mneme.share/v1`（只含活跃行、scope 与 home 前缀不进包、密钥/PII 整条不进、报告先于下载、3 MiB 水位、一条不合格整包拒、干跑为默认、按 `share_external_id` 幂等、整包退出走物删），「本机巩固不改写别人导入的原文」由单一谓词守在汇流口与九个行池，记忆溯源读出口 `GET /memory/provenance`（@z2Ace0107，409 与 503 两种「没有」分开），并修同标题重复入库（#505）、模式扫描窗口饿死（#515）、五处 prompt 未围栏（#501/#493）与 dream 合并护栏整类误拦（#521），面板加设置页分组目录（#518）|✅ 已发布（v0.9.5）|",
+     "|**v0.10**|归因与闸门：蒸馏归因补上「运行」身份（`distill_runs` 窗口级 + `memory_mints` 行级，历史行不猜）、溯源补上反方向 `?sessionId=`、会话级无痕闸门（`sessionGateEnabled`，判据只认宿主委派标记 + 有界记账）、防谄媚补到写入面（蒸馏与总览的立场 / 叙述纪律）、`differentiate` 改落账本不改正文（#533）、sleep 冲突相位输入侧预算与续排（#529）、面板「最近巩固」区分 organize 回执（#495）、面板首次有移动端与 481–519px 中间带断点（#542）|✅ 已发布（v0.10.0）|",
+     "|**v0.12**|pin 显式化（`pinned_memories` 表 + `memory_pin`（取消钉选传 `unpin: true`），钉住的行在注入里优先占位，不再靠类型推断；`pinnedInjectBudget` 默认 0 = pin 池关闭）+ pin 池不再被向量路 `poolSize` 封顶挤出 + 「Agent 眼中的你」自动事实（`profileFactsEnabled` 默认关）+ 向量解析缓存跟工作集自适应（命中率 0% → 100%，单轮检索快 5.6 倍，存储换 `Float32Array`）+ 修 #579 地志工具错误路径与「读不到答成没匹配」+ 修 #590 严格寻址把「一张卡都没建」判成「没有这张卡」|✅ 已发布（v0.12.0）|"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    272,
+    247,
+    248
+   ],
+   [
+    "replace",
+    272,
+    273,
+    248,
+    249,
+    [
+     "> 完整逐小版本说明见 CHANGELOG。"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    283,
+    249,
+    259
+   ],
+   [
+    "delete",
+    283,
+    285,
+    259,
+    259
+   ],
+   [
+    "equal",
+    285,
+    289,
+    259,
+    263
+   ],
+   [
+    "replace",
+    289,
+    291,
+    263,
+    265,
+    [
+     "- **Claude Code 的 Auto Dream**（Anthropic，Memory 2.0）：理念源头——会话间隙由后台子代理整理记忆文件（去重、修矛盾、清衰减）。",
+     "- **Sleep-time Compute: Beyond Inference Scaling at Test-time**（UC Berkeley & Letta，arXiv:2504.13171）：Auto Dream「离线巩固」思想背后的学术脉络。"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    299,
+    265,
+    273
+   ],
+   [
+    "replace",
+    299,
+    308,
+    273,
+    280,
+    [
+     "- **在线写入 + 离线巩固**：Dual-Layer Agentic Memory with Fast Write Routing and Slow Consolidation（arXiv:2608.22215）——与 autoDream 的「快写慢巩固」分工同构。",
+     "- **热度衰减与访问强化**：FadeMem（arXiv:2601.18642）——heat 记忆热度模型（指数衰减 × 访问强化 × 重要性调制）的学术近亲。",
+     "- **冲突裁决与状态追踪**：StateMemBench（arXiv:2608.19652）——记忆系统追踪演化状态的考卷；C1 冲突裁决（supersede 后不再引用旧值）以其为验收靶子。",
+     "- **何时该忘 / scope 门控**：PersistBench（arXiv:2602.01146）；呈现层缓解见 Structured Memory（arXiv:2608.08300）——scope 语义域门控的问题出处与零契约变更改法。",
+     "- **领域全景**：Write–Manage–Read 综述（arXiv:2603.07670）——「写入 / 管理 / 读取」三段式与插件整体形状互证。",
+     "- **数月尺度的可靠性工程**：Memory as Infrastructure（arXiv:2609.05510）——与 sha256 审计链、fail-safe 降级同属「记忆即基础设施」路线。",
+     "- **相邻系统（对照）**：Zep（时序知识图谱）、Mem0（生产级抽取式记忆）、Hindsight（retain / recall / reflect 三操作）走「写入时 LLM 抽取 + 向量/图检索」路线；dsh-mneme 的差异点在于：巩固由 LLM 参与但产物全程留痕可回放，冲突冻结待人工复核，记忆只落本机。"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    311,
+    280,
+    283
+   ],
+   [
+    "replace",
+    311,
+    312,
+    283,
+    284,
+    [
+     "**dsh-mneme** is a cross-session memory plugin for DeepSeek Harness (DSH). It does not just *store* your memories — it *manages* them: background deduplication and merging, conflicts frozen for your review, a fully replayable audit trail, memory kept on your machine, and export to human-readable Markdown."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    317,
+    284,
+    289
+   ],
+   [
+    "replace",
+    317,
+    318,
+    289,
+    290,
+    [
+     "|Date|Version|Headline|"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    319,
+    290,
+    291
+   ],
+   [
+    "replace",
+    319,
+    327,
+    291,
+    299,
+    [
+     "|2026-11-07|**v0.12.0**|**Pinning becomes a fact you state, and the retrieval hot path gets 5.6x faster** — both main lines in this release replace \"looks right\" with \"can be checked\". ① **Explicit pinning**: \"pinned\" used to be inferred from the memory's type (`constraint` / `preference` counted as pinned by default), so a pinned `pattern` row could never survive; a separate `pinned_memories` table (a table rather than a boolean column, so rollback is one `DROP` — export the table first, since the pin choices are independent facts that do not come back with the `memories` rows) now backs `memory_pin` (release with `unpin: true`; there is no separate unpin tool), and pinned rows take their place in the injected block first. Two side paths fixed along the way: pin selection ran **after** the hybrid merge, which is already capped at `poolSize` (production `maxItems=5` → 10 rows), so rule-window pinned rows never reached the pool — on a real-store copy, pinned injection went 2/5 → 5/5 and the injected total 7 → 10, with existing entries only shifting down and none pushed out; and the predicate moved from \"how many rows are in the table\" to \"how many are usable\", because a pinned row can be archived, forgotten or hard-deleted on the `memories` side while the pin table knows nothing about it — the old predicate stayed `explicit` as long as one row remained, leaving the usable set empty and **never** falling back (hence `pinnedStats.source` now has three values, `explicit` / `fallback-none-usable` / `type-fallback`: a silent downgrade must leave a trace). `pinnedInjectBudget` defaults to 0 — **the pin pool is off by default, so a pinned row does not win a slot merely by being pinned**; set it to a positive number to enable that, and while it is off the injected sequence is identical to the previous release. ② **Automatic facts for \"you as the agent sees it\"**: verifiable fact entries derived from memory, kept per-identity card, injected, and manageable in the panel (`profileFactsEnabled`, off by default). ③ **Performance**: the embedding-resolution cache was capped at 4000 while 6730 active rows carry vectors, so it began evicting what it had just filled at row 4001 — four measured rounds, hit rate a flat **0.0%**, the cache did nothing; the cap now follows the working set under a memory budget, A/B 1.8–2.4s → 370–424ms, storage moved to `Float32Array` (55.5MB → 29.7MB), and the `embedding != ''` predicate came off a scan that only `SELECT id` (SQL layer 265ms → 96ms). ④ Fixes \\#579: the three read-only chorography tools returned fields outside their schema on error paths, so the host reported `invalid output` (thanks to @Oscar-Williams); the more dangerous half was search silently turning \"this page cannot be read\" into \"0 hits\" — unreadable pages are now listed while the hits that were read are kept. ⑤ Fixes \\#590: strict addressing treated \"no identity card has ever been created\" as \"there is no card for this identity\", and in hosts like DS Bot every bot session shares one immutable `agentPreset`, so the single persona card silently stopped applying — the test is now \"is there a key\" rather than \"is there a usable card\".|",
+     "|2026-11-05|**v0.11.0**|**Memory learns to read a repository** — this release pushes the repository chorography subsystem from zero to something you can browse and query: it reads a JS/TS repo's file tree and import graph, partitions it into modules, and writes Markdown chorography pages under `<repo>/.chorography/` (the T0 skeleton uses no model and no network, `plan.yaml` is the positive control, and the `CHORO:HUMAN` preserved region survives regeneration byte for byte). A T1 pass then runs one headless session per module to add the four semantic sections — architecture, conventions, stack, build — plus verifiable claims, spending the host's existing model quota rather than asking for another vendor key. Three consumer faces land at once: a second panel seat, three read-only tools, and `/choro/*` read routes, together with a small title-level outline injected each turn and a read-only `/choro` command that **reports staleness and never re-runs by itself**. `chorographyEnabled` is off by default, and wiki rows stay physically separate from memory rows — they never enter any consolidation or quality-filter pool. Also fixes #573: in the wide sidebar the memory entry landed below the \"More\" row and was covered when the menu opened.|",
+     "|2026-11-03|**v0.10.1**|**Opening a memory no longer takes the whole host down** — in 0.10.0, opening the detail drawer of any memory in the sidebar made the renderer throw `ReferenceError: provenance is not defined` immediately, restarting the whole host and cutting off the session in progress, reproducible 100% of the time (#553). The cause was two components thousands of lines apart: `MemoryDrawer`'s provenance effect and render block read `provenance` / `setProvenance`, while that `useState` had landed in the **previous** component in the same file, `EntityPanel` — where it was pure dead code, with zero references to `provenance` anywhere else in the function body. That shape slips past the eye (thousands of lines apart, and a same-named state looks perfectly normal), past syntax checks (`provenance` is a valid identifier, just not in scope) and past the existing tests (which read source strings and never run a component), so the regression test does not pin a name — it scans every component for \"calls `setXxx(` without declaring it\". This release also carries the graph anchoring follow-up merged after 0.10.0 (#24): the Tag and vector seed paths are wired up, and passive confirmation gained a review surface|",
+     "|2026-11-02|**v0.10.0**|**Memory now keeps accounts per run, not only per span** — everything in this release adds one missing thing: an identity for what already happened. ① **Distillation gets a run identity** (#512): provenance only reached \"which session span\", a coordinate of the **input**, never of the **run** — so \"how many times was this text re-distilled, and which rounds failed\" was nowhere in the store. Window level now records `distill_runs` (`ok` / `degraded` / `noop` / `failed` / `aborted`, plus `audit_id`), row level gets its own `memory_mints` table for \"which consolidation run minted this memory\"; historical rows stay NULL rather than guessed, and failed rounds are recorded too. ② **Provenance gains the other direction** (#524): `GET /memory/provenance?sessionId=<sid>` answers \"which windows did this session produce\", where before you could only walk back from one memory. The two keys are mutually exclusive, an out-of-range `limit` is a 400 rather than a silent truncation, and hitting the cap sets `truncated: true`. ③ **The gate reaches individual sessions** (#539): `sessionGateEnabled` makes chosen sessions and subagents receive nothing and record nothing — no injection, no distillation, and any `memory_*` or `set_scope_state` call is refused — while every other session carries on; previously the only switch was global, and turning the plugin off took other sessions down with it. Subagent detection uses only the host's own delegation markers, never `parentSession`: verified against 641 real session headers on one machine, where it misclassified 3 forked main sessions. ④ **Anti-sycophancy reaches the write side** (#530): the distillation and overview prompts said nothing about flattery, and what they write never passes write admission — now they carry a stance discipline (no judging the user's character or ability, assistant inference is not written as fact, conflicts recorded rather than adjudicated, and `importance` driven only by how much a fact affects later work — never raised by user satisfaction or mood) and a narration discipline, placed ahead of the timestamp-conversion instruction. Also fixed: the `differentiate` positive-feedback loop (the same note appended to both sides → vectors converge → judged duplicate again; one row carried 19 notes and grew from 150 to 2200+ characters — the note now lives in a ledger, not in the text, #533), the sleep conflict phase's missing input budget and catch-up (one request filled 163,054 of 163,840 tokens and the rest waited overnight; a clean round now continues immediately, #529), the panel's \"last consolidation\" card no longer passing an organize receipt off as consolidation (#495), and the panel gaining its first breakpoints for 320–519px (#542).|",
+     "|2026-10-30|**v0.9.5**|**Memory can be handed over safely — and taken back** — sharing memory stops being a file and becomes a protocolled action (#386): the pack carries active rows only, with no scopes, no home prefixes and no secret/PII rows; shipping returns a report before the file, answers 413 over the watermark and batches by type or tag; receiving rejects the whole pack on one bad row, dry-runs by default, stays idempotent on `share_external_id`, and `undo-share` deletes outright, so a withdrawn pack can be re-imported. Provenance becomes readable too: `GET /memory/provenance` (#421, by @z2Ace0107), where 409 and 503 answer \"the user switched it off\" and \"the wiring is missing\" apart. Plus #505, #515 and the unfenced consolidation prompts (#501).|",
+     "|2026-10-21|**v0.9.4**|**Three chains each get their missing last link** — the three items in this release share one shape: the thing was already built, nothing could call it. ① **Agent-driven organizing** (#231): the engine landed in `src/organize.js` back in v0.8 (dryRun comparison report → the agent decides → apply persists, screening out means archive rather than delete, every step leaving a `dream_runs` receipt), but it had **no entry point at all** — absent from the tool table, zero hits on both API surfaces, zero `.organize(` call sites in the repo; only its own tests could reach it. Now it has a tool: `memory_organize`, behind `organizeEnabled`, off by default (off = the tool is not even registered, so a model that cannot see it never calls it). ② **The profile can finally be derived** (#497): the panel's profile card gained a button that reads the active memories, spends one host model call and returns an \"as the assistant sees them\" **draft** — **a draft only**: applying it is another click you make, and your hand-written text is never rewritten by the model; an empty store or a misbehaving model is an error, never an empty draft masquerading as \"nothing to extract this time\" (`profileExtractEnabled`, off by default). ③ **Personas no longer leak into someone else's session**: the `default` card used to be handed to every identity without a card, so a third-party bot running in the same host — one that carries its own identity — received two \"you are ...\" claims in every turn, while \"switch this card off\" in the panel changed nothing; the new `personaStrictAddressing` (off by default, existing behaviour byte-identical) reclaims both \"no card for this identity\" and \"card explicitly switched off\" as inject-nothing. The same release adds the **transcript fence and the parse-failure guard** for distillation (#494: the root cause of one session being stuck on the same window, retried 20 times and growing more expensive each time; failed rows now always carry the raw output shape, so \"what did the model actually print\" is answerable afterwards), and the panel's read-only card that called itself \"injected text\" is now rendered by the backend — it used to show neither the persona lines nor the header and prefix it claimed to mirror.|",
+     "|2026-10-20|**v0.9.3**|**M.O. goes from “diggable” to “actually summoned to dig”** — the distillation chain has been fully implemented since v0.9.1 (multi-frame zstd → repeated sequences → absence contrast → draft workflows), yet it had **no call site at runtime**: every reference in the repo lived in tests. The machine could dig, but nothing ever called it. What was missing was never the algorithm — it was **attribution** and **triggering**. This release wires up three things: resolving a project's session bucket from the `cwd` in the session header (bucket names are a **lossy** transform of paths whose rule lives outside this repo; when the lookup fails the whole run is skipped rather than degraded into a global sweep — the latter attributes project A's actions to project B, and the result looks perfectly normal); a new `nudgeForProject` that folds “attribute → mine → persist” into one entry point; and a `turn/end` hook that runs per project with a 10-minute cooldown, a 4-second budget, deferred to a macrotask, one project at a time, errors only warned. **It produces proposals, never drafts** (#489): promotion still needs a human, and the panel gained a \"distill now\" button on the same entry point, differing only in that it does not touch the repo. The same version fixes three “broken but silent” defects: the scope reverse-lookup that had been throwing and silently degrading on every call since v0.8.0, disabling canonical normalization and membership checks (#487); `/nudge`'s write gate, which only intercepted `PUT`/`POST` so a token-bearing `PATCH`/`DELETE` persisted proposals silently, plus attribution resolution ignoring the budget and bucket names being truncated while being collected — reporting “did not look at everything” as “there is genuinely nothing”; and a multi-frame zstd counter-assertion bound to Node's whole-buffer decode semantics, expired from 24.22.0 (#490).|",
+     "|2026-10-19|**v0.9.2**|**Making silent failures visible** — most of what this release fixes isn't a missing feature, it's something broken that never said so. Feature flags have always taken effect at startup, so a lit \"changed\" badge only meant the value reached the database; there's now a third state, **pending restart** (#481). The default `dreamMaxTokens` was sent verbatim as `max_tokens` and blew past provider caps: **180 consolidations, 0 successes** over eight days — the panel can now edit it, and an over-cap request retries once at the limit the provider itself declares (#478). Rows written by auto-distillation got no vector at all; the \"deferred to commit\" the comment promised never existed (#477). And the CLI treated values starting with `--` as new flags — a defect that only surfaces when a random token happens to begin with `-` (about 1/4096), which is why it hid for a whole release cycle. Also new: a **scope-level reversible gate** (#471, off by default) that pauses one scope without editing config or restarting.|"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    328,
+    299,
+    300
+   ],
+   [
+    "replace",
+    328,
+    329,
+    300,
+    301,
+    [
+     "> Headlines only; see the CHANGELOG for the full list."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    336,
+    301,
+    308
+   ],
+   [
+    "replace",
+    336,
+    337,
+    308,
+    309,
+    [
+     "|Scenario|Without plugin|With plugin|"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    338,
+    309,
+    310
+   ],
+   [
+    "replace",
+    338,
+    341,
+    310,
+    313,
+    [
+     "|Continue a project discussion from Monday on Wednesday|\"Can you describe your project again?\"|\"You mean the blog refactor from last week? You mentioned wanting to use Astro.\"|",
+     "|Tell the AI your coding habits|Repeat every session|Set once, remember forever|",
+     "|Close window after organizing research|Notes are lost|Auto-archived, retrievable anytime|"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    354,
+    313,
+    326
+   ],
+   [
+    "replace",
+    354,
+    355,
+    326,
+    327,
+    [
+     "> **How does it compare with Zep / Mem0 / Letta / Hindsight?** There is a row-by-row table — storage, retrieval, write-time extraction, offline consolidation, conflicts, forgetting, scoping, auditability, multi-host, offline, license: 11 rows, and **\"—\" does not mean \"worse\"**: capability comparison (Chinese)."
+    ]
+   ],
+   [
+    "equal",
+    355,
+    370,
+    327,
+    342
+   ],
+   [
+    "replace",
+    370,
+    371,
+    342,
+    343,
+    [
+     "|Source|Paste this|Note|"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    372,
+    343,
+    344
+   ],
+   [
+    "replace",
+    372,
+    376,
+    344,
+    348,
+    [
+     "|**npm name**|`@modusensus/dsh-mneme`|Recommended; a version range works too (`@0.9.0`)|",
+     "|**Git repo**|`git+https://github.com/slow-stack/mneme.git#path:/dsh-mneme`|`#path:` is not optional. Without it you get the root shell (`0.0.0`, no `dsh` field) — the host does not treat it as a plugin|",
+     "|**tarball**|`C:\\\\path\\\\to\\\\modusensus-dsh-mneme-0.9.0.tgz`|Produced by `npm pack` inside `dsh-mneme/`; `pnpm pack` fails on the bin script's CRLF line endings|",
+     "|**local directory**|`C:\\\\path\\\\to\\\\mneme\\\\dsh-mneme`|**Must be absolute** — a relative path is rejected outright (`a local path must be absolute`)|"
+    ]
+   ],
+   [
+    "equal",
+    376,
+    396,
+    348,
+    368
+   ],
+   [
+    "replace",
+    396,
+    397,
+    368,
+    369,
+    [
+     "|Need|Config key|Default|Change|"
+    ]
+   ],
+   [
+    "equal",
+    397,
+    398,
+    369,
+    370
+   ],
+   [
+    "replace",
+    398,
+    402,
+    370,
+    374,
+    [
+     "|Fully offline|`embedProvider`|`openai`|Change to `local`|",
+     "|Background consolidation|`autoDream`|`true`|Change to `false` to disable|",
+     "|Structured entity extraction|`entityExtractionEnabled`|`false`|Change to `true`|",
+     "|Memory isolation per agent / workspace|`scopeEnabled` (add `strictScope` for stronger isolation — hard blocking applies to explicit declarations only)|`false`|Change to `true`|"
+    ]
+   ],
+   [
+    "equal",
+    402,
+    403,
+    374,
+    375
+   ],
+   [
+    "replace",
+    403,
+    404,
+    375,
+    376,
+    [
+     "> All of these live in DSH Settings → Memory Settings. Full config docs in the Configuration section (Chinese, bilingual file)."
+    ]
+   ],
+   [
+    "equal",
+    404,
+    415,
+    376,
+    387
+   ],
+   [
+    "replace",
+    415,
+    422,
+    387,
+    388,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    441,
+    388,
+    407
+   ],
+   [
+    "replace",
+    441,
+    442,
+    407,
+    408,
+    [
+     "Off by default (`actionPipelineEnabled`). Design trade-offs and pitfalls: docs/WORKFLOWS.md (Chinese)."
+    ]
+   ],
+   [
+    "equal",
+    442,
+    445,
+    408,
+    411
+   ],
+   [
+    "replace",
+    445,
+    446,
+    411,
+    412,
+    [
+     "> The panel is bilingual and follows your DSH interface language. English shots below; see the Chinese section for the localized UI."
+    ]
+   ],
+   [
+    "equal",
+    446,
+    447,
+    412,
+    413
+   ],
+   [
+    "replace",
+    447,
+    451,
+    413,
+    415,
+    [
+     " Memory browse ",
+     " Record, browse and filter your memories. "
+    ]
+   ],
+   [
+    "equal",
+    451,
+    452,
+    415,
+    416
+   ],
+   [
+    "replace",
+    452,
+    456,
+    416,
+    418,
+    [
+     " Entities & relations ",
+     " Entities are extracted from your memories, building a relation graph with attributes. "
+    ]
+   ],
+   [
+    "equal",
+    456,
+    457,
+    418,
+    419
+   ],
+   [
+    "replace",
+    457,
+    461,
+    419,
+    421,
+    [
+     " Status & audit ",
+     " The status panel shows your vector index, LLM spend and consolidation activity at a glance. "
+    ]
+   ],
+   [
+    "equal",
+    461,
+    462,
+    421,
+    422
+   ],
+   [
+    "replace",
+    462,
+    466,
+    422,
+    424,
+    [
+     " Memory settings ",
+     " Retrieval, entity extraction and consolidation toggles are all configured in one place. "
+    ]
+   ],
+   [
+    "equal",
+    466,
+    467,
+    424,
+    425
+   ],
+   [
+    "replace",
+    467,
+    471,
+    425,
+    427,
+    [
+     " Help & feedback ",
+     " Optional write-protect token and feedback channels for a fully local, auditable setup. "
+    ]
+   ],
+   [
+    "equal",
+    471,
+    491,
+    427,
+    447
+   ],
+   [
+    "replace",
+    491,
+    492,
+    447,
+    448,
+    [
+     "|Client|Setup|"
+    ]
+   ],
+   [
+    "equal",
+    492,
+    493,
+    448,
+    449
+   ],
+   [
+    "replace",
+    493,
+    499,
+    449,
+    455,
+    [
+     "|**Claude Code**|Project-root `.mcp.json`: `{\"mcpServers\": {\"mneme-memory\": {\"command\": \"mneme-mcp\", \"env\": {\"MNEME_TOKEN\": \"<your-token>\"}}}}`|",
+     "|**Cursor**|Settings → MCP → Add Server; command `mneme-mcp`, env `MNEME_TOKEN`|",
+     "|**Codex**|`~/.codex/config.toml`: `[mcp_servers.mneme-memory]` section, `command = \"mneme-mcp\"`, `env = { MNEME_TOKEN = \"<your-token>\" }`|",
+     "|**Hermes**|`mcp_servers:` section of `~/.hermes/config.yaml`: `mneme-memory: {command: \"mneme-mcp\", env: {MNEME_TOKEN: \"<your-token>\"}}`, then restart|",
+     "|**OpenCode**|`opencode.json`: `{\"mcp\": {\"mneme-memory\": {\"type\": \"local\", \"command\": [\"mneme-mcp\"], \"environment\": {\"MNEME_TOKEN\": \"<your-token>\"}}}}`|",
+     "|**OpenClaw**|`openclaw mcp add mneme-memory --command mneme-mcp --env MNEME_TOKEN=<your-token>`, or Control UI → Settings → MCP|"
+    ]
+   ],
+   [
+    "equal",
+    499,
+    500,
+    455,
+    456
+   ],
+   [
+    "replace",
+    500,
+    501,
+    456,
+    457,
+    [
+     "> **Legacy mounts keep working**: `dsh-mneme-mcp` + `DSH_MNEME_TOKEN` remain supported (both the bin and env vars are preserved; no migration needed). If the npm package is not installed globally, use `npx` as the command with args `-p mneme-memory mneme-mcp` (an args array in Claude Code/OpenCode; `args = [\"-p\", \"mneme-memory\", \"mneme-mcp\"]` in Codex). Full config details and security notes: full docs (Chinese)."
+    ]
+   ],
+   [
+    "equal",
+    501,
+    515,
+    457,
+    471
+   ],
+   [
+    "replace",
+    515,
+    516,
+    471,
+    472,
+    [
+     "|Project|Platform|Description|"
+    ]
+   ],
+   [
+    "equal",
+    516,
+    517,
+    472,
+    473
+   ],
+   [
+    "replace",
+    517,
+    518,
+    473,
+    474,
+    [
+     "|Mneme-Bridge|DeepSeek web|Browser extension + local service: web chats are distilled into the mneme store and DSH memories are injected back by topic, so both sides share one memory. Embedded (mounts the lib) and remote (standalone API — pairs with the daemon above) modes|"
+    ]
+   ],
+   [
+    "equal",
+    518,
+    523,
+    474,
+    479
+   ],
+   [
+    "replace",
+    523,
+    524,
+    479,
+    480,
+    [
+     "|Doc|Path|"
+    ]
+   ],
+   [
+    "equal",
+    524,
+    525,
+    480,
+    481
+   ],
+   [
+    "replace",
+    525,
+    539,
+    481,
+    495,
+    [
+     "|Full plugin docs (features / install / config / architecture)|dsh-mneme/README.md（中文）|",
+     "|stdio MCP server — plug the six memory tools into any MCP client (Claude Code / Cursor / …)|dsh-mneme/README.md · MCP Server（中文）|",
+     "|Standalone daemon (serve memories without DSH)|dsh-mneme/docs/DAEMON.md（中文）|",
+     "|Configuration reference (all keys)|dsh-mneme/docs/CONFIGURATION.md（中文）|",
+     "|Distill record retention & memory-level provenance (#399)|dsh-mneme/docs/DISTILL.md（中文）|",
+     "|Memory share pack: export and import (`dsh-mneme share` / `receive` / `undo-share`)|dsh-mneme/docs/SHARE.md（中文）|",
+     "|Entity structure design|dsh-mneme/docs/ENTITIES.md|",
+     "|Workflows (M.O.): the workflow lives in the repo, the evidence in memory|dsh-mneme/docs/WORKFLOWS.md（中文）|",
+     "|Semantic architecture|dsh-mneme/docs/SEMANTIC.md|",
+     "|Local model guide|dsh-mneme/docs/LOCAL_MODEL.md|",
+     "|Capability comparison vs Zep / Mem0 / Letta / Hindsight|docs/COMPARISON.md（中文）|",
+     "|Changelog|dsh-mneme/CHANGELOG.md|",
+     "|Security|SECURITY.md|",
+     "|Code of Conduct (attribution, evidence over identity)|CODE_OF_CONDUCT.md|"
+    ]
+   ],
+   [
+    "equal",
+    539,
+    546,
+    495,
+    502
+   ],
+   [
+    "replace",
+    546,
+    547,
+    502,
+    503,
+    [
+     "|Version|Theme|Status|"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    548,
+    503,
+    504
+   ],
+   [
+    "replace",
+    548,
+    557,
+    504,
+    513,
+    [
+     "|**v0.3**|Gene: entities / time-boxed attributes / relations|✅|",
+     "|**v0.4**|Sleep Mode: idle 4-phase deep maintenance|✅|",
+     "|**v0.5**|Recall fusion & visualization: BM25 + graph + hot memory|✅|",
+     "|**v0.6**|Session lifecycle: delete session ≠ delete memory|✅|",
+     "|**v0.7**|Self-evolving memory: heat decay + sleep dual-protection + desktop workbench/feature toggles|✅|",
+     "|**v0.8**|Scope isolation (agent/workspace stamping + retrieval weighting + opt-in hard filter) + conflict review queue + explicit attribution + ecosystem (stdio MCP server / graph recall axis / cold-start bootstrap / injection truncation & status bar / distill reliability / injection shaping & agent-driven organize / configuration reference & issue templates)|✅ Released (up to v0.8.16)|",
+     "|**v0.9**|M.O. (Modus Operandi) beta: project-level workflows + candidate tiering & promotion criteria + panel list-and-graph view; settings panel re-folded at \"beyond the newcomer\" (#427); security & supply-chain hardening (declarative route auth, OSV gate, signed releases); **v0.9.1 adds the write side**: execution windows, run ledger, attribution candidates, observation sidecar with drift detection, step `assert`/`optional`, draft mining from session logs, persona page (per-agent cards); **v0.9.2 makes silent failures visible**: feature-flag third state \"pending restart\", scope-level reversible gate (#471), automatic max_tokens downgrade for consolidation (#478); **v0.9.3 wires up auto-distillation**: resolves the project bucket from the session header's `cwd`, hooks `turn/end`, 10-minute cooldown, 4-second budget, proposals only and never drafts (#489), and fixes the scope reverse-lookup that had been silently degrading since v0.8.0 (#487), the `/nudge` write gate missing `PATCH`/`DELETE`, and a multi-frame zstd counter-assertion bound to Node's whole-buffer decode semantics (#490); **v0.9.4 supplies the missing last link on three chains**: the agent-driven organizing interface finally gets a tool (`memory_organize`, behind `organizeEnabled`, off by default — off means the model cannot even see it), the profile can be drafted from memory (`profileExtractEnabled`, off by default; a draft only — applying it is another user action, and hand-written text is never rewritten by the model), and the persona `default` card is no longer handed to identities that simply have no card (#497, `personaStrictAddressing`, off by default); the panel's \"injected text\" card is now rendered by a single backend source, plus the distillation transcript fence and parse-failure guard (#494); **v0.9.5 makes memory shareable and recallable**: the `mneme.share/v1` pack (active rows only, no scopes or home prefixes, secret/PII rows dropped whole, report before file, 3 MiB watermark, one bad row rejects the whole pack, dry-run by default, idempotent on `share_external_id`, withdrawal deletes rather than archives), a single predicate guarding \"local consolidation never rewrites someone else's imported text\" at the dedupe choke point and nine row pools, the provenance read endpoint `GET /memory/provenance` (@z2Ace0107, with 409 and 503 kept as two different answers), plus fixes for duplicate same-title writes (#505), a starved pattern-scan window (#515), five unfenced consolidation prompts (#501/#493) and a merge guard skipping whole categories (#521), and a sticky settings section index (#518)|✅ Released (v0.9.5)|",
+     "|**v0.10**|Attribution and gates: distillation provenance gains a **run** identity (`distill_runs` per window plus `memory_mints` per row; historical rows left NULL rather than guessed), provenance gains the reverse direction `?sessionId=`, a per-session incognito gate (`sessionGateEnabled`, keyed on the host's own delegation markers with a bounded ledger), anti-sycophancy rules reaching the write side (stance and narration discipline in distillation and overview), `differentiate` moving to a ledger instead of rewriting text (#533), an input budget and catch-up for the sleep conflict phase (#529), the \"last consolidation\" card no longer showing organize receipts (#495), and the panel's first mobile and 481–519px breakpoints (#542)|✅ Released (v0.10.0)|",
+     "|**v0.12**|Explicit pinning (a `pinned_memories` table behind `memory_pin` — release with `unpin: true` — so pinned rows take their place in the injected block instead of relying on their type; `pinnedInjectBudget` defaults to 0, which leaves the pin pool off) + pinned rows no longer squeezed out by the vector path's `poolSize` cap + automatic facts for \"you as the agent sees it\" (`profileFactsEnabled`, off by default) + an embedding-resolution cache that follows the working set (hit rate 0% → 100%, single-round retrieval 5.6x faster, storage on `Float32Array`) + #579 chorography tool error paths and \"cannot read\" no longer answered as \"no match\" + #590 strict addressing no longer reading \"no card was ever created\" as \"no card for this identity\"|✅ Released (v0.12.0)|"
+    ]
+   ],
+   [
+    "equal",
+    557,
+    558,
+    513,
+    514
+   ],
+   [
+    "replace",
+    558,
+    559,
+    514,
+    515,
+    [
+     "> Full per-minor-version changelog in CHANGELOG."
+    ]
+   ],
+   [
+    "equal",
+    559,
+    569,
+    515,
+    525
+   ],
+   [
+    "delete",
+    569,
+    571,
+    525,
+    525
+   ],
+   [
+    "equal",
+    571,
+    575,
+    525,
+    529
+   ],
+   [
+    "replace",
+    575,
+    577,
+    529,
+    531,
+    [
+     "- **Auto Dream in Claude Code** (Anthropic, Memory 2.0): the conceptual origin — a background sub-agent consolidates memory files between sessions (dedupe, resolve contradictions, prune decay).",
+     "- **Sleep-time Compute: Beyond Inference Scaling at Test-time** (UC Berkeley & Letta, arXiv:2504.13171): the academic thread behind the offline-consolidation idea."
+    ]
+   ],
+   [
+    "equal",
+    577,
+    585,
+    531,
+    539
+   ],
+   [
+    "replace",
+    585,
+    592,
+    539,
+    546,
+    [
+     "- **Fast write + slow consolidation**: Dual-Layer Agentic Memory (arXiv:2608.22215) — mirrors autoDream's online-write / offline-consolidate split.",
+     "- **Heat decay & access reinforcement**: FadeMem (arXiv:2601.18642) — academic kin of the heat model (exponential decay × access reinforcement × importance modulation).",
+     "- **Conflict resolution & state tracking**: StateMemBench (arXiv:2608.19652) — a benchmark for tracking evolving state; C1 conflict adjudication (no stale reads after supersede) treats it as its acceptance target.",
+     "- **When to forget / scope gating**: PersistBench (arXiv:2602.01146); presentation-layer mitigation in Structured Memory (arXiv:2608.08300).",
+     "- **Field survey**: Write–Manage–Read survey (arXiv:2603.07670) — the write/manage/read taxonomy matches the plugin's overall shape.",
+     "- **Months-scale reliability**: Memory as Infrastructure (arXiv:2609.05510) — the same \"memory as infrastructure\" school as the sha256 audit chain and fail-safe degradation.",
+     "- **Adjacent systems (contrast)**: Zep (temporal knowledge graph), Mem0 (production-grade extraction) and Hindsight (retain / recall / reflect) extract with LLM at write time and retrieve via vectors/graphs; dsh-mneme instead keeps consolidation replayable with a full audit trail, freezes conflicts for human review, and keeps memory local by default."
+    ]
+   ],
+   [
+    "equal",
+    592,
+    596,
+    546,
+    550
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "60c7d33984f2+2": {
+  "fn": "nambok/mentedb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Crates.io docs.rs CI dependency status License npm PyPI"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    3,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    16,
+    14,
+    16,
+    [
+     "|**Cloud**|Managed. Get an API key, set `MENTEDB_API_KEY`, connect. The overnight maintenance runs for you.|",
+     "|**Self-host**|Run the engine yourself with `cargo install mentedb-server` or Docker. Nightly maintenance is built in.|"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "Building your own agent? **Build an agent** has a"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    18,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "**Cloud in 30 seconds** (full guide):"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    28,
+    22,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "**Self-host in 30 seconds** (full guide):"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    95,
+    29,
+    95
+   ],
+   [
+    "replace",
+    95,
+    100,
+    95,
+    96,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    107,
+    96,
+    103
+   ],
+   [
+    "replace",
+    107,
+    108,
+    103,
+    104,
+    [
+     "self-hosted, Python / Node / Rust) is in **Build an agent**."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    115,
+    104,
+    111
+   ],
+   [
+    "replace",
+    115,
+    130,
+    111,
+    112,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    137,
+    112,
+    119
+   ],
+   [
+    "replace",
+    137,
+    138,
+    119,
+    120,
+    [
+     "`MENTEDB_LLM_PROVIDER` and `MENTEDB_LLM_API_KEY` (or use cloud,"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    120,
+    123
+   ],
+   [
+    "replace",
+    141,
+    142,
+    123,
+    124,
+    [
+     "> user profile from accumulated turns. On cloud it runs in the"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    169,
+    124,
+    151
+   ],
+   [
+    "replace",
+    169,
+    181,
+    151,
+    152,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    204,
+    152,
+    175
+   ],
+   [
+    "replace",
+    204,
+    205,
+    175,
+    176,
+    [
+     "|Feature|Traditional DBs|Vector DBs|MenteDB|"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    176,
+    177
+   ],
+   [
+    "replace",
+    206,
+    215,
+    177,
+    186,
+    [
+     "|Storage model|Tables/Documents|Embeddings|Memory nodes (embeddings + graph + bi-temporal)|",
+     "|Entity understanding|Manual schemas|None|**Auto-extracted typed entities with graph edges**|",
+     "|Query result|Raw data|Similarity scores|**Token budget optimized context**|",
+     "|Memory quality|Manual|None|**LLM extract + quality filter + dedup + contradiction**|",
+     "|Retrieval strategy|Index scan|Single-pass kNN|**Hybrid vector + BM25 + graph traversal**|",
+     "|Understands AI attention?|No|No|**Yes, U curve ordering**|",
+     "|Tracks what AI knows?|No|No|**Epistemic state tracking**|",
+     "|Multi-agent isolation?|Schema level|Collection level|**Memory spaces with ACLs**|",
+     "|Updates cascade?|Foreign keys|No|**Belief propagation**|"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    229,
+    186,
+    200
+   ],
+   [
+    "replace",
+    229,
+    230,
+    200,
+    201,
+    [
+     "- **Delta Aware Serving** Only sends what changed since last turn (80 to 91 percent fewer memory retrieval tokens over 20 turns in the bundled benchmarks, see Token Efficiency)"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    238,
+    201,
+    209
+   ],
+   [
+    "replace",
+    238,
+    239,
+    209,
+    210,
+    [
+     "- **Self-Hosted Server** One process serves many databases (`/v1/db/{name}/...`, one directory and lock per tenant, dotted names such as `tenant.alice.notes` as a stable contract), tokens scoped to databases by name or glob with `read`, `write` or `maintenance` scopes (verifiable with a public key, so no shared secret on the server, with `dbs` required and optionally bound to the token's subject), native HTTPS, Bedrock embeddings and extraction through the task role, and REST endpoints for hybrid search (with per request MMR, reranking and relevance first ranking), heads-up context, batch search across databases, paged memory lists, in place updates and supersession, recall for an action, pins, history, graph neighbors, conflicts, documents, consolidation, maintenance and backups. Operations: SIGTERM drain and clean close, per caller rate limits, request deadlines, liveness and readiness probes, and enrichment on its own bounded worker pool. See the server API reference and self-hosting guide"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    262,
+    210,
+    233
+   ],
+   [
+    "replace",
+    262,
+    263,
+    233,
+    234,
+    [
+     "|Operation|Target|"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    234,
+    235
+   ],
+   [
+    "replace",
+    264,
+    269,
+    235,
+    240,
+    [
+     "|Point lookup|~50ns|",
+     "|Multi-tag filter|~10us|",
+     "|k-NN similarity search|~5ms|",
+     "|Full context assembly|<50ms|",
+     "|Startup (mmap)|<1ms|"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    299,
+    240,
+    270
+   ],
+   [
+    "replace",
+    299,
+    300,
+    270,
+    271,
+    [
+     "See mentedb-mcp for setup and configuration."
+    ]
+   ],
+   [
+    "equal",
+    300,
+    309,
+    271,
+    280
+   ],
+   [
+    "replace",
+    309,
+    323,
+    280,
+    281,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    327,
+    281,
+    285
+   ],
+   [
+    "replace",
+    327,
+    328,
+    285,
+    286,
+    [
+     "server API reference."
+    ]
+   ],
+   [
+    "equal",
+    328,
+    331,
+    286,
+    289
+   ],
+   [
+    "replace",
+    331,
+    332,
+    289,
+    290,
+    [
+     "The server backs Claude's client side memory tool (`memory_20250818`) at `POST /v1/memory_tool`, with the same contract as MenteDB Cloud. Each `/memories` file is a memory, scoped per agent, and the Python and TypeScript SDKs ship a `MemoryTool` helper that turns the model's `tool_use` blocks into `tool_result` blocks. See Memory tool backend."
+    ]
+   ],
+   [
+    "equal",
+    332,
+    344,
+    290,
+    302
+   ],
+   [
+    "replace",
+    344,
+    350,
+    302,
+    303,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    383,
+    303,
+    336
+   ],
+   [
+    "replace",
+    383,
+    481,
+    336,
+    337,
+    [
+     "…（98 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    481,
+    485,
+    337,
+    341
+   ],
+   [
+    "replace",
+    485,
+    486,
+    341,
+    342,
+    [
+     "`ingest_agent_file` (deterministic) and `ingest_agent_file_llm` (any format, any language, via an extraction provider) break an agent instruction file into atomic, self contained memories: open vocabulary action triggers (`trigger:git-commit`, `trigger:order-refund`), section tags for cluster completion, and exemplar turns that anchor mode activation for standing directives (\"longterm fixes only\", \"use the t function for user visible text\"). Delivery runs through four channels: relevance injection, action rules at the tool moment, mode activation by activity, and cluster completion for dense rule sections. Measured on real public agent files (openai/codex, kiali, temporal, freerouting; results in the write up), two pass delivery (retrieve at the prompt, review against the draft) reached 100 percent rule compliance at 2 to 8 times fewer tokens than carrying the file in context, including a held out file never used during development. Re ingesting keeps memory in sync with the file, so the file stays the source of truth and the normal workflow does not change: edit it as always and ingest again, new rules are stored, unchanged rules deduplicate, edited rules replace their old version, and rules deleted from the file are forgotten (report field `removed`; opt out with `sync: false`; give each file its own `source_tag` when several files share one agent scope). The benchmark lives in this repository under benchmarks/agent_file."
+    ]
+   ],
+   [
+    "equal",
+    486,
+    495,
+    342,
+    351
+   ],
+   [
+    "replace",
+    495,
+    496,
+    351,
+    352,
+    [
+     "|Cosine Similarity|Action|What happens|"
+    ]
+   ],
+   [
+    "equal",
+    496,
+    497,
+    352,
+    353
+   ],
+   [
+    "replace",
+    497,
+    501,
+    353,
+    357,
+    [
+     "|**> 0.95**|Contradiction detected|Creates `Contradicts` edge, flags conflict for review (both memories stay valid; a byte-identical duplicate is superseded instead)|",
+     "|**0.85 – 0.95**|Supersedes old memory|Invalidates older memory (`valid_until` set), creates `Supersedes` edge|",
+     "|**0.6 – 0.85**|Related|Creates `Related` edge with similarity as weight|",
+     "|**< 0.6**|No action|Memories are independent|"
+    ]
+   ],
+   [
+    "equal",
+    501,
+    544,
+    357,
+    400
+   ],
+   [
+    "replace",
+    544,
+    554,
+    400,
+    401,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    554,
+    621,
+    401,
+    468
+   ],
+   [
+    "replace",
+    621,
+    626,
+    468,
+    469,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    626,
+    632,
+    469,
+    475
+   ],
+   [
+    "replace",
+    632,
+    633,
+    475,
+    476,
+    [
+     "|Phase|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    633,
+    634,
+    476,
+    477
+   ],
+   [
+    "replace",
+    634,
+    638,
+    477,
+    481,
+    [
+     "|**Batch LLM Extraction**|Converts episodic memories into semantic facts and entity nodes|",
+     "|**Entity Linking**|Resolves duplicates and aliases (e.g., \"JS\" ↔ \"JavaScript\") via rules + LLM|",
+     "|**Community Detection**|Groups related entities by category and generates LLM summaries|",
+     "|**User Model**|Builds an always-available user profile from accumulated knowledge|"
+    ]
+   ],
+   [
+    "equal",
+    638,
+    641,
+    481,
+    484
+   ],
+   [
+    "replace",
+    641,
+    642,
+    484,
+    485,
+    [
+     "**Requires an LLM provider** (OpenAI, Anthropic, Ollama, or AWS Bedrock). Without one, the rest of the engine works as usual and enrichment does not run. See LLM Extraction Config for setup."
+    ]
+   ],
+   [
+    "equal",
+    642,
+    647,
+    485,
+    490
+   ],
+   [
+    "replace",
+    647,
+    652,
+    490,
+    491,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    652,
+    664,
+    491,
+    503
+   ],
+   [
+    "replace",
+    664,
+    667,
+    503,
+    506,
+    [
+     " live set, with no external store and no coordinator process. A node that stops",
+     " heartbeating drops out; a new one is picked up from a seed address or a headless",
+     " service DNS name. This is the Cassandra/Dynamo model, not a consensus leader."
+    ]
+   ],
+   [
+    "equal",
+    667,
+    668,
+    506,
+    507
+   ],
+   [
+    "replace",
+    668,
+    671,
+    507,
+    510,
+    [
+     " (highest-random-weight) hashing, computed identically everywhere, so a request",
+     " reaches the same owner from any node. Adding or removing a node re-homes only",
+     " about 1/N of users, not the full reshuffle a `hash % N` ring forces."
+    ]
+   ],
+   [
+    "equal",
+    671,
+    672,
+    510,
+    511
+   ],
+   [
+    "replace",
+    672,
+    674,
+    511,
+    513,
+    [
+     " the old owner releases the lock and the new owner takes it, so a user's database",
+     " is only ever written by one node and handoff moves the lock, not the data."
+    ]
+   ],
+   [
+    "equal",
+    674,
+    691,
+    513,
+    530
+   ],
+   [
+    "replace",
+    691,
+    692,
+    530,
+    531,
+    [
+     "For a full stack, `observability/` has a one-command Prometheus +"
+    ]
+   ],
+   [
+    "equal",
+    692,
+    699,
+    531,
+    538
+   ],
+   [
+    "replace",
+    699,
+    701,
+    538,
+    540,
+    [
+     "Point `observability/prometheus.yml` at your nodes,",
+     "or import `crates/mentedb-server/grafana-dashboard.json`"
+    ]
+   ],
+   [
+    "equal",
+    701,
+    707,
+    540,
+    546
+   ],
+   [
+    "replace",
+    707,
+    708,
+    546,
+    547,
+    [
+     "|Crate|Description|"
+    ]
+   ],
+   [
+    "equal",
+    708,
+    709,
+    547,
+    548
+   ],
+   [
+    "replace",
+    709,
+    723,
+    548,
+    562,
+    [
+     "|`mentedb`|Facade crate with full cognitive engine (12 subsystems wired in)|",
+     "|`mentedb-core`|Types (MemoryNode, MemoryEdge), newtype IDs, errors, config|",
+     "|`mentedb-storage`|Compact record storage engine with crash safe WAL, record cache, LZ4|",
+     "|`mentedb-index`|HNSW vector index (bounded, concurrent), roaring bitmaps, temporal index|",
+     "|`mentedb-graph`|CSR/CSC knowledge graph with BFS/DFS and contradiction detection|",
+     "|`mentedb-query`|MQL parser with AND/OR/NOT, grouping, and ORDER BY|",
+     "|`mentedb-context`|Attention aware context assembly, U curve ordering, delta tracking|",
+     "|`mentedb-cognitive`|Write inference, belief propagation, pain signals, phantom memories, speculative cache|",
+     "|`mentedb-consolidation`|Temporal decay, memory consolidation, salience management, archival|",
+     "|`mentedb-embedding`|Embedding providers: local Candle, OpenAI, Cohere, and Voyage over HTTP, AWS Bedrock Cohere and Titan, hash|",
+     "|`mentedb-extraction`|LLM powered memory extraction pipeline|",
+     "|`mentedb-server`|REST + gRPC server with named databases, scoped JWT auth, HTTPS, space ACLs, rate limiting|",
+     "|`mentedb-cli`|`mentedb` command line client: run MQL against a local data directory or a running server|",
+     "|`mentedb-replication`|Raft based replication (experimental)|"
+    ]
+   ],
+   [
+    "equal",
+    723,
+    736,
+    562,
+    575
+   ],
+   [
+    "replace",
+    736,
+    737,
+    575,
+    576,
+    [
+     "- **Verified Erase** `erase` removes a memory and every memory derived from it (facts, consolidations, entity and community nodes), overwrites every copy of their bytes in the database directory, and returns a receipt; see Verified erase"
+    ]
+   ],
+   [
+    "equal",
+    737,
+    742,
+    576,
+    581
+   ],
+   [
+    "replace",
+    742,
+    746,
+    581,
+    582,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    746,
+    773,
+    582,
+    609
+   ],
+   [
+    "replace",
+    773,
+    774,
+    609,
+    610,
+    [
+     "Python and TypeScript SDKs. docs/FORGETTING.md covers"
+    ]
+   ],
+   [
+    "equal",
+    774,
+    803,
+    610,
+    639
+   ],
+   [
+    "replace",
+    803,
+    804,
+    639,
+    640,
+    [
+     "docs/PROVENANCE.md."
+    ]
+   ],
+   [
+    "equal",
+    804,
+    809,
+    640,
+    645
+   ],
+   [
+    "replace",
+    809,
+    810,
+    645,
+    646,
+    [
+     "|Variable|Description|Default|"
+    ]
+   ],
+   [
+    "equal",
+    810,
+    811,
+    646,
+    647
+   ],
+   [
+    "replace",
+    811,
+    821,
+    647,
+    657,
+    [
+     "|`MENTEDB_LLM_PROVIDER`|openai, anthropic, ollama, bedrock (server built with the `bedrock` feature, as the Docker image is), none|none|",
+     "|`MENTEDB_LLM_API_KEY`|API key for the provider (not used by ollama or bedrock)||",
+     "|`MENTEDB_LLM_MODEL`|Model name|Provider default|",
+     "|`MENTEDB_LLM_BASE_URL`|Custom base URL (Ollama, proxies)|Provider default|",
+     "|`MENTEDB_LLM_REGION`|AWS region for bedrock (falls back to `AWS_REGION`)||",
+     "|`MENTEDB_AUTO_EXTRACT`|`true` to queue LLM extraction for conversation shaped `POST /v1/memories` bodies (same as `--auto-extract`)|off|",
+     "|`MENTEDB_EXTRACTION_QUALITY_THRESHOLD`|Min confidence to store (0.0 to 1.0)|0.7|",
+     "|`MENTEDB_EXTRACTION_DEDUP_THRESHOLD`|Similarity threshold for dedup (0.0 to 1.0)|0.85|",
+     "|`MENTEDB_EMBEDDING_PROVIDER`|Server embeddings: candle, bedrock, hash, none|candle when built with `local-embeddings`, else hash|",
+     "|`MENTEDB_EMBEDDING_MODEL`|Bedrock embedding model|`cohere.embed-english-v3`|"
+    ]
+   ],
+   [
+    "equal",
+    821,
+    822,
+    657,
+    658
+   ],
+   [
+    "replace",
+    822,
+    823,
+    658,
+    659,
+    [
+     "Every server variable (auth, databases, TLS, Bedrock, backups) is listed in Self-hosting."
+    ]
+   ],
+   [
+    "equal",
+    823,
+    832,
+    659,
+    668
+   ],
+   [
+    "replace",
+    832,
+    849,
+    668,
+    669,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    849,
+    854,
+    669,
+    674
+   ],
+   [
+    "replace",
+    854,
+    858,
+    674,
+    678,
+    [
+     " (`=`, and `IN [...]` lists) is answered from the bitmap index, so only",
+     " matching memories are loaded, and without `ORDER BY` loading stops once",
+     " `LIMIT` results are found. `RECALL memories WHERE type = episodic LIMIT 10`",
+     " loads 10 memories whatever the database size."
+    ]
+   ],
+   [
+    "equal",
+    858,
+    859,
+    678,
+    679
+   ],
+   [
+    "replace",
+    859,
+    862,
+    679,
+    682,
+    [
+     " temporal index. Every other condition in the `WHERE` still applies, and so",
+     " do `LIMIT` and `ORDER BY`: `RECALL memories WHERE created > 1700000000000000",
+     " AND type = episodic LIMIT 10` returns at most 10 episodic memories."
+    ]
+   ],
+   [
+    "equal",
+    862,
+    863,
+    682,
+    683
+   ],
+   [
+    "replace",
+    863,
+    866,
+    683,
+    686,
+    [
+     " `AS OF`, and any `!=` are checked after a memory is loaded. Combine them",
+     " with a `type`, `tag`, `agent`, or `created` filter to keep the set of",
+     " loaded memories small."
+    ]
+   ],
+   [
+    "equal",
+    866,
+    867,
+    686,
+    687
+   ],
+   [
+    "replace",
+    867,
+    881,
+    687,
+    701,
+    [
+     " reach the top results. The inputs to each memory's decayed salience (base",
+     " salience, last access, access count, decay exemption) are cached and",
+     " persisted with the snapshots, so candidates are visited from the highest",
+     " current salience down and the scan stops once the next one cannot beat the",
+     " `LIMIT`th result. `RECALL memories WHERE type = episodic ORDER BY salience",
+     " DESC LIMIT 5` loads 5 memories once the cache is warm, more only when",
+     " several tie at the cutoff. The first such query on a cold cache (after an",
+     " upgrade, or with the cache file lost) loads every candidate once to fill",
+     " it, unless `MenteDb::warm_salience_bounds` filled it in the background",
+     " after open (see SELF_HOSTING.md), and a memory",
+     " written since the last query loads once again. Results, ties included (broken by storage",
+     " order), are identical to sorting every candidate. Set",
+     " `CognitiveConfig::mql_salience_top_k` to false to always sort every",
+     " candidate."
+    ]
+   ],
+   [
+    "equal",
+    881,
+    882,
+    701,
+    702
+   ],
+   [
+    "replace",
+    882,
+    885,
+    702,
+    705,
+    [
+     " before it can sort, so it loads every memory that passes the indexed",
+     " filters. Leave it out when any `LIMIT` matches will do; unordered results",
+     " come back in storage order."
+    ]
+   ],
+   [
+    "equal",
+    885,
+    886,
+    705,
+    706
+   ],
+   [
+    "replace",
+    886,
+    888,
+    706,
+    708,
+    [
+     " visits every memory (still stopping at `LIMIT` when there is no",
+     " `ORDER BY`)."
+    ]
+   ],
+   [
+    "equal",
+    888,
+    891,
+    708,
+    711
+   ],
+   [
+    "replace",
+    891,
+    892,
+    711,
+    712,
+    [
+     "|Field|Compares|Operators|Value|"
+    ]
+   ],
+   [
+    "equal",
+    892,
+    893,
+    712,
+    713
+   ],
+   [
+    "replace",
+    893,
+    897,
+    713,
+    717,
+    [
+     "|`agent`|the memory's owner agent id|`=`, `!=`, `IN`|a UUID, bare or quoted|",
+     "|`space`|the memory's space id|`=`, `!=`, `IN`|a UUID, bare or quoted|",
+     "|`salience`|the memory's current decayed salience|`=`, `!=`, `<`, `<=`, `>`, `>=`, `IN`|a number|",
+     "|`confidence`|the stored confidence (it does not decay)|`=`, `!=`, `<`, `<=`, `>`, `>=`, `IN`|a number|"
+    ]
+   ],
+   [
+    "equal",
+    897,
+    916,
+    717,
+    736
+   ],
+   [
+    "replace",
+    916,
+    927,
+    736,
+    737,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    927,
+    942,
+    737,
+    752
+   ],
+   [
+    "replace",
+    942,
+    943,
+    752,
+    753,
+    [
+     "|Test|Result|Key Metric|"
+    ]
+   ],
+   [
+    "equal",
+    943,
+    944,
+    753,
+    754
+   ],
+   [
+    "replace",
+    944,
+    949,
+    754,
+    759,
+    [
+     "|Stale Belief|PASS|Superseded memories correctly excluded via graph edges|",
+     "|Delta Savings|PASS|90.7% reduction in memory retrieval tokens over 20 turns|",
+     "|Sustained Conversation|FAIL|100 turns, 3 projects, 0% stale returns, but average insert is 12 to 28ms across runs, over the test's 5ms gate (the full write pipeline grew; see the 10K scale test)|",
+     "|Attention Budget|PASS (earlier run)|U-curve ordering maintains 100% LLM compliance|",
+     "|Noise Ratio|PASS (earlier run)|100% useful vs 80% naive, +20pp improvement|"
+    ]
+   ],
+   [
+    "equal",
+    949,
+    957,
+    759,
+    767
+   ],
+   [
+    "replace",
+    957,
+    958,
+    767,
+    768,
+    [
+     "|Provider|Invalidation (23)|Contradiction (24)|Topic (15)|**Total**|"
+    ]
+   ],
+   [
+    "equal",
+    958,
+    959,
+    768,
+    769
+   ],
+   [
+    "replace",
+    959,
+    962,
+    769,
+    772,
+    [
+     "|Anthropic Claude Sonnet 4|100%|100%|100%|**100% (62/62)**|",
+     "|Ollama llama3.1 8b|87%|66.7%|93.3%|**80.6% (50/62)**|",
+     "|Ollama llama3.2 3B|78.3%|58.3%|80%|**71% (44/62)**|"
+    ]
+   ],
+   [
+    "equal",
+    962,
+    973,
+    772,
+    783
+   ],
+   [
+    "replace",
+    973,
+    974,
+    783,
+    784,
+    [
+     "LongMemEval (ICLR 2025) is the standard benchmark for long-term conversational memory: 500 questions across six reasoning types, over long multi-session histories (~115K tokens per question)."
+    ]
+   ],
+   [
+    "equal",
+    974,
+    977,
+    784,
+    787
+   ],
+   [
+    "replace",
+    977,
+    978,
+    787,
+    788,
+    [
+     "|Category|Accuracy|"
+    ]
+   ],
+   [
+    "equal",
+    978,
+    979,
+    788,
+    789
+   ],
+   [
+    "replace",
+    979,
+    986,
+    789,
+    796,
+    [
+     "|Single-session (assistant)|100.0% (56/56)|",
+     "|Single-session (user)|97.1% (68/70)|",
+     "|Single-session (preference)|93.3% (28/30)|",
+     "|Temporal reasoning|92.5% (123/133)|",
+     "|Knowledge update|91.0% (71/78)|",
+     "|Multi-session reasoning|85.7% (114/133)|",
+     "|**Overall (500 questions)**|**92.0% (460/500)**|"
+    ]
+   ],
+   [
+    "equal",
+    986,
+    995,
+    796,
+    805
+   ],
+   [
+    "replace",
+    995,
+    996,
+    805,
+    806,
+    [
+     "|Metric|Value|"
+    ]
+   ],
+   [
+    "equal",
+    996,
+    997,
+    806,
+    807
+   ],
+   [
+    "replace",
+    997,
+    1004,
+    807,
+    814,
+    [
+     "|Total memories|10,006|",
+     "|Engine search at 10K (no embed)|1.05ms|",
+     "|Engine insert, full write pipeline (no embed)|13.9ms/mem|",
+     "|Query embed (local Candle, per query)|40ms|",
+     "|Batch embed (amortized, one provider call per 512 inputs)|30ms/mem|",
+     "|Belief supersessions tracked|6/6|",
+     "|Stale beliefs returned|0|"
+    ]
+   ],
+   [
+    "equal",
+    1004,
+    1009,
+    814,
+    819
+   ],
+   [
+    "replace",
+    1009,
+    1010,
+    819,
+    820,
+    [
+     "|Metric|Candle (all-MiniLM-L6-v2)|OpenAI (text-embedding-3-small)|"
+    ]
+   ],
+   [
+    "equal",
+    1010,
+    1011,
+    820,
+    821
+   ],
+   [
+    "replace",
+    1011,
+    1016,
+    821,
+    826,
+    [
+     "|Retrieval accuracy (8 queries)|62% (5/8)|Requires API key to compare|",
+     "|Engine search (identical code path)|0.3ms|0.3ms|",
+     "|Query embed|39ms (local, no network)|network round trip (hundreds of ms)|",
+     "|Setup required|None (auto-downloads model)|OPENAI_API_KEY|",
+     "|Cost|Free|~$0.02 per 1M tokens|"
+    ]
+   ],
+   [
+    "equal",
+    1016,
+    1021,
+    826,
+    831
+   ],
+   [
+    "replace",
+    1021,
+    1022,
+    831,
+    832,
+    [
+     "|Benchmark|100|1,000|10,000|"
+    ]
+   ],
+   [
+    "equal",
+    1022,
+    1023,
+    832,
+    833
+   ],
+   [
+    "replace",
+    1023,
+    1025,
+    833,
+    835,
+    [
+     "|Insert throughput|13ms|243ms|2.65s|",
+     "|Context assembly|218us|342us|696us|"
+    ]
+   ],
+   [
+    "equal",
+    1025,
+    1030,
+    835,
+    840
+   ],
+   [
+    "replace",
+    1030,
+    1031,
+    840,
+    841,
+    [
+     "MenteDB's context assembler uses purpose-built serialization formats instead of dumping raw JSON into context windows. Measured by `token_efficiency`:"
+    ]
+   ],
+   [
+    "equal",
+    1031,
+    1034,
+    841,
+    844
+   ],
+   [
+    "replace",
+    1034,
+    1035,
+    844,
+    845,
+    [
+     "|Format|Tokens|vs Raw JSON|"
+    ]
+   ],
+   [
+    "equal",
+    1035,
+    1036,
+    845,
+    846
+   ],
+   [
+    "replace",
+    1036,
+    1039,
+    846,
+    849,
+    [
+     "|Raw JSON|947|—|",
+     "|Structured (markdown)|576|1.6x fewer|",
+     "|**Compact (pipe-delimited)**|**414**|**2.3x fewer**|"
+    ]
+   ],
+   [
+    "equal",
+    1039,
+    1042,
+    849,
+    852
+   ],
+   [
+    "replace",
+    1042,
+    1043,
+    852,
+    853,
+    [
+     "|Metric|Tokens|"
+    ]
+   ],
+   [
+    "equal",
+    1043,
+    1044,
+    853,
+    854
+   ],
+   [
+    "replace",
+    1044,
+    1047,
+    854,
+    857,
+    [
+     "|Full retrieval (cumulative)|9,863|",
+     "|Delta serving (cumulative)|2,004|",
+     "|**Savings**|**79.7%**|"
+    ]
+   ],
+   [
+    "equal",
+    1047,
+    1052,
+    857,
+    862
+   ],
+   [
+    "replace",
+    1052,
+    1053,
+    862,
+    863,
+    [
+     "|Budget|Compact|Structured|Raw JSON|"
+    ]
+   ],
+   [
+    "equal",
+    1053,
+    1054,
+    863,
+    864
+   ],
+   [
+    "replace",
+    1054,
+    1056,
+    864,
+    866,
+    [
+     "|4,096|223|166|218|",
+     "|8,192|448|333|436|"
+    ]
+   ],
+   [
+    "equal",
+    1056,
+    1068,
+    866,
+    878
+   ],
+   [
+    "replace",
+    1068,
+    1073,
+    878,
+    879,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1073,
+    1086,
+    879,
+    892
+   ],
+   [
+    "replace",
+    1086,
+    1091,
+    892,
+    893,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1091,
+    1092,
+    893,
+    894
+   ],
+   [
+    "replace",
+    1092,
+    1094,
+    894,
+    895,
+    [
+     "Apache 2.0, see LICENSE for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "6ef2f3096d45+2": {
+  "fn": "Open-NET-Libraries/Open.Database.Extensions",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Open.Database.Extensions: You write the SQL. The library writes the other twenty lines."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "NuGet",
+     "Docs",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "**Documentation** · Getting started · API reference · Benchmarks"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    20,
+    11,
+    20
+   ],
+   [
+    "replace",
+    20,
+    41,
+    20,
+    21,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    49,
+    21,
+    29
+   ],
+   [
+    "replace",
+    49,
+    53,
+    29,
+    30,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    55,
+    30,
+    32
+   ],
+   [
+    "replace",
+    55,
+    56,
+    32,
+    33,
+    [
+     "`AddParam(author)` names the parameter `author` after the variable. To name it yourself, write `.AddParam(\"author\", 42)`. `connectionFactory` is created once per application, for example `new DbConnectionFactory<SqliteConnection>(() => new SqliteConnection(connectionString))`: see Registering the factory once."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    33,
+    34
+   ],
+   [
+    "replace",
+    57,
+    58,
+    34,
+    35,
+    [
+     "Each job is one complete call: open the connection, run the SQL with one parameter, return the result. Lines you write, counted from the `plain_*` and `ode_*` regions of `docsite/samples/BeforeAfter.cs` (not counting blank lines or the `int author = 42;` that declares the value):"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    35,
+    36
+   ],
+   [
+    "replace",
+    59,
+    60,
+    36,
+    37,
+    [
+     "|The job|Lines you write: plain ADO.NET|Lines you write: Open.Database.Extensions|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    37,
+    38
+   ],
+   [
+    "replace",
+    61,
+    65,
+    38,
+    42,
+    [
+     "|A list of mapped objects|20|5|",
+     "|One mapped object (one row)|20|5|",
+     "|A scalar (`count(*)`)|9|4|",
+     "|A command with no result set (`update`)|9|4|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    77,
+    42,
+    54
+   ],
+   [
+    "replace",
+    77,
+    78,
+    54,
+    55,
+    [
+     "|Package|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    55,
+    56
+   ],
+   [
+    "replace",
+    79,
+    85,
+    56,
+    62,
+    [
+     "|`Open.Database.Extensions.Core`|The foundation, expressive commands and `Map<T>()`. Provider-agnostic: start here.|",
+     "|`Open.Database.Extensions.Channel`|Rows into `System.Threading.Channels`.|",
+     "|`Open.Database.Extensions.Dataflow`|Rows into TPL Dataflow blocks.|",
+     "|`Open.Database.Extensions.MSSqlClient`|`SqlConnectionFactory` and SQL Server specializations on `Microsoft.Data.SqlClient`.|",
+     "|`Open.Database.Extensions.SqlClient`|The same API on the older `System.Data.SqlClient`. Deprecated: use `MSSqlClient`.|",
+     "|`Open.Database.Extensions`|Discontinued. It only referenced Core: use `Open.Database.Extensions.Core`. The last published version is 9.0.3.|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    62,
+    63
+   ],
+   [
+    "replace",
+    86,
+    87,
+    63,
+    64,
+    [
+     "Targets: `netstandard2.0`, `netstandard2.1` and `net10.0` (`MSSqlClient`: `net472` and `net10.0`). Version 11 is a release candidate (`11.0.0-rc.3`): see What's new in 11 for the changes, the breaking changes and the known limitations, and the release notes for earlier versions. Please try it and tell us what you find."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    90,
+    64,
+    67
+   ],
+   [
+    "replace",
+    90,
+    91,
+    67,
+    68,
+    [
+     "Four layers: a foundation of best-practice ADO.NET extensions, expressive commands, row mapping, all resting on performance."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    100,
+    68,
+    77
+   ],
+   [
+    "replace",
+    100,
+    107,
+    77,
+    78,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    109,
+    78,
+    80
+   ],
+   [
+    "replace",
+    109,
+    110,
+    80,
+    81,
+    [
+     "See The foundation."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    119,
+    81,
+    90
+   ],
+   [
+    "replace",
+    119,
+    124,
+    90,
+    91,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    132,
+    91,
+    99
+   ],
+   [
+    "replace",
+    132,
+    137,
+    99,
+    100,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    139,
+    100,
+    102
+   ],
+   [
+    "replace",
+    139,
+    140,
+    102,
+    103,
+    [
+     "Stored procedures are `StoredProcedure(name)`. Terminals include `ExecuteNonQuery`, `ExecuteScalar` and, after `Map<T>()`, `ToArray`, `ToList` and `FirstOrDefault`. On a `DbConnection` or an `IDbConnectionFactory<TConnection>` each has an `Async` twin. See Expressive commands."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    154,
+    103,
+    117
+   ],
+   [
+    "replace",
+    154,
+    155,
+    117,
+    118,
+    [
+     "Positional records and classes with one public constructor are built through it, so `Map<PostRecord>()` works. `init` properties are set, and a property marked `required` must have a column. See Mapping rows to objects for the rules and limits."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    164,
+    118,
+    127
+   ],
+   [
+    "replace",
+    164,
+    174,
+    127,
+    128,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    176,
+    128,
+    130
+   ],
+   [
+    "replace",
+    176,
+    177,
+    130,
+    131,
+    [
+     "`field ??=` (C# 14) builds the map on first use; older compilers use an explicit backing field. Declare a map once and reuse it: a map built at the call site is rebuilt on every call. More in Columns named differently."
+    ]
+   ],
+   [
+    "equal",
+    177,
+    186,
+    131,
+    140
+   ],
+   [
+    "replace",
+    186,
+    187,
+    140,
+    141,
+    [
+     "These figures come from the 11.0.0-preview01 build, re-run independently on a noisy machine, so read the timing ratios as indicative. The SQLite results are published but were not independently re-run, and a re-baseline is pending. Channels and Dataflow are conveniences, not speed-ups. See Performance."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    190,
+    141,
+    144
+   ],
+   [
+    "replace",
+    190,
+    193,
+    144,
+    147,
+    [
+     "- **Channels and Dataflow:** stream rows into a `Channel<T>` or a dataflow block. Guide",
+     "- **SQL Server:** `SqlConnectionFactory` and stored procedures on `Microsoft.Data.SqlClient`. Guide",
+     "- **Coming from Dapper:** the same jobs side by side. Guide"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    196,
+    147,
+    150
+   ],
+   [
+    "replace",
+    196,
+    197,
+    150,
+    151,
+    [
+     "Documentation lives next to the code and is rebuilt and published from `master` automatically; see where each kind of documentation lives. Released under the MIT license."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
+ },
+ "58bda56b53b7+2": {
+  "fn": "cthit/Gamma",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Gamma is a **membership and identity management system** built for Chalmers IT student division. It serves as the central directory for members, groups, OAuth2 clients, and API keys."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    11,
+    3,
+    11
+   ],
+   [
+    "delete",
+    11,
+    12,
+    11,
+    11
+   ],
+   [
+    "equal",
+    12,
+    40,
+    11,
+    39
+   ],
+   [
+    "replace",
+    40,
+    41,
+    39,
+    40,
+    [
+     "When `PRODUCTION=false` or `IS_MOCKING=true`, Gamma loads mock data from `MOCK_DATA_RESOURCE` (default `mock.json`) on startup. Each kind of data is only created if none of it exists yet. All mock users sign in with the password `password1337`."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    48,
+    40,
+    47
+   ],
+   [
+    "replace",
+    48,
+    65,
+    47,
+    48,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    67,
+    48,
+    50
+   ],
+   [
+    "replace",
+    67,
+    68,
+    50,
+    51,
+    [
+     "|Field|Description|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    51,
+    52
+   ],
+   [
+    "replace",
+    69,
+    77,
+    52,
+    60,
+    [
+     "|`id`|Client UUID|",
+     "|`clientId`|OAuth2 client ID, exactly 30 upper case letters and digits|",
+     "|`clientSecret`|Raw client secret, encoded when the client is created|",
+     "|`redirectUrl`|Redirect URL of your application|",
+     "|`emailScope`|Whether the client gets the `email` scope in addition to `openid profile`|",
+     "|`ownerId`|Id of the user that owns the client. Leave it out for an official client|",
+     "|`apiKey`|Optional client API key. Use it with `Authorization: pre-shared <id>:<token>`|",
+     "|`authorities`|Authority names (2-30 lower case letters and digits) with the ids of the super groups and users that have them. `superGroupPosts` gives the authority only to the members of a super group's groups who hold a post, such as the chairman of digIT|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    120,
+    60,
+    103
+   ],
+   [
+    "delete",
+    120,
+    121,
+    103,
+    103
+   ],
+   [
+    "equal",
+    121,
+    125,
+    103,
+    107
+   ],
+   [
+    "replace",
+    125,
+    126,
+    107,
+    108,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    108,
+    109
+   ],
+   [
+    "replace",
+    127,
+    151,
+    109,
+    132,
+    [
+     "|`SERVER_PORT`|`8081`|HTTP port|",
+     "|`BASE_URL`|`http://localhost:8081`|Public base URL (used for redirect URIs, etc.)|",
+     "|`DB_HOST`|`db`|PostgreSQL host|",
+     "|`DB_PORT`|`5432`|PostgreSQL port|",
+     "|`DB_NAME`|`postgres`|Database name|",
+     "|`DB_USER`|`postgres`|Database user|",
+     "|`DB_PASSWORD`|`postgres`|Database password|",
+     "|`REDIS_HOST`|`redis`|Redis host|",
+     "|`REDIS_PORT`|`6379`|Redis port|",
+     "|`REDIS_PASSWORD`|*(empty)*|Redis password|",
+     "|`PRODUCTION`|`true`|Production mode (disables Thymeleaf caching, dev services, etc.)|",
+     "|`OAUTH2_SIGNING_KEY`|*(empty)*|RSA private key that signs OAuth2 tokens. Will be required in production from v3, see OAuth2 signing keys|",
+     "|`OAUTH2_VERIFICATION_KEYS`|*(empty)*|Comma separated keys that are still published so the tokens they signed can be verified, but that no longer sign tokens|",
+     "|`DEV_SERVICES_ENABLED`|`false`|Auto-start PostgreSQL + Redis via Testcontainers|",
+     "|`IS_MOCKING`|`false`|Load mock data on startup|",
+     "|`MOCK_DATA_RESOURCE`|`classpath:/mock/mock.json`|Path to mock data JSON|",
+     "|`ADMIN_SETUP`|`true`|Auto-create admin user on first run|",
+     "|`UPLOAD_FOLDER`|`./uploads/`|File upload directory|",
+     "|`GOTIFY_KEY`|`123abc`|Gotify pre-shared key|",
+     "|`GOTIFY_BASE_URL`|`http://gotify:80`|Gotify service URL|",
+     "|`SESSION_TIMEOUT`|`43200`|Session timeout in seconds|",
+     "|`ROOT_DEBUG_LEVEL`|`INFO`|Root log level|",
+     "|`SERVER_SSL_ENABLED`|*(varies)*|Enable HTTPS|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    154,
+    132,
+    135
+   ],
+   [
+    "replace",
+    154,
+    155,
+    135,
+    136,
+    [
+     "Gamma signs ID tokens and access tokens with the RSA key in `OAUTH2_SIGNING_KEY` and publishes its public key at `/oauth2/jwks`. Without one, a temporary key is generated on every start, so tokens stop working when Gamma restarts and instances can't verify each other's tokens. Running in production without `OAUTH2_SIGNING_KEY` is deprecated, and Gamma v3 will refuse to start without it (#1004)."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    136,
+    137
+   ],
+   [
+    "replace",
+    156,
+    157,
+    137,
+    138,
+    [
+     "Both settings take PEM content directly or the location of a PEM file, such as `/run/secrets/gamma-signing-key.pem` or `file:/run/secrets/gamma-signing-key.pem`. Each key gets its RFC 7638 thumbprint as key id (`kid`), so every instance that uses the same key publishes the same key id. Keys must be RSA keys of at least 2048 bits."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    173,
+    138,
+    154
+   ],
+   [
+    "delete",
+    173,
+    174,
+    154,
+    154
+   ],
+   [
+    "equal",
+    174,
+    178,
+    154,
+    158
+   ],
+   [
+    "replace",
+    178,
+    179,
+    158,
+    159,
+    [
+     "|Key Type|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    159,
+    160
+   ],
+   [
+    "replace",
+    180,
+    184,
+    160,
+    164,
+    [
+     "|`INFO`|Read public info (`/api/info/v1`): groups, super groups, members|",
+     "|`ACCOUNT_SCAFFOLD`|Google account sync data (`/api/account-scaffold/v1`)|",
+     "|`ALLOW_LIST`|Registration allow-list management (`/api/allow-list/v1`)|",
+     "|`CLIENT`|OAuth2 client-level API access|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    191,
+    164,
+    171
+   ],
+   [
+    "delete",
+    191,
+    192,
+    171,
+    171
+   ],
+   [
+    "equal",
+    192,
+    233,
+    171,
+    212
+   ],
+   [
+    "delete",
+    233,
+    234,
+    212,
+    212
+   ],
+   [
+    "equal",
+    234,
+    242,
+    212,
+    220
+   ],
+   [
+    "replace",
+    242,
+    274,
+    220,
+    221,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    294,
+    221,
+    241
+   ],
+   [
+    "replace",
+    294,
+    295,
+    241,
+    242,
+    [
+     "Complete the E2E setup, including installing Chromium and building or pulling `gamma-app:test`, before running these commands from the repository root."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    300,
+    242,
+    247
+   ],
+   [
+    "replace",
+    300,
+    305,
+    247,
+    248,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    305,
+    310,
+    248,
+    253
+   ],
+   [
+    "delete",
+    310,
+    311,
+    253,
+    253
+   ],
+   [
+    "equal",
+    311,
+    318,
+    253,
+    260
+   ],
+   [
+    "replace",
+    318,
+    320,
+    260,
+    261,
+    [
+     "Zero-Clause BSD (0BSD). See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-10"
  }
 }

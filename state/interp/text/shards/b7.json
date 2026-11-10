@@ -2932,5 +2932,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e921b61ff3d8": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 Git 服务，单二进制文件即可运行",
+   "review": "Gogs 是用 Go 实现的自托管 Git 服务，以单个二进制文件分发，支持 Linux、macOS、Windows 和 ARM 系统（如树莓派）。面向希望自行搭建 Git 服务的个人与团队，支持 PostgreSQL、MySQL、MariaDB、SQLite3 等数据库，提供 SSH/HTTP/HTTPS 访问、Issue、PR、wiki、Git LFS 等功能。API 目前为实验性支持。",
+   "highlights": [
+    "通过独立的 Go 二进制跨平台分发，含 ARM 系统，硬件要求文档给出最低 2 核 512MB RAM 的协作基线",
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite3 等数据库后端，可通过 SSH、HTTP、HTTPS 访问仓库",
+    "包含用户/组织/仓库管理、webhook、Git hooks、deploy keys、Git LFS、Issue、pull request、wiki、受保护分支，认证支持 SMTP、LDAP、反向代理及 GitHub（含 2FA）"
+   ],
+   "use_cases": [
+    "在树莓派或低配 VPS 上以 Docker 或二进制方式自托管 Git 服务",
+    "小团队代码托管与协作（Issue、PR、wiki、受保护分支）",
+    "从其他代码托管平台迁移并镜像仓库（含 wiki）"
+   ]
+  },
+  "sha": "e921b61ff3d8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5eeb7103b2a2": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 AI 记忆层，经 MCP 与 Python SDK 接入各类智能体。",
+   "review": "Mnemosyne 是一个面向智能体的记忆层，数据存储于单个 SQLite 文件，pip 安装后无需外部服务。它内置 MCP 服务器（stdio/SSE 传输），支持与 Cursor、Claude Code、Codex、OpenWebUI、OpenClaw 等平台集成，也提供 Python SDK（remember/recall 接口）。架构上采用 BEAM 三层记忆：工作记忆、基于 sqlite-vec 与 FTS5 混合检索的情景记忆，以及带版本链的时序知识图谱 TripleStore。默认本地存储，无遥测，同步时支持可选的客户端加密。",
+   "highlights": [
+    "内置 MCP 服务器（stdio/SSE），可通过配置接入 Cursor、Claude Code、Codex、Windsurf、OpenWebUI、OpenClaw 等平台，也提供 Python SDK 直接调用",
+    "存储基于单个 SQLite 文件，检索采用 sqlite-vec 与 FTS5 混合评分（向量 50% + FTS5 30% + 重要性 20%），嵌入向量经二值化压缩为 48 字节",
+    "提供 BEAM 三层记忆架构（工作记忆、情景记忆、TripleStore 知识图谱），支持可选双向同步与客户端加密，默认无遥测"
+   ],
+   "use_cases": [
+    "为运行在 Cursor、Claude Code 等 MCP 客户端中的智能体添加持久记忆",
+    "在 Python 智能体项目中通过 SDK 实现事实存储与召回",
+    "需要在本地或自托管环境中保存对话记忆、不依赖外部向量数据库的场景"
+   ]
+  },
+  "sha": "5eeb7103b2a2",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "566403e02275": {
+  "identity": {
+   "one_liner": "基于编译期代码生成的 Rust 异步动态 SQL ORM 框架",
+   "review": "Rbatis 是面向 Rust 的 ORM 框架，在 cargo build 阶段通过 rbatis-codegen 将 py_sql/html_sql 动态 SQL 编译为原生 Rust 代码。支持 MySQL、PostgreSQL、SQLite、MSSQL、Oracle 等数据库，提供 CRUD 宏、拦截器与表同步插件，适用于需要在 Rust 项目中编写动态 SQL 的开发者。",
+   "highlights": [
+    "提供 py_sql、html_sql（MyBatis 风格 XML 模板）和原生 SQL 三种 SQL 构建方式，支持 #{arg} 预编译与 ${arg} 直接替换两种参数模式",
+    "支持 MySQL、PostgreSQL、SQLite、MSSQL、MariaDB、TiDB、CockroachDB、Oracle、TDengine、DuckDB 等数据库，并提供自定义驱动接口",
+    "内置 FastPool（默认）、Deadpool、MobcPool 三种连接池，并提供 CRUD 宏、拦截器插件和表结构同步插件"
+   ],
+   "use_cases": [
+    "需要在 Rust 后端服务中使用动态 SQL 进行分页、join、多条件查询的场景",
+    "从 MyBatis 风格 XML 模板开发迁移到 Rust 生态的项目",
+    "需要接入多种数据库或实现自定义数据库驱动的应用"
+   ]
+  },
+  "sha": "566403e02275",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d3b4000be82b": {
+  "identity": {
+   "one_liner": "面向配送公司的开源自托管物流管理系统，含快递员移动端应用",
+   "review": "Logistico 是一个 Apache-2.0 协议的开源自托管配送管理系统，覆盖订单、仓库分拣、干线卡车、快递员应用、货到付款结算、退货与公开追踪等环节，使用 .NET 10、Blazor WebAssembly、PostgreSQL 和 Flutter 构建，界面以阿拉伯语 RTL 为默认并支持英语。内置伊拉克 18 省网络、条码扫描站和五种办公角色权限，Docker Compose 可一键启动并载入演示数据。",
+   "highlights": [
+    "支持订单录入、仓库分拣、卡车干线、快递员应用、货到付款结算、退货与审计日志的全流程管理",
+    "提供 Flutter 移动端应用（Android/iOS），支持手持设备内置扫码枪、蓝牙/USB 扫码枪和摄像头扫描",
+    "内置伊拉克省份网络、Instagram 店铺订单、ASYCUDA 报关工作台，并提供匿名化 CSV 开放数据导出"
+   ],
+   "use_cases": [
+    "配送公司自托管管理订单、仓库、车队与快递员的日常运营",
+    "以货到付款为主的电商配送场景的现金收款与商户结算",
+    "阿拉伯语地区（尤其伊拉克）配送公司的本地化物流系统部署"
+   ]
+  },
+  "sha": "d3b4000be82b",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

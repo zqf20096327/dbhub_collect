@@ -3144,5 +3144,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fba1498884c3": {
+  "identity": {
+   "one_liner": "本地运行的CPAP数据查看器，解析呼吸机SD卡/蓝牙数据并生成网页仪表盘",
+   "review": "HMS-CPAP 是一个 C++ 服务加 Angular 网页界面，读取 CPAP 呼吸机 SD 卡文件（经 Sleep Bridge Lite、ez Share、FlashAir WiFi 卡、文件夹）或 AirSense 11/梦 station 2 的蓝牙，自行解析后存入 SQLite/PostgreSQL/MySQL 并展示每夜图表、事件与 PDF 报告。支持 ResMed、Löwenstein、Sefam、Luna 等机型。解析的是逆向工程的未公开格式，项目声明并非医疗设备，不能用于诊断或调整治疗。",
+   "highlights": [
+    "支持多种数据来源：SD 卡（读卡器/文件夹）、Sleep Bridge Lite、ez Share、FlashAir WiFi 卡，以及 AirSense 11 和 DreamStation 2 的蓝牙读取",
+    "仪表盘含每夜关键数值、30 天趋势、13 张可缩放信号图、事件浏览器与按日期范围生成的 PDF 报告",
+    "通过 MQTT 自动发现向 Home Assistant 提供 47+ 传感器，可安装为 HA 插件运行"
+   ],
+   "use_cases": [
+    "在本地网络中集中查看和归档家用呼吸机每夜治疗数据，生成 PDF 报告供就诊时使用",
+    "将呼吸机数据接入 Home Assistant 实现配件更换提醒等自动化",
+    "在 Raspberry Pi 或 Docker 上部署家庭健康数据自托管服务"
+   ]
+  },
+  "sha": "fba1498884c3",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "455d6f7429e8": {
+  "identity": {
+   "one_liner": "单容器自托管日志聚合器，集 syslog 服务器、FTS5 搜索与告警于一体",
+   "review": "LogShed 是面向家庭实验室（homelab）环境的单容器日志聚合服务，内置 syslog 服务器（UDP/TCP 1514 端口）、Docker 容器日志采集和 HTTP 日志接入，日志存储在本地 SQLite 并用 FTS5 全文检索。README 明确说明它针对家庭网络和个人服务器设计，不面向多租户或高流量企业场景。通过 Docker Compose 部署，首次启动设置管理员密码后本地容器日志即开始流转。",
+   "highlights": [
+    "内置 syslog 服务器（UDP/TCP 端口 1514）和 Docker 日志尾随，支持本地及远程 Docker 主机（socket 代理、TCP 或双向 TLS），并提供 HTTP 接入端点 POST /api/v1/ingest",
+    "使用 SQLite FTS5 存储和检索日志，支持按主机、应用、严重级别和相对时间过滤，可实时流转查看，提供摄入前的丢弃规则和默认 14 天保留策略",
+    "支持阈值/模式/速率激增告警，通过 Apprise 发送通知到 100+ 服务，可选接入 Gemini、OpenAI、Claude 或 OpenAI 兼容端点解释错误，发送前对常见密钥脱敏"
+   ],
+   "use_cases": [
+    "家庭网络中集中收集路由器、防火墙、NAS、hypervisor（OPNsense、TrueNAS、Proxmox 等）和本地 Docker 容器的日志",
+    "通过告警规则、速率激增检测和每日摘要监控家中服务器的错误与异常",
+    "备份或升级期间通过维护窗口（可由 Home Assistant、REST API 或 MCP 触发）静默通知"
+   ]
+  },
+  "sha": "455d6f7429e8",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "28d749065abb": {
+  "identity": {
+   "one_liner": "Rust 编写的通用数据库，兼容 MySQL，面向 AI 代理与 HTAP 场景",
+   "review": "MyDB 是用 Rust 编写的通用数据库，定位为 AI 代理、HTAP 与 MySQL 兼容三个方向，提供 SQL 调用文本生成与嵌入模型、原生 VECTOR 类型、BM25+RRF 混合检索、在线 DDL 和自动 Zone Map。提供预编译二进制、源码构建与 Docker 部署，可用 MySQL 客户端连接。README 明确 1.2.0 为公开预览版，用于功能验证与受控环境评估，非生产级 MySQL 替代品，磁盘格式不保证向后兼容。",
+   "highlights": [
+    "通过 AI_GENERATE/AI_EMBED 等 SQL 函数调用文本生成与嵌入服务，支持 Ollama、OpenAI 等本地与远程模型，推理在 MyDB 之外运行",
+    "提供并行哈希连接、向量化执行和基于代价的优化器；默认启用自动 Zone Map 块级跳扫；在线构建索引与主键时允许并发 DML",
+    "兼容 MySQL 客户端、JDBC 驱动与核心 SQL，提供行 binlog 集成；可选 REST SQL API（HTTPS 参数化 SQL、NDJSON 流式、事务）与 MCP Server"
+   ],
+   "use_cases": [
+    "AI 代理的数据管理：任务中动态变更表结构、写入嵌入向量并检索关联业务数据，用于 RAG、知识库与代理持久记忆",
+    "事务与分析混合负载评估，或需要复用现有 MySQL 客户端/驱动的应用接入",
+    "通过 REST SQL API 或 MCP Server 向应用/AI 客户端提供 HTTPS SQL 访问"
+   ]
+  },
+  "sha": "28d749065abb",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "073af9457f87": {
+  "identity": {
+   "one_liner": "SQL Server Query Store 电子书配套仓库，提供书籍 PDF、T-SQL 脚本与原始测量输出。",
+   "review": "这是 DMC Bilgi Teknolojileri 免费书籍《SQL Server Query Store Başucu Rehberi》（土耳其语 196 页）与英文版 Handbook（215 页）的配套仓库，包含两份 PDF、按章节组织的 T-SQL 脚本以及实验的原始测量输出。测量在 Azure Windows Server 虚拟机上的 SQL Server 2019/2022/2025 完成，未覆盖的环境（SQL Server 2016/2017、Linux、Standard 版、Azure SQL 等）在书中明确标注。适合需要复现书中实验或验证 Query Store 行为的 DBA。",
+   "highlights": [
+    "提供土耳其语与英语两个版本的免费 PDF，位于 Releases 部分",
+    "包含按书籍章节组织的 T-SQL 脚本及 SQL Server 2019/2022/2025 上的原始测量输出",
+    "书籍共 20 章，覆盖 Query Store 架构、plan forcing、PSP、automatic plan correction 与 Availability Group 等主题"
+   ],
+   "use_cases": [
+    "需要复现或核查书中 Query Store 测量的 DBA",
+    "在测试环境中验证 plan forcing、PSP 触发条件或 flush 行为",
+    "搭建 Availability Group 与 secondary replica 相关的 Query Store 实验"
+   ]
+  },
+  "sha": "073af9457f87",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a1adea1bd514": {
+  "identity": {
+   "one_liner": "社区维护的达梦数据库 .NET 10 ADO.NET 数据提供程序。",
+   "review": "W.DamengProvider 是面向达梦（DM）数据库的 ADO.NET 驱动，命名空间为 W.Dm，通过 NuGet 安装，供 .NET（net6.0/net8.0/net9.0/net10.0/netstandard2.1）应用访问达梦数据库。其重点处理存储过程参数绑定、返回值位置、时间精度与时区偏移等场景，默认要求 TLS 并验证证书；不支持原生加密、批量装载、自动重连、分布式事务，且连接池每次租用新建物理会话，无物理连接复用。已验证环境为 DM 8.1.5.60/UTF-8 与 DM 8.1.4.6/GB18030/TLS。",
+   "highlights": [
+    "支持同步与异步的 Open、Prepare、Execute、Read、NextResult，以及本地事务、存储过程、数组绑定和 DbBatch API",
+    "提供流式 BLOB/CLOB 读写（物化读取上限 64 MiB）、保留时区偏移的 DateTimeOffset 返回和 CLR 100ns 时间精度",
+    "默认严格 TLS 并验证证书，暴露 ActivitySource 与 Meter 诊断接口（名称为 W.DmProvider）"
+   ],
+   "use_cases": [
+    "在 .NET 应用中通过 ADO.NET 访问达梦数据库，包括 EF 适配层配合开发",
+    "存储过程密集的调用场景，需要参数名严格校验、ReturnValue 位置灵活及七位小数秒精度",
+    "需启用 TLS 加密连接或接入 OpenTelemetry 等基于 ActivitySource/Meter 的监控体系"
+   ]
+  },
+  "sha": "a1adea1bd514",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

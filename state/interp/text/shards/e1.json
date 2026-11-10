@@ -2730,5 +2730,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2876670d81e0": {
+  "identity": {
+   "one_liner": "SQL 支持的 TypeScript/Node 虚拟 actor 库，提供持久状态与按身份排序",
+   "review": "Solid Objects 是一个面向 TypeScript 和 Node.js 的 SQL 支持虚拟 actor 库。每个 actor 具有稳定身份，状态存储在应用已有的 SQLite、PostgreSQL 或 MySQL 中，调用按身份顺序执行，重试、提醒和效果 outbox 一并落库，进程重启后可继续。运行需 Node.js 24.4+、TypeScript 5.9+，仅支持 ESM。交付语义为 at-least-once，外部副作用需自行做幂等；不同身份可并发，无跨身份事务。",
+   "highlights": [
+    "每个 actor 拥有稳定身份，调用按身份持久排序，不同身份可并发执行",
+    "状态、提醒、重试与事务性 outbox 存储 SQLite、PostgreSQL 或 MySQL，重启后恢复执行",
+    "浏览器端以 SQLite WASM + OPFS 运行完整运行时，actor 状态可在页面刷新后保留"
+   ],
+   "use_cases": [
+    "跨进程竞态防护：票据预留、库存占用、购物车与支付恢复等需持久过期与顺序处理的场景",
+    "多人游戏房间、协作文档等需顺序编辑与重启后保留状态的实时多用户状态",
+    "本地优先浏览器应用：离线写入经 outbox 以 at-least-once 语义回放至 Node 或 Rails 服务端"
+   ]
+  },
+  "sha": "2876670d81e0",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c660238a39e2": {
+  "identity": {
+   "one_liner": "用原生 PHP + SQLite 构建的多语言摄影师作品集 CMS，含管理后台。",
+   "review": "面向摄影师的作品集网站与管理系统，采用原生 PHP 编写，默认使用 SQLite（可选 MySQL），无需构建步骤，将文件夹复制到服务器即可运行。包含作品编辑器（支持章节、双联图）、媒体库（自动转 AVIF/WebP、读取 EXIF）、17 种语言的管理界面、26 套主题与实时设计编辑器，以及 sitemap、RSS、登录限流等配套功能。要求 PHP 8.1+ 及 pdo_sqlite、gd 等扩展。",
+   "highlights": [
+    "原生 PHP + SQLite（可选 MySQL），无需框架和构建步骤，数据库在首次请求时自动创建",
+    "媒体库支持批量拖拽上传，上传图片自动转换为 AVIF 与 WebP，读取 EXIF 信息并提示图片被引用位置",
+    "站点与管理面板支持 17 种语言，提供翻译表格与自动翻译，包含 26 套主题和实时设计编辑器"
+   ],
+   "use_cases": [
+    "摄影师搭建多语言个人作品集网站",
+    "共享主机（cPanel）环境下无需数据库配置的站点部署",
+    "需要密码保护作品链接、博客、联系表单与 Google Analytics 统计的作品类网站"
+   ]
+  },
+  "sha": "c660238a39e2",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3095,5 +3095,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5851b2858a9f": {
+  "identity": {
+   "one_liner": "自托管的 OPNsense 防火墙机队管理平台，按客户与站点分组监控、备份和分批更新",
+   "review": "OPNManager 是部署在自己服务器上的 OPNsense 防火墙机队管理平台，面向 MSP 和 IT 团队。通过安装在防火墙上的原生插件代理（默认每两分钟签到一次）采集网关延迟、VPN、CARP、证书等健康数据，提供计划备份、基线漂移对比、按 canary/pilot/production 分环且禁止同时更新 CARP 对的更新活动，以及按条件开启关闭的事件列表。要求 Ubuntu 22.04+、PHP 8.0+、MySQL/MariaDB、Apache/Nginx；代理包需自行放入 downloads/plugins/，pfSense 支持未经实机验证。",
+   "highlights": [
+    "代理以原生 OPNsense 插件形式安装，签到上报网关延迟与丢包、VPN 隧道状态、CARP 状态、服务状态与证书到期信息，并采集 WAN 流量、CPU、内存、磁盘的历史数据",
+    "配置按计划备份并逐台保存，可标记经批准的基线并按变更描述生成差异对比，不会自动恢复任何配置",
+    "更新以活动形式经 canary、pilot、production 三个环手动推进，保证 CARP 对的两个成员不在同一时间更新，支持维护窗口抑制通知"
+   ],
+   "use_cases": [
+    "MSP 或 IT 团队集中监控多客户、多站点的 OPNsense（及 pfSense CE/Plus 实验设备）防火墙健康与连通性",
+    "对防火墙配置做定期备份、与基线对比审计变更，并以分环方式协调含 CARP 高可用对的版本更新",
+    "需要自托管、防火墙仅出站 HTTPS（无需入站端口）即可接入的机队管理部署"
+   ]
+  },
+  "sha": "5851b2858a9f",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb423d03cc9a": {
+  "identity": {
+   "one_liner": "本地优先知识工作区，基于 PostgreSQL 提供三种检索引擎的文档问答系统",
+   "review": "CompanyBrain 是一个本地优先的知识工作区，用户上传公司资料后可通过三种检索引擎查询：基于 pgvector 的朴素 RAG、基于 LightRAG 和 Apache AGE 的 GraphRAG，以及含类型化链接的 nano brain，答案均附引用来源。技术栈为 TypeScript + Bun，依赖 PostgreSQL 17（五个数据库）、Python 检索模块和 OpenAI 兼容模型端点；GraphRAG 模块可另作为 stdio MCP 服务器运行。附管理控制台、检索评测基准集与英文演示语料。macOS 外部署需自行配置数据库。",
+   "highlights": [
+    "单个工作区内提供三种检索引擎：朴素 RAG（pgvector 向量与关键词融合）、GraphRAG（LightRAG 实体/关系抽取，存于 PostgreSQL + Apache AGE）和基于页面的 nano brain（含 facts、typed links 与 dream maintenance）",
+    "每个答案返回其来源证据引用，工作区在答案旁展示文档与图谱上下文",
+    "GraphRAG 模块可作为 stdio MCP 服务器运行，暴露 graph_search、graph_list_sources、graph_get_document 三个工具，使用进程作用域令牌鉴权"
+   ],
+   "use_cases": [
+    "需要将公司内部文档上传后进行带引用来源的问答检索",
+    "需要在同一工作区内对比或切换向量检索与知识图谱检索方案",
+    "需要将知识库检索能力通过 MCP 协议接入 Agent 会话流程"
+   ]
+  },
+  "sha": "cb423d03cc9a",
+  "source": "readme",
+  "generated_at": "2026-11-10",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
