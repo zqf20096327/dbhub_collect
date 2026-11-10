@@ -6089,18 +6089,20 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:51:37Z",
+  "collected_at": "2026-11-10T05:24:22Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-09",
   "stars": 10,
   "tree": {
-   "sha": "a09b6081e9ae78da8a85212b906b8eee9ea49de8",
-   "etag": "W/\"1bd99176be014942a0bfa5614541d091792d3f22ab0c80097b45143cc3054c0e\"",
+   "sha": "ae686212b52925fe43346c68fd7821b48c1cea9e",
+   "etag": "W/\"f82352b12e5c5e3d4a019bd5bfb09d8bc0b57fe122065fce0c879d83120c06b3\"",
    "truncated": false,
-   "path_count": 1294,
+   "path_count": 1445,
    "matched": [
     "package.json",
     "benchmarks/server/pyproject.toml",
+    "packages/go/go.mod",
+    "packages/python/pyproject.toml",
     "packages/spec/package.json",
     "packages/ts/package.json",
     "benchmarks/server/driver/package.json",
@@ -6110,6 +6112,7 @@
     "native/npm/linux-x64/package.json",
     "native/npm/win32-arm64/package.json",
     "native/npm/win32-x64/package.json",
+    "packages/go/tests/go.mod",
     "native/sqlite/npm/darwin-arm64/package.json",
     "native/sqlite/npm/darwin-x64/package.json",
     "native/sqlite/npm/linux-arm64/package.json",
@@ -6127,6 +6130,7 @@
     ".github/workflows/age-gate.yml",
     ".github/workflows/ci.yml",
     ".github/workflows/failover.yml",
+    ".github/workflows/publish-clients.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/replication-soak.yml",
     ".github/workflows/sirannon-sqlite.yml",
@@ -6155,6 +6159,29 @@
     "bytes": 871
    },
    {
+    "path": "packages/go/go.mod",
+    "kind": "dep",
+    "blob_sha": "fbb873e8d6a67edd63253f10eaabd4b10e54bbe5",
+    "ecosystem": "go",
+    "bytes": 105,
+    "names": [
+     "github.com/coder/websocket"
+    ]
+   },
+   {
+    "path": "packages/python/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "d6a0eaa5c183352c0267529cb9b88270e95f5c87",
+    "ecosystem": "pyproject",
+    "bytes": 2443,
+    "names": [
+     "httpx",
+     "pydantic",
+     "typing-extensions",
+     "websockets"
+    ]
+   },
+   {
     "path": "packages/spec/package.json",
     "kind": "dep",
     "blob_sha": "27b3f6c7db3df7f22a2b84c4b9abcc376b61fa0d",
@@ -6164,9 +6191,9 @@
    {
     "path": "packages/ts/package.json",
     "kind": "dep",
-    "blob_sha": "a849b0868c68048f6f20ad39dc43c80641d48761",
+    "blob_sha": "50e93ef1d0adb1aac2446412cfc1a12be2ce8ba6",
     "ecosystem": "npm",
-    "bytes": 6922,
+    "bytes": 7452,
     "names": [
      "@bufbuild/protobuf",
      "@delali/sirannon-sqlite",
@@ -6271,6 +6298,29 @@
     "blob_sha": "2dcf1e380a864372f887f1a2072bfccf40710602",
     "ecosystem": "npm",
     "bytes": 607
+   },
+   {
+    "path": "packages/go/tests/go.mod",
+    "kind": "dep",
+    "blob_sha": "3e556086e862725efe21a4b154cc1c974ac5fa9b",
+    "ecosystem": "go",
+    "bytes": 702,
+    "names": [
+     "github.com/assetcorp/sirannon-db/packages/go",
+     "github.com/coder/websocket",
+     "modernc.org/sqlite"
+    ],
+    "dev": [
+     "github.com/dustin/go-humanize",
+     "github.com/google/uuid",
+     "github.com/mattn/go-isatty",
+     "github.com/ncruces/go-strftime",
+     "github.com/remyoudompheng/bigfft",
+     "golang.org/x/sys",
+     "modernc.org/libc",
+     "modernc.org/mathutil",
+     "modernc.org/memory"
+    ]
    },
    {
     "path": "native/sqlite/npm/darwin-arm64/package.json",
@@ -6502,49 +6552,55 @@
    {
     "path": ".github/workflows/age-gate.yml",
     "kind": "ci",
-    "blob_sha": "c8112f5656c4f516883e48621c1bc1a63bcc5d32",
+    "blob_sha": "9e83ea06083bf949425ff3a64eee5be6bca9fc6a",
     "bytes": 857
    },
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "4136c3b1f4908551b0a2bde35e8a826850df65e7",
-    "bytes": 5033
+    "blob_sha": "72d317adee14da2ee05df44c3c17d735a77c1e98",
+    "bytes": 6288
    },
    {
     "path": ".github/workflows/failover.yml",
     "kind": "ci",
-    "blob_sha": "5fd6aac91004dc9851ee690bdda9952b5026a98c",
+    "blob_sha": "b9934e7cccb786adaa2e5ea0c5280cd3b5ddd186",
     "bytes": 1310
+   },
+   {
+    "path": ".github/workflows/publish-clients.yml",
+    "kind": "ci",
+    "blob_sha": "5bddc949d05ea19fb0e97407ba1a6fb2101d558a",
+    "bytes": 5265
    },
    {
     "path": ".github/workflows/publish.yml",
     "kind": "ci",
-    "blob_sha": "5ede56915812e1ec6dca01826c1e4b9a16137d74",
-    "bytes": 6375
+    "blob_sha": "6eb632cfe10a4f140c28ebec42ba6ba6442f0480",
+    "bytes": 6373
    },
    {
     "path": ".github/workflows/replication-soak.yml",
     "kind": "ci",
-    "blob_sha": "5d0a9f1a64d0a3bcb1983999180b6669179b8d74",
-    "bytes": 1256
+    "blob_sha": "7e9cd76f47a7964f7d789fb3f559f8511bdd3706",
+    "bytes": 1255
    },
    {
     "path": ".github/workflows/sirannon-sqlite.yml",
     "kind": "ci",
-    "blob_sha": "64a7b280d5acba598d742d2085f3886c27b5e37e",
-    "bytes": 7602
+    "blob_sha": "29889a059a4fe24aaeea3995cd5ed7d4cef1ea81",
+    "bytes": 7598
    },
    {
     "path": ".github/workflows/streaming-extension.yml",
     "kind": "ci",
-    "blob_sha": "721c4356880d7e59ffa2d623066a7a1eb70387ea",
-    "bytes": 5213
+    "blob_sha": "06debb82c7afd307e9cca26a4db5eb6de0e561b8",
+    "bytes": 5210
    },
    {
     "path": ".github/workflows/supply-chain-gate.yml",
     "kind": "ci",
-    "blob_sha": "0bf6016fc29e88b6b673737d43b06faefc617b64",
+    "blob_sha": "7358abbfc6cd36fcb845e794a5427250b2d200b7",
     "bytes": 547
    }
   ],
@@ -7649,13 +7705,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:24:57Z",
+  "collected_at": "2026-11-10T04:23:58Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
-  "stars": 21957,
+  "pushed_at": "2026-11-09",
+  "stars": 21965,
   "tree": {
    "sha": "9b9a2cf41b7e5978e1cf7d30401c8fe1fa797ddf",
-   "etag": "W/\"611efdf6e61226efb7eeffa01a2dc6fe3693eb6f9a45fd7ca8cace1605d49618\"",
+   "etag": "W/\"da09ef6bb8c27a90a4d3d11a34d2346e08b294bb4a7f0da3fbcd9df94f8ce15e\"",
    "truncated": false,
    "path_count": 2251,
    "matched": [
@@ -9005,15 +9061,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T18:33:34Z",
+  "collected_at": "2026-11-10T04:50:18Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-08",
   "stars": 182,
   "tree": {
-   "sha": "7f125a6ab66f552cb5f4b19a1394ef385822d843",
-   "etag": "W/\"6c3b59fc6b7d393cc577d655365f8634a0b089daf14329090787b0d9a495dd73\"",
+   "sha": "97b187be8502ceb26f95c512286d56c039e7dabd",
+   "etag": "W/\"bbd0d8946643ba960fb23dbfd3d30e1165465da275d477157ba193390c9c46af\"",
    "truncated": false,
-   "path_count": 166,
+   "path_count": 147,
    "matched": [
     "requirements.txt"
    ]
@@ -9150,15 +9206,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:31:40Z",
+  "collected_at": "2026-11-10T04:49:42Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-08",
-  "stars": 191,
+  "pushed_at": "2026-11-10",
+  "stars": 193,
   "tree": {
-   "sha": "43414f1b143d46b4f79232dbd9b20fd191fc88ae",
-   "etag": "W/\"546197a1b3edff45a3ea8840a4399479ae924747b06dee4d1f8b762682b20c95\"",
+   "sha": "c9c9642e7ea8ee04ed9fb312f0e3f04a69245077",
+   "etag": "W/\"be5232f45012c46fb9ab6abd9b0f39201692862cb734aa4420c3d8898308a463\"",
    "truncated": false,
-   "path_count": 2130,
+   "path_count": 2161,
    "matched": [
     "go.mod",
     "Dockerfile",
@@ -10156,13 +10212,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:31:12Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-10T04:58:39Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
-  "stars": 69,
+  "pushed_at": "2026-11-09",
+  "stars": 72,
   "tree": {
-   "sha": "6924d066f48a5786fd07f5574399b507531e005f",
-   "etag": "W/\"bd78f273d83ef15f5931a720f4b10fee2ccf7f091b819c96f7208a012691fbb2\"",
+   "sha": "a5a8f27a4d68f8368ad87b853b50561cdfc845e3",
+   "etag": "W/\"a5b17d7c4c7cbd4e83d72379c33f4b595bc5305f449a7685cc286bde131007ef\"",
    "truncated": false,
    "path_count": 29,
    "matched": [
@@ -12840,19 +12897,20 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:45:12Z",
+  "collected_at": "2026-11-10T05:14:37Z",
   "default_branch": "sub2api-custom",
-  "pushed_at": "2026-11-08",
+  "pushed_at": "2026-11-09",
   "stars": 20,
   "tree": {
-   "sha": "de1328d4281ab09ba042b3b6ff4266a244755447",
-   "etag": "W/\"d700ecde260cce94370fb479e06608e4c1f750c109a165ee36a2d3623b05cf47\"",
+   "sha": "8ec92375d2b9cf8d552f92152c97a51640760c35",
+   "etag": "W/\"10bd6a6d1856aa37474fa29accad3229aa6de6288e09cf8eb6380dcd3014b159\"",
    "truncated": false,
-   "path_count": 6055,
+   "path_count": 6163,
    "matched": [
     "backend/go.mod",
     "frontend/package.json",
     "renderer/package.json",
+    "tools/ipv6-egress/go.mod",
     "tools/reauth-runtime/package.json",
     "tools/reauth-runtime/requirements.txt",
     "Dockerfile",
@@ -13085,6 +13143,13 @@
     "names": [
      "playwright"
     ]
+   },
+   {
+    "path": "tools/ipv6-egress/go.mod",
+    "kind": "dep",
+    "blob_sha": "6b47d2f7b645cf7664eabacf4966f0791c2563af",
+    "ecosystem": "go",
+    "bytes": 44
    },
    {
     "path": "tools/reauth-runtime/package.json",
@@ -14965,13 +15030,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:19:09Z",
+  "collected_at": "2026-11-10T05:21:53Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 12,
   "tree": {
    "sha": "a63d3c1d51b7ee2a9878a70e0079cfbec5e37ae3",
-   "etag": "W/\"d6b68a722f96ba223681941b69a7020af754fe4f9d7a00c9f4d2499b9ff6aedb\"",
+   "etag": "W/\"d3200a6e23f90c9df56eebf2e22dce418fc3abe80f339b0a7a44fb1a5d6e1f97\"",
    "truncated": false,
    "path_count": 1522,
    "matched": [
@@ -15474,13 +15539,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:19:41Z",
+  "collected_at": "2026-11-10T05:22:40Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 11,
   "tree": {
    "sha": "2733ccea8aa55c09a58f09f3083846681207be28",
-   "etag": "W/\"a974bbd0d477e642ecd470bedaa96e59b76e9e55033e7d682c458b18475d9d9a\"",
+   "etag": "W/\"987273b6f5017785a7f5fe60ed49a37cd0f5eaa2565b9c5a6d22a2004f01243f\"",
    "truncated": false,
    "path_count": 621,
    "matched": [
@@ -17508,15 +17573,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:27:35Z",
+  "collected_at": "2026-11-10T04:41:54Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
-  "stars": 555,
+  "pushed_at": "2026-11-10",
+  "stars": 557,
   "tree": {
-   "sha": "69abc30b638c3f2d61072890aeff831d12fe712e",
-   "etag": "W/\"4772895ac15918162adf814b0d48f7a0253ffda391f9fe900feade58b073206a\"",
+   "sha": "d41db4a28e8b3bc8508393f080e2305d88917aa6",
+   "etag": "W/\"f5b872d9273cb9124870bf0ee554ff036d71076411ddf486f24945154989089c\"",
    "truncated": false,
-   "path_count": 3075,
+   "path_count": 3092,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -17571,9 +17636,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "edd671e973771c0255831b736ba3f01a5aaa80e9",
+    "blob_sha": "c77dbf11bdb464e1b07b7a2d218edf0116cba79a",
     "ecosystem": "cargo",
-    "bytes": 7927
+    "bytes": 7923
    },
    {
     "path": "package.json",
@@ -17711,9 +17776,9 @@
    {
     "path": "crates/amux-server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a17e30a9d4cc2d7ae6e7183b6a3ce78119d384c1",
+    "blob_sha": "dbc8e4665c4f080ec7141ad55db511b95a583052",
     "ecosystem": "cargo",
-    "bytes": 2850,
+    "bytes": 2821,
     "names": [
      "amux-core",
      "amux-dashboard",
@@ -17729,7 +17794,6 @@
      "tracing-subscriber.workspace",
      "rusqlite.workspace",
      "r2d2.workspace",
-     "r2d2_sqlite.workspace",
      "thiserror.workspace",
      "anyhow.workspace",
      "ulid.workspace",
@@ -17810,8 +17874,8 @@
    {
     "path": "cloud/docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "0d6f3bbe0652330989d48de6f003d0d66234ed98",
-    "bytes": 17569,
+    "blob_sha": "863d041765b9bec90e8eb81f75d6a31b371d36ee",
+    "bytes": 17606,
     "images": [
      "rust:1-slim-bookworm",
      "debian:bookworm-slim"
@@ -18041,6 +18105,7 @@
     "docs/social-connectors.md",
     "e2e/connector-forget.spec.ts",
     "e2e/connector-google-per-service.spec.ts",
+    "e2e/connector-reconnect-link.spec.ts",
     "e2e/connector-scope-corruption.spec.ts",
     "e2e/connector-test-refresh.spec.ts",
     "e2e/connector-untested.spec.ts",

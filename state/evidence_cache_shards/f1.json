@@ -1798,15 +1798,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:55:30Z",
+  "collected_at": "2026-11-10T04:55:17Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-10",
   "stars": 105,
   "tree": {
-   "sha": "1c7078f1859371520dee4bbf1297c4a861d0c93f",
-   "etag": "W/\"a1cadd01a14b8e02a18f8045a0cf98fc88e67a82fc119825a505429f60f52ca5\"",
+   "sha": "613ae3a9d2358e112d170ca403c0774fa92eb5d1",
+   "etag": "W/\"dc06f715cc522ca769078f0bc35d11abed850d182515d84fd5d303afd7520004\"",
    "truncated": false,
-   "path_count": 812,
+   "path_count": 859,
    "matched": [
     "interops/pyproject.toml",
     "golang/cloudrun/go.mod",
@@ -1836,10 +1836,14 @@
     "python/transactional-outbox/pyproject.toml",
     "python/widget-store/pyproject.toml",
     "python/widget-store/requirements.txt",
+    "rust/dbos-starter/Cargo.toml",
+    "rust/queue-patterns/Cargo.toml",
+    "rust/widget-store/Cargo.toml",
     "typescript/dbos-nestjs-starter/package.json",
     "typescript/dbos-nextjs-starter/package.json",
     "typescript/dbos-node-starter/package.json",
     "typescript/dbos-node-toolbox/package.json",
+    "typescript/durable-honey-badger/package.json",
     "typescript/hacker-news-agent/package.json",
     "typescript/queue-patterns/package.json",
     "typescript/queue-worker/package.json",
@@ -1862,12 +1866,8 @@
     "python/pydantic-research-agent/frontend/package.json",
     "python/queue-patterns/frontend/package.json",
     "python/queue-worker/frontend/package.json",
+    "rust/queue-patterns/frontend/package.json",
     "typescript/queue-patterns/frontend/package.json",
-    "typescript/queue-worker/frontend/package.json",
-    "python/databricks-openai-agent/e2e-chatbot-app-next/client/package.json",
-    "python/databricks-openai-agent/e2e-chatbot-app-next/server/package.json",
-    "python/databricks-openai-agent/e2e-chatbot-app-next/packages/ai-sdk-providers/package.json",
-    "python/databricks-openai-agent/e2e-chatbot-app-next/packages/auth/package.json",
     "golang/cloudrun/Dockerfile",
     "kubernetes/dbos-go-starter/Dockerfile",
     "kubernetes/dbos-go-starter/Dockerfile.migrate",
@@ -1881,6 +1881,7 @@
     ".github/workflows/jvm-demo-apps.yml",
     ".github/workflows/python-reliable-refunds-langchain.yml",
     ".github/workflows/python-widget-store.yml",
+    ".github/workflows/rust-demo-apps.yml",
     ".github/workflows/widget-store.yml"
    ]
   },
@@ -2512,6 +2513,53 @@
     ]
    },
    {
+    "path": "rust/dbos-starter/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "630e4467b26c2f49c4a7737308d0f20d73eb55a2",
+    "ecosystem": "cargo",
+    "bytes": 1030,
+    "names": [
+     "dbos",
+     "axum",
+     "tokio",
+     "serde",
+     "tracing-subscriber"
+    ]
+   },
+   {
+    "path": "rust/queue-patterns/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a7cfaaf4ab4dac299f0df77cdfd6326f3618b92f",
+    "ecosystem": "cargo",
+    "bytes": 811,
+    "names": [
+     "dbos",
+     "axum",
+     "rand",
+     "serde",
+     "serde_json",
+     "tokio",
+     "tower-http",
+     "tracing-subscriber"
+    ]
+   },
+   {
+    "path": "rust/widget-store/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "54b39b9b00c6d496bd608032ba228c9eeb15ca98",
+    "ecosystem": "cargo",
+    "bytes": 1731,
+    "names": [
+     "dbos",
+     "axum",
+     "tokio",
+     "serde",
+     "sqlx",
+     "thiserror",
+     "tracing-subscriber"
+    ]
+   },
+   {
     "path": "typescript/dbos-nestjs-starter/package.json",
     "kind": "dep",
     "blob_sha": "0097183132149f9228eecfa607670b79c929a5bf",
@@ -2612,6 +2660,22 @@
      "@types/express",
      "nodemon",
      "tsx",
+     "typescript"
+    ]
+   },
+   {
+    "path": "typescript/durable-honey-badger/package.json",
+    "kind": "dep",
+    "blob_sha": "8cab4b98b8f8276f32dc99b1ede0431570abd0a4",
+    "ecosystem": "npm",
+    "bytes": 484,
+    "names": [
+     "@dbos-inc/dbos-sdk",
+     "express"
+    ],
+    "dev": [
+     "@types/express",
+     "@types/node",
      "typescript"
     ]
    },
@@ -2987,7 +3051,7 @@
     ]
    },
    {
-    "path": "typescript/queue-patterns/frontend/package.json",
+    "path": "rust/queue-patterns/frontend/package.json",
     "kind": "dep",
     "blob_sha": "895584395746b8835eac01b235a827de7120061e",
     "ecosystem": "npm",
@@ -3012,130 +3076,28 @@
     ]
    },
    {
-    "path": "typescript/queue-worker/frontend/package.json",
+    "path": "typescript/queue-patterns/frontend/package.json",
     "kind": "dep",
-    "blob_sha": "107581af77b11624f4e4ddfc1b31a79c5c6bdc42",
+    "blob_sha": "895584395746b8835eac01b235a827de7120061e",
     "ecosystem": "npm",
-    "bytes": 425,
+    "bytes": 708,
     "names": [
      "react",
      "react-dom"
     ],
     "dev": [
+     "@eslint/js",
+     "@types/node",
      "@types/react",
      "@types/react-dom",
      "@vitejs/plugin-react",
-     "vite"
-    ]
-   },
-   {
-    "path": "python/databricks-openai-agent/e2e-chatbot-app-next/client/package.json",
-    "kind": "dep",
-    "blob_sha": "843f8ddcb46e9e78da9bd41eae128f0bb5a7173e",
-    "ecosystem": "npm",
-    "bytes": 1942,
-    "names": [
-     "@ai-sdk/react",
-     "@radix-ui/react-alert-dialog",
-     "@radix-ui/react-collapsible",
-     "@radix-ui/react-dialog",
-     "@radix-ui/react-dropdown-menu",
-     "@radix-ui/react-separator",
-     "@radix-ui/react-slot",
-     "@radix-ui/react-tooltip",
-     "@radix-ui/react-use-controllable-state",
-     "ai",
-     "class-variance-authority",
-     "clsx",
-     "date-fns",
-     "fast-deep-equal",
-     "framer-motion",
-     "lucide-react",
-     "next-themes",
-     "react",
-     "react-dom",
-     "react-router-dom",
-     "react-syntax-highlighter",
-     "sonner",
-     "streamdown",
-     "swr",
-     "tailwind-merge",
-     "use-stick-to-bottom",
-     "usehooks-ts",
-     "zod"
-    ],
-    "dev": [
-     "@chat-template/auth",
-     "@chat-template/core",
-     "@chat-template/db",
-     "@tailwindcss/postcss",
-     "@tailwindcss/typography",
-     "@types/react",
-     "@types/react-dom",
-     "@vitejs/plugin-react",
-     "postcss",
-     "tailwindcss",
-     "tailwindcss-animate",
+     "eslint",
+     "eslint-plugin-react-hooks",
+     "eslint-plugin-react-refresh",
+     "globals",
      "typescript",
+     "typescript-eslint",
      "vite"
-    ]
-   },
-   {
-    "path": "python/databricks-openai-agent/e2e-chatbot-app-next/server/package.json",
-    "kind": "dep",
-    "blob_sha": "d6092124d0c241d3f54d8240f9b3c472157c7d94",
-    "ecosystem": "npm",
-    "bytes": 782,
-    "names": [
-     "@chat-template/ai-sdk-providers",
-     "@chat-template/auth",
-     "@chat-template/core",
-     "@chat-template/db",
-     "ai",
-     "cors",
-     "dotenv",
-     "express",
-     "zod"
-    ],
-    "dev": [
-     "@types/cors",
-     "@types/express",
-     "@types/node",
-     "tsdown",
-     "tsx",
-     "typescript"
-    ]
-   },
-   {
-    "path": "python/databricks-openai-agent/e2e-chatbot-app-next/packages/ai-sdk-providers/package.json",
-    "kind": "dep",
-    "blob_sha": "0ac17dc04477140f8cb4072bd75048a6c2cda835",
-    "ecosystem": "npm",
-    "bytes": 922,
-    "names": [
-     "@ai-sdk/provider",
-     "@chat-template/auth",
-     "@chat-template/utils",
-     "@databricks/ai-sdk-provider",
-     "ai"
-    ],
-    "dev": [
-     "@types/node",
-     "typescript"
-    ]
-   },
-   {
-    "path": "python/databricks-openai-agent/e2e-chatbot-app-next/packages/auth/package.json",
-    "kind": "dep",
-    "blob_sha": "6b90021fc5b966949a37999e1805ce8a2ff802d9",
-    "ecosystem": "npm",
-    "bytes": 770,
-    "names": [
-     "@chat-template/utils"
-    ],
-    "dev": [
-     "typescript",
-     "@types/node"
     ]
    },
    {
@@ -3253,6 +3215,12 @@
     ]
    },
    {
+    "path": ".github/workflows/rust-demo-apps.yml",
+    "kind": "ci",
+    "blob_sha": "94dda280f386d75d9fc96c29c407020894a21fd3",
+    "bytes": 865
+   },
+   {
     "path": ".github/workflows/widget-store.yml",
     "kind": "ci",
     "blob_sha": "7f76ad516f719caa2e3d23f53974f2f17ea9928c",
@@ -3305,13 +3273,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:05:48Z",
+  "collected_at": "2026-11-10T05:06:31Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 37,
   "tree": {
-   "sha": "03ae03b8e6d2f159feb440383eb7e3ffc5c4aecd",
-   "etag": "W/\"a15e02fb285814aaac72540540123b1c6e78dc3e8aa8ccfa0032fe8f1092e57f\"",
+   "sha": "fc522ad86c34147bb517b63ce58292e682c584ee",
+   "etag": "W/\"f2b62e47032775f3923839f9e088b0a673485eb3f64ee45999a67eff3abeb788\"",
    "truncated": false,
    "path_count": 56,
    "matched": [
@@ -3326,11 +3294,11 @@
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "8d8197ad611102f514544305730f96939a8b64d5",
+    "blob_sha": "26ae54632216722ba7906be8452304cc3508bd5b",
     "bytes": 1091,
     "images": [
      "tonistiigi/xx:latest@sha256:40fe21f44bb8cddf1eb1226db190d0a984118f62ee02a91b77d99448d28264a6",
-     "alpine:3.24@sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a"
+     "alpine:3.24@sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf"
     ]
    },
    {
@@ -4905,13 +4873,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:02:24Z",
+  "collected_at": "2026-11-10T05:02:54Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 51,
   "tree": {
    "sha": "f8a2228092dce2729aa52827cd649a09991373f2",
-   "etag": "W/\"0bef6837d40fab54444742cecf588bf0fccd0790929f5585e92acf6086a6e7d0\"",
+   "etag": "W/\"6d1737eaf0a8052adc85037d24ca48a37c5046b1f45fd7d4005beaff47b29c49\"",
    "truncated": false,
    "path_count": 382,
    "matched": [
@@ -7251,15 +7219,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T12:16:32Z",
+  "collected_at": "2026-11-10T04:24:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
-  "stars": 17615,
+  "pushed_at": "2026-11-09",
+  "stars": 17643,
   "tree": {
-   "sha": "7908fe79fabc816ce172ac1ac59f6b4bd548ca39",
-   "etag": "W/\"17e30cefd5fad1dcecbf7ada7c3f765ef2ba5779d797be4c731dbb080bb33e77\"",
+   "sha": "fd56e1dffe74d4b6f9e7ce710bac02dd9026258e",
+   "etag": "W/\"fe997b9365dfd0a07066af5067cb1290949e19f6f1af47b31d008dbf3bf82660\"",
    "truncated": false,
-   "path_count": 725,
+   "path_count": 714,
    "matched": [
     "Cargo.toml",
     "sqlx-cli/Cargo.toml",
@@ -7305,9 +7273,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "3ad344c3f992975693ab9d432c81f739e5a49ce8",
+    "blob_sha": "ed09cd7e9375457ec55c93833235b2d3369879aa",
     "ecosystem": "cargo",
-    "bytes": 14574,
+    "bytes": 14710,
     "names": [
      "sqlx-core",
      "sqlx-macros",
@@ -7367,9 +7335,9 @@
    {
     "path": "sqlx-core/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "fb301ea44ec0a17ac58acc6755d88aa2b518ca5e",
+    "blob_sha": "a4b4ddebf280b2f55b7340bb820a46d79166bcbe",
     "ecosystem": "cargo",
-    "bytes": 4275,
+    "bytes": 4371,
     "names": [
      "async-global-executor",
      "async-std",
@@ -7427,9 +7395,9 @@
    {
     "path": "sqlx-macros-core/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "42bf0f5e8cbd86cf82753f7f12366d45e19c8309",
+    "blob_sha": "7831dc60dc9f853d134e9d05b9fb74306363de8f",
     "ecosystem": "cargo",
-    "bytes": 3412,
+    "bytes": 3498,
     "names": [
      "sqlx-core",
      "sqlx-mysql",
@@ -7457,9 +7425,9 @@
    {
     "path": "sqlx-macros/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "bd90da96088533e59026b93b1bdf8015c7828fd8",
+    "blob_sha": "90fe6bb4d9e1cf22915fa4d1b5ef4907f13c8317",
     "ecosystem": "cargo",
-    "bytes": 2064,
+    "bytes": 2157,
     "names": [
      "sqlx-core",
      "sqlx-macros-core",
@@ -7552,7 +7520,7 @@
    {
     "path": "sqlx-sqlite/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "632992ee975f6df3f1345ab918b91a1c473b6586",
+    "blob_sha": "8f530f3cd5099e83c7a046e108af215fcd828648",
     "ecosystem": "cargo",
     "bytes": 2829,
     "names": [
@@ -7968,8 +7936,8 @@
    {
     "path": ".github/workflows/sqlx.yml",
     "kind": "ci",
-    "blob_sha": "50ef29dd92cd2f8f63d6456af2ff1192ba8f0ebb",
-    "bytes": 26185
+    "blob_sha": "df72941810d7aa697a1d5f03f0a5e4759b5fcf06",
+    "bytes": 27676
    }
   ],
   "clues": {
@@ -8208,15 +8176,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:21:10Z",
+  "collected_at": "2026-11-10T04:31:49Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
-  "stars": 3316,
+  "pushed_at": "2026-11-09",
+  "stars": 3317,
   "tree": {
-   "sha": "2511921646b7200f442f83feafae44dce66f3f64",
-   "etag": "W/\"27e054958164df3072c313f5283ad3438d3b8aac822e019bd1c9fbb3a6ed6cd5\"",
+   "sha": "6951b76b5e4bde2a94c2863a7316d887495a2c33",
+   "etag": "W/\"f704dd0e3ebad5162c3ecde07a0e7c6d8b79939e9e3842ee074e7c52a81f1824\"",
    "truncated": false,
-   "path_count": 1166,
+   "path_count": 1170,
    "matched": [
     "e2e_cleanup/go.mod",
     "flow/go.mod",
@@ -9344,6 +9312,7 @@
     "flow/connectors/bigquery/data_format_utils.go",
     "flow/connectors/bigquery/data_format_utils_test.go",
     "flow/connectors/bigquery/gcp.go",
+    "flow/connectors/bigquery/gcp_test.go",
     "flow/connectors/bigquery/gcs_header_provider.go",
     "flow/connectors/bigquery/merge_stmt_generator.go",
     "flow/connectors/bigquery/merge_stmt_generator_test.go",
@@ -9424,8 +9393,7 @@
     "flow/connectors/snowflake/qrep_avro_consolidate.go",
     "flow/connectors/snowflake/qrep_avro_sync.go",
     "flow/connectors/snowflake/qvalue_convert.go",
-    "flow/connectors/snowflake/snowflake.go",
-    "flow/connectors/utils/autoenv.go"
+    "flow/connectors/snowflake/snowflake.go"
    ],
    "matrix_urls": [
     "https://docs.peerdb.io/sql/commands/supported-connectors"
@@ -9439,15 +9407,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:23:20Z",
+  "collected_at": "2026-11-10T04:35:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-10",
   "stars": 1804,
   "tree": {
-   "sha": "0cc59e65f8b6e3b8d3d1da52de0e4b46d909b4d0",
-   "etag": "W/\"9d0235ced8c0f2caef7ab2dc53643bc9938a10112f2640495459b5ce6e75198b\"",
+   "sha": "06a5c9055192877ed21b0544dae288abc6f5b7fc",
+   "etag": "W/\"3fa8084e7f82de1164ad590c84423dcab92958b954f2cc80577ba666386bb4c1\"",
    "truncated": false,
-   "path_count": 291,
+   "path_count": 294,
    "matched": [
     "package.json",
     "Dockerfile",
@@ -10114,13 +10082,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:39:19Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-10T04:52:13Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-13",
+  "pushed_at": "2026-11-09",
   "stars": 139,
   "tree": {
-   "sha": "c09bb968ce9095d34144c90ef8f401c4eeb6fd1c",
-   "etag": "W/\"2a4e37ad23995b4e288fd08040162879aa31f3551a12c38ec382443f414d1996\"",
+   "sha": "af901ab7b96460c108e57e1e37edcc3d821745df",
+   "etag": "W/\"3c57dc8ecbfe29f7085ad49e8203ca4272cc5aee3c2b0530d74f6f7d180d5ed9\"",
    "truncated": false,
    "path_count": 25,
    "matched": [
@@ -10197,13 +10166,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:19:06Z",
+  "collected_at": "2026-11-10T04:53:18Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-09",
   "stars": 127,
   "tree": {
    "sha": "f2f1171567a1d518451e5433138f0722b2161ae8",
-   "etag": "W/\"fb3ed093806b1b1854a6267c8dbd5d26cf914acb7cddc9c4bf7c62564754b186\"",
+   "etag": "W/\"d50d9eddc2deca2105719e88ac7b71fc492a1903cc87355a3730b826421d218b\"",
    "truncated": false,
    "path_count": 249,
    "matched": [
@@ -11620,13 +11589,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:36:59Z",
+  "collected_at": "2026-11-10T04:59:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
+  "pushed_at": "2026-11-09",
   "stars": 65,
   "tree": {
-   "sha": "1da97b6db91e601e68696c8d740d21b35d2a4b91",
-   "etag": "W/\"0bc4c271aaded244812ff91829f83ae7a08576a6ee7ef1dfdf5f98ecaeb678fe\"",
+   "sha": "f269f409f105c0f16e240479ab03dc6110e24e3e",
+   "etag": "W/\"a0d1d534121c84d1e3229577d673b3922c9ad41bbf009fea6eac009bd5d5e05f\"",
    "truncated": false,
    "path_count": 2278,
    "matched": [
@@ -11692,11 +11661,11 @@
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "6a4bb31cc84d203c546e46dbdcd5569b87df1700",
+    "blob_sha": "296367f104963903eddc04bd3017aec0abad23af",
     "bytes": 2393,
     "images": [
      "eclipse-temurin:25-jdk-alpine@sha256:1e20ead9eec7234db293f1913438090d533ed47c0b9e12dc8c7627a802a44ed6",
-     "eclipse-temurin:25-jre-noble@sha256:b4c93a50fc67612798db73d68ca3b0ee4ebdd51736e59cca370e689b9797037e"
+     "eclipse-temurin:25-jre-noble@sha256:a98128a57de944a72bd31fbc79b898edd5a5864d3652071d5bbd2160ab7d7dce"
     ]
    },
    {
@@ -13588,13 +13557,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:28:50Z",
+  "collected_at": "2026-11-10T05:13:42Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-04",
-  "stars": 21,
+  "pushed_at": "2026-11-09",
+  "stars": 22,
   "tree": {
    "sha": "dd8f4da3c39bb458e41c5818c606b3ba977b788a",
-   "etag": "W/\"f580cedf3f2fa41784ec6d7afa5ecf50edfb072ebb893896537fb531ca8672cb\"",
+   "etag": "W/\"2cd95dddb91c44776e0a1b99dedfffaf2d6138d928f1aedf12bcd6482c5ec996\"",
    "truncated": false,
    "path_count": 29,
    "matched": [
@@ -13694,13 +13663,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:12:25Z",
+  "collected_at": "2026-11-10T05:14:41Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 20,
   "tree": {
-   "sha": "3d7682f408d17e4caca6615fdf3090e96801c856",
-   "etag": "W/\"c9a0baf0b5c7c1375650abcdf48d65def72f1bce1592520fa90d066a337c6c1f\"",
+   "sha": "aba2dc61a37dacc9973a79eeb11f79283e91c95a",
+   "etag": "W/\"4eb24f18d8d1ffcdff076d227a8fa72f27d9a6747895ff99ee12302515d44726\"",
    "truncated": false,
    "path_count": 4952,
    "matched": [
@@ -16381,13 +16350,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:52:59Z",
+  "collected_at": "2026-11-10T05:26:17Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
+  "pushed_at": "2026-11-09",
   "stars": 5,
   "tree": {
-   "sha": "d22ebb52f56a3536c1dbd264407ba5e37d7f4211",
-   "etag": "W/\"ac28ba7d28fe359bb1e43fe666be6dc16dcfe93be911799225c8705c49738776\"",
+   "sha": "79826fda4983766363c4ffdc57a124a3efb138e6",
+   "etag": "W/\"81bc6e6c70748b49458b9bdce229910f24b6fe3c0147adb4010caf16a53e3b5a\"",
    "truncated": false,
    "path_count": 653,
    "matched": [
@@ -17016,15 +16985,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:46:49Z",
+  "collected_at": "2026-11-10T05:17:24Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-09",
   "stars": 16,
   "tree": {
-   "sha": "dab5295152d4213d5b061cc40e8c069855af2154",
-   "etag": "W/\"b455eefe4dcfa6357f4b04240e6d29456401dedc282cc185ac1d19387cfed3d3\"",
+   "sha": "e06ebb524e3f113b43b2d6074a7d5d18b4526f96",
+   "etag": "W/\"fdadd64e42d2b407cf8622708164fd62e520be1a22832f8159ee9073362cc494\"",
    "truncated": false,
-   "path_count": 261,
+   "path_count": 265,
    "matched": [
     "package.json"
    ]
@@ -17033,7 +17002,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "4eed6916bb5657376ced9853c7378f83752db3de",
+    "blob_sha": "7b24880d0faf12371ff7bc50b82a297abd59bc81",
     "ecosystem": "npm",
     "bytes": 672,
     "dev": [
@@ -17441,15 +17410,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T18:16:06Z",
+  "collected_at": "2026-11-10T05:24:02Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 10,
   "tree": {
-   "sha": "df270f9bb005eb34c1ade2f678f40255d3c5f747",
-   "etag": "W/\"3041b74f53e55ab6742cc52fe2b9a874ba4b51b177d53aaad23191c257ba4594\"",
+   "sha": "57b1b32c49867791406925151b387804d42be48e",
+   "etag": "W/\"b8dbdc7a0fcd6f9d20584df36f09412e86f66421b235557ad51fe6c54a9f18d7\"",
    "truncated": false,
-   "path_count": 621,
+   "path_count": 1245,
    "matched": [
     "backend/pom.xml",
     "frontend/package.json",
@@ -17462,9 +17431,9 @@
    {
     "path": "backend/pom.xml",
     "kind": "dep",
-    "blob_sha": "a7a1f64143ead14a5971c0385fe69c7b3525ae96",
+    "blob_sha": "4ba2a7c863cdc67e178b0b0c70e96c90942833c8",
     "ecosystem": "maven",
-    "bytes": 4160,
+    "bytes": 4321,
     "names": [
      "org.springframework.boot:spring-boot-starter-web",
      "org.springframework.boot:spring-boot-starter-validation",
@@ -17481,18 +17450,26 @@
      "org.flywaydb:flyway-mysql",
      "org.projectlombok:lombok",
      "org.springframework.boot:spring-boot-configuration-processor",
-     "org.springframework.boot:spring-boot-starter-test"
+     "org.springframework.boot:spring-boot-starter-test",
+     "com.h2database:h2"
     ]
    },
    {
     "path": "frontend/package.json",
     "kind": "dep",
-    "blob_sha": "d756a5eca05f4ddce1a888ac9fec0a4ce5a7cd05",
+    "blob_sha": "65be072c1f26477a793d13ca8279c38cfd30f245",
     "ecosystem": "npm",
-    "bytes": 1001,
+    "bytes": 1265,
     "names": [
+     "@tiptap/extension-placeholder",
+     "@tiptap/extension-task-item",
+     "@tiptap/extension-task-list",
+     "@tiptap/starter-kit",
+     "@tiptap/vue-3",
      "axios",
      "element-plus",
+     "fflate",
+     "pdfjs-dist",
      "pinia",
      "vue",
      "vue-router"
@@ -18974,13 +18951,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:09:36Z",
+  "collected_at": "2026-11-10T05:17:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
+  "pushed_at": "2026-11-09",
   "stars": 16,
   "tree": {
    "sha": "ff1cd352c9b56a48863eae7b104e6dd45f3e998f",
-   "etag": "W/\"c5803cfc3efb584152b91a7963a6951052ec3933c4ae1592b138ec727bbcc40d\"",
+   "etag": "W/\"34a7f28bf696afeeb0aea289503b1c1de1859dd866076a485d6bd86b4b348df0\"",
    "truncated": false,
    "path_count": 73,
    "matched": [

@@ -1137,13 +1137,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:55:49Z",
+  "collected_at": "2026-11-10T05:30:06Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
+  "pushed_at": "2026-11-09",
   "stars": 0,
   "tree": {
    "sha": "dab240063bfcfa7917898dc44da4baadb3747bd0",
-   "etag": "W/\"f9b7d3dd2a88349072d3e5332bd4355811eec6d079d3c5e98c58455a2cf1adb7\"",
+   "etag": "W/\"14ca6b48cc3d6ff039483d3b1ab59cc5f75aeaa88d71081b316208ede67a17bf\"",
    "truncated": false,
    "path_count": 1938,
    "matched": [
@@ -3098,15 +3098,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T21:00:36Z",
+  "collected_at": "2026-11-10T05:18:00Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-01",
+  "pushed_at": "2026-11-09",
   "stars": 16,
   "tree": {
-   "sha": "3d813ff8b079739481c4da56486d154b40470247",
-   "etag": "W/\"fe1e7c1292dbf91172883dfbb0e308e679387973bdd8032deb6b3a9f1522eef8\"",
+   "sha": "f28a836c4f30190f703ec91a7c198f394aa7b3db",
+   "etag": "W/\"a96ec4f5299415947a93db876bee55d74237e8bdbd2ea4917f70f4e6f1d17959\"",
    "truncated": false,
-   "path_count": 1172,
+   "path_count": 1194,
    "matched": [
     "pom.xml",
     "common/pom.xml",
@@ -3120,18 +3120,18 @@
     "offline-package-maven-plugin/pom.xml",
     "plsql/pom.xml",
     "plugin-example/pom.xml",
-    "plugin-scheduler/pom.xml",
     "plugin/pom.xml",
-    "release/pom.xml"
+    "release/pom.xml",
+    "scheduler/pom.xml"
    ]
   },
   "files": [
    {
     "path": "pom.xml",
     "kind": "dep",
-    "blob_sha": "b6d10f96dbf856ff1df8cab69a4600acc289110a",
+    "blob_sha": "ee35666a0f965fb38aa4e4c1dd68ed5d05481275",
     "ecosystem": "maven",
-    "bytes": 15759,
+    "bytes": 15752,
     "names": [
      "org.slf4j:slf4j-api",
      "io.netty:netty-bom",
@@ -3169,9 +3169,9 @@
    {
     "path": "dbcli/pom.xml",
     "kind": "dep",
-    "blob_sha": "994050ca955c5f78e98d5974794cc6df17993782",
+    "blob_sha": "f76b41d4f5e3d4c0c9d21efb10bbcf91eba0cdfd",
     "ecosystem": "maven",
-    "bytes": 15705,
+    "bytes": 16991,
     "names": [
      "org.robotslacker:slackerdb-common",
      "org.robotslacker:slackerdb-plsql",
@@ -3282,11 +3282,12 @@
    {
     "path": "dbserver/pom.xml",
     "kind": "dep",
-    "blob_sha": "d11bd23f3291d3af3127439b792254233950993c",
+    "blob_sha": "f5f5e6b23e93e1e2c5d8e79dff79697aefa10a6f",
     "ecosystem": "maven",
-    "bytes": 16332,
+    "bytes": 17118,
     "names": [
-     "org.quartz-scheduler:quartz",
+     "org.robotslacker:slackerdb-scheduler",
+     "org.robotslacker:slackerdb-dbcli",
      "org.robotslacker:slackerdb-common",
      "org.robotslacker:slackerdb-dbdriver",
      "org.robotslacker:slackerdb-plsql",
@@ -3368,25 +3369,6 @@
     ]
    },
    {
-    "path": "plugin-scheduler/pom.xml",
-    "kind": "dep",
-    "blob_sha": "5af10dc995a516c2b9c67f56477687700c3edaec",
-    "ecosystem": "maven",
-    "bytes": 9131,
-    "names": [
-     "ch.qos.logback:logback-core",
-     "ch.qos.logback:logback-classic",
-     "org.slf4j:slf4j-api",
-     "org.duckdb:duckdb_jdbc",
-     "io.javalin:javalin-bundle",
-     "org.pf4j:pf4j",
-     "org.robotslacker:slackerdb-plugin",
-     "org.quartz-scheduler:quartz",
-     "com.alibaba.fastjson2:fastjson2",
-     "org.projectlombok:lombok"
-    ]
-   },
-   {
     "path": "plugin/pom.xml",
     "kind": "dep",
     "blob_sha": "2b42db9bc0f1c483cecc843a5097a2f466e5ea8a",
@@ -3404,6 +3386,24 @@
     "blob_sha": "00b9442ffd06223d4c98300ecce73106af7a5af6",
     "ecosystem": "maven",
     "bytes": 3802
+   },
+   {
+    "path": "scheduler/pom.xml",
+    "kind": "dep",
+    "blob_sha": "fcc997b21714bbe9ec3a550e6b193852b5b0f32d",
+    "ecosystem": "maven",
+    "bytes": 8587,
+    "names": [
+     "org.robotslacker:slackerdb-dbcli",
+     "ch.qos.logback:logback-core",
+     "ch.qos.logback:logback-classic",
+     "org.slf4j:slf4j-api",
+     "org.duckdb:duckdb_jdbc",
+     "io.javalin:javalin-bundle",
+     "org.quartz-scheduler:quartz",
+     "com.alibaba.fastjson2:fastjson2",
+     "org.projectlombok:lombok"
+    ]
    }
   ],
   "clues": {
@@ -3416,11 +3416,8 @@
     "offline-package-maven-plugin/pom.xml",
     "plugin-example/README.adoc",
     "plugin-example/pom.xml",
-    "plugin-scheduler/pom.xml",
     "plugin/pom.xml",
-    "plugin-scheduler/tools/Start-SchedulerInstance.ps1",
     "plugin-example/src/main/resources/plugin.properties",
-    "plugin-scheduler/src/main/resources/plugin.properties",
     "dbcli/src/main/resources/META-INF/services/java.sql.Driver",
     "dbdriver/src/main/resources/META-INF/services/java.sql.Driver",
     "dbcli/src/test/java/org/slackerdb/dbcli/CliLoadJdbcDriverTest.java",
@@ -3610,7 +3607,10 @@
     "dbdriver/src/main/java/org/slackerdb/jdbc/translation/messages_cs.java",
     "dbdriver/src/main/java/org/slackerdb/jdbc/translation/messages_de.java",
     "dbdriver/src/main/java/org/slackerdb/jdbc/translation/messages_es.java",
-    "dbdriver/src/main/java/org/slackerdb/jdbc/translation/messages_fr.java"
+    "dbdriver/src/main/java/org/slackerdb/jdbc/translation/messages_fr.java",
+    "dbdriver/src/main/java/org/slackerdb/jdbc/translation/messages_it.java",
+    "dbdriver/src/main/java/org/slackerdb/jdbc/translation/messages_ja.java",
+    "dbdriver/src/main/java/org/slackerdb/jdbc/translation/messages_nl.java"
    ]
   },
   "fail_count": 0
@@ -6052,13 +6052,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:33:28Z",
+  "collected_at": "2026-11-10T04:32:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
-  "stars": 3030,
+  "pushed_at": "2026-11-08",
+  "stars": 3031,
   "tree": {
-   "sha": "a5b60a0727c624ff96a256a968c57f59a76cdf10",
-   "etag": "W/\"18a24b7d34cca5eeb62517a7d88f83325047afc984f18372afa6e21815b8ffba\"",
+   "sha": "c580b1fe5db1fc6a6f34043230619b87eb4d3050",
+   "etag": "W/\"591ab535d6f72d608e8a970edb6356c31d3bd2c4daf4f5888bc6cfaebcb54a91\"",
    "truncated": false,
    "path_count": 2515,
    "matched": [
@@ -7093,15 +7093,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:26:26Z",
+  "collected_at": "2026-11-10T04:39:50Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
-  "stars": 752,
+  "pushed_at": "2026-11-09",
+  "stars": 767,
   "tree": {
-   "sha": "7593ffedeed59d5d4a47aabf734e476faf82475d",
-   "etag": "W/\"a5b0a9ffc35d69c2c5d6bbdb130233f09a0af7e9d1a393cbe199e2b67da5f3f3\"",
+   "sha": "e27350d75e2fdb5d19bf0e0d4f15c9f0af47d10d",
+   "etag": "W/\"91979510fa8798b18e0dcd3bed86e86ff7f1c29e20f88d4bd822431b7de78a03\"",
    "truncated": false,
-   "path_count": 3444,
+   "path_count": 3488,
    "matched": [
     "submissions/bun-yatta-psrockstar098/package.json",
     "submissions/csharp-aspnetcore-andrexx/FeedApi.csproj",
@@ -7124,6 +7124,7 @@
     "submissions/go-gin-lincolng4/go.mod",
     "submissions/go-gnet-kaikegm/go.mod",
     "submissions/go-iouring-davidefrageri/go.mod",
+    "submissions/go-iouring-huykn/go.mod",
     "submissions/go-iouring-pmatteo/go.mod",
     "submissions/go-iouring-quananh2503/go.mod",
     "submissions/go-iouring-trungdlp/go.mod",
@@ -7162,7 +7163,6 @@
     "submissions/rust-axum-tbsvttr/Cargo.toml",
     "submissions/rust-epoll-scooter1337/Cargo.toml",
     "submissions/rust-hyper-dannie203/Cargo.toml",
-    "submissions/rust-iouring-kensac/Cargo.toml",
     "submissions/ada-native-visseranalytics/Dockerfile",
     "submissions/ada-native-visseranalytics/Dockerfile.cached",
     "submissions/ada-native-visseranalytics/Dockerfile.native",
@@ -7420,6 +7420,13 @@
     "blob_sha": "b9509db0c0e2e44f7235d18df7fa6b26b676070d",
     "ecosystem": "go",
     "bytes": 41
+   },
+   {
+    "path": "submissions/go-iouring-huykn/go.mod",
+    "kind": "dep",
+    "blob_sha": "ce3d3ce21205ac4d041bc7ad07eba35f64dc52d8",
+    "ecosystem": "go",
+    "bytes": 35
    },
    {
     "path": "submissions/go-iouring-pmatteo/go.mod",
@@ -8016,22 +8023,6 @@
     ]
    },
    {
-    "path": "submissions/rust-iouring-kensac/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "7199bf241f040cfdf8259fa7b8fa1505ffbf5987",
-    "ecosystem": "cargo",
-    "bytes": 328,
-    "names": [
-     "io-uring",
-     "libc",
-     "sha2",
-     "memchr"
-    ],
-    "dev": [
-     "cc"
-    ]
-   },
-   {
     "path": "submissions/ada-native-visseranalytics/Dockerfile",
     "kind": "image",
     "blob_sha": "dd656a96c384e37556d865574510f04a24cd6f62",
@@ -8297,13 +8288,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:33:58Z",
+  "collected_at": "2026-11-10T04:44:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
-  "stars": 378,
+  "pushed_at": "2026-11-09",
+  "stars": 394,
   "tree": {
    "sha": "3e8bf8fc9eb4fbc6e559b118a87d70093aedd15a",
-   "etag": "W/\"fc201630684806c5b50a37e77399021f7ab5c8869f1b92358fbe169417a4966c\"",
+   "etag": "W/\"7b0a7fbe13f78f4c6a1ac28695d2e1bfc18e57806ff72fe70400efbc40a833cf\"",
    "truncated": false,
    "path_count": 247,
    "matched": [
@@ -9290,13 +9281,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:55:23Z",
+  "collected_at": "2026-11-10T04:55:02Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 106,
   "tree": {
-   "sha": "30fc9933aabe6dd58c0ae3ff46b95e480e646317",
-   "etag": "W/\"fb69bfd99591b8e9b051cd5ee262d73d91974339900708c9cc1e2fdf5a638b7e\"",
+   "sha": "7fc1e4c2800da4251d9fb2e8cb3502348b1d3327",
+   "etag": "W/\"0b3c8597bdc02460eef41a9dae4f2548608632347479bf51713d23498ac93501\"",
    "truncated": false,
    "path_count": 192,
    "matched": [
@@ -9318,7 +9309,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "66875b85d98ffdb801b3c3159ec9c7a2dbb8e784",
+    "blob_sha": "f2880698d2f3bb60c043652b387a4f275543b40a",
     "ecosystem": "npm",
     "bytes": 3332,
     "names": [
@@ -11750,13 +11741,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:39:04Z",
+  "collected_at": "2026-11-10T05:15:39Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
-  "stars": 17,
+  "pushed_at": "2026-11-09",
+  "stars": 19,
   "tree": {
-   "sha": "261d8045baf8a77b8745de10b71b0cbdb3df4896",
-   "etag": "W/\"3343dfa4acce600c523d1405cda1e934b446c54e3ce815a68321661e1c90b5ed\"",
+   "sha": "f771b8868d9b9f589e18f9d716e758f22a90f1c5",
+   "etag": "W/\"4e7ae847047ca23450c6907613fb1c0d80b3d3b8a3744a8c4af04fda538c48b7\"",
    "truncated": false,
    "path_count": 784,
    "matched": [
@@ -12607,13 +12598,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:47:29Z",
+  "collected_at": "2026-11-10T05:18:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
+  "pushed_at": "2026-11-09",
   "stars": 15,
   "tree": {
-   "sha": "8903b8a6ac8ac3201c616f16eaa56f986fb0f10e",
-   "etag": "W/\"f078f9d0daa586031cbc61e9ed4b75fbaeff0532bce3adc3a4dc0a859204792e\"",
+   "sha": "b1919dd88655a95c790a43b8db0ec6ff3d1b994c",
+   "etag": "W/\"c1f5befbfc30617f45c0e990c60948c3445ffe67808ac5f9c914d9558890fc74\"",
    "truncated": false,
    "path_count": 322,
    "matched": [
@@ -12676,7 +12667,7 @@
    {
     "path": "web/package.json",
     "kind": "dep",
-    "blob_sha": "03b93a55565f03048f881fab77c2f2d2a229f579",
+    "blob_sha": "2df79268160808e46ae246b70dc1d21a3ad64731",
     "ecosystem": "npm",
     "bytes": 1912,
     "names": [
@@ -14049,13 +14040,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:41:16Z",
+  "collected_at": "2026-11-10T04:40:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 702,
   "tree": {
    "sha": "00efc858b1b7b47354f6a7b1d95a0aaaecc0d691",
-   "etag": "W/\"420d2c0bb6f745bb90c8f7145d4f6b827e6b73f781c1c7a26c2a76d64a7fb25b\"",
+   "etag": "W/\"6fc379f36cfa58677866836a077c2944455b5bddf1cadb21c81135d0b5fd23af\"",
    "truncated": false,
    "path_count": 1067,
    "matched": [
@@ -14587,15 +14578,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T18:30:41Z",
+  "collected_at": "2026-11-10T04:45:30Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-07",
+  "pushed_at": "2026-11-09",
   "stars": 355,
   "tree": {
-   "sha": "6550b2f55d23399c47cdbde22f9e25c42054d0d1",
-   "etag": "W/\"baa0bb25668adbbda7dc915a307da8a72894ab6f5aba543a8370db915eb6a3f2\"",
+   "sha": "874367dc8c8e218d36c404ecbde91818e0922847",
+   "etag": "W/\"0ba4a8ec596c994bfc09250a6e3e7bfdcbbc35cd1dfa79041d462fb7e85db04f\"",
    "truncated": false,
-   "path_count": 5687,
+   "path_count": 5717,
    "matched": [
     "go.mod",
     "canopy/package.json",
@@ -14643,9 +14634,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "96c04faa78feb37f369030b5a303d245ad385f5c",
+    "blob_sha": "7bf446cc31fde46146695cb28745e8c5d8e01eb7",
     "ecosystem": "go",
-    "bytes": 11049,
+    "bytes": 11079,
     "names": [
      "cloud.google.com/go/storage",
      "github.com/Azure/azure-sdk-for-go/sdk/azcore",
@@ -14995,8 +14986,8 @@
    {
     "path": "test/docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "4e4928720627990eb0f0fe15b52c3bfbafe0eca0",
-    "bytes": 1406,
+    "blob_sha": "625b8b04e1850a0603a4f1f0b9e7a8aa7518c5fb",
+    "bytes": 1479,
     "images": [
      "alpine:edge",
      "busybox:stable-glibc"
@@ -15068,8 +15059,8 @@
    {
     "path": ".github/workflows/e2e.yml",
     "kind": "ci",
-    "blob_sha": "9905e3519eec645986b43ecaf3578ff39122df74",
-    "bytes": 7871
+    "blob_sha": "5caa03a35a89101aa9eb00b5202464fb72a9439c",
+    "bytes": 7978
    },
    {
     "path": ".github/workflows/flaky-test.yml",
@@ -15314,15 +15305,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:49:26Z",
+  "collected_at": "2026-11-10T04:49:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-09",
   "stars": 205,
   "tree": {
-   "sha": "89b180c80f9d9bc1e66c1fa7d3a327e0adf06d57",
-   "etag": "W/\"6d474ae52f7c9ede20170d43414f1dcb8b10b863a88d96cc8baf1e805b22400b\"",
+   "sha": "122558877484cae06cc239f76bd139341676e0a5",
+   "etag": "W/\"9195310f62bac98af3bd0dd1a6eaaf88f43a67e8f6e8e83eaf0989ed3800f016\"",
    "truncated": false,
-   "path_count": 263,
+   "path_count": 270,
    "matched": [
     "Cargo.toml",
     "crates/datafusion-app/Cargo.toml",
@@ -15349,9 +15340,9 @@
    {
     "path": "crates/datafusion-app/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "25028680f4877693c8c1cf9c530c4e7a42747c03",
+    "blob_sha": "4d2e1d286328dd0503b617bd4f96f53f21af6877",
     "ecosystem": "cargo",
-    "bytes": 2912,
+    "bytes": 2971,
     "names": [
      "datafusion-functions-arrow",
      "datafusion-functions-parquet",
@@ -15378,6 +15369,7 @@
      "object_store_opendal",
      "opendal",
      "parking_lot.workspace",
+     "prost",
      "rustls",
      "serde.workspace",
      "tokio",
@@ -15497,9 +15489,9 @@
    {
     "path": "crates/dft-bin/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d48e42f8ed06aa002bdcd0ab5d5744a687c31482",
+    "blob_sha": "536478d484808afdf736f0069830b1207dca06a6",
     "ecosystem": "cargo",
-    "bytes": 4624,
+    "bytes": 4551,
     "names": [
      "datafusion-app.workspace",
      "datafusion-functions-rocksdb",
@@ -17299,6 +17291,60 @@
     "kind": "ci",
     "blob_sha": "2e3a92a3dcf19b2930a3355e35a325292b4709bd",
     "bytes": 1041
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "getbeton/dryfit": {
+  "fn": "getbeton/dryfit",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-10T04:19:12Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-09",
+  "stars": 30,
+  "tree": {
+   "sha": "9fbf4c096676b3d10a2a9403f686c8581a4a468a",
+   "etag": "W/\"ab3523af9fab6d28d4f55ec1804a657f9d373555b6a631b976b6301fe7cef24c\"",
+   "truncated": false,
+   "path_count": 59,
+   "matched": [
+    "pyproject.toml",
+    "docker-compose.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "59b3d03d0de95706daf6b7ae6b5e4423247ab6f9",
+    "ecosystem": "pyproject",
+    "bytes": 696,
+    "names": [
+     "faker",
+     "psycopg",
+     "pydantic",
+     "pyyaml",
+     "typer"
+    ]
+   },
+   {
+    "path": "docker-compose.yml",
+    "kind": "image",
+    "blob_sha": "4853d51b4d8c921bf3e9963125eb54e36754be0c",
+    "bytes": 928,
+    "images": [
+     "postgres:16",
+     "grafana/grafana:11.5.2"
+    ]
    }
   ],
   "clues": {
