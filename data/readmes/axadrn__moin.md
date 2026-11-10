@@ -1,6 +1,8 @@
-# moin.
+<p align="center">
+  <img src="hub/assets/img/og.png" alt="moin. Deploy anything. Lose nothing." width="100%">
+</p>
 
-Deploy anything. Lose nothing. Your apps on your servers. Every change backed up. Every restore tested. Open source, for SQLite and Postgres, with web, CLI, terminal UI and MCP.
+Deploy anything. Lose nothing. Your apps on your servers. Backups on your schedule, checked every day. Open source, for SQLite and Postgres, with web, CLI, terminal UI and MCP.
 
 ```bash
 moin login              # log in through the browser
@@ -9,11 +11,11 @@ moin deploy             # ✓ moin. your app is live
 moin                    # the live terminal UI
 ```
 
-The agent on your server only dials out. Nothing listens for moin.
+The daemon on your server only dials out. Nothing listens for moin.
 
 ## Documentation
 
-Everything else is in the docs: [moin.run/docs](https://moin.run/docs), or `/docs` on your own control plane. They are the source of truth.
+Everything else is in the docs: [moin.run/docs](https://moin.run/docs), or `/docs` on your own hub. They are the source of truth.
 
 ## Build
 
@@ -21,7 +23,7 @@ Everything else is in the docs: [moin.run/docs](https://moin.run/docs), or `/doc
 go install github.com/axadrn/moin/cmd/moin@latest
 ```
 
-The control plane is in [`controlplane`](controlplane).
+The hub is in [`hub`](hub).
 
 ## License
 

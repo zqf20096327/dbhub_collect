@@ -1,0 +1,180 @@
+# ExitLens
+
+Claude IP 风险自检工具:从 Claude 的视角检查你的网络出口与浏览器环境。
+
+## 界面预览
+
+| 检测进行中 | 简明视图(状态卡 + 深度研判) |
+| --- | --- |
+| ![进度](docs/screenshots/02-progress.png) | ![简明](docs/screenshots/03-simple-results.png) |
+
+| 专业视图(六维评分) | 深色主题 |
+| --- | --- |
+| ![专业](docs/screenshots/05-pro-view.png) | ![暗色](docs/screenshots/07-dark.png) |
+
+截图由 `scripts/screenshot.mjs` 自动生成(IP 已打码为文档地址);多语言见 [EN](docs/screenshots/06-en.png)。
+
+## 快速开始
+
+```bash
+npm install
+npm run build && npm start        # 生产
+npm run dev                       # 开发
+```
+
+浏览器访问 http://localhost:3000(自动跳转 /zh),点击「开始检测」。
+
+## 功能
+
+- **出口探测**:claude.ai / api.anthropic.com / platform.claude.com 三域名 `/cdn-cgi/trace`,读出口 IP、地区、WARP、colo
+- **分流矩阵**:45 个知名站点按预期路线(直连/代理)分组探测,验证分流规则是否生效(首页 Pro 视图)
+- **IP 纯净度评分**:0-100 单值评分(Trust Score),Tor/代理/VPN/机房/滥用/黑名单逐项扣分,IP 页展示
+- **IP 情报聚合**(服务端,免费源):ipwho.is、ip-api.com、rdap.org、Tor 官方出口表、DNSBL 12 区加权明细(spamhaus/spamcop/barracuda/sorbs 等);可选 `PROXYCHECK_API_KEY` / `ABUSEIPDB_API_KEY`(env)
+- **场景适配评分**:AI 平台 / 社媒运营 / TikTok 三场景 0-10 分(TikTok 对机房 IP 零容忍)
+- **BGP 情报**:前缀数、直接上游与 Tier-1 占比(RIPEstat,7 天缓存)
+- **多源地理对照**:各数据源定位互相比对,坐标最大偏移超阈值即标记
+- **WebRTC 泄漏**:5 公共 STUN,收集公网候选与 Claude 出口比对
+- **大陆环境 7 信号**(纯本地):时区/语言/中文字体/厂商字体/国产浏览器/国产设备/Intl
+- **六维评分**:网络 35 · 暴露 20 · 信誉 15 · 一致性 15 · 浏览器 10 · 自动化 5,含地区门控
+- **自建历史信誉库**(SQLite):每次查询自动记录,支持人工反馈
+- **蜜罐接口(预留)**:见下
+- **深度研判**:44 条二阶结论推理规则(全局VPN/分流代理/Claude专用出口/中转架构/IPv6裸奔/SNI阻断/代理池/云厂商/被征用家宽/指纹漂移与轮换/出口粘性/同国重拨/移动环境/无头农场/跨层自洽度/注册适合度/拼接伪装/低共享出口/自建中继/ASN连坐/隐身窗口误区等)+ 处置建议卡(按优先级分组的动作清单),每条附证据链与置信度
+- **检测历史**:本机 localStorage 记录每次检测的评分/结论/趋势,不上传
+- **浏览器指纹**:36 因子(Canvas/WebGL×2/WebGPU/Audio×2/字体双通道/解码器/语音/UA-CH/Emoji/键盘/Intl/WASM/WebCodecs/SDP/时钟偏移/HTTP头序等)+ 9 项伪装矛盾交叉检测,估算熵约 150 位,全本地计算
+- **风控链路对照**:注册→登录→KYC→支付→运行时五阶段端点地图 + 错误码速查(社区逆向知识层,工具不调用)
+- **网络连通性页**(`/link`):48 站分四组(中/日/美/全球)实时延迟,两轮取样取中位
+- **Cloudflare 检测页**(`/cloudflare`):7 个 CF 站点 trace 对比(出口 IP/colo 城市/HTTP/TLS/SNI/密钥交换),一致性判定 + Turnstile/reCAPTCHA 实测
+- **服务状态页**(`/status`):聚合 15 个 AI/开发者服务官方 statuspage,故障置顶,5 分钟缓存
+- **GPT 出口检测页**(`/gpt`):探测 ChatGPT / OpenAI API 真实出口,给出纯净度与场景适配分
+- **WHOIS/RDAP 查询页**(`/whois`):域名 / IP / ASN 三路查询,结构化展示注册信息与实体
+- 三语 zh / en / ja,明暗双主题
+
+## API
+
+| 路由 | 说明 |
+|---|---|
+| `GET /api/ip/{ip}` | 聚合情报,缓存 1h |
+| `GET /api/claude/status` | Anthropic 官方状态(5min 缓存) |
+| `GET /api/reputation?ip=` | 本地信誉记录 |
+| `POST /api/reputation` | `{ip, note}` 提交使用反馈 |
+| `GET /api/honeypot?ip=` | 蜜罐命中查询 |
+| `POST /api/honeypot` | 蜜罐上报(见下) |
+| `GET /api/v1/check?ip=&lang=zh` | **REST 评估**:情报+评分+门控+自然语言结论 |
+| `POST /api/v1/check` | 批量评估 `{ips:[...≤20], lang}` |
+| `GET /api/me[?format=text]` | curl 回显(curl localhost:3000/api/me?format=text) |
+
+### REST 评估 API(/api/v1/check)
+
+```bash
+# 单 IP:出口类型 / 风险旗标 / 原生性 / 前缀年龄 / 地区门控 / 自然语言结论
+curl -s "localhost:3000/api/v1/check?ip=64.51.26.194&lang=zh" | jq '{score, headline, verdicts}'
+
+# 批量(≤20):适合代理池入库前体检
+curl -s -X POST localhost:3000/api/v1/check \
+  -H 'content-type: application/json' \
+  -d '{"ips":["1.2.4.8","64.51.26.194"],"lang":"zh"}' | jq '.results[].headline'
+```
+
+评分口径:服务端可见维度(出口网络 35 + IP 信誉 15,覆盖 50/100),浏览器维度(泄漏/一致性/环境/自动化)需用页面检测。`lang` 支持 zh/en/ja。配置 `EGRESSLAB_API_KEY` 后需携带 `x-api-key` 头。每次调用写入本地信誉库。
+
+### 真 DNS 泄漏检测(可选,需一台可开 UDP 53 的主机)
+
+部署 [`dnsleak-server/`](dnsleak-server/README.md)(权威观察者 + 日志 API),Cloudflare 为 `leak.exitlens.<域名>` 加 NS 记录指向该机,然后配置环境变量:
+
+```
+DNSLEAK_ZONE=leak.exitlens.<你的域名>
+DNSLEAK_API=http://<该机IP>:8090
+```
+
+检测页将新增「真 DNS 出口」行与泄漏研判结论;未配置时模块自动隐藏。CF Workers / Vercel 无法承载(无 UDP)。
+
+### 蜜罐上报(为将来部署 Cowrie 等传感器预留)
+
+```bash
+# .env 配置 HONEYPOT_KEY=your-secret 后:
+curl -X POST localhost:3000/api/honeypot \
+  -H 'content-type: application/json' \
+  -H "x-sensor-key: $HONEYPOT_KEY" \
+  -d '{"src_ip":"1.2.3.4","sensor":"cowrie-1","proto":"ssh","detail":"brute force"}'
+```
+
+未配置 `HONEYPOT_KEY` 时上报返回 503;查询始终开放。
+
+### 本地库(统一 GeoProvider / PrivacyProvider 接口,懒加载,缺文件自动跳过)
+
+```bash
+# 一键更新(ip2region 与 db-ip 无需任何 key;MaxMind/IPInfo/IP2Location 配 env 后自动下载)
+scripts/update-local-dbs.sh
+```
+
+| 库 | 注册 | 补什么 |
+|---|---|---|
+| IP2Region(随 npm 包分发) | 不用 | 中国境内省市精度 |
+| DB-IP city lite | 不用 | 全球城市级兜底 |
+| MaxMind GeoLite2 City+ASN | 免费 key | geo/时区/ASN 本地化 |
+| IPInfo privacy lite | 免费 token | 本地 VPN/代理/机房识别 |
+| IP2Location DB11 LITE | 免费 token | CSV→SQLite 区间查询 |
+
+新增同类库:实现 `lib/server/intel/local.ts` 的 `GeoProvider` 或补充 `lookupLocalPrivacy` 并注册进 `GEO_PROVIDERS` 即可。
+
+### 自建数据积累
+
+```bash
+# Tor 出口表每小时更新(建议 crontab)
+scripts/update-tor.sh
+# 本地库每周更新
+scripts/update-local-dbs.sh
+```
+
+信誉库 `data/exitlens.db` 随使用自动积累;换机迁移拷贝该文件即可。
+
+## 数据流向
+
+浏览器环境特征**不上传**。情报查询访问:ipwho.is、ip-api.com、rdap.org、check.torproject.org、DNSBL、status.anthropic.com(及可选 proxycheck/AbuseIPDB)。Trace 探测直连 anthropic 三域名。
+
+## 测试
+
+```bash
+npx vitest run        # 评分门控 / 九档网络分 / 环境信号纯函数
+npx tsc --noEmit
+```
+
+## 参考与致谢
+
+本项目的检测思路与数据能力站在以下项目和服务的肩膀上。
+
+### 数据源
+
+| 提供方 | 用途 |
+|---|---|
+| [ipwho.is](https://ipwho.is) / [ip-api.com](https://ip-api.com) | IP 地理与网络信息 |
+| [RIPEstat](https://stat.ripe.net) | 注册国(RIPE Whois)与 BGP 前缀首次宣告时间 |
+| [rdap.org](https://rdap.org) | RDAP 注册数据 |
+| [Tor Project](https://check.torproject.org/torbulkexitlist) | 官方 Tor 出口列表 |
+| [Barracuda](https://www.barracudacentral.org) / [SORBS](http://www.sorbs.net) | DNSBL 黑名单查询 |
+| [FireHOL](https://github.com/firehol/blocklist-ipsets) | 聚合封锁列表(level1) |
+| [StopForumSpam](https://www.stopforumspam.com) | 垃圾注册 IP 记录 |
+| [abuse.ch ThreatFox](https://threatfox.abuse.ch) | 恶意 IoC 检索(端点变更中,静默降级) |
+| [DB-IP](https://db-ip.com) | City Lite 本地库(CC BY 4.0) |
+| [ip2region](https://github.com/lionsoul2014/ip2region)(MIT) | 中国境内定位精度 |
+| [Cloudflare](https://www.cloudflare.com/ips) | 官方 IP 段与 `cdn-cgi/trace` 边缘回显 |
+| Google / Cloudflare / Twilio STUN | WebRTC 泄漏检测 |
+| [proxycheck.io](https://proxycheck.io) / [AbuseIPDB](https://www.abuseipdb.com) / [MaxMind GeoLite2](https://www.maxmind.com) / [IPInfo](https://ipinfo.io) / [IP2Location](https://www.ip2location.com) | 可选增强源(env key) |
+
+### 开源库
+
+- [Next.js](https://nextjs.org) / [React](https://react.dev) — 框架
+- [Tailwind CSS](https://tailwindcss.com) — 样式
+- [lucide-react](https://lucide.dev) — 图标
+- [maxmind](https://github.com/runk/maxmind)(ISC) — mmdb 读取
+
+### 设计参考
+
+同类工具的公开实现与文档为本文档化过的检测项提供了大量灵感:
+
+- [MyIP](https://github.com/jason5ng32/MyIP) — IP 工具箱的功能布局,连通包 / 多源出口对照 / curl API / 报告导出
+- [dnsleaktest](https://github.com/macvk/dnsleaktest) — DNS 泄漏检测方法论
+- [claude-environment-check](https://github.com/TZZ520/claude-environment-check) — Claude 环境自检的检查项组织
+- [EgressScope](https://github.com/uruana33/egress-scope) — 出口诊断工作台的分区思路
+- [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright) — 自动化浏览器检测面的理解
+- [FingerprintJS](https://github.com/fingerprintjs/fingerprintjs) / [CreepJS](https://github.com/AbrahamJuliot/creepjs) — 浏览器环境信号(字体/时区/矛盾检测)

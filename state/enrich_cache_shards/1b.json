@@ -1,9 +1,9 @@
 {
  "thedotmack/claude-mem": {
-  "commit_7d": 220,
-  "commit_90d": 1610,
-  "rel_ver": "v15.12.0",
-  "rel_pub": "2026-11-07",
+  "commit_7d": 343,
+  "commit_90d": 1816,
+  "rel_ver": "v15.14.0",
+  "rel_pub": "2026-11-09",
   "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 143,
-  "enriched_at": "20261108",
+  "enriched_at": "20261110",
   "lang": {
    "TypeScript": 46,
    "JavaScript": 40,
@@ -23,11 +23,26 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261107",
-   "release": "20261108",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v15.14.0",
+    "d": "2026-11-09",
+    "n": "- Server: generation completions are metered once, reasoning corrections stay within the job's paid-send cap, operator generation state changes are locked, legacy ingestion routes get usage guards, event polling stops on disconnect, shutdown cleanup finishes after errors, and queue health reads are bounded during Redis outages (#5640, #5615, #5650, #5641, #5651, #5628, #5617).\n- PostgreSQL: explicit TLS policy is kept, failed pool connections recover, idempotent writes skip inference, redelivered events are"
+   },
+   {
+    "t": "v15.13.0",
+    "d": "2026-11-09",
+    "n": "## Critical fix\n\n- **Cursor summaries:** Cursor sessions got no summary on native Windows, or when the workspace path had a `_`, a space or a dot folder in it. claude-mem now looks for the transcript in the project folder Cursor actually names, so those sessions get summaries again (#5544, thanks @tanishqbaweja; the same symptom was first reported in #2248 by @wbingli).\n\n## New\n\n- **Auto-clear at 33% context (off by default):** turn it on with `CLAUDE_MEM_AUTO_CLEAR_ENABLED=true`. When a Claude Code convers"
+   },
+   {
+    "t": "v15.12.1",
+    "d": "2026-11-08",
+    "n": "- **macOS 12 (system SQLite 3.37):** observations failed to save with \"SQL logic error\" on every write. Statements that use `RETURNING` are now read with `.all()`, so observations store again (#5499, thanks @xunguangzlj-cloud; reported in #5497 by @hamadikante0-ship-it)."
+   },
    {
     "t": "v15.11.1",
     "d": "2026-11-07",
@@ -62,27 +77,15 @@
     "t": "v15.8.3",
     "d": "2026-11-02",
     "n": "## Privacy fix\n\nBrowser setup no longer uploads your prompts to cmem.ai without asking. Fixes #5176.\n\nThe browser setup opened by `npx claude-mem install` (since v15.2.0) scanned local agent histories and uploaded the full text of the last 30 days of prompts, with session IDs, project names, folder paths and timestamps, without asking.\n\n**What changed (#5220)**\n\n- The scan now reads local history only, then stops and asks. Nothing leaves the machine until you answer.\n- A new consent panel states what is sen"
-   },
-   {
-    "t": "v15.8.2",
-    "d": "2026-11-02",
-    "n": "## Fixes\n- Work view: telemetry volume cuts. High-volume events (observer turns, work-state use, context injections, searches, skills) are now one daily rollup per install with a `count`; worker start/stop carry `restart_count`; failures are one event per type per day with `count`.\n- Observer: after a spent cmem.ai allowance, the gateway is probed once a day instead of on every resume.\n- Work view: fixed a runaway \"opened\" event; hosted viewer reports analytics with `viewer_host='hosted'`.\n- Work view: idle"
-   },
-   {
-    "t": "v15.8.1",
-    "d": "2026-11-01",
-    "n": "Repository cleanup. No changes to how claude-mem runs.\n\n- The repo root drops from 60 entries to 36, so the README sits much higher on the GitHub page.\n- Old plans, reports, playbooks and generated files are gone, along with the superseded `cursor-hooks/` and `ragtime/` directories.\n- Docs, test assets and Docker files moved into `docs/`, `tests/`, `.github/`, `.claude/` and `docker/`. The changelog now lives at `docs/CHANGELOG.md`, and the security policy at `.github/SECURITY.md`.\n- The Cloudflare sync hub"
-   },
-   {
-    "t": "v15.8.0",
-    "d": "2026-11-01",
-    "n": "## What's Changed\n* feat(viewer): cloud viewer host for My Work, and work_state sync for every account by @thedotmack in https://github.com/thedotmack/claude-mem/pull/5193\n\n\n**Full Changelog**: https://github.com/thedotmack/claude-mem/compare/v15.7.0...v15.8.0"
    }
   ],
   "etag": {
-   "release": "W/\"b3d43576386432549235d0ccb94a0088cecdbd68f31cbcafc436a7afed6779cb\""
+   "release": "W/\"7177d596fa94cf82be2cb07a366c766bfb12e5cf9ea2585fe822be5d859ce64b\""
   },
   "rel_dates": [
+   "2026-11-09",
+   "2026-11-09",
+   "2026-11-08",
    "2026-11-07",
    "2026-11-07",
    "2026-11-06",
@@ -109,10 +112,7 @@
    "2026-10-17",
    "2026-10-16",
    "2026-10-13",
-   "2026-10-13",
-   "2026-10-13",
-   "2026-10-12",
-   "2026-10-12"
+   "2026-10-13"
   ]
  },
  "porsager/postgres": {
@@ -120,7 +120,7 @@
   "commit_90d": 69,
   "rel_ver": "v4.1.0",
   "rel_pub": "2026-11-05",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -188,11 +188,11 @@
   }
  },
  "ydb-platform/ydb": {
-  "commit_7d": 424,
-  "commit_90d": 6011,
+  "commit_7d": 423,
+  "commit_90d": 5962,
   "rel_ver": "26.3.1.16",
   "rel_pub": "2026-09-21",
-  "rel_days": 48,
+  "rel_days": 50,
   "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
@@ -201,7 +201,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 233,
-  "enriched_at": "20261108",
+  "enriched_at": "20261110",
   "lang": {
    "C++": 53,
    "C": 25,
@@ -211,8 +211,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261107",
-   "release": "20261108",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261027"
   },
   "rel_notes": [
@@ -233,7 +233,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"3cdb458f0470a30686388d1965ca20de44d0fe3e5f29622293d25a3cc4adb826\""
+   "release": "W/\"0ed57c6bbf384b19fe6ac92c0f331c1f57c83c74a26fd1ddd23f8fc14f0827e0\""
   },
   "rel_dates": [
    "2026-09-21",
@@ -245,7 +245,7 @@
   "commit_90d": 0,
   "rel_ver": "v0.5.41",
   "rel_pub": "2025-07-11",
-  "rel_days": 485,
+  "rel_days": 487,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -284,15 +284,19 @@
    "Kotlin": 2,
    "TypeScript": 2
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "adamchainz/django-mysql": {
-  "commit_90d": 19,
-  "commit_7d": 2,
+  "commit_90d": 17,
+  "commit_7d": 1,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -303,15 +307,19 @@
   "lang": {
    "Python": 100
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "dbfixtures/pytest-postgresql": {
-  "commit_90d": 154,
-  "commit_7d": 6,
+  "commit_90d": 156,
+  "commit_7d": 12,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -322,18 +330,22 @@
   "lang": {
    "Python": 100
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "devicehive/devicehive-java-server": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v4.0",
   "rel_pub": "2023-09-06",
-  "rel_days": 1159,
+  "rel_days": 1161,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -373,7 +385,7 @@
   "commit_7d": 8,
   "rel_ver": "v2.2.2",
   "rel_pub": "2026-11-04",
-  "rel_days": 4,
+  "rel_days": 6,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -491,8 +503,8 @@
   "enriched_at": "20260927"
  },
  "Shannon-Data/ShannonBase": {
-  "commit_90d": 148,
-  "commit_7d": 11,
+  "commit_90d": 162,
+  "commit_7d": 16,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -507,15 +519,19 @@
    "C#": 2,
    "CMake": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "jurerotar/Pillage-First-Ask-Questions-Later": {
-  "commit_90d": 175,
-  "commit_7d": 19,
+  "commit_90d": 184,
+  "commit_7d": 8,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -530,11 +546,15 @@
    "CSS": 0,
    "JavaScript": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "junpengxu/Apollo": {
   "commit_90d": 0,
@@ -575,7 +595,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.9",
   "rel_pub": "2025-03-19",
-  "rel_days": 599,
+  "rel_days": 601,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -594,7 +614,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.2",
   "rel_pub": "2017-08-05",
-  "rel_days": 3382,
+  "rel_days": 3384,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -661,7 +681,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-04-02",
-  "rel_days": 220,
+  "rel_days": 222,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -682,7 +702,7 @@
   "commit_7d": 5,
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-10-18",
-  "rel_days": 1117,
+  "rel_days": 1119,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -715,7 +735,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.9",
   "rel_pub": "2023-11-08",
-  "rel_days": 1096,
+  "rel_days": 1098,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -758,7 +778,7 @@
  "simonw/markdown-to-sqlite": {
   "rel_ver": "1.0",
   "rel_pub": "2021-06-13",
-  "rel_days": 1974,
+  "rel_days": 1976,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -806,7 +826,7 @@
  "kkrisz1/staruml-reverse-db": {
   "rel_ver": "v2.1.8",
   "rel_pub": "2023-08-27",
-  "rel_days": 1169,
+  "rel_days": 1171,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -824,7 +844,7 @@
  "dan-kimani/mysql-mongo-etl": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2020-03-29",
-  "rel_days": 2415,
+  "rel_days": 2417,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -857,7 +877,7 @@
  "truenormis/savvy": {
   "rel_ver": "v1.3.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 61,
+  "rel_days": 63,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -891,7 +911,7 @@
  "daobab-projects/daobab-core": {
   "rel_ver": "Daobab",
   "rel_pub": "2023-11-29",
-  "rel_days": 1075,
+  "rel_days": 1077,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -999,7 +1019,7 @@
  "tikv/migration": {
   "rel_ver": "br-v1.0.2",
   "rel_pub": "2025-04-17",
-  "rel_days": 570,
+  "rel_days": 572,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1068,7 +1088,7 @@
  "epost/purescript-node-postgres": {
   "rel_ver": "v4.1.0",
   "rel_pub": "2017-12-16",
-  "rel_days": 3249,
+  "rel_days": 3251,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1087,7 +1107,7 @@
  "go-fries/fries": {
   "rel_ver": "v4.2.0",
   "rel_pub": "2026-09-14",
-  "rel_days": 55,
+  "rel_days": 57,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1134,7 +1154,7 @@
  "majiayu000/remem": {
   "rel_ver": "v0.6.98",
   "rel_pub": "2026-09-27",
-  "rel_days": 42,
+  "rel_days": 44,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1155,7 +1175,7 @@
  "datreant/MDSynthesis": {
   "rel_ver": "0.6.1",
   "rel_pub": "2016-05-17",
-  "rel_days": 3827,
+  "rel_days": 3829,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1359,7 +1379,7 @@
  "kowala-tech/kcoin": {
   "rel_ver": "3.0.0",
   "rel_pub": "2018-10-04",
-  "rel_days": 2957,
+  "rel_days": 2959,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1470,7 +1490,7 @@
  "elky84/light": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-01-02",
-  "rel_days": 1771,
+  "rel_days": 1773,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1503,7 +1523,7 @@
  "oracle-quickstart/oci-elastic": {
   "rel_ver": "v2.0",
   "rel_pub": "2022-02-01",
-  "rel_days": 1741,
+  "rel_days": 1743,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1521,7 +1541,7 @@
  "nativeapptemplate/nativeapptemplateapi": {
   "rel_ver": "v1.0.0-with-nfc",
   "rel_pub": "2026-04-23",
-  "rel_days": 199,
+  "rel_days": 201,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1542,7 +1562,7 @@
  "ozankasikci/global-agent-memory": {
   "rel_ver": "v0.1.7",
   "rel_pub": "2026-08-31",
-  "rel_days": 69,
+  "rel_days": 71,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1576,7 +1596,7 @@
  "Dani3lSun/apex-plugin-videoplayer": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2016-02-24",
-  "rel_days": 3910,
+  "rel_days": 3912,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1619,7 +1639,7 @@
  "claranet/ansible-role-patroni": {
   "rel_ver": "1.1.0",
   "rel_pub": "2026-07-24",
-  "rel_days": 107,
+  "rel_days": 109,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1638,7 +1658,7 @@
  "HenryJi529/OpenMorningstar": {
   "rel_ver": "v0.2.14",
   "rel_pub": "2024-03-04",
-  "rel_days": 979,
+  "rel_days": 981,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1703,7 +1723,7 @@
  "oceanbase/spark-connector-oceanbase": {
   "rel_ver": "v1.5",
   "rel_pub": "2026-07-22",
-  "rel_days": 109,
+  "rel_days": 111,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1727,7 +1747,7 @@
  "gz08/database": {
   "rel_ver": "v1.0-final",
   "rel_pub": "2026-06-20",
-  "rel_days": 141,
+  "rel_days": 143,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1750,7 +1770,7 @@
  "huaweicloud-samples/database-dify-gaussdb": {
   "rel_ver": "v1.16.1-gaussdb",
   "rel_pub": "2026-08-15",
-  "rel_days": 85,
+  "rel_days": 87,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1816,7 +1836,7 @@
  "Linuxndroid/WhatsApp-Viewer": {
   "rel_ver": "v.1.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 381,
+  "rel_days": 383,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1867,7 +1887,7 @@
   "commit_7d": 0,
   "rel_ver": "flink-connector-jdbc-dameng_20250331_(适用于v3.3及以上版本)",
   "rel_pub": "2025-03-31",
-  "rel_days": 587,
+  "rel_days": 589,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2647,7 +2667,7 @@
  "phuthuycoding/dbclone": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-10-05",
-  "rel_days": 34,
+  "rel_days": 36,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2671,7 +2691,7 @@
  "macolszewski/dbeast_manager": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 21,
+  "rel_days": 23,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2718,7 +2738,7 @@
  "Paul0Franca/lurkqvd": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-24",
-  "rel_days": 15,
+  "rel_days": 17,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2784,7 +2804,7 @@
  "BalianWang/busytok": {
   "rel_ver": "v0.0.16",
   "rel_pub": "2026-07-15",
-  "rel_days": 116,
+  "rel_days": 118,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2828,7 +2848,7 @@
  "EnriqueMuhammad/Zephix-DBStudio": {
   "rel_ver": "v0.3.2",
   "rel_pub": "2026-11-01",
-  "rel_days": 7,
+  "rel_days": 9,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2927,7 +2947,7 @@
   },
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-10-07",
-  "rel_days": 32,
+  "rel_days": 34,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2962,6 +2982,132 @@
    "security": "20261108",
    "contrib": "20261108",
    "lang": "20261108"
+  }
+ },
+ "kz370/OpenLocalServer": {
+  "etag": {
+   "release": "W/\"50b1c351c9c98c8df161986e4271cde4a56fca91bd5e48de7e6fec2237ef0926\"",
+   "security": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_ver": "v2.12.0",
+  "rel_pub": "2026-11-10",
+  "rel_days": 0,
+  "rel_n90": 17,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_dates": [
+   "2026-11-10",
+   "2026-11-08",
+   "2026-11-07",
+   "2026-11-05",
+   "2026-11-04",
+   "2026-11-03",
+   "2026-11-02",
+   "2026-11-01",
+   "2026-10-25",
+   "2026-10-24",
+   "2026-10-19",
+   "2026-10-18",
+   "2026-10-10",
+   "2026-10-01",
+   "2026-10-01",
+   "2026-09-30",
+   "2026-09-29"
+  ],
+  "rel_notes": [
+   {
+    "t": "v2.12.0",
+    "d": "2026-11-10",
+    "n": "- **Security checks:** warnings for unsupported PHP, Node, Python and database versions, and a Security tab that checks project packages for known vulnerabilities.\n- **Migration guard:** OLS saves a project's database before running a migration. **Rewind** puts it back.\n- **Services sleep when unused:** MariaDB, PostgreSQL, Redis, MongoDB and Memcached can stop when idle and wake on connection. Off by default.\n- **Database per Git branch:** each branch gets its own database copy.\n- **Pull a server database*"
+   },
+   {
+    "t": "v2.11.0",
+    "d": "2026-11-08",
+    "n": "- **Dockerize a project:** makes a Dockerfile, compose file and `.dockerignore` for PHP, Node, Python, Go, Rust, Ruby, Java, .NET or static projects. The project is copied into the image, `docker compose watch` keeps it in sync while you edit, and a Production mode builds a small non-root image. OLS also adds the services it detects (database, Redis, queue, mail, search) as pinned images with generated passwords. It shows everything first and never overwrites. Also in the right-click menu of Projects and Si"
+   },
+   {
+    "t": "v2.10.0",
+    "d": "2026-11-07",
+    "n": "- **Import databases report:** when an import finishes you get a message, your selection is cleared, and a report lists every database as imported, skipped or failed, with the reason. Copy the report or save it as a text file. It never includes passwords.\n- **PHP extensions (PECL)** install only when OLS knows the file's SHA-256: apcu, redis, igbinary, imagick, mongodb, xdebug, pcov and yaml for PHP 8.1–8.5.\nDownload `OLS-v2.10.0-setup.exe` and run the installer. Your settings, sites, databases, services "
+   },
+   {
+    "t": "v2.9.0",
+    "d": "2026-11-05",
+    "n": "- Sites, Projects, Runtimes and Databases pages no longer jump around while loading.\n- **Choose what happens with duplicate databases:** skip, replace (backed up first), or import under a new name. An import that was interrupted is recovered next time you start the app.\nFeature release with easier database import, an Explorer menu for projects, a way to hide only a site, and steadier pages.\n- **Import databases from several places at once:** your installed OLS MariaDB versions, other MySQL/MariaDB installs "
+   },
+   {
+    "t": "v2.8.0",
+    "d": "2026-11-04",
+    "n": "- Internal database improvement: Added read-only SQLite query views for project, site, and activity records, plus indexes to speed up common lookups. This is an under-the-hood data-access improvement, not a new app feature.\n- Versioned database migrations back up the database before changes; operation history now has retention and repeated-failure cleanup.\nFeature release with easier project selection, faster Quick App search, and safer database maintenance.\nDownload `OLS-v2.8.0-setup.exe` and run the insta"
+   },
+   {
+    "t": "v2.7.0",
+    "d": "2026-11-03",
+    "n": "Run `OLS-2.7.0-setup.exe` to upgrade. Existing configuration, sites, databases, certificates, and settings are preserved."
+   },
+   {
+    "t": "v2.6.0",
+    "d": "2026-11-02",
+    "n": "Feature and UI release introducing the unified External Database Tools Gallery, visual argument editor with per-engine arguments, persistent UI caching, dashboard responsiveness, runtime version management, and port detection.\n- **Multi-Engine & Per-Engine Arguments**: Configure different arguments per database engine (e.g. DBeaver's `mariaDB`, `postgres-jdbc`, and `sqlite_jdbc` connection drivers) with a simple \"Same for every engine\" vs \"Different per engine\" toggle.\n- **Unified External Database Tools Ga"
+   },
+   {
+    "t": "v2.5.0",
+    "d": "2026-11-01",
+    "n": "Run `OLS-2.5.0-setup.exe` to upgrade. Existing configuration, sites, databases, certificates, and settings are preserved."
+   },
+   {
+    "t": "v2.4.0",
+    "d": "2026-10-25",
+    "n": "Feature release adding Python & virtualenv support, MCP integration, database tools, refreshed branding, and UI improvements.\n- **MCP Server**: Stdio Model Context Protocol integration with tools for domains, web servers, databases, and services.\n- **Database Tools**: Table listing and SQL execution for MariaDB, PostgreSQL, and SQLite.\n- **Updates UI**: Compact in-button loading indicator and lightweight status feedback.\nRun `OLS-v2.4.0-setup.exe` to upgrade. Existing configuration, sites, databases, and ce"
+   },
+   {
+    "t": "v2.3.0",
+    "d": "2026-10-24",
+    "n": "- **MCP Server**: New `ols-mcp` crate exposes OLS as a stdio Model Context Protocol server — JSON-RPC 2.0 tools for domains, services, tunnels, databases, web config, and tasks, plus `ols_run_command` escape hatch.\nDownload `OLS-v2.3.0-setup.exe` and run the installer. In-place upgrade from earlier versions preserves existing configuration, sites, databases, secrets, services, and certificates."
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "Rust": 60,
+   "TypeScript": 36,
+   "HTML": 1,
+   "PowerShell": 1,
+   "Batchfile": 1
+  },
+  "enriched_at": "20261110",
+  "dim_ts": {
+   "release": "20261110",
+   "security": "20261110",
+   "contrib": "20261110",
+   "lang": "20261110"
+  }
+ },
+ "Tharusha5010/curo-pharmacy-system": {
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\"",
+   "security": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "Java": 100
+  },
+  "enriched_at": "20261110",
+  "dim_ts": {
+   "release": "20261110",
+   "security": "20261110",
+   "contrib": "20261110",
+   "lang": "20261110"
   }
  }
 }

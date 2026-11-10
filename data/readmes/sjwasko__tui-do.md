@@ -13,7 +13,7 @@ agentic tasks and workflows.
 Feel the flow break when you have to tab out of tmux or herdr or your terminal sessions to go
 to a PWA or the web page for your Vikunja instance? I'm with you, tui-do is the answer!
 
-> **Status: 1.0.** `v1.0.2` is published and is what the commands below install. Everything
+> **Status: 1.1.** `v1.1.0` is published and is what the commands below install. Everything
 > documented here works and is used daily against a real Vikunja;
 > [what's planned](#whats-planned--coming) is set out rather than left to be discovered.
 
@@ -78,7 +78,7 @@ Raspberry Pi 5), Ubuntu 24.04 (Raspberry Pi 4 Model B). Your results may vary on
 releases and distributions.
 
 ```sh
-tag=v1.0.2
+tag=v1.1.0
 arch=$(uname -m)          # x86_64 or aarch64
 base=https://github.com/sjwasko/tui-do/releases/download/$tag
 
@@ -366,7 +366,16 @@ rule applies there -- over SSH into a Mac, `o` still copies.
 
 ## Quick-add syntax
 
-Tokens may appear anywhere in the line and are taken out of the title.
+Tokens may appear anywhere in the line. Labels, projects, users, priorities and repeats
+leave the title wherever they are. **A date is always read, but leaves the title only when
+nothing follows it except whitespace, punctuation and other tokens; anywhere else it stays
+exactly as typed.**
+
+So `call mom tomorrow.` becomes `call mom`, and `pay rent due friday *bills !3` becomes
+`pay rent`, but `tomorrow buy milk` keeps that title, with any `due` or `start` it was typed
+with, and is still due tomorrow.
+Two dates at the end (`start monday due friday`) both come out; a date mid-sentence stays
+while one at the end still comes out.
 
 | | |
 |---|---|
@@ -374,9 +383,44 @@ Tokens may appear anywhere in the line and are taken out of the title.
 | `*label` | Attach a label: `*urgent` |
 | `@user` | Assign someone: `@admin` |
 | `!1` … `!5` | Priority, 1 lowest to 5 highest |
-| a date | `tomorrow`, `next friday`, `27/08/26`, `27aug26`, `2026-08-27` |
-| `due <date>` / `start <date>` | The same, said explicitly |
+| a date | `tomorrow`, `next friday`, `27aug26`, `aug 27`, `2026-08-27`, `27/08/2026` |
+| `due <date>` / `start <date>` | The same, said explicitly, and also `27.8`, `27/08`, `27/08/26` |
 | `every <n> <unit>` | Repeat: `every 2 weeks`, `every month` |
+
+**A date in digits alone needs `due` or `start` in front of it** unless it has a four-digit
+year. `call mom due 27.8` is due on 27 August; `llvm 1.6 GB`, `add 1/2 cup` and
+`upgrade to 2.6.10` keep their numbers and get no date, because without the keyword those
+read as a decimal, a fraction or a version as readily as a day. A month name or a
+four-digit year is never ambiguous and works anywhere — except a dotted date that leads
+with its year, `2026.1.5`, which is a version number's shape and needs the keyword too;
+write `2026-01-05` instead. `tui-do add` names any date it set, so a misread one shows up
+at once: `Added "call mom" to Inbox, due Fri 27 Aug 2027`.
+
+**Check a line before adding it with `--dry-run`.** It parses the line, resolves its
+project and labels against the local store exactly as a real add would, and prints what it
+would create and the line in its best form. It queues nothing, writes nothing and contacts
+no server, and it fails, with the same message, wherever a real add would:
+
+```console
+$ tui-do add --dry-run 'Call the dentist tomorrow +Personal *health !3 every week'
+Would add "Call the dentist" to Personal, due Mon 9 Nov 2026
+Parsed: title "Call the dentist" · +Personal · *health · !3 · due Mon 9 Nov 2026 · every week
+as typed best: Call the dentist +Personal *health !3 due 2026-11-09 every week
+Dry run: nothing was queued or sent.
+```
+
+It checks projects against the **local store only**: a project created elsewhere since the
+last sync can fail a dry run and still succeed for real, because a real add asks the server
+once before giving up. It also refuses a store that does not exist yet, or one a real run
+would first have to upgrade, rather than creating or changing it.
+
+**The best form** is the title, then `+project`, `*label`s, `@user`s and `!N`, then each
+date after its keyword in ISO form (`due 2026-11-09`, `start 2026-11-09 at 09:00`), then the
+repeat. Dates go last because of the rule above: a date leaves the title only when nothing
+follows it except whitespace, punctuation and other tokens. A date kept mid-sentence stays
+in the title, so the best form keeps it there and writes the date again at the end. Every
+real add whose line differs from its best form says so on a second line,
+`as typed best: …`; a line already written that way, spacing aside, gets no second line.
 
 Wrap a name containing spaces in brackets or quotes; brackets are usually easier from a
 shell, which strips quotes before tui-do sees them:
@@ -386,6 +430,23 @@ tui-do add 'Renew the domain *urgent !3 +Admin tomorrow'
 tui-do add 'File the quarterly return +[Life Admin] 27aug26'
 tui-do add 'Water the plants every 3 days'
 ```
+
+**Run `tui-do add` with no text to be asked.** At a terminal it opens a prompt a few lines
+tall at the bottom of the screen, not the full interface, so your scrollback stays put. An
+example in your own project and label names shows the recommended shape until the first
+key, and a line under the input shows what will be created, re-read on every key:
+
+| key | |
+|---|---|
+| Tab | Complete a `+project`, `*label` or `@user` from the local store, or a date word after `due ` or `start `. A name with a space completes in brackets, `+[Home Improvement]`. A second Tab lists the matches |
+| `?` | Straight after `+` `*` `@` `!`, after `due ` or `start `, or on an empty line: list what can come next, without typing the `?`. Anywhere else it is a question mark, because titles have them |
+| F1 | Every token |
+| Enter | Add it, exactly as `tui-do add '<the line>'` would |
+| Esc, Ctrl-C | Cancel, adding nothing |
+
+The interface's `a` prompt completes and answers `?` the same way. Without a terminal,
+`tui-do add` with no text is the usage error it always was. The flags apply to the line it
+asks for, so `tui-do add --dry-run` alone asks, then checks what was typed and adds nothing.
 
 **Use single quotes, not double.** At an interactive `bash` prompt, `!3` is history
 expansion: the shell replaces it with an earlier command *before* tui-do sees the line,
@@ -399,8 +460,13 @@ agent) has history expansion off regardless.
 ## From the shell
 
 `tui-do add` applies locally and queues for the server exactly as the interface does, so it
-works on a plane. Two flags matter:
+works on a plane. It is also the way to use tui-do from a script: the interface itself needs a
+terminal on both stdin and stdout, and refuses to start, with a message saying which is
+missing, when either is redirected. Three flags matter:
 
+- **`--dry-run`** says what the line would add, and how it is best written, without
+  adding it. It reads only the local store, so a project created since the last sync is
+  unknown to it.
 - **`--create-labels`** creates any label the line names that does not exist yet. The
   interface asks instead of assuming.
 - **`--offline`** skips the send entirely, **but it needs a store that already knows your
@@ -409,7 +475,70 @@ works on a plane. Two flags matter:
   before it gives up, so run it once without `--offline` on a new machine (or start
   `tui-do`, which syncs at launch). After that it works on a plane as advertised.
 
-Shell completions, including for the quick-add flags:
+**A description goes beside the line, never in it.** The quick-add line is the title and
+its tokens; the description is body text, stored exactly as given (Markdown, plain text or
+HTML), with no tokens read out of it. Pick one of three ways:
+
+- **`-d 'text'`** inline, for a line or two. Newlines in the argument are kept.
+- **`--description-file PATH`** reads a file, and **`--description-file -`** reads stdin, for
+  anything longer. A quoted heredoc moves several paragraphs without retyping or expanding
+  them:
+
+  ```sh
+  tui-do add 'Write the plan +Work' --description-file - <<'EOF'
+  ## Context
+
+  What was tried, and what is left.
+  EOF
+  ```
+
+  Run that from a script or type it where you are. **Do not paste it into a terminal on
+  another machine**: pasted multi-line text often arrives re-indented, the closing `EOF` then
+  no longer matches, and the shell waits at a `>` prompt with nothing added. To file a long
+  description on a remote box, copy the file there (`scp plan.md host:/tmp/plan.md`) and use
+  `--description-file /tmp/plan.md`.
+
+- **`--edit`** (`-e`) opens `$VISUAL`, else `$EDITOR`, else `vi`, the way `git commit` does.
+  Everything from the `# ---- >8 ----` scissors line down is ignored, as in `git commit -v`.
+  Above it, blank lines at the start and just above the scissors are dropped and the rest is
+  kept exactly, `# Heading`s included. Leave it empty for no description, or quit with an
+  error (`:cq` in vim) to add nothing. It needs a terminal.
+
+It must be UTF-8 and at most 64 KiB, and one trailing newline is dropped. The confirmation
+line counts it rather than printing it:
+
+```console
+$ tui-do add 'Write the plan +Work due 2026-11-12' --description-file plan.md
+Added "Write the plan" to Work, due Thu 12 Nov 2026, with a description (5 paragraphs, 114 characters)
+```
+
+Shell completions come in two kinds. **Names** — `tui-do add Call the VA +Le` then Tab
+offers `+Legal` — come from your local store, so the shell has to ask tui-do on every Tab.
+Add one line to your shell's startup file:
+
+| shell | in | add |
+|---|---|---|
+| bash | `~/.bashrc` | `source <(TUI_DO_COMPLETE=bash tui-do)` |
+| zsh | `~/.zshrc`, after `compinit` | `source <(TUI_DO_COMPLETE=zsh tui-do)` |
+| fish | `~/.config/fish/config.fish` | `TUI_DO_COMPLETE=fish tui-do \| source` |
+
+That completes `+project`, `*label` and `@user` from the store, a date word after `due` or
+`start`, and the flags and subcommands too. A name with a space comes out in brackets,
+`+[Life Admin]`. It reads the store and never writes, syncs or contacts a server, and with no
+store it offers nothing. It is generated on each shell start rather than saved, because the
+script and the binary speak a protocol that may change between versions.
+
+It completes unquoted words. Inside a quoted `'…'` argument, what happens differs from shell
+to shell, and often nothing does. `?` is not offered in a shell at all: only the `tui-do add`
+prompt has it. In bash a bracketed name goes in backslash-escaped, `+\[Life\ Admin\]`, so it reaches
+tui-do as one word with its spacing intact; zsh and fish quote it themselves. An unquoted
+`!3` is still bash history expansion, as above.
+
+Name completion is the `dynamic-completion` cargo feature, on by default and in the release
+binaries. A build with `--no-default-features` ignores `TUI_DO_COMPLETE`; use the static
+script below there.
+
+**Flags only**, from a file written once, still works as it always did:
 
 ```sh
 tui-do completions fish > ~/.config/fish/completions/tui-do.fish
@@ -438,6 +567,22 @@ directly is a second writer with none of that.
 
 **`skills/tui-do/SKILL.md`** documents this for agents and is installable as a skill by tools
 that support them. It is plain Markdown, so anything else can simply read it.
+
+**Learn the names with `--tokens`.** `tui-do add --tokens` lists the projects, labels and
+users in the local store, one per line and grouped, each written the way a line should name
+it (`+[Life Admin]` for a project with a space), then the token syntax. It reads the store
+only, and fails with "run tui-do once to sync" if there is none yet.
+
+**Check generated lines with `--dry-run` first.** It adds nothing and exits non-zero,
+with the message a real add would give, if the line would fail. Then write them the way
+the `as typed best:` line shows: title, then `+project *label @user !N`, then
+`due YYYY-MM-DD`, `start YYYY-MM-DD` and the repeat. That form reads the same way every
+time.
+
+**Put context in the description, through stdin.** A stack trace, a spec or what was tried
+belongs in the description, not the title. Pass it with `--description-file -` and a heredoc
+whose delimiter is quoted (`<<'EOF'`), so nothing in it is shell-expanded, and keep the
+quick-add tokens on the title line, where they are read.
 
 One flag deserves mentioning: **`--create-labels` should usually stay off.**
 Labels are one global pool shared by every project, so a typo in a generated line becomes a
@@ -480,10 +625,6 @@ help!
 
 **Coming**
 
-- **A macOS port.** The hard part is already done: rendering needs no platform knowledge at
-  all, and the one thing that genuinely does, opening a URL, is already behind a seam built
-  for this. It may well build today, but it is not tested or supported yet; that should be a
-  quick gap to close.
 - **A real agent surface.** `add` is the only action right now. Reading, completing, moving
   and searching from the command line turn tui-do into something an agent can actually
   operate rather than only write to. See [For agents](#for-agents); this is the one I most
@@ -522,13 +663,14 @@ test any of it are very welcome.
 
 ## Platform support
 
-**Linux is the only supported platform.** Developed on Omarchy (Arch), with Ubuntu as the
-second supported target: built and tested against 26.04 in CI, and hand-driven on both 24.04
-and 26.04 hardware, on x86-64 and aarch64 alike.
+**Linux and macOS are supported.**
 
-- **macOS.** Apple Silicon, tested by hand on macOS 26 across several terminals, tmux, and
-  over SSH from Linux. Installed with Homebrew or from the release tarball. Intel is not
-  built.
+- **Linux.** Developed on Omarchy (Arch), with Ubuntu as the second target: built and tested
+  against 26.04 in CI, and hand-driven on both 24.04 and 26.04 hardware, on x86-64 and
+  aarch64 alike.
+- **macOS.** Apple Silicon only. The test suite runs on macOS in CI, and the interface is
+  tested by hand on macOS 26 across several terminals, tmux, and over SSH from Linux.
+  Installed with Homebrew or from the release tarball. Intel is not built.
 - **Windows.** Not a target. Use [WSL](https://learn.microsoft.com/windows/wsl/install) and
   run the Linux build. There are no plans to ship a native Windows binary.
 
@@ -536,7 +678,7 @@ and 26.04 hardware, on x86-64 and aarch64 alike.
 
 Only needed to modify tui-do, or to run on an architecture no release covers. **SQLite is
 compiled from source**, so a C toolchain is required even though the resulting binary needs
-none. Rust **1.85 or newer**.
+none. Rust **1.89 or newer**.
 
 On a fresh Debian or Ubuntu:
 
@@ -546,7 +688,7 @@ sudo apt-get install -y --no-install-recommends \
     curl ca-certificates build-essential pkg-config git
 
 # Take Rust from rustup rather than the distribution, which may package
-# a version older than 1.85.
+# a version older than 1.89.
 curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
 . "$HOME/.cargo/env"
 ```

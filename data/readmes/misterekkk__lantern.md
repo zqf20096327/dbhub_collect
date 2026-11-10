@@ -43,7 +43,7 @@ Spotify library sync is the only exception).
   answers at once with the apps you use most (macOS's own launch counts), and a query you keep answering with the
   same result ("d" → Discord) puts it first. Coming from Alfred? Settings → Privacy imports the choices it learned.
 - **Works with Raycast and Alfred:** keep your launcher and search with Lantern inside it ("Search Lantern" in
-  Raycast with previews, thumbnails and filters; a workflow for Alfred). See [Use with Raycast or Alfred](#use-with-raycast-or-alfred).
+  Raycast, from the Raycast Store, with previews, thumbnails and filters; a workflow for Alfred). See [Use with Raycast or Alfred](#use-with-raycast-or-alfred).
 - **Applications and System Settings**, like Spotlight: apps by any of their names (also translated and misspelt:
   `calcul`, `dicsord`, `vsc`) or their App Store category (`music` finds Spotify beside Music), panes and the ~560
   single settings of macOS by their words (`24 hour`, `night shift`), and both by what they do as a fallback
@@ -100,7 +100,7 @@ Spotify library sync is the only exception).
 | ffmpeg (optional) | MKV and WebM recordings only; everything else is decoded by macOS itself (AVFoundation) | `brew install ffmpeg` |
 
 `uv sync` installs everything else into the project's `.venv` (nothing global, no PyTorch): MLX and a pinned `mlx-vlm`
-commit (EmbeddingGemma 2 support), `transformers`, `tokenizers`, `sqlite-vec`, `tree-sitter-language-pack`,
+release (EmbeddingGemma 2 support), `transformers`, `tokenizers`, `sqlite-vec`, `tree-sitter-language-pack`,
 `pathspec`, `charset-normalizer`, `mlx-whisper`, `pillow`, `soundfile`, `watchdog`, and `pyobjc-framework-Vision` /
 `pyobjc-framework-Quartz` (Python bindings for macOS's text recognition and PDFKit; no models to download).
 
@@ -290,21 +290,14 @@ own panel.
 
 ### Raycast, step by step
 
-The extension is in review for the Raycast Store; until it is published it is added once from this repository (needs
-Node.js: `brew install node`). It does not install Lantern itself: without the app, "Search Lantern" shows the download
+The extension is in the Raycast Store as [Lantern – Semantic Search](https://www.raycast.com/kacper_piotrowski/lantern-semantic-search). It does not install Lantern itself: without the app, "Search Lantern" shows the download
 link and the Homebrew command, and while Lantern is setting up, downloading its models or indexing for the first time
 it says so instead of showing no results. Raycast keeps its hotkeys to itself (no app can read or set them), so the
 hotkey for "Search Lantern" is set in Raycast; Lantern's Settings say so instead of showing its own shortcut.
 
 1. Install and open [Raycast](https://www.raycast.com), and have the Lantern app running.
-2. Add the extension:
-
-   ```bash
-   cd integrations/raycast
-   npm ci
-   npm run dev        # adds "Search Lantern" to Raycast; when it says "ready", Ctrl+C (the command stays)
-   npm run build      # optional: type-checks and bundles into dist/
-   ```
+2. Install [Lantern – Semantic Search](https://www.raycast.com/kacper_piotrowski/lantern-semantic-search) from the Raycast Store (or in Raycast: Store, then search for
+   "Lantern").
 
 3. In Lantern: Settings → General → **Search from: Raycast**. Lantern's own shortcut turns off.
 4. Choose how to open it, in Raycast's settings (sidebar → **Lantern – Semantic Search** → Search Lantern):
@@ -329,6 +322,11 @@ The pane beside the results shows the code around a result (its lines marked ▶
 and thumbnails of photos and video frames. Raycast never reads your folders, so it asks for no access to them: the
 text comes from Lantern, and the thumbnails are made by Lantern into its cache, deleted after 10 minutes (see
 [PRIVACY.md](docs/PRIVACY.md)). Details: [integrations/raycast](integrations/raycast).
+
+To work on the extension itself (needs Node.js: `brew install node`): `cd integrations/raycast`, `npm ci`, then
+`npm run dev` adds your local copy to Raycast (when it says "ready", Ctrl+C: the command stays) and `npm run build`
+type-checks and bundles into `dist/`. Changes reach the Store through a pull request to
+[raycast/extensions](https://github.com/raycast/extensions) (`extensions/lantern-semantic-search`).
 
 ### Alfred
 
@@ -425,7 +423,8 @@ uv run lantern diagnostics                 # a report for a bug report, without 
   two, people are counted in the background (about a quarter of a second per photo; files waiting for your approval
   stay waiting). `lantern status` shows what is left.
 - **Indexed types:** code (Python, JS/TS, Go, Rust, Java, Kotlin, Swift, C/C++, C#, Ruby, PHP and more, split into
-  functions and classes), text (Markdown, txt, JSON, YAML, HTML…; text files over 2 MB and binaries are skipped),
+  functions and classes), text (Markdown, txt, JSON, YAML, HTML as the text a browser shows…; text files over 2 MB and
+  binaries are skipped),
   PDFs, audio (mp3, m4a, wav, flac, ogg, opus, aac, aiff…), video (mp4, mov, mkv, webm, avi…: sound and frames) and
   photos (jpg, png, heic, gif, webp, tiff, bmp).
 
@@ -590,8 +589,9 @@ uv run lantern daemon stop | uninstall
 
 ## Known limitations
 
-- The MLX backend uses an **unreleased `mlx-vlm` branch** (pinned commit) and community-converted `mlx-community`
-  weights. Vectors match the original model (cosine 0.9998), but this dependency needs watching.
+- The MLX backend uses `mlx-vlm` (a pinned release; Lantern loads only its model files) and community-converted
+  `mlx-community` weights. Vectors match the original model (cosine 0.9998); a new `mlx-vlm` is adopted only after
+  its vectors are checked against the current one, since a change would mean reindexing.
 - Memory (measured on M4): idle daemon ~490 MB, plus ~340 MB for the photo query model while the panel is in use
   (released after 5 minutes); the indexing process up to ~2 GB for text, ~3.3 GB for recordings and ~4 GB for photos,
   then it exits.

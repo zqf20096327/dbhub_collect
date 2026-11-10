@@ -7,6 +7,21 @@ uses the same stack as the PetLibro and Dexcom dashboards: a Vite, React and
 Recharts client, an Express and tRPC server, Drizzle on TiDB, password
 sign-in, and a free Render web service.
 
+Signed in with the admin password, you can change the purifier's settings on
+the Controls tab: power, Auto, fan speed, night mode, the sleep timer and
+continuous monitoring. The Dashboard tab only shows them, so looking through
+the readings can't change the purifier. Notes about what was going on at
+home, like cooking, cleaning or open windows, are added in a pop-up on the
+Dashboard and marked on its charts. The Schedule tab shows the schedule set
+in the MyDyson app. The
+Info tab explains the purifier, where each number comes from, and terms like
+PM2.5, µg/m³, AQI and NO₂. The Settings tab picks light, dark, or the
+device's theme (the default), saved in each browser.
+
+The look follows Dyson's own: Futura-style type in a quiet black, white and
+gray interface. Dyson's DysonFutura is proprietary, so it uses Jost, a free
+typeface modeled on Futura, and no Dyson logos or font files are in the repo.
+
 This is unofficial. It relies on the community-documented MyDyson App API,
 which Dyson can change without notice.
 
@@ -18,7 +33,7 @@ which Dyson can change without notice.
 | `server/` | Express and tRPC. `server/_core/` holds sign-in, sessions and security headers, from the Dexcom app |
 | `server/dyson/` | The Dyson client: App API calls, the AWS IoT connection and the message parser, ported from the CLI |
 | `shared/` | Code and types the client and server share |
-| `drizzle/` | The `readings`, `history_slots` and `outdoor_readings` tables and their migrations |
+| `drizzle/` | The `readings`, `history_slots`, `outdoor_readings` and `notes` tables and their migrations |
 | `cli/` | The Python `hushjet` CLI: Dyson login, the device list, and live MQTT on the home network or through Dyson's cloud. See [cli/README.md](cli/README.md) |
 
 ## How a reading works
@@ -31,7 +46,7 @@ which Dyson can change without notice.
    missing is asked for once more; a reading without its fault report still
    counts.
 
-That takes about three seconds and works from anywhere, so neither the server
+That takes two or three seconds and works from anywhere, so neither the server
 nor the sync needs to be on the purifier's network. The dashboard reuses a
 reading for a minute, refreshes an open tab every two minutes, and does a new
 read when you press Refresh. Every new reading is stored when `DATABASE_URL`
@@ -57,11 +72,13 @@ The status card on the dashboard shows:
 Dyson's cloud keeps 15-minute averages of the purifier for the MyDyson app's
 charts: PM2.5, PM10, an air quality index, the fan's average speed, and how
 long the fan ran (`/v1/messageprocessor/devices/{serial}/environmentdata/daily`).
-It covers only the current week, from Sunday at midnight in the account's
-time zone, so a new week presumably starts empty. Every `pnpm sync` copies
-the whole week into the `history_slots` table, updating the newest slot as it
-fills in, and loading the charts does the same, at most every ten minutes.
-Slots that aren't copied before their week ends are likely lost.
+It covers the last seven days: a rolling window that starts at midnight six
+days ago, in the account's time zone, and moves forward a day at a time. (On
+Sunday, November 8, 2026 it started on Monday, November 2, so it doesn't reset
+weekly.) Every `pnpm sync` copies all seven days into the `history_slots`
+table, updating the newest slot as it fills in, and loading the charts does
+the same, at most every ten minutes. A slot is lost only if nothing copies it
+for about a week.
 
 The charts use those slots for PM and fan speed. Filter life isn't in Dyson's
 history, so it comes from the stored readings.
@@ -97,6 +114,83 @@ Below the charts, one row per day for the last seven days, from the same
 Today's row is marked "so far", and a day with less than about 23 hours of
 data is marked partial.
 
+## Controls
+
+The admin role gets a Controls tab: power, Auto, night mode, continuous
+monitoring, fan speeds 1 to 10, and a sleep timer. The switches are only on
+that tab. The Dashboard shows the same settings as text, for everyone, so
+looking through the readings can't change the purifier.
+
+Each change is one `STATE-SET` command on the purifier's command topic in
+Dyson's cloud, in the format hass-dyson uses for cloud-connected Dyson
+models. The server waits up to eight seconds for the purifier to report the
+new values back, then takes a fresh reading, so the tab shows what the
+purifier reports rather than what was asked for. A change takes two to four
+seconds.
+
+- **Who can change things:** only the admin role. Viewers don't get the tab,
+  and the server refuses their changes. In production that means signing in
+  with `ADMIN_PASSWORD`, so the tab stays hidden until it's set. Viewers get a
+  "Sign in as admin" link to the admin sign-in page, `/login?admin=1`. Signing
+  in there replaces the viewer session, so there's no need to sign out first.
+  Locally, with no `VIEWER_PASSWORD`, the site is open and the controls work
+  without signing in.
+- **A speed** turns Auto off, as it does in the MyDyson app.
+- **Night mode** on the HJ10 turns Auto off and holds the fan at speed 4, even
+  when Auto is sent with it. Turning night mode off leaves Auto off; switch
+  Auto back on to let the purifier choose again.
+- **The sleep timer** turns the purifier off after 15 minutes to 8 hours. A
+  timer set in the MyDyson app shows as the time left.
+- **Continuous monitoring** keeps the sensor measuring while the fan is off.
+
+## Schedule
+
+The Schedule tab lists the schedule set in the MyDyson app: each period's
+start and end, its days, and what it sets (Auto or a speed, night mode,
+power), and whether the schedule is on. It's read-only; change the schedule
+in the app. The server reads it from Dyson's unified scheduler
+(`/v1/unifiedscheduler/{serial}/events`) and keeps it for five minutes. Dyson
+stores each period as two events in one group, its start and its end.
+
+On the HJ10, a period that asks for Auto with night mode on runs at speed 4,
+since night mode turns Auto off (see [Controls](#controls)). The fan history
+shows that: a steady speed 4 through the scheduled night, then Auto again
+after the morning change.
+
+## Notes
+
+Notes are a log of what was going on at home that can change the air:
+cooking, cleaning, open windows, the heating, the air conditioning, or
+anything else. They're there to look back on, for example to see how much
+cooking raises PM2.5 and how long the purifier takes to clear it. They live
+with the charts, on the Dashboard's History card, as in the PetLibro
+dashboard.
+
+- **Adding one:** **Add note**, above the charts, opens a pop-up set for now.
+  With a mouse, clicking a chart opens it set for the 15-minute slot clicked.
+  Each note has a kind, a start, an optional end and optional details, which
+  Other needs. **Now**, beside Until, ends a note at the current time, for
+  something that just stopped.
+- **On the charts:** the PM, indoor and outdoor, and fan charts mark each
+  note with a dashed line at its start, a faint band for how long it lasted,
+  and its icon above the plot. Notes too close together to tell apart share
+  one icon, with a count. The charts reach as far as the newest note, so one
+  made just now shows before Dyson's next 15-minute average arrives. Pointing
+  at a chart lists the notes at that time in the tooltip.
+- **Opening one:** click or tap an icon above a chart. The admin role can
+  edit or delete the note there; when several share the icon, the pop-up
+  lists them first.
+- **Lists:** under the charts, the notes in the chart's range, newest first.
+  **All notes** opens a page with every note, a page at a time.
+- **Who can change notes:** everyone signed in sees them. Only the admin role
+  adds, edits or deletes them, and the server refuses changes from viewers.
+  Viewers get a "Sign in as admin" link instead of the buttons.
+- **Rules:** a note can't start in the future, can last up to 31 days, and
+  can have up to 1,000 characters of details. The form and the server check
+  the same rules, in `shared/notes.ts`.
+- **Storage:** the `notes` table, with times in UTC, shown in each viewer's
+  time zone. Its migration runs with the others when Render builds.
+
 ## Run it locally
 
 Log in to Dyson once with the CLI. It asks for your password and the code
@@ -127,7 +221,7 @@ server picks the database up on its next start:
 npx pnpm@10.4.1 db:push
 ```
 
-To copy the week's history and take one reading from the command line:
+To copy the last seven days of history and take one reading from the command line:
 
 ```bash
 npx pnpm@10.4.1 sync
@@ -138,7 +232,7 @@ npx pnpm@10.4.1 sync
 | Script | What it does |
 | --- | --- |
 | `dev` | The server with Vite middleware and hot reload |
-| `sync` | Copies the week's 15-minute history and the hour's outdoor air from Dyson's cloud and takes one reading, storing them. `sync --ci` is the scheduled job's version |
+| `sync` | Copies the last seven days of 15-minute history and the hour's outdoor air from Dyson's cloud and takes one reading, storing them. `sync --ci` is the scheduled job's version |
 | `check` | TypeScript typecheck |
 | `test` | Vitest: the Dyson client against real HJ10 captures and history, the stores, sessions, routers |
 | `build` | The client into `dist/public`, the server into `dist/index.js` |
@@ -151,7 +245,7 @@ npx pnpm@10.4.1 sync
 | --- | --- | --- |
 | `DATABASE_URL` | For history | TiDB or MySQL. TiDB needs `?ssl={"rejectUnauthorized":true}` |
 | `VIEWER_PASSWORD` | In production | The site password |
-| `ADMIN_PASSWORD` | Optional | A second password for settings changes, once there are some |
+| `ADMIN_PASSWORD` | For controls and notes | A second password that unlocks the Controls tab and adding notes. Without it, nobody can change settings or add notes from the dashboard |
 | `SESSION_SECRET` | In production | Signs session cookies, e.g. `openssl rand -hex 32` |
 | `DYSON_TOKEN` | In production | The token from `hushjet login`. Locally it's read from the CLI's saved login instead |
 | `DYSON_SERIAL` | Optional | Which device, when the account has more than one HushJet |
@@ -195,9 +289,9 @@ it. GitHub pauses schedules in a public repo after 60 days without a commit;
 a healthcheck notices, and the Actions tab re-enables it.
 
 GitHub also runs scheduled workflows late and skips many runs. Each run copies
-the whole week, so the history only loses slots when no run, and no visit to
-the dashboard, comes after them before the week ends; readings have gaps
-wherever runs were skipped.
+all seven days, so the history only loses slots if nothing runs and nobody
+opens the dashboard for about a week; readings have gaps wherever runs were
+skipped.
 
 ## Deployment
 
@@ -218,8 +312,13 @@ uses:
   Migrations run here, so a schema change ships with the push that adds it.
 - Start: `pnpm run start`
 - Environment: `NODE_ENV=production`, `DATABASE_URL` (the same string as the
-  GitHub secret), `VIEWER_PASSWORD`, `DYSON_TOKEN`, and a `SESSION_SECRET`
-  Render generated. `ADMIN_PASSWORD` is unset, since nothing needs it yet.
+  GitHub secret), `VIEWER_PASSWORD`, `ADMIN_PASSWORD` (a different password,
+  for the Controls tab and notes), `DYSON_TOKEN`, and a `SESSION_SECRET`
+  Render generated.
+
+Saving an environment variable redeploys the service. The old server keeps
+answering until the new one is live, so a new or changed password only works
+once Render shows that deploy as live.
 
 Every push to `main` redeploys, including changes to docs.
 

@@ -1,9 +1,9 @@
 <div align="center">   
             
 # 𝑳𝒆𝒊𝒍𝒂           
-            
+               
 ### Angehende Fachinformatikerin · Python · SQL · Web · Android 
-   
+        
 Ich suche eine **Ausbildung als Fachinformatikerin** ab 2027.
 
 [![English](https://img.shields.io/badge/English_version-README.md-0A66C2?style=flat-square)](README.en.md)
@@ -15,7 +15,7 @@ Marokko 🇲🇦 · Bereit für einen Umzug nach Deutschland
   
 </div>
          
---- 
+---   
  
 ## Über mich
 
@@ -29,7 +29,7 @@ Ich programmiere gern Anwendungen und arbeite mit Daten, zum Beispiel mit SQL, D
 
 | Zeitraum | Abschluss | Einrichtung |
 |---|---|---|
-| 2026 – 2027 | **Bachelor Künstliche Intelligenz und Data Science** (dreijähriges Hochschulstudium nach dem Abitur, Abschluss 2027) | Fachhochschule für Technologie, Marokko |
+| 2026 – Bis jetzt   | **Bachelor Künstliche Intelligenz und Data Science** (dreijähriges Hochschulstudium nach dem Abitur, Abschluss 2027) | Fachhochschule für Technologie, Marokko |
 | 2024 – 2026 | **DUT Informatik** (Informatikingenieurwesen, zweijähriges Hochschulstudium nach dem Abitur) — abgeschlossen | Fachhochschule für Technologie, Marokko |
 | 2023 – 2024 | **Abitur**, Physikalische Wissenschaften | Marokko |
 

@@ -13,6 +13,10 @@ Boring Agent Memory indexes the docs, skills, runbooks, bug logs, and ADRs you c
 It returns source paths and snippets, and your agent reads the cited file before it acts.
 It needs no hosted service, embedding API, vector database, model download, or account.
 
+![Default query path: 100% Recall@3, returns nothing for 100% of easy no-answer queries and 0% of adversarial ones. With --strict: 80% Recall@3, returns nothing for 100% of both.](https://raw.githubusercontent.com/hskl18/boring-agent-memory/main/docs/media/abstention.png)
+
+*Benchmark v1, synthetic fixtures: strict mode gives up recall on vague queries in exchange for returning nothing when no file answers. [Numbers and method](https://github.com/hskl18/boring-agent-memory#evidence).*
+
 ## Install
 
 ```bash
@@ -103,6 +107,21 @@ Agent instructions to copy are in [docs/agent-prompt.md](https://github.com/hskl
 On Benchmark v2's 12 synthetic queries, chunked BM25 finds the right lines first every time, while whole-document BM25 finds the right file 91% of the time and never the right lines.
 These are deterministic fixture results, not production traffic or a broad semantic-memory claim.
 See [Benchmark v2](https://github.com/hskl18/boring-agent-memory/blob/main/docs/benchmark-v2.md) and [why BM25 comes first](https://github.com/hskl18/boring-agent-memory/blob/main/docs/canonical-first-memory.md#why-bm25-first).
+
+Knowing when to return nothing matters as much as recall.
+On Benchmark v1, 20 adversarial no-answer queries pair one system's name with another system's setting, such as "current cobalt idle timeout": every word is in the corpus, but no file answers it.
+
+| Query path | Recall@3 on 100 answerable queries | Vague queries | Easy no-answer returned nothing | Adversarial no-answer returned nothing |
+| --- | ---: | ---: | ---: | ---: |
+| Default | 1.00 | 1.00 | 20 of 20 | 0 of 20 |
+| `--strict` | 0.80 | 0.00 | 20 of 20 | 20 of 20 |
+
+The default falls back to an any-term match, so it answers every vague query and every adversarial one; those results carry `"strategy": "or"`, which marks a partial match.
+`--strict` skips that fallback and the substring fallback, so a result must match every term the query tokenizer keeps (Latin letters, digits, and CJK; other scripts are dropped) across the chunk's indexed fields (text, heading, title, and path), and it refuses both.
+A term-coverage threshold seemed to split them, but mostly because of how many terms the templated queries have, so it was not adopted.
+Neither mode makes a result authoritative: strict results can still come from a stale note or match a term only in the path, so the agent still reads the cited lines.
+The default keeps recall; `--strict` is for callers that would rather get nothing than a partial match.
+See [Benchmark v1](https://github.com/hskl18/boring-agent-memory/blob/main/docs/benchmark-v1.md#adversarial-abstention).
 
 ## What It Is Not
 

@@ -268,7 +268,7 @@ For an archive or summarisation client, start with the explicit read-only mode:
 `WHATSAPP_MCP_MEDIA_ROOT` (default `<store>/uploads/`, created on first run) is the only directory the tools may touch for **user-supplied** send and output paths. The managed download cache lives separately under the store.
 
 - **Sending:** `send_file` and `send_audio_message` take a `media_path` under the root.
-- **Receiving:** `download_media` caches to `<store>/<chat_jid>/<hex(message_id)>/<safe_filename>` (checked against the stored size and SHA-256). An optional `output_path` also places the file under the root; an existing file there makes the call a no-op.
+- **Receiving:** `download_media` caches to `<store>/<chat_jid>/<hex(message_id)>/<safe_filename>` (checked against the stored size and SHA-256). An optional `output_path` also writes a separate copy under the root. An existing file there is never replaced: the call succeeds without downloading again if that file already holds this media, and fails otherwise.
 - **MCP resource:** `whatsapp://media/{chat_jid}/{message_id}` returns the media bytes over MCP, downloading (and, for expired links, asking your phone to re-upload) when needed. It is available in read-only mode.
 - **Expired media links:** media links from history sync carry a signed expiry and usually fail with HTTP 403 by the time you ask. `download_media` (and reads of the `whatsapp://media/…` resource) then asks the account's own phone to re-upload the file (WhatsApp's media retry receipt, the same request WhatsApp Web sends), waits up to 30 seconds for the answer, and downloads once more. The link is saved only after whatsmeow decrypts the payload and its size and SHA-256 match the cached message. This explicit recovery also works in read-only mode; the request goes only to your own phone, with no notification to the sender or chat. The phone must be online; media it has deleted cannot be recovered. This happens only for the message you asked for, never in bulk.
 
@@ -289,6 +289,8 @@ The cache follows edits and deletions for everyone, whether they arrive live, in
 ## Running the daemon
 
 Events reach SQLite **only while `serve` runs**. Messages sent while it is stopped reach the cache only if WhatsApp delivers them later, and delivery is controlled by WhatsApp. `request_sync` can ask for older history for one chat that already has a cached message.
+
+Encrypted poll votes received through history sync are saved until the poll and its decryption key are available, even across sync chunks or a restart. Replay is local and does not request more history.
 
 A file lock on `store/.lock` allows one `serve` or `login` process per store. Multiple MCP clients can share that daemon and its WhatsApp session.
 
@@ -324,6 +326,7 @@ The image includes a readiness `HEALTHCHECK`. Set `WHATSAPP_MCP_ADDR` to the sam
 - **Log redaction is obfuscation:** see [Debug logging](#debug-logging).
 - **Unauthenticated probes:** `/healthz` and `/readyz` need no token.
 - **Message gaps:** the cache holds only what WhatsApp delivered while `serve` was running or during a sync. It is not a complete archive. See [Running the daemon](#running-the-daemon).
+- **Poll history:** pending votes are limited to 1,000 encrypted updates in total, each at most 16 KiB, with no age expiry. When full, the oldest pending update is evicted and a warning is logged. Oversized or evicted votes, history WhatsApp never delivered, and votes discarded by an older release can leave tallies incomplete.
 - **One daemon per store:** a second `serve` on the same store is refused. Point extra MCP clients at the same daemon.
 - **Windows:** requires CGO and a C compiler. See [docs/windows.md](docs/windows.md).
 - **Upstream bounds:** message fetch and send are bounded by what [whatsmeow](https://github.com/tulir/whatsmeow) supports against the WhatsApp web multidevice API.

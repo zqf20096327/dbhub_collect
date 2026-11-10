@@ -68,6 +68,10 @@ developer works with an Oracle database day to day:
 - Composable filters in the style of TablePlus – column, operator, value – translated into bound SQL; see the generated
   statement (the grid's own or a short `SELECT t.*`) and its execution plan at any time. Combine rows with **OR** and **NOT** groups (NOT treats NULL as C# does,
   so the grid and a LINQ `Where` keep the same rows).
+- **SQL condition**: filter a table tab by a condition you write, as in the WHERE field of SQL Developer –
+  `ID IN (SELECT …)` on other tables, nested as deep as you like – with completion of the columns and tables, the
+  conditions last applied to the table, and the filter bar's filter as a start. The tab stays a table tab: edit, jump
+  along foreign keys, count and export as usual. A new tab can start with it (*Settings › Data view*).
 - **Filter presets**: save the filter rows of a table, and its sort order, under a name ("Open orders") – a preset
   belongs to the table name, so it works on Dev, Test and Prod alike.
 - **Links to a table view**: "Copy link" puts a link with table, filters, sort order and view on the clipboard – an https
@@ -151,6 +155,18 @@ developer works with an Oracle database day to day:
   <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd> in the grid.
 - **Open changes** beside the tabs: everything the workspace has not committed – pending edits per tab, written actions
   with their SQL, what was taken back – one click from the counts in the status bar.
+- **Data diff**: set a start point for a workspace and later see which rows of the chosen tables are new, changed or
+  deleted since – whoever changed them (your app, a job, a colleague). Oracle compares the committed state with the
+  state at the start (flashback query with `MINUS`), so only the rows that differ come over the line; changed cells
+  show their value at the start. Start, compare and discard from the workspace's menu, add a table with its filter
+  from the tab menu (*Compare this tab*). Reaches back as far as the database's undo does; tables of other owners need
+  the right `FLASHBACK`. The start point can also lie at a time you choose (*Start comparison from…*), and ticked rows
+  are set back to it as pending changes of the table's tab – a deleted row inserted again, a changed one with its old
+  values, a new one deleted – written the usual way, one <kbd>Ctrl</kbd>+<kbd>Z</kbd> takes them back.
+- **Time travel**: *Time travel…* in a table tab's menu shows the table as it was at a time you choose (quick choices
+  5, 15, 60 minutes ago), with the tab's filter, read only, in a tab of its own – filter, sort, export, the form and FK
+  jumps stay at that point. Reads committed data on a session of its own; the dialog says how far the database's undo
+  reaches where the right on `V$UNDOSTAT` is there.
 - Lock conflicts are detected after a short wait (`SELECT … FOR UPDATE WAIT n`) and shown with the blocking session.
 - Optimistic concurrency check on the changed columns; insert and delete rows; edit CLOBs and BLOBs in a dialog
   (text in the code editor with line wrap, JSON/XML coloring and JSON indenting).
@@ -213,6 +229,11 @@ developer works with an Oracle database day to day:
   compile errors are marked in the editor.
 - Bind variables (`:kundeId`) become typed input fields – values are bound, never pasted into the SQL.
 - Completion for tables, views, synonyms and columns (with their C# names), history per connection, export of results.
+- **SQL scripts:** save a window, a selection (also from the editor's right-click menu) or a history entry as a `.sql`
+  file with a description and typed parameters in its head – in your personal folder, one per connection group or a general one (e.g. a shared
+  repository). The explorer lists them as a tree (*Scripts*); a click opens one in a new tab without running it, and the
+  panel beside the history inserts one at the cursor. A tab opened from a script saves only when asked and reloads when
+  the file changes on disk (format: `docs/sql-scripts.md`).
 - Results know where their columns come from: C# names, enum members, names beside foreign keys and foreign-key jumps
   as in a table – also with the quoted aliases EF Core writes and through synonyms. Columns of a result can be pinned;
   the tab keeps them for every result it shows.
@@ -270,12 +291,15 @@ changes, and a new build is picked up automatically:
   wait for, a chart of up to the last hour – and its top statements by CPU, time, executions or reads, either for the time
   you watch or since each was loaded (like SQL Developer’s reports), with plan, Excel export and the sessions running
   right now. Only views outside the Diagnostics and Tuning Pack; needs `SELECT_CATALOG_ROLE` or grants on the V$ views.
-  With a linked C# project, a statement's details name the methods of your solution that may send it – guessed from its
-  tables and the columns it filters by, best fit first – and a click opens the line in Visual Studio.
+  A statement's details open in a dialog with folding parts (SQL, origin in code, plan) and step through the list. With a
+  linked C# project they name the methods of your solution that may send it – guessed from its tables and the columns it
+  filters by, ranked, with a meter of how much of the statement each covers – and a click opens the line in Visual Studio.
+  Projects of the solution that are not built are marked there, as their methods are missing, with *Build projects* at hand.
 - **Usage in the code**: per column, the methods of your solution that read or write its property or query the table,
   read from the compiled code – a click opens the line in Visual Studio. Properties no code uses are marked, and the
   designer warns before dropping a column the code still uses. Uses open in your *work clone* of the connection group.
   Columns your code filters on (`Where`, `Any`, `First…`) without an index that starts with them are marked.
+  Projects not built are named; *Build projects* builds the solution and shows how many of its projects are done.
 - **Model file**: can't build the project (packages from a private feed)? A colleague exports the model as a file, and
   you link that instead – names, enums and relationships without a build and without running the project's code.
 

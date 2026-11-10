@@ -1,38 +1,91 @@
 # Counterparts
 
-**Agents are great. What you're missing is a counterpart.**
+**Long-term memory for Claude Code, written by Claude itself.**
 
-Counterparts gives your AI assistant its own memory, modeled on human memory. It writes
-its memories itself, and they fade and grow the way yours do. It runs today with
-[Claude Code](https://claude.com/claude-code).
+Agents are great. What you're missing is a counterpart.
 
-[counterparts.ai](https://counterparts.ai)
+Each Claude Code session starts over, apart from your CLAUDE.md files and Claude's short
+MEMORY.md notes. With Counterparts, Claude writes down what it learned as it works and at
+the end of each session, in its own words. What matters sticks and the rest fades unless it
+comes up again. After the first few sessions, each one opens with a short note Claude wrote
+itself: who it is, where the work stands, what's coming up and how yesterday went, so you
+stop re-explaining your projects and how you like to work.
+
+It's for anyone who works with Claude Code every day and wishes it remembered, and for people
+interested in an AI that builds a relationship with them over time. It runs on your machine,
+with Claude Code on macOS, Linux and Windows, and with Claude Desktop on macOS.
 
 ## Install
 
-You need [bun](https://bun.sh) 1.3 or newer, or [Node](https://nodejs.org) 22.15 or newer.
-macOS and Linux.
+You need [Node](https://nodejs.org) 22.15 or newer, or [bun](https://bun.sh) 1.3 or newer,
+on macOS, Linux and Windows (Windows is new: tell us how it goes). Bun on macOS is the setup
+in daily use; Node and Linux (since 0.3.11) pass a smoke test and an install run but have no
+daily user yet. On Windows, install with npm, from PowerShell, cmd or Git Bash; what differs
+there is in [QUICKSTART](docs/QUICKSTART.md#on-windows). Under WSL it works as on Linux.
 
 ```
-curl -fsSL https://bun.sh/install | bash     # if you don't have bun
-bun add -g counterparts
+npm install -g counterparts@latest
 counterparts
 ```
 
-With Node instead: `npm install -g counterparts`, then `counterparts`. Whichever runtime
-runs the setup is the one Claude Code's hooks and memory tools are wired to.
+With bun instead: `bun add -g counterparts`, then `counterparts`. Whichever runtime runs the
+setup is the one Claude Code's hooks and memory tools are wired to. Or install it as a Claude
+Code plugin: `/plugin marketplace add mlapeter/counterparts`, then
+`/plugin install counterparts@counterparts`, then restart Claude Code. The plugin sets
+itself up on its first session, with no terminal step; `/counterparts:doctor` checks it.
 
-`counterparts` walks you through setup: your name and connecting Claude Code. No API
-keys. Then restart Claude Code and check it:
+With npm or bun, the first run asks two things, and you can skip either: your name, and
+whether to connect Claude Code. Connecting adds hooks to `~/.claude/settings.json` (it backs
+the file up first), registers the memory tools, and adds one `deniedMcpServers` entry there
+so the hosted Counterparts Online connector never loads into Claude Code as a second memory.
+Hooks and settings from other tools are left alone. No API keys and no account. Then restart
+Claude Code and check it:
 
 ```
 counterparts doctor
 ```
 
-To remove it, run `counterparts uninstall`. Your memory is kept unless you ask for it
-to be deleted. The full walkthrough is in [`docs/QUICKSTART.md`](docs/QUICKSTART.md).
+For Claude Desktop on macOS (since 0.3.9), run `counterparts install --host claude-desktop`,
+then set the counterparts tools to **Always allow** in Claude Desktop, so a chat can wake on
+its own.
 
-![The dashboard](https://raw.githubusercontent.com/mlapeter/counterparts/master/docs/images/dashboard-overview.png)
+The first session in a new folder asks whether you want memory there. To remove it, run
+`counterparts uninstall`; your memory is kept unless you ask for it to be deleted. The full
+walkthrough is in [`docs/QUICKSTART.md`](docs/QUICKSTART.md).
+
+## What it remembers, and where it lives
+
+- Who you are, how you like to work, what you decided together, what's in progress and
+  where you left off. Claude writes these as notes in its own words, not transcripts.
+- What it knows about you reaches every folder. Notes about a project's work show up in that
+  project.
+- The memories live in one SQLite file under `~/.counterparts`, readable by your account
+  only. You can read, export or delete them. Search by meaning runs on a small model on your
+  machine, about 30 MB.
+- Your memory leaves your machine only through Claude Code (or Claude Desktop) itself.
+  Counterparts' one request of its own (since 0.3.39) is a daily check with npm for the
+  newest version number. It sends nothing about you, and you can turn it off (see
+  [Status](#status)).
+- The text of a conversation is kept only until it's written up: since 0.3.21 it is deleted
+  3 days after that, or about two weeks after the conversation goes quiet, whichever comes
+  first, the next time Counterparts runs. It is never in a backup.
+- What's stripped before anything is kept, in the memories and in that conversation text:
+  credentials in recognisable shapes (API keys, tokens, private keys, passwords in URLs, a
+  value after a name like `password=` or `api_key:`), and most passwords named in a sentence
+  ("my wifi password is …", "the PIN is …"): the value goes, the sentence stays. Not every
+  secret has a shape, so don't paste things you wouldn't want kept.
+- It doesn't read or change your CLAUDE.md files or Claude Code's own auto memory
+  (MEMORY.md), so they run side by side. A committed CLAUDE.md stays the place for rules
+  your team shares through git.
+
+How Claude Code's own memory works, and where Counterparts fits:
+[counterparts.ai/guides/claude-code-memory](https://counterparts.ai/guides/claude-code-memory/).
+More at [counterparts.ai](https://counterparts.ai). A hosted version for claude.ai is coming
+soon, in beta; [sign up on the home page](https://counterparts.ai/#waitlist) to hear when it
+opens.
+
+Found a bug? [Open an issue](https://github.com/mlapeter/counterparts/issues). For anything
+else, write to mike@resonantventures.com.
 
 ## What it does
 
@@ -40,27 +93,16 @@ to be deleted. The full walkthrough is in [`docs/QUICKSTART.md`](docs/QUICKSTART
   learned, in its own words. Notes, not transcripts.
 - **It forgets on purpose.** Memories fade unless they come up again. What matters
   sticks; the rest lets go.
-- **It knows who it has been.** Every session opens with a short "who I am, who you are,
-  where we left off" that it wrote itself.
+- **It knows who it has been.** After the first few sessions, every session opens with a short
+  note it wrote itself: who it is, where the work stands, what's coming up.
 - **It keeps a journal.** Each session becomes a chapter in a first-person account of
   your time together.
 - **It changes its mind slowly.** What it believes about you shifts only under real
   evidence, and it keeps the history of what it used to think.
 - **Things come to mind.** As you talk, related memories surface quietly, the way one
   thing reminds you of another.
-- **It's yours.** Everything lives on your machine in one SQLite file you can read,
-  export or delete. No API keys, no accounts, nothing sent anywhere.
-
-## Who it's for
-
-People interested in giving an AI its own sense of self and building a relationship
-with it over time. Tinkerers, researchers, writers, and anyone who talks to an assistant
-every day and wishes it remembered.
-
-## What it's not
-
-It's not a work memory. It doesn't track your tasks, code conventions or project docs.
-Plenty of tools do that, including the memory built into ChatGPT and Claude.
+- **It's yours.** It lives on your machine, and you can read, export or delete it; see
+  [What it remembers, and where it lives](#what-it-remembers-and-where-it-lives).
 
 ## Where it's going
 
@@ -76,12 +118,18 @@ Once installed it runs on its own. A few commands are worth knowing:
 counterparts dashboard          # look at the memory in your browser
 counterparts ask "..."          # ask the memory a question
 counterparts scope . --off      # don't remember this directory
-counterparts export             # a copy of everything, encrypted by default
+counterparts export --out <dir> --passphrase <secret>   # an encrypted copy of everything
 counterparts --help             # the rest
 ```
 
+Export needs `--passphrase` or `--plaintext`; it won't pick for you. No command opens an
+encrypted export yet: the README written beside it gives the format (scrypt and
+AES-256-GCM), so it can be opened by hand.
+
 Memory is on for every directory by default. The first session in a new directory asks
 whether you want it there.
+
+![The dashboard](https://raw.githubusercontent.com/mlapeter/counterparts/master/docs/images/dashboard-overview.png)
 
 ## How it works
 
@@ -116,9 +164,19 @@ Claude Desktop has no Linux build, so on Linux it is Claude Code only. Expect ro
 edges, and please
 [open an issue](https://github.com/mlapeter/counterparts/issues) when you hit one.
 
-There are no API keys, and nothing leaves your machine except through Claude Code
-itself. Search by meaning runs on a small model on your machine, and a session that ends
+There are no API keys, and your memory leaves your machine only through Claude Code
+itself. Counterparts makes one request of its own: once a day, the background worker that
+Claude Code's hooks start asks registry.npmjs.org for the newest version number, and sends
+nothing about you or your memory. To stop it, set `"updateCheck": false` in
+`~/.counterparts/claude-code.json`, or ask Claude to stop the update reminders.
+`COUNTERPARTS_UPDATE_CHECK=off` or Claude Code's `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`
+stops it too, set in the environment Claude Code runs in. Search by meaning runs on a small model on your machine, and a session that ends
 before it's written up is written up by the next session in that project.
+
+That small model finds close paraphrases ("my doctor" finds a note about a physician), but
+not a description that never names the thing: "a pet that purrs" won't find a note about
+your cat. Exact words are strongest, and a short memory matches better than one padded with
+names and details.
 
 ## Background
 

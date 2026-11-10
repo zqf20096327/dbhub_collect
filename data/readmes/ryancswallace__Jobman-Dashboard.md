@@ -1,0 +1,47 @@
+# Jobman Dashboard
+
+Download the [latest stable release](https://github.com/ryancswallace/Jobman-Dashboard/releases/latest)
+and use the [release process](RELEASE.md) to verify its source and artifacts.
+
+Private web and native iPhone monitoring for Jobman Control. The applications implement source-qualified monitoring, direct AD role unions, arrays/collections/graphs, safe logs, deterministic diagnosis, and notification rules/history. **Product review is complete for the approved first-production-release scope.** Agent reliability is included; other unfinished integrations and acceptance work are scheduled for later releases, with their limitations accepted.
+
+See [requirements](docs/REQUIREMENTS.md), [design](docs/DESIGN.md), and the [implementation record](docs/IMPLEMENTATION_STATUS.md) for coverage, and the [first-release scope](docs/FIRST_RELEASE_SCOPE.md) for the accepted limitations and post-release roadmap.
+
+Stable releases contain reproducible Linux amd64/arm64 services and web assets. Follow
+[private installation](docs/LINUX_INSTALLATION.md) and the
+[operations runbook](docs/OPERATIONS.md); managed native signing/distribution is scheduled after the first release. Actual [subprocess](docs/LAB_EXECUTION.md) and [split-runtime](docs/LAB_SPLIT.md)
+Lab evidence identifies the exact tested revisions and limitations.
+
+## Development
+
+Use Go **1.26.10** (`go.version`), Node **26.5.1** and the committed npm lockfile. Full Xcode is required for the iPhone simulator and physical-device builds; the native core is also a Swift package.
+
+```sh
+make web
+make dev
+```
+
+Open `http://127.0.0.1:8088`. This explicitly starts a **synthetic fixture environment**, restricted to a loopback IP. Fixture identities and data are not organization authentication. Configured HTTPS mode provides OIDC authentication, durable web sessions, current-authorized Control adapters, logs, artifacts, targets, workload groups, diagnosis, notification rules/history and personal preferences; see [authentication and configuration](docs/AUTHENTICATION.md). Optional services require their explicit private configuration; an unavailable service is displayed as unavailable. Actual AD FS and corporate directory validation is scheduled for a later release.
+
+For live web editing, run the fixture backend plus `npm run dev --prefix web`; the Vite configuration proxies same-origin API calls. Never expose the fixture server on a public or organization interface.
+
+```sh
+make contracts-check
+make check
+make ios-core
+make ios-simulator
+```
+
+Backend tests exercise cross-source paging, account/query/grant/epoch isolation, explicit partial results, schema migration integrity and optimistic preference updates. Database integration tests need `JOBMAN_DASHBOARD_TEST_DATABASE_URL`; each creates and removes its own random schema. With the authorized local Jobman-Lab PostgreSQL VM running, `python3 scripts/test-lab-postgres.py` loads only the synthetic database credential and runs those tests without printing its value.
+
+No command above deploys production, contacts an AI provider, submits jobs, or publishes a release. Internal iPhone distribution and organization-specific AD FS/APNs/device validation follow the [post-release roadmap](docs/FIRST_RELEASE_SCOPE.md).
+
+## Repository and contributor resources
+
+See the [documentation index](docs/README.md), [development guide](docs/DEVELOPMENT.md),
+[contributing policy](CONTRIBUTING.md), [security policy](SECURITY.md),
+[support](SUPPORT.md), [changelog](CHANGELOG.md), [license](LICENSE),
+[dependency notices](docs/DEPENDENCY_NOTICES.md),
+[release engineering](RELEASE.md) and [repository scaffolding parity](docs/REPOSITORY_SCAFFOLDING.md).
+Run `make help` for focused tooling; the devcontainer supports Go/web development
+and the existing macOS CI job builds the native iPhone application.

@@ -468,7 +468,8 @@ core produces rows, and a library turns rows into a file, or a file into rows.
   prompt a vision model reads a photograph or a plain PDF with, so both arrive
   as the same `ReceivedInvoice` and the same purchase draft.
 - **Bank statements, read:** [`camt053`](packages/formats/camt053/),
-  [`coda`](packages/formats/coda/), [`cfonb120`](packages/formats/cfonb120/).
+  [`coda`](packages/formats/coda/), [`cfonb120`](packages/formats/cfonb120/),
+  and CSV, described by a column profile: [`csv-statement`](packages/formats/csv-statement/).
 - **Books kept elsewhere, read:** [`trial-balance`](packages/formats/trial-balance/),
   [`journal-items`](packages/formats/journal-items/),
   [`journal-report`](packages/formats/journal-report/),

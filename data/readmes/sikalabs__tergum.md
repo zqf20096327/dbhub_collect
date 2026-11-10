@@ -4,13 +4,13 @@
   <p align="center">
     <a href="https://opensource.sikalabs.com"><img alt="SikaLabs" src="https://img.shields.io/badge/OPENSOURCE BY-SIKALABS-131480?style=for-the-badge"></a>
     <a href="https://sikalabs.com"><img alt="SikaLabs" src="https://img.shields.io/badge/-sikalabs.com-gray?style=for-the-badge"></a>
-    <a href="mailto://opensource@sikalabs.com"><img alt="SikaLabs" src="https://img.shields.io/badge/-opensource@sikalabs.com-gray?style=for-the-badge"></a>
+    <a href="mailto:opensource@sikalabs.com"><img alt="SikaLabs" src="https://img.shields.io/badge/-opensource@sikalabs.com-gray?style=for-the-badge"></a>
   </p>
 </p>
 
 ## Why Tergum?
 
-Tergum is simple tool provides centralized backup solution with multiple sources (databases, files, S3, ...) and multiple backup storages (S3, filesystem, ...). Tergum has native backup monitoring and alerts you when backup fails. Tergum also support backup encryption, compression and automatic recovery testing.
+Tergum is a simple tool that provides a centralized backup solution with multiple sources (databases, files, S3, ...) and multiple backup storages (S3, filesystem, ...). Tergum has native backup monitoring and alerts you when backup fails. Tergum also supports backup encryption, compression and automatic recovery testing.
 
 __Tergum is under active development, not all features are already implemented. Check [current project state](#current-project-state)__
 
@@ -24,13 +24,13 @@ Tergum means backup in latin.
 
 ## Tergum Cloud: Bring Your Backups into Cloud
 
-Tergum Cloud allow you to manage your backup using UI & Terraform and store your backups securely in our AWS.
+Tergum Cloud allows you to manage your backups using UI & Terraform and store your backups securely in our AWS.
 
-Are you interested in our public beta? Drop us email [hi@sikalabs.com](mailto:hi@sikalabs.com?subject=Tergum_Cloud)
+Are you interested in our public beta? Drop us an email [hi@sikalabs.com](mailto:hi@sikalabs.com?subject=Tergum_Cloud)
 
 ## Tergum Enterprise: Use Tergum Cloud in Your Private Infrastructure
 
-Tergum Enterprise brings our cloud platform behind your filewall. For an inquiry, contact our sales [sales@sikalabs.com](mailto:sales@sikalabs.com?subject=Tergum_Enterprise)
+Tergum Enterprise brings our cloud platform behind your firewall. For an inquiry, contact our sales [sales@sikalabs.com](mailto:sales@sikalabs.com?subject=Tergum_Enterprise)
 
 ## Install
 
@@ -78,9 +78,9 @@ tergum generate-docs
 
 ## Tergum Config File
 
-Tergum supports only JSON config file, but we're working on YAML support.
+Tergum supports YAML config files (JSON works too, as JSON is a subset of YAML).
 
-Config file examples are in [misc/example/config](./misc/example/config) directory
+Config file examples are in [misc/example/config](./misc/example/config) and [examples/config](./examples/config) directories
 
 #### Basic Config Structure
 
@@ -119,11 +119,12 @@ Source:
   Dummy: <BackupSourceDummy>
   Gitlab: <BackupSourceGitlab>
   Consul: <BackupSourceConsul>
+  ProxmoxLocalVM: <BackupSourceProxmoxLocalVM>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
-Destinations:
-  - ID: <UniqueBackupDestinationID>
+Targets:
+  - ID: <UniqueBackupTargetID>
     Middlewares:
       - <MiddlewareConfiguration>
       - ...
@@ -133,13 +134,20 @@ Destinations:
     AzureBlob: <BackupDestinationAzureBlobConfiguration>
     Telegram: <BackupDestinationTelegramConfiguration>
   - ...
-SleepBefore: <sleep time befor backup job in seconds>
+SleepBefore: <sleep time before backup job in seconds>
 ```
 
 #### GzipMiddlewareConfiguration
 
+Gzip compression:
+
 ```yaml
 Gzip: {}
+```
+
+Symmetric encryption:
+
+```yaml
 SymmetricEncryption:
   Passphrase: "passphrase"
 ```
@@ -379,7 +387,7 @@ Excludes:
 ```yaml
 Token: <Notion token_v2>
 SpaceID: <Notion Space UID>
-Format: <Fotmat of export ("html" or "markdown")>
+Format: <Format of export ("html" or "markdown")>
 ```
 
 ### Example BackupSourceFTP Block
@@ -459,7 +467,7 @@ Content: <backup content>
 ### Example BackupSourceGitlab Block
 
 ```yaml
-NamePrefix: <prefix Gitlab backup file in /var/opt/gitlab/backups>
+NamePrefix: <prefix of Gitlab backup file in /var/opt/gitlab/backups>
 Skip: <skip (for example registry)>
 ```
 
@@ -478,7 +486,7 @@ Example without ACL
 Addr: http://127.0.0.1:8500
 ```
 
-Example with ACL requires token
+Example with ACL (requires token)
 
 ```yaml
 Addr: http://127.0.0.1:8500
@@ -513,6 +521,14 @@ SqlpackageExtraArgs:
 
 Uses `sqlpackage` to extract the database as a `.dacpac` file (requires `sqlpackage` to be installed).
 
+#### Example BackupSourceProxmoxLocalVM Block
+
+```yaml
+VMID: 100
+```
+
+Uses `vzdump` to back up a local Proxmox VM (must run on the Proxmox host).
+
 #### Example BackupDestinationFilePathConfiguration Block
 
 ```yaml
@@ -529,7 +545,7 @@ Suffix: "sql"
 
 #### Example BackupDestinationS3Configuration Block
 
-AWS:
+Minio:
 
 ```yaml
 AccessKey: "admin"
@@ -540,28 +556,28 @@ Prefix: "mysql-default"
 Suffix: "sql"
 ```
 
-Minio:
+AWS:
 
 ```yaml
-accessKey: "aws_access_key_id"
-secretKey: "aws_secret_access_key"
-region: "eu-central-1"
-bucketName: "tergum-backups"
-prefix: "mysql-default"
-suffix: "sql"
+AccessKey: "aws_access_key_id"
+SecretKey: "aws_secret_access_key"
+Region: "eu-central-1"
+BucketName: "tergum-backups"
+Prefix: "mysql-default"
+Suffix: "sql"
 ```
 
-Minio with 3 retries:
+AWS with 3 retries:
 
 You can set `UploadRetries` (default is 0) to retry upload in case of error.
 
 ```yaml
-accessKey: "aws_access_key_id"
-secretKey: "aws_secret_access_key"
-region: "eu-central-1"
-bucketName: "tergum-backups"
-prefix: "mysql-default"
-suffix: "sql"
+AccessKey: "aws_access_key_id"
+SecretKey: "aws_secret_access_key"
+Region: "eu-central-1"
+BucketName: "tergum-backups"
+Prefix: "mysql-default"
+Suffix: "sql"
 UploadRetries: 3
 ```
 
@@ -604,9 +620,9 @@ FileName: "backup.sql"
 #### Notification Block
 
 ```yaml
-Backends: {
-  Email:  <NotificationBackendEmail>
-Target:
+Backend:
+  Email: <NotificationBackendEmail>
+Targets:
   - <NotificationTarget>
   - <NotificationTarget>
   - ...
@@ -617,7 +633,7 @@ Target:
 ```yaml
 SmtpHost: "mail.example.com"
 SmtpPort: "25"
-Usename: "aaa"
+Username: "aaa"
 Password: "aaa/bbb"
 From: "tergum@example.com"
 ```
@@ -649,19 +665,19 @@ URLs:
 SendOK: false
 ```
 
-- `SendOK=true` will send email notification for all tergum runs (failed & OK runs)
+- `SendOK=true` will send Slack notification for all tergum runs (failed & OK runs)
 
 #### Example NotificationTelegramTarget Block
 
 ```yaml
 BotToken: "123456789:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
-ChatIDs: -123456789
+ChatID: -123456789
 SendOK: false
 ```
 
 [example](./examples/config/telegram)
 
-- `SendOK=true` will send email notification for all tergum runs (failed & OK runs)
+- `SendOK=true` will send Telegram notification for all tergum runs (failed & OK runs)
 
 #### Cloud Block
 
@@ -730,7 +746,7 @@ tergum utils cron "0 0 * * *" -- tergum backup -c tergum.yaml
 - [ ] CephFS
 - [x] MongoDB
 - [x] Gitlab
-- [ ] Proxmox
+- [x] Proxmox (local VM)
 - [x] Kubernetes Resource
   - [x] Kubernetes TLS Secret
 - [ ] Container Image

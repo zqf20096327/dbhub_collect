@@ -39,7 +39,7 @@ pgNimbus reached 1.0 on September 29, 2026, its 33rd release in the three months
 
 Before tagging 1.0, the whole codebase was read the way an attacker would read it, and the way a DBA connecting to production would. That review found 18 problems. The worst were a query that could run twice, a statement a DBA had just killed being sent again after a reconnect, and SSH host keys that were never checked. All of them are fixed in 1.0. The review was done in house, with the same Claude Code agents that write most of the code, so it isn't a third-party audit.
 
-Since then 1.1 made large databases quick to move around in, 1.2 added backing up and restoring a database, a schema or a single table through PostgreSQL's own `pg_dump` and `pg_restore`, and 1.2.1 made a connection marked Production open with writes off until you allow them in one window. [See what's in the latest release.](https://github.com/Shman4ik/pgNimbus/releases/latest)
+Since then 1.1 made large databases quick to move around in, 1.2 added backing up and restoring a database, a schema or a single table through PostgreSQL's own `pg_dump` and `pg_restore`, 1.2.1 made a connection marked Production open with writes off until you allow them in one window, and 1.3 added Query Lab, which saves EXPLAIN plans and compares any two of them, for example before and after an index. [See what's in the latest release.](https://github.com/Shman4ik/pgNimbus/releases/latest)
 
 ## 🎯 Why pgNimbus?
 
@@ -68,7 +68,7 @@ Where it sits among the alternatives: pgAdmin and DBeaver are powerful but heavy
 | Platform | How |
 | --- | --- |
 | Windows (recommended) | **[Microsoft Store](https://apps.microsoft.com/detail/9N6SZT42XJ24)**, signed and self-updating, or `winget install pgNimbus --source msstore` |
-| Windows (portable) | `pgNimbus-<version>-win-x64.zip` from [Releases](https://github.com/Shman4ik/pgNimbus/releases). Unzip anywhere and run `PgNimbus.App.exe`; no installer, no admin rights. Unsigned, so SmartScreen warns on first run. |
+| Windows (portable) | `pgNimbus-<version>-win-x64.zip`, or `-win-arm64.zip` for Windows on Arm, from [Releases](https://github.com/Shman4ik/pgNimbus/releases). Unzip anywhere and run `PgNimbus.App.exe`; no installer, no admin rights. Unsigned, so SmartScreen warns on first run. |
 | macOS (beta) | `pgNimbus-<version>-macos-arm64.dmg`, Apple Silicon only, macOS 12 or later. Ad-hoc signed and not notarized: the first launch needs **Open Anyway**, and an update can leave saved passwords unreadable until you delete the old `pgNimbus` Keychain items (see the installation guide). |
 | Linux (beta) | AppImage, `.deb` or `.tar.gz` for x64 and arm64 from [Releases](https://github.com/Shman4ik/pgNimbus/releases). Needs glibc 2.35 or newer: Ubuntu 22.04, Debian 12 or later. |
 
@@ -114,6 +114,7 @@ On macOS, <kbd>Cmd</kbd> replaces <kbd>Ctrl</kbd>, except autocomplete, which st
 
 - Schema tree read from `pg_catalog`: materialized views, partitioned tables, relation sizes, DDL for any table or view.
 - `EXPLAIN` and `EXPLAIN ANALYZE` as a tree with a self-time heat map and plain warnings (disk spills, bad row estimates). Paste a plan from anywhere and read it with no connection.
+- Query Lab: save plans, live or pasted, and compare any two. Time, rows, cost and buffers side by side, one merged tree that marks each node same, changed, added or removed, and notes on what two single runs can't show.
 - Server activity with cancel and terminate, plus a who-blocks-whom lock tree from `pg_blocking_pids`.
 - Database overview: largest relations, unused indexes, seq vs index scans, cache hit ratios.
 - Slow queries from `pg_stat_statements`: ranked by total or mean time, measured since the last reset or over just the workload you ran, one double-click from the editor.
@@ -127,6 +128,7 @@ On macOS, <kbd>Cmd</kbd> replaces <kbd>Ctrl</kbd>, except autocomplete, which st
 - SSH tunnels with agent, key file or password auth. The jump host's key is checked against `known_hosts`, and a key pgNimbus has not seen before is shown with its fingerprint before you accept it.
 - TLS that verifies: new profiles start at Require, Verify full works through an SSH tunnel, and a profile can point at a provider's root certificate (RDS, Cloud SQL, Supabase).
 - Read-only profiles that the server enforces, so a stray `UPDATE` is refused rather than trusted to a keyword check.
+- Environments: mark a profile Development, Staging or Production. A production window opens with writes off, enforced by the server, until you allow them in that window.
 - Several databases side by side, each window with its own pool and tunnel. Auto-reconnect after sleep, without ever silently re-opening a transaction.
 - Tabs, including unsaved ones, come back after a restart.
 
@@ -154,8 +156,8 @@ Two things outside the app report data. Building from source runs Avalonia's bui
 
 Next up (a direction, not a commitment):
 
-- **Production connection policies:** environment labels, on top of the read-only sessions that shipped.
-- **Query Lab:** save EXPLAIN runs and compare them before and after a change.
+- **Repeated measurement in Query Lab:** run a plan several times and compare the spread, not one sample.
+- **Schema snapshots and a drift report:** compare two connections, or a connection against a saved snapshot.
 - **Signed and notarized macOS builds.**
 
 The backlog is tracked as [issues labeled `roadmap`](https://github.com/Shman4ik/pgNimbus/issues?q=is%3Aissue%20is%3Aopen%20label%3Aroadmap); [ROADMAP.md](ROADMAP.md) has the direction and the competitive research behind it. Pick one scoped item if you'd like to contribute; [CONTRIBUTING.md](CONTRIBUTING.md) has the details.
@@ -175,7 +177,7 @@ dotnet test --project tests/PgNimbus.Core.Tests
 A NativeAOT build:
 
 ```bash
-dotnet publish src/PgNimbus.App -c Release -r win-x64 -p:PublishAot=true    # Windows
+dotnet publish src/PgNimbus.App -c Release -r win-x64 -p:PublishAot=true    # Windows (win-arm64 for Windows on Arm)
 dotnet publish src/PgNimbus.App -c Release -r linux-x64 -p:PublishAot=true  # Linux (needs clang + zlib1g-dev)
 ```
 

@@ -3,7 +3,7 @@ CamusDB
 
 CamusDB is a SQL distributed database written in C# on .NET. It provides a SQL interface with a Raft-replicated, transactional key-value storage layer, and makes a few opinionated choices: **serializable isolation/strong consistency are the default**; databases can be **branched copy-on-write like code**; and **dropped objects are recoverable** instead of instantly destroyed. It can auto-scale based on traffic. Development is driven by performance, Jepsen-style testing, chaos engineering, fault injection, and degraded-state testing.
 
-**While CamusDB is actively used in production, some of its features are considered alpha, use it with caution.** APIs and storage formats may change between versions.
+**While CamusDB is actively used in production, some of its features are still young, use it with caution.** APIs and storage formats may change between versions.
 
 [![Build Status](https://app.travis-ci.com/camusdb/camusdb.svg?branch=main)](https://app.travis-ci.com/camusdb/camusdb)
 
@@ -158,7 +158,19 @@ EXPLAIN (ANALYZE) SELECT role, COUNT(*) FROM app_users GROUP BY role;
 
 Installing
 ----------
-CamusDB ships as a .NET global tool. With the [.NET 10 runtime or SDK](https://dotnet.microsoft.com/download)
+On macOS or Linux, install with [Homebrew](https://brew.sh). The package carries its own .NET
+runtime, so you do not need to install .NET:
+
+```bash
+brew install camusdb/tap/camusdb
+brew services start camusdb   # run a node in the background, and again at login
+```
+
+The service keeps its configuration in `$(brew --prefix)/var/camusdb/config.yml` and its data in
+`$(brew --prefix)/var/camusdb/data`. Its log is `$(brew --prefix)/var/log/camusdb.log`. You can
+also run `camusdb` in a shell, as described below.
+
+CamusDB also ships as a .NET global tool. With the [.NET 10 runtime or SDK](https://dotnet.microsoft.com/download)
 installed:
 
 ```bash

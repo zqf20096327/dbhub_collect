@@ -24,9 +24,11 @@ nix build github:Sinity/polylogue      # the package, at ./result/bin/polylogue
 nix develop                             # a development shell
 ```
 
-The flake also provides a Home Manager module (the user service, hooks, MCP
-registration, the browser extension's host, completions) and a NixOS module,
-each serving one or more named archives; see
+The flake also provides a Home Manager module (the package and one user
+service per named archive) and a NixOS module (the system service). Hooks, MCP
+registration and the browser extension's host are not installed by the module
+yet; register them by hand as [agents](docs/agents.md) and
+[extension](docs/extension.md) describe. See see
 [development](docs/development.md#deployment-modules) for their use and
 [operations](docs/operations.md#deployment) for the deployment contract.
 
@@ -35,6 +37,10 @@ With Cargo, from a checkout:
 ```sh
 cargo build --release -p polylogue
 ```
+
+That builds standalone mode. Primary mode (Sinex) is the Cargo feature
+`sinex`: `cargo build --release -p polylogue --features sinex`. The Nix
+package includes it.
 
 Polylogue reads each tool's data where the tool writes it, so a running daemon
 needs no configuration to start collecting. Exports you download (a ChatGPT or
@@ -70,9 +76,9 @@ MCP and HTTP too.
 
 - [`docs/`](docs/README.md): the design, one page per area, starting with
   [architecture](docs/architecture.md).
-- [`docs/reference/`](docs/reference/README.md): current generated artifacts
-  and planned reference pages. Use `polylogue --help` and the MCP schemas for
-  commands available in the current build.
+- [`docs/derived.md`](docs/derived.md): the derived-data reference, rendered
+  from the declarations. Use `polylogue --help` and the MCP schemas for the
+  commands in the current build.
 - [`AGENTS.md`](AGENTS.md): how work is done in this repository, its layout and
   its commands.
 - [Python client](clients/python/README.md): the declared commands through CLI

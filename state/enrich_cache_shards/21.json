@@ -34,7 +34,7 @@
   "commit_90d": 0,
   "rel_ver": "v0.11.1",
   "rel_pub": "2024-02-20",
-  "rel_days": 992,
+  "rel_days": 994,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -77,7 +77,7 @@
   "commit_7d": 3,
   "rel_ver": "v22.4.2",
   "rel_pub": "2026-04-05",
-  "rel_days": 217,
+  "rel_days": 219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -107,7 +107,7 @@
   "commit_7d": 5,
   "rel_ver": "v0.8.1",
   "rel_pub": "2026-10-30",
-  "rel_days": 9,
+  "rel_days": 11,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -178,7 +178,7 @@
   "commit_7d": 1,
   "rel_ver": "0.20.0",
   "rel_pub": "2020-01-03",
-  "rel_days": 2501,
+  "rel_days": 2503,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -224,7 +224,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0-beta.1",
   "rel_pub": "2017-11-17",
-  "rel_days": 3278,
+  "rel_days": 3280,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -240,13 +240,13 @@
   "enriched_at": "20260927"
  },
  "gizmodata/gizmosql": {
-  "commit_90d": 127,
-  "commit_7d": 9,
-  "rel_ver": "v1.42.2",
-  "rel_pub": "2026-10-27",
-  "rel_days": 12,
-  "rel_n90": 12,
-  "rel_pre": false,
+  "commit_90d": 125,
+  "commit_7d": 0,
+  "rel_ver": "v1.42.2-preview1-duckdb1.5.6",
+  "rel_pub": "2026-11-06",
+  "rel_days": 4,
+  "rel_n90": 17,
+  "rel_pre": true,
   "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
@@ -260,18 +260,92 @@
    "Shell": 3,
    "CMake": 2
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"caccad39bb0cd42b74eb66c6cd79d538a057d7e01a401c816aa0a39863daf6ac\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-10-27",
+   "2026-10-15",
+   "2026-10-06",
+   "2026-09-29",
+   "2026-09-14",
+   "2026-09-11",
+   "2026-09-10",
+   "2026-09-09",
+   "2026-09-07",
+   "2026-09-02",
+   "2026-08-28",
+   "2026-08-25",
+   "2026-08-24",
+   "2026-08-24",
+   "2026-08-24",
+   "2026-08-18"
+  ],
+  "rel_notes": [
+   {
+    "t": "v1.42.2",
+    "d": "2026-10-27",
+    "n": "DuckDB 2.0.0 refuses any new statement on a connection while an earlier\n`postgres_clear_cache()`; edge now calls the new name (stable and LTS keep\n- **Edge channel: DuckDB `v2.0.0`**, the official DuckDB 2.0 release (was the\nand installs extensions from `extensions.duckdb.org/v2.0.0/`, and the edge\nDocker images carry the DuckDB v2.0.0 CLI from DuckDB's GitHub release. The\nnewest DuckDB major rather than a DuckDB pre-release. Stable stays on DuckDB\nand writes nothing (DuckDB 2.0's `StreamsByDefault` rule, w"
+   },
+   {
+    "t": "v1.42.0",
+    "d": "2026-10-15",
+    "n": "`month_day_nano`, `month` and `day_time` intervals (what ADBC drivers return\n`adbc_driver_duckdb`) gives it: `string_view` → `VARCHAR`; `binary_view` and\nrequirements pin `duckdb==1.5.6` and `adbc-driver-gizmosql>=2.0.15`.\n- The `-adbc` images bundle gizmosql-adbc **v2.0.15** (was v2.0.14), whose Linux driver library is built for\nglibc 2.17 instead of 2.34; GizmoData's Oracle ADBC driver **v1.0.1** (was v0.4.2) and Db2 ADBC driver\n`adbc_ingest` / `CommandStatementIngest` now gets `INTERVAL` for Arrow\nfor "
+   },
+   {
+    "t": "v1.41.0",
+    "d": "2026-10-06",
+    "n": "DuckDB 2.0 no longer does it for the embedding program.\nnow installs `adbc-driver-gizmosql` 2.0.14.\n- Edge channel (DuckDB 2.0) additions are gated for non-admins: `CONNECT`/`DISCONNECT`\n- Edge channel / DuckDB 2.0 compatibility: `SET [GLOBAL] gizmosql.<name> = ...` (DuckDB\nthird channel next to stable and LTS, built on the next DuckDB major ahead\nof its release: today DuckDB `v2.0.0-alpha43763` (commit `96063b9e39`; there\nis no v2.0.0 tag yet). It exists to evaluate DuckDB 2.0 early. Build it with\n`-DGIZMO"
+   },
+   {
+    "t": "v1.40.0",
+    "d": "2026-09-29",
+    "n": "`cursor.execute()` with new parameters; the ADBC driver cancels the\nDuckDB behavior change. Also a new trailing `block_unredacted_secrets`\nform, ...) before DuckDB sees it, for every role including admin. DuckDB\nalready refuses to enable the setting once the database is open; this\nparameter on the `RunFlightSQLServer()` C API. DuckDB backend only\nsanitizer into Arrow, DuckDB, gflags, replxx, SQLite, and OpenTelemetry and\nevery client, including admins: DuckDB persistent secrets (the default\ninit-SQL files. "
+   },
+   {
+    "t": "v1.39.0",
+    "d": "2026-09-14",
+    "n": "read-only instances sharing a database file no longer write it or raise\n`executeQuery` on such statements is now refused by JDBC drivers, per the\nserver- or session-wide mutexes only for the map update; DuckDB connection\nchecks against both DuckDB channels. Source and test changes trigger builds.\nBackground collection keeps DuckDB and process measurements off the query path.\n- DuckDB statements without a user result set execute during GetFlightInfo,\n- Prepared DDL/DML advertises an empty dataset schema, all"
+   },
+   {
+    "t": "v1.38.5",
+    "d": "2026-09-11",
+    "n": "`GetDbSchemas` / `GetTables` (hence in ADBC/JDBC/MCP schema browsers),\n`duckdb_databases()` / `duckdb_tables()`, `information_schema.*` and\n`SHOW DATABASES` / `SHOW ALL TABLES`, and then got \"Only administrators can\nDuckDB headers already had."
+   },
+   {
+    "t": "v1.38.4",
+    "d": "2026-09-10",
+    "n": "because the restored Arrow/DuckDB cache trees predated the superbuild-skip\n`duckdb-v2`) so fresh trees with the hash stamp are saved and the skip\n- `-adbc` Docker image tags now bundle `gizmosql-adbc` v2.0.13 (was v2.0.10),\nbeing silently lost or interrupted (see the gizmosql-adbc 2.0.13 notes)."
+   },
+   {
+    "t": "v1.38.3",
+    "d": "2026-09-09",
+    "n": "### Fixed\n- Bind parameters of Arrow's canonical `arrow.uuid` extension type (what\n  pyarrow, pandas and polars send for UUID columns) now bind as native DuckDB\n  `UUID` values on both the prepared-query and prepared-update paths. They\n  previously fell into the generic `ToString()` fallback and failed with\n  `Conversion Error: Could not convert string '[ ... ]' to INT128`. Other\n  extension types are now unwrapped to their storage scalar instead of being\n  stringified."
+   },
+   {
+    "t": "v1.38.2",
+    "d": "2026-09-07",
+    "n": "figures, and spell out DuckDB's resulting default `memory_limit` (80% of\nevery DEBUG-level `DuckDBStatement::*` / `DuckDBFlightSqlServer::*` scope\n`third_party/duckdb_extensions.cmake` look newer than the DuckDB build\ntree restored from cache; DuckDB's generated `build.ninja` lists it as a\nconfigure input, so ninja re-ran CMake and rebuilt ~600 DuckDB objects on\nchannel's DuckDB 1.4 build does not track that input). Diagnosed with a\n- Build: the third-party superbuilds (Arrow, DuckDB, OpenTelemetry, jwt-cpp"
+   },
+   {
+    "t": "v1.38.1",
+    "d": "2026-09-02",
+    "n": "unsupported type \"NULL\"` (plain DuckDB silently made it INTEGER, breaking\nwithout a prepare step (e.g. the Node.js `@apache-arrow/adbc-driver-manager`)\ncan bind parameters; `dbapi.connect()` gained `catalog=` / `db_schema=`.\n- `-adbc` image variants now bundle\n[gizmosql-adbc](https://github.com/gizmodata/gizmosql-adbc) v2.0.10\n- CI: the third-party superbuilds (Arrow, DuckDB, OpenTelemetry, jwt-cpp,\nDuckLake catalogs reject with `Failed to convert DuckDB type to DuckLake -\nhanded to DuckDB, which caused thr"
+   }
+  ]
  },
  "serilog-mssql/serilog-sinks-mssqlserver": {
-  "commit_90d": 61,
-  "commit_7d": 0,
+  "commit_90d": 67,
+  "commit_7d": 6,
   "rel_ver": "v10.0.0",
   "rel_pub": "2026-05-22",
-  "rel_days": 170,
+  "rel_days": 172,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -284,11 +358,15 @@
    "C#": 99,
    "PowerShell": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"2354d369e9f6ad46315cf1579d0e29900e3f47516889b39fe40ab83e95deda86\""
+  },
+  "rel_dates": []
  },
  "AleksK1NG/Go-gRPC-RabbitMQ-microservice": {
   "commit_90d": 0,
@@ -312,7 +390,7 @@
   "commit_7d": 3,
   "rel_ver": "@verdant-web/tiptap@12.0.6",
   "rel_pub": "2026-11-07",
-  "rel_days": 1,
+  "rel_days": 3,
   "rel_n90": 26,
   "rel_pre": false,
   "rel_none": false,
@@ -418,10 +496,10 @@
  },
  "pietermartin/sqlg": {
   "commit_90d": 9,
-  "commit_7d": 0,
+  "commit_7d": 2,
   "rel_ver": "3.1.6",
   "rel_pub": "2026-02-01",
-  "rel_days": 280,
+  "rel_days": 282,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -437,18 +515,22 @@
    "JavaScript": 0,
    "Groovy": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"5da1da28ccb39a0c351fb89e1b9103189351ddbb9fed8ba7051a3a8c706e1a7a\""
+  },
+  "rel_dates": []
  },
  "Marklogic-retired/marklogic-data-hub": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v4.3.3",
   "rel_pub": "2024-09-19",
-  "rel_days": 780,
+  "rel_days": 782,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -467,8 +549,8 @@
   "enriched_at": "20260927"
  },
  "ydddp/mail-hub": {
-  "commit_90d": 28,
-  "commit_7d": 10,
+  "commit_90d": 29,
+  "commit_7d": 3,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -482,11 +564,15 @@
    "Dockerfile": 0,
    "JavaScript": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "trailofbits/sqlite_wrapper": {
   "commit_90d": 0,
@@ -509,7 +595,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-03-19",
-  "rel_days": 234,
+  "rel_days": 236,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -545,7 +631,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.1",
   "rel_pub": "2026-09-04",
-  "rel_days": 65,
+  "rel_days": 67,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -612,7 +698,7 @@
  "litesql/ha": {
   "rel_ver": "v0.13.4",
   "rel_pub": "2026-09-26",
-  "rel_days": 43,
+  "rel_days": 45,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -633,7 +719,7 @@
  "Racum/uuinfo": {
   "rel_ver": "v0.7.5",
   "rel_pub": "2026-05-31",
-  "rel_days": 161,
+  "rel_days": 163,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -706,7 +792,7 @@
  "GeorgeLeePatterson/clickhouse-arrow": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2025-12-14",
-  "rel_days": 329,
+  "rel_days": 331,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -787,7 +873,7 @@
  "freislot/kiri": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2026-07-04",
-  "rel_days": 127,
+  "rel_days": 129,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -806,7 +892,7 @@
  "project-minigraf/minigraf": {
   "rel_ver": "v2.0.11",
   "rel_pub": "2026-10-26",
-  "rel_days": 13,
+  "rel_days": 15,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -830,7 +916,7 @@
  "atlas-cli/nestjs-boilerplate": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2024-04-26",
-  "rel_days": 926,
+  "rel_days": 928,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -897,7 +983,7 @@
  "longfellowone/field-services": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2019-05-20",
-  "rel_days": 2729,
+  "rel_days": 2731,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -917,7 +1003,7 @@
  "DrSaeedHub/Softether-Manager": {
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-09-07",
-  "rel_days": 62,
+  "rel_days": 64,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -1087,7 +1173,7 @@
  "usebondery/bondery": {
   "rel_ver": "v1.9.2",
   "rel_pub": "2026-09-24",
-  "rel_days": 45,
+  "rel_days": 47,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1147,7 +1233,7 @@
  "oracle/coherence-go-client": {
   "rel_ver": "v2.3.1",
   "rel_pub": "2025-06-22",
-  "rel_days": 504,
+  "rel_days": 506,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1227,7 +1313,7 @@
  "Magnifico4625/locus": {
   "rel_ver": "v3.7.0",
   "rel_pub": "2026-06-10",
-  "rel_days": 151,
+  "rel_days": 153,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1287,7 +1373,7 @@
  "neverinfamous/postgres-mcp": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-05-14",
-  "rel_days": 178,
+  "rel_days": 180,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1319,7 +1405,7 @@
  "xiaogege6697/tcm-db": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-06-29",
-  "rel_days": 132,
+  "rel_days": 134,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1407,7 +1493,7 @@
  "claranet/ansible-role-mariadb": {
   "rel_ver": "3.2.1",
   "rel_pub": "2026-02-25",
-  "rel_days": 256,
+  "rel_days": 258,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1471,7 +1557,7 @@
  "UjjwalSaini07/Affiliate-Postback-Engine": {
   "rel_ver": "v1.0",
   "rel_pub": "2025-08-24",
-  "rel_days": 441,
+  "rel_days": 443,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1491,7 +1577,7 @@
  "true-async/php-clickhouse": {
   "rel_ver": "v0.1.5",
   "rel_pub": "2026-06-09",
-  "rel_days": 152,
+  "rel_days": 154,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1630,7 +1716,7 @@
  "code3-dev/FoxQL": {
   "rel_ver": "1.1.0",
   "rel_pub": "2025-08-09",
-  "rel_days": 456,
+  "rel_days": 458,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1653,7 +1739,7 @@
  "mridoni/gixsql": {
   "rel_ver": "v1.0.21dev",
   "rel_pub": "2023-09-13",
-  "rel_days": 1152,
+  "rel_days": 1154,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2320,7 +2406,7 @@
   "commit_7d": 0,
   "rel_ver": "5.5.13",
   "rel_pub": "2024-04-13",
-  "rel_days": 939,
+  "rel_days": 941,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2348,7 +2434,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-04-10",
-  "rel_days": 212,
+  "rel_days": 214,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2438,7 +2524,7 @@
  "roian6/apple-health-ai-bridge": {
   "rel_ver": "receiver-v1.1.2",
   "rel_pub": "2026-10-01",
-  "rel_days": 38,
+  "rel_days": 40,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2491,7 +2577,7 @@
  "akhil-dara/WebCache-Forensic-Analyzer": {
   "rel_ver": "v5.0.0",
   "rel_pub": "2026-10-17",
-  "rel_days": 22,
+  "rel_days": 24,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2518,7 +2604,7 @@
  "madebyzan/knovum": {
   "rel_ver": "v0.0.1",
   "rel_pub": "2026-10-23",
-  "rel_days": 16,
+  "rel_days": 18,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2657,6 +2743,32 @@
    "security": "20261030",
    "contrib": "20261030",
    "lang": "20261030"
+  }
+ },
+ "shataksha45-shiiii/Cold-Mail": {
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\"",
+   "security": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_ver": null,
+  "rel_none": true,
+  "rel_dates": [],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "JavaScript": 59,
+   "CSS": 32,
+   "HTML": 8
+  },
+  "enriched_at": "20261110",
+  "dim_ts": {
+   "release": "20261110",
+   "security": "20261110",
+   "contrib": "20261110",
+   "lang": "20261110"
   }
  }
 }

@@ -166,9 +166,17 @@ Or run from source — see [Setup and Launch](#setup-and-launch).
 - 🔍 **Powerful search** — filter and sort by full text (FTS5), tags, kind,
   rating, and captured, created, added, and played date ranges, with
   conditions shown as removable badges
-- 🏷️ **Tags, ratings & history** — manual tags with autocomplete, ★ ratings,
-  and playback history that survive file moves and renames, plus a day-grouped
-  history timeline across all workspaces
+- 🏷️ **Tags, ratings & history** — manual tags with autocomplete, shared
+  across workspaces by name (letter case and stray spacing aside, one tag is
+  one tag), ★ ratings, and playback history that survive file moves and
+  renames, plus a day-grouped history timeline across all workspaces
+- 🤖 **Auto tagging** — tag files from their names and folders: regex rules,
+  keywords, and folder rules, with suggestions of words no rule covers yet;
+  applied to new and changed files on every scan, or to the whole library at
+  once
+- 🗃️ **Tags screen** — rename, merge, and delete tags (across every
+  workspace from the All view or a collection), as a list or as a cloud sized
+  by how many files carry each tag
 - 📅 **Timeline view** — the library in date order, a section per day, with a
   rail of every month and day down the side to drag straight to any of them.
 - 🕸️ **Graph view** — see the library as a network of files and their tags,
@@ -188,16 +196,23 @@ Or run from source — see [Setup and Launch](#setup-and-launch).
 - 📺 **Playlist playback** — play any list hands-off in a full-screen player,
   with shuffle, repeat, manual ordering, and timed images
   ([see above](#-playlist--press-play-and-let-it-run))
+- ↗️ **Drag to other apps** — drag files (or the whole selection) from the
+  grid or the list into other desktop apps
 - 📋 **Copy to clipboard** — copy any image to the clipboard from the detail
   view, ready to paste elsewhere
 - 📑 **Side peek** — open any file's detail as a resizable sheet docked beside
   the library instead of a modal, keeping the grid, search, and player bar in
   use while you watch, tag, and rate; Meguri remembers which you prefer
+- 🧭 **Guided tour** — on first launch the pet walks you through the main
+  screen; replay it any time from Settings
 - 🐾 **A pet** — a pixel-art zabuton that wanders along the bottom of the
   window: drop a file on it to queue it in Watch Later, double-click it for
   Discovery, or put it away from its menu
 - 🎨 **Themes** — base16-based multi-theme switching (gruvbox / solarized /
   monokai / nord / dracula, etc.)
+- 🖌️ **Custom CSS** — layer your own `custom.css` over the theme to recolor or
+  restyle the UI, or keep several stylesheets as CSS themes and pick one next
+  to the built-in themes; saved changes apply instantly
 - 🔎 **Content zoom** — Ctrl + wheel (and Ctrl +/-/0)
 - 🔒 **Privacy-first** — no telemetry, no analytics, no external network
   communication ([see below](#privacy))
@@ -230,6 +245,22 @@ The same library shown by folder, stepping in and out of folders:
 The graph view: files and their tags as a network, in 2D or 3D:
 
 ![Graph view demo — picking a tag from the search to light up its files, then orbiting the same graph in 3D](./docs/assets/graph.gif)
+
+Auto tagging from file names: a regex rule taking the code at the start of
+each name, with the files it would tag:
+
+![Auto tagging — the code-prefix rule and the files it would tag](./docs/assets/auto-tag.png)
+
+Keywords add tags to every file whose name holds one of their terms, and the
+suggestions list the words no condition covers yet:
+
+![Auto tagging — a keyword and the files it finds](./docs/assets/auto-tag-keywords.png)
+
+![Auto tagging — suggested words from the file names](./docs/assets/auto-tag-suggest.png)
+
+The Tags screen as a cloud, each tag sized by how many files carry it:
+
+![Tag cloud](./docs/assets/tags-cloud.png)
 
 Selecting several files and rating, favoriting, and tagging them at once:
 
@@ -345,6 +376,88 @@ To drag a file to another app, hover over it in grid or list view and drag
 the arrow beside its selection checkbox. Drag from a selected file's arrow
 to carry the whole selection.
 
+ProRes clips play in Meguri through a local H.264 preview at up to
+1920 × 1080. The original clip is still used when you drag it into an editor
+or open it externally.
+
+## Custom CSS
+
+Meguri's look can be changed with plain CSS in two ways, and both can be used
+together:
+
+- **CSS themes** — whole stylesheets kept in a themes folder and picked from
+  the **Theme** list, next to the built-in themes
+- **`custom.css`** — one stylesheet always layered on top of whichever theme
+  is active, for small tweaks
+
+Every save applies right away, with no restart.
+
+### Applying a CSS theme
+
+1. Open **Settings → General → CSS theme** and press **Open themes folder**.
+   This opens `<userData>/themes/`.
+2. Put the theme's `.css` file there (the extension in lower case). It appears
+   in the **Theme** list right away, under the name from the `@name` line at
+   the top of the file (or the file name if there is none).
+3. Pick it in the **Theme** list.
+
+To try one, download a sample theme from [`docs/themes/`](docs/themes/):
+
+| File                                               | Look                  |
+| -------------------------------------------------- | --------------------- |
+| [cyberpunk.css](docs/themes/cyberpunk.css)         | Neon on black         |
+| [oled.css](docs/themes/oled.css)                   | True black            |
+| [matrix.css](docs/themes/matrix.css)               | Green terminal rain   |
+| [sky.css](docs/themes/sky.css)                     | Sky, clouds and trees |
+| [high-contrast.css](docs/themes/high-contrast.css) | 7:1 text, bold lines  |
+
+Each has a dark and a light variant, picked by the app's light / dark switch.
+The sample themes Cyberpunk (dark) and Sky (light); see
+[the sample themes](docs/theming.md#sample-themes) for every one in both
+variants:
+
+![Cyberpunk sample theme, dark](./docs/assets/css-theme-cyberpunk-dark.png)
+
+![Sky sample theme, light](./docs/assets/css-theme-sky-light.png)
+
+### Applying custom.css
+
+1. Open **Settings → General → Custom CSS** and turn the switch on.
+2. Press **Open file**. Meguri creates `<userData>/custom.css` from a
+   commented template (an existing file is never overwritten) and opens it in
+   your default app.
+3. Edit and save the file. `custom.css` applies on top of the active theme,
+   including a CSS theme. Pasting a sample theme into it works too.
+
+Theme colors are the `--c-*` CSS variables. The themes declare them on
+`html[data-theme="<id>"]`, so a plain `:root` rule loses to them; target
+`html[data-theme]` instead, or `html[data-appearance="dark"]` /
+`html[data-appearance="light"]` for one appearance:
+
+```css
+/* Every theme */
+html[data-theme] {
+  --c-primary: #e06c75;
+}
+
+/* Dark themes only */
+html[data-appearance="dark"] {
+  --c-bg: #101014;
+}
+```
+
+Parts of the UI carry a `data-slot` attribute, such as `workspace-rail` for
+the side rail. See [Theming Meguri with CSS](docs/theming.md) for every
+variable and slot, what is safe to rely on across updates, and contrast
+guidance.
+
+### Safety and recovery
+
+External resources (`@import` or `url()` pointing at the network) are blocked by
+the app's Content Security Policy, so a stylesheet cannot make Meguri go
+online. If a stylesheet makes the UI unusable, delete or rename `custom.css`
+(or the theme file in `<userData>/themes/`) and the app returns to normal.
+
 ## Where Data Is Stored
 
 Scan root paths are hashed for identification and managed centrally under
@@ -353,10 +466,18 @@ Electron's userData.
 ```text
 <userData>/                 # e.g. ~/.config/Meguri
 ├─ config.json              # registered workspaces and the active root
+├─ library.sqlite           # favorites, ratings, tags, bookmarks, history (WAL)
+├─ library-backups/         # daily copies of library.sqlite (the 5 newest)
+├─ custom.css               # optional user stylesheet (see "Custom CSS")
+├─ themes/                  # optional CSS theme files (see "Custom CSS")
 └─ roots/<hash of root>/
-   ├─ db.sqlite             # metadata (WAL)
+   ├─ db.sqlite             # the file index (WAL)
    └─ thumbs/               # generated thumbnails (webp)
 ```
+
+Removing a workspace deletes its `roots/<hash>/` directory. The library keeps
+the metadata of its files, which comes back when the same files are added
+again.
 
 > [!WARNING]
 > Data stored here (tags, ratings, playback history, and other metadata) may

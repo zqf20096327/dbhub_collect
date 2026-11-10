@@ -21,7 +21,7 @@ wagoya remembers people, not just conversations.
 - **Facts with provenance.** Every fact records who said it and how much that source is trusted: the owner, the person themselves, someone else in the chat, or the bot's own inference. Hearsay ranks lower and is shown as unverified, and a less trusted source can't overrule a more trusted one.
 - **Facts age instead of vanishing.** Forgetting or correcting marks a fact as no longer true and keeps it as history. Short-lived states ("on the way home") expire after a day. Owners can retire anyone's facts; people can retire their own.
 - **One profile per person.** A profile made from someone's number merges into their account once WhatsApp reveals their LID, and a profile made from a name ("Andi") merges into the real account ("Andi Pratama") when exactly one matching person is in the chat where it was learned.
-- **Search that understands paraphrase.** Fact search combines keywords with embeddings, so "what does he do for work" finds "Job: IT engineer". Embedding a fact costs a fraction of a millionth of a dollar.
+- **Search that understands paraphrase.** Fact search combines keywords with embeddings, so "what does he do for work" finds "Job: accountant". Embedding a fact costs a fraction of a millionth of a dollar.
 - **Long chats keep their shape.** Only the last 64 messages go to the model, so the curator also keeps a rolling summary of each chat (who is who, ongoing plans, running jokes, and who holds which side of an open argument), at most 300 words, shown before the transcript. Messages older than that window are kept for 72 hours, and the model can search them with a `chat_history` tool (this chat only).
 - **Reminders and nags.** "Remind me to eat at 12" schedules a message; owners can make it repeat (hourly, daily, weekdays, weekly) or send it to another group they are in, and the bot may schedule a caring nag on its own, rarely. Jobs are stored, so they survive restarts. Ask "what reminders do you have?" to list or cancel them. Each reply also sees the chat's next reminders with the time left worked out by the server, so "how long until" is exact.
 - **No spam pile-ups.** A fact that nearly repeats one already stored overwrites it instead of adding another row, so someone spamming the same bait leaves one fact, not fifty.
@@ -45,6 +45,23 @@ wagoya remembers people, not just conversations.
   "github": {"url": "https://api.githubcopilot.com/mcp/", "headers": {"Authorization": "Bearer <token>"}},
   "files":  {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "/srv/share"]}
 }}
+```
+
+### Claude Code tasks
+
+Owners can ask Rin to get coding work done ("have Claude Code add X to wagoya"). Claude Code runs on the owner's laptop with their own login, not on the server:
+
+- **Queue:** Rin's owner-only tools queue a task in `bot.db`, with the owner's own words. Her reply starts with `[Orchestration Initiated]`.
+- **Runner:** `cmd/claude-runner` on the laptop polls the queue over SSH (`wagoya task claim`), runs Claude Code in a git worktree on `claude/task-N`, and reports back. Claude Code may edit files, build, test and commit; anything else is refused and listed.
+- **Results:** Rin posts `[Orchestration Completed]` with what changed, the branch and the diff stat. A question from Claude Code comes as `[Orchestration Question]`; the owner's answer resumes the same session. Follow-ups ("also add a test for #3") continue it too.
+- **Pushing:** only the task's branch, only when an owner asks Rin. Merging and deploying stay manual.
+
+```sh
+go build -o ~/.local/bin/claude-runner ./cmd/claude-runner
+cat > ~/.config/wagoya-runner.json <<'JSON'
+{"host": "kritz", "remote": "~/wagoya/wagoya", "repos": {"wagoya": "/path/to/wa-claude-bot"}}
+JSON
+claude-runner            # or: systemctl --user enable --now claude-runner (deploy/claude-runner.service)
 ```
 
 ### Chat behaviour
@@ -83,7 +100,7 @@ Build for a Linux server:
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o wagoya .
 ```
 
-`deploy/` has a systemd unit and a deploy script (cross-compile, scp, restart).
+`deploy/` has a systemd unit and a deploy script (cross-compile, resumable rsync upload with a checksum check, restart until connected).
 
 ## Configuration
 
@@ -116,6 +133,7 @@ internal/memtools   memory tools: search_facts, save_fact, invalidate_fact, save
 internal/tools      http_request (public-only) and the MCP client
 internal/ratelimit  global send pacer and per-chat cooldown
 internal/config     .env loading and validation
+cmd/claude-runner   laptop-side runner for Claude Code tasks (never deployed)
 ```
 
 Design notes: [`ARCHITECTURE.md`](ARCHITECTURE.md). Every design choice, with its reason: [`DECISIONS.md`](DECISIONS.md). Plan: [`ROADMAP.md`](ROADMAP.md).
@@ -125,6 +143,8 @@ Design notes: [`ARCHITECTURE.md`](ARCHITECTURE.md). Every design choice, with it
 ```sh
 go test ./...                           # offline
 LLM_LIVE=1 go test ./internal/llm -v    # real model calls (needs keys, costs money)
+EVAL=1 go test ./internal/eval          # golden set against the configured model (the deploy gate)
+CLAUDE_LIVE=1 go test ./cmd/claude-runner -run Live -v   # real Claude Code on a throwaway repo
 ```
 
 ## Data and privacy

@@ -64,6 +64,7 @@ PDF-upload UI.
 | Screen papers before choosing evidence | Save human include/exclude/unsure decisions, resume the queue, and explicitly preview current included IDs | [Human paper screening](docs/guides/PAPER_SCREENING_GUIDE.md) |
 | Retrieve only current human-included papers | Pass a revision-checked `screened_collection` directly to preview/query; reject empty or stale selections without widening scope | [API/Python handoff, full guide and executed GIF](docs/guides/SCREENED_COLLECTION_GUIDE.md) |
 | Record a human screening decision in a normal browser | Open an exact member/revision, read local paper/source links, explicitly submit a reasoned opinion, and recover append-only history after restart | [Native screening workbench: user/API/Python/portfolio guide](docs/guides/HUMAN_SCREENING_WORKBENCH_GUIDE.md) |
+| Screen the most likely relevant papers first | Opt in to a local TF-IDF + Naive Bayes order of still-pending members, learned from your current includes/excludes, with per-paper scores and contributing terms; it never decides | [Screening prioritization: browser/API/Python guide, simulation and executed GIF](docs/guides/SCREENING_PRIORITIZATION_GUIDE.md) |
 | Inspect how a human screening judgment changed | Read append-only decisions with exact reasons, original timestamps, revisions and an honest legacy boundary through Python/API/native browser pages | [Screening decision history and executed offline illustration](docs/guides/SCREENING_HISTORY_GUIDE.md) |
 | Download complete human screening results | Export every current collection member in one read snapshot as bounded JSON or spreadsheet-safe CSV, including stale and unscreened states | [Screening exports and measured offline demo](docs/guides/SCREENING_EXPORT_GUIDE.md) |
 | Save an auditable human screening progress report | Download complete JSON/literal Markdown with resolved/pending totals and exact exclusion-reason membership, derived from one export without models or writes | [Human progress report: browser/API/Python/portfolio guide and executed illustration](docs/guides/SCREENING_REPORT_GUIDE.md) |
@@ -147,6 +148,30 @@ not parity or a dependency. The [complete guide and offline demo](docs/guides/HU
 reproduce this **measured-output illustration, not browser footage**.
 The still makes animation opt-in; an [exact text alternative](docs/assets/human-screening-workbench.txt)
 is available.
+
+## Screen the most likely relevant papers first
+
+[![Executed synthetic screening prioritization: cold start, learned order, browser queue and simulation](docs/assets/screening-priority.png)](docs/assets/screening-priority.gif)
+
+On a saved collection, choose **Most likely relevant first** to open an opt-in,
+read-only queue of the members still needing your decision. A deterministic,
+offline TF-IDF + multinomial Naive Bayes model learns only from your current
+include and exclude decisions; each card shows its rank, score and contributing
+terms beside a link to the unchanged decision form.
+`GET /collections/{collection_id}/screening-priority?collection_revision=N` returns
+the same order as JSON. Before one include and one exclude exist, saved order is
+kept and no score is invented. Nothing records, changes or suggests a decision.
+
+On a templated synthetic set (100 papers, 20 relevant, mostly near misses), a
+simulated reviewer found 19 of 20 relevant papers after a median of 25.5 papers in
+prioritized order versus 94 in saved order across ten shuffles (median WSS@95 0.695
+vs 0.01). That is synthetic evidence of the mechanism, not a recall guarantee, and no
+stopping signal is reported because stored decisions have no reliable global order.
+The [complete guide](docs/guides/SCREENING_PRIORITIZATION_GUIDE.md) gives exact
+formulas, the API, cold start, limits and an ASReview/Covidence/Rayyan comparison.
+The opt-in GIF is a **generated illustration of executed output**, not browser
+footage; the [measured transcript](docs/assets/screening-priority.txt) is the text
+alternative.
 
 ## Browse papers and passages without generating
 
@@ -593,7 +618,8 @@ Earlier Kimi and Sonnet migration checks are dated separately in the provider gu
 explicit `kimi-k3` rollback overrides remain available.
 Routing and budgets are unchanged. Catalog guidance is not a repository
 benchmark, account-entitlement check, or live inference verification.
-Human screening progress reports use none of these models or provider endpoints.
+Human screening progress reports and screening prioritization use none of these models or
+provider endpoints.
 Gemini `CONTINUATION` hops fail explicitly instead of becoming completed
 answers; there is no long-decode loop or increase to the current 60-second
 HTTPX timeouts and default reasoning deadline.
@@ -623,8 +649,9 @@ additional `/query` stages or clinical assessments. Browse the
 [categorized cue guides](docs/README.md#clinical-and-statistical-evidence-cues)
 for study-design, outcome, statistical, and reporting cues. Each guide retains
 its usage examples and illustration; these heuristics do not validate findings.
-Older model names in helper guides and illustrations are historical, not current
-defaults or compatibility promises; use the [provider guide](docs/guides/PROVIDER_MODELS_GUIDE.md).
+Helper-guide prose names the provider flagships verified on 2026-11-07; older
+illustrations may still show historical model names, which are not current
+defaults or compatibility promises. Use the [provider guide](docs/guides/PROVIDER_MODELS_GUIDE.md).
 
 Existing cue illustrations remain available without interrupting the introduction:
 
@@ -720,31 +747,31 @@ Bandit. Passing these checks is not a scientific-accuracy benchmark.
 
 ![CompetingRisksResidualCueExtractor](assets/demo/competing-risks-residual-cues.gif)
 
-Gap vs Elicit/Consensus/Connected Papers competing-risks residual cue extractors. Distinct from `CompetingRiskCueExtractor` / `CompetingRiskInformativeCensoringCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/COMPETING_RISKS_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Gap vs Elicit/Consensus/Connected Papers competing-risks residual cue extractors. Distinct from `CompetingRiskCueExtractor` / `CompetingRiskInformativeCensoringCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/COMPETING_RISKS_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 ### MediationBiasCueExtractor
 
 ![MediationBiasCueExtractor](assets/demo/mediation-bias-cues.gif)
 
-Gap vs Elicit/Consensus/Connected Papers mediation-bias cue extractors. Distinct from `MediationAnalysisCueExtractor` / `SelectionIntoTreatmentCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/MEDIATION_BIAS_CUES_EXTRACTOR_GUIDE.md`.
+Gap vs Elicit/Consensus/Connected Papers mediation-bias cue extractors. Distinct from `MediationAnalysisCueExtractor` / `SelectionIntoTreatmentCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/MEDIATION_BIAS_CUES_EXTRACTOR_GUIDE.md`.
 
 ### ProtocolAmendmentCueExtractor
 
 ![ProtocolAmendmentCueExtractor](assets/demo/protocol-amendment-cues.gif)
 
-Gap vs Elicit/Consensus/Connected Papers protocol-amendment cue extractors. Distinct from `OutcomeSwitchingCueExtractor` / `WinnerCurseCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/PROTOCOL_AMENDMENT_CUES_EXTRACTOR_GUIDE.md`.
+Gap vs Elicit/Consensus/Connected Papers protocol-amendment cue extractors. Distinct from `OutcomeSwitchingCueExtractor` / `WinnerCurseCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/PROTOCOL_AMENDMENT_CUES_EXTRACTOR_GUIDE.md`.
 
 ### ColliderBiasOpeningCueExtractor
 
 ![ColliderBiasOpeningCueExtractor](assets/demo/collider-bias-opening-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers collider-bias-opening cue extractors. Distinct from `SelectionBiasCueExtractor` / `SimpsonParadoxCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/COLLIDER_BIAS_OPENING_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers collider-bias-opening cue extractors. Distinct from `SelectionBiasCueExtractor` / `SimpsonParadoxCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/COLLIDER_BIAS_OPENING_CUES_EXTRACTOR_GUIDE.md`.
 
 ### AdaptiveEnrichmentCueExtractor
 
 ![AdaptiveEnrichmentCueExtractor](assets/demo/adaptive-enrichment-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers adaptive-enrichment cue extractors. Distinct from `SubgroupAnalysisCueExtractor` / `ProtocolAmendmentCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/ADAPTIVE_ENRICHMENT_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers adaptive-enrichment cue extractors. Distinct from `SubgroupAnalysisCueExtractor` / `ProtocolAmendmentCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/ADAPTIVE_ENRICHMENT_CUES_EXTRACTOR_GUIDE.md`.
 
 ### ImmortalTimeResidualCueExtractor
 
@@ -755,83 +782,83 @@ Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers adaptive-enrichm
 
 ![PrincipalStratumResidualCueExtractor](assets/demo/principal-stratum-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers principal-stratum residual cue extractors. Distinct from `InstrumentalVariableExclusionCueExtractor` / `CrossoverDesignCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/PRINCIPAL_STRATUM_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers principal-stratum residual cue extractors. Distinct from `InstrumentalVariableExclusionCueExtractor` / `CrossoverDesignCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/PRINCIPAL_STRATUM_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 
 ### MediationPathResidualCueExtractor
 
 ![MediationPathResidualCueExtractor](assets/demo/mediation-path-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers mediation-path residual cue extractors. Distinct from `MediationAnalysisCueExtractor` / `MediationBiasCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/MEDIATION_PATH_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers mediation-path residual cue extractors. Distinct from `MediationAnalysisCueExtractor` / `MediationBiasCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/MEDIATION_PATH_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 
 ### FalsificationTestResidualCueExtractor
 
 ![FalsificationTestResidualCueExtractor](assets/demo/falsification-test-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers falsification-test residual cue extractors. Distinct from `NegativeControlOutcomeCueExtractor` / `PlaceboTestCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/FALSIFICATION_TEST_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers falsification-test residual cue extractors. Distinct from `NegativeControlOutcomeCueExtractor` / `PlaceboTestCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/FALSIFICATION_TEST_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 ### ClusterCrossoverResidualCueExtractor
 
 ![ClusterCrossoverResidualCueExtractor](assets/demo/cluster-crossover-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers cluster-crossover residual cue extractors. Distinct from `ClusterRandomizationCueExtractor` / `CrossoverDesignCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/CLUSTER_CROSSOVER_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers cluster-crossover residual cue extractors. Distinct from `ClusterRandomizationCueExtractor` / `CrossoverDesignCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/CLUSTER_CROSSOVER_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 ### AdaptiveRandomizationCueExtractor
 
 ![AdaptiveRandomizationCueExtractor](assets/demo/adaptive-randomization-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers adaptive-randomization cue extractors. Distinct from `AdaptiveDesignCueExtractor` / `AdaptiveEnrichmentCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/ADAPTIVE_RANDOMIZATION_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers adaptive-randomization cue extractors. Distinct from `AdaptiveDesignCueExtractor` / `AdaptiveEnrichmentCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/ADAPTIVE_RANDOMIZATION_CUES_EXTRACTOR_GUIDE.md`.
 
 ### InstrumentalVariableExclusionCueExtractor
 
 ![InstrumentalVariableExclusionCueExtractor](assets/demo/instrumental-variable-exclusion-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers instrumental-variable exclusion cue extractors. Distinct from `InstrumentalVariableStrengthCueExtractor` / `InstrumentStrengthCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/INSTRUMENTAL_VARIABLE_EXCLUSION_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers instrumental-variable exclusion cue extractors. Distinct from `InstrumentalVariableStrengthCueExtractor` / `InstrumentStrengthCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/INSTRUMENTAL_VARIABLE_EXCLUSION_CUES_EXTRACTOR_GUIDE.md`.
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers immortal-time residual cue extractors. Distinct from `SurvivorBiasCueExtractor` / `TimeDependentBiasCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/IMMORTAL_TIME_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers immortal-time residual cue extractors. Distinct from `SurvivorBiasCueExtractor` / `TimeDependentBiasCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/IMMORTAL_TIME_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 
 ### TwinStudiesResidualCueExtractor
 
 ![TwinStudiesResidualCueExtractor](assets/demo/twin-studies-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers twin-studies residual cue extractors. Distinct from `MendelianRandomizationCueExtractor` / `MendelianRandomizationWeakCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/TWIN_STUDIES_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers twin-studies residual cue extractors. Distinct from `MendelianRandomizationCueExtractor` / `MendelianRandomizationWeakCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/TWIN_STUDIES_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 
 ### DoseResponseResidualCueExtractor
 
 ![DoseResponseResidualCueExtractor](assets/demo/dose-response-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers dose-response residual cue extractors. Distinct from `DoseResponseCueExtractor` / `SurrogateEndpointCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/DOSE_RESPONSE_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers dose-response residual cue extractors. Distinct from `DoseResponseCueExtractor` / `SurrogateEndpointCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/DOSE_RESPONSE_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 
 ### HeapingBiasResidualCueExtractor
 
 ![HeapingBiasResidualCueExtractor](assets/demo/heaping-bias-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers heaping-bias residual cue extractors. Distinct from `MeasurementErrorBiasCueExtractor` / `SurveyModeEffectCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/HEAPING_BIAS_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers heaping-bias residual cue extractors. Distinct from `MeasurementErrorBiasCueExtractor` / `SurveyModeEffectCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/HEAPING_BIAS_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 
 ### AttritionResidualCueExtractor
 
 ![AttritionResidualCueExtractor](assets/demo/attrition-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers attrition residual cue extractors. Distinct from `LossToFollowupBiasCueExtractor` / `InformativeCensoringCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/ATTRITION_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers attrition residual cue extractors. Distinct from `LossToFollowupBiasCueExtractor` / `InformativeCensoringCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/ATTRITION_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 
 ### SelectionBiasResidualCueExtractor
 
 ![SelectionBiasResidualCueExtractor](assets/demo/selection-bias-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers selection-bias residual cue extractors. Distinct from `SelectionBiasCueExtractor` / `SelectionIntoTreatmentCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/SELECTION_BIAS_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers selection-bias residual cue extractors. Distinct from `SelectionBiasCueExtractor` / `SelectionIntoTreatmentCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/SELECTION_BIAS_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 
 ### InstrumentalVariableWeakResidualCueExtractor
 
 ![InstrumentalVariableWeakResidualCueExtractor](assets/demo/instrumental-variable-weak-residual-cues.gif)
 
-Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers weak-IV residual cue extractors. Distinct from `InstrumentalVariableExclusionCueExtractor` / `InstrumentalVariableStrengthCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/INSTRUMENTAL_VARIABLE_WEAK_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+Offline cue extractor. Gap vs Elicit/Consensus/Connected Papers weak-IV residual cue extractors. Distinct from `InstrumentalVariableExclusionCueExtractor` / `InstrumentalVariableStrengthCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/INSTRUMENTAL_VARIABLE_WEAK_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
 
 ## License
 
@@ -842,16 +869,16 @@ own licenses and access terms.
 
 ![OutcomeSwitchingCueExtractor](assets/demo/outcome-switching-cues.gif)
 
-Gap vs Elicit/Consensus/Connected Papers outcome-switching cue extractors. Distinct from `PrimaryEndpointCueExtractor` / `SpinPHackingCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/OUTCOME_SWITCHING_CUES_EXTRACTOR_GUIDE.md`.
+Gap vs Elicit/Consensus/Connected Papers outcome-switching cue extractors. Distinct from `PrimaryEndpointCueExtractor` / `SpinPHackingCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/OUTCOME_SWITCHING_CUES_EXTRACTOR_GUIDE.md`.
 
 ### SelectionIntoTreatmentCueExtractor
 
 ![SelectionIntoTreatmentCueExtractor](assets/demo/selection-into-treatment-cues.gif)
 
-Gap vs Elicit/Consensus/Connected Papers selection-into-treatment cue extractors. Distinct from `SelectionBiasCueExtractor` / `HealthyWorkerSurvivorCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/SELECTION_INTO_TREATMENT_CUES_EXTRACTOR_GUIDE.md`.
+Gap vs Elicit/Consensus/Connected Papers selection-into-treatment cue extractors. Distinct from `SelectionBiasCueExtractor` / `HealthyWorkerSurvivorCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/SELECTION_INTO_TREATMENT_CUES_EXTRACTOR_GUIDE.md`.
 
 ### MendelianRandomizationWeakCueExtractor
 
 ![MendelianRandomizationWeakCueExtractor](assets/demo/mendelian-randomization-weak-cues.gif)
 
-Gap vs Elicit/Consensus/Connected Papers weak Mendelian-randomization cue extractors. Distinct from `InstrumentStrengthCueExtractor` / `GComputationCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/MENDELIAN_RANDOMIZATION_WEAK_CUES_EXTRACTOR_GUIDE.md`.
+Gap vs Elicit/Consensus/Connected Papers weak Mendelian-randomization cue extractors. Distinct from `InstrumentStrengthCueExtractor` / `GComputationCueExtractor`. Stack: GPT-6 Astra / Claude Opus 5.5 / Gemini 4 Argon / Kimi K3.1 Pro. See `docs/guides/MENDELIAN_RANDOMIZATION_WEAK_CUES_EXTRACTOR_GUIDE.md`.

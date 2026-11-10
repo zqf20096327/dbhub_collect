@@ -1,9 +1,9 @@
-dqlite [![CI Tests](https://github.com/canonical/dqlite/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/canonical/dqlite/actions/workflows/build-and-test.yml) [![codecov](https://codecov.io/gh/canonical/dqlite/branch/master/graph/badge.svg)](https://codecov.io/gh/canonical/dqlite)
+dqlite [![CI Tests](https://github.com/canonical/dqlite/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/canonical/dqlite/actions/workflows/build-and-test.yml) [![codecov](https://codecov.io/gh/canonical/dqlite/branch/main/graph/badge.svg)](https://codecov.io/gh/canonical/dqlite)
 ======
 
 [English](./README.md)|[简体中文](./README_CH.md)
 
-[dqlite](https://dqlite.io) is a C library that implements an embeddable and
+[dqlite](https://canonical.com/dqlite) is a C library that implements an embeddable and
 replicated SQL database engine with high availability and automatic failover.
 
 The acronym "dqlite" stands for "distributed SQLite", meaning that dqlite
@@ -25,7 +25,7 @@ License
 The dqlite library is released under a slightly modified version of LGPLv3,
 that includes a copyright exception allowing users to statically link the
 library code in their project and release the final work under their own terms.
-See the full [license](https://github.com/canonical/dqlite/blob/master/LICENSE)
+See the full [license](https://github.com/canonical/dqlite/blob/main/LICENSE)
 text.
 
 Compatibility
@@ -46,7 +46,7 @@ Media
 -----
 
 A talk about dqlite was given at FOSDEM 2020, you can watch it
-[here](https://fosdem.org/2020/schedule/event/dqlite/).
+[here](https://archive.fosdem.org/2020/schedule/event/dqlite/).
 
 [Here](https://gcore.com/blog/comparing-litestream-rqlite-dqlite/) is a blog
 post from 2022 comparing dqlite with rqlite and Litestream, other replication
@@ -56,7 +56,7 @@ Wire protocol
 -------------
 
 If you wish to write a client, please refer to the [wire
-protocol](https://dqlite.io/docs/protocol) documentation.
+protocol](https://canonical.com/dqlite/docs/reference/wire-protocol) documentation.
 
 Install
 -------
@@ -69,6 +69,17 @@ sudo add-apt-repository ppa:dqlite/dev
 sudo apt update
 sudo apt install libdqlite-dev
 ```
+
+Operating
+---------
+
+To inspect the state of a running dqlite instance, create a snapshot of data to load onto a node or even to inspect past database states, install `dqlite-utils`:
+
+```bash
+sudo snap install dqlite-utils --classic
+```
+
+See the [dqlite documentation](https://canonical.com/dqlite/docs) for more information.
 
 Contributing
 ------------

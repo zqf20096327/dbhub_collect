@@ -1,7 +1,5 @@
 # MenteDB
 
-> ⚠️ **Beta** — MenteDB is under active development. APIs may change between minor versions.
-
 [![Crates.io](https://img.shields.io/crates/v/mentedb-core)](https://crates.io/crates/mentedb-core) [![docs.rs](https://img.shields.io/docsrs/mentedb-core)](https://docs.rs/mentedb-core) [![CI](https://github.com/nambok/mentedb/actions/workflows/ci.yml/badge.svg)](https://github.com/nambok/mentedb/actions/workflows/ci.yml) [![dependency status](https://deps.rs/repo/github/nambok/mentedb/status.svg)](https://deps.rs/repo/github/nambok/mentedb) [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE) [![npm](https://img.shields.io/npm/v/mentedb)](https://www.npmjs.com/package/mentedb) [![PyPI](https://img.shields.io/pypi/v/mentedb)](https://pypi.org/project/mentedb/)
 
 **The Mind Database for AI Agents**
@@ -328,6 +326,10 @@ curl -X POST http://localhost:6677/v1/recall \
 Every route also works per database under `/v1/db/{name}/...`. The full list of
 endpoints, fields, auth rules and error codes is in the
 [server API reference](docs/SERVER_API.md).
+
+### Claude memory tool backend
+
+The server backs Claude's client side memory tool (`memory_20250818`) at `POST /v1/memory_tool`, with the same contract as MenteDB Cloud. Each `/memories` file is a memory, scoped per agent, and the Python and TypeScript SDKs ship a `MemoryTool` helper that turns the model's `tool_use` blocks into `tool_result` blocks. See [Memory tool backend](docs/MEMORY_TOOL.md).
 
 ### 5. gRPC
 
@@ -772,6 +774,34 @@ for the erased content and embedding bytes. It is also on gRPC and in the
 Python and TypeScript SDKs. [docs/FORGETTING.md](docs/FORGETTING.md) covers
 what it removes, what it cannot reach (backups, copies outside the
 directory, file system snapshots), and how to verify it.
+
+### Provenance and erase by session
+
+Every memory records where it came from when it is first written: the
+session, the kind of source (`chat`, `file`, `api`, `mcp`, `import`,
+`derived`), a reference into it (a file path, a URL, a message id), the
+writing agent, the write time, and for a derived memory the memories it was
+made from. No later write or update can change it. Session and source are
+indexed, so filtering by them costs O(matches).
+
+```rust
+let node = MemoryNode::new(agent, MemoryType::Semantic, text, embedding)
+    .with_provenance(Provenance::new(SourceKind::Chat, agent).with_session("conv-7"));
+db.store(node)?;
+let ids = db.memory_ids_in_session("conv-7");
+let receipt = db.erase_session("conv-7", EraseOptions::default())?;
+```
+
+```bash
+curl "localhost:6677/v1/memories?session_id=conv-7" -H "Authorization: Bearer $TOKEN"
+curl -X POST localhost:6677/v1/sessions/conv-7/erase -H "Authorization: Bearer $TOKEN"
+```
+
+MQL takes `WHERE session = "conv-7"` and `WHERE source = file`. Erase by
+session runs one verified erase over the session's memories and everything
+derived from them, with one receipt. Databases written before provenance
+open unchanged, their memories with none. See
+[docs/PROVENANCE.md](docs/PROVENANCE.md).
 
 ## LLM Extraction Configuration
 

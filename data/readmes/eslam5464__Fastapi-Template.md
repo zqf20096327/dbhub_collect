@@ -11,22 +11,43 @@ A production-ready FastAPI project template with modern best practices, async su
 
 - **🚀 FastAPI** - Modern, fast web framework for building APIs, with versioned routers (`/v1`, `/v2`)
 - **📊 PostgreSQL** - Async database integration with SQLAlchemy 2.0 and Alembic migrations
-- **🔐 JWT Authentication** - Secure token-based authentication with token blacklisting
+- **🔐 JWT Authentication** - Secure token-based authentication
+<!-- --- FEATURE[redis_token_blacklist] START --- -->
+- **🚫 Token revocation** - logout puts the token on a Redis blacklist
+<!-- --- FEATURE[redis_token_blacklist] END --- -->
+<!-- --- FEATURE[!redis_token_blacklist] START --- -->
+- **⚠️ Logout does not revoke tokens** - without the token blacklist, a logged-out access token stays valid until it expires; keep expiry times short
+<!-- --- FEATURE[!redis_token_blacklist] END --- -->
 - **🏗️ Clean Architecture** - Repository pattern, dependency injection, and enforced module boundaries (tach)
-- **🔒 Security** - CSRF, rate limiting, and security headers middleware
-- **🐳 Docker Compose** - Backend, Postgres, and Redis ready to run
+- **🔒 Security** - CSRF and security headers middleware
+<!-- --- FEATURE[redis_rate_limit] START --- -->
+- **🚦 Rate limiting** - Redis sliding-window limits on the auth and user routes
+<!-- --- FEATURE[redis_rate_limit] END --- -->
+- **🐳 Docker Compose** - Backend and Postgres ready to run
 - **🧪 CI & Testing** - Pytest with coverage gating, plus lint/type/security checks in GitHub Actions
 
+<!-- --- FEATURE[redis_cache|celery|backblaze|gcs|firebase|apple_pay|resend|brevo] START --- -->
 Plus optional integrations:
 
+<!-- --- FEATURE[redis_cache|celery|backblaze|gcs|firebase|apple_pay|resend|brevo] END --- -->
+<!-- --- FEATURE[redis_cache] START --- -->
 - caching
+<!-- --- FEATURE[redis_cache] END --- -->
+<!-- --- FEATURE[celery] START --- -->
 - background jobs
+<!-- --- FEATURE[celery] END --- -->
+<!-- --- FEATURE[backblaze|gcs] START --- -->
 - cloud storage
+<!-- --- FEATURE[backblaze|gcs] END --- -->
+<!-- --- FEATURE[firebase] START --- -->
 - Firebase
+<!-- --- FEATURE[firebase] END --- -->
 <!-- --- FEATURE[apple_pay] START --- -->
 - Apple Pay
 <!-- --- FEATURE[apple_pay] END --- -->
+<!-- --- FEATURE[resend|brevo] START --- -->
 - email delivery
+<!-- --- FEATURE[resend|brevo] END --- -->
 
 For the full list of integrations and services, see **[docs/features.md](docs/features.md)**.
 
@@ -67,11 +88,8 @@ For the full list of integrations and services, see **[docs/features.md](docs/fe
    Install dependencies
 
    ```bash
-   # Install dependencies
+   # Install dependencies (the services chosen at generation are regular dependencies)
    uv sync --all-groups
-
-   # Install optional integrations as needed
-   uv sync --all-groups --all-extras
 
    # Install pre-commit hooks
    pre-commit install
@@ -81,7 +99,6 @@ For the full list of integrations and services, see **[docs/features.md](docs/fe
 
    ```bash
    uv sync --all-groups --native-tls
-   uv sync --native-tls --all-extras
    ```
 
 3. **Set up environment variables**
@@ -124,7 +141,7 @@ uvx copier copy gh:eslam5464/Fastapi-Template <new-project-dir> --trust
 
 **Alternative:** if you'd rather have `copier` installed permanently (e.g. for `copier update` later), use `uv tool install copier` instead. On Windows, that installs into a user tools directory that's often **not yet on PATH** in your *current* terminal session — if you see `'copier' is not recognized as an internal or external command` right after installing, either open a **new** terminal window, or run `uv tool update-shell` and then restart the terminal. The `uvx` command above sidesteps the PATH issue entirely since it doesn't need `copier` installed anywhere persistent.
 
-You'll be prompted for a project name, description, author name/email, GitHub username, Python version, and whether to keep the minimal base or choose optional services one by one (currently BackBlaze B2 and Apple Pay); running `copier copy ... --defaults` gives you the minimal base. Everything identity-specific — the `pyproject.toml` name, Docker container names, the Postgres schema, `README.md`, `LICENSE`, `CODEOWNERS` — is filled in automatically; see [docs/features.md](docs/features.md) for what ships by default versus what's opt-in.
+You'll be prompted for a project name, description, author name/email, GitHub username, Python version, and whether to keep the minimal base or choose optional services one by one (currently the Redis cache, rate limiting, the token blacklist, Celery, Firebase, Firestore, Google Cloud Storage, BackBlaze B2, Resend, Brevo, OpenObserve and Apple Pay); running `copier copy ... --defaults` gives you the minimal base. Everything identity-specific — the `pyproject.toml` name, Docker container names, the Postgres schema, `README.md`, `LICENSE`, `CODEOWNERS` — is filled in automatically; see [docs/features.md](docs/features.md) for what ships by default versus what's opt-in.
 
 `--trust` is required because generation runs a small post-processing script (`scripts/generate/post_gen.py`) that substitutes your answers into the copied files, removes unused Apple Pay files when you opt out, regenerates `uv.lock`, and runs `git init` for you.
 
@@ -165,6 +182,10 @@ Add `-g` to install it once to your personal/global skills folder instead of jus
 project, or `-a claude-code` / `-a codex` to target one agent specifically. This is a
 real, general-purpose skill installer, not something built for this repo — it works
 the same way for anyone else's skills too.
+
+A skill installed this way (or copied, below) carries reference copies of key template
+files in its `assets/` folder, shown with every optional service included. In a project
+generated from this template, those copies match the services that project has.
 
 > GitHub Copilot support in that CLI is unverified as of this writing — Copilot's own
 > docs don't describe a native skills-folder mechanism yet. If `-a github-copilot`
@@ -225,6 +246,9 @@ Detailed documentation is available in the [docs/](docs/) folder:
 
 ## 🏛️ Architecture
 
+See **[Architecture Overview](docs/architecture/overview.md)** for the layers, request flow and module boundaries.
+
+<!-- --- FEATURE[_template] START --- -->
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/architecture/fastapi-template.architecture.visual-check.1440x900.dark.png">
   <img src="docs/architecture/fastapi-template.architecture.visual-check.1440x900.light.png" alt="FastAPI Template runtime architecture diagram: client through the API gateway, versioned routers, service layer, repository/ORM, PostgreSQL, Redis-backed caching and rate limiting, and an optional Celery worker, all inside a Docker Compose trusted network." width="800">
@@ -232,7 +256,9 @@ Detailed documentation is available in the [docs/](docs/) folder:
 
 *Screenshot of the interactive diagram — client → API Gateway → versioned API → Service Layer → Repository/ORM → PostgreSQL, with Redis-backed caching/rate-limiting/token-blacklisting and an optional Celery worker for background jobs, all inside the Docker Compose trusted network.*
 
-See **[Architecture Overview](docs/architecture/overview.md)** for the full write-up. The interactive version lives at [`docs/architecture/fastapi-template.architecture.html`](docs/architecture/fastapi-template.architecture.html) — download it and open it locally for guided views, theme toggling, and per-node source links (GitHub renders `.html` files as source, not a live page, so the link above won't run it in-browser).
+The interactive version of this diagram lives at [`docs/architecture/fastapi-template.architecture.html`](docs/architecture/fastapi-template.architecture.html) — download it and open it locally for guided views, theme toggling, and per-node source links (GitHub renders `.html` files as source, not a live page, so the link above won't run it in-browser).
+
+<!-- --- FEATURE[_template] END --- -->
 
 ## 🏗️ Project Structure
 
@@ -266,7 +292,9 @@ The template includes a complete JWT-based authentication system:
 - User registration and login
 - Access and refresh tokens
 - Password hashing with Argon2 (via pwdlib)
+<!-- --- FEATURE[redis_token_blacklist] START --- -->
 - Token blacklisting for secure logout
+<!-- --- FEATURE[redis_token_blacklist] END --- -->
 - Protected routes with dependency injection
 
 ### Example Usage
@@ -325,39 +353,12 @@ uv run bandit -r app -f json -o bandit_results.json
 uv run pytest -v
 ```
 
+<!-- --- FEATURE[celery] START --- -->
 ### Background Jobs & Task Queue
 
-The project uses Celery for background job processing with Redis as the message broker.
+Celery workers, the beat scheduler and the sample tasks: see [docs/integrations/celery.md](docs/integrations/celery.md).
 
-#### Start Celery Worker
-
-```bash
-# Linux/macOS
-./scripts/celery_worker.sh
-
-# Windows
-.\scripts\celery_worker.bat
-
-# Or directly
-celery -A app.services.task_queue worker --loglevel=info --pool=solo
-```
-
-#### Start Celery Beat (Scheduler)
-
-```bash
-# Linux/macOS
-./scripts/celery_beat.sh
-
-# Windows
-.\scripts\celery_beat.bat
-
-# Or directly
-celery -A app.services.task_queue beat --loglevel=info
-```
-
-**Available Tasks:**
-
-- `seed_fake_users` - Generates fake users for testing (runs every 10 seconds when `ENABLE_DATA_SEEDING=true`)
+<!-- --- FEATURE[celery] END --- -->
 
 ### Database Migrations
 
@@ -413,44 +414,60 @@ REFRESH_TOKEN_EXPIRE_SECONDS=2592000
 BACKEND_HOST=localhost
 BACKEND_PORT=8799
 CURRENT_ENVIRONMENT=local
+```
 
-# Redis (for caching and rate limiting)
+<!-- --- FEATURE[redis] START --- -->
+Redis (shared by the Redis-backed services this project uses):
+
+```env
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASS=your-redis-password
+```
 
-# Rate Limiting
+<!-- --- FEATURE[redis] END --- -->
+<!-- --- FEATURE[redis_rate_limit] START --- -->
+Rate limiting:
+
+```env
 RATE_LIMIT_ENABLED=true
 RATE_LIMIT_DEFAULT=100
 RATE_LIMIT_WINDOW=60
+```
 
-# Celery & Background Tasks
+<!-- --- FEATURE[redis_rate_limit] END --- -->
+<!-- --- FEATURE[celery] START --- -->
+Celery and background tasks:
+
+```env
 ENABLE_DATA_SEEDING=false
 SEEDING_USER_COUNT=100
+```
 
-# Email Providers
+<!-- --- FEATURE[celery] END --- -->
+<!-- --- FEATURE[resend] START --- -->
+Resend:
+
+```env
 RESEND_API_KEY=your_resend_api_key_here
+```
+
+<!-- --- FEATURE[resend] END --- -->
+<!-- --- FEATURE[brevo] START --- -->
+Brevo:
+
+```env
 BREVO_API_KEY=your_brevo_api_key_here
 ```
 
+<!-- --- FEATURE[brevo] END --- -->
+`.env.example` lists every variable this project uses.
+
 ## 📦 Dependencies
 
-Core dependencies (FastAPI, SQLAlchemy, Alembic, Pydantic, Uvicorn) are always installed. Optional integrations (Redis, Celery, Firebase, GCS, email providers) are opt-in extras — install only what you need:
+Core dependencies (FastAPI, SQLAlchemy, Alembic, Pydantic, Uvicorn) are always installed. The packages of the optional services chosen when the project was generated are regular dependencies too, so `uv sync` installs everything the project uses.
 
-```bash
-uv sync --extra email
-uv sync --extra cloud-service
-uv sync --extra cache
-uv sync --extra task-queue
-```
-
-<!-- --- FEATURE[apple_pay] START --- -->
-```bash
-uv sync --extra apple-services
-```
-<!-- --- FEATURE[apple_pay] END --- -->
-
-See **[docs/features.md](docs/features.md)** for what each extra provides and how to configure it.
+See **[docs/features.md](docs/features.md)** for what each service provides and how to configure it.
 
 ## 🤝 Contributing
 

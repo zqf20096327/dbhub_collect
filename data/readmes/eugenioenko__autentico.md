@@ -94,6 +94,7 @@ It is not designed for organizations that require horizontal scaling of the auth
 - [Client Interaction Examples](#client-interaction-examples)
 - [Security Considerations](#security-considerations)
 - [Deployment & Operations](#deployment--operations)
+  - [Kubernetes (Helm)](#kubernetes-helm)
 - [Testing](#testing)
 - [Use as a Test Fixture](#use-as-a-test-fixture)
 - [API Documentation](#api-documentation)
@@ -154,12 +155,12 @@ It is not designed for organizations that require horizontal scaling of the auth
 
 ### Operations
 
-- **Built-in Admin UI** — a React/Ant Design dashboard embedded into the binary at build time; zero separate deployments
+- **Built-in Admin UI** — a React dashboard embedded into the binary at build time; zero separate deployments
 - **Runtime settings** — most configuration lives in the database and can be updated via the Admin UI without restarting the server
 - **Background cleanup** — a configurable background goroutine purges expired tokens, sessions, auth codes, MFA challenges, and passkey challenges; the retention window is tunable, and OAuth token/session rows survive through both token lifetimes for refresh and replay detection
 - **Graceful shutdown** — SIGTERM handling drains in-flight requests before exit
 - **Guided onboarding** — first-run setup flow that bootstraps the admin account; the server surfaces the onboarding URL at startup until complete
-- **Docker-ready** — multi-stage Dockerfile produces a minimal Alpine image with nginx for TLS termination
+- **Docker-ready** — multi-stage Dockerfile produces a slim Debian image with a single binary; put your own reverse proxy in front for TLS
 
 ---
 
@@ -167,13 +168,13 @@ It is not designed for organizations that require horizontal scaling of the auth
 
 | Layer       | Choice                        | Rationale                                                     |
 | ----------- | ----------------------------- | ------------------------------------------------------------- |
-| Language    | Go 1.23                       | Single-binary deployment, strong concurrency, type safety     |
+| Language    | Go 1.25                       | Single-binary deployment, strong concurrency, type safety     |
 | Database    | SQLite (`modernc.org/sqlite`) | No CGo, no external server, sufficient for IdP write patterns |
 | JWT Signing | RS256 (RSA 2048)              | Asymmetric — relying parties verify without holding secrets   |
 | WebAuthn    | `go-webauthn/webauthn`        | Standards-compliant FIDO2/WebAuthn implementation             |
 | TOTP        | RFC 6238 compliant            | Compatible with Google Authenticator, Authy, 1Password, etc.  |
 | CSRF        | `gorilla/csrf`                | Protects browser-facing form endpoints                        |
-| Admin UI    | React + Ant Design (Vite)     | Embedded into the binary via `go:embed`                       |
+| Admin UI    | React + yarcl (Vite)          | Embedded into the binary via `go:embed`                       |
 | Testing     | Testify + in-memory SQLite    | Isolated, fast unit and integration tests                     |
 | Docs        | Swagger/OpenAPI               | Interactive API reference                                     |
 
@@ -256,7 +257,7 @@ The full setup requires three commands: initialize configuration, start the serv
 
 ### Prerequisites
 
-- Go 1.21 or later
+- Go 1.25 or later
 - `make` (optional, for Makefile targets)
 - Node.js 20+ and `pnpm` (only if building the Admin UI from source)
 
@@ -296,7 +297,7 @@ cd autentico
 # Build Admin UI + Go binary (requires pnpm)
 make build
 
-# Build Go binary only (uses the pre-built Admin UI in pkg/admin/dist)
+# Build Go binary only (reuses UI assets from a previous make build)
 make build-go
 ```
 
@@ -479,7 +480,7 @@ Trusted device tokens are stored in the `trusted_devices` table and cleaned up a
 
 ## Admin UI
 
-The Admin UI is a React application (built with Ant Design) embedded into the Go binary via `go:embed`. It is served at `/admin/` and authenticates through Auténtico itself using the auto-seeded `autentico-admin` OIDC client.
+The Admin UI is a React application (built with yarcl) embedded into the Go binary via `go:embed`. It is served at `/admin/` and authenticates through Auténtico itself using the auto-seeded `autentico-admin` OIDC client.
 
 ### Pages
 
@@ -529,7 +530,7 @@ curl -X PUT \
 
 ### Building the Admin UI
 
-The pre-built Admin UI is committed to the repository in `pkg/admin/dist/` and is embedded at compile time. If you modify the frontend source:
+The Admin UI build output is copied to `pkg/admin/dist/` (git-ignored) and embedded at compile time. Build it before compiling the binary, and again after changing the frontend source:
 
 ```bash
 # Build the Admin UI and copy it into the embed directory
@@ -600,7 +601,7 @@ Authentication is handled automatically: on first visit, users are redirected th
 
 ### Building the Account UI
 
-The pre-built Account UI is committed to the repository in `pkg/account/dist/` and embedded at compile time. If you modify the frontend source:
+The Account UI build output is copied to `pkg/account/dist/` (git-ignored) and embedded at compile time. Build it before compiling the binary, and again after changing the frontend source:
 
 ```bash
 # Build Account UI and copy assets into the embed directory
@@ -857,12 +858,13 @@ Place an nginx or Caddy instance in front for TLS. The `onboard` step is optiona
 
 ### Docker
 
-The included `dockerfile` produces a minimal Alpine image with nginx for TLS termination. It uses a self-signed certificate by default — replace with a real certificate in production.
+The included `Dockerfile` produces a slim Debian image that runs `autentico start` on port 9999 with `/app/data` as its working directory and volume. It does not terminate TLS; put a reverse proxy in front of it in production.
 
 ```bash
 docker build -t autentico .
-docker run -p 443:443 -p 9999:9999 \
+docker run -p 127.0.0.1:9999:9999 \
   -e AUTENTICO_APP_URL=https://auth.example.com \
+  -e AUTENTICO_LISTEN_PORT=9999 \
   -e AUTENTICO_PRIVATE_KEY="..." \
   -e AUTENTICO_ACCESS_TOKEN_SECRET="..." \
   -e AUTENTICO_REFRESH_TOKEN_SECRET="..." \
@@ -878,7 +880,61 @@ docker run -p 443:443 -p 9999:9999 \
 docker compose up -d
 ```
 
-The provided `docker-compose.yml` maps ports 9999 and 443.
+The provided `docker-compose.yml` builds the image, maps port 9999 on `127.0.0.1` only and runs `start --auto-setup`, which generates a `.env` with fresh secrets on the data volume on first start and reuses it afterwards. Open `http://localhost:9999/onboard` to create the admin account.
+
+### Kubernetes (Helm)
+
+A Helm chart is included in [`deploy/helm/autentico`](deploy/helm/autentico). Release builds package it as a `.tgz` archive, attach it to the GitHub release, and publish it to GitHub Container Registry as an OCI artifact.
+
+Install the published chart:
+
+```bash
+helm install autentico oci://ghcr.io/eugenioenko/charts/autentico \
+  --version <chart-version> \
+  --namespace autentico \
+  --create-namespace \
+  --set application.appUrl=https://auth.example.com
+```
+
+Or install directly from the repository:
+
+```bash
+helm install autentico ./deploy/helm/autentico \
+  --namespace autentico \
+  --create-namespace \
+  --set application.appUrl=https://auth.example.com
+```
+
+The chart creates a `PersistentVolumeClaim` for the SQLite database and keeps a single replica, because SQLite is a single-writer database. Set `persistence.createPV=true` only in clusters without a dynamic storage provisioner. For production, disable `application.launchWithAutoSetup` and provide the bootstrap secrets through `envFrom`:
+
+```bash
+kubectl create secret generic autentico-secrets -n autentico \
+  --from-literal=AUTENTICO_ACCESS_TOKEN_SECRET='...' \
+  --from-literal=AUTENTICO_REFRESH_TOKEN_SECRET='...' \
+  --from-literal=AUTENTICO_CSRF_SECRET_KEY='...' \
+  --from-literal=AUTENTICO_PRIVATE_KEY='...' \
+  --from-literal=AUTENTICO_TOTP_ENCRYPTION_KEY='...'
+
+helm upgrade --install autentico ./deploy/helm/autentico \
+  --namespace autentico \
+  --set application.appUrl=https://auth.example.com \
+  --set application.launchWithAutoSetup=false \
+  --set envFrom[0].secretRef.name=autentico-secrets
+```
+
+See the [chart README](deploy/helm/autentico/README.md) for persistence options, backups, migrations, and all supported values. After installation, run `helm test autentico -n autentico` to check the `/healthz` endpoint.
+
+To build the chart archive locally:
+
+```bash
+make helm-lint
+make helm-package
+# -> dist/helm/autentico-<version>.tgz
+```
+
+`make helm-push` publishes the archive to `HELM_CHART_REPO`. By default the owner is derived from the `origin` remote, so a fork publishes to `oci://ghcr.io/<fork-owner>/charts`; override the variable to publish elsewhere. Run `helm registry login ghcr.io` first.
+
+Release workflows use the repository that runs them, not the upstream repository. Pushing a tag such as `v0.1.0-test.1` to a fork publishes the chart to that fork's GHCR namespace (`oci://ghcr.io/<fork-owner>/charts/autentico`) and the Docker image to `ghcr.io/<fork-owner>/autentico`, without touching the upstream registry. Make the GHCR package public or run `helm registry login ghcr.io` to install it.
 
 ### Reverse Proxy (nginx example)
 
@@ -944,7 +1000,7 @@ autentico start --no-auto-migrate
 
 ### Health Check
 
-`GET /.well-known/openid-configuration` serves as a reliable liveness and readiness probe — it requires the database and key to be functional.
+`GET /healthz` returns `200` when the server and database are healthy and `503` when the database is unreachable. Use it for liveness and readiness probes.
 
 ### Go Runtime Tuning
 

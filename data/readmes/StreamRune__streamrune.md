@@ -62,7 +62,9 @@ The other modules in the [Modules](#modules) table use the same group and versio
 
 ## Requirements
 
-- **Java 25**
+- **Java 25**. The Graal JIT (GraalVM's default compiler) is not supported on JDK 25: run GraalVM
+  with `-XX:+UnlockExperimentalVMOptions -XX:-UseJVMCICompiler` — see
+  [Supported JVMs](docs/guide/production.md#supported-jvms).
 - **PostgreSQL 17 or newer**, when you use `streamrune-postgres` (the in-memory `streamrune-test`
   store needs no database). Every PostgreSQL-backed suite of `postgresTest` runs on 17 and on 18 in
   CI (the broker end-to-end suite on 18 only), nothing older is tested, and the runtime refuses an
@@ -102,6 +104,30 @@ Each row is a published artifact, `org.streamrune:<module>`.
 | [streamrune-rabbitmq-outbox](streamrune-outbox/README.md) | Transactional outbox publisher for RabbitMQ |
 
 The crypto modules have a shared [overview](streamrune-crypto/README.md).
+
+## API stability
+
+From `1.0.0` on, StreamRune follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html):
+a minor or patch release does not break code written against the public API, and a breaking
+change waits for the next major version. The public API is:
+
+- the public types and members of the published modules, except those marked `@Internal`;
+- the configuration keys and their units, the metric names, the health component names and the
+  database schema the migrations create.
+
+A type or member annotated `@Internal` (from `streamrune-core`) is public only because another
+StreamRune module uses it: the runtime, the PostgreSQL store or one of the integrations. It is not
+covered by this policy and may change or disappear in any release. The generated API documentation
+leaves it out. Application code does not call, implement or bind it.
+
+The `@Bean`, producer and factory methods of the Spring, Quarkus and Micronaut integrations are
+wiring that the container calls, not API: an application replaces a bean with one of its own, and
+does not call these methods.
+
+Interfaces that applications implement (an `EventStore`, a `CommandBus` decorator, a
+`CommandInterceptor`, a `SagaStore` and the other ports) may gain new `default` methods in a minor
+release. A class that implements such an interface keeps compiling; a decorator forwards a new
+method once it wants the delegate's answer instead of the default.
 
 ## License
 

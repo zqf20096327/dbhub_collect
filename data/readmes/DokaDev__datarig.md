@@ -1,8 +1,10 @@
 # datarig
 
-[![CI](https://github.com/DokaDev/datarig/actions/workflows/ci.yml/badge.svg)](https://github.com/DokaDev/datarig/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/DokaDev/datarig)](https://github.com/DokaDev/datarig/releases/latest) [![Homebrew](https://img.shields.io/badge/brew-dokadev%2Ftap%2Fdatarig-orange)](https://github.com/DokaDev/homebrew-tap)
+[![CI](https://github.com/DokaDev/datarig/actions/workflows/ci.yml/badge.svg)](https://github.com/DokaDev/datarig/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/DokaDev/datarig)](https://github.com/DokaDev/datarig/releases/latest) [![Downloads](https://img.shields.io/github/downloads/DokaDev/datarig/total)](https://github.com/DokaDev/datarig/releases) [![Homebrew](https://img.shields.io/badge/brew-dokadev%2Ftap%2Fdatarig-orange)](https://github.com/DokaDev/homebrew-tap) [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue)](#license)
 
-[![Docs](https://img.shields.io/badge/docs-dokadev.github.io%2Fdatarig-informational)](https://dokadev.github.io/datarig/) [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue)](#license) [![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-20B2AA)](https://deepwiki.com/DokaDev/datarig)
+[![Docs](https://img.shields.io/badge/docs-dokadev.github.io%2Fdatarig-informational)](https://dokadev.github.io/datarig/) [![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-20B2AA)](https://deepwiki.com/DokaDev/datarig) [![Built With Ratatui](https://img.shields.io/badge/Built_With_Ratatui-000?logo=ratatui&logoColor=fff)](https://ratatui.rs/) [![Rust 1.93+](https://img.shields.io/badge/rust-1.93%2B-orange?logo=rust)](https://www.rust-lang.org/)
+
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=fff)](https://dokadev.github.io/datarig/introduction.html#status) [![MySQL 8.0+](https://img.shields.io/badge/MySQL_8.0%2B-4479A1?logo=mysql&logoColor=fff)](https://dokadev.github.io/datarig/guide/mysql.html)
 
 A full-featured database client that lives in your terminal: light, fast, and safe by default.
 
@@ -10,13 +12,18 @@ A full-featured database client that lives in your terminal: light, fast, and sa
 
 ```sh
 brew install dokadev/tap/datarig
-# or from source, with Rust 1.93 and libclang:
+```
+
+Or take the archive for macOS, Linux or Windows from
+[GitHub Releases](https://github.com/DokaDev/datarig/releases). On Linux, these two need no
+build tools; a build from source needs Rust 1.93, clang and libclang (the packages for each
+distribution are in [Install](https://dokadev.github.io/datarig/install.html#from-source)):
+
+```sh
 git clone https://github.com/DokaDev/datarig && cd datarig && cargo install --locked --path crates/tui
 ```
 
-Archives for macOS, Linux and Windows are on
-[GitHub Releases](https://github.com/DokaDev/datarig/releases); details in
-[Install](https://dokadev.github.io/datarig/install.html). **Documentation: <https://dokadev.github.io/datarig/>**
+**Documentation: <https://dokadev.github.io/datarig/>**
 
 ## Why datarig
 
@@ -62,6 +69,14 @@ the values into series, and a cursor shows the exact values of each point. Nothi
 
 ![Revenue per month and product category as lines with a cursor on one month, then as bars](https://dokadev.github.io/datarig/demo/charts.gif)
 
+**Watch a server.** The Monitor tab shows a PostgreSQL or MySQL server's load as charts, its
+sessions, who waits for whom and its replication, read by a connection of its own only while
+the tab is shown. Cancelling a statement or ending a session asks first, and is sent only if
+the session still runs what you saw.
+[Server monitor](https://dokadev.github.io/datarig/guide/monitoring.html)
+
+![The Monitor tab on a busy server: moving charts, the running sessions, one statement in full, a session waiting for another's row lock, and the blocker's statement cancelled after a confirm](https://dokadev.github.io/datarig/demo/monitor.gif)
+
 **Know where you are.** Profiles carry icons, and their environment's colour and mark (PROD,
 STG or your own) follow them onto their tabs and the status line; a read-only environment
 refuses a write before it is sent. [Environments and safety](https://dokadev.github.io/datarig/guide/environments.html)
@@ -102,18 +117,19 @@ keyboard help. Next: [Getting started](https://dokadev.github.io/datarig/getting
 
 | Path | What |
 |---|---|
-| `crates/core` | UI-free core: driver interface, SQL tooling and the safety classifier, profiles, secrets, config, i18n |
+| `crates/core` | UI-free core: driver interface, SQL tooling and the safety classifier, profiles, secrets, config |
+| `crates/export-formats` | the Excel and Parquet writers of the export |
+| `crates/i18n` | the UI text: the catalogs (`locales/en/`, `locales/ko/`, one file per area) and their typed messages |
 | `crates/drivers/postgres`, `crates/drivers/mysql` | the database drivers |
 | `crates/ssh`, `crates/tls` | SSH tunnels, TLS (rustls) |
 | `crates/update` | the update check's HTTPS request to GitHub |
 | `crates/tui` | the terminal UI and the `datarig` binary |
 | `crates/bench` | benchmarks and the CI performance budgets |
-| `locales/` | the UI text catalogs (`en.toml`, `ko.toml`) |
 | `dev/` | Docker Compose with PostgreSQL, MySQL, PgBouncer and an SSH bastion for the tests; see [dev/README.md](https://github.com/DokaDev/datarig/blob/main/dev/README.md) |
 | `vendor/` | patched tokio-postgres, mysql_async and ssh-key; see [vendor/README.md](https://github.com/DokaDev/datarig/blob/main/vendor/README.md) |
 | `docs/` | [architecture](https://github.com/DokaDev/datarig/blob/main/docs/architecture.md), [performance](https://github.com/DokaDev/datarig/blob/main/docs/perf.md), the generated [key bindings](https://github.com/DokaDev/datarig/blob/main/docs/keybindings.md) and [theme tokens](https://github.com/DokaDev/datarig/blob/main/docs/themes.md), and the documentation site (`docs/site`) |
 
-How to build, test and send a change:
+Please open an issue before a pull request. How to build, test and send a change:
 [CONTRIBUTING.md](https://github.com/DokaDev/datarig/blob/main/CONTRIBUTING.md); the test
 services: [dev/README.md](https://github.com/DokaDev/datarig/blob/main/dev/README.md).
 

@@ -384,6 +384,13 @@ Behavior and limitations:
   failure cleanup. To coordinate copy with delete and purge across processes, enable `lock.zk_flock`
   and use the same ZooKeeper ensemble and lock path for every operation on the respective storage.
   Locking remains optional; the local file lock retains its shared semantics.
+- Set `multiprocessing.metadata_read_threads` in the target configuration to control parallel
+  source and target light-metadata reads at copy startup (default: `4`, positive integer).
+  Each batch holds at most this many reads; set `1` for sequential reading.
+- `multiprocessing.full_metadata_read_threads` in the target configuration controls
+  full-metadata prefetch for `copy.deduplication_age_limit` (default: `2`). The limit includes
+  the candidate being indexed and queued reads; indexing remains sequential. Set `1` for
+  sequential loading. Increasing it retains more full metadata in memory.
 - By default, deduplicated data parts of the backup are stored in older backups. If such a backup is already
   present in the target storage, the deduplication link is kept. A link to a local part is also kept
   if the copy of that backup is not completed but already holds files of the part, e.g. after its
@@ -651,6 +658,14 @@ can be used to pass additional arguments to underlying `behave` invocation.
 For example, `make test-integration BEHAVE_ARGS='-i ssl_support'` executes
 tests that belongs to SSL support feature (`ssl_support.feature`).
 
+After every executed scenario, including successful ones, the runner saves
+`ch-backup.log`, `boto.log` and `clickhouse-server.err.log` from ClickHouse
+containers, plus the broken proxy's stdout/stderr. Logs are collected before
+containers are reset, under `staging/logs/saved-logs/` for serial runs. Each
+container instance has its own directory, so later scenarios do not overwrite
+earlier ones. Files not created by a scenario are omitted. Full container logs,
+configuration and S3 exports are still collected on failure.
+
 #### Parallel integration tests on one Docker host
 
 ```bash
@@ -695,10 +710,11 @@ Results are printed at startup under `staging/parallel/<run-id>/results/`:
   IDs and actual ClickHouse versions. Features not started after a failure have
   status `not_run`, distinct from version skips.
 - Per-feature directories: full `behave.log` and standard Behave `junit/` reports,
-  including skipped scenarios. Failure-only stage diagnostics are written to
-  `stage-failures.jsonl`; worker logs and container diagnostics are retained for
-  failed runs. Exit codes, report completeness and stage failures determine the
-  result; unfinished scenarios cannot turn a run green.
+  including skipped scenarios. `saved-logs/` contains the selected container logs
+  described above, on both success and failure. Failure-only stage diagnostics
+  are written to `stage-failures.jsonl`; worker logs and container diagnostics
+  are retained for failed runs. Exit codes, report completeness and stage failures
+  determine the result; unfinished scenarios cannot turn a run green.
 
 All twelve existing CI combinations use three slots. JUnit and diagnostics are
 uploaded on both success and failure with run-attempt-specific artifact names.

@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform: macOS | Windows | Linux](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-blue.svg)](https://github.com/xiaoliuzhuan666/workbuddy-account-migrate)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8+-green.svg)](https://www.python.org/)
-[![Version 1.7.0](https://img.shields.io/badge/Version-1.7.0-brightgreen.svg)](https://github.com/xiaoliuzhuan666/workbuddy-account-migrate)
+[![Version 1.7.1](https://img.shields.io/badge/Version-1.7.1-brightgreen.svg)](https://github.com/xiaoliuzhuan666/workbuddy-account-migrate)
 
 **[English](#english) | [中文](#chinese)**
 
@@ -183,7 +183,15 @@ python3 scripts/migrate.py --source <USER_ID> --yes --restart
 >
 > 因此同一台机器上装了两个版本时，脚本会按**数据目录**决定读哪份登录态：
 > 指向国际版目录时不会去读国内版的 `storage.json`（否则会把国际版数据迁到一个国际版里不存在的账号下）。
-> **目录优先级**：`--dir` > `--intl` > 自动探测（`~/.workbuddy-ai` 存在且非空时判为国际版，否则国内版）。交互式向导还会让你确认一次版本。
+> **目录优先级**：`--dir` > `--intl` > 自动探测。交互式向导还会让你确认一次版本。
+>
+> ⚠️ **双版本同装的坑（v1.7.1 修复）**：两个目录**可以同时存在**（国内版 + 国际版各装一个客户端）。
+> 旧版自动探测只要 `~/.workbuddy-ai` 非空就无条件判为国际版、且不打任何提示，于是
+> `--diagnose` 会去诊断几乎空的国际版库，报「只发现一个账号，无需迁移」——而国内版库里
+> 躺着的几百条会话被完全跳过（实测漏掉 266 条）。
+> 现在两个目录都有数据时：**默认处理国内版**，并打印两个目录各自的会话数/账号数，
+> 要操作国际版请显式加 `--intl`（或 `--dir`）。`--diagnose` 也会把「本次未诊断」的
+> 另一版本一并列出，不再只看一半就给结论。
 
 ### 备份目录布局
 
@@ -209,18 +217,11 @@ python3 scripts/migrate.py --source <USER_ID> --yes --restart
 
 ### 退出码
 
-下表三个脚本共用，但 **`3` 只有 `migrate.py` 会产生**（整账号迁移才有"源账号空"这个概念；
-另两个脚本遇到源/目标版本目录没数据时是 `1`）。
+下表三个脚本共用。`3`（未做任何改动）由 `migrate.py` 与 `migrate_project.py` 产生；
+`migrate_session.py` 遇到源/目标版本目录里根本没有库时返回 `1`（版本选错）。
 
 | 退出码 | 含义 |
 |:---:|:---|
 | `0` | 确实迁移 / 回滚了东西 |
-| `1` | 出错（含：`migrate_session.py` 的源/目标版本目录里根本没有库 = 版本选错） |
-| `2` | 「客户端必须关闭」检测拦截（检测到客户端仍在运行，或检测不可信且未给 `--force` / `--assume-clients-closed`） |
-| `3` | **仅 `migrate.py`**：无数据可迁，本次未做任何改动。涵盖两种情况——源账号确实没有 session / memory / connector；或源有数据但与目标完全一致、合并后没有任何新增内容 |
-
-> ⚠️ 自动化脚本不要把「退出码 0」当成「一定迁了东西」，也不要把「3」当成失败：
-> 它表示本次没有产生任何改动。判读建议：`0` → 成功，`3` → 跳过，其他 → 失败。
->
-> ⚠️ **破坏性变更**：v1.6.1 之前，源账号没数据时 `migrate.py` 返回 `0`。
-> 如果你在 CI / 自动化里按 `rc
+| `1` | 出错或未完成（含：`migrate_session.py` 的源/目标版本目录里根本没有库 = 版本选错；`migrate_project.py` 部分会话导入失败；用户在确认提示里选择取消） |
+| `2` |

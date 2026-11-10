@@ -18,15 +18,26 @@ It indexes polyglot source files, project manifests, HTTP/gRPC/GraphQL endpoints
 2. **Surgical MCP Context for AI Agents**: Gives coding agents instant access to call chains, cross-service dependencies, data lineage, and blast-radius impact analysis without burning millions of tokens on blind `grep` searches.
 3. **CI Architecture Gates (Semantic Invariant Gates)**: Enforces architectural boundaries in the IDE and CI (`ce gate check`) using declarative OpenCypher rules and SHA-256 ratchet baselines.
 
-### Benchmark: Plain AI Agent (`ripgrep`) vs. AI Agent + CodeExplorer Graph
-*(Single blast-radius audit task on a private 450-module TypeScript/Go/SQL monorepo: 324 microservices, 93 shared libraries, 33 workers. Same model (Gemini Flash) for both agents, one run each. The agent used `ce` CLI graph queries. [Full methodology and transcript metrics](./benchmarks/02-enterprise-microservices-deep-audit/README.md). A smaller benchmark you can reproduce on this repository itself: [Case Study 01](./benchmarks/01-polyglot-architecture-and-blast-radius/README.md).)*
+### Benchmarks: Autonomous AI Agents & MCP Graph Engines
+*(We run two distinct types of benchmarks: **1. End-to-End AI Agent Workflows** (measuring how much time, tokens, and missed dependencies a graph saves an LLM on real tasks) and **2. Deterministic Graph Engine Head-to-Head** (cold indexing speed, RAM, MCP latency, and extraction recall across `371` verified items without an LLM). Full catalog: [benchmarks/README.md](./benchmarks/README.md) and [code-explorer.app/benchmarks.html](https://code-explorer.app/benchmarks.html).)*
 
-| Metric | Plain AI Agent (`ripgrep` + file reads) | AI Agent + **CodeExplorer Graph** | Improvement |
-| :--- | :--- | :--- | :--- |
-| **Analysis Time** | 29m 52s | **3m 56s** | **7.59× faster** |
-| **Cumulative Input Tokens** | 17.19M tokens | **393K tokens** | **43.7× fewer tokens** |
-| **Agent Effort** | 285 turns (142 shell commands, 114 file reads) | **23 turns (18 graph queries, 0 file reads)** | **12.4× fewer turns** |
-| **Blast-Radius Recall** | 82% *(missed 9 RTB services behind env constants)* | **100% recall** *(all services & DB tables found)* | **Zero blind spots** |
+| Metric | **`twentyhq/twenty` (`24.5k` files): `CBM` → `CodeExplorer`** ([Case Study 01](./benchmarks/01-agent-audit-ce-vs-cbm-on-twenty/README.md)) | **324-Service Monorepo (`13.8k` files): `ripgrep` → `CodeExplorer`** ([Case Study 02](./benchmarks/02-enterprise-microservices-deep-audit/README.md)) |
+| :--- | :--- | :--- |
+| **Time to Answer** | `9m 15s` → **`41s` (`13.5×` faster)** | `29m 52s` → **`3m 56s` (`7.59×` faster)** |
+| **Cumulative Input Tokens** | `1.68M` → **`80.2K` tokens (`20.9×` fewer tokens)** | `17.19M` → **`393K` tokens (`43.7×` fewer tokens)** |
+| **Agent Effort** | `28` turns (`8` `CBM` queries + `3` AST scripts + `10` file reads) → **`4` turns (`5` graph queries, `0` source reads)** | `285` turns (`142` shell commands, `114` file reads, `14` scripts) → **`23` turns (`18` graph queries, `0` file reads)** |
+| **Blast-Radius Recall** | `3.4%` (`13 / 381`) from `CBM` graph → **`99%` (`378 / 381`) directly from `graph.db`** | `82%` *(missed 9 RTB services behind env constants)* → **`100%` recall (`0` blind spots)** |
+
+### Head-to-Head vs. Other MCP Code Graphs (`immich` & `twenty`)
+*(Evaluated on `immich-app/immich` (`3,205` files, `461k` LOC) and `twentyhq/twenty` (`24,527` files, `2.49M` LOC) against a frozen seed-42 ground-truth dataset (`371` items across `C1–C11`: `130` Group A Basic Code + `241` Group B Architecture, DB & Queues). Full reproducible reports and scripts: [Case Study 03 (`ce` vs. `codebase-memory-mcp`)](./benchmarks/03-code-explorer-vs-codebase-memory-mcp/README.md) and [Case Study 04 (`ce` vs. `graphify`)](./benchmarks/04-code-explorer-vs-graphify/README.md).)*
+
+| Dimension | **`CodeExplorer` (`ce`)** | **`codebase-memory-mcp` (`CBM`)** | **`graphify`** |
+| :--- | :---: | :---: | :---: |
+| **Cold Index (`immich`, `3.2k` files)** | **`17.60 s`** (`55.1 MB` DB) | `20.60 s` (`282.0 MB` DB) | `107.60 s` (`52.3 MB` dir) |
+| **Cold Index (`twenty`, `24.5k` files)** | `147.33 s` (**`784.0 MB`** DB) | **`96.90 s`** (`842.5 MB` DB) | `DNF (>45 min timeout)` |
+| **Part 1 Recall (`L1–L3`: Endpoints, HTTP, Call Graph, Inheritance)** | **`78%`** (`102 / 130`, 6W/2T/0L) | `38%` (`49 / 130`; `50%` on `immich`) | `18%` (`23 / 130`; `35%` on `immich`) |
+| **Part 2 Recall (`L4–L5`: Queues, DB Tables, Read/Write Lineage, Services)** | **`97.5%`** (`235 / 241`) | *Not modeled* | *Not modeled* |
+| **Structured Query & CI Governance** | **OpenCypher (`3.1–4.7 ms`) + 32+ CI Gates** | Cypher subset (`38–71 ms`), snapshot diff | Keyword BFS/DFS (`334 ms`), Leiden clusters |
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/vmikhailov/code-explorer/main/docs/all_services.png" alt="CodeExplorer Service Topology" width="100%" />
@@ -268,17 +279,18 @@ The VS Code extension provides an interactive workspace for exploring the graph,
 
 ## Supported Languages & Frameworks
 
-CodeExplorer combines Tree-sitter grammars, Microsoft SQL ScriptDom, and framework-specific semantic analyzers (`ISemanticExtension`). Maturity reflects how much real-world code each analyzer has been validated against: **Stable** means used daily on large production repositories, **Beta** means the analyzers exist and are tested, but coverage of real-world framework patterns is still growing. If the graph looks wrong on your repository, please [open an issue](https://github.com/vmikhailov/code-explorer/issues).
+CodeExplorer combines Tree-sitter parsers, SQL parsers, and **250 framework analyzers** across 8 languages. Maturity reflects how much real-world code each analyzer has been validated against: **Stable** means validated on large open-source and production repositories, **Beta** means coverage is still growing. If the graph looks wrong on your repository, please [open an issue](https://github.com/vmikhailov/code-explorer/issues).
 
-| Language | Maturity | Files & Manifests | Extracted Framework Semantics |
+| Language | Maturity | Files & Manifests | Extracted Framework Semantics (250 Library Parsers) |
 | :--- | :--- | :--- | :--- |
-| **C#** | Stable | `.cs`, `.csproj`, `.sln`, `.slnx` | ASP.NET Core Controllers & Minimal APIs, gRPC services/clients, HttpClient, EF Core (`DbContext`, entities, migrations), Dapper, MassTransit, MediatR |
-| **TypeScript / JS** | Stable | `.ts`, `.tsx`, `.js`, `.jsx`, `package.json` | NestJS, Express, Next.js, React, Vue, Angular, Svelte, Axios/fetch/undici clients, Prisma/TypeORM, AWS SDK (SQS, S3, DynamoDB), Azure SDK, Stripe, Jest/Vitest/Playwright/Cypress |
+| **C#** | Stable | `.cs`, `.csproj`, `.sln`, `.slnx` | ASP.NET Core Controllers & Minimal APIs, FastEndpoints, Carter, YARP, gRPC, HttpClient, EF Core, Dapper, Marten, Linq2Db, NHibernate, MassTransit (incl. Sagas), Wolverine, NServiceBus, Rebus, Hangfire, Quartz.NET, CAP, MediatR, Dapr, Azure/AWS SDKs, Semantic Kernel |
+| **TypeScript / JS** | Stable | `.ts`, `.tsx`, `.js`, `.jsx`, `package.json` | NestJS (REST, GraphQL `@Resolver`, DI), Express, Fastify, Next.js, Hono, tRPC, Remix, SvelteKit, Astro, Cloudflare Workers, React/Vue/Angular/Svelte, Prisma, TypeORM, Kysely, MikroORM, BullMQ, Inngest, Temporal, NATS/MQTT, TanStack Query/SWR, Vercel AI SDK, Playwright/Cypress |
 | **SQL** | Stable | `.sql` & embedded SQL strings | T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`) |
-| **Go** | Beta | `.go`, `go.mod` | Gin, Fiber, Echo, `net/http` handlers & clients, Resty, gRPC, `pgx` / `database/sql` |
-| **Java** | Beta | `.java`, `pom.xml`, `build.gradle` | Spring Boot REST (`@RestController`, `@RequestMapping`), Spring Kafka (`KafkaTemplate`, `@KafkaListener`), Spring AMQP / RabbitMQ, JPA / Hibernate |
-| **Kotlin & Android** | Beta | `.kt`, `.kts`, `build.gradle.kts`, `AndroidManifest.xml` | Android Activities/Services/BroadcastReceivers/ContentProviders, Intents, Retrofit, OkHttp, Ktor, Room DAO/Entities, gRPC/Protobuf, Hilt/Dagger/Koin DI, Jetpack Compose, Navigation |
-| **Python** | Beta | `.py`, `pyproject.toml`, `requirements.txt` | FastAPI, Flask, Django routes & ORM models, `requests`, `httpx`, `aiohttp`, Celery / Kafka consumers |
+| **Go** | Stable | `.go`, `go.mod` | Gin, Fiber, Echo, Fasthttp, Beego, Gorilla Mux, Go-Zero, Go-Kit/Kratos, `net/http`, gRPC, gRPC-Gateway, ConnectRPC/Twirp, Watermill, Asynq, Machinery/River, Kafka-Go/Franz-Go, Dapr, GORM, `sqlx`, `sqlc`, Ent, Bun, `pgx`, Temporal, Uber Fx/Wire |
+| **Java** | Stable | `.java`, `pom.xml`, `build.gradle` | Spring Boot/Cloud/Batch/Integration/Gateway, Quarkus (RESTEasy, Panache, SmallRye), Micronaut, Dropwizard/Jersey, Vert.x, Akka/Pekko, Netty, Apache Dubbo, Camel, Pulsar, Axon, JPA/Hibernate, MyBatis (Annotations & XML), jOOQ, JDBI, R2DBC, OpenFeign/Retrofit, Temporal, LangChain4j/Spring AI |
+| **Kotlin & Android** | Stable | `.kt`, `.kts`, `build.gradle.kts`, `AndroidManifest.xml` | Spring Web/Data, Ktor Server & Client DSL, Micronaut, http4k, gRPC-Kotlin, Apollo GraphQL, Exposed, Ktorm, Room DAO/Entities, SQLDelight, Coroutines Channels/SharedFlow, Retrofit/OkHttp, Hilt/Dagger/Koin/Kodein DI, Jetpack Compose, Voyager/Decompose, Kotest/MockK |
+| **Python** | Stable | `.py`, `pyproject.toml`, `requirements.txt` | FastAPI, Litestar, Flask, Django, Sanic/Tornado/Falcon, Strawberry GraphQL, SQLAlchemy, SQLModel, Tortoise ORM, `asyncpg`/`psycopg3`, Motor/Mongo, ClickHouse, Qdrant/Milvus/Weaviate, Celery, Dramatiq, RQ, FastStream, AIOKafka, Pika/RabbitMQ, Airflow/Prefect, Temporal, OpenAI/Anthropic/LangChain/CrewAI/PydanticAI |
+| **Rust** | Stable | `.rs`, `Cargo.toml` | Axum, Actix Web, Warp, Rocket, Tonic gRPC, Reqwest, SQLx, SeaORM, Diesel, Tokio, Lapin/rdkafka |
 | **ColdFusion** | Beta | `.cfc`, `.cfm` | Components, functions, `cfquery` SQL extraction, HTTP calls |
 
 ---
@@ -305,6 +317,8 @@ CodeExplorer sits between code-intelligence indexers and architecture-testing li
 | **GitHub CodeQL** | Deep semantic and security dataflow queries over per-language databases, built from the compiler for compiled languages. | No build required. One graph across all languages, with cross-service HTTP/gRPC/queue edges and architecture gates with ratchet baselines. Not a security dataflow engine. |
 | **Joern** | Open-source Code Property Graph for vulnerability research, queried with a Scala DSL. | Architecture-level ontology instead of a low-level CPG, standard OpenCypher, and MCP / VS Code / CI integration out of the box. |
 | **Serena** and other LSP-based MCP servers | Precise symbol lookup and editing for agents through language servers. | Gives agents the system view (cross-service calls, data lineage, blast radius) rather than symbol-level edits. Works well alongside an LSP-based server. |
+| **`codebase-memory-mcp` (`CBM`)** | Fast Go/C Tree-sitter structural & call-graph indexing (`96.9s` on `twenty`), low RAM usage, branch graph diffing (`compare_graphs`), and runtime trace overlays (`ingest_traces`). | Adds Layer 4–5 architectural ontology (ORM/SQL database tables, `READS_FROM`/`WRITES_TO` lineage, BullMQ/Kafka queues, GraphQL/REST endpoints), NestJS DI call resolution, and CI Semantic Invariant Gates ([Case Study 03](./benchmarks/03-code-explorer-vs-codebase-memory-mcp/README.md)). |
+| **`graphify`** | Unsupervised Leiden community clustering, cross-community bridge detection (`graphify://surprises`), docstring rationale extraction, GitHub PR triage, and Obsidian/HTML knowledge vault exports. | Scales to 24.5k-file monorepos (`147s` vs. `>45m` timeout on `twenty`), queries an indexed SQLite database via OpenCypher (`599ms` cold MCP init vs. `3.7s`), and models endpoints, queues, and database lineage ([Case Study 04](./benchmarks/04-code-explorer-vs-graphify/README.md)). |
 | **Aider repo map** | Compact Tree-sitter summary of important symbols, placed directly into the prompt. | A persistent graph the agent can query on demand with multi-hop questions, instead of a static summary. |
 | **ArchUnit**, **NetArchTest**, **dependency-cruiser** | Architecture rules written as tests inside one language ecosystem. ArchUnit can also freeze existing violations. | One rule language (OpenCypher) across languages and services, and the same graph also powers visualization and agent context. |
 | **Structurizr**, C4 diagrams-as-code | Carefully authored architecture models and diagrams. | The model is derived from code, so it does not drift. Diagrams can be exported to Mermaid or C4 (`ce export`). |

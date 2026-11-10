@@ -4,7 +4,7 @@
   "commit_90d": 1,
   "rel_ver": "release-proxy-8853",
   "rel_pub": "2025-07-29",
-  "rel_days": 467,
+  "rel_days": 469,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -31,7 +31,7 @@
   "commit_90d": 68,
   "rel_ver": "v7.5.8",
   "rel_pub": "2026-09-17",
-  "rel_days": 52,
+  "rel_days": 54,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -81,7 +81,7 @@
  },
  "fushengqian/fuint": {
   "commit_90d": 47,
-  "commit_7d": 3,
+  "commit_7d": 4,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -93,14 +93,14 @@
    "Java": 100,
    "Shell": 0
   },
-  "enriched_at": "20261107",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261107",
-   "release": "20261107",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261027"
   },
   "etag": {
-   "release": "\"b045bf43836e07d86b40a45b2d7f8aa45c07502e1260fe566fff0fef4d659b72\""
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
   },
   "rel_dates": [],
   "rel_n90": 0
@@ -110,7 +110,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.5.9",
   "rel_pub": "2026-01-02",
-  "rel_days": 310,
+  "rel_days": 312,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -159,12 +159,12 @@
   "rel_n90": 0
  },
  "obeli-sk/obelisk": {
-  "commit_90d": 1394,
-  "commit_7d": 126,
-  "rel_ver": "v0.43.0-rc.11",
-  "rel_pub": "2026-10-27",
-  "rel_days": 12,
-  "rel_n90": 12,
+  "commit_90d": 1526,
+  "commit_7d": 103,
+  "rel_ver": "v0.43.0-rc.17",
+  "rel_pub": "2026-11-07",
+  "rel_days": 3,
+  "rel_n90": 30,
   "rel_pre": true,
   "rel_none": false,
   "sec_n": 0,
@@ -178,15 +178,102 @@
    "JavaScript": 0,
    "Nix": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"b4ed6b3e02c76fb7f5493ed71151eb5b7de2279f9d65b78555b66cfad0357e6b\""
+  },
+  "rel_dates": [
+   "2026-11-07",
+   "2026-11-05",
+   "2026-10-29",
+   "2026-10-28",
+   "2026-10-28",
+   "2026-10-28",
+   "2026-10-27",
+   "2026-10-26",
+   "2026-10-24",
+   "2026-10-22",
+   "2026-10-20",
+   "2026-10-18",
+   "2026-10-17",
+   "2026-10-15",
+   "2026-10-14",
+   "2026-10-14",
+   "2026-10-13",
+   "2026-10-04",
+   "2026-10-03",
+   "2026-10-02",
+   "2026-10-01",
+   "2026-10-01",
+   "2026-09-30",
+   "2026-10-01",
+   "2026-09-26",
+   "2026-09-26",
+   "2026-09-26",
+   "2026-09-19",
+   "2026-09-18",
+   "2026-08-31"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.43.0-rc.17",
+    "d": "2026-11-07",
+    "n": "This release candidate adds verified PostgreSQL TLS, uses the system's certificates for outbound\n- *(postgres)* `database.postgres.ssl_mode = \"verify_full\"` encrypts connections and verifies\nHTTPS, and improves recovery when SQLite runs out of space. Cloud logins gain account aliases and\n- *(postgres)* Database operations check out pooled clients only while in use, so waiting\n- *(sqlite)* Full-database writes return HTTP `507` instead of `503`. Executors back off after\na full database despite failed audit, "
+   },
+   {
+    "t": "v0.43.0-rc.16",
+    "d": "2026-11-05",
+    "n": "- **Breaking:** *(db)* A deployment's content digest is unique. Submitting content already stored\nthe same deployment file. The database migration keeps existing deployments storing the same\n- *(server)* `[idle_report]` (SQLite only) POSTs repeated reports to a URL while no HTTP request is\nthe database. Its requests do not count as activity for `idle_report`.\ntargets, its options are read from `MALLOC_CONF` instead of `_RJEM_MALLOC_CONF`. SQLite and V8 no\n- *(sqlite)* Periodic GC drains free database pages "
+   },
+   {
+    "t": "v0.43.0-rc.15",
+    "d": "2026-10-29",
+    "n": "This release candidate bounds SQLite polling cost as execution history grows and improves\n- *(sqlite)* Idle polling uses indexes for pending executions and cancellation checks,"
+   },
+   {
+    "t": "v0.43.0-rc.14",
+    "d": "2026-10-28",
+    "n": "This release candidate fixes stalls in activities that wait on outbound HTTP.\n\n### Fixed\n\n- *(v8)* A cancelled or timed-out V8 activity awaiting `fetch` stops immediately instead of\n  running until the request finishes. [#1243](https://github.com/obeli-sk/obelisk/pull/1243)\n- *(http)* Pooled connections run on the server runtime instead of a native V8 isolate's\n  runtime. A Rust activity reusing a connection created by a V8 webhook can now make\n  progress while the webhook waits for it, avoiding activity ti"
+   },
+   {
+    "t": "v0.43.0-rc.13",
+    "d": "2026-10-28",
+    "n": "- *(db)* Backtrace source mappings are written in a single transaction during deployment"
+   },
+   {
+    "t": "v0.43.0-rc.12",
+    "d": "2026-10-28",
+    "n": "- *(sqlite)* Prepared statements with a bound `LIMIT` are no longer recompiled on every\n- *(sqlite)* Pool shutdown waits for connection cleanup and the final WAL checkpoint\nreclaims SQLite space during GC, and keeps cron registration independent of execution history.\n- *(sqlite)* Databases use incremental auto-vacuum, and periodic GC reclaims up to 100 free\npages per sweep. Existing databases are converted once at startup with a full `VACUUM`,"
+   },
+   {
+    "t": "v0.43.0-rc.11",
+    "d": "2026-10-27",
+    "n": "It is off by default as it costs a database write per such execution. The `Created` event's"
+   },
+   {
+    "t": "v0.43.0-rc.10",
+    "d": "2026-10-26",
+    "n": "This release candidate streams webhook response bodies from WASIp3 and JS webhooks, pools\noutbound HTTP connections, adds follow streams to the execution responses, logs and events\nendpoints, and fixes record parameters of JS activities and workflows.\n\n### Added\n\n- *(webhook)* WASIp3 webhooks send the response as soon as the guest produces headers and\n  stream the body, so SSE and other incremental responses arrive as they are written.\n  [#1209](https://github.com/obeli-sk/obelisk/pull/1209)\n- *(js)* JS web"
+   },
+   {
+    "t": "v0.43.0-rc.9",
+    "d": "2026-10-24",
+    "n": "This release candidate skips overlapping cron executions by default, accepts HTTP/2 on webhook\nlisteners, adds cloud integration bindings and staged configuration revisions, and fixes workflow\nlock extension with short lock expiries.\n\n### Added\n\n- *(cron)* `overlap` setting on `[[cron]]`: `skip` (default) skips a tick while the previously\n  scheduled execution is not finished, `allow` keeps the previous behavior.\n  [#1191](https://github.com/obeli-sk/obelisk/pull/1191)\n- *(webhook)* Webhook listeners accept"
+   },
+   {
+    "t": "v0.43.0-rc.8",
+    "d": "2026-10-22",
+    "n": "This release candidate removes the deprecated gRPC API, adds URL prefix rules for outbound HTTP,\npersists atomic app checkpoints, makes cloud app apply and fill explicit, and adds\n`/v1/app-policy`.\n\n### Added\n\n- *(config)* Outbound HTTP rules in `app.toml` and deployments accept `url_prefix` with an optional\n  `url_regex_suffix` instead of `pattern` and `request_url_regex`. Environment variables expand\n  before the prefix is regex-escaped. [#1178](https://github.com/obeli-sk/obelisk/pull/1178)\n- *(api)* `GE"
+   }
+  ]
  },
  "uyuni-project/uyuni": {
-  "commit_90d": 1286,
-  "commit_7d": 110,
+  "commit_90d": 1287,
+  "commit_7d": 49,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 4,
@@ -206,15 +293,17 @@
    "TypeScript": 5,
    "Gherkin": 3
   },
-  "enriched_at": "20261107",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261107"
   },
   "etag": {
-   "security": "W/\"7fd61967d2359833c8f760b7b068a1ffa283421104e19154c09e0bd1e724872f\""
-  }
+   "security": "W/\"7fd61967d2359833c8f760b7b068a1ffa283421104e19154c09e0bd1e724872f\"",
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "raramuridesign/mysql-country-list": {
   "commit_90d": 3,
@@ -232,19 +321,23 @@
    "Python": 24,
    "JavaScript": 2
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "trimble-oss/dba-dash": {
-  "commit_90d": 343,
-  "commit_7d": 61,
-  "rel_ver": "4.22.1",
-  "rel_pub": "2026-10-21",
-  "rel_days": 18,
-  "rel_n90": 12,
+  "commit_90d": 370,
+  "commit_7d": 29,
+  "rel_ver": "4.24.1",
+  "rel_pub": "2026-11-06",
+  "rel_days": 4,
+  "rel_n90": 18,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -259,19 +352,94 @@
    "PowerShell": 1,
    "HTML": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"2cf557d5a7a907e67c38ce18a03302ea304ed96fe7c13c5bfde461d9d39a30d3\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-05",
+   "2026-10-28",
+   "2026-10-28",
+   "2026-10-21",
+   "2026-10-20",
+   "2026-10-07",
+   "2026-10-01",
+   "2026-10-01",
+   "2026-09-29",
+   "2026-09-29",
+   "2026-09-22",
+   "2026-09-17",
+   "2026-09-16",
+   "2026-09-15",
+   "2026-09-15",
+   "2026-09-02",
+   "2026-09-01"
+  ],
+  "rel_notes": [
+   {
+    "t": "4.24.1",
+    "d": "2026-11-06",
+    "n": "| Add a monitoring client on another machine (installer, updates to match the repository) | [DBADash_GUI_Setup_4.24.1.exe](https://github.com/trimble-oss/dba-dash/releases/download/4.24.1/DBADash_GUI_Setup_4.24.1.exe) |\n| Add a monitoring client for all users of a machine (installer, needs admin)        | [DBADash_GUI_Setup_4.24.1.msi](https://github.com/trimble-oss/dba-dash/releases/download/4.24.1/DBADash_GUI_Setup_4.24.1.msi) |\n| Add a monitoring client on another machine (xcopy deployment, no install)  "
+   },
+   {
+    "t": "4.24.0",
+    "d": "2026-11-05",
+    "n": "| Add a monitoring client on another machine (installer, updates to match the repository) | [DBADash_GUI_Setup_4.24.0.exe](https://github.com/trimble-oss/dba-dash/releases/download/4.24.0/DBADash_GUI_Setup_4.24.0.exe) |\n| Add a monitoring client for all users of a machine (installer, needs admin)        | [DBADash_GUI_Setup_4.24.0.msi](https://github.com/trimble-oss/dba-dash/releases/download/4.24.0/DBADash_GUI_Setup_4.24.0.msi) |\n| Add a monitoring client on another machine (xcopy deployment, no install)  "
+   },
+   {
+    "t": "4.23.1",
+    "d": "2026-10-28",
+    "n": "| Add a monitoring client on another machine (installer, updates to match the repository) | [DBADash_GUI_Setup_4.23.1.exe](https://github.com/trimble-oss/dba-dash/releases/download/4.23.1/DBADash_GUI_Setup_4.23.1.exe) |\n| Add a monitoring client for all users of a machine (installer, needs admin)        | [DBADash_GUI_Setup_4.23.1.msi](https://github.com/trimble-oss/dba-dash/releases/download/4.23.1/DBADash_GUI_Setup_4.23.1.msi) |\n| Add a monitoring client on another machine (xcopy deployment, no install)  "
+   },
+   {
+    "t": "4.23.0",
+    "d": "2026-10-28",
+    "n": "* Manage source connections from the GUI (add, edit options, remove) by @DavidWiseman in https://github.com/trimble-oss/dba-dash/pull/2228\n| Add a monitoring client on another machine (installer, updates to match the repository) | [DBADash_GUI_Setup_4.23.0.exe](https://github.com/trimble-oss/dba-dash/releases/download/4.23.0/DBADash_GUI_Setup_4.23.0.exe) |\n| Add a monitoring client for all users of a machine (installer, needs admin)        | [DBADash_GUI_Setup_4.23.0.msi](https://github.com/trimble-oss/dba-"
+   },
+   {
+    "t": "4.22.1",
+    "d": "2026-10-21",
+    "n": "| Add a monitoring client on another machine (installer, updates to match the repository) | [DBADash_GUI_Setup_4.22.1.exe](https://github.com/trimble-oss/dba-dash/releases/download/4.22.1/DBADash_GUI_Setup_4.22.1.exe) |\n| Add a monitoring client for all users of a machine (installer, needs admin)        | [DBADash_GUI_Setup_4.22.1.msi](https://github.com/trimble-oss/dba-dash/releases/download/4.22.1/DBADash_GUI_Setup_4.22.1.msi) |\n| Add a monitoring client on another machine (xcopy deployment, no install)  "
+   },
+   {
+    "t": "4.22.0",
+    "d": "2026-10-20",
+    "n": "| Add a monitoring client on another machine (installer, updates to match the repository) | [DBADash_GUI_Setup_4.22.0.exe](https://github.com/trimble-oss/dba-dash/releases/download/4.22.0/DBADash_GUI_Setup_4.22.0.exe) |\n| Add a monitoring client for all users of a machine (installer, needs admin)        | [DBADash_GUI_Setup_4.22.0.msi](https://github.com/trimble-oss/dba-dash/releases/download/4.22.0/DBADash_GUI_Setup_4.22.0.msi) |\n| Add a monitoring client on another machine (xcopy deployment, no install)  "
+   },
+   {
+    "t": "4.21.0",
+    "d": "2026-10-07",
+    "n": "| Add a monitoring client on another machine (after monitoring is already set up)    | [DBADash_GUI_Only_4.21.0.zip](https://github.com/trimble-oss/dba-dash/releases/download/4.21.0/DBADash_GUI_Only_4.21.0.zip) |\n* Add Teams notification channel by @DavidWiseman in https://github.com/trimble-oss/dba-dash/pull/2149\n* Slow queries - Add EventFile and ExistingSession capture modes by @DavidWiseman in https://github.com/trimble-oss/dba-dash/pull/2154\n* AI - Add Ollama provider by @DavidWiseman in https://github"
+   },
+   {
+    "t": "4.20.4",
+    "d": "2026-10-01",
+    "n": "| Add a monitoring client on another machine (after monitoring is already set up)    | [DBADash_GUI_Only_4.20.4.zip](https://github.com/trimble-oss/dba-dash/releases/download/4.20.4/DBADash_GUI_Only_4.20.4.zip) |\n| Set up monitoring (repository DB + service + GUI)                                 | [DBADash_4.20.4.zip](https://github.com/trimble-oss/dba-dash/releases/download/4.20.4/DBADash_4.20.4.zip) |\n| View query plans/deadlocks only - no monitoring (installer, auto-updates)         | [DBADash_Visualizer"
+   },
+   {
+    "t": "4.20.3",
+    "d": "2026-10-01",
+    "n": "| Add a monitoring client on another machine (after monitoring is already set up)    | [DBADash_GUI_Only_4.20.3.zip](https://github.com/trimble-oss/dba-dash/releases/download/4.20.3/DBADash_GUI_Only_4.20.3.zip) |\n| Set up monitoring (repository DB + service + GUI)                                 | [DBADash_4.20.3.zip](https://github.com/trimble-oss/dba-dash/releases/download/4.20.3/DBADash_4.20.3.zip) |\n| View query plans/deadlocks only - no monitoring (installer, auto-updates)         | [DBADash_Visualizer"
+   },
+   {
+    "t": "4.20.2",
+    "d": "2026-09-29",
+    "n": "| Add a monitoring client on another machine (after monitoring is already set up)    | [DBADash_GUI_Only_4.20.2.zip](https://github.com/trimble-oss/dba-dash/releases/download/4.20.2/DBADash_GUI_Only_4.20.2.zip) |\n| Set up monitoring (repository DB + service + GUI)                                 | [DBADash_4.20.2.zip](https://github.com/trimble-oss/dba-dash/releases/download/4.20.2/DBADash_4.20.2.zip) |\n| View query plans/deadlocks only - no monitoring (installer, auto-updates)         | [DBADash_Visualizer"
+   }
+  ]
  },
  "Kobii-git/rackpad": {
-  "commit_90d": 137,
-  "commit_7d": 0,
-  "rel_ver": "v1.8.5",
-  "rel_pub": "2026-10-20",
-  "rel_days": 19,
-  "rel_n90": 12,
+  "commit_90d": 138,
+  "commit_7d": 3,
+  "rel_ver": "v1.8.7",
+  "rel_pub": "2026-11-07",
+  "rel_days": 3,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -286,19 +454,106 @@
    "CSS": 0,
    "PowerShell": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"309a1a80ec596dec3b68f7cd39c1fe98c932f82934c894815f44bbe0858882fe\""
+  },
+  "rel_dates": [
+   "2026-11-07",
+   "2026-11-06",
+   "2026-11-03",
+   "2026-11-02",
+   "2026-11-02",
+   "2026-11-01",
+   "2026-11-01",
+   "2026-10-31",
+   "2026-10-31",
+   "2026-10-31",
+   "2026-10-29",
+   "2026-10-29",
+   "2026-10-20",
+   "2026-10-13",
+   "2026-09-27",
+   "2026-09-24",
+   "2026-09-22",
+   "2026-09-19",
+   "2026-09-16",
+   "2026-09-11",
+   "2026-09-09",
+   "2026-09-09",
+   "2026-09-05",
+   "2026-09-05",
+   "2026-09-04",
+   "2026-09-04",
+   "2026-09-03",
+   "2026-09-01",
+   "2026-08-30",
+   "2026-08-30"
+  ],
+  "rel_notes": [
+   {
+    "t": "v1.8.7",
+    "d": "2026-11-07",
+    "n": "No production route, listener, privilege, authentication setting or database\nSchema remains **55**, matching 1.8.6. Retain a protected consistent database or\ndatabase/configuration/key snapshot. Older installations must also follow the"
+   },
+   {
+    "t": "v1.9.0-beta.7",
+    "d": "2026-11-06",
+    "n": "Before upgrading, retain a consistent database/volume snapshot, configuration,\n`8f2a32ac77db8167fecb468c6091e12720a0bbae`, schema 62:\n`ghcr.io/kobii-git/rackpad@sha256:2ec9251b0db8d63dcaa009a465fd879c9487989ff90b00489641f7f728fce1d5`."
+   },
+   {
+    "t": "v1.9.0-beta.6",
+    "d": "2026-11-03",
+    "n": "and retain a consistent pre-upgrade database, configuration and encryption key\nLocal regressions use disposable databases and synthetic discovery/HTTP fixtures."
+   },
+   {
+    "t": "v1.9.0-beta.5",
+    "d": "2026-11-02",
+    "n": "telemetry history database is introduced.\npre-upgrade database, configuration and encryption key with the preceding image"
+   },
+   {
+    "t": "v1.9.0-beta.4",
+    "d": "2026-11-02",
+    "n": "requires the matching pre-upgrade schema-61 database, configuration and encryption\nkey; an older executable must not open the upgraded database."
+   },
+   {
+    "t": "v1.9.0-beta.3",
+    "d": "2026-11-01",
+    "n": "summary. Use a matching pre-upgrade database/configuration/key snapshot for\nChecks include disposable database regressions and real container Glances"
+   },
+   {
+    "t": "v1.9.0-beta.2",
+    "d": "2026-11-01",
+    "n": "SQLite database, configuration and encryption-key snapshot; an older executable\nmust not open the upgraded database.\nValidation uses disposable databases, synthetic provider responses and real Kuma"
+   },
+   {
+    "t": "v1.9.0-beta.1",
+    "d": "2026-10-31",
+    "n": "or deletion removes invalid markers in the same database transaction.\npaired with its pre-upgrade database, configuration and encryption key."
+   },
+   {
+    "t": "v1.9.0-beta.0",
+    "d": "2026-10-31",
+    "n": "Rollback requires the previous binary/image paired with its pre-upgrade database,"
+   },
+   {
+    "t": "v1.8.7-beta.1",
+    "d": "2026-10-31",
+    "n": "Keep the previous image/binary with its consistent pre-upgrade database,\nolder binaries against a schema-58 database.\nCI pins the published beta.0 schema-57 image (revision `7bf2eaf484daa5c878154a5d1f828528daff7bff`) alongside the older schema-51/53/55 baselines. Its upgrade checks retain known and unresolved audit history, verify scope backfill, delete a fixture subject, restart, and restore the protected old database/configuration/key pair. The workflow targets both AMD64 and ARM64; this is a required che"
+   }
+  ]
  },
  "mikemajesty/nestjs-microservice-boilerplate-api": {
-  "commit_90d": 114,
-  "commit_7d": 5,
-  "rel_ver": "v1.1.15",
-  "rel_pub": "2026-10-07",
-  "rel_days": 32,
-  "rel_n90": 3,
+  "commit_90d": 125,
+  "commit_7d": 8,
+  "rel_ver": "v1.1.19",
+  "rel_pub": "2026-11-06",
+  "rel_days": 4,
+  "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -313,11 +568,48 @@
    "Makefile": 2,
    "JavaScript": 2
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"c9a92ae13dd1dbd75583e893cc11343c4fe4a52ce58465171b199d90a8f60a0e\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-02",
+   "2026-11-02",
+   "2026-10-07",
+   "2026-09-12"
+  ],
+  "rel_notes": [
+   {
+    "t": "v1.1.19",
+    "d": "2026-11-06",
+    "n": "## What's Changed\n* 📝 Changelog for v1.1.18 by @github-actions[bot] in https://github.com/mikemajesty/nestjs-microservice-boilerplate-api/pull/29\n\n\n**Full Changelog**: https://github.com/mikemajesty/nestjs-microservice-boilerplate-api/compare/v1.1.18...v1.1.19"
+   },
+   {
+    "t": "v1.1.18",
+    "d": "2026-11-02",
+    "n": "**Full Changelog**: https://github.com/mikemajesty/nestjs-microservice-boilerplate-api/compare/v1.1.17...v1.1.18"
+   },
+   {
+    "t": "v1.1.16",
+    "d": "2026-11-02",
+    "n": "**Full Changelog**: https://github.com/mikemajesty/nestjs-microservice-boilerplate-api/compare/v1.1.15...v1.1.16"
+   },
+   {
+    "t": "v1.1.15",
+    "d": "2026-10-07",
+    "n": "## What's Changed\n* 📝 Changelog for v1.1.14 by @github-actions[bot] in https://github.com/mikemajesty/nestjs-microservice-boilerplate-api/pull/27\n\n\n**Full Changelog**: https://github.com/mikemajesty/nestjs-microservice-boilerplate-api/compare/v1.1.14...v1.1.15"
+   },
+   {
+    "t": "v1.1.14",
+    "d": "2026-09-12",
+    "n": "## What's Changed\n* 📝 Changelog for v1.1.13 by @github-actions[bot] in https://github.com/mikemajesty/nestjs-microservice-boilerplate-api/pull/25\n\n\n**Full Changelog**: https://github.com/mikemajesty/nestjs-microservice-boilerplate-api/compare/v1.1.13...v1.1.14"
+   }
+  ]
  },
  "nilenso/postgresql-monitoring": {
   "commit_90d": 0,
@@ -333,7 +625,7 @@
   "enriched_at": "20260927"
  },
  "Leantime/docker-leantime": {
-  "commit_90d": 2,
+  "commit_90d": 5,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -346,18 +638,22 @@
    "Dockerfile": 78,
    "Shell": 22
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "vitaly-t/pg-promise-demo": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "4.0.0",
   "rel_pub": "2025-08-30",
-  "rel_days": 435,
+  "rel_days": 437,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -426,7 +722,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.4",
   "rel_pub": "2025-07-21",
-  "rel_days": 475,
+  "rel_days": 477,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -449,7 +745,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.12",
   "rel_pub": "2026-06-06",
-  "rel_days": 155,
+  "rel_days": 157,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -472,7 +768,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.2",
   "rel_pub": "2022-07-28",
-  "rel_days": 1564,
+  "rel_days": 1566,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -490,10 +786,10 @@
  },
  "percona/proxysql_exporter": {
   "commit_90d": 11,
-  "commit_7d": 2,
+  "commit_7d": 1,
   "rel_ver": "v1.1.2",
   "rel_pub": "2021-10-06",
-  "rel_days": 1859,
+  "rel_days": 1861,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -506,19 +802,23 @@
    "Go": 96,
    "Makefile": 4
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"cc08ec8c1d6de8fa2772774b4cd11cade3e3d169406f47bda378b0e38f76e101\""
+  },
+  "rel_dates": []
  },
  "takapi327/ldbc": {
-  "commit_90d": 153,
-  "commit_7d": 1,
+  "commit_90d": 128,
+  "commit_7d": 3,
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-09-01",
-  "rel_days": 68,
-  "rel_n90": 2,
+  "rel_days": 70,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -533,11 +833,24 @@
    "Nix": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"ba5a80915f8813e789dd3fde7477bea3d7ed378c9c9db8648d24dbf89d836562\""
+  },
+  "rel_dates": [
+   "2026-09-01"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.8.0",
+    "d": "2026-09-01",
+    "n": "`ldbc.connector.data.Parameter` is now a `sealed trait` with one case class per type, and `def sql: String` has been removed.\nThis release fixes a SQL injection in client-side prepared statements under the `NO_BACKSLASH_ESCAPES` sql_mode, adds the JDBC 4.3 enquote APIs, and makes `ldbc-plugin` usable from sbt 2.\n> **ldbc** is pre-1.0 software and is still undergoing active development. New versions are **not** binary compatible with prior versions, although in most cases user code will be source compatible."
+   }
+  ]
  },
  "supabase/postgres-deno": {
   "commit_90d": 0,
@@ -586,7 +899,7 @@
  "tidb-incubator/tide": {
   "rel_ver": "v0.3.5",
   "rel_pub": "2021-08-19",
-  "rel_days": 1907,
+  "rel_days": 1909,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -610,7 +923,7 @@
  "invm/noir": {
   "rel_ver": "v2.3.1",
   "rel_pub": "2026-05-08",
-  "rel_days": 184,
+  "rel_days": 186,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -631,7 +944,7 @@
  "bartventer/gorm-multitenancy": {
   "rel_ver": "v8.9.0",
   "rel_pub": "2025-07-11",
-  "rel_days": 485,
+  "rel_days": 487,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -651,7 +964,7 @@
  "RizkyRajitha/linkin": {
   "rel_ver": "v0.5.3",
   "rel_pub": "2024-06-10",
-  "rel_days": 881,
+  "rel_days": 883,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -702,7 +1015,7 @@
  "oslabs-beta/FluxQL": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2021-02-26",
-  "rel_days": 2081,
+  "rel_days": 2083,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -721,11 +1034,11 @@
   "enriched_at": "20260927"
  },
  "huaweicloud/huaweicloud-devkit": {
-  "rel_ver": "v1.1.12",
-  "rel_pub": "2026-10-22",
-  "rel_days": 17,
-  "rel_n90": 11,
-  "rel_pre": false,
+  "rel_ver": "v2.0.0-next.0",
+  "rel_pub": "2026-11-09",
+  "rel_days": 1,
+  "rel_n90": 13,
+  "rel_pre": true,
   "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
@@ -738,13 +1051,83 @@
    "PowerShell": 1,
    "Shell": 0
   },
-  "enriched_at": "20261030",
+  "enriched_at": "20261110",
   "commit_90d": 1373,
   "commit_7d": 0,
   "dim_ts": {
    "commit": "20261030",
-   "release": "20261027"
-  }
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"31eea52c0fafd57900803878a5e5c60c4cb4d967859cbf3fe3d58f027e45ccbe\""
+  },
+  "rel_dates": [
+   "2026-11-09",
+   "2026-11-05",
+   "2026-10-22",
+   "2026-10-20",
+   "2026-10-12",
+   "2026-09-24",
+   "2026-09-22",
+   "2026-09-09",
+   "2026-09-07",
+   "2026-09-01",
+   "2026-08-24",
+   "2026-08-24",
+   "2026-08-24"
+  ],
+  "rel_notes": [
+   {
+    "t": "v2.0.0-next.0",
+    "d": "2026-11-09",
+    "n": "v2.0.0-next.0"
+   },
+   {
+    "t": "v1.1.13",
+    "d": "2026-11-05",
+    "n": "## 1.1.13 Stable Release"
+   },
+   {
+    "t": "v1.1.12",
+    "d": "2026-10-22",
+    "n": "## 1.1.12 Stable Release"
+   },
+   {
+    "t": "v1.1.10",
+    "d": "2026-10-20",
+    "n": "## 1.1.10 Stable Release"
+   },
+   {
+    "t": "v1.1.8",
+    "d": "2026-10-12",
+    "n": "## 1.1.8 Stable Release"
+   },
+   {
+    "t": "v1.1.7",
+    "d": "2026-09-24",
+    "n": "## 1.1.7 Stable Release"
+   },
+   {
+    "t": "v1.1.6",
+    "d": "2026-09-22",
+    "n": "* feat(sandbox): migrate DevBridge flow to 0.2.x (s2 gateway + API Key auth) by @coconut1919 in https://github.com/huaweicloud/huaweicloud-devkit/pull/793\n* fix(sandbox): deploy pipeline correctness fixes verified in live sandbox by @coconut1919 in https://github.com/huaweicloud/huaweicloud-devkit/pull/736"
+   },
+   {
+    "t": "v1.1.2",
+    "d": "2026-09-09",
+    "n": "- Runtime credential switching for multi-account sandbox isolation (huaweicloud_auth_init / auth_switch / auth_confirm / auth_status / auth_sync) + credential reconciliation (#196, #443)\n- \\\u0007uth init\\: automatic project_id resolution & \\--cli-project-id\\ write (#262), non-interactive guidance and KooCLI existing-profile detection (#260), pre-injection IAM credential validation for sandbox credentials (#259)\n**Sandbox**\n- Workspace id auto-passed between sandbox tool calls; index.html overwrite documented wi"
+   },
+   {
+    "t": "v1.1.1",
+    "d": "2026-09-07",
+    "n": "﻿## 1.1.1 Stable Release\n\n### 新增\n- **huawei-iac 编排技能**：8 阶段部署工作流（体量评估 → 架构提案 → 成本+余额关卡 → 批量审批创建 → 验收 → 反序销毁），覆盖 200+ 服务的资源购买目录与真实账号 E2E 验证过的命令模板\n- **部署路由收敛**：所有部署意图（沙箱预览除外）统一经 huawei-iac 编排，各服务技能内置路由守卫\n- **遥测与卸载清理**：可选遥测上报、全局卸载时的 KooCLI/OBS 清理"
+   },
+   {
+    "t": "v1.1.0",
+    "d": "2026-09-01",
+    "n": "- Sandbox deployment fixes (nginx port conflict, QR code generation, fingerprint verification)"
+   }
+  ]
  },
  "kuangshp/gin-admin-api": {
   "rel_ver": null,
@@ -780,7 +1163,7 @@
  "liquibase/liquibase-percona": {
   "rel_ver": "v5.0.4",
   "rel_pub": "2026-08-21",
-  "rel_days": 79,
+  "rel_days": 81,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -869,7 +1252,7 @@
  "orhanayd/noneDB": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2025-12-29",
-  "rel_days": 314,
+  "rel_days": 316,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -903,7 +1286,7 @@
  "dcgadmin/pg_sqltxplain": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2024-08-01",
-  "rel_days": 829,
+  "rel_days": 831,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -938,7 +1321,7 @@
  "SWM-SparkPlus/kr-address-db-updater": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2021-09-29",
-  "rel_days": 1866,
+  "rel_days": 1868,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -956,7 +1339,7 @@
  "Mineru98/mysql-mcp-server": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2025-03-19",
-  "rel_days": 599,
+  "rel_days": 601,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1019,7 +1402,7 @@
  "yizhao95/prov_ledger": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-17",
-  "rel_days": 52,
+  "rel_days": 54,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1057,7 +1440,7 @@
  "OraOpenSource/apex-plugin-clob-load": {
   "rel_ver": "2017.08.04",
   "rel_pub": "2017-08-04",
-  "rel_days": 3383,
+  "rel_days": 3385,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1093,7 +1476,7 @@
  "demasylabs/Point-Of-Sale": {
   "rel_ver": "v1.0",
   "rel_pub": "2021-02-11",
-  "rel_days": 2096,
+  "rel_days": 2098,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1136,7 +1519,7 @@
  "oracle-quickstart/oci-cloudera": {
   "rel_ver": "v3.3.7",
   "rel_pub": "2021-10-19",
-  "rel_days": 1846,
+  "rel_days": 1848,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1155,7 +1538,7 @@
  "pingcap/wordpress-tidb-plugin": {
   "rel_ver": "1.0",
   "rel_pub": "2024-01-29",
-  "rel_days": 1014,
+  "rel_days": 1016,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1194,7 +1577,7 @@
  "canyener/social-me-die": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2020-12-13",
-  "rel_days": 2156,
+  "rel_days": 2158,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1224,7 +1607,7 @@
  "IAsDoubleYou/homeassistant-mysql_query": {
   "rel_ver": "v3.2.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 43,
+  "rel_days": 45,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1271,7 +1654,7 @@
  "KazKozDev/cbt-assistant": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-08-28",
-  "rel_days": 72,
+  "rel_days": 74,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1346,7 +1729,7 @@
  "ThymonA/fivem-mysql": {
   "rel_ver": "v1.0.2",
   "rel_pub": "2021-02-12",
-  "rel_days": 2095,
+  "rel_days": 2097,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1365,7 +1748,7 @@
  "prplwtf/dbEdit": {
   "rel_ver": "1.2",
   "rel_pub": "2023-10-31",
-  "rel_days": 1104,
+  "rel_days": 1106,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1510,7 +1893,7 @@
  "huaweicloud/devcloud-go": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2024-12-25",
-  "rel_days": 683,
+  "rel_days": 685,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1548,7 +1931,7 @@
  "pingcap/tidb-insight": {
   "rel_ver": "v0.2.5",
   "rel_pub": "2018-10-12",
-  "rel_days": 2949,
+  "rel_days": 2951,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1586,7 +1969,7 @@
  "projectstorm/tornado": {
   "rel_ver": "v1.2.1",
   "rel_pub": "2023-07-10",
-  "rel_days": 1217,
+  "rel_days": 1219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1623,7 +2006,7 @@
  "turbot/steampipe-plugin-linkedin": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2025-10-13",
-  "rel_days": 391,
+  "rel_days": 393,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1747,7 +2130,7 @@
  "huaweicloud/huaweicloud-sdk-java-dis": {
   "rel_ver": "v1.3.21",
   "rel_pub": "2025-05-11",
-  "rel_days": 546,
+  "rel_days": 548,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1770,7 +2153,7 @@
  "punteroo/TF2-Item-Plugins": {
   "rel_ver": "latest",
   "rel_pub": "2026-03-30",
-  "rel_days": 223,
+  "rel_days": 225,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1915,7 +2298,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.6",
   "rel_pub": "2023-11-15",
-  "rel_days": 1089,
+  "rel_days": 1091,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1940,7 +2323,7 @@
  "rocketflare-dev/rocketflare": {
   "rel_ver": "0.15.8",
   "rel_pub": "2026-09-29",
-  "rel_days": 40,
+  "rel_days": 42,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2418,7 +2801,7 @@
   "commit_7d": 0,
   "rel_ver": "v12.0.0",
   "rel_pub": "2025-07-11",
-  "rel_days": 485,
+  "rel_days": 487,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2509,7 +2892,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.1.1",
   "rel_pub": "2026-08-17",
-  "rel_days": 83,
+  "rel_days": 85,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2534,7 +2917,7 @@
  "panp1/onekey-cli": {
   "rel_ver": "0.7.12",
   "rel_pub": "2026-10-15",
-  "rel_days": 24,
+  "rel_days": 26,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2581,7 +2964,7 @@
  },
  "Patrick007-nix/tidbyt-news-de": {
   "commit_90d": 1,
-  "commit_7d": 1,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2644,7 +3027,7 @@
  "Ztudio/Querybird": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-10-27",
-  "rel_days": 12,
+  "rel_days": 14,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2690,7 +3073,7 @@
  "make0-official/brain-oss": {
   "rel_ver": "v0.2.4",
   "rel_pub": "2026-10-31",
-  "rel_days": 8,
+  "rel_days": 10,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2754,7 +3137,7 @@
  "opskest/opskest": {
   "rel_ver": "v1.0.3",
   "rel_pub": "2026-11-03",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2812,7 +3195,7 @@
  "wolph/speedups": {
   "rel_ver": "v2.3.3",
   "rel_pub": "2026-08-14",
-  "rel_days": 86,
+  "rel_days": 88,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,

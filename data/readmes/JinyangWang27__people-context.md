@@ -170,9 +170,14 @@ Or, without an agent: `pctx remember "Amina Hassan" "prefers short emails" --org
 
 Prefer a table to a terminal? `pctx browse --open` opens a local page over the same database:
 
-- browse people and open one person's brief;
+- browse people, searching names, aliases, and summaries, sorting by name or newest added or edited, and
+  narrowing to one organization or group; open one person's brief;
+- rename a person (the old name stays as an alias) or rewrite their summary;
 - add, correct, or remove a person's aliases and email addresses;
-- correct an affiliation, fact, trait, or reminder in place, with the before and after kept in the audit log;
+- add an affiliation (organization, role, optional dates), a fact, or an interaction;
+- correct an affiliation, fact, interaction, trait, or reminder in place, with the before and after kept in the
+  audit log;
+- permanently remove an affiliation, fact, or interaction, after a confirmation;
 - review a staged import batch person by person, edit its candidates, then withdraw or commit them.
 
 It binds `127.0.0.1` only, every request needs the per-launch token printed in its URL, and every write goes
@@ -229,8 +234,8 @@ encryption or opt into SQLCipher at-rest encryption (`uv sync --extra encrypted`
 - **Import**: `pctx import stage SOURCE PATH` then `review` and `commit`, over email, mbox, vCard, `.ics`,
   LinkedIn, Outlook, and WhatsApp exports. Agents can stage extracted candidates the same way. See
   [docs/import.md](docs/import.md).
-- **Local browser**: `pctx browse --open` serves a loopback-only, token-guarded page to browse people, edit their
-  aliases, correct affiliations, facts, traits, and reminders, and review, edit, and commit staged import batches.
+- **Local browser**: `pctx browse --open` serves a loopback-only, token-guarded page to browse people, rename them and edit
+  their summary and aliases, correct affiliations, facts, traits, and reminders, and review, edit, and commit staged import batches.
   See [Review and edit in your browser](#review-and-edit-in-your-browser).
 - **Groups**: record classes, teams, clubs, and households with `pctx group`, then ask how two people know each
   other with `pctx group shared A B`. See [docs/shared-connections-examples.md](docs/shared-connections-examples.md).

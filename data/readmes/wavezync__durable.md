@@ -13,6 +13,11 @@ waits.
 - **Docs, guides and interactive examples:** [durable.wavezync.com](https://durable.wavezync.com)
 - **API reference:** [durable](https://hexdocs.pm/durable) and [durable_dashboard](https://hexdocs.pm/durable_dashboard) on HexDocs
 
+## Project docs
+
+- [ARCHITECTURE.md](ARCHITECTURE.md): how Durable works, and the rules to keep
+- [PLAN.md](PLAN.md): what's next
+
 ## Workspace
 
 This is a path-dep monorepo (pnpm-workspaces style) containing the Durable
@@ -53,7 +58,7 @@ commands work: `mix deps.get`, `mix compile`, `mix test`, `mix format`,
 
 ## Cross-package references
 
-`durable_dashboard` depends on `{:durable, "~> 1.0"}` from Hex, which is what
+`durable_dashboard` depends on `{:durable, "~> 1.5"}` from Hex, which is what
 it ships with. To build it against the local checkout, set `DURABLE_PATH`:
 
 ```bash

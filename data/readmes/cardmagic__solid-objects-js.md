@@ -17,7 +17,9 @@ promise.
 
 **Production use.** One first-party application with more than 100,000 users
 runs it in production. That is a count of users, not a measure of load. The
-[benchmarks](docs/benchmarks.md) are development measurements.
+[benchmark guide](https://github.com/cardmagic/solid-objects-js/blob/main/docs/benchmarks.md)
+lists the measured releases, environments and durability settings. Reports are
+published independently of package versions.
 
 **It is not** Solid Queue, SolidJS, or the `service_actor` gem, and it is not
 affiliated with Rails or Cloudflare.
@@ -177,6 +179,13 @@ Different identities can run concurrently. One global identity serializes everyt
 
 ## Solid Objects in the browser
 
+**Browser async-context limit:** after the first `await` in actor code,
+application-write and inside-transaction guards lose their context. Keep actor
+operations free of direct application database writes; use staged effects or
+commit actions with their supplied fenced connection. Durable actor commits
+remain fenced. Read the [browser context contract](docs/api.md#browser-async-context)
+before porting asynchronous Node actors.
+
 The full runtime runs inside a browser module worker. Actors look exactly
 like they do in Node; the database is SQLite WASM, and persistent storage
 lives in the origin's private file system (OPFS), so actor state survives
@@ -289,6 +298,7 @@ then shows a tested Solid Objects version with its limits:
 - [Choosing Solid Objects](docs/fit.md)
 - [Comparisons with Restate, DBOS, RivetKit, and Graphile Worker](docs/comparisons.md)
 - [Public API](docs/api.md)
+- [Versioned benchmark results](https://github.com/cardmagic/solid-objects-js/blob/main/docs/benchmarks.md)
 - [Versioning](docs/versioning.md)
 - [Operations and recovery](docs/operations.md)
 - [Observability and diagnostics](docs/observability.md)

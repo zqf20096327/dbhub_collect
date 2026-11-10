@@ -13,7 +13,7 @@
 
 # Todas tus IAs en un mismo chat.
 
-**MADRE no es otra IA.** Es una app que corre en tu computadora y junta a las IAs que ya usas (Codex, Claude Code, Gemini, Cursor y OpenCode) en un solo chat, dentro de tu proyecto. Les escribes con tus palabras, cada una lee lo que dijeron las otras y tú decides qué pueden cambiar. Lo que se decide queda guardado.
+**MADRE no es otra IA.** Es una app que corre en tu computadora y junta a las IAs que ya usas (Codex, Claude Code, Gemini, Cursor, OpenCode y Grok) en un solo chat, dentro de tu proyecto. Les escribes con tus palabras, cada una lee lo que dijeron las otras y tú decides qué pueden cambiar. Lo que se decide queda guardado.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jossuealcacao-exe/madre/main/public/assets/news/1.1/es/chats.webp" alt="Un proyecto en MADRE 1.1: los chats a la izquierda y OpenCode revisando el carrito de una tienda" width="100%">
@@ -44,7 +44,7 @@ Necesitas Node 22.5 o más nuevo y al menos una IA con sesión. No hay cuenta qu
   </tr>
 </table>
 
-También: chats a un lado como en las apps de chat, Windows con WSL2 y mapas de proyectos que crecen con lo que saben. El detalle está en el [CHANGELOG](CHANGELOG.md).
+También: habilidades, para enseñarle una vez a MADRE cómo trabajas y que todas tus IAs lo sigan; Grok entre tus IAs; chats a un lado como en las apps de chat, Windows con WSL2 y mapas de proyectos que crecen con lo que saben. El detalle está en el [CHANGELOG](CHANGELOG.md).
 
 ## Si algo falla
 
@@ -54,7 +54,7 @@ Abre **Diagnóstico** y escribe lo que ves, como «Gemini no contesta». Te dice
 
 - **Corre en tu computadora.** MADRE no tiene cuenta ni nube: abre en `127.0.0.1`.
 - **Tus llaves no se copian.** Cada IA guarda su propia sesión.
-- **Sabes qué sale.** Lo que lee una IA va a su proveedor, con tu cuenta, igual que en tu Terminal. A madre.run van dos cosas, nunca lo que escribes ni tus proyectos: un aviso diario de que la copia sigue en uso (un identificador al azar, la versión, el sistema y Node), que siempre está encendido, y un diagnóstico anónimo (qué falló y cuánto se usa), que apagas en Ajustes. El detalle está en [lo que sale de la máquina](docs/REFERENCE.md#lo-que-sale-de-la-máquina).
+- **Sabes qué sale.** Lo que lee una IA va a su proveedor, con tu cuenta, igual que en tu Terminal. A madre.run van tres cosas, nunca lo que escribes ni tus proyectos: un aviso diario de que la copia sigue en uso (un identificador al azar, la versión, el sistema y Node), que siempre está encendido; un diagnóstico anónimo (qué falló, cuánto se usa y, cada cinco minutos, que la copia está abierta), que apagas en Ajustes; y el reporte automático de un error que MADRE no conoce (qué falló y en qué parte de MADRE), que viene encendido con el diagnóstico y tiene su propio interruptor. Cada envío queda anotado en tu computadora, en «Lo que se envía». El detalle está en [lo que sale de la máquina](docs/REFERENCE.md#lo-que-sale-de-la-máquina).
 
 ## Licencia
 

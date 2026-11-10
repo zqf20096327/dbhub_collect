@@ -158,15 +158,17 @@ The [manual](docs/manual/README.md) documents each surface's exact limits.
 | Surface | Default | Enable |
 |---|---|---|
 | HTTP native protocol | `127.0.0.1:3000`, `POST /protocol/v1/execute` | always on |
-| PostgreSQL wire | `127.0.0.1:5432` | on with `sql` (default) |
+| PostgreSQL wire | `127.0.0.1:5432` | on with `sql` (default); `--pgwire-port 0` turns it off |
 | gRPC (`rushdb.v1.Database/Execute`) | off | `--grpc-port` |
 | Bolt 5.0 | off | `--bolt-port` with `cypher` |
 
 The [JavaScript](https://www.npmjs.com/package/@rushdb/javascript-sdk) and
 [Python](https://pypi.org/project/rushdb/) SDKs, the
-[MCP server](https://www.npmjs.com/package/@rushdb/mcp-server) and the
-[agent skills](https://github.com/rush-db/skills) work with a self-hosted
-engine in direct mode.
+[MCP server](https://www.npmjs.com/package/@rushdb/mcp-server), the
+[agent skills](https://github.com/rush-db/skills) and the
+[LangChain and LangGraph integrations](https://github.com/rush-db/langchain-rushdb)
+(`langchain-rushdb`, `@rushdb/langchain`) work with a self-hosted engine in
+direct mode.
 
 ## Self-hosted engine and RushDB Cloud
 

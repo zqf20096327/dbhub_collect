@@ -29,6 +29,7 @@ For a comparison between dbmate and other popular database schema migration tool
   - [Creating Migrations](#creating-migrations)
   - [Running Migrations](#running-migrations)
   - [Rolling Back Migrations](#rolling-back-migrations)
+  - [Checking Migration Status](#checking-migration-status)
   - [Migration Options](#migration-options)
   - [Waiting For The Database](#waiting-for-the-database)
   - [Exporting Schema File](#exporting-schema-file)
@@ -98,7 +99,7 @@ dbmate --help
 
 Docker images are published to GitHub Container Registry ([`ghcr.io/amacneil/dbmate`](https://ghcr.io/amacneil/dbmate)).
 
-Remember to set `--network=host` or see [this comment](https://github.com/amacneil/dbmate/issues/128#issuecomment-615924611) for more tips on using dbmate with docker networking):
+Remember to set `--network=host` or see [this comment](https://github.com/amacneil/dbmate/issues/128#issuecomment-615924611) for more tips on using dbmate with docker networking:
 
 ```sh
 docker run --rm -it --network=host ghcr.io/amacneil/dbmate --help
@@ -121,7 +122,7 @@ dbmate drop           # drop the database
 dbmate migrate        # run any pending migrations
 dbmate rollback       # roll back the most recent migration
 dbmate down           # alias for rollback
-dbmate status         # show the status of all migrations (supports --exit-code and --quiet)
+dbmate status         # show the status of all migrations (supports --exit-code, --quiet and --strict)
 dbmate dump           # write the database schema.sql file
 dbmate dump -- [...]  # optionally pass additional arguments directly to mysqldump or pg_dump
 dbmate load           # load schema.sql file to the database
@@ -140,12 +141,13 @@ The following options are available with all commands. You must use command line
 - `--migrations-table "schema_migrations"` - database table to record migrations in. _(env: `DBMATE_MIGRATIONS_TABLE`)_
 - `--schema-file, -s "./db/schema.sql"` - a path to keep the schema.sql file. _(env: `DBMATE_SCHEMA_FILE`)_
 - `--no-dump-schema` - don't auto-update the schema.sql file on migrate/rollback _(env: `DBMATE_NO_DUMP_SCHEMA`)_
-- `--strict` - fail if migrations would be applied out of order _(env: `DBMATE_STRICT`)_
+- `--strict` - fail if migrations would be applied out of order, or (on `rollback`) if the most recently applied migration file is missing, or (on `status`) if any applied migration file is missing _(env: `DBMATE_STRICT`)_
 - `--wait` - wait for the db to become available before executing the subsequent command _(env: `DBMATE_WAIT`)_
 - `--wait-timeout 60s` - timeout for --wait flag _(env: `DBMATE_WAIT_TIMEOUT`)_
 - `--wait-interval 1s` - time to wait between connection attempts for --wait flag _(env: `DBMATE_WAIT_INTERVAL`)_
 - `--migration-lock` - hold a database lock while migrating so that concurrent dbmate instances wait for each other (PostgreSQL only) _(env: `DBMATE_MIGRATION_LOCK`)_
 - `--migration-lock-timeout 5m` - maximum time to wait for the migration lock, 0 to wait indefinitely _(env: `DBMATE_MIGRATION_LOCK_TIMEOUT`)_
+- `--migration-application-name` - record the migration version in application_name during execution (PostgreSQL only) _(env: `DBMATE_MIGRATION_APPLICATION_NAME`)_
 
 ## Usage
 
@@ -168,7 +170,8 @@ Most dbmate settings can be configured with environment variables in addition to
 | Wait interval | `DBMATE_WAIT_INTERVAL` | Corresponds to `--wait-interval`. |
 | Migration lock | `DBMATE_MIGRATION_LOCK` | Corresponds to `--migration-lock`. |
 | Migration lock timeout | `DBMATE_MIGRATION_LOCK_TIMEOUT` | Corresponds to `--migration-lock-timeout`. |
-| Strict migrations | `DBMATE_STRICT` | Corresponds to `--strict` on `up` / `migrate`. |
+| Migration application name | `DBMATE_MIGRATION_APPLICATION_NAME` | Corresponds to `--migration-application-name`. |
+| Strict migrations | `DBMATE_STRICT` | Corresponds to `--strict` on `up` / `migrate` / `rollback` / `status`. |
 | Verbose SQL output | `DBMATE_VERBOSE` | Corresponds to `--verbose` / `-v` on `up` / `migrate` / `rollback`. |
 
 `--env` and `--env-file` are CLI-only options (they are not themselves read from environment variables).
@@ -518,6 +521,8 @@ A few limitations are worth knowing about:
 - The lock covers migrations only. Concurrent instances creating the database itself (`dbmate up` where the database does not exist yet) can still race, with or without this flag.
 - The lock is released when the server sees the connection close. A host failure or a network partition can leave it held until the server detects the dead connection, so other instances keep waiting, and may reach `--migration-lock-timeout` before it is released.
 
+Pass `--migration-application-name` to update PostgreSQL's `application_name` session setting with the version of the running migration (for example, in `pg_stat_activity`). The setting takes the format `<application_name>[<version>]`, or `dbmate[<version>]` if no application name was configured on the connection. Because this is set locally within the transaction, it only applies to migrations run inside a transaction; migrations configured with `transaction:false` (such as `CREATE INDEX CONCURRENTLY`) keep the normal name. This option is supported for PostgreSQL only, and is skipped on Redshift and `spanner-postgres`.
+
 ### Rolling Back Migrations
 
 By default, dbmate doesn't know how to roll back a migration. In development, it's often useful to be able to revert your database to a previous state. To accomplish this, implement the `migrate:down` section:
@@ -542,6 +547,22 @@ Rolling back: 20151127184807_create_users_table.sql
 Rolled back: 20151127184807_create_users_table.sql in 123µs
 Writing: ./db/schema.sql
 ```
+
+### Checking Migration Status
+
+Run `dbmate status` to list applied (`[X]`) and pending (`[ ]`) migrations. A migration that is recorded as applied but has no file (for example, after deploying an older release) is shown as `[?] <version> (file not found)` and is still counted in `Applied:`:
+
+```sh
+$ dbmate status
+[X] 20151127184807_create_users_table.sql
+[?] 20151130120000 (file not found)
+[ ] 20151201093000_create_posts_table.sql
+
+Applied: 2
+Pending: 1
+```
+
+`--exit-code` returns 1 only when there are pending migrations. Pass `--strict` to also fail when an applied migration file is missing.
 
 ### Migration Options
 
@@ -711,7 +732,7 @@ Here is an example:
 -- migrate:up
 create table users (
   id integer,
-  name varchar(255),
+  name varchar(255)
 );
 
 -- migrate:down
@@ -719,6 +740,23 @@ drop table if exists users;
 ```
 
 Both up and down migrations are stored in the same file, for ease of editing. Both up and down directives are required, even if you choose not to implement the down migration.
+
+Migration files are sent to the database byte for byte, without converting their character encoding, so save them in the encoding your database connection uses (normally UTF-8). A UTF-8 byte order mark at the start of a file is ignored. UTF-16 and UTF-32 files are not supported, and dbmate's error message says when a migration looks like one. Windows PowerShell 5.1 writes UTF-16 with `>` and `Out-File` by default, so use `Out-File -Encoding UTF8` there instead.
+
+To convert a file that starts with a byte order mark to UTF-8, replacing it in place:
+
+```sh
+# Linux and macOS: use -f UTF-16 or -f UTF-32, matching dbmate's error message
+iconv -f UTF-16 -t UTF-8 db/migrations/20240101000000_example.sql > example.sql && mv example.sql db/migrations/20240101000000_example.sql
+```
+
+```powershell
+# Windows PowerShell: UTF-16 and UTF-32 are detected from the byte order mark
+$file = "$PWD/db/migrations/20240101000000_example.sql"
+[IO.File]::WriteAllText($file, [IO.File]::ReadAllText($file))
+```
+
+For a file without a byte order mark, name the encoding from dbmate's error message, for example `iconv -f UTF-16LE`, or `[IO.File]::ReadAllText($file, [Text.Encoding]::Unicode)` for UTF-16LE in PowerShell.
 
 When you apply a migration dbmate only stores the version number, not the contents, so you should always rollback a migration before modifying its contents. For this reason, you can safely rename a migration file without affecting its applied status, as long as you keep the version number intact.
 
@@ -730,7 +768,7 @@ This file should be checked in to source control, so that you can easily compare
 
 ### Schema migrations table
 
-Dbmate stores a record of each applied migration in table named `schema_migrations`. This table will be created for you automatically if it does not already exist.
+Dbmate stores a record of each applied migration in a table named `schema_migrations`. This table will be created for you automatically if it does not already exist.
 
 The table is very simple:
 
@@ -763,7 +801,7 @@ Why another database schema migration tool? Dbmate was inspired by many other to
 | PostgreSQL                                                   |              :white_check_mark:              |            :white_check_mark:             |                  :white_check_mark:                  |                     :white_check_mark:                      |                             :white_check_mark:                              |                            :white_check_mark:                            |       :white_check_mark:        |      :white_check_mark:       |
 | MySQL                                                        |              :white_check_mark:              |            :white_check_mark:             |                  :white_check_mark:                  |                     :white_check_mark:                      |                             :white_check_mark:                              |                            :white_check_mark:                            |       :white_check_mark:        |      :white_check_mark:       |
 | SQLite                                                       |              :white_check_mark:              |            :white_check_mark:             |                  :white_check_mark:                  |                     :white_check_mark:                      |                             :white_check_mark:                              |                            :white_check_mark:                            |       :white_check_mark:        |      :white_check_mark:       |
-| CliсkHouse                                                   |              :white_check_mark:              |                                           |                                                      |                     :white_check_mark:                      |                             :white_check_mark:                              |                            :white_check_mark:                            |                                 |
+| ClickHouse                                                   |              :white_check_mark:              |                                           |                                                      |                     :white_check_mark:                      |                             :white_check_mark:                              |                            :white_check_mark:                            |                                 |
 
 _If you notice any inaccuracies in this table, please [propose a change](https://github.com/amacneil/dbmate/edit/main/README.md)._
 

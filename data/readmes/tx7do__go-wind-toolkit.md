@@ -38,7 +38,7 @@ go-wind-toolkit/
 | Wire 依赖注入生成 | ✅ | ✅ |
 | 前端 CRUD 页面生成 (`gow frontend`) | ✅ | ✅ |
 | 微服务模块提取 (`gow extract`) | ✅ | — |
-| 配置导出到 Consul / Etcd / Nacos | — | ✅ |
+| 配置导出到 Consul / Etcd / Nacos (`gow config`) | ✅ | ✅ |
 | 可视化表配置与服务分配 | — | ✅ |
 | AI 辅助 DDL 生成与微服务划分 | — | ✅ |
 | AI 代码审查 | — | ✅ |
@@ -53,7 +53,7 @@ go-wind-toolkit/
 
 通过向导式界面完成从数据库 Schema 到完整微服务代码的全流程生成。支持直连数据库（MySQL、PostgreSQL）、SQL 文件、远程 URL、在线编辑器四种方式导入 Schema；为每张表分配所属微服务、配置 Proto 包策略（每表独立包 / 按服务分包 / 自定义包名）；选择 ORM 类型（Ent / GORM），一键生成 gRPC 或 REST 服务代码，自动完成后处理（`go mod tidy` → `buf generate` → `ent generate` → `wire generate`）。
 
-> 数据源支持 MySQL / PostgreSQL 连接串、DDL 文本（SQL 文件 / 远程 URL / 在线编辑器）与 `ent://<目录>` / `gorm://<目录>` Go 源码目录。SQLite、Oracle 连接不能作为生成数据源——SQLite 可先用 `sqlite3 <文件> .schema` 导出 DDL，再走「SQL 文件」导入。
+> 数据源支持 MySQL / PostgreSQL / SQLite 连接、DDL 文本（SQL 文件 / 远程 URL / 在线编辑器）与 `ent://<目录>` / `gorm://<目录>` Go 源码目录。SQLite 直接指向库文件（`sqlite://<路径>.db`，命令行给裸 `.db` 路径也可）；Oracle 连接不能作为生成数据源。
 
 ### 前端代码生成
 
@@ -206,6 +206,11 @@ gow generate
 # 校验数据源、解析表清单并预览计划，不写入任何文件
 # （支持数据库 DSN 或内联 DDL 文本）
 gow generate --dsn "mysql://user:pass@tcp(localhost:3306)/dbname" --service user --dry-run
+# 追加生成 CRUD service 的单测骨架(fake 仓储,不依赖数据库)
+gow generate --dsn "mysql://..." --service user --tests
+
+# 漂移守卫:重新生成到临时目录与工作区比对,CI 挡"手改生成文件"(退出码非 0)
+gow generate --dsn "mysql://..." --service user --check
 
 # 完整命令行
 gow generate --dsn "mysql://user:pass@tcp(localhost:3306)/dbname" --service user
@@ -241,6 +246,40 @@ gow frontend gen --openapi ./api/openapi.yaml \
 # 只生成指定服务/文件类型
 gow frontend gen --openapi ./api/openapi.yaml --framework react \
   --out ./admin-web/src --tags RoleService --types composable,page,drawer
+```
+
+### OpenAPI 文档生成（gow openapi）
+
+用 gnostic 的 protoc-gen-openapi 从 proto 定义（google.api.http 注解）一键产出合并的 OpenAPI 3.0 文档，为 `gow frontend` 供料：
+
+```shell
+# 在项目根目录运行(默认 ./api),产物写 api/openapi.yaml
+gow openapi
+
+# 指定 api 目录与输出位置(目录时写入 <out>/openapi.yaml)
+gow openapi api --out app/admin/service/cmd/server/assets
+
+# 依赖: buf 与 protoc-gen-openapi(可用 gow doctor 体检)
+go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
+```
+
+### 客户端 SDK 生成（gow client）
+
+用本仓库的客户端插件从 proto 生成 TS / Dart HTTP 客户端，写入前端/移动端仓库：
+
+```shell
+gow client typescript api --out ../admin-web/src/api/generated
+gow client dart api --out ../mobile/lib/api
+```
+
+### 配置导出（gow config）
+
+把 app/<服务>/service/configs 下的配置文件导出到远程配置中心，与桌面端同一引擎：
+
+```shell
+gow config services --path ./backend          # 列出可导出的服务
+gow config export --type consul --endpoint http://localhost:8500   --project demo --path ./backend             # 导出全部服务
+gow config export --type nacos --endpoint http://nacos:8848   --project demo --group DEFAULT_GROUP --service admin --dry-run
 ```
 
 ### Ent 代码生成

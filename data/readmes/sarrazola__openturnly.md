@@ -9,7 +9,7 @@
 Barbershops, hair salons, spas, clinics, therapists, vets, sports courts — give your
 customers a page to book appointments, on your own server, for free.
 
-[![CI](https://github.com/juanpabloortizo/openturnly/actions/workflows/ci.yml/badge.svg)](https://github.com/juanpabloortizo/openturnly/actions/workflows/ci.yml)
+[![CI](https://github.com/sarrazola/openturnly/actions/workflows/ci.yml/badge.svg)](https://github.com/sarrazola/openturnly/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
@@ -61,7 +61,7 @@ features than they need. OpenTurnly aims to be the free, simple alternative that
 You need [Docker](https://docs.docker.com/get-docker/) with Docker Compose.
 
 ```bash
-git clone https://github.com/juanpabloortizo/openturnly.git
+git clone https://github.com/sarrazola/openturnly.git
 cd openturnly
 docker compose up -d --build
 ```
@@ -81,16 +81,16 @@ updates, read the [self-hosting guide](docs/self-hosting.md), or follow the
 
 ## Configuration
 
-| Variable       | Default                    | Description                                                         |
-| -------------- | -------------------------- | ------------------------------------------------------------------- |
-| `APP_URL`      | `http://localhost:3000`    | Public URL of your install. Used in invitation and booking links.   |
-| `OPENTURNLY_PORT` | `3000`                     | Port published on the host by `docker-compose.yml`.                 |
-| `POSTGRES_PASSWORD` | `openturnly`             | Password of the bundled PostgreSQL. Set it before the first start.  |
-| `DATABASE_URL` | built by `docker-compose.yml` | PostgreSQL connection URL, if you use your own database server.  |
-| `SECRET`       | generated on first start   | Signs sessions. Saved to `/data/secret` if you don't set one.       |
-| `WEBHOOKS_ALLOW_PRIVATE` | `false`          | Let workflows post to addresses inside your network (e.g. a receiver in the same Docker network). |
-| `TRUST_PROXY`  | `false`                    | Set to `true` behind a reverse proxy (Caddy, Nginx, Cloudflare Tunnel) so login and anti-bot limits use the visitor's real IP. |
-| `DATA_DIR`     | `/data`                    | Where the generated secret is saved.                                |
+| Variable                 | Default                       | Description                                                                                                                    |
+| ------------------------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `APP_URL`                | `http://localhost:3000`       | Public URL of your install. Used in invitation and booking links.                                                              |
+| `OPENTURNLY_PORT`        | `3000`                        | Port published on the host by `docker-compose.yml`.                                                                            |
+| `POSTGRES_PASSWORD`      | `openturnly`                  | Password of the bundled PostgreSQL. Set it before the first start.                                                             |
+| `DATABASE_URL`           | built by `docker-compose.yml` | PostgreSQL connection URL, if you use your own database server.                                                                |
+| `SECRET`                 | generated on first start      | Signs sessions. Saved to `/data/secret` if you don't set one.                                                                  |
+| `WEBHOOKS_ALLOW_PRIVATE` | `false`                       | Let workflows post to addresses inside your network (e.g. a receiver in the same Docker network).                              |
+| `TRUST_PROXY`            | `false`                       | Set to `true` behind a reverse proxy (Caddy, Nginx, Cloudflare Tunnel) so login and anti-bot limits use the visitor's real IP. |
+| `DATA_DIR`               | `/data`                       | Where the generated secret is saved.                                                                                           |
 
 ## Features
 
@@ -120,6 +120,8 @@ updates, read the [self-hosting guide](docs/self-hosting.md), or follow the
 - **Services, staff and hours**: split shifts, closures, automatic public holidays per
   country and booking rules, all time-zone aware.
 - **Team access** with admin and professional roles, and a branded sign-in page per business.
+- **Phone apps** for iPhone and Android, native on each, for the owner, admins and staff: the
+  agenda, booking, checkout, customers, sales and reports ([docs/mobile.md](docs/mobile.md)).
 - **AI agents** through an MCP server per business ([docs/mcp.md](docs/mcp.md)).
 - **Workflows** that send appointment data to any system that takes webhooks: an
   automation platform, a CRM, a WhatsApp bot or your own API ([docs/workflows.md](docs/workflows.md)).
@@ -127,6 +129,8 @@ updates, read the [self-hosting guide](docs/self-hosting.md), or follow the
   ([docs/whatsapp.md](docs/whatsapp.md)).
 - **Email reminders and confirmations** through any provider that takes SMTP
   ([docs/email.md](docs/email.md)).
+- **Text message reminders and confirmations** through Twilio, with what each one cost
+  ([docs/sms.md](docs/sms.md)).
 - **Online payments** at booking, a deposit or the full price, straight to the business's own
   Mercado Pago account ([docs/payments.md](docs/payments.md)).
 - **Protection against fake bookings**: self-hosted proof of work (ALTCHA), rate limits and

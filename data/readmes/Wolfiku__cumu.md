@@ -39,6 +39,8 @@ curl -fsSL https://raw.githubusercontent.com/Wolfiku/cumu/main/scripts/install.s
 [+] Recursive Library Scanner    — auto-scans nested subdirectories (Artist/Album/Song.mp3)
 [+] Podcast Search & Player      — search millions of shows/episodes, manage feeds & progress
 [+] PWA & Offline Mode           — save playlists offline for playback without internet
+[+] Native Android App           — streaming, background playback, offline library & downloads (APK in Releases)
+[+] Login Brute-Force Protection — failed logins are rate-limited per account and IP
 [+] Multi-Format Audio           — MP3, FLAC, M4A, AAC, WAV, OGG, OPUS, ALAC support
 [+] Embedded Artwork Extraction  — auto-extracts ID3 album covers or upload custom JPG/PNG
 [+] Audio Seeking & Range Stream — HTTP Range requests for instant scrubbing
@@ -59,6 +61,7 @@ Customize runtime settings via `.env` or environment variables:
 | `HOST` | `0.0.0.0` | Network interface binding address |
 | `SESSION_SECRET` | *(auto-generated)* | Secret key used for signing session cookies |
 | `ADMIN_LOGIN_CODE` | *(auto-generated)* | Code every admin must enter at login (and during first-time setup). If missing, the server generates one on startup and writes it to `.env` (in Docker: `data/.env` inside the data volume) |
+| `TRUST_PROXY` | *(off)* | Set when cumu runs behind a reverse proxy (`true`, a hop count like `1`, or an address/subnet like `loopback`), so login brute-force protection sees the real client IP |
 | `MUSIC_PATH` | `./music` | Path to host music storage folder |
 | `MAX_STORAGE_GB` | `50` | Maximum library storage quota in GB |
 | `DB_PATH` | `./data/cumu.db` | Path to SQLite database file |

@@ -12,6 +12,8 @@ The queue separates **ready to merge**, **your move**, and **waiting**. Failed m
 
 Cooking rows show **since ordered** in the inbox and compact PR overlays, measured from the latest cached `order` label-addition event (REST `created_at` or timeline `LabeledEvent.createdAt`), not a Kitchen stage change. The clock is omitted when the label is no longer present or its addition time is unknown.
 
+The PR header shows **Ordered** while an open PR has the `order` label; merged and closed states take precedence.
+
 ## Install
 
 Run this in your terminal as your normal user, **not with `sudo`**:
@@ -39,6 +41,10 @@ Press <kbd>h</kbd> on a PR in the list to **Remind me**. Pick a time or type a d
 
 Enable **Date filters and sorting** in **Settings → Workspace** for **Opened** and **Order** controls in the main PR lists, plus **Grouping** in Your queue. Switch grouping between Status, Feature area, PR type, and Manual without leaving the queue. Opened, Order, Grouping, and Repository selections survive refreshes and app updates; only applied custom date bounds are saved. Filter to the last 24 hours, 7 days, 30 days, or a custom local date-and-time range; custom bounds apply when you press **Apply**. Order by newest or oldest opened, or most or least recently updated. **Queue order** keeps the usual priorities. Grouped queues keep their sections, manual pin order, and stacks; the Whiteboard is unchanged. PRs with an unknown opened date appear in All time but not an active date range.
 
+## Investigating slowness
+
+Run `pr-cockpit profile --seconds 20` while reproducing the slowdown (1–120 seconds), without restarting the server. It prints the output folder and top findings; CLI recordings cover the server only. In the desktop app, **View → Record Performance Profile** records both server and main renderer for 20 seconds, then reveals the folder. Nothing is sampled outside a recording. Profiles and summaries go to `~/Library/Logs/PR Cockpit/profiles/<timestamp>/` on macOS, or `${XDG_STATE_HOME:-~/.local/state}/pr-cockpit/profiles/<timestamp>/` on Linux. Open the `.cpuprofile` files in Chrome DevTools or speedscope; `summary.md` and `summary.json` include route/query timings, event-loop lag, GitHub requests, subprocess durations, memory, and (from the menu) renderer heap, DOM nodes, and long tasks. Profiles may contain local paths and SQL values: review them before sharing. Set `COCKPIT_PORT` to target a nondefault local server.
+
 ## From finding the PR to finishing the review
 
 ### Bring up a PR without leaving your editor
@@ -52,6 +58,8 @@ The search panel uses its own connection pool, so pending main-window requests c
 ### Read the change, then follow the details
 
 Diffs, threads, checks, and file history live in the same review workspace. Short diffs render without scrolling, including in tall windows. The header shows Closed or Merged even if the PR retains its draft flag. The PR check summary uses the latest workflow run and job attempt; earlier runs remain in Actions history. Press <kbd>x</kbd> to cycle **All files → Hide tests/generated → Only tests/generated**, keeping viewed marks. Generated files include `.generated.` names and committed `.gitattributes` rules marked `linguist-generated`; nested rules and overrides follow the reviewed revision. The default filter follows Settings.
+
+Actions keeps recently read logs in memory for instant switching, with a 32 MiB text budget and at most 100 jobs. Larger logs stay readable but are not added to that cache; filter snapshots share the bounded recent-view cache.
 
 Syntax highlighting covers Shiki's bundled languages in diffs, file previews, editors, and Markdown code blocks, including Swift, C/C++ headers, Objective-C, Kotlin, and C#. Grammars load on demand; unrecognized formats remain plain text.
 
@@ -198,6 +206,7 @@ Cockpit is a client for your existing GitHub workflow, not a second place to mai
 - **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches, keyed PR titles, and embedded PR rows use the connected source.
 - **Embeds:** `/#/embed?keys=owner%2Frepo%23123&overlay=1` shows compact PR rows with lifecycle, readiness, pin and Kitchen state, plus an E hide control, grouped like your review queue. The host owns hiding, persistence, and Undo; GitHub and the review queue stay unchanged.
 - **Mirror storage:** Git mirrors compact automatically and evict the oldest unprotected caches toward a 20 GiB target. Active reads, recent use, and linked worktrees are protected, so the target is not a hard limit.
+- **SQLite cache retention:** cached PR details, diffs, file contents, Actions runs, and webhook activity expire after 30 days; Actions jobs expire after 7 days, and their run refetches them from GitHub when next viewed. Cleanup continues hourly without restarting, in indexed batches of at most 20 rows separated by 100 ms. New databases reclaim free pages incrementally; older databases reuse freed space but do not shrink on disk unless compacted offline. Cockpit never runs a full `VACUUM` on the live server.
 - **Back to GitHub:** comments, reviews, file edits, thread resolution, and merges use your GitHub CLI authentication. GitHub remains authoritative.
 - **Keeping it current:** the hosted relay is enabled by default. It receives GitHub webhooks and delivers compact change markers and Actions run/job state, including runner assignment—not full PR contents or job logs—to Cockpit. Cockpit never sends the relay your GitHub token; it proves read access to each repository with commit data only readers can look up, and that proof rotates daily. Branch pushes refresh open PRs whose head or base matches, including recently viewed PRs outside the inbox. A direct GitHub poller repairs missed events.
 - **Your relay, if you prefer:** you can configure a different relay URL. See [Self-hosting](docs/self-host-relay.md) for deployment and connection instructions.

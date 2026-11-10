@@ -4,7 +4,7 @@
   "commit_90d": 64,
   "rel_ver": "v1.31.1",
   "rel_pub": "2026-04-22",
-  "rel_days": 200,
+  "rel_days": 202,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -50,11 +50,11 @@
   "rel_dates": []
  },
  "trickstercache/trickster": {
-  "commit_7d": 6,
-  "commit_90d": 182,
+  "commit_7d": 3,
+  "commit_90d": 183,
   "rel_ver": "v2.2.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -63,7 +63,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 72,
-  "enriched_at": "20261107",
+  "enriched_at": "20261110",
   "lang": {
    "Go": 100,
    "Makefile": 0,
@@ -73,8 +73,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261107",
-   "release": "20261107",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261027"
   },
   "rel_notes": [
@@ -100,7 +100,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"558130b46e2169df5f5c988274d4bbca77a4600ea39bd3e6e98880637f7847d9\""
+   "release": "W/\"f74be7a6ce1ed6f9f14e97d03f862708a56110f891c1ed80ee015a4d3757d553\""
   },
   "rel_dates": [
    "2026-11-03",
@@ -198,11 +198,11 @@
   "enriched_at": "20260927"
  },
  "3dcitydb/3dcitydb": {
-  "commit_90d": 25,
-  "commit_7d": 0,
+  "commit_90d": 35,
+  "commit_7d": 1,
   "rel_ver": "v5.1.4",
   "rel_pub": "2026-08-25",
-  "rel_days": 75,
+  "rel_days": 77,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -217,11 +217,24 @@
    "Batchfile": 13,
    "Dockerfile": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"0b9b531dd4ea9497b1d898159e9d4d60c6f15ee702c2da2aeff1a7f7f32514e5\""
+  },
+  "rel_dates": [
+   "2026-08-25"
+  ],
+  "rel_notes": [
+   {
+    "t": "v5.1.4",
+    "d": "2026-08-25",
+    "n": "This is a bugfix and maintenance release. See the [changelog](https://github.com/3dcitydb/3dcitydb/blob/master/CHANGELOG.md) for full details."
+   }
+  ]
  },
  "baztian/jaydebeapi": {
   "commit_90d": 0,
@@ -273,12 +286,12 @@
   "enriched_at": "20260927"
  },
  "DroneDB/DroneDB": {
-  "commit_90d": 68,
-  "commit_7d": 0,
-  "rel_ver": "v1.12.2",
-  "rel_pub": "2026-10-14",
-  "rel_days": 25,
-  "rel_n90": 8,
+  "commit_90d": 536,
+  "commit_7d": 15,
+  "rel_ver": "v2.1.0",
+  "rel_pub": "2026-11-09",
+  "rel_days": 1,
+  "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -293,19 +306,86 @@
    "CMake": 1,
    "C": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"0724bab5166d0410af78be85c1f90bd7b86d795c251c25a6d06e330f111aaae2\""
+  },
+  "rel_dates": [
+   "2026-11-09",
+   "2026-11-04",
+   "2026-11-02",
+   "2026-10-14",
+   "2026-10-14",
+   "2026-09-28",
+   "2026-09-23",
+   "2026-09-06",
+   "2026-08-21",
+   "2026-08-17"
+  ],
+  "rel_notes": [
+   {
+    "t": "v2.1.0",
+    "d": "2026-11-09",
+    "n": "- Changed every `ddb` command that writes data files to refuse to replace an existing output unless `--overwrite` is given, and to refuse an output that is one of its inputs; scripts that overwrite on purpose must read Breaking changes.\n- The 11 commands above refuse to replace an existing output, and `ddb tile` no longer tiles into existing tiles, without `--overwrite`.\n- Added libddb ABI 2.1 (additive): `DDBAlignRasterEx`, `DDBMergeMultispectralEx` and `DDBMaskBordersEx` take an options struct with `overw"
+   },
+   {
+    "t": "v2.0.1",
+    "d": "2026-11-04",
+    "n": "- libddb ABI stays 2.0: no exports were added, removed or changed (`ddb.h`, `ddb_export.h` and `ddb.symbols` are identical to 2.0.0; only `ddb_version.h` carries the new version). Hosts built against 2.0.0, such as Registry, need only the new `.deb` or Windows zip.\n- [Windows] Fixed every vector build (GeoJSON, GPX, DXF/DWG, `odm_report/shots.geojson`) of a dataset stored below `C:\\` failing with \"the output folder '...\\.vec-stage-...' has no low integrity label\". A folder made below `C:\\` gives its users o"
+   },
+   {
+    "t": "v2.0.0",
+    "d": "2026-11-02",
+    "n": "- Added the libddb 2.0.0 C ABI: 35 new exports (version handshake, process configuration, cancellation, log callback, role-tagged build manifest), and the library now exports only the 109 functions of `ddb.h`; integrators must read Breaking changes.\n- Added a role-tagged build manifest: `DDBGetEntryTypes`, `DDBGetBuildArtifacts`, `DDBResolveBuildFile` and `DDBCopyBuildArtifacts`; artifacts carry `version`, `downloadName` and `fallbackFor`, so hosts no longer compose build paths.\n- Added the `metadata-util` "
+   },
+   {
+    "t": "v1.12.2",
+    "d": "2026-10-14",
+    "n": "- Bundled Obj2Tiles v1.8.0 for 3D Tiles builds. On a 224K-face ODM model with DroneDB's arguments, peak memory drops from 21.2 GB to 10.0 GB, wall time from 141 s to about 100 s, and output from 344 MB to 281 MB.\n- The Obj2Tiles runner drops `--ktx2-threads` when a core cap applies (`DDB_OBJ2TILES_MAX_CORES` or an inherited `DOTNET_PROCESSOR_COUNT`): libktx threads are native and ignore the .NET processor count. The flag is sent only with `--texture-format Ktx2`.\n- Migration: use the bundled binary. If `DDB"
+   },
+   {
+    "t": "v1.12.1",
+    "d": "2026-10-14",
+    "n": "- Added regression tests for the process runner, `plyconv`, pending marker healing, the tiles3d build swap, cleanup age/lock races and Obj2Tiles flag handling; child-process lifecycle tests now also run on Windows via a new `ddbtest_child` helper.\n- Fixed several Windows build issues: orphaned locks stuck at `BuildInProgress`, builds hanging when a streaming grandchild kept the output pipe open, and timezone lookups failing when multiple processes share `libddb`.\n- Fixed timezone lookups failing with a shar"
+   },
+   {
+    "t": "v1.11.7",
+    "d": "2026-09-28",
+    "n": "**Full Changelog**: https://github.com/DroneDB/DroneDB/compare/v1.11.6...v1.11.7"
+   },
+   {
+    "t": "v1.11.6",
+    "d": "2026-09-23",
+    "n": "- Migration: build build-lod via scripts/build-buildlod.{sh,ps1} (or the updated full-build scripts), or place a compatible build-lod binary on PATH or set DDB_BUILDLOD_PATH; set DDB_REQUIRE_BUILDLOD=1 in CI to fail early when the tool is missing.\n- build-lod (vendor/spark) is now a mandatory dependency for Gaussian Splat (RAD) builds: buildGsplat throws BuildDepMissingException until the tool is available, so no LOD-free artifact is produced anymore. Local builds keep a non-blocking warning banner; CI and "
+   },
+   {
+    "t": "v1.11.5",
+    "d": "2026-09-06",
+    "n": "- Migration: upgrade, then run `ddb rescan` on each existing dataset. Scope it with `ddb rescan -w <ddb> --type model` (the command holds the SQLite writer lock for its whole duration, so avoid running it during concurrent `ddb add`). Verify with `ddb info <file>`: point-only `.glb`/`.gltf` files should now report type `Generic`.\n- Classify glTF/GLB by primitive type instead of by extension by @HeDo88TH in [#467](https://github.com/DroneDB/DroneDB/pull/467)\n**Full Changelog**: https://github.com/DroneDB/Dro"
+   },
+   {
+    "t": "v1.11.4",
+    "d": "2026-08-21",
+    "n": "- Added a concurrency stress regression test: 8 threads racing `DDBAddWithOptions` on the same 20 identical files, asserting the bucket-sum completeness contract (`entries` + `unchanged` + `errors` always equals the input).\n- Fix concurrent adds by @HeDo88TH in [#466](https://github.com/DroneDB/DroneDB/pull/466)\n**Full Changelog**: https://github.com/DroneDB/DroneDB/compare/v1.11.3...v1.11.4"
+   },
+   {
+    "t": "v1.11.3",
+    "d": "2026-08-17",
+    "n": "- Added `DDBAddWithOptions` (and `addToIndexEx`) batch add APIs with per-item error isolation: one corrupt file no longer aborts the whole batch.\n- Close connections with `sqlite3_close_v2` so unfinalized statements can no longer leak the handle (and its locks).\n- Added `Transaction` RAII wrapper (immediate/deferred/exclusive modes) with automatic rollback on exception; replaced hand-rolled `BEGIN`/`COMMIT` blocks in `dbops.cpp`, `metamanager.cpp`, and `passwordmanager.cpp`.\n- Added `DBBusyException` to the"
+   }
+  ]
  },
  "supabase/splinter": {
-  "commit_90d": 9,
-  "commit_7d": 0,
+  "commit_90d": 5,
+  "commit_7d": 1,
   "rel_ver": "2026.09.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 61,
-  "rel_n90": 4,
+  "rel_days": 63,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -319,18 +399,37 @@
    "Shell": 1,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"ca0c76c3c19d6c2e5f439986967bd41f9a57d62ba8b34ab9e7ce6cc019c696bc\""
+  },
+  "rel_dates": [
+   "2026-09-08",
+   "2026-09-04"
+  ],
+  "rel_notes": [
+   {
+    "t": "2026.09.1",
+    "d": "2026-09-08",
+    "n": "## What's Changed\n* fix: minor improvements to splinter CI and the lint manifest build by @utkarash2991 in https://github.com/supabase/splinter/pull/187\n\n\n**Full Changelog**: https://github.com/supabase/splinter/compare/2026.09.0...2026.09.1"
+   },
+   {
+    "t": "2026.09.0",
+    "d": "2026-09-04",
+    "n": "## What's Changed\n* ci: fail the build when the test suite fails by @soedirgo in https://github.com/supabase/splinter/pull/180\n* fix(lints)urls-and-level by @smeubank in https://github.com/supabase/splinter/pull/183\n* feat: autovacuum-disabled-lint by @smeubank in https://github.com/supabase/splinter/pull/184\n\n## New Contributors\n* @smeubank made their first contribution in https://github.com/supabase/splinter/pull/183\n\n**Full Changelog**: https://github.com/supabase/splinter/compare/2026.08.0...2026.09.0"
+   }
+  ]
  },
  "jiisanda/docflow": {
-  "commit_90d": 0,
-  "commit_7d": 0,
+  "commit_90d": 5,
+  "commit_7d": 5,
   "rel_ver": "v1",
   "rel_pub": "2023-12-31",
-  "rel_days": 1043,
+  "rel_days": 1045,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -344,14 +443,22 @@
    "Mako": 1,
    "Dockerfile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261110",
+  "etag": {
+   "release": "W/\"306049b87cb6a597c64e6e1618e89c3f1a5f075c8e3385f7473bdab65f5bebbb\""
+  },
+  "rel_dates": [],
+  "dim_ts": {
+   "commit": "20261110",
+   "release": "20261110"
+  }
  },
  "austinheap/laravel-database-encryption": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v0.2.1",
   "rel_pub": "2019-11-26",
-  "rel_days": 2539,
+  "rel_days": 2541,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -367,7 +474,7 @@
   "enriched_at": "20260927"
  },
  "SphericalKat/katbin": {
-  "commit_90d": 76,
+  "commit_90d": 115,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -382,11 +489,15 @@
    "JavaScript": 2,
    "PLpgSQL": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "\"9fe4433d0f54e36b6f8825bfd9906602caa94771f77f4ef7f877996b51d7b70e\""
+  },
+  "rel_dates": []
  },
  "Discord-AntiScam/scam-links": {
   "commit_90d": 0,
@@ -433,11 +544,11 @@
   "enriched_at": "20260927"
  },
  "GoogleCloudPlatform/spanner-migration-tool": {
-  "commit_90d": 22,
-  "commit_7d": 6,
+  "commit_90d": 26,
+  "commit_7d": 4,
   "rel_ver": "v4.0.8",
-  "rel_pub": "2026-10-23",
-  "rel_days": 16,
+  "rel_pub": "2026-10-29",
+  "rel_days": 12,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -453,11 +564,48 @@
    "HTML": 2,
    "SCSS": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"177dfaac3338677d2960242248a93a9f0770f52d71496bbc9888e3614a709781\""
+  },
+  "rel_dates": [
+   "2026-10-29",
+   "2026-10-15",
+   "2026-10-03",
+   "2026-09-10",
+   "2026-08-18"
+  ],
+  "rel_notes": [
+   {
+    "t": "v4.0.8",
+    "d": "2026-10-29",
+    "n": "- Restricted PostgreSQL migrations to the `public` schema, skipping non-public tables and reporting warnings for skipped tables or cross-schema references\n- Fixed Oracle connection and schema discovery failing when usernames or passwords contain special characters\nPlease refer to the Spanner migration tool [README](https://github.com/cloudspannerecosystem/harbourbridge/blob/master/README.md) for further details.\n- Improved Oracle data type mapping and conversion warnings:\n- Preserved declared column lengths"
+   },
+   {
+    "t": "v4.0.7",
+    "d": "2026-10-15",
+    "n": "- Added support for SQL Server as a source: improved data type mapping (including uniqueidentifier → UUID, json → JSON, rowversion → BYTES), IDENTITY column migration, and SQL Server connections from the web UI\n- Added support for migrating PostgreSQL default expressions and stored generated columns to Spanner\n- Added support for migrating PostgreSQL inherited tables. Each child table is flattened into a standalone Spanner table, and each parent table keeps only its own rows\nPlease refer to the Spanne"
+   },
+   {
+    "t": "v4.0.6",
+    "d": "2026-10-03",
+    "n": "- Added support for UUID, money and few other datatypes for PostgreSQL as a source\n- Added support for PostgreSQL identity column migration to Spanner\n- Added support for partitioned tables (PostgreSQL) migration in UI\nPlease refer to the Spanner migration tool [README](https://github.com/cloudspannerecosystem/harbourbridge/blob/master/README.md) for further details."
+   },
+   {
+    "t": "v4.0.5",
+    "d": "2026-09-10",
+    "n": "### New Features/Improvements\r\n\r\n- Improved support for Oracle schema migration\r\n\r\n### Bug Fixes\r\n\r\n- Fixed the migration metrics being sent to Spanner API\r\n\r\nNA\r\n\r\n### Documentation Updates\r\n\r\nNA\r\n\r\n### Dependency Updates\r\n\r\n- Updated [google.golang.org/grpc](http://google.golang.org/grpc) to v1.82.1\r\n\r\n### General Changes\r\n\r\nNA\r\n\r\n&nbsp;\r\n\r\nPlease refer to the Spanner migration tool [README](https://github.com/cloudspannerecosystem/harbourbridge/blob/master/README.md) for further details."
+   },
+   {
+    "t": "v4.0.4",
+    "d": "2026-08-18",
+    "n": "Please refer to the Spanner migration tool [README](https://github.com/cloudspannerecosystem/harbourbridge/blob/master/README.md) for further details.\n- Hardened CI workflows by pinning GitHub Actions to commit SHAs, pinning the Oracle container image to a SHA256 digest, and adding explicit least-privilege permissions"
+   }
+  ]
  },
  "lxaw/ComprehensiveFoodDatabase": {
   "commit_90d": 0,
@@ -492,7 +640,7 @@
  "PawelGerr/Thinktecture.EntityFrameworkCore": {
   "rel_ver": "10.4.0",
   "rel_pub": "2026-08-26",
-  "rel_days": 74,
+  "rel_days": 76,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -544,7 +692,7 @@
  "brick/db": {
   "rel_ver": "0.3.0",
   "rel_pub": "2025-02-05",
-  "rel_days": 641,
+  "rel_days": 643,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -561,7 +709,7 @@
  "svtslv/nestjs-knex": {
   "rel_ver": "v3.0.0-n1",
   "rel_pub": "2025-06-22",
-  "rel_days": 504,
+  "rel_days": 506,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -579,7 +727,7 @@
  "oracle/weblogic-remote-console": {
   "rel_ver": "v3.0.5",
   "rel_pub": "2026-07-21",
-  "rel_days": 110,
+  "rel_days": 112,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -685,7 +833,7 @@
  "alextselegidis/easyappointments-wordpress": {
   "rel_ver": "1.3.1",
   "rel_pub": "2020-12-11",
-  "rel_days": 2158,
+  "rel_days": 2160,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -705,7 +853,7 @@
  "DuckBoss/JJMumbleBot": {
   "rel_ver": "v5.3.1",
   "rel_pub": "2026-06-24",
-  "rel_days": 137,
+  "rel_days": 139,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -724,7 +872,7 @@
  "oliverjessner/sqlite-hub": {
   "rel_ver": "v2.7.1",
   "rel_pub": "2026-09-24",
-  "rel_days": 45,
+  "rel_days": 47,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -772,7 +920,7 @@
  "safesploitOrg/doogle": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-06-08",
-  "rel_days": 153,
+  "rel_days": 155,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -808,7 +956,7 @@
  "rohansx/ctxgraph": {
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-03-29",
-  "rel_days": 224,
+  "rel_days": 226,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -840,7 +988,7 @@
  "modeldba/antlr4ts-sql": {
   "rel_ver": "1.1.0",
   "rel_pub": "2021-03-07",
-  "rel_days": 2072,
+  "rel_days": 2074,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -859,7 +1007,7 @@
  "Neztore/save-server": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-03-27",
-  "rel_days": 226,
+  "rel_days": 228,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -887,7 +1035,7 @@
  "Trendyol/PollingOutboxPublisher": {
   "rel_ver": "v1.7.0",
   "rel_pub": "2026-02-05",
-  "rel_days": 276,
+  "rel_days": 278,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -938,7 +1086,7 @@
  "sc2-pulse/sc2-pulse": {
   "rel_ver": "v1.64.0",
   "rel_pub": "2025-11-12",
-  "rel_days": 361,
+  "rel_days": 363,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1090,7 +1238,7 @@
  "styler/ian-db": {
   "rel_ver": "v1.0",
   "rel_pub": "2020-10-01",
-  "rel_days": 2229,
+  "rel_days": 2231,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1158,7 +1306,7 @@
  "diegovalle/hoyodecrimen.api": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2025-09-10",
-  "rel_days": 424,
+  "rel_days": 426,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1218,7 +1366,7 @@
  "shashikdm/E-Library": {
   "rel_ver": "2.0",
   "rel_pub": "2019-01-07",
-  "rel_days": 2862,
+  "rel_days": 2864,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1311,7 +1459,7 @@
  "Project-Owl/dms-lite-docker": {
   "rel_ver": "1.0.0",
   "rel_pub": "2021-07-19",
-  "rel_days": 1938,
+  "rel_days": 1940,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1365,7 +1513,7 @@
  "ifct2017/ifct2017.github.io": {
   "rel_ver": "2.0.10",
   "rel_pub": "2022-09-17",
-  "rel_days": 1513,
+  "rel_days": 1515,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1415,7 +1563,7 @@
  "duyet/clickhouse-udf-rs": {
   "rel_ver": "v0.1.8",
   "rel_pub": "2024-04-16",
-  "rel_days": 936,
+  "rel_days": 938,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1434,7 +1582,7 @@
  "sommergeo/roadDB": {
   "rel_ver": "v.0.2.0",
   "rel_pub": "2026-09-22",
-  "rel_days": 47,
+  "rel_days": 49,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1531,7 +1679,7 @@
  "t8y2/dbx-agents": {
   "rel_ver": "v0.2.33",
   "rel_pub": "2026-06-20",
-  "rel_days": 141,
+  "rel_days": 143,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1614,7 +1762,7 @@
  "tidbcloud/terraform-provider-tidbcloud": {
   "rel_ver": "v0.4.11",
   "rel_pub": "2026-07-03",
-  "rel_days": 128,
+  "rel_days": 130,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1638,7 +1786,7 @@
  "wentaojin/tichecker": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2021-03-11",
-  "rel_days": 2068,
+  "rel_days": 2070,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1660,7 +1808,7 @@
  "xiebinJava/pms-distribution": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 18,
+  "rel_days": 20,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -1744,7 +1892,7 @@
  "HydStAn/agy-memory-engine": {
   "rel_ver": "v2.5.0",
   "rel_pub": "2026-09-29",
-  "rel_days": 40,
+  "rel_days": 42,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1813,7 +1961,7 @@
   "commit_7d": 0,
   "rel_ver": "main",
   "rel_pub": "2026-05-11",
-  "rel_days": 181,
+  "rel_days": 183,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1978,7 +2126,7 @@
   "commit_7d": 0,
   "rel_ver": "3.0.0",
   "rel_pub": "2019-07-19",
-  "rel_days": 2669,
+  "rel_days": 2671,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2136,7 +2284,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.5",
   "rel_pub": "2026-07-15",
-  "rel_days": 116,
+  "rel_days": 118,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2317,7 +2465,7 @@
  "hristo2612/aso-cli": {
   "rel_ver": "v0.4.4",
   "rel_pub": "2026-09-24",
-  "rel_days": 45,
+  "rel_days": 47,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
@@ -2412,7 +2560,7 @@
  "Yash-Satankar/shortlist": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-07",
-  "rel_days": 32,
+  "rel_days": 34,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

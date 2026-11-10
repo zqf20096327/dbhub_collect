@@ -21,11 +21,14 @@ The Claude Code plugin install (`claude plugin install quicken-mac-mcp`) bundles
 
 ## Requirements
 
-**Quicken For Mac must be open** while using either the skill or the MCP. Quicken encrypts its database file when the app is closed — the data is only readable while Quicken is running.
+**Quicken For Mac should be open** while using either the skill or the MCP. Depending on the install, Quicken may replace its database file with an encrypted stub when the app is closed; other installs leave the file readable while closed. The probe checks for the `ZACCOUNT` table rather than assuming either way.
+
+- **macOS**, with Quicken For Mac. Tested against Quicken 9.3.1; the older 8.5 database layout is covered by test fixtures.
+- **Node.js 22.14 or newer** (23.6 or newer on the 23 line) for the MCP server and `qmac` CLI. The skill alone needs only Python 3.
 
 ## How it works
 
-Quicken For Mac stores data in a Core Data SQLite database inside a `.quicken` bundle in your Documents folder (e.g., `~/Documents/MyFinances.quicken/data`). The skill teaches Claude how to query that database directly; the MCP server is a thin wrapper that exposes eight prepackaged queries as tools.
+Quicken For Mac stores data in a Core Data SQLite database inside a `.quicken` bundle. The retail/subscription app keeps it in `~/Library/Application Support/Quicken/Documents/` by default (`Quicken Beta` for the beta channel); the Mac App Store build uses its sandbox container; and a file can live anywhere the user chose in File → Move To, for example `~/Documents`. The server looks in all of those (see [Custom database path](#custom-database-path)). The skill teaches Claude how to query that database directly; the MCP server is a thin wrapper that exposes eight prepackaged queries as tools.
 
 ## Install — recommended (Claude Code, plugin)
 
@@ -73,7 +76,7 @@ Restart Claude Desktop and you'll see a hammer icon with 8 tools available.
 
 ### Custom database path
 
-If you have multiple Quicken files, or your `.quicken` bundle isn't in `~/Documents`, set the `QUICKEN_DB_PATH` environment variable:
+If you have multiple Quicken files, or your `.quicken` bundle is somewhere the server does not look, set the `QUICKEN_DB_PATH` environment variable:
 
 ```json
 {
@@ -89,7 +92,13 @@ If you have multiple Quicken files, or your `.quicken` bundle isn't in `~/Docume
 }
 ```
 
-By default, the server auto-detects your Quicken database only when exactly one `.quicken` bundle exists in `~/Documents`. If multiple bundles exist, it refuses to guess; set `QUICKEN_DB_PATH` explicitly.
+By default, the server auto-detects your Quicken database only when exactly one `.quicken` bundle exists across these locations:
+
+- `~/Documents`
+- `~/Library/Application Support/Quicken*/Documents` (retail/subscription default; `Quicken`, `Quicken Beta`, or a year-suffixed folder)
+- `~/Library/Containers/com.quicken.QuickenAppStore/Data/Library/Application Support/Quicken/Documents` (Mac App Store build)
+
+If multiple bundles exist, it refuses to guess and says how many it found in each location; set `QUICKEN_DB_PATH` explicitly.
 
 ## MCP tools
 
@@ -103,7 +112,7 @@ These are the eight prepackaged tools the MCP server exposes. The skill covers t
 | `spending_by_category` | Aggregate negative consumer-spending splits by category, excluding transfers and report-excluded rows and preserving `(Uncategorized)`. |
 | `spending_over_time` | Monthly negative consumer-spending totals with the same exclusions, optionally broken down by category. |
 | `search_payees` | Search payees by name with transaction counts. |
-| `list_portfolio` | List investment holdings with shares, cost basis, and stored Quicken price quotes. |
+| `list_portfolio` | List investment holdings with shares, cost basis, currency, and stored Quicken price quotes. Positions with a negative share count are included. |
 | `raw_query` | Run arbitrary SELECT queries (500-row limit). |
 
 ## Self-Documenting Command-Line Interface (`qmac`)
@@ -207,9 +216,9 @@ npm run format    # prettier
 npm run dev       # run server locally
 ```
 
-Set `QUICKEN_DB_PATH` before `npm test` if `~/Documents` holds more than one `.quicken` bundle; otherwise the live-schema suites skip.
+Set `QUICKEN_DB_PATH` before `npm test` if more than one `.quicken` bundle exists across the searched locations; otherwise the live-schema suites skip.
 
-Known issues and planned work live in [`ROADMAP.md`](ROADMAP.md) — open bugs, developer-experience gaps, and deferred dependency upgrades (fresh as of 2026-08-14).
+Known issues and planned work live in [`ROADMAP.md`](ROADMAP.md) — open bugs, developer-experience gaps, and deferred dependency upgrades (fresh as of 2026-11-09).
 
 ## Docker
 
@@ -218,6 +227,25 @@ docker build -t quicken-mac-mcp .
 docker run --rm -v ~/Documents/YourFile.quicken:/data:ro quicken-mac-mcp
 ```
 
+## Documentation
+
+Every Markdown document in this repo, with what would make it worth revisiting.
+
+- [Schema reference](docs/schema.md): every table, column, index, entity and join table in the Quicken For Mac database, with the conventions needed to query it and field-level notes on what the values mean and where they mislead. (updated 2026-11-09; update when: a Quicken release changes the database layout, which `npm run schema:check` reports)
+- [Quicken skill](plugin/skills/quicken/SKILL.md): the Claude skill's entry point: how to find and open the database safely and which reference to load for a question. (updated 2026-08-13; update when: a reference file is added or removed, or the safe-access steps change)
+- [Balances reference](plugin/skills/quicken/references/balances.md): skill recipes for account balances and how fresh they are. (updated 2026-08-13; update when: Quicken changes where it stores institution balances or statements)
+- [Budgets reference](plugin/skills/quicken/references/budgets.md): skill recipes for budgets, line items and targets. (updated 2026-11-09; update when: budget tables change, or the stored rollover mode values are verified)
+- [Cash flow reference](plugin/skills/quicken/references/cash-flow.md): skill recipes for spending and income by category, payee and period. (updated 2026-08-13; update when: the MCP spending tools change which rows they count, since the two must agree)
+- [Investments reference](plugin/skills/quicken/references/investments.md): skill recipes for holdings, tax lots and cost basis. (updated 2026-08-13; update when: position, lot or quote tables change)
+- [Tags and rules reference](plugin/skills/quicken/references/tags-and-rules.md): skill recipes for user tags and QuickFill rules, including how to discover the tag join table. (updated 2026-08-13; update when: Quicken changes how tags are joined to transaction splits)
+- [Changelog](CHANGELOG.md): user-visible changes by release. (updated 2026-11-09; update when: a change that users of the tools, CLI or skill would notice is merged)
+- [Roadmap](ROADMAP.md): known issues, planned work and deliberately deferred upgrades. (updated 2026-11-09; update when: a known gap is found, fixed or reprioritized)
+- [Contributing](CONTRIBUTING.md): how to set up, test, version and submit changes, and what to do after a Quicken update. (updated 2026-11-09; update when: the build, test, schema-refresh or release commands change)
+- [Developer guidelines for Claude](CLAUDE.md): build commands and code rules for AI coding agents working in this repo. (updated 2026-05-30; update when: commands, code style or the read-only database rule change)
+- [Security policy](SECURITY.md): the read-only design principles, supported versions and how to report a vulnerability. (updated 2026-03-02; update when: the reporting contact or supported versions change)
+- [Code of conduct](CODE_OF_CONDUCT.md): expected behavior for participants. (updated 2026-03-02; update when: the maintainers adopt a different code or contact)
+- [Launch guide](LAUNCHGUIDE.md): the listing copy used when submitting the server to MCP directories: tagline, features, setup and tags. (updated 2026-11-09; update when: tools are added or removed, or setup requirements change)
+
 ## Contributors
 
 - [Manish Mukherjee](https://github.com/manishie) — fixed dynamic `Z_ENT` lookup for CategoryTag ([#4](https://github.com/dweekly/quicken-mac-mcp/pull/4)), added `account_names` filter and date fallback for imported transactions ([#5](https://github.com/dweekly/quicken-mac-mcp/pull/5))
@@ -225,7 +253,7 @@ docker run --rm -v ~/Documents/YourFile.quicken:/data:ro quicken-mac-mcp
 
 ## Disclaimer
 
-This project is an independent, community-developed open-source tool. It is **not** an official Intuit product and is not endorsed by, directly affiliated with, maintained by, or sponsored by Intuit Inc. or any of its subsidiaries. "Quicken" is a registered trademark of Intuit Inc. All product and company names are trademarks or registered trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them.
+This project is an independent, community-developed open-source tool. It is **not** an official Quicken product and is not endorsed by, directly affiliated with, maintained by, or sponsored by Quicken Inc. or the owner of the Quicken trademark. "Quicken" is a registered trademark of Rocket Mortgage, LLC. All product and company names are trademarks or registered trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them.
 
 This software is provided "as is," without warranty of any kind. The authors and contributors are not responsible for any damage, data loss, or other issues arising from its use. Always back up your financial data before using third-party tools.
 

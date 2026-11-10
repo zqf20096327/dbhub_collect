@@ -8,9 +8,10 @@
 </p>
 
 <p align="center">
-  <a href="https://hookforms-docs.h1n054ur.dev">Docs</a> &middot;
+  <a href="https://oss.hookforms.com">Docs</a> &middot;
   <a href="https://github.com/bts-io/hookforms-cloud">Cloudflare Workers version</a> &middot;
-  <a href="https://hookforms-docs.h1n054ur.dev/getting-started/self-hosted/">Quick start guide</a>
+  <a href="https://oss.hookforms.com/getting-started/self-hosted/">Quick start guide</a> &middot;
+  <a href="https://hookforms.com/?utm_source=github&utm_medium=readme-top&utm_campaign=selfhosted">Hosted version</a>
 </p>
 
 ---
@@ -90,6 +91,10 @@ Needs a current stable Rust toolchain.
 cp .env.example .env        # set ADMIN_API_KEY
 DATABASE_URL=sqlite://./hookforms.db cargo run --release
 ```
+
+## Hosted option
+
+If you would rather not run a server, HookForms Pro is the hosted version of this project. You can start on the free plan, and the paid plans also send notification email for you. [hookforms.com](https://hookforms.com/?utm_source=github&utm_medium=readme&utm_campaign=selfhosted)
 
 ## Usage
 
@@ -291,7 +296,7 @@ docker compose --profile tunnel up -d
 
 ## API reference
 
-Full documentation at [hookforms-docs.h1n054ur.dev](https://hookforms-docs.h1n054ur.dev).
+Full documentation at [oss.hookforms.com](https://oss.hookforms.com).
 
 ### Public (no auth)
 

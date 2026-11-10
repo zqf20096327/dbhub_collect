@@ -115,6 +115,11 @@ Tool failures return to the model as text — the loop never crashes on one.
 | P8 ✅ | startup config validation, tool-argument schema checks, a stall guard, token budgets, sandboxed-and-offline execution, visible retries, output spilling, subagents, interactive approval, skill policy fields, memory kinds |
 | P9 ✅ | tool-result budgets (line-aware spilling + observed-prefill calibration), subagent report scanning and `result_schema`, MCP circuit breaking and name de-duplication, memory write de-duplication, twelve lifecycle hooks (`JOY_HOOKS`), a todo list, background jobs, and a goal loop (`/goal`) |
 | P10 ✅ | file-writing tools (`write_file`/`edit`), image input, model catalog, HTTP hooks, declarative workflows, per-session write lock, Windows boundary (Unix-only), distribution materials (npm shim / brew / PyPI / release workflow) |
+| P11 ✅ | accounts & multi-device: register/login hub (PBKDF2, per-device tokens, seat cap), dashboard remote mode + login card, cross-device event sync, CORS, PWA skeleton, Tauri desktop shell |
+| P12 ✅ | long-task engine (turn-level checkpoints): working memory persisted at tool boundaries, kill -9 → startup reconcile auto-resumes (finished tools never re-run), `task_*` event pings, dashboard resume notice |
+| P13 ✅ | long tasks as entities (`agent_tasks`): the goal loop becomes their engine, one active task per session, create/pause/resume/cancel, a pause keeps the checkpoint (resume continues it), boot reconcile marks suspended, dashboard task-card switches |
+| P14 ✅ | connectors (M4): email (SMTP) and Feishu (app identity) — allowlist hard boundary, drafts by default, one approval per live send; `joy connector` for humans; read-only dashboard panel |
+| P15 ✅ | business form (M5): task API (`POST /api/run`, one turn in, one JSON answer out), inbound webhooks (`webhooks.json` + `X-Joy-Secret`, no config = no door), tier routing (a task or a caller declares `tier` and it wins even in fixed mode; configurable in the dashboard's model panel) |
 
 ## Naming
 

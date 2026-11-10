@@ -1,10 +1,10 @@
 {
  "Dokploy/dokploy": {
-  "commit_7d": 56,
-  "commit_90d": 790,
+  "commit_7d": 68,
+  "commit_90d": 756,
   "rel_ver": "v0.31.0",
   "rel_pub": "2026-11-05",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -22,7 +22,7 @@
    "GHSA-r89g-h7x9-phr2(CVE-2026-72886,critical)"
   ],
   "contrib_n": 373,
-  "enriched_at": "20261107",
+  "enriched_at": "20261110",
   "lang": {
    "TypeScript": 98,
    "PLpgSQL": 1,
@@ -32,8 +32,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261107",
-   "release": "20261107",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261107"
   },
   "rel_notes": [
@@ -89,7 +89,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"da23beabed6d277f730ea14dd0196f039d48bd2bd73655453762c5761500edef\"",
+   "release": "W/\"bc7457be2b8b34a3c5a239476240a7b91d2a17ae53500aa9dd9e38e818452925\"",
    "security": "W/\"849e06bdb6ff0017ae80955467034203a0148878e10132448324af6add444880\""
   },
   "rel_dates": [
@@ -108,11 +108,11 @@
   ]
  },
  "coleifer/peewee": {
-  "commit_7d": 3,
-  "commit_90d": 120,
+  "commit_7d": 5,
+  "commit_90d": 118,
   "rel_ver": "4.5.3",
   "rel_pub": "2026-10-07",
-  "rel_days": 32,
+  "rel_days": 34,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -121,7 +121,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 132,
-  "enriched_at": "20261106",
+  "enriched_at": "20261110",
   "lang": {
    "Python": 99,
    "Cython": 0,
@@ -129,8 +129,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261106",
-   "release": "20261106",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261027"
   },
   "rel_notes": [
@@ -148,15 +148,35 @@
     "t": "4.5.1",
     "d": "2026-09-08",
     "n": "Couple little things for `EnumField`.\r\n\r\n* `EnumField` and `IntEnumField` validate member value types (`str` and `int` respectively) at field construction.\r\n* `EnumField` and `IntEnumField` default `choices` to `(value, name)` pairs derived from the enum.\r\n* Fix #3075, migration generation for `EnumField`. Generated migrations will emit the storage field type (e.g. `IntegerField`) rather than `EnumField()`.\r\n\r\n[View commits](https://github.com/coleifer/peewee/compare/4.5.0...4.5.1)\r\n\r\n<img width=\"202\" heigh"
+   },
+   {
+    "t": "4.5.0",
+    "d": "2026-09-05",
+    "n": "* MySQL and MariaDB connections no longer set `sql_mode`. Peewee had been setting `PIPES_AS_CONCAT`, but the param replaced the server's mode rather than adding to it, which silently disabled `STRICT_TRANS_TABLES` (etc). Going forward Peewee will not modify `sql_mode` by default and use `CONCAT()` rather than `||` for MySQL/MariaDB.\n* SQLite `BEGIN`, `COMMIT` and `ROLLBACK` are issued directly on a cursor rather than through `execute_sql()`, so they are no longer debug-logged, do not fire query hooks and ar"
+   },
+   {
+    "t": "4.4.0",
+    "d": "2026-08-23",
+    "n": "* Add `playhouse.migrations` for running migration scripts. Migrations are python files defining `up(migrator, db)` and optionally `down(...)`. Migrations are applied in numeric order a-la Django, and stored by name in a history table. CLI via `pwmigrate` accepting `status`, `up`, `down`, `initial`, `create`, `generate`, `fake` and `diff`. To run from python, `migrations.run(db)`.\n* Add a `SchemaMigrator.migration_context()` helper for wrapping migrations. This was wanted for SQLite in order to disable FK p"
    }
+  ],
+  "etag": {
+   "release": "W/\"c017c453cee03168852936fd03b7a06025dfcf052f3d16df4133e57b501e4b76\""
+  },
+  "rel_dates": [
+   "2026-10-07",
+   "2026-09-27",
+   "2026-09-08",
+   "2026-09-05",
+   "2026-08-23"
   ]
  },
  "tconbeer/harlequin": {
-  "commit_7d": 0,
-  "commit_90d": 139,
+  "commit_7d": 1,
+  "commit_90d": 130,
   "rel_ver": "v2.17.0",
   "rel_pub": "2026-10-26",
-  "rel_days": 13,
+  "rel_days": 15,
   "rel_n90": 13,
   "rel_pre": false,
   "rel_none": false,
@@ -165,15 +185,15 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 25,
-  "enriched_at": "20261108",
+  "enriched_at": "20261110",
   "lang": {
    "Python": 100,
    "Makefile": 0
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261107",
-   "release": "20261108",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261027"
   },
   "rel_notes": [
@@ -229,7 +249,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"30a611b47738ced1e3d60474d9a8eb423585175184bb4ef55fd93fb6adf36efe\""
+   "release": "W/\"d54d1b0c7094b3dd11c8933cfda1762d2de216a317a42dd9983fb742fb3cc2ea\""
   },
   "rel_dates": [
    "2026-10-26",
@@ -248,11 +268,11 @@
   ]
  },
  "supabase/supabase-py": {
-  "commit_7d": 116,
-  "commit_90d": 269,
+  "commit_7d": 110,
+  "commit_90d": 276,
   "rel_ver": "v2.34.1",
   "rel_pub": "2026-11-06",
-  "rel_days": 2,
+  "rel_days": 4,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -261,7 +281,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 100,
-  "enriched_at": "20261107",
+  "enriched_at": "20261110",
   "lang": {
    "Python": 98,
    "Makefile": 1,
@@ -271,8 +291,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261107",
-   "release": "20261107",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261027"
   },
   "rel_notes": [
@@ -303,7 +323,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"04293ca24f2ca487fff74d7613d3f5125b9b20e1ab58c4d87417bd0c10f763e2\""
+   "release": "W/\"920a0a7ee569abb9c49b1210a266423e95134f0d3c8496dc07e1ca5d3ed76c58\""
   },
   "rel_dates": [
    "2026-11-06",
@@ -317,7 +337,7 @@
   "commit_90d": 80,
   "rel_ver": "v26.0.0",
   "rel_pub": "2026-10-08",
-  "rel_days": 31,
+  "rel_days": 33,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -388,7 +408,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.20",
   "rel_pub": "2015-04-06",
-  "rel_days": 4234,
+  "rel_days": 4236,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -430,7 +450,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.6.0",
   "rel_pub": "2026-10-22",
-  "rel_days": 17,
+  "rel_days": 19,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -456,7 +476,7 @@
   "commit_7d": 0,
   "rel_ver": "v6.0.0",
   "rel_pub": "2025-03-23",
-  "rel_days": 595,
+  "rel_days": 597,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -473,11 +493,11 @@
  },
  "glific/glific": {
   "commit_90d": 183,
-  "commit_7d": 15,
-  "rel_ver": "v8.14.3",
-  "rel_pub": "2026-10-27",
-  "rel_days": 12,
-  "rel_n90": 12,
+  "commit_7d": 10,
+  "rel_ver": "v8.16.2",
+  "rel_pub": "2026-11-04",
+  "rel_days": 6,
+  "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -492,11 +512,98 @@
    "HTML": 1,
    "Shell": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"14732db8cb9254fe4edb6560a8f2400548640630bd29b3cf9bc1b488a89af473\""
+  },
+  "rel_dates": [
+   "2026-11-04",
+   "2026-11-03",
+   "2026-11-02",
+   "2026-10-28",
+   "2026-10-27",
+   "2026-10-27",
+   "2026-10-22",
+   "2026-10-21",
+   "2026-10-14",
+   "2026-10-13",
+   "2026-10-12",
+   "2026-10-08",
+   "2026-10-05",
+   "2026-10-01",
+   "2026-09-30",
+   "2026-09-29",
+   "2026-09-22",
+   "2026-09-20",
+   "2026-09-15",
+   "2026-09-08",
+   "2026-09-07",
+   "2026-09-03",
+   "2026-09-02",
+   "2026-09-02",
+   "2026-09-02",
+   "2026-09-02",
+   "2026-09-01",
+   "2026-08-28",
+   "2026-08-26",
+   "2026-08-26"
+  ],
+  "rel_notes": [
+   {
+    "t": "v8.16.2",
+    "d": "2026-11-04",
+    "n": "* fix(bigquery): send contacts in chunks of 50 and log error bodies as compact JSON by @rvignesh89 in https://github.com/glific/glific/pull/6127"
+   },
+   {
+    "t": "v8.16.1",
+    "d": "2026-11-03",
+    "n": "* fix(bigquery): point permission-denied error to the current BigQuery setup docs page by @priyanshu6238 in https://github.com/glific/glific/pull/6106"
+   },
+   {
+    "t": "v8.16.0",
+    "d": "2026-11-02",
+    "n": "## What's Changed\n* feat(contacts): write WhatsApp consent and session state to identities alongside contacts by @AmishaBisht in https://github.com/glific/glific/pull/5913\n* chore(deps): bump appsignal to 2.18.4 (eMudhra CA), refresh web stack deps, force SSL by @shijithkjayan in https://github.com/glific/glific/pull/6080\n* fix(kaapi):  send a name on create-collection so retries can't create duplicate collections by @priyanshu6238 in https://github.com/glific/glific/pull/6081\n* chore: replace ngrok with Cl"
+   },
+   {
+    "t": "v8.15.0",
+    "d": "2026-10-28",
+    "n": "## What's Changed\n* fix(flows): :bug: stop webhook retries from repeating a call that already succeeded by @shijithkjayan in https://github.com/glific/glific/pull/6065\n* fix(gupshup): handle V3 message status callbacks by @shijithkjayan in https://github.com/glific/glific/pull/5922\n\n\n**Full Changelog**: https://github.com/glific/glific/compare/v8.14.3...v8.15.0"
+   },
+   {
+    "t": "v8.14.3",
+    "d": "2026-10-27",
+    "n": "## What's Changed\n* chore(ai-evaluations): remove the ai_evaluations feature flags, v1 polling and the access-request flow by @AkhileshNegi in https://github.com/glific/glific/pull/5907\n* feat(action): implement wait_for_time action handling and improve error management for WA groups by @akanshaaa19 in https://github.com/glific/glific/pull/5757\n* feat(whatsapp-forms): send WhatsApp form templates through Gupshup V3 with a flow_token by @shijithkjayan in https://github.com/glific/glific/pull/5854\n* feat(api-"
+   },
+   {
+    "t": "v8.14.2",
+    "d": "2026-10-27",
+    "n": "## What's Changed\n* fix(media): stop MessageWorker timeouts from the media dedup lookup by @akanshaaa19 in https://github.com/glific/glific/pull/5910\n* fix(erase): index unindexed ON DELETE CASCADE foreign keys so org data erase doesn't time out by @priyanshu6238 in https://github.com/glific/glific/pull/5908\n* feat(ai-evaluations): store Kaapi latency summary in evaluation results by @AkhileshNegi in https://github.com/glific/glific/pull/5919\n* fix(messages): truncate flow label to respect maximum length co"
+   },
+   {
+    "t": "v8.14.1",
+    "d": "2026-10-22",
+    "n": "## What's Changed\n* refactor(web-channel): verify every web channel token against the organization's secret by @AmishaBisht in https://github.com/glific/glific/pull/5909\n\n\n**Full Changelog**: https://github.com/glific/glific/compare/v8.14.0...v8.14.1"
+   },
+   {
+    "t": "v8.14.0",
+    "d": "2026-10-21",
+    "n": "## What's Changed\n* feat(llm): record every flow Kaapi LLM call with guardrail input/output by @AkhileshNegi in https://github.com/glific/glific/pull/5871\n* feat(guardrail): Kaapi guardrail validator catalog query by @AkhileshNegi in https://github.com/glific/glific/pull/5868\n* feat(contacts): add contact identities and make contacts.phone nullable by @AmishaBisht in https://github.com/glific/glific/pull/5849\n* feat(guardrails): accept inline guardrail specs on assistants and send them to Kaapi by @Akhilesh"
+   },
+   {
+    "t": "v8.13.8",
+    "d": "2026-10-14",
+    "n": "## What's Changed\n* feat(ops): purge audit versions older than the retention window by @priyanshu6238 in https://github.com/glific/glific/pull/5796\n\n\n**Full Changelog**: https://github.com/glific/glific/compare/v8.13.7...v8.13.8"
+   },
+   {
+    "t": "v8.13.7",
+    "d": "2026-10-13",
+    "n": "## What's Changed\n* feat(guardrail): add is_ai_guardrail_enabled feature flag by @AkhileshNegi in https://github.com/glific/glific/pull/5865\n* feat(ai): integrate Langfuse for tracing and scoring AI interactions by @akanshaaa19 in https://github.com/glific/glific/pull/5785\n* feat(docs): answer product questions from Glific's documentation by @akanshaaa19 in https://github.com/glific/glific/pull/5851\n\n\n**Full Changelog**: https://github.com/glific/glific/compare/v8.13.6...v8.13.7"
+   }
+  ]
  },
  "frolicflow/frolic": {
   "commit_90d": 0,
@@ -539,7 +646,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.36.9",
   "rel_pub": "2024-10-18",
-  "rel_days": 751,
+  "rel_days": 753,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -576,11 +683,11 @@
   "enriched_at": "20260927"
  },
  "vahid-sohrabloo/chconn": {
-  "commit_90d": 30,
+  "commit_90d": 28,
   "commit_7d": 0,
-  "rel_ver": "v3.1.1",
-  "rel_pub": "2026-10-16",
-  "rel_days": 23,
+  "rel_ver": "v3.2.0",
+  "rel_pub": "2026-10-28",
+  "rel_days": 13,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -594,18 +701,61 @@
    "Makefile": 1,
    "Go Template": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"8d83729de4cf2ba54ab52975477c8b25578fe17b73bacc21e68d40b23bd5f37d\""
+  },
+  "rel_dates": [
+   "2026-10-28",
+   "2026-10-16",
+   "2026-10-16",
+   "2026-10-06",
+   "2026-09-27",
+   "2026-08-25"
+  ],
+  "rel_notes": [
+   {
+    "t": "v3.2.0",
+    "d": "2026-10-28",
+    "n": "- two fields use the same `db` name, also inside Tuple/Nested."
+   },
+   {
+    "t": "v3.1.1",
+    "d": "2026-10-16",
+    "n": "Bug fixes for v3.1.0 (#127):\n\n- `Nullable(String)` no longer panics on a nil `*string` or `*[]byte` in `AppendAny`; it appends null.\n- An empty map is now checked by its key and value types, so a Variant sends it to the matching member (for example `[]map[string]string{}` to `Array(Map(String, String))`, not `Array(Map(String, Int64))`).\n- Map and Array columns keep the right offsets when you append or delete after a read.\n- `MapBase.ValidateInsert` now checks that offsets match the key and value rows, as A"
+   },
+   {
+    "t": "v3.1.0",
+    "d": "2026-10-16",
+    "n": "Smaller builds: the column conversion methods (`Array`, `Nullable`, `LC`, `LowCardinality`, ...) are now Go 1.27 generic methods, so they no longer pull whole generic method sets into every importing package. Call sites stay the same. On a large codebase the test build cache dropped by more than half.\n\n**This release has breaking changes and needs Go 1.27.** See [Breaking changes in v3.1.0](https://github.com/vahid-sohrabloo/chconn/blob/v3.1.0/README.md#breaking-changes-in-v310) in the README. The main ones"
+   },
+   {
+    "t": "v3.0.5",
+    "d": "2026-10-06",
+    "n": "## What's Changed\r\n* Bump github.com/pierrec/lz4/v4 from 4.1.30 to 4.1.31 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/117\r\n* Bump github.com/klauspost/compress from 1.20.0 to 1.20.1 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/116\r\n* Bump github.com/kelindar/bitmap from 1.5.6 to 1.5.7 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/115\r\n* Bump github.com/pierrec/lz4/v4 from 4.1.31 to 4.1.32 by @dependabot[bot] in https://github.com/vah"
+   },
+   {
+    "t": "v3.0.4",
+    "d": "2026-09-27",
+    "n": "## What's Changed\r\n* chore: require Go 1.27 by @vahid-sohrabloo in https://github.com/vahid-sohrabloo/chconn/pull/109\r\n* Bump github.com/klauspost/compress from 1.19.2 to 1.20.0 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/108\r\n* Bump github.com/pierrec/lz4/v4 from 4.1.29 to 4.1.30 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/112\r\n* Bump golang.org/x/tools from 0.49.0 to 0.50.0 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/111\r\n* Bump"
+   },
+   {
+    "t": "v3.0.3",
+    "d": "2026-08-25",
+    "n": "## What's Changed\r\n* Bump github.com/pierrec/lz4/v4 from 4.1.27 to 4.1.28 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/102\r\n* Bump github.com/klauspost/compress from 1.19.1 to 1.19.2 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/101\r\n* Bump github.com/stretchr/testify from 1.11.1 to 1.12.1 by @dependabot[bot] in https://github.com/vahid-sohrabloo/chconn/pull/105\r\n* Bump golang.org/x/tools from 0.48.0 to 0.49.0 by @dependabot[bot] in https://github.com/vahid-s"
+   }
+  ]
  },
  "neondatabase/elephantshark": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v0.3",
   "rel_pub": "2026-01-16",
-  "rel_days": 296,
+  "rel_days": 298,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -621,11 +771,11 @@
   "enriched_at": "20260927"
  },
  "ClickHouse/click-ui": {
-  "commit_90d": 101,
-  "commit_7d": 1,
-  "rel_ver": "v0.15.0",
-  "rel_pub": "2026-10-09",
-  "rel_days": 30,
+  "commit_90d": 102,
+  "commit_7d": 6,
+  "rel_ver": "v0.16.0",
+  "rel_pub": "2026-11-06",
+  "rel_days": 4,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
@@ -641,11 +791,78 @@
    "Shell": 1,
    "HTML": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"74624c31ab80ec031df5f991a0a5ab6c9756d1946489575c71555320c73e318c\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-05",
+   "2026-10-09",
+   "2026-10-05",
+   "2026-10-02",
+   "2026-09-30",
+   "2026-09-16",
+   "2026-09-07",
+   "2026-09-07",
+   "2026-08-14"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.16.0",
+    "d": "2026-11-06",
+    "n": "- feat(Table): add skeleton loading variant by [@mdevils](https://github.com/mdevils) in [#1229](https://github.com/ClickHouse/click-ui/pull/1229)\n- fix(a11y): add keyboard activation and button role to CardHorizontal by [@EvandroLG](https://github.com/EvandroLG) in [#1269](https://github.com/ClickHouse/click-ui/pull/1269)\n- feat(Alert): add preserveLineBreaks prop by [@fneves](https://github.com/fneves) in [#1277](https://github.com/ClickHouse/click-ui/pull/1277)\n- feat(Logos): add Vercel logo by [@mdevils"
+   },
+   {
+    "t": "v0.16.0-rc1",
+    "d": "2026-11-05",
+    "n": "- feat(Table): add skeleton loading variant by [@mdevils](https://github.com/mdevils) in [#1229](https://github.com/ClickHouse/click-ui/pull/1229)\n- fix(a11y): add keyboard activation and button role to CardHorizontal by [@EvandroLG](https://github.com/EvandroLG) in [#1269](https://github.com/ClickHouse/click-ui/pull/1269)\n- feat(Alert): add preserveLineBreaks prop by [@fneves](https://github.com/fneves) in [#1277](https://github.com/ClickHouse/click-ui/pull/1277)\n- feat(Logos): add Vercel logo by [@mdevils"
+   },
+   {
+    "t": "v0.15.0",
+    "d": "2026-10-09",
+    "n": "* fix(Dropdown): keep items at full height when the menu scrolls by @ariser in https://github.com/ClickHouse/click-ui/pull/1256\n* fix(Dropdown): forward the ref of Dropdown.Item by @ariser in https://github.com/ClickHouse/click-ui/pull/1257\n* fix(Dropdown): keep menus 8px from the viewport edges instead of 100px by @ariser in https://github.com/ClickHouse/click-ui/pull/1260\n- `Dropdown.Content` keeps 8px from the viewport edges instead of 100px, so long menus are taller before they scroll ([#1260](https://g"
+   },
+   {
+    "t": "v0.14.0",
+    "d": "2026-10-05",
+    "n": "## What's Changed\r\n* chore: Chromatic storybook deployment url by @XOP in https://github.com/ClickHouse/click-ui/pull/1232\r\n* feat(Logos): add AI agent logos by @stoler in https://github.com/ClickHouse/click-ui/pull/1246\r\n* ci(deps): bump the github-actions group with 2 updates by @dependabot[bot] in https://github.com/ClickHouse/click-ui/pull/1248\r\n\r\n\r\n**Full Changelog**: https://github.com/ClickHouse/click-ui/compare/v0.13.0...v0.14.0"
+   },
+   {
+    "t": "v0.13.0",
+    "d": "2026-10-02",
+    "n": "- feat(Dropdown)!: support link menu items with `Dropdown.Item asChild` by [@ariser](https://github.com/ariser) in [#1234](https://github.com/ClickHouse/click-ui/pull/1234)\n- fix: consistent prop type exports, `Dropdown.Sub` takes Radix sub-menu props by [@XOP](https://github.com/XOP) in [#1226](https://github.com/ClickHouse/click-ui/pull/1226)\n- fix: remove trailing semicolons from generated theme tokens by [@XOP](https://github.com/XOP) in [#1210](https://github.com/ClickHouse/click-ui/pull/1210)\n- test(D"
+   },
+   {
+    "t": "v0.13.0-rc1",
+    "d": "2026-09-30",
+    "n": "* test(Dropdown): make the disabled-item test able to fail by @ariser in https://github.com/ClickHouse/click-ui/pull/1239\n* feat(Dropdown)!: support link menu items with Dropdown.Item asChild by @ariser in https://github.com/ClickHouse/click-ui/pull/1234\n* feat(Icon): add grid-dots icon by @ariser in https://github.com/ClickHouse/click-ui/pull/1235\n* fix(AutoComplete): skip disabled options in keyboard navigation by @fallintoplace in https://github.com/ClickHouse/click-ui/pull/1184\n* fix(Table): preserve wi"
+   },
+   {
+    "t": "v0.12.0",
+    "d": "2026-09-16",
+    "n": "* feat(DateRangePicker): add ability to quick-select year by @hoorayimhelping in https://github.com/ClickHouse/click-ui/pull/1196\n* feat(CodeBlock): add diff language by @Kinzeng in https://github.com/ClickHouse/click-ui/pull/1195\n* fix(CardHorizontal): prevent duplicate button clicks by @fallintoplace in https://github.com/ClickHouse/click-ui/pull/1185\n* fix(Loaders): use valid 0% keyframe selector for horizontal-circle animations by @nihaocami in https://github.com/ClickHouse/click-ui/pull/1187\n* chore: l"
+   },
+   {
+    "t": "v0.11.0",
+    "d": "2026-09-07",
+    "n": "- fix(Dropdown): narrow `tooltipProps`, default item tooltips to `right`, export `DropdownItemProps` by [@DreaminDani](https://github.com/DreaminDani) in [#1179](https://github.com/ClickHouse/click-ui/pull/1179)\n- fix(CodeBlock): actions no longer overlap text, new `ariaLabel` prop by [@XOP](https://github.com/XOP) in [#1169](https://github.com/ClickHouse/click-ui/pull/1169)\n- fix(Link): remove redundant right margin by [@XOP](https://github.com/XOP) in [#1162](https://github.com/ClickHouse/click-ui/pull/11"
+   },
+   {
+    "t": "v0.11.0-rc1",
+    "d": "2026-09-07",
+    "n": "* fix(Link): Removes redundant margin by @XOP in https://github.com/ClickHouse/click-ui/pull/1162\n* fix(Dropdown): narrow tooltipProps, default item tooltips right, unstale exported types by @DreaminDani in https://github.com/ClickHouse/click-ui/pull/1179\n* feat(Text): add noWrap prop for white-space control by @gjones in https://github.com/ClickHouse/click-ui/pull/1094\n* chore(ci): allow fork checks by @XOP in https://github.com/ClickHouse/click-ui/pull/1167\n* fix(CodeBlock): actions overlap text by @XOP i"
+   },
+   {
+    "t": "v0.10.0",
+    "d": "2026-08-14",
+    "n": "* chore(css): remove styled-components as a dependency by @DreaminDani in https://github.com/ClickHouse/click-ui/pull/1151\n* fix(GenericMenu): restore scroll on dropdown-menu panels by @claude in https://github.com/ClickHouse/click-ui/pull/1155\n* ci(publish): run publish workflows on Node 24, drop npm@latest upgrade by @DreaminDani in https://github.com/ClickHouse/click-ui/pull/1152\n* feat(Flags): add 16 cloud provider region flags and fix nine existing ones by @DreaminDani in https://github.com/ClickHouse/"
+   }
+  ]
  },
  "scbushan05/online-bookstore": {
   "commit_90d": 0,
@@ -688,7 +905,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.0.3",
   "rel_pub": "2024-11-02",
-  "rel_days": 736,
+  "rel_days": 738,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -722,7 +939,7 @@
  "adiralashiva8/robotframework-historic": {
   "rel_ver": "v0.2.7",
   "rel_pub": "2020-10-18",
-  "rel_days": 2212,
+  "rel_days": 2214,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -900,7 +1117,7 @@
  "artefactory/artefactory-connectors-kit": {
   "rel_ver": "v2.0",
   "rel_pub": "2021-04-02",
-  "rel_days": 2046,
+  "rel_days": 2048,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -938,7 +1155,7 @@
  "SapphireDb/sapphiredb-js": {
   "rel_ver": "3.1.8",
   "rel_pub": "2021-07-01",
-  "rel_days": 1956,
+  "rel_days": 1958,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -973,7 +1190,7 @@
  "aneshas/gocask": {
   "rel_ver": "v0.0.5",
   "rel_pub": "2022-09-17",
-  "rel_days": 1513,
+  "rel_days": 1515,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1021,7 +1238,7 @@
  "abhishek-0713/MyWallet": {
   "rel_ver": "mw-01-v",
   "rel_pub": "2022-12-20",
-  "rel_days": 1419,
+  "rel_days": 1421,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1038,7 +1255,7 @@
  "podiljs/podil": {
   "rel_ver": "0.3.7",
   "rel_pub": "2024-09-01",
-  "rel_days": 798,
+  "rel_days": 800,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1083,7 +1300,7 @@
  "toomore/mailbox": {
   "rel_ver": "3.0.0",
   "rel_pub": "2026-03-27",
-  "rel_days": 226,
+  "rel_days": 228,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1179,7 +1396,7 @@
  "munzaz1/trk": {
   "rel_ver": "beta1",
   "rel_pub": "2021-09-07",
-  "rel_days": 1888,
+  "rel_days": 1890,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1240,7 +1457,7 @@
  "mattnicee7/MattLib": {
   "rel_ver": "1.2.9",
   "rel_pub": "2022-04-25",
-  "rel_days": 1658,
+  "rel_days": 1660,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1257,7 +1474,7 @@
  "SqlQuantumLeap/BinaryFormatter": {
   "rel_ver": "v2.0",
   "rel_pub": "2017-12-10",
-  "rel_days": 3255,
+  "rel_days": 3257,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1300,7 +1517,7 @@
  "AlexKalll/axon-pharma": {
   "rel_ver": "v1.0",
   "rel_pub": "2025-10-31",
-  "rel_days": 373,
+  "rel_days": 375,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1382,7 +1599,7 @@
  "LAA-Software-Engineering/ultra-minimal-fast-rest-api": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-09-17",
-  "rel_days": 52,
+  "rel_days": 54,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1501,7 +1718,7 @@
  "PhilNad/with-respect-to": {
   "rel_ver": "v0.2",
   "rel_pub": "2025-10-04",
-  "rel_days": 400,
+  "rel_days": 402,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1521,7 +1738,7 @@
  "winebarrel/genlog": {
   "rel_ver": "v1.8.0",
   "rel_pub": "2023-11-16",
-  "rel_days": 1088,
+  "rel_days": 1090,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1539,7 +1756,7 @@
  "chteau/Roblox-Supabase": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-12-20",
-  "rel_days": 323,
+  "rel_days": 325,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1556,7 +1773,7 @@
  "SpecIR/SpecCompiler": {
   "rel_ver": "v0.4",
   "rel_pub": "2026-08-18",
-  "rel_days": 82,
+  "rel_days": 84,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1577,7 +1794,7 @@
  "openlit/helm": {
   "rel_ver": "openlit-controller-0.10.0",
   "rel_pub": "2026-07-13",
-  "rel_days": 118,
+  "rel_days": 120,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1594,7 +1811,7 @@
  "mhdb96/StoreAutomationXd": {
   "rel_ver": "1.0.1",
   "rel_pub": "2020-04-20",
-  "rel_days": 2393,
+  "rel_days": 2395,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1611,7 +1828,7 @@
  "MadeiraData/sql-clr-ics": {
   "rel_ver": "v2.3-beta",
   "rel_pub": "2020-09-22",
-  "rel_days": 2238,
+  "rel_days": 2240,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1695,7 +1912,7 @@
  "oracle-quickstart/oci-adoption-framework-thunder": {
   "rel_ver": "1.1",
   "rel_pub": "2021-11-05",
-  "rel_days": 1829,
+  "rel_days": 1831,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1765,7 +1982,7 @@
  "begoneeraj/Newsup": {
   "rel_ver": "v2.1.2",
   "rel_pub": "2026-08-05",
-  "rel_days": 95,
+  "rel_days": 97,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -1786,7 +2003,7 @@
  "wetory/sql-server-replication-monitoring": {
   "rel_ver": "1.0.7",
   "rel_pub": "2020-04-29",
-  "rel_days": 2384,
+  "rel_days": 2386,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1803,7 +2020,7 @@
  "weklund/fiduciary": {
   "rel_ver": "v1.0.2",
   "rel_pub": "2026-07-02",
-  "rel_days": 129,
+  "rel_days": 131,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1860,7 +2077,7 @@
  "FuturisticGoo/squealer": {
   "rel_ver": "v0.1.4",
   "rel_pub": "2026-03-14",
-  "rel_days": 239,
+  "rel_days": 241,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1887,7 +2104,7 @@
  "TT-Wang/memem": {
   "rel_ver": "v2.9.7",
   "rel_pub": "2026-07-03",
-  "rel_days": 128,
+  "rel_days": 130,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2386,7 +2603,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-09-23",
-  "rel_days": 46,
+  "rel_days": 48,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2621,7 +2838,7 @@
  "ChrisK106/duolab": {
   "rel_ver": "1.0",
   "rel_pub": "2025-06-30",
-  "rel_days": 496,
+  "rel_days": 498,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2666,7 +2883,7 @@
  "leonardovida/duckdb-sqlalchemy": {
   "rel_ver": "v1.5.6.1",
   "rel_pub": "2026-10-11",
-  "rel_days": 28,
+  "rel_days": 30,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2810,7 +3027,7 @@
  "volekerb/hivemill": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-10-30",
-  "rel_days": 9,
+  "rel_days": 11,
   "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
@@ -2902,7 +3119,7 @@
  "zane-tv/soft-db": {
   "rel_ver": "v1.4.2",
   "rel_pub": "2026-03-30",
-  "rel_days": 223,
+  "rel_days": 225,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,

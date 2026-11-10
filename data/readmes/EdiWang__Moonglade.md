@@ -14,6 +14,8 @@ A public blog and authenticated admin portal provide:
 
 The admin portal supports desktop browsers with a viewport at least 1440 CSS pixels wide.
 
+The interface supports English (`en-US`), Simplified Chinese (`zh-Hans`), Traditional Chinese (`zh-Hant`, using Hong Kong terminology), German (`de-DE`), Japanese (`ja-JP`), and French (`fr-FR`, France). Visitors can choose a display language in the footer; the default language setting controls blog and post metadata for SEO.
+
 ## Repository Layout
 
 The solution is `src/Moonglade.slnx`. See the [engineering reference](docs/agent-reference.md#layers-and-project-responsibilities) for module responsibilities.
@@ -90,6 +92,14 @@ dotnet restore src/Moonglade.Web/Moonglade.Web.csproj
 dotnet build src/Moonglade.Web/Moonglade.Web.csproj
 dotnet run --project src/Moonglade.Web/Moonglade.Web.csproj
 ```
+
+With PowerShell, use the startup script from the repository root instead:
+
+```powershell
+.\start.ps1
+```
+
+The script requires the .NET 10 SDK and a configured, running database (see [Database Setup](#database-setup)). It restores dependencies, builds, and runs the web project with the `Moonglade.Web` launch profile in `Development`. It does not start Docker or change local configuration. Stop the application with `Ctrl+C`.
 
 Open `https://localhost:10210` or `https://localhost:10210/admin`. The default local account is `admin` / `admin123`; first sign-in requires scanning the authenticator QR code and entering its 6-digit TOTP code. For test commands and coverage guidance, see [Tests](src/Tests/README.md).
 

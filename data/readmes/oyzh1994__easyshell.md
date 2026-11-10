@@ -6,7 +6,7 @@
 
 ## 功能特性
 
-- **多协议支持**：支持 SSH、FTP、SFTP、Redis、Valkey、ZooKeeper、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mariadb、达梦、PostgreSQL、SQLite、Mosh、本地终端等多种连接方式。
+- **多协议支持**：支持 SSH、FTP、SFTP、Redis、Valkey、ZooKeeper、HTTP、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mariadb、达梦、PostgreSQL、SQLite、Mosh、本地终端等多种连接方式。
 - **连接管理**：支持连接的添加、编辑、删除、导入、导出等操作。
 - **密钥管理**：支持密钥的生成、导入、导出、编辑、复制到主机等操作。
 - **片段执行**：支持代码片段的保存和执行。
@@ -24,6 +24,7 @@
 - **Redis 客户端**：支持 Redis 协议的增删改查、导出、导入、传输、终端等操作。
 - **Valkey 客户端**：支持 Valkey 协议的增删改查、导出、导入、传输、终端等操作。
 - **ZooKeeper 客户端**：支持 ZooKeeper 协议的增删改查、权限管理、导入、导出、传输、终端等操作。
+- **HTTP 客户端**：支持 HTTP 请求集合、环境变量、请求头、请求体、认证、响应查看与 HTML 预览等操作。
 - **Mysql 客户端**：支持 Mysql 协议的库、表、视图、函数、过程、事件管理、查询、导入、导出、传输、转储、终端等操作。
 - **Dameng 客户端**：支持 Dameng 协议的模式、表、视图、函数、过程、序列、用户管理、查询、导入、导出、传输、转储、终端等操作。
 - **PostgreSQL 客户端**：支持 PostgreSQL 协议的模式、表、视图、函数、过程、序列、查询、导入、导出、传输、转储、终端等操作。
@@ -118,6 +119,7 @@
 ![zk16.png](resource/screenshot/zk16.png)
 ![zk17.png](resource/screenshot/zk17.png)
 ![zk18.png](resource/screenshot/zk18.png)
+![zk19.png](resource/screenshot/zk19.png)
 
 ### Redis
 ![redis1.png](resource/screenshot/redis1.png)
@@ -137,6 +139,25 @@
 ![redis15.png](resource/screenshot/redis15.png)
 ![redis16.png](resource/screenshot/redis16.png)
 ![redis17.png](resource/screenshot/redis17.png)
+
+### Valkey
+![valkey1.png](resource/screenshot/valkey1.png)
+![valkey2.png](resource/screenshot/valkey2.png)
+![valkey3.png](resource/screenshot/valkey3.png)
+![valkey4.png](resource/screenshot/valkey4.png)
+![valkey5.png](resource/screenshot/valkey5.png)
+![valkey6.png](resource/screenshot/valkey6.png)
+![valkey7.png](resource/screenshot/valkey7.png)
+![valkey8.png](resource/screenshot/valkey8.png)
+![valkey9.png](resource/screenshot/valkey9.png)
+![valkey10.png](resource/screenshot/valkey10.png)
+![valkey11.png](resource/screenshot/valkey11.png)
+![valkey12.png](resource/screenshot/valkey12.png)
+![valkey13.png](resource/screenshot/valkey13.png)
+![valkey14.png](resource/screenshot/valkey14.png)
+![valkey15.png](resource/screenshot/valkey15.png)
+![valkey16.png](resource/screenshot/valkey16.png)
+![valkey17.png](resource/screenshot/valkey17.png)
 
 ### SFTP
 ![sftp1.png](resource/screenshot/sftp1.png)
@@ -293,6 +314,37 @@
 ![mariadb25.png](resource/screenshot/mariadb25.png)
 ![mariadb26.png](resource/screenshot/mariadb26.png)
 ![mariadb27.png](resource/screenshot/mariadb27.png)
+
+### PostgreSQL
+![postgresql1.png](resource/screenshot/postgresql1.png)
+![postgresql2.png](resource/screenshot/postgresql2.png)
+![postgresql3.png](resource/screenshot/postgresql3.png)
+![postgresql4.png](resource/screenshot/postgresql4.png)
+![postgresql5.png](resource/screenshot/postgresql5.png)
+![postgresql6.png](resource/screenshot/postgresql6.png)
+![postgresql7.png](resource/screenshot/postgresql7.png)
+![postgresql8.png](resource/screenshot/postgresql8.png)
+![postgresql9.png](resource/screenshot/postgresql9.png)
+![postgresql10.png](resource/screenshot/postgresql10.png)
+![postgresql11.png](resource/screenshot/postgresql11.png)
+![postgresql12.png](resource/screenshot/postgresql12.png)
+![postgresql13.png](resource/screenshot/postgresql13.png)
+![postgresql14.png](resource/screenshot/postgresql14.png)
+![postgresql15.png](resource/screenshot/postgresql15.png)
+![postgresql16.png](resource/screenshot/postgresql16.png)
+![postgresql17.png](resource/screenshot/postgresql17.png)
+![postgresql18.png](resource/screenshot/postgresql18.png)
+![postgresql19.png](resource/screenshot/postgresql19.png)
+![postgresql20.png](resource/screenshot/postgresql20.png)
+![postgresql21.png](resource/screenshot/postgresql21.png)
+![postgresql22.png](resource/screenshot/postgresql22.png)
+![postgresql23.png](resource/screenshot/postgresql23.png)
+![postgresql24.png](resource/screenshot/postgresql24.png)
+![postgresql25.png](resource/screenshot/postgresql25.png)
+![postgresql26.png](resource/screenshot/postgresql26.png)
+![postgresql27.png](resource/screenshot/postgresql27.png)
+![postgresql28.png](resource/screenshot/postgresql28.png)
+![postgresql29.png](resource/screenshot/postgresql29.png)
 
 ### Mosh
 ![mosh1.png](resource/screenshot/mosh1.png)

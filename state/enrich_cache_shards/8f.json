@@ -1,10 +1,10 @@
 {
  "usememos/memos": {
-  "commit_7d": 15,
-  "commit_90d": 259,
+  "commit_7d": 5,
+  "commit_90d": 254,
   "rel_ver": "26.11.0",
   "rel_pub": "2026-11-01",
-  "rel_days": 7,
+  "rel_days": 9,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -15,7 +15,7 @@
    "GHSA-mr34-8733-grr2(CVE-2024-21635,low)"
   ],
   "contrib_n": 390,
-  "enriched_at": "20261108",
+  "enriched_at": "20261110",
   "lang": {
    "Go": 51,
    "TypeScript": 48,
@@ -25,8 +25,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261107",
-   "release": "20261108",
+   "commit": "20261110",
+   "release": "20261110",
    "security": "20261107"
   },
   "rel_notes": [
@@ -67,7 +67,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"8c442169c212cb79626e9b30ceb4d4dbfcf3a90f19215a6eee6c93fe5ad0a9e7\"",
+   "release": "W/\"53b41c33d4cc5dcac6e5bdc42c2d43b3a57078ddd7a4963a17152c0c05e79094\"",
    "security": "W/\"91cb5b8d2717e4a53dec349e4d410a32127ddcdb81e29c34ad3fee7b4d2e53a5\""
   },
   "rel_dates": [
@@ -107,7 +107,7 @@
   "commit_7d": 1,
   "rel_ver": "v5.5.1",
   "rel_pub": "2026-11-05",
-  "rel_days": 3,
+  "rel_days": 5,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -173,7 +173,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.0.1",
   "rel_pub": "2026-07-24",
-  "rel_days": 107,
+  "rel_days": 109,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -192,12 +192,12 @@
   }
  },
  "mr-karan/logchef": {
-  "commit_90d": 504,
-  "commit_7d": 336,
-  "rel_ver": "v2.5.0",
-  "rel_pub": "2026-10-23",
-  "rel_days": 16,
-  "rel_n90": 12,
+  "commit_90d": 516,
+  "commit_7d": 4,
+  "rel_ver": "v2.6.1",
+  "rel_pub": "2026-10-29",
+  "rel_days": 12,
+  "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -212,18 +212,86 @@
    "Rust": 9,
    "Shell": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"973586ba3257f9f5da6a3551977824e44bc0776f7eca77462e6671c839b6426f\""
+  },
+  "rel_dates": [
+   "2026-10-29",
+   "2026-10-28",
+   "2026-10-23",
+   "2026-10-13",
+   "2026-10-08",
+   "2026-10-07",
+   "2026-10-07",
+   "2026-10-07",
+   "2026-09-29",
+   "2026-09-29",
+   "2026-09-24"
+  ],
+  "rel_notes": [
+   {
+    "t": "v2.6.1",
+    "d": "2026-10-29",
+    "n": "## Changelog\n* a0b1cf58a39b2fdede2cf427bd7c782bb90d511a chore(release): Prepare v2.6.1\n* cefa7986f930025dd3ce336d832ed198031b69b1 fix(askchef): give the model the current time\n* fcb2e52495549d8e7055182fd56a9c81bd81ebd9 fix(explore): open the time range picker again\n* 58005c6e24d3231a5401d85efdd872424c75a2ff test(store): cut race test suite from 257s to 62s"
+   },
+   {
+    "t": "v2.6.0",
+    "d": "2026-10-28",
+    "n": "database migrations and no config changes."
+   },
+   {
+    "t": "v2.5.0",
+    "d": "2026-10-23",
+    "n": "- A hung ClickHouse server no longer stalls other queries and health checks.\nat startup: SQLite to version 38 and Postgres to version 12. Back up the\nmetadata database before upgrading. On SQLite, sessions stored with a non-UTC\n- ClickHouse alert queries must be a single `SELECT`, and they run exactly as\n- SQLite stores timestamps in UTC, so session limits, expiry and alert\n- Collections and their owners are created atomically. Postgres records each\n- Alert queries that return `UInt8` and other ClickHouse i"
+   },
+   {
+    "t": "v2.4.0",
+    "d": "2026-10-13",
+    "n": "VictoriaLogs windowed search is opt-in. Enable it in the source form or\nprovisioning file to use streamed progress, newest-first pages, and window retries.\n\n### Added\n- Opt-in VictoriaLogs windowed search returns partial results newest first,\n  with Load older, Stop, and individual window skip and retry controls (#116).\n  Stream selection narrows searches without changing the query text.\n- Background window counts provide totals, histogram data, and count coverage.\n  An exhaustive first page builds its hist"
+   },
+   {
+    "t": "v2.3.2",
+    "d": "2026-10-08",
+    "n": "automatically at startup: SQLite to version 34 and Postgres to version 9.\nBack up the metadata database before upgrading.\n- SQLite alerts now evaluate at their configured interval instead of waiting"
+   },
+   {
+    "t": "v2.3.1",
+    "d": "2026-10-07",
+    "n": "* 3443848345dfdb4fa433b2f51c39a4de46315e0a fix(server): stop passing the fasthttp request context to background work"
+   },
+   {
+    "t": "v2.3.0",
+    "d": "2026-10-07",
+    "n": "* edb23575f81fc6556e6596d8fe4bf5be7cb09332 docs(changelog): add unreleased OAuth and built-in MCP notes\n* f4d45a2cfad655ebaeb301a0a7e0abdbe5d8f4f0 feat(mcp): add the integrated MCP server tools and investigation panel\n* f6db3094d4550f372972f475370eb3dcfc27a931 feat(store): add OAuth grant and token storage\n* d4547b186ea16d2d6ea168c84c83ec08d772ff67 fix(clickhouse): bound the connection handshake by the caller's deadline\n* 7ca0f845bb891d24978e76a759cdbf169e84b808 Merge pull request #117: Logchef OAuth and bu"
+   },
+   {
+    "t": "cli-v0.3.0",
+    "d": "2026-10-07",
+    "n": "## What's Changed\n* feat: Logchef OAuth and built-in MCP for agents and the CLI by @mr-karan in https://github.com/mr-karan/logchef/pull/117\n\n\n**Full Changelog**: https://github.com/mr-karan/logchef/compare/cli-v0.2.3...cli-v0.3.0"
+   },
+   {
+    "t": "v2.2.0",
+    "d": "2026-09-29",
+    "n": "Logchef 2.2 can run under a subpath behind a reverse proxy and completes the Simplified Chinese interface for sources, access, admin, and library views. The server moved to Fiber v3. There are no database migrations.\n- **No database migrations.**"
+   },
+   {
+    "t": "cli-v0.2.3",
+    "d": "2026-09-29",
+    "n": "Logchef CLI 0.2.3 fixes timezone handling.\n\n## Fixed\n\n- **`saved-queries` ran the wrong window when a timezone was set.** The window was formatted in UTC but sent with the configured zone, so with `Asia/Kolkata` the server read the bounds 5h30m early. Saved queries now format and label the window in the same zone, like `collections` already did. `find` also sends the resolved zone.\n- **Invalid timezones are rejected.** `logchef config set timezone` accepts only IANA zone names such as `Asia/Kolkata` or `UTC"
+   }
+  ]
  },
  "context-machine-lab/sleepless-agent": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v0.1.2",
   "rel_pub": "2025-10-27",
-  "rel_days": 377,
+  "rel_days": 379,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -243,7 +311,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2024-01-04",
-  "rel_days": 1039,
+  "rel_days": 1041,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -265,7 +333,7 @@
   "commit_7d": 0,
   "rel_ver": "v3.1.0",
   "rel_pub": "2019-03-12",
-  "rel_days": 2798,
+  "rel_days": 2800,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -317,7 +385,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.6",
   "rel_pub": "2026-07-26",
-  "rel_days": 105,
+  "rel_days": 107,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -335,11 +403,11 @@
   "enriched_at": "20260927"
  },
  "davidmoten/rxjava2-jdbc": {
-  "commit_90d": 4,
+  "commit_90d": 5,
   "commit_7d": 0,
   "rel_ver": "0.2.14",
   "rel_pub": "2023-08-02",
-  "rel_days": 1194,
+  "rel_days": 1196,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -353,19 +421,23 @@
    "Kotlin": 0,
    "Shell": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"f093f03b8772e2aea8b99a5319f05a8d06aca28532d09fb5feaccedbabab552d\""
+  },
+  "rel_dates": []
  },
  "1broseidon/cymbal": {
-  "commit_90d": 31,
-  "commit_7d": 0,
-  "rel_ver": "v0.17.0",
-  "rel_pub": "2026-09-23",
-  "rel_days": 46,
-  "rel_n90": 3,
+  "commit_90d": 33,
+  "commit_7d": 2,
+  "rel_ver": "v0.18.0",
+  "rel_pub": "2026-11-08",
+  "rel_days": 2,
+  "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -380,18 +452,49 @@
    "JavaScript": 0,
    "PowerShell": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"1a13329f40fa992dd84eed748fe7afef526561ccb57991746222dd88a92f2660\""
+  },
+  "rel_dates": [
+   "2026-11-08",
+   "2026-09-23",
+   "2026-09-23",
+   "2026-09-05"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.18.0",
+    "d": "2026-11-08",
+    "n": "**The OpenCode plugin works with OpenCode 2.x.** OpenCode 2.x dropped the 1.x plugin API, so the plugin `cymbal hook install opencode` wrote had no effect there: no reminder, no nudge. The installer now writes one plugin that serves both: OpenCode 1.x runs it as before, and 2.x adds cymbal's reminder to the system prompt before each model request and nudges code searches run through its shell tool. On 2.x, Grep and Glob calls are not nudged, because 2.x tool hooks can only change a tool's input. The path, t"
+   },
+   {
+    "t": "v0.17.0",
+    "d": "2026-09-23",
+    "n": "**Empty results are results.** `impact` on a symbol nothing calls used to fail with \"no callers found\", the same thing it printed for a name that doesn't exist. Now it exits 0 with its usual header and `total_callers: 0`, or an empty `results` list in `--json`. `trace`, `refs` and `refs --importers` do the same when they have nothing to show, and `trace --json` prints JSON instead of a plain-text note. A name the index has never seen exits 1 with `symbol not found: X` in all four commands, as in `show` and "
+   },
+   {
+    "t": "v0.16.2",
+    "d": "2026-09-23",
+    "n": "**Fixed** path filters being applied after result limits, which could hide a match just past the cutoff; `trace` dropping real one- and two-letter callees like `Do`; and `--db ./custom.db` changing the permissions of the folder it lives in."
+   },
+   {
+    "t": "v0.15.0",
+    "d": "2026-09-05",
+    "n": "- **`index --force <subdir>` wrote to an orphaned DB** — the DB path was hashed from the subdirectory instead of the git root, so the indexed data was invisible to every query command, and a scoped walk could prune files outside the subtree. Indexing now resolves the git root (via `EvalSymlinks` first, so a symlink into a subtree also lands in the right DB), walks and prunes only within the scope, and keeps `rel_path` repo-relative. A scope outside the repo root is rejected; a scope equal to the root is a"
+   }
+  ]
  },
  "vgarvardt/gue": {
-  "commit_90d": 18,
+  "commit_90d": 19,
   "commit_7d": 1,
   "rel_ver": "v6.0.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 61,
+  "rel_days": 63,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -405,18 +508,31 @@
    "PLpgSQL": 3,
    "Makefile": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"32321a62d6fb9e490d5ce99c3c8edfa61ecdaceaeae8e5951e79d39e45e70b98\""
+  },
+  "rel_dates": [
+   "2026-09-08"
+  ],
+  "rel_notes": [
+   {
+    "t": "v6.0.1",
+    "d": "2026-09-08",
+    "n": "## What's Changed\r\n* chore(gha): bump actions/setup-go from 5 to 6 by @dependabot[bot] in https://github.com/vgarvardt/gue/pull/360\r\n* chore(deps): bump golang.org/x/crypto from 0.43.0 to 0.45.0 in /_example/outbox-worker-kafka by @dependabot[bot] in https://github.com/vgarvardt/gue/pull/364\r\n* chore(go): bump golang.org/x/crypto from 0.37.0 to 0.45.0 by @dependabot[bot] in https://github.com/vgarvardt/gue/pull/363\r\n* chore(gha): bump golangci/golangci-lint-action from 8 to 9 by @dependabot[bot] in https://"
+   }
+  ]
  },
  "alexmacarthur/local-docker-db": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "mssqlserver",
   "rel_pub": "2021-09-10",
-  "rel_days": 1885,
+  "rel_days": 1887,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -436,7 +552,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2026-10-01",
-  "rel_days": 38,
+  "rel_days": 40,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -459,11 +575,11 @@
   }
  },
  "fcoury/oxide": {
-  "commit_90d": 9,
+  "commit_90d": 11,
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 19,
+  "rel_days": 21,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -479,18 +595,31 @@
    "HTML": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"98365360674a6213c902cab2781e758878a85c78de48b6449fe5ce50de5094f5\""
+  },
+  "rel_dates": [
+   "2026-10-20"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.2.0",
+    "d": "2026-10-20",
+    "n": "This release introduces `oxide:jsonb:v2` to preserve BSON document field order. Existing version-one collections are refused without modification. Back up the original database, export through the original Oxide binary, and import into a separate database with this version. Previously lost field order cannot be recovered by relabeling tables. See the [migration instructions](https://github.com/fcoury/oxide/blob/v0.2.0/docs/compatibility.md#storage-version-and-legacy-databases).\nThe release also includes the"
+   }
+  ]
  },
  "koolphp/koolreport": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v3.25.4",
   "rel_pub": "2019-02-15",
-  "rel_days": 2823,
+  "rel_days": 2825,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -525,11 +654,11 @@
   "enriched_at": "20260927"
  },
  "oracle/macaron": {
-  "commit_90d": 7,
+  "commit_90d": 3,
   "commit_7d": 0,
   "rel_ver": "v0.25.0",
   "rel_pub": "2026-07-26",
-  "rel_days": 105,
+  "rel_days": 107,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -545,11 +674,15 @@
    "Makefile": 1,
    "Go": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"ed8f5aee4f7231663f1027a5c6685faf481ccfe19d1d451c847a50b9a702fbd7\""
+  },
+  "rel_dates": []
  },
  "Grootzz/seckill": {
   "commit_90d": 0,
@@ -573,7 +706,7 @@
   "commit_7d": 22,
   "rel_ver": "v2.15.2",
   "rel_pub": "2026-10-25",
-  "rel_days": 14,
+  "rel_days": 16,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -599,11 +732,11 @@
   }
  },
  "villagesql/villagesql-server": {
-  "commit_90d": 323,
-  "commit_7d": 15,
+  "commit_90d": 294,
+  "commit_7d": 17,
   "rel_ver": "release/0.0.7",
   "rel_pub": "2026-10-13",
-  "rel_days": 26,
+  "rel_days": 28,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -619,11 +752,30 @@
    "C#": 2,
    "Makefile": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"e73cfcb0cf067f022ba437d9b05dc16494ba6fecaffb36a1bec98f4de4769024\""
+  },
+  "rel_dates": [
+   "2026-10-13",
+   "2026-08-25"
+  ],
+  "rel_notes": [
+   {
+    "t": "release/0.0.7",
+    "d": "2026-10-13",
+    "n": "- **`ALTER EXTENSION ... AT RESTART` applies the whole update** — An update applied at restart no longer leaves the extension or a custom column at the old version, a state in which `SHOW CREATE TABLE` crashed the server. (`b36bdbe142b`, #1267, #1261)\n- **`DROP DATABASE`** — Metadata for stored programs with custom-type parameters is deleted with the database. (`738b26db28d`, #1121)\n- **Valgrind memcheck and ThreadSanitizer** — Nightly workflows run the VillageSQL tests and the bundled extensions unde"
+   },
+   {
+    "t": "release/0.0.6",
+    "d": "2026-08-25",
+    "n": "- **MySQL services capability** — Extensions can consume MySQL component services through a new capability. This release exposes the consumer side only; providing services is not yet supported. (`4c56f3f00e1`, #954)\n- **`--initialize` with `--default_table_encryption=ON` aborts** — Upstream MySQL 8.4.11 (the fix for Bug#39114059) assumes the `mysql` tablespace is unencrypted during initialization. With `--default_table_encryption=ON` that assumption is false, so `mysqld --initialize` aborts with `ERROR "
+   }
+  ]
  },
  "purshink/ReactJS-Spring-Boot-Full-Stack-App": {
   "commit_90d": 0,
@@ -645,10 +797,10 @@
   "enriched_at": "20260927"
  },
  "zoonk/zoonk": {
-  "commit_90d": 92,
-  "commit_7d": 0,
-  "rel_ver": null,
-  "rel_none": true,
+  "commit_90d": 394,
+  "commit_7d": 308,
+  "rel_ver": "v2.1.4",
+  "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
@@ -661,18 +813,65 @@
    "JavaScript": 1,
    "Kotlin": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"a09d9baffb66283e5b8facdeee76e771c5f9a83fe90f0472932c77f59ddcee51\""
+  },
+  "rel_pub": "2026-11-09",
+  "rel_days": 1,
+  "rel_n90": 6,
+  "rel_pre": false,
+  "rel_dates": [
+   "2026-11-09",
+   "2026-11-09",
+   "2026-11-08",
+   "2026-11-08",
+   "2026-11-07",
+   "2026-11-02"
+  ],
+  "rel_notes": [
+   {
+    "t": "v2.1.4",
+    "d": "2026-11-09",
+    "n": "## Highlights\n\n### Start your first lesson while your plan is still being built\n\nWhen you set up a new subject, we now start writing your course while you answer the setup questions, and you can begin lesson 1 as soon as it's ready instead of waiting for the whole plan. A short quiz keeps you busy in the meantime, with progress shown in a small line on your phone or beside the quiz on a bigger screen. Whichever is ready first, lesson 1 or your plan, is the one we offer. When you finish lesson 1, **See your "
+   },
+   {
+    "t": "v2.1.3",
+    "d": "2026-11-09",
+    "n": "If a save fails twice in a row, the \"Still not going through\" line now has a **Report a problem** link under it. It opens the feedback form with \"I couldn't save my answers.\" already filled in, so sending takes one more tap. You can do this on placement, the level test, practice, checkpoints, mistakes, essays, pronunciation and lesson ends. Guests can send it too, with an email if they'd like a reply. The report goes through a separate route from your answers, so it can reach us even when your saves can't. "
+   },
+   {
+    "t": "v2.1.2",
+    "d": "2026-11-08",
+    "n": "## Highlights\n\n### A language certificate now means you finished the level\n\nYou now earn a language certificate by finishing that level in your plan and studying at least half of its lessons. Under the old rules, a level test and a few good answers could be enough: one learner placed at B1+ got a B1 certificate after 2 lessons and 8 minutes. Each language now has six certificates, from A1 to C2. The Level card on Today and Progress follows your plan as well, and unit pages show the exact level of their less"
+   },
+   {
+    "t": "v2.1.1",
+    "d": "2026-11-08",
+    "n": "- After a missed answer from \"I can't talk now\", the feedback now shows the right translation, like a regular listening screen does. (#2398)"
+   },
+   {
+    "t": "v2.1",
+    "d": "2026-11-07",
+    "n": "Calls now start when you're ready. An intro explains how they work, and you tap to call. The transcript follows along, a bar shows whose turn it is, and the character starts talking in about 1.5 seconds, down from 2.4. Calls end with a goodbye at a natural pause, where they used to cut off mid-sentence, and a daily limit never cuts a call short. If a call drops, \"Call again\" picks it up where it stopped, and your feedback covers the whole conversation. (#1924, #1956)\n- **Speaking feedback.** Feedback quotes"
+   },
+   {
+    "t": "v2.0",
+    "d": "2026-11-02",
+    "n": "Redesign our entire learning experience"
+   }
+  ]
  },
  "codewinsdotcom/PostgresClientKit": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v1.5.0",
   "rel_pub": "2022-08-30",
-  "rel_days": 1531,
+  "rel_days": 1533,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -695,7 +894,7 @@
   "commit_7d": 0,
   "rel_ver": "spring-boot-3.5.9",
   "rel_pub": "2026-01-06",
-  "rel_days": 306,
+  "rel_days": 308,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -734,12 +933,12 @@
   }
  },
  "amphp/postgres": {
-  "commit_90d": 1,
-  "commit_7d": 1,
-  "rel_ver": "v2.2.1",
-  "rel_pub": "2026-02-25",
-  "rel_days": 256,
-  "rel_n90": 0,
+  "commit_90d": 4,
+  "commit_7d": 2,
+  "rel_ver": "v2.2.2",
+  "rel_pub": "2026-11-04",
+  "rel_days": 6,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -750,18 +949,31 @@
   "lang": {
    "PHP": 100
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261110",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261110",
+   "release": "20261110"
+  },
+  "etag": {
+   "release": "W/\"66312d0288f37a6f9a6f0ebe42539bfe82667f9d3f60f1a00c53bb9bbbb56538\""
+  },
+  "rel_dates": [
+   "2026-11-04"
+  ],
+  "rel_notes": [
+   {
+    "t": "v2.2.2",
+    "d": "2026-11-04",
+    "n": "* Tolerate deallocation of statements the server has already dropped by @webpatser in https://github.com/amphp/postgres/pull/74\n* Complete PgSqlHandle operations only once the connection is idle by @danog in https://github.com/amphp/postgres/pull/75\n* Fix transaction release race by @simPod in https://github.com/amphp/postgres/pull/73\n* @simPod made their first contribution in https://github.com/amphp/postgres/pull/73\n* @webpatser made their first contribution in https://github.com/amphp/postgres/pull/74\n* "
+   }
+  ]
  },
  "zzzprojects/EntityFramework-Classic": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "v7.2.45",
   "rel_pub": "2026-10-13",
-  "rel_days": 26,
+  "rel_days": 28,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -816,7 +1028,7 @@
  "exasol/pyexasol": {
   "rel_ver": "2.4.1",
   "rel_pub": "2026-09-15",
-  "rel_days": 54,
+  "rel_days": 56,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -833,7 +1045,7 @@
  "yantrikos/yantrikdb": {
   "rel_ver": "v0.23.1",
   "rel_pub": "2026-09-19",
-  "rel_days": 50,
+  "rel_days": 52,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -903,7 +1115,7 @@
  "ClickHouse/terraform-provider-clickhouse": {
   "rel_ver": "v3.32.1",
   "rel_pub": "2026-09-24",
-  "rel_days": 45,
+  "rel_days": 47,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -924,7 +1136,7 @@
  "codenotary/immudb-py": {
   "rel_ver": "v1.5.0",
   "rel_pub": "2024-07-29",
-  "rel_days": 832,
+  "rel_days": 834,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -943,7 +1155,7 @@
  "thecourseforum/theCourseForum2": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-05-07",
-  "rel_days": 550,
+  "rel_days": 552,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -994,7 +1206,7 @@
  "llnl/Silo": {
   "rel_ver": "4.12.1",
   "rel_pub": "2026-07-28",
-  "rel_days": 103,
+  "rel_days": 105,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1032,7 +1244,7 @@
  "auraphp/Aura.SqlSchema": {
   "rel_ver": "2.0.4",
   "rel_pub": "2026-09-09",
-  "rel_days": 60,
+  "rel_days": 62,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1074,7 +1286,7 @@
  "adsabs/bumblebee": {
   "rel_ver": "v1.11.1",
   "rel_pub": "2026-07-17",
-  "rel_days": 114,
+  "rel_days": 116,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1111,7 +1323,7 @@
  "skyvstigreo/philippines-province-city-barangay-database": {
   "rel_ver": "1.0",
   "rel_pub": "2021-04-16",
-  "rel_days": 2032,
+  "rel_days": 2034,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1126,7 +1338,7 @@
  "productdevbook/nabiz": {
   "rel_ver": "v3.12.1",
   "rel_pub": "2026-08-20",
-  "rel_days": 80,
+  "rel_days": 82,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1147,7 +1359,7 @@
  "vorojar/AgentClaw": {
   "rel_ver": "v1.3.14",
   "rel_pub": "2026-03-14",
-  "rel_days": 239,
+  "rel_days": 241,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1269,7 +1481,7 @@
  "Dani3lSun/apex-plugin-apextooltip": {
   "rel_ver": "v1.2",
   "rel_pub": "2016-10-18",
-  "rel_days": 3673,
+  "rel_days": 3675,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1288,7 +1500,7 @@
  "patrickklaeren/azuser": {
   "rel_ver": "1.0.0",
   "rel_pub": "2018-12-22",
-  "rel_days": 2878,
+  "rel_days": 2880,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1340,7 +1552,7 @@
  "jauhenis/php-interview-ultimate": {
   "rel_ver": "1.10.1",
   "rel_pub": "2026-07-24",
-  "rel_days": 107,
+  "rel_days": 109,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1371,7 +1583,7 @@
  "Oustro/portfoliwoah": {
   "rel_ver": "release-v0.0.24",
   "rel_pub": "2024-03-10",
-  "rel_days": 973,
+  "rel_days": 975,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1391,7 +1603,7 @@
  "star-ga/mind-mem": {
   "rel_ver": "v5.0.3",
   "rel_pub": "2026-09-15",
-  "rel_days": 54,
+  "rel_days": 56,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1438,7 +1650,7 @@
  "nystudio107/craft-connect": {
   "rel_ver": "4.0.1",
   "rel_pub": "2022-10-05",
-  "rel_days": 1495,
+  "rel_days": 1497,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1485,7 +1697,7 @@
  "TencentCloud/octop-browser": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 45,
+  "rel_days": 47,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1522,7 +1734,7 @@
  "samuel-oldra/PousadaKatedral": {
   "rel_ver": "2018.04",
   "rel_pub": "2024-06-14",
-  "rel_days": 877,
+  "rel_days": 879,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1633,7 +1845,7 @@
  "rolobio/DictORM": {
   "rel_ver": "v4.2",
   "rel_pub": "2020-08-10",
-  "rel_days": 2281,
+  "rel_days": 2283,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1664,7 +1876,7 @@
  "AbhiCrackerOfficial/OSM-OracleDBServicesManager": {
   "rel_ver": "OSM",
   "rel_pub": "2023-04-07",
-  "rel_days": 1311,
+  "rel_days": 1313,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1681,7 +1893,7 @@
  "justanotherbyte/imoog": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2022-09-17",
-  "rel_days": 1513,
+  "rel_days": 1515,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1730,7 +1942,7 @@
  "oracle/cordova-plugin-oracle-idm-auth": {
   "rel_ver": "2.2.0",
   "rel_pub": "2024-08-02",
-  "rel_days": 828,
+  "rel_days": 830,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1782,7 +1994,7 @@
  "zwx1127/agent-relay": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-05-28",
-  "rel_days": 164,
+  "rel_days": 166,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1858,7 +2070,7 @@
  "Lexiang-Xiong/Focus-Flow": {
   "rel_ver": "v2.3.0",
   "rel_pub": "2026-06-22",
-  "rel_days": 139,
+  "rel_days": 141,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1919,7 +2131,7 @@
  "battincik/coreor-database": {
   "rel_ver": "v26.9.4",
   "rel_pub": "2026-09-23",
-  "rel_days": 46,
+  "rel_days": 48,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2267,7 +2479,7 @@
  "ashishsinha1602/schemagate": {
   "rel_ver": "v1.15.1",
   "rel_pub": "2026-10-29",
-  "rel_days": 10,
+  "rel_days": 12,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2459,7 +2671,7 @@
  "voxmastery/FluctlightDB": {
   "rel_ver": "v0.5.21",
   "rel_pub": "2026-09-04",
-  "rel_days": 65,
+  "rel_days": 67,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
@@ -2595,7 +2807,7 @@
   "commit_7d": 0,
   "rel_ver": "hostedfile1.0",
   "rel_pub": "2021-05-10",
-  "rel_days": 2008,
+  "rel_days": 2010,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2842,7 +3054,7 @@
   "commit_7d": 135,
   "rel_ver": "v1.5.0",
   "rel_pub": "2026-11-03",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3049,7 +3261,7 @@
   "commit_7d": 0,
   "rel_ver": "libs/langchain-polardbx/v0.4.2",
   "rel_pub": "2026-08-21",
-  "rel_days": 79,
+  "rel_days": 81,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -3124,7 +3336,7 @@
   "commit_7d": 4,
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 21,
+  "rel_days": 23,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -3167,7 +3379,7 @@
  "MrXyu1453/stock_quant_model_V3": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-01",
-  "rel_days": 38,
+  "rel_days": 40,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3237,7 +3449,7 @@
  "Antruly/libuvcpp": {
   "rel_ver": "v1.6.4",
   "rel_pub": "2026-10-12",
-  "rel_days": 27,
+  "rel_days": 29,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
@@ -3310,7 +3522,7 @@
  "codewithmuh/django-starter-kit": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-26",
-  "rel_days": 13,
+  "rel_days": 15,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

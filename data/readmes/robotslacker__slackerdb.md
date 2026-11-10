@@ -56,7 +56,7 @@ It runs either as a standalone server (`dbserver`, `dbproxy`) or **embedded dire
 [...截断...]
 
 _0.2.2.zip
-    #        distribution package - standalone jar packages, plugin jar,
+    #        distribution package - standalone jar packages,
     #        default configuration files and start/stop scripts.
     #    slackerdb-src_0.2.2.zip
     #        source package - the complete multi-module Maven project, the same
@@ -153,4 +153,4 @@ Run the following commands to complete the build:
     java -jar dbproxy/target/slackerdb-dbproxy-0.2.2-standalone.jar stop
 ....
 
-==== 
+==== Check proxy 

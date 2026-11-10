@@ -1,6 +1,6 @@
 [![DomainMOD](https://domainmod.org/images/logo.png)](https://domainmod.org)
 
-[![ACR B0a](https://img.shields.io/badge/ACR-B0a-2140B5)](ACR.md)
+[![ACR B1b](https://img.shields.io/badge/ACR-B1b-2140B5)](ACR.md)
 
 Project Home: <https://domainmod.org>  
 Project Demo: <https://demo.domainmod.org>  
@@ -19,7 +19,7 @@ So go ahead, take the live demo for a test drive before you install: <https://de
 
 Requirements
 ------------
-**Software**: PHP 8.1-8.2.9, MariaDB 10.4-11.1.2 or MySQL 5.7-8.1.0  
+**Software**: PHP 8.2-8.5, MariaDB 10.4-11.8 or MySQL 5.7-8.1.0  
 **PHP Extensions**: PDO (MariaDB/MySQL), cURL, OpenSSL, gettext  
 **PHP Settings**: allow_url_fopen  
 
@@ -85,21 +85,23 @@ Although we've done our best to secure DomainMOD, unfortunately there are many f
 
 1. Secure your installation with an SSL Certificate.
 
-2. Do not use easy-to-guess passwords. **Ever**.
+2. If your database is on a different server than DomainMOD, encrypt the connection and check the server's certificate by adding `$dbsslmode = 'verify';` to config.inc.php. See the User Guide for details: <https://domainmod.org/docs/userguide/database-encryption/>
 
-3. Although DomainMOD has its own authentication system, we recommend that you also use HTTP authentication on your installation directory to add an extra layer of security.
+3. Do not use easy-to-guess passwords. **Ever**.
 
-4. Do not store your account passwords or API keys in DomainMOD. Although the ability to save this information exists, **use it at your own risk**. This information is fairly secure if you run DomainMOD on your local computer, but there's a much higher risk of someone gaining access to it if you host the site on a server that is accessible to the outside world.
+4. Although DomainMOD has its own authentication system, we recommend that you also use HTTP authentication on your installation directory to add an extra layer of security.
+
+5. Do not store your account passwords or API keys in DomainMOD. Although the ability to save this information exists, **use it at your own risk**. This information is fairly secure if you run DomainMOD on your local computer, but there's a much higher risk of someone gaining access to it if you host the site on a server that is accessible to the outside world.
 
     **WARNING:** Saving your API keys (and other relevant API connection information) in DomainMOD is necessary if you want to use the Domain Queue, however we recommend that you only save this information temporarily while you're using the Domain Queue, and that you remove it as soon as you're done.
 
-5. Do not host DomainMOD on a public website or on an easy-to-guess URL.
+6. Do not host DomainMOD on a public website or on an easy-to-guess URL.
 
    If you do end up hosting DomainMOD on a public website, you should use your website's robots.txt file to block bots and spiders from crawling your site, otherwise your DomainMOD URL may end up in public search results.
 
-6. Do not give the URL to anyone who does not need to access DomainMOD. You should treat the URL like a password.
+7. Do not give the URL to anyone who does not need to access DomainMOD. You should treat the URL like a password.
 
-7. Always use the most up-to-date version of DomainMOD. This will help protect you from any security vulnerabilities that are found and fixed.
+8. Always use the most up-to-date version of DomainMOD. This will help protect you from any security vulnerabilities that are found and fixed.
 
 Upgrading
 ---------
@@ -120,6 +122,9 @@ If you installed DomainMOD using Git right from your web server, just run the fo
     
 **Option #4 -- Softaculous Install**  
 If you installed DomainMOD using Softaculous you're just a few clicks away from upgrading to the newest version. Please see the upgrade instructions on the Softaculous Wiki: <https://www.softaculous.com/docs/How_to_upgrade_installations>
+
+**After Upgrading**  
+Unless you upgraded using Docker, restart PHP so the updated translation files are loaded (restart PHP-FPM if your server uses it, otherwise restart your web server). Otherwise some text may display incorrectly until it restarts. If you can't restart it yourself, your web hosting provider should be able to do it for you.
 
 Data Warehouse
 --------------
@@ -162,7 +167,7 @@ Please see the CHANGELOG file that came with DomainMOD, or view the Changelog on
 License
 -------
 DomainMOD is an open source domain and internet asset manager.  
-Copyright (c) 2010-2025 Greg Chetcuti <greg@greg.ca>
+Copyright (c) 2010-2026 Greg Chetcuti <greg@chetcuti.com>
 
 DomainMOD is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 

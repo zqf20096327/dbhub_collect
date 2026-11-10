@@ -52,18 +52,17 @@ Data lives in memory and is gone when the container stops. For real use, see
 - **Drop files in.** Drag `.excalidraw` files (or `.png`/`.svg` exports with the scene) from your computer onto a folder in the sidebar.
 - **Trash** with restore. Deleted items are purged automatically after 30 days.
 - **Invite-only accounts.** The first visitor creates the admin account; everyone else joins by invite link.
-- **Connect your AI client.** Claude.ai, Claude Code, Claude Desktop, and other MCP clients can find, read, and create drawings, and move them to the trash. They sign in with OAuth or a personal access token. The instance needs no LLM API key.
+- **Connect your AI client.** Claude.ai, Claude Code, Claude Desktop, and other MCP clients can find, read, create, and export drawings, propose changes to them, and move them to the trash. A change waits on the canvas until you click Apply, and then everyone in the drawing sees it live. Clients sign in with OAuth or a personal access token. The instance needs no LLM API key.
 - **Single sign-on** with Google Workspace, Microsoft Entra ID, or any OIDC provider (Okta, Authentik, Keycloak). People from your email domains join on their first sign-in, with no invite.
 - **Admin tools** under Settings: manage members and roles, create password-reset links, and see instance stats.
-- **Light and dark themes**, with an optional separate theme for the canvas.
+- **Light and dark themes**, or follow the system setting, with an optional separate theme for the canvas.
 
 ## Deploy
 
-Both paths run the app and its Postgres database together from one compose file.
-They pull the prebuilt image `ghcr.io/maciekzygmunt/excaliself`
-(amd64 and arm64), so nothing is built on your server. `latest` is the newest
-release. The app applies database migrations when it starts, so updating is a
-redeploy.
+Each path runs the app next to its Postgres database and pulls the prebuilt
+image `ghcr.io/maciekzygmunt/excaliself` (amd64 and arm64), so nothing is built
+on your server. `latest` is the newest release. The app applies database
+migrations when it starts, so updating is running a newer image.
 
 ### Docker Compose
 
@@ -100,6 +99,15 @@ domain on the `excaliself` service with the container port, e.g.
 To pin a release instead of `latest`, set
 `EXCALISELF_VERSION` (e.g. `1.0.0`) in the resource's environment variables.
 Drawings live in the `pgdata` volume and survive redeploys.
+
+### Railway
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/excaliself)
+
+The template runs the app next to a Railway Postgres database. It generates the
+auth secret and a domain, so there is nothing to configure. Open the domain to create
+the admin account. To set it up by hand or to upgrade, see the
+[docs](https://excaliself.com/docs/railway/).
 
 ### Configuration
 
@@ -180,8 +188,14 @@ The tools:
   their space and folder.
 - `read_drawing` describes a drawing: its shapes, text, and what the arrows
   connect. It does not send the raw Excalidraw JSON.
+- `export_drawing` exports a drawing as a PNG or SVG image, for example for
+  your documentation. An SVG contains the drawing's fonts. `export_scene`
+  exports it as an `.excalidraw` file.
 - `create_drawing` makes a new drawing in your private space or in Team,
   optionally in a folder, from simple shapes and arrows or a Mermaid flowchart.
+- `edit_drawing` proposes a change to a drawing: shapes, text, and arrows to
+  add, change, or remove. Nothing changes until you click **Apply** on the
+  drawing. `get_drawing_edit` tells the client whether you applied it.
 - `create_folder` makes a folder in your private space or in Team, optionally
   inside another folder.
 - `move_drawing` moves a drawing into a folder, or to the top of its space. A
@@ -192,8 +206,9 @@ The tools:
 
 A token or a connected app acts as you: it sees what you see, and it can
 trash what you can trash. It can create drawings and folders, and move
-drawings between folders. It cannot change what is in a drawing, and it
-cannot delete anything for good: trashed items stay in Trash for 30 days.
+drawings between folders. It cannot change what is in a drawing until you
+click **Apply**, and it cannot delete anything for good: trashed items stay
+in Trash for 30 days.
 Revoke a token or disconnect an app under Settings at any time. When an admin
 deletes a member, that member's tokens and apps stop working.
 

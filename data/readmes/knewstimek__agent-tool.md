@@ -88,6 +88,22 @@ Local relative paths resolve against an explicit workspace, then the MCP client 
 | **SetConfig** | Change runtime settings (encoding, file size limit, symlinks, workspace, etc.) | ✅ |
 | **Help** | Built-in usage guide for agents (encoding, indentation, troubleshooting) | ✅ |
 
+## Decompilation
+
+The Gosleigh v0.1.16 enhanced preset is applied automatically. It improves inferred stack and floating-point arguments, indirect-call arguments, and reused stack locals while keeping pointers distinct from floating-point values. No additional options are needed; supplied debug or IL2CPP prototypes retain precedence over inference.
+
+## IL2CPP prototypes and native metadata extraction
+
+For Windows x64 IL2CPP images without PDB/DWARF, `analyze(operation="decompile")` accepts `il2cpp_signatures` (`il2cpp_script` is an alias). Pass `global-metadata.dat`, an Il2CppDumper `script.json`, or an exported `methodsigs.tsv`. Adjacent signature sidecars take priority; otherwise standard Unity metadata locations are discovered, including `<application>_Data/il2cpp_data/Metadata/global-metadata.dat`. Multiple matches require an explicit path; `none` disables this source. `decompile-all` uses the same extraction and accepts `-il2cpp-signatures`.
+
+Native extraction currently supports **metadata v39 and Windows x64 PE**. It reads the binary and metadata directly in Go, without running the DLL or requiring .NET, LibCpp2IL, or an external dumper. It resolves method addresses, shared-generic aliases, signatures, instance fields, and virtual slots. Class decoration requires a recognized runtime accessor proving the vtable offset; otherwise direct signatures remain available. Extraction is retained in the existing worker's memory, with metadata changes invalidating worker reuse. It creates no metadata dump or C# declaration files. Other metadata versions and binary formats require external signature exports.
+
+Automatic native extraction requires recognizable IL2CPP runtime exports and a bounded adjacent-directory search; use an explicit metadata path for stripped images or other layouts. Failed automatic extraction reports a note and preserves ordinary inferred decompilation. Explicit invalid metadata paths report an error.
+
+TSV columns are `VA<TAB>static<TAB>ret<TAB>params<TAB>name`: absolute VA, static `0/1`, return type, comma-separated managed parameter types, and a diagnostic name. Types include `bool`, `int32`, `uint64`, `float32`, `float64`, `ref:Type`, `ptr:Type`, and `val:12:Type` (exact value-type payload size). Escape commas in type names as `%2C`. The host supplies an instance `this` and trailing `MethodInfo*`; do not include them in TSV params. A `# binary_sha256=<hex>` header, when present, must match the binary.
+
+Debug information takes precedence. Names are unchanged, and unknown or conflicting shared-generic signatures remain inferred. Closed generic value layouts are not guessed. Known large aggregate returns remain unlocked because they require a hidden return buffer. JSON value types need layouts from a sibling `il2cpp.h`; unsupported layouts are skipped. For external TSV exports, a sibling, binary-bound `il2cpp-types.json` can additionally supply class layouts and typed virtual slots; see [the type export contract](docs/il2cpp-types.md). Virtual prototypes apply where the object's class type reaches the call; unknown slots and hidden-buffer returns stay inferred. No additional MCP tool is required.
+
 ## Persistent analysis annotations
 
 The existing `analyze` tool can save user comments and labels in SQLite with
@@ -436,6 +452,11 @@ collects the result; cancelling a wait never stops the job. `enable`,
 `disable`, and `profile` remain available for clients that honor
 `tools/list_changed`; fixed-binding clients can always keep using the gateway.
 
+Job listing, results and cancellation are restricted to the originating MCP
+session, including SSH/ProcExec job operations and toolbox. A job ID alone does
+not grant access from another session. Closing a session does not terminate
+background work; its job records cannot be retrieved by a newly created session.
+
 ### Environment Variable
 
 Set `AGENT_TOOL_FALLBACK_ENCODING` and/or `AGENT_TOOL_PROFILE` to avoid repeating CLI flags:
@@ -451,6 +472,47 @@ export AGENT_TOOL_PROFILE=coding
 ```
 
 Priority: CLI flag > environment variable > default (UTF-8).
+
+### Session directory aliases
+
+Use `directory_alias` through toolbox (`describe`, then `call`) to register directories:
+
+```json
+{"operation":"set","aliases":{"src":"src","logs":"logs"}}
+{"operation":"set","connection_profile":"dev","aliases":{"deploy":"/srv/releases/current"}}
+```
+
+Local values must be existing directories (relative to the workspace or absolute).
+Remote values must be absolute; registration does not connect to the server.
+Use `@src/main.go` in read/write/edit/copy/multiread and other common local path
+arguments, or `@deploy` in SSH `remote_root` and SFTP path arguments. Output path
+metadata in read diagnostics, write/edit/copy/multiread results and SFTP uses aliases
+when shorter and reusable. Other tools may retain ordinary path displays. Contents
+and SSH commands are never substituted.
+
+Bindings stay in client-session memory, scoped by local workspace or remote
+connection/authentication identity, and disappear when the MCP session ends. No alias JSON file
+is created or loaded; existing SSH connection profiles are still read as usual. `list` shows mappings on demand (`names` filters), `delete` removes
+`names`, and changing a binding requires `overwrite:true`. Names are case-sensitive
+ASCII letters/digits, with `_`/`-` allowed after the first character; max 64 characters
+and 64 aliases per scope. Unknown aliases, rooted suffixes, `..` and `:` in suffixes
+are rejected. Use `./@name` for a literal filename starting with `@`. Aliases are
+path conveniences, not sandboxes; symlink destinations are not constrained.
+
+Each MCP call uses one workspace and alias snapshot, captured lazily on first
+use. Concurrent registrations/rebindings apply to later calls, so a multi-path
+operation does not mix alias versions. File path whitespace is significant and
+is not trimmed. Equivalent SSH port/authentication defaults use the same target
+scope; different hosts, credentials or jump settings remain isolated.
+
+SFTP background status/cancel is restricted to the MCP session that started the
+transfer. Status keeps resolved paths and renders current aliases at query time;
+if an alias was deleted or rebound, the exact remote path is shown instead.
+
+Persistent `bash` shell names (including `default`), SSH/SFTP pooled connections,
+and `connection_id` handles also belong to the calling MCP session. Other clients
+cannot reuse or disconnect them. Pool capacity never evicts another client's
+connection; creation fails when no owned entry is available for eviction.
 
 ### Local SSH/SFTP connection profiles
 
@@ -468,7 +530,8 @@ ignored if it is placed inside a workspace.
       "user": "builder",
       "key_file": "/local/path/to/id_ed25519",
       "host_key_check": "strict",
-      "trusted": true
+      "trusted": true,
+      "remote_root": "/srv/app"
     }
   }
 }
@@ -480,6 +543,46 @@ private-address warning on every call instead of once per pooled connection. Thi
 only display; SSRF blocking and cloud metadata protection are unchanged. SSH also supports `quiet`, `echo_command`, and
 `result_only`; the last returns compact JSON centered on `stdout`, `stderr`, and
 `exit_code`. SFTP supports `quiet`, `result_only`, and `upload_many` (up to 100 files).
+
+Set `remote_root` in a connection profile or an initial SSH/SFTP call to reuse an
+absolute remote working directory through the returned `connection_id`. SSH changes
+to that directory for every foreground/background command or PowerShell script;
+a failed directory change prevents execution. SFTP resolves relative `remote_path`,
+rename `new_path`, and batch upload destinations against it. Explicit absolute paths
+keep their meaning; this is a working directory, not a filesystem sandbox. Changing
+the root with an existing ID returns a new ID without changing the original one.
+
+`remote_shell` describes the server's SSH default shell: `posix` (default), `cmd`
+(default for Windows drive roots such as `D:/app`), or `powershell`. Set it explicitly
+if the SSH server uses a different default. Windows roots must be drive-based;
+cmd roots containing shell expansion/metacharacters are rejected. `powershell_script`
+uses PowerShell location handling independently of the SSH default shell.
+
+With `remote_root`, Windows CMD commands are launched as child processes with
+an explicit working directory through PowerShell (which must be installed).
+Command text is passed as data, keeping parentheses and `%CD%` out of the cwd
+guard's parser. PowerShell script text keeps leading `using` and `param`
+declarations; location setup occurs outside its scriptblock. Generated Windows
+launchers are staged when their final length reaches the command-line threshold.
+
+Tool-generated local paths in read diagnostics, multiread headers, edit and copy
+results use workspace-relative paths when inside the workspace. SFTP reports local
+paths relative to the workspace and remote paths relative to `remote_root`, including
+transfer status. Outside paths remain explicit. File contents and SSH stdout/stderr
+are never rewritten. SSH no longer echoes commands by default; use `echo_command:true`
+to display the original command. No root banner or alias list is added per call.
+
+```json
+{"connection_profile":"dev","command":"git status"}
+{"operation":"upload","connection_profile":"dev","local_path":"build/app","remote_path":"bin/app"}
+```
+
+To set the root without editing a profile, pass it once and reuse the returned ID:
+
+```json
+{"connection_profile":"dev","remote_root":"/srv/app","command":"git status"}
+{"operation":"ls","connection_id":"<returned-id>","remote_path":"logs"}
+```
 
 For Windows PowerShell, pass script text in `powershell_script` instead of `command`.
 SSH uploads a unique UTF-8 temporary `.ps1` through a short PowerShell command's

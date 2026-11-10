@@ -55,7 +55,7 @@ other data.
 ### Create an API token
 
 1. Sign in and open a space.
-2. Open **Space Settings**, select **Tokens**, and click **Create token**.
+2. Open **Space Settings**, select **API tokens**, and click **Create token**.
 3. Copy the new token and store it securely. Tokens remain active until you
    delete them from the same settings page.
 
@@ -363,6 +363,10 @@ pnpm lint
 pnpm test
 pnpm test:e2e
 ```
+
+The web E2E suite starts a [Radicale](https://radicale.org/) CalDAV server, so
+`radicale` must be on your `PATH` (`uv tool install radicale` or
+`pipx install radicale`).
 
 ## Why another task manager?
 

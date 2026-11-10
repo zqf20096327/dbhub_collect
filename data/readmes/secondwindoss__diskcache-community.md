@@ -1,14 +1,14 @@
 <br />
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/secondwindoss/diskcache-community/master/docs/_static/logo-dark.png">
-    <img alt="diskcache" src="https://raw.githubusercontent.com/secondwindoss/diskcache-community/master/docs/_static/logo-light.png" width="40%">
-  </picture>
+  <img alt="diskcache community: disk and file backed persistent cache for Python, built on SQLite" src="https://raw.githubusercontent.com/secondwindoss/diskcache-community/master/docs/_static/banner.png" width="100%">
 </p>
 
-<h1 align="center">diskcache-community</h1>
+<h3><p align="center">Disk and file backed persistent cache for Python, built on SQLite</p></h3>
 
-<h2><p align="center">Disk and file backed persistent cache for Python, built on SQLite</p></h2>
+<p align="center">
+  <a href="https://pypi.org/project/diskcache-community/"><img alt="PyPI downloads per day" src="https://img.shields.io/pypi/dd/diskcache-community.svg"></a>
+  <a href="https://pypi.org/project/diskcache-community/"><img alt="PyPI downloads per week" src="https://img.shields.io/pypi/dw/diskcache-community.svg"></a>
+</p>
 
 <h4><p align="center">
 <a href="https://diskcache-community.readthedocs.io/en/latest/tutorial.html">[Tutorial]</a>

@@ -51,6 +51,10 @@
 
 ## What's new
 
+- **2.45.7: in-page events are kept even on a day whose log figures are held back** ([changelog](CHANGELOG.md#2457-2026-11-09)).
+- **2.45.6: an upgrade no longer shows "404 Not Found" on a dashboard (Docker)** ([changelog](CHANGELOG.md#2456-2026-11-09)).
+- **2.45.5: a fix for 2.45.4, a day with your own server's error adds up again** ([changelog](CHANGELOG.md#2455-2026-11-09)).
+- **2.45.4: your own server's errors are not your site's; to-dos people met come first** ([changelog](CHANGELOG.md#2454-2026-11-09)).
 - **2.45.3: a Calendly or Cal.com booking with only the visitor ID shows the pages before it** ([changelog](CHANGELOG.md#2453-2026-11-06)).
 - **2.45.2: quieter morning checks (held webhooks on keep-everything sites, Search Console's last 3 days)** ([changelog](CHANGELOG.md#2452-2026-10-31)).
 - **2.45.1: a POST your site refused (scanners' 404s and 405s) is not a form** ([changelog](CHANGELOG.md#2451-2026-10-31)).

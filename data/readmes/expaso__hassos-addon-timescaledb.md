@@ -14,7 +14,7 @@ PostgreSQL has earned a strong reputation for its proven architecture, reliabili
 
 ## TimescaleDB Overview
 
-From: https://docs.timescale.com/latest/introduction
+From: https://www.tigerdata.com/docs/about/latest
 
 TimescaleDB is an open-source time-series database optimized for fast ingest and complex queries. It speaks "full SQL" and is correspondingly easy to use like a traditional relational database, yet scales in ways previously reserved for NoSQL databases.
 
@@ -81,9 +81,6 @@ pull one of the images for the desired architecture from docker hub:
 ```
 docker pull ghcr.io/expaso/timescaledb/amd64:stable
 docker pull ghcr.io/expaso/timescaledb/aarch64:stable
-docker pull ghcr.io/expaso/timescaledb/armv7:stable
-docker pull ghcr.io/expaso/timescaledb/armhf:stable
-docker pull ghcr.io/expaso/timescaledb/i386:stable
 ```
 
 You can replace latest with the version number you want to use.
@@ -124,80 +121,94 @@ The default is port `5432`
 **Securiy Notice!**
 
 The default username is `postgres` with password `homeassistant`.
-Make sure you change this immediately after activating the add-on:
+Change it immediately after activating the add-on with the `postgres_password` option, or in SQL:
 
 ```
-ALTER USER user_name WITH PASSWORD 'strongpassword';
+ALTER USER postgres WITH PASSWORD 'strongpassword';
 ```
 
 A default `pg_hba.conf` is created in the data directory with the following content, which allows local peer users and network users with passwords.:
 
 ```
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
-host    all             all             0.0.0.0/0               md5"
-local   all             all             0.0.0.0/0               md5"
-local   all             all             0.0.0.0/0               peer"
+host    all             all             0.0.0.0/0               scram-sha-256
+host    all             all             ::/0                    scram-sha-256
+local   all             all                                     scram-sha-256
+local   all             all                                     peer
 ```
+
+New installations use `scram-sha-256` (PostgreSQL 18 deprecates MD5 passwords). Installations upgraded from an older version, and databases restored from a backup, keep `md5`: their roles may still have MD5 password hashes, and `md5` accepts both MD5 and SCRAM hashes.
 
 Please review this configuration carefully by examine the docs:
 https://www.postgresql.org/docs/devel/auth-pg-hba-conf.html
+
+## Configuration
+
+#### Option: `postgres_password`
+
+The password of the `postgres` superuser. When set, the add-on applies it on every start, so you can change it here at any time. When not set, a new installation gets the default password `homeassistant`, with a warning in the log, and an existing installation keeps its current password.
+
+Remember to update the password everywhere you connect with the `postgres` user, like the `db_url` of the recorder or LTSS.
 
 ## Advanced Configuration
 
 ### PostgreSQL Configuration
 
-#### Option: `postgresql_config`
+#### Option: `postgresql_settings`
 
-Allows you to customize PostgreSQL server parameters. These settings are applied to `postgresql.conf` and can override default settings configured by the addon.
+Allows you to customize PostgreSQL server parameters, as a list of `name=value` entries. The add-on writes them to `/data/postgres/postgresql.user.conf`, which is included at the end of `postgresql.conf`, so they override the settings the addon configures itself (including TimescaleDB tuning).
 
 **Example:**
 
 ```yaml
-postgresql_config:
-  log_statement: "all"
-  log_min_duration_statement: "1000" # Log queries taking > 1 second
-  work_mem: "16MB"
-  maintenance_work_mem: "256MB"
-  effective_cache_size: "4GB"
-  random_page_cost: "1.1"
-  checkpoint_completion_target: "0.9"
+postgresql_settings:
+  - "log_statement=all"
+  - "log_min_duration_statement=1000"
+  - "work_mem=16MB"
+  - "maintenance_work_mem=256MB"
+  - "effective_cache_size=4GB"
+  - "random_page_cost=1.1"
+  - "checkpoint_completion_target=0.9"
 ```
+
+The value is written to the configuration as given. Quote values that contain spaces with single quotes, for example `"log_line_prefix='%m [%p] '"`. Settings of extensions work too, for example `"timescaledb.max_background_workers=16"`.
 
 See the [PostgreSQL documentation](https://www.postgresql.org/docs/current/runtime-config.html) for all available parameters and their meanings.
 
 **Important Notes:**
 
 - Configuration changes require a restart of the addon to take effect
-- Some critical parameters cannot be modified (e.g., `shared_preload_libraries`, `port`, `data_directory`) as they are managed by the addon
-- Invalid parameter names or values will be logged and skipped
-- Parameters are applied after TimescaleDB tuning, so you can override tuned values if needed
+- The file is rewritten on every start: removing an entry also removes the setting
+- Some critical parameters cannot be modified (e.g., `shared_preload_libraries`, `port`, `data_directory`) as they are managed by the addon; they are skipped with a warning in the log
+- Before PostgreSQL starts, the addon lets PostgreSQL check the settings. If it rejects one, all settings are ignored for that start and the error is shown in the log, so a typo cannot keep the database from starting
+- This option replaces `postgresql_config` from version 5.x, which never worked: Home Assistant drops option keys that are not listed by name
 
 **Common Use Cases:**
 
 **Performance Tuning:**
 
 ```yaml
-postgresql_config:
-  work_mem: "32MB"
-  maintenance_work_mem: "512MB"
-  effective_cache_size: "8GB"
+postgresql_settings:
+  - "work_mem=32MB"
+  - "maintenance_work_mem=512MB"
+  - "effective_cache_size=8GB"
 ```
 
 **Query Logging for Debugging:**
 
 ```yaml
-postgresql_config:
-  log_statement: "all"
-  log_duration: "on"
-  log_min_duration_statement: "500"
+postgresql_settings:
+  - "log_statement=all"
+  - "log_duration=on"
+  - "log_min_duration_statement=500"
 ```
 
 **Connection Settings:**
 
 ```yaml
-postgresql_config:
-  idle_in_transaction_session_timeout: "60000"
-  statement_timeout: "30000"
+postgresql_settings:
+  - "idle_in_transaction_session_timeout=60000"
+  - "statement_timeout=30000"
 ```
 
 #### Option: `pg_hba_config`
@@ -316,12 +327,33 @@ init_commands:
 **New way (recommended):**
 
 ```yaml
-postgresql_config:
-  log_statement: "all"
-  work_mem: "32MB"
+postgresql_settings:
+  - "log_statement=all"
+  - "work_mem=32MB"
 ```
 
 The new approach is simpler, safer, and easier to maintain. The `init_commands` option remains available for advanced use cases that aren't covered by the declarative configuration.
+
+## Immich (VectorChord)
+
+The add-on includes [VectorChord](https://github.com/tensorchord/VectorChord) (`vchord`) and pgvector, the extensions [Immich](https://immich.app/) needs. VectorChord has to be loaded at startup, so it is behind the `vectorchord` option (off by default):
+
+```yaml
+vectorchord: true
+```
+
+To use the database for [Immich](https://immich.app/), turn the option on, restart the add-on, and prepare a database once (for example in pgAdmin, or `psql` in the add-on console):
+
+```sql
+CREATE DATABASE immich;
+\c immich
+CREATE EXTENSION vchord CASCADE;
+CREATE EXTENSION earthdistance CASCADE;
+```
+
+Then point Immich at it with `DB_URL=postgresql://postgres:<password>@<home assistant host>:5432/immich` (map the port in the Network section). `vchord CASCADE` also installs pgvector, which VectorChord builds on.
+
+Turning the option off again stops loading VectorChord after the next restart; databases that use it (like Immich's) then fail on their vector indexes until you turn it back on.
 
 ## Backup and Restore
 
@@ -331,26 +363,30 @@ This addon implements a robust backup and restore mechanism designed to protect 
 
 When Home Assistant's backup system runs, it automatically:
 
-1. **Pre-Backup**: Executes `pg_dumpall` to create a complete SQL dump of all databases (`backup_db.sql`)
-2. **Backup**: Backs up the SQL dump file along with other addon data (but excludes the PostgreSQL data directory)
-3. **Post-Backup**: Removes the temporary SQL dump file to save space
+1. **Pre-Backup**: Dumps every database with `pg_dump` in its compressed custom format, and the roles with `pg_dumpall --globals-only`, into `/data/backup`
+2. **Backup**: Backs up the dump along with other addon data (but excludes the PostgreSQL data directory)
+3. **Post-Backup**: Removes the dump again to save space
 
 This approach has several advantages:
 
-- **Consistency**: SQL dumps are transaction-consistent snapshots
+- **Consistency**: Each database dump is a transaction-consistent snapshot
 - **Safety**: No risk of backing up corrupted or in-transition database files
-- **Portability**: SQL dumps can be restored across different PostgreSQL versions
-- **Small Size**: Excludes the large PostgreSQL data directory from backup
+- **Small Size**: The dump is compressed (zstd), and the large PostgreSQL data directory is excluded from the backup
+
+**Disk space:** the dump always leaves at least 1 GiB free on the data partition. When there is less space, or the free space drops below that while dumping, the dump is stopped and removed again, and an error is logged: PostgreSQL never runs out of disk because of a backup. The Home Assistant backup then does not contain the database, so free up disk space and back up again.
 
 ### How Restore Works
 
 When you restore a Home Assistant backup:
 
-1. The addon starts up with the restored `backup_db.sql` file
+1. The addon starts up with the restored dump in `/data/backup`
 2. If the PostgreSQL data directory is missing or corrupted, the addon:
    - Initializes a fresh PostgreSQL database
-   - Automatically restores all data from the SQL dump
-   - Removes the SQL dump after successful restoration
+   - Restores the roles, then every database the way TimescaleDB prescribes (`timescaledb_pre_restore()`, `pg_restore`, `timescaledb_post_restore()`)
+   - Moves every sequence up to at least the highest id in its table, so inserts cannot fail with a duplicate key afterwards
+   - Removes the dump after successful restoration
+
+Backups of older addon versions contain a plain SQL dump (`/data/backup_db.sql`, or `backup_db.sql.gz`). These are still restored, with the same TimescaleDB restore steps added.
 
 This automatic recovery process ensures your data is safely restored even if:
 
@@ -362,22 +398,25 @@ This automatic recovery process ensures your data is safely restored even if:
 
 You can also create manual backups using the PostgreSQL command-line tools:
 
-**Create a backup:**
+**Create a backup of one database:**
 
 ```bash
-docker exec addon_timescaledb_timescaledb su - postgres -c "pg_dumpall -U postgres --clean --if-exists -f /data/manual_backup_$(date +%Y%m%d).sql"
+docker exec addon_timescaledb_timescaledb su - postgres -c "pg_dump -U postgres -d homeassistant -Fc -f /data/manual_homeassistant_$(date +%Y%m%d).dump"
 ```
 
-**Restore from a manual backup:**
+**Restore it into an empty database:**
 
 ```bash
-docker exec addon_timescaledb_timescaledb su - postgres -c "psql -U postgres -f /data/manual_backup_YYYYMMDD.sql -d postgres"
+docker exec addon_timescaledb_timescaledb su - postgres -c "psql -U postgres -d homeassistant -c 'SELECT timescaledb_pre_restore();'"
+docker exec addon_timescaledb_timescaledb su - postgres -c "pg_restore -U postgres -d homeassistant /data/manual_homeassistant_YYYYMMDD.dump"
+docker exec addon_timescaledb_timescaledb su - postgres -c "psql -U postgres -d homeassistant -c 'SELECT timescaledb_post_restore();'"
 ```
+
+Do not use `pg_restore -j` (parallel): it does not restore the TimescaleDB catalog correctly.
 
 ### Important Notes
 
-- The SQL dump is only present during the backup process and is automatically cleaned up
-- If you need to keep a copy of the backup SQL file, copy it before the backup completes
+- The dump is only present during the backup process and is automatically cleaned up
 - The PostgreSQL data directory (`/data/postgres/*`) is excluded from backups to reduce backup size and improve reliability
 - Restore is automatic - no manual intervention required when restoring from a Home Assistant backup
 
@@ -385,18 +424,13 @@ docker exec addon_timescaledb_timescaledb su - postgres -c "psql -U postgres -f 
 
 **If restore fails:**
 
-1. Check the addon logs for detailed error messages
-2. The backup SQL file will be preserved at `/data/backup_db.sql` for manual recovery
-3. You can attempt manual restoration using:
-
-   ```bash
-   docker exec -it addon_timescaledb_timescaledb su - postgres -c "psql -U postgres -f /data/backup_db.sql -d postgres"
-   ```
+1. Check the addon logs and `/var/log/timescaledb.restore.log` in the addon for detailed error messages
+2. The dump is preserved in `/data/backup` (or `/data/backup_db.sql` for older backups) for manual recovery
 
 **If backup fails:**
 
 - Check that PostgreSQL is running during the backup
-- Ensure there's sufficient disk space for the SQL dump
+- Ensure there's sufficient disk space: the compressed dump plus 1 GiB
 - Review the addon logs for specific error messages
 
 ### Now what..

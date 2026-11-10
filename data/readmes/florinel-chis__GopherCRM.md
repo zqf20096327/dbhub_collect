@@ -460,6 +460,14 @@ before this rule existed are not repaired automatically: `docs/DEVELOPMENT.md` l
 that find the ones with a live row left, and the supervised way to finish them; graphs whose rows
 are all soft-deleted have no supported path yet.
 
+Deals and quotes of the erased customers and leads are kept with their links, stages, amounts,
+statuses, totals and history, but the text staff typed into them can name the client, so the same
+transaction overwrites it: deal titles become `[redacted]` and their notes and lost reasons are
+emptied, quote titles become `[redacted]` and their notes are emptied whatever the quote status,
+quote line descriptions are reset to the product names, and notifications about those deals are
+deleted (#245). Ticket and task text is kept; see `docs/DEVELOPMENT.md` for the ticket redaction
+procedure.
+
 Two consequences:
 
 - **Erasure cannot be undone.** The only way to get the data back is to restore a database backup.
@@ -608,6 +616,8 @@ authentication and live on the moderate tier:
   `external_id` returns the leads with that exact external id the caller may see, overriding the
   others; hidden leads are left out rather than refused)
 - `POST /api/v1/leads` - Create new lead (the owner must be an active admin or sales user)
+- `GET /api/v1/leads/export` - Download the leads the caller may list as CSV *(admin: every lead, with
+  the list's search, classification and sort; sales: only its own leads, in id order)*
 - `GET /api/v1/leads/:id` - Get specific lead
 - `PUT /api/v1/leads/:id` - Update lead (a changed owner must be an active admin or sales user; admin only)
 - `DELETE /api/v1/leads/:id` - **Erase** lead (cascades to the customer it was converted into and its login; converted leads admin-only)
@@ -617,7 +627,8 @@ authentication and live on the moderate tier:
   *(sales may only touch leads they own)*
 
 ### Customers
-- `GET /api/v1/customers` - List customers *(admin, sales, support)*
+- `GET /api/v1/customers` - List customers *(admin, sales, support)*; with `source`, `scope` and
+  `external_id` it is an exact external-id lookup answering at most one live customer
 - `POST /api/v1/customers` - Create new customer *(admin, sales)*
 - `GET /api/v1/customers/:id` - Get specific customer *(admin, sales, support)*
 - `PUT /api/v1/customers/:id` - Update customer *(admin, sales)*
@@ -627,6 +638,11 @@ authentication and live on the moderate tier:
 - `GET /api/v1/customers/export` - Download all matching customers as CSV *(admin only — mass PII
   egress; supports `search`, `sort_by`, `sort_order`)*
 - `POST /api/v1/customers/:id/assign` - Assign the customer to an active admin or sales user
+  *(admin, sales)*
+- `POST /api/v1/customers/:id/external-ids` - Map an external `(source, scope, external_id)`
+  identity to the customer; the triple is unique and case-sensitive, 409 when already mapped
+  *(admin, sales)*
+- `DELETE /api/v1/customers/:id/external-ids/:mappingId` - Delete one of the customer's mappings
   *(admin, sales)*
 
 ### Companies *(read: admin, sales, support; write: admin, sales; delete: admin)*
@@ -805,8 +821,10 @@ expired, or if its owner has been deactivated or erased.
   (`title`, `body?`, recipient); an invalid trigger or step, more than 20 steps, more than 90 days
   of waits, a backward or out-of-range `else_position` or an unknown `{{placeholder}}` is 400
   `INVALID_INPUT` and writes nothing; a `create_task` title or description accepts only the
-  non-personal placeholders — `lead.id`, `lead.status`, `lead.source` or the `deal.*` fields —
-  because a task survives the erasure of its lead; an unknown, inactive or non-staff user is 400
+  placeholders `lead.id`, `lead.status`, `lead.source` or the `deal.*` fields — never a lead's
+  name, email, phone, company or owner — because a task survives the erasure of its lead; note
+  that `deal.title` is staff-typed and may name the client: the erasure redacts the deal (#245),
+  but a task already rendered from `{{deal.title}}` keeps that text (accepted limitation); an unknown, inactive or non-staff user is 400
   `INVALID_REFERENCE`; every refused field is listed in `error.details.fields` as
   `{field, code, message}` — `field` a path into the body such as `name`, `trigger.hour_utc` or
   `steps[2].config.title` (steps counted from zero) — while `error.message` and `error.code` are

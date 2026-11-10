@@ -6,12 +6,18 @@
   </a>
 </p>
 <p align="center">
-  <strong>Web development became a spaceship. Bialet is a bicycle.</strong>
+  <strong>Small on purpose.</strong><br />
+  It should have stayed this simple.
 </p>
 <p align="center">
-  Build data-driven web apps from a single file. No NPM, no YAML, no separate<br />
-  database servers. Just a <strong>tiny binary</strong> with a built-in HTTP server,<br />
-  a lightweight scripting language, and SQLite.
+  One executable: an HTTP server, SQLite, and the Wren scripting language.<br />
+  Build data-driven web apps from <code>.wren</code> files. No package manager,<br />
+  no YAML, no separate database server, no build step. The Linux x86_64<br />
+  binary is 3.7 MB.
+</p>
+<p align="center">
+  In development since 2023 &middot; running in production at
+  <a href="https://home.dev.ar/">home.dev.ar</a>
 </p>
 
 <p align="center">
@@ -26,26 +32,29 @@
   </a>
 </p>
 
-A script that stays out of your way:
+A whole app in three files.
+
+`_migration.wren` creates the table on first start:
 
 ```wren
-// 1. Create your database table automatically
-`CREATE TABLE IF NOT EXISTS messages (text TEXT)`.query
+Db.migrate("init", `
+  CREATE TABLE messages (
+    text TEXT,
+    created_at DATETIME
+  )
+`)
+```
 
-// 2. Handle POST requests and save data
-if (Request.isPost) {
-  var msg = Request.post("msg") || ""
-  `messages`.save({"text": msg})
-}
+`index.wren` renders `/`:
 
-// 3. Fetch data using pure SQL
-var messages = `SELECT * FROM messages`.fetch
+```wren
+var messages = `
+  SELECT * FROM messages ORDER BY created_at ASC
+`.fetch
 
-// 4. Return HTML directly
 return <main>
   <h1>Bialet Guestbook</h1>
-
-  <form method="post">
+  <form method="post" action="/message">
     <input name="msg" placeholder="Write a message...">
     <button>Submit</button>
   </form>
@@ -56,22 +65,51 @@ return <main>
 </main>
 ```
 
+`message.wren` handles the POST at `/message`:
+
+```wren
+if (Request.isPost) {
+  var msg = Request.post("msg")
+  if (msg) {
+    `INSERT INTO messages VALUES (?, CURRENT_TIME)`.query(msg)
+    return <main>
+      <p>Messaged <b>{{ msg }}</b> saved!</p>
+      <p><a href="/">Show messages</a></p>
+    </main>
+  }
+}
+return Response.redirect("/")
+```
+
+The filename is the route. Three files, three jobs, no router.
+
 Bialet integrates the object-oriented [Wren language](https://wren.io) with an
-HTTP server and a built-in SQLite database — **in a single small binary**, with
-zero configuration files, zero dependencies, and no build step. Requests are
-routed from the filesystem: each `.wren` file is a handler that returns a
-response body. It is written in C17 and runs on Linux and macOS and Windows.
+HTTP server and a built-in SQLite database — **in a single binary**, with
+no configuration files, no runtime dependencies, and no build step. Routes
+follow the filesystem: each `.wren` file is a handler that returns a response
+body. It is written in C17 and runs on Linux, macOS, and Windows.
 
 ## Install
 
-Install a prebuilt binary with a single command (macOS ARM, Ubuntu x86_64,
-Ubuntu ARM):
+Prebuilt binaries and an install script are available for macOS ARM,
+Ubuntu x86_64, and Ubuntu ARM64.
 
 ```bash
 curl -fsSL https://get.bialet.dev | sh
 ```
 
-Check for [other installation options](https://bialet.dev/installation.html).
+To read the script before running it:
+
+```bash
+curl -fsSL https://get.bialet.dev -o install.sh
+less install.sh
+sh install.sh
+```
+
+Other options: [Homebrew, Docker, and release
+archives](https://bialet.dev/installation.html). On Windows, download the
+`.zip` from the [latest
+release](https://github.com/bialet/bialet/releases/latest).
 
 ## Quickstart
 
@@ -93,22 +131,36 @@ Double-clicking `bialet.exe` in File Explorer starts it in dev mode: live
 reload, in-browser error display, and the browser opens automatically. Run it
 from a terminal to start without dev mode.
 
-## The Bialet Manifesto — Ride Light 🚲
+## Tradeoffs
 
-1. **Simplicity is a superpower.** Every line of tooling you don't write is a
-   line of your app that ships faster.
+Small has limits. These are the ones that come with Bialet:
 
-2. **Standards, not frameworks.** HTML, SQL, and HTTP have outlived every
-   framework. Master them and your knowledge stays relevant.
+- **One worker per process, with instant queueing.** Requests are served
+  sequentially per worker. For parallel concurrency on multi-core servers,
+  spin up multiple local instances behind Caddy or nginx — see
+  [Deployment](https://bialet.dev/deployment.html).
+- **HTTP/1.0, no native TLS.** Put nginx, Apache, or Caddy in front for HTTPS,
+  HTTP/2, rate limiting, and request buffering. See
+  [Deployment](https://bialet.dev/deployment.html).
+- **SQLite is the database.** One SQLite file (`_db.sqlite3` by default), no
+  external database server. WAL mode is available with `-w`.
+- **Wren only, basic tooling.** Apps are written in Wren. The [VS Code and Vim
+  plugins](https://bialet.dev/editor-support.html) provide syntax highlighting;
+  autocomplete and an LSP are on the roadmap.
+- **No package registry.** External modules are imported from GitHub paths;
+  there is no package format, manifest, or build step. See [External
+  Modules](https://bialet.dev/external-modules.html).
+- **No WebSockets.** Request/response HTTP only. Use polling or an external
+  service for realtime features.
 
-3. **One file to deploy.** No containers, no orchestration, no
-   `docker-compose.yml`. Copy the binary — that's it.
+## Status
 
-4. **Batteries included.** Server, database, templating — all in one small
-   binary. No external services to provision.
-
-5. **Ride light.** Complexity is a choice. Choose less, and you'll go further
-   than you think.
+Bialet has been in development since 2023 and runs in production at
+[home.dev.ar](https://home.dev.ar/). It is maintained by one developer, with
+no commercial support or SLA. Bugs go to
+[GitHub Issues](https://github.com/bialet/bialet/issues); questions go to
+[GitHub Discussions](https://github.com/bialet/bialet/discussions). Planned
+work is in [ROADMAP.md](ROADMAP.md).
 
 ## Build from source
 

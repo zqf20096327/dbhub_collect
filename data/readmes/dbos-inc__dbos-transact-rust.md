@@ -2,10 +2,14 @@
 
 # DBOS Transact: Lightweight Durable Workflows
 
-#### [Documentation](https://docs.dbos.dev/) &nbsp;&nbsp;•&nbsp;&nbsp;  [Examples](https://docs.dbos.dev/examples) &nbsp;&nbsp;•&nbsp;&nbsp; [Github](https://github.com/dbos-inc) &nbsp;&nbsp;•&nbsp;&nbsp; [Discord](https://discord.com/invite/jsmC6pXGgX)
+#### [Documentation](https://docs.dbos.dev/rust/programming-guide) &nbsp;&nbsp;•&nbsp;&nbsp; [API reference](https://docs.rs/dbos) &nbsp;&nbsp;•&nbsp;&nbsp;  [Examples](https://docs.dbos.dev/examples) &nbsp;&nbsp;•&nbsp;&nbsp; [Github](https://github.com/dbos-inc) &nbsp;&nbsp;•&nbsp;&nbsp; [Discord](https://discord.com/invite/jsmC6pXGgX)
 </div>
 
 ---
+
+> [!WARNING]
+> **Pre-production release.** DBOS Transact for Rust 0.6 is a pre-production release, and isn't
+> yet supported for production use. Its API may still change in breaking ways between releases.
 
 ## What is DBOS?
 
@@ -22,49 +26,21 @@ This library contains all you need to add durable workflows to your program: the
 Because it's just a library, you can incrementally add it to your projects.
 And because it's built on Postgres, it natively supports all the tooling you're familiar with (backups, GUIs, CLI tools) and works with any Postgres provider.
 
-## Try the starter app
+## Writing workflows
 
-The [starter app](./demo-apps/dbos-rust-starter) is durable execution in one page: a three-step
-workflow that checkpoints each step to Postgres, a live progress display, and a crash button.
-Launch a workflow, crash the app mid-run, restart it — execution resumes at the step after the
-last one that finished.
+A workflow body must be deterministic: a recovery runs it again and replays what each durable call
+recorded, so it has to reach the same calls in the same order. Non-deterministic values belong in
+steps, and plain races, timeouts, spawns and completion-order streams over durable calls aren't
+supported in a workflow body. The crate docs list [what isn't supported and what to use
+instead](https://docs.rs/dbos/latest/dbos/#determinism-in-workflows), on every runtime.
 
-With a Postgres listening on `localhost:5432`:
+## Try the demo apps
 
-```bash
-cargo run -p dbos-rust-starter
-```
+The [demo apps](https://github.com/dbos-inc/dbos-demo-apps/tree/main/rust) are in their own repository:
 
-Then open <http://localhost:8080>. The app creates its `dbos_rust_starter` database if it does not
-exist, and the standard libpq variables (`PGUSER`, `PGPASSWORD`) apply; point it at another server
-with `DBOS_SYSTEM_DATABASE_URL`. See the
-[starter's README](./demo-apps/dbos-rust-starter/README.md) for details.
-
-## Try the widget store
-
-The [widget store](./demo-apps/dbos-rust-widget-store) is an online storefront that survives being
-killed mid-checkout. Buy a widget and watch the order go out; press the crash button while it is
-being dispatched, restart the app, and the same order carries on from where it stopped, with no
-application code taking part in the recovery.
-
-Its writes are at-least-once rather than exactly-once, because Rust has no transactional step yet:
-the demo's README says where the window is and what it costs.
-
-It is the Rust port of the widget store that already exists in Python, TypeScript, Go and Java,
-against the same application schema.
-
-With a Postgres listening on `localhost:5432`:
-
-```bash
-cargo run -p dbos-rust-widget-store
-```
-
-Then open <http://localhost:8080>. The app creates its `dbos_rust_widget_store` database and its
-own `products` and `orders` tables on first run, so there is nothing to migrate by hand; point it
-at another server with `DBOS_SYSTEM_DATABASE_URL`. The workflow worth reading is the checkout, which
-reserves a widget and then *stops* until a payment webhook tells it whether the card was charged —
-a wait that outlives the process. See the [widget store's
-README](./demo-apps/dbos-rust-widget-store/README.md) for what to try.
+- The [starter](https://github.com/dbos-inc/dbos-demo-apps/tree/main/rust/dbos-starter) is durable execution in one page: launch a workflow, crash the app mid-run, restart it, and execution resumes at the step after the last one that finished.
+- The [widget store](https://github.com/dbos-inc/dbos-demo-apps/tree/main/rust/widget-store) is an online storefront that survives being killed mid-checkout.
+- [Queue patterns](https://github.com/dbos-inc/dbos-demo-apps/tree/main/rust/queue-patterns) shows fair queueing, rate limits and debouncing.
 
 ## Community
 

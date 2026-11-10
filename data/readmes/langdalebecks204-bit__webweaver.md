@@ -1,0 +1,211 @@
+中文 | [English](README.en.md)
+
+# 织网 (WebWeaver)
+
+树状结构自动化网络状态检测平台。后台定时/手动巡检设备（ICMP Ping + 可选 TCP 端口探测），前端以树形展示设备层级与实时状态，支持巡检历史记录与按小时/按天平均延时图表。
+
+## 技术栈
+
+- 后端：Python 3.12 / FastAPI / SQLAlchemy 2 / APScheduler / ping3 / PyJWT / bcrypt
+- 前端：Vue 3 / Vite / Element Plus / Pinia / axios / ECharts
+- 数据库：SQLite（单容器持久化到数据卷）
+
+## 快速开始（本地开发）
+
+### 1. 启动后端
+
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1        # Linux: source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+copy .env.example .env              # Linux: cp .env.example .env
+uvicorn app.main:app --reload --port 8000
+```
+
+默认管理员：`admin` / `admin123`（请在 `.env` 中修改 `WEAVER_DEFAULT_ADMIN_PASSWORD`）。
+
+### 2. 启动前端
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+访问 http://localhost:5173 ，用默认账号登录。
+
+## Docker 部署
+
+单容器多架构镜像（linux/amd64 + linux/arm64），发布到 GitHub Container Registry（`ghcr.io/langdalebecks204-bit/webweaver`）。首次部署：
+
+```bash
+docker run -d --name weaver \
+  --net=host \
+  --cap-add=NET_RAW \
+  --restart unless-stopped \
+  -v webweaver-data:/data \
+  -e WEAVER_JWT_SECRET=请改成随机长字符串 \
+  ghcr.io/langdalebecks204-bit/webweaver:0.6.5
+```
+
+- `--net=host`：推荐网络模式，方便直接与局域网设备/交换机进行 ICMP 与 SNMP 161 端口通信（避开 Docker 虚拟网段冲突）。
+- `--cap-add=NET_RAW`：ICMP Ping 必需（若使用 `--net=host` 亦推荐保留）。
+- `-v webweaver-data:/data`：SQLite 数据库持久化，重建容器不丢数据。
+- 首次启动自动创建默认管理员 `admin` / `admin123`（生产务必通过 `WEAVER_DEFAULT_ADMIN_PASSWORD` 修改）。
+- 前端静态资源已内置镜像中，浏览器访问 http://<主机>:8000 即可。
+
+也可用 `docker compose up -d`（见仓库 `docker-compose.yml`，env 参考 `compose.env.example`）。
+
+## Ubuntu / Linux 原生一键部署（无需容器）
+
+适合不想使用 Docker，希望直接在 Ubuntu / Debian 服务器裸机运行的场景。系统提供了一键全自动安装脚本（自动安装 Python 3 环境、Node.js 20、编译前端、配置 ICMP 权限与 Systemd 开机自启服务）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/langdalebecks204-bit/webweaver/main/install.sh | sudo bash
+```
+
+或克隆代码后直接执行：
+```bash
+sudo bash install.sh
+```
+
+脚本执行完毕后将输出 Web 访问地址（默认端口 `8000`，默认账号 `admin` / `admin123`），并由 `systemctl` 自动守护运行。常用管理命令：
+- 查看状态：`sudo systemctl status webweaver`
+- 实时日志：`sudo journalctl -u webweaver -f`
+- 重启服务：`sudo systemctl restart webweaver`
+
+### 更新版本
+
+#### 方式一：网页端一键在线热更新（推荐）
+
+自 `v0.5.6` 起，系统支持在 Web 界面内完成差量热更新：
+- 登录管理员账号，进入 **【系统管理】 -> 【在线更新】**。
+- 支持直接从 GitHub Release 获取仅约 3MB~5MB 的差量更新包，几秒内自动完成代码替换、数据库平滑迁移与服务重启，免去重新拉取全量 Docker 镜像，省时且避免损耗设备闪存寿命。
+
+**更新失败与常见问题排查**：
+1. **国内直连 GitHub 报 500 错误 / 超时**：
+   - 国内网络直接下载 GitHub Release 资产容易受阻超时。更新时请在镜像下拉框选择 **`ghproxy.net`** 或 **`gh-proxy.com`** 等国内加速源。
+2. **从 v0.5.6 升级到更高版本的技巧**：
+   - 若系统版本仍为 `0.5.6`，选择加速镜像点击【检查更新】后，**请将镜像下拉框切换为【官方直连】（切完后不要再点检查），直接点击【立即更新】**。这可规避 0.5.6 历史版本在双重代理组装上的缺陷。`v0.5.8` 及更高版本已修复此问题，后续更新直接一键点击即可。
+3. **PVE CT 容器 / LXC 容器热更新后关机（需手动启动）**：
+   - **现象**：热更新完成后显示正在重启，但在 Proxmox VE 中发现 CT 容器处于 `Stopped`（关机）状态。
+   - **原因**：热更新在覆盖代码后会通过让主进程正常退出（`os._exit(0)`）来交由守护进程拉起。在 PVE CT 容器中，如果 WebWeaver 进程是整个 CT 的主进程（PID 1），或者容器内 Docker 未配置重启策略，主进程退出会导致 Linux 内核判定容器生命周期结束而关闭 CT。
+   - **解决办法**：
+     - **手动启动**：在 PVE 管理界面中找到该 CT 容器，**手动点击一次【启动】**，即可正常加载并运行新版本。
+     - **一劳永逸设置自动重启**：
+       - 若 CT 内部通过 Docker 运行 WebWeaver，在 CT 终端执行：`docker update --restart unless-stopped <容器名>`。
+       - 若以独立 LXC 容器运行，在 PVE 宿主机设置中为该 CT 勾选【开机自启动】或在 CT 内通过 systemd 守护配置 `Restart=always`。
+
+---
+
+#### 方式二：Docker 容器重新拉取更新（兜底常规方式）
+
+```bash
+# 固定 tag 方式
+docker pull ghcr.io/langdalebecks204-bit/webweaver:0.6.5
+docker rm -f weaver
+docker run -d --name weaver \
+  --net=host \
+  --cap-add=NET_RAW \
+  --restart unless-stopped \
+  -v webweaver-data:/data \
+  -e WEAVER_JWT_SECRET=请改成随机长字符串 \
+  ghcr.io/langdalebecks204-bit/webweaver:0.6.5
+
+# 或 compose 方式
+docker compose pull
+docker compose up -d
+```
+
+#### 方式三：源码部署一键与定时自动更新（Git 模式）
+
+若你的服务器采用 `install.sh` 原生源码部署，可直接使用内置的 `update.sh` 脚本：
+
+```bash
+# 1. 手动一键拉取最新代码并热重启
+cd /opt/webweaver
+sudo bash update.sh
+
+# 2. 或一键配置 Crontab 每天凌晨 03:00 自动拉取 Git 最新代码并更新（完全无人值守）
+sudo bash update.sh --cron
+
+# 3. 移除定时自动更新任务
+sudo bash update.sh --remove-cron
+```
+
+- 数据保存在卷 `webweaver-data:/data`，删除重建容器**不会丢数据**。
+- 升级后启动时自动创建新表（如巡检历史表、新增设备字段），旧数据自动迁移无须人工干预。
+- 回滚：把镜像 tag 换回旧版本（如 `0.5.7`）重复上述步骤即可。
+
+## 巡检说明
+
+- 调度器默认每 5 分钟巡检一次（`WEAVER_POLL_INTERVAL_MINUTES`，可在前端设备页调整）。
+- 状态判定：Ping 成功 → `online`；Ping 成功但 TCP 端口失败 → `warning`；Ping 失败 → `offline`；未巡检 → `unknown`。
+- 每次巡检为带 IP 的节点写一条历史记录（状态 + 延时）。
+- 树中右键节点可：添加子节点 / 添加同级 / 编辑 / 立即巡检 / **查看历史（带 IP 节点）** / 删除。
+- 右键「查看历史」弹出平均延时柱状图：可切按小时/按天粒度、最近 1/7/30 天范围。
+- 历史记录默认保留 30 天，自动清理（`WEAVER_PROBE_HISTORY_DAYS`，1-365）。
+- 手机端设备树支持横向滚动查看深层嵌套。
+- 设备支持上传图片（详情页右上角），自动压缩到最长边 1600px 且 ≤300KB。
+- 上传接口拒绝超过 30MB 的文件；上传处理失败时保留原图。
+
+### 内存要求
+
+- 已在 **512MB 及以上内存** 的设备上验证：包括上传 48MP（约 8000x6000）手机照片并成功缩略。
+- **512MB 以下内存未测试过图片上传**，请自行验证；大图上传主要内存消耗来自解码阶段，已在解码前预降采样以降低峰值内存。
+
+## 测试
+
+```powershell
+cd backend
+.\.venv\Scripts\python.exe -m pytest tests -v
+
+cd frontend
+npm run test
+```
+
+## 环境变量（见 backend/.env.example）
+
+| 变量 | 默认 | 说明 |
+|---|---|---|
+| WEAVER_DB_URL | sqlite:///./weaver.db | SQLAlchemy 连接串（容器内为 sqlite:////data/weaver.db） |
+| WEAVER_JWT_SECRET | dev-secret-change-me | JWT 签名密钥（生产必改） |
+| WEAVER_TOKEN_EXPIRE_MINUTES | 480 | token 有效期 |
+| WEAVER_POLL_INTERVAL_MINUTES | 5 | 巡检周期（分钟） |
+| WEAVER_PING_CONCURRENCY | 100 | 并发探测上限 |
+| WEAVER_PING_TIMEOUT | 1.0 | ICMP 超时（秒） |
+| WEAVER_TCP_TIMEOUT | 2.0 | TCP 探测超时（秒） |
+| WEAVER_DEFAULT_ADMIN | admin | 首次启动的默认管理员 |
+| WEAVER_DEFAULT_ADMIN_PASSWORD | admin123 | 默认管理员密码（生产必改） |
+| WEAVER_ENABLE_SCHEDULER | true | 是否启用定时巡检 |
+| WEAVER_PROBE_HISTORY_DAYS | 30 | 巡检历史保留天数（1-365） |
+| WEAVER_FRONTEND_DIR | /app/frontend/dist | 前端静态资源目录（容器内默认即可） |
+
+## 接口速览
+
+- `POST /api/auth/login` 登录获取 JWT
+- `GET /api/auth/me` 当前用户
+- `GET /api/devices/tree` 设备树（嵌套 JSON）
+- `GET|POST /api/devices` 列表 / 新建（admin）
+- `PUT|DELETE /api/devices/{id}` 修改 / 删除（admin，级联删子树）
+- `POST /api/devices/{id}/recheck` 立即巡检（含子树）
+- `GET /api/devices/{id}/history?days=7` 巡检历史（登录即可）
+- `GET /api/settings/inspection-interval` 巡检间隔（admin）
+- `GET|PUT /api/settings/probe-history-days` 历史保留天数（admin）
+- `POST /api/topology/lldp-discover` LLDP + Bridge FDB 物理拓扑自动探测（支持品牌与白牌交换机）
+- `POST /api/topology/apply-lldp` 应用探测到的端口互联至设备端口绑定与拓扑树
+- `GET /api/topology/diag` 单交换机 SNMP/LLDP/FDB 连通性排障诊断
+- `GET /api/assets` IP-MAC 局域网资产发现列表与 OUI 厂商解析
+- `POST /api/assets/scan` 扫描网关/交换机 ARP 表与转发表刷新在线资产
+- `POST /api/topology/edge-discover` 边缘 CAM/FDB 终端精准直连定位与虚拟分线器聚合推导
+- `POST /api/topology/apply-edge` 应用边缘接入拓扑（直连端口绑定与自动创建虚拟 Hub）
+- `GET /api/system/update/check` 检查 GitHub 最新版本与更新包
+- `POST /api/system/update/apply` 系统一键在线平滑热更新
+
+## 后续规划
+
+- 交换机光口光衰与光模块 DDM 实时监控
+- WebSocket 实时状态流式推送
+- 更多国产白牌网络设备的深度适配
+

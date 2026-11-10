@@ -68,8 +68,8 @@ def create_todo(self, request, payload: CreateTodoSchema):
 
 # Pattern 4 — Service layer: controller is a thin HTTP adapter
 class TodoController:
-    def __init__(self):
-        self.service = TodoService()
+    def __init__(self, service: TodoService):
+        self.service = service
 
     @http_post("/", response={201: TodoSchema, 400: dict, 500: dict})
     @log_api_call(include_payload=True, include_response=False)
@@ -215,7 +215,7 @@ Performance-critical components use Rust under the hood:
 - **[uv](https://docs.astral.sh/uv/)** - Package management (replaces pip/poetry)
 - **[Ruff](https://docs.astral.sh/ruff/)** - Linting and formatting (replaces flake8/black/isort)
 - **[ty](https://github.com/astral-sh/ty)** - Type checking (alongside mypy)
-- **[pydantic-core](https://github.com/pydantic/pydantic-core)** - Validation engine behind Pydantic (direct base dependency in `pyproject.toml`)
+- **[Pydantic](https://github.com/pydantic/pydantic)** - Validation engine behind Django Ninja; its Rust core is pinned by Pydantic, not by `pyproject.toml`
 - **[orjson](https://github.com/ijl/orjson)** - JSON serialization (2-10x faster than stdlib)
 - **[django-vcache](https://pypi.org/project/django-vcache/)** - Cache I/O driver (default backend)
 
@@ -987,7 +987,12 @@ The boilerplate includes a comprehensive audit logging system for compliance tra
 
 ### Automatic Tracking
 
-Model changes are automatically tracked via Django signals:
+Model changes are automatically tracked via Django signals. Every model is
+audited unless it is listed in `AUDIT_EXCLUDED_MODELS`. An append-only or
+high-volume table (ingest rows, outbox events, event logs, snapshots) writes
+one `AuditLog` row per change, so add it to the exclusion list, or set
+`AUDIT_TRACKED_MODELS` to the models you need. See `FEATURE_GENERATION.md`
+for the generated-app note:
 
 ```python
 # Any model changes are automatically logged

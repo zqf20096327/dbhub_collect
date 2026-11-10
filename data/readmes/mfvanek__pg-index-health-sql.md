@@ -2,7 +2,7 @@
 
 **pg-index-health-sql** is a collection of SQL queries for analyzing PostgreSQL schemas, detecting issues and promoting best practices.
 
-[![Lint Code Base](https://github.com/mfvanek/pg-index-health-sql/actions/workflows/linter.yml/badge.svg)](https://github.com/mfvanek/pg-index-health-sql/actions/workflows/linter.yml)
+[![Lint with SQLFluff](https://github.com/mfvanek/pg-index-health-sql/actions/workflows/sqlfluff.yml/badge.svg)](https://github.com/mfvanek/pg-index-health-sql/actions/workflows/sqlfluff.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/mfvanek/pg-index-health-sql/blob/master/LICENSE "Apache License 2.0")
 
 ## What is this?
@@ -80,17 +80,15 @@ For more information please see [PostgreSQL Versioning Policy](https://www.postg
 
 ### Linting
 
+[SQLFluff](https://github.com/sqlfluff/sqlfluff) is used to lint all SQL queries.
+The configuration is located in [.sqlfluff](https://github.com/mfvanek/pg-index-health-sql/blob/master/.sqlfluff).
+
 #### macOS/Linux
 
-To run super-linter locally:
-
 ```shell
-docker run \
-  -e RUN_LOCAL=true \
-  -e USE_FIND_ALGORITHM=true \
-  -e VALIDATE_SQLFLUFF=true \
-  -v $(pwd):/tmp/lint \
-  ghcr.io/super-linter/super-linter:slim-v8.7.0
+docker run --rm \
+  -v "$(pwd)":/sql \
+  sqlfluff/sqlfluff:4.5.0 lint /sql/sql
 ```
 
 #### Windows
@@ -98,20 +96,7 @@ docker run \
 Use `cmd` on Windows:
 
 ```shell
-docker run ^
-  -e RUN_LOCAL=true ^
-  -e USE_FIND_ALGORITHM=true ^
-  -e VALIDATE_SQLFLUFF=true ^
-  -v "%cd%":/tmp/lint ^
-  ghcr.io/super-linter/super-linter:slim-v8.7.0
-```
-
-See https://github.com/super-linter/super-linter/blob/main/dependencies/python/sqlfluff.txt
-
-```shell
 docker run --rm ^
-  -v "%cd%\.github\linters\.sqlfluff":/sql/.sqlfluff:ro ^
   -v "%cd%":/sql ^
-  -e SQLFLUFF_CONFIG=/sql/.sqlfluff ^
-  sqlfluff/sqlfluff:4.2.2 lint /sql
+  sqlfluff/sqlfluff:4.5.0 lint /sql/sql
 ```

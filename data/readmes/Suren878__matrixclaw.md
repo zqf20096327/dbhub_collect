@@ -355,7 +355,7 @@ tool contract and API roles.
 | [docs/EXTERNAL_AGENTS.md](docs/EXTERNAL_AGENTS.md) | Codex and Claude Code runtimes, subagents |
 | [docs/MCP.md](docs/MCP.md) | MCP client and server |
 | [docs/BROWSER.md](docs/BROWSER.md) | browser tools through MCP |
-| [docs/WEB_SEARCH.md](docs/WEB_SEARCH.md) | `web_search` and `web_fetch` |
+| [docs/WEB_SEARCH.md](docs/WEB_SEARCH.md) | Web search, page reading and HTTP API requests |
 | [docs/VOICE.md](docs/VOICE.md) | local TTS/STT, realtime voice, telephony |
 | [docs/IMAGES.md](docs/IMAGES.md) | image generation and editing |
 | [docs/STORAGE.md](docs/STORAGE.md) | storage module and Telegram files |

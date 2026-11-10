@@ -1,0 +1,777 @@
+# rods-sdk
+
+Framework de governança para agentes de código, com recuperação via Context Engine e economia de tokens usando RTK por padrão.
+
+O Rods SDK entrega uma camada operacional pequena e auditável para agentes:
+
+- Context Engine: busca indexada do projeto em chunks com SQLite FTS5.
+- RTK por padrão: compactação de saída de comandos, testes, logs e diffs.
+- Skills e arquivos de governança: regras versionadas em `.ai/` que podem ser sincronizadas com agentes suportados.
+- Adaptadores opcionais: memória entre sessões e modo de resposta curta sem virar dependência obrigatória.
+- Execução CLI-first: flows de agentes usam as CLIs locais. O roteador Jev é uma consulta externa opcional e desligada por padrão. O MCP expõe somente o Context Engine, não o comando `flow run`.
+
+## Status — RODS Local-First MVP
+
+### Estado atual
+
+O projeto possui uma **Local-First Foundation** implementada e validada. O
+**Local-First MVP E2E não está concluído**: a rota real `Codex Harness →
+runtime local verificado → modelo local` permanece intencionalmente
+desabilitada até que a rota do harness também possa ser atestada por um
+contrato público e estruturado.
+
+A foundation já fornece `rods setup`, `rods doctor` e `rods run`; seleção de
+contexto com orçamento; filtros de segredos e symlinks; worktree isolada;
+sanitização de artifacts; subprocessos controlados; validação opt-in; erros
+estruturados; e roteamento `--local-only` fail-closed com `cloudCalls = 0`.
+
+Na validação anterior, `npm run typecheck`, `npm run build` e a suíte de
+testes passaram. O pacote também foi empacotado e instalado em um
+diretório limpo, com seus binários funcionando. Isso não é evidência de uma
+execução real por Magnitude e Codex.
+
+As dependências transitivas de produção foram atualizadas e a verificação
+`npm audit --omit=dev` retorna zero vulnerabilidades. A atualização corrigiu a
+cadeia de `fast-uri`, `ip-address`, `hono`, `@hono/node-server` e `qs` usada
+por `@modelcontextprotocol/sdk`.
+
+### O que funciona e o que não funciona
+
+| Fluxo                                           | Estado                                           | Evidência e limite                                                                                                                                             |
+| ----------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Context Engine, governança, Q&A, adapters e CLI | Disponível                                       | Cobertos pela suíte e pelo smoke test de instalação.                                                                                                           |
+| `rods flow run` com Codex, Claude ou Gemini     | Implementado, mas precisa de ambiente do usuário | A integração foi exercitada com CLIs falsas nos testes. O usuário deve configurar CLIs autenticadas, modelos e permissões antes de uma primeira execução real. |
+| `rods doctor --compute`                         | Disponível                                       | Descobre CPU, RAM, disco e verifica Ollama por endpoint loopback documentado; LM Studio é diagnosticado, mas fica não verificado enquanto LM Link puder rotear remotamente. |
+| `rods run --local-only`                         | Bloqueado de propósito                           | Ainda falta uma prova verificável da ligação Codex → runtime local; runtime saudável não implica harness saudável.                                             |
+| Fallback cloud em Local-First                   | Não existe                                       | `--cloud` e `--hybrid` retornam `FEATURE_NOT_AVAILABLE`.                                                                                                       |
+
+O discovery atual não usa parsing frágil de texto humano, flags JSON não
+documentadas, schemas internos ou códigos de saída presumidos. Se Magnitude
+estiver instalado sem uma sonda estruturada oficial, o resultado correto é
+`RUNTIME_CONTRACT_UNSUPPORTED`; sem uma atestação da conexão do harness, é
+`HARNESS_NOT_READY`.
+
+O `doctor --compute` também emite `harnessRoute`. No Codex CLI atual, a opção
+oficial `--oss --local-provider ollama|lmstudio` permite escolher um provider,
+mas não há uma consulta estruturada para atestar provider ativo, endpoint,
+modelo ou fallback cloud. Assim, o relatório mantém `routeVerified: false` e
+os campos de cloud como `unknown`; o RODS não interpreta help ou configuração
+interna como prova.
+
+`--local-only` passa pelo `LocalOnlyGate`, a única autoridade que pode permitir
+o início do harness. Ele exige localidade e modelo verificados, rota Codex
+verificada, fallback e credenciais cloud comprovadamente ausentes e isolamento
+de rede no SO. `--local-only` é sempre estrito: quando a plataforma não puder
+impor o confinamento, retorna `NETWORK_ISOLATION_UNAVAILABLE`; uso local sem
+essa garantia pertence a um modo não estrito futuro.
+
+### Arquitetura e decisão de segurança
+
+```text
+RODS
+ ├── Context Engine
+ ├── Security + sanitização
+ ├── Classifier + Local Router
+ └── Worktree isolada
+             ↓
+      Codex Harness
+             ↓
+      Magnitude Runtime
+             ↓
+        Modelo local
+```
+
+Magnitude é apenas o runtime de inferência; não é tratado como editor de
+arquivos. O harness é quem pode alterar somente a worktree controlada. Quando
+a rota local não pode ser provada, o RODS não inicia o harness e não tenta
+substituí-lo por cloud:
+
+```text
+localOnly = true
+        ↓
+cloud provider resolved = NO
+cloud provider initialized = NO
+cloud calls = 0
+```
+
+O MVP E2E só será concluído quando uma fixture real executar `rods run
+--local-only` e comprovar runtime, modelo, conexão do harness, alteração na
+worktree, validação e patch — tudo sem chamadas cloud e sem tocar o workspace
+primário. O roadmap separa a infraestrutura E2E (PR 4A) do E2E local
+verificado (PR 4B): este último permanece bloqueado até o Codex expor prova
+estruturada de provider, endpoint, modelo e ausência de fallback cloud.
+
+A fixture E2E de segurança já verifica infraestrutura real — repositório Git,
+worktree isolada, patch, relatório sanitizado e validação determinística — e
+também que uma rota de harness não verificada é bloqueada antes da execução.
+
+O discovery oficial do Codex encontrou apenas atestação parcial via app-server:
+provider/model configurados e `requiresOpenaiAuth`. Como endpoint resolvido,
+modelo efetivo e fallback cloud não possuem contrato público suficiente, o
+diagnóstico é `CODEX_HARNESS_CONTRACT_INSUFFICIENT` e `--local-only` permanece
+bloqueado com `HARNESS_NOT_READY`.
+
+Codex continua sendo um `ExecutionHarness` suportado, mas não é o único
+possível: um harness alternativo só poderá liberar `--local-only` ao produzir
+um `HarnessRouteProof` estruturado para provider, endpoint, modelo, runtime,
+autenticação e ausência de fallback cloud. O gate não será relaxado para
+acomodar nenhum provider.
+
+O RODS também aceita uma rota efetiva por `network-confinement`: configuração
+explícita não basta, mas pode compor prova com runtime/modelo same-machine
+verificados e uma política do SO que permita apenas o endpoint loopback do
+runtime, bloqueie rede externa e registre zero conexões externas bem-sucedidas.
+No Linux, o RODS prepara essa política com namespace `bwrap` e um gateway Unix
+privado fixado ao runtime; se o kernel não suportar o isolamento, a execução é
+recusada.
+
+## Instalação
+
+```bash
+npm install -g @pedrohrferreira/rods-sdk
+```
+
+Para usar sem instalação global:
+
+```bash
+npx @pedrohrferreira/rods-sdk rods --help
+npx @pedrohrferreira/rods-sdk context --help
+```
+
+Para desenvolvimento local neste repositório:
+
+```bash
+npm install
+npm run build
+```
+
+Instalações via git executam `prepare` para gerar `dist/` automaticamente. Em projetos com pnpm, se lifecycle scripts de dependências estiverem bloqueados, rode `pnpm approve-builds` ou adicione `@pedrohrferreira/rods-sdk` em `pnpm.onlyBuiltDependencies`.
+
+Durante o desenvolvimento:
+
+```bash
+npm run dev -- search "termo de busca"
+```
+
+Depois do build, o pacote expõe:
+
+```bash
+rods --help
+context --help
+```
+
+`context` continua existindo como alias de compatibilidade para a mesma CLI.
+
+## Uso disponível hoje
+
+O fluxo abaixo prepara um projeto consumidor para o orquestrador CLI-first.
+Ele não habilita o Local-First E2E.
+
+1. Inicialize a governança na raiz de um repositório Git:
+
+```bash
+rods init /caminho/para/meu-projeto
+```
+
+Em terminal interativo, `rods init` abre uma conversa para planejar as skills.
+Use ↑/↓ e Enter para escolher a CLI instalada, o modelo e as respostas às
+perguntas sobre o projeto. A lista reúne modelos configurados e sugestões;
+“Outro modelo”, “Outra resposta” e “Outra alteração” permitem texto livre.
+O wizard apresenta um plano revisável e a prévia das skills, e só grava após
+selecionar “Aplicar e inicializar” (o padrão é “Não aplicar”). Ctrl+C cancela
+o planejamento e remove a cópia temporária. Cada chamada à CLI tem limite
+padrão de 10 minutos; falhas mostram os diagnósticos disponíveis, inclusive
+eventos de erro JSON do Codex. Arquivos ignorados e sensíveis ficam fora da
+cópia temporária analisada pela CLI. Sem terminal interativo ou com
+`--no-plan`, mantém o scaffold determinístico. A escolha do modelo vale
+apenas para essa geração. O assistente preserva skills personalizadas;
+`rods upgrade` não substitui as geradas pela IA.
+
+2. Indexe o projeto para que agentes possam recuperar contexto compacto antes
+   de abrir arquivos:
+
+```bash
+context project add meu-projeto /caminho/para/meu-projeto
+context ingest /caminho/para/meu-projeto
+context search "onde fica a autenticação?" --limit 8
+```
+
+3. Configure em `.ai/config.json` as CLIs que a equipe realmente possui e os
+   modelos aceitos para cada tier. O template vem com nomes de modelos vazios e
+   `escalation.mode: "advisory"`; portanto, um projeto recém-inicializado não
+   executa agentes até receber configuração explícita. Para executar flows,
+   habilite os targets escolhidos, preencha `simple`, `medium` e `high`, e defina
+   `escalation.mode` como `"execute"`. Verifique as integrações:
+
+```bash
+rods adapter doctor /caminho/para/meu-projeto
+```
+
+4. Escolha um modo com um agente ou com desenvolvedor e revisor distintos e
+   inicie o flow:
+
+```bash
+rods flow run "implemente a exportação CSV de faturas" \
+  --root /caminho/para/meu-projeto \
+  --mode codex+claude
+```
+
+O RODS classifica a tarefa, cria uma branch e worktree temporárias, chama o
+desenvolvedor, roda o gate de testes configurado e pede uma revisão estruturada.
+Ele repete as correções até `workflow.maxIterations`. Se a revisão aprovar, o
+patch só é promovido para o branch original se ele ainda estiver no mesmo HEAD;
+caso contrário, o patch é preservado para aplicação manual. Se não houver
+aprovação, o comando mantém a worktree e informa o caminho do patch.
+
+### Potência, limites e gastos
+
+O RODS executa agentes pelas CLIs (`execution.apiEnabled` é
+`false`), mas suas CLIs autenticadas podem consumir assinatura, créditos ou
+tarifação do provedor. O SDK não conhece a tabela de preços da sua conta, não
+calcula moeda e não possui um teto financeiro por execução.
+
+Como exceção opt-in, `decisionRouter.enabled` permite consultar
+`typesafe-ai/jev` pelo Vercel AI Gateway antes de `rods flow run`. Defina
+`AI_GATEWAY_API_KEY` no ambiente e configure `minConfidence` e `timeoutMs` em
+`.ai/config.json`. Jev sugere o tier e o desenvolvedor; falhas e baixa
+confiança devolvem a decisão ao classificador local. `--mode` explícito
+mantém a escolha de agentes do usuário. Essa chamada pode ser cobrada pelo
+Gateway e não habilita `--local-only`.
+
+Em cada iteração há uma chamada de desenvolvimento. Se o gate de testes passar,
+há também uma chamada de revisão. Assim, o máximo de chamadas é
+`2 × workflow.maxIterations`: o padrão de três iterações permite até seis
+chamadas. Se o teste falhar, a revisão daquela iteração é pulada. Tokens só são
+registrados quando a CLI devolve métricas JSON oficiais; ausência de métrica é
+registrada como `unavailable`, não estimada.
+
+Para estimar custo quando o provedor cobra por token:
+
+```text
+custo = Σ(inputTokens / 1.000.000 × preço_input_do_modelo)
+      + Σ(outputTokens / 1.000.000 × preço_output_do_modelo)
+```
+
+O modo de maior cobertura é um par de agentes, por exemplo `codex+claude`,
+com modelos configurados para os três tiers, `workflow.testCommand`,
+`reviewContext: true` e até três iterações. Ele também é o modo de maior custo
+potencial. Para um primeiro uso real, comece com uma iteração, confira os
+tokens reportados e aumente o limite conscientemente. O contexto de revisão é
+opt-in e limitado a cinco snippets; o diff enviado à revisão tem teto de
+50 mil caracteres. O resumo persistido da revisão tem limite de 12 mil.
+
+### Preparar Local-First
+
+Esta trilha configura defaults sem instalar softwares externos:
+
+```bash
+rods setup /caminho/para/meu-projeto
+rods doctor /caminho/para/meu-projeto --compute --json
+```
+
+`doctor --compute` verifica Git, Context Engine, capacidade básica da máquina,
+Ollama por API local documentada, LM Studio em modo diagnóstico (LM Link pode
+roter para outro dispositivo), Magnitude experimental, Codex e permissões de
+validação. Hoje ele retorna código de saída `1` enquanto
+não houver uma prova estruturada da conexão Codex → runtime local e do
+isolamento Git. Nesse estado,
+`rods run "tarefa" --local-only` falha de forma segura; `--cloud` e `--hybrid`
+são sempre recusados. Isso é uma proteção, não um fallback.
+
+## Principais Atualizações
+
+Esta versão inclui cache Q&A com validade explícita, escalação real de modelos, métricas de uso e orquestração CLI-first entre Codex, Claude e Gemini, além das melhorias de governança já existentes.
+
+| Área                    | O que mudou                                                                                                                            | Impacto no framework                                                                                                                       |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Instalação via git      | `prepare` roda `npm run build` automaticamente.                                                                                        | Consumidores que instalam via GitHub recebem `dist/` sem passo manual, exceto quando pnpm bloqueia lifecycle scripts.                      |
+| Inicialização           | `rods init` agora gera governança, sincroniza Codex, escreve/mescla `~/.codex/RTK.md` e roda doctor.                                   | O setup inicial fica concentrado em um comando e deixa de depender de `rtk init -g --codex` manual.                                        |
+| Targets de agente       | Codex e Claude possuem integração de governança; Codex, Claude e Gemini podem executar flows.                                          | Gemini entra como CLI de execução sem ser tratado como harness de skills/hooks.                                                            |
+| Upgrade                 | `rods upgrade` atualiza templates seletivamente, preserva arquivos customizados e tem `--dry-run`.                                     | Projetos consumidores conseguem receber melhorias do SDK sem perder ajustes locais.                                                        |
+| Skills                  | Foram adicionadas skills de `review`, `architecture` e `quality`.                                                                      | Agentes passam a ter regras versionadas para revisão, arquitetura e validação.                                                             |
+| Context Engine          | `ingest` e `search` aceitam `--scope`, com `general` como padrão e `review` para revisão.                                              | Contextos de revisão ficam isolados do índice geral sem criar outro projeto.                                                               |
+| Cache Q&A               | `rods qa` armazena, consulta, lista, reclassifica, invalida e limpa respostas reutilizáveis com hash exato e FTS5 lexical.             | Perguntas repetidas podem reaproveitar respostas sem nova ingestão ou chamada automática de agente.                                        |
+| Validade do cache       | Cada entrada usa policy explícita `conceptual`, `files` ou `repository`; dependências por arquivo são verificadas por SHA-256.         | Commits irrelevantes não invalidam respostas conceituais ou respostas ligadas apenas a arquivos específicos.                               |
+| Limpeza e métricas      | `qa prune --stale` remove entradas obsoletas com dry-run e filtro de idade; `qa stats` exclui stale dos totais principais.             | O usuário controla o acúmulo de versões inválidas e a economia reportada permanece conservadora.                                           |
+| Escalação executável    | O tier `simple`, `medium` ou `high` seleciona modelos configurados nas CLIs locais quando `escalation.mode` é `execute`.               | A classificação deixa de ser apenas advisory no fluxo automatizado, sem chamadas diretas às APIs dos provedores.                           |
+| Fluxo multiagente       | `rods flow run` executa desenvolvimento e revisão com Codex, Claude ou Gemini em worktree isolada, loop limitado e review estruturado. | Um resultado aprovado só promove o patch quando branch e HEAD originais permanecem inalterados; nos demais casos, o patch é preservado.    |
+| Validação de execução   | Configurações dos dois papéis são verificadas antes da criação do worktree e novamente antes de cada chamada.                          | Erros identificam agente, fase e campo inválido; `RODS_DEBUG=1` habilita stack trace completo.                                             |
+| Acurácia da revisão     | Gate de testes, coerência por severidade, diff transparente, memória lexical de findings e contexto opt-in reforçam o review.          | Falhas determinísticas evitam chamadas desnecessárias, enquanto contexto e padrões recorrentes melhoram a decisão dentro de limites fixos. |
+| Uso de tokens           | Adapters extraem tokens somente das saídas JSON oficiais disponíveis e registram `unavailable` quando ausentes.                        | Relatórios não inventam consumo e permitem enxergar custo por etapa e por agente.                                                          |
+| Migração SQLite         | Bancos antigos recebem backfill de `scope=general` e entradas Q&A legadas são classificadas como `repository`.                         | Bases já indexadas preservam dados e comportamento após o upgrade.                                                                         |
+| Fluxo de cards externos | Casos de eval documentam quando perguntar antes de buscar contexto.                                                                    | Evita inferir requisitos de links externos sem confirmação.                                                                                |
+
+## Atualizar Projetos Consumidores
+
+Use primeiro o dry-run para ver o que será alterado:
+
+```bash
+rods upgrade /caminho/absoluto/do/projeto --dry-run
+```
+
+Aplicar atualização seletiva preservando arquivos customizados:
+
+```bash
+rods upgrade /caminho/absoluto/do/projeto
+```
+
+Forçar atualização dos arquivos gerados pelo SDK:
+
+```bash
+rods upgrade /caminho/absoluto/do/projeto --force
+```
+
+Se o projeto usa pnpm e o `dist/` não foi gerado durante a instalação via git:
+
+```bash
+pnpm approve-builds
+```
+
+Ou configure no `package.json` raiz do consumidor:
+
+```json
+{
+  "pnpm": {
+    "onlyBuiltDependencies": ["@pedrohrferreira/rods-sdk"]
+  }
+}
+```
+
+Depois do upgrade, rode uma validação rápida:
+
+```bash
+rods adapter doctor /caminho/absoluto/do/projeto
+context search "termo de validação" --limit 8
+```
+
+## Como Rodar O Framework
+
+1. Registre o projeto que será indexado:
+
+```bash
+context project add meu-projeto /caminho/absoluto/do/projeto
+```
+
+2. Indexe o projeto:
+
+```bash
+context ingest /caminho/absoluto/do/projeto
+```
+
+3. Consulte o índice antes de abrir arquivos manualmente:
+
+```bash
+context search "termo de busca" --limit 8
+context read <chunkId>
+context stats
+```
+
+Para contexto dedicado de revisão:
+
+```bash
+context ingest /caminho/absoluto/do/projeto --scope review
+context search "critério de revisão" --scope review --limit 8
+```
+
+4. Para gerar governança em um projeto consumidor:
+
+```bash
+rods init /caminho/absoluto/do/projeto
+rods adapter sync /caminho/absoluto/do/projeto --target codex
+rods adapter sync /caminho/absoluto/do/projeto --target claude
+```
+
+Por padrão, as skills ficam apenas em `.ai/skills`. Se você precisar projetar uma cópia para um diretório específico consumido pelo Codex, passe o destino explicitamente:
+
+```bash
+rods adapter sync /caminho/absoluto/do/projeto --target codex --codex-skills-dir .codex/skills
+```
+
+## Comandos
+
+```bash
+context ingest <path> [--scope general|review] [--type file|log|markdown|diff|error|stacktrace|json|sql|http]
+context search <query> [--scope general|review] [--limit 8]
+context read <chunkId>
+context stats
+context project add <name> <root>
+context project list
+context project remove <name>
+context ingest <path> [--type <type>] [--scope <scope>] [--project-root <path>]
+rods init [path] [--force]
+rods upgrade [path] [--force] [--dry-run]
+rods adapter list
+rods adapter enable <rtk|claude-mem|caveman> [path] [--force]
+rods adapter sync [path] --target codex|claude [--codex-skills-dir <path>] [--force]
+rods adapter doctor [path] [--target codex|claude]
+rods escalation classify <task> [--files <files>] [--root <path>] [--json]
+rods qa store --question <text> --answer <text|-> --policy conceptual|files|repository [--files <paths>] [--summary <text>] [--tokens <count>]
+rods qa search <question> [--threshold 0.75] [--json]
+rods qa list [--project <name>] [--stale] [--json]
+rods qa invalidate <id>
+rods qa reclassify <id> --policy conceptual|files|repository [--files <paths>]
+rods qa prune --stale [--project <name>] [--older-than <days>] [--dry-run] [--json]
+rods qa stats [--project <name>] [--json]
+rods flow run <task> [--mode <agent|developer+reviewer>] [--root <path>] [--json]
+rods flow findings --file <path> [--project <name>] [--json]
+rods hook run --target codex|claude
+rods setup [path] [--json]
+rods doctor [path] [--compute] [--json]
+rods run <task> --local-only [--root <path>] [--dry-run] [--explain] [--power eco|balanced|performance|max|auto] [--json]
+```
+
+Os agentes válidos para `flow run` são `codex`, `claude` e `gemini`. Um modo solo usa o mesmo agente para desenvolver e revisar. Pares devem usar agentes distintos e respeitam a ordem `developer+reviewer`:
+
+```text
+codex  claude  gemini
+codex+claude  codex+gemini
+claude+codex  claude+gemini
+gemini+codex  gemini+claude
+```
+
+## Integração Com Codex
+
+### Plugin do Codex
+
+O repositório também distribui o plugin `rods-sdk` com duas skills: planejamento
+do `rods init` e busca com Context Engine. Para instalar pelo marketplace do
+GitHub:
+
+```bash
+codex plugin marketplace add PedroHRFerreira/rods-sdk
+codex plugin add rods-sdk@rods-sdk
+```
+
+O plugin contém instruções para o Codex; a CLI continua sendo instalada à parte:
+
+```bash
+npm install -g @pedrohrferreira/rods-sdk
+```
+
+O plugin não instala a CLI automaticamente nem configura o servidor MCP local.
+Para a integração MCP, siga [`docs/codex.md`](docs/codex.md).
+
+[Política de privacidade](PRIVACY.md) · [Termos de uso](TERMS.md).
+
+O código-fonte é distribuído sob a [licença MIT](LICENSE).
+
+O Rods SDK expõe o servidor MCP do Context Engine para o Codex:
+
+```bash
+npm run build
+context-mcp
+```
+
+Veja [docs/codex.md](docs/codex.md) para configurar o `~/.codex/config.toml` e usar o MCP no Codex.
+
+Veja [docs/evals.md](docs/evals.md) para os casos de eval da regra de card/link com dependência externa.
+
+## Armazenamento
+
+Por padrão, os arquivos ficam em:
+
+```text
+~/.context-engine/
+  config/config.json
+  db/context.db
+```
+
+Defina `CONTEXT_ENGINE_HOME` para isolar o armazenamento em testes ou experimentos locais. Quando ele for relativo, o rods-sdk resolve o caminho a partir da raiz detectada do projeto ou da raiz passada em `--project-root`.
+
+## Economia De Tokens
+
+- Arquivos são armazenados em chunks por linha, não como registros gigantes.
+- `search` retorna metadados compactos, ranqueados, com snippets.
+- `read` exige um `chunkId` explícito.
+- Hashes de arquivo são cacheados para pular reindexação do que não mudou.
+- O chunking usa heurísticas simples de estrutura e linhas vazias; ele não é um parser por linguagem.
+- O schema reserva campos de metadados de embedding para busca híbrida futura, sem implementar embeddings no MVP.
+
+Ao atualizar o algoritmo de chunking heurístico, a próxima execução de `rods ingest` reindexará o projeto inteiro uma única vez. As execuções seguintes voltarão a pular arquivos sem alterações normalmente. As fronteiras usam sinais como fechamento de blocos, declarações e linhas vazias, sem AST ou parser por linguagem.
+
+## Governança
+
+`rods init` cria arquivos de governança no projeto, sincroniza a projeção Codex e escreve/mescla o hook RTK em `~/.codex/RTK.md`:
+
+```text
+AGENTS.md
+.ai/config.json
+.ai/constitution.md
+.ai/skills/context-search-first/SKILL.md
+.ai/skills/review/SKILL.md
+.ai/skills/architecture/SKILL.md
+.ai/skills/quality/SKILL.md
+.ai/adapters/rtk.md
+```
+
+`.ai/` é a fonte versionada da verdade. `rods adapter sync --target codex` mantém as skills em `.ai/skills` e sincroniza apenas os hooks do target. Se houver necessidade de uma projeção física para outro diretório, use `--codex-skills-dir <path>`. `rods adapter sync --target claude` gera a projeção `CLAUDE.md`. Gemini não é um target de `adapter sync`: sua integração atual é somente como CLI de execução do flow.
+
+RTK vem habilitado por padrão em `.ai/config.json`. O hook Codex gerado pelo rods-sdk documenta o fluxo RTK/Context Engine sem exigir um passo manual de `rtk init -g --codex`.
+
+`rods upgrade --dry-run` mostra quais arquivos seriam atualizados. O upgrade real preserva arquivos customizados e reporta quando existe versão upstream mais nova para eles.
+
+A execução é CLI-first por padrão:
+
+```json
+{
+  "execution": {
+    "mode": "cli",
+    "apiEnabled": false
+  }
+}
+```
+
+## Escalonamento De Modelo
+
+`rods escalation classify <task>` continua classificando a tarefa e recomendando uma classe de modelo. Em `escalation.mode: "advisory"` nada é executado, preservando o comportamento das configurações antigas. Em `"execute"`, `rods flow run` usa o tier para selecionar o modelo configurado e chama exclusivamente as CLIs locais.
+
+Configure nomes de modelo explicitamente; o SDK não embute aliases que podem mudar entre versões:
+
+```json
+{
+  "escalation": {
+    "enabled": true,
+    "mode": "execute",
+    "policyPath": ".ai/policies/complexity.md",
+    "specsDir": "docs/rods/specs"
+  },
+  "targets": {
+    "codex": {
+      "enabled": true,
+      "execution": {
+        "binary": "codex",
+        "models": {
+          "simple": "modelo-a",
+          "medium": "modelo-b",
+          "high": "modelo-c"
+        },
+        "args": [],
+        "timeoutMs": 900000
+      }
+    },
+    "claude": {
+      "enabled": true,
+      "execution": {
+        "binary": "claude",
+        "models": {
+          "simple": "modelo-a",
+          "medium": "modelo-b",
+          "high": "modelo-c"
+        },
+        "args": [],
+        "timeoutMs": 900000
+      }
+    },
+    "gemini": {
+      "enabled": true,
+      "execution": {
+        "binary": "gemini",
+        "models": {
+          "simple": "modelo-a",
+          "medium": "modelo-b",
+          "high": "modelo-c"
+        },
+        "args": [],
+        "timeoutMs": 900000
+      }
+    }
+  },
+  "workflow": {
+    "mode": "codex+gemini",
+    "maxIterations": 3,
+    "failOnSeverity": "high",
+    "testCommand": { "command": "npm", "args": ["test"], "timeoutMs": 600000 },
+    "reviewContext": false
+  }
+}
+```
+
+Quando executado via lifecycle hook, `rods hook run --target codex|claude` injeta a recomendação em `additionalContext` no evento `UserPromptSubmit`, junto com avisos de planejamento/revisão quando aplicáveis. O agente ou a pessoa operando a sessão ainda precisa ler essa sugestão e decidir manualmente se muda de modelo ou altera o plano de execução.
+
+Para estimar o escopo, passe os arquivos explicitamente sempre que quiser um resultado sensível ao recorte da tarefa:
+
+```bash
+rods escalation classify "corrigir typo no README" --files README.md
+```
+
+Se `--files` for omitido, o classificador usa `git diff --name-only` no repositório atual como fallback. Isso é útil para classificar a mudança em andamento, mas pode surpreender em repositórios com alterações não commitadas: dois textos de tarefa diferentes podem produzir o mesmo resultado quando o diff local é o mesmo.
+
+## Cache Q&A
+
+O cache é lexical, não semântico. Perguntas são normalizadas e consultadas primeiro por hash exato; depois, o FTS5 retorna até três candidatos e um overlap determinístico decide o reuso. O threshold padrão é conservador (`0.75`) e pode ser alterado em `qa search`.
+
+```bash
+rods qa store --question "o que é este projeto?" --answer - --policy conceptual --tokens 420 < resposta.md
+rods qa store --question "como funciona o parser?" --answer - --policy files --files src/parser.ts < resposta.md
+rods qa store --question "qual é o estado atual?" --answer - --policy repository < resposta.md
+rods qa search "como configuro o projeto?"
+rods qa list --stale
+rods qa stats
+```
+
+`--policy` é obrigatório na CLI: `conceptual` não depende do Git, `files` depende somente dos arquivos declarados e `repository` usa o fingerprint global de commit, diff e arquivos não rastreados. `files` exige uma lista não vazia de arquivos existentes dentro do projeto. Chamadas programáticas que omitirem a política usam `repository` por segurança.
+
+Entradas stale são auditáveis e não são retornadas como hit quando existe candidato fresco. Reclassifique uma entrada explicitamente ou limpe stale em lote:
+
+```bash
+rods qa reclassify 12 --policy files --files src/parser.ts
+rods qa prune --stale --older-than 30 --dry-run
+rods qa prune --stale --older-than 30
+```
+
+`prune` nunca remove somente por idade: `--stale` é obrigatório. A remoção libera páginas para reuso pelo SQLite, mas não reduz necessariamente o arquivo sem `VACUUM`. Em `qa stats`, `hits` e `tokensSaved` incluem apenas entradas atualmente frescas; hits e tokens stale aparecem separadamente como excluídos, e números de tokens só usam contagens conhecidas.
+
+## Fluxo Multiagente
+
+`rods flow run` cria uma branch e worktree em `/tmp`, executa desenvolvimento e revisão em subprocessos e limita o loop por `workflow.maxIterations`. Antes de criar o worktree, o SDK valida `binary`, modelo do tier, `args` e `timeoutMs` para developer e reviewer. A mesma validação é repetida antes das chamadas, inclusive se o tier mudar após a implementação.
+
+Cada adapter aplica o modo de permissão apropriado ao papel: Codex usa sandbox `workspace-write`/`read-only`, Claude usa `acceptEdits`/`plan` e Gemini usa `auto_edit`/`plan`. O revisor precisa produzir JSON estruturado com `approved`, `summary` e `findings`. No Gemini, o schema é solicitado pelo prompt porque a CLI não oferece enforcement equivalente ao `--output-schema` do Codex ou `--json-schema` do Claude; por isso, uma resposta fora do formato encerra o flow com erro explícito.
+
+Antes da chamada ao revisor, o flow executa `workflow.testCommand` sem shell, quando configurado. Falha, timeout ou binário ausente geram um finding `high` e evitam a chamada de LLM naquela iteração. Depois da resposta, `failOnSeverity` reconcilia `approved` com os próprios findings do modelo; por padrão, qualquer finding `high` bloqueia a aprovação.
+
+O developer recebe o comando de teste configurado. O reviewer recebe comando, status, duração, saída limitada e hash do estado testado, além de um resumo curto das alegações do developer. Essas alegações não substituem investigação independente; testes adicionais respondem a lacunas concretas. As correções preservam severidade e diagnóstico, incluindo as duas extremidades de mensagens longas. A revisão é recusada se alterar a worktree testada; um gate que altera conteúdo não ignorado também exige correção antes de aprovar.
+
+Quando uma correção repete o mesmo estado completo do patch, configuração do gate e falha, o run encerra como `stalled`, com saída 2 e motivo explícito, mantendo worktree e patch recuperáveis. Uma falha com patch diferente continua usando o orçamento de iterações. `stalled` nunca significa aprovação.
+
+O diff de revisão mantém orçamento máximo de 50 mil caracteres sem cortar patches no meio. Arquivos omitidos são declarados no prompt e continuam disponíveis no worktree somente leitura. Findings históricos do mesmo arquivo são agrupados por overlap lexical mínimo de `0.50`; até três padrões recorrentes entram no prompt, e `rods flow findings --file <path>` permite consultá-los manualmente. A poda é explícita; o flow reporta quantos findings e comparações foram consultados. O limite de 12 mil caracteres se aplica ao resumo persistido da revisão, não ao diff.
+
+`workflow.reviewContext` é opt-in. Quando habilitado, o revisor recebe no máximo cinco snippets compactos do Context Engine, sempre filtrados pelo projeto atual e sem leitura de chunks completos. Ausência de índice é fail-open e fica registrada nos metadados da etapa.
+
+Quando aprovado, o flow verifica a branch e o HEAD originais, valida o patch e o aplica ao workspace original. Sem aprovação, ou se a promoção falhar, mantém a worktree e o patch recuperável; não faz commit automaticamente. Uso de tokens vem dos campos oficiais de cada CLI, sem somar totais e subtotais duplicados. Dados ausentes aparecem como `unavailable`, inclusive quando uma chamada falha; zero só representa um contador informado como zero.
+
+### Ponytail: skill, flow e instruções permanentes
+
+O plugin `plugins/rods-sdk` distribui `ponytail`, `ponytail-review` e `ponytail-debt`, adaptadas de [DietrichGebert/ponytail v5.3.2](https://github.com/DietrichGebert/ponytail/tree/16352ac229eb08a9598dcae48fe9f2b342567d86), com atribuição MIT. Não instala o Ponytail externo nem adiciona hooks.
+
+Para instalar o plugin localmente, use o diretório `plugins` deste checkout ou do pacote npm instalado:
+
+```bash
+# Codex: registre o catálogo local e instale explicitamente.
+codex plugin marketplace add /caminho/absoluto/rods-sdk/plugins
+codex plugin add rods-sdk@rods-sdk
+
+# Claude: estes são comandos enviados na sessão interativa.
+/plugin marketplace add /caminho/absoluto/rods-sdk/plugins
+/plugin install rods-sdk@rods-sdk
+
+# Alternativa Claude, apenas para a sessão atual:
+claude --plugin-dir /caminho/absoluto/rods-sdk/plugins/rods-sdk
+```
+
+No chat, mencione `$rods-sdk:ponytail`, `$rods-sdk:ponytail-review` ou `$rods-sdk:ponytail-debt` no Codex; no Claude, use `/rods-sdk:ponytail`, `/rods-sdk:ponytail-review` ou `/rods-sdk:ponytail-debt`. A descoberta automática continua disponível. A lista inicial contém metadados compactos; o corpo só carrega quando a skill é usada, e pode permanecer no contexto dos turnos seguintes. Veja [OpenAI Docs](https://learn.chatgpt.com/docs/build-skills) e [Claude Code](https://code.claude.com/docs/en/skills).
+
+O adapter do flow é independente da instalação das skills:
+
+```bash
+rods adapter enable ponytail
+rods flow run "minha tarefa" --mode codex
+
+# Opt-in adicional: instruções permanentes no projeto.
+rods adapter enable ponytail --interactive
+rods adapter sync --target codex   # bloco gerenciado em AGENTS.md
+rods adapter sync --target claude  # bloco gerenciado em CLAUDE.md
+rods ponytail lite
+rods ponytail full
+rods ponytail off
+```
+
+O modo interativo nasce `off`; `--interactive` escolhe `full`. `lite` preserva mudança mínima completa, reuso, validação e testes proporcionais; `full` incorpora o conjunto compacto completo. O comando `rods ponytail` muda somente os blocos permanentes dos targets configurados ou já projetados, preserva o texto do usuário e não desliga o adapter do flow nem remove skills. Abra uma nova sessão para descartar instruções já carregadas.
+
+No flow, as instruções de implementação entram uma vez por chamada de desenvolvimento/correção; o reviewer recebe regras próprias e mantém JSON estruturado. Blocos permanentes são temporariamente esvaziados na worktree e restaurados antes de testes/diffs, inclusive em falhas. O doctor distingue skills instaladas de regras ativas: sobreposição ativa com Caveman ou hooks de compressão bloqueia o flow; no uso interativo gera aviso. RTK continua independente.
+
+A supressão inclui `AGENTS.md`, `AGENTS.override.md` e `CLAUDE.md` aninhados, sem seguir symlinks ou varrer dependências/builds. O agente é informado de que os diffs temporários dos blocos são manutenção do Rods. Edições fora dos delimitadores são preservadas. Se o agente destruir um delimitador, o flow falha, preserva a worktree e mantém os contadores conhecidos da chamada. Projeções permanentes também orientam a não recarregar a mesma skill.
+
+O preflight lê hooks JSON, hooks inline TOML e hooks de plugins explicitamente habilitados, incluindo `.claude/settings.local.json`, overrides da CLI e perfis Codex. No Codex, a configuração do projeto prevalece sobre o perfil e os overrides CLI prevalecem sobre ambos, conforme a [precedência documentada](https://learn.chatgpt.com/docs/config-file/config-basic#configuration-precedence). Instalar uma skill sem ativar seus hooks não bloqueia o flow. As fontes seguem os formatos de [hooks do Codex](https://learn.chatgpt.com/docs/hooks#where-codex-looks-for-hooks) e [settings do Claude](https://code.claude.com/docs/en/settings). Configurações externas são somente lidas.
+
+### Relatórios, ledger e manutenção
+
+```bash
+rods flow report --root . --json             # último run deste projeto
+rods flow report <runId> --prices prices.json --json
+rods flow debt --json                        # varredura somente leitura
+rods flow debt --persist                     # persistência explícita
+rods flow findings --file src/app.ts --source all --json
+rods flow findings --source shortcut --json
+rods flow findings prune --dry-run
+rods flow findings prune --older-than 90 --severity low,medium --apply
+rods flow clean --dry-run
+rods flow clean --apply
+```
+
+Relatórios mostram etapas, modelos, iterações, duração e cobertura da telemetria. Etapas de sistema não contam como chamadas de modelo sem dados. Runs anteriores à migração conservam seus dados e mostram metadados novos ausentes como indisponíveis.
+
+Cada etapa nova inclui `telemetry`: hash/bytes e estimativa `characters/4` do prompt e de suas seções, tokens de entrada em cache quando informados, contagens por categoria de ferramenta, duração observada e volume de saída quando disponíveis. Contagens de ferramentas são observadas no stream Codex; os formatos finais de Claude/Gemini não oferecem a mesma cobertura e indicam indisponibilidade. Comandos, argumentos e saídas brutas de ferramentas não são persistidos nessas métricas. Cache continua incluído no total oficial de entrada, sem dupla soma.
+
+O snapshot do run registra hashes das possíveis fontes locais de contexto. Isso permite comparar configurações entre runs, mas não prova que o host carregou cada arquivo e não captura prompts privados do agente. Estimativas por seção não são contagem exata do tokenizer nem cobrança. Dados históricos de diagnóstico permanecem `null`.
+
+O arquivo opcional de preços tem tarifas em USD por milhão de tokens:
+
+```json
+{
+  "currency": "USD",
+  "rates": {
+    "codex": {
+      "seu-modelo": { "inputPerMillion": 1, "outputPerMillion": 2 }
+    }
+  }
+}
+```
+
+Esses valores são apenas exemplo de formato. A estimativa é nominal, sem descontos de cache; não representa faturamento real. Sem tarifa ou contadores completos, o custo total fica indisponível e os subtotais conhecidos aparecem separados.
+
+O ledger reconhece comentários `shortcut: <limite>, <gatilho de revisão>` e o marcador legado `ponytail:`. Respeita arquivos ignorados, evita duplicações e sinaliza `no-trigger`. Runs com Ponytail coletam o ledger automaticamente após uma varredura completa. Decisões de simplificação não viram findings bloqueantes nem alimentam recorrência de bugs.
+
+Nenhum run executa poda automática. A prévia de findings usa 90 dias e severidades `low,medium` por padrão; `high` exige seleção explícita. A limpeza verifica associação com o run e salva um patch binário durável, incluindo arquivos novos, antes de remover recursos. Runs ativos, branches com commits adicionais, caminhos sem procedência, submódulos e arquivos ignorados sem recuperação ficam preservados com motivo explícito. Histórico e patches não são apagados.
+
+### Medição reproduzível
+
+```bash
+npm run build
+npm run validate:plugin
+npm run validate:benchmark
+npm run benchmark:context -- --output /tmp/rods-context-cost.json
+npm run benchmark:flow -- --model <modelo-configurado> --effort high --round 1 --output /tmp/rods-flow-round-1.json
+# Segunda rodada: mais 12 flows reais, com a ordem invertida por caso.
+npm run benchmark:flow -- --model <modelo-configurado> --effort high --round 2 --output /tmp/rods-flow-round-2.json
+node scripts/analyze-flow-benchmark.mjs --output /tmp/rods-flow-analysis.json /tmp/rods-flow-round-1.json /tmp/rods-flow-round-2.json
+```
+
+A contagem local usa `js-tiktoken` fixado em desenvolvimento e `o200k_base` empacotado, sem rede ou chamadas de modelo. Conta corpos/blocos distribuídos e modela os metadados de descoberta; enquadramento privado e truncamento dos agentes ficam fora da contagem. Para Claude, é uma estimativa comparável de texto, não seu tokenizer nem cobrança. Os targets são medidos separadamente.
+
+Os seis casos versionados são executados com e sem adapter, em 12 flows Codex isolados por rodada, com o mesmo modelo nos dois papéis, até três iterações e testes externos à worktree. Plugins, hooks, instruções permanentes e descoberta de skills do host ficam desativados nos dois grupos. Resultados são exploratórios; falhas e cobertura incompleta permanecem visíveis. Consulte [custos de contexto atuais](docs/benchmarks/context-cost-v2.json) e [ajustes e resultados v2](docs/benchmarks/efficiency-v2.md). Ponytail permanece opt-in, independentemente do resultado.
+
+Na [rodada de 20/10/2026](docs/benchmarks/README.md), o consumo de entrada + saída foi de **1.078.611 para 1.293.486 tokens (+19,9%)**. Cinco das seis tarefas passaram em cada grupo; o caso CLI falhou nos dois e contém uma ambiguidade de contrato documentada. A rodada não demonstrou economia. Os blocos permanentes custaram 0/101/497 tokens em `off`/`lite`/`full`, respectivamente, com o encoding local declarado.
+
+O corpus v2 explicita objeto na API e serialização no caller, e é verificado offline contra referências corretas e regressões antes de usar agentes. O v1 e seus resultados ficam preservados; o runner recusa sobrescrever resultados existentes. Cada run v2 usa um `CODEX_HOME` independente, com link apenas para a autenticação existente da CLI, sem copiar credenciais ou instruções globais. Os blocos atuais, com aviso de deduplicação, custam 0/135/531 tokens por target; os corpos Ponytail fixados e sua injeção no flow permanecem iguais. Veja [contagem atual](docs/benchmarks/context-cost-v2.json).
+
+Uma interrupção pode ser retomada acrescentando `--resume` ao mesmo comando e mantendo snapshot, modelo, esforço e rodada. Runs já registrados, inclusive falhas, não são repetidos. Pares incompletos ficam fora da comparação de consumo, com as falhas preservadas no relatório.
+
+Na [validação v2 da 0.2.4](docs/benchmarks/efficiency-v2.md), 23 dos 24 flows passaram na aceitação independente; um atingiu timeout sem informar consumo. Nos 11 pares completos, o consumo foi **1.863.522 → 2.045.005 tokens (+9,7%)**: desenvolvimento +17,5%, revisão +1,2%, sem correções necessárias. O resultado continua exploratório e ainda não demonstra economia frente ao controle. Os 19,9% históricos usam outro SDK/corpus e não são uma comparação causal antes/depois.
+
+Configurações v2 com `modelAdviceOnly` são interpretadas como `advisory`. Rode `rods upgrade --dry-run` antes de atualizar o template; arquivos `.ai/config.json` customizados são preservados e devem receber os novos campos manualmente.
+
+### Diagnóstico de execução
+
+Por padrão, o CLI mostra uma mensagem curta. Erros de configuração informam o agente, a fase (`develop`, `patch` ou `review`) e o campo inválido, por exemplo:
+
+```text
+Invalid execution configuration for gemini during review: binary must be a non-empty string
+```
+
+Para obter o stack trace completo durante uma investigação:
+
+```bash
+RODS_DEBUG=1 rods flow run "minha tarefa" --mode codex+gemini
+```
+
+Identificadores de modelo são repassados sem alteração para cada CLI. Portanto, um modelo inexistente ou incompatível é reportado pela própria CLI e identifica o agente que falhou.
+
+## Adaptadores Opcionais
+
+Adaptadores documentam e validam ferramentas opcionais. Eles não são dependências embutidas, e o rods-sdk não reimplementa o comportamento dessas ferramentas.
+
+- `rtk`: compactação padrão de saída de comandos.
+- `claude-mem`: memória persistente entre sessões.
+- `caveman`: saída curta, ativada somente por opção.
+
+Use `rods adapter enable <name>` para registrar a intenção em `.ai/config.json` e gerar `.ai/adapters/<name>.md`. Use `rods adapter doctor` para verificar instalação, configuração detectada, hooks, sinais MCP e possíveis conflitos.

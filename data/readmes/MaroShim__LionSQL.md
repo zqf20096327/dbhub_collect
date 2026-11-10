@@ -2,7 +2,7 @@
 
 Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures
 
-[![Version](https://img.shields.io/badge/version-v0.91.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v0.92.0-blue.svg)](CHANGELOG.md)
 [![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8.svg?logo=go&logoColor=white)](go.mod)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
@@ -88,7 +88,7 @@ LionSQL's core capabilities are organized across five foundational architectural
 
 > [!TIP]
 > **Recommended Application Protocol: PostgreSQL Wire (`:5433`)**
-> While LionSQL faithfully serves both protocols, **PGWire (`:5433`) is strongly recommended as the default application protocol**, even when executing T-SQL stored procedures (`EXEC sp_name @p1=$1;`). PGWire's lightweight framing and single-packet pipelining (`Parse` + `Bind` + `Execute` + `Sync`) deliver higher raw network throughput (141,000+ tpmC / 5,170+ TPS) with lower serialization latency than Microsoft TDS RPC streams, while offering universal, zero-quirk driver support across Go (`pgx`, `lib/pq`), Node.js, Python, Java, and Rust. TDS (`:1433`) is primarily intended for legacy Microsoft tooling (SSMS, Azure Data Studio, legacy .NET `SqlClient`).
+> While LionSQL faithfully serves both protocols, **PGWire (`:5433`) is strongly recommended as the default application protocol**, even when executing T-SQL stored procedures (`EXEC sp_name @p1=$1;`). PGWire's lightweight framing and single-packet pipelining (`Parse` + `Bind` + `Execute` + `Sync`) deliver higher raw network throughput (376,000+ tpmC / 13,900+ TPS) with lower serialization latency than Microsoft TDS RPC streams, while offering universal, zero-quirk driver support across Go (`pgx`, `lib/pq`), Node.js, Python, Java, and Rust. TDS (`:1433`) is primarily intended for legacy Microsoft tooling (SSMS, Azure Data Studio, legacy .NET `SqlClient`).
 
 ### 2. Enterprise T-SQL Procedural Runtime
 - **Stored Procedures, Functions & Triggers**:
@@ -113,8 +113,8 @@ LionSQL's core capabilities are organized across five foundational architectural
 
 ### 4. High-Performance Storage & ACID Concurrency
 - **Dual Storage Backends**:
-  - **In-Memory OCC Engine**: Delivers 186,000+ TPS (and up to 779k tpmC in TPC-C with an ultra-low 3.6% abort rate) based on concurrent SkipList indexes and Optimistic Concurrency Control.
-  - **WiredTiger MVCC Disk Engine**: Delivers 120,000+ TPS (and up to 833k tpmC in TPC-C) with full ACID durability backed by lock-free B+Trees.
+  - **In-Memory OCC Engine**: Delivers 218,000+ TPS (and up to 1,066k tpmC in kernel TPC-C, 759k tpmC in T-SQL VDBE runtime, and 376k tpmC over network wire with an ultra-low 0.00%~3.4% abort rate) based on concurrent SkipList indexes and Optimistic Concurrency Control.
+  - **WiredTiger MVCC Disk Engine**: Delivers 141,000+ TPS (and up to 1,184k tpmC in kernel TPC-C, 863k tpmC in T-SQL VDBE runtime, and 352k tpmC over network wire) with full ACID durability backed by lock-free B+Trees.
 - **Bloat-Free MVCC without Vacuum**:
   Multi-version update chains are maintained in memory and only latest committed versions are written to disk, completely eliminating table bloat and Autovacuum I/O storms.
 - **Non-Blocking Snapshot Isolation**:
@@ -199,7 +199,8 @@ Upon startup, the console displays the connection endpoints:
  [Data Directory] data
  [Storage Engine] wiredtiger
  [Session Pooler] Max Workers: 32, Max Idle Sessions: 64 (No PgBouncer required)
- [Memory Governor] max_memory: 2867MB (Go runtime GC soft limit), work_mem: 64MB (External Merge Sort & HashJoin guard)
+ [Memory Governor] max_memory: 2867MB (Go runtime GC soft limit),
+                   work_mem: 64MB (External Merge Sort & HashJoin guard)
  [Replication]    Role: PRIMARY, Node:  (HistoryCap: 10000)
 --------------------------------------------------------------------------------
 ```

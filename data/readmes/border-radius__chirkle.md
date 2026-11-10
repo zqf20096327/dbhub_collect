@@ -10,6 +10,9 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
   <img alt="A room in Chirkle: the room list with unread counts on the left; messages with avatars, a reply, a photo and emoji reactions on the right" src="docs/screenshot-light.png">
 </picture>
 
+- Runs on a $5 VPS (1 vCPU, 1 GB of RAM): about 500 people online at a normal pace, or 100 chatting nonstop
+  (measured, [PERF.md §8](docs/PERF.md#8-2026-11-09-a-5-vps-one-cpu)); past 100–200 clients, everyone
+  reconnecting at once can still swamp it
 - Public rooms anyone can create; hide rooms you don't care about; creators archive rooms (read-only, history kept)
 - Room access, chosen by each room's creator: **Private** (only the people they add), **Public** (everyone with an account) or **Open Air** (anyone can read it, no account needed; the home page shows these rooms to guests, who log in or sign up to join in); and who can post: everyone who can read it, or only the people they choose (the others read and react)
 - Live messages, edits and deletes (deleted messages leave a placeholder)
@@ -95,6 +98,7 @@ The PocketBase admin UI is at http://127.0.0.1:8090/_/ (create a superuser with
 | `npm start` | Production build, then the server (`scripts/start.mjs`, the package's `chirkle` command): PocketBase on http://127.0.0.1:8090 with `pb_data/` |
 | `npm run dev` | Unminified watch build into `pb_public/` + `pocketbase serve --dev` |
 | `npm run build` | Production build (hashed assets) into `pb_public/`; fails if over the size budget |
+| `npm run release -- <version>` | Gives the npm package and the Android app the next version and starts the app's changelog; then publish a GitHub Release tagged `v<version>` ([Releasing](#releasing)) |
 | `npm run typecheck` | `tsc` (strict) for the frontend, tests and scripts, plus `pb_hooks/` + `pb_migrations/` against PocketBase's generated types (`types/pocketbase.d.ts`, written by `scripts/pb-types.sh`) |
 | `npm run lint` | Biome: formatting, lint rules, import order (`npm run format` applies the fixes) |
 | `npm run lint:sinks` | Fails if frontend code uses `innerHTML` & co. (XSS guard) |
@@ -239,6 +243,15 @@ account's server about every 15 minutes (WorkManager), with no Google services a
 set (`/.well-known/assetlinks.json`; `ANDROID_APP_ID` only for a build with another `chirkle.appId`). An admin can set
 `min_android_version` on the site record to make older apps ask for an update. What is built and what isn't yet:
 [`docs/ANDROID.md` §16](docs/ANDROID.md#16-implementation-2026-10-18), and [`android/PARITY.md`](android/PARITY.md).
+
+## Releasing
+
+One version for the npm package and the Android app. `npm run release -- 0.2.0` sets it in `package.json` and
+`android/app/build.gradle.kts` (versionCode + 1) and creates `fastlane/…/changelogs/<versionCode>.txt` to fill in.
+Commit, push, then publish a GitHub Release with the new tag `v0.2.0`. The Release workflow
+(`.github/workflows/release.yml`) checks the versions, attaches the signed APK and
+stages `chirkle@0.2.0` on npm; approve it on npmjs.com (2FA) to publish it. Setup and details:
+[`docs/ANDROID.md` §28.7](docs/ANDROID.md#287-one-release-for-the-app-and-the-npm-package-2026-11-08).
 
 ## Link previews
 

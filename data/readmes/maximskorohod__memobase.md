@@ -11,12 +11,6 @@
 <h3 align="center">🌐 Русский · <a href="README.en.md">English</a></h3>
 
 <p align="center">
-  <a href="https://www.youtube.com/@MaximSkorohod"><img alt="YouTube: @MaximSkorohod" src="https://img.shields.io/badge/YouTube-%40MaximSkorohod-FF0000?logo=youtube&logoColor=white"></a>
-  <a href="https://t.me/+XrhmiKgCQdY5MjFi"><img alt="Telegram" src="https://img.shields.io/badge/Telegram-community-26A5E4?logo=telegram&logoColor=white"></a>
-  <a href="https://skorehood.com"><img alt="skorehood.com" src="https://img.shields.io/badge/skorehood.com-0A0A0A?logo=googlechrome&logoColor=white"></a>
-</p>
-
-<p align="center">
   <a href="#зачем-это-нужно">Зачем</a> ·
   <a href="#возможности">Возможности</a> ·
   <a href="#установка">Установка</a> ·
@@ -297,8 +291,7 @@ MemoBase закрывает обе дыры. Это как **NotebookLM, но л
 
 ## Автор
 
-Сделано **Maxim Skorohod** — [skorehood.com](https://skorehood.com) · [YouTube @MaximSkorohod](https://www.youtube.com/@MaximSkorohod) · [Telegram](https://t.me/+XrhmiKgCQdY5MjFi)
-
+Сделано **Maxim Skorohod** — [skorehood.com](https://skorehood.com) · [YouTube @MaximSkorohod](https://www.youtube.com/@MaximSkorohod)
 ## Лицензия
 
 MIT — copyright © 2026 Maxim Skorohod. Полный текст — в [`LICENSE`](LICENSE).

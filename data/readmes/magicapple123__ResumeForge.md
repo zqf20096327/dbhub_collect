@@ -72,7 +72,7 @@ A second problem matters more: **generative models polish wording and also fabri
 ## ✨ Features
 
 <details>
-<summary><b>All features at a glance (77 items, click to expand)</b></summary>
+<summary><b>All features at a glance (80 items, click to expand)</b></summary>
 
 <p>Every feature name below links to its section in the official docs; the sections that were missing have been written in this pass.</p>
 
@@ -131,11 +131,13 @@ A second problem matters more: **generative models polish wording and also fabri
 | [💾 Save location](https://magicapple123.github.io/ResumeForge-official/en/docs.html#privacy-save) | Settings → the “Data & export” tab → the “Save location” card: by default exports only go to the browser's download directory, and once you pick a folder with the native picker, exports from the local front end **also land a copy there**; remote or cross-site exports are refused |
 | [📦 Offline share pack](https://magicapple123.github.io/ResumeForge-official/en/docs.html#share) | Packs a redacted HTML / PDF plus a read-only snapshot and a comment-return file, and can be “read-only” or “commentable”; a commentable pack supports **annotations on objects**: import the returned `annotations.json` and mark each annotation resolved or ignored, and annotations whose object changed must be re-linked (annotations never enter any applying artifact) |
 | [🚀 Automatic apply desk](https://magicapple123.github.io/ResumeForge-official/en/docs.html#apply) | Collect automatically by keyword and city (site filters are carried over wholesale and it runs in the background); confirmed Jobs queue up and drive your local browser to apply, and **only Jobs whose source is inside a recruiting site are accepted** |
+| [📮 Submitted & delivery receipt](https://magicapple123.github.io/ResumeForge-official/en/docs.html#apply) | On a **successful** apply record, click “I've submitted”: it adds an “applied” tracker entry (an entry already further along is never downgraded), schedules a follow-up reminder 7 days out and freezes a delivery snapshot — repeated clicks create nothing new. The “delivery receipt” in the same drawer turns that snapshot into an **inspectable record**: which Resume version went out (title + content fingerprint), to whom, export artifact and page count, which fields were filled (exact URL match against Web form fill records; a miss shows as “unknown”), how many fact-ledger doubts remain and which manual steps are still missing. Three states, **waiting on you > has doubts > ready**; “the Resume changed after delivery” is shown as information only and never changes the state |
 | [📝 Web form](https://magicapple123.github.io/ResumeForge-official/en/docs.html#webform) | Fills corporate application forms in a **separate dedicated browser**: type a URL to open it in a new tab and manage the URL history without clobbering pages you already have open; each page can be switched between batch and point-and-fill. It reads the whole page and checks each value before filling, or confirms a suggestion next to the input you click; fields the rules cannot recognise can be handed to the AI, which **only receives page text and field names, never your Profile values**. The browser model is shared with the apply desk but runs in its own window; fill records contain real values and stay local. **It fills, it never submits**, and passwords and verification codes are never filled automatically; **it only writes into text-like controls** — dropdowns, radio buttons, checkboxes and date pickers are left alone and honestly listed as “needs your click”; a separate **relaxed mode** can try label and context matching and click dropdown and popover options (see the next row). When filling finishes it shows the **success rate** (fields filled / readable fields on the page) and can export **redacted diagnostics that contain no Resume values**, which makes it easy to report a field it could not recognise |
 | [🟢 Relaxed mode](https://magicapple123.github.io/ResumeForge-official/en/docs.html#webform-relaxed) | The Web form's **optional exception, off by default**: once you explicitly switch it on, it tries to match unrecognised text inputs (including Custom Fields) by label and context and clicks dropdown and popover options itself (**strict option matching plus read-back verification**); in relaxed text matching, low-confidence candidates backed only by weak context are left unticked for you to confirm, and repeated experience entries are only filled when the record count and the page order can be paired. Consent and declaration checkboxes still need item-by-item confirmation; date pickers and file uploads are never touched. The Job assistant has no tool to switch it on — do it on the page or in Settings. Relaxed matching can pick wrong, so proofread after filling; a multi-value popover only acts when every value matches |
 | [🧠 Learnt while filling](https://magicapple123.github.io/ResumeForge-official/en/docs.html#webform-learned) | When you hit a field **ResumeForge does not know**, **both entry points** can record it: batch mode shows one summary prompt when it finishes (**everything ticked, everything “General” by default**, and you can untick individual items), and point-and-fill puts a “Remember this” next to **every box**, so you can **record it on the spot** — **even a box it recognised but has no value for** (fill it in place without jumping to another page). Once remembered, the same field is **pre-filled automatically** next time. Each entry picks a scope: **General** (true wherever you apply) / **Scenario** (tied to an applying channel) / **This time** (recorded but never auto-filled, for one-off values such as a referral code). Source and scope can be edited or removed in the Web form profile at any time, and **values the AI recognised are labeled “AI recognised”** because it is likelier than the rules to misread a field. **Custom Fields outside the catalogue** (a supervisor's name, a lab, say) can take part in Web form filling too: normal mode accepts only a unique exact match, and relaxed mode matches by label or context and flags low confidence; when something is ambiguous or fails a safety veto it does not guess, so proofread after filling. **There is exactly one destination, the Web form profile**: Resume fields are never learnt (the code that could modify them does not exist), and passwords, verification codes and other people's details are intercepted and cannot be learnt. Everything stays local and **is never read during Resume generation** |
 | [🎯 Job tracker](https://magicapple123.github.io/ResumeForge-official/en/docs.html#tracker) | One record per company walks from “applied → screening → assessment → interview → offer”; paste an email or a screenshot to recognise progress, and preview it before it is written |
 | [🗓 Calendar reminders](https://magicapple123.github.io/ResumeForge-official/en/docs.html#reminder) | Set reminders for applications, interviews, referrals and so on, **color-coded by urgency** (overdue / within 24 hours / within 3 days / later), with a list and a month view |
+| [🔔 Follow-up sweep](https://magicapple123.github.io/ResumeForge-official/en/docs.html#tracker) | With **Settings → Assistant & AI behaviour → “Task cards”** switched on (off by default), a background sweep looks at applications that are **still active and have had no update for over 7 days**: 7–21 days produces a **follow-up list card**, over 21 days a **confirm-status card** (the two never overlap); at most 5 companies per card and one card per kind per week. The card only states “N days since you applied, no status change has been recorded since”, and never claims the other side replied; you can mark each company “contacted / they replied / stop following up”, and **only the decision is recorded — the tracker status is never touched** |
 | [🤝 Referral management](https://magicapple123.github.io/ResumeForge-official/en/docs.html#referral) | Record the referrer, the referral code and note images, follow up by status and compute a **referral conversion rate** |
 | [📈 Job search analytics](https://magicapple123.github.io/ResumeForge-official/en/docs.html#analytics) | Four themes — conversion and blockers, timing and pace, channels and destinations, Resume and health; **every chart is its own block with its own title and its own definition**, and trends cover the last 1 / 3 / 6 months |
 | [⭐ Favorites](https://magicapple123.github.io/ResumeForge-official/en/docs.html#jobs-favorites) | Browse favorited Jobs and Resumes on pages, jump to a detail view or remove the favorite |
@@ -145,8 +147,9 @@ A second problem matters more: **generative models polish wording and also fabri
 | [🧠 Interview notes base](https://magicapple123.github.io/ResumeForge-official/en/docs.html#bank-exp) | Captures real interview experience (company / Job / questions / retrospective) and makes it searchable, with cards that open the full text |
 | [📖 Knowledge base](https://magicapple123.github.io/ResumeForge-official/en/docs.html#materials) | Written material such as interview summaries, Resume tips and search strategy, with category tags and Markdown previews; the assistant can search, add and edit it |
 | [💬 AI Job assistant](https://magicapple123.github.io/ResumeForge-official/en/docs.html#assistant) | Streaming chat that can be linked to a Job / Resume / Profile and to web search; it can look up reminders, referrals, interview notes and analytics and **only writes data when you explicitly ask**; before answering it is given the local time and weekday (late at night it suggests going to bed); its tool set covers applying-failure diagnosis, typography queries, and recording interview notes and referrals; open it from the Toutou bubble on any page; the sidebar and the floating chat keep separate histories, and the floating one only exposes web search and reasoning effort |
+| [🎛 Job preferences](https://magicapple123.github.io/ResumeForge-official/en/docs.html#assistant) | Settings → “Assistant & AI behaviour” → “Job preferences” keeps the constraints you keep repeating (target role family, cities, salary floor, work mode, employment type, excluded companies and industries, overtime, banned words, length, tone, availability, this-conversation-only, 13 kinds in all) so a new conversation does not start from zero. **One entry = one confirmed value**; the assistant saying “noted” does not count — you pick “always” or “this conversation only” on the confirmation card. Every entry can be edited, sent to the trash, or rolled back one version, and preferences **only constrain the assistant: they never reach Resume content or the fact ledger** |
 | [🔓 Assistant relaxed mode](https://magicapple123.github.io/ResumeForge-official/en/docs.html#assistant-relaxed) | Settings → the “Assistant & AI behaviour” tab → the “Assistant relaxed mode” card: off by default; once on and **announced in advance**, the assistant may read the full Profile (including sensitive fields such as name and phone number, Web form values and past conversations), while credentials such as API keys are never sent in any mode |
-| [🧩 Skills](https://magicapple123.github.io/ResumeForge-official/en/docs.html#skills) | Create, import and edit skills (a prompt plus knowledge files); once enabled they constrain how the assistant answers |
+| [🧩 Skills](https://magicapple123.github.io/ResumeForge-official/en/docs.html#skills) | Create, import and edit skills (a prompt plus knowledge files); enable them in a conversation to shape how the assistant answers there |
 | [🗒 Conversation management](https://magicapple123.github.io/ResumeForge-official/en/docs.html#assistant-sessions) | Rename, pin, favorite, group and archive conversations, and export them as Markdown or save them to the Material library |
 | [📌 Toutou clipboard](https://magicapple123.github.io/ResumeForge-official/en/docs.html#assistant-clipboard) | **Double-click the Toutou bubble** to open it: store snippets you paste repeatedly and copy them in one click; they only live in your local browser and are never uploaded (a single click still opens the assistant) |
 | [🏠 Home](https://magicapple123.github.io/ResumeForge-official/en/docs.html#home) | Quick entries in the order you use them, across 7 destinations; the upcoming-reminders card embeds a compact month calendar |
@@ -155,7 +158,7 @@ A second problem matters more: **generative models polish wording and also fabri
 | [📤 Outbound preview and usage](https://magicapple123.github.io/ResumeForge-official/en/docs.html#privacy-outbound) | Settings page: before you send Profile material to a model or another service, see **what is about to go out** (target service, categories of material, attachments, excluded fields, whether page text is fetched and the text itself); “Model usage” lists calls and tokens per task / model — **an unknown token count is never shown as 0**, and no cost is estimated without a configured price. The preview text exists in memory only and is never written to disk; usage can be broken down per task / model / dataset with **end reasons and retries**, and cost is only estimated when a unit price is configured |
 | [✅ Batch select and delete](https://magicapple123.github.io/ResumeForge-official/en/docs.html#shortcuts-batch) | Resume Center, assistant conversation history, past interviews, deep-dive history, calendar reminders, question bank history and Web form fill records all support **batch selection**: “Batch select” → tick → “Delete selected” with one confirmation (everything goes to the trash and can be restored) |
 | [🔄 Check and update](https://magicapple123.github.io/ResumeForge-official/en/docs.html#upgrade-check) | Settings can check for a new version and create, export and import datasets; a dataset backup **includes the model API key by default** (you can untick it; on Windows it is carried DPAPI-encrypted); **on Windows double-click `start.cmd` / `stop.cmd` / `update.cmd`, on macOS double-click `start.command` / `stop.command` / `update.command`** — all zero-dependency one-click scripts — and `uninstall.cmd` cleans up the local environment |
-| [♻️ Trash](https://magicapple123.github.io/ResumeForge-official/en/docs.html#trash) | 22 kinds of content go to the trash first and can be restored or destroyed in bulk; only a second confirmation really destroys anything. Since 2026-10 the four kinds “Plans / Custom Sections / Custom Fields / Profile entries” are included |
+| [♻️ Trash](https://magicapple123.github.io/ResumeForge-official/en/docs.html#trash) | 23 kinds of content go to the trash first and can be restored or destroyed in bulk; only a second confirmation really destroys anything. Since 2026-10 the four kinds “Plans / Custom Sections / Custom Fields / Profile entries” are included, and since 2026-11 “Job preferences” |
 | [🔑 Your key, your call](https://magicapple123.github.io/ResumeForge-official/en/docs.html#model-presets) | 16 built-in service presets (DeepSeek / Claude / Doubao / OpenAI / Ollama …) with model discovery, advanced parameters and a switchable API protocol |
 
 </details>
@@ -164,7 +167,7 @@ A second problem matters more: **generative models polish wording and also fabri
 
 **The release build is the recommended option**: no repository clone and no Python or Node.js to install. All packages are on the [Release page](https://github.com/magicapple123/ResumeForge/releases), each with a matching `.sha256`; they can also be downloaded from the [website](https://magicapple123.github.io/ResumeForge-official/) if GitHub is slow.
 
-Supported: **Windows 10/11 (x64)** and **macOS 13+ (Intel, and Apple Silicon via Rosetta 2)**. No Linux release build yet.
+Supported: **Windows 10/11 (x64)**, **macOS 14+ (Apple Silicon native; Intel Macs are supported for the app itself, but the optional local semantic-retrieval model needs Apple Silicon)**, and **Linux (x86_64 / aarch64, glibc ≥ 2.31 — Ubuntu 22.04+, Debian 12+, Fedora 38+ and similar)**.
 
 ### Choosing a build
 
@@ -172,8 +175,9 @@ Supported: **Windows 10/11 (x64)** and **macOS 13+ (Intel, and Apple Silicon via
 | --- | --- | --- |
 | `ResumeForge-Setup-<version>.exe` | Windows installer: installs and adds a shortcut | Most Windows users |
 | `ResumeForge-<version>-x64.dmg` / `-arm64.dmg` | macOS installer: drag “简历通” into Applications | Most macOS users |
-| `ResumeForge-<version>-windows.zip` / `-macos.zip` | Portable archive: unzip and run, writes nothing outside its folder | No installation; easy to carry on a USB drive |
-| `ResumeForge-<version>-all.zip` | Both portable archives in one file | One Windows and one macOS machine |
+| `ResumeForge-<version>-windows.zip` / `-macos.zip` / `-linux.zip` | Portable archive: unzip and run, writes nothing outside its folder | No installation; easy to carry on a USB drive |
+| `ResumeForge-<version>-linux-x64.AppImage` / `-linux-arm64.AppImage` | Linux single-file app: mark executable and run, nothing installed system-wide | Most Linux users |
+| `ResumeForge-<version>-all.zip` | All three portable archives in one file | One machine per platform |
 | Source (`git clone`) | Run it yourself; needs Python and Node.js | Reading or modifying the source |
 
 > The installers are **unsigned and not notarised**: if Windows reports an unknown publisher or macOS cannot verify the developer, **right-click → Open** allows it. The cause and how to verify a download are covered in the [FAQ](#-faq).
@@ -194,7 +198,7 @@ Repository: https://github.com/magicapple123/ResumeForge
 Releases: https://github.com/magicapple123/ResumeForge/releases/latest
 
 Work through the steps below and report the result of each one:
-1. Identify the OS and architecture (Windows 10/11 x64; macOS 13+ on Intel or Apple Silicon) and pick the matching build:
+1. Identify the OS and architecture (Windows 10/11 x64; macOS 14+ on Apple Silicon or Intel; on Intel Macs the app runs but the optional local semantic-search model is unavailable) and pick the matching build:
    Windows → ResumeForge-Setup-<version>.exe (installer) or ResumeForge-<version>-windows.zip (portable)
    macOS → ResumeForge-<version>-x64.dmg / -arm64.dmg (installer) or -macos.zip (portable)
 2. Download it and verify it against the matching .sha256 from the same page; stop and tell me if they differ.
@@ -236,9 +240,24 @@ Requirements (Python 3.11 – 3.13, Node.js ≥ 20.19; the launcher installs the
 
 ### Configure a model (optional)
 
-Open **Settings → “AI models”** in the sidebar, choose a built-in preset (which fills in the endpoint and model name) or “Custom model (OpenAI-compatible)”, enter the API key and click “Test connection”. The 16 built-in presets cover DeepSeek, Claude (native Anthropic protocol), Doubao, Kimi, Qwen, Zhipu, MiniMax, SiliconFlow, OpenRouter, OpenAI, Gemini, Grok, Groq, Mistral, Ollama and LM Studio.
+Open **Settings → “AI models”** in the sidebar, choose a built-in preset (which fills in the endpoint and model name) or “Custom model (OpenAI-compatible)”, enter the API key and click “Test connection”. The **22** built-in presets cover DeepSeek, Qwen, Doubao, Zhipu GLM, SiliconFlow, Kimi, Tencent Hunyuan, OpenAI, Claude (Anthropic native), Google Gemini, Baidu Qianfan, iFlytek Spark, MiniMax, OpenRouter, StepFun, Ollama, xAI Grok, Mistral, LM Studio, Groq, Together AI and Perplexity.
+
+The API protocol has three options: **OpenAI-compatible (Chat Completions, default) / Anthropic native (Messages) / OpenAI Responses (experimental)**. Responses is off by default and saved configurations are unaffected; when unsure, expand the “provider protocol support” matrix on the Settings page (its footer carries the verification date).
 
 > **A model is optional**: Job parsing, Profile parsing, the five match verdicts, version diffing in the writing aids, quality and compliance checks and every export format are **local rules** and work offline. Only generation actions (AI-tailored Resume, JD breakdown, mock interview, Job assistant, interview deep dive) require a model; with a local model such as Ollama or LM Studio, even generation stays on your machine.
+
+### Configure voice transcription (optional)
+
+In **Settings → “Assistant & AI behavior” → “Voice transcription”**, fill in an OpenAI-compatible transcription service (OpenAI, Groq, SiliconFlow and the like; DeepSeek has no transcription capability, so configure a separate provider. Endpoint such as `https://api.openai.com/v1`, model such as `whisper-1`, and that service's API key). Then the assistant input, the mock-interview answer box and the interview-review follow-up box all support **dictation**: recognised text is **placed in the input first**, and you review (and may edit) it before sending it yourself — it is **never sent automatically**, and a follow-up is only filled in, never submitted. Limits per clip: 3 minutes for the assistant and the answer box, 1 minute for review follow-ups (audio over 10 MB is rejected too). **Audio is sent to the transcription provider you configured; the app does not store audio files.**
+
+### Configure semantic search (optional)
+
+Resume generation can optionally use **semantic retrieval** to recall Profile entries that keyword matching misses (design and boundaries: [Architecture](docs/architecture.md); field reference: [User guide](docs/user-guide.md)). It is **off by default**; enable it under **Settings → “AI models” → “Semantic search”**, which offers two modes. **Enabling a provider is all it takes** — no environment variable is needed (`RAG_RETRIEVAL_ENABLED` remains a developer/evaluation master switch).
+
+- **Local model (recommended; one-off download of about 110–126 MB depending on platform — Windows 111 MB, macOS 110 MB, Linux 122–126 MB, the zip transfer sizes recorded in the asset manifest; the Settings card shows the exact figure for your machine; Windows x64, macOS 14+ on Apple Silicon, Linux x86_64 / aarch64).** Click “Download local model” once: the packed embedding model (about 74.6 MB zip) and an isolated ONNX runtime (35–51 MB zip depending on platform) are verified against a pinned SHA-256 and unpacked into `backend/data/rag-model/` and `backend/data/rag-runtime/` (unpacked on disk, model plus runtime take about 237–280 MB depending on platform), then “Enable local model” turns it on. Neither the weights nor the runtime are part of the installer, the release archive or a backup package, and **Profile text never leaves your machine**. Only the first download needs a network connection; “Delete downloaded files” returns to not-downloaded.
+- **Remote service (0 download; any 64-bit platform, including Intel Macs).** Choose a provider preset (Alibaba Cloud Bailian, OpenAI, Zhipu AI, SiliconFlow, local Ollama) or “Custom”, fill in an OpenAI-compatible endpoint address, model name and API key, click “Test connection” (the dimension is probed automatically — there is no dimension field) and then “Enable remote search”. The first enable for a host shows a one-time **privacy confirmation** — “Item texts will be sent to <host>”, “Name, phone and email are never sent” — and a changed host asks again. The request carries **only the whitelisted text of Profile entries**; a separate option under “Advanced” allows loopback/RFC1918 hosts for a local Ollama or LM Studio.
+
+**Any failure falls back automatically to the keyword path** — download error, checksum mismatch, offline, invalid key, HTTP 401/429/5xx, dimension mismatch. Enabling it therefore cannot break Resume generation, and “Turn off semantic search” (or “Clear API key”) restores the previous behaviour exactly. Intel Macs have **no onnxruntime wheel for the local model**, so the local option is unavailable there; the remote option works normally.
 
 For the full field reference, privacy boundaries, upgrades and rollback, and AI troubleshooting, see the [official user docs](https://magicapple123.github.io/ResumeForge-official/docs.html).
 
@@ -247,6 +266,7 @@ For the full field reference, privacy boundaries, upgrades and rollback, and AI 
 The app handles ID and phone numbers, company names and Resume text, so the boundaries are stated first:
 
 - **Everything stays on your machine by default.** Resumes, Jobs, the Fact ledger, settings, attachments and photos all live in the local data directory (the main database is `backend/data/resume_forge.db`; the desktop build uses `%APPDATA%\ResumeForge\data`); exporting, rendering and PDF generation also happen locally, with no third party involved.
+- **Semantic search follows the same boundary.** The local model stays on your machine; the remote option sends only whitelisted Profile-entry text (no name, phone, email or private links) to the host you configure, after a one-time confirmation per host.
 - **Requests only leave when you configure a target and trigger the action yourself.** The target is a model provider whose endpoint and key you entered, and the content is limited to the minimum this generation needs; **photos are never sent to a model**.
 - **No recruiting-site password, cookie, token or verification code is stored.** Applying and Web form connect over CDP to a browser you signed into yourself, and you complete any QR-code sign-in.
 - **No hard-coded keys.** `.env`, the database, photos and export files are all ignored by `.gitignore`; on Windows the API key is stored DPAPI-encrypted.
@@ -272,7 +292,7 @@ Do not use `git clean -fdx`, and do not delete the whole project directory and c
 <details>
 <summary><b>Do I need an internet connection?</b></summary>
 
-No. Apart from the apply desk's collection and applying, the Web form — the only two paths that visit recruiting sites — and the AI generation you trigger yourself (including the assistant's web search), every feature works offline; with a local model such as Ollama or LM Studio, even AI generation never leaves your machine.
+No. Apart from the apply desk's collection and applying, the Web form — the only two paths that visit recruiting sites — and the AI generation you trigger yourself (including the assistant's web search), every feature works offline; with a local model such as Ollama or LM Studio, even AI generation never leaves your machine. The optional **local** semantic search needs a one-time download of about 111 MB (Windows; zip transfer size); after that it runs offline too.
 
 </details>
 
@@ -305,6 +325,20 @@ One Job can link several Resumes, and a Resume shows the Job it targets; the Res
 </details>
 
 <details>
+<summary><b>Where do I see the “Tasks” card, and what does turning it off do?</b></summary>
+
+On the **Home** page (below the upcoming-reminders card and above the to-do card): waiting-for-approval first, then in progress, at most 3 in total; “Finished” is collapsed by default. “View steps” expands in place, one task at a time, and marks the current step. Task cards created when a reminder is due (titled “Prepare: …”) also appear here with a “From: reminder” badge. When there is nothing to show, the card is not rendered at all. The master switch is **Settings → “Assistant & AI behavior” → “Task cards”**: turning it off stops creating new cards and hides the card from Home, while existing records are kept and come back when you turn it on again.
+
+</details>
+
+<details>
+<summary><b>How does voice input work? Does it send anything automatically?</b></summary>
+
+First configure an OpenAI-compatible transcription service in **Settings → “Assistant & AI behavior” → “Voice transcription”** (endpoint / model / key). Then click the microphone in the assistant input, the mock-interview answer box or the review follow-up box: the recognised text only fills the input, and **you send it yourself** — nothing is submitted automatically. Audio goes to the provider you configured and the app does not store it; per-clip limit is 3 minutes (1 minute for follow-ups).
+
+</details>
+
+<details>
 <summary><b>Where is the data stored, and how do I move it to another computer?</b></summary>
 
 All of it in the local data directory: the main database is `backend/data/resume_forge.db` (the desktop build uses `%APPDATA%\ResumeForge\data`), and attachments, photos, custom fonts and backups sit in the same directory, with no third party involved. To move, use “Settings → Data & export → Export current dataset”, then “Import backup as new dataset” on the new machine; details in [Updating without losing data](#-updating-without-losing-data).
@@ -314,7 +348,7 @@ All of it in the local data directory: the main database is `backend/data/resume
 <details>
 <summary><b>Which operating systems are supported?</b></summary>
 
-Officially there are launchers for Windows 10/11 and macOS 13+ (`start.cmd` / `start.command`) and installers (a Windows installer and a macOS dmg); Linux has no official support and is neither packaged nor accepted. Python and Node do not need to be installed: the first start prepares portable runtimes.
+Officially there are launchers for Windows 10/11, **macOS 14+** and Linux (`start.cmd` / `start.command` / `start.sh`) and installers (a Windows installer, a macOS dmg and Linux AppImages). **macOS 13 and earlier are no longer officially supported**: this release raised the floor to macOS 14 for the optional local semantic-retrieval runtime (the app may still start on older systems, but they are untested and get no support). Intel Macs run the app and can use **remote** semantic retrieval, but not the local model. Linux is accepted on **x86_64 / aarch64 with glibc ≥ 2.31** (Ubuntu 22.04+, Debian 12+, Fedora 38+ and similar); older distributions and other architectures are untested. Python and Node do not need to be installed: the first start prepares portable runtimes.
 
 </details>
 
@@ -404,8 +438,6 @@ Issues and pull requests are welcome. Before starting, read [CONTRIBUTING.md](CO
 - A new table or column requires an Alembic migration and a downgrade script, plus an assertion that “the set of tables is unchanged before and after”;
 - Commit messages follow Conventional Commits (`feat:` / `fix:` / `docs:` …).
 
-This project adopts the [Contributor Covenant](CODE_OF_CONDUCT.md) code of conduct.
-
 ## 📄 License
 
 Licensed under the [Apache License 2.0](LICENSE), © 2026 magicapple123.
@@ -414,6 +446,7 @@ Licensed under the [Apache License 2.0](LICENSE), © 2026 magicapple123.
 - The software is provided “as is”, without warranty of any kind, express or implied.
 - **The code license does not include a trademark license**: the name “ResumeForge”, the icon and the logo are not licensed with it — use your own name and marks when redistributing.
 - Versions 1.0.2 and earlier were released under MIT, and that license remains valid and irrevocable for those versions; Apache-2.0 applies to later versions.
+- **Third-party components**: the optional semantic-retrieval model weights and isolated runtime are **not shipped** with the app — they are downloaded on first use and verified against pinned SHA-256 checksums. Their licenses (IBM Granite embedding model: Apache-2.0; onnxruntime: MIT; tokenizers: Apache-2.0; numpy: BSD-3-Clause) are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 - The Windows installer is built and signed in CI through the [SignPath Foundation](https://signpath.org) free code signing program for open source projects, so once the certificate is issued Windows will show the publisher as **SignPath Foundation** rather than the repository owner. As of this writing the test-signing pipeline is wired up and the production certificate is still pending, so the packages currently on the releases page remain unsigned (see the download section above). What is signed, where a signing request comes from and who approves it are documented in the [code signing policy](https://magicapple123.github.io/ResumeForge-official/en/code-signing.html).
 
 ## ⭐ Star history
