@@ -14,6 +14,12 @@ vector search is optional; the core works without Ollama or paid APIs.
 A stored assertion is not automatically a verified fact. Its author, evidence,
 and kind (`observed`, `decision`, or `assumption`) remain visible.
 
+[![The Atlas: the whole memory as a sky, every project a galaxy](docs/images/atlas-sky.jpg)](docs/OPERATIONS.md#atlas)
+
+*The Atlas, the memory as a sky to wander through: every project a galaxy, every
+memory a light in it, and a river of time underneath. The pictures on this page
+show a made-up memory.*
+
 ## Quick start
 
 ```bash
@@ -64,9 +70,21 @@ anything is stored.
   checkpoint history, facts with every value a slot had, search that says why each
   hit matched, and single records with their evidence. Read-only, no script,
   answered only on this machine.
-- **Atlas:** `http://127.0.0.1:8093/ui/atlas` draws the whole memory as a map:
-  projects, tasks, events, notes and fact slots, joined by what the memory records
-  and by resemblance in meaning, with a time machine that replays how it grew.
+- **Atlas:** `http://127.0.0.1:8093/ui/atlas` draws the whole memory as a sky to
+  turn around in three dimensions, or as a flat map: every project a galaxy of
+  its own form (a spiral while it is being written, a great ball once it has
+  gone quiet), its tasks, events, notes and fact slots the lights in it, joined
+  by what the memory records and by resemblance in meaning. What stands out in
+  the sky is a fact about the memory: a task at work is a comet, a routine
+  record a pulsar, a memory with a copy a double star, and what was marked
+  stale circles a black hole. A click on a line says why two memories are joined; a river of time
+  frames any stretch of days and replays how the memory grew.
+  The operator can pin a memory to the brief, mark it stale or hide a copy of it
+  there; each action is an event by the operator, and undoing it is another.
+
+  | Close to a galaxy: tasks by name, two of them comets | Where stale memories go |
+  | --- | --- |
+  | ![A galaxy from close by, with its tasks named and comets among them](docs/images/atlas-galaxy.jpg) | ![The black hole with the stale memories that circle it](docs/images/atlas-hole.jpg) |
 - **CLI:** `chronicle query-memory`, `chronicle timeline --as-of`, `chronicle record`;
   `chronicle doctor --summary` answers "is everything running" on one screen.
 

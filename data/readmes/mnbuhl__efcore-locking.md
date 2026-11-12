@@ -4,6 +4,7 @@ Pessimistic locking for EF Core. Supports PostgreSQL, MySQL, and SQL Server.
 
 - **Row-level locks** — `ForUpdate()` / `ForShare()` LINQ extensions, scoped to a transaction
 - **Distributed locks** — `AcquireDistributedLockAsync()` session-scoped advisory locks, no transaction required
+- **Transaction distributed locks** — `AcquireDistributedLockAsync(..., scope: DistributedLockScope.Transaction)` native advisory locks owned by an existing transaction (PostgreSQL and SQL Server)
 
 ## Installation
 
@@ -65,7 +66,7 @@ var row = await ctx.Products
     .ForUpdate(LockBehavior.Wait, TimeSpan.FromMilliseconds(500))
     .FirstOrDefaultAsync();
 
-// Shared lock (PostgreSQL and MySQL only)
+// Shared lock
 var row = await ctx.Products
     .Where(p => p.Id == id)
     .ForShare()
@@ -127,13 +128,13 @@ await tx.CommitAsync();
 | `ForUpdate(LockBehavior.NoWait)` | `FOR UPDATE NOWAIT` / `SET LOCK_TIMEOUT 0` |
 | `ForUpdate(LockBehavior.SkipLocked)` | `FOR UPDATE SKIP LOCKED` (PG/MySQL) / `WITH (UPDLOCK, ROWLOCK, READPAST)` (SQL Server) |
 | `ForUpdate(LockBehavior.Wait, timeout)` | `SET LOCAL lock_timeout` (PG) / `SET SESSION innodb_lock_wait_timeout` (MySQL) / `SET LOCK_TIMEOUT` (SQL Server) |
-| `ForShare()` | `FOR SHARE` (PostgreSQL/MySQL only) |
+| `ForShare()` | `FOR SHARE` (PG/MySQL) / `WITH (HOLDLOCK, ROWLOCK)` (SQL Server) |
 | `ForNoKeyUpdate()` | `FOR NO KEY UPDATE` (PostgreSQL only) |
 | `ForKeyShare()` | `FOR KEY SHARE` (PostgreSQL only) |
 
 ## Distributed locks
 
-Advisory locks coordinate across processes without tying the lock to a row or transaction. They are session-scoped — held until the handle is disposed or the connection drops.
+Advisory locks coordinate across processes using an application-defined key. The following methods default to session scope — held until the handle is disposed or the connection drops. Pass `scope: DistributedLockScope.Transaction` to hold the lock until transaction completion, as described below.
 
 ```csharp
 // Blocks until available
@@ -164,6 +165,78 @@ var handle = ctx.Database.TryAcquireDistributedLock("report:daily");
 // Runtime check
 if (ctx.Database.SupportsDistributedLocks()) { ... }
 ```
+
+### Transaction-scoped distributed locks
+
+On PostgreSQL and SQL Server, pass `scope: DistributedLockScope.Transaction` to the same distributed-lock methods when a lock must protect a read-check-write sequence through commit or rollback. The connection must already be open and have an active EF transaction, including an external transaction attached through `UseTransaction`. In transaction scope, the methods do not open/close connections or create/enlist transactions. They return acquisition results through `IDistributedLockHandle`; release and disposal are no-ops because the transaction owns the lock lifetime. Omitting `scope` preserves session behavior, even when a transaction exists.
+
+```csharp
+await using var tx = await ctx.Database.BeginTransactionAsync();
+
+await using var result = await ctx.Database.AcquireDistributedLockAsync(
+    "stock:123", TimeSpan.FromSeconds(5), scope: DistributedLockScope.Transaction);
+
+// Read, check, and write while holding the advisory lock.
+await ctx.SaveChangesAsync();
+await tx.CommitAsync(); // the database releases the lock
+```
+
+Non-blocking acquisition returns an immutable result object:
+
+```csharp
+await using var tx = await ctx.Database.BeginTransactionAsync();
+await using var result = await ctx.Database.TryAcquireDistributedLockAsync(
+    "stock:123", scope: DistributedLockScope.Transaction);
+if (result is not { IsAcquired: true })
+    return; // ordinary contention; transaction disposal rolls back
+
+// Perform the protected operation.
+await tx.CommitAsync();
+// result.IsAcquired remains true: it records the attempt, not current lock ownership.
+```
+
+Synchronous variants are `AcquireDistributedLock()` and `TryAcquireDistributedLock()`, with the same `scope` argument. `TryAcquire` in transaction scope always returns an immutable result, with `IsAcquired=false` for ordinary contention; its return type remains nullable because session scope still returns null on contention. Both sync/async variants accept `DistributedLockMode.Shared` or `Exclusive` (default). `SupportsTransactionDistributedLocks()` reports provider capability, independent of whether the connection or transaction is ready. Reacquiring a key in the same transaction follows the database's native behavior, including contention when strengthening shared ownership to exclusive.
+
+For `TransactionScope`, explicitly enlist through EF after opening the connection. Driver auto-enlistment alone does not populate EF's tracked enlistment and is rejected by the transaction lock API. Enable async flow and keep connection cleanup outside the completed scope:
+
+```csharp
+using System.Transactions;
+
+try
+{
+    using (var scope = new TransactionScope(
+        TransactionScopeOption.Required,
+        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+        TransactionScopeAsyncFlowOption.Enabled))
+    {
+        await ctx.Database.OpenConnectionAsync();
+        ctx.Database.EnlistTransaction(Transaction.Current);
+        await using var result = await ctx.Database.AcquireDistributedLockAsync(
+            "stock:123", scope: DistributedLockScope.Transaction);
+
+        await ctx.SaveChangesAsync();
+        scope.Complete(); // commit occurs when the owning scope is disposed
+    }
+}
+finally
+{
+    await ctx.Database.CloseConnectionAsync();
+}
+```
+
+| Provider | Native transaction lock | Supported |
+|----------|-------------------------|-----------|
+| PostgreSQL | `pg_advisory_xact_lock` / `pg_advisory_xact_lock_shared` | Yes |
+| SQL Server | `sp_getapplock @LockOwner='Transaction'` | Yes |
+| MySQL | No native equivalent | No; acquisition throws `LockingConfigurationException` |
+
+The existing key encoding is shared with session locks, so conflicting session and transaction requests on the same key contend across connections. Session locking remains available on all three providers.
+
+A null timeout adds no library wait limit, zero performs one no-wait attempt (and `Acquire` throws `LockTimeoutException` on contention), and positive durations round up to milliseconds and clamp to the native signed-int millisecond range. Negative durations are configuration errors. The native acquisition command has no driver command-timeout limit; cancellation is best-effort, and a caller/server policy such as PostgreSQL `statement_timeout` or `lock_timeout` can still impose a shorter wait.
+
+After any acquisition failure, roll back the affected transaction or exit its scope without completing it. PostgreSQL timeout/cancellation/deadlock errors can abort the transaction; a cancellation before dispatch can leave it usable but with a temporary local timeout. A finite PostgreSQL acquisition uses the smaller of the requested timeout and the caller's nonzero `lock_timeout`, then restores the caller's original setting after success. The library neither issues recovery SQL after failure nor creates savepoints. SQL Server application-lock deadlock return codes do not themselves roll back the transaction.
+
+Calling `Release`, `ReleaseAsync`, `Dispose`, or `DisposeAsync` on a transaction result does not release the lock or affect the connection or transaction. Native savepoint semantics still apply: on PostgreSQL, rolling back to a savepoint releases transaction locks acquired after that savepoint. An `IsAcquired` result continues to report the original successful attempt.
 
 ### Lock keys
 
@@ -227,16 +300,26 @@ catch (LockingConfigurationException)
 | Feature | PostgreSQL | MySQL | SQL Server |
 |---------|-----------|-------|-----------|
 | `ForUpdate` | ✓ | ✓ | ✓ |
-| `ForShare` | ✓ | ✓ | ✗ |
+| `ForShare` | ✓ | ✓ | ✓ (Wait / NoWait) |
 | `ForNoKeyUpdate` | ✓ | ✗ | ✗ |
 | `ForKeyShare` | ✓ | ✗ | ✗ |
-| `SkipLocked` | ✓ | ✓ | ✓ (via `READPAST`) |
+| `SkipLocked` | ✓ | ✓ | ✓ (`ForUpdate` via `READPAST`) |
 | `NoWait` | ✓ | ✓ | ✓ |
 | Wait with timeout | ✓ (ms) | ✓ (ceil to 1s) | ✓ (ms) |
 
-SQL Server uses `WITH (UPDLOCK, ROWLOCK, READPAST)` for `SkipLocked` — `READPAST` skips rows held under row-level or page-level locks, but rows under a table-level lock are blocked rather than skipped.
+SQL Server uses `WITH (UPDLOCK, ROWLOCK, READPAST)` for `SkipLocked` — `READPAST` skips row-level locks; page-level and table-level locks can still block.
+
+SQL Server `ForShare()` uses `WITH (HOLDLOCK, ROWLOCK)`: shared readers can coexist, while updates and deletes wait until the transaction commits or rolls back. `NoWait` and explicit wait timeouts use `SET LOCK_TIMEOUT`, as with `ForUpdate`. `ForShare(SkipLocked)` throws `LockingConfigurationException`: omitting `HOLDLOCK` would lose transaction-duration shared locking, and combining it with `READPAST` is not supported.
+
+`HOLDLOCK` applies SERIALIZABLE semantics to the hinted table, including key-range locks that may block inserts; this is stronger than PostgreSQL's `FOR SHARE`. It requests locking reads even under `READ_COMMITTED_SNAPSHOT` (RCSI) and SNAPSHOT isolation. `ROWLOCK` requests row/key granularity but does not prevent lock escalation. See [SQL Server table hints](https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-table).
 
 MySQL's `innodb_lock_wait_timeout` is in whole seconds, so sub-second timeouts are rounded up to 1 second.
+
+## Custom query providers
+
+Locking methods support custom `IAsyncQueryProvider` wrappers that forward query expressions to EF Core, including wrappers applied before `ForUpdate()` or `ForShare()`. The wrapper must preserve EF Core's `TagWith` expression when forwarding the query. This also applies to PostgreSQL's `ForNoKeyUpdate()` and `ForKeyShare()`.
+
+Calling a locking method on a synchronous non-EF query, such as `list.AsQueryable()`, throws `LockingConfigurationException` immediately. Such calls previously returned the query unchanged without applying a lock.
 
 ## Unsupported query shapes
 

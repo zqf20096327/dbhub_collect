@@ -37,7 +37,7 @@
 ## Contents
 
 - [At a glance](#at-a-glance)
-- [Quick start](#quick-start)
+- [Quick start](#quick-start) · [Deploy](#deploy)
 - [Features](#features) · [Screenshots](#screenshots) · [How Flowplan compares](#how-flowplan-compares) · [Private by design](#private-by-design)
 - A closer look: [Write](#write-and-think) · [Databases](#organise-with-databases) · [AI](#ai-optional) · [Whiteboards and journal](#whiteboards-and-a-journal) · [Handwriting](#handwriting-and-notebooks) · [Home page](#a-home-page-of-your-own) · [Together](#together-everywhere)
 - [For admins and integrations](#for-admins-and-integrations): [architecture](#architecture), [system requirements](#system-requirements), [security](#security)
@@ -135,6 +135,23 @@ Images are built only for a release or by hand: **Actions → Docker image → R
 
 More in the documentation: [Installation](https://docs.flowplan.org/en/installation) · [Configuration](https://docs.flowplan.org/en/configuration) · [Storage, S3 and backups](https://docs.flowplan.org/en/storage-and-backups) · [Operations](https://docs.flowplan.org/en/operations)
 
+## Deploy
+
+One click to a running instance with your own address – or one command on any server:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/yannicschuller/flowplan)
+[![Deploy to DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/yannicschuller/flowplan/tree/main)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/yannicschuller/flowplan/main/deploy/install.sh | sudo bash -s -- flowplan.example.com
+```
+
+- **Render** ([`render.yaml`](render.yaml)): the image with a persistent disk on `/app/data` – disks need a paid instance (Starter or larger); the address is the `onrender.com` one until you set `APP_URL` to your domain.
+- **DigitalOcean App Platform** ([`.do/deploy.template.yaml`](.do/deploy.template.yaml)): no volumes there, so the data goes to a PostgreSQL database and uploads need a Spaces bucket (`S3_*`) – without it, files are lost on every deploy; the dev database has no backups.
+- **Any server** with Ubuntu 24.04 or Debian 12 (Hetzner, Netcup, IONOS …): paste [`deploy/cloud-init.yaml`](deploy/cloud-init.yaml) as "user data" when creating the server (set `FLOWPLAN_DOMAIN=` in it), or run the command above on an existing one – Docker, Caddy with HTTPS, generated secrets, firewall; the data stays in a Docker volume on the server.
+
+Step by step: [Deploy in one click](https://docs.flowplan.org/en/installation#deploy-in-one-click).
+
 ## Features
 
 <table>
@@ -220,7 +237,7 @@ A fair comparison is hard – every tool here is good at something. This is our 
 | **Whiteboards** | ✅ | ❌ embeds only | ✅ Cloud | ✅ edgeless mode | ⚠️ not built in, as far as we know | ❌ |
 | **Journal** | ✅ | ⚠️ templates | ⚠️ templates | ✅ | ⚠️ templates | ⚠️ templates |
 | **End-to-end encryption** | ⚠️ encrypted spaces, documents only⁴ | ❌ | ❌ | ⚠️ local data only, as far as we know | ⚠️ status unclear | ❌ |
-| **Import from others** | ✅ Notion, Confluence, AFFiNE, AppFlowy, Obsidian, Evernote, Google Docs, Microsoft Word, Jira, Trello | ✅ | ⚠️ a few formats | ✅ Notion, Markdown, HTML | ✅ Notion, Markdown, CSV | ✅ Notion, Confluence, Markdown |
+| **Import from others** | ✅ Notion, Confluence, AFFiNE, AppFlowy, Obsidian, Evernote, Google Docs, Microsoft Word, GoodNotes (PDF), Jira, Trello | ✅ | ⚠️ a few formats | ✅ Notion, Markdown, HTML | ✅ Notion, Markdown, CSV | ✅ Notion, Confluence, Markdown |
 | **Apps (iOS / Android / desktop)** | ⚠️ desktop and iOS; Android as APK | ✅ | ⚠️ mobile only | ⚠️ desktop; mobile apps newer | ✅ | ⚠️ desktop; mobile via the web |
 | **Real-time collaboration** | ✅ | ✅ | ✅ | ✅ | ✅ with AppFlowy Cloud | ✅ |
 
@@ -452,7 +469,7 @@ Yes. Documents are always saved in the browser first and synced when the server 
 <details>
 <summary><b>How do I move from Notion, Confluence, AFFiNE or Obsidian?</b></summary>
 
-Under **Settings → Import & export → Import**: Notion and Confluence exports, the AFFiNE workspace file, Obsidian vaults (as pages or as a database), plus AppFlowy, Evernote, Google Docs, Microsoft Word (.docx), Markdown, HTML and CSV. A preview shows what will be imported before anything is created. See [Moving to Flowplan](https://docs.flowplan.org/en/migrate).
+Under **Settings → Import & export → Import**: Notion and Confluence exports, the AFFiNE workspace file, Obsidian vaults (as pages or as a database), plus AppFlowy, Evernote, Google Docs, Microsoft Word (.docx), GoodNotes notebooks (as PDF), Markdown, HTML and CSV. A preview shows what will be imported before anything is created. See [Moving to Flowplan](https://docs.flowplan.org/en/migrate).
 
 </details>
 

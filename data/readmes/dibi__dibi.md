@@ -1,4 +1,4 @@
-[Dibi](https://dibi.nette.org) - smart database layer for PHP  [![Buy me a coffee](https://files.nette.org/images/coffee1s.png)](https://nette.org/make-donation?to=dibi)
+[Dibi](https://dibi.deegee.dev) - smart database layer for PHP  [![Buy me a coffee](https://files.nette.org/images/coffee1s.png)](https://nette.org/make-donation?to=dibi)
 =========================================================
 
 [![Downloads this Month](https://img.shields.io/packagist/dm/dibi/dibi.svg)](https://packagist.org/packages/dibi/dibi)
@@ -34,7 +34,7 @@ Install Dibi via Composer:
 composer require dibi/dibi
 ```
 
-The Dibi 6.0 requires PHP version 8.2 and supports PHP up to 8.5.
+The Dibi 6.0 requires PHP version 8.2 and supports PHP up to 8.6.
 
 
 Running Tests
@@ -59,7 +59,7 @@ Usage
 -----
 
 Refer to the `examples` directory for examples. Dibi documentation is
-available on the [homepage](https://dibi.nette.org).
+available on the [homepage](https://dibi.deegee.dev).
 
 
 ### Connecting to database

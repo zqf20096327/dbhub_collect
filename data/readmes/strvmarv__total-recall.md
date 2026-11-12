@@ -52,7 +52,7 @@ Every TUI coding assistant has the same gaps:
 ## The Solution
 
 - **Persistent memory** — corrections, preferences, decisions, and project context survive sessions automatically
-- **Cross-tool** — one memory store shared across Claude Code, Copilot CLI, Cursor, Cline, OpenCode, Hermes, Gemini CLI, Windsurf, Zed, and VS Code; existing memories auto-import on first run
+- **Cross-tool** — one memory store shared across Claude Code, Copilot CLI, Cursor, Cline, OpenCode, pi, Codex CLI, Hermes, Gemini CLI, Windsurf, Zed, and VS Code; existing memories auto-import on first run
 - **Built-in web UI** — `total-recall ui` opens a local browser dashboard (Dashboard, Memory, Knowledge Base, Usage, Insights, Eval, Config) for visual memory management without touching the CLI or AI session. Dark/light themes, a keyboard-first ⌘K command palette, and a developer-native *Terminal / Archive* design
 - **Cross-device** — point `TOTAL_RECALL_DB_PATH` at a cloud-synced folder and your memory follows you everywhere
 - **Smarter context, lower token cost** — a three-tier model (Hot / Warm / Cold, with sticky pins) enforces a 4000-token budget per prompt; new memories land in warm and earn their way into hot, so you get relevant context without carrying everything
@@ -84,6 +84,37 @@ Or if the marketplace isn't registered:
 /plugin marketplace add strvmarv/total-recall-marketplace
 /plugin install total-recall@strvmarv-total-recall-marketplace
 ```
+
+### pi
+
+```bash
+pi install npm:@strvmarv/total-recall   # once the release carrying pi support is published
+pi install git:github.com/strvmarv/total-recall   # from main
+```
+
+The extension registers the MCP server, injects the startup instructions, runs the pinned-directive floor, and adds a `/total-recall` command. See [INSTALL.md](INSTALL.md#pi) for details and known gaps.
+
+### Cursor CLI
+
+Copy the repository to `~/.cursor/plugins/local/total-recall` and restart Cursor (Windows; see [INSTALL.md](INSTALL.md#cursor) for approval with `--approve-mcps`, the first-call timeout and other limits). The plugin registers the MCP server, injects the startup instructions, and runs the pinned-directive floor on tool-using turns.
+
+### Codex CLI
+
+```bash
+codex plugin marketplace add strvmarv/total-recall-marketplace
+codex plugin add total-recall@strvmarv-total-recall-marketplace
+```
+
+Then trust the two hooks once in `/hooks`. The plugin registers the MCP server, injects the startup instructions, and runs the pinned-directive floor. See [INSTALL.md](INSTALL.md#codex-cli) for tool approval, limitations and troubleshooting.
+
+### Copilot CLI
+
+```bash
+copilot plugin marketplace add strvmarv/total-recall-marketplace
+copilot plugin install total-recall@strvmarv-total-recall-marketplace
+```
+
+This works once the marketplace points at a release that contains `.github/plugin/` and `copilot/` (see the INSTALL.md caveat). Then allow the server for non-interactive runs with `--allow-tool=total-recall`. The plugin registers the MCP server, injects the startup instructions, and runs the pinned-directive floor. See [INSTALL.md](INSTALL.md#github-copilot-cli) for tool approval and known gaps.
 
 ### npm (Any MCP-Compatible Tool)
 
@@ -133,7 +164,7 @@ Every memory has an entry type that tells total-recall what it is and how to tre
 
 total-recall uses a three-tier memory model — **Hot / Warm / Cold** — with a **sticky** flag that turns any hot entry into an always-injected pin. New memories land in **Warm** by default and *earn* their way into Hot by proving useful, so the auto-injected context stays high-signal without carrying everything:
 
-- **Warm** (default landing tier, up to 10K entries) — where new memories go unless you say otherwise. Retrieved semantically per query: when you ask about authentication, relevant auth memories surface automatically. An entry is **promoted to Hot** once it earns it — `access_count ≥ 5` **and** `decay_score ≥ 0.7` (both tunable). Unused entries decay and migrate to Cold.
+- **Warm** (default landing tier, up to 10K entries) — where new memories go unless you say otherwise: `memory_store`, `memory_extract`, `memory_import` / `total-recall memory import` (for entries without a recognised `tier`) and Cortex pulls that omit the tier all land here. Retrieved semantically per query: when you ask about authentication, relevant auth memories surface automatically. An entry is **promoted to Hot** once it earns it — `access_count ≥ 5` **and** `decay_score ≥ 0.7` (both tunable). Unused entries decay and migrate to Cold.
 - **Hot** (up to 50 entries, 4000-token budget, 1200 chars/entry) — auto-injected into every prompt, no query needed. Populated by earned promotion from warm (and by explicit `tier: "hot"` writes, which are capped at 1200 characters — store a concise summary, not an essay). Sticky tokens come off the top of this budget.
 - **Sticky (pinned)** — a flag on a hot entry, set via `memory_pin` (or store-and-pin with `memory_store { pinned: true }`). Sticky entries are **unbounded**, injected verbatim and first at session start under a `## Pinned directives (always follow)` header, and are **never** truncated, decayed, demoted, evicted, or compacted. `memory_unpin` clears the flag, leaving the entry in hot as a normal earned resident. **Project-scoped injection** (default on): untagged pins are global and inject everywhere; a pin tagged with a `project` value (lowercase `owner/repo` slug or folder name) injects only when the detected cwd matches that repo. When no git repo is detected, only global pins inject (fail-closed).
 - **Cold** (unlimited, hierarchical) — your knowledge base. Ingest entire directories — source trees, documentation, design specs — and they're retrieved when relevant.
@@ -180,9 +211,11 @@ Per-host support:
 | Host | Per-turn floor | Mechanism |
 |---|---|---|
 | Claude Code | Active | `UserPromptSubmit` hook → `additionalContext` |
-| Copilot CLI | Pending upstream fix | Wired the same way, but Copilot CLI currently ignores the returned `additionalContext` |
-| Cursor | Layered fallback | session-start injection + skill-guided `session_refresh` (Cursor's `beforeSubmitPrompt` is block-only and cannot inject context) |
+| Copilot CLI | Active (turn-count trigger only) | `userPromptSubmitted` hook (`copilot/hooks.json` → `copilot/hook.js`) → `additionalContext` (observed on 1.0.98-2; Copilot's docs say this event ignores it) |
+| Cursor | Active on tool-using turns (turn-count trigger only) | `postToolUse` hook (`cursor/hooks.json` → `cursor/hook.js`) → `additional_context` (Cursor's CLI fires no per-prompt hook, and `beforeSubmitPrompt` cannot inject) |
 | Gemini CLI | Active | `BeforeAgent` hook → `hookSpecificOutput.additionalContext` |
+| pi | Active (turn-count trigger only) | pi extension: `before_agent_start` → hidden context message; `/total-recall` command |
+| Codex CLI | Active (turn-count trigger only) | `UserPromptSubmit` hook (`codex/hooks.json` → `codex/hook.js`) → `additionalContext` |
 | Cline | MCP tools only | No hooks; MCP server config via postinstall |
 | Windsurf | MCP tools only | No hooks; rules file for session-start instruction |
 | Zed | MCP tools only | No hooks; `context_servers` config via postinstall |
@@ -195,9 +228,11 @@ Per-host support:
 | Platform | Support | Notes |
 |---|---|---|
 | Claude Code | Full | Native plugin, session hooks, auto-import |
-| Copilot CLI | Full | Plugin wrapper, session hooks, auto-import from Copilot memory files |
-| Cursor | Full | Plugin wrapper, SessionStart hook; run `/total-recall:commands compact` manually — no SessionEnd hook |
+| Copilot CLI | Core (known gaps in [INSTALL.md](INSTALL.md#github-copilot-cli): turn-count floor only, no `session_end`, server-side project scope, nothing re-injected after `/compact`) | `copilot plugin install` plugin: MCP server, startup instructions, pinned-directive floor, auto-import from Copilot memory files |
+| Cursor | Core (known gaps in [INSTALL.md](INSTALL.md#cursor): floor only on tool-using turns, the first `session_start` can hit Cursor's 60 s MCP limit, no custom store, no `session_end`, Windows only so far) | Local plugin: MCP server (workspace cwd), startup instructions, pinned-directive floor |
 | OpenCode | Full | Plugin wrapper, auto-import from OpenCode project and agent files |
+| pi | Full (known gaps in [INSTALL.md](INSTALL.md#pi): turn-count floor only, no `session_end`, `compact --fast`) | `pi install` package: MCP server, startup instructions, pinned-directive floor, `/total-recall` command |
+| Codex CLI | Full (known gaps in [INSTALL.md](INSTALL.md#codex-cli): turn-count floor only, no `session_end`, hooks need a one-time trust review) | `codex plugin add` plugin: MCP server, startup instructions, pinned-directive floor |
 | Cline | Full | Auto-import from task history; MCP server config required |
 | Hermes | Importer | Auto-import from SOUL.md and skills on first run; no session hooks |
 
@@ -442,6 +477,48 @@ A bundle (directory with supporting files) uses the same frontmatter in its `SKI
 
 **Merge behavior:** When Cortex is configured and reachable, the session context block merges cortex-stored skills with locally-scanned `extra_dirs` skills, deduplicating by name (Cortex entries take precedence). When Cortex is unavailable or not configured, only local skills appear.
 
+### The `develop` skill
+
+The plugin ships a `develop` skill (`/develop`) that takes a change from an idea to an open pull request, with a GitHub issue as the ticket.
+
+- **Define** is interactive: you and the model brainstorm, agree a spec (or a short approach), have it reviewed, and publish a GitHub issue that meets the ticket standard. A `defined` comment pins the issue body the run will build.
+- **Deliver** is hands-off: from that issue it writes a plan, builds with review at every step, verifies, and opens a PR that closes the issue. It then stops. It never merges, rebases or force-pushes, and it works in its own git worktree, so your checkout is untouched.
+
+`/develop 123` (or an issue URL) delivers an existing issue, `/develop <description>` starts a Define, and `/develop initialize` writes the repository profile with you. On Claude Code the command may be namespaced by the plugin name (for example `/total-recall:develop`); this is unverified.
+
+A fork is refused (`origin` must not be a fork), and a host with no way to ask you a question cannot run Define.
+
+**Requirements**
+
+- The superpowers plugin, version 7 or later (brainstorming, writing-plans, subagent-driven-development, test-driven-development, verification-before-completion, finishing-a-development-branch).
+- `gh` 2.48 or later (Define reads every open pull request with `gh api --paginate --slurp`), logged in to a github.com account with write access to the repository, whose `origin` is on github.com.
+- Optional: a repository profile, `.github/develop.md`, naming the `gh` account to use, the ticket-standard switch and the commands to run before the PR opens (the format is in `skills/develop/profile.md`; this repository's own profile is the example).
+- Claude Code and pi are supported first. On a host without a way to dispatch the two reviewer agents (`adversarial-reviewer`, `counterexample-reviewer`), or where `adversarial-reviewer` is not available, the reviews run in the same session (`review=self`); on pi, Preflight first offers to copy the agent files into pi's global agent directory, never over a file already there.
+
+**Trust.** A run acts on the pin (the latest `defined` or `reapproved` comment) written by someone with write access to the repository, not on whatever the issue body says now. Any other issue text, comment or tool output is treated as data.
+
+**Account pinning.** Every `gh` and network `git` call is pinned to the chosen account on that one command; the skill never runs `gh auth switch`. Both the token lookup and the tool run with `GH_HOST=github.com`, so an Enterprise `GH_HOST` in the environment cannot redirect them. The pinned forms look like this:
+
+```sh
+t=$(GH_HOST=github.com gh auth token --user <login>) && [ -n "$t" ] && GH_HOST=github.com GH_TOKEN="$t" gh <args>
+t=$(GH_HOST=github.com gh auth token --user <login>) && [ -n "$t" ] && GH_HOST=github.com GH_TOKEN="$t" GIT_TERMINAL_PROMPT=0 git -c credential.helper= -c 'credential.helper=!gh auth git-credential' <args>
+```
+
+The PowerShell forms (the skill picks the form that matches the shell it is running in):
+
+```powershell
+$e = 1; $p = $env:GH_TOKEN; $h = $env:GH_HOST; try { $env:GH_HOST = 'github.com'; $env:GH_TOKEN = (gh auth token --user <login>); if (-not $env:GH_TOKEN) { throw 'no token' }; gh '<arg>' '<arg>'; $e = $LASTEXITCODE } finally { $env:GH_TOKEN = $p; $env:GH_HOST = $h }; exit $e
+$e = 1; $p = $env:GH_TOKEN; $q = $env:GIT_TERMINAL_PROMPT; $h = $env:GH_HOST; try { $env:GH_HOST = 'github.com'; $env:GH_TOKEN = (gh auth token --user <login>); if (-not $env:GH_TOKEN) { throw 'no token' }; $env:GIT_TERMINAL_PROMPT = '0'; git -c credential.helper= -c 'credential.helper=!gh auth git-credential' '<arg>' '<arg>'; $e = $LASTEXITCODE } finally { $env:GH_TOKEN = $p; $env:GIT_TERMINAL_PROMPT = $q; $env:GH_HOST = $h }; exit $e
+```
+
+**Minimal tool allowlist.** Deliver runs many routine commands, and a plain `gh *` or `git *` permission pattern may not match the pinned forms above (they begin with `t=$(...)`), so either use an auto-accept mode or allow these:
+
+- the skill's own scripts: `node <skill dir>/scripts/ghpin.js scratch`, `node <skill dir>/scripts/ghpin.js run *`, and the other CLIs in that directory (`node <skill dir>/scripts/*.js *`), where `<skill dir>` is the directory that holds the skill's `SKILL.md` (`ghpin.js run` spawns `gh` or `git` with no shell and applies the pin itself);
+- the pinned `gh` and `git` forms shown above, as written;
+- the local `git` calls a run makes: `remote get-url origin`, `status`, `diff`, `add`, `commit`, `worktree` (`add`, `list`, `remove`), `branch -d`, `rev-parse`, `check-ref-format`, `show`, `ls-tree`, `merge-base --is-ancestor` and the reachability probe `rev-parse --verify --quiet` (the last four are run through `ghpin.js run`);
+- the network `git` calls, `fetch`, `push` and `ls-remote`, which go through `ghpin.js run` or the pinned `git` form above;
+- the `sh verify` commands of the repository profile.
+
 ---
 
 ## Developer Reference
@@ -465,7 +542,7 @@ The MCP server exposes 41 core tools in every backend mode; local SQLite and Cor
 
 †Unavailable in Postgres mode (local SQLite + Cortex modes only).
 
-Sticky (pinned) surface: `memory_pin` sets the sticky flag on an entry, moving it into the hot tier (with optional `scope: "project" | "global"`); `memory_unpin` clears the flag, leaving the entry in hot as an earned resident; `memory_store` accepts `pinned: true` to store-and-pin new content directly as sticky-hot; `memory_promote` / `memory_demote` reject a sticky entry as source or target (unpin it first). `memory_list` accepts a `sticky: true` filter, and `status` reports a sticky count (surfaced as `tierSummary.pinned` for wire compatibility). **Project-scoped injection** (enabled by `tiers.pinned.project_scoping`, default on): a pin is tagged to a repo by setting its `project` field to the lowercase `owner/repo` slug (e.g. `radancy-pe/rai-ops-cortex`) or bare folder name when no remote is configured — at injection time `ProjectResolver` detects the current repo from cwd (pure filesystem walk) and `PinnedScope.OptsFor` filters accordingly. Untagged (null-project) pins are global and always inject. When no repo is detected the injection is fail-closed to globals only.
+Sticky (pinned) surface: `memory_pin` sets the sticky flag on an entry, moving it into the hot tier (with optional `scope: "project" | "global"`); `memory_unpin` clears the flag, leaving the entry in hot as an earned resident; `memory_store` accepts `pinned: true` to store-and-pin new content directly as sticky-hot; `memory_promote` / `memory_demote` reject a sticky entry as source or target (unpin it first). `memory_list` accepts a `sticky: true` filter, and `status` reports a sticky count (surfaced as `tierSummary.pinned` for wire compatibility). **Project-scoped injection** (enabled by `tiers.pinned.project_scoping`, default on): a pin is tagged to a repo by setting its `project` field to the lowercase `owner/repo` slug (e.g. `acme-org/widget-service`) or bare folder name when no remote is configured — at injection time `ProjectResolver` detects the current repo from cwd (pure filesystem walk) and `PinnedScope.OptsFor` filters accordingly. Untagged (null-project) pins are global and always inject. When no repo is detected the injection is fail-closed to globals only.
 
 Retrieval-quality feedback: `memory_search` returns `{ retrievalId, results }` and `kb_search` returns a top-level `retrievalId`. The assistant can call `memory_feedback` with that `retrievalId` to confirm whether the retrieval was actually used; un-acted retrievals are inferred as misses after a grace window. This drives the `eval_report` metrics and the web UI's "Retrieval quality" card. `memory_feedback` is intentionally assistant-only — it is not exposed to the web UI.
 
@@ -483,7 +560,7 @@ npm wrapper layer (Node, zero runtime dependencies):
     restarts on crash; the MCP connection never drops (no more MCP error -32000 on first
     launch after an update); emits notifications/tools/list_changed once proxying begins.
 
-MCP Server (.NET 8 NativeAOT — C# imperative shell + F# functional core)
+MCP Server (.NET 10 NativeAOT — C# imperative shell + F# functional core)
 ├── TotalRecall.Core (F#)        — pure functions: tokenizer, decay, hybrid ranking, parsers, chunker
 ├── TotalRecall.Infrastructure   — SQLite/Postgres storage, ONNX/remote embedder, importers, migrations
 ├── TotalRecall.Server           — MCP JSON-RPC server, 41 core tool handlers (48–49 with mode-dependent tools), lifecycle
@@ -520,7 +597,7 @@ Backends (selected by config):
 
 These apply only if you're building from source. The prebuilt binary is self-contained — no .NET runtime, no system SQLite, no Bun required.
 
-- **.NET 10 SDK** — pinned by `global.json` at the repo root; builds the `net8.0` NativeAOT target
+- **.NET 10 SDK** — pinned by `global.json` at the repo root; builds the `net10.0` NativeAOT target
 - **npm** — for `npm ci`, which pulls `sqlite-vec` native libs needed by the csproj copy targets
 - **Embedding model** — run `sh scripts/fetch-bge-small.sh` once to fetch + sha256-verify the `bge-small-en-v1.5` ONNX model (~133 MB) into `models/bge-small-en-v1.5/`. The model is no longer committed to the repo (not in Git LFS); release builds fetch and bundle it into the per-RID artifact.
 
@@ -539,7 +616,7 @@ dotnet publish src/TotalRecall.Host/TotalRecall.Host.csproj -c Release -r win-x6
 # (swap win-x64 for your RID: linux-x64, linux-arm64, osx-arm64)
 ```
 
-The publish output lands in `src/TotalRecall.Host/bin/Release/net8.0/<rid>/publish/` with the binary plus all sibling native libs (`libonnxruntime.*`, `libe_sqlite3.*`, `runtimes/vec0.*`) ready to run.
+The publish output lands in `src/TotalRecall.Host/bin/Release/net10.0/<rid>/publish/` with the binary plus all sibling native libs (`libonnxruntime.*`, `libe_sqlite3.*`, `runtimes/vec0.*`) ready to run.
 
 Supported RIDs: `linux-x64`, `linux-arm64`, `osx-arm64`, `win-x64`. Intel Mac (`osx-x64`) is not shipped.
 
@@ -561,7 +638,7 @@ If you're building plugins for TUI coding assistants, start with [superpowers](h
 
 ### Core Technologies
 
-- [.NET 8 / NativeAOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/) — single-binary deployment, no runtime dependency
+- [.NET 10 / NativeAOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/) — single-binary deployment, no runtime dependency
 - [F# Core](https://learn.microsoft.com/en-us/dotnet/fsharp/) — pure functional core: tokenizer, parsers, decay, hybrid ranking
 - [Microsoft.Data.Sqlite](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/) — embedded SQLite with extension loading
 - [sqlite-vec](https://github.com/asg017/sqlite-vec) — vector similarity search in SQLite (loaded as a native extension via `LoadExtension`)

@@ -142,6 +142,8 @@ I built FlowState v1 in January 2026 as a gift to the vibe coder community, back
 
 *John Martin, DialectForge*
 
+FlowState MCP is not related to other products that share the FlowState name, such as a Markdown prompt framework, an academic research paper, or an image tool.
+
 ---
 
 ## Quick start
@@ -173,6 +175,8 @@ claude mcp add --scope user --transport stdio flowstate -- uvx flowstatemcp
 
 Or start the server yourself with `uvx flowstatemcp`. `pipx run flowstatemcp` does the same.
 After `pip install flowstatemcp`, both `flowstatemcp` and `flowstate` start it.
+
+Want it on all your devices without running anything? Try [FlowState Hosted](https://flowstatemcp.com/hosted).
 
 ### Git clone (backups, the skill, and written app configs)
 
@@ -247,6 +251,12 @@ left out the database schema, so every FlowState call failed, and the failed sta
 database file behind. 2.4.1 sets up such an empty file as a new database, so reinstalling is
 enough. `flowstate update` needs the git clone set up by `setup_flowstate.py`. Config
 snippets for every app, if you'd rather edit configs by hand, are in [AGENTS.md](AGENTS.md#manual-config-if-you-cant-run-the-script).
+
+---
+
+## Questions, or just saying hi
+
+If you are using FlowState and want setup help, or just want to say you are here, email [hello@flowstatemcp.com](mailto:hello@flowstatemcp.com) or post in [Discussions](https://github.com/dialectforge/FlowState/discussions). Local FlowState does not send us usage data or anything about your projects. The only automatic network call is a daily check of GitHub's public releases, which you can turn off. Don't want to install or keep a computer on? [FlowState Hosted](https://flowstatemcp.com/hosted) is the no-install option.
 
 ---
 

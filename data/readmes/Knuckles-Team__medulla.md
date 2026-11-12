@@ -1,0 +1,166 @@
+# Medulla
+
+The `medulla` distribution provides Medulla; import it as `medulla`.
+The repository is `medulla`. Package, CLI and API identifiers remain unchanged.
+
+<p align="center">
+  <img src="docs/assets/brands/medulla-logo-v1.png" alt="Medulla logo" width="176">
+</p>
+
+<p align="center">
+  <strong>A durable graph database and reasoning engine for connected, evidence-rich data.</strong><br>
+  <sub>Property graph · SQL · RDF/OWL · vectors · time · provenance · multimodal records</sub>
+</p>
+
+<p align="center">
+
+[![PyPI - Version](https://img.shields.io/pypi/v/medulla)](https://pypi.org/project/medulla/)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-526cff)](https://knuckles-team.github.io/medulla/)
+[![GitHub license](https://img.shields.io/github/license/Knuckles-Team/medulla)](LICENSE)
+[![Version](https://img.shields.io/badge/version-3.3.3-blue)](https://github.com/Knuckles-Team/medulla/releases)
+[![Build](https://github.com/Knuckles-Team/medulla/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Knuckles-Team/medulla/actions/workflows/ci.yml)
+[![GitHub Repo stars](https://img.shields.io/github/stars/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/forks)
+[![GitHub contributors](https://img.shields.io/github/contributors/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/graphs/contributors)
+[![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/commits/main)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/pulls)
+[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/pulls?q=is%3Apr+is%3Aclosed)
+[![GitHub issues](https://img.shields.io/github/issues/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/issues)
+[![GitHub top language](https://img.shields.io/github/languages/top/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla)
+[![GitHub language count](https://img.shields.io/github/languages/count/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla)
+[![GitHub repo size](https://img.shields.io/github/repo-size/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla)
+[![GitHub repo file count (file type)](https://img.shields.io/github/directory-file-count/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla)
+[![PyPI - Downloads](https://img.shields.io/pypi/dd/medulla)](https://pypi.org/project/medulla/)
+[![PyPI - License](https://img.shields.io/pypi/l/medulla)](https://pypi.org/project/medulla/)
+[![PyPI - Wheel](https://img.shields.io/pypi/wheel/medulla)](https://pypi.org/project/medulla/)
+[![PyPI - Implementation](https://img.shields.io/pypi/implementation/medulla)](https://pypi.org/project/medulla/)
+
+</p>
+
+<p align="center">
+  <a href="https://knuckles-team.github.io/medulla/">Documentation</a> ·
+  <a href="https://knuckles-team.github.io/medulla/capabilities/">Capabilities</a> ·
+  <a href="https://knuckles-team.github.io/medulla/interfaces/">Interfaces</a> ·
+  <a href="https://knuckles-team.github.io/medulla/status/">Status</a>
+</p>
+
+## Overview
+
+Medulla is a Rust-native database and compute engine for teams building
+knowledge systems, evidence-led applications, analytics, and agent memory. It
+stores and queries connected graph records, relational data, RDF/OWL knowledge,
+vectors, time-series, events, documents, and media through one engine.
+
+Claims can retain their evidence, provenance, confidence, and time of validity,
+so applications can inspect why information is present and how it changes.
+Use Medulla directly through its clients and query interfaces. It also
+serves as the durable knowledge layer beneath [Arbora](https://knuckles-team.github.io/arbora/)
+and [Agent Utilities](https://knuckles-team.github.io/meristem/).
+Medulla is the database. Agent execution and connector runtimes live in
+their respective ecosystem projects.
+
+## Key capabilities
+
+| Capability | What it provides |
+|---|---|
+| One multi-model engine | Property graph, relational tables, RDF, vectors, time-series, events, blobs, and media |
+| Query across interfaces | UQL, SQL, SPARQL, Cypher/Bolt, GraphQL, and typed native clients |
+| Semantic constraints | OWL reasoning, SHACL validation, and ShEx shape validation |
+| Evidence-aware knowledge | Claims, provenance, confidence, contradiction handling, and bitemporal validity |
+| Durable operation | Commit-before-ack persistence, audit, change data capture, tenant isolation, and observability |
+| Distributed deployment | Single-node operation and an optional cluster build with replication and coordinated placement |
+
+Check the [capability matrix](https://knuckles-team.github.io/medulla/capabilities/)
+and [generated method ledger](https://knuckles-team.github.io/medulla/capabilities.generated/)
+for the current behavior of each operation.
+
+## Packages
+
+This repository publishes one PyPI package and one container image, at the same version.
+
+| Artifact | Contents | Install |
+|---|---|---|
+| `medulla` | The Python client, the in-process engine module, the numeric kernel and the native `medulla-server` executable for the wheel's platform (Linux x86_64 and aarch64, macOS arm64, Windows x64) at `medulla/_bin/medulla-server`. `medulla.server_binary.resolve_server_binary()` returns its path. | `pip install medulla` |
+| `medulla-server` image | The server binary on a slim base, one tag for `linux/amd64` and `linux/arm64`, built from the Linux wheels. | `docker pull <registry-user>/medulla-server:<version>` |
+
+The server executable ships in the platform wheels only. An install from the
+source distribution builds the extension modules and carries no server.
+
+## Documentation
+
+- [Start here](https://knuckles-team.github.io/medulla/) for a guided engine tour.
+- [Interfaces](https://knuckles-team.github.io/medulla/interfaces/) explains UQL, SQL, SPARQL, Cypher, GraphQL, vectors, time-series, and clients.
+- [Architecture](https://knuckles-team.github.io/medulla/architecture/) covers query execution, reasoning, storage, and distribution.
+- [Deploy Medulla](https://knuckles-team.github.io/medulla/standalone_deployment/) covers durable server, TLS, containers, and clusters.
+- [Operations](https://knuckles-team.github.io/medulla/operations/runbook/) covers day-two procedures and recovery.
+
+## Architecture
+
+<p align="center">
+  <a href="https://knuckles-team.github.io/.github/architecture/#eg">
+  <img src="https://raw.githubusercontent.com/Knuckles-Team/medulla/main/docs/assets/runtime-architecture.svg" alt="People use browser, terminal, desktop, or messaging clients. Arbora serves clients. Agent Utilities coordinates agents. Medulla stores knowledge. Connectors synchronize source systems." width="960">
+  </a>
+  <br><a href="https://knuckles-team.github.io/.github/architecture/#eg">Explore the live architecture</a>
+</p>
+
+<p align="center">
+  <img src="docs/assets/engine-architecture.svg" alt="Medulla architecture. Authenticated interfaces feed one planner. It composes graph, semantic, analytical, temporal, and multimodal engines over one durable store." width="920">
+</p>
+
+People use the **Overstory** (browser), **Tuig** (terminal), **Axil** (desktop), or the
+messaging services hosted by **Arbora**. The terminal UI reaches Arbora through
+its REST API.
+External applications and agents connect through Arbora using MCP, REST, or
+A2A. Arbora governs the runtime boundary. **Meristem** is the in-run harness. It applies the decisions it receives and holds no store. Medulla stores and reasons over their durable
+knowledge. Source systems enter through **Scion SDK**, which holds connector contracts and transports.
+External stores stay connector sources, read as virtual graphs.
+
+| This repository owns | Ecosystem projects own |
+|---|---|
+| Durable graph and multimodal state, query planning, reasoning, and engine authorization | [Arbora](https://knuckles-team.github.io/arbora/) owns MCP/REST/A2A entrypoints, runtime policy, and frontend hosting |
+| Rust serde types as the contract source of truth; hand-written clients tested on round-trip vectors | [Meristem](https://knuckles-team.github.io/meristem/) owns the in-run harness: run loop, context, and fan-out |
+| Source-ingestion admission, schema validation, evidence, and provenance commits | [Scion SDK](https://knuckles-team.github.io/scion-sdk/) owns connector execution and source-system adapters |
+| Database and compute execution | [Overstory](https://knuckles-team.github.io/overstory/), [Tuig](https://github.com/Knuckles-Team/tuig), and [Axil](https://github.com/Knuckles-Team/axil) provide user-facing clients |
+
+## Quick start
+
+Install the release wheel and open an in-process graph. This mode is explicit,
+ephemeral, and needs no server or TLS configuration.
+
+```bash
+python -m pip install medulla
+python -m medulla.cli status  # no server is expected in embedded mode
+python - <<'PY'
+import msgpack
+from medulla.engine import Engine
+
+engine = Engine(persist_dir=":memory:")
+engine.create_graph("demo")
+engine.add_node(
+    "demo",
+    "node:hello",
+    msgpack.packb({"kind": "Greeting"}, use_bin_type=True),
+)
+print(engine.has_node("demo", "node:hello"), engine.node_count("demo"))
+PY
+```
+
+Expected output:
+
+```text
+Status: NOT RUNNING (no PID file)
+True 1
+```
+
+For durable storage, authenticated clients, containers, TLS, or clustering,
+continue with [Deploy Medulla](https://knuckles-team.github.io/medulla/standalone_deployment/).
+
+## Contributing
+
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md)
+for development setup and review gates. Architecture and implementation guidance
+for coding agents lives in [AGENTS.md](AGENTS.md).
+
+## License
+
+Licensed under the [MIT License](LICENSE).

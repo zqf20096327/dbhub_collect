@@ -16,6 +16,7 @@ Row-level permissions · multi-tab that keeps state · approval workflow · an A
 [![CI](https://github.com/yilecoding/fastapi-react-admin/actions/workflows/ci.yml/badge.svg)](https://github.com/yilecoding/fastapi-react-admin/actions/workflows/ci.yml)
 [![E2E report](https://img.shields.io/badge/E2E_report-Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://yilecoding.github.io/fastapi-react-admin/e2e/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/yilecoding/fastapi-react-admin)
 
 </div>
 
@@ -72,7 +73,7 @@ packages/      one-way deps: i18n / api ← ui ← platform ← web
 AI changes code fast, so every change needs something to catch it:
 
 - **Tests** — 1,600+ tests against a real database and a real browser, no mocks, on every CI run; the [E2E report](https://yilecoding.github.io/fastapi-react-admin/e2e/) is public
-- **Types** — frontend/backend types are generated from OpenAPI, so an API change the pages didn't follow fails type checking
+- **Types** — the frontend/backend contract is generated from OpenAPI; mobile infers every request's types from it, so an API change the screens didn't follow fails type checking (the web client is still migrating, and its call sites currently declare response types by hand)
 - **Rules written for AI** — 50+ per-directory `CLAUDE.md` / `AGENTS.md` files record pitfalls found by testing; a coding assistant reads the one for whatever directory it edits
 - **A backend inside the AI ecosystem** — Python + FastAPI, with the built-in AI assistant on pydantic-ai
 
@@ -146,7 +147,7 @@ Switch with `DATABASE_TYPE` in `.env` — same code, same migration chain, seed 
 
 ## Quick start
 
-You need Node ≥ 22.13, Python ≥ 3.10, [uv](https://docs.astral.sh/uv/) and Docker.
+You need Node ≥ 22.13, Python ≥ 3.11, [uv](https://docs.astral.sh/uv/) and Docker.
 
 ```bash
 docker compose -f docker-compose.dev.yml up -d          # PostgreSQL + Redis

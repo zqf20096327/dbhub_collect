@@ -53,7 +53,7 @@
 ### Library
 
 - **Every kind of book in one place:** physical books, EPUB, PDF and audiobooks (MP3, M4A, M4B) to read or play. TXT and MOBI files can be stored and downloaded, but Nostos cannot read them yet. Audiobooks split into many files play as one book.
-- **Free books, built in:** search Project Gutenberg, Standard Ebooks, Wikisource and LibriVox from **Add a book**. Litteraturbanken (Swedish literature) is available to turn on.
+- **Free books, built in:** search Project Gutenberg, Standard Ebooks, Wikisource and LibriVox from **Add a book**.
 - **Collections and editions:** nested collections, drag and drop, and editions of the same work grouped together.
 - **A To read list:** keep the books you want but don't own yet, with a short **Next up** shelf.
 - **Search everything:** press <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd> to find books, topics, notes and documents. Search forgives typos.
@@ -124,7 +124,7 @@ The Brain is where notes from different books meet.
 
 ### Ask Nostos (optional)
 
-Ask Nostos is an AI assistant for your own library. It can find what you have read, help you capture a thought, or reorganise your collections. When it changes your library, it shows one set of changes you can undo, or review before anything happens. Nostos works fully without it.
+Ask Nostos is an AI assistant for your own library. It can find what you have read, save a thought or a quote, add books, link notes to topics, open and draft Studio documents, put a book on To read, or reorganise your collections and book details. When it changes your library, it shows one set of changes you can undo, or review before anything happens. Nostos works fully without it.
 
 On SelfHosted, you connect your own AI provider in **Settings → AI connections**. Nostos Cloud includes a managed allowance.
 

@@ -66,7 +66,7 @@ volumes:
 
 ## What you get
 
-- **Recipe import.** Paste the id or URL of any [trmnl.com Recipe](https://trmnl.com/recipes) and it becomes a ready-to-use Plugin, serverless-transform Recipes included.
+- **Recipe import.** Browse, search and sort the whole [trmnl.com Recipe](https://trmnl.com/recipes) catalog from inside Kuroshiro and import one in a click, or paste an id—either way it becomes a ready-to-use Plugin, serverless-transform Recipes included.
 - **Plugins.** Poll external APIs through multiple named Data Sources per Plugin, or accept pushed Webhooks, and render with Liquid and the TRMNL framework, previewed live as you type.
 - **Screens.** Upload images, fetch links, write HTML, or combine Plugins into Mashups with 7 layouts. Gate any Screen to a day/time Schedule.
 - **Every TRMNL panel.** All sizes and colour depths TRMNL sells, synced daily from the official model list, plus custom colour Palettes.
@@ -92,7 +92,7 @@ Kuroshiro isn't the only way to run a TRMNL: the device also works with the offi
 | Accounts | Single admin, no login | Multi-user accounts with email verification | Cloud account required |
 | Device models & palettes | Full official catalog synced daily, plus admin-created custom colour Palettes | Device models & palettes supported | Defines the catalog—sells the hardware |
 | Plugins | `Poll` (multiple named Data Sources, each fetched or a literal value) & `Webhook` (3 merge strategies) | "Extensions"/Exchanges, single- or multi-source polling | 1,000+ native, community & private plugins |
-| Recipe import | Imports any trmnl.com Recipe, including serverless-transform ones Terminus's importer rejects | Imports via its Extension Gallery | Native—it's the source catalog |
+| Recipe import | Browse, search and sort the trmnl.com catalog in the admin UI and import in one click, or paste an id—serverless-transform Recipes included, which Terminus's importer rejects | Imports via its Extension Gallery | Native—it's the source catalog |
 | Screen scheduling | Per-Screen day/time Schedule gates rotation eligibility | Playlist model: weekday/date windows, skip-if-stale TTL, device-grouped playlists | Playlist Scheduler, group scheduling by time of day |
 | Mashups | 7 layouts | Supported | 8 layouts |
 | Firmware | Official sync + custom OTA upload, hard-blocked unless the Firmware is compatible with the Device's model | Official sync + custom upload, no model-compatibility link | Manages its own hardware directly |
@@ -220,6 +220,20 @@ Besides the Postgres database, Kuroshiro keeps files the database points at on t
 
 Everything else under `/app/public` ships with the image or is a cache Kuroshiro redraws on demand (Fallback Screens, palette colour maps). Uploads are held in memory, so nothing needs mounting for them; an `/app/uploads` folder only exists on instances that ran an older version, and Housekeeping offers to clear it.
 
+### Running unprivileged
+
+The container runs as the `node` user (uid 1000), not as root. A named volume mounted on one of the paths above starts out owned by `node`; a bind mount has to be writable by uid 1000.
+
+**Upgrading over volumes an older, root-running image wrote:** those files are still root's, and Kuroshiro refuses to start, saying which directory it cannot write. Start the container once as root, and the entrypoint hands everything under `/app/public` to `node` before dropping to it:
+
+```
+docker run --user 0 …                      # or, in docker-compose.yml: user: "0"
+```
+
+Remove `--user 0` again afterwards, or keep it. Kuroshiro still drops to `node` before it starts. Or change the owner yourself: `docker run --rm -v <volume>:/data alpine chown -R 1000:1000 /data`.
+
+Chromium, which renders Plugin and HTML Screens, starts with its sandbox when the container allows the user namespaces it needs. Docker's default seccomp profile does not, so there Kuroshiro logs a warning and renders without the sandbox, as `node`. `--security-opt seccomp=unconfined` (compose: `security_opt: [seccomp=unconfined]`) lets the sandbox start, at the price of the rest of the default profile. [ADR-0076](docs/adr/0076-the-image-runs-as-node-and-chromium-sandboxes-its-renderers-where-the-container-lets-it.md) has the details.
+
 ---
 
 ## Packages
@@ -299,7 +313,7 @@ Plugins pull outside data into a [Liquid](https://shopify.github.io/liquid/)-ren
 - **Poll**: Kuroshiro fetches on a shared `refreshInterval`. A Poll Plugin can hold multiple named **Data Sources**—each its own HTTP request (method, URL, headers, body, optional JS transform) or a literal, hand-entered JSON value—fetched in parallel and exposed to the template under its own name. If one source fails, the rest still render.
 - **Webhook**: an external system `POST`s JSON to the Plugin's own token-secured URL, and Kuroshiro renders on arrival. Choose how each POST combines with what's already stored—replace outright (`standard`), recursively merge objects (`deep_merge`), or append to an array up to a configurable limit (`stream`).
 
-Don't want to build a Plugin from scratch? Paste a Recipe's id or [trmnl.com/recipes](https://trmnl.com/recipes) URL and Kuroshiro imports it as a ready-to-use Poll Plugin. For OG devices with a Qwiic sensor add-on attached, CO₂, humidity, pressure and temperature readings are parsed straight off the device's poll and exposed to every template as `sensors.*`—no extra setup required.
+Don't want to build a Plugin from scratch? Search [trmnl.com](https://trmnl.com/recipes)'s Recipes by name, category and install count in the Recipe Gallery without leaving Kuroshiro, or paste a Recipe's id or URL, and Kuroshiro imports it as a ready-to-use Poll Plugin. For OG devices with a Qwiic sensor add-on attached, CO₂, humidity, pressure and temperature readings are parsed straight off the device's poll and exposed to every template as `sensors.*`—no extra setup required.
 
 ---
 

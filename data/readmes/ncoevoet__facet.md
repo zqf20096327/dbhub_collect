@@ -72,7 +72,7 @@ Hover over any photo to see its score breakdown and EXIF data in the gallery's s
 </tr></table>
 
 <details><summary>Full filter sidebar — every section expanded (click to view)</summary>
-<p align="center"><img src="docs/screenshots/filter-sidebar-full.jpg" alt="The five filter sidebar tabs side by side: Browse, Review, Quality, Subject and Display" width="900"></p>
+<p align="center"><img src="docs/screenshots/filter-sidebar-full.jpg" alt="The gallery filter sidebar, with its filters grouped under tabs" width="900"></p>
 </details>
 
 **Workflow tips:**
@@ -144,7 +144,7 @@ Hover over any photo to see its score breakdown and EXIF data in the gallery's s
 
 - **Dark & light mode** with 10 accent color themes; respects system preference
 - **Responsive** — adapts from mobile to desktop, with a touch-friendly bulk-actions sheet on small screens
-- **Installable PWA** — web app manifest + service worker: install to home screen, offline app shell, cached thumbnails
+- **Installable PWA** — web app manifest + service worker: install to home screen, offline app shell
 - **Virtualized gallery** — renders a handful of DOM nodes regardless of library size, so scrolling stays fast at 100k+ photos
 - **Resumable scans** — interrupted scans resume (`--resume`), failed files are tracked and retryable (`--retry-failed`), progress streams to the web UI
 - **7 UI languages** — the viewer ships in English, French, German, Spanish, Italian, Brazilian Portuguese, and Simplified Chinese (简体中文); documentation is available in all seven

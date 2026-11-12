@@ -18,7 +18,7 @@ with web assets embedded in the binary and data stored in PostgreSQL.
 
 ## The catalog today
 
-Local catalog snapshot, **2026-11-09**:
+Local catalog snapshot, **2026-11-10**:
 
 | Layer | Current scope |
 | --- | --- |
@@ -31,8 +31,8 @@ Local catalog snapshot, **2026-11-09**:
 
 The broad directory lives in [`pgext.universe`](db/universe.csv); the packaged
 baseline lives in [`pgext.extension`](db/extension.csv). The latter has
-626 records (624 available, 2 removed), grouped under 518 package names,
-including PostgreSQL contrib modules. These are separate counts: the homepage
+625 available records, grouped under 518 package names, including PostgreSQL
+contrib modules. These are separate counts: the homepage
 uses Universe's `packaged` flag, while its package and slot totals come from
 the active `pgext.pkg` matrix. A package can provide several extensions;
 matrix slots include missing and unsupported combinations, not just successful
@@ -65,7 +65,7 @@ filters, and server options.
 
 Download a binary for Linux or macOS (`amd64`/`arm64`), or a Linux `deb`/`rpm`
 package, from the [releases](https://github.com/pgsty/pgext/releases), and put
-`pgext` on your `PATH`. To build from source, use Go 1.27.3:
+`pgext` on your `PATH`. To build from source, use Go 1.27.4:
 
 ```bash
 git clone https://github.com/pgsty/pgext.git

@@ -4,11 +4,11 @@
   
   **A high-performance, enterprise-grade e-commerce backend built with Kotlin & Ktor.**
 
-  [![Ktor](https://img.shields.io/badge/ktor-3.5.1-blue.svg)](https://github.com/ktorio/ktor)
-  [![Exposed](https://img.shields.io/badge/Exposed-1.3.0-blue.svg)](https://github.com/JetBrains/Exposed)
-  [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.0-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
-  ![Koin](https://img.shields.io/badge/Koin-4.2.0-29BEB0?logo=koin&logoColor=white)
-  [![PostgreSQL Version](https://img.shields.io/badge/PostgreSQL-42.7.8-336791?logo=postgresql)](https://www.postgresql.org/)
+  [![Ktor](https://img.shields.io/badge/ktor-3.6.1-blue.svg)](https://github.com/ktorio/ktor)
+  [![Exposed](https://img.shields.io/badge/Exposed-1.6.1-blue.svg)](https://github.com/JetBrains/Exposed)
+  [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.21-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+  ![Koin](https://img.shields.io/badge/Koin-4.2.2-29BEB0?logo=koin&logoColor=white)
+  [![PostgreSQL Version](https://img.shields.io/badge/PostgreSQL-42.7.14-336791?logo=postgresql)](https://www.postgresql.org/)
   [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
   <a href="https://github.com/piashcse"><img alt="Author" src="https://img.shields.io/static/v1?label=GitHub&message=piashcse&color=C51162"/></a>
 
@@ -68,14 +68,14 @@
 - **Order Processing**: Handle order creation, status updates, and order history.
 - **Order Status History**: Comprehensive audit trail for every status transition (Placed, Confirmed, Shipped, etc.).
 - **Automatic Taxation**: Configurable tax calculation (default 5%) applied automatically during checkout.
-- **Order Cancellation**: Customers can cancel PENDING/CONFIRMED orders with autom
+- **Order Cancellation**: Customers can cancel PENDING/CONFIRMED orders with aut
 
 [...截断...]
 
-atic stock restoration.
+omatic stock restoration.
 - **Seller Orders**: Sellers can view and manage orders from their shop.
 - **Admin Orders**: Admins can view all orders with advanced filters (status, date range).
-- **Human-Readable Order Numbers**: Sequential order numbers in format ORD-YYYYMMDD-XXXX.
+- **Human-Readable Order Numbers**: Date-prefixed order numbers in `ORD-YYYYMMDD-XXXX-XXXXXXXX` format (random suffix guarantees uniqueness under concurrency).
 - **Idempotency Support**: Prevent duplicate orders with idempotency keys.
 - **Payment Integration**: Integrate with popular payment gateways for seamless transactions.
 - **Payment Validation**: Payment amounts validated against order totals.
@@ -131,18 +131,17 @@ atic stock restoration.
 - **Detekt**: Static code analysis for finding potential bugs and code smells.
 - **Pre-commit Hooks**: Enforce quality standards before code is even committed.
 
-## Architecture
+### 13. Testing & Coverage
 
-<p align="center">
-  </br>
-  <img width="60%" height="60%" src="https://github.com/piashcse/ktor-E-Commerce/blob/master/screenshots/onion_architecture.png" />
-</p>
-<p align="center">
-<b>Fig. Clean / Onion Architecture </b>
-</p>
+- **Unit + route tests**: `./gradlew test` (no database required)
+- **PostgreSQL integration tests**: Flyway migrations, repositories, order/payment/refund/payout
+  lifecycles and concurrency guards
+- **Coverage gate**: JaCoCo overall + per-package rules; CI enforces the integration-backed target
+- **Current baseline**: 430 tests, **54.3% instruction / 25.7% branch / 59.3% line**
 
-The project follows **Clean Architecture** with clear separation of concerns:
+```bash
+./gradlew test jacocoTestReport
+# report: build/reports/jacoco/test/html/index.html
+```
 
-- **Route Layer** (`*Routes.kt`) — HTTP routing only, uses `by inject()` for dependency injection, delegates all logic to services/repositories
-- **Service Layer** (`*Service.kt`) — Business logic orchestration, works with domain models and DTOs, zero Exposed/sql imports
-- **Repository Lay
+See [Testing & Coverage](docs/test

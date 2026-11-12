@@ -9,9 +9,25 @@ Self-hosted server for book libraries and reading-position synchronization.
 
 The server is a single Go binary with SQLite by default, optional PostgreSQL, and multi-user support.
 
+Project site: <https://chmouel.github.io/liseur-sync/>
+
 ![Library](docs/screenshots/library.png)
 
 ![Insights](docs/screenshots/insights.png)
+
+## Set up KOReader
+
+Download one file from the Devices page, copy it into KOReader's `patches/` folder and start KOReader. The library appears in KOReader's built-in OPDS catalog, reading positions sync through its built-in Progress sync, and reading time goes to the server through the KoInsight plugin, which the setup downloads for you.
+
+**[Step-by-step guide with screenshots](https://chmouel.github.io/liseur-sync/koreader/)**
+
+![The Set up KOReader box on the Devices page](docs/site/img/web-setup-card.png)
+
+## Set up CrossPoint
+
+On an Xteink running CrossPoint, pair CrossPoint Sync with a code from the Devices page to sync your reading position. Add the OPDS catalog with a library token to download books, and install the statistics plugin the Devices page builds for the reader to record reading time.
+
+**[Step-by-step guide with screenshots](https://chmouel.github.io/liseur-sync/crosspoint/)**
 
 ## Interfaces
 
@@ -20,8 +36,7 @@ The server is a single Go binary with SQLite by default, optional PostgreSQL, an
 * reading-position synchronization using full locators
 * a native REST API
 * a kosync-compatible API for KOReader and [CrossPoint](docs/crosspoint.md), with paragraph-precise positions shared with Liseur
-* a [KOReader plugin](koreader-plugin/README.md) that browses and downloads the library and syncs positions through the native API
-* OPDS 1.2
+* OPDS 1.2 and OPDS 2.0 catalogs
 * EPUB library indexing and search
 * audiobooks found in watched folders, played inside the web reader
 * EPUB and audiobook upload, and deletion, for writable folders
@@ -50,9 +65,9 @@ Reader preferences synchronize as well per device.
 
 Every device writes positions its own way, and the server keeps them together:
 
-* **KOReader** has two options. Its own *Progress sync* can point at the kosync API, or you can install the [Liseur Sync plugin](koreader-plugin/README.md), which browses and downloads the catalogue, syncs positions through the native API, and shows the reading summary. The plugin is in KOReader's App Store, and every change to it is published as a release with a ready-to-unzip `liseur.koplugin.zip`. Pick one of the two: only one thing should write positions.
+* **KOReader** syncs positions through its built-in *Progress sync*, browses the library over OPDS and uploads reading time with the KoInsight plugin. One download from the Devices page sets all three up: see the [setup guide](https://chmouel.github.io/liseur-sync/koreader/) or the [reference](docs/koreader.md).
 * **CrossPoint** pairs through kosync; see [docs/crosspoint.md](docs/crosspoint.md).
-* **Liseur**, on a phone or a desktop, uses the native API.
+* **Liseur**, the Android app and the main client, uses the native API. See [how it connects](https://chmouel.github.io/liseur-sync/liseur/).
 
 Pairing and setup for each client is in [docs/deployment.md](docs/deployment.md).
 
@@ -139,12 +154,16 @@ The reader design and security model are documented in [ADR-0007](docs/adr/0007-
 
 ### Offline PWA
 
-Liseur-sync's web UI ships as a PWA that lets you read books offline. From the
-library, choose **Save offline** for each book you want to carry, then install
-the site via your browser's "Add to Home Screen" option (Safari, Chrome, etc.).
+Liseur-sync's web UI ships as a PWA that lets you read books offline. Install
+the site with your browser's "Add to Home Screen" option (Safari, Chrome, etc.),
+open the installed app and sign in there, then choose **Save offline** for each
+book you want to carry. Books saved in the browser beforehand do not carry over
+to the installed app on iOS.
 The installed app opens downloaded books without a network connection and keeps
 positions, reading sessions, highlights and notes locally until it can
 reconnect.
+
+**[Install it on an iPad, step by step](https://chmouel.github.io/liseur-sync/ipad/)**
 
 ### Audiobooks
 
@@ -230,7 +249,7 @@ Deployment details, including TLS, KOReader pairing, Calibre integration, watche
 
 ## Client integration
 
-[Liseur](https://github.com/chmouel/liseur) uses the native API, as does the [KOReader plugin](koreader-plugin/README.md).
+[Liseur](https://github.com/chmouel/liseur) uses the native API.
 
 Protocol and synchronization details:
 

@@ -23,7 +23,7 @@ videos and images with thumbnails. It recursively scans any folder you point it 
 generates thumbnails, tags, and metadata, and lets you browse the collection in
 a native window.
 
-The name **Meguri** comes from the Japanese word *巡り* — "going around,
+The name **Meguri** comes from the Japanese word _巡り_ — "going around,
 coming back around" — with the sentiment of wandering back through your
 memories and rediscovering them.
 
@@ -87,7 +87,7 @@ Prebuilt packages for all platforms are also available on
 | -------- | --------------------------------------------- |
 | Linux    | AppImage / deb                                |
 | Windows  | Microsoft Store / Installer (NSIS) / portable |
-| macOS    | dmg / zip (Apple silicon)                     |
+| macOS    | dmg / zip (Apple silicon, macOS 13 or later)  |
 
 ### macOS: first launch
 
@@ -357,20 +357,20 @@ To watch the app while debugging, run on the current display instead:
 npm run test:e2e
 ```
 
-CI installs Playwright browser dependencies with `npm run test:e2e:install`
-(Ubuntu/Debian only). On other distros (e.g. Arch), skip `--with-deps` if you
-already run Electron apps locally.
+The tests launch the Electron app, not Playwright's browsers, so CI installs no
+Playwright browsers. On a fresh Ubuntu/Debian machine that lacks the libraries
+Electron needs, `npm run test:e2e:install` pulls them in.
 
 ## Basic Usage
 
-| Action     | How                                                                                                                |
-| ---------- | ------------------------------------------------------------------------------------------------------------------ |
-| Scan       | Runs automatically at startup. Re-scan via the header "Scan" (incremental, move tracking)                          |
+| Action     | How                                                                                                                  |
+| ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| Scan       | Runs automatically at startup. Re-scan via the header "Scan" (incremental, move tracking)                            |
 | Play       | Click a thumbnail → play in the detail view (audio plays in the bottom bar). When unsupported, use "Open externally" |
-| Tag / Rate | Assign in the detail view (tags have autocomplete). Click a tag in the grid to search                              |
-| Search     | Filter and sort by full text, kind, and rating in the top bar (conditions shown as badges, individually removable) |
-| Theme      | Switch from Theme at the top-right of the header                                                                   |
-| Zoom       | Ctrl + wheel, Ctrl +/-, Ctrl + 0 to reset                                                                          |
+| Tag / Rate | Assign in the detail view (tags have autocomplete). Click a tag in the grid to search                                |
+| Search     | Filter and sort by full text, kind, and rating in the top bar (conditions shown as badges, individually removable)   |
+| Theme      | Switch from Theme at the top-right of the header                                                                     |
+| Zoom       | Ctrl + wheel, Ctrl +/-, Ctrl + 0 to reset                                                                            |
 
 To drag a file to another app, hover over it in grid or list view and drag
 the arrow beside its selection checkbox. Drag from a selected file's arrow
@@ -379,6 +379,10 @@ to carry the whole selection.
 ProRes clips play in Meguri through a local H.264 preview at up to
 1920 × 1080. The original clip is still used when you drag it into an editor
 or open it externally.
+
+When the player repackages a container such as MKV, it converts Dolby Digital
+(AC-3) or Dolby Digital Plus (E-AC-3) audio to AAC for playback. The preview
+keeps the original picture and the surround channel count.
 
 ## Custom CSS
 
@@ -549,13 +553,17 @@ welcome!** 🎉
 You don't need to write code to help. Ideas, feature requests, bug reports,
 UI/UX feedback, translations, and documentation improvements are all just as
 appreciated — if Meguri could do something better for your library, please
-[open an issue](https://github.com/zabuton-app/meguri/issues) and tell us
-about it.
+tell us about it: share ideas and feedback in
+[Discussions](https://github.com/zabuton-app/meguri/discussions), and report
+bugs as [issues](https://github.com/zabuton-app/meguri/issues).
 
 ## Contributing
 
 Issues and pull requests are welcome. Before opening a larger change, please
-start with an issue so the scope and direction can be discussed first.
+start a conversation — an idea in
+[Discussions](https://github.com/zabuton-app/meguri/discussions/categories/ideas)
+or an issue — so the scope and direction can be agreed first. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 
 For development:
 
@@ -570,6 +578,8 @@ Before submitting a pull request, run:
 npm run typecheck
 npm test
 npm run test:e2e:headless
+npm run lint
+npm run format:check
 ```
 
 Keep changes focused, avoid unrelated refactors, and include tests when a change

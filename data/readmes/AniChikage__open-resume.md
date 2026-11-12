@@ -20,12 +20,13 @@
 ## Features
 
 - **156 templates, all included** — browse, filter, preview, and switch layouts without unlocking a plan.
-- **An editor that stays out of your way** — live A4 preview, autosave, undo/redo, photos, section ordering, fonts, and accent colors.
-- **Unlimited resumes and free exports** — PDF, PNG, and JSON backups, without watermarks.
+- **An editor that stays out of your way** — Content, Design, Check and Share workspaces, a PDF preview of the exact file you download, autosave, undo/redo, photos, section ordering, fonts, and accent colors.
+- **Unlimited resumes and free exports** — searchable PDF, editable Word (.docx), PNG, and JSON backups, without watermarks.
+- **Bring your existing resume** — read PDF, DOCX, TXT, Markdown or pasted text on your device, review the detected content, then create an editable copy.
+- **Back up and restore** — export the whole workspace or one resume as JSON, and restore it as new copies. Original JSON backups remain compatible.
+- **Version history** — server checkpoints, named snapshots, content and appearance comparisons, and restoration as a new copy. Existing browser snapshots remain available under Browser history; JSON keeps backups outside the app.
 - **Find and organize your resumes** — search by title, name, or target role; sort by update time or title; rename and duplicate from your workspace.
 - **Local resume checks** — review content, contact details, and date ranges, then jump to the relevant editor fields. Runs in the browser without an API key.
-- **Version history** — automatic checkpoints, named snapshots of your current editor, content and appearance comparisons, and restoration as a new copy.
-- **Import an existing resume** — read text PDFs, DOCX, TXT, Markdown, or pasted text on your device, review the result, and import a new resume. JSON backups restore content and appearance.
 - **Local job matching** — compare a posting with visible resume content, add your own keywords, and jump to matching evidence. No API key needed.
 - **Seven interface languages** — English, Simplified Chinese, Traditional Chinese, Japanese, Korean, French, and Russian.
 - **Your own workspace** — local SQLite storage, server-side sessions, bundled fonts, and no analytics or telemetry.
@@ -33,6 +34,14 @@
 - **Easy to run and modify** — Docker or Node.js 24+, with a strict TypeScript frontend and server. No cloud database, OAuth, or payment setup required.
 
 ![Open Resume — template gallery in English](docs/images/templates.png)
+
+### Import and export
+
+Use **Content**, **Design**, **Check** and **Share** to write, style, review and download. Arrow keys move between the workspace tabs; keys 1–4 switch workspaces while you are outside a text field. On a phone, use **Preview** to see the PDF and **Back to editing** to return.
+
+From **My Resumes**, choose **Import resume** for PDF, DOCX, TXT, Markdown or pasted text, **Import JSON backup** to restore workspace copies, or **Back up all** to save the workspace. In the editor, **Resume tools** opens server **Version history**, existing **Browser history** and **Job matching**; **Export** offers PDF, Word, PNG and a single-resume JSON backup.
+
+File import supports text PDFs, DOCX, TXT and Markdown up to 10 MB; PDFs can have up to 30 pages. Scanned PDFs require OCR first; complex layouts should be checked before saving. Choose A4 or US Letter in **Design**; the choice is saved with the resume and its backups. The PDF font picker offers bundled Noto Sans CJK and Noto Serif CJK, keeping text metrics consistent across devices; legacy font choices map to the matching family. Word exports editable content in a simplified layout at the selected paper size; PDF and PNG use the same PDF pages as the preview, including page breaks and continuation margins; PDF embeds only the used font glyphs. Workspace JSON backups support up to 100 resumes / 25 MB. Import creates copies and does not overwrite existing resumes.
 
 ## Demo
 
@@ -46,12 +55,10 @@ Screenshots and the walkthrough show the real app with fictional English sample 
 
 ## Getting started
 
-The commands below pin the first stable release, [v1.0.0](https://github.com/AniChikage/open-resume/releases/tag/v1.0.0). See [CHANGELOG.md](CHANGELOG.md) for version history.
-
 ### Docker
 
 ```sh
-git clone --branch v1.0.0 --depth 1 https://github.com/AniChikage/open-resume.git
+git clone https://github.com/AniChikage/open-resume.git
 cd open-resume
 docker compose up -d --build
 ```
@@ -65,7 +72,7 @@ Data is stored in the `resumes` named volume and survives container replacement.
 Requires **Node.js 24 or later**.
 
 ```sh
-git clone --branch v1.0.0 --depth 1 https://github.com/AniChikage/open-resume.git
+git clone https://github.com/AniChikage/open-resume.git
 cd open-resume
 npm ci
 npm run build
@@ -87,15 +94,9 @@ Custom passwords are not displayed in the interface. Changing credentials invali
 
 Node mode stores data in `.data/open-resume.sqlite` by default; set `DATA_DIR` to use another directory. To back up, stop the app and copy the entire data directory, including any `-wal` and `-shm` files. In Docker, back up the named volume after stopping the service. Keep a backup before deleting data.
 
-Version history is stored in the same SQLite database. Each resume keeps its initial version, 20 recent automatic versions, and 30 recent manual snapshots; automatic changes within one minute are grouped. Named snapshots can include current unsaved edits. Compare content and appearance before restoring a version as a new resume; the source stays intact.
-
-Import reads files locally and asks you to review detected fields and editable source text before saving a new resume to your workspace. Original layouts, photos, and dates may need adjustment. Scanned PDFs and images have no built-in OCR; extract their text first or paste it manually.
-
-Job matching keeps the posting and selected keywords in this browser for the current resume. It measures keyword coverage, not an ATS score or a hiring prediction. You can pass the posting into optional AI tailoring, which asks for consent before sending content to your configured provider.
-
 Use `PORT` to change the port. The server and Compose port bind to loopback by default. Set `HOST=0.0.0.0` for LAN access; for a public deployment, use private credentials, an HTTPS reverse proxy, and `SECURE_COOKIE=true`.
 
-Share links encode the resume in the URL fragment without third-party storage. Recipients must be able to reach your deployment; uploaded avatars are not included automatically. Share snapshots support up to 1 MiB of uncompressed content; export a PDF or JSON backup for larger resumes.
+Share links encode the resume in the URL fragment without third-party storage. Recipients must be able to reach your deployment; uploaded avatars are not included automatically.
 
 ## Optional AI tailoring
 

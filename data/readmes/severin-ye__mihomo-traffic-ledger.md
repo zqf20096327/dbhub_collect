@@ -137,3 +137,5 @@ Mihomo, Clash, Clash Verge Rev, Windows, and other names may be trademarks of th
 - [MetaCubeX/mihomo](https://github.com/MetaCubeX/mihomo) — the compatible proxy core and controller API
 - [clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev) — the Windows client used by the default named-pipe integration
 - [MetaCubeX/metacubexd](https://github.com/MetaCubeX/metacubexd) and [foru17/neko](https://github.com/foru17/neko) — interface and ecosystem references acknowledged by the upstream project
+
+发布通用检查及原生验收边界见[发布检查](docs/gstack-release-checks.md)。

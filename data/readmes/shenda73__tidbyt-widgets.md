@@ -9,12 +9,17 @@ that widget's slot in the rotation without interrupting what's on screen.
 |---|---|---|---|
 | ![](docs/sun_arc_day.gif) | ![](docs/sun_arc_night.gif) | ![](docs/flights_overhead.gif) | ![](docs/hello_world.gif) |
 
+| Stock Watch | Sectors | Stock Alert | Market Map |
+|---|---|---|---|
+| ![](docs/stock_watch.gif) | ![](docs/sectors.gif) | ![](docs/stock_alert.gif) | ![](docs/market_map.gif) |
+
 ## Widgets
 
-- **Sun Arc** (`apps/sun_arc.star`): the sun moves along an arc from sunrise to
-  sunset, and a moon takes over at night. The sky color follows the time of day,
-  clouds drift by during the day, and stars twinkle at night. Shows sunrise and sunset
-  times and how long is left. Config: `lat`, `lng`, `tz`.
+- **Sun Arc** (`apps/sun_arc.star`): an abstract view of the day. A plain disc for
+  the sun moves along a thin arc from sunrise to sunset over flat bands of sky color,
+  with rings rippling out from it. At night it becomes a hollow ring for the moon. The
+  palette follows the time of day. Shows sunrise and sunset times and how long is left.
+  Config: `lat`, `lng`, `tz`.
 - **Flights Overhead** (`apps/flights_overhead.star`): a radar scope with live ADS-B
   aircraft near you, cycling through the nearest planes and helicopters. Data comes
   from airplanes.live (falling back to adsb.lol), both free with no key. Config: `lat`,
@@ -27,11 +32,33 @@ that widget's slot in the rotation without interrupting what's on screen.
   URI `http://localhost:8765/callback`, put `OURA_CLIENT_ID` and `OURA_CLIENT_SECRET`
   in `.oura`, then run `python3 scripts/oura_login.py`. Tokens are stored in SSM
   (`/oura/credentials`). Gen3+ rings need an active Oura membership for API access.
-- **Stock Watch** (`apps/stocks.star`): cycles through a list of tickers, each with
-  its price, change since the previous close and an intraday sparkline
-  with a blinking dot on the latest price (dotted line = previous close). Set `tickers` to comma-separated Yahoo
-  symbols, optionally `SYMBOL:Label` (default `^GSPC:S&P,TSLA,SPCX`), and `seconds`
-  per ticker. Data from Yahoo Finance's chart API, no key needed.
+- **Stock Watch** (`apps/stocks.star`): cycles through a list of tickers. Each one
+  shows its price, the change since the previous close and its volume pace (today's
+  volume against the same point of the day over the past month). Below is the day's
+  price as a glowing area chart, next to a sideways histogram of the volume traded at
+  each price: deep blue (little) to cyan (a lot), with the busiest price in amber. Set
+  `tickers` to comma-separated Yahoo symbols, optionally `SYMBOL:Label` (default
+  `^GSPC:S&P,TSLA,SPCX`), and `seconds` per ticker. Data from Yahoo Finance's chart
+  API, no key needed, with Nasdaq's feed as a fallback when Yahoo's is stale.
+- **Market Map** (`apps/market_map.star`, off by default): a treemap of the most
+  traded US stocks. A tile's area is the dollar volume traded so far today and its
+  color is the change since the previous close. A glint of light crosses the tiles
+  trading at an unusually high volume, and labels fade between ticker and percent
+  change. Config: `count`, `scale`, `unusual`. Data from Yahoo Finance's "most active"
+  screener. To turn it on, remove `"enabled": false` from its entry in
+  `apps.example.json`.
+- **Sectors** (`apps/sectors.star`): what is moving, by sector. The eleven S&P 500
+  sectors as bars sorted from strongest to weakest, with the S&P 500 as a dotted line
+  and an amber tip on sectors trading at unusually high volume. A highlight walks
+  along the bars while the header names each sector, its change and its volume pace.
+  Data from Yahoo Finance's chart API for the sector SPDR funds.
+- **Stock Alert** (`apps/stock_alert.star`): a full-screen alert when a watched ticker
+  makes a big move. It is not in the rotation: the Lambda checks prices every minute
+  (`lambda/alerts.py`) and pushes it to the front of the Tidbyt when a ticker's change
+  since the previous close crosses a new multiple of its step (with a step of 3: at
+  ±3%, ±6%, ±9%), once per level per day. Set `tickers` as `SYMBOL[:Label[:Step]]`
+  (default `^GSPC:S&P:1,TSLA,SPCX`) and the default `step`. To see it now:
+  `aws lambda invoke --function-name tidbyt-widgets --cli-binary-format raw-in-base64-out --payload '{"apps":["alert"],"alert_test":true}' /dev/stdout`
 - **Hello World** (`apps/hello_world.star`): the smallest possible example.
 
 ## How it works

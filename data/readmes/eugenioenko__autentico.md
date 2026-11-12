@@ -131,6 +131,7 @@ It is not designed for organizations that require horizontal scaling of the auth
 
 ### Authentication
 
+- **Password visibility** — accessible show/hide controls on sign-in, signup, reset, onboarding and account password forms; masked by default
 - **Three auth modes** — `password`, `password_and_passkey`, or `passkey_only` — switchable at runtime without restart
 - **Passkeys (WebAuthn)** — hardware-backed FIDO2 authentication via platform authenticators and security keys; passkey-only mode supports signup without passwords
 - **Passkey signup policy** — self-signup and client overrides apply at ceremony start and completion. Required email verification precedes sessions and authorization codes; registration is rate-limited and bound to the initiating browser.
@@ -149,6 +150,7 @@ It is not designed for organizations that require horizontal scaling of the auth
 - **Self-signup** — optionally allow end users to register accounts on the login page, globally or per client
 - **User CRUD** — full user lifecycle management with role support (`user`, `admin`)
 - **Custom claims** — assign custom string claims to users and groups; group claims are inherited as `group.claim`, or optionally merged into arrays under their local names, with individual claims taking precedence; emitted into the ID token, access token, and UserInfo response when the `custom_claims` scope is granted
+- **Client access restriction**: limit a client to listed users and members of listed groups; enforced on login, SSO, consent, every user grant, device approval and ForwardAuth
 - **User groups** — organize users into groups; group names are emitted as a `groups` claim when the `groups` scope is granted
 - **Soft deletes** — users and clients are deactivated, not destroyed, preserving audit history
 - **Account self-service** — users can manage their own profile, security settings, sessions, passkeys, MFA, and connected providers via the built-in Account UI

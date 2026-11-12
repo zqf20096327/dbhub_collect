@@ -17,14 +17,27 @@ behind it, and each can be replaced or added to.
 
 ## What it has
 
-- Standard SQL implementing SQL-86 in full, SQL-92 being taken in full, and each
-  later standard in turn through SQL:2023, as one language. See
-  [CONFORMANCE.md](CONFORMANCE.md).
+- Standard SQL as one language, SQL-86 in full and SQL-92 and SQL:2023
+  being implemented. See [CONFORMANCE.md](CONFORMANCE.md).
 - Transactions at READ COMMITTED by default, or up to SERIALIZABLE, that run
   on many threads at once and survive a crash with multi-version concurrency
   control, a write-ahead log, checkpoints and recovery.
-- Multiple Indexes such as B-link trees and linear hash tables, chosen by a
-  cost-based planner.
+- Row and columnar storage, chosen per table.
+- Indexes as plug-ins. B-link trees and linear hash tables are built in,
+  any other method registers with its own options, and a cost-based
+  planner chooses among them. Zone maps and Bloom filters skip what a scan
+  cannot match.
+- Collations, from binary order through case-insensitive to the Unicode
+  Collation Algorithm and CLDR's tailorings for 48 languages, so text sorts
+  and compares as its readers expect.
+- Compression and encryption at rest, LZ4 and AES-256-GCM or
+  ChaCha20-Poly1305, for a whole database or one table.
+- Replication by Viewstamped Replication over mutual TLS. A change commits
+  once a majority of servers holds it, so three servers survive losing one.
+  Backups serve reads and elect a new primary within seconds, and a lost
+  server catches up when it rejoins.
+- Domains, assertions, temporary tables, scrollable cursors and dynamic SQL.
+- Import of CSV and tab-separated files through the client.
 - Library, embedded modes
 - A server over TCP, Unix sockets or Windows named pipes, with TLS,
   users and passwords, prepared statements and cancellation.

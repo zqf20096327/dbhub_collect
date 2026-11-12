@@ -77,8 +77,9 @@ system permissions determine the available voice, camera and notification tools.
 
 are end-to-end encrypted with Olm (vodozemac),
 > and channel voice, video and screen sharing are end-to-end encrypted with a
-> key shared by the channel's members. Channel/global chat, forum bodies and
-> private calls are **not** end-to-end encrypted yet. Upgrading? Deploy the
+> key shared by the channel's members. Private calls (direct and group) are
+> end-to-end encrypted with per-call keys sent over Olm. Channel/global chat
+> and forum bodies are **not** end-to-end encrypted yet. Upgrading? Deploy the
 > server before or together with the clients: see
 > [Upgrading to end-to-end encryption](#e2ee-upgrade).
 
@@ -125,8 +126,8 @@ app:
   X25519 keys (NaCl box) and kept by the server for up to 24 hours, so it has
   no forward secrecy: someone who stores it and later obtains one of those
   long-term keys can read the copied history.
-- **Private-call signalling** still uses the static device keys (private-call
-  media is not end-to-end encrypted, see below).
+- **Private-call signalling** still uses the static device keys; private-call
+  media itself is end-to-end encrypted with per-call keys (see below).
 - **Guests.** A guest that signs in with an identity key (desktop password-less
   logins, browser guests) uses the same protocol for direct messages: its key
   is its own account root and registers its device itself. A browser guest has
@@ -138,5 +139,4 @@ app:
 **Channel voice, video and screen sharing (`noxa-media-e2ee-v1`).** On a
 server that advertises this capability, every channel microphone, camera,
 screen and screen-audio frame is encrypted on the sending device before it
-reaches the server's media relay (SFU), and decrypted only on the receiving
-device. The frame cipher is the maintained LiveKit FrameC
+reaches the server's media relay

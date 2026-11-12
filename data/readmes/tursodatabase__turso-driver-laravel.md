@@ -1,8 +1,12 @@
-> [!CAUTION]
-> There is a new adapter coming soon for Laravel that doesn't require using an extension. This extension doesn't support offline writes beta. Join us on Discord to talk more - https://discord.gg/turso
+> [!IMPORTANT]
+> Offline writes are currently in **beta** and come in **two flavors**: the
+> journaled flavor for **Turso Cloud** (`DB_OFFLINE_WRITES=true` alone) and the
+> sqld flavor for **self-hosted libsql-server** (`DB_SQLD_OFFLINE_MODE=true`
+> **and** `DB_OFFLINE_WRITES=true`). Both are supported via the libSQL PHP
+> extension v1.7.0+ (see [Offline Writes](https://github.com/tursodatabase/turso-driver-laravel/wiki/Offline-Writes) in the Wiki).
 
 <p align="center">
-  <a href="https://discord.gg/turso">
+  <a href="https://discord.gg/9eAaMnJtfY">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/UhuW3zm.png">
       <source media="(prefers-color-scheme: light)" srcset="https://i.imgur.com/vljWbfr.png">
@@ -16,94 +20,70 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE">
-    <picture>
-      <img src="https://img.shields.io/github/license/tursodatabase/turso-driver-laravel?color=F05340" alt="MIT License" />
-    </picture>
-  </a>
-  <a href="https://tur.so/discord-php">
-    <picture>
-      <img src="https://img.shields.io/discord/933071162680958986?color=F05340" alt="Discord" />
-    </picture>
-  </a>
-  <a href="#contributors">
-    <picture>
-      <img src="https://img.shields.io/github/contributors/tursodatabase/turso-driver-laravel?color=F05340" alt="Contributors" />
-    </picture>
-  </a>
-  <a href="https://packagist.org/packages/tursodatabase/turso-driver-laravel">
-    <picture>
-      <img src="https://img.shields.io/packagist/dt/tursodatabase/turso-driver-laravel?color=F05340" alt="Total downloads" />
-    </picture>
-  </a>
-  <a href="https://github.com/tursodatabase/turso-driver-laravel/tags">
-    <picture>
-      <img src="https://img.shields.io/github/v/tag/tursodatabase/turso-driver-laravel?label=version&color=F05340" alt="Version Tag" />
-    </picture>
-  </a>
-  <a href="https://github.com/tursodatabase/turso-driver-laravel/actions/workflows/tests.yml">
-    <picture>
-      <img src="https://github.com/tursodatabase/turso-driver-laravel/actions/workflows/tests.yml/badge.svg" alt="Testing" />
-    </picture>
-  </a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/github/license/tursodatabase/turso-driver-laravel?color=F05340" alt="MIT License" /></a>
+  <a href="https://tur.so/discord-php"><img src="https://img.shields.io/discord/933071162680958986?color=F05340" alt="Discord" /></a>
+  <a href="#contributors"><img src="https://img.shields.io/github/contributors/tursodatabase/turso-driver-laravel?color=F05340" alt="Contributors" /></a>
+  <a href="https://packagist.org/packages/tursodatabase/turso-driver-laravel"><img src="https://img.shields.io/packagist/dt/tursodatabase/turso-driver-laravel?color=F05340" alt="Total downloads" /></a>
+  <a href="https://github.com/tursodatabase/turso-driver-laravel/tags"><img src="https://img.shields.io/github/v/tag/tursodatabase/turso-driver-laravel?label=version&color=F05340" alt="Version Tag" /></a>
+  <a href="https://github.com/tursodatabase/turso-driver-laravel/actions/workflows/tests.yml"><img src="https://github.com/tursodatabase/turso-driver-laravel/actions/workflows/tests.yml/badge.svg" alt="Testing" /></a>
 </p>
 
 <p align="center">
-  SQLite for Production. Powered by <a href="https://turso.tech/libsql">libSQL</a> and <a href="https://github.com/tursodatabase/turso-client-php/">libSQL Extension</a> for PHP.
+  SQLite for Production. Powered by <a href="https://turso.tech/libsql">libSQL</a> and the <a href="https://github.com/tursodatabase/turso-client-php/">libSQL PHP extension</a>.
 </p>
 
 <p align="center">
-  LibSQL is a fork of SQLite and this package is <b>#1 LibSQL Driver</b> that run natively using LibSQL Native Extension/Driver/Whatever and support Laravel Ecosystem.
+  libSQL is an open-contribution fork of SQLite. This package provides a
+  Laravel database driver built on the native libSQL PHP extension; Eloquent,
+  the Query Builder, migrations and transactions are exercised by the test
+  suite and the <code>docker/proof/</code> integration harness.
 </p>
 
 ---
 
-## Installation
+## Requirements
 
-You can install the package via composer:
+| Component | Requirement |
+|---|---|
+| PHP | 8.2, 8.3, 8.4 or 8.5 |
+| Laravel | 12 or 13 (13 requires PHP 8.3+) |
+| libSQL PHP extension | installed automatically via Artisan (see below) |
+| Turso PHP installer | 2.2+ (bundled) |
+
+## Installation
 
 ```bash
 composer require tursodatabase/turso-driver-laravel
 ```
 
-Then register the service provider at `bootstrap/providers.php` array:
+Register the service provider in `bootstrap/providers.php`:
 
 ```php
 return [
     App\Providers\AppServiceProvider::class,
-    Turso\Driver\Laravel\LibSQLDriverServiceProvider::class, // Here
+    Turso\Driver\Laravel\LibSQLDriverServiceProvider::class, // add this line
 ];
 ```
 
-The package now include the `turso-php-installer`, so you can install the LibSQL Extension via artisan command:
+Install the libSQL PHP extension (bundled with this package):
 
-```
+```bash
 php artisan turso-php:install
 ```
 
-And you can read the all command using `php artisan | grep turso-php` or read the [manual](https://darkstation.mintlify.app/dark-extensions/tools/installer/reference)
+The installer also provides `turso-php:update` and `turso-php:uninstall`, plus
+environment, token, certificate and `sqld`-server management commands — see
+`src/Commands/` for the implementations, or `php artisan | grep turso-php`
+for the full list.
 
-## Laravel Sail
+## Configuration
 
-Don't worry, we also provide Laravel Sail step by step guide for you read: [Sailing with LibSQL](https://darkstation.mintlify.app/dark-extensions/tools/installer/platforms/laravel-sail)
-
-## Environment Variable Overview
-
-You need to know the additional configuration in `.env` file, which come from Laravel and which come from LibSQL Driver. And here is the overview of `.env`:
-
-**Laravel**
+The driver reads its settings from `.env`:
 
 ```env
 DB_CONNECTION=libsql
-DB_DATABASE=database.sqlite
-```
+DB_DATABASE=database.sqlite   # or :memory:
 
--   `DB_CONNECTION` key is represent default database connection like `libsql`, `sqlite`, `mysql`, `mariadb`, `pgsql`, and `sqlsrv`.
--   `DB_DATABASE` key is represent the location of database name or in this case is database filename.
-
-**LibSQL Driver**
-
-```env
 DB_AUTH_TOKEN=<your-database-auth-token-from-turso>
 DB_SYNC_URL=<your-database-url-from-turso>
 DB_SYNC_INTERVAL=5
@@ -113,97 +93,7 @@ DB_SQLD_OFFLINE_MODE=false
 DB_OFFLINE_WRITES=false
 ```
 
--   `DB_ENCRYPTION_KEY` encrypts the database at rest. It is passed straight into the libSQL extension (`v1.7.0` positional `encryption_key` argument) and is only effective at database creation time.
--   `DB_SQLD_OFFLINE_MODE` enables `sqld_offline_mode` for sqld (self-hosted libsql server) offline-write replicas (`extension >= 1.7.0`).
--   `DB_OFFLINE_WRITES` enables offline writes for Turso Cloud databases (`extension >= 1.7.0`, Turso Cloud only — not plain libsql-server).
-
-Create a new Turso Database [here](https://docs.turso.tech/quickstart)
-
-### Environment Variables for Turso Driver
-
-Below is a list of environment variables used to configure the Turso driver. Each variable plays a role in defining database connection and behavior:
-
--   **`DB_AUTH_TOKEN`**  
-    You can generate this token using the following command:
-
-    ```bash
-    turso db tokens create <database-name>
-    ```
-
-    Alternatively, visit your [Turso Dashboard](https://dashboard.turso.io), select the desired database, and generate the token from there.
-
--   **`DB_SYNC_URL`**  
-    This URL is automatically generated by Turso when you create a new database. Retrieve the database URL using the command:
-
-    ```bash
-    turso db show --url <database-name>
-    ```
-
--   **`DB_SYNC_INTERVAL`**  
-    This variable defines the interval (in seconds) at which an embedded replica synchronizes with the primary database. It ensures automatic synchronization of the database in the background.  
-    **Default:** `5 seconds`  
-    **Use case:** Keeps replicas up-to-date with minimal manual intervention.
-
--   **`DB_READ_YOUR_WRITES`**  
-    Ensures that writes made by a connection are immediately visible to subsequent reads from the same connection. This is vital for maintaining consistency in distributed systems.  
-    **Default:** `true`  
-    **Use case:** Guarantees clients always see their latest writes.
-
--   **`DB_ENCRYPTION_KEY`**  
-    Specifies the encryption key used for database encryption. This key is critical for securing data at rest, ensuring only authorized individuals can decrypt the database content.  
-    **Default:** Empty  
-    **Use case:** Protects sensitive data stored on disk.
-
-## Choose Your Connection Needs
-
-**LibSQL** has **4 types of connections** to interact with the database: _In-Memory Connection_, _Local Connection_, _Remote Connection_, and _Remote Replica Connection (Embedded Replica)_
-
-<details>
-  <summary><strong>💾 &mdash; In-Memory Connection</strong></summary>
-  <p>To be able to use LibSQL in-memory as if you were using SQLite, simply change the following <code>.env</code>:</p>
-  <pre><code>DB_CONNECTION=libsql
-DB_DATABASE=:memory:
-  </code></pre>
-</details>
-
-<details>
-  <summary><strong>🖥 &mdash; Local Connection</strong></summary>
-  <p>To be able to use LibSQL locally as if you were using SQLite, simply change the following <code>.env</code>:</p>
-  <pre><code>DB_CONNECTION=libsql
-DB_DATABASE=database.sqlite
-  </code></pre>
-  <p>Ignore other LibSQL <code>.env</code> variables.</p>
-</details>
-
-<details>
-  <summary><strong>🌏 &mdash; Remote Connection</strong></summary>
-  <p>To use LibSQL Remote Connection only, you can define the following <code>.env</code> variables:</p>
-  <pre><code>DB_CONNECTION=libsql
-DB_AUTH_TOKEN=&lt;your-database-auth-token-from-turso&gt;
-DB_SYNC_URL=&lt;your-database-url-from-turso&gt;
-  </code></pre>
-</details>
-
-<details>
-  <summary><strong>🌱 &mdash; Remote Replica Connection (Embedded Replica)</strong></summary>
-  <p>To configure remote replica connection (embedded replica), you can simply use the following <code>.env</code> variables:</p>
-  <pre><code>DB_CONNECTION=libsql
-DB_DATABASE=database.sqlite
-DB_AUTH_TOKEN=&lt;your-database-auth-token-from-turso&gt;
-DB_SYNC_URL=&lt;your-database-url-from-turso&gt;
-DB_SYNC_INTERVAL=5
-DB_READ_YOUR_WRITES=true
-DB_ENCRYPTION_KEY=<your-encryption-key>
-DB_SQLD_OFFLINE_MODE=false
-DB_OFFLINE_WRITES=false
-  </code></pre>
-  <p>Enable `DB_OFFLINE_WRITES=true` (Turso Cloud) or `DB_SQLD_OFFLINE_MODE=true` (sqld server) when you need offline-write capability; both require the libSQL extension `>= 1.7.0`.</p>
-  <p>That's it! How easy to make different connection using LibSQL Driver in Laravel, right?!</p>
-</details>
-
-## Database Configuration
-
-Add this configuration at `config/database.php` inside the `connections` array:
+And the `connections` block of `config/database.php`:
 
 ```php
 'libsql' => [
@@ -220,60 +110,79 @@ Add this configuration at `config/database.php` inside the `connections` array:
 ],
 ```
 
-> Copy and Paste and do not change it! Or try to change it and will broke your app or give you malfunction.
+**All options, defaults and their meaning are documented on the**
+[**Wiki · Configuration**](https://github.com/tursodatabase/turso-driver-laravel/wiki/Configuration).
+
+## Connection types
+
+libSQL supports four connection types — **in-memory**, **local**, **remote**,
+and **remote replica** (embedded replica). Examples and verified setups are on
+the [Wiki · Connection Types](https://github.com/tursodatabase/turso-driver-laravel/wiki/Connection-Types).
 
 ## Usage
 
-For database operation usage, everything have same interface like usual when you using `Illuminate\Support\Facades\DB` in your database model. But remember, this is LibSQL they have `sync` method that can be used when you connect with Remote Replica Connection (Embedded Replica).
+Database operations use the standard `Illuminate\Support\Facades\DB`
+interface. When connected via remote replica (embedded replica), the driver
+adds a `DB::sync()` method for triggering a manual replica sync.
+
+Write failures **throw** since v1.4.0 — wrap writes in try/catch as you would
+with the SQLite driver:
 
 ```php
-use Illuminate\Support\Facades\DB;
-
-// Create
-DB::table('users')->insert([
-    'name' => 'Budi Dalton',
-    'email' => 'budi.dalton@duck.com'
-]);
-
-// Read
-DB::table('users')->get();
-DB::table('users')->where('id', 2)->first();
-DB::table('users')->orderBy('id', 'DESC')->limit(2)->get();
-
-// Update
-DB::table('users')->where('id', 2)->update(['name' => 'Doni Mandala']);
-
-// Delete
-DB::table('users')->where('id', 2)->delete();
-
-// Transaction
 try {
-    DB::beginTransaction();
-
-    $updated = DB::table('users')->where('id', 9)->update(['name' => 'Doni Kumala']);
-
-    if ($updated) {
-        echo "It's updated";
-        DB::commit();
-    } else {
-        echo "Not updated";
-        DB::rollBack();
-    }
-
-    $data = DB::table('users')->orderBy('id', 'DESC')->limit(2)->get();
-    dump($data);
-} catch (\Exception $e) {
-    DB::rollBack();
-    echo "An error occurred: " . $e->getMessage();
+    DB::table('users')->insert(['name' => 'Budi Dalton', 'email' => 'budi.dalton@duck.com']);
+} catch (\Illuminate\Database\QueryException $e) {
+    report($e);
 }
-
-// Sync
-DB::sync();
 ```
+
+Query Builder, Eloquent (relations, casts, soft deletes, collections),
+migrations, transactions, the schema builder, vector types and encryption at
+rest are all covered by the Pest suite and the `docker/proof/` harness.
+
+For the full tour — Eloquent examples, vector index syntax, offline-write
+bootstrap, `DB::sync()` semantics and more — see
+the [Wiki · Basic Usage](https://github.com/tursodatabase/turso-driver-laravel/wiki/Basic-Usage).
+
+## Offline-write modes
+
+Two opt-in flavors (both need libSQL Extension ≥ 1.7.0):
+
+| Env variable | Value | Flavor |
+|---|---|---|
+| `DB_OFFLINE_WRITES` | `true` | Turso Cloud (beta) — `remote_replica` mode, `DB::sync()` pushes to the cloud |
+| `DB_SQLD_OFFLINE_MODE` + `DB_OFFLINE_WRITES` | both `true` | Self-hosted sqld — `offline_write` mode, journal replay via `DB::sync()` |
+
+The Turso Cloud flavor bootstraps from the cloud on first sync — see
+[Wiki · Offline Writes](https://github.com/tursodatabase/turso-driver-laravel/wiki/Offline-Writes) for the required ordering and verified output.
+
+## Documentation
+
+The full user manual & tutorial lives on the **[Wiki](https://github.com/tursodatabase/turso-driver-laravel/wiki)**:
+
+- [Installation](https://github.com/tursodatabase/turso-driver-laravel/wiki/Installation)
+- [Configuration](https://github.com/tursodatabase/turso-driver-laravel/wiki/Configuration)
+- [Connection Types](https://github.com/tursodatabase/turso-driver-laravel/wiki/Connection-Types)
+- [Basic Usage](https://github.com/tursodatabase/turso-driver-laravel/wiki/Basic-Usage)
+- [Offline Writes (two flavors)](https://github.com/tursodatabase/turso-driver-laravel/wiki/Offline-Writes)
+- [Verification & Proof Harness](https://github.com/tursodatabase/turso-driver-laravel/wiki/Verification)
+- [Known Limitations](https://github.com/tursodatabase/turso-driver-laravel/wiki/Known-Limitations)
+- [Troubleshooting](https://github.com/tursodatabase/turso-driver-laravel/wiki/Troubleshooting)
+
+## Testing
+
+```bash
+composer install
+./vendor/bin/pest
+```
+
+Server-dependent tests are skipped by default; they run in CI against a
+seeded `libsql-server`. See [Wiki · Verification](https://github.com/tursodatabase/turso-driver-laravel/wiki/Verification).
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed
+recently.
 
 ## Contributing
 
@@ -281,7 +190,8 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+Please review [our security policy](https://github.com/tursodatabase/turso-driver-laravel/security/policy)
+on how to report security vulnerabilities.
 
 ## Contributors
 
@@ -289,6 +199,6 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+Licensed under the MIT License. See [LICENSE.md](LICENSE.md) for details.
 
 <!-- GitAds-Verify: QMVSQYBI166XXYYWVHF4E5PWL9UJFRL8 -->

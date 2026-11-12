@@ -14,7 +14,7 @@
 [![Android](<https://img.shields.io/badge/Android-APK%20Ready%20(API%2026%2B)-3DDC84?logo=android&logoColor=white>)](#android-mobile-release)
 [![Windows](https://img.shields.io/badge/Windows-x64%20Installer%20Ready-0078D6?logo=windows&logoColor=white)](#windows-desktop-release)
 [![Capacitor](https://img.shields.io/badge/Capacitor-v7-119EFF?logo=capacitor&logoColor=white)](https://capacitorjs.com)
-[![Tests](https://img.shields.io/badge/Tests-172%20pass%2C%200%20fail-brightgreen)](#testing--verification)
+[![Tests](https://img.shields.io/badge/Tests-174%20pass%2C%200%20fail-brightgreen)](#testing--verification)
 [![Telemetry](https://img.shields.io/badge/Telemetry-Zero%20Egress-red)](#security-invariants)
 [![License](https://img.shields.io/badge/License-MIT-blue)](#license)
 
@@ -33,12 +33,17 @@ containing hundreds of thousands of items.
 > indexing, and presentation**. Your interface should never pause for a remote network round-trip
 > simply to sort or view your personal memories.
 
+**Technical Deep Dive:** For a complete explanation of every runtime, framework, SQLite/FTS5 index,
+cryptographic engine, Tauri/Android native bridge, security control, and UI mechanism used across
+the codebase, see the **[Complete Technology & Implementation Guide](docs/technical-guide.md)**.
+
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Releases](#releases)
+  - [Bring-Your-Own-Credentials (BYOC) Privacy Model](#bring-your-own-credentials-byoc-privacy-model)
   - [Windows Desktop Release](#windows-desktop-release)
   - [Android Mobile Release](#android-mobile-release)
 - [Architecture & Data Flow](#architecture--data-flow)
@@ -72,6 +77,32 @@ containing hundreds of thousands of items.
 ---
 
 ## Releases
+
+### Bring-Your-Own-Credentials (BYOC) Privacy Model
+
+When you distribute the Windows installer (`.exe`) or Android APK (`.apk`), **no developer
+credentials, personal client secrets, access tokens, or Google accounts are bundled or exposed.**
+Project Sunflower is strictly local-first, zero-telemetry, and zero-knowledge.
+
+Every end-user provides their own Google Cloud OAuth 2.0 Client credentials:
+
+1. Users simply follow the step-by-step **[Google Cloud Setup Guide](docs/google-setup.md)** to
+   create a free personal Google Cloud project and generate an OAuth 2.0 Client ID and Client Secret
+   with the Google Drive API enabled.
+2. On first launch of either the Windows desktop app or the Android mobile APK, the **Setup Wizard**
+   appears automatically.
+3. Users paste their **Client ID** and **Client Secret** into the setup wizard:
+   - **On Android:** Credentials and OAuth tokens are stored exclusively inside the device's private
+     app sandbox (`localStorage`).
+   - **On Windows:** Credentials are encrypted directly into the native OS Keychain (Windows
+     Credential Manager via DPAPI).
+4. Users then click **Connect with Google** to authenticate directly with Google via OAuth 2.0 PKCE.
+
+> **Privacy Guarantee:** All personal media, metadata, and authentication tokens remain 100% on the
+> user's local device. Project Sunflower contains zero telemetry, zero analytics, and zero external
+> cloud servers.
+
+---
 
 ### Windows Desktop Release
 
@@ -142,22 +173,35 @@ running server, and no cloud middlemen**.
    Pressing back fluidly closes the lightbox, dismisses album pickers, or navigates from child views
    (Albums, Favorites, Private Vault) back to the main Gallery without accidentally exiting the
    application.
-4. **Mobile Touch & Drag Gestures:**  
-   Full gesture support in the Lightbox: swipe left for next photo, swipe right for previous photo,
-   with real-time finger translation and velocity-sensitive snaps. Pinch-to-zoom and double-tap zoom
-   for high-res photo inspection.
-5. **Zero-Knowledge Mobile Vault:**  
+4. **Interactive 2D Pan & Pinch-to-Zoom Engine:**  
+   Full gesture-driven photo inspection in the lightbox: two-finger pinch scales smoothly from
+   `1.0x` up to `5.0x`, double-tap toggles instant zoom (`1.0x` / `2.5x`), and free 2D pan/drag
+   allows exploring any detail of the photo at 60 FPS with GPU hardware acceleration.
+5. **Native 1-Click MediaStore Gallery Downloader:**  
+   Custom native Android plugin (`SunflowerDownloaderPlugin.java`) writes media streams directly
+   into the device's native `MediaStore` (`Pictures/ProjectSunflower` or `Movies/ProjectSunflower`),
+   updates `IS_PENDING = 0`, triggers `MediaScannerConnection.scanFile`, and shows a native Android
+   Toast. Saved photos appear immediately in Samsung Gallery, Google Photos, and file managers.
+6. **Hardware-Accelerated Zero-Lag Sidebar Drawer:**  
+   Promoted to a dedicated GPU compositor layer (`translate3d`), the mobile navigation drawer slides
+   fluidly over the screen with a clean backdrop dismiss, eliminating page reflow and keeping the
+   photo grid locked at 60–120 FPS.
+7. **Interactive Tile Panel Density Zoom:**  
+   Two-finger pinch/stretch gestures directly on the photo grid, along with an ergonomic floating
+   dock at the bottom right, dynamically adjust tile density between 1 and 5 columns on phones (and
+   up to 11 columns on desktop) with real-time column badges.
+8. **Zero-Knowledge Mobile Vault:**  
    The Private Vault runs 100% offline using the browser's native `SubtleCrypto` API (PBKDF2 key
    derivation with 100,000 iterations + AES-256-GCM authenticated encryption). Master passphrases
    and decryption keys never touch disk or network.
-6. **Adaptive Safe-Area Inset Handling:**  
+9. **Adaptive Safe-Area Inset Handling:**  
    Fully respects Android display cutouts, punch-hole cameras, and system navigation bars
    (`paddingTop: max(env(safe-area-inset-top), 48px)`), eliminating header overlapping across all
    phone brands (Samsung, Pixel, OnePlus, Xiaomi).
-7. **Pixel-Perfect Adaptive Icons:**  
-   Ships with custom adaptive app launcher icons across all standard density buckets (`mdpi`,
-   `hdpi`, `xhdpi`, `xxhdpi`, `xxxhdpi`) featuring the centered golden sunflower on a deep-blue
-   canvas with glowing cyan border.
+10. **Pixel-Perfect Adaptive Icons:**  
+    Ships with custom adaptive app launcher icons across all standard density buckets (`mdpi`,
+    `hdpi`, `xhdpi`, `xxhdpi`, `xxxhdpi`) featuring the centered golden sunflower on a deep-blue
+    canvas with glowing cyan border.
 
 ---
 
@@ -379,6 +423,15 @@ Verified on synthetic and real-world datasets (`scripts/bench/`):
 
 ```
 project-sunflower/
+├── android/                      # Native Android Mobile Shell (Capacitor 7 + Gradle)
+│   ├── app/
+│   │   ├── src/main/java/com/projectsunflower/app/
+│   │   │   ├── MainActivity.java             # Local proxy server, OAuth deep link handler
+│   │   │   └── SunflowerDownloaderPlugin.java # Native 1-click Android MediaStore Gallery Saver
+│   │   ├── src/main/res/                     # Adaptive sunflower launcher icons & splash assets
+│   │   └── src/main/AndroidManifest.xml      # Storage permissions, deep links & intent filters
+│   └── build.gradle                          # Android build configuration (compileSdk 35, minSdk 26)
+│
 ├── apps/
 │   ├── server/                   # Fastify 5 Loopback Backend
 │   │   ├── src/
@@ -391,16 +444,22 @@ project-sunflower/
 │   │
 │   └── web/                      # React 19 Frontend SPA (Vite + Tailwind)
 │       └── src/
-│           ├── app/shell/        # TopBar, Sidebar, and shell layout
-│           ├── features/         # Gallery, Albums, Files, Vault, Setup Wizard
+│           ├── app/shell/        # TopBar, Hardware-Accelerated Sidebar Drawer, Shell
+│           ├── features/         # Gallery (Tile Zoom Dock), Lightbox (2D Pan/Pinch), Vault
 │           ├── hooks/            # Setup polling, sync progress, timeline hooks
-│           └── lib/              # API client, WebCrypto vault encryption
+│           └── lib/              # API client, WebCrypto vault, mobile-client.ts (IndexedDB)
 │
 ├── packages/
 │   └── shared/                   # Shared TypeScript contracts & SDV1 Vault Core
 │       └── src/
 │           ├── index.ts          # DTO contracts, schemas, and shared types
 │           └── vault/            # Pure SDV1 AEAD cryptographic engine
+│
+├── docs/
+│   ├── technical-guide.md        # Complete technology & implementation reference
+│   ├── google-setup.md           # Step-by-step BYOC Google Cloud OAuth setup guide
+│   ├── security.md               # Security invariants & threat model
+│   └── vault-format.md           # SDV1 zero-knowledge container specification
 │
 ├── src-tauri/                    # Tauri v2 Rust Desktop Shell
 │   ├── src/lib.rs                # Sidecar process manager, system browser opener
@@ -411,7 +470,8 @@ project-sunflower/
 │   ├── build-desktop-bundle.js   # Sidecar runtime and native addon packager
 │   └── seed.ts                   # Synthetic 100k test dataset generator
 │
-└── Project-Sunflower-Setup-1.0.0.exe # Standalone Windows NSIS Release Installer
+├── Project-Sunflower-1.0.0-debug.apk # Standalone Android Universal Release APK (~5.05 MB)
+└── Project-Sunflower-Setup-1.0.0.exe # Standalone Windows NSIS Release Installer (~26.4 MB)
 ```
 
 ---

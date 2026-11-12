@@ -2,9 +2,9 @@
  "timgit/pg-boss": {
   "commit_7d": 10,
   "commit_90d": 456,
-  "rel_ver": "12.38.1",
-  "rel_pub": "2026-11-05",
-  "rel_days": 5,
+  "rel_ver": "12.38.2",
+  "rel_pub": "2026-11-10",
+  "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 94,
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "lang": {
    "TypeScript": 97,
    "JavaScript": 2,
@@ -23,10 +23,20 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "12.38.2",
+    "d": "2026-11-10",
+    "n": "* Fix: `publish()` with `{ db }` looked up the subscribed queues on pg-boss's own pool instead of the `db` passed in. Inside a transaction, the lookup took a second pool connection while the transaction held its own. After `stop()`, `publish()` rejected even with a valid `db`. The lookup now runs on the `db` passed in, like the `send()` calls that follow it. Thanks to [@Kalos-S](https://github.com/Kalos-S) for the fix in [#1001](https://github.com/timgit/pg-boss/pull/1001).\n* fix(pubsub): publish() looks up"
+   },
+   {
+    "t": "dashboard-1.13.1",
+    "d": "2026-11-10",
+    "n": "* `PGBOSS_DASHBOARD_QUERY_TIMEOUT=0` leaves the query timeout to the database. With `0`, the dashboard sends no `SET statement_timeout` and sets no client-side timeout. Behind a transaction pooler, that `SET` would stay on the server connection for the next client. A timeout on a role only the dashboard connects as bounds its queries instead. See [Connection poolers](https://pgboss.io/dashboard#connection-poolers)."
+   },
    {
     "t": "12.38.1",
     "d": "2026-11-05",
@@ -66,22 +76,14 @@
     "t": "proxy-1.11.0",
     "d": "2026-10-09",
     "n": "Requires pg-boss **12.37.1** or later.\r\n\r\n* `getQueueStats` takes `percentiles` and returns wait and run times for each snapshot.\r\n* Queue and queue stats responses carry the 12.36 wait and run histograms, the oldest ready wait, and `blockedCount`.\r\n\r\n## Highlights\r\n\r\n### Percentiles from `getQueueStats`\r\n\r\n`GET /api/getQueueStats` accepts `percentiles`, a comma-separated list of percents from 1 to 100, and passes it to `boss.getQueueStats()`. Each snapshot then carries one entry per percent asked for:\r\n\r\n`"
-   },
-   {
-    "t": "dashboard-1.11.0",
-    "d": "2026-10-09",
-    "n": "No dashboard code changed.  For use with pg-boss 12.37. Stay on dashboard 1.10.x with 12.35."
-   },
-   {
-    "t": "12.37.1",
-    "d": "2026-10-08",
-    "n": "Schema version: **45**, unchanged from 12.37.0\r\n\r\n* Fix: a `singleton` or `stately` queue could stop fetching while none of its jobs were active. `fetch()` skipped every key in the queue's cached list of active singleton keys. Only a monitor pass refreshed that list, so after a job completed its key stayed blocked until the next pass that counted the queue. A pass skips the count when another instance is already counting, so with several instances supervising, the block had no upper limit. In production it "
    }
   ],
   "etag": {
-   "release": "W/\"f6d1c6b4c83111368a0db26e695bc863eaf590b46a43f92e62e69b7cd6f15086\""
+   "release": "W/\"dd5e27401070c5f31d5500537398fdfc3b8e89d9a8ff524d19964fa2f3f6f24e\""
   },
   "rel_dates": [
+   "2026-11-10",
+   "2026-11-10",
    "2026-11-05",
    "2026-10-27",
    "2026-10-15",
@@ -109,19 +111,17 @@
    "2026-09-18",
    "2026-09-17",
    "2026-09-16",
-   "2026-09-14",
-   "2026-09-13",
-   "2026-09-10"
+   "2026-09-14"
   ]
  },
  "JasperFx/marten": {
   "commit_7d": 55,
   "commit_90d": 520,
-  "rel_ver": "V9.59.0",
-  "rel_pub": "2026-11-09",
-  "rel_days": 1,
+  "rel_ver": "V10.0.0-alpha.1",
+  "rel_pub": "2026-11-11",
+  "rel_days": 0,
   "rel_n90": 30,
-  "rel_pre": false,
+  "rel_pre": true,
   "rel_none": false,
   "sec_n": 2,
   "sec_worst": "critical",
@@ -131,7 +131,7 @@
    "GHSA-vmw2-qwm8-x84c(CVE-2026-45288,critical)"
   ],
   "contrib_n": 257,
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "lang": {
    "C#": 99,
    "HTML": 0,
@@ -142,10 +142,15 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261107"
   },
   "rel_notes": [
+   {
+    "t": "V10.0.0-alpha.1",
+    "d": "2026-11-11",
+    "n": "- **Recompile against Marten 10** (#5733, #5857, #5766, #5853): `Marten.ITransactionParticipant` is now `Weasel.Storage.ITransactionParticipant<NpgsqlConnection, NpgsqlTransaction>` (same method signatures); `OpenTelemetryOptions` derives from JasperFx's `OpenTelemetryOptions<IChangeSet>` and Marten emits on the one process-wide `Marten` `ActivitySource`; `MartenActivator` derives from JasperFx's `StoreActivator` (a database that failed to migrate under `ContinueOnFailures` skips its seeders and rolling-par"
+   },
    {
     "t": "V9.59.0",
     "d": "2026-11-09",
@@ -190,18 +195,14 @@
     "t": "v9.53.0",
     "d": "2026-10-23",
     "n": "9.53.0 is a minor release. It picks up JasperFx 2.94.0 and implements the three members that release adds, for CritterWatch's Document Store Explorer and Event Store Explorer ([#5756](https://github.com/JasperFx/marten/pull/5756)).\n\n## New\n\n- **`IReadOnlyEventStore.QueryEventData<T>(tenantId)`** ([jasperfx#1073](https://github.com/JasperFx/jasperfx/issues/1073)): store-agnostic LINQ over the bodies of one event type, across every stream. It runs through the shared `DocumentQueryableExtensions` terminators ("
-   },
-   {
-    "t": "v9.52.0",
-    "d": "2026-10-23",
-    "n": "* Move the Aspire sample to Aspire.AppHost.Sdk 13.6.3 with a PostgreSQL resource; drop the workload step (#5724) by @jeremydmiller in https://github.com/JasperFx/marten/pull/5748\nA database whose schema has not been migrated yet keeps starting its projections exactly as before. Floors survive\nbefore Marten's built-in ones, to turn a `PostgresException` with your own SQLSTATE into a typed exception.\n* **A permanent database error in projection code is now attributed to the event that hit it** (#5741). The pa"
    }
   ],
   "etag": {
-   "release": "W/\"81027e2c71737247462ac993030c4a7f833024e1d67ab571123d6c0466385cc4\"",
+   "release": "W/\"72b3c0d9cc13dbdfc61be07e74ccbf6cea13a04921338f9ff90c4f674ad22ed5\"",
    "security": "W/\"83212bd7ea725b7823454ab0de04754e1cce6d415d3affd54d509af74ab405ac\""
   },
   "rel_dates": [
+   "2026-11-11",
    "2026-11-09",
    "2026-11-06",
    "2026-11-02",
@@ -230,7 +231,6 @@
    "2026-09-24",
    "2026-09-22",
    "2026-09-21",
-   "2026-09-15",
    "2026-09-15"
   ]
  },
@@ -239,7 +239,7 @@
   "commit_90d": 35,
   "rel_ver": "v2.5.0",
   "rel_pub": "2026-10-12",
-  "rel_days": 29,
+  "rel_days": 30,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -289,7 +289,7 @@
   "commit_90d": 32,
   "rel_ver": "4.2.1",
   "rel_pub": "2026-08-13",
-  "rel_days": 89,
+  "rel_days": 90,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -316,7 +316,7 @@
   "commit_7d": 2,
   "rel_ver": "@ts-safeql/zod-annotator@5.0.5",
   "rel_pub": "2026-10-18",
-  "rel_days": 23,
+  "rel_days": 24,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -364,7 +364,7 @@
   "commit_7d": 0,
   "rel_ver": "3.5.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 383,
+  "rel_days": 384,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -387,7 +387,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 52,
+  "rel_days": 53,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -414,7 +414,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.6.0",
   "rel_pub": "2026-02-21",
-  "rel_days": 262,
+  "rel_days": 263,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -435,7 +435,7 @@
   "commit_7d": 7,
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-10-25",
-  "rel_days": 16,
+  "rel_days": 17,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -567,7 +567,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2018-07-30",
-  "rel_days": 3025,
+  "rel_days": 3026,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -590,7 +590,7 @@
   "commit_7d": 0,
   "rel_ver": "1.6.1",
   "rel_pub": "2023-05-24",
-  "rel_days": 1266,
+  "rel_days": 1267,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -647,7 +647,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.8",
   "rel_pub": "2024-03-20",
-  "rel_days": 965,
+  "rel_days": 966,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -667,7 +667,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.15",
   "rel_pub": "2026-04-06",
-  "rel_days": 218,
+  "rel_days": 219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -789,7 +789,7 @@
   "commit_7d": 0,
   "rel_ver": "main-latest",
   "rel_pub": "2026-08-01",
-  "rel_days": 101,
+  "rel_days": 102,
   "rel_n90": 3,
   "rel_pre": true,
   "rel_none": false,
@@ -810,7 +810,7 @@
  "kosame-rs/kosame": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2025-12-10",
-  "rel_days": 335,
+  "rel_days": 336,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -857,7 +857,7 @@
  "Pure-Peace/peace": {
   "rel_ver": "v0.12.0",
   "rel_pub": "2021-06-16",
-  "rel_days": 1973,
+  "rel_days": 1974,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -876,7 +876,7 @@
  "thijsmie/pocketbase": {
   "rel_ver": "0.12.0",
   "rel_pub": "2025-02-02",
-  "rel_days": 646,
+  "rel_days": 647,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -936,7 +936,7 @@
  "depyronick/clickhouse-client": {
   "rel_ver": "2.1.0",
   "rel_pub": "2026-01-21",
-  "rel_days": 293,
+  "rel_days": 294,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -954,7 +954,7 @@
  "EddieHubCommunity/CreatorsRegistry": {
   "rel_ver": "v0.26.3",
   "rel_pub": "2024-08-12",
-  "rel_days": 820,
+  "rel_days": 821,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1088,7 +1088,7 @@
  "antifailure/antifailure": {
   "rel_ver": "v1.8.1",
   "rel_pub": "2026-09-27",
-  "rel_days": 44,
+  "rel_days": 45,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1109,7 +1109,7 @@
  "hxlog/balanced-portfolio": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-17",
-  "rel_days": 116,
+  "rel_days": 117,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1130,7 +1130,7 @@
  "bilaschandra/laravel-coreui": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2024-09-27",
-  "rel_days": 774,
+  "rel_days": 775,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1150,7 +1150,7 @@
  "rapidloop/rapidrows": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-09-29",
-  "rel_days": 1503,
+  "rel_days": 1504,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1183,7 +1183,7 @@
  "CEDStandards/CEDS-Data-Warehouse": {
   "rel_ver": "v14.1.0.0",
   "rel_pub": "2026-06-18",
-  "rel_days": 145,
+  "rel_days": 146,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1213,7 +1213,7 @@
  "agis/pglockanalyze": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2025-09-26",
-  "rel_days": 410,
+  "rel_days": 411,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1231,7 +1231,7 @@
  "basxsoftwareassociation/basxconnect": {
   "rel_ver": "v0.4.62",
   "rel_pub": "2024-04-24",
-  "rel_days": 930,
+  "rel_days": 931,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1293,7 +1293,7 @@
  "bnomei/kirby3-pageviewcounter": {
   "rel_ver": "v5.4.0",
   "rel_pub": "2026-05-13",
-  "rel_days": 181,
+  "rel_days": 182,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1311,7 +1311,7 @@
  "Point72/polars-io-tools": {
   "rel_ver": "v0.2.4",
   "rel_pub": "2026-09-26",
-  "rel_days": 45,
+  "rel_days": 46,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -1373,7 +1373,7 @@
  "dzwvip/oracle": {
   "rel_ver": "v1.3.2",
   "rel_pub": "2024-12-31",
-  "rel_days": 679,
+  "rel_days": 680,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1390,7 +1390,7 @@
  "kungfux/business-accounting-desktop": {
   "rel_ver": "1.4.1",
   "rel_pub": "2019-10-11",
-  "rel_days": 2587,
+  "rel_days": 2588,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1437,7 +1437,7 @@
  "radkawar/screenlogger": {
   "rel_ver": "v0.1.15",
   "rel_pub": "2026-08-21",
-  "rel_days": 81,
+  "rel_days": 82,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1503,7 +1503,7 @@
  "chanukyasds/pg_math": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-10-16",
-  "rel_days": 390,
+  "rel_days": 391,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1536,7 +1536,7 @@
  "r2hu1/cavio": {
   "rel_ver": "v2.2",
   "rel_pub": "2026-02-14",
-  "rel_days": 269,
+  "rel_days": 270,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1555,7 +1555,7 @@
  "banghuazhao/longevity-master": {
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 47,
+  "rel_days": 48,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1589,7 +1589,7 @@
  "kingrishabdugar/Green-Leaf-Gourmet": {
   "rel_ver": "v2.5.1",
   "rel_pub": "2023-02-14",
-  "rel_days": 1365,
+  "rel_days": 1366,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1634,7 +1634,7 @@
  "CNVioletTech/image2-ai": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-07-11",
-  "rel_days": 122,
+  "rel_days": 123,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1668,7 +1668,7 @@
  "gewebe/TecdocBundle": {
   "rel_ver": "v0.9.1",
   "rel_pub": "2019-05-19",
-  "rel_days": 2732,
+  "rel_days": 2733,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1685,7 +1685,7 @@
  "DavLagoHern/LakeDB": {
   "rel_ver": "v1.0.0-beta.6.3",
   "rel_pub": "2026-09-22",
-  "rel_days": 49,
+  "rel_days": 50,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1718,7 +1718,7 @@
  "frerich/pg_large_objects": {
   "rel_ver": "v0.2.7",
   "rel_pub": "2026-05-17",
-  "rel_days": 177,
+  "rel_days": 178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1749,7 +1749,7 @@
  "KillerAery/ForAlive": {
   "rel_ver": "v0.213",
   "rel_pub": "2018-05-15",
-  "rel_days": 3101,
+  "rel_days": 3102,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1873,7 +1873,7 @@
  "IITDBGroup/gprom": {
   "rel_ver": "v1.0.5",
   "rel_pub": "2026-04-03",
-  "rel_days": 221,
+  "rel_days": 222,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1955,7 +1955,7 @@
  "deadislove/nestJS-modular-monolith-cqrs-event-sourcing-architecture-template": {
   "rel_ver": "v1.0.1",
   "rel_pub": "2025-05-11",
-  "rel_days": 548,
+  "rel_days": 549,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2036,7 +2036,7 @@
  "SaberSz/College-System-2-Attendance-Management-Systems": {
   "rel_ver": "v1.0",
   "rel_pub": "2017-11-15",
-  "rel_days": 3282,
+  "rel_days": 3283,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2072,7 +2072,7 @@
  "Holo795/CBMCoolifyBackup": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-07-03",
-  "rel_days": 130,
+  "rel_days": 131,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2105,7 +2105,7 @@
  "jince-boy/php-ccenote-blog-api": {
   "rel_ver": "laravel",
   "rel_pub": "2023-02-28",
-  "rel_days": 1351,
+  "rel_days": 1352,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2146,7 +2146,7 @@
  "hieutdo/policyfs": {
   "rel_ver": "v1.0.8",
   "rel_pub": "2026-08-28",
-  "rel_days": 74,
+  "rel_days": 75,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2214,7 +2214,7 @@
  "bbkane/enventory": {
   "rel_ver": "v0.0.28",
   "rel_pub": "2026-06-20",
-  "rel_days": 143,
+  "rel_days": 144,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2239,7 +2239,7 @@
  "Salve-Software/react-native-salve-db": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2026-09-04",
-  "rel_days": 67,
+  "rel_days": 68,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2285,7 +2285,7 @@
  "budiadiono/sqlite-ts": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2019-02-10",
-  "rel_days": 2830,
+  "rel_days": 2831,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2729,7 +2729,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-09-01",
-  "rel_days": 70,
+  "rel_days": 71,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -3018,7 +3018,7 @@
  "sucraft-hub/homeledger": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 47,
+  "rel_days": 48,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3045,7 +3045,7 @@
  "paperkite-hq/stork": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-04-06",
-  "rel_days": 218,
+  "rel_days": 219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3137,7 +3137,7 @@
  "DavidBelicza/semantic-search": {
   "rel_ver": "v1.9.0",
   "rel_pub": "2026-08-18",
-  "rel_days": 84,
+  "rel_days": 85,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -3180,7 +3180,7 @@
   "commit_7d": 129,
   "rel_ver": "v0.6.3",
   "rel_pub": "2026-11-04",
-  "rel_days": 6,
+  "rel_days": 7,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,

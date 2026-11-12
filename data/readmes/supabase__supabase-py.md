@@ -12,11 +12,12 @@ Python monorepo for all [Supabase](https://supabase.com) libraries.
 > See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 - [supabase](src/supabase/README.md)
-- [realtime-py](src/realtime/README.md)
+- [realtime](src/realtime/README.md)
 - [supabase_functions](src/functions/README.md)
 - [storage3](src/storage/README.md)
 - [postgrest](src/postgrest/README.md)
 - [supabase_auth](src/auth/README.md)
+- [supabase_utils](src/utils/README.md)
 
 Relevant links:
 
@@ -31,7 +32,7 @@ Relevant links:
 
 We support Python 3.12 and every later version that has not yet reached end of life, as listed in the [Python version status page](https://devguide.python.org/versions/). The currently supported versions are the ones tested in [CI](.github/workflows/ci.yml).
 
-Once a Python version reaches end of life, support for it may be dropped in a **minor release**, and **this won't be considered a breaking change**. For instance, Python 3.9 reached end of life in October 2025, so it can be removed in a minor update.
+Once a Python version reaches end of life, support for it may be dropped in a **minor release**, and **this won't be considered a breaking change**. For instance, once Python 3.12 reaches end of life in October 2028, support for it can be dropped in a minor update.
 
 ### Platforms
 
@@ -70,8 +71,7 @@ cd supabase-py
 This repository relies on the following dependencies for development: 
 - `uv` for python project management.
 - `make` for running project commands.
-- `docker` for both `postgrest` and `auth` test containers.
-- `supabase-cli` for both `storage` and `realtime` test containers.
+- `supabase-cli` and `docker` for the `auth`, `postgrest`, `storage` and `realtime` test containers.
 
 All of these dependencies are included in the nix shell environment, through `flake.nix`. If you've got `nix` installed, you may prefer to use it through `nix develop`.
 

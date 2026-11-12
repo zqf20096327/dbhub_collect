@@ -2,12 +2,13 @@
 
 A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) binary is the whole backend
 (auth, data, realtime, static files); the frontend is vanilla TypeScript bundled by esbuild — no framework,
-~49 KB of JS and ~11 KB of CSS gzipped (`npm run build` fails over its budget: 49.75 KB of JS,
-11.25 KB of CSS; rarer screens such as the image viewer, search, room access and collections load on first use).
+~50 KB of JS and ~11 KB of CSS gzipped (`npm run build` fails over its budget: 62.5 KB for everything a visit loads
+first, 16 KB for any rarer screen, such as the image viewer, search, room access, collections, the emoji picker and
+Mentions & replies, which load on first use).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshot-dark.png">
-  <img alt="A room in Chirkle: the room list with unread counts on the left; messages with avatars, a reply, a photo and emoji reactions on the right" src="docs/screenshot-light.png">
+  <img alt="A room in Chirkle: the room list with unread counts on the left; messages with avatars, a reply, an @mention of you, a photo and emoji reactions on the right" src="docs/screenshot-light.png">
 </picture>
 
 - Runs on a $5 VPS (1 vCPU, 1 GB of RAM): about 500 people online at a normal pace, or 100 chatting nonstop
@@ -21,8 +22,14 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
 - Avatars (or colored initials) and a profile page to change your picture, display name (unique) and password, and to log out
 - Search in any room or DM: every word you type, in any case ("привет" finds "Привет"), newest first; pick a result to go to it, however far back
 - Replies: answer any message with a quote of it; click the quote to jump to the original, however far back
+- Handles and @mentions: everyone has an @handle (made from their name, changeable in Settings); type "@" in the
+  composer to pick someone. A message that mentions you is highlighted and notifies you like a reply, and rooms with
+  unread mentions or replies show an "@" by their count
+- Mentions & replies: one page, right under Jump to, of every mention of you, reply to you and reaction to your
+  messages, newest first; each opens its message in its room
 - Links in messages are clickable and open in a new tab (http, https and www. addresses only)
-- Emoji: a picker in the composer, and reactions on any message (as many different ones as you like), live for everyone
+- Emoji: a picker in the composer with search by name, ":name" suggestions as you type, and reactions on any message
+  (as many different ones as you like), live for everyone
 - Attachments: up to 10 files of 20 MB per message, with an upload progress bar; images shown as thumbnails and videos as their first frame (4 tiles, then "+N"); files are private to whoever can read the message
 - Image viewer: click a thumbnail to see it full size (or a video to play it) and step through the room's images and videos (buttons, arrow keys, swipe);
   loaded only when first used, so it adds nothing to the page's first load
@@ -31,7 +38,14 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
 - Unread counts on every room and DM, live, and in sync across your tabs and devices; the total shows in the tab's favicon and title;
   a room with unread messages opens at the first of them, under a "New" line
 - What you were typing is kept per room, even across a reload; "Jump to latest" whenever you are scrolled up
+- Moderators, chosen by the admin: they delete anyone's messages, change any room's access, archive rooms, and ban or
+  unban people (a banned account can't log in); DMs and private rooms they aren't in stay out of their reach
+- Usage statistics at `/stats` for moderators and the admin: people online now, messages and active people over
+  time, no names (the admin can turn collecting them off)
+- Anonymous rooms, set by the admin: messages show the room's name instead of their authors
 - Your own branding (title and logo) and, if you like, invite-only signups: set by the admin in PocketBase
+- Forgot password: once the admin sets up email, "Forgot password?" on the login page (web and Android) emails a link
+  that sets a new password and logs out every device
 - Telegram bridge (optional): link rooms to Telegram groups through a bot; messages, replies, edits, files and (with the bot an admin) reactions go both ways (deletes from Chirkle to Telegram), Telegram people show under stand-in accounts with their names and pictures — see [Telegram integration](#telegram-integration)
 - Fast room switching: each room's latest messages are kept in the browser (IndexedDB) and shown at once while the
   server answers; unread rooms are fetched ahead. Attachment thumbnails are kept by the service worker, so going back
@@ -77,19 +91,20 @@ Open the page and sign up. The first run prints a link to create the admin (supe
 `HOST` and `PORT` choose the address (default `127.0.0.1:8090`; `HOST=0.0.0.0` to reach it from other machines),
 `CHIRKLE_DATA` the data directory (default `./pb_data`), and any other `pocketbase serve` flags can follow
 (`npx chirkle --http=0.0.0.0:80`). The settings of [Deploying](#deploying) (`TRUSTED_PROXY` behind a reverse proxy, …)
-apply as they are. PocketBase is kept in the package's `bin/` (or `~/.cache/chirkle/` when that isn't writable).
+apply as they are. The package ships the server built for Linux and macOS (x64, arm64): no Go or PocketBase download
+needed.
 
 ## Getting started (development)
 
 ```sh
 npm ci
-npm run setup      # downloads the pinned PocketBase (checksum-verified) into bin/
-npm run dev        # esbuild watch + PocketBase on http://127.0.0.1:8090
+npm run setup      # builds the server (server/: PocketBase with Go hooks) into bin/chirkle-server; needs Go 1.27+
+npm run dev        # esbuild watch + the server on http://127.0.0.1:8090
 ```
 
 Open http://127.0.0.1:8090 and sign up (top right). The dev database lives in `pb_data/` — delete it to start over.
 The PocketBase admin UI is at http://127.0.0.1:8090/_/ (create a superuser with
-`bin/pocketbase superuser upsert you@example.com <password> --dir=pb_data`).
+`bin/chirkle-server superuser upsert you@example.com <password> --dir=pb_data`).
 
 ## Scripts
 
@@ -124,21 +139,24 @@ web/src/         frontend: api.ts (the only module that talks to PocketBase, thr
                  store, cache.ts (the room cache), sw.ts (the service worker), views/, lib/ (pure logic)
 web/styles/      app.css (bundles app/*.css, one file per part) and viewer.css
 web/public/      icons/: the logo (logo.svg) as icon.svg and the PNG app icons, served as they are
-scripts/         build, dev, fetch-pocketbase, pb-types (PocketBase's types for the hooks), html-sink check
+server/          the server binary: PocketBase with its JS hooks, plus the hot paths in Go (enrich, live, pages, unread)
+scripts/         build, dev, build-server, pb-types (PocketBase's types for the hooks), html-sink check
 tests/           unit/, integration/, e2e/, perf/ (scale measurements), support/ (PocketBase harness, Telegram stub, helpers)
 android/         the Android app (docs/ANDROID.md): core/data (API, realtime, database, sync), core/ui, feature/*, app
 ```
 
 ## Deploying
 
-Build once, then copy `bin/pocketbase`, `pb_public/`, `pb_migrations/` and `pb_hooks/` to the server.
+Build once, then copy `bin/chirkle-server`, `pb_public/`, `pb_migrations/` and `pb_hooks/` to the server. It is PocketBase
+with the hot paths in Go (`server/`): the same commands and flags as the `pocketbase` binary. Go builds it for another
+platform with `GOOS`/`GOARCH` (`node scripts/build-server.mjs --all` builds them all into `bin/release/`).
 Migrations run automatically on start, and nothing is served until they are done, so they change only the database.
 What stored files need moving (the shared files of DESIGN.md §37) the media worker does afterwards, while the server
 runs.
 
 ```sh
 npm ci && npm run setup && npm run build
-rsync -a bin/pocketbase pb_public pb_migrations pb_hooks server:/opt/chirkle/
+rsync -a bin/chirkle-server pb_public pb_migrations pb_hooks server:/opt/chirkle/
 ```
 
 With a domain pointing at the server, PocketBase serves HTTPS itself (Let's Encrypt):
@@ -152,7 +170,7 @@ After=network-online.target
 [Service]
 User=chirkle
 WorkingDirectory=/opt/chirkle
-ExecStart=/opt/chirkle/pocketbase serve chat.example.com --hooksPool=100 --dir=/opt/chirkle/pb_data --publicDir=/opt/chirkle/pb_public --migrationsDir=/opt/chirkle/pb_migrations --hooksDir=/opt/chirkle/pb_hooks
+ExecStart=/opt/chirkle/chirkle-server serve chat.example.com --hooksPool=100 --dir=/opt/chirkle/pb_data --publicDir=/opt/chirkle/pb_public --migrationsDir=/opt/chirkle/pb_migrations --hooksDir=/opt/chirkle/pb_hooks
 Restart=on-failure
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 LimitNOFILE=65536
@@ -163,7 +181,7 @@ WantedBy=multi-user.target
 
 ```sh
 sudo systemctl enable --now chirkle
-sudo -u chirkle /opt/chirkle/pocketbase superuser upsert you@example.com <password> --dir=/opt/chirkle/pb_data
+sudo -u chirkle /opt/chirkle/chirkle-server superuser upsert you@example.com <password> --dir=/opt/chirkle/pb_data
 ```
 
 Behind an existing reverse proxy instead, use `serve --http=127.0.0.1:8090` and proxy to it (keep
@@ -192,11 +210,23 @@ dokku nginx:set chirkle client-max-body-size 210m
 dokku letsencrypt:enable chirkle   # with the dokku-letsencrypt plugin
 ```
 
-Then deploy (`git push dokku master` from a clone with `dokku@server:chirkle` as the `dokku` remote) and create a
-superuser:
+Then deploy. The light way is to run the image GitHub builds: after CI passes on `master`,
+`.github/workflows/image.yml` pushes `ghcr.io/border-radius/chirkle:<commit>` (and `:latest`), so the server only pulls
+and restarts, however many apps run it:
 
 ```sh
-dokku run chirkle /app/pocketbase superuser upsert you@example.com <password> --dir=/pb_data
+dokku git:from-image chirkle ghcr.io/border-radius/chirkle:<commit>   # each deploy needs a new tag: use the commit
+```
+
+To follow `master`, run that from cron with the commit `git ls-remote https://github.com/border-radius/chirkle.git
+refs/heads/master` names; until its image exists (CI and the build take a few minutes, and a commit that fails CI
+gets none) `docker pull` of it fails, and the app keeps running what it has.
+
+Or build on the server: `git push dokku master` from a clone with `dokku@server:chirkle` as the `dokku` remote, or
+`dokku git:sync --build chirkle https://github.com/border-radius/chirkle.git master`. Then create a superuser:
+
+```sh
+dokku run chirkle /app/chirkle-server superuser upsert you@example.com <password> --dir=/pb_data
 ```
 
 Settings go in as environment variables (`dokku config:set chirkle KEY=value`, which restarts the app); the image already
@@ -211,10 +241,22 @@ only people who have the code sign up (they enter it on the Sign up form; it is 
 the old one working; leave it empty to close signups. Existing accounts are unaffected, and you can still create
 accounts yourself under *Collections → users*.
 
+**Moderators and statistics:** in the admin UI, *Collections → users*, tick `moderator` on someone's record. They
+then delete messages, change room access, archive rooms and ban people from the app (`banned` on the same record
+undoes a ban), and find usage statistics on Settings; superusers signed in to the admin UI open `/stats` directly.
+Tick `no_stats` on the *site* record to stop recording them.
+
+**Forgot password:** in the admin UI, set *Settings → Application → Application URL* to the server's public
+address (the emailed link starts with it) and the sender under *Settings → Mail settings*, and turn on *Use SMTP
+mail server* with your provider's host, port and login; *Send test email* checks it. Only then do the login pages
+offer "Forgot password?" (an SMTP server set but turned off isn't used). The link opens `/reset-password/…` on the
+web, works once for 30 minutes, and logs out every device of the account. The email's wording is under *Collections →
+users → Options → Default Password reset email template*; keep `{APP_URL}/reset-password/{TOKEN}` as its link.
+
 **Backups:** in the admin UI, *Settings → Backups* — schedule automatic backups (optionally to S3-compatible
 storage). Uploaded files (avatars, attachments) live in `pb_data/storage` (or S3, under *Settings → Files storage*) and
 are part of the backups, so plan disk space for them. **Rate limits** (per IP: messages 10 per 5 s, edits/deletes 20
-per 10 s, reactions 30 per 10 s, forwarding and deleting several messages 20 requests per minute each, password changes 5 per minute, new rooms 5 per minute, opening DMs 10 per minute, marking rooms read 120 per minute, signups 20 per minute; PocketBase defaults for the rest)
+per 10 s, reactions 30 per 10 s, forwarding and deleting several messages 20 requests per minute each, password changes 5 per minute, password reset emails 5 per 10 minutes, new rooms 5 per minute, opening DMs 10 per minute, marking rooms read 120 per minute, signups 20 per minute; PocketBase defaults for the rest)
 are set by the migrations and adjustable under *Settings → Rate limits*.
 
 ## Android app
@@ -225,7 +267,7 @@ it ([`CLAUDE.md`](CLAUDE.md), [`android/PARITY.md`](android/PARITY.md)).
 A native client for any server running Chirkle, with several accounts at once on one server or many (`android/`,
 design: [`docs/ANDROID.md`](docs/ANDROID.md), §17 for servers and accounts). It needs JDK 17+
 (21 recommended) and the Android SDK (`ANDROID_HOME`, or `sdk.dir` in `android/local.properties`); Gradle fetches the
-rest. Its tests start PocketBase from `bin/`, so run `npm run setup` first.
+rest. Its tests start the server from `bin/`, so run `npm run setup` first.
 
 ```sh
 cd android

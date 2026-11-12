@@ -10,7 +10,7 @@
 
 [![crates.io](https://img.shields.io/badge/crates.io-kimetsu--cli-orange)](https://crates.io/crates/kimetsu-cli)
 [![license](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue)](#license)
-[![rust](https://img.shields.io/badge/rust-1.85%2B-informational)](https://www.rust-lang.org)
+[![rust](https://img.shields.io/badge/rust-1.91%2B-informational)](https://www.rust-lang.org)
 
 <img src="https://kimetsu.dev/demo.gif" alt="Kimetsu demo: one-command setup, selftest, record a lesson, retrieve it by meaning" width="720" />
 
@@ -135,7 +135,8 @@ an unlisted key is quarantined. A scope outside the signed list is rejected
 and does not touch the database. Unsigned v1 packs still import into the
 mount you name. Merge is idempotent, so re-importing is safe. Replace supersedes rather
 than deletes, so a swap can always be undone. Roster members share that signed
-pack on the bus. `kimetsu brain sync` is the offline complement: a directory of
+pack on the bus. Release builds include it as `kimetsu network` (it stays
+quiet until you invite or join). `kimetsu brain sync` is the offline complement: a directory of
 allowlisted event-log batches, not an unsigned pack import, and it does not dial
 the bus. **[Kimetsu Remote](https://kimetsu.dev/docs/remote)** stays an HTTP
 checkpoint server and does not dial the bus either.
@@ -187,6 +188,46 @@ python3 scripts/retrieval_eval.py \
 
 ---
 
+## Experiment E0
+
+Experiment E0 runs that harness on the settings a fresh `kimetsu init` writes. `--profile bench` keeps `retrieval.level` at `deep` and omits `min_semantic_score` from the MCP call, so the binary keeps the config auto floor (0.35 for bge). The bench base also turns off `kimetsu.use_user_brain`, `broker.session_dedupe`, and `broker.warm_start`. Lexical and fused set `embedder.reranker` to `off`, because the MCP server loads TinyBERT whenever that field names a model. The two rerank arms set TinyBERT explicitly, one with `broker.rerank_min_score` 0 and one with the shipped 0.3.
+
+`--profile script` (the default) is the base printed above: `retrieval.level` `custom` and every floor at 0, including `min_semantic_score`. `python3 scripts/retrieval_eval.py --self-test` checks that default and checks the bench profile against `scripts/fixtures/retrieval_eval.json`.
+
+Point the adapter at a LoCoMo bench export and a LongMemEval oracle file. `full-dataset.json` supplies conv-26 history lines (the chunk text) and questions. `locomo10.json` is the LoCoMo file used to check that question text. `longmemeval_oracle.json` is the oracle file. The default conversation is `conv-26`.
+
+```bash
+python3 scripts/prepare_e0_data.py \
+  --full-dataset /path/to/full-dataset.json \
+  --locomo /path/to/locomo10.json \
+  --longmemeval /path/to/longmemeval_oracle.json \
+  --out /path/to/e0-data
+
+scripts/experiments/e0/run_e0.sh --data-dir /path/to/e0-data --out /path/to/e0-results
+```
+
+`run_e0.sh` waits for free RAM, builds a release binary with embeddings, runs both passes, and diffs them. One dataset on a binary you already built:
+
+```bash
+python3 scripts/e0_eval.py \
+  --bin target/release/kimetsu \
+  --profile bench \
+  --dataset /path/to/e0-data/locomo-conv26.json \
+  --name locomo-conv26 \
+  --out /path/to/e0-results/run1/locomo-conv26.jsonl
+
+python3 scripts/experiments/e0/summarize_e0.py summary /path/to/e0-results/run1
+python3 scripts/experiments/e0/summarize_e0.py diff \
+  /path/to/e0-results/run1 /path/to/e0-results/run2 \
+  /path/to/e0-results/determinism-diff.md
+```
+
+Questions with no gold turn in the haystack stay in the fixture with `scored` false. Recall and MRR use the scored questions. Empty rate and capsule counts use every question. The vector arm is still cosine over the blobs that binary stored.
+
+The files `scripts/experiments/e0/prepare_data.py`, `e0_eval.py`, and `summarize_e0.py` are the copies from the pinned run, with checksums in [scripts/experiments/e0/README.md](scripts/experiments/e0/README.md).
+
+---
+
 ## Command reference
 
 | Command | What it does |
@@ -199,6 +240,7 @@ python3 scripts/retrieval_eval.py \
 | `kimetsu resume` / `kimetsu checkpoint` | Pick up where the last session left off |
 | `kimetsu brain export` / `import` | Share brains: scrubbed packs, merge or replace, file or URL |
 | `kimetsu brain sync` | Offline directory replica of the allowlisted event log |
+| `kimetsu network` | Invite, join, share, or request signed repo packs. Off until you join |
 | `kimetsu brain skills` | Turn often-cited lessons into runnable skills |
 | `kimetsu brain insights` / `roi` | Is the brain helping, and did it pay for itself |
 | `kimetsu brain tune` | Self-tune retrieval against your own query history |

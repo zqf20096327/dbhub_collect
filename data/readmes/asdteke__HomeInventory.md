@@ -1,0 +1,262 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="client/public/brand/logo-full-dark.svg" />
+    <img src="client/public/brand/logo-full-light.svg" alt="HomeInventory Logo" width="420" />
+  </picture>
+</p>
+
+<h1 align="center">HomeInventory</h1>
+
+<!-- Release status: v2.8.0 release line. -->
+
+<p align="center">
+  <strong>Private, self-hostable household inventory for shared homes.</strong><br/>
+  Track items, warranties, documents, borrowing, and sensitive personal records from one calm React app.
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> ·
+  <a href="README.tr.md">Türkçe</a> ·
+  <a href="README.de.md">Deutsch</a> ·
+  <a href="README.es.md">Español</a> ·
+  <a href="README.ar.md">العربية</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/stars/asdteke/HomeInventory?style=for-the-badge&logo=github&color=f4c542" alt="GitHub stars" />
+  <img src="https://img.shields.io/github/last-commit/asdteke/HomeInventory?style=for-the-badge&color=2f6f55" alt="Last commit" />
+  <img src="https://github.com/asdteke/HomeInventory/actions/workflows/ci.yml/badge.svg" alt="CI status" />
+  <img src="https://img.shields.io/badge/security-AES--256--GCM-2f6f55?style=for-the-badge" alt="AES-256-GCM encryption" />
+  <img src="https://img.shields.io/badge/PWA-ready-334155?style=for-the-badge" alt="PWA ready" />
+  <img src="https://img.shields.io/badge/Docker-supported-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker supported" />
+  <img src="https://img.shields.io/badge/license-MIT-111827?style=for-the-badge" alt="MIT license" />
+</p>
+
+<p align="center">
+  <a href="#preview">Preview</a> ·
+  <a href="#why-homeinventory">Why</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#security--privacy">Security</a> ·
+  <a href="PRIVACY.md">Privacy Policy</a> ·
+  <a href="#code-signing-policy">Code signing policy</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#documentation">Docs</a> ·
+  <a href="CHANGELOG.md">Changelog</a> ·
+  <a href="ROADMAP.md">Roadmap</a>
+</p>
+
+---
+
+## Preview
+
+<p align="center">
+  <img src="docs/assets/screenshot-landing.png" alt="HomeInventory landing page preview" width="82%" />
+</p>
+
+<details>
+<summary><strong>More screenshots: Inventory, Boxes, Box Contents, Borrow Center, Personal Vault, Categories</strong></summary>
+
+<br/>
+
+<p align="center">
+  <img src="docs/assets/screenshot-inventory.png" alt="Inventory screen" width="82%" />
+</p>
+<p align="center">
+  <img src="docs/assets/screenshot-boxes.png" alt="Boxes screen" width="82%" />
+</p>
+<p align="center">
+  <img src="docs/assets/screenshot-box-detail.png" alt="Box contents screen" width="82%" />
+</p>
+<p align="center">
+  <img src="docs/assets/screenshot-borrow.png" alt="Borrow Center screen" width="82%" />
+</p>
+<p align="center">
+  <img src="docs/assets/screenshot-vault.png" alt="Personal Vault screen" width="82%" />
+</p>
+<p align="center">
+  <img src="docs/assets/screenshot-categories.png" alt="Categories screen" width="82%" />
+</p>
+
+</details>
+
+HomeInventory is built for families, roommates, and small households that need a practical inventory without turning private records into a shared spreadsheet.
+
+> [!NOTE]
+> **v2.8.0 is the current release line.** It adds a ready-made multi-architecture Docker image, one-command secret setup, automatic server backups with restore, a new-version notice for self-hosters, and a faster desktop launcher with optional updates and an optional app window.
+
+## Why HomeInventory
+
+- **One household, many people:** create or join homes, switch the active home, and keep shared inventory scoped to the right members.
+- **Real item records:** track photos, rooms, locations, categories, quantities, warranty dates, invoice data, notes, and attachments.
+- **Bulk-friendly inventory:** select multiple items, move them between rooms or categories, adjust visibility, delete safely, and filter by stock, dates, warranties, borrowing, owner, and location.
+- **Camera-first mobile entry:** take item and invoice photos directly from supported mobile browsers, or keep using gallery/file uploads.
+- **TypeScript-powered client:** the React interface now runs on a TypeScript/Vite codebase, improving editor feedback, refactor confidence, and build-time checks.
+- **Sensitive data has a better place:** Personal Vault keeps highly private records away from regular household search and collaboration.
+- **Fast lookup in daily life:** use search, barcode scanning, QR labels, and mobile-friendly screens when you are standing in front of the shelf.
+- **Built to self-host:** Express, SQLite, Docker support, environment documentation, and production secret-loading flows are included.
+
+## Features
+
+| Area | What it covers |
+| --- | --- |
+| Inventory | Items, camera/gallery photos, rooms, categories, locations, quantities, warranty and invoice metadata |
+| Boxes | Shared or personal boxes, single/bulk item assignment, camera/gallery photos, room selection with inline location creation, guarded moves/deletion, and existing QR label printing |
+| Bulk operations | Multi-select, bulk category/room/location/visibility updates, bulk deletion, quick stock adjustment, advanced filters, and sorting |
+| Shared homes | Create homes, join with house access flows, switch active homes, and keep data scoped by membership |
+| Borrow Center | Incoming, outgoing, and active lending records with clear request states |
+| Personal Vault | Client-side encrypted vault flow for IDs, property documents, access codes, and sensitive notes |
+| Shopping List | Manual and inventory-linked shopping items, completed history, and low-stock suggestions |
+| Smart Maintenance | Recurring item-care tasks, overdue indicators, and automated next-due-date calculations |
+| Labels and scanning | Local-first barcode lookup with opt-in public catalogue search, responsive Full HD barcode/QR scanning, supported-device flash and zoom controls, branded item/box QR label sheets, room/shelf labels, and print cut guides |
+| Alerts and service | Focused low-stock, expiration, warranty, maintenance, and borrow-return surfaces |
+| Backup and restore | Owner-only standard/full export and import with passphrase encryption, box metadata/assignments/archive state, and optional media/attachment coverage |
+| Automatic server backups | Admin-only scheduled SQLite snapshots (daily by default, keep 7) with download, upload, and a verified restore that is applied on the next restart after a safety snapshot; see [DOCKER.md](DOCKER.md#backup) |
+| Activity history | Protected item activity log for edits, stock changes, attachments, borrowing, and bulk actions |
+| Auth and recovery | JWT auth, Google OAuth, email verification, TOTP 2FA, trusted devices, and recovery keys |
+| Desktop Launcher | Optional Tauri GUI plus release packages for local setup, dependency checks, profile start/stop, automatic browser opening, backups, logs, advanced settings, port checks, QR/LAN access, and [opt-in offline HTTPS for mobile camera access](docs/offline-mobile-https.md) |
+| Internationalization | 100+ selectable UI locale packs with fallback behavior and automated validation checks |
+
+## Security & Privacy
+
+- **AES-256-GCM encryption at rest** protects sensitive inventory, auth, and profile fields before they are written to disk or SQLite.
+- **Encrypted media handling** strips image metadata and stores protected media blobs instead of raw uploads.
+- **Encrypted activity logging** protects item activity actions and metadata before writing audit history to SQLite.
+- **Household-scoped authorization** keeps rooms, categories, items, media, and backups limited to the active household membership.
+- **Independent box and item privacy** lets a shared box contain each member's private items without revealing them in normal inventory views, while personal boxes and their exact placement remain creator-only. Household-owner backups include private household records for disaster recovery; the download dialog enables passphrase encryption by default.
+- **Personal Vault separation** keeps highly sensitive records out of normal shared inventory flows.
+- **Rate limiting and hardened auth routes** reduce brute-force and abuse risk around login, backup, and interactive endpoints.
+- **Dependency security maintenance** keeps high-severity npm advisories closed in CI; the remaining Tauri/GLib advisory is tracked as an upstream Linux launcher dependency issue.
+
+> [!IMPORTANT]
+> HomeInventory uses strong server-side encryption, but the main inventory encryption key is still managed by the server. An operator with database access and runtime secrets can decrypt protected inventory data. Use Personal Vault for records that need stronger separation from shared household workflows.
+
+## Code signing policy
+
+HomeInventory is preparing a SignPath Foundation application for free Windows code signing. Acceptance and production signing have not been confirmed; current Windows packages are not Authenticode-signed by SignPath. See the [Code signing policy](CODE_SIGNING.md) for signing scope, maintainer roles, verification and provider attribution, and the [Privacy Policy](PRIVACY.md) for data handling and network services.
+
+## Architecture
+
+```text
+React SPA (Vite, PWA, Tailwind)
+        |
+        v
+Express API (JWT, OAuth, rate limiting)
+        |
+        v
+SQLite storage + encrypted media
+```
+
+## Tech Stack
+
+| Backend | Frontend |
+| --- | --- |
+| Node.js, Express, better-sqlite3 | React 19, Vite, Tailwind CSS |
+| JWT, bcrypt, Passport Google OAuth 2.0 | React Router v8, react-i18next |
+| Helmet, express-rate-limit, i18next | Lucide React, html5-qrcode |
+| Sharp, encrypted media storage | PWA-ready responsive UI |
+
+## Quick Start
+
+Choose the setup method that best fits your workflow:
+
+### Option A: Desktop GUI Launcher
+
+For local/self-hosted use, the Desktop GUI Launcher can verify dependencies, configure a local environment, isolate database/uploads per profile, and run both frontend and backend services from one window.
+
+1. **Download:** Go to the [GitHub Releases](https://github.com/asdteke/HomeInventory/releases) page and download the launcher package for your OS (`.dmg` for macOS, `.exe`/`.msi` for Windows, `.AppImage`/`.deb`/`.rpm` for Linux).
+2. **Install & Open:** Install and launch the application.
+3. **Start:** Click **Launch HomeInventory**. The launcher checks ports, starts the API and UI, then shows the local URL and a QR code for devices on the same network.
+
+For isolation details and advanced settings, see [GUI_LAUNCHER.md](GUI_LAUNCHER.md).
+
+---
+
+### Option B: Terminal Setup
+
+#### Prerequisites
+- Node.js 22.23.4+
+- npm 9+
+- Git
+
+#### 1. Install dependencies
+```bash
+git clone https://github.com/asdteke/HomeInventory.git
+cd HomeInventory
+npm run install-all
+```
+
+#### 2. Create a local environment file
+```bash
+npm run setup
+```
+This creates `.env` from `.env.example` (if it does not exist yet) and fills `JWT_SECRET`, `APP_ENCRYPTION_KEY` and `APP_ENCRYPTION_KEY_ID` with strong random values. Existing values are never overwritten. For local development, also set:
+```env
+NODE_ENV=development
+PORT=3001
+SITE_URL=http://localhost:5173
+```
+> [!WARNING]
+> Back up `APP_ENCRYPTION_KEY` and `APP_ENCRYPTION_KEY_ID`: encrypted data, including photos, cannot be recovered without them.
+>
+> Prefer to do it by hand? Use `openssl rand -hex 32` for `JWT_SECRET` and `openssl rand -base64 32` for `APP_ENCRYPTION_KEY`.
+
+#### 3. Run the app
+```bash
+npm run dev
+```
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:3001`
+
+#### 4. Build for production
+```bash
+npm run build
+npm start
+```
+
+---
+
+### Option C: Docker Setup
+
+Deploy HomeInventory from the pre-built image — no source checkout and no local build required:
+
+```bash
+curl -O https://raw.githubusercontent.com/asdteke/HomeInventory/main/docker-compose.yml
+touch .env  # optional settings, see .env.example
+mkdir -p secrets
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD/secrets:/secrets" \
+  ghcr.io/asdteke/homeinventory:latest node scripts/setup.mjs --docker --out /secrets
+docker compose up -d
+```
+
+Compose pulls `ghcr.io/asdteke/homeinventory:latest`, the newest release, available for amd64, arm64 and armv7. The `docker run` line generates the three secret files in `secrets/` without overwriting existing ones; back them up, because encrypted data cannot be recovered without the encryption key.
+
+For advanced configuration, reverse proxy setup, and production deployment, see [DOCKER.md](DOCKER.md).
+
+## Documentation
+
+- [DOCKER.md](DOCKER.md): Docker, reverse proxy, and self-hosting notes
+- [GUI_LAUNCHER.md](GUI_LAUNCHER.md): Desktop GUI Launcher setup, isolation details, and development guide
+- [README_ENVIRONMENT_SETUP.md](README_ENVIRONMENT_SETUP.md): environment variables and secret-management setup
+- [CONTRIBUTING.md](CONTRIBUTING.md): contribution guidelines
+- [SECURITY.md](SECURITY.md): vulnerability reporting process
+- [CHANGELOG.md](CHANGELOG.md): release history and upgrade notes
+- [ROADMAP.md](ROADMAP.md): short-term project direction
+- [docs/release-checklist.md](docs/release-checklist.md): release, signing, launcher, and artifact verification
+
+Recommended GitHub topics for maintainers: `home-inventory`, `self-hosted`, `inventory-management`, `household`, `pwa`, `sqlite`, `express`, `react`, `docker`, `privacy`, `qr-code`, `barcode`, `2fa`.
+
+## Language Note
+
+The product ships with **100+ selectable UI locale packs**. English and Turkish are the most actively reviewed product languages; other locales can fall back per key when a translation is incomplete.
+
+## Contributing
+
+Issues and pull requests are welcome. For larger changes, open an issue first so the implementation can stay aligned with the security model, household scoping, and localization structure.
+
+## Legal Note
+
+HomeInventory is an independent open-source project. It is not affiliated with, endorsed by, or connected to any commercial product or company using a similar name.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

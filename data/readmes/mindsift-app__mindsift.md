@@ -6,7 +6,7 @@
 [![Self-Hosted](https://img.shields.io/badge/100%25-Self--Hosted-2563eb?style=flat-square)](#-quick-start)
 [![Docker](https://img.shields.io/badge/Deployment-Single%20Container-2496ed?style=flat-square&logo=docker&logoColor=white)](#-quick-start)
 [![License](https://img.shields.io/badge/License-AGPLv3-6b7280?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-v0.89.1-16a34a?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-v0.94.0-16a34a?style=flat-square)](CHANGELOG.md)
 
 **Dump a thought, sort it later, turn it into a task, a note or a shopping list, alone or together.**
 Self-hosted, one container, one SQLite file, your server.
@@ -64,11 +64,15 @@ Capture from anywhere: the input bar (`C` or `/`), voice input (in the browser o
   <img src="screenshots/Mobile_Workspace.webp" alt="MindSift note on the phone, dark theme" width="280px" />
 </p>
 
-### ✅ Tasks & kanban
-List and board view with your own columns, priorities, due dates, subtasks, recurring tasks, drag & drop and undo. Share task lists, watch tasks, and get alarms and a daily summary by email, push, Discord or webhook.
+### ✅ Tasks, kanban & calendar
+List, board and calendar view (month or week, with a column of unscheduled tasks to drag onto a day) with your own columns, priorities, due dates, subtasks, recurring tasks, drag & drop and undo. Share task lists, mention people with @, watch tasks or mute a busy shared list, and get alarms and a daily summary by email, push, Discord or webhook.
 
 <p align="center">
   <img src="screenshots/aufgaben_desktop.webp" alt="MindSift tasks and kanban board" width="90%" />
+</p>
+
+<p align="center">
+  <img src="screenshots/calendar_desktop.webp" alt="MindSift tasks in the calendar view: a month with tasks on their days, repeating tasks shown ahead, unscheduled tasks on the right" width="90%" />
 </p>
 
 ### 📝 Outliner notes, together, live

@@ -1577,8 +1577,14 @@ A pattern is a pattern of SQL `LIKE`. A table pattern with a dot, such as
 
 The dump reads the schema and the rows in one transaction, so that they agree.
 Inside a transaction that `\begin` started, `\dump` reads in that
-transaction, and so it includes the changes that are not committed yet. A file
-is written whole or not at all, and only its owner can read it. `--dump` runs
+transaction, and so it includes the changes that are not committed yet.
+Outside such a transaction, the dump goes to a temporary file that only its
+owner can read, and its destination gets the dump only when it is complete. So
+standard output or a command gets a whole script or nothing. When the database
+fails to read the rows, the dump waits and starts again in a new transaction,
+at most three times. A value that the dump cannot write stops it at once. Oracle refuses to read a table that was made a few seconds before the
+transaction started, and a new try a little later reads it. A file is written
+whole or not at all, and only its owner can read it. `--dump` runs
 no `init.sql`. Neither form reads its options from `config.yaml`, `-O` or a
 `USQL_` variable, so that a setting cannot change what a dump writes.
 
@@ -1776,10 +1782,12 @@ directly in the terminal:
 </div>
 
 At a terminal with graphics, `\chart help` lists the charts and their options.
+See [`_samples/chart.sql`](_samples/chart.sql) for a sample that makes a
+PostgreSQL table and draws it.
 
-The renderer runs Apache ECharts in a JavaScript engine and rasterizes the
-result with an SVG renderer, which together add about 12 MiB to the binary.
-Both are pure Go, so a build with `CGO_ENABLED=0` has the renderer too.
+The renderer is [zuzu][zuzu], which draws charts in pure Go, so a build with
+`CGO_ENABLED=0` has the renderer too. The text of a chart uses the IBM Plex
+Sans font that zuzu holds, so a chart looks the same on every machine.
 Every build has it, unless its build tags leave it out. The tag `no_charts`
 leaves it out, and so does `no_drivers` unless the tag `charts` is also given.
 A build without it reports that it has no chart renderer.
@@ -2014,6 +2022,7 @@ requests. For [technical details, see CONTRIBUTING.md](CONTRIBUTING.md).
 [backticks]: #backticks "Backticks"
 [config]: #configuration "Configuration"
 [commands]: #backslash-commands "Backslash Commands"
+[zuzu]: https://github.com/xo/zuzu "zuzu"
 [completion]: #context-completion "Context Completion"
 [connecting]: #connecting-to-databases "Connecting to Databases"
 [contributing]: #contributing "Contributing"

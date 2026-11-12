@@ -80,7 +80,8 @@ the diagnostic graph specification is in `pg_diag/render/graph/`.
 - Table filtering, sorting, pagination, and compact value formatting.
 - Chart zoom, drag-pan, reset, legends with vertical scrolling after six rows,
   consistent axis/tooltip unit scaling, SVG/PNG/CSV export, and fixed color
-  palettes.
+  palettes. Selection and pan are exclusive modes; switching tools preserves
+  the visible range. Undo covers zoom and pan, and Reset restores the full range.
 - Source and metadata dialogs for report items.
 - Error diagnostics embedded directly into failed report items.
 - Self-contained HTML for human review and structured JSON for LLM, ETL, and
@@ -1240,17 +1241,23 @@ No additional PostgreSQL grants are needed: the reference `pgdiag` role already
 covers `pg_ls_logdir()`, `pg_current_logfile()`, and the log-related settings
 through `pg_monitor`.
 
-The current release ships nineteen log items: the error chronology, top errors
+The current release ships twenty-one log items: the error chronology, top errors
 and top warnings by frequency, crash and recovery markers, deadlocks,
 authentication failures, autovacuum runs, checkpoints, WAL archiver failures,
 transaction ID wraparound pressure, lock waits, `auto_explain` plans by
-duration, the log files overview, plus system incidents, server lifecycle,
+duration, ordinary query durations by time bucket and their top-100 table,
+the log files overview, plus system incidents, server lifecycle,
 replication/WAL transport events, query terminations by minute, query time/temp
 file groups, and heavy/failed maintenance (the log overview needs only
 `pg_monitor`, no log-content access). Chart event text and plans use bounded,
 deduplicated references so repeated events do not duplicate large payloads.
+Repeated log records are compressed only when their retained event evidence agrees;
+different metrics, details, processes and applications remain separate. Ordinary
+duration records keep their individual timestamps. Query/resource groups list all
+known users, and checkpoint/archiver/wraparound summaries include events outside
+their table row limits.
 Log SQL links reuse the report-wide `query_texts` catalog. Retained SQL is limited
-to 2000 characters and hover previews to 300; truncated text is marked in the
+to 3000 characters and hover previews to 300; truncated SQL ends with `...` in the viewer and is marked in the
 query dialog. Catalog keys are PostgreSQL Query IDs; missing/zero IDs use the first
 20 hex characters of the retained sanitized SQL's SHA256, without a prefix,
 also displayed as the link label. Each key keeps

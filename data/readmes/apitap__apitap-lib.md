@@ -7,8 +7,8 @@ wire formats — binary `COPY`, RowBinary, `LOAD DATA`, logical replication, the
 MySQL binlog — through its own Rust wire clients, moves tables over parallel
 range pipes, publishes them with atomic swaps, and keeps memory flat no matter
 how big the table is. The Python package is a thin binding in the spirit of
-Polars: one call, no daemon, no local state files. It is the open-source engine
-behind apitap cloud (apitap.dev).
+Polars: one call, no daemon, no local state files. Docs and a public sandbox
+are at apitap.dev.
 
 ```bash
 pip install apitap
@@ -67,9 +67,9 @@ apitap.sql("""SELECT o_orderpriority, SUM(l_extendedprice * (1 - l_discount)) AS
 | **Modes** | `replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg |
 | **SQL** | `apitap.sql()` joins and aggregates tables of different databases (all 22 TPC-H queries across Postgres × MySQL: CTEs, correlated subqueries, HAVING, LEFT JOIN) in apitap's own Rust engine, exact, in a 256 MB container; into a DataFrame (streamed), a destination, or an incremental view |
 | **DataFrames** | `apitap.read()` → polars, pyarrow, duckdb, pandas through the Arrow C stream protocol, zero-copy, no pyarrow dependency |
-| **Runtime** | CPython ≥ 3.9, one `abi3` wheel (`manylinux_x86_64`); the engine is Rust, nothing in the data path is Python |
+| **Runtime** | CPython ≥ 3.9, `abi3` wheels: `manylinux_x86_64` (the PGO build every gate leg and number here ran on), `manylinux_aarch64` and macOS `arm64` (built and unit-tested in CI, not PGO, not gated), and an sdist; the engine is Rust, nothing in the data path is Python |
 | **Memory** | bounded by *pipes × buffers*, planned from the container's cgroup limits — never by table size; a 256 MB container moves 100 GB |
-| **Version** | 0.67.0 — pin exactly while pre-1.0 (`apitap==0.67.0`) |
+| **Version** | 0.67.2 — pin exactly while pre-1.0 (`apitap==0.67.2`). **Upgrade from 0.66.0–0.67.1** if you use `apitap.sql()`: a join on a database's text column (`ON a.code = b.code` with both `varchar`, or an integer against text) answered 0 rows, or through a CTE matched `'099'` with `'99'`, without an error; 0.67.0 also mis-compared a `WHERE` across tables of text or unlike kinds. 0.67.2 refuses all of these by name |
 | **License** | MIT |
 
 ## Why apitap
@@ -423,8 +423,8 @@ table already joined. Then:
 
 | piece | supported |
 |---|---|
-| joins | `INNER JOIN … ON a.k = b.k` or the comma form with the equalities in `WHERE` |
-| `WHERE` | per-table conditions (comparisons, `BETWEEN`, `IN`, `LIKE`, `IS NULL`, `AND`/`OR`/`NOT`, date literals, folded constants) are pushed to that table's server; an `OR` across tables (TPC-H Q19) is checked here per matched row, its single-table parts implied to each server too; a comparison of a column of each table (`l.shipdate > o.orderdate`) is checked on each joined row |
+| joins | `INNER JOIN … ON a.k = b.k` or the comma form with the equalities in `WHERE`; the key is an integer column on a database, while a sheet's, CSV's or GitHub API table's text key is read as an integer (`'010'` equals `'10'`, spaces are trimmed, an empty cell is NULL, a value that is not an integer is refused); a text column from a database, directly or through a CTE or derived table, is refused as a key |
+| `WHERE` | per-table conditions (comparisons, `BETWEEN`, `IN`, `LIKE`, `IS NULL`, `AND`/`OR`/`NOT`, date literals, folded constants) are pushed to that table's server; an `OR` across tables (TPC-H Q19) is checked here per matched row, its single-table parts implied to each server too; a comparison of a column of each table is checked on each joined row when both are numbers, both dates or both timestamps of one kind (`l.shipdate > o.orderdate`) |
 | subqueries | `IN` / `EXISTS` / `NOT IN` / `NOT EXISTS (SELECT …)`, including `IN (SELECT k … GROUP BY k HAVING SUM/COUNT/AVG(…) > x)` (TPC-H Q18) |
 | expressions | arithmetic in aggregates, `CASE WHEN … THEN … END` over one table, `EXTRACT(YEAR FROM col)`, derived tables `FROM (SELECT … ) AS t` without GROUP BY |
 | aggregates | `SUM`, `COUNT(*)`, `COUNT(col)`, `MIN`, `MAX`, `AVG`; decimals exact (i128, digit for digit), integer overflow widened, floats f64 |
@@ -437,8 +437,9 @@ and full outer joins, a `LEFT JOIN` grouped coarser than its key or with
 `HAVING`/`DISTINCT` or an aggregate over an expression of the joined table, a
 correlated subquery in any other place, a CTE shadowing another, a timestamp
 scalar subquery used as a literal, a `WHERE` expression over two tables'
-columns (`l.a * 2 > o.b`; a plain column against column runs), joins on
-non-integer keys.
+columns (`l.a * 2 > o.b`), a comparison of two tables' text columns (their
+collations may differ) or of unlike kinds (a date against a timestamp or a
+number), joins on non-integer keys (a database's text column as a join key included).
 
 **How it runs.** Each server only scans and sends: its table's conditions and
 columns go into its own `SELECT`, never a join, aggregate or another table's
@@ -802,7 +803,7 @@ and collation included.
       functions, UNION, outer joins beyond LEFT JOIN by key
 - [ ] `query=` for `read()` (arbitrary SQL, not just tables)
 - [ ] Snowflake destination
-- [ ] aarch64 and macOS wheels, plus an sdist
+- [x] aarch64 and macOS arm64 wheels, plus an sdist (0.67.1)
 
 ## Development
 
@@ -827,7 +828,7 @@ the fast lanes *are* the product. A new destination is one `sink/<name>.rs`
 (plus a `logbased/dest_<name>.rs` for CDC) and its route-table arms; it then
 works with every source whose wire format it accepts.
 
-The release gate runs 87 end-to-end legs against live servers (Postgres with
+The release gate runs 243 end-to-end legs against live servers (Postgres with
 logical replication, MySQL 8.4, MariaDB, ClickHouse, MinIO and a REST Iceberg
 catalog, BigQuery, two older wheels for upgrade and rollback legs) and prints
 one verdict; a skipped leg is a reported leg. Longer write-ups — the benchmark
@@ -837,5 +838,4 @@ ledgers with raw logs, the failure-mode catalogue, the CDC design and the
 
 ## License
 
-MIT. The managed cloud — scheduling, always-on per-tenant workers, monitoring,
-a UI — is apitap.dev.
+MIT.

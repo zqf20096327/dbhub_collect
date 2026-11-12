@@ -306,9 +306,9 @@ Useful resources and dependencies that are used in Canva Clone.
 - [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.3.1
 - [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.1.16
 - [@radix-ui/react-label](https://www.npmjs.com/package/@radix-ui/react-label): ^2.1.17
-- [@radix-ui/react-scroll-area](https://www.npmjs.com/package/@radix-ui/react-scroll-area): ^1.2.10
+- [@radix-ui/react-scroll-area](https://www.npmjs.com/package/@radix-ui/react-scroll-area): ^1.4.0
 - [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.2.0
-- [@radix-ui/react-slider](https://www.npmjs.com/package/@radix-ui/react-slider): ^1.3.6
+- [@radix-ui/react-slider](https://www.npmjs.com/package/@radix-ui/react-slider): ^1.6.1
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
 - [@radix-ui/react-tooltip](https://www.npmjs.com/package/@radix-ui/react-tooltip): ^1.2.8
 - [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.13
@@ -317,7 +317,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [@trivago/prettier-plugin-sort-imports](https://www.npmjs.com/package/@trivago/prettier-plugin-sort-imports): ^6.0.0
 - [@types/lodash.debounce](https://www.npmjs.com/package/@types/lodash.debounce): ^4.0.9
 - [@types/material-colors](https://www.npmjs.com/package/@types/material-colors): ^1.2.3
-- [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.5
+- [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.6
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19
 - [@types/react-color](https://www.npmjs.com/package/@types/react-color): ^3.0.13
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^19
@@ -327,7 +327,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [date-fns](https://www.npmjs.com/package/date-fns): ^4.1.0
-- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.8
+- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.9
 - [drizzle-kit](https://www.npmjs.com/package/drizzle-kit): ^0.31.11
 - [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.4
 - [drizzle-zod](https://www.npmjs.com/package/drizzle-zod): ^0.8.3
@@ -336,7 +336,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^10.0.1
 - [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^5.5.7
 - [fabric](https://www.npmjs.com/package/fabric): 7.4.0
-- [hono](https://www.npmjs.com/package/hono): ^4.13.14
+- [hono](https://www.npmjs.com/package/hono): ^4.13.17
 - [lodash.debounce](https://www.npmjs.com/package/lodash.debounce): ^4.0.8
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.51.0
 - [material-colors](https://www.npmjs.com/package/material-colors): ^1.2.6

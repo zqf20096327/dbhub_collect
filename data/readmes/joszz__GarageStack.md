@@ -51,15 +51,17 @@ The statistics, trip log, maintenance list and light theme are in the [screensho
 - [Trip log](#trip-log), [Climate schedules](#climate-schedules) and [Maintenance](#maintenance)
 - [Dutch registration (RDW)](#dutch-registration-rdw)
 - [Homepage dashboard widget](#homepage-dashboard-widget) and [Read-only API tokens](#read-only-api-tokens)
-- [Map overlays](#map-overlays)
+- [Directions to the car](#directions-to-the-car) and [Map overlays](#map-overlays)
 - [Security defaults](#security-defaults), [HTTPS](#https) and [What leaves your network](#what-leaves-your-network)
 - [Documentation](#documentation)
 
 ## Features
 
-- **Live dashboard** -- Real-time vehicle telemetry displayed as configurable cards. Cards are automatically shown or hidden based on your vehicle type (HEV, PHEV, BEV) and can be reordered or toggled individually in the dashboard's edit mode. The car drawn on the dashboard takes your car's colour (Settings > Car colour), and the vehicle type can be set by hand under Settings > Vehicle type when detection gets it wrong.
+- **Live dashboard** -- Real-time vehicle telemetry displayed as configurable cards. Cards are automatically shown or hidden based on your vehicle type (HEV, PHEV, BEV) and can be reordered or toggled individually in the dashboard's edit mode. The car drawn on the dashboard takes your car's colour (Settings > Vehicle > Car colour), and the vehicle type can be set by hand under Settings > Vehicle > Vehicle type when detection gets it wrong.
+- **Directions to the car** -- Open walking directions to the car's last known location from the dashboard or the car's map marker, on OpenStreetMap or, if you prefer, Google Maps, Apple Maps or a map app on your phone. See [Directions to the car](#directions-to-the-car).
 - **Tyre history** -- Tap a tyre's pressure on the dashboard's car to see a month of daily pressures for all four tyres, and how each one moved against the other three over the last two weeks: a tyre falling behind the others while they hold is a slow puncture, which also sends a notification.
 - **Trip history** -- Browse past journeys on an interactive map, each drawn on the roads it took and coloured by speed or by the speed limit, with a heatmap of the roads you drive most. Each trip is saved to the database a few minutes after the car parks. After upgrading from a version that did not save trips, the existing history is saved in the background on the Worker's first start.
+- **Phone GPS (Dawarich)** -- Fill gaps in recorded car trips with phone locations from your own Dawarich instance. Identify trackers by their app/device ID and last-seen time; you can link multiple phones, and GarageStack uses the best match for each trip. See [Phone GPS setup](documentation/PHONE_GPS.md).
 - **Trip log** -- Mark each trip as business, commute or private (commutes between your home and work are marked automatically), add notes, hide a GPS glitch, join two trips a fuel stop split, and export a month or a year as a spreadsheet with the addresses and odometer readings a tax trip log (such as the Dutch *rittenregistratie*) asks for. See [Trip log](#trip-log).
 - **Maintenance** -- Keep the car's service items (oil, tyres, the yearly inspection, ...) with a distance interval, a time interval or both. GarageStack works out from the odometer and your service log when each one is due, shows the most urgent on the dashboard, and sends a notification when an item reaches 90 % of its interval. Log each service with its date, odometer reading and notes.
 - **Dutch registration (RDW)** -- For a car with a Dutch licence plate, a dashboard card with the date the APK runs out and the days left, open recalls with what can go wrong and what the dealer does about it, and whether the car is insured, from the [RDW's open data](https://opendata.rdw.nl). Notifications come for a new recall, the APK a month and a week ahead, and a car with no insurance on record. Off until `RDW_ENABLED=true`; the plate, entered under Settings, is the only thing sent. See [Dutch registration (RDW)](#dutch-registration-rdw).
@@ -69,8 +71,8 @@ The statistics, trip log, maintenance list and light theme are in the [screensho
 - **Push notifications** -- Browser and in-app alerts for key events: engine started, low or high tyre pressure, a slow puncture, low EV battery, low fuel, a weak 12V battery, car left unlocked, doors or windows left open, the car moving while parked, arriving at or leaving home or work, a charge that finished or stopped early, maintenance coming due, the APK running out or a recall on a Dutch plate, a climate schedule that ran, the messages the official MG app receives, and data that stopped arriving because the MG sign-in failed or the car went quiet. Each device chooses which ones it gets.
 - **Homepage widget** -- A read-only API endpoint for the [gethomepage.dev](https://gethomepage.dev) Custom API widget, exposing key vehicle stats at a glance, along with the APK days left, open recalls, the maintenance due next and the last trip.
 - **Log viewer** -- The Logs page shows the entries of the API's and the Worker's log files, newest first and older ones loading as you scroll, filtered by service, level and text, with exceptions folded open on request and a live mode that adds what was written every ten seconds. The files themselves stay on the server, one per day (`LOG_RETAINED_FILES`).
-- **Full data export** -- Settings > Your data downloads everything GarageStack keeps as one zip: per car its trips, maintenance, schedules, places and every telemetry reading (as CSV), and your notifications and settings.
-- **Read-only API tokens** -- Make a token under Settings > API tokens and let a script, a dashboard or a watch read what the app shows, without signing in. A token can only read: it cannot send commands or change anything, and the full data export and the logs stay with a signed-in session.
+- **Full data export** -- Settings > Data & API > Your data downloads everything GarageStack keeps as one zip: per car its trips, maintenance, schedules, places and every telemetry reading (as CSV), and your notifications and settings.
+- **Read-only API tokens** -- Make a token under Settings > Data & API > API tokens and let a script, a dashboard or a watch read what the app shows, without signing in. A token can only read: it cannot send commands or change anything, and the full data export and the logs stay with a signed-in session.
 - **Home Assistant** -- Your car appears in Home Assistant automatically through MQTT discovery, sharing GarageStack's broker and MG session instead of needing a second integration. GarageStack adds sensors of its own to the car: the APK and its days left, open recalls, the maintenance due next and the last trip. See [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md).
 - **Progressive Web App (PWA)** -- Installable on mobile or desktop for a native app-like experience, complete with a home screen icon and push notification support. Where the browser allows it, GarageStack offers to install itself, and the offer can be turned down for good. Installing and push need HTTPS, see [HTTPS](#https).
 - **Charging stations** -- Overlay nearby EV charging stations on the map, sourced from the [Open Charge Map](https://openchargemap.org) database. Station data is cached in the database for 7 days; on page load the map immediately shows all stations within 100 km of your car that are already cached. Markers show operational status; clicking a marker displays the station name, operator, address, and available connector types with power ratings. Requires a free OCM API key (`OPENCHARGEMAP_API_KEY`). Unlike fuel stations and service areas, charging station tiles are loaded on demand as you browse the map and are not pre-populated by the background Worker.
@@ -83,8 +85,9 @@ The statistics, trip log, maintenance list and light theme are in the [screensho
 - **Themed vector basemap** -- Every map is drawn from OpenStreetMap vector tiles by MapLibre GL, in a dark or light style that follows the interface theme (or in full colour, if you prefer) and with labels in the interface language. Served by [OpenFreeMap](https://openfreemap.org) without an API key, point it at your own tile server if you prefer, and it falls back to raster tiles where WebGL is unavailable.
 - **Single sign-on** -- Sign in through your own identity provider (Authentik, Authelia, Keycloak, Pocket ID, Google, and anything else speaking OpenID Connect), with optional auto-login and group or email based access restrictions. A built-in username/password login remains available for installs without a provider. See [`AUTHENTICATION.md`](documentation/AUTHENTICATION.md).
 - **Multi-language support** -- Interface available in English, Dutch and Spanish. It follows the browser's language until you pick one under Settings, and the choice then follows your account. Push notifications are sent in `NOTIFICATION_LANGUAGE` (`en`, `nl` or `es`).
-- **Region and units** -- Kilometres or miles, Celsius or Fahrenheit, bar, psi or kPa for tyres, L/100 km or miles per UK or US gallon for fuel, and a 24-hour or 12-hour clock. Each one follows the region the browser is in (taken from its time zone, so an English browser in the Netherlands still gets kilometres and 14:05), and can be set by hand under Settings > Region and units, as can the region itself, which also sets the date order. Everything is stored in metric and converted only for display, so switching back and forth loses nothing; the trip log's CSV export follows the chosen distance unit and clock. The homepage widget, Home Assistant and the `TYRE_PRESSURE_*_BAR` thresholds stay metric, and notifications use a 24-hour clock.
+- **Region and units** -- Kilometres or miles, Celsius or Fahrenheit, bar, psi or kPa for tyres, L/100 km or miles per UK or US gallon for fuel, and a 24-hour or 12-hour clock. Each one follows the region the browser is in (taken from its time zone, so an English browser in the Netherlands still gets kilometres and 14:05), and can be set by hand under Settings > General > Region and units, as can the region itself, which also sets the date order. Everything is stored in metric and converted only for display, so switching back and forth loses nothing; the trip log's CSV export follows the chosen distance unit and clock. The homepage widget, Home Assistant and the `TYRE_PRESSURE_*_BAR` thresholds stay metric, and notifications use a 24-hour clock.
 - **Settings follow you** -- Theme, language, units, the dashboard layout and the map's layers and filters are saved to your account, so every phone, tablet and computer you sign in on looks the same. Each browser keeps a copy too, so pages open instantly and the login page keeps your theme and language. After upgrading, the first device to sign in brings its settings along.
+- **Grouped settings** -- Settings is divided into General, Vehicle, Map, Phone GPS, Notifications and Data & API tabs. A tab with nothing to set for your car or deployment is left out, and switching tabs keeps unsaved edits.
 - **Self-hosted** -- Runs entirely on your own infrastructure via Docker (all-in-one container or Docker Compose). No cloud account or subscription required beyond the SAIC iSmart API.
 
 ### Dashboard cards
@@ -386,7 +389,7 @@ GarageStack checks your vehicle's state every 5 minutes and sends both a browser
 
 Push notifications require VAPID keys to be configured (`VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY`). Without them, alerts still appear in the in-app notification panel. While GarageStack is open in a browser that allowed notifications but is not subscribed to push, the same alerts show up as system notifications too; a subscribed browser gets them through push instead, so nothing arrives twice.
 
-Settings has a push switch for the device you are on and a per-type checklist for these alerts, which offers only the types the car's drivetrain can produce: the plug-in alerts (low EV battery, charging complete, charging interrupted) are left out for a plain hybrid, low fuel for a full electric car, and the RDW type (APK, recalls and insurance) wherever `RDW_ENABLED` is off. Both are kept per device: a type switched off on your phone still reaches your laptop, and still shows up in the notification panel. Only the switch turns push on or off; the checklist never asks the browser for permission.
+Settings > Notifications has a push switch for the device you are on and a per-type checklist for these alerts, which offers only the types the car's drivetrain can produce: the plug-in alerts (low EV battery, charging complete, charging interrupted) are left out for a plain hybrid, low fuel for a full electric car, and the RDW type (APK, recalls and insurance) wherever `RDW_ENABLED` is off. Both are kept per device: a type switched off on your phone still reaches your laptop, and still shows up in the notification panel. Only the switch turns push on or off; the checklist never asks the browser for permission.
 
 Notification texts are written by the background worker, which has no browser to take a language from, so their language is a deployment setting: `NOTIFICATION_LANGUAGE=en` (default), `nl` or `es`. The web UI's language selection does not affect them.
 
@@ -460,7 +463,7 @@ Commands sent by hand at the same moment as a scheduled run share the car's one 
 
 For a car with a Dutch licence plate, GarageStack shows what the [RDW](https://opendata.rdw.nl) has on record for it: when the APK runs out, the recalls on the car, and whether it is WAM insured. It is off until the deployment sets `RDW_ENABLED=true`; until then nothing is sent and none of the below appears.
 
-- **The plate.** Enter it under **Settings > Licence plate**, which is drawn as a Dutch plate. Type it with or without dashes: they are placed as the plate has them while you type (`HPK-98-B`, `12-ABC-3`). The plate is kept per car in GarageStack's own database, without the dashes, and **Remove** clears it along with what the RDW said about it.
+- **The plate.** Enter it under **Settings > Vehicle > Licence plate**, which is drawn as a Dutch plate. Type it with or without dashes: they are placed as the plate has them while you type (`HPK-98-B`, `12-ABC-3`). The plate is kept per car in GarageStack's own database, without the dashes, and **Remove** clears it along with what the RDW said about it.
 - **The lookup.** Saving the plate looks it up straight away, so the card fills at once. After that the Worker asks again every `RDW_REFRESH_HOURS` (a day by default). The plate is the only thing sent, to `opendata.rdw.nl`, together with the RDW's own reference codes for the recalls it lists; no key is needed.
 - **The card.** The **APK & recalls** card shows the days the APK has left and how many recalls are open. Clicking it shows the APK date, the insurance on record, each open recall with what can happen and what the dealer does about it, the recalls already repaired, and when the RDW was last asked. The recall texts are the RDW's own, in Dutch. A plate the RDW does not know is said so, rather than shown as an error.
 - **Notifications.** A new open recall (once per recall: one reported repaired later sends nothing), the APK a month and a week before it runs out and once it has, and a car with no WAM insurance on record. They are listed under [Push notifications](#push-notifications), and can be switched off per device like the other types.
@@ -477,7 +480,7 @@ GarageStack has a read-only endpoint for the [gethomepage.dev](https://gethomepa
 
 ## Read-only API tokens
 
-To read GarageStack's data from a script, a dashboard or a watch, make a token under **Settings > API tokens**. It is shown once: copy it then. Send it with every request:
+To read GarageStack's data from a script, a dashboard or a watch, make a token under **Settings > Data & API > API tokens**. It is shown once: copy it then. Send it with every request:
 
 ```bash
 curl -H "Authorization: Bearer gs_..." https://garagestack.example.com/api/vehicles
@@ -497,6 +500,18 @@ A few things to know before building on a token:
 - Requests with a token count against the same per-address rate limit as the app (120 a minute by default, `RATE_LIMIT_GLOBAL_PER_MINUTE`), so poll every few seconds at most.
 - Live updates (the `/hubs/telemetry` connection the dashboard uses) are not available with a token; poll the REST endpoints instead.
 - A Home Assistant [REST sensor](https://www.home-assistant.io/integrations/sensor.rest/) works well with a token, see [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md#reading-garagestack-with-an-api-token).
+
+---
+
+## Directions to the car
+
+Click the directions icon beside the full-map icon in the top-right corner of the dashboard map, or **Directions to car** in the car marker's popup. Both open the same dialog with map options and information about the car's last known location. The first option opens walking directions on [OpenStreetMap](https://www.openstreetmap.org/directions) to the selected car's last known telemetry coordinates, on a phone or desktop, routed by FOSSGIS's OSRM foot router. The map provider uses or asks for your starting location; GarageStack does not ask your browser for it, wake the car or send a command.
+
+The dialog also offers Google Maps and Apple Maps walking directions, a `geo:` link for compatible installed map apps (Organic Maps, OsmAnd and others) and coordinate copying. Apple Maps availability depends on the device, browser and region. A `geo:` link needs a compatible app and may open a pin rather than walking navigation. If automatic copying is unavailable, for example on a plain HTTP LAN page, select and copy the displayed coordinates by hand.
+
+The coordinates are the car's own telemetry, not a phone fix or a historical trip endpoint. They may be old or inaccurate. A displayed vehicle update time is not the time of the GPS fix, which can be older. Directions are unavailable when the car appears to be moving or on an active trip, and until valid coordinates for the selected vehicle are available.
+
+Opening an external map or map app shares the destination coordinates with it. No external directions request is made just by viewing GarageStack. The chosen provider may also use or ask for your location under its own permissions and privacy policy.
 
 ---
 
@@ -606,7 +621,7 @@ A reading counts as over the limit only past 5 km/h above it: speedometers read 
 
 ### What leaves your network
 
-GarageStack runs on your own hardware, but a few features ask public services for what they know. Each one is listed here with what it sends, and each one except the MG servers can be switched off.
+GarageStack runs on your own hardware, but a few features ask public services for what they know. Each one is listed here with what it sends, and each one except the MG servers can be switched off or left unopened.
 
 | Service | Asked by | What it receives | Switch it off |
 | ------- | -------- | ---------------- | ------------- |
@@ -618,6 +633,7 @@ GarageStack runs on your own hardware, but a few features ask public services fo
 | [RDW open data](https://opendata.rdw.nl) (APK, recalls, insurance) | the API and the Worker | The licence plate, and the RDW's own codes for the recalls it lists | Off until `RDW_ENABLED=true` |
 | [GitHub](https://github.com/joszz/GarageStack/releases) (update notice) | the API | One request a day for the latest release | `UPDATE_CHECK_ENABLED=false` |
 | [OpenFreeMap](https://openfreemap.org) and [OpenStreetMap](https://www.openstreetmap.org) tiles (the basemap) | your browser | The map tiles your browser shows | Serve your own tiles, see [Basemap](#basemap) |
+| OpenStreetMap, Google Maps, Apple Maps or a compatible map app (directions to the car) | your browser, only when you follow a map link | The car's last known destination coordinates; the chosen provider may also use your starting location | Do not open an external map link |
 | Your browser's push service (Google, Mozilla, Apple) | the Worker | Each notification, encrypted so only your browser can read it, and `VAPID_SUBJECT` | Leave the VAPID keys empty, or switch push off per device |
 
 Requests to the map, lookup and update services identify themselves as `GarageStack/1.0 (+https://github.com/joszz/GarageStack)`, as Nominatim's usage policy asks. Apart from what the table lists, the car's telemetry, its trips, your notifications and your settings stay on your server, unless you connect something to it yourself, such as Home Assistant.
@@ -674,6 +690,7 @@ For running GarageStack:
 - [`CONFIGURATION.md`](documentation/CONFIGURATION.md): every setting, with its default
 - [`AUTHENTICATION.md`](documentation/AUTHENTICATION.md): single sign-on, the built-in login, and provider examples
 - [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md): the car in Home Assistant, through MQTT or an API token
+- [`PHONE_GPS.md`](documentation/PHONE_GPS.md): fill recorded car trips with phone GPS from Dawarich
 - [`WIDGET.md`](documentation/WIDGET.md): the gethomepage.dev widget
 - [`docker/all-in-one/README.md`](docker/all-in-one/README.md): the all-in-one image and Unraid
 - [Screenshots](documentation/screenshots/README.md) of the main pages

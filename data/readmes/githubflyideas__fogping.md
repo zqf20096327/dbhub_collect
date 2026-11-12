@@ -3,16 +3,17 @@
 >
 > *🚫 No Perl. No RRDtool. No Web Server. No Config Files.*
 
-![fogping: PING target latency graph (dark theme)](docs/images/fogping-ping.png)
-![fogping: TCP target latency graph (amber theme)](docs/images/fogping-tcp.png)
-![fogping: target editor (daylight theme)](docs/images/fogping-targets.png)
+
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/dbc7a184-c25b-4e34-9c58-9ac355d4bd63" />
+
+
 
 ## Quick start
 
 One command (Linux x86-64) — downloads, unpacks and starts fogping:
 
 ```bash
-mkdir -p ~/fogping && cd ~/fogping && curl -L https://github.com/githubflyideas/fogping/releases/download/v1.3.1/fogping-v1.3.1-linux-amd64.tar.gz | tar --no-same-owner -xz && ./fogping --edit user=admin passwd=change-me
+mkdir -p ~/fogping && cd ~/fogping && curl -L https://github.com/githubflyideas/fogping/releases/download/v1.3.2/fogping-v1.3.2-linux-amd64.tar.gz | tar --no-same-owner -xz && ./fogping --edit user=admin passwd=change-me
 ```
 
 Or with Docker (amd64 / arm64 / armv7):

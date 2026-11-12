@@ -83,7 +83,8 @@ developer works with an Oracle database day to day:
   columns read from a table. The display columns live in one file you
   can share with your team through your repository.
 - Object details per table: columns, constraints, indexes (with a hint for unindexed foreign keys), dependencies,
-  synonyms, DDL.
+  synonyms, DDL – with *Without owner* the DDL and its GRANT statements leave the object's own schema out, to run them
+  under another owner.
 - **Synonyms**: every table, view and PL/SQL unit lists the private and public synonyms on it – create one (private in
   the schema or public) or drop one, after the confirmation every schema change gets. "Synonyms of the schema" in the
   command palette lists the schema's private synonyms with their targets and marks those leading nowhere, to clean up.
@@ -234,6 +235,11 @@ developer works with an Oracle database day to day:
   repository). The explorer lists them as a tree (*Scripts*); a click opens one in a new tab without running it, and the
   panel beside the history inserts one at the cursor. A tab opened from a script saves only when asked and reloads when
   the file changes on disk (format: `docs/sql-scripts.md`).
+- **Keep results:** *Keep result* above a query's result keeps it, with its rows as they were read, when the next
+  statement runs – up to ten per tab, side by side in the bar above the grid, each named by its table and time (a double
+  click renames it). A kept result never reads again: it sorts, copies and exports the rows it holds. Every result shows
+  the statement and the variables it ran with, and *To the editor* selects that statement in the script or inserts it.
+  *Load all rows* reads the rest of a result (up to 10,000 rows) before you keep it.
 - Results know where their columns come from: C# names, enum members, names beside foreign keys and foreign-key jumps
   as in a table – also with the quoted aliases EF Core writes and through synonyms. Columns of a result can be pinned;
   the tab keeps them for every result it shows.
@@ -249,8 +255,14 @@ developer works with an Oracle database day to day:
 - Compare any number of connections or schemas – Dev, Test, Prod, customer databases – in one matrix: tables, views,
   columns (type, length, NULL, default, identity), keys, foreign keys, checks and indexes. Sides with the same definition
   share a colour; names Oracle generated (`SYS_C…`) are matched by content.
-- "Forgot the ALTER on Test?": a DDL proposal aligns one side with another – drops and renames only as commented-out
-  hints – and opens in the SQL editor of the target connection. Comparisons can be saved and copied as Markdown.
+- Views and materialized views compare by their query – spaces, comments, letter case and the own schema do not count –
+  with `WITH READ ONLY`/`CHECK OPTION` or their refresh options, and by status (an invalid view is a difference). A click
+  on the definition shows the text of each variant.
+- "Forgot the ALTER on Test?": a DDL proposal aligns one side with another for the objects you tick in the matrix – views
+  created or replaced in the order they build on each other, invalid ones compiled; drops, renames and recreating a
+  materialized view only as commented-out hints – that runs on the target connection right from the dialog (with the usual
+  confirmation, also on a connection in the background) or opens in its SQL editor. Comparisons can be saved and copied as
+  Markdown; the search and the opened rows stay when you come back.
 - Single columns to another database: pick them in the "Columns" view (or mark their headers in the grid) and right-click
   – `ALTER TABLE … ADD` with their comments and the foreign keys made only of them, to copy or to open in the SQL
   editor of another connection.

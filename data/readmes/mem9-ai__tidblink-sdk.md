@@ -1,0 +1,36 @@
+# TiDB Link SDKs
+
+Official, supported SDKs for TiDB Link.
+
+The TypeScript SDK lives in [`typescript/`](typescript/README.md). It targets Node.js
+22.12 or newer, uses the platform `fetch` API, and has no
+runtime dependencies.
+
+- [TypeScript quick start](typescript/README.md#quick-start)
+- [Contributing](CONTRIBUTING.md)
+- [Release process](RELEASING.md)
+- [Changelog](CHANGELOG.md)
+- [Security policy](SECURITY.md)
+
+The SDK is pre-1.0 while the TiDB Link HTTP API remains pre-1.0. Each SDK
+release declares its exact service baseline and supported scope. This package
+covers Organization/End User/Key provisioning, Template discovery, personal Agent
+and Session management, text commands with recoverable final results and continuous
+progress, Client Tools, explicit cancellation and checkpoint retry, conversation
+history, verified file attachments and downloads, Schedulers, Realtime
+Model/Connection preparation, prerecorded audio and User usage reads against one exact service revision.
+Resource workflows accept Organization authority with an explicit End User as well
+as existing User API Keys.
+See the TypeScript README for the supported boundaries
+and excluded capabilities.
+
+## Development
+
+```sh
+npm install
+npm test
+```
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).

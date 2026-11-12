@@ -120,7 +120,6 @@ All of it is here, MIT-licensed, with no tier gate, no seat count, no account, a
 <!-- Directory presence — one row per registry, no duplicates -->
 
 [![MCP Registry](https://img.shields.io/badge/MCP%20Registry-official-6f42c1?style=for-the-badge&labelColor=1e293b)](https://registry.modelcontextprotocol.io/)
-[![Smithery](https://img.shields.io/badge/Smithery-listed-8b5cf6?style=for-the-badge&labelColor=1e293b)](https://smithery.ai/server/@FROWNINGdev/orm-lens)
 [![Glama](https://img.shields.io/badge/Glama.ai-listed-64748b?style=for-the-badge&labelColor=1e293b)](https://glama.ai/mcp/servers/FROWNINGdev/orm-lens)
 [![awesome-mcp-servers](https://img.shields.io/badge/awesome--mcp--servers-listed-16a34a?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b)](https://github.com/punkpeye/awesome-mcp-servers)
 [![mcp.so](https://img.shields.io/badge/mcp.so-listed-1f2937?style=for-the-badge&labelColor=1e293b)](https://mcp.so/servers/orm-lens)
@@ -527,7 +526,7 @@ The comment goes up **before** the job fails, so a blocked PR still explains why
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/FROWNINGdev/orm-lens
-    rev: py-v1.17.1
+    rev: py-v1.18.0
     hooks:
       - id: orm-lens-nplusone
       - id: orm-lens-migration-risk

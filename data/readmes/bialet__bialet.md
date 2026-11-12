@@ -91,6 +91,14 @@ body. It is written in C17 and runs on Linux, macOS, and Windows.
 
 ## Install
 
+On Debian and Ubuntu, install it from the PPA:
+
+```bash
+sudo add-apt-repository ppa:bialet/bialet
+sudo apt update
+sudo apt install bialet
+```
+
 Prebuilt binaries and an install script are available for macOS ARM,
 Ubuntu x86_64, and Ubuntu ARM64.
 
@@ -139,8 +147,9 @@ Small has limits. These are the ones that come with Bialet:
   sequentially per worker. For parallel concurrency on multi-core servers,
   spin up multiple local instances behind Caddy or nginx — see
   [Deployment](https://bialet.dev/deployment.html).
-- **HTTP/1.0, no native TLS.** Put nginx, Apache, or Caddy in front for HTTPS,
-  HTTP/2, rate limiting, and request buffering. See
+- **HTTP/1.1, one request per connection, no native TLS.** Every response
+  carries `Connection: close`; there is no keep-alive. Put nginx, Apache, or
+  Caddy in front for HTTPS, HTTP/2, rate limiting, and request buffering. See
   [Deployment](https://bialet.dev/deployment.html).
 - **SQLite is the database.** One SQLite file (`_db.sqlite3` by default), no
   external database server. WAL mode is available with `-w`.

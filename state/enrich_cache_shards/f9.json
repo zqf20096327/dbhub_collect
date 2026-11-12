@@ -4,7 +4,7 @@
   "commit_90d": 0,
   "rel_ver": "v1.3.1",
   "rel_pub": "2017-07-17",
-  "rel_days": 3403,
+  "rel_days": 3404,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -28,7 +28,7 @@
   "commit_90d": 2,
   "rel_ver": "v3.8.0",
   "rel_pub": "2024-05-17",
-  "rel_days": 907,
+  "rel_days": 908,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -58,7 +58,7 @@
   "commit_90d": 3,
   "rel_ver": "8.1.2",
   "rel_pub": "2024-12-01",
-  "rel_days": 709,
+  "rel_days": 710,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -84,7 +84,7 @@
   "commit_7d": 0,
   "rel_ver": "v8.0.3",
   "rel_pub": "2025-05-29",
-  "rel_days": 530,
+  "rel_days": 531,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -125,7 +125,7 @@
   "commit_7d": 2,
   "rel_ver": "7.1.5",
   "rel_pub": "2025-02-03",
-  "rel_days": 645,
+  "rel_days": 646,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -208,7 +208,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.22.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 22,
+  "rel_days": 23,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -241,12 +241,12 @@
   ]
  },
  "albertoarena/laravel-truss": {
-  "commit_90d": 178,
-  "commit_7d": 0,
-  "rel_ver": "v1.15.1",
-  "rel_pub": "2026-10-17",
-  "rel_days": 24,
-  "rel_n90": 12,
+  "commit_90d": 168,
+  "commit_7d": 14,
+  "rel_ver": "v1.16.0",
+  "rel_pub": "2026-11-11",
+  "rel_days": 0,
+  "rel_n90": 18,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 1,
@@ -263,15 +263,88 @@
    "CSS": 5,
    "Blade": 1
   },
-  "enriched_at": "20261107",
+  "enriched_at": "20261111",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027",
+   "commit": "20261111",
+   "release": "20261111",
    "security": "20261107"
   },
   "etag": {
-   "security": "W/\"2349aacc8d43d15e8855bf1201b170648cafd28958d559488330e1299263b608\""
-  }
+   "security": "W/\"2349aacc8d43d15e8855bf1201b170648cafd28958d559488330e1299263b608\"",
+   "release": "W/\"757a9b8d7e0f10d837ce32238b80bf80634b52eb836c9bf055add9910a862cfc\""
+  },
+  "rel_dates": [
+   "2026-11-11",
+   "2026-11-10",
+   "2026-11-05",
+   "2026-10-28",
+   "2026-10-28",
+   "2026-10-17",
+   "2026-10-17",
+   "2026-09-25",
+   "2026-09-19",
+   "2026-09-18",
+   "2026-09-15",
+   "2026-09-13",
+   "2026-09-02",
+   "2026-09-01",
+   "2026-08-27",
+   "2026-08-20",
+   "2026-08-18",
+   "2026-08-17"
+  ],
+  "rel_notes": [
+   {
+    "t": "v1.16.0",
+    "d": "2026-11-11",
+    "n": "- `TRUSS-INT-008` (error): a foreign key that references columns which are not exactly the primary key or the key of a unique index. MySQL up to 8.3 (or 8.4 with `restrict_fk_on_non_standard_key` off), MariaDB and SQLite accept this. On MySQL and MariaDB one child row can then match several parent rows, and SQLite fails writes to the child table with \"foreign key mismatch\". A unique index on an expression, such as `lower(email)`, does not count as making the plain column unique.\n- `TRUSS-TYP-009` (warning, "
+   },
+   {
+    "t": "v1.15.5",
+    "d": "2026-11-10",
+    "n": "- **The `truss` binary says when a database refused the password, or has no database by that name.** A wrong user name, password or database name used to be reported as \"Truss could not reach the database\", with advice to check the host, the port and the VPN. The binary now says the server refused the credentials, or that the database does not exist on its server, on MySQL, MariaDB and PostgreSQL, and for both databases in `truss diff`. A SQLite path with no file behind it is reported as exactly that, rathe"
+   },
+   {
+    "t": "v1.15.4",
+    "d": "2026-11-05",
+    "n": "- **The DBML export no longer fails on a table with an expression index.** An index on an expression, such as `lower(email)`, made `truss:export --format=dbml`, the web export, the `truss` binary and the MCP `get_schema` tool stop with \"Undefined array key 0\", on Postgres, MySQL and SQLite alike. The DBML export now writes it as a DBML expression index (`` `lower(email)` ``). Reported by @hmzisb in [#107](https://github.com/albertoarena/laravel-truss/issues/107).\n- **An index that mixes a column and an expr"
+   },
+   {
+    "t": "v1.15.3",
+    "d": "2026-10-28",
+    "n": "### Security\n\n- **The bundled Mermaid is now 11.16.1.** It fixes GHSA-c4c3-pg64-4m4v, a low-severity prototype pollution in Mermaid's configuration APIs. Truss only ever passes Mermaid its own fixed configuration, so the dashboard was not exposed in practice, but the copy it served is the one dependency scanners flag. Nothing in how Truss draws your diagram changes: every name Mermaid accepted before is still accepted, and the Mermaid export is byte for byte the same. If you load Mermaid from a CDN through "
+   },
+   {
+    "t": "v1.15.2",
+    "d": "2026-10-28",
+    "n": "- **The DBML export opens in dbdiagram.io whatever your table and column names are.** `truss:export --format=dbml` (and the `truss` binary, the web export and the MCP tools, which default to DBML) wrote every name bare, so a name with a space, a `$`, a `%`, an accented or non-Latin letter, or any character other than a letter, digit or `_` made the file invalid DBML. Such names are now double-quoted, in the table, its columns, its indexes and its `Ref:` lines. DBML cannot hold a double quote or a line break"
+   },
+   {
+    "t": "v1.15.1",
+    "d": "2026-10-17",
+    "n": "- **A diff between MySQL and MariaDB reports only what differs.** Comparing a MariaDB database with a MySQL one, such as staging against production with `truss diff`, listed dozens of columns as changed when only the two servers' spelling differed. MariaDB prints an integer display width MySQL 8 dropped (`int(11)` against `int`), quotes a string default, writes the text `NULL` for no default, and writes `current_timestamp()` where MySQL writes `CURRENT_TIMESTAMP`. It also reports a foreign key with no `ON U"
+   },
+   {
+    "t": "v1.15.0",
+    "d": "2026-10-17",
+    "n": "Truss now runs without Laravel. `truss.phar`, attached to this release, reads a database straight from a connection string: no application, no project, no `composer require`. It is for Symfony and plain PHP codebases, for CI, and for the database somebody just handed you. Structure only, like everything else Truss does.\n- **Four commands.** `truss show` prints the structure as a table, `truss export` writes any of the seven formats (including the single-file HTML diagram), `truss doctor` reviews the structu"
+   },
+   {
+    "t": "v1.14.1",
+    "d": "2026-09-25",
+    "n": "- `truss:export --format=html` escapes `<` and `>` in the payload it embeds, so a schema whose names or column defaults contain a closing `</script>` can no longer break out of the JSON block. A structural value is not always tame: identifiers can be quoted, and a column default is ordinary application text that happens to be part of the table definition. Before this, such a value ended the script element early, which at best truncated the payload so the file opened blank, and at worst left the remainder of"
+   },
+   {
+    "t": "v1.14.0",
+    "d": "2026-09-19",
+    "n": "`php artisan truss:export --format=html --output=schema.html` writes the whole dashboard as a single file: the diagram, the filter, the focus picker, the structure health panel, zoom and pan. It opens by double-clicking it, with no server, no network and no database, and whoever opens it needs neither Truss nor access to your application. Structure only, like every other format."
+   },
+   {
+    "t": "v1.13.1",
+    "d": "2026-09-18",
+    "n": "### Fixed\n\n- The toolbar's **Filter** field no longer collapses to nothing when the\n  dashboard is embedded in something narrower than the window, such as a\n  Filament panel. The bar's responsive steps asked the viewport, so a 1280px\n  window with a ~470px panel sidebar left the bar around 810px and none of them\n  fired; every other control is floored at its own content width, so the whole\n  shortfall landed on the Filter field and it rendered as a small empty square.\n  The steps now follow the toolbar's ow"
+   }
+  ]
  },
  "datamllab/pyodds": {
   "commit_90d": 0,
@@ -294,7 +367,7 @@
   "commit_7d": 0,
   "rel_ver": "latest-a9ca4818625deef91ff80f6c395a575ccae22b7c",
   "rel_pub": "2026-01-13",
-  "rel_days": 301,
+  "rel_days": 302,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -317,7 +390,7 @@
   "commit_7d": 8,
   "rel_ver": "v4.4.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 41,
+  "rel_days": 42,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -355,7 +428,7 @@
   "commit_7d": 3,
   "rel_ver": "v4.4.2",
   "rel_pub": "2026-09-17",
-  "rel_days": 54,
+  "rel_days": 55,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -419,7 +492,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-12",
-  "rel_days": 121,
+  "rel_days": 122,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -487,7 +560,7 @@
   "commit_7d": 6,
   "rel_ver": "v.0.41.3",
   "rel_pub": "2026-09-27",
-  "rel_days": 44,
+  "rel_days": 45,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -540,7 +613,7 @@
   "commit_7d": 10,
   "rel_ver": "v2.72.0",
   "rel_pub": "2026-11-04",
-  "rel_days": 6,
+  "rel_days": 7,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -715,7 +788,7 @@
  "codeforkjeff/dbt-sqlite": {
   "rel_ver": "v1.10.0",
   "rel_pub": "2025-06-27",
-  "rel_days": 501,
+  "rel_days": 502,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -734,7 +807,7 @@
  "har777/pellet": {
   "rel_ver": "v0.1.3",
   "rel_pub": "2022-07-18",
-  "rel_days": 1576,
+  "rel_days": 1577,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -751,7 +824,7 @@
  "dkulchenko/watchdb": {
   "rel_ver": "v0.2",
   "rel_pub": "2015-03-12",
-  "rel_days": 4261,
+  "rel_days": 4262,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -780,7 +853,7 @@
  "jhoelzl/HRTF-Individualization": {
   "rel_ver": "0.9.2",
   "rel_pub": "2017-04-04",
-  "rel_days": 3507,
+  "rel_days": 3508,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -814,7 +887,7 @@
  "WildCodeSchool/create-js-monorepo": {
   "rel_ver": "v7.2.4",
   "rel_pub": "2025-04-24",
-  "rel_days": 565,
+  "rel_days": 566,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -835,7 +908,7 @@
  "tomohiro-owada/devrag": {
   "rel_ver": "v1.4.4",
   "rel_pub": "2026-04-15",
-  "rel_days": 209,
+  "rel_days": 210,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -856,7 +929,7 @@
  "systemsdk/docker-symfony-api": {
   "rel_ver": "v5.0.0",
   "rel_pub": "2026-08-23",
-  "rel_days": 79,
+  "rel_days": 80,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -893,7 +966,7 @@
  "bulwark-crypto/bulwark-explorer": {
   "rel_ver": "2.0.3",
   "rel_pub": "2019-11-20",
-  "rel_days": 2547,
+  "rel_days": 2548,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -913,7 +986,7 @@
  "skiptools/swift-sqlcipher": {
   "rel_ver": "1.13.0",
   "rel_pub": "2026-09-08",
-  "rel_days": 63,
+  "rel_days": 64,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1074,7 +1147,7 @@
  "DxCat/translatable": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2018-02-23",
-  "rel_days": 3182,
+  "rel_days": 3183,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1237,7 +1310,7 @@
  "amberframework/jasper-helpers": {
   "rel_ver": "v0.2.5",
   "rel_pub": "2019-09-23",
-  "rel_days": 2605,
+  "rel_days": 2606,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1325,7 +1398,7 @@
  "aerospike/aerospike-kubernetes-enterprise": {
   "rel_ver": "1.5.3",
   "rel_pub": "2023-03-30",
-  "rel_days": 1321,
+  "rel_days": 1322,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1395,7 +1468,7 @@
  "zhcet-amu/zhcet-web": {
   "rel_ver": "v2.2.2",
   "rel_pub": "2019-08-17",
-  "rel_days": 2642,
+  "rel_days": 2643,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1416,7 +1489,7 @@
  "snaplet/action": {
   "rel_ver": "v1.1.2",
   "rel_pub": "2023-05-09",
-  "rel_days": 1281,
+  "rel_days": 1282,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1505,7 +1578,7 @@
  "guzba/respite": {
   "rel_ver": "0.1.0",
   "rel_pub": "2024-04-22",
-  "rel_days": 932,
+  "rel_days": 933,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1550,7 +1623,7 @@
  "theapsgroup/steampipe-plugin-vault": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2023-10-02",
-  "rel_days": 1135,
+  "rel_days": 1136,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1569,7 +1642,7 @@
  "SnoozeThis-org/pgperms": {
   "rel_ver": "v0.1.1",
   "rel_pub": "2023-06-22",
-  "rel_days": 1237,
+  "rel_days": 1238,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1604,7 +1677,7 @@
  "wizecore/graylog2-output-jdbc": {
   "rel_ver": "v2.5.1",
   "rel_pub": "2019-08-21",
-  "rel_days": 2638,
+  "rel_days": 2639,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1623,7 +1696,7 @@
  "shogo82148/go-mysql-pool": {
   "rel_ver": "v0.0.2",
   "rel_pub": "2026-07-31",
-  "rel_days": 102,
+  "rel_days": 103,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1654,7 +1727,7 @@
  "IngoKl/textdirectory": {
   "rel_ver": "v0.4.1",
   "rel_pub": "2026-07-25",
-  "rel_days": 108,
+  "rel_days": 109,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1700,7 +1773,7 @@
  "rezmoss/go-cloudip": {
   "rel_ver": "v0.0.4",
   "rel_pub": "2026-01-13",
-  "rel_days": 301,
+  "rel_days": 302,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1733,7 +1806,7 @@
  "SafakB/postgres-server": {
   "rel_ver": "0.0.1-alpha",
   "rel_pub": "2024-09-19",
-  "rel_days": 782,
+  "rel_days": 783,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1751,7 +1824,7 @@
  "Latency-Zero-tfm/LatencyZero": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-03-06",
-  "rel_days": 249,
+  "rel_days": 250,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1783,7 +1856,7 @@
  "IdlePhysicist/cave-logger": {
   "rel_ver": "v2.0.2",
   "rel_pub": "2022-02-10",
-  "rel_days": 1734,
+  "rel_days": 1735,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1901,7 +1974,7 @@
  "StewartLynch/SQLiteER": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-13",
-  "rel_days": 150,
+  "rel_days": 151,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1943,7 +2016,7 @@
  "KingDasWinx/Dexo": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2026-09-24",
-  "rel_days": 47,
+  "rel_days": 48,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -2138,7 +2211,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.8",
   "rel_pub": "2026-05-28",
-  "rel_days": 166,
+  "rel_days": 167,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2165,7 +2238,7 @@
   "commit_7d": 0,
   "rel_ver": "11.0.3",
   "rel_pub": "2025-02-17",
-  "rel_days": 631,
+  "rel_days": 632,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2733,7 +2806,7 @@
  "billy12151/memory-arbiter-mcp": {
   "rel_ver": "v0.17.1",
   "rel_pub": "2026-10-05",
-  "rel_days": 36,
+  "rel_days": 37,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2780,7 +2853,7 @@
  "cristipufu/culprit-sql-studio": {
   "rel_ver": "v0.1.7",
   "rel_pub": "2026-10-12",
-  "rel_days": 29,
+  "rel_days": 30,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2830,7 +2903,7 @@
  "alphabet-h/grooveseek": {
   "rel_ver": "v1.19.0",
   "rel_pub": "2026-10-13",
-  "rel_days": 28,
+  "rel_days": 29,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2902,7 +2975,7 @@
  "zengyunhua/Mestudy": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-10-26",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2974,7 +3047,7 @@
    "release": "W/\"34a04e13187db4bdb2fabc579054fc1dca23d067e8e7752c00199146f1f9b4e9\""
   },
   "rel_pub": "2026-11-09",
-  "rel_days": 1,
+  "rel_days": 2,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_dates": [
@@ -3068,7 +3141,7 @@
  "Zyc009234/x.erp": {
   "rel_ver": "v2.0.15",
   "rel_pub": "2026-11-05",
-  "rel_days": 5,
+  "rel_days": 6,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,

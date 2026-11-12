@@ -112,7 +112,7 @@ The web dashboard starts at `http://127.0.0.1:8123/` by default. Add `--exit` to
 | `--port` | 8123 | Web dashboard port |
 | `--no-verify` | off | Skip row-count and checksum verification |
 | `--no-checksum` | off | Compare row counts only |
-| `--with-views` | off | Migrate views (MySQL to PG/openGauss) |
+| `--with-views` | off | Migrate views (MySQL ↔ PG/openGauss; PG→MySQL mechanical conversion) |
 | `--cdc` | off | Continue with CDC after full load |
 | `--cdc-only` | off | Run CDC only |
 | `--cdc-ddl` | off | Apply DDL changes from binlog |
@@ -130,8 +130,17 @@ The web dashboard starts at `http://127.0.0.1:8123/` by default. Add `--exit` to
 | `--consistent-snapshot` | off | Consistent snapshot (MySQL: binlog position; PG/openGauss: REPEATABLE READ), forces workers=1 |
 | `--resume` | off | Resume full load from PK watermark |
 | `--resume-dir` | out/resume | Resume checkpoint directory |
+| `--load-mode` | auto | MySQL target LOAD DATA mode: auto/insert/ignore/replace |
+| `--io-scheduler` | `fair` | Batch I/O scheduling: `off` / `fair` / `scan` |
+| `--io-queue-depth` | 0 | Concurrent batch reads (0 = workers) |
+| `--io-prefetch` | 0 | Read-ahead batches per range (0 = off) |
+| `--io-window` | 0 | SCAN range window (0 = auto) |
 
 DSN format: `host=...;port=...;user=...;password=...;db=...`.
+
+### I/O scheduling
+
+`--io-scheduler fair` (default) hands batch reads to ranges in FIFO turns and bounds the number of in-flight reads, so one range cannot monopolize the source; `scan` only admits ranges inside a moving primary-key window, which suits tables clustered by primary key; `off` disables scheduling. `--io-prefetch` adds a read-ahead buffer per range (reader and writer overlap); it is off by default because it usually does not help with remote databases. The scheduler only controls client-side batch reads; physical disk scheduling remains with the OS/database engine.
 
 ## Performance
 
@@ -149,6 +158,10 @@ Dataset used for the measurements below: 5,110,000 rows in three tables (5,000,0
 
 The MySQL → openGauss run used a source database that also contained two temporary 1,000,000-row benchmark tables, hence 7,110,000 rows.
 
+Single-table primary-key range parallelism (`--workers 4`) measured: PostgreSQL → MySQL, 1.25M rows in 6.23 s / 200,517 rows/s (sequential 9.11 s / 137,168 rows/s, about 46% faster); openGauss → MySQL, 5M rows in 15.12 s / 330,621 rows/s. Both passed checksum verification.
+
+Batch I/O scheduling (`--io-scheduler fair --io-prefetch 0`) versus `off`: PostgreSQL, 1.25M rows in 5.18 s / 241,276 rows/s (off 5.80 s / 215,442); openGauss, 5M rows in 14.30 s / 349,703 rows/s (off 15.07 s / 331,851). Both passed checksum verification.
+
 Typical table-level results with the same dataset:
 
 | Table | Rows | Notes |
@@ -163,19 +176,19 @@ Typical table-level results with the same dataset:
 - CDC requires a primary key; tables without a primary key are skipped.
 - CDC supports MySQL sources (binlog ROW events) and PostgreSQL sources (wal2json logical decoding); the PostgreSQL CDC target must be PG/openGauss, not MySQL.
 - PostgreSQL CDC requires `wal_level=logical`, the `wal2json` output plugin allowed in `output_plugin_libraries`, and a replication slot. Changes made during a full load are not captured unless the slot existed before the load.
-- `--repair` requires a single-column primary key and holds primary-key sets in memory; it inserts missing rows and deletes extra rows, then re-verifies.
+- `--repair` requires a single-column primary key; integer keys use a streaming merge (O(batch) memory), non-integer keys fall back to in-memory sets.
 - Unsupported column types: BIT, ENUM, SET, GEOMETRY.
 - DDL dialect conversion is limited; complex MySQL-specific DDL may need manual rewriting.
 - DM8 is not implemented.
-- PostgreSQL → MySQL view migration is not implemented yet.
+- PostgreSQL → MySQL view migration uses mechanical conversion (quotes/functions/simple `::type` casts); complex expressions still need review.
 - Target tables should be empty or already aligned; use `--truncate` to drop and recreate them for a safe rerun.
 - Checksum read failures make verification FAIL instead of being silently skipped.
-- Full-load connections retry with backoff; CDC reconnects from the last committed binlog position.
+- Full-load connections retry with backoff; a mid-stream read failure reconnects and resumes from the last written primary key; CDC reconnects from the last committed binlog position.
 - For remote databases, open the DB port, allow the client host in grants/firewall, and use SSH tunnel/VPN if needed.
 - `--resume` is implemented for MySQL, PostgreSQL and openGauss sources; it requires a single-column primary key.
 - `--consistent-snapshot` uses a single source connection (MySQL: consistent snapshot + binlog position; PG/openGauss: REPEATABLE READ) and forces `workers=1`.
 - `--resume` and `--truncate` are mutually exclusive.
-- PostgreSQL/openGauss sources currently use a single sequential cursor; single-table range parallelism is implemented for MySQL sources only.
+- PostgreSQL/openGauss sources now support single-table primary-key range parallelism (`--workers`); `--resume` and `--consistent-snapshot` still use a single sequential cursor.
 - MySQL target bulk load uses `LOAD DATA LOCAL INFILE`; the server must have `local_infile=ON`. Tables with binary columns automatically fall back to batched INSERT.
 - openGauss target databases should be created with `DBCOMPATIBILITY='PG'`; if the account uses sha256 authentication, native libpq may require switching the migration account to md5.
 

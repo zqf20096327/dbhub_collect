@@ -22,6 +22,7 @@ Open source VS Code extension that connects to your Postgres, MySQL and MariaDB 
 
 - **Automatic discovery**: detects Postgres, MySQL and MariaDB containers (including PostGIS, TimescaleDB and pgvector) and reads the user, password and database from the container's environment variables.
 - **Saved connections**: local or remote databases, with TLS, SSH tunnel and connection string. Docker is optional.
+- **Every database on the server**: a Postgres connection expands into the databases of the server, so a container that creates several databases shows all of them.
 - **DB Schema section**: schemas, tables, views, columns, indexes and foreign keys of the selected connection, with a filter and menu actions.
 - **Table screen**: Properties, Data and Diagram tabs. Edit cells, add, duplicate and delete rows, filter by SQL expression, view the data as a grid, text or record, and run SQL below the grid, with writes in a transaction.
 - **Drivers**: PostgreSQL, MySQL and MariaDB, with an architecture ready for new databases.
@@ -53,6 +54,7 @@ None of this is needed for a direct connection. The extension has no database of
      ```
    - **Without Docker or for a remote database:** click **Add New Connection**.
 3. Click the connection. The **DB Schema** section shows its schemas and tables.
+   On Postgres, expand the connection to see every database on the server and click one to open it, as in DBeaver. The database from the container's environment variables is marked as **default**.
 4. Click a table to view and edit its data, or use **New Query** on the connection to open a SQL editor.
 5. Use **Show ER Diagram** on the connection or on the schema to see the diagram.
 6. Use **Generate SQL with AI** at the top of the tab to write a query in natural language.
@@ -249,10 +251,10 @@ To report a vulnerability, see [SECURITY.md](SECURITY.md).
 
 ## Using the MCP server outside VS Code
 
-In VS Code, turn on `auraDataDockDb.mcp.enabled` in your user settings to register the server. To use it in other clients, point to the `dist/mcp-server.js` file of the installed extension. Example with Claude Code on Windows, where `0.1.5` is the installed version:
+In VS Code, turn on `auraDataDockDb.mcp.enabled` in your user settings to register the server. To use it in other clients, point to the `dist/mcp-server.js` file of the installed extension. Example with Claude Code on Windows, where `0.1.6` is the installed version:
 
 ```bash
-claude mcp add aura-datadock-db -- node "%USERPROFILE%\.vscode\extensions\lucascodev.aura-datadock-db-0.1.5\dist\mcp-server.js"
+claude mcp add aura-datadock-db -- node "%USERPROFILE%\.vscode\extensions\lucascodev.aura-datadock-db-0.1.6\dist\mcp-server.js"
 ```
 
 Available tools:

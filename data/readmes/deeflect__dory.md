@@ -4,13 +4,15 @@
 
 # 🐟 Dory
 
+> Archived in November 2026. Dory is no longer maintained. The code stays here under MIT.
+
 **One memory layer. Every agent. Local by default.**
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Built with uv](https://img.shields.io/badge/built%20with-uv-orange)](https://docs.astral.sh/uv/)
 [![MCP](https://img.shields.io/badge/MCP-native-purple)](https://modelcontextprotocol.io/)
-[![Status](https://img.shields.io/badge/status-building-yellow)]()
+[![Status](https://img.shields.io/badge/status-archived-lightgrey)]()
 
 *Your agent forgot who you are. Again. Dory fixes that.*
 

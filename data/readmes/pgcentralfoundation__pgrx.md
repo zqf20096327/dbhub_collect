@@ -93,6 +93,7 @@ A cross build has further requirements; see [Cross-compiling](#cross-compiling).
    - Debian-likes: `apt install clang llvm libclang-dev`
    - RHEL-likes: `yum install clang llvm`
    - Windows: download installers from https://github.com/llvm/llvm-project/releases
+   - On Linux, pgrx's CI generates the C macros with every Clang major from 14 through 23, on x86_64 and aarch64, and requires those versions to generate the same macros. Other Clang versions are not tested on Linux.
    - `pgrx-pg-sys` uses the driver to find the target's system headers, to check the C macro profile against the PostgreSQL headers and to compile its native support archive, including the `cshim` feature. Its major version must match `libclang`. pgrx uses `CLANG_PATH` when it is set; otherwise it uses the first match among the `CLANG` recorded in a `pg_config` program's `--configure` output, the `clang` installed with `libclang`, and `clang-<major>` or `clang` on `PATH`.
    - The archiver is `llvm-ar` from the driver's LLVM release, or `llvm-lib` for Windows targets. pgrx looks for `llvm-ar-<major>` beside a `clang-<major>` driver, then `llvm-ar` beside the driver or beside its resolved path, such as Debian's `/usr/lib/llvm-<major>/bin/llvm-ar`. Without one, builds for Unix targets use the system `ar`, which works for native builds but may not index objects built for another target.
    - A failure to generate the C macros stops the build with an error that names the cause.
@@ -101,7 +102,7 @@ A cross build has further requirements; see [Cross-compiling](#cross-compiling).
    - Linux and macOS: a host C compiler, which builds the generator's SHA-256 backend
    - Windows: MSVC, which Rust's MSVC targets need for linking
 - [PostgreSQL's build dependencies](https://wiki.postgresql.org/wiki/Compile_and_Install_from_source_code) ‡
-   - Debian-likes: `sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache pkg-config`
+   - Debian-likes: `sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache pkg-config libicu-dev`
    - RHEL-likes: `sudo yum install -y bison-devel readline-devel zlib-devel openssl-devel wget ccache && sudo yum groupinstall -y 'Development Tools'`
 
  † PGRX has no MSRV policy, thus may require the latest stable version of Rust, available via Rustup
@@ -322,6 +323,8 @@ cargo pgrx init
 | `NULL`                     | `Option::None`                                          |
 | `internal`                 | `pgrx::Internal`                                        |
 | `uuid`                     | `pgrx::Uuid([u8; 16])`                                  |
+| `tsvector`                 | `&pgrx::TsVector` or `pgrx::TsVectorBuf`                |
+| `tsquery`                  | `&pgrx::TsQuery` or `pgrx::TsQueryBuf`                  |
 
 There are also `IntoDatum` and `FromDatum` traits for implementing additional type conversions,
 along with `#[derive(PostgresType)]` and `#[derive(PostgresEnum)]` for automatic conversion of
@@ -396,6 +399,26 @@ error[E0080]: evaluation of constant value failed
     | |_____^ the evaluated program panicked at 'Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?', pgrx/src/lib.rs:151:5
     |
 ```
+
+### "no_thread_check_in_release": Skip the backend thread check in release builds
+
+Postgres may only be called from the backend's own thread.  pgrx remembers the first thread that
+calls into Postgres and panics when another one does.  That check runs on every call through
+pgrx's FFI guard, and several safe pgrx functions rely on it for their soundness.
+
+With the `no_thread_check_in_release` feature, a build without `debug_assertions`, which is what
+`cargo pgrx install --release` and `cargo pgrx package` make by default, compiles the check as a
+`const fn` that does nothing.  Calling Postgres from another thread is then undefined behavior that
+nothing reports, including through pgrx's safe functions.  A build with `debug_assertions`, such as
+the one `cargo pgrx test` makes by default, keeps the check.
+
+Cargo unifies features, so one crate that sets this one removes the check from every crate of the
+build that uses pgrx.  Only set it in an extension whose every dependency keeps Postgres calls on
+the backend thread.
+
+`pgrx::assert_active_thread()` is the same check as a function you can call yourself.  It runs in
+every build, whatever this feature says.  A build without pgrx's own checks has no active thread
+until the first call, so make that call on the backend thread.
 
 
 ## Contributing

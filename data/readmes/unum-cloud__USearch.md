@@ -1,12 +1,12 @@
 <h1 align="center">USearch</h1>
 <h3 align="center">
-Smaller & <a href="https://www.unum.cloud/blog/2023-11-07-scaling-vector-search-with-intel">Faster</a> Single-File<br/>
-Similarity Search & Clustering Engine for <a href="https://github.com/ashvardanian/numkong">Vectors</a> & 🔜 <a href="https://github.com/ashvardanian/stringzilla">Texts</a>
+One Proximity Graph for Search, Sparse Products &amp; Attention<br/>
+across RAM, VRAM &amp; NVMe
 </h3>
 <br/>
 
 <p align="center">
-<a href="https://discord.gg/A6wxt6dS9j"><img height="25" src="https://github.com/unum-cloud/.github/raw/main/assets/discord.svg" alt="Discord"></a>
+<a href="https://discord.gg/4mxGrenbNt"><img height="25" src="https://github.com/unum-cloud/.github/raw/main/assets/discord.svg" alt="Discord"></a>
 &nbsp;&nbsp;&nbsp;
 <a href="https://www.linkedin.com/company/unum-cloud/"><img height="25" src="https://github.com/unum-cloud/.github/raw/main/assets/linkedin.svg" alt="LinkedIn"></a>
 &nbsp;&nbsp;&nbsp;
@@ -18,22 +18,24 @@ Similarity Search & Clustering Engine for <a href="https://github.com/ashvardani
 </p>
 
 <p align="center">
-Spatial • Binary • Probabilistic • User-Defined Metrics
+Dense Vectors • Sequences • Shapes • Geospatial Sets
 <br/>
-<a href="https://unum-cloud.github.io/USearch/cpp">C++11</a> •
-<a href="https://unum-cloud.github.io/USearch/python">Python 3</a> •
-<a href="https://unum-cloud.github.io/USearch/javascript">JavaScript</a> •
-<a href="https://unum-cloud.github.io/USearch/java">Java</a> •
-<a href="https://unum-cloud.github.io/USearch/rust">Rust</a> •
-<a href="https://unum-cloud.github.io/USearch/c">C99</a> •
-<a href="https://unum-cloud.github.io/USearch/objective-c">Objective-C</a> •
-<a href="https://unum-cloud.github.io/USearch/swift">Swift</a> •
-<a href="https://unum-cloud.github.io/USearch/csharp">C#</a> •
-<a href="https://unum-cloud.github.io/USearch/golang">Go</a> •
-<a href="https://unum-cloud.github.io/USearch/wolfram">Wolfram</a>
+<a href="https://github.com/unum-cloud/USearch/blob/main/include/usearch/dense/README.md">C++</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/c/README.md">C</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/python/README.md">Python</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/rust/README.md">Rust</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/javascript/README.md">JavaScript</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/golang/README.md">Go</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/swift/README.md">Swift</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/java/README.md">Java, Kotlin &amp; Scala</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/csharp/README.md">C#</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/zig/README.md">Zig</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/mojo/README.md">Mojo</a> •
+<a href="https://github.com/unum-cloud/USearch/blob/main/wolfram/README.md">Wolfram</a>
 <br/>
-Linux • macOS • Windows • iOS • Android • WebAssembly •
-<a href="https://unum-cloud.github.io/USearch/sqlite">SQLite</a>
+Linux • macOS • Windows • FreeBSD • iOS • Android • WASI
+<br/>
+x86 • Arm • RISC-V • WebAssembly • CUDA • ROCm • Metal
 </p>
 
 <div align="center">
@@ -41,522 +43,255 @@ Linux • macOS • Windows • iOS • Android • WebAssembly •
 <a href="https://www.npmjs.com/package/usearch"> <img alt="NPM" src="https://img.shields.io/npm/dy/usearch?label=JavaScript%20NPM%20installs"> </a>
 <a href="https://crates.io/crates/usearch"> <img alt="Crate" src="https://img.shields.io/crates/d/usearch?label=Rust%20Crate%20installs"> </a>
 <a href="https://www.nuget.org/packages/Cloud.Unum.USearch"> <img alt="NuGet" src="https://img.shields.io/nuget/dt/Cloud.Unum.USearch?label=CSharp%20NuGet%20installs"> </a>
-<!-- Maven Central publishing is deprecated for now; fat-JAR download is the supported path. -->
 <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/unum-cloud/USearch?label=Repo%20size">
 </div>
 
 ---
 
-- ✅ __[10x faster][faster-than-faiss]__ [HNSW][hnsw-algorithm] implementation than [FAISS][faiss].
-- ✅ Simple and extensible [single C++11 header][usearch-header] __library__.
-- ✅ [Trusted](#integrations) by giants like Google and DBs like [ClickHouse][clickhouse-docs] & [DuckDB][duckdb-docs].
-- ✅ [SIMD][simd]-optimized and [user-defined metrics](#user-defined-functions) with JIT compilation.
-- ✅ Hardware-agnostic `bf16`, `e5m2`, & `i8` - [half-precision & quarter-precision support](#memory-efficiency-downcasting-and-quantization).
-- ✅ [View large indexes from disk](#serialization--serving-index-from-disk) without loading into RAM.
-- ✅ Heterogeneous lookups, renaming/relabeling, and on-the-fly deletions.
-- ✅ Binary Tanimoto and Sorensen coefficients for [Genomics and Chemistry applications](#usearch--rdkit--molecular-search).
-- ✅ Space-efficient point-clouds with `uint40_t`, accommodating 4B+ size.
-- ✅ Compatible with OpenMP and custom "executors" for fine-grained parallelism.
-- ✅ [Semantic Search](#usearch--uform--ucall--multimodal-semantic-search) and [Joins](#joins-one-to-one-one-to-many-and-many-to-many-mappings).
-- 🔄 Near-real-time [clustering and sub-clustering](#clustering) for Tens or Millions of clusters.
+![USearch banner](https://github.com/ashvardanian/ashvardanian/blob/master/repositories/USearch-v3.png?raw=true)
 
-[faiss]: https://github.com/facebookresearch/faiss
-[usearch-header]: https://github.com/unum-cloud/USearch/blob/main/include/usearch/index.hpp
-[obscure-use-cases]: https://ashvardanian.com/posts/abusing-vector-search
-[hnsw-algorithm]: https://arxiv.org/abs/1603.09320
-[simd]: https://en.wikipedia.org/wiki/Single_instruction,_multiple_data
-[faster-than-faiss]: https://www.unum.cloud/blog/2023-11-07-scaling-vector-search-with-intel
-[clickhouse-docs]: https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/annindexes#usearch
+USearch is an open-source proximity-graph index for nearest-neighbor search over dense vectors, sequences, shapes & geospatial sets.
+The same graph serves as a sparse operand, folding sparse matrix products, MaxSim scoring & softmax attention into its traversal, and one checkpoint opens in RAM, VRAM or on NVMe without being rewritten.
+Its core is a header-only C++ 20 library with no external dependencies, a commitment to lightweight systems.
+[ClickHouse][clickhouse-code], [DuckDB][duckdb-docs], [ScyllaDB](https://github.com/scylladb/vector-store) & [YugabyteDB][yugabyte-code] embed it for vector search.
+
+- ✅ __One Vector Index, Three Goals__ - Search, Sparse Matrix Multiplications, & Flash Attention folded into the graph walk.
+- ✅ __Many Modalities__ - Dense Vectors, Sequences, Shapes, & Geospatial Sets, with experimental engines beyond Dense.
+- ✅ __Three Residencies__ - RAM, VRAM, & NVMe, exchanging portable [SafeGraphs](https://github.com/unum-cloud/USearch/blob/main/docs/format.md) files.
+- ✅ __128-bit Keys__ - Built around UUIDs for large-scale systems, with several vectors allowed under one key.
+- ✅ __Atomic Visibility__ - RAM insertion batches publish complete entries & keys behind each shard's watermark.
+- ✅ __Concurrent Mutability__ - RAM queries overlap indexing & refinement, which take turns with each other.
+- ✅ __14 Programming Languages__ - From IoT & mobile to GPU neoclouds, through one C ABI & a lower-level C++ core.
+
+One of the most important features of USearch is using the hardware your machine already has, but most software leaves idle.
+Even SIMD, the most vanilla of those features, often means multiplying dense `f32` vectors with AVX2.
+For USearch, it meant developing one of the largest collections of mixed-precision numerical kernels & algebraic transforms in [NumKong][numkong]: `i8` dot-products with `i32` accumulation, packed single-bit arithmetic, & FP8 computations on CPUs that have no native FP8 instructions.
+In slightly more detail:
+
+- ✅ __SIMD__ - AVX2, WASM v128, LASX, AVX-512, NEON, RVV, Intel AMX, & Arm SME across NumKong's kernel collection.
+- ✅ __Extended Atomics__ - Beyond the standard libraries of C++, Rust, or Zig, with [verification models](https://github.com/unum-cloud/USearch/blob/main/verification/README.md) for the index's concurrent protocols.
+- ✅ __GPGPU__ - Generation-specific kits for NVIDIA Ampere, Ada, Hopper, Blackwell, & Blackwell RTX, AMD CDNA 3-5 through ROCm, & Apple GPUs through Metal, with GPUDirect Storage between NVMe drives and GPU memory.
+- ✅ __I/O Mechanisms__ - Blocking POSIX reads, Windows overlapped I/O, Linux AIO, `io_uring`, & SPDK in the storage engines.
+- ✅ __Memory Pinning__ - Explicit NUMA placement for shards & workers; linking a different allocator doesn't place the graph near the threads walking it.
+
+That barely begins to describe how many flavors of AVX-512 USearch distinguishes & dispatches under the hood.
+The [architecture notes](https://github.com/unum-cloud/USearch/blob/main/include/usearch/dense/README.md) go deeper into the kits, residency layers, & core components you can use beyond the default public API.
+The [verification notes](https://github.com/unum-cloud/USearch/blob/main/verification/README.md) cover the ordering & publication rules that a language's memory-safety guarantees alone cannot establish.
+
+[clickhouse-code]: https://github.com/ClickHouse/ClickHouse/pull/53447
+[clickhouse-docs]: https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/annindexes
 [duckdb-docs]: https://duckdb.org/2024/05/03/vector-similarity-search-vss.html
+[yugabyte-code]: https://github.com/yugabyte/yugabyte-db/blob/366b9f5e3c4df3a1a17d553db41d6dc50146f488/src/yb/vector_index/usearch_wrapper.cc
+[numkong]: https://github.com/ashvardanian/NumKong
+[stringzilla]: https://github.com/ashvardanian/StringZilla
+[forkunion]: https://github.com/ashvardanian/ForkUnion
+[faiss]: https://github.com/facebookresearch/faiss
+[cuvs]: https://github.com/rapidsai/cuvs
+
+## Performance
+
+Cross-engine comparisons need matched datasets, recall, hardware, & query batches.
+[RetriEval](https://github.com/ashvardanian/RetriEval) compares USearch with [FAISS][faiss], [cuVS][cuvs], & full database products through one harness.
+
+On one NVIDIA B300 SXM6, SIFT 100M builds at __431,520 vectors/s__ & searches at __604,490 QPS__, with `u8` storage & Euclidean distance.
+On 192 AWS Graviton5 cores, it builds at __161,952 vectors/s__ & searches at __173,823 QPS__, while [FAISS][faiss] HNSW builds at __84,536__ & searches at __178,600__.
+Their 1-recall@10, the share of queries whose true nearest neighbor is among ten results, is __0.9913__, __0.9925__ & __0.9917__ respectively.
+The [benchmark tables](https://github.com/unum-cloud/USearch/blob/main/bench/README.md#100m) record each row's expansions.
+
+## Quickstart
+
+Every binding is a thin layer over the same C ABI, so this matrix follows the C symbols each one calls.
+The C++ core also exposes lower-level kits & custom folds.
+
+| Operation                         |  C  | Python | Rust | JS  | Go  | Swift | Java | C#  | Zig | Mojo | Wolfram |
+| :-------------------------------- | :-: | :----: | :--: | :-: | :-: | :---: | :--: | :-: | :-: | :--: | :-----: |
+| Dense Init, Load, Insert & Search |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    ✓    |
+| Save, Metadata & Describe         |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    ✓    |
+| Refine & Health                   |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    ✓    |
+| Count & Get by Key                |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    ✓    |
+| Exact Scans                       |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    ✓    |
+| VRAM & NVMe Residencies           |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    ✓    |
+| Multiply & MaxSim                 |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    ✓    |
+| Folded Flash Attention            |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    ✓    |
+| Batched Iteration with Cursors    |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    -    |
+| Filtered Search with Predicates   |  ✓  |   ✓    |  ✓   |  -  |  ✓  |   ✓   |  -   |  ✓  |  ✓  |  ✓   |    -    |
+| Deferred Calls                    |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    -    |
+| Merge & Streams ¹                 |  ✓  |   ✓    |  ✓   |  ✓  |  ✓  |   ✓   |  ✓   |  ✓  |  ✓  |  ✓   |    -    |
+| Sequence, Shapes & Geospatial ²   |  ✓  |   -    |  -   |  -  |  -  |   -   |  -   |  -  |  -  |  -   |    -    |
+
+✓ indicates a binding surface; engine availability still depends on residency, as detailed in the [C guide](https://github.com/unum-cloud/USearch/blob/main/c/README.md).
+¹ Absorption runs in the C engine; streams expose the declared API, but their C engine verbs currently report unsupported.
+² The experimental sequence, shape & geospatial C calls run the engines, on RAM & NVIDIA GPUs.
+Kotlin & Scala consume the Java surface directly & match its column.
+
+Most calls name an Index, an Executor for scheduling, & an Arena for outputs whose size grows with the input.
+Typed buffers cross the ABI directly; arenas own the returned buffers & can be reused once their results are consumed.
+The language guides above cover installation & complete examples.
+See [contributing](https://github.com/unum-cloud/USearch/blob/main/CONTRIBUTING.md) for building from source, & [benchmarks](https://github.com/unum-cloud/USearch/blob/main/bench/README.md) for measuring it.
+
+## Architecture
+
+An index dispatches on its Modality, Residency, stored scalar type, metric, & available hardware.
+The build selects the kernel families it includes; runtime detection picks the newest CPU, GPU, & NVMe classes the machine admits, unless the caller pins one.
+A description reports the classes an index dispatches as & the `shards_count` it spans.
+The graph & its traversal are templated on those kits, so a walk carries the matching vector loads, dot-products, norms, atomics, & wait instructions together.
+
+### Residency
+
+__RAM__ shards follow memory domains, __VRAM__ shards follow devices, & __NVMe__ views follow checkpoint parts.
+Sharding partitions the indexed entries rather than replicating the entire graph.
+[SafeGraphs](https://github.com/unum-cloud/USearch/blob/main/docs/format.md) carries the keys, vectors, norms, & links between those layers.
+
+The useful unit of parallelism changes with residency.
+CPU workers overlap independent walks; GPU warps cooperate on their candidates & vector fragments; NVMe workers keep many pending walks alive while reads complete.
+Blackwell kits score candidate batches in `mma.sync` tiles fed by 256-bit loads, while storage walks explicitly yield the reads they need next.
+`io_uring` submits those reads through kernel-managed rings; SPDK uses user-space storage drivers & polling.
+The traversal's latency hiding depends on keeping useful work ready between memory accesses, device instructions, or I/O completions.
+
+`search_if` makes sense in RAM & NVMe because a host predicate can admit results while excluded entries still route the walk.
+An arbitrary host callback cannot run inside a device-resident GPU traversal.
+`insert` grows RAM & VRAM indexes; NVMe views serve immutable parts, with separate build & refinement operations writing new parts.
+See the [C++ guide](https://github.com/unum-cloud/USearch/blob/main/include/usearch/dense/README.md) for the layers & the [C guide](https://github.com/unum-cloud/USearch/blob/main/c/README.md) for the verbs served by each residency.
+
+### Modalities
+
+| Modality            | Inputs                                      | Similarities & Distances                                         | Status                                |
+| :------------------ | :------------------------------------------ | :--------------------------------------------------------------- | :------------------------------------ |
+| __Dense Vectors__   | Equal-width numeric rows or packed bit sets | Inner-Product, Angular, Euclidean, Hamming, & Jaccard            | RAM, VRAM, & NVMe engines             |
+| __Sequences__       | Variable-length byte strings & UTF-8 text   | Levenshtein, overlap, & Needleman-Wunsch global alignment        | Experimental C++ engine & C interface |
+| __Shapes__          | 3D point clouds of any size                 | Chamfer, Hausdorff, Wasserstein-Procrustes, & Gromov-Wasserstein | Experimental C++ engine & C interface |
+| __Geospatial Sets__ | WGS-84 points, point sets, & sampled paths  | Point proximity; declared Overlap, Shape, Coverage, & Route      | Experimental C++ engine & C interface |
+
+### Building Indexes
+
+Indexes are built in two very different regimes, & USearch keeps them as separate operations.
+Insertion is online & greedy: each entry commits to its neighbors once, against the graph as it stands.
+Refinement & absorption are macro-level: they revisit entries already in the graph, judge the graph as a whole, & may spend more compute per entry in exchange for throughput.
+A workflow that bulk-indexes first & bulk-serves later should run both; a workflow that streams entries into a live index may never refine at all.
+
+#### Incremental Insertions
+
+`insert` walks the graph from its entry points with a beam as wide as the expansion, picks a diverse subset of what the walk scored, & back-links each pick to the new entry.
+It answers one question per entry - the approximate nearest neighbors of a new point in a fixed graph - so its cost is one latency-bound walk per entry, & entries become searchable as soon as their batch publishes.
+The greediness is the price: the first entries chose their neighbors from a small graph, & no insertion revisits them.
+A narrow insertion expansion ingests cheaply & leaves picks a wider walk would improve on.
+An index grows as it inserts; `reserve` is only a hint of the capacity to come.
+
+#### Macro-Level Refinements
+
+`refine` re-selects neighbors for entries already in the graph, against the finished graph.
+It solves a different problem from insertion: building an approximate nearest-neighbor graph over every entry at once, plus the global properties no single walk can see.
+Its audit sweeps the graph from landmarks, finds islands no search reaches, & heals them.
+Like compaction in a database, refinement is optional & never changes what the index contains, only how well it is connected, & it must never lower recall.
+Because nothing waits on its answers, refinement can use bandwidth-oriented kernels a search cannot afford: on GPUs, a two-hop pass will score an entry's neighbors-of-neighbors as one Gram matrix on Tensor Cores, trading per-entry latency for many more distances per byte loaded.
 
-__Technical Insights__ and related articles:
-
-- [Uses Arm SVE and x86 AVX-512's masked loads to eliminate tail `for`-loops](https://ashvardanian.com/posts/simsimd-faster-scipy/#tails-of-the-past-the-significance-of-masked-loads).
-- [Uses Horner's method for polynomial approximations, beating GCC 12 by 119x](https://ashvardanian.com/posts/gcc-12-vs-avx512fp16/).
-- [For every language implements a custom separate binding](https://ashvardanian.com/posts/porting-cpp-library-to-ten-languages/).
-
-
-## Comparison with FAISS
-
-FAISS is a widely recognized standard for high-performance vector search engines.
-USearch and FAISS both employ the same HNSW algorithm, but they differ significantly in their design principles.
-USearch is compact and broadly compatible without sacrificing performance, primarily focusing on user-defined metrics and fewer dependencies.
-
-|                                              |                   FAISS |                  USearch |             Improvement |
-| :------------------------------------------- | ----------------------: | -----------------------: | ----------------------: |
-| Indexing time ⁰                              |                         |                          |                         |
-| 100 Million 96d `f32`, `f16`, `i8` vectors   |       2.6 · 2.6 · 2.6 h |        0.3 · 0.2 · 0.2 h | __9.6 · 10.4 · 10.7 x__ |
-| 100 Million 1536d `f32`, `f16`, `i8` vectors |       5.0 · 4.1 · 3.8 h |        2.1 · 1.1 · 0.8 h |   __2.3 · 3.6 · 4.4 x__ |
-|                                              |                         |                          |                         |
-| Codebase length ¹                            |       84 K [SLOC][sloc] |         3 K [SLOC][sloc] |            maintainable |
-| Supported metrics ²                          |         9 fixed metrics |               any metric |              extendible |
-| Supported languages ³                        |             C++, Python |             10 languages |                portable |
-| Supported ID types ⁴                         |          32-bit, 64-bit |   32-bit, 40-bit, 64-bit |               efficient |
-| Filtering ⁵                                  |               ban-lists |           any predicates |              composable |
-| Required dependencies ⁶                      |            BLAS, OpenMP |                        - |            light-weight |
-| Bindings ⁷                                   |                    SWIG |                   Native |             low-latency |
-| Python binding size ⁸                        | [~ 10 MB][faiss-weight] | [< 1 MB][usearch-weight] |              deployable |
+#### Absorption & Compaction
 
-[sloc]: https://en.wikipedia.org/wiki/Source_lines_of_code
-[faiss-weight]: https://pypi.org/project/faiss-cpu/#files
-[usearch-weight]: https://pypi.org/project/usearch/#files
+`absorb` moves every entry of one or more donor indexes into a recipient, keeps their links, & re-selects only the entries across the new seams; the donors end empty.
+Shards hold at most about 4 billion entries, so a collection past that size grows by adding shards, & `compact` absorbs small shards into larger ones while each stays under the bound.
+Absorption also crosses residencies: GPU shards link to each other on their devices, then land in RAM as one graph.
+NVMe parts are immutable, so their compaction writes new parts from old ones & leaves the sources untouched.
 
-> ⁰ [Tested][intel-benchmarks] on Intel Sapphire Rapids, with the simplest inner-product distance, equivalent recall, and memory consumption while also providing far superior search speed.
-> ¹ A shorter codebase of `usearch/` over `faiss/` makes the project easier to maintain and audit.
-> ² User-defined metrics allow you to customize your search for various applications, from GIS to creating custom metrics for composite embeddings from multiple AI models or hybrid full-text and semantic search.
-> ³ With USearch, you can reuse the same preconstructed index in various programming languages.
-> ⁴ The 40-bit integer allows you to store 4B+ vectors without allocating 8 bytes for every neighbor reference in the proximity graph.
-> ⁵ With USearch the index can be combined with arbitrary external containers, like Bloom filters or third-party databases, to filter out irrelevant keys during index traversal.
-> ⁶ Lack of obligatory dependencies makes USearch much more portable.
-> ⁷ Native bindings introduce lower call latencies than more straightforward approaches.
-> ⁸ Lighter bindings make downloads and deployments faster.
+## Dense Modality
 
-[intel-benchmarks]: https://www.unum.cloud/blog/2023-11-07-scaling-vector-search-with-intel
+Each shard supports up to roughly __4 billion entries__ through 32-bit internal node IDs.
+Public keys remain 128-bit UUIDs; adjacency lists store those compact node IDs rather than repeating UUIDs on every edge.
+Several shards extend the collection beyond one shard's address space: `shard_capacity` bounds each, & a full generation of shards opens a new one on the same memory domains or devices.
 
-Base functionality is identical to FAISS, and the interface must be familiar if you have ever investigated Approximate Nearest Neighbors search:
+The number of compiled storage types is controllable.
+The default four are `bf16`, `u1`, `i8`, & `e4m3`; the full eleven add `f16`, `u8`, `e5m2`, `i4`, `u4`, `e3m2`, & `e2m3`.
+Inputs can arrive as `f32` or `f64` & convert on ingestion.
+Bit sets suit fingerprints; byte integers suit quantized embeddings; `e4m3` & `bf16` offer floating-point range at different memory costs.
 
-```py
-# pip install usearch
-
-import numpy as np
-from usearch.index import Index
+Most dense measures reuse a dot-product & precomputed norms.
+Squared Euclidean distance is $\lVert a\rVert^2 + \lVert b\rVert^2 - 2\langle a,b\rangle$; Angular distance derives from the normalized product; packed-bit intersections yield Hamming & Jaccard distances.
+Geometry freezes when the index opens, while the graph's population grows.
+`refine` improves its links & `health` audits reachability, making disconnected regions visible in the same reports that measure recall & throughput.
 
-index = Index(ndim=3)               # Default settings for 3D vectors
-vector = np.array([0.2, 0.6, 0.4])  # Can be a matrix for batch operations
-index.add(42, vector)               # Add one or many vectors in parallel
-matches = index.search(vector, 10)  # Find 10 nearest neighbors
-
-assert matches[0].key == 42
-assert matches[0].distance <= 0.001
-assert np.allclose(index[42], vector, atol=0.1) # Ensure high tolerance in mixed-precision comparisons
-```
-
-More settings are always available, and the API is designed to be as flexible as possible.
-The default storage/quantization level is hardware-dependant for efficiency, but `bf16` is recommended for most modern CPUs.
-
-```py
-index = Index(
-    ndim=3, # Define the number of dimensions in input vectors
-    metric='cos', # Choose 'l2sq', 'ip', 'haversine' or other metric, default = 'cos'
-    dtype='bf16', # Store as 'f64', 'f32', 'bf16', 'f16', 'e5m2', 'e4m3', 'e3m2', 'e2m3', 'u8', 'i8', 'b1'..., default = None
-    connectivity=16, # Optional: Limit number of neighbors per graph node
-    expansion_add=128, # Optional: Control the recall of indexing
-    expansion_search=64, # Optional: Control the quality of the search
-    multi=False, # Optional: Allow multiple vectors per key, default = False
-)
-```
-
-## Serialization & Serving `Index` from Disk
-
-USearch supports multiple forms of serialization:
-
-- Into a __file__ defined with a path.
-- Into a __stream__ defined with a callback, serializing or reconstructing incrementally.
-- Into a __buffer__ of fixed length or a memory-mapped file that supports random access.
-
-The latter allows you to serve indexes from external memory, enabling you to optimize your server choices for indexing speed and serving costs.
-This can result in __20x cost reduction__ on AWS and other public clouds.
-
-```py
-index.save("index.usearch")
-
-index.load("index.usearch")
-view = Index.restore("index.usearch", view=True, ...)
-
-other_view = Index(ndim=..., metric=...)
-other_view.view("index.usearch")
-```
-
-## Exact vs. Approximate Search
-
-Approximate search methods, such as HNSW, are predominantly used when an exact brute-force search becomes too resource-intensive.
-This typically occurs when you have millions of entries in a collection.
-For smaller collections, we offer a more direct approach with the `search` method.
-
-```py
-from usearch.index import search, MetricKind, Matches, BatchMatches
-import numpy as np
-
-# Generate 10'000 random vectors with 1024 dimensions
-vectors = np.random.rand(10_000, 1024).astype(np.float32)
-vector = np.random.rand(1024).astype(np.float32)
-
-one_in_many: Matches = search(vectors, vector, 50, MetricKind.L2sq, exact=True)
-many_in_many: BatchMatches = search(vectors, vectors, 50, MetricKind.L2sq, exact=True)
-```
-
-If you pass the `exact=True` argument, the system bypasses indexing altogether and performs a brute-force search through the entire dataset using SIMD-optimized similarity metrics from [NumKong](https://github.com/ashvardanian/numkong).
-When compared to FAISS's `IndexFlatL2` in Google Colab, __[USearch may offer up to a 20x performance improvement](https://github.com/unum-cloud/USearch/issues/176#issuecomment-1666650778)__:
-
-- `faiss.IndexFlatL2`: __55.3 ms__.
-- `usearch.index.search`: __2.54 ms__.
-
-## User-Defined Metrics
+### Search & MaxSim
 
-Built-in metrics return distances, so a smaller `Match.distance` means closer.
-
-- `cos`, the Python default, returns $1 - \frac{a \cdot b}{\lVert a \rVert \lVert b \rVert}$ for vectors of any length.
-- `ip` returns $1 - a \cdot b$, matching `cos` only for unit-length vectors and turning negative once $a \cdot b > 1$.
-- `l2sq` returns the squared Euclidean distance $\sum_i (a_i - b_i)^2$, without the square root.
-
-While most vector search packages concentrate on just two metrics, "Inner Product distance" and "Euclidean distance", USearch allows arbitrary user-defined metrics.
-This flexibility allows you to customize your search for various applications, from computing geospatial coordinates with the rare [Haversine][haversine] distance to creating custom metrics for composite embeddings from multiple AI models, like joint image-text embeddings.
-You can use [Numba][numba], [Cppyy][cppyy], or [PeachPy][peachpy] to define your [custom metric even in Python](https://unum-cloud.github.io/USearch/python#user-defined-metrics-and-jit-in-python):
-
-```py
-from numba import cfunc, types, carray
-from usearch.index import Index, MetricKind, MetricSignature, CompiledMetric
-
-ndim = 256
-
-@cfunc(types.float32(types.CPointer(types.float32), types.CPointer(types.float32)))
-def python_inner_product(a, b):
-    a_array = carray(a, ndim)
-    b_array = carray(b, ndim)
-    c = 0.0
-    for i in range(ndim):
-        c += a_array[i] * b_array[i]
-    return 1 - c
-
-metric = CompiledMetric(pointer=python_inner_product.address, kind=MetricKind.IP, signature=MetricSignature.ArrayArray)
-index = Index(ndim=ndim, metric=metric, dtype=np.float32)
-```
-
-Similar effect is even easier to achieve in C, C++, and Rust interfaces.
-Moreover, unlike older approaches indexing high-dimensional spaces, like KD-Trees and Locality Sensitive Hashing, HNSW doesn't require vectors to be identical in length.
-They only have to be comparable.
-So you can apply it in [obscure][obscure] applications, like searching for similar sets or fuzzy text matching, using [GZip][gzip-similarity] compression-ratio as a distance function.
-
-[haversine]: https://ashvardanian.com/posts/abusing-vector-search#geo-spatial-indexing
-[obscure]: https://ashvardanian.com/posts/abusing-vector-search
-[gzip-similarity]: https://twitter.com/LukeGessler/status/1679211291292889100?s=20
-
-[numba]: https://numba.readthedocs.io/en/stable/reference/jit-compilation.html#c-callbacks
-[cppyy]: https://cppyy.readthedocs.io/en/latest/
-[peachpy]: https://github.com/Maratyszcza/PeachPy
-
-## Filtering and Predicate Functions
+`search` returns keys & distances from the walk's retained candidates.
+`search_if` applies a result-admission predicate without severing the routing paths through rejected nodes.
+Expansion controls the candidates, & connectivity controls the adjacency width; neither promises an exact nearest neighbor.
 
-Sometimes you may want to cross-reference search-results against some external database or filter them based on some criteria.
-In most engines, you'd have to manually perform paging requests, successively filtering the results.
-In USearch you can simply pass a predicate function to the search method, which will be applied directly during graph traversal.
-In Rust that would look like this:
-
-```rust
-let is_odd = |key: Key| key % 2 == 1;
-let query = vec![0.2, 0.1, 0.2, 0.1, 0.3];
-let results = index.filtered_search(&query, 10, is_odd).unwrap();
-assert!(
-    results.keys.iter().all(|&key| key % 2 == 1),
-    "All keys must be odd"
-);
-```
-
-## Memory Efficiency, Downcasting, and Quantization
-
-Training a quantization model and dimension-reduction is a common approach to accelerate vector search.
-Those, however, are only sometimes reliable, can significantly affect the statistical properties of your data, and require regular adjustments if your distribution shifts.
-Instead, we have focused on high-precision arithmetic over low-precision downcasted vectors.
-The same index, and `add` and `search` operations will automatically down-cast or up-cast between `f64_t`, `f32_t`, `bf16_t`, `f16_t`, `e5m2_t`, `e4m3_t`, `e3m2_t`, `e2m3_t`, `u8_t`, `i8_t`, and single-bit `b1x8_t` representations.
-You can use the following command to check, if hardware acceleration is enabled:
+`maxsim` ranks multi-vector documents, with token rows sharing one document key.
+For query tokens $q_i$ & document tokens $d_j$, it sums each query token's best similarity: $\sum_i \max_j \langle q_i,d_j\rangle$.
+The implementation walks the query rows to nominate documents, sharing the graph machinery with ordinary retrieval, then scores every token row of each nominated document exactly.
+Each query lands a ragged run of its best `wanted` documents, or of every scored document when `wanted` is zero.
+This avoids flattening a document's token geometry into one pooled vector.
 
-```sh
-$ python -c 'from usearch.index import Index; print(Index(ndim=768, metric="cos", dtype="f16").hardware_acceleration)'
-> sapphire
-$ python -c 'from usearch.index import Index; print(Index(ndim=166, metric="tanimoto").hardware_acceleration)'
-> ice
-```
+### Sparse Linear Algebra
 
-In most cases, `bf16` is recommended for modern CPUs.
-For even smaller footprints, USearch supports IEEE & MX-compatible Float8 (`e5m2` and `e4m3`) and Float6 (`e3m2` and `e2m3`) formats.
-You can pass pre-quantized buffers from [NumKong](https://github.com/ashvardanian/numkong) with the explicit `dtype=` parameter on `add` and `search`, or let USearch handle the quantization internally from higher-precision inputs.
-When quantization is enabled, the "get"-like functions won't be able to recover the original data, so you may want to replicate the original vectors elsewhere.
-When quantizing to `i8_t` integers, note that it's only valid for cosine-like metrics.
-As part of the quantization process, the vectors are normalized to unit length and later scaled to [-127, 127] range to occupy the full 8-bit range.
-When quantizing to `b1x8_t` single-bit representations, note that it's only valid for binary metrics like Jaccard, Hamming, etc.
-As part of the quantization process, the scalar components greater than zero are set to `true`, and the rest to `false`.
+Sparsity appears at several levels: fixed patterns in Tensor Cores, routed experts in MoE models, & structured operators in State Space Models.
+USearch adds a data-dependent computation mask to an $M \times N \times K$ product: __Dense M, Sparse N, Dense K__.
+The $M$ query rows choose a subset of the $N$ indexed rows through the graph, while each chosen product consumes all $K$ stored coordinates.
 
-![USearch uint40_t support](https://github.com/unum-cloud/USearch/blob/main/assets/usearch-neighbor-types.png?raw=true)
+`multiply` exposes those products as a graph-selected portion of $A B^{\mathsf{T}}$.
+It returns every pair scored by the traversal, including candidates the nearest-neighbor walk rejected, subject to an optional output bound.
+Products are computed over the stored representation; unvisited entries remain unknown.
+The returned offsets delimit query rows, keys identify the selected indexed rows, & scores contain their dot-products.
 
-Using smaller numeric types will save you RAM needed to store the vectors, but you can also compress the neighbors lists forming our proximity graphs.
-By default, 32-bit `uint32_t` is used to enumerate those, which is not enough if you need to address over 4 Billion entries.
-For such cases we provide a custom `uint40_t` type, that will still be 37.5% more space-efficient than the commonly used 8-byte integers, and will scale up to 1 Trillion entries.
+Exporting entries is one use of the walk.
+A custom C++ fold can accumulate $\sum_{j\in S(q)} \langle q,b_j\rangle v_j$ directly, avoiding the product tape & its key exports.
+With $v_j = w_j b_j$, a fixed selected set defines a sparse bilinear operator $B_S^{\mathsf{T}} W B_S$; applying a final vector forms $x^{\mathsf{T}} B_S^{\mathsf{T}} W B_S q$.
+When the graph chooses $S(q)$ from the query, the resulting operation is adaptive rather than globally linear.
 
+An index-to-index `join` could add sparsity along $M$ as well; that public operation is planned.
+Sparsity along $K$ needs a compatible custom metric & representation through the core C++ components, beyond the current dense public API.
 
-## `Indexes` for Multi-Index Lookups
+### Subquadratic Attention
 
-For larger workloads targeting billions or even trillions of vectors, parallel multi-index lookups become invaluable.
-Instead of constructing one extensive index, you can build multiple smaller ones and view them together.
+`attend` folds values into an online Softmax as the graph scores keys.
+Every scored key contributes, including keys outside the retained nearest-neighbor candidates.
+The fold maintains a running maximum, partition, & weighted value sum, so it materializes neither a full score matrix nor an intermediate top-k selection.
+Several query heads share one traversal & one value lookup, with separate accumulators per head.
 
-```py
-from usearch.index import Indexes
+For the scored set $S(q)$, the output is $\frac{\sum_{j\in S(q)} \exp(s_j-m)v_j}{\sum_{j\in S(q)} \exp(s_j-m)}$.
+It is normalized over that set & approximates full attention; the unvisited mass determines the remaining error.
+The maximum, partition, & weighted sums can merge across shards without averaging already-normalized outputs.
 
-multi_index = Indexes(
-    indexes: Iterable[usearch.index.Index] = [...],
-    paths: Iterable[os.PathLike] = [...],
-    view: bool = False,
-    threads: int = 0,
-)
-multi_index.search(...)
-```
+With $T$ queries, $H$ heads, width $D$, & $W$ scored keys per query, the attention work scales with $T H W D$ instead of $T H N D$ for a dense scan.
+That becomes subquadratic when $W$ grows sublinearly with the indexed population $N$.
+Construction & maintenance have their own cost, & neither arbitrary data nor arbitrary attention distributions guarantee a small $W$ at a chosen accuracy.
 
-## Clustering
-
-Once the index is constructed, USearch can perform K-Nearest Neighbors Clustering much faster than standalone clustering libraries, like SciPy, 
-UMap, and tSNE.
-Same for dimensionality reduction with PCA. 
-Essentially, the `Index` itself can be seen as a clustering, allowing iterative deepening.
-
-```py
-clustering = index.cluster(
-    min_count=10, # Optional
-    max_count=15, # Optional
-    threads=..., # Optional
-)
-
-# Get the clusters and their sizes
-centroid_keys, sizes = clustering.centroids_popularity
+## Sequence Modality
 
-# Use Matplotlib to draw a histogram
-clustering.plot_centroids_popularity()
-
-# Export a NetworkX graph of the clusters
-g = clustering.network
-
-# Get members of a specific cluster
-first_members = clustering.members_of(centroid_keys[0])
-
-# Deepen into that cluster, splitting it into more parts, all the same arguments supported
-sub_clustering = clustering.subcluster(min_count=..., max_count=...)
-```
-
-The resulting clustering isn't identical to K-Means or other conventional approaches but serves the same purpose.
-Alternatively, using Scikit-Learn on a 1 Million point dataset, one may expect queries to take anywhere from minutes to hours, depending on the number of clusters you want to highlight.
-For 50'000 clusters, the performance difference between USearch and conventional clustering methods may easily reach 100x.
-
-## Joins, One-to-One, One-to-Many, and Many-to-Many Mappings
-
-One of the big questions these days is how AI will change the world of databases and data management.
-Most databases are still struggling to implement high-quality fuzzy search, and the only kind of joins they know are deterministic.
-A `join` differs from searching for every entry, requiring a one-to-one mapping banning collisions among separate search results.
-
-| Exact Search | Fuzzy Search | Semantic Search ? |
-| :----------: | :----------: | :---------------: |
-|  Exact Join  | Fuzzy Join ? | Semantic Join ??  |
-
-Using USearch, one can implement sub-quadratic complexity approximate, fuzzy, and semantic joins.
-This can be useful in any fuzzy-matching tasks common to Database Management Software.
-
-```py
-men = Index(...)
-women = Index(...)
-pairs: dict = men.join(women, max_proposals=0, exact=False)
-```
-
-> Read more in the post: [Combinatorial Stable Marriages for Semantic Search 💍](https://ashvardanian.com/posts/searching-stable-marriages)
-
-
-## Functionality
-
-By now, the core functionality is supported across all bindings.
-Broader functionality is ported per request.
-In some cases, like Batch operations, feature parity is meaningless, as the host language has full multi-threading capabilities and the USearch index structure is concurrent by design, so the users can implement batching/scheduling/load-balancing in the most optimal way for their applications.
-
-|                         | C++ 11 | Python 3 | C 99  | Java  | JavaScript | Rust  |  Go   | Swift |
-| :---------------------- | :----: | :------: | :---: | :---: | :--------: | :---: | :---: | :---: |
-| Add, search, remove     |   ✅    |    ✅     |   ✅   |   ✅   |     ✅      |   ✅   |   ✅   |   ✅   |
-| Save, load, view        |   ✅    |    ✅     |   ✅   |   ✅   |     ✅      |   ✅   |   ✅   |   ✅   |
-| User-defined metrics    |   ✅    |    ✅     |   ✅   |   ❌   |     ❌      |   ✅   |   ❌   |   ❌   |
-| Batch operations        |   ❌    |    ✅     |   ❌   |   ✅   |     ✅      |   ❌   |   ❌   |   ❌   |
-| Filter predicates       |   ✅    |    ❌     |   ✅   |   ❌   |     ❌      |   ✅   |   ❌   |   ✅   |
-| Joins                   |   ✅    |    ✅     |   ❌   |   ❌   |     ❌      |   ❌   |   ❌   |   ❌   |
-| Variable-length vectors |   ✅    |    ❌     |   ❌   |   ❌   |     ❌      |   ❌   |   ❌   |   ❌   |
-| 4B+ capacities          |   ✅    |    ❌     |   ❌   |   ❌   |     ❌      |   ❌   |   ❌   |   ❌   |
-
-## Application Examples
-
-### USearch + UForm + UCall = Multimodal Semantic Search
-
-AI has a growing number of applications, but one of the coolest classic ideas is to use it for Semantic Search.
-One can take an encoder model, like the multi-modal [UForm](https://github.com/unum-cloud/uform), and a web-programming framework, like [UCall](https://github.com/unum-cloud/ucall), and build a text-to-image search platform in just 20 lines of Python.
-
-```python
-from ucall import Server
-from uform import get_model, Modality
-from usearch.index import Index
+The C++ RAM index works with variable-length byte sequences & UTF-8 text, using [StringZilla][stringzilla] for Levenshtein & overlap kernels and its own for Needleman-Wunsch global alignment, & the C interface exports it.
+Sequence search is useful when edit operations & local matches carry more meaning than a dense embedding's geometry.
 
-import numpy as np
-import PIL as pil
+## Geospatial Modality
 
-processors, models = get_model('unum-cloud/uform3-image-text-english-small')
-model_text = models[Modality.TEXT_ENCODER]
-model_image = models[Modality.IMAGE_ENCODER]
-processor_text = processors[Modality.TEXT_ENCODER]
-processor_image = processors[Modality.IMAGE_ENCODER]
-
-server = Server()
-index = Index(ndim=256)
-
-@server
-def add(key: int, photo: pil.Image.Image):
-    image = processor_image(photo)
-    vector = model_image(image)
-    index.add(key, vector.flatten(), copy=True)
-
-@server
-def search(query: str) -> np.ndarray:
-    tokens = processor_text(query)
-    vector = model_text(tokens)
-    matches = index.search(vector.flatten(), 3)
-    return matches.keys
-
-server.run()
-```
-
-Similar experiences can also be implemented in other languages and on the client side, removing the network latency.
-For Swift and iOS, check out the [`ashvardanian/SwiftSemanticSearch`](https://github.com/ashvardanian/SwiftSemanticSearch) repository.
-
-<table>
-  <tr>
-    <td>
-      <img src="https://github.com/ashvardanian/ashvardanian/blob/master/demos/SwiftSemanticSearch-Dog.gif?raw=true" alt="SwiftSemanticSearch demo Dog">
-    </td>
-    <td>
-      <img src="https://github.com/ashvardanian/ashvardanian/blob/master/demos/SwiftSemanticSearch-Flowers.gif?raw=true" alt="SwiftSemanticSearch demo with Flowers">
-    </td>
-  </tr>
-</table>
-
-A more complete [demo with Streamlit is available on GitHub](https://github.com/ashvardanian/usearch-images).
-We have pre-processed some commonly used datasets, cleaned the images, produced the vectors, and pre-built the index.
-
-| Dataset                             |            Modalities | Images |                              Download |
-| :---------------------------------- | --------------------: | -----: | ------------------------------------: |
-| [Unsplash][unsplash-25k-origin]     | Images & Descriptions |   25 K | [HuggingFace / Unum][unsplash-25k-hf] |
-| [Conceptual Captions][cc-3m-origin] | Images & Descriptions |    3 M |        [HuggingFace / Unum][cc-3m-hf] |
-| [Arxiv][arxiv-2m-origin]            |    Titles & Abstracts |    2 M |     [HuggingFace / Unum][arxiv-2m-hf] |
-
-[unsplash-25k-origin]: https://github.com/unsplash/datasets
-[cc-3m-origin]: https://huggingface.co/datasets/conceptual_captions
-[arxiv-2m-origin]: https://www.kaggle.com/datasets/Cornell-University/arxiv
-
-[unsplash-25k-hf]: https://huggingface.co/datasets/unum-cloud/ann-unsplash-25k
-[cc-3m-hf]: https://huggingface.co/datasets/unum-cloud/ann-cc-3m
-[arxiv-2m-hf]: https://huggingface.co/datasets/unum-cloud/ann-arxiv-2m
-
-### USearch + RDKit = Molecular Search
-
-Comparing molecule graphs and searching for similar structures is expensive and slow.
-It can be seen as a special case of the NP-Complete Subgraph Isomorphism problem.
-Luckily, domain-specific approximate methods exist.
-The one commonly used in Chemistry is to generate structures from [SMILES][smiles] and later hash them into binary fingerprints.
-The latter are searchable with binary similarity metrics, like the Tanimoto coefficient.
-Below is an example using the RDKit package.
-
-```python
-from usearch.index import Index, MetricKind
-from rdkit import Chem
-from rdkit.Chem import AllChem
-
-import numpy as np
-
-molecules = [Chem.MolFromSmiles('CCOC'), Chem.MolFromSmiles('CCO')]
-encoder = AllChem.GetRDKitFPGenerator()
-
-fingerprints = np.vstack([encoder.GetFingerprint(x) for x in molecules])
-fingerprints = np.packbits(fingerprints, axis=1)
-
-index = Index(ndim=2048, metric=MetricKind.Tanimoto)
-keys = np.arange(len(molecules))
-
-index.add(keys, fingerprints)
-matches = index.search(fingerprints, 10)
-```
-
-That method was used to build the ["USearch Molecules"](https://github.com/ashvardanian/usearch-molecules), one of the largest Chem-Informatics datasets, containing 7 billion small molecules and 28 billion fingerprints.
-
-[smiles]: https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system
-[rdkit-fingerprints]: https://www.rdkit.org/docs/RDKit_Book.html#additional-information-about-the-fingerprints
-
-### USearch + POI Coordinates = GIS Applications
-
-Similar to Vector and Molecule search, USearch can be used for Geospatial Information Systems.
-The Haversine distance is available out of the box, but you can also define more complex relationships, like the Vincenty formula, that accounts for the Earth's oblateness.
-
-```py
-from numba import cfunc, types, carray
-import math
-
-ndim = 2
-semi_major, flattening = 6378137.0, 1 / 298.257223563
-semi_minor = (1 - flattening) * semi_major
-
-def vincenty_distance(first_ptr, second_ptr):
-    first, second = carray(first_ptr, ndim), carray(second_ptr, ndim)
-    lat1, lon1, lat2, lon2 = first[0], first[1], second[0], second[1]
-    diff_lon = lon2 - lon1
-    rlat1, rlat2 = math.atan((1 - flattening) * math.tan(lat1)), math.atan((1 - flattening) * math.tan(lat2))
-    sin_rlat1, cos_rlat1 = math.sin(rlat1), math.cos(rlat1)
-    sin_rlat2, cos_rlat2 = math.sin(rlat2), math.cos(rlat2)
-    lon_on_sphere = diff_lon
-    for _ in range(100):
-        sin_lon, cos_lon = math.sin(lon_on_sphere), math.cos(lon_on_sphere)
-        sin_ang = math.sqrt((cos_rlat2 * sin_lon) ** 2 + (cos_rlat1 * sin_rlat2 - sin_rlat1 * cos_rlat2 * cos_lon) ** 2)
-        if sin_ang == 0: return 0.0
-        cos_ang = sin_rlat1 * sin_rlat2 + cos_rlat1 * cos_rlat2 * cos_lon
-        ang = math.atan2(sin_ang, cos_ang)
-        sin_az = cos_rlat1 * cos_rlat2 * sin_lon / sin_ang
-        cos2_az = 1 - sin_az ** 2
-        cos2_mid = cos_ang - 2 * sin_rlat1 * sin_rlat2 / cos2_az if cos2_az != 0 else 0.0
-        corr = flattening / 16 * cos2_az * (4 + flattening * (4 - 3 * cos2_az))
-        prev = lon_on_sphere
-        lon_on_sphere = diff_lon + (1 - corr) * flattening * (
-            sin_az * (ang + corr * sin_ang * (cos2_mid + corr * cos_ang * (-1 + 2 * cos2_mid ** 2))))
-        if abs(lon_on_sphere - prev) <= 1e-12: break
-    else:
-        return float('nan')
-    u_sq = cos2_az * (semi_major ** 2 - semi_minor ** 2) / (semi_minor ** 2)
-    ca = 1 + u_sq / 16384 * (4096 + u_sq * (-768 + u_sq * (320 - 175 * u_sq)))
-    cb = u_sq / 1024 * (256 + u_sq * (-128 + u_sq * (74 - 47 * u_sq)))
-    delta = cb * sin_ang * (cos2_mid + cb / 4 * (cos_ang * (-1 + 2 * cos2_mid ** 2)
-        - cb / 6 * cos2_mid * (-3 + 4 * sin_ang ** 2) * (-3 + 4 * cos2_mid ** 2)))
-    return semi_minor * ca * (ang - delta) / 1000.0
-
-index = Index(ndim=ndim, metric=CompiledMetric(
-    pointer=vincenty_distance.address,
-    kind=MetricKind.Haversine,
-    signature=MetricSignature.ArrayArray,
-))
-```
-
-## Integrations & Users
-
-### Databases & Query Engines
-
-- [x] ClickHouse: [C++](https://github.com/ClickHouse/ClickHouse/pull/53447), [docs](https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/annindexes#usearch).
-- [x] DuckDB: [post](https://duckdb.org/2024/05/03/vector-similarity-search-vss.html).
+> [!WARNING]
+> Experimental: the C++ point index is ahead of the broader Geospatial C interface.
+
+The native index converts WGS-84 coordinates into Earth-Centered, Earth-Fixed positions stored as three centimeter-scale `i32` coordinates - __12 bytes per point__.
+Multiple points can share one key to represent sampled paths or geographic sets.
+Cheap chord distances guide candidate selection; ellipsoidal geodesic calculations refine those candidates where surface distance matters.
+Chord ordering on an ellipsoid need not match geodesic ordering, so the candidate stage remains approximate.
+The broader Overlap, Shape, Coverage, & Route calls are declared through the experimental C interface.
+
+## Integrations
+
+USearch is used in databases, frameworks & applications:
+
+- [x] ClickHouse: [C++](https://github.com/ClickHouse/ClickHouse/pull/53447), [docs][clickhouse-docs].
+- [x] DuckDB: [post][duckdb-docs].
+- [x] YugabyteDB: [C++][yugabyte-code], [architecture](https://www.yugabyte.com/blog/yugabytedb-vector-indexing-architecture/), [1B-vector benchmark](https://www.yugabyte.com/blog/benchmarking-1-billion-vectors-in-yugabytedb/).
 - [x] ScyllaDB: [Rust](https://github.com/scylladb/vector-store), [presentation](https://www.slideshare.net/slideshow/vector-search-with-scylladb-by-szymon-wasik/276571548).
 - [x] TiDB & TiFlash: [C++](https://github.com/pingcap/tiflash), [announcement](https://www.pingcap.com/article/introduce-vector-search-indexes-in-tidb/).
-- [x] YugaByte: [C++](https://github.com/yugabyte/yugabyte-db/blob/366b9f5e3c4df3a1a17d553db41d6dc50146f488/src/yb/vector_index/usearch_wrapper.cc), [architecture](https://www.yugabyte.com/blog/yugabytedb-vector-indexing-architecture/), [1B-vector benchmark](https://www.yugabyte.com/blog/benchmarking-1-billion-vectors-in-yugabytedb/).
 - [x] MemGraph: [C++](https://github.com/memgraph/memgraph/blob/784dd8520f65050d033aea8b29446e84e487d091/src/storage/v2/indices/vector_index.cpp), [announcement](https://memgraph.com/blog/simplify-data-retrieval-memgraph-vector-search).
+- [x] Google: [Perch](https://github.com/google-research/perch-hoplite) bioacoustics DB, [UniSim](https://github.com/google/unisim), [RetSim](https://arxiv.org/abs/2311.17264) paper.
+- [x] LangChain: [Python](https://github.com/langchain-ai/langchain/releases/tag/v0.0.257) & [JavaScript](https://github.com/langchain-ai/langchainjs/releases/tag/0.0.125).
+- [x] Microsoft: [Semantic Kernel](https://github.com/microsoft/semantic-kernel/releases/tag/python-0.3.9.dev) & [vcpkg](https://github.com/microsoft/vcpkg/tree/master/ports/usearch).
+- [x] GPTCache: [Python](https://github.com/zilliztech/GPTCache/releases/tag/0.1.29).
+- [x] Hugging Face: Sentence-Transformers [docs](https://www.sbert.net/docs/package_reference/quantization.html#sentence_transformers.quantization.semantic_search_usearch), [quantization benchmarks](https://huggingface.co/blog/embedding-quantization).
+- [x] MemMachine: [Python](https://github.com/MemMachine/MemMachine/blob/main/packages/server/src/memmachine_server/common/vector_store/vector_search_engine/usearch_engine.py).
+- [x] Pathway: [Rust](https://github.com/pathwaycom/pathway).
+- [x] Vald: [GoLang](https://github.com/vdaas/vald).
 - [x] MatrixOne: [GoLang](https://github.com/matrixorigin/matrixone).
 - [x] GreptimeDB: [Rust](https://github.com/GreptimeTeam/greptimedb/blob/main/src/index/src/vector.rs).
 - [x] KurrentDB: [C#](https://github.com/kurrent-io/KurrentDB/blob/master/src/KurrentDB.Kontext/Indexing/USearch/USearchVectorStore.cs), [credits](https://github.com/kurrent-io/KurrentDB/blob/master/NOTICE.md).
 - [x] Chroma: [Rust](https://github.com/chroma-core/chroma/blob/main/rust/index/src/usearch.rs), behind their RaBitQ-quantized SPANN index.
-
-### AI Frameworks & Memory
-
-- [x] Google: [Perch](https://github.com/google-research/perch-hoplite) bioacoustics DB, [UniSim](https://github.com/google/unisim), [RetSim](https://arxiv.org/abs/2311.17264) paper.
-- [x] Microsoft: [Semantic Kernel](https://github.com/microsoft/semantic-kernel/releases/tag/python-0.3.9.dev) and [vcpkg](https://github.com/microsoft/vcpkg/tree/master/ports/usearch).
-- [x] LangChain: [Python](https://github.com/langchain-ai/langchain/releases/tag/v0.0.257) and [JavaScript](https://github.com/langchain-ai/langchainjs/releases/tag/0.0.125).
-- [x] Hugging Face: Sentence-Transformers [docs](https://www.sbert.net/docs/package_reference/quantization.html#sentence_transformers.quantization.semantic_search_usearch), [quantization benchmarks](https://huggingface.co/blog/embedding-quantization).
-- [x] GPTCache: [Python](https://github.com/zilliztech/GPTCache/releases/tag/0.1.29).
-- [x] MemMachine: [Python](https://github.com/MemMachine/MemMachine/blob/main/packages/server/src/memmachine_server/common/vector_store/vector_search_engine/usearch_engine.py).
-- [x] Pathway: [Rust](https://github.com/pathwaycom/pathway).
-- [x] Vald: [GoLang](https://github.com/vdaas/vald).
-
-### Applications & Products
-
 - [x] Arm MCP: [Python](https://github.com/arm/mcp/blob/main/arm_kb_search/loaders.py).
 - [x] GPT4All: [C++](https://github.com/nomic-ai/gpt4all/blob/main/gpt4all-chat/src/database.cpp).
 - [x] Ente: [Rust](https://github.com/ente-io/ente/blob/main/rust/crates/photos/src/ml/vector_db.rs), [post](https://ente.com/blog/vector-db/).
@@ -564,17 +299,25 @@ index = Index(ndim=ndim, metric=CompiledMetric(
 - [x] Copilot for Xcode by Intitni: [Swift](https://github.com/intitni/CopilotForXcode/blob/main/Tool/Sources/USearchIndex/UsearchIndex.swift).
 - [x] LLM for Unity: [C#](https://github.com/undreamai/LLMUnity/tree/main/Runtime/RAG/usearch), [docs](https://undream.ai/LLMUnity/).
 - [x] Music Assistant: [Python](https://github.com/music-assistant/server/blob/dev/music_assistant/providers/sonic_similarity/vectors.py), [docs](https://www.music-assistant.io/plugins/sonic-similarity/).
-  
 
-## Citations
+USearch builds on sibling libraries: [NumKong][numkong] supplies every dense kernel, [StringZilla][stringzilla] the sequence kernels, & [ForkUnion][forkunion] the thread pools behind RAM & NVMe executors.
+Lending an application's own ForkUnion pool through `usearch_executor_on_pool` is in progress.
+[UStore](https://github.com/unum-cloud/UStore) pairing documents with their vectors, so both become visible in one transaction, is planned.
+
+Related applications include [SwiftSemanticSearch](https://github.com/ashvardanian/SwiftSemanticSearch) for multimodal retrieval & [USearch Molecules](https://github.com/unum-science/USearchMolecules), indexing 7 billion molecules through 28 billion fingerprints.
+
+## Citation
 
 ```bibtex
 @software{Vardanian_USearch,
 doi = {10.5281/zenodo.7949415},
 author = {Vardanian, Ash},
-title = {{USearch by Unum Cloud}},
+title = {{USearch: One Proximity Graph for Search, Sparse Products and Attention, across RAM, VRAM and NVMe}},
 url = {https://github.com/unum-cloud/USearch},
-version = {2.26.6},
-year = {2026},
 }
 ```
+
+## License
+
+Licensed under the Apache License, Version 2.0.
+See `LICENSE` for details.

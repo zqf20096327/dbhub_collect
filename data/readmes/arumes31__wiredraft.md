@@ -1,0 +1,632 @@
+# WireDraft
+
+<div align="center">
+
+**Design, cable, validate, and document physical network infrastructure in one browser workspace.**
+
+[![Core CI](https://github.com/arumes31/wiredraft/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/arumes31/wiredraft/actions/workflows/quality.yml)
+[![Lint](https://github.com/arumes31/wiredraft/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/arumes31/wiredraft/actions/workflows/lint.yml)
+[![Security](https://github.com/arumes31/wiredraft/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/arumes31/wiredraft/actions/workflows/security.yml)
+[![Supply Chain](https://github.com/arumes31/wiredraft/actions/workflows/supply-chain.yml/badge.svg?branch=main)](https://github.com/arumes31/wiredraft/actions/workflows/supply-chain.yml)
+[![Go version](https://img.shields.io/github/go-mod/go-version/arumes31/wiredraft?logo=go&logoColor=white)](https://go.dev/)
+[![GHCR](https://img.shields.io/badge/GHCR-ghcr.io%2Farumes31%2Fwiredraft-2496ED?logo=docker&logoColor=white)](https://github.com/arumes31/wiredraft/pkgs/container/wiredraft)
+[![License: MIT](https://img.shields.io/github/license/arumes31/wiredraft)](LICENSE)
+
+[Quick start](#quick-start) · [First use](#first-use) · [Workspace guide](#workspace-guide) · [GHCR](#run-the-ghcr-image) · [Configuration](#configuration) · [Entra login](#microsoft-entra-id-login) · [HTTP API](#http-api) · [Development](#development) · [Documentation](#documentation)
+
+</div>
+
+WireDraft is a self-hosted rack, cabling, and VLAN planning application. A single Go server embeds the browser UI and API; PostgreSQL stores complete topology documents, revision metadata, users, TOTP state, recovery codes, and organization access. Uploaded field photos live in a separate private media volume and are delivered only after map-organization authorization.
+
+![WireDraft rack workspace with physical links](e2e/__screenshots__/rack-faceplates.png)
+
+## Quick start
+
+The included Compose stack builds WireDraft locally, starts PostgreSQL, applies the initial schema to a new database, and retains data in host directories under `data/`.
+
+### Requirements
+
+- Docker Engine with Docker Compose v2
+- Git
+
+### Start the stack
+
+```sh
+git clone https://github.com/arumes31/wiredraft.git
+cd wiredraft
+cp .env.example .env
+```
+
+Open `.env` and replace both example passwords. The administrator password must contain at least 12 characters. Then start the services:
+
+```sh
+mkdir -p data/postgres data/media
+# Linux only: the application container runs as UID/GID 10001.
+sudo chown -R 10001:10001 data/media
+docker compose up --build -d
+docker compose ps
+```
+
+Open <http://localhost:8080>. Session cookies are HTTPS-only by default; browsers accept them on `localhost`, but to sign in over plain HTTP from another host set `WIREDRAFT_BIND_ADDRESS=0.0.0.0` and `WIREDRAFT_COOKIE_SECURE=false` in `.env` (evaluation only). The port is published on `127.0.0.1` by default. View logs or stop the stack with:
+
+```sh
+docker compose logs -f wiredraft
+docker compose down
+```
+
+`docker compose down`, including `docker compose down -v`, keeps the database and uploaded photos in the host directories `data/postgres` and `data/media`. Remove those directories only after making a backup.
+
+> On PowerShell, use `Copy-Item .env.example .env` instead of `cp`.
+
+## First use
+
+1. Sign in with `WIREDRAFT_ADMIN_USER` and `WIREDRAFT_ADMIN_PASSWORD` from `.env`.
+2. On the first administrator login, scan the QR code with a TOTP authenticator and enter its current six-digit code. If `WIREDRAFT_ADMIN_TOTP_SECRET` is already set, enrollment is skipped.
+3. Download or copy the one-use recovery codes. They are displayed only when TOTP enrollment completes.
+4. Open the demonstration map in the protected `Default` organization. Use **Identity Control > Organizations** to add organizations before assigning users or creating maps for them.
+5. Choose **All unlocked** beside the canvas tools to add racks and devices or edit their settings. Choose **Cabling unlocked** to create, reconnect, configure, group, or delete connections while equipment stays fixed.
+
+To create your own map, select **+** beside **Active map**, enter its name, organization, and location, then choose **Blank workspace** or **Starter topology**. Use the adjacent pencil button to edit the active map's metadata later.
+
+Maps open in **Read only**, which still permits navigation, selection, inspection, and export. Either unlocked mode returns to Read only after 15 minutes without a completed edit; panning, zooming, inspecting, and unapplied form input do not reset the timer. Switching maps or reloading also relocks the editor. Completed changes remain intact, and an open form keeps its unapplied draft so you can explicitly unlock and continue.
+
+Unsaved map changes are protected when switching maps, changing organization, importing a backup, opening administration, or signing out: choose **Save and leave**, **Discard changes**, or **Stay here**. Reloading or closing a tab with unsaved work triggers the browser's warning. The save menu shows persistent failures, a retry action, and the last successful save time.
+
+Completed local edits also receive a recovery snapshot in this tab's session storage, scoped to the signed-in account. If a server update replaces those edits, or you reload before saving, the save menu shows **Recovery**. Download the recovery JSON, create a blank map, and import the file there; importing replaces the selected map. Recovery copies are retained until explicitly discarded or the tab is closed. If browser storage is unavailable or full, the menu explains that recovery is only available in memory and offers a download. These snapshots contain topology data and attachment metadata, not photo bytes or unapplied form input.
+
+Accounts are global: a user may be granted one, several, or all organizations. The organization selector in Identity Control changes the current map view; administrators always retain access to every organization. Every map belongs to one registered organization, and `Default` cannot be renamed or deleted.
+
+Open **Identity Control > Administration** for the dedicated user and organization management area. Search or filter the Users directory, then choose **Manage** to edit access or sign-in settings. **Add user** shows only the fields needed for local/TOTP or Microsoft Entra accounts. The Organizations directory links to everyone with effective access, including administrators and global grants. Use **Back to workspace** to return to the remembered map.
+
+Guest access is disabled by default. Set `WIREDRAFT_GUEST_ENABLED=true` before startup to let anonymous visitors open the shared Guest workspace with read/write access; existing Guest maps are kept while it is disabled. Guest sessions are limited to 10 new sessions per client address every 5 minutes and 1024 live sessions in total (`WIREDRAFT_GUEST_SESSIONS_PER_CLIENT`, `WIREDRAFT_GUEST_SESSION_LIMIT`).
+
+## Run the GHCR image
+
+Images are published for `linux/amd64` and `linux/arm64`:
+
+```sh
+docker pull ghcr.io/arumes31/wiredraft:latest
+```
+
+Available tags include `latest`, `main`, `sha-<commit>`, `v<version>`, `<version>`, and `<major>.<minor>` according to the triggering branch or release tag. Use a version or digest instead of `latest` for repeatable production deployments.
+
+The repository includes a standalone [GHCR Compose stack](docker-compose.ghcr.yml) with both the application and PostgreSQL. WireDraft embeds and applies pending schema migrations before serving requests, keeps the database and protected media in separate host directories, waits for database readiness, and runs with a read-only root filesystem and dropped Linux capabilities. The accompanying [.env.example](.env.example) lists every setting accepted by this stack with runnable defaults and placeholder credentials.
+
+Start it from a WireDraft checkout:
+
+```sh
+cp .env.example .env
+# Replace the credentials in .env before continuing.
+mkdir -p data/postgres data/media
+# Linux only: the application container runs as UID/GID 10001.
+sudo chown -R 10001:10001 data/media
+docker compose -f docker-compose.ghcr.yml pull
+docker compose -f docker-compose.ghcr.yml up -d
+```
+
+Set `WIREDRAFT_IMAGE` in `.env` to pin a release tag or digest without editing the Compose file, for example `WIREDRAFT_IMAGE=ghcr.io/arumes31/wiredraft:1.2.3`.
+
+Compose-specific settings are separate from the application configuration below:
+
+| Environment variable | Default | Description |
+| --- | --- | --- |
+| `COMPOSE_PROJECT_NAME` | `wiredraft` | Compose project and generated resource-name prefix |
+| `WIREDRAFT_IMAGE` | `ghcr.io/arumes31/wiredraft:latest` | Application image tag or digest |
+| `POSTGRES_IMAGE` | pinned PostgreSQL 17 Alpine digest | PostgreSQL image tag or digest |
+| `WIREDRAFT_BIND_ADDRESS` | `127.0.0.1` | Host address that publishes the web port. WireDraft serves plain HTTP, so keep the loopback default behind a TLS reverse proxy on the host; set `0.0.0.0` only when another trusted host terminates TLS |
+| `WIREDRAFT_PUBLISHED_PORT` | `8080` | Host-side web port |
+| `POSTGRES_DB` | `wiredraft` | Database initialized in a new PostgreSQL data directory |
+| `POSTGRES_USER` | `wiredraft` | Database owner initialized in a new PostgreSQL data directory |
+| `POSTGRES_PASSWORD` | required | Password for the bundled PostgreSQL container; replace the placeholder before startup |
+
+The app connection defaults (`PGDATABASE`, `PGUSER`, and `PGPASSWORD`) must match the bundled PostgreSQL settings. `PGPASSWORD` may be left empty in `.env` to reuse `POSTGRES_PASSWORD`. For an external database, set `DATABASE_URL` or the five `PG*` connection variables; the included PostgreSQL service will still start unless you remove it from the copied deployment file. The configured database role must own the application schema or otherwise be allowed to apply its versioned DDL migrations.
+
+`PORT` is the container-side listen port while `WIREDRAFT_PUBLISHED_PORT` is the host-side port. If `PORT` changes, update `HEALTHCHECK_URL` to the same container port. `WIREDRAFT_MEDIA_DIR` must be an absolute in-container path in this Compose deployment; the protected `data/media` host directory is mounted at that path automatically.
+
+The published runtime image is `FROM scratch`, contains only the statically linked server, runs as numeric user `10001`, and has no shell or package manager. Its built-in `-healthcheck` command probes `/api/v1/health` without adding a second binary.
+
+## Features
+
+### Rack and hardware planning
+
+Choose **All unlocked → + Room**, or right-click an empty canvas position and choose **Add room here**, to create a room with a name, building, floor and outline color. Select its racks and free devices in the room inspector, then choose **Update room**. Rack-mounted devices inherit their rack's room. You can also change room assignment in a rack or free device's inspector; equipment created by right-clicking inside a room joins it automatically.
+
+Drag a room's header to move its equipment together. Its outline grows to contain its members, including dual rack elevations. The header arrow or **Collapse room** hides the contents and shows bundled external cables; click a bundle to trace its cables and reveal the equipment. Double-click the header to expand and fit the room. Collapse is local to the session and works in read-only mode. Room changes save immediately and support undo/redo. **Remove room** keeps its equipment and cables. Rooms are included in JSON backups and diagram exports.
+
+Racks open in **Dual** view automatically when equipment is visible on both sides, including servers with front and rear panels. You can still collapse a rack manually; live refreshes keep that choice. A newly occupied second side opens automatically again.
+
+For hardware installed backwards, select the device and set **Physical mounting → Installation orientation → Reversed**, then **Update device record**. The hardware panels and socket positions swap while rack allocation, port IDs and cable connections are preserved. The orientation is saved with the device and included in exports.
+
+To add hardware at a specific position, choose **All unlocked**, right-click empty canvas space or a free rack unit, and select **Add device here**. Choose the model and click **Place device**. The dialog shows the destination rack face and unit; taller devices extend upward from that unit and must fit without overlapping existing equipment. Press **Escape** to cancel.
+
+To create a rack, choose **All unlocked**, then **+ Rack**. Enter its name and capacity, and set **Frame color** with the color picker or choose a rack under **Use existing rack color** to copy its color. The dropdown lists rack names and color codes from the current map and appears only when the map already contains racks. You can adjust the copied color with the picker before selecting **Place rack**; the source rack is unaffected.
+
+- Multi-rack layouts with 6U–48U frames, independent front/rear rails, per-rack face switching, whole-U snapping, collision prevention, hidden-side silhouettes, grouped cable portals, trace-expanded dual-face views, capacity reporting, free-floating devices, and a navigable minimap.
+- Drag hardware onto a rack's numbered rails to preview its destination U range. Dropping onto an occupied range opens a confirmation listing the affected devices. Confirm to mount the dropped hardware and move displaced devices onto the canvas with cables attached, or cancel to leave the map unchanged. Confirmed placement supports undo; a map changed by another edit must be reviewed again.
+- Servers show matching front and rear hardware at the same U position in rack views by default. In the device inspector, **Rack display → Visible faces** can use the automatic default, show both faces, or show only the mounting face. This setting is saved with the device; dual-view panels share one device record and its cable endpoints.
+- High-DPI faceplates for switches, firewalls, routers, carrier handoffs, modems, access points, servers, patch panels, storage, power, and console equipment.
+- Source-backed front/rear hardware panels across multiple vendors, composed from shared connector, indicator, vent, fan, and PSU artwork. Select **Hardware panel** in the device inspector; the choice is local to your session and independent of rack mounting. Cables to hidden sockets terminate at a labeled connection marker. Canvas and SVG use the same physical geometry. See [hardware faceplates](FACEPLATES.md) for model, family, and schematic fidelity and evidence requirements.
+- Offline multi-vendor hardware catalog covering networking, compute, storage, power, wireless, and rack accessories, plus JSON profile import. In **+ Device**, search all devices and providers by name or SKU, then select a result to fill the installation fields; family and provider selectors also support browsing.
+- Generic 1U–4U server rear builder with mixed card bays and independently cableable ports.
+- Copper and fiber patch panels with independent front/rear occupancy, editable rear mappings, and atomic one-to-one panel ranges.
+
+### Physical cabling
+
+- Magnetic port-to-port drafting with precise connector hit testing and automatic endpoint link-state updates.
+- Select a cable and drag its S (source) or T (target) handle to repatch one end. Free ports are marked in teal; occupied ports are amber and require a modal confirmation to swap the two ends atomically. Escape or an empty drop cancels. VLAN and port settings remain on their physical ports; cable properties and group membership are retained. Repatching checks the displayed revision and preserves front/rear patch-panel termination planes.
+- Deterministic orthogonal routing, rack-side/inter-rack gutters, crossing underpasses, bundled device-pair tracks, and separated vertical lanes in dense layouts.
+- Cable media and transceiver metadata for copper, coax, SMF/MMF, DAC, AOC, and twinax.
+- Trunk, LACP, MC-LAG, and failover link groups with shared labels, primary/backup roles, group-wide VLAN editing, and complete-path hover highlighting.
+- Canvas and SVG exports use the same Manhattan route geometry and native/tagged VLAN conductors.
+
+### Layer 2 modeling and analysis
+
+- Access, trunk, hybrid, and unconfigured switchport models with native and tagged VLAN membership.
+- Logical switch systems for generic stacks, Aruba VSF, Cisco StackWise/VSS, Fortinet MC-LAG, Juniper Virtual Chassis, HPE/H3C IRF, and custom fabrics.
+- Active/active and active/passive firewall clusters with active-member selection and safe failover reassignment.
+- Per-VLAN spanning-tree simulation with deterministic root election and Root, Designated, and Blocked port roles.
+- Server-side detection of native VLAN mismatches, tagged VLAN drops, switching loops, invalid bundles, and forwarding paths.
+
+### Collaboration and output
+
+- Revision-aware autosave, manual save, undo/redo, optimistic conflict detection, and per-topology Server-Sent Events.
+- Anchored comment threads, HTTP(S) documentation links, and revocable tokenized read-only shares.
+- Export to A3 PDF, self-contained interactive HTML, configuration workbook, PNG, SVG, and JSON; the HTML viewer embeds its CSS, source data, search, pan/zoom, hover tracing, face filters, and inspector without remote assets, while JSON can be restored as a topology backup.
+- Device inventory for hostname, management IP, serial, asset tag, owner/team, site hierarchy, rack/U position, and STP priority.
+- Persistent arrows, boxes, and text notes, plus JPEG/PNG field photos attached to selected objects with editable captions and filenames.
+
+### Runtime and security
+
+- Local password and TOTP authentication, optional single-tenant Microsoft Entra ID login, one-use recovery codes, opaque host-bound sessions, global user identities with multi-organization grants, and administrator management for users and organizations.
+- Strict JSON decoding, request size limits, same-origin and CSRF enforcement, security headers, structured logs, database transactions, and graceful shutdown.
+- Embedded native ES-module frontend with no runtime Node.js dependency; release builds minify modules before `go:embed` compilation.
+- Responsive controls, keyboard-visible focus, reduced-motion support, adaptive graphics quality, bounded frame rates, and suspended rendering for hidden canvases.
+
+The GHCR publishing, container health, and image security workflows prepare and syntax-check the minified JavaScript tree before starting Docker. They pass that output through a [named build context](https://docs.docker.com/build/ci/github-actions/named-contexts/), so the image embeds those exact files. The container health check compares the served `app.js` with the prepared output. Standalone Docker builds generate the same module tree automatically.
+
+## Workspace guide
+
+### Navigation and shortcuts
+
+Use **Find installed equipment** above the topology navigator to search by device
+name, hostname, management IP, serial number, asset tag, or model. Multiple words
+must all match. Selecting a result frames its equipment; clearing the search
+restores collapsed navigator groups. Group expansion is retained across selection
+and topology refreshes within the active map. Click a Rule Engine alert to select
+its cable and frame the affected equipment, or highlight all cables in a group or cycle.
+
+The **Duplicate active map** button beside the map picker creates an independent
+copy in the same organization. Give the copy a name; if prompted, save pending
+edits to include them or discard them to copy the saved version. Equipment,
+configuration, comments, documentation and photo files are copied. Existing share
+links are excluded. The original remains intact and the new map opens read-only.
+
+Choose **Navigation → Auto**, **Trackpad**, or **Mouse** in the left sidebar. Trackpad mode uses two-finger scrolling to pan and pinching to zoom; Mouse mode uses wheel scrolling to zoom. Auto detects the gesture type. Choose an explicit mode if your input device is misidentified.
+
+| Action | Control |
+| --- | --- |
+| Pan | Drag empty canvas, hold Space and drag, or drag with the middle mouse button |
+| Select multiple devices | Shift-drag a selection box on empty canvas; Shift-click devices to extend the selection |
+| Move a rack | Drag its header |
+| Frame the whole topology | **Fit map** |
+| Show front and rear rack views together | **Expand all**; use the same control to collapse them |
+| Save now | Ctrl/Cmd+S or **Save now** in the autosave menu |
+| Undo / redo | Ctrl/Cmd+Z / Ctrl/Cmd+Shift+Z; Ctrl/Cmd+Y also redoes |
+| Delete the selected rack, device, cable, or annotation | Delete or Backspace, subject to the current edit mode |
+| Exit a drawing tool | Escape or select the active tool again |
+
+Editing shortcuts require the appropriate unlocked mode and do not replace normal typing in form fields. Outside a dialog, Escape also clears an active path trace and collapses expanded rack faces. **Graphics mode** offers Auto, Performance, Balanced, and Quality to tune rendering for your device and map size.
+
+### Notes, photos, and resources
+
+Use **Arrow**, **Box**, or **Note** in the canvas toolbar to add saved markup. Select an annotation to edit it in the inspector. Comments in the selected object's inspector remain part of the map and its JSON backup.
+
+Select an object and use **Field photos → Upload JPEG / PNG** to attach up to 12 images per upload, at most 10 MiB each. Open a thumbnail to view it in **Photo manager**, change its display filename or caption, or delete it. Photo access follows the map's organization. JSON backups contain photo metadata only; preserve the separate media files as described under [persistent data](#persistent-data).
+
+Open **Resources** to attach HTTP(S) documentation links or create a read-only share with an optional expiry. Copy a newly created share URL immediately: its secret is shown only once. Revoke shares from the same dialog. Only HTTPS documentation can be embedded, in a sandboxed frame without referrer; embeds also depend on the destination site's framing policy. Use **Open** for HTTP links or when embedding is unavailable.
+
+### Saving and exports
+
+**Export → Multipage PDF** prints large maps as A3 landscape tiles rather than
+shrinking everything onto one sheet. Choose a print scale; pages run left to right
+and then top to bottom, with an 18-point overlap and row/column labels. Each tile
+is rendered independently to preserve detail. Exports are limited to 100 pages;
+reduce the scale or map extent if necessary. A changed map interrupts export so
+pages cannot silently combine different versions.
+
+**Identity Control → About / diagnostics** shows the build revision, Go version,
+map revision, object counts, connection state, graphics mode, and recovery-storage
+availability. Copy diagnostics for a support report; names, inventory values,
+organization identifiers, account details, addresses and credentials are omitted.
+Git builds use Go's embedded VCS metadata. Published container builds receive the
+commit through `WIREDRAFT_BUILD_REVISION`; custom Docker builds can set that build
+argument, otherwise they display `development`.
+
+The autosave menu enables or disables autosave, selects a 30-second, 1-minute, or 5-minute interval, and offers **Save now** and draft recovery. See [First use](#first-use) for unsaved-change and recovery behavior.
+
+Use **Export** for PDF, interactive HTML, a configuration workbook, PNG, SVG, or a JSON backup. **Restore JSON** replaces the active map; create a blank map first when you want to keep the original. Exported HTML can be opened without the server and provides viewing and tracing controls; use JSON for restoring an editable map.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    U[Browser] -->|HTML, CSS, ES modules| S[WireDraft Go server]
+    U <-->|REST /api/v1| A[HTTP handlers]
+    U <-->|revisioned SSE| E[SSE broker]
+    S --> A
+    S --> E
+    A --> M[Topology model and analyzer]
+    A --> X[Authentication and authorization]
+    M --> P[(PostgreSQL)]
+    X --> P
+    X <-->|OIDC authorization code + PKCE| I[Microsoft Entra ID]
+    S -. embeds at build time .-> W[web/static]
+```
+
+WireDraft stores each topology as a validated JSONB aggregate alongside indexed summary and revision fields. Mutations lock the row, enforce the optional `If-Match: "rev-N"` precondition, validate the next aggregate, increment its revision, and commit atomically.
+
+```mermaid
+sequenceDiagram
+    participant B as Browser
+    participant API as Go API
+    participant DB as PostgreSQL
+    participant SSE as SSE subscribers
+    B->>API: Mutation + If-Match: "rev-N"
+    API->>DB: SELECT ... FOR UPDATE
+    DB-->>API: Document + revision N
+    API->>API: Apply, normalize, validate
+    API->>DB: UPDATE document, revision N+1
+    DB-->>API: Commit
+    API-->>B: Updated topology + ETag
+    API-->>SSE: Publish revision N+1
+```
+
+### Persistent data
+
+| Persistent item | Contents |
+| --- | --- |
+| `organizations` | Stable organization IDs and display names, including the protected `Default` organization |
+| `topologies` | Complete topology JSONB documents plus organization ownership, name, location, revision, counts, and timestamps |
+| `auth_state` | Global users, organization grants, password/TOTP/recovery state, guest workspace membership, and the 32-byte key used to encrypt authenticator secrets |
+| `data/postgres` host directory | The complete database used by the included Compose deployment |
+| `data/media` host directory | Randomly renamed JPEG/PNG attachments, isolated by topology and never exposed as a browsable static directory |
+
+Back up PostgreSQL and `data/media` together to preserve topology, authentication state, and uploaded photos. A JSON export contains attachment metadata but not the photo bytes, so it is not a replacement for these backups.
+
+For a consistent backup, pause application writes while copying both stores. These commands use the default Compose file; add `-f docker-compose.ghcr.yml` to each Compose command for that deployment. Keep the backup directory private: the database includes authentication state.
+
+```sh
+(
+set -e
+mkdir -p backups
+docker compose stop wiredraft
+trap 'docker compose start wiredraft' EXIT
+docker compose exec -T postgres sh -c 'exec pg_dump --clean --if-exists -U "$POSTGRES_USER" -d "$POSTGRES_DB"' > backups/wiredraft.sql
+tar -czf backups/media.tar.gz -C data media
+)
+```
+
+Check that both backup commands succeeded before treating this as a complete backup. Copy the pair to a dated, protected location outside the deployment host; retain several generations. Restart the application even if a backup command fails, and investigate the failed backup.
+
+Verify recovery in a **separate deployment directory with empty data directories**, its own Compose project name, and a different published port. Copy the matching backup pair into its `backups/` directory, configure `.env`, and restore before starting the application:
+
+```sh
+mkdir -p data/postgres data/media
+docker compose up -d postgres
+# Wait until PostgreSQL is healthy (docker compose ps).
+docker compose exec -T postgres sh -c 'exec psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < backups/wiredraft.sql
+tar -xzf backups/media.tar.gz -C data
+# Linux: restore the application container's media ownership.
+sudo chown -R 10001:10001 data/media
+docker compose up -d wiredraft
+```
+
+The SQL restore replaces the target database's application tables. Confirm the isolated restore target before running it. In the restored app, verify administrator sign-in/TOTP, organization access, map counts and revisions, representative uploaded photos, and a saved edit that survives restart. Repeat this restore check after changing the schema or backup process. PowerShell users can pipe `Get-Content -Raw backups/wiredraft.sql` into the `docker compose exec ... psql` command instead of using `<`.
+
+PostgreSQL runs on `127.0.0.1:5432` in the included development Compose file. Do not expose it publicly. WireDraft applies pending migrations from the schema files embedded in its binary before opening the HTTP server. This initializes fresh databases and upgrades existing databases automatically; startup stops with an error if a migration cannot be applied.
+
+## Configuration
+
+WireDraft reads environment variables first and lets command-line flags override the supported server options.
+
+| Environment variable | Flag | Default | Description |
+| --- | --- | --- | --- |
+| `WIREDRAFT_LISTEN_HOST` | `-host` | empty (all interfaces) | HTTP listen IP address, such as `127.0.0.1` for loopback-only local runs |
+| `PORT` | `-port` | `8080` | HTTP listen port |
+| `DATABASE_URL` | — | empty | PostgreSQL URL; when empty, pgx reads the standard `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`, and related variables |
+| `PGHOST` | — | pgx default | PostgreSQL host when `DATABASE_URL` is empty; the GHCR Compose stack uses `postgres` |
+| `PGPORT` | — | pgx default | PostgreSQL port when `DATABASE_URL` is empty; the GHCR Compose stack uses `5432` |
+| `PGDATABASE` | — | pgx default | PostgreSQL database when `DATABASE_URL` is empty; the GHCR Compose stack uses `wiredraft` |
+| `PGUSER` | — | pgx default | PostgreSQL user when `DATABASE_URL` is empty; the GHCR Compose stack uses `wiredraft` |
+| `PGPASSWORD` | — | pgx default | PostgreSQL password when `DATABASE_URL` is empty; Compose reuses `POSTGRES_PASSWORD` when this is unset |
+| `WIREDRAFT_MEDIA_DIR` | `-media-dir` | `data/media` | Private photo root; Compose sets this to `/media` and mounts the host `data/media` directory there |
+| `LOG_LEVEL` | `-log-level` | `info` | `debug`, `info`, `warn`, or `error` |
+| `LOG_FORMAT` | `-log-format` | `json` | `json` or `text` |
+| `WIREDRAFT_ADMIN_USER` | — | `admin` | Bootstrap administrator username |
+| `WIREDRAFT_ADMIN_PASSWORD` | — | required | Bootstrap administrator password; minimum 12 characters |
+| `WIREDRAFT_ADMIN_TOTP_SECRET` | — | empty | Optional Base32 TOTP secret; empty starts QR enrollment on first login |
+| `WIREDRAFT_GUEST_ENABLED` | — | `false` | Enables anonymous guest-workspace login with read/write access to the Guest organization |
+| `WIREDRAFT_COOKIE_SECURE` | — | `true` | Sends the session cookie only over HTTPS; set `false` only for plain-HTTP local evaluation |
+| `WIREDRAFT_GUEST_SESSION_LIMIT` | — | `1024` | Maximum number of live Guest sessions |
+| `WIREDRAFT_GUEST_SESSIONS_PER_CLIENT` | — | `10` | New Guest sessions allowed per client address every 5 minutes |
+| `WIREDRAFT_TRUSTED_PROXIES` | — | empty | Comma-separated reverse-proxy IPs or CIDRs whose `X-Forwarded-For` header identifies the client for login and guest throttling |
+| `WIREDRAFT_AUTH_SECRET_KEY_FILE` | — | empty | Optional file with a 32-byte base64 or hex key that encrypts TOTP secrets instead of the key stored in PostgreSQL |
+| `WIREDRAFT_AUTH_PREVIOUS_SECRET_KEY_FILE` | — | empty | Previous TOTP encryption key, read only while rotating `WIREDRAFT_AUTH_SECRET_KEY_FILE` |
+| `WIREDRAFT_ENTRA_ENABLED` | — | `false` | Enables the Microsoft Entra ID login button and OIDC endpoints |
+| `WIREDRAFT_ENTRA_TENANT_ID` | — | empty | Directory (tenant) ID of the single permitted Entra tenant |
+| `WIREDRAFT_ENTRA_CLIENT_ID` | — | empty | Application (client) ID of the WireDraft app registration |
+| `WIREDRAFT_ENTRA_CLIENT_SECRET_FILE` | — | empty | Path to a read-only file containing the app registration client secret |
+| `WIREDRAFT_ENTRA_REDIRECT_URL` | — | empty | Exact HTTPS callback registered in Entra, ending in `/api/v1/auth/entra/callback` |
+| `WIREDRAFT_ENTRA_REQUIRE_ACCT_CLAIM` | — | `false` | Rejects ID tokens without the optional `acct` claim, so only home-tenant members (`acct=0`) can sign in. Enable after adding `acct` to the app registration |
+| `HEALTHCHECK_URL` | `-healthcheck-url` | `http://127.0.0.1:8080/api/v1/health` | Target used with `-healthcheck` |
+
+During the rename migration window, `NETDIAGRAM_GUEST_ENABLED` and `NETDIAGRAM_COOKIE_SECURE` remain fallback aliases when their `WIREDRAFT_*` replacements are unset.
+
+## Microsoft Entra ID login
+
+WireDraft can use a private Microsoft 365 work account as an alternative login. This is an optional, single-tenant OpenID Connect integration: the local administrator remains available for recovery and explicitly pre-provisions every Entra user, their WireDraft application role, and their organization grants.
+
+No inbound Internet port is required. The user's browser visits Microsoft and is redirected back to WireDraft's private HTTPS name; Microsoft does not initiate a connection to WireDraft. The WireDraft container needs outbound DNS and HTTPS access to `login.microsoftonline.com` and to the endpoints in Microsoft's OIDC discovery document.
+
+```mermaid
+sequenceDiagram
+    participant B as User browser on LAN/VPN
+    participant W as Private WireDraft HTTPS URL
+    participant E as Microsoft Entra ID
+    B->>W: Sign in with Microsoft
+    W-->>B: Redirect with state, nonce, and PKCE challenge
+    B->>E: Authenticate and satisfy tenant policies
+    E-->>B: Authorization code
+    B->>W: Private callback with code and state
+    W->>E: Outbound token exchange and signing-key lookup
+    E-->>W: Verified ID token
+    W-->>B: WireDraft session cookie
+```
+
+### 1. Prepare the private URL
+
+Give WireDraft a stable DNS name that enrolled clients can resolve, for example `wiredraft.internal.example.com`. Terminate TLS with a certificate trusted by those clients and proxy requests to the WireDraft container. The callback in this example is:
+
+```text
+https://wiredraft.internal.example.com/api/v1/auth/entra/callback
+```
+
+The scheme, host, port, path, and letter case must match the Entra redirect URI exactly. A private CA, split DNS, LAN-only address, or VPN-only address is valid as long as each signing-in browser can reach and trust it. Set `WIREDRAFT_BIND_ADDRESS=127.0.0.1` when the reverse proxy runs on the Docker host. When the proxy is another Compose service, keep WireDraft on a private Docker network and do not publish its application port publicly.
+
+### 2. Register WireDraft in Entra
+
+1. Open the [Microsoft Entra admin center](https://entra.microsoft.com), then go to **Identity > Applications > App registrations > New registration**.
+2. Enter a recognizable name such as `WireDraft` and select **Accounts in this organizational directory only**. WireDraft intentionally rejects tokens from any other tenant.
+3. Open **Authentication > Add a platform > Web** and add the exact callback URL from the previous section. Do not configure the SPA platform, implicit grant, or a logout URL for this integration.
+4. Copy the **Directory (tenant) ID** and **Application (client) ID** from **Overview**.
+5. Open **Certificates & secrets > Client secrets > New client secret**, choose the shortest practical expiry, and securely copy the secret value while it is visible. WireDraft reads it from a file and never accepts it through the browser.
+6. Leave API permissions at the default OpenID Connect sign-in permissions. WireDraft requests `openid profile email`; it does not request Microsoft Graph or `offline_access`.
+7. Open the matching **Enterprise application > Properties**, set **Assignment required?** to **Yes**, and assign only the intended users or groups under **Users and groups**. Group assignment availability depends on the Entra edition. Without assignment enforcement, Entra generally permits every tenant user to reach the application login.
+8. Apply your normal Entra MFA and Conditional Access policy. Entra-backed WireDraft accounts do not enroll in WireDraft's local TOTP because Entra owns their primary authentication policy.
+
+Microsoft's references cover [app registration](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app), [redirect URI rules](https://learn.microsoft.com/en-us/entra/identity-platform/reply-url), [authorization code flow with PKCE](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow), and [enterprise application assignment](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/ways-users-get-assigned-to-applications).
+
+### 3. Mount the client secret
+
+Create a private secret file in the deployment's ignored `secrets/` directory and restrict access to the deployment operator and container user. Do not put the secret in `.env`, a Compose file, an image layer, or Git.
+
+```sh
+mkdir -p secrets
+printf '%s' 'paste-the-client-secret-value-here' > secrets/wiredraft_entra_client_secret
+sudo chown 10001:10001 secrets/wiredraft_entra_client_secret
+sudo chmod 0400 secrets/wiredraft_entra_client_secret
+```
+
+The numeric ownership matches the non-root user in the published image. On Docker Desktop or a rootless engine, use the platform's equivalent secret-file permissions and confirm that container UID `10001` can read the bind mount.
+
+Create `docker-compose.entra.yml` next to the supplied GHCR Compose file:
+
+```yaml
+services:
+  wiredraft:
+    volumes:
+      - type: bind
+        source: ./secrets/wiredraft_entra_client_secret
+        target: /run/secrets/wiredraft_entra_client_secret
+        read_only: true
+```
+
+The supplied `.gitignore` and `.dockerignore` keep `secrets/` out of version control and image build contexts. WireDraft rejects an empty secret or a secret file larger than 16 KiB and loads the value only at startup.
+
+### 4. Enable the provider
+
+Set these values in `.env`:
+
+```dotenv
+WIREDRAFT_COOKIE_SECURE=true
+WIREDRAFT_ENTRA_ENABLED=true
+WIREDRAFT_ENTRA_TENANT_ID=00000000-0000-0000-0000-000000000000
+WIREDRAFT_ENTRA_CLIENT_ID=11111111-1111-1111-1111-111111111111
+WIREDRAFT_ENTRA_CLIENT_SECRET_FILE=/run/secrets/wiredraft_entra_client_secret
+WIREDRAFT_ENTRA_REDIRECT_URL=https://wiredraft.internal.example.com/api/v1/auth/entra/callback
+WIREDRAFT_ENTRA_REQUIRE_ACCT_CLAIM=true
+```
+
+`WIREDRAFT_ENTRA_REQUIRE_ACCT_CLAIM=true` requires the optional `acct` claim. In the app registration, open **Token configuration → Add optional claim → ID → acct** before enabling it; otherwise every sign-in is rejected. With the claim required, guest accounts (`acct=1`) can never bind a pre-approved login even if their home tenant controls a matching `preferred_username`.
+
+Start or recreate the stack with both Compose files:
+
+```sh
+docker compose -f docker-compose.ghcr.yml -f docker-compose.entra.yml pull
+docker compose -f docker-compose.ghcr.yml -f docker-compose.entra.yml up -d
+docker compose -f docker-compose.ghcr.yml -f docker-compose.entra.yml logs wiredraft
+```
+
+Entra configuration errors fail startup instead of silently weakening login. OIDC discovery is lazy, so a temporary Entra outage does not prevent the server or local administrator login from starting.
+
+### 5. Pre-provision and link users
+
+1. Sign in as the local WireDraft administrator.
+2. Open **Identity Control > Administration > Add user**, select **Microsoft Entra** as the sign-in method, enter the WireDraft display username and the user's exact current Entra sign-in name (UPN), then choose the WireDraft application role and grant one, several, or all organizations. Entra accounts have no local password.
+3. Ask the user to select **Sign in with Microsoft**. On the first successful login, WireDraft matches the verified UPN once and binds the account to the immutable Entra tenant/object pair (`tid` + `oid`).
+4. After linking, UPN or display-name changes do not change authorization. If Microsoft deletes and recreates the identity, verify the replacement account and use **Manage > Reset Microsoft link** before the next login.
+
+Assignment in Entra and pre-provisioning in WireDraft are both required. An authenticated tenant user who has no matching enabled WireDraft account is rejected. A WireDraft administrator may promote either a local or Entra account to application administrator; this is independent of Entra directory roles. Keep the protected local bootstrap administrator available for recovery.
+
+WireDraft validates the token issuer, signature, audience, expiry, nonce, tenant, and authorization flow state. It stores only the stable `tid`/`oid` binding and display metadata—never ID tokens, access tokens, refresh tokens, or Microsoft passwords. The local logout ends the WireDraft session but does not globally sign the browser out of Microsoft 365.
+
+### Operations and troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| Microsoft button is absent | `WIREDRAFT_ENTRA_ENABLED=true`, valid startup configuration, and the current container version |
+| Startup rejects the configuration | All five Entra variables are set, the callback is absolute HTTPS, `WIREDRAFT_COOKIE_SECURE=true`, and the secret file is mounted and readable by UID `10001` |
+| `AADSTS50011` | The registered Web redirect URI and `WIREDRAFT_ENTRA_REDIRECT_URL` differ; compare every character |
+| Microsoft succeeds but the browser cannot return | The client cannot resolve, route to, or trust TLS for the private WireDraft name |
+| WireDraft rejects the authenticated user | Wrong tenant, no enabled pre-provisioned account, UPN mismatch on first login, or a stale identity binding after account recreation |
+| Provider temporarily unavailable | Verify container DNS, time synchronization, CA trust, and outbound TCP 443 to Microsoft's discovered endpoints |
+
+To rotate the secret, create a second Entra client secret, replace the mounted file securely, recreate the WireDraft container, verify login, and then delete the old secret. To disable Entra login, set `WIREDRAFT_ENTRA_ENABLED=false` and recreate the container. Existing bindings remain stored for a later re-enable, and local authentication remains available.
+
+### Production checklist
+
+Session cookies have the `Secure` attribute unless `WIREDRAFT_COOKIE_SECURE=false` (or its legacy fallback alias) is set. The default is `true`; plain-HTTP deployments other than `localhost` must opt out explicitly, otherwise browsers do not return the session cookie and sign-in fails. Entra-enabled deployments reject the opt-out at startup. WireDraft does not infer this setting from forwarded headers. `HttpOnly` and `SameSite=Strict` are always set on session cookies.
+
+Login and Guest throttling are keyed on the client address. Behind a reverse proxy, every client otherwise shares the proxy's address, so set `WIREDRAFT_TRUSTED_PROXIES` to the proxy's address or network. WireDraft then uses the right-most `X-Forwarded-For` entry that is not a trusted proxy; the header is ignored for any other peer. Second-factor (TOTP and recovery code) failures are also counted per account: every 5 failures lock that account's second factor for 1 minute, doubling up to 1 hour, and are logged as `second_factor_failed` / `second_factor_locked` events.
+
+By default the key that encrypts TOTP secrets is stored in the `auth_state` row next to them. Set `WIREDRAFT_AUTH_SECRET_KEY_FILE` to a mounted file containing a 32-byte key (for example `openssl rand -base64 32`) to keep it out of the database: on startup WireDraft re-encrypts every TOTP secret with that key and replaces the stored key with random filler. From then on the key file is required to start. To rotate, mount the new key as `WIREDRAFT_AUTH_SECRET_KEY_FILE`, the old one as `WIREDRAFT_AUTH_PREVIOUS_SECRET_KEY_FILE`, restart once, and then remove the previous key.
+
+- Use long, unique values for the database and administrator passwords.
+- Disable guest access unless it is intentionally required.
+- Terminate TLS at a trusted reverse proxy, keep `WIREDRAFT_COOKIE_SECURE=true`, and set `WIREDRAFT_TRUSTED_PROXIES` to the proxy's address.
+- Set `WIREDRAFT_AUTH_SECRET_KEY_FILE` and back up the key separately from the database.
+- Keep PostgreSQL on a private network and back up `data/postgres`.
+- Back up `data/media` with PostgreSQL; do not publish or serve the media directory directly from a reverse proxy.
+- Pin the WireDraft image to a release tag or digest; WireDraft applies its embedded database migrations during startup.
+- Preserve the `auth_state` row with the rest of the database; unless `WIREDRAFT_AUTH_SECRET_KEY_FILE` is set, its encryption key is required to read stored TOTP secrets.
+- Run one WireDraft application replica. Authentication state is currently maintained as one PostgreSQL aggregate and is not yet safe for concurrent writers across multiple replicas.
+- Collect and retain the application's JSON logs for access-change investigations; see [access audit events](SECURITY.md#access-audit-events) for fields and retention limitations.
+
+## HTTP API
+
+The versioned API is rooted at `/api/v1`. Paths in the first table are relative to that prefix.
+
+| Area | Routes |
+| --- | --- |
+| Health and authentication | `/health`, `/auth/*` |
+| Administration | `/admin/users`, `/admin/users/{userId}`, `/admin/organizations`, `/admin/organizations/{organizationId}` |
+| Maps | `/topologies`, `/topologies/{id}` |
+| Public read-only access | `/shared/{id}/{token}` |
+
+All resources below are relative to `/api/v1/topologies/{id}`; for example, rack creation uses `POST /api/v1/topologies/{id}/racks`.
+
+| Area | Resource paths |
+| --- | --- |
+| Inventory | `/racks`, `/racks/{rackId}`, `/devices`, `/devices/{deviceId}`, `/ports/{portId}` |
+| Protected photos | `/photos`, `/photos/{photoId}` |
+| Cables | `/links`, `/links/bulk`, `/links/{linkId}`, `/links/{linkId}/configuration`, `/links/{linkId}/media`, `/links/{linkId}/direction`, `/links/{linkId}/endpoint` |
+| Logical groups | `/link-groups`, `/link-groups/{groupId}`, `/switch-systems`, `/switch-systems/{systemId}`, `/firewall-clusters`, `/firewall-clusters/{clusterId}` |
+| Network intent | `/vlans`, `/vlans/{vlanId}`, `/analysis`, `/trace` |
+| Live updates and comments | `/events`, `/comments`, `/comments/{threadId}`, `/comments/{threadId}/replies` |
+| Documentation and shares | `/documentation-links`, `/documentation-links/{linkId}`, `/shares`, `/shares/{shareId}` |
+
+These are resource paths, not a promise that every resource supports every HTTP method. See the [route registrations](internal/handler/server.go) for supported methods and the [browser API client](web/static/js/api.js) for request bodies. The persisted domain schema is defined in [internal/model](internal/model).
+
+Topology mutations support optimistic concurrency with `If-Match: "rev-N"`. Error responses use `{ "error": "message", "code": 400 }`.
+
+## Development
+
+### Toolchain
+
+- Go 1.27.1 or later
+- PostgreSQL 14 or later
+- Node.js 24 for tests and release-time minification only
+- Docker, PowerShell 7, and the quality tools listed in [CONTRIBUTING.md](CONTRIBUTING.md) for the full CI mirror
+
+Start PostgreSQL from Compose and run the application natively:
+
+```sh
+docker compose up -d postgres
+```
+
+```powershell
+$env:PGHOST = "127.0.0.1"
+$env:PGPORT = "5432"
+$env:PGDATABASE = "wiredraft"
+$env:PGUSER = "wiredraft"
+$env:PGPASSWORD = "the-password-from-.env"
+$env:WIREDRAFT_ADMIN_PASSWORD = "a-long-local-admin-password"
+$env:WIREDRAFT_COOKIE_SECURE = "false"
+go run ./cmd/server
+
+```
+
+The native server reads process environment variables; it does not load `.env` automatically. Set the remaining options as needed in the same shell. Browser assets are embedded at build time, so restart `go run` or rebuild the binary after editing files under `web/static`.
+
+Build a static binary:
+
+```sh
+make build
+./wiredraft
+```
+
+Without `make`:
+
+```sh
+go build -trimpath -ldflags="-s -w" -o wiredraft ./cmd/server
+```
+
+For the static build equivalent in PowerShell, set `$env:CGO_ENABLED = "0"` and run `go build -trimpath -ldflags="-s -w" -o wiredraft.exe ./cmd/server`.
+
+### Tests and quality gates
+
+```sh
+go test ./...
+go test -race ./...
+npm ci
+npm run test:unit
+npm run test:coverage
+npx playwright install chromium firefox webkit
+npm run test:e2e
+```
+
+Browser tests need a reachable PostgreSQL test database. The Playwright server helper reads `.env` and starts the app at `http://127.0.0.1:41817`; when running on the host with the supplied `.env`, override `PGHOST=127.0.0.1` in your shell and use the matching database credentials. Use a dedicated test database because browser tests create and modify persisted maps. On Linux, install browser system dependencies with `npx playwright install --with-deps chromium firefox webkit`.
+
+To target an already running test server, set `PLAYWRIGHT_BASE_URL` to its URL; this skips automatic server startup. Additional checks are `npm run test:a11y`, `npm run test:visual`, and `npm run test:edge` (requires installed Microsoft Edge). Use `npm run test:visual:update` only when deliberately regenerating baselines for review. Playwright writes diagnostics under `test-results/` and its HTML report under `playwright-report/`.
+
+The Core CI workflow enforces at least 70% Go statement coverage and 80% frontend line, function, and branch coverage. Run the complete locally reproducible suite from PowerShell 7 before review:
+
+```powershell
+pwsh -NoProfile -File scripts/ci-local.ps1
+```
+
+For quicker iteration, `-SkipBrowsers` and `-SkipContainers` are available. The full command also checks formatting, lint, race/fuzz coverage, dependencies, secrets, Docker, SBOM output, mutation behavior, supported browsers, accessibility, and visual regression. GitHub additionally runs CodeQL, dependency review, OpenSSF Scorecard, and build/SBOM attestations.
+
+### Project layout
+
+```text
+cmd/server/          Application entry point and health probe
+internal/auth/       Password, TOTP, recovery, sessions, and user access
+internal/config/     Environment and flag parsing
+internal/handler/    HTTP API, middleware, static delivery, and authorization
+internal/media/      Private photo storage and image validation
+internal/model/      Topology domain, validation, STP, tracing, and analysis
+internal/store/      PostgreSQL persistence, embedded migrations, and revision transactions
+internal/sse/        Per-topology event broker
+web/static/          Embedded browser application
+web/*_test.mjs       Frontend unit and contract tests
+e2e/                 Playwright, accessibility, and visual tests
+scripts/             CI mirror, minification, and mutation helpers
+```
+
+## Documentation
+
+- [Hardware faceplates](FACEPLATES.md): evidence and fidelity rules, inventory compatibility, and geometry audits (`npm run audit:faceplates`).
+- [Contributing](CONTRIBUTING.md): development conventions and the complete local CI workflow.
+- [Security](SECURITY.md): private vulnerability reporting, supported deployment practices, and access audit events.
+- [Example configuration](.env.example): deployment environment variables with placeholder credentials.
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Keep changes focused, add tests for behavioral changes, and call out persistence or API compatibility effects.
+
+Security issues should be reported privately as described in [SECURITY.md](SECURITY.md).
+
+## License
+
+WireDraft is available under the [MIT License](LICENSE).

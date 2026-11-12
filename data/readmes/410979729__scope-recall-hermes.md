@@ -1,6 +1,6 @@
 # Scope Recall
 
-This checkout is `4.0.3`. Local, source-backed memory shared by Claude Code, Codex, Hermes, WorkBuddy and DeepSeek Harness.
+This checkout is `4.0.4.dev0`, a development version; the newest release is `4.0.3`. Local, source-backed memory shared by Claude Code, Codex, Hermes, WorkBuddy and DeepSeek Harness.
 SQLite keeps the original conversations; model-derived facts and vectors remain traceable and rebuildable.
 
 ## Quick start
@@ -39,9 +39,10 @@ their cutoff reason. Unverified items never ship. The thresholds and diagnostic 
 in [the recall configuration](docs/configuration.md#vector_threshold).
 
 Current and automatic recall preserve the ordinary complete items and can
-append a neutral list when remaining matching records span at least three
-sessions. Each session contributes its highest-ranked remaining visible
-record. The list does not assert that records describe the same event or
+append a neutral list. Automatic background injection allows one remaining
+matching non-assistant source; explicit current and auto lookups require
+remaining matches in at least three sessions. Each session contributes its
+highest-ranked remaining visible record. The list does not assert that records describe the same event or
 count how often something occurred. Every row labels its excerpt, full text
 length, source time and versioned reference; use inspect to expand the source.
 At most twelve rows share at most 1024 budget units and one quarter of the

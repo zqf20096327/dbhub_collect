@@ -23,6 +23,8 @@
 ![](./screenshots/3.png)
 ![](./screenshots/4.png)
 ![](./screenshots/5.png)
+![](./screenshots/6.png)
+![](./screenshots/7.png)
 
 ## Features
 
@@ -37,8 +39,20 @@
   colored tags (with a Tag Manager and bulk tagging).
 - **Views, filters & sort** — Covers, Table, or Overview views with an adjustable card size;
   filter by platform, format, storefront, tag, ownership, play status, game type, source,
-  steelbook, collection, or series (each with an Exclude option), and sort by name or release
-  date. Pages remember your search, filters, and sort.
+  steelbook, collection, or series (each with an Exclude option), or, with the Screensaver lab
+  on, whether a game is shown in the screensaver; sort by name or release date. Pages remember
+  your search, filters, and sort.
+- **Game Shelf** (Labs) — your physical games as cases on a shelf, one per platform you own
+  each on, drawn at their real relative sizes in each platform's spine colours and logo, with
+  the usual search, filters, and sort, plus a scale slider. Cases come from a curated list of
+  standard retail cases (cartridge-only systems have none); turn a platform's cases on or
+  off in **Settings → Game Cases**, where each preview opens large.
+- **Screensaver** (Labs) — a floating button that shows your game covers full screen, one
+  after another, with the VideoGameTrackarr badge in the corner; swipe to browse, tap a cover
+  to open the game. Set the time per cover in **Settings → Screensaver**, and hide a game from
+  its page, or many at once from the Games list. Handy on a wall-mounted tablet.
+- **Labs** — opt-in features that are still taking shape, off by default and switched on in
+  **Settings → Labs**.
 - **Hardware** — devices and accessories from a curated Sony, Microsoft, Nintendo, and Sega
   catalog, with product photos.
 - **What's New** — after an upgrade, the release notes of every version you haven't seen
@@ -60,14 +74,15 @@
   worth filling on the Overview; breakdowns by play status, platform, genre, and hardware on
   Insights; plus release calendars, duplicate detection, missing addons, orphaned accessories,
   and side-by-side game comparison.
-- **Share links** — unlisted, read-only links to your Games or Hardware collection.
+- **Share links** — unlisted, read-only links to your Games, Game Shelf, or Hardware
+  collection.
 - **Jobs** — scheduled catalog resyncs, Steam import, sale refreshes, and event syncs, with live
-  progress.
+  progress, a log of each run, and catch-up of runs missed while the app was down.
 - **Backup & restore** — one JSON backup of your library, hardware, target prices and settings,
   or a `.zip` that also carries your pick of ROMs and saves, BIOS files and uploaded images,
   with an automatic safety snapshot before every restore.
-- **PWA** — installable, works offline for anything you've already viewed, and syncs offline
-  edits when you reconnect.
+- **PWA** — installable (see [Installing the app](#installing-the-app)), works offline for
+  anything you've already viewed, and syncs offline edits when you reconnect.
 - **Design** — light, dark, and high-contrast modes with your choice of accent color (Material 3
   color schemes), a sidebar that becomes a drawer on phones, and virtualized lists for large
   collections.
@@ -125,6 +140,14 @@ Running from source instead? `git pull`, reinstall dependencies if they changed,
 `alembic upgrade head` from `backend/` before starting the app. Any breaking change is called
 out in that release's notes.
 
+### Installing the app
+
+VideoGameTrackarr can be installed like an app, with its own window and home-screen or desktop icon.
+**Settings → General → App** has an **Install** button where the browser offers one (Chrome, Edge, Android),
+and says how otherwise (on an iPhone or iPad: Share → Add to Home Screen). Browsers only install
+apps opened over **HTTPS** (or on `localhost`): at a plain `http://` address such as
+`http://192.168.1.10:8000`, use a reverse proxy with a certificate or a Cloudflare tunnel.
+
 ## Configuration
 
 Settings live in `.env` (see [.env.example](.env.example) for every option). Only IGDB and a JWT
@@ -152,7 +175,8 @@ Optional integrations — add a key to `.env`, then run `docker compose up -d` (
 Other options: `ROM_MAX_UPLOAD_MB` (default `2048`) caps ROM uploads — raise your reverse
 proxy's upload limit to match. Behind a reverse proxy, set `FORWARDED_ALLOW_IPS` to the proxy's
 address (or its Docker network, such as `172.16.0.0/12`) so login rate limits count each visitor
-rather than the proxy. `DATABASE_URL` (SQLite by default), `REDIS_URL`, and
+rather than the proxy. Set `TZ` (such as `Europe/Lisbon`) so job schedules run in your
+timezone; Docker containers otherwise use UTC. `DATABASE_URL` (SQLite by default), `REDIS_URL`, and
 `CORS_ORIGINS` are optional.
 
 ## Development

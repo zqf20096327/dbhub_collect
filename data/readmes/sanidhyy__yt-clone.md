@@ -353,7 +353,7 @@ Useful resources and dependencies that are used in NewTube.
 - [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.13
 - [@t3-oss/env-nextjs](https://www.npmjs.com/package/@t3-oss/env-nextjs): ^0.13.11
 - [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
-- [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query): ^5.104.1
+- [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query): ^5.107.1
 - [@trpc/client](https://www.npmjs.com/package/@trpc/client): ^11.18.0
 - [@trpc/react-query](https://www.npmjs.com/package/@trpc/react-query): ^11.18.0
 - [@trpc/server](https://www.npmjs.com/package/@trpc/server): ^11.18.0
@@ -367,9 +367,9 @@ Useful resources and dependencies that are used in NewTube.
 - [client-only](https://www.npmjs.com/package/client-only): ^0.0.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [cn](https://www.npmjs.com/package/cn): ^0.5.1
-- [concurrently](https://www.npmjs.com/package/concurrently): ^10.0.5
+- [concurrently](https://www.npmjs.com/package/concurrently): ^10.0.7
 - [date-fns](https://www.npmjs.com/package/date-fns): ^4.4.0
-- [dotenv](https://www.npmjs.com/package/dotenv): ^17.4.2
+- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.9
 - [drizzle-kit](https://www.npmjs.com/package/drizzle-kit): ^0.31.10
 - [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.4
 - [drizzle-zod](https://www.npmjs.com/package/drizzle-zod): ^0.8.3
@@ -380,7 +380,7 @@ Useful resources and dependencies that are used in NewTube.
 - [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^5.5.6
 - [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss): ^4.4.0
 - [jiti](https://www.npmjs.com/package/jiti): ^2.7.0
-- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.66.0
+- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.70.0
 - [next](https://www.npmjs.com/package/next): ^16.4.1
 - [openai](https://www.npmjs.com/package/openai): ^7.27.0
 - [player.style](https://www.npmjs.com/package/player.style): ^0.3.4
@@ -402,7 +402,7 @@ Useful resources and dependencies that are used in NewTube.
 - [typescript](https://www.npmjs.com/package/typescript): ^6
 - [uploadthing](https://www.npmjs.com/package/uploadthing): ^7.7.4
 - [vaul](https://www.npmjs.com/package/vaul): ^1.1.2
-- [zod](https://www.npmjs.com/package/zod): ^4.6.6
+- [zod](https://www.npmjs.com/package/zod): ^4.6.7
 
 <!--- DEPENDENCIES_END --->
 

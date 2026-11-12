@@ -141,11 +141,11 @@ dsh plugin add dsh-plugin-lookatstudy
 
 ## 技术上
 
-Electron 44,React 19。数据库用 sql.js,就是把 SQLite 编译成 WASM,没有任何要编译的原生模块,Windows 上装依赖不会翻车。渲染进程碰不到数据库、文件系统和 key,所有跨进程调用走一套类型化的 IPC 桥。132 个确定性测试套件加一个无头真 GUI 测试看着它,`npm run verify:core` 一条命令全跑。
+Electron 44,React 19。数据库用 sql.js,就是把 SQLite 编译成 WASM,没有任何要编译的原生模块,Windows 上装依赖不会翻车。渲染进程碰不到数据库、文件系统和 key,所有跨进程调用走一套类型化的 IPC 桥。133 个确定性测试套件加一个无头真 GUI 测试看着它,`npm run verify:core` 一条命令全跑。
 
 ## 状态
 
-v0.39.1。导入、跟导师学、复习、考试、朗读、伴学这条主干完整,复习已经换成和导师真对话,我自己每天在用。完整历史看 [CHANGELOG.md](CHANGELOG.md)(英文)。
+v0.43.0。导入、跟导师学、复习、考试、朗读、伴学这条主干完整,复习已经换成和导师真对话,我自己每天在用。完整历史看 [CHANGELOG.md](CHANGELOG.md)(英文)。
 
 ## 许可证
 

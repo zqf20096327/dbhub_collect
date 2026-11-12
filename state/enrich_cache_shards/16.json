@@ -2,9 +2,9 @@
  "dolthub/dolt": {
   "commit_7d": 125,
   "commit_90d": 1115,
-  "rel_ver": "v2.7.2",
-  "rel_pub": "2026-11-05",
-  "rel_days": 5,
+  "rel_ver": "v2.7.3",
+  "rel_pub": "2026-11-11",
+  "rel_days": 0,
   "rel_n90": 19,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 144,
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "lang": {
    "Go": 80,
    "Shell": 19,
@@ -24,10 +24,15 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v2.7.3",
+    "d": "2026-11-11",
+    "n": "- **Port of #12184** (first commit, squashed). A write session's owner now holds its working set, so materializing publishes to the owner. `detach` / `carryOverPending` are gone: a branch state can't be dropped with open writers (#12400). `IsWritingDatabase` counts pending edits, which #12376's restore check needs.\nThe first commit is #12410, which the stricter drop check needs. Doltgres's regression suite is clean against this with doltgresql#3799 and go-mysql-server#4136.\nRelease note: `dolt --use-db <db>"
+   },
    {
     "t": "v2.7.2",
     "d": "2026-11-05",
@@ -72,17 +77,13 @@
     "t": "v2.4.2",
     "d": "2026-10-06",
     "n": "The new \"Storage locking\" section documents the lock's path (`<database dir>/.dolt/noms/LOCK`), that it goes through `github.com/dolthub/file-locks` (`flock(2)` on unix, `LockFileEx` on Windows), and that it is advisory. It covers the lifetime (`newJournalLock` acquires, `NomsBlockStore.Close` releases; there is no maximum hold time), the 100 ms `lockFileTimeout` and what happens after it (a silent read-only open by default, `ErrDatabaseLocked` with `fail_on_journal_lock_timeout`, a single non-blocking atte"
-   },
-   {
-    "t": "v2.4.1",
-    "d": "2026-10-02",
-    "n": "* [11903](https://github.com/dolthub/dolt/issues/11903): String literals drop the backslash in \\% and \\_, so LIKE '%\\_%' matches every row (differs from MySQL)\n- Add `checkNonlocalTableName` for `Database.CreateTable` and `Database.CreateIndexedTable` to allow a table name where the nonlocal rule resolves it locally.\nAdds CSV import regression coverage for update triggers alongside https://github.com/dolthub/go-mysql-server/pull/3947 and https://github.com/dolthub/doltgresql/pull/3469.\nAdds shared engine co"
    }
   ],
   "etag": {
-   "release": "W/\"2d0fe9e463e191721a4379d88cd390867d0a1a9a09702c9c7d587e142d0a6d15\""
+   "release": "W/\"e7cbd1b46bc77e2105a1a8a4a2253c43c1eea642eb5cb76b654136d1c1977acb\""
   },
   "rel_dates": [
+   "2026-11-11",
    "2026-11-05",
    "2026-11-05",
    "2026-11-04",
@@ -100,8 +101,7 @@
    "2026-09-02",
    "2026-08-19",
    "2026-08-17",
-   "2026-08-13",
-   "2026-08-12"
+   "2026-08-13"
   ]
  },
  "go-sql-driver/mysql": {
@@ -109,7 +109,7 @@
   "commit_90d": 31,
   "rel_ver": "v1.10.1",
   "rel_pub": "2026-09-02",
-  "rel_days": 69,
+  "rel_days": 70,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -118,14 +118,14 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 158,
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "lang": {
    "Go": 100
   },
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261027"
   },
   "rel_notes": [
@@ -146,18 +146,18 @@
    }
   ],
   "etag": {
-   "release": "W/\"8fb72d8f325096204e3a250dee35e795b419d749b9209536aacfe6b583673137\""
+   "release": "W/\"f8658ddebbdca9953db83452067928cd9d33d7aea57f58198926175be07246ce\""
   },
   "rel_dates": [
    "2026-09-02"
   ]
  },
  "jaredwray/keyv": {
-  "commit_7d": 57,
+  "commit_7d": 2,
   "commit_90d": 172,
   "rel_ver": "v6.1.0",
   "rel_pub": "2026-10-06",
-  "rel_days": 35,
+  "rel_days": 36,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -166,7 +166,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 81,
-  "enriched_at": "20261107",
+  "enriched_at": "20261111",
   "lang": {
    "HTML": 64,
    "TypeScript": 34,
@@ -176,8 +176,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261107",
-   "release": "20261107",
+   "commit": "20261111",
+   "release": "20261111",
    "security": "20261027"
   },
   "rel_notes": [
@@ -198,7 +198,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"edf336608aba72667b036e336eb91fd8766ee0a17b6bc7f877eff91568a563cf\""
+   "release": "W/\"431c86bac0ec9866e6900bd9c85da24718b681afda0796c27c4a29ce0049b37d\""
   },
   "rel_dates": [
    "2026-10-06"
@@ -209,7 +209,7 @@
   "commit_90d": 28,
   "rel_ver": "5.9.1",
   "rel_pub": "2026-11-02",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -251,11 +251,11 @@
   ]
  },
  "oracle/bpftune": {
-  "commit_90d": 8,
+  "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "0.4-2",
   "rel_pub": "2025-12-15",
-  "rel_days": 330,
+  "rel_days": 331,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -279,7 +279,7 @@
   "commit_7d": 20,
   "rel_ver": "v7.5.8",
   "rel_pub": "2026-09-17",
-  "rel_days": 54,
+  "rel_days": 55,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -294,10 +294,10 @@
    "Makefile": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "dim_ts": {
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261027"
   },
   "rel_notes": [
@@ -318,7 +318,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"aa22962e4e7d5a8b7b61df71117bba24f7cdf53bd146c78aa7290110c54c638a\""
+   "release": "W/\"1c2ef2435a658b12b9e891fe94fbc820bfa70c8db71c7f139919e028e068c5bc\""
   },
   "rel_dates": [
    "2026-09-17",
@@ -330,7 +330,7 @@
   "commit_7d": 13,
   "rel_ver": "v1.3.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 7,
+  "rel_days": 8,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -376,7 +376,7 @@
   "commit_7d": 0,
   "rel_ver": "21.0.0",
   "rel_pub": "2026-08-17",
-  "rel_days": 85,
+  "rel_days": 86,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -411,7 +411,7 @@
   "commit_7d": 0,
   "rel_ver": "2.5",
   "rel_pub": "2024-06-12",
-  "rel_days": 881,
+  "rel_days": 882,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -463,7 +463,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2022-10-24",
-  "rel_days": 1478,
+  "rel_days": 1479,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -522,7 +522,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.4",
   "rel_pub": "2021-02-22",
-  "rel_days": 2087,
+  "rel_days": 2088,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -555,12 +555,12 @@
   "enriched_at": "20260927"
  },
  "will-be-done/will-be-done": {
-  "commit_90d": 190,
-  "commit_7d": 33,
-  "rel_ver": "v0.12.0",
-  "rel_pub": "2026-10-23",
-  "rel_days": 18,
-  "rel_n90": 2,
+  "commit_90d": 366,
+  "commit_7d": 154,
+  "rel_ver": "v0.15.0",
+  "rel_pub": "2026-11-10",
+  "rel_days": 1,
+  "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -575,11 +575,54 @@
    "CSS": 1,
    "Shell": 1
   },
-  "enriched_at": "20261028",
+  "enriched_at": "20261111",
   "dim_ts": {
-   "commit": "20261028",
-   "release": "20261028"
-  }
+   "commit": "20261111",
+   "release": "20261111"
+  },
+  "etag": {
+   "release": "W/\"ef64ae53a018a8429d3dafcfa955391cf0338c8dc2e8e29dc4fccbe1a2463d33\""
+  },
+  "rel_dates": [
+   "2026-11-10",
+   "2026-11-07",
+   "2026-11-06",
+   "2026-11-03",
+   "2026-10-23",
+   "2026-08-20"
+  ],
+  "rel_notes": [
+   {
+    "t": "v0.15.0",
+    "d": "2026-11-10",
+    "n": "See your meetings next to your tasks with read-only CalDAV and iCal calendars, scroll the timeline through any week, and manage a space from full settings pages.\n\n## What's new\n\n### Calendar events\n\nConnect your calendars to see their events alongside your tasks. Open **Space settings → Calendars** and add either:\n\n- a **CalDAV account**: the server address, your username, and an app password. iCloud, Fastmail, and Nextcloud work this way. Untick the calendars you don't want to see.\n- a **calendar link**:"
+   },
+   {
+    "t": "v0.14.0",
+    "d": "2026-11-07",
+    "n": "Plan visually with mindmaps that hold your real tasks, keep notes next to tasks, select many items at once, and undo any change.\n\n## What's new\n\n### Mindmaps\n\n<img width=\"2000\" height=\"1346\" alt=\"Mindmap with topics branching from a central topic, linked tasks from several projects, and the task details panel\" src=\"https://raw.githubusercontent.com/will-be-done/will-be-done/e1e577a3478556f4caa47e232b7dd26c60ccafbc/apps/landing/src/assets/mindmap.png\" />\n\nOpen **maps** in the view switcher to lay out ideas a"
+   },
+   {
+    "t": "v0.13.1",
+    "d": "2026-11-06",
+    "n": "Fixes the self-hosted Docker server failing to start on Synology NAS and other hosts with older Linux kernels.\r\n\r\n## Fixes\r\n\r\n- The Docker image now starts on hosts running Linux kernels older than 4.11, such as Synology DSM. Previously the server exited at startup with `Cannot find module '@sentry/node'`. (#152)\r\n\r\n## Everyday improvements\r\n\r\n- The Docker image is about half the size, because it now ships only the server's production dependencies.\r\n\r\n## Upgrade notes\r\n\r\n- Self-hosted installations: pull `g"
+   },
+   {
+    "t": "v0.13.0",
+    "d": "2026-11-03",
+    "n": "Plan tasks on a calendar, format task text with Markdown, and recover deleted tasks for 30 days.\r\n\r\n## What's new\r\n\r\n### Calendar and task times\r\n\r\n<img width=\"2000\" height=\"1433\" alt=\"image\" src=\"https://github.com/user-attachments/assets/36f9c414-9b22-461b-b3a0-b7aee34de028\" />\r\n\r\n- Plan in Day, Week, Month, or Plan view. Plan shows two weeks at a time.\r\n- Set optional start times and durations for tasks and recurring templates. In Day and Week views, tasks without a time stay in the all-day row.\r\n- Drag "
+   },
+   {
+    "t": "v0.12.0",
+    "d": "2026-10-23",
+    "n": "- Reworked local database preloading and improved server transaction handling."
+   },
+   {
+    "t": "v0.11.0",
+    "d": "2026-08-20",
+    "n": "SQLite remains the default. Self-hosted installations can now use Turso Cloud or the new Rust-based `tursod` service.\nThis release also adds Redis-backed sync notifications, shared Redis rate limiting, Fly.io deployment configurations, and a guarded SQLite-to-`tursod` migration workflow. API rate limits are enabled by default.\n- Existing SQLite installations need no new database configuration. Back up self-hosted data before the first v0.11.0 startup because storage migrations run when databases open.\n- The"
+   }
+  ]
  },
  "datenanfragen/data": {
   "commit_90d": 15,
@@ -606,7 +649,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.2",
   "rel_pub": "2026-04-07",
-  "rel_days": 217,
+  "rel_days": 218,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -648,7 +691,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.0.0",
   "rel_pub": "2025-12-11",
-  "rel_days": 334,
+  "rel_days": 335,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -667,7 +710,7 @@
   "commit_7d": 9,
   "rel_ver": "v1.9.1",
   "rel_pub": "2026-10-16",
-  "rel_days": 25,
+  "rel_days": 26,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -762,7 +805,7 @@
  "frkdrgt/ferox": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-08",
-  "rel_days": 63,
+  "rel_days": 64,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -780,7 +823,7 @@
  "VladimirBalun/RacingWorld": {
   "rel_ver": "0.1.0",
   "rel_pub": "2019-03-04",
-  "rel_days": 2808,
+  "rel_days": 2809,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -851,7 +894,7 @@
  "3c7/yaramanager": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2022-11-02",
-  "rel_days": 1469,
+  "rel_days": 1470,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -869,7 +912,7 @@
  "oracle/rwloadsim": {
   "rel_ver": "v3.3.0",
   "rel_pub": "2026-07-06",
-  "rel_days": 127,
+  "rel_days": 128,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -890,7 +933,7 @@
  "reliefsupports/reliefsupports.org-v1": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2017-06-04",
-  "rel_days": 3446,
+  "rel_days": 3447,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -911,7 +954,7 @@
  "kevinmartintech/sp_CRUDGen": {
   "rel_ver": "v3.02.05",
   "rel_pub": "2022-02-27",
-  "rel_days": 1717,
+  "rel_days": 1718,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -928,7 +971,7 @@
  "malaria-atlas-project/malariaAtlas": {
   "rel_ver": "V0.0.2",
   "rel_pub": "2018-09-11",
-  "rel_days": 2982,
+  "rel_days": 2983,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -945,7 +988,7 @@
  "LeChatErrant/API-template": {
   "rel_ver": "1.1.3",
   "rel_pub": "2021-12-23",
-  "rel_days": 1783,
+  "rel_days": 1784,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -965,7 +1008,7 @@
  "caiobarroso/react-native-nativescope": {
   "rel_ver": "v1.4.1",
   "rel_pub": "2026-08-12",
-  "rel_days": 90,
+  "rel_days": 91,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -986,7 +1029,7 @@
  "sabertaz/notes": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-09-15",
-  "rel_days": 56,
+  "rel_days": 57,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1052,7 +1095,7 @@
  "UznetDev/Aiogram-Bot-Template": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2024-08-15",
-  "rel_days": 817,
+  "rel_days": 818,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1083,7 +1126,7 @@
  "dsa0x/go-social-network": {
   "rel_ver": "v1",
   "rel_pub": "2022-04-14",
-  "rel_days": 1671,
+  "rel_days": 1672,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1133,7 +1176,7 @@
  "stidges/laravel-fk-migration": {
   "rel_ver": "1.1.0",
   "rel_pub": "2014-06-25",
-  "rel_days": 4521,
+  "rel_days": 4522,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1257,7 +1300,7 @@
  "MeltanoLabs/tap-postgres": {
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-07-27",
-  "rel_days": 106,
+  "rel_days": 107,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1301,7 +1344,7 @@
  "leo-aa88/PetitePass": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-13",
-  "rel_days": 58,
+  "rel_days": 59,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -1319,7 +1362,7 @@
  "internetarchive/arklet": {
   "rel_ver": "v0.2.1",
   "rel_pub": "2026-02-25",
-  "rel_days": 258,
+  "rel_days": 259,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1336,7 +1379,7 @@
  "sprklai/zenii": {
   "rel_ver": "app-v0.2.6",
   "rel_pub": "2026-06-03",
-  "rel_days": 160,
+  "rel_days": 161,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1384,7 +1427,7 @@
  "edwig/CXHibernate": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2025-04-09",
-  "rel_days": 580,
+  "rel_days": 581,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1404,7 +1447,7 @@
  "OUIsolutions/DoTheWorld": {
   "rel_ver": "11.2.1",
   "rel_pub": "2026-02-14",
-  "rel_days": 269,
+  "rel_days": 270,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1454,7 +1497,7 @@
  "bolajiwahab/pgrubic": {
   "rel_ver": "3.1.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 45,
+  "rel_days": 46,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -1473,7 +1516,7 @@
  "adorsys/encrypt-down": {
   "rel_ver": "v2.1.2",
   "rel_pub": "2020-11-07",
-  "rel_days": 2194,
+  "rel_days": 2195,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1592,7 +1635,7 @@
  "memloom/memloom": {
   "rel_ver": "v0.10.0",
   "rel_pub": "2026-08-13",
-  "rel_days": 89,
+  "rel_days": 90,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1669,7 +1712,7 @@
  "Dani3lSun/apex-plugin-extend_ig_menu": {
   "rel_ver": "v1.1.3",
   "rel_pub": "2018-01-15",
-  "rel_days": 3221,
+  "rel_days": 3222,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1772,7 +1815,7 @@
  "MatissJanis/knex-serverless-mysql": {
   "rel_ver": "1.1.0",
   "rel_pub": "2021-04-26",
-  "rel_days": 2024,
+  "rel_days": 2025,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1927,7 +1970,7 @@
  "Oreoxmt/tidbcloudy": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2023-10-08",
-  "rel_days": 1129,
+  "rel_days": 1130,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2054,7 +2097,7 @@
  "datasette/datasette-litestream": {
   "rel_ver": "0.2a0",
   "rel_pub": "2026-01-20",
-  "rel_days": 294,
+  "rel_days": 295,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2103,7 +2146,7 @@
  "EliaTolin/remote_caching": {
   "rel_ver": "v1.0.16",
   "rel_pub": "2026-01-23",
-  "rel_days": 291,
+  "rel_days": 292,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2130,7 +2173,7 @@
  "zendbit/katabase": {
   "rel_ver": "v0.1.29",
   "rel_pub": "2025-06-02",
-  "rel_days": 526,
+  "rel_days": 527,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2192,7 +2235,7 @@
  "vbgate/opencode-supertask": {
   "rel_ver": "v0.1.41",
   "rel_pub": "2026-07-19",
-  "rel_days": 114,
+  "rel_days": 115,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2235,7 +2278,7 @@
  "lodilorenzo/teatro": {
   "rel_ver": "0.19.6_beta",
   "rel_pub": "2026-09-17",
-  "rel_days": 54,
+  "rel_days": 55,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -2453,7 +2496,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.1",
   "rel_pub": "2024-01-22",
-  "rel_days": 1023,
+  "rel_days": 1024,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2479,7 +2522,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-08-13",
-  "rel_days": 454,
+  "rel_days": 455,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2975,7 +3018,7 @@
  "AwesomeDog/soma": {
   "rel_ver": "v0.10.6",
   "rel_pub": "2026-10-13",
-  "rel_days": 28,
+  "rel_days": 29,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -3001,7 +3044,7 @@
  "devcristianlopez/lemoria": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-29",
-  "rel_days": 42,
+  "rel_days": 43,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3028,7 +3071,7 @@
  "KarakoramDev/Karakoram": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-26",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,

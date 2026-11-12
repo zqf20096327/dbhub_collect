@@ -40,7 +40,7 @@ dumped 48211907 rows in 312 chunks into ./shop
 Global_read_lock held for 41ms
 ```
 
-Documentation of every command and of the masking language: <https://jongleb.github.io/quiver/>
+Documentation of every command and of the masking language: <https://jongleb.github.io/quiver/cli.html>
 (`quiver docs DIR` writes the same site from the binary at hand).
 
 ## Why quiver
@@ -249,7 +249,7 @@ You need opam, pkg-config and the zstd and OpenSSL libraries. quiver builds with
 
 ```sh
 git clone https://github.com/jongleb/quiver.git && cd quiver
-opam switch create quiver-ox 5.2.0+ox \
+opam switch create quiver-ox 5.4.0+ox \
   --repos ox=git+https://github.com/oxcaml/opam-repository.git,default
 opam install --switch=quiver-ox . --deps-only --with-test
 opam exec --switch=quiver-ox -- dune build

@@ -21,12 +21,14 @@ It indexes polyglot source files, project manifests, HTTP/gRPC/GraphQL endpoints
 ### Benchmarks: Autonomous AI Agents & MCP Graph Engines
 *(We run two distinct types of benchmarks: **1. End-to-End AI Agent Workflows** (measuring how much time, tokens, and missed dependencies a graph saves an LLM on real tasks) and **2. Deterministic Graph Engine Head-to-Head** (cold indexing speed, RAM, MCP latency, and extraction recall across `371` verified items without an LLM). Full catalog: [benchmarks/README.md](./benchmarks/README.md) and [code-explorer.app/benchmarks.html](https://code-explorer.app/benchmarks.html).)*
 
-| Metric | **`twentyhq/twenty` (`24.5k` files): `CBM` → `CodeExplorer`** ([Case Study 01](./benchmarks/01-agent-audit-ce-vs-cbm-on-twenty/README.md)) | **324-Service Monorepo (`13.8k` files): `ripgrep` → `CodeExplorer`** ([Case Study 02](./benchmarks/02-enterprise-microservices-deep-audit/README.md)) |
-| :--- | :--- | :--- |
-| **Time to Answer** | `9m 15s` → **`41s` (`13.5×` faster)** | `29m 52s` → **`3m 56s` (`7.59×` faster)** |
-| **Cumulative Input Tokens** | `1.68M` → **`80.2K` tokens (`20.9×` fewer tokens)** | `17.19M` → **`393K` tokens (`43.7×` fewer tokens)** |
-| **Agent Effort** | `28` turns (`8` `CBM` queries + `3` AST scripts + `10` file reads) → **`4` turns (`5` graph queries, `0` source reads)** | `285` turns (`142` shell commands, `114` file reads, `14` scripts) → **`23` turns (`18` graph queries, `0` file reads)** |
-| **Blast-Radius Recall** | `3.4%` (`13 / 381`) from `CBM` graph → **`99%` (`378 / 381`) directly from `graph.db`** | `82%` *(missed 9 RTB services behind env constants)* → **`100%` recall (`0` blind spots)** |
+<!-- BEGIN:md.root_agent_table -->
+| Metric | **`twentyhq/twenty` (`24.5k` files): `CBM` → `CodeExplorer`** ([Case 01](./benchmarks/01-agent-audit-ce-vs-cbm-on-twenty/README.md)) | **324-Service Multi-Repo (`13.8k` files): `ripgrep` → `CodeExplorer`** ([Case 02](./benchmarks/02-enterprise-microservices-deep-audit/README.md)) | **`OrchardCore` (`334` .NET projects): `ripgrep` → `CodeExplorer`** ([Case 05](./benchmarks/05-polyglot-architecture-and-blast-radius/README.md)) |
+| :--- | :--- | :--- | :--- |
+| **Time to Answer** | `9m 15s` → **`1m 33s` (`6.0×` faster)** | `29m 52s` → **`4m 16s` (`7.00×` faster)** | `11m 04s` → **`4m 25s` (`2.51×` faster)** |
+| **Cumulative Input Tokens** | `1.68M` → **`242K` (`7.0×` fewer)** | `17.19M` → **`686K` (`25.07×` fewer, `11.50×` cheaper)** | `16.10M` → **`3.91M` (`4.12×` fewer, `1.95×` less tool output, `2.94×` cheaper)** |
+| **Agent Effort** | `28` turns (`8` `CBM` + `3` AST scripts + `10` reads) → **`7` turns (`13` queries, `0` reads)** | `285` turns (`142` CLI, `114` reads, `14` scripts) → **`18` turns (`10` CLI, `16` reads, `0` scripts)** | `193` turns / `389` steps (`117` file reads) → **`92` turns / `184` steps (`36` file reads, `3.25×` fewer)** |
+| **Recall & Context Health** | `3.4%` (`13 / 381`) from `CBM` graph → **`100%` (`381 / 381`) from `graph.db`** | `82%` *(missed 9 RTB services, 1 compaction)* → **`100%` recall (`0` blind spots)** | `92.7%` (`307 / 331`, *24 caller errors*) → **`100%` (`331 / 331`)** |
+<!-- END:md.root_agent_table -->
 
 ### Head-to-Head vs. Other MCP Code Graphs (`immich` & `twenty`)
 *(Evaluated on `immich-app/immich` (`3,205` files, `461k` LOC) and `twentyhq/twenty` (`24,527` files, `2.49M` LOC) against a frozen seed-42 ground-truth dataset (`371` items across `C1–C11`: `130` Group A Basic Code + `241` Group B Architecture, DB & Queues). Full reproducible reports and scripts: [Case Study 03 (`ce` vs. `codebase-memory-mcp`)](./benchmarks/03-code-explorer-vs-codebase-memory-mcp/README.md) and [Case Study 04 (`ce` vs. `graphify`)](./benchmarks/04-code-explorer-vs-graphify/README.md).)*
@@ -35,9 +37,9 @@ It indexes polyglot source files, project manifests, HTTP/gRPC/GraphQL endpoints
 | :--- | :---: | :---: | :---: |
 | **Cold Index (`immich`, `3.2k` files)** | **`17.60 s`** (`55.1 MB` DB) | `20.60 s` (`282.0 MB` DB) | `107.60 s` (`52.3 MB` dir) |
 | **Cold Index (`twenty`, `24.5k` files)** | `147.33 s` (**`784.0 MB`** DB) | **`96.90 s`** (`842.5 MB` DB) | `DNF (>45 min timeout)` |
-| **Part 1 Recall (`L1–L3`: Endpoints, HTTP, Call Graph, Inheritance)** | **`78%`** (`102 / 130`, 6W/2T/0L) | `38%` (`49 / 130`; `50%` on `immich`) | `18%` (`23 / 130`; `35%` on `immich`) |
+| **Part 1 Recall (`L1–L3`: Endpoints, HTTP, Call Graph, Inheritance)** | **`78%`** (`102 / 130`; `7W/1T` vs `CBM`, `6W/2T` vs `graphify`) | `38%` (`49 / 130`; `50%` on `immich`) | `18%` (`23 / 130`; `35%` on `immich`) |
 | **Part 2 Recall (`L4–L5`: Queues, DB Tables, Read/Write Lineage, Services)** | **`97.5%`** (`235 / 241`) | *Not modeled* | *Not modeled* |
-| **Structured Query & CI Governance** | **OpenCypher (`3.1–4.7 ms`) + 32+ CI Gates** | Cypher subset (`38–71 ms`), snapshot diff | Keyword BFS/DFS (`334 ms`), Leiden clusters |
+| **Structured Query & CI Governance** | **OpenCypher (`4.3–4.7 ms`) + 32+ CI Gates** | Cypher subset (`38–71 ms`), snapshot diff | Keyword BFS/DFS (`334 ms`), Leiden clusters |
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/vmikhailov/code-explorer/main/docs/all_services.png" alt="CodeExplorer Service Topology" width="100%" />

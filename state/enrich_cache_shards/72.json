@@ -2,8 +2,8 @@
  "coollabsio/coolify": {
   "commit_7d": 223,
   "commit_90d": 2293,
-  "rel_ver": "v4.7.3",
-  "rel_pub": "2026-11-09",
+  "rel_ver": "v4.7.5",
+  "rel_pub": "2026-11-10",
   "rel_days": 1,
   "rel_n90": 30,
   "rel_pre": false,
@@ -22,7 +22,7 @@
    "GHSA-mv4c-9x67-rrmv(CVE-2026-42200,high)"
   ],
   "contrib_n": 409,
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "lang": {
    "PHP": 81,
    "Blade": 16,
@@ -33,10 +33,20 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261107"
   },
   "rel_notes": [
+   {
+    "t": "v4.7.5",
+    "d": "2026-11-10",
+    "n": "## Fixed\n\n- Crashed the `Keys & Tokens` > `API Tokens` page with a 500 error for a token with scopes stored in an unexpected format\n- Failed connection to SFTP backup storages on an IPv6 address, and a connection error without the network reason\n  - The error now shows the network reason, for example `Connection refused` or `Connection timed out`"
+   },
+   {
+    "t": "v4.7.4",
+    "d": "2026-11-10",
+    "n": "## Fixed\n\n- Kept the records of failed database backups forever\n  - The daily database cleanup deletes failed database backups that are older than 60 days\n- Missing production runtime variables in preview deployments when the variable has no preview variable\n  - A preview gets these production runtime variables again, except when `PR deployment access` is public. The deployment log lists each variable that a preview does not get"
+   },
    {
     "t": "v4.7.3",
     "d": "2026-11-09",
@@ -76,23 +86,15 @@
     "t": "v4.5.1",
     "d": "2026-10-27",
     "n": "- Saved removed databases in the backup list (#11548) and explained dumps that stopped without an error (#11549).\n- Fixed the database image picker (#12337) and server IDs in the new resource wizard (#12327).\n- Security: blocked PostgreSQL restore scan bypasses and stopped restores on SQL errors (#12333).\n- Security: hid database URLs in API create responses without sensitive access (#12297, fixes #11190).\n- Security: scoped database backup API endpoints to the database type (#12279).\n- Kept privileges in P"
-   },
-   {
-    "t": "v4.5.0",
-    "d": "2026-10-23",
-    "n": "- Added a file browser for applications, services, and databases (#11518, fixes #6519)\n- Added an automatic backup of the Coolify database before an update (#12093)\n- Added a cache flush for Redis, KeyDB, and Dragonfly databases (#11513)\n- PostgreSQL healthchecks and backups set `PGPASSWORD` (#12224, fixes #6353)\n- Backups use the configured databases when the container environment is missing (#12212, fixes #9417)\n- Database updates apply `redis_password` and `instant_deploy`\n- Database custom configuration"
-   },
-   {
-    "t": "v4.4.7",
-    "d": "2026-10-21",
-    "n": "> [!IMPORTANT]\r\n> This release fixes multiple critical CVEs in dependencies that Coolify uses. Update immediately.\r\n\r\n> [!TIP]\r\n> Every v4 line has a security fix release. On v4.4, update from the dashboard: `Settings → Update → Check now → Update`. We recommend that everyone moves to v4.4.7, because the v4.1, v4.2, v4.3, v4.4 minior releases also include other security fixes that are not backported.\r\n>\r\n> To update to a patched version of v4.0 to v4.3, run this on your server to update to the securit"
    }
   ],
   "etag": {
-   "release": "W/\"51a5d92864f37184a27839eb32921c3773e99d9f7f7d1945b73b1d24d5e41b6f\"",
+   "release": "W/\"9856011f07b700fe40c160ff791f1e42332837875fdb14437201bae8197fe4d9\"",
    "security": "W/\"fbcf81a7a62e9e1bb05fb4418a21b0937800eb97836d278c7a80adce1822a333\""
   },
   "rel_dates": [
+   "2026-11-10",
+   "2026-11-10",
    "2026-11-09",
    "2026-11-09",
    "2026-11-09",
@@ -120,9 +122,7 @@
    "2026-09-15",
    "2026-09-10",
    "2026-09-08",
-   "2026-09-04",
-   "2026-09-03",
-   "2026-09-03"
+   "2026-09-04"
   ]
  },
  "citusdata/citus": {
@@ -130,7 +130,7 @@
   "commit_90d": 78,
   "rel_ver": "v14.3.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 18,
+  "rel_days": 19,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -139,7 +139,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 122,
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "lang": {
    "C": 57,
    "PLpgSQL": 35,
@@ -150,7 +150,7 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261027"
   },
   "rel_notes": [
@@ -171,7 +171,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"42db5d9a940404c9b585c4a196b9a6eed5a89fe3c0ce526d0578eff366f97267\""
+   "release": "W/\"a86c4344c9e1b1fbcbcb6d914c3ec4c55c3ef8e6173ec0621b0e1b8e8a8a2f3f\""
   },
   "rel_dates": [
    "2026-10-23",
@@ -183,7 +183,7 @@
   "commit_90d": 2,
   "rel_ver": "v1.3.2",
   "rel_pub": "2025-12-07",
-  "rel_days": 338,
+  "rel_days": 339,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -246,10 +246,10 @@
  "openfoodfacts/openfoodfacts-server": {
   "commit_90d": 779,
   "commit_7d": 71,
-  "rel_ver": "v2.120.0",
-  "rel_pub": "2026-11-06",
-  "rel_days": 4,
-  "rel_n90": 22,
+  "rel_ver": "v2.121.0",
+  "rel_pub": "2026-11-10",
+  "rel_days": 1,
+  "rel_n90": 23,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -264,13 +264,18 @@
    "JavaScript": 2,
    "SCSS": 1
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "dim_ts": {
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261102"
   },
   "rel_notes": [
+   {
+    "t": "v2.121.0",
+    "d": "2026-11-10",
+    "n": "* **foodture:** select representative products from the JSONL dump and 2026 scans ([#15168](https://github.com/openfoodfacts/openfoodfacts-server/issues/15168)) ([d060c67](https://github.com/openfoodfacts/openfoodfacts-server/commit/d060c67427393db47c1a93406abef90f2b15ffe0))\n* parse \"Lait : origine France\" after the ingredients list as an origin ([#15289](https://github.com/openfoodfacts/openfoodfacts-server/issues/15289)) ([91e4b9e](https://github.com/openfoodfacts/openfoodfacts-server/commit/91e4b9e247f23"
+   },
    {
     "t": "v2.120.0",
     "d": "2026-11-06",
@@ -315,17 +320,13 @@
     "t": "v2.113.0",
     "d": "2026-10-06",
     "n": "* **Nutrition:** allow “kg” for carbon footprint ([#14822](https://github.com/openfoodfacts/openfoodfacts-server/issues/14822)) ([8cfd1ad](https://github.com/openfoodfacts/openfoodfacts-server/commit/8cfd1ad1e820e0880db0a769a7da4f29bfa84210))"
-   },
-   {
-    "t": "v2.112.0",
-    "d": "2026-10-02",
-    "n": "## [2.112.0](https://github.com/openfoodfacts/openfoodfacts-server/compare/v2.111.0...v2.112.0) (2026-10-02)\n\n\n### Features\n\n* **Ingredients:** add sv phrase to ignore ([#14773](https://github.com/openfoodfacts/openfoodfacts-server/issues/14773)) ([d1cdfd4](https://github.com/openfoodfacts/openfoodfacts-server/commit/d1cdfd4f2ef41b346b47c608057b15ee99aa7928))\n\n\n### Bug Fixes\n\n* improve ingredient traces parser ([#14663](https://github.com/openfoodfacts/openfoodfacts-server/issues/14663)) ([09a5dd1](https://"
    }
   ],
   "etag": {
-   "release": "W/\"352eb0f2559249b0031b07daf9a17e147da0d4e359eb8174cfabff7619ea5d8d\""
+   "release": "W/\"e25b0170d11d50b2e6e28c96643bb24b6e59de5f0ee300eda8a25e2ae134ee7c\""
   },
   "rel_dates": [
+   "2026-11-10",
    "2026-11-06",
    "2026-11-02",
    "2026-10-30",
@@ -400,7 +401,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.0",
   "rel_pub": "2021-10-08",
-  "rel_days": 1859,
+  "rel_days": 1860,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -423,7 +424,7 @@
   "commit_7d": 0,
   "rel_ver": "2.0.0-rc.9",
   "rel_pub": "2026-06-18",
-  "rel_days": 145,
+  "rel_days": 146,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -443,7 +444,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.5.11",
   "rel_pub": "2026-10-29",
-  "rel_days": 12,
+  "rel_days": 13,
   "rel_n90": 13,
   "rel_pre": false,
   "rel_none": false,
@@ -540,7 +541,7 @@
   "commit_7d": 6,
   "rel_ver": "v0.60.1",
   "rel_pub": "2026-11-09",
-  "rel_days": 1,
+  "rel_days": 2,
   "rel_n90": 20,
   "rel_pre": false,
   "rel_none": false,
@@ -642,7 +643,7 @@
   "commit_7d": 13,
   "rel_ver": "v5.1.0",
   "rel_pub": "2026-10-28",
-  "rel_days": 13,
+  "rel_days": 14,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -683,7 +684,7 @@
   "commit_7d": 0,
   "rel_ver": "4.1.0",
   "rel_pub": "2023-04-19",
-  "rel_days": 1301,
+  "rel_days": 1302,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -738,10 +739,10 @@
  },
  "S2thend/cursor-history": {
   "commit_90d": 137,
-  "commit_7d": 7,
+  "commit_7d": 0,
   "rel_ver": "v0.18.0",
   "rel_pub": "2026-08-16",
-  "rel_days": 86,
+  "rel_days": 87,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -799,7 +800,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.1.0",
   "rel_pub": "2025-05-19",
-  "rel_days": 540,
+  "rel_days": 541,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -834,7 +835,7 @@
   },
   "enriched_at": "20261110",
   "rel_pub": "2026-10-24",
-  "rel_days": 17,
+  "rel_days": 18,
   "rel_n90": 1,
   "rel_pre": false,
   "dim_ts": {
@@ -891,7 +892,7 @@
  "FgForrest/evitaDB": {
   "rel_ver": "v2026.2.17",
   "rel_pub": "2026-09-25",
-  "rel_days": 46,
+  "rel_days": 47,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -912,7 +913,7 @@
  "nhaarman/SQLiteBuilder": {
   "rel_ver": "0.1.0",
   "rel_pub": "2015-05-17",
-  "rel_days": 4195,
+  "rel_days": 4196,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -929,7 +930,7 @@
  "oceanbase/ocp-express": {
   "rel_ver": "v4.2.2-release-20240117173031",
   "rel_pub": "2024-07-23",
-  "rel_days": 840,
+  "rel_days": 841,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -972,7 +973,7 @@
  "INotfound/Magic": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2021-01-19",
-  "rel_days": 2121,
+  "rel_days": 2122,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1008,7 +1009,7 @@
  "beiju-dev/beiju": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-09-02",
-  "rel_days": 69,
+  "rel_days": 70,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1040,7 +1041,7 @@
  "greencapk8s/greencap-k8s": {
   "rel_ver": "v0.7.9",
   "rel_pub": "2026-08-05",
-  "rel_days": 97,
+  "rel_days": 98,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -1088,7 +1089,7 @@
  "iamsauravsharma/sqlx_migrator": {
   "rel_ver": "v0.19.0",
   "rel_pub": "2026-06-02",
-  "rel_days": 161,
+  "rel_days": 162,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1134,7 +1135,7 @@
  "nellavio/nellavio-backend": {
   "rel_ver": "2.0.1",
   "rel_pub": "2026-04-12",
-  "rel_days": 212,
+  "rel_days": 213,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1154,7 +1155,7 @@
  "nickatnight/tag-youre-it-backend": {
   "rel_ver": "0.1.1",
   "rel_pub": "2023-03-11",
-  "rel_days": 1340,
+  "rel_days": 1341,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1313,7 +1314,7 @@
  "si3nloong/sqlgen": {
   "rel_ver": "v1.0.0-beta.0",
   "rel_pub": "2025-10-06",
-  "rel_days": 400,
+  "rel_days": 401,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1360,7 +1361,7 @@
  "marklogic/marklogic-docker": {
   "rel_ver": "2.3.0",
   "rel_pub": "2026-09-10",
-  "rel_days": 61,
+  "rel_days": 62,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1397,7 +1398,7 @@
  "Dani3lSun/apex-plugin-clockpicker": {
   "rel_ver": "v1.7.0",
   "rel_pub": "2016-12-22",
-  "rel_days": 3610,
+  "rel_days": 3611,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1441,7 +1442,7 @@
  "vitingr/spotify-guess": {
   "rel_ver": "alpha",
   "rel_pub": "2024-06-15",
-  "rel_days": 878,
+  "rel_days": 879,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1461,7 +1462,7 @@
  "iguntur/administratif-indonesia": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2018-03-21",
-  "rel_days": 3156,
+  "rel_days": 3157,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1494,7 +1495,7 @@
  "RhetTbull/apple-news-to-sqlite": {
   "rel_ver": "v0.5.2",
   "rel_pub": "2023-03-16",
-  "rel_days": 1335,
+  "rel_days": 1336,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1511,7 +1512,7 @@
  "jalalmostafa/SciTS": {
   "rel_ver": "v2.0-rc1",
   "rel_pub": "2024-01-29",
-  "rel_days": 1016,
+  "rel_days": 1017,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1558,7 +1559,7 @@
  "uchebnick/unch": {
   "rel_ver": "v0.4.4",
   "rel_pub": "2026-04-26",
-  "rel_days": 198,
+  "rel_days": 199,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1579,7 +1580,7 @@
  "txthinking/denolib": {
   "rel_ver": "v20221108",
   "rel_pub": "2022-11-08",
-  "rel_days": 1463,
+  "rel_days": 1464,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1609,7 +1610,7 @@
  "romzes13/WorkOrderCMS": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2018-06-08",
-  "rel_days": 3077,
+  "rel_days": 3078,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1643,7 +1644,7 @@
  "turbot/steampipe-plugin-googledirectory": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2025-10-13",
-  "rel_days": 393,
+  "rel_days": 394,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1689,7 +1690,7 @@
  "FinnPL/Forum": {
   "rel_ver": "v0.0.1-alpha",
   "rel_pub": "2023-02-25",
-  "rel_days": 1354,
+  "rel_days": 1355,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1736,7 +1737,7 @@
  "DanielFGray/pg-sourcerer": {
   "rel_ver": "v0.5.2",
   "rel_pub": "2026-02-25",
-  "rel_days": 258,
+  "rel_days": 259,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1770,7 +1771,7 @@
  "OpenGovMail/raven": {
   "rel_ver": "v0.8.0",
   "rel_pub": "2026-08-12",
-  "rel_days": 90,
+  "rel_days": 91,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1853,7 +1854,7 @@
  "Sharaal/sql-pg": {
   "rel_ver": "v10.4.1",
   "rel_pub": "2021-09-14",
-  "rel_days": 1883,
+  "rel_days": 1884,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1884,7 +1885,7 @@
  "AI3I/pyCluster": {
   "rel_ver": "v1.0.22",
   "rel_pub": "2026-09-07",
-  "rel_days": 64,
+  "rel_days": 65,
   "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
@@ -2003,7 +2004,7 @@
  "wusterbuilds/habitat-cli": {
   "rel_ver": "v0.4.7",
   "rel_pub": "2026-08-28",
-  "rel_days": 74,
+  "rel_days": 75,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2090,7 +2091,7 @@
  "windily-cloud/obsidian-sqlite3": {
   "rel_ver": "0.0.1",
   "rel_pub": "2022-09-21",
-  "rel_days": 1511,
+  "rel_days": 1512,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2737,7 +2738,7 @@
  "oleg-tkachuk/paladin": {
   "rel_ver": "sdk/go/v0.23.1",
   "rel_pub": "2026-10-03",
-  "rel_days": 38,
+  "rel_days": 39,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2837,7 +2838,7 @@
   "commit_7d": 3,
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 21,
+  "rel_days": 22,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -2914,7 +2915,7 @@
  "egggeeegg/quiz-app": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 20,
+  "rel_days": 21,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

@@ -150,6 +150,9 @@ and queries are organized inside each database.
   collections.
 - **Virtualized grid** with several results per run, messages and a cell
   viewer (with formatted JSON).
+- **Result tabs:** earlier runs keep their results in tabs with their query
+  and time; a pinned result isn't replaced by later runs. Details:
+  [docs/query-editor.md](docs/query-editor.md#result-tabs).
 - **Column filters** on a table's data (values, ranges, nulls, text). They are
   applied on the server, with each engine's own filter.
 - **Copy results** in 10 formats: with or without headers, CSV, JSON, JSON
@@ -238,6 +241,10 @@ and queries are organized inside each database.
   - "Sync" generates the script of that side's engine (`CREATE`, `ALTER`,
     `DROP`) in the right order, and warns if something may lose data or fail.
     It opens as a query or runs with confirmation.
+  - It points out columns and tables that look renamed, so they're renamed and
+    keep their data instead of being dropped and added. With the AI it also
+    finds renames whose names don't look alike, and the assistant can review
+    the script, measuring its risks with reads you approve, or summarize it.
 
   Details: [`docs/schema-compare.md`](docs/schema-compare.md).
 - **Compare data:** compares the rows of two tables or collections, on the same
@@ -253,6 +260,10 @@ and queries are organized inside each database.
     if one exceeds 200,000 rows. Read-only connections reject the script.
   - It compares on every engine. Applying the changes depends on what the
     target allows writing: Drill, for example, has no INSERT, UPDATE or DELETE.
+  - With the AI it explains what the differences have in common (a time zone,
+    a rounding, a sync running late), filters them from a request in words and
+    suggests a key for a table without one. The AI gets counts, names and
+    types, never the rows.
 
   Details: [`docs/data-compare.md`](docs/data-compare.md).
 - **Clone table:** from the explorer, a table, collection or index is cloned
@@ -369,6 +380,8 @@ editor's one and answers about the database's structure.
 - **Contexts:** notes per connection or database, and instructions for every
   conversation, that it gets in each new message. They guide it; they never
   change what it's allowed to do.
+- **Also outside the chat:** the query optimizer, schema compare and data
+  compare use the same provider for their suggestions.
 
 Details: [`docs/ai-assistant.md`](docs/ai-assistant.md).
 

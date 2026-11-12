@@ -34,6 +34,8 @@ bun run start
 
 打开 <http://localhost:3000> ，首次打开会自动抓取一轮（十几秒）。之后每 2 小时自动刷新，也可以点「立即刷新」。
 
+> **最省事的配置方式**：打开页面，点右上角「设置」，把息知 / OpenRouter / Jina 的 Key 粘进去保存即可，立即生效、无需重启。密钥只保存在服务端，页面上只显示末 4 位。（`.env` 里也能填；两边都填时，重启后以 `.env` 为准。）
+>
 > 不配置任何 Key 时：抓取、浏览、筛选、收藏都能用；AI 评分、排行榜和微信推送会自动关闭，分类退回关键词规则。
 
 ### 用 Docker 部署（服务器长期运行）
@@ -81,6 +83,7 @@ docker compose up -d --build
 - openrouter_key：OpenRouter Key（sk-or-v1- 开头），用于 AI 价值评分、分类和排行榜
 - 可选 openrouter_model：默认 parallel/decisions-fast:free，一般不用填
 - 可选 push_quiet_hours：推送静默时段（北京时间），默认 "23-8"，写 "off" 关闭
+- 可选 jina_key：Jina Reader Key，LINUX DO 来源显示异常（HTTP 429 限流）时填写，在 https://jina.ai/reader 免费申请
 
 写入方式：INSERT INTO app_settings (key, value) VALUES ('<key>', '<value>') ON CONFLICT(key) DO UPDATE SET value = excluded.value;
 
@@ -111,14 +114,15 @@ docker compose up -d --build
 | `DATA_DIR` | 数据目录（SQLite） | `./data` |
 | `REFRESH_INTERVAL_MINUTES` | 自动刷新间隔，`0` 关闭 | `120` |
 | `PUSH_QUIET_HOURS` | 推送静默时段（北京时间），`off` 关闭 | `23-8` |
+| `JINA_API_KEY` | Jina Reader Key，LINUX DO 被限流（HTTP 429）时配置，[免费申请](https://jina.ai/reader) | 空 |
 
 修改 `.env` 后重启服务生效。启动时 Key 会写入数据库 `app_settings` 表，服务端只从那里读取，**永远不会发到前端**。
 
 ### 获取微信推送 Key（息知，免费）
 
 1. 微信关注公众号「息知」，点底部「消息推送」，自动回复里就有你的专属 Key；也可以在 <https://xz.qqoq.net/> 扫码登录后，在「我的」页面查看。
-2. 填到 `.env` 的 `XIZHI_KEY=`。只填 `XZ` 开头的 Key 本身，不要填整个 `https://xizhi.qqoq.net/xxx.send` 地址。
-3. 重启后点页面右上角「测试推送」，微信收到就说明接通了。
+2. 在页面右上角「设置」里粘贴保存（可以直接粘整个推送地址，会自动提取 Key）；或者填到 `.env` 的 `XIZHI_KEY=`（只填 `XZ` 开头的 Key 本身）后重启。
+3. 点页面右上角「测试推送」，微信收到就说明接通了。
 
 ### 获取 AI Key（OpenRouter，免费模型）
 
@@ -201,7 +205,7 @@ bun run typecheck   # 类型检查
 ## 常见问题
 
 **Q：LINUX DO 显示「异常」？**
-这个来源依赖 Jina Reader 免费服务，偶尔会被限流，下一轮会自动重试。
+这个来源依赖 Jina Reader 免费服务，免费额度按出口 IP 计算。在 Muse 等托管平台上，很多应用共用一个 IP，容易被限流（悬停标签可以看到 `HTTP 429`）。抓取失败时会自动重试 2 次，仍然失败就在 [jina.ai/reader](https://jina.ai/reader) 免费申请一个 Key，填到 `JINA_API_KEY`（Muse 上写入 app_settings 的 `jina_key`）后重启。
 
 **Q：「测试推送」失败？**
 检查 `.env` 里的 `XIZHI_KEY` 是不是只填了 Key 本身，改完要重启服务。

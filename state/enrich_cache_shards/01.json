@@ -4,7 +4,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.2",
   "rel_pub": "2025-10-22",
-  "rel_days": 384,
+  "rel_days": 385,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -82,7 +82,7 @@
   "commit_7d": 10,
   "rel_ver": "v1.7.5.3555",
   "rel_pub": "2026-11-06",
-  "rel_days": 4,
+  "rel_days": 5,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -156,9 +156,9 @@
  "strelov1/freehire": {
   "commit_90d": 2690,
   "commit_7d": 239,
-  "rel_ver": "web-v0.1.3",
-  "rel_pub": "2026-11-09",
-  "rel_days": 1,
+  "rel_ver": "deploy-20261111-2227",
+  "rel_pub": "2026-11-11",
+  "rel_days": 0,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -174,68 +174,81 @@
    "HTML": 1,
    "JavaScript": 1
   },
-  "enriched_at": "20261110",
+  "enriched_at": "20261111",
   "dim_ts": {
    "commit": "20261110",
-   "release": "20261110",
+   "release": "20261111",
    "security": "20261027"
   },
   "rel_notes": [
    {
+    "t": "deploy-20261111-2227",
+    "d": "2026-11-11",
+    "n": "- The running revision is `a2302979ecf9a2278fe5b97579c9bb9958137193`; the public asset-version response matches the active build. API health returned HTTP 200 and database status up."
+   },
+   {
+    "t": "deploy-20261111-1740",
+    "d": "2026-11-11",
+    "n": "## Changes\n- #4448 fix(reindex): rebuild facetd alone when it falls out of the tee\n- #4445 feat(api): move saved searches and subscriptions into the contract\n\n## How it was verified\n- Pre-flight: CI green on the target (29 check runs success, 1 skipped); no migrations, no search settings or embedder change, no new command, no new env var, no new route path; no release running, no backup running, load 14, search drain not paused.\n- Baseline before the flip: 75 rps, API 5xx 0, p95 0.213s, public smoke 15/15.\n"
+   },
+   {
+    "t": "deploy-20261111-1640",
+    "d": "2026-11-11",
+    "n": "## Changes\n- #4439 perf: avoid repeated background writes and search failures\n- #4432 fix: resolve remaining tech-debt sweep findings\n\n## How it was verified\n- Pre-flight: CI green on 9197658 (29 checks success, 1 skipped); no migrations, no Meilisearch settings change, no new cmd/, no new routes, no new env vars; no release or backup running, load 11.8.\n- Baseline (30 min before): 110 rps, p95 0.114 s, API 5xx 0, nginx 5xx 0, public smoke 15/15, settings drift 0.\n- After the flip: the live color serves 919"
+   },
+   {
+    "t": "deploy-20261111-1604",
+    "d": "2026-11-11",
+    "n": "## Changes\n- #4436 feat(api): move votes, ghost reports and Talent Network membership into the contract\n- #4441 fix(ci): add independent HTTPS apt mirror fallback\n\n## How it was verified\n- Pre-flight: CI green on the target (29 of 29 checks); no migrations, no search settings change, no new cmd/, no new routes outside /api/, no new env vars; no release running, no backup running, no invalid index, deploys not paused, load 9-11.\n- Baseline (30 min): 109 rps, p95 0.155 s, 5xx 0, smoke 15/15.\n- After the flip:"
+   },
+   {
+    "t": "deploy-20261111-1509",
+    "d": "2026-11-11",
+    "n": "## Changes\n- #4435 feat(api): move screening answers, the survey and onboarding completion into the contract\n\n## How it was verified\n- Pre-flight: CI green on the target (30 of 30 checks). Flags: no migrations, no search-settings change, no new `cmd/`, no new routes outside `/api/`, no new env vars. Waited for server load to drop below the limit before releasing.\n- Baseline before the release: API p95 0.094s at 109 rps, 5xx 0, public smoke 15/15.\n- After the flip: the live color serves the target commit, th"
+   },
+   {
+    "t": "deploy-20261111-1415",
+    "d": "2026-11-11",
+    "n": "## Changes\n- #4434 feat(api): move plans, dictionary gaps and job-description resolve into the contract\n- #4433 fix(api): reserve watchlist import methods\n- #4431 feat(api): move city search, suggestions, agent permissions and usage into the contract\n- #4430 feat(api): move the company watchlist into the contract\n- #4428 ci: fuzz the TypeSpec contract with Schemathesis against a running API\n\n## How it was verified\n- Pre-flight: CI green on 224c09d (29 checks success, 1 PR-only check skipped). No migrations,"
+   },
+   {
+    "t": "deploy-20261111-1252",
+    "d": "2026-11-11",
+    "n": "## Changes\n- #4426 feat(api): move the Talent Network catalogue into the contract, with shared list models\n\n## How it was verified\n- pre-flight: CI green on 431feee99 (30 of 30 checks); no migrations, no Meilisearch settings change, no new cmd/, no new routes outside /api/, no new env vars; the batch changes the shared contract wrapper that also serves the email-prefs routes, so both were exercised.\n- after the flip: live color serves 431feee99, the other color the previous build; web server reloaded, no em"
+   },
+   {
+    "t": "deploy-20261111-1133",
+    "d": "2026-11-11",
+    "n": "## Changes\n- #4425 build: bump Go to 1.27.4 for the net/http MaxBytesReader fix\n\n## How it was verified\n- Pre-flight: CI green on the target (4/4 check runs). Flags: no migrations, no Meilisearch settings change, no new cmd/, no new routes, no new env vars. The build toolchain (Go 1.27.4) was fetched on first build; the build succeeded in one attempt.\n- After the flip: the live color serves the target commit, the previous color holds the previous build, nginx workers restarted at the flip with no errors, ma"
+   },
+   {
+    "t": "deploy-20261111-0149",
+    "d": "2026-11-11",
+    "n": "## Changes\n- #4422 feat(api): TypeSpec contract with an ogen server, starting with email prefs\n- #4421 fix(web): polish job cards on company pages and the Find people link\n- #4420 docs(workers): fix the relative link to the sources AGENTS.md\n- #4419 fix(location): stop an office address narrowing a stated scope; read UNOPS and hybrid Greenhouse places\n- #4418 test(ingest): cover cutshort edge rows and state the city-merge rule\n- #4417 perf(search): drop the Meilisearch desc embedder\n- #4416 perf(search): tu"
+   },
+   {
     "t": "deploy-20261110-0020",
     "d": "2026-11-10",
     "n": "## Changes\n- #4388 fix(assistant): support knows the MCP connector, chat session waits for the first message\n- #4387 docs(handler): note the Cloudflare edge exemption for MCP and OAuth discovery\n\n## How it was verified\n- Pre-flight: CI green on 7779f7545 (30/30 checks). No migrations, no Meilisearch settings change, no new cmd, no new routes outside /api/, no new env vars. No other release running, no incident open.\n- After the flip: the live color serves 7779f7545, the other holds the previous build; nginx"
-   },
-   {
-    "t": "web-v0.1.3",
-    "d": "2026-11-09",
-    "n": "* Bind OAuth codes to revocation and reject cross-site browser actions (#4126) (fdbbd371f)"
-   },
-   {
-    "t": "deploy-20261109-0406",
-    "d": "2026-11-09",
-    "n": "## Changes\n- #4377 refactor: split the files over 20000 tokens, size limit 20000\n\n## How it was verified\n- Pre-flight: CI green on the target (32/32 checks). No migrations, no search index changes, no new binaries, no new routes outside /api/, no new env vars.\n- Audit: the moved Go code (skill dictionaries, ATS board recognition, ingest pipeline) compared line by line before and after: only package, import and comment lines, formatting and the join of split tables differ.\n- After the flip: the live color se"
-   },
-   {
-    "t": "deploy-20261109-0325",
-    "d": "2026-11-09",
-    "n": "## Changes\n- #4325 Drop twelve unused queries over the retired AI-credit ledger\n\n## How it was verified\n- pre-flight: CI green on 31e1008c9 (30 check runs: 29 success, 1 skipped). No migrations, no Meilisearch settings change, no new cmd/, no new routes outside /api/, no new env vars.\n- #4325 audit: all 12 removed query names have 0 references anywhere else in the repo; pure dead-code removal.\n- after the flip: live color serves 31e1008c9, the previous color holds the prior build; nginx reloaded (12 new wor"
-   },
-   {
-    "t": "deploy-20261109-0212",
-    "d": "2026-11-09",
-    "n": "## Changes\n- #4375 refactor(web): split api.ts into method groups, size limit 33000 tokens\n- #4376 fix(ingest): map traffit's remoteStatus picklist to work_mode\n\n## How it was verified\n- pre-flight: CI green on b429be751 (30/30 checks). Flags: no migrations, no search-index changes, no new commands, no routes outside /api/, no new env vars. #4375 audited: all 31 exports of the old api.ts are still exported (0 missing).\n- baseline before the release: API p95 0.083s, 5xx 0, smoke 15/15, no panics.\n- after the"
-   },
-   {
-    "t": "deploy-20261109-0148",
-    "d": "2026-11-09",
-    "n": "a crawl on the new crawler binary ran with no database errors.\n- Not verified: category classification beyond the worker run and CI tests; crawler upsert and close queries beyond \"no database"
-   },
-   {
-    "t": "backend-v0.1.3",
-    "d": "2026-11-09",
-    "n": "* testdb: one shared template per server; CI integration shards drop testcontainers' Postgres (#4239) (8b8f3bb75)\n* Add ast-grep syntax rules, tested, in CI and a pre-commit hook (#4234) (2dbed476c)\n* Add mise: pinned toolchain and a database and port per worktree (#4232) (d0226dd92)\n* Let integration tests use a running Postgres; make sqlc prefer a pinned local binary (#4214) (8ec733d51)\n* build(deps): bump modernc.org/sqlite from 1.61.0 to 1.61.1 (#4352) (28edd6c4c)\n* Compute statistics on the PostgreSQL "
-   },
-   {
-    "t": "deploy-20261109-0023",
-    "d": "2026-11-09",
-    "n": "## Changes\n- #4373 fix(enrich): pause the drain while the upstream refuses every call\n- #4372 ci: limit file size, ratcheted down to 5000 tokens\n\n## How it was verified\n- Pre-flight: CI green on 819f3fd49 (28 of 28 checks); no migrations, no Meilisearch settings change, no new cmd/, no new routes or env vars.\n- After the flip: the live color serves 819f3fd49, the previous build stays warm on the other color; nginx reloaded with fresh workers and no emerg; daemons and the enrich worker run the new build.\n- R"
-   },
-   {
-    "t": "deploy-20261108-0251",
-    "d": "2026-11-08",
-    "n": "## Changes\n- #4277 Default saved-search digests to once a day at 09:00 local time\n- #4276 Wake SuperPlane on PRs stuck on a conflict or a red check\n\n## How it was verified\n- Pre-flight: CI green on d6865f0be (26 check runs, all success). Flags: one migration (0246, column defaults plus two small UPDATEs on notification settings, ~1k rows; no DROP/RENAME, so rollback stayed possible); no search index settings change, no new binaries, routes or env vars. No long transactions, no maintenance jobs running, host"
-   },
-   {
-    "t": "deploy-20261108-0201",
-    "d": "2026-11-08",
-    "n": "Production moved from e30d7152c to e80c2e4fb.\n\n## Changes\n- #4275 Say plainly that the assistant never embeds a view\n- #4269 Say what splitting a search push really costs\n- #4241 Add Firefish ATS adapter (firefish)\n- #4198 Track delivery and clicks only, without an open pixel\n- #4270 Merge thinkbrg into berkeley-research-group\n\n## How it was verified\n- Pre-flight: CI green on e80c2e4fb (23/23 check runs). No migrations, no search index settings change, no new commands, routes or env vars.\n- Release: built, "
    }
   ],
   "etag": {
-   "release": "W/\"02d55680e1d6746e66c9b5f5cdc071578f3d1087f41851bfc42ca233a93c3b4e\""
+   "release": "W/\"6704948aec608f3d49d059387aacd213bb3ff4cdbb4645cd7ad02f7a9fb3d7fe\""
   },
   "rel_dates": [
+   "2026-11-11",
+   "2026-11-11",
+   "2026-11-11",
+   "2026-11-11",
+   "2026-11-11",
+   "2026-11-11",
+   "2026-11-11",
+   "2026-11-11",
+   "2026-11-11",
+   "2026-11-10",
+   "2026-11-10",
+   "2026-11-10",
+   "2026-11-10",
    "2026-11-09",
    "2026-11-10",
    "2026-11-09",
@@ -252,20 +265,7 @@
    "2026-11-08",
    "2026-11-08",
    "2026-11-07",
-   "2026-11-07",
-   "2026-11-07",
-   "2026-11-07",
-   "2026-11-02",
-   "2026-11-02",
-   "2026-11-01",
-   "2026-10-26",
-   "2026-10-26",
-   "2026-10-25",
-   "2026-10-25",
-   "2026-10-23",
-   "2026-10-22",
-   "2026-10-21",
-   "2026-10-21"
+   "2026-11-07"
   ]
  },
  "proofrock/ws4sqlite": {
@@ -273,7 +273,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.16.6",
   "rel_pub": "2025-10-31",
-  "rel_days": 375,
+  "rel_days": 376,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -305,11 +305,11 @@
   "enriched_at": "20260927"
  },
  "caiopizzol/cnpj-data-pipeline": {
-  "commit_90d": 40,
-  "commit_7d": 0,
+  "commit_90d": 43,
+  "commit_7d": 3,
   "rel_ver": "v1.38.10",
   "rel_pub": "2026-10-18",
-  "rel_days": 23,
+  "rel_days": 24,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -323,18 +323,67 @@
    "Just": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261111",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027"
-  }
+   "commit": "20261111",
+   "release": "20261111"
+  },
+  "etag": {
+   "release": "W/\"66e10bcadd0999173cc2191ee3c1caf181c0e9c560db697209c19c636744d5cb\""
+  },
+  "rel_dates": [
+   "2026-10-18",
+   "2026-09-08",
+   "2026-09-08",
+   "2026-09-08",
+   "2026-09-08",
+   "2026-09-08",
+   "2026-09-07"
+  ],
+  "rel_notes": [
+   {
+    "t": "v1.38.10",
+    "d": "2026-10-18",
+    "n": "- fix(database): truncate replace tables without CASCADE (#146) (54a6592)"
+   },
+   {
+    "t": "v1.38.9",
+    "d": "2026-09-08",
+    "n": "### Fixes\n\n- **Docker image platform checks** — Isolates published image platform verification into a separate job with proper platform isolation using QEMU for both linux/amd64 and linux/arm64."
+   },
+   {
+    "t": "v1.38.8",
+    "d": "2026-09-08",
+    "n": "- **PostgreSQL benchmark infrastructure** — New benchmarking framework to measure sample data load performance across different batch sizes and loading strategies for performance optimization."
+   },
+   {
+    "t": "v1.38.7",
+    "d": "2026-09-08",
+    "n": "### Fixes\n\n- **Handle duplicates in first replace batch** — Duplicate keys in the initial batch of a replace operation are now properly deduplicated before being inserted into the database."
+   },
+   {
+    "t": "v1.38.6",
+    "d": "2026-09-08",
+    "n": "### Fixes\n\n- **Mark ZIP complete only after all CSVs load** — Fix PostgreSQL loading to mark ZIP archives as processed only after all member CSV files load successfully, enabling proper retry behavior when individual files fail."
+   },
+   {
+    "t": "v1.38.5",
+    "d": "2026-09-08",
+    "n": "- **PostgreSQL replace mode preserves completed shards on restart** — When a pipeline is interrupted during replace mode loading and restarted, previously processed shards are no longer re-truncated, preventing data loss."
+   },
+   {
+    "t": "v1.38.4",
+    "d": "2026-09-07",
+    "n": "- chore(main): release 1.38.4 (#119) (c51f4ef)\n- chore(release): migrate to Release Please (#118) (fd381fd)\n- refactor(pipeline): simplify code and isolate integration tests (#117) (4b4d70c)\n- test(processor): preserve company-name accents (#116) (73861f4)\n- chore(ci): remove unused Pickled fixtures (#115) (8e9c7bd)\n- chore(ci): remove Cubic and Pickled configuration (#114) (373bc19)\n- chore(python): enforce passing strict type checks (#113) (f2d81fb)\n- docs(product): map pipeline scope and capabilities (#1"
+   }
+  ]
  },
  "timgordontg/engrim": {
   "commit_90d": 69,
   "commit_7d": 0,
   "rel_ver": "v1.4.11",
   "rel_pub": "2026-09-22",
-  "rel_days": 49,
+  "rel_days": 50,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -356,7 +405,7 @@
   "commit_7d": 0,
   "rel_ver": "0.14.0",
   "rel_pub": "2025-05-21",
-  "rel_days": 538,
+  "rel_days": 539,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -396,7 +445,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2020-01-10",
-  "rel_days": 2496,
+  "rel_days": 2497,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -415,7 +464,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2021-04-21",
-  "rel_days": 2029,
+  "rel_days": 2030,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -438,7 +487,7 @@
   "commit_7d": 0,
   "rel_ver": "2.3.0",
   "rel_pub": "2018-10-22",
-  "rel_days": 2941,
+  "rel_days": 2942,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -458,7 +507,7 @@
   "commit_7d": 66,
   "rel_ver": "v3.0.2",
   "rel_pub": "2026-10-26",
-  "rel_days": 15,
+  "rel_days": 16,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -502,7 +551,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.1",
   "rel_pub": "2025-09-05",
-  "rel_days": 431,
+  "rel_days": 432,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -520,8 +569,8 @@
   "enriched_at": "20260928"
  },
  "Francis1998/scholar-rag-agent": {
-  "commit_90d": 760,
-  "commit_7d": 48,
+  "commit_90d": 791,
+  "commit_7d": 38,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -535,18 +584,22 @@
    "Shell": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261028",
+  "enriched_at": "20261111",
   "dim_ts": {
-   "commit": "20261028",
-   "release": "20261028"
-  }
+   "commit": "20261111",
+   "release": "20261111"
+  },
+  "etag": {
+   "release": "\"2442c31fe7795c6d824092b579433fa02653c665513670d2c7de6f4769564a23\""
+  },
+  "rel_dates": []
  },
  "h-sphere/sql-seal": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "0.40.1",
   "rel_pub": "2026-05-04",
-  "rel_days": 190,
+  "rel_days": 191,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -568,7 +621,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.9.0",
   "rel_pub": "2018-12-15",
-  "rel_days": 2887,
+  "rel_days": 2888,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -615,7 +668,7 @@
  "pomm-project/pomm-bundle": {
   "rel_ver": "3.0.0",
   "rel_pub": "2020-10-18",
-  "rel_days": 2214,
+  "rel_days": 2215,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -634,7 +687,7 @@
  "VMDashboard/vmdashboard": {
   "rel_ver": "v19.01.03",
   "rel_pub": "2020-11-25",
-  "rel_days": 2176,
+  "rel_days": 2177,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -655,7 +708,7 @@
  "andrei-polukhin/pgdbtemplate": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-05-07",
-  "rel_days": 187,
+  "rel_days": 188,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -689,7 +742,7 @@
  "simonw/paginate-json": {
   "rel_ver": "1.0",
   "rel_pub": "2023-08-30",
-  "rel_days": 1168,
+  "rel_days": 1169,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -780,7 +833,7 @@
  "jpazvd/wbopendata": {
   "rel_ver": "v18.8.0",
   "rel_pub": "2026-08-08",
-  "rel_days": 94,
+  "rel_days": 95,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -828,7 +881,7 @@
  "TeamDerUntergang/Telegram-UserBot": {
   "rel_ver": "v3.4",
   "rel_pub": "2020-06-18",
-  "rel_days": 2336,
+  "rel_days": 2337,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -913,7 +966,7 @@
  "ansible-collections/community.elastic": {
   "rel_ver": "latest",
   "rel_pub": "2024-04-18",
-  "rel_days": 936,
+  "rel_days": 937,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1095,7 +1148,7 @@
  "oceanbase/dify-on-mysql": {
   "rel_ver": "1.8.0",
   "rel_pub": "2025-09-16",
-  "rel_days": 420,
+  "rel_days": 421,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1151,7 +1204,7 @@
  "Lombiq/UI-Testing-Toolbox": {
   "rel_ver": "v15.0.0",
   "rel_pub": "2026-07-18",
-  "rel_days": 115,
+  "rel_days": 116,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1187,7 +1240,7 @@
  "LuckyIndraEfendi/Mangazuna": {
   "rel_ver": "3.1",
   "rel_pub": "2024-02-09",
-  "rel_days": 1005,
+  "rel_days": 1006,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1235,7 +1288,7 @@
  "pierreforstmann/pg_readonly": {
   "rel_ver": "1.0.6",
   "rel_pub": "2026-07-15",
-  "rel_days": 118,
+  "rel_days": 119,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1267,7 +1320,7 @@
  "circuitsacul/apgorm": {
   "rel_ver": "v1.0.0-b.14",
   "rel_pub": "2022-11-22",
-  "rel_days": 1449,
+  "rel_days": 1450,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1310,7 +1363,7 @@
  "JumpCodeFrog/telegram-shop-bot": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-25",
-  "rel_days": 46,
+  "rel_days": 47,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1358,7 +1411,7 @@
  "kbennett2000/lan-games": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-28",
-  "rel_days": 166,
+  "rel_days": 167,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1395,7 +1448,7 @@
  "raw-lab/NFixDB": {
   "rel_ver": "v2.1",
   "rel_pub": "2024-04-23",
-  "rel_days": 931,
+  "rel_days": 932,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1455,7 +1508,7 @@
  "SiavashGolchoobian/SqlDeep": {
   "rel_ver": "v3.0.0.7",
   "rel_pub": "2025-01-03",
-  "rel_days": 676,
+  "rel_days": 677,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1577,7 +1630,7 @@
  "Marco-Sulla/ewa": {
   "rel_ver": "v1.5.7",
   "rel_pub": "2019-05-29",
-  "rel_days": 2722,
+  "rel_days": 2723,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1638,7 +1691,7 @@
   "commit_7d": 7,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-12",
-  "rel_days": 151,
+  "rel_days": 152,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2321,7 +2374,7 @@
  "DerKezorm/nexlore": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-10-06",
-  "rel_days": 35,
+  "rel_days": 36,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2371,7 +2424,7 @@
  "Vincentkeio/clover-mail": {
   "rel_ver": "v2.0.2",
   "rel_pub": "2026-10-15",
-  "rel_days": 26,
+  "rel_days": 27,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2398,7 +2451,7 @@
  "federicoaecom/mimir": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 23,
+  "rel_days": 24,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2450,7 +2503,7 @@
  "directus/monospace-starter": {
   "rel_ver": "monoerp@0.1.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 7,
+  "rel_days": 8,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2489,7 +2542,7 @@
  "XWJ-z/ZXDesk": {
   "rel_ver": "v0.9.7",
   "rel_pub": "2026-11-05",
-  "rel_days": 5,
+  "rel_days": 6,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2533,7 +2586,7 @@
  "catzoidhub/DevCatz": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-11-04",
-  "rel_days": 6,
+  "rel_days": 7,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,

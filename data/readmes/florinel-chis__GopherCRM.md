@@ -693,13 +693,23 @@ authentication and live on the moderate tier:
 - `GET /api/v1/products` - List the catalogue (`page`/`offset`/`limit` through the shared parser —
   `limit=0` is 20, the cap is 100 — `search` over name and SKU, `is_active`, `currency`, `sort_by` in
   `id, name, sku, unit_price_cents, currency, is_active, created_at, updated_at`, anything else is
-  400, `sort_order`); soft-deleted products never appear
+  400, `sort_order`); soft-deleted products never appear. With `source`, `scope` or `external_id`
+  present (even empty) it is an exact external-id lookup instead: the three values are validated
+  (400 `VALIDATION_ERROR`), the other list parameters are ignored, and `data` holds at most one live
+  product, inactive products included *(admin, sales)*
 - `POST /api/v1/products` - Create a product `{name, sku?, description?, unit_price_cents, currency?, is_active?}`
   *(the price is an integer in minor units, 0 to 10^12; currency defaults to `deals.default_currency`;
   active by default)*
 - `GET /api/v1/products/:id` - Get a product
 - `PUT /api/v1/products/:id` - Partial update *(existing quote lines keep the name and price they copied)*
-- `DELETE /api/v1/products/:id` - Soft-delete a product *(its quote lines keep their copied values)*
+- `DELETE /api/v1/products/:id` - Soft-delete a product *(its quote lines keep their copied values;
+  its external-id mappings are hard-deleted in the same transaction, so their triples can be mapped
+  again)*
+- `POST /api/v1/products/:id/external-ids` - Map an external `(source, scope, external_id)` identity
+  to the product; the triple is unique and case-sensitive, 409 when already mapped (to this or
+  another product), 404 for a missing or deleted product *(admin)*
+- `DELETE /api/v1/products/:id/external-ids/:mappingId` - Delete one of the product's mappings
+  *(admin; 404 for another product's mapping)*
 
 ### Quotes *(admin and sales; sales sees and edits its own quotes only; support and customer get 403)*
 - `GET /api/v1/quotes` - List quotes without their lines (`status`, `deal_id`, `customer_id`,
@@ -746,7 +756,14 @@ authentication and live on the moderate tier:
 - `GET /api/v1/tickets/:id` - Get specific ticket
 - `PUT /api/v1/tickets/:id` - Update ticket *(admin any; support only their own assignments; sales
   is read-only)*
-- `DELETE /api/v1/tickets/:id` - Delete ticket *(admin; ordinary soft delete)*
+- `DELETE /api/v1/tickets/:id` - Delete ticket *(admin; ordinary soft delete; its comment mail
+  delivery records are hard-deleted with it)*
+- `GET /api/v1/tickets/:id/comments` - List a ticket's comments *(customers never see internal notes)*
+- `POST /api/v1/tickets/:id/comments` - Add a comment or internal note *(admin; support on their own
+  assignments)*. With `email_customer: true` (not on an internal note, which is 400) the comment is
+  also emailed once to the ticket customer's current address after it is saved, and the `201`
+  carries the outcome as `delivery` (`sent`, `failed`, `log_only` or `skipped`); there is no retry
+  and no read returns it
 - `POST /api/v1/tickets/bulk/status` - Set the status of up to 100 tickets, all-or-nothing *(admin
   any; support only their assignments; a closed ticket cannot be reopened)*
 
@@ -966,18 +983,21 @@ gophercrm/
   issued before them is refused at once (deactivation and erasure reject it too). Refresh rotation
   does not: the access token it replaces stays valid until `JWT_EXPIRY_HOURS` elapses, and so does
   every token of an account whose role changes. There is no per-token denylist.
-- **Session handling has two known gaps.** Browser tabs sharing a remembered session
-  (`localStorage`) do not coordinate their refreshes, so two tabs refreshing at the same moment can
-  sign each other out (#184). A login that verified the old password a moment before a password
-  change commits can still be issued a session afterwards, and login is not yet serialised against
-  erasure under the owner lock (#183).
+- **Session handling has known gaps.** Browser tabs sharing a remembered session coordinate their
+  refreshes through the Web Locks API (#184), which browsers offer only in secure contexts: served
+  over plain HTTP (the bundled nginx without TLS) each tab locks on its own, and two tabs
+  refreshing at the same moment can still sign each other out when the losing tab's rejection
+  arrives before the winner stored the successor. Other open tabs learn about a sign-in or
+  sign-out only on their next request. A login that verified the old password a moment before a
+  password change commits can still be issued a session afterwards, and login is not yet
+  serialised against erasure under the owner lock (#183).
 - **Outbound email needs SMTP configuration.** Without `SMTP_HOST` set, every mail — the
   password-reset link (redacted), the forms mail, the quote email and the `send_email` step of an
   automation rule — goes to the application log instead of a mailbox, and the sending code cannot
   tell: `POST /api/v1/quotes/:id/email` still answers `200` and stamps `last_emailed_at`, and an
-  automation email step is logged as `succeeded`, although nothing was delivered. Form mail is the
-  exception: each delivery is recorded `log_only`, not `sent`. Fine for development, useless in
-  production.
+  automation email step is logged as `succeeded`, although nothing was delivered. Form mail and
+  ticket comment mail (`email_customer`) are the exception: each delivery is recorded `log_only`,
+  not `sent`. Fine for development, useless in production.
 - **Form mail is retried by hand only.** Every form mail (confirmation, follow-up, one notification
   per address) is recorded and shown on the submission and in `GET /api/v1/forms/deliveries`;
   admin and sales retry a failed, log-only or stuck one with

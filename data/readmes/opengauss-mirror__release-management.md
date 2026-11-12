@@ -11,26 +11,27 @@ ReleaseManagement sig的主要工作职责是在社区协调各SIG的Maintainer�
 
 ## 组织会议
 
-公开的视频会议时间：北京时间双周三下午，14:15~16:15，请订阅releasemanagement@opengauss.org，以获取相关会议通知
+公开的视频会议时间：每月1次，请订阅releasemanagement@opengauss.org，以获取相关会议通知
 
 ## 会议纪要归档
 ReleaseManagement sig历次会议纪要均做归档，详情请查询历史[会议纪要归档etherpad](https://etherpad.opengauss.org/p/ReleaseManagement-meetings)
 
 ## 成员
 **Maintainer：**
-| 姓名| GiteeID           | 邮件地址  |
-| :-------------: |:--------:| :-----|
-|蔡亚杰 | [@Cyj10727](https://gitee.com/Cyj10727)| jieky.cai@huawei.com|
-|王江 |[@wang-jingle](https://gitee.com/wang-jingle)|wangjiang16@huawei.com|
-|冯伟  | [@flowill](https://gitee.com/flowill)|  f.fengwei@huawei.com|
+|姓名|GitcodeID|邮件地址|
+|:-------------:|:--------:|:-----|
+|熊钦|[@xiongqin3](https://gitcode.com/xiongqin3)|xiongqin3@huawei.com|
+|陈栋|[@chendong76](https://gitcode.com/chendong76)|chendong76@huawei.com|
+|窦欣|[@ywzq1161327784](https://gitcode.com/ywzq1161327784)|douxin5@huawei.com|
+|杨皓|[@yanghaos](https://gitcode.com/yanghaos)|yanghao37@huawei.com|
 
-**Commiter:**
-| 姓名| GiteeID           | 邮件地址  |
-| :-------------: |:--------:| :-----|
-|熊小军| [@xiong_xjun](https://gitee.com/xiong_xjun) | xiong_xiaojun@yeah.net|
-|张文龙| [@willloong](https://gitee.com/willloong) | 1259931895@qq.com|
-|刘伟|[@llzx373](https://gitee.com/llzx373) | llzx373@hotmail.com|
-|张旭博|[@zhang_xubo](https://gitee.com/zhang_xubo) | 2578876417@qq.com|
+**Commiter：**
+|姓名|gitcodeID|邮件地址|
+|:-------------:|:--------:|:-----|
+|熊小军|[@xiong_xjun](https://gitcode.com/xiong_xjun)| xiong_xiaojun@yeah.net|
+|张文龙|[@willloong](https://gitee.com/willloong)|1259931895@qq.com|
+|刘伟|[@llzx373](https://gitee.com/llzx373)|llzx373@hotmail.com|
+|张旭博|[@zhangxubo](https://gitcode.com/zhangxubo)|2578876417@qq.com|
 
 
 ## ReleaseManagement sig maintainer竞选流程及原则
@@ -46,9 +47,9 @@ ReleaseManagement sig历次会议纪要均做归档，详情请查询历史[会�
 
 
 ## 联系方式
-| sig ID| Gitee 访问链接           | 邮件地址  |
-| :-------------: |:--------:| :-----|
-|release-management|[release-management](https://gitee.com/opengauss/release-management/)|releasemanagement@opengauss.org|
+|sig ID|gitcode访问链接|邮件地址|
+|:-------------:|:--------:|:-----|
+|release-management|[release-management](https://gitcode.com/opengauss/release-management/)|releasemanagement@opengauss.org|
 
 
 
@@ -56,6 +57,6 @@ ReleaseManagement sig历次会议纪要均做归档，详情请查询历史[会�
 
 ### Release Manager
 
-Repository地址：https://gitee.com/opengauss/release-management
+Repository地址：https://gitcode.com/opengauss/release-management
 
 *发布经理团队的相关信息均在以上Reository内，可以进入该Repository了解详情

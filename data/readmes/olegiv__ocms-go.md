@@ -71,11 +71,13 @@ Running `ocms-go` in production? [Tell us about it.](https://github.com/olegiv/o
 
 ## Roadmap
 
-The path to v1.0 is tracked in the [Roadmap to v1.0 issue](https://github.com/olegiv/ocms-go/issues). Headlines:
+Development priorities and progress are tracked in [oCMS Development](https://github.com/users/olegiv/projects/5), with Board and Roadmap views.
+The [v0.33.0 milestone](https://github.com/olegiv/ocms-go/milestone/1) covers inline media uploads, deployment reliability and the coordinated templ/parser upgrade.
+The [v1.0 milestone](https://github.com/olegiv/ocms-go/milestone/2) collects longer-term work; its final scope remains open. Neither milestone has a due date. Headlines:
 
 - ✅ RSS / Atom feeds for published posts, categories and tags, with language-prefixed URLs
 - ✅ JSON-LD structured data: Article, homepage WebSite and visible/structured breadcrumbs
-- PostgreSQL adapter alongside SQLite
+- [PostgreSQL adapter alongside SQLite](https://github.com/olegiv/ocms-go/issues/212)
 - ✅ Public demo — live at [ocms-demo.fly.dev](https://ocms-demo.fly.dev/), 24h auto-reset
 
 Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Good first issues](https://github.com/olegiv/ocms-go/issues) list.
@@ -92,6 +94,7 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Good f
   - Automatic thumbnail and variant generation
   - Folder organization
   - Featured image support for pages
+  - Upload images from the Featured, Open Graph, editor and theme pickers without leaving the form
 - **Menu Builder**: Create navigation menus with drag-and-drop ordering
   - Hierarchical menu structures
   - Link to pages or external URLs
@@ -210,7 +213,7 @@ Prebuilt release binaries have no external runtime dependencies beyond the opera
 
 Building from source requires:
 
-- Go 1.27.3 or later
+- Go 1.27.4 or later
 - [Node.js 24](https://nodejs.org/) with npm for frontend dependencies
 - [sqlc](https://sqlc.dev/) for SQL code generation
 - [templ](https://templ.guide/) for type-safe HTML templates
@@ -305,7 +308,7 @@ gh attestation verify ocms-linux-amd64.tar.gz --repo olegiv/ocms-go
 3. Install required tools:
    ```bash
    go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
-   go install github.com/a-h/templ/cmd/templ@v0.3.1070
+   go install github.com/a-h/templ/cmd/templ@v0.3.1100
    go install github.com/pressly/goose/v3/cmd/goose@latest
    ```
 
@@ -1146,7 +1149,7 @@ git commit -m "Update Claude Code shared submodule"
 
 ## Technology Stack
 
-- **Backend**: Go 1.27.3+
+- **Backend**: Go 1.27.4+
 - **Database**: SQLite with [goose](https://github.com/pressly/goose) migrations
 - **SQL**: Type-safe queries with [sqlc](https://sqlc.dev/)
 - **Templates**: [templ](https://templ.guide/) for type-safe HTML

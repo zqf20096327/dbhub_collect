@@ -1,6 +1,6 @@
 # Open.Database.Extensions (ODX)
 
-![Open.Database.Extensions: You write the SQL. The library writes the other twenty lines.](https://raw.githubusercontent.com/Open-NET-Libraries/Open.Database.Extensions/master/docsite/images/hero-core.svg)
+[![Open.Database.Extensions: You write the SQL. ODX writes the other twenty lines.](https://raw.githubusercontent.com/Open-NET-Libraries/Open.Database.Extensions/master/docsite/images/hero-core.svg)](https://open-net-libraries.github.io/Open.Database.Extensions/)
 
 [![NuGet](https://img.shields.io/nuget/vpre/Open.Database.Extensions.Core.svg?style=flat)](https://www.nuget.org/packages/Open.Database.Extensions.Core/)
 [![Docs](https://github.com/Open-NET-Libraries/Open.Database.Extensions/actions/workflows/docs.yml/badge.svg)](https://github.com/Open-NET-Libraries/Open.Database.Extensions/actions/workflows/docs.yml)
@@ -48,7 +48,7 @@ int author = 42;
 
 Post[] posts = await connectionFactory
     .Command("select * from posts where author = @author order by id")
-    .AddParam(author)
+    .AddParam(author) // name and type inferred from the variable
     .Map<Post>()
     .ToArrayAsync();
 ```
@@ -84,11 +84,11 @@ dotnet add package Microsoft.Data.Sqlite
 | `Open.Database.Extensions.SqlClient` | The same API on the older `System.Data.SqlClient`. Deprecated: use `MSSqlClient`. |
 | `Open.Database.Extensions` | Discontinued. It only referenced Core: use `Open.Database.Extensions.Core`. The last published version is 9.0.3. |
 
-Targets: `netstandard2.0`, `netstandard2.1` and `net10.0` (`MSSqlClient`: `net472` and `net10.0`). Version 11 is a release candidate (`11.0.0-rc.3`): see [What's new in 11](https://open-net-libraries.github.io/Open.Database.Extensions/articles/whats-new-11.html) for the changes, the breaking changes and the known limitations, and the [release notes](https://open-net-libraries.github.io/Open.Database.Extensions/articles/release-notes.html) for earlier versions. Please try it and tell us what you find.
+Targets: `netstandard2.0`, `netstandard2.1` and `net10.0` (`MSSqlClient`: `net472` and `net10.0`). Version 11 is a release candidate (`11.0.0-rc.4`): see [What's new in 11](https://open-net-libraries.github.io/Open.Database.Extensions/articles/whats-new-11.html) for the changes, the breaking changes and the known limitations, and the [release notes](https://open-net-libraries.github.io/Open.Database.Extensions/articles/release-notes.html) for earlier versions. Please try it and tell us what you find.
 
 ## How it fits together
 
-![Four layers: a foundation of best-practice ADO.NET extensions, expressive commands, row mapping, all resting on performance.](https://raw.githubusercontent.com/Open-NET-Libraries/Open.Database.Extensions/master/docsite/images/architecture.svg)
+[![Four layers: a foundation of best-practice ADO.NET extensions, expressive commands, row mapping, all resting on performance.](https://raw.githubusercontent.com/Open-NET-Libraries/Open.Database.Extensions/master/docsite/images/architecture.svg)](https://open-net-libraries.github.io/Open.Database.Extensions/articles/foundation.html)
 
 ## The foundation: best practice by default
 
@@ -119,7 +119,7 @@ int author = 42;
 // The command takes a connection from the factory when a terminal runs, opens it, and disposes it afterwards.
 Post[] posts = await connectionFactory
     .Command("select * from posts where author = @author order by id")
-    .AddParam(author)
+    .AddParam(author) // name and type inferred from the variable
     .Map<Post>()
     .ToArrayAsync();
 ```
@@ -132,7 +132,7 @@ int author = 42;
 // You own the connection. The command opens it only if it is closed, and closes only what it opened.
 Post[] posts = connection
     .Command("select * from posts where author = @author order by id")
-    .AddParam(author)
+    .AddParam(author) // name and type inferred from the variable
     .Map<Post>()
     .ToArray();
 ```

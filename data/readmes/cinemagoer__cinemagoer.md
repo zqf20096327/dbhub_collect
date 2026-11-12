@@ -25,22 +25,27 @@ This project and its authors are not affiliated in any way to Internet Movie Dat
    From that day we can no longer guarantee that the package will work as expected with IMDb data (from a technical and legal standpoints),
    and we limited the scope of Cinemagoer to the handling of the dataset that is freely distributed by IMDb.
 
-    If you still need IMDb web-page parsing, see `cinemagoerng`_.
-    It is focused on parsing IMDb web pages, but requires you to provide
-    the function used to fetch those pages.
+   If you still need IMDb web-page parsing, see `cinemagoerng`_.
+   It is focused on parsing IMDb web pages, but requires you to provide
+   the function used to fetch those pages.
 
-   
 
 Main features
 -------------
 
-- written in Python 3
+- imports IMDb's non-commercial datasets into a local SQL database and
+  queries it offline: no web scraping, no API key
 
-- platform-independent
+- SQLite support with no third-party dependencies; PostgreSQL, MariaDB, MySQL
+  and other databases through the optional SQLAlchemy integration
 
-- simple and complete API
+- search for titles and people, with filters (kind, year, genre, rating,
+  votes, runtime) and sorting; retrieve movies, series, episodes and people
 
-- released under the terms of the GPL 2 license
+- a ``cinemagoer`` command line tool, with text and JSON output
+
+- written in Python 3, platform-independent, released under the terms of the
+  GPL 2 license
 
 Cinemagoer powers many other software and has been used in various research papers.
 `Curious about that`_?
@@ -91,8 +96,8 @@ Here's an example that demonstrates how to use Cinemagoer:
 
    from imdb import Cinemagoer
 
-    # Open the SQLite database populated with s32cinemagoer.py.
-    ia = Cinemagoer('s3', uri='sqlite:///cinemagoer.db')
+   # Open the SQLite database populated with s32cinemagoer.py.
+   ia = Cinemagoer('s3', uri='sqlite:///cinemagoer.db')
 
    # get a movie
    movie = ia.get_movie('0133093')
@@ -107,10 +112,17 @@ Here's an example that demonstrates how to use Cinemagoer:
    for genre in movie['genres']:
        print(genre)
 
-   # search for a person name
+   # search for a person name
    people = ia.search_person('Mel Gibson')
    for person in people:
-      print(person.personID, person['name'])
+       print(person.personID, person['name'])
+
+The same database can be queried from the command line:
+
+.. code-block:: bash
+
+   cinemagoer --uri sqlite:///cinemagoer.db search movie "the matrix" -n 5
+   cinemagoer --uri sqlite:///cinemagoer.db get movie tt0133093 --format json
 
 
 Getting help
@@ -139,14 +151,13 @@ NOTE: For a list of persons who share the copyright over specific portions of co
 NOTE: See also the recommendations in the `DISCLAIMER.txt`_ file.
 
 .. _IMDb: https://www.imdb.com/
-.. _please help with it!: http://cinemagoer.readthedocs.io/en/latest/devel/test.html
 .. _Curious about that: https://cinemagoer.github.io/ecosystem/
 .. _project homepage: https://cinemagoer.github.io/
 .. _support: https://cinemagoer.github.io/support/
 .. _Read The Docs: https://cinemagoer.readthedocs.io/
 .. _GitHub: https://github.com/cinemagoer/cinemagoer
 .. _cinemagoerng: https://github.com/cinemagoer/cinemagoerng
-.. _CONTRIBUTOR_GUIDE.rst: https://github.com/ethorne2/cinemagoer/blob/documentation-add-contributor-guide/CONTRIBUTOR_GUIDE.rst
+.. _CONTRIBUTOR_GUIDE.rst: https://github.com/cinemagoer/cinemagoer/blob/master/CONTRIBUTOR_GUIDE.rst
 .. _LICENSE.txt: https://raw.githubusercontent.com/cinemagoer/cinemagoer/master/LICENSE.txt
 .. _CONTRIBUTORS.txt: https://raw.githubusercontent.com/cinemagoer/cinemagoer/master/CONTRIBUTORS.txt
 .. _DISCLAIMER.txt: https://raw.githubusercontent.com/cinemagoer/cinemagoer/master/DISCLAIMER.txt

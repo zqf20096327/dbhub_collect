@@ -15,7 +15,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/EternalNight996/memory-eternal?style=flat)](https://github.com/EternalNight996/memory-eternal/stargazers)
 [![npm](https://img.shields.io/npm/v/memory-eternal)](https://www.npmjs.com/package/memory-eternal)
-[![release](https://img.shields.io/badge/release-v0.30.2-FF7A45)](https://github.com/EternalNight996/memory-eternal/releases)
+[![release](https://img.shields.io/badge/release-v0.31.4-FF7A45)](https://github.com/EternalNight996/memory-eternal/releases)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 **English (default)** · [简体中文](README.zh-CN.md)
@@ -227,6 +227,22 @@ Not everything should be injected into every session. Core memory is the small, 
 | **Terminal** | <code>dsh-memory tui</code> — live queue, select-all, batch approve/reject, long-form reader |
 | **Browser** | <code>dsh-memory open</code> → http://127.0.0.1:7999 |
 
+## 🎨 Skins
+
+Five skins, switch in Settings → General → Theme with one click. The choice is saved locally and survives reloads.
+
+<p align="center">
+  <img src="assets/screen/skins-gallery.png" width="900" alt="Five themes: Default, Pop, Light, Resident Evil and Spider-Man" />
+</p>
+
+| Skin | Style |
+| --- | --- |
+| **Default** | Dark base + amber accent, easy on the eyes |
+| **Pop** | Yellow paper, black frames, hard shadows and halftone |
+| **Light** | Warm paper + serif headings for daytime |
+| **Resident Evil** | Umbrella lab, toxic-green scanlines, B.O.W. banner and claw |
+| **Spider-Man** | Red/blue comic, webs, halftone, wide action banner and hanging charm |
+
 ## 📸 Screenshots
 
 <p align="center">
@@ -294,4 +310,17 @@ _Verses from 《蛊真人》(Reverend Insanity). Kept in the original Chinese �
 > 待到天开云雾散，负手直望笑苍天。
 
 <p align="right"><sub>——《蛊真人》· 大爱仙尊</sub></p>
+
+---
+
+## 🌟 Contributors
+
+Thanks to everyone who helped memory-eternal get better.
+
+| Contributor | Contribution |
+| --- | --- |
+| [@aloneangel45](https://github.com/aloneangel45) | Found and fixed [#54](https://github.com/EternalNight996/memory-eternal/issues/54) — `memory_recall` / `memory_note` were never registered when the `tools` service mounted late ([#58](https://github.com/EternalNight996/memory-eternal/pull/58)) |
+| [@EternalNight996](https://github.com/EternalNight996) | Author and maintainer |
+
+Have a fix worth landing? Open an issue or a pull request — accepted contributions are listed here.
 

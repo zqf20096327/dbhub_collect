@@ -74,6 +74,15 @@ can apply what it finds.
    `<placeholder>` is left. On SQL Server 2025 and Azure SQL Managed Instance, also run its step 1,
    which enables the REST endpoint feature and needs `ALTER SETTINGS`. To keep a filled-in copy with your key, save it as
    `setup/Configure-Endpoint-DEV.sql`, which `.gitignore` excludes.
+   - The script is for the initial setup only. An existing credential with the endpoint's name is
+     kept as it is, so re-running the script with a new key does not change the key; use
+     `ALTER DATABASE SCOPED CREDENTIAL` for that (step 3 shows how).
+   - Step 0 holds the API key and master key password as literals, which the plan cache and Query
+     Store could keep. Its last step removes those copies and returns what it removed
+     (`SetupTextPlanCache`, `SetupTextQueryStore`). It needs `VIEW SERVER STATE`,
+     `ALTER ANY DATABASE SCOPED CONFIGURATION` and `ALTER` on the database; a part it cannot do
+     reads `NOT DONE` with the reason. It cannot reach a copy captured by an Extended Events
+     session, a trace or an audit, so run it where nothing is capturing statement text.
 3. Smoke test: `EXEC dbo.sp_AIIndexTuner;`, then check that the latest `AIIndexTuner.Run` row has
    `Status = 'Succeeded'`. If it failed, `ErrorMessage` names the part to look at: the HTTP status,
    the credential, or polling.
@@ -158,6 +167,31 @@ EXEC dbo.sp_AIIndexTuner_Apply @RecommendationId = 43, @AllowDropIndex = 1;
 EXEC dbo.sp_AIIndexTuner_Apply @RunId = 7, @AllowColumnstore = 1, @AllowDropIndex = 1, @MaxNewIndexes = 2;
 ```
 
+### Build limits
+
+These parameters, on `sp_AIIndexTuner` and `sp_AIIndexTuner_Apply`, limit when and how large a
+change CREATE mode and `sp_AIIndexTuner_Apply` make. `NULL` (the default) is no limit. The prompt
+is unchanged.
+
+| Parameter | Effect |
+|---|---|
+| `@MaxTableRows` | Skips a new or widened index on a table with more rows than this |
+| `@MaxIndexSizeMB` | Skips a new or widened index estimated at more MB than this. The estimate is an upper bound from the catalog: the table's rows times the declared width of the index's columns (key, included, and the clustered key or RID), with a variable-length column at its declared maximum and a `(max)` column at 8,000 bytes. A real index is usually smaller |
+| `@MaxMinutes` | Starts no change after this many minutes from the start of the call; a change already running finishes. The ones not started are marked `Skipped` with how to apply them later. `0` starts none. Collection and the AI call are not limited by it |
+
+The size limits are stored on the run, and a value passed to `sp_AIIndexTuner_Apply` replaces the
+run's, so an index held back can be built later, in a maintenance window:
+
+```sql
+EXEC dbo.sp_AIIndexTuner @Mode = 'CREATE', @MaxIndexSizeMB = 1024, @MaxMinutes = 60;
+EXEC dbo.sp_AIIndexTuner_Apply @RecommendationId = 42, @MaxIndexSizeMB = 20480;   -- later, in the window
+```
+
+How builds and drops wait for locks, and how many CPUs a build uses, are set in
+`AIIndexTuner.Config` (see [Configuration](#configuration)): `LockTimeoutSec`, `OnlineWaitMinutes`
+and `BuildMaxDop`. Whether a build can run online depends on the edition (see *What it adds* under
+[Apply-mode safety](#apply-mode-safety)); an offline build blocks writes to the table while it runs.
+
 ### Apply thresholds
 
 `@MinPriority` and `@MinConfidence` set the lowest priority level and confidence a recommendation
@@ -229,6 +263,17 @@ EXEC dbo.sp_AIIndexTuner_Apply @RunId = 7, @MinPriority = 'Low', @MinConfidence 
     also needs the error log to confirm the period, which takes securityadmin or sysadmin and doesn't
     work inside `INSERT ... EXEC`. On Azure SQL Database a failover can reset the statistics without
     a trace, so the 7 days are counted from the times it can see.
+  - low-use drops of an index whose reads-to-writes ratio in that period is 5 or more, or that
+    has 1,000 or more reads a day, from `sys.dm_db_index_usage_stats` (reads are user seeks, scans
+    and lookups; writes are user updates, counted per statement). The reads-a-day rule keeps a
+    heavily read index on a write-heavy table from going on its ratio alone. An index with no reads
+    is low use; one with reads and no writes is not. The model's word that an index is little used
+    is not enough, and `StatusReason` gives the reads, the writes, the ratio, the reads a day and
+    the period for a drop it makes. Only the primary replica is in scope: usage on
+    readable secondaries is not counted there and has not been tested, so check it yourself before
+    allowing drops on an availability group with readable secondaries.
+  - low-use drops of a unique index, since it decides which rows the table accepts. A unique index
+    is dropped only when another unique index with the same keys makes it redundant.
 - **Widenings it refuses, each with a reason:**
   - a consolidation that doesn't name the index it replaces (`replaces_index`), such as a merge of
     two indexes or a new clustered index
@@ -240,9 +285,16 @@ EXEC dbo.sp_AIIndexTuner_Apply @RunId = 7, @MinPriority = 'Low', @MinConfidence 
 - **How it widens:** in place, under the replaced index's name, with `DROP_EXISTING = ON` on the
   same filegroup. The old index keeps serving queries until the new one is built, and hints and plan
   guides that name it keep working. A widening counts towards `@MaxNewIndexes` but needs no
-  `@AllowDropIndex`, because the old index's keys and columns all survive.
+  `@AllowDropIndex`, because the old index's keys and columns all survive. It also keeps the old
+  index's options: fill factor, data compression, `PAD_INDEX`, `ALLOW_ROW_LOCKS`,
+  `ALLOW_PAGE_LOCKS` and `OPTIMIZE_FOR_SEQUENTIAL_KEY`. A fill factor or compression the
+  recommendation sets replaces the old one, and `StatusReason` lists what was kept and what changed.
 - **What it adds:** `ONLINE = ON` where the edition supports it (Enterprise, Azure SQL Database,
-  Managed Instance).
+  Managed Instance). An online rowstore build waits at low priority for its locks for
+  `OnlineWaitMinutes` (default 5), then gives up rather than block the workload
+  (`WAIT_AT_LOW_PRIORITY ... ABORT_AFTER_WAIT = SELF`). A drop, an offline build and a columnstore
+  build wait at most `LockTimeoutSec` (default 30) for their locks. `MAXDOP = BuildMaxDop` when set.
+  A change that gives up is marked `Failed` with the reason and can be applied again.
 - **Tagging:** each index it creates gets the extended property `AIIndexTuner`, naming the run and
   the recommendation. A widened index existed before, so its tag says *Widened by*: roll it back with
   its `UndoDDL`, not by dropping it.
@@ -286,6 +338,9 @@ WHERE ep.name = N'AIIndexTuner';
 | `KeepRunDetail` | 1 | Keep the collected data and raw response on each run |
 | `MaxPayloadChars` | 500000 | The largest collected payload sent to the model, in characters (NULL = no limit). A larger one fails before the request with an error that names its size; narrow the scope or raise the limit |
 | `EnableLogging` | 1 | Log each step of a run to `AIIndexTuner.RunLog`; `sp_AIIndexTuner @Logging` overrides it for one call |
+| `LockTimeoutSec` | 30 | The longest a drop, an offline build or a columnstore build waits for its locks before it fails (NULL = no limit) |
+| `OnlineWaitMinutes` | 5 | How long an online rowstore build waits at low priority for its locks before it gives up (NULL = wait at normal priority, without limit) |
+| `BuildMaxDop` | NULL | `MAXDOP` for every index build (NULL = the server's setting) |
 
 ### Step log
 
@@ -312,16 +367,46 @@ ORDER BY l.RunLogId;
 ## Data disclosure
 
 The collected diagnostics go to the Azure OpenAI endpoint you configure, and to nothing else.
-They include:
+To see exactly what would be sent, run `EXEC dbo.sp_AIIndexTuner @CollectOnly = 1;`.
 
-- object, index and column names
-- row counts and usage counters
+**What is sent.** The payload includes:
+
+- the server name (`@@SERVERNAME`), database name, edition, version and product level, and the
+  times the usage statistics start from (server start, database creation, latest restore and
+  the error log's "Starting up database" message)
+- object, index, column, constraint and statistics names, with column types
+- row counts, sizes, usage and operational counters, page density and fragmentation, and the
+  average width of wide columns (sampled with `DATALENGTH`; the values themselves are not sent)
+- **column values**: for each skewed low-cardinality column (up to 20), each value in its
+  statistics histogram (up to 10 per column, the first 60 characters of each) with its share of
+  the rows, for example `Closed: 99.50%, Open: 0.50%`. These are table data, not metadata, so a
+  column such as a status, country or customer tier sends its actual values. There is no setting
+  that leaves them out; scope the run with `@SchemaName` and `@TableName` to limit which tables
+  are read.
 - up to 600 characters of each of the top plan cache statements
 - up to 400 characters of each non-SARGable predicate, from the plan
+- up to 600 characters of each Query Store query in the workload and forced plan failure
+  sections, and up to 200 characters of each query in the cardinality estimation and degree of
+  parallelism feedback sections
 
-Statement text and predicates can contain literal values. Set `IncludeQueryText = 0` to leave
-them out. To see
-exactly what would be sent, run `EXEC dbo.sp_AIIndexTuner @CollectOnly = 1;`.
+Statement text and predicates can contain literal values. Set `IncludeQueryText = 0` to leave out
+all of the query text and predicates above; it does not affect the column values.
+
+**Copies kept after the run.**
+
+- At the endpoint: the Responses API stores each response, the prompt (the payload above)
+  included, for 30 days by default, and background mode (`UseBackgroundMode = 1`, the default)
+  requires it. Once the run has read the answer, or stops waiting for it,
+  `AIIndexTuner.usp_DeleteResponse` deletes the stored response. `AIIndexTuner.Run` records the
+  response id (`StoredResponseId`) and whether the delete succeeded (`StoredResponseDeleted`); when
+  it is 0, `AIIndexTuner.RunLog` says why, and you can delete it yourself with
+  `DELETE <endpoint>/openai/v1/responses/<StoredResponseId>`. What Azure keeps for abuse monitoring
+  is set on the Azure OpenAI resource, not by this tool.
+- In the database: with `KeepRunDetail = 1` (the default), `AIIndexTuner.Run` keeps the full
+  payload (`CollectedData`) and the raw response (`RawResponse`) of every run, and
+  `AIIndexTuner.Recommendation` keeps the model's rationale and scripts. Nothing deletes them;
+  set `KeepRunDetail = 0` to stop keeping the payload and raw response, and delete old runs
+  yourself. A retention setting and purge procedure are tracked in issue #55.
 
 ## Known limitations
 

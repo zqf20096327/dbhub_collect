@@ -13,7 +13,13 @@ agentic tasks and workflows.
 Feel the flow break when you have to tab out of tmux or herdr or your terminal sessions to go
 to a PWA or the web page for your Vikunja instance? I'm with you, tui-do is the answer!
 
-> **Status: 1.1.** `v1.1.0` is published and is what the commands below install. Everything
+**Your agents can file tasks too.** `tui-do add 'Chase the upstream ticket *urgent !4 +Infra
+tomorrow'` turns one line into a task, with its project, label, priority and due date, and
+queues it through the same offline-safe outbox the interface uses. Give your agent
+[`skills/tui-do/SKILL.md`](skills/tui-do/SKILL.md) and it knows how; see
+[For agents](#for-agents).
+
+> **Status: 1.2.** `v1.2.2` is published and is what the commands below install. Everything
 > documented here works and is used daily against a real Vikunja;
 > [what's planned](#whats-planned--coming) is set out rather than left to be discovered.
 
@@ -28,7 +34,7 @@ Regenerate it with [`docs/demo/tui-do-agent.tape`](docs/demo/tui-do-agent.tape).
 > creates, edits, completes and **deletes** tasks, and every sync reconciles your local copy
 > against what the server holds.
 >
-> Undo (`u`) covers most of what you do from the interface, and is worth knowing the limits
+> Undo (`U`) covers most of what you do from the interface, and is worth knowing the limits
 > of. **Undoing a delete re-creates the task with a new id, so its comments and attachments
 > do not come back**, because Vikunja has no undelete. Creating a label cannot be undone at
 > all. And on a genuine conflict, where you and another client have changed the same field,
@@ -54,6 +60,9 @@ Regenerate it with [`docs/demo/tui-do-agent.tape`](docs/demo/tui-do-agent.tape).
   when it can. A rejection rolls the change back and says so. A failure blocks that one
   task, not the queue.
 - **Quick-add syntax** for creating tasks in one line, from the interface or the shell.
+- **A command line agents can use.** `tui-do add` files a task from one line, `--tokens`
+  lists the names a line may use, and `--dry-run` checks a generated line before anything is
+  queued. See [For agents](#for-agents).
 - **Task descriptions rendered**: Markdown, plain text, or the HTML Vikunja's web editor
   stores, in your own colours, in process, with no external tools.
 - **Labels, priorities, due dates, projects**, with fuzzy pickers for each. Labels can be
@@ -78,7 +87,7 @@ Raspberry Pi 5), Ubuntu 24.04 (Raspberry Pi 4 Model B). Your results may vary on
 releases and distributions.
 
 ```sh
-tag=v1.1.0
+tag=v1.2.2
 arch=$(uname -m)          # x86_64 or aarch64
 base=https://github.com/sjwasko/tui-do/releases/download/$tag
 
@@ -264,6 +273,8 @@ server:
 sync:
   # The local store answers every read, so this sets staleness rather than speed.
   # Shorter if you have several instances syncing against the same Vikunja.
+  # Each sync fetches what changed; once an hour it re-reads everything, which is
+  # what notices a task deleted elsewhere. R does that at once.
   interval_seconds: 300
   enabled: true
 
@@ -312,6 +323,12 @@ works.
 `?` shows this table inside the application, and `:` runs any command by name if you would
 rather not remember a key.
 
+Where Vikunja's web interface has a shortcut, tui-do uses the same key, so `t`, `d`, `u`,
+`g a`, `p`, `m`, `l` and `e` do the same thing in both, and in the
+[omavikunja](https://github.com/sjwasko/omavikunja) panel. That changed in 1.2.0: done was
+`d`, due date `D`, add `a`, undo `u`, show completed `t`, and go to a label `g l`. The first
+launch after upgrading lists what moved; `d` on that screen stops it appearing again.
+
 ### Navigation
 
 | | |
@@ -320,7 +337,7 @@ rather not remember a key.
 | `C-d` / `C-u`, `PgDn` / `PgUp` | Page down / up |
 | `g g` / `G`, `Home` / `End` | Jump to top / bottom |
 | `Tab` / `S-Tab` | Focus the next / previous pane |
-| `g p` / `g l` | Go to a project / label |
+| `g p` / `g a` | Go to a project / label |
 | `/` | Search the current list |
 | `Enter` | Open the selected task |
 | `Esc` | Back to the list, then out of a search |
@@ -329,15 +346,16 @@ rather not remember a key.
 
 | | |
 |---|---|
-| `a` | Add a task, in quick-add syntax |
+| `n` | Add a task, in quick-add syntax |
 | `e` | Edit the selected task |
-| `d` | Mark done, or not done |
-| `p` / `D` | Set priority / due date |
+| `t` | Mark done, or not done |
+| `p` / `d` | Set priority / due date |
 | `l` | Add or remove labels |
 | `m` | Move to another project |
+| `u` | Open the task's project, keeping the task selected |
 | `o` | Open a link in the selected task |
-| `x` | Delete the task |
-| `u` / `C-r` | Undo / redo |
+| `x`, `Delete` | Delete the task |
+| `U` / `C-r` | Undo / redo |
 | `Space` | Configured quick actions |
 
 ### View and application
@@ -345,9 +363,9 @@ rather not remember a key.
 | | |
 |---|---|
 | `z s` / `z p` | Show or hide the sidebar / preview pane |
-| `t` | Show or hide completed tasks |
+| `z d` | Show or hide completed tasks |
 | `L` / `H` | Next / previous column layout |
-| `r` | Sync: push, then fetch what changed |
+| `r`, `F5` | Sync: push, then fetch what changed |
 | `R` | Sync everything, so deletions made elsewhere are noticed |
 | `:` / `?` | Run a command by name / show the keys |
 | `q`, `C-c` | Quit |
@@ -381,11 +399,15 @@ while one at the end still comes out.
 |---|---|
 | `+project` | File it in a project, by title or id: `+Legal`, `+#12` |
 | `*label` | Attach a label: `*urgent` |
-| `@user` | Assign someone: `@admin` |
+| `@user` | Assign someone: `@admin`. A name tui-do has not seen on a task stays in the title |
 | `!1` … `!5` | Priority, 1 lowest to 5 highest |
 | a date | `tomorrow`, `next friday`, `27aug26`, `aug 27`, `2026-08-27`, `27/08/2026` |
 | `due <date>` / `start <date>` | The same, said explicitly, and also `27.8`, `27/08`, `27/08/26` |
-| `every <n> <unit>` | Repeat: `every 2 weeks`, `every month` |
+| `every <n> <unit>` | Repeat: `every 2 weeks`, `every month`. With two `every`s, the last one that forms a repeat is used |
+
+**A weekday abbreviation needs `due` or `start` too** (`due fri`, `start mon`): `sun`,
+`sat` and `wed` are words as well, so `water plants in the sun` keeps its title. The full
+name, `friday`, works anywhere.
 
 **A date in digits alone needs `due` or `start` in front of it** unless it has a four-digit
 year. `call mom due 27.8` is due on 27 August; `llvm 1.6 GB`, `add 1/2 cup` and
@@ -421,6 +443,8 @@ follows it except whitespace, punctuation and other tokens. A date kept mid-sent
 in the title, so the best form keeps it there and writes the date again at the end. Every
 real add whose line differs from its best form says so on a second line,
 `as typed best: …`; a line already written that way, spacing aside, gets no second line.
+A best form starting with `-` is shown after `-- `, which keeps it from being read as a
+flag when pasted back; the `--` goes outside any quotes.
 
 Wrap a name containing spaces in brackets or quotes; brackets are usually easier from a
 shell, which strips quotes before tui-do sees them:
@@ -444,7 +468,7 @@ key, and a line under the input shows what will be created, re-read on every key
 | Enter | Add it, exactly as `tui-do add '<the line>'` would |
 | Esc, Ctrl-C | Cancel, adding nothing |
 
-The interface's `a` prompt completes and answers `?` the same way. Without a terminal,
+The interface's `n` prompt completes and answers `?` the same way. Without a terminal,
 `tui-do add` with no text is the usage error it always was. The flags apply to the line it
 asks for, so `tui-do add --dry-run` alone asks, then checks what was typed and adds nothing.
 
@@ -468,7 +492,8 @@ missing, when either is redirected. Three flags matter:
   adding it. It reads only the local store, so a project created since the last sync is
   unknown to it.
 - **`--create-labels`** creates any label the line names that does not exist yet. The
-  interface asks instead of assuming.
+  interface asks instead of assuming. Without it, an unknown `*label` is left off and its
+  words stay in the title as typed.
 - **`--offline`** skips the send entirely, **but it needs a store that already knows your
   projects**, because a task has to be filed somewhere. On a machine that has never synced
   you get *"no project to add to"*. Without the flag `tui-do add` fetches the project list
@@ -479,7 +504,8 @@ missing, when either is redirected. Three flags matter:
 its tokens; the description is body text, stored exactly as given (Markdown, plain text or
 HTML), with no tokens read out of it. Pick one of three ways:
 
-- **`-d 'text'`** inline, for a line or two. Newlines in the argument are kept.
+- **`-d 'text'`** inline, for a line or two. The argument is kept byte for byte, newlines
+  included.
 - **`--description-file PATH`** reads a file, and **`--description-file -`** reads stdin, for
   anything longer. A quoted heredoc moves several paragraphs without retyping or expanding
   them:
@@ -504,7 +530,8 @@ HTML), with no tokens read out of it. Pick one of three ways:
   kept exactly, `# Heading`s included. Leave it empty for no description, or quit with an
   error (`:cq` in vim) to add nothing. It needs a terminal.
 
-It must be UTF-8 and at most 64 KiB, and one trailing newline is dropped. The confirmation
+It must be UTF-8 and at most 64 KiB. From a file, stdin or the editor, one trailing newline
+is dropped, since a file or a heredoc always ends in one, and CRLF becomes LF. The confirmation
 line counts it rather than printing it:
 
 ```console
@@ -565,9 +592,6 @@ interface does**: the same outbox, the same backoff, and the same three-way merg
 replays your change onto the server's current copy. Something calling the Vikunja API
 directly is a second writer with none of that.
 
-**`skills/tui-do/SKILL.md`** documents this for agents and is installable as a skill by tools
-that support them. It is plain Markdown, so anything else can simply read it.
-
 **Learn the names with `--tokens`.** `tui-do add --tokens` lists the projects, labels and
 users in the local store, one per line and grouped, each written the way a line should name
 it (`+[Life Admin]` for a project with a space), then the token syntax. It reads the store
@@ -588,6 +612,30 @@ One flag deserves mentioning: **`--create-labels` should usually stay off.**
 Labels are one global pool shared by every project, so a typo in a generated line becomes a
 permanent entry that pollutes completion everywhere. Pass it only where the label vocabulary
 is yours rather than a model's.
+
+### Giving it to your agent
+
+[`skills/tui-do/SKILL.md`](skills/tui-do/SKILL.md) is the whole of this, written for a
+model: the tokens, `--tokens`, `--dry-run`, descriptions from stdin, and what a zero exit
+does and does not mean. It is plain Markdown in the
+[Agent Skills](https://agentskills.io) format.
+
+For Claude Code, install it as a personal skill, available in every project:
+
+```sh
+mkdir -p ~/.claude/skills/tui-do
+curl -fsSL https://raw.githubusercontent.com/sjwasko/tui-do/v1.2.2/skills/tui-do/SKILL.md -o ~/.claude/skills/tui-do/SKILL.md
+```
+
+For an agent that reads `AGENTS.md` instead, save the file anywhere and add one line to the
+`AGENTS.md` of the project the agent works in:
+
+```markdown
+To record a task or a follow-up, use `tui-do add`; read /path/to/tui-do/SKILL.md first.
+```
+
+The skill describes `add` as of the release it is fetched from, so fetch it from the tag you
+installed.
 
 ### What verbs/actions to add for agents next?
 

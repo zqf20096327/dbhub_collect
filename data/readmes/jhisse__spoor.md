@@ -153,7 +153,7 @@ Any other client: Streamable HTTP at `http://localhost:8080/mcp`. The endpoint i
 
 | Tool | What it returns |
 |---|---|
-| `list_traces` | Traces, newest first, one summary row each. Filters: service, status, since |
+| `list_traces` | Traces, newest first, one summary row each. Filters: service, status, since. Pages with `cursor`, from the `next_cursor` of the previous answer |
 | `get_trace` | One trace and its spans in start order, with input and output. Long values are cut and the cut is reported |
 | `search_spans` | Spans whose name, input, output, metadata, status message or events hold every word of a query (`"phrase"`, `-excluded`) |
 
@@ -209,13 +209,13 @@ sqlite3 spoor.db ".backup backup.db"       # or: sqlite3 spoor.db "VACUUM INTO '
 
 **Upgrade.** Replace the binary and start it. `spoor serve` applies pending schema migrations before it opens either port and logs the versions; `spoor migrate` applies them, loads the price table and exits. Each migration is one transaction that also records its version, so a process killed while migrating leaves the schema as it was and the next start applies that migration again.
 
-**Retention.** Unset, spoor keeps everything. With `SPOOR_RETENTION_DAYS=30`, every `SPOOR_SWEEP_INTERVAL` spoor deletes each trace first stored more than 30 days ago, with all its spans. It applies to every trace and changing it needs a restart. The file does not shrink by itself: SQLite reuses the freed pages, and `VACUUM` with spoor stopped returns them.
+**Retention.** Unset, spoor keeps everything. With `SPOOR_RETENTION_DAYS=30`, at the start and then every `SPOOR_SWEEP_INTERVAL` spoor deletes each trace first stored more than 30 days ago, with all its spans. It applies to every trace and changing it needs a restart. The file does not shrink by itself: SQLite reuses the freed pages, and `VACUUM` with spoor stopped returns them.
 
 **Exposing the ports.** Neither port has authentication, and both bind loopback by default (`serve` logs a warning for each one that does not). To reach spoor from another machine, set `SPOOR_HTTP_ADDR` or `SPOOR_INGEST_ADDR` only behind a VPN, a firewall or a proxy that authenticates, and list the name you open the UI under in `SPOOR_ALLOWED_HOSTS`, or every request is refused with 403. What spoor does and does not protect is in [SECURITY.md](SECURITY.md).
 
 **Logs.** Text lines on standard error. A request that failed inside spoor is logged at level `error`: `internal error` for a UI request answered 500, `storage unavailable` for an ingest request answered 503 (OTLP senders retry 503). `GET /healthz` on either port answers 200 while the database is reachable.
 
-**Prices.** A span's cost is calculated when it is ingested, from a price table that ships in the binary ([NOTICE](NOTICE)). `serve`, `demo` and `migrate` load the table into `model_prices` at every start, in one transaction. `serve` logs how many stored spans were priced with older rows and `spoor reprice` recalculates them; run `spoor reprice --dry-run` first. A cost the sender reported itself is left alone.
+**Prices.** A span's cost is calculated when it is ingested, from a price table that ships in the binary ([NOTICE](NOTICE)). `serve`, `demo` and `migrate` load the table into `model_prices` at every start, in one transaction. `serve` logs how many stored spans were priced with older rows and `spoor reprice` recalculates them; run `spoor reprice --dry-run` first. A cost the sender reported itself is left alone. The Help page says the day of the newest price in the table, and a span's cost breakdown the day its row was last updated.
 
 </details>
 
@@ -232,7 +232,7 @@ spoor stores, shows and counts. It does not judge, and it will not grow into a p
 | High-volume concurrent ingestion | Everything is written to one SQLite file |
 | A gRPC OTLP endpoint | Put an [OpenTelemetry Collector](docs/recipes/otel-collector.md) in front |
 
-**Known gaps.** The "what is new in this prompt" view needs the sender to export prompt content. The price table has one rate per model, so a Gemini Pro prompt above 200k tokens is priced at the base rate; the span's cost breakdown says so.
+**Known gaps.** The "what is new in this prompt" view needs the sender to export prompt content. The split of a prompt into cache read, fresh input and cache write, and the cache-loss marks, need the sender to report cache counts: [which senders do](docs/recipes/README.md#cache-counts). The price table has one rate per model, so a Gemini Pro prompt above 200k tokens is priced at the base rate; the span's cost breakdown says so.
 
 ## Contributing
 

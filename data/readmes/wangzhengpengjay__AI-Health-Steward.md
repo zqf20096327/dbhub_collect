@@ -28,7 +28,12 @@
 ## 🚀 快速开始
 
 ```bash
-git clone https://github.com/zhengpengwangjay/AI-Health-Steward.git
+# HTTPS（也可点击仓库首页绿色「Code」按钮复制地址）
+git clone https://github.com/wangzhengpengjay/AI-Health-Steward.git
+
+# 或 SSH
+git clone git@github.com:wangzhengpengjay/AI-Health-Steward.git
+
 cd AI-Health-Steward
 cp .env.example .env          # 填入你的 API Key
 cp .env backend/.env

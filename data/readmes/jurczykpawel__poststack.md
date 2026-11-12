@@ -258,6 +258,10 @@ re-encrypt every `channels.token_encrypted` under the new key (in a maintenance 
 
 > **Instagram account statistics (PRO)?** See [docs/INSIGHTS.md](docs/INSIGHTS.md): what is collected, the extra permission each login needs, and how to read the numbers.
 
+> **Stories and a cut-off reel in your Facebook Story?** See [docs/STORIES.md](docs/STORIES.md): Story format, auto-Story modes, and how to turn off Facebook's own shortened reel preview in Story.
+
+> **Telegram?** See [docs/TELEGRAM_CONNECTIONS.md](docs/TELEGRAM_CONNECTIONS.md): create a bot with BotFather, connect it, and the pitfalls (one webhook per bot).
+
 > **Want an AI agent to click through this for you?** The repo ships an agent skill,
 > [`skills/meta-app-setup`](skills/meta-app-setup/SKILL.md), that drives the whole setup below in
 > your own browser and stops only for your password, 2FA and consent screens.
@@ -631,7 +635,9 @@ publish-time permissions. Direct publishing also queries TikTok afresh before in
 and stops when the creator cannot post now. The inbox/draft flow is unchanged.
 
 The other publishing channels — **X, LinkedIn, Threads, YouTube, Facebook & Instagram** — publish
-directly, subject to each platform's own developer-app setup and API access tier.
+directly, subject to each platform's own developer-app setup and API access tier. LinkedIn can
+publish as your profile or as Company Pages you administer — see
+[DEPLOY → LinkedIn Company Pages](docs/DEPLOY.md#linkedin-company-pages).
 
 ---
 

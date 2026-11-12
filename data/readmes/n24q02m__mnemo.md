@@ -1,6 +1,6 @@
 # Mnemo MCP Server
 
-> **Distribution & CLI:** the repo and CLI are `mnemo`. The PyPI distribution is **`n24q02m-mnemo`** (install `pip install n24q02m-mnemo` / `uvx n24q02m-mnemo`). The MCP server remains available: run `mnemo` (or legacy `mnemo-mcp`).
+> **Distribution & CLI:** the repo is `mnemo`; the PyPI distribution is **`n24q02m-mnemo`** (install `pip install n24q02m-mnemo` / `uvx n24q02m-mnemo`). Two console scripts ship: **`n24q02m-mnemo`** (legacy alias `mnemo-mcp`) starts the HTTP MCP server, and **`mnemo`** is the CLI-first memory surface that never serves. See [CLI](#cli).
 
 mcp-name: io.github.n24q02m/mnemo
 
@@ -38,7 +38,7 @@ mcp-name: io.github.n24q02m/mnemo
 | [imagine-mcp](https://github.com/n24q02m/imagine-mcp) | Image and video understanding + generation for AI agents -- across Gemini, Op... | MCP |
 | [jules-task-archiver](https://github.com/n24q02m/jules-task-archiver) | Chrome Extension for bulk operations on Jules tasks via batchexecute API -- a... | Tooling |
 | [mcp-core](https://github.com/n24q02m/mcp-core) | Shared foundation for building MCP servers -- Streamable HTTP transport, OAut... | MCP |
-| [mnemo](https://github.com/n24q02m/mnemo) | Persistent AI memory with hybrid search and embedded sync. Open, free, unlimi... | MCP |
+| [mnemo](https://github.com/n24q02m/mnemo) | Persistent AI memory with hybrid search. Open, free, unlimi... | MCP |
 | [fastretrieval](https://github.com/n24q02m/fastretrieval) | Multi-model retrieval runtime for ONNX/GGUF embeddings and reranking | Library |
 | [skret](https://github.com/n24q02m/skret) | Secrets without the server. | CLI |
 | [tacet](https://github.com/n24q02m/tacet) | A self-distilling neuro-symbolic cascade that amortises LLM cost across knowl... | Tooling |
@@ -374,6 +374,35 @@ HTTP. Mix freely — e.g. cloud OpenRouter for `chat` while `embed`/`rerank`
 point at a local OpenAI-spec server, or all cloud. Keys are host-only
 (end users never see them) and may alternatively come from the
 `HULL_<TASK>_API_KEY` env vars.
+
+### Provider keys: rotation across several credentials
+
+A cell's key is the seed of an ordered **credential pool** per provider
+identity (`hull_core.credentials`, stored under `~/.mnemo/credentials.db`, keys
+sealed at rest). Every provider call leases the highest-priority usable
+credential, records the outcome, and rotates:
+
+| Upstream | Action |
+|---|---|
+| `401` / `403` | disable that credential, use the next one |
+| `429` | cool it down (`Retry-After` / `rate_limit_reset`, 1 s–1 h, default 60 s), use the next one |
+| `5xx` | retry once on the same credential, then use the next one |
+| anything else | re-raise; the credential is not blamed |
+| pool empty / all blocked | one error naming the pool counts and the earliest retry, never a key |
+
+- Add more keys through the library (`hull_core.credentials`), e.g.
+  `CredentialStore(mnemo_config_dir() / "credentials.db").add_credential(...)`,
+  or the `KeyPool`/`CredentialStore` API directly; a task cell with no
+  `api_key` still works as long as its provider pool holds one.
+- `provider = "openrouter"` (optional) selects a pool identity other than the
+  one derived from `base_url`. `account = "<account-id>"` (optional) selects a
+  named account's own pool — rotation never crosses accounts.
+- A legacy key in `config.toml` or `HULL_<TASK>_API_KEY` is copied into the
+  pool on startup **while the pool is empty** and keeps working untouched; the
+  env var is never deleted and no key is ever logged.
+- The cell always owns the model id: all four task cells may share one provider
+  pool, so an entry contributes its key and endpoint, not a model override.
+
 
 ## Remote (HTTP mode)
 

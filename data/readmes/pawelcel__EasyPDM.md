@@ -301,6 +301,11 @@ bottom of an item's panel you can see the full **history**: who created it, ever
 change, every revision with its comment, every added/removed attachment, every
 lock/release.
 
+By default anyone with access to an item can release it, its author included. Where a
+second pair of eyes is wanted, an administrator can switch on **"Only an administrator can
+set the Released status"** under Settings → Users: the author then sends the item for
+review, and an administrator releases it.
+
 An **Assembly can't get ahead of its own bill of materials**. It goes "under review" only
 once every component one level below it is at least under review, and "released" only once
 every one of them is released. Only the direct children are checked — what sits deeper is
@@ -365,6 +370,18 @@ manufacturer has a name, contact people and a Series/Type + Subtype list of what
 supplies. You pick them from a list when filling in a Part's/Assembly's properties,
 instead of typing them in by hand.
 
+The **Processes** menu holds the company's processes — laser cutting, bending, welding,
+hardening — each with a description and a choice of whether it applies to parts, assemblies
+or both. The same name can appear several times with different descriptions: "Hardening, up
+to 50 HRC" and "Hardening, induction" are one process with two specifications. A
+manufactured Part or Assembly picks any number of them, or none: click the field to choose
+from the list, or type to narrow it by name or description. The picked processes are listed
+under the field with their descriptions, each with an × to remove it. An item keeps the name and
+description it picked, so a released part keeps the specification it was released with
+even if the catalog changes later. The chosen processes also appear as a column in the bill
+of materials and in both CSV exports. The catalog itself can be filtered by text and by
+whether a process applies to parts or assemblies.
+
 A **Client** has a name (plus an optional location), a list of second names/trade variants
 (add as many as you need — typing an existing client's name into "Add client" switches to
 adding it a new one instead of creating a duplicate), its own contact people, and its own
@@ -373,11 +390,41 @@ can optionally be linked to a Client — and, when that client has several, to o
 Name 2. The project selector then shows "Project (Client, Name 2)", and the client's detail
 panel lists every Project assigned to it, with a button to jump straight there.
 
+### Documentation languages
+
+Documentation languages are separate from the interface language each person picks for
+themselves. Under **Settings → Language** an administrator keeps the list of languages the
+company documents in — a full name and a code of up to three capital letters; the list
+starts with English (EN) and Polish (PL) — and chooses the default documentation language.
+
+Every project has a **main language**, the default one when the project is created, and
+can be marked **multilingual** with the languages its documentation is written in; both
+are set in the project properties. The add-item dialog names the project's language in its
+title, so it is clear which language the new item is described in.
+
+**Processes** are entered in the default documentation language, and a button next to each
+opens its translations: the default version on top and one other language at a time below,
+picked from a list that shows which are already translated. The catalog follows the
+default language and marks processes still without a translation. A part or assembly keeps
+its processes in every language and shows them in its project's main language — in the
+item panel, the bill of materials and both CSV exports.
+
+A **part or assembly name** is translated through the button to the left of the name
+field. When adding a new item, the name field suggests names existing parts or assemblies
+already have in the project's language, and picking one brings its translations along — a
+second "Kostka" arrives with its "Cube".
+
 ### Search and the whole database
 
 The **Whole database** tab searches all items regardless of project — by name, number,
-tags, kind. Found filters can be saved for reuse, and a "Clear filters" button resets
+tags, kind. Several tags can be ticked at once; the list then shows the items that carry all
+of them. Found filters can be saved for reuse, and a "Clear filters" button resets
 everything at once.
+
+Tags are typed freely, so typos and labels nobody uses any more pile up. An administrator
+sees every tag in **Settings → Tags**, with how many items carry it, and can filter for the
+unused ones. Deleting a tag there removes it from all items at once, released ones
+included, and from the suggestions and the filter.
 
 ### Downloadable documentation
 
@@ -403,6 +450,13 @@ Two roles: **administrator** (full access, sees all projects, manages accounts a
 server settings) and **user** (sees and works only in the projects they've been assigned
 to). Everyone manages their own interface language (Polish/English/German) and
 light/dark theme in Settings.
+
+Every account has a **first and last name**, separate from the display name and meant for
+drawing title blocks. Both are required when an account is created; Settings → Users marks
+accounts that still lack them, and the edit button next to an account fills them in.
+
+**Settings → Company** (administrators) holds the company name and logo — PNG or JPEG,
+ideally square — for the drawing title block.
 
 ## For administrators and developers
 

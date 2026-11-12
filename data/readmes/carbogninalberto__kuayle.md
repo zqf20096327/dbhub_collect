@@ -26,8 +26,8 @@ Thanks to everyone who has contributed code, reviews and ideas. See the
 [contributors graph](https://github.com/carbogninalberto/kuayle/graphs/contributors).
 
 <!-- contributors:start -->
-<a href="https://github.com/carbogninalberto"><img src="https://avatars.githubusercontent.com/u/17618905?v=4&amp;s=64" width="64" height="64" alt="@carbogninalberto" title="@carbogninalberto"></a>
 <a href="https://github.com/carbninai"><img src="https://avatars.githubusercontent.com/u/346896133?v=4&amp;s=64" width="64" height="64" alt="@carbninai" title="@carbninai"></a>
+<a href="https://github.com/carbogninalberto"><img src="https://avatars.githubusercontent.com/u/17618905?v=4&amp;s=64" width="64" height="64" alt="@carbogninalberto" title="@carbogninalberto"></a>
 <a href="https://github.com/uiYzzi"><img src="https://avatars.githubusercontent.com/u/40852301?v=4&amp;s=64" width="64" height="64" alt="@uiYzzi" title="@uiYzzi"></a>
 <a href="https://github.com/kasperhartwich"><img src="https://avatars.githubusercontent.com/u/616231?v=4&amp;s=64" width="64" height="64" alt="@kasperhartwich" title="@kasperhartwich"></a>
 <a href="https://github.com/MarioGK"><img src="https://avatars.githubusercontent.com/u/8379079?v=4&amp;s=64" width="64" height="64" alt="@MarioGK" title="@MarioGK"></a>
@@ -149,7 +149,7 @@ assistant that can hand issues to coding agents running on your own machines.
 
 - A visual editor to design the steps a coding task follows: implement, test, open a pull request, agent review, CI, your go-ahead and merge. Start from templates (Standard, Review loop, Full cycle) or a blank workflow.
 - Defaults per workspace, team or project; the most specific one wins.
-- Agent profiles: a role, coding agent, model and instructions, plus skills from the workspace library delivered as <code>SKILL.md</code> files. Profiles never grant permissions; every step runs under the workspace policy.
+- Agent profiles: a role you name, what the agent does (plans, changes code or reviews), coding agent, model and instructions, plus skills from the workspace library delivered as <code>SKILL.md</code> files. Profiles never grant permissions; every step runs under the workspace policy.
 
 </details>
 
@@ -166,7 +166,9 @@ assistant that can hand issues to coding agents running on your own machines.
 <summary><b>Integrations</b></summary>
 
 - GitHub App: links branches, commits and pull requests to issues, moves issues through configurable status rules, and comments on pull requests.
-- Outgoing webhooks, personal access tokens with scopes, and Telegram.
+- HTTP API with scoped personal access tokens and an [OpenAPI 3.1 reference](docs/api.md) served by every instance at `/api/openapi.json`.
+- Outgoing webhook registration with signed deliveries (event delivery is not wired yet), and Telegram.
+- [MCP server](docs/mcp.md) at `/mcp`: Claude Code, Claude Desktop, Cursor and Codex read and update issues and wiki pages with a scoped token.
 - Workspace export/import between instances, with assets and ID remapping.
 
 </details>

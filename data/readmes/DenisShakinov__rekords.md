@@ -22,10 +22,11 @@ schemas and queries are written once in common code, and every engine supports e
 ## What you get
 
 - Plain Kotlin classes, mapped by `kotlinx.serialization` — no code generation step.
-- Filters, ordering, paging and counting.
+- Filters, ordering, paging and counting, and one rekord for each value of some fields.
 - Nested rekords and lists of them, stored once and shared between the rekords referring to them,
   and filtered by their fields — a nested rekord can be an id too.
 - Embedded classes: a group of fields reused by several rekord types, kept within each of them.
+- Generated ids: numbers counted up or UUIDs, given to rekords as they are put.
 - Transactions: several operations applied together or not at all.
 - Observing: queries as `Flow`s, read again whenever a transaction writing their rekords commits.
 - Versioned schemas with migrations run in a transaction of their own.
@@ -177,6 +178,37 @@ the field holding it, as a rekord held is. An embedded class holds values, rekor
 embedded classes, but no list. A field holding one may be null unless it is an id, the class then
 needing a field that cannot be: null is kept as each of its fields holding none.
 
+An id marked `generated = true` is given to a rekord as it is put. An `Int` or `Long` one gets the
+next number of its type — one never given before, so a rekord deleted does not give its number to
+the next — and a `String` one a random UUID. A rekord that has no id yet holds `0` or
+`""` there, and `putRekord` hands it back with the id it was given — along with the ids given to the
+rekords it holds, as deep as they nest:
+
+```kotlin
+@Rekord(type = "folder")
+data class FolderRekord(
+    @Field(name = ID, id = true, generated = true) val id: Long = 0,
+    @Field(name = NAME) val name: String,
+)
+
+@Rekord(type = "task")
+data class TaskRekord(
+    @Field(name = ID, id = true, generated = true) val id: String = "",
+    @Field(name = TITLE) val title: String,
+    @Field(name = FOLDER) val folder: FolderRekord,
+)
+
+val inbox: FolderRekord = store.putRekord(FolderRekord(name = "Inbox")).getOrThrow() // id = 1
+val task: TaskRekord = store.putRekord(TaskRekord(title = "Write", folder = inbox)).getOrThrow()
+```
+
+A rekord already holding its id is updated as any other. One that does not is added each time it is
+put: put a rekord held by several others once, and have them hold the one handed back. A generated
+id is the only id of its rekord, a non-null `Int`, `Long` or `String`, and not a field of an
+embedded class. A number cannot be encrypted, a UUID can be `Encryption.Deterministic`. Nothing but
+the values and the largest number given is kept for it, so a field is made generated with no
+migration. A rekord type renamed by a migration keeps counting where it left off.
+
 ### Schema
 
 The schema lists every rekord type, nested ones included, and upgrades the storage from one
@@ -220,7 +252,8 @@ val store = RekordsStore(NotesSchema()) {
 }
 ```
 
-Every operation returns a `Result`:
+Every operation returns a `Result`. Putting returns the rekords as stored, with any
+[generated ids](#rekords) given to them:
 
 ```kotlin
 store.putRekord(note)
@@ -241,9 +274,24 @@ val dueThisWeek: List<NoteRekord> = store
 
 val count: Int = store.count<NoteRekord>(Filter.Contains(NoteRekord.TITLE, "Draft")).getOrThrow()
 
+// The note due last in each folder, and how many folders hold notes.
+val lastOfEachFolder: List<NoteRekord> = store
+    .getRekords<NoteRekord>(
+        orderBy = listOf(Order.Descending(NoteRekord.DUE_DATE)),
+        distinctBy = listOf(NoteRekord.FOLDER),
+    )
+    .getOrThrow()
+val folders: Int = store.count<NoteRekord>(distinctBy = listOf(NoteRekord.FOLDER)).getOrThrow()
+
 store.deleteRekord(note)
 store.delete<NoteRekord>(Filter.LessThan(NoteRekord.CREATED, cutoff))
 ```
+
+`distinctBy` reads one rekord for each set of values of the fields it names - the first in the
+order asked for - and counts those sets instead of the rekords; `limit` and `offset` page what is
+read so. A field holding a nested rekord tells rekords apart by the ids of that rekord, one holding
+an embedded class by all of its fields. A list of rekords, or a field encrypted Randomized, tells
+nothing apart. A null is a value like any other.
 
 Filters are combined with `+` (and) and `or`, or with `Filter.And`, `Filter.Or` and `Filter.Not`.
 `Filter.Nested` filters by a field of a nested rekord, or of any rekord in a list:

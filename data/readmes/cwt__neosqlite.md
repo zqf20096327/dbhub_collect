@@ -1,6 +1,10 @@
 # NeoSQLite - NoSQL for SQLite with PyMongo-like API
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python Compatibility](https://img.shields.io/badge/python-3.10%20%7C%203.15-blue.svg)](#installation)
 [![PyPI Version](https://img.shields.io/pypi/v/neosqlite.svg)](https://pypi.org/project/neosqlite/)
+[![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-blue)](https://deepwiki.com/cwt/neosqlite)<!-- [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/cwt/neosqlite) -->
+[![View Code Wiki](https://assets.codewiki.google/readme-badge/static.svg)](https://codewiki.google/github.com/cwt/neosqlite?utm_source=badge&utm_medium=github&utm_campaign=github.com/cwt/neosqlite)
 
 `NeoSQLite` (new + nosqlite) is a pure Python library that provides a schemaless, `PyMongo`-like wrapper for interacting with SQLite databases. The API is designed to be familiar to those who have worked with `PyMongo`, providing a simple and intuitive way to work with document-based data in a relational database.
 
@@ -34,21 +38,24 @@
 
 See [Release Notes](documents/releases/) for the full history.
 
-## Latest Release: v1.17.2
+## Latest Release: v1.17.4
 
-NeoSQLite v1.17.2 is a **correctness and PyMongo API parity release** resolving gaps surfaced during real-world dogfooding (e.g. against blogging platforms like `neo-blogger`). It introduces native SQLite FTS5 BM25 text relevance scoring and sorting in `find()`, PyMongo-compatible multi-field text index creation syntax, fluent chaining methods on `GridOutCursor`, direct `Connection` instantiation for `GridFSBucket`, safe collection counting on GridFS system tables, and expanded unit test coverage reaching **81.18%**. Fully backward compatible.
+NeoSQLite v1.17.4 is a **critical correctness and SQLite engine compatibility release**. It resolves a major silent data type regression introduced by SQLite's internal subtype handling changes in SQLite **≥ 3.54.0** (including SQLite 3.54.1 on macOS / Homebrew), where scalar subqueries dropped the internal `'J'` JSON subtype across subquery boundaries. This previously caused `json_set()`, `jsonb_set()`, and `json_object()` to serialize subquery array and object results into escaped JSON string literals (e.g. `'"[1, 2, 3]"'`) instead of native JSON arrays or objects.
+
+By wrapping all JSON-producing scalar subqueries with an outer `json((SELECT ...))` expression, NeoSQLite restores the `'J'` subtype uniformly across modern SQLite (≥ 3.54) while maintaining full backward compatibility with older SQLite versions (≤ 3.53, e.g. Fedora 45). Additionally, this release eliminates unclosed connection `ResourceWarning` leaks and aligns NX-27017 wire protocol dependencies. Fully backward compatible.
 
 **Key Highlights:**
-- **FTS5 BM25 Text Relevance Scoring & Sorting** — `find({"$text": {"$search": ...}})` computes true BM25 relevance scores across indexed fields, supports score projection via `{"score": {"$meta": "textScore"}}`, and enables sorting by `[("score", {"$meta": "textScore"})]`.
-- **MongoDB-Style Multi-Field Text Index Definitions** — `collection.create_index([("field1", "text"), ("field2", "text")])` creates FTS virtual tables across all specified text fields in a single call, matching PyMongo syntax.
-- **Fluent `GridOutCursor` Operations** — Added `.sort()`, `.skip()`, `.limit()`, `.batch_size()`, `.to_list()`, `.clone()`, and `.rewind()` to `GridOutCursor` for idiomatic cursor chaining on GridFS file searches.
-- **Direct Connection Support in `GridFSBucket`** — `GridFSBucket(conn)` accepts a `neosqlite.Connection` directly (automatically unwrapping the underlying SQLite database handle) alongside raw database connections (`GridFSBucket(conn.db)`).
-- **Safe Document Counting on GridFS System Collections** — Dotted collection access like `conn.fs.files.count_documents()` maps directly onto relational schema columns without raising `no such column: data`.
-- **Robust Quality Gates & Differential Testing** — Achieved 100.0% compatibility across 404 comparison cases against MongoDB 8.2.12, passed 3,034 pytest unit tests with **81.18% code coverage**, and verified zero mypy/lint warnings.
+- **SQLite ≥ 3.54 Scalar Subquery Subtype Fix** — Enclosed all scalar subqueries producing JSON in `json((SELECT ...))`, ensuring enclosing functions (`json_set`, `jsonb_set`, `json_object`) recognize outputs as structured JSON rather than plain text strings on SQLite ≥ 3.54.
+- **Hardened Array Updates** — Fixed `$push` (with `$position` and `$slice`), `$pull`, and `$pullAll` update SQL clauses so updated documents retain proper JSON array structures in both TEXT and JSONB modes.
+- **Hardened Aggregation & `$expr` Array Converters** — Updated SQL converters for `$slice`, `$firstN`, `$lastN`, `$sortArray`, `$filter`, `$map`, `$maxN`, `$minN`, `$setIntersection`, `$setUnion`, `$setDifference`, and `$objectToArray` to prevent stringification of nested arrays and objects.
+- **Clean Resource Management** — Resolved unclosed SQLite connection leaks and silenced associated `ResourceWarning` diagnostic notices.
+- **Cross-Engine Verification** — Verified 100% test pass on modern SQLite (macOS, SQLite 3.54.1 / Python 3.14) and older SQLite (Fedora 45 container, SQLite 3.53.4 / Python 3.15). All 3,034 tests in `neosqlite` pass with **80.70%** line coverage; all 180 tests in `nx_27017` pass.
 
-For full details, see [documents/releases/v1.17.2.md](documents/releases/v1.17.2.md). Previous release highlights are in [documents/releases/v1.17.1.md](documents/releases/v1.17.1.md).
+For full details, see [documents/releases/v1.17.4.md](documents/releases/v1.17.4.md). Previous release highlights are in [documents/releases/v1.17.3.md](documents/releases/v1.17.3.md).
 
 ## Installation
+
+NeoSQLite supports Python 3.10, 3.11, 3.12, 3.13, 3.14, and 3.15.
 
 ```bash
 pip install neosqlite
