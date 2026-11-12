@@ -25692,5 +25692,1568 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "e342fb70910f+2": {
+  "fn": "tinbase/tinbase",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "tinbase logo "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "A pure-JS backend built on PGlite (Postgres compiled to WASM), with an embedded-native-Postgres and an ultralight pure-JS (`@tinbase/pg-mem`) engine too. One command, real Row Level Security, and 1:1 with Supabase's APIs and migration conventions."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    17,
+    7,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "- **Three engines, one API.** Default is embedded native Postgres 17 (macOS/Linux): ~59 MB of RAM at boot, PocketBase-class footprint, zero semantic differences; the first run downloads ~12 MB of binaries. `--engine wasm` runs PGlite (Postgres compiled to WASM) instead - portable, browser-ready, and the default on Windows. `--engine pgmem` is an ultralight pure-JS in-memory engine for local dev / previews - see Engines."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "- **Runs real projects unchanged.** A project's `CREATE EXTENSION` statements for extensions tinbase can't install (pg_cron, pg_net, http, hypopg, …) are skipped rather than aborting; `CREATE INDEX CONCURRENTLY` is applied without the (transaction-illegal) `CONCURRENTLY`; each migration runs with a fresh `search_path` like the Supabase CLI; and Vault, pgmq, cron, pg_net, and `moddatetime` are emulated. As a test, Cap-go/capgo's **335 migrations + seed apply and query cleanly**."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    53,
+    20,
+    53
+   ],
+   [
+    "replace",
+    53,
+    62,
+    53,
+    54,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    70,
+    54,
+    62
+   ],
+   [
+    "replace",
+    70,
+    85,
+    62,
+    63,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    89,
+    63,
+    67
+   ],
+   [
+    "replace",
+    89,
+    90,
+    67,
+    68,
+    [
+     "- **native** (default on macOS/Linux): embedded native Postgres 17. First run downloads platform binaries (~12 MB, from theseus-rs/postgresql-binaries, cached in `~/.cache/tinbase`), then `initdb` with memory-lean settings. ~59 MB RAM at boot. Listens only on a private unix socket (0700 dir, trust auth) - never TCP. macOS/Linux on x64/arm64."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    92,
+    68,
+    70
+   ],
+   [
+    "replace",
+    92,
+    93,
+    70,
+    71,
+    [
+     "- **pgmem** (`--engine pgmem`): an ultralight, pure-JS, in-memory engine via `@tinbase/pg-mem` — our fork of pg-mem — **no WASM**, so it's the lightest option for the browser (RapidNative local-dev / previews). The fork adds the Postgres surface real projects rely on: **PL/pgSQL, triggers, row-level-security policies, correlated subqueries, `information_schema` constraints, MERGE, range/full-text types, and declarative partitioning**. A full Supabase-style bootstrap and real migration sets now apply **unchanged — nothing skipped** (RLS/trigger/PL-pgSQL DDL runs). Runs the REST CRUD surface, email/password auth, **edge functions, realtime (broadcast/presence + `postgres_changes`), and database webhooks**. Caveats vs the Postgres engines: `LISTEN`/`NOTIFY` are no-ops, so realtime/webhook change events are synthesized in JS by the REST layer (every write goes through it in-process); the engine runs with superuser rights, so **RLS policies are created but not enforced per-request** (events are delivered unfiltered, not per-subscriber); **cron** and **pgmq** are absent. Local-dev / preview only — never production."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    112,
+    71,
+    90
+   ],
+   [
+    "replace",
+    112,
+    120,
+    90,
+    91,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    134,
+    91,
+    105
+   ],
+   [
+    "replace",
+    134,
+    146,
+    105,
+    117,
+    [
+     "|Service|Endpoint|Coverage|",
+     "|---|---|---|",
+     "|REST (PostgREST)|`/rest/v1`|select with embedded resources (to-one, to-many, many-to-many via junction, nested, `!inner`, aliases, hints, casts, JSON paths), all common filter operators incl. `or`/`and` trees, full-text search, order/limit/offset (top-level and per-embed), `single`/`maybeSingle`, `count`, insert/bulk insert, upsert (merge/ignore), update, delete, `Prefer` handling, RPC (scalar, `setof`, void, filters on results), PostgREST-shaped errors|",
+     "|Auth (GoTrue)|`/auth/v1`|email/password signup + sign-in, anonymous sign-in, email OTP / magic links / recovery, phone (SMS OTP) sign-in, signup and phone change through Supabase's `[auth.sms.twilio]` provider, session refresh with rotation, `getUser`, `updateUser`, sign-out, admin user CRUD (service key), GoTrue-shaped errors. JWTs are HS256 via WebCrypto; passwords are PBKDF2|",
+     "|Storage|`/storage/v1`|bucket CRUD, upload (raw + multipart), download (with byte ranges), public objects, signed URLs, signed upload URLs, list with folder entries, move/copy, remove, size/MIME limits, a project-wide storage quota. Metadata lives in `storage.objects` with RLS enforced; bytes go through a pluggable driver (fs in Node, memory anywhere)|",
+     "|Edge Functions|`/functions/v1`|`supabase.functions.invoke()` - Supabase-style `Deno.serve(handler)` functions (with `Deno.env`) run unchanged, as do `export default` handlers; loaded from `supabase/functions/<name>/index.{ts,js,mjs}` by the CLI or passed via `createBackend({ functions })`. Web-API functions work as-is; with `esbuild` installed, TypeScript, `npm:`/`jsr:`/URL imports (remote `.ts` included) and import maps (`<fn>/deno.json`, `functions/import_map.json`) are bundled. The CLI loads each function on its first request (`TINBASE_FUNCTIONS_EAGER=1` loads all at startup)|",
+     "|Queues (pgmq)|`pgmq.*`|Message queues via a pure-SQL pgmq subset (create/send/read/pop/delete/archive, visibility timeouts). Call from SQL or `supabase.schema('pgmq').rpc(...)`. No extension|",
+     "|Cron|`cron.*`|Scheduled jobs, drop-in with pg_cron's API — `cron.schedule(name, '*/5 * * * *', 'sql')` (also the `'N seconds'` form), `cron.unschedule(...)`, and the `cron.job` / `cron.job_run_details` tables. Schedules match in **UTC**, like hosted pg_cron; an in-process scheduler runs due jobs and logs to `cron.job_run_details`. Jobs run while tinbase is up, with service-role privileges. No extension|",
+     "|HTTP from SQL (pg_net)|`net.*`|`net.http_post` / `net.http_get` / `net.http_delete(...)` enqueue a request that an in-process worker sends, recording the reply in `net._http_response`. Lets a cron job or trigger call an Edge Function or any URL — the common Supabase `cron.schedule(..., $$ select net.http_post(...) $$)` pattern works unchanged. No extension|",
+     "|Database Webhooks|config|Fire HTTP requests on table INSERT/UPDATE/DELETE with Supabase's exact payload (`type`/`table`/`schema`/`record`/`old_record`). Configured via `createBackend({ webhooks })`, `backend.webhooks.register()`, or `supabase/webhooks.json`. Built on the CDC pipeline — no extension needed|",
+     "|Studio (Admin UI)|`/_/`|A Supabase-Studio-style dashboard (React + Radix + Tailwind) with real URL routing and a command palette: table editor (filters, sorting, inline type-aware editing, FK navigation, RLS + role preview), database section (schema visualizer, tables, functions, triggers, enums, indexes, migrations, policies, roles), authentication, storage, edge functions, realtime, automations (cron/queues/webhooks), logs, SQL editor, settings, and a live Advisor. One self-contained HTML file (works in the single binary); log in with the service_role key|",
+     "|Realtime|`/realtime/v1`|Phoenix protocol (v1 JSON and v2 array/binary serializers), `postgres_changes` (INSERT/UPDATE/DELETE, filters) fed by triggers + `pg_notify`, broadcast (incl. binary payloads), presence. WebSocket server is a ~150-line RFC 6455 implementation - no `ws` dependency|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    158,
+    117,
+    129
+   ],
+   [
+    "replace",
+    158,
+    166,
+    129,
+    130,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    239,
+    130,
+    203
+   ],
+   [
+    "replace",
+    239,
+    240,
+    203,
+    204,
+    [
+     "tinbase ships with a built-in dashboard at `/_/` - the same shape as Supabase Studio, with real URL routing (deep links, back/forward), a `Ctrl+K` command palette, light/dark theming, and drag-resizable panels:"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    273,
+    204,
+    237
+   ],
+   [
+    "replace",
+    273,
+    274,
+    237,
+    238,
+    [
+     "Memory footprint comparison"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    238,
+    239
+   ],
+   [
+    "replace",
+    275,
+    276,
+    239,
+    240,
+    [
+     "Measured on an Apple Silicon Mac (48 GB), macOS 15. Same workload for all three: boot with one migrated table, then 1,000 single-row inserts followed by 1,000 filtered list queries. Memory is physical footprint (`vmmap`) for native processes and the sum of `docker stats` for containers. Reproduce with `bench/footprint.ts`; raw numbers in `bench/results.json`."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    240,
+    241
+   ],
+   [
+    "replace",
+    277,
+    287,
+    241,
+    251,
+    [
+     "||tinbase (single binary)|tinbase (native)|tinbase (pg-mem)|tinbase (wasm)|PocketBase v0.39.5|Supabase local|",
+     "|---|---|---|---|---|---|---|",
+     "|Database|real Postgres 17 + RLS|real Postgres 17 + RLS|in-memory, pure-JS¹|real Postgres (PGlite) + RLS|SQLite|Postgres 17|",
+     "|Runtime memory at boot|49 MB|59 MB|71 MB|~610 MB²|15 MB|1,441 MB|",
+     "|Runtime memory after workload|66 MB|100 MB|185 MB|~640 MB²|24 MB|1,626 MB|",
+     "|Data on disk (1k rows)|39 MB|39 MB|0 (in-memory)|40 MB|7 MB|70 MB|",
+     "|Install size|92 MB (58 MB binary + PG)|36 MB³|6.7 MB³|27 MB³|30 MB|2,291 MB⁴|",
+     "|Processes|2|2|1|1|1|12 containers + Docker|",
+     "|1,000 inserts|0.4 s|0.5 s|0.8 s|0.8 s|0.3 s|1.1 s|",
+     "|1,000 filtered reads|0.3 s|0.4 s|0.8 s|0.9 s|0.3 s|1.0 s|"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    288,
+    251,
+    252
+   ],
+   [
+    "replace",
+    288,
+    289,
+    252,
+    253,
+    [
+     "¹ **pgmem** is a pure-JS in-memory engine (local dev / preview) via the `@tinbase/pg-mem` fork. It now runs PL/pgSQL, triggers and RLS-policy DDL (migrations apply unchanged, nothing skipped), but the engine runs as superuser so RLS isn't enforced per-request (realtime/webhook events are unfiltered), and **cron**/**pgmq** are absent. Pure JS (no WASM), the lightest option for the browser. See Engines."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    303,
+    253,
+    267
+   ],
+   [
+    "replace",
+    303,
+    311,
+    267,
+    275,
+    [
+     "|Module|Coverage|Supported|Missing|",
+     "|---|---|---|---|",
+     "|Database (`postgrest-js`)|~85%|full filter grammar, embeds (to-one/to-many/m2m/nested/`!inner`), JSON paths, upsert, count, single/maybeSingle, RPC|aggregates in select, full spread embeds, `.explain()`, `.csv()`, geojson|",
+     "|Auth (`auth-js`)|~80%|email/password, anonymous sign-in, OTP + magic links + password recovery (pluggable mailer), OAuth providers (Google/GitHub presets + generic) with PKCE and identity linking, refresh rotation, user updates, admin CRUD|MFA, SSO/SAML, phone auth|",
+     "|Storage (`storage-js`)|~80%|buckets, upload/download, signed URLs + signed uploads, list/move/copy/remove, size/MIME limits|resumable (TUS) uploads, image transformations|",
+     "|Realtime (`realtime-js`)|~85%|postgres_changes with filters + **per-subscriber RLS filtering** (INSERT/UPDATE), broadcast (incl. binary), presence, v1+v2 serializers|per-row DELETE RLS, private channel auth, DB-triggered broadcast|",
+     "|Edge Functions (`functions-js`)|~70%|`invoke()`; **Deno.serve/Deno.env-style functions run unchanged** + export-default; auth context, project-dir loading|`npm:`/`jsr:`/URL import resolution, `supabase functions deploy`|",
+     "|Type generation|~85%|`tinbase gen types typescript` → `Database` type (Tables/Views/Functions/Enums/Relationships)|composite-type args, multi-schema output|"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    333,
+    275,
+    297
+   ],
+   [
+    "replace",
+    333,
+    336,
+    297,
+    298,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    338,
+    298,
+    300
+   ],
+   [
+    "replace",
+    338,
+    339,
+    300,
+    301,
+    [
+     "tinbase was built for lifo - a project that maps Linux APIs into the browser - to let **Expo apps run fully in the browser with full-stack capability** (database, auth, storage, realtime, no server). It is part of RapidNative. That origin drives the architecture:"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    345,
+    301,
+    307
+   ],
+   [
+    "replace",
+    345,
+    346,
+    307,
+    308,
+    [
+     "tinbase is built by the team behind **RapidNative** — AI that"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    349,
+    308,
+    311
+   ],
+   [
+    "replace",
+    349,
+    355,
+    311,
+    317,
+    [
+     "|Project|What it is|",
+     "|---|---|",
+     "|RapidNative|AI that generates production-ready React Native apps and UIs from a prompt|",
+     "|Lifo|Linux APIs in the browser — real dev tooling with no VM and no container|",
+     "|ORCHD|A multi-tenant workload orchestrator — per-tenant workloads that sleep when idle and wake on the next request|",
+     "|jetplane|A Metro plugin and a thin dev server for Expo — many dev environments per machine|"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    356,
+    317,
+    318
+   ],
+   [
+    "replace",
+    356,
+    357,
+    318,
+    319,
+    [
+     "See them all on rapidnative.com/open-source."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "2f0cbd179058+2": {
+  "fn": "floci-io/floci-oci",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    2,
+    [
+     "floci-oci",
+     " floci-oci"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    2,
+    3
+   ],
+   [
+    "replace",
+    5,
+    10,
+    3,
+    6,
+    [
+     " Any Cloud. Locally. ",
+     " Light, fluffy, and always free, now for Oracle Cloud ",
+     " No account. No API key ceremony. No feature gates. Just <code>docker compose up</code>."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    19,
+    7,
+    13,
+    [
+     " Latest Release",
+     " Build Status",
+     " Docker Pulls",
+     " Docker Image Size",
+     " License: MIT",
+     " GitHub Stars"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    13,
+    14
+   ],
+   [
+    "replace",
+    20,
+    30,
+    14,
+    20,
+    [
+     " Quick Start ·",
+     " Features ·",
+     " Services ·",
+     " SDKs ·",
+     " Terraform ·",
+     " Docs"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    37,
+    20,
+    27
+   ],
+   [
+    "replace",
+    37,
+    38,
+    27,
+    28,
+    [
+     "floci-oci is the OCI member of the Floci emulator family, named after floccus, the cloud formation that looks like popcorn."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    28,
+    29
+   ],
+   [
+    "replace",
+    39,
+    40,
+    29,
+    30,
+    [
+     "|Emulator|Cloud|Port|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    30,
+    31
+   ],
+   [
+    "replace",
+    41,
+    45,
+    31,
+    35,
+    [
+     "|floci|AWS|4566|",
+     "|floci-az|Azure|4577|",
+     "|floci-gcp|GCP|4588|",
+     "|**floci-oci**|**OCI**|**4599**|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    70,
+    35,
+    60
+   ],
+   [
+    "replace",
+    70,
+    75,
+    60,
+    61,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    77,
+    61,
+    63
+   ],
+   [
+    "replace",
+    77,
+    78,
+    63,
+    64,
+    [
+     "Any locally generated API key works: floci-oci parses the request signature for tenancy and user context but never verifies it. See OCI CLI & SDK Setup for a one-time throwaway config."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    64,
+    65
+   ],
+   [
+    "replace",
+    79,
+    81,
+    65,
+    66,
+    [
+     " Prefer building from source? "
+    ]
+   ],
+   [
+    "equal",
+    81,
+    97,
+    66,
+    82
+   ],
+   [
+    "replace",
+    97,
+    101,
+    82,
+    83,
+    [
+     " Bundled CLI wrapper "
+    ]
+   ],
+   [
+    "equal",
+    101,
+    109,
+    83,
+    91
+   ],
+   [
+    "delete",
+    109,
+    111,
+    91,
+    91
+   ],
+   [
+    "equal",
+    111,
+    113,
+    91,
+    93
+   ],
+   [
+    "replace",
+    113,
+    115,
+    93,
+    94,
+    [
+     " Local OCI without the cloud account "
+    ]
+   ],
+   [
+    "equal",
+    115,
+    118,
+    94,
+    97
+   ],
+   [
+    "replace",
+    118,
+    122,
+    97,
+    98,
+    [
+     " Real OCI wire protocols "
+    ]
+   ],
+   [
+    "equal",
+    122,
+    125,
+    98,
+    101
+   ],
+   [
+    "replace",
+    125,
+    126,
+    101,
+    102,
+    [
+     " Drop-in SDK, CLI, and IaC compatibility "
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    102,
+    103
+   ],
+   [
+    "replace",
+    127,
+    129,
+    103,
+    104,
+    [
+     "The official oci-java-sdk, Python SDK, OCI CLI, and the `oracle/oci` Terraform provider work unchanged, validated continuously by the compatibility suite."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    104,
+    105
+   ],
+   [
+    "replace",
+    130,
+    136,
+    105,
+    106,
+    [
+     " Fast enough for CI "
+    ]
+   ],
+   [
+    "equal",
+    136,
+    139,
+    106,
+    109
+   ],
+   [
+    "replace",
+    139,
+    143,
+    109,
+    110,
+    [
+     " Configurable persistence "
+    ]
+   ],
+   [
+    "equal",
+    143,
+    145,
+    110,
+    112
+   ],
+   [
+    "delete",
+    145,
+    147,
+    112,
+    112
+   ],
+   [
+    "equal",
+    147,
+    160,
+    112,
+    125
+   ],
+   [
+    "replace",
+    160,
+    184,
+    125,
+    126,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    188,
+    126,
+    130
+   ],
+   [
+    "replace",
+    188,
+    189,
+    130,
+    131,
+    [
+     "|Category|Services|"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    131,
+    132
+   ],
+   [
+    "replace",
+    190,
+    199,
+    132,
+    141,
+    [
+     "|Identity|Compartments, users, groups, user-group memberships, policies, availability domains, regions, region subscriptions, tenancies|",
+     "|Storage|Object Storage: namespaces, buckets, objects, listing, rename, copy, batch delete, multipart uploads, pre-authenticated requests|",
+     "|Messaging|Queue (visibility timeouts, dead-letter queues, channels), Streaming (partitioned log, cursors, consumer groups)|",
+     "|Security|Vault + KMS (vaults, keys, key versions, **real** AES-GCM / RSA / ECDSA crypto), Secrets and secret bundles|",
+     "|Serverless|Functions on API versions `20260325` and `20181201` (applications, functions, work requests, runtime catalog, real invocation through an Fn Project sidecar)|",
+     "|Kubernetes|Container Engine for Kubernetes (OKE): clusters with their settings read back as sent, endpoint config updates, node pools, options, kubeconfig generation, work requests, real-mode k3s sidecar|",
+     "|Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default and custom configurations, backups, restore and point-in-time recovery, instance patches, failover and replicas, Kerberos and insight settings, work requests, real PostgreSQL sidecar|",
+     "|Organizations|Child tenancies (each with its own home region and isolated storage), organizations, organization tenancies, links, invitations, domains, subscriptions and mappings, orders; Governance Rules (allowed regions enforced)|",
+     "|Async operations|Work requests, partitioned per service (Identity/Queue/Streaming use `SUCCEEDED`, Object Storage/OKE use `COMPLETED`)|"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    141,
+    142
+   ],
+   [
+    "replace",
+    200,
+    201,
+    142,
+    143,
+    [
+     "For operation-level compatibility, see the Services Overview."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    143,
+    144
+   ],
+   [
+    "replace",
+    202,
+    204,
+    144,
+    145,
+    [
+     " Detailed service notes "
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    145,
+    146
+   ],
+   [
+    "replace",
+    205,
+    206,
+    146,
+    147,
+    [
+     "|Service|How it works|Notable features|"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    207,
+    147,
+    148
+   ],
+   [
+    "replace",
+    207,
+    219,
+    148,
+    160,
+    [
+     "|Identity (IAM)|In-process|Compartment CRUD incl. `compartmentIdInSubtree` listing and async delete via work request; users, groups, memberships; policies (statements stored verbatim); reference data (3 ADs, regions, tenancy); etag concurrency on every mutation|",
+     "|Object Storage|In-process|Bucket CRUD (delete requires empty); objects with `Content-MD5` verification, `opc-meta-*` metadata, Range/206 reads, conditional headers; ListObjects with `prefix`/`start`/`end`/`delimiter`/`fields` and `nextStartWith` truncation; rename; async copy via work request; batch delete with per-object success/failure results; multipart uploads (per-part `etag` + `opc-content-md5`); pre-authenticated requests with anonymous `/p/{token}/…` data path|",
+     "|Queue|In-process|Work-request-driven control plane (mutations return no body); data plane with visibility timeouts, `0`-visibility peeks, long polling, dead-letter queues, per-channel filtering, stats; wrapped `{\"items\":[…]}` list shape|",
+     "|Streaming|In-process|Partitioned append-only log with key-hash placement; opaque cursors (`TRIM_HORIZON`/`LATEST`/`AT_OFFSET`/`AFTER_OFFSET`/`AT_TIME`), group cursors with commit + resume, `opc-next-cursor` paging; CreateStream returns body *and* work request|",
+     "|Vault + KMS|In-process, real crypto|Vaults and keys with schedule/cancel deletion (no DELETE verb), key rotation, AES and RSA key import via `GetWrappingKey`/`ImportKey`/`ImportKeyVersion`; AES-GCM encrypt/decrypt whose envelope survives rotation, RSA/ECDSA sign/verify via JCA, CRC32 `plaintextChecksum`|",
+     "|Secrets|In-process|Secret versions with CURRENT/PREVIOUS/LATEST stages; the `Secret` shape never echoes content: retrieval is through `/20190301/secretbundles`, including the bodyless POST `getByName`|",
+     "|Functions|Real Docker (Fn Project)|Applications and functions with deterministic image digests; invocation proxied to a shared `fnproject/fnserver` sidecar that runs your real FDK image. `mock: true` disables Docker entirely|",
+     "|OKE (Container Engine)|Real Docker (k3s) / In-process|Control plane CRUD (`/20180222`), options, kubeconfig YAML generator, work requests tracking; real-mode k3s sidecar driver (`rancher/k3s:v1.30.1-k3s1`) binding dynamic host ports (`6443..6543`) and persistent volumes (`/var/lib/rancher/k3s`). `mock: true` disables sidecar|",
+     "|Database with PostgreSQL|Real Docker (PostgreSQL) / In-process|DB system CRUD (`/20220915`) driven by work requests, with a `DELETED` tombstone clients can poll; one `postgres:<major>-alpine` container per DB system, started in the background; connection details with a per-system CA certificate (`sslmode=verify-full` works); master password from the request or a Vault secret, never stored, reset in the running database; start/stop/restart keep the data volume; shapes and default configurations catalog. `mock: true` disables Docker|",
+     "|Organizations|In-process|`CreateChildTenancy` registers a child tenancy with its own home region; requests signed with it see only its own resources; organizations, organization tenancies and links live with the parent tenancy; invitations bring an existing tenancy in; domains, domain governance, subscriptions (one V2 subscription per tenancy), subscription mappings and order activation complete the Tenant Manager control plane; wrapped `{\"items\":[…]}` lists|",
+     "|Governance Rules|In-process|Governance rules (`/20220504`) of type `QUOTA`, `TAG` and `ALLOWED_REGIONS`, inclusion criteria, tenancy attachments for children opted in to governance, enforced rules as the child sees them; `ALLOWED_REGIONS` refuses a governed child's region subscription outside the list|",
+     "|Work Requests|In-process|`202` + `opc-work-request-id` responses, pollable per service (`/20160918`, `/20210201`, `/20180418`, `/20180222` and unversioned `/workRequests`) with errors/logs endpoints|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    221,
+    160,
+    162
+   ],
+   [
+    "delete",
+    221,
+    223,
+    162,
+    162
+   ],
+   [
+    "equal",
+    223,
+    228,
+    162,
+    167
+   ],
+   [
+    "replace",
+    228,
+    229,
+    167,
+    168,
+    [
+     "|Service|Default image|What is real|"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    168,
+    169
+   ],
+   [
+    "replace",
+    230,
+    233,
+    169,
+    172,
+    [
+     "|Functions|`fnproject/fnserver:latest`|The open-source engine OCI Functions is built on. Your function image runs for real: fnserver spawns it as a sibling container and speaks the FDK http-stream contract|",
+     "|OKE|`rancher/k3s:v1.30.1-k3s1`|Real local Kubernetes cluster execution via a k3s sidecar container with dynamic host port mapping (`6443..6543`) and named data volume `/var/lib/rancher/k3s`|",
+     "|Database with PostgreSQL|`postgres:{major}-alpine`|A real PostgreSQL server per DB system, of the major the DB system asks for, with TLS, a host port from `15432..15531` and a named data volume; backup dumps are kept by the emulator, outside the containers|"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    249,
+    172,
+    188
+   ],
+   [
+    "replace",
+    249,
+    250,
+    188,
+    189,
+    [
+     "AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    255,
+    189,
+    194
+   ],
+   [
+    "replace",
+    255,
+    256,
+    194,
+    195,
+    [
+     "|Mode|Behavior|Best for|Durability|"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    195,
+    196
+   ],
+   [
+    "replace",
+    257,
+    261,
+    196,
+    200,
+    [
+     "|`memory`|Entirely in RAM. Data is lost when the container stops.|CI and ephemeral tests|None|",
+     "|`persistent`|Loaded at startup and flushed to disk immediately on every write operation.|Simple local state preservation with immediate persistence|Medium|",
+     "|`hybrid`|In-memory performance with periodic async flushing every 5 seconds.|Local development|Good|",
+     "|`wal`|Write-ahead log. Every mutation is logged before responding.|Maximum durability|Highest|"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    264,
+    200,
+    203
+   ],
+   [
+    "replace",
+    264,
+    265,
+    203,
+    204,
+    [
+     "For more detail, see the Storage Configuration documentation."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    282,
+    204,
+    221
+   ],
+   [
+    "replace",
+    282,
+    284,
+    221,
+    222,
+    [
+     " Java, oci-java-sdk "
+    ]
+   ],
+   [
+    "equal",
+    284,
+    289,
+    222,
+    227
+   ],
+   [
+    "replace",
+    289,
+    306,
+    227,
+    228,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    308,
+    228,
+    230
+   ],
+   [
+    "replace",
+    308,
+    312,
+    230,
+    231,
+    [
+     " Python, oci "
+    ]
+   ],
+   [
+    "equal",
+    312,
+    317,
+    231,
+    236
+   ],
+   [
+    "replace",
+    317,
+    330,
+    236,
+    237,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    332,
+    237,
+    239
+   ],
+   [
+    "replace",
+    332,
+    336,
+    239,
+    240,
+    [
+     " Go, oci-go-sdk "
+    ]
+   ],
+   [
+    "equal",
+    336,
+    341,
+    240,
+    245
+   ],
+   [
+    "replace",
+    341,
+    376,
+    245,
+    246,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    376,
+    378,
+    246,
+    248
+   ],
+   [
+    "replace",
+    378,
+    382,
+    248,
+    249,
+    [
+     " Bash, OCI CLI "
+    ]
+   ],
+   [
+    "equal",
+    382,
+    387,
+    249,
+    254
+   ],
+   [
+    "replace",
+    387,
+    396,
+    254,
+    255,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    397,
+    255,
+    256
+   ],
+   [
+    "delete",
+    397,
+    399,
+    256,
+    256
+   ],
+   [
+    "equal",
+    399,
+    412,
+    256,
+    269
+   ],
+   [
+    "replace",
+    412,
+    422,
+    269,
+    270,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    424,
+    270,
+    272
+   ],
+   [
+    "replace",
+    424,
+    425,
+    272,
+    273,
+    [
+     "The full apply → plan (zero drift) → destroy cycle is validated in CI for both Terraform and OpenTofu. See `compatibility-tests/compat-terraform` for a working example."
+    ]
+   ],
+   [
+    "equal",
+    425,
+    428,
+    273,
+    276
+   ],
+   [
+    "replace",
+    428,
+    429,
+    276,
+    277,
+    [
+     "The `compatibility-tests` directory validates floci-oci with real SDKs and IaC tooling, not just theoretical protocol adherence."
+    ]
+   ],
+   [
+    "equal",
+    429,
+    430,
+    277,
+    278
+   ],
+   [
+    "replace",
+    430,
+    431,
+    278,
+    279,
+    [
+     "|Module|Language / Tool|SDK / Client|Tests|"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    432,
+    279,
+    280
+   ],
+   [
+    "replace",
+    432,
+    438,
+    280,
+    286,
+    [
+     "|`sdk-test-java`|Java|oci-java-sdk (incl. OKE integration, Organizations child tenancies, invitations, domains and subscriptions, governance rules, the Functions management plane, and a JDBC connection to a PostgreSQL DB system, custom configurations and an in-place restore)|38|",
+     "|`sdk-test-python`|Python 3|oci (incl. `UploadManager` streaming, Organizations invitations, domains, subscriptions and orders, governance rules, OKE clusters and node pools, PostgreSQL custom configurations, backups and instance patches)|36|",
+     "|`sdk-test-go`|Go|oci-go-sdk (OKE container engine)|1|",
+     "|`sdk-test-cli`|Bash / BATS|OCI CLI 3.96.0 (all 10 services, incl. error codes, PAR access and kubectl through the OKE exec kubeconfig)|69|",
+     "|`compat-terraform`|Terraform|oracle/oci provider (14 resources, zero-drift plan)|6|",
+     "|`compat-opentofu`|OpenTofu|oracle/oci provider (14 resources, zero-drift plan)|6|"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    454,
+    286,
+    302
+   ],
+   [
+    "replace",
+    454,
+    455,
+    302,
+    303,
+    [
+     "|Channel|Standard|Compat with OCI CLI and Python SDK|"
+    ]
+   ],
+   [
+    "equal",
+    455,
+    456,
+    303,
+    304
+   ],
+   [
+    "replace",
+    456,
+    460,
+    304,
+    308,
+    [
+     "|Release, floating|`latest`|`latest-compat`|",
+     "|Release, pinned|`x.y.z`|`x.y.z-compat`|",
+     "|Nightly, floating|`nightly`|`nightly-compat`|",
+     "|Nightly, dated|`nightly-mmddyyyy`|`nightly-mmddyyyy-compat`|"
+    ]
+   ],
+   [
+    "equal",
+    460,
+    467,
+    308,
+    315
+   ],
+   [
+    "replace",
+    467,
+    475,
+    315,
+    316,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    475,
+    493,
+    316,
+    334
+   ],
+   [
+    "replace",
+    493,
+    494,
+    334,
+    335,
+    [
+     "Versions are derived from Conventional Commits by semantic-release; `CHANGELOG.md` is generated, never hand-edited. Releases are cut from `main` only: there are no maintenance branches."
+    ]
+   ],
+   [
+    "equal",
+    494,
+    499,
+    335,
+    340
+   ],
+   [
+    "replace",
+    499,
+    500,
+    340,
+    341,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    500,
+    501,
+    341,
+    342
+   ],
+   [
+    "replace",
+    501,
+    512,
+    342,
+    353,
+    [
+     "|`FLOCI_OCI_PORT`|`4599`|Port exposed by the floci-oci API|",
+     "|`FLOCI_OCI_DEFAULT_REGION`|`us-ashburn-1`|Home region given to a tenancy the first time it is seen, which is also where its requests land when the `Host` names no OCI region|",
+     "|`FLOCI_OCI_DEFAULT_REALM`|`oc1`|Realm key for OCIDs when the region is not a known OCI region; known regions use their own realm (e.g. `uk-gov-london-1` is `oc4`)|",
+     "|`FLOCI_OCI_DEFAULT_TENANCY_ID`|`ocid1.tenancy.oc1..flocilocal…`|Tenancy used for unsigned requests|",
+     "|`FLOCI_OCI_DEFAULT_NAMESPACE`|`floci-local`|Object Storage namespace|",
+     "|`FLOCI_OCI_BASE_URL`|`http://localhost:4599`|Base URL used when floci-oci returns service URLs|",
+     "|`FLOCI_OCI_HOSTNAME`|Unset|Hostname used in returned URLs when floci-oci runs inside Docker Compose|",
+     "|`FLOCI_OCI_STORAGE_MODE`|`memory`|Storage mode: `memory`, `persistent`, `hybrid`, or `wal`|",
+     "|`FLOCI_OCI_STORAGE_PERSISTENT_PATH`|`./data`|Directory used for persisted state|",
+     "|`FLOCI_OCI_AUTH_REQUIRE_SIGNATURE`|`false`|Reject unsigned requests with 401 `NotAuthenticated`. `/health`, `/_floci-oci/*` and pre-authenticated requests (`/p/*`) are always exempt|",
+     "|`FLOCI_OCI_TLS_ENABLED`|`false`|Serve HTTPS + HTTP on the same port|"
+    ]
+   ],
+   [
+    "equal",
+    512,
+    513,
+    353,
+    354
+   ],
+   [
+    "replace",
+    513,
+    514,
+    354,
+    355,
+    [
+     "Full reference: configuration docs"
+    ]
+   ],
+   [
+    "equal",
+    514,
+    523,
+    355,
+    364
+   ],
+   [
+    "replace",
+    523,
+    533,
+    364,
+    365,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    536,
+    365,
+    368
+   ],
+   [
+    "replace",
+    536,
+    539,
+    368,
+    369,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    539,
+    540,
+    369,
+    370
+   ],
+   [
+    "replace",
+    540,
+    546,
+    370,
+    371,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    546,
+    551,
+    371,
+    376
+   ],
+   [
+    "replace",
+    551,
+    552,
+    376,
+    377,
+    [
+     "IceGuard · Softmax"
+    ]
+   ],
+   [
+    "equal",
+    552,
+    557,
+    377,
+    382
+   ],
+   [
+    "replace",
+    557,
+    558,
+    382,
+    383,
+    [
+     "*Your logo here. Become a sponsor.*"
+    ]
+   ],
+   [
+    "equal",
+    558,
+    563,
+    383,
+    388
+   ],
+   [
+    "replace",
+    563,
+    564,
+    388,
+    389,
+    [
+     "AutoScout24 · Nexxion AI"
+    ]
+   ],
+   [
+    "equal",
+    564,
+    566,
+    389,
+    391
+   ],
+   [
+    "replace",
+    566,
+    567,
+    391,
+    392,
+    [
+     "tiers, is listed in THANKS.md."
+    ]
+   ],
+   [
+    "equal",
+    567,
+    568,
+    392,
+    393
+   ],
+   [
+    "replace",
+    568,
+    569,
+    393,
+    394,
+    [
+     "**Sponsor Floci**"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    571,
+    394,
+    396
+   ],
+   [
+    "replace",
+    571,
+    582,
+    396,
+    397,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    582,
+    583,
+    397,
+    398
+   ],
+   [
+    "replace",
+    583,
+    588,
+    398,
+    399,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    588,
+    589,
+    399,
+    400
+   ],
+   [
+    "delete",
+    589,
+    590,
+    400,
+    400
+   ],
+   [
+    "equal",
+    590,
+    591,
+    400,
+    401
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

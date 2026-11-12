@@ -2974,5 +2974,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f32dde41ba15": {
+  "identity": {
+   "one_liner": "媒体库管理 CLI 工具集，通过 SQLite 索引本地与在线媒体",
+   "review": "library 是一个包含 143 个子命令的命令行工具集，用于索引、浏览和播放大型媒体库。用户可通过 pip 安装，用 ffprobe 提取本地文件元数据存入 SQLite 数据库，也支持下载 YouTube 等网站播放列表元数据并跟踪更新。需外部依赖 ffmpeg，部分功能依赖 mpv、gallery-dl 等。适合管理本地视频/音频文件及在线媒体收藏的命令行用户。",
+   "highlights": [
+    "通过 `database add` 将本地文件或在线播放列表/频道的元数据写入 SQLite 数据库，后续扫描仅读取新增文件",
+    "提供 `play video/audio/text` 等播放子命令，并可配置播放后动作（如删除文件）",
+    "子命令按 database/filesystem/document/file 工作流分组，支持 yt-dlp、gallery-dl、Internet Archive、Reddit、Hacker News 等多种来源"
+   ],
+   "use_cases": [
+    "为数十 TB 级本地视频/音频存档建立可查询的元数据索引",
+    "跟踪 YouTube 等网站的播放列表/频道，用 `database update` 获取新增视频元数据",
+    "在终端中浏览并连续播放数据库中的媒体文件"
+   ]
+  },
+  "sha": "f32dde41ba15",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b619974e789": {
+  "identity": {
+   "one_liner": "Rust 实现的分布式事务型键值数据库，基于 Raft 共识与 RocksDB 存储。",
+   "review": "TiKV 是一个开源分布式事务键值数据库，使用 Rust 编写，采用 Raft 共识算法并将共识状态存于 RocksDB。它提供经典键值 API 与满足 ACID 的事务 API，由 Placement Driver 实现自动分片与数据迁移。运行时必须与 PD 组件一同部署，可单独使用或作为 TiDB 的存储层。客户端目前仅有 TiDB Go 客户端与 TiSpark Java 客户端。",
+   "highlights": [
+    "基于 Raft 共识算法与 RocksDB 存储，提供 ACID 事务 API 和快照隔离（含 SELECT ... FOR UPDATE 锁读）",
+    "通过 Placement Driver 实现自动分片、负载均衡与数据迁移，支持跨地域复制",
+    "实现协处理器框架支持分布式计算，事务模型参考 Google Percolator 与 Spanner"
+   ],
+   "use_cases": [
+    "需要分布式事务与外部一致性读写的大规模键值存储场景",
+    "作为 TiDB 的存储引擎配合使用，或与 TiSpark 协同分析",
+    "使用 Docker Compose/Docker/Ansible 部署测试或生产集群"
+   ]
+  },
+  "sha": "2b619974e789",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

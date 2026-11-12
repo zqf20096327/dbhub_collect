@@ -3254,5 +3254,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dce47c24e85b": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的记忆运行时，基于 FastAPI，通过 MCP 与 REST 接口提供持久化记忆服务",
+   "review": "MNEMOS 是一个用于 AI Agent 记忆管理的 FastAPI 运行时，提供记忆写入、向量检索、版本化存储、压缩与导出导入。支持六种持久化后端，默认 SQLite + sqlite-vec，可通过 DSN 切换 PostgreSQL + pgvector、Oracle、Db2、MySQL、MariaDB。Agent 通过 MCP stdio/HTTP、REST 或 OpenAI 兼容接口接入。注意其 PyPI 包尚未发布，需从源码安装；源码主仓库位于 GitLab。",
+   "highlights": [
+    "实现六种持久化后端（SQLite+sqlite-vec、PostgreSQL+pgvector、Oracle 26ai、IBM Db2、MySQL 9.0 Enterprise、MariaDB 11.7+），由 DSN 在运行时选择并自建 schema",
+    "提供 MCP stdio 与 HTTP/SSE（默认 :5003）、REST 和 OpenAI 兼容网关接入方式，暴露 search_memories、create_memory、kg_search 等 MCP 工具",
+    "包含 MIF/MPF 格式导入导出、STYX 加密备份、GDPR 删除 worker、webhook 事件推送（memory.created/updated/deleted 等）"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 客户端或任意 LLM Agent 提供持久化、可检索的记忆存储",
+    "使用 PostgreSQL + pgvector 等后端部署多后端向量记忆服务，按 DSN 切换环境",
+    "需要记忆数据可移植导出导入或满足 GDPR 删除要求的 Agent 记忆管理场景"
+   ]
+  },
+  "sha": "dce47c24e85b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "911a1828ec9b": {
+  "identity": {
+   "one_liner": "开源后台管理系统，连接数据库后由编程代理生成 TypeScript 管理页面。",
+   "review": "AntelopeJS DMS 是一个自托管的开源后台（back office）项目。用户将 PostgreSQL、MongoDB 或 RethinkDB 连接串粘贴进 Builder，运行 Claude Code 或 Codex 后，项目仓库中会生成管理页面与仪表盘的 TypeScript 代码。项目提供每表 14 条 API 路由、41 个构建块、细粒度角色权限、登录与多租户功能，默认只读。需要 Node.js、Git 和 Docker Compose v2。",
+   "highlights": [
+    "支持连接 PostgreSQL、MongoDB 和 RethinkDB，为每张表生成含搜索、筛选、看板等视图的页面及 14 条带权限校验的 API 路由",
+    "生成的页面为仓库中的 TypeScript 类，可通过 Builder 点击、内置助手聊天或外部编程代理（Claude Code / Codex）三种方式构建",
+    "内置账号体系，包括登录、邀请、角色、双因素认证、多租户与 SaaS 模式；表默认只读，需手动开启增删改"
+   ],
+   "use_cases": [
+    "为已有产品的数据库快速生成后台管理页面与数据仪表盘",
+    "需要按角色控制页面与操作权限的内部工具，如客服、订单、发票管理",
+    "在现有 AntelopeJS 或 AdonisJS 6 项目中以模块形式集成后台功能"
+   ]
+  },
+  "sha": "911a1828ec9b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "94cbe2ac9c77": {
+  "identity": {
+   "one_liner": "基于 Airflow 的加密货币数据抓取管道，定时抓取并存储至 SQLite。",
+   "review": "该项目是一个使用 Apache Airflow 构建的数据管道，定时从 CoinMarketCap 抓取数据，经转换筛选前 10 名加密货币后写入 SQLite。运行前需准备 Python 3.x、Airflow 及 CoinMarketCap API Key，密钥写入项目根目录的 config.json；可通过 docker-compose 启动调度器与 Web 服务器，并在 8080 端口查看和触发 DAG。README 中安装依赖一步未给出具体命令。",
+   "highlights": [
+    "每小时自动抓取 CoinMarketCap 数据并清洗转换前 10 名加密货币",
+    "使用 SQLite 存储数据，供分析或报表使用",
+    "支持通过 Docker Compose 启动 Airflow，经 Web UI 查看、触发 DAG"
+   ],
+   "use_cases": [
+    "需要定时采集加密货币行情数据的个人数据管道练习",
+    "数据工程学习：演示 Airflow DAG 的抓取—转换—入库流程",
+    "将采集结果用于本地 SQLite 的分析或报表输出"
+   ]
+  },
+  "sha": "94cbe2ac9c77",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4561c49ac22c": {
+  "identity": {
+   "one_liner": "Harness IaCM 教程，用 Terraform Provider 构建 init→plan→审批→apply 流水线",
+   "review": "这是 Harness 官方社区的一篇约 20 分钟上手的实操教程仓库，演示如何用 Harness IaCM 模块构建 Terraform plan/apply 供给流水线。特点是无需云账号：Terraform 通过 harness provider 在 Harness 内部创建一条流水线，形成自举示例。步骤涵盖连接器、工作区、变量（API 密钥需设为 Secret）、流水线导入与运行；限制为仅支持 Terraform ≤1.5.7，更高版本需改用 OpenTofu。",
+   "highlights": [
+    "提供含 init→plan→审批→apply 步骤的完整 provision 流水线配置（.harness/pipeline.yaml），带审批门禁与执行日志",
+    "使用 harness/harness Terraform provider 创建流水线资源，全程无需连接云账号",
+    "使用 Terraform 变量注入 Harness 账号/组织/项目 ID 及 API 密钥，密钥可标记为 Secret"
+   ],
+   "use_cases": [
+    "学习 Harness IaCM 工作区、连接器与 plan/apply 流水线的配置流程",
+    "在无云账号的环境下验证 IaCM 供给流水线运行",
+    "参考用 Terraform 管理 Harness 平台自身资源的模式"
+   ]
+  },
+  "sha": "4561c49ac22c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

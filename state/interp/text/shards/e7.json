@@ -3177,5 +3177,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1f3b697bfa1d": {
+  "identity": {
+   "one_liner": "开源数据库管理平台，为数据库提供电子表格式界面并自动生成 REST API",
+   "review": "NocoDB 是一个可自托管的数据库管理平台，用户通过电子表格界面操作底层数据库，支持连接 PostgreSQL 等数据源，并提供 REST API 和 SDK 供程序化调用。项目采用 Sustainable Use License 许可证，提供 Docker、Docker Compose、Kubernetes、Helm 等部署方式，适用于需要以表格形式管理和共享数据、同时保留数据库与 API 访问能力的团队。",
+   "highlights": [
+    "提供电子表格界面，支持表格/列/行的增删改查，以及排序、筛选、分组、隐藏列等字段操作",
+    "支持 Grid、Gallery、Form、Kanban、Calendar 多种视图类型，以及协作视图与锁定视图权限",
+    "提供 REST API 和 NocoDB SDK，可使用 JWT 或社交登录令牌进行请求鉴权；内置 Slack/Discord/SMTP/S3 等集成"
+   ],
+   "use_cases": [
+    "需要以电子表格方式协作管理数据库数据的团队",
+    "需要为现有数据库快速生成 REST API 的开发场景",
+    "自托管环境下搭建表单、看板、日历等多视图数据管理工具"
+   ]
+  },
+  "sha": "1f3b697bfa1d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f050d3d4f51b": {
+  "identity": {
+   "one_liner": "多币种个人财务 PWA，按日汇率记录交易",
+   "review": "Kharji 是面向多币种人群（如海外居住者、有国际客户的自由职业者）的个人财务管理应用，提供支出、收入、资产组合追踪与报表。每笔交易保存当日汇率用于历史换算，支持英语/波斯语双语及 Jalali 历法。技术栈为 Next.js 16 + TypeScript + Turso/libSQL，通过 Better Auth 自托管登录。注意：许可证为 Source-Available（仅查看），并非标准开源许可。",
+   "highlights": [
+    "支持 10 种货币的实时汇率与按日期的历史换算，交易记录保存当日汇率",
+    "提供支出/收入追踪、资产组合（现金、加密货币、不动产等）与净值图表，支持 Excel 导入导出",
+    "技术栈包含 Next.js 16、TypeScript、Turso(libSQL/SQLite)、Better Auth、Serwist(PWA)，需 Node.js 22+ 与 pnpm 10+ 运行"
+   ],
+   "use_cases": [
+    "需要在多种货币间记录和换算收支的个人财务追踪",
+    "波斯语/英语双语用户，含 RTL 布局与 Jalali 历法需求",
+    "自托管部署的个人财务数据管理，可配置 Turso 或本地 SQLite 文件"
+   ]
+  },
+  "sha": "f050d3d4f51b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "48d0d20f5a93": {
+  "identity": {
+   "one_liner": "逐模块构建的 ETF 投研 Agent 教学项目，每模块附可运行实现与可追溯证据。",
+   "review": "该项目通过 v0.1 到 v0.28 的模块序列构建一个 ETF 投研 Agent，每个模块解释一项工程决策并保留可运行代码与验证证据。面向学习 Agent 工程的开发者及希望将架构文章与代码对照阅读的读者。默认示例使用离线合成文档，不需要模型密钥；明确声明不提供实盘基金研究、交易服务或投资建议。",
+   "highlights": [
+    "支持离线运行默认示例，无需模型密钥；每次运行在 runs/ 目录生成 report.md、manifest.json 与 run.jsonl",
+    "实现带检查点与恢复机制的执行链路，包含 Session 心跳、持久化取消和跨进程续跑同一 Run",
+    "每个版本保留验证证据：报告附哈希与来源引用，测试在进程退出后重新打开文件进行校验"
+   ],
+   "use_cases": [
+    "对照架构文章逐行阅读可运行实现，学习 Agent 工程设计决策",
+    "在本地复现从 0 到 1 的 Agent 构建过程，追踪每次运行的报告与证据",
+    "基于离线合成文档的比较实验开展无密钥的开发与调试"
+   ]
+  },
+  "sha": "48d0d20f5a93",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b48f97cb0ff2": {
+  "identity": {
+   "one_liner": "基于 Flutter + Rust + BASS + SQLite 的本地音乐播放器",
+   "review": "面向 Windows 桌面的本地音乐播放器，Flutter 实现 Material 3 界面，Rust 负责目录扫描、lofty 元数据解析与系统集成，BASS 负责音频输出。曲库存于带 FTS5 的 SQLite，支持增量扫描与全文检索；可切换 WASAPI 独占输出。项目处于 M3 阶段，歌单、历史、队列等功能已接入，播放队列本身不持久化。",
+   "highlights": [
+    "提供 FTS5 全文检索（歌名/歌手/专辑）与万级曲目虚拟滚动的曲库视图",
+    "支持 WASAPI 独占输出，设备不支持时自动回落共享模式",
+    "实现系统媒体控制（SMTC）、托盘驻留、会话恢复与专辑封面按内容哈希缓存去重"
+   ],
+   "use_cases": [
+    "在 Windows 上管理并播放本地音乐目录（含 m4a/aac，需额外下载 bass_aac.dll）",
+    "通过歌名、歌手或专辑关键词快速检索本地曲库",
+    "需要媒体键/耳机线控与任务栏控制的桌面听歌场景"
+   ]
+  },
+  "sha": "b48f97cb0ff2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

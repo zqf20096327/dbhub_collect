@@ -2919,5 +2919,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "71551b5770c6": {
+  "identity": {
+   "one_liner": "实现 ClickHouse 原生协议的 .NET 数据库驱动",
+   "review": "ClickHouse.ADO 是面向 Yandex ClickHouse 的 .NET 驱动，实现 ClickHouse 原生 TCP 协议而非 HTTP 封装，部分实现源自 ClickHouse 官方源码，有意在某些方面不遵循 ADO.NET 规范。适合需要在 .NET 应用中连接 ClickHouse 的开发者。使用上需注意：不支持单次执行多条 SQL；必须调用 NextResult 读取可能返回的多个结果集；批量插入需用 VALUES @bulk 特殊语法。",
+   "highlights": [
+    "实现 ClickHouse 原生协议，支持 SSL/TLS（连接字符串 Encrypt=True）与 LZ4/ZStd 压缩",
+    "通过 VALUES @bulk 语法和 IBulkInsertEnumerable 接口实现批量插入",
+    "支持 Map、JSON、IPv4/IPv6、LowCardinality、Tuple 等类型，基于异步 I/O 并实现 System.Data.Common（含 DbProviderFactory）"
+   ],
+   "use_cases": [
+    ".NET 应用中直接连接 ClickHouse 读写数据",
+    "向 ClickHouse 批量插入大量记录的场景",
+    "需要追踪驱动发出的 SQL（Trace=True 配合 .NET trace listener）进行调试的场景"
+   ]
+  },
+  "sha": "71551b5770c6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f0c7b2dfa790": {
+  "identity": {
+   "one_liner": "基于 PocketBase 单二进制后端的实时群聊应用，前端为原生 TypeScript。",
+   "review": "Chirkle 是一个实时群聊服务，后端由单个 PocketBase 二进制承担认证、数据、实时通信与静态文件，前端用原生 TypeScript 经 esbuild 打包，约 50 KB JS。支持公开/私密/免登录房间、私信、回复与 @提及、附件、emoji 反应、Telegram 桥接和 Android 客户端。需要 Node.js ≥22，支持 Linux/macOS，Windows 需 WSL 或 Docker。",
+   "highlights": [
+    "后端由一个 PocketBase 二进制提供认证、数据、实时通信和静态文件，通过 npm start 或 npx chirkle 即可运行",
+    "支持实时消息、编辑、删除、已读计数、回复、@提及、emoji 反应及最多 10 个 20 MB 附件",
+    "提供 Telegram 双向桥接（可选）与 Kotlin/Jetpack Compose 编写的 Android 原生客户端"
+   ],
+   "use_cases": [
+    "在小规模 VPS（1 vCPU、1 GB 内存）上自托管群组聊天，README 实测约 500 人在线或 100 人持续聊天",
+    "需要免注册可读的开放房间或邀请制私密群组的社区",
+    "将聊天室与 Telegram 群通过机器人双向同步的混合场景"
+   ]
+  },
+  "sha": "f0c7b2dfa790",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c5c6e7ae394": {
+  "identity": {
+   "one_liner": "本地自托管的 onetimeemail.com 临时邮箱管理工具",
+   "review": "该项目通过 Flask + SQLite 在本地运行 Web 界面，用于管理 onetimeemail.com 临时邮箱账户，支持创建可选有效期（10 分钟至 30 天）的邮箱、多级分组、拖动排序、定时自动续期、收信查看及批量导入导出。数据存储于本地 SQLite 文件，不经过第三方服务。仅提供 Windows x64 打包版，其他平台需用 Python 源码运行。",
+   "highlights": [
+    "创建临时邮箱时可选 10 分钟至 30 天共 10 档有效期，内置调度器按「每 N 小时」或「每天 HH:MM」自动续期",
+    "提供无限层级分组树、分组与邮箱卡片拖动排序、批量勾选移入分组，支持粘贴文本/文本文件/Excel 三种方式导入及导出 Excel",
+    "全部数据保存在本地 SQLite（WAL 模式），数据库结构版本化，启动时自动备份并升级老库"
+   ],
+   "use_cases": [
+    "需要批量创建并长期维护多个 onetimeemail.com 临时邮箱账户的场景",
+    "需要离线本地保存邮箱凭证（uuid/助记词/cookies）与收信记录的场景",
+    "需按分组管理大量临时邮箱并通过定时续期保持有效的场景"
+   ]
+  },
+  "sha": "8c5c6e7ae394",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

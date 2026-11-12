@@ -19186,5 +19186,1670 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "8e66107a778e+2": {
+  "fn": "davefatkin/EinVault",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Ein, the EinVault mascot"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    8,
+    4,
+    6,
+    [
+     "License: MIT",
+     "Version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    6,
+    9
+   ],
+   [
+    "replace",
+    11,
+    12,
+    9,
+    10,
+    [
+     "Want a look before you self-host? There's a read-only demo at **demo.einvault.app**. Pick a role and explore; nothing you do there sticks."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    10,
+    12
+   ],
+   [
+    "replace",
+    14,
+    49,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    72,
+    13,
+    36
+   ],
+   [
+    "replace",
+    72,
+    73,
+    36,
+    37,
+    [
+     "EinVault dashboard"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    37,
+    40
+   ],
+   [
+    "replace",
+    76,
+    77,
+    40,
+    41,
+    [
+     "Companion overview"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    41,
+    44
+   ],
+   [
+    "replace",
+    80,
+    81,
+    44,
+    45,
+    [
+     "Caretaker dashboard"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    45,
+    46
+   ],
+   [
+    "replace",
+    82,
+    85,
+    46,
+    49,
+    [
+     "|Member dashboard (mobile)|Caretaker dashboard (mobile)|",
+     "|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------|",
+     "|Member dashboard mobile|Caretaker dashboard mobile|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    49,
+    50
+   ],
+   [
+    "replace",
+    86,
+    89,
+    50,
+    51,
+    [
+     "More screenshots"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    94,
+    51,
+    56
+   ],
+   [
+    "replace",
+    94,
+    95,
+    56,
+    57,
+    [
+     "Download `docker-compose.prod.yml` and set your domain before starting:"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    117,
+    57,
+    79
+   ],
+   [
+    "replace",
+    117,
+    135,
+    79,
+    97,
+    [
+     "||Default|Description|",
+     "|-----------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`TZ`|`UTC`|Container timezone. Set to your local timezone (e.g. `America/New_York`, `Europe/London`) so dates and times display correctly. Celebration notifications go out at 09:00 in this zone (UTC if unset).|",
+     "|`UPLOAD_MAX_MB`|`10`|Maximum size in MB for image (photo and avatar) uploads. `BODY_SIZE_LIMIT` is derived from the larger of this and `VIDEO_MAX_MB` at container start.|",
+     "|`VIDEO_MAX_MB`|`100`|Maximum size in MB for journal video uploads. Videos are stored as-is unless transcoding is enabled (see below).|",
+     "|`MAX_DAILY_MEDIA`|`5`|Maximum number of journal photos and videos (combined) per companion per day. (Renamed from `MAX_DAILY_PHOTOS`, still honored with a deprecation warning.)|",
+     "|`MAX_NOTE_MEDIA`|`10`|Maximum number of photos and videos (combined) attached to a single note.|",
+     "|`MAX_DOCUMENTS_PER_COMPANION`|`200`|Maximum number of documents (uploads and Paperless references combined) stored per companion.|",
+     "|`REMINDER_UNDO_SECONDS`|`7`|Default undo window (seconds) when dismissing a Reminder. `0` disables the undo window. Each user can override in their settings.|",
+     "|`CALENDAR_FEED_HISTORY_DAYS`|`90`|Days of past events the calendar feed includes. `0` includes all history (larger feeds).|",
+     "|`CALENDAR_FEED_ENABLED`|`true`|Set `false` to disable the calendar feed endpoint entirely.|",
+     "|`API_TOKENS_ENABLED`|`true`|Set `false` to disable the Bearer-token API (token creation and the `/api/logs`, `/api/journal`, `/api/quick-logs` endpoints) entirely.|",
+     "|`API_RATE_LIMIT_PER_MINUTE`|`30`|Bearer API requests allowed per client IP per minute. Behind a reverse proxy, set adapter-node's `ADDRESS_HEADER` so each client gets its own budget.|",
+     "|`DEMO_MODE`|`false`|Enable read-only public demo mode. See Running a demo instance.|",
+     "|`user`|`1000:1000`|UID:GID the container runs as. Change if your `./data` directory has different ownership.|",
+     "|`./data` volume|`./data`|Where the database and uploads are stored on the host.|",
+     "|`DATABASE_URL`|`/data/einvault.db`|Database path inside the container. Unlikely to need changing.|",
+     "|`TWOFA_ENC_KEY`|-|32-byte base64 key (`openssl rand -base64 32`) that encrypts stored TOTP secrets. Required to enable two-factor authentication.|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    146,
+    97,
+    108
+   ],
+   [
+    "replace",
+    146,
+    157,
+    108,
+    119,
+    [
+     "||Default|Description|",
+     "|-----------------------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`VIDEO_TRANSCODE`|`false`|Enable background transcoding of uploaded videos to a web-playable MP4 plus a poster.|",
+     "|`VIDEO_KEEP_ORIGINAL`|`true`|Keep the original source file alongside the transcoded copy. The original is never served; it is retained for re-encoding or backup. `false` discards it.|",
+     "|`VIDEO_TRANSCODE_MAX_MB`|`VIDEO_MAX_MB`|Skip transcoding (store as-is) for inputs larger than this.|",
+     "|`VIDEO_TRANSCODE_MAX_SECONDS`|`600`|Skip transcoding for inputs longer than this.|",
+     "|`VIDEO_TRANSCODE_MAX_WIDTH`|`4096`|Skip transcoding for inputs wider than this.|",
+     "|`VIDEO_TRANSCODE_MAX_HEIGHT`|`4096`|Skip transcoding for inputs taller than this.|",
+     "|`VIDEO_FFMPEG_PATH`|`/usr/bin/ffmpeg`|Absolute path to the `ffmpeg` binary. Override if it lives elsewhere (e.g. `/opt/homebrew/bin/ffmpeg` on macOS).|",
+     "|`VIDEO_FFPROBE_PATH`|`/usr/bin/ffprobe`|Absolute path to the `ffprobe` binary.|",
+     "|`VIDEO_TMP_DIR`|`<data>/transcode-tmp`|Scratch directory for in-progress transcodes. Must be on disk with room for the source plus output. Do not point it at the in-memory `/tmp` tmpfs.|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    166,
+    119,
+    128
+   ],
+   [
+    "replace",
+    166,
+    176,
+    128,
+    138,
+    [
+     "||Default|Description|",
+     "|------------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`STORAGE_BACKEND`|`local`|`local` writes to `./data/uploads`. `s3` writes new uploads to the configured bucket. Reads always honor the per-row provider, so switching does not invalidate old rows.|",
+     "|`S3_ENDPOINT`|-|Full endpoint URL, e.g. `https://s3.garage.example.com` or `https://s3.us-east-1.amazonaws.com`.|",
+     "|`S3_BUCKET`|-|Bucket name. Must already exist and should be private.|",
+     "|`S3_REGION`|`auto`|Region. For non-AWS providers, `auto` usually works.|",
+     "|`S3_ACCESS_KEY_ID`|-|Access key. Scope it to this bucket only.|",
+     "|`S3_SECRET_ACCESS_KEY`|-|Secret key.|",
+     "|`S3_FORCE_PATH_STYLE`|`false`|Set to `true` for Garage, MinIO, and older S3 deployments. Leave `false` for AWS and R2.|",
+     "|`S3_PRESIGN_TTL_SECONDS`|`300`|Lifetime of presigned download URLs. Shorter is stricter, longer improves browser cache reuse on reload.|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    183,
+    138,
+    145
+   ],
+   [
+    "replace",
+    183,
+    188,
+    145,
+    150,
+    [
+     "||Default|Description|",
+     "|-----------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`IMMICH_URL`|-|Base URL of your Immich server, e.g. `http://immich.local:2283`. No trailing slash. Required if `IMMICH_API_KEY` is set.|",
+     "|`IMMICH_API_KEY`|-|API key. Required permissions: `asset.read`, `asset.view`. Generate in Immich → Account Settings → API Keys. Required if `IMMICH_URL` is set.|",
+     "|`IMMICH_ALBUM_ID`|-|If set, the picker only shows assets in this album. If unset, the picker shows the user's most recent assets across the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    195,
+    150,
+    157
+   ],
+   [
+    "replace",
+    195,
+    196,
+    157,
+    158,
+    [
+     "When `PAPERLESS_URL` and `PAPERLESS_API_TOKEN` are set, members and admins get an \"Add from Paperless\" option on the Documents tab that searches a Paperless-ngx instance and attaches a document by reference. The document stays in Paperless; EinVault stores only a reference and proxies reads through the server using the token. EinVault never uploads to or deletes from Paperless. Caretakers cannot use the picker. EinVault serves the archived (OCR'd PDF) version of each referenced document."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    199,
+    158,
+    161
+   ],
+   [
+    "replace",
+    199,
+    204,
+    161,
+    166,
+    [
+     "||Default|Description|",
+     "|---------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`PAPERLESS_URL`|-|Base URL of your Paperless-ngx instance, e.g. `http://paperless.local:8000`. No trailing slash. Required if `PAPERLESS_API_TOKEN` is set.|",
+     "|`PAPERLESS_API_TOKEN`|-|API token. Generate in Paperless under Settings → \"My Profile\". Use a dedicated user limited to the documents you want visible. Required if `PAPERLESS_URL` is set.|",
+     "|`PAPERLESS_TAG_ID`|-|If set, only documents carrying this Paperless tag ID can be searched and imported. Strongly recommended; without it every member can search the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    211,
+    166,
+    173
+   ],
+   [
+    "replace",
+    211,
+    219,
+    173,
+    181,
+    [
+     "||Default|Description|",
+     "|-------------|-------|-------------------------------------------------------------------------------------------------------------------------------|",
+     "|`SMTP_HOST`|-|SMTP server hostname. Required (with `SMTP_FROM`) to enable email.|",
+     "|`SMTP_PORT`|`587`|SMTP port. Use `465` with `SMTP_SECURE=true` for implicit TLS, or `587` (default) for STARTTLS.|",
+     "|`SMTP_SECURE`|`false`|`true` = implicit TLS (port 465). `false` = STARTTLS upgrade on connect.|",
+     "|`SMTP_USER`|-|SMTP username. Leave unset for unauthenticated relays.|",
+     "|`SMTP_PASS`|-|SMTP password. Leave unset for unauthenticated relays.|",
+     "|`SMTP_FROM`|-|RFC 5322 From address shown to recipients, e.g. `EinVault <einvault@example.com>`. Required (with `SMTP_HOST`) to enable email.|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    181,
+    184
+   ],
+   [
+    "replace",
+    222,
+    223,
+    184,
+    185,
+    [
+     "When `NTFY_URL` is set, EinVault can publish push notifications via ntfy. This configures the server only (base URL and optional access token). Each user sets their own topic name under Settings -> Notifications; a non-empty topic is that user's opt-in for pushes scoped to what they can see in the app (reminders due, shift alerts, celebrations). The notification scheduler runs when either SMTP or ntfy is configured. The forgot-password flow remains email-only."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    185,
+    188
+   ],
+   [
+    "replace",
+    226,
+    231,
+    188,
+    193,
+    [
+     "||Default|Description|",
+     "|-------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`NTFY_URL`|-|ntfy server base URL, e.g. `https://ntfy.sh` or a self-hosted instance. No topic in the URL.|",
+     "|`NTFY_TOKEN`|-|Bearer token for self-hosted ntfy servers with auth enabled. Used for every publish regardless of topic.|",
+     "|`NOTIFY_SCAN_INTERVAL_MS`|`60000`|How often the notification scheduler scans for due reminders, shift alerts, and celebrations, in milliseconds. Values below 250 fall back to the default. Mainly useful for automated tests.|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    260,
+    193,
+    222
+   ],
+   [
+    "replace",
+    260,
+    269,
+    222,
+    231,
+    [
+     "|||",
+     "|-------------------|---------------------------------------|",
+     "|Runs as root|No (runs as `node`, UID 1000)|",
+     "|`no-new-privileges`|Enabled|",
+     "|Linux capabilities|All dropped|",
+     "|Root filesystem|Read-only|",
+     "|Writable `/tmp`|tmpfs, 64 MB|",
+     "|CPU limit|0.5 cores (raise for video transcoding)|",
+     "|Memory limit|256 MB (raise for video transcoding)|"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    272,
+    231,
+    234
+   ],
+   [
+    "replace",
+    272,
+    279,
+    234,
+    241,
+    [
+     "|Tag|Description|",
+     "|--------------|---------------------------------------------------|",
+     "|`latest`|Latest stable release (published on version tags)|",
+     "|`x.y.z`|Pinned release|",
+     "|`x.y`|Latest patch of a minor release|",
+     "|`main`|Latest commit on `main`, unstable, for testing only|",
+     "|`sha-<commit>`|Specific commit build, useful for rollback|"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    282,
+    241,
+    244
+   ],
+   [
+    "replace",
+    282,
+    283,
+    244,
+    245,
+    [
+     "Each release image carries a Sigstore-signed SLSA provenance attestation and a SPDX SBOM, and only ships after Trivy clears the OS and library packages on both `linux/amd64` and `linux/arm64`. See SECURITY.md for the verification commands."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    289,
+    245,
+    251
+   ],
+   [
+    "delete",
+    289,
+    291,
+    251,
+    251
+   ],
+   [
+    "equal",
+    291,
+    301,
+    251,
+    261
+   ],
+   [
+    "delete",
+    301,
+    303,
+    261,
+    261
+   ],
+   [
+    "equal",
+    303,
+    326,
+    261,
+    284
+   ],
+   [
+    "replace",
+    326,
+    335,
+    284,
+    285,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    354,
+    285,
+    304
+   ],
+   [
+    "delete",
+    354,
+    356,
+    304,
+    304
+   ],
+   [
+    "equal",
+    356,
+    361,
+    304,
+    309
+   ],
+   [
+    "delete",
+    361,
+    363,
+    309,
+    309
+   ],
+   [
+    "equal",
+    363,
+    374,
+    309,
+    320
+   ],
+   [
+    "replace",
+    374,
+    380,
+    320,
+    326,
+    [
+     "|Variable|Description|",
+     "|--------------------|---------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_ISSUER_URL`|IdP base URL. Discovery happens at `<issuer>/.well-known/openid-configuration`. e.g. `https://auth.example.com`|",
+     "|`OIDC_CLIENT_ID`|Client ID registered with your IdP.|",
+     "|`OIDC_CLIENT_SECRET`|Client secret. Omit for public clients (PKCE-only).|",
+     "|`OIDC_REDIRECT_URI`|Must match what's registered with the IdP. e.g. `https://einvault.yourdomain.com/auth/oidc/callback`|"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    383,
+    326,
+    329
+   ],
+   [
+    "replace",
+    383,
+    393,
+    329,
+    339,
+    [
+     "|Variable|Default|Description|",
+     "|-------------------------------|----------------------|-----------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_SCOPES`|`openid profile email`|Space-separated scopes requested from the IdP.|",
+     "|`OIDC_PROVIDER_NAME`|`SSO`|Display label on the login button.|",
+     "|`OIDC_ALLOW_SIGNUP`|`false`|If `true`, auto-creates accounts for users who authenticate but have no matching record. See below.|",
+     "|`OIDC_DEFAULT_ROLE`|`member`|Role assigned to auto-created users. Allowed: `member`, `caretaker`. Admin can only be granted via groups.|",
+     "|`OIDC_ADMIN_GROUPS`|_(unset)_|Comma-separated. Users whose `groups` claim contains any value here are promoted to admin on every login.|",
+     "|`OIDC_POST_LOGOUT_REDIRECT_URI`|_(unset)_|If set and the IdP advertises `end_session_endpoint`, logout triggers RP-initiated logout at the IdP.|",
+     "|`OIDC_STATE_SECRET`|_(random)_|Pin a long random string. Without it, in-flight logins break across server restarts.|",
+     "|`OIDC_ALLOW_INSECURE_HTTP`|`false`|Allows plain-HTTP issuer URLs. Exists for automated tests against a local mock IdP. Never set this in production.|"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    417,
+    339,
+    363
+   ],
+   [
+    "replace",
+    417,
+    418,
+    363,
+    364,
+    [
+     "By default, logout destroys the local EinVault session and returns the user to `/auth/login`. Set `OIDC_POST_LOGOUT_REDIRECT_URI` (and register it with your IdP) to also end the IdP session via RP-initiated logout."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    421,
+    364,
+    367
+   ],
+   [
+    "replace",
+    421,
+    429,
+    367,
+    373,
+    [
+     "|Provider|Notes|",
+     "|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|**Authelia**|Register the redirect URI under the OIDC client config. Set `client_secret_basic` (default) or `none` for public clients.|",
+     "|**Authentik**|Create an OAuth2/OIDC provider; scope mapping for `groups` is built-in. `OIDC_ADMIN_GROUPS` matches the `groups` claim directly.|",
+     "|**Keycloak**|Add a \"Group Membership\" mapper to the client with token claim name `groups` and \"Full group path\" off. EinVault does not read `realm_access.roles`. Add the redirect URI to \"Valid Redirect URIs\".|",
+     "|**PocketID**|Public-client first; omit `OIDC_CLIENT_SECRET`. Register the redirect URI in the client settings.|"
+    ]
+   ],
+   [
+    "equal",
+    429,
+    460,
+    373,
+    404
+   ],
+   [
+    "delete",
+    460,
+    462,
+    404,
+    404
+   ],
+   [
+    "equal",
+    462,
+    481,
+    404,
+    423
+   ],
+   [
+    "replace",
+    481,
+    506,
+    423,
+    448,
+    [
+     "|Method & path|Body|Purpose|",
+     "|-----------------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`GET /api/companions`|-|List the companions the token user may target (members/admins: all active; caretakers: assigned). Returns `{ companions: [...] }` with each companion's full profile. Use this to discover `companionId`s.|",
+     "|`GET /api/companions/{companionId}`|-|Get one companion. Full-scope tokens get the full profile; write-scope tokens get the minimal projection (no PII). An id the token can't reach reads as `404`, same as unknown, so it can't be used to probe which ids exist; an archived companion reads as `404` too, not as a retrievable \"deleted\" record. Returns `{ companion }`.|",
+     "|`POST /api/logs`|`{ companionId or companionIds, type, subtypes?, notes?, durationMinutes?, loggedAt? }`|Log a daily event. `type` is one of `walk`, `meal`, `bathroom`, `litter`, `treat`, `play`, `grooming`, `other`. Each species allows a subset (a cat has no `bathroom`, a dog no `litter`, and an `other` companion has neither those nor `walk`); a type any target companion can't have is rejected with `400 typeNotAllowedForSpecies`. `subtypes` is an optional array of kinds valid for that type (e.g. `[\"pee\"]` for `bathroom`, `[\"leash\"]` for `walk`; the full list per type is in `/api/docs`); a value that no target companion can take is rejected with `400 invalidSubtype`, and one that fits only some targets is kept for those and dropped for the rest. Returns `201 { ids, eventGroupId }`.|",
+     "|`GET /api/logs`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back logged events for a companion, newest first. Each event includes its `subtypes` (`null` when none were logged). Returns `{ events: [...] }`.|",
+     "|`GET /api/journal`|query `?companionId=&date=` (`date` defaults to today)|Read back the journal entry for a companion/day. Returns `{ entry }` (or `{ entry: null }`).|",
+     "|`POST /api/journal`|`{ companionId, date?, body?, mood? }`|Upsert the journal entry for a day (`date` defaults to today). Sending both `body` and `mood` replaces them; omitting a key leaves that field untouched, so a mood-only or body-only post won't wipe the other. Caretaker tokens may only write today. Returns `201 { id, companionId, date }`.|",
+     "|`GET /api/notes`|query `?companionId=&tag=&match=&pinned=`|List a companion's notes, pinned first. Repeat `tag` to filter by several (up to 20); `match=all` returns only notes with every tag, default `any`. Full-scope tokens only, for members and admins. Returns `{ notes: [...], hasMore }`.|",
+     "|`POST /api/notes`|`{ companionId, title, body?, tags?, pinned?, sharedWithCaretakers? }`|Create a note. `body` is markdown (up to 20000 characters), `title` up to 200, and up to 10 tags of 32 characters each. Returns `201 { id, companionId }`.|",
+     "|`GET /api/notes/{id}`|-|Read one note.|",
+     "|`PATCH /api/notes/{id}`|`{ title?, body?, tags?, pinned?, sharedWithCaretakers? }`|Partial update; `tags` replaces the whole set. Returns the updated note.|",
+     "|`DELETE /api/notes/{id}`|-|Delete a note. Returns `204`.|",
+     "|`GET /api/quick-logs`|-|List the token user's enabled quick logs so a device can discover their ids. Returns `{ quickLogs: [...] }`.|",
+     "|`POST /api/quick-logs/{id}/execute`|`{ companionIds?, loggedAt? }` (optional)|Run a configured quick log. With no body it uses the quick log's remembered/assigned companions, so a physical button only needs the URL and token. Returns `201 { ids }`.|",
+     "|`POST /api/health-events`|`{ companionId, type, title, notes?, occurredAt?, vetName?, vetClinic? }`|Log a health event. `type` is one of `vet_visit`, `vaccination`, `medication`, `procedure`, `other`. `occurredAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/health-events`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back health events for a companion, newest first by `occurredAt`. Returns `{ events: [...] }`.|",
+     "|`POST /api/weight`|`{ companionId, weight, unit, notes?, recordedAt? }`|Log a weight entry. `unit` is `kg`, `lbs`, `g`, or `oz`. `recordedAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/weight`|query `?companionId=`|Read back weight entries for a companion, newest first by `recordedAt`. Returns `{ entries: [...] }`.|",
+     "|`GET /api/reminders`|query `?companionId=&status=due\\|all`|List reminders. Default `status=due` lists not-yet-completed reminders oldest-due first; `status=all` also includes completed reminders, ordered by due date (newest first). Omit `companionId` to list across every companion the token user may access. Returns `{ reminders: [...] }`.|",
+     "|`POST /api/reminders/{id}/complete`|-|Mark a reminder done. A recurring reminder spawns its next occurrence. Returns `200 { id, completedAt, nextReminderId }` (`nextReminderId` is `null` for a one-off).|",
+     "|`GET /api/medications`|query `?companionId=&status=active\\|all`|List medications. Default `status=active`; caretakers only ever see active ones. Write-scope tokens may call it so a device can find ids; they get active medications only, with just `id`, `companionId`, `name`, `active` and `nextDueAt`. Returns `{ medications: [...] }`.|",
+     "|`POST /api/medications/{id}/doses`|`{ givenAt?, note? }` (optional)|Record a dose. Completes the matching linked reminder occurrence (a missed one from an earlier day, or one due within 3 hours of `givenAt`), otherwise logs a standalone dose. Returns `201 { doseId, completedReminderId }`; a `givenAt` before the start date is `400 givenBeforeStart`, one more than 5 minutes in the future is `400 givenInFuture` (up to 5 minutes ahead counts as now), an ended medication is `409 medicationEnded`.|",
+     "|`GET /api/shifts`|query `?from=&to=` (both optional `YYYY-MM-DD`)|List the caretaker shift schedule, most recent shifts first (up to 200; use `from`/`to` to window further back). Admins and members see every shift; a caretaker sees only their own. Returns `{ shifts: [...] }`.|",
+     "|`GET /api/users`|-|List the user roster, scoped to what the token user may see: an admin sees everyone, a member sees everyone except admins, a caretaker sees only themselves. Returns `{ users: [...] }` with `id`, `displayName`, `role`, `isActive` per user, plus `username` (omitted for a member-role token, since a member has no need to see other users' login identifiers).|"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    514,
+    448,
+    456
+   ],
+   [
+    "delete",
+    514,
+    516,
+    456,
+    456
+   ],
+   [
+    "equal",
+    516,
+    527,
+    456,
+    467
+   ],
+   [
+    "delete",
+    527,
+    529,
+    467,
+    467
+   ],
+   [
+    "equal",
+    529,
+    534,
+    467,
+    472
+   ],
+   [
+    "replace",
+    534,
+    535,
+    472,
+    473,
+    [
+     "- **Session-based auth:** custom sessions with bcryptjs password hashing; optional OIDC SSO via `openid-client`"
+    ]
+   ],
+   [
+    "equal",
+    535,
+    537,
+    473,
+    475
+   ],
+   [
+    "delete",
+    537,
+    539,
+    475,
+    475
+   ],
+   [
+    "equal",
+    539,
+    540,
+    475,
+    476
+   ],
+   [
+    "replace",
+    540,
+    547,
+    476,
+    477,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    548,
+    477,
+    478
+   ],
+   [
+    "replace",
+    548,
+    550,
+    478,
+    479,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "f20000dc3d81+2": {
+  "fn": "litestar-org/pytest-databases",
+  "clean_ver": "2",
+  "raw_lines": 13,
+  "ops": [
+   [
+    "replace",
+    0,
+    13,
+    0,
+    7,
+    [
+     "|Project||Status|",
+     "|---------|:--|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|CI/CD||Latest Release ci Documentation Building|",
+     "|Quality||Coverage Quality Gate Status Maintainability Rating Reliability Rating Security Rating|",
+     "|Package||PyPI - Version PyPI - Support Python Versions|",
+     "|Community||Discord Matrix Medium Twitter Blog|",
+     "|Meta||Litestar Project types - Mypy License - MIT Litestar Sponsors linting - Ruff code style - Ruff|"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    78,
+    7,
+    72
+   ],
+   [
+    "replace",
+    78,
+    86,
+    72,
+    73,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    90,
+    73,
+    77
+   ],
+   [
+    "replace",
+    90,
+    91,
+    77,
+    78,
+    [
+     "Full documentation is available at https://litestar-org.github.io/pytest-databases/latest/"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    93,
+    78,
+    80
+   ],
+   [
+    "replace",
+    93,
+    96,
+    80,
+    81,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    81,
+    82
+   ],
+   [
+    "replace",
+    97,
+    100,
+    82,
+    83,
+    [
+     "This project is licensed under the MIT License - see the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    83,
+    84
+   ],
+   [
+    "replace",
+    101,
+    104,
+    84,
+    85,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "1df655c34439+2": {
+  "fn": "n0rdy/pooml",
+  "clean_ver": "2",
+  "raw_lines": 16,
+  "ops": [
+   [
+    "equal",
+    0,
+    16,
+    0,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     " text), full-text search (SQLite FTS5), live tail, infinite scroll, SQL querying"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    20,
+    18,
+    20,
+    [
+     " (`increase(http_requests_total) per 1h last 24h by service`), charts. Two metric types on purpose: counters and",
+     " gauges - histograms and summaries are downcast to their `_sum`/`_count` counter series"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    20,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     " to zoom, every view is a shareable URL. Alerts can carry a War Room link centered on the firing moment"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     " query stops working tells you so, instead of going quiet"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    30,
+    26,
+    30,
+    [
+     " itself",
+     "- **AI-ready (MCP)**: `@pooml/mcp` gives Claude (or any MCP client)",
+     " read-only SQL access to your logs and metrics - LLMs already speak SQL, so there's no query DSL for the model to",
+     " hallucinate around"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    44,
+    30,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     "- Built for my own projects first - reTrek runs on it in production. The roadmap follows what I need. Ideas are welcome in Discussions, but I may say no."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    57,
+    45,
+    57
+   ],
+   [
+    "replace",
+    57,
+    64,
+    57,
+    58,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    72,
+    58,
+    66
+   ],
+   [
+    "replace",
+    72,
+    73,
+    66,
+    67,
+    [
+     "`http://localhost:8081` as above. For LAN access or a reverse proxy, see Troubleshooting."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    80,
+    67,
+    74
+   ],
+   [
+    "replace",
+    80,
+    99,
+    74,
+    75,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    108,
+    75,
+    84
+   ],
+   [
+    "replace",
+    108,
+    109,
+    84,
+    85,
+    [
+     "Download the archive for your architecture from Releases, then:"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    114,
+    85,
+    90
+   ],
+   [
+    "replace",
+    114,
+    118,
+    90,
+    91,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    124,
+    91,
+    97
+   ],
+   [
+    "replace",
+    124,
+    125,
+    97,
+    98,
+    [
+     "GitHub CLI:"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    147,
+    98,
+    120
+   ],
+   [
+    "replace",
+    147,
+    148,
+    120,
+    121,
+    [
+     "|Variable|Default|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    121,
+    122
+   ],
+   [
+    "replace",
+    149,
+    163,
+    122,
+    136,
+    [
+     "|`POOML_DB_DIR`|*required*|Directory for `logs.db`, `metrics.db`, and `meta.db`. Created if missing; `~` expands.|",
+     "|`POOML_UI_SECRET`|*required*|UI login secret, min 32 chars.|",
+     "|`POOML_ENCRYPTION_KEY`|*required*|Encrypts secrets stored in `meta.db` (S3 credentials, notification tokens), min 32 chars. Losing it means re-entering those secrets.|",
+     "|`POOML_ENV`|`pro`|`local` / `pro`. Affects cookie Secure flag, HSTS, the CSRF origin check, log verbosity. See Troubleshooting.|",
+     "|`POOML_API_ADDR`|`localhost:8080`|Ingestion API bind address.|",
+     "|`POOML_UI_ADDR`|`localhost:8081`|UI bind address.|",
+     "|`POOML_LOG_LEVEL`|`info`|Pooml's own log level (`trace` / `debug` / `info` / `warn` / `error`).|",
+     "|`POOML_TRUST_PROXY_HEADERS`|`false`|Derive client IP from `X-Forwarded-For` for throttling. Enable ONLY behind a reverse proxy that overrides the header, otherwise IPs are spoofable.|",
+     "|`POOML_METRICS_ENABLED`|`false`|Expose pooml's own Prometheus metrics at `:8080/metrics` and register a self-scrape target.|",
+     "|`POOML_METRICS_AUTH_SECRET`|-|Required when metrics are enabled, min 32 chars. Sent as `X-API-Key` by scrapers.|",
+     "|`POOML_QUERY_API_ENABLED`|`false`|Expose the read-only SQL query API at `/api/v1/query/*`.|",
+     "|`POOML_QUERY_API_AUTH_SECRET`|-|Required when the query API is enabled, min 32 chars. Sent as `X-API-Key`. Deliberately separate from ingest keys.|",
+     "|`POOML_PUBLIC_URL`|-|Where this pooml lives from the outside (e.g. `https://logs.example.com`). Optional; enables War Room links (and a link to the Alerts page) in alert notifications.|",
+     "|`POOML_SHUTDOWN_TIMEOUT_SECONDS`|`30`|Hard deadline for graceful shutdown.|"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    172,
+    136,
+    145
+   ],
+   [
+    "replace",
+    172,
+    178,
+    145,
+    146,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    203,
+    146,
+    171
+   ],
+   [
+    "replace",
+    203,
+    204,
+    171,
+    172,
+    [
+     "The full HTTP API is documented in openapi.yaml."
+    ]
+   ],
+   [
+    "equal",
+    204,
+    230,
+    172,
+    198
+   ],
+   [
+    "replace",
+    230,
+    231,
+    198,
+    199,
+    [
+     "the pooml-mcp repo."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    290,
+    199,
+    258
+   ],
+   [
+    "replace",
+    290,
+    291,
+    258,
+    259,
+    [
+     " is what your services need to reach."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    259,
+    260
+   ],
+   [
+    "replace",
+    292,
+    293,
+    260,
+    261,
+    [
+     " `POOML_TRUST_PROXY_HEADERS=true` (and make sure the proxy overwrites `X-Forwarded-For`)."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    261,
+    262
+   ],
+   [
+    "replace",
+    294,
+    295,
+    262,
+    263,
+    [
+     " so enable server-side encryption on the bucket if you need encryption at rest."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    263,
+    264
+   ],
+   [
+    "replace",
+    296,
+    298,
+    264,
+    266,
+    [
+     " internal network addresses. That is consistent with pooml's single-admin model (the same admin already runs arbitrary",
+     " SQL), but worth knowing if the pooml host sits inside a sensitive network."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    311,
+    266,
+    279
+   ],
+   [
+    "replace",
+    311,
+    312,
+    279,
+    280,
+    [
+     " `http://localhost:8081`. Nothing to reconfigure."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    314,
+    280,
+    282
+   ],
+   [
+    "replace",
+    314,
+    315,
+    282,
+    283,
+    [
+     " `POOML_ENV=pro`."
+    ]
+   ],
+   [
+    "equal",
+    315,
+    319,
+    283,
+    287
+   ],
+   [
+    "replace",
+    319,
+    321,
+    287,
+    288,
+    [
+     "AGPL-3.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "bda5fb4da987+2": {
+  "fn": "hakureiyuyuko/go-acs",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**简体中文** | English"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    7,
+    3,
+    7
+   ],
+   [
+    "replace",
+    7,
+    10,
+    7,
+    10,
+    [
+     "CI",
+     "Go",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    15,
+    10,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     " IPPingDiagnostics、Connection Request（含 HTTP Digest）；不依赖任何厂商私有服务"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    20,
+    16,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     " 删除设备这类本地操作照旧可用"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     " 探不通才判离线（设备断电时 TR-069 不会通知 ACS，只能这样确认）"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     " 任务与上报记录的保留上限"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     " （没变的端口把 socket 交给新进程，设备上报不断；新端口起不来当场回滚）"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    30,
+    28,
+    30,
+    [
+     " 寄存器编码的原始值），这些映射存在库里（`param_aliases`）—— 支持一台新光猫就是加几行数据",
+     " （`acs alias add`），没登记的机型按叶子名启发式显示，不会空着也不编数字"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    39,
+    30,
+    39
+   ],
+   [
+    "replace",
+    39,
+    40,
+    39,
+    40,
+    [
+     "概览"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    40,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     "设备详情"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    47,
+    44,
+    47
+   ],
+   [
+    "replace",
+    47,
+    48,
+    47,
+    48,
+    [
+     "FTTR 与诊断"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    51,
+    48,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "终端列表"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    56,
+    52,
+    56
+   ],
+   [
+    "replace",
+    56,
+    57,
+    56,
+    57,
+    [
+     "设置"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    60,
+    57,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     "从 Releases 下对应架构的包，解压后一条命令装成 systemd 服务："
+    ]
+   ],
+   [
+    "equal",
+    61,
+    107,
+    61,
+    107
+   ],
+   [
+    "replace",
+    107,
+    133,
+    107,
+    133,
+    [
+     "|参数|环境变量|默认|说明|",
+     "|---|---|---|---|",
+     "|`-listen`|`ACS_LISTEN`|`:7547`|CWMP 监听地址|",
+     "|`-web-listen`|`ACS_WEB_LISTEN`|空|面板监听地址；留空 = 与 CWMP 同端口|",
+     "|`-path`|`ACS_PATH`|`/acs`|CWMP 端点路径（同端口时生效）|",
+     "|`-db`|`ACS_DB`|`acs.db`|SQLite 文件路径|",
+     "|`-user` / `-password`|`ACS_USER` / `ACS_PASSWORD`|空|设备侧 HTTP 认证（CPE 基本认证）|",
+     "|`-web-user` / `-web-pass`|`ACS_WEB_USER` / `ACS_WEB_PASS`|空|面板登录账号密码（首次启动种入，之后以设置页为准）|",
+     "|`-max-params-per-request`|`ACS_MAX_PARAMS_PER_REQUEST`|`200`|单次 GetParameterValues 带多少个参数名|",
+     "|`-task-history-limit`|`ACS_TASK_HISTORY_LIMIT`|`500`|每台设备保留多少条任务记录（`0` = 不限）|",
+     "|`-inform-history-limit`|`ACS_INFORM_HISTORY_LIMIT`|`500`|每台设备保留多少条上报记录（`0` = 不限）|",
+     "|`-offline-after`|`ACS_OFFLINE_AFTER`|`10m`|多久没上报算离线（设备**没**上报周期信息时的兜底）|",
+     "|`-offline-probe`|`ACS_OFFLINE_PROBE`|`true`|判离线前先主动探测；`false` = 退回纯超时|",
+     "|`-offline-probe-factor`|`ACS_OFFLINE_PROBE_FACTOR`|`2`|超过 `上报周期 × 这个倍数` 没上报就开始探测|",
+     "|`-offline-probe-attempts`|`ACS_OFFLINE_PROBE_ATTEMPTS`|`3`|最多探测几次，都没回音才判离线|",
+     "|`-offline-probe-interval`|`ACS_OFFLINE_PROBE_INTERVAL`|`15s`|两次探测之间的间隔|",
+     "|`-offline-probe-grace`|`ACS_OFFLINE_PROBE_GRACE`|`30s`|最后一次探测后再等多久才判离线|",
+     "|`-offline-probe-max`|`ACS_OFFLINE_PROBE_MAX`|`0`|`周期×倍数` 的上限（`0` = 不设；设备上报的周期很大时用得上）|",
+     "|`-offline-check-interval`|`ACS_OFFLINE_CHECK_INTERVAL`|`30s`|后台多久巡检一次在线状态|",
+     "|`-auto-fetch-wifi`|`ACS_AUTO_FETCH_WIFI`|`true`|纳管时自动采集无线概况与主机列表|",
+     "|`-task-wake-interval`|`ACS_TASK_WAKE_INTERVAL`|`10s`|有任务排队就主动发 Connection Request 叫设备的检查间隔（`0` = 关闭，只等设备周期性上报）|",
+     "|`-auto-refresh-wifi`|`ACS_AUTO_REFRESH_WIFI`|`10m`|概览数据（无线 / 终端概况 + **以太网口** + **FTTR 子设备**）的**兜底**刷新间隔（`0` = 只在首次纳管时采一次）|",
+     "|`-overview-refresh-min`|`ACS_OVERVIEW_REFRESH_MIN`|`30s`|设备**主动周期上报**时顺手刷新概览的最短间隔（`0` = 不设下限）|",
+     "|`-probe-capabilities`|`ACS_PROBE_CAPABILITIES`|`true`|纳管时做一次能力探测（决定界面区块）|",
+     "|`-log-level`|`ACS_LOG_LEVEL`|`info`|`debug` / `info` / `warn` / `error`|",
+     "|`-log-soap`|`ACS_LOG_SOAP`|`false`|打印原始 SOAP 报文（排障用）|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    182,
+    133,
+    182
+   ],
+   [
+    "replace",
+    182,
+    194,
+    182,
+    183,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    201,
+    183,
+    190
+   ],
+   [
+    "replace",
+    201,
+    203,
+    190,
+    192,
+    [
+     " 写回类型大小写、诊断要最后置 `Requested`）、设备怪癖（能改不能读、异步生效、身份键被元数据改写）、",
+     " 运维坑（挂载掉了不能乱删、任务别卡在 running）……修法与验证都在里面"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    208,
+    192,
+    197
+   ],
+   [
+    "replace",
+    208,
+    212,
+    197,
+    198,
+    [
+     "AGPL-3.0。可以自由使用、修改、分发（含商用）；但把**修改后**的版本作为网络服务提供给别人用时，"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    198,
+    199
+   ],
+   [
+    "replace",
+    213,
+    218,
+    199,
+    200,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    221,
+    200,
+    203
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

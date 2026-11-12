@@ -2987,5 +2987,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fd733c9a2fa2": {
+  "identity": {
+   "one_liner": "基于 SQLite+FTS5 的 AI 编码代理持久化记忆系统，单 Go 二进制",
+   "review": "Engram 为 AI 编码代理提供跨会话的持久化记忆存储，数据默认保存在 ~/.engram 下的 SQLite 数据库中。它通过 MCP stdio、HTTP API、CLI 和 TUI 四种方式访问，支持 14 个代理的 setup 命令及任意 MCP 兼容代理。核心机制包括 FTS5 全文检索、项目感知读取（按 ENGRAM_PROJECT 或 cwd 解析）以及冲突记忆标记。依赖方面无需 Node.js、Python 或 Docker；Git Sync 可导出压缩块跨机器共享，Cloud 复制为可选功能。",
+   "highlights": [
+    "单 Go 二进制内置 SQLite+FTS5 全文检索，通过 CLI、HTTP API、MCP 和 TUI 暴露",
+    "提供 engram setup 子命令，为 Claude Code、Cursor、VS Code 等 14 个代理写入 MCP 配置",
+    "默认本地存储于 ~/.engram，支持 Git Sync 导出与可选的按项目 Cloud 复制"
+   ],
+   "use_cases": [
+    "让编码代理在会话结束后保留项目记忆，避免重复解释项目背景",
+    "用 engram tui 浏览、检索代理保存的观察记录",
+    "多机器间通过 Git Sync 或 Cloud 共享同一份代理记忆"
+   ]
+  },
+  "sha": "fd733c9a2fa2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5dcdae9b9dca": {
+  "identity": {
+   "one_liner": "Go 实现的 LLM 代理网关，单二进制内嵌 Svelte 面板，路由多提供商请求",
+   "review": "9router-go 是 9Router 的 Go 实现，以单个二进制提供代理网关与内嵌 Svelte 仪表盘，面向使用 Claude Code、Cursor、Cline 等 CLI 工具的开发者。它将请求转发到 40+ 提供商与 100+ 模型，支持 RTK 工具输出压缩、组合路由（fallback/round-robin/sticky 等）与多账号轮换。默认监听 20130 端口，数据存于 ~/.9router，并直接读取上游 9Router 的同一 SQLite 数据库，无需迁移；仅做增量式 schema 变更，不导入旧 JSON 导出。",
+   "highlights": [
+    "单二进制运行，无需 Node.js 运行时，支持 Docker、后台守护进程与 systemd/launchd/cron 等开机自启",
+    "支持 fallback、round-robin、sticky、capacity、fusion 等组合路由策略，可为每个 API key 绑定代理池",
+    "兼容 OpenAI Chat、Claude Messages、Gemini、Ollama 等接口格式，含 SSE 流式与每请求日志检查"
+   ],
+   "use_cases": [
+    "在 Claude Code、Codex、Cursor 等 CLI 工具中通过本地端点统一接入多个 AI 提供商",
+    "对工具输出类内容做自动压缩以减少 token 消耗",
+    "已使用 9Router（Next.js 版）时切换或并行运行 Go 实现而保留既有数据库配置"
+   ]
+  },
+  "sha": "5dcdae9b9dca",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bee841dd7f86": {
+  "identity": {
+   "one_liner": "自托管家庭墙面看板，集中显示日历、家务、餐食与购物清单",
+   "review": "Prism 是一个面向家庭的自托管信息看板，用于在墙面屏幕、平板或手机上展示日历、天气、家务、购物清单和照片。它读取 Google、iCloud 和 iCal 日历，家务以积分制运作并由家长确认。数据存储在本机 Postgres 中，无账户和订阅。采用 PolyForm Noncommercial 许可，仅限个人非商业使用。安装方式包括 Home Assistant 加载项、Docker 镜像或本地构建，首次启动通过设置向导为成员分配 PIN。支持英语和德语界面。",
+   "highlights": [
+    "支持 Google、iCloud 和 iCal 日历接入，家务含积分与奖励目标机制，购物清单支持条码扫描并可推送至 Kroger 系商店购物车",
+    "数据存储于本地 Postgres 数据库，可从设置中导出备份；无账户与订阅，登录采用每人 PIN 码",
+    "提供 Home Assistant 加载项（自带 Postgres 与 Redis）、Docker amd64/arm64 镜像及源码构建三种安装方式；空闲时可切换为照片幻灯片，支持 OneDrive 或上传照片"
+   ],
+   "use_cases": [
+    "在厨房墙面屏幕或电视上展示当日日程、天气和生日提醒，空闲时作为数字相框",
+    "家庭成员通过手机应用查看共享日历、家务任务和购物清单，孩子完成家务由家长确认并累计积分兑换奖励",
+    "在 Home Assistant 或 NAS、树莓派等自有设备上部署，配合已有屏幕使用"
+   ]
+  },
+  "sha": "bee841dd7f86",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "362dcf135542": {
+  "identity": {
+   "one_liner": "自托管 CRM：Go+React 构建，集成线索、商机、工单与获客表单",
+   "review": "GopherCRM 是面向小型销售与支持团队的自托管 CRM，将线索、五阶段商机管道、工单、任务与可嵌入网站的获客表单置于同一应用。后端为 Go 单二进制，前端为 React 静态界面，支持 SQLite（单文件、无数据库服务器）或 MySQL 8/MariaDB 10.11，提供 Docker Compose 部署文件，采用 MIT 许可证。运行时需自行设置 JWT_SECRET 与 CORS_ALLOWED_ORIGINS，公共注册默认关闭。",
+   "highlights": [
+    "内置获客表单生成与脚本嵌入，提交即转为线索，含蜜罐、时间陷阱、速率限制、可选 reCAPTCHA v3 等多层反垃圾与可选双重确认机制",
+    "提供线索、客户、公司、五阶段商机（含只追加的阶段历史）、工单、任务、产品与报价模块，以及 admin/sales/support/customer 四种角色",
+    "支持每日定时查询 Anthropic、OpenAI、Gemini、Kimi、Perplexity 等 LLM 端点的品牌提及情况，输出可见性、声量份额与引用报告"
+   ],
+   "use_cases": [
+    "小型销售与支持团队希望在自有服务器上统一管理线索、商机与工单，且不按席位付费",
+    "需要在网站嵌入表单收集线索并支持双重确认订阅流程",
+    "需要定期检测多个 LLM 答案引擎对品牌的提及情况（AEO 报告）"
+   ]
+  },
+  "sha": "362dcf135542",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6eb89a2d4608": {
+  "identity": {
+   "one_liner": "e-SUS APS PEC 5.6.1 的 PostgreSQL 库结构图谱与现成 SQL 查询集",
+   "review": "该仓库包含两部分：一是 e-SUS APS PEC 5.6.1（巴西 SUS 初级保健电子病历）PostgreSQL 库 1188 张表的结构图谱，含 10796 个列描述、1688 个外键及 3D 关系图；二是按初级保健场景分类的 41 条现成 SQL 查询，覆盖联邦拨款指标、主动随访、免疫接种、登记与数仓建模五类。面向公共医疗 IT 人员和第三方系统开发者。查询经 PostgreSQL 9.6 与 16 测试，不含任何患者数据，使用时建议只读账户并遵守 LGPD。",
+   "highlights": [
+    "提供 1188 张 PEC 表的结构文档、10796 个列描述与 1688 个外键关系，并生成离线浏览器可打开的 3D 关系图",
+    "提供 41 条按五类组织的 SQL 查询，其中 C1、C3、C4、C7、B3、M1 等指标的计算规则已对照卫生部方法学说明核对",
+    "脚本以只读方式连接数据库，validate_sql.py 用 EXPLAIN 校验每条查询，audit_publication.py 在发布前扫描 CPF、CNS、密码等隐私内容"
+   ],
+   "use_cases": [
+    "为 e-SUS PEC 数据搭建看板、BI 或指标工具时查阅表结构与表间关系",
+    "查找需要主动随访的人群（孕妇、高血压、糖尿病患者等）或统计疫苗接种覆盖情况",
+    "计算进入联邦拨款的 APS 指标，并将 SQL 从 Markdown 笔记批量整理为参数化查询文件"
+   ]
+  },
+  "sha": "6eb89a2d4608",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1f8aada02cf": {
+  "identity": {
+   "one_liner": "面向 AI 代理的可检查记忆 API，基于 FastAPI 与 PostgreSQL+pgvector 实现",
+   "review": "Mnemo 是一个为 AI 代理提供持久记忆的 API 服务：应用写入事实文本，系统用本地 all-MiniLM-L6-v2（384 维）生成向量存入 PostgreSQL+pgvector，检索时返回记忆、相似度、评分与年龄供检查，并对英文陈述做启发式冲突标记。它提供作用域密钥、游标分页、导出导入、审计事件和 Python SDK。README 明确其为早期单租户原型，冲突检测仅覆盖有限英文规则，编码器截断超过 256 词片的内容。运行方式为 backend 目录下 docker compose up --build。",
+   "highlights": [
+    "存储文本、向量、标签、重要性与可选过期时间，检索响应包含相似度、最终评分与年龄",
+    "提供作用域密钥（支持命名空间授权与过期）、游标分页、导出/导入、审计事件与事务性 outbox",
+    "上下文端点在字符预算内选取完整事实并保留原文，默认省略未解决的冲突"
+   ],
+   "use_cases": [
+    "为需要跨会话保存和召回事实的 AI 代理应用提供记忆存储与检索",
+    "在事实变更时标记可能冲突的陈述供人工审阅与解决",
+    "通过 Python SDK 或 HTTP API 构建带引用来源的代理上下文"
+   ]
+  },
+  "sha": "e1f8aada02cf",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

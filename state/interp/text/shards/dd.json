@@ -2893,5 +2893,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5051512a7cbf": {
+  "identity": {
+   "one_liner": "Rust 编写的家庭实验室仪表盘，免 YAML，UI 内配置并聚合 Proxmox/Docker 遥测。",
+   "review": "AMUD Dashboard 是面向家庭实验室（homelab）用户的自托管仪表盘，由 amud-server（Axum Web 服务器，状态存于 SQLite）和 amud-agent（部署在各主机的遥测守护进程）两个二进制组成。配置在 Web UI 中完成并持久化到 SQLite，无需 YAML 文件；代理通过 UDS 或 TCP/TLS 上报主机与容器数据。Docker 镜像仅支持 amd64，ARM64 需用原生二进制安装。",
+   "highlights": [
+    "通过 Proxmox VE REST API（API Token 认证）和 Docker UNIX socket 原生采集主机与容器遥测，经 WebSocket 推送到浏览器",
+    "配置、布局与分类标签存储于嵌入式 SQLite（WAL 模式），全部通过 UI 设置，不使用 YAML 文件",
+    "支持多节点部署：一个服务器接入多个主机上的代理，支持 LXC 容器控制、LDAP、Homepage YAML 导入及 AdGuard/Pi-hole/Plex/Home Assistant 等集成"
+   ],
+   "use_cases": [
+    "集中监控运行 Proxmox VE、Unraid、CasaOS 或 Docker 的多台家庭服务器",
+    "在浏览器中直接管理容器并查看实时遥测数据",
+    "从 Homepage 等现有仪表盘导入布局并配置自托管服务卡片"
+   ]
+  },
+  "sha": "5051512a7cbf",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ea28765497e": {
+  "identity": {
+   "one_liner": "ArcGIS Pro Python 工具箱，用于创建和配置加权叠加镶嵌数据集",
+   "review": "该仓库包含三个 Python 脚本工具：Create Weighted Overlay Mosaic 创建镶嵌数据集并写入图层字段与符号系统，另两个工具用于更新图层分类范围和标题描述等信息。面向使用 ArcGIS Pro 的用户，构建的加权叠加服务可在 ArcGIS Experience Builder 等 Web 应用中使用。使用前需下载工具箱并在 ArcGIS Pro 中添加。",
+   "highlights": [
+    "Create Weighted Overlay Mosaic 工具创建加权叠加镶嵌数据集，将 Contents 面板中受支持的影像类型写入镶嵌，并从图层读取符号系统写入字段",
+    "Update WRO Layer Classification 工具更新镶嵌中图层的分类范围，Update WRO Layer Info 工具修改图层标题、描述并可添加预览或信息 URL",
+    "生成的加权叠加服务可用于 ArcGIS Experience Builder 等基于 Web 的应用"
+   ],
+   "use_cases": [
+    "在 ArcGIS Pro 中为加权叠加分析准备和配置镶嵌数据集",
+    "为 ArcGIS Experience Builder Suitability Modeler Widget 配置数据源",
+    "维护既有加权叠加镶嵌数据集的图层分类与元数据信息"
+   ]
+  },
+  "sha": "2ea28765497e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a0e2ddf9292": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地优先 AI 代理共享记忆系统，经 MCP/CLI 存取。",
+   "review": "Max Chronicle 用 SQLite 为 AI 代理存储带署名的事件与当前断言，代理通过 MCP 或 CLI 记录决策、检索记忆、交换检查点，使新代理可在无先前对话的情况下接续任务。它面向需要多代理协作与任务交接的开发者，核心不依赖 Ollama 或付费 API，本地向量检索为可选功能；所有记录保留作者、证据与类型标记，并在写入前对疑似机密做脱敏处理。",
+   "highlights": [
+    "提供六个 MCP 工具（startup_bundle、query_memory、get_memory、record_event、recent_events、state_at），支持按词语与语义检索事件和笔记",
+    "存储的断言保留作者、证据与类型（observed/decision/assumption），记录的一切内容作为数据处理而非指令",
+    "提供 Web 视图、Atlas 三维可视化、CLI（query-memory/timeline/record/doctor）以及健康检查、定时任务与备份；MIT 许可"
+   ],
+   "use_cases": [
+    "代理会话交接：通过检查点与任务简报让另一代理在没有先前聊天记录的情况下继续任务",
+    "团队或个人查看项目开放任务、当前事实与近期决策，并浏览记忆历史与 Atlas 可视化",
+    "在本地（无付费 API 依赖）为多代理工作流记录决策、发现与证据以供检索"
+   ]
+  },
+  "sha": "1a0e2ddf9292",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7cf8b3e76c35": {
+  "identity": {
+   "one_liner": "基于Java注解与反射的Android轻量级SQLite ORM库",
+   "review": "light-dao是一个面向Android的SQLite ORM，通过@Table/@Column注解定义表结构，借助BaseDBHelper子类管理数据库，提供链式API完成单条与批量保存、条件查询、更新、删除及事务批处理，支持通过aliasName跨表查询和自动数据库升级迁移。适用于需要在Android应用中将Java对象映射到SQLite表的开发者。跨表查询需自定义返回对象并指定字段来源表。",
+   "highlights": [
+    "使用@Table、@Column注解定义表和字段，通过Java反射实现对象与SQLite数据库的映射",
+    "提供链式API（withTable/withWhere/withColumns/withGroupBy等）支持增删改查、主键查找、条件删除与事务批处理",
+    "重写onUpgrade()实现autoMigrate()自动数据库升级，跨表查询支持通过aliasName指定字段来源"
+   ],
+   "use_cases": [
+    "Android应用中需要以对象形式操作SQLite表的持久化场景",
+    "需要避免在每个Table类中手动编写toContentValues()/restore(Cursor)的Android项目",
+    "涉及多表关联查询或数据库版本升级迁移的Android数据层开发"
+   ]
+  },
+  "sha": "7cf8b3e76c35",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

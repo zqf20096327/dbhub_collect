@@ -3334,5 +3334,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "046a4748a7cd": {
+  "identity": {
+   "one_liner": "基于声明式 YAML 配置的 PostgreSQL 与 PgBouncer Prometheus 指标导出器",
+   "review": "pg_exporter 是一个面向 Prometheus 的 PostgreSQL 与 PgBouncer 指标导出器，用 Go 编写，采用声明式 YAML 定义采集器，内置 96 个采集分支、59 个命名空间共 460 项指标。支持 PostgreSQL 10–18（旧版配置支持 9.1–9.6）与 PgBouncer，提供自动发现多库、每采集器的超时/缓存/跳过条件配置、自身监控指标及 HTTP 健康检查端点。默认监听 :9630，指标通过 /metrics 暴露；未显式指定 sslmode 时连接 URL 会自动注入 sslmode=disable，远程目标需手动配置 TLS。提供 RPM/DEB 包、Docker 镜像及 Pigsty 集成部署方式。",
+   "highlights": [
+    "通过声明式 YAML 配置定义指标，内置配置包含 96 个采集分支、59 个命名空间、460 项指标",
+    "支持 PostgreSQL 10–18（legacy 配置支持 9.1–9.6）与 PgBouncer 1.26.1，并可按版本/条件定义多个查询分支",
+    "自动发现实例内多个数据库，提供 HTTP 健康检查端点与 pg_exporter 自身监控指标"
+   ],
+   "use_cases": [
+    "需要将 PostgreSQL 或 PgBouncer 实例接入 Prometheus 监控体系",
+    "通过编辑 YAML 配置自定义采集指标、超时、缓存与跳过条件",
+    "配合 Pigsty 部署监控现有 PostgreSQL 集群或 RDS 实例"
+   ]
+  },
+  "sha": "046a4748a7cd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30ad33e1cb0e": {
+  "identity": {
+   "one_liner": "面向 Coolify v4.3–v4.6 的服务器迁移与异地备份命令行工具",
+   "review": "Coolify Mirror 是一个用 Go 编写的开源 CLI 工具，用于将单个项目、多个项目或整个 Coolify 服务器从一台机器备份并在另一台同版本 Coolify 服务器上恢复，涵盖项目、环境变量、secrets、卷、文件、镜像与代理设置，并由 Coolify 自身启动。1.10 版加入基于 rclone 的自动异地备份（Google Drive、S3、SFTP 等），备份经 age X25519 加密并通过校验后删除本地副本。要求两台服务器运行相同 Coolify 版本，并需 root 或 sudo SSH 权限。",
+   "highlights": [
+    "支持按项目、多个项目或整个服务器粒度备份与恢复，恢复前需用户确认且可选择保留或修改域名",
+    "通过 rclone 支持超过 70 种异地备份目标，采用 systemd timer 定时执行，保留远端最新 7 份备份",
+    "备份文件使用 age X25519 加密（含恢复密钥），传输经 HTTPS 且证书固定；PostgreSQL、MySQL、MariaDB 使用原生 dump 工具"
+   ],
+   "use_cases": [
+    "在服务器之间迁移 Coolify 托管的应用、数据库与服务，迁移后通过 DNS A 记录切换域名",
+    "配置每日定时整服务器异地备份，服务器丢失后在新增服务器上用恢复密钥还原",
+    "自托管/homelab 场景下为 Coolify 实例建立灾备恢复流程"
+   ]
+  },
+  "sha": "30ad33e1cb0e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2777,5 +2777,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f1f52e11654e": {
+  "identity": {
+   "one_liner": "浏览器扩展，基于 TheIntroDB 时间戳在流媒体页面显示跳过按钮。",
+   "review": "该扩展在 Netflix、Prime Video 等流媒体页面上为片头、回顾、片尾字幕和预览提供跳过按钮，跳过时机由 TheIntroDB 的时间戳数据决定。除八个内置专用提取器外，还能通过通用提取器解析 URL 或页面文本中的 TMDB ID 与剧集信息。用户可在弹窗中设置 API key 提交时间戳。采用 GPL-3.0-or-later 许可证。",
+   "highlights": [
+    "为 Netflix、Max、Prime Video、Apple TV+ 等八个站点提供专用提取器，并对含 TMDB ID 或可见标题的任意站点启用通用提取器",
+    "支持在扩展弹窗中配置 TheIntroDB API key 以提交时间戳并查看待审提交",
+    "站点逻辑通过 src/websites/ 下的 match/extract 接口扩展，返回含标题、TMDB ID、季集号的 MediaContext"
+   ],
+   "use_cases": [
+    "在支持的流媒体站点观看剧集时显示片头/片尾跳过按钮",
+    "为缺少专用提取器的站点贡献新的站点匹配与解析逻辑",
+    "通过扩展直接向 TheIntroDB 提交片段时间戳"
+   ]
+  },
+  "sha": "f1f52e11654e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c1fda1a20664": {
+  "identity": {
+   "one_liner": "自托管多用户全渠道团队收件箱，统一管理 WhatsApp 与 Telegram 客户会话",
+   "review": "WATeamInbox 是一个可自托管的开源团队收件箱 Web 应用，将 WhatsApp（whatsmeow 链接设备）和 Telegram Bot 的客户会话汇入同一界面，提供分配、标签、快捷回复、审计日志等功能，并通过内置 MCP 服务器让授权的 AI 客户端访问收件箱。技术栈为 Bun/Hono API、React 前端和 Go WhatsApp worker，使用租户隔离的 PostgreSQL 架构。项目处于 beta 阶段，README 明确说明接口与迁移可能无向后兼容变更，且 WhatsApp 链接设备使用非官方客户端库。",
+   "highlights": [
+    "支持 WhatsApp 链接设备（QR 配对）与 Telegram Bot（webhook + Bot API）两类已实现的渠道，其他渠道为规划项",
+    "内置 MCP 服务器，AI 客户端可通过作用域 API token 访问收件箱，受角色、权限与审计日志约束",
+    "采用渠道中立的消息主干架构，通过适配器隔离各 provider 的凭证与能力；消息命令经 NATS 持久化，语义为至少一次投递"
+   ],
+   "use_cases": [
+    "团队通过共享实时收件箱协作处理来自 WhatsApp 和 Telegram 的客户咨询",
+    "需要会话分配、角色可见性控制和审计日志的多用户客服协作场景",
+    "需自托管并希望让 MCP 兼容的 AI 客户端在权限范围内处理客户消息的场景"
+   ]
+  },
+  "sha": "c1fda1a20664",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "20ba550e47cf": {
+  "identity": {
+   "one_liner": "自托管的本地 RAG 工作区，用 Ollama 对文档与代码做带引用的问答",
+   "review": "LocalLens 是一个自托管的文档问答工作区，用于向本地 PDF、Markdown、文本与源代码提问，回答附引用摘录并展示文件连接图。技术栈为 ASP.NET Core、React、SQLite 和本地 Ollama 模型，默认无云服务与遥测。适合愿意用 Docker 自部署的个人用户；限制包括单用户无认证、每文件 20 MB、库容量 500 个来源，且引用由模型生成，不保证每条声明都有依据。",
+   "highlights": [
+    "支持上传 PDF、Markdown、UTF-8 文本与多种源代码文件，检索保留 PDF 页码与文本行号引用，嵌入与回答通过本地 Ollama 模型运行",
+    "文档按 1,400 字符、200 字符重叠切块存入 SQLite，检索采用精确余弦搜索，导入的本地文件夹会生成相对导入与 Markdown 链接的文件图",
+    "默认部署绑定 127.0.0.1，容器以非 root 用户运行且未配置云服务或遥测；首次启动需联网下载 qwen2.5:3b 与 nomic-embed-text 模型"
+   ],
+   "use_cases": [
+    "在本地向私有 PDF、笔记或项目文档提问并核对引用出处",
+    "导入代码仓库，浏览 import 与 Markdown 链接构成的关系图并针对源码提问",
+    "在无外部网络依赖的环境下搭建个人知识库问答工作区"
+   ]
+  },
+  "sha": "20ba550e47cf",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

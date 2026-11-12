@@ -2947,5 +2947,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7be9c256c1be": {
+  "identity": {
+   "one_liner": "SQL 原生开源时序数据库，以 Parquet 格式存储遥测数据",
+   "review": "Arc 是一个时序分析数据库，用于接收机器与服务产生的遥测数据，面向需要保留全分辨率历史并支持 SQL 查询的团队。它以标准 Apache Parquet 文件存储数据于本地磁盘、S3 或 Azure，内嵌 DuckDB 作为查询引擎，兼容 InfluxDB Line Protocol 与 Telegraf。整体部署为单一可执行文件，采用 AGPL-3.0 许可证。",
+   "highlights": [
+    "支持 InfluxDB Line Protocol 写入，兼容 Telegraf 采集端，可双写渐进迁移",
+    "数据以开放 Apache Parquet 格式存储在自有基础设施，后台自动执行压缩合并",
+    "单一自包含二进制部署，Linux 仅依赖 glibc 2.34+ 与 libgcc_s，提供 Arrow IPC、MessagePack、JSON 三种查询输出格式"
+   ],
+   "use_cases": [
+    "IoT 与设备遥测的长期历史数据保留与分析查询",
+    "已有 InfluxDB/Telegraf 采集链路的渐进式迁移与双写验证",
+    "边缘设备或离线（air-gap）环境中的单机时序部署"
+   ]
+  },
+  "sha": "7be9c256c1be",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1cc1c0bbe1c9": {
+  "identity": {
+   "one_liner": "Java 后端面试题与项目实战内容合集，按主题分类持续更新",
+   "review": "该仓库汇集博主「苏三」发布的技术文章，按 AI、高并发、分布式、Spring、MySQL、中间件、缓存、多线程、JVM 等主题分类，每类下列出文章标题清单；另附 13 个项目实战条目和外部网站、知识星球链接。内容以索引和链接为主，仓库内不含文章正文。适用于准备 Java 后端面试或查找学习路线的读者。",
+   "highlights": [
+    "按 AI、高并发、分布式、Spring、MySQL、中间件、缓存、多线程、JVM、网络等主题分类的文章标题索引",
+    "包含 13 个项目实战条目（如短链系统、秒杀系统、商城微服务系统、AI Agent 类项目）",
+    "提供配套网站 susan.net.cn、AI 教程与项目实战页面链接"
+   ],
+   "use_cases": [
+    "查找 Java 后端各主题的面试相关文章索引",
+    "了解 AI Agent、Spring AI 等方向的文章入口",
+    "获取项目实战主题清单作为学习参考"
+   ]
+  },
+  "sha": "1cc1c0bbe1c9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "407af9cef1ac": {
+  "identity": {
+   "one_liner": "Windows 便携式 WAMP 整合包：Apache、PHP、MariaDB/MySQL 单压缩包解压即用",
+   "review": "winpacho 是面向 Windows 本地开发环境的便携式 WAMP 服务器整合包，将 Apache、MariaDB/MySQL（可切换）、PHP 8.3/8.4/8.5 与 Adminer 打包为单个 zip，解压后运行 WinpachoController.exe 即可使用，无安装器与注册表写入。它由 The Uniform Server 的控制程序源码（Free Pascal/Lazarus 编写）延续而来，本仓库只含控制器源码，服务器二进制由 CI 打包脚本从各官方渠道获取。升级采用覆盖 exe 或换目录迁移 www、数据库与配置的方式。",
+   "highlights": [
+    "单个 zip 包含 Apache、MariaDB 与 MySQL（可切换）、PHP 8.3/8.4/8.5（控制器内切换）、Adminer，无外部依赖，无安装器与注册表项",
+    "控制器首次启动自动生成 localhost 自签名证书并启用 SSL，支持创建多个去重写入 hosts 的虚拟主机（http/https）",
+    "提供滚动发布（每次 push 更新）与按 git 标签构建的版本化发布，CI 对每个已装 PHP 版本做冒烟测试"
+   ],
+   "use_cases": [
+    "在 Windows 上搭建本地 PHP 开发/测试环境，需要多版本 PHP 切换或 MariaDB/MySQL 双引擎",
+    "需要免安装、可随目录移动的便携服务器（如 U 盘或无权限安装软件的机器）",
+    "从 The Uniform Server 或 uniserver-reload 迁移的既有安装继续维护与升级"
+   ]
+  },
+  "sha": "407af9cef1ac",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fcacd998c54f": {
+  "identity": {
+   "one_liner": "基于 Paxos 协议的分布式关系型数据库",
+   "review": "OceanBase 是蚂蚁集团开发的分布式关系型数据库，运行在通用服务器集群上，基于 Paxos 协议提供高可用与水平扩展能力，兼容 MySQL 协议以便迁移。README 提供单机体验（all-in-one 脚本）、Docker 镜像（dockerhub/quay.io/ghcr.io）、Kubernetes ob-operator 及源码编译四种部署方式。本仓库为 v4.4.1_CE_HF2 版本的镜像；许可证为木兰公共许可证第 2 版。",
+   "highlights": [
+    "基于 Paxos 协议实现多副本一致性，README 标注 RPO=0、RTO<8 秒",
+    "支持 HTAP 混合负载，兼容 MySQL 协议",
+    "提供 all-in-one 脚本、Docker、Kubernetes（ob-operator）多种部署途径"
+   ],
+   "use_cases": [
+    "在通用服务器集群上部署分布式数据库",
+    "从 MySQL 迁移应用的场景",
+    "需要同时处理事务与分析负载（HTAP）的场景"
+   ]
+  },
+  "sha": "fcacd998c54f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

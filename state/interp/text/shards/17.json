@@ -3439,5 +3439,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a5d5396a51b3": {
+  "identity": {
+   "one_liner": "为 golang-migrate 提供纯 Go 数据库驱动及保留上游命令的 CLI",
+   "review": "该项目为 golang-migrate/migrate 提供额外的纯 Go 数据库驱动，覆盖 Oracle、DM8、GaussDB、openGauss 和 OceanBase（MySQL/Oracle 租户）。驱动实现上游 database.Driver 接口并注册到上游注册表，迁移引擎与公共 API 复用上游库；同时附带保留上游命令与参数的 CLI。需 Go 1.26+，全程 CGO 禁用。README 注明各驱动尚未在真实服务器版本上验证。",
+   "highlights": [
+    "驱动实现上游 database.Driver 接口并注册到上游注册表，迁移引擎、文件解析与公共 API 来自 golang-migrate",
+    "支持 Oracle（go-ora）、DM8、GaussDB、openGauss、OceanBase（MySQL/Oracle 租户）驱动，纯 Go 实现，CGO 禁用",
+    "CLI 保留上游命令与参数，Oracle 使用可在 DDL 提交后存续的会话锁，支持 -lock-timeout 配置初始化锁等待"
+   ],
+   "use_cases": [
+    "在纯 Go（无 CGO）构建环境中使用 golang-migrate 管理 Oracle、DM8、GaussDB、openGauss 或 OceanBase 数据库的迁移",
+    "应用通过导入驱动包并继续使用上游 migrate/v4 API 集成嵌入式或文件源迁移",
+    "自定义二进制通过导入 cli 包并 blank-import 所需驱动来组合构建自己的迁移命令行工具"
+   ]
+  },
+  "sha": "a5d5396a51b3",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

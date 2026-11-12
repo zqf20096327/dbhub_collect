@@ -2960,5 +2960,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "404dd586cd54": {
+  "identity": {
+   "one_liner": "跨代理共享记忆层：将团队代理的会话轨迹沉淀为可复用的 SKILL.md 技能库",
+   "review": "Hivemind 是一个面向 Claude Code、Codex、Cursor、OpenClaw、Hermes、pi、Claude Cowork 等编程代理的共享记忆与技能沉淀服务。它通过各平台的生命周期钩子捕获会话中的提示、工具调用与响应，存入 Deeplake，并将重复模式整理为 SKILL.md 供团队其他代理检索复用；检索采用词法加语义混合方式，支持 BYOC 将数据存于自有 GCS/S3/Azure。安装需 Node 22+，提供脚本安装与 npm 安装两种方式，支持无头 CI 环境用 API token 登录。",
+   "highlights": [
+    "以结构化轨迹形式捕获各代理会话的提示词、工具调用与响应，存入 Deeplake，并将重复模式整理为可复用的 SKILL.md 技能文件",
+    "提供混合词法 + 语义检索（未启用嵌入时回退到 ILIKE 词法检索），支持跨会话、代理、 teammates 与机器实时同步",
+    "支持 BYOC 部署，数据可保留在自有 GCS、Azure、S3 或本地存储桶；安装器自动检测本机代理并注入钩子，无头/CI 环境可用 API token 安装"
+   ],
+   "use_cases": [
+    "团队多名工程师使用不同代理（如一人用 Claude Code、一人用 Cursor）时，共享解决过的迁移、调试等任务模式，避免重复推导",
+    "希望将代理会话记录持久化并可检索的组织，用于会话总结（生成 wiki 页）与历史回溯",
+    "需要将记忆数据保留在自有云存储桶（GCS/Azure/S3/本地）的合规场景"
+   ]
+  },
+  "sha": "404dd586cd54",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df61028fbf34": {
+  "identity": {
+   "one_liner": "管理 GitHub Stars 的自托管工具，支持同步 Lists、打标签评分并生成健康分。",
+   "review": "Stard 是一个面向拥有大量 GitHub Stars 用户的工具：读取用户 starred 仓库，借助 Claude Code 或 Codex 等 AI agent 将其整理为 GitHub Lists 并写回 GitHub，为每个仓库计算基于提交、issue、贡献者、star 增长和最近发布的 0-10 健康分，同时提供标签、1-5 评分与笔记功能。它还能将精选仓库、评测和 Lists 渲染成图片卡片，嵌入个人 README。运行方式为 npx（需 Node.js 20+ 与 gh 登录）或 Docker（应用+Postgres+Electric 三个容器，或 aio 单镜像），通过 GitHub token 访问，可选密码或 OIDC 认证。",
+   "highlights": [
+    "支持将 Stars 整理为 GitHub Lists 并双向同步回 GitHub，提供标签、笔记和 1-5 评分",
+    "基于最近提交、issue 关闭比例、贡献者数、star 增长和最近发布计算每个仓库 0-10 健康分，Archived 仓库为 0，并为失效仓库推荐活跃替代项目",
+    "提供 Profile 卡片生成、stars 图表（Explore）、每次启动前自动备份与恢复，以及 CLI 搜索命令 npx github-stars-organizer search"
+   ],
+   "use_cases": [
+    "整理数百条未分类的 starred 仓库，按主题归入 GitHub Lists 并过滤已停维护项目",
+    "为 GitHub 个人主页生成精选仓库、评分与 Lists 卡片",
+    "通过 agent API 让 Claude Code/Codex 在推荐依赖前检索自己的 stars 库"
+   ]
+  },
+  "sha": "df61028fbf34",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6df5e95fc55e": {
+  "identity": {
+   "one_liner": "Android 应用，将 TikTok LIVE 的评论、礼物等事件转为语音播报",
+   "review": "TikVoz 是一款 Android 应用（要求 Android 9 及以上 64 位，APK 约 48.35 MB），用于在直播期间以语音播报 TikTok LIVE 中的评论、礼物、关注和点赞事件。用户输入直播账号用户名即可连接，可配置读取的事件类型、语音档案、语速与消息队列，并能为指定礼物分配本机音频片段。应用仅通过 APK 分发，当前版本 0.8.0，由开发者 SUAREZ SH 维护。",
+   "highlights": [
+    "支持连接指定 TikTok LIVE 直播，将评论、礼物、关注、点赞事件按用户设置的过滤规则进行语音播报",
+    "支持为不同礼物分配手机本地音频并裁剪，可调节语音档案、语速和播报队列",
+    "提供最近十条事件与直播计数面板，并在系统通知中显示连接状态"
+   ],
+   "use_cases": [
+    "主播在 TikTok 直播时希望听取观众评论、礼物等事件提醒",
+    "需要用自定义音频提示特定礼物事件的场景",
+    "直播中通过通知查看连接状态并快速断开连接的使用场景"
+   ]
+  },
+  "sha": "6df5e95fc55e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

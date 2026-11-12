@@ -3302,5 +3302,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e301850e3c46": {
+  "identity": {
+   "one_liner": "开源多租户知识图谱数据库，支持自动构建与双时态记录",
+   "review": "HASH 是一个开源的多租户平台，将原始信息转化为知识与流程图谱，供自动化、决策和 AI 场景使用。它由 Rust 图层、TypeScript API 与前端等服务组成，通过智能体从公开网络与私有数据源采集并标准化信息，支持双时态（事件发生时间与知晓时间分别记录）。仓库为 monorepo，可通过 hash.ai 云端、本地开发环境或自托管三种方式运行。",
+   "highlights": [
+    "支持双时态（bitemporality）：分别记录并查询事件发生时间与信息获知时间",
+    "用户可通过可视化界面浏览和管理实体（数据）与类型（模式），非技术用户亦可操作",
+    "依赖 Docker Compose 编排 Postgres、Redis、Kratos、Hydra、Temporal、Vault、MinIO 等服务，并提供 Grafana 与 Temporal UI 可观测性栈"
+   ],
+   "use_cases": [
+    "构建图谱支撑的世界模型，用于流程自动化、优化与决策",
+    "部署智能体从公开互联网及私有数据源自动采集、校验并结构化信息",
+    "自托管部署或参与代码开发（monorepo 含 /apps、/blocks、/infra、/libs、/tests 等目录）"
+   ]
+  },
+  "sha": "e301850e3c46",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "acc0805861d2": {
+  "identity": {
+   "one_liner": "SRC资产测绘与监控流水线，四阶段主动测绘加每日增量对比，数据汇于单一SQLite。",
+   "review": "srcradar 是面向持有授权的安全运营者的信息收集流水线：从录入业务及其资产范围出发，调用 ProjectDiscovery 工具链（subfinder/dnsx/httpx/naabu 等）完成主动测绘，每天北京时间 03:00 由 cron 自动运行快照对比并生成本地可视化面板（127.0.0.1:8765）。所有输出写入单一 SQLite，按业务名隔离。工具只做信息收集，不包含漏洞利用；运行前需通过 check.sh/install.sh 安装外部依赖。",
+   "highlights": [
+    "骨干模块 pdtm/daily/manage 默认安装并自动运行，katana、health、notify 为自部署的可选插件",
+    "全部输出汇入单一 SQLite（db/recon.sqlite3），daily 模块只读数据库生成快照与增量报告",
+    "支持 Docker 单容器运行，数据库持久化于命名卷，面板与 MCP 守护进程仅绑定回环地址"
+   ],
+   "use_cases": [
+    "持有 SRC 协议或渗透测试授权后，对企业范围内资产进行子域名枚举、端口与 HTTP 探测",
+    "需要每日增量对比资产变化并生成本地可视化报告的持续监控场景",
+    "通过 MCP 适配器（srcradar-mcp-server）将资产数据接入本地代理使用"
+   ]
+  },
+  "sha": "acc0805861d2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ee3d354f27f": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL 的可观测性与模式编目平台，包含六个服务",
+   "review": "该仓库为 PostgreSQL 可观测性、性能监控与模式编目平台。README 实际描述的是其 CI 与发布流程：对 main 分支的 PR 和推送运行 Python/Bash 语法检查及完整测试套件（迁移、API、分析、通知、采集器、安装器、前端），并发布六个 Docker 镜像到 GitHub Container Registry。支持 vMAJOR.MINOR.PATCH 与预发布标签，版本一致性由脚本校验。发布流程不对多镜像做事务性保证，失败任务需手动重跑。",
+   "highlights": [
+    "CI 在 PR 和 main 推送时运行迁移、API、analytics、notifier、collector、installer、前端测试及 Svelte 编译与类型检查",
+    "发布流程构建六个服务镜像（api、collector、migrations、frontend、analytics、notifier）并推送到 GitHub Container Registry，支持 vMAJOR.MINOR.PATCH 和 rc/beta/alpha 预发布标签",
+    "版本号通过 check_version.py 强制在锁文件、服务清单与 Git 标签之间保持一致"
+   ],
+   "use_cases": [
+    "需要为 PostgreSQL 实例建立监控、可观测性与模式编目能力",
+    "需要通过 CI 校验与 GHCR 镜像发布管理多服务版本发布",
+    "需要带预发布标签（rc/beta/alpha）的语义化版本发布流程"
+   ]
+  },
+  "sha": "6ee3d354f27f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3060659e6a2": {
+  "identity": {
+   "one_liner": "以 npm 包形式嵌入 Next.js 应用的开源客服工单与轻量 CRM 库",
+   "review": "Better Helpdesk 是一个 npm 库而非独立服务，通过挂载一个路由处理器、一个客服团队界面组件和一个站点挂件，在宿主应用自身的数据库（PostgreSQL、MySQL、SQL Server、SQLite）中存储会话、联系人与公司数据，身份由宿主应用的会话函数 identify 判定。适合已有 Next.js 应用、希望客服数据与业务表同库的开发团队。要求 Node.js 22.19+ 与 React 19。",
+   "highlights": [
+    "提供共享收件箱、SLA 服务等级策略、联系人/公司/商机 CRM、Web Component 挂件与邮件收发（DKIM 校验、webhook 入站）功能",
+    "数据写入宿主数据库的 helpdesk schema，身份识别由宿主应用的 identify 函数或签名令牌决定，不存储密码与会话",
+    "会话历史以 JSON Lines 导出导入，文件存储、AI 建议、帮助中心搜索等均为可实现的适配器接口；支持英德法意四种语言"
+   ],
+   "use_cases": [
+    "在现有 Next.js（或 Hono、SvelteKit 等）应用内为站点访客提供客服挂件与团队工单收件箱",
+    "需要客服数据与业务数据库同库、可用 SQL 联接自有表生成报表的团队",
+    "由宿主代码直接函数调用开启会话，如计费 webhook 自动为客户创建工单"
+   ]
+  },
+  "sha": "c3060659e6a2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ef4c44ad8828": {
+  "identity": {
+   "one_liner": "Go CLI 脚手架，生成基于 Gin+sqlc+Postgres 的 API 服务并自动接线",
+   "review": "Bogie 是一个 Go 编写的 CLI 工具，用于生成仅支持 API 与 Postgres 的后端服务，组合 Gin、sqlc、goose、River、Kamal 2 等既有组件。其生成器在写入文件的同时完成路由注册等接线（因 Go 无自动加载）；生成的应用不依赖 Bogie 本身。适用于希望省去技术选型、直接以约定布局启动 Go API 服务的团队，需 Go 1.26+ 与 Docker Compose 或自备 Postgres。",
+   "highlights": [
+    "提供 new/g/d 命令族：scaffold、model、controller、job、config、authentication 等生成器在创建文件的同时写入注册行，destroy 可连同注册行一起移除，doctor 检查标记与控制器挂载完整性",
+    "生成的应用组合 Gin、sqlc+pgx/v5、goose 迁移、River 后台任务（可选 --jobs）、加密凭据文件与 Kamal 2 部署配置，并附带 bin/ci 本地流水线",
+    "生成的应用不导入 Bogie 包；测试使用独立数据库 URL，不读取开发凭据或 DATABASE_URL"
+   ],
+   "use_cases": [
+    "从零启动一个仅 API、仅 Postgres 的 Go 后端服务，技术栈决策已由脚手架固定",
+    "用 rails new 风格的生成器批量创建带迁移、查询、模型与已挂载控制器的资源脚手架",
+    "在本地通过 bin/ci 运行包含数据库重建、sqlc diff、lint、构建与测试的完整流水线"
+   ]
+  },
+  "sha": "ef4c44ad8828",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

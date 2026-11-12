@@ -15224,5 +15224,681 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "a10ba5092644+2": {
+  "fn": "satisfecho/pos",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "POS2 - Restaurant POS and ordering"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    7,
+    [
+     "version",
+     "build",
+     "license",
+     "last commit",
+     "stars"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    7,
+    8
+   ],
+   [
+    "replace",
+    4,
+    14,
+    8,
+    12,
+    [
+     "Docker",
+     "Angular",
+     "FastAPI",
+     "PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    21,
+    12,
+    19
+   ],
+   [
+    "replace",
+    21,
+    26,
+    19,
+    20,
+    [
+     "**Try the live demo →**"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    37,
+    20,
+    31
+   ],
+   [
+    "delete",
+    37,
+    39,
+    31,
+    31
+   ],
+   [
+    "equal",
+    39,
+    47,
+    31,
+    39
+   ],
+   [
+    "replace",
+    47,
+    48,
+    39,
+    40,
+    [
+     "1. **Register** your restaurant (Getting Started below)."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    52,
+    40,
+    44
+   ],
+   [
+    "replace",
+    52,
+    53,
+    44,
+    45,
+    [
+     "Add later when you want: table PIN, online checkout, kitchen display, and inventory. URLs are in Access Points."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    58,
+    45,
+    50
+   ],
+   [
+    "replace",
+    58,
+    59,
+    50,
+    51,
+    [
+     "1. **Register** and sign in (see Getting Started)."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    69,
+    51,
+    61
+   ],
+   [
+    "replace",
+    69,
+    73,
+    61,
+    63,
+    [
+     " Kitchen display - full-screen order cards",
+     " Customer menu - browse, cart, place order"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    63,
+    64
+   ],
+   [
+    "replace",
+    74,
+    77,
+    64,
+    65,
+    [
+     "*More screenshots (orders, reports, reservations, tables, provider portal) are listed in docs/screenshots/README.md.*"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    65,
+    68
+   ],
+   [
+    "replace",
+    80,
+    81,
+    68,
+    69,
+    [
+     "|Area|What's included|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    69,
+    70
+   ],
+   [
+    "replace",
+    82,
+    106,
+    70,
+    94,
+    [
+     "|**Orders**|Full lifecycle (pending → preparing → ready → delivered → paid). Session-based orders per browser. Item-level status; partial delivery; order modification and cancellation before delivery; soft delete with “Show removed items” in staff UI. Session rules and status reset: docs/0008-order-management-logic.md. **Print invoice** and **Print Factura** (with optional billing customer and tax breakdown) open the browser print dialog. See docs/0017-billing-customers-factura.md.|",
+     "|**Tax (IVA)**|Tax-inclusive pricing with per-tenant tax rates (name, rate %, validity). Default tax in Settings; product-level tax override. Order items store applied tax snapshot for invoice breakdown.|",
+     "|**Billing customers (Factura)**|Register customers that need a tax invoice with company details (name, company, CIF/tax ID, address, email, phone). List and search at `/customers`; from Orders, **Print Factura** lets you select a customer and print an invoice with “Bill to” block; optionally save the customer on the order. End-user accounts and MFA are not shipped (docs/0002-customer-features-plan.md).|",
+     "|**Customer menu**|Browse menu, cart, place order, order history.|",
+     "|**Kitchen display**|Dedicated full-screen view at `/kitchen`: large order cards, auto-refresh and WebSocket updates, optional sound on new orders. Read-only; same access as Orders. See docs/0015-kitchen-display.md.|",
+     "|**Reports**|Sales & revenue at `/reports` (owner/admin): date range, summary (total revenue, order count, average payment per client), reservation count and by source (public/staff), by product/category/table/waiter, charts, CSV/Excel export. See docs/0016-reports.md.|",
+     "|**Payments**|**Stripe** and **Revolut** (online checkout on the customer menu; per-tenant configuration in **Settings**). **Cash** and **card terminal (dataphone)** when staff marks the order paid. Optional **immediate payment required** (checkout opens right after placing order). Revolut sandbox and redirect URLs: docs/REVOLUT.md.|",
+     "|**Tables**|Table management, QR codes, canvas view. Table activation and 4-digit PIN so only present guests can order; PIN rate limiting via Redis. See docs/0009-table-pin-security.md.|",
+     "|**Staff navigation**|After sign-in, the sidebar matches operational areas: **Dashboard**, **My shift** (optional), **Orders**, **Reservations** and **Guest feedback** (when the reservations module is enabled), **Tables** (list and canvas), **Kitchen** and **Bar** displays, **Customers**, **Products**, **Catalog** (when the providers module is enabled), **Reports**, **Working plan**, **Inventory** (items, suppliers, purchase orders, stock, reports - admin), **Users**, **Contracts** (when permitted), **Settings** (admin).|",
+     "|**Reservations**|Staff: list, create, edit, seat, finish, cancel at `/reservations`. **Client notes** (from the customer at booking) and **owner notes** (internal staff notes). **Client technical info** (IP, user-agent, browser fingerprint, screen size) is recorded for public bookings and visible to staff. **No-show**: mark no-shows and **send reminders** by email and/or **WhatsApp** (when Twilio is configured). Public: book at `/book/:tenantId`, view/cancel at `/reservation?token=...`. **Waiting list:** public join at `/waitlist/:tenantId` (linked from the book page); staff manage the queue on the Reservations waiting-list tab. Table status: available / reserved / occupied. See docs/0011-table-reservation-user-guide.md.|",
+     "|**Real-time**|WebSocket updates for order status; token-based WS auth (`/ws-token`).|",
+     "|**i18n & currency**|Languages: English, Spanish, Catalan, German, French, Bulgarian, Chinese (Simplified), Hindi, Urdu (RTL). Files: `front/public/i18n/*.json`. Language picker in the admin sidebar and on the public menu. API: `?lang=es` (or another code) for localized messages. Per-tenant currency (EUR, USD, MXN, INR, CNY, TWD, and others). See docs/0012-translation-implementation.md.|",
+     "|**Multi-tenant**|Isolated data per tenant; first user becomes owner; configurable roles (owner, admin, kitchen, bartender, waiter, receptionist, courier) and permissions (e.g. reservation read/write).|",
+     "|**Restaurant groups**|Multi-location operators can **create**, **join**, or **leave** a restaurant group (Settings → Restaurant group) and optionally **share billing customers** and/or **product catalog** across sibling locations. See docs/0054-restaurant-groups.md.|",
+     "|**Satisfecho Delivery**|First-party delivery channel (not Glovo/Uber): staff **Delivery** tab on Orders, create/assign courier, public guest checkout at `/delivery/{tenantId}`. See docs/0053-satisfecho-delivery-order-channel.md.|",
+     "|**Courier portal**|Couriers log in at `/courier/login` and work Mine / order actions at `/courier`. Demo credentials: `COURIER_EMAIL` / `COURIER_PASSWORD` in `config.env.example`.|",
+     "|**SaaS signup paywall**|After guided signup (`/register` / `/signup`), new tenants may hit `/paywall` (trial or subscribe) when the paywall flag is on. See docs/0052-saas-signup-paywall.md.|",
+     "|**Public pricing**|Hosted trial/monthly price from live `GET /saas/config` at **`/pricing`** (no login). Self-host / AGPLv3 alternative; does not imply billing when paywall is off.|",
+     "|**Platform operator**|Satisfecho platform admins log in at `/platform/login` and oversee tenants at `/platform`. Distinct from provider and tenant staff. See docs/0059-platform-operator-portal.md.|",
+     "|**Products & images**|Staff manage products at `/products`. On deploy, demo products are linked to catalog provider products so the Products page shows images (beer/pizza/wine import); first load of `/products` backfills image URLs.|",
+     "|**Provider portal**|Suppliers register at `/provider/register`, log in at `/provider/login`, and manage their catalog at `/provider` (tile/list view, search, add/edit/delete products, company details). See docs/0014-provider-portal.md.|",
+     "|**Tenant branding (public)**|Per-tenant **background colour**, **primary button colour** (blue OOBE default when unset), and **header background image** for book, menu, waitlist, delivery, feedback, and reservation-view pages. Set in Settings → Business profile; optional dark overlay when a header image is used. See docs/0028-tenant-public-branding.md.|",
+     "|**Public features (marketing)**|Product capabilities for prospects at **`/features`** (no login). Linked from the landing nav (“View all features”); uses the same landing site footer as the home page.|",
+     "|**Public about**|Company / About us at **`/about`** (no login). Names **Amvara Consulting S.L.**; linked from marketing nav and footer Support.|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    94,
+    95
+   ],
+   [
+    "replace",
+    107,
+    110,
+    95,
+    96,
+    [
+     "Planned, not yet implemented: Order Phase 4 (batch operations, audit, item replacement) and a stricter “must pay before continuing” flow. Further security items (for example CAPTCHA after failed logins) are in ROADMAP.md."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    120,
+    96,
+    106
+   ],
+   [
+    "delete",
+    120,
+    122,
+    106,
+    106
+   ],
+   [
+    "equal",
+    122,
+    124,
+    106,
+    108
+   ],
+   [
+    "replace",
+    124,
+    125,
+    108,
+    109,
+    [
+     "So, you really want to get your hands dirty and install? Then continue reading. If you want to try it out first, you may use the hosted version at satisfecho.de. No worries, anything you do on satisfecho.de - your data, your menus - you can export at any time and import the same on a self-hosted stack. Open source, no lock-in. ;-)"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    128,
+    109,
+    112
+   ],
+   [
+    "replace",
+    128,
+    129,
+    112,
+    113,
+    [
+     "- Docker and Docker Compose"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    143,
+    113,
+    127
+   ],
+   [
+    "replace",
+    143,
+    144,
+    127,
+    128,
+    [
+     " Local defaults are enough to start. For production or a custom domain, set `API_URL`, `WS_URL`, `CORS_ORIGINS`, and `SECRET_KEY`. Use `https://` and `wss://` in production. See docs/0004-deployment.md. Variable meanings are in Configuration."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    146,
+    128,
+    130
+   ],
+   [
+    "replace",
+    146,
+    148,
+    130,
+    132,
+    [
+     " - **Local (development):** `docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file config.env up -d`",
+     " - **Production (e.g. amvara9):** `docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file config.env up -d`"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    150,
+    132,
+    134
+   ],
+   [
+    "replace",
+    150,
+    151,
+    134,
+    135,
+    [
+     " Run `docker compose -f docker-compose.yml -f docker-compose.dev.yml ps` (or with `.prod.yml` if you used prod). Read the **PORTS** column for `haproxy` (for example `0.0.0.0:4202->4202/tcp`). The host port is the app URL. The route list is Access Points. If the port is not 4202, use that port in those URLs."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    153,
+    135,
+    137
+   ],
+   [
+    "replace",
+    153,
+    156,
+    137,
+    138,
+    [
+     " There is no pre-seeded user. Open **`/register`** on that host. Enter tenant name, email, and password. The first user becomes the tenant owner. Then sign in at the app URL."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    159,
+    138,
+    141
+   ],
+   [
+    "replace",
+    159,
+    160,
+    141,
+    142,
+    [
+     "|Purpose|URL|"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    142,
+    143
+   ],
+   [
+    "replace",
+    161,
+    187,
+    143,
+    167,
+    [
+     "|**Unified app (frontend + API via HAProxy)**|http://localhost:4202|",
+     "|**API docs (Swagger)**|http://localhost:4202/api/docs|",
+     "|**Health check**|http://localhost:4202/api/health|",
+     "|**DB health**|http://localhost:4202/api/health/db|",
+     "|**Public menu (example)**|http://localhost:4202/menu/{table_token}|",
+     "|**Public booking**|http://localhost:4202/book/{tenantId}|",
+     "|**Public waiting list**|http://localhost:4202/waitlist/{tenantId}|",
+     "|**Public features (marketing)**|http://localhost:4202/features|",
+     "|**Public pricing**|http://localhost:4202/pricing|",
+     "|**Public about**|http://localhost:4202/about|",
+     "|**Public guest feedback**|http://localhost:4202/feedback/{tenantId}|",
+     "|**Public Satisfecho Delivery (example tenant 1)**|http://localhost:4202/delivery/1|",
+     "|**Provider login**|http://localhost:4202/provider/login|",
+     "|**Provider dashboard**|http://localhost:4202/provider|",
+     "|**Courier login**|http://localhost:4202/courier/login|",
+     "|**Courier dashboard**|http://localhost:4202/courier|",
+     "|**SaaS paywall**|http://localhost:4202/paywall|",
+     "|**Platform operator login**|http://localhost:4202/platform/login|",
+     "|**Platform operator dashboard**|http://localhost:4202/platform|",
+     "|**Kitchen display**|http://localhost:4202/kitchen|",
+     "|**Bar display**|http://localhost:4202/bar (beverage-station view of the kitchen display)|",
+     "|**Reports (owner/admin)**|http://localhost:4202/reports|",
+     "|**Customers (Factura)**|http://localhost:4202/customers|",
+     "|**Dashboard (staff)**|http://localhost:4202/dashboard|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    192,
+    167,
+    172
+   ],
+   [
+    "replace",
+    192,
+    193,
+    172,
+    173,
+    [
+     "|Variable|Description|Required|"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    173,
+    174
+   ],
+   [
+    "replace",
+    194,
+    204,
+    174,
+    184,
+    [
+     "|`SECRET_KEY`|JWT signing; change in production|Yes|",
+     "|`REFRESH_SECRET_KEY`|Refresh token signing; must differ from `SECRET_KEY`|Yes|",
+     "|`API_URL`|Backend base URL used by frontend (e.g. `http://localhost:4202/api`)|For custom domain|",
+     "|`WS_URL`|WebSocket URL (e.g. `ws://localhost:4202/ws`)|For custom domain|",
+     "|`CORS_ORIGINS`|Allowed frontend origins (comma-separated)|Yes (production)|",
+     "|`POSTGRES_*` / `DB_*`|Database connection|Yes|",
+     "|`STRIPE_CURRENCY`|Fallback currency if tenant has none|Optional|",
+     "|`SAAS_PAYWALL_ENABLED`|When `true`, new restaurant signups hit `/paywall` after guided signup. Default `false` for local/demo.|Optional (default `false`)|",
+     "|`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM`|Optional; when set, reservation reminders can be sent via WhatsApp (in addition to email)|Optional|",
+     "|`DEFAULT_PHONE_COUNTRY`|ISO country code (e.g. `ES`, `DE`) for normalizing reservation phone numbers to E.164|Optional (default `ES`)|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    207,
+    184,
+    187
+   ],
+   [
+    "delete",
+    207,
+    209,
+    187,
+    187
+   ],
+   [
+    "equal",
+    209,
+    211,
+    187,
+    189
+   ],
+   [
+    "replace",
+    211,
+    214,
+    189,
+    190,
+    [
+     "Each feature row links to its guide. The full index is docs/README.md. Release notes are in CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    214,
+    234,
+    190,
+    210
+   ],
+   [
+    "delete",
+    234,
+    236,
+    210,
+    210
+   ],
+   [
+    "equal",
+    236,
+    243,
+    210,
+    217
+   ],
+   [
+    "replace",
+    243,
+    244,
+    217,
+    218,
+    [
+     "See AGENTS.md for more detail."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    253,
+    218,
+    227
+   ],
+   [
+    "replace",
+    253,
+    254,
+    227,
+    228,
+    [
+     "The suite includes small guards such as **`tests/test_settings_defaults.py`** (e.g. **`EMAIL_FROM`** default). Puppeteer UI scripts and reservation capacity tests are in **docs/testing.md**."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    275,
+    228,
+    249
+   ],
+   [
+    "replace",
+    275,
+    276,
+    249,
+    250,
+    [
+     "**Ad-hoc SQL:** There is no relation **`restaurantorder`**. Orders live in **`\"order\"`** (quoted - SQL keyword), line items in **`orderitem`**, floor tables in **`\"table\"`**. See docs/0033-postgres-adhoc-sql-table-names.md."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    287,
+    250,
+    261
+   ],
+   [
+    "delete",
+    287,
+    289,
+    261,
+    261
+   ],
+   [
+    "equal",
+    289,
+    295,
+    261,
+    267
+   ],
+   [
+    "replace",
+    295,
+    298,
+    267,
+    268,
+    [
+     "- **Rate limiting:** Global and per-route limits (login, register, payments, public menu, uploads, admin/management) use Redis. See docs/0020-rate-limiting-production.md. Table PIN attempts stay rate-limited."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    301,
+    268,
+    271
+   ],
+   [
+    "replace",
+    301,
+    302,
+    271,
+    272,
+    [
+     "|Issue|What to try|"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    272,
+    273
+   ],
+   [
+    "replace",
+    303,
+    309,
+    273,
+    277,
+    [
+     "|**Services won’t start**|Check port conflicts; ensure `config.env` exists and is valid; run `docker compose -f docker-compose.yml -f docker-compose.dev.yml logs`.|",
+     "|**Frontend can’t reach API**|Confirm `API_URL` and `WS_URL` match how the browser reaches the app (e.g. through HAProxy). Check CORS and browser console.|",
+     "|**Wrong port**|Use the host port from Quick Start.|",
+     "|**DB connection errors**|Ensure `db` is healthy (`docker compose -f docker-compose.yml -f docker-compose.dev.yml ps`); with Compose, use `DB_HOST=db`. Check credentials in `config.env`.|"
+    ]
+   ],
+   [
+    "equal",
+    309,
+    311,
+    277,
+    279
+   ],
+   [
+    "delete",
+    311,
+    312,
+    279,
+    279
+   ],
+   [
+    "equal",
+    312,
+    313,
+    279,
+    280
+   ],
+   [
+    "delete",
+    313,
+    331,
+    280,
+    280
+   ],
+   [
+    "equal",
+    331,
+    332,
+    280,
+    281
+   ],
+   [
+    "replace",
+    332,
+    338,
+    281,
+    282,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

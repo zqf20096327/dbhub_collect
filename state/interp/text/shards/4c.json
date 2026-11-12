@@ -3138,5 +3138,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b05e73f6f02e": {
+  "identity": {
+   "one_liner": "为 TORO Server 构建仅含官方可执行文件的最小化容器镜像并发布到 GHCR 的仓库",
+   "review": "该仓库用于构建 TORO Server 所使用的第三方服务器（Caddy、Cloudflared、TiDB 等）的最小容器镜像：只提取官方可执行文件，生成不含 shell 和包管理工具的镜像并发布到 GHCR（ghcr.io/toro-server/<名称>）。版本以各 Dockerfile 首个 FROM 的上游标签为准，digest 固定由消费方 ServerImage-TORO 负责，版本升级依赖 Dependabot PR（pingcap 三个镜像为带步骤的手工操作）。CI 在 main push 时执行构建与 smoke 测试后发布，PR 不发布。",
+   "highlights": [
+    "仅提取官方可执行文件，构建不含 shell 与包管理工具的最小镜像并发布至 GHCR",
+    "CI（images.yml）在 main push 时执行构建与 smoke 测试，通过后发布到 GHCR",
+    "镜像版本以 Dockerfile 首个 FROM 的上游标签为准，digest 固定与发布脚本位于消费方仓库"
+   ],
+   "use_cases": [
+    "为 TORO Server 提供各第三方服务器组件的容器镜像",
+    "需要不含 shell 和包管理工具的最小化镜像的环境",
+    "通过 GHCR 拉取 ghcr.io/toro-server/ 下已构建镜像的使用场景"
+   ]
+  },
+  "sha": "b05e73f6f02e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

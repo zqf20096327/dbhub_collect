@@ -3490,5 +3490,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "42f14e60e02a": {
+  "identity": {
+   "one_liner": "基于 ES6 标签模板字符串的 PostgreSQL 客户端库",
+   "review": "Postgres.js 是一个运行于 Node.js 18+、Bun、Cloudflare Workers 的 PostgreSQL 客户端，为 ES 模块、无依赖，Deno 可通过 Node 兼容层运行。它以标签模板字符串为核心：插值参数被替换为 $1、$2 等协议占位符并单独发送，由数据库端处理转义和类型转换，参数类型由服务器决定。可通过 npm install postgres 安装，连接配置支持 URL 字符串或选项对象，未提供的选项回退到 psql 环境变量。",
+   "highlights": [
+    "以标签模板字符串处理查询参数，值经序列化后替换为 $1、$2 等占位符并单独发送到数据库",
+    "支持动态构建查询：动态列选择、插入、更新、where in、排序、表名与列名标识符，以及嵌套 sql 片段的查询组装",
+    "提供游标（cursor）分批读取、forEach 逐行处理、describe 查询描述等高级方法"
+   ],
+   "use_cases": [
+    "在 Node.js、Bun、Deno 或 Cloudflare Workers 环境中连接 PostgreSQL（兼容 CockroachDB 等标签所示数据库）",
+    "需要以模板字符串方式编写参数化查询、避免字符串拼接构建 SQL 的应用",
+    "需要分批或逐行处理大量查询结果集的场景"
+   ]
+  },
+  "sha": "42f14e60e02a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b85676427b61": {
+  "identity": {
+   "one_liner": "本地优先的 macOS 开源仓库收藏整理应用，支持抓取、分类、克隆与更新检查",
+   "review": "reshelf 是一款运行在 macOS 14+ 的应用，用于收录 GitHub 仓库并整理到三个书架（Top Shelf / The Collector / Yard Sale），可按分类整目录克隆到 ~/reshelf/repos/<Category>/<repo>，用 git ls-remote 检查更新并一键 Pull。无账号、无云端依赖；在支持 Apple Intelligence 的设备上可本地生成标签与用例。提供 DMG 下载与 Xcode/build.sh 构建方式，需 Xcode 16+，首次构建经 SPM 解析 GRDB。",
+   "highlights": [
+    "粘贴 GitHub 链接（⌘K/⌘N/⌘V）抓取元数据并按规则自动分类，可检测重复收录",
+    "按分类整目录全量克隆到 ~/reshelf/repos/，通过只读 ls-remote 检查落后并一键 Pull，支持按文件夹批量操作",
+    "AI 功能（Capture Assist、Fits）仅在设备端 Apple Intelligence 上运行，无 API key、无云端选项；数据存于隔离的 SwiftData store 并自动保留最近 30 份 JSON 备份"
+   ],
+   "use_cases": [
+    "收藏整理日常实际使用的开源仓库，按分类本地克隆并跟踪上游更新",
+    "为某个项目批量克隆一组仓库并分组管理（文件夹 + 批量移动/批量 Pull）",
+    "将克隆目录作为 source-as-context 提供给 AI 编码代理，配合附带的 Claude Code skill 查询真实源码与许可证信息"
+   ]
+  },
+  "sha": "b85676427b61",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0421f69dd065": {
+  "identity": {
+   "one_liner": "自托管图片后端服务，以单一 HTTP API 提供上传、校验、存储、转换与删除。",
+   "review": "Konifer 是一个自托管图片后端，基于 Kotlin 实现，以 Docker 镜像分发，通过 HTTP API 提供图片上传、校验、存储、变换和删除。它部署在应用方自己的 PostgreSQL 与 S3 兼容存储或文件系统之上，图片处理使用 libvps 并在服务进程内运行，适合希望集中管理头像、商品图、租户品牌等图片生命周期的团队。服务端采用 AGPL 许可证，持久化部署需自备 PostgreSQL 和对象存储。",
+   "highlights": [
+    "提供应用自定义路径寻址的 HTTP API，支持 multipart 上传、S3 ARN 导入和受控域名 URL 导入，并可按路径配置尺寸、像素、格式等上传限制",
+    "基于 libvps 实现缩放、裁剪、格式转换，支持命名 profile 在上传后或按需生成变体，支持 JPEG、PNG、WebP、HEIC、AVIF、JPEG XL、GIF 及动图，可生成 BlurHash/ThumbHash 占位图",
+    "内置替换与历史模型（entryId 版本），支持递归删除路径下图片，可在 `konifer.conf` 中按路径继承配置存储桶、缓存和分发策略，支持多实例无状态水平扩展"
+   ],
+   "use_cases": [
+    "集中管理用户头像、商品图库、租户品牌等应用图片的上传、替换与清理，避免在各个应用中重复实现图片处理逻辑",
+    "为计算机视觉工作流提供编码显示图和指定布局（HWC/CHW）的原始像素缓冲输出",
+    "通过可选 SigLIP2 模型包，基于文本提示对上传内容进行接受、拒绝或分类标注"
+   ]
+  },
+  "sha": "0421f69dd065",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

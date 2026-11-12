@@ -2972,5 +2972,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "64aa68c45eb6": {
+  "identity": {
+   "one_liner": "S2 持久流 API 的 CLI、Rust SDK 与可自托管服务端实现",
+   "review": "该仓库提供 S2 持久流（Durable Streams）API 的三个组件：s2-cli 命令行工具、s2-sdk Rust SDK，以及 s2-lite 可自托管的服务端实现。s2-lite 基于 SlateDB 存储引擎，以对象存储作为持久化层，可指向 S3/Tigris 等桶或本地目录，也支持纯内存模式用于集成测试，面向需要实时流数据读写的开发者。其写前日志（WAL）可与主存储分桶部署；访问令牌经 /basins、/streams 等 REST 端点操作，但不支持 /access-tokens 与 /metrics API，为单节点二进制。",
+   "highlights": [
+    "提供 CLI、Rust SDK 与内嵌于 CLI 的 s2 lite 子命令，作为 S2 API 的自托管服务端实现",
+    "存储引擎为 SlateDB，数据在对象存储确认前落盘，支持 S3 兼容桶、本地目录与内存三种存储模式",
+    "提供 Prometheus 格式的 /metrics、/health 健康检查端点，支持 Helm 部署到 Kubernetes"
+   ],
+   "use_cases": [
+    "以 s2 lite 作为 S2 API 的本地或自托管运行环境，配合 CLI/多语言 SDK（TypeScript/Go/Rust/Python）进行流读写",
+    "使用无 --bucket 的内存模式作为 S2 模拟器跑集成测试",
+    "将流数据持久化到 S3 兼容对象存储，并可把 WAL 放入独立桶或本地盘以隔离延迟"
+   ]
+  },
+  "sha": "64aa68c45eb6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed84845f35a1": {
+  "identity": {
+   "one_liner": "本地优先的 Markdown 仓库编辑器，直接打开 Obsidian 兼容仓库并保留文件所有权。",
+   "review": "Plainva 是一款面向 Windows、macOS 与 Linux 的开源本地优先 Markdown 仓库编辑器，可直接打开现有 Obsidian 仓库而无需迁移。它通过 SQLite/FTS5 提供全文搜索，支持在纯文件上叠加 .base 数据库视图，并经由用户自选的存储（WebDAV、S3 等）同步。软件处于 Beta 阶段，默认每日创建 ZIP 备份。",
+   "highlights": [
+    "写入的文件保持标准 Markdown + YAML frontmatter，Plainva 特有内容集中于单个命名空间化的 plainva: 键下",
+    "提供 WebDAV/Nextcloud、S3 兼容存储、Google Drive、OneDrive 与 Dropbox 同步，含离线队列、三方合并与冲突解决器",
+    "每次写入本地快照版本，可浏览、diff、恢复，并默认每日创建 ZIP 备份"
+   ],
+   "use_cases": [
+    "在自有云存储上同步 Obsidian 兼容笔记仓库，且不希望迁移或重新格式化现有文件",
+    "通过脚本、CLI 工具或 AI 应用（含内置只读 MCP 服务器）直接读写纯 Markdown 仓库",
+    "在 Windows/macOS/Linux 及移动端（Android/iOS Beta）访问同一仓库，需要按笔记 frontmatter 的表格、看板、日历等视图"
+   ]
+  },
+  "sha": "ed84845f35a1",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "25d6987b6b8d": {
+  "identity": {
+   "one_liner": "单二进制 C++20 自托管 BaaS，提供 REST API、认证、实时与后台管理。",
+   "review": "MantisBase 是用 C++20 编写的自托管后端即服务，单个二进制文件包含自动生成的 REST CRUD 接口、JWT 认证、SSE 实时推送、文件上传和 Web 管理面板，默认使用 SQLite，也支持 PostgreSQL。可通过预编译二进制、Docker 或源码构建运行，还能作为 C++ 库嵌入应用，并通过 JavaScript 扩展自定义路由。项目采用 MIT 许可证，无外部运行时依赖。",
+   "highlights": [
+    "创建实体（表）后即时生成 REST CRUD 端点，API 位于 /api/v1/",
+    "内置 MbAuth 认证：JWT 登录（密码或邮箱一次性码）、刷新、登出与令牌验证，支持表达式权限规则",
+    "支持 SQLite 与 PostgreSQL 存储、SSE 实时数据变更推送，可作为 CMake 子模块嵌入 C++ 应用或用 JavaScript 编写扩展"
+   ],
+   "use_cases": [
+    "为应用快速搭建带认证和实时能力的自托管后端服务",
+    "部署在嵌入式设备或桌面应用中，作为 C++ 库内嵌运行",
+    "通过管理面板或 REST API 管理数据表、记录、用户与文件"
+   ]
+  },
+  "sha": "25d6987b6b8d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

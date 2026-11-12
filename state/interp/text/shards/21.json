@@ -2990,5 +2990,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "13ce6797dedc": {
+  "identity": {
+   "one_liner": "由 Video2Book 从87门网课音频自动重构的教材、笔记与逐字稿合集",
+   "review": "本仓库收录87门真实网课的文本重构产物，包含796册模块合辑全书、1098篇思维导图复习笔记和4070份逐字稿，覆盖计算机、数学、法学、医学、经济等方向。所有内容由 Video2Book 从课程音频自动生成，属于对原课程的二次整理，不代表讲师或机构观点。仓库文本约195 MB（不含音频），可在线阅读或克隆本地，支持 Markmap/XMind 脑图导入，仅供个人学习使用。",
+   "highlights": [
+    "包含796册模块全书、1098篇复习笔记、4070份逐字稿，按课程分类目录组织",
+    "复习笔记开头的知识拓扑树支持 Markmap 插件预览和 XMind 导入 Markdown 大纲",
+    "配套 GitHub Pages 在线阅读站，支持 KaTeX 公式渲染与多端自适应"
+   ],
+   "use_cases": [
+    "体系化通读或考前速查某门网课的知识内容",
+    "通过逐字稿核对讲师原话",
+    "需要将笔记导入脑图工具做二次整理与复习"
+   ]
+  },
+  "sha": "13ce6797dedc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "471f8202d89f": {
+  "identity": {
+   "one_liner": "基于 MCP 协议的 PostgreSQL 服务器，附自然语言查询 Agent、CLI 与 Web UI",
+   "review": "pgEdge Postgres MCP Server 是一个 Go 实现的 MCP 服务器，让 MCP 兼容客户端（Claude Desktop、Cursor、VS Code Copilot 等）对 PostgreSQL 14+ 执行 SQL 查询，并通过自然语言 Agent 生成 SQL。项目提供 CLI（Stdio/HTTP）、React Web UI 与 Docker 部署方式，支持用户与令牌认证、TLS 及热重载配置。README 明确警告其向 LLM 暴露整个库的读写元数据，仅适用于内部工具或可信用户环境，不面向公开应用。",
+   "highlights": [
+    "默认以只读事务执行全部查询，支持行级/列级安全配置",
+    "提供 MCP Tools（查询执行、模式分析、BM25+MMR 混合搜索、嵌入生成）、Resources 与 Prompts",
+    "支持 Stdio 与 HTTP/HTTPS 传输，附 Go 聊天客户端、React Web UI 及 GitHub Container Registry 的 Docker 镜像"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor、VS Code Copilot 等 MCP 客户端中以自然语言查询内部 PostgreSQL 数据库",
+    "团队多用户或远程访问场景下经 HTTP/HTTPS 模式部署，配合用户与 API 令牌认证",
+    "本地单用户开发环境中通过 Stdio CLI 快速连接数据库进行查询与模式探索"
+   ]
+  },
+  "sha": "471f8202d89f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "70212cf4a281": {
+  "identity": {
+   "one_liner": "基于 SQLite 符号级索引的编码代理持久记忆层，提供代码问答与提交审计",
+   "review": "unified-brain 是 DevLoops 发布的开源框架，用 tree-sitter 读取仓库整个 git 历史，将每个符号的各版本连同引入提交写入仓库内一个 SQLite 数据库；检索经嵌入与小型判定模型（默认 Apache-2.0 的 pplx-decider）筛选证据，再由用户自选的 writer 模型一次性作答。它通过 MCP 接入 Cursor、Claude Code 等现有 harness，支持 Ask 问答与提交范围变更审计两类查询。作者自测在 xz 基准上给出两组配置的成绩，且判定模型目前均为托管服务，暂无法本地运行。",
+   "highlights": [
+    "用 tree-sitter 解析 git 历史并将符号级版本索引存入仓库内 SQLite 数据库，摄取阶段不调用 LLM",
+    "提供 Ask（按提交回答“X 为何做 Y”）与 Timeline/报告（对提交区间内变更符号逐个判定并附证据）两类查询",
+    "通过 MCP 在 Cursor、OpenCode、Claude Code 等工具中运行，判定模型默认为 Apache-2.0 的 27B pplx-decider"
+   ],
+   "use_cases": [
+    "回答关于仓库历史与代码演进的“为什么”类问题，答案锚定于指定提交时的符号版本",
+    "对一段提交区间做变更审计，判断改动是否与提交说明相符并检查潜在缺陷或恶意意图",
+    "作为接入现有编码代理 harness 的感知层，提供跨问题的持久上下文检索"
+   ]
+  },
+  "sha": "70212cf4a281",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5551e7b46360": {
+  "identity": {
+   "one_liner": "自托管的 MG 车辆仪表盘、行程记录与地图 Web 应用",
+   "review": "GarageStack 是一款开源自托管 Web 应用，通过登录 SAIC iSmart API 获取现代 MG 车辆（如 MG4、MG5、ZS EV、HS PHEV）的数据，提供实时仪表盘、行程地图、能耗统计、远程控制和推送通知等功能。适用于 SAIC 旗下 MG 车主，以 Docker 一体容器或 Compose 部署，依赖 PostgreSQL 存储。注意：与官方 MG iSmart 应用无法同时登录同一账号，且不兼容 SAIC 收购前的经典英制 MG 车型。",
+   "highlights": [
+    "实时仪表盘展示燃料、电量、胎压、门窗、空调等遥测数据，卡片按 HEV/PHEV/BEV 车型自动显示或隐藏",
+    "行程自动保存并在地图上绘制路线、热力图和限速对比，支持按公务/通勤/私人标记并导出为电子表格",
+    "支持远程空调预热、锁车、鸣笛闪灯、充电控制等指令，并通过 MQTT discovery 接入 Home Assistant"
+   ],
+   "use_cases": [
+    "需要记录行程并按月或按年导出电子表格用于税务申报的车主",
+    "希望将车辆数据接入 Home Assistant 或 gethomepage.dev 的 homelab 用户",
+    "需要远程控制空调、充电计划及胎压慢漏气等异常推送通知的 iSmart 用户"
+   ]
+  },
+  "sha": "5551e7b46360",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42dc79784a75": {
+  "identity": {
+   "one_liner": "基于 Laravel 的浏览器端数字标牌系统，通过 PDF/MP4 模板管理屏幕内容",
+   "review": "open-signage 是一个自托管的数字标牌系统，用 Laravel 和 Bootstrap 构建。服务器端将上传的 PDF 转为逐页图片、MP4 直接播放，管理员通过 Web 界面向各显示器分配模板、分组或定时计划；显示器端只需浏览器打开 /discover 页面即可。用户认证依赖 Active Directory（LDAP），不支持本地账号，上传文件上限 100 MB，支持 Docker 或原生 PHP 8.3+ 部署。",
+   "highlights": [
+    "支持 PDF（逐页转图片）和 MP4（H.264）两种内容格式，可分配给单个显示器、分组或按时间计划播放",
+    "支持同步分组、基于 IP 的显示器自动发现注册、远程重载，以及 LDAP 登录与可选 SSO",
+    "内置角色权限和操作审计日志，界面支持英语和德语，无需 cron 或队列 worker"
+   ],
+   "use_cases": [
+    "企业或机构内用树莓派等浏览器设备搭建信息显示屏（kiosk 模式）",
+    "通过视频墙或同组多屏同步播放相同幻灯片的场景",
+    "已有 Active Directory 环境、希望集中管理多块屏幕内容更新的部署"
+   ]
+  },
+  "sha": "42dc79784a75",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2bc0613825ef": {
+  "identity": {
+   "one_liner": "Java 事务性发件箱库：同事务写 PostgreSQL，中继保序投递到 Kafka",
+   "review": "Tandem 是实现 Transactional Outbox Pattern 的 Java 库：业务变更与 outbox 行在同一个数据库事务中写入，由独立 relay 轮询 tandem_outbox 表并以 at-least-once、按 aggregate 保序的方式发布到 Kafka，不依赖 CDC 或 Kafka Connect。面向使用 PostgreSQL 与 Kafka 的 Java/Spring Boot 开发者，提供 Spring Boot 自动配置、Admin API、tandem-cli 与 Micrometer/OpenTelemetry 可观测性。要求 Java 17+，事件按 aggregate_id 作为 Kafka key 发布，崩溃重发可能产生重复，需消费方幂等。",
+   "highlights": [
+    "在同一数据库事务中写入领域变更与 outbox 事件，relay 轮询 PostgreSQL 并以 at-least-once、按 aggregate 保序发布到 Kafka，无需 CDC 或 Kafka Connect",
+    "提供 Spring Boot 自动配置、Admin API（含 replay/discard、bucket/worker 查询，LEASE/SINGLE 协调模式）、tandem-cli 命令行工具及 Micrometer/OpenTelemetry 指标与链路导出",
+    "附带 tandem-sample、Spring、JPA 三类示例与 benchmark 演示，通过 Testcontainers 启动真实 PostgreSQL/Kafka；基准文档报告 600 events/s 下 p50 13ms、p99 87ms，清空 71.3 万行积压约 405 秒"
+   ],
+   "use_cases": [
+    "微服务中需要避免双写、将数据库变更以事件形式发布到 Kafka 的 Java/Spring Boot 应用",
+    "需要按聚合保证事件顺序、且不希望部署 Debezium 等 CDC 基础设施的 PostgreSQL + Kafka 环境",
+    "需要 outbox 积压监控、失败消息重放/丢弃及 Grafana 指标面板的事件驱动系统运维场景"
+   ]
+  },
+  "sha": "2bc0613825ef",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c2f81226453e": {
+  "identity": {
+   "one_liner": "本地自托管的间隔滚动复习网站，基于 React 与 openGauss。",
+   "review": "温故是一个可在本机运行的滚动复习网站，用于记录知识点并按预设或自定义周期生成复习任务。用户填写科目、学习日期和要点后，系统在「今日学习」中汇总到期与逾期任务，支持标记记忆效果、加强复习、暂停计划及 JSON 导入导出。架构为 React/Vite 前端、Node.js 接口层和 openGauss 数据库，由 Docker Compose 编排，默认面向本机演示部署，也可连接已有的 CentOS openGauss 实例。",
+   "highlights": [
+    "支持预设与自定义复习周期，复习后可按记忆效果追加加强复习，逾期任务持续保留在待复习列表",
+    "新增、编辑、删除、复习及撤销操作在数据库事务中提交，使用版本号避免多页面并发覆盖，外键级联删除关联数据",
+    "提供 Docker Compose 一键启动、/health 实时数据库检查端点、npm 测试与冒烟脚本，以及连接已有 openGauss 实例的配置说明"
+   ],
+   "use_cases": [
+    "个人在本机记录学习知识点，每天查看到期与逾期的复习任务并按记忆情况安排加强复习",
+    "在本地或已有 openGauss 环境中演练 React + Node.js + openGauss 的三层应用部署与数据库事务、连接池实践",
+    "需要 JSON 备份导入导出、按科目/关键词/日期筛选学习记录的个人学习管理场景"
+   ]
+  },
+  "sha": "c2f81226453e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

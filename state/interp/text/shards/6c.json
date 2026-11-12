@@ -2997,5 +2997,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c862f04f064b": {
+  "identity": {
+   "one_liner": "本地 CLI，为 AI 代理会话提供命名任务、笔记与信箱的持续工作记录",
+   "review": "flow 是一个运行在本地的 Go CLI，配合 Claude Code 或 Codex 使用：为每项工作建立名称、会话、简报、带日期的笔记和信箱，数据以 SQLite 和 markdown 存于 ~/.flow。用户对代理说话，由代理执行 flow 命令。支持父子任务协作、Slack 联络等机制；当前为 alpha 阶段，存在约 3% headless 运行失败、无停止命令、无搜索等已记录限制，原生支持 macOS，Linux 构建待发布。",
+   "highlights": [
+    "为每项工作提供命名会话、简报、日期笔记和信箱，数据以 SQLite 和 markdown 存储于 ~/.flow",
+    "支持父子任务结构：驱动会话可将工作拆分为无头子会话，任务间可通过信箱互发消息",
+    "以 Claude Code 和 Codex 为会话载体，支持 iTerm、Warp、tmux 等多种终端及 headless 模式按名恢复"
+   ],
+   "use_cases": [
+    "管理同日运行的多个代理会话，通过名称恢复工作上下文并读取此前笔记",
+    "夜间无人值守运行任务，需要决策时通过 Slack 联系用户",
+    "驱动会话将待办拆分为多个子会话并行处理并在临时 worktree 中验证合并"
+   ]
+  },
+  "sha": "c862f04f064b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe0079243d5e": {
+  "identity": {
+   "one_liner": "基于 Mono T4 引擎的 Windows 桌面代码生成器，读取数据库元数据批量生成代码文件",
+   "review": "AutoCode（工程名 Banana.AutoCode）是一个 MIT 协议的 .NET WinForms 桌面工具，连接 MySQL、PostgreSQL、SQLite、SQL Server、Oracle 五种数据库，读取表结构后按 T4 模板生成实体类、CRUD 及前后端代码文件，输出到 Output 目录。面向需要在多种技术栈间批量生成样板代码的开发者。它不是 ORM，也不替代项目脚手架；运行于 Windows，连接串以明文存储，需注意凭据安全。",
+   "highlights": [
+    "支持读取 MySQL、PostgreSQL、SQLite、SQL Server、Oracle 五种数据库的库、表、列元数据",
+    "内置 T4 模板覆盖 MyBatis、JPA、Entity Framework、SqlSugar、FreeSql、EasyUI、LayUI、Thrift RPC、TypeScript 实体等方向，模板可直接编辑",
+    "支持表名前缀/后缀移除并转换为 PascalCase/CamelCase，模板可通过 TemplateFileManager 一次生成多个文件并写入子目录"
+   ],
+   "use_cases": [
+    "从已有数据库表结构批量生成多技术栈（MyBatis、JPA、Entity Framework 等）的实体类与 CRUD 代码",
+    "团队内统一实体、CRUD 与前端页面脚手架的生成结果，通过编辑 T4 模板匹配项目规范",
+    "生成 *.thrift 文件后调用内置 thrift.exe 产出 Java、C#、JS、Python、C++ 等多语言 RPC 桩代码"
+   ]
+  },
+  "sha": "fe0079243d5e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a3c711134e23": {
+  "identity": {
+   "one_liner": "基于 Bun、Astro 7 与 PostgreSQL/RLS 的多租户 ERP 基础模板",
+   "review": "AWCMS 是 AhliWeb 面向 ERP 与业务解决方案的多租户基础平台模板，由 awcms-mini 技术底座重建而来，运行模式为在线优先的混合在线/离线。基础模块含租户、RBAC/ABAC、同步 outbox、工作流、报表等共 21 个；ERP 领域模块（财务、库存等）不内置于基座，而是在使用时直接加入 src/modules/，基座只提供中立的 ERP 就绪契约。运行时限定 Bun。",
+   "highlights": [
+    "包含 21 个已上线模块：10 个基础模块、10 个网站/内容模块及印尼行政区划主数据模块",
+    "安全基线为 RBAC + ABAC 默认拒绝 + PostgreSQL RLS FORCE + 审计日志",
+    "外部业务提供方（支付、税务、物流等）通过 outbox/队列接入，不进入数据库事务关键路径"
+   ],
+   "use_cases": [
+    "作为 ERP/SaaS 系统的记录系统（system of record）模板，在其上添加财务、库存等领域模块",
+    "需要租户/法人/组织单元边界隔离的多租户多实体业务系统开发",
+    "依赖离线韧性模式的分支同步与外部系统集成场景"
+   ]
+  },
+  "sha": "a3c711134e23",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3265,5 +3265,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fb9d76bc3127": {
+  "identity": {
+   "one_liner": "开源自托管 text-to-SQL 引擎，管线各环节可配置并自带评测工具",
+   "review": "mnemiq 是 Apache-2.0 的开源 text-to-SQL 引擎，在自己环境内运行并使用自选模型。它将生成 SQL 与决定是否执行分离：模型提出的查询须通过只读、权限、方言编译和 EXPLAIN 检查，否则拒绝并说明原因。管线各环节（模型、检索、语义增强、验证阈值、行/列策略）均为可配置项，配置以命名 profile 保存；内置评测工具按返回数据而非 SQL 字符串匹配打分。支持本地 SQLite/DuckDB 演示及 PostgreSQL、Oracle、Databricks 等数据源，可作为 HTTP API 与 MCP 服务器运行。",
+   "highlights": [
+    "确定性决策层在查询触达数据库前执行只读、权限、方言编译和 EXPLAIN 校验，失败时拒绝并说明缺失的列",
+    "管线各环节以配置项（settings/profiles）暴露，`mnemiq sweep` 可在自己的问题上测量设置以选出配置",
+    "语义增强分 Tier 0-2（表列结构、键与分布、LLM 提议的定义），编码值须有数据或标准代码系统等证据来源，生产定义可由具名负责人认证"
+   ],
+   "use_cases": [
+    "在自己的数仓/数据库上测量 text-to-SQL 表现并调优配置，而非依赖通用基准数字",
+    "需按调用方角色或 OIDC 身份控制可查询表与行列范围的自然语言查询服务",
+    "通过 HTTP API 或 MCP 端点（/mcp）为 Agent 或聊天界面提供带审计追踪的 NL2SQL 能力"
+   ]
+  },
+  "sha": "fb9d76bc3127",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

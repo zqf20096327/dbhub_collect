@@ -3048,5 +3048,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "17174d1cb55d": {
+  "identity": {
+   "one_liner": "Rust 编写的多线程内存键值数据库，兼容 Redis 协议并内置全文与向量搜索",
+   "review": "KiviDB 是用 Rust 编写的内存键值数据库，实现 RESP2/RESP3 协议，现有 Redis 客户端与 redis-cli 可直接连接。它采用分片设计将命令分布到所有核心，支持 Redis Stack 风格的 FT.* 全文、标签、数值与向量搜索（FLAT/HNSW），持久化方式为快照加可选 AOF，默认监听 6380 端口。Lua 脚本与 TLS 为构建期可选特性，采用 AGPL-3.0 许可证，可经 Docker 或源码（需 Rust 1.89+）安装。",
+   "highlights": [
+    "支持 RESP2/RESP3 协议与 Redis 兼容命令面，并提供 Redis Stack 风格的 FT.* 全文（BM25）、标签、数值与向量（FLAT/HNSW）搜索命令",
+    "采用分片设计在所有核心上运行命令，Linux 上使用 io_uring（不可用时回退到 Tokio），持久化为快照与可选追加文件",
+    "提供 default、lua、tls、full 四种构建变体，快照可保存索引模式与 HNSW 图以支持重启后恢复搜索索引"
+   ],
+   "use_cases": [
+    "现有 Redis 客户端应用的部署，可默认监听 6380 端口与 Redis 并行运行",
+    "需要在哈希字段上执行全文、标签、数值过滤与 KNN 向量检索的应用",
+    "需要多核分片内存键值存储并支持快照/AOF 持久化的场景"
+   ]
+  },
+  "sha": "17174d1cb55d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f0cbd179058": {
+  "identity": {
+   "one_liner": "本地运行的 Oracle Cloud Infrastructure 模拟器，基于 Docker 与 Quarkus 实现。",
+   "review": "floci-oci 是一个开源的 Oracle Cloud Infrastructure (OCI) 本地模拟器，面向开发、测试与 CI 场景，无需 Oracle Cloud 账号或 API 密钥。它实现 OCI 线协议（opc-request-id、分页头、etag、work requests 等），支持官方 Java/Python SDK、OCI CLI 及 Terraform provider 指向 localhost:4599 直接使用。基于 Quarkus 构建，要求 JDK 25 从源码运行；部分服务（Functions、OKE、PostgreSQL）通过真实容器 sidecar 执行。身份域、对象版本控制等功能尚未实现。",
+   "highlights": [
+    "实现 OCI 真实请求/响应协议，包括 opc-request-id、opc-next-page 分页、etag/if-match 条件请求、OCID 与 work requests 异步操作",
+    "支持 Identity、Object Storage、Queue、Streaming、Vault+KMS、Secrets、Functions、OKE、PostgreSQL 数据库及 Organizations 等服务",
+    "提供内存、持久化、混合、写前日志四种存储配置；Functions/OKE/数据库通过 Fn Project、k3s、PostgreSQL 真实容器 sidecar 运行"
+   ],
+   "use_cases": [
+    "本地开发与测试 OCI 集成，无需真实 Oracle Cloud 租户与网络往返",
+    "在 CI 流水线中运行依赖 OCI SDK、OCI CLI 或 Terraform 的自动化测试",
+    "验证 Terraform/OpenTofu 的 oracle/oci provider 配置与部署流程"
+   ]
+  },
+  "sha": "2f0cbd179058",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "37e91c2cfa18": {
+  "identity": {
+   "one_liner": "完全本地运行的 SQLite 浏览器练习场，基于 wasm",
+   "review": "SQLight 是一个在浏览器中本地运行的 SQLite Playground。它通过 sqlite-wasm-rs 将 SQLite 以 wasm 形式运行于浏览器内，前端使用 leptos 编写，界面布局与组件设计源自 Rust Playground。项目支持 sqlite-vec 向量搜索扩展（主题标签还提及 sqlite3-multiple-ciphers），可用 npm ci 与 trunk 通过 npm run build 构建，产物位于 dist 文件夹，适合需要在本地浏览器环境执行 SQLite 语句的用户。",
+   "highlights": [
+    "通过 sqlite-wasm-rs 将 SQLite 以 wasm 形式在浏览器中本地运行",
+    "基于 leptos 重写的 UI，布局与组件设计源自 Rust Playground",
+    "支持 sqlite-vec 向量搜索扩展"
+   ],
+   "use_cases": [
+    "在本地浏览器环境中练习和执行 SQLite 语句",
+    "使用 sqlite-vec 扩展进行向量搜索相关实验",
+    "本地部署一个无需服务端的 SQLite Web 玩具环境"
+   ]
+  },
+  "sha": "37e91c2cfa18",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "24788e8019fa": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库浏览器，集成 EF Core 模型与工作区机制",
+   "review": "FerretSharp 是一个运行在 Windows、.NET 10 上的 Oracle 数据库浏览工具，采用 MIT 许可发布。它面向日常使用 Oracle 数据库的 .NET 开发者，提供按连接划分的工作区（各自独立数据库会话）、基于外键或 EF Core 导航属性的数据跳转、以显式事务执行的沙箱编辑，以及将实体和属性名与表列对应显示、可查看生成 SQL 的 LINQ 控制台。界面支持英文和德文切换，默认英文。",
+   "highlights": [
+    "支持每个连接多个工作区，各工作区拥有独立数据库会话、标签页与过滤器，生产连接默认由 Oracle 强制只读",
+    "支持从单元格跳转到被引用或引用它的行，包括仅存在于 EF Core 模型中、无外键约束的关系",
+    "提供 LINQ 控制台显示代码实际发送的 SQL，并可从关系图生成 LINQ 或 SQL 查询"
+   ],
+   "use_cases": [
+    "开发者在 DEV 与 PROD 连接之间切换浏览表数据，通过外键或 C# 模型关系追查数据来源",
+    "以显式事务方式在沙箱中编辑表数据，逐个提交或回滚变更",
+    "在关系图中点击关系构建查询，生成 LINQ 表达式或带连接的 SQL，并导出为 Excel、CSV 或 SQL 脚本"
+   ]
+  },
+  "sha": "24788e8019fa",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

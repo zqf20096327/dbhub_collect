@@ -2894,5 +2894,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "14d76f1e8413": {
+  "identity": {
+   "one_liner": "将GTFS时刻表导入数据库并提供查询、校验与导出的Node.js工具库",
+   "review": "node-GTFS读取公交机构发布的GTFS静态文件并导入SQLite、PostgreSQL或MySQL，使其内容可查询，同时存储GTFS-Realtime的服务警报与车辆位置。它提供命令行导入/导出和JavaScript/TypeScript API，可在导入时开启静态feed校验，生成GeoJSON。适用于地图制作、服务分析、公交应用开发等场景；README注明它不是时刻表编辑器、托管服务或行程规划引擎，不自带地图显示与路线计算功能。",
+   "highlights": [
+    "支持导入、查询和导出GTFS Schedule与GTFS-Realtime数据，可选用SQLite、PostgreSQL或MySQL作为数据库",
+    "提供命令行工具和JavaScript/TypeScript API两种使用方式，导入时可选开启静态feed校验并输出问题信息",
+    "支持在保留GTFS标识符的前提下同时存储多个静态feed，并可从任意受支持数据库生成GeoJSON与导出时刻表数据"
+   ],
+   "use_cases": [
+    "将公交机构的GTFS数据导入本地SQLite文件供地图、应用或分析流程查询使用",
+    "存储GTFS-Realtime的服务警报和车辆位置更新，为到站查询类应用提供数据",
+    "从命令行导入或导出GTFS ZIP文件，无需编写JavaScript代码"
+   ]
+  },
+  "sha": "14d76f1e8413",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c3909a5b235": {
+  "identity": {
+   "one_liner": "离线重放测试工具，验证区块链事件消费者的投影状态一致性",
+   "review": "iro 是一个用 Rust 编写的命令行工具，通过重放离线区块链事件测试事件消费者的持久化投影。它向被测消费者注入重复投递、重启进程并触发协商的崩溃点，再比较 SQLite/PostgreSQL 中的归一化投影状态。消费者通过 JSONL 子进程协议接入，可用任意语言实现。适用对象是使用 Ponder、Envio、The Graph 或自建索引器的开发者。限制：不模拟 reorg、并发写入者和网络分区。",
+   "highlights": [
+    "注入重复投递、进程重启和协商崩溃点，并比较归一化的 SQLite 或 PostgreSQL 投影状态",
+    "支持种子化混合调度、JUnit XML/JSON 报告输出和失败场景的复现与最小化",
+    "消费协议基于 JSONL stdin/stdout，消费者可用任意语言实现；无需节点、RPC 端点或 ABI 解码器"
+   ],
+   "use_cases": [
+    "在 CI 中验证区块链事件消费者在重复投递和崩溃恢复后投影状态不变",
+    "排查一次性重放无法暴露的重复入账等幂等性缺陷",
+    "对自建索引器或 Ponder/Envio/The Graph 项目的 handler 做离线回归测试"
+   ]
+  },
+  "sha": "2c3909a5b235",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

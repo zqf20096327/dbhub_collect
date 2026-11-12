@@ -3062,5 +3062,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8d0e773e3169": {
+  "identity": {
+   "one_liner": "开源业务风控系统，基于Flink实时计算与事件-变量-策略-名单四层模型",
+   "review": "星云 Nebula 2.0 是一套业务风控系统，用于识别撞库、盗号、薅羊毛等行为风险。它旁路采集业务流量或日志，标准化为事件后经 Flink 实时计算生成告警与名单，提供 Go 采集器（含采集端脱敏）、Java 控制面与 React 管理界面，内置 17 类事件、253 个变量与 170 条策略模板（继承自 1.x）。项目处于 0.x 阶段，README 声明不承接生产流量；通过 docker compose 可启动完整链路评估。",
+   "highlights": [
+    "内置经过审计的风控资产：17 类事件模型、253 个统计变量（四层窗口）、170 条策略模板、15 个风险标签，按 IP/设备/账号三维度镜像设计",
+    "采集端就地脱敏：184 个事件字段分级（sensitive 出边界前抹除，pii 由存储层 HMAC 加密），数据模型由 JSON Schema 单一来源定义并 CI 强制校验",
+    "支持策略热更新（窗口状态不丢）、告警附带判定依据、参考引擎与 Flink 引擎读同一批测试向量做语义回归"
+   ],
+   "use_cases": [
+    "业务方旁路接入登录、注册、下单等流量或日志，实时统计并产出撞库、盗号、刷单等风险名单",
+    "用 docker compose 起完整链路（采集→Kafka→Flink→告警→控制面）评估风控策略效果，通过 Node.js 参考引擎快速验证判定逻辑",
+    "作为风控领域模型（事件-变量-策略-名单）与策略模板设计的参考实现"
+   ]
+  },
+  "sha": "8d0e773e3169",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "394bfa345788": {
+  "identity": {
+   "one_liner": "面向 .NET 的 Testcontainers 风格集成测试容器库，支持 WSLC 与 Docker 双后端",
+   "review": "Purview.Containers 是一个 .NET（net10.0/net11.0）NuGet 库，通过统一的 API 运行一次性 Linux 容器用于集成测试，可在 Windows 上的 Microsoft WSL Containers（无需安装 Docker）或任意平台的 Docker（基于 Testcontainers）上运行。引用伞包后按环境自动选择后端，测试代码无需改动。项目处于 preview 阶段，API 与打包规则可能在预发布版本间变更，未承诺生产支持。",
+   "highlights": [
+    "提供后端中立的核心抽象与两个实现：WSLC 后端（基于 Microsoft.WSL.Containers 3.0.5，不依赖 Docker）与 Docker 后端（基于 Testcontainers for .NET），可用 PURVIEW_CONTAINERS_BACKEND 固定选择",
+    "包含九个服务模块（PostgreSQL、Redis、SQL Server、RabbitMQ、Azurite、NATS、MySQL、Azure Key Vault Emulator、Azure Service Bus Emulator），支持等待策略、镜像/标签解析器、注册表认证、Linux capabilities、Dockerfile 构建、托管桥接网络与别名",
+    "支持可配置的生命周期超时（启动总预算五分钟、exec 一分钟、停止十五秒、清理三十秒）、取消传播，以及 WithCleanUp/WithAutoRemove 清理行为；WSLC 默认共享镜像存储，镜像按会话复用"
+   ],
+   "use_cases": [
+    "在 Windows 开发机上通过 WSLC 运行一次性容器做集成测试，无需安装 Docker，并在 Linux CI 上用 Docker 运行同一套测试代码",
+    "为 .NET 10/.NET 11 项目在测试中启动 PostgreSQL、Redis、SQL Server、RabbitMQ 等服务容器并直接获取连接字符串",
+    "通过 Purview.Containers.Environment 与 Purview.Containers.Aspire 为 Docker 兼容 CLI 消费者和 Aspire AppHost 解析 bind 路径"
+   ]
+  },
+  "sha": "394bfa345788",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -20918,5 +20918,1107 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "47b55c025dcc+2": {
+  "fn": "pgcentralfoundation/pgrx",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    11,
+    [
+     "GitHub Actions badge",
+     "crates.io badge",
+     "docs.rs badge",
+     "Twitter Follow",
+     "[Discord Chat][Discord]"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    19,
+    11,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     " + **Please join our [Discord Server][Discord].**"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    19,
+    20
+   ],
+   [
+    "replace",
+    21,
+    22,
+    20,
+    21,
+    [
+     " + **We are also in need of financial sponsorship.**"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    21,
+    24
+   ],
+   [
+    "replace",
+    25,
+    34,
+    24,
+    33,
+    [
+     "- **A fully managed development environment with `cargo-pgrx`**",
+     " + `cargo pgrx new`: Create new extensions quickly",
+     " + `cargo pgrx init`: Install new (or register existing) PostgreSQL installs",
+     " + `cargo pgrx run`: Run your extension and interactively test it in `psql` (or `pgcli`)",
+     " + `cargo pgrx test`: Unit-test your extension across multiple PostgreSQL versions",
+     " + `cargo pgrx regress`: Run SQL regression tests and compare their output with expected files",
+     " + `cargo pgrx package`: Create installation packages for your extension, including RPM and DEB packages on Linux",
+     " + `cargo pgrx migrate`: Optionally build upgrade scripts from one small SQL file per change",
+     " + More in the `README.md`!"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    33,
+    34
+   ],
+   [
+    "replace",
+    35,
+    38,
+    34,
+    37,
+    [
+     " + Support from Postgres 15 to Postgres 19 from the same codebase",
+     " + Use Rust feature gating to use version-specific APIs",
+     " + Seamlessly test against all versions"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    37,
+    38
+   ],
+   [
+    "replace",
+    39,
+    43,
+    38,
+    42,
+    [
+     " + Implement extensions entirely in Rust",
+     " + Automatic mapping for many Rust types into PostgreSQL",
+     " + SQL schemas generated automatically (or manually via `cargo pgrx schema`)",
+     " + Include custom SQL with `extension_sql!` & `extension_sql_file!`"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    42,
+    43
+   ],
+   [
+    "replace",
+    44,
+    48,
+    43,
+    47,
+    [
+     " + During binding generation, pgrx transpiles nearly all of PostgreSQL's function-style C `#define` macros into Rust `macro_rules!` macros",
+     " + Call them through `pgrx::` with their original C names and `!`, such as `pgrx::VARSIZE_ANY!(ptr)`",
+     " + Their behavior follows the selected PostgreSQL installation, compiler flags, and target",
+     " + See Using PostgreSQL C macros for extension examples and the transpiler architecture for implementation details"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    47,
+    48
+   ],
+   [
+    "replace",
+    49,
+    54,
+    48,
+    53,
+    [
+     " + Translates Rust `panic!`s into Postgres `ERROR`s that abort the transaction, not the process",
+     " + Memory Management follows Rust's drop semantics, even in the face of `panic!` and `elog(ERROR)`",
+     " + `#[pg_guard]` procedural macro to ensure the above",
+     " + Postgres `Datum`s are `Option<T> where T: FromDatum`",
+     " - `NULL` Datums are safely represented as `Option::<T>::None`"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    53,
+    54
+   ],
+   [
+    "replace",
+    55,
+    59,
+    54,
+    58,
+    [
+     " + Annotate functions with `#[pg_extern]` to expose them to Postgres",
+     " + Return `pgrx::iter::SetOfIterator<'a, T>` for `RETURNS SETOF`",
+     " + Return `pgrx::iter::TableIterator<'a, T>` for `RETURNS TABLE (...)`",
+     " + Create trigger functions with `#[pg_trigger]`"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    58,
+    59
+   ],
+   [
+    "replace",
+    60,
+    66,
+    59,
+    65,
+    [
+     " + `#[derive(PostgresType)]` to use a Rust struct as a Postgres type",
+     " - By default, represented as a CBOR-encoded object in-memory/on-disk, and JSON as human-readable",
+     " - Supports `#[pg_binary_protocol]` to generate binary protocol send/recv functions",
+     " - Provide custom in-memory/on-disk/human-readable representations",
+     " + `#[derive(PostgresEnum)]` to use a Rust enum as a Postgres enum",
+     " + Composite types supported with the `pgrx::composite_type!(\"Sample\")` macro"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    65,
+    66
+   ],
+   [
+    "replace",
+    67,
+    69,
+    66,
+    68,
+    [
+     " + Safe access into SPI",
+     " + Transparently return owned Datums from an SPI context"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    68,
+    69
+   ],
+   [
+    "replace",
+    70,
+    77,
+    69,
+    76,
+    [
+     " + Safe access to Postgres' `MemoryContext` system via `pgrx::PgMemoryContexts`",
+     " + Executor/planner/transaction/subtransaction hooks",
+     " + Safely use Postgres-provided pointers with `pgrx::PgBox<T>` (akin to `alloc::boxed::Box<T>`)",
+     " + `#[pg_guard]` proc-macro for guarding `extern \"C-unwind\"` Rust functions that need to be passed into Postgres",
+     " + Access Postgres' logging system through `eprintln!`-like macros",
+     " + Direct `unsafe` access to large parts of Postgres internals via the `pgrx::pg_sys` module",
+     " + New features added regularly!"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    76,
+    85
+   ],
+   [
+    "replace",
+    86,
+    88,
+    85,
+    87,
+    [
+     "target limits.",
+     "A cross build has further requirements; see Cross-compiling."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    87,
+    91
+   ],
+   [
+    "replace",
+    92,
+    100,
+    91,
+    99,
+    [
+     " - Debian-likes: `apt install clang llvm libclang-dev`",
+     " - RHEL-likes: `yum install clang llvm`",
+     " - Windows: download installers from https://github.com/llvm/llvm-project/releases",
+     " - On Linux, pgrx's CI generates the C macros with every Clang major from 14 through 23, on x86_64 and aarch64, and requires those versions to generate the same macros. Other Clang versions are not tested on Linux.",
+     " - `pgrx-pg-sys` uses the driver to find the target's system headers, to check the C macro profile against the PostgreSQL headers and to compile its native support archive, including the `cshim` feature. Its major version must match `libclang`. pgrx uses `CLANG_PATH` when it is set; otherwise it uses the first match among the `CLANG` recorded in a `pg_config` program's `--configure` output, the `clang` installed with `libclang`, and `clang-<major>` or `clang` on `PATH`.",
+     " - The archiver is `llvm-ar` from the driver's LLVM release, or `llvm-lib` for Windows targets. pgrx looks for `llvm-ar-<major>` beside a `clang-<major>` driver, then `llvm-ar` beside the driver or beside its resolved path, such as Debian's `/usr/lib/llvm-<major>/bin/llvm-ar`. Without one, builds for Unix targets use the system `ar`, which works for native builds but may not index objects built for another target.",
+     " - A failure to generate the C macros stops the build with an error that names the cause.",
+     " - A driver that loads a default configuration file, as Gentoo's Clang does, is refused. Set `CLANG_NO_DEFAULT_CONFIG=1` to build without it."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    99,
+    100
+   ],
+   [
+    "replace",
+    101,
+    106,
+    100,
+    105,
+    [
+     " - Linux and macOS: a host C compiler, which builds the generator's SHA-256 backend",
+     " - Windows: MSVC, which Rust's MSVC targets need for linking",
+     "- PostgreSQL's build dependencies ‡",
+     " - Debian-likes: `sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache pkg-config libicu-dev`",
+     " - RHEL-likes: `sudo yum install -y bison-devel readline-devel zlib-devel openssl-devel wget ccache && sudo yum groupinstall -y 'Development Tools'`"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    120,
+    105,
+    119
+   ],
+   [
+    "replace",
+    120,
+    121,
+    119,
+    120,
+    [
+     "The Mac C compiler (clang) and related tools are bundled with Xcode."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    123,
+    120,
+    122
+   ],
+   [
+    "replace",
+    123,
+    124,
+    122,
+    123,
+    [
+     "For additional C libraries, it's easiest to use Homebrew. In particular,"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    142,
+    123,
+    141
+   ],
+   [
+    "replace",
+    142,
+    166,
+    141,
+    142,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    178,
+    142,
+    154
+   ],
+   [
+    "replace",
+    178,
+    183,
+    154,
+    155,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    197,
+    155,
+    169
+   ],
+   [
+    "replace",
+    197,
+    198,
+    169,
+    170,
+    [
+     " └── lib.rs"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    218,
+    170,
+    190
+   ],
+   [
+    "delete",
+    218,
+    219,
+    190,
+    190
+   ],
+   [
+    "equal",
+    219,
+    225,
+    190,
+    196
+   ],
+   [
+    "replace",
+    225,
+    262,
+    196,
+    197,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    281,
+    197,
+    216
+   ],
+   [
+    "replace",
+    281,
+    390,
+    216,
+    217,
+    [
+     "…（109 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    392,
+    217,
+    219
+   ],
+   [
+    "replace",
+    392,
+    400,
+    219,
+    227,
+    [
+     " --> pgrx/src/lib.rs:151:5",
+     " |",
+     "151 | / assert!(",
+     "152 | | same_slice(pg_sys::FMGR_ABI_EXTRA, b\"xPostgreSQL\\0\"),",
+     "153 | | \"Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?\",",
+     "154 | | );",
+     " | |_____^ the evaluated program panicked at 'Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?', pgrx/src/lib.rs:151:5",
+     " |"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    404,
+    227,
+    231
+   ],
+   [
+    "replace",
+    404,
+    451,
+    231,
+    232,
+    [
+     "…（47 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    462,
+    232,
+    243
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "dcb6b420b6c0+2": {
+  "fn": "cwt/neosqlite",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "License",
+     "Python Compatibility",
+     "PyPI Version",
+     "Ask DeepWiki ",
+     "View Code Wiki"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "NeoSQLite: SQLite with a MongoDB Disguise"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    17,
+    13,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "- **NX-27017**: MongoDB Wire Protocol Server — Use PyMongo with SQLite backend"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    38,
+    18,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "See Release Notes for the full history."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    53,
+    39,
+    53
+   ],
+   [
+    "replace",
+    53,
+    54,
+    53,
+    54,
+    [
+     "For full details, see documents/releases/v1.17.4.md. Previous release highlights are in documents/releases/v1.17.3.md."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    69,
+    54,
+    69
+   ],
+   [
+    "replace",
+    69,
+    75,
+    69,
+    70,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    83,
+    70,
+    78
+   ],
+   [
+    "replace",
+    83,
+    103,
+    78,
+    79,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    133,
+    79,
+    109
+   ],
+   [
+    "replace",
+    133,
+    134,
+    109,
+    110,
+    [
+     "|Metric|Result|"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    110,
+    111
+   ],
+   [
+    "replace",
+    135,
+    140,
+    111,
+    116,
+    [
+     "|**Total Tests**|381|",
+     "|**Passed**|363|",
+     "|**Skipped**|18 (architectural differences)|",
+     "|**Failed**|0|",
+     "|**Compatibility**|**100%**|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    163,
+    116,
+    139
+   ],
+   [
+    "replace",
+    163,
+    167,
+    139,
+    140,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    210,
+    140,
+    183
+   ],
+   [
+    "replace",
+    210,
+    211,
+    183,
+    184,
+    [
+     "|Mode|Use Case|"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    212,
+    184,
+    185
+   ],
+   [
+    "replace",
+    212,
+    215,
+    185,
+    188,
+    [
+     "|**WAL**|Best concurrency (default)|",
+     "|**DELETE**|Single-file distribution|",
+     "|**MEMORY**|Maximum speed, no crash recovery|"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    218,
+    188,
+    191
+   ],
+   [
+    "replace",
+    218,
+    219,
+    191,
+    192,
+    [
+     "|Topic|Link|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    192,
+    193
+   ],
+   [
+    "replace",
+    220,
+    227,
+    193,
+    200,
+    [
+     "|Knowledge Base / Docs|documents/|",
+     "|Release Notes|documents/releases/|",
+     "|GridFS|documents/gridfs.md|",
+     "|Text Search|documents/text-search.md|",
+     "|Aggregation Optimization|documents/aggregation-pipeline-optimization.md|",
+     "|NX-27017 Server|packages/nx_27017/README.md|",
+     "|API Comparison|examples/api_comparison/README.md|"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    229,
+    200,
+    202
+   ],
+   [
+    "replace",
+    229,
+    250,
+    202,
+    203,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    256,
+    203,
+    209
+   ],
+   [
+    "replace",
+    256,
+    257,
+    209,
+    210,
+    [
+     "This project was originally developed as shaunduncan/nosqlite and was later forked as plutec/nosqlite before becoming NeoSQLite. It is now maintained by Chaiwat Suttipongsakul and is licensed under the MIT license."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    259,
+    210,
+    212
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "4dd88054b958+2": {
+  "fn": "JasperFx/fisher",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "Discord",
+     "Nuget Package",
+     "Nuget"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    11,
+    8,
+    9,
+    [
+     " Fisher logo"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "**Documentation: fisher.jasperfx.net**"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    15,
+    12,
+    13,
+    [
+     "Fisher is Marten and Polecat for SQLite —"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    34,
+    13,
+    32
+   ],
+   [
+    "replace",
+    34,
+    35,
+    32,
+    33,
+    [
+     "> differ. The migration guide"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    43,
+    33,
+    41
+   ],
+   [
+    "replace",
+    43,
+    44,
+    41,
+    42,
+    [
+     "> migration guide"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    69,
+    42,
+    67
+   ],
+   [
+    "replace",
+    69,
+    77,
+    67,
+    68,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    79,
+    68,
+    70
+   ],
+   [
+    "replace",
+    79,
+    81,
+    70,
+    72,
+    [
+     "See Getting Started for the full walkthrough, and",
+     "Why Fisher? for where it fits and where it does not."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    98,
+    72,
+    89
+   ],
+   [
+    "replace",
+    98,
+    99,
+    89,
+    90,
+    [
+     "migration guide for the behaviours that differ."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    109,
+    90,
+    100
+   ],
+   [
+    "replace",
+    109,
+    112,
+    100,
+    101,
+    [
+     " JasperFx logo"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    118,
+    101,
+    107
+   ],
+   [
+    "replace",
+    118,
+    119,
+    107,
+    108,
+    [
+     "Become a Sponsor on GitHub by sponsoring monthly or one time."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    108,
+    111
+   ],
+   [
+    "replace",
+    122,
+    123,
+    111,
+    112,
+    [
+     "You need the **.NET 10 SDK** (available here) and the .NET 9"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    141,
+    112,
+    130
+   ],
+   [
+    "replace",
+    141,
+    142,
+    130,
+    131,
+    [
+     "VitePress site, as the other JasperFx projects are."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    150,
+    131,
+    139
+   ],
+   [
+    "replace",
+    150,
+    156,
+    139,
+    140,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    140,
+    141
+   ],
+   [
+    "delete",
+    157,
+    158,
+    141,
+    141
+   ],
+   [
+    "equal",
+    158,
+    159,
+    141,
+    142
+   ],
+   [
+    "delete",
+    159,
+    162,
+    142,
+    142
+   ],
+   [
+    "equal",
+    162,
+    163,
+    142,
+    143
+   ],
+   [
+    "replace",
+    163,
+    167,
+    143,
+    144,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

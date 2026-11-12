@@ -2938,5 +2938,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d792d1583af5": {
+  "identity": {
+   "one_liner": "C++17 控制台银行模拟教学应用，含账户管理与文件持久化",
+   "review": "MiniBank C++ 是一个运行于 Windows 控制台的 C++17 教学用银行模拟程序，用于练习面向对象编程与数据持久化。它提供账户创建、存取款与转账、操作历史查询，余额以分（centimes）为单位存储以避免浮点误差；持久化采用带版本号的文本格式（MINIBANK|1），支持主文件与 .bak 备份的显式恢复，恢复前需确认。项目不处理真实银行交易，仅支持本地单用户文件存储，包含 18 个测试套件。",
+   "highlights": [
+    "支持账户创建、存取款、转账及操作历史查询，余额以分为单位避免浮点不精确",
+    "采用版本化文本格式（MINIBANK|1）持久化账户、操作与标识符计数器，加载时校验完整性",
+    "包含 18 个测试套件，覆盖账户、转账、序列化、反序列化、加载与 .bak 恢复等场景"
+   ],
+   "use_cases": [
+    "学习 C++17 面向对象编程、数据验证与文件持久化机制",
+    "作为教学示例演示备份恢复与原子性状态还原的实现",
+    "本地单人环境下的银行操作流程模拟练习"
+   ]
+  },
+  "sha": "d792d1583af5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "59462577bbe4": {
+  "identity": {
+   "one_liner": "纯软件方式获取 Google Home Mini 一代 shell 的安全研究项目",
+   "review": "该项目记录在不拆焊硬件的前提下，对 Google Home Mini 一代（H0A）进行 shell 访问研究的过程与工具链。设备运行的 Chrome/92 预发布版本未收到 CVE-2021-30563 补丁，项目通过 Cast registry DNS MITM、Magellan SQLite RCE 探测和 YAFFS2 NAND 路径三条链推进，并提供 BLE/GATT 转储、固件分析、Ghidra headless 等 Python 与 shell 脚本。适合拥有自有设备、从事嵌入式漏洞研究的读者；shell 访问尚在执行中。",
+   "highlights": [
+    "提供 BLE 扫描、GATT 转储、setup API 枚举、MITM 攻击编排、NAND 解码与 Ghidra headless 固件分析等约 20 个脚本",
+    "文档包含已验证的研究进展状态表、七项已解决的实践陷阱与按顺序阅读的笔记目录",
+    "支持三条攻击链：CVE-2021-30563 Cast MITM（进行中）、Magellan SQLite RCE（复评中）、YAFFS2 NAND 硬件路径（待固件镜像）"
+   ],
+   "use_cases": [
+    "对自己拥有的 Google Home Mini 一代进行固件与攻击面研究",
+    "学习 Cast 协议、BLE setup API 与嵌入式 Chrome 的漏洞利用链搭建",
+    "复用其 NAND 解码与 Ghidra headless 脚本做 ARM 固件逆向分析"
+   ]
+  },
+  "sha": "59462577bbe4",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "156ea5c23cef": {
+  "identity": {
+   "one_liner": "本地运行的 AI 编码代理观测与评测工具，记录会话、成本并支持评测。",
+   "review": "coding.sh 通过代理 hooks、transcript 及 OpenTelemetry 记录 AI 编码代理的每次提示、模型调用、工具调用、文件改动与估算成本，数据存入本地 SQLite 索引并提供查看器、CLI 查询与 MCP 访问。可将失败会话转为可重放评测，支持配对统计的 A/B 对比。MIT 许可，无运行时依赖，需 Node 22.16+，当前为 pre-1.0 版本。",
+   "highlights": [
+    "记录每次会话的提示、模型调用、工具调用、文件改动、token、延迟与估算成本，并存入本地 SQLite 索引",
+    "支持将失败会话转为可重放评测，通过代码评分器或校准的 LLM 评委运行实验，并用配对统计做 A/B 对比",
+    "通过 hooks 适配 Claude Code、Codex CLI 等多种代理，可用 `coding.sh run --` 包装任意命令，并提供 MCP、TypeScript/Python SDK 与远程 sink"
+   ],
+   "use_cases": [
+    "在本地查看器或 CLI 中检索和浏览代理会话历史，含全文搜索",
+    "把出错的代理会话转为评测用例，对比不同提示、模型或配置",
+    "通过 `coding.sh serve` 搭建包含摄取、查看器与 API 的服务端，后端可选 SQLite、Postgres 或 ClickHouse"
+   ]
+  },
+  "sha": "156ea5c23cef",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

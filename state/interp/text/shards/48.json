@@ -2716,5 +2716,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8970100490f5": {
+  "identity": {
+   "one_liner": "通过原生 TDS 协议连接 Microsoft SQL Server 的 DuckDB 扩展",
+   "review": "这是一个 DuckDB 社区扩展，用于在 DuckDB 中 ATTACH 并查询 Microsoft SQL Server 数据库。它自实现 TDS 协议（不依赖 ODBC/JDBC），提供 catalog 集成、过滤与远程查询下推、BCP 批量加载、事务与 DML，并支持 Azure AD、Kerberos/SSPI 认证与 TLS。要求 DuckDB ≥1.4.1、SQL Server 2019+。项目标注为实验性，API 可能随版本变化；下推后字符串比较遵循 SQL Server 列排序规则，大小写敏感行为可能与 DuckDB 本地执行不同。",
+   "highlights": [
+    "实现原生 TDS 协议连接 SQL Server，无需 ODBC/JDBC 或外部驱动",
+    "支持过滤与远程查询下推（join、聚合、ORDER BY 等），并支持 BCP 批量加载、INSERT/UPDATE/DELETE 与事务",
+    "支持 Azure AD、Kerberos/Windows SSPI 认证及默认校验证书的 TLS 连接；可离线读取 .bak 备份文件元数据"
+   ],
+   "use_cases": [
+    "在 DuckDB 中直接查询和写入 SQL Server 数据库，无需数据导出",
+    "需要 BCP 批量装载、CTAS 或跨库事务的 ETL 作业",
+    "不运行 SQL Server 时检查 .bak 备份内容（表、视图、元数据）"
+   ]
+  },
+  "sha": "8970100490f5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

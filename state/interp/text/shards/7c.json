@@ -2900,5 +2900,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1df655c34439": {
+  "identity": {
+   "one_liner": "基于 SQLite 的单二进制自托管日志与指标服务器",
+   "review": "pooml（Poor Man's Logger）是一个单二进制、SQLite 存储的日志与指标服务器，面向独立开发者和小团队的副业项目或 VPS 部署。它提供 FluentBit 兼容的 HTTP 日志采集（含 FTS5 全文检索）、OTLP 推送与 Prometheus 抓取两种指标接入（仅存 counters 和 gauges 两类，histogram 会降采样为 _sum/_count），并支持 SQL 查询、仪表盘、SQL 告警和 S3 备份。项目不接受外部 PR，处于 0.x 阶段，版本间可能出现破坏性变更。",
+   "highlights": [
+    "支持 FluentBit 兼容 HTTP 日志采集，逐行自动检测 JSON/CLF/纯文本格式，使用 SQLite FTS5 提供全文检索",
+    "支持 OTLP/HTTP 推送与 Prometheus 端点抓取两种指标接入方式，查询语言为 SQL",
+    "提供 SQL 告警规则、War Room 事件时间线视图、定时 S3 备份，以及通过 @pooml/mcp 提供只读 SQL 查询的 MCP 服务器"
+   ],
+   "use_cases": [
+    "在 VPS 或小型云实例上为个人项目或小型团队部署日志与指标收集",
+    "通过 SQL 查询和仪表盘查看日志与指标，并在 Pushover 或 Campfire 接收告警",
+    "通过 MCP 客户端（如 Claude）以只读 SQL 方式查询日志与指标数据"
+   ]
+  },
+  "sha": "1df655c34439",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1c05eb0b21c1": {
+  "identity": {
+   "one_liner": "可克隆的 ABAP 应用服务器：转译 ABAP 并在本地数据库上运行 /IWBEP/ OData v2 网关",
+   "review": "open-steamgate 将经典 SEGW 代码式服务相关的 ABAP 代码（_MPC_EXT/_DPC_EXT、CDS、AMDP、报表）交叉转译后在本地数据库（SQLite/DuckDB/PostgreSQL/HANA）上运行，向 Fiori Elements 提供 OData，支持 Eclipse ADT 与 SAP GUI DIAG 连接，不依赖 SAP 系统。运行方式包括浏览器 Service Worker、Docker、单二进制、VS Code 插件与 Node 源码。README 声明它是 ERP 之下的语言运行时层而非 ERP，实现范围是语言、字典与 Gateway 的子集，RAP 与 OData V4 支持存在明确限制。",
+   "highlights": [
+    "支持将 _MPC_EXT/_DPC_EXT Gateway 类、CDS 视图、AMDP 方法与报表转译后在 sql.js、SQLite、DuckDB、PostgreSQL 或 HANA 上运行，无需连接 SAP 系统",
+    "提供浏览器 Service Worker、Docker 多架构镜像、单文件可执行程序、VS Code 扩展、Node 源码及 abapGit 仓库分层加载等多种运行与安装方式",
+    "实现 OData v2 的 $filter、$batch/changeset、$expand、deep insert、function imports、ETags、media entities 等特性，并包含 SEGW 项目生成与 CDS @OData.publish 投影"
+   ],
+   "use_cases": [
+    "在本地或离线环境运行基于经典 SEGW 代码式服务的 ABAP Gateway 服务并供 Fiori 应用访问",
+    "通过 Eclipse ADT 或 VS Code 编辑、激活 ABAP 代码并以 abapGit 文件形式落在 git 树上进行版本管理",
+    "为来自 A4H（ABAP Cloud Developer Trial）的开发者提供本地运行环境并配合 docs/coming-from-a4h.md 迁移自有代码"
+   ]
+  },
+  "sha": "1c05eb0b21c1",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

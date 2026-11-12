@@ -2769,5 +2769,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6f847d051942": {
+  "identity": {
+   "one_liner": "基于 Flask 与 ESP32 传感网络的作物种植与监测 IoT Web 系统",
+   "review": "ICuCrops 是一个面向菲律宾圣巴勃罗 Sarate 农场的毕业设计项目，通过埋设于种植行的土壤湿度、pH、EC 探针及温室温湿度和光照传感器，依据作物阈值自动控制灌溉、排气扇与补光灯，并经 Raspberry Pi 上的 Flask 服务器读写本地 SQLite，联网时与 Supabase 同步。仓库仅含网站前端与 Flask 后端，不含传感器固件，也不包含密钥等敏感信息。",
+   "highlights": [
+    "每行独立灌溉，支持自动、手动与定时三种模式，按土壤湿度上下限启停",
+    "双数据库架构：农场本地 SQLite 离线运行，联网后与 Supabase（PostgreSQL）同步，线上面板托管于 Vercel",
+    "服务器端生成 Excel (.xlsx) 与 PDF 报表，读数超出作物设定范围时发出提醒"
+   ],
+   "use_cases": [
+    "对种植行土壤湿度、pH、EC 及温室空气温湿度、光照进行持续监测的温室农场",
+    "需要在断网时依靠本地 kiosk 面板继续监控和灌溉的农业现场",
+    "需要按管理员/用户角色审批种植申请并追踪预计收获日期的种植管理流程"
+   ]
+  },
+  "sha": "6f847d051942",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a574e10f261f": {
+  "identity": {
+   "one_liner": "把 PST 与 IMAP 邮件归档为本地 SQLite 库，供 AI 代理经 CLI/Python/MCP 查询。",
+   "review": "mailattic 将多年 Outlook PST 归档和增量 IMAP 同步导入一个本地 SQLite 数据库并启用 FTS5 全文检索，AI 代理可通过 CLI（bes）、Python API 或 MCP 服务器三种接口查询，三者共用同一查询代码。发送采用草稿加 SHA-256 指纹审批机制。仅支持 Windows 11、Python 3.13 与 uv，PST 导入需运行中的 Outlook；不含语义搜索，一个库对应一人邮箱。",
+   "highlights": [
+    "将 PST 与 IMAP 邮件导入单一本地 SQLite 数据库，使用 FTS5 提供关键词全文检索",
+    "提供 CLI、Python API、MCP 服务器三种接口，共用同一套查询代码",
+    "发送机制要求草稿先经人工审批，发送时须携带匹配的 SHA-256 指纹"
+   ],
+   "use_cases": [
+    "查询服务器因保留期限不再保存的历史邮件，如多年前的报价记录",
+    "为无法运行宿主 CLI 的沙箱化 AI 助手提供 MCP 方式的邮件读取与草稿发送",
+    "将仅通过 POP 下载到本地的旧邮箱存档建成可检索数据库"
+   ]
+  },
+  "sha": "a574e10f261f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2761,5 +2761,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a9094b95c950": {
+  "identity": {
+   "one_liner": "基于拖拽画布的 Telegram 机器人可视化搭建器，生成 aiogram Python 代码",
+   "review": "该项目提供一个可视化 Telegram 机器人搭建器：用户在画布上拖拽节点构建对话流程，系统将其转换为基于 aiogram 的 Python 代码，生成的代码可下载并独立运行。技术栈为 React + TypeScript 前端、Express.js 后端、PostgreSQL 与 Redis。API 默认关闭访问，需通过 Telegram 登录或代理令牌认证。适合自托管部署。",
+   "highlights": [
+    "支持拖拽节点构建机器人方案，生成 Python (aiogram) 代码并可下载独立运行",
+    "支持媒体消息、inline/reply 键盘、条件逻辑、HTTP 请求、PostgreSQL SQL 查询及群组论坛主题创建",
+    "内置消息触发、批量发送、用户管理、对话查看、使用统计与版本历史等面板功能"
+   ],
+   "use_cases": [
+    "通过 Docker、Railway 或 VPS 自托管搭建器，以图形方式构建和运行 Telegram 机器人",
+    "下载生成的 Python 代码部署到任意服务器独立运行",
+    "为需要命令、文本触发器、键盘按钮和数据收集的机器人构建对话流程"
+   ]
+  },
+  "sha": "a9094b95c950",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4cacf680d966": {
+  "identity": {
+   "one_liner": "把 PostgreSQL 数据库封装为单个 .pgdb 文件的命令行工具",
+   "review": "minipg 将 PostgreSQL 以 `.pgdb` 目录的形式封装为一个文件，运行单个二进制即可打开 psql shell、执行 SQL 或为应用提供连接 URL。其机制是内嵌 Docker Hub 的 postgres:18-alpine 镜像，通过 h9 hypervisor 库在宿主机上直接运行 Alpine 的 Postgres 二进制，无需启动 Linux 内核、VM 镜像或 Docker。适用于想要按文件管理数据库实例、在本地或 CI 中运行 Postgres 的开发者。README 注明项目处于早期，h9 是研究原型，数据可靠性需自行评估；JIT 因裁剪镜像而不可用。",
+   "highlights": [
+    "内嵌 postgres:18-alpine 镜像，可通过 init --pg 下载其他主版本，支持 MINIPG_OFFLINE 离线模式",
+    "提供 shell、serve、run、dump、restore、exec、env 等命令，run 可在设置 DATABASE_URL 的情况下运行宿主命令",
+    "Linux 构建为静态 musl 二进制，无 /dev/kvm 时可使用 h9 原生后端，无需 --privileged 或设备"
+   ],
+   "use_cases": [
+    "本地开发时以文件形式创建、复制、备份和恢复 Postgres 数据库实例",
+    "在 CI 测试作业中运行 Postgres（如 GitHub runner 上 minipg init + minipg run -- go test）",
+    "通过 minipg run 或 env 命令为应用注入 DATABASE_URL 启动服务"
+   ]
+  },
+  "sha": "4cacf680d966",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0c9ff2b7519": {
+  "identity": {
+   "one_liner": "基于 TiDB Operator v2 在 Kubernetes 上运行 TiDB 的 OpenEverest provider",
+   "review": "该仓库实现 OpenEverest 的 TiDB provider：监听 providerRef 为 tidb 的 Instance 自定义资源，将其转换为 TiDB Operator v2 的原生资源（PDGroup、TiKVGroup、TiDBGroup 等），并把健康状态和 MySQL 连接端点回写至 Instance.status。它需先安装 OpenEverest 核心，不可独立运行；当前处于 pre-alpha 阶段，不适用于生产环境。",
+   "highlights": [
+    "支持 PD、TiKV、TiDB 三个必选组件及可选 TiFlash、TiProxy，按组件配置副本数、资源、存储、内联 TOML 配置与调度策略",
+    "支持版本升级（按 PD→TiFlash→TiKV→TiDB 顺序滚动、拒绝降级）、TLS/mTLS 证书、Prometheus 或 VictoriaMetrics 监控、基于 S3 兼容存储的备份、定时备份与时间点恢复",
+    "Helm chart 自包含：捆绑 TiDB Operator v2，CRD 通过 pre-install Job 从 GitHub release 下载，可配置镜像地址或关闭自动安装"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中通过统一的 Instance API 声明式部署和管理 MySQL 兼容的分布式 TiDB 集群",
+    "需要对运行中的实例执行水平/垂直扩缩容、存储扩容、版本升级和调度策略调整的场景",
+    "需要可选 TiFlash 列式副本（HTAP）或 TiProxy 连接代理，以及基于 S3 的备份/恢复能力的场景"
+   ]
+  },
+  "sha": "c0c9ff2b7519",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4e4dbc32d71e": {
+  "identity": {
+   "one_liner": "将 SQLite 数据库引擎移植到 Arduino/嵌入式开发板的库",
+   "review": "该库把上游 sqlite/sqlite 发布版编译到内存与闪存充足的 Arduino 板（如 ESP32、RP2040/RP2350、STM32）上，生成的数据库文件为标准 SQLite 格式，可在桌面端打开。C++ API 沿用 SQLiteCpp 风格（Database/Statement/Transaction），不使用异常和 std::string，同时提供完整 C API；存储支持 stdio、TinyFATFS 和内存模式，PSRAM 设备可将动态内存放入外部 RAM。适合需要在嵌入式设备上本地读写结构化数据的开发者。",
+   "highlights": [
+    "从上游 sqlite/sqlite 发布版编译，生成标准 SQLite 数据库文件，可在桌面端打开",
+    "提供 SQLiteCpp 风格 C++ API 与完整 C API（sqlite3.h），不依赖异常和 std::string",
+    "存储后端可插拔：stdio（含 LittleFS/SD 挂载路径）、TinyFATFS、内存模式，PSRAM 可启用外部内存"
+   ],
+   "use_cases": [
+    "在 ESP32/RP2040/STM32 等开发板上以标准 SQLite 文件格式本地存取结构化数据",
+    "在 SD 卡、LittleFS 或 RAM 磁盘上读写预构建的 SQLite 数据库",
+    "无文件系统的板上使用内存数据库进行数据操作"
+   ]
+  },
+  "sha": "4e4dbc32d71e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

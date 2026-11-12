@@ -13828,5 +13828,1203 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "f0d075f929f0+2": {
+  "fn": "volekerb/hivemill",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Hivemill "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    3,
+    [
+     " Hivemill is a self-hosted software factory of AI coding agents (Claude Code and Cursor), with separate review, QA and a judge that decides the merge. "
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    3,
+    4
+   ],
+   [
+    "replace",
+    5,
+    6,
+    4,
+    9,
+    [
+     " CI",
+     " License: MIT",
+     " Python 3.11+",
+     " Go (worker guard)",
+     " Release"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    9,
+    10
+   ],
+   [
+    "replace",
+    7,
+    8,
+    10,
+    16,
+    [
+     " Quickstart ·",
+     " Docs ·",
+     " Examples ·",
+     " Adopt with Claude ·",
+     " Security ·",
+     " Discussions"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    16,
+    17
+   ],
+   [
+    "delete",
+    9,
+    27,
+    17,
+    17
+   ],
+   [
+    "equal",
+    27,
+    29,
+    17,
+    19
+   ],
+   [
+    "replace",
+    29,
+    30,
+    19,
+    20,
+    [
+     " how it was made · seeded demo data only "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    20,
+    21
+   ],
+   [
+    "replace",
+    31,
+    38,
+    21,
+    25,
+    [
+     " <a href=\"docs/images/home-light.png\"> ",
+     "",
+     " The overview page of the web UI: live agents, open PRs, goals, items waiting on the owner and usage",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    43,
+    25,
+    30
+   ],
+   [
+    "replace",
+    43,
+    59,
+    30,
+    40,
+    [
+     " Fixed roles Each role has its own prompt and permissions, enforced by hooks rather than by trust. ",
+     " Independent review A separate reviewer and QA check every pull request against a real test run. ",
+     " A judge merges Only on passing reviewer and QA verdicts. Anything else goes back with findings. ",
+     "",
+     " One source of truth Goals, tasks, messages and verdicts are rows in SQLite with an append-only log. ",
+     " Small-box friendly A spawn gate queues agents until RAM, load and Claude process count allow. ",
+     "",
+     " Two runtimes, side by side A Claude org and a Cursor org, each a full chain of command, share one box and one DB (runtimes). ",
+     " A read-only web UI Goals, agents, throughput, quality, and cost, tokens and wall time per task, in light and dark. ",
+     " Opt-in containment A worker guard on every tool call, an optional sandbox, a GitHub token per worker role and optional per-task clones (guard, sandbox). "
+    ]
+   ],
+   [
+    "equal",
+    59,
+    68,
+    40,
+    49
+   ],
+   [
+    "replace",
+    68,
+    69,
+    49,
+    50,
+    [
+     "The roles and the merge gate as diagrams are under How it works."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    50,
+    51
+   ],
+   [
+    "replace",
+    70,
+    71,
+    51,
+    52,
+    [
+     "The factory runs on herdr, the terminal multiplexer that hosts the agent panes (source, pinned release v0.9.5)."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    76,
+    52,
+    57
+   ],
+   [
+    "replace",
+    76,
+    77,
+    57,
+    58,
+    [
+     "Needs a fresh Debian or Ubuntu machine and a logged-in Claude Code (the Cursor org also needs the Cursor Agent CLI, see docs/runtimes.md). In Claude Code:"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    84,
+    58,
+    65
+   ],
+   [
+    "replace",
+    84,
+    85,
+    65,
+    66,
+    [
+     "The full guide, with the installer options and the manual steps, is docs/SETUP.md."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    66,
+    69
+   ],
+   [
+    "replace",
+    88,
+    89,
+    69,
+    70,
+    [
+     "Seeded fictional data, nothing real runs (docs/demo-data.md). Run from the repository root:"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    100,
+    70,
+    81
+   ],
+   [
+    "replace",
+    100,
+    101,
+    81,
+    82,
+    [
+     "Three walkthroughs with full output on the demo data: from a goal to a merged PR, handling a rejection, the digest and scorecard."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    105,
+    82,
+    86
+   ],
+   [
+    "replace",
+    105,
+    106,
+    86,
+    87,
+    [
+     "- **Two orgs, one box.** An org is a complete chain of command (boss, director, leads, workers) on one runtime and one model map: `claude` (Claude Code, the default) and `cursor` (Cursor Agent). Each goal belongs to one org, every spawn inherits it, and both orgs share one agent cap and one resource gate (docs/runtimes.md)."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    108,
+    87,
+    89
+   ],
+   [
+    "replace",
+    108,
+    109,
+    89,
+    90,
+    [
+     "- **Contained workers.** A worker guard hook blocks actions outside a role's job. Opt-in extras: the worker sandbox (`sandbox_roles`), a worker GitHub token per role (`worker_gh_roles`) and a standalone clone per coder task instead of a worktree (`task_clones`, off by default; docs/git-hardening.md). The guard is Python by default; a Go port is available through `guard_impl` (docs/worker-guard-go.md)."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    115,
+    90,
+    96
+   ],
+   [
+    "replace",
+    115,
+    138,
+    96,
+    97,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    146,
+    97,
+    105
+   ],
+   [
+    "replace",
+    146,
+    151,
+    105,
+    106,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    153,
+    106,
+    108
+   ],
+   [
+    "replace",
+    153,
+    154,
+    108,
+    109,
+    [
+     "Details: docs/lifecycle.md, docs/verdict-gates.md, docs/db-layout.md."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    109,
+    112
+   ],
+   [
+    "replace",
+    157,
+    158,
+    112,
+    113,
+    [
+     "|Feature|What it does|Docs|"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    113,
+    114
+   ],
+   [
+    "replace",
+    159,
+    175,
+    114,
+    130,
+    [
+     "|**Run it**|||",
+     "|Setup and operations|Install, boot units, reboot recovery, identity rules|SETUP, operations|",
+     "|Adopt with Claude|An instruction file your own Claude Code follows to install it|ADOPT|",
+     "|**Ship safely**|||",
+     "|Verdict gates|The judge merges only on passing reviewer and QA verdicts|verdict-gates|",
+     "|Goal lifecycle|From request to goal to done, with plan and success criteria|goal-lifecycle|",
+     "|**Contain agents**|||",
+     "|Worker guard|Hooks that block actions outside a role's job|worker-guard|",
+     "|Worker sandbox|Opt-in namespaced spawn and worker GitHub tokens, with known limits|worker-sandbox|",
+     "|Per-task clones|Optional standalone clone per coder task (`task_clones`)|git-hardening|",
+     "|Stopping a worker|Stop one agent cleanly without losing its work|stopping-a-worker|",
+     "|**Two runtimes**|||",
+     "|Claude and Cursor orgs|Orgs, runtimes, model maps and message routing|runtimes|",
+     "|**See it**|||",
+     "|Web UI|Read-only pages for goals, tasks, agents, throughput and quality|web-ui|",
+     "|State branch|Markdown exports and a DB dump pushed to the `state` branch|state-branch|"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    130,
+    131
+   ],
+   [
+    "replace",
+    176,
+    177,
+    131,
+    132,
+    [
+     "Each feature has its own file under docs/ (all pages: docs/README.md). Also: tests and CI, lessons, per-role plugins, updating persistent agents, boss mail."
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    132,
+    133
+   ],
+   [
+    "replace",
+    178,
+    179,
+    133,
+    134,
+    [
+     " back to top "
+    ]
+   ],
+   [
+    "equal",
+    179,
+    182,
+    134,
+    137
+   ],
+   [
+    "replace",
+    182,
+    183,
+    137,
+    138,
+    [
+     "||One Claude Code session|Hand-run subagents|Hivemill|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    138,
+    139
+   ],
+   [
+    "replace",
+    184,
+    190,
+    139,
+    145,
+    [
+     "|Role separation|One agent plans, writes and judges its own work|You choose the roles each time|Fixed roles with their own prompts and permissions, enforced by hooks (worker-guard)|",
+     "|Independent review|The author reviews itself|Only if you start a reviewer|A separate reviewer and QA check every PR (verdict-gates)|",
+     "|Merge gate|You merge by hand|You merge by hand|The judge merges, gated on reviewer and QA (verdict-gates)|",
+     "|State and audit|The chat transcript|Whatever you wrote down|Goals, tasks, messages and verdicts in SQLite with an append-only event log (db-layout)|",
+     "|Resource gate|None|None|A spawn gate queues agents until RAM, load and Claude process count allow (spawn-queue)|",
+     "|Recovery after reboot|Start over|Start over|Boot units resume the headquarters and active teams (operations)|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    145,
+    146
+   ],
+   [
+    "replace",
+    191,
+    192,
+    146,
+    147,
+    [
+     "Works with: Claude Code, Cursor Agent, herdr, `gh`, systemd user units and the Moshi phone app."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    195,
+    147,
+    150
+   ],
+   [
+    "replace",
+    195,
+    196,
+    150,
+    151,
+    [
+     "A read-only web UI shows goals, tasks, live agents, throughput and quality, in light and dark themes, with an org filter, a runtime chip per agent and cost, tokens and wall time per task. Start it with `factory serve` (docs/web-ui.md). The screenshots come from fictional demo data only (docs/demo-data.md); click one for the full-size light image."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    151,
+    152
+   ],
+   [
+    "replace",
+    197,
+    255,
+    152,
+    193,
+    [
+     " <a href=\"docs/images/home-light.png\"> ",
+     "",
+     " The overview page: a needs-you list, system gauges, goals with progress, live agents, shipped changes and quality",
+     " </a> ",
+     " Overview: agents, PRs, goals and usage ",
+     "",
+     " <a href=\"docs/images/goals-light.png\"> ",
+     "",
+     " The goals page: goals grouped by status with progress bars and priority",
+     " </a> ",
+     " Goals: status and priority ",
+     "",
+     " <a href=\"docs/images/tasks-light.png\"> ",
+     "",
+     " The tasks page: tasks grouped by status with goal, assignee, PR and CI state",
+     " </a> ",
+     " Tasks: status, assignee and PR ",
+     "",
+     " <a href=\"docs/images/agents-light.png\"> ",
+     "",
+     " The agents page: live agents by role and team with model and uptime",
+     " </a> ",
+     " Agents: live agents by role and team ",
+     "",
+     " <a href=\"docs/images/throughput-light.png\"> ",
+     "",
+     " The throughput page: merges per day and spawn-to-merge times as charts",
+     " </a> ",
+     " Throughput: merged changes over time ",
+     "",
+     " <a href=\"docs/images/quality-light.png\"> ",
+     "",
+     " The quality page: merge, rejection, retry and CI pass-rate cards with per-team scores",
+     " </a> ",
+     " Quality: rejections and retries per team ",
+     "",
+     " <a href=\"docs/images/goal-light.png\"> ",
+     "",
+     " The goal detail page: a goal",
+     " </a> ",
+     " Goal detail: intent, plan, teams and tasks "
+    ]
+   ],
+   [
+    "equal",
+    255,
+    259,
+    193,
+    197
+   ],
+   [
+    "replace",
+    259,
+    260,
+    197,
+    198,
+    [
+     "- The `hc` (herdr-core) terminal backend is experimental and off by default (docs/terminal-backends.md)."
+    ]
+   ],
+   [
+    "equal",
+    260,
+    261,
+    198,
+    199
+   ],
+   [
+    "replace",
+    261,
+    263,
+    199,
+    201,
+    [
+     "- Agent isolation is a tripwire, not a sandbox. Hooks and permission settings stop honest mistakes and make bypasses visible; they do not contain a determined adversary. Read SECURITY.md for the threat model and the known limits before you point it at anything you cannot afford to lose.",
+     "- The worker sandbox is opt-in (`sandbox_roles`, off by default) and a tripwire, not a boundary: it has no egress filter (docs/worker-sandbox.md)."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    269,
+    201,
+    207
+   ],
+   [
+    "replace",
+    269,
+    270,
+    207,
+    208,
+    [
+     "Install Moshi on your phone, connect to your box over SSH, and run `herdr` there to reach the boss's pane. Moshi is a third-party app, not part of Hivemill."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    273,
+    208,
+    211
+   ],
+   [
+    "replace",
+    273,
+    280,
+    211,
+    218,
+    [
+     "- What's new in v0.4.0: a short plain-English summary of this release.",
+     "- docs/examples/: three walkthroughs with real output.",
+     "- docs/README.md: index of every docs page. docs/SETUP.md: install and troubleshooting.",
+     "- docs/finishing-coders.md: how coders finish. Known gaps of the worker guard.",
+     "- docs/worker-sandbox.md: worker sandbox design, owner steps, rollout, rollback.",
+     "- docs/adopt/ADOPT.md: let your own Claude Code set it up.",
+     "- CHANGELOG.md, SECURITY.md, THIRD_PARTY.md, CODE_OF_CONDUCT.md."
+    ]
+   ],
+   [
+    "equal",
+    280,
+    282,
+    218,
+    220
+   ],
+   [
+    "replace",
+    282,
+    285,
+    220,
+    221,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    221,
+    222
+   ],
+   [
+    "replace",
+    286,
+    290,
+    222,
+    223,
+    [
+     "MIT. Third-party notices: THIRD_PARTY.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "51a2c2aad5cc+2": {
+  "fn": "Knuckles-Team/medulla",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    8,
+    5,
+    6,
+    [
+     " Medulla logo"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    6,
+    7
+   ],
+   [
+    "replace",
+    9,
+    13,
+    7,
+    9,
+    [
+     " A durable graph database and reasoning engine for connected, evidence-rich data. ",
+     " Property graph · SQL · RDF/OWL · vectors · time · provenance · multimodal records "
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    9,
+    10
+   ],
+   [
+    "replace",
+    14,
+    15,
+    10,
+    30,
+    [
+     "PyPI - Version",
+     "Documentation",
+     "GitHub license",
+     "Version",
+     "Build",
+     "GitHub Repo stars",
+     "GitHub forks",
+     "GitHub contributors",
+     "GitHub last commit (by committer)",
+     "GitHub pull requests",
+     "GitHub closed pull requests",
+     "GitHub issues",
+     "GitHub top language",
+     "GitHub language count",
+     "GitHub repo size",
+     "GitHub repo file count (file type)",
+     "PyPI - Downloads",
+     "PyPI - License",
+     "PyPI - Wheel",
+     "PyPI - Implementation"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    30,
+    31
+   ],
+   [
+    "replace",
+    16,
+    45,
+    31,
+    35,
+    [
+     " Documentation ·",
+     " Capabilities ·",
+     " Interfaces ·",
+     " Status"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    56,
+    35,
+    46
+   ],
+   [
+    "replace",
+    56,
+    58,
+    46,
+    48,
+    [
+     "serves as the durable knowledge layer beneath Arbora",
+     "and Agent Utilities."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    63,
+    48,
+    53
+   ],
+   [
+    "replace",
+    63,
+    64,
+    53,
+    54,
+    [
+     "|Capability|What it provides|"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    54,
+    55
+   ],
+   [
+    "replace",
+    65,
+    71,
+    55,
+    61,
+    [
+     "|One multi-model engine|Property graph, relational tables, RDF, vectors, time-series, events, blobs, and media|",
+     "|Query across interfaces|UQL, SQL, SPARQL, Cypher/Bolt, GraphQL, and typed native clients|",
+     "|Semantic constraints|OWL reasoning, SHACL validation, and ShEx shape validation|",
+     "|Evidence-aware knowledge|Claims, provenance, confidence, contradiction handling, and bitemporal validity|",
+     "|Durable operation|Commit-before-ack persistence, audit, change data capture, tenant isolation, and observability|",
+     "|Distributed deployment|Single-node operation and an optional cluster build with replication and coordinated placement|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    61,
+    62
+   ],
+   [
+    "replace",
+    72,
+    74,
+    62,
+    64,
+    [
+     "Check the capability matrix",
+     "and generated method ledger"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    80,
+    64,
+    70
+   ],
+   [
+    "replace",
+    80,
+    81,
+    70,
+    71,
+    [
+     "|Artifact|Contents|Install|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    71,
+    72
+   ],
+   [
+    "replace",
+    82,
+    84,
+    72,
+    74,
+    [
+     "|`medulla`|The Python client, the in-process engine module, the numeric kernel and the native `medulla-server` executable for the wheel's platform (Linux x86_64 and aarch64, macOS arm64, Windows x64) at `medulla/_bin/medulla-server`. `medulla.server_binary.resolve_server_binary()` returns its path.|`pip install medulla`|",
+     "|`medulla-server` image|The server binary on a slim base, one tag for `linux/amd64` and `linux/arm64`, built from the Linux wheels.|`docker pull <registry-user>/medulla-server:<version>`|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    90,
+    74,
+    80
+   ],
+   [
+    "replace",
+    90,
+    95,
+    80,
+    85,
+    [
+     "- Start here for a guided engine tour.",
+     "- Interfaces explains UQL, SQL, SPARQL, Cypher, GraphQL, vectors, time-series, and clients.",
+     "- Architecture covers query execution, reasoning, storage, and distribution.",
+     "- Deploy Medulla covers durable server, TLS, containers, and clusters.",
+     "- Operations covers day-two procedures and recovery."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    98,
+    85,
+    88
+   ],
+   [
+    "replace",
+    98,
+    104,
+    88,
+    92,
+    [
+     " <a href=\"https://knuckles-team.github.io/.github/architecture/#eg\">",
+     " People use browser, terminal, desktop, or messaging clients. Arbora serves clients. Agent Utilities coordinates agents. Medulla stores knowledge. Connectors synchronize source systems.",
+     " </a>",
+     " Explore the live architecture"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    92,
+    93
+   ],
+   [
+    "replace",
+    105,
+    108,
+    93,
+    94,
+    [
+     " Medulla architecture. Authenticated interfaces feed one planner. It composes graph, semantic, analytical, temporal, and multimodal engines over one durable store."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    117,
+    94,
+    103
+   ],
+   [
+    "replace",
+    117,
+    118,
+    103,
+    104,
+    [
+     "|This repository owns|Ecosystem projects own|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    104,
+    105
+   ],
+   [
+    "replace",
+    119,
+    123,
+    105,
+    109,
+    [
+     "|Durable graph and multimodal state, query planning, reasoning, and engine authorization|Arbora owns MCP/REST/A2A entrypoints, runtime policy, and frontend hosting|",
+     "|Rust serde types as the contract source of truth; hand-written clients tested on round-trip vectors|Meristem owns the in-run harness: run loop, context, and fan-out|",
+     "|Source-ingestion admission, schema validation, evidence, and provenance commits|Scion SDK owns connector execution and source-system adapters|",
+     "|Database and compute execution|Overstory, Tuig, and Axil provide user-facing clients|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    133,
+    109,
+    119
+   ],
+   [
+    "replace",
+    133,
+    145,
+    119,
+    120,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    155,
+    120,
+    130
+   ],
+   [
+    "replace",
+    155,
+    156,
+    130,
+    131,
+    [
+     "continue with Deploy Medulla."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    158,
+    131,
+    133
+   ],
+   [
+    "replace",
+    158,
+    163,
+    133,
+    134,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    164,
+    134,
+    135
+   ],
+   [
+    "replace",
+    164,
+    166,
+    135,
+    136,
+    [
+     "Licensed under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "c5849e74b4bf+2": {
+  "fn": "Yongze-zzz/openGauss-server",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "replace",
+    9,
+    15,
+    9,
+    15,
+    [
+     "|Experiment|Main session switches|What it measures|",
+     "|---------------------------------|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|",
+     "|Intra-operator data access|`enable_intra_operator_data_access=on`|Reads and writes to state owned by one operator, including Sonic HashAgg/HashJoin state|",
+     "|inter-operator data access|`enable_inter_operator_data_access=on`|Data handed from a producer operator to its consumer through vectors, batches, copies, and local Stream exchange|",
+     "|IMCS partition-scan baseline|`enable_imcs_partition_scan=on`, `enable_numa_aware_partition_scan=off`|Whole-partition assignment using the existing worker placement|",
+     "|Chiplet-aware IMCS partition scan|`enable_imcs_partition_scan=on`, `enable_numa_aware_partition_scan=on`|Partition assignment and worker CPU affinity guided by the NUMA node holding each partition|"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    28,
+    15,
+    28
+   ],
+   [
+    "replace",
+    28,
+    45,
+    28,
+    29,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    108,
+    29,
+    92
+   ],
+   [
+    "replace",
+    108,
+    130,
+    92,
+    93,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    171,
+    93,
+    134
+   ],
+   [
+    "replace",
+    171,
+    177,
+    134,
+    135,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    193,
+    135,
+    151
+   ],
+   [
+    "replace",
+    193,
+    199,
+    151,
+    152,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    237,
+    152,
+    190
+   ],
+   [
+    "replace",
+    237,
+    243,
+    190,
+    196,
+    [
+     "|GUC|Set it|Role|",
+     "|------------------------------------|----------------------------|-----------------------------------------------------------------------|",
+     "|`imcs_partition_numa_map`|Before `populate`|Select the NUMA node for each mapped relation or partition's CU buffers|",
+     "|`imcs_partition_scan_cpus`|Before an IMCS-Chiplet query|Provide the ordered CPU IDs used by chiplet-aware scan workers|",
+     "|`enable_imcs_partition_scan`|Query session|Enable whole-partition IMCS assignment|",
+     "|`enable_numa_aware_partition_scan`|Query session|Select chiplet-aware assignment and worker affinity|"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    248,
+    196,
+    201
+   ],
+   [
+    "replace",
+    248,
+    257,
+    201,
+    210,
+    [
+     "|Component|Main files|",
+     "|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|Data-access frame, scopes, page batching, and log records|operator_data_access.cpp, operator_data_access.h|",
+     "|Executor and expression hooks|vecexecutor.cpp, vecexpression.cpp, vectorbatch.cpp|",
+     "|Sonic HashAgg and HashJoin access points|vsonichash.cpp, vsonichashagg.cpp, vsonichashjoin.cpp|",
+     "|CU and IMCS access observation|cstore_am.cpp, imcstore_am.cpp|",
+     "|IMCS placement and chiplet-aware scan assignment|imcs_partition_wise.cpp, imcs_partition_wise.h, vecpartiterator.cpp|",
+     "|GUC registration|guc_sql.cpp, knl_session_attr_sql.h|",
+     "|Reproducibility scripts|build_test_imcs.sh, prepare_tpch_imcs.sh, run_imcs_queries.sh|"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    261,
+    210,
+    214
+   ],
+   [
+    "replace",
+    261,
+    263,
+    214,
+    215,
+    [
+     "See License and COPYRIGHT for the openGauss license and notices."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

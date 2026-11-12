@@ -2652,5 +2652,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "35237b55aa97": {
+  "identity": {
+   "one_liner": "计算机使用代理（CUA）领域带来源佐证的资源目录，含论文、模型、数据集、基准与工具。",
+   "review": "该仓库面向计算机使用代理（computer-use agent）研究者与开发者，提供经来源核验的论文、GUI 模型、数据集、基准、框架和工具目录，并附带 JSONL/SQLite 等可复用数据。目录条目按评审状态分级，通过 Python 脚本可本地检索；克隆后需 Python 3.11+，无额外依赖。另有 Hugging Face 镜像与 Atom 订阅源。",
+   "highlights": [
+    "包含 5,347 条 curated 资源与 1,718 篇经评审论文/综述，覆盖 web、桌面、Android、iOS 等平台",
+    "提供 scripts/catalog.py 本地检索脚本，支持按类型、环境、评审状态过滤并输出 JSON",
+    "提供 Catalog JSONL、llms.txt、下载清单（含 SHA-256 校验）、Atom feed 及 Hugging Face 只读镜像"
+   ],
+   "use_cases": [
+    "按任务（如选基准、找训练数据、构建代理）检索 CUA 研究资源",
+    "为语言模型或 RAG 流水线提供带来源与评审状态的目录文档",
+    "跟踪 GUI 代理领域综述、基准与模型的更新（定期调度发现扫描）"
+   ]
+  },
+  "sha": "35237b55aa97",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f48c87475e86": {
+  "identity": {
+   "one_liner": "wal-g 的 Rust 移植版，用于 PostgreSQL WAL 归档与备份",
+   "review": "wal-rus 是 wal-g 的 Rust 移植，面向 PostgreSQL 的 WAL 归档/恢复与备份工具，针对 no-overcommit 主机做了流式 I/O、不整段缓冲的调整。配置沿用 wal-g 的 WALG_*、PG* 环境变量，提供 wal-push、backup-push 等子命令，可通过 cargo features 裁剪存储后端与压缩编解码，文档标注与 wal-g 的互操作保证及差异见 docs/WALG_COMPAT.md。",
+   "highlights": [
+    "支持 file://、s3://、gs:// 三种存储后端与 zstd、brotli、lz4、lzma、gzip、none 六种压缩方式",
+    "提供 wal-push、wal-fetch、wal-receive、backup-push、backup-fetch、daemon 等 CLI 子命令，配置兼容 wal-g 的 WALG_* 与 PG* 环境变量",
+    "库用户可通过 cargo features 裁剪后端、压缩与加密等能力；未编入的功能被配置使用时报错而非静默回退"
+   ],
+   "use_cases": [
+    "PostgreSQL 集群的 WAL 归档与时间点恢复（wal-push/wal-fetch/wal-restore）",
+    "通过 backup-push/backup-fetch 做基础与增量备份管理，用 backup-list/delete/copy 维护备份",
+    "作为 Rust 库集成到自有工具中，按需启用 s3/gcs、压缩编解码、复制或备份功能"
+   ]
+  },
+  "sha": "f48c87475e86",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8ba83558774b": {
+  "identity": {
+   "one_liner": "面向自主 AI 编码代理的 Rust CLI，提供上下文切片、运行时治理与嵌入式状态存储",
+   "review": "Kavach 是一个 Rust 静态二进制 CLI，定位为 AI 编码代理（如 Claude Code、Cursor 等）与操作系统之间的工具层，提供 AST 级代码切片、符号调用图追踪、JSON 字段投影、嵌入式 Turso/libSQL 状态存储及 mistakes ledger、生命周期门禁与 Webfind 实时联网检索。通过 cargo install 安装，先执行 kavach db register 注册项目。README 中大量性能与 token 节省数据均为作者自测，具体数值未经独立验证。",
+   "highlights": [
+    "提供 kavach grep/trace/origin/json 等子命令，支持 AST 模式提取、调用图追踪、JSON 字段投影与原子化文本替换",
+    "内嵌 Turso/libSQL SQLite，包含依赖图、路线图 DAG、mistakes ledger 与 working-state 等持久化状态组件",
+    "实现 lifecycle gates、verify 阶段门禁与 3-witness 验证机制，并配套 webfind 实时搜索工具"
+   ],
+   "use_cases": [
+    "为自主编码代理提供受限的代码读取与修改工具集，替代 cat/grep/sed 等传统 CLI",
+    "需要跨会话保留任务路线图、架构决策与错误记录的代理工作流",
+    "在工具调用中引入实时联网检索以获取外部 API 与文档信息"
+   ]
+  },
+  "sha": "8ba83558774b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e98f44b2f7a0": {
+  "identity": {
+   "one_liner": "单二进制自托管媒体服务器，扫描影视库并按需 GPU 转码播放",
+   "review": "Kinora 是一个自托管媒体服务器，用 Rust 单二进制实现，内置 Web 界面，使用 SQLite 存储和 FFmpeg 处理视频。用户将电影和电视剧目录挂载后，它会扫描文件、从 TMDB 获取元数据，并通过浏览器流式播放；仅当设备无法直接播放时才调用 GPU（Intel/AMD/NVIDIA/Apple）转码。部署以 Docker 为主，端口 8420，元数据需自备 TMDB API key，采用 GPLv2 许可证。",
+   "highlights": [
+    "支持 NVENC、Quick Sync、VAAPI、VideoToolbox 四种 GPU 转码后端并带 CPU 回退，通过真实测试编码检测 GPU",
+    "支持 HDR10/HLG/Dolby Vision 检测，用 libplacebo/OpenCL/zscale 做 SDR 色调映射；HEVC 可直接封装为分片 MP4 HLS 只重编码音频",
+    "内置用户角色（owner/admin/editor/viewer）、增量扫描、观看进度记录、可开关的模块系统及 4 个内置主题"
+   ],
+   "use_cases": [
+    "在家庭服务器或 NAS（含 Unraid）上自建影视库，通过浏览器在局域网或经反向代理/Tailscale 远程观看",
+    "对 Dolby Vision、HDR 等非直解内容，在支持 GPU 的机器上按需转码给不兼容的播放设备",
+    "Android TV 设备（如 NVIDIA Shield）侧载原生客户端直接播放"
+   ]
+  },
+  "sha": "e98f44b2f7a0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

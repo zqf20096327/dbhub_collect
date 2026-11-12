@@ -3295,5 +3295,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "af1c2f95ac07": {
+  "identity": {
+   "one_liner": "自托管的共享工作空间，人类与 AI 代理共用聊天、任务、知识与审批流。",
+   "review": "Deft 是一个可自托管的开源工作空间（AGPL-3.0），包含聊天、任务、知识库、日历和审批机制，供团队人员与 AI 代理在同一工作记录上协作。其核心机制是代理对工作区的写入需经审批并留下回执；个人 MCP 连接则以授权用户身份在其权限范围内操作。当前为 Alpha 状态，官方定位用于技术评估和受控试点，部署需配置 PostgreSQL、四组密钥，AI 提供商为可选项。",
+   "highlights": [
+    "提供实时聊天、任务看板/表格/时间线/日历视图、知识库、笔记和日历（含只读 ICS 订阅）等常规工作空间功能",
+    "支持通过 MCP 接入 Codex、Claude、ChatGPT 等 AI 客户端，内置 Defty 工作流与代理员工，代理写入需审批并生成活动历史与回执",
+    "AI 提供商为可选配置，支持 OpenAI、Anthropic、OpenRouter、OpenAI 兼容端点及本地 Ollama 式提供商；无 AI 密钥时基础工作空间功能仍可运行"
+   ],
+   "use_cases": [
+    "团队希望在同一自托管工作空间内记录聊天、任务与决策，并通过审批流程约束 AI 代理的写入操作",
+    "个人用户通过 MCP 将已有的 AI 客户端连接到工作空间，按自身权限范围读写任务、消息和知识",
+    "通过 Modules 与 Apps 机制扩展领域记录（如内置 Contacts 模块），将新能力置于同一共享底座上"
+   ]
+  },
+  "sha": "af1c2f95ac07",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "881392fc119b": {
+  "identity": {
+   "one_liner": "RaccoonX（原 DBCheck）是支持 22 类数据库、839 条巡检规则的开源数据库巡检运维平台。",
+   "review": "RaccoonX（原名 DBCheck）是一个基于 Python/WebUI 的开源数据库巡检与运维平台，面向 DBA、数据库工程师、DevOps 与基础设施团队。它将连接管理、规则巡检、慢查询与锁诊断、历史对比、AI 辅助分析（本地 Ollama 或云 API）与 Word 报告生成整合在单一平台中；提供 Docker 镜像（amd64/arm64）、docker-compose 与源码部署方式，含 Web UI 与 CLI 入口，默认账号密码首次登录后需修改。",
+   "highlights": [
+    "支持 22 类数据库与数据系统，内置 839 条巡检规则，可自动生成 Word 巡检报告",
+    "提供慢查询分析、锁诊断、索引健康、配置基线对比、历史趋势分析等巡检能力，并可通过 Ollama 或兼容云 API 接入 AI 辅助诊断与 RAG 知识库",
+    "以插件架构组织功能，包含 MCP Server（12 个工具，其中 3 个写入需审批）、定时任务、SSH 终端与多语言 UI（9 种语言）"
+   ],
+   "use_cases": [
+    "对包含 MySQL、PostgreSQL、Oracle、DM8、TiDB、OceanBase、Redis、MongoDB、ClickHouse 等多类数据库的生产环境执行批量巡检并生成报告",
+    "通过 Cron 定时巡检配合 Email/Webhook 通知，进行多轮历史对比与配置漂移检测",
+    "通过 MCP Server 将巡检能力接入 Claude、Cursor 等 MCP 客户端，以自然语言交互方式查询巡检结果"
+   ]
+  },
+  "sha": "881392fc119b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c4d7e4ef471": {
+  "identity": {
+   "one_liner": "面向 .NET 的类型化对象存储，模式即 C# 类，基于 LINQ 查询",
+   "review": "RedBase 是一个 .NET 数据平台，将强类型对象存入 PostgreSQL、SQL Server 或 SQLite 后端。开发者以普通 C# 类定义模式，通过单一 LINQ 风格 API 完成存储、索引、查询、树结构、聚合与窗口函数，无需迁移文件；属性以带类型的真实列存储而非 JSON。提供免费版与 Pro 版包及 CLI、项目模板，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持 PostgreSQL、SQL Server 与 SQLite 三种后端，SQLite 可用于嵌入式、离线、Blazor WebAssembly 与移动场景",
+    "属性存储为按类型映射的真实数据库列并建立索引，树查询、聚合和窗口函数通过 LINQ API 提供",
+    "提供 CLI 工具（init/schema/export/import/flat）、.redb 导出导入格式用于备份与跨后端迁移，以及多节点启动的 schema 锁机制"
+   ],
+   "use_cases": [
+    ".NET 应用中需要以 C# 类为中心管理数据模式并避免迁移流程的项目",
+    "需要存储和查询树形结构、列表、聚合与窗口计算的领域数据",
+    "使用 SQLite 后端的离线/嵌入式应用、Blazor WebAssembly 或移动端场景"
+   ]
+  },
+  "sha": "4c4d7e4ef471",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8ce3dd824575": {
+  "identity": {
+   "one_liner": "本地运行的 LLM 可观测性工具：接收 OTLP 链路并存入单个 SQLite 文件",
+   "review": "spoor 是一个本地优先的 LLM 可观测性程序，接收来自 LLM 应用和编码代理的 OpenTelemetry 链路数据，存入单个 SQLite 文件，并在网页界面展示每次模型调用的上下文变化、提示缓存失效位置以及时间、token 与估算成本的分布。用 Go 编写、无 cgo，编译为单个二进制文件，无账号、无密钥、无出站调用，适合希望在本地检查代理链路的开发者。",
+   "highlights": [
+    "接收 OTLP/HTTP（protobuf 或 JSON）链路，仅处理 traces，存储于单个 SQLite 文件，可用 sqlite3 直接打开",
+    "按 token 类型（输入、缓存读、缓存写、输出）分别计价，价格表内置于二进制，无已知价格的模型不显示成本",
+    "支持读取 Claude Code、OpenLLMetry、OpenInference、Pydantic AI、Vercel AI SDK、LiteLLM、Gemini CLI、GitHub Copilot Chat 等发送方导出的数据"
+   ],
+   "use_cases": [
+    "检查编码代理（如 Claude Code）会话中每步上下文增长与提示缓存失效的原因",
+    "按服务、模型、成本、时长、token 等维度检索和过滤 LLM 应用的链路记录",
+    "向本地 AI 代理或 MCP 客户端提供只读的链路查询端点"
+   ]
+  },
+  "sha": "8ce3dd824575",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "515d0ec9c46a": {
+  "identity": {
+   "one_liner": "基于 stdio MCP 的本地确定性上下文压缩器，用于 AI 编码代理",
+   "review": "trimtok 是一个运行于本地的上下文压缩工具，面向 Claude Code、Cursor 等编码代理与 IDE，通过 MCP stdio 接口接入。它对终端输出、源码、JSON、日志等负载执行压缩：多语言 AST 骨架化（默认仅 Python，其他语言需安装 tree-sitter 语法包）、无损 TOON v2 编码、跨轮次增量、以及基于 SQLite WAL + Zstandard 的 CCR 恢复机制，可通过 trimtok_retrieve 取回被省略内容。README 声称的压缩率数字基于其自有评测语料，实际效果随负载类型不同。",
+   "highlights": [
+    "提供压缩内容恢复机制（trimtok_retrieve）与基于 SQLite WAL + Zstandard 的 CCR 存储",
+    "支持多语言 AST 代码骨架化（默认 Python，其余语言为可选依赖）与无损 TOON v2 JSON 列式编码",
+    "提供命令特定过滤器（git log/status、ls -la、npm）与跨轮次测试增量输出"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等支持 MCP 的编码代理压缩终端输出与工具结果",
+    "压缩日志、JSON、测试套件输出等高字符量负载以减少上下文占用",
+    "需要本地运行、不开启网络端口的进程内压缩场景"
+   ]
+  },
+  "sha": "515d0ec9c46a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

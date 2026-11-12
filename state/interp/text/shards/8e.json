@@ -2281,5 +2281,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b412723a8cbd": {
+  "identity": {
+   "one_liner": "嵌入式多模态事务数据库引擎，支持内核旁路 NVMe 与统一 C ABI",
+   "review": "UStore 是嵌入应用进程运行的数据库引擎，无需部署服务端。它以 128 位 UUID 键存储 blob、文档与图数据，事务可跨集合提交。引擎层包含内存 ram 参考引擎、基于 io_uring/SPDK 内核旁路与 GPU 压缩的 NVMe 引擎，以及 RocksDB 和 LevelDB 后端，全部经由同一套 C ABI 调用。文档操作遵循 RFC 6901/6902/7386 标准，不引入自有查询语言。构建依赖 CMake 与若干 git 子模块。",
+   "highlights": [
+    "提供统一的 C ABI，同一调用可在 NVMe、内存 ram、RocksDB 和 LevelDB 四种引擎上运行",
+    "文档字段通过 JSON Pointer 寻址，修改支持 JSON Patch 与 JSON MergePatch（RFC 6902/7386）",
+    "NVMe 引擎通过 io_uring 或 SPDK 内核旁路访问磁盘，压缩可在 CPU 或 GPU 上执行（经 GPUDirect Storage 读取）"
+   ],
+   "use_cases": [
+    "需要将数据库链接进应用进程、避免独立服务端部署的场景",
+    "在同一事务中处理二进制大对象及其关联 JSON 文档或图关系的数据管理",
+    "训练管线中元数据超出内存、需按随机采样的键分批读取数据的场景"
+   ]
+  },
+  "sha": "b412723a8cbd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "56d80850b03a": {
+  "identity": {
+   "one_liner": "多语言香水数据库，含14万+结构化记录与UGC伴生数据集",
+   "review": "FragDB 提供结构化香水行业数据：144,452 条香水记录、品牌/调香师/香调/香调组参考表，标签支持 23 种语言，各文件通过 ID 关联。另含 Apache Parquet 伴生数据集（506 万条评论、26,048 篇文章、28 万条新闻评论）与按记录计费的 HTTP API。许可为 CC-BY-NC-4.0，完整数据为付费获取，仓库内含 10 条免费样本与数据字典文档。",
+   "highlights": [
+    "六个管道符分隔 CSV 文件，UTF-8 编码，通过唯一 ID 关联，含 23 种语言翻译",
+    "三个 Parquet 数据集包含评论、编辑文章与主题讨论，字段含可连接的外键",
+    "提供 Python/JavaScript/PostgreSQL 导入示例及按记录计费的 REST API（无列表端点）"
+   ],
+   "use_cases": [
+    "构建香水推荐或相似度系统",
+    "多语言评论语料用于 NLP 与情感分析",
+    "按记录接入香水数据的应用（API）"
+   ]
+  },
+  "sha": "56d80850b03a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "be2ff730a07e": {
+  "identity": {
+   "one_liner": "基于 InBody 数据推算体型并进行 3D 虚拟试穿的服装服务项目",
+   "review": "ONFIT 是一个四人团队项目，本仓库为成员宋成根的个人作品集，整理其负责的会员认证、InBody OCR 解析、体型计算与 3D 试穿功能。后端用 FastAPI 计算体型参数，前端用 React 与 Three.js 通过 Morph Target 驱动人体与服装模型变形。README 说明体型为规则视觉推算而非精确人体还原，原始 InBody 文件不保存。",
+   "highlights": [
+    "后端 FastAPI 提供 InBody PDF/图片 OCR 解析、体型计算与记录存取 API，前端 React/Three.js 通过 7 个身体部位的 Morph Target 实现模型变形",
+    "使用 Blender/MPFB 制作带 Shape Key 的人体与服装 GLB 资源，支持多类服装的独立穿着与颜色状态",
+    "提供 pytest 与 Node.js test runner 测试命令，前端与后端分离部署于 Render，数据库使用 TiDB Cloud"
+   ],
+   "use_cases": [
+    "求职者展示 FastAPI + React 3D 全栈功能开发与测试的组织方式",
+    "需要 InBody 报告 OCR 解析与规则式体型估算流程参考的场景",
+    "基于 Three.js/Blender 的 Morph Target 服装试穿演示与二次开发"
+   ]
+  },
+  "sha": "be2ff730a07e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

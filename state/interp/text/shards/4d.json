@@ -2751,5 +2751,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "11470fa2bb99": {
+  "identity": {
+   "one_liner": "本地优先的个人助手，Rust 核心 + JSON-RPC 客户端架构",
+   "review": "Joyczl-agent（代号 Joy）是运行在用户本机的个人助手：Rust 实现代理循环、记忆（FTS5 语义检索，支持中文）、工具与状态库，CLI、dashboard 与聊天网关作为客户端通过 stdio 上的 JSON-RPC 调用 joy app-server。内置 22 个工具并可接 MCP 服务器，支持 Telegram、Discord、微信、飞书网关和 12 家 LLM 提供商。文件写入与 shell 命令默认关闭，需 JOY_WRITE/JOY_EXEC 环境变量显式开启。适合想在本地运行并自行配置个人助手的开发者。",
+   "highlights": [
+    "Rust 核心实现代理循环、记忆（FTS5 语义检索、情景与技能记忆）与状态库，客户端经 JSON-RPC over stdio 访问 app-server，状态库仅由一个进程打开",
+    "内置 22 个工具并支持 MCP 服务器；文件写入、shell 命令、子代理委派默认关闭，需 JOY_WRITE=1 / JOY_EXEC=1 / JOY_DELEGATE=1 开启",
+    "代码内预适配 12 家 LLM 提供商，可通过 models-catalog.json 无代码扩展；密钥优先写入操作系统密钥链"
+   ],
+   "use_cases": [
+    "在终端 REPL 或本地 dashboard 中与助手对话并管理个人记忆、日程与待办",
+    "通过 Telegram/Discord/微信/飞书网关接入聊天场景",
+    "需要本地存储状态、可控工具权限边界（能力开关、可写目录）的个人助手部署"
+   ]
+  },
+  "sha": "11470fa2bb99",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30a9ceb6b927": {
+  "identity": {
+   "one_liner": "面向 Hermes Agent 的本地自组织记忆系统，SQLite 存储并自适应调节信任与衰减。",
+   "review": "Limbic 是为 Hermes Agent 实现的 MemoryProvider ABC 的本地记忆插件，将事实存入单个 limbic.db 文件，通过嵌入、干扰检查、信任评分与衰减机制组织记忆，全程不调用 LLM。操作员通过 hermes limbic 命令管理数据删除与导出，支持多用户按平台账号分桶隔离。许可证为 PolyForm Noncommercial 1.0.0，商用需另行授权；激活的每个配置档常驻约 700 MB 内存用于 ONNX 嵌入模型，且 Python 需启用 SQLite 可加载扩展。",
+   "highlights": [
+    "提供 remember/recall/forget 三个工具接口，检索无匹配时返回 no_confident_match 而非猜测；相似记忆竞争、纠正通过写入时 NLI 链接并惩罚旧条目信任，不直接编辑已存内容",
+    "基于 SQLite 的单文件存储（WAL 模式），衰减半衰期与相关性阈值由信任引擎自适应调节，后台扫描清除超出召回阈值的记忆",
+    "支持多用户模式，按平台 ID 解析到各用户的记忆桶，支持 guardians 写入语义与 users.yaml 身份清单"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 部署提供长期事实记忆，替代内置 MEMORY.md 与 USER.md 存储",
+    "需要按用户隔离记忆的多用户聊天平台部署，可配合 users.yaml 实现显示名与监护人写入规则",
+    "个人或研究用途中需要数据可删除、可导出（含哈希墓碑回执）的记忆管理场景"
+   ]
+  },
+  "sha": "30a9ceb6b927",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

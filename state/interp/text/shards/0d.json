@@ -2964,5 +2964,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5090d99379b0": {
+  "identity": {
+   "one_liner": "以 Markdown 文件为唯一真源的 AI 代理长期记忆运行时，本地检索无需 API 密钥",
+   "review": "agent-memory 用一个存储目录管理 AI 代理的长期记忆：每个记忆是一个 Markdown 文件，SQLite 索引仅作可重建缓存，检索返回路径与摘要供代理按层级读取。写入在会话边界触发，睡眠时段负责整合与删除提案。面向使用 Claude Code、Codex CLI 等可执行 shell 命令的代理用户，通过 `mem setup` 接入，需 Python 3.12+ 和 uv，目前需从源码安装，尚未发布到 PyPI。",
+   "highlights": [
+    "Markdown 文件为单一真源，删除 .index 后 `mem rebuild` 可无损重建索引；记忆含 validity interval、links 和 provenance 等 frontmatter 字段",
+    "三级读取轨道：MEMORY.md 注入、基于 FTS5 的 BM25 检索（可融合向量插件）、以及可直接 ls/grep 的目录树；recall 返回 L0 列表，代理可按 outline/abstract/full 层级读取",
+    "内置 record/correct/supersede/merge/delete 等修正操作，supersede 保留链路，`recall --as-of` 支持按日期回溯；可经 MCP stdio 服务（mem-mcp）提供同名调用"
+   ],
+   "use_cases": [
+    "让 Claude Code、Codex CLI、Muse Code 等多个代理共享同一份长期记忆存储",
+    "希望记忆以纯 Markdown 文件形式保留、可用 git 管理并可脱离该系统迁移的团队",
+    "需要在无 API 密钥、无内置 LLM 客户端的本地环境下运行代理记忆的系统"
+   ]
+  },
+  "sha": "5090d99379b0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c9f9926c67a1": {
+  "identity": {
+   "one_liner": "基于 Lean 4 的后端框架，授权安全性由形式化证明保证。",
+   "review": "Nyxis 是一个用 Lean 4 编写的后端框架，开发者只需编写并批准 Cedar 模式与策略，处理器可由 Claude Code 等 AI 工具生成。每次 lake build 时 Lean 内核会检查一条定理：任何 HTTP 请求序列都无法使已认证主体越权读取、修改、删除或授权数据。处理器不能直接执行 IO 或访问数据库，所有操作经由授权层。项目处于 v0.1.11 活跃开发阶段，生产使用前需阅读 ASSUMPTIONS.md 了解证明范围与信任假设。",
+   "highlights": [
+    "每次 lake build 时由 Lean 内核检查授权安全定理，主定理为 Nyxis.Runtime.authorization_safety",
+    "Cedar 模式同时作为数据库表定义（实体类型对应表、属性对应列），每个 action 携带一个由 Nyxis 定义的效果",
+    "效果涵盖 read/list/insert/update/delete、签名 URL 文件存储、邮件通知和外部 API 调用，全部经授权层并受同一定理覆盖；JWT、数据库行、时间和唯一 ID 由框架确定，处理器无法伪造"
+   ],
+   "use_cases": [
+    "由 AI 代理生成 Web 应用的独立开发者，需对授权逻辑进行机器检查的发布流程",
+    "需要基于 Supabase Auth JWT 与 PostgreSQL 构建后端的 HTTP 服务",
+    "参考官方示例（公告板含 Next.js 前端、团队文档共享含成员角色与附件）学习应用布局"
+   ]
+  },
+  "sha": "c9f9926c67a1",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2693,5 +2693,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a5ba5e27bdb": {
+  "identity": {
+   "one_liner": "开源桌面 SQL 工作台，内置 3 种数据库驱动并提供 29 个驱动插件",
+   "review": "Tabularis 是一个开源桌面 SQL 工作台，内置 MySQL/MariaDB、PostgreSQL、SQLite 驱动，其余数据库（如 ClickHouse、DuckDB、MongoDB 等）以 JSON-RPC over stdio 协议的驱动插件形式从插件注册表安装。提供连接管理、SQL 编辑器、SQL 笔记本、可视化查询构建器与 ER 图等功能，并内置 MCP 服务器供 AI 代理读取表结构和执行查询。通过 WinGet、Homebrew、Snap、Flatpak、AUR 等方式安装，UI 支持 13 种语言。",
+   "highlights": [
+    "内置 PostgreSQL、MySQL/MariaDB、SQLite 驱动，另提供 29 个可从插件注册表安装的驱动插件",
+    "内置 MCP 服务器，允许 Claude、Cursor、Devin 读取表结构并执行查询",
+    "包含 SQL 笔记本（SQL 与 Markdown 单元、跨单元变量 {{cell_N}}、图表）、交互式 ER 图与可视化 EXPLAIN 计划图"
+   ],
+   "use_cases": [
+    "需要在同一桌面应用中连接多种数据库（如 PostgreSQL、ClickHouse、Redis）进行查询与管理",
+    "需要为 Claude、Cursor 等 AI 代理提供数据库表结构读取与查询执行能力",
+    "需要以笔记本形式组合 SQL 与 Markdown 单元进行探索性数据分析并导出 HTML/CSV/JSON"
+   ]
+  },
+  "sha": "1a5ba5e27bdb",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed0032dd550d": {
+  "identity": {
+   "one_liner": "基于服务端提交日志同步客户端 SQLite 数据库的离线优先同步引擎",
+   "review": "Syncular 在每个客户端维护本地 SQLite 数据库，通过服务器拥有的提交日志进行同步，写操作先更新本地状态并进入 outbox，联网时由服务器校验。浏览器端用 OPFS 上的 SQLite，原生端共享 Rust 核心与 C FFI 绑定。项目处于 pre-1.0 阶段，公开 API 与协议细节仍可能变化，由 Benjamin Kniffler 个人维护。",
+   "highlights": [
+    "客户端读取本地 SQLite，支持离线写入，写入经 outbox 在同步时由服务器校验",
+    "TypeScript 与 Rust 双核心运行同一套一致性测试目录，协议规格附字节级测试向量",
+    "服务器可运行于 Bun、Node 或 Cloudflare Workers，后端存储支持 SQLite、Postgres 或 D1"
+   ],
+   "use_cases": [
+    "需要离线继续工作、联网后同步的本地优先应用",
+    "跨 Rust、Swift、Kotlin、Flutter、React Native、Tauri 等多端共享同步逻辑的项目",
+    "后端服务以 headless 客户端或无数据库 SyncRemoteClient 形式参与同步流程"
+   ]
+  },
+  "sha": "ed0032dd550d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c248de60a333": {
+  "identity": {
+   "one_liner": "自托管网页版音乐元数据编辑器，三栏界面直接改写音频文件标签",
+   "review": "Tagr 是一个自托管的 Web 应用，用于浏览、播放和编辑音乐文件的元数据，标签修改可直接写回音频文件。技术栈为 Next.js、React、Prisma 加 SQLite，提供 Docker 与 Node.js 22+ 手动两种部署方式。支持多用户与角色权限（管理员/打标者/听众）、变更历史与撤销、 ListenBrainz scrobbling。Demo 站点为只读模式，元数据编辑功能在该模式下被禁用。",
+   "highlights": [
+    "支持 40+ 元数据字段的内联编辑及自定义标签，标签修改直接写回音频文件，支持 MP3、FLAC、WAV、AAC、OGG、M4A、M4B、WMA、AIFF、Opus 十种格式",
+    "内置音频播放器（基于 WaveSurfer.js 波形可视化），提供三栏布局、高级筛选、可自定义列、虚拟滚动等库浏览功能，UI 响应式适配移动端",
+    "记录每次元数据变更的完整审计历史并支持逐条或批量撤销；支持多用户账号与 Tagger/Listener 角色，密码以 bcrypt 哈希存储，每用户可连接自己的 ListenBrainz 账号"
+   ],
+   "use_cases": [
+    "在浏览器（桌面或手机）中集中管理和编辑 NAS 或本地音乐库的文件标签",
+    "多个用户以不同角色共享访问同一音乐库，分别执行打标或仅播放操作",
+    "将播放记录转发到 ListenBrainz 个人档案，同时维护曲库元数据与播放历史"
+   ]
+  },
+  "sha": "c248de60a333",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74e33d89a5b8": {
+  "identity": {
+   "one_liner": "在自有单台服务器上运行应用及数据库、认证、KV、文件、邮件等配套服务的托管/自托管平台",
+   "review": "ShipTiffin 将应用部署与 Postgres、认证、KV、文件存储、邮件、任务、分析、备份等服务集成在同一台用户拥有的 Linux 服务器上，提供 CLI、dashboard 和 MCP 三种操作入口。支持托管模式（在用户自己的 Hetzner 账户中建机）与自托管（Hetzner 或任意 Ubuntu 服务器），针对小型 Next.js 应用开发者和使用编码代理的团队。当前为 pre-1.0，核心采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供 CLI、dashboard 和 MCP 三种操作方式，均由同一 OpenAPI 描述生成；每次变更列出步骤与风险级别，凭计划哈希应用，支持 tiffin undo 回滚",
+    "每个项目包含 Postgres 18（含 pgvector、连接池、分支）、Valkey KV、S3 兼容文件桶、Better Auth 登录、任务队列、分析、错误追踪，每 6 小时备份一次",
+    "支持 Next.js、Hono、FastAPI、SvelteKit、Nuxt 等框架及任意 Dockerfile，零停机部署、PR 预览环境（含独立数据库副本）"
+   ],
+   "use_cases": [
+    "在单台自托管或托管服务器上集中运行多个小型 Web 应用及其数据库、缓存等依赖服务",
+    "让 Claude Code、Codex 等编码代理通过 MCP 接口和独立 API key 创建、部署和管理应用",
+    "通过 tiffin CLI 在自有 Hetzner 或 Ubuntu 服务器上一条命令完成建机与初始化"
+   ]
+  },
+  "sha": "74e33d89a5b8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

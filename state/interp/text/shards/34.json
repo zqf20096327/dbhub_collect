@@ -3020,5 +3020,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e342fb70910f": {
+  "identity": {
+   "one_liner": "单进程运行的 Supabase 兼容后端，基于 Postgres 并支持 supabase-js 直连",
+   "review": "tinbase 是一个以单二进制/单进程形式运行的 Supabase 兼容后端，提供 REST、Auth、Storage、Realtime、Edge Functions 等服务，官方 supabase-js 无需修改即可连接。它读取 supabase/migrations 与 seed.sql，遵循 Supabase CLI 迁移约定；提供 native、wasm（PGlite）、pgmem 三种引擎。README 标注为 Alpha 阶段，尚不建议用于生产。",
+   "highlights": [
+    "通过 npx tinbase start 启动，无需 Docker 和外部服务，支持 native/wasm/pgmem 三种引擎",
+    "实现 PostgREST、GoTrue、Storage、Edge Functions、pgmq、pg_cron、pg_net、Webhooks 及 Studio 管理界面等服务端点",
+    "读取 supabase/migrations/*.sql 与 seed.sql，迁移文件可迁移至托管 Supabase；支持通过 createBackend 在 Node 或浏览器中嵌入"
+   ],
+   "use_cases": [
+    "无 Docker 环境下的 Supabase 项目本地开发与迁移验证",
+    "原型与演示场景中作为与 supabase-js 配合的后端进程运行",
+    "在浏览器或 Node 进程内以 fetch handler 形式嵌入整个后端"
+   ]
+  },
+  "sha": "e342fb70910f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b31aeaededc7": {
+  "identity": {
+   "one_liner": "本地知识库工具：以 Markdown 为源、SQLite 为索引、供人及编码代理检索。",
+   "review": "Lorevell 是一个基于 Rust 引擎的 CLI 工具，用于将过程、经验等知识以纯 Markdown 文件保存在本地 vault（带独立 Git 仓库）中，并通过 SQLite 索引提供关键字与语义混合检索、反链解析和本地 Web 工作区。它面向使用 Claude Code 或 Codex 等编码代理的开发者，代理经 setup 安装技能后可在调查前检索、沉淀经验；dream 子命令调用既有 headless 代理对变更文件做批量整理并经 Git 提交回滚。需注意：2.0 为 breaking 变更，不自动迁移 1.x；嵌入模型首次使用可能下载，--text-only 可走离线字面检索。",
+   "highlights": [
+    "以 Markdown 为唯一事实源，SQLite 索引可删除重建；支持 FTS5 字面检索与 AllMiniLM-L6-V2 本地语义检索两种模式",
+    "提供 add/update/search/show/index/archive 等 CLI 命令、127.0.0.1 本地 Web UI，以及只读快照 recall，不实现自身的代理运行时或编排框架",
+    "dream 命令以有界批次调用已安装的 Codex/Claude Code 代理整理笔记，经 Git 快照提交，失败可回退，验证不覆盖语义真伪"
+   ],
+   "use_cases": [
+    "开发者在本地保存可检索的过程与经验笔记，通过 CLI 或浏览器工作区查找、复制复用",
+    "为 Claude Code/Codex 等编码代理安装技能，使其在项目工作前检索既有知识并沉淀经过验证的可复用结论",
+    "对由其他系统所有的知识库做只读快照召回与有界 review，本地检索不接管同步与写入"
+   ]
+  },
+  "sha": "b31aeaededc7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

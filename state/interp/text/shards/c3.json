@@ -3032,5 +3032,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1bf486c1aa7f": {
+  "identity": {
+   "one_liner": "开源自托管的无代码数据库平台，用电子表格界面构建应用与自动化",
+   "review": "Baserow 是一个开源的无代码平台，用于搭建数据库、应用门户、自动化流程和仪表板，面向需要结构化数据与内部工具的团队。技术栈基于 Django、Vue.js 和 PostgreSQL，提供云托管与自托管两种部署方式，非付费功能采用 MIT 许可证。README 说明项目已从 GitLab 迁移至 GitHub，旧仓库的已合并 PR 未被导入。",
+   "highlights": [
+    "提供电子表格与数据库混合的界面，支持创建应用并发布到自有域名",
+    "内置 AI 助手（Kuma），支持通过自然语言创建数据库和工作流",
+    "支持 Docker、Helm、Docker Compose 及 Heroku、AWS 等多种部署方式，API 文档含 OpenAPI schema"
+   ],
+   "use_cases": [
+    "自托管搭建在线数据库并保留数据控制权",
+    "构建内部工具、应用门户与数据仪表板",
+    "通过自动化功能处理重复性工作流"
+   ]
+  },
+  "sha": "1bf486c1aa7f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "28fac27d6386": {
+  "identity": {
+   "one_liner": "通过 Agent Skills 连接编码代理的 dbt/语义层分析与维护工具",
+   "review": "Dex 由 Exmergo 开发，以 Agent Skills 形式接入 Claude Code、Codex 等代理，调用 exmergo-dex-core 引擎完成探索（列画像、连接验证、ER 图）、转换（以可审阅 diff 生成 dbt 模型与指标）和维护（检测 schema/指标漂移）。源数据只读，构建仅跑在 dev 目标上，扫描前先估算成本。依赖 PATH 中的 uv，不支持 claude.ai 聊天环境。",
+   "highlights": [
+    "提供 explore/transform/maintain 三个技能循环，输出统一的 JSON envelope，模型变更以 diff 形式存入仓库供审阅",
+    "查询防火墙拦截个人数据值进入上下文，凭据不进入代理上下文；每次扫描先估算成本并服务端封顶，花费记录在本地台账",
+    "支持 Snowflake、BigQuery、Databricks、Redshift、Postgres、DuckDB、ClickHouse、Trino 连接器，及 dbt、Cube、SLayer、Ossie 语义层"
+   ],
+   "use_cases": [
+    "在代理会话中探索数据仓库：定位相关表、验证连接关系、生成 Mermaid ER 图",
+    "以可审阅计划创建和重构 dbt 模型、测试、文档与语义指标，并在 dev 目标上构建验证",
+    "数据源变更后对比快照，检测 schema、体量、粒度与指标定义漂移并审阅修复建议"
+   ]
+  },
+  "sha": "28fac27d6386",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "188164a67c0e": {
+  "identity": {
+   "one_liner": "读取本地 AI 编码工具记录并生成令牌用量仪表盘的自托管应用",
+   "review": "该项目读取本机 Claude Code、Codex 和 OpenCode 的会话记录，构建历史令牌用量仪表盘，展示日历热力图、按工具/模型分类的每日总量、缓存读写占比及 5 小时/7 天窗口等数据。统计数据缓存在本地 SQLite 中，即使原始记录被修剪仍可保留历史；费用按当前公开 API 费率估算。处理全部在本地完成，仅查询订阅计划窗口时会调用一次 Anthropic 接口（可在设置中关闭）。",
+   "highlights": [
+    "支持读取 Claude Code、Codex、OpenCode 三种工具的本地会话记录",
+    "统计数据缓存于本地 SQLite，可保留被修剪记录之外的历史",
+    "提供 Docker、systemd 服务、release 包和源码四种部署方式"
+   ],
+   "use_cases": [
+    "需要统计 Claude Code、Codex、OpenCode 的历史令牌用量与费用估算",
+    "查看 Anthropic/OpenAI 5 小时与 7 天窗口的使用情况",
+    "以自托管方式在本地分析 AI 工具使用记录且数据不出本机"
+   ]
+  },
+  "sha": "188164a67c0e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "04b7139444ff": {
+  "identity": {
+   "one_liner": "Rust 编写的无头 CMS：Lua 定义模式、gRPC 查询、HTMX 管理界面。",
+   "review": "Crap CMS 是一个用 Rust 编写的无头 CMS：内容模式用 Lua 定义，字段级/集合级 Lua 钩子可在事务内扩展 CRUD，查询走 gRPC（附带 REST 代理），内容管理通过 HTMX 管理界面完成。数据存 SQLite（WAL 模式），整体为单一二进制、无外部基础设施依赖，以 Docker 或静态二进制分发。README 标明目前为 0.x Alpha 阶段，可能存在未经通知的破坏性变更。",
+   "highlights": [
+    "集合支持 20 种字段类型，含关系、上传、数组、blocks 等复合字段",
+    "在字段、集合、全局三个层级提供 Lua 钩子，事务内可执行完整 CRUD",
+    "提供 gRPC API（过滤、分页、服务端反射）、SSE/gRPC 流式实时事件，以及面向 AI 工具的 MCP 服务器"
+   ],
+   "use_cases": [
+    "为 Rust 技术栈项目提供内容管理后端，经 gRPC 或 REST 代理读取内容",
+    "需要通过 Lua 钩子自定义内容行为的单机部署站点",
+    "配合 SQLite 单二进制、零外部依赖的场景快速启动内容服务（docker run 或安装脚本即可运行示例）"
+   ]
+  },
+  "sha": "04b7139444ff",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

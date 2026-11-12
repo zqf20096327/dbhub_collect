@@ -2707,5 +2707,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "534739bb6682": {
+  "identity": {
+   "one_liner": "用于美发店预约管理的 Android 应用，含 Kotlin/Compose 客户端与 Flask+PostgreSQL 后端",
+   "review": "HairCloud 是一个美发店预约管理项目，包含 Kotlin 与 Jetpack Compose 构建的 Android 客户端，以及 Python/Flask 提供的版本化 REST API 和 PostgreSQL 数据库。客户端为顾客与美发店专业人员提供不同视图，涵盖预约、服务配置、日历与评论等功能。项目定位为示例与作品集，未部署上线，README 说明其数据均为测试数据且未做外部审计。",
+   "highlights": [
+    "为顾客与专业人员提供分别的界面视图，功能含预约、日历管理、服务配置与评论",
+    "后端为 Python/Flask 实现的版本化 REST API，使用 JWT 与 refresh token 认证，按角色（cliente、peluquero、semiadmin、admin）在服务器端校验权限与业务规则",
+    "包含版本化 SQL 迁移、41 个针对真实 PostgreSQL 的 pytest 测试，并提供 db-upgrade、seed-demo、create-admin 等 flask 命令"
+   ],
+   "use_cases": [
+    "学习 Android（Kotlin + Jetpack Compose + Retrofit）与 Flask REST API 全栈项目结构的参考代码",
+    "作为美容美发类预约场景的教学或示例实现",
+    "在本地搭建后端与 Android Studio 前端进行开发调试运行"
+   ]
+  },
+  "sha": "534739bb6682",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a11b3ef9d136": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 服务器，为多个 AI 应用提供共享的项目记忆",
+   "review": "FlowState 是一个本地 MCP 服务器，将项目的待办、变更、决策、问题与经验存为单个 SQLite 文件，供 Claude、ChatGPT、Cursor 等支持 MCP 的客户端共享读取与写入。AI 开始工作时读取项目简报并记录过程，后续会话接着继续。数据默认留在本机；可选功能（GitHub 备份、Cloudflare Tunnel、中继）会产生网络传输。同一待办需先认领，冲突由用户在审核队列裁定。",
+   "highlights": [
+    "以 MCP 协议向多个 AI 客户端提供共享项目记忆，数据存储在本机单个 SQLite 文件中",
+    "支持多代理并发：待办认领机制（默认 15 分钟，可至 120 分钟）、决策冲突检测标记、按应用/模型/机器记录变更来源",
+    "可选离站备份至私有 GitHub 仓库、Cloudflare Tunnel 远程访问或中继；每日一次的 GitHub 版本检查可通过命令关闭"
+   ],
+   "use_cases": [
+    "在多个 AI 应用和设备间延续项目上下文，避免每次对话重新说明背景",
+    "多个 AI 代理并行处理同一项目时协调待办、查看彼此的决策与变更记录",
+    "需要在本地保存 AI 项目记忆、不将数据发送到第三方服务的开发者"
+   ]
+  },
+  "sha": "a11b3ef9d136",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f5f8a1eb3fc": {
+  "identity": {
+   "one_liner": "基于 xio 与 RocksDB 构建的分布式键值存储",
+   "review": "Chicago 是一个构建于 xio 与 RocksDB 之上的分布式键值存储，作者原用于可观测性场景的准实时统计与告警。写入默认并行复制到 3 个节点并全部成功才确认；通过 RendezvousHash 横向扩展到 N 节点，节点增减时各服务器带外重平衡键。节点列表存于 ZooKeeper，客户端可配置不同 Views。默认传输加密可关闭，可选 Snappy 压缩；部分重平衡策略功能标注为 TODO。",
+   "highlights": [
+    "写入默认并行复制到 3 台服务器，全部成功后才向客户端确认，失败按可配置次数重试",
+    "使用 RendezvousHash 支持横向扩展至 N 节点，节点增减时各节点执行带外键重平衡",
+    "传输数据默认加密，可选启用 Snappy 压缩；写入与读取路径全程哈希与校验"
+   ],
+   "use_cases": [
+    "可观测性系统中的准实时统计数据与告警存储",
+    "低延迟、大批量写入的键值场景（README 称配置合适时复制写入可在 3–5ms、每秒百万级对象）",
+    "本地 DC 写入、跨 DC 读取的部署（通过为客户端配置不同 Views）"
+   ]
+  },
+  "sha": "8f5f8a1eb3fc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0a4af739a9ac": {
+  "identity": {
+   "one_liner": "城市管理市民上报事件的平台，基于 Spring Boot 与 PostGIS",
+   "review": "UrbanPulse 用于登记、分类、追踪和解决市民上报的城市事件，并结合马拉加市的数据做上下文补充。面向市政工作人员，含操作员、技术员、管理员等角色。事件生命周期由 ADR-0020 定义的状态机驱动，采用乐观锁并记录追加式审计日志。项目仍在开发中，部分功能标记为 Planned。",
+   "highlights": [
+    "提供基于 JWT 的认证、角色权限检查和首登强制改密机制",
+    "支持带位置坐标的事件上报、地图聚类展示、照片证据存储与状态历史追踪",
+    "包含 Flyway 管理的 PostGIS 数据库、OpenAPI 3.1 合约及按角色划分的 React Web 端与 React Native 移动端"
+   ],
+   "use_cases": [
+    "市政操作员筛选、分类并关闭或重开市民上报的事件",
+    "技术员查看工作队列、接受并解决分配的事件",
+    "分析师或管理员生成按状态、类别、部门等维度分组的事件运营报告（JSON 或 CSV）"
+   ]
+  },
+  "sha": "0a4af739a9ac",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

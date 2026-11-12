@@ -2893,5 +2893,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "76fc64542936": {
+  "identity": {
+   "one_liner": "单二进制自托管监控工具，自动发现容器、端点与证书并发送告警",
+   "review": "maintenant 是一个用 Go 编写的自托管基础设施监控工具，以单个容器运行，自动发现 Docker、Docker Swarm 和 Kubernetes 中的容器及端点、TLS 证书、cron 任务等监控对象，提供实时仪表盘、日志流和告警推送。检测由固定规则完成，内置 MCP 服务器（51 个工具）供 AI 代理查询诊断。Personal 版限制 20 台远程主机。",
+   "highlights": [
+    "零配置自动发现 Docker/Swarm/Kubernetes 容器，跟踪状态、健康检查、重启循环与实时日志流",
+    "内置 MCP 服务器提供 51 个只读/管理工具，支持 stdio、HTTP 传输与 OAuth2",
+    "多主机监控：轻量只读代理经 Ed25519 双向认证的 gRPC 流回传数据，支持断线重连与历史回放"
+   ],
+   "use_cases": [
+    "家庭实验室或中小规模自托管环境的一体化容器与可用性监控",
+    "需要通过 webhook 告警并让 AI 代理经 MCP 查询日志与历史进行排查的场景",
+    "对多个远程主机（含混合 Docker 与 Kubernetes）做集中式只读监控"
+   ]
+  },
+  "sha": "76fc64542936",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec94af914aa2": {
+  "identity": {
+   "one_liner": "基于 FoundationDB 的分布式事务文档数据库，以命名空间实现多租户隔离。",
+   "review": "Kronotop 是构建在 FoundationDB 之上的分布式文档数据库，文档以 BSON 存储，支持 BQL 查询语言、二级/复合/向量索引与严格可串行化事务。每个命名空间对应一个 FoundationDB 键前缀，可承载大量轻量级逻辑库。项目目前处于 developer preview，API 与运维行为可能变动，运行依赖 Java 25 及 FoundationDB 集群。",
+   "highlights": [
+    "命名空间作为 FoundationDB 键前缀实现键空间级数据隔离，单个事务可跨多个命名空间提交",
+    "支持 RESP2/RESP3 协议，可使用 redis-cli、valkey-cli 等现有客户端连接",
+    "Bucket（BSON 文档）与 ZMap（有序键值）共享协议，可参与同一 ACID 事务；查询通过游标分批返回"
+   ],
+   "use_cases": [
+    "需要租户隔离的事务性文档存储",
+    "Agent 记忆存储：命名空间隔离、向量相似度查询与事务性更新",
+    "基于租约锁与 versionstamp 提交的分布式协调、有序键值场景"
+   ]
+  },
+  "sha": "ec94af914aa2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2866,5 +2866,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4eb4ce068a91": {
+  "identity": {
+   "one_liner": "实现 Apache Kafka API 的无状态 broker，存储引擎可插拔",
+   "review": "Nisshi 是用 Rust 编写的单二进制无状态服务器，实现 Apache Kafka 线协议（基于 Kafka 3.9.1 消息描述符生成），应用可直接使用 Kafka 客户端。数据保存在可插拔存储引擎（PostgreSQL、SQLite/libSQL、S3、内存）中，共享引擎的 broker 均可响应请求；带 schema 的主题可写入 Iceberg 或 Delta Lake 表。不支持事务，Kafka Streams 的 exactly_once_v2 无法使用。",
+   "highlights": [
+    "实现 Kafka 线协议，幂等生产者可用，事务不支持",
+    "存储引擎可插拔：PostgreSQL、libSQL、SQLite、S3、内存",
+    "按 Avro/JSON Schema/Protobuf 校验的主题可写为 Apache Iceberg 或 Delta Lake 表，支持 TLS 与 SASL SCRAM"
+   ],
+   "use_cases": [
+    "希望用现有 Kafka 客户端而不运行 Kafka broker 集群的场景",
+    "需要消息落库共享存储（如与业务同库实现事务性 outbox）的架构",
+    "将带 schema 的消息写入数据湖表（Iceberg/Delta Lake/Parquet）供 Spark、DuckDB 等查询"
+   ]
+  },
+  "sha": "4eb4ce068a91",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d28883035e7f": {
+  "identity": {
+   "one_liner": "通过 OIDC 认证与 OPA 策略控制对生产 PostgreSQL 访问的 Go 网关服务",
+   "review": "Database Gateway 是一个 Go 编写的 Web 网关服务，为员工提供访问生产 PostgreSQL 实例的统一入口。用户经外部 OIDC 提供商认证后，提交的 SQL 会先经解析与校验，再由磁盘加载的 .rego 策略按用户、目标实例、操作类型和表进行授权判定，查询结果缓存在本地 PostgreSQL 中并生成可分享链接。限制包括部分复杂查询可能被解析器拒绝，且远程数据库仅能经网关访问。",
+   "highlights": [
+    "基于 OPA 策略在实例、表和查询类型层面控制权限，.rego 文件从磁盘加载并内嵌编译",
+    "提供 Web UI 与 LRPC API，支持查询书签、最近查询列表及 HTML/JSON/CSV 结果导出",
+    "解析并校验 SQL 以限制查询类型，基于 schema 校验实现列白名单，支持连接池配置"
+   ],
+   "use_cases": [
+    "团队需要按角色区分生产库读写权限（如组长可 SELECT/INSERT，成员只读 SELECT）的场景",
+    "需要保留查询结果及执行元数据用于调试和审计的场景",
+    "DevSecOps 流程中通过网关隔离生产数据库直接访问的场景"
+   ]
+  },
+  "sha": "d28883035e7f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a2971de96047": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式键值存储库，支持双模式寻址与字节级校验。",
+   "review": "babeldb 是以 Rust 实现的嵌入式键值数据库（库 + CLI），底层采用 fjall 加 WAL 写入，并提供 Python 与 Node.js 原生绑定。它将数据表示分为 BabelPure（可逆寻址）与 Adaptive（多重编码选择）两种互斥模式，写库时确定并记录；读取通过 BLAKE3 校验、支持原子提交、区间扫描与受限内存导入。适合需要在进程内运行键值存储、且关注空间占用账目的开发者。当前 0.x 版本 API 与磁盘格式可能变更；Python/Node 二进制仅覆盖 Windows x64。",
+   "highlights": [
+    "提供 BLAKE3 校验、原子且持久的提交、区间读取、可选修订历史，以及受限内存的文件导入",
+    "支持 Adaptive 模式下在 RawV1、Repeat、Arithmetic、LZ4、Zstd、模板与块去重之间选择最小精确表示，并有空间账目统计",
+    "提供 Rust API、CLI/REPL、TCP 服务器，以及 API 一致的 Python（pip install babeldb）与 Node.js（npm install @q6r/babeldb）嵌入库"
+   ],
+   "use_cases": [
+    "进程内嵌入式键值存储场景（消息键助手、批处理原子写入、前缀/区间扫描）",
+    "比较不同数据表示的空间开销，需按模式分别报告计量结果的实验与教学",
+    "多进程或多语言访问时通过 TCP 服务器（127.0.0.1:7878）共享同一数据库文件"
+   ]
+  },
+  "sha": "a2971de96047",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

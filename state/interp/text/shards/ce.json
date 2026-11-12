@@ -3009,5 +3009,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a79b2493999": {
+  "identity": {
+   "one_liner": "自托管媒体管理器，将搜索、下载与整理整合于一个 Docker 容器。",
+   "review": "Mediarium 是一个运行于 Docker 的自托管媒体管理器，用于搜索、下载并整理电影、剧集、音乐、电子书和有声书，输出到 Plex、Jellyfin、Emby 等媒体服务器。它把索引器搜索、Usenet 与种子下载、解压重命名合并到单个容器和 Web 界面中，支持 amd64/arm64。README 提到项目为 4.0 版本，音乐与图书功能需手动开启，且存在未完善之处。",
+   "highlights": [
+    "在单个 Docker 容器内实现索引器搜索、Usenet 与种子下载、修复解压和文件命名入库",
+    "内置电子书阅读器与有声书播放器，支持跨设备同步阅读进度，并可读取 Kindle 电子书",
+    "支持从 Radarr、Sonarr、Prowlarr、SABnzbd 等应用只读迁移现有配置，并可模拟 SABnzbd/qBittorrent/Radarr/Sonarr 接口对接 nzb360、LunaSea 等客户端应用"
+   ],
+   "use_cases": [
+    "在 NAS 或 64 位 Linux 服务器（Synology、Unraid、QNAP、树莓派）上通过 Docker 部署家庭媒体库的自动化搜索与下载流程",
+    "为家庭多个成员创建带权限和点播请求审批的账户，并通过标签在 Plex/Jellyfin/Emby 中生成合集",
+    "统一管理电子书与有声书，使用内置阅读器和播放器在多设备上继续阅读进度"
+   ]
+  },
+  "sha": "1a79b2493999",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8909ec190f6a": {
+  "identity": {
+   "one_liner": "以 SQL 检查项收集 PostgreSQL 索引与查询信息的 Python/CLI 工具",
+   "review": "pg_analyse 提供 Python 模块与命令行两种方式，从 PostgreSQL 收集索引膨胀、重复索引、缺失主键、慢查询等信息，结果以表格或 JSON 输出，可手动或接入 CI 使用。依赖 Python 3.10+ 与 psycopg 3，检查 SQL 来自 pg-index-health-sql 项目；通过环境变量 PG_ANALYSE_DSN 可配置连接。",
+   "highlights": [
+    "提供索引健康检查（膨胀、重复、未使用）及缺失主键、慢查询等信息收集",
+    "支持 Python 模块和 CLI 两种使用方式，输出表格或 JSON 格式",
+    "可扩展新检查项：在 sql/ 目录放置 SQL 文件并添加 Inspection 子类"
+   ],
+   "use_cases": [
+    "在 CI 流程中收集 PostgreSQL 索引与查询信息",
+    "手动检查数据库中缺失主键/索引的表",
+    "通过 JSON 输出将收集结果接入其他处理流程"
+   ]
+  },
+  "sha": "8909ec190f6a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "deff4a5b4472": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 Vikunja 终端任务客户端",
+   "review": "tui-do 是用 Rust 编写的 Vikunja 终端客户端，任务存于本地 SQLite 存储，后台与服务器同步，读取不依赖网络、写入采用先本地入队再同步的机制。面向在终端（如 tmux）中使用 Vikunja 的自托管用户。通过 tui-do login 配置服务器与 API token；写操作会真实修改服务器数据，README 建议使用前备份 Vikunja 数据，撤销删除不会恢复评论和附件。",
+   "highlights": [
+    "所有读取由本地 SQLite 存储响应，服务器不可达时仍可查看和排队任务",
+    "提供单行快速添加语法，tui-do add 支持指定项目、标签、优先级和截止日期，并带 --dry-run 与 --tokens 子命令",
+    "渲染 Markdown、纯文本和 HTML 格式的任务描述，支持标签、优先级、项目、撤销重做及可配置列布局"
+   ],
+   "use_cases": [
+    "在终端工作流中管理自托管 Vikunja 实例上的任务",
+    "离线环境（如无网络的旅途）中记录任务，联网后同步",
+    "通过命令行让脚本或 agent 向同一离线安全的队列提交任务"
+   ]
+  },
+  "sha": "deff4a5b4472",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea96c1de3bc5": {
+  "identity": {
+   "one_liner": "基于磁盘存储的 DBMS，提供 B+Tree 索引、缓冲池缓存与 JDBC 接口。",
+   "review": "RheaDB 是一个磁盘式数据库管理系统，支持建表/删表、删行、更新、简单选择查询及索引的创建与删除，通过内存缓冲池缓存磁盘数据。面向 Java 使用者，提供 JDBC 驱动，连接 URL 格式为 jdbc:rhea:DIR_PATH，加载类名为 RheaDB.JDBCDriver.JCDriver。仓库含性能测试套件，需以 JVM 参数 -Drheadb.perf=true 启用。",
+   "highlights": [
+    "实现磁盘存储与内存缓冲池缓存，并提供 B+Tree 索引（可创建/删除）",
+    "提供 JDBC 驱动，通过 DriverManager.getConnection 使用 jdbc:rhea:DIR_PATH 连接 URL 访问指定存储目录（不存在时自动创建）",
+    "仓库包含性能测试套件 test/performance/RheaDBPerformanceTest.java，默认关闭，通过系统属性 rheadb.perf=true 启用"
+   ],
+   "use_cases": [
+    "在 Java 应用中通过 JDBC 接口连接并读写本地目录中的数据库",
+    "以 SQL 类语句进行建表、更新、删除和简单查询操作",
+    "运行仓库内置的性能测试套件观察其测试流程"
+   ]
+  },
+  "sha": "ea96c1de3bc5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f4731a92012": {
+  "identity": {
+   "one_liner": "Go 编写的 WhatsApp LLM 机器人，带全局人物记忆与可编辑人格。",
+   "review": "wagoya 是一个用 Go 编写的 WhatsApp 机器人，通过 whatsmeow 以伴随设备方式接入 WhatsApp，可私聊或在群组中被 @提及触发。它为每个联系人按 WhatsApp ID 建立记忆档案，事实由模型经受校验的工具读写，支持 SQLite FTS5 加嵌入检索。单静态二进制部署（纯 Go SQLite，无 CGO），支持 Anthropic/OpenRouter 模型。私聊仅限白名单号码，模型每日支出有上限。",
+   "highlights": [
+    "按 WhatsApp LID/号码为每个联系人建立跨群组全局档案，事实带来源与信任等级，检索基于 SQLite FTS5 与嵌入",
+    "提供 MCP 客户端与 http_request 工具（拒绝回环/私网/元数据地址），支持通过 SSH 队列运行 Claude Code 编码任务",
+    "内置人格系统（SQLite 存储并保留版本历史）、提醒任务持久化、速率限制与每日模型支出上限等运行机制"
+   ],
+   "use_cases": [
+    "在群聊或私聊中作为 @提及触发的对话助手",
+    "对聊天对象进行长期人物档案管理与事实检索",
+    "由所有者通过机器人远程派发 Claude Code 编码任务"
+   ]
+  },
+  "sha": "8f4731a92012",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

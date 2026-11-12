@@ -3509,5 +3509,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "25313f7436dc": {
+  "identity": {
+   "one_liner": "自托管语音视频屏幕共享与聊天系统，Go 服务器加 WebRTC SFU 与 PWA 客户端",
+   "review": "noXa 是一套可自托管的实时通信系统，包含 Go 服务器、Windows x64 桌面客户端（Wails）和可安装的移动/网页 PWA，使用 Pion WebRTC SFU 处理媒体、PostgreSQL 持久化状态、可选 Redis pub/sub。私信与私群消息基于 Olm/vodozemac 端到端加密，频道聊天与论坛正文尚未端到端加密；服务器仍可见元数据。Linux/macOS 桌面端有源码但无官方发布。",
+   "highlights": [
+    "提供语音频道、摄像头与屏幕共享、私信/群聊和频道论坛，基于 Pion WebRTC SFU 中转媒体",
+    "支持 Docker 部署，使用 PostgreSQL 持久化、可选 Redis pub/sub，公开控制端口默认 12333",
+    "私信与私群消息用 Olm（vodozemac 编译为 WebAssembly）端到端加密，频道音视频与屏幕共享支持 noxa-media-e2ee-v1 每频道密钥加密"
+   ],
+   "use_cases": [
+    "需要自行部署语音/视频/屏幕共享与聊天服务器的个人或小团队",
+    "桌面与移动/PWA 客户端跨设备使用的场景",
+    "对私信端到端加密有需求的私有通信部署"
+   ]
+  },
+  "sha": "25313f7436dc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "494be11d0577": {
+  "identity": {
+   "one_liner": "本地单用户求职引擎，用向量检索与LLM对简历评分匹配技术岗位",
+   "review": "HireSignal 是一款运行在本机的开源求职工具（Next.js 15 + TypeScript，MIT 许可），面向软件、数据、DevOps 等技术岗位求职者。它从 14 个 ATS 平台公开 API 及约 37,000 个公司招聘页采集职位，用 sqlite-vec 向量检索与 BM25 混合评分，LLM 生成匹配度与企业简报。数据存于本地单个 SQLite 文件，无账号与云存储；嵌入默认用本地 Ollama（CPU，约 275 MB 模型），首次全量同步可能需 1-3 小时以上。",
+   "highlights": [
+    "混合匹配评分（0-100）：向量检索（sqlite-vec）+ BM25 + 简历技能重叠（25%）+ AI 评定（25%），职业硬性条件作为约束可封顶至 15 分，每行展示扣分明细",
+    "通过公开 API 接入 14 个 ATS 平台（Greenhouse、Lever、Ashby、Workday 等），可按名称检索约 37,000 个公司招聘板并整板拉取；过期/下架职位自动退役",
+    "本地与隐私：数据存于本机单个 SQLite 文件，支持多份简历切换；LLM 默认 Ollama，也可配置 Gemini、OpenAI、Groq、Anthropic，可完全不用 Ollama 运行"
+   ],
+   "use_cases": [
+    "技术岗位求职者在本机持续采集、验证并按简历匹配度排序职位列表",
+    "投递前查阅公司的薪酬数据（Levels.fyi）、裁员历史与 AI 简报做背景调研",
+    "使用辅助投递功能：浏览器自动填写申请表并附简历，由用户手动点击提交（需登录的招聘板改为展示跳转链接）"
+   ]
+  },
+  "sha": "494be11d0577",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

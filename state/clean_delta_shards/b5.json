@@ -19819,5 +19819,739 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "9fcc02bc9486+2": {
+  "fn": "hajdu-patrik/ARSM",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     ".NET",
+     "React",
+     "TypeScript",
+     "PostgreSQL",
+     "Aspire"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    11,
+    7,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Hungarian version: README(HU).md.md)"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    24,
+    12,
+    24
+   ],
+   [
+    "replace",
+    24,
+    30,
+    24,
+    30,
+    [
+     "|Layer|Technologies|",
+     "|-----|------------|",
+     "|Backend|.NET 10, ASP.NET Core, EF Core, ASP.NET Core Identity, JWT cookies, QuestPDF|",
+     "|Frontend|React 19, TypeScript, Vite, Tailwind CSS, TanStack Query|",
+     "|Data|PostgreSQL (18 locally, 17 in production), S3-compatible object store (RustFS locally, Azure Blob in production)|",
+     "|Orchestration|.NET Aspire (`app/AutoService.AppHost`)|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    33,
+    30,
+    33
+   ],
+   [
+    "replace",
+    33,
+    41,
+    33,
+    41,
+    [
+     "|Path|Content|",
+     "|----|-------|",
+     "|`app/AutoService.ApiService`|API, domain model, EF Core, authentication|",
+     "|`app/AutoService.WebUI`|React frontend and its Playwright E2E tests|",
+     "|`app/AutoService.AppHost`, `app/AutoService.ServiceDefaults`|Aspire orchestration and shared service defaults|",
+     "|`tests`|HTTP (`tests/API`), SQL (`tests/Database`), xUnit (`tests/AutoService.UnitTests`) and script tests|",
+     "|`scripts`|`validate.py` gate, `pre-push.py`, local test runner, `deploy-azure.py`|",
+     "|`deploy`|Azure production kit, local test instance kit, token gate; guides in `deploy/docs`|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    47,
+    41,
+    47
+   ],
+   [
+    "replace",
+    47,
+    49,
+    47,
+    49,
+    [
+     " `JwtSettings.Secret`, `ConnectionStrings.AutoServiceDb`, `CompanyProfile.*` (quote letterhead seed) and optionally",
+     " `Bootstrap.Admin.*` (first admin on an empty database; the API seeds no other data)."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    49,
+    50
+   ],
+   [
+    "replace",
+    50,
+    51,
+    50,
+    51,
+    [
+     " `dotnet user-secrets set \"Parameters:minio-user\" \"<user>\"` and `\"Parameters:minio-password\" \"<password>\"` in `app/AutoService.AppHost`."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    63,
+    51,
+    63
+   ],
+   [
+    "replace",
+    63,
+    69,
+    63,
+    69,
+    [
+     "|What|Command|",
+     "|----|-------|",
+     "|Fast gate on the changed files (type check, lint, build, size limits, no-shadow rule)|`python scripts/validate.py`|",
+     "|Pre-push gate, the same stages as CI (install once: `git config core.hooksPath .githooks`)|`python scripts/pre-push.py`|",
+     "|Local suites against a running AppHost|`python scripts/run-local-test-suite.py [playwright\\|http\\|sql]`|",
+     "|Unit tests|`dotnet test` in `app/`|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    75,
+    69,
+    75
+   ],
+   [
+    "replace",
+    75,
+    81,
+    75,
+    81,
+    [
+     "||`https://teszt.arsm.hu` (test)|`https://arsm.hu` (production)|",
+     "|---|---|---|",
+     "|Runs on|The owner's Windows machine, Docker containers behind a Cloudflare tunnel|Azure Container Apps, PostgreSQL Flexible Server, Blob Storage|",
+     "|Updated|Automatically from every new `origin/main` commit|Manually, from a commit you choose|",
+     "|Data|Its own test database (daily `pg_dump` backups)|Separate production database|",
+     "|Access|Token gate (`GATE_TOKEN`)|Token gate sidecar (`ARSM_PROD_GATE_TOKEN`, a different token)|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    85,
+    81,
+    85
+   ],
+   [
+    "replace",
+    85,
+    86,
+    85,
+    86,
+    [
+     " bring the commit onto `main`. The remote holds only `main`."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    86,
+    87
+   ],
+   [
+    "replace",
+    87,
+    91,
+    87,
+    91,
+    [
+     " and SQL suites on throwaway containers). Once pushed, the scheduled task of the test kit (`deploy/local-test/deploy.py`,",
+     " every 5 minutes) sees the new commit, backs up the test database, builds the API and web images from that commit",
+     " (`git archive`), recreates the two app containers and waits until `/` and `/alive` answer. The API applies new",
+     " migrations at startup, so `teszt.arsm.hu` runs the new version within a few minutes."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    91,
+    92
+   ],
+   [
+    "replace",
+    92,
+    97,
+    92,
+    97,
+    [
+     " (`az login` first): `python scripts/deploy-azure.py release --commit <sha>`. It builds and pushes the three images",
+     " tagged with the commit, runs the `arsm-migrate` job (migrations and the `arsm_app` role) and only after it succeeds",
+     " rolls `arsm-api` and `arsm-web` to new revisions. A failed migration stops the release with the old version still",
+     " serving. Check with `curl -sS -o /dev/null -w \"%{http_code}\\n\" https://arsm.hu/alive` (401 from the gate without the",
+     " token), then sign in and try a quote PDF."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    97,
+    100
+   ],
+   [
+    "replace",
+    100,
+    102,
+    100,
+    102,
+    [
+     "Details: deploy/docs/deployment-local-test.md (turning the test instance on",
+     "and off, backups) and deploy/docs/deployment-azure.md (the `.env` keys, first-time"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    107,
+    102,
+    107
+   ],
+   [
+    "replace",
+    107,
+    108,
+    107,
+    108,
+    [
+     " deployment and MCP values in the root `.env`; each has a tracked template (`*.template.json`, `*.example`)."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    108,
+    109
+   ],
+   [
+    "replace",
+    109,
+    110,
+    109,
+    110,
+    [
+     " (rate limits, login bans and session cutoffs are in-process)."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    120,
+    110,
+    120
+   ],
+   [
+    "replace",
+    120,
+    122,
+    120,
+    121,
+    [
+     "This repository is not MIT-licensed. See LICENSE.md for the Custom Copyright Notice and Academic Use Policy."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "25313f7436dc+2": {
+  "fn": "arumes31/noxa",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "noXa logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    10,
+    1,
+    8
+   ],
+   [
+    "replace",
+    10,
+    16,
+    8,
+    14,
+    [
+     "CI",
+     "golangci-lint",
+     "Security Analysis",
+     "Go Version",
+     "Container Image",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     "Public test server • Mobile / PWA • Architecture • Features • Quick Start • Server Setup • Permissions • ServerQuery API • Configuration • Development • Operations"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    20,
+    17,
+    18,
+    [
+     "Current noXa desktop client in OLED Midnight with fictional demo conversations"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    18,
+    19
+   ],
+   [
+    "replace",
+    21,
+    27,
+    19,
+    20,
+    [
+     "*Actual client UI with fictional demo data; capture details.*"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    38,
+    20,
+    31
+   ],
+   [
+    "replace",
+    38,
+    42,
+    31,
+    33,
+    [
+     "not a standalone browser client. `website/` is a separate",
+     "static product/download website hosted at noxa.wowcraft.pw."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    45,
+    33,
+    36
+   ],
+   [
+    "replace",
+    45,
+    51,
+    36,
+    42,
+    [
+     "|Open|Address|",
+     "|:---|:---|",
+     "|Website and downloads|noxa.wowcraft.pw|",
+     "|Mobile / browser client|Launch the PWA|",
+     "|Desktop server address (Server IP / hostname)|`wowcraft.pw` (default control port `12333`)|",
+     "|Windows x64 client|Download for Windows|"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    62,
+    42,
+    53
+   ],
+   [
+    "replace",
+    62,
+    64,
+    53,
+    54,
+    [
+     " More current interface screenshots "
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    54,
+    55
+   ],
+   [
+    "replace",
+    65,
+    66,
+    55,
+    56,
+    [
+     "Role management with fictional demo roles"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    56,
+    57
+   ],
+   [
+    "replace",
+    67,
+    70,
+    57,
+    58,
+    [
+     "Mobile PWA chat with fictional demo messages"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    72,
+    58,
+    60
+   ],
+   [
+    "replace",
+    72,
+    73,
+    60,
+    61,
+    [
+     "> **Encryption boundaries** (details in Encryption): direct"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    83,
+    61,
+    71
+   ],
+   [
+    "replace",
+    83,
+    86,
+    71,
+    72,
+    [
+     "> Upgrading to end-to-end encryption."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    94,
+    72,
+    80
+   ],
+   [
+    "replace",
+    94,
+    101,
+    80,
+    87,
+    [
+     " vodozemac, compiled to",
+     " WebAssembly and used by both clients (`noxa-olm-v1`). There is one Olm",
+     " session per pair of devices; every device of the sender and of the",
+     " recipients receives its own copy, and the conversation, sender, recipient",
+     " device and message ID are authenticated inside every message. Keys ratchet",
+     " forward with every message, so a session key stolen later cannot open",
+     " earlier messages (copied history is the exception, see \"New devices\")."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    87,
+    88
+   ],
+   [
+    "replace",
+    102,
+    108,
+    88,
+    94,
+    [
+     " HMAC-SHA-256 for messages. The Olm MAC is **truncated to 64 bits**, as the",
+     " Olm specification defines. Olm accounts are published as bundles signed by",
+     " each device's Ed25519 noXa key; contacts verify devices against the",
+     " identity they pinned (the account's first desktop and the devices it",
+     " approved). Changed identities need explicit confirmation; account resets",
+     " are accepted only through a signed reset chain."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    94,
+    95
+   ],
+   [
+    "replace",
+    109,
+    110,
+    95,
+    96,
+    [
+     " with Signal or Matrix; it is not post-quantum."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    96,
+    97
+   ],
+   [
+    "replace",
+    111,
+    114,
+    97,
+    100,
+    [
+     " admission (complete device fanout, limits, membership) without being able",
+     " to read messages. It still sees metadata: who talks to whom, when, message",
+     " sizes and device lists."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    100,
+    101
+   ],
+   [
+    "replace",
+    115,
+    121,
+    101,
+    107,
+    [
+     " used static X25519 + XSalsa20-Poly1305 (NaCl box) keys without forward",
+     " secrecy. Updated apps never send that way. Older apps still can, and",
+     " updated apps still show such messages, labelled as legacy encryption",
+     " (readable, not editable). An updated app never falls back to the weaker",
+     " encryption: if a contact has no end-to-end key yet, it does not send and",
+     " says that the contact needs to update."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    107,
+    108
+   ],
+   [
+    "replace",
+    122,
+    128,
+    108,
+    114,
+    [
+     " readable records only (signed per transfer by the source device, never keys",
+     " or sessions); copied records are marked as verified on the other device,",
+     " not on the new one. The copy is sealed with the two devices' long-term",
+     " X25519 keys (NaCl box) and kept by the server for up to 24 hours, so it has",
+     " no forward secrecy: someone who stores it and later obtains one of those",
+     " long-term keys can read the copied history."
+    ]
+   ],
+   [
+    "equal",
+    128,
+    129,
+    114,
+    115
+   ],
+   [
+    "replace",
+    129,
+    130,
+    115,
+    116,
+    [
+     " media itself is end-to-end encrypted with per-call keys (see below)."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    116,
+    117
+   ],
+   [
+    "replace",
+    131,
+    137,
+    117,
+    123,
+    [
+     " logins, browser guests) uses the same protocol for direct messages: its key",
+     " is its own account root and registers its device itself. A browser guest has",
+     " no desktop to vouch for the server, so it pins the server's certificate on",
+     " first use; if the certificate changes, secure messaging pauses until the",
+     " guest explicitly reviews and accepts the new fingerprint. Sessions without an",
+     " identity key cannot send direct or group messages."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    142,
+    123,
+    128
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "4f848401c9cb+2": {
+  "fn": "LoRy24/Keybase",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "languages vuln license discussions commits"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    26,
+    2,
+    26
+   ],
+   [
+    "replace",
+    26,
+    30,
+    26,
+    27,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    32,
+    27,
+    29
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

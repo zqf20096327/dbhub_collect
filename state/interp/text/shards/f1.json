@@ -2874,5 +2874,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f441e7db70af": {
+  "identity": {
+   "one_liner": "本地优先的任务管理器，以可视化周时间线为核心，支持离线与 Docker 自托管",
+   "review": "Will Be Done 是一款围绕可视化周时间线的本地优先任务规划工具，支持离线读写、多设备同步和 Docker 一条命令自托管，默认用 SQLite 存储且无需外部数据库服务。提供 HTTP API、Vim 键盘操作、思维导图与循环任务，支持从 Todoist 和 TickTick 导入。面向注重数据自有与周计划的个人用户。",
+   "highlights": [
+    "浏览器端本地数据库，支持离线读写，联网后在多标签页与设备间实时同步",
+    "支持日/周时间线/项目/Stash 视图、思维导图、每日/每周/每月/每年循环任务模板",
+    "提供 Bearer Token 认证的 HTTP API 与 Scalar 文档，可按 API token 导入 Todoist、按 CSV 导入 TickTick"
+   ],
+   "use_cases": [
+    "用 Docker 自托管、以 SQLite 存放任务数据的个人任务归档",
+    "需要离线可用、跨设备同步的周计划与日常任务管理",
+    "偏好 Vim 风格键盘操作或以思维导图整理任务分支的工作流"
+   ]
+  },
+  "sha": "f441e7db70af",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "429c192cc36f": {
+  "identity": {
+   "one_liner": "Tempo 链数据索引器，混合 PostgreSQL 与 ClickHouse 双存储架构",
+   "review": "tidx 从 Tempo 节点摄取区块、交易和日志，写入 PostgreSQL（热窗口，OLTP）与 ClickHouse（全量归档，OLAP），支持保留策略下仅由 ClickHouse 回填热区间。用户可通过 SQL、HTTP API 和 CLI 查询，并按 ABI 签名解码事件。适用于需要结构化 Tempo 链上数据但不想自建索引管道的团队。需注意 FDW 路由依赖未发布的 pg_clickhouse 0.4 构建，且查询校验器拒绝 replace()。",
+   "highlights": [
+    "分层存储：PostgreSQL 热窗口与 ClickHouse 全量归档，通过 engine/source 参数路由查询",
+    "按 ABI 签名解码事件与函数调用数据，无需预先注册",
+    "提供 HTTP API、CLI 与 SQL 三种查询方式；serve 进程无状态，可部署多副本"
+   ],
+   "use_cases": [
+    "Tempo 区块浏览器与数据看板",
+    "钱包余额与代币分析查询",
+    "DEX 活动追踪与分析"
+   ]
+  },
+  "sha": "429c192cc36f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c129a204e5e4": {
+  "identity": {
+   "one_liner": "嵌入式 Rust 认知记忆库，为 AI agent 提供衰减、矛盾检测与图检索",
+   "review": "YantrikDB 是一个可嵌入的记忆引擎，以 Rust 库发布并附 Python 绑定，支持 record/recall/relate 等认知接口，内置 HNSW 向量索引、知识图、时间索引与衰减堆栈五种结构，数据存于单文件。可用 pip 或 crates.io 安装，也能通过 MCP 接入 Claude、Cursor 等客户端。注意库自带 SQLite，同一进程内不可再用其他 SQLite 连接打开同一文件，否则可能损坏存储。",
+   "highlights": [
+    "包含 HNSW 向量、知识图、时间、衰减堆栈等五种索引结构",
+    "支持时间衰减、矛盾检测、自主整合与 ANN 召回",
+    "提供 Python 包、Rust crate 与 MCP 服务器三种接入方式"
+   ],
+   "use_cases": [
+    "为 AI agent 提供跨会话的持久记忆与上下文自动召回",
+    "对密集、高近重复的记忆数据进行矛盾检测与整合",
+    "通过 MCP 协议接入 Claude、Cursor、Windsurf、Copilot 等客户端"
+   ]
+  },
+  "sha": "c129a204e5e4",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c65aa1ed9ea1": {
+  "identity": {
+   "one_liner": "大数据框架与资源的精选清单，标注星标数",
+   "review": "该项目维护一份大数据相关框架与资源的分类清单，目录含 47 行分类，可见部分涵盖 RDBMS、Frameworks、Distributed Programming 等类别，每个条目附简短说明，部分条目标注仓库星标与 fork 数。清单灵感来自 awesome-php、awesome-python 等同类项目，接受社区贡献。适合需要按类别检索大数据工具名的使用者。",
+   "highlights": [
+    "按 RDBMS、Frameworks、Distributed Programming 等类别组织条目",
+    "部分条目附仓库星标数与 fork 数标注",
+    "接受社区贡献（README 声明 contributions welcome）"
+   ],
+   "use_cases": [
+    "按类别查找大数据处理、流处理、数据仓库相关的项目名称",
+    "收集分布式计算框架（Hadoop、Spark、Flink 等）的条目线索",
+    "为大数据技术调研提供入门索引"
+   ]
+  },
+  "sha": "c65aa1ed9ea1",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

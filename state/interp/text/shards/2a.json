@@ -2706,5 +2706,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "234e46a7f5d5": {
+  "identity": {
+   "one_liner": "面向 Datastar/Rocket 的社区 Web 组件画廊，Go+SQLite 单二进制",
+   "review": "Starbase 是一个面向 Rocket 框架与 Datastar 的社区组件目录网站，收录 51 个 sb-* 组件，提供在线演示、由 Rocket manifest 生成的 API 表和自动生成的属性 Playground。组件可通过 issue 表单提交，由机器人验证并开 PR；前端经 autoloader 按需加载。后端用 Go、templ、SQLite 实现 CQRS 架构，SSE 流式渲染，编译为内嵌资产的单二进制。组件采用 MIT（部分沿用 Beer-Ware）。",
+   "highlights": [
+    "提供 51 个组件及每个组件的在线演示、API 表格与可编辑代码的 Playground",
+    "通过一个 <script> autoloader 在任意站点按需加载 sb-* 组件，并支持带 SHA-384 integrity 的版本锁定",
+    "采用 CQRS 架构：命令经队列单写入者事务处理，视图通过压缩 SSE 流更新，目录存储于 SQLite（FTS5 搜索）"
+   ],
+   "use_cases": [
+    "为使用 Datastar/Rocket 的网站查找和引入现成组件",
+    "托管社区组件目录并提供版本固定与自托管分发",
+    "参考 Go+SQLite+templ 的 CQRS/SSE 应用架构实现"
+   ]
+  },
+  "sha": "234e46a7f5d5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b613b670d775": {
+  "identity": {
+   "one_liner": "Go+SQLite 单二进制 CMS，内置 HTMX 管理后台与 REST API",
+   "review": "ocms-go 是用 Go 编写、默认使用 SQLite 的内容管理系统，编译为单一二进制文件，无需 PHP 或 Node 构建链即可部署。它包含服务端渲染的 HTMX/Alpine.js 管理后台、REST API、主题与模块系统，以及多语言、表单构建器、媒体库、SEO 工具等功能。采用 GPL-3.0 许可证；生产环境强制要求 TOTP 双因素认证。",
+   "highlights": [
+    "单二进制部署，内嵌 SQLite 数据库并自带迁移，无需外部数据库配置",
+    "提供 REST API（Bearer Token 认证、按 Key 的权限与速率限制）及 MCP 端点供 AI 代理读取站点内容",
+    "包含主题系统、模块生命周期钩子与迁移、表单构建器、带 HMAC-SHA256 签名和重试机制的 Webhooks"
+   ],
+   "use_cases": [
+    "希望以单文件方式部署在服务器上运行的多语言内容站点",
+    "需要通过 REST API 或 MCP 协议对外提供内容的无头（headless）使用场景",
+    "需要表单收集、媒体库管理及 SEO 元数据控制的中小型网站"
+   ]
+  },
+  "sha": "b613b670d775",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52ffbd7e2bd4": {
+  "identity": {
+   "one_liner": "基于Spring Boot与PostgreSQL的图书馆管理REST API",
+   "review": "Libro是为Aklan State University计算机学院图书馆开发的Spring Boot REST API，管理实体图书副本、用户账户和借阅历史。每个目录记录对应一个实体副本以保持借阅记录准确。技术栈为Java 25、Spring Boot、PostgreSQL 18、Flyway、Docker Compose，通过GitHub Actions做CI/CD，需自配JWT密钥与数据库凭据运行。",
+   "highlights": [
+    "实现图书目录检索（按标题、作者、类型、成本筛选排序分页）与借阅流程，限制14天借期、最多3笔活跃借阅，逾期阻断新借出",
+    "提供四种角色（STUDENT/FACULTY/ADMINISTRATOR/LIBRARIAN）的JWT无状态认证、BCrypt密码及登录注册的按IP速率限制",
+    "包含Flyway管理的数据库模式、Testcontainers集成测试、/livez与/readyz探针及Prometheus指标端口"
+   ],
+   "use_cases": [
+    "高校图书馆对实体书副本、借阅归还和师生账户的数字化管理",
+    "需要通过REST接口对接图书馆目录、借阅记录的校园系统",
+    "学习Spring Boot分层架构、JWT安全与Docker化PostgreSQL部署的参考实现"
+   ]
+  },
+  "sha": "52ffbd7e2bd4",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f7d96d38a63": {
+  "identity": {
+   "one_liner": "为 Tidbyt 设备提供的 Pixlet 自定义组件集，由 AWS Lambda 定时渲染并推送更新",
+   "review": "该项目包含一组 Pixlet 编写的 .star 组件（太阳轨迹、头顶航班、Oura 健康分数、股票行情、板块、股价提醒等），由 AWS Lambda 容器镜像渲染后通过 Tidbyt API 推送到设备。EventBridge 按分钟/十分钟调度，GitHub Actions 在 push 到 main 时经 OIDC 构建并部署。使用者需自备 Tidbyt 设备、AWS 账户、Docker 和 AWS CLI，通过 deploy.sh 完成一次安装。MIT 许可。",
+   "highlights": [
+    "提供太阳轨迹、头顶航班（ADS-B 数据）、Oura 健康分数、股票行情与板块图等多种 Pixlet 组件",
+    "EventBridge Scheduler 白天每分钟、夜间每 10 分钟触发 Lambda 渲染并推送，推送只更新图片不打断当前屏幕",
+    "GitHub Actions 在每次 push 到 main 时构建 arm64 镜像、对每个组件做渲染冒烟测试并部署到 Lambda，仓库内不保存 AWS 密钥"
+   ],
+   "use_cases": [
+    "想让 Tidbyt 显示自定义内容（太阳时刻、附近航班、健康数据、行情）的设备持有者",
+    "希望组件数据定时自动刷新、且通过 git push 即可部署更新的个人 AWS 用户",
+    "想学习编写 Pixlet 组件的开发者，可参考内置的 hello_world 最小示例"
+   ]
+  },
+  "sha": "5f7d96d38a63",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

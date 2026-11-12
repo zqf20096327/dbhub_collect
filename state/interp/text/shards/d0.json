@@ -3031,5 +3031,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5e306a6009df": {
+  "identity": {
+   "one_liner": "自托管的数据库备份工具，支持 PITR 与恢复验证。",
+   "review": "Databasus 是一个 Apache 2.0 许可的自托管备份工具，通过 Docker 部署，Web 界面运行在 4005 端口。它为 PostgreSQL（物理+逻辑备份）、MySQL、MariaDB、MongoDB（仅逻辑备份）提供定时备份，支持 WAL 流式捕获以实现 PITR，并可启动真实容器执行恢复验证。适合需要管理多数据库备份策略的运维与开发团队。",
+   "highlights": [
+    "支持物理备份（全量+增量+WAL 流式实现 PITR）与逻辑备份两种类型",
+    "提供恢复验证功能：启动数据库容器执行真实恢复并输出逐表行数报告",
+    "支持 S3、Azure Blob Storage、FTP 等多种存储目标，AES-256-GCM 加密备份文件"
+   ],
+   "use_cases": [
+    "需要对 PostgreSQL 集群做基于 WAL 流的时点恢复（PITR）以降低数据丢失的场景",
+    "团队通过工作空间、角色权限与审计日志集中管理多项目数据库备份",
+    "需要在 S3 等共享存储上保存加密备份，并定期自动验证备份可恢复性的环境"
+   ]
+  },
+  "sha": "5e306a6009df",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0c9cba3297c": {
+  "identity": {
+   "one_liner": "kubectl 插件，用于管理 mariadb-operator 异步/半同步复制集群",
+   "review": "kubectl-mdba 是一个以 Bash 编写的 kubectl 插件，用于管理 mariadb-operator 的异步/半同步复制集群，覆盖副本重建等操作流程。插件面向使用 mariadb-operator v26.6.0 的 Kubernetes 集群运维人员，依赖 kubectl 与 jq，可通过 krew 安装。它提供十余个环境变量用于自定义命名空间、备份线程数、备份流端口等行为，且非 MariaDB 官方项目。",
+   "highlights": [
+    "支持通过 krew 或手动放置脚本到 $PATH 安装，并提供补全脚本",
+    "提供 KMBDA_NAMESPACE、KMBDA_BACKUP_THREADS（1-16 线程并行传输数据文件）、KMBDA_STREAM_PORT 等环境变量自定义行为",
+    "支持副本重建流程（可指定初始步骤号 1-14）及跳过确认、忽略主库索引不匹配等选项"
+   ],
+   "use_cases": [
+    "使用 mariadb-operator v26.6.0 部署的异步/半同步复制集群的日常管理",
+    "需要基于 mariabackup 流程重建副本节点的场景",
+    "Kubernetes 环境下需要插件化、可自定义参数的 MariaDB 复制运维操作"
+   ]
+  },
+  "sha": "b0c9cba3297c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "abf204b9bef3": {
+  "identity": {
+   "one_liner": "单 PHP 文件加 SQLite 的无 Cookie 自托管网站分析工具",
+   "review": "Puls 是一个自托管的网站访问分析工具，由一个 PHP 文件和 SQLite 数据库组成，无需 Node、Docker 或独立数据库服务器，可在普通 PHP 8.3 主机上运行。它不使用 Cookie、不存储 IP 地址，访客标识采用当日删除盐值的哈希。README 说明其定位于中小规模站点；按页面或渠道过滤的视图需读取该期间全部页面浏览记录，耗时以秒计。采用 MIT 许可证。",
+   "highlights": [
+    "单个 PHP 文件加 SQLite 运行，无构建步骤、无外部依赖，跟踪脚本 gzip 后小于 2.5 KB 并通过 sendBeacon 发送",
+    "不使用 Cookie、不存储 IP 地址，访客标识为加盐哈希且盐值在当天后删除；支持将 URL 中的 id/token 替换为 :id/:token",
+    "提供自定义事件、两步漏斗、CSV/JSON API、目标追踪、机器人流量分类统计以及只读分享链接"
+   ],
+   "use_cases": [
+    "在普通 PHP 共享主机或 Docker 上自托管网站流量统计，无需 Cookie 同意横幅",
+    "追踪站点事件（如注册、点击）并按事件数据键生成漏斗和仪表盘卡片",
+    "通过只读 token 或 ?api&format=md 报告向 AI 助手提供站点访问数据"
+   ]
+  },
+  "sha": "abf204b9bef3",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

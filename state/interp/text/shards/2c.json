@@ -3194,5 +3194,29 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5d300e235ba7": {
+  "identity": {
+   "one_liner": "Rust 编写的结构化 JSON 日志存储，用 trie 保存键集、值按类型列式压缩",
+   "review": "kibbr 是用 Rust 编写的结构化 JSON 日志存储，面向产生大量键集固定日志行、需要在 Elasticsearch 等热存储与冷归档之间低成本保留可查询数据的应用运维场景。它将每行的键集作为 shape 存入内存 trie，值追加为磁盘上的类型化列，并对每种列选择编码方式。README 标注项目仍在开发中，schema 合并与 S3 冷层未实现。",
+   "highlights": [
+    "将每行的键集存入内存 trie 一次，值按 trie 叶子写入类型化列，列支持 same-value-once、delta、varint、zstd 等编码",
+    "支持 POST /ingest 逐行写入与 kibbr load 按天批量装载、kibbr compact 压缩、TrieQL 查询语言和内置 Web 控制台"
+   ],
+   "use_cases": [
+    "键集少且稳定的应用结构化日志在热搜索集群之后、冷归档之前的可查询保留",
+    "通过 POST /ingest 实时接收，或用 kibbr load 批量装载已完成的天数据",
+    "用 kibbr bench-storage 测量自有 NDJSON 日志的实际压缩体积"
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "sha": "5d300e235ba7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

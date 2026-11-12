@@ -2595,5 +2595,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "afc4067dd661": {
+  "identity": {
+   "one_liner": "AI-first Scala 3 后端模板，内置 http4s+Skunk+cats-effect 技术栈与 MCP 工具链。",
+   "review": "这是一个以酒类拍卖为示例领域的 Scala 3 后端项目模板，技术栈为 http4s、Skunk、cats-effect 和 PostgreSQL。仓库提交 .mcp.json，为 AI 编码助手提供 Metals 编译测试循环和只读 MCP 服务器引用，docs/ 目录作为知识库。通过 init-project.scala 脚本可重命名并移除示例；生成的项目可自由选择许可证。依赖 JDK 21、sbt、scala-cli 与 Docker。",
+   "highlights": [
+    "内置 .mcp.json，为助手提供 Metals 编译测试循环与只读 MCP 服务器；docs/ 作为助手知识库",
+    "默认仅 Postgres 一个容器即可运行，full profile 提供 Mailpit、OpenObserve、Silo（S3）三服务，通过 .env 切换 SMTP/OTLP/S3 集成",
+    "提供 ./scripts/init-project.scala 重命名脚本（可换许可证）、doctor 诊断脚本、app 启动脚本及 Flyway 式 MigrateMain 迁移工具"
+   ],
+   "use_cases": [
+    "以 AI 助手驱动方式开发 Scala 3 后端新项目",
+    "基于模板快速搭建带数据库迁移、可观测性和对象存储的后端服务",
+    "配合参考前端/移动端文档，通过生成契约保持类型一致"
+   ]
+  },
+  "sha": "afc4067dd661",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e8cbb7d90cb": {
+  "identity": {
+   "one_liner": "为 TUI 编码助手提供跨会话、跨工具持久记忆与知识库的 MCP 插件",
+   "review": "total-recall 是一个面向 Claude Code、Copilot CLI、Cursor 等终端编码助手的记忆与知识库插件，通过 MCP 服务器运行，默认以本地 SQLite 存储记忆与向量嵌入。其核心是 Hot/Warm/Cold 三层记忆模型：Warm 为新记忆默认落点，条目按访问次数与衰减分晋升到每条 prompt 自动注入的 Hot 层（4000 token 预算），Sticky 标记的条目不参与衰减与截断。检索采用 BM25 全文与余弦向量相似度混合排序，嵌入模型 bge-small-en-v1.5 经 ONNX 本地运行；团队可改配 Postgres/pgvector 后端。",
+   "highlights": [
+    "提供 Hot/Warm/Cold 三层记忆模型，Warm 条目在访问次数与衰减分达标后晋升 Hot，Hot 层执行 4000 token 注入预算",
+    "检索结合 BM25 全文搜索与 384 维向量余弦相似度，嵌入模型经 ONNX 本地运行，无运行时网络请求",
+    "内置 total-recall ui 本地浏览器界面，支持记忆管理、用量统计与检索质量评估，并可配置共享 Postgres/pgvector 后端"
+   ],
+   "use_cases": [
+    "在多个 TUI 编码助手间共享更正、偏好与架构决策等记忆，避免跨会话重复提供上下文",
+    "将文档、README、API 参考等目录导入知识库，供语义检索在相关查询时引用",
+    "通过云同步目录共享 SQLite 数据库路径，或配置 Postgres 后端，实现跨设备或团队内的记忆复用"
+   ]
+  },
+  "sha": "2e8cbb7d90cb",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

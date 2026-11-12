@@ -2923,5 +2923,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "239fdc5c9eb9": {
+  "identity": {
+   "one_liner": "Go+SQLite 的加密货币永续合约量化研究工具，含回测与模拟交易。",
+   "review": "该项目用 Go 标准库和 SQLite 构建面向 OneBullEx 永续合约的量化研究链路，覆盖行情同步、K 线缺口检查、Scalp TPSL/SMA 策略回测、paper trading、风控检查和本地看板。系统默认 dry-run，只有同时设置 ONEBULLEX_LIVE_TRADING=true 与 SUBMIT_EXCHANGE=true 才进入真实下单。适合在本地做策略验证与风险审计的研究者。",
+   "highlights": [
+    "支持同步永续合约 K 线、资金费率、标记价格、订单簿等行情到本地 SQLite，并提供 K 线缺口检查与回测快照冻结",
+    "提供单币对多参数网格扫描回测、基于真实行情驱动的 paper trading（含 ATR 止盈止损、趋势过滤、日亏损/连续亏损熔断）",
+    "内置风控检查、dry-run 下单审计、每日报告、数据库备份和基于 .runtime/halt 文件的人工急停开关；实盘提交默认关闭"
+   ],
+   "use_cases": [
+    "在本地同步永续合约行情并对短线策略进行回测与参数扫描",
+    "用真实行情驱动 paper trading 验证策略与风控规则",
+    "对计划订单做 dry-run 风控审计、生成每日报告并本地备份数据"
+   ]
+  },
+  "sha": "239fdc5c9eb9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0a40e68c8fee": {
+  "identity": {
+   "one_liner": "面向 JVM 的 schema-first ORM，用单一模式文件生成类型安全客户端与迁移",
+   "review": "Volan 让开发者在单个 schema.volan 文件中描述数据模型，构建期生成 Kotlin/Java 类型安全客户端与迁移代码，无需运行时反射或数据库连接即可编译。数据模型不散落于注解中，迁移由模式文件与数据库差异对比生成。1.0.0 支持 PostgreSQL、SQLite、H2、MySQL、MariaDB，通过 Gradle/Maven 插件或 CLI 安装使用，要求 Java 17+。README 中附带的基准测试显示其读取延迟高于对比库，写入区间宽且重叠。",
+   "highlights": [
+    "构建期代码生成类型安全的 Kotlin DSL 与 Java 回调 API，行映射为生成的直线代码，不在热路径使用运行时反射",
+    "通过 db push/db pull 提供声明式迁移，PostgreSQL 与 SQLite 的 push 在事务中运行并在提交前校验结果 schema",
+    "可选 volan-coroutines 模块提供 suspendQuery 与协程取消时 JDBC 语句取消，volan-micrometer 记录查询时长与计数指标"
+   ],
+   "use_cases": [
+    "希望以单一模式文件驱动 JVM 项目数据模型并在编译期捕获查询错误的 Kotlin/Java 团队",
+    "需要声明式迁移流程与显式 include 查询行为的应用开发",
+    "使用 Spring Boot 或 Ktor 且同时面向 Kotlin 与 Java 消费方的项目"
+   ]
+  },
+  "sha": "0a40e68c8fee",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f6b32ee37b76": {
+  "identity": {
+   "one_liner": "自托管 API 请求日志与调试平台，基于 Rust 与 ClickHouse 存储",
+   "review": "Trailscope 是一个自托管的 API 请求日志记录与调试系统，由一个 Rust 二进制配合 ClickHouse 和 Postgres 运行。它记录服务收到的每个请求，支持 SQL WHERE 过滤查询、请求详情检查、单用户跨服务的旅程时间线、错误分组和告警，并提供多语言框架 SDK 及 OpenTelemetry 接收端。当前为 0.x 早期版本，告警、SDK 和单点登录部分自动化测试较少，1.0 前可能出现破坏性变更。服务端采用 AGPL-3.0 许可证，SDK 为 Apache-2.0。",
+   "highlights": [
+    "提供实时请求尾随（live tail）、路由热力图和 SQL WHERE/快捷搜索语法查询，支持按任意列分组并计算 p50/p95/p99",
+    "提供 Journey 功能，将单个用户、订单或会话跨服务与后台任务的请求、日志行放在同一时间线",
+    "支持 Express、Fastify、NestJS、Django、FastAPI、Laravel、Spring Boot 等 SDK，并提供 OTLP/HTTP 接收端；SDK 在进程内先做密码与令牌脱敏"
+   ],
+   "use_cases": [
+    "需要自托管、数据不出本机的 API 请求日志记录与排查环境",
+    "跟踪单个客户或订单在多个服务与后台任务中的完整调用链路",
+    "按路由查看延迟、错误与流量分布，并对 5xx 比率、p95 延迟等设置邮件/Slack/Telegram/webhook 告警"
+   ]
+  },
+  "sha": "f6b32ee37b76",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2998,5 +2998,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1becc1cc3ec5": {
+  "identity": {
+   "one_liner": "AI 编码代理控制平面：并行运行多 CLI 代理，共享任务板与调度",
+   "review": "amux 用单个 Rust 二进制和 SQLite 在本地并行运行 Claude Code、Codex、Gemini CLI 等代理，提供原子认领的共享任务板、代理间消息、用量限额恢复与定时调度，并支持通过 Tailscale 从 iPhone/iPad/Mac 应用或浏览器远程访问，也可选用官方云服务。需 tmux 3.2+ 和至少一个代理 CLI，仅支持 macOS/Linux。许可证为 MIT + Commons Clause，允许自用、修改和自托管，但禁止转售 amux 本身；崩溃进程不会自动重启（可选脚本仅覆盖 macOS 上的 Claude worker）。",
+   "highlights": [
+    "并行运行 Claude Code、Codex、Gemini CLI、OpenCode 或 Ollama 代理，可按 worker 切换模型",
+    "共享任务板采用原子认领机制，避免两个代理领取同一任务；代理之间可直接互发消息",
+    "用量限额触发时暂停投递并在重置后恢复；支持 daily/every 等定时调度"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理并行处理任务板上的工作项",
+    "夜间或按周期（如每 15 分钟、每天 9 点）自动运行代理任务",
+    "通过手机或平板远程查看、干预和批准代理的执行"
+   ]
+  },
+  "sha": "1becc1cc3ec5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aa03261d5286": {
+  "identity": {
+   "one_liner": "托管 Vorma、Paranoid、Lime 等多个 Rust/JS 开源包的组织仓库",
+   "review": "osh 是一个多项目集合仓库，收录 Vorma、Paranoid、Lime、Primitives、Labs 等子项目的包索引与文档链接。各包同时提供 Cargo（Rust）与 npm（JavaScript）发行版本，当前均处于 pre 预发布阶段，Lime 标注为 coming soon。适用于需要查阅这些包的版本号与官方文档入口的用户。",
+   "highlights": [
+    "Vorma 提供 Rust crate（vorma）与 npm 包（vorma、@vorma/client），版本为 0.86.0-pre.8",
+    "Paranoid、Primitives、Labs 均同时提供 Cargo crate 与 npm 包，版本均为 pre 预发布",
+    "包含辅助工具包 @sjcx/repo-tooling 与配套测试包 paranoid-testing"
+   ],
+   "use_cases": [
+    "查找 Vorma、Paranoid 等包的最新预发布版本号",
+    "跳转至 docs.rs 或 npmx.dev 查看各包文档",
+    "同时使用 Rust 与 JavaScript 生态的对应实现（如 primitives-rs 与 primitives-ts）"
+   ]
+  },
+  "sha": "aa03261d5286",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "86f08ae01d2b": {
+  "identity": {
+   "one_liner": "Python CLI 密码管理器，密钥存于 SQLCipher 加密的 SQLite 数据库",
+   "review": "Vault 是一个基于 Python 3.11–3.15 的命令行密码管理器，将机密存入 SQLCipher 加密的 SQLite 数据库，每条密码与备注另用 AES-256 加密，主密钥经加盐哈希。可通过 pip、Docker 或源码运行，Linux 剪贴板功能需安装 xclip 或 xsel。",
+   "highlights": [
+    "使用 SQLCipher 加密 SQLite 数据库存储机密，单条密码与备注以唯一盐值配合 AES-256 加密",
+    "支持创建多个 vault、密码建议生成、JSON 格式导入导出、剪贴板自动清除与闲置自动锁定",
+    "提供 CLI 参数配置剪贴板 TTL、自动锁定时长、vault 位置等选项"
+   ],
+   "use_cases": [
+    "在本地终端环境中以命令行方式保存和读取密码及备注",
+    "通过 JSON 导出/导入在版本升级或不同环境间迁移 vault 数据",
+    "以 Docker 容器或源码克隆方式部署运行"
+   ]
+  },
+  "sha": "86f08ae01d2b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e6b49ae63e04": {
+  "identity": {
+   "one_liner": "用 Rust 引擎按数据库原生线协议在受限内存中整表搬迁数据的 Python 库",
+   "review": "apitap 是一个数据库间表数据搬迁引擎，通过自带的 Rust 线协议客户端（二进制 COPY、RowBinary、LOAD DATA、逻辑复制/binlog）以并行分片管道传输，内存由管道×缓冲决定而非表大小。提供单函数 Python API，支持 replace/append/merge/log_based 模式与跨源 SQL 查询。支持 Postgres、MySQL/MariaDB、ClickHouse、BigQuery、S3/GCS、Iceberg 等源与目标，MIT 协议，当前版本 0.67.2（预 1.0，建议固定版本）。",
+   "highlights": [
+    "支持 Postgres、MySQL/MariaDB、ClickHouse、BigQuery、S3/GCS、Iceberg、Google Sheets、GitHub 等数据源与目标，提供 replace/append/merge/log_based（批量 CDC）传输模式",
+    "内存上限由管道数×缓冲大小并按容器 cgroup 限制规划，与表大小无关；README 记录 256 MB 容器内搬迁 100 GB 表的测量数据",
+    "apitap.sql() 在 Rust 引擎中对不同数据库的表执行连接与聚合查询，结果可经 Arrow C 流协议输出为 polars/pyarrow/duckdb/pandas DataFrame"
+   ],
+   "use_cases": [
+    "在 Postgres、MySQL、ClickHouse、BigQuery 等数据库间进行整表迁移或定期同步",
+    "从 Postgres WAL 或 MySQL binlog 做基于日志的批量 CDC 到支持的多种目标库",
+    "将表导出为 Parquet/CSV 写入 S3、GCS 或 Iceberg 目录，或以 DataFrame 形式读取做本地分析"
+   ]
+  },
+  "sha": "e6b49ae63e04",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

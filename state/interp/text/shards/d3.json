@@ -2821,5 +2821,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b72a6b495b09": {
+  "identity": {
+   "one_liner": "本地优先的个人消息归档工具，用 SQLite 和 DuckDB 存储并可检索邮件、聊天、日历与联系人。",
+   "review": "msgvault 是一个 Go 编写的本地优先开源归档程序（MIT 协议），用于把邮件、聊天、日历、会议记录和联系人同步或导入到自托管硬件上，支持 Web UI、TUI、CLI、HTTP API 及 MCP 接入。搜索与分析离线进行，可选的语义搜索和 AI 功能需单独授权并配置外部端点。README 标明为 Alpha 软件，API、存储格式与 CLI 参数可能变化。",
+   "highlights": [
+    "支持从邮件、聊天、日历、联系人等多种来源同步或导入本地导出，并按发件人、日期、邮件列表或关键词检索",
+    "提供浏览器、终端 TUI、CLI、HTTP API 和 MCP 五种访问方式，可用 SQL 直接查询并导出消息与附件",
+    "包含去重、备份、分级删除审核等归档维护功能，远程删除时保留本地归档的消息和附件"
+   ],
+   "use_cases": [
+    "将多年邮件与聊天记录集中归档到自有硬件并离线检索",
+    "通过 CardDAV 同步联系人并维护跨账号的个人身份与关系档案",
+    "在自托管服务器上部署归档，供个人或代理程序通过 API/MCP 查询历史消息"
+   ]
+  },
+  "sha": "b72a6b495b09",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b2e66bf721f": {
+  "identity": {
+   "one_liner": "在 R 中嵌入 SQLite 引擎，提供 DBI 兼容接口",
+   "review": "RSQLite 将 SQLite 数据库引擎及其源码直接编译进 R 包，无需外部数据库软件，并通过 DBI 规范提供连接、建表、读写和查询接口。适合需要在 R 会话内使用本地或内存 SQLite 数据库的用户。其 SQLite 版本与构建选项由包内置源码决定，不使用系统安装的 SQLite；DBI 未覆盖的 SQLite 特性可通过 initExtension() 等函数启用。",
+   "highlights": [
+    "内嵌 SQLite 源码并在包内编译，各安装使用相同引擎版本与构建选项，无需外部数据库软件",
+    "实现 DBI 规范，完整 DBItest 测试套件作为包自身测试运行",
+    "支持加载扩展，构建时含 libcurl 时提供实验性 HTTP/HTTPS VFS，只读访问远程 SQLite 数据库文件"
+   ],
+   "use_cases": [
+    "在 R 中对 data.frame 与 SQLite 表进行写入、读取和 SQL 查询",
+    "使用内存数据库（:memory:）进行临时数据处理",
+    "构建含 libcurl 时只读访问远程 SQLite 数据库文件"
+   ]
+  },
+  "sha": "1b2e66bf721f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d89d036d1a7f": {
+  "identity": {
+   "one_liner": "基于 tree-sitter 的语义代码书签工具，按代码结构而非行号定位",
+   "review": "Codemark 是一个用 Rust 编写的命令行代码书签系统，将书签锚定到函数、类型等命名语法结构上，代码重构后仍可重新解析。它提供 TUI 面板、SQLite 全文与本地向量语义搜索、集合分组、git 集成，并附带可安装到 AI 编码代理（Claude Code、Copilot、Gemini CLI 等）的技能，用于跨会话保留代码探索上下文。语言语法以 WASM 形式运行时加载，Dart 仍为内置。支持 macOS、Linux、Windows。",
+   "highlights": [
+    "使用 tree-sitter 将书签锚定到命名 AST 结构，通过 Exact→Relaxed→Hash Fallback 分级匹配在重构后重新定位",
+    "提供 lazygit 风格的键盘驱动 TUI 面板，包含 SQLite 全文搜索与本地 embeddings 语义搜索（无需 API key）",
+    "附带可安装的 agent skill，支持 Claude Code、GitHub Copilot、Gemini CLI 及任何加载 .agents/skills 的代理"
+   ],
+   "use_cases": [
+    "在长会话的 AI 编码代理工作流中保存和复用代码探索上下文",
+    "跨提交和分支跟踪关键代码位置，供代码审计或问题排查引用",
+    "创建并共享集合或导览，用于新成员上手或讲解代码流程"
+   ]
+  },
+  "sha": "d89d036d1a7f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1c0909151f54": {
+  "identity": {
+   "one_liner": "用 C#/.NET 10 编写的教育向 MMO 服务器模拟器，用于研究客户端/服务器协议。",
+   "review": "AvalonEmu 是一个面向协议与游戏服务器架构学习的本地服务器模拟项目，基于 .NET 10，通过 Photon UDP 传输、Protocol18 序列化与 DH/AES 加密握手实现登录、游戏、聊天三个服务，并加载用户自有的客户端 GameData 运行世界模拟。仓库不含客户端或客户端补丁，仅支持特定客户端版本 1.32.030.345319，默认监听 127.0.0.1，可配置为 LAN 运行。",
+   "highlights": [
+    "实现 Photon UDP 传输、Protocol18 序列化与 DH/AES 加密握手，包含登录（5055）、游戏（5056）、聊天（5057）三个服务，使用 SQLite 持久化并支持 schema 迁移",
+    "内置离线自测（tests/AlbionLocal.SelfTest），通过进程内客户端运行，无需网络和真实客户端；并提供自有会话抓包解码工具 AlbionLocal.CapDecode",
+    "通过 config/*.jsonc 与 content/*.json 配置，提供 official 与 pve 两种预设，所有键均可通过命令行覆盖"
+   ],
+   "use_cases": [
+    "在本地或 LAN 环境搭建私有服务器，供单人或少数朋友运行和研究 MMO 客户端/服务器协议交互",
+    "学习游戏服务器架构，包括网络传输、序列化、加密握手、世界模拟与持久化设计",
+    "使用抓包解码工具分析自有会话的数据包结构"
+   ]
+  },
+  "sha": "1c0909151f54",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb638ae94106": {
+  "identity": {
+   "one_liner": "Rust 编写的开源桌面邮件客户端，主打隐私与本地运行机制",
+   "review": "Lyonoyl Mail 是一个用 Rust 构建的跨平台桌面邮件客户端，提供 macOS、Windows、Linux 版本，采用 Apache-2.0 许可证。它对每封邮件先做清理再在隔离框架中展示，网络图片需手动加载，密码存于系统钥匙串或主密码之后，并对本地邮件加密。可从 release 下载安装，也可通过 npm 脚本从源码构建；文档包含架构、数据模型、威胁模型等篇章，提供 11 套主题和 17 种界面语言。",
+   "highlights": [
+    "清理邮件内容并在不执行代码、不访问网络的框架中展示，链接打开前显示真实地址",
+    "密码存储在系统钥匙串或主密码之后，本地邮件加密，不发送遥测、分析或更新检查",
+    "提供六套深色与五套浅色主题及 17 种界面语言，支持 macOS、Windows、Linux"
+   ],
+   "use_cases": [
+    "希望在本地查看和管理 IMAP 邮件、并控制远程图片与回执加载的用户",
+    "需要离线使用且不依赖遥测服务的桌面邮件环境",
+    "偏好可从源码构建、审阅架构与威胁模型文档的用户"
+   ]
+  },
+  "sha": "cb638ae94106",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "96ccc1443b4b": {
+  "identity": {
+   "one_liner": "面向 Claude Code 开发者的本地仪表盘，单页聚合会话、MR、任务、Docker 与 Postgres。",
+   "review": "Opsboard 是一个运行在 127.0.0.1 的本地 Web 仪表盘，将 Claude Code 会话及其子代理状态、GitLab/GitHub 合并请求、Jira 任务、Docker 容器、Postgres 慢查询、Claude 用量限额和机器资源集中在一个浏览器页展示。依赖 Python 3.8+（仅标准库）与 git，可选 Docker、Jira token、Claude Code CLI。仅支持 macOS 和 Linux，不支持 Windows。",
+   "highlights": [
+    "单页展示运行中的 Claude Code 会话、子代理状态、后台任务与每条回答耗时",
+    "聚合 GitLab/GitHub 合并请求的管线状态、评审线程、冲突与关联 Jira 任务，并支持在页面内查看 diff 与评审线程",
+    "侧边栏每分钟读取 Claude 订阅计划的会话/周/模型限额与重置时间，凭据仅存内存且只发往 api.anthropic.com"
+   ],
+   "use_cases": [
+    "同时管理多个 Claude Code 会话并查看其代理与资源占用",
+    "将 Jira 任务与合并请求关联跟踪评审进度与冲突",
+    "本地监控 Docker 容器、Postgres 慢查询与机器 CPU/内存/GPU 资源"
+   ]
+  },
+  "sha": "96ccc1443b4b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

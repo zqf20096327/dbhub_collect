@@ -31559,5 +31559,3272 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "429c192cc36f+2": {
+  "fn": "tempoxyz/tidx",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "tidx"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    1,
+    2
+   ],
+   [
+    "replace",
+    8,
+    16,
+    2,
+    8,
+    [
+     " Quickstart •",
+     " Installation •",
+     " Configuration •",
+     " CLI •",
+     " API •",
+     " Queries"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    8,
+    9
+   ],
+   [
+    "replace",
+    17,
+    20,
+    9,
+    10,
+    [
+     "**tidx** is Tempo's chain indexer. It ingests blocks, transactions, and logs from a Tempo node, then makes them queryable through SQL, an HTTP API, and a CLI. Its hybrid PostgreSQL and ClickHouse architecture supports fast point lookups (OLTP) and large analytical queries (OLAP)."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    30,
+    10,
+    20
+   ],
+   [
+    "replace",
+    30,
+    43,
+    20,
+    21,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    59,
+    21,
+    37
+   ],
+   [
+    "replace",
+    59,
+    84,
+    37,
+    38,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    88,
+    38,
+    42
+   ],
+   [
+    "replace",
+    88,
+    89,
+    42,
+    43,
+    [
+     "|`engine`|`source`|Route|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    43,
+    44
+   ],
+   [
+    "replace",
+    90,
+    94,
+    44,
+    48,
+    [
+     "|`postgres`*|`postgres-clickhouse`*|**Tiered:** hot reads on PostgreSQL, cold/analytical reads on native ClickHouse; provably-safe shapes split at the prune boundary, everything else falls back to `pg_clickhouse` (FDW)|",
+     "|`postgres`*|`postgres`|Plain PostgreSQL (hot window only when retention is enabled)|",
+     "|`postgres`*|`clickhouse`|PostgreSQL planner over the full ClickHouse archive via `pg_clickhouse` foreign tables|",
+     "|`clickhouse`|`clickhouse`*|Native ClickHouse (full archive + materialized views)|"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    98,
+    48,
+    52
+   ],
+   [
+    "replace",
+    98,
+    99,
+    52,
+    53,
+    [
+     "> FDW routes require a `pg_clickhouse` build with ClickHouse/pg_clickhouse#296 (unreleased 0.4): 0.3.2 crashes PostgreSQL on LATERAL / correlated subqueries over foreign tables. `ghcr.io/tempoxyz/pg_clickhouse:16-02505c4` ships a pinned build (see `.github/workflows/pg-clickhouse.yml`). Aggregates pushed to ClickHouse (e.g. `avg`) compute in Float64 and can differ from PostgreSQL `numeric` in the last decimal."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    104,
+    53,
+    58
+   ],
+   [
+    "replace",
+    104,
+    123,
+    58,
+    59,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    127,
+    59,
+    63
+   ],
+   [
+    "replace",
+    127,
+    130,
+    63,
+    66,
+    [
+     "- Tempo developer documentation: guides for building on Tempo",
+     "- tempoxyz/tempo: Tempo node and protocol implementation",
+     "- tempoxyz/tempo-apps: Tempo applications, including the block explorer"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    158,
+    66,
+    94
+   ],
+   [
+    "replace",
+    158,
+    197,
+    94,
+    95,
+    [
+     "…（39 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    205,
+    95,
+    103
+   ],
+   [
+    "replace",
+    205,
+    232,
+    103,
+    104,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    240,
+    104,
+    112
+   ],
+   [
+    "replace",
+    240,
+    254,
+    112,
+    113,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    262,
+    113,
+    121
+   ],
+   [
+    "replace",
+    262,
+    267,
+    121,
+    122,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    275,
+    122,
+    130
+   ],
+   [
+    "replace",
+    275,
+    279,
+    130,
+    131,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    292,
+    131,
+    144
+   ],
+   [
+    "replace",
+    292,
+    293,
+    144,
+    145,
+    [
+     "|Setting|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    145,
+    146
+   ],
+   [
+    "replace",
+    294,
+    300,
+    146,
+    152,
+    [
+     "|`http.max_concurrent_queries`|32|API statements that may run at once in one process|",
+     "|`http.max_live_connections`|20|Live query streams one process accepts|",
+     "|`chains.postgres.api_pool_size`|16|Connections in the API's own pool (`api_url` and `serve`)|",
+     "|`chains.postgres.api_pool_wait_ms`|none|`serve` only: fail a request that waits this long for a connection|",
+     "|`chains.clickhouse.api_user` / `api_password_env`|`user` / `password_env`|`serve` only: ClickHouse user for queries. Use `readonly = 2` or SELECT-only grants: tidx sets query settings on every request, which `readonly = 1` refuses|",
+     "|`chains.clickhouse.api_url` / `api_failover_urls`|`url` / `failover_urls`|`serve` only: ClickHouse URL for queries, such as a replica that serves only API reads, and the URLs to fail over to (such as the writers). Serve returns to `api_url` within 30 seconds of its `/replicas_status` reporting healthy (up and caught up). Tiered-storage queries that PostgreSQL runs through pg_clickhouse use `fdw_url` instead|"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    307,
+    152,
+    159
+   ],
+   [
+    "replace",
+    307,
+    312,
+    159,
+    160,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    320,
+    160,
+    168
+   ],
+   [
+    "replace",
+    320,
+    326,
+    168,
+    169,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    334,
+    169,
+    177
+   ],
+   [
+    "replace",
+    334,
+    349,
+    177,
+    178,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    375,
+    178,
+    204
+   ],
+   [
+    "replace",
+    375,
+    385,
+    204,
+    205,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    403,
+    205,
+    223
+   ],
+   [
+    "replace",
+    403,
+    426,
+    223,
+    224,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    449,
+    224,
+    247
+   ],
+   [
+    "replace",
+    449,
+    457,
+    247,
+    248,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    457,
+    465,
+    248,
+    256
+   ],
+   [
+    "replace",
+    465,
+    478,
+    256,
+    257,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    478,
+    496,
+    257,
+    275
+   ],
+   [
+    "replace",
+    496,
+    508,
+    275,
+    276,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    508,
+    516,
+    276,
+    284
+   ],
+   [
+    "replace",
+    516,
+    521,
+    284,
+    285,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    521,
+    523,
+    285,
+    287
+   ],
+   [
+    "replace",
+    523,
+    524,
+    287,
+    288,
+    [
+     "|Field|Required|Description|"
+    ]
+   ],
+   [
+    "equal",
+    524,
+    525,
+    288,
+    289
+   ],
+   [
+    "replace",
+    525,
+    530,
+    289,
+    294,
+    [
+     "|`chainId`|yes|Target chain ID|",
+     "|`name`|yes|View name (alphanumeric + underscore)|",
+     "|`sql`|yes|SELECT statement for the view|",
+     "|`orderBy`|yes|Primary key columns for table sorting|",
+     "|`engine`|no|ClickHouse engine (default: `SummingMergeTree()`)|"
+    ]
+   ],
+   [
+    "equal",
+    530,
+    577,
+    294,
+    341
+   ],
+   [
+    "replace",
+    577,
+    580,
+    341,
+    344,
+    [
+     "- **Base Tables:** raw chain data written by the sync engine, available in both PostgreSQL and ClickHouse.",
+     "- **Event Tables:** virtual, decoded-at-query-time tables generated from `?signature=Event(...)`. Available in both engines.",
+     "- **Materialized Tables:** precomputed token, holder, and DEX analytics maintained by ClickHouse. Available only with `engine=clickhouse`, alongside user-defined views registered through the `/views` API."
+    ]
+   ],
+   [
+    "equal",
+    580,
+    587,
+    344,
+    351
+   ],
+   [
+    "replace",
+    587,
+    588,
+    351,
+    352,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    588,
+    589,
+    352,
+    353
+   ],
+   [
+    "replace",
+    589,
+    599,
+    353,
+    363,
+    [
+     "|`num`|`INT8`|Block number|",
+     "|`hash`|`BYTEA`|Block hash|",
+     "|`parent_hash`|`BYTEA`|Parent block hash|",
+     "|`timestamp`|`TIMESTAMPTZ`|Block timestamp|",
+     "|`timestamp_ms`|`INT8`|Block timestamp (milliseconds)|",
+     "|`gas_limit`|`INT8`|Gas limit|",
+     "|`gas_used`|`INT8`|Gas used|",
+     "|`miner`|`BYTEA`|Block producer|",
+     "|`extra_data`|`BYTEA`|Extra data field|",
+     "|`consensus_proposer`|`BYTEA`|Ed25519 consensus proposer pubkey (TIP-1031, NULL pre-fork)|"
+    ]
+   ],
+   [
+    "equal",
+    599,
+    602,
+    363,
+    366
+   ],
+   [
+    "replace",
+    602,
+    603,
+    366,
+    367,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    603,
+    604,
+    367,
+    368
+   ],
+   [
+    "replace",
+    604,
+    625,
+    368,
+    389,
+    [
+     "|`block_num`|`INT8`|Block number|",
+     "|`block_timestamp`|`TIMESTAMPTZ`|Block timestamp|",
+     "|`idx`|`INT4`|Transaction index|",
+     "|`hash`|`BYTEA`|Transaction hash|",
+     "|`type`|`INT2`|Transaction type|",
+     "|`from`|`BYTEA`|Sender address|",
+     "|`to`|`BYTEA`|Recipient address|",
+     "|`value`|`TEXT`|Transfer value (wei)|",
+     "|`input`|`BYTEA`|Calldata|",
+     "|`gas_limit`|`INT8`|Gas limit|",
+     "|`max_fee_per_gas`|`TEXT`|Max fee per gas|",
+     "|`max_priority_fee_per_gas`|`TEXT`|Max priority fee|",
+     "|`gas_used`|`INT8`|Gas consumed|",
+     "|`nonce_key`|`BYTEA`|Nonce key (2D nonces)|",
+     "|`nonce`|`INT8`|Nonce value|",
+     "|`fee_token`|`BYTEA`|Fee token address|",
+     "|`calls`|`JSONB`|Batch call data|",
+     "|`call_count`|`INT2`|Number of calls|",
+     "|`valid_before`|`INT8`|Validity window start|",
+     "|`valid_after`|`INT8`|Validity window end|",
+     "|`signature_type`|`INT2`|Signature type|"
+    ]
+   ],
+   [
+    "equal",
+    625,
+    628,
+    389,
+    392
+   ],
+   [
+    "replace",
+    628,
+    629,
+    392,
+    393,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    629,
+    630,
+    393,
+    394
+   ],
+   [
+    "replace",
+    630,
+    639,
+    394,
+    403,
+    [
+     "|`block_num`|`INT8`|Block number|",
+     "|`block_timestamp`|`TIMESTAMPTZ`|Block timestamp|",
+     "|`log_idx`|`INT4`|Log index|",
+     "|`tx_idx`|`INT4`|Transaction index|",
+     "|`tx_hash`|`BYTEA`|Transaction hash|",
+     "|`address`|`BYTEA`|Emitting contract|",
+     "|`selector`|`BYTEA`|Event selector (topic0)|",
+     "|`topics`|`BYTEA[]`|All topics|",
+     "|`data`|`BYTEA`|Event data|"
+    ]
+   ],
+   [
+    "equal",
+    639,
+    642,
+    403,
+    406
+   ],
+   [
+    "replace",
+    642,
+    643,
+    406,
+    407,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    643,
+    644,
+    407,
+    408
+   ],
+   [
+    "replace",
+    644,
+    656,
+    408,
+    420,
+    [
+     "|`block_num`|`INT8`|Block number|",
+     "|`block_timestamp`|`TIMESTAMPTZ`|Block timestamp|",
+     "|`tx_idx`|`INT4`|Transaction index|",
+     "|`tx_hash`|`BYTEA`|Transaction hash|",
+     "|`from`|`BYTEA`|Sender address|",
+     "|`to`|`BYTEA`|Recipient address|",
+     "|`contract_address`|`BYTEA`|Created contract (if deploy)|",
+     "|`gas_used`|`INT8`|Gas consumed|",
+     "|`cumulative_gas_used`|`INT8`|Cumulative gas in block|",
+     "|`effective_gas_price`|`TEXT`|Actual gas price paid|",
+     "|`status`|`INT2`|Success (1) or failure (0)|",
+     "|`fee_payer`|`BYTEA`|Tempo fee payer (if sponsored)|"
+    ]
+   ],
+   [
+    "equal",
+    656,
+    661,
+    420,
+    425
+   ],
+   [
+    "replace",
+    661,
+    662,
+    425,
+    426,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    663,
+    426,
+    427
+   ],
+   [
+    "replace",
+    663,
+    674,
+    427,
+    438,
+    [
+     "|`chain_id`|`INT8`|Chain identifier|",
+     "|`head_num`|`INT8`|Remote chain head from RPC|",
+     "|`synced_num`|`INT8`|Highest contiguous block (no gaps from backfill_num to here)|",
+     "|`tip_num`|`INT8`|Highest block near chain head (realtime follows this)|",
+     "|`backfill_num`|`INT8`|Lowest synced block going backwards (NULL=not started, 0=complete)|",
+     "|`archive_tip_num`|`INT8`|Highest block in the contiguous ClickHouse archive interval|",
+     "|`archive_backfill_num`|`INT8`|Lowest block in the contiguous ClickHouse archive interval (NULL=not started)|",
+     "|`pruned_below`|`INT8`|Current PostgreSQL hot-tier boundary; rows at or below it route to ClickHouse|",
+     "|`pruned_below_ts`|`TIMESTAMPTZ`|Timestamp boundary used for tiered constraint exclusion|",
+     "|`started_at`|`TIMESTAMPTZ`|Sync start time|",
+     "|`updated_at`|`TIMESTAMPTZ`|Last update time|"
+    ]
+   ],
+   [
+    "equal",
+    674,
+    683,
+    438,
+    447
+   ],
+   [
+    "replace",
+    683,
+    688,
+    447,
+    448,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    688,
+    690,
+    448,
+    450
+   ],
+   [
+    "replace",
+    690,
+    691,
+    450,
+    451,
+    [
+     "For Transfer logs specifically, `token_transfers` is pre-decoded and cheaper."
+    ]
+   ],
+   [
+    "equal",
+    691,
+    703,
+    451,
+    463
+   ],
+   [
+    "replace",
+    703,
+    704,
+    463,
+    464,
+    [
+     "|Name|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    704,
+    705,
+    464,
+    465
+   ],
+   [
+    "replace",
+    705,
+    721,
+    465,
+    481,
+    [
+     "|`address_balances`|Current positive balance per `(holder, token)`.|",
+     "|`address_balances_snapshot`|Pre-aggregated `address_balances`, refreshed on a schedule.|",
+     "|`address_holder_deltas`|Holder-first mirror of `token_holder_deltas`.|",
+     "|`dex_fills`|Decoded stablecoin-DEX `OrderFilled` events.|",
+     "|`dex_ohlc_1m`|1-minute OHLC candles per pair, refreshed on a schedule.|",
+     "|`dex_orders`|Decoded stablecoin-DEX `OrderPlaced` events.|",
+     "|`dex_pair_liquidity`|Pairs joined to their on-DEX base liquidity.|",
+     "|`dex_pairs`|Decoded stablecoin-DEX `PairCreated` events.|",
+     "|`token_balances`|Current positive balance per `(token, holder)`.|",
+     "|`token_balances_snapshot`|Pre-aggregated `token_balances`, refreshed on a schedule.|",
+     "|`token_holder_counts`|Holder count per token, refreshed on a schedule.|",
+     "|`token_holder_deltas`|Per-event ± balance change, two rows per transfer.|",
+     "|`token_metadata`|Per-token first/last seen + lifetime transfer count.|",
+     "|`token_supply`|Per-token mints − burns (zero-address legs).|",
+     "|`token_transfer_stats`|Per-`(day, token)` count, volume, unique senders/recipients.|",
+     "|`token_transfers`|Decoded `Transfer` events.|"
+    ]
+   ],
+   [
+    "equal",
+    721,
+    722,
+    481,
+    482
+   ],
+   [
+    "replace",
+    722,
+    723,
+    482,
+    483,
+    [
+     "User-defined views registered through the `/views` API live alongside these in `analytics_{chainId}` and are queryable the same way."
+    ]
+   ],
+   [
+    "equal",
+    723,
+    731,
+    483,
+    491
+   ],
+   [
+    "replace",
+    731,
+    732,
+    491,
+    492,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    732,
+    733,
+    492,
+    493
+   ],
+   [
+    "replace",
+    733,
+    736,
+    493,
+    496,
+    [
+     "|`holder`|`String`|Holder address|",
+     "|`token`|`String`|Token contract|",
+     "|`balance`|`Int256`|Current balance (positive only)|"
+    ]
+   ],
+   [
+    "equal",
+    736,
+    741,
+    496,
+    501
+   ],
+   [
+    "replace",
+    741,
+    745,
+    501,
+    502,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    745,
+    752,
+    502,
+    509
+   ],
+   [
+    "replace",
+    752,
+    753,
+    509,
+    510,
+    [
+     "Same `(holder, token, balance)` rollup as `address_balances`, but stored in its own `MergeTree` ordered by `(holder, balance, token)` so account balance pages and counts resolve via a holder-keyed range instead of re-aggregating the full delta history on every read. Use this for hot addresses where the live `address_balances` view would time out; results are up to one refresh interval stale."
+    ]
+   ],
+   [
+    "equal",
+    753,
+    754,
+    510,
+    511
+   ],
+   [
+    "replace",
+    754,
+    755,
+    511,
+    512,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    755,
+    756,
+    512,
+    513
+   ],
+   [
+    "replace",
+    756,
+    759,
+    513,
+    516,
+    [
+     "|`holder`|`String`|Holder address|",
+     "|`token`|`String`|Token contract|",
+     "|`balance`|`Int256`|Current balance (positive only)|"
+    ]
+   ],
+   [
+    "equal",
+    759,
+    764,
+    516,
+    521
+   ],
+   [
+    "replace",
+    764,
+    769,
+    521,
+    522,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    769,
+    778,
+    522,
+    531
+   ],
+   [
+    "replace",
+    778,
+    779,
+    531,
+    532,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    779,
+    780,
+    532,
+    533
+   ],
+   [
+    "replace",
+    780,
+    789,
+    533,
+    541,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`holder`|`String`|Holder address|",
+     "|`token`|`String`|Token contract|",
+     "|`leg`|`Int8`|`+1` for credit, `-1` for debit|",
+     "|`balance_delta`|`Int256`|Signed delta applied to `(holder, token)`|"
+    ]
+   ],
+   [
+    "equal",
+    789,
+    797,
+    541,
+    549
+   ],
+   [
+    "replace",
+    797,
+    798,
+    549,
+    550,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    798,
+    799,
+    550,
+    551
+   ],
+   [
+    "replace",
+    799,
+    808,
+    551,
+    560,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_idx`|`Int32`|Transaction index|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`address`|`String`|Emitting contract (the DEX precompile)|",
+     "|`key`|`String`|Pair key (`bytes32`)|",
+     "|`base`|`String`|Base token address|",
+     "|`quote`|`String`|Quote token address|"
+    ]
+   ],
+   [
+    "equal",
+    808,
+    816,
+    560,
+    568
+   ],
+   [
+    "replace",
+    816,
+    817,
+    568,
+    569,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    817,
+    818,
+    569,
+    570
+   ],
+   [
+    "replace",
+    818,
+    832,
+    570,
+    584,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_idx`|`Int32`|Transaction index|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`address`|`String`|Emitting contract (the DEX precompile)|",
+     "|`orderId`|`UInt256`|Order id|",
+     "|`maker`|`String`|Order maker|",
+     "|`token`|`String`|Pair base token|",
+     "|`amount`|`UInt256`|Order amount|",
+     "|`isBid`|`UInt8`|1 = bid, 0 = ask|",
+     "|`tick`|`Int16`|Order price tick|",
+     "|`isFlipOrder`|`UInt8`|1 = flip order|",
+     "|`flipTick`|`Int16`|Flip order price tick|"
+    ]
+   ],
+   [
+    "equal",
+    832,
+    838,
+    584,
+    590
+   ],
+   [
+    "replace",
+    838,
+    839,
+    590,
+    591,
+    [
+     "Decoded `OrderFilled(uint128 indexed orderId, address indexed maker, address indexed taker, uint128 amountFilled, bool partialFill)` events. The pair (`token`/`isBid`/`tick`) is not on this event. Join `orderId` to `dex_orders`. `ReplacingMergeTree` ordered by `(orderId, block_num, log_idx)` so the join probes by sort key, with bloom indexes on `maker`/`taker`/`tx_hash`."
+    ]
+   ],
+   [
+    "equal",
+    839,
+    840,
+    591,
+    592
+   ],
+   [
+    "replace",
+    840,
+    841,
+    592,
+    593,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    841,
+    842,
+    593,
+    594
+   ],
+   [
+    "replace",
+    842,
+    853,
+    594,
+    605,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_idx`|`Int32`|Transaction index|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`address`|`String`|Emitting contract (the DEX precompile)|",
+     "|`orderId`|`UInt256`|Order id (join key to `dex_orders`)|",
+     "|`maker`|`String`|Fill maker|",
+     "|`taker`|`String`|Fill taker|",
+     "|`amountFilled`|`UInt256`|Amount filled|",
+     "|`partialFill`|`UInt8`|1 = partial fill|"
+    ]
+   ],
+   [
+    "equal",
+    853,
+    858,
+    605,
+    610
+   ],
+   [
+    "replace",
+    858,
+    864,
+    610,
+    611,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    864,
+    875,
+    611,
+    622
+   ],
+   [
+    "replace",
+    875,
+    876,
+    622,
+    623,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    876,
+    877,
+    623,
+    624
+   ],
+   [
+    "replace",
+    877,
+    886,
+    624,
+    633,
+    [
+     "|`bucket`|`DateTime('UTC')`|Start of the 1-minute bucket|",
+     "|`token`|`String`|Pair base token|",
+     "|`open`|`Float64`|Rate of the first fill in the bucket|",
+     "|`high`|`Float64`|Highest fill rate in the bucket|",
+     "|`low`|`Float64`|Lowest fill rate in the bucket|",
+     "|`close`|`Float64`|Rate of the last fill in the bucket|",
+     "|`base_volume`|`UInt256`|Sum of base-token amounts filled|",
+     "|`quote_volume`|`UInt256`|Sum of quote-token amounts|",
+     "|`fill_count`|`UInt64`|Number of fills in the bucket|"
+    ]
+   ],
+   [
+    "equal",
+    886,
+    891,
+    633,
+    638
+   ],
+   [
+    "replace",
+    891,
+    896,
+    638,
+    639,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    896,
+    905,
+    639,
+    648
+   ],
+   [
+    "replace",
+    905,
+    906,
+    648,
+    649,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    906,
+    907,
+    649,
+    650
+   ],
+   [
+    "replace",
+    907,
+    915,
+    650,
+    658,
+    [
+     "|`key`|`String`|Pair key (`bytes32`)|",
+     "|`base`|`String`|Base token address|",
+     "|`quote`|`String`|Quote token address|",
+     "|`block_num`|`Int64`|Pair creation block|",
+     "|`log_idx`|`Int32`|Pair creation log index|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Pair creation timestamp|",
+     "|`tx_hash`|`String`|Pair creation tx hash|",
+     "|`liquidity`|`Int256`|Base-token balance escrowed on the DEX|"
+    ]
+   ],
+   [
+    "equal",
+    915,
+    920,
+    658,
+    663
+   ],
+   [
+    "replace",
+    920,
+    924,
+    663,
+    664,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    924,
+    925,
+    664,
+    665
+   ],
+   [
+    "delete",
+    925,
+    926,
+    665,
+    665
+   ],
+   [
+    "equal",
+    926,
+    934,
+    665,
+    673
+   ],
+   [
+    "replace",
+    934,
+    935,
+    673,
+    674,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    935,
+    936,
+    674,
+    675
+   ],
+   [
+    "replace",
+    936,
+    939,
+    675,
+    678,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`holder`|`String`|Holder address|",
+     "|`balance`|`Int256`|Current balance (positive only)|"
+    ]
+   ],
+   [
+    "equal",
+    939,
+    944,
+    678,
+    683
+   ],
+   [
+    "replace",
+    944,
+    949,
+    683,
+    684,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    949,
+    955,
+    684,
+    690
+   ],
+   [
+    "replace",
+    955,
+    959,
+    690,
+    691,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    959,
+    966,
+    691,
+    698
+   ],
+   [
+    "replace",
+    966,
+    967,
+    698,
+    699,
+    [
+     "Same `(token, holder, balance)` rollup as `token_balances`, but stored in its own `MergeTree` ordered by `(token, balance)` so holder counts and \"top holders by balance\" resolve via a sort-key seek instead of re-aggregating the full delta history on every read. Use this for high-cardinality tokens where the live `token_balances` view would time out; results are up to one refresh interval stale."
+    ]
+   ],
+   [
+    "equal",
+    967,
+    968,
+    699,
+    700
+   ],
+   [
+    "replace",
+    968,
+    969,
+    700,
+    701,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    969,
+    970,
+    701,
+    702
+   ],
+   [
+    "replace",
+    970,
+    973,
+    702,
+    705,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`holder`|`String`|Holder address|",
+     "|`balance`|`Int256`|Current balance (positive only)|"
+    ]
+   ],
+   [
+    "equal",
+    973,
+    986,
+    705,
+    718
+   ],
+   [
+    "replace",
+    986,
+    987,
+    718,
+    719,
+    [
+     "> Refreshable materialized view over `token_balances_snapshot`, recomputed on a schedule (every 15 minutes) rather than on insert."
+    ]
+   ],
+   [
+    "equal",
+    987,
+    990,
+    719,
+    722
+   ],
+   [
+    "replace",
+    990,
+    991,
+    722,
+    723,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    991,
+    992,
+    723,
+    724
+   ],
+   [
+    "replace",
+    992,
+    994,
+    724,
+    726,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`holder_count`|`UInt64`|Number of holders with a positive balance|"
+    ]
+   ],
+   [
+    "equal",
+    994,
+    1011,
+    726,
+    743
+   ],
+   [
+    "replace",
+    1011,
+    1012,
+    743,
+    744,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1012,
+    1013,
+    744,
+    745
+   ],
+   [
+    "replace",
+    1013,
+    1021,
+    745,
+    753,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`token`|`String`|Token contract|",
+     "|`holder`|`String`|Holder address (sender or recipient)|",
+     "|`leg`|`Int8`|`+1` for recipient credit, `-1` for sender debit|",
+     "|`balance_delta`|`Int256`|Signed delta applied to `holder` for `token` at this block|"
+    ]
+   ],
+   [
+    "equal",
+    1021,
+    1026,
+    753,
+    758
+   ],
+   [
+    "replace",
+    1026,
+    1032,
+    758,
+    759,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1032,
+    1038,
+    759,
+    765
+   ],
+   [
+    "replace",
+    1038,
+    1042,
+    765,
+    766,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1042,
+    1059,
+    766,
+    783
+   ],
+   [
+    "replace",
+    1059,
+    1060,
+    783,
+    784,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1060,
+    1061,
+    784,
+    785
+   ],
+   [
+    "replace",
+    1061,
+    1067,
+    785,
+    791,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`first_seen_block`|`Int64`|Block of the first observed `Transfer`|",
+     "|`last_seen_block`|`Int64`|Block of the most recent `Transfer`|",
+     "|`first_seen_timestamp`|`DateTime64(3, 'UTC')`|Timestamp of the first `Transfer`|",
+     "|`last_seen_timestamp`|`DateTime64(3, 'UTC')`|Timestamp of the most recent `Transfer`|",
+     "|`transfer_count`|`UInt64`|Total `Transfer` events ever emitted by this token|"
+    ]
+   ],
+   [
+    "equal",
+    1067,
+    1072,
+    791,
+    796
+   ],
+   [
+    "replace",
+    1072,
+    1076,
+    796,
+    797,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1076,
+    1085,
+    797,
+    806
+   ],
+   [
+    "replace",
+    1085,
+    1086,
+    806,
+    807,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1086,
+    1087,
+    807,
+    808
+   ],
+   [
+    "replace",
+    1087,
+    1089,
+    808,
+    810,
+    [
+     "|`token`|`String`|Token contract|",
+     "|`supply`|`Int256`|Cumulative mints − cumulative burns|"
+    ]
+   ],
+   [
+    "equal",
+    1089,
+    1094,
+    810,
+    815
+   ],
+   [
+    "replace",
+    1094,
+    1098,
+    815,
+    816,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1098,
+    1114,
+    816,
+    832
+   ],
+   [
+    "replace",
+    1114,
+    1115,
+    832,
+    833,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1115,
+    1116,
+    833,
+    834
+   ],
+   [
+    "replace",
+    1116,
+    1122,
+    834,
+    840,
+    [
+     "|`day`|`Date`|Day (UTC) bucket from `block_timestamp`|",
+     "|`token`|`String`|Token contract|",
+     "|`transfer_count`|`UInt64`|Number of `Transfer` events on that day|",
+     "|`volume`|`UInt256`|Sum of `amount` across all transfers on that day|",
+     "|`unique_senders`|`UInt64`|Distinct `from` addresses on that day|",
+     "|`unique_recipients`|`UInt64`|Distinct `to` addresses on that day|"
+    ]
+   ],
+   [
+    "equal",
+    1122,
+    1127,
+    840,
+    845
+   ],
+   [
+    "replace",
+    1127,
+    1132,
+    845,
+    846,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1132,
+    1149,
+    846,
+    863
+   ],
+   [
+    "replace",
+    1149,
+    1150,
+    863,
+    864,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1150,
+    1151,
+    864,
+    865
+   ],
+   [
+    "replace",
+    1151,
+    1161,
+    865,
+    875,
+    [
+     "|`block_num`|`Int64`|Block number|",
+     "|`block_timestamp`|`DateTime64(3, 'UTC')`|Block timestamp|",
+     "|`tx_idx`|`Int32`|Transaction index|",
+     "|`log_idx`|`Int32`|Log index|",
+     "|`tx_hash`|`String`|Transaction hash|",
+     "|`token`|`String`|Emitting token contract|",
+     "|`from`|`String`|Sender address|",
+     "|`to`|`String`|Recipient address|",
+     "|`amount`|`UInt256`|Transfer amount|",
+     "|`is_virtual_forward`|`UInt8`|1 if this transfer was inserted via a virtual-forward path|"
+    ]
+   ],
+   [
+    "equal",
+    1161,
+    1166,
+    875,
+    880
+   ],
+   [
+    "replace",
+    1166,
+    1171,
+    880,
+    881,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1171,
+    1189,
+    881,
+    899
+   ],
+   [
+    "replace",
+    1189,
+    1208,
+    899,
+    900,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1208,
+    1210,
+    900,
+    902
+   ],
+   [
+    "replace",
+    1210,
+    1211,
+    902,
+    903,
+    [
+     "|Operation|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1211,
+    1212,
+    903,
+    904
+   ],
+   [
+    "replace",
+    1212,
+    1214,
+    904,
+    906,
+    [
+     "|**Realtime**|Follows chain head immediately, maintains ~0 lag|",
+     "|**Gap Sync**|Detects all gaps, fills from most recent to earliest|"
+    ]
+   ],
+   [
+    "equal",
+    1214,
+    1221,
+    906,
+    913
+   ],
+   [
+    "replace",
+    1221,
+    1225,
+    913,
+    917,
+    [
+     "- Rust 1.75+",
+     "- Docker",
+     "- PostgreSQL",
+     "- ClickHouse 25.11+ when ClickHouse OLAP is enabled"
+    ]
+   ],
+   [
+    "equal",
+    1225,
+    1232,
+    917,
+    924
+   ],
+   [
+    "replace",
+    1232,
+    1240,
+    924,
+    925,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1240,
+    1243,
+    925,
+    928
+   ],
+   [
+    "replace",
+    1243,
+    1246,
+    928,
+    929,
+    [
+     "LICENSE"
+    ]
+   ],
+   [
+    "equal",
+    1246,
+    1247,
+    929,
+    930
+   ],
+   [
+    "replace",
+    1247,
+    1249,
+    930,
+    931,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "bde96abfe927+2": {
+  "fn": "Abhishek200416/IVA",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    12,
+    3,
+    12,
+    [
+     "GitHub Repo",
+     "License: MIT",
+     "Python Version",
+     "Development Status-yellow.svg)",
+     "Runtime Dependencies-brightgreen.svg)",
+     "Universal API-orange.svg)",
+     "Fast-Path UI SLA",
+     "Self-Verification Suite",
+     "Safety Railings-red.svg)"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "**Official Repository:** https://github.com/Abhishek200416/IVA"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "**IVA** is a production-grade, resource-aware autonomous engineering harness and automated **Python CI-Repair & UI Acceleration** runtime led by **Iva** (`IVA_README.md`). "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "> **Grounded Engineering Reality (Zero Sci-Fi Hype)**: "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    18,
+    21
+   ],
+   [
+    "delete",
+    21,
+    23,
+    21,
+    21
+   ],
+   [
+    "equal",
+    23,
+    41,
+    21,
+    39
+   ],
+   [
+    "replace",
+    41,
+    48,
+    39,
+    40,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    74,
+    40,
+    66
+   ],
+   [
+    "replace",
+    74,
+    78,
+    66,
+    68,
+    [
+     " - Windows: `irm https://raw.githubusercontent.com/Abhishek200416/IVA/main/install.ps1 | iex`",
+     " - Linux / macOS / Termux: `curl -fsSL https://raw.githubusercontent.com/Abhishek200416/IVA/main/install.sh | bash`"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    89,
+    68,
+    79
+   ],
+   [
+    "delete",
+    89,
+    92,
+    79,
+    79
+   ],
+   [
+    "equal",
+    92,
+    105,
+    79,
+    92
+   ],
+   [
+    "replace",
+    105,
+    117,
+    92,
+    93,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    130,
+    93,
+    106
+   ],
+   [
+    "replace",
+    130,
+    131,
+    106,
+    107,
+    [
+     " Modeling Indian equity derivatives (NIFTY 50 and BANKNIFTY) through Stochastic Volatility Inspired (SSVI) arbitrage-free smile calibration, Multivariate Hawkes point processes for self-exciting order flow, and Microstructure Limit Order Flow Imbalance (MLOFI) with 100% friction-aware statutory cost accounting (STT, exchange turnover, SEBI charges, GST, stamp duty, slippage)."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    107,
+    108
+   ],
+   [
+    "replace",
+    132,
+    133,
+    108,
+    109,
+    [
+     " Orchestrating 100 embedded specialist contracts across 16 capability families into an automated, self-directing research laboratory where subagents autonomously debate hypotheses, run parallel sandboxed experiments in isolated Git worktrees, and synthesize minimal-diff AST patches."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    109,
+    110
+   ],
+   [
+    "replace",
+    134,
+    135,
+    110,
+    111,
+    [
+     " Operating continuously across all hours without artificial fatigue, harvesting insights from academic literature (arXiv, quantitative finance journals, frontier AI labs), refining her 10-layer cognitive SQLite WAL database (`omega_memory.db`), and converting every runtime edge case into a permanent empirical asset."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    111,
+    112
+   ],
+   [
+    "replace",
+    136,
+    137,
+    112,
+    113,
+    [
+     " Reinvesting 20% of net paper-simulated and authorized trading alpha into a dedicated hardware fund, proving mathematically when the system has earned its own dedicated high-performance GPU cluster (NVIDIA H100/B200) and live tick infrastructure."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    145,
+    113,
+    121
+   ],
+   [
+    "replace",
+    145,
+    154,
+    121,
+    122,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    160,
+    122,
+    128
+   ],
+   [
+    "replace",
+    160,
+    166,
+    128,
+    134,
+    [
+     " 1. Did this fix address the fundamental root cause or merely patch a symptom?",
+     " 2. Are all dependencies covered by standard library or pre-existing code?",
+     " 3. Was the diff minimized to the fewest possible lines?",
+     " 4. Were any security or fail-closed gates compromised?",
+     " 5. Did all existing unit and regression tests pass?",
+     " 6. Has the memory database been updated with the learned lesson?"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    176,
+    134,
+    144
+   ],
+   [
+    "delete",
+    176,
+    178,
+    144,
+    144
+   ],
+   [
+    "equal",
+    178,
+    180,
+    144,
+    146
+   ],
+   [
+    "replace",
+    180,
+    181,
+    146,
+    147,
+    [
+     "|Architectural Pillar|Guarantee & Real-World Implementation|"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    147,
+    148
+   ],
+   [
+    "replace",
+    182,
+    191,
+    148,
+    155,
+    [
+     "|**🖥️ Pure Terminal First**|Runs 100% inside your standard terminal / console. Zero desktop GUI popups, zero voice HUD overlays, zero browser dependencies for core agent operations.|",
+     "|**🛡️ Zero External Plugins**|**100% Battery-Included**. You **DO NOT** need to install separate agent frameworks or prompt tools (Ponytail, Agency, AutoGPT, CrewAI, Yux Pro Max are **not** needed). All 100 specialists across 16 capability families are embedded natively.|",
+     "|**🌐 Universal Multi-Model Access**|Works on **any device or cloud environment** using standard library `urllib.request`. Native direct support for **OpenRouter** (`sk-or-...`), **Anthropic Claude** (`claude-3-5-sonnet`, `claude-3-7-sonnet`), **OpenAI** (`gpt-4o`), **DeepSeek** (`deepseek-chat`, `deepseek-reasoner`), **Groq**, **NVIDIA NIM**, **local Ollama/vLLM**, and **Google Gemini** (`gemini-2.5-flash`, `gemini-3.8-flash-high`) with automatic `.env` discovery.|",
+     "|**⚡ Fast-Path UI Accelerator**|Solves the common agent flaw of taking **25–40 minutes** for simple UI changes. Pre-indexes UI components into SQLite WAL in <200ms and resolves element targets to exact file/line coordinates in <50ms, achieving surgical UI updates in **< 60 seconds**.|",
+     "|**🧠 Local Persistent Memory**|Automatically initializes a **10-layer cognitive SQLite WAL memory store** on *your* system (`~/.iva/memory/omega_memory.db`), preserving project decisions, bug repair playbooks, and user context across reboots with zero cloud lock-in.|",
+     "|**🔧 Automated CI-Repair**|Autonomous Python CI-repair specialist (`CIRepairAgent`) that reproduces failing test suites inside a disposable container sandbox, synthesizes minimal AST root-cause patches, verifies zero regressions, and outputs reviewable diffs.|",
+     "|**🔒 Physical Fail-Closed Safety**|High-impact gates are default-deny. Market live order dispatch is physically locked (`LIVE_ORDER_DISPATCH_ENABLED = False`). Path traversal and SSRF firewalls protect host filesystems.|"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    194,
+    155,
+    158
+   ],
+   [
+    "replace",
+    194,
+    195,
+    158,
+    159,
+    [
+     "> 📄 **Definitive 5-Way Architectural Whitepaper**: For an exhaustive technical breakdown comparing **IVA vs. Claude Code vs. OpenAI Codex vs. Google Antigravity vs. DeepSeek Harness**, see **`HARNESS_COMPARISON.md`**."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    200,
+    159,
+    164
+   ],
+   [
+    "replace",
+    200,
+    201,
+    164,
+    165,
+    [
+     "|Evaluation Dimension|Standard Antigravity Desktop Agent|IVA Autonomous Cognitive Runtime|"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    165,
+    166
+   ],
+   [
+    "replace",
+    202,
+    210,
+    166,
+    174,
+    [
+     "|**🧠 Multi-Step Reasoning & Planning**|**Flat Tool Loop**: Relies on single-prompt chat turn iteration. Vulnerable to context drift, forgetting earlier subtasks, and unrecoverable execution loops.|**Hierarchical 14-State DAG Engine + Sequential Thinking**: Formulates dynamic dependency DAGs with topological cycle detection, step-by-step hypothesis evaluation, and bounded recursive self-reflection (`AuthoritativeBrainConfig`).|",
+     "|**📉 Token Efficiency & Operating Cost**|**High Token Bloat (22.7k+ tokens/turn)**: Ingests entire repositories and conversation histories into the prompt window, rapidly exhausting rate limits and driving high API billing.|**-88.2% Token Reduction (2.6k tokens/turn)**: Employs **Isolated CWD Execution** and **ACON Context Compression** to preserve exact symbols while dropping redundant AST bloat. Drastically faster and cheaper.|",
+     "|**🛠️ Everyday Coding & Refactoring**|**Unstructured File Editing**: Rewrites entire blocks without minimal-diff enforcement; prone to regression and wiping docstrings/comments.|**Native Ponytail Senior Dev Discipline**: Strict YAGNI ladder: standard library first, zero unneeded abstractions, root-cause fixes, AST syntax validation, and minimal surgical diffs (`swe_patch_minimizer`).|",
+     "|**🌐 Web & UI Automation**|**Desktop-Tied Browser**: Limited to local browser interaction within the desktop app window.|**Native Playwright Browser MCP**: Full headless and headed browser automation (DOM accessibility tree inspection, selector refinement, click/type/hover, visual screenshots, and network HAR tracing). Runs anywhere (servers, CI, or desktop).|",
+     "|**📚 Upstream Documentation & Knowledge**|**Static Cutoff / Generic Web Search**: Relies on basic search engine results; frequently hallucinates outdated package APIs.|**Real-Time Context7 MCP**: Resolves exact package libraries and pulls authoritative upstream documentation chunks live at runtime before writing code.|",
+     "|**💻 Device & Platform Independence**|**Desktop App Lock-In**: Requires Google's proprietary Electron desktop application. **Cannot** run on headless Linux servers, CI/CD runners, Docker containers, or via SSH.|**100% Platform Independent**: Runs natively on **any OS** (Linux, macOS, Windows, Raspberry Pi, Docker, SSH) using standard library Python with **zero external PyPI dependencies** and universal REST API support.|",
+     "|**🧠 Memory & Context Continuity**|**Ephemeral Session Loss**: Memory resets when the chat session ends or the desktop app closes.|**Local 10-Layer SQLite WAL Database**: Auto-initializes persistent storage (`~/.iva/memory/omega_memory.db`) locally on your machine, retaining project facts, bug repair playbooks, and user preferences permanently.|",
+     "|**🔒 Safety & Execution Containment**|**Basic Permissions**: Code runs directly on the host machine or in standard sandbox without physical financial gates.|**Defense-in-Depth Hardening**: Disposable Docker Sandbox (`--network none`, `--read-only`, `UID 65534`), Path Traversal & SSRF firewalls, and hard fail-closed financial live order lock (`LIVE_ORDER_DISPATCH_ENABLED = False`).|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    224,
+    174,
+    188
+   ],
+   [
+    "replace",
+    224,
+    226,
+    188,
+    190,
+    [
+     " - *Standard Agent*: Edits files directly in the host workspace, risking collateral corruption and unverified regressions.",
+     " - *IVA*: Isolates test execution in a disposable Docker container (`--network none`, `--read-only`, `UID 65534`). `CIRepairAgent` extracts the exact stack trace, queries AST trees, synthesizes minimal patches (`swe_patch_minimizer`), audits zero regressions, and stages clean unified diffs for human review."
+    ]
+   ],
+   [
+    "equal",
+    226,
+    227,
+    190,
+    191
+   ],
+   [
+    "replace",
+    227,
+    229,
+    191,
+    193,
+    [
+     " - *Standard Agent*: Attempts to hold all files in a single flat conversation, leading to context truncation, forgotten requirements, and fragmented implementations.",
+     " - *IVA*: `HierarchicalOrchestrator` decomposes the feature into a topologically sorted Directed Acyclic Graph (DAG) with cycle detection. Dedicated specialist contracts (`swe_api_contract_designer`, `swe_python_runtime_engineer`, `swe_concurrency_lock_auditor`) execute in structured waves with typed artifact handoffs."
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    193,
+    194
+   ],
+   [
+    "replace",
+    230,
+    232,
+    194,
+    196,
+    [
+     " - *Standard Agent*: Limited to manual desktop browser viewing without automated assertions.",
+     " - *IVA*: Integrates native **Playwright Browser Automation MCP** to inspect live DOM accessibility trees, test responsive selectors, trigger user clicks, capture visual regression screenshots, and intercept network HAR traces in headless CI or headed desktop."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    196,
+    197
+   ],
+   [
+    "replace",
+    233,
+    237,
+    197,
+    199,
+    [
+     " - *Standard Agent*: Loses state and progress completely if the IDE or computer crashes.",
+     " - *IVA*: Enforces a **14-state transactional SQLite WAL task database** (`iva_tasks.db`). In the event of a system reboot, `CheckpointManager.reconcile_after_restart()` restores exact DAG task states, execution progress, and cryptographic SHA-256 evidence ledgers with zero work loss."
+    ]
+   ],
+   [
+    "equal",
+    237,
+    260,
+    199,
+    222
+   ],
+   [
+    "delete",
+    260,
+    262,
+    222,
+    222
+   ],
+   [
+    "equal",
+    262,
+    270,
+    222,
+    230
+   ],
+   [
+    "replace",
+    270,
+    282,
+    230,
+    231,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    290,
+    231,
+    239
+   ],
+   [
+    "replace",
+    290,
+    355,
+    239,
+    240,
+    [
+     "…（65 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    356,
+    240,
+    241
+   ],
+   [
+    "delete",
+    356,
+    358,
+    241,
+    241
+   ],
+   [
+    "equal",
+    358,
+    363,
+    241,
+    246
+   ],
+   [
+    "replace",
+    363,
+    364,
+    246,
+    247,
+    [
+     "IVA permanently solves this with the **Fast-Path UI & Memory Accelerator Engine** (`FastPathUIResolver`):"
+    ]
+   ],
+   [
+    "equal",
+    364,
+    369,
+    247,
+    252
+   ],
+   [
+    "replace",
+    369,
+    375,
+    252,
+    253,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    375,
+    381,
+    253,
+    259
+   ],
+   [
+    "delete",
+    381,
+    383,
+    259,
+    259
+   ],
+   [
+    "equal",
+    383,
+    385,
+    259,
+    261
+   ],
+   [
+    "replace",
+    385,
+    386,
+    261,
+    262,
+    [
+     "IVA provides universal model access via `UniversalAPIProvider`, implemented entirely using Python's standard library `urllib.request`. It requires **zero proprietary SDKs** or heavy PyPI dependencies."
+    ]
+   ],
+   [
+    "equal",
+    386,
+    387,
+    262,
+    263
+   ],
+   [
+    "replace",
+    387,
+    388,
+    263,
+    264,
+    [
+     "> **Provider Freedom (Not Tied to Any Single Model)**: "
+    ]
+   ],
+   [
+    "equal",
+    388,
+    395,
+    264,
+    271
+   ],
+   [
+    "replace",
+    395,
+    396,
+    271,
+    272,
+    [
+     " Add any of your preferred model keys to `.env` in the repository root:"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    400,
+    272,
+    276
+   ],
+   [
+    "replace",
+    400,
+    425,
+    276,
+    277,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    428,
+    277,
+    280
+   ],
+   [
+    "replace",
+    428,
+    429,
+    280,
+    281,
+    [
+     " Export your key directly in your terminal, Docker environment, or CI runner:"
+    ]
+   ],
+   [
+    "equal",
+    429,
+    433,
+    281,
+    285
+   ],
+   [
+    "replace",
+    433,
+    444,
+    285,
+    286,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    444,
+    446,
+    286,
+    288
+   ],
+   [
+    "replace",
+    446,
+    448,
+    288,
+    290,
+    [
+     " # Windows PowerShell",
+     " $env:GEMINI_API_KEY=\"AIzaSy...\""
+    ]
+   ],
+   [
+    "equal",
+    448,
+    449,
+    290,
+    291
+   ],
+   [
+    "replace",
+    449,
+    451,
+    291,
+    293,
+    [
+     " # Windows Command Prompt",
+     " set GEMINI_API_KEY=AIzaSy..."
+    ]
+   ],
+   [
+    "equal",
+    451,
+    456,
+    293,
+    298
+   ],
+   [
+    "replace",
+    456,
+    457,
+    298,
+    299,
+    [
+     " python run_iva.py --api-key \"AIzaSy...\""
+    ]
+   ],
+   [
+    "equal",
+    457,
+    476,
+    299,
+    318
+   ],
+   [
+    "replace",
+    476,
+    541,
+    318,
+    319,
+    [
+     "…（65 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    541,
+    544,
+    319,
+    322
+   ],
+   [
+    "replace",
+    544,
+    547,
+    322,
+    325,
+    [
+     "│ ├── server.py # Zero-dependency multi-threaded REST API server (Port 8095)",
+     "│ ├── models.py # Typed domain contracts (MeetupEvent, Attendee, Coordinate3D)",
+     "│ └── database.py # Thread-safe persistent JSON repository with seed meetups"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    548,
+    325,
+    326
+   ],
+   [
+    "replace",
+    548,
+    553,
+    326,
+    331,
+    [
+     "│ ├── index.html # Semantic HTML5, accessible HUD header, 3D WebGL Canvas",
+     "│ ├── css/styles.css # Glassmorphic spatial design system, responsive breakpoints",
+     "│ └── js/",
+     "│ ├── app.js # Core application controller, REST API integration, RSVP state",
+     "│ └── three_scene.js # Spatial Three.js scene manager, camera scroll rigging, node rotations"
+    ]
+   ],
+   [
+    "equal",
+    553,
+    554,
+    331,
+    332
+   ],
+   [
+    "replace",
+    554,
+    557,
+    332,
+    335,
+    [
+     "│ └── test_backend_api.py # Automated integration test suite (HTTP 200, RSVP flow, CORS)",
+     "├── run_app.py # Automated launcher script with browser auto-open",
+     "└── README.md # Complete technical architecture specification"
+    ]
+   ],
+   [
+    "equal",
+    557,
+    571,
+    335,
+    349
+   ],
+   [
+    "replace",
+    571,
+    624,
+    349,
+    350,
+    [
+     "…（53 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    624,
+    643,
+    350,
+    369
+   ],
+   [
+    "replace",
+    643,
+    647,
+    369,
+    370,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    647,
+    649,
+    370,
+    372
+   ],
+   [
+    "replace",
+    649,
+    661,
+    372,
+    384,
+    [
+     "│ IVA ALL-IN-ONE RUNTIME │",
+     "│ │",
+     "│ ❌ NO 'Ponytail' Plugin Needed → ✅ Built-in AST Refactoring & │",
+     "│ Minimal Diff Synthesis │",
+     "│ ❌ NO 'Agency' / 'AutoGPT' Needed → ✅ Built-in Hierarchical DAG │",
+     "│ Multi-Agent Orchestrator │",
+     "│ ❌ NO 'Yux Pro Max' Needed → ✅ Built-in 100 Specialist │",
+     "│ Prompt Contracts & Schemas │",
+     "│ ❌ NO Cloud Memory Subscription → ✅ Built-in 10-Layer SQLite │",
+     "│ WAL Cognitive Memory Store │",
+     "│ ❌ NO Proprietary SDK Dependencies → ✅ Built-in Python Stdlib │",
+     "│ Universal API Provider │"
+    ]
+   ],
+   [
+    "equal",
+    661,
+    666,
+    384,
+    389
+   ],
+   [
+    "replace",
+    666,
+    677,
+    389,
+    390,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    677,
+    679,
+    390,
+    392
+   ],
+   [
+    "replace",
+    679,
+    694,
+    392,
+    407,
+    [
+     "├── playwright/ # Full Headless & Headed Browser Automation (DOM, Clicks, Screenshots)",
+     "├── sequential-thinking/ # Dynamic Multi-Step Hypothesis Evaluation & Branching",
+     "├── context7/ # Real-Time Upstream Documentation & Library Resolution",
+     "├── gsd/ # Getting Shit Done: Full Multi-Phase Software Design Lifecycle",
+     "├── ponytail/ # Lazy Senior Developer Engine: AST Refactoring & Minimal Diffs",
+     "├── chrome-devtools-mcp/ # Chrome DevTools Protocol, Network HAR & Performance Tracing",
+     "├── maestro/ # Mobile Application UI & Automation Testing",
+     "├── mobile-mcp/ # Mobile Device & Emulator Interaction Plane",
+     "├── uiux-mcp/ # Automated UI/UX Inspection & Accessibility Audits",
+     "├── cloudrun/ # Google Cloud Run Container Deployment & Log Telemetry",
+     "├── gonkarouter/ # Multi-Model Arbitration & Cognitive Model Routing",
+     "├── gemini-api_gemini-api-docs/ # Upstream Official Gemini SDK & API Documentation Engine",
+     "├── firebase-mcp-server/ # Cloud Database & Backend Service Orchestration",
+     "├── codegraphcontext/ # AST Dependency Graphs & Symbol Resolution",
+     "└── arize-tracing-assistant/ # Observability, Latency & Token Telemetry Tracing"
+    ]
+   ],
+   [
+    "equal",
+    694,
+    698,
+    407,
+    411
+   ],
+   [
+    "replace",
+    698,
+    734,
+    411,
+    412,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    734,
+    736,
+    412,
+    414
+   ],
+   [
+    "replace",
+    736,
+    743,
+    414,
+    421,
+    [
+     " A[Failing Unit Test] --> B[Reproduce in Sandbox]",
+     " B --> C[Analyze Traceback & AST]",
+     " C --> D[Synthesize Minimal Patch]",
+     " D --> E[Re-run Tests in Sandbox]",
+     " E -- \"Pass\" --> F[Audit Zero Regressions]",
+     " F --> G[Stage Reviewable Unified Diff]",
+     " E -- \"Fail\" --> C"
+    ]
+   ],
+   [
+    "equal",
+    743,
+    747,
+    421,
+    425
+   ],
+   [
+    "replace",
+    747,
+    751,
+    425,
+    426,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    751,
+    757,
+    426,
+    432
+   ],
+   [
+    "replace",
+    757,
+    763,
+    432,
+    433,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    763,
+    765,
+    433,
+    435
+   ],
+   [
+    "replace",
+    765,
+    772,
+    435,
+    442,
+    [
+     " subgraph Layer0 [\"0. Security Gatekeeper & Universal Input\"]",
+     " direction TB",
+     " INPUT[\"User CLI / Terminal REPL / API / CI Runner\"] --> SCAN[\"UntrustedContentScanner (Path Traversal & SSRF Firewall)\"]",
+     " SCAN --> ROUTER_FAST{\"Fast-Path Router (< 50ms Intent Classifier)\"}",
+     " ROUTER_FAST -- \"Runtime / Status Command\" --> DIRECT[\"Deterministic Direct Handler\"]",
+     " ROUTER_FAST -- \"Complex Goal / Engineering Task\" --> INBOX[\"CommandInbox (Live Priority Dispatch)\"]",
+     " end"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    773,
+    442,
+    443
+   ],
+   [
+    "replace",
+    773,
+    780,
+    443,
+    450,
+    [
+     " subgraph Layer1 [\"1. Transactional Task Control Plane\"]",
+     " direction TB",
+     " INBOX --> ORCH[\"HierarchicalOrchestrator (Mission DAG Decomposer)\"]",
+     " ORCH --> DEP[\"DependencyManager (Cycle Detection & Topological Sort)\"]",
+     " DEP <--> TASKDB[(\"14-State SQLite Task DB (iva_tasks.db WAL)\")]",
+     " TASKDB <--> STM[\"TaskStateMachine (14-State Transition Enforcer)\"]",
+     " end"
+    ]
+   ],
+   [
+    "equal",
+    780,
+    781,
+    450,
+    451
+   ],
+   [
+    "replace",
+    781,
+    787,
+    451,
+    457,
+    [
+     " subgraph Layer2 [\"2. Concurrency & Resource Governor\"]",
+     " direction TB",
+     " ORCH --> GOV[\"ResourceGovernor (Telemetry Monitor)\"]",
+     " GOV <--> RES[\"Live System Headroom Checks (RAM >= 1400MB, CPU < 85%)\"]",
+     " GOV --> POOL[\"Dynamic Active Worker Pool (1 to 4 Concurrent Executions)\"]",
+     " end"
+    ]
+   ],
+   [
+    "equal",
+    787,
+    788,
+    457,
+    458
+   ],
+   [
+    "replace",
+    788,
+    793,
+    458,
+    463,
+    [
+     " subgraph Layer3 [\"3. 100-Specialist Ecosystem Router\"]",
+     " direction TB",
+     " POOL --> CROUTER[\"CapabilityRouter (Schema Matching & Contract Binding)\"]",
+     " CROUTER --> SPEC[\"100 Embedded Specialist Contracts (16 Functional Families)\"]",
+     " end"
+    ]
+   ],
+   [
+    "equal",
+    793,
+    794,
+    463,
+    464
+   ],
+   [
+    "replace",
+    794,
+    800,
+    464,
+    470,
+    [
+     " subgraph Layer4 [\"4. Universal Model Engine & Token Economy\"]",
+     " direction TB",
+     " SPEC --> MA[\"ModelAdapter (Google Gemini Direct REST / OpenAI)\"]",
+     " MA --> CWD[\"Isolated CWD Working Directory (-88.2% Token Bloat Reduction)\"]",
+     " MA --> ECON[\"TokenEconomy Ledger (Strict Cost Ceilings)\"]",
+     " end"
+    ]
+   ],
+   [
+    "equal",
+    800,
+    801,
+    470,
+    471
+   ],
+   [
+    "replace",
+    801,
+    807,
+    471,
+    477,
+    [
+     " subgraph Layer5 [\"5. Disposable Sandbox & Process Supervision\"]",
+     " direction TB",
+     " SPEC --> SBX[\"DisposableSandboxRunner (python:3.12-slim Container)\"]",
+     " SBX --> FLAGS[\"Strict Hardening Flags (--network none, --read-only, tmpfs /tmp)\"]",
+     " SBX <--> SUP[\"ProcessSupervisor & StreamParser (Real-Time stdout/stderr & Idle Timeout)\"]",
+     " end"
+    ]
+   ],
+   [
+    "equal",
+    807,
+    808,
+    477,
+    478
+   ],
+   [
+    "replace",
+    808,
+    814,
+    478,
+    484,
+    [
+     " subgraph Layer6 [\"6. Cognitive Memory & Learning Plane\"]",
+     " direction TB",
+     " SBX -- \"Failure Traceback\" --> REPAIR[\"CIRepairAgent (Minimal Patch Synthesis)\"]",
+     " REPAIR --> MEM[(\"10-Layer SQLite Memory (omega_memory.db WAL)\")]",
+     " MEM <--> ACON[\"ACONCompressor (Anchor-Preserving Compression)\"]",
+     " end"
+    ]
+   ],
+   [
+    "equal",
+    814,
+    815,
+    484,
+    485
+   ],
+   [
+    "replace",
+    815,
+    823,
+    485,
+    493,
+    [
+     " subgraph Layer7 [\"7. Verification & Staging\"]",
+     " direction TB",
+     " SBX -- \"Exit Code 0 (Full Pass)\" --> VERIF[\"EvidenceVerifier (Zero-Regression Audit)\"]",
+     " VERIF --> STAGE[\"External Candidate Staging (Repo 100% Unchanged During Generation)\"]",
+     " STAGE --> HUMAN{\"HighImpactApprovalGate Human Authorization?\"}",
+     " HUMAN -- \"Approved\" --> COMMIT[\"Atomic Workspace Commit\"]",
+     " HUMAN -- \"Denied\" --> ABORT[\"Default-Deny Quarantine\"]",
+     " end"
+    ]
+   ],
+   [
+    "equal",
+    823,
+    824,
+    493,
+    494
+   ],
+   [
+    "replace",
+    824,
+    831,
+    494,
+    501,
+    [
+     " Layer0 --> Layer1",
+     " Layer1 --> Layer2",
+     " Layer2 --> Layer3",
+     " Layer3 --> Layer4",
+     " Layer3 --> Layer5",
+     " Layer5 --> Layer6",
+     " Layer6 --> Layer7"
+    ]
+   ],
+   [
+    "equal",
+    831,
+    835,
+    501,
+    505
+   ],
+   [
+    "replace",
+    835,
+    881,
+    505,
+    506,
+    [
+     "…（46 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    881,
+    898,
+    506,
+    523
+   ],
+   [
+    "replace",
+    898,
+    902,
+    523,
+    525,
+    [
+     " 🧪 IVA AUTONOMOUS SELF-VERIFICATION SUITE",
+     " Executing tests across terminal, universal API, cognitive identity & hardening..."
+    ]
+   ],
+   [
+    "equal",
+    902,
+    903,
+    525,
+    526
+   ],
+   [
+    "replace",
+    903,
+    905,
+    526,
+    528,
+    [
+     " • Loaded 118 test cases from verified test modules.",
+     " Ran 118 tests in 12.97s"
+    ]
+   ],
+   [
+    "equal",
+    905,
+    906,
+    528,
+    529
+   ],
+   [
+    "replace",
+    906,
+    910,
+    529,
+    531,
+    [
+     " OK",
+     " ✅ All 118 tests PASSED in 12.97s. IVA self-verification 100% GREEN."
+    ]
+   ],
+   [
+    "equal",
+    910,
+    914,
+    531,
+    535
+   ],
+   [
+    "replace",
+    914,
+    929,
+    535,
+    536,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    929,
+    931,
+    536,
+    538
+   ],
+   [
+    "replace",
+    931,
+    937,
+    538,
+    544,
+    [
+     "├── run_iva.py # Primary CLI Entrypoint (Interactive REPL & CLI commands)",
+     "├── setup_iva.py # Autonomous setup script (creates .env & initializes memory)",
+     "├── README.md # Master Architecture, Installation & Operational Guide",
+     "├── IVA_README.md # Iva Agent Cognitive Identity & Philosophical Playbook",
+     "├── pyproject.toml # Standard packaging definition (0 required dependencies)",
+     "├── .env.example # Universal API configuration template"
+    ]
+   ],
+   [
+    "equal",
+    937,
+    938,
+    544,
+    545
+   ],
+   [
+    "replace",
+    938,
+    957,
+    545,
+    564,
+    [
+     "├── agents/IVA/ # Native IVA Multi-Agent Core Engine",
+     "│ ├── ecosystem/agent_registry/ # 100 Specialist Contracts & Registry",
+     "│ │ ├── registry.json # Validated 100-specialist contract definitions",
+     "│ │ ├── registry_validator.py # JSON schema & duplicate contract validator",
+     "│ │ └── ecosystem_coordinator.py # Dynamic capability router & contract dispatcher",
+     "│ │",
+     "│ ├── engine/agi17/ # Transactional Runtime Engine",
+     "│ │ ├── adapters/ # Universal API Provider & Model Adapter",
+     "│ │ │ ├── universal_api_provider.py # Direct Google Gemini & OpenAI REST via stdlib urllib",
+     "│ │ │ └── model_adapter.py # Token economy & credential discovery",
+     "│ │ ├── memory/ # 10-Layer Cognitive Memory DB (SQLite WAL)",
+     "│ │ ├── orchestration/ # Hierarchical DAG Orchestrator & CI-Repair Agent",
+     "│ │ │ ├── hierarchical_orchestrator.py",
+     "│ │ │ └── ci_repair_agent.py # Automated Python CI-Repair Specialist",
+     "│ │ ├── process_supervision/ # Disposable Docker Sandbox Runner & Supervisors",
+     "│ │ ├── runtime/ # TerminalClient & Interactive REPL Engine",
+     "│ │ └── task_control/ # 14-State Machine & Transactional Task DB",
+     "│ │",
+     "│ └── docs/ # Architecture Specifications & P0 Security Audits"
+    ]
+   ],
+   [
+    "equal",
+    957,
+    958,
+    564,
+    565
+   ],
+   [
+    "replace",
+    958,
+    963,
+    565,
+    570,
+    [
+     "└── tests/ # Comprehensive Test Suites",
+     " ├── unit/ # Terminal client & Universal API provider unit tests",
+     " ├── integration/ # End-to-end multi-agent integration tests",
+     " ├── test_iva_cognitive_architecture_and_identity.py # Iva identity & safety invariant tests",
+     " └── test_production_hardening_sprint.py # Production hardening & sandbox tests"
+    ]
+   ],
+   [
+    "equal",
+    963,
+    967,
+    570,
+    574
+   ],
+   [
+    "replace",
+    967,
+    974,
+    574,
+    575,
+    [
+     "…（7 行代码略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

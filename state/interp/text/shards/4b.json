@@ -2407,5 +2407,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3762ae5902c1": {
+  "identity": {
+   "one_liner": "基于 React 前端与 Rust 后端的实时敏捷回顾看板应用",
+   "review": "Retrospected 是面向工程团队的实时敏捷回顾看板，同时是产品与技术演示项目：前端使用 React 19、Zustand、Socket.IO，后端以 Rust（Axum、Tokio、sqlx）实现，数据存储于 Postgres 16。支持 Google、GitHub 等多种 OAuth 登录、多语言界面及 Claude 驱动的 AI 教练与回顾总结。可通过公共站点使用，也可按快速入门指南自托管，完整版本需购买自托管许可证。",
+   "highlights": [
+    "基于 Socket.IO 实现实时协作看板，支持贴纸的拖拽排序与分组（含触屏设备）",
+    "后端由 Rust 重写（Axum、Tokio、sqlx），数据库与自托管安装保持兼容；加密卡片使用 AES-GCM",
+    "支持 i18next 多语言、多种 OAuth 登录，以及由 Claude 驱动的敏捷教练和回顾总结功能"
+   ],
+   "use_cases": [
+    "工程团队进行迭代回顾会议，实时收集和整理成员反馈",
+    "在内部服务器上自托管部署，通过 Docker 运行实例",
+    "需要多语言界面与 AI 辅助总结的敏捷团队协作场景"
+   ]
+  },
+  "sha": "3762ae5902c1",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "22a7a803829d": {
+  "identity": {
+   "one_liner": "一个用流式命令封装 ADO.NET 样板代码的 .NET 数据访问工具库",
+   "review": "Open.Database.Extensions（ODX）是基于 ADO.NET 类型扩展方法的 .NET 库，开发者自写 SQL，库负责打开/关闭连接、创建命令与参数、读取行并映射为对象后释放资源。核心包括连接工厂、表达力命令（含存储过程）和按名称匹配的 Map<T>() 行映射，另提供 Channel/Dataflow 流式读取包。适合需要在 .NET 中手写 SQL 并依赖注入的场景；v11 目前为 release candidate。",
+   "highlights": [
+    "提供基于 DbConnection/DbCommand/DbDataReader 的扩展方法，按 ADO.NET 最佳实践处理连接开闭、事务回滚与资源释放",
+    "支持 Map<T>() 按名称（忽略大小写与下划线）将列映射到公共可写属性与构造参数，可声明 RowMap<T> 复用列重命名映射",
+    "包含多个 NuGet 包：Core（提供者无关）、Channel、Dataflow、MSSqlClient 等，目标 netstandard2.0/2.1 与 net10.0"
+   ],
+   "use_cases": [
+    "手写 SQL 且希望减少连接管理、参数添加与行读取样板代码的 .NET 项目",
+    "需要将查询行流转入 System.Threading.Channels 或 TPL Dataflow 进行处理的场景",
+    "使用 Microsoft.Data.SqlClient 的 SQL Server 存储过程调用与连接工厂注册"
+   ]
+  },
+  "sha": "22a7a803829d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ff4bb6d7c0b7": {
+  "identity": {
+   "one_liner": "多租户药店会员运营系统，基于 Next.js 与 Prisma 实现",
+   "review": "Afyvia Tier 2 是一个多租户药店网络运营系统，为多家独立药店提供客户账户、CRM、AI 助手、续方流程、提醒、营销活动、积分忠诚度与分析看板等模块。技术栈为 Next.js App Router、Prisma 7 与 Neon Postgres，采用共享数据库加 pharmacy_id 隔离；含平台超管、药店后台与客户门户等入口。库存、POS、发药等属于 Tier 3，不在多租户范围内。",
+   "highlights": [
+    "包含客户账户、CRM、AI 助手、续方、提醒、活动、忠诚度、分析等 19 个 Tier 2 模块",
+    "多租户架构：共享 Neon Postgres 数据库，按 pharmacy_id 隔离，配套平台超管与药店入驻向导",
+    "定时任务通过 Cron 端点处理提醒（每 5 分钟）、库存监控（每 6 小时）与忠诚度积分（每日）"
+   ],
+   "use_cases": [
+    "多药店共享平台运营会员关系、续方与提醒",
+    "需要 AI 助手仅基于已审核知识库回答并升级人工的客服场景",
+    "构建平台超管审核、 impersonate 与药店入驻流程的 SaaS 平台"
+   ]
+  },
+  "sha": "ff4bb6d7c0b7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3af1dcc942d": {
+  "identity": {
+   "one_liner": "独立维护的 Rust 分析型 SQL 引擎，目标兼容 DuckDB 1.5.6 接口",
+   "review": "roastedDuck 是一个独立的进程内分析型 SQL 引擎，用 Rust 实现，针对 DuckDB 1.5.6 的 SQL、存储及部分客户端契约。提供命令行 shell 与 Python、Go、Swift、C API、ADDBC 接口，MIT 许可，处于公开预览阶段，与官方 DuckDB 无关。安装通过 GitHub Releases 或 PyPI（包名 roastedduck，导入名仍为 duckdb）；基准数据显示其峰值内存更低而部分查询耗时更长。",
+   "highlights": [
+    "以 Rust 实现的进程内分析型 SQL 引擎，提供 CLI、Python、Go、Swift、C API 与 ADBC 客户端支持",
+    "针对 DuckDB 1.5.6 的 SQL、存储与部分客户端契约做兼容，具备差分测试覆盖，并公布已分类的测试失败记录",
+    "发布的基准候选记录显示在 TPC-H SF10 与 ClickBench 上峰值 RSS 降低 60–76%，最佳执行时间延长 7–16%"
+   ],
+   "use_cases": [
+    "需要嵌入应用进程内的分析型 SQL 查询，并使用 Python、Go、Swift 或 C/ADBC 客户端接入",
+    "希望读取/写入 .duckdb 存储文件的 Rust 工具链项目",
+    "希望以独立实现测试 DuckDB SQL 兼容性的场景（预览阶段，Windows 与 Intel Mac 不在支持范围）"
+   ]
+  },
+  "sha": "b3af1dcc942d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

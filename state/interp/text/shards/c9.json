@@ -2562,5 +2562,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e373a9c71858": {
+  "identity": {
+   "one_liner": "Rust 异步 ORM，模型字段声明关系并提供流式查询构建器",
+   "review": "TideORM 是面向 Rust 开发者的异步 ORM，通过 #[tideorm::model] 宏定义模型，支持在模型上直接声明 HasOne/HasMany/BelongsTo 关系。使用 Cargo feature 选择 PostgreSQL、MySQL 或 SQLite 后端及 tokio/async-std 运行时；注意加密字段暂不支持透明查询过滤，需按文档显式配置 feature。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 三种数据库后端，通过 feature 标志启用",
+    "提供急加载、分块读取、游标分页，以及含 join/union/CTE/窗口函数的流式查询构建器",
+    "可选模块包括字段加密、实体管理器、脏跟踪、附件、翻译和全文检索"
+   ],
+   "use_cases": [
+    "使用 async/await 技术栈的 Rust 后端服务数据访问层",
+    "需要多数据库连接或按租户/副本切换数据库的应用",
+    "需要模型级字段加密存储敏感列的项目"
+   ]
+  },
+  "sha": "e373a9c71858",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a8009d82460f": {
+  "identity": {
+   "one_liner": "替换 PostgreSQL 库中 PII 数据的命令行匿名化工具",
+   "review": "pgEdge Anonymizer 是一个用于 PostgreSQL 数据库的命令行工具，通过 YAML 配置文件指定列与替换模式，将库中的个人身份信息（PII）替换为逼真的假值，供开发与测试使用。替换在同一运行内保持一致性，支持外键级联关系，所有变更以单事务提交或回滚。源码以 Go 编写，采用 PostgreSQL License。",
+   "highlights": [
+    "内置 19 个国家常见 PII 类型的 100+ 替换模式，并支持以日期、数字或掩码格式定义自定义模式",
+    "具备外键感知，自动处理 CASCADE 关系，并通过服务端游标分批处理大型数据库",
+    "全部变更在单事务中原子提交或回滚，同一输入在同一运行内产生相同输出"
+   ],
+   "use_cases": [
+    "从生产库复制出的开发/测试数据库需要在转换数据时保持参照完整性",
+    "需按 GDPR 等要求对含 PII 列的 PostgreSQL 数据进行替换处理",
+    "需要对大型 PostgreSQL 表进行批量匿名化并保留原数据格式的场景"
+   ]
+  },
+  "sha": "a8009d82460f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5b8bf35612f": {
+  "identity": {
+   "one_liner": "ocdbc：分析并安全回收 OpenCode SQLite 数据库的空闲页空间",
+   "review": "ocdbc 是一个面向 OpenCode 用户的 Python 命令行工具，用于检查并回收 ~/.local/share/opencode/opencode.db 中 freelist 空闲页占用的磁盘空间。提供只读 analyze 命令输出数据库大小、活跃数据与空闲页占比、表大小和会话年龄分布；vacuum 命令按固定顺序执行 fuser 检测、WAL checkpoint、完整性检查、带验证的时间戳备份、开启增量 auto_vacuum、VACUUM 重建及最终完整性验证。需 Python 3.8+，仅依赖标准库，MIT 许可，可通过 pip 安装。",
+   "highlights": [
+    "analyze 命令只读输出数据库大小、活跃数据与 freelist 占比、表大小、会话年龄分布及最大的 5 条消息",
+    "vacuum 命令依次执行 fuser 占用检测、WAL checkpoint、前后完整性检查、已验证的时间戳备份、增量 auto_vacuum 开启与 VACUUM 重建",
+    "仅依赖 Python 3.8+ 标准库，无 pip 依赖"
+   ],
+   "use_cases": [
+    "opencode.db 体积较大，需判断占用来自活跃数据还是 freelist 空闲页",
+    "OpenCode 重度使用后的本地数据库维护检查",
+    "希望在备份和完整性检查保护下执行 SQLite VACUUM，而非手动运行命令"
+   ]
+  },
+  "sha": "b5b8bf35612f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3fb24d56e4a5": {
+  "identity": {
+   "one_liner": "可自托管的项目管理工具，通过 MCP 与 CLI 让 AI 代理与团队在同一看板上协作。",
+   "review": "Kanera 是一个基于 Angular、Fastify、PostgreSQL 与 Socket.IO 构建的项目管理工具，支持 Kanban、表格、日历、时间线和依赖视图，采用 ELv2 许可证并以 Docker 镜像分发，可自托管。其特点是提供 MCP 服务器和 kanera CLI，使 Claude、Codex、Cursor 等 AI 代理能直接读取卡片、执行任务并留下运行记录，变更带代理归属标记；工作区级别的列表、标签与自定义字段在各看板间共享，代理权限沿用所代表用户的看板权限，并提供只读凭据机制。",
+   "highlights": [
+    "提供 MCP 服务器、kanera CLI、TypeScript SDK、REST API 与 webhook 五种接入方式，CLI 与 MCP 暴露同一工具层",
+    "代理运行在卡片上显示实时状态，15 分钟未报告标记为停滞，变更通过 OAuth 连接以 via 徽章归属",
+    "支持跨看板依赖链接，Timeline 视图可返回关键路径、浮动时间与预计完成日期；自托管版本包含访客访问、Slack/Discord/ntfy/Gotify 通知，无计划与按席位费用"
+   ],
+   "use_cases": [
+    "团队需要自托管项目管理并让 AI 代理在同一看板上认领和执行任务",
+    "多个项目看板需共享统一的列表、标签、自定义字段与自动化配置",
+    "需要跨看板追踪任务依赖、关键路径及通过 REST API/webhook 集成其他工具"
+   ]
+  },
+  "sha": "3fb24d56e4a5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "00f183ab2802": {
+  "identity": {
+   "one_liner": "纯托管 C# 编写的 SQLite3 数据库只读解析器",
+   "review": "该项目以托管 C# 实现 SQLite3 数据库文件的只读解析，可读取表结构与行数据，支持 WAL、DELETE 等 SQLite 全部 journal 模式，并支持 Lenient/Strict 两种校验级别。适合需要在无本地 SQLite 依赖的环境中读取数据库文件的开发者。项目不提供写入与 SQL 执行能力，虚拟表与 VIRTUAL 生成列无法读取，且要求打开期间文件不被并发修改。",
+   "highlights": [
+    "全部托管 C# 实现只读读取，提供表与行数据访问",
+    "支持读取 SQLite 的全部 journal 模式，包括 -wal 文件与热 -journal 回放",
+    "通过移植 SQLite 自带解析器来解析 CREATE 语句等模式定义"
+   ],
+   "use_cases": [
+    "无本地 SQLite 原生依赖的 .NET 环境中读取 SQLite3 数据库文件",
+    "读取带有 -wal 或热 -journal 侧文件、尚未合并到主文件的已提交数据",
+    "校验数据库文件结构（Header 字段、一致性检查）或读取表模式定义"
+   ]
+  },
+  "sha": "00f183ab2802",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c9deffc5388e": {
+  "identity": {
+   "one_liner": "自托管的 Rust 文档检索与 RAG 引擎，返回可回溯验证的引文",
+   "review": "AnyRAG 是一个用 Rust 编写的自托管文档搜索与检索增强生成引擎，内置 SQLite，可索引 Markdown、文本及可选的 PDF/Word 文件，检索段落并附带可重新打开核对的引文。它面向个人笔记（如 Obsidian）和小型团队私有搜索，默认构建无需模型或数据库服务，可选启用语义检索、类型化图遍历和带引文的模型回答。README 记录了基准数据来自合成测试集，扫描件 OCR 为实验性功能。",
+   "highlights": [
+    "基于源文件修订版本模型，检索结果附带可回溯、可在源变更后验证失效的引文",
+    "提供本地搜索、语义/混合检索、类型化 Graph RAG 管线，以及操作员仪表盘",
+    "支持 Rust CLI、Rust SDK、只读 MCP 和共享 HTTP 服务多种接入方式"
+   ],
+   "use_cases": [
+    "对个人 Obsidian 或 Markdown 笔记进行本地精确与语义检索",
+    "在单台 Linux 工作站上为团队搭建私有网络内的文档搜索与 Graph RAG 服务",
+    "需要关系跨文档推断的两跳式证据问答场景"
+   ]
+  },
+  "sha": "c9deffc5388e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

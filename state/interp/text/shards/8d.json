@@ -2752,5 +2752,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fba04bad9ab8": {
+  "identity": {
+   "one_liner": "macOS 上的达梦 dmPython 兼容层，基于 JayDeBeApi 与 JDBC 实现 DBAPI 子集。",
+   "review": "该包为 macOS 提供达梦数据库的 dmPython 替代实现：因官方无 macOS 驱动，它通过 JayDeBeApi 调用内置的达梦 JDBC 驱动（jar 随 wheel 附带），实现 DBAPI 子集，导入名仍为 dmPython，应用代码无需修改；非 macOS 平台则转发到官方驱动。面向需要在 Mac 本地运行 dmSQLAlchemy、dmAsync 等达梦生态工具的开发者。需 Python≥3.12 与 JDK，不支持存储过程 OUT 绑定、流式 LOB 等。",
+   "highlights": [
+    "通过 JayDeBeApi + 达梦 JDBC 驱动实现 dmPython 的 DBAPI 子集，导入名保持 dmPython",
+    "支持 dmAsync==1.0.0 所需的 connect/execute/fetch/commit/rollback/ping 等接口，并以 .pth 钩子使 importlib.metadata 返回版本号",
+    "内置达梦 JDBC 驱动 jar，可用 DM_JDBC_JAR 环境变量覆盖"
+   ],
+   "use_cases": [
+    "在 macOS 上为 dmSQLAlchemy 的 dm+dmPython:// 方言提供可安装的 dmPython 模块",
+    "作为 dmAsync 的 dmPython 后端运行异步数据库操作",
+    "跨平台项目中按 sys_platform 条件依赖：macOS 用本包，Linux/Windows 用官方驱动"
+   ]
+  },
+  "sha": "fba04bad9ab8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

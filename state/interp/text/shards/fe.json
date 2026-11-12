@@ -2998,5 +2998,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5184046bc01d": {
+  "identity": {
+   "one_liner": "面向 Node.js 和 Bun 的纯 TypeScript PostgreSQL 驱动，直接实现线缆协议",
+   "review": "PostgreJS 是不依赖 libpq 和原生绑定的 PostgreSQL 客户端驱动，用 TypeScript 从线缆协议层面实现，支持连接池、预处理语句、服务端游标、LISTEN/NOTIFY、COPY 流、逻辑复制、两阶段提交等功能。README 中的性能与内存数据来自项目自带基准测试。安装方式为 npm install postgrejs。",
+   "highlights": [
+    "不依赖 libpq 和原生扩展，以纯 TypeScript/JavaScript 实现 PostgreSQL 线缆协议，以 ESM 格式发布并附带类型定义",
+    "提供动态 sql 标签、逐查询类型映射、连接池、服务端游标、二进制 COPY、逻辑复制、大对象 API、两阶段提交、多主机故障转移及 SCRAM channel binding",
+    "查询、游标、事务、连接等事件发布到 Node diagnostics_channel，可经 postgrejs-otel 转为 OpenTelemetry span 与连接池指标"
+   ],
+   "use_cases": [
+    "在 Node.js（22.12+）或 Bun 运行时中直接连接 PostgreSQL 12–18 数据库的应用",
+    "希望通过适配器将 Kysely、Drizzle ORM、TypeORM、Prisma 等查询构建器或 ORM 的底层连接替换为该驱动的项目",
+    "需要接入 OpenTelemetry 追踪与数据库客户端指标的服务，或需在 Cloudflare Workers 中以纯 JS 方式访问 PostgreSQL"
+   ]
+  },
+  "sha": "5184046bc01d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8574bc61d29d": {
+  "identity": {
+   "one_liner": "ioBroker 的 SQL 历史数据适配器，将状态写入 MySQL、PostgreSQL、MS-SQL 或 SQLite",
+   "review": "ioBroker.sql 是 ioBroker 平台的适配器，用于把状态历史数据存储到 SQL 数据库，支持 PostgreSQL、MySQL、Microsoft SQL Server 和 SQLite。它面向 ioBroker 用户，提供防抖、阻断时间、仅记录变化值等采集控制，以及统计清理和保留期管理。README 提到 MySQL 8.0 的新加密认证方式尚不被支持，SQLite 为文件型数据库。该适配器从 js-controller 3.0 起默认使用 Sentry 上报异常，可在插件文档中了解关闭方法。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、MS-SQL、SQLite 四种数据库，MySQL 可通过 Unix socket 连接",
+    "提供防抖时间、阻断时间、仅记录变化值、最小差值、0/null 忽略等逐数据点记录规则",
+    "统计页列出每个 ID 的存储类型、值数量、估算大小和时间范围，清理操作需确认后执行"
+   ],
+   "use_cases": [
+    "为 ioBroker 中的传感器、设备状态等数据点建立 SQL 历史记录",
+    "在 SD 卡或消费级 SSD 上通过 PostgreSQL synchronous_commit=off 选项减少磁盘写入",
+    "需要对历史数据做保留期清理、ID 别名延续记录或直接查询数据库表结构的场景"
+   ]
+  },
+  "sha": "8574bc61d29d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2504ae9bb39b": {
+  "identity": {
+   "one_liner": "用 Rust 编写的 WoW Forever 1.60.1 服务端模拟器，实验阶段",
+   "review": "RustyCore Forever 是 RustyCore 的现代客户端分支，在模块化 3.4.3 基础上实现 WoW Forever 1.60.1.70170 协议，面向希望参与开发或测试的用户。项目采用 GPL-3.0-or-later 许可，依赖固定版本的 Rust 工具链与 protoc 28.3 构建，需配套 rustycore-extractors 仓库提取客户端资源。README 明确标注服务器尚不可游玩，角色创建与进入世界等功能未完成。",
+   "highlights": [
+    "实现 build-70170 Battle.net 认证、账号查询与 realm-list 交换，AuthSession 证明与加密传输已在隔离测试中通过",
+    "提供 forever-extractor CLI，读取本地客户端生成版本化的 DB2、GameTable、地形、碰撞与导航数据包，可离线校验",
+    "要求 rustycore 与 rustycore-extractors 两仓库置于同一父目录，以解析路径依赖"
+   ],
+   "use_cases": [
+    "开发者参与协议实现与功能贡献，需提供 C++ 源锚点或真实客户端抓包",
+    "在隔离回环环境中运行认证冒烟测试与 validation-v2 验收",
+    "使用提取器为本地客户端生成可校验的资源数据包"
+   ]
+  },
+  "sha": "2504ae9bb39b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f0d075f929f0": {
+  "identity": {
+   "one_liner": "自托管多代理软件工厂，以角色分离与评审/QA/裁判合并门交付 PR",
+   "review": "Hivemill 是一个运行在单台机器上的自托管多代理系统，编排 Claude Code 与 Cursor 代理，按 boss、director、coder、reviewer、QA、judge 等固定角色协作，由 judge 在评审与 QA 通过后决定合并 PR。适用于希望在自有服务器上批量委派编码任务并留存审计记录的开发者。需 Debian/Ubuntu 环境与已登录的 Claude Code；写入者不评审不合并；代理隔离被明确定位为 tripwire 而非沙箱。",
+   "highlights": [
+    "固定角色链（boss/director/coder/reviewer/QA/judge）由 hooks 强制权限，写代码的代理不能评审、测试或合并",
+    "merge gate 仅在 reviewer 与 QA 判定通过时合并，目标、任务、判定存于 SQLite 并带 append-only 事件日志",
+    "spawn gate 监控 RAM、负载与 Claude 进程数以排队新代理；支持 claude 与 cursor 两种 runtime 组织共享一机一库"
+   ],
+   "use_cases": [
+    "在自有 VM 上让多个代理并行处理编码目标并自动产出经检查的 PR",
+    "需要留存每项任务的判定、成本、token 与耗时审计记录的团队",
+    "低配单机环境下受控运行多个代理实例"
+   ]
+  },
+  "sha": "f0d075f929f0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

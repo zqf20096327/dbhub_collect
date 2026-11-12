@@ -2779,5 +2779,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "50839caac6a8": {
+  "identity": {
+   "one_liner": "自托管的开源 issue 跟踪器，含周期、项目、Wiki 与 AI 编码代理协作",
+   "review": "Kuayle 是一个可在自有服务器运行的键盘驱动 issue 跟踪器，用 Go 编写 API、SvelteKit 编写前端，提供 issues、cycles、项目 Gantt、Wiki、AI 助手及可委派任务给编码代理的 Dev Machines。技术栈为 Docker Compose（Caddy/PostgreSQL/Redis），Apache 2.0 单仓库，无付费层；README 说明当前版本为可运行的 MVP，不包含 SSO，建议生产使用前自行评估测试。",
+   "highlights": [
+    "提供 issues 管理（多指派人、子任务、关系、版本历史 diff）、带燃尽与速率图的 cycles、含 Gantt 视图的跨团队项目，及实时 WebSocket 更新与只读公开链接",
+    "内置 AI 助手，支持接入 OpenAI 兼容提供商、把 issue 委派给自托管 Dev Machine 上的 Claude Code、Codex、OpenCode 等编码代理，并可用可视化编辑器设计代理工作流步骤",
+    "包含团队/项目 Wiki、每日日志、GitHub App 集成、HTTP API（OpenAPI 3.1）、MCP server、Telegram、33 种语言及 Docker Compose 自托管参考栈与官方 CLI"
+   ],
+   "use_cases": [
+    "团队需要在自有服务器上自托管的 issue 跟踪与 sprint 周期管理",
+    "开发团队希望将 issue 委派给在本机运行的编码代理并按工作流执行实现、测试、评审与合并",
+    "需要配套 Wiki、每日日志、公开只读链接及多语言界面的协作场景"
+   ]
+  },
+  "sha": "50839caac6a8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "80f245aba222": {
+  "identity": {
+   "one_liner": "本代码图谱索引与查询服务，解析多语言源码为嵌入 SQLite 图数据库并通过 MCP 暴露",
+   "review": "CodeExplorer（ce）将 C#、TypeScript/JS、Go、Python、SQL 的源码、HTTP/gRPC/GraphQL 端点、消息队列拓扑与 SQL schema 索引进本地 SQLite 图库（.codeexplorer/graph.db），内置 OpenCypher-to-SQL 编译器。以单一自包含二进制分发，无需 .NET 运行时、Docker 或独立图数据库服务，数据留在本机。通过 MCP 向 Claude Code、Cursor 等 AI 代理提供调用链、跨服务依赖与数据血缘查询；支持 VS Code 扩展与基于 OpenCypher 规则及 SHA-256 基线的 CI 架构门禁（ce gate check）。",
+   "highlights": [
+    "解析五种语言的源码、项目清单、端点、消息队列与 SQL schema 为单一本地 SQLite 图，通过 OpenCypher 查询",
+    "提供 MCP 工具（get_architecture_map、get_file_outline、analyze_code_impact、inspect_data_lineage、execute_custom_read_cypher 等）供 AI 代理执行静态结构分析",
+    "以 YAML 定义语义不变式门禁（Zero-Match Contract），支持 SHA-256 ratchet 基线与 CI 集成，附 VS Code 扩展"
+   ],
+   "use_cases": [
+    "在 Claude Code、Cursor、VS Code 等 MCP 客户端中为 AI 编码代理提供调用图、跨服务依赖与数据血缘上下文",
+    "在 CI 流水线中以声明式 OpenCypher 规则检查架构边界，并用 ratchet 基线管理遗留违规",
+    "在 VS Code 中浏览 C1/C2/C3 服务拓扑、消息队列流向与数据库血缘，点击跳转源码"
+   ]
+  },
+  "sha": "80f245aba222",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bf79b8b86c80": {
+  "identity": {
+   "one_liner": "纯标准库实现的离线 SQL 网页控制台，支持三平台六种数据库",
+   "review": "sqlweb_offline_common 是面向无外网、无法安装客户端的内网运维/实施场景的 SQL 网页控制台，目标机只需 Python 3.8+ 即可解压运行。它通过统一的驱动适配层连接 PostgreSQL、MySQL、SQL Server、Oracle、达梦 DM8 和 SQLite，驱动按优先级自动降级（先官方二进制、再纯 Python 实现、否则明确报错）。内置 PBKDF2 口令认证、图片验证码、登录限流与默认只读拦截；数据源可在界面增删改并热加载。限制包括：仅 HTTP 不含 TLS、SQL Server/Oracle 驱动需另行下载二进制 wheel、数据源口令明文存于 config.json。",
+   "highlights": [
+    "一套代码运行于 Linux/Windows/macOS，核心仅用 Python 标准库，包内自带 7 个跨平台纯 Python wheel（约 470 KB，Python 3.8–3.13 可装）",
+    "支持 PostgreSQL、MySQL/MariaDB、SQL Server、Oracle、达梦 DM8、SQLite 六种数据库，达梦在 macOS 上可通过内置纯 Python 驱动 dmpy 工作",
+    "包含强制登录（PBKDF2-HMAC-SHA256 20 万次迭代）、动态 PNG 验证码、按 IP 登录限速，以及语句级只读拦截（可按数据源放开）"
+   ],
+   "use_cases": [
+    "无外网、禁止安装客户端的内网服务器上通过浏览器查询数据库",
+    "需要对多平台目标机（含麒麟/统信等国产系统）实施统一的 SQL 查询工具部署",
+    "需要登录验证、验证码和只读保护以满足安全扫描要求的内网环境"
+   ]
+  },
+  "sha": "bf79b8b86c80",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

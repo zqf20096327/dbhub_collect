@@ -2658,5 +2658,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6b419d2fc465": {
+  "identity": {
+   "one_liner": "Tauri+Rust 桌面端 AI 小说创作软件，含知识图谱与多代理创作工作流",
+   "review": "StoryMoss（草苔）是一款基于 Tauri、React 与 Rust 的桌面小说写作应用，提供幕前沉浸写作与幕后资产管理双界面，集成多代理协作、知识图谱、伏笔看板与风格学习机制，支持 OpenAI、Anthropic、Ollama 等模型接入。可下载预构建安装包，或用 Node.js 与 Rust 1.95.0 从源码构建运行。",
+   "highlights": [
+    "提供双界面：幕前沉浸写作与幕后故事/角色/世界观/知识图谱/伏笔看板等资产管理",
+    "支持多代理协作创作，每章经加权质量门检查后交付，并支持 OpenAI/Anthropic/Ollama/本地 API 模型路由",
+    "每章生成后自动提取角色、关系、世界观与大纲回流至资产库，续写前可按需检索前文原文"
+   ],
+   "use_cases": [
+    "长篇小说创作中需要管理角色、世界观、伏笔与章纲的作者",
+    "希望接入本地 Ollama 或多模型 API 进行 AI 辅助续写与改写的写作者",
+    "需要离线桌面写作环境并配合 markdown 编辑器整理故事素材的用户"
+   ]
+  },
+  "sha": "6b419d2fc465",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0b4f01ed2a20": {
+  "identity": {
+   "one_liner": "面向 Scala 2 的 Apache Cassandra 客户端，以 CQL 为先并提供编译期校验",
+   "review": "Helenus 是一组用于 Apache Cassandra 的 Scala 工具库，设计上以 CQL 查询语言为先，提供 Scala 类型的 TypeCodec、编译期校验的 cql 字符串插值器，以及基于 case class 的类型安全 Tables DSL（仅发布 Scala 2.13 版本）。核心模块经 Maven Central 引入，另提供 Akka、Flink、Monix、Pekko、Spark、ZIO 等流处理集成及数据迁移模块，适用于以 Scala 操作 Cassandra 的项目。",
+   "highlights": [
+    "为 Scala 类型提供 TypeCodec，覆盖 AnyVal、常用集合、Enumeration、Enumeratum、元组、映射为 UDT 的 case class、Option 与 Either",
+    "cql\"...\" 插值器与 Tables DSL 在编译期做语法级校验，并支持覆盖 CQL 5.0 语法检查的 unsafe 路径",
+    "提供与 Akka、Akka BUSL、Flink、Monix、Pekko、Spark、ZIO 集成的流处理模块及独立的 Migrations 模块"
+   ],
+   "use_cases": [
+    "Scala 2.13 项目中需以类型安全方式执行 CQL 增删改查与 DDL 语句",
+    "需要将 Cassandra 与流处理框架（Spark、Flink、Akka/Pekko 等）对接的数据管道",
+    "从任意来源到 Cassandra 或 Cassandra 之间的数据迁移任务"
+   ]
+  },
+  "sha": "0b4f01ed2a20",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "87ea929f29c6": {
+  "identity": {
+   "one_liner": "本地优先的桌面媒体库，扫描本地视频与照片并生成缩略图与元数据",
+   "review": "Meguri 是基于 Electron + React + TypeScript 的桌面应用，用于离线浏览、搜索和播放本地视频、图片与音频。它递归扫描指定文件夹，用内置 ffmpeg 生成缩略图，元数据存于 better-sqlite3 的 SQLite 数据库，无云端与账号依赖。提供工作区、FTS5 全文搜索、标签/评分/历史、播放列表自动连播、2D/3D 图谱视图等。macOS 版尚未公证，首次启动需手动放行。",
+   "highlights": [
+    "支持递归增量扫描（mtime/size 检查，内容哈希跟踪移动/重命名），由内置 ffmpeg 生成 WebP 缩略图",
+    "基于 SQLite（better-sqlite3）与 FTS5，提供全文搜索、标签、评分、播放历史，标签/历史在文件移动后仍保留",
+    "通过本地 HTTP 服务器流式播放，非 faststart 容器即时转封装为 fragmented MP4，不可播放的编解码器交给系统默认播放器"
+   ],
+   "use_cases": [
+    "整理与检索本地视频、照片、音频合集（多工作区、文件夹视图、时间线）",
+    "无网络环境下离线播放媒体，含全屏播放列表自动连播与随机 Discovery 模式",
+    "通过正则规则与关键词对文件名/文件夹自动打标签，批量管理大体积媒体库"
+   ]
+  },
+  "sha": "87ea929f29c6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f349960d19d0": {
+  "identity": {
+   "one_liner": "AI 代理的额外上下文层，基于 L2/L3 分级归档与混合检索管理长程记忆",
+   "review": "Memex 是位于代理历史与模型上下文窗口之间的额外上下文层，将较早文本段落归档到粘性 L2/L3 存档，通过冷层压缩与有界摘要管理容量，并用混合检索按预算取回记录。起始于 DeepSeek Harness 插件，现支持 Claude Code、OpenAI Codex 等 MCP 代理及 HTTP 嵌入。README 说明捕获与检索不保证包含所有相关事实，外部附件字节不保证捕获。",
+   "highlights": [
+    "提供 L2/L3 分级归档、冷层压缩与有界批摘要的上下文容量管理",
+    "支持 FTS5 混合检索与可选学习型重排，按上下文预算分页取回记录",
+    "提供 MCP 服务器（packages/memex-mcp）与可嵌入核心包 @qiuxu/memex-core，含 21 个模型配置文件"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness、Claude Code、Codex 等 MCP 代理补充长程上下文记录",
+    "长会话中将较早历史归档并按查询物化回模型窗口",
+    "本地存储记忆记录，无需遥测的私有化部署场景"
+   ]
+  },
+  "sha": "f349960d19d0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1f7d8526af49": {
+  "identity": {
+   "one_liner": "华为云 Serverless 数据库审计日志采集与查询方案，基于 OBS 归档与 DLI SQL 查询。",
+   "review": "该仓库提供一套部署在华为云上的 Serverless 审计日志采集与查询方案，面向使用 RDS MySQL / GaussDB MySQL 的用户。方案自动发现开启审计日志的数据库实例，周期性拉取审计日志并归档到 OBS，并通过 DLI 提供 SQL 查询能力，按使用量计费。仓库由自动化请求流程创建，Getting Started 部分尚未填写具体部署步骤，采用 MIT-0 许可证。",
+   "highlights": [
+    "自动发现开启审计日志的 RDS MySQL / GaussDB MySQL 实例",
+    "周期性拉取审计日志并归档至 OBS",
+    "通过 DLI（Data Lake Insight）提供 SQL 查询能力，采用 Serverless 按用量计费模式"
+   ],
+   "use_cases": [
+    "需要集中采集与归档 RDS MySQL / GaussDB MySQL 审计日志的场景",
+    "需要用 SQL 查询数据库审计日志的场景",
+    "华为云环境下的 Serverless 安全审计日志分析场景"
+   ]
+  },
+  "sha": "1f7d8526af49",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

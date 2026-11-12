@@ -3122,5 +3122,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "52b1fe8636fb": {
+  "identity": {
+   "one_liner": "基于 Hrana over HTTP 的 libSQL 纯 PHP 客户端库，支持 Turso Cloud 与自托管 sqld",
+   "review": "该库通过 Hrana over HTTP 协议以纯 PHP 实现 libSQL 客户端，连接 Turso Cloud 或自托管 libsql-server，无需原生扩展，仅依赖 ext-curl 等扩展，可在共享主机和 CI 环境运行。提供 Laravel 服务提供者与门面、事务、查询构建器等功能，支持 PHP 8.3–8.5。注意它不是原生 libSQL PHP 扩展。",
+   "highlights": [
+    "纯 PHP 实现（Hrana over HTTP），不依赖原生 libSQL 扩展，需 PHP 8.3+、ext-curl、ext-json、ext-mbstring",
+    "支持事务（deferred 等模式）、查询构建器、多种 fetch 模式，HTTP 401/403/404 错误抛出可捕获的 LibSQLError 异常",
+    "提供 Laravel 自动发现的 TursoServiceProvider 与 Turso 门面，DSN 连接并支持 DB_URL/DB_TOKEN 等环境变量回退"
+   ],
+   "use_cases": [
+    "PHP 项目（含 Laravel、CodeIgniter 等）通过 HTTP 访问 Turso Cloud 数据库",
+    "无原生扩展安装权限的共享主机或 CI 运行环境中连接自托管 libsql-server",
+    "需要事务与查询构建器进行 libSQL 数据读写操作的应用开发"
+   ]
+  },
+  "sha": "52b1fe8636fb",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2fefe5a3613e": {
+  "identity": {
+   "one_liner": "Node.js WebRTC 信令服务器，支持多频道 P2P 直播、会议与账号限额。",
+   "review": "这是一个基于 Node.js 与 Socket.IO 的开源 WebRTC 信令服务器，采用 GPL-2.0-or-later 许可。它为 VideoWhisper 浏览器应用和 WordPress 集成提供信令，支持直播广播、私密通话、随机匹配和最多四人的视频会议。账号、套餐限额与统计数据可存入 MySQL；STUN/TURN 需另行部署（如 coturn）。服务器只做信令，媒体为 P2P 直传，不含 SFU、转推或服务端录制。安装需 Node.js 22+、HTTPS 域名与 TLS 证书，通过 .env 配置后 npm start 运行。",
+   "highlights": [
+    "提供 HTTPS 与 Socket.IO 信令，支持发布、订阅和点对点协商，可管理多频道及每频道的多观众",
+    "支持 MySQL 账号与套餐管理，含封禁、连接/媒体配置限制，以及带重试去重的账号级统计 v2",
+    "支持 STUN/TURN 配置与网站回调验证的账号/角色/房间权限控制"
+   ],
+   "use_cases": [
+    "为网站添加网页摄像头直播、四人视频会议或私密双人通话",
+    "搭建随机视频匹配聊天室，配合角色验证与房间管理",
+    "作为自托管信令层对接 WordPress 等站点集成，需自行部署 TURN 服务"
+   ]
+  },
+  "sha": "2fefe5a3613e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d15d317b16a": {
+  "identity": {
+   "one_liner": "Go 编写的自托管短链接服务，单二进制部署，支持 PostgreSQL/SQLite 与可选 Redis。",
+   "review": "Redrx 是一个用 Go 编写的自托管短链接服务，将模板和静态资源嵌入单一静态二进制文件（约 25 MB）。它通过环境变量配置，默认使用 SQLite，也可通过 DATABASE_URL 连接 PostgreSQL，Redis 用于共享限流与 GeoIP 缓存。适用于需要自部署短链、点击统计与钓鱼域名单筛查的运维或个人用户。注意 GeoIP 下载需 MaxMind 许可密钥，Docker 容器以 UID/GID 10001:10001 运行，挂载目录需预先设置对应属主。",
+   "highlights": [
+    "支持自定义或自动生成的 base62 短码、链接密码保护、start_at/end_at 有效期窗口及 TTL 过期",
+    "内置二维码生成（SVG/PNG，可自定义颜色）、基于本地 MaxMind GeoLite2 的国家级访问统计、Prometheus /metrics 端点",
+    "钓鱼域名单后台定时刷新，且在每次跳转请求时重新校验目标域名，可配置自动移除命中黑名单的链接"
+   ],
+   "use_cases": [
+    "自托管短链接服务，需点击量、浏览器、平台与国家维度的访问统计",
+    "同一短链在多个目标地址间轮转跳转，用于分流或测试流量分配",
+    "需要对短链目标域名进行黑名单筛查以限制恶意链接的场景"
+   ]
+  },
+  "sha": "5d15d317b16a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e5d98473db10": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Stream Video 的 AI 会议助手与会话总结应用",
+   "review": "MeetAI 是一个运行在 Next.js 上的会议应用，集成 Stream Video 提供音视频会议，并使用 OpenAI 与 Inngest Agent Kit 实现聊天助手和会议摘要生成。数据存储于 Neon PostgreSQL（Drizzle ORM），通过 Better Auth 支持 GitHub/Google OAuth 登录，Polar 用于订阅计费，UploadThing 处理文件上传。部署需配置 Stream、Polar、OAuth 等多项第三方密钥，本地运行还需 Ngrok 接收 Stream Webhook。",
+   "highlights": [
+    "集成 Stream Video SDK 与 OpenAI Realtime API，支持实时会议与 AI 聊天",
+    "通过 Inngest 后台任务处理会议记录并生成摘要",
+    "内置 Better Auth 认证（GitHub/Google OAuth）与 Polar 订阅计费"
+   ],
+   "use_cases": [
+    "搭建带 AI 助手参会的在线视频会议平台",
+    "自动生成会议聊天记录的总结归档",
+    "作为 Next.js + tRPC + Drizzle 全栈应用的参考实现"
+   ]
+  },
+  "sha": "e5d98473db10",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

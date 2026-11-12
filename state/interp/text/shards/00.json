@@ -2533,5 +2533,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6bc42a3e6669": {
+  "identity": {
+   "one_liner": "基于数据库现有事务的 Go 任务队列引擎，通过 Driver[TTx] 泛型接口适配多种数据库",
+   "review": "goncordia 是一个 Go 任务队列引擎，复用应用已有的数据库（Postgres、MySQL、SQLite、MongoDB、Redis、Cassandra、ClickHouse、DynamoDB、Firestore 及内存驱动），无需引入新依赖。核心机制是 EnqueueTx 实现事务性 outbox：任务在既有事务内写入，仅提交后对 worker 可见。README 注明部分驱动（如 Redis、Cassandra、ClickHouse）不支持原子插入，为 at-least-once 语义。要求 Go 1.25+，驱动以子模块形式按需引入。",
+   "highlights": [
+    "通过 Driver[TTx] 接口以原生事务类型适配 Postgres、MySQL、SQLite、MongoDB、Redis、Cassandra、ClickHouse、DynamoDB、Firestore 和内存驱动",
+    "EnqueueTx 在现有事务内写入任务，实现事务性 outbox 模式，任务随事务提交原子可见",
+    "支持计划任务、优先级队列、唯一任务去重、指数/固定/自定义重试策略、崩溃恢复、Pipeline 串行化、加权多队列调度、定期 cron 任务的租约式单主调度，以及嵌入式管理面板、JSON API 和 Prometheus 端点"
+   ],
+   "use_cases": [
+    "在业务事务内原子地投递后台任务（如订单创建后发送确认邮件），避免双写不一致",
+    "不希望为任务队列额外部署 Redis 或专用 Postgres 实例，复用应用现有数据库的场景",
+    "需要多实例部署下的定期任务调度、队列限流、暂停/恢复以及运维监控端点的后台作业系统"
+   ]
+  },
+  "sha": "6bc42a3e6669",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a44163d2b75b": {
+  "identity": {
+   "one_liner": "本地运行的个人资产看板与市场分析工具，数据存于本机 SQLite",
+   "review": "licai 是一个本地运行的 Python/FastAPI + React 个人资产看板，将 A股、港美股、基金、银行理财、现金与数字资产汇总到同一界面，统一计算成本、盈亏与风险敞口，并附带市场问答 agent、盯盘员、全市场榜单与复盘归因功能。数据保存在本机单个 SQLite 文件，无云端与账号体系，输出限定为客观信息与历史统计。适合需要跨平台汇总头寸并接入行情数据做复盘的个人使用者。",
+   "highlights": [
+    "支持 A股、港美股、基金、理财、现金、数字资产等多类资产的统一账本，成本口径含佣金、印花税、过户费等",
+    "提供约 50 个基础数据工具的市场问答 agent、子 agent 与预约任务，输出标注来源等级且不给出买卖建议",
+    "场外基金盘中提供前十大持仓加权与岭回归两层净值估算，风险模块包含 EWMA 组合波动估算与穿透同源敞口分析"
+   ],
+   "use_cases": [
+    "跨券商与银行平台汇总个人持仓，按统一口径查看成本、盈亏与组合风险",
+    "交易日盘中查看全市场榜单、板块情绪与盘口异动，收盘后进行组合复盘与买点回看",
+    "通过自然语言问答查询个股行情、资金流、基本面与自身持仓数据"
+   ]
+  },
+  "sha": "a44163d2b75b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

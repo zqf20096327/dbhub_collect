@@ -3050,5 +3050,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1472cebba2e8": {
+  "identity": {
+   "one_liner": "基于 MCP 的多智能体编排服务器，提供持久记忆、代理间消息与任务级联",
+   "review": "wrai.th 是一个用 Go 编写的 MCP 服务器，为多智能体协作提供管理设施：持久化记忆（跨会话保留）、代理间消息（5 种寻址模式、P0-P3 优先级、TTL）、最多 3 层的嵌套任务，以及按优先级×相关性×新鲜度打分的上下文预算裁剪。数据存储在单个 SQLite 文件中，单个二进制文件运行，默认本地使用；启用 API key 后可作为团队共享服务器。提供 mission-control 仪表盘展示任务与代理活动。适用于使用 Claude Code 等 MCP 客户端的开发者和团队。",
+   "highlights": [
+    "提供 58 个 MCP 工具，支持持久记忆（FTS5 搜索）与 query_context RAG 查询",
+    "支持 5 种消息寻址模式（direct/broadcast/team/conversation/user）、优先级路由与 TTL 过期",
+    "单二进制部署，数据存于 SQLite，默认本地运行，可选 API key 用于团队/服务器部署"
+   ],
+   "use_cases": [
+    "多个 AI 代理（如 Claude Code、Cursor）协作开发同一项目时的通信与任务分工",
+    "需要代理记忆跨会话保留、在上下文重置后恢复状态的工作流",
+    "团队通过共享服务器与 Linear 镜像统一管理任务分发"
+   ]
+  },
+  "sha": "1472cebba2e8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "357cd6f88007": {
+  "identity": {
+   "one_liner": "基于 Dolt 为 WordPress 数据库提供分支与合并式版本控制的插件。",
+   "review": "Branchline 是一个 WordPress 插件，将站点数据库运行在 Dolt（MySQL 兼容、内置分支与合并模型）之上，为每个环境提供独立数据分支，支持生产内容下拉与发布版本上推。它按规则区分结构与内容归属，对序列化 PHP 和 JSON 按键合并，提供可读的合并审阅、命名工作区与发布回滚。要求 WordPress 6.4+、PHP 8.1+、Dolt SQL server 1.42+，命令行部分依赖 WP-CLI。",
+   "highlights": [
+    "每个环境对应单一数据库的一个分支，合并为真三方合并，序列化 PHP 与 JSON 按键合并",
+    "提供命名工作区与命名发布，发布以 git 和数据库中的标签记录并支持整体回滚",
+    "提供 WP-CLI 命令集并输出 JSON，支持导入既有站点与导出回 MySQL/MariaDB"
+   ],
+   "use_cases": [
+    "管理生产、staging 与多个开发者环境之间的 WordPress 内容与结构变更",
+    "需要双向同步发布分支与生产内容的 WooCommerce 等站点",
+    "为流水线或自动化代理提供 JSON 输出的数据库操作命令接口"
+   ]
+  },
+  "sha": "357cd6f88007",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

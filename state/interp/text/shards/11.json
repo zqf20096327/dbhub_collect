@@ -3139,5 +3139,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c474e25f6e9e": {
+  "identity": {
+   "one_liner": "本地运行的 WhatsApp AI 网关，通过 MCP 连接代理并按会话执行规则",
+   "review": "Piumy-gateway 是 Piumy 的引擎：单个 Go 二进制程序，内嵌 whatsmeow 库连接 WhatsApp，向 AI 代理提供 MCP 服务器接口，并用纯 Go 的 SQLite 存储消息历史、逐会话规则与发件队列。代理的每个动作必须对应其正在处理的真实来信，该限制实现于代码层面而非提示词。适用于希望在本机托管 WhatsApp 自动应答、并通过本地仪表盘（8092 端口）管理规则的用户；代码以 AGPLv3 许可开源。",
+   "highlights": [
+    "以单二进制运行，内嵌 whatsmeow 实现 WhatsApp 连接，无浏览器、Node 或外部客户端依赖，CGO_ENABLED=0 编译",
+    "提供 MCP 服务器和消息分发通道，代理动作必须在代码层关联到当前正在处理的真实来信",
+    "使用纯 Go SQLite 存储，包含聊天记录、逐会话规则、记忆、草稿与发件队列，并内置本地仪表盘"
+   ],
+   "use_cases": [
+    "在个人电脑或树莓派上本地托管 WhatsApp 自动应答服务",
+    "让本地 AI 代理通过 MCP 工具读取和回复 WhatsApp 消息",
+    "按会话粒度配置代理的权限规则并经由本地仪表盘查看与管理"
+   ]
+  },
+  "sha": "c474e25f6e9e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

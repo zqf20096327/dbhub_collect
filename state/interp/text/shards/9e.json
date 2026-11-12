@@ -2931,5 +2931,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "03d8524fa2ee": {
+  "identity": {
+   "one_liner": "本地优先的 CI 日志诊断 CLI，规则分组解析构建报错并生成修复清单",
+   "review": "DevRescue 是一个用于分析 CI 构建日志的 CLI 工具，也可作为 GitHub Action 和浏览器端工具运行。它通过 ANSI 剥离、规则匹配与重复签名分组，将嘈杂日志转化为诊断证据和后续步骤，覆盖 TypeScript、Python、依赖安装、Docker、PostgreSQL 等约二十类规则族。核心零运行时依赖，需 Node.js 22+，MIT 许可；托管版含三小时免费试用。未知类型失败不产生诊断，工具不会自动生成代码补丁或执行日志中的命令。",
+   "highlights": [
+    "提供 CLI、GitHub Action 与浏览器工作台三种使用方式，支持日志分析、doctor 环境检查、前后对比与 Markdown/JSON 导出",
+    "包含约二十个启发式规则族，覆盖 TypeScript 报错位置、Python traceback、npm/lockfile、Docker、PostgreSQL、DNS/TLS、Git 冲突等签名",
+    "核心以 Node.js 22+ 本地运行，零运行时依赖；不调用付费 AI API、不要求账号、不自动执行日志派生命令，.gitignore 补丁带备份并需人工确认"
+   ],
+   "use_cases": [
+    "本地或 CI 构建失败后，对嘈杂日志进行分组诊断并生成可审查的修复清单",
+    "在 CI 中通过 GitHub Action 生成脱敏的失败摘要，便于团队共享构建证据",
+    "比较修复前后的日志，识别新增、消失与复发的错误签名，跟踪同类事故"
+   ]
+  },
+  "sha": "03d8524fa2ee",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3e0212486020": {
+  "identity": {
+   "one_liner": "本地离线优先的 Discord↔GitHub 自动化引擎，按读取-规划-审计-执行流程工作",
+   "review": "Gitcord 是面向 GitHub 组织与 Discord 社区的本地自动化工具，读取双方活动与状态，以确定性规划生成角色变更和 issue 分配的审计报告（JSON+Markdown），默认 dry-run，仅在 active 模式下真正写入。技术栈为 Python 3.11+ 和 SQLite，支持 Docker 部署，提供身份链接、贡献指标、PR/issue 查询等斜杠命令，需 GitHub 细粒度 PAT 与 Discord Bot Token。",
+   "highlights": [
+    "离线优先执行，可本地按需运行，无需常驻进程；默认 dry-run 模式生成 JSON 与 Markdown 审计报告，写入操作由 MutationPolicy 门控",
+    "读取-规划-报告-应用四层架构：Readers 只读，Planners 为纯确定性逻辑，相同输入产生相同计划",
+    "Discord 斜杠命令支持 GitHub 身份验证链接、贡献者档案、7/30 天贡献指标、PR/issue 列表查询及最多 3 人的 issue 分配"
+   ],
+   "use_cases": [
+    "GitHub 组织希望根据贡献活动自动化 Discord 角色管理，且要求变更前可审查审计报告",
+    "开源社区为贡献者提供 Discord 身份验证（GitHub 账号绑定）与贡献数据查询入口",
+    "以 Docker Compose 部署在 Linux VPS 上定时（默认每六小时）同步 GitHub 与 Discord 状态"
+   ]
+  },
+  "sha": "3e0212486020",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "552c1db3841d": {
+  "identity": {
+   "one_liner": "开源桌面应用，用 Lead 加 agent 团队运行 AI 代理组织",
+   "review": "Tyslin Studio 是一款开源 Electron 桌面应用，用于运行由 Lead 规划、多个 agent 执行任务的 AI agency。worker 通过 Agent Client Protocol 驱动 Claude Code、Codex 或 Gemini CLI，用户须自带 API 密钥或账号登录，本地存储 SQLite 数据。目前处于 Beta，主要在 Linux 上测试，macOS/Windows 构建未签名。",
+   "highlights": [
+    "通过 Agent Client Protocol 驱动用户安装的 Claude Code、Codex、Gemini CLI，支持 API 密钥或账号登录两种方式",
+    "提供九个可创建的 agency 模板，含 Lead、团队、目标、五步计划与技能，任务全程单线程记录并支持 Telegram/Slack 联系",
+    "文件变更逐块审批，卡片显示预估成本，每个 agency 设有月度预算上限"
+   ],
+   "use_cases": [
+    "在本地用自有密钥运行软件类 agency，完成应用开发、QA 测试、DevOps 等任务",
+    "通过社交营销、SEO、邮件营销等模板执行市场与销售类工作流",
+    "需要逐块审批文件变更并控制成本的多人协作式 agent 任务管理"
+   ]
+  },
+  "sha": "552c1db3841d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "be4bef0ba1bf": {
+  "identity": {
+   "one_liner": "OceanBase 团队发表论文的文献汇总仓库",
+   "review": "该仓库用于存放 OceanBase 团队发表的论文清单，按总体架构、存储引擎、事务引擎、SQL 引擎、系统评测等类别整理，涵盖 PVLDB、SIGMOD、ICDE、FAST 等会议期刊及中文学术期刊，含论文题目、作者、出处与 DOI/链接信息。适合研究者与数据库从业者查阅 OceanBase 相关技术的原始文献。仓库仅包含文献列表，不包含代码或可运行组件。",
+   "highlights": [
+    "按总体架构、存储引擎、事务引擎、SQL 引擎、系统评测五个主题分类组织论文条目",
+    "收录发表于 PVLDB、SIGMOD、ICDE、FAST、SC 及中文期刊的论文，部分条目附 DOI 或全文链接",
+    "覆盖 OceanBase 架构、日志复制（PALF）、分布式事务、参数化查询优化、基数估计等研究方向"
+   ],
+   "use_cases": [
+    "查找 OceanBase 架构与各子系统设计的原始论文出处",
+    "数据库研究者按主题（存储、事务、SQL、评测）检索相关学术论文",
+    "了解 OceanBase 团队与高校合作的论文发表情况"
+   ]
+  },
+  "sha": "be4bef0ba1bf",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

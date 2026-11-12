@@ -2734,5 +2734,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1eb1bb5e3ca4": {
+  "identity": {
+   "one_liner": "基于 Telegram 机器人与 React 仪表盘的多币种个人记账应用",
+   "review": "Money Flow 是一个个人财务记录系统，提供 Telegram 机器人（支持文本命令与语音消息记账）和 React 网页仪表盘两个入口。后端为 Java 25 + Spring Boot 4 + PostgreSQL 17，经 Docker Compose 部署，由 Traefik 做反向代理。语音记账依赖 OpenAI Whisper 转录与 GPT 解析。README 未提供许可证与测试说明，部署需自备 OpenAI 与 Telegram 凭据。",
+   "highlights": [
+    "支持文本命令（/gasto、/entrada 等）与语音消息两种记账方式，语音经 Whisper 转录并由 GPT 按用户的类别和账户解析为交易",
+    "提供 React 仪表盘，包含余额历史折线图、收支对比、分类占比环形图、KPI 指标及周/月/年/自定义时间范围选择",
+    "金额使用 NUMERIC/BigDecimal 存储，货币挂在账户上（BRL/EUR/USD），不同货币金额不做汇总换算；支持葡语/英语双语言回复与引导式注册流程"
+   ],
+   "use_cases": [
+    "个人日常快速记录收支：通过 Telegram 发送文本或语音即可记一笔支出或收入",
+    "多币种生活场景：如在 EUR/BRL 环境下分别跟踪不同货币账户余额",
+    "自托管部署：有 VPS 的用户可通过 Docker Compose 与 Traefik（含 Let's Encrypt TLS、WAF、限流）运行整套服务"
+   ]
+  },
+  "sha": "1eb1bb5e3ca4",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "269eb26c605d": {
+  "identity": {
+   "one_liner": "服务端渲染的协作看板，单 Go 二进制加 SQLite 与 Datastar 流式更新",
+   "review": "这是一个多人协作看板应用：多人在同一看板上移动列表和卡片，通过流式推送实时看到彼此的改动。它采用 CQRS 架构，每次操作以 POST 命令提交，整板视图经压缩流（zstd/brotli）下发，所有写入经单一 goroutine 走一个 SQLite 连接批处理，不做乐观更新。与 PLANKA 对比属于功能受限的案例研究：无搜索、过滤器、REST API、通知等。需 Go 1.27.3+，提供 systemd/Caddy 部署与 Prometheus 监控配置。",
+   "highlights": [
+    "支持列表与卡片的增删改名、拖拽或 Alt+方向键移动、归档，卡片含 Markdown 描述、标签、截止日期与评论，每张卡片有独立 URL",
+    "协作流式同步：看板上每人实时看到全部改动与他人在线状态，冲突移动由服务器取先到者并通知后者，操作携带 op id 防止重试重复执行",
+    "提供 `/healthz`、`/readyz`、Prometheus 指标、运行中备份（kanban backup）、夜间重置种子数据（-reset-at）及 systemd/Caddy 部署文件"
+   ],
+   "use_cases": [
+    "需要多人同时在同一看板上协作移动卡片的小团队",
+    "希望部署为单个静态二进制加一个 SQLite 文件的轻量自托管场景",
+    "研究 Go+SQLite 服务端渲染与压缩流架构的参考案例"
+   ]
+  },
+  "sha": "269eb26c605d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "859fb74048f3": {
+  "identity": {
+   "one_liner": "Windows 本地优先知识管理桌面应用，结合本地 SQLite 与 BYOK 云端 AI",
+   "review": "ECHO Knowledge 是面向 Windows 11 x64 的桌面应用，用于本地导入、索引和检索个人文档（支持 PDF、Markdown、纯文本），并提供语义检索、Ask ECHO 问答（带来源引用）和知识图谱视图。技术栈为 Tauri 2（Rust）+ React 19/TypeScript + SQLite；AI 功能采用 BYOK 模式接入 Gemini 或 Groq，API 密钥经 Windows Credential Manager 存储。未配置密钥时仅本地导入与存储可用；扫描版 PDF 不支持，v1.0.0 无云同步。安装采用 NSIS 安装包，需 WebView2 运行时。",
+   "highlights": [
+    "本地 SQLite 存储文档、文本、嵌入、对话、标签与图状态，无遥测、无开发者代理服务",
+    "BYOK 接入 Gemini（嵌入/生成）与 Groq（生成/标签），API 密钥经 Windows Credential Manager/DPAPI 管理",
+    "支持 PDF/Markdown/纯文本导入、语义检索、带引用的问答及交互式知识图谱"
+   ],
+   "use_cases": [
+    "在本地集中管理个人 PDF/Markdown 文档并按语义检索内容",
+    "配置自有 Gemini/Groq 密钥后对文档进行 AI 问答、标签与关系发现",
+    "以知识图谱方式浏览文档间的概念关联"
+   ]
+  },
+  "sha": "859fb74048f3",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "66c8add998cc": {
+  "identity": {
+   "one_liner": "面向小微餐饮商户的自托管进销利润管理平台，以食谱驱动扣减库存并按加权平均成本核算HPP",
+   "review": "Kulakan 是一款开源自托管的 Web 应用，为食品饮料行业的微型与小型商户（咖啡摊、咖啡馆、食肆）提供库存、食谱、生产成本、菜单利润与现金预算的一体化管理。系统按食谱 BOM 在收银下单时原子化扣减原材料库存，以加权平均成本（WAC）重算 HPP，并依据现金预算生成补货建议。页面经 Inertia.js 以 React 组件渲染，未提供独立 REST API。",
+   "highlights": [
+    "提供补货规划器：输入可用现金预算后生成按库存紧急度排序的采购包建议，采购计划包含 draft→approved→ordered→purchased 四阶段状态流转",
+    "实现 Recipe-to-Stock 引擎：下单时按 BOM 与损耗因子原子扣减库存，支持未处理原料回库（void）与损耗入账（waste）两种取消路径",
+    "按 WAC 方法在每次采购后自动重算材料成本，金额计算使用 bcmath 扩展，并通过 Owner/Staff 双角色中间件限制访问"
+   ],
+   "use_cases": [
+    "咖啡馆/小吃店 Owner 在有限现金预算下模拟并生成补货采购计划",
+    "店员使用 POS 收银（支持现金/QRIS、58/80mm 热敏小票打印）并跟踪厨房订单 preparing→ready→completed 队列",
+    "Owner 通过 Profitable/Watchlist/Loss 分类与利润-人气矩阵查看各菜单的毛利率状况"
+   ]
+  },
+  "sha": "66c8add998cc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

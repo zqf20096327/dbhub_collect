@@ -3028,5 +3028,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a829c2fc363d": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的开源上下文服务，以修订版 Artifact 在会话与 Agent 间延续工作状态。",
+   "review": "PowerContext 是 OceanBase 开源的上下文服务，面向使用 Claude Code、Codex 等 Agent 的开发者与团队。它将决策、约束、交接记录等存为服务器端修订版 Artifact，划分 Scope 隔离数据，提供 Memory、Handoff、Experience、Skill 服务，经 HTTP/MCP、Python Client、CLI、Dashboard 暴露。安装需 Python 3.11+、Git、uv，支持 macOS/Linux，Windows 为实验性。",
+   "highlights": [
+    "提供 Memory、Handoff、Experience、Skill 四类服务，Artifact 以 FAMILY/ARTIFACT_ID@REVISION 形式编址，读取精确引用返回历史快照",
+    "提供 HTTP/MCP 接口、Python Client、CLI、Dashboard 与 Desktop 预览，支持 Kubernetes 部署与外部 OceanBase 的 Helm chart",
+    "PreparedContext 按共享字节预算选择活跃 Memory 与已批准 Experience 内容，显式 Memory 写入无需模型 API"
+   ],
+   "use_cases": [
+    "跨会话或跨 Agent（如 Codex 与 Claude Code 之间）延续任务上下文与工作交接",
+    "团队中人与人之间通过 Handoff 与审查后的 Memory 接手进行中的工作",
+    "无模型 API 的本地部署场景下进行显式记忆保存与检索"
+   ]
+  },
+  "sha": "a829c2fc363d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7a8eb647d421": {
+  "identity": {
+   "one_liner": "单容器一体化 Docker 镜像，用于搭建和运行自动化媒体栈。",
+   "review": "DUMB 是一个 All-In-One Docker 镜像，把 Debrid/Usenet 工作流、*arr 自动化、媒体服务器（Plex/Emby/Jellyfin）、请求与监控工具整合在一个容器内，通过控制面板统一管理服务安装、配置、日志、健康检查和更新。需设置 PUID/PGID/TZ 环境变量，支持 docker-compose、Docker Hub/GHCR 镜像或 Proxmox LXC 部署，许可证为 GPLv3。",
+   "highlights": [
+    "以单个容器提供 30 余个媒体栈组件，包括 Radarr、Sonarr、Prowlarr、Plex、Jellyfin、PostgreSQL、Traefik 等",
+    "提供 DUMB 前端仪表盘与 API（默认端口 3005/8000），用于服务的生命周期管理、日志、健康检查与更新",
+    "支持可选的 Authelia 身份认证、Traefik 反向代理和 Cloudflare 访问工具，并可通过 Proxmox Community Scripts 以 LXC 方式部署"
+   ],
+   "use_cases": [
+    "在单台 NAS/服务器上通过一个容器运行完整的自动化媒体下载与管理栈",
+    "需要统一界面管理多个媒体服务（*arr、媒体服务器、索引工具）的部署与运维",
+    "在 Proxmox 环境中使用 LXC 脚本原生部署媒体栈组件"
+   ]
+  },
+  "sha": "7a8eb647d421",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5938662ec908": {
+  "identity": {
+   "one_liner": "基于 pg_dump 将 PostgreSQL 数据库自动备份到 Amazon S3 的 Bash 脚本",
+   "review": "该项目提供一组 Bash 脚本，用 pg_dump 将 PostgreSQL 数据库转储为 .dump 文件并归档到 Amazon S3，附带从 S3 恢复的脚本 pg_restore-from-s3.sh。配置通过 .conf 文件指定数据库连接信息和备份库列表，AWS 凭证由 AWS CLI 管理，密码需存放在 ~/.pgpass。每次备份后按 DELETE_AFTER 设置自动删除过期的 .dump 文件，支持 Linux 和 macOS。",
+   "highlights": [
+    "自动执行 pg_dump 备份并上传到指定的 S3 路径",
+    "提供从 S3 恢复备份的脚本，支持指定目标数据库和 S3 对象",
+    "每次备份后自动清理超过 DELETE_AFTER 期限的 .dump 文件"
+   ],
+   "use_cases": [
+    "定时批量备份多个 PostgreSQL 数据库到 S3",
+    "按保留期限自动清理历史备份文件",
+    "从 S3 中的指定 dump 文件恢复数据库"
+   ]
+  },
+  "sha": "5938662ec908",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e66107a778e": {
+  "identity": {
+   "one_liner": "自托管的宠物健康与护理追踪应用，基于 SvelteKit 与 SQLite。",
+   "review": "EinVault 是面向家庭服务器（homelab）用户的自托管宠物健康与护理记录系统，用于管理宠物档案、日志、健康事件、用药、用品库存与提醒。数据存储在本地 SQLite，无云端依赖；提供管理员/成员/护理者三种角色，并通过单个 Docker 容器部署，需自备反向代理提供 TLS。",
+   "highlights": [
+    "提供宠物档案、每日日志、健康记录、用药、事件追踪、用品库存与提醒等功能",
+    "提供 Bearer-token API 和可订阅的 ICS 日历源，支持脚本与外部设备读取/写入数据",
+    "单 Docker 容器部署，使用 SQLite 数据库，无外部依赖"
+   ],
+   "use_cases": [
+    "在家庭服务器上集中记录多只宠物的健康、用药与日常活动",
+    "为临时照看者生成打印版护理单并按班次开放日志权限",
+    "通过 API 或日历订阅将护理数据接入智能按钮、脚本或 Home Assistant"
+   ]
+  },
+  "sha": "8e66107a778e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec330a9f0d59": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的 SchemaCrawler 网页应用，在线生成数据库图表与文档",
+   "review": "该应用是 SchemaCrawler 的 Web 前端，通过浏览器访问在 8080 端口在线生成 SQLite 数据库的 crow's-foot ERD 图与文档。构建依赖 Graphviz、Maven 和 Docker，运行需配置 AWS S3 相关环境变量用于存储。适合需要通过网页界面使用 SchemaCrawler 功能的用户。",
+   "highlights": [
+    "基于 Spring Boot 构建，提供 Bootstrap 用户界面",
+    "生成 SQLite 数据库的 crow's-foot ERD 图",
+    "支持 Maven 构建、Docker 镜像打包及本地 jar 方式运行"
+   ],
+   "use_cases": [
+    "在浏览器中在线生成数据库图表与文档",
+    "本地或 Docker 容器中部署 SchemaCrawler Web 服务",
+    "基于 CI/CD 流水线（GitHub Actions、JaCoCo、Codecov）自动化构建与部署的参考项目"
+   ]
+  },
+  "sha": "ec330a9f0d59",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

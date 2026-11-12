@@ -2949,5 +2949,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "342a254234b9": {
+  "identity": {
+   "one_liner": "基于 PHP/MySQL 的铁路票务订票系统，集成 Razorpay 支付与二维码票据",
+   "review": "这是一个使用 PHP 和 MySQL 实现的铁路车票与月票预订系统，面向本地部署运行的用户。系统集成 Razorpay 支付网关（支持测试模式密钥）、生成二维码车票、记录用户交易历史，并提供管理员面板。运行需 PHP 7.4 及 mysqli、gd 扩展、MySQL 8，导入 railway.sql 后复制 config.php 填入 Razorpay 密钥即可运行。",
+   "highlights": [
+    "集成 Razorpay 支付网关，测试模式密钥即可运行",
+    "生成二维码车票并保存于 temp/ 目录",
+    "包含用户交易历史与管理员面板"
+   ],
+   "use_cases": [
+    "PHP/MySQL 课程项目或 CRUD 应用学习参考",
+    "本地部署的铁路订票流程演示",
+    "Razorpay 支付集成与二维码生成的实践示例"
+   ]
+  },
+  "sha": "342a254234b9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "00f795e4f568": {
+  "identity": {
+   "one_liner": "单二进制 OLTP 数据库服务器，编译执行 T-SQL 存储过程并兼容 PGWire 协议",
+   "review": "LionSQL 是用 Go 编写的单二进制 OLTP 数据库服务器，可原生编译并执行 Microsoft SQL Server 的 T-SQL 与存储过程，同时提供 PostgreSQL wire v3 与 TDS 两种协议接入。它面向需要运行 T-SQL 业务逻辑、又希望以单文件部署的开发者，内置 Web 管理界面、REST API 生成与静态站点托管。官方支持 macOS 与 Linux，另有 Windows 内存引擎构建，许可证为 GPL v3。",
+   "highlights": [
+    "提供 PostgreSQL v3（端口 5433）与 MSSQL TDS（端口 1433）双协议监听，可用 psql、sqlcmd、SSMS、pgx 等客户端连接",
+    "支持存储过程、标量与表值函数、AFTER/INSTEAD OF 触发器，以及 IF...ELSE、WHILE、TRY...CATCH、游标等 T-SQL 控制流",
+    "包含内存 OCC 引擎与 WiredTiger MVCC 磁盘引擎两种存储后端，参数化查询编译为 VDBE 字节码并缓存"
+   ],
+   "use_cases": [
+    "在非 Windows 平台上运行依赖 T-SQL 存储过程的现有应用逻辑",
+    "使用 PostgreSQL 驱动（pgx、GORM、Prisma 等）接入并执行 T-SQL 语法的应用开发",
+    "通过内置 Web Studio（端口 8090）进行表结构浏览、SQL 查询与备份恢复管理"
+   ]
+  },
+  "sha": "00f795e4f568",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d248e15e34fd": {
+  "identity": {
+   "one_liner": "Telegram 自助售货与抢单派单机器人，Python + SQLite 单机运行。",
+   "review": "GShopBot 是一个基于 python-telegram-bot 的 Telegram 机器人系统，提供商品购买、报单派单和积分商城功能，主要面向 Telegram 上的虚拟商品交易社群运营者。系统包含买家端、接单员端和管理端，支持 OkPay/KKPay/TRON/TON 四通道 USDT 充值，用尾数金额或 memo 匹配充值单。部署要求 Python 3.10+ 与 SQLite，通过 .env 配置 Token 后以 main.py 单入口启动，一个 Bot Token 只能运行一个轮询实例。",
+   "highlights": [
+    "提供库存池一件一卖机制，支持原子售卖与发货失败回滚退款，覆盖文字/图片/文件/图册四种库存格式",
+    "实现匿名派单与条件更新抢单（UPDATE ... WHERE grab_status='waiting'），佣金走冻结解冻流程，提现需管理员审核",
+    "支持 TRON TRC20 与 TON 冷钱包链上轮询入账，以 txid 主键实现幂等，含 WAL 模式 SQLite 与 flock 单实例保护"
+   ],
+   "use_cases": [
+    "Telegram 社群中的自动发货售货场景，需分类、搜索、限购与售罄处理",
+    "接单派单协作场景：买家报单后系统将需求匿名推送到接单群，接单员抢单回单获取佣金",
+    "需要 USDT 充值与积分余额管理的运营场景，支持余额双口径显示与提现审批"
+   ]
+  },
+  "sha": "d248e15e34fd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "be1b4a930470": {
+  "identity": {
+   "one_liner": "考公考编离线刷题 Android App，题库内置本地 SQLite 并支持增量更新",
+   "review": "上岸是一个面向公务员、事业单位、三支一扶考生的离线刷题 Android 应用，内置约 10.3 万道去重真题和 3600 余套历年试卷，覆盖行测、职测、公基、申论、综应五个科目。技术上采用 Capacitor 6 加 WebView 壳，前端为无框架的原生 JS 单页应用，三套 SQLite 数据库分别存储题库、图片与用户记录。题库更新走 NDJSON 行级增量包（14–30 MB），通过 gh-proxy 等镜像下载。题库内容采集自公开网络，版权归原平台，部分题目缺少解析或考点标签。",
+   "highlights": [
+    "内置 103,128 道去重真题与 3,615 套试卷（2001–2027），全部数据存于本地 SQLite，断网可刷题",
+    "支持行级增量题库更新（v2 NDJSON 流式应用，每 2,000 行提交事务，带 SHA-256 校验）",
+    "提供计时模考与成绩单、错题本、Leitner 间隔复习、按薄弱考点抽题的每日任务，AI 功能可选（用户自配 Key 直连服务商）"
+   ],
+   "use_cases": [
+    "备考公务员、事业单位、三支一扶考试时进行日常刷题与限时模考",
+    "网络条件受限或希望避免商业广告干扰的离线学习场景",
+    "需要真题与解析文本数据（data/ 下 JSONL 导出）用于数据分析或二次整理"
+   ]
+  },
+  "sha": "be1b4a930470",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

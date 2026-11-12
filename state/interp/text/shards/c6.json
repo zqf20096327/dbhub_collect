@@ -3326,5 +3326,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8096f1eca4d7": {
+  "identity": {
+   "one_liner": "将 geonames.org 邮政编码数据转换为 JSON、XML、CSV 三种格式的数据集仓库",
+   "review": "该仓库收录来自 geonames.org 的全球邮政编码及地理坐标数据，覆盖德国、奥地利、瑞士等一百余个国家，并转换为 JSON、XML、CSV 三种文件格式供直接导入。数据含国家码、邮编、地名、行政区及经纬度字段。README 注明仓库仅做格式转换，缺失数据需向 geonames 反馈；数据随 geonames 源更新。",
+   "highlights": [
+    "提供 JSON、XML、CSV 三种格式的邮政编码数据文件，可直接导入",
+    "覆盖 100 余个国家/地区，记录含国家码、邮编、地名、州/省、社区及经纬度字段",
+    "数据源为 geonames.org，仓库定期转换并更新，README 附各国记录数清单"
+   ],
+   "use_cases": [
+    "需要导入邮政编码与地理坐标数据进行校验或分析的应用",
+    "需要离线邮编数据集（如地址库、地理定位功能）的项目",
+    "需要特定格式（JSON/XML/CSV）邮编数据以适配不同软件环境的数据处理流程"
+   ]
+  },
+  "sha": "8096f1eca4d7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0fab3e596df8": {
+  "identity": {
+   "one_liner": "ClickHouse 备份工具，将 MergeTree 表备份到 S3 兼容存储并支持恢复",
+   "review": "ch-backup 是一个用 Python 编写的 ClickHouse 备份管理命令行工具，支持向 S3 兼容存储执行备份并在原始数据损坏时恢复。它只处理 MergeTree 引擎家族的表，默认启用 part 级别的去重，并支持备份复制、跨存储拷贝和跳过云存储的恢复。安装需先运行 make build 生成 wheel 包，再用 pip 或 uv tool install 安装。",
+   "highlights": [
+    "仅对 MergeTree 引擎家族的表执行备份，无需停机即可获得一致的数据快照",
+    "支持 part 级别的去重，可通过配置文件设置并可用起始时间排除更早的备份",
+    "提供 ch-backup copy 命令，可将备份拷贝到另一个 S3 bucket、endpoint 或 backup.path_root"
+   ],
+   "use_cases": [
+    "将 ClickHouse MergeTree 表数据定期备份到 S3 兼容存储",
+    "在原始数据损坏时从备份恢复本地 part，或使用 --skip-cloud-storage 跳过云端 part 的恢复",
+    "将已有备份复制到另一个 S3 bucket 或 endpoint 用于容灾"
+   ]
+  },
+  "sha": "0fab3e596df8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51a2c2aad5cc": {
+  "identity": {
+   "one_liner": "Rust 原生多模型图数据库与推理引擎，支持属性图、RDF/OWL、向量与时序数据",
+   "review": "Medulla 是一个 Rust 实现的数据库与计算引擎，在单一引擎中存储和查询属性图、关系表、RDF/OWL 知识、向量、时序、事件与多媒体记录，条目可保留证据、来源、置信度与双时态有效期。面向构建知识系统、证据驱动应用与智能体记忆的团队，也可作为生态项目 Arbora、Agent Utilities 的持久知识层。提供 PyPI 包与容器镜像，MIT 协议。",
+   "highlights": [
+    "单引擎支持属性图、关系表、RDF、向量、时序、事件、blob 与多媒体八类数据模型",
+    "提供 UQL、SQL、SPARQL、Cypher/Bolt、GraphQL 多种查询接口及类型化客户端",
+    "支持 OWL 推理、SHACL 与 ShEx 校验，具备提交后确认持久化、审计、变更数据捕获与租户隔离"
+   ],
+   "use_cases": [
+    "为智能体构建持久化记忆与证据追踪知识层",
+    "需要 RDF/OWL 推理与 SHACL 校验的知识图谱应用",
+    "存储与查询图、关系、向量、时序等多模态数据的分析场景"
+   ]
+  },
+  "sha": "51a2c2aad5cc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b59de3d90eb5": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 MCP 记忆服务器，支持混合检索与时序知识图谱",
+   "review": "Mnemo 是一个实现 MCP 协议（仅 Streamable HTTP 传输）的持久化记忆服务器，面向 Claude Code、Cursor 等 MCP 客户端。数据存储于本地单个 SQLite 文件（WAL 模式），通过 FTS5 全文检索与 sqlite-vec 向量检索经 RRF 融合实现混合搜索，并附带技能与钩子插件。注意：2026-09 去除托管化改造后已移除 stdio 传输与内嵌云同步，备份依赖外部 rclone。安装方式为 pip install n24q02m-mnemo 或 uvx 运行，也可经 Docker Compose 启动。",
+   "highlights": [
+    "混合检索：FTS5 + sqlite-vec 向量搜索经 RRF（k=60）融合，可用本地 Qwen3 交叉编码器或 [models.rerank] 单元重排，含时间衰减与重要性加权",
+    "类型化捕获 memory(action=\"capture\")，含 6 种 context_type、基于嵌入的去重、0.0-1.0 重要性评分与软归档/恢复策略",
+    "时序知识图谱：双时态 valid_from/valid_to 列、嵌入 KNN 实体解析、entity_search/entity_graph/history/as_of 动作与 memory_audit 审计表"
+   ],
+   "use_cases": [
+    "为支持 MCP 的 AI 编码工具（Claude Code、Cursor、Codex、Gemini CLI 等）提供跨会话的本地持久化记忆",
+    "需要按时间点查询记忆历史（as_of 时间回溯）或维护实体关系的知识管理场景",
+    "单机自托管记忆服务，经 rclone 在多台机器间备份与迁移"
+   ]
+  },
+  "sha": "b59de3d90eb5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e604c415ed5": {
+  "identity": {
+   "one_liner": "离线优先的开源复式记账软件，SQLite 单文件 + AI 辅助凭证录入",
+   "review": "BOKI 是一套运行在本地的桌面财务软件，基于 Electron + NestJS 构建，实现复式记账、财务报表生成与多公司数据隔离，面向小微企业、个体工商户与代理记账公司。数据库经 SQLCipher 整库加密，AI 记账只生成草稿凭证，需人工确认后入账；内核采用插件化架构，随附 14 个官方插件。",
+   "highlights": [
+    "复式记账引擎，借贷平衡前后端双重校验，预置 75 个中文科目，支持往来单位/部门/项目辅助核算",
+    "SQLite 单文件存储，SQLCipher 整库加密，附件采用 AES-256-GCM，无云端依赖与遥测",
+    "插件化架构：内核仅含记账引擎，官方插件覆盖 AI 记账、OCR、语音、HR、往来核销等，通过应用内插件市场安装"
+   ],
+   "use_cases": [
+    "小微企业或个体工商户在断网环境下录入凭证、生成资产负债表/利润表/科目余额表等报表",
+    "代理记账公司用一个账号管理多家公司账套，数据相互隔离",
+    "要求数据不出内网的团队，通过 Windows 安装包或源码方式自托管部署"
+   ]
+  },
+  "sha": "9e604c415ed5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2819,5 +2819,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5c64f87076b9": {
+  "identity": {
+   "one_liner": "在 T3 Code 旁运行的 MCP 网关，让托管 AI 机器人统一连接多台 T3 机器。",
+   "review": "这是一个与 T3 Code 配套部署的小型 Node.js/TypeScript 服务，面向已在一或多台常开机器上运行 T3 Code、希望让外部托管机器人（如 Grok Bot、Notion agent）驱动编码工作的用户。机器人通过一个 OAuth MCP 端点连接全部机器，工作以带稳定 ID 的 job 形式管理。网关只监听 loopback，需经公共 HTTPS 隧道（如 Tailscale Funnel、Cloudflare Tunnel）暴露；权限审批仍留在 T3 内。",
+   "highlights": [
+    "提供单一 HTTPS MCP 端点，机器人一次登录即可访问多台已配置的 T3 主机；支持 bearer token、重叠轮换和按 token 的使用记录",
+    "每个操作携带 requestId 实现安全重试：丢失响应的启动任务按标题标记找回，不会重复启动；job 状态存于本地 SQLite，重启后可恢复",
+    "支持 work_feed 游标式事件流、出站 webhook（含过滤、投递健康检查和七天存档回放），以及通过 work_adopt 收养用户手动创建的 T3 线程"
+   ],
+   "use_cases": [
+    "让云端托管机器人数周无人值守地跨多台机器启动、跟进和接手编码工作",
+    "机器人需要在任务完成、需要输入或失败时通过 webhook 被唤醒而非轮询的场景",
+    "不向机器人交付 T3 自身凭据，同时对每个机器人按机器和项目白名单细粒度授权"
+   ]
+  },
+  "sha": "5c64f87076b9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

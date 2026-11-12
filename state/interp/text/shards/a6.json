@@ -2930,5 +2930,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "72d58fb631ad": {
+  "identity": {
+   "one_liner": "基于数据库模式自动生成 GraphQL 与 REST API 的 Java 引擎",
+   "review": "该项目是 Excalibase 平台中的 API 引擎服务，启动时内省 Postgres 或 MySQL 模式，自动生成 GraphQL 类型和 REST 端点，并将每个 GraphQL 请求编译为单条 SQL 语句，同时在引擎层执行按角色的权限规则。权限规则被编译进同一条 SQL，不依赖数据库行级安全，因此在 MySQL 上同样可用。使用 Java/Spring Boot 编写，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "启动时内省数据库模式，自动生成 GraphQL 类型与 REST 端点，每个 GraphQL 请求编译为一条 SQL 语句",
+    "支持按角色、表和操作的权限规则（行过滤、列列表、写入检查），可追踪返回表行的 Postgres 函数",
+    "通过 WebSocket 提供 realtime 订阅，经 NATS CDC 由 Postgres WAL 或 MySQL binlog 驱动"
+   ],
+   "use_cases": [
+    "为现有 Postgres 或 MySQL 数据库快速生成 GraphQL/REST 查询接口",
+    "在缺乏行级安全特性的数据库（如 MySQL）上实现引擎层按角色权限控制",
+    "需要基于数据库变更推送实时数据的场景（WAL/binlog 经 CDC 转发至 WebSocket）"
+   ]
+  },
+  "sha": "72d58fb631ad",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3168,5 +3168,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8b50d9ec6e33": {
+  "identity": {
+   "one_liner": "macOS 上的 PostgreSQL 打包应用，内置 GUI 管理服务器启动停止",
+   "review": "Postgres.app 将 PostgreSQL 二进制文件打包进 macOS 应用内，首次启动时自动执行 initdb 初始化数据目录、启动服务器并创建与当前用户同名的超级用户和数据库。适用于希望在 Mac 上本地运行 PostgreSQL 的开发者。它同时可运行多个 PostgreSQL 版本，并附带 PostGIS、pgvector 等扩展及 psql、pg_dump、shp2pgsql 等命令行工具；注意服务器以当前用户身份运行，而非创建独立的 postgres 系统用户。",
+   "highlights": [
+    "内置图形界面用于启动/停止服务器，支持同时运行多个 PostgreSQL 版本",
+    "捆绑 PostgreSQL、PostGIS、pgvector（15+）、wal2json、pldebugger 等扩展",
+    "附带 PostgreSQL、GDAL、PROJ.4、PostGIS 的命令行工具集"
+   ],
+   "use_cases": [
+    "在 Mac 上本地安装和运行 PostgreSQL 进行开发",
+    "需要 PostGIS、pgvector 等扩展的空间数据或向量场景",
+    "本地调试 pl/pgsql 存储过程（配合 PgAdmin 4）"
+   ]
+  },
+  "sha": "8b50d9ec6e33",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3ee58e33df3d": {
+  "identity": {
+   "one_liner": "自托管游戏收藏追踪 Web 应用，集成 IGDB 目录与 Steam 同步。",
+   "review": "VideoGameTrackarr 是一个自托管的单管理员 Web 应用，用于记录游戏库、愿望单、游玩进度和评分，目录数据来自 IGDB，可导入 Steam 库与愿望单并跟踪折扣。部署方式为 Docker 单容器，默认使用 SQLite，通过 .env 配置 IGDB 凭据和 JWT 密钥。首次访问需用日志中的一次性设置码创建管理员。",
+   "highlights": [
+    "支持按平台、格式、标签等多维过滤与排序，提供封面、表格、实体盒装架等多种视图",
+    "内置自托管模拟器，可上传所拥有游戏的 ROM 在浏览器中游玩超过 25 种系统",
+    "支持 JSON 或 zip 备份还原、计划任务、离线可用的 PWA 及只读分享链接"
+   ],
+   "use_cases": [
+    "个人在家庭服务器（homelab）上集中管理实体与数字版游戏收藏",
+    "通过 IsThereAnyDeal 和 PlatPrices 跟踪愿望单游戏的降价信息",
+    "上传已拥有游戏的 ROM，在浏览器中跨多系统游玩并保存进度"
+   ]
+  },
+  "sha": "3ee58e33df3d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cdafb5642d21": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 PostgreSQL 的后端项目模板，含认证、Docker 与迁移机制",
+   "review": "Mercury 是一个后端项目模板，提供 OAuth2 认证（含 Google 登录）、PostgreSQL 主库、Redis 缓存、Flyway SQL 迁移，以及可选启用的 Celery worker 和 LangGraph agent。面向需要快速启动后端项目的开发者，通过 docker compose 一条命令运行完整技术栈，并内置单元/集成测试、ruff 代码检查与 Bandit 安全扫描流程。",
+   "highlights": [
+    "基于 FastAPI 安全模块实现 OAuth2 认证，支持 Google 集成登录",
+    "使用 Flyway SQL 迁移作为数据库 schema 的变更管理，PostgreSQL 为主库、Redis 分别用于缓存与 Celery broker",
+    "提供健康检查、Prometheus 指标、JSON 日志、X-Request-ID 响应头，OpenTelemetry 追踪可通过环境变量启用"
+   ],
+   "use_cases": [
+    "需要认证、数据库迁移与容器化部署的后端 API 项目起步",
+    "需要可选异步任务队列（Celery）或 LLM agent 运行端点的应用原型",
+    "本地开发与测试环境中需要完整技术栈编排及 Swagger 文档调试的场景"
+   ]
+  },
+  "sha": "cdafb5642d21",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c0a9c8fff13": {
+  "identity": {
+   "one_liner": "简化 Java JDK 中 SQLite JDBC 使用的库，提供 SQLiteOpenHelper 抽象",
+   "review": "该库用于在 Java JDK 环境中简化 SQLite JDBC 的使用，提供 SQLiteOpenHelper 类。支持两种模式：代码优先（运行时创建数据库文件，onCreate 方法中建表和插入初始数据）与数据库优先（使用已有数据库文件，onCreate 不被调用）。递增数据库版本号会触发 onUpdate 回调，可用于更新表结构。适合需要以代码优先或数据库优先方式管理 SQLite 的 Java 开发者。",
+   "highlights": [
+    "提供 SQLiteOpenHelper 抽象类，通过继承实现 onCreate 与 onUpdate 回调",
+    "支持代码优先与数据库优先两种数据库接入方式",
+    "通过递增数据库版本号触发 onUpdate 方法进行表结构更新"
+   ],
+   "use_cases": [
+    "Java 应用运行时动态创建 SQLite 数据库并初始化表结构与数据",
+    "复用已有的 SQLite 数据库文件并以编程方式管理版本更新",
+    "需要在 Java JDK 环境中通过 JDBC 访问 SQLite 数据库的场景"
+   ]
+  },
+  "sha": "0c0a9c8fff13",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aaf6ed6f08d8": {
+  "identity": {
+   "one_liner": "Rust 编写的自托管 CMS，提供 WordPress 风格管理与 REST API",
+   "review": "Daypress 是用 Rust 编写的自托管 CMS，以单个二进制运行，内嵌 SQLite（WAL 模式），基于 Axum/Tokio 构建，无 PHP 和 MySQL 依赖。面向需要 WordPress 风格后台、可视化页面构建器和兼容 REST API 的建站者，内置实验性 WordPress 导入器。项目自述长期目标是承接 WordPress 站点迁移，目前更适合构建新站。",
+   "highlights": [
+    "提供 WordPress 风格管理后台、DayStudio 可视化页面构建器及 WordPress 兼容的 REST API，单二进制内嵌 SQLite 数据库",
+    "支持文章、页面、分类、标签、评论审核、用户角色与双因素认证、定时发布、RSS/Atom 订阅源等内容功能",
+    "提供静态站点导出（部署至 Cloudflare Pages/Netlify）、内置自更新器、Let's Encrypt TLS/ACME 以及多平台二进制与 Docker 镜像发布"
+   ],
+   "use_cases": [
+    "在单二进制环境中自托管内容站点，无需 PHP 与 MySQL",
+    "需要拖拽式页面构建器与可视化主题模板编辑的新站建设",
+    "将本地站点编译为静态构建并一键部署到 Cloudflare Pages、Netlify 或本地目录"
+   ]
+  },
+  "sha": "aaf6ed6f08d8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

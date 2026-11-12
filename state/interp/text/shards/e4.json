@@ -2759,5 +2759,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "577253c60984": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 临时运行器集群控制器，单 Go 二进制加 SQLite 实现",
+   "review": "Zoomies 面向 GitHub 组织或个人仓库，监听 workflow_job webhook，为每个排队任务启动一次性运行器并在任务结束后销毁。采用 GitHub App 认证并自行签发一次性 JIT 注册令牌，支持多主机多操作系统代理、Web UI 管理和 S3 备份。README 提醒用户参考其支持矩阵，区分实测与仅可构建的平台。",
+   "highlights": [
+    "默认临时运行器，一个任务一个运行器，任务结束即销毁",
+    "基于 workflow_job webhook 的事件驱动扩缩，轮询仅作兜底；单控制器可接多代理，代理仅出站连接，NAT 内主机无需入站规则",
+    "提供 15 页实时 Web UI、Prometheus 指标、结构化日志、夜间 SQLite 备份并可推送至 S3 兼容目标"
+   ],
+   "use_cases": [
+    "希望用自有硬件（含家庭实验室 NAT 后机器，通过内置 Tailcat 连接）运行 GitHub Actions 自托管运行器",
+    "需要为组织或个人仓库自动扩缩 CI 运行器集群，而环境不使用 Kubernetes",
+    "需要对运行器队列等待、任务历史和变更操作进行审计与可观测性记录的团队"
+   ]
+  },
+  "sha": "577253c60984",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9cd344b0e39c": {
+  "identity": {
+   "one_liner": "基于 SQLite FTS5、tree-sitter 与嵌入的本地代码索引 MCP 服务器",
+   "review": "Srclight 为代码库构建可搜索索引，通过 MCP 协议供 AI 编码代理查询，提供符号搜索、调用图、语义搜索等工具。索引存储于每仓库一个 SQLite 文件，完全本地运行，无需云服务。支持 Python 3.11+，可通过 pip 安装，语义搜索需可选安装 Ollama。",
+   "highlights": [
+    "支持 19 种语言的 tree-sitter 解析与 4 种搜索模式（符号、源码、文档、语义），并提供 RRF 混合检索",
+    "通过 MCP 协议暴露工具，同时提供 CLI 可从终端查询索引，支持多仓库工作区与 git 钩子自动重索引",
+    "每个结果携带 index_freshness 标记，并通过 index_status 报告未索引扩展名等覆盖缺口"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 客户端提供本地代码索引查询能力",
+    "在离线或隔离（air-gapped）环境中对代码库建立可搜索索引",
+    "从终端或沙箱代理通过 CLI 以 JSON 输出查询符号、调用关系与文档内容"
+   ]
+  },
+  "sha": "9cd344b0e39c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

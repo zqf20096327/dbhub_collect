@@ -2976,5 +2976,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a0994b62e06f": {
+  "identity": {
+   "one_liner": "将 SQLite 编译为 WebAssembly 的 JavaScript 库，在浏览器或 Node.js 中运行内存型 SQLite 数据库。",
+   "review": "sql.js 通过 emscripten 将 SQLite 编译为 WebAssembly，提供 SQL.Database 类用于创建、查询数据库。数据库默认存储在内存中，不持久化更改，但可导入现有 .sqlite 文件并导出为类型化数组。1.x 版本采用异步初始化 API（initSqlJs），默认构建需额外加载 .wasm 文件，也提供内嵌二进制的单文件构建。适用于前端和 Node.js 场景；README 提示 Node.js 环境下使用原生绑定通常可避免整库载入内存。",
+   "highlights": [
+    "基于 WebAssembly 运行 SQLite，支持浏览器、Node.js 和 Web Worker，启用原生数学函数并默认包含 legacy math/string 扩展",
+    "支持导入现有 sqlite 文件（Uint8Array、fetch、XHR、Node fs 读取）并导出为类型化数组写入磁盘",
+    "提供多种构建形态：默认 wasm 构建、内嵌二进制的单文件构建（sql-wasm-inline.js）、Web Worker 构建及调试版本，并支持部分 BigInt 读取"
+   ],
+   "use_cases": [
+    "在浏览器中创建关系数据库并执行 SQL 查询，无需后端服务",
+    "读取用户本地或服务器上的 .sqlite 文件并在页面中查询展示",
+    "在 Node.js 或 Electron 中读写 sqlite 文件（README 建议此类场景可评估原生绑定）"
+   ]
+  },
+  "sha": "a0994b62e06f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52a0d0cddf69": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 与 Razor Pages 的自托管个人博客平台",
+   "review": "Moonglade 是一个面向开发者的自托管博客系统，使用 ASP.NET Core / .NET 10 与 Razor Pages 构建，默认数据库为 PostgreSQL，也支持 SQL Server。它包含公开博客与认证后台，提供文章发布、评论互动、RSS/Atom 等协议输出及站点管理功能。注意：数据库升级为手动执行 SQL 脚本，不支持子路径部署，且未初始化的 Local 安装在账户设置公开期间需限制访问。",
+   "highlights": [
+    "提供文章发布（含草稿、定时发布、Markdown/Mermaid）、评论、Webmention、RSS/Atom/OPML/OpenSearch/sitemap 等内容与协议能力",
+    "支持 PostgreSQL（默认）与 SQL Server 两种数据库，界面提供英、简中、繁中、德、日、法六种语言",
+    "提供 Docker Compose 部署方式，包含 xUnit 测试项目与手动幂等迁移 SQL 脚本"
+   ],
+   "use_cases": [
+    "开发者在云服务器或本地自托管个人技术博客",
+    "需要多语言界面与 RSS/OpenSearch 等标准协议输出的博客站点",
+    "需通过 Docker Compose 快速搭建并自行管理数据库升级的个人站点"
+   ]
+  },
+  "sha": "52a0d0cddf69",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a3d11fe072ee": {
+  "identity": {
+   "one_liner": "基于Olist电商数据集的端到端数据工程项目，覆盖ETL到看板",
+   "review": "该项目以Olist巴西电商公开数据集为数据源，使用Python/Pandas完成CSV提取与校验，经pyodbc加载至SQL Server，构建星型模型（4维表+fact_sales事实表，112,650条记录），并提供4个SQL分析视图供Power BI使用，通过pytest与Jenkins/Docker实现持续集成。定位为数据工程练习型项目，原始CSV不入Git，EUR换算使用固定示意汇率而非历史汇率。",
+   "highlights": [
+    "提供从CSV提取、SQL Server加载、星型建模到Power BI看板的完整数据流程",
+    "包含41个pytest测试，覆盖数据校验、ETL转换与SQL加载的事务回滚/提交场景（使用mock）",
+    "Jenkins流水线在Docker中运行，执行环境验证、依赖安装、pytest与JUnit报告，并以Poll SCM监控GitHub main分支"
+   ],
+   "use_cases": [
+    "数据工程学习与实践：练习ETL、维度建模、数据校验与CI流程",
+    "构建销售分析看板：营收、月度销售、品类Top10、按州销售分布等KPI展示",
+    "源数据与数仓的对账验证：项目内置金额级对账结果（差异为0.00）"
+   ]
+  },
+  "sha": "a3d11fe072ee",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -27309,5 +27309,1856 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "7e9c487b13ae+2": {
+  "fn": "rqzbeh/KhatamRouter",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "KhatamRouter Banner"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " # KhatamRouter"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     " **High-Performance AI Routing Gateway, Vertical Scale Engine & Protocol Translator**"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    7,
+    [
+     " Connect any AI developer tool or client to 40+ AI providers through one unified, high-concurrency OpenAI-compatible endpoint."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    16,
+    8,
+    14,
+    [
+     " License: MIT",
+     " Runtime: Bun",
+     " Architecture: Multi-Worker Cluster",
+     " Database: bun:sqlite WAL",
+     " Cache: Redis (Optional)-DC382D.svg?logo=redis&logoColor=white)",
+     " API: OpenAI-Compatible /v1-10b981.svg)"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    22,
+    15,
+    16,
+    [
+     " Why KhatamRouter • Architecture • Comparison • Features • Quick Start • Configuration • Clients • Credits"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    34,
+    16,
+    28
+   ],
+   [
+    "replace",
+    34,
+    37,
+    28,
+    29,
+    [
+     "For implementation milestones and planned work, see ROADMAP.md. For release notes, see CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    46,
+    29,
+    38
+   ],
+   [
+    "replace",
+    46,
+    70,
+    38,
+    39,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    72,
+    39,
+    41
+   ],
+   [
+    "replace",
+    72,
+    75,
+    41,
+    42,
+    [
+     "For full details on the request lifecycle, token refresh loops, and persistence model, see docs/ARCHITECTURE.md and open-sse/AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    42,
+    45
+   ],
+   [
+    "replace",
+    78,
+    79,
+    45,
+    46,
+    [
+     "KhatamRouter is initialized from decolua/9router and adapts provider definitions and stateless executors from Vanszs/VansRouter. Every comparison below is derived directly from and verifiable in this repository's codebase."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    46,
+    47
+   ],
+   [
+    "replace",
+    80,
+    81,
+    47,
+    48,
+    [
+     "|Subsystem / Feature|KhatamRouter|Upstream 9router|VansRouter|Repo Evidence|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    48,
+    49
+   ],
+   [
+    "replace",
+    82,
+    96,
+    49,
+    61,
+    [
+     "|**Runtime Engine**|Strict Bun runtime (`process.versions.bun` enforced; Node drivers removed)|Multi-driver Node fallback chain (`better-sqlite3`, `node:sqlite`, `sql.js`)|Node.js (`engines.node`, pnpm packaging)|`src/lib/db/driver.js:24-25`|",
+     "|**Persistence Driver**|`bun:sqlite` exclusively with WAL journal mode|Multi-driver Node fallback chain|`better-sqlite3` / `node:sqlite`|`src/lib/db/adapters/bunSqliteAdapter.js:1-16`|",
+     "|**Process Model & Scaling**|`node:cluster` supervisor running `max(1, nproc - 2)` workers (`KHATAM_WORKERS`)|Single-process|Single-process|`src/lib/cluster/supervisor.js:20-33`|",
+     "|**Distributed Coordination**|Optional Redis Pub/Sub events & distributed login rate limiter|None (in-process only)|In-process `Map`s for combo state and failures|`src/lib/redis/events.js:1-28`, `src/lib/auth/loginLimiter.js:1-26`|",
+     "|**Hot-Path Repository Caches**|5-second TTL in-memory LRU caches for aliases, combos, and nodes|None|None|`src/lib/db/repos/aliasRepo.js:14`, `src/lib/db/repos/combosRepo.js:10`, `src/lib/db/repos/nodesRepo.js:10`|",
+     "|**Worker Secret Convergence**|Atomic file locking via hard-link collision (`publishSecretOnce`)|Single-process file write|Single-process file write|`src/shared/utils/secretFile.js:9-26`, `src/lib/auth/dashboardSession.js:22`|",
+     "|**Request Ingestion Hardening**|Rejects combined `Content-Length` + `Transfer-Encoding`; 64 MiB chunked cap|Default HTTP parsing|Rejects combined `Content-Length` + `Transfer-Encoding`; 64 MiB chunked cap|`custom-server.js:164`, `custom-server.js:310-336`|",
+     "|**Model Capability Gating**|Fail-closed vision requirement enforcement (`KHATAM_MODEL_CAPABILITY_GUARD=1`)|None|None|`src/domain/requestCapabilities.js:16`, `open-sse/services/combo.js:525`|",
+     "|**Granular Quota & Cost Ledger**|Per-key spend caps & transactional `request_cost_ledger` table|No `request_cost_ledger` table|No `request_cost_ledger` table|`src/domain/keyQuota.js:1-25`, `src/lib/db/keyQuota.js:1-24`|",
+     "|**LoopGuard**|Opt-in sliding-window loop detection (`loopGuardEnabled`)|Not present|Present (`open-sse/handlers/chatCore.js`)|`open-sse/utils/loopGuard.js:1-30`, `src/lib/db/repos/settingsRepo.js:71`|",
+     "|**Rotating Psiphon Proxy Pool**|`psiphon` pool type: holds a lowest-latency tunnel, rotates to a new IP and country on 429 / `FreeTierError` / transport failure; fail-closed (never falls back to the server IP). Operator supplies the GPL-3.0 `ConsoleClient`|Static proxy URLs only|Static proxy URLs only|`src/lib/network/psiphon/psiphonManager.js`, `docs/PSIPHON.md`|",
+     "|**Bundled OpenCode Unlimited Egress**|`opencode2api` pool type: supervised loopback EGRESS daemon holding a Cloudflare WARP IPv6 exit pool, retiring a burned exit on 429/403 and substituting a pre-registered one before the request continues; strict/fail-closed; binary bundled for `amd64` + `arm64`|Nothing|Nothing|`src/lib/network/opencode2api/index.js`, `docs/OPENCODE2API.md`|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    124,
+    61,
+    89
+   ],
+   [
+    "delete",
+    124,
+    126,
+    89,
+    89
+   ],
+   [
+    "equal",
+    126,
+    138,
+    89,
+    101
+   ],
+   [
+    "replace",
+    138,
+    140,
+    101,
+    102,
+    [
+     " Docker Deployment Details & Operational Commands "
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    102,
+    103
+   ],
+   [
+    "replace",
+    141,
+    142,
+    103,
+    104,
+    [
+     "- Standalone container configurations and persistent volume details live in DOCKER.md."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    151,
+    104,
+    113
+   ],
+   [
+    "delete",
+    151,
+    152,
+    113,
+    113
+   ],
+   [
+    "equal",
+    152,
+    167,
+    113,
+    128
+   ],
+   [
+    "replace",
+    167,
+    169,
+    128,
+    129,
+    [
+     " Development Server Details "
+    ]
+   ],
+   [
+    "equal",
+    169,
+    179,
+    129,
+    139
+   ],
+   [
+    "delete",
+    179,
+    180,
+    139,
+    139
+   ],
+   [
+    "equal",
+    180,
+    191,
+    139,
+    150
+   ],
+   [
+    "delete",
+    191,
+    193,
+    150,
+    150
+   ],
+   [
+    "equal",
+    193,
+    203,
+    150,
+    160
+   ],
+   [
+    "replace",
+    203,
+    204,
+    160,
+    161,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    161,
+    162
+   ],
+   [
+    "replace",
+    205,
+    212,
+    162,
+    169,
+    [
+     "|`INITIAL_PASSWORD`|`change-me`|Dashboard login password. Must be changed before public exposure.|",
+     "|`JWT_SECRET`|Auto-generated|Session cookie signing key. A random secret is generated under `DATA_DIR` if empty.|",
+     "|`API_KEY_SECRET`|Built-in fallback|HMAC secret used to sign and verify gateway API keys. Set explicitly.|",
+     "|`PORT`|`20128`|Listener port for production (`custom-server.js:15`).|",
+     "|`DATA_DIR`|`~/.9router`|Root storage directory (`/app/data` in Docker Compose).|",
+     "|`REDIS_URL`|None|Optional Redis connection string (e.g. `redis://localhost:6379`).|",
+     "|`KHATAM_WORKERS`|`max(1, nproc - 2)`|Worker process count for vertical scaling (clamped 1–64).|"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    169,
+    170
+   ],
+   [
+    "replace",
+    213,
+    216,
+    170,
+    171,
+    [
+     "The complete environment variable contract is defined in `.env.example`."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    229,
+    171,
+    184
+   ],
+   [
+    "replace",
+    229,
+    233,
+    184,
+    185,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    245,
+    185,
+    197
+   ],
+   [
+    "delete",
+    245,
+    247,
+    197,
+    197
+   ],
+   [
+    "equal",
+    247,
+    249,
+    197,
+    199
+   ],
+   [
+    "replace",
+    249,
+    257,
+    199,
+    205,
+    [
+     "- ROADMAP.md — Implementation status, architectural phases, and planned work.",
+     "- CHANGELOG.md — Release notes and version history.",
+     "- docs/ARCHITECTURE.md — Request lifecycle, format translation, and storage architecture.",
+     "- docs/PERFORMANCE.md — Multi-core vertical scaling benchmarks.",
+     "- DOCKER.md — Container deployment guide and volume configuration.",
+     "- CLAUDE.md — Contributor instructions and agent conventions."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    260,
+    205,
+    208
+   ],
+   [
+    "replace",
+    260,
+    262,
+    208,
+    210,
+    [
+     "- **decolua/9router**: KhatamRouter is initialized from 9router and ports later upstream releases. The routing engine, dashboard, provider interfaces, and CLI originate there. MIT License.",
+     "- **Vanszs/VansRouter**: Provider definitions, stateless executors, LoopGuard, and free-tier discovery were adapted from VansRouter to this Bun-only, Redis-optional architecture. KhatamRouter does not share git history with VansRouter. MIT License."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    210,
+    211
+   ],
+   [
+    "replace",
+    263,
+    264,
+    211,
+    212,
+    [
+     "Both projects are MIT-licensed. The copyright notice is preserved in LICENSE: Copyright (c) 2024-2026 decolua and contributors."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "c0c9ff2b7519+2": {
+  "fn": "openeverest/provider-tidb",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "equal",
+    0,
+    7,
+    0,
+    7
+   ],
+   [
+    "replace",
+    7,
+    12,
+    7,
+    12,
+    [
+     "Status",
+     "CI",
+     "Release",
+     "Go Reference",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    16,
+    13,
+    16,
+    [
+     "Run **TiDB** — a distributed, MySQL-compatible SQL database —",
+     "on Kubernetes through OpenEverest, backed by",
+     "**TiDB Operator v2**."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    27,
+    16,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "|Component|Role|Operator resource|"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    28,
+    29
+   ],
+   [
+    "replace",
+    29,
+    34,
+    29,
+    34,
+    [
+     "|`pd`|Placement Driver — metadata, timestamps (TSO), scheduling|`PDGroup`|",
+     "|`tikv`|Distributed key-value storage engine|`TiKVGroup`|",
+     "|`tidb`|Stateless SQL layer (MySQL protocol)|`TiDBGroup`|",
+     "|`tiflash` *(optional)*|Columnar replicas for analytical queries (HTAP)|`TiFlashGroup`|",
+     "|`tiproxy` *(optional)*|Connection proxy in front of TiDB: balances sessions and keeps them open while TiDB changes|`TiProxyGroup`|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    38,
+    34,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "> See Install OpenEverest."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    44,
+    39,
+    44
+   ],
+   [
+    "replace",
+    44,
+    48,
+    44,
+    45,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    57,
+    45,
+    54
+   ],
+   [
+    "replace",
+    57,
+    58,
+    54,
+    55,
+    [
+     "|provider-tidb|OpenEverest|TiDB Operator|Kubernetes|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    55,
+    56
+   ],
+   [
+    "replace",
+    59,
+    61,
+    56,
+    58,
+    [
+     "|`0.2.x`|`>= 2.0.0`|`v2.0.1`|`1.30` – `1.36`|",
+     "|`0.1.x`|`>= 2.0.0`|`v2.0.1`|`1.30` – `1.36`|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    58,
+    61
+   ],
+   [
+    "replace",
+    64,
+    65,
+    61,
+    62,
+    [
+     "|Feature|Requires|Tested with|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    62,
+    63
+   ],
+   [
+    "replace",
+    66,
+    70,
+    63,
+    67,
+    [
+     "|Monitoring → Prometheus|Prometheus Operator (`PodMonitor`, `monitoring.coreos.com/v1`)|kube-prometheus-stack|",
+     "|Monitoring → VictoriaMetrics|VictoriaMetrics Operator (`VMPodScrape`, `operator.victoriametrics.com/v1beta1`)|`v0.54.1`|",
+     "|Certificates from cert-manager|cert-manager|`v1.20.2`|",
+     "|Backups and restores|S3-compatible object storage|AWS S3 API, SeaweedFS, Linode Object Storage|"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    67,
+    68
+   ],
+   [
+    "replace",
+    71,
+    72,
+    68,
+    69,
+    [
+     "The bundled operator manages TiDB engine versions independently (see Versions)."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    76,
+    69,
+    73
+   ],
+   [
+    "replace",
+    76,
+    77,
+    73,
+    74,
+    [
+     "is covered under Installation."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    74,
+    75
+   ],
+   [
+    "replace",
+    78,
+    79,
+    75,
+    76,
+    [
+     "|Capability|Status|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    76,
+    77
+   ],
+   [
+    "replace",
+    80,
+    89,
+    77,
+    86,
+    [
+     "|Provisioning|✅|PD + TiKV + TiDB, optionally TiFlash and TiProxy|",
+     "|Horizontal scaling|✅|Per-component `replicas`; TiKV can't be scaled in below PD's `max-replicas` (see below)|",
+     "|Vertical scaling (CPU / memory)|✅|Per-component `resources`|",
+     "|Custom configuration|✅|Inline TOML `config` per component|",
+     "|Scheduling policy|✅|Per-component `schedulingPolicy` (node selector, affinity, tolerations, topology spread, scheduler)|",
+     "|Version upgrades|✅|Change the version bundle; the operator rolls PD → TiFlash → TiKV → TiDB. TiProxy has its own version line. Downgrades are rejected|",
+     "|Monitoring|✅|Prometheus `PodMonitor` or VictoriaMetrics `VMPodScrape` for PD, TiKV, TiDB, TiFlash and TiProxy (see Monitoring)|",
+     "|TLS|✅|mTLS between components and TLS for MySQL clients, with provider-issued certificates (see Security)|",
+     "|Connection proxy|✅|Optional TiProxy: session balancing and connections that survive TiDB restarts and scaling (see TiProxy)|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    86,
+    89
+   ],
+   [
+    "replace",
+    92,
+    93,
+    89,
+    90,
+    [
+     "|Capability|Status|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    90,
+    91
+   ],
+   [
+    "replace",
+    94,
+    100,
+    91,
+    97,
+    [
+     "|Persistent storage|✅|Per-component size and storage class|",
+     "|Storage expansion|✅|Grow `storage.size`; shrinking is rejected. Needs an expandable StorageClass (see below)|",
+     "|Backups (on demand)|✅|Full snapshot to S3-compatible storage (BR)|",
+     "|Backups (scheduled)|✅|Cron schedules per storage with count or time retention (see below)|",
+     "|Point-in-time recovery|✅|Continuous log backup to one storage; restore a point of it into a new Instance (see Point-in-time recovery)|",
+     "|Restore|✅|Into an existing Instance, or seed a new one via `spec.dataSource`|"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    97,
+    98
+   ],
+   [
+    "replace",
+    101,
+    102,
+    98,
+    99,
+    [
+     "See ROADMAP.md for the planned work."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    170,
+    99,
+    167
+   ],
+   [
+    "replace",
+    170,
+    171,
+    167,
+    168,
+    [
+     " with `--set operator.enabled=false` to run against an externally managed operator."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    168,
+    169
+   ],
+   [
+    "replace",
+    172,
+    176,
+    169,
+    173,
+    [
+     " inside the Helm release — so a `Job` applies the pinned CRD manifest from the operator's GitHub",
+     " release before the operator and provider start. This requires cluster egress to that URL; point",
+     " `--set crds.url=...` at a mirror for air-gapped clusters, or `--set crds.install=false` to manage",
+     " the CRDs yourself."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    191,
+    173,
+    188
+   ],
+   [
+    "replace",
+    191,
+    193,
+    188,
+    190,
+    [
+     " their TiDB resources, and they stay plaintext. TLS (Security) can only be chosen",
+     " when an Instance is created; new Instances get it by default in the UI."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    190,
+    191
+   ],
+   [
+    "replace",
+    194,
+    196,
+    191,
+    193,
+    [
+     " account BR jobs run as), `PodMonitor`s, `VMPodScrape`s and cert-manager `Issuer`s and",
+     " `Certificate`s. `helm upgrade --reuse-values` works."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    193,
+    194
+   ],
+   [
+    "replace",
+    197,
+    200,
+    194,
+    197,
+    [
+     " (#63). A `Backup` or `Restore` still",
+     " `Running` from before the upgrade keeps waiting for a job that cannot start; delete it and",
+     " create it again."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    232,
+    197,
+    229
+   ],
+   [
+    "replace",
+    232,
+    253,
+    229,
+    230,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    256,
+    230,
+    233
+   ],
+   [
+    "replace",
+    256,
+    257,
+    233,
+    234,
+    [
+     "TiDB 2, default version bundle). More examples live in examples/."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    265,
+    234,
+    242
+   ],
+   [
+    "replace",
+    265,
+    266,
+    242,
+    243,
+    [
+     "The connection secret holds the MySQL `host`, `port` (4000, or 6000 through TiProxy),"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    243,
+    244
+   ],
+   [
+    "replace",
+    267,
+    268,
+    244,
+    245,
+    [
+     "(`mysql://root:<password>@<host>:<port>/?tls=false`, with `tls=true` under client TLS)."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    292,
+    245,
+    269
+   ],
+   [
+    "replace",
+    292,
+    296,
+    269,
+    270,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    305,
+    270,
+    279
+   ],
+   [
+    "replace",
+    305,
+    306,
+    279,
+    280,
+    [
+     "|`state` / `reason`|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    307,
+    280,
+    281
+   ],
+   [
+    "replace",
+    307,
+    312,
+    281,
+    286,
+    [
+     "|`Available` / `WindowAvailable`|Every point from `earliestRestorableTime` (the oldest full backup the log covers) to `latestRestorableTime` (the log backup's checkpoint) is restorable|",
+     "|`Available` / `LogBackupLagging`|As above, but the checkpoint is over 15 minutes old: the log backup is stuck. Check the TiKV logs and `br log status`|",
+     "|`Unavailable` / `LogBackupStarting`|The log backup is waiting for the cluster, starting, or moving to another storage|",
+     "|`Unavailable` / `NoBaseBackup`|No full backup to that storage since the log backup started yet|",
+     "|`Unavailable` / `LogBackupFailed`|The log backup failed to start; the message carries BR's reason|"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    320,
+    286,
+    294
+   ],
+   [
+    "replace",
+    320,
+    331,
+    294,
+    295,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    331,
+    359,
+    295,
+    323
+   ],
+   [
+    "replace",
+    359,
+    360,
+    323,
+    324,
+    [
+     "|Preset|PD|TiKV|TiDB|TiFlash|TiProxy|Use it for|"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    361,
+    324,
+    325
+   ],
+   [
+    "replace",
+    361,
+    364,
+    325,
+    328,
+    [
+     "|`tidb-dev`|1|1|1|—|—|A laptop or CI: the smallest cluster that runs (about 6 GiB)|",
+     "|`tidb-standard`|3|3|2|—|2|A highly available transactional database|",
+     "|`tidb-analytics`|3|3|2|2|2|Transactions plus analytics on the same data|"
+    ]
+   ],
+   [
+    "equal",
+    364,
+    370,
+    328,
+    334
+   ],
+   [
+    "replace",
+    370,
+    371,
+    334,
+    335,
+    [
+     "live under `presets:` in values.yaml; set `enabled: false`"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    375,
+    335,
+    339
+   ],
+   [
+    "replace",
+    375,
+    376,
+    339,
+    340,
+    [
+     "TiProxy is a MySQL-protocol proxy in"
+    ]
+   ],
+   [
+    "equal",
+    376,
+    379,
+    340,
+    343
+   ],
+   [
+    "replace",
+    379,
+    380,
+    343,
+    344,
+    [
+     " migrates existing sessions to the new TiDB nodes, not just new connections;"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    381,
+    344,
+    345
+   ],
+   [
+    "replace",
+    381,
+    382,
+    345,
+    346,
+    [
+     " changes) or removed by a scale-in, by migrating each session to another TiDB node first."
+    ]
+   ],
+   [
+    "equal",
+    382,
+    391,
+    346,
+    355
+   ],
+   [
+    "replace",
+    391,
+    395,
+    355,
+    356,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    395,
+    409,
+    356,
+    370
+   ],
+   [
+    "replace",
+    409,
+    410,
+    370,
+    371,
+    [
+     "definition/versions.yaml. It is not ordered against the TiDB"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    412,
+    371,
+    373
+   ],
+   [
+    "replace",
+    412,
+    413,
+    373,
+    374,
+    [
+     "(TiProxy configuration)."
+    ]
+   ],
+   [
+    "equal",
+    413,
+    414,
+    374,
+    375
+   ],
+   [
+    "replace",
+    414,
+    415,
+    375,
+    376,
+    [
+     "With TLS, TiProxy follows the Instance's settings: with `tls.client` it serves MySQL"
+    ]
+   ],
+   [
+    "equal",
+    415,
+    427,
+    376,
+    388
+   ],
+   [
+    "replace",
+    427,
+    428,
+    388,
+    389,
+    [
+     " `SessionTokenSigning`) from the start, and nothing restarts;"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    429,
+    389,
+    390
+   ],
+   [
+    "replace",
+    429,
+    434,
+    390,
+    395,
+    [
+     " updates the operator's resources in place without restarting any pod. Once every TiDB node",
+     " carries it, the provider turns on `SessionTokenSigning`, and the operator **replaces the TiDB",
+     " pods one at a time** (a new pod starts before an old one stops). TiProxy balances connections",
+     " from the start, but sessions on the TiDB pods that predate the signing certificate cannot be",
+     " migrated, so this one roll closes them. Expect the Instance to be `Updating` until it is done."
+    ]
+   ],
+   [
+    "equal",
+    434,
+    441,
+    395,
+    402
+   ],
+   [
+    "replace",
+    441,
+    442,
+    402,
+    403,
+    [
+     "`graceful-wait-before-shutdown`"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    460,
+    403,
+    421
+   ],
+   [
+    "replace",
+    460,
+    461,
+    421,
+    422,
+    [
+     "|Toggle|Creates|Requires|"
+    ]
+   ],
+   [
+    "equal",
+    461,
+    462,
+    422,
+    423
+   ],
+   [
+    "replace",
+    462,
+    464,
+    423,
+    425,
+    [
+     "|**Prometheus** (`monitoring.prometheus`)|`PodMonitor` `<instance>-metrics`|Prometheus Operator|",
+     "|**VictoriaMetrics** (`monitoring.victoriaMetrics`)|`VMPodScrape` `<instance>-vm-metrics`|VictoriaMetrics Operator|"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    469,
+    425,
+    430
+   ],
+   [
+    "replace",
+    469,
+    480,
+    430,
+    431,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    480,
+    484,
+    431,
+    435
+   ],
+   [
+    "replace",
+    484,
+    485,
+    435,
+    436,
+    [
+     "the Metrics plugin finds a `PodMonitor` by, so its"
+    ]
+   ],
+   [
+    "equal",
+    485,
+    506,
+    436,
+    457
+   ],
+   [
+    "replace",
+    506,
+    507,
+    457,
+    458,
+    [
+     "|Toggle|Field|Effect|"
+    ]
+   ],
+   [
+    "equal",
+    507,
+    508,
+    458,
+    459
+   ],
+   [
+    "replace",
+    508,
+    510,
+    459,
+    461,
+    [
+     "|Encrypt traffic between components (mTLS)|`tls.cluster`|PD, TiKV, TiDB, TiFlash and TiProxy authenticate each other with certificates and encrypt their traffic|",
+     "|Encrypt client connections (TLS)|`tls.client`|MySQL clients can connect to TiDB (and TiProxy) over TLS|"
+    ]
+   ],
+   [
+    "equal",
+    510,
+    515,
+    461,
+    466
+   ],
+   [
+    "replace",
+    515,
+    519,
+    466,
+    467,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    519,
+    528,
+    467,
+    476
+   ],
+   [
+    "replace",
+    528,
+    529,
+    476,
+    477,
+    [
+     "`<instance>-tidb-server-secret` (TiDB's MySQL certificate). While TiProxy is enabled it"
+    ]
+   ],
+   [
+    "equal",
+    529,
+    545,
+    477,
+    493
+   ],
+   [
+    "replace",
+    545,
+    546,
+    493,
+    494,
+    [
+     "With mTLS, the monitoring `PodMonitor` and `VMPodScrape` scrape over https"
+    ]
+   ],
+   [
+    "equal",
+    546,
+    555,
+    494,
+    503
+   ],
+   [
+    "replace",
+    555,
+    556,
+    503,
+    504,
+    [
+     "With cert-manager installed, the certificates can come from it"
+    ]
+   ],
+   [
+    "equal",
+    556,
+    562,
+    504,
+    510
+   ],
+   [
+    "replace",
+    562,
+    567,
+    510,
+    511,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    567,
+    570,
+    511,
+    514
+   ],
+   [
+    "replace",
+    570,
+    571,
+    514,
+    515,
+    [
+     " self-signed `Issuer`, a CA `Certificate` (`<instance>-tls-ca`) and a CA `Issuer` that signs the rest."
+    ]
+   ],
+   [
+    "equal",
+    571,
+    572,
+    515,
+    516
+   ],
+   [
+    "replace",
+    572,
+    573,
+    516,
+    517,
+    [
+     " (`ca.crt`), as CA and Vault issuers do; ACME issuers cannot be used."
+    ]
+   ],
+   [
+    "equal",
+    573,
+    582,
+    517,
+    526
+   ],
+   [
+    "replace",
+    582,
+    583,
+    526,
+    527,
+    [
+     "|Topology|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    583,
+    584,
+    527,
+    528
+   ],
+   [
+    "replace",
+    584,
+    585,
+    528,
+    529,
+    [
+     "|`cluster`|✅|Standard distributed TiDB: PD + TiKV + TiDB, optionally TiFlash and TiProxy|"
+    ]
+   ],
+   [
+    "equal",
+    585,
+    588,
+    529,
+    532
+   ],
+   [
+    "replace",
+    588,
+    589,
+    532,
+    533,
+    [
+     "|Version bundle|Default|Components|"
+    ]
+   ],
+   [
+    "equal",
+    589,
+    590,
+    533,
+    534
+   ],
+   [
+    "replace",
+    590,
+    592,
+    534,
+    536,
+    [
+     "|`8.5.2`|✅|PD / TiKV / TiDB / TiFlash `v8.5.2`, TiProxy `v1.3.3`|",
+     "|`7.5.5`||PD / TiKV / TiDB / TiFlash `v7.5.5`, TiProxy `v1.3.3`|"
+    ]
+   ],
+   [
+    "equal",
+    592,
+    593,
+    536,
+    537
+   ],
+   [
+    "replace",
+    593,
+    594,
+    537,
+    538,
+    [
+     "Source of truth: definition/versions.yaml. Each bundle pins the TiDB"
+    ]
+   ],
+   [
+    "equal",
+    594,
+    599,
+    538,
+    543
+   ],
+   [
+    "replace",
+    599,
+    601,
+    543,
+    545,
+    [
+     "- **Chart values:** charts/provider-tidb/values.yaml — provider",
+     " deployment settings and the bundled `operator` subchart values."
+    ]
+   ],
+   [
+    "equal",
+    601,
+    602,
+    545,
+    546
+   ],
+   [
+    "replace",
+    602,
+    605,
+    546,
+    549,
+    [
+     " defined under definition/ and published on the `Provider` resource",
+     " (`kubectl get provider tidb -o yaml`). The API server and the UI validate user input against",
+     " these schemas."
+    ]
+   ],
+   [
+    "equal",
+    605,
+    626,
+    549,
+    570
+   ],
+   [
+    "replace",
+    626,
+    628,
+    570,
+    572,
+    [
+     "Requires Go (see go.mod), Docker, Helm, kubectl, and a Kubernetes cluster you can",
+     "reach. dev/README.md covers the environment end to end: the recommended"
+    ]
+   ],
+   [
+    "equal",
+    628,
+    644,
+    572,
+    588
+   ],
+   [
+    "replace",
+    644,
+    645,
+    588,
+    589,
+    [
+     "PROVIDER_DEVELOPMENT.md."
+    ]
+   ],
+   [
+    "equal",
+    645,
+    648,
+    589,
+    592
+   ],
+   [
+    "replace",
+    648,
+    649,
+    592,
+    593,
+    [
+     "|Path|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    649,
+    650,
+    593,
+    594
+   ],
+   [
+    "replace",
+    650,
+    661,
+    594,
+    605,
+    [
+     "|`cmd/provider/`|Entry point|",
+     "|`internal/provider/`|`ProviderInterface` implementation (Sync/Validate/Status/Cleanup), RBAC markers|",
+     "|`internal/common/`|Component name constants|",
+     "|`definition/`|Provider identity, component types, versions, topologies|",
+     "|`charts/provider-tidb/`|Helm chart — bundles the operator subchart and TiDB `crds/`; `generated/` is produced by `make generate`|",
+     "|`config/rbac/role.yaml`|Generated `ClusterRole` — do not edit|",
+     "|`test/integration/`|Chainsaw suites (see its `README.md`)|",
+     "|`test/vars.sh`|Pinned operator and engine versions used by tests|",
+     "|`examples/`|Example `Instance` resources|",
+     "|`dev/`|Tilt dev environment, `.env` configuration, k3d cluster config|",
+     "|`.github/workflows/`|CI: lint, build, unit and integration tests, release|"
+    ]
+   ],
+   [
+    "equal",
+    661,
+    665,
+    605,
+    609
+   ],
+   [
+    "replace",
+    665,
+    666,
+    609,
+    610,
+    [
+     " which asserts every UI-schema field is reconciled by `Sync`)."
+    ]
+   ],
+   [
+    "equal",
+    666,
+    667,
+    610,
+    611
+   ],
+   [
+    "replace",
+    667,
+    671,
+    611,
+    615,
+    [
+     " the full lifecycle: create an `Instance`, assert the provider produces the `Cluster` and",
+     " component groups, simulate operator readiness, assert the `Instance` reports `Ready`, and delete.",
+     " The operator itself is disabled for these tests (readiness is simulated). See",
+     " test/integration/README.md."
+    ]
+   ],
+   [
+    "equal",
+    671,
+    672,
+    615,
+    616
+   ],
+   [
+    "replace",
+    672,
+    673,
+    616,
+    617,
+    [
+     " verification, Helm lint, and each integration suite on every pull request."
+    ]
+   ],
+   [
+    "equal",
+    673,
+    680,
+    617,
+    624
+   ],
+   [
+    "replace",
+    680,
+    681,
+    624,
+    625,
+    [
+     "|Symptom|Where to look|"
+    ]
+   ],
+   [
+    "equal",
+    681,
+    682,
+    625,
+    626
+   ],
+   [
+    "replace",
+    682,
+    694,
+    626,
+    638,
+    [
+     "|`Instance` stuck in `Provisioning`|`kubectl describe instances.core.openeverest.io <name>` conditions, then the provider logs|",
+     "|No `Provider` resource in the cluster|Is the chart installed? Check the provider deployment logs|",
+     "|`Instance` ignored entirely|`spec.providerRef.name` must be `tidb`|",
+     "|Provider logs `no matches for kind \"TiKVGroup\"`|TiDB CRDs missing. The chart's pre-install hook installs them; check the `<release>-crd-installer` Job (and its egress to `crds.url`), or apply them manually: `kubectl apply --server-side -f <crds.url>`|",
+     "|Operator pod `CrashLoopBackOff` at startup|The TiDB CRDs must exist before the operator starts (see the row above)|",
+     "|Groups created but no pods|Inspect the group/instance status (`kubectl get tidbgroup,tikvgroup,pdgroup`) — the failure is upstream in the operator|",
+     "|Storage size raised but PVCs unchanged|The StorageClass must allow volume expansion; check `kubectl get pvc` and the operator logs|",
+     "|`Instance` turns `Failed` right after an edit, with no message|The provider rejected the change. The reason is in the provider logs (`Validation failed`); see Known issues. Typical causes: shrinking storage, downgrading or reordering versions, scaling TiKV below PD's `max-replicas`, changing TLS after creation. Revert the change to return to `Ready`|",
+     "|`Backup` or `Restore` stays `Running`|`kubectl get jobs` in the Instance's namespace and the BR job's pod logs; the BR `Backup`/`Restore` (`backups.br.pingcap.com`) conditions carry the reason|",
+     "|TiProxy runs but does not migrate sessions|`kubectl get cluster.core.pingcap.com <instance> -o jsonpath='{.spec.featureGates}'` must list `SessionTokenSigning`. On an existing Instance the provider adds it only once every TiDB instance lists `FeatureModification` (`kubectl get tidb -o jsonpath='{.items[*].spec.features}'`); see TiProxy|",
+     "|TiKV pods restart with `OOMKilled`, or writes fail with `tikv disk full` early|The TiKV memory limit or volume is too small; see TiKV memory and disk|",
+     "|Clients cannot log in after a restore|The restored data carries the backed-up cluster's root password; see Usage. The Restore's message says when that password is unknown|"
+    ]
+   ],
+   [
+    "equal",
+    694,
+    698,
+    638,
+    642
+   ],
+   [
+    "replace",
+    698,
+    702,
+    642,
+    646,
+    [
+     " `Failed` without a message; the reason is only in the provider logs. Fixed in the OpenEverest",
+     " provider runtime (openeverest/openeverest#3346) and picked up once a release includes it.",
+     "- **No certificate rotation** (#66).",
+     " Certificates are issued for ten years and not renewed (see Security)."
+    ]
+   ],
+   [
+    "equal",
+    702,
+    704,
+    646,
+    648
+   ],
+   [
+    "replace",
+    704,
+    709,
+    648,
+    649,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    709,
+    712,
+    649,
+    652
+   ],
+   [
+    "replace",
+    712,
+    713,
+    652,
+    653,
+    [
+     "OpenEverest security policy."
+    ]
+   ],
+   [
+    "equal",
+    713,
+    716,
+    653,
+    656
+   ],
+   [
+    "replace",
+    716,
+    718,
+    656,
+    657,
+    [
+     "Apache License 2.0 — see LICENSE for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

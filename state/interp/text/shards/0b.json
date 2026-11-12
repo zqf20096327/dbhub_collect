@@ -2552,5 +2552,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "79212dd03706": {
+  "identity": {
+   "one_liner": "本地优先的单二进制项目管理工具，以 SQLite 存储，提供 CLI、Web UI 和 AI agent 技能",
+   "review": "Pad 是一个用 Go 编写的本地优先项目管理工具，单个二进制文件即可在本机运行，数据存于本地 SQLite。它提供 CLI、Web UI（localhost:7777）和面向 Claude Code、Cursor、Codex 等 AI 工具的 /pad 技能，内置任务、想法、计划、文档等集合，支持自定义字段、约定规则和多步 playbook，agent 操作会记录归属。安装可用 Homebrew、源码构建（需 Go 1.26+ 与 Node.js 22+）或 Docker，可选导出迁移至 Pad Cloud。",
+   "highlights": [
+    "单二进制运行，数据存储在本地 SQLite，无需注册账号，提供 CLI 与本地 Web UI（端口 7777）",
+    "通过 /pad 技能集成 Claude Code、Cursor、Windsurf、Codex、OpenCode、GitHub Copilot、Amazon Q、JetBrains Junie 等 AI 工具，支持 conventions 触发规则与 playbook 多步工作流",
+    "内置 Tasks/Ideas/Plans/Docs/Conventions/Playbooks 集合，支持自定义类型化字段，条目自动生成参考编号（如 TASK-5）"
+   ],
+   "use_cases": [
+    "开发者在本地终端管理个人或小团队项目的任务、计划与文档",
+    "为 AI 编码代理配置项目约定与工作流，使其读写项目条目并可追溯操作来源",
+    "需要离线可用的本地项目管理，或后续通过导出/导入迁移到 Pad Cloud 协作"
+   ]
+  },
+  "sha": "79212dd03706",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "455cfb82690f": {
+  "identity": {
+   "one_liner": "基于 Postgres 的认知图谱数据库，记录 agent 与人的工作、信念与发现。",
+   "review": "trackinizer 是一个面向 agent 与人的认知型数据库，将工作（Issue）与产出（Artifact）统一为 Inquiry 节点，以有向边（narrows、produces、proves 等）构成图谱，用 Postgres 或 PGlite 存储，FastAPI 提供 API。安装用 uv 一条命令启动，`--no-auth` 可本地免登录运行；不含浏览器登录，默认仅接受 API token。",
+   "highlights": [
+    "三种核心表（inquiries、edges、change_log）实现追加式审计与幂等重放，边上用 CHECK 约束类型配对并拒绝环",
+    "内置 Web 界面展示图谱、agent 实时会话控制台、Belief/Paper/Experiment 视图，随包附带已构建前端",
+    "trax CLI 支持 JSONL 全量导出与按过滤子句导出子图，客户端层（types/wire/client）可独立发布为无服务器依赖的 SDK"
+   ],
+   "use_cases": [
+    "记录自治 agent 的会话、工作与产出，形成可追溯的知识图谱",
+    "管理 Belief 及其支持/反对证据，关联实验的配置、指标时序与结论",
+    "本地单用户运行浏览自身 agent 工作记录，或以 API token 方式供多个 agent 接入"
+   ]
+  },
+  "sha": "455cfb82690f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9a8fc7a8b8c8": {
+  "identity": {
+   "one_liner": "面向监控与系统自动化的 Python 3.9+ 工具函数库，已发布至 PyPI。",
+   "review": "该库是一组 Python 3.9+ 过程式风格工具函数集合，用于系统管理、监控插件开发与基础设施自动化，任何 Python 工具均可调用。核心机制是函数返回 (success, result) 元组、由调用方决定退出与否（辅以 coe() 助手），并遵循 Nagios/Icinga 监控插件规范。支持 Linux/Windows/macOS，安装方式为 pip install --user linuxfabrik-lib。模块化组织：args/base/human 等核心工具、SQLite/MySQL 数据访问、disk/lvm/systemd 等系统操作。",
+   "highlights": [
+    "提供参数解析、状态评估、阈值比较、性能数据格式化与 ASCII 表格输出等检查插件所需函数",
+    "包含 SQLite 键值缓存、SQLite/MySQL 数据访问、日志增量读取与 dmidecode/LVM/systemd/KVM 等系统信息解析模块",
+    "错误消息中的敏感数据（密码、令牌）自动脱敏；版本检查支持对 endoflife.date 及离线 EOL 数据"
+   ],
+   "use_cases": [
+    "开发 Nagios/Icinga 风格的监控检查插件",
+    "编写系统管理与基础设施自动化脚本",
+    "读取 Prometheus/OpenMetrics 指标并进行数据库操作与缓存管理"
+   ]
+  },
+  "sha": "9a8fc7a8b8c8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "82f8430adcfc": {
+  "identity": {
+   "one_liner": "运行于本地、基于 EmbeddingGemma 2 语义搜索的 macOS 启动器应用",
+   "review": "Lantern 是一款在 Apple Silicon Mac 上离线运行的搜索面板（默认 ⌥Space/⌘Space），用 EmbeddingGemma 2 模型按含义索引文件、代码、PDF、照片与录音，并结合 SQLite FTS5/BM25 做混合排序，兼容 Raycast/Alfred。要求 macOS 26.2+，可经 Homebrew、DMG 或源码安装；README 注明其为在单台 M4（16GB）上测试的原型。",
+   "highlights": [
+    "通过 MLX 在本地运行 EmbeddingGemma 2 模型，索引完成后默认离线、无遥测，仅可选的 Spotify 同步需联网",
+    "混合排序融合语义嵌入与 SQLite FTS5/BM25 精确匹配（RRF）；代码用 tree-sitter 按 22 种语言拆分函数与类并定位定义行",
+    "支持 PDF（PDFKit+OCR）、照片（双视觉模型加 Vision 文本识别）与录音视频（Whisper 转录到时间点）；提供菜单栏应用、索引调度与电池/发热时暂停"
+   ],
+   "use_cases": [
+    "在 Mac 上用自然语言或代码片段查找文件、定义、截图与录音中的具体时刻，替代 Spotlight 的检索入口",
+    "需要在无网络环境下完成本机内容语义检索、且数据不出设备的场景",
+    "已有 Raycast 或 Alfred 工作流，想在其中嵌入语义搜索的用户"
+   ]
+  },
+  "sha": "82f8430adcfc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5904c38413f6": {
+  "identity": {
+   "one_liner": "多平台学习任务聚合提醒工具，官方登录后只读采集任务到本地清单",
+   "review": "面向需要同时使用学习通、雨课堂、中国大学 MOOC 等在线课程平台的学生，通过各平台官方登录后只读采集作业与测验，汇总为一张本地任务清单。支持 Windows 安装/便携版与 Android 版，会话经 DPAPI 或 Android Keystore 加密保存，任务数据仅存本地 SQLite。自动采集设单轮课程数、页数与请求数上限，部分平台状态与截止日期存在推定或估算标注。",
+   "highlights": [
+    "接入学习通、雨课堂、长江雨课堂、中国大学 MOOC、学堂在线、智慧树、旧版 U 校园与 PTA 八个平台的官方登录后只读任务采集",
+    "任务与 Cookie 仅保存在本地，会话按平台分别加密存储，不保存账号密码",
+    "按截止时间自动划分 P0–P4 优先级，支持临期与逾期提醒，Windows 与 Android 版本独立保存数据无跨设备同步"
+   ],
+   "use_cases": [
+    "同时使用多个在线课程平台、需要在一张清单中查看全部待办与截止时间的学生",
+    "本地化管理各平台作业状态、进度与成绩记录",
+    "在无网络同步服务的情况下于 Windows 或 Android 设备上设置任务到期提醒"
+   ]
+  },
+  "sha": "5904c38413f6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

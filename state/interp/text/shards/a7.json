@@ -2548,5 +2548,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "79616ded674c": {
+  "identity": {
+   "one_liner": "将CSV/JSON/Parquet/XLSX等文件加载为内存SQLite表并用SQL查询的Go库",
+   "review": "filesql 是一个 Go 模块，将 CSV、TSV、LTSV、JSON、JSONL、Parquet、XLSX、ACH、Fedwire 等文件读入内存 SQLite 数据库，以文件名为表名，支持 join、CTE、json_extract 等标准 SQLite 语法。配套 prep 包在数据成为表前做清洗校验，并支持 MySQL/PostgreSQL/GoogleSQL 方言翻译及多种编码输出。数据保存在内存中，需显式调用保存接口写回文件；方言翻译仅覆盖声明的 SQL 子集。安装方式为 go get，要求 Go 1.26.9+，运行于 Linux/macOS/Windows。",
+   "highlights": [
+    "支持 CSV、TSV、LTSV、JSON、JSONL、Parquet、XLSX、ACH、Fedwire 九种格式输入，透明处理 .gz/.bz2/.xz/.zst 等压缩封装",
+    "提供 prep 包在加载前进行裁剪、大小写归一化、默认值填充和带行号的校验",
+    "通过 WithDialect 支持以 MySQL、PostgreSQL、GoogleSQL 语法编写查询并翻译为 SQLite 执行，超子集构造返回含行列位置的错误"
+   ],
+   "use_cases": [
+    "Go 程序中通过 database/sql 直接以 SQL 查询本地文件数据，无需部署数据库服务器",
+    "对 CSV/JSONL/Parquet 等多格式文件执行跨格式 join 查询",
+    "导入前需要对行数据做清洗和校验并输出错误行号的数据准备流程"
+   ]
+  },
+  "sha": "79616ded674c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "98cc1da8911e": {
+  "identity": {
+   "one_liner": "自托管的 GitHub 组织安全态势仪表盘，内置评分检查与缓存清理任务。",
+   "review": "Clevis 通过 GitHub API 提供仓库活动概览、组织安全审计与特权维护任务。核心是六项自动检查（MFA、分支保护、密钥扫描、Dependabot 告警、代码扫描告警、默认分支强推保护）组成的安全评分，带修复指引。架构为 FastAPI 后端、Postgres 任务队列驱动的 worker、Next.js 前端。面向需要自托管面板管理 GitHub 组织的团队。所有环境变量无默认值，需手动填写。",
+   "highlights": [
+    "六项安全检查以 pass/fail/error/not_applicable 状态输出并给出修复指引，特权操作记录于仅追加的审计日志",
+    "任务经 Fernet 加密入队，由基于 Postgres 队列的 worker 执行，支持多副本与 dry-run",
+    "推荐通过 GitHub App 安装获取短-lived 安装令牌，legacy PAT 仅作回退，访问按路由以 JWT 与组织角色控制"
+   ],
+   "use_cases": [
+    "持续跟踪 GitHub 组织安全配置（MFA、分支保护、扫描告警）与分数趋势",
+    "集中查看仓库活动流与协作者访问情况",
+    "以 dry-run 和审计记录方式批量清理 GitHub Actions 缓存"
+   ]
+  },
+  "sha": "98cc1da8911e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "045bff76e02c": {
+  "identity": {
+   "one_liner": "面向外贸业务员的本地 AI 助手，基于 Hermes Agent 提供 45 项 B2B 技能。",
+   "review": "Smart Trade AI 是一个在本地运行的 AI 助手，面向外贸业务员，提供 45 项技能，覆盖客户开发、背景调查（6 层验证）、开发信生成、B2B 平台诊断、商务文档生成与招标处理等流程。底层基于 Hermes Agent（MIT 开源），后端为 FastAPI + SQLite，支持 DeepSeek、OpenAI、Ollama 等模型。运行依赖 Python 3.14、LLM API Key，搜索与背调功能需 Tavily API Key；许可为 AGPL v3，带 30 天体验期，付费激活码绑定单台电脑。业务数据默认存于本地 ~/.trade/。",
+   "highlights": [
+    "内置 45 项技能，覆盖客户开发、OSINT 背调（邮箱检测/WHOIS/制裁名单/技术栈/LinkedIn）、邮件营销、文档生成（DOCX/XLSX/PPTX）、海关数据分析与招标流程",
+    "以 Hermes Agent 为 AI 引擎，进程内嵌运行，支持 web_search / read_file / database 等工具调用，兼容 OpenAI / Anthropic / GLM / Kimi / Ollama 等接口",
+    "默认绑定 127.0.0.1，业务数据存储于本地 ~/.trade/，支持多公司数据隔离与升级前数据库自动备份"
+   ],
+   "use_cases": [
+    "外贸客户开发流程：搜索潜在客户、生成开发信、管理客户分级与销售管线",
+    "客户尽职调查与合规初筛（制裁名单查询、企业邮箱验证）",
+    "定时自动化任务：每日汇率行情简报、B2B 平台询盘检查、社媒内容日历生成"
+   ]
+  },
+  "sha": "045bff76e02c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

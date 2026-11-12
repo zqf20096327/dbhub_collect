@@ -2894,5 +2894,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "15a9c3ef38bb": {
+  "identity": {
+   "one_liner": "从数据模型生成外键一致、确定性合成数据及dbt项目的CLI工具",
+   "review": "model2data 是一个 Python CLI 工具（pip 安装，支持 Python 3.10–3.14，MIT 许可），读取 YAML 或 DBML 格式的数据模型，生成合成数据并输出一个包含 seeds、staging 模型和测试的 dbt 项目，可用一条 dbt build 命令在 DuckDB 或 Postgres 上构建运行。生成过程支持 --seed 和 --as-of 参数实现字节级一致的确定性输出，并可将指标定义写入 metric_values.json 及对应 dbt 测试。README 提到配套的 model2data studio 网页版（分免费/Pro 收费档），CLI 本身保持免费开源。",
+   "highlights": [
+    "支持 YAML 与 DBML 输入，生成约 40 种列名模式、任意 Faker provider 和 locale 的合成数据",
+    "按依赖顺序生成数据使外键均指向存在的行，并支持 after、history（SCD2）、--days 增量、--skew/--distribution 等分布控制",
+    "生成的 dbt 项目包含 seeds、staging 模型、not_null/unique/relationships/accepted_values 测试及 DuckDB 或 Postgres profile"
+   ],
+   "use_cases": [
+    "在无生产数据访问权限时为客户演示生成模型对应的示例数据",
+    "用固定 seed 和 as-of 在 CI 中构建可复现的测试夹具数据",
+    "通过 --defects 生成带已知缺陷的数据用于 dbt 测试教学或验证"
+   ]
+  },
+  "sha": "15a9c3ef38bb",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fa176896cefe": {
+  "identity": {
+   "one_liner": "GaussDB 数据库智能体后端：接入网关与 K8s 隔离环境承载诊断技能和知识库。",
+   "review": "该仓库提供 GaussDB/openGauss 数据库智能体的后端部分，包含接入网关（负责身份认证、按工号分配用户环境并反向代理）、每用户一个 Pod 或池化槽位的运行环境、知识库导入环境及标准知识库镜像，用于配合前端方联合构建智能体系统。代码实际在测试仓库维护，本仓库的 diag 与 kbimport 分支由转化脚本自动生成交付，不支持手工修改。",
+   "highlights": [
+    "提供接入网关与按用户隔离的 K8s 运行环境（按需建 Pod 或固定池化槽位），状态数据存于 NAS 上的 RWX 卷",
+    "diag 分支包含 17 个诊断技能、138 条白名单 DML 及根规范检索脚本，从不同旧版本升级提供对应的 SQL 增量文件",
+    "提供可选发版台容器，支持资源扫描、变更预览确认、按槽位在线替换与冒烟验证；附完整部署上线方案与验收题库文档"
+   ],
+   "use_cases": [
+    "为 GaussDB/openGauss 实例部署基于 opencode 的诊断智能体，供应用 DBA / 运维 DBA 定位指标异常相关的 SQL、会话与表",
+    "搭建知识库导入环境，执行文档标准化、CHM 官方文档集、网页剪藏与扫描件 PDF 导入",
+    "与前端团队按接口契约协作开发数据库智能体整体系统"
+   ]
+  },
+  "sha": "fa176896cefe",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

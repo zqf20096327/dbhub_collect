@@ -2948,5 +2948,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2cd9bfe71881": {
+  "identity": {
+   "one_liner": "Rust 编写的图数据库，内置向量检索与 BM25 全文搜索，基于对象存储。",
+   "review": "HelixDB 是 Apache 2.0 开源的图数据库，以带标签属性图存储实体、关系、嵌入与文本，在同一事务引擎中支持图遍历、向量近邻检索和 BM25 搜索的组合查询。提供 Rust、TypeScript、Go、Python 四种 SDK，可嵌入进程内运行、本地/自托管服务器（内存、磁盘或 S3 兼容对象存储）或使用托管云服务；源码构建还支持通过 openCypher 配置文件执行读和 CRUD 操作。本地开发需 Docker 或 Podman。",
+   "highlights": [
+    "在单一事务引擎中原生存储实体、关系、嵌入向量与文本，图与向量写入一起提交或回滚",
+    "向量搜索可由图遍历预过滤，将相似度检索限定在指定节点范围内",
+    "提供 Rust、TypeScript、Go、Python SDK，通过 POST /v2/query 统一发送 JSON 请求；源码构建支持 openCypher 读与 CRUD"
+   ],
+   "use_cases": [
+    "AI 应用的记忆与检索：长期 agent 记忆、GraphRAG 与混合 RAG",
+    "连接文档、人员、工具和决策的内部知识图谱",
+    "自托管或嵌入式的图+向量+全文一体化数据存储"
+   ]
+  },
+  "sha": "2cd9bfe71881",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe4bdf6d2921": {
+  "identity": {
+   "one_liner": "基于 RAG 与 TiDB 的微服务 AI 股票研究工作台，输出带来源的事实与规则化估值",
+   "review": "Project Oracle 是一个单用户概念验证项目，用 Docker Compose 本地运行，监控自选公司及其供应链。数据来自 SEC EDGAR、Alpaca、yfinance 和 Google News；AI 部分用 Groq（Llama 3.3 70B）并自动回退到本地 Ollama，向量存于 TiDB Cloud。估值与评级（BUY/HOLD/SELL）由无 AI 的公式模块生成，AI 回答带引用且被过滤掉任何意见句。需自行配置 API 密钥。",
+   "highlights": [
+    "AI 回答与简报通过 RAG 带 [S#] 引用，每个数字对照来源核验，并由规则过滤评级/预测类语句",
+    "估值模块（valuation.py，无 AI）实现 CAPM、股利贴现、历史 P/E、分析师一致目标价四种方法的公允价值计算与评级",
+    "包含约 12 个 Docker 代理服务，覆盖价格与基本面摄取、新闻、供应链关系抽取、告警与 RAG 索引"
+   ],
+   "use_cases": [
+    "跟踪自选股票及其供应商/客户动态，获取带证据链接的变动告警与每日简报",
+    "查阅公司财务报表、比率与估值公式，用于个人学习与研究",
+    "通过 AI 质量页面检验引用率与数字核验等 RAG 评估实践"
+   ]
+  },
+  "sha": "fe4bdf6d2921",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

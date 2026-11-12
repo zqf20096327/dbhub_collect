@@ -2850,5 +2850,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ec93b4518c27": {
+  "identity": {
+   "one_liner": "单二进制 C++ 流式 SQL 引擎，基于 ClickHouse 实现实时流处理与分析",
+   "review": "Timeplus Proton 是一个流式 SQL 引擎，以单个 C++ 二进制（<500MB）运行，无 JVM 依赖，基于 ClickHouse 引擎构建。它提供流式摄取、多流 JOIN、滚动/跳跃/会话窗口、增量物化视图、CDC 等能力，并内置可查询的存储。数据源方面支持 Kafka、Pulsar、ClickHouse 外部流等；需注意开源版为单节点部署，部分连接器（如 WebSocket、NATS、CSV 上传）仅在企业版提供。可通过 curl 脚本、Homebrew 或 Docker 安装，用 proton server/client 即可运行 SQL 查询。",
+   "highlights": [
+    "单二进制运行，无 JVM/ZooKeeper 依赖，可在 1 vCPU/0.5 GiB 环境运行",
+    "支持流式 ETL、tumble/hop/session 窗口、watermark、增量物化视图、CDC 与 Python/JS UDF",
+    "提供 Kafka/Pulsar 外部流与 ClickHouse 外部表，同一 SQL 可查询 live 与 historical 数据"
+   ],
+   "use_cases": [
+    "从 Kafka 摄取数据并在管道内做过滤、富化、脱敏后写入 ClickHouse 等下游",
+    "日志、指标、链路遥测数据的实时处理、降噪与告警路由",
+    "基于流式 SQL 与物化视图计算 AI/ML 实时特征，支持回填与窗口计算"
+   ]
+  },
+  "sha": "ec93b4518c27",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23392d5e002f": {
+  "identity": {
+   "one_liner": "只读 MCP 服务，通过 Web 控制台注册生产组件供 AI 排障查询",
+   "review": "DrPanda MCP 是一个面向生产排障的只读 MCP 服务，提供 39 个工具，覆盖 MySQL、MongoDB、Elasticsearch、Redis、GitLab、RabbitMQ、Kafka、CLS、Nacos、Jenkins 共 10 类组件。管理员在 Web 控制台注册目标（地址、凭据、范围），AI 客户端经 Streamable HTTP 携带 Bearer token 调用 /mcp，仅以 environment+target 名称选择查询对象，不接触主机与密码。服务本身用 Python 3.11+ 编写，可从源码或 PyPI 安装，默认监听 127.0.0.1:8111，配置存储支持 SQLite/MySQL/PostgreSQL。运行时执行只读白名单，拒绝管理命令与高成本查询，并记录审计。",
+   "highlights": [
+    "支持 10 类组件共 39 个只读工具，含 systems_status 状态查询与 investigate_error 排障 prompt；凭据加密存储，工具调用仅接受环境与目标名称",
+    "通过连接、操作、身份三层边界限制查询：仅可达控制台注册目标、仅执行只读白名单、Web 登录与 MCP token 相互独立并逐调用审计",
+    "目标可配置缩小读取范围（如 MySQL 库/表、Kafka topic/分区、GitLab 项目/分支），每个目标可附 512 字符以内的 operator_notes"
+   ],
+   "use_cases": [
+    "生产事故排查中让 AI 客户端同时查询数据库、日志、缓存与消息队列，凭据不出控制台",
+    "需要审计每次 AI 对生产目标访问的运维团队，token 以哈希存储并按真实管理员审计",
+    "多环境（如测试/生产）下按环境键隔离目标，限制 AI 可读的库表、索引或 topic 范围"
+   ]
+  },
+  "sha": "23392d5e002f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

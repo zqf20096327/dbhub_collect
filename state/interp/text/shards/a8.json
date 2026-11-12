@@ -3146,5 +3146,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4ccb4fec7c6e": {
+  "identity": {
+   "one_liner": "将 Gmail 与 Google Calendar 通讯数据解析为 D3 力导向图、本地运行的联系人可视化应用",
+   "review": "该项目读取 Google Takeout 导出的 .mbox 邮件与 .ics 日历文件，用 Rust 解析器生成 SQLite 数据，通过 React 与 D3.js 在浏览器中呈现以用户为中心的力导向联系人图，包含垃圾发件人过滤与六种视图模式。服务仅绑定 127.0.0.1，数据不上传。适合拥有 Google Takeout 导出、想在本地查看自己通讯网络结构的个人用户。",
+   "highlights": [
+    "提供 Docker Compose 与原生（Rust 1.87+/Node.js 20.19+）两种运行方式，并内置含 19 条合成消息的示例邮箱用于快速试用",
+    "支持 Overall、Gmail、Calendar、Message Groups、Organizations、Event Groups 六种视图，并允许手动纠正垃圾联系人过滤结果且在重新导入后保留",
+    "导入失败时通过 contacts.db.new 原子替换机制保留原有图数据，前一次成功导入的数据库保存为 contacts.db.prev"
+   ],
+   "use_cases": [
+    "用 Google Takeout 导出数据在本地生成个人邮件与会议共同参会者的联系人网络图",
+    "按邮件域名查看联系人所属组织，或按同一邮件出现的人查看消息群组",
+    "在合成示例邮箱上以 Docker 快速启动试用，再导入自己的真实导出"
+   ]
+  },
+  "sha": "4ccb4fec7c6e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "47e299dba89b": {
+  "identity": {
+   "one_liner": "读取 ChessBase 棋谱数据库（.cbh/.2cbh/.cbv/.cbz）的只读 Rust 库与 CLI。",
+   "review": "cbvault 是一个 MIT 许可的 Rust 库和命令行工具，用于直接读取 ChessBase 数据库文件，无需安装 ChessBase 本身。它提供元数据搜索、带变例与注解的对局解析、PGN 导出、并行转换，以及 .cbv/.cbz 存档解压。项目为只读设计，不修改源数据库，也不解析 PGN 输入，目前处于 pre-1.0 阶段，面向棋类软件、开局研究工具和批处理管道的开发者。",
+   "highlights": [
+    "原生读取经典 .cbh 与现代 .2cbh 两代 ChessBase 数据库格式，并支持导出 PGN、按棋手/ECO/年份等元数据过滤搜索",
+    "提供内存映射读取、借用式对局记录和保序并行转换；通过 GameSink 回调按需请求着法、密钥或原生注解",
+    "CLI 支持检查（info）、校验（verify）、PGN 导出、存档列表与解压，可输出机器可读 JSON，.cbz 支持 --password"
+   ],
+   "use_cases": [
+    "为开局探索器、研究工具等棋类应用提供读取 ChessBase 数据库的底层访问层",
+    "将大型 ChessBase 集合批量转换为 PGN 或迁移 .cbv/.cbz 存档内容",
+    "在不导入拷贝的前提下检索数百万局对局的元数据与局面"
+   ]
+  },
+  "sha": "47e299dba89b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63e47a4555bd": {
+  "identity": {
+   "one_liner": "声明式基础设施目录与实时关系图谱，基于 Go、Terraform 与 React Flow 构建。",
+   "review": "Deed 提供一个来源可追溯的基础设施图谱，记录实体、身份、软件及其运行位置、归属与依赖关系，并标注每个字段的数据来源与新鲜度。数据来自 Terraform 状态导入、GitHub 等连接器及带令牌的自定义程序，各来源写入独立分面后经确定性字段级合并，分歧以冲突形式呈现而非静默覆盖。适用于需要梳理服务目录与拓扑关系的自托管运维团队。项目处于 1.0 之前的活跃开发阶段，尚未经过外部安全审查。",
+   "highlights": [
+    "支持多来源分面写入与字段级确定性合并，提供来源溯源（provenance）与冲突呈现",
+    "内置发现与告警功能，覆盖证书过期、配置漂移、陈旧来源、版本生命周期等情形",
+    "提供按类型、项目、标签等维度分组的图谱视图、邻域/影响/路径查询及 SSE 实时更新"
+   ],
+   "use_cases": [
+    "构建自托管的基础设施/服务目录并可视化实体间拓扑与依赖关系",
+    "汇总 Terraform 状态、GitHub 等多来源数据并追踪字段级来源与冲突",
+    "基于证书过期、漂移、EOL 版本等证据生成运维发现与告警事件"
+   ]
+  },
+  "sha": "63e47a4555bd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

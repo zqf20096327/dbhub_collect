@@ -2445,5 +2445,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5190714fcdfd": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编程会话历史索引与检索工具",
+   "review": "Callimachus 将 13 种 AI 编程代理（Claude Code、Codex、Cursor、Gemini CLI 等）的会话记录索引到本地 SQLite 存储，提供基于 SQLite FTS5 与 sqlite-vec 的混合检索、文件路径搜索、基于规则的 TODO 提取与可选的 LLM 知识蒸馏，并包含 MCP server、CLI、VS Code 扩展及按仓库聚合的项目记忆功能。基于 Tauri 2/Rust 构建，AGPL-3.0 许可，数据保留在本机，Linux 需 glibc 2.38+。",
+   "highlights": [
+    "索引 13 种 AI 编程代理的会话到本地 SQLite，支持 FTS5 关键词与本地语义相似度融合排序",
+    "支持 file: 语法查找触及指定文件的会话，可按来源、项目、标签过滤",
+    "提供 MCP server、CLI（cal）与 VS Code 扩展，可通过 AGENTS.md 托管块或 SessionStart hook 向代理注入项目记忆"
+   ],
+   "use_cases": [
+    "在本地集中检索多个 AI 编程工具的历史会话",
+    "为代码仓库维护跨会话的决策与注意事项记忆并与团队共享",
+    "通过 MCP 或 CLI 在代理工作流中集成历史检索"
+   ]
+  },
+  "sha": "5190714fcdfd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb7b439a5c6b": {
+  "identity": {
+   "one_liner": "Rust 编写的混合搜索引擎，融合 ACID KV 存储、文档模型与全文检索",
+   "review": "CameoDB 是一个用 Rust 实现的单二进制数据库引擎，将键值存储（基于 redb）、文档模型与全文搜索（基于 tantivy）合并到同一条写入路径。它通过 MCP 协议面向 AI Agent 提供查询接口，支持分布式无主节点部署（一致性哈希与 Kademlia DHT），可通过 Docker 运行，HTTP API 默认监听 9480 端口，并支持 rustls 实现的 HTTPS。",
+   "highlights": [
+    "每个分片同时包含 KV 存储（数据/WAL）与倒排索引，写入返回后即可按 ID 读取，提交后可全文搜索",
+    "提供 MCP 服务器接口，工具按 key 作用域并校验所需能力与索引",
+    "支持多语言分析器（Snowball 词干提取、克罗地亚语词典还原）与 ghost field 机制，一份文本可经多个分析器检索而不重复存储"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供通过 MCP 协议检索的持久化文档与全文搜索存储",
+    "需要同时写入 KV 数据并保持搜索索引一致的单进程/分布式部署场景",
+    "多语言文本集合的索引与检索，包括通过字段投影控制返回内容以减少序列化字段"
+   ]
+  },
+  "sha": "cb7b439a5c6b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c4c31fd9b863": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 MCP 工具服务器，以单二进制提供 40 个感知编码的文件、远程与分析工具",
+   "review": "agent-tool 是一个用 Go 编写的 MCP 工具服务器，为 Claude Code、Cursor、Codex 等 AI 编码代理提供文件读写、进程管理、SSH/SFTP、数据库查询、DAP 调试与静态二进制分析等 40 个工具。它通过 profile 按需暴露工具 schema（core 默认仅 11 个），并默认启用 ECH 与 DoH。文件工具保留原编码与缩进风格，支持 EUC-KR、Shift-JIS、GB18030 等编码。",
+   "highlights": [
+    "提供 40 个工具，通过 core/core-lite/coding/remote/analysis/full 等 profile 按需暴露，core-lite 仅含 5 个 schema",
+    "文件工具感知编码与行尾/缩进风格，支持 EUC-KR、Shift-JIS、GB18030 与 UTF-8 互转",
+    "包含 DAP 交互式调试器与静态二进制分析（x86/x64 PE/ELF 反编译为 C、反汇编、xref、函数发现、二进制 diff）"
+   ],
+   "use_cases": [
+    "维护使用 Tab 缩进或非 UTF-8 编码（如 EUC-KR、GB18030）的既有项目",
+    "通过 SSH/SFTP 与 MySQL/Redis 命令统一管理远程主机和数据库操作",
+    "对 PE/ELF 二进制进行反编译、反汇编与交叉引用分析"
+   ]
+  },
+  "sha": "c4c31fd9b863",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee75968c9907": {
+  "identity": {
+   "one_liner": "单二进制自托管后端，集成集合、REST、认证、实时与 MCP。",
+   "review": "Vaultbase 是一个以单个二进制文件运行的自托管后端，基于 Bun 与 Elysia 构建，提供集合数据表、REST API、认证、实时订阅、文件存储、服务端逻辑和 MCP 服务器。默认使用 SQLite，可通过环境变量切换至 Postgres。进程本身不处理 TLS 终止与响应压缩，需配合 nginx、Caddy 或 Cloudflare 等反向代理部署。适用于希望以单进程方式运行应用后端的开发者。",
+   "highlights": [
+    "提供集合驱动的 REST API（每个集合对应一张表，16 种字段类型），支持过滤、排序、展开、字段投影与 ETag 并发控制",
+    "内置认证（密码、OAuth2/PKCE、OTP、MFA）、WebSocket/SSE 实时订阅，以及按集合生成工具的 MCP 服务器（带审计日志）",
+    "文件存储支持本地磁盘、S3 或 R2；数据库默认 SQLite（带读取工作线程），可经 `VAULTBASE_DATABASE_URL` 切换为 Postgres"
+   ],
+   "use_cases": [
+    "为 Web 或移动应用快速搭建自托管的数据与文件后端",
+    "为 AI 代理提供受作用域令牌约束并记录审计日志的 MCP 工具接口",
+    "在单进程中运行含定时任务、队列与钩子的服务端逻辑，配合反向代理上线"
+   ]
+  },
+  "sha": "ee75968c9907",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2993,5 +2993,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0dbacc6371c7": {
+  "identity": {
+   "one_liner": "面向多租户的闲鱼虚拟商品自动化运营系统",
+   "review": "XianYuSmart 是基于 Java 21、Spring Boot 3.5 与 Vue 3 构建的闲鱼虚拟商品运营系统，提供自动发货（固定内容/卡密）、AI 与关键词自动回复、评价跟进等功能。核心链路依赖 MySQL，通过行级锁预占卡密、任务持久化与租约重试实现可恢复发货。支持 Docker Compose 自部署与多租户数据隔离，适合自行部署运营闲鱼虚拟商品商家的场景。",
+   "highlights": [
+    "支持固定内容与卡密两种互斥交付模式，卡密按订单数量预占，发送成功后核销，失败释放或转人工复核",
+    "订单与回复任务持久化到 MySQL，提供 Worker 租约、超时回收和退避重试，进程重启后可继续处理；不强制依赖 Redis 或消息队列",
+    "业务数据与 AI 知识库按租户隔离，AI 客服内置 20 个服务商预设，支持关键词规则、商品专属规则和人工接管"
+   ],
+   "use_cases": [
+    "出售网盘链接、教程等固定资源的商家，需要按订单自动替换变量并发货",
+    "出售激活码、兑换码等卡密商品的商家，需要防重复发卡和库存预警",
+    "多个商家共用一个平台部署，需要按租户隔离账号、订单与配置的自托管场景"
+   ]
+  },
+  "sha": "0dbacc6371c7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "07cf0b1fd231": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 OAuth2/OIDC 身份提供方，单二进制内嵌 SQLite 运行",
+   "review": "Auténtico 是一个用 Go 实现的自托管 OAuth2/OIDC 身份提供方（IdP），将登录、MFA、Passkey、会话管理、令牌签发与管理界面打包为单个二进制，状态存储于单一 SQLite 文件，无需外部数据库或缓存。协议实现含授权码+PKCE、令牌自省/撤销、OIDC Discovery、RS256 JWT。README 明确其不适用于需水平扩展、多区域部署或 SCIM/LDAP 等企业合规场景。",
+   "highlights": [
+    "支持授权码流+PKCE、刷新令牌、令牌自省（RFC 7662）与撤销（RFC 7009）、OIDC Discovery 与 RS256 签名 JWT",
+    "认证方式涵盖密码、WebAuthn Passkey、TOTP 与邮件 OTP，支持密码/密码+Passkey/仅 Passkey 三种运行时可切换模式",
+    "内置编译进二进制的 React 管理 UI，支持 REST API 动态客户端注册与按客户端的配置覆盖"
+   ],
+   "use_cases": [
+    "为小型团队或自托管应用的 OAuth2/OIDC 登录提供集中式身份服务",
+    "作为 CI/测试套件中的真实 OIDC 测试桩（启动约 375ms，无需 Docker 或 mock）",
+    "需要脱离第三方服务实现用户认证的个人项目与独立开发者场景"
+   ]
+  },
+  "sha": "07cf0b1fd231",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2505,5 +2505,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bcdfaea3f3a0": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 兼容数据库运行时，单进程托管数千个隔离的短生命周期数据库",
+   "review": "PGX 是用 Rust 实现的数据库运行时，面向 AI agent 沙箱、CI、per-PR、测试和预览等一次性数据库场景。它说 Postgres wire 协议和 SQL 方言，单个进程内按名称、角色与限制隔离多个数据库，基于密封模板以 copy-on-write 方式克隆，连接指定前缀名称即自动创建数据库，闲置后由 janitor 回收。v0.1 不用于生产：fsync 关闭、无 HA/PITR、不能加载 C 扩展（含 pgvector）。通过 npx pgxdb@latest 一键安装。",
+   "highlights": [
+    "单进程托管多个隔离数据库，空闲数据库内存约 70 KB；基于密封模板以 copy-on-write 方式创建，ZFS 块克隆下 10 GB 模板分支约 674 ms 就绪、自有存储约 13.6 MB",
+    "实现 Postgres wire 协议与 SQL 方言，支持事务性 DDL、savepoint、临时表及内置 contrib 模块（含 pgvector）；提供会话/数据库/运行时内存限制与 cgroup 兜底",
+    "提供 PGX Skill 与 pgx agent，为每个 agent 会话挂载独立分支并自动设置 DATABASE_URL，TTL 延长与自动销毁"
+   ],
+   "use_cases": [
+    "AI agent 工作流中为每个会话或子 agent 创建隔离的一次性数据库",
+    "CI 任务、每个 PR 或预览环境的临时数据库",
+    "基于生产数据脱敏副本构建的测试与迁移演练环境"
+   ]
+  },
+  "sha": "bcdfaea3f3a0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "60ed28139740": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的持久化任务队列，多语言 worker 共用一套 SQL 协议",
+   "review": "Workhorse 将版本化 SQL 函数部署在现有 PostgreSQL 中，任务入队与应用事务共用同一数据库事务，回滚时保持一致。它支持 TypeScript、Python、Go、Rust、Ruby、Java、Kotlin、C# 等 worker，包含重试、fence token 认领、仪表盘与定期调度，无需数据库之外的 broker。当前为公开 beta，0.x 小版本可能变更行为。采用 Apache-2.0 许可证。",
+   "highlights": [
+    "入队与业务变更共享同一 PostgreSQL 事务，回滚时二者一致",
+    "多语言 worker（TypeScript、Python、Go、Rust、Ruby、Java、Kotlin、C#）经由同一 SQL 协议工作",
+    "提供仪表盘展示任务活动、生命周期事件、队列与定期调度；worker 以 fence token 认领任务"
+   ],
+   "use_cases": [
+    "应用已依赖 PostgreSQL，需要与业务事务同生共死的后台任务",
+    "需要跨多种语言服务共用一套任务队列与调度",
+    "需要任务历史、重试与运维仪表盘的小规模到早期生产部署"
+   ]
+  },
+  "sha": "60ed28139740",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3a28126213e5": {
+  "identity": {
+   "one_liner": "自托管 DuckDB 服务端，提供 REST API 与 Web UI 管理界面",
+   "review": "WebDuck 是基于 FastAPI 与 NiceGUI 构建的自托管 DuckDB-as-a-Service 服务端，面向希望向客户提供 DuckDB 管理界面的托管服务商。它以项目/数据库两级组织存储，提供 JWT 保护的管理 API 与 project-key 保护的查询、导入导出 API，并内置 SQL 编辑器、软删除回收站、只读写保护等机制；无内置 TLS，HTTPS 需通过反向代理实现，采用 AGPLv3 许可。",
+   "highlights": [
+    "提供 REST API（JWT 管理接口 + project-key 数据库接口）与 NiceGUI Web UI，支持 CSV/Parquet/JSON 导入导出",
+    "使用 bcrypt 哈希密码，支持按数据库只读写保护与文件级读写锁（并行读、独占写）",
+    "可通过 pip 或 Docker 安装，支持 YAML 配置、日志轮转及英/德多语言"
+   ],
+   "use_cases": [
+    "托管服务商为客户开箱提供 DuckDB 数据库管理与分析界面",
+    "团队自托管通过 REST API 执行 SQL 查询及 CSV/Parquet/JSON 数据导入导出",
+    "需要数据库软删除回收站、查询历史与表数据浏览编辑的管理场景"
+   ]
+  },
+  "sha": "3a28126213e5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2821acd57f2a": {
+  "identity": {
+   "one_liner": "基于自有 SQL 表的自托管无代码内容与数据管理平台",
+   "review": "CairnCMS 是一个 GPLv3 许可的自托管工作区，用于 SQL 后端应用：用户通过无代码后台建模数据、管理内容、管理文件，并为集合生成 REST 与 GraphQL API，还可基于数据事件、Webhook、定时等触发器创建工作流。支持 PostgreSQL、MySQL、MariaDB 和 SQLite。适合需要自行托管基础设施并掌控 SQL 表结构的团队。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite 多种数据库，数据存储在用户控制的 SQL 表中",
+    "为集合生成 REST 和 GraphQL API",
+    "内置工作流自动化，支持数据事件、Webhook、定时和手动触发器"
+   ],
+   "use_cases": [
+    "团队自托管内容管理，通过 API 向前端或其他系统分发内容",
+    "基于自有 SQL 表构建无代码数据管理后台",
+    "通过事件、Webhook 或定时任务自动化数据处理流程"
+   ]
+  },
+  "sha": "2821acd57f2a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "78decece9cc5": {
+  "identity": {
+   "one_liner": "Rust 单二进制网页抓取引擎，提供 CLI、REST API、MCP 与仪表盘",
+   "review": "AICrawl 是一个基于 Rust 的网页数据抓取引擎，编译为单个二进制文件，同一引擎对外提供 CLI、REST API、MCP 服务器和内嵌仪表盘四种接口。它接受结构化 JSON 请求，基于 CSS/XPath 选择器返回经过校验的结构化 JSON，请求路径中不含 LLM 模型，无需 API key。适合需要可重复抓取结果的开发者、脚本/CI 流程以及通过 MCP 接入的 AI agent 使用。",
+   "highlights": [
+    "单二进制提供 CLI、REST API、MCP（stdio/HTTP）和内嵌仪表盘四种接口",
+    "支持 CSS 选择器及文档化的 XPath 子集，字段类型含 text、number、json_ld、meta 等 11 种",
+    "支持 JSON-LD、Open Graph、meta 标签、标题和表格提取，可传入 JSON Schema 做响应校验"
+   ],
+   "use_cases": [
+    "在脚本、cron 或 CI 中批量抓取并导出 JSON/JSONL 数据集",
+    "为 AI agent 提供 MCP 工具形式的网页结构化数据提取",
+    "搭建带 API key 鉴权的抓取服务，通过 REST 端点管理任务与结果"
+   ]
+  },
+  "sha": "78decece9cc5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0ca77843e93": {
+  "identity": {
+   "one_liner": "自托管开源特性开关与实验平台，单一 Go 二进制，仅依赖 PostgreSQL。",
+   "review": "Flagnetic 是自托管的特性开关与实验管理平台，以单个 Go 二进制运行，唯一依赖 PostgreSQL。它提供布尔/字符串/数字/JSON 四类开关、定向规则、百分比发布、实验生命周期与曝光记录，以及变更审批、审计日志、OIDC/SAML/SCIM 等治理与身份功能。当前为 0.2 开发者预览版，实验结果分析与导出尚未实现，SDK API 与规则集格式自 0.1 起向前兼容。",
+   "highlights": [
+    "支持 Go、JavaScript/TypeScript、Dart/Flutter、Ruby、Python SDK，并提供 OpenFeature provider；服务端 SDK 本地求值，无网络调用开销",
+    "提供带审批的变更请求、受保护环境、审计日志、OIDC/SAML 单点登录与 SCIM 供应等治理与访问控制功能",
+    "可在同一 PostgreSQL 上运行多个无粘性会话的相同副本，提供 Prometheus 指标与 linux/amd64、linux/arm64 Docker 镜像"
+   ],
+   "use_cases": [
+    "需要自托管、无商业授权层特性开关管理的团队",
+    "需对生产环境变更走审批流程并留存审计日志的组织",
+    "在自有数据仓库中分析实验曝光与分配结果的团队"
+   ]
+  },
+  "sha": "c0ca77843e93",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

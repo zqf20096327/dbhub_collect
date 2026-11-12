@@ -2956,5 +2956,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "950d99c78895": {
+  "identity": {
+   "one_liner": "PHP/Symfony 的 PostgreSQL 原生全文搜索层，用旁车索引表实现容错搜索",
+   "review": "Fuzzphony 是一个 PHP 库（v0.12.1，pre-1.0），在已运行的 PostgreSQL 内实现容错、去重音、带排序的全文搜索，不依赖外部搜索服务。索引存放在业务表旁的旁车表中，不修改原表结构。面向运行 PostgreSQL 的 Symfony/PHP 项目，需 PHP 8.4+、PostgreSQL 15+ 及 pg_trgm、unaccent 扩展，经 composer 安装。",
+   "highlights": [
+    "通过旁车索引表提供容错搜索、重音折叠、词干提取（28 种 Snowball 语言）与字段权重排序，不改动业务表结构",
+    "提供含短语、OR、排除等运算的查询语法，用户输入错误会被修复并记入 warnings 而非抛出异常",
+    "提供 trigger、queue、orm、manual 等同步模式与索引级租户隔离、基于 Symfony voters 的字段级授权"
+   ],
+   "use_cases": [
+    "为管理员后台、CRM、支持工具替换 LIKE '%…%' 查询，需要容错与排序时",
+    "表结构不可修改的遗留系统或 ERP，或不允许新增搜索服务的项目",
+    "多租户 SaaS 场景下需要按租户强制过滤搜索结果、数据须留在数据库内受同一备份与权限管理"
+   ]
+  },
+  "sha": "950d99c78895",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7eefb331ecea": {
+  "identity": {
+   "one_liner": "基于终端的 SQL Server 管理工具，以 Go 编写并以单个可执行文件分发。",
+   "review": "goSSMS 是一个在终端中运行的应用程序，用于管理 SQL Server 和 Azure SQL Managed Instance，支持 Linux、macOS 和 Windows。它是作为一个独立可执行文件分发的，不需要安装程序、SQL 客户端工具或单独的数据库驱动程序。它提供了对象资源管理器（Object Explorer）、查询结果导出、活动监视器（Activity Monitor）和具有操作权限控制的命令行模式。该工具需要具备 UTF-8 和 256 色支持的终端，以及到 SQL Server 实例的网络访问权限。",
+   "highlights": [
+    "以单个可执行文件分发，无需安装程序、SQL 客户端工具或独立的数据库驱动程序",
+    "提供图形化界面和用于脚本编写或自动化代理的命令行模式，并支持基于每个配置文件的可配置操作权限（读取/写入/DDL/管理）",
+    "将结果集导出为 CSV、制表符分隔、JSON 或 XML 格式，并支持验证 SQL Server 登录、集成身份验证以及多种 Microsoft Entra ID 身份验证方法"
+   ],
+   "use_cases": [
+    "在 Linux 或 macOS 上无需安装 Windows 即可管理 SQL Server 2016 SP1+ 或 Azure SQL Managed Instance",
+    "通过带有命名配置文件和 JSON 输出封装的 CLI 命令执行脚本或 AI 代理数据库任务",
+    "通过 Always On 对等发现、活动监视器和实时查询统计信息检查可用性组副本"
+   ]
+  },
+  "sha": "7eefb331ecea",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

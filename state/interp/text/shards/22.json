@@ -2793,5 +2793,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5de9a3a804da": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Go 队列库，提供 FIFO 与优先级队列及确认机制",
+   "review": "sqliteq 是一个 Go 库，将 FIFO 与优先级队列存储在 SQLite 中，提供确认（ack）、批量出队、任务去重、结果记录、取消和持久化暂停等 API，并实现 VarMQ 的队列接口。它要求 Go 1.27 以上和 cgo（依赖 mattn/go-sqlite3，需 CGO_ENABLED=1 与 C 编译器）。默认每个队列一个文件，无内存模式；带 watch 的对象每 50ms 轮询文件。",
+   "highlights": [
+    "提供 FIFO（NewQueue）与优先级（NewPriorityQueue，数字小者先出）两种队列，支持 EnqueueOnce 按 job ID 去重和 DequeueBatchWithAckIds 单语句批量出队",
+    "支持确认机制：未确认的条目在文件下次打开时回到队列；带 job ID 的任务可写入 completed/failed/cancelled 结果记录，供本机或跨进程的 WatchOutcome 读取",
+    "提供 CancelJob 写取消标记、Pause 在 meta 表写入持久暂停行（跨进程生效并存活于重启），并自动执行 WAL checkpoint"
+   ],
+   "use_cases": [
+    "作为 VarMQ（≥ v1.11.0）工作流的持久化队列存储，接入其 REST API 与 vartop",
+    "需要队列内容在重启后保留、并需要任务确认/失败重入队的 Go 后台任务处理",
+    "多个进程或 goroutine 通过同一文件共享队列，需要跨进程的任务结果通知、取消或暂停控制"
+   ]
+  },
+  "sha": "5de9a3a804da",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "07eea62673f5": {
+  "identity": {
+   "one_liner": "用 PostgreSQL JSONB 查询替代 ZCatalog BTree 索引的 Plone 目录插件",
+   "review": "plone-pgcatalog 是 Plone 6 的目录插件，将 ZCatalog 的 BTree 索引替换为 PostgreSQL JSONB 上的 SQL 查询，依赖 zodb-pgjsonb 作为 ZODB 存储后端。安装后 portal_catalog 被 PlonePGCatalogTool 替换，查询沿用 ZCatalog API；目录数据在 ZODB 提交时与对象状态一同原子写入。需 Python 3.12+、PostgreSQL 15+。",
+   "highlights": [
+    "支持全部标准索引类型及 DateRecurringIndex，可经 IPGIndexTranslator 命名工具扩展自定义索引类型",
+    "基于 tsvector/tsquery 提供面向 30 种语言的词干化全文检索，检测到 vchord_bm25 扩展时自动改用 BM25 排序",
+    "目录写入在 ZODB 提交时原子完成，不在 ZODB 中存储 BTree/Bucket 对象"
+   ],
+   "use_cases": [
+    "已运行于 zodb-pgjsonb 的 Plone 6 站点将目录迁移到 PostgreSQL",
+    "含循环事件的 Plone 站点（查询时经 rrule_plpgsql 展开重复日期）",
+    "通过 plone.distribution 创建使用 PG 目录的新站点，或经 catalog.xml 动态注册索引的插件场景"
+   ]
+  },
+  "sha": "07eea62673f5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

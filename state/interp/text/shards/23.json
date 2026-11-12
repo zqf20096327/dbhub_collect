@@ -2778,5 +2778,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "896ae90f5451": {
+  "identity": {
+   "one_liner": "配套《High Performance PostgreSQL for Rails》一书的 Rails 应用示例项目",
+   "review": "Rideshare 是支持《High Performance PostgreSQL for Rails》一书的 Rails API 应用，由 Pragmatic Programmers 于 2024 年出版。项目要求 PostgreSQL 16 以上，使用自定义脚本 db/setup.sh（而非默认的 db:create）建库，采用 owner 角色运行迁移，并内置 ridshare schema、pg_stat_statements 扩展、PgHero 界面及行程模拟器等示例数据工具。读者和学习者可通过本地或 Docker 方式安装运行。",
+   "highlights": [
+    "API-only Rails 应用，集成 PgHero 数据库监控界面（/pghero）",
+    "使用 db/setup.sh 自定义脚本建库，迁移以 owner 角色执行，数据库对象归属于 owner 用户",
+    "支持本地（Homebrew、rbenv、Postgres.app）与 Docker Compose 两种开发环境安装方式"
+   ],
+   "use_cases": [
+    "作为该书读者跟随书中 PostgreSQL 性能内容进行实操的配套代码库",
+    "学习 Rails 与 PostgreSQL 集成配置（schema、角色、~/.pgpass、连接字符串）的参考",
+    "在本地或 Docker 环境搭建带示例数据的 API 应用开发环境"
+   ]
+  },
+  "sha": "896ae90f5451",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "626b6ffbe3e6": {
+  "identity": {
+   "one_liner": "单二进制 Go 公共信息流服务：ed25519 签名消息 + SQLite + IPFS",
+   "review": "exe-hub 是一个用 Go 编译为单个二进制的公共信息流服务。写入为 ed25519 签名信封，读取走公开 HTTP，数据存于 SQLite（WAL 模式，append-only 消息表为唯一事实来源），图片经 kubo 节点存入 IPFS。发帖权限由 JSON 配置决定：全员开放或按 Solana 代币余额门控。Hub 之间可一跳手动复制。面向想自托管信息流节点的用户，支持 Docker Compose、Web Push、基于 Ollama 的语言标注与三语翻译。",
+   "highlights": [
+    "每条写入为带单调 seq 的 ed25519 签名信封，消息 id 为其 SHA-256，重试幂等且跨 hub 一致",
+    "提供 post.create/delete/mark/bookmark、profile.set 等操作，文本帖上限 8 KB、最多四个嵌入附件，无编辑操作",
+    "读取 API 公开并开放 CORS，含 SSE 实时事件、搜索、Web Push 订阅；帖子可由 Ollama 模型标注 BCP 47 语言并翻译为简中/英/日三语"
+   ],
+   "use_cases": [
+    "自托管小型公共信息流节点，通过二进制或 Docker Compose 运行",
+    "需按 Solana 代币持有量门控发帖权限的社区信息流",
+    "exe 节点间的 hub 互相同步内容（一跳、手动管理的对等复制）"
+   ]
+  },
+  "sha": "626b6ffbe3e6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

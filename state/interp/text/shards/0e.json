@@ -2988,5 +2988,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d370d7351582": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 服务器与 CLI，用 SQLite 为 AI 代理提供人际记忆",
+   "review": "people-context 是运行在本地的 MCP 服务器加 CLI，将人际关系数据（姓名别名、组织角色、事实、互动摘要、提醒）存于单个 SQLite 文件，供 AI 代理通过窄工具查询。数据导入需人工审核后提交，forget 为硬删除，敏感记录需操作员门控。默认数据库为明文，可选 SQLCipher 加密。",
+   "highlights": [
+    "支持身份解析：对名字、昵称、别名、句柄返回带匹配理由的候选列表，歧义不静默猜测",
+    "支持从邮件、mbox、vCard、日历、LinkedIn、Outlook、WhatsApp 导出分阶段导入，经审核后提交",
+    "写入经审计日志记录，browse 子命令提供仅绑定 127.0.0.1、带每启动令牌的本地浏览器编辑界面"
+   ],
+   "use_cases": [
+    "在 Claude Code、Cursor 等 MCP 客户端中让代理查询和记录人际关系信息",
+    "通过 pctx 命令行离线管理个人通讯录、互动摘要与提醒",
+    "将数据导出为 Obsidian vault 浏览，或用 pctx sync push/pull 做备份迁移"
+   ]
+  },
+  "sha": "d370d7351582",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "938a2c87f4a8": {
+  "identity": {
+   "one_liner": "AI代理消费管控层：LLM提出购买建议，确定性策略引擎决定是否支付。",
+   "review": "Mandate 是 PayPal AI Hackathon 的参赛项目，用于为会自主购物的 AI 代理设置预算、单品上限、类别白名单与人工审批阈值。其关键机制是权限分离：LLM 模块无支付工具与凭据，仅输出经 Zod 校验的候选商品 ID；纯 TypeScript 策略引擎重新计算价格后返回 ALLOW/NEEDS_APPROVAL/DENY。支付走 PayPal sandbox，无真实资金。",
+   "highlights": [
+    "确定性策略引擎为纯函数（无 I/O、无时钟、无随机），对 LLM 提案返回 ALLOW、NEEDS_APPROVAL 或 DENY 并附机器可读原因",
+    "所有支出、待审批与被拦截尝试记录于 append-only 审计日志，并在 React + AG Grid 仪表盘展示",
+    "LLM 模块不含支付工具和凭据，商品文案作为不可信输入被截断、隔离，仅用于无工具调用的请求"
+   ],
+   "use_cases": [
+    "团队财务为 AI 代理设定总预算、单品上限和人工审批阈值后再授权其采购",
+    "超过阈值的购买请求经 Zapier 转发至 Slack/邮件，人工批准后流程恢复继续",
+    "对同一攻击套件在无防护代理、提示词加固代理和 Mandate 三种配置下运行对比评测"
+   ]
+  },
+  "sha": "938a2c87f4a8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

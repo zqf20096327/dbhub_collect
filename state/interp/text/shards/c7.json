@@ -3012,5 +3012,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b710ca5d54c4": {
+  "identity": {
+   "one_liner": "分布式内存数据库，支持多级存储与ANSI SQL计算",
+   "review": "Apache Ignite是一个内存优先的分布式数据库，提供内存、磁盘与Intel Optane多级存储，自带分布式ACID持久化层，并通过ANSI-99 SQL引擎以JDBC/ODBC及Java、C#、C++、Python等原生API访问。它也可作为计算集群实现MapReduce式分布式计算，面向需要内存数据处理与SQL访问的场景。README中未包含安装步骤，需查阅官方文档。",
+   "highlights": [
+    "支持DRAM、磁盘与Intel Optane组成的多级存储，磁盘层可选外部数据库或Ignite原生持久化",
+    "内存与磁盘数据均符合ACID，事务可跨网络跨服务器执行",
+    "提供ANSI-99兼容SQL引擎，支持SELECT/INSERT/UPDATE/DELETE及部分DDL，具备水平扩展与容错"
+   ],
+   "use_cases": [
+    "在内存中处理数据并执行跨集群的计算密集型任务（实现MapReduce范式）",
+    "作为外部数据库之上的缓存层，或直接启用原生持久化存储超内存容量数据",
+    "通过JDBC、ODBC或多种语言原生SQL API以SQL方式交互访问数据"
+   ]
+  },
+  "sha": "b710ca5d54c4",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c891413491dc": {
+  "identity": {
+   "one_liner": "AI 编码工作审计与验证框架，以人类授权和确定性契约约束代理执行。",
+   "review": "Review Bridge 是一个用于 Claude Code 和 Codex 的 AI 工作审计与验证框架。它以只读审阅者复核写手代理的产出，用户批准计划后，框架在代码层面固化范围、预算、测试命令与停止点，代理无法修改这些限制，并将工单、契约与结果存入数据库及结果文件。适用于希望在本地对 AI 编码任务保留授权与验证记录的开发者。当前版本存在前台进程被终止导致运行记录残留的限制，需手动 stop 后 resume。",
+   "highlights": [
+    "写手/审阅者双代理结构，审阅者为只读角色，且其只读限制每次页面会话检查一次",
+    "以纯代码解析工单生成密封契约，展示契约 SHA-256 与版本，不调用模型",
+    "结果与契约文件生成于 .review-bridge/ 且不覆盖既有结果，Bridge 不执行 commit、push 或 deploy"
+   ],
+   "use_cases": [
+    "使用 Claude Code 或 Codex 执行工作单（含 VS Code 任务或终端方式）并保留授权与契约记录",
+    "在 CI 或脚本中以命令行按目录顺序批量运行工作单",
+    "需要测试命令验证写手每次修改、并生成可读结果文件的工作流"
+   ]
+  },
+  "sha": "c891413491dc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "090e14828c81": {
+  "identity": {
+   "one_liner": "Zig 编写的终端数据库 TUI，支持 PostgreSQL、MySQL、SQLite 和 ClickHouse。",
+   "review": "zpeek 是一个运行在终端里的数据库浏览与查询工具，基于 Zig 构建，发布为单个二进制文件并内置驱动。它面向希望在编辑器终端或 SSH 远程环境中直接查看数据的开发者：可浏览表行、按外键跳转关联记录、在带语法高亮和自动补全的编辑器中执行 SQL。连接配置和已保存查询存放在可编辑的普通文件中；文档说明客户端侧 SQL 检查不构成安全边界。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、ClickHouse 四类数据库，通过连接字符串或 SQLite 文件路径打开",
+    "提供表浏览、行过滤与排序、隐藏列、按 f 键跟随外键查看关联记录，以及带语法高亮和自动补全的 SQL 编辑器、查询历史与保存查询",
+    "查询结果可导出为 CSV 或 JSON，支持保存连接、访问模式、dev/prod 颜色标识，并可在 SSH 环境下运行"
+   ],
+   "use_cases": [
+    "在不离开编辑器终端或 SSH 远程服务器的情况下浏览表数据与外键关联记录",
+    "需要编写、保存并复用 SQL 查询，或将结果导出为 CSV/JSON 时",
+    "本地开发与生产库之间切换连接，并借助颜色标识区分环境"
+   ]
+  },
+  "sha": "090e14828c81",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f0e39509a268": {
+  "identity": {
+   "one_liner": "Bludit 插件目录的数据仓库，以 JSON 文件驱动多语言插件站点",
+   "review": "该仓库存储 plugins.bludit.com（英/德/西/俄四种语言版本）的插件数据库。插件作者通过提交作者信息 JSON 和插件 metadata.json 与截图，以 Pull Request 方式收录免费或付费插件。仓库内置 Python 校验脚本和机器人自动检查命名、字段、链接等规则，最终由维护者审核合并。适合希望将插件上架 Bludit 官方插件站的开发者。",
+   "highlights": [
+    "以 authors/ 和 items/ 目录下的 JSON 文件存储作者与插件元数据，支持免费、固定价格及外部定价三类插件",
+    "提供 .github/scripts/validate_pr.py 校验脚本，机器人自动检查文件命名、JSON 字段、URL 格式、截图规格等规则并给出 ready-to-merge / needs-review / needs-changes 三种结论",
+    "通过 description_de、description_es、description_ru 等字段支持英、德、西、俄多语言描述"
+   ],
+   "use_cases": [
+    "插件开发者向 plugins.bludit.com 提交新插件或更新已有插件信息",
+    "为已有插件补充德语、西班牙语、俄语等翻译描述",
+    "在提交 PR 前本地运行校验脚本预检元数据是否符合规范"
+   ]
+  },
+  "sha": "f0e39509a268",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

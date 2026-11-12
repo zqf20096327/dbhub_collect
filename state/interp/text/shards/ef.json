@@ -2901,5 +2901,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "22e1ca790d43": {
+  "identity": {
+   "one_liner": "VastBase/openGauss/PostgreSQL 离线应急数据恢复工具，直接解析磁盘数据文件提取数据",
+   "review": "vbdul 是一款面向 VastBase、openGauss 系及 PostgreSQL 10–17 的二进制分发应急恢复工具，在数据库无法启动、误删表或无备份时直接解析磁盘数据文件抢救数据。提供字典构建、表导出、空闲页扫描、基于 ProBackup 备份的表还原和 WAL 日志挖掘（logminer）功能。以只读方式访问原始数据文件，仅支持 Heap 行存引擎，正式版需向供应商申请 license，Beta 版无需 license。",
+   "highlights": [
+    "提供表导出（unload）、导入脚本生成（imp）、空闲页面扫描（scan filesystem）与 WAL DML 挖掘（logminer）等命令，输出 COPY 文本与 psql 脚本",
+    "支持 PostgreSQL 10–17 及多种 VastBase 版本内核，通过 config.dul 配置 db_type/db_version/数据目录等参数",
+    "以只读方式访问设备和数据文件，输出仅写入自身目录；支持 Linux x86_64 与 aarch64 平台"
+   ],
+   "use_cases": [
+    "数据库无法启动、系统表损坏且无备份时，离线解析数据文件导出数据",
+    "DROP TABLE / TRUNCATE 误操作后无备份场景，通过文件系统空闲页面扫描还原数据",
+    "基于 WAL 的 logminer 定位误操作事务，恢复被 DELETE 删除或被 INSERT 写入的行数据"
+   ]
+  },
+  "sha": "22e1ca790d43",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

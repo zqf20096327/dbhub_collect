@@ -2880,5 +2880,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f0631d4106a1": {
+  "identity": {
+   "one_liner": "基于 SQLite 与 BM25 的 CJK 优先智能体长期记忆模块",
+   "review": "Brain4Agent 将智能体对话轮次存入单个 SQLite 文件，以会话为单位做 BM25 检索，核心路径不调用模型、无需 API key。面向需要中文、日文、韩文等 CJK 文本记忆能力的智能体使用者。读写采用不同分词器，检索结果返回语料缺失词等证据字段而非置信分，是否拒绝由调用方决定。可选 20 MB jieba 词典；评审型 judge 需显式配置密钥，默认关闭。",
+   "highlights": [
+    "支持 CLI、Python 库、MCP 服务器（含 b4a_remember/b4a_recall/b4a_ask 等 5 个工具）及 agent skill 四种使用方式，并提供 JSONL 批量导入",
+    "检索为 BM25，核心无模型调用，README 记录的单次查询耗时为个位数毫秒，写入支持 batch() 批量提交",
+    "返回 corpus_missing、missing_terms、term_frequencies、related_terms 等证据字段，记忆支持 tags、superseded_by、refs 元数据"
+   ],
+   "use_cases": [
+    "为使用中文/日文/韩文的智能体保存并按会话检索长期对话记忆",
+    "通过 MCP 服务器将记忆能力接入支持 MCP 的智能体客户端",
+    "本地单文件存储场景下批量导入 JSONL 历史对话并做离线检索"
+   ]
+  },
+  "sha": "f0631d4106a1",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e02e68d4d6b7": {
+  "identity": {
+   "one_liner": "数据库驱动的仓库级 AI 团队基底，通过适配器接入多种编码 harness 运行",
+   "review": "Subfloor 是一个可安装到现有 Git 仓库的开源基底，为 AI 编码代理提供基于数据库的持久身份、记忆、规格与交接，并预置十种 shell（Planner、Developer、Reviewer 等），经五个 harness 适配器（Claude Code、Codex、OpenCode、Mistral Vibe、Kimi Code）运行。要求 Linux 与 Python 3.14、SQLite、Docker 或 systemd host 运行时；合并默认受分支守卫控制，须操作员显式指令或 Sprint 授权。",
+   "highlights": [
+    "预置十个持久 shell（含 Planner/Developer/Reviewer/Admin/Cartographer），记忆与决策跨会话保存于数据库",
+    "提供五个 harness 适配器，共享同一 shell 上下文，支持面因适配器而异",
+    "开发者工作于独立 worktree 分支；合并需操作员显式指令或已武装 Sprint 下的实时授权"
+   ],
+   "use_cases": [
+    "在现有 Git 项目中维护一支记忆持久的 AI 开发团队，从终端或本地浏览器 UI 交互",
+    "用 Sprints 让 Planner 划分独立工作道、指定路径与评审人，协调执行并跟踪至授权合并",
+    "通过 Playwright 扩展与专属 Chromium 档案，让部分 harness 上跑的代理执行浏览器任务或登录预览检查"
+   ]
+  },
+  "sha": "e02e68d4d6b7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4a52a8f00f54": {
+  "identity": {
+   "one_liner": "运行于 SQL Server 内部的存储过程式 AI 索引调优工具",
+   "review": "本项目以一个 T-SQL 存储过程实现在 SQL Server 内运行：收集缺失索引、索引重叠、非 SARGable 谓词、Query Store 等诊断数据，发送到用户自有的 Azure OpenAI 部署，将建议存入表并可按阈值创建经验证的新索引。面向 SQL Server 2025 及 Azure/Fabric SQL 平台的 DBA，MIT 许可，目前尚未在 Azure SQL Database 与 Fabric SQL Database 上实测运行。",
+   "highlights": [
+    "单存储过程收集索引诊断数据，调用自有 Azure OpenAI 端点生成 JSON 格式建议并存入表",
+    "支持 @Mode='CREATE' 创建经验证的非聚集行存储索引，可选拆分控制 columnstore 与删索引",
+    "提供优先级、置信度、预估存储变化等阈值参数，可经由 SQL Server Agent 定时运行"
+   ],
+   "use_cases": [
+    "为 SQL Server 2025 数据库周期性生成索引创建/删除/合并建议",
+    "按表或架构范围分析缺失索引与冗余索引",
+    "在允许参数内自动创建或加宽索引，其余建议留待 DBA 人工审阅"
+   ]
+  },
+  "sha": "4a52a8f00f54",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

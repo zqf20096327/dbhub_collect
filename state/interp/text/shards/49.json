@@ -2961,5 +2961,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "411c82e978a7": {
+  "identity": {
+   "one_liner": "EF Core 悲观锁扩展库，提供行级锁 ForUpdate/ForShare 与分布式咨询锁",
+   "review": "该库为 EF Core 提供悲观锁定能力，支持 PostgreSQL、MySQL 和 SQL Server 三种数据库。核心机制包括两类：行级锁通过 ForUpdate()/ForShare() LINQ 扩展生成 FOR UPDATE 等 SQL 子句，须在活动事务内使用；分布式咨询锁通过 AcquireDistributedLockAsync() 以应用定义的键实现跨进程协调，默认会话作用域，PG 与 SQL Server 上还支持事务作用域。行级锁功能因数据库方言存在差异，如 ForNoKeyUpdate 仅限 PostgreSQL。",
+   "highlights": [
+    "通过 ForUpdate()/ForShare() LINQ 扩展生成数据库行级锁 SQL，支持 NoWait、SkipLocked、带超时等待等锁定行为",
+    "提供基于应用定义键的分布式咨询锁，含阻塞/非阻塞（TryAcquire）、同步/异步、共享/独占模式，PG 与 SQL Server 支持事务作用域",
+    "为不同数据库生成方言对应 SQL，如 PostgreSQL FOR UPDATE SKIP LOCKED、SQL Server WITH (UPDLOCK, ROWLOCK, READPAST)"
+   ],
+   "use_cases": [
+    "多消费者并发认领任务的队列处理（ForUpdate(SkipLocked)）",
+    "跨进程协调的任务互斥，如按业务键（如 invoice:generate）获取分布式锁",
+    "在事务中保护读-检查-写序列的场景（PG/SQL Server 事务作用域咨询锁）"
+   ]
+  },
+  "sha": "411c82e978a7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4951ad6e94f4": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的银行财务聚合 REST 平台，含离线 UPI 网格结算引擎",
+   "review": "FinFlow-Core 是一个基于 Spring Boot 3.3 与 Java 17 的财务聚合 REST 平台，连接 PostgreSQL 16，提供用户注册登录、交易记录、分类管理与月度汇总分析接口，并包含离线 UPI 网格支付结算引擎——通过混合加密包与中继上传实现无网环境下的记账结算。适合 Java 后端开发者学习或部署试用；测试需运行 `./mvnw clean test`，部署可用 Docker Compose。",
+   "highlights": [
+    "提供基于 Spring Security 6 JWT 的无状态认证与按用户隔离的交易、分类与分析数据",
+    "离线网格结算子系统采用 RSA-OAEP + AES-256-GCM 混合加密、数字签名、nonce 与 24 小时包时效校验，并以密文 SHA-256 摘要的 CAS 去重实现单次入账",
+    "提供认证、网格结算、分类、交易、月度分析五组 REST 接口，附带 Swagger 沙箱与 31 项单元/集成/并发测试"
+   ],
+   "use_cases": [
+    "个人收支与分类预算的记录及月度汇总分析",
+    "无互联网连接场景下通过 BLE 中继转发加密支付包并在恢复联网后批量上传结算",
+    "作为 Spring Boot + JWT + PostgreSQL 后端接口的参考实现或演练环境"
+   ]
+  },
+  "sha": "4951ad6e94f4",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

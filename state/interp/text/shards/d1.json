@@ -2611,5 +2611,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "818c7397b807": {
+  "identity": {
+   "one_liner": "纯 JavaScript 实现的流式异步 SQL 查询引擎",
+   "review": "Squirreling 是一个以 TypeScript/JavaScript 编写的只读 SQL 查询引擎，面向浏览器环境设计，以 npm 包形式分发，包体 13 kb 且无依赖。其核心机制是单元格级惰性求值：行以 AsyncGenerator 流式输出，单元格为异步 thunk，仅在结果中出现的单元格才会执行。适用于需要在浏览器内查询网络数据源、API 或模型的前端开发场景。注意排序等阻塞运算符仍会占用额外内存。",
+   "highlights": [
+    "支持只读 SQL：SELECT/WHERE/JOIN/GROUP BY/CTE/窗口函数及字符串、数学、JSON、数组、正则、空间等函数类别",
+    "行输出为 AsyncGenerator，单元格惰性求值，未出现在结果中的昂贵运算不执行",
+    "可注册同步或异步 UDF 调用 API 或模型；数据源通过 AsyncDataSource 接口接入，支持过滤/限制下推"
+   ],
+   "use_cases": [
+    "在浏览器中对 API、网络数据源或 LLM 输出执行 SQL 查询",
+    "配合 LIMIT/WHERE 按需物化单元格，调用模型或外部服务作为 UDF",
+    "实现自定义 AsyncDataSource 并在数据源层做过滤与分页下推"
+   ]
+  },
+  "sha": "818c7397b807",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fb6d2c597ad6": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件全文搜索数据库，经 WAL 写入并用 BM25F 排序检索。",
+   "review": "Persia DB 是一个以库形式链接的全文搜索数据库，数据存储于单个 .persia 文件中，支持写入、提交、段合并、过滤/排序/分面及 BM25F 排序搜索。项目目前处于 pre-alpha 阶段（MVP 完成约 64%），规划中的 Db 门面 API 与查询松弛（relaxation）尚未实现，文件格式在 v1.0 前不稳定， crates 未发布，需以 git 依赖方式引入。",
+   "highlights": [
+    "嵌入式设计：调用进程即数据库，无守护进程，通过 Database API 打开单文件容器进行写入与搜索",
+    "支持 BM25F 评分、字段过滤/排序/分面查询，schema 字段类型含 text、keyword、i64、f64、bool、datetime、stored",
+    "单文件容器含校验帧与 CRC32C 校验，段不可变，支持自动压缩回收死空间，并提供 inspect/verify 等 CLI 子命令"
+   ],
+   "use_cases": [
+    "在 Rust 应用内嵌全文搜索功能（当前通过 persia-engine 库 API 使用）",
+    "对 .persia 数据库文件进行校验、检查段结构与统计信息的运维场景",
+    "需要模式中混合文本、关键词与数值/布尔/时间字段并按 BM25F 排序返回结果的检索任务"
+   ]
+  },
+  "sha": "fb6d2c597ad6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

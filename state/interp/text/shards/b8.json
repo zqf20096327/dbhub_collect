@@ -2703,5 +2703,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "47b55c025dcc": {
+  "identity": {
+   "one_liner": "用 Rust 开发 PostgreSQL 扩展的框架",
+   "review": "pgrx 是一个在 Rust 中开发 PostgreSQL 扩展的框架，支持 Postgres 15 至 19rc1。通过 cargo-pgrx 提供从创建项目、编译安装到运行测试的开发流程，可从 Rust 代码自动生成 SQL 模式，将 Rust panic 转换为 Postgres 事务级 ERROR。面向需要在 Postgres 中编写自定义函数、类型和触发器的 Rust 开发者；无 MSRV 策略，可能需要最新稳定版 Rust。",
+   "highlights": [
+    "提供 cargo pgrx 命令集，覆盖新建扩展、初始化 PostgreSQL、运行、跨版本测试、SQL 回归测试及生成 RPM/DEB 包等开发环节",
+    "支持通过 #[pg_extern]、#[pg_trigger]、#[derive(PostgresType)] 等宏暴露函数、触发器、自定义类型与枚举，并自动生成 SQL 模式",
+    "将 Rust panic! 转换为中止事务而非进程的 Postgres ERROR，NULL Datum 以 Option::None 表示，并提供 SPI 与 MemoryContext 的安全访问接口"
+   ],
+   "use_cases": [
+    "在 Rust 中编写 Postgres 自定义函数（UDF）、聚合返回 SETOF/TABLE 的函数及触发器函数",
+    "需要同一代码库兼容 Postgres 15 到 19 多个版本，并用 Rust feature gating 调用版本特定 API 的扩展开发",
+    "需要通过 #[derive(PostgresType)] 定义自定义 Postgres 类型（默认 CBOR 编码存储、JSON 可读输出）的场景"
+   ]
+  },
+  "sha": "47b55c025dcc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a705711e767a": {
+  "identity": {
+   "one_liner": "基于 Electron 的桌面 SQL 学习工作台，整合本地 SQLite、AI 导师与可视化模式",
+   "review": "PractiSQL 是一款面向 SQL 学习者的桌面工作台，将本地 SQLite 数据库、SQL 编辑器、可视化模式图、课程挑战与 AI 导师整合在同一个三栏界面中。编辑器、模式查看器和本地补全不依赖 AI 连接；AI 导师需另行接入 ChatGPT 账户或 API 提供商。目前提供 Windows x64 安装包，macOS 版本尚在准备中。",
+   "highlights": [
+    "提供 SQL 编辑器、结果表、可视化模式图与 AI 导师共处一屏的三栏工作区",
+    "支持加载 SQLite 数据库、SQL dump 或 CSV，本地 SQL 补全与语法高亮无需 AI 账户",
+    "内置课程、挑战（三种数据变体验证）、考试、数据项目与本地生成的 PDF 学习手册，并配有 XP、徽章等进度记录"
+   ],
+   "use_cases": [
+    "在本地数据库上练习编写与运行 SQL，并将查询、结果与解释对照阅读",
+    "跟随内置课程路径（选择、过滤、排序、连接、分组等）系统学习 SQL 概念",
+    "导入自有数据库或 CSV 数据，借助模式图理解表关系并生成学习手册"
+   ]
+  },
+  "sha": "a705711e767a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

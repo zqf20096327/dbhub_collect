@@ -2608,5 +2608,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9ca1739fcbc9": {
+  "identity": {
+   "one_liner": "Swift 6 + AppKit 编写的 macOS 原生数据库客户端，支持 9 类数据库引擎",
+   "review": "BerryDB 是面向 macOS 开发者、数据工程师和 DBA 的原生数据库客户端，使用 Swift 6 与 AppKit 构建，数据网格为 NSTableView，不依赖 Electron。支持 PostgreSQL、MySQL、SQL Server、SQLite、Redis/Valkey、MongoDB、DynamoDB、Elasticsearch 和 Qdrant，凭据存于 macOS Keychain，内置 SSH 隧道和可选 AI 助手。结果默认截断为 1000 行，需 macOS 15 及以上。",
+   "highlights": [
+    "通过原生驱动连接 PostgreSQL、MySQL/MariaDB、SQL Server、SQLite、Redis/Valkey、MongoDB、DynamoDB、Elasticsearch、Qdrant，支持 SSH 隧道与 TLS/SSL",
+    "提供流式数据网格、内联单元格编辑（需主键）、SQL 补全、查询取消、查询历史，密码等秘密存于 macOS Keychain",
+    "提供 AI SQL 助手（云端或 Apple Intelligence 本地模型）、Mermaid ER 图生成，以及供 Claude Code 等编码代理读取缓存 schema 的本地 MCP 助手"
+   ],
+   "use_cases": [
+    "在 macOS 上统一查询和管理生产 PostgreSQL、MongoDB、Redis 等多种类型数据库",
+    "本地打开和编辑 SQLite WAL 模式数据库文件",
+    "让编码代理（如 Claude Code）读取缓存 schema 或执行受限的只读查询"
+   ]
+  },
+  "sha": "9ca1739fcbc9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74a91f1d77e6": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 行级安全的 Django 多租户隔离库",
+   "review": "这是一个通过 PostgreSQL RLS 策略实现租户隔离的 Django 库，隔离发生在数据库层而非应用层，缺失租户上下文时返回零行。模型继承 RLSProtectedModel 即自动获得租户外键、RLS 策略和租户范围管理器。注意：RLS 仅对非超用户、非 BYPASSRLS 的数据库角色生效，且防护的是遗漏租户过滤而非任意 SQL，需 Python 3.12+、Django 5.2+、PostgreSQL 15+。",
+   "highlights": [
+    "隔离由数据库 RLS 策略执行，覆盖 ORM、原生 SQL、dbshell 与数据迁移",
+    "提供 Celery（@rls_task 跨链/组/和弦传递租户上下文）、DRF、Django Ninja、异步视图集成",
+    "run_as_tenant / run_for_all_tenants 管理命令按租户运行任务，audit logger 记录上下文进入/退出/拒绝事件"
+   ],
+   "use_cases": [
+    "需要数据库层强制租户隔离的 Django 单库单 schema 多租户应用",
+    "含 Celery 异步任务、DRF/Ninja API 或 async 视图的租户系统",
+    "需要按租户批量执行管理命令（报表、回填、重建索引）的运维场景"
+   ]
+  },
+  "sha": "74a91f1d77e6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

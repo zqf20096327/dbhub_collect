@@ -3198,5 +3198,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d4ade8c8c565": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 复制引擎，可作库嵌入或独立运行",
+   "review": "该项目用 Rust 实现 Postgres 逻辑复制，对 publication 选定的每张表先做存量行初始同步并追平复制期间的变更，再以有序事件持续投递插入、更新、删除和 truncate 到内置或自定义目的地。目的地含 ClickHouse、BigQuery、DuckLake、Snowflake（公开 alpha）。需 Postgres 14–18 且 wal_level=logical、复制用户具 REPLICATION 角色；API 尚未达首个稳定版。",
+   "highlights": [
+    "支持嵌入 Rust 应用作为库使用，或以独立二进制/容器镜像（Linux AMD64/ARM64）运行",
+    "两阶段复制：初始同步（copy 路径 + CDC 追赶）与持续 CDC，并持久化检查点、表状态以支持安全重启和至少一次投递",
+    "通过 Postgres publications 选择表、列、行及操作类型；提供类型化 Rust API 实现自定义目的地与持久化存储"
+   ],
+   "use_cases": [
+    "将 Postgres 表变更以逻辑复制方式投递到 ClickHouse、BigQuery、Snowflake、DuckLake 等分析型存储",
+    "在 Rust 应用内嵌复制能力，无需额外部署协调服务",
+    "自托管场景下以 Docker 容器运行独立 replicator 进程"
+   ]
+  },
+  "sha": "d4ade8c8c565",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "332c1ef8a453": {
+  "identity": {
+   "one_liner": "用 Rust 与 GPUI 编写的多引擎数据库客户端，跨平台运行。",
+   "review": "DBDelve 是一个用 Rust 和 GPUI 框架实现的跨平台数据库客户端，支持 Postgres、MySQL、MongoDB、Redis、ClickHouse 等多种引擎，并可通过 ODBC 桥接访问 Db2、Oracle 等数据库。它提供网格编辑、CSV/Excel/Parquet 数据文件查询、查询计划展示、SSH 隧道和连接管理等功能，面向需要在本地管理多种数据库的开发者。macOS 版本未经公证，需通过 Homebrew 安装时清除隔离标志。",
+   "highlights": [
+    "支持 Postgres、MySQL、MariaDB、SQLite、MongoDB、Redis、ClickHouse 等引擎，并可通过内置 ODBC 桥接访问装有对应驱动的其他数据库",
+    "提供网格编辑并生成可预览的 UPDATE 语句、查询计划面板、基于 schema 的自动补全，以及可从 DBeaver 或 TablePlus 导入的连接管理",
+    "拖入 CSV、Excel、Parquet 或 JSON 文件可在内存中的 DuckDB 里作为可编辑查询打开；SSH 隧道通过系统自带的 ssh 运行"
+   ],
+   "use_cases": [
+    "开发者需要在同一客户端内连接和管理多种 SQL 与 NoSQL 数据库",
+    "需要通过 ODBC 访问 Oracle、Db2、Teradata 等数据库，或通过 SSH 隧道连接远程数据库",
+    "需要用 DuckDB 就地查询本地 CSV、Excel、Parquet、JSON 数据文件"
+   ]
+  },
+  "sha": "332c1ef8a453",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ea023c96c2e": {
+  "identity": {
+   "one_liner": "可自托管的个人卡片流，AI 助手可通过 MCP 读写。",
+   "review": "Cardlake 将提醒、书签、笔记、GitHub Issues 等内容汇总为单一信息流，部署在用户自己的 Vercel 和 Neon 账号上。它内置 MCP 服务器，Claude 和 ChatGPT 可通过对话读写卡片；仅支持单账户模式。通过 Vercel 一键部署，免费套餐即可运行，AGPL-3.0 许可。",
+   "highlights": [
+    "内置 MCP 服务器（api/mcp.js），向 MCP 兼容 AI 暴露全部卡片类型与操作（snooze、pin、favorite）",
+    "支持一键部署到 Vercel 并使用 Neon Postgres 数据库，数据库 schema 在首次请求后自动应用",
+    "提供 PWA 手机分享保存、GitHub Issues 导入、附件上传（含格式白名单校验）与搜索功能"
+   ],
+   "use_cases": [
+    "让 Claude/ChatGPT 在对话中代为记录提醒和待办，集中到自托管信息流",
+    "通过 Hermes Agent 插件在 Telegram 中查看和操作卡片",
+    "个人开发者自托管的单账户笔记/任务/稍后读聚合工具"
+   ]
+  },
+  "sha": "6ea023c96c2e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6392989b7bdf": {
+  "identity": {
+   "one_liner": "openGauss 社区发行经理 SIG，负责版本发布流程协调与治理",
+   "review": "该仓库是 openGauss 社区 ReleaseManagement SIG 的信息归档库，记录版本发布时间表规划、开发/测试周期状态跟踪等职责说明，并列出 Maintainer 与 Committer 名单、会议时间与纪要归档方式、Maintainer 竞选及变更的量化条件（如6个月贡献与70%与会率）。适用于希望参与 openGauss 版本发布协调的社区成员查阅，内容以治理规则为主，不含可运行的软件。",
+   "highlights": [
+    "定义 SIG 四项职责：版本时间表规划、开发状态跟踪、发布协调、交付过程协调",
+    "公开 Maintainer/Committer 名单及每月一次的视频会议机制",
+    "提供量化的 Maintainer 竞选与变更流程原则"
+   ],
+   "use_cases": [
+    "了解 openGauss 社区版本发布流程的组织分工",
+    "申请或评审 ReleaseManagement SIG Maintainer 资格",
+    "订阅邮件列表获取发布相关会议通知"
+   ]
+  },
+  "sha": "6392989b7bdf",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

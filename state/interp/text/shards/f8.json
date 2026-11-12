@@ -2691,5 +2691,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f12b280bc9a2": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的长期记忆系统，单 Rust 二进制、离线运行、通过 MCP 接入",
+   "review": "Uteke 为 AI Agent 提供本地长期记忆存储，以 MCP 协议接入 Claude Code、Cursor、Codex 等客户端，检索路径不调用 LLM，采用向量加 SQLite 全文检索融合排序。首次运行需下载约 200 MB 嵌入模型；支持自托管（Apache-2.0）或官方云托管，Windows 需通过 PowerShell 脚本安装。",
+   "highlights": [
+    "检索基于本地向量与 FTS5 全文搜索的 RRF 融合排序，README 称查询过程为 0 次 LLM 调用、仅用 CPU",
+    "Rooms 机制支持多 Agent 读写同一记忆库，并记录每条记忆的作者归属",
+    "提供点时回溯（--at）、关系图、墓碑机制、cosign 签名升级等记忆管理与运维功能"
+   ],
+   "use_cases": [
+    "多个 Agent（Claude Code、Cursor 等）共享同一份长期记忆并保留写入者信息",
+    "数据需留在本机的自托管部署场景，或通过 Docker 在自有基础设施内运行",
+    "对记忆内容进行按时间点回溯查询、按类型与标签组织的团队知识管理"
+   ]
+  },
+  "sha": "f12b280bc9a2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2ee0b84a18c": {
+  "identity": {
+   "one_liner": "Rust 编写的 shell 命令闸门，在 AI 代理执行前预览后果、备份并按策略放行或拦截",
+   "review": "Termaxa 是单个 Rust 二进制，运行于 Claude Code、Codex、Cursor、Copilot CLI 等代理的 hook 路径，无模型、无服务、无账户。对每条命令按仓库内策略文件判定允许/询问/拒绝，预览删除文件、丢失提交、DROP 行数等后果，执行前做可回滚备份，并用跨 shell 的熔断器计数破坏性意图。审计日志为追加式、哈希链接，运行时状态存于 ~/.termaxa/。支持 brew/cargo/winget/scoop 安装，可先以观察模式接入项目。",
+   "highlights": [
+    "按仓库内 policy.yaml 判定 allow/ask/deny，首条匹配规则生效，未匹配命令默认询问",
+    "预览命令后果而非命令文本：删除文件清单、强推将丢失的提交、DROP 移除的行数（行数估算来自 pg_class.reltuples）、reset --hard 丢弃的未提交编辑",
+    "执行前创建可回滚备份（复制文件、固定引用、导出表），由 termaxa rollback 撤销"
+   ],
+   "use_cases": [
+    "运行 AI 编码代理（含无人值守场景）的项目，希望在命令执行前获得后果预览与回滚手段",
+    "通过 termaxa replay 读取 Claude Code/Codex 历史转录，评估接入闸门前代理执行过的命令",
+    "以观察模式接入项目，依据 report 中'未备份即执行'等数据决定是否切换到强制模式"
+   ]
+  },
+  "sha": "d2ee0b84a18c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "19567a947ee5": {
+  "identity": {
+   "one_liner": "面向台湾 K-12 单校自架的网页版排课与调代课系统，采用 OR-Tools 自动排课引擎",
+   "review": "一套供台湾国小、国中、高中职使用的开源（AGPL-3.0）排课与调代课系统，以教学组长工作流程为中心，涵盖学期基础资料、手动拖拉排课、自动排课、请假代课调课、通知与钟点统计。通过 Docker Compose 六容器部署于校内单台主机，支持 x86-64 与 ARM64；前端 Vue 3、后端 FastAPI、数据库 PostgreSQL 16。设计为单校部署，不含多租户 SaaS 模式。",
+   "highlights": [
+    "自动排课基于 OR-Tools CP-SAT 引擎，含 H1–H10 硬约束与 S1–S8 软约束加权，无解时以教务语言定位冲突并支持部分排课",
+    "调代课流程包含请假登记、代课推荐、调课验证、站内与 Email 通知确认、今日看板与 A4 公告打印、月结钟点 Excel 统计",
+    "课表可导出 Excel / PDF（内嵌中文字型）/ PNG，含每日自动备份、稽核纪录与 RBAC（管理员/主任/组长/教师）"
+   ],
+   "use_cases": [
+    "台湾国中小与高中职教务处进行学期排课、配课与课表发布",
+    "学期中处理教师请假、代课指派、跨周调课与钟点月结统计",
+    "学校在内部主机或 NAS（ARM64）自架部署，数据留存校内"
+   ]
+  },
+  "sha": "19567a947ee5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "093abc799971": {
+  "identity": {
+   "one_liner": "纯 Go 实现的嵌入式 SQL 引擎，支持持久化与向量/全文检索",
+   "review": "tinySQL 是一个用 Go 标准库编写的嵌入式 SQL 引擎，通过 go get 安装后在 Go 程序内创建内存或持久化数据库并执行 SQL。支持连接、递归 CTE、窗口函数、触发器、向量检索、BM25 及 C/Python/Rust/Swift 绑定，并可编译为 WebAssembly。限制包括仅支持单写进程、不支持分片、分布式事务、SAVEPOINT、部分索引等特性。",
+   "highlights": [
+    "支持连接、递归 CTE、窗口函数、视图、触发器和存储过程等 SQL 特性",
+    "提供精确与近似（IVF/HNSW）向量检索、BM25 全文检索及混合排序",
+    "支持内存、WAL、JSON、磁盘、索引和 SQLite 后端等多种存储模式，并提供 C、Python、Rust、Swift 绑定与 WebAssembly 构建"
+   ],
+   "use_cases": [
+    "在 Go 应用中嵌入 SQL 数据库引擎，进行内存或持久化数据查询",
+    "构建 RAG 应用，结合向量检索与全文检索",
+    "通过浏览器 playground 或 CLI/HTTP/gRPC 服务器运行与查询数据"
+   ]
+  },
+  "sha": "093abc799971",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2444760d90b": {
+  "identity": {
+   "one_liner": "Flow Steward 的 OceanBase 独立数据连接器，基于 MySQL 兼容接口读写数据",
+   "review": "这是 Flow Steward 的 OceanBase 扩展包（v1.3.6），通过 MySQL 兼容接口提供 Dataset 查询与工作流写入：查询只读且单次最多返回 100 行/480 KiB，execute_write 动作以命名参数执行单条 INSERT/UPDATE/DELETE。不提供 Oracle 模式，不含触发器与事务脚本。仅打包 Linux AMD64/ARM64 两种目标，安装时不下载驱动。注意验证基于编译与契约测试，未经真实 OceanBase 连接验证。",
+   "highlights": [
+    "Dataset 支持连接测试、类型化表结构内省、保存 SQL、结果预览与执行，读取上限 100 行/480 KiB",
+    "execute_write 动作以命名参数执行单条 INSERT/UPDATE/DELETE，参数与 SQL 分离并经原生驱动绑定",
+    "分别提供 Linux AMD64 与 ARM64 安装包，原生二进制由固定版本 Google MCP Toolbox 构建并提供 provenance 记录"
+   ],
+   "use_cases": [
+    "通过只读 Dataset 查询为后续工作流步骤提供应用数据查询与报表抽取",
+    "在工作流中以参数化 SQL 保存输出或修改 OceanBase 中既有应用记录",
+    "需要固定版本、可校验 provenance 的独立连接器包的 Flow Steward 项目部署"
+   ]
+  },
+  "sha": "f2444760d90b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bbed2e37f2dd": {
+  "identity": {
+   "one_liner": "OceanBase 的 Entity Framework Core 提供程序设计文档集",
+   "review": "该目录是 OceanBase EF Core 提供程序（基于 OceanBaseConnector 构建）的设计、支持边界、开发规则与发布流程文档集合。面向该提供程序的开发与验收评审人员，内容按 EF Core 8/9/10 分版本组织，含功能清单与版本支持矩阵；文档中说明版本设计文档本身不构成已实现或可用的证据，需待相应测试与服务器矩阵通过。",
+   "highlights": [
+    "包含存储库规范、提供程序架构、版本支持矩阵等多类文档",
+    "按 EF Core 8/9/10 分别提供移植边界与功能评审清单",
+    "EF Core 10 功能清单为特性分配稳定 ID，并区分 MySQL/Oracle 模式状态"
+   ],
+   "use_cases": [
+    "查阅 OceanBase EF Core 提供程序的功能支持边界与验收标准",
+    "确定应用 TFM、EF Core 版本、提供程序分支与包之间的对应关系",
+    "作为该提供程序开发、评审与发布流程的规范依据"
+   ]
+  },
+  "sha": "bbed2e37f2dd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -18510,5 +18510,1123 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "6df66d4738a5+2": {
+  "fn": "ClickHouse/clickhouse-odbc",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# ODBC Driver for ClickHouse "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Build and Test - Linux",
+     "Build and Test - macOS",
+     "Build and Test - Windows"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "## Introduction "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "For more information on ClickHouse go to ClickHouse home page."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "For more information on what ODBC is go to ODBC Overview."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "The canonical repo for this driver is located at https://github.com/ClickHouse/clickhouse-odbc."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "See LICENSE file for licensing information."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    41,
+    18,
+    20,
+    [
+     "## Table of contents  ",
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    45,
+    20,
+    24
+   ],
+   [
+    "replace",
+    45,
+    46,
+    24,
+    25,
+    [
+     "- Releases"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    55,
+    25,
+    34
+   ],
+   [
+    "replace",
+    55,
+    56,
+    34,
+    35,
+    [
+     "If you have Homebrew installed (usually applicable to macOS only, but can also be available in Linux), just execute:"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    61,
+    35,
+    40
+   ],
+   [
+    "replace",
+    61,
+    62,
+    40,
+    41,
+    [
+     "If you don't see a package that matches your platforms under Releases, or the version of your system is significantly different than those of the available packages, or maybe you want to try a bleeding edge version of the code that hasn't been released yet, you can always build the driver manually from sources:"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    41,
+    42
+   ],
+   [
+    "replace",
+    63,
+    64,
+    42,
+    43,
+    [
+     "- Building from sources"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    43,
+    44
+   ],
+   [
+    "replace",
+    65,
+    66,
+    44,
+    45,
+    [
+     "Note, that it is always a good idea to install the driver from the corresponding **native** package (if one is supported for your platform, like `.msi`, etc., which you can also easily create if you are building from sources), than use the binaries that were manually copied to a destination folder."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    69,
+    45,
+    48
+   ],
+   [
+    "replace",
+    69,
+    73,
+    48,
+    49,
+    [
+     "（目录 4 行略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    86,
+    49,
+    62
+   ],
+   [
+    "replace",
+    86,
+    89,
+    62,
+    65,
+    [
+     "- Configuration: MDAC/WDAC (Microsoft/Windows Data Access Components)",
+     "- Configuration: UnixODBC",
+     "- Configuration: iODBC"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    65,
+    68
+   ],
+   [
+    "replace",
+    92,
+    115,
+    68,
+    91,
+    [
+     "|Parameter|Default value|Description|",
+     "|:---------------------:|:----------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`Url`|empty|URL that points to a running ClickHouse instance, may include username, password, port, database, etc. Also, see URL query string|",
+     "|`Proto`|deduced from `Url`, or from `Port` and `SSLMode`: `https` if `443` or `8443` or `SSLMode` is not empty, `http` otherwise|Protocol, one of: `http`, `https`|",
+     "|`Server` or `Host`|deduced from `Url`|IP or hostname of a server with a running ClickHouse instance on it|",
+     "|`Port`|deduced from `Url`, or from `Proto`: `8443` if `https`, `8123` otherwise|Port on which the ClickHouse instance is listening|",
+     "|`Path`|`/query`|Path portion of the URL|",
+     "|`UID` or `Username`|`default`|User name|",
+     "|`PWD` or `Password`|empty|Password|",
+     "|`Database`|`default`|Database name to connect to|",
+     "|`Timeout`|`30`|Connection timeout|",
+     "|`VerifyConnectionEarly`|`off`|Verify the connection and credentials during `SQLConnect` and similar calls (adds a typical overhead of one trivial remote query execution), otherwise, possible connection-related failures will be detected later, during `SQLExecute` and similar calls|",
+     "|`SSLMode`|empty|Certificate verification method (used by TLS/SSL connections), one of: `allow`, `prefer`, `require`. With `allow` the server certificate is not verified at all (neither the trust chain nor the host name); with any other value the connection fails if the certificate is not trusted or does not match the host name|",
+     "|`PrivateKeyFile`|empty|Client certificate for TLS/SSL connections. On Linux and macOS: path to the private key file (PEM). On Windows: the subject common name of a certificate in the `CurrentUser\\MY` (Personal) certificate store, or a store reference in the form `CurrentUser\\MY\\<SHA-1 thumbprint>`; PKCS#12 (`.pfx`/`.p12`) files are not supported, import them into the store instead|",
+     "|`CertificateFile`|empty|Path to the client certificate file (PEM), used by TLS/SSL connections on Linux and macOS, ignored on Windows (the certificate comes from the store, see `PrivateKeyFile`); if the private key and the certificate are stored in the same file, this can be empty if `PrivateKeyFile` is specified|",
+     "|`CALocation`|empty|Path to the file or directory containing the CA/root certificates, used by TLS/SSL connections on Linux and macOS, ignored on Windows (the system certificate store is used)|",
+     "|`HugeIntAsString`|`off`|Report integer column types that may underflow or overflow 64-bit signed integer (`SQL_BIGINT`) as a `String`/`SQL_VARCHAR`|",
+     "|`DriverLog`|`on` if `CMAKE_BUILD_TYPE` is `Debug`, `off` otherwise|Enable or disable the extended driver logging|",
+     "|`DriverLogFile`|`\\temp\\clickhouse-odbc-driver.log` on Windows, `/tmp/clickhouse-odbc-driver.log` otherwise|Path to the extended driver log file (used when `DriverLog` is `on`)|",
+     "|`AutoSessionId`|`off`|Auto generate session_id required to use some features of CH (e.g. TEMPORARY TABLE)|",
+     "|`ClientName`|empty|Sets additional information about the calling application. This string will be used as a prefix for the User-Agent header.|",
+     "|`Compression`|`off`|Enables compression for data sent from ClickHouse to the driver|",
+     "|SqlCompatibilitySetting|`off`|Enables query settings such as `cast_keep_nullable` and `prefer_column_name_to_alias` that make ClickHouse behave more like a traditional relational database.|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    122,
+    91,
+    98
+   ],
+   [
+    "replace",
+    122,
+    126,
+    98,
+    102,
+    [
+     "|Parameter|Default value|Description|",
+     "|:--------------:|:-----------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`database`|`default`|Database name to connect to|",
+     "|`default_format`|`ODBCDriver2`|Default wire format of the resulting data that the server will send to the driver. Formats supported by the driver are: `ODBCDriver2` and `RowBinaryWithNamesAndTypes` (experimental)|"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    134,
+    102,
+    110
+   ],
+   [
+    "replace",
+    134,
+    137,
+    110,
+    113,
+    [
+     " - Enabling driver manager tracing: MDAC/WDAC (Microsoft/Windows Data Access Components)",
+     " - Enabling driver manager tracing: UnixODBC",
+     " - Enabling driver manager tracing: iODBC"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    146,
+    113,
+    122
+   ],
+   [
+    "replace",
+    146,
+    149,
+    122,
+    125,
+    [
+     " Clang 16 and later, or GNU binutils 2.40 and later. With an older binutils (e.g. Ubuntu 22.04, RHEL 9),",
+     " GCC can still be used for C and C++ if a recent Clang is used as the assembler: `-DCMAKE_ASM_COMPILER=clang-18`.",
+     " The configuration step checks this and stops with an explanation if the assembler is too old."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    125,
+    126
+   ],
+   [
+    "replace",
+    150,
+    154,
+    126,
+    130,
+    [
+     " - Clang 4 and later",
+     " - GCC 7 and later",
+     " - Xcode 10 and later (on macOS 10.14 and later)",
+     " - Microsoft Visual Studio 2017 and later"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    159,
+    130,
+    135
+   ],
+   [
+    "replace",
+    159,
+    163,
+    135,
+    136,
+    [
+     "（目录 4 行略）"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    166,
+    136,
+    139
+   ],
+   [
+    "replace",
+    166,
+    175,
+    139,
+    148,
+    [
+     "|Option|Default value|Description|",
+     "|:------------------------------------:|:----------------------------------------------------------:|:---------------------------------------------------------------------------------------|",
+     "|`CMAKE_BUILD_TYPE`|`RelWithDebInfo`|Build type, one of: `Debug`, `Release`, `RelWithDebInfo`|",
+     "|`CH_ODBC_ALLOW_UNSAFE_DISPATCH`|`ON`|Allow unchecked handle dispatching (may slightly increase performance in some scenarios)|",
+     "|`CH_ODBC_ENABLE_INSTALL`|`ON`|Enable install targets (required for packaging)|",
+     "|`CH_ODBC_ENABLE_TESTING`|inherits value of `BUILD_TESTING`|Enable test targets|",
+     "|`CH_ODBC_DEFAULT_DSN_ANSI`|`ClickHouse DSN (ANSI)`|Default ANSI DSN name|",
+     "|`CH_ODBC_DEFAULT_DSN_UNICODE`|`ClickHouse DSN (Unicode)`|Default Unicode DSN name|",
+     "|`TEST_DSN_LIST`|`${CH_ODBC_DEFAULT_DSN_ANSI};${CH_ODBC_DEFAULT_DSN_UNICODE}`|`;`-separated list of DSNs, each test will be executed with each of these DSNs|"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    188,
+    148,
+    161
+   ],
+   [
+    "replace",
+    188,
+    189,
+    161,
+    162,
+    [
+     "#### iODBC "
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    162,
+    163
+   ],
+   [
+    "replace",
+    190,
+    191,
+    163,
+    164,
+    [
+     "Execute the following in the terminal (assuming you have Homebrew installed):"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    197,
+    164,
+    170
+   ],
+   [
+    "replace",
+    197,
+    198,
+    170,
+    171,
+    [
+     "#### UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    198,
+    199,
+    171,
+    172
+   ],
+   [
+    "replace",
+    199,
+    200,
+    172,
+    173,
+    [
+     "Execute the following in the terminal (assuming you have Homebrew installed):"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    208,
+    173,
+    181
+   ],
+   [
+    "replace",
+    208,
+    209,
+    181,
+    182,
+    [
+     "#### UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    209,
+    216,
+    182,
+    189
+   ],
+   [
+    "replace",
+    216,
+    217,
+    189,
+    190,
+    [
+     "#### iODBC "
+    ]
+   ],
+   [
+    "equal",
+    217,
+    226,
+    190,
+    199
+   ],
+   [
+    "replace",
+    226,
+    227,
+    199,
+    200,
+    [
+     "#### UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    227,
+    234,
+    200,
+    207
+   ],
+   [
+    "replace",
+    234,
+    235,
+    207,
+    208,
+    [
+     "#### iODBC "
+    ]
+   ],
+   [
+    "equal",
+    235,
+    251,
+    208,
+    224
+   ],
+   [
+    "replace",
+    251,
+    252,
+    224,
+    225,
+    [
+     "- Installing and Configuring the ODBC Software"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    253,
+    225,
+    226
+   ],
+   [
+    "replace",
+    253,
+    254,
+    226,
+    227,
+    [
+     "Note, that the keys are subject to \"Registry Redirection\" mechanism, with caveats."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    257,
+    227,
+    230
+   ],
+   [
+    "replace",
+    257,
+    259,
+    230,
+    232,
+    [
+     "- odbcinst.ini.sample",
+     "- odbc.ini.sample"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    268,
+    232,
+    241
+   ],
+   [
+    "replace",
+    268,
+    271,
+    241,
+    244,
+    [
+     "- unixODBC without the GUI",
+     "- odbcinst - An unixODBC tool for manipulating configuration files",
+     "- unixODBC - An ODBC implementation for Unix - for description of recognized run-time environment variables"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    274,
+    244,
+    247
+   ],
+   [
+    "replace",
+    274,
+    276,
+    247,
+    249,
+    [
+     "- odbcinst.ini.sample",
+     "- odbc.ini.sample"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    294,
+    249,
+    267
+   ],
+   [
+    "replace",
+    294,
+    296,
+    267,
+    269,
+    [
+     "- What's an odbc.ini and what do I put in it?",
+     "- What's a libiodbc and what goes in my Driver= lines in odbc.ini?"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    299,
+    269,
+    272
+   ],
+   [
+    "replace",
+    299,
+    301,
+    272,
+    274,
+    [
+     "- odbcinst.ini.sample",
+     "- odbc.ini.sample"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    306,
+    274,
+    279
+   ],
+   [
+    "replace",
+    306,
+    309,
+    279,
+    282,
+    [
+     "- 5.8.1 Enabling ODBC Tracing on Windows",
+     "- ODBC Troubleshooting: How to Enable Driver-manager Tracing",
+     "- Enabling Tracing"
+    ]
+   ],
+   [
+    "equal",
+    309,
+    314,
+    282,
+    287
+   ],
+   [
+    "replace",
+    314,
+    316,
+    287,
+    289,
+    [
+     "- ODBC Troubleshooting: How to Enable Driver-manager Tracing",
+     "- How do I turn unixODBC tracing on or off?"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    321,
+    289,
+    294
+   ],
+   [
+    "replace",
+    321,
+    323,
+    294,
+    296,
+    [
+     "- ODBC Troubleshooting: How to Enable Driver-manager Tracing",
+     "- Tracing Application Behavior"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    326,
+    296,
+    299
+   ],
+   [
+    "replace",
+    326,
+    327,
+    299,
+    300,
+    [
+     "#### Build-time dependencies "
+    ]
+   ],
+   [
+    "equal",
+    327,
+    332,
+    300,
+    305
+   ],
+   [
+    "replace",
+    332,
+    333,
+    305,
+    306,
+    [
+     "You will need to install WiX toolset to be able to generate `.msi` packages. You can download and install it from WiX toolset home page."
+    ]
+   ],
+   [
+    "equal",
+    333,
+    334,
+    306,
+    307
+   ],
+   [
+    "replace",
+    334,
+    335,
+    307,
+    308,
+    [
+     "#### Build steps "
+    ]
+   ],
+   [
+    "equal",
+    335,
+    353,
+    308,
+    326
+   ],
+   [
+    "replace",
+    353,
+    361,
+    326,
+    327,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    384,
+    327,
+    350
+   ],
+   [
+    "replace",
+    384,
+    385,
+    350,
+    351,
+    [
+     "#### Build-time dependencies "
+    ]
+   ],
+   [
+    "equal",
+    385,
+    388,
+    351,
+    354
+   ],
+   [
+    "replace",
+    388,
+    389,
+    354,
+    355,
+    [
+     "Install Homebrew using the following command, and follow the printed instructions on any additional steps required to complete the installation:"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    394,
+    355,
+    360
+   ],
+   [
+    "replace",
+    394,
+    395,
+    360,
+    361,
+    [
+     "Then, install the latest Xcode from App Store. Open it at least once to accept the end-user license agreement and automatically install the required components."
+    ]
+   ],
+   [
+    "equal",
+    395,
+    405,
+    361,
+    371
+   ],
+   [
+    "replace",
+    405,
+    406,
+    371,
+    372,
+    [
+     "#### Build-time dependencies: iODBC "
+    ]
+   ],
+   [
+    "equal",
+    406,
+    414,
+    372,
+    380
+   ],
+   [
+    "replace",
+    414,
+    415,
+    380,
+    381,
+    [
+     "#### Build-time dependencies: UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    415,
+    423,
+    381,
+    389
+   ],
+   [
+    "replace",
+    423,
+    424,
+    389,
+    390,
+    [
+     "#### Build steps "
+    ]
+   ],
+   [
+    "equal",
+    424,
+    437,
+    390,
+    403
+   ],
+   [
+    "replace",
+    437,
+    442,
+    403,
+    404,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    465,
+    404,
+    427
+   ],
+   [
+    "replace",
+    465,
+    466,
+    427,
+    428,
+    [
+     "#### Build-time dependencies: UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    466,
+    477,
+    428,
+    439
+   ],
+   [
+    "replace",
+    477,
+    478,
+    439,
+    440,
+    [
+     "#### Build-time dependencies: iODBC "
+    ]
+   ],
+   [
+    "equal",
+    478,
+    489,
+    440,
+    451
+   ],
+   [
+    "replace",
+    489,
+    490,
+    451,
+    452,
+    [
+     "#### Build steps "
+    ]
+   ],
+   [
+    "equal",
+    490,
+    509,
+    452,
+    471
+   ],
+   [
+    "replace",
+    509,
+    513,
+    471,
+    472,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    513,
+    530,
+    472,
+    489
+   ],
+   [
+    "replace",
+    530,
+    531,
+    489,
+    490,
+    [
+     "#### Build-time dependencies: UnixODBC "
+    ]
+   ],
+   [
+    "equal",
+    531,
+    538,
+    490,
+    497
+   ],
+   [
+    "replace",
+    538,
+    539,
+    497,
+    498,
+    [
+     "#### Build-time dependencies: iODBC "
+    ]
+   ],
+   [
+    "equal",
+    539,
+    546,
+    498,
+    505
+   ],
+   [
+    "replace",
+    546,
+    547,
+    505,
+    506,
+    [
+     "#### Build steps "
+    ]
+   ],
+   [
+    "equal",
+    547,
+    548,
+    506,
+    507
+   ],
+   [
+    "replace",
+    548,
+    549,
+    507,
+    508,
+    [
+     "Assuming, that the system `cc` and `c++` are pointing to the compilers that satisfy the minimum requirements from Building from sources."
+    ]
+   ],
+   [
+    "equal",
+    549,
+    552,
+    508,
+    511
+   ],
+   [
+    "replace",
+    552,
+    554,
+    511,
+    513,
+    [
+     "- Kitware APT Repository",
+     "- Installing CMake"
+    ]
+   ],
+   [
+    "equal",
+    554,
+    555,
+    513,
+    514
+   ],
+   [
+    "replace",
+    555,
+    556,
+    514,
+    515,
+    [
+     "On Ubuntu 22.04 and older, the system assembler and Clang are too old for the bundled OpenSSL (see Building from sources). Install a recent Clang from apt.llvm.org and either use it as the compiler, or pass `-DCMAKE_ASM_COMPILER=clang-18` to the configuration step to keep GCC for C and C++."
+    ]
+   ],
+   [
+    "equal",
+    556,
+    569,
+    515,
+    528
+   ],
+   [
+    "replace",
+    569,
+    573,
+    528,
+    529,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    573,
+    587,
+    529,
+    543
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

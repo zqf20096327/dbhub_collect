@@ -16617,5 +16617,2895 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "07cf0b1fd231+2": {
+  "fn": "eugenioenko/autentico",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "Go Version",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    10,
+    7,
+    8,
+    [
+     " Auténtico first-run onboarding and admin UI"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    8,
+    9
+   ],
+   [
+    "replace",
+    11,
+    16,
+    9,
+    12,
+    [
+     " From an empty directory to a running identity provider. ",
+     " Onboarding, self-signup, registering a client, 2FA enrollment, and the audit log. ",
+     " Same walkthrough as an MP4 → "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    23,
+    12,
+    19
+   ],
+   [
+    "delete",
+    23,
+    25,
+    19,
+    19
+   ],
+   [
+    "equal",
+    25,
+    27,
+    19,
+    21
+   ],
+   [
+    "replace",
+    27,
+    28,
+    21,
+    22,
+    [
+     "Access the full documentation at getautentico.dev"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    22,
+    25
+   ],
+   [
+    "replace",
+    31,
+    32,
+    25,
+    26,
+    [
+     "Try Autentico instantly: Launch a Live Demo"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    38,
+    26,
+    32
+   ],
+   [
+    "replace",
+    38,
+    41,
+    32,
+    33,
+    [
+     "Share your use case in Discussions"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    58,
+    33,
+    50
+   ],
+   [
+    "delete",
+    58,
+    60,
+    50,
+    50
+   ],
+   [
+    "equal",
+    60,
+    72,
+    50,
+    62
+   ],
+   [
+    "delete",
+    72,
+    74,
+    62,
+    62
+   ],
+   [
+    "equal",
+    74,
+    75,
+    62,
+    63
+   ],
+   [
+    "replace",
+    75,
+    105,
+    63,
+    64,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    124,
+    64,
+    83
+   ],
+   [
+    "replace",
+    124,
+    125,
+    83,
+    84,
+    [
+     "- **Resource Owner Password Credentials** — supported for legacy client compatibility (see ROPC note); required email verification also applies to non-admin password grants"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    166,
+    84,
+    125
+   ],
+   [
+    "delete",
+    166,
+    168,
+    125,
+    125
+   ],
+   [
+    "equal",
+    168,
+    170,
+    125,
+    127
+   ],
+   [
+    "replace",
+    170,
+    183,
+    127,
+    138,
+    [
+     "|Layer|Choice|Rationale|",
+     "|-----------|-----------------------------|-------------------------------------------------------------|",
+     "|Language|Go 1.25|Single-binary deployment, strong concurrency, type safety|",
+     "|Database|SQLite (`modernc.org/sqlite`)|No CGo, no external server, sufficient for IdP write patterns|",
+     "|JWT Signing|RS256 (RSA 2048)|Asymmetric — relying parties verify without holding secrets|",
+     "|WebAuthn|`go-webauthn/webauthn`|Standards-compliant FIDO2/WebAuthn implementation|",
+     "|TOTP|RFC 6238 compliant|Compatible with Google Authenticator, Authy, 1Password, etc.|",
+     "|CSRF|`gorilla/csrf`|Protects browser-facing form endpoints|",
+     "|Admin UI|React + yarcl (Vite)|Embedded into the binary via `go:embed`|",
+     "|Testing|Testify + in-memory SQLite|Isolated, fast unit and integration tests|",
+     "|Docs|Swagger/OpenAPI|Interactive API reference|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    190,
+    138,
+    145
+   ],
+   [
+    "replace",
+    190,
+    217,
+    145,
+    172,
+    [
+     "|Package|Role|",
+     "|-------------------|--------------------------------------------------------------------------------|",
+     "|`pkg/authorize`|Authorization endpoint — renders login page, validates client and redirect URI|",
+     "|`pkg/login`|Login form submission, credential validation, MFA challenge creation|",
+     "|`pkg/mfa`|MFA challenge verification, TOTP enrollment, email OTP delivery|",
+     "|`pkg/passkey`|WebAuthn registration and authentication ceremony handlers|",
+     "|`pkg/trusteddevice`|Trusted device token issuance and cookie management|",
+     "|`pkg/token`|Token endpoint — authorization code exchange, refresh, revocation|",
+     "|`pkg/session`|OAuth2 session lifecycle and admin session management|",
+     "|`pkg/idpsession`|IdP-level SSO sessions — cross-request browser sessions|",
+     "|`pkg/client`|OAuth2 client registration, CRUD, and authentication|",
+     "|`pkg/user`|User identity management — CRUD, authentication, lockout|",
+     "|`pkg/groupclaim`|Group custom claims — admin CRUD, inherited through membership|",
+     "|`pkg/userclaim`|Custom per-user claims — CRUD and token/UserInfo embedding|",
+     "|`pkg/signup`|Self-service user registration flow|",
+     "|`pkg/onboarding`|First-run admin account creation|",
+     "|`pkg/appsettings`|Runtime settings — DB persistence, loading into config|",
+     "|`pkg/introspect`|Token introspection endpoint|",
+     "|`pkg/userinfo`|UserInfo endpoint|",
+     "|`pkg/wellknown`|OIDC discovery document and JWKS|",
+     "|`pkg/middleware`|CORS, CSRF, logging, admin auth, audience validation|",
+     "|`pkg/cleanup`|Background goroutine for expired record purging|",
+     "|`pkg/account`|Account self-service API and embedded React Account UI (from `pkg/account/dist`)|",
+     "|`pkg/admin`|Embedded Admin UI (static files + stats handler)|",
+     "|`pkg/config`|Bootstrap and runtime configuration|",
+     "|`pkg/db`|SQLite initialization, schema, and incremental migrations|",
+     "|`pkg/key`|RSA key loading (env or ephemeral) and JWK Set generation|"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    234,
+    172,
+    189
+   ],
+   [
+    "replace",
+    234,
+    235,
+    189,
+    190,
+    [
+     "|Concurrency|Error rate|Login p95|Token p95|Assessment|"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    190,
+    191
+   ],
+   [
+    "replace",
+    236,
+    240,
+    191,
+    195,
+    [
+     "|20 VUs|0%|248ms|300ms|Comfortable — imperceptible to users|",
+     "|100 VUs|0%|1.19s|1.56s|Sustained load — fully functional|",
+     "|200 VUs|0%|2.37s|2.94s|Moderate pressure — noticeable but acceptable|",
+     "|500 VUs|0%|5.76s|7.34s|Stress ceiling — degraded experience|"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    243,
+    195,
+    198
+   ],
+   [
+    "replace",
+    243,
+    244,
+    198,
+    199,
+    [
+     "See `stress/README.md` for the full methodology and how to reproduce these numbers."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    252,
+    199,
+    207
+   ],
+   [
+    "delete",
+    252,
+    254,
+    207,
+    207
+   ],
+   [
+    "equal",
+    254,
+    267,
+    207,
+    220
+   ],
+   [
+    "replace",
+    267,
+    268,
+    220,
+    221,
+    [
+     "Download the latest binary from GitHub Releases, then:"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    273,
+    221,
+    226
+   ],
+   [
+    "replace",
+    273,
+    278,
+    226,
+    227,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    341,
+    227,
+    290
+   ],
+   [
+    "delete",
+    341,
+    343,
+    290,
+    290
+   ],
+   [
+    "equal",
+    343,
+    356,
+    290,
+    303
+   ],
+   [
+    "replace",
+    356,
+    382,
+    303,
+    329,
+    [
+     "|Variable|Description|Default|",
+     "|--------------------------------|--------------------------------------------------------------|-----------------------|",
+     "|`AUTENTICO_APP_URL`|Base URL (used to derive issuer, domain, port)|`http://localhost:9999`|",
+     "|`AUTENTICO_APP_OAUTH_PATH`|Path prefix for OAuth2 endpoints|`/oauth2`|",
+     "|`AUTENTICO_DB_FILE_PATH`|SQLite database file path|`./autentico.db`|",
+     "|`AUTENTICO_PRIVATE_KEY`|Base64-encoded RSA private key PEM|_(generated by init)_|",
+     "|`AUTENTICO_TOTP_ENCRYPTION_KEY`|Required persistent base64-encoded 32-byte TOTP encryption key; generated by init|_(generated by init)_|",
+     "|`AUTENTICO_ACCESS_TOKEN_SECRET`|HMAC secret for access token signing|_(generated by init)_|",
+     "|`AUTENTICO_REFRESH_TOKEN_SECRET`|HMAC secret for refresh token signing|_(generated by init)_|",
+     "|`AUTENTICO_CSRF_SECRET_KEY`|Secret for CSRF token generation|_(generated by init)_|",
+     "|`AUTENTICO_CSRF_COOKIE_NAME`|CSRF cookie name|`_gorilla_csrf`|",
+     "|`AUTENTICO_TRUSTED_DEVICE_COOKIE_NAME`|Trusted-device cookie name|`autentico_trusted_device`|",
+     "|`AUTENTICO_FEDERATION_COOKIE_NAME`|Federation browser-cookie base name (automatic secure `__Host-` prefix)|`autentico_federation`|",
+     "|`AUTENTICO_PASSKEY_REGISTRATION_COOKIE_NAME`|Passkey-registration cookie base name (automatic secure `__Host-` prefix)|`autentico_passkey_registration`|",
+     "|`AUTENTICO_FORWARD_AUTH_COOKIE_PREFIX`|App-session/flow cookie prefix (automatic `__Host-` for HTTPS apps)|`autentico_fa_`|",
+     "|`AUTENTICO_CSRF_SECURE_COOKIE`|Require Secure flag on CSRF cookie|`true`|",
+     "|`AUTENTICO_REFRESH_TOKEN_COOKIE_ONLY`|**Opt-in security enhancement.** Delivers the refresh token as an `HttpOnly` cookie instead of in the JSON response body, preventing JavaScript (including XSS) from reading it. Non-standard — only enable if your client reads the refresh token from a cookie.|`false`|",
+     "|`AUTENTICO_IDP_SESSION_SECURE`|Require Secure flag on IdP session cookie|`true`|",
+     "|`AUTENTICO_JWK_CERT_KEY_ID`|Key ID (`kid`) in the JWK Set|`autentico-key-1`|",
+     "|`AUTENTICO_TRUSTED_PROXIES`|Comma-separated proxy CIDRs allowed to supply client IPs via X-Forwarded-For; empty uses network peer|_(empty)_|",
+     "|`AUTENTICO_RATE_LIMIT_RPS`|Sustained requests/sec per IP on auth endpoints (0 = disabled)|`5`|",
+     "|`AUTENTICO_RATE_LIMIT_BURST`|Burst size for the per-second limiter|`10`|",
+     "|`AUTENTICO_RATE_LIMIT_RPM`|Sustained requests/min per IP (long-term cap)|`20`|",
+     "|`AUTENTICO_RATE_LIMIT_RPM_BURST`|Burst size for the per-minute limiter|`20`|",
+     "|`AUTENTICO_ANTI_TIMING_MIN_MS`|Minimum random delay (ms) on auth responses to prevent timing-based user enumeration (0 + 0 = disabled)|`50`|",
+     "|`AUTENTICO_ANTI_TIMING_MAX_MS`|Maximum random delay (ms); must be > min, otherwise disabled|`150`|"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    389,
+    329,
+    336
+   ],
+   [
+    "replace",
+    389,
+    424,
+    336,
+    371,
+    [
+     "|Setting Key|Description|Default|",
+     "|--------------------------------|------------------------------------------------------|----------------|",
+     "|`access_token_expiration`|Access token lifetime|`15m`|",
+     "|`refresh_token_expiration`|Refresh token lifetime|`720h` (30 days)|",
+     "|`authorization_code_expiration`|Auth code lifetime|`10m`|",
+     "|`access_token_audience`|JWT `aud` claim (JSON array)|`[]`|",
+     "|`auth_mode`|`password` \\|`password_and_passkey` \\|`passkey_only`|`password`|",
+     "|`mfa_enabled`|Require MFA for all users|`false`|",
+     "|`mfa_method`|`totp` \\|`email`|`totp`|",
+     "|`trust_device_enabled`|Allow users to bypass MFA on trusted devices|`false`|",
+     "|`trust_device_expiration`|Trusted device token lifetime|`720h` (30 days)|",
+     "|`sso_session_idle_timeout`|IdP session idle timeout (`0` = disabled); resets on login and token refresh|`4h`|",
+     "|`sso_session_max_age`|Absolute max session lifetime (`0` = disabled)|`720h` (30 days)|",
+     "|`allow_self_signup`|Allow end users to register their own accounts|`false`|",
+     "|`account_lockout_max_attempts`|Failed logins before account lock|`5`|",
+     "|`account_lockout_duration`|How long the account stays locked|`15m`|",
+     "|`passkey_rp_name`|WebAuthn relying party name shown to users|`Autentico`|",
+     "|`cleanup_interval`|How often expired records are purged|`6h`|",
+     "|`cleanup_retention`|Minimum age for a record to be eligible for cleanup|`24h`|",
+     "|`validation_min_username_length`|Minimum username length|`4`|",
+     "|`validation_max_username_length`|Maximum username length|`64`|",
+     "|`validation_min_password_length`|Minimum password length|`6`|",
+     "|`validation_max_password_length`|Maximum password length|`64`|",
+     "|`validation_username_is_email`|Require username to be a valid email format|`false`|",
+     "|`validation_email_required`|Require email field at registration|`false`|",
+     "|`smtp_host`|SMTP server hostname|_(empty)_|",
+     "|`smtp_port`|SMTP server port|`587`|",
+     "|`smtp_username`|SMTP authentication username|_(empty)_|",
+     "|`smtp_password`|SMTP authentication password|_(empty)_|",
+     "|`smtp_from`|From address for outbound email|_(empty)_|",
+     "|`theme_title`|Page title shown on login/MFA pages|`Autentico`|",
+     "|`theme_logo_url`|URL to a logo image displayed on login page|_(empty)_|",
+     "|`theme_css_inline`|Inline CSS injected into login page `<style>`|_(empty)_|",
+     "|`theme_css_file`|Path to a CSS file loaded at runtime|_(empty)_|",
+     "|`footer_links`|JSON array of `{label, url}` links for login footer|`[]`|"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    429,
+    371,
+    376
+   ],
+   [
+    "replace",
+    429,
+    441,
+    376,
+    386,
+    [
+     "|Field|Description|",
+     "|-------------------------------|---------------------------------------------------------------|",
+     "|`access_token_expiration`|Token lifetime for this client's tokens|",
+     "|`refresh_token_expiration`|Refresh token lifetime for this client|",
+     "|`authorization_code_expiration`|Auth code TTL|",
+     "|`allowed_audiences`|Additional `aud` values in tokens for this client|",
+     "|`allow_self_signup`|Override self-signup in both the login page and signup submission|",
+     "|`sso_session_idle_timeout`|Override idle timeout for this client's login page (not enforced by the background cleanup sweep, which uses the global value)|",
+     "|`trust_device_enabled`|Override password/magic-link MFA bypass and device creation for this client|",
+     "|`trust_device_expiration`|Trust duration for this client's users|"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    446,
+    386,
+    391
+   ],
+   [
+    "replace",
+    446,
+    453,
+    391,
+    396,
+    [
+     "|Mode|Behavior|",
+     "|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`password`|Standard username + password. MFA is applied on top if `mfa_enabled` is true.|",
+     "|`password_and_passkey`|Users can authenticate with either password or a registered passkey. Password flow optionally includes MFA.|",
+     "|`passkey_only`|Password authentication is disabled. Users authenticate exclusively with passkeys. New users can sign up when self-signup is enabled.|"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    472,
+    396,
+    415
+   ],
+   [
+    "delete",
+    472,
+    474,
+    415,
+    415
+   ],
+   [
+    "equal",
+    474,
+    479,
+    415,
+    420
+   ],
+   [
+    "delete",
+    479,
+    481,
+    420,
+    420
+   ],
+   [
+    "equal",
+    481,
+    524,
+    420,
+    463
+   ],
+   [
+    "replace",
+    524,
+    530,
+    463,
+    464,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    530,
+    556,
+    464,
+    490
+   ],
+   [
+    "delete",
+    556,
+    558,
+    490,
+    490
+   ],
+   [
+    "equal",
+    558,
+    574,
+    490,
+    506
+   ],
+   [
+    "replace",
+    574,
+    578,
+    506,
+    510,
+    [
+     " - Username (if `allow_username_change` is enabled)",
+     " - Email (if `allow_email_change` is enabled)",
+     " - First name, last name, phone number, profile picture URL, locale",
+     " - Street address, city, state/region, postal code, country"
+    ]
+   ],
+   [
+    "equal",
+    578,
+    627,
+    510,
+    559
+   ],
+   [
+    "delete",
+    627,
+    629,
+    559,
+    559
+   ],
+   [
+    "equal",
+    629,
+    633,
+    559,
+    563
+   ],
+   [
+    "replace",
+    633,
+    646,
+    563,
+    576,
+    [
+     "|Endpoint|Method|Description|",
+     "|------------------------------------------|--------|---------------------------------------------|",
+     "|`/.well-known/openid-configuration`|GET|OIDC discovery document|",
+     "|`/oauth2/.well-known/jwks.json`|GET|JWK Set — public keys for token verification|",
+     "|`/oauth2/certs`|GET|Alias for JWKS (legacy path)|",
+     "|`/oauth2/authorize`|GET|Authorization endpoint — renders login page|",
+     "|`/oauth2/token`|POST|Token endpoint — code exchange, refresh, ROPC|",
+     "|`/oauth2/protocol/openid-connect/token`|POST|Keycloak-compatible token path|",
+     "|`/oauth2/userinfo`|GET/POST|UserInfo endpoint|",
+     "|`/oauth2/protocol/openid-connect/userinfo`|GET/POST|Keycloak-compatible userinfo path|",
+     "|`/oauth2/introspect`|POST|Token introspection (RFC 7662)|",
+     "|`/oauth2/revoke`|POST|Token revocation (RFC 7009)|",
+     "|`/oauth2/logout`|POST|Session logout|"
+    ]
+   ],
+   [
+    "equal",
+    646,
+    649,
+    576,
+    579
+   ],
+   [
+    "replace",
+    649,
+    658,
+    579,
+    588,
+    [
+     "|Endpoint|Method|Description|",
+     "|---------------------------------|--------|---------------------------------------------------|",
+     "|`/oauth2/login`|POST|Username/password form submission|",
+     "|`/oauth2/mfa`|GET/POST|MFA challenge render and verification|",
+     "|`/oauth2/signup`|GET/POST|Self-service user registration (when enabled)|",
+     "|`/onboard`|GET/POST|First-run admin onboarding (disabled after first user)|",
+     "|`/oauth2/passkey/login/begin`|GET|Begin WebAuthn authentication/registration ceremony|",
+     "|`/oauth2/passkey/login/finish`|POST|Complete WebAuthn authentication ceremony|",
+     "|`/oauth2/passkey/register/finish`|POST|Complete WebAuthn registration ceremony|"
+    ]
+   ],
+   [
+    "equal",
+    658,
+    661,
+    588,
+    591
+   ],
+   [
+    "replace",
+    661,
+    668,
+    591,
+    598,
+    [
+     "|Endpoint|Method|Description|",
+     "|------------------------------|------|-------------------------------|",
+     "|`/oauth2/register`|POST|Register a new OAuth2 client|",
+     "|`/oauth2/register`|GET|List all registered clients|",
+     "|`/oauth2/register/{client_id}`|GET|Get a specific client|",
+     "|`/oauth2/register/{client_id}`|PUT|Update a client's configuration|",
+     "|`/oauth2/register/{client_id}`|DELETE|Deactivate a client|"
+    ]
+   ],
+   [
+    "equal",
+    668,
+    671,
+    598,
+    601
+   ],
+   [
+    "replace",
+    671,
+    680,
+    601,
+    610,
+    [
+     "|Endpoint|Method|Description|",
+     "|-------------------------|-------------------|----------------------------|",
+     "|`/admin/api/users`|GET/POST|List or create users|",
+     "|`/admin/api/users`|PUT/DELETE|Update or deactivate users|",
+     "|`/admin/api/users/unlock`|POST|Unlock a locked user account|",
+     "|`/admin/api/clients`|GET/POST/PUT/DELETE|Client management|",
+     "|`/admin/api/sessions`|GET/DELETE|Session management|",
+     "|`/admin/api/stats`|GET|Dashboard statistics|",
+     "|`/admin/api/settings`|GET/PUT|Read/update runtime settings|"
+    ]
+   ],
+   [
+    "equal",
+    680,
+    683,
+    610,
+    613
+   ],
+   [
+    "replace",
+    683,
+    686,
+    613,
+    616,
+    [
+     "|Endpoint|Method|Description|",
+     "|--------|------|-------------------------------------------|",
+     "|`/user`|POST|Create a user (for API-driven provisioning)|"
+    ]
+   ],
+   [
+    "equal",
+    686,
+    689,
+    616,
+    619
+   ],
+   [
+    "replace",
+    689,
+    710,
+    619,
+    638,
+    [
+     "|Endpoint|Method|Description|",
+     "|---------------------------------------|------------|----------------------------------------------|",
+     "|`/account/api/settings`|GET|UI configuration (auth mode, field visibility)|",
+     "|`/account/api/profile`|GET / PUT|Get or update user profile|",
+     "|`/account/api/password`|POST|Change password|",
+     "|`/account/api/sessions`|GET|List active OAuth sessions|",
+     "|`/account/api/sessions/{id}`|DELETE|Revoke a session|",
+     "|`/account/api/passkeys`|GET|List registered passkeys|",
+     "|`/account/api/passkeys/register/begin`|POST|Begin WebAuthn registration ceremony|",
+     "|`/account/api/passkeys/register/finish`|POST|Complete WebAuthn registration ceremony|",
+     "|`/account/api/passkeys/{id}`|PATCH/DELETE|Rename or remove a passkey|",
+     "|`/account/api/mfa`|GET|Get MFA status|",
+     "|`/account/api/mfa/totp/setup`|POST|Initialize TOTP enrollment (returns QR code)|",
+     "|`/account/api/mfa/totp/verify`|POST|Confirm TOTP enrollment with a 6-digit code|",
+     "|`/account/api/mfa/totp`|DELETE|Disable TOTP|",
+     "|`/account/api/trusted-devices`|GET|List trusted devices|",
+     "|`/account/api/trusted-devices/{id}`|DELETE|Revoke a trusted device|",
+     "|`/account/api/connected-providers`|GET|List connected external providers|",
+     "|`/account/api/connected-providers/{id}`|DELETE|Disconnect an external provider|"
+    ]
+   ],
+   [
+    "equal",
+    710,
+    713,
+    638,
+    641
+   ],
+   [
+    "replace",
+    713,
+    720,
+    641,
+    646,
+    [
+     "|Grant Type|Use Case|",
+     "|-----------------------------|---------------------------------------------------------------|",
+     "|`authorization_code` (+ PKCE)|Web apps, SPAs, native apps. The recommended default.|",
+     "|`refresh_token`|Obtaining new access tokens without re-authenticating the user.|",
+     "|`password` (ROPC)|Legacy clients and trusted internal tooling. Use with caution.|"
+    ]
+   ],
+   [
+    "equal",
+    720,
+    729,
+    646,
+    655
+   ],
+   [
+    "replace",
+    729,
+    743,
+    655,
+    656,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    743,
+    753,
+    656,
+    666
+   ],
+   [
+    "replace",
+    753,
+    760,
+    666,
+    667,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    760,
+    768,
+    667,
+    675
+   ],
+   [
+    "replace",
+    768,
+    799,
+    675,
+    676,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    799,
+    807,
+    676,
+    684
+   ],
+   [
+    "replace",
+    807,
+    814,
+    684,
+    685,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    814,
+    817,
+    685,
+    688
+   ],
+   [
+    "delete",
+    817,
+    819,
+    688,
+    688
+   ],
+   [
+    "equal",
+    819,
+    846,
+    688,
+    715
+   ],
+   [
+    "delete",
+    846,
+    848,
+    715,
+    715
+   ],
+   [
+    "equal",
+    848,
+    868,
+    715,
+    735
+   ],
+   [
+    "replace",
+    868,
+    876,
+    735,
+    736,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    876,
+    888,
+    736,
+    748
+   ],
+   [
+    "replace",
+    888,
+    889,
+    748,
+    749,
+    [
+     "A Helm chart is included in `deploy/helm/autentico`. Release builds package it as a `.tgz` archive, attach it to the GitHub release, and publish it to GitHub Container Registry as an OCI artifact."
+    ]
+   ],
+   [
+    "equal",
+    889,
+    915,
+    749,
+    775
+   ],
+   [
+    "replace",
+    915,
+    924,
+    775,
+    776,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    924,
+    926,
+    776,
+    778
+   ],
+   [
+    "replace",
+    926,
+    927,
+    778,
+    779,
+    [
+     "See the chart README for persistence options, backups, migrations, and all supported values. After installation, run `helm test autentico -n autentico` to check the `/healthz` endpoint."
+    ]
+   ],
+   [
+    "equal",
+    927,
+    946,
+    779,
+    798
+   ],
+   [
+    "replace",
+    946,
+    965,
+    798,
+    799,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    965,
+    994,
+    799,
+    828
+   ],
+   [
+    "replace",
+    994,
+    995,
+    828,
+    829,
+    [
+     "**Upgrading to v3 (schemas 15 and 17):** schema 15 invalidates all existing tokens and OAuth/SSO sessions; schema 17 encrypts existing TOTP enrollments without resetting them. Stop the application and prepare a persistent `AUTENTICO_TOTP_ENCRYPTION_KEY` first (run `autentico init` on an existing `.env`, or supply the key through the environment). Run `autentico migrate`, read the warnings, and type the target schema shown (`19`). For unattended deployments, use `autentico migrate --approve-major=15,17` (or `--approve-major=17` from schema 15 or 16). These are database schema numbers, not release numbers. Restart only after migration succeeds, and keep the encryption key for future restarts and restores. Docker users should run migration as a one-off container against the existing database volume. See the v3 migration guide for key setup, Docker Compose commands, backup behavior, and recovery."
+    ]
+   ],
+   [
+    "equal",
+    995,
+    1023,
+    829,
+    857
+   ],
+   [
+    "delete",
+    1023,
+    1025,
+    857,
+    857
+   ],
+   [
+    "equal",
+    1025,
+    1029,
+    857,
+    861
+   ],
+   [
+    "replace",
+    1029,
+    1030,
+    861,
+    862,
+    [
+     "See the ForwardAuth integration guide for the proxy contract, complete tested configurations, cookie handling and the Docker/Chromium black-box suite (`python3 tests/proxy/run.py --binary \"$PWD/autentico\"`)."
+    ]
+   ],
+   [
+    "equal",
+    1030,
+    1079,
+    862,
+    911
+   ],
+   [
+    "replace",
+    1079,
+    1080,
+    911,
+    912,
+    [
+     "|Phase|Spec|Status|"
+    ]
+   ],
+   [
+    "equal",
+    1080,
+    1081,
+    912,
+    913
+   ],
+   [
+    "replace",
+    1081,
+    1091,
+    913,
+    923,
+    [
+     "|1|RFC 6749 — OAuth 2.0 Core|✅ Done|",
+     "|2|RFC 6750 — Bearer Token Usage|✅ Done|",
+     "|3|RFC 7636 — PKCE|✅ Done|",
+     "|4|RFC 7009 — Token Revocation|✅ Done|",
+     "|5|RFC 7662 — Token Introspection|✅ Done|",
+     "|6|OIDC Core 1.0|✅ Done|",
+     "|7|OIDC Discovery 1.0|✅ Done|",
+     "|8|OIDC RP-Initiated Logout 1.0|✅ Done|",
+     "|9|RFC 7591 — Dynamic Client Registration|✅ Done|",
+     "|10|RFC 8414 — Authorization Server Metadata|✅ Done|"
+    ]
+   ],
+   [
+    "equal",
+    1091,
+    1100,
+    923,
+    932
+   ],
+   [
+    "replace",
+    1100,
+    1101,
+    932,
+    933,
+    [
+     "These were identified *by reading the RFCs line-by-line*, not by observing runtime failures — a class of issues that typical test suites miss. See `rfc/rfc.md` for the full bug inventory, MUST/SHOULD/MAY compliance tables, and per-phase test lists. All protocol-facing code now carries inline comments referencing the exact spec section that mandates the behavior."
+    ]
+   ],
+   [
+    "equal",
+    1101,
+    1104,
+    933,
+    936
+   ],
+   [
+    "replace",
+    1104,
+    1105,
+    936,
+    937,
+    [
+     "Auténtico passes the OpenID Foundation `oidcc-basic-certification-test-plan` — the official conformance test suite for Basic OpenID Providers. The suite covers the full Authorization Code flow: discovery, authorization, token exchange, token refresh, ID token validation, UserInfo, and session management."
+    ]
+   ],
+   [
+    "equal",
+    1105,
+    1118,
+    937,
+    950
+   ],
+   [
+    "replace",
+    1118,
+    1119,
+    950,
+    951,
+    [
+     "Stress tests using k6 exercise the full PKCE auth code flow (authorize → login → token exchange → introspect → refresh). See the performance benchmarks for results and `stress/README.md` for the full methodology, test profiles, and how to reproduce."
+    ]
+   ],
+   [
+    "equal",
+    1119,
+    1125,
+    951,
+    957
+   ],
+   [
+    "replace",
+    1125,
+    1126,
+    957,
+    958,
+    [
+     "- RFC audit artifacts: see `rfc/rfc.md`"
+    ]
+   ],
+   [
+    "equal",
+    1126,
+    1127,
+    958,
+    959
+   ],
+   [
+    "replace",
+    1127,
+    1128,
+    959,
+    960,
+    [
+     "- Load testing: see `stress/README.md`"
+    ]
+   ],
+   [
+    "equal",
+    1128,
+    1130,
+    960,
+    962
+   ],
+   [
+    "delete",
+    1130,
+    1132,
+    962,
+    962
+   ],
+   [
+    "equal",
+    1132,
+    1155,
+    962,
+    985
+   ],
+   [
+    "replace",
+    1155,
+    1167,
+    985,
+    986,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1167,
+    1173,
+    986,
+    992
+   ],
+   [
+    "replace",
+    1173,
+    1176,
+    992,
+    993,
+    [
+     "For a complete working example using Playwright, see the test fixture guide in the documentation."
+    ]
+   ],
+   [
+    "equal",
+    1176,
+    1188,
+    993,
+    1005
+   ],
+   [
+    "replace",
+    1188,
+    1191,
+    1005,
+    1006,
+    [
+     "The pre-generated HTML API reference is available at `/docs/index.html` in the repository, and hosted at GitHub Pages."
+    ]
+   ],
+   [
+    "equal",
+    1191,
+    1193,
+    1006,
+    1008
+   ],
+   [
+    "replace",
+    1193,
+    1201,
+    1008,
+    1009,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1201,
+    1202,
+    1009,
+    1010
+   ],
+   [
+    "replace",
+    1202,
+    1207,
+    1010,
+    1011,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1207,
+    1208,
+    1011,
+    1012
+   ],
+   [
+    "replace",
+    1208,
+    1211,
+    1012,
+    1013,
+    [
+     "GNU GENERAL PUBLIC LICENSE. See `LICENSE` for the full text."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "8d0e773e3169+2": {
+  "fn": "threathunterX/nebula2",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    11,
+    5,
+    9,
+    [
+     "License",
+     "Release",
+     "CI",
+     "Status"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    42,
+    9,
+    40
+   ],
+   [
+    "replace",
+    42,
+    55,
+    40,
+    41,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    77,
+    41,
+    63
+   ],
+   [
+    "replace",
+    77,
+    78,
+    63,
+    64,
+    [
+     "隐私设计。"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    64,
+    66
+   ],
+   [
+    "replace",
+    80,
+    81,
+    66,
+    67,
+    [
+     "Nebula 1.x(2019 年开源,1098 star)"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    87,
+    67,
+    73
+   ],
+   [
+    "delete",
+    87,
+    89,
+    73,
+    73
+   ],
+   [
+    "equal",
+    89,
+    93,
+    73,
+    77
+   ],
+   [
+    "replace",
+    93,
+    94,
+    77,
+    78,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    78,
+    79
+   ],
+   [
+    "replace",
+    95,
+    97,
+    79,
+    81,
+    [
+     "|**能做什么**|`docker compose up` 起完整链路(采集 → Kafka → Flink → 告警 → 控制面),接入自己的流量评估效果,在控制面管理策略与账号、查告警|",
+     "|**不能做什么**|承接生产流量。全部组件单节点、无高可用;Helm / K8s 编排尚未开始|"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    81,
+    82
+   ],
+   [
+    "replace",
+    98,
+    100,
+    82,
+    83,
+    [
+     " 逐项实现状态 (点击展开) "
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    83,
+    86
+   ],
+   [
+    "replace",
+    103,
+    104,
+    86,
+    87,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    87,
+    88
+   ],
+   [
+    "replace",
+    105,
+    107,
+    88,
+    90,
+    [
+     "|领域模型定义(JSON Schema)与强制校验|✅|",
+     "|风控资产:17 事件 / 253 变量 / 170 策略 / 15 标签|✅ 已审计|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    90,
+    93
+   ],
+   [
+    "replace",
+    110,
+    111,
+    93,
+    94,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    94,
+    95
+   ],
+   [
+    "replace",
+    112,
+    117,
+    95,
+    100,
+    [
+     "|采集器(Go 单二进制,含脱敏引擎)|✅ 接入 stdin / 文件 / HTTP / syslog,输出 stdout / 文件 / Kafka|",
+     "|syslog 接入(RFC 3164 / 5424,UDP 与 TCP)|✅|",
+     "|Kafka 输出(franz-go,按主体分区)|✅|",
+     "|OpenResty 埋点(网关侧,敏感字段不出网关)|✅|",
+     "|Kafka 作为**数据源**|🚧|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    120,
+    100,
+    103
+   ],
+   [
+    "replace",
+    120,
+    121,
+    103,
+    104,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    104,
+    105
+   ],
+   [
+    "replace",
+    122,
+    128,
+    105,
+    111,
+    [
+     "|参考引擎(零依赖,验证语义规格)|✅|",
+     "|计算引擎(算子、条件、窗口、变量图、规则引擎)|✅|",
+     "|Flink 接入、多维度并行拓扑(并行度 1/2/4 结果一致)、Checkpoint|✅|",
+     "|序列检测(「做了 A 但 N 秒内没做 B」)|✅|",
+     "|多步序列检测(A → B → C,分组 + 时间窗)|✅|",
+     "|序列的分支模式(A 之后 B 或 C)|🚧|"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    131,
+    111,
+    114
+   ],
+   [
+    "replace",
+    131,
+    132,
+    114,
+    115,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    115,
+    116
+   ],
+   [
+    "replace",
+    133,
+    142,
+    116,
+    125,
+    [
+     "|策略管理与 `/checkRisk`、审计日志|✅|",
+     "|认证授权(Argon2id、角色、服务令牌 + 网段绑定)|✅|",
+     "|告警查询与趋势(分级脱敏)|✅|",
+     "|策略编辑(schema 校验、乐观并发、修订历史)|✅|",
+     "|元数据下发(引擎从控制面加载,单一事实来源)|✅|",
+     "|管理界面(登录、策略管理、告警查询、变量浏览、账号与令牌)|✅|",
+     "|策略热更新(改完无需重启作业,窗口状态不丢)|✅|",
+     "|数据主体权利(按主体导出与删除)|✅|",
+     "|表单化策略编辑器(字段与取值从 domain-schema 派生)|✅|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    125,
+    128
+   ],
+   [
+    "replace",
+    145,
+    146,
+    128,
+    129,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    129,
+    130
+   ],
+   [
+    "replace",
+    147,
+    156,
+    130,
+    137,
+    [
+     "|ClickHouse 落库(明细、告警、物化视图小时聚合、TTL)|✅|",
+     "|事件明细的 pii 保护(写库前 HMAC,计算仍用原值)|✅|",
+     "|PostgreSQL 元数据(JSONB + 约束 + 审计分区)|✅|",
+     "|可观测性(引擎 / 控制面 / 采集器三端指标)|✅|",
+     "|Lite 部署(三个组件容器化,compose 一键起全栈)|✅|",
+     "|Helm / Kubernetes 编排(单节点 k3s 上实测装通)|✅|",
+     "|存储组件的高可用(Operator / 托管服务)|🚧|"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    158,
+    137,
+    139
+   ],
+   [
+    "replace",
+    158,
+    159,
+    139,
+    140,
+    [
+     "Nebula 1.x —— 但它已于 2019 年停止维护,"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    161,
+    140,
+    142
+   ],
+   [
+    "delete",
+    161,
+    163,
+    142,
+    142
+   ],
+   [
+    "equal",
+    163,
+    168,
+    142,
+    147
+   ],
+   [
+    "replace",
+    168,
+    169,
+    147,
+    148,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    170,
+    148,
+    149
+   ],
+   [
+    "replace",
+    170,
+    177,
+    149,
+    154,
+    [
+     "|**告警必须可解释**|每条告警附带判定依据:哪个指标、当前值多少、超了什么阈值。运营看到告警却看不到依据,就只能靠猜|",
+     "|**领域模型只有一份**|事件、变量、策略的结构由 JSON Schema 定义,引擎与控制面共读同一份,CI 强制校验。同一个模型在两处各写一份,迟早会漂移|",
+     "|**隐私是采集端的事**|敏感字段在数据离开客户网络边界之前就地脱敏,而不是「先收上来再说」。事件模型的 184 个字段全部分级,漏标会导致校验失败|",
+     "|**不把计划写成现状**|文档里标 ✅ 的每一项,读者都能自己验证;没实现的一律标 🚧。这条看起来是废话,但它是本项目返工最多的一条|",
+     "|**语义变更必须被证明**|参考引擎与生产引擎读同一批测试向量、跑同一批用例,两套实现之间的语义漂移在结构上不可能发生|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    180,
+    154,
+    157
+   ],
+   [
+    "replace",
+    180,
+    181,
+    157,
+    158,
+    [
+     "虚线框 = **尚未实现**,逐项状态见上方项目状态。"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    186,
+    158,
+    163
+   ],
+   [
+    "replace",
+    186,
+    226,
+    163,
+    164,
+    [
+     "…（40 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    230,
+    164,
+    168
+   ],
+   [
+    "replace",
+    230,
+    231,
+    168,
+    169,
+    [
+     "ADR-0005。"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    234,
+    169,
+    172
+   ],
+   [
+    "replace",
+    234,
+    235,
+    172,
+    173,
+    [
+     "|层|选型|说明|"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    173,
+    174
+   ],
+   [
+    "replace",
+    236,
+    246,
+    174,
+    184,
+    [
+     "|采集|**Go** 单二进制 + **OpenResty Lua** 埋点|接入 stdin / 文件 / HTTP / syslog(Zeek 配成 JSON 后走这两条),输出 stdout / 文件 / Kafka;Kafka 作为数据源 🚧|",
+     "|计算|**Apache Flink**|事件时间语义、精确一次、状态可恢复;统一了 1.x 的实时与离线两套引擎|",
+     "|规则表达式|**CEL**|类型安全、沙箱执行、跨语言实现一致|",
+     "|消息|**Kafka / Redpanda**|兼作事件持久化与重放|",
+     "|分析存储|**ClickHouse**|事件明细 + 小时聚合 + TTL 自动过期|",
+     "|元数据|**PostgreSQL 16**|策略/变量以 JSONB 存储|",
+     "|名单/热状态|**Redis / Valkey**|黑白名单 TTL|",
+     "|控制面|**Java 21 + Spring Boot 3**|与计算层共享领域模型|",
+     "|前端|**React 19 + TypeScript + ECharts**||",
+     "|可观测|**OpenTelemetry + Prometheus + Grafana**|使用官方组件,不做魔改|"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    184,
+    185
+   ],
+   [
+    "replace",
+    247,
+    250,
+    185,
+    186,
+    [
+     "设计取舍的完整推理见 架构决策记录(ADR)。"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    257,
+    186,
+    193
+   ],
+   [
+    "replace",
+    257,
+    272,
+    193,
+    194,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    276,
+    194,
+    198
+   ],
+   [
+    "delete",
+    276,
+    278,
+    198,
+    198
+   ],
+   [
+    "equal",
+    278,
+    280,
+    198,
+    200
+   ],
+   [
+    "replace",
+    280,
+    281,
+    200,
+    201,
+    [
+     "从 1.x 完整继承并经过审计的风控知识沉淀,位于 `seeds/`:"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    282,
+    201,
+    202
+   ],
+   [
+    "replace",
+    282,
+    283,
+    202,
+    203,
+    [
+     "|资产|数量|说明|"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    284,
+    203,
+    204
+   ],
+   [
+    "replace",
+    284,
+    288,
+    204,
+    208,
+    [
+     "|事件模型|17|以 `HTTP_DYNAMIC`(30 个基础字段)为根,继承出登录/注册/改密/下单/支付/活动等业务事件|",
+     "|统计变量|253|四层窗口:5 分钟实时、1 小时槽、当天、长期画像|",
+     "|策略模板|170|订单 70 / 账号 60 / 访客 40,按 IP、设备、账号三维度镜像设计|",
+     "|风险标签|15|撞库、盗号、刷单、羊毛党、恶意扫描、爬虫等|"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    295,
+    208,
+    215
+   ],
+   [
+    "replace",
+    295,
+    314,
+    215,
+    216,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    317,
+    216,
+    219
+   ],
+   [
+    "replace",
+    317,
+    318,
+    219,
+    220,
+    [
+     "三个同时绕开的成本高得多。详见策略开发指南。"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    319,
+    220,
+    221
+   ],
+   [
+    "replace",
+    319,
+    322,
+    221,
+    222,
+    [
+     "> **数据来源声明**:这些资产源自 1.x 的出厂配置。迁移过程中已剔除全部真实客户与个人信息,所有示例数据均为合成数据。详见 `seeds/INVENTORY.md`。"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    341,
+    222,
+    241
+   ],
+   [
+    "replace",
+    341,
+    351,
+    241,
+    242,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    357,
+    242,
+    248
+   ],
+   [
+    "replace",
+    357,
+    358,
+    248,
+    249,
+    [
+     "生产」最直观的例证,见 `seeds/PLACEHOLDERS.md`。"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    370,
+    249,
+    261
+   ],
+   [
+    "replace",
+    370,
+    378,
+    261,
+    262,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    418,
+    262,
+    302
+   ],
+   [
+    "replace",
+    418,
+    419,
+    302,
+    303,
+    [
+     "步骤(以及错过口令怎么重置)见 Lite 部署说明。"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    420,
+    303,
+    304
+   ],
+   [
+    "replace",
+    420,
+    423,
+    304,
+    305,
+    [
+     "完整步骤与结果解读见快速开始。"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    426,
+    305,
+    308
+   ],
+   [
+    "replace",
+    426,
+    427,
+    308,
+    309,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    427,
+    428,
+    309,
+    310
+   ],
+   [
+    "replace",
+    428,
+    447,
+    310,
+    327,
+    [
+     "|风控数据模型|**建议第一篇**。事件 → 变量 → 策略 → 名单|",
+     "|系统架构|组件职责、数据流、两种部署形态|",
+     "|接入指南|数据源、字段映射、脱敏配置、`/checkRisk`、接入后验证|",
+     "|策略开发|条件三形式、三维度镜像、阈值校准、生命周期|",
+     "|算子语义规格|**规范性文档**。每个算子的精确定义与 1.x 差异对照|",
+     "|类型推导规则|窗口 × 类型 × 算子的合法组合|",
+     "|变量参考|253 个内置变量 + 画像变量详解(自动生成)|",
+     "|策略模板参考|170 条内置策略逐条说明(自动生成)|",
+     "|API 参考|全部接口、权限矩阵、错误码|",
+     "|配置项参考|三个组件的全部配置项与默认值|",
+     "|部署|形态选择、凭据注入、暴露面、升级|",
+     "|隐私设计与合规|数据分级、脱敏、保留期、主体权利、法规对齐|",
+     "|1.x → 2.0 迁移|资产迁移与 **6 处语义差异**|",
+     "|架构决策记录|每个关键选型背后的推理与代价|",
+     "|路线图|下一个版本做什么、为什么、代价与风险|",
+     "|Golden 回归测试|如何证明语义继承是正确的|",
+     "|全部文档|文档索引(含尚未编写文档的提纲)|"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    450,
+    327,
+    330
+   ],
+   [
+    "replace",
+    450,
+    451,
+    330,
+    331,
+    [
+     "本项目是 Nebula 1.x 的**重写版本**,不是升级版。"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    459,
+    331,
+    339
+   ],
+   [
+    "replace",
+    459,
+    462,
+    339,
+    340,
+    [
+     "从 1.x 迁移时有 **6 处语义差异**必须了解(去重计数精度、标准差定义、离线重算取消等),详见 迁移指南。"
+    ]
+   ],
+   [
+    "equal",
+    462,
+    465,
+    340,
+    343
+   ],
+   [
+    "replace",
+    465,
+    467,
+    343,
+    345,
+    [
+     "见 CONTRIBUTING.md,并遵守行为准则。",
+     "安全问题请按 SECURITY.md 私下报告,不要提交公开 issue。"
+    ]
+   ],
+   [
+    "equal",
+    467,
+    470,
+    345,
+    348
+   ],
+   [
+    "replace",
+    470,
+    472,
+    348,
+    350,
+    [
+     "变更记录见 CHANGELOG.md。",
+     "项目距离可发布状态还差什么,逐项列在发布就绪度审查里"
+    ]
+   ],
+   [
+    "equal",
+    472,
+    475,
+    350,
+    353
+   ],
+   [
+    "replace",
+    475,
+    479,
+    353,
+    354,
+    [
+     "Apache License 2.0。"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "20ba550e47cf+2": {
+  "fn": "PersiOnOff/locallens",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "LocalLens — Your knowledge. Your machine."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    8,
+    4,
+    8,
+    [
+     "CI",
+     "License: MIT",
+     ".NET 10",
+     "React 19"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    15,
+    8,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "Quick start · See it in action · Limits · Contribute"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    47,
+    16,
+    47
+   ],
+   [
+    "replace",
+    47,
+    48,
+    47,
+    48,
+    [
+     "Real LocalLens walkthrough: upload, local indexing, question, cited answer, source preview, themes and graph"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    55,
+    48,
+    55
+   ],
+   [
+    "replace",
+    55,
+    58,
+    55,
+    58,
+    [
+     "|Light — paper and sage|Dark — graphite and soft green|",
+     "|-----------------------------------------------------------------------------|----------------------------------------------------------------------------------|",
+     "|Light theme with a real answer and source chips|Dark theme with the same real answer and source chips|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    61,
+    58,
+    61
+   ],
+   [
+    "replace",
+    61,
+    63,
+    61,
+    62,
+    [
+     " Explore the welcome screen, source preview and file graph "
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    62,
+    63
+   ],
+   [
+    "replace",
+    64,
+    67,
+    63,
+    66,
+    [
+     "|A place to begin|Follow the connections|",
+     "|-----------------------------------------------------|-----------------------------------------------------------------------------------------|",
+     "|Light welcome screen|Dark file graph showing the sample documents and their link|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    66,
+    67
+   ],
+   [
+    "replace",
+    68,
+    71,
+    67,
+    68,
+    [
+     "An actual retrieved passage in the source preview"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    85,
+    68,
+    82
+   ],
+   [
+    "replace",
+    85,
+    91,
+    82,
+    88,
+    [
+     "|Variable|Default|Purpose|",
+     "|-------------------|------------------|----------------------------------------------------|",
+     "|`PORT`|`8080`|Localhost web port|",
+     "|`CHAT_MODEL`|`qwen2.5:3b`|Local Ollama chat model|",
+     "|`EMBEDDING_MODEL`|`nomic-embed-text`|Local Ollama embedding model|",
+     "|`REPOSITORIES_PATH`|`./samples`|Existing folder mounted read-only as the import root|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    112,
+    88,
+    109
+   ],
+   [
+    "replace",
+    112,
+    118,
+    109,
+    110,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    126,
+    110,
+    118
+   ],
+   [
+    "replace",
+    126,
+    132,
+    118,
+    124,
+    [
+     "|Input|Behavior|",
+     "|---------------|----------------------------------------------------------------------------------------------------------|",
+     "|PDF|Extractable text, page references; no OCR or image/table interpretation|",
+     "|Markdown / text|UTF-8; line references; Markdown links contribute graph edges|",
+     "|Source files|C#, TS/JS/React, Python, Java, Go, Rust, HTML/CSS, SQL, shell, JSON/YAML/XML, csproj|",
+     "|File graph|Relative `from`, `import`, `require` and Markdown links; conservative heuristic, not a full compiler graph|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    169,
+    124,
+    161
+   ],
+   [
+    "replace",
+    169,
+    174,
+    161,
+    162,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    189,
+    162,
+    177
+   ],
+   [
+    "replace",
+    189,
+    196,
+    177,
+    178,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    178,
+    179
+   ],
+   [
+    "replace",
+    197,
+    199,
+    179,
+    180,
+    [
+     "MIT. See LICENSE. Model weights and dependencies retain their own licenses."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "63e47a4555bd+2": {
+  "fn": "aurimasniekis/go-deed",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "Deed"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    16,
+    1,
+    11
+   ],
+   [
+    "replace",
+    16,
+    20,
+    11,
+    15,
+    [
+     "> checksums and a container image) are on GitHub Releases; the",
+     "> `/api/v1` compatibility promise is in docs/VERSIONING.md. The capability matrix is",
+     "> docs/ACCEPTANCE.md; what has actually been run end to end (and what is still pending against",
+     "> real services) is in docs/VALIDATION.md. Documentation site: https://aurimasniekis.github.io/go-deed/"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    15,
+    17
+   ],
+   [
+    "delete",
+    22,
+    26,
+    17,
+    17
+   ],
+   [
+    "equal",
+    26,
+    27,
+    17,
+    18
+   ],
+   [
+    "replace",
+    27,
+    30,
+    18,
+    19,
+    [
+     " Map: the neighbourhood of a service, edges coloured by relationship type, measured traffic rates on the edges and telemetry values inside the node cards"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    19,
+    20
+   ],
+   [
+    "replace",
+    31,
+    35,
+    20,
+    21,
+    [
+     " Dashboard: entities, relationships, findings, alerts and source health"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    21,
+    22
+   ],
+   [
+    "replace",
+    36,
+    39,
+    22,
+    23,
+    [
+     " Dashboard "
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    23,
+    24
+   ],
+   [
+    "replace",
+    40,
+    44,
+    24,
+    25,
+    [
+     " Entity provenance: for every field, the winning source, its layer and revision, and the losing candidates"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    25,
+    26
+   ],
+   [
+    "replace",
+    45,
+    50,
+    26,
+    27,
+    [
+     " Why does this value exist? Field-level provenance "
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    27,
+    28
+   ],
+   [
+    "replace",
+    51,
+    55,
+    28,
+    29,
+    [
+     " Map coloured by asserting source, with the edge inspector listing every source that asserts a relationship"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    29,
+    30
+   ],
+   [
+    "replace",
+    56,
+    59,
+    30,
+    31,
+    [
+     " Map coloured by source , with the edge inspector "
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    31,
+    32
+   ],
+   [
+    "replace",
+    60,
+    64,
+    32,
+    33,
+    [
+     " Findings: expiring certificates, drift, source conflicts, missing relationship targets and available updates"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    33,
+    34
+   ],
+   [
+    "replace",
+    65,
+    70,
+    34,
+    35,
+    [
+     " Findings derived from evidence "
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    35,
+    36
+   ],
+   [
+    "replace",
+    71,
+    75,
+    36,
+    37,
+    [
+     " Map overview grouped by a label, two groups expanded in place into containers of their members"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    37,
+    38
+   ],
+   [
+    "replace",
+    76,
+    79,
+    38,
+    39,
+    [
+     " Group by kind, project, location, team or any label "
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    39,
+    40
+   ],
+   [
+    "replace",
+    80,
+    84,
+    40,
+    41,
+    [
+     " Map with the show / hide panel open: kinds, label values and relationship types with counts"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    41,
+    42
+   ],
+   [
+    "replace",
+    85,
+    89,
+    42,
+    43,
+    [
+     " Show / hide kinds, label values and relationship types "
+    ]
+   ],
+   [
+    "equal",
+    89,
+    91,
+    43,
+    45
+   ],
+   [
+    "replace",
+    91,
+    92,
+    45,
+    46,
+    [
+     "(`web/e2e/a11y.spec.ts`, `web/e2e/showcase.spec.ts`). More in the web UI guide."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    95,
+    46,
+    49
+   ],
+   [
+    "replace",
+    95,
+    96,
+    49,
+    50,
+    [
+     " typed relationships with evidence (declared, structural, observed, inferred)."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    50,
+    51
+   ],
+   [
+    "replace",
+    97,
+    103,
+    51,
+    57,
+    [
+     " \"why does this value exist?\", and disagreements surface as conflicts instead of silent overwrites. Project",
+     " **label rules** add labels (such as `group=github`) to entities other sources own, below every source.",
+     "- **Sources:** the Terraform provider (`aurimasniekis/deed`),",
+     " Terraform state import (push, S3, HTTP backend; allowlisted attributes only), GitHub, HallPass and Porch connectors,",
+     " Pulse (admin API, read-only `evt.>` tail, ingest consumer), and any program with a source token",
+     " (`pkg/deedclient`, `deed-agent` for Docker)."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    57,
+    58
+   ],
+   [
+    "replace",
+    104,
+    108,
+    58,
+    62,
+    [
+     " by kind, project, environment, owner, location, region, team or any label, with groups expanding in place;",
+     " telemetry values inside node cards and traffic overlays only where a measurement exists; colour by relationship",
+     " type, health, freshness, evidence or source; show / hide by kind, label value or relationship type; right-click",
+     " quick actions; mask mode for screenshots; copy the whole map as an image; saved views and live updates over SSE."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    62,
+    63
+   ],
+   [
+    "replace",
+    109,
+    111,
+    63,
+    65,
+    [
+     " unreachable integrations) delivered as Pulse events; named telemetry bindings for Prometheus/Mimir, Loki, NATS",
+     " monitoring, OpenSearch and Grafana; Prometheus metrics, Grafana dashboard and alert rules."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    65,
+    66
+   ],
+   [
+    "replace",
+    112,
+    114,
+    66,
+    68,
+    [
+     " and service accounts for automation, CSRF, SSRF-guarded outbound calls, hash-chained audit log, age-encrypted",
+     " backups with signed manifests and tested restore."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    116,
+    68,
+    70
+   ],
+   [
+    "replace",
+    116,
+    119,
+    70,
+    73,
+    [
+     "From a release (Linux and macOS binaries with the web UI",
+     "embedded) or the container image `ghcr.io/aurimasniekis/go-deed`, follow docs/DEPLOYMENT.md;",
+     "behind Cloudflare: docs/CLOUDFLARE.md."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    132,
+    73,
+    86
+   ],
+   [
+    "replace",
+    132,
+    133,
+    86,
+    87,
+    [
+     "|Topic|Document|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    87,
+    88
+   ],
+   [
+    "replace",
+    134,
+    141,
+    88,
+    95,
+    [
+     "|Decisions|Discovery, ADRs, Threat model|",
+     "|Operating|Deployment, Cloudflare, SSO, Service accounts, Backups, Operations|",
+     "|Integrating|Ingest API, Terraform import, Connectors, Pulse, Telemetry, Agent and SDK|",
+     "|Using|Web UI guide|",
+     "|Modelling|Custom kinds, Label rules, Findings and alerts, Icons|",
+     "|Quality|Testing, Validation, Performance|",
+     "|Releases|Versioning, Compatibility, Releasing, Changelog|"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    95,
+    96
+   ],
+   [
+    "replace",
+    142,
+    143,
+    96,
+    97,
+    [
+     "Security reports: see SECURITY.md. Contributions: CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    145,
+    97,
+    99
+   ],
+   [
+    "replace",
+    145,
+    146,
+    99,
+    100,
+    [
+     "Apache License 2.0. Copyright 2026 Aurimas Niekis. See LICENSE and NOTICE."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

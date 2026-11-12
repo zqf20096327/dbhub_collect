@@ -2443,5 +2443,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "24ab4ad011ac": {
+  "identity": {
+   "one_liner": "用于记录和管理鸡尾酒配方的 Web 应用，含酒吧管理功能",
+   "review": "这是一个管理鸡尾酒配方与原料的 Web 应用，面向多用户、多角色的酒吧场景使用。它提供配方管理、调酒师紧凑视图、活动用料核算、成本与统计数据，支持多酒吧数据隔离、按单位计算及 DE/EN 界面语言。部署依赖 Node.js 24、pnpm 与 OIDC 认证提供方，推荐通过 docker compose 运行，采用 AGPL v3 加 Common Clause 附加条款许可。",
+   "highlights": [
+    "支持多酒吧隔离管理、用户角色权限及详细配方的增删改",
+    "提供活动用料量计算、鸡尾酒成本查看与调酒统计功能",
+    "支持从 conalco.de 等网站一键导入原料，界面支持德语和英语（i18next 实现）"
+   ],
+   "use_cases": [
+    "酒吧营业时调酒师通过搜索和紧凑视图快速查看配方步骤",
+    "活动或派对前根据待售鸡尾酒核算原料用量与成本",
+    "本地开发环境通过 pnpm 与 PostgreSQL 运行并管理数据库迁移"
+   ]
+  },
+  "sha": "24ab4ad011ac",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4336b5e2c8dc": {
+  "identity": {
+   "one_liner": "基于 Cloudflare Workers 的多租户 SaaS 起始套件，含 Hono API 与 React UI",
+   "review": "Rocketflare 是一个单仓库的 SaaS 起始模板，复制后改名使用而非作为依赖引入。技术栈为 Cloudflare Workers 上的 Hono 4 API、React 19 UI、Postgres 17 + pgvector（Drizzle ORM），通过共享 zod 契约保持 API、UI 与 CLI 一致。内置租户隔离（tenant_id 过滤加预留 RLS）、魔法链接/OIDC 认证、角色权限（CASL）、队列与 Workflow 后台任务、WebSocket 实时通知和 AI 层。首次本地运行不需要外部凭证，可通过 install.sh 一条命令或手动 clone 启动。",
+   "highlights": [
+    "单 Worker 同时导出 fetch、queue、scheduled，并包含 Durable Object 与 Workflow；API 用 Hono 4 与 zod 契约，数据库为 Postgres 17 + pgvector，ORM 为 Drizzle",
+    "租户模式支持 multi/single 切换（TENANCY_MODE）无需迁移，查询按 tenant_id 过滤，同时每张租户表附带 RLS 策略（TENANT_SCOPE_MODE=enforce 启用）",
+    "提供 /rf-setup、/rf-adapt、/rf-upgrade 等面向编码代理的 CLI 命令；认证支持魔法链接、Google/Microsoft OAuth 及任意 OIDC issuer"
+   ],
+   "use_cases": [
+    "在 Cloudflare Workers 上构建内部工具或 B2B 多租户 SaaS 产品",
+    "需要租户隔离、角色权限、后台任务与实时通知的平台起点",
+    "使用编码代理（如 Claude Code）驱动的功能开发流程，配合契约→schema→路由→页面循环"
+   ]
+  },
+  "sha": "4336b5e2c8dc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

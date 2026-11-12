@@ -2774,5 +2774,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ed4c64ec3dfa": {
+  "identity": {
+   "one_liner": "基于 Rust 的本地多数据库 CLI，将连接与查询封装为 Agent 可调用命令",
+   "review": "agent-database-cli 是一个用 Rust 编写、经 npm 分发的命令行工具，支持 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、SQL/命令执行、元信息读取和连接复用。面向让 AI Agent 调用本地数据库的场景，默认启用只读模式并支持命令黑名单、密码本地加密、SSH 隧道及可视化配置编辑页。Oracle 默认走 SQLcl，需本机安装 SQLcl 与 Java21。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、Redis（含集群）、Oracle、MongoDB 五类数据库的连接、查询执行与元信息读取，Redis keys 使用 SCAN 分批读取",
+    "提供只读模式（默认开启，拒绝 SELECT INTO、$out/$merge 等写语义操作）与命令黑名单两级权限控制，黑名单优先于只读检查",
+    "明文密码、SSH 密码与通行短语在首次使用时自动加密存入本地 secrets.json，配置中仅保留密文引用；编辑服务仅监听 127.0.0.1 且使用随机访问令牌"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex 等 AI Agent 提供受只读和黑名单约束的本地数据库查询入口",
+    "通过 SSH 隧道访问内网数据库或 Redis 集群节点",
+    "通过本地 Web 编辑页分组、打标签管理多数据库连接配置并测试连通性"
+   ]
+  },
+  "sha": "ed4c64ec3dfa",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5cb7d400110a": {
+  "identity": {
+   "one_liner": "面向 AI 代理的受治理双时态知识库，基于 RDF/SHACL 存储",
+   "review": "Quipu 是一个为 AI 代理及其运维者设计的受治理双时态知识存储，用于保存可被代理读取、复用和共享的事实与决策。写入时依据用户词汇表和形状（SHACL/OWL）校验，每个事实记录来源，并保留可查询的历史版本（可用 --tx 查询事务版本）。通过 CLI、REST、MCP 或 Rust 库使用，数据存于本地 SQLite 数据库；quipu-server 提供网络 API 与浏览器。属于 Tambo 工具栈一员，Apache-2.0 许可，支持 Linux/macOS x86_64 与 arm64，需 Python 3.9+。",
+   "highlights": [
+    "支持 CLI、REST、MCP 与 Rust 库四种访问方式，数据存储于本地 SQLite",
+    "写入时依据自定义词汇表与形状校验，记录事实来源（provenance），支持双时态历史查询",
+    "支持经校验的分享导入流程：导出含校验和与出处，导入时暂存隔离、确认后提升"
+   ],
+   "use_cases": [
+    "为多个 AI 代理集中存储共享的项目事实、决策与工作历史，避免重复粘贴上下文",
+    "通过 MCP 将本地知识库接入 Claude Code 等代理客户端",
+    "需要保留知识变更历史并可按时间点回查事实的场景"
+   ]
+  },
+  "sha": "5cb7d400110a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c51b10bfb4c9": {
+  "identity": {
+   "one_liner": "Black Box 极品飞车游戏 AttribSys 数据库的查看与编辑工具",
+   "review": "Attribulina 用于读取和编辑 Black Box 开发的极品飞车游戏中 EA AttribSys 属性数据库。提供图形界面，支持类编辑、Vault 编辑、Lua 状态图反编译/编译，并附带命令行工具 attribcli 执行 .amod 模组脚本。README 列出了已测试的游戏与平台清单，Nitro 支持标注为不完整。",
+   "highlights": [
+    "支持 Most Wanted 至 World 等多款 Black Box 极品飞车游戏的 PC、PS2、PS3、Xbox 360、Wii、GameCube 平台数据",
+    "提供 .amod 脚本格式与 attribcli 命令行工具，可应用、导出、生成差异脚本",
+    "支持类创建/删除、C++ 头文件自动生成及 State Graph Builder 的 Lua 反编译与编译"
+   ],
+   "use_cases": [
+    "查看和编辑 NFS 游戏存档/资源中的属性数据库条目",
+    "编写 .amod 脚本批量应用或导出游戏属性修改",
+    "研究 AttribSys 数据库格式并生成对应 C++ 头文件"
+   ]
+  },
+  "sha": "c51b10bfb4c9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2752,5 +2752,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7aab5e7c561e": {
+  "identity": {
+   "one_liner": "面向 Agent 的开源 AI 搜索可见度（AEO/GEO）运营平台",
+   "review": "Canonry 是一个开源、可自托管的 AI 搜索可见度平台，跟踪品牌在 ChatGPT、Claude、Gemini 等回答引擎中的提及与引用，并聚合 Search Console、GA4、AI 爬虫流量等数据。它通过单一 REST API 提供 CLI、MCP 和插件接口，让编码 Agent 读取证据并执行内容发布、索引提交等操作。AI 可见度检测需自备各家 API 密钥。",
+   "highlights": [
+    "所有功能运行在同一个 REST API（含 OpenAPI 规范），配套 CLI、MCP 服务器及 Claude Code/Codex 插件",
+    "跟踪品牌在 ChatGPT、Claude、Gemini、Meta、Perplexity 等引擎及 OpenRouter、Exa、Parallel 中的提及与引用，各渠道保留独立结果与历史",
+    "从服务器日志分析 AI 爬虫与用户访问，并对站点进行 Agent Readiness 审计（爬虫可访问性、llms.txt、结构化数据等）"
+   ],
+   "use_cases": [
+    "监测品牌在 AI 回答引擎中的提及份额、引用缺口与竞争对手表现",
+    "让接入的 Agent 依据搜索与审计证据起草内容、发布 WordPress 草稿并提交索引",
+    "排查 AI 爬虫对站点的抓取与访问情况，评估各页面被 Agent 读取和引用的可达性"
+   ]
+  },
+  "sha": "7aab5e7c561e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3a89801afeb5": {
+  "identity": {
+   "one_liner": "基于 asyncio 的多数据库异步连接器集合，提供统一抽象层",
+   "review": "AsyncDB 是一个 Python 异步数据库驱动集合，通过统一接口连接 PostgreSQL、MySQL、SQLite、Redis、MongoDB、Oracle 等多种数据源。各驱动使用相同方法名以复用代码；非异步连接器（如 MS SQL Server）通过 ThreadPoolExecutor 以非阻塞方式运行。需 Python 3.10+（核心包），部分驱动依赖原生客户端库。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite、Redis、MongoDB、Cassandra、Oracle、InfluxDB 等多种数据库及 Redpanda/Kafka 数据源",
+    "所有驱动使用统一方法接口，可通过简短驱动名（如 pg、mysql、redis）调用",
+    "查询结果可输出为 CSV、JSON、Pandas/DataFrame、Dataclass、PySpark DataFrame 等多种格式"
+   ],
+   "use_cases": [
+    "Python asyncio 应用中需要连接多种数据库的异步数据访问层",
+    "需以统一接口复用同一套代码切换不同数据库的场景",
+    "需要将查询结果转换为 Pandas、JSON 或 PySpark DataFrame 等格式的数据处理流程"
+   ]
+  },
+  "sha": "3a89801afeb5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cf414f250d4a": {
+  "identity": {
+   "one_liner": "面向游戏运营管控的服务器/Agent/SDK平台，基于统一TCP会话传输",
+   "review": "Croupier 是面向单一游戏公司内多游戏、多环境的运营管控平台，包含 Server 控制面、游戏 VPC 内的 Agent 代理和多语言 SDK（Go/C#/Java/C++/Python/JS）。业务边界以 gameId+env 划分，Agent 提供 sidecar、devops、capture、synthetics 四种角色。README 注明其高风险生产写入尚未获批准，后端基于 Go/GORM，支持 SQLite/MySQL/PostgreSQL/SQL Server。",
+   "highlights": [
+    "提供统一会话传输：单连接、双向请求、心跳/重连/背压/流分离，会话与子协议分层",
+    "提供六种官方语言 SDK 与基于 JSON Schema 能力契约生成的 Web 控制台（Ant Design Pro）",
+    "Agent 支持 sidecar、devops（带审计的 SSH 会话）、capture（MySQL/Mongo/PostgreSQL CDC）、synthetics（HTTP/TCP/ICMP 探测与插件）四种角色"
+   ],
+   "use_cases": [
+    "游戏公司内部对多游戏、多环境（dev/staging/prod）的运营与管控后台搭建",
+    "游戏服务器的函数注册/调用、任务调度与游戏侧观测（sidecar 角色）",
+    "数据库变更捕获告警与外部服务存活探测等运维场景"
+   ]
+  },
+  "sha": "cf414f250d4a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "145ec5311616": {
+  "identity": {
+   "one_liner": "自托管的特斯拉数据记录器，可部署在 Cloudflare Workers/D1 或 Docker 容器上。",
+   "review": "EVBook 是一个开源电动车日志应用，通过 Tesla Owner API 记录行驶、充电、电池健康和成本数据，数据存放在用户自己的数据库中。部署方式为单个 Cloudflare Worker 加 D1 数据库，或以 Docker 容器运行在自有服务器；也可用 Node/Bun 直接运行。目前仅支持特斯拉车辆，代码结构预留了其他品牌的扩展空间。技术栈为 TypeScript、Hono 与 React。",
+   "highlights": [
+    "记录行驶（路线地图、速度、功耗图表、GPX 导出）、充电（能耗、AC/DC 分项、充电曲线）、电池健康与统计等数据",
+    "每辆车一个 actor 状态机控制轮询与退避，使车辆可进入睡眠状态；支持从 Tessie 和 TeslaMate 导入历史数据",
+    "支持一条命令部署（bun run setup）、应用内检测新版本、逐表 CSV 导出，前端为可安装的 PWA"
+   ],
+   "use_cases": [
+    "在 Cloudflare 免费套餐上自托管记录一辆或两辆特斯拉的行驶、充电与电池数据",
+    "用 Docker 或 Node 在自有 VPS 上运行，本地保存车辆历史数据并通过 CSV 导出备份",
+    "需要分时段电价、按地点定价的充电成本核算与电池衰减趋势跟踪"
+   ]
+  },
+  "sha": "145ec5311616",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

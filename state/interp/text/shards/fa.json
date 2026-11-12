@@ -2891,5 +2891,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a275af2b9949": {
+  "identity": {
+   "one_liner": "基于原生 libSQL PHP 扩展的 Laravel 数据库驱动",
+   "review": "该包为 Laravel 提供 libSQL 数据库驱动，libSQL 是 SQLite 的开放贡献分支。支持 PHP 8.2–8.5 与 Laravel 12/13，通过 Composer 安装并用 Artisan 命令自动安装 libSQL PHP 扩展。兼容 Eloquent、查询构造器、迁移与事务，提供内存、本地、远程和嵌入式副本四种连接类型，写入失败自 v1.4.0 起抛出异常，MIT 许可。",
+   "highlights": [
+    "提供 in-memory、local、remote、remote replica（嵌入式副本）四种连接类型，副本模式下支持 DB::sync() 手动同步",
+    "提供两种可选离线写入模式（Turso Cloud 与自托管 sqld），需 libSQL PHP 扩展 1.7.0+，目前处于 beta",
+    "通过 Artisan 命令安装、更新和卸载 libSQL PHP 扩展，并包含环境、令牌、证书与 sqld 服务器管理命令"
+   ],
+   "use_cases": [
+    "在 Laravel 应用中通过 Eloquent、查询构造器、迁移和事务访问本地或远程 libSQL/SQLite 数据库",
+    "使用嵌入式副本连接，将本地副本与远程数据库同步，包括离线写入后经 DB::sync() 推送",
+    "使用 libSQL 的向量类型与静态加密能力并配合 Laravel schema builder"
+   ]
+  },
+  "sha": "a275af2b9949",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "94e00104e4c0": {
+  "identity": {
+   "one_liner": "为 Claude Code 提供按计划、Webhook 或健康检查触发的持久目标执行与人工审批机制的 MCP 服务器。",
+   "review": "Quarterdeck 把 Claude Code 会话中的后台子代理变为可长期运行的目标执行器：用户通过 /goal-new 设定持续目标，系统按计划或事件触发运行，每个动作类别可设为关闭、提议或自动，guard 插件在工具层拦截越权调用。目标、记忆与待办存储在本地 SQLite。限制：需电脑开机且 Claude Code 打开，目前由单人开发使用。",
+   "highlights": [
+    "支持定时、cron、Webhook、健康检查失败和 watch 命令五种运行触发方式",
+    "按动作类别（如 email.send）实现 off/propose/auto 三级自治，guard 插件在 MCP 工具调用层强制执行限制",
+    "每个目标维护独立记忆、按外部 ID 去重的待办项和运行历史，数据存于单个本地 SQLite 数据库"
+   ],
+   "use_cases": [
+    "周期性邮箱分拣与邮件列表退订等需要人工审批的持续任务",
+    "每周职位扫描、Downloads 目录清理等按日程执行的后台事务",
+    "在会话之外维护个人待办清单，避免上下文压缩或 /clear 导致丢失"
+   ]
+  },
+  "sha": "94e00104e4c0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7c9dad90b39": {
+  "identity": {
+   "one_liner": "离线 Android 单词练习应用，基于 SM-2 间隔重复调度复习",
+   "review": "这是一款 Android 端单词练习应用，使用 Kotlin 与 SQLite 实现，界面基于 Material 3。应用提供英译汉、汉译英、单词默写、听音拼写等七种题型，内置高中 3500 词与四级词库，并支持通过 Markdown 文件导入自定义词汇表。复习排期采用间隔重复结合 SM-2 难度系数，数据保存在本机 SQLite，仅检查更新与 AI 智能解析功能需要联网。构建需 JDK 17 与 Android SDK platform 36，采用 GPLv3 协议发布。",
+   "highlights": [
+    "提供七种练习题型与每日学习包（到期复习/错题/新词按配额合成一轮），采用间隔重复结合 SM-2 难度系数安排复习",
+    "内置高中 3500 词与大学英语四级词库，含音标、双语例句与固定搭配，支持 Markdown 导入自组词库（自动识别 UTF-8/GBK）",
+    "包含错题本、星标、屏蔽单词、词汇量自测、打卡热力图、备份导出 JSON 与桌面小组件等功能；发音使用系统 TTS 离线合成"
+   ],
+   "use_cases": [
+    "备考高中英语或大学英语四级时进行词汇练习与到期复习",
+    "在无网络环境下使用本地词库练习单词并保存本机进度",
+    "通过 Markdown 或 AI 智能解析导入自定义词汇表进行针对性练习"
+   ]
+  },
+  "sha": "a7c9dad90b39",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

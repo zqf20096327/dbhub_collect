@@ -2692,5 +2692,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5a3fe809c0f7": {
+  "identity": {
+   "one_liner": "从真实问题出发的开源 AI 学习路径平台，多 Agent 回合式教学",
+   "review": "WenFlow 是一个以澄清真实问题为起点的开源 AI 学习支持服务，面向自学者与自托管部署者。核心流程为：多轮对话澄清目标、生成经学习者确认的学习路径、回合式教学（含课堂白板）、课后评估，并以 LSS/KTL/LF/LSB 四项指标追踪学习负荷，按 FSRS-6 模型安排复习。技术栈为 Vue3 + Node.js/Express + SQLite 双库，MIT 许可，项目定位为早期实验原型，功能验证主要依赖内置虚拟学习者仿真。",
+   "highlights": [
+    "提供 5 个顶层 Agent（目标/路径/教学/画像/仿真）与 Skill 执行层的多 Agent 课堂，路径生成与调整需学习者明确确认",
+    "实现 LSS/KTL/LF/LSB 学习负荷指标追踪与 FSRS-6 记忆模型复习安排，支持 Embedding/Rerank 资料语义检索（未配置时回退关键词）",
+    "包含 19 个场景页的管理后台与 Virtual Learner Lab（200 张默认角色卡的黑盒仿真与 Quick Learn 回归）"
+   ],
+   "use_cases": [
+    "希望从真实问题出发获得 AI 澄清目标并生成学习路径的个人学习场景",
+    "自托管部署用于体验或验证基于多 Agent 协议的 AI 教学流程",
+    "通过虚拟学习者仿真对 AI 教学质量进行批量回归测试"
+   ]
+  },
+  "sha": "5a3fe809c0f7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f96c2db480bf": {
+  "identity": {
+   "one_liner": "自托管个人财务记账与预算追踪工具，基于 Postgres 支持多币种报表与 AI 代理 SQL 访问。",
+   "review": "该项目是一个自托管的开源个人财务工具，用于记录支出、管理预算、追踪账户余额和跨币种转账。它提供内置 Web UI，并通过托管的 MCP 服务器或基于 API key 的 SQL 查询/执行接口供 AI 代理读写财务数据。本地部署使用 Docker Compose 且默认无鉴权仅限回环访问，而带鉴权的部署依赖 AWS CDK；MCP 与 Agent API 凭证互不通用。适合希望在自有环境或托管服务中管理财务并让 LLM 代理查询、导入账单的个人用户。",
+   "highlights": [
+    "托管 MCP 服务器通过 Streamable HTTP 与 OAuth 暴露五个工具，读取工具受 expenses:read 范围控制，写入 sql_execute 需额外的 expenses:write 范围",
+    "SQL 查询/执行 API 支持单条 SELECT/WITH...SELECT 与经批准的 INSERT/UPDATE/DELETE，API key 可记住所选工作区",
+    "本地 Docker Compose 启动 Postgres、迁移、web 与 worker 服务，监听 localhost:3000，无鉴权且仅绑定回环地址"
+   ],
+   "use_cases": [
+    "通过 Web UI 管理预算、浏览交易并跨账户与币种追踪余额",
+    "让支持 MCP 的远程客户端或可调用 HTTP API 的 AI 代理（如 Claude Code、Codex）查询财务数据或从截图、CSV、PDF 银行对账单中解析并写入交易",
+    "在自有 AWS 账户或单一 compose 栈（边缘代理之后）中自托管整个服务以管理个人财务数据"
+   ]
+  },
+  "sha": "f96c2db480bf",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d7de1aeaacd6": {
+  "identity": {
+   "one_liner": "为 Kaggle 数据库性能优化挑战赛提供可验证性能与持久化恢复的 PostgreSQL 扩展项目",
+   "review": "QueryFoundry 是对赛事组织方 Windows 应用的独立扩展，官方 GUI、生成器与固定种子原样保留于 app/ 目录，新增功能集中在 dbperf/。项目通过 payload_once 配方复用每行的 JSON 值对象以减少重复解析，并提供 --recovery 选项在同一事务中写入持久回执，相同 job UUID 的重试直接返回已存结果。适用于参加该 Kaggle 挑战或需要可复现基准测量与输出等价校验的用户。项目明确声明未获官方评分，也未验证 3 亿行容量。",
+   "highlights": [
+    "payload_once 配方通过 LATERAL 与 OFFSET 0 屏障重写 JSON 提取，仅改动六个已知组织方配方，自定义配方保留原始 SQL",
+    "--recovery 在每个数据库中将效果与回执在同一事务提交，相同 job UUID 重试返回存储结果，请求变更则拒绝",
+    "用 SHA-256 验证 32 个组织方文件，输出通过双向 EXCEPT ALL 与参考比较进行六表等价校验"
+   ],
+   "use_cases": [
+    "参与 Kaggle Python Database Performance Optimization 挑战赛并需要可复现的本地基准测量",
+    "需要在进程重启或重试时避免重复已提交扩展工作的批量数据展开流程",
+    "需要六表输出等价验证与失败注入测试的 PostgreSQL 数据处理流水线"
+   ]
+  },
+  "sha": "d7de1aeaacd6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2821,5 +2821,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3fae53d2aac0": {
+  "identity": {
+   "one_liner": "本地优先的个人 LLM Wiki，将文档摄取为可引用、可对话的知识库",
+   "review": "该项目是一个在本地运行的个人知识库工具：把用户文档摄取为互相链接的 wiki 页面并存入 SQLite（FTS5 全文检索），通过 Web 界面阅读并与内置代理对话，答案附引用。核心机制包括 cite-or-refuse 后验校验、datasets 结构化数据引擎、十二项 lint 检查与自动修复、以及每个 wiki 独立的本地 git 历史。技术上基于 FastAPI + HTMX + SQLite，支持任意 OpenAI 兼容端点，不依赖云端，也非 Obsidian 插件。",
+   "highlights": [
+    "提供阅读、检索、对话一体化 Web 界面，聊天支持 pre-retrieval、严格校验、不校验三种回答模式，答案附页面引用",
+    "包含领域无关的 datasets 引擎，以 query_dataset 工具向对话代理暴露结构化数据，数值按 as_of 日期原文引用",
+    "内置十二项 lint 检查与安全项自动修复，每个 wiki 为独立本地 git 仓库，支持任意 OpenAI 兼容模型"
+   ],
+   "use_cases": [
+    "将个人文档整理为可检索、可对话的本地知识库",
+    "对包含时效性数值（如利率、价格）的文档进行引用式问答与确定性计算",
+    "生成与维护带引用溯源和多语言（en/es）输出的结构化 wiki 页面"
+   ]
+  },
+  "sha": "3fae53d2aac0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d65e13c70af5": {
+  "identity": {
+   "one_liner": "面向 Java 业务应用的模型驱动运行时库，提供类型化查询、表达式与审计变更",
+   "review": "TeaQL Java 是一个面向 Java 业务应用的库与运行时，通过语义模型生成领域库，提供 Q 查询 API、E 访问路径 API 和带审计原因的 Save 变更边界，运行时通过元数据、Context、Checker、Policy 和数据库提供方执行操作，并自动生成执行日志。需配合 TeaQL 工具链从模型生成代码使用；不提供分布式事务，审计事件非持久化 outbox。",
+   "highlights": [
+    "提供 Q 查询、E 表达式访问路径和统一的 Save 变更边界，变更经 Checker 与配置的 Mutation Policy 执行",
+    "运行时自动生成含 SQL、审计原因与 trace 上下文的诊断日志，敏感绑定经掩码处理并标注 MASKED",
+    "E API 区分已加载 NULL 与 NotLoaded 字段，未加载访问产生诊断；Assist 工作流支持按需获取 API 指引"
+   ],
+   "use_cases": [
+    "需要将查询意图、审计原因与业务代码集中评审的 Java 业务应用开发",
+    "编码代理参与开发时，通过 AGENTS.md 与渐进式 Assist 获取 API 指引",
+    "需要对查询与变更操作进行执行日志追踪和字段级审计的场景"
+   ]
+  },
+  "sha": "d65e13c70af5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

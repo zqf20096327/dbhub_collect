@@ -3039,5 +3039,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "58c91500d806": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，通过网关在回复前注入相关记忆并提供 MCP 记忆工具。",
+   "review": "Stiller Brain 是一个基于 Python 与 SQLite 的 LLM 长期记忆后端，面向支持 OpenAI 兼容 Chat Completions 网关与 MCP 工具调用的模型及客户端。AI 通过工具保存经历、知识与计划，网关按对话语境在回复前注入相关记忆，支持自写提醒、主动整理与版本回看。提供 Windows、Linux 及 Android Termux 实验性部署路线，许可证为非商业源码预览。",
+   "highlights": [
+    "提供两种接入方式：ST 网关在回复前自动注入相关记忆，MCP 工具支持主动查询、保存与修改记录",
+    "包含自我定义、情感、学习、工具、规划等模块及独立的幻觉黑匣子区域，记忆保留原文与版本历史",
+    "支持自写提醒、短期换窗交接、图片附件、情绪词表，可按模块开关自动浮现"
+   ],
+   "use_cases": [
+    "为具备 MCP 调用能力的 LLM 客户端构建可跨会话延续的记忆库",
+    "部署者通过网关让模型在多轮对话中按话题关联自动带回既往记录",
+    "在 Windows/Linux/VPS 或 Android Termux 上本地部署记忆后端"
+   ]
+  },
+  "sha": "58c91500d806",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "acd3ce6a7a0d": {
+  "identity": {
+   "one_liner": "面向 Oasis SDK EVM ParaTime 模块的 Web3 网关服务。",
+   "review": "oasis-web3-gateway 是一个用 Go 编写的网关服务，连接运行 Emerald/Sapphire 的 Oasis ParaTime 客户端节点，为 Web3/EVM 兼容访问提供索引与查询能力，数据存储依赖 PostgreSQL（≥13.3），构建需 Go（≥1.27.3）。配置支持 YAML 文件与环境变量两种方式，提供 truncate-db 子命令清空数据库并触发全量重建索引。适用于需要自行部署 EVM 网关接入 Oasis ParaTime 的节点运营者与开发者。",
+   "highlights": [
+    "连接 Emerald/Sapphire ParaTime 客户端节点，提供 Web3/EVM 兼容访问",
+    "使用 PostgreSQL 存储索引数据，支持通过 truncate-db 子命令清库并强制重新索引",
+    "所有配置项可通过 YAML 配置文件或环境变量（如 DATABASE__PASSWORD）设置"
+   ],
+   "use_cases": [
+    "在测试网/主网部署网关，向以太坊工具链提供对 Oasis ParaTime 的 Web3 兼容接口",
+    "使用 Docker Localnet 镜像（emerald-dev/sapphire-dev）进行开发与 CI 测试",
+    "清空数据库状态后强制对区块执行完整重新索引"
+   ]
+  },
+  "sha": "acd3ce6a7a0d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "98185fcb4c7f": {
+  "identity": {
+   "one_liner": "面向 AI 代理的本地离线记忆层，以双线程仿生架构在 RAM 中存取上下文",
+   "review": "Mnemostroma 是一个本地运行的 AI 代理记忆层，通过异步 Observer 侧车自动捕获决策、约束等关键信息，压缩到 5 层记忆结构中，代理只读取不写入。基于 ONNX 与 SQLite WAL，约 20ms 检索、约 420MB 基线内存，记忆按使用频率逐级衰减。提供 MCP Server、SSE/HTTP 适配器、MITM 代理等接入方式。需 Python 3.12+，setup 下载约 300MB 模型，适合需跨会话保持上下文的代理与桌面用户。",
+   "highlights": [
+    "双流异步架构（Observer 写入 + 代理读取），5 层记忆，基于 ONNX 与 SQLite WAL 的六边形架构",
+    "记忆按时间衰减：细节逐步移入 SQLite，最终仅保留 embedding；原则与决策持久保留",
+    "提供 MCP Server（stdio + SSE）、HTTP Read 适配器（8762 端口）、作用域 MITM 代理（8764 端口）及浏览器扩展等多种接入方式"
+   ],
+   "use_cases": [
+    "为 CLI 编码代理（如通过 8767 端口 MITM 代理接入 Claude Code）跨会话保留决策与约束上下文",
+    "本地离线环境下的代理长期记忆管理，数据不出本机",
+    "通过 MCP 协议为支持该协议的代理或机器人提供语义记忆检索服务"
+   ]
+  },
+  "sha": "98185fcb4c7f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f3b236a3e88": {
+  "identity": {
+   "one_liner": "基于 Java 与 Spring Boot 的开源 Headless CMS，提供 REST API 与可选参考前端",
+   "review": "Phoebe CMS 是用 Java 21 与 Spring Boot 3.2.8 构建的开源 Headless CMS，通过 REST API 向任意前端（Angular、React、Vue 等）交付内容。采用混合架构：后端为核心，另有 Angular 与 Next.js 两套可选参考前端。支持 MySQL/PostgreSQL、Flyway 迁移、Caffeine 缓存与 Bucket4j 限流，MIT 许可。适合开发团队自建前端或小型团队开箱部署。",
+   "highlights": [
+    "提供完整的内容管理 REST API，支持任意内容类型的 CRUD 操作、分类/标签体系与基于角色的用户管理（ADMIN、EDITOR）",
+    "技术栈包含 Spring Security、Caffeine 缓存、Bucket4j IP 限流、Flyway 数据库迁移，支持 MySQL 8.3.0 与 PostgreSQL 12+",
+    "附带 Angular 与 Next.js 两套可选参考前端，并通过 Docker Compose 快速启动，API 文档由 Swagger UI 提供"
+   ],
+   "use_cases": [
+    "开发团队或代理公司以 API 为后端，为网站、移动应用等自建任意框架的前端",
+    "小型团队或组织使用参考实现快速部署网站，并按需定制内容",
+    "需要向多平台分发内容并接入第三方分析、营销工具的组织"
+   ]
+  },
+  "sha": "5f3b236a3e88",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "459529cca685": {
+  "identity": {
+   "one_liner": "仅用 Python 标准库实现的 webhook 事务性发件箱投递引擎",
+   "review": "webhook-outbox 是一个零依赖的 Python 包与 CLI（Python 3.9+），用于持久化待发送的 webhook 意图，再做 HMAC-SHA256 签名、按业务键去重、指数退避加抖动的重试、死信队列与重放。数据存于单个 SQLite 文件，提供 Python API 和 `outbox` 命令，支持通过 ThreadedAsyncSender 在 FastAPI 等异步服务中使用，不提供仪表盘或多租户队列。",
+   "highlights": [
+    "事务性发件箱模式：先写入意图再发送，dedupe_key 唯一约束去重，claim 用 BEGIN IMMEDIATE 加租约保证原子性",
+    "按 t=<unix>,v1=<hex> 格式做 HMAC-SHA256 签名，verify() 支持容差窗口与双密钥轮换；5xx/429/408 重试，4xx/3xx 直接进死信",
+    "CLI 提供事件回调（attempt/delivered/retried/dead）、状态过滤查询、metrics 与退出码契约（0/1/2），可配合 cron 监控死信"
+   ],
+   "use_cases": [
+    "需要从应用内部可靠发送带签名 webhook 的 Python 服务",
+    "无消息代理或独立投递服务、希望以单个 SQLite 文件加 worker 运行的部署",
+    "需要死信队列查询、重放与退出码驱动的 cron 监控的运维场景"
+   ]
+  },
+  "sha": "459529cca685",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

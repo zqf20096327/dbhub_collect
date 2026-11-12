@@ -2981,5 +2981,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dcb6b420b6c0": {
+  "identity": {
+   "one_liner": "纯 Python 库，为 SQLite 提供 PyMongo 风格的文档型 API",
+   "review": "NeoSQLite 是纯 Python 库，在 SQLite 之上实现无模式文档存储，提供 PyMongo 风格 API，支持插入、查询、聚合管道、索引、事务、变更流与 GridFS。提供两种使用方式：直接用 Connection 调用 API，或通过 nx_27017 线协议服务器让现有 PyMongo 客户端连接 SQLite 后端。支持 Python 3.10–3.15，MIT 许可。",
+   "highlights": [
+    "提供 PyMongo 风格 API 与 MongoDB Wire Protocol 服务器 nx_27017，可用 PyMongo 客户端零代码改动访问 SQLite",
+    "实现聚合管道、单键/复合/嵌套索引、FTS5 文本搜索、TTL 索引、基于 SAVEPOINT 的事务及基于触发器的 watch() 变更流",
+    "支持 GridFSBucket 与旧版 GridFS、12 字节 ObjectId，并提供 WAL/DELETE/MEMORY 等日志模式配置"
+   ],
+   "use_cases": [
+    "需要在 SQLite 单文件数据库中使用文档模型与 PyMongo 风格代码的 Python 应用",
+    "以 PyMongo 编写的现有代码需在无 MongoDB 服务环境中运行",
+    "需要文档存储、文本搜索、TTL 过期与事务等能力组合的嵌入式数据库场景"
+   ]
+  },
+  "sha": "dcb6b420b6c0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5e01d6e2137c": {
+  "identity": {
+   "one_liner": "为 AI 智能体提供本地优先持久记忆层的 Rust 工具",
+   "review": "Noema 是用 Rust 编写的智能体记忆工具，将每条记忆存为本地 Markdown 文件，以 SQLite（FTS5）作为索引，并通过 MCP 服务器（stdio 与 Streamable HTTP）供 Claude Code、Copilot、Zed、Cursor 等客户端读写。核心存储与词法检索本地运行、无需 API 密钥；可选的外部模型集成会把输入发送到所配置的外部服务。项目处于 v0.x 阶段，次版本间可能出现破坏性变更。",
+   "highlights": [
+    "以 Markdown 文件为数据源、SQLite FTS5 为索引，核心存储与词法检索本地运行且无需 API 密钥",
+    "以 MCP 服务器形式（stdio 与 Streamable HTTP）集成多种编码智能体工具，并提供内置 TUI 与 CLI",
+    "支持多 Cortex 间基于向量时钟与事件日志的 P2P 同步，冲突自动生成 divergence 类型 Trace；提供 standard 与可选 strong 两种持久化档位"
+   ],
+   "use_cases": [
+    "为编码智能体（Claude Code、Copilot、Cursor、Aider 等）持久记录事实、决策、偏好与意图等记忆",
+    "在 Obsidian、VS Code 等编辑器中直接编辑 Markdown 记忆，文件系统监听会将其转为变更事件并通过联邦传播",
+    "需要多个 Cortex 目录之间点对点同步记忆并审计并发编辑冲突的场景"
+   ]
+  },
+  "sha": "5e01d6e2137c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c6700a1b304a": {
+  "identity": {
+   "one_liner": "CVE-2026-116366 ClickHouse 未认证 RCE 的 PoC、容器化实验与根因分析",
+   "review": "该项目为 CVE-2026-116366（CVSS 4.0 9.5）提供 PoC 脚本、容器化对照实验与根因分析：ClickHouse 捆绑的 brotli v1.2.0 解码器在处理非法块切换时将失败静默丢弃，导致越界写、100% CPU 死循环与每请求约 60 MB 内存泄漏。面向安全研究人员与运维人员，通过 lab.sh 启动易受攻击/已修复双容器，用 poc.py 做 check、detect、dos 操作，仅依赖 Python 标准库；README 同时记录了已修复版本 v1.2.1 中残留的六个挂起载荷。",
+   "highlights": [
+    "提供库级差分检测与容器化易受攻击/已修复双服务器实验（26.10.2.103 vs 26.10.3.7）",
+    "poc.py 仅用 Python 标准库实现指纹识别、差分检测与 DoS 演示，实验室通过 ./lab.sh 一键启停",
+    "包含根因代码分析：DecodeBlockTypeAndLength 失败被 void 包装丢弃，及 v1.2.1 修复（错误码 -17 与 BROTLI_SAFE_WITH_STATUS 宏）"
+   ],
+   "use_cases": [
+    "检测自托管 ClickHouse 是否受 CVE-2026-116366 影响（HTTP 接口 8123/8443、Content-Encoding: br 可达）",
+    "复现与研究 brotli v1.2.0 解码器状态损坏机制及越界写根因",
+    "验证升级到 26.3.62.3-lts / 26.8.36.3-lts / 26.9.27.3-stable / 26.10.3.7-stable 后的修复效果"
+   ]
+  },
+  "sha": "c6700a1b304a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

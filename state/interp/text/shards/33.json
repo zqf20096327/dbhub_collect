@@ -2620,5 +2620,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f963654f52e6": {
+  "identity": {
+   "one_liner": "为分布式节点集中调度凭据与代理的服务，节点经 Acquire/Report 两调用取用并上报。",
+   "review": "Spinneret 用 Go 编写，基于 PostgreSQL 和 Valkey，集中管理多节点共享的 cookies、tokens、API keys、会话与代理池。节点请求前调用 Acquire 获取凭据和租约，请求后调用 Report 上报状态码、标记等事实，由服务端分类并施加冷却、隔离、封禁等动作。转发行为、登录、验证码处理不在其功能范围内；行为由版本化的 YAML 策略控制。",
+   "highlights": [
+    "提供 Acquire/Report 热路径接口，支持租约 TTL 与回收、wait_ms 排队等待及单次最多 50 个身份的批量获取",
+    "支持凭据与代理的并发上限、复用间隔、滑动配额、warmup、pending 探测及身份-代理绑定等策略",
+    "内置六种作用域的动作、跨归因重判、EWMA 健康分与端点组熔断器，并提供 Web 控制台、ClickHouse 请求查询、告警 webhook 与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "多台机器共享大规模账号会话池的分布式爬虫场景",
+    "需要集中管理凭据轮换、配额与冷却策略并按端点组细分控制的系统",
+    "需要通过控制台或请求记录追踪身份与出口路由健康状态、区分凭据故障与代理故障的运维场景"
+   ]
+  },
+  "sha": "f963654f52e6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

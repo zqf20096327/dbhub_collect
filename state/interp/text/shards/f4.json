@@ -2975,5 +2975,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "644f1a977c4a": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的本地 MCP 长期记忆服务器，用 SQLite 存取项目决策规则",
+   "review": "Krusch Context MCP 是一个本地运行的 MCP 服务器，为 Cursor、Claude Code、Windsurf 等 AI 编码代理提供跨会话的项目记忆，存储架构决策、不变量、经验与缺陷诊断。它通过 retrieve/remember/revise/nudge/health 五个工具实现记忆读写与撤销，默认使用 SQLite 存储，写入采用五类封闭分类并检测近似重复；提供 span 溯源与漂移检测。不含代码索引或 Git 分析功能。",
+   "highlights": [
+    "提供 5 个 MCP 工具（retrieve/remember/revise/nudge/health）用于记忆的检索、写入、修订、差异审计与健康检查",
+    "默认使用 SQLite（node:sqlite），可切换 PostgreSQL/pgvector；无 Ollama 或 API Key 时支持完全离线的确定性关键词检索",
+    "remember 写入执行 5 类封闭分类与近似重复检测（余弦相似度 ≥0.85 时提示 supersede），invalidate 必须提供理由"
+   ],
+   "use_cases": [
+    "为跨多会话工作的 AI 编码代理保存与召回项目规则、决策和不变量",
+    "提交前用 nudge 工具将 proposed diff 与活跃项目约束进行核对",
+    "多机器多代理协作场景下改用 PostgreSQL 集中存储记忆"
+   ]
+  },
+  "sha": "644f1a977c4a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42606aab06b5": {
+  "identity": {
+   "one_liner": "面向 OpenCode 的本地化、免 Docker 代码语义索引插件",
+   "review": "该插件为 OpenCode 提供本地运行的代码索引，包含语义搜索、仓库结构、调用/导入影响分析和文档搜索。索引结合向量、FTS5 BM25 与小型交叉编码器重排序；多块文件由本地 OpenAI 兼容 LLM 生成摘要块，不可用时回退到确定性摘要。按仓库 opt-in 启用，需 npm 构建、安装脚本并重启 opencode。注意检索结果会进入对话并发送给所配置的模型提供方，未必本地。",
+   "highlights": [
+    "提供 semantic_search、repo_structure、find_symbol、analyze_impact、search_docs、index_status 等工具，索引、嵌入与搜索均在本地运行",
+    "搜索结合向量、FTS5 BM25 与交叉编码器重排序，可按 allowlist 搜索其他已索引仓库；摘要块由本地 OpenAI 兼容 LLM（LM Studio、Ollama 等）生成并可回退",
+    "同时支持 OpenCode 1.x（含 LSP 与文件监视器）和 2.x（基于索引、通过工具调用与 session.idle 重扫描保持索引更新）"
+   ],
+   "use_cases": [
+    "在 OpenCode TUI 或 ACP（JetBrains AI Assistant）环境中为代理提供代码语义检索与符号影响分析",
+    "修改符号前查询调用者/被调用者/导入方，或按名称定位类/函数定义",
+    "搜索 Markdown 文档、ADR、RFC 等仓库内文档"
+   ]
+  },
+  "sha": "42606aab06b5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "57f0a9880831": {
+  "identity": {
+   "one_liner": "基于 DeepAgents 后端协议的工程实验库，探索虚拟文件系统与隔离执行。",
+   "review": "该仓库将 Agent 所需的文件读写、命令执行与状态持久化拆分为可独立运行的后端实验，提供 StateBackend、SQLiteBackend 和 OpenSandbox 适配三种实现，通过 DeepAgents 后端协议解耦 Agent 与具体文件系统。适合需要为 DeepAgents 应用选择或实现后端的开发者参考；OpenSandbox 示例需另行运行沙箱服务器，且文档明确提醒勿提交密钥。",
+   "highlights": [
+    "提供三个后端实现：内置 StateBackend（LangGraph 内存检查点）、SQLite 虚拟文件后端、OpenSandbox BaseSandbox 适配器",
+    "SQLiteBackend 支持线程安全的读-改-写访问，可被测试或其他 DeepAgents 应用导入使用",
+    "包含 opensandbox_test.py 端到端冒烟测试，覆盖沙箱、命令、文件与解释器操作"
+   ],
+   "use_cases": [
+    "为 DeepAgents 应用选型或对比不同后端持久化方案",
+    "将 SQLiteBackend 作为虚拟文件系统嵌入自建的 Agent 应用",
+    "验证 OpenSandbox 隔离执行的命令与文件传输原语"
+   ]
+  },
+  "sha": "57f0a9880831",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "81860325ae78": {
+  "identity": {
+   "one_liner": "为 AI agent 提供跨会话持久文件系统与数据库的工作空间服务",
+   "review": "TiDB AgentSpace 是一个面向 AI agent 的持久化工作空间服务，提供 PostgreSQL 兼容数据库、持久文件系统及基于 Workspace Key 的权限控制。外部 agent（如 Codex CLI、Claude Code）通过作用域密钥接入，工作结果可在 Studio 中跨会话查看。agent 身份、托管执行、Runs 和 Memory 尚未实现。后端以 Rust 构建，Apache-2.0 许可。",
+   "highlights": [
+    "提供 PostgreSQL 兼容数据库和持久文件系统，数据与文件可跨会话保留",
+    "通过 Workspace Key 实现资源与操作级别的权限控制，密钥可换取短寿命区域访问令牌",
+    "提供 JavaScript/Python API 客户端与 OpenAPI 合约导出，Studio 与外部 agent 共用同一 Rust API"
+   ],
+   "use_cases": [
+    "让外部 AI agent 在多次会话间保存和读取文件分析结果",
+    "为 agent 授予限定范围的数据库与文件系统访问权限",
+    "本地搭建工作空间服务进行开发与测试"
+   ]
+  },
+  "sha": "81860325ae78",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

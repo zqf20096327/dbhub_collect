@@ -2754,5 +2754,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7866393fa943": {
+  "identity": {
+   "one_liner": "阿里云 CDT 流量监控与 ECS 自动化控制单机 Go 控制台",
+   "review": "CDT Monitor 是一个单进程 Go 控制台，将 HTTP 服务、定时调度器、并发 Worker、SQLite 和前端静态资源集成一体，用于监控阿里云 CDT 流量、控制 ECS 实例开关机和观察账单余额。支持多账号多地域管理，可配置流量阈值触发停机或通知。适用于使用阿里云 CDT 并需要自托管监控的个人或团队，通过 Docker（端口 43210）或独立二进制部署，数据存储于 SQLite，需备份 data/master.key 才能恢复加密凭据。",
+   "highlights": [
+    "单 Go 进程集成 HTTP 服务、定时调度器、并发 Worker、SQLite（WAL 模式）和前端静态资源，不需要 MySQL 或 Redis",
+    "支持流量阈值触发“停机并通知”或“仅通知”，包含普通停机 KeepCharging 和节省停机 StopCharging 两种模式，以及每日定时开关机和抢占式实例保活",
+    "通过 SMTP、Telegram Bot（支持自定义反代和 SOCKS5）和自定义 Webhook 发送通知，提供带 scope、可撤销的 API Key 及兼容 URL Cron 接口"
+   ],
+   "use_cases": [
+    "对多个阿里云账号、多地域的 ECS 实例进行集中 CDT 流量监控与用量历史图表查看",
+    "按流量阈值自动停机或仅通知，以及抢占式实例的定时开关机与保活自动化",
+    "通过 API Key 为 Android、iOS 和桌面小组件提供状态摘要读取接口"
+   ]
+  },
+  "sha": "7866393fa943",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e88493648a4b": {
+  "identity": {
+   "one_liner": "列存储+JIT 编译的 Go 实现 SQLite 方言嵌入式数据库",
+   "review": "musql 用自研 .musq 列式分段存储配合 JIT 编译执行 SQLite 方言 SQL，提供 database/sql 驱动、musql 命令行、musqld 服务端（兼容 Turso/libSQL 协议）及 SQLite 双向转换工具。纯 Go 无 CGo，需 Go 1.27+。文件格式与 SQLite 不兼容，现有库需先经 musql-convert 转换；每次 Exec/Query 仅支持单条语句。",
+   "highlights": [
+    "纯 Go 实现，通过 database/sql 驱动使用，注册为 sqlite/musql 驱动名",
+    "支持连接、窗口函数、触发器、JSON、全文检索、R-tree 索引及向量搜索函数",
+    "支持 CRDT 或 leader 模式节点间复制，服务端兼容 Turso/libSQL 客户端协议"
+   ],
+   "use_cases": [
+    "将现有 SQLite 数据导入后进行扫描聚合类查询的嵌入式 Go 应用",
+    "通过 Docker 或二进制部署服务端供 libSQL/Turso 客户端连接",
+    "需要在独立节点间复制数据库的分布式场景"
+   ]
+  },
+  "sha": "e88493648a4b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

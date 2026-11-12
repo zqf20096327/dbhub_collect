@@ -3284,5 +3284,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4e4e485245d6": {
+  "identity": {
+   "one_liner": "Yjs CRDT 的纯 Go 移植，与 yjs 字节级兼容",
+   "review": "Ygo 是 Yjs CRDT 框架的纯 Go 实现，已列入 Yjs 文档端口页。V1/V2 更新格式与 yjs@13.6.33 字节兼容，经 307 个跨语言夹具双向验证。提供 Map/Array/Text 共享类型、UndoManager、快照、子文档，附 yserve WebSocket 服务器与 Go 客户端。无 CGO，可经 gomobile 构建 Android AAR 与 iOS xcframework。SQLite 存储不支持 wasm 等平台。",
+   "highlights": [
+    "以 307 个跨语言夹具在 CI 中双向验证与 yjs@13.6.33 的 V1/V2 线格式字节兼容",
+    "纯 Go 无 CGO，可在全部 47 个 Go 目标平台编译，支持 gomobile 生成 Android AAR 与 iOS xcframework",
+    "包含 yserve 单二进制服务器（y-websocket 协议、SQLite 持久化、周期版本快照）及支持离线缓存与重连的 Go 同步客户端"
+   ],
+   "use_cases": [
+    "为 Go 后端或机器人接入 y-websocket/Hocuspocus 协作的 Yjs 文档",
+    "通过 gomobile 在 Swift/Kotlin 移动应用中嵌入本地协作编辑与后台同步",
+    "自托管无 Node 依赖的协作服务器，或以 http.Handler 嵌入现有 Go 服务"
+   ]
+  },
+  "sha": "4e4e485245d6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "345939c8b230": {
+  "identity": {
+   "one_liner": "用 Rust 编写的可扩展关系数据库，支持嵌入或服务器运行",
+   "review": "turborel 是一个用 Rust 编写的关系数据库系统，可作为库嵌入应用，也可通过 turboreld 以服务器模式供多客户端连接，并附带 turborel 命令行客户端。其存储引擎、索引、数据类型、认证与传输协议等均为插件接口，可替换或扩展。项目当前处于 alpha 阶段，版本号 0.0.0，SQL、API、协议与文件格式在版本间都可能变动。",
+   "highlights": [
+    "支持事务（默认 READ COMMITTED，最高 SERIALIZABLE），基于多版本并发控制、预写日志、检查点与恢复机制",
+    "每张表可选择行式或列式存储，索引以插件形式注册，由基于代价的规划器选择；内置 B-link 树与线性哈希表",
+    "支持 LZ4 压缩与 AES-256-GCM / ChaCha20-Poly1303 加密（注：原文为 ChaCha20-Poly1305），可作用于整个数据库或单表；通过 mutual TLS 上的 Viewstamped Replication 实现复制"
+   ],
+   "use_cases": [
+    "需要将数据库以库形式嵌入 Rust 应用的进程内场景",
+    "需要部署多服务器复制与备份选举的数据库服务场景",
+    "需要导入 CSV 或制表符分隔文件并用 SQL 查询的数据处理任务"
+   ]
+  },
+  "sha": "345939c8b230",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8bbded26ded6": {
+  "identity": {
+   "one_liner": "原生 Go 微服务电商系统，采用 Clean Architecture 与 gRPC 通信",
+   "review": "该项目是用 Go 标准库和 MySQL 构建的微服务电商系统，拆分为认证、用户、商品、订单、支付、通知等服务，服务间通过 gRPC 同步通信、经 Kafka 事件异步协作。库存扣减使用数据库本地行锁，订单与 Outbox 记录在同一本地事务内写入。项目不依赖重型框架和 ORM，直接使用 database/sql 执行原生 SQL。适合学习微服务架构设计的开发者参考。",
+   "highlights": [
+    "按领域拆分为认证、用户、商品、订单、支付、通知六个服务，各服务内部遵循相同的四层 Clean Architecture 结构",
+    "秒杀库存扣减通过 MySQL 本地行锁实现，订单与 Outbox 记录在同一本地事务中提交，Outbox Worker 轮询表并经 gRPC 调用下游服务同步库存",
+    "使用 database/sql 原生 SQL（PrepareCtx、BeginTx 等），并通过值类型传参、接口解耦仓储层以支持 Testify mock 单元测试"
+   ],
+   "use_cases": [
+    "学习 Clean Architecture 在 Go 微服务中的分层实现方式",
+    "参考 Transactional Outbox 模式与本地行锁在高并发下单场景中的应用",
+    "作为不依赖外部框架和 ORM、使用 Go 标准库构建后端服务的代码示例"
+   ]
+  },
+  "sha": "8bbded26ded6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

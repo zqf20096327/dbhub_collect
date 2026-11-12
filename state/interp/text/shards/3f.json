@@ -3131,5 +3131,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0b48a503d8d5": {
+  "identity": {
+   "one_liner": "在 PostgreSQL 后台 worker 进程中异步执行任意 SQL 的扩展",
+   "review": "pg_background 是一个 PostgreSQL 扩展，通过动态后台 worker 在服务器内部异步执行 SQL，worker 运行于独立事务中，可独立提交或回滚。提供 launch/wait/cancel/detach/list 等生命周期操作，句柄由 (pid, cookie) 元组标识。2.0 移除 v1 API 并退役 _v2 后缀。适用于需要在父事务回滚后仍提交操作的场景；不提供调度与持久化队列。",
+   "highlights": [
+    "支持在后台 worker 中异步执行 SQL，worker 事务独立于调用方提交或回滚",
+    "提供 cookie 保护的句柄、结构化错误返回（SQLSTATE/detail/hint/context）及超时取消机制",
+    "内置可观测性：pg_background_list 会话注册视图、pg_background_stats 计数、进度上报与标签"
+   ],
+   "use_cases": [
+    "审计日志等需要在父事务回滚后仍提交的自治事务写入",
+    "在 SQL 会话中启动 VACUUM、REINDEX、数据回填等维护任务而不阻塞会话",
+    "将已知数量的独立 SQL 拆分为多个 worker 并行执行并收集结果"
+   ]
+  },
+  "sha": "0b48a503d8d5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "81335f397e46": {
+  "identity": {
+   "one_liner": "Rust 编写的原生桌面应用，将数据库管理与本地文件 SQL 查询结合在同一工作区。",
+   "review": "Kuery 是一个桌面端工作区，用于连接 PostgreSQL、MySQL、MariaDB、SQL Server、SQLite、Redis 和 MongoDB，并在无数据库连接时用 Polars SQL 查询 CSV、JSON 与 Parquet 文件。数据库默认以只读运行，写入需显式模式并带影响预览；文件 SQL 当前为临时只读工作区。项目处于早期原型阶段，提供 macOS、Windows、Linux 安装包。",
+   "highlights": [
+    "支持多数据库浏览与 SQL 编辑（多标签、补全、取消、超时），并用 Polars SQL 查询本地 CSV/TSV、JSON/JSONL/NDJSON 与 Parquet 文件",
+    "提供 Profile 视图展示缺失值、分布、百分位、数值相关性，以及以树形或图形查看查询计划",
+    "默认只读，写入采用显式 SQL 模式、事务提交/回滚与影响预览；连接密码存于操作系统凭据库，支持 TLS 与 OpenSSH 隧道"
+   ],
+   "use_cases": [
+    "在本地打开 CSV、JSON 或 Parquet 文件并用 SQL 做联接、聚合等探索性查询",
+    "浏览数据库的 schema、表、索引与查询计划，查看结果的列分布与相关性",
+    "通过环境策略和只读默认模式管理开发、staging 与生产连接的受控写入"
+   ]
+  },
+  "sha": "81335f397e46",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

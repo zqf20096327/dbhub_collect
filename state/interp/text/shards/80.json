@@ -2965,5 +2965,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4e630ed8a354": {
+  "identity": {
+   "one_liner": "开源项目管理平台，用于跟踪事项、运行周期和管理路线图",
+   "review": "Plane 是一个开源项目管理工具，用于跟踪 issue、运行周期、管理产品路线图，功能涵盖工作项、模块、视图、页面和分析。技术栈为 Django、React Router 与 Node.js，使用 PostgreSQL 存储，支持 Docker、Kubernetes 及一体化 Docker 部署，也可使用官方云服务。采用 AGPLv3 许可证，需注意其传染性条款。适合需要自托管项目管理系统的团队。",
+   "highlights": [
+    "提供工作项、周期、模块、视图、页面和分析功能，周期支持燃尽图跟踪进度",
+    "支持 Docker、Kubernetes 和一体化 Docker 三种自托管部署方式，管理员可通过 God mode 配置实例",
+    "技术栈包含 Django、React Router 和 Node.js，采用 AGPLv3 许可证"
+   ],
+   "use_cases": [
+    "团队跟踪任务与 bug、运行迭代周期",
+    "对数据主权有要求、需在自有服务器部署项目管理系统的团队",
+    "将复杂项目拆分为模块并自定义筛选视图的组织"
+   ]
+  },
+  "sha": "4e630ed8a354",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "66434a1c7df9": {
+  "identity": {
+   "one_liner": "本地优先、人工审核闸门的 AI 智能体长期记忆库",
+   "review": "memory-eternal 是一个为 AI 智能体提供长期记忆的插件，基于本地 SQLite 与 Markdown 存储记忆卡片，采用审核闸门机制：智能体写入的记忆先进入待审队列，需人工在 Web UI、TUI 或 CLI 中批准后才进入主库，所有状态变更写入不可变审计日志。它通过 MCP 服务器接入 Claude Code、Codex、Cursor 及任意 MCP 客户端，检索使用 FTS5 + BM25，并提供记录注入量与蒸馏调用的记忆账本。MIT 许可，可自托管。",
+   "highlights": [
+    "记忆写入需经人工审核队列，智能体无法批准自己提交的卡片",
+    "检索基于 SQLite FTS5 + BM25 实现，召回阶段不调用模型",
+    "内置记忆账本，记录召回注入字符数、蒸馏调用次数与有用性反馈"
+   ],
+   "use_cases": [
+    "多会话开发中复用项目决策与上下文，避免重复解释背景",
+    "需要审计与控制智能体写入内容的团队或个人",
+    "同时使用多个 MCP 客户端并希望共享同一本地记忆库的场景"
+   ]
+  },
+  "sha": "66434a1c7df9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b4d78134abb5": {
+  "identity": {
+   "one_liner": "自托管的 AI API 成本台账，按日期分层的模型单价精确计价",
+   "review": "该项目是一个自托管的 AI API 成本记录系统：应用侧上报各请求的 token 数量，系统按带生效日期、区分服务层级（service tier）与长提示阶梯的模型单价精确计价，不收集或存储提示词与响应内容。它提供按项目、供应商、模型、客户、功能、run 和标签的费用细分，支持月度预算与告警、OpenTelemetry 接入，并可用 npm run reconcile 与 Anthropic、OpenAI、Google Cloud 账单核对。适用于需要留存成本记录的团队；未定价的用量不计入总额，预算仅对事先调用预留接口的请求生效。",
+   "highlights": [
+    "分别按输入、缓存输入、缓存写入与输出 token 计价，支持长提示阶梯定价，金额以精确小数存储",
+    "价格按 effective_from/effective_to 版本化，价格变更不改动历史成本，每条价格记录来源 URL 与核查日期",
+    "支持 POST /api/usage、TypeScript 与 Python 客户端、OpenTelemetry trace 三种上报方式；预算告警可发送至 webhook、Slack 或邮件"
+   ],
+   "use_cases": [
+    "团队需要按项目、客户或功能维度记录和查看 AI API 花费",
+    "需要按版本化价格保留历史成本记录并与供应商账单核对",
+    "需要对各项目设置月度预算并在达到阈值时接收告警"
+   ]
+  },
+  "sha": "b4d78134abb5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7764f1e3d5ff": {
+  "identity": {
+   "one_liner": "基于 .NET 与 React 的多租户 SaaS 起始模板，内置认证、团队与 Stripe 计费",
+   "review": "Tenlith 是一个开源 SaaS 起始模板，后端为 ASP.NET Core（EF Core、后台 worker），前端为 React + TypeScript，采用垂直切片与模块化单体架构。它实现邮箱认证、组织/团队、Stripe 订阅与配额控制，通过 Docker Compose 一键运行，适合作为 .NET 技术栈 SaaS 项目的代码基础。",
+   "highlights": [
+    "提供邮箱/密码认证、JWT 访问令牌与轮换刷新会话，可选 GitHub OAuth 登录",
+    "实现按账户多组织（多租户）、Owner/Admin/Member 角色与带过期机制的团队邀请",
+    "集成 Stripe Checkout、Customer Portal 与签名 webhook，并支持本地计划模拟"
+   ],
+   "use_cases": [
+    "需要多租户、组织与团队功能的 .NET SaaS 项目起步开发",
+    "需要 Stripe 订阅计费与 Free/Pro 配额控制的订阅型产品",
+    "在本地通过 Docker 快速体验完整 SaaS 工作流（无需外部凭证）"
+   ]
+  },
+  "sha": "7764f1e3d5ff",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

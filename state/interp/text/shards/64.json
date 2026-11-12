@@ -2858,5 +2858,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "93ee307862da": {
+  "identity": {
+   "one_liner": "YAML 声明式语义层，将模型编译为 8 种 SQL 方言",
+   "review": "OrionBelt 是一个语义与上下文层，用户或 AI 代理在 YAML 中声明维度、度量与连接，系统经 AST 编译为 8 种方言（BigQuery、ClickHouse、Snowflake、DuckDB 等）的 SQL，并提供 PostgreSQL wire、Arrow Flight SQL、REST 和 MCP 四种接入接口。它以 sidecar 形式运行，不管理集群或缓存，要求 Python 3.12+，许可为 BUSL-1.1，可通过 pip 安装或 Docker 运行。",
+   "highlights": [
+    "将 YAML 声明的语义模型通过 AST 编译为 BigQuery、ClickHouse、Databricks、Dremio、DuckDB/MotherDuck、MySQL、PostgreSQL、Snowflake 八种方言的 SQL",
+    "提供 PostgreSQL wire（5432）、Arrow Flight SQL（8815）、REST（8000）与 MCP 四种接入接口；v3.0.0 起支持跨数据库联邦查询，将拆分后的子查询经内存 DuckDB 合并",
+    "模型可导出为 Apache Ossie（OSI）格式与 RDF 图（OWL/SHACL/SKOS/PROV），支持只读 SPARQL 查询，并以 JSON、Mermaid 或 Turtle 输出查询与物件的血缘"
+   ],
+   "use_cases": [
+    "AI 代理通过 MCP 或 oneshot 批量接口提交任务级 OBML 模型并执行查询",
+    "BI 工具（Tableau、Power BI、Superset、Metabase 等）经既有 Postgres 驱动或 Flight SQL 驱动连接语义模型",
+    "同一模型需跨多个数据仓库编译，并对 NULL 处理、取整等表达式行为做统一化处理"
+   ]
+  },
+  "sha": "93ee307862da",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c72e86bcf65e": {
+  "identity": {
+   "one_liner": "本地优先的记忆 CLI，将邮件、日历、消息与文件同步为可检索、带引用的本地上下文",
+   "review": "Mora 是一个用 Go 编写的命令行工具，面向使用 Claude Code、Codex 等 AI agent 的个人用户。它以只读方式从 Gmail、Google Calendar、iMessage、WhatsApp、GitHub Issues 及本地文件夹抽取数据，存为本地 Markdown 文本与 SQLite 索引，默认不联网上传；通过 MCP 服务器向 agent 提供搜索与写入工具。保存路径均不调用 AI 模型，写入策略默认 tentative 并支持 mora review 审核。项目为 alpha 阶段，同步失败可能导致本地副本过期。",
+   "highlights": [
+    "以只读方式接入 Gmail、Google Calendar、iMessage、WhatsApp、Apple Calendar、GitHub Issues 与本地文件（含 PDF/Word），数据存为本地 Markdown 加 SQLite 索引",
+    "通过 `mora mcp serve` 向任意 MCP 客户端提供搜索、读取、write_memory 等工具；MCP 写入默认带 tentative 标签，可用 `mora review` 审核",
+    "保存与搜索路径不调用 AI 模型，可选本地 Ollama 模型改进搜索；备份与共享为需自行开启的独立功能"
+   ],
+   "use_cases": [
+    "为 Claude Code/Codex 等 agent 提供带引用的本地上下文，供其在会话中检索邮件、日历、消息与文件内容",
+    "在本地集中搜索多个数据源的文本内容（单条目保留前 16KB/64KB，超过 512KB 文本文件跳过）",
+    "用 Bash 规则 hook 在 Claude Code 中对匹配命令发出警告，或用 `mora write`/`mora teach` 记录决策与纠正"
+   ]
+  },
+  "sha": "c72e86bcf65e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

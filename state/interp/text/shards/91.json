@@ -2798,5 +2798,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e94113d224da": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 Apache Flink 连接器，用于将 Flink 数据流写入 ClickHouse",
+   "review": "这是 ClickHouse 团队维护的官方 Apache Flink 连接器，支持 DataStream API 与 Table API/Flink SQL（仅 insert-only，不支持 update/delete）。SQL sink 通过 'connector' = 'clickhouse' 注册，可在规划期校验 schema 与目标表列类型，按名称大小写敏感匹配列。支持 Flink 1.17 至 2.0+ 多版本，需 Java 11+ 或 17+，SQL sink 要求 ClickHouse 服务器 23.10 及以上。",
+   "highlights": [
+    "支持 DataStream API 与 Table API/Flink SQL 两种接入方式，SQL sink 仅支持插入",
+    "规划期读取目标表真实列类型并校验 Flink schema，类型不匹配在提交时报错",
+    "提供批量刷新、重试策略、时区解释、严格数值映射等可配置选项"
+   ],
+   "use_cases": [
+    "将 Flink 流处理作业的数据写入 ClickHouse 表",
+    "通过 Flink SQL 的 INSERT INTO 向 ClickHouse 追加数据",
+    "使用 ReplacingMergeTree/AggregatingMergeTree 配合 FINAL/argMax 实现 Upsert 风格写入"
+   ]
+  },
+  "sha": "e94113d224da",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "92c482cff39b": {
+  "identity": {
+   "one_liner": "配套 Medium 文章的示例项目，用 Axum 与 SQLx 实现笔记 CRUD REST API。",
+   "review": "该仓库是为 Medium 文章编写的示例代码，演示如何使用 Rust、Axum 框架与 SQLx 构建连接 MySQL 的笔记 CRUD REST API。README 记录了技术栈（Rust 1.99.1）、cargo init 初始化项目的步骤，以及通过 sqlx-cli 执行数据库迁移的命令。适合跟随文章学习该技术组合的初学者。",
+   "highlights": [
+    "使用 Axum 与 SQLx 实现对 MySQL 的笔记 CRUD REST API",
+    "README 提供 cargo init 项目初始化步骤",
+    "提供基于 sqlx-cli 的数据库迁移命令"
+   ],
+   "use_cases": [
+    "配合 Medium 文章学习 Axum + SQLx + MySQL 的 API 开发流程",
+    "作为本地运行的笔记 CRUD 接口示例代码",
+    "参考其迁移命令了解 sqlx-cli 的使用方式"
+   ]
+  },
+  "sha": "92c482cff39b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9a48ed48a54": {
+  "identity": {
+   "one_liner": "把仓库、文档、音视频转成闯关式课程的本地 Electron 学习应用",
+   "review": "LookatStudy 是一个 Electron 桌面应用，读取 GitHub 仓库、本地文件夹、网页链接、文本、EPUB、音频和视频等输入，生成由章节课时、知识点掌握度（BKT）、SM-2 复习计划和章节考试组成的课程结构。数据以 SQLite 文件存于本机，不注册账号、无云同步，LLM key 由用户自备并支持多家服务商及 OpenAI 兼容端点。源码运行需 Node 22 以上。",
+   "highlights": [
+    "支持五种导入入口和十二种文档、三十余种代码文件格式，音频经本地 Whisper 转写，视频走 yt-dlp 拉取音轨或字幕",
+    "每道题更新对应知识点的 BKT 掌握模型，课程按节点门控解锁，SM-2 调度到期复习",
+    "数据存储在本机 SQLite 文件中，key 只存于主进程，渲染进程无法读取"
+   ],
+   "use_cases": [
+    "想把已 star 的教程仓库、技术文档或论文按课程节奏逐节学完的自学者",
+    "希望用本地录音、B站或 YouTube 课程视频批量生成多集课程的学习者",
+    "需要在离线环境使用神经语音朗读课文、且数据不留本机的场景"
+   ]
+  },
+  "sha": "a9a48ed48a54",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

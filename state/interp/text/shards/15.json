@@ -3277,5 +3277,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "610f82b6ba43": {
+  "identity": {
+   "one_liner": "基于 Postgres RLS 的 Spring Boot 多租户隔离层",
+   "review": "TenantLayer 是面向 Spring Boot + Postgres 的多租户隔离库：在连接签出时写入租户设置、由数据库行级安全强制隔离，并配合 Hibernate @TenantId 过滤。提供 HTTP 头/子域/路径/JWT 四种租户解析器与成员校验，覆盖虚拟线程、Kafka、@Async 等上下文传播场景，适合构建多租户 SaaS 的 Java 团队。",
+   "highlights": [
+    "通过 RlsPolicyGenerator 生成含 FORCE RLS、nullif 守卫和租户列索引的 SQL 策略迁移，IsolationChecker 在启动时扫描 pg_policies 报告未受保护的表",
+    "提供四种租户解析器（HTTP 头、子域、路径段、JWT claim）、可插拔 SPI、默认开启的严格模式（无法解析租户返回 400）与成员资格验证（越权返回 403）",
+    "租户上下文自动传播至 Servlet、@Async、虚拟线程、CompletableFuture、@Scheduled、RestTemplate/WebClient/Feign 及 Kafka 生产与消费；注册表支持 forEachTenant 批量运行与幂等租户 onboarding"
+   ],
+   "use_cases": [
+    "构建依赖 Postgres 行级安全实现租户数据隔离的 Spring Boot SaaS 应用",
+    "需要租户上下文跨越虚拟线程、Kafka 监听器、CompletableFuture 等异步边界的后台任务与消息处理",
+    "包含租户注册、按租户迁移与钩子执行（种子数据、Stripe 客户等）的多租户开通流程"
+   ]
+  },
+  "sha": "610f82b6ba43",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

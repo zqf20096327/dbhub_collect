@@ -17763,5 +17763,668 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "52a0d0cddf69+2": {
+  "fn": "EdiWang/Moonglade",
+  "clean_ver": "2",
+  "raw_lines": 20,
+  "ops": [
+   [
+    "equal",
+    0,
+    20,
+    0,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "The solution is `src/Moonglade.slnx`. See the engineering reference for module responsibilities."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    29,
+    22,
+    29,
+    [
+     "|Path|Purpose|",
+     "|---|---|",
+     "|`src/Moonglade.Web`|ASP.NET Core web host, Razor Pages, API controllers, endpoint mapping, filters, middleware wiring, and static assets.|",
+     "|`src/Moonglade.*`|Feature, data, configuration, authentication, storage, integration, and background-service libraries.|",
+     "|`src/Tests/Moonglade.*.Tests`|xUnit test projects aligned with the production projects. See the test layout and maintenance guide.|",
+     "|`Dockerfile`, `compose.yaml`|Docker deployment assets.|",
+     "|`database/`|Manual, idempotent database migration SQL scripts and their conventions.|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    34,
+    29,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "- **Stable Code:** Always use the Release branch. Avoid deploying from `master`."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    42,
+    35,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "See `database/README.md` for the script catalog, authoring rules, and repeat-execution verification."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    48,
+    43,
+    48
+   ],
+   [
+    "replace",
+    48,
+    54,
+    48,
+    54,
+    [
+     "1. Category integer IDs: converts GUID keys; public category/feed URLs retain their slugs, while admin APIs use integers.",
+     "2. PostgreSQL snake_case names: requires integer category IDs first. SQL Server retains PascalCase names.",
+     "3. Canonical activity events: replaces legacy activity wording with stable event keys on both providers. Stop the old host first; this one-time upgrade discards only legacy activity history. Reruns preserve new history.",
+     "4. SEO settings copies existing SEO values from General and Advanced into a dedicated configuration row before startup. A follow-up moves robots.txt into that row.",
+     "5. Independent owner accounts: run the additive `owner-account.sql` and then `owner-account-cutover.sql` for your provider. This preserves the public address, removes only obsolete General email and legacy credentials, and leaves Local installations awaiting new credentials unless already initialized. Restrict access until public setup is complete. End-to-end release acceptance is still pending; do not deploy this development build as a completed release.",
+     "6. Owner profile settings: run `owner-avatar.sql` and then `owner-presentation.sql` for your provider to move the uploaded avatar, Gravatar preference, name and description to account storage."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    67,
+    54,
+    67
+   ],
+   [
+    "replace",
+    67,
+    68,
+    67,
+    68,
+    [
+     "Email is optional and inactive until SMTP is configured. See Email Notifications and `/admin/settings/notification` for setup."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    71,
+    68,
+    71
+   ],
+   [
+    "replace",
+    71,
+    72,
+    71,
+    72,
+    [
+     "|Tools|Alternatives|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    72,
+    73
+   ],
+   [
+    "replace",
+    73,
+    75,
+    73,
+    75,
+    [
+     "|Visual Studio 2026|VS Code + .NET 10.0 SDK|",
+     "|PostgreSQL|SQL Server 2025 or LocalDB|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    80,
+    75,
+    80
+   ],
+   [
+    "replace",
+    80,
+    81,
+    80,
+    81,
+    [
+     "|Database|Example Connection String (`appsettings.json > ConnectionStrings > MoongladeDatabase`)|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    81,
+    82
+   ],
+   [
+    "replace",
+    82,
+    84,
+    82,
+    84,
+    [
+     "|PostgreSQL|`User ID=***;Password=***;Host=localhost;Port=5432;Database=moonglade;Pooling=true;`|",
+     "|SQL Server|`Server=(local);Database=moonglade;Trusted_Connection=True;`|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    104,
+    84,
+    104
+   ],
+   [
+    "replace",
+    104,
+    105,
+    104,
+    105,
+    [
+     "The script requires the .NET 10 SDK and a configured, running database (see Database Setup). It restores dependencies, builds, and runs the web project with the `Moonglade.Web` launch profile in `Development`. It does not start Docker or change local configuration. Stop the application with `Ctrl+C`."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    105,
+    106
+   ],
+   [
+    "replace",
+    106,
+    107,
+    106,
+    107,
+    [
+     "Open `https://localhost:10210`. With Local authentication, an installation without an initialized account redirects to `/auth/setup-account`. Create the owner account using an email and password; there is no shipped administrator or separate username. By default, scan the authenticator QR code and enter its 6-digit TOTP code before credentials are saved. Successful setup signs in and opens the public homepage. For test commands and coverage guidance, see Tests."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    124,
+    107,
+    124
+   ],
+   [
+    "replace",
+    124,
+    125,
+    124,
+    125,
+    [
+     "Article saves, publication changes (including scheduled publishing), recycle-bin operations, and category/tag updates or deletions invalidate article caches, feeds, and the sitemap. Counters do not trigger invalidation; page-specific sitemap invalidation preserves article/feed caches. Feeds and the sitemap expire after one hour; articles use `PostCacheMinutes`. Invalidation is process-local, so multiple instances require separate coordination. See Caching and Side Effects for implementation details."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    130,
+    125,
+    130
+   ],
+   [
+    "replace",
+    130,
+    131,
+    130,
+    131,
+    [
+     "Settings become active only after a successful database save and publication of one immutable ordinary-settings snapshot; groups submitted together are persisted together. Each operation or page render uses one immutable settings capture, including its related layouts/components or feed data/formatting; a subsequent operation can capture newer values. Updates are serialized within one process; other instances must reload or synchronize separately. See the configuration write contract."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    131,
+    132
+   ],
+   [
+    "replace",
+    132,
+    133,
+    132,
+    133,
+    [
+     "Settings activity compares the effective previous and saved group inside that same write gate, including partial saves and nested custom menus. Only approved public labels, choices, counts, and switches enter before/after details. URLs, email identities, scripts, CSS, menu contents, filter keywords, and credential values are excluded. A restricted-only change still records the update without naming its restricted fields. Legacy configuration JSON normalization can still update persistence timestamps and caches without an activity entry when effective values are unchanged. Ordinary settings activity requires the before/after details format. Installations that ran a preview with the canonical schema must also clear pre-release activity history before starting the release. See the activity upgrade guide."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    138,
+    133,
+    138
+   ],
+   [
+    "replace",
+    138,
+    148,
+    138,
+    148,
+    [
+     "|Setting|When the change takes effect|",
+     "|---|---|",
+     "|Site information, feed count/full content, image CDN|Subsequent requests; affected RSS/Atom/category feeds and canonical sitemap outputs are refreshed after saving.|",
+     "|Theme selection|Subsequent public, admin, and sign-in page renders.|",
+     "|Custom CSS|The server reads the saved value; existing browser caching and ETag revalidation still apply.|",
+     "|Watermarks and original-image retention|Future uploads; existing image files are not reprocessed.|",
+     "|Notification switches|Future enqueue decisions; already queued email is retained.|",
+     "|Notification sender display name|Application restart required, including when changing to/from the deployment fallback.|",
+     "|FOAF and sitemap enable/disable|Subsequent requests to the current instance. Disabled endpoints return HTTP 404.|",
+     "|Scheduled publishing enable/disable|Saving wakes the worker and it rechecks before dispatching publication; publication already dispatched is not canceled.|"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    179,
+    148,
+    179
+   ],
+   [
+    "replace",
+    179,
+    187,
+    179,
+    180,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    197,
+    180,
+    190
+   ],
+   [
+    "replace",
+    197,
+    206,
+    190,
+    191,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    210,
+    191,
+    195
+   ],
+   [
+    "replace",
+    210,
+    211,
+    195,
+    196,
+    [
+     "For Microsoft Entra ID, use the tenant-specific authority `https://login.microsoftonline.com/{tenant-id}/v2.0`. Register both callback URLs shown above in the provider. Existing Entra-specific deployments must follow the generic OIDC migration guide."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    275,
+    196,
+    260
+   ],
+   [
+    "replace",
+    275,
+    276,
+    260,
+    261,
+    [
+     "Upgrading from a previous filesystem, Azure Blob, or S3-compatible provider requires manual storage preparation and data migration before the new version starts. See Upgrade to Filesystem-Only Image Storage."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    261,
+    262
+   ],
+   [
+    "replace",
+    277,
+    278,
+    262,
+    263,
+    [
+     "For an optional deployment example using mounted object storage, see Cloudflare R2 with rclone."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    302,
+    263,
+    287
+   ],
+   [
+    "replace",
+    302,
+    308,
+    287,
+    288,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    336,
+    288,
+    316
+   ],
+   [
+    "replace",
+    336,
+    340,
+    316,
+    317,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    340,
+    342,
+    317,
+    319
+   ],
+   [
+    "replace",
+    342,
+    343,
+    319,
+    320,
+    [
+     "Replace `notifications@example.com` with your verified sender address. Supply the Resend API key through `Email__SmtpPassword` or your deployment's secret configuration; do not commit it to `appsettings.json`. Port `587` with `EnableSsl=true` requires STARTTLS. Restart Moonglade, enable email sending in `/admin/settings/notification`, and use **Send Test Email** to check delivery. See Resend's SMTP documentation for service requirements and supported ports."
+    ]
+   ],
+   [
+    "equal",
+    343,
+    346,
+    320,
+    323
+   ],
+   [
+    "replace",
+    346,
+    348,
+    323,
+    325,
+    [
+     "- System Settings",
+     "- Security HTTP Headers"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    351,
+    325,
+    328
+   ],
+   [
+    "replace",
+    351,
+    352,
+    328,
+    329,
+    [
+     "|Name|Feature|Status|Endpoint|"
+    ]
+   ],
+   [
+    "equal",
+    352,
+    353,
+    329,
+    330
+   ],
+   [
+    "replace",
+    353,
+    366,
+    330,
+    343,
+    [
+     "|RSS|Subscription|Supported|`/rss`|",
+     "|Atom|Subscription|Supported|`/atom`|",
+     "|OPML|Subscription|Supported|`/opml`|",
+     "|Open Search|Search|Supported|`/opensearch`|",
+     "|FOAF|Social|Supported|`/foaf.xml`|",
+     "|Webmention|Social|Supported|`/webmention`|",
+     "|Reader View|Reader Mode|Supported|N/A|",
+     "|u-card|SEO|Supported|N/A|",
+     "|IndexNow|SEO|Supported|N/A|",
+     "|Dublin Core|SEO|Basic|N/A|",
+     "|RSD|Discovery|Deprecated|N/A|",
+     "|MetaWeblog|Blogging|Deprecated|N/A|",
+     "|Pingback|Social|Deprecated|N/A|"
+    ]
+   ],
+   [
+    "equal",
+    366,
+    371,
+    343,
+    348
+   ],
+   [
+    "replace",
+    371,
+    375,
+    348,
+    352,
+    [
+     "|Endpoint|Checks|",
+     "|---|---|",
+     "|`GET /health`|Process liveness only; no database check.|",
+     "|`GET /health/ready`|Readiness including database connectivity.|"
+    ]
+   ],
+   [
+    "equal",
+    375,
+    377,
+    352,
+    354
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "d301d50f814c+2": {
+  "fn": "lyr1cs/rein",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    9,
+    4,
+    5,
+    [
+     " English | 中文"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    14,
+    5,
+    10
+   ],
+   [
+    "replace",
+    14,
+    15,
+    10,
+    11,
+    [
+     "**Current release: `v1.5.4`** (2026-11-12) — Anthropic works as an LLM vendor: chat requests are built per vendor, so an Anthropic model gets no `temperature`, no `json_object` mode and a real thinking switch, and `rein providers status --probe` no longer reports a valid Anthropic key as unauthorized. v1.5.3 (same day): the owner token (`REIN_HTTP_TOKEN`) resolves like provider keys: process environment first, then `~/.rein/secrets.env` (`rein keys set REIN_HTTP_TOKEN`), so `rein doctor` and every other command agree with the running server without the token being exported into a shell. v1.5.2 (same day) fixed #5 and #6: embedding requests packed by size with failing texts isolated, so a store with a few very large memories converges in one run; a legacy UNIQUE on the OAuth client name repaired on open; internal error text no longer returned by OAuth and REST endpoints; read-only database open; merges that never shorten a memory. **2155 lib tests / 0 fail; clippy + fmt clean.**"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    20,
+    11,
+    16
+   ],
+   [
+    "replace",
+    20,
+    22,
+    16,
+    17,
+    [
+     " v1.3.0 (2026-07-15) — the self-supervised activation line "
+    ]
+   ],
+   [
+    "equal",
+    22,
+    28,
+    17,
+    23
+   ],
+   [
+    "delete",
+    28,
+    30,
+    23,
+    23
+   ],
+   [
+    "equal",
+    30,
+    39,
+    23,
+    32
+   ],
+   [
+    "replace",
+    39,
+    40,
+    32,
+    33,
+    [
+     "For the full GitHub-ready manual, see docs/manual/README.md. Reference tables live under docs/reference/."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    33,
+    36
+   ],
+   [
+    "replace",
+    43,
+    44,
+    36,
+    37,
+    [
+     "|Feature|Description|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    37,
+    38
+   ],
+   [
+    "replace",
+    45,
+    49,
+    38,
+    42,
+    [
+     "|**40 MCP tools**|core memory ops, knowledge graph, temporal recall, adaptive maintenance, ARS feedback (Cap A mirror, Cap B synthesis, Cap C archival summary), runtime LLM judge enqueue, ARS acceleration release-gate inspection, and Trust & Measurement reporting. All authored once via `#[op]` macro (v0.21+) and exposed through CLI / MCP / REST simultaneously.|",
+     "|**Unified operation registry**|One `#[op]` declaration drives CLI / MCP / REST surfaces (v0.21, A1). Inventory-based dispatch; zero hand-maintained lists.|",
+     "|**Neural Wiki GUI**|React + Tailwind web dashboard with Brain View, Adaptive Engine, Knowledge Graph, Timeline, and more|",
+     "|**Self-adaptive engine**|M1-M6: all learning loops closed — data drives fusion weights, decay curves, dedup thresholds, and tier boundaries|"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    42,
+    43
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

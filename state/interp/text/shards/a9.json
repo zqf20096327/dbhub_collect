@@ -3182,5 +3182,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f9b2b28621ca": {
+  "identity": {
+   "one_liner": "自托管 OPNsense 防火墙编队管理平台，按客户/站点分组监控与更新",
+   "review": "OPNManager 是一个自托管的 OPNsense 防火墙编队管理应用，供 MSP 和 IT 团队集中监控、备份和更新多台防火墙，按客户与站点组织。代理以 OPNsense 原生插件形式每两分钟签到，报告网关延迟、VPN、CARP、服务与证书状态；配置按计划备份并与批准基线比对生成差异，更新通过 canary/pilot/production 分环手动推进。需 Ubuntu 22.04+、PHP 8.0+、MySQL/MariaDB 及 Apache/Nginx，功能可用性取决于防火墙实际运行的代理版本；pfSense 支持已实现但未经验证。",
+   "highlights": [
+    "代理以原生插件方式安装，每 2 分钟签到，报告网关延迟/丢包、VPN 隧道、CARP、服务状态与证书到期",
+    "配置按计划备份，可与批准基线比对生成按规则描述命名的差异；无自动恢复",
+    "更新以 campaign 形式经 canary/pilot/production 三环手动推进，CARP 对成员不会同时更新"
+   ],
+   "use_cases": [
+    "MSP 按客户/站点分组管理多台 OPNsense 防火墙",
+    "需要配置漂移审查与基线比对的运维团队",
+    "需要分环灰度推送防火墙更新并保护 CARP 高可用对的场景"
+   ]
+  },
+  "sha": "f9b2b28621ca",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f6127e60c239": {
+  "identity": {
+   "one_liner": "基于 LangGraph 的 AI 对话 agent，回答标来源并支持文件生成出版本",
+   "review": "灵稿是一个能搜索、读网页与文件、回答标注来源的对话 agent。用户可上传图片和文件、建立可检索的资料库；需要成品时模型把文档、网页、代码写成文件并逐次存版本。架构上主 agent 与子 agent 均用 LangChain 的 create_agent 搭配 16 个自写中间件，运行层自行实现排队、停止、插话、中断提问与断线续看。适合需要带引用的资料问答和工作任务的场景。默认使用 DeepSeek，另直连 7 家模型。",
+   "highlights": [
+    "基于 LangGraph 实现：create_agent 加 16 个自写中间件，支持并行子 agent（每轮最多 5 个、同时最多 3 个）、interrupt 停下来问用户、多模型路由与免费额度切换",
+    "检查点、长期记忆、运行记录和资料库向量均存 Postgres（pgvector），检索采用向量加关键词各取 20 块、RRF 合并后重排取前 8 块",
+    "上下文压缩围绕前缀缓存设计：压缩位置存于 state 只往后挪，两次挪动之间发出的前缀逐字不变；文件按版本存储，支持片段替换编辑"
+   ],
+   "use_cases": [
+    "需要回答标注引用来源、可查个人资料库的资料问答与对话",
+    "把调研、报告、网页、代码等成品写成文件并保留修改版本的工作任务",
+    "涉及搜索、读网页、天气、地图、出行班次查询并渲染卡片的对话场景"
+   ]
+  },
+  "sha": "f6127e60c239",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c49af88d1bc3": {
+  "identity": {
+   "one_liner": "本地运行的网络安全资讯聚合器，抓取100+RSS源并生成LinkedIn帖文",
+   "review": "CyberPulse 是面向需要持续跟踪安全资讯并在 LinkedIn 分享内容的安全从业者的工具。它从内置 118 个（默认启用 101 个）RSS 源抓取文章，按类别和严重度分类，支持基于 OpenAI 兼容接口的帖文生成，失败时回退到本地模板。需 Node.js 20+ 或 Docker 运行，数据存于本地 SQLite，LinkedIn 发布需自行创建开发者应用完成 OAuth 授权，访问令牌约 60 天过期。",
+   "highlights": [
+    "内置 118 个 RSS 源（101 个默认启用），每 15 分钟自动抓取，可按类别（VULNERABILITY、MALWARE 等 16 类）和严重度过滤",
+    "帖文生成器提供 5 种语气、6 种格式、英语/西班牙语支持，可经 LinkedIn OAuth 2.0 API 直接发布",
+    "提供 REST API 和 MCP 端点，支持 My Stack 技术栈模糊匹配过滤，本地 SQLite 存储并支持 Docker 一键部署"
+   ],
+   "use_cases": [
+    "安全从业者聚合跟踪漏洞、恶意软件、威胁情报等多类别资讯",
+    "基于自定义技术栈（含版本、厂商）过滤与自身基础设施相关的安全新闻",
+    "生成安全内容帖文并经 OAuth 授权直接发布到 LinkedIn 个人主页"
+   ]
+  },
+  "sha": "c49af88d1bc3",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7726bef8d64": {
+  "identity": {
+   "one_liner": "OceanBase 大赛赛题一的 seekdb 部署记录，含过程与验证",
+   "review": "该仓库是第六届 OceanBase 数据库大赛赛题一的部署文档，记录 seekdb 在 Kali Linux 2026.2 虚拟机上通过 Docker 部署到 2881 端口的全过程。内容包含三次安装尝试（官方脚本、Docker Hub 直连均失败，国内镜像源成功）、连通性验证及遥测 ID 读取方法。适合参加同一赛题、需参考在非支持发行版上以容器方式部署 seekdb 的用户。",
+   "highlights": [
+    "记录三种安装路径的完整命令与失败原因：官方脚本不支持 Kali、Docker Hub 不可达、国内镜像源可用",
+    "提供基于 MySQL 协议的连通性验证命令（mysql -uroot -P2881）",
+    "说明容器内遥测文件路径 /var/lib/seekdb/run/telemetry.json 的读取方式"
+   ],
+   "use_cases": [
+    "在 Kali 等不在安装脚本支持列表的 Debian 衍生发行版上以 Docker 部署 seekdb",
+    "排查 seekdb 安装脚本或镜像拉取过程中的网络与系统权限问题",
+    "参加 OceanBase 大赛赛题一时对照部署步骤与验证方法"
+   ]
+  },
+  "sha": "a7726bef8d64",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

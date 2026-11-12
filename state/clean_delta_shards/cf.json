@@ -17916,5 +17916,1968 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "a0eb9d0ea641+2": {
+  "fn": "ConduitIO/conduit-connector-postgres",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "The PostgreSQL connector is a Conduit"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "delete",
+    5,
+    6,
+    5,
+    5
+   ],
+   [
+    "equal",
+    6,
+    45,
+    5,
+    44
+   ],
+   [
+    "replace",
+    45,
+    46,
+    44,
+    45,
+    [
+     " so a Windows path must be written `sslcert=C:\\\\path\\\\to\\\\cert`."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    45,
+    46
+   ],
+   [
+    "replace",
+    47,
+    48,
+    46,
+    47,
+    [
+     " resolved from `$HOME` instead of the OS account's home directory."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    80,
+    47,
+    79
+   ],
+   [
+    "replace",
+    80,
+    82,
+    79,
+    81,
+    [
+     " the rows keyed 0 or below that it skipped, then continues where it stopped. A",
+     " crash during that catch-up resumes it."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    81,
+    82
+   ],
+   [
+    "replace",
+    83,
+    91,
+    82,
+    90,
+    [
+     " by the connector. On its first start it checks each table and logs a warning",
+     " with the code `postgres.source.snapshot_low_keys_skipped` for every table that has",
+     " rows keyed 0 or below. The warning is shown until the first record of that run",
+     " is acknowledged. It can be a false positive: a pipeline that never ran a",
+     " snapshot, or whose rows changed since, lost nothing.",
+     " The check waits at most 5 seconds per table. If a table is locked, or the",
+     " connector's role cannot SELECT from it, it logs a warning with the same code and",
+     " the pipeline starts anyway; the check runs again on the next start."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    96,
+    90,
+    95
+   ],
+   [
+    "replace",
+    96,
+    97,
+    95,
+    96,
+    [
+     " upsert by key apply as inserts: `UPDATE SET <key> = <key> WHERE <key> <= 0`."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    96,
+    97
+   ],
+   [
+    "replace",
+    98,
+    99,
+    97,
+    98,
+    [
+     "To check a table yourself: `SELECT count(*) FROM WHERE <key> <= 0`."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    123,
+    98,
+    122
+   ],
+   [
+    "replace",
+    123,
+    139,
+    122,
+    123,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    220,
+    123,
+    204
+   ],
+   [
+    "replace",
+    220,
+    226,
+    204,
+    210,
+    [
+     " Postgres grants to `PUBLIC` by default. If it was revoked, the connector refuses to",
+     " start with `postgres.source.slot_beacon_failed`; grant it back with",
+     " `GRANT EXECUTE ON FUNCTION pg_logical_emit_message(boolean, text, text) TO <role>`",
+     " (Postgres 14 to 16) or",
+     " `GRANT EXECUTE ON FUNCTION pg_logical_emit_message(boolean, text, text, boolean) TO <role>`",
+     " (Postgres 17+). Peeking needs `REPLICATION`, which the connector already needs."
+    ]
+   ],
+   [
+    "equal",
+    226,
+    227,
+    210,
+    211
+   ],
+   [
+    "replace",
+    227,
+    232,
+    211,
+    216,
+    [
+     " key that exists only in the pipeline's position (Conduit's position store). The key",
+     " never reaches the database or a log (logs show an 8-digit fingerprint), so a role that",
+     " can call `pg_logical_emit_message` cannot forge a beacon, and a genuine one copied into",
+     " a replaced slot is refused. Treat the position store as sensitive. A beacon holds no",
+     " row data and no configuration."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    216,
+    217
+   ],
+   [
+    "replace",
+    233,
+    236,
+    217,
+    220,
+    [
+     " the WAL. Consider `REVOKE EXECUTE ON FUNCTION <signature above> FROM PUBLIC` together",
+     " with the `GRANT` to the connector's role; the connector logs",
+     " `postgres.source.slot_beacon_public` at start while PUBLIC still has it."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    220,
+    221
+   ],
+   [
+    "replace",
+    237,
+    241,
+    221,
+    225,
+    [
+     " destinations, and its API returns the source's position (`sourceState.position`). So",
+     " the key can be read wherever records or that API are, for example in a Kafka topic of",
+     " OpenCDC records. Forging a beacon with it still needs the rights to drop and recreate",
+     " the slot (`REPLICATION` or superuser) and to write into the WAL."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    225,
+    226
+   ],
+   [
+    "replace",
+    242,
+    246,
+    226,
+    230,
+    [
+     " after a record has been delivered**: until a position with the new key is saved, a",
+     " restart from the old position is refused again, so an attempt that created the slot and",
+     " failed before saving never passes for the original. On an idle source that can take a",
+     " while; write a row to a captured table to get a record through."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    230,
+    231
+   ],
+   [
+    "replace",
+    247,
+    249,
+    231,
+    233,
+    [
+     " messages enabled, see the beacons; Debezium can filter them with",
+     " `message.prefix.exclude.list`."
+    ]
+   ],
+   [
+    "equal",
+    249,
+    250,
+    233,
+    234
+   ],
+   [
+    "replace",
+    250,
+    256,
+    234,
+    240,
+    [
+     " while the pipeline is idle, after it acked records or once the server has written at",
+     " least 512 bytes of WAL since the last beacon. An idle database stays idle. An idle",
+     " slot reaches the WAL end as of the last beacon about two status intervals after the",
+     " last ack (the beacon itself, and WAL written after it, stay until the next one). Beacons commit",
+     " with `synchronous_commit = local`, so a synchronous standby that is down does not block",
+     " them."
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    240,
+    241
+   ],
+   [
+    "replace",
+    257,
+    266,
+    241,
+    250,
+    [
+     " `postgres.source.slot_beacon_unavailable` with `retained_wal_bytes`), the idle slot is",
+     " held at the last beacon for at most `logrepl.slotIdentity.beaconFailureTimeout`",
+     " (default 5 minutes; the WAL held back is at most that time's worth). Then the slot",
+     " advances without beacons, so its WAL cannot fill the disk, and the connector logs the",
+     " same code as an error. Until a beacon is written and delivered again, a restart is",
+     " refused with `slot_replaced`. The connector keeps trying: fix the cause (usually the",
+     " `GRANT` above) while the pipeline runs, and it recovers on its own (it logs that the",
+     " slot can be proven again). If the pipeline was stopped in that state, start it once",
+     " with `logrepl.allowWALGap: true`."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    250,
+    251
+   ],
+   [
+    "replace",
+    267,
+    272,
+    251,
+    256,
+    [
+     " that far back and make it slow, and so can a large backlog: it reads as far as it must,",
+     " never giving up early. `logrepl.slotIdentity.checkTimeout` (default 10 minutes) bounds",
+     " it; a check that times out or cannot read the slot refuses the start with",
+     " `postgres.source.slot_identity_check_failed`, which is retried. Raise the timeout, or",
+     " start once with `logrepl.allowWALGap: true` to take the slot unproven."
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    256,
+    257
+   ],
+   [
+    "replace",
+    273,
+    279,
+    257,
+    263,
+    [
+     " cannot write them. There positions carry no identity and the check is the one before",
+     " v0.17.5: the connector logs `postgres.source.slot_identity_unsupported` and resumes on",
+     " a slot past the position. A position that does carry an identity (written on a",
+     " primary) is never accepted unproven there: it is refused with",
+     " `postgres.source.slot_identity_unprovable`. A slot on a standby is a slot of the",
+     " standby, never the primary's, even when it can decode the primary's beacons."
+    ]
+   ],
+   [
+    "equal",
+    279,
+    283,
+    263,
+    267
+   ],
+   [
+    "replace",
+    283,
+    287,
+    267,
+    271,
+    [
+     " `pg_logical_emit_message` (only databases that revoked it from PUBLIC are affected):",
+     " `SELECT has_function_privilege('<role>', 'pg_logical_emit_message(boolean, text, text, boolean)', 'EXECUTE');`",
+     " on Postgres 17+, or with `(boolean, text, text)` on 14 to 16. If it returns false,",
+     " grant it, or the first start fails with `postgres.source.slot_beacon_failed`."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    288,
+    271,
+    272
+   ],
+   [
+    "replace",
+    288,
+    294,
+    272,
+    278,
+    [
+     " it, it is proven by the position alone. Otherwise (the usual case, since older",
+     " versions advance an idle slot to the WAL end) the connector cannot tell whether the",
+     " slot was replaced before the upgrade. It takes the slot over and logs",
+     " `postgres.source.slot_identity_unverified` with `unproven_wal_bytes`, the stretch of",
+     " WAL nothing proves. **Protection begins at the first record saved after the",
+     " upgrade**; until then a restart adopts the slot again with the same warning."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    278,
+    279
+   ],
+   [
+    "replace",
+    295,
+    299,
+    279,
+    283,
+    [
+     " start logs `postgres.source.wal_history_unverified` (with a fingerprint of the server's",
+     " system identifier and its timeline): a restore, point-in-time recovery or another server",
+     " at the same address before the upgrade would go unnoticed. That protection, too, starts",
+     " once the next position is saved."
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    283,
+    284
+   ],
+   [
+    "replace",
+    300,
+    302,
+    284,
+    286,
+    [
+     " database, since that pipeline last delivered a record, re-snapshot that pipeline: the",
+     " changes in between may be gone, and nothing can tell after the fact."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    379,
+    286,
+    363
+   ],
+   [
+    "replace",
+    379,
+    381,
+    363,
+    365,
+    [
+     "schema-qualified name, `<schema>. `, in `opencdc.collection` and in their Avro",
+     "subjects (the Avro record name stays ` _payload`/` _key`, so a schema"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    399,
+    365,
+    383
+   ],
+   [
+    "replace",
+    399,
+    400,
+    383,
+    384,
+    [
+     "`ALTER TABLE REPLICA IDENTITY FULL`, or use a unique index that includes the"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    415,
+    384,
+    399
+   ],
+   [
+    "replace",
+    415,
+    416,
+    399,
+    400,
+    [
+     "(#386). Until it"
+    ]
+   ],
+   [
+    "equal",
+    416,
+    422,
+    400,
+    406
+   ],
+   [
+    "replace",
+    422,
+    424,
+    406,
+    408,
+    [
+     "`postgres.replica_identity.excludes_key: delete on table \" \" (WAL LSN <a>, in the",
+     "transaction that commits at LSN ) arrived without a value for key column ...`."
+    ]
+   ],
+   [
+    "equal",
+    424,
+    430,
+    408,
+    414
+   ],
+   [
+    "replace",
+    430,
+    431,
+    414,
+    415,
+    [
+     "`SELECT relreplident FROM pg_class WHERE oid = ' '::regclass` (`i` is"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    436,
+    415,
+    420
+   ],
+   [
+    "replace",
+    436,
+    440,
+    420,
+    424,
+    [
+     " `ALTER TABLE REPLICA IDENTITY FULL`, or `REPLICA IDENTITY DEFAULT`, or",
+     " `REPLICA IDENTITY USING INDEX <index>` on a unique index that has the primary key",
+     " among its key columns. This does not repair the change already in the WAL. A restart",
+     " alone fails on it again."
+    ]
+   ],
+   [
+    "equal",
+    440,
+    441,
+    424,
+    425
+   ],
+   [
+    "replace",
+    441,
+    442,
+    425,
+    426,
+    [
+     " uses it."
+    ]
+   ],
+   [
+    "equal",
+    442,
+    443,
+    426,
+    427
+   ],
+   [
+    "replace",
+    443,
+    447,
+    427,
+    431,
+    [
+     " Read the stuck transaction from the slot instead, as a superuser or a role with",
+     " `REPLICATION`. Peeking does not consume anything. `<c>` is the commit LSN ` `",
+     " from the error with its low hex part incremented by one (`0/40C5318` becomes",
+     " `0/40C5319`); the error prints it:"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    455,
+    431,
+    439
+   ],
+   [
+    "replace",
+    455,
+    471,
+    439,
+    455,
+    [
+     " Use the values of `logrepl.slotName` and `logrepl.publicationName` (defaults",
+     " `conduitslot` and `conduitpub`).",
+     " The output can start with earlier transactions that the pipeline already delivered",
+     " but Postgres has not yet been told about (the connector reports its position",
+     " periodically). They can contain the same value as the stuck delete, so do not read",
+     " them. Read only the transaction (`xid`) that contains the `D` row whose `lsn` is the",
+     " WAL LSN `<a>` in the error.",
+     " Each row is one pgoutput message. `B` and `C` begin and commit the transaction. `R`",
+     " names a table and its columns. `I`, `U` and `D` are the changes. A `K` tuple follows",
+     " the table's object id: a 2-byte column count, then one entry per column, `n` for NULL",
+     " or `t`, a 4-byte length and the text value. For this error the only non-null columns",
+     " are those of the identity index, so the readable text is the value to look for, for",
+     " example `222` in a `D` row that shows `K ... n t ... 222 n`. Postgres only accepts a",
+     " unique index as a replica identity, so that value identifies the row in the",
+     " destination. Only tables in the publication appear, which are the tables the pipeline",
+     " captures."
+    ]
+   ],
+   [
+    "equal",
+    471,
+    472,
+    455,
+    456
+   ],
+   [
+    "replace",
+    472,
+    497,
+    456,
+    481,
+    [
+     " cannot do it. Then work out what else step 5 would skip. It skips every change the",
+     " peek lists before the stuck one, and the other changes of the stuck transaction.",
+     " Postgres has not been told they are done, and the pipeline may have read them",
+     " without the destination writing them before it stopped. Get the source connector's",
+     " last acknowledged position from Conduit:",
+     " `GET /v1/connectors/ `, field `sourceState.position`. It is",
+     " base64 of JSON, for example",
+     " `{\"version\":2,\"type\":2,\"last_lsn\":\"0/40845E8\",\"tx_commit_lsn\":\"0/40846E8\",\"tx_seq\":1}`",
+     " (decode it with `base64 -d`). Conduit sets it only when the destination acknowledges a",
+     " record, never when the source reads one, so `last_lsn` is the WAL LSN of the last",
+     " change the destination has confirmed. If Conduit was restarted since the pipeline",
+     " stopped, it reports the last position it saved, which can be slightly older; that errs",
+     " on the safe side. Find the peek row of kind `I`, `U` or `D` whose `lsn` equals",
+     " `last_lsn`. Ignore `B` and `C` rows: a `C` row can show the same number as the first",
+     " change after it. If several rows share that `lsn` (a `COPY` or another statement",
+     " that changes many rows can do that), use `tx_seq`. It numbers the transaction's",
+     " `I`, `U`, `D` and `T` (truncate) rows in the order listed, starting at 1 after its",
+     " `B` row. `R` (relation), `Y` (type) and `O` (origin) rows are not counted. The row",
+     " with that number is the one to match, and it is an `I`, `U` or `D` row. The matched row",
+     " itself and everything listed before it are in the destination. For each change",
+     " listed after it, up to the stuck one and including the rest of the stuck transaction,",
+     " check the destination for its rows and apply any that are missing by hand (`I` and",
+     " `U` carry the full new row; `D` carries the identity columns). If no row matches,",
+     " treat every listed change as unconfirmed. A position without `last_lsn` (a pipeline",
+     " still in its snapshot) matches nothing."
+    ]
+   ],
+   [
+    "equal",
+    497,
+    498,
+    481,
+    482
+   ],
+   [
+    "replace",
+    498,
+    504,
+    482,
+    488,
+    [
+     " deliberate: `' '::pg_lsn + 1` only works from Postgres 14.",
+     " - Postgres 11 or later:",
+     " `SELECT pg_replication_slot_advance('<slot name>', '<c>');`",
+     " - Postgres 10 has no such function. Consume the changes up to `<c>` instead. This",
+     " skips exactly the same changes and needs no new snapshot:",
+     " `SELECT count(*) FROM pg_logical_slot_get_binary_changes('<slot name>', '<c>', NULL, 'proto_version', '1', 'publication_names', '<publication name>');`"
+    ]
+   ],
+   [
+    "equal",
+    504,
+    505,
+    488,
+    489
+   ],
+   [
+    "replace",
+    505,
+    508,
+    489,
+    492,
+    [
+     " Advancing to `<c>` is what skips the transaction. Advancing to the change LSN",
+     " (`<a>`) or to the commit LSN ` ` itself does not: Postgres replays the transaction",
+     " and the pipeline fails on the same delete."
+    ]
+   ],
+   [
+    "equal",
+    508,
+    509,
+    492,
+    493
+   ],
+   [
+    "replace",
+    509,
+    512,
+    493,
+    496,
+    [
+     " so the connector can refuse it with `postgres.source.slot_replaced` (see \"Resuming",
+     " on a replication slot that was replaced\"). If it does, start it once with",
+     " `logrepl.allowWALGap: true`, and remove the setting once it runs."
+    ]
+   ],
+   [
+    "equal",
+    512,
+    521,
+    496,
+    505
+   ],
+   [
+    "replace",
+    521,
+    522,
+    505,
+    506,
+    [
+     "TOAST. When a row is"
+    ]
+   ],
+   [
+    "equal",
+    522,
+    533,
+    506,
+    517
+   ],
+   [
+    "replace",
+    533,
+    536,
+    517,
+    520,
+    [
+     " destination, which builds its `ON CONFLICT DO UPDATE SET` clause only from the",
+     " fields present in the payload) handle omission correctly — an absent field is left",
+     " untouched in the target row."
+    ]
+   ],
+   [
+    "equal",
+    536,
+    537,
+    520,
+    521
+   ],
+   [
+    "replace",
+    537,
+    541,
+    521,
+    525,
+    [
+     " \"unchanged\" and preserve the existing target value. If a sink cannot do this, set",
+     " `REPLICA IDENTITY FULL` on the source table. Under `REPLICA IDENTITY FULL` the old",
+     " row image carries every column, and this connector backfills unchanged TOASTed",
+     " values from it so the payload is always complete."
+    ]
+   ],
+   [
+    "equal",
+    541,
+    551,
+    525,
+    535
+   ],
+   [
+    "replace",
+    551,
+    552,
+    535,
+    536,
+    [
+     "#388."
+    ]
+   ],
+   [
+    "equal",
+    552,
+    571,
+    536,
+    555
+   ],
+   [
+    "replace",
+    571,
+    572,
+    555,
+    556,
+    [
+     " of its type, for example `{\"name\":\"id\",\"type\":\"long\"}`."
+    ]
+   ],
+   [
+    "equal",
+    572,
+    573,
+    556,
+    557
+   ],
+   [
+    "replace",
+    573,
+    576,
+    557,
+    560,
+    [
+     " Debezium's Avro converter uses for an optional column:",
+     " `{\"name\":\"price\",\"type\":[\"null\",{\"type\":\"bytes\",\"logicalType\":\"decimal\",\"precision\":10,\"scale\":2}],\"default\":null}`.",
+     " A `NULL` value is delivered as `null` for every type, logical types included."
+    ]
+   ],
+   [
+    "equal",
+    576,
+    595,
+    560,
+    579
+   ],
+   [
+    "replace",
+    595,
+    596,
+    579,
+    580,
+    [
+     "(#326). After the"
+    ]
+   ],
+   [
+    "equal",
+    596,
+    597,
+    580,
+    581
+   ],
+   [
+    "replace",
+    597,
+    598,
+    581,
+    582,
+    [
+     "schema version for its payload subject (` _payload`). Tables whose columns are"
+    ]
+   ],
+   [
+    "equal",
+    598,
+    618,
+    582,
+    602
+   ],
+   [
+    "replace",
+    618,
+    628,
+    602,
+    612,
+    [
+     "|Postgres type|Without an Avro schema|With an Avro schema (`logrepl.withAvroSchema`, the default)|",
+     "|---|---|---|",
+     "|`timestamp`|The wall clock stored in Postgres, as a time with no offset information (`2024-01-02T03:04:05Z` for `2024-01-02 03:04:05`).|`local-timestamp-micros` of the same wall clock.|",
+     "|`timestamptz`|The instant, in UTC (`Z`).|`timestamp-micros`.|",
+     "|`date`|Midnight UTC of the date.|`date`.|",
+     "|`tsvector`|Postgres text form, `'a':1 'cat':3A,4B`.|`string`, same text.|",
+     "|`json`, `jsonb`|A string holding the text Postgres prints for the value (`json` as written, `jsonb` in its canonical form).|`string` named `io.debezium.data.Json`, same text (since v0.21.0, `bytes` before).|",
+     "|`infinity`, `-infinity`|The strings `infinity` and `-infinity`.|The source halts with error code `postgres.source.temporal_not_representable`.|",
+     "|Years before 1 BC or after 9999 AD|Postgres text, for example `0044-03-15 12:00:00 BC`.|As above, up to what 64-bit microseconds hold; beyond that the same error.|",
+     "|Arrays, ranges, multiranges of these|Element and bound values as above.|Not supported by the Avro schema.|"
+    ]
+   ],
+   [
+    "equal",
+    628,
+    678,
+    612,
+    662
+   ],
+   [
+    "replace",
+    678,
+    683,
+    662,
+    667,
+    [
+     " of the value's exact bytes, and the record's metadata `postgres.json.raw_bytes` names",
+     " the column. For a `json[]` or `jsonb[]` column with one such element, every non-`NULL`",
+     " element of that value is base64 (`NULL` elements stay `NULL`), so a listed array",
+     " column is decoded element by element. Valid values, in the same record or another, are",
+     " the exact text as above, and a record with none has no `postgres.json.raw_bytes`."
+    ]
+   ],
+   [
+    "equal",
+    683,
+    684,
+    667,
+    668
+   ],
+   [
+    "replace",
+    684,
+    685,
+    668,
+    669,
+    [
+     " again on the same row after every restart."
+    ]
+   ],
+   [
+    "equal",
+    685,
+    742,
+    669,
+    726
+   ],
+   [
+    "replace",
+    742,
+    743,
+    726,
+    727,
+    [
+     " `SQL_ASCII` (or the startup warning named it)."
+    ]
+   ],
+   [
+    "equal",
+    743,
+    744,
+    727,
+    728
+   ],
+   [
+    "replace",
+    744,
+    745,
+    728,
+    729,
+    [
+     " or the error:"
+    ]
+   ],
+   [
+    "equal",
+    745,
+    750,
+    729,
+    734
+   ],
+   [
+    "replace",
+    750,
+    756,
+    734,
+    735,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    756,
+    758,
+    735,
+    737
+   ],
+   [
+    "replace",
+    758,
+    760,
+    737,
+    739,
+    [
+     " Replace `orders`, `doc` and `id` with the table, the column and the key columns.",
+     " For a `json[]` or `jsonb[]` column the same query finds the rows."
+    ]
+   ],
+   [
+    "equal",
+    760,
+    761,
+    739,
+    740
+   ],
+   [
+    "replace",
+    761,
+    763,
+    740,
+    742,
+    [
+     " snapshot error contains `fetcher for table`, a CDC error contains",
+     " `logical replication error`."
+    ]
+   ],
+   [
+    "equal",
+    763,
+    767,
+    742,
+    746
+   ],
+   [
+    "replace",
+    767,
+    770,
+    746,
+    749,
+    [
+     " to get the exact bytes Postgres stored, then decode them with the encoding the writer",
+     " used, or keep them as bytes. Decode nothing else: an unlisted field is JSON text,",
+     " even when it happens to look like base64. For example, in Python:"
+    ]
+   ],
+   [
+    "equal",
+    770,
+    775,
+    749,
+    754
+   ],
+   [
+    "replace",
+    775,
+    784,
+    754,
+    755,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    784,
+    786,
+    755,
+    757
+   ],
+   [
+    "replace",
+    786,
+    791,
+    757,
+    762,
+    [
+     " Use `postgres.json.raw_bytes.before` the same way for `payload.before`, and",
+     " `postgres.json.raw_bytes` for the key. This connector's destination does this",
+     " itself: it writes the bytes of every listed column, which a `SQL_ASCII` target",
+     " stores exactly and a `UTF8` target rejects with SQLSTATE 22021 (see \"json text that",
+     " is not valid UTF-8\" under Destination)."
+    ]
+   ],
+   [
+    "equal",
+    791,
+    792,
+    762,
+    763
+   ],
+   [
+    "replace",
+    792,
+    797,
+    763,
+    768,
+    [
+     " as base64 with the metadata, and the pipeline goes on. A snapshot row can instead be",
+     " corrected and the source restarted; a change already in the WAL is read again with",
+     " the bytes it was written with however the row is corrected afterwards, so for CDC",
+     " base64 is the way past it. Do not drop or advance the replication slot to get past",
+     " it: that skips every change before the new position, for every table of the slot."
+    ]
+   ],
+   [
+    "equal",
+    797,
+    798,
+    768,
+    769
+   ],
+   [
+    "replace",
+    798,
+    799,
+    769,
+    770,
+    [
+     " for example from LATIN1:"
+    ]
+   ],
+   [
+    "equal",
+    799,
+    806,
+    770,
+    777
+   ],
+   [
+    "replace",
+    806,
+    808,
+    777,
+    779,
+    [
+     " The update is delivered as valid text (under `REPLICA IDENTITY FULL` its Before is",
+     " still base64 and listed in `postgres.json.raw_bytes.before`)."
+    ]
+   ],
+   [
+    "equal",
+    808,
+    809,
+    779,
+    780
+   ],
+   [
+    "replace",
+    809,
+    812,
+    780,
+    783,
+    [
+     " created with `ENCODING 'UTF8'`, converting the data from the encoding the writers",
+     " used), then start a new pipeline with a snapshot. Until then, make sure every writer",
+     " stores valid UTF-8 in `json` and `jsonb` columns."
+    ]
+   ],
+   [
+    "equal",
+    812,
+    820,
+    783,
+    791
+   ],
+   [
+    "replace",
+    820,
+    833,
+    791,
+    804,
+    [
+     " new schema version for its subjects (payload, and key if the key is a `jsonb`",
+     " column) with the field typed `string` and named `io.debezium.data.Json`. The Avro",
+     " specification allows promoting `bytes` to `string` and `string` to `bytes` in schema",
+     " resolution, and the `connect.*` properties are ignored by it, so for a `NOT NULL`",
+     " column the new version is `BACKWARD`, `FORWARD` and `FULL` compatible with the old",
+     " one; the Avro library this connector uses agrees",
+     " (`source/schema/avro_json_compat_test.go`). A nullable column also becomes",
+     " `[\"null\", string]` in this release (see \"Upgrading from v0.20.x or earlier\" under",
+     " Avro Schema), and that version is only `BACKWARD` compatible with the old `bytes`",
+     " one: a registry that enforces `FORWARD` or `FULL` on the subject rejects it, so",
+     " relax the subject's compatibility for the upgrade or upgrade the consumers first.",
+     " Conduit sets compatibility `NONE` on subjects it creates and its built-in registry",
+     " does not check compatibility, so nothing is rejected there either way."
+    ]
+   ],
+   [
+    "equal",
+    833,
+    834,
+    804,
+    805
+   ],
+   [
+    "replace",
+    834,
+    840,
+    805,
+    811,
+    [
+     " working: with the old schema it still reads `bytes`, with the new one a `string`, from",
+     " records written before or after the upgrade (the wire encoding is identical: a length",
+     " followed by the UTF-8 text). A consumer that decodes with the writer's schema and",
+     " expects bytes (for example code that casts the field to `ByteBuffer` or `[]byte`)",
+     " must accept a string. Without an Avro schema, JSON serializers used to print the",
+     " `[]byte` as base64; they now print the document as a JSON string."
+    ]
+   ],
+   [
+    "equal",
+    840,
+    841,
+    811,
+    812
+   ],
+   [
+    "replace",
+    841,
+    842,
+    812,
+    813,
+    [
+     " accept `string`."
+    ]
+   ],
+   [
+    "equal",
+    842,
+    843,
+    813,
+    814
+   ],
+   [
+    "replace",
+    843,
+    845,
+    814,
+    816,
+    [
+     " emitted as the raw bytes. It is now the base64 of those bytes with the column named",
+     " in `postgres.json.raw_bytes` (see above), or a halt with `json.invalidUTF8: halt`."
+    ]
+   ],
+   [
+    "equal",
+    845,
+    846,
+    816,
+    817
+   ],
+   [
+    "replace",
+    846,
+    848,
+    817,
+    819,
+    [
+     " reordered keys, rounded large numbers and stopped the source on numbers beyond the",
+     " range of a float64. They are now the exact text of each element."
+    ]
+   ],
+   [
+    "equal",
+    848,
+    849,
+    819,
+    820
+   ],
+   [
+    "replace",
+    849,
+    852,
+    820,
+    823,
+    [
+     " `json`/`jsonb` is no longer admitted automatically (the value changes from bytes to a",
+     " string), and a change between `json`/`jsonb` and any other type still halts.",
+     " `json` to `jsonb` and back is admitted."
+    ]
+   ],
+   [
+    "equal",
+    852,
+    853,
+    823,
+    824
+   ],
+   [
+    "replace",
+    853,
+    858,
+    824,
+    829,
+    [
+     " a string or from bytes, so records produced before and after the upgrade both land as",
+     " the same document. A column listed in `postgres.json.raw_bytes` is base64-decoded and",
+     " written as its bytes (see \"json text that is not valid UTF-8\" under Destination).",
+     " Upgrade the destination with the source, or before it: an older destination writes",
+     " the base64 text of such a column."
+    ]
+   ],
+   [
+    "equal",
+    858,
+    859,
+    829,
+    830
+   ],
+   [
+    "replace",
+    859,
+    864,
+    830,
+    835,
+    [
+     " For a `NOT NULL` column that is compatible in every mode. For a nullable column,",
+     " `bytes` after `[\"null\", string]` is not `BACKWARD` compatible, so a registry that",
+     " enforces `BACKWARD` or `FULL` on the subject rejects it. v0.20.0 emits json text that",
+     " is not valid UTF-8 as raw bytes again, without `postgres.json.raw_bytes`. Positions",
+     " and state are unchanged, so the rollback is otherwise safe."
+    ]
+   ],
+   [
+    "equal",
+    864,
+    884,
+    835,
+    855
+   ],
+   [
+    "replace",
+    884,
+    885,
+    855,
+    856,
+    [
+     "#391."
+    ]
+   ],
+   [
+    "equal",
+    885,
+    903,
+    856,
+    874
+   ],
+   [
+    "replace",
+    903,
+    913,
+    874,
+    884,
+    [
+     " from the same position. The value is delivered as a string. **Then set it",
+     " back to `true` as soon as that record has been delivered.** Without an Avro",
+     " schema a finite `numeric` is a `big.Rat`, which a standalone connector",
+     " cannot send to Conduit (#378): the next finite numeric would stop the",
+     " pipeline. Built-in pipelines are not affected.",
+     " On a standalone connector the SDK also fails the whole read batch on the",
+     " first record it cannot send, so if the NaN/Infinity record or its batch",
+     " contains any finite numeric, it is never delivered with Avro off and this",
+     " workaround does not help (#378 is the fix). While Avro is off,",
+     " JSON-serializing destinations receive a finite numeric as the string `\"3/2\"`."
+    ]
+   ],
+   [
+    "equal",
+    913,
+    915,
+    884,
+    886
+   ],
+   [
+    "replace",
+    915,
+    918,
+    886,
+    889,
+    [
+     " that is already in the WAL: it is read again after every restart. Do not drop",
+     " the replication slot to get past it, that loses the position. A constraint",
+     " only keeps new bad values out."
+    ]
+   ],
+   [
+    "equal",
+    918,
+    922,
+    889,
+    893
+   ],
+   [
+    "replace",
+    922,
+    936,
+    893,
+    907,
+    [
+     " `TRUNCATE` on a published table produces no record: rows it removed remain in",
+     " the destination. If the publication publishes `truncate` (the one the",
+     " connector creates does by default), the connector logs a `WARN` (\"TRUNCATE was NOT",
+     " propagated\") naming the table and the LSN, at most once a minute per table.",
+     " A restricted or user-supplied publication (for example",
+     " `publish = 'insert, update, delete'`) never sends the message, so there is",
+     " no warning and no other signal. The `suppressed` field counts the TRUNCATEs",
+     " of that table the rate limit swallowed since the previous warning; when",
+     " another table's warning evicts an expired entry that still holds a count, a",
+     " one-line summary with that count is logged. Treat the log lines as a signal,",
+     " not a precise counter: a count still pending when the process exits is",
+     " lost. Inserts, updates and deletes around the `TRUNCATE` are delivered as",
+     " usual. A configurable policy for TRUNCATE is planned. Until then, treat the",
+     " warning as a signal to reconcile the destination by hand."
+    ]
+   ],
+   [
+    "equal",
+    936,
+    960,
+    907,
+    931
+   ],
+   [
+    "replace",
+    960,
+    965,
+    931,
+    936,
+    [
+     " a create, update or snapshot record is `INSERT ... ON CONFLICT (<key columns>) DO",
+     " UPDATE SET` every other field of the record. The key columns must carry a primary",
+     " key or unique constraint, otherwise Postgres rejects the statement. When a record has",
+     " no field besides its key columns (a table whose columns are all key columns), the",
+     " statement is `ON CONFLICT DO NOTHING`, so a redelivery is a no-op."
+    ]
+   ],
+   [
+    "equal",
+    965,
+    966,
+    936,
+    937
+   ],
+   [
+    "replace",
+    966,
+    970,
+    937,
+    941,
+    [
+     " no column for fails the write; the destination does not create or alter tables. A",
+     " field the record lacks is not written: an insert gets the column default, an existing",
+     " row keeps its value. A create, update or snapshot record without fields fails with",
+     " `postgres.destination.payload_empty`."
+    ]
+   ],
+   [
+    "equal",
+    970,
+    971,
+    941,
+    942
+   ],
+   [
+    "replace",
+    971,
+    975,
+    942,
+    946,
+    [
+     " null value fails with `postgres.destination.key_column_missing` (a delete would match",
+     " every row with a NULL there, an upsert would append a new row on every redelivery), and",
+     " a list or object fails with `postgres.destination.key_value_not_scalar` (a delete would",
+     " match several rows or none)."
+    ]
+   ],
+   [
+    "equal",
+    975,
+    977,
+    946,
+    948
+   ],
+   [
+    "replace",
+    977,
+    983,
+    948,
+    954,
+    [
+     " literal is an `int64` (or `uint64`), and any other number keeps its literal, so",
+     " `numeric`, `text` and `json`/`jsonb` columns store it exactly. Integer columns take a",
+     " whole value in any form (`1e3`, `7.0`) and reject a fraction; `real` and `float8`",
+     " columns store the nearest float. Structured data that arrives over the plugin protocol",
+     " has already passed through a double (ConduitIO/conduit#3100), so integers above 2^53",
+     " sent that way are rounded before the destination sees them."
+    ]
+   ],
+   [
+    "equal",
+    983,
+    984,
+    954,
+    955
+   ],
+   [
+    "replace",
+    984,
+    988,
+    955,
+    959,
+    [
+     " words, upper case and double quotes work. A name with a NUL byte or longer than 63 bytes",
+     " fails with `postgres.destination.invalid_identifier`, because Postgres would address a",
+     " different table or column. The table name is one identifier: a dot is part of the name,",
+     " not a schema separator."
+    ]
+   ],
+   [
+    "equal",
+    988,
+    989,
+    959,
+    960
+   ],
+   [
+    "replace",
+    989,
+    992,
+    960,
+    963,
+    [
+     " commit fails, nothing from that write is stored and no record of it is acknowledged;",
+     " the records are redelivered (at-least-once). Keyed upserts make redelivery",
+     " idempotent; keyless inserts append again."
+    ]
+   ],
+   [
+    "equal",
+    992,
+    1004,
+    963,
+    975
+   ],
+   [
+    "replace",
+    1004,
+    1006,
+    975,
+    977,
+    [
+     " `json`, `jsonb` and `text` columns and in `jsonb[]` and `text[]` columns, and a",
+     " delete by a listed `jsonb` key matches the row by those bytes."
+    ]
+   ],
+   [
+    "equal",
+    1006,
+    1007,
+    977,
+    978
+   ],
+   [
+    "replace",
+    1007,
+    1011,
+    978,
+    982,
+    [
+     " error, SQLSTATE `22021` (invalid byte sequence for encoding \"UTF8\"), and nothing of",
+     " that write is stored or acknowledged. Move the target to `SQL_ASCII`, fix the data at",
+     " the source (see the source runbook), or transform the column before the destination",
+     " and remove it from the metadata."
+    ]
+   ],
+   [
+    "equal",
+    1011,
+    1012,
+    982,
+    983
+   ],
+   [
+    "replace",
+    1012,
+    1018,
+    983,
+    989,
+    [
+     " encoding unless the url sets it. A url that sets `client_encoding=UTF8` on a",
+     " `SQL_ASCII` target makes Postgres reject them as on a `UTF8` one. For that reason",
+     " `default_query_exec_mode=simple_protocol` cannot write to a `SQL_ASCII` target: pgx",
+     " refuses every simple-protocol query unless `client_encoding` is `UTF8`, and with it",
+     " Postgres rejects the listed values. Use `describe_exec` (the default),",
+     " `cache_statement`, `cache_describe` or `exec`."
+    ]
+   ],
+   [
+    "equal",
+    1018,
+    1019,
+    989,
+    990
+   ],
+   [
+    "replace",
+    1019,
+    1026,
+    990,
+    997,
+    [
+     " record's key and payload do not have, or a listed value that is not standard padded",
+     " base64 (or a list of such strings and nulls) fails the write with",
+     " `postgres.destination.json_raw_bytes_invalid`, naming the table and the column, never",
+     " the value. A processor that renames, drops or rewrites a listed column must update",
+     " the metadata, or remove the column from it. The destination cannot always tell a",
+     " rewritten value from base64: a new value that happens to be valid padded base64,",
+     " such as `true` or `1234`, is decoded and its bytes are written without an error."
+    ]
+   ],
+   [
+    "equal",
+    1026,
+    1027,
+    997,
+    998
+   ],
+   [
+    "replace",
+    1027,
+    1028,
+    998,
+    999,
+    [
+     " `payload.before`."
+    ]
+   ],
+   [
+    "equal",
+    1028,
+    1039,
+    999,
+    1010
+   ],
+   [
+    "replace",
+    1039,
+    1040,
+    1010,
+    1011,
+    [
+     " or a payload, is written as an ordinary record. One WARN per batch reports it."
+    ]
+   ],
+   [
+    "equal",
+    1040,
+    1041,
+    1011,
+    1012
+   ],
+   [
+    "replace",
+    1041,
+    1043,
+    1012,
+    1014,
+    [
+     " stops the pipeline with `postgres.destination.drift_marker_unverified`. Nothing",
+     " in that batch is written or acknowledged."
+    ]
+   ],
+   [
+    "equal",
+    1043,
+    1044,
+    1014,
+    1015
+   ],
+   [
+    "replace",
+    1044,
+    1045,
+    1015,
+    1016,
+    [
+     " a marker, with a WARN that names the added fields."
+    ]
+   ],
+   [
+    "equal",
+    1045,
+    1135,
+    1016,
+    1106
+   ],
+   [
+    "replace",
+    1135,
+    1138,
+    1106,
+    1109,
+    [
+     " value is rejected, also on a destination that was already running when the",
+     " column was changed to an integer type (see \"Column type changes on a running",
+     " pipeline\")."
+    ]
+   ],
+   [
+    "equal",
+    1138,
+    1142,
+    1109,
+    1113
+   ],
+   [
+    "replace",
+    1142,
+    1143,
+    1113,
+    1114,
+    [
+     " with 22001 if the string is longer than `n`."
+    ]
+   ],
+   [
+    "equal",
+    1143,
+    1147,
+    1114,
+    1118
+   ],
+   [
+    "replace",
+    1147,
+    1148,
+    1118,
+    1119,
+    [
+     " zone UTC)."
+    ]
+   ],
+   [
+    "equal",
+    1148,
+    1152,
+    1119,
+    1123
+   ],
+   [
+    "replace",
+    1152,
+    1153,
+    1123,
+    1124,
+    [
+     " stored as `101` in a `bit(3)`)."
+    ]
+   ],
+   [
+    "equal",
+    1153,
+    1156,
+    1124,
+    1127
+   ],
+   [
+    "replace",
+    1156,
+    1157,
+    1127,
+    1128,
+    [
+     "schema maps a numeric field to the wrong column, so check the mapping. "
+    ]
+   ],
+   [
+    "equal",
+    1157,
+    1160,
+    1128,
+    1131
+   ],
+   [
+    "delete",
+    1160,
+    1161,
+    1131,
+    1131
+   ],
+   [
+    "equal",
+    1161,
+    1165,
+    1131,
+    1135
+   ],
+   [
+    "replace",
+    1165,
+    1351,
+    1135,
+    1136,
+    [
+     "…（186 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1351,
+    1352,
+    1136,
+    1137
+   ],
+   [
+    "delete",
+    1352,
+    1353,
+    1137,
+    1137
+   ],
+   [
+    "equal",
+    1353,
+    1356,
+    1137,
+    1140
+   ],
+   [
+    "delete",
+    1356,
+    1357,
+    1140,
+    1140
+   ],
+   [
+    "equal",
+    1357,
+    1361,
+    1140,
+    1144
+   ],
+   [
+    "replace",
+    1361,
+    1431,
+    1144,
+    1145,
+    [
+     "…（70 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1431,
+    1432,
+    1145,
+    1146
+   ],
+   [
+    "delete",
+    1432,
+    1433,
+    1146,
+    1146
+   ],
+   [
+    "equal",
+    1433,
+    1445,
+    1146,
+    1158
+   ],
+   [
+    "replace",
+    1445,
+    1446,
+    1158,
+    1159,
+    [
+     "scarf pixel"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "1f7d8526af49+2": {
+  "fn": "huaweicloud-samples/cloud-native-security-db-audit-log-serverless",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Status",
+     "Huawei Cloud",
+     "Scenario"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    17,
+    5,
+    17
+   ],
+   [
+    "replace",
+    17,
+    20,
+    17,
+    18,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    18,
+    19
+   ],
+   [
+    "delete",
+    21,
+    22,
+    19,
+    19
+   ],
+   [
+    "equal",
+    22,
+    23,
+    19,
+    20
+   ],
+   [
+    "delete",
+    23,
+    24,
+    20,
+    20
+   ],
+   [
+    "equal",
+    24,
+    31,
+    20,
+    27
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

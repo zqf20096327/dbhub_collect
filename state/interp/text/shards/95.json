@@ -3064,5 +3064,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "54dea50518e2": {
+  "identity": {
+   "one_liner": "基于NATS在Postgres与本地SQLite/PGLite/DuckDB等副本间做双向同步的引擎",
+   "review": "ZeBridge 用 Zig 实现桥接层，通过 NATS 在各设备本地数据库（SQLite/PGLite/Postgres/DuckDB）与权威 PostgreSQL 之间双向同步，离线时写入进入 outbox 队列，重连后由 PostgreSQL 裁决冲突。面向 B2B 多租户运营类应用，不针对每用户单租户的 B2C 场景。后端只需登录并签发一次性邀请码，无写 API；快速体验需 Docker Compose。",
+   "highlights": [
+    "支持 SQLite、PGLite、Postgres、DuckDB 作为客户端本地副本，经 NATS 与权威 PostgreSQL 双向同步，离线写入由 outbox 排队并在重连后提交",
+    "提供 query/mutate/request/ingest 接口，mutate 支持默认排序等待、after 指定前置写入和 independent 三种写序模式",
+    "通过一次性邀请码和 SQL 函数 zebridge_invite 完成设备注册与租户隔离，hub 可用 Docker Compose 或 Ansible 部署"
+   ],
+   "use_cases": [
+    "多租户 B2B 运营类应用，如外勤车队、仓储站点等设备共享一个租户数据集的弱网/离线场景",
+    "需要在浏览器本地副本上执行查询、并将路由或分析等远程 responder 结果经 ingest 本地留存的应用",
+    "需要在 PostgreSQL 侧保留写裁决（外键、触发器、拒绝写入）的同步架构"
+   ]
+  },
+  "sha": "54dea50518e2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "26738ebd415b": {
+  "identity": {
+   "one_liner": "只读 PowerShell 脚本，对 SQL Server/RDS/Azure SQL 运行 27 项安全检查并生成 HTML 报告",
+   "review": "Get-SqlSafe Community Edition 是一个独立的 PowerShell 脚本，对 SQL Server、Amazon RDS 与 Azure SQL Database 执行 27 项核心安全检查，覆盖认证暴露、sysadmin 成员、xp_cmdshell、孤立账户、审计缺口与所有权漂移，输出单个本地 HTML 报告。脚本只读、不修改配置或数据，内嵌 T-SQL 经 SHA-256 校验；README 明确其定位为风险指标初查，不构成完整安全审计。适用于 DBA 与安全评估人员。",
+   "highlights": [
+    "提供 27 项只读安全检查，结果写入 Results 文件夹下的单文件本地 HTML 报告",
+    "支持 SQL Server（2016+ 推荐）、Amazon RDS 与 Azure SQL Database 三类目标，含 -Platform 参数与 RDS 兼容模式",
+    "运行前对内嵌 T-SQL 做 SHA-256 校验，SQL Server/RDS 场景不导入任何外部 PowerShell 模块"
+   ],
+   "use_cases": [
+    "对 SQL Server 实例或云数据库做安全基线初查，用于整改讨论",
+    "在受限网络环境中由 DBA 以只读方式评估权限与审计配置",
+    "通过提供不同退出码的包装脚本将安全检查集成到自动化流程"
+   ]
+  },
+  "sha": "26738ebd415b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

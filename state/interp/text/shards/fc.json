@@ -2736,5 +2736,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c66e7b7da600": {
+  "identity": {
+   "one_liner": "ClickHouse Cloud 官方 Terraform Provider，以声明式配置管理云资源",
+   "review": "该仓库是 ClickHouse Cloud 的官方 Terraform Provider，用于以 Infrastructure-as-Code 方式管理 ClickHouse Cloud 服务生命周期（如自动伸缩、升级窗口）、SQL 控制台访问控制、ClickPipes、ClickStack 可观测性资源及托管 Postgres 服务。使用前需注册 ClickHouse Cloud 账户并生成 API 密钥。注意它仅管理 SQL 控制台级权限，数据库级用户与授权需改用 clickhousedbops provider；多个版本升级涉及破坏性变更，需按 README 迁移步骤调整配置。",
+   "highlights": [
+    "支持管理 ClickHouse Cloud、ClickStack、托管 Postgres 三类服务组的资源",
+    "通过 API 密钥（CLICKHOUSE_CLOUD_API_KEY/SECRET）认证",
+    "支持告警多通知渠道（channels 列表，1 到 10 个目标）"
+   ],
+   "use_cases": [
+    "以代码化管理 ClickHouse Cloud 服务生命周期与伸缩配置",
+    "管理组织成员、自定义角色、API 密钥等 SQL 控制台级访问控制",
+    "维护 ClickStack 可观测性资源（仪表盘、告警、Webhook 等）"
+   ]
+  },
+  "sha": "c66e7b7da600",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1011f6b0da71": {
+  "identity": {
+   "one_liner": "Go 内嵌数据库，以稀疏六边形网格单元存储记录并按坐标环扫描检索。",
+   "review": "HexxlaDB 是一个以 Go 库形式在进程内运行的嵌入式数据库，将记录存为稀疏六边形网格上的单元格，支持文本/标签/向量检索、环向邻域扩展、MVCC 版本、来源与有效性窗口记录，以及记录矛盾与取代关系的 seams。README 标明项目处于 alpha 阶段，建议在可恢复数据的受控评估中使用；原生记录不含任意元数据字段，JSON 以字符串存储且不做字段索引，向量需由应用自行生成。",
+   "highlights": [
+    "单元格携带 tags、来源引用、置信度、时间戳和可选的有效性窗口，seams 记录单元格间的矛盾与取代关系",
+    "提供 QueryCells 文本与标签检索、可选 HNSW 向量相似度（近似）、带 MaxScanRows 的有界扫描，以及 LoadContext 环向扩展和按边类型遍历",
+    "写入通过 DB.Update 原子提交，读取经 DB.View 获得一致快照，默认以 MVCC 打开并保留修订历史直到剪枝"
+   ],
+   "use_cases": [
+    "按主题锚点与放置半径组织记录，并用有界环扫描组装邻域上下文的应用",
+    "需要为 LLM 提示词组装带来源、置信度与有效性窗口的上下文记录的 Go 程序",
+    "需要以网格可视性规则（LoadContextFOV 与调用方透明度规则）做空间检索的应用"
+   ]
+  },
+  "sha": "1011f6b0da71",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "600cd1ec9d9a": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss 诊断智能体的 Kubernetes 容器化交付方案",
+   "review": "该项目将 opencode 与 GaussDB/openGauss DBA 技能集打包为 Kubernetes 容器交付：每个用户一个无状态 runtime Pod，状态存于 NAS 的 RWX PVC，诊断与知识库导入分为两个镜像，另含前端与知识库镜像。面向银行等行内实施/运维团队，提供部署手册、发版台、离线镜像包、SQL 白名单与验收题库；需要平台网关按工号建 Pod 并提供 NFS 存储。",
+   "highlights": [
+    "提供 runtime、kb-import、frontend、kbstd 四类镜像，支持 x86_64 与 aarch64 双架构及离线交付包",
+    "Pod 无状态设计，SQLite 会话库位于 NAS 挂载路径，新 Pod 挂载 users/<工号>/ 后历史会话直接出现",
+    "包含知识库导入（网页剪藏、扫描件 PDF 看图转录、PPT）、Top SQL、WDR、健康检查、死锁日志解析等诊断技能与 138 条 SQL 白名单"
+   ],
+   "use_cases": [
+    "行内以 Kubernetes 部署面向 DBA 的 GaussDB/openGauss 诊断环境",
+    "离线环境交付：通过镜像 tar.gz + k8s 清单部署并运行冒烟验收",
+    "管理员向知识库导入 Wiki/Confluence 页面、扫描件 PDF、PPT 等多格式资料"
+   ]
+  },
+  "sha": "600cd1ec9d9a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

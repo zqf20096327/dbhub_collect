@@ -3136,5 +3136,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fa6d96ef0239": {
+  "identity": {
+   "one_liner": "Rust 语言的 SQLite 封装库，通过 Cargo 特性可选编译链接方式",
+   "review": "Rusqlite 提供 Rust 调用 SQLite 的绑定接口，底层依赖 libsqlite3-sys 声明 SQLite C API。默认经 pkg-config 或 vcpkg 查找系统已装的 SQLite 库；启用 bundled 特性则用 cc 从内嵌源码编译链接。支持 SQLCipher、扩展加载、虚拟表、自定义函数等众多可选特性，适合需要在 Rust 程序中操作 SQLite 的开发者。基础包要求 SQLite 3.45.3 或更新版本。",
+   "highlights": [
+    "提供约 30 个 Cargo 可选特性，涵盖备份、窗口函数、BLOB 读写、虚拟表、扩展加载、serde_json/chrono/uuid 等类型的 FromSql/ToSql 实现",
+    "默认通过 pkg-config 或 vcpkg 链接系统 SQLite，bundled 特性则从源码编译内嵌的 SQLite 3.54.1",
+    "通过预生成绑定避免构建时运行 bindgen，并支持 SQLCipher 及 wasm32 目标下的 sqlite-wasm-rs"
+   ],
+   "use_cases": [
+    "在 Rust 应用中嵌入 SQLite 进行本地数据存储与查询",
+    "Windows 等系统库链接复杂的环境，可启用 bundled 特性直接从源码编译 SQLite",
+    "需要加密数据库时，通过 sqlcipher 系列特性链接 SQLCipher"
+   ]
+  },
+  "sha": "fa6d96ef0239",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42aa316f6669": {
+  "identity": {
+   "one_liner": "基于 Flask+SQLite 的学生请假与学业调适系统原型，含两级审批与课表关联预览",
+   "review": "这是一个学生请假与学业调适管理系统（SAAS）的可运行原型，使用 Flask 与 SQLite 实现，面向高校场景，README 中针对 HKUST(GZ) 给出了企业设计提案包。系统实现学生提交请假、导师/教师两级审批、附件上传与访问控制、基于学生课表受影响课程预览、配额与节假日校历、OIDC SSO、审计日志与备份恢复等功能，并附 CI 测试套件。README 提到生产化前需补齐 SSO、PostgreSQL、SIS 课表同步、个人数据治理等缺口，当前为原型形态。",
+   "highlights": [
+    "支持两级审批流、批量审批、审批委托、按学期与假期类型的配额限制及 SLA 升级定时任务",
+    "提供基于学生课表的受影响课程预览、CSV 课表导入、官方校历导入（含补课日）、流式 CSV 导出与统计页",
+    "实现 CSRF 防护、登录限流、OIDC SSO、附件访问控制与病毒扫描（ClamAV 兼容）、审计日志、在线备份/恢复，以及 CI 中的单元测试与冒烟检查"
+   ],
+   "use_cases": [
+    "高校学生请假申请与导师/教师两级审批管理",
+    "教务或行政人员按学期配额、校历节假日与课表核对受影响课程",
+    "需要审计留痕、备份恢复与附件访问控制的校内部署原型验证"
+   ]
+  },
+  "sha": "42aa316f6669",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0548141b4220": {
+  "identity": {
+   "one_liner": "本地运行的陪伴型 AI 记忆卡，基于 SQLite 提供衰减遗忘与哈希链时间线",
+   "review": "whale-card 是一套面向陪伴型 AI 的本地记忆系统，用 Python 实现并通过 HTTP 服务（127.0.0.1:8848）向会话提供上下文。它把记忆存入 SQLite，按短期/中期/长期三级池管理，含分区衰减和海马打分；时间线为哈希链结构，配套 verify_chain 校验；启动时用 6 条身份锚 sha256 校验卡片。依赖 Python 3.10+、numpy 和 bge-base-zh-v1.5 模型，许可证限制为个人使用。",
+   "highlights": [
+    "三级记忆池（短期/中期/长期）配分段双速率衰减与海马打分巩固机制",
+    "时间线采用连续哈希链结构，提供 verify_chain 校验且不自动修复断链",
+    "提供 /context、/report、/recall 等 HTTP 接口，附带只读体检脚本与 22 项回归测试"
+   ],
+   "use_cases": [
+    "为陪伴型 AI 会话提供跨窗口、跨设备的持久记忆与上下文组装",
+    "需要记录离线时长、遗忘曲线和时间连续性的个人 AI 伴侣场景",
+    "本地部署的对话记忆实验与记忆衰减机制研究"
+   ]
+  },
+  "sha": "0548141b4220",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2580,5 +2580,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2dfb3527774a": {
+  "identity": {
+   "one_liner": "面向 Solana 与 Robinhood Chain 的链上行情采集与钱包打分系统，含 MCP 服务",
+   "review": "Pulse 用 TypeScript 实现，采集 Solana 与 Robinhood Chain 上的代币发射、交易与榜单数据，对钱包计算 PnL、胜率等分数，为 KOL 打标签，并将数据存入 Postgres 或内嵌 PGlite。它每日生成 Telegram 简报，可把数据归档到 git 仓库，并提供 MCP 服务器供代理读取。需 Node 24+，所有数据源无需 API key。",
+   "highlights": [
+    "记录代币生命周期状态、周期性快照、交易与钱包评分等多张数据表，支持从 /api/export/ 导出 JSON",
+    "通过 npx 启动采集器、API 与仪表盘（端口 8787），无 DATABASE_URL 时使用内嵌 PGlite 存储，也可接 TimescaleDB",
+    "提供 MCP 服务器与 pulse_runners 工具，可将每日数据以 gzip JSONL 归档到指定 git 仓库并从中重建数据库"
+   ],
+   "use_cases": [
+    "追踪 Solana 与 Robinhood Chain 上新代币的发射、晋级与生命周期数据并存档",
+    "为已打标签钱包与巨鲸（5 SOL 及以上）记录交易，生成钱包 PnL 与胜率评分",
+    "配置 Telegram Bot 后每日定时推送简报；通过 MCP 让编码代理读取链上历史数据"
+   ]
+  },
+  "sha": "2dfb3527774a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

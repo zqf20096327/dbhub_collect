@@ -2829,5 +2829,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7172518bc018": {
+  "identity": {
+   "one_liner": "1990-2025年36版CIA世界概况的结构化SQL Server存档与ETL脚本集",
+   "review": "该项目将1990-2025年共36版CIA世界概况解析为结构化数据库，覆盖281个实体、约107万数据字段，提供预构建SQL导入和Python ETL两种方式重建数据。源数据来自Project Gutenberg、Wayback Machine与JSON仓库，附原始文件包供离线校验。README注明CIA原文已于2026年2月停更，且验证器未覆盖当前公开数据库的全部字段。适用于需要跨年度查询国别事实数据的研究者与开发者。",
+   "highlights": [
+    "提供9,536条国家-年度记录、1,071,603个数据字段，1,132个字段名变体映射到416个规范名",
+    "ETL脚本处理4种纯文本格式、5代HTML布局及JSON阶段，含55个字段专用解析器生成1,775,588个带来源片段标记的子值",
+    "提供预构建SQL转储、约662MB带FTS5的SQLite导出及2.98GB原始源文件包，附只读完整性验证脚本与离线应用"
+   ],
+   "use_cases": [
+    "需要跨1990-2025年时间序列查询国别数据的研究与分析场景",
+    "以SQL导入或重跑ETL管道方式离线使用公共领域国别数据",
+    "对原始源文件做全文检索或完整性验证的场景"
+   ]
+  },
+  "sha": "7172518bc018",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f4c68e67888a": {
+  "identity": {
+   "one_liner": "将 Pinecone 向量搜索引擎引入 Postgres 的开源扩展，一列三种引擎。",
+   "review": "pg_pinecone 是一个 PostgreSQL 扩展（基于 pgrx，Rust 编写），在保留 pgvector 列和 SQL 查询的前提下，为每张表提供 pgvector、native、remote 三种可互换的搜索引擎，其中 remote 引擎将检索同步到 Pinecone serverless 索引。适合已在 Postgres 中运行向量搜索、需要过滤检索或超出单机容量的团队。要求 Postgres 17/18、超级用户权限并安装 pgvector。",
+   "highlights": [
+    "每张表可在 pgvector、native（默认）、remote 三种引擎间切换，切换无需更改查询且可逆",
+    "native 引擎在 Postgres 内执行检索，支持租户 ID 等过滤条件，无网络调用",
+    "remote 引擎将检索移至 Pinecone serverless 索引，Postgres 保留所有行；另支持 BM25、向量与混合全文检索"
+   ],
+   "use_cases": [
+    "对现有 pgvector 表启用带过滤条件（如租户隔离）的向量检索",
+    "单台 Postgres 容量不足时将部分表的检索外移到 Pinecone serverless 索引",
+    "在 SQL 中对与表同步的 Pinecone 索引执行 BM25、向量或混合搜索"
+   ]
+  },
+  "sha": "f4c68e67888a",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "35e5525a6f2b": {
+  "identity": {
+   "one_liner": "DSH 模型矩阵调度插件：本地 OpenAI 兼容网关按任务属性自动选路与容灾。",
+   "review": "这是 DeepSeek Harness 的插件，在 127.0.0.1 起 OpenAI 兼容网关，把多个 OpenAI 兼容上游接入同一矩阵。请求经硬过滤、打分、降级链三段流水线选路，支持四档调度模式、429/5xx/401 容灾和 SQLite 精确缓存。适用于使用 DSH 且想按请求维度分配不同模型的用户。未发布 npm，需从 GitHub 安装；API Key 为明文存储（权限 0600）。",
+   "highlights": [
+    "提供 steward:frugal / balanced / max_power / free 四档调度模式及子代理专用模型 steward:subagent，选路发生在网关层，DSH 会话配置不需修改",
+    "内置容灾机制：429 指数退避冷却、连续失败熔断、401 即下线、上下文超限自动换更大窗口模型，全部在一次客户端请求内完成",
+    "支持 SQLite 精确缓存（SHA-256 键、跨重启保留、命中 0 token）与按路由维度的 token/费用计量，未定价模型如实显示而不计入免费"
+   ],
+   "use_cases": [
+    "同时持有多个上游（官方 API、免费镜像、自建中转），希望按任务属性（编程/推理/看图/并发）将请求分发到不同模型",
+    "上游出现 429、超时或凭据失效时，希望在同一会话内自动切换候选模型而不中断",
+    "需要通过 Agent 对话（token_steward_manage / recommend_model 工具）维护厂商、模型与调度档位"
+   ]
+  },
+  "sha": "35e5525a6f2b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

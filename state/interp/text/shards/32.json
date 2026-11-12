@@ -2460,5 +2460,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "be707b5ad5f5": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展目录与 RPM/DEB 包构建工具",
+   "review": "pgext 是一个 PostgreSQL 扩展构建与目录管理工具，也是 pgext.cloud 网站背后的 Go 应用。它收录扩展目录数据，收集 APT/RPM 仓库元数据并生成包可用性矩阵，可直接依据 Pigsty 配方从源码构建 RPM/DEB 包，无需 PIG 或元数据数据库。命令行提供 init/serve/repo/pkg 等子命令；`serve` 以嵌入式 Web 资源提供目录网页与 JSON 查询 API，数据存储于 PostgreSQL。许可证为 Apache-2.0。",
+   "highlights": [
+    "目录包含 2,733 个扩展条目、16 个分类，覆盖 PostgreSQL 14–18 与 16 种 Linux OS/架构组合（EL 8/9/10、Debian 12/13、Ubuntu 22.04/24.04/26.04，x86_64 与 aarch64）",
+    "提供 Web 应用与 JSON 查询 API（如 /api/v1/ext、/api/v1/matrix），Web 资源嵌入二进制，目录数据存于 PostgreSQL",
+    "构建管线支持 `get → dep → mak` 分步执行或 `pkg` 一键运行，支持多 PG 大版本（--pg 17,18）、--plan 预览、--json 输出、--checksums 源码 SHA256 清单"
+   ],
+   "use_cases": [
+    "按分类、许可证、语言或 PostgreSQL 版本查找扩展，并获取依赖、preload 与兼容性信息以规划安装",
+    "在 EL/Debian/Ubuntu 主机或容器中为指定 PG 大版本从源码构建扩展 RPM/DEB 包",
+    "本地部署目录服务：`pgext init` 初始化目录后通过 `pgext serve` 提供 Web UI 与 JSON API（默认端口 8432）"
+   ]
+  },
+  "sha": "be707b5ad5f5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b4d5034faec7": {
+  "identity": {
+   "one_liner": "基于 Docker 微服务的宏观经济数据分析仪表盘，集成多智能体 AI 分析、预测与聚类推理",
+   "review": "这是一个以 Docker 容器编排的宏观经济分析仪表盘项目，面向需要浏览和分析宏观经济数据的用户。前端为多页 Streamlit 应用，后端由 FastAPI 微服务提供 AI 分析、时间序列预测、聚类和按需数据下载，模型推理统一由 NVIDIA Triton 承担。数据源覆盖世界银行、Yahoo Finance、Binance、FRED 与 Eurostat，并包含 3 万余篇新闻的 RAG 语料库。运行需要 NVIDIA GPU 与容器工具包，首次启动需下载 1–2 小时数据，LLM 需配置任意 OpenAI 兼容接口。",
+   "highlights": [
+    "内置 70+ 世界银行指标、90+ Yahoo Finance 标的、150+ 预置图表，覆盖世界银行、Yahoo Finance、Binance、FRED 美国州级与 Eurostat NUTS-2 区域数据源",
+    "AI 聊天支持多模态输入，可经 Whisper 转录音频、docling 转换 PDF/Office 文档后交由 LangGraph 多智能体处理",
+    "通过 Triton Inference Server 以 gRPC 提供 ARIMA、Prophet、Chronos、XGBoost 等预测模型及 KMeans、DBSCAN 等聚类模型推理"
+   ],
+   "use_cases": [
+    "浏览世界银行、FRED、Eurostat 等多源宏观数据的交互式仪表盘页面",
+    "通过 AI 智能体按需从五个数据源拉取新指标并用自然语言查询数据库",
+    "对时间序列执行预测与无监督聚类分析，并在沙箱中执行 LLM 生成的 Plotly/Polars 代码"
+   ]
+  },
+  "sha": "b4d5034faec7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "099627e1c3a2": {
+  "identity": {
+   "one_liner": "自托管笔记任务共享清单应用，单 Go 容器加 SQLite 文件，内置 MCP 服务器。",
+   "review": "MindSift 是一个自托管应用，将快速记录、分类整理（triage）、大纲笔记、看板任务、日历与共享清单整合在同一 Web 界面中。它以单个 Docker 容器运行，数据存于一个 SQLite 文件，适合个人或家庭、小团队自建服务使用。内置 MCP 服务器与带作用域密钥的 REST API，供 AI 代理和 Home Assistant 等外部系统读写任务与笔记；支持多人实时协作编辑、离线使用，并提供英文、德文、西班牙文、法文和意大利文界面。",
+   "highlights": [
+    "提供快速记录入口（输入栏、语音输入、手机分享菜单、API）与后续逐卡分类流程，可将想法转为任务、笔记或列表项",
+    "支持多人同时编辑同一大纲笔记，包含 wiki 链接、标签、画布绘图、加密隐藏值，并可离线工作及在屏蔽 WebSocket 的代理后运行",
+    "内置 MCP 服务器（支持 claude.ai/ChatGPT 经 OAuth 连接）和带作用域 API 密钥的 REST API；每版本发布前运行约 350 个前端测试、近 300 个后端测试及浏览器端到端检查，并用 Trivy 扫描"
+   ],
+   "use_cases": [
+    "个人快速捕捉想法并在稍后整理为任务、笔记或清单",
+    "家庭或小团队共享购物、打包和待办清单，多端实时同步",
+    "通过 MCP 或 REST API 让 AI 代理或智能家居系统读写任务与笔记"
+   ]
+  },
+  "sha": "099627e1c3a2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

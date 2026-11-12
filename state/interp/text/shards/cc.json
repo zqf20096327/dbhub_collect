@@ -2824,5 +2824,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8d12eff3f628": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Python 分布式任务队列库",
+   "review": "Procrastinate 是一个 Python 3.11+ 的分布式任务处理库，使用 PostgreSQL 13+ 存储任务定义、管理锁并分发任务。主代码中以特殊方式调用函数后，任务被调度到别处立即或延迟执行，支持同步与异步两种调用方式。提供 Django 集成，也可配合 ASGI 框架使用，通过命令行或 worker 运行任务。",
+   "highlights": [
+    "支持同步与异步代码，异步为推荐用法",
+    "支持周期性任务、重试与自定义任务锁",
+    "提供 Django 集成，可配合 ASGI 框架使用"
+   ],
+   "use_cases": [
+    "需要将耗时函数延迟到 worker 执行的 Python 应用",
+    "使用 Django 或 ASGI 框架且已部署 PostgreSQL 的项目",
+    "需要周期性任务调度与失败重试的场景"
+   ]
+  },
+  "sha": "8d12eff3f628",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "894574ebe2f5": {
+  "identity": {
+   "one_liner": "自托管 VPN 面板：双 Go 静态二进制+SQLite，经 SSH 添加节点，一人一条订阅链接。",
+   "review": "Mistgate 是一个自托管面板，用于在自己的若干台服务器上为家人、朋友、社区或小团队提供 VPN。面板部署在一台服务器上，可从浏览器经 SSH 添加节点，每 5 分钟以客户端方式对各节点做健康检查并通过 Telegram 告警；支持 Hysteria2、VLESS REALITY、AmneziaWG 等协议，协议以编译进二进制的插件契约接入。项目处于 beta（v0.1.x），1.0 前 API 与节点协议仍可能变动，暂不支持 VMess、Trojan、Shadowsocks 等。",
+   "highlights": [
+    "支持 Hysteria2、VLESS REALITY、AmneziaWG（2.0/3.1）与实验性 MTProto，通过插件契约编译进二进制，新协议仅下发给声明支持它的 agent",
+    "每 5 分钟以客户端方式连接各节点检查，节点端 doctor 运行 21 项主机检查并提供 8 项需确认的修复；支持节点间中继转发加密流量，并可经 Globalping 等来源探测特定国家内的可达性",
+    "面板与节点为静态 Go 二进制，使用 SQLite，无需 Docker 或数据库服务器，空闲内存 16-20 MiB；节点更新采用金丝雀灰度发布，失败自动回滚，面板更新前先备份数据"
+   ],
+   "use_cases": [
+    "为家人、朋友、社区或小团队自托管 VPN，每人一条订阅链接，支持 Mihomo、Happ、AmneziaVPN 等客户端应用",
+    "需要从浏览器经 SSH 管理多台节点服务器，并进行健康检查、Telegram 告警与分批滚动更新",
+    "通过 MCP 让外部 AI agent 读取节点状态、测试节点间路径并规划变更，风险操作需管理员批准"
+   ]
+  },
+  "sha": "894574ebe2f5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4d6334017645": {
+  "identity": {
+   "one_liner": "按需选装模块的全栈 TypeScript 脚手架生成器，支持 Next.js/TanStack Start/React+Vite 前端",
+   "review": "这是一个脚手架工具，通过 pnpm dlx 命令生成项目，每个功能（认证、存储、邮件、支付、任务、可观测性）作为可选模块，未选用的模块会被完全移除，各服务商实现位于独立包中的接口之后，便于替换。生成器记录项目来源，后续可合并方式增删或升级模块。支持 Hono（TypeScript）或 FastAPI（Python）作为独立 API，需注意生成的移动端 iOS 版需通过 App Store/TestFlight 分发，不提供安装文件。",
+   "highlights": [
+    "认证模块支持 Supabase、Better Auth、Firebase、Appwrite 四种方案，会话以安全 Cookie 或请求验证的令牌实现",
+    "提供 PostgreSQL + Drizzle ORM 的模式、迁移与种子命令，后台任务可选 pg-boss、BullMQ 或 Inngest 实现",
+    "CI 矩阵对每种组合生成真实项目并运行完整流水线：安装、lint、类型检查、单元测试、浏览器测试、生产构建与冒烟测试"
+   ],
+   "use_cases": [
+    "需要按团队技术栈定制组合（前端框架、API 语言、认证与任务服务商）的新项目初始化",
+    "希望以 OpenAPI 契约连接 Web 应用与独立 Hono/FastAPI API 的单仓库开发",
+    "需要用 Capacitor 或 Expo 构建并发布移动端应用的全栈项目"
+   ]
+  },
+  "sha": "4d6334017645",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

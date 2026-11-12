@@ -3126,5 +3126,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "811caf6bc3ad": {
+  "identity": {
+   "one_liner": "Capacitor 键值对 SQLite 存储插件，支持 iOS/Android/Web/Electron",
+   "review": "这是一个 Capacitor 插件，在 SQLite 中提供仅支持字符串类型的键值对持久存储，运行于 iOS、Android、Electron 与 Web（IndexedDB/localforage）。支持多 store 与多表、JSON 导入导出、按过滤条件取值，原生平台经 SQLCipher 实现可选加密（需在 capacitor.config 配置密钥）。适合 Capacitor/Ionic 应用开发者做简单本地持久化；仅存字符串，不提供复杂 SQL 查询能力。",
+   "highlights": [
+    "提供 set/get/remove/clear/iskey/keys/values 等键值 API，并支持 openStore/setTable/deleteTable 等多 store、多表管理",
+    "在 iOS 与 Android 上通过 SQLCipher 支持可选加密存储，加密 openStore 仅限原生平台",
+    "支持 importFromJson/exportToJson 数据迁移及 filtervalues 键过滤，Web 端基于 localforage 使用同一 API"
+   ],
+   "use_cases": [
+    "为 Capacitor 应用提供持久化键值存储，替代 localStorage",
+    "需要按表组织数据并做 JSON 导入导出的本地数据管理",
+    "原生平台上需要加密本地字符串数据的场景"
+   ]
+  },
+  "sha": "811caf6bc3ad",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ae29f8e6898": {
+  "identity": {
+   "one_liner": "基于 Multicorn 的 PostgreSQL 外部数据封装器，用于在 SQL 中查询 BigQuery 表",
+   "review": "bigquery_fdw 是一个 PostgreSQL 扩展，基于 Multicorn 实现，允许通过外部表以 PostgreSQL SQL 语法读取 BigQuery 数据。面向需要从 PostgreSQL 访问 BigQuery 数据集的开发者。它将参数化查询下发到 BigQuery，支持表分区和大部数据类型，认证依赖 Service Account JSON 密钥；仅支持 BigQuery standard SQL，要求 PostgreSQL 14–18 与 Python ≥3.10。",
+   "highlights": [
+    "通过 CREATE FOREIGN TABLE 建立 BigQuery 外部表，支持 fdw_dataset、fdw_table、fdw_convert_tz、fdw_group 等选项",
+    "发送到 BigQuery 的查询采用参数化方式，支持在 SQL 中使用 BigQuery 表分区",
+    "支持 BigQuery standard SQL 方言及大部分数据类型与运算符，认证使用 Google Cloud 默认凭据机制（GOOGLE_APPLICATION_CREDENTIALS）"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中以 SQL 直接查询远端 BigQuery 数据集",
+    "需要将 BigQuery 时间戳/日期转换到指定时区的跨库查询场景",
+    "基于 Docker 或 Debian/Ubuntu 环境部署的 PostgreSQL 14–18 集成"
+   ]
+  },
+  "sha": "4ae29f8e6898",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

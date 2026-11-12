@@ -3113,5 +3113,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e5331abd48e4": {
+  "identity": {
+   "one_liner": "基于 Docker 的 FastAPI + SQLAlchemy 2 + PostgreSQL 项目模板，内置依赖注入容器",
+   "review": "这是一个 Docker 化的 FastAPI、SQLAlchemy 2 与 PostgreSQL 应用模板，面向需要快速搭建 Python Web 项目结构的开发者。模板通过 modern-di 提供 IOC 容器，使用 Alembic 管理数据库迁移，pytest 测试在每条用例后自动回滚。模板有意不包含认证方案，需开发者自行以 FastAPI 依赖形式添加。",
+   "highlights": [
+    "提供基于 modern-di 的 IOC（控制反转）容器",
+    "使用 pytest 运行测试，每条测试用例结束后自动回滚",
+    "集成 Alembic 数据库迁移与 ruff 代码检查、ty 类型检查"
+   ],
+   "use_cases": [
+    "搭建包含 FastAPI、SQLAlchemy 2 与 PostgreSQL 的后端项目起点",
+    "需要依赖注入容器与可观测性工具集成的 Python 应用开发",
+    "通过设置 OPENTELEMETRY_ENDPOINT 在生产环境启用请求链路追踪"
+   ]
+  },
+  "sha": "e5331abd48e4",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a0eb9d0ea641": {
+  "identity": {
+   "one_liner": "Conduit 的 PostgreSQL 连接器插件，含源与目标，基于逻辑复制实现 CDC。",
+   "review": "该插件为 Conduit 数据管道提供 PostgreSQL 的源与目标连接器。源端启动时先以只读锁对配置表做快照读取，随后切换到 CDC 模式，通过创建逻辑复制槽与 publication 监听表变更并转为记录；连接以 URL 配置，支持 SCRAM/TLS 及 channel_binding 设置。CDC 模式要求连接用户具备相应权限，复制槽丢失或被替换时连接器会拒绝启动并报出错误码。",
+   "highlights": [
+    "提供 source 与 destination 两种连接器，通过 url 设置连接数据库",
+    "源端支持初始快照（可由 snapshotMode 配置关闭）与基于逻辑复制槽和 publication 的 CDC 模式",
+    "写入 slot 身份信标（beacon）到 WAL，可检测复制槽被替换或被其他客户端推进的情形并拒绝启动"
+   ],
+   "use_cases": [
+    "捕获 PostgreSQL 指定表的行变更并转换为记录流入 Conduit 管道",
+    "将数据写入 PostgreSQL 数据库作为管道目标端",
+    "通过宿主进程提供的 dialer 代理连接器所有网络连接的场景"
+   ]
+  },
+  "sha": "a0eb9d0ea641",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c5849e74b4bf": {
+  "identity": {
+   "one_liner": "基于 openGauss 的片上多核 OLAP 数据局部性实验代码库",
+   "review": "该仓库包含用于研究算子并行 OLAP 数据局部性的 openGauss 代码，含两部分：算子内/算子间数据访问插桩，以及内存列存（IMCS）分区扫描基线与 chiplet 感知变体。参考环境为 openGauss RC7.0.0、TPC-H SF100、Kunpeng 920 四路服务器。通过会话 GUC 切换扫描策略，无需重新编译。面向需要在 NUMA/多芯粒环境复现实验的研究者。",
+   "highlights": [
+    "通过 GUC 开关（enable_intra/inter_operator_data_access、enable_imcs_partition_scan、enable_numa_aware_partition_scan）切换实验模式，切换基线与 chiplet 感知扫描无需重新编译",
+    "插桩层记录逻辑字节范围及页所在 NUMA 节点，区分指针复用、深拷贝与 Stream 传输；自带脚本完成 TPC-H 数据生成、建表、加载与 IMCS populate",
+    "支持 numactl 绑定服务器 CPU 与内存，IMCS 分区可通过 relation_oid:numa_node 映射放置到指定 NUMA 节点"
+   ],
+   "use_cases": [
+    "在多 socket/多 NUMA 节点服务器上测量算子并行 OLAP 的数据访问模式",
+    "对比 IMCS 整分区分配与 NUMA 感知分区分配两种扫描策略",
+    "按算子间数据传递边（producer/consumer）分析向量、拷贝与 Stream 交换开销"
+   ]
+  },
+  "sha": "c5849e74b4bf",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

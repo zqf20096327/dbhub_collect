@@ -2972,5 +2972,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "65001dcc04a8": {
+  "identity": {
+   "one_liner": "PHP 数据库抽象层，统一多数据库接口并管理 SQL 参数化",
+   "review": "Dibi 是面向 PHP 的数据库抽象层，用于屏蔽 mysqli、PDO、PostgreSQL、SQLite、SQL Server 等不同扩展间的接口差异。它以 query() 方法配合占位符与修饰符（%s、%i、%and 等）构建参数化 SQL，结果以 Dibi\row 对象返回，支持事务、异常体系与条件 SQL。Dibi 6.0 要求 PHP 8.2 及以上，通过 Composer 安装，examples 目录提供示例。",
+   "highlights": [
+    "支持通过 query() 方法的 ? 占位符与 %s/%i/%and 等修饰符进行参数化查询",
+    "提供 begin/commit/rollback 事务方法及 ConstraintViolationException 等细分异常",
+    "支持 SQL 条件修饰符 %if/%else/%end 与 Dibi\\Literal、expression 表达式对象"
+   ],
+   "use_cases": [
+    "需要在 PHP 项目中统一操作 MySQL、PostgreSQL、SQLite、SQL Server 等多种数据库",
+    "需要用修饰符与数组参数构建 INSERT/UPDATE/DELETE 等语句并管理事务",
+    "需要在 SQL 语句中按变量拼接条件片段（如 %if 条件、%by 排序）的场景"
+   ]
+  },
+  "sha": "65001dcc04a8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b93ed9ed86d8": {
+  "identity": {
+   "one_liner": "Go+SQLite 的六通道支付接入教学项目，含 mock 演示与验签入账",
+   "review": "本项目用 Go 和 SQLite 演示 Stripe、Allscale、MoonPay、Alchemy Pay、Transak、Ramp 六种支付/买币通道的接入流程，覆盖订单创建、Webhook 验签、状态查询与回调丢失恢复等异常场景。面向需要接入这些网关的 Go 开发者，默认 demo 模式无需真实密钥即可本地运行；真实交易验收未完成，且不含扣点、退款发起与出款功能。",
+   "highlights": [
+    "统一实现六通道的订单创建、Webhook 验签、主动查询与幂等入账，含回调丢失后的对账恢复机制",
+    "默认 demo 模式提供 mock 凭据，无需真实商户密钥即可本地跑通全流程；教程内嵌于 Go 二进制，支持离线阅读",
+    "实现 SQLite 持久化账本、失败通知退避重试与隔离队列，管理端可查看未决事件与复核订单"
+   ],
+   "use_cases": [
+    "开发者学习对比 Stripe/Allscale 储值与四家法币买币通道的签名、验签与状态映射差异",
+    "本地搭建支付流程演示环境，用于教学或集成前的流程验证",
+    "参考其幂等入账、回调去重、对账恢复等模式设计支付系统异常处理逻辑"
+   ]
+  },
+  "sha": "b93ed9ed86d8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5dcd55b5ec5d": {
+  "identity": {
+   "one_liner": "自托管的个人仪表盘，多个 AI 代理共享同一 Markdown 笔记库。",
+   "review": "Kokpit 是一个运行在自己设备上的个人仪表盘，聚合日历、任务、新闻摘要、城市活动、求职市场、AI 用量与健康状态等模块，数据存于本地 SQLite 与纯 Markdown 文件。它仅用 Python 标准库实现，无第三方依赖，不强制要求 AI API 密钥，各模块均有基于规则的路径，模型为可选项。面向希望在本地（包括树莓派）管理个人信息的用户，当前处于 1.0 之前的早期阶段。",
+   "highlights": [
+    "仅依赖 Python 3.11+ 标准库（http.server、sqlite3、tomllib），无构建步骤，支持 Docker 与树莓派运行",
+    "多个 AI 代理（Hermes、Claude Code、Codex、Antigravity）共享同一 Markdown 笔记库，通过会话卡与回执接力工作",
+    "每个任务记录自身运行状态与记录数；无法确定的价格或配额显示为 unknown 而非零；支持英文与土耳其文界面"
+   ],
+   "use_cases": [
+    "在本地设备（如树莓派或小型服务器）上集中查看日历、天气、任务、招聘与活动信息",
+    "让多个 AI 编码代理围绕同一个 Markdown 笔记库协作并追踪各自的会话与改动",
+    "读取 Hermes、Claude Code、Codex 本地日志以统计 token 用量与成本，并监控各数据源运行状况"
+   ]
+  },
+  "sha": "5dcd55b5ec5d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

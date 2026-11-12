@@ -2822,5 +2822,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5812cdcda83b": {
+  "identity": {
+   "one_liner": "纯 Haskell 实现的 MySQL 驱动，支持二进制协议与 binlog",
+   "review": "mysql-haskell 是完全用 Haskell 编写的 MySQL 驱动，不经 FFI 绑定 C 客户端库。它提供查询、预编译语句、executeMany 批量写入，以及 binlog 监听与行事件解码模块，还可通过 Decoder 将行直接解码为自定义类型。面向需要在 Haskell 中访问 MySQL 的开发者。注意查询返回的行流须在下一次查询前消费完毕；运行测试需要本地 MySQL 服务器并开启 ROW 格式 binlog。",
+   "highlights": [
+    "提供 Database.MySQL.Base 模块实现查询与预编译语句（prepareStmt/queryStmt）及 executeMany 批量执行",
+    "提供 Database.MySQL.BinLog 模块实现 binlog 监听与基于行的事件解码",
+    "支持通过 Decoder 模块将查询行直接解码为自定义类型，并在首行前逐列校验"
+   ],
+   "use_cases": [
+    "在 Haskell 应用中执行 MySQL 查询与批量写入",
+    "监听并解析 MySQL binlog 行事件，用于数据变更捕获相关程序",
+    "为 groundhog、persistent 等上层库提供 MySQL 访问基础（README 中提及的定位）"
+   ]
+  },
+  "sha": "5812cdcda83b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "924e449590c2": {
+  "identity": {
+   "one_liner": "本地运行的交易日志，导入券商 CSV 并用 Claude 分析复盘。",
+   "review": "一个运行在用户自己机器上的交易日志应用：导入券商 CSV 后自动重建往返交易、计算胜率、盈亏比、期望值等指标，并可用 Claude 对交易日记做复盘评分。数据存储于单个 SQLite 文件，无账号无遥测。面向日内交易者，支持股票、期权与期货。Exit Lab 历史回放需另行配置 Alpaca 密钥获取分钟线数据。",
+   "highlights": [
+    "支持 Thinkorswim 与 Interactive Brokers 导入，另有七个 beta 导入器及任意券商 CSV 模板",
+    "交易分组、盈亏与统计为带测试的普通代码，AI 仅作为可选分析层",
+    "Exit Lab 以历史一分钟价格回放已完成的股票交易并对比多种出场规则"
+   ],
+   "use_cases": [
+    "需要本地保存交易记录并统计绩效指标的散户交易者",
+    "想用 Claude 分析交易日记、按流程给每日表现打分的交易复盘",
+    "在 Schwab Edge Trader 下单后同步成交与交易笔记到本地日志的场景"
+   ]
+  },
+  "sha": "924e449590c2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

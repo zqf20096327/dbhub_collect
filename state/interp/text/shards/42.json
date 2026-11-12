@@ -2553,5 +2553,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bb6250177320": {
+  "identity": {
+   "one_liner": "C++17 编写的 MySQL/PostgreSQL/openGauss 间数据迁移工具，支持全量、校验与 binlog/logical 增量同步",
+   "review": "mini-migrator 用 C++17 实现 MySQL、PostgreSQL、openGauss 三种数据库之间七个方向的全量迁移，附行数与 checksum 校验，CDC 增量支持 MySQL binlog 和 PostgreSQL wal2json 源。构建仅需 libmysqlclient 与 libpq，可选 pg_cdc、repair 等模块；MySQL 目标端批量装载需开启 local_infile，BIT/ENUM/SET/GEOMETRY 列类型不受支持，迁移需目标表为空或已对齐。",
+   "highlights": [
+    "支持 mysql2pg、mysql2og、pg2mysql、pg2og、og2pg、og2mysql、mysql2mysql 七个方向的全量迁移与行数加 checksum 校验",
+    "CDC 支持 MySQL binlog ROW 事件与 PostgreSQL wal2json 逻辑解码源，位点持久化并支持断点续传（--resume）、单表主键范围并行（--workers）与一致快照",
+    "内置 Web 面板（默认 8123 端口，中/英/俄三语）与 Prometheus 指标端点 /metrics；模块可在编译期或运行时禁用"
+   ],
+   "use_cases": [
+    "MySQL 迁移到 PostgreSQL 或 openGauss（含全量加载后接 CDC 持续同步）",
+    "PostgreSQL/openGauss 与 MySQL 之间的数据回迁或同构复制",
+    "迁移后差异修复（--repair 按主键补删行）与监控接入 Prometheus 的批量数据搬运"
+   ]
+  },
+  "sha": "bb6250177320",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

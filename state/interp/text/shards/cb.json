@@ -2704,5 +2704,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c83f40f66ce": {
+  "identity": {
+   "one_liner": "面向 0DTE SPX 期权的定价与行情分析平台，含 AI 图表分析",
+   "review": "该平台针对 SPX/SPY 0DTE 期权场景，提供 Black-Scholes 定价、delta 目标行权价表、铁鹰/BWB 盈亏计算，并接入 Schwab、Unusual Whales、GEXBot 的实时行情与做市商 gamma 数据。前端 React 19 + Vite 部署于 Vercel，Python 服务跑在 Railway，数据层用 Neon Postgres 与 Upstash Redis。属单人维护工具，带可选访客只读访问，采用 AGPLv3 许可。",
+   "highlights": [
+    "提供 delta 目标行权价表、铁鹰/BWB 完整盈亏计算，以及基于 9,102 天 VIX-SPX 历史数据的 delta 上限建议",
+    "接入 Schwab、Unusual Whales（REST + websocket）、GEXBot 数据源，提供 dealer gamma、资金流看板与两条盘中异常期权警报流（Lottery Finder、Silent Boom）",
+    "使用 Claude Opus 4.7（Sonnet 4.6 作为后备）读取 Periscope 截图与结构化数据，返回结构/delta/入场/管理/对冲建议"
+   ],
+   "use_cases": [
+    "输入 SPY/SPX 价格、VIX 与时间，生成 0DTE 行权价表与铁鹰/BWB 盈亏分析",
+    "查看做市商 gamma 敞口、期权资金流与盘中异常成交警报的实时仪表盘",
+    "运行 uw-stream websocket 服务与 ml/ 研究管线，构建特征与校准模型（Take-It 概率带 SHAP 标记）"
+   ]
+  },
+  "sha": "0c83f40f66ce",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "807d8a52fb26": {
+  "identity": {
+   "one_liner": "收录55个免费开发者工具的清单，含夜间自动在线状态检查",
+   "review": "这是一个面向开发者与 Vibe Coders 的免费工具目录，以表格形式收录55个工具，按16个类别组织（AI编码IDE、云托管、数据库、DevOps、安全、自托管等），每条标注用途、定价模式与在线状态。状态由 GitHub Actions 每晚自动检测，判断标准为响应码是否小于500。项目允许通过 PR 或 Issue 贡献新条目，采用 MIT 许可证。",
+   "highlights": [
+    "收录55个工具，涵盖16个类别，每条标注用途、定价与状态",
+    "通过 GitHub Actions 每晚自动检查各工具在线状态（响应<500为在线）",
+    "允许通过 Pull Request 或 Issue 贡献新工具条目"
+   ],
+   "use_cases": [
+    "查找特定类别的免费层级工具，如数据库（Supabase、Neon）、托管（Vercel、Render）或 API 测试工具",
+    "了解收录工具当前的在线/离线状态",
+    "为开发者工具清单贡献新条目"
+   ]
+  },
+  "sha": "807d8a52fb26",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d513febad3d3": {
+  "identity": {
+   "one_liner": "hoodkit：面向 Robinhood Chain 的流式、缓存、批量与索引工具包",
+   "review": "hoodkit 是构建在 hoodchain 之上的 TypeScript 工具包，针对 Robinhood Chain（chain ID 4663）提供实时事件流（价格、swap、代币发行、钱包变动）、读缓存、Multicall 批处理、本地 SQLite 索引器和策略原语。面向在该链上开发交易机器人、仪表盘或索引服务的开发者。流支持断线补块，查询时零 RPC；依赖 hoodchain 与 viem 为必需 peer，Node ≥ 20。",
+   "highlights": [
+    "实时流支持断线后按区块游标补读遗漏日志，提供 drop-oldest/latest/block 溢出策略",
+    "读缓存支持请求合并与可插拔 CacheStore，Multicall 批处理带单读失败隔离",
+    "本地 SQLite 索引器从 Transfer/Swap 事件计算持仓、OHLCV 与 24h 滚动成交量"
+   ],
+   "use_cases": [
+    "在 Robinhood Chain 上开发需要实时价格与 swap 流的交易机器人",
+    "构建展示持仓、K 线与成交量的仪表盘或分析服务",
+    "需要将链上读取合并、缓存以降低 RPC 调用量的服务"
+   ]
+  },
+  "sha": "d513febad3d3",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "485241467b85": {
+  "identity": {
+   "one_liner": "本地优先的桌面任务管理器，SQLite 存储，可选 TickTick 同步",
+   "review": "Open Tick 是一款基于 Electron + React + TypeScript 构建的桌面任务管理应用，支持 Windows、macOS 和 Linux。任务数据以本地 SQLite 文件为唯一数据源，无需账号即可使用本地功能；可选通过 TickTick OAuth 连接进行入站同步（目前仅支持拉取，出站推送在路线图中）。安装需 Node.js 20+，可打包为 NSIS/DMG/AppImage+deb，其中 macOS 产物未签名，Windows 下 better-sqlite3 需原生编译。采用 MIT 许可证。",
+   "highlights": [
+    "本地 SQLite 存储任务数据，支持离线使用，使用本地应用无需注册账号",
+    "提供收件箱、项目、文件夹、标签、优先级、子任务、日历视图、循环任务、提醒和 Markdown 笔记编辑",
+    "通过 TickTick OAuth 实现入站同步，UI 内显示连接状态；支持系统托盘、快捷键、提醒和可选开机自启"
+   ],
+   "use_cases": [
+    "在 Windows、macOS 或 Linux 桌面离线管理个人任务与日程",
+    "从 TickTick 拉取任务数据到本地应用中查看与管理",
+    "自行从源码构建、打包并运行开源桌面应用（CI 可生成三平台安装包）"
+   ]
+  },
+  "sha": "485241467b85",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

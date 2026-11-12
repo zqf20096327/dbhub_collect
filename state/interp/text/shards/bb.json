@@ -2933,5 +2933,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b8f0945108c9": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理会话日志分析工具，将多代理日志聚合为可搜索的 SQLite 归档",
+   "review": "Decant 读取 Claude Code、Codex、Gemini CLI、OpenCode、Cursor CLI、GitHub Copilot CLI 及 VS Code Copilot Chat 在本机写入的会话日志，汇总到一个带全文索引的 SQLite 归档，并提供本地 Web UI、CLI 和 HTTP API 用于查看 token、成本、耗时等统计。运行时不发起外呼（更新检查默认关闭）；归档为未加密文件，含会话中的源码与凭据等内容，权限为 0600。原生二进制仅支持 macOS 与 Linux。",
+   "highlights": [
+    "将多种编码代理的会话日志索引到一个 SQLite 归档，支持对提示、响应、工具名和工具输入的全文搜索",
+    "按代理、模型、项目、仓库、结果和日期统计 token、估算成本、上下文窗口与代理耗时",
+    "提供本地 Web UI、CLI 命令和带 OpenAPI 3.1 契约的本地 HTTP API；会话可导出为 Markdown、JSON、trajectory-v1 和 ATIF 格式"
+   ],
+   "use_cases": [
+    "集中检索和回看多个编码代理的历史会话记录",
+    "分析各项目、模型上的 token 消耗与估算成本",
+    "导出会话报告或轨迹用于存档与分享"
+   ]
+  },
+  "sha": "b8f0945108c9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "90d86096a197": {
+  "identity": {
+   "one_liner": "离线 Rust CLI，在一次性 SQLite 快照上分析 Cloudflare D1 迁移风险。",
+   "review": "该工具将待执行的 D1 迁移 SQL 应用到本地一次性 SQLite 快照上，比较 schema 与行标识、验证约束并对比工作负载查询计划，输出带证据、严重级别和迁移归属的检查报告。使用需 Rust 工具链与 C 编译器，编译后的二进制完全离线运行。README 明确说明其不连接 Cloudflare、不部署迁移，SQLite 评估只是近似 D1，查询计划不等于延迟基准。",
+   "highlights": [
+    "支持 schema/数据/迁移文件、SQLite 快照、Wrangler TOML 等多种基线输入，输出纯文本、JSON 与 Markdown 报告",
+    "内置规则覆盖删表删列、行数丢失、唯一性缺失、外键检查、索引移除、无界变更、视图/触发器变化及执行与完整性失败等",
+    "提供 GitHub Actions 注解输出与按严重级别的退出码策略（fail_on），迁移原子按文件执行，显式事务语句被拒绝"
+   ],
+   "use_cases": [
+    "在部署前对 D1 迁移做本地离线的破坏性变更与约束检查",
+    "接入 CI 流程，在 GitHub Actions 中生成迁移风险注解与报告",
+    "对提供的 SELECT 工作负载做查询计划变化对比（不做延迟基准）"
+   ]
+  },
+  "sha": "90d86096a197",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

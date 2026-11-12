@@ -23932,5 +23932,2174 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "00f795e4f568+2": {
+  "fn": "MaroShim/LionSQL",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    11,
+    4,
+    11,
+    [
+     "Version",
+     "Go Version",
+     "License: GPL v3",
+     "Platform",
+     "Architecture",
+     "Website",
+     "Compatibility: MSSQL 2019 & PG 15"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    15,
+    12,
+    13,
+    [
+     "(한국어 문서는 README.ko.md, 호환성 사양은 COMPATIBILITY.ko.md를 참조하세요.)"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    23,
+    13,
+    21
+   ],
+   [
+    "delete",
+    23,
+    24,
+    21,
+    21
+   ],
+   [
+    "equal",
+    24,
+    28,
+    21,
+    25
+   ],
+   [
+    "replace",
+    28,
+    73,
+    25,
+    26,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    26,
+    27
+   ],
+   [
+    "delete",
+    74,
+    76,
+    27,
+    27
+   ],
+   [
+    "equal",
+    76,
+    83,
+    27,
+    34
+   ],
+   [
+    "replace",
+    83,
+    85,
+    34,
+    36,
+    [
+     " - **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding.",
+     " - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    36,
+    37
+   ],
+   [
+    "replace",
+    86,
+    87,
+    37,
+    38,
+    [
+     " Handles 10,000+ simultaneous connections over lightweight Go goroutines, eliminating connection bottlenecks without external poolers."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    94,
+    38,
+    45
+   ],
+   [
+    "replace",
+    94,
+    95,
+    45,
+    46,
+    [
+     " Full support for `CREATE PROCEDURE`, scalar and Table-Valued Functions (TVF), and `AFTER` / `INSTEAD OF` triggers."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    46,
+    47
+   ],
+   [
+    "replace",
+    96,
+    97,
+    47,
+    48,
+    [
+     " Supports conditional branching (`IF...ELSE`), loops (`WHILE`), exception handling (`TRY...CATCH`), local variables (`@var`), table variables, session variables, and cursors."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    48,
+    49
+   ],
+   [
+    "replace",
+    98,
+    99,
+    49,
+    50,
+    [
+     " Window functions (`ROW_NUMBER`, `RANK`), JSON extraction functions, foreign keys with cascading actions, `TRUNCATE TABLE`, and `SELECT ... INTO`."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    102,
+    50,
+    53
+   ],
+   [
+    "replace",
+    102,
+    103,
+    53,
+    54,
+    [
+     " Both interactive queries (`SELECT`, `INSERT`, `UPDATE`, `DELETE`) and stored procedures execute on the exact same register-based VDBE virtual machine, complete with bytecode disassembly support (`EXPLAIN BYTECODE`)."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    54,
+    55
+   ],
+   [
+    "replace",
+    104,
+    105,
+    55,
+    56,
+    [
+     " Parameterized queries are compiled directly into bytecode during preparation and cached, completely eliminating query re-parsing overhead on subsequent executions."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    56,
+    57
+   ],
+   [
+    "replace",
+    106,
+    108,
+    57,
+    59,
+    [
+     " - **Ultra Fast-Path**: In-house zero-allocation Pratt parser delivering sub-microsecond parsing for high-frequency queries.",
+     " - **Full-Spec Fallback**: Official Microsoft T-SQL parser invoked automatically on advanced syntax (bracket escapes, vendor options) to ensure 100% grammar compatibility."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    59,
+    60
+   ],
+   [
+    "replace",
+    109,
+    110,
+    60,
+    61,
+    [
+     " Composable iterator execution (Hash Join, Index Scan, GroupBy) with streaming batches, featuring an automatic disk spill to external merge sort when query memory limits are exceeded."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    61,
+    62
+   ],
+   [
+    "replace",
+    111,
+    112,
+    62,
+    63,
+    [
+     " Leverages table statistics (cardinality, distinct counts, histograms) and multi-column extended statistics to optimize join orders and generate efficient execution plans."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    63,
+    66
+   ],
+   [
+    "replace",
+    115,
+    117,
+    66,
+    68,
+    [
+     " - **In-Memory OCC Engine**: Delivers 218,000+ TPS (and up to 1,066k tpmC in kernel TPC-C, 759k tpmC in T-SQL VDBE runtime, and 376k tpmC over network wire with an ultra-low 0.00%~3.4% abort rate) based on concurrent SkipList indexes and Optimistic Concurrency Control.",
+     " - **WiredTiger MVCC Disk Engine**: Delivers 141,000+ TPS (and up to 1,184k tpmC in kernel TPC-C, 863k tpmC in T-SQL VDBE runtime, and 352k tpmC over network wire) with full ACID durability backed by lock-free B+Trees."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    68,
+    69
+   ],
+   [
+    "replace",
+    118,
+    119,
+    69,
+    70,
+    [
+     " Multi-version update chains are maintained in memory and only latest committed versions are written to disk, completely eliminating table bloat and Autovacuum I/O storms."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    70,
+    71
+   ],
+   [
+    "replace",
+    120,
+    121,
+    71,
+    72,
+    [
+     " Readers never block writers and writers never block readers, ensuring long-running analytical queries or backups never stall online transaction processing."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    72,
+    73
+   ],
+   [
+    "replace",
+    122,
+    123,
+    73,
+    74,
+    [
+     " Captures live, compressed `.tar.gz` database backups without interrupting active transaction traffic. Supported seamlessly via CLI, REST API, and Web Studio."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    74,
+    75
+   ],
+   [
+    "replace",
+    124,
+    125,
+    75,
+    76,
+    [
+     " Supports real-time WAL stream replication from Primary to Replicas with zero-downtime failover."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    128,
+    76,
+    79
+   ],
+   [
+    "replace",
+    128,
+    129,
+    79,
+    80,
+    [
+     " Database kernel, wire protocol listeners, REST API, and web studio packaged into a single static executable with zero external runtime dependencies (officially supported on macOS and Linux)."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    80,
+    81
+   ],
+   [
+    "replace",
+    130,
+    131,
+    81,
+    82,
+    [
+     " Zero-install browser dashboard (`/_/`) featuring visual schema explorer, inline data grid editor, SQL query console, real-time event stream viewer, and request activity logs."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    82,
+    83
+   ],
+   [
+    "replace",
+    132,
+    133,
+    83,
+    84,
+    [
+     " Host single HTML files or flat static frontend SPA builds directly on `:8090` without Nginx or Caddy, eliminating CORS while accessing database APIs under the same origin (Guide)."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    84,
+    85
+   ],
+   [
+    "replace",
+    134,
+    135,
+    85,
+    86,
+    [
+     " Instant REST endpoints generated automatically for all tables upon creation, with boolean filtering, sorting, and pagination."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    86,
+    87
+   ],
+   [
+    "replace",
+    136,
+    137,
+    87,
+    88,
+    [
+     " Lightweight client SDK served directly by the standalone executable, supporting Browsers, Node.js, Bun, and Deno."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    88,
+    89
+   ],
+   [
+    "replace",
+    138,
+    141,
+    89,
+    90,
+    [
+     " Authentication-based data access control (RLS), asynchronous webhooks, 5-field cron automation scheduler, and built-in SMTP mailer."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    150,
+    90,
+    99
+   ],
+   [
+    "replace",
+    150,
+    152,
+    99,
+    101,
+    [
+     " - macOS: `brew install wiredtiger`",
+     " - Linux (Ubuntu/Debian): `sudo apt-get install libwiredtiger-dev`"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    159,
+    101,
+    108
+   ],
+   [
+    "replace",
+    159,
+    164,
+    108,
+    109,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    172,
+    109,
+    117
+   ],
+   [
+    "replace",
+    172,
+    182,
+    117,
+    118,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    190,
+    118,
+    126
+   ],
+   [
+    "replace",
+    190,
+    207,
+    126,
+    127,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    215,
+    127,
+    135
+   ],
+   [
+    "replace",
+    215,
+    218,
+    135,
+    136,
+    [
+     "The Web Studio provides immediate visual table inspection, real-time query execution, stored procedure inspection, and one-click database backup/restore. See the Web Studio User Guide for full operational instructions."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    231,
+    136,
+    149
+   ],
+   [
+    "replace",
+    231,
+    237,
+    149,
+    150,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    261,
+    150,
+    174
+   ],
+   [
+    "delete",
+    261,
+    263,
+    174,
+    174
+   ],
+   [
+    "equal",
+    263,
+    271,
+    174,
+    182
+   ],
+   [
+    "replace",
+    271,
+    302,
+    182,
+    183,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    310,
+    183,
+    191
+   ],
+   [
+    "replace",
+    310,
+    325,
+    191,
+    192,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    333,
+    192,
+    200
+   ],
+   [
+    "replace",
+    333,
+    346,
+    200,
+    201,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    354,
+    201,
+    209
+   ],
+   [
+    "replace",
+    354,
+    368,
+    209,
+    210,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    369,
+    210,
+    211
+   ],
+   [
+    "delete",
+    369,
+    371,
+    211,
+    211
+   ],
+   [
+    "equal",
+    371,
+    376,
+    211,
+    216
+   ],
+   [
+    "replace",
+    376,
+    377,
+    216,
+    217,
+    [
+     "|Flag|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    378,
+    217,
+    218
+   ],
+   [
+    "replace",
+    378,
+    391,
+    218,
+    231,
+    [
+     "|`-http`|`127.0.0.1:8090`|HTTP service and embedded Web Studio address|",
+     "|`-pg`|`127.0.0.1:5433`|PostgreSQL wire protocol listen address|",
+     "|`-tds`|`127.0.0.1:1433`|Microsoft SQL Server TDS protocol listen address|",
+     "|`-dir`|`data`|Database storage directory|",
+     "|`-engine`|`wiredtiger`|Storage engine backend (`wiredtiger` or `memory`)|",
+     "|`-ephemeral`|`false`|Disable WAL/AOF persistence for in-memory engine (pure RAM)|",
+     "|`-replica-of`|`\"\"`|Primary server URL to stream WAL from (runs as read-only replica)|",
+     "|`-node-id`|`\"node-1\"`|Unique cluster node identifier for replication tracking|",
+     "|`-work-mem`|`64MB`|Default memory limit per query operator before spill-to-disk|",
+     "|`-max-workers`|`NumCPU * 4`|Maximum concurrent query execution workers|",
+     "|`-max-idle-sessions`|`64`|Maximum idle storage sessions to retain in pool|",
+     "|`-auth`|`false`|Enforce JWT authentication on protected REST endpoints|",
+     "|`-seed`|`true`|Seed sample accounts and `TransferFunds` procedure on startup|"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    400,
+    231,
+    240
+   ],
+   [
+    "replace",
+    400,
+    414,
+    240,
+    241,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    422,
+    241,
+    249
+   ],
+   [
+    "replace",
+    422,
+    430,
+    249,
+    250,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    430,
+    438,
+    250,
+    258
+   ],
+   [
+    "replace",
+    438,
+    446,
+    258,
+    259,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    446,
+    447,
+    259,
+    260
+   ],
+   [
+    "delete",
+    447,
+    449,
+    260,
+    260
+   ],
+   [
+    "equal",
+    449,
+    454,
+    260,
+    265
+   ],
+   [
+    "replace",
+    454,
+    455,
+    265,
+    266,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    455,
+    456,
+    266,
+    267
+   ],
+   [
+    "replace",
+    456,
+    479,
+    267,
+    288,
+    [
+     "|`GET`|`/api/health`|Service health and version check|",
+     "|`GET`|`/api/pool/stats`|Realtime worker pool and connection pooler metrics|",
+     "|`GET`|`/api/realtime`|Server-Sent Events (SSE) live data mutation stream|",
+     "|`POST`|`/api/sql`|Execute SQL/T-SQL statement directly (`{\"sql\": \"...\"}`)|",
+     "|`GET`|`/api/tables`|List all tables and schemas|",
+     "|`POST`|`/api/tables`|Create a new table|",
+     "|`GET`|`/api/tables/{name}/records`|Get records with pagination, sorting, and search|",
+     "|`POST`|`/api/tables/{name}/records`|Insert a new record|",
+     "|`PATCH`|`/api/tables/{name}/records/{pk}`|Update a record by primary key|",
+     "|`DELETE`|`/api/tables/{name}/records/{pk}`|Delete a record by primary key|",
+     "|`GET`|`/api/procs`|List all registered stored procedures|",
+     "|`POST`|`/api/procs`|Register a stored procedure script|",
+     "|`POST`|`/api/procs/{name}/exec`|Execute stored procedure via JSON parameters|",
+     "|`GET`|`/api/backup`|Stream live `.tar.gz` snapshot hot backup|",
+     "|`POST`|`/api/backup`|Create backup file on server (`{\"target\": \"path\"}`)|",
+     "|`POST`|`/api/restore`|Restore database from archive file or multipart upload|",
+     "|`GET`|`/api/replication/status`|Get node replication role, LSN, lag, and replica list|",
+     "|`GET`|`/api/replication/stream`|Stream chunked WAL frames to connected replicas|",
+     "|`POST`|`/api/replication/ack`|Report follower heartbeat and replayed LSN|",
+     "|`POST`|`/api/replication/promote`|Promote replica to active primary node|",
+     "|`POST`|`/api/replication/demote`|Demote primary node to follower under a new primary|"
+    ]
+   ],
+   [
+    "equal",
+    479,
+    484,
+    288,
+    293
+   ],
+   [
+    "replace",
+    484,
+    485,
+    293,
+    294,
+    [
+     "### Master Technical Documentation Directory (doc/README.md)"
+    ]
+   ],
+   [
+    "equal",
+    485,
+    487,
+    294,
+    296
+   ],
+   [
+    "replace",
+    487,
+    488,
+    296,
+    297,
+    [
+     "### Official Application Integration Guides (guide/README.md)"
+    ]
+   ],
+   [
+    "equal",
+    488,
+    491,
+    297,
+    300
+   ],
+   [
+    "replace",
+    491,
+    496,
+    300,
+    305,
+    [
+     "- **Official Web SDK & HTML Embedding Guide**: Universal zero-dependency client library and HTML embedding patterns for Web, Node.js, Bun, and Deno.",
+     "- **Auto-Generated RESTful CRUD API**: Zero-code `/api/records/:table` endpoints with rich boolean filter expressions.",
+     "- **Webhooks & Row-Level Security (RLS)**: Non-blocking mutation webhooks with HMAC signatures and declarative `@auth` access rules.",
+     "- **Cron Jobs Scheduler & SMTP Mailer**: Embedded 5-field cron automation and transactional HTML email dispatching.",
+     "- **HTTP REST API & Realtime SSE Specification**: OpenAPI-style endpoint documentation and JavaScript EventSource examples."
+    ]
+   ],
+   [
+    "equal",
+    496,
+    498,
+    305,
+    307
+   ],
+   [
+    "replace",
+    498,
+    507,
+    307,
+    316,
+    [
+     "- **System Architecture Specification**: Exhaustive technical specification covering Volcano iterators, dual-parser decoupling, and storage backends.",
+     "- **Architecture Decision Records (ADRs)**: Historical log of 18 foundational architectural decisions (ADR-001 through ADR-018).",
+     "- **VDBE Bytecode Virtual Machine Internals**: Register allocation, opcode instruction set architecture (ISA), and procedural execution.",
+     "- **Storage Engine Mechanics (WiredTiger & Memory OCC)**: Lock-free B+Trees, hazard pointers, OCC validation, and AOF log compaction.",
+     "- **Cost-Based Optimizer & Volcano Pipeline Internals**: Equi-depth histograms, physical cost formulas, and external merge sort.",
+     "- **Multi-Wire Protocol Internals**: Binary framing for PostgreSQL v3, TDS 7.x/8.0, and goroutine connection pooler.",
+     "- **Virtual System Catalog & Data Dictionary**: System views (`sys.*`, `information_schema.*`), data types, and tool compatibility.",
+     "- **High Availability & Disaster Recovery**: Multi-node replication topology, 1-writer multi-reader WAL streaming, failover, and recovery SLAs.",
+     "- **Extension & Driver Development Guide**: Dual-track UDFs (Go native SPI + Wasm sandbox), pluggable storage engines, and fallback parsers."
+    ]
+   ],
+   [
+    "equal",
+    507,
+    509,
+    316,
+    318
+   ],
+   [
+    "replace",
+    509,
+    527,
+    318,
+    334,
+    [
+     "- **T-SQL & SQL Syntax Reference Guide**: Complete language reference for procedures, triggers, UDFs, TVFs, and queries.",
+     "- **Percentile & Quantile Analytics**: Continuous/discrete quantiles (`PERCENTILE_CONT`, `PERCENTILE_DISC`), `MEDIAN`, and streaming `APPROX_PERCENTILE` (T-Digest).",
+     "- **In-Engine Text & Log Analytics**: Zero-copy `GREP`, `REGEXP_LIKE`, and `AWK` / `SPLIT_PART` filter and extraction operators.",
+     "- **Observability, Metrics & Telemetry Guide**: Prometheus time-series metrics, health probes, alerting rules, and Grafana integration.",
+     "- **Production Deployment & Operations Runbook**: Systemd services, Docker deployment, 1-writer replication failover, and security hardening.",
+     "- **Performance Tuning & Benchmark Guide**: High-concurrency banking benchmark harness, TPS measurement, and memory tuning.",
+     "- **Local Testing & Regression Guide**: Build and test pipeline, running single tests, build tags, regression test map, and TPC-C performance regression procedure.",
+     "- **Data Import & Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "- **Security Policy & Threat Model**: RBAC access control, SQL injection immunity, and vulnerability disclosure.",
+     "- **Engineering Roadmap & Milestones**: Versioned engineering milestones from single-node OLTP to Always On HA and decoupled HTAP.",
+     "- **Actionable Engineering Backlog (TODO.md)**: Immediate, daily task backlog and prioritized operational execution tracker.",
+     "- **Developer & AI Handover Context Notes**: Shared brain, engineering invariants, why alternatives were spec'd out, fragile landmines, and upcoming refactoring context.",
+     "- **Troubleshooting, Error Diagnostics & FAQ**: Port conflicts, serialization conflicts, slow query tuning, and client driver setup.",
+     "- **Contributing & Development Guide**: Engineering standards, 3-stage verification pipeline, and pull request checklist.",
+     "- **Contributor Covenant Code of Conduct**: Standards, pledge, enforcement responsibilities, and guidelines.",
+     "- **Changelog & Release Notes**: Semantic versioning history and release notes."
+    ]
+   ],
+   [
+    "equal",
+    527,
+    543,
+    334,
+    350
+   ],
+   [
+    "replace",
+    543,
+    544,
+    350,
+    351,
+    [
+     " Requires 100% PASS across all packages with **0 data races**."
+    ]
+   ],
+   [
+    "equal",
+    544,
+    545,
+    351,
+    352
+   ],
+   [
+    "replace",
+    545,
+    547,
+    352,
+    354,
+    [
+     " - **Extended Integration Smoke Test**:",
+     " Verifies all 13 core architecture domains from `notes/TEST_VERIFICATION_REPORT.ko.md` in ~3 seconds (see `scripts/README.md`):"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    555,
+    354,
+    362
+   ],
+   [
+    "replace",
+    555,
+    557,
+    362,
+    364,
+    [
+     " - **SQLLogicTest (SLT) 107-Suite Full Corpus (551,217 Queries) Oracle Verification (100% PASS)**:",
+     " Runs full black-box regression across official SQLite test suites (`select1~5.test`), specification clauses (`evidence/*`), B-Tree index paths (`index/*`), synthetic fuzzing expressions (`random/*`), and curated edge suites (see Verification Report, Guide, and Babelfish T-SQL Integration Report):"
+    ]
+   ],
+   [
+    "equal",
+    557,
+    561,
+    364,
+    368
+   ],
+   [
+    "replace",
+    561,
+    566,
+    368,
+    369,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    566,
+    568,
+    369,
+    371
+   ],
+   [
+    "replace",
+    568,
+    572,
+    371,
+    373,
+    [
+     " - Conventional Commits format (`feat`, `fix`, `docs`, `refactor`, `test`).",
+     " - Zero decorative emojis in code, logs, comments, and commit messages."
+    ]
+   ],
+   [
+    "equal",
+    572,
+    574,
+    373,
+    375
+   ],
+   [
+    "delete",
+    574,
+    575,
+    375,
+    375
+   ],
+   [
+    "equal",
+    575,
+    576,
+    375,
+    376
+   ],
+   [
+    "replace",
+    576,
+    577,
+    376,
+    377,
+    [
+     "LionSQL is free open-source software licensed under the **GNU General Public License v3 (GPL-3.0-or-later)**. See LICENSE for the full canonical license text."
+    ]
+   ],
+   [
+    "equal",
+    577,
+    581,
+    377,
+    381
+   ],
+   [
+    "replace",
+    581,
+    586,
+    381,
+    385,
+    [
+     " - Copyright (c) MongoDB, Inc.",
+     " - Copyright (c) Keith Bostic and Michael Cahill.",
+     " - Licensed under the **GNU General Public License (GPLv2 or GPLv3)**.",
+     " - When LionSQL is built with `-tags wiredtiger`, it links with `libwiredtiger` governed by its respective GPL terms."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "0a4af739a9ac+2": {
+  "fn": "Dalibex/urban-incidence-manager",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "CI",
+     "Release",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    9,
+    5,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "> **In development.** What is built is in Current Scope, the status of each requirement in the requirements, and how to use the apps in the user guide."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    21,
+    10,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "- **Authentication:** sign up, sign in, refresh and sign out with JWT access tokens and refresh tokens, a password change that a staff account must make at its first sign-in, and a role check on every operation (security guide)."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    24,
+    22,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "- **Incidents:** reporting with a position, listing with filters, the positions on a live map of the web app, clustered by zoom (#195, #196), detail, status history and photos (JPEG, PNG or WebP, kept on the `evidence_data` volume; the mobile app uploads them after reporting, and the incident detail of the web app shows them to staff (#194)), scoped by role, the assignment to a department and, optionally, an active technician from the list of active technicians (API only, the form is planned in #185), acceptance and resolution by the assigned technician, closing or reopening a resolved incident by an operator, classification by category and manual priority, with its changes read back from the audit trail, and internal comments between staff that citizens never see (the web incident detail adds them and shows them in its timeline), through the built operations of the OpenAPI 3.1 contract (`docs/api/openapi.yml`, served with Swagger UI; the rest say `Planned: #N`). The lifecycle service applies the transitions of ADR-0020 with optimistic locking, and an append-only audit trail records the relevant actions."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    29,
+    26,
+    29,
+    [
+     "- **Clients:** a pnpm workspace in `frontend/` with the web app for staff (operator inbox with filters, and incident detail with its photos, where operators classify the incident and close or reopen it once resolved, and staff add internal comments; the technician's work queue and detail, where they accept and resolve their incidents; the administrator's *Users* screen and audit log; and the reports screen with its CSV download), the mobile app for citizens (report an incident over the base map, \"My reports\"), which runs as an Expo development build, and their shared packages, including the API client generated from the contract. How each role uses them is in the user guide.",
+     "- **Data:** the database schema of the whole data model, created by Flyway migrations, and sample data behind the `dev`, `demo` and `perf` profiles (datasets).",
+     "- **Base map:** a self-hosted OpenStreetMap map of the province of Málaga, built as a one-off process (ADR-0016)."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    49,
+    29,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "Install Java 25, Docker Engine or Docker Desktop, and Git. Maven and PostgreSQL do not need to be installed locally. To work on the web or mobile clients, also install Node.js 24; pnpm is provided by Corepack (see the development guide)."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    81,
+    50,
+    81
+   ],
+   [
+    "replace",
+    81,
+    82,
+    81,
+    82,
+    [
+     "Write the values without quotes. Every variable is described in the deployment guide."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    99,
+    82,
+    99
+   ],
+   [
+    "replace",
+    99,
+    100,
+    99,
+    100,
+    [
+     "The database starts empty. To try the API and the clients with sample users and incidents, start the backend with the `dev` profile (see the development guide), and to run the web and mobile apps, see *Client Workspace* in the same guide."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    100,
+    101
+   ],
+   [
+    "replace",
+    101,
+    102,
+    101,
+    102,
+    [
+     "To run the backend as a container instead, with the same image as the CI, use `docker compose --profile app up --build` (see the deployment guide)."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    125,
+    102,
+    125
+   ],
+   [
+    "replace",
+    125,
+    165,
+    125,
+    126,
+    [
+     "…（40 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    171,
+    126,
+    132
+   ],
+   [
+    "replace",
+    171,
+    172,
+    132,
+    133,
+    [
+     "UrbanPulse database schema"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    133,
+    134
+   ],
+   [
+    "replace",
+    173,
+    174,
+    134,
+    135,
+    [
+     "The diagram is a `.drawio.svg`: GitHub shows it as an image, and draw.io opens it as an editable diagram. The Flyway migrations in `backend/src/main/resources/db/migration` (ADR-0014) are the source of truth for the schema; if the diagram and the migrations disagree, the migrations are right. Update this diagram in the same pull request that changes the schema."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    177,
+    135,
+    138
+   ],
+   [
+    "replace",
+    177,
+    195,
+    138,
+    156,
+    [
+     "- User guide: how each role uses the web and mobile apps",
+     "- Requirements and prioritization (the plan is in the GitHub milestones)",
+     "- Development guide",
+     "- Deployment guide (local Compose stack for now)",
+     "- Database guide and database schema",
+     "- Datasets and measurements and demo script",
+     "- Testing guide",
+     "- API guide and OpenAPI contract",
+     "- Security guide",
+     "- Architecture overview: drivers and quality attribute scenarios",
+     "- C4 architecture model",
+     "- CI guide",
+     "- Twelve-factor traceability: how each factor is applied and how to check it",
+     "- Architecture Decision Records",
+     "- Changelog",
+     "- Contributing guide",
+     "- Security policy",
+     "- AI Agents Context"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    200,
+    156,
+    161
+   ],
+   [
+    "replace",
+    200,
+    201,
+    161,
+    162,
+    [
+     "This project is licensed under the Apache License 2.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "8e01725b15c5+2": {
+  "fn": "psrockstar098/yatta.js",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    1,
+    [
+     "Yatta"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    1,
+    4
+   ],
+   [
+    "replace",
+    7,
+    8,
+    4,
+    5,
+    [
+     "**Production-grade backend framework for Bun.**"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    12,
+    5,
+    9
+   ],
+   [
+    "replace",
+    12,
+    15,
+    9,
+    12,
+    [
+     "CI",
+     "Benchmarks",
+     "npm"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    20,
+    12,
+    17
+   ],
+   [
+    "delete",
+    20,
+    23,
+    17,
+    17
+   ],
+   [
+    "equal",
+    23,
+    31,
+    17,
+    25
+   ],
+   [
+    "replace",
+    31,
+    51,
+    25,
+    26,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    68,
+    26,
+    43
+   ],
+   [
+    "replace",
+    68,
+    69,
+    43,
+    44,
+    [
+     "|Pool|Sizing|Concurrency per worker|For|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    44,
+    45
+   ],
+   [
+    "replace",
+    70,
+    72,
+    45,
+    47,
+    [
+     "|`cpu-pool`|`cores * 0.35`|`1`|Password hashing, crypto, transforms|",
+     "|`io-pool`|`min(16, cores * 0.8)`|`500`|DB queries, network, mail|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    77,
+    47,
+    52
+   ],
+   [
+    "replace",
+    77,
+    88,
+    52,
+    53,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    96,
+    53,
+    61
+   ],
+   [
+    "replace",
+    96,
+    98,
+    61,
+    62,
+    [
+     "|Framework|Requests/sec|vs Yatta|Spread|p50|p95|p99|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    62,
+    63
+   ],
+   [
+    "replace",
+    99,
+    107,
+    63,
+    70,
+    [
+     "|Yatta|46,942|1.00x|5%|1.98ms|3.76ms|4.65ms|",
+     "|Raw Bun|43,011|0.92x|21%|2.27ms|4.71ms|4.84ms|",
+     "|Hono|48,560|1.03x|34%|1.85ms|3.53ms|4.20ms|",
+     "|Elysia|47,022|1.00x|8%|2.17ms|3.70ms|5.16ms|",
+     "|Express|15,487|0.33x|4%|6.40ms|10.13ms|11.49ms|",
+     "|Fastify|22,094|0.47x|6%|4.07ms|7.61ms|8.98ms|",
+     "|Koa|15,459|0.33x|5%|6.51ms|10.06ms|11.30ms|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    109,
+    70,
+    72
+   ],
+   [
+    "replace",
+    109,
+    110,
+    72,
+    73,
+    [
+     "Full results, throughput ladders and workload profiles: BENCHMARKS.md."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    116,
+    73,
+    79
+   ],
+   [
+    "replace",
+    116,
+    117,
+    79,
+    80,
+    [
+     "|Module|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    80,
+    81
+   ],
+   [
+    "replace",
+    118,
+    129,
+    81,
+    92,
+    [
+     "|`yatta/api`|Unified API: router with onion middleware, typed params, schema validation (Zod/Valibot/ArkType), CORS, cookies, streaming, typed client, universal routes (define once, call directly or over HTTP), path utilities, DataLoader batching|",
+     "|`yatta/db`|`bun:sqlite` ORM — column builder, relations, transactions with savepoints, pagination, cursor pagination, schema sync, backup/restore|",
+     "|`yatta/auth`|Argon2id, rotating access/refresh JWTs, AES-256-GCM sessions, TOTP 2FA, WebAuthn passkeys, hashed API keys, RBAC, rate-limit lockouts|",
+     "|`yatta/jwt`|Fast stateless HS256 verification — `Bun.CryptoHasher` HMAC, no caching, reference-compatible error strings|",
+     "|`yatta/jobs`|Job queue, worker pools, cron (Vixie semantics, tz-aware), event bus, atomic leases, DLQ, backoff + jitter|",
+     "|`yatta/cache`|L1 LRU + SQLite L2, singleflight, stale-while-revalidate, tag invalidation; plus an O(1) priority queue|",
+     "|`yatta/storage`|Local + S3 drivers, RFC 9110 range streaming, magic-byte inspection, HMAC signed URLs|",
+     "|`yatta/mail`|SMTP/Resend/Postmark/SendGrid/SES/Gmail, layouts, pipe templating, md→html, RFC 8058 unsubscribe|",
+     "|`yatta/realtime`|Unified SSE + WebSocket, topic pub/sub, AI token streaming, job tracking, backpressure|",
+     "|`yatta/observe`|Tracing, metrics, logs, issue grouping, incident correlation, adaptive baselines, SLOs, N+1 detection, golden traces|",
+     "|`yatta/otel`|OpenTelemetry bridge — Yatta spans flow to any OTel backend (Jaeger, Tempo, Datadog)|"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    138,
+    92,
+    101
+   ],
+   [
+    "replace",
+    138,
+    139,
+    101,
+    102,
+    [
+     "|Import|Served at|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    102,
+    103
+   ],
+   [
+    "replace",
+    140,
+    147,
+    103,
+    110,
+    [
+     "|`yatta.js/grpcweb`|`/grpc-web`|gRPC-Web unary calls — protobuf codec, framing, trailers, a client, and a health check|",
+     "|`yatta.js/webdav`|`/dav`|WebDAV (RFC 4918) over the storage engine — Finder, Explorer, Word, davfs2|",
+     "|`yatta.js/doh`|`/dns-query`|DNS over HTTPS (RFC 8484), wire and JSON shapes, A and AAAA|",
+     "|`yatta.js/webfinger`|`/.well-known/webfinger`|WebFinger (RFC 7033) discovery for auth-store accounts|",
+     "|`yatta.js/oauth`|`/oauth/*`|OAuth 2.0 server — code + PKCE, client credentials, rotating refresh tokens|",
+     "|`yatta.js/oidc`|`/oauth/jwks`, `/oauth/userinfo`, `/.well-known/openid-configuration`|OpenID Connect on top of OAuth — RS256 ID tokens, discovery, JWKS|",
+     "|`yatta.js/mcp`|`/mcp`|MCP server whose tools are generated from your collections|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    152,
+    110,
+    115
+   ],
+   [
+    "replace",
+    152,
+    156,
+    115,
+    116,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    185,
+    116,
+    145
+   ],
+   [
+    "replace",
+    185,
+    200,
+    145,
+    146,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    260,
+    146,
+    206
+   ],
+   [
+    "replace",
+    260,
+    264,
+    206,
+    207,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    273,
+    207,
+    216
+   ],
+   [
+    "replace",
+    273,
+    274,
+    216,
+    217,
+    [
+     "|Situation|Result|"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    217,
+    218
+   ],
+   [
+    "replace",
+    275,
+    281,
+    218,
+    224,
+    [
+     "|Fewer than 20 samples for a baseline|`confidence: \"unknown\"`, no anomaly claimed|",
+     "|Metric with zero observed variance|`z: null`, explains it cannot be scored|",
+     "|Zero baseline for a ratio|`changePct: null`, not `Infinity`|",
+     "|SLO with fewer than 20 requests|`status: \"no-data\"`, no compliance claimed|",
+     "|First release with nothing to compare|`status: \"unknown\"`, not \"healthy\"|",
+     "|Memory trend with a weak fit|`verdict: \"stable\"`, reports the R²|"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    284,
+    224,
+    227
+   ],
+   [
+    "replace",
+    284,
+    285,
+    227,
+    228,
+    [
+     "|Call|Returns|"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    228,
+    229
+   ],
+   [
+    "replace",
+    286,
+    297,
+    229,
+    240,
+    [
+     "|`analyzeIncident(fp)`|Timeline, suspects with evidence, suggested actions|",
+     "|`releaseHealth()`|Per-release errors, p50/p95/p99, slow queries, new errors|",
+     "|`whatChanged()`|The running release against the previous one|",
+     "|`serviceMap()`|Dependency graph inferred from spans, with its own limitations|",
+     "|`detectNPlusOne()`|Repeated identical queries under one parent|",
+     "|`detectAnomalies()`|Current values against their own history|",
+     "|`memoryTrend()`|Least-squares growth with fit quality|",
+     "|`evaluateSlos()`|Availability, error budget, burn rate|",
+     "|`jobHealth()`|Queue depth, success rate, backlog direction|",
+     "|`incidentReport(fp)`|Self-contained JSON for a model or a colleague|",
+     "|`compareToGolden(name, traceId)`|Drift against a known-good baseline|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    337,
+    240,
+    280
+   ],
+   [
+    "replace",
+    337,
+    342,
+    280,
+    281,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    342,
+    349,
+    281,
+    288
+   ],
+   [
+    "replace",
+    349,
+    350,
+    288,
+    289,
+    [
+     "|Endpoint|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    351,
+    289,
+    290
+   ],
+   [
+    "replace",
+    351,
+    357,
+    290,
+    296,
+    [
+     "|`GET /_yatta/api/analysis/state`|Every analysis in one call|",
+     "|`GET /_yatta/api/analysis/incident/:fp`|One incident analysis|",
+     "|`GET /_yatta/api/analysis/report/:fp`|Full incident report for export|",
+     "|`GET/POST /_yatta/api/analysis/goldens/:name`|List or save a golden trace|",
+     "|`GET /_yatta/api/analysis/compare/:name?trace=`|Compare against a baseline|",
+     "|`POST /_yatta/api/analysis/action/:kind`|Guarded action|"
+    ]
+   ],
+   [
+    "equal",
+    357,
+    365,
+    296,
+    304
+   ],
+   [
+    "replace",
+    365,
+    366,
+    304,
+    305,
+    [
+     " precisely so the observer cannot become the leak it is meant to diagnose."
+    ]
+   ],
+   [
+    "equal",
+    366,
+    367,
+    305,
+    306
+   ],
+   [
+    "replace",
+    367,
+    368,
+    306,
+    307,
+    [
+     " limitation; external dependencies appear only if a call site was wrapped."
+    ]
+   ],
+   [
+    "equal",
+    368,
+    369,
+    307,
+    308
+   ],
+   [
+    "replace",
+    369,
+    370,
+    308,
+    309,
+    [
+     " and the resolver refuses any path outside the project root."
+    ]
+   ],
+   [
+    "equal",
+    370,
+    379,
+    309,
+    318
+   ],
+   [
+    "replace",
+    379,
+    383,
+    318,
+    319,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    392,
+    319,
+    328
+   ],
+   [
+    "replace",
+    392,
+    393,
+    328,
+    329,
+    [
+     "|Variable|Default|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    394,
+    329,
+    330
+   ],
+   [
+    "replace",
+    394,
+    398,
+    330,
+    334,
+    [
+     "|`PORT`|`4000`|Must be 1–65535|",
+     "|`NODE_ENV`|`development`|`production` \\|`development` \\|`test`|",
+     "|`STORAGE_SECRET`|*ephemeral*|**Required in production**|",
+     "|`DATABASE_URL`|`Database/app.db`|Shared volume / managed SQLite file|"
+    ]
+   ],
+   [
+    "equal",
+    398,
+    404,
+    334,
+    340
+   ],
+   [
+    "replace",
+    404,
+    405,
+    340,
+    341,
+    [
+     "|Endpoint|Meaning|Status|"
+    ]
+   ],
+   [
+    "equal",
+    405,
+    406,
+    341,
+    342
+   ],
+   [
+    "replace",
+    406,
+    408,
+    342,
+    344,
+    [
+     "|`/healthz`|Liveness. Never touches the worker pool.|`200 {\"status\":\"ok\"}`|",
+     "|`/readyz`|Readiness: fleet mounted and serving.|`200` ready / `503` degraded|"
+    ]
+   ],
+   [
+    "equal",
+    408,
+    454,
+    344,
+    390
+   ],
+   [
+    "replace",
+    454,
+    456,
+    390,
+    392,
+    [
+     " probing an untested surface, and each fix was reverted briefly to confirm the new test",
+     " actually goes red. A test that passes before and after proves nothing."
+    ]
+   ],
+   [
+    "equal",
+    456,
+    457,
+    392,
+    393
+   ],
+   [
+    "replace",
+    457,
+    461,
+    393,
+    396,
+    [
+     " a size cap, a cache TTL, and a rate limiter each ended up with no limit at all, all",
+     " reachable from `Number(process.env.SOMETHING)` with the variable unset. Validate at",
+     " the boundary rather than trusting a downstream comparison."
+    ]
+   ],
+   [
+    "equal",
+    461,
+    463,
+    396,
+    398
+   ],
+   [
+    "replace",
+    463,
+    465,
+    398,
+    400,
+    [
+     " with `WorkerCrashError`; a replacement is spawned and remounts its graphs.",
+     " Recovery survives cascading crashes."
+    ]
+   ],
+   [
+    "equal",
+    465,
+    466,
+    400,
+    401
+   ],
+   [
+    "replace",
+    466,
+    468,
+    401,
+    403,
+    [
+     " per-subsystem override). A hung task rejects with `TaskTimeoutError` instead",
+     " of pinning a promise forever. `timeoutMs: 0` opts out."
+    ]
+   ],
+   [
+    "equal",
+    468,
+    469,
+    403,
+    404
+   ],
+   [
+    "replace",
+    469,
+    472,
+    404,
+    407,
+    [
+     " in-flight work, then terminates threads and stops the observer. The drain",
+     " budget is 30s — deliberately longer than the default task deadline, so a",
+     " legitimately long task is not reported as a failed drain."
+    ]
+   ],
+   [
+    "equal",
+    472,
+    497,
+    407,
+    432
+   ],
+   [
+    "replace",
+    497,
+    498,
+    432,
+    433,
+    [
+     "|Command|Does|"
+    ]
+   ],
+   [
+    "equal",
+    498,
+    499,
+    433,
+    434
+   ],
+   [
+    "replace",
+    499,
+    506,
+    434,
+    441,
+    [
+     "|`bun run dev`|Watch mode|",
+     "|`bun run start`|Production server|",
+     "|`bun run cluster`|Multi-process mode|",
+     "|`bun test`|Full suite|",
+     "|`bun run typecheck`|`tsc --noEmit`|",
+     "|`bun run check`|Typecheck + tests|",
+     "|`bun run benchmark`|Scheduler/IPC microbenchmarks|"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    509,
+    441,
+    444
+   ],
+   [
+    "replace",
+    509,
+    510,
+    444,
+    445,
+    [
+     "|Command|Does|"
+    ]
+   ],
+   [
+    "equal",
+    510,
+    511,
+    445,
+    446
+   ],
+   [
+    "replace",
+    511,
+    517,
+    446,
+    452,
+    [
+     "|`yatta doctor`|Diagnose project health|",
+     "|`yatta migrate`|Run pending migrations|",
+     "|`yatta migrate:make <name>`|Create migration file|",
+     "|`yatta migrate:status`|Show migration status|",
+     "|`yatta db:backup`|Backup SQLite database|",
+     "|`yatta db:restore <file>`|Restore from backup|"
+    ]
+   ],
+   [
+    "equal",
+    517,
+    519,
+    452,
+    454
+   ],
+   [
+    "replace",
+    519,
+    528,
+    454,
+    455,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    528,
+    538,
+    455,
+    465
+   ],
+   [
+    "replace",
+    538,
+    542,
+    465,
+    466,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    542,
+    543,
+    466,
+    467
+   ],
+   [
+    "delete",
+    543,
+    544,
+    467,
+    467
+   ],
+   [
+    "equal",
+    544,
+    546,
+    467,
+    469
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

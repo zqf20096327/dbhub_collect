@@ -2664,5 +2664,70 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "89de7088d63f": {
+  "identity": {
+   "one_liner": "Supabase 官方 Python 客户端 monorepo，用于在 Python 应用中访问 Postgres 及配套服务",
+   "review": "supabase-py 是 Supabase 的 Python 客户端代码库，以 monorepo 形式包含 supabase、realtime、storage3、postgrest、supabase_auth 等子包，供 Flask、Django、FastAPI 等 Python 项目调用 Supabase 的数据库、认证、存储、边缘函数与实时数据流服务。该仓库 main 分支为 v3 早期开发版，暂不接受外部贡献；v2 分支仅接受关键缺陷和安全修复。仅官方支持 CPython，兼容各服务最新版本。",
+   "highlights": [
+    "以 monorepo 组织，包含 supabase、realtime、storage3、postgrest、supabase_auth、supabase_functions、supabase_utils 七个子包",
+    "纯 Python 实现，在 Linux 上测试，预期可在 macOS、Windows 等 CPython 支持的平台运行",
+    "通过 make 管理测试命令，支持按子包单独执行（如 make realtime.tests）及并行运行"
+   ],
+   "use_cases": [
+    "在 Flask、Django、FastAPI 应用中通过 Python 查询和写入 Postgres 数据",
+    "需要 Python 用户认证、文件存储或实时数据流的 Supabase 项目",
+    "自托管 Supabase 并需配套 Python SDK 的场景"
+   ]
+  },
+  "sha": "89de7088d63f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bb0a7e13b283": {
+  "identity": {
+   "one_liner": "基于 MSSQL/PostgreSQL 存储过程生成流式 JSON 接口的 HTTP 网关",
+   "review": "Weir 是一个运行在 MSSQL（并支持 PostgreSQL 连接器）之上的 HTTP 网关：客户端调用端点后，网关执行对应的存储过程或函数并将结果以 JSON 流式返回。端点以元数据定义，通过内置 Blazor PWA 管理台在线维护，无需重新部署；认证使用 API Key 并支持作用域。系统分数据面与控制面，仅执行存储过程、不执行即席 SQL。提供 Docker 镜像部署，需自行准备数据库。",
+   "highlights": [
+    "端点以元数据驱动，通过管理台增改，无需重新部署",
+    "结果集从 DbDataReader 直接流式写入 JSON 响应，使用 Dapper、无 ORM",
+    "内置管理 PWA，包含 SignalR 实时仪表盘、审计日志与运行时设置热更新"
+   ],
+   "use_cases": [
+    "将既有数据库存储过程以受控 HTTP 端点形式对外提供",
+    "需要通过 API Key 与作用域管理多个数据端点访问权限的场景",
+    "希望在不改动后端代码的情况下在线调整端点路由与限流等运行时配置"
+   ]
+  },
+  "sha": "bb0a7e13b283",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4f848401c9cb": {
+  "identity": {
+   "one_liner": "基于 JSON 序列化键值对文件的 Java 数据库 API",
+   "review": "Keybase 是一个 Java 框架，用于操作以 JSON 字符串序列化的键值对数据库文件，内部通过 Google GSON 将 DatabaseObject 类序列化为 JSON 对象，格式不支持时无法读取。README 以 Redis 作为设计参照示例，适合希望不经建表即可序列化整个对象的开发者，可通过 Maven 添加依赖使用，官方 wiki 尚在开发中。",
+   "highlights": [
+    "支持以 JSON 字符串序列化的键值对数据库文件，底层使用 Google GSON 实现序列化",
+    "提供 Maven 依赖接入方式",
+    "文件扩展名可自定义，官方建议使用 .kybdb 以便识别"
+   ],
+   "use_cases": [
+    "需要以键值系统保存并序列化整个 Java 对象、无需建表结构的场景",
+    "通过 Maven 引入依赖的 Java 项目中管理简单键值数据存储"
+   ]
+  },
+  "sha": "4f848401c9cb",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

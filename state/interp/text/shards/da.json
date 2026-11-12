@@ -2997,5 +2997,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6bbb1d25a937": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 AI 代理审计数据库，以因果链记录决策并支持防篡改校验",
+   "review": "ZizkaDB 是一个运行在 Postgres 上的 AI 代理记录数据库，为每条事件写入 SHA-256 校验和并做哈希链接，通过 parent_id 记录因果链，提供 db.why() 溯因、db.at() 历史回放、db.verify_chain() 链校验和 drift 检测接口，面向需要留存代理运行记录的团队。支持 Python/TypeScript SDK、MCP、Docker 单容器部署；注意 AGPL-3.0 许可，自托管版限单代理、向量搜索需额外部署 Qdrant。",
+   "highlights": [
+    "每条事件包含 SHA-256 校验和并哈希链链接，verify_chain 接口可校验记录未被编辑、删除或重排",
+    "事件通过 parent_id 构成因果链，why()/at() 接口支持按事件溯因和按时间戳重建代理当时状态",
+    "提供 Python 与 TypeScript SDK、MCP 集成及 LangChain/LangGraph 等框架接入包，支持 Docker 单容器自托管或云服务"
+   ],
+   "use_cases": [
+    "需要按 EU AI Act 第12条留存代理决策记录的合规场景",
+    "调试代理行为：从工具调用回溯到引发它的用户消息或错误上下文",
+    "作为代理跨运行的因果记忆，通过 context_for 返回按相关性排序的历史上下文块"
+   ]
+  },
+  "sha": "6bbb1d25a937",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cd929a97b0fd": {
+  "identity": {
+   "one_liner": "把十个编码渠道凭证池封装为 OpenAI/Responses/Anthropic 兼容 API 的网关",
+   "review": "Coding2API 用 FastAPI 将 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce、小浣熊、灵犀等渠道封装为 OpenAI/Responses/Anthropic 兼容接口，提供公共凭证池、健康度调度、会话粘性与按人用量统计。面向需统一管理多渠道编码模型凭证的团队，需 Python 3.12+、uv 与 Node.js 构建，支持 Docker 部署。README 注明为逆向接口，仅供学习研究，未做安全审计。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages、/v1/models 等兼容端点，支持流式与非流式",
+    "凭证池加密入库，含设备码登录、额度探测、每日签到与按健康度的选号调度",
+    "管理台含三角色权限、审计日志、脱敏用量统计与月度账单 CSV/JSONL 导出"
+   ],
+   "use_cases": [
+    "团队内部共享多渠道编码模型凭证并统计各成员用量",
+    "为 OpenAI 兼容客户端或 Claude Code、Codex CLI 提供统一接入入口",
+    "管理凭证额度到期、签到与限流冷却的自动化运维"
+   ]
+  },
+  "sha": "cd929a97b0fd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9786863be42c": {
+  "identity": {
+   "one_liner": "AI 代理工具调用的运行前拦截审计平台，带防篡改证据链",
+   "review": "PANOPTIS（原 AgentWatch）位于代理与工具之间，在工具调用执行前做决策（拦截、人工审批、放行），并在结果返回代理前检查注入内容；同时以 Merkle 分段密封生成防篡改审计证据。面向使用 Claude Code、Cursor/MCP、Python/OpenAI Agents SDK 的开发者。需 Python 3.12+；单机模式用 SQLite 绑定 127.0.0.1，团队部署需 Docker Compose。检测基于模式与解析规则，对新型编码和改写的注入可能漏检。",
+   "highlights": [
+    "十步决策管线在工具运行前拦截调用，含人工审批与紧急停止；管线内部失败时也按拒绝处理，被拦截的调用不会执行",
+    "证据面以每 200 条记录或 30 秒为界生成 Merkle 密封段，头锚定在存储之外，附独立校验器可检测编辑、重排与截断",
+    "提供影子重放：用记录的证据应答工具调用，对被测模型重放历史运行并比较轨迹，不接触真实环境"
+   ],
+   "use_cases": [
+    "为通过 Python SDK、Claude Code 或 MCP 网关接入的代理提供工具调用的执行前拦截与人工审批流程",
+    "需要对代理决策与工具调用留存可验证、防篡改审计记录的合规或取证场景",
+    "在更换模型时重放历史代理运行并比较工具调用轨迹，验证新模型行为差异"
+   ]
+  },
+  "sha": "9786863be42c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "36688cecfc1f": {
+  "identity": {
+   "one_liner": "Kotlin 多平台注解驱动的存储库，经引擎落在 SQLite、IndexedDB 或内存",
+   "review": "Rekords 是一个 Kotlin Multiplatform 持久化库：用 @Rekord 注解的类描述数据，在公共代码中声明带版本迁移的 schema 并读写记录。它自身不带数据库，按目标平台复用已有存储（SQLite、IndexedDB、内存），API 不绑定 SQL。支持嵌套记录、嵌入类、事务、Flow 观察、AES 加密字段；README 明确说明复杂 SQL 查询场景需另选库。",
+   "highlights": [
+    "提供过滤器（含嵌套、Contains、Glob）、排序、分页、计数与 distinctBy 查询，API 在各目标平台行为一致",
+    "支持嵌套记录与列表存储共享、嵌入类、自增/UUID 生成 id、事务、以及以 Flow 形式观察查询结果",
+    "提供 SQLite、IndexedDB、内存三种引擎及 rekords-crypto 模块对单字段做确定性或随机化 AES 加密"
+   ],
+   "use_cases": [
+    "需要在 Android、iOS、JVM、JS/Wasm 等多个目标间共享同一套模型与存储代码的 Kotlin Multiplatform 项目",
+    "使用 Kotlin/JS 或 Kotlin/Wasm 的浏览器应用，需要通过 IndexedDB 持久化注解类数据",
+    "测试或缓存场景，用内存引擎运行同一套 schema 与查询代码"
+   ]
+  },
+  "sha": "36688cecfc1f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9507046387cb": {
+  "identity": {
+   "one_liner": "用 Rust 实现的 Kafka 协议兼容流平台，内置 SQL、全文与向量检索",
+   "review": "Chronik Stream 是一个用 Rust 编写的事件流平台，实现 Kafka 线路协议（24 个 API），可直接对接现有 Kafka 客户端。核心机制是在写入后异步构建索引：按 topic 开启 columnar、searchable、vector 等能力，分别通过 DataFusion SQL、Tantivy BM25、HNSW 提供查询。集群模式基于 Raft 共识，最少 3 节点。适合希望在同一系统内完成流式写入与多模态查询的团队。需注意其官方集群吞吐基准数据已因复制缺陷撤回待重测。",
+   "highlights": [
+    "实现 24 个 Kafka 线路协议 API，支持标准 Kafka 生产者与消费者直接接入",
+    "按 topic 启用 SQL（DataFusion/Arrow/Parquet）、全文检索（Tantivy BM25）、向量检索（HNSW）能力，索引在写入确认后异步构建",
+    "支持基于 Raft 共识的多节点集群部署，提供加节点等零停机运维命令"
+   ],
+   "use_cases": [
+    "使用任意 Kafka 客户端写入事件后，通过 POST /_sql 以 SQL 直接查询 topic 数据",
+    "日志、工单等消息写入后进行 BM25 全文检索",
+    "对事件自动生成嵌入并进行向量相似度检索，用于语义查询"
+   ]
+  },
+  "sha": "9507046387cb",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cecb861f71e7": {
+  "identity": {
+   "one_liner": "基于纯 Markdown 与 SQLite FTS5 的本地知识库 CLI，为工程师和 AI 编码代理提供检索",
+   "review": "Sovereign-KB（skb）是一个本地优先的 Markdown 知识库及 Python CLI，运行于 Python 3.10+ 标准库和 SQLite FTS5，声明零运行时依赖。它通过 skb capture 写入带时间戳的笔记，用 BM25、[[wikilink]] 图与可选的 Ollama 本地向量做混合检索，并支持 --json 输出供 Claude Code、Cursor 等 AI 编码代理跨会话读取项目记忆；删除 .kb/ 目录后原始 Markdown 文件保留。项目还包含 dashboard、scaffold 等附加子系统。",
+   "highlights": [
+    "提供 capture/search/ask/sync/verify 等 CLI 命令，搜索支持 --json 输出和 --explain 评分",
+    "混合检索实现：SQLite FTS5 BM25、可选 Rust Block-Max WAND（hips）、768 维 Ollama 本地向量、RRF 融合与 1 跳 wikilink 图传播",
+    "以纯 .md 文件存储，索引数据位于 .kb/，删除后原文件不受影响；配置经 KB_VAULT_DIR、KB_NO_EMBED 等环境变量控制"
+   ],
+   "use_cases": [
+    "在终端中记录架构决策与修复过程，并按关键词、wikilink 或向量检索历史笔记",
+    "为 AI 编码代理提供跨会话的项目记忆：代理在会话开始读取 skb me、变更前用 skb search --json 检索、完成后用 skb capture 记录",
+    "直接对已有的 Obsidian 库或 docs/ 目录运行 skb sync 建立索引，无需迁移文件格式"
+   ]
+  },
+  "sha": "cecb861f71e7",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

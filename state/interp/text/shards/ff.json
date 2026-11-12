@@ -3103,5 +3103,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "732c16d47182": {
+  "identity": {
+   "one_liner": "TypeScript 优先的无头 CMS，以代码定义内容模型并支持多种运行时与数据库适配器。",
+   "review": "Lucid CMS 是一个面向开发团队与内容编辑团队的无头 CMS，处于 alpha 阶段。开发者通过 lucid.config.ts 以代码方式定义集合、字段与本地化，API 带类型；内容团队获得媒体管理、发布审批、定时发布等编辑功能。运行时支持 Node.js 与 Cloudflare Workers，数据库支持 PostgreSQL、LibSQL、SQLite；AI 功能需订阅且尚未随 beta 发布。匿名遥测默认开启，可通过配置或环境变量关闭。",
+   "highlights": [
+    "支持代码定义集合、可复用 bricks、自定义字段与本地化，并提供类型化 API",
+    "运行时适配 Node.js 与 Cloudflare Workers，数据库适配 PostgreSQL、LibSQL、SQLite",
+    "提供约 20 个官方插件，涵盖存储（S3/R2/本地文件系统）、图像处理、邮件、第三方登录、队列、KV、搜索索引与 SEO"
+   ],
+   "use_cases": [
+    "需要自托管内容平台并选择运行时与数据库的团队",
+    "配合 Astro 构建网站并通过发布审批与定时发布管理内容的工作流",
+    "使用 Cloudflare Workers 在边缘部署 CMS 的项目"
+   ]
+  },
+  "sha": "732c16d47182",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b8ef0a1ab38": {
+  "identity": {
+   "one_liner": "本地优先的个人理财桌面应用，导入银行 OFX/CSV 生成月度报表",
+   "review": "Finoinc 是一款离线运行的桌面记账应用，支持 macOS、Windows 和 Linux，基于 Tauri + Svelte + Rust 构建，数据存储在单个本地 SQLite 文件中。它读取银行导出的 OFX/CSV 账单，自动去重、配对退款，并通过用户定义的规则分类交易。适用于希望在本地管理个人收支、不愿使用云服务或账号体系的用户。内置 MCP 服务器可让本机 AI 代理查询数据，默认仅开启只读工具。",
+   "highlights": [
+    "导入 OFX/CSV 账单，自动去重、识别重复行并配对退款，保存 CSV 列映射",
+    "基于描述关键词的分类规则系统，规则可生成日历账单，支持本地化规则包（pt-BR/en-US）",
+    "数据存于单个 SQLite 文件，可用任意 SQLite 客户端打开；默认零网络请求"
+   ],
+   "use_cases": [
+    "导入银行 OFX/CSV 账单，按类别查看月度收支、收入来源和 11 个月趋势",
+    "将自有账户间转账标记为 Transfer 类型，避免卡账单与活期账单重复计入",
+    "通过日历管理带到期日的周期性账单，并核对对应的实际交易"
+   ]
+  },
+  "sha": "2b8ef0a1ab38",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c801d3ef7cec": {
+  "identity": {
+   "one_liner": "面向俄语 GTA5 角色扮演服务器的 Telegram 法律助手机器人及后端 API",
+   "review": "该项目为 Majestic RP、GTA5RP 等角色扮演服务器提供法律助手，包含 Telegram 机器人与 FastAPI 后端。它通过 Playwright 解析器抓取各服务器论坛的法律条文，结合 Gemini 模型的路由与回答（附条文引用）、pgvector 向量检索及 PostgreSQL 全文搜索实现问答与文档起草。部署依赖 Docker Compose、GCP Vertex AI 服务账号，桌面对话浮层与网站存于独立仓库。",
+   "highlights": [
+    "通过 Docker Compose 编排 8 个服务：PostgreSQL 16 + pgvector、Telegram 机器人（python-telegram-bot 22）、FastAPI、法律条文向量计算 worker、论坛解析 worker（Playwright）、FlareSolverr、Caddy 反向代理",
+    "法律条文问答采用模型路由：由路由模型选择法典，再由 Gemini 读取全文并附条文引用回答；向量 RAG 使用 gemini-embedding-001（3072 维）存入 pgvector halfvec 并建 HNSW 索引",
+    "条文搜索在运行时不依赖 LLM，融合 PostgreSQL 全文搜索、三元组（trigram）、俚语同义词典与本地 FRIDA 模型向量，按加权 RRF 合并结果"
+   ],
+   "use_cases": [
+    "为角色扮演服务器玩家提供各服务器法律条文的查询与引用问答",
+    "起草申诉、起诉书、刑事案件等程序性文档，或分析他人申诉",
+    "通过 Telegram 设备授权（device-code + JWT）为桌面对话浮层与网站提供条文搜索 API"
+   ]
+  },
+  "sha": "c801d3ef7cec",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "68297fff717c": {
+  "identity": {
+   "one_liner": "基于RAG的文档问答平台，答案严格来源于上传PDF并附页级引用。",
+   "review": "VeriDoc AI 是一个本地部署的 RAG 文档问答系统，用户上传 PDF 后以自然语言提问，回答仅基于文档内容生成并附文档、版本、页码级内联引用；文档中无依据时明确拒答。技术栈为 Java 21 + Spring Boot 3.4 后端、React 19 前端、PostgreSQL 17 + pgvector 与全文检索混合召回、Redis 限流，嵌入用 Gemini，生成用 Groq 模型。需自备 Groq 与 Gemini API 密钥，通过 Docker Compose 一键启动，检索权重、top-k、最低分数等参数可在 .env 中调节。",
+   "highlights": [
+    "混合检索：pgvector HNSW 余弦相似度与 PostgreSQL tsvector 全文检索合并重排，权重可配置",
+    "回答含内联引用（文档、版本、页码及证据摘录），无依据时明确拒答",
+    "PDF 摄取流水线：Apache Tika 抽取、滑动窗口分块、SHA-256 去重、批量向量化，支持 SSE 流式多轮对话"
+   ],
+   "use_cases": [
+    "需要在本地环境对 PDF 文档集进行有依据问答并核对页级引用",
+    "构建带多租户行级隔离的 RAG 应用参考实现",
+    "以 Docker Compose 快速搭建包含向量检索、缓存与前后端的本地开发栈"
+   ]
+  },
+  "sha": "68297fff717c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

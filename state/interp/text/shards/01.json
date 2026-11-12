@@ -2876,5 +2876,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e7f4d3fb5191": {
+  "identity": {
+   "one_liner": "图+向量+历史多版本合一的图数据库，兼容 Neo4j Bolt/Cypher 协议",
+   "review": "NornicDB 是一个用 Go 编写的图数据库，在同一存储中组合 Cypher 查询、图遍历、向量检索与基于 MVCC 的历史读取，支持 Bolt 和 HTTP 接口，也可嵌入 Go 应用运行。提供 Homebrew、Docker、macOS 安装包与源码构建多种安装方式，支持 CPU 及 CUDA/Metal/Vulkan 加速。文档注明 Docker 在 macOS 上不暴露 Metal 加速，GPU 场景需原生安装或本地构建。",
+   "highlights": [
+    "同时提供 Cypher 查询、图遍历、向量检索与全文检索",
+    "通过 MVCC 与保留历史支持历史状态读取",
+    "兼容 Neo4j Bolt 协议与 Qdrant gRPC 接口，支持嵌入 Go 应用"
+   ],
+   "use_cases": [
+    "需要图遍历与向量检索混合查询的应用",
+    "需要读取历史数据版本的场景",
+    "从 Neo4j 迁移的项目"
+   ]
+  },
+  "sha": "e7f4d3fb5191",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9ba4ca12a932": {
+  "identity": {
+   "one_liner": "抓取暴雪页面数据的非官方守望先锋 REST API",
+   "review": "OverFast API 是一个非官方守望先锋 API，通过抓取暴雪页面提供英雄、游戏模式、地图与玩家生涯数据。基于 FastAPI、Selectolax、PostgreSQL 与 Valkey，采用 SWR 缓存和任务队列 worker。部署依赖 docker compose，须在 .env 设置 POSTGRES_PASSWORD。作为非官方项目，数据来自页面抓取，暴雪页面结构变化可能影响功能。",
+   "highlights": [
+    "抓取暴雪页面，提供英雄、游戏模式、地图和玩家生涯统计的 JSON 数据，时长转秒、百分比转整数",
+    "基于 Valkey 的 Stale-While-Revalidate 缓存，nginx 直接读取 SWR 信封返回响应，taskiq worker 异步刷新",
+    "PostgreSQL 持久化玩家档案，玩家搜索支持 10 分钟 TTL 缓存，官方在线实例带每秒限流"
+   ],
+   "use_cases": [
+    "为守望先锋数据看板或统计工具获取英雄与地图等静态数据",
+    "按玩家战网标签查询生涯数据与统计",
+    "自托管实例获取更高请求吞吐（通过 just up / make up 部署）"
+   ]
+  },
+  "sha": "9ba4ca12a932",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8ec64a77a8e0": {
+  "identity": {
+   "one_liner": "自托管家庭藏书目录系统，支持条码/拍照扫描与元数据自动获取",
+   "review": "Shelf 是一个以单个 Docker 容器运行的自托管家庭媒体编目应用，用于管理图书、漫画、DVD、CD、有声书、电子书和游戏等藏品。用户可通过手机摄像头或 USB/蓝牙扫码器录入条目，支持用视觉模型识别整架书照片批量导入，并提供借出归还、多用户角色、去重合并、回收站和收藏估值报告等功能。技术栈为 FastAPI、SQLite 和 HTMX，数据存于本地目录。",
+   "highlights": [
+    "支持摄像头/USB/蓝牙条码扫描、8 种扫描模式及 AI 视觉整架照片批量导入",
+    "级联元数据查询覆盖 Open Library、Hardcover、Google Books、TMDb、IGDB 及德国、意大利国家书目",
+    "内置借阅跟踪、条目去重合并、回收站恢复、书架盘点审计与保险估值报告"
+   ],
+   "use_cases": [
+    "录入并管理家庭藏书、影音、游戏等多类型收藏",
+    "通过借阅与盘点模式跟踪物品去向、清理重复记录",
+    "离线/本地网络环境运行，数据不出户的 homelab 场景"
+   ]
+  },
+  "sha": "8ec64a77a8e0",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "699fd62ede75": {
+  "identity": {
+   "one_liner": "自托管上下文编译器：以 git 中的 Markdown 知识库经 MCP 输出受 token 预算约束的上下文包",
+   "review": "briefd 是面向 AI 编码团队的自托管知识服务：团队知识以 Markdown 存于 git 仓库，briefd 索引后通过 MCP 或 REST 提供检索与打包。检索采用 SQLite FTS5（BM25）与纯 Go 计算的多语言 embedding 的混合方案，配以 reciprocal rank fusion；所有返回上下文的接口均接受 max_tokens 且不超预算。索引仅是可丢弃缓存，知识以 git 为唯一来源，代理只能经 propose_update 开分支提交修改。",
+   "highlights": [
+    "提供 compile_bundle、search_context 等 7 个 MCP 工具，接口支持 max_tokens 硬预算；同类操作也可经 REST 访问",
+    "混合检索：SQLite FTS5（BM25）+ multilingual-e5-small 多语言 embedding，由纯 Go 实现计算，无外部数据库或 ONNX 运行时依赖",
+    "支持 Obsidian vault 读取 [[wikilinks]] 等链接并构建链接图；可选接入 Jira Cloud 与 Confluence Cloud，propose_update 通过分支/PR 修改知识"
+   ],
+   "use_cases": [
+    "多个项目共享同一领域术语、业务规则与编码规范时，向编码代理按需提供该领域上下文",
+    "团队希望通过 git review 流程管理代理可见的知识，代理仅能经 PR 提案修改",
+    "以 Obsidian vault 作为知识库，并让代理通过 MCP/stdio 或 HTTP 访问其链接图与文档"
+   ]
+  },
+  "sha": "699fd62ede75",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5eee31e2f56d": {
+  "identity": {
+   "one_liner": "开源车辆品牌车型数据集，从各国官方车辆登记数据对齐构建",
+   "review": "VehiclesDB 提供覆盖 6 类车辆（汽车、摩托车、轻便摩托车、厢式车、卡车、客车）的品牌车型数据，当前版本含 974 个品牌、16,448 个车型，源自 18 个国家的官方车辆登记或型式认证数据。收录条件为两个独立官方来源一致，或单一来源的保有量数字超出录入错误的可能范围。每个车型以 (kind, make_slug, model_slug) 作为永久稳定 ID，改名或合并时旧 ID 保留在 former_ids 字段中；发布时清除登记源中的解析残留、重复项和伪装成车名板的装饰版本。提供 CSV、SQLite、Parquet、JSON 及 Ruby gem 多种载体，数据以 CC BY 4.0 许可发布，版本号采用 YYYY.MM.PATCH 格式，列自 2026.07.2 起只追加不重命名。",
+   "highlights": [
+    "收录 6 类车辆共 16,448 个车型、974 个品牌，附 18 国来源证据、分国家 availability 和 popularity 十分位数",
+    "提供 CSV、SQLite、Parquet、嵌套 JSON 及 Ruby gem 五种格式，(kind, make_slug, model_slug) 组合 ID 永久稳定，变更经 former_ids 别名衔接",
+    "CSV 列自 2026.07.2 起只追加、不重命名或重排序，数据文件可通过 GitHub release、jsDelivr CDN 和 Hugging Face 获取"
+   ],
+   "use_cases": [
+    "配件目录与兼容性筛选、车辆交易市场平台",
+    "维修厂预约表单、车队管理与车牌识别应用",
+    "需要品牌-车型选择器的表单或应用，尤其是缺乏本地车型目录的市场"
+   ]
+  },
+  "sha": "5eee31e2f56d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f602710e3ffa": {
+  "identity": {
+   "one_liner": "用于在 Go 程序中访问 SQLite3 数据库的库，提供事务、查询与维护接口",
+   "review": "litesql 是一个 Go 语言库，用于在 Go 程序中读写 SQLite3 数据库。它通过 Open 函数配合预设配置（如 TypicalConfiguration）打开数据库，提供 StartRead/StartWrite 分别管理读事务（连接池、可并发）与写事务（单连接、串行）；提供 QueryRow/QueryRows、Exec/ExecID、Pragmas、Snapshot 备份、FTS5 输入净化及 Optimize/Analyze/Vacuum 维护方法；另含 litesqltest 子包支持用真实磁盘数据库编写测试。采用 BSD-3-Clause 许可证，通过 go get 安装。",
+   "highlights": [
+    "提供 StartRead/StartWrite 事务接口：读事务使用连接池可并发，写事务使用单一专用连接串行执行，并返回需 defer 调用的 CloseFunc 用于回滚",
+    "包含 Snapshot 方法，基于 SQLite 备份 API 逐页复制生成时间点快照，支持 Step/Gap 参数与 Retention 保留策略",
+    "提供 SanitizeFTS5 函数用于剥离 FTS5 控制字符，以及 Optimize、Analyze、Vacuum 三个数据库维护方法"
+   ],
+   "use_cases": [
+    "需要在 Go 程序中嵌入 SQLite3 读写（如 Web 应用）的场景",
+    "需要数据库快照备份或定期 Optimize/Analyze/Vacuum 维护的场景",
+    "需要用真实 SQLite 文件（而非 mock）编写单元测试的场景，可使用 litesqltest 子包"
+   ]
+  },
+  "sha": "f602710e3ffa",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

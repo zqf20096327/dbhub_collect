@@ -2615,5 +2615,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "71c4a274842d": {
+  "identity": {
+   "one_liner": "基于 VFS 实现的 SQLite 加密扩展，支持多种加密算法",
+   "review": "SQLite3MultipleCiphers 是 SQLite 的加密扩展，从 wxSQLite3 中独立而来，支持多种加密算法。因 SQLite 3.32.0 移除了 SQLITE_HAS_CODEC 编译选项，该项目改用 SQLite 的 VFS 机制实现加密，与 SQLite 核心代码耦合较低。代码主要在 Windows 下开发，也在 Linux 下测试过。支持 C 和 SQL 接口。",
+   "highlights": [
+    "基于 SQLite VFS 机制实现加密，兼容 SQLite 3.32.0 及以上版本",
+    "支持多种加密算法，提供 C 接口和 SQL 接口",
+    "已在 Windows 和 Linux 下测试"
+   ],
+   "use_cases": [
+    "需要对 SQLite 数据库文件进行加密的应用",
+    "使用 SQLite 3.32.0 及以上版本且需要加密扩展的场景",
+    "跨平台（Windows/Linux）SQLite 加密需求"
+   ]
+  },
+  "sha": "71c4a274842d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "44f35163722f": {
+  "identity": {
+   "one_liner": "本地优先的自托管密码管理器，单主密码解锁本地加密保险库",
+   "review": "CipherMoth 是一款本地优先的密码管理器，提供桌面应用（macOS/Windows/Linux）与 Docker 自托管版（FastAPI、PostgreSQL，经 install.sh 安装后访问 localhost:3000）。所有条目以 AES-256-GCM 加密，主密码经 Argon2id 派生密钥，无账号、无遥测。README 说明尚未经独立安全审计，定位为个人使用；无主密码重置通道，需自行保存恢复码。",
+   "highlights": [
+    "条目全部内容以 AES-256-GCM 加密，主密码经 Argon2id（OWASP 2024 interactive profile）派生密钥封装随机 256 位 vault key",
+    "支持可选 FIDO2 安全密钥（如 YubiKey）作为第二因子、恢复码、生物识别解锁、TOTP 验证码显示与最多 5MB 的加密附件",
+    "提供浏览器扩展（Chrome/Brave/Firefox 等，经原生消息或自建服务器通信）、CLI、加密备份（.cmbackup）及从 Chrome/Bitwarden/KeePass/Proton Pass 等 CSV 导入"
+   ],
+   "use_cases": [
+    "在个人电脑上离线使用、自行管理备份的密码存储",
+    "通过 Docker 在自有服务器上运行加密保险库并通过浏览器扩展按需填充登录信息",
+    "本机执行密码健康检查（弱/重复/陈旧密码）与密码生成"
+   ]
+  },
+  "sha": "44f35163722f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42bbd1e7ea75": {
+  "identity": {
+   "one_liner": "Kotlin/JVM 事务性 Outbox 模式库，将消息与业务数据同事务落库后异步投递",
+   "review": "Okapi 是运行在 JVM 上的 Kotlin 库，实现事务性 outbox 模式：业务写入与消息存储在同一数据库事务中提交，再由后台调度器异步投递到 HTTP 或 Kafka。支持 PostgreSQL、MySQL 8+ 存储，提供 Spring Boot 自动配置或手动装配。消费方可能收到重复消息，需依赖 x-outbox-id 头做幂等处理。",
+   "highlights": [
+    "消息行与业务数据在同一事务提交，通过 FOR UPDATE SKIP LOCKED 实现多 worker 领取互斥",
+    "投递失败按指数退避（含抖动）重试，默认 5 次重试后标记 FAILED，已投递行按保留期清除",
+    "所有传输均附带 x-outbox-id UUID 头且跨重试保持不变，供消费方去重"
+   ],
+   "use_cases": [
+    "Spring Boot 服务在数据库事务提交后需向 HTTP webhook 或 Kafka 发布事件",
+    "无法引入分布式事务、需防止数据库提交与消息投递之间丢失消息的场景",
+    "仅发布消息的实例可关闭投递（okapi.processor.enabled=false），由独立 worker 处理投递"
+   ]
+  },
+  "sha": "42bbd1e7ea75",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "47fac68caf17": {
+  "identity": {
+   "one_liner": "学业监控与风险预测微服务平台，FastAPI+React+RabbitMQ 架构",
+   "review": "SIMPA 是巴西 UniEVANGÉLICA 学院人工智能专业的综合项目，用于登记成绩与出勤、计算统计指标并分类学业风险。系统由 nginx 网关、React 前端及 auth、academico、analitico 等微服务组成，通过 RabbitMQ outbox 模式传递事件，服务间风险由 analitico worker 重算，一条 Docker Compose 命令即可启动，并提供演示账号与 Swagger 文档。",
+   "highlights": [
+    "微服务拆分：auth（JWT RS256）、academico（成绩出勤）、analitico（回归预测与风险历史）各自独立容器与数据库",
+    "事件驱动：academico-despachante 将 outbox 事件发布到 RabbitMQ，analitico-worker 消费并重算风险，失败消息进入死信队列",
+    "运维配套：Prometheus/Alertmanager/Grafana 监控队列、AES-256-GCM 加密备份脚本、pytest/ruff/Playwright 测试与 CI 流水线"
+   ],
+   "use_cases": [
+    "教学中演示微服务、事件驱动与 outbox 模式的完整实现",
+    "院校记录成绩出勤并以统计指标与回归预测分类学业风险",
+    "作为测试隔离环境、备份恢复演练与队列监控的参考工程"
+   ]
+  },
+  "sha": "47fac68caf17",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

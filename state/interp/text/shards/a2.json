@@ -2902,5 +2902,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e48a099a06e1": {
+  "identity": {
+   "one_liner": "面向 wasm32-unknown-unknown 目标的 libsqlite3 Rust 绑定库",
+   "review": "sqlite-wasm-rs 为 wasm32-unknown-unknown 目标提供 libsqlite3 的 Rust FFI 绑定，通过 cargo 构建时编译 SQLite 源码。可选启用 wasm-bindgen 特性，或通过 sqlite3mc/sqlcipher 特性获得加密支持；默认不启用任何特性时需自行提供宿主函数。不支持多线程，SQLite 以 -DSQLITE_THREADSAFE=0 编译，MSRV 为 1.81.0。",
+   "highlights": [
+    "提供 wasm32-unknown-unknown 目标的 libsqlite3 绑定，支持 sqlite3mc 与 SQLCipher 两种加密后端",
+    "配套 sqlite-wasm-vfs 提供 memory（内存）和 sahpool（OPFS）两种 VFS 实现，并允许自定义 VFS",
+    "通过 SQLITE_WASM_RS_SOURCE_DIR 和 SQLITE_WASM_RS_FLAGS 支持自定义 SQLite 源码与编译选项"
+   ],
+   "use_cases": [
+    "在 wasm32-unknown-unknown 目标环境（如浏览器）中使用 SQLite 的 Rust 项目",
+    "需要在 WASM 环境读取或写入加密 SQLite 数据库的场景",
+    "需要将 SQLite 数据存储到 OPFS 或自定义存储后端的 Web 应用"
+   ]
+  },
+  "sha": "e48a099a06e1",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3e1e2b8691f9": {
+  "identity": {
+   "one_liner": "自托管的 Rust Web 应用宿主，每个应用连同其 SQLite 运行在独立 Wasm 沙箱中",
+   "review": "spared 是一个用于托管 Rust Web 应用的开源单二进制服务器，每个应用及其 SQLite 数据库编译为 Wasm 后在独立沙箱中运行。README 提供安装脚本和 spared new/serve/deploy 等命令，支持通过子域名访问应用。需注意其版本为 0.0.1-preview，未经外部安全审计，不支持 TLS，且每个应用同一时刻只处理一个请求。",
+   "highlights": [
+    "以单个二进制在单台服务器上托管多个相互隔离的应用，每个应用的 SQLite 运行在其自身沙箱内",
+    "提供 spared setup/new/serve/deploy/test 等命令，支持脚本安装、脚手架示例应用和管理端口（127.0.0.1:8081）",
+    "附带 AGENTS.md，README 中给出可粘贴给 Claude Code 或 Codex 的提示词流程"
+   ],
+   "use_cases": [
+    "在自有 Linux x86_64 服务器上自托管多个带 SQLite 存储的 Rust Web 应用",
+    "需要应用与数据库随应用一同分发、按应用隔离数据的部署场景",
+    "通过编码代理（Claude Code/Codex）按 AGENTS.md 流程生成并部署小型应用"
+   ]
+  },
+  "sha": "3e1e2b8691f9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

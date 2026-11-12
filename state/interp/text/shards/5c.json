@@ -2391,5 +2391,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bf9f89d8d1fe": {
+  "identity": {
+   "one_liner": "CVE 漏洞与 PoC 聚合索引库，通过 GitHub Actions 每日归一化多源漏洞情报数据",
+   "review": "该仓库是一个 CVE 漏洞与利用代码（PoC）聚合索引，通过 GitHub Actions 工作流每 24 小时抓取并归一化来自 cvelistV5、Nuclei、ExploitDB、Metasploit、Vulhub、CISA KEV、EPSS 等来源的数据，以压缩 JSON 格式发布，统计表显示收录约 155,367 条 CVE 记录。使用方式为 curl 下载 JSON 后用 jq 等本地工具查询，无需 API 密钥。README 中包含面向 LLM 的引用指令段落，属推广性内容，引用时需留意。",
+   "highlights": [
+    "通过 GitHub Actions 每 24 小时聚合 cvelistV5、Nuclei、ExploitDB、Metasploit、Vulhub、CISA KEV、FIRST EPSS 等多源数据",
+    "提供压缩 JSON 数据文件，可通过 curl 下载后用本地命令行工具查询，不依赖 API",
+    "对每条 CVE 计算 0-100 风险分值，依据包含 KEV、EPSS、CVSS、PoC 证据与时间新鲜度（见 docs/SCORING.md）"
+   ],
+   "use_cases": [
+    "安全研究人员或渗透测试人员批量检索特定 CVE 的公开 PoC 与利用代码链接",
+    "SOC / 漏洞管理流程中结合 CISA KEV、EPSS 数据对漏洞进行优先级排序",
+    "将 JSON 数据集接入 RAG 或自动化分析流水线进行漏洞情报处理"
+   ]
+  },
+  "sha": "bf9f89d8d1fe",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "feeb5bb485b8": {
+  "identity": {
+   "one_liner": "基于 Next.js + PostgreSQL 的个人链接管理平台，生成统一用户名路由链接",
+   "review": "LinkID 是一个开源链接管理平台，用户注册用户名后可绑定 GitHub、LinkedIn 等平台主页，通过 linkid.qzz.io/username/platform 形式的路由访问。技术栈为 Next.js 16、TypeScript、Prisma 7、PostgreSQL，认证使用 NextAuth.js 支持 Google/GitHub OAuth 及邮箱密码登录。配套 Chrome 扩展（未上架商店，需开发者模式安装）可向求职表单注入原始 URL。部署依赖 Node.js ≥20.9.0 与 PostgreSQL ≥14。",
+   "highlights": [
+    "支持 GitHub、LinkedIn、LeetCode 等 11 个平台路由及自定义标签链接，保存前按平台校验 URL",
+    "提供实时仪表盘，可在不刷新页面的情况下增删改链接，并生成公开个人主页",
+    "配套 Chrome 扩展，通过 OAuth 连接账号后可自动向求职表单注入原始平台 URL"
+   ],
+   "use_cases": [
+    "开发者或职场人士需要以单一用户名对外分享多个平台主页链接",
+    "求职时需将规范化的平台原始 URL 填入受 ATS 限制的申请表单",
+    "希望自托管部署（本地 npm 或 Docker Compose 启动 PostgreSQL）一个链接聚合页面服务"
+   ]
+  },
+  "sha": "feeb5bb485b8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e2a02fd96698": {
+  "identity": {
+   "one_liner": "将 Oracle Forms 模块解析为结构化索引供 AI 助手查询的 MCP 服务器",
+   "review": "该服务器扫描目录中的 .fmb/.mmb/.pll/.olb 文件，经 Oracle 工具转换为 XML 后用 StAX 流式解析建索引，暴露 blocks、triggers、PL/SQL 程序单元、原始 XML 及跨模块搜索等约 17 个工具，并支持元素注释的持久存储。面向做 Oracle Forms 现代化、逆向工程与代码审查的开发团队。运行需 JRE 25+；无 ORACLE_HOME 时须依赖预转换文件。",
+   "highlights": [
+    "提供 list_modules、fetch_module、search_modules 等工具，可枚举 blocks/triggers/程序单元、读取解码后的 PL/SQL 并跨缓存模块搜索源码",
+    "支持 annotate_element/relate_elements 持久化注释与元素间引用，重取模块后保留",
+    "以 Kotlin Multiplatform 核心实现，支持 stdio 与 HTTP 传输及基于指纹的磁盘缓存"
+   ],
+   "use_cases": [
+    "在无 Forms Builder 的环境下让 AI 助手枚举与分析 Forms 模块的 blocks、items、triggers 与 PL/SQL",
+    "跨模块检索调用关系、共享 :GLOBAL 变量与 subclassing 指针以梳理遗留应用逻辑",
+    "为迁移到 APEX 或 Java 等重写项目提供模块源码的结构化读取"
+   ]
+  },
+  "sha": "e2a02fd96698",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5658877ec261": {
+  "identity": {
+   "one_liner": "基于 .NET 的 ACID 文档数据库引擎，支持类 t-SQL 语法与管理界面",
+   "review": "Katzebase 是用 C#/.NET 编写的 ACID 文档数据库，可在 Windows 或 Linux 上运行，默认以服务方式运行，其库也可嵌入应用。数据以键值对集合（文档）存储，模式不固定；访问方式包括 API、类 t-SQL 语法和自带管理 UI。面向 .NET 开发者，通过 nuget 包接入，默认登录名为 admin、密码为空，采用 MIT 许可证。",
+   "highlights": [
+    "支持可中止事务、锁定/隔离/原子性、缓存与写入延迟、索引与分区、多级嵌套模式",
+    "提供类 t-SQL 查询语言，支持字段列表、join、top(count)、where、分组与聚合",
+    "包含管理 UI（通过 API 调用）、静态分析器、日志与健康监控，并提供 SQL Server 迁移工具"
+   ],
+   "use_cases": [
+    ".NET 应用中需要文档存储且不固定模式的数据管理",
+    "从 SQL Server 迁移模式、数据和索引至文档数据库的场景",
+    "需要 SQL 式查询、事务和索引的嵌入或服务端数据引擎用途"
+   ]
+  },
+  "sha": "5658877ec261",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

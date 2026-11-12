@@ -2725,5 +2725,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "46bda3ff7d38": {
+  "identity": {
+   "one_liner": "面向 MongoDB 的分支与版本控制工具，基于元数据指针和写捕获实现数据时间回溯与撤销。",
+   "review": "Argon 是一个用 Go 编写的 MongoDB 数据版本管理工具：分支通过元数据写入创建，checkout 将分支物化为可被任意驱动连接的真实 mongod 数据库；写捕获基于 change-stream 生成历史，支持 diff、三方合并、undo 与 LSN/时间戳查询。历史依赖 retention 窗口与 GC，collection drop/rename 捕获降级，索引与集合选项不纳入版本控制。",
+   "highlights": [
+    "分支为元数据指针而非数据副本，checkout 后由真实 mongod 提供服务，兼容 pymongo、mongoose、mongosh、聚合与事务",
+    "通过 change-stream 捕获文档插入/更新/替换/删除形成历史，支持按 LSN 或时间戳查询、按 actor 标签的追加式 undo、三方合并预览",
+    "提供 sandbox（fork+checkout+TTL 一次性工作区）、dataset pin、本地 Web 控制台（UI+REST API）及面向 AI 代理的 MCP（13 个工具）、Python SDK 与 LangGraph 适配器"
+   ],
+   "use_cases": [
+    "为 AI 代理（如通过 claude mcp add 接入）创建带 TTL 的一次性数据沙箱，会话结束后可 diff、撤销或合并",
+    "在保留窗口内对数据库执行时间旅行查询、按操作者回滚一段写入，或将合并作为可审查的计划（data PR）提交",
+    "导入现有 MongoDB 数据库后管理分支、恢复已发布分支或从保留历史 fork 数据集"
+   ]
+  },
+  "sha": "46bda3ff7d38",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "388238a2eadc": {
+  "identity": {
+   "one_liner": "合并 IEEE、Wireshark、Nmap、HDM 四源的 MAC 地址厂商查询数据库",
+   "review": "这是一个 MAC 地址 OUI（前 3 字节厂商标识）查询数据库，将 IEEE、Wireshark、Nmap、HDM Mac-Tracker 四个来源按 IEEE 格式去重合并，包含 59,320 条 OUI 记录。数据以 TXT/CSV/JSON/SQLite/XML 等 10 种格式提供，可下载或通过浏览器页面查询；字段含厂商、注册类型、设备类别、地址、状态与注册历史。设备类别由启发式分类，仅覆盖约 52% 的记录。仓库经 GitHub Actions 每月自动更新。",
+   "highlights": [
+    "合并四个来源并去重，按 IEEE 格式为键，记录交叉验证情况与来源数组",
+    "提供 10 种文件格式（TXT、CSV、TSV、JSON、XML、SQLite 等）及 raw URL 直接下载",
+    "字段包含 canonical 厂商名、原始注册文本、注册类型、ISO2 国家码、状态（current/deregistered/legacy）与 registrant_history"
+   ],
+   "use_cases": [
+    "网络安全场景中识别网络上的未授权设备或比对 OUI 注册厂商以检查 MAC 伪装",
+    "子网扫描后按厂商/设备类别归类发现的 IoT、摄像头、打印机等设备",
+    "作为离线数据集导入自有脚本、数据库或 Kismet 等工具使用"
+   ]
+  },
+  "sha": "388238a2eadc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e5e431b4f638": {
+  "identity": {
+   "one_liner": "自托管开源泰国本地化 ERP，集成 AI 与 OCR 于本地机器运行",
+   "review": "oserp 是一个面向泰国中小企业及个体经营者的自托管开源 ERP，将销售、采购、库存、项目与财务整合在单一数据库中，内置泰国增值税、预扣税、泰铢与曼谷时区。技术栈为 Go/Wails 桌面壳、Next.js/React/TypeScript、PostgreSQL（Supabase Auth），本地 AI 与 OCR 通过回环接口调用 Ollama，仅生成建议供人工审核。薪资、制造模块及电子税务申报尚未实现；社区版采用 AGPL-3.0 或商业授权。",
+   "highlights": [
+    "提供销售、采购、多仓库库存、项目工时与财务等模块，支持泰文/英文图片与 PDF 的本地 OCR 及权限范围的 ERP 聊天",
+    "架构基于 Go/Wails 桌面窗口与 Go CLI 无头服务器，Next.js/React/TypeScript 前端，PostgreSQL+RLS 行级权限，金额以整数 satang 存储",
+    "支持 Windows/macOS/Linux 安装包，桌面版内置 Node、PostgreSQL、Auth、PostgREST 与 Ollama，无需 Docker；另有 Flutter iOS 应用通过 Tailscale 私有网络连接"
+   ],
+   "use_cases": [
+    "需要在自有服务器/本地机器保管业务数据，并处理泰国 VAT 与预扣税场景的中小企业财务与进销存管理",
+    "希望用本地模型读取发票/单据并生成表单建议、再由人工审核确认的文档录入流程",
+    "有 iOS 移动端访问、n8n webhook 自动化或 CSV 导出对接会计软件需求的团队"
+   ]
+  },
+  "sha": "e5e431b4f638",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "274e3b0b61cc": {
+  "identity": {
+   "one_liner": "从表格数据生成并校验 ISO 20022 支付文件的 Python 库",
+   "review": "Pain001 是一个 Python 库（3.11+），用于从 CSV、SQLite、JSON、JSONL 或 Parquet 输入生成 pain.001（v03–13）与 pain.008 XML 文件，并在写入前对照捆绑的 XSD 进行校验。它面向需要构建支付文件流水线的开发者，提供 CLI、REST API、MCP 与 LSP 服务器。项目明确说明不含真实清算、EBICS/SWIFT 连接，XSD 校验不保证银行受理；插件以进程权限运行且未沙箱化，项目为单一维护者。",
+   "highlights": [
+    "支持生成 pain.001.001.03–13 与 pain.008.001.02/.08 XML，写入前按捆绑 XSD 校验，输出到文件或内存字符串，流式模式按分块重算控制总额",
+    "提供 CLI（init/validate/generate/check/serve/mcp 等）、REST API、MCP 服务器、CSV 语言服务器，支持 SFTP 上传、XML-DSig 签名、CEL 规则与 async 适配器等可选扩展",
+    "包含 pain.002 与 camt.053 的解析器及用于测试的合成构建器，可通过插件契约扩展加载器、校验器、方案与写入器"
+   ],
+   "use_cases": [
+    "从 CSV/数据库/JSON 等行状记录批量生成 pain.001 付款发起或 pain.008 直接借记 XML 文件",
+    "在 CI、GitHub Action 或 pre-commit 钩子中对已有支付文件执行 XSD、消息规则与方案校验（输出文本、JSON 或 SARIF）",
+    "为支付数据集成测试生成合成的 pain.002 回复与 camt.053 报表（配套 mockbank 服务）"
+   ]
+  },
+  "sha": "274e3b0b61cc",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

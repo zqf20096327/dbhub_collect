@@ -23457,5 +23457,186 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "f6127e60c239+2": {
+  "fn": "HyxiaoGe/LingDraft",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "对话页：主 agent 把对比拆给三个子 agent 并行去查，写好的对比文档在右栏打开"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "资料库：回答里的引用标到资料库文件的第几段，点开在右栏看到原文那一节"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    14,
+    10,
+    12,
+    [
+     " 出行：路线和火车班次画成卡片，可以按出发时间、价格、用时排",
+     " 手机端：同一段出行对话，天气卡片"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    21,
+    12,
+    19
+   ],
+   [
+    "replace",
+    21,
+    33,
+    19,
+    20,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    37,
+    20,
+    24
+   ],
+   [
+    "replace",
+    37,
+    38,
+    24,
+    25,
+    [
+     "|机制|用在哪|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    25,
+    26
+   ],
+   [
+    "replace",
+    39,
+    59,
+    26,
+    46,
+    [
+     "|`create_agent` + `AgentMiddleware`|主 agent、子 agent 都由它搭；16 个自写中间件用到 `before_agent`、`abefore_model`、`awrap_model_call`、`awrap_tool_call`、`after_model`（`can_jump_to`）、`after_agent`|",
+     "|`ModelRequest.override(model=…, tools=…)`|每次调模型现挑模型：这一轮定下的、免费额度、直连、备用，出问题一路换下去；这段对话没有资料库时，把查资料库的工具从请求里拿掉|",
+     "|`ExtendedModelResponse` + `Command(update=…)`|中间件在一次模型调用里顺手改 state：写上起好的标题、换掉没通过审核的工具结果、记下换上的备用模型、超长重发时记下压到了哪一轮|",
+     "|`context_schema` / `ToolRuntime`|取插话、上次起好的标题这些运行时的东西从 context 传给中间件，不进 state；子任务、recall、读写文件、查资料库、看图的工具从 `ToolRuntime` 拿 state 和 context|",
+     "|`aupdate_state(as_node=START)` + `astream(None)`|用户的话先写进检查点再开跑，排队时服务重启也不丢|",
+     "|`stream_mode=[\"messages\", \"updates\", \"custom\"]`，`subgraphs=True`|逐字的思考和正文、存下的步骤、工具进度一路推给页面；子 agent 的流按命名空间认出是哪个子任务的；模型写文件时，从 `tool_call_chunks` 边收边解出标题和正文，右栏跟着出字|",
+     "|`get_stream_writer` / `TAG_NOSTREAM`|中间件推自定义事件（在等什么、工具进度、换了哪个模型）；写短版、单条送审这些内部调用不推给页面|",
+     "|`content_blocks`|8 家模型的思考统一按标准 content blocks 读；豆包的类标成自家的提供方，才读得到它的思考|",
+     "|`with_structured_output(method=\"function_calling\")`|判断难易、起标题这些结构化输出走强制工具调用：DeepSeek 只支持这一种，百炼、TokenHub 上有的接入点也不认 `json_schema`|",
+     "|`ContextOverflowError`|各家报的“上下文超长”都认成它，连 MiMo 不报错、一个字没生成就结束的也算；压缩中间件压了再发一次|",
+     "|`langchain.mcp`（`MCPAdapter`）|搜索、读网页、天气、地图、航班火车、画图、查文档（Context7）都是 agent-tools 的 MCP 工具，怎么搜、怎么读、挑城市、定地名、查班次、出图存图、结果的样子和失败时给模型的话都在服务里，几个产品共用：灵稿起服务时取来，工具说明后面接上自己的一段，中间件给搜索结果、读到的页、查到的每段文档带上来源 id，管每轮画几张查几次、比路线时核对车站的城市；天气、地图、航班火车、画图结果的 `structuredContent` 画卡片，模型只看文字（图只给编号，页面经灵稿后端按编号取）；排行程是灵稿自己的工具，模型按查到的班次编号排，核对过才画行程卡|",
+     "|`ToolMessage.artifact`|子 agent 的整段消息放在 artifact 里交回：来源、用量、子任务卡从这里读，主 agent 的模型只看报告；写文件、查资料库的结果也把给页面的部分放在这里|",
+     "|`ToolCallLimitMiddleware`|子 agent 搜、读各 8 次的硬上限|",
+     "|`RecursiveCharacterTextSplitter`|资料库切块：先按标题、页分段，再按 800 字切、重叠 100|",
+     "|`AsyncPostgresSaver`，`durability=\"exit\"`|检查点只在一轮的开头和结尾存|",
+     "|`interrupt(…, response_schema=…)` / `Command(resume={id: …})`|模型问用户：`ask_user` 工具里调 `interrupt`，这次执行结束、线程停在工具里等；回答按中断的 id 交回去，同一轮接着跑，同一条消息里别的工具不重跑；回答的格式由 `response_schema` 校验，不合格的存不进检查点|",
+     "|`AsyncPostgresStore`|长期记忆；和检查点、运行记录共用一个连接池|",
+     "|LangSmith|评测每次传成一个实验；线上开着 tracing，中间件那几层不记输入输出：每层记的都是同一份请求，一轮问天气就有 1.5MB|",
+     "|`StateGraph` + `interrupt`|早先的海报场景：手写图，生成前后停下来让人确认|",
+     "|`InMemorySaver` / `InMemoryStore`|测试|"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    122,
+    46,
+    109
+   ],
+   [
+    "replace",
+    122,
+    141,
+    109,
+    110,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    157,
+    110,
+    126
+   ],
+   [
+    "replace",
+    157,
+    163,
+    126,
+    127,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    167,
+    127,
+    131
+   ],
+   [
+    "replace",
+    167,
+    168,
+    131,
+    132,
+    [
+     "接口、事件、环境变量、存储等开发说明见 backend/README.md。"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

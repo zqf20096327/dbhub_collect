@@ -3039,5 +3039,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2fe766d10278": {
+  "identity": {
+   "one_liner": "基于 Rust/Ratatui 的终端数据库管理工具，支持 SQL 查询与表数据浏览",
+   "review": "Rainfrog 是一个运行于终端的数据库交互工具，使用 Rust 和 Ratatui 构建，面向需要在命令行环境操作数据库的用户。它提供 vim 风格键位与鼠标操作、带关键字高亮和会话历史的查询编辑器、表数据过滤复制及元数据查看等功能，支持 macOS、Linux、Windows 和 Termux。README 注明项目处于活跃开发期，可能存在破坏性变更，不建议用于有写权限的生产数据库。",
+   "highlights": [
+    "提供 vim 风格键位与鼠标操作的查询编辑器，支持关键字高亮、会话历史与收藏",
+    "支持 PostgreSQL、MySQL、SQLite、Redshift、DuckDB、Oracle，并可经 wire protocol 连接兼容数据库",
+    "通过 TOML 配置文件预设数据库连接与界面设置，支持 cargo/homebrew/docker 等多种安装方式"
+   ],
+   "use_cases": [
+    "在 SSH 会话或无图形界面的服务器环境中查询和浏览数据库",
+    "通过 Termux 在 Android 设备上连接管理远程数据库",
+    "需要按项目配置多个数据库连接并快速切换 schema 的开发场景"
+   ]
+  },
+  "sha": "2fe766d10278",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8b3e4bb859ea": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话记忆插件，本地 SQLite+Markdown 存储，四路召回。",
+   "review": "dsh-mneme 是面向 DeepSeek Harness (DSH) 的跨会话记忆插件，用于给 AI agent 持久化对话中的偏好、项目与决定。数据落在本地 SQLite 并生成可手工编辑的 Markdown 镜像；后台 autoDream 自动整理，冲突对挂起待人工裁决，支持按 agent/工作区作用域隔离。通过 npm 包名、Git、tarball 或本地目录四种来源安装到 DSH；另提供独立 MCP server（bin 名 mneme-mcp）供 Claude Code、Cursor 等客户端挂载，以及不开 DSH 也可运行的独立服务 daemon。",
+   "highlights": [
+    "四路召回（关键词/向量/BM25/实体），嵌入可配置为本地 provider 离线运行",
+    "存储为本机 SQLite + Markdown 双向同步，无遥测；巩固与摘要走宿主已配置模型",
+    "提供 10 个模型工具、零依赖 stdio MCP server、CLI 与独立服务 daemon（dsh-mneme-serve）"
+   ],
+   "use_cases": [
+    "为 DSH 会话提供跨窗口的长期记忆，避免每次对话重复交代偏好与项目背景",
+    "通过 MCP 挂载到 Claude Code、Cursor、Codex 等客户端共享同一份记忆库",
+    "不开 DSH 时用 daemon 常驻数据面，供脚本、网页桥接等第三方集成读写记忆"
+   ]
+  },
+  "sha": "8b3e4bb859ea",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "59f2a53c9fc6": {
+  "identity": {
+   "one_liner": "内嵌 PHP 的 Adminer 单文件桌面版，免装 Web 服务器，启动后于浏览器窗口打开",
+   "review": "该项目将 Adminer 数据库管理工具与自带 PHP 打包为 Windows 的 adminer.exe、Linux 的 tar.xz 和 macOS 的 Adminer.app，无需安装 PHP 或配置 Web 服务器。程序仅在 127.0.0.1 监听，运行时解包到临时目录，关闭窗口即停止。支持 MySQL/MariaDB、PostgreSQL、SQLite；MS SQL 与 Oracle 需额外驱动。适合没有 PHP 环境或不想搭建服务器的用户。",
+   "highlights": [
+    "提供 Windows exe、Linux tar.xz、macOS Apple Silicon 版三种免安装包，启动即解包到临时目录，停止时删除",
+    "MySQL/MariaDB、PostgreSQL、SQLite 开箱即用，Elasticsearch、ClickHouse、Redis 通过插件驱动支持；允许空密码但服务仅监听 127.0.0.1",
+    "Linux/macOS 使用 static-php-cli 构建的静态 PHP，不依赖发行版库；构建脚本可指定版本和平台"
+   ],
+   "use_cases": [
+    "本机没有 PHP 或 Web 服务器环境、需要通过浏览器界面管理 MySQL、PostgreSQL 或 SQLite 数据库",
+    "在 Windows 上管理 MS SQL 或 Oracle，需手动安装 ODBC Driver 17/18 或 Oracle Instant Client",
+    "通过插件驱动连接 ClickHouse、Elasticsearch、Redis（含 https:// 服务器）"
+   ]
+  },
+  "sha": "59f2a53c9fc6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

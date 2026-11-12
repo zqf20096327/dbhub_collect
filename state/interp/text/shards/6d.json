@@ -3028,5 +3028,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9b7183821610": {
+  "identity": {
+   "one_liner": "本地优先的 Linux 桌面工作室：用 Claude Code 代理按描述构建应用并安装",
+   "review": "AI App Studio 是运行在 Linux 上的 Tauri 2 桌面应用（Rust 后端 + Vue 3 前端），用户以文字描述应用，由 Claude Code 代理规划与编辑代码，每个编辑和命令经审批卡片确认，配合实时预览、内置 Git/GitHub 版本管理及 AppImage 构建安装到 GNOME 启动器。项目为普通 Git 仓库，Studio 不存储凭据。当前版本 0.6.0，仅支持 Linux，依赖 glibc 2.44+ 与 Claude Code CLI。",
+   "highlights": [
+    "每次代理运行生成审批卡片与 diff，可逐运行还原，运行前记录 Git 检查点",
+    "本地构建 AppImage/.deb/.rpm 及 Windows setup.exe（经 Docker），一步安装到 GNOME 应用网格",
+    "新应用可使用 SQLite 及版本化迁移，发布前自动备份数据"
+   ],
+   "use_cases": [
+    "在 Linux 桌面上从文字描述创建小型应用并安装到应用启动器",
+    "需要逐命令审批、diff 审查与回滚的 AI 代理编程工作流",
+    "为其他 Linux 发行版或 Windows 导出应用安装包"
+   ]
+  },
+  "sha": "9b7183821610",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "075766240056": {
+  "identity": {
+   "one_liner": "以一致性快照并行导出、加载、复制和流式传输 MySQL/MariaDB/TiDB 数据的命令行工具",
+   "review": "quiver 是用 OxCaml 编写的 MySQL/MariaDB/TiDB 数据传输工具，提供 dump、load、copy、mirror 等子命令，实现并行一致性快照下的导出与服务器间复制。它自带 MySQL 协议客户端，将行解码为 Arrow 列式批次，支持 zstd 压缩、断线帧恢复和输出 mydumper 兼容目录。需 glibc 2.34+ 的 Linux、macOS 14+ 或源码构建，许可证为 AGPL-3.0。",
+   "highlights": [
+    "支持 dump/load/copy/mirror 命令，可在单一一致性快照下并行导出、加载、复制与流式传输数据",
+    "自带 MySQL 协议客户端，将行数据从 socket 缓冲解码为 Arrow 列式批次，输出 mydumper 兼容布局的 SQL 或 CSV",
+    "支持 TiDB 经 TiKV 在单一 TSO 读取、agent-collector 多 TCP 流传输、帧级确认断线恢复以及 --ingest tablespace 客户端构建 InnoDB 表空间"
+   ],
+   "use_cases": [
+    "数据库备份导出为 SQL/CSV 文件并并行恢复（dump/load）",
+    "MySQL/MariaDB/TiDB 服务器之间的直接数据复制与迁移（copy/mirror）",
+    "通过网络向多个目标流式分发同一份数据（agent-collector 模式）"
+   ]
+  },
+  "sha": "075766240056",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "78037828503e": {
+  "identity": {
+   "one_liner": "学生学习应用：笔记转 AI 练习题，按掌握度与间隔重复安排学习内容",
+   "review": "Orbi 是一个学习应用：学生上传课程笔记，AI 将其生成练习题，应用内置的推荐算法（按主题掌握度评分与间隔重复调度）决定展示哪些题目及何时展示。由 Team Byte4 团队以 Scrum 方法开发，采用 pnpm monorepo，前端 Next.js，后端 Fastify + PostgreSQL/Drizzle ORM，AI 调用限于服务端。生产部署依赖 Docker Compose、SMTP 邮件服务及 AI 提供商 API 密钥。",
+   "highlights": [
+    "AI 从笔记生成练习题，学生可批准或拒绝生成的题目",
+    "按主题维护掌握度评分并使用间隔重复调度生成当日学习列表",
+    "支持多种 AI 提供商（Gemini、Claude、DeepSeek），调用仅在服务端进行，并对每学生每日 token 用量设限"
+   ],
+   "use_cases": [
+    "学生为课程主题添加笔记并获得练习题与即时反馈",
+    "根据答题错误情况生成当日学习列表，聚焦薄弱主题",
+    "团队以 pnpm monorepo 在本地通过 Docker Compose 运行开发环境"
+   ]
+  },
+  "sha": "78037828503e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

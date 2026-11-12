@@ -2606,5 +2606,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a1eb789e227": {
+  "identity": {
+   "one_liner": "自托管数据库备份管理器，通过 Web UI 调度、备份与恢复多类数据库",
+   "review": "Databasement 是一个自托管数据库备份管理应用，基于 Web UI 管理多台数据库服务器的定时备份与恢复。它通过调用各数据库原生命令行工具（mysqldump、pg_dump、mongodump 等）导出数据，支持 SSH 隧道连接私有网络数据库，并提供远程 agent 以 outbound HTTPS 方式覆盖无入站端口的隔离网络。支持 gzip/zstd/加密压缩、GFS 保留策略，存储目标涵盖本地、S3 兼容、Azure Blob、SMB 及 SFTP/FTP。支持多租户、RBAC 与 OAuth/SSO 登录，提供 REST API 与 MCP server。MIT 许可，Redis/Valkey 仅支持备份不支持恢复。",
+   "highlights": [
+    "通过单一 Web 界面管理 MySQL、PostgreSQL、MariaDB、SQL Server、MongoDB、SQLite、Firebird、Redis/Valkey 八类数据库的备份与恢复（Redis/Valkey 不支持恢复）",
+    "支持 SSH 隧道（密码或密钥认证）及远程 agent 模式，agent 经 HTTPS 出站连接并上传备份",
+    "提供 gzip/zstd/AES-256 加密压缩、GFS 或按天数保留策略、定时恢复，以及 Email/Slack/Discord/Telegram 等失败通知"
+   ],
+   "use_cases": [
+    "在单一自托管界面中集中调度多台数据库服务器的定时备份",
+    "备份内网或防火墙后无入站端口的数据库",
+    "通过 REST API 或 MCP 将备份管理集成到脚本、CI/CD 流程或 AI 助手"
+   ]
+  },
+  "sha": "1a1eb789e227",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c83e82639546": {
+  "identity": {
+   "one_liner": "带来源引用的美国数据中心、加密矿场及配套电力设施数据集",
+   "review": "Compute Atlas 收录美国数据中心、加密矿场及其配套电力设施的数据，覆盖从拟建到运营各阶段，并记录能耗、水耗、补贴、排放等社区影响信息。每条记录须附至少一个带 URL 和检索日期的公开来源，候选记录需经人工审核后发布。面向记者、研究者、地方官员及设施周边居民。技术栈为 Next.js + Postgres/Drizzle + MapLibre，代码 MIT、数据 CC BY 4.0 许可。",
+   "highlights": [
+    "提供可按状态、运营商、类型和容量筛选的设施地图与数据表",
+    "每条记录通过 sourceIndex 将具体事实指向具体来源文档，来源含 URL、标签、类型和检索日期",
+    "记录经 Zod schema 校验并纳入 CI 测试，所有提交须人工审核后方可发布"
+   ],
+   "use_cases": [
+    "记者与研究者引用带来源的设施事实进行报道或分析（CC BY 4.0）",
+    "地方官员与居民查询周边设施的电力、水、排放及社区信息",
+    "按州、运营商、县、容量等维度浏览或筛选设施数据"
+   ]
+  },
+  "sha": "c83e82639546",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8bca426dd38f": {
+  "identity": {
+   "one_liner": "音效库索引工具，通过 SQLite 目录和 MCP 服务器供 Claude Code 搜索、比对并导入音频",
+   "review": "Foley 指向一个音效/音乐文件夹或共享目录，离线分析每个文件并将结果存入两个 SQLite 文件：包括响度（ITU-R BS.1770）、时长、频谱特征、AudioSet 标签、CLAP 嵌入及波形与频谱图。Claude Code 经 MCP 服务器按描述搜索、查看频谱图比对候选并按响度目标导入游戏项目；`foley browse` 提供本地网页浏览器供人试听。库始终只读，有测试强制约束。它是 Soverance Studios 内部工具，以现状共享，无支持承诺和发布节奏。",
+   "highlights": [
+    "混合搜索：关键词匹配与 CLAP 音频嵌入相似度结合，支持 find-similar",
+    "生成每文件波形与 log-mel 频谱图及对比网格，供视觉模型读取",
+    "MCP 服务器暴露 7 个工具，import_to_project 将文件复制入项目并归一化到响度目标"
+   ],
+   "use_cases": [
+    "游戏开发中由 Claude Code 按文字描述从音效库选取并导入音频",
+    "本地或工作室局域网内浏览、试听和维护音效库目录",
+    "通过直接读取公开的 SQLite 模式，供无 Python 的引擎端工具查询目录"
+   ]
+  },
+  "sha": "8bca426dd38f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

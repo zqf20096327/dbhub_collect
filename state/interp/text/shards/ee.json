@@ -2943,5 +2943,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bfea1ec11c14": {
+  "identity": {
+   "one_liner": "基于 KMP 的应用调试检查工具，实时查看与控制 App",
+   "review": "Flocon 是一个基于 Kotlin Multiplatform 构建的调试与检查工具，开发者在 Android、桌面或 iOS 环境开发时，可将应用连接到电脑上的桌面界面，实时观察网络请求、数据库、分析数据等。库体积约 140KB，通过 Maven Central 引入，debug 与 release 依赖分开提供。需 ADB、Kotlin 2.0.0+ 及 JVM 桌面应用配合使用，MIT 许可。",
+   "highlights": [
+    "支持 HTTP、GraphQL、gRPC、WebSocket 网络拦截与 Mock，以及 Room/SQLDelight/SQLite 数据库检查",
+    "提供 Android 与 KMP (JVM/iOS) 平台支持，部分功能如 Preferences、Deeplink 仅限 Android",
+    "提供 MCP AI Agents、仪表盘与表格、Analytics 等功能模块，并可经 BOM 统一引入多个模块"
+   ],
+   "use_cases": [
+    "调试 Android 或 KMP 应用中的网络请求与 Mock 场景",
+    "在桌面端实时查看应用数据库与偏好设置数据",
+    "为应用添加可观测面板与分析数据可视化"
+   ]
+  },
+  "sha": "bfea1ec11c14",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d23d4e564bb3": {
+  "identity": {
+   "one_liner": "基于官方镜像打包、以 SQLite 替代 MySQL 运行 WordPress 的 Docker 镜像",
+   "review": "该项目提供将 WordPress 与 sqlite-database-integration 插件打包的 Docker 镜像，使 WordPress 无需 MySQL 即可运行，基于官方 WordPress 镜像构建，发布于 Docker Hub 与 GHCR，支持五平台架构。镜像额外捆绑 SQLite 诊断、SELECT id 大小写修正两个 mu-plugins，以及默认关闭的页面性能展示与 SMTP 发信组件，支持 Docker Compose 与 OwlMail 组合部署。适用于本地测试或单机轻量部署场景。",
+   "highlights": [
+    "捆绑 sqlite-database-integration v3.1.3，WordPress 运行于 SQLite 而非 MySQL，五个支持平台均使用 PHP 解析器",
+    "内置 SQLite 诊断页面（只读）、SELECT id 大小写修正 mu-plugins，以及默认关闭的页面性能展示与 SMTP 发信组件",
+    "发布于 Docker Hub 与 GHCR，支持 CalVer 固定版本标签与 rolling 标签，上传限制默认 upload_max_filesize=32M 且可通过挂载 PHP 配置覆盖"
+   ],
+   "use_cases": [
+    "无 MySQL 依赖的 WordPress 本地试用与开发环境",
+    "通过 Docker Compose 快速启动单容器 WordPress 站点",
+    "配合 OwlMail overlay 捕获和测试 WordPress 邮件发送流程"
+   ]
+  },
+  "sha": "d23d4e564bb3",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bc7c4fb7a516": {
+  "identity": {
+   "one_liner": "自托管的多平台社交媒体自动化系统，集发布、自动回复与 CRM 于一身",
+   "review": "PostStack 是一个可自托管的社交媒体管理工具，覆盖 Facebook、Instagram、YouTube、Telegram 和 Gmail，提供帖子发布与排期、私信/评论/邮件自动回复、 drip 消息序列及联系人 CRM。基于 Docker Compose 一键启动，REST API 配合 Scalar 文档供自定义前端或 n8n/Zapier 集成。运行自有账号时无需通过 Meta App Review；README 注明工作区成员目前均为完全权限（无角色分层），且 Meta 评论与私信身份在系统内是两个独立联系人。",
+   "highlights": [
+    "支持关键词、评论、story 回复、emoji 等多种自动回复触发规则，并可经 OpenAI 兼容端点改写回复文本",
+    "提供实时收件箱、联系人标签/全文搜索、定时消息序列与颜色标签等 CRM 功能",
+    "OAuth 令牌采用 AES-256-GCM 加密，含 webhook 签名验证、JWT 注销失效与认证端点限流"
+   ],
+   "use_cases": [
+    "个人或团队集中管理多个社交平台的发帖排期与私信/评论回复",
+    "通过关键词规则和 drip 序列自动化粉丝触达与联系人沉淀",
+    "以 REST API 或 n8n/Zapier 将社交消息流程接入自有系统"
+   ]
+  },
+  "sha": "bc7c4fb7a516",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f3ae482b7dfd": {
+  "identity": {
+   "one_liner": "基于证据的 AI 编程代理记忆系统，单个 Rust 二进制加 SQLite 存储",
+   "review": "Kimetsu 为 Claude Code、Codex、Cursor 等代理提供持久化记忆：默认记忆管线不含 LLM 调用，使用 FTS5、本地嵌入与本地重排序器实现存储与检索，任务后被引用的记忆得到提升、未使用的按半衰期衰减。记忆以每项目一个 SQLite 文件保存，支持导出为脱敏、可 Ed25519 签名的 pack 并合并导入。通过 npm、cargo 或预编译包安装。",
+   "highlights": [
+    "默认管线零 LLM 调用，本地离线存储与语义检索，支持 MCP 接入多种代理宿主",
+    "记忆按引用次数晋升、按半衰期曲线衰减，非平凡会话自动收获经验教训",
+    "brain 可导出为 gzip 压缩且自动脱敏凭据/PII 的 pack，支持 Ed25519 签名、信任名单与幂等合并"
+   ],
+   "use_cases": [
+    "让编程代理跨会话保留项目约定、失败模式与关键命令，避免每次从零探索",
+    "团队间分享记忆 pack，用于新成员或新机器的一次性导入",
+    "在离线或零 API 成本约束下运行带记忆的终端编码助手"
+   ]
+  },
+  "sha": "f3ae482b7dfd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

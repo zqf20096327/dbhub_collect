@@ -2687,5 +2687,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cbe7aa102a0c": {
+  "identity": {
+   "one_liner": "基于 Copier 的 FastAPI 项目模板，内置 JWT 认证、PostgreSQL 异步集成与版本化路由",
+   "review": "这是一个可用作 Copier 模板的 FastAPI 项目模板，面向需要快速生成后端项目的 Python 开发者。它提供 SQLAlchemy 2.0 异步集成、Alembic 迁移、JWT 认证与 Redis 令牌黑名单、速率限制、CSRF 中间件，以及可选的缓存、Celery、邮件、云存储等服务。生成时通过交互式问答填写项目信息；需注意最小基础版默认无认证，路由为公开状态，登出撤销令牌依赖 Redis 黑名单组件。",
+   "highlights": [
+    "支持版本化路由（/v1、/v2）与 SQLAlchemy 2.0 异步数据库集成、Alembic 迁移",
+    "提供 JWT 认证、Redis 令牌黑名单、滑动窗口速率限制、CSRF 双提交 Cookie 中间件",
+    "可作为 Copier 模板生成新项目，并通过 Agent Skills 格式供多种 AI 编码助手使用"
+   ],
+   "use_cases": [
+    "生成带认证、数据库与可选服务（Redis、Celery、云存储等）的 FastAPI 后端项目",
+    "为已有项目安装架构技能，由 AI 编码助手按模板规则扩展或审查代码",
+    "本地开发与 Docker Compose 部署含 PostgreSQL、Redis 的 API 服务"
+   ]
+  },
+  "sha": "cbe7aa102a0c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bf3b01650290": {
+  "identity": {
+   "one_liner": "自托管即时通讯应用，基于 React Native 与 Node.js/PostgreSQL 构建",
+   "review": "Flock 是一个自托管即时通讯服务端与客户端项目，提供聊天、音视频通话、屏幕共享和会议链接功能，从单一 React Native (Expo) 代码库生成 PWA 网页应用、Android 与 Windows 客户端，后端为 Node.js 加 PostgreSQL。README 给出 Docker、在线脚本、离线脚本三种部署方式，支持英文与波斯语（RTL）界面，适合希望在自有服务器上运行聊天服务的用户。",
+   "highlights": [
+    "支持单一代码库构建 PWA、Android APK 与 Windows 安装包，服务端为 Node.js + PostgreSQL",
+    "提供加密私聊（服务器仅存储密文）、群聊、文件传输（默认上限 100 MB）、语音/视频通话与屏幕共享",
+    "提供三种部署方式（Docker、在线脚本、离线脚本），内置 HTTPS 配置、flockctl 管理菜单及 TURN 中继安装选项"
+   ],
+   "use_cases": [
+    "在自有 Linux 服务器上为朋友或小团队搭建聊天与音视频通话服务（README 称 1 核 1 GB 内存可满足一组朋友使用）",
+    "通过会议链接创建无需账号即可从浏览器加入的会议室",
+    "需要波斯语（从右到左）界面的用户社区自托管部署"
+   ]
+  },
+  "sha": "bf3b01650290",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c184be857304": {
+  "identity": {
+   "one_liner": "单二进制 Web 框架，内置 SQLite、HTTP 服务器与 Wren 脚本语言",
+   "review": "Bialet 是一个用 C17 编写的单可执行文件 Web 框架，将 HTTP 服务器、SQLite 数据库和 Wren 脚本语言打包在一起，无配置文件、无构建步骤。路由基于文件系统：每个 .wren 文件即一个请求处理器。适用于数据驱动的小型 Web 应用；项目自 2023 年开发，由单人维护，无商业支持或 SLA。仅支持 HTTP/1.1 且无原生 TLS，HTTPS 需前置反向代理。",
+   "highlights": [
+    "单个可执行文件包含 HTTP 服务器、SQLite 和 Wren 解释器，Linux x86_64 二进制约 3.7 MB，无运行时依赖",
+    "路由遵循文件系统约定，文件名即路由；提供 Db.migrate 数据库迁移方法",
+    "支持 WAL 模式（-w）、内存/CPU 软硬限制、语法校验（-t）和内联脚本执行（-r）"
+   ],
+   "use_cases": [
+    "以 .wren 文件构建数据驱动的 Web 应用，无需包管理器、YAML 或独立数据库服务器",
+    "在 Linux、macOS、Windows 上通过 `bialet dev` 进行本地开发，支持热重载与错误显示",
+    "多核并行场景下以多实例配合 Caddy/nginx 部署，TLS 与 HTTP/2 由反向代理承担"
+   ]
+  },
+  "sha": "c184be857304",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e02de013f11d": {
+  "identity": {
+   "one_liner": "读取 Mihomo 连接数据、按进程记录流量的 Windows 本地流量台账",
+   "review": "Mihomo Traffic Ledger 是一款 Windows x64 托盘应用，通过 Clash Verge Rev 默认的 Mihomo 命名管道每秒读取连接快照，将上传下载计数归因到进程、目标、规则与代理链，写入本地 SQLite 形成永久分钟事实及小时/日/周/月汇总。仅统计经过 Mihomo 的连接，绕过的流量不可见；数据保存在 %LOCALAPPDATA% 下，仪表盘仅绑定 127.0.0.1。适合需要在 Windows 上按应用维度查看代理流量的 Clash Verge Rev 用户。",
+   "highlights": [
+    "通过命名管道读取 Mihomo /connections 数据，无需开启外部 TCP 控制器",
+    "记录进程名与路径、目标主机、规则、路由类型、代理链及每连接上传下载计数，并生成分钟事实和小时/日/周/月汇总",
+    "数据写入本地 SQLite，无遥测，仪表盘仅监听 127.0.0.1:18080"
+   ],
+   "use_cases": [
+    "按应用/代理节点/主机/路由维度查看上传下载量与排行",
+    "通过“隐藏直连”开关在仪表盘中过滤 DIRECT 流量（收集与历史仍包含直连）",
+    "需要长期保留本地流量历史记录的 Windows 10/11 + Clash Verge Rev 环境"
+   ]
+  },
+  "sha": "e02de013f11d",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79ab80d29358": {
+  "identity": {
+   "one_liner": "将 Python dateutil 解析器移植为 SQLite C 扩展函数",
+   "review": "该项目用 C 实现了 python-dateutil 的 parse()，提供 dateutil_parse 等四个 SQL 函数，支持模糊解析和 dayfirst 选项，解析失败返回 NULL。可通过 pip 安装、sqlite3 加载或在 Pyodide 中使用，另提供 Datasette 和 sqlite-utils 插件。测试采用与 dateutil 的差分对比，解析结果与 dateutil 2.9.0 存在若干有意差异，如不解析本地时区名。",
+   "highlights": [
+    "提供四个 SQL 函数，对应 dateutil parse() 的默认、fuzzy、dayfirst 参数组合",
+    "单遍词法加单遍解析，线性时间，输入上限 64 KiB，注册为 SQLITE_INNOCUOUS",
+    "测试包含 190 个手选输入、4 万生成输入、Hypothesis 属性测试及 libFuzzer 模糊测试"
+   ],
+   "use_cases": [
+    "在 SQLite 查询中解析 ISO 8601、RFC 2822 等非标准格式的日期文本",
+    "在 Datasette 或 sqlite-utils 中为所有连接注册这些解析函数",
+    "在 Pyodide/WASM 环境的 SQLite 中使用日期解析功能"
+   ]
+  },
+  "sha": "79ab80d29358",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

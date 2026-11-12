@@ -2677,5 +2677,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "75a0f5a24b6b": {
+  "identity": {
+   "one_liner": "数据库迁移工具，以 CLI 与 Go 库形式提供 SQL 与 Go 函数两种迁移方式。",
+   "review": "goose 是数据库 schema 迁移工具，同时提供 CLI 和 Go 库两种使用形式，面向需要在 Postgres、MySQL、SQLite、ClickHouse 等多种数据库上管理增量 schema 变更的开发团队。迁移可用带 Up/Down 注解的 SQL 文件或普通 Go 函数编写，支持嵌入到二进制中。默认在事务内执行迁移，无法事务化的语句可用 NO TRANSACTION 注解跳过；Go 迁移需自行编译二进制运行。",
+   "highlights": [
+    "支持 Postgres、MySQL、MariaDB、SQLite、ClickHouse 等多种数据库驱动",
+    "提供 up、down、up-to、down-to、status、version 等迁移命令",
+    "SQL 迁移支持环境变量替换、NO TRANSACTION 注解与 Go 1.16 embed 嵌入"
+   ],
+   "use_cases": [
+    "在多数据库环境中以版本化 SQL 文件管理 schema 变更",
+    "将迁移文件嵌入 Go 应用二进制，随应用启动时执行迁移",
+    "需要用 Go 函数表达复杂迁移逻辑的场景"
+   ]
+  },
+  "sha": "75a0f5a24b6b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9d8ea13f1a29": {
+  "identity": {
+   "one_liner": "基于 SQLite 的零云端 AI 代理记忆层，单依赖纯 Python 实现",
+   "review": "Mnemosyne 是一个面向 AI 代理的本地记忆层，通过 MCP 服务器、Python SDK 或各平台原生集成接入 Cursor、Claude Code、OpenWebUI 等多种代理框架。数据存储于单个 SQLite 文件，无需外部服务或向量数据库。基准数据基于 v3.0.0 版本测量，项目注明部分早期结果已撤回，且不同 judge 下的分数不可直接比较。",
+   "highlights": [
+    "内置 MCP 服务器（支持 stdio/SSE）与 Python SDK（remember/recall 接口），兼容 Cursor、Claude Code、Codex、Windsurf、OpenWebUI 等多种接入方式",
+    "BEAM 三层记忆架构：TTL 驱动的工作记忆、基于 sqlite-vec 与 FTS5 的情景记忆、含版本链的时序知识图谱 TripleStore",
+    "384 维 float32 嵌入经二值化压缩为 48 字节，混合评分（50% 向量 + 30% FTS5 + 20% 重要性）在 SQLite 内完成；同步支持 Fernet 或 PyNaCl 客户端加密"
+   ],
+   "use_cases": [
+    "为使用 Claude Code、Cursor 等 MCP 客户端的代理工作流添加本地持久化记忆",
+    "在无法依赖外部数据库或云服务的环境中为自定义 Python 代理嵌入记忆功能",
+    "需要在多设备间同步记忆数据且要求客户端加密、无遥测的场景"
+   ]
+  },
+  "sha": "9d8ea13f1a29",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61e9da3c515e": {
+  "identity": {
+   "one_liner": "抓取耶鲁课程与评课数据的爬虫，接入 CourseTable。",
+   "review": "Ferry 是面向 CourseTable 的耶鲁课程数据爬虫，抓取课程信息、评课（OCE）数据、选课需求统计（ivy.yale.edu）及学术日历，经转换后写入 PostgreSQL 数据库。基于 Python 实现，支持 Dev Container 环境、分阶段运行（抓取/转换/同步）、缓存与 Sentry 错误上报；部分数据需提供 CAS cookie 认证，评课与需求数据每学期仅手动运行一次。",
+   "highlights": [
+    "分阶段流水线：可选择性运行抓取、转换、数据库同步等阶段，配置可经 CLI、YAML 文件或环境变量传入",
+    "支持抓取课程、评课、需求统计、学术日历与地点数据，并可生成 CSV 快照和数据库结构图",
+    "提供 release 模式（强制抓取新数据并启用 Sentry）与缓存机制，支持 GitHub Action 定时运行"
+   ],
+   "use_cases": [
+    "为 CourseTable 等课程查询应用维护耶鲁课程与评课数据库",
+    "定期更新选课需求统计（注册/候补/旁听人数）与学术日历数据",
+    "将抓取结果导出为 CSV 快照或同步到 PostgreSQL 供 GraphQL 服务（如 Hasura）查询"
+   ]
+  },
+  "sha": "61e9da3c515e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ab0c6a8e9301": {
+  "identity": {
+   "one_liner": "自托管家庭规划看板，含日历、家务、餐食与打印晨报",
+   "review": "Marplanner 是一个面向墙上平板（kiosk）的家用自托管规划系统，整合本地日历与 ICS 订阅、家务与连续打卡、餐食计划、提醒、天气（Open-Meteo）等模块，可选功能以插件形式在管理端启用，支持英文与西班牙文。其特色机制是每人每日纸质晨报：kiosk 浏览器通过 Web Bluetooth 向 ESC/POS 热敏打印机直接发送打印内容，无需打印服务器。需 Node.js 24.x、持久化数据目录，默认监听 0.0.0.0:3000，未配置凭据前服务拒绝访问。",
+   "highlights": [
+    "提供共享日历（本地事件加 ICS 订阅）、按日分组的家务打卡与连续记录、每周餐食计划与食谱目录",
+    "每名儿童可生成打印晨报，含日程、天气、提醒等 20 多种内容块，通过 Web Bluetooth 直接发送 ESC/POS 到热敏打印机",
+    "API-first 设计，UI 与脚本使用同一套 OpenAPI 文档化 HTTP 接口；支持 Docker Compose 部署与备份/恢复"
+   ],
+   "use_cases": [
+    "将闲置平板挂在墙上作为家庭共享日历与家务看板",
+    "为每个孩子生成纸质晨间日程单，早餐时无需屏幕查看当天安排",
+    "通过 HTTP API 脚本化集成家庭日程、餐食与提醒数据"
+   ]
+  },
+  "sha": "ab0c6a8e9301",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8a6334e619eb": {
+  "identity": {
+   "one_liner": "SSMS 风格的 PostgreSQL 原生 Windows 客户端，C#/WPF 实现。",
+   "review": "PGMS 是一个运行于 Windows x64 的 PostgreSQL 客户端，采用 C#/WPF/.NET 10 构建，支持 PostgreSQL 16–18。它提供 Object Explorer、F5 执行、图形化执行计划、会话监控、数据库关系图、可视化查询设计器与上下文感知 IntelliSense，管理操作以 SQL 脚本先审阅后执行，备份还原依赖外部 pg_dump/pg_restore/psql 工具。当前为 alpha 预发布版，未声明达到 SSMS 完全对等。",
+   "highlights": [
+    "提供数据库关系图、查询设计器与上下文感知 IntelliSense，JOIN 补全可基于外键生成完整连接条件",
+    "管理操作（库/模式/表/索引/角色等）以可审阅的 SQL 脚本形式执行，备份还原通过外部 PostgreSQL 客户端工具支持 custom/tar/SQL/directory 格式",
+    "未保存查询草稿按 Windows 用户加密检查点保存，崩溃后可恢复；提供可选 AI 生成 SQL（Anthropic/OpenAI/Ollama，需自备密钥）"
+   ],
+   "use_cases": [
+    "习惯 SSMS 操作方式、在 Windows 上管理 PostgreSQL 数据库的开发者与 DBA",
+    "需要通过图形界面查看表关系、设计查询或查看估计/实际执行计划的场景",
+    "需要会话与阻塞监控、区分取消查询与终止会话的日常运维工作"
+   ]
+  },
+  "sha": "8a6334e619eb",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

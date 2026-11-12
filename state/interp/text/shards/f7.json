@@ -3078,5 +3078,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ff3eed49164b": {
+  "identity": {
+   "one_liner": "基于 Next.js 的开源 SaaS 起步套件，内置认证、Stripe 支付与管理面板。",
+   "review": "这是一个 MIT 许可的 Next.js SaaS 样板项目，集成 Better Auth 认证、Stripe 支付、Prisma/PostgreSQL 数据层、Tailwind v4 界面和 Resend 邮件。面向希望以现有代码为基础构建 SaaS 产品的开发者。运行需 Node 24+ 与 PostgreSQL 数据库，通过 clone、npm install、配置环境变量和 Prisma 迁移即可启动，未配置的可选功能保持关闭状态。",
+   "highlights": [
+    "提供 Better Auth 认证（Google/GitHub OAuth、magic link、邮箱密码、自托管 TOTP 两步验证与会话管理）",
+    "包含 Stripe Checkout、Customer Portal、签名验证 webhook、订阅与一次性付款、多套餐及 PDF 发票",
+    "内置管理面板（用户管理、MRR 指标）、i18n、MDX 博客、演示模式及 GitHub Actions CI 与 Playwright/Vitest 测试"
+   ],
+   "use_cases": [
+    "以该样板为起点开发需要登录、订阅付费功能的 SaaS 应用",
+    "自托管部署 Next.js + PostgreSQL 应用，代码和数据由使用者自行管理",
+    "通过 DEMO_MODE 环境变量部署带预置数据的公开产品演示站点"
+   ]
+  },
+  "sha": "ff3eed49164b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "424513bb6ca6": {
+  "identity": {
+   "one_liner": "本地加密的 AI 代理记忆库：SQLCipher/AES 加密 SQLite 存储，作用域签名与哈希链审计日志。",
+   "review": "Kibisis 是 Perseus Computing 开源的 Python/Rust 库（MIT），把 AI 代理在运行中学到的决策、偏好和事实存入本地单个加密 SQLite 文件，而非托管服务。它提供按候选/已验证/争议/撤销四态组织的检索、墓碑式永久遗忘、每条变更的哈希链日志，以及基于 fencing token 的单写者租约协调。可通过 stdio 上的 MCP 服务器供代理调用，代理写入仅为候选条目，需人工按法定人数审核后才可验证。当前为 0.1.0-alpha.17 预发布版。",
+   "highlights": [
+    "条目内容以 AES-256-GCM 密封于单个 SQLite 文件，加载 SQLCipher 后整个数据库文件加密；每条记忆带 HMAC-SHA256 签名，校验失败的行不被返回",
+    "检索支持按信任状态与日期查询，排除已撤销条目，MCP 的 recall() 会拦截冲突或覆盖不足的匹配并说明拦截原因；墓碑删除后同作用域内拒绝以任何变体形式重写",
+    "全部写入、归档、墓碑和清除记录于与变更同一事务的哈希链日志；租约协调通过只增 fencing token 保证单机多进程/线程单写者"
+   ],
+   "use_cases": [
+    "为长时间运行的 AI 代理在本地保存经加密的记忆，避免数据离开本机",
+    "需要人工审核流程的场景：代理写入候选条目，由操作系统账户按法定人数（默认 2 人）批准后变为已验证",
+    "多进程协作写入同一记忆库、需要防止并发重复写入的代理系统"
+   ]
+  },
+  "sha": "424513bb6ca6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "780145e82feb": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 与 Redis 的餐厅订座与点单管理平台",
+   "review": "Dine-Luxe 是一个餐厅管理、餐桌预订与点单平台，README 标注其集成 PostgreSQL 与 Redis，主题标签涉及乐观锁、缓存失效与并发处理。注意仓库描述与功能列表提及 Next.js/Express，而技术栈部分写为 Java 17 Spring Boot 3.3 与 Maven，两处信息不一致，实际实现需查看代码确认。",
+   "highlights": [
+    "提供餐桌预订与订单管理功能",
+    "集成 PostgreSQL 与 Redis",
+    "README 技术栈列出 Java 17 Spring Boot 3.3、Maven 与 Docker"
+   ],
+   "use_cases": [
+    "餐厅餐桌预订管理",
+    "堂食点单与订单处理流程",
+    "涉及缓存失效与并发控制的场景参考"
+   ]
+  },
+  "sha": "780145e82feb",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

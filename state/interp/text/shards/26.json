@@ -3033,5 +3033,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "05ade2d2d957": {
+  "identity": {
+   "one_liner": "基于 Express 的 TypeScript 微服务样板，含分层架构与 Docker 部署",
+   "review": "该仓库是一个使用 TypeScript、Express、MongoDB、Redis、Socket.io、Jest 和 OpenAPI 的微服务样板，采用手动的分层架构（Controller/Service/Repository）。作者已声明项目进入维护模式，不再积极开发，建议生产环境使用 NestJS 等框架；仓库作为学习资源保留，供开发者研究手动 TypeScript 管线和 Docker 集成。",
+   "highlights": [
+    "使用 Express、MongoDB、Redis、Jest、Socket.io 与 OpenAPI（Swagger）实现微服务样板",
+    "采用分层架构（Controllers、Services、Repositories）并支持通过 docker-compose 部署",
+    "提供 pnpm build/start/dev 脚本，可配置 HTTPS 并用 Jest 编写单元与功能测试"
+   ],
+   "use_cases": [
+    "学习手动 TypeScript/Express 管线与分层架构的搭建方式",
+    "查看 Docker、Redis 与 MySQL/MongoDB 在同一样板中的集成示例",
+    "作为旧项目维护或二次改造的基础代码参考"
+   ]
+  },
+  "sha": "05ade2d2d957",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "35e4526d8e53": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 CMS，单进程加 Postgres，内置 MCP 服务器与签名 WebAssembly 插件机制",
+   "review": "Hatamoto 是一个用 Go 编写的自托管 CMS，包含可视化页面构建器、文章编辑器、SEO 检查、无 Cookie 分析、表单、重定向和页面缓存。站点、管理后台、JSON API 与 MCP 端点运行在同一进程，数据存储依赖 Postgres。插件与主题为签名的 WebAssembly 包；更新支持维护窗口安装与失败自动回滚。安装可用 Docker Compose 或 Linux/macOS 二进制，许可证为 Apache-2.0，当前状态为 v1、插件 SDK 为 v0 且可能在次要版本间变更。",
+   "highlights": [
+    "单 Go 进程运行站点、管理后台、JSON API、MCP 端点、后台任务和插件运行时，仅需一个 Postgres 数据库，不依赖 Node、Redis 或独立 worker",
+    "插件与主题为签名的 WebAssembly 包，安装前显示签名者与权限列表，更新在维护窗口安装且健康检查失败时自动回滚",
+    "内置 MCP 服务器，AI 代理可通过 API key（带 scope 限制）操作内容、页面构建器、媒体、SEO 与分析工具；含 WordPress 导入器、AI 爬虫分析与 llms.txt、JSON-LD 输出"
+   ],
+   "use_cases": [
+    "自托管博客或企业站点，需要文章编辑器、可视化页面构建、表单和 SEO 工具",
+    "从 WordPress 迁移站点，需保留原有 URL（永久重定向与 URL 模式审计）",
+    "让 AI 代理通过 MCP 发布和管理内容，或跟踪 AI 爬虫对站点的抓取行为"
+   ]
+  },
+  "sha": "35e4526d8e53",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9060c1550f2e": {
+  "identity": {
+   "one_liner": "本地优先的 Google Drive 桌面/移动客户端，用 SQLite 索引与本地加密库管理照片",
+   "review": "Project Sunflower 是一款面向 Google Drive 的本地优先桌面与 Android 照片套件，将元数据索引、浏览与媒体展示放在本地完成。Windows 版打包 Tauri v2 外壳与 Fastify/Node.js sidecar，数据存于 SQLite（WAL+FTS5）；Android 版经 Capacitor 直连 Drive v3 REST 并用 IndexedDB 缓存。采用 BYOC 模式，用户需自建 Google Cloud OAuth 2.0 凭据（支持 PKCE）。",
+   "highlights": [
+    "桌面端内嵌 Node.js 运行时与 Fastify 服务，SQLite 索引存储于 %LOCALAPPDATA%，内置 7 个自动执行的数据库迁移",
+    "提供 AES-256-GCM 加密的本地私有保险库（PBKDF2 100,000 次迭代密钥派生），凭据经 DPAPI/Keychain 存储",
+    "虚拟化照片画廊、月份跳转选择器，视频支持 RFC 7233 字节范围流式播放"
+   ],
+   "use_cases": [
+    "在本地快速浏览与检索 Google Drive 中大量照片/视频，减少云端往返",
+    "在离线状态下查看已缓存的媒体元数据与相册",
+    "将私密照片存放于本地加密保险库中"
+   ]
+  },
+  "sha": "9060c1550f2e",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae04e192e67b": {
+  "identity": {
+   "one_liner": "为编码代理记录失败→修复轨迹的避坑记忆插件，以规则形式复用注入上下文",
+   "review": "该项目是一个面向编码代理的避坑记忆系统：当工具调用先失败后修复，插件将这对轨迹提炼为规则，存入 SQLite+FTS5，并在后续会话中于错误重复前注入。引擎以插件包形式原生支持 DSH 和 ZCode，也可通过 immune connect 以纯 hooks 方式接入 Claude Code 和 Codex CLI。无运行时依赖；外部 LLM 提炼需自行配置 OpenAI 兼容端点。附 immune doctor 自检与历史会话审计命令。",
+   "highlights": [
+    "将失败后修复的工具调用对提炼为规则，存入 SQLite+FTS5，并在后续会话匹配时注入上下文",
+    "同一 core/ 引擎支持四种宿主：DSH/ZCode 原生插件安装，Claude Code/Codex CLI 通过 hooks 接入",
+    "immune audit 可回放本机已有会话历史（ZCode db、Codex rollout、Claude Code transcripts）生成报告并提炼首批规则；immune export/import 支持规则以 SKILL.md 或 JSON 快照共享，含路径与密钥泄露导出门禁"
+   ],
+   "use_cases": [
+    "在 DSH、ZCode、Claude Code 或 Codex CLI 中让代理避免重复已修复过的同类工具调用错误",
+    "团队通过 export/import 共享已验证的避坑规则库，或安装 git-safety、node-ts、python-uv、docker 四个预置规则包",
+    "对本机已有的多宿主会话历史做失败模式审计，输出可分享报告并提炼个人规则"
+   ]
+  },
+  "sha": "ae04e192e67b",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "908d1b6388e6": {
+  "identity": {
+   "one_liner": "从零用 C++ 实现的小型图数据库，含存储引擎与 Cypher 查询",
+   "review": "smollerGraph 是一个用 C++20 从零实现的图数据库，配套 YouTube 系列逐集构建，每个步骤对应仓库中的一个 tag。它以 4 KiB 页和缓冲池管理固定大小记录，用 B+ 树按名称定位节点，支持 Cypher 子集查询、双向最短/最廉价路径、FastRP 嵌入与 HTTP 可视化界面。附 Wikidata 哺乳动物与鸟类数据集，采用 MIT 许可证。",
+   "highlights": [
+    "以 4 KiB 页、缓冲池、B+ 树索引和属性记录链组织磁盘存储；关系以出边和入边两条链存放，可双向遍历",
+    "支持 Cypher 子集查询（含 WHERE/RETURN/EXPLAIN），实现双向 BFS 最短路径与基于权重的 Dijkstra 最廉价路径",
+    "通过 FastRP 为节点生成 256 维嵌入，sg similar 按余弦相似度输出相近节点，sg serve 提供 HTTP 页面绘制查询结果"
+   ],
+   "use_cases": [
+    "学习图数据库存储引擎与查询计划的实现细节，按视频 tag 逐步阅读代码",
+    "加载 Wikidata 分类等事实数据，执行标签/属性匹配、多跳关系遍历与路径查询",
+    "在浏览器中可视化图结构与节点磁盘记录，运行嵌入相似度查询"
+   ]
+  },
+  "sha": "908d1b6388e6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

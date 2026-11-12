@@ -2924,5 +2924,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6df66d4738a5": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 ODBC 驱动，用于以 ODBC 数据源方式访问 ClickHouse。",
+   "review": "该仓库实现 ClickHouse 的 ODBC 驱动，供通过 ODBC 驱动管理器（MDAC、UnixODBC、iODBC）访问数据的应用程序调用。驱动主要针对 ClickHouse 服务器 21.3 版本测试，提供 DSN 参数配置（连接、TLS 证书、超时、压缩、日志等），安装时需保证驱动与应用的架构和 ODBC 提供方一致。",
+   "highlights": [
+    "提供覆盖 http/https 协议、TLS 客户端证书、连接超时、数据压缩、驱动日志等十余项 DSN 配置参数",
+    "支持 MDAC、UnixODBC、iODBC 三种 ODBC 驱动管理器，可通过 Homebrew 安装、Releases 二进制包或源码构建",
+    "支持 ODBCDriver2 与 RowBinaryWithNamesAndTypes（实验性）两种线格式，可将超出 64 位整数范围的类型以字符串返回"
+   ],
+   "use_cases": [
+    "通过支持 ODBC 的应用程序或 BI 工具读取 ClickHouse 数据源",
+    "在 Windows/Linux/macOS 环境下经 ODBC 驱动管理器接入 ClickHouse",
+    "需要 TLS 加密连接、客户端证书认证或驱动日志排查的场景"
+   ]
+  },
+  "sha": "6df66d4738a5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b56d4c4396ca": {
+  "identity": {
+   "one_liner": "Cairn.ink 开源的 AI 代理跨会话记忆工具包，基于 SQLite，经 MCP 暴露",
+   "review": "Cairn Memory 是 Cairn.ink 发布的开源 AI 记忆工具包（开发者预览版），面向 Claude Code 和 Codex 用户，用于在会话间保存、查看、更正和遗忘上下文记忆。每条记忆附带 Source Receipt（提交时的源文本），本地模式将记忆存于用户自己的 SQLite 文件并通过 MCP 或 JavaScript 暴露，无需 Cairn 账户；托管模式连接 cairn.ink 服务并支持自动捕获与召回。项目要求 Node ≥22.16，记录过的验证覆盖 Linux x64 和有限的 Windows x64 安装。",
+   "highlights": [
+    "提供 remember/inspect/correct/forget 等八个 MCP 记忆工具，保存、查看与更正操作无需模型密钥",
+    "记忆存于本地 SQLite 文件，附带 Source Receipt 源文本，支持按修订版本更正与逻辑删除",
+    "语义召回需自备 OpenAI 密钥，无密钥时 contextRead 回退到 BM25"
+   ],
+   "use_cases": [
+    "为 Claude Code 或 Codex 会话保留偏好与项目决策等上下文",
+    "在本地构建基于 MCP 或 JavaScript 的记忆层集成",
+    "需要查看并更正已存记忆及其源文本的场景"
+   ]
+  },
+  "sha": "b56d4c4396ca",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7683853da3ba": {
+  "identity": {
+   "one_liner": "运行在本机的 QQ 群聊/私聊陪伴型 AI，接 DeepSeek Harness 与 SnowLuma。",
+   "review": "小鲸鱼是一个部署在 Windows 本机、通过 SnowLuma 的 OneBot 接口接入 QQ 的陪伴型 AI 程序，面向想让 AI 以群友身份长期参与群聊和私聊的个人用户。消息先经白名单与唤醒规则筛选，再交给 DSH 的模型决定是否回复，并支持跨会话记忆、控制台管理与代码提案流程。仅支持 Windows 10/11，单机运行，无跨设备同步。",
+   "highlights": [
+    "消息处理分两级：确定性规则筛选后，8 秒内消息合并为一次模型唤醒，单次最多携带 12 条未读、6000 字",
+    "提供本地控制台（默认 127.0.0.1:3100）与实时状态页 /live，可管理人格提示词、白名单、工具开关与记忆数据",
+    "包含代码提案闭环：将私聊需求整理为带验收标准的提案，由用户自己的 coding agent 实现，确认后逐文件合并并支持失败回滚"
+   ],
+   "use_cases": [
+    "在 QQ 群中部署一个按唤醒条件选择性接话、支持跨会话记忆的 AI 群成员",
+    "通过私聊使用定时提醒、查资料、聊天记录整理等工具功能",
+    "以自然语言提交需求，经提案流程交由本地 coding agent 实现功能变更"
+   ]
+  },
+  "sha": "7683853da3ba",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "856e7b34ba8c": {
+  "identity": {
+   "one_liner": "自托管的 AI 角色陪伴应用，以后台记忆系统持久记录角色与用户的长期对话。",
+   "review": "LumiMuse 是一个基于 Next.js 16 与 SQLite 的自托管 AI 角色聊天应用，面向想与角色长期相处的用户。它从对话中自动提取长期记忆并按相关性注入上下文，内置 Agent 只能以提案形式修改数据，批准后才写入且可撤销。数据为一个 SQLite 文件加三个媒体目录，需自备兼容 OpenAI 格式的模型接口，支持 Docker 部署。",
+   "highlights": [
+    "从聊天中自动提取长期记忆，支持 full/local/vector/hybrid 四种按角色配置的注入模式，记忆可新增、合并、取代并归档",
+    "内置 Agent 可读取角色、对话、记忆与日志，所有修改以逐条可批准的提案呈现，写入后记入修订历史并可撤销",
+    "数据全部存于本地一个 SQLite 文件加三个媒体目录，支持应用内 JSON 导出迁移，并提供访问密码、登录限流与 SSRF 防护"
+   ],
+   "use_cases": [
+    "想与某个角色长期聊天并保留共同记忆的个人用户",
+    "在自有服务器或本机用 Docker 部署、自行配置 OpenAI 兼容模型接口的自托管场景",
+    "需要导入 SillyTavern 角色卡与预设、或接入 Stable Diffusion WebUI/NovelAI/ComfyUI 生图的对话角色体验"
+   ]
+  },
+  "sha": "856e7b34ba8c",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

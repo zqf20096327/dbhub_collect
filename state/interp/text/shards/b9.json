@@ -3033,5 +3033,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4dd88054b958": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 .NET 事件存储与文档数据库，Critter Stack 成员。",
+   "review": "Fisher 是 Critter Stack 中面向 SQLite 的事件溯源与文档存储库，采用与 Marten 相同的 API。无需安装数据库服务器，数据是进程内文件，通过 AddFisher 进行 DI 注册。适用于 .NET 开发者。限制方面：SQLite 每个数据库文件只有一个写入者，独占追加方法会失败而非等待；不支持编译查询，子集合 LINQ 仅部分实现，且没有内置消息总线。",
+   "highlights": [
+    "提供事件存储与文档存储，API 与 Marten 一致，支持 LINQ 查询、补丁、批量插入、软删除、自然键与用户声明索引",
+    "支持五种投影形态与三种生命周期（含复合投影）、异步投影守护进程、订阅、事件重写（含数据脱敏与流压缩）及两种多租户模式",
+    "通过 JasperFx.Events.ComplianceTests 的 65 个套件、811 项测试，并提供 Fisher.AspNetCore 与 Fisher.EntityFrameworkCore 伴生包"
+   ],
+   "use_cases": [
+    "在 .NET 应用中以进程内 SQLite 文件实现事件溯源或文档持久化，无需部署数据库服务器",
+    "与 Marten/Polecat 共用同一 API 的代码，需要切换或评估 SQLite 作为后端存储的场景",
+    "数据库级多租户（每租户一个文件）或需要本地文件备份（cp 即可）的轻量部署场景"
+   ]
+  },
+  "sha": "4dd88054b958",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fcbe95c1fee4": {
+  "identity": {
+   "one_liner": "自托管 TRMNL 电子墨水屏服务器，单 Docker 镜像加 Postgres，可导入官方 Recipes。",
+   "review": "Kuroshiro 是一个 BYOS 后端，为运行 TRMNL 开源固件的设备（TRMNL、Xteink、Kindle 等）决定墨水屏面板显示内容与轮换时机。它将 NestJS API 与 Vue 3 管理界面打包进单个容器，数据存于用户自备的 Postgres。项目目前处于 alpha 阶段，1.0.0 前接口格式可能变更，升级前需备份数据库。",
+   "highlights": [
+    "支持从 trmnl.com 目录浏览、搜索并一键导入 Recipes，含 serverless-transform 类型",
+    "Plugin 支持多个命名 Data Sources 轮询外部 API 或接收 Webhook 推送，用 Liquid 模板渲染并实时预览",
+    "提供设备自动配置、Qwiic 传感器读数、固件模型兼容性校验、设备模拟器，以及经 Apprise 的低电量/离线告警和 Prometheus /metrics 端点"
+   ],
+   "use_cases": [
+    "在家用网络中自托管管理 TRMNL 电子墨水屏的显示内容",
+    "作为 Home Assistant OS 附加组件运行，数据纳入 HA 备份",
+    "无硬件时通过设备模拟器和每日重置的在线演示实例测试面板配置"
+   ]
+  },
+  "sha": "fcbe95c1fee4",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

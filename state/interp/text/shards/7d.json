@@ -2977,5 +2977,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6b2d136bb8c6": {
+  "identity": {
+   "one_liner": "为 Hermes Agent 提供本地 SQLite 存储、无 LLM 调用检索的记忆系统",
+   "review": "zeromem 是 Zero-Mem 论文（arXiv:2607.29377）的 Rust 实现，将 Hermes Agent 的每条消息逐字存入单个本地 SQLite 文件，检索过程不调用 LLM，仅在模型读取返回结果时消耗 token。每轮消息通过实体图、时间线层级和 BM25+稠密嵌入三种方式索引，图与时间线索引在打开时可从原始轮次重建。可作为 Hermes 插件安装，也提供 Python 库、CLI 和 Claude Code MCP 集成；默认嵌入模型为英文向的 bge-small-en-v1.5，非英语对话需切换 multilingual-e5-small。",
+   "highlights": [
+    "消息逐字存储于单个本地 SQLite 文件，存储与检索消耗零 token，检索步骤不调用任何 LLM",
+    "每轮消息以三种方式索引：实体图（PPR）、时间线层级（轮次/窗口/片段）、BM25 加稠密嵌入，查询经确定性画像路由并融合两路检索分数",
+    "提供 zeromem_recall/zeromem_stats/zeromem_forget_session 工具，支持后台同步与前一轮的证据预取，可从 Hermes 会话历史零 token 导入且幂等"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 配置本地记忆提供者，逐字保留会话历史并按轮次检索证据",
+    "在 Claude Code 中通过 MCP 共享跨项目的单一记忆库（注意无会话身份限制）",
+    "通过 Python 或 CLI 对 JSONL 格式的对话轮次做离线摄取与查询检索"
+   ]
+  },
+  "sha": "6b2d136bb8c6",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d11067ae5847": {
+  "identity": {
+   "one_liner": "单二进制 Rust 博客引擎，内置管理面板与 Let's Encrypt HTTPS",
+   "review": "Bloogla 是一个用 Rust 编写的博客程序，单个可执行文件同时运行站点前台、管理面板并自动获取 Let's Encrypt 证书，数据存放于一个文件夹，无需 PHP 或数据库服务器。它面向想自托管博客的个人用户，支持 Docker 或直接下载运行于 Linux/Windows，采用 MIT 许可证。内容可从 WordPress 导入，也可导出为 WordPress 文件或 Markdown。",
+   "highlights": [
+    "单二进制运行，支持 Docker 与 Linux/Windows 原生部署，自动获取 Let's Encrypt HTTPS 证书",
+    "内置可视化编辑器、草稿与定时发布、七套主题、评论、RSS、站点地图及无 Cookie 的每日访问统计",
+    "支持 WordPress 导入导出、每日备份（可推送至 S3 兼容存储）、签名更新与两步验证登录"
+   ],
+   "use_cases": [
+    "在自有服务器或 VPS 上自托管个人博客",
+    "将现有 WordPress 站点内容迁移到独立单文件程序",
+    "使用自定义 HTML/CSS 主题搭建小型个人或项目网站"
+   ]
+  },
+  "sha": "d11067ae5847",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

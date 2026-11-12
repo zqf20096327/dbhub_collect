@@ -17299,5 +17299,7073 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "bb429d7f387a+2": {
+  "fn": "Deodat-Lawson/LaunchStack",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "license",
+     "CI",
+     "types"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    11,
+    8,
+    9,
+    [
+     "Run it · Repository layout · Packages · Architecture · Chat models · Contributing"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    14,
+    9,
+    12
+   ],
+   [
+    "replace",
+    14,
+    15,
+    12,
+    13,
+    [
+     "The publishable bricks in `packages/` and the compositions package `@launchstack/pipelines` are **not yet on npm**. The engine aggregate is `@launchstack/engine`; `@launchstack/design-tokens` is private. The first release will publish the public packages together through the Changesets flow in `release.yml`, which builds the bricks and pipelines, validates the packed engine tarball with `publint`, and checks every declared publishable subpath for Node-ESM loadability. Until that first release lands, consume the engine by running this repository."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    17,
+    13,
+    15
+   ],
+   [
+    "delete",
+    17,
+    19,
+    15,
+    15
+   ],
+   [
+    "equal",
+    19,
+    33,
+    15,
+    29
+   ],
+   [
+    "replace",
+    33,
+    34,
+    29,
+    30,
+    [
+     "|Variable|Value|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    30,
+    31
+   ],
+   [
+    "replace",
+    35,
+    39,
+    31,
+    35,
+    [
+     "|`BETTER_AUTH_SECRET`|`openssl rand -base64 32`|",
+     "|`BETTER_AUTH_URL`|`http://localhost:3000` (the `.env.example` default). Without it, browser sign-up is refused with \"Invalid origin\".|",
+     "|Chat|**Gemini:** `GOOGLE_AI_API_KEY`, with `CHAT_BASE_URL` unset. **Azure OpenAI:** `CHAT_BASE_URL=https://<resource>.openai.azure.com/openai/v1`, `CHAT_API_KEY`, and `CHAT_MODELS_CONFIG=config/chat-models.azure.yaml`. See Chat models.|",
+     "|Embeddings|`EMBEDDING_API_BASE_URL` + `EMBEDDING_API_KEY`. There is **no default**: without them, uploads are read and chunked but never become searchable. Azure OpenAI fits the default `EMBEDDING_INDEX` (`legacy-openai-1536`) as-is, with `text-embedding-3-large` deployed under that name. Gemini needs `EMBEDDING_INDEX=gemini-embedding-768` on a fresh database.|"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    76,
+    35,
+    72
+   ],
+   [
+    "replace",
+    76,
+    77,
+    72,
+    73,
+    [
+     "Nothing else creates schema — see Changing the database."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    83,
+    73,
+    79
+   ],
+   [
+    "replace",
+    83,
+    85,
+    79,
+    80,
+    [
+     " Windows (no <code>make</code>) "
+    ]
+   ],
+   [
+    "equal",
+    85,
+    94,
+    80,
+    89
+   ],
+   [
+    "replace",
+    94,
+    97,
+    89,
+    90,
+    [
+     "Or install `make` via Chocolatey (`choco install make`) or Scoop (`scoop install make`)."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    90,
+    93
+   ],
+   [
+    "replace",
+    100,
+    101,
+    93,
+    94,
+    [
+     "See `CONTRIBUTING.md` for the full dev guide."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    112,
+    94,
+    105
+   ],
+   [
+    "replace",
+    112,
+    113,
+    105,
+    106,
+    [
+     "a separate app (`apps/landing`) that Docker and Compose do not"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    116,
+    106,
+    109
+   ],
+   [
+    "replace",
+    116,
+    119,
+    109,
+    110,
+    [
+     "Self-hosting defaults."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    110,
+    113
+   ],
+   [
+    "replace",
+    122,
+    123,
+    113,
+    114,
+    [
+     "**`REPOSITORY.md`** is the map: every directory, all deploy targets, and which areas are engine versus hosted product. Read it before the layout below surprises you."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    114,
+    115
+   ],
+   [
+    "replace",
+    124,
+    125,
+    115,
+    116,
+    [
+     "|Path|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    116,
+    117
+   ],
+   [
+    "replace",
+    126,
+    136,
+    117,
+    125,
+    [
+     "|`apps/web`|The Next.js app: UI, auth, command acceptance, synchronous reads.|",
+     "|`apps/landing`|The public site (launchstack.app): landing, pricing, contact, deployment guide. No database, no auth; **not** part of any self-hosted deployment.|",
+     "|`apps/worker`|The durable workflow coordinator — consumes the ingestion outbox and hosts the background jobs (ADR-003).|",
+     "|`packages/`|The bricks: persistence, model calls, orchestration, conversion, indexing, retrieval, shared tools and independent clients. See `packages/README.md` for the spine and side packages.|",
+     "|`packages/engine`|The one-install engine aggregate: `createEngine(CoreConfig)` assembles the engine spine and re-exports selected brick APIs.|",
+     "|`pipelines/`|One package, `@launchstack/pipelines`, containing 13 product verticals that compose the bricks. Bricks never import pipelines.|",
+     "|`services/`|Compute services — document-converter (Node), transcription and adeu-ai-docs-editing (Python). Not part of the pnpm workspace; each manages its own dependencies.|",
+     "|`scripts/`|`ci/` for gates, `ops/` for operational tasks, `dev/` for manual developer probes.|"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    139,
+    125,
+    128
+   ],
+   [
+    "replace",
+    139,
+    140,
+    128,
+    129,
+    [
+     "|Package|Status|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    129,
+    130
+   ],
+   [
+    "replace",
+    141,
+    159,
+    130,
+    148,
+    [
+     "|`@launchstack/engine`|unpublished|`createEngine(CoreConfig)`: database, storage and graph handles; registration of the engine's shared configuration and ports.|",
+     "|`@launchstack/runtime`|unpublished|Host ports, actor context, typed errors and HMR-safe singleton slots.|",
+     "|`@launchstack/evidence`|unpublished|Pure company-state logic: evidence, citations, versioning, conflicts, reconciliation and freshness.|",
+     "|`@launchstack/store`|unpublished|Drizzle/Postgres persistence, engine schema and migrations, credentials, file tokens and credits.|",
+     "|`@launchstack/llm`|unpublished|Structured output, guardrails, chat configuration, model providers and embeddings.|",
+     "|`@launchstack/orchestration`|unpublished|Transactional outbox, source lifecycle, worker tick and stage ports.|",
+     "|`@launchstack/conversion`|unpublished|Sources to `EvidenceDocument`: document conversion, OCR, transcription and archive expansion.|",
+     "|`@launchstack/indexing`|unpublished|Chunking, embeddings, entity extraction, Neo4j sync and the document-ingestion pipeline.|",
+     "|`@launchstack/retrieval`|unpublished|Hybrid retrieval, reranking and permission-scoped citations.|",
+     "|`@launchstack/tools`|unpublished|Shared capabilities composed by verticals: company context, web research, social publishing, grants and stage execution.|",
+     "|`@launchstack/editing`|unpublished|Typed client and wire contract for adeu tracked-changes Word editing.|",
+     "|`@launchstack/collab`|unpublished|Channels, multi-agent meetings, human takeover and signed HTTP coordination.|",
+     "|`@launchstack/document-conversion-engine`|unpublished|Gotenberg client for Office, HTML and Markdown to PDF.|",
+     "|`@launchstack/google-drive`|unpublished|Drive v3 and OAuth token client with injected credentials.|",
+     "|`@launchstack/schema-generator`|unpublished|Versioned JSON Schema bundle from conversion, orchestration and editing wire contracts.|",
+     "|`@launchstack/design-tokens`|private|Shared CSS design tokens for the apps.|",
+     "|`@launchstack/pipelines`|unpublished|12 verticals: client-prospector, company-metadata, connectors, distribution, email, founder-weekly-review, marketing, proposals, repo-explainer, repo-workspace, trend-search and vantage.|",
+     "|`apps/web`|—|The Next.js reference app — how we wire everything together|"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    161,
+    148,
+    150
+   ],
+   [
+    "delete",
+    161,
+    163,
+    150,
+    150
+   ],
+   [
+    "equal",
+    163,
+    172,
+    150,
+    159
+   ],
+   [
+    "replace",
+    172,
+    192,
+    159,
+    160,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    197,
+    160,
+    165
+   ],
+   [
+    "replace",
+    197,
+    198,
+    165,
+    166,
+    [
+     "- `eslint.config.js` declares these boundaries and CI enforces them: lint is blocking (ADR-006). The engine spine has lint-enforced no-env rules, with transcription-client exceptions; `tools` and `editing` allow env reads, and `schema-generator` has no no-env rule."
+    ]
+   ],
+   [
+    "equal",
+    198,
+    201,
+    166,
+    169
+   ],
+   [
+    "replace",
+    201,
+    202,
+    169,
+    170,
+    [
+     "`createEngine(config)` opens the database pool and registers the database, storage, metering and Neo4j slots, plus credits and RAG ports when supplied. Several subsystems need **separate** registration calls — `apps/web/src/server/engine.ts` makes seven: the host-local `configureAppChatModels`, `configureEmbeddingIndexRegistry`, `configureCompanyEmbeddingDefaults`, `configureProviders`, `configureSecretBox`, `configureOcr` and `configureEntityExtraction`. The chat helper loads the app's YAML and registers the same `config.llm.chat` that `createEngine` applies; a custom host can pass a chat config directly without that app-local helper. Slots are read lazily, so register them before a subsystem is first *used*."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    207,
+    170,
+    175
+   ],
+   [
+    "replace",
+    207,
+    274,
+    175,
+    176,
+    [
+     "…（67 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    280,
+    176,
+    182
+   ],
+   [
+    "delete",
+    280,
+    282,
+    182,
+    182
+   ],
+   [
+    "equal",
+    282,
+    284,
+    182,
+    184
+   ],
+   [
+    "replace",
+    284,
+    285,
+    184,
+    185,
+    [
+     "`apps/web` is a Next.js app built on the engine. It demonstrates:"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    319,
+    185,
+    219
+   ],
+   [
+    "replace",
+    319,
+    323,
+    219,
+    220,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    328,
+    220,
+    225
+   ],
+   [
+    "replace",
+    328,
+    329,
+    225,
+    226,
+    [
+     "See docs/chat-models.md for presets, route inheritance,"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    346,
+    226,
+    243
+   ],
+   [
+    "replace",
+    346,
+    347,
+    243,
+    244,
+    [
+     "|Source|Export|Adapter|"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    348,
+    244,
+    245
+   ],
+   [
+    "replace",
+    348,
+    353,
+    245,
+    250,
+    [
+     "|Notion|Markdown & CSV / HTML|TextAdapter, HtmlAdapter|",
+     "|Google Docs / Sheets|DOCX / CSV / XLSX|DocxAdapter, SpreadsheetAdapter|",
+     "|Google Drive|Takeout ZIP|ZipAdapter (delegates per entry)|",
+     "|Slack|Workspace export JSON|JsonExportAdapter|",
+     "|GitHub|Code ZIP, `gh issue/pr list --json`|ZipAdapter, JsonExportAdapter|"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    358,
+    250,
+    255
+   ],
+   [
+    "delete",
+    358,
+    360,
+    255,
+    255
+   ],
+   [
+    "equal",
+    360,
+    362,
+    255,
+    257
+   ],
+   [
+    "replace",
+    362,
+    363,
+    257,
+    258,
+    [
+     "`@launchstack/engine` is the one-install aggregate: `createEngine(CoreConfig)` assembles the engine spine and re-exports selected runtime, database, conversion, indexing and orchestration APIs. Import model, OCR, embedding and retrieval APIs from their owning bricks' public subpaths; individual bricks can also be consumed separately. CI checks the declared publishable subpaths under plain Node ESM (`scripts/ci/check-package-exports.mjs`). The engine package reads no `process.env` (lint-enforced) — configuration arrives through `CoreConfig`, typed ports and separate `configure*` hooks; `apps/web/src/server/engine.ts` is the reference composition root."
+    ]
+   ],
+   [
+    "equal",
+    363,
+    364,
+    258,
+    259
+   ],
+   [
+    "replace",
+    364,
+    367,
+    259,
+    260,
+    [
+     "One tenancy caveat remains by design: the engine's search contract is keyed on `companyId`, so a consumer adopts that workspace model (without inheriting auth, billing, or product tables). See `REPOSITORY.md`."
+    ]
+   ],
+   [
+    "equal",
+    367,
+    370,
+    260,
+    263
+   ],
+   [
+    "replace",
+    370,
+    374,
+    263,
+    265,
+    [
+     "- **Issues** — github.com/Deodat-Lawson/LaunchStack/issues",
+     "- **Security** — email per SECURITY.md"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    376,
+    265,
+    267
+   ],
+   [
+    "replace",
+    376,
+    383,
+    267,
+    268,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    384,
+    268,
+    269
+   ],
+   [
+    "replace",
+    384,
+    395,
+    269,
+    270,
+    [
+     "Licensed under the Apache License 2.0. By contributing you agree your contributions will be released under the same license."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "4dc56eab9f36+2": {
+  "fn": "quuuuj/hrm",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    11,
+    6,
+    11,
+    [
+     "|项目|地址|",
+     "|:---|:---|",
+     "|系统入口|<https://hrm.qiujie.net.cn>|",
+     "|接口文档（Swagger UI）|<https://hrm.qiujie.net.cn/api/swagger-ui.html>|",
+     "|健康检查|<https://hrm.qiujie.net.cn/api/actuator/health>|"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    15,
+    11,
+    15
+   ],
+   [
+    "delete",
+    15,
+    17,
+    15,
+    15
+   ],
+   [
+    "equal",
+    17,
+    26,
+    15,
+    24
+   ],
+   [
+    "delete",
+    26,
+    28,
+    24,
+    24
+   ],
+   [
+    "equal",
+    28,
+    31,
+    24,
+    27
+   ],
+   [
+    "replace",
+    31,
+    32,
+    27,
+    28,
+    [
+     " - 加班时长核算（`OvertimeUtil`）、薪资核算（`SalaryUtil`，含社保公积金扣减与考勤扣款）以及请假审批副作用处理（`ManagerApproveListener`）收敛为无框架依赖的纯函数领域模型，具备极高的单测覆盖与维护确定性。"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    28,
+    29
+   ],
+   [
+    "replace",
+    33,
+    34,
+    29,
+    30,
+    [
+     " - 深度整合 Spring Boot 3.4 与 Flowable 引擎，引擎表存放在同实例的 `hrm_flowable` 库，通过 `hrm_flowable.` 库名前缀复用 master 连接；业务状态与流程推进共享同一个本地事务，一侧失败时两边一起回滚。"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    30,
+    31
+   ],
+   [
+    "replace",
+    35,
+    36,
+    31,
+    32,
+    [
+     " - 基于 httpOnly Cookie 的双 Token（Access Token + Refresh Token）鉴权体系，前端拦截器透明处理并发无感刷新，阻断 XSS 与 Token 劫持风险。"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    32,
+    33
+   ],
+   [
+    "replace",
+    37,
+    38,
+    33,
+    34,
+    [
+     " - `FileTaskService` → `FileTaskEngine` 流式读写 Excel（EasyExcel），按批次回调业务校验与入库，逐行记录失败原因；任务进度经 SSE 实时推送，结束后可下载错误明细文件。前端通过 `/file-upload/init` + `/file-upload/chunks` 分片上传，文件中心与业务导入共用同一套协议。"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    34,
+    35
+   ],
+   [
+    "replace",
+    39,
+    40,
+    35,
+    36,
+    [
+     " - 采用 MySQL（业务）+ Redis（验证码/缓存）+ PostgreSQL/pgvector（向量库）+ MinIO（对象存储）的多引擎存储架构；文档解析（PDF / DOCX / Markdown / TXT）、切块与向量化构成完整 ETL 流水线，检索侧用「向量召回 + 关键词召回 → RRF 融合 → DashScope 精排」提升语义命中率。"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    36,
+    37
+   ],
+   [
+    "replace",
+    41,
+    42,
+    37,
+    38,
+    [
+     " - 搭载兼容 DashScope / OpenAI 规范的智能问答服务，先经意图闸门（知识问答 / 闲聊 / 无关）分流，再结合知识库检索结果与员工静态上下文（部门、岗位等档案信息）生成回答；回答带证据充分度评估与引用编号，全程流式输出。"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    38,
+    39
+   ],
+   [
+    "replace",
+    43,
+    46,
+    39,
+    40,
+    [
+     " - 通知落库 + SSE 实时推送，支持未读数、标记已读与分页查询，审批结果与异步任务完成均通过同一通道触达。"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    52,
+    40,
+    46
+   ],
+   [
+    "replace",
+    52,
+    55,
+    46,
+    49,
+    [
+     "|登录界面|首页仪表盘（工作台与考勤日历）|",
+     "|:---:|:---:|",
+     "|登录界面|首页仪表盘|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    57,
+    49,
+    51
+   ],
+   [
+    "replace",
+    57,
+    62,
+    51,
+    56,
+    [
+     "|员工管理|部门管理|",
+     "|:---:|:---:|",
+     "|员工管理|部门管理|",
+     "|**文件中心**||",
+     "|文件管理||"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    64,
+    56,
+    58
+   ],
+   [
+    "replace",
+    64,
+    67,
+    58,
+    61,
+    [
+     "|角色权限分配|菜单权限配置|",
+     "|:---:|:---:|",
+     "|角色管理|菜单管理|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    69,
+    61,
+    63
+   ],
+   [
+    "replace",
+    69,
+    74,
+    63,
+    68,
+    [
+     "|请假申请与审批|考勤表现分析|",
+     "|:---:|:---:|",
+     "|请假审批|考勤表现|",
+     "|**加班详情核算**||",
+     "|加班详情||"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    76,
+    68,
+    70
+   ],
+   [
+    "replace",
+    76,
+    79,
+    70,
+    73,
+    [
+     "|员工薪资管理|参保城市与五险一金比例|",
+     "|:---:|:---:|",
+     "|薪资管理|参保城市|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    81,
+    73,
+    75
+   ],
+   [
+    "replace",
+    81,
+    86,
+    75,
+    78,
+    [
+     "|智能问答（会话与流式回答）|",
+     "|:---:|",
+     "|智能问答|"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    95,
+    78,
+    87
+   ],
+   [
+    "replace",
+    95,
+    121,
+    87,
+    88,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    88,
+    89
+   ],
+   [
+    "delete",
+    122,
+    124,
+    89,
+    89
+   ],
+   [
+    "equal",
+    124,
+    129,
+    89,
+    94
+   ],
+   [
+    "replace",
+    129,
+    147,
+    94,
+    112,
+    [
+     "|技术组件|版本|用途与说明|",
+     "|:---|:---|:---|",
+     "|**Java**|17|开发语言运行环境|",
+     "|**Spring Boot**|3.4.4|现代化微服务脚手架与依赖管理|",
+     "|**MyBatis-Plus**|3.5.10|ORM 增强框架，支持多数据源隔离与灵活查询|",
+     "|**Flowable**|8.0.0|原生支持 Spring Boot 3 的企业级工作流引擎|",
+     "|**Spring AI**|1.0.0|大模型抽象层（`spring-ai-starter-model-openai`），对接 DashScope OpenAI 兼容端点|",
+     "|**Spring Security**|6.4.x|细粒度 RBAC 安全认证与授权控制|",
+     "|**JJWT**|0.11.5|无状态的双 Token 签名、加解密与有效期校验|",
+     "|**SpringDoc OpenAPI**|2.8.10|遵循 OpenAPI 3.1 规范的接口交互文档（Swagger UI）|",
+     "|**EasyExcel**|3.3.4|流式 Excel 读写，支撑异步导入导出与错误明细|",
+     "|**PDFBox / POI**|2.0.31 / 5.2.5|知识库 PDF 与 DOCX 文档文本抽取|",
+     "|**Hutool**|5.8.25|通用工具集（日期、字符串处理等）|",
+     "|**MinIO Client**|8.5.7|S3 兼容对象存储客户端，管理附件与制度文档|",
+     "|**MySQL**|8.1|主业务数据库（`hrm`）；Flowable 引擎表存于同实例的 `hrm_flowable` 库，由 master 数据源以 `hrm_flowable.` 库名前缀访问|",
+     "|**PostgreSQL**|16 (pgvector)|知识库分块与 `vector(1024)` 高维向量存储（`hrm_kb`）|",
+     "|**Redis**|5.0|图形验证码与缓存，key 统一带 `hrm:` 前缀|",
+     "|**MinIO**|Latest|S3 兼容的高性能私有化对象存储服务|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    150,
+    112,
+    115
+   ],
+   [
+    "replace",
+    150,
+    162,
+    115,
+    125,
+    [
+     "|技术组件|版本|用途与说明|",
+     "|:---|:---|:---|",
+     "|**Vue.js**|2.6.14|核心渐进式前端渲染框架|",
+     "|**Element UI**|2.15.7|经典桌面端企业级 UI 组件库|",
+     "|**Vue Router**|3.5.3|前端路由管理，支持基于后端动态菜单的路由载入|",
+     "|**Vuex**|3.6.2|全局集中式状态管理（用户信息、权限点列表等）|",
+     "|**Axios**|0.25.0|网络请求库，封装响应拦截器以支持 401 自动无感静默刷新|",
+     "|**ECharts**|5.3.0|首页仪表盘考勤分布与可视化图表分析|",
+     "|**marked + DOMPurify**|4.3.0 / 3.4.17|智能问答回答的 Markdown 渲染与 XSS 消毒|",
+     "|**Moment.js**|2.30.1|日期格式化与考勤日历计算|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    169,
+    125,
+    132
+   ],
+   [
+    "replace",
+    169,
+    236,
+    132,
+    133,
+    [
+     "…（67 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    133,
+    134
+   ],
+   [
+    "delete",
+    237,
+    239,
+    134,
+    134
+   ],
+   [
+    "equal",
+    239,
+    246,
+    134,
+    141
+   ],
+   [
+    "replace",
+    246,
+    301,
+    141,
+    142,
+    [
+     "…（55 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    313,
+    142,
+    154
+   ],
+   [
+    "delete",
+    313,
+    315,
+    154,
+    154
+   ],
+   [
+    "equal",
+    315,
+    332,
+    154,
+    171
+   ],
+   [
+    "delete",
+    332,
+    334,
+    171,
+    171
+   ],
+   [
+    "equal",
+    334,
+    341,
+    171,
+    178
+   ],
+   [
+    "replace",
+    341,
+    347,
+    178,
+    179,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    348,
+    179,
+    180
+   ],
+   [
+    "delete",
+    348,
+    350,
+    180,
+    180
+   ],
+   [
+    "equal",
+    350,
+    364,
+    180,
+    194
+   ],
+   [
+    "replace",
+    364,
+    369,
+    194,
+    195,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    372,
+    195,
+    198
+   ],
+   [
+    "delete",
+    372,
+    374,
+    198,
+    198
+   ],
+   [
+    "equal",
+    374,
+    384,
+    198,
+    208
+   ],
+   [
+    "delete",
+    384,
+    386,
+    208,
+    208
+   ],
+   [
+    "equal",
+    386,
+    402,
+    208,
+    224
+   ],
+   [
+    "replace",
+    402,
+    406,
+    224,
+    225,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    406,
+    407,
+    225,
+    226
+   ],
+   [
+    "delete",
+    407,
+    409,
+    226,
+    226
+   ],
+   [
+    "equal",
+    409,
+    417,
+    226,
+    234
+   ],
+   [
+    "delete",
+    417,
+    419,
+    234,
+    234
+   ],
+   [
+    "equal",
+    419,
+    421,
+    234,
+    236
+   ],
+   [
+    "replace",
+    421,
+    433,
+    236,
+    248,
+    [
+     "|配置键|说明|",
+     "|:---|:---|",
+     "|`llm.*`|对话 / Embedding / 重排模型的凭据、端点与模型名，来自 `.env` 的 `LLM_*` 变量|",
+     "|`knowledge.enabled`|知识库模块总开关|",
+     "|`knowledge.chunk.*`|文档切块长度与重叠字符数|",
+     "|`chat.retrieval.*`|向量/关键词召回条数、RRF 融合参数、重排开关与候选池大小|",
+     "|`chat.qa.*`|问答证据充分度分级阈值|",
+     "|`chat.window-max-chars` / `chat.max-context-chars`|会话窗口与检索上下文长度预算|",
+     "|`notification.retention-days`|站内通知保留天数（默认 30，定时清理）|",
+     "|`file-task.retention-days`|异步任务产物与相关通知保留天数（默认 30）|",
+     "|`storage.minio.*`|对象存储端点、凭据与桶名|",
+     "|`flowable.table-prefix`|固定为 `hrm_flowable.`，复用主数据源且关闭引擎建表|"
+    ]
+   ],
+   [
+    "equal",
+    433,
+    436,
+    248,
+    251
+   ],
+   [
+    "delete",
+    436,
+    438,
+    251,
+    251
+   ],
+   [
+    "equal",
+    438,
+    440,
+    251,
+    253
+   ],
+   [
+    "replace",
+    440,
+    443,
+    253,
+    256,
+    [
+     "|渠道|信息|",
+     "|:---|:---|",
+     "|**QQ 交流群**|`967925576`|"
+    ]
+   ],
+   [
+    "equal",
+    443,
+    446,
+    256,
+    259
+   ],
+   [
+    "delete",
+    446,
+    448,
+    259,
+    259
+   ],
+   [
+    "equal",
+    448,
+    450,
+    259,
+    261
+   ],
+   [
+    "replace",
+    450,
+    451,
+    261,
+    262,
+    [
+     "本项目基于 GNU General Public License v3.0 开源。"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "0c99b4c78d05+2": {
+  "fn": "mihnea-radulescu/imagefanreloaded",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "It is written in C#, and targets .NET 11 on Linux and Windows. It relies on Avalonia, as its UI framework, on Magick.NET, as its image processing library, and on SQLite, as its thumbnail cache database."
+    ]
+   ],
+   [
+    "equal",
+    4,
+    62,
+    4,
+    62
+   ],
+   [
+    "replace",
+    62,
+    63,
+    62,
+    63,
+    [
+     "Screenshot Main Dark"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    63,
+    64
+   ],
+   [
+    "replace",
+    64,
+    65,
+    64,
+    65,
+    [
+     "Screenshot Main Light"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    65,
+    66
+   ],
+   [
+    "replace",
+    66,
+    67,
+    66,
+    67,
+    [
+     "Screenshot Main Recursive Folder Browsing"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    67,
+    68
+   ],
+   [
+    "replace",
+    68,
+    69,
+    68,
+    69,
+    [
+     "Screenshot Image Edit"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    69,
+    70
+   ],
+   [
+    "replace",
+    70,
+    71,
+    70,
+    71,
+    [
+     "Screenshot Tab Options"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "c13e5889b6a5+2": {
+  "fn": "FROWNINGdev/orm-lens",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "**English** · Русский · Español · 中文"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    3,
+    [
+     "ORM Lens — live sidebar and ER diagram for your Django and SQLAlchemy models"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    15,
+    3,
+    10
+   ],
+   [
+    "replace",
+    15,
+    16,
+    10,
+    11,
+    [
+     " Formerly **django-orm-lens**. `pip install django-orm-lens` still works and installs orm-lens. "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    11,
+    14
+   ],
+   [
+    "replace",
+    19,
+    20,
+    14,
+    20,
+    [
+     "PyPI",
+     "Python",
+     "Django versions",
+     "CI",
+     "Downloads",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    24,
+    [
+     "Install on VS Code",
+     "Install on Open VSX",
+     "Docker GHCR"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    24,
+    25
+   ],
+   [
+    "replace",
+    23,
+    45,
+    25,
+    26,
+    [
+     " Featured in Django News #347 · PyCoder's Weekly #746 "
+    ]
+   ],
+   [
+    "equal",
+    45,
+    54,
+    26,
+    35
+   ],
+   [
+    "replace",
+    54,
+    55,
+    35,
+    36,
+    [
+     "Cold clone, broken venv, no settings module — you still see every app and model of the project, then the N+1 loops and risky migrations in it, right in your terminal. (`uvx` is from uv; `pipx run` works the same way.)"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    58,
+    36,
+    39
+   ],
+   [
+    "replace",
+    58,
+    59,
+    39,
+    40,
+    [
+     "|You are|Install|You get|"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    40,
+    41
+   ],
+   [
+    "replace",
+    60,
+    63,
+    41,
+    44,
+    [
+     "|**Editor user** (Django) — VS Code / Cursor / Windsurf / VSCodium|`code --install-extension frowningdev.django-orm-lens`|Field autocomplete in `.filter()`, sidebar tree, live ER diagram, hover cards, 18 lint rules with QuickFixes|",
+     "|**Terminal / CI user**|`pip install orm-lens`|17 subcommands, SARIF + PR annotations, pre-commit hooks, a GitHub Action|",
+     "|**AI-agent user** — Cursor / Claude Code / Aider / Zed / Continue|`pip install \"orm-lens[mcp]\"`|14 read-only MCP tools answering schema questions from ground truth|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    44,
+    45
+   ],
+   [
+    "replace",
+    64,
+    67,
+    45,
+    46,
+    [
+     "MCP setup is one JSON block — see Integrations. Point `ORM_LENS_ROOT` at your project's absolute path."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    74,
+    46,
+    53
+   ],
+   [
+    "replace",
+    74,
+    75,
+    53,
+    54,
+    [
+     "|Capability usually sold as a paid tier|Here|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    54,
+    55
+   ],
+   [
+    "replace",
+    76,
+    83,
+    55,
+    62,
+    [
+     "|PR review bot for schema changes — posts once, then updates in place|`blast-radius` + the Action|",
+     "|Analysis that follows a queryset across functions|`nplusone`|",
+     "|Schema drift detection|`drift`|",
+     "|Index proposals from observed QuerySet usage|`suggest-indexes`|",
+     "|Migration risk weighed against real table sizes|`blast-radius --stats`|",
+     "|Blast radius of a destructive migration|`blast-radius`|",
+     "|Cross-layer impact of removing a field|`impact`|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    62,
+    65
+   ],
+   [
+    "delete",
+    86,
+    88,
+    65,
+    65
+   ],
+   [
+    "equal",
+    88,
+    90,
+    65,
+    67
+   ],
+   [
+    "replace",
+    90,
+    91,
+    67,
+    76,
+    [
+     "GitHub stars",
+     "Forks",
+     "Contributors",
+     "PyPI monthly",
+     "Total downloads",
+     "Open VSX downloads",
+     "VS Code installs",
+     "Marketplace rating",
+     "Last commit"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    76,
+    77
+   ],
+   [
+    "replace",
+    92,
+    93,
+    77,
+    81,
+    [
+     "MCP Registry",
+     "Glama",
+     "awesome-mcp-servers",
+     "mcp.so"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    81,
+    82
+   ],
+   [
+    "replace",
+    94,
+    129,
+    82,
+    83,
+    [
+     "> If the tool saves you a `grep` next time you touch a strange Django project — **a star helps others find it**."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    132,
+    83,
+    86
+   ],
+   [
+    "replace",
+    132,
+    141,
+    86,
+    87,
+    [
+     " <a href=\"https://www.star-history.com/?repos=FROWNINGdev%2Form-lens&type=date&legend=top-left\">"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    87,
+    88
+   ],
+   [
+    "replace",
+    142,
+    143,
+    88,
+    91,
+    [
+     " Star history of FROWNINGdev/orm-lens",
+     "",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    177,
+    91,
+    125
+   ],
+   [
+    "delete",
+    177,
+    179,
+    125,
+    125
+   ],
+   [
+    "equal",
+    179,
+    191,
+    125,
+    137
+   ],
+   [
+    "delete",
+    191,
+    193,
+    137,
+    137
+   ],
+   [
+    "equal",
+    193,
+    194,
+    137,
+    138
+   ],
+   [
+    "delete",
+    194,
+    198,
+    138,
+    138
+   ],
+   [
+    "equal",
+    198,
+    205,
+    138,
+    145
+   ],
+   [
+    "delete",
+    205,
+    208,
+    145,
+    145
+   ],
+   [
+    "equal",
+    208,
+    214,
+    145,
+    151
+   ],
+   [
+    "delete",
+    214,
+    219,
+    151,
+    151
+   ],
+   [
+    "equal",
+    219,
+    222,
+    151,
+    154
+   ],
+   [
+    "delete",
+    222,
+    225,
+    154,
+    154
+   ],
+   [
+    "equal",
+    225,
+    230,
+    154,
+    159
+   ],
+   [
+    "delete",
+    230,
+    235,
+    159,
+    159
+   ],
+   [
+    "equal",
+    235,
+    238,
+    159,
+    162
+   ],
+   [
+    "delete",
+    238,
+    241,
+    162,
+    162
+   ],
+   [
+    "equal",
+    241,
+    246,
+    162,
+    167
+   ],
+   [
+    "delete",
+    246,
+    252,
+    167,
+    167
+   ],
+   [
+    "equal",
+    252,
+    253,
+    167,
+    168
+   ],
+   [
+    "delete",
+    253,
+    257,
+    168,
+    168
+   ],
+   [
+    "equal",
+    257,
+    264,
+    168,
+    175
+   ],
+   [
+    "delete",
+    264,
+    267,
+    175,
+    175
+   ],
+   [
+    "equal",
+    267,
+    272,
+    175,
+    180
+   ],
+   [
+    "delete",
+    272,
+    277,
+    180,
+    180
+   ],
+   [
+    "equal",
+    277,
+    284,
+    180,
+    187
+   ],
+   [
+    "delete",
+    284,
+    287,
+    187,
+    187
+   ],
+   [
+    "equal",
+    287,
+    292,
+    187,
+    192
+   ],
+   [
+    "delete",
+    292,
+    297,
+    192,
+    192
+   ],
+   [
+    "equal",
+    297,
+    304,
+    192,
+    199
+   ],
+   [
+    "delete",
+    304,
+    307,
+    199,
+    199
+   ],
+   [
+    "equal",
+    307,
+    312,
+    199,
+    204
+   ],
+   [
+    "delete",
+    312,
+    317,
+    204,
+    204
+   ],
+   [
+    "equal",
+    317,
+    324,
+    204,
+    211
+   ],
+   [
+    "delete",
+    324,
+    327,
+    211,
+    211
+   ],
+   [
+    "equal",
+    327,
+    333,
+    211,
+    217
+   ],
+   [
+    "delete",
+    333,
+    339,
+    217,
+    217
+   ],
+   [
+    "equal",
+    339,
+    341,
+    217,
+    219
+   ],
+   [
+    "replace",
+    341,
+    344,
+    219,
+    220,
+    [
+     "VS Code with ORM Lens: the model tree, ORM diagnostics in views.py and the live ER diagram"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    351,
+    220,
+    227
+   ],
+   [
+    "replace",
+    351,
+    366,
+    227,
+    228,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    366,
+    374,
+    228,
+    236
+   ],
+   [
+    "delete",
+    374,
+    376,
+    236,
+    236
+   ],
+   [
+    "equal",
+    376,
+    394,
+    236,
+    254
+   ],
+   [
+    "replace",
+    394,
+    397,
+    254,
+    255,
+    [
+     "Tuned against Superset, Airflow, Prefect, Polar, Dispatch, Mealie, CTFd, Redash and the FastAPI template: 517 models read, and every N+1 finding on them checked by hand and real. Details: SQLAlchemy models · Alembic rules. The VS Code extension is Django-only for now."
+    ]
+   ],
+   [
+    "equal",
+    397,
+    408,
+    255,
+    266
+   ],
+   [
+    "replace",
+    408,
+    423,
+    266,
+    267,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    427,
+    267,
+    271
+   ],
+   [
+    "replace",
+    427,
+    428,
+    271,
+    272,
+    [
+     "> **Alembic (preview):** `migration-risk` also checks Alembic revisions — NOT NULL without `server_default`, indexes without `CONCURRENTLY`, multiple heads and nine more rules — so SQLAlchemy projects without Django (FastAPI, Flask) get the same static migration review."
+    ]
+   ],
+   [
+    "equal",
+    428,
+    429,
+    272,
+    273
+   ],
+   [
+    "replace",
+    429,
+    430,
+    273,
+    274,
+    [
+     "> **Django 6.1:** `on_delete=models.DB_CASCADE` deletes child rows in the database, so their `post_delete` handlers never run. Since **py-1.13.8**, `cascade` names the handlers each `DB_CASCADE` relation skips — why that matters and what to do."
+    ]
+   ],
+   [
+    "equal",
+    430,
+    437,
+    274,
+    281
+   ],
+   [
+    "replace",
+    437,
+    453,
+    281,
+    297,
+    [
+     "|Tool|Purpose|",
+     "|---|---|",
+     "|`list_apps`|Every Django app in the workspace with model counts|",
+     "|`list_models`|Flat `app.Model` list, optional app filter|",
+     "|`describe_model`|Full field / relation / Meta detail for one model|",
+     "|`find_relations`|Inbound + outbound relations for one model|",
+     "|`cascade_preview`|Blast radius of one `delete()`, grouped by `on_delete`, plus the `post_delete` receivers Django 6.1's `DB_CASCADE` skips|",
+     "|`er_diagram`|ER diagram — `mermaid` / `dbml` / `d2` / `plantuml` / `dot`|",
+     "|`describe_migration_dependency`|Per-app migration DAG: roots, leaves, cross-app deps|",
+     "|`suggest_indexes`|`Meta.indexes` proposals from observed QuerySet usage|",
+     "|`signal_graph`|Sender→signal→handler graph from `@receiver` decorators and `signal.connect()` calls|",
+     "|`migration_risk`|Dangerous schema changes in Django migrations & Alembic revisions (table locks, dropped columns)|",
+     "|`blast_radius`|What a destructive migration hits: its risks, the code still reading it, the cascade fallout|",
+     "|`drift`|`makemigrations --check` without booting Django — migrations diffed against `models.py`|",
+     "|`impact`|Every reference to a field or model name, grouped by Django layer|",
+     "|`nplusone_scan`|Static N+1 findings for the whole workspace|"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    473,
+    297,
+    317
+   ],
+   [
+    "replace",
+    473,
+    474,
+    317,
+    318,
+    [
+     "that. `skills/orm-lens` is a SKILL.md"
+    ]
+   ],
+   [
+    "equal",
+    474,
+    480,
+    318,
+    324
+   ],
+   [
+    "replace",
+    480,
+    481,
+    324,
+    325,
+    [
+     "- Install from Agensi (free), or"
+    ]
+   ],
+   [
+    "equal",
+    481,
+    487,
+    325,
+    331
+   ],
+   [
+    "delete",
+    487,
+    489,
+    331,
+    331
+   ],
+   [
+    "equal",
+    489,
+    500,
+    331,
+    342
+   ],
+   [
+    "replace",
+    500,
+    515,
+    342,
+    343,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    515,
+    519,
+    343,
+    347
+   ],
+   [
+    "replace",
+    519,
+    521,
+    347,
+    348,
+    [
+     "> The Action installs from PyPI, so `blast-radius` and `drift` need **py-1.7.0** or later — pin it with `version: 1.7.0` if your workflow must not drift. To run an unreleased build instead, add `install: false` and install the source yourself; this repo's own workflow does exactly that, and is what verifies the Action on every PR."
+    ]
+   ],
+   [
+    "equal",
+    521,
+    528,
+    348,
+    355
+   ],
+   [
+    "replace",
+    528,
+    532,
+    355,
+    356,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    532,
+    556,
+    356,
+    380
+   ],
+   [
+    "delete",
+    556,
+    558,
+    380,
+    380
+   ],
+   [
+    "equal",
+    558,
+    560,
+    380,
+    382
+   ],
+   [
+    "replace",
+    560,
+    561,
+    382,
+    383,
+    [
+     "|Client|How to enable|Status|"
+    ]
+   ],
+   [
+    "equal",
+    561,
+    562,
+    383,
+    384
+   ],
+   [
+    "replace",
+    562,
+    573,
+    384,
+    395,
+    [
+     "|**VS Code**|`code --install-extension frowningdev.django-orm-lens`|✅|",
+     "|**Cursor**|same VSIX + optional MCP entry in `~/.cursor/mcp.json`|✅|",
+     "|**Windsurf / VSCodium / any Code fork**|install the VSIX from the Marketplace or GitHub Releases|✅|",
+     "|**Aider**|add `orm-lens-mcp` to your `mcp.json`|✅ (via MCP)|",
+     "|**Continue.dev**|register the MCP server in `~/.continue/config.json`|✅ (via MCP)|",
+     "|**Zed**|register the MCP server in Zed settings|✅ (via MCP)|",
+     "|**Any MCP-compatible client**|point `command` at `orm-lens-mcp`, set `ORM_LENS_ROOT`|✅|",
+     "|**pre-commit**|`repo: https://github.com/FROWNINGdev/orm-lens` + two hook ids|✅|",
+     "|**GitHub Actions**|`uses: FROWNINGdev/orm-lens@action-v1` — annotations or SARIF|✅|",
+     "|**Discoverable via MCP Registry**|official Model Context Protocol server directory|✅|",
+     "|**Plain terminal / CI**|`pip install orm-lens && orm-lens scan`|✅|"
+    ]
+   ],
+   [
+    "equal",
+    573,
+    580,
+    395,
+    402
+   ],
+   [
+    "replace",
+    580,
+    585,
+    402,
+    403,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    585,
+    586,
+    403,
+    404
+   ],
+   [
+    "delete",
+    586,
+    588,
+    404,
+    404
+   ],
+   [
+    "equal",
+    588,
+    600,
+    404,
+    416
+   ],
+   [
+    "delete",
+    600,
+    602,
+    416,
+    416
+   ],
+   [
+    "equal",
+    602,
+    611,
+    416,
+    425
+   ],
+   [
+    "delete",
+    611,
+    613,
+    425,
+    425
+   ],
+   [
+    "equal",
+    613,
+    617,
+    425,
+    429
+   ],
+   [
+    "replace",
+    617,
+    618,
+    429,
+    430,
+    [
+     "|Segment|Existing option|What it costs you|"
+    ]
+   ],
+   [
+    "equal",
+    618,
+    619,
+    430,
+    431
+   ],
+   [
+    "replace",
+    619,
+    624,
+    431,
+    436,
+    [
+     "|Boot-and-graph|`django-extensions graph_models`|Requires Graphviz + Django settings + a working DB URL|",
+     "|Web-based viewer|`django-schema-graph`|Requires a running Django server; hosts one more thing to break|",
+     "|Admin panel|Django Admin|Requires runserver + auth + database — great for data, not for architecture|",
+     "|Editor plugin|PyCharm's Django Structure|Locked to PyCharm; no CLI, no AI-agent story|",
+     "|MCP server|(none until now)|AI agents guess your schema from source, imperfectly|"
+    ]
+   ],
+   [
+    "equal",
+    624,
+    627,
+    436,
+    439
+   ],
+   [
+    "delete",
+    627,
+    629,
+    439,
+    439
+   ],
+   [
+    "equal",
+    629,
+    631,
+    439,
+    441
+   ],
+   [
+    "replace",
+    631,
+    632,
+    441,
+    442,
+    [
+     "||**ORM Lens**|`django-extensions graph_models`|`django-schema-graph`|Django Admin|PyCharm Django Structure|"
+    ]
+   ],
+   [
+    "equal",
+    632,
+    633,
+    442,
+    443
+   ],
+   [
+    "replace",
+    633,
+    646,
+    443,
+    456,
+    [
+     "|Works without a bootable Django project|✅|❌|❌|❌|⚠️|",
+     "|Zero-install (no graphviz, no server)|✅|❌|❌|❌|❌ (needs PyCharm)|",
+     "|Works in VS Code / Cursor / any Code fork|✅|❌|❌|❌|❌|",
+     "|Sidebar tree inside the editor|✅|❌|❌|❌|✅|",
+     "|Live ER diagram|✅|✅|✅|❌|❌|",
+     "|Hover cards on `ForeignKey`|✅|❌|❌|❌|⚠️|",
+     "|CodeLens on model classes|✅|❌|❌|❌|❌|",
+     "|Split `models/` package support|✅|⚠️|⚠️|✅|✅|",
+     "|CLI for terminal / CI|✅|⚠️|❌|❌|❌|",
+     "|MCP server for AI agents|✅|❌|❌|❌|❌|",
+     "|Discoverable in the MCP Registry|✅|❌|❌|❌|❌|",
+     "|Free & open-source (MIT)|✅|✅|✅|✅|❌ (paid IDE)|",
+     "|Django version support|**4.0 – 6.1**|latest|3.2 – 4.1 (stale since 2023)|latest|latest|"
+    ]
+   ],
+   [
+    "equal",
+    646,
+    652,
+    456,
+    462
+   ],
+   [
+    "delete",
+    652,
+    654,
+    462,
+    462
+   ],
+   [
+    "equal",
+    654,
+    663,
+    462,
+    471
+   ],
+   [
+    "replace",
+    663,
+    671,
+    471,
+    472,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    673,
+    472,
+    474
+   ],
+   [
+    "replace",
+    673,
+    674,
+    474,
+    475,
+    [
+     "|Setting|Type|Default|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    674,
+    675,
+    475,
+    476
+   ],
+   [
+    "replace",
+    675,
+    683,
+    476,
+    482,
+    [
+     "|`djangoOrmLens.excludeGlobs`|`string[]`|See above|Glob patterns to skip when scanning|",
+     "|`djangoOrmLens.autoRefresh`|`boolean`|`true`|Rescan on `models.py` changes|",
+     "|`djangoOrmLens.codeFixes.enabled`|`boolean`|`true`|Master switch for the DOL### diagnostics + QuickFixes|",
+     "|`djangoOrmLens.rules`|`object`|`{}`|Per-rule severity: `{ \"DOL007\": \"off\", \"DOL013\": \"error\" }`|",
+     "|`djangoOrmLens.rulesSelect`|`string[]`|`[]`|Ruff-style select. `[\"DOL0\"]` runs only queryset+model rules|",
+     "|`djangoOrmLens.rulesIgnore`|`string[]`|`[]`|Ruff-style ignore. `[\"DOL03\"]` silences form/view rules|"
+    ]
+   ],
+   [
+    "equal",
+    683,
+    688,
+    482,
+    487
+   ],
+   [
+    "replace",
+    688,
+    689,
+    487,
+    488,
+    [
+     "|Category|Rules|Examples|"
+    ]
+   ],
+   [
+    "equal",
+    689,
+    690,
+    488,
+    489
+   ],
+   [
+    "replace",
+    690,
+    697,
+    489,
+    496,
+    [
+     "|Queryset|`DOL001`–`DOL007`|`.count() > 0` → `.exists()`, FK access in loops (N+1)|",
+     "|Model definition|`DOL011`–`DOL015`|`ForeignKey` without `on_delete`, `null=True` on string fields|",
+     "|Datetime|`DOL021`–`DOL022`|`datetime.now()` → `timezone.now()`|",
+     "|Forms / views|`DOL031`–`DOL032`|`locals()` in `render()`, `Meta.fields = '__all__'`|",
+     "|Raw SQL|`DOL041`|`SET enable_hashjoin = off`, `plan_cache_mode`, `jit` overrides in app code|",
+     "|Migration risks|16 rules|NOT NULL add without default, table-locking index builds, irreversible data migrations|",
+     "|Static N+1|1 analyzer|FK/M2M access in loops without `select_related` / `prefetch_related`|"
+    ]
+   ],
+   [
+    "equal",
+    697,
+    698,
+    496,
+    497
+   ],
+   [
+    "replace",
+    698,
+    699,
+    497,
+    498,
+    [
+     "→ **Full rule reference** — every code with bad/good examples, QuickFix behaviour, and suppression syntax."
+    ]
+   ],
+   [
+    "equal",
+    699,
+    706,
+    498,
+    505
+   ],
+   [
+    "replace",
+    706,
+    710,
+    505,
+    506,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    710,
+    716,
+    506,
+    512
+   ],
+   [
+    "delete",
+    716,
+    718,
+    512,
+    512
+   ],
+   [
+    "equal",
+    718,
+    722,
+    512,
+    516
+   ],
+   [
+    "replace",
+    722,
+    723,
+    516,
+    517,
+    [
+     "|Command|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    723,
+    724,
+    517,
+    518
+   ],
+   [
+    "replace",
+    724,
+    736,
+    518,
+    528,
+    [
+     "|`ORM Lens: Refresh`|Force-rescan the workspace|",
+     "|`ORM Lens: Show ER Diagram`|Open the Mermaid ER diagram side-by-side|",
+     "|`ORM Lens: Filter Models`|Filter the tree by app / model / field name|",
+     "|`ORM Lens: Clear Filter`|Restore the full tree|",
+     "|`ORM Lens: Jump to Model`|Programmatic — triggered by tree clicks and hover cards|",
+     "|`ORM Lens: Find Reverse References`|Right-click a model — QuickPick of every FK pointing at it|",
+     "|`ORM Lens: Generate factory_boy Factory`|Right-click a model or use CodeLens — scaffold a `DjangoModelFactory`|",
+     "|`ORM Lens: Schema Diff (Time-Travel)`|Pick two commits — get a typed diff as a markdown buffer|",
+     "|`ORM Lens: Find Impact (What Uses This?)`|Right-click a field or model — workspace-wide reference scan|",
+     "|`ORM Lens: Build Query (Insert Snippet)`|Right-click a field or model — pick an ORM template|"
+    ]
+   ],
+   [
+    "equal",
+    736,
+    753,
+    528,
+    545
+   ],
+   [
+    "replace",
+    753,
+    755,
+    545,
+    547,
+    [
+     "- [x] **v0.3.1** — `through_model` on M2M edges (contributed by @kingrubic)",
+     "- [x] **v0.3.1** — Listed in the official MCP Registry + Glama.ai"
+    ]
+   ],
+   [
+    "equal",
+    755,
+    765,
+    547,
+    557
+   ],
+   [
+    "replace",
+    765,
+    767,
+    557,
+    559,
+    [
+     "- [x] **v0.7.3** — PEP-526 type annotations on fields (`jti: CharField[str] = models.CharField(...)`) now parse — reported by @jsabater (#25) with a clean Django Ninja 1.6 repro",
+     "- [x] **v0.7.4** — PEP-695 generic class headers (Python 3.12+): `class ContainerT:` now parses"
+    ]
+   ],
+   [
+    "equal",
+    767,
+    780,
+    559,
+    572
+   ],
+   [
+    "replace",
+    780,
+    781,
+    572,
+    573,
+    [
+     "- [x] `er --format dbml | d2 | plantuml | dot` — community-standard diagram exports (dbdiagram.io, D2, PlantUML, Graphviz — `dot` contributed by @JJordan0C)"
+    ]
+   ],
+   [
+    "equal",
+    781,
+    795,
+    573,
+    587
+   ],
+   [
+    "replace",
+    795,
+    802,
+    587,
+    594,
+    [
+     "- [x] `drift` documents its `!!` / `~` marks in the report and in `--help` — reported by @sevdog (#57)",
+     "- [x] `drift` follows inheritance from abstract bases — an abstract base's fields count as the concrete child's own, as Django treats them — reported by @sevdog (#58)",
+     "- [x] `suggest-index` recognises the indexes Django already made — primary key (`pk` and `id` are one lookup), `db_index`, `unique`, foreign keys, `unique_together`, `UniqueConstraint` — reported by @sevdog (#60), same cause independently found by @RinZ27 (#61)",
+     "- [x] A sixth golden fixture — Read the Docs joins Zulip, Saleor, Wagtail, django-CMS and Mezzanine, putting the parser under 75 models and 538 fields of real-world Django — contributed by @JJordan0C (#62, closing #51)",
+     "- [x] django-taggit `TaggableManager` is read as the M2M it is — through `taggit.TaggedItem` to `taggit.Tag`, `through=` overrides honoured, in both the Python and the TypeScript parser — contributed by @Guflly (#63, closing #50)",
+     "- [x] `DOL021` states the `USE_TZ` default correctly — `False` through Django 4.2, `True` from 5.0, with the `startproject` template's `USE_TZ = True` since 4.0 called out as the separate thing it is — and no longer claims `timezone.now()` is always aware UTC — found by @Justine0211 while translating the page (#52)",
+     "- [x] The `parity_input.py` fixture carries the `models` import a real `models.py` would have — contributed by @RinZ27 (#64)"
+    ]
+   ],
+   [
+    "equal",
+    802,
+    810,
+    594,
+    602
+   ],
+   [
+    "replace",
+    810,
+    811,
+    602,
+    603,
+    [
+     "- [x] django-mptt models are no longer invisible — `MPTTModel` is a recognised base, and `TreeForeignKey` / `TreeOneToOneField` / `TreeManyToManyField` are reported as the Django fields they subclass, so `TreeForeignKey('self', ...)` draws exactly the self-edge a plain `ForeignKey('self', ...)` does. No `django-mptt` dependency is added — the parser keeps working against a broken venv. Saleor's `product.Category` and its `children` edge now appear in the golden snapshot: 76 added lines, none removed (closing #49)"
+    ]
+   ],
+   [
+    "equal",
+    811,
+    815,
+    603,
+    607
+   ],
+   [
+    "replace",
+    815,
+    816,
+    607,
+    608,
+    [
+     "- [x] **v0.9.0** — Partial `UniqueConstraint` tracking in Time-Travel Schema Diff: `add` / `drop` / `change` / `rename` as typed events, with `fromCondition` carrying the pre-change predicate so a review comment can show `Q(is_primary=True) → Q(is_primary=True, deleted=False)`, and a rename no longer showing up as a lossy `add + drop` pair. Multiple unnamed constraints on one model key onto `#anon-<index>` instead of collapsing into a single event. Prompted by django-extensions #1813, where `sqldiff` drops the `condition=` predicate so migration reviewers never see what changed"
+    ]
+   ],
+   [
+    "equal",
+    816,
+    824,
+    608,
+    616
+   ],
+   [
+    "replace",
+    824,
+    825,
+    616,
+    617,
+    [
+     "- [x] **v0.13.0** — Field completion inside `.filter()` / `.exclude()` / `.get()` (#3)"
+    ]
+   ],
+   [
+    "equal",
+    825,
+    833,
+    617,
+    625
+   ],
+   [
+    "replace",
+    833,
+    836,
+    625,
+    626,
+    [
+     "Vote by 👍-ing the corresponding issue."
+    ]
+   ],
+   [
+    "equal",
+    836,
+    839,
+    626,
+    629
+   ],
+   [
+    "replace",
+    839,
+    842,
+    629,
+    631,
+    [
+     " Do you send any of my code to a server? ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    842,
+    843,
+    631,
+    632
+   ],
+   [
+    "delete",
+    843,
+    844,
+    632,
+    632
+   ],
+   [
+    "equal",
+    844,
+    845,
+    632,
+    633
+   ],
+   [
+    "replace",
+    845,
+    848,
+    633,
+    635,
+    [
+     " Does it work with Poetry / uv / conda / no venv at all? ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    848,
+    849,
+    635,
+    636
+   ],
+   [
+    "delete",
+    849,
+    850,
+    636,
+    636
+   ],
+   [
+    "equal",
+    850,
+    851,
+    636,
+    637
+   ],
+   [
+    "replace",
+    851,
+    854,
+    637,
+    639,
+    [
+     " My models are split across multiple files inside a <code>models/</code> package. Does that work? ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    854,
+    855,
+    639,
+    640
+   ],
+   [
+    "delete",
+    855,
+    856,
+    640,
+    640
+   ],
+   [
+    "equal",
+    856,
+    857,
+    640,
+    641
+   ],
+   [
+    "replace",
+    857,
+    860,
+    641,
+    643,
+    [
+     " Can I use it with DRF serializers, Wagtail, Oscar, or third-party base models? ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    860,
+    861,
+    643,
+    644
+   ],
+   [
+    "delete",
+    861,
+    862,
+    644,
+    644
+   ],
+   [
+    "equal",
+    862,
+    863,
+    644,
+    645
+   ],
+   [
+    "replace",
+    863,
+    868,
+    645,
+    646,
+    [
+     " Which AI agents can use the MCP server? "
+    ]
+   ],
+   [
+    "equal",
+    868,
+    869,
+    646,
+    647
+   ],
+   [
+    "replace",
+    869,
+    874,
+    647,
+    648,
+    [
+     "Any MCP-compatible client — Cursor, Aider, Continue.dev, Zed, and any other tool that speaks the protocol. Just point <code>command</code> at the installed <code>orm-lens-mcp</code> binary. See the Integrations section."
+    ]
+   ],
+   [
+    "equal",
+    874,
+    875,
+    648,
+    649
+   ],
+   [
+    "replace",
+    875,
+    878,
+    649,
+    655,
+    [
+     " How do I block schema regressions in CI? ",
+     "",
+     "Three ways, all zero-config: the two pre-commit hooks, the composite GitHub Action (<code>uses: FROWNINGdev/orm-lens@action-v1</code> with <code>format: github</code> for PR annotations), or <code>--format sarif</code> piped into <code>github/codeql-action/upload-sarif</code> for the Security tab. <code>diff</code> / <code>nplusone</code> exit 1 on findings, <code>migration-risk</code> exits 1 on critical findings.",
+     "",
+     " Is there a JetBrains / PyCharm version? ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    878,
+    879,
+    655,
+    656
+   ],
+   [
+    "delete",
+    879,
+    882,
+    656,
+    656
+   ],
+   [
+    "equal",
+    882,
+    885,
+    656,
+    659
+   ],
+   [
+    "replace",
+    885,
+    892,
+    659,
+    664,
+    [
+     "- 🐛 **Bug reports** — GitHub Issues (please include a minimal `models.py` snippet)",
+     "- 💡 **Feature requests / ideas** — GitHub Discussions",
+     "- 📝 **Marketplace reviews** — rate the extension (the fastest signal that keeps this project moving)",
+     "- 🐍 **PyPI page** — pypi.org/project/orm-lens",
+     "- 💚 **Sponsor** — github.com/sponsors/FROWNINGdev"
+    ]
+   ],
+   [
+    "equal",
+    892,
+    895,
+    664,
+    667
+   ],
+   [
+    "replace",
+    895,
+    900,
+    667,
+    668,
+    [
+     "MIT © FROWNINGdev"
+    ]
+   ],
+   [
+    "equal",
+    900,
+    903,
+    668,
+    671
+   ],
+   [
+    "replace",
+    903,
+    906,
+    671,
+    672,
+    [
+     "Marketplace · PyPI · GitHub · Issues · Discussions · Sponsor"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "1472cebba2e8+2": {
+  "fn": "TsukumoHQ/WRAI.TH",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    8,
+    0,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    12,
+    [
+     "Release",
+     "Go",
+     "MCP",
+     "SQLite",
+     "License",
+     "Discord"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    12,
+    13
+   ],
+   [
+    "replace",
+    10,
+    16,
+    13,
+    14,
+    [
+     "Why · One-prompt setup · Install · First Project · The Dashboard · How It Works · Agents · Messaging · Memory · Tasks · MCP Tools"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    22,
+    15,
+    16,
+    [
+     "wrai.th mission control -- live overview of a project: tasks, agent load, and activity feed"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    16,
+    19
+   ],
+   [
+    "replace",
+    25,
+    26,
+    19,
+    20,
+    [
+     "**v1.6 -- stable.** Battle-tested on real multi-agent projects, API stable. Breaking changes are documented in CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    20,
+    22
+   ],
+   [
+    "delete",
+    28,
+    32,
+    22,
+    22
+   ],
+   [
+    "equal",
+    32,
+    50,
+    22,
+    40
+   ],
+   [
+    "replace",
+    50,
+    53,
+    40,
+    41,
+    [
+     "And you're never flying blind: the **mission-control dashboard** (below) shows every project, every agent, and every task in real time -- who's shipping, who's blocked, and what just landed."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    62,
+    41,
+    50
+   ],
+   [
+    "replace",
+    62,
+    73,
+    50,
+    51,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    51,
+    54
+   ],
+   [
+    "delete",
+    76,
+    78,
+    54,
+    54
+   ],
+   [
+    "equal",
+    78,
+    87,
+    54,
+    63
+   ],
+   [
+    "replace",
+    87,
+    89,
+    63,
+    64,
+    [
+     " Build from source "
+    ]
+   ],
+   [
+    "equal",
+    89,
+    97,
+    64,
+    72
+   ],
+   [
+    "delete",
+    97,
+    99,
+    72,
+    72
+   ],
+   [
+    "equal",
+    99,
+    121,
+    72,
+    94
+   ],
+   [
+    "replace",
+    121,
+    126,
+    94,
+    95,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    130,
+    95,
+    99
+   ],
+   [
+    "replace",
+    130,
+    132,
+    99,
+    100,
+    [
+     " Where to put the MCP config "
+    ]
+   ],
+   [
+    "equal",
+    132,
+    135,
+    100,
+    103
+   ],
+   [
+    "replace",
+    135,
+    136,
+    103,
+    104,
+    [
+     "|Level|File|Scope|"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    104,
+    105
+   ],
+   [
+    "replace",
+    137,
+    140,
+    105,
+    108,
+    [
+     "|**Project**|`.mcp.json` in repo root|Only this repo. Committed = shared with your team.|",
+     "|**User-global**|`~/.claude/.mcp.json`|Every repo on your machine.|",
+     "|**CLAUDE.md**|Project or global `CLAUDE.md`|Can document the expected config, but doesn't auto-connect.|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    155,
+    108,
+    123
+   ],
+   [
+    "replace",
+    155,
+    160,
+    123,
+    124,
+    [
+     "> **Team/server deployment?** See docs/deployment.md -- API key auth, reverse proxy (Traefik/nginx/Caddy), TLS, platform notes."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    173,
+    124,
+    137
+   ],
+   [
+    "delete",
+    173,
+    175,
+    137,
+    137
+   ],
+   [
+    "equal",
+    175,
+    203,
+    137,
+    165
+   ],
+   [
+    "delete",
+    203,
+    205,
+    165,
+    165
+   ],
+   [
+    "equal",
+    205,
+    207,
+    165,
+    167
+   ],
+   [
+    "replace",
+    207,
+    212,
+    167,
+    168,
+    [
+     "Most of the 58 MCP tools weren't designed by a human. Multiple teams of agents at TsukumoHQ ran Q&A sessions directly on the wrai.th codebase -- identifying what they needed to work better as a team. Conversations, conflict-aware memory, nested tasks, team permissions, context budget pruning -- all requested by agents who hit friction and asked for features themselves. The relay is shaped by its own users."
+    ]
+   ],
+   [
+    "equal",
+    212,
+    214,
+    168,
+    170
+   ],
+   [
+    "replace",
+    214,
+    215,
+    170,
+    171,
+    [
+     "Persistent identity -- respawn across sessions with full context restore. One Claude session can run multiple agents via the `as` parameter. Details below."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    217,
+    171,
+    173
+   ],
+   [
+    "replace",
+    217,
+    218,
+    173,
+    174,
+    [
+     "5 addressing modes: direct, broadcast, team channels, group conversations, user questions. Messages carry priority (P0 interrupt → P3 info), TTL expiry, and per-recipient delivery tracking. Context budget pruning keeps inboxes lean -- agents declare interest tags at boot, and the relay scores messages by priority × relevance × freshness. Details below."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    220,
+    174,
+    176
+   ],
+   [
+    "replace",
+    220,
+    224,
+    176,
+    177,
+    [
+     "Scoped memory (agent / project / global), conflict-aware and FTS5-indexed, plus `query_context` RAG that fuses memories with past task results. Survives `/clear`, context resets, session restarts. An agent that reboots picks up where it left off. Details below."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    226,
+    177,
+    179
+   ],
+   [
+    "replace",
+    226,
+    227,
+    179,
+    180,
+    [
+     "Nested tasks (subtasks via `parent_task_id`, 3 levels deep), strict state machine with an `in-review` stage, P0-P3 priorities, dispatch by profile archetype. Progress rolls up through the subtask tree. The kanban is the real-time view. Details below."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    232,
+    180,
+    185
+   ],
+   [
+    "replace",
+    232,
+    237,
+    185,
+    186,
+    [
+     "Open `localhost:8090/v2/`. Every project, agent, and task live on one dashboard (tour below) -- the board fills, messages stream, the activity feed never stops. Drop directives into an agent's `loop.md` to steer without breaking its loop."
+    ]
+   ],
+   [
+    "equal",
+    237,
+    242,
+    186,
+    191
+   ],
+   [
+    "replace",
+    242,
+    264,
+    191,
+    192,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    192,
+    193
+   ],
+   [
+    "delete",
+    265,
+    267,
+    193,
+    193
+   ],
+   [
+    "equal",
+    267,
+    317,
+    193,
+    243
+   ],
+   [
+    "replace",
+    317,
+    326,
+    243,
+    244,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    332,
+    244,
+    250
+   ],
+   [
+    "replace",
+    332,
+    333,
+    250,
+    251,
+    [
+     "|State|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    334,
+    251,
+    252
+   ],
+   [
+    "replace",
+    334,
+    337,
+    252,
+    255,
+    [
+     "|`active`|Online, processing|",
+     "|`sleeping`|Idle -- messages still queue in inbox|",
+     "|`deactivated`|Offline -- can be reactivated|"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    339,
+    255,
+    257
+   ],
+   [
+    "delete",
+    339,
+    341,
+    257,
+    257
+   ],
+   [
+    "equal",
+    341,
+    362,
+    257,
+    278
+   ],
+   [
+    "replace",
+    362,
+    363,
+    278,
+    279,
+    [
+     "|Priority|Alias|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    364,
+    279,
+    280
+   ],
+   [
+    "replace",
+    364,
+    368,
+    280,
+    284,
+    [
+     "|`P0`|`interrupt`|Critical -- drop everything|",
+     "|`P1`|`steering`|Important -- do next|",
+     "|`P2`|`advisory`|Normal (default)|",
+     "|`P3`|`info`|Low -- when you get to it|"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    409,
+    284,
+    325
+   ],
+   [
+    "replace",
+    409,
+    410,
+    325,
+    326,
+    [
+     "|Component|Formula|Range|"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    411,
+    326,
+    327
+   ],
+   [
+    "replace",
+    411,
+    414,
+    327,
+    330,
+    [
+     "|**priorityScore**|`1 - priorityIndex / 3` -- P1=0.67, P2=0.33, P3=0|0–1|",
+     "|**tagScore**|Jaccard similarity between message `metadata.tags` and agent `interest_tags`: `len(A & B) / len(A \\|B)`|0–1|",
+     "|**freshnessScore**|Exponential decay: `1 / (1 + ageSeconds / 3600)` --1h-old = 0.5, 2h-old = 0.33|0–1|"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    451,
+    330,
+    367
+   ],
+   [
+    "replace",
+    451,
+    455,
+    367,
+    368,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    455,
+    458,
+    368,
+    371
+   ],
+   [
+    "delete",
+    458,
+    460,
+    371,
+    371
+   ],
+   [
+    "equal",
+    460,
+    469,
+    371,
+    380
+   ],
+   [
+    "replace",
+    469,
+    470,
+    380,
+    381,
+    [
+     "Kanban board -- tasks across todo / in progress / in review / done, with P0-P3 priorities and blocked flags"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    475,
+    381,
+    386
+   ],
+   [
+    "replace",
+    475,
+    476,
+    386,
+    387,
+    [
+     "Messages view -- per-agent channels, threaded conversation, priorities, send box"
+    ]
+   ],
+   [
+    "equal",
+    476,
+    481,
+    387,
+    392
+   ],
+   [
+    "replace",
+    481,
+    482,
+    392,
+    393,
+    [
+     "Memory view -- card grid of scoped, layered, versioned memories with search"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    487,
+    393,
+    398
+   ],
+   [
+    "replace",
+    487,
+    497,
+    398,
+    403,
+    [
+     " Team view -- org hierarchy graph with live activity transcript ",
+     " Stats view -- cycle time, throughput, burndown, bottleneck ",
+     "",
+     " Team -- org tree + live transcript ",
+     " Stats -- delivery metrics "
+    ]
+   ],
+   [
+    "equal",
+    497,
+    499,
+    403,
+    405
+   ],
+   [
+    "delete",
+    499,
+    501,
+    405,
+    405
+   ],
+   [
+    "equal",
+    501,
+    535,
+    405,
+    439
+   ],
+   [
+    "delete",
+    535,
+    537,
+    439,
+    439
+   ],
+   [
+    "equal",
+    537,
+    539,
+    439,
+    441
+   ],
+   [
+    "replace",
+    539,
+    540,
+    441,
+    442,
+    [
+     "The other half of the system. Memory is what agents know -- this is what they do. (See the board above.)"
+    ]
+   ],
+   [
+    "equal",
+    540,
+    590,
+    442,
+    492
+   ],
+   [
+    "delete",
+    590,
+    592,
+    492,
+    492
+   ],
+   [
+    "equal",
+    592,
+    599,
+    492,
+    499
+   ],
+   [
+    "delete",
+    599,
+    601,
+    499,
+    499
+   ],
+   [
+    "equal",
+    601,
+    616,
+    499,
+    514
+   ],
+   [
+    "replace",
+    616,
+    624,
+    514,
+    515,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    624,
+    625,
+    515,
+    516
+   ],
+   [
+    "delete",
+    625,
+    627,
+    516,
+    516
+   ],
+   [
+    "equal",
+    627,
+    636,
+    516,
+    525
+   ],
+   [
+    "delete",
+    636,
+    638,
+    525,
+    525
+   ],
+   [
+    "equal",
+    638,
+    644,
+    525,
+    531
+   ],
+   [
+    "delete",
+    644,
+    646,
+    531,
+    531
+   ],
+   [
+    "equal",
+    646,
+    659,
+    531,
+    544
+   ],
+   [
+    "replace",
+    659,
+    671,
+    544,
+    545,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    683,
+    545,
+    557
+   ],
+   [
+    "replace",
+    683,
+    687,
+    557,
+    558,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    687,
+    716,
+    558,
+    587
+   ],
+   [
+    "replace",
+    716,
+    717,
+    587,
+    588,
+    [
+     "|Frequency|Actions|"
+    ]
+   ],
+   [
+    "equal",
+    717,
+    718,
+    588,
+    589
+   ],
+   [
+    "replace",
+    718,
+    723,
+    589,
+    594,
+    [
+     "|**1m**|`get_inbox` → reply to urgent questions, `mark_read`|",
+     "|**5m**|`list_tasks({ status: \"blocked\" })` → unblock or escalate|",
+     "|**15m**|`set_memory` with current architecture decisions, check the task board|",
+     "|**30m**|Post sync to `team:engineering`, review in-progress tasks|",
+     "|**60m**|Memory sync of architecture decisions, team health check, dispatch new tasks from backlog|"
+    ]
+   ],
+   [
+    "equal",
+    723,
+    726,
+    594,
+    597
+   ],
+   [
+    "delete",
+    726,
+    728,
+    597,
+    597
+   ],
+   [
+    "equal",
+    728,
+    730,
+    597,
+    599
+   ],
+   [
+    "replace",
+    730,
+    731,
+    599,
+    600,
+    [
+     "wrai.th speaks MCP -- the open Model Context Protocol. **Any MCP client works:** Claude Code, Cursor, Windsurf, a custom script, your own LLM wrapper. A Claude agent and a GPT agent can share the same task board."
+    ]
+   ],
+   [
+    "equal",
+    731,
+    738,
+    600,
+    607
+   ],
+   [
+    "delete",
+    738,
+    740,
+    607,
+    607
+   ],
+   [
+    "equal",
+    740,
+    744,
+    607,
+    611
+   ],
+   [
+    "replace",
+    744,
+    746,
+    611,
+    612,
+    [
+     " Session --4 tools "
+    ]
+   ],
+   [
+    "equal",
+    746,
+    749,
+    612,
+    615
+   ],
+   [
+    "replace",
+    749,
+    750,
+    615,
+    616,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    750,
+    751,
+    616,
+    617
+   ],
+   [
+    "replace",
+    751,
+    755,
+    617,
+    621,
+    [
+     "|`whoami`|Identify session via transcript salt|",
+     "|`register_agent`|Announce presence, receive compact context (respawn-aware)|",
+     "|`get_session_context`|Compact boot index: profile, tasks, message/memory indexes (~4.5K tokens)|",
+     "|`query_context`|RAG: ranked memories + past task results|"
+    ]
+   ],
+   [
+    "equal",
+    755,
+    756,
+    621,
+    622
+   ],
+   [
+    "replace",
+    756,
+    757,
+    622,
+    623,
+    [
+     " Agents --4 tools "
+    ]
+   ],
+   [
+    "equal",
+    757,
+    758,
+    623,
+    624
+   ],
+   [
+    "replace",
+    758,
+    760,
+    624,
+    630,
+    [
+     "|Tool|What it does|",
+     "|---|---|",
+     "|`list_agents`|All agents with status and roles|",
+     "|`sleep_agent`|Go idle (messages still queue)|",
+     "|`deactivate_agent`|Leave the roster (reactivatable)|",
+     "|`delete_agent`|Soft-delete|"
+    ]
+   ],
+   [
+    "equal",
+    760,
+    761,
+    630,
+    631
+   ],
+   [
+    "replace",
+    761,
+    762,
+    631,
+    634,
+    [
+     " Messaging --6 tools ",
+     "",
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    762,
+    763,
+    634,
+    635
+   ],
+   [
+    "replace",
+    763,
+    767,
+    635,
+    641,
+    [
+     "|`send_message`|Direct, broadcast `*`, team `team:slug`, user, or conversation. Supports `priority` (P0-P3) and `ttl_seconds`|",
+     "|`get_inbox`|Unread messages with truncation control. Context-budget pruning on by default (`max_context_bytes`); `apply_budget: false` for the whole inbox|",
+     "|`ack_delivery`|Acknowledge receipt (transitions delivery: surfaced → acknowledged)|",
+     "|`get_thread`|Full reply chain from any message|",
+     "|`mark_read`|Mark messages or conversations as read|",
+     "|`get_team_inbox`|Messages sent to `team:slug`|"
+    ]
+   ],
+   [
+    "equal",
+    767,
+    768,
+    641,
+    642
+   ],
+   [
+    "replace",
+    768,
+    769,
+    642,
+    643,
+    [
+     " Conversations --6 tools "
+    ]
+   ],
+   [
+    "equal",
+    769,
+    770,
+    643,
+    644
+   ],
+   [
+    "replace",
+    770,
+    772,
+    644,
+    652,
+    [
+     "|Tool|What it does|",
+     "|---|---|",
+     "|`create_conversation`|Group thread with members|",
+     "|`list_conversations`|Browse with unread counts|",
+     "|`get_conversation_messages`|Paginated (`full` / `compact` / `digest`)|",
+     "|`invite_to_conversation`|Add agent mid-thread|",
+     "|`leave_conversation`|Leave a conversation|",
+     "|`archive_conversation`|Archive a conversation|"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    773,
+    652,
+    653
+   ],
+   [
+    "replace",
+    773,
+    800,
+    653,
+    654,
+    [
+     " Memory --6 tools "
+    ]
+   ],
+   [
+    "equal",
+    800,
+    803,
+    654,
+    657
+   ],
+   [
+    "replace",
+    803,
+    804,
+    657,
+    658,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    804,
+    805,
+    658,
+    659
+   ],
+   [
+    "replace",
+    805,
+    811,
+    659,
+    665,
+    [
+     "|`set_memory`|Store with scope (`agent` / `project` / `global`), tags, confidence|",
+     "|`get_memory`|Cascade lookup: agent > project > global|",
+     "|`search_memory`|Full-text search with tag filters (FTS5)|",
+     "|`list_memories`|Browse collective knowledge|",
+     "|`delete_memory`|Soft-delete|",
+     "|`resolve_conflict`|Two agents disagreed -- pick the winner|"
+    ]
+   ],
+   [
+    "equal",
+    811,
+    812,
+    665,
+    666
+   ],
+   [
+    "replace",
+    812,
+    816,
+    666,
+    667,
+    [
+     " Tasks --15 tools "
+    ]
+   ],
+   [
+    "equal",
+    816,
+    823,
+    667,
+    674
+   ],
+   [
+    "replace",
+    823,
+    824,
+    674,
+    675,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    824,
+    825,
+    675,
+    676
+   ],
+   [
+    "replace",
+    825,
+    835,
+    676,
+    686,
+    [
+     "|`dispatch_task`|Assign to a profile archetype|",
+     "|`claim_task` / `start_task`|Lifecycle transitions|",
+     "|`review_task`|Mark a task in-review -- the \"PR up\" signal|",
+     "|`complete_task` / `block_task` / `cancel_task`|Finish, flag, or cancel|",
+     "|`resume_task`|Resume a blocked task|",
+     "|`get_task` / `list_tasks`|Filter by status, priority (P0-P3), board|",
+     "|`update_task`|Update task fields|",
+     "|`move_task`|Move task to a different board or parent|",
+     "|`batch_complete_tasks` / `batch_dispatch_tasks`|Bulk complete / dispatch in one call|",
+     "|`archive_tasks`|Clean up done/cancelled|"
+    ]
+   ],
+   [
+    "equal",
+    835,
+    836,
+    686,
+    687
+   ],
+   [
+    "replace",
+    836,
+    837,
+    687,
+    688,
+    [
+     " Boards --4 tools "
+    ]
+   ],
+   [
+    "equal",
+    837,
+    838,
+    688,
+    689
+   ],
+   [
+    "replace",
+    838,
+    840,
+    689,
+    693,
+    [
+     "|Tool|What it does|",
+     "|---|---|",
+     "|`create_board` / `list_boards`|Sprint containers|",
+     "|`archive_board` / `delete_board`|Retire a board|"
+    ]
+   ],
+   [
+    "equal",
+    840,
+    841,
+    693,
+    694
+   ],
+   [
+    "replace",
+    841,
+    850,
+    694,
+    695,
+    [
+     " Profiles --4 tools "
+    ]
+   ],
+   [
+    "equal",
+    850,
+    853,
+    695,
+    698
+   ],
+   [
+    "replace",
+    853,
+    854,
+    698,
+    699,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    854,
+    855,
+    699,
+    700
+   ],
+   [
+    "replace",
+    855,
+    858,
+    700,
+    703,
+    [
+     "|`register_profile`|Define archetype with skills and context keys|",
+     "|`get_profile` / `list_profiles`|Retrieve profiles|",
+     "|`find_profiles`|Search by skill tag|"
+    ]
+   ],
+   [
+    "equal",
+    858,
+    859,
+    703,
+    704
+   ],
+   [
+    "replace",
+    859,
+    860,
+    704,
+    705,
+    [
+     " Teams --7 tools "
+    ]
+   ],
+   [
+    "equal",
+    860,
+    861,
+    705,
+    706
+   ],
+   [
+    "replace",
+    861,
+    863,
+    706,
+    712,
+    [
+     "|Tool|What it does|",
+     "|---|---|",
+     "|`create_org` / `list_orgs`|Organization structure|",
+     "|`create_team` / `list_teams`|Team types: `admin`, `regular`, `bot`|",
+     "|`add_team_member` / `remove_team_member`|Roles: admin, lead, member, observer|",
+     "|`add_notify_channel`|Cross-team direct channel allowlist|"
+    ]
+   ],
+   [
+    "equal",
+    863,
+    864,
+    712,
+    713
+   ],
+   [
+    "replace",
+    864,
+    865,
+    713,
+    716,
+    [
+     " Projects --2 tools ",
+     "",
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    865,
+    866,
+    716,
+    717
+   ],
+   [
+    "replace",
+    866,
+    884,
+    717,
+    719,
+    [
+     "|`create_project`|Bootstrap a project + return the autonomous onboarding plan|",
+     "|`delete_project`|Remove a project and its data|"
+    ]
+   ],
+   [
+    "equal",
+    884,
+    891,
+    719,
+    726
+   ],
+   [
+    "replace",
+    891,
+    901,
+    726,
+    727,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    901,
+    903,
+    727,
+    729
+   ],
+   [
+    "replace",
+    903,
+    904,
+    729,
+    730,
+    [
+     "Single binary. SQLite on disk. No required external services. The web UI is embedded via `go:embed`. An optional Linear connector mirrors tasks when `RELAY_LINEAR_MODE` is enabled."
+    ]
+   ],
+   [
+    "equal",
+    904,
+    909,
+    730,
+    735
+   ],
+   [
+    "replace",
+    909,
+    911,
+    735,
+    736,
+    [
+     " Full endpoint list "
+    ]
+   ],
+   [
+    "equal",
+    911,
+    912,
+    736,
+    737
+   ],
+   [
+    "replace",
+    912,
+    913,
+    737,
+    738,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    913,
+    914,
+    738,
+    739
+   ],
+   [
+    "replace",
+    914,
+    961,
+    739,
+    784,
+    [
+     "|`GET`|`/api/projects`|List all projects with agent/task/message stats|",
+     "|`GET`|`/api/projects/:name`|Single project details|",
+     "|`PATCH`|`/api/projects/:name`|Update project (planet_type, description)|",
+     "|`GET`|`/api/agents?project=X`|Agents for a project|",
+     "|`GET`|`/api/agents/all`|All agents across projects|",
+     "|`GET`|`/api/org?project=X`|Full org tree (hierarchy)|",
+     "|`GET`|`/api/messages/latest?project=X`|Latest messages|",
+     "|`GET`|`/api/messages/all?project=X`|All messages for a project|",
+     "|`GET`|`/api/conversations?project=X`|Conversations with unread counts|",
+     "|`GET`|`/api/conversations/:id/messages`|Messages in a conversation|",
+     "|`GET`|`/api/memories?project=X`|List memories|",
+     "|`GET`|`/api/memories/search?project=X&q=...`|FTS5 search|",
+     "|`POST`|`/api/memories`|Create/update memory|",
+     "|`POST`|`/api/memories/:id/resolve`|Resolve conflict|",
+     "|`DELETE`|`/api/memories/:id`|Soft-delete memory|",
+     "|`GET`|`/api/tasks?project=X`|List tasks (filter by status, priority, board)|",
+     "|`POST`|`/api/tasks`|Dispatch task|",
+     "|`POST`|`/api/tasks/:id/transition`|State transition (claim, start, complete, block)|",
+     "|`PUT`|`/api/tasks/:id`|Update task fields|",
+     "|`GET`|`/api/boards?project=X`|List boards|",
+     "|`GET`|`/api/profiles?project=X`|List profiles|",
+     "|`GET`|`/api/teams?project=X`|List teams|",
+     "|`PUT`|`/api/agents/avatar`|Set/clear an agent's avatar image|",
+     "|`GET`|`/api/file-locks?project=X`|Active advisory file locks|",
+     "|`GET`|`/api/notification-rules?project=X`|List notification rules|",
+     "|`POST`|`/api/notification-rules`|Create a notification rule|",
+     "|`PATCH`|`/api/notification-rules/:id`|Update a rule|",
+     "|`DELETE`|`/api/notification-rules/:id`|Delete a rule|",
+     "|`POST`|`/api/notification-rules/:id/test-fire`|Test-fire a rule|",
+     "|`GET`|`/api/notification-events?project=X`|Notification event log|",
+     "|`GET`|`/api/notification-deliveries?project=X`|Per-channel delivery log|",
+     "|`GET`|`/api/token-usage?project=X`|Per-project token usage|",
+     "|`GET`|`/api/token-usage/project` / `/agent` / `/timeseries`|Per-agent, per-tool, bucketed usage|",
+     "|`GET`|`/api/cycles?project=X`|Linear cycles (mirror mode)|",
+     "|`GET`|`/api/linear/teams`|Linear teams (mirror mode)|",
+     "|`POST`|`/api/connectors/linear/webhook`|Inbound Linear webhook (HMAC)|",
+     "|`GET`|`/api/stats?project=X`|Aggregate project stats|",
+     "|`GET`|`/api/activity`|Current agent activity states|",
+     "|`GET`|`/api/activity/stream`|SSE -- real-time agent activity|",
+     "|`GET`|`/api/events/stream`|SSE -- MCP tool events|",
+     "|`GET`|`/api/events/recent?project=X`|Recent MCP events (ring buffer)|",
+     "|`POST`|`/api/user-response`|Reply to a user_question from the web UI|",
+     "|`GET`|`/api/health`|Uptime, version, DB stats|",
+     "|`GET`|`/api/settings`|Relay settings|",
+     "|`PUT`|`/api/settings`|Update an allowlisted setting|"
+    ]
+   ],
+   [
+    "equal",
+    961,
+    964,
+    784,
+    787
+   ],
+   [
+    "replace",
+    964,
+    966,
+    787,
+    788,
+    [
+     " Package layout "
+    ]
+   ],
+   [
+    "equal",
+    966,
+    971,
+    788,
+    793
+   ],
+   [
+    "replace",
+    971,
+    996,
+    793,
+    794,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    996,
+    997,
+    794,
+    795
+   ],
+   [
+    "delete",
+    997,
+    1001,
+    795,
+    795
+   ],
+   [
+    "equal",
+    1001,
+    1015,
+    795,
+    809
+   ],
+   [
+    "replace",
+    1015,
+    1016,
+    809,
+    810,
+    [
+     "|View|What you see|"
+    ]
+   ],
+   [
+    "equal",
+    1016,
+    1017,
+    810,
+    811
+   ],
+   [
+    "replace",
+    1017,
+    1020,
+    811,
+    814,
+    [
+     "|**Overview**|24h token count per project in the KPI cards|",
+     "|**Stats**|Throughput-by-agent, per-tool breakdown, time-series sparklines|",
+     "|**Agent detail**|24h/7d stats grid (tokens, calls, avg/call, % of project), top 8 tools|"
+    ]
+   ],
+   [
+    "equal",
+    1020,
+    1023,
+    814,
+    817
+   ],
+   [
+    "delete",
+    1023,
+    1025,
+    817,
+    817
+   ],
+   [
+    "equal",
+    1025,
+    1027,
+    817,
+    819
+   ],
+   [
+    "replace",
+    1027,
+    1028,
+    819,
+    820,
+    [
+     "wrai.th is built and run by the team behind **tsukumo** -- we help engineering teams run fleets of AI coding agents in production. wrai.th is the orchestration layer we run ourselves; free and open source (AGPL)."
+    ]
+   ],
+   [
+    "equal",
+    1028,
+    1031,
+    820,
+    823
+   ],
+   [
+    "replace",
+    1031,
+    1034,
+    823,
+    824,
+    [
+     "> Standing up an agent fleet across a team? We do that hands-on -- talk to us."
+    ]
+   ],
+   [
+    "equal",
+    1034,
+    1039,
+    824,
+    829
+   ],
+   [
+    "replace",
+    1039,
+    1040,
+    829,
+    830,
+    [
+     "Something breaks? Open an issue. Want to contribute? Open a PR."
+    ]
+   ],
+   [
+    "equal",
+    1040,
+    1050,
+    830,
+    840
+   ],
+   [
+    "delete",
+    1050,
+    1054,
+    840,
+    840
+   ],
+   [
+    "equal",
+    1054,
+    1056,
+    840,
+    842
+   ],
+   [
+    "replace",
+    1056,
+    1057,
+    842,
+    843,
+    [
+     "wrai.th is the **orchestration** layer of a four-part suite for running AI coding agents in production, built by tsukumo:"
+    ]
+   ],
+   [
+    "equal",
+    1057,
+    1059,
+    843,
+    845
+   ],
+   [
+    "replace",
+    1059,
+    1062,
+    845,
+    848,
+    [
+     "- **trovex** — context: serve agents the one canonical doc per query instead of rereading the repo (~60% fewer tokens per lookup).",
+     "- **yoru** — observability: session receipts of what each agent actually did.",
+     "- **dokan** — deterministic execution: run the agent's settled, repeatable work as scripts in clean containers, no model in the loop, no token burn."
+    ]
+   ],
+   [
+    "equal",
+    1062,
+    1063,
+    848,
+    849
+   ],
+   [
+    "replace",
+    1063,
+    1064,
+    849,
+    850,
+    [
+     "Built and run in production by tsukumo, a developer studio and AI consultancy."
+    ]
+   ],
+   [
+    "equal",
+    1064,
+    1065,
+    850,
+    851
+   ],
+   [
+    "replace",
+    1065,
+    1066,
+    851,
+    852,
+    [
+     "Built at TsukumoHQ · AGPL-3.0 License"
+    ]
+   ],
+   [
+    "equal",
+    1066,
+    1067,
+    852,
+    853
+   ],
+   [
+    "replace",
+    1067,
+    1078,
+    853,
+    854,
+    [
+     "Built by the team behind tsukumo -- consulting for teams running AI agent fleets."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "807d8a52fb26+2": {
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Awesome Free Dev Tools"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    11,
+    4,
+    9,
+    [
+     "Total Tools",
+     "Online",
+     "Offline",
+     "Auto Update",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    18,
+    9,
+    16
+   ],
+   [
+    "replace",
+    18,
+    19,
+    16,
+    17,
+    [
+     "|Metric|Value|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    17,
+    18
+   ],
+   [
+    "replace",
+    20,
+    26,
+    18,
+    22,
+    [
+     "|Total Tools|55|",
+     "|🟢 Online|55|",
+     "|🔴 Offline|0|",
+     "|Last Updated|11/11/2026, 11:09:16 AM (GMT+7)|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    22,
+    25
+   ],
+   [
+    "replace",
+    29,
+    47,
+    25,
+    26,
+    [
+     "（目录 16 行略）"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    26,
+    29
+   ],
+   [
+    "replace",
+    50,
+    182,
+    29,
+    33,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    33,
+    34
+   ],
+   [
+    "replace",
+    183,
+    184,
+    34,
+    133,
+    [
+     " Qoder ",
+     " Agentic coding platform with autonomous development ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Cursor ",
+     " AI coding agent and software development environment ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Devin (Windsurf) ",
+     " Agentic IDE with Devin cloud agent built-in ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Zed ",
+     " Open-source code editor with agentic editing ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " TraeCode ",
+     " AI coding engineer with IDE and SOLO modes ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Firebase Studio ",
+     " Agentic cloud-based development environment with Gemini ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Google Antigravity ",
+     " Agentic development platform with local and cloud agents ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Kilo Code ",
+     " Open-source AI coding agent for VS Code, JetBrains, CLI ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Cline ",
+     " Open-source coding agent in IDE and terminal ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Continue ",
+     " Open-source AI code agent for VS Code and JetBrains ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Roo Code ",
+     " AI-powered dev team in VS Code (archived) ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " GitHub Copilot ",
+     " AI pair programmer with agent mode ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Amazon Q Developer ",
+     " AWS AI coding assistant with agentic capabilities ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Tabnine ",
+     " Enterprise AI coding assistant (acquired by Tricentis, now AI Workspace) ",
+     " Enterprise ",
+     " 🟢 ",
+     "",
+     " Claude Code ",
+     " Agentic coding tool in terminal, IDE, desktop, browser ",
+     " BYOK ",
+     " 🟢 ",
+     "",
+     " Gemini CLI ",
+     " Open-source AI agent with Gemini in terminal ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " OpenAI Codex CLI ",
+     " Lightweight coding agent from OpenAI for terminal ",
+     " BYOK ",
+     " 🟢 ",
+     "",
+     " Aider ",
+     " AI pair programming in terminal with git integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " OpenCode ",
+     " Open-source AI coding agent for terminal, IDE, desktop ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Goose ",
+     " Open-source AI agent for code, workflows, automation ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    184,
+    187,
+    133,
+    136
+   ],
+   [
+    "replace",
+    187,
+    205,
+    136,
+    140,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    140,
+    141
+   ],
+   [
+    "replace",
+    206,
+    207,
+    141,
+    145,
+    [
+     " Hugging Face ",
+     " AI models, datasets, and Spaces hosting ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    207,
+    210,
+    145,
+    148
+   ],
+   [
+    "replace",
+    210,
+    240,
+    148,
+    152,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    152,
+    153
+   ],
+   [
+    "replace",
+    241,
+    242,
+    153,
+    167,
+    [
+     " Render ",
+     " Application hosting (Web, Worker, Cron) ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Vercel ",
+     " Frontend cloud platform with serverless functions ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Shipvela ",
+     " Publish React, Vite and static sites from GitHub or a CLI; custom domains and managed HTTPS ",
+     " Free Tier: 3 projects, 20 publishes/month ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    242,
+    245,
+    167,
+    170
+   ],
+   [
+    "replace",
+    245,
+    299,
+    170,
+    174,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    174,
+    175
+   ],
+   [
+    "replace",
+    300,
+    301,
+    175,
+    209,
+    [
+     " Supabase ",
+     " PostgreSQL and backend services (Auth, Storage, Realtime) ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Neon ",
+     " Serverless PostgreSQL ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Firebase ",
+     " Authentication and cloud services ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Cloudflare D1 ",
+     " Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Turso ",
+     " Serverless SQLite database with edge replication ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Prisma ",
+     " Type-safe ORM for TypeScript and Node.js ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " DBeaver Community ",
+     " Connect to and manage multiple SQL and NoSQL databases with a graphical interface, SQL editor, and data browser ",
+     " Free: Open Source (Apache-2.0); commercial editions available ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    301,
+    304,
+    209,
+    212
+   ],
+   [
+    "replace",
+    304,
+    340,
+    212,
+    216,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    340,
+    341,
+    216,
+    217
+   ],
+   [
+    "replace",
+    341,
+    342,
+    217,
+    236,
+    [
+     " Webhook.site ",
+     " Instant webhook testing and debugging ",
+     " Free ",
+     " 🟢 ",
+     "",
+     " Agent QA ",
+     " Natural-language web and mobile regression testing with execution memory, CLI and MCP tools ",
+     " Free package; configured model, browser or device costs may apply ",
+     " 🟢 ",
+     "",
+     " Bruno ",
+     " Open-source API client for creating, testing, and organizing API requests with collections stored directly in Git ",
+     " Free: Open Source (MIT); paid plans available for additional features ",
+     " 🟢 ",
+     "",
+     " Mockoon ",
+     " Create and run mock REST APIs locally to develop and test frontend applications without a live backend ",
+     " Free: Open Source (MIT); paid plans available for team and cloud features ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    342,
+    345,
+    236,
+    239
+   ],
+   [
+    "replace",
+    345,
+    369,
+    239,
+    243,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    369,
+    370,
+    243,
+    244
+   ],
+   [
+    "replace",
+    370,
+    371,
+    244,
+    253,
+    [
+     " Dockhand ",
+     " Docker management ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Uptime Kuma ",
+     " Self-hosted monitoring dashboard for websites, APIs, servers, and network services with notifications when services become unavailable ",
+     " Free: Open Source (MIT); self-hosted ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    371,
+    374,
+    253,
+    256
+   ],
+   [
+    "replace",
+    374,
+    392,
+    256,
+    260,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    260,
+    261
+   ],
+   [
+    "replace",
+    393,
+    394,
+    261,
+    265,
+    [
+     " Resend ",
+     " Transactional email for developers ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    394,
+    397,
+    265,
+    268
+   ],
+   [
+    "replace",
+    397,
+    415,
+    268,
+    272,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    415,
+    416,
+    272,
+    273
+   ],
+   [
+    "replace",
+    416,
+    417,
+    273,
+    277,
+    [
+     " Synology ",
+     " NAS for file and backup storage ",
+     " Paid ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    417,
+    420,
+    277,
+    280
+   ],
+   [
+    "replace",
+    420,
+    438,
+    280,
+    284,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    438,
+    439,
+    284,
+    285
+   ],
+   [
+    "replace",
+    439,
+    440,
+    285,
+    289,
+    [
+     " SePay ",
+     " Payment integration (VietQR & Banking) ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    440,
+    443,
+    289,
+    292
+   ],
+   [
+    "replace",
+    443,
+    461,
+    292,
+    296,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    461,
+    462,
+    296,
+    297
+   ],
+   [
+    "replace",
+    462,
+    463,
+    297,
+    301,
+    [
+     " Notion ",
+     " Documentation, planning and notes ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    463,
+    466,
+    301,
+    304
+   ],
+   [
+    "replace",
+    466,
+    484,
+    304,
+    308,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    484,
+    485,
+    308,
+    309
+   ],
+   [
+    "replace",
+    485,
+    486,
+    309,
+    313,
+    [
+     " Gravatar ",
+     " Globally Recognized User Avatars ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    486,
+    489,
+    313,
+    316
+   ],
+   [
+    "replace",
+    489,
+    513,
+    316,
+    320,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    513,
+    514,
+    320,
+    321
+   ],
+   [
+    "replace",
+    514,
+    515,
+    321,
+    330,
+    [
+     " Google reCAPTCHA ",
+     " Anti-bot protection ",
+     " Free ",
+     " 🟢 ",
+     "",
+     " Tailscale ",
+     " Connect personal devices, development machines, and self-hosted services through a secure private network without complex VPN configuration ",
+     " Free Personal plan available; usage and user limits apply ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    515,
+    518,
+    330,
+    333
+   ],
+   [
+    "replace",
+    518,
+    536,
+    333,
+    337,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    536,
+    537,
+    337,
+    338
+   ],
+   [
+    "replace",
+    537,
+    538,
+    338,
+    342,
+    [
+     " Home Assistant ",
+     " Smart Home automation ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    538,
+    541,
+    342,
+    345
+   ],
+   [
+    "replace",
+    541,
+    595,
+    345,
+    349,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    595,
+    596,
+    349,
+    350
+   ],
+   [
+    "replace",
+    596,
+    597,
+    350,
+    384,
+    [
+     " FacebookBot ",
+     " Facebook automation bot ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " fb-messenger-bot ",
+     " Facebook Messenger bot template ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " messenger-bot ",
+     " Facebook Messenger bot implementation ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " MetaBot ",
+     " Meta (Facebook) bot for automation ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " meta-ai-agent ",
+     " Meta AI agent integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " instagram-mcp ",
+     " Instagram MCP (Model Context Protocol) integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " messenger-platform-samples ",
+     " Official Facebook Messenger platform samples ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    597,
+    600,
+    384,
+    387
+   ],
+   [
+    "replace",
+    600,
+    624,
+    387,
+    391,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    624,
+    625,
+    391,
+    392
+   ],
+   [
+    "replace",
+    625,
+    626,
+    392,
+    401,
+    [
+     " Cloudinary ",
+     " Image/Video storage and on-the-fly optimization ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " PicCollages ",
+     " Compress multiple JPG, PNG and WebP images in the browser; adjust output quality and download images individually or as a ZIP ",
+     " Free: No account required ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    626,
+    629,
+    401,
+    404
+   ],
+   [
+    "replace",
+    629,
+    647,
+    404,
+    408,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    647,
+    648,
+    408,
+    409
+   ],
+   [
+    "replace",
+    648,
+    649,
+    409,
+    413,
+    [
+     " UI.RIP ",
+     " Clone/recreate web UI elements ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    649,
+    655,
+    413,
+    419
+   ],
+   [
+    "replace",
+    655,
+    656,
+    419,
+    420,
+    [
+     "- All contributions welcome via PR at GitHub."
+    ]
+   ],
+   [
+    "equal",
+    656,
+    657,
+    420,
+    421
+   ],
+   [
+    "replace",
+    657,
+    658,
+    421,
+    422,
+    [
+     " Made with 💜 by the Awesome Free Dev Tools community"
+    ]
+   ],
+   [
+    "equal",
+    658,
+    659,
+    422,
+    423
+   ],
+   [
+    "replace",
+    659,
+    666,
+    423,
+    424,
+    [
+     " 🕐 Last updated: 11/11/2026, 11:09:16 AM"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "156ea5c23cef+2": {
+  "fn": "jackulau/coding.sh",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "coding.sh: see what your AI agents did, and what it cost. Every prompt, tool call, file change and cost, kept on your machine. Below the headline, the top of one session in the coding.sh viewer: a Claude Code session that raised the OTLP receiver body limit to 8 MB, with its model, duration, estimated cost, a "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    10,
+    2,
+    6,
+    [
+     " CI status",
+     " npm version",
+     " MIT license",
+     " Node 22.16 or newer"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    16,
+    7,
+    10,
+    [
+     " coding.sh records what your AI agents do: every prompt, model call, tool call, file change and what it cost. ",
+     " You read each run in a local viewer and turn the ones that went wrong into evals. ",
+     " Your sessions stay on your machine."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    10,
+    11
+   ],
+   [
+    "replace",
+    17,
+    26,
+    11,
+    18,
+    [
+     " Docs ·",
+     " Quickstart ·",
+     " Supported agents ·",
+     " What you get ·",
+     " Changelog ·",
+     " Discussions ·",
+     " Report a bug"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    32,
+    18,
+    24
+   ],
+   [
+    "replace",
+    32,
+    37,
+    24,
+    27,
+    [
+     " A terminal recording. Typing ",
+     "",
+     " A first run of <code>npx coding.sh</code> 0.1.6 in a fresh home. "
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    27,
+    32
+   ],
+   [
+    "replace",
+    42,
+    47,
+    32,
+    35,
+    [
+     " The coding.sh viewer on one Claude Code session: the prompt as the title, agent, model, start time, duration, tokens with the cache rate, the estimated cost, latency percentiles, a ",
+     "",
+     " One Claude Code session in the local viewer (<code>coding.sh ui</code>), with the diff it made and the tests it ran. "
+    ]
+   ],
+   [
+    "equal",
+    47,
+    57,
+    35,
+    45
+   ],
+   [
+    "replace",
+    57,
+    58,
+    45,
+    46,
+    [
+     " agents, shows one plan and asks once."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    46,
+    47
+   ],
+   [
+    "replace",
+    59,
+    60,
+    47,
+    48,
+    [
+     " already open may not be recorded."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    48,
+    49
+   ],
+   [
+    "replace",
+    61,
+    62,
+    49,
+    50,
+    [
+     " your agents can read them over MCP."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    67,
+    50,
+    55
+   ],
+   [
+    "replace",
+    67,
+    68,
+    55,
+    56,
+    [
+     "|Command|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    56,
+    57
+   ],
+   [
+    "replace",
+    69,
+    73,
+    57,
+    61,
+    [
+     "|`coding.sh init --dry-run`|Prints the plan without writing anything. `--diff` adds the edits.|",
+     "|`coding.sh init --no-import`|Sets up capture and skips the past-session import.|",
+     "|`coding.sh ingest --backfill`|Imports past sessions again, for example after adding an agent.|",
+     "|`coding.sh uninstall`|Removes the hooks and MCP entries again.|"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    61,
+    62
+   ],
+   [
+    "replace",
+    74,
+    78,
+    62,
+    63,
+    [
+     " npm install, the npx cache and other ways to install "
+    ]
+   ],
+   [
+    "equal",
+    78,
+    82,
+    63,
+    67
+   ],
+   [
+    "replace",
+    82,
+    85,
+    67,
+    68,
+    [
+     "docs/guides/install.md."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    68,
+    71
+   ],
+   [
+    "replace",
+    88,
+    89,
+    71,
+    72,
+    [
+     "|Area|What it does|Start with|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    72,
+    73
+   ],
+   [
+    "replace",
+    90,
+    95,
+    73,
+    78,
+    [
+     "|**Record**|Captures each session, including subagents, from hooks and transcripts. Wraps any other agent. Takes OpenTelemetry from frameworks and apps.|`coding.sh init`, `coding.sh run -- <cmd>`, `coding.sh collector`|",
+     "|**Measure**|Turns, tool calls, model calls, tokens, latency and outcome for every session. Flags sessions that edited code and never ran a check.|`coding.sh sessions`, `coding.sh usage`, `coding.sh improve`|",
+     "|**Evaluate**|Turns a failed session into a replayable eval. Runs experiments with code graders or calibrated LLM judges. A/B tests prompts, harness files and models with paired statistics.|`coding.sh eval new`, `coding.sh exp compare`|",
+     "|**Benchmark**|Draws new cases every day, runs every contender on the same frozen set, and writes a static report.|`coding.sh bench`|",
+     "|**Production**|One server for ingest, the viewer and the API, backed by SQLite, Postgres or ClickHouse. SDKs for API apps.|`coding.sh serve`|"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    78,
+    79
+   ],
+   [
+    "replace",
+    96,
+    99,
+    79,
+    80,
+    [
+     " The coding.sh session list: 13 sessions from Claude Code, Codex and a bot that labels coding.sh issues and sends OpenTelemetry traces, with agent, model, tool count, cost (~ where it is estimated from list prices), duration and start time. Two rows show a green "
+    ]
+   ],
+   [
+    "equal",
+    99,
+    106,
+    80,
+    87
+   ],
+   [
+    "replace",
+    106,
+    110,
+    87,
+    88,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    113,
+    88,
+    91
+   ],
+   [
+    "replace",
+    113,
+    114,
+    91,
+    92,
+    [
+     "More in docs/guides/explore.md."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    92,
+    93
+   ],
+   [
+    "replace",
+    115,
+    119,
+    93,
+    94,
+    [
+     " Record : wrappers, OpenTelemetry and the model API proxy "
+    ]
+   ],
+   [
+    "equal",
+    119,
+    123,
+    94,
+    98
+   ],
+   [
+    "replace",
+    123,
+    125,
+    98,
+    100,
+    [
+     " model call's system prompt, tools, messages and cache use. More in",
+     " docs/how-to/capture-with-proxy.md."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    100,
+    101
+   ],
+   [
+    "replace",
+    126,
+    132,
+    101,
+    102,
+    [
+     " Evaluate : evals, experiments and paired statistics "
+    ]
+   ],
+   [
+    "equal",
+    132,
+    138,
+    102,
+    108
+   ],
+   [
+    "replace",
+    138,
+    139,
+    108,
+    109,
+    [
+     "too. More in docs/guides/evals.md."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    109,
+    110
+   ],
+   [
+    "replace",
+    140,
+    146,
+    110,
+    111,
+    [
+     " Benchmark : daily cases and head-to-head reports "
+    ]
+   ],
+   [
+    "equal",
+    146,
+    150,
+    111,
+    115
+   ],
+   [
+    "replace",
+    150,
+    151,
+    115,
+    116,
+    [
+     "docs/guides/benchmarks.md."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    116,
+    117
+   ],
+   [
+    "replace",
+    152,
+    158,
+    117,
+    118,
+    [
+     " Production : server, SDKs and LLM gateways "
+    ]
+   ],
+   [
+    "equal",
+    158,
+    164,
+    118,
+    124
+   ],
+   [
+    "replace",
+    164,
+    167,
+    124,
+    125,
+    [
+     "docs/production/README.md."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    170,
+    125,
+    128
+   ],
+   [
+    "replace",
+    170,
+    171,
+    128,
+    129,
+    [
+     "|Agent|How it records|Status|"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    129,
+    130
+   ],
+   [
+    "replace",
+    172,
+    186,
+    130,
+    144,
+    [
+     "|Claude Code|hooks, transcript, subagents|Verified on real sessions|",
+     "|Codex CLI|hooks, rollout files, subagents|Verified on real sessions|",
+     "|Antigravity CLI (formerly Gemini CLI)|hooks, transcript|Verified on real sessions|",
+     "|OpenCode|plugin, session database|Verified on a real install|",
+     "|Cursor CLI|hooks, transcript|Not run live|",
+     "|GitHub Copilot CLI|hooks, session state|Verified on a real install|",
+     "|Factory Droid|hooks, transcript|Verified on a real install|",
+     "|Goose|plugin hooks, session database|Verified on a real install|",
+     "|Pi|extension, transcript|Verified on a real install|",
+     "|Amp|plugin|Not run live|",
+     "|T3 Code|its local store|Verified on a real install|",
+     "|Aider|`coding.sh run -- aider …`|Verified on a real install|",
+     "|Any other command|`coding.sh run -- <cmd>`|Tested|",
+     "|Your own agent or app (Vercel AI SDK, Claude Agent SDK, OpenAI Agents SDK, LangGraph and more)|OpenTelemetry into `coding.sh collector`, or the TypeScript and Python SDKs|Tested|"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    144,
+    145
+   ],
+   [
+    "replace",
+    187,
+    191,
+    145,
+    146,
+    [
+     " What the statuses mean "
+    ]
+   ],
+   [
+    "equal",
+    191,
+    193,
+    146,
+    148
+   ],
+   [
+    "replace",
+    193,
+    194,
+    148,
+    149,
+    [
+     " agent during development, in addition to the CI tests."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    195,
+    149,
+    150
+   ],
+   [
+    "replace",
+    195,
+    198,
+    150,
+    153,
+    [
+     " session against a local stub model, its hooks fired and the recorded session was checked, and",
+     " the captured payloads are now CI fixtures. For OpenCode, Pi, Goose, Factory Droid, GitHub",
+     " Copilot CLI and Aider, CI repeats that run on Linux and Windows on every change."
+    ]
+   ],
+   [
+    "equal",
+    198,
+    199,
+    153,
+    154
+   ],
+   [
+    "replace",
+    199,
+    201,
+    154,
+    156,
+    [
+     " run it against a live install yet. Cursor CLI and Amp are in that state because both need an",
+     " account login."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    203,
+    156,
+    158
+   ],
+   [
+    "delete",
+    203,
+    205,
+    158,
+    158
+   ],
+   [
+    "equal",
+    205,
+    206,
+    158,
+    159
+   ],
+   [
+    "replace",
+    206,
+    207,
+    159,
+    160,
+    [
+     "agent support report"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    160,
+    161
+   ],
+   [
+    "replace",
+    208,
+    210,
+    161,
+    163,
+    [
+     "MCP server, are in docs/guides/agents.md. T3 Code and Pi each have a",
+     "section on Record coding agents."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    218,
+    163,
+    171
+   ],
+   [
+    "replace",
+    218,
+    222,
+    171,
+    172,
+    [
+     " What the hook writes to the spool "
+    ]
+   ],
+   [
+    "equal",
+    222,
+    226,
+    172,
+    176
+   ],
+   [
+    "replace",
+    226,
+    229,
+    176,
+    177,
+    [
+     "docs/guides/privacy.md."
+    ]
+   ],
+   [
+    "equal",
+    229,
+    235,
+    177,
+    183
+   ],
+   [
+    "replace",
+    235,
+    238,
+    183,
+    186,
+    [
+     " Git Bash) and real OpenCode, Pi, Goose, Factory Droid, GitHub Copilot CLI and Aider sessions",
+     " against a stub model. Capture from Claude Code, Codex CLI, Antigravity CLI, Cursor CLI, Amp and",
+     " T3 Code has not been checked on Windows yet."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    239,
+    186,
+    187
+   ],
+   [
+    "replace",
+    239,
+    240,
+    187,
+    188,
+    [
+     " login (see Supported agents)."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    188,
+    189
+   ],
+   [
+    "replace",
+    241,
+    243,
+    189,
+    191,
+    [
+     "Changes are listed in CHANGELOG.md and on the",
+     "releases page."
+    ]
+   ],
+   [
+    "equal",
+    243,
+    245,
+    191,
+    193
+   ],
+   [
+    "replace",
+    245,
+    253,
+    193,
+    194,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    255,
+    194,
+    196
+   ],
+   [
+    "replace",
+    255,
+    260,
+    196,
+    201,
+    [
+     "- coding.sh/docs: quickstart, agents, CLI, MCP, evals, OpenTelemetry,",
+     " storage and the trace format.",
+     "- docs/: the same guides in Markdown, plus production, design specs and",
+     " research.",
+     "- docs/troubleshooting.md: what to check when sessions don't show up."
+    ]
+   ],
+   [
+    "equal",
+    260,
+    263,
+    201,
+    204
+   ],
+   [
+    "replace",
+    263,
+    264,
+    204,
+    205,
+    [
+     "|Path|What it holds|"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    205,
+    206
+   ],
+   [
+    "replace",
+    265,
+    274,
+    206,
+    215,
+    [
+     "|`packages/coding.sh`|The CLI, hook, adapters, OTLP receiver, viewer, MCP server and evals|",
+     "|`packages/sdk`, `packages/sdk-python`|The TypeScript and Python SDKs for API apps|",
+     "|`packages/store-postgres`, `packages/store-clickhouse`, `packages/blob-s3`|Store plugins|",
+     "|`apps/site`|The coding.sh website (Astro, static)|",
+     "|`docs`|Guides, production, reference and design docs|",
+     "|`examples`|An eve agent, production apps, a plugin A/B and a skill eval|",
+     "|`deploy`|Deploy recipes for Compose, Fly, Railway and ClickHouse (Render uses `render.yaml`)|",
+     "|`evals`|coding.sh's own CLI eval suite|",
+     "|`scripts/dogfood`|The scorecard coding.sh runs on itself|"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    276,
+    215,
+    217
+   ],
+   [
+    "replace",
+    276,
+    281,
+    217,
+    218,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    282,
+    218,
+    219
+   ],
+   [
+    "replace",
+    282,
+    285,
+    219,
+    220,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    220,
+    221
+   ],
+   [
+    "replace",
+    286,
+    288,
+    221,
+    222,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "c801d3ef7cec+2": {
+  "fn": "clavasyp/TurgovBot-public",
+  "clean_ver": "2",
+  "raw_lines": 14,
+  "ops": [
+   [
+    "equal",
+    0,
+    14,
+    0,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     " выбирает нужные кодексы, Gemini (Vertex AI) отвечает по ним со ссылками на статьи."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    18,
+    16,
+    18,
+    [
+     " PostgreSQL, триграммы, словарь сленга и синонимов, векторы локальной модели",
+     " FRIDA в pgvector. Нормы ранжируются взвешенным RRF."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    23,
+    18,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     " лицензии, веб-вход сайта через Telegram Login Widget."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    31,
+    24,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "|Сервис|Что делает|"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    32,
+    33
+   ],
+   [
+    "replace",
+    33,
+    41,
+    33,
+    41,
+    [
+     "|`db`|PostgreSQL 16 с pgvector|",
+     "|`migrate`|Alembic-миграции (`alembic upgrade head`) перед стартом|",
+     "|`bot`|Telegram-бот, `main.py` (python-telegram-bot 22)|",
+     "|`api`|FastAPI, `api/main.py` — эндпоинты оверлея, поиска законов, сайта|",
+     "|`law-embedding-worker`|Фоновый расчёт векторов статей локальной моделью FRIDA|",
+     "|`parser-worker`|Парсер форумов на Playwright, `parser_worker/worker.py`|",
+     "|`flaresolverr`|Прохождение Cloudflare-проверки для форумов, которые за ней|",
+     "|`caddy`|TLS и реверс-прокси перед API, раздача обновлений оверлея|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    48,
+    41,
+    48
+   ],
+   [
+    "replace",
+    48,
+    55,
+    48,
+    49,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    62,
+    49,
+    56
+   ],
+   [
+    "replace",
+    62,
+    63,
+    56,
+    57,
+    [
+     " `gemini-3-flash-preview` читает их целиком."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    57,
+    58
+   ],
+   [
+    "replace",
+    64,
+    66,
+    58,
+    60,
+    [
+     " 1200 символов, эмбеддинги `gemini-embedding-001` (3072 измерения) в pgvector",
+     " `halfvec` с HNSW. Найденные фрагменты собираются обратно в целые статьи."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    60,
+    61
+   ],
+   [
+    "replace",
+    67,
+    71,
+    61,
+    65,
+    [
+     " полнотекстовый поиск PostgreSQL, триграммы, сленговая карта и локальная модель",
+     " FRIDA (1536 измерений). Результаты больше",
+     " десятка «ног» сливаются взвешенным Reciprocal Rank Fusion. Векторы голосуют, только",
+     " когда корпус сервера посчитан полностью."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    65,
+    66
+   ],
+   [
+    "replace",
+    72,
+    73,
+    66,
+    67,
+    [
+     " сохраняются при пересборке, каждая нога поиска сообщает свой статус."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    67,
+    68
+   ],
+   [
+    "replace",
+    74,
+    75,
+    68,
+    69,
+    [
+     "Подробно, с моделями, порогами и весами — docs/RAG_AND_SEARCH.md."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    83,
+    69,
+    77
+   ],
+   [
+    "replace",
+    83,
+    85,
+    77,
+    79,
+    [
+     "что измерено и почему остановились — docs/ENRICHMENT_V3.md,",
+     "код — в папке experimental/enrichment-v3/. Этот код ботом не используется."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    89,
+    79,
+    83
+   ],
+   [
+    "replace",
+    89,
+    90,
+    83,
+    84,
+    [
+     "бот от @BotFather."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    103,
+    84,
+    97
+   ],
+   [
+    "replace",
+    103,
+    104,
+    97,
+    98,
+    [
+     "STARTUP_GUIDE.md."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    122,
+    98,
+    116
+   ],
+   [
+    "replace",
+    122,
+    123,
+    116,
+    117,
+    [
+     "по инструкции из SECURITY.md, не через публичные issues."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    117,
+    120
+   ],
+   [
+    "replace",
+    126,
+    127,
+    120,
+    121,
+    [
+     "Код распространяется по лицензии MIT."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    130,
+    121,
+    124
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "908d1b6388e6+2": {
+  "fn": "nenuadrian/smollerGraph",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "smollerGraph: a graph database, from the bytes up"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "CI"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    7,
+    5,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "Building smollerGraph. Each step of each episode is a tag"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    27,
+    8,
+    27
+   ],
+   [
+    "replace",
+    27,
+    31,
+    27,
+    28,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    49,
+    28,
+    46
+   ],
+   [
+    "replace",
+    49,
+    50,
+    46,
+    47,
+    [
+     "`sg query` answers a small subset of Cypher: a pattern of nodes, with a"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    62,
+    47,
+    59
+   ],
+   [
+    "replace",
+    62,
+    63,
+    59,
+    60,
+    [
+     "`data/wikidata.txt` holds 21,834 taxa from Wikidata, which is under"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    77,
+    60,
+    74
+   ],
+   [
+    "replace",
+    77,
+    78,
+    74,
+    75,
+    [
+     "return on a canvas, a path as its nodes and the relationships between them, laid out by D3's force simulation, up to 500 nodes at a"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    147,
+    75,
+    144
+   ],
+   [
+    "replace",
+    147,
+    149,
+    144,
+    145,
+    [
+     "MIT, see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

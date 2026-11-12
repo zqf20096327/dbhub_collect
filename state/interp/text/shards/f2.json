@@ -3172,5 +3172,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7390b4626a31": {
+  "identity": {
+   "one_liner": "面向 AI 应用工程师的三个可离线运行的工程项目：RAG、提示词评测与受守护的 NL2SQL。",
+   "review": "该仓库面向 AI 应用工程师求职场景，包含三个项目：InsightRAG（混合检索与逐句引用校验的知识库问答）、PromptLens（提示词版本管理与可复现评测）、DataChat BI（只读 SQL 安全边界）。核心机制包括证据偏移回放、内容哈希固定版本、SQL 白名单与只读执行层。要求 Python 3.13，三个离线演示仅用标准库，Web 服务需 FastAPI 与 uvicorn；README 明确注明演示数据规模小、指标不可外推到生产。",
+   "highlights": [
+    "InsightRAG 支持 BM25 与哈希字符 n-gram 并行召回、RRF 融合，证据保留 source、chunk_id 与字符区间，在线生成须逐句通过引用编号校验",
+    "PromptLens 用内容哈希与 SHA256 固定提示词版本与输入，提供 exact_match、contains、regex 三种指标，支持失败隔离、超时与有限重试",
+    "DataChat BI 实现单条 SELECT/WITH 预检、表列函数白名单、参数绑定，执行层使用只读 URI、PRAGMA query_only 与 SQLite authorizer"
+   ],
+   "use_cases": [
+    "离线演示与验证检索、评测、SQL 守护三条工程链路的完整源码与自动化测试",
+    "通过 OpenAI 兼容接口接入真实模型进行在线生成、真实评测与 LLM 规划",
+    "复现仓库内评测 JSON、对比报告与图表报告等产物"
+   ]
+  },
+  "sha": "7390b4626a31",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b101a4a5b470": {
+  "identity": {
+   "one_liner": "自托管开源发票系统，基于 Bun + Hono + React，单容器单 SQLite 文件运行",
+   "review": "Inkvoice 是一个面向自由职业者和小型团队的自托管开源开票系统，功能涵盖发票、报价、循环发票、在线收款、费用追踪与报表。采用 Bun + Hono + React 构建，数据存于单个 SQLite 文件，官方标注内存占用约 50 MB。支持通过 Docker 一条命令部署，也提供官方云托管版本；代码采用 MIT 许可，但名称与标识为注册商标。",
+   "highlights": [
+    "提供发票、报价、循环发票、贷记单及可自定义 PDF 模板，支持 Stripe 与 PayPal 在线收款",
+    "支持多币种、费用与报表 CSV 导出，兼容 XRechnung、ZUGFeRD、Factur-X 及 PEPPOL 电子发票",
+    "单 SQLite 文件存储（约 50 MB 内存），支持多用户角色、OIDC SSO、五种语言及 iOS/Android 应用"
+   ],
+   "use_cases": [
+    "自由职业者或小型团队自行托管管理发票、收款与费用",
+    "需要德国或法国电子发票格式（XRechnung/ZUGFeRD/Factur-X）或 PEPPOL 接入的场景",
+    "通过 Docker、Dokploy 或 Coolify 部署，数据保存在自有环境中"
+   ]
+  },
+  "sha": "b101a4a5b470",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d5a8c2444171": {
+  "identity": {
+   "one_liner": "面向新加坡SkillsFuture生态的自托管AI学习与培训管理系统",
+   "review": "该项目是基于 Next.js/TypeScript/PostgreSQL 的学习与培训管理系统，面向新加坡 SkillsFuture 培训生态中的培训机构、培训师和学员。系统包含 7 种角色仪表盘，支持 SSG/TPGateway API 对接、OTP 登录、QuickBooks 财务流程、多租户部署（Coolify/Docker），并提供 OpenAI 与 Claude 的 OAuth 选择配置。需自托管运行，依赖 PostgreSQL 与 Docker。",
+   "highlights": [
+    "支持 SkillsFuture Singapore（SSG）API，覆盖课程运行、报名、评估、资助与申报流程",
+    "提供 7 种角色（学员、培训师、管理员、开发者、财务、薪资、培训提供商）及多租户部署支持",
+    "包含 AI 提供商配置（OpenAI/Claude OAuth 连接测试与选择）、外部 REST API、任务调度与 n8n 工作流自动化"
+   ],
+   "use_cases": [
+    "新加坡培训机构通过 SSG API 管理课程发布、报名、出勤与评估签核",
+    "培训学员浏览课程、提交作业文件、查看成绩并下载结业证书",
+    "培训提供商使用 Coolify/Docker 以同一代码库运行多租户实例"
+   ]
+  },
+  "sha": "d5a8c2444171",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79b74d1ede08": {
+  "identity": {
+   "one_liner": "本地运行的 AI 编码工具记忆与规则共享中心，单一 SQLite 存储",
+   "review": "Aletheia 是一个本地、免费的记忆与规则中心，为 Claude Code、Codex CLI、Cursor、Gemini CLI、Windsurf、OpenCode 等工具提供共享的持久记忆：数据存于单一 SQLite 库，工具通过 MCP（stdio/HTTP）、REST 或 CLI 读取，规则可同步写入 CLAUDE.md、AGENTS.md 等各工具的指令文件。通过 aletheia install 命令安装钩子实现自动捕获，含密钥脱敏与备份机制。项目处于 alpha 阶段，仅部分工具在真实环境中验证过；运行需 Bun 1.1+，仅监听 loopback，无账号与遥测。",
+   "highlights": [
+    "单一 SQLite 存储通过 MCP（stdio 与 HTTP）、REST API 和 CLI 三种接口读取，支持多 AI 编码工具共享记忆",
+    "规则可同步写入 CLAUDE.md、AGENTS.md、GEMINI.md、.cursor/rules、.windsurf/rules 等各工具指令文件",
+    "钩子捕获前进行密钥脱敏与 <private> 块处理，数据库不可用时写磁盘暂存，始终以 0 退出避免阻塞宿主工具"
+   ],
+   "use_cases": [
+    "多个 AI 编码工具（如 Claude Code 与 Codex CLI）之间共享同一份项目记忆与规则，避免各工具重复维护",
+    "对本地数据隐私有要求的场景：无账号、无遥测、仅监听 loopback，除配置模型提供商外无网络调用",
+    "需要规则一次编写、同步分发到多种工具指令文件的团队或个人工作流"
+   ]
+  },
+  "sha": "79b74d1ede08",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bed74b0c4bda": {
+  "identity": {
+   "one_liner": "介于编码代理与 Git 之间的事务性 Go 运行时，用 worktree 隔离与 2PC 合并约束代理行为",
+   "review": "Nomos 是一个 Go 编写的运行时层，运行在编码代理（Claude Code、Cursor 等）与 Git 仓库之间。它通过 git worktree 隔离任务、以 INT-*/SUB-* DAG 分离规格与代码、在合并前执行 42 项 AST 质量门禁并以 Git Notes 回执记录两阶段提交发布。安装方式为 curl 脚本、Homebrew、makepkg 或 Go 工具链，初始化只需 nomos init。当前集成 Claude Code、Gemini CLI、OpenCode、Cursor、Antigravity、Windsurf、Aider。",
+   "highlights": [
+    "提供 42 项多语言 AST 检查（Go、TypeScript、Python、Rust、Ruby、C/C++、Java、Kotlin、C#），检测空存根、跳过测试注解、超长函数、圈复杂度超标与覆盖率下降",
+    "将任务隔离在独立 git worktree 沙箱中，通过 IDLE→PLAN→EDIT→REVIEW→SYNC→LEARN 状态机管理，main 上的直接提交默认失败",
+    "提供回执门控的 SQLite 记忆（mneme.db）与原子两阶段提交发布，合并时附加密 Git Notes 验证回执"
+   ],
+   "use_cases": [
+    "在允许编码代理自动修改代码的同时，阻止其删除失败断言、留下 TODO 存根或绕过测试",
+    "需要将意图/契约规格（INT-*）与实现代码（SUB-*）分离管理、防止代理改写规格的团队仓库",
+    "限制代理读取宿主凭证文件（~/.ssh、~/.aws 等）、阻止 SSRF 与未授权出站域名的开发环境"
+   ]
+  },
+  "sha": "bed74b0c4bda",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1ef987bb3c57": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理编排框架，以 SQL 票据库驱动工作流执行",
+   "review": "Jobshop 是一个 Go 编写的工作流执行框架，将工作拆分为票据（ticket）并交给 ACP 代理会话处理，状态由 SQLite 或 Postgres 存储。它处理模型自身无法完成的环节：跨会话保持状态、响应外部事件、拆分任务并路由到带上下文的新会话。代理在各自的 git worktree 与沙箱中工作，人类可在需人工介入的步骤参与。项目自身即用此流程完成从 issue 到已合并 PR 的开发。",
+   "highlights": [
+    "提供票据图（含阻塞边、认领与评论）、代理池、带重试与升级的工作流运行机制",
+    "支持 GitHub 与 Linear 的 webhook/轮询接入，内置 PR 审查合并步骤包（packs/github）",
+    "触发器支持计数、cron、事件、Starlark 处理器与扫描信号；提供 Web UI（Desk）、HTTP API 与 A2A 网关"
+   ],
+   "use_cases": [
+    "将 GitHub issue 或 Linear issue 自动流转为实现、审查、合并、部署检查的完整运行流程",
+    "对无人认领票据、无响应会话、未合并 PR 等异常状态做扫描并启动诊断运行",
+    "master 构建失败时按 SHA 键启动对应的修复运行（ci-repair）"
+   ]
+  },
+  "sha": "1ef987bb3c57",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ce40600fdcb5": {
+  "identity": {
+   "one_liner": "《造梦西游4》生存大冒险的C99求解内核，含DP精确解与微型Transformer策略",
+   "review": "这是一个针对《造梦西游4》内置生存大冒险小游戏的纯计算内核，用C99编写、无第三方依赖，面向游戏玩家及需要嵌入决策能力的宿主程序（小程序、网页）开发者。内核提供两套引擎：precision 模式用动态规划加记忆化精确计算各选项的达标概率（支持620/480两档目标），flash 模式用27-token的微型Transformer网络一次前向给出策略近似。内核无UI与全局可变状态，可编译为控制台程序、静态/动态库或经Emscripten编译为WASM。",
+   "highlights": [
+    "precision 模式基于带剪枝与记忆化的动态规划，输出各选项的达标概率精确值，支持最大化均分、620分与480分三种目标",
+    "flash 模式内置27-token、d_model=128的Transformer策略网络（权重约6.3MB编译进二进制），单次前向输出4个选项的偏好与价值",
+    "纯计算内核无UI、IO依赖与全局可变状态，状态封装在GameContext中可重入；可编译为原生程序、静态库或WASM，已在微信小程序与网页中跑通"
+   ],
+   "use_cases": [
+    "为生存大冒险玩法计算每题4个选项的最优选择及620/480分档达标概率",
+    "通过Emscripten编译为WASM嵌入网页或微信小程序提供决策接口",
+    "将dpsolver/net编译为静态库，供其他语言或宿主程序调用其求解API"
+   ]
+  },
+  "sha": "ce40600fdcb5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

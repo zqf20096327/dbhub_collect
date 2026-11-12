@@ -2385,5 +2385,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "32a4b6f48069": {
+  "identity": {
+   "one_liner": "基于 Rust 的编码代理本地记忆 MCP 服务器，单 SQLite 文件加本地嵌入",
+   "review": "Palace 是一个为编码代理提供跨会话记忆的 MCP 服务器，用 Rust 编写，以单个二进制文件和单个 SQLite 数据库运行，不需要 API 密钥。它将代码、笔记和对话按原文存储，嵌入由 ONNX Runtime 在本地 CPU 上计算，检索融合 BM25 与向量相似度，并附带来源引用。通过用户级 hooks 在会话开始、提交提示时自动注入记忆。支持 Linux x86_64、macOS Apple Silicon、Windows x86_64，不支持 macOS Intel。",
+   "highlights": [
+    "存储原文而非 LLM 摘要，检索融合 BM25 关键词评分与本地嵌入余弦相似度，结果附带 wing/room/来源文件/分数等出处信息",
+    "通过用户级 hooks 在会话开始、提示提交和工具调用后自动注入相关记忆，stop hook 让代理写回日记与决策",
+    "支持多本地嵌入模型，migrate 命令在检索不中断的情况下重建向量，并以 recall@5 和 p95 延迟阈值验证后再切换"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等支持 MCP 的代理客户端提供跨会话的记忆与决策追溯",
+    "需要数据不出本机的本地嵌入与语义搜索场景",
+    "非软件项目场景：README 提供 creative 和 personal profile 用于世界观构建、小说、教练笔记等"
+   ]
+  },
+  "sha": "32a4b6f48069",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

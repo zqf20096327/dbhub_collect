@@ -19988,5 +19988,342 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "ff4bb6d7c0b7+2": {
+  "fn": "Elvinoacer/pharmacy_template_tier2",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "This build is a **multi-tenant network**: many independent pharmacies share the platform. Read **MULTITENANCY.md** before changing schema or auth."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    10,
+    5,
+    10
+   ],
+   [
+    "replace",
+    10,
+    17,
+    10,
+    17,
+    [
+     "|Layer|Technology|",
+     "|---|---|",
+     "|App|Next.js App Router, React 19, Tailwind CSS 4|",
+     "|ORM|Prisma 7 (`prisma-client` + `@prisma/adapter-pg`)|",
+     "|Database|Neon Postgres (shared DB, `pharmacy_id` isolation)|",
+     "|Auth|Cookie sessions, bcrypt password hashes, memberships + platform admin|",
+     "|AI|Groq (knowledge-base grounded assistant)|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    51,
+    17,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "Open http://localhost:3000."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    52,
+    53
+   ],
+   [
+    "replace",
+    53,
+    54,
+    53,
+    54,
+    [
+     "For role-specific navigation and safe admin provisioning, see Everyday user flows. The demo seed (`npm run db:seed`) truncates existing data; use it only on a disposable demo database. Use `npm run db:seed:admin` to add one platform admin without resetting pharmacy data."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    69,
+    54,
+    69
+   ],
+   [
+    "replace",
+    69,
+    83,
+    69,
+    83,
+    [
+     "|Variable|Purpose|",
+     "|---|---|",
+     "|`DATABASE_URL`|Neon pooled connection string (`sslmode=require`) — **required**|",
+     "|`DIRECT_URL`|Same as `DATABASE_URL`, used by Prisma CLI for migrations|",
+     "|`DATABASE_HOSTADDR`|Optional IPv4 override when Node cannot connect through DNS|",
+     "|`AUTH_SECRET`|Signs the session-claim JWT cookie. ≥16 chars. **Required.**|",
+     "|`NEXT_SERVER_ACTIONS_ENCRYPTION_KEY`|Required by Next.js 16 to encrypt Server Action payloads. ≥16 chars. **Required.**|",
+     "|`NEXT_PUBLIC_APP_URL`|Public app URL — used for OAuth redirect URI, email links. Must match your production domain exactly.|",
+     "|`CRON_SECRET`|Bearer token for `/api/cron/reminders` (required in production)|",
+     "|`GOOGLE_CLIENT_ID`|Google OAuth client ID (Google Cloud Console → Credentials)|",
+     "|`GOOGLE_CLIENT_SECRET`|Google OAuth client secret|",
+     "|`GROQ_API_KEY`|AI assistant|",
+     "|`GROQ_MODEL`|Optional text model override. Default `openai/gpt-oss-20b` (Llama 3.x IDs were shut down 16 Aug 2026).|",
+     "|`GROQ_VISION_MODEL`|Optional vision model override. Default `qwen/qwen3.8-27b` (`qwen/qwen3.6-27b` was retired).|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    83,
+    86
+   ],
+   [
+    "replace",
+    86,
+    87,
+    86,
+    87,
+    [
+     "1. Go to **Google Cloud Console → Credentials**."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    89,
+    87,
+    89
+   ],
+   [
+    "replace",
+    89,
+    91,
+    89,
+    91,
+    [
+     " - Dev: `http://localhost:3000/api/auth/google/callback`",
+     " - Prod: `https://YOUR_DOMAIN/api/auth/google/callback`"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    100,
+    91,
+    100
+   ],
+   [
+    "replace",
+    100,
+    105,
+    100,
+    105,
+    [
+     "|Endpoint|Frequency|Function|",
+     "|---|---|---|",
+     "|`/api/cron/reminders`|Every 5 mins|Dose reminders, scheduled campaigns, messages & adherence alerts|",
+     "|`/api/cron/inventory`|Every 6 hours|Inventory low stock & expiration monitoring|",
+     "|`/api/cron/loyalty`|Daily (06:00 UTC)|Birthday points, refill completion bonuses & order points|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    110,
+    105,
+    110
+   ],
+   [
+    "replace",
+    110,
+    119,
+    110,
+    119,
+    [
+     "|Email|Role|Entry|",
+     "|---|---|---|",
+     "|`platform@afyvia.health`|Super-admin|`/platform`|",
+     "|`manager@afyviapharmacy.com`|Afyvia owner + Coast Care manager|`/admin` (switcher)|",
+     "|`pharmacist@afyviapharmacy.com`|Pharmacist (Afyvia)|`/admin`|",
+     "|`staff@afyviapharmacy.com`|Staff (Afyvia)|`/admin`|",
+     "|`jane@example.com`|Customer (Afyvia + Coast Care)|`/portal` → My pharmacies|",
+     "|`john@example.com`|Customer (Afyvia)|`/portal`|",
+     "|`peter@example.com`|Caregiver|`/caregiver`|"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    193,
+    119,
+    193
+   ]
+  ],
+  "at": "2026-11-12"
+ },
+ "80c36b5955d9+2": {
+  "fn": "huaweicloud-samples/database-awesome-huaweicloud",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    5,
+    1,
+    4
+   ],
+   [
+    "replace",
+    5,
+    7,
+    4,
+    5,
+    [
+     "|Repository|Description|Team|Status|"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    91,
+    6,
+    88,
+    [
+     "|application-intelligence-application-intelligence-semantic-search-css|This practice provides a semantic search solution on Huawei Cloud, supporting traditional keyword search (BM25), vector-based semantic search, and Retrieval Augmented Generation (RAG). It serves as a reference architecture for enterprise knowledge bases and intelligent Q&A systems.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|application-intelligence-audio-transcription-pii|This project provides an audio file upload and processing platform that automatically performs speech transcription, Personally Identifiable Information (PII) redaction, and content summarization. Built on Huawei Cloud native services with high availability and scalable Serverless architecture.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|application-intelligence-durable-workflow-otel-tracing|A minimal, deployable sample that instruments a **FunctionGraph durable workflow** with **OpenTelemetry**, demonstrating unified distributed tracing across multiple function invocations with per-step spans and automatically correlated logs.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|application-intelligence-logistics-tracking|This project demonstrates how to build a logistics tracking agent with VPC network connectivity on Huawei Cloud. The agent is built using Strands Agents SDK, deployed via FunctionGraph, and can query a private GaussDB database to track shipments and identify potential delays.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|application-intelligence-modelarts-private-workspace|Provisions a VPC-only private ModelArts AI workspace on Huawei Cloud with Terraform: private notebook pool, KMS-encrypted SFS Turbo/OBS, VPC flow logs, least-privilege IAM.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|application-intelligence-serverless-pdf-chat|Serverless PDF Chat is a serverless application that allows users to upload PDF documents and ask questions about their content using a conversational AI interface. Documents are processed with embeddings and stored for retrieval, providing accurate answers using RAG (Retrieval-Augmented Generation) technology.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|application-intelligence-story-generation|This practice provides a scheduled content generation system running on Huawei Cloud: at a fixed time every day, a large model automatically generates a children's bedtime story, persists it with a 2-day TTL, and fans out a domain event to two asynchronous pipelines (speech synthesis and email notification).|public-cloud-continuous-operation-competence-center|incubating|",
+     "|argo-workflow-installation-for-cce|Step-by-step guide to install Argo Workflows on Huawei Cloud CCE: persist logs to OBS and archive run records to RDS, with image pre-pull and x86/ARM multi-arch scheduling, including full installation YAML and verification steps.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloud-native-computing-gpu-diagnostics-collector|This practice provides **one-click GPU instance fault diagnostics collection** for scenarios such as **Xid / NVLink / ECC / training-hang troubleshooting**. It targets platform / infrastructure engineers.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloud-native-observability-distributed-tracing-sample|This practice demonstrates **distributed tracing instrumentation for three classes of downstream calls (HTTP / storage / database) in an Express application**, for **observability / APM onboarding** scenarios. It targets Node.js backend and observability engineers.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloud-native-security-cloudhsm-jce-examples|This practice provides **Java JCE integration with a Cloud HSM** examples for **encryption / signing / secure key storage**. It is intended for Java backend / security engineers and can be used as a reference / algorithm baseline.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloud-native-security-db-audit-log-serverless|This solution deploys a **serverless audit log collection and querying system for RDS MySQL / GaussDB MySQL** on Huawei Cloud. It automatically discovers database instances with audit logging enabled, periodically fetches audit logs and archives them to OBS, and provides SQL query capability through DLI (Data Lake Insight) — fully serverless, pay-per-use.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloud-native-security-obs-upload-virus-scanning|An event-driven content check practice on Huawei Cloud: an object written to aprivate OBS bucket triggers a FunctionGraph function through CTS key operation notifications and an SMN topic. The function reads the object, runs registered inspection rules, then writes a status back to the object or removes it.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloud-native-security-resource-control-policies|This practice provides the core capability of **organizational resource control policies (RCPs)** for **access-boundary governance and security compliance in multi-account / multi-project environments**. It is intended for cloud architects / security governance engineers and can be used as a reference template / compliance baseline / governance solution.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloudnative-cluster-api-provider-cce|A Cluster API (CAPI) Infrastructure Provider that manages Huawei Cloud CCE (Cloud Container Engine) managed clusters declaratively — create, scale and delete CCE clusters and node pools through standard Cluster API resources, following the Cluster API managed-cluster model.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloudnative-ecs-fullstack-app|Deploy a fullstack application using Huawei Cloud CCE (Cloud Container Engine) with CodeArts DevOps pipeline. Demonstrates infrastructure management with Terraform, CI/CD with CodeArts Pipeline, and containerized deployment with auto-scaling on CCE.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloudnative-vpc-hub1|Build an enterprise-grade scalable network hub architecture on Huawei Cloud using Terraform. Implements centralized network management, security isolation, and unified governance across multi-account/multi-VPC environments. Uses ER (Enterprise Router) for Transit Hub networking, VPC Border Firewall for security, and DNS for centralized resolution.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloudnative-vpc-hub|Build an enterprise-grade scalable network hub architecture on Huawei Cloud using Terraform. Implements centralized network management, security isolation, and unified governance across multi-account/multi-VPC environments. Uses ER (Enterprise Router) for Transit Hub networking, VPC Border Firewall for security, and DNS for centralized resolution.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloudoperation-resource-monitor-dashboard|HuaweiCloud Resource Monitor Dashboard 是一个面向华为云弹性云服务器（ECS）、云硬盘（EVS）和云监控（CES）的资源监控仪表盘。用户配置租户 AKSK 等鉴权信息后，后端定时或手动从华为云 API 采集资源数据与使用率指标，保存到本地 SQLite 数据库，并通过 RESTful API 为前端提供查询、筛选和导出报告功能。|public-cloud-continuous-operation-competence-center|incubating|",
+     "|cloudrobo-samples|This repository provides a comprehensive collection of practice samples for the CloudRobo Embodied AI Platform. Covering key modules such as simulation, data processing, embodied models, Ascend adaptation, and robot integration.|public-cloudrobo|incubating|",
+     "|data-integration-dicom-metadata-extractor|This project is a **DICOM medical image metadata auto-extraction and querying platform**. It extracts structured metadata from medical imaging files (DICOM format), converts them to columnar storage (Parquet), and loads them into a data lake for downstream querying, analysis, and machine learning.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|data-integration-s3-cross-account-replication|This practice provides OBS cross-region replication capability for data disaster recovery and cross-region data synchronization. Designed for operations engineers and architects as a reference architecture or learning example.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|data-integration-sample-s3-hybrid-cache|A high-performance transparent cache proxy deployed on Huawei Cloud ECS that accelerates OBS (Object Storage Service) access. It provides intelligent multi-layer caching, a streaming architecture, and comprehensive observability. Clients connect through OBS's S3-compatible interface with zero changes to their business protocols.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating|",
+     "|database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating|",
+     "|database-dapper-orm-gaussdb|Dapper-orm兼容GaussDB|gaussdb-drivers|incubating|",
+     "|database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating|",
+     "|database-langchain-gaussdb-sync|GaussDB生态建设：适配LangChain，提供同步VectorStore和ChatMessageHistory能力|gaussdb-drivers|incubating|",
+     "|database-lightrag-gaussdb|开源工具LightRAG兼容GaussDB|gaussdb-drivers|incubating|",
+     "|database-n8n-gaussdb|gaussdb生态建设：n8n 兼容gaussdb|gaussdb-drivers|incubating|",
+     "|database-prisma-orm-gaussdb|prisma-orm兼容GaussDB|gaussdb-drivers|incubating|",
+     "|database-ragflow|生态建设，GaussDB 适配 RAGFlow|gaussdb-drivers|incubating|",
+     "|database-sea-orm-gaussdb|Sea-ORM兼容GaussDB|gaussdb-drivers|incubating|",
+     "|database-superagi-gaussdb|开源工具SpuerAGI兼容GaussDB|gaussdb-drivers|incubating|",
+     "|deterministic-operations-cce-log-pipelin|This repository provides a container log collection and routing solution running on Huawei Cloud Cloud Container Engine (CCE). It handles both standard output and log files from application containers. Two collection paths are covered — managed collection and self-built routing — and logs can be delivered to LTS, OBS, DIS, CSS, and AOM. It is intended for DevOps, backend, and operations engineers as a reference architecture or production template.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|deterministic-operations-css-ces-alarm-checker|A **one-click deployment and periodic inspection solution for recommended alarms on CSS (Cloud Search Service) clusters**: Terraform provisions the cluster and supporting cloud resources, and the Python tools create the recommended CES alarm rules for a given cluster and periodically check whether the alarms of each cluster match the baseline. It is intended for O&M scenarios where a unified alarm baseline is required across CSS clusters.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|deterministic-operations-devops-alarm-webhook|This practice delivers an alarm-driven automation loop: function errors → AOM alarm → SMN → FunctionGraph → webhook. When a function fails, the alarm is captured and a signed incident event is posted to a user-configured endpoint. It targets DevOps/SRE teams as a reference for automatic incident reporting.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|dify-gaussdb|gaussdb生态建设：dify适配兼容gaussdb|gaussdb-drivers|incubating|",
+     "|distributed-x-infrastructure-functiongraph-layers|This solution provides an automated CI/CD pipeline for building and distributing FunctionGraph (Huawei Cloud Serverless Functions) Layers across multiple Huawei Cloud regions.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|distributed-x-infrastructure-php-serverless-examples|This practice provides the core capability of **serverless PHP (Lamp-stack serverless)** progressive examples for **full cloud-native modernization of PHP applications**. It is intended for PHP backend / DevOps engineers and can be used as a reference architecture / learning path / modernization template.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|distributed-x-infrastructure-sample-multichannel-messaging-api-with-template|This project is a multi-channel message sending platform based on Huawei Cloud DMS Kafka message queue, providing: - **Message Queue Processing**: Uses DMS Kafka as message middleware, supporting high-throughput message processing - **Multi-Channel Sending**: Supports email sending (via SMTP) and SMS sending - **Template Storage**: Supports dynamic management and storage of message templates Suitable for enterprise scenarios requiring large-scale push messaging, such as e-commerce promotions, member notifications, system alerts, etc.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|distributed-x-infrastructure-scheduled-web-scraper-layer|A timer trigger invokes one FunctionGraph function on a Quartz-style cron expression. Each invocation fetches a configured page over HTTP, writes the response body as a dated snapshot object into a private Object Storage Service (OBS) bucket, and emits structured JSON log lines to Log Tank Service (LTS).|public-cloud-continuous-operation-competence-center|incubating|",
+     "|distributed-x-infrastructure-serverless-activity-crud|A fully serverless Activity CRUD service on Huawei Cloud: API Gateway exposes five REST routes, FunctionGraph runs the business logic, and the GeminiDB DynamoDB-compatible interface stores the data.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|distributed-x-infrastructure-serverless-crud-api|Four independent FunctionGraph functions serve the list, read, create and delete operations of a product REST API. All four entry points depend only on a `ProductStore` port; a single adapter binds that port to a managed key-value table. Structured logs, custom metrics and trace identifiers are emitted as JSON lines for Log Tank Service (LTS) and Application Operations Management (AOM).|public-cloud-continuous-operation-competence-center|incubating|",
+     "|distributed-x-infrastructure-serverless-hexagonal-api|A serverless products API built with Go and hexagonal architecture, keeping domain logic independent of cloud services.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|distributed-x-infrastructure-video-streaming|Building a complete video live streaming and VOD platform requires: RTMP ingest, real-time transcoding to multi-resolution HLS, metadata storage, CDN distribution, and shared file storage for multi-Pod collaboration.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-cce-container-workloads|his practice runs common applications such as nginx, tomcat, jetty, and wildfly on Cloud Container Engine (CCE) as Kubernetes workloads (Deployments). Each application provides a declarative definition, accompanied by Terraform infrastructure-as-code for one-click creation of the cluster, node pool, and namespace. All 4 workloads above have been verified through real deployment on a CCE cluster in this account, with Pods reaching the Running state.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-container-patterns|This catalog collects and implements the most commonly used design patterns for deploying container workloads on Huawei Cloud, covering typical scenarios such as load balancing, sidecar, service discovery, and scheduled tasks. Each pattern provides a deployable reference implementation (Terraform infrastructure + Kubernetes manifests + sample application), helping architects and platform engineering teams reuse proven container architectures in a cloud-native way.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-ecs-cce-managed-nodes-tco-calculator|The CCE Managed Node TCO Calculator helps platform engineers and architects quantify the cost difference of adopting **CCE managed nodes** versus **self-managed standard ECS**. It simultaneously measures infrastructure cost (ECS instance fee + CCE managed node service fee) and platform-engineering labor cost (manual management vs. automated managed service), and outputs the monthly savings plus additional benefits from bin-packing efficiency improvements. All calculations run locally in the browser|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-knowledge-graph-visualization|DOT-LD (DOT Linked Data) is a lightweight Markdown extension that allows embedding formal knowledge graph structures in technical documents.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-mcp-server-obs|This service targets developers and solution teams that need a large language model to \"read directly\" from files in Huawei Cloud OBS. It wraps object storage capabilities as standard MCP tools and resources. Once mounted into any MCP-compatible client (such as Claude Desktop or MCP Inspector), the model can list buckets, browse objects, and read object content without manually downloading files or writing glue code. It is suitable for scenarios such as knowledge base Q&A, document retrieval augmentation, and object storage content preview.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-obs-resumable-upload|`obstrans` is a high-performance resumable-transfer CLI built on Huawei Cloud Object Storage Service (OBS). It supports multipart upload, ranged download, bucket-to-bucket migration, and distributed cluster transfer orchestrated by a message queue. It fits large-scale data migration, cross-region sync, and reliable large-file transfer.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-observability|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for user authentication.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-rds-mysql-upgrade-assistant|This solution is a major version (8.0 → 8.4) upgrade assistant for Huawei Cloud RDS for MySQL. It exposes upgrade tools as an MCP Server that clients such as Claude Desktop / Cursor can call, covering the complete flow of \"discover instances → compatibility precheck → create a target-version instance and sync in real time → switch the connection entry → validate → clean up\". It suits operations and architecture scenarios that require low-downtime major version upgrades for a batch of MySQL instances.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-security-review-tool|This CLI performs deterministic security rule scanning on Huawei Cloud infrastructure-as-code (Terraform / JSON / YAML templates) and optionally enhances results with threat modeling and remediation suggestions generated by a MaaS-hosted model, producing Excel / HTML / JSON reports.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-serverless-todo|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for user authentication.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|enterprise-synthetic-document-generator|Convert reference PDFs (contracts, forms, reports) into synthetic versions—keeping structure and formatting intact.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|example-samples|@huaweicloudsamples|ImageTeam|incubating|",
+     "|finance-real-time-stream-processing|This implementation provides a **Real-time Stream Processing** reference architecture on Huawei Cloud, demonstrating a complete event-driven data processing pipeline built with native Huawei Cloud services.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb-drivers|incubating|",
+     "|government-rekognition-virtual-proctor|A **real-time proctoring web application** for online exam scenarios: after registering a candidate's face, the system periodically captures the webcam feed and performs real-time detection across four indicators — face presence, candidate identity, prohibited objects, and prohibited content — presenting the results instantly on the frontend. This repository is its **serverless** implementation on Huawei Cloud, suitable for online proctoring validation and pilot deployments by educational institutions and certification exam platforms.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|government-tak-server|This solution demonstrates how to deploy a serverless TAK Server (Team Awareness Kit) on Huawei Cloud, achieving high availability, auto-scaling, and cost-optimized collaboration platform.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|hibernate-orm7.4.1|应客户要求，基于hibernate7.4.1进行适配（支持 A 兼容（Oracle 风格）、M 兼容（MySQL 风格）），数据库版本505.2.1 0800SPC|gaussdb-drivers|incubating|",
+     "|huawei-elb-controller-for-everest-v1|Huawei Cloud ELB Controller for OpenEverest V1 — manages ELB instances via LoadBalancerConfig CRD|public-cloud-continuous-operation-dept|incubating|",
+     "|huaweicloud|test|members|incubating|",
+     "|iaas-file-processing-example|An event-driven real-time file processing architecture. When a Markdown file is uploaded to OBS, two processing workflows are automatically triggered in parallel: **Markdown-to-HTML conversion** and **sentiment analysis**.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|internet-agent-trace-exporter|This solution provides a \"log → OTLP\" agent trace export pipeline: the agent runtime writes trace spans as JSON to the Log Tank Service (LTS); the pipeline consumes them in real time and filters them by configurable attributes, converts matched spans to OpenTelemetry (OTLP) format, and fans them out to one or more OTLP-compatible backends (self-hosted Collector, Grafana Tempo, Jaeger, etc.), while periodically archiving raw records to Object Storage Service (OBS) with a 30-day retention period.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|internet-cce-fluxv2-gitops-example|Terraform provisions the CCE cluster, node pools (native auto-scaling), networking, and IAM delegation. Once the cluster is ready, Flux v2 continuously reconciles the cluster state declared in `k8s-config/` against production. Infrastructure and GitOps content are decoupled and can be iterated independently.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|internet-content-aggregator|This practice provides the core capability of **automated content aggregation and static display** for **blog / RSS aggregation and feed pipelines** scenarios. It is intended for DevOps / backend engineers and can be used as a reference architecture / learning sample / production template.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|internet-elastic-beanstalk-express-js|This repository provides a best-practice approach for running a stateless Node.js (Express) web application on Huawei Cloud: containerize the application and run it on CCE (Cloud Container Engine), exposing it externally through a dedicated-mode Elastic Load Balance (ELB). It is suitable for scenarios where you want to quickly host a lightweight web service on managed Kubernetes while gaining elastic scaling and high-availability capabilities.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|internet-obs-image-processing|Real-time image optimization workflow based on Huawei Cloud CDN + FunctionGraph + OBS. Original images are uploaded to OBS buckets and distributed globally via CDN|public-cloud-continuous-operation-competence-center|incubating|",
+     "|internet-react-cors-spa|This reference architecture delivers an end-to-end \"static single-page application + lightweight REST API\" pattern on Huawei Cloud, demonstrating the typical cross-origin web architecture where a frontend calls a backend API. It targets frontend engineers, full-stack developers, and architects, and serves as a learning sample and production reference template.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|internet-rss-content-aggregator|This practice provides the core capability of **automated content aggregation and static display** for **blog / RSS aggregation and feed pipelines** scenarios. It is intended for DevOps / backend engineers and can be used as a reference architecture / learning sample / production template.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|internet-serverless-form-submission-notification|A single FunctionGraph function receives a web form submission over one public HTTP endpoint. Within the same request it writes the payload to a managed key-value table and publishes a notification message in parallel, then returns one unified response. No server is provisioned or maintained.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|langgraph-gaussdb|gaussdb生态建设：适配langgraph|gaussdb-drivers|incubating|",
+     "|lean-governance-custom-lens-wa|This practice provides the core capability of **cloud architecture best-practice checklists** for **architecture reviews, compliance checks, and pre-launch health checks**. It is intended for cloud architects / operations / security engineers and can be used as a reference template / assessment baseline / review tool.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|lean-governance-multi-account-budget-management|This reference architecture provides centralized multi-account budget governance: maintain the monthly budget for every account in one place, let a scheduled task periodically check actual spending per account, and notify stakeholders by email / SMS when spending reaches the defined threshold (90% by default).|public-cloud-continuous-operation-competence-center|incubating|",
+     "|media-cloud-serverless-architecture|Sample project for deploy full-stack serverless architecture media main site|public-cloud-continuous-operation-dept, public-cloud-continuous-operation-competence-center|incubating|",
+     "|modelarts-vllm-ascend-deploy-skill|## New Sample Request **Repo name:** `modelarts-vllm-ascend-deploy-skill` **Description:** An AI coding agent skill (Cursor / Claude Code / Codex / CodeArts Snap) for deploying LLM/VL/ASR models to Huawei Cloud ModelArts real-time inference on Ascend NPU (Snt9b2 / Atlas A2), using AK/SK signed REST calls — no CLI package required.|public-cloud-continuous-operation-dept, public-cloud-continuous-operation-competence-center|incubating|",
+     "|rvtools|test|members|incubating|",
+     "|telecom-nlp-pipeline-modelarts|Three NLP capabilities built on ModelArts and OBS: custom entity recognition (BERT-NER), Word2Vec embeddings (gensim), and negative sentiment classification (fastText), targeting text analysis scenarios such as telecom tweet corpora. This practice provides a complete NLP training pipeline: three Jupyter Notebooks run on Huawei Cloud ModelArts, with data stored uniformly in OBS. Training artifacts can be deployed as ModelArts online endpoints, or wrapped as FunctionGraph functions exposed through APIG as REST APIs. **Target audience**: teams that need to train custom entity recognition, word embedding, or text classification models from their own corpora.|public-cloud-continuous-operation-competence-center|incubating|",
+     "|test11|test|public-cloud-service-dept|incubating|"
+    ]
+   ]
+  ],
+  "at": "2026-11-12"
  }
 }

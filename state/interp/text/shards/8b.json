@@ -2673,5 +2673,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c13e5889b6a5": {
+  "identity": {
+   "one_liner": "基于静态解析的 Django/SQLAlchemy ORM 分析工具，提供 ER 图、N+1 检测与迁移风险检查",
+   "review": "ORM Lens（前身为 django-orm-lens）通过静态解析 Django models.py 与迁移文件、SQLAlchemy 模型与 Alembic 版本，提供 ER 图生成、N+1 查询检测、schema 漂移检查和迁移风险分析，无需启动应用或连接数据库。支持 VS Code 扩展、CLI（17 个子命令）和 MCP 服务器三种形态，MIT 协议。要求 Python 3.9+（MCP 为 3.10+），CLI 无运行时依赖。",
+   "highlights": [
+    "提供 ER 图生成、N+1 检测、schema 漂移检测与迁移风险（blast-radius）分析，全部基于静态解析，无需数据库或启动应用",
+    "分发为 VS Code 扩展、CLI（含 SARIF 输出、pre-commit 钩子、GitHub Action）与 MCP 服务器（14 个只读工具）",
+    "包含 18 条 lint 规则、factory_boy 工厂生成器、跨提交 schema diff 与影响分析等能力，MIT 协议"
+   ],
+   "use_cases": [
+    "在 CI 或损坏的虚拟环境中检查 Django 项目的模型结构与迁移风险",
+    "通过 MCP 让 AI 编码代理读取项目的 schema 信息",
+    "审查破坏性迁移的影响范围，或在拉取请求中生成 schema 变更评审评论"
+   ]
+  },
+  "sha": "c13e5889b6a5",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1465b5ba82a2": {
+  "identity": {
+   "one_liner": "Windows x64 桌面应用，通过本机网关让客户端使用自配模型 API",
+   "review": "haxsd byok 是一款 Windows x64 桌面应用，通过本机网关与配置改写，使 Cursor、Devin、Codex 和 Claude Desktop 使用用户自配的 OpenAI 或 Anthropic 兼容模型服务。它内置模型库（支持连接测试）、调用记录、Token 用量与按参考单价估算的花费统计，数据保存在本机数据库。登录、套餐额度与云端功能仍由对应客户端管理，无法接管 Cloud Agents 等云端能力。安装需下载 Releases 中的 x64-setup.exe。",
+   "highlights": [
+    "模型库支持 OpenAI Chat / Responses 与 Anthropic 协议，可添加多个模型并带连接测试",
+    "记录每次调用的成败、耗时、Token 用量及按参考单价估算的金额",
+    "各网关默认关闭且只监听 127.0.0.1，API Key、设置与调用记录保存在本机数据库"
+   ],
+   "use_cases": [
+    "已有自备模型 API 服务，想在 Cursor、Devin、Codex 或 Claude Desktop 中使用",
+    "需要查看本地模型调用的 Token 用量与估算花费",
+    "需要保留客户端原界面与工具链，只替换推理模型来源"
+   ]
+  },
+  "sha": "1465b5ba82a2",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a571e0af8a39": {
+  "identity": {
+   "one_liner": "将 PostgreSQL 大批量 UPDATE/DELETE 拆成小批次执行以减少锁定的命令行工具",
+   "review": "pg_batch 是一个 Python 命令行工具，用于将大批量的 UPDATE 或 DELETE 操作按小批次执行，README 说明大量行更新或删除会产生锁定并影响并行查询，该工具通过分批读写及可选的批次行数上限与休眠间隔来处理。通过 pip 安装，需提供主机、用户、数据库名、表名、WHERE 条件等参数，采用 MIT 许可证。",
+   "highlights": [
+    "支持将 UPDATE 和 DELETE 查询按小批次执行，可配置读批次大小、写批次大小与批次间休眠时间",
+    "按主键游标分页选取目标行，从样本输出看以 id 排序并用 LIMIT 逐步读取",
+    "通过 pip3 install pg_batch 安装，命令行参数包含主机、端口、用户、密码、数据库、表、主键、WHERE、SET 等选项"
+   ],
+   "use_cases": [
+    "需要对大量行执行 UPDATE 或 DELETE，且期间其他查询需要继续运行的场景",
+    "按 WHERE 条件批量修改表数据并控制每次处理的行数",
+    "已有 mysql-batch 使用经验的团队在 PostgreSQL 环境使用对应的同系列工具"
+   ]
+  },
+  "sha": "a571e0af8a39",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

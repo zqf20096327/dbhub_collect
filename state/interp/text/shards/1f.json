@@ -3282,5 +3282,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dd4bbe11abfd": {
+  "identity": {
+   "one_liner": "本地优先的自托管个人财务管理应用，聚合资产、负债与交易。",
+   "review": "Open Finance 是一个自托管的个人财务管理应用，用于在单一仪表板中记录账户、交易、预算、资产与负债。技术栈为 Java 21/Maven 后端加 Node.js 前端，推荐通过 Docker Compose 部署，数据可存于 SQLite 或 PostgreSQL。支持 QIF/OFX/QFX/CSV/JSON 导入与静态加密，AI 助手依赖 Ollama，需单独启用。采用 Elastic License v2 许可证，允许自托管与修改。",
+   "highlights": [
+    "支持账户、交易（拆分、批量编辑、转账）、分类、收款方与金融机构管理，提供循环交易与自动分类规则",
+    "支持 QIF/OFX/QFX/CSV/JSON 导入并带重复检测，支持多币种、静态加密与 JWT 认证，界面提供英文和法文",
+    "AI 助手基于 Ollama 本地运行（默认模型 qwen2.5:0.5b），需通过 ai profile 启用，另含行情数据（Yahoo Finance）功能"
+   ],
+   "use_cases": [
+    "希望数据保存在本地、自托管管理个人收支、预算与净值的场景",
+    "需要从 GnuCash 等工具导入 QIF/OFX 文件并合并多币种资产的场景",
+    "追踪股票、ETF、加密货币等投资组合及房贷摊销与房地产信息"
+   ]
+  },
+  "sha": "dd4bbe11abfd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6352fe030ef8": {
+  "identity": {
+   "one_liner": "将 Grafana 数据从 SQLite 迁移到 Postgres 的命令行工具",
+   "review": "该工具是 Percona 从 wbh1/grafana-sqlite-to-postgres fork 的 Go 命令行应用，用于把 Grafana 的 SQLite 数据库迁移到 Postgres。迁移前需先在 Postgres 建库并由 Grafana 启动生成表结构，然后工具分三步工作：将 SQLite 数据导出到 /tmp、清理导出内容以适配 Postgres、导入目标库。支持以 Docker 镜像方式运行，pq 驱动默认开启 sslmode，连接串可能需调整该参数。",
+   "highlights": [
+    "三步迁移流程：导出 SQLite 到 /tmp、清理导出内容、导入 Postgres",
+    "支持命令行和 Docker 镜像两种运行方式",
+    "已在 macOS、CentOS 7/RHEL7、Fedora 36 上配合多版本 SQLite、Postgres 和 Grafana 6.1.0+ 测试"
+   ],
+   "use_cases": [
+    "需要将 Grafana 从 SQLite 存储切换到 Postgres 的运维场景",
+    "批量迁移多实例 Grafana 数据到统一 Postgres 数据库",
+    "通过 Docker 在无本地 Go 环境的机器上执行迁移"
+   ]
+  },
+  "sha": "6352fe030ef8",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "99f8cd6d65dd": {
+  "identity": {
+   "one_liner": "基于 Tauri v2 的桌面应用模板，预置窗口框架与原生功能。",
+   "review": "WingHarness 是一个 Tauri v2 + React 19 + TypeScript 的桌面应用起始模板，预置无边框窗口、自定义标题栏、路由、系统托盘、全局快捷键、i18n、本地终端与文件预览等模块，面向需要在 Tauri 上直接开发功能而非搭建窗口框架的开发者。需 Node.js ≥18、pnpm ≥9、Rust ≥1.70，通过 pnpm tauri dev 运行；部分文档描述的页面尚未包含在仓库中，采用 GPL-3.0-only 许可证。",
+   "highlights": [
+    "预置无边框窗口、自定义标题栏、系统托盘、全局快捷键、浅色/深色/系统主题及中英文 i18n（i18next）等桌面基础能力",
+    "内置本地伪终端（portable-pty）、Markdown 笔记、受限根目录的文件浏览，以及在 webview 中解析 Word/Excel/PDF/图片/压缩包等多格式的文件预览",
+    "提供发布与自动更新流程：pnpm release:version 校验版本一致性并打标签，GitHub Actions 构建签名的 NSIS 安装包，经 Tauri updater 安装更新"
+   ],
+   "use_cases": [
+    "作为 Tauri v2 项目起点，直接复用窗口框架、路由与原生管道后开始编写业务功能",
+    "构建需要托盘、全局快捷键、多窗口与自动更新的 Windows 桌面工具（构建产物为 NSIS 安装包）",
+    "参考其文档与目录结构，学习 Tauri 命令注册、页面添加、shadcn/ui 组件接入与签名发布流程"
+   ]
+  },
+  "sha": "99f8cd6d65dd",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

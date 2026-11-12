@@ -3447,5 +3447,159 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "478ecf7b0352": {
+  "identity": {
+   "one_liner": "基于 Docker 的 Litestar + SQLAlchemy 2 + PostgreSQL 应用模板，内置依赖注入",
+   "review": "这是一个 Docker 化的 Litestar + SQLAlchemy 2 + PostgreSQL 应用模板，面向需要快速搭建后端项目的开发者。它通过 modern-di 实现 IOC 容器，集成 Alembic 数据库迁移、lite-bootstrap 可观测性工具，并包含 pytest 测试与 ruff/ty 检查链。克隆后通过 just 命令查看可用任务。注意认证方案被有意留空，需自行以 guard 或 middleware 形式添加。",
+   "highlights": [
+    "提供基于 modern-di 的 IOC 容器",
+    "使用 Alembic 进行数据库迁移，pytest 每个用例后自动回滚",
+    "集成 OpenTelemetry 追踪与 Sentry 错误上报，通过环境变量配置"
+   ],
+   "use_cases": [
+    "以 Litestar + SQLAlchemy 2 + PostgreSQL 技术栈启动新后端项目",
+    "需要容器化开发环境与数据库迁移流程的项目脚手架",
+    "需要 OpenTelemetry 全链路追踪配置参考的项目"
+   ]
+  },
+  "sha": "478ecf7b0352",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b1e53fbd7ea9": {
+  "identity": {
+   "one_liner": "用于示威活动的实时协作地图，无需账户或追踪",
+   "review": "Cortège 是一款免费网络应用（采用 AGPL-3.0 协议）：在示威活动中，用户可将现场情况（如封锁、催泪瓦斯、冲锋、医疗点、法律服务团队等）报告至共享地图，供所有人查看。该报告包含带有权重的投票确认机制及过期时间，并提供组织者发布通知和移除虚假报告的入口。可运行于 Node 22.13+ 的服务器上，无需安装依赖。适用于活动现场的参与者、法律服务团队及活动组织者。",
+   "highlights": [
+    "基于多源投票和按距离及时间加权的防滥用报告系统，点会自动过期",
+    "位置信息不离开设备，报告四舍五入至十米量级，无账户、Cookie 或追踪器，支持 Tor 访问",
+    "轻量模式及离线保存地图，具有延迟报告功能，通过二维码为组织者提供访问权限"
+   ],
+   "use_cases": [
+    "示威活动现场的实时局势共享",
+    "法律服务团队发布紧急通知及联系方式",
+    "自行托管社区或城市地图（VPS、cPanel、Docker）"
+   ]
+  },
+  "sha": "b1e53fbd7ea9",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ea575d84202": {
+  "identity": {
+   "one_liner": "本地 MCP 记忆服务器，单一 SQLite 文件供多客户端读写共享",
+   "review": "linksee-memory 是一个本地运行的 MCP 记忆服务器，将项目决策记录存入本机一个 SQLite 文件（~/.linksee-memory/memory.db），供 Claude Code、Codex、Cursor、Windsurf、Gemini CLI 等客户端共同读写，无需账号或云服务。它支持 FTS5 全文搜索、记忆 supersede 替换与漂移检测；会话开始摘要和编辑前警告仅通过 Claude Code hooks 实现，其他客户端需 agent 主动调用 remember/recall。跨机器同步需手动复制目录。",
+   "highlights": [
+    "单个本地 SQLite 文件（含 FTS5）作为跨客户端共享记忆，服务器不发起网络请求，遥测默认关闭",
+    "提供 remember/recall 工具，支持 supersedes 记忆替换、按 entity/beta 名称过滤与漂移检测",
+    "Claude Code 通过 hooks 实现会话开始注入决策摘要、编辑前按 affects 匹配重新注入，Stop hook 自动保存会话"
+   ],
+   "use_cases": [
+    "在不同会话或不同 AI 客户端之间传递项目决策及其原因（如 repo A 记录、repo B 查询）",
+    "交接项目给后续开发者或下一个会话，附带决策记录与漂移检查",
+    "通过 MCP 为多个 AI 编码工具配置统一的本地记忆层"
+   ]
+  },
+  "sha": "4ea575d84202",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fad0c491891f": {
+  "identity": {
+   "one_liner": "基于 Rust 与 GPUI 的本地优先桌面 SQL 客户端，支持多种数据库。",
+   "review": "BarSQL 是一个运行于 Windows、macOS 和 Linux 的桌面 SQL 工作台，采用 Rust 编写并使用 GPUI 界面框架，连接 PostgreSQL、MySQL/MariaDB、SQL Server、ClickHouse、SQLite 和 Turso/libSQL。它无需账户和遥测，数据存储在应用旁的单一 BarSQL-data 文件夹中，可便携使用。提供源码构建方式，采用 GPL-3.0-only 许可证。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQL Server、ClickHouse、SQLite、Turso/libSQL 六类数据库，各引擎均有 TLS/SSL 安全传输选项，除 SQLite 外支持 SSH 隧道",
+    "内置树状结构编辑器，提供模式感知自动补全、多光标编辑、查询计划查看器、ER 图、模式对比、CSV/SQL 导入与一键导出",
+    "所有数据保存在可执行文件旁的 BarSQL-data 文件夹中，无需账户、无遥测，每个版本发布均附带 SHA-256 校验文件与签名构建来源证明"
+   ],
+   "use_cases": [
+    "在同一桌面工具中管理和查询多种数据库引擎，包括表数据编辑、结构设计与表备份",
+    "通过 SSH 隧道访问堡垒机后的数据库，或以只读模式连接生产库",
+    "通过 MCP 协议让 Claude 等 AI 助手读取数据库，并限定其可修改的范围"
+   ]
+  },
+  "sha": "fad0c491891f",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1721b367a666": {
+  "identity": {
+   "one_liner": "基于 Java 21 Arena 与 MemoryLayout 的 LSM-tree 键值存储系统",
+   "review": "该项目是一个用 Java 实现的日志结构合并树（LSM-tree）键值存储，采用内存 MemTable、磁盘不可变 SSTable、WAL 预写日志与后台压缩的经典分层架构，支持 TTL、墓碑标记、布隆过滤器及阈值/大小分层两种压缩策略。面向写密集与时间序列场景，需 Java 21 与 Maven 3.6+，通过 Maven 依赖或源码构建使用，遵循 Apache 2.0 协议。",
+   "highlights": [
+    "基于 MemTable、不可变 SSTable、WAL 与后台压缩实现经典 LSM-tree 架构",
+    "支持 TTL 过期、墓碑删除标记、布隆过滤器与可配置压缩策略",
+    "使用 Java 21 的 Arena API 与 MemoryLayout 进行堆外内存管理"
+   ],
+   "use_cases": [
+    "写密集型负载的键值存储场景",
+    "时间序列数据的持久化存储",
+    "需要范围扫描与 TTL 过期能力的 Java 应用"
+   ]
+  },
+  "sha": "1721b367a666",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "129b66156dc1": {
+  "identity": {
+   "one_liner": "基于 Go 标准库与 MySQL 的迷你银行系统，实现 Clean Architecture 分层。",
+   "review": "这是一个使用 Go 标准库和 MySQL 构建的迷你银行应用，支持存款、取款、转账及企业批量发薪等接口，遵循 Clean Architecture 四层结构。项目未使用第三方 Web 框架或 ORM，通过 database/sql 执行原生 SQL 并以 BeginTx 保证事务；跨层传参倾向值类型以减少堆分配。测试仅覆盖 use case 层，使用 Testify 进行断言与 mock。",
+   "highlights": [
+    "提供注册、存款、取词、转账、批量发薪等 HTTP JSON 接口",
+    "使用 database/sql 与 go-sql-driver/mysql 执行原生 SQL，通过 BeginTx 实现 ACID 事务",
+    "批量发薪单次请求限制最多 1000 条变更，失败时整体回滚"
+   ],
+   "use_cases": [
+    "作为 Go Clean Architecture 分层与原生 SQL 事务实现的学习参考",
+    "用于演示银行核心流程（存款、取款、转账、批量发薪）的 API 场景",
+    "用于基于 Testify mock 的 use case 层单元测试实践"
+   ]
+  },
+  "sha": "129b66156dc1",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ea9e15f406ad": {
+  "identity": {
+   "one_liner": "OpenGauss 安装指南：macOS 上装 Lean 4 + Mathlib 自动形式化工作区",
+   "review": "这是一份社区维护的非官方安装教程，指导用户在 Mac 上安装 Math, Inc. 的开源编排器 OpenGauss，并搭建 Lean 4 + Mathlib 工作区，用 AI 编码代理将 LaTeX 数学论文与证明转为机器验证代码。文档记录了官方安装脚本当前失败（模板 YAML 404）等原因，给出按顺序排列的逐步修复方案，适用对象为使用 Apple Silicon 或 Intel Mac 的用户，需约 8 GB 磁盘空间及 Claude Code 或 OpenAI Codex 账户。",
+   "highlights": [
+    "提供完整的 macOS 分步安装流程，覆盖安装器当前失败点的替代方案（直接运行仓库内 install-internal.sh）",
+    "说明两种使用路径：Claude Code 直接调用 /lean4: 系列命令，或通过 gauss CLI 以 /swarm 并行运行多个代理",
+    "包含 Mathlib 缓存下载、git 仓库初始化、bypass permissions 风险提示及冒烟测试（/lean4:prove 1+1=2）等验证步骤"
+   ],
+   "use_cases": [
+    "在新 Mac（Apple Silicon，macOS 14 实测）上从零搭建 Lean 4 + Mathlib 形式化工作环境",
+    "使用 Claude Code 或 Codex 作为后端代理，执行 prove、formalize、autoformalize 等 Lean 工作流",
+    "排查 OpenGauss 官方一键安装脚本失败、Mathlib 未下载、Rosetta 环境等常见安装问题"
+   ]
+  },
+  "sha": "ea9e15f406ad",
+  "source": "readme",
+  "generated_at": "2026-11-12",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
