@@ -1,8 +1,8 @@
-# Argon — Git for MongoDB
+# Argon — MongoDB sandboxes for AI agents
 
 <p align="center">
   <a href="https://argonlabs.tech">
-    <img src=".github/assets/hero.png" alt="Argon — Git for MongoDB, built for AI agents: branch off prod, run an agent, undo the session" width="100%">
+    <img src=".github/assets/hero.png" alt="Argon — MongoDB sandboxes for AI agents: give every agent run its own database and review what to merge" width="100%">
   </a>
 </p>
 
@@ -12,18 +12,24 @@
 [![Homebrew](https://img.shields.io/badge/Homebrew-argonctl-orange?logo=homebrew)](https://github.com/argon-lab/homebrew-tap)
 [![npm](https://img.shields.io/npm/v/argonctl?logo=npm&label=npm)](https://www.npmjs.com/package/argonctl)
 [![PyPI](https://img.shields.io/pypi/v/argon-agents?logo=pypi&label=argon--agents)](https://pypi.org/project/argon-agents/)
+[![mcp.market](https://mcp.market/badge/argon-lab-argon.svg)](https://mcp.market/server/argon-lab-argon)
 
-**Branch, time-travel, merge and undo your MongoDB. Any driver, real mongod,
-versioned history underneath. Built for AI agents.**
+**Give every agent run its own real MongoDB database, forked from your data.
+Review what it changed, merge what you want, discard the rest. Git-style
+branching, time travel and merge underneath. Any driver, real mongod.**
 
 Three ideas, thirty seconds:
 
-1. **A branch is a pointer, not a copy** — created with a metadata write. Checkout separately materializes the data.
-2. **`checkout` turns a branch into a real MongoDB database** — pymongo,
-   mongoose, mongosh, indexes, aggregation, transactions: all real, and
-   supported document writes become history while capture is healthy.
-3. **Review and recover changes** — diff, merge, undo and pin states within
-   the configured retention and capture guarantees.
+1. **A sandbox is a real MongoDB database** — forked from a branch or a pinned
+   dataset, checked out and given a TTL in one command. pymongo, mongoose,
+   mongosh, indexes, aggregation, transactions: all real.
+2. **What the agent wrote is a diff** — supported document writes become
+   history while capture is healthy, so a run can be reviewed, merged as a data
+   pull request, undone or thrown away. Your source data is untouched until you
+   merge.
+3. **Underneath, it is Git for MongoDB** — a branch is a pointer created with a
+   metadata write; checkout separately materializes the data. Diff, merge, undo
+   and pins work within the configured retention and capture guarantees.
 
 ## Install
 
@@ -31,7 +37,7 @@ For npm, use Node.js 24 LTS with npm 11.16 or newer. The package-scoped
 approval allows the installer to download Argon's binary on npm 12.
 
 ```bash
-brew install argon-lab/tap/argonctl      # macOS
+brew install argon-lab/tap/argonctl      # macOS or Linux, builds from source
 npm install -g argonctl --allow-scripts=argonctl # cross-platform
 
 # MongoDB must run as a replica set (one-node is fine):
@@ -47,65 +53,44 @@ Go 1.27 line that means 1.27.4 or newer, which carry the same standard-library f
 ## The flow
 
 ```
-main ──branch──▶ experiment ──checkout──▶ mongodb://…  ← any driver
-                                              │
-                     ┌── argon diff ──────────┤  document history
-                     ▼                        ▼
-        merge (a data PR)          or   undo / discard / rewind
+your data ──sandbox──▶ mongodb://…  ← the agent, any driver
+                           │
+          argon diff ──────┤  what the run changed
+              ▼            ▼
+   merge (a data PR)   or  discard / undo
 ```
 
 ```bash
-# 0 · Stop source writers and DDL for the import — or: argon projects create myapp
+# 0 · Bring your data in once. Stop source writers and DDL for the import — or: argon projects create myapp
 argon import database --uri mongodb://localhost:27017 --database myapp --project myapp --source-quiesced
 
-# 1 · Branch — instant, no copy
-argon branches create experiment -p myapp
+# 1 · In terminal A, a sandbox: fork + checkout + TTL + capture in one command.
+#     Prints its name and a connection string, then keeps capturing until Ctrl-C
+argon sandbox create -p myapp --ttl 1h --watch --actor agent:run-1
 
-# 2 · In terminal A, capture writes with a branch actor label
-argon checkout -p myapp -b experiment      # prints a connection string
-argon watch    -p myapp -b experiment --actor agent:experiment
+# In terminal B, point the agent at the printed URI. Then:
 
-# In terminal B, write through the printed URI. Then:
-
-# 3 · Review and merge back — a data pull request
-argon diff          -p myapp -b experiment
-argon merge preview -p myapp -b experiment
+# 2 · Review, then adopt the run — a data pull request
+argon diff          -p myapp -b <sandbox>
+argon merge preview -p myapp -b <sandbox>
 argon merge apply <plan-id>
 
-# …or rewind instead of merging
-argon restore reset -p myapp -b main --time 2026-07-07T09:00:00Z --backup pre-incident
+# …or throw the run away
+argon sandbox discard -p myapp -b <sandbox>
 ```
+
+Through the MCP server or `argon console`, capture and expiry are managed for
+you: nothing stays in the foreground, and expired sandboxes are swept every
+minute. `--watch` needs 2.3.0 or newer; on older versions run
+`argon watch -p myapp -b <sandbox> --actor agent:run-1` after creating the sandbox.
+Long-lived branches work the same way with `argon branches create` and
+`argon checkout`, and `argon restore reset` rewinds a branch to an earlier time.
 
 Prefer clicking? `argon console` serves a local web console (UI + REST API),
 supervises capture, reaps expired sandboxes every minute, and opens your browser.
 The console's MIT-licensed source is in [web/](web/README.md); see the
 [rebuild instructions](CONTRIBUTING.md#console-source-and-reproducible-assets).
 For a complete managed workflow, run [the two-agent pinned dataset example](examples/pinned_agents.py).
-
-## What you get
-
-| | Command | In one line |
-|---|---|---|
-| **Branching** | `argon branches create` | a metadata write — instant, zero copy |
-| **Real databases** | `argon checkout` / `argon proxy` | any driver, real mongod; proxy serves stable `mongodb://host/<project>~<branch>` URIs |
-| **Write capture** | `argon watch` | exact change-stream images → history, one actor label per branch |
-| **Time travel** | `argon time-travel query` | query captured document states at retained LSNs; restore/pin also accept timestamps |
-| **Undo** | `argon undo --actor <a>` | revert a range or actor label; append-only, conflict-aware |
-| **Restore** | `argon restore preview/reset/branch` | rewind a released branch or fork retained history |
-| **Data PRs** | `argon merge preview/apply` | three-way merges as reviewable plans; conflicts never silent |
-| **Sandboxes** | `argon sandbox create --ttl 1h` | fork + checkout + TTL in one step — disposable agent workspaces |
-| **Dataset pins** | `argon pin create` / `pin sandbox` | named captured states protected from GC and resets while the pin exists |
-| **Web console** | `argon console` | local UI + REST API in one command |
-
-Data history covers document inserts, updates, replacements and deletes. Collection
-drop/rename produces degraded capture; indexes and collection options are not
-versioned. Native writes are asynchronous; control operations drain capture.
-Stop writers before release. Existing pins protect their referenced states, while GC can expire audit
-and undo history. See [operations](docs/OPERATIONS.md) for recovery and credentials.
-
-Storage retention uses snapshots + retention-window GC to keep state plus a
-window of history, not every write forever. Details and the consistency
-model, stated honestly: [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## For AI agents
 
@@ -138,7 +123,47 @@ run = argon.sandbox_from_pin("myapp", "eval-v1")            # identical state, e
 use the separate calls above when approval is required. Pins protect captured
 document state while they exist; keep independent backups.
 
+To keep a person in the loop, withhold tools from the MCP server:
+`argon mcp --disable-tools argon_merge_apply` leaves applying a merge plan to
+`argon merge apply <plan-id>`, and `argon mcp --read-only` offers only the
+tools that inspect state.
+
 The full agent workflow: [docs/AGENTS.md](docs/AGENTS.md).
+
+## What you get
+
+| | Command | In one line |
+|---|---|---|
+| **Sandboxes** | `argon sandbox create --ttl 1h` | fork + checkout + TTL in one step — disposable agent workspaces |
+| **Dataset pins** | `argon pin create` / `pin sandbox` | named captured states protected from GC and resets while the pin exists |
+| **Data PRs** | `argon merge preview/apply` | three-way merges as reviewable plans; conflicts never silent |
+| **Undo** | `argon undo --actor <a>` | revert a range or actor label; append-only, conflict-aware |
+| **Real databases** | `argon checkout` / `argon proxy` | any driver, real mongod; proxy serves stable `mongodb://host/<project>~<branch>` URIs |
+| **Write capture** | `argon watch` | exact change-stream images → history, one actor label per branch |
+| **Branching** | `argon branches create` | a metadata write — instant, zero copy |
+| **Time travel** | `argon time-travel query` | query captured document states at retained LSNs; restore/pin also accept timestamps |
+| **Restore** | `argon restore preview/reset/branch` | rewind a released branch or fork retained history |
+| **Web console** | `argon console` | local UI + REST API in one command |
+
+Data history covers document inserts, updates, replacements and deletes. Collection
+drop/rename produces degraded capture; indexes and collection options are not
+versioned. Native writes are asynchronous; control operations drain capture.
+Stop writers before release. Existing pins protect their referenced states, while GC can expire audit
+and undo history. See [operations](docs/OPERATIONS.md) for recovery and credentials.
+
+Two things to know before handing a sandbox to an agent. A collection the agent
+creates is captured exactly while capture is running, or when it is next
+synchronized within MongoDB's snapshot history (five minutes by default); the
+one exception is a document that is updated and then changed again inside one
+transaction on a collection created moments earlier. Before 2.3.1 such a collection needed
+`argon collections prepare` first. And a sandbox is a full physical copy with
+capture ready, so creating one takes longer as the data grows: the
+[benchmarks](https://github.com/argon-lab/benchmarks) measure it as
+`sandbox_capture_ready_ms`.
+
+Storage retention uses snapshots + retention-window GC to keep state plus a
+window of history, not every write forever. Details and the consistency
+model, stated honestly: [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Documentation
 
@@ -157,6 +182,23 @@ The full agent workflow: [docs/AGENTS.md](docs/AGENTS.md).
 [Discussions](https://github.com/argon-lab/argon/discussions) ·
 [Contributing](CONTRIBUTING.md) ·
 [argonlabs.tech](https://argonlabs.tech) · [Blog](https://argonlabs.tech/blog)
+
+## Contributors
+
+Thank you to everyone who has made Argon better.
+
+<a href="https://github.com/argon-lab/argon/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=argon-lab/argon" alt="Argon contributors">
+</a>
+
+What each person shipped, and the release it shipped in, is listed at
+[argonlabs.tech/about#contributors](https://argonlabs.tech/about#contributors).
+Every release also names its new contributors in the
+[release notes](https://github.com/argon-lab/argon/releases).
+
+New here? Start with a
+[good first issue](https://github.com/argon-lab/argon/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+and the [first-contribution guide](CONTRIBUTING.md#your-first-contribution).
 
 ---
 

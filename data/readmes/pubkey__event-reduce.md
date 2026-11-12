@@ -112,7 +112,7 @@ EventReduce uses 18 different `state functions` to 'describe' an event+previousR
 
 Also there are 16 different `action functions`. An action function gets the event+previousResults and modifies the results array in a given way like `insertFirst()`, `replaceExisting()`, `insertAtSortPosition()`, `doNothing()` and so on.
 
-For each of our `2^19` state combinations, we calculate which action function gives the same results that the database would return when the full query is executed again.
+For each of our `2^18` state combinations, we calculate which action function gives the same results that the database would return when the full query is executed again.
 
 From this state-action combinations we create a big truth table that is used to create a [binary decision diagram](https://github.com/pubkey/binary-decision-diagram). The BDD is then optimized to call as few `state functions` as possible to determine the correct action of an incoming event-results combination.
 
@@ -138,6 +138,7 @@ Before, RxDB used its own `QueryChangeDetection`, which was made of many handwri
 ## Limitations
 
 - EventReduce only works with queries that have a [predictable](https://stackoverflow.com/a/11599283) sort-order for any given documents. (you can make any query predicable by adding the primary key as last sort parameter)
+- The sort comparator is not allowed to return `0` for two different documents. It must break ties itself, in the same way as the database does, for example with the primary key as the last sort field.
 
 - EventReduce can be used with relational databases but not on relational queries that run over multiple tables/collections. (you can use views as workarround so that you can query over only one table). In theory Event-Reduce could also be used for relational queries but I did not need this for now. Also the fuzzing that ensures the correctness of the truth table runs for a long time, and having more state functions looks like an NP problem.
 
@@ -151,7 +152,9 @@ See [docs/result-window-buffer.md](./docs/result-window-buffer.md) for how it wo
 
 ## Implementations
 
-At the moment there is only the [JavaScript implementation](./javascript/) that you can use over npm. Pull requests for other languages are welcomed.
+The [JavaScript implementation](./javascript/) is the reference: it creates the BDD and you can use it over npm.
+There are also implementations in [Rust](./rust/), [Dart](./dart/), [Kotlin](./kotlin/), [Swift](./swift/), [C#](./csharp/), [Python](./python/) and [Go](./go/).
+They resolve the same BDD and run the same [shared test suite](./test-suite/). Pull requests for other languages are welcomed.
 
 ## Previous Work
 

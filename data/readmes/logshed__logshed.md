@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/logshed/logshed"><img src="https://img.shields.io/badge/version-1.3.0-blue?style=flat-square" alt="Version 1.3.0"></a>
+  <a href="https://github.com/logshed/logshed"><img src="https://img.shields.io/badge/version-1.3.1-blue?style=flat-square" alt="Version 1.3.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="MIT License"></a>
   <a href="https://github.com/logshed/logshed/pkgs/container/logshed"><img src="https://img.shields.io/badge/container-ghcr.io-blue?logo=docker&logoColor=white&style=flat-square" alt="GHCR Container"></a>
   <a href="#system-requirements"><img src="https://img.shields.io/badge/arch-amd64%20%7C%20arm64-blueviolet?style=flat-square" alt="Multi-Arch Support"></a>
@@ -41,6 +41,7 @@
 - [System Requirements](#system-requirements)
 - [Built With](#built-with)
 - [Local Development](#local-development)
+- [Support the Project](#support-the-project)
 - [Licensing](#licensing)
 
 ---
@@ -121,7 +122,7 @@ Start the container:
 docker compose up -d
 ```
 
-To pin a specific release instead of following `latest`, use a version tag such as `ghcr.io/logshed/logshed:1.3.0`.
+To pin a specific release instead of following `latest`, use a version tag such as `ghcr.io/logshed/logshed:1.3.1`.
 
 If you prefer not to mount `/var/run/docker.sock` directly, you can point `DOCKER_HOST` at a socket proxy such as `tecnativa/docker-socket-proxy` (with `CONTAINERS=1`). See [Docker Log Tailing](docs/CONFIGURATION.md#docker-log-tailing) for details. Additional Docker hosts can be added in the web UI under **Settings > Sources**.
 
@@ -168,7 +169,7 @@ docker exec -it logshed python -m app.cli reset-admin
 
 ## Home Assistant Integration
 
-The [LogShed integration for Home Assistant](https://github.com/logshed/homeassistant-logshed) connects your LogShed server to Home Assistant. Install it through the [Home Assistant Marketplace](https://www.home-assistant.io/integrations/marketplace/) (**Settings > Marketplace > Add from link** with `logshed/homeassistant-logshed` on Home Assistant 2026.11 and later) or as a custom repository in HACS on older versions:
+The [LogShed integration for Home Assistant](https://github.com/logshed/homeassistant-logshed) connects your LogShed server to Home Assistant. Install it through the [Home Assistant Marketplace](https://www.home-assistant.io/integrations/marketplace/) (**Settings > Marketplace**, search for **LogShed**, on Home Assistant 2026.11 and later) or through HACS on older versions:
 
 - **Sensors** for ingestion rate, error counts (1h, 24h, and by severity), database size, disk usage, alert state, and active maintenance.
 - **Maintenance switch and actions** (`logshed.enable_maintenance` and `logshed.disable_maintenance`) so backup or update automations can silence alerts automatically.
@@ -205,7 +206,7 @@ Step-by-step setup guides and references live in [`docs/`](docs/):
 
 | Guide | Description |
 |---|---|
-| [Forwarding Logs Guide](docs/SENDING_LOGS.md) | Syslog setup for OPNsense, Proxmox VE, Synology DSM, UniFi, pfSense, Home Assistant, Linux, and Docker, plus the [HTTP ingest API](docs/SENDING_LOGS.md#http-ingest-api) |
+| [Forwarding Logs Guide](docs/SENDING_LOGS.md) | Syslog setup for OPNsense, Proxmox VE, Synology DSM, UniFi, pfSense, Home Assistant, Linux, and Docker, plus the [HTTP ingest API](docs/SENDING_LOGS.md#http-ingest-api) and [what the navbar health figures mean](docs/SENDING_LOGS.md#reading-the-navbar-health-figures) |
 | [Configuration Reference](docs/CONFIGURATION.md) | Environment variables, Docker socket proxy setup, and storage paths |
 | [Rules Guide](docs/RULES_GUIDE.md) | Threshold, pattern, and rate-spike alert rules, plus ingestion drop rules |
 | [Model Context Protocol (MCP) Guide](docs/MCP_GUIDE.md) | Connect Claude Desktop, Cursor, Windsurf, or Antigravity to query logs and manage maintenance |
@@ -240,7 +241,7 @@ LogShed runs as a single process with Python 3.12, FastAPI, Uvicorn, and SQLite 
 
 ## Local Development
 
-Requires **Python 3.12+** and **Node.js 20+**:
+Requires **Python 3.12+** and **Node.js 24+**:
 
 ```bash
 # 1. Clone and set up the Python virtual environment
@@ -261,6 +262,12 @@ cd ..
 .venv/bin/pytest backend/tests/ -v
 DATA_DIR=./data python -m uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8080 --reload
 ```
+
+---
+
+## Support the Project
+
+LogShed is free and maintained in spare time. If it is useful to you, you can support it through [GitHub Sponsors](https://github.com/sponsors/BenHornerTech) or [Buy Me a Coffee](https://buymeacoffee.com/benhornertech).
 
 ---
 

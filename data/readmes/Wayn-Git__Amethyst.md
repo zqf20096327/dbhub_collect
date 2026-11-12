@@ -47,11 +47,6 @@ See [docs/architecture/library.md](docs/architecture/library.md).
 
 Beyond the screenshots:
 
-- **Code mode** — a second working surface next to the chat. It embeds a real
-  [OpenCode](https://opencode.ai) session: its own process, proxied and
-  supervised by the backend, with Amethyst's providers synced into it and live
-  sessions listed in the sidebar. Toggle between *Work* and *Code* without
-  leaving the app. See `backend/opencode/`.
 - **Task-aware search** — a router that classifies the question first (factoid,
   comparison, freshness-sensitive, URL extraction, deep research) and dispatches
   to LangSearch, Exa, Firecrawl or Tavily through a circuit breaker with a live
@@ -128,30 +123,31 @@ test:
 
 ## Quick start
 
-**Fastest path** (macOS / Linux / WSL2 — Windows: `run.bat`):
+**Desktop Application (Recommended — Zero-Command)**:
+
+Download and run standalone installers across macOS, Windows, and Linux directly from [GitHub Releases](https://github.com/wayn-wayn/amethyst/releases/latest) or the in-app `/install` page:
+- **macOS:** Download `.dmg` or install via Homebrew: `brew install --cask amethyst`
+- **Windows:** Download `.exe` installer or run in PowerShell: `irm https://raw.githubusercontent.com/wayn-wayn/amethyst/master/install.ps1 | iex`
+- **Linux:** Download `.AppImage` / `.deb` or install via curl: `curl -fsSL https://raw.githubusercontent.com/wayn-wayn/amethyst/master/install.sh | bash`
+
+The desktop application includes a native dark splash loading screen, self-contained engine supervision, single-instance lock, system tray integration, and automatic continuous updates whenever code lands on `master`.
+
+**Developer Desktop Shell:**
 
 ```bash
-git clone https://github.com/Wayn-Git/Amethyst.git
-cd Amethyst
+npm run dev:desktop   # boots electron window with live Vite HMR + backend supervision
+```
+
+**Terminal Quickstart (Developer Mode)**:
+
+```bash
+git clone https://github.com/wayn-wayn/amethyst.git
+cd amethyst
 ./run.sh
 ```
 
 The script sets up the venv, installs dependencies, initializes the database,
-builds the frontend, and opens **http://127.0.0.1:8000**.
-
-**As a desktop application** (after the first run, no terminal needed):
-
-```bash
-amethyst desktop                    # launch it -- or use the application menu
-amethyst-show                       # raise the window of a running instance
-amethyst desktop --install-autostart # start it at login, in the background
-amethyst desktop --install-shortcut  # bind a global key to open it
-```
-
-Launching twice does not start a second copy; it raises the window of the one
-already running. Closing the window puts AMETHYST away rather than quitting it —
-schedules, jobs and the agent loop keep running. `amethyst serve` remains the
-development command. See [docs/architecture/desktop.md](docs/architecture/desktop.md).
+builds the frontend, and opens **http://127.0.0.1:8000**. See [docs/architecture/desktop.md](docs/architecture/desktop.md).
 
 **Docker:**
 
@@ -235,7 +231,6 @@ backend/          FastAPI app, agent loop, tools, connectors, CLI
   instagram/      Webhook handling, reel capture, the relay poll
   browser/        Firefox-family bookmark capture (places.sqlite)
   mcp/            Connector config, catalogue, OAuth, Composio service
-  opencode/       Code mode: OpenCode process manager and reverse proxy
   sync/           Microsoft To Do, multi-device sync and intents
   scheduling/     Date resolution, conflicts, free-slot search
   skills/         Skill loader + the built-in SKILL.md files it seeds
@@ -251,6 +246,41 @@ automations/      Example automation payloads
 scripts/          setup_wizard.py — the interactive ./run.sh --setup
 docs/             Guides, architecture notes, ADRs, screenshots (docs/README.md)
 tests/            99 pytest files — permissions, sandbox, retrieval, streaming
+```
+
+## Automated Cloud Notifier (Zero Paid Services)
+
+The `notifier` package delivers automated morning briefings, weekly library digests, and batched library-save emails locally and in GitLab CI without needing an always-on server or paid subscriptions.
+
+### One-Time Setup
+
+1. **AgentMail (Email Delivery)**:
+   - Create a free account at [agentmail.to](https://agentmail.to) (free tier allows 100 sends/day).
+   - Create an inbox and obtain your `AGENTMAIL_API_KEY` and `AGENTMAIL_INBOX_ID`.
+   - Set `NOTIFIER_RECIPIENT_EMAIL` to your destination email address. (Recipients are strictly env-configured; the LLM never chooses recipients).
+
+2. **Turso (Cloud State & Deduplication)**:
+   - Create a free database at [turso.tech](https://turso.tech) (`turso db create amethyst-notifier`).
+   - Copy your database URL (`TURSO_DATABASE_URL`) and create an auth token (`turso db tokens create amethyst-notifier` -> `TURSO_AUTH_TOKEN`).
+
+3. **GitLab CI Variables & Schedules**:
+   - In your GitLab repository, go to **Settings > CI/CD > Variables** and add:
+     - `NOTIFIER_RECIPIENT_EMAIL`, `AGENTMAIL_API_KEY`, `AGENTMAIL_INBOX_ID`
+     - `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
+     - `COMPOSIO_API_KEY`, `GROQ_API_KEY` (or `GEMINI_API_KEY`)
+     - `DISCORD_BOT_TOKEN` (optional)
+   - Go to **Build > Pipeline schedules** and create two schedules:
+     - **Morning Briefing**: Cron `30 2 * * *` (08:00 IST), Variable: `JOB` = `brief`.
+     - **Weekly Digest**: Cron `0 3 * * 0` (Sunday mornings), Variable: `JOB` = `digest`.
+
+### Running Locally
+
+```bash
+# Morning briefing
+python -m notifier.brief
+
+# Weekly library digest
+python -m notifier.digest
 ```
 
 ## Contributing

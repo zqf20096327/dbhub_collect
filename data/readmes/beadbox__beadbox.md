@@ -19,7 +19,7 @@ Beadbox gives `bd` users a visual interface for the things a terminal can't show
 - **Waiting** — open `bd` gates (human, timer, gh:run, gh:pr, bead), oldest first, with the work each one holds; resolve a human gate in place. The tab (⌘6) appears only while a gate is open
 - **Live updates** — changes made from the `bd` CLI appear in the UI in real time; no refresh
 - **Bead detail** — full descriptions, comments, dependencies, and workflow advancement in a side panel or modal
-- **Filters** — slice by status, type, priority, and assignee; filters persist across sessions
+- **Filters** — slice by status, type, priority, assignee, and label (any selected label matches); filters persist across sessions, and label selections clear when switching workspaces
 - **Activity feed** — a timeline of what changed, by whom, across the workspace
 - **Multi-workspace** — a rail of project tabs switches between local `.beads/` projects and remote Dolt servers; rename a tab, give it an emoji, and switching back is instant
 - **Keyboard-first** — power-user paths work without touching the mouse
@@ -124,6 +124,41 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Contributions are accepted under the MIT
 ## Security
 
 To report a vulnerability, see [SECURITY.md](SECURITY.md). Please don't open public issues for security reports.
+
+## Finding the bd executable
+
+Beadbox checks executable files in mise (`$MISE_DATA_DIR/shims`,
+`$XDG_DATA_HOME/mise/shims`, and `~/.local/share/mise/shims`), asdf
+(`$ASDF_DATA_DIR/shims` and `~/.asdf/shims`), and Nix profiles before Homebrew,
+Go and user-local installs, then falls back to its inherited PATH. Nix profiles
+include `~/.nix-profile/bin`, `~/.local/state/nix/profiles/profile/bin`,
+`/etc/profiles/per-user/$USER/bin`,
+`/nix/var/nix/profiles/per-user/$USER/profile/bin`, and
+`/nix/var/nix/profiles/default/bin`.
+Existing version-manager directories are also added to child PATH so bd can
+find tools installed beside it. The inherited PATH keeps its existing order.
+Set a per-user path in **Settings → General → bd executable**, or directly on
+any missing-bd or too-old-bd screen. Use the absolute executable path (spaces are
+supported; surrounding whitespace is trimmed and `~/` is expanded). Beadbox
+requires the selected basename to be `bd` (`bd.exe` on Windows), even for
+symlinks. The target must be a regular executable owned by the current user or
+root and must not be group- or world-writable. All static checks run before the
+supported-version probe when saving. **Use automatic detection** clears the preference.
+The active path and source are shown beside the controls.
+
+Precedence is `BD_PATH` environment variable, then the saved path, then automatic
+detection. An environment override stays active until it is removed from the
+app's launch environment; saving or clearing a preference does not override it.
+Corrupt settings are logged and treated as no saved path; resetting replaces the
+invalid file. Saved paths and target permissions are checked again on every
+read before spawning; invalid choices warn without logging their contents and
+fall back to automatic detection.
+The choice is stored in `~/.beadbox/settings.json`, applies to every workspace,
+and survives restarts. Changes apply to new commands immediately and refresh
+active polling and bd serve processes. Commands already running may finish with
+the previous binary. If a saved executable disappears later, automatic detection is used.
+Version-manager shims select tool versions from the workspace, just as invoking
+`bd` in that workspace from a terminal does; the version manager governs trust.
 
 ## License
 

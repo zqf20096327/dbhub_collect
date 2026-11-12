@@ -1,18 +1,22 @@
 # QQ DUMP + Trowel !
 
-⛏ 全方位友好的 QQNT 数据库到信息一站式流水线：涵盖数据库解密与转储、消息解析与导出、统计分析、好友查询及 WebUI，并提供专为逆向研究与开发设计的数据库和消息研究分析套件。
+⛏ 全方位友好的跨平台 QQNT 数据库到信息一站式流水线：涵盖数据库解密与转储、消息解析与导出、统计分析、好友查询及 WebUI，并提供专为逆向研究与开发设计的数据库和消息研究分析套件。
+
+支持 Android、Windows、Linux。
 
 > 项目已全面升级到 Python，其中的运行时依赖按需使用，均为非强制。  
 > 主分支已重写历史记录，包含旧提交的经典 bash 实现在 *[dbtools 分支](https://github.com/miniyu157/qq-dump/tree/feat/dbtools)* 仍可查看。  
 
-> 保留内嵌了经典消息导出项目 *[QQRootFastDecrypt](https://github.com/miniyu157/QQRootFastDecrypt)* 的完整代码，已适配此项目架构，可直接运行。
+> 保留了经典消息导出项目 *[QQRootFastDecrypt](https://github.com/miniyu157/QQRootFastDecrypt)* 的完整代码，已适配此项目架构，可直接运行。
 
-此文档编辑于 2026年11月8日 凌晨  
+此文档编辑于 2026年11月12日 中午  
 ~~写文档真的好累呀 T^T~~
 
 ---
 
 ## 截图预览
+
+> 截图已过时，待更新。
 
 *无参数时进入的 TUI 交互界面:*
 
@@ -36,33 +40,47 @@
 
 ---
 
-## TODO
+## 开始
 
-> 目前的 WebUI 功能，仅为从数据库中解析详细的好友列表后，在前端显示漂亮界面渲染。
+在 Android 设备上使用喜欢的终端应用，或者在 Windows、Linux 上运行。确保设备中有 Python 3.11 及以上版本，程序需要它运行。
 
-<details>
-<summary>🐱 点击展开 TODO 计划</summary>
+**方式一: 下载仓库后运行:**
 
-- Legacy (QQRootFastDecrypt) 功能
-  - [ ] 后续可能会完全被新的消息解析功能替代，但仍旧保留 Legacy 菜单。
-  - 先让 legacy 代码看起来漂亮一点。
-    - [x] 完成 **去 blackboxprotobuf 化** 使用仓库自带的轻量解析器。
-    - [ ] 交互体验优化、性能优化等，可能为导出时选择的好友列表添加搜索功能等。
-- 新的消息解析/导出/统计等:
-  - [ ] 交互体验，使用精心设计的友好 TUI/WebUI 操作界面。
-  - [ ] 实现更多的统计、群聊导出、艾特统计、年度/月度/天度报告等功能。
-  - [ ] 各种各样的统计、花哨功能，甚至做出插件化。
-  - [ ] 还原几乎全部的 protobuf 消息类型，最大程度上个性化导出。
-  - [ ] 覆盖全数据库/全表，什么有价值就可以导出什么。
-    - [ ] 还会支持 buddy/groups_msg_fts.db 等文本摘要数据库的导出与统计。
-- [ ] **正在进行！** 将旧的 Table2D 研究分析套件 (CLI 的 50 个雷霆大参数，但其实很好用) 完全重写到 Trowel。
+```bash
+git clone https://github.com/miniyu157/qq-dump.git
+cd qq-dump
+./qqdump  # 或 ./main.py；Windows 的 PowerShell 与 cmd 中为 .\qqdump
+```
 
-![table2d](docs/table2d.png)
+启动器按以下顺序查找解释器，只负责启动，不检查依赖:
 
-> 也许会使用 Trowel 解决所有难题，探索并覆盖全部消息类型的解析。  
-> **是的，这个东西很漂亮。**
+1. 环境变量 `QQDUMP_PYTHON` 指定的解释器，不可用时直接报错
+2. 仓库内的 `.venv`
+3. 系统 Python (`python3`；Windows 为 `py`、`python`)
+4. `uv python find` 找到的解释器
 
-</details>
+功能用到的依赖缺失时，程序会列出当前环境可用的补全方式: pip、uv、项目 `.venv` (安装后自动重新运行)、Termux 的 `pkg`。  
+系统包管理器接管的 Python 环境 (PEP 668) 不提供 pip 与 uv；Termux 以外的平台缺少二进制依赖时只提示名称。
+
+仓库更新比较快的时候，可以用这个方式便捷地获取最新代码，运行以下命令即可更新:
+
+```bash
+git pull
+```
+
+*后续可能会有自动检查更新的功能。*
+
+> 版本号使用 git 获取，形如 `v0.0.0-5-gaabbcc (2026-10-30)`，  
+> 其中 `v0.0.0` 是最近的 Release 版本号，`-5` 是提交次数，后面的是提交 hash 和时间与日期。  
+> 脏工作区会为版本号追加 `-dirty` 脏标记，不影响功能和运行。
+
+**方式二: Release 稳定版源码包:**
+
+可前往 [Releases](https://github.com/miniyu157/qq-dump/releases) 页面，从需要的版本中，找到 *Assets* 下方的 *Source code (zip)* 或者 *Source code (tar.gz)* 链接，即可下载此应用的源码包。
+
+源码包需要解压后运行，可能需要使用 `chmod +x` 命令为入口附加执行权限，也可以直接使用 `python3 ...` 运行。
+
+> 源码包也会正确显示版本号，仓库设置了 .git_archival.txt 与 .gitattributes 文件。
 
 ---
 
@@ -90,7 +108,7 @@ Legacy 代码虽然较老，除了已做交互适配和适当优化之外，功�
 
 **不止如此，Legacy 功能已改为使用仓库自带的轻量级 protobuf 解析器，也允许使用 `--blackboxprotobuf` 选项使用旧解析器。**
 
-速度是原来的 3-5 倍左右，对比测试与解析器差异详情可以查看 *Protobuf 解析器差异* ([点击跳转](#protobuf-parser-comparison)) 章节。
+新解析器短小精炼，不依赖庞大的 `blackboxprotobuf` 库，也不使用 `google.protobuf`，速度是原来的 3-5 倍左右，对比测试与解析器差异详情可以查看 *Protobuf 解析器差异* ([点击跳转](#protobuf-parser-comparison)) 章节。
 
 **Tealina28/QQNT_Export 接入:**
 
@@ -128,9 +146,16 @@ v0.5.0 起可以直接从主菜单运行 [Tealina28/QQNT_Export](https://github.
 
 </details>
 
-### *₊˚⊹ 轻量解析*
+### *₊˚⊹ 跨平台*
 
-- 消息解析器不使用庞大的 `blackboxprotobuf` 库，也不使用 `google.protobuf`，仓库自带短小精炼的 Protobuf 解析器实现。
+- 能处理 Android、Windows、Linux 三种 QQ 的数据，程序本身也能在这三种系统上运行。数据来自哪个系统，与在哪个系统上处理它，两者互不绑定。
+- 在数据所在的设备上直接运行即可，平台与数据位置自动确定；Linux 的原生安装与 flatpak 安装都能找到，同时存在时列出供选择。
+- 把数据目录拷到另一台设备后，用 `--root-dir` 指向它，程序按目录结构识别这是哪种平台的数据，不需要另外指定。
+- 密钥不需要手动寻找: Android 由数据库文件头算出；Windows、Linux 从已登录的 QQ 进程内存中扫描，只用 Python 标准库。
+- Windows、Linux 的密钥取得一次后自动存入密钥缓存。之后处理同一份数据，不再需要 QQ 保持运行或提权；把缓存文件带到另一个系统，还可以解密拷贝来的数据。
+- 密钥经数据库校验通过才会采用。拿到的是另一台设备的密钥时，程序会直接说明不匹配，不会解出一份损坏的数据库。
+
+各平台的数据位置、密钥的取得方式与密钥缓存的用法，见 [平台与数据](#平台与数据) 章节。
 
 ### *₊˚⊹ 数据库完整性*
 
@@ -164,16 +189,18 @@ v0.5.0 起可以直接从主菜单运行 [Tealina28/QQNT_Export](https://github.
 
 ### *₊˚⊹ 安全性*
 
-- QQ 私有目录均为只读操作，不会以任何形式直接修改内容。
-- 当无法访问 QQ 私有目录时才自动提权。
-- 还可以通过设置程序配置、或 .env 文件，让每一次提权操作都显示日志。
+- QQ 私有目录均为只读操作，不会以任何形式直接修改内容；读取 Windows、Linux 版 QQ 的进程内存同样只读。
+- 处理 Android 版 QQ 时，无法访问 QQ 私有目录才尝试自动提权。
+- 处理 Windows、Linux 版 QQ 时，不会因为数据目录无法访问而提权，此时直接报错；只有 Linux 下无权扫描 QQ 进程内存时，才在询问并得到同意后提权取密钥。
+- 还可以用 `--sudo-notice` 选项、`QQDUMP_SUDO_NOTICE` 环境变量或 .env 文件，让每一次提权操作都显示日志。
+- Windows、Linux 的密钥取得后会以明文存入密钥缓存，默认是仓库下的 `.cache/keys.json`，只由未提权的主程序写入。持有它和数据库就能读出全部内容，与解密出的明文数据库同等敏感；不想保留时删除该文件即可，下次使用会重新扫描。
 - 不提权整个程序本身，所有提权操作都是 fork sudo 后运行独立的子程序，  
-  它们需要访问 QQ 私有目录以获取所需要的密钥、数据库文件等信息，集中位于 cli/ 文件夹下，短小可审阅。
+  它们需要访问 QQ 私有目录或进程内存以获取所需要的密钥、数据库文件等信息，集中位于 cli/ 文件夹下，短小可审阅。
 - 不实现 sudo，直接使用 PATH 里的 sudo。
 
 ### *₊˚⊹ 精心设计的交互逻辑*
 
-- 除了 Python 以外所有依赖均为可选，按需使用；缺少时在交互终端询问补全方式，非交互时给出命令。  
+- 除了 Python 解释器本身以外，所有依赖均为可选，按需使用；缺少时在交互终端询问补全方式，非交互时给出命令。  
 - 当一个功能 (如 friends 好友查询、legacy 消息导出) 需要数据库但你没有提供文件时，会自动扫描账号并弹出账号选择界面，选择后会解密需要的文件到临时文件夹。
 - 提供数据库文件的方式有很多种，如 `QQDUMP_*` 环境变量、`.env` 文件、CLI 选项 等，了解优先级等详细信息，可以运行 `help` 命令查看帮助信息。
 - CLI 不敷衍，管道数据进出分明，帮助信息与子命令用法完整。
@@ -182,8 +209,8 @@ v0.5.0 起可以直接从主菜单运行 [Tealina28/QQNT_Export](https://github.
 
 | 子命令 | 用途 |
 | --- | --- |
-| `key` | 为选定用户计算数据库密钥 |
-| `db [files...]` | 为选定用户解密指定的数据库文件 |
+| `key` | 为选定账号取得数据库密钥，输出 JSON |
+| `db [files...]` | 为选定账号解密指定的数据库文件 |
 | `web` | 启动本地 WebUI (目前仅为好友信息浏览，包括已删除好友、亲密度、分组、删除时间等) |
 | `friends` | 输出好友列表 JSON |
 | `owner` | 输出主人 (数据库持有者) 信息 JSON |
@@ -191,6 +218,51 @@ v0.5.0 起可以直接从主菜单运行 [Tealina28/QQNT_Export](https://github.
 | `t28` | 启动 Tealina28/QQNT_Export 导出 |
 | `check` | 检查运行时依赖状态 |
 | `avatar <uin>` | 使用 QQ API 获取头像并在终端渲染，支持 chafa 与真彩色 ASCII |
+| `menu` | 显示主菜单，不带子命令时默认进入 |
+| `help` | 显示完整帮助，包括全部选项与环境变量 |
+
+---
+
+## 平台与数据
+
+在数据所在的设备上直接运行时，平台、数据位置与密钥都会自动确定，通常不需要指定下面的任何选项。处理拷贝来的数据，或数据不在默认位置时，才需要了解这一节。
+
+**平台:** 平台指数据来自哪个系统的 QQ，分为 `android`、`windows`、`linux`，与运行本程序的系统无关。  
+默认自动选择: 用 `--root-dir` 指定了目录时，按其下的结构识别；识别不出或没有指定时，取运行系统对应的平台。也可以用 `--platform` 选项、`QQDUMP_PLATFORM=...` 环境变量或 `.env` 文件手动指定。
+
+**数据根目录:** 每个平台在对应的系统上都有默认的数据根目录。数据在其他位置，或者在另一个系统上处理拷贝来的数据时，用 `--root-dir` 选项、`QQDUMP_ROOT_DIR=...` 环境变量或 `.env` 文件指定。
+
+| 平台 | 默认数据根目录 | 其下的结构 |
+| --- | --- | --- |
+| `android` | `/` | `data/user/*/com.tencent.mobileqq/` |
+| `windows` | *Tencent Files*，位置读取自 QQ 的配置 | `<QQ 号>/nt_qq/nt_db/` |
+| `linux` | `~/.config/QQ`，flatpak 安装为 `~/.var/app/com.qq.QQ/config/QQ` | `nt_qq_<哈希>/nt_db/` |
+
+默认位置上找到多个数据根目录时 (例如同时安装了原生与 flatpak 版 QQ)，程序会列出它们供选择；一个都找不到时需要手动指定。
+
+**密钥:**
+
+- `android`: 由账号信息与数据库文件头算出，不需要 QQ 正在运行。
+- `windows`、`linux`: 先取密钥缓存中的密钥；缓存里没有时，从已登录的 QQ 进程内存中扫描得到，需要在数据所在的设备上打开 QQ 并登录要处理的账号。  
+  Windows 下读取同一用户的 QQ 进程通常不需要管理员权限；Linux 下通常需要 root，无权读取时程序会询问是否用 sudo 重试，只有取密钥这一步提权，解密仍以当前用户运行。
+
+**密钥缓存:** windows 与 linux 的密钥取得后自动存入密钥缓存，默认位于仓库下的 `.cache/keys.json`。之后处理同一份数据时直接取用，不再需要 QQ 运行与提权，可以先退出 QQ 再解密，得到一致的数据。
+
+- 缓存中的密钥只用于平台与 QQ 号都相同的账号，经数据库校验通过才会采用；都不匹配时照常扫描进程内存，不会用错误的密钥解密。
+- android 的密钥每次由数据算出，不经缓存。
+- 用 `--key-cache` 选项、`QQDUMP_KEY_CACHE=...` 环境变量或 `.env` 文件可以改用另一个缓存文件，读取与存入都在这个文件上进行。
+- 缓存的内容就是 `key` 输出的 JSON，`key` 的输出也可以直接保存为缓存文件。
+- 缓存是明文，持有它和数据库就能读出全部内容，请妥善保管；删除后下次使用会重新扫描。
+
+windows 与 linux 的密钥与设备绑定，同一账号换一台设备后密钥通常不同。要在另一个系统上处理拷贝来的数据，把数据所在设备上的缓存文件一并带过去:
+
+```bash
+# 在数据所在的设备上，QQ 已登录；也可以直接拷贝 .cache/keys.json
+./qqdump key > keys.json
+
+# 之后在任意系统上，数据可以是拷贝来的
+./qqdump db --root-dir <数据根目录> --key-cache keys.json
+```
 
 ---
 
@@ -236,61 +308,6 @@ v0.5.0 起可以直接从主菜单运行 [Tealina28/QQNT_Export](https://github.
 
 ---
 
-## 运行环境
-
-在 Android 设备上使用喜欢的终端应用，或者在标准 Linux PC 上运行。
-
-程序需要时，会从 QQ 私有目录 `/data/user/*/com.tencent.mobileqq/` 读取信息。
-
-如果你不能访问它，可以使用 `--root-dir` 选项，或 `QQDUMP_ROOT_DIR=...` 环境变量，或 `.env` 文件指定根目录。
-
-这在 PC 上调试与开发尤为有用。
-
----
-
-## 开始
-
-确保电脑中有 Python 3.11 及以上版本，程序需要它运行。
-
-**方式一: 下载仓库后运行:**
-
-```bash
-git clone https://github.com/miniyu157/qq-dump.git
-./qqdump  # 或 ./main.py；Windows 的 PowerShell 与 cmd 中为 .\qqdump
-```
-
-启动器按以下顺序查找解释器，只负责启动，不检查依赖:
-
-1. 环境变量 `QQDUMP_PYTHON` 指定的解释器，不可用时直接报错
-2. 仓库内的 `.venv`
-3. 系统 Python (`python3`；Windows 为 `py`、`python`)
-4. `uv python find` 找到的解释器
-
-功能用到的依赖缺失时，程序会列出当前环境可用的补全方式: pip、uv、项目 `.venv` (安装后自动重新运行)、Termux 的 `pkg`。  
-系统包管理器接管的 Python 环境 (PEP 668) 不提供 pip 与 uv；Termux 以外的平台缺少二进制依赖时只提示名称。
-
-仓库更新比较快的时候，可以用这个方式便捷地获取最新代码，运行以下命令即可更新:
-
-```bash
-git pull
-```
-
-*后续可能会有自动检查更新的功能。*
-
-> 版本号使用 git 获取，形如 `v0.0.0-5-gaabbcc (2026-10-30)`，  
-> 其中 `v0.0.0` 是最近的 Release 版本号，`-5` 是提交次数，后面的是提交 hash 和时间与日期。  
-> 脏工作区会为版本号追加 `-dirty` 脏标记，不影响功能和运行。
-
-**方式二: Release 稳定版源码包:**
-
-可前往 [Releases](https://github.com/miniyu157/qq-dump/releases) 页面，从需要的版本中，找到 *Assets* 下方的 *Source code (zip)* 或者 *Source code (tar.gz)* 链接，即可下载此应用的源码包。
-
-源码包需要解压后运行，可能需要使用 `chmod +x` 命令为入口附加执行权限，也可以直接使用 `python3 ...` 运行。
-
-> 源码包也会正确显示版本号，仓库设置了 .git_archival.txt 与 .gitattributes 文件。
-
----
-
 ## 数据库与二进制研究分析套件
 
 *Table2D，通用的数据库与 protobuf 二进制分析工具*
@@ -303,17 +320,58 @@ git pull
 
 ---
 
+## TODO
+
+> 目前的 WebUI 功能，仅为从数据库中解析详细的好友列表后，在前端显示漂亮界面渲染。
+
+<details>
+<summary>🐱 点击展开 TODO 计划</summary>
+
+- Legacy (QQRootFastDecrypt) 功能
+  - [ ] 后续可能会完全被新的消息解析功能替代，但仍旧保留 Legacy 菜单。
+  - [x] 完成 **去 blackboxprotobuf 化** 使用仓库自带的轻量解析器。
+  - [ ] 交互体验优化、性能优化等，可能为导出时选择的好友列表添加搜索功能等。
+- 新的消息解析体系:
+  - [ ] 精心设计的友好 WebUI 操作界面。
+  - [ ] 实现更多的统计、群聊导出、艾特统计、年度/月度/天度报告等功能。
+        各种各样的统计、花哨功能，甚至做出插件化。
+  - [ ] 还原几乎全部的 protobuf 消息类型，最大程度上个性化导出。
+  - [ ] 覆盖全数据库/全表，什么有价值就可以导出什么。
+    - [ ] 还会支持 buddy/groups_msg_fts.db 等文本摘要数据库的导出与统计。
+- [ ] **正在进行！** 将旧的 Table2D 研究分析套件 (CLI 的 50 个雷霆大参数，但其实很好用) 完全重写到 Trowel。
+
+</details>
+
+---
+
 ## 贡献、议题、Bug 反馈
 
 非常欢迎提交 PR 和开启 Issues。
 
 ~~相关的贡献文档待编写与完善...~~
 
+**测试:** 只依赖标准库，在仓库根目录运行 `python -m unittest discover -s test -t test`；缺少 `sqlcipher` 时相关用例显示为跳过。  
+读取本机真实 QQ 数据的实机层默认跳过，设置 `QQDUMP_TEST_LIVE=1` 后运行。测试的结构规则、各层边界、未覆盖的部分与已知问题见 [test/README.md](test/README.md)。
+
 ---
 
 ## 开源许可证
 
 采用 [MIT LICENSE](./LICENSE) 分发
+
+---
+
+## 移植与来源
+
+PC 版 QQ (Windows / Linux) 的密钥获取能力，即从运行中的 QQ NT 进程内存中扫描 raw_key 的逻辑，移植自 [QQBackup/x_key_scanner](https://github.com/QQBackup/x_key_scanner) (Rust 实现)。
+
+本项目以纯 Python 重新实现了其核心部分，不依赖原项目的二进制，也不依赖 `sqlcipher` 即可取得密钥：
+
+- 进程枚举与内存读取 (Windows 经 `kernel32`、Linux 经 `process_vm_readv`，均用 `ctypes`)；
+- 锚点与密集簇的候选扫描、排序；
+- 账号与数据目录定位，以及 `login.db` 的解析。
+
+原项目未附带开源许可证，本项目仅移植其算法与流程，未直接包含其源码。在此致谢原作者的分析与实现。
 
 ---
 

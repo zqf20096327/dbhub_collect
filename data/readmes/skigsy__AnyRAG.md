@@ -14,9 +14,19 @@ Any RAG is a self-hosted Rust engine for document search and retrieval-augmented
 
 > **Verified on one Linux VM.** An Ubuntu guest with 2 vCPUs and 6 GiB RAM ran the shared service, nginx HTTPS, signed access checks, and a pinned local Qwen3-4B model. The rehearsal reopened both exact citations in a two-hop answer and checked revocation, edits, and backup and restore on synthetic documents. [Test environment](docs/project/inspect.md#independent-fresh-linux-candidate-handoff) · [Results and image digest](docs/project/inspect.md#resumed-independent-portable-linux-qualification)
 
-[**Download 1.3.0**](https://github.com/skigsy/AnyRAG/releases/tag/v1.3.0) · [Dashboard](#live-operator-dashboard) · [Install](#quickstart-rust-personal-search) · [Choose a setup](#choose-a-setup) · [Benchmarks](#what-we-measured) · [Build and deploy](#build-and-deploy)
+[**Download 1.4.0**](https://github.com/skigsy/AnyRAG/releases/tag/v1.4.0) · [Benchmarks](#about-20-fewer-input-tokens-for-cited-answers) · [Dashboard](#live-operator-dashboard) · [Install](#quickstart-rust-personal-search) · [Choose a setup](#choose-a-setup) · [Build and deploy](#build-and-deploy)
 
-**Pick your build.** The v1.3.0 Windows ZIP includes personal search and the dashboard. The v1.3.0 Linux image adds PDF and Word readers, model endpoints, local graph review, and [company graph publication and review](infra/private-vm.md#review-shared-graph-relationships). Build from source for native embeddings, read-only MCP, or AWS adapters. [Version and verification details](status.md#source-and-downloads)
+**Pick your build.** The v1.4.0 Windows ZIP includes personal search and the dashboard. The v1.4.0 Linux image adds PDF and Word readers, model endpoints, local graph review, and [company graph publication and review](infra/private-vm.md#review-shared-graph-relationships). Build from source for native embeddings, read-only MCP, or AWS adapters. [Version and verification details](status.md#source-and-downloads)
+
+## About 20% fewer input tokens for cited answers
+
+In a paired response-format trial on 500 synthetic documents, AnyRAG's
+compact MCP evidence cut median input tokens by **20.8% for GPT-6 Luna**
+and **19.9% for GPT-6.1 Sol**. Both models scored **36/36** on exact cited
+answers with either format. The two formats used the same ranked passages
+and full citation IDs.
+
+[Response-format trial](docs/benchmarks.md#luna-and-sol-on-compact-mcp-evidence) · [Use compact evidence](docs/setup.md#search-a-personal-index-from-an-mcp-client) · [5,000-document agent trial](docs/benchmarks.md#agent-benchmark-at-5000-documents)
 
 ## Choose a setup
 
@@ -61,7 +71,7 @@ After the [personal search quickstart](#quickstart-rust-personal-search), run `r
 
 ## Quickstart: Rust personal search
 
-[Windows x64 ZIP](https://github.com/skigsy/AnyRAG/releases/download/v1.3.0/rust-rag-1.3.0-windows-x64.zip) · [Linux amd64 image](https://github.com/skigsy/AnyRAG/releases/download/v1.3.0/rust-rag-linux-amd64.tar) · [SHA-256 checksums](https://github.com/skigsy/AnyRAG/releases/download/v1.3.0/SHA256SUMS.txt) · [Verify provenance](docs/evidence.md#verify-package-provenance)
+[Windows x64 ZIP](https://github.com/skigsy/AnyRAG/releases/download/v1.4.0/rust-rag-1.4.0-windows-x64.zip) · [Linux amd64 image](https://github.com/skigsy/AnyRAG/releases/download/v1.4.0/rust-rag-linux-amd64.tar) · [SHA-256 checksums](https://github.com/skigsy/AnyRAG/releases/download/v1.4.0/SHA256SUMS.txt) · [Verify provenance](docs/evidence.md#verify-package-provenance)
 
 [Verify and install the Windows ZIP](docs/setup.md#install-the-windows-zip), then set your folder and question in the same PowerShell window. This creates a fresh personal index for Markdown and text. The default build needs no model, Python, or database service.
 

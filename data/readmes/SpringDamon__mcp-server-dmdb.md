@@ -132,7 +132,7 @@ SQL 语句必须连续通过五层检查才会执行，任一层失败即拒绝�
 5. **交叉裁决** —— 第 3 层与第 4 层结论必须一致
 
 **永久禁止**（任何开关状态下都不放行）：
-`TRUNCATE`、`DROP DATABASE/USER/SCHEMA/TABLESPACE/ROLE`、`ALTER DATABASE/SYSTEM/SESSION`、`SHUTDOWN`、`GRANT`、`REVOKE`、`SP_*`、`SF_*`、`DBMS_*`、`EXECUTE IMMEDIATE`。
+`TRUNCATE`（DDL 语句；`LISTAGG ... ON OVERFLOW TRUNCATE` 溢出子句中的关键字不算，见 issue #1）、`DROP DATABASE/USER/SCHEMA/TABLESPACE/ROLE`、`ALTER DATABASE/SYSTEM/SESSION`、`SHUTDOWN`、`GRANT`、`REVOKE`、`SP_*`、`SF_*`、`DBMS_*`、`EXECUTE IMMEDIATE`。
 
 **DDL 额外三道锁**：
 - 上面的永久黑名单
@@ -205,7 +205,7 @@ git clone https://github.com/SpringDamon/mcp-server-dmdb.git
 cd mcp-server-dmdb
 npm install
 npm run build      # tsc -> dist/
-npm test           # 构建 + node --test 跑门禁用例（43 条）
+npm test           # 构建 + node --test 跑门禁用例（49 条）
 ```
 
 下面两个脚本要连真实库，凭据**只从环境变量读取**，缺失即报错（见 `scripts/env.mjs`）：
@@ -214,7 +214,7 @@ npm test           # 构建 + node --test 跑门禁用例（43 条）
 export DM_HOST=<host> DM_USER=<user> DM_PASSWORD=<pwd> DM_SCHEMA=<schema>
 node scripts/probe-connect.mjs   # 验证数据库连通性
 node scripts/verify-dict.mjs     # 导出字典视图真实列名
-node scripts/e2e-mcp.mjs         # 端到端 JSON-RPC 验证（43 项检查）
+node scripts/e2e-mcp.mjs         # 端到端 JSON-RPC 验证（45 项检查）
 ```
 
 ## 依赖

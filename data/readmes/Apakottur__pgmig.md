@@ -1,0 +1,70 @@
+<p align="center">
+  <img src="https://github.com/Apakottur/pgmig/blob/main/pgmig.png?raw=true" width="400" />
+</p>
+
+[![image](https://img.shields.io/pypi/v/pgmig.svg)](https://pypi.python.org/pypi/pgmig)
+[![image](https://img.shields.io/pypi/l/pgmig.svg)](https://github.com/Apakottur/pgmig/blob/main/LICENSE)
+[![image](https://img.shields.io/pypi/pyversions/pgmig.svg)](https://pypi.python.org/pypi/pgmig)
+[![Documentation](https://readthedocs.org/projects/pgmig/badge/?version=latest)](https://pgmig.readthedocs.io/)
+
+Generate migrations between Postgres databases.
+
+Use `pgmig` to compare the structure of two Postgres databases — a `source` and a `target` — and generate
+the SQL that turns the source into the target.
+
+`pgmig` connects **read-only** to both databases and never
+runs the generated SQL for you: you review it and apply it yourself.
+
+pgmig officially supports **Postgres 14–18** — the majors currently maintained upstream — and is
+tested against each in CI. Other versions may work but are not tested.
+
+**Documentation**: [pgmig.readthedocs.io](https://pgmig.readthedocs.io/)
+
+## Quick start
+
+Say the `current` database has a `users` table, and the `desired` one adds an `email` column with a unique index:
+
+```sql
+-- current
+CREATE TABLE users (id bigint PRIMARY KEY, name text NOT NULL);
+
+-- desired
+CREATE TABLE users (id bigint PRIMARY KEY, name text NOT NULL, email text NOT NULL);
+CREATE UNIQUE INDEX users_email_idx ON users (email);
+```
+
+Print the migration SQL that makes `current` match `desired`, using [`uvx`](https://docs.astral.sh/uv/):
+
+```shell
+$ uvx pgmig generate \
+    --source postgresql://user:pass@localhost:5432/current \
+    --target postgresql://user:pass@localhost:5432/desired
+
+ALTER TABLE "public"."users" ADD COLUMN "email" text NOT NULL;
+CREATE UNIQUE INDEX users_email_idx ON public.users USING btree (email);
+```
+
+Or from Python:
+
+```python
+import pgmig
+
+sql = pgmig.generate(
+    source="postgresql://user:pass@localhost:5432/current",
+    target="postgresql://user:pass@localhost:5432/desired",
+)
+
+print(sql)
+# ALTER TABLE "public"."users" ADD COLUMN "email" text NOT NULL;
+# CREATE UNIQUE INDEX users_email_idx ON public.users USING btree (email);
+```
+
+## Contributing
+
+Contributions are welcome!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## License
+
+`pgmig` is distributed under the terms of the [MIT license](LICENSE).

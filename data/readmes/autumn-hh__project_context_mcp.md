@@ -1,0 +1,524 @@
+# Project Context MCP
+
+<p align="center">
+  <img src="docs/assets/readme-banner-cn.jpg" alt="Project Context MCP — 本地项目记忆，让编程助手跨会话接着干" width="100%">
+</p>
+
+**中文** | [English](README.en.md)
+
+给编程助手用的本地「项目记忆」。
+
+换个聊天窗口，它还记得这项目里重要的事。
+
+**你能得到**
+
+- 代码和文档的索引（方便助手查找）
+- 你确认过的决定和约定
+- 做到一半的任务，下次接着干
+- 数据默认在你电脑；备份 / 同步 / 团队权限都是可选
+
+<p align="center">
+  <img src="docs/assets/flow-remember-resume.svg" alt="记 → 查 → 接着干" width="720">
+</p>
+
+**适合：** 用 Cursor、Claude Code、Codex 等，讨厌重复解释项目的人  
+**不适合：** 想要现成云账号、托管服务的人（这里默认本地，团队需自建）
+
+装好就能用 → [安装与构建](#安装与构建)  
+不会接 MCP → [小白教程](#小白教程接入-mcp-客户端并自动初始化项目)
+
+## 索引升级与空间回收
+
+启动 `node dist/cli.js ui --no-open`，打开输出中的 **`launchUrl`（包含本次启动的 token）**，进入 **项目画像 → 索引与存储 → 升级索引并回收空间**。
+
+1. 搜索已索引文件夹，选择每页 10/20/50/100 项。切换搜索和分页保留勾选，确认时包含筛选外的选择；源码字节数不是预计可回收的数据库大小。
+2. 可点击“勾选推荐目录”。推荐依据已索引路径中的语言、框架和构建文件线索，供用户核对；多语言项目识别不代表所有语言都支持 Tree-sitter 符号解析。默认不自动排除学习或业务目录。
+3. 升级前检查数据库、备份和 SQLite 临时目录所在磁盘，同盘合并空间需求。空间不足或无法验证时阻止执行；估算并不预留磁盘，其他进程仍可能随后消耗空间。
+4. 确认后由独立后台任务执行备份、保存所选忽略规则、更新分级索引和压缩。业务内容保留完整索引，低相关内容按分级规则保留文本检索；排除目录写入 `.project-context-ignore`，不会删除源码。
+5. 全部成功且 `quick_check` 通过后删除本次自动创建的临时备份。失败或部分完成时保留，并显示阶段和备份路径。历史及手工备份不自动删除。
+
+| 遇到的情况 | 处理方式 |
+| --- | --- |
+| `database or disk is full` | 查看空间预检中的路径、可用空间及缺口；释放空间后重新检查，不要手动删除数据库或 WAL 文件。 |
+| `Failed to fetch` 或暂时断线 | 页面查询原任务而不重复提交；可重新打开窗口或点击“重新查询原任务状态”。服务重启后使用新 `launchUrl`。 |
+| 索引成功、压缩未完成 | 使用“仅重试空间回收”；不会再备份、重建索引、保存本次勾选或清理日志，也不会删除历史备份。 |
+| 后台服务退出 | 显示中断、结果未知；检查终端、索引和备份，不能把连接丢失当作迁移已回滚。旧版操作没有新任务记录，无法追溯恢复状态。 |
+
+任务状态保存在 `<project>/.project-context/migration-jobs`。后台任务不依赖浏览器长连接，但仍依赖本地服务进程。点击“暂停访问并升级”后，新版客户端在任务运行期间暂缓打开项目数据库，文件监听保留变化并延后重试；不会强制断开已有连接，也尚未等待所有连接排空。旧版 MCP 和外部数据库工具仍可能占用数据库，更新后应重新构建并重启所有相关 Web/MCP 进程。若仍报 `database is locked`，让其他读写任务结束后重新升级；索引失败时仅压缩不能完成升级。数据库最终节省多少取决于重复内容和索引构成，不保证固定缩减比例。
+
+源码安装用户更新后需重新构建并重启服务：`git pull --ff-only` → `npm run build` → 重启 Web/MCP 服务。重新构建后，仍在运行的旧进程会暂停索引和监听，避免旧规则改写新版已升级的索引；新启动的 MCP、`ui` 或 `watch` 服务会结束同一安装目录下旧构建的常驻服务；对应客户端重新连接 MCP（或重新打开工作台）后即使用新版。如需保留旧进程，设置 `PROJECT_CONTEXT_KEEP_OUTDATED_SERVERS=1`。完整变更见 [补丁说明](PATCH_NOTES.md)。
+
+## 完整任务浏览与更新历史
+
+工作阶段与生命周期现已分开：待排期、执行中、待验收、等待外部条件、暂缓；旧任务缺失阶段显示待核对。完成前须记录最终结论、验收条件与通过证据，确保没有未完成的下一步或阻塞，并核对各验证命令最新结果通过；遗漏必要验证时使用 `task_reopen`，原完成历史保留。阶段、检查点增量更新、CLI 与重开示例见[任务工作流](docs/task-workflow.md)。比特/NO_PROXY 复现和审计结果见[执行记录](docs/accuracy-task-workflow-2026-11-03.md)。更新后请重新构建并重启相关 MCP/Web 进程。
+
+切换任务筛选时保留已有内容和输入焦点，显示更新中；请求失败会提示当前仍是上次结果，支持刷新重试。工作阶段筛选只匹配未完成任务。当前没有独立存量整理统计页，也不会自动合并项目迁移副本。
+
+Web 的“任务流水线”支持全部项目或单项目查询、目标/当前摘要搜索、进行中/已完成/已取消筛选，以及每页 10/20/50 条。可按更新时间、创建时间或结束时间排序；归档项目默认排除。部分项目不可读取时，其余结果仍可查看，并明确提示总数仅覆盖已读取项目。项目画像继续保留近期摘要，可从“查看全部任务”进入完整列表。
+
+工作台采用统一的浅色卡片与分段导航，分页集中在任务队列底部；详情通过紧凑步骤展示检查点阶段，流程示意默认折叠，不代表后台自动执行或验证通过。设计参考和响应式验收范围见 [界面说明](docs/ui-design.md)。
+
+任务详情可切换“当前状态”和“更新历史”。创建、检查点、完成和取消会原子保存对应快照；历史保留修改文件、验证结果、阻塞和风险，完成任务不代表所有环境均已验证。阅读历史时暂停自动刷新，避免展开内容被打断。
+
+首次使用新版访问项目数据库会执行 Schema v8 增量迁移：保留任务和现有索引，为旧任务追加一条明确标记的“迁移时快照”，不伪造此前历史，也无需重建代码索引。升级后请重启所有相关 MCP/Web 进程；旧版进程不会记录新历史。历史属于持久工作记录，不由日志清理自动删除；备份、恢复及 JSONL 导出包含历史和检查点请求回执。
+
+新增 MCP `task_query`（项目可选、分页与筛选）和 `task_history`；原有 `task_list` 保持兼容。`task_checkpoint` 可传 `requestId`，重试时复用相同 ID：不会把较新的进度回退到旧请求，同一 ID 对应不同内容会报冲突。不提供 ID 时，仅连续相同内容去重，不能识别跨更新的旧请求重放。
+
+```powershell
+node dist/cli.js task query --status in_progress --limit 20
+node dist/cli.js task query --project <project-id> --query "升级" --include-archived
+node dist/cli.js task history <project-id> <task-id> --limit 10 --offset 0
+```
+
+这是个人工作记忆扩展的第一批。任务仍归属项目；跨项目查询按项目读取，不提供全库同一时刻的快照，数据更新时偏移分页也可能移动。深页读取和大量项目的延迟仍需评估。独立工作总览、任务恢复专用入口、规则来源解释和个人记忆画像属于后续阶段。
+
+## 个人存储与项目能力
+
+- 由用户明确选择持久化存储位置，MCP 服务不会静默初始化
+- Codex、Claude Code、Cursor 及其他 MCP 客户端共享项目注册表
+- 项目数据库随项目存放在 `<project>/.project-context/project.db`
+- 使用 SQLite WAL，并结合 FTS5、Unicode n-gram 与代码关系搜索
+- 将覆盖率归一化的 n-gram 排名、FTS 结果和精确符号名加权合并
+- 增量索引支持 `.git/info/exclude`、`.gitignore` 和 `.project-context-ignore`（按 Git 优先级，后者可用 `!` 重新包含），并在目录层提前剪枝
+- 文件大小与修改时间均未变化时不读取文件；内容规则变化或距上次全量核对超过 24 小时会重新读取全部文件，刚写入不久或含遮蔽行的文件每次都重新读取
+- 每项目索引锁、MCP 取消操作和进度通知
+- 旧版 n-gram 迁移延迟到 `project_index`，采用可取消、有界事务的批量重建
+- 根据项目根目录识别并排除 Codex 运行会话、缓存、日志、附件和本地密钥存储
+- 为已索引文本块建立外键索引，保证大型数据库中的来源清理行为可预期
+- 默认排除 `.env`、凭据、私钥、数据库、二进制文件、生成目录和大文件
+- 普通文本和源码中的疑似敏感内容只遮蔽命中物理行，PEM 私钥遮蔽完整块；保留其他片段及原行号，源文件不修改。`project_health`、项目画像健康数据和 `project_doctor` 的 `contentProtection` 返回最近检查的遮蔽行号与跳过路径，未完成检查有明确标记；忽略目录不在覆盖范围内。MCP 与工作台返回的是有界摘要：`skipped`、`redacted` 各最多 50 条（图片、二进制等常规跳过排在最后），并附 `skippedTotal`、`skippedByReason`、`redactedTotal`；`project_health` 的最近索引记录只含统计和前 3 条错误，工作区变化列表最多 50 条并附 `changeCount`。命令行 `health`、`doctor` 仍输出完整列表。
+- 升级前显示数据库连接占用 PID、角色、版本及重启建议。新版连接使用项目外临时登记；Windows 查询数据库/WAL/SHM 文件句柄，也能发现未登记旧进程。其他平台或系统探测失败时明确提示覆盖不足；不会强制断开连接。
+- 本机真实大库邻居查询测量与消歧抽查见 [图查询验证](docs/graph-query-benchmark-2026-10-12.md)，结果仅代表邻居扩展成本。
+- 默认排除 `.d` 依赖文件、`.o/.obj` 目标文件、`.a/.lib` 静态库、字节码、编译缓存和覆盖率/性能分析产物
+- 使用 Tree-sitter 索引 TypeScript/JavaScript（`.ts`、`.tsx`、`.js`、`.jsx`、`.mjs`、`.cjs`）、Python、Go、Rust、Java、C、C++（含 `.h` 等头文件与 `.ino`）、C#、PHP 以及 Vue/Svelte 组件 `<script>` 块的符号与代码关系；`static`、`assets`、`plugins`、`vendors` 等低相关目录中的文件只保留文本检索
+- Kotlin、Swift、Scala、Ruby、Dart 等语言的源码仍可全文搜索，但不解析符号；`project_health` 的 `codeIntelligence` 返回这类文件数、主要扩展名及其在代码文件中的占比，低相关目录中的代码单独计数
+- 搜索与任务上下文包含导入、调用、继承和实现关系；Java 按导入、同包与字段/参数声明类型跨文件解析调用并沿父类型查找继承方法，PHP 与 C/C++ 解析项目内的导入和包含文件，均为语法推断，第三方库与无法推断类型的调用保持未解析
+- 自动检测 Git、Mercurial（hg）和 Subversion（svn），记录版本、分支、工作区状态与差异哈希证据，但不持久化完整 diff
+- 从 Git、Mercurial、Subversion 变更、已索引知识文档和已完成任务生成待审核记忆候选
+- 各类版本控制与无版本控制项目均支持稳定的候选去重和文档候选替代
+- 文件来源发生变化或消失时，将关联的活跃记忆标记为过期
+- 使用段落指纹，避免大文件中无关内容变化导致记忆失效
+- 支持结构化记忆类型、生命周期状态和决策替代关系
+- 原生用户记忆支持 `user`、`workspace`、`project`、`module` 和 `task` 作用域
+- 支持跨会话任务和检查点
+- 本地工作台支持候选接受/拒绝、过期记忆清理、任务完成/取消以及索引监听控制
+- `project_context` 按任务相关性组装上下文，包含关联代码符号并严格执行 Token 预算
+- 本地记忆独立召回，支持中文长问句；上下文按精确标题、类型、结论、理由和范围合并重复记录并保留来源，相关过期记录仅提示复核。实现、边界和前后对照见[本地记忆召回](docs/local-memory-recall.md)。
+- “项目画像 → 记忆关系”展示记忆、来源、任务和范围节点，可搜索、查看证据及展开两层邻居；MCP 支持 `memory_graph`、`memory_graph_node`，上下文可沿明确来源补充相关知识。见[记忆图谱](docs/memory-graph.md)。
+- 图谱默认“知识关联”，仅显示少量长期记忆及带共同词项/原文的“可能相关”连线；来源、任务、目录通过“来源追溯”按需展开。任务摘要默认排除，图补充上下文必须同时匹配任务内容与适用范围。
+- 选择与任务相关的作用域约束，同时保留作用域为空的项目级约束
+- 个人记忆仅在任务词命中时进入上下文，最多使用请求 Token 预算的 20%；项目决策、约束按类型保留候选名额。任务摘要默认排除，回顾相关任务或指定任务 ID 时才召回；极小预算可能不足以保留完整记录。
+- 工作台分别展示长期知识、任务摘要及两类待审核候选；“整理并接受”允许明确编辑标题、结论与类型，原候选保留为审核证据。MCP `memory_candidate_accept` 可选传入 `review: { title, content, type }`，原调用仍兼容。
+- Schema v9 保存解析后的代码关系目标；旧项目在下一次索引时补齐，搜索按种子符号查询邻居，不再全量读取符号和导入。解析仍限于静态可确定的关系；不确定的调用保持未解析。更新后需构建并重启 MCP/Web 服务。
+
+历史任务摘要标题可单独规范化，正文、来源和时间戳保持不变，FTS 与 n-gram 同步更新。默认只预览；应用时可交互取消，或用已审阅预览的哈希非交互执行。预览后记录有变化会拒绝应用。
+
+```powershell
+node dist/cli.js memory normalize-task-titles <project-id>
+node dist/cli.js memory normalize-task-titles <project-id> --cancel
+node dist/cli.js memory normalize-task-titles <project-id> --apply
+node dist/cli.js memory normalize-task-titles <project-id> --apply --preview-hash <previewHash>
+```
+- 本地确定性质量评估覆盖检索、上下文选择、记忆候选和延迟
+- 项目根目录和输出根目录使用显式允许列表，并校验符号链接后的真实输出路径
+- MCP 工具提供结构化结果、输出 Schema、资源、资源模板和工作流提示词
+- 支持版本化的原地数据库迁移、完整性诊断、FTS 修复、备份和 JSONL 导出
+- 支持恢复为新项目，或在明确确认后覆盖已归档项目
+- 支持项目重命名、归档、取消归档、迁移、删除预览和受保护的永久删除
+- MCP 打开项目时自动同步索引并启动进程级监听，读取上下文和结束任务前刷新待处理变化
+- 使用 scrypt 派生密钥的流式 AES-256-GCM 加密备份与恢复
+- 安全的本地主机项目工作台，包含项目画像、作用域用户规则和上下文预览
+- CLI 与 stdio MCP 服务共用同一套核心实现
+
+已提供可选加密远程知识备份：S3 兼容存储、CLI/MCP 和工作台「项目画像 → 远程备份」。默认排除代码索引，个人规则明确选择；下载恢复到全新目录。配置、迁移步骤和验证限制见 [远程备份说明](docs/remote-backup.md)。原有本地备份继续兼容。
+
+已提供可选的[多机增量同步](docs/sync-protocol.md)、[团队共享记忆、计划和规则中心](docs/team-service.md)，以及 [Python/Go/Rust、embedding 插件和 LSP 定义桥接](docs/search-extensions.md)。团队成员连接同一远程 MCP 即可访问同一份知识，代码和个人开发留在本机，无需同步数据库文件夹。Web 顶部「团队知识」可选择连接、提议记忆、更新计划和编辑规则，并查看历史；IDE 需另行配置远程 MCP。本地功能保持兼容；生产 TLS 代理和第三方模型/语言服务仍需部署验证。见[执行计划](docs/remote-storage-team-sync-execution-plan.md)。
+
+## 环境要求
+
+- Node.js 22 或更高版本
+- npm 10 或更高版本
+
+## 安装与构建
+
+```powershell
+npm install
+npm run typecheck
+npm test
+npm run build
+npm run eval
+npm run benchmark
+```
+
+## 质量评估
+
+`npm run eval` 会创建隔离的临时项目，确定性测量英文和 CJK 文档检索、中文子串检索、精确代码符号检索、代码图 seed/related 召回、活跃记忆检索、作用域上下文选择、候选记忆的准确率与召回率、Token 预算合规性以及本地延迟。搜索会把 FTS5/BM25、Unicode n-gram 和精确符号作为独立排序通道，用 RRF 融合后再进行带 hop 衰减的代码关系扩展。任何质量指标未达阈值时，命令都会以非零状态退出。评估不使用网络服务、嵌入模型或外部项目数据。
+
+`npm run benchmark` 会执行 100 次查询和上下文迭代，并输出只包含耗时的 JSON。延迟与机器环境相关，应在没有竞争负载的同一主机上比较；质量指标才是可移植的回归门槛。
+
+评估报告保存在 `docs/baselines/v0.3.1.json` 和 `docs/baselines/v0.4.0.json`。在确定性测试数据上，v0.4.0 将搜索 MRR 从 `0.707` 提升到 `0.900`，Top-1 召回率从 `0.600` 提升到 `0.800`，已选择记忆的准确率从 `0.667` 提升到 `1.000`；同时 Recall@5、必需记忆召回率、候选准确率、候选召回率和候选类型准确率均保持 `1.000`。
+当前评估集包含 9 个搜索用例；搜索专项回归另外覆盖中文任务描述、非 active 记忆排除、作用域误召回、同文件同名 symbol 和跨文件代码关系。本轮确定性评估结果为 Recall@5 `1.000`、MRR `0.870`，质量门槛中的最低 MRR 为 `0.800`。历史版本指标仍保留在上述 baseline 文件中，用于比较，不应与当前用例数量直接横向比较。
+
+## 选择记忆存储位置
+
+运行交互式初始化程序：
+
+```powershell
+node dist/cli.js init
+```
+
+初始化程序用于选择共享注册表数据和恢复备份的存储位置。项目数据库始终位于 `<project>/.project-context/project.db`。可选位置包括：
+
+1. 用户目录，推荐：`%USERPROFILE%\.project-context`
+2. 当前项目：`<project>\.project-context`
+3. 自定义绝对路径
+
+自动化环境可使用：
+
+```powershell
+node dist/cli.js init --storage user --allow-project-root D:\project
+node dist/cli.js init --storage project --project-root D:\project\my-app
+node dist/cli.js init --storage D:\ProjectMemory --allow-project-root D:\project --allow-output-root D:\ProjectMemory
+```
+
+`PROJECT_CONTEXT_HOME` 可在临时或隔离环境中覆盖共享注册表和恢复目录。使用该变量时，请配置 `PROJECT_CONTEXT_ALLOWED_ROOTS` 和 `PROJECT_CONTEXT_ALLOWED_OUTPUT_ROOTS`：Windows 使用分号分隔，POSIX 使用冒号分隔。升级后，已注册项目仍可继续使用；注册新项目时，其路径必须位于允许的根目录中。
+
+## CLI 工作流
+
+### 数据库清理与自动维护
+
+本地工作台（`node dist/cli.js ui`）的 **项目画像 → 数据库维护** 提供可见入口：查看数据库、WAL、SHM 和空闲页占用，先预览，再确认清理。默认仅删除 30 天前已经结束的索引运行日志，并始终保留最近 10 条已结束记录；所有记忆（含过期记忆）、任务、候选以及当前文件/搜索索引都会保留。
+
+占用指标、手动清理和自动维护分区展示，桌面采用两栏，窄屏自动上下排列。预览和执行结果可查看日志编号、开始/结束时间、状态以及扫描/索引数量。手动清理的保留天数与自动维护设置独立，调整本次预览不会修改自动策略。
+
+“索引运行日志”可选择每页 10/20/50/100 条，按全部、已完成、失败、运行中筛选，使用上一页/下一页查看其余记录。无需预览或执行清理即可展开日志。清理历史可选择显示最近 5/10/20 次。
+
+展开日志直接显示已有内容，不触发索引。点击“立即索引”后只更新项目状态，保留正在阅读的日志、筛选和页码；需要更新列表时点击“刷新日志”。刷新同一列表会尽量保留仍在当前页的记录展开状态、键盘焦点和滚动位置。旧记录只展示当时保存的摘要/错误信息，不要求重新索引来查看。
+
+Schema v7 为运行记录增加过程日志：升级后的新索引会记录开始、更新文件索引、未变化或不可索引文件跳过、失效索引移除和最终结果；不会复制源文件内容。每次运行最多保存 100 条事件、约 32 KiB，保留最终结果，超限明确标注。清理后历史中每条运行过程保留最多 10 条事件，避免清理历史再次膨胀。旧记录保持不变，界面会说明当时未保存过程内容；需使用更新后的服务执行下一次索引才能产生新内容。
+
+“最近清理记录”保存最近 20 次手动/自动清理，每次最多 100 条明细，并显示实际删除总数和截断提示。执行时在删除事务内保存真实删除明细；空间回收未完成或进程中断时，记录会保留相应阶段。每条记录可展开“查看日志内容”，查看运行统计和已保存的错误路径/消息；每条最多保留 5 项错误，路径/消息分别最多 200/500 字符，超出时明确标注，并遮蔽识别到的敏感内容。这不是完整终端输出，旧版本未保存的内容无法恢复。此功能清理的是数据库中的运行日志，不是项目文件。
+
+首次手动清理执行一次完整的 SQLite `VACUUM`，同时把数据库切换为增量回收模式（`auto_vacuum = INCREMENTAL`）；此后的手动和自动清理都分小步归还空闲页，不再整库重写，耗时只与空闲页数量有关。清理会尝试截断 WAL，返回实际占用变化；预览中的空闲页大小不是保证可释放的字节数。首次压缩大库可能耗时（1.2 GB 约半分钟）并需要额外磁盘空间，建议在空闲时操作。其他客户端占用数据库时，会明确提示“记录已清理、空间回收未完成”，可以稍后重试；不会直接删除 WAL/SHM 文件。
+
+**自动维护默认开启，可按项目关闭。** 可在同一区域设置保留天数和执行间隔。每次成功索引结束会检查维护周期（默认至少间隔 24 小时），清理过期索引日志并回收空闲页：已切换为增量模式的数据库在空闲页达到 16 MiB 时分小步回收（每次最多约 512 MiB，每步是独立的短事务）；尚未切换的数据库在 256 MiB 以内、空闲页达到 16 MiB 且占 20% 时自动完整压缩一次，更大的数据库不会被自动整库重写，需要手动回收一次。其余情况仅做不阻塞读取的 WAL checkpoint；既没有删除日志也没有回收空间的例行运行不写入清理历史。服务未运行、项目未索引时不会启动定时任务。工作台显示最近自动维护结果；关闭开关后不再自动运行。
+
+项目画像顶部会在可回收空间达到 64 MiB（或至少 16 MiB 且占数据库 20%）时显示“可回收 X 数据库空间”和“立即回收”按钮，并说明自动维护是否会处理；确认后按自动维护的保留天数清理日志并回收空间。
+
+```powershell
+# 查看占用与配置；预览不会删除记录或执行压缩
+node dist/cli.js storage <project-id>
+node dist/cli.js cleanup <project-id> --retention-days 30
+
+# 明确执行；仅删日志、跳过压缩可加 --no-vacuum
+node dist/cli.js cleanup <project-id> --apply --confirm <project-id>
+
+# 自动维护默认开启；按项目调整，或将 true 改为 false 关闭
+node dist/cli.js maintenance <project-id> --enabled true --retention-days 30 --interval-hours 24
+```
+
+对应 MCP 工具为 `project_storage`、`project_cleanup`（默认 `dryRun: true`，执行时须传入匹配的 `confirmProjectId`）和 `project_maintenance_configure`。这些 MCP 工具返回的运行记录和清理历史是摘要，不含过程日志、错误全文和逐条明细（真实项目上 `project_storage` 从约 30.6 万字符降到约 5.7 千字符），完整内容在工作台查看。有效索引本身占用的空间不会被清理；如数据库主要由有效索引构成，可通过工作台的忽略规则缩小索引范围，然后再回收空闲空间。
+
+```powershell
+# 注册项目并保存返回的项目 ID
+node dist/cli.js project open D:\project\my-app
+
+# 执行增量索引
+node dist/cli.js index <project-id>
+
+# 或保持显式的进程生命周期文件监听
+node dist/cli.js watch <project-id> --debounce 300
+
+# 在系统浏览器中打开本地工作台
+node dist/cli.js ui
+
+# 搜索已索引内容、代码符号和活跃记忆
+node dist/cli.js search <project-id> "refresh token"
+
+# 索引文档或完成任务后，审核有来源的候选记忆
+node dist/cli.js memory candidates <project-id>
+node dist/cli.js memory accept <project-id> <candidate-id>
+
+# 取消不再继续的跨会话任务并保留最后检查点
+node dist/cli.js task cancel <project-id> <task-id>
+
+# 保存一条有来源的决策
+node dist/cli.js memory add <project-id> `
+  --type decision `
+  --title "Rotate refresh tokens" `
+  --content "Refresh tokens rotate after every successful use." `
+  --source-kind user
+
+# 保存跨项目共享的偏好
+node dist/cli.js user-memory add `
+  --type preference `
+  --title "Test runner" `
+  --content "Prefer Vitest for TypeScript projects." `
+  --source-kind user `
+  --scope-level user
+
+# 开始任务并在之后恢复
+node dist/cli.js task start <project-id> "Implement token reuse detection"
+node dist/cli.js task checkpoint <project-id> <task-id> `
+  --completed "Added token family" `
+  --next "Add reuse test" `
+  --changed-file "src/auth/auth.service.ts"
+
+# 为新会话组装任务上下文
+node dist/cli.js context <project-id> "Continue token reuse detection"
+
+# 诊断并修复派生的 FTS 索引
+node dist/cli.js doctor <project-id> --repair
+
+# 创建持久化运维副本；目标必须是新的绝对路径或空目录
+node dist/cli.js backup <project-id> D:\ProjectMemoryBackups\my-app.db
+node dist/cli.js export <project-id> D:\ProjectMemoryExports\my-app
+
+# 避免将口令写入命令历史或进程参数
+$env:PROJECT_CONTEXT_BACKUP_PASSPHRASE = "<a strong private passphrase>"
+node dist/cli.js backup-encrypted <project-id> D:\ProjectMemoryBackups\my-app.pcmb `
+  --passphrase-env PROJECT_CONTEXT_BACKUP_PASSPHRASE
+node dist/cli.js project restore-encrypted D:\ProjectMemoryBackups\my-app.pcmb `
+  --passphrase-env PROJECT_CONTEXT_BACKUP_PASSPHRASE `
+  --root D:\project\restored-app
+```
+
+项目删除被设计为两个步骤：先归档，再调用不带 `--purge` 的 `project delete` 检查影响数量，最后使用精确的项目 ID 确认执行永久删除。存在活跃记忆、进行中任务或待审核候选时，永久删除会被阻止。项目目录缺失不会触发自动删除。
+
+## 本地项目工作台
+
+`project-context ui` 会启动一个仅绑定到 `127.0.0.1` 的临时 HTTP 服务，自动选择可用端口并打开系统浏览器。项目画像汇总索引健康状态、代码智能、文件类型、Git 状态、记忆、候选、任务和主要索引来源，并可直接执行增量索引、控制进程级 watcher、审核候选、清理过期记忆以及结束历史任务。监听开启时，当前项目画像会自动刷新索引与记忆状态。索引过滤编辑器支持常用规则快捷添加、Windows 路径规范化和保存前影响预览，确认后将规则原子写入 `.project-context-ignore` 并立即更新索引。工作台还可以管理 `user`、`workspace`、`project`、`module` 和 `task` 作用域规则。
+
+### Windows 一键启动
+
+在仓库根目录双击 [`start-web.cmd`](start-web.cmd)，即可启动本地工作台并自动打开系统浏览器。启动器会以自身所在目录作为项目目录；如果 `dist/cli.js` 尚不存在，则会先使用已有依赖执行 `npm run build`。首次使用仍需在仓库中执行一次 `npm install`。
+
+需要桌面入口时，右键单击 `start-web.cmd`，选择“发送到 > 桌面快捷方式”。工作台运行期间请保留命令窗口；按 `Ctrl+C` 或关闭窗口即可停止服务。不要收藏或复制某次启动产生的完整 URL 作为固定入口，因为端口和启动令牌属于当前服务进程；以后仍应通过启动器打开工作台。
+
+### macOS 一键启动
+
+在仓库根目录双击 [`start-web.command`](start-web.command)，即可启动本地工作台并自动打开默认浏览器。启动器兼容 Apple Silicon 和 Intel Homebrew 的常见 Node.js 安装路径，并与 Windows 版本一样在缺少 `dist/cli.js` 时使用已有依赖自动构建。
+
+如果文件不可执行，请在终端中运行一次 `chmod +x start-web.command`。如果 macOS 首次阻止打开，请在 Finder 中按住 `Control` 单击该文件，选择“打开”并确认。工作台运行期间请保留终端窗口；按 `Control+C` 或关闭窗口即可停止服务。首次使用仍需在仓库中执行一次 `npm install`，并且不应收藏某次启动产生的临时完整 URL。
+
+项目画像包含基于 Cytoscape.js 的交互式关系图。文件级视图会聚合项目依赖，而不是将每条原始关系都发送到浏览器；选择或搜索文件及符号后，可以按需展开一跳或两跳符号邻域。节点可自由拖拽，画布支持平移、缩放、适配，以及力导向、分层和环形布局。`IMPORTS`、`CALLS`、`EXTENDS`、`IMPLEMENTS` 关系可以独立筛选，节点详情会关联到已索引的源码路径和行号。
+
+编辑活跃规则会创建新版本并将旧版本标记为 `superseded`；停用规则使用可审计的 `deleted` 生命周期状态，而不是物理删除。已被替代的历史版本不能重新激活为第二个活跃版本。
+
+上下文预览会针对选定项目和模拟任务运行真实的 `project_context` 流程，展示选中的用户规则、项目约束与决策、活跃任务检查点、索引证据、警告以及实际 Token 预算使用情况。
+
+浏览器会话使用随机启动令牌，并将其交换为 `HttpOnly`、`SameSite=Strict` Cookie。API 会校验 `Host`、同源状态变更请求、自定义 UI 请求头、JSON Schema 和 64 KiB 请求体上限。服务返回严格的内容安全策略，并且不会监听 `0.0.0.0`。`project-context ui --no-open` 仅供自动化使用，它会将一次性启动 URL 输出到终端。
+
+## 小白教程：接入 MCP 客户端并自动初始化项目
+
+Project Context MCP 不绑定某一个 AI 客户端。Codex、Claude Code、Cursor 以及其他支持 stdio MCP 的客户端都可以连接同一套本地项目数据。
+
+这里的“默认启动”分为两层：先在所用客户端中注册 MCP 服务，再通过该客户端的全局会话规则，引导它在仓库首个任务中调用 `project_open` 和 `project_context`。`project_open` 会在 MCP 内部完成首次或增量索引并启动变更监听，无需客户端单独调用 `project_index` 或 `project_watch_start`。仅启动客户端但不开始任务时，不会在后台扫描磁盘。
+
+### 安装完成后还要配置什么
+
+首次安装后需要完成下面 3 项一次性配置，缺少其中任何一项都可能导致客户端看得到 MCP、但没有真正打开和索引当前项目：
+
+| 一次性配置 | 作用 | 完成标志 |
+| --- | --- | --- |
+| 初始化个人存储和允许的项目根目录 | 决定共享注册表、恢复目录和允许索引的代码目录 | `storage_status` 返回 `configured: true` |
+| 将 MCP 注册到所用客户端 | 让 Codex、Claude Code 或其他客户端可以启动 `project-context-mcp` | 客户端的 MCP 列表中能看到 `project-context` |
+| 将推荐区块加入客户端全局会话规则 | 引导客户端在仓库首个任务中调用 `project_open` | 新会话依次调用 `storage_status`、`project_open`、`project_context` |
+
+常用客户端的全局会话规则位置：
+
+| 客户端 | Windows | macOS/Linux |
+| --- | --- | --- |
+| Codex | `%USERPROFILE%\.codex\AGENTS.md` | `~/.codex/AGENTS.md` |
+| Claude Code | `%USERPROFILE%\.claude\CLAUDE.md` | `~/.claude/CLAUDE.md` |
+| Cursor 或其他 MCP 客户端 | 使用客户端提供的全局 MCP 配置和 User Rules | 使用客户端提供的全局 MCP 配置和 User Rules |
+
+这 3 项只需要为所用客户端配置一次。以后进入位于允许根目录下的任意仓库，直接描述正常开发任务即可，不需要修改项目提示词，也不需要手动调用 `project_index`、`project_watch_start` 或判断任务长短。MCP 会在 `project_open` 后托管当前进程的索引与 watcher；候选记忆仍需人工审核，不会自动进入正式上下文。
+
+下面按顺序给出从安装到验证的完整命令。已经完成某一步的用户可以直接跳到下一步。
+
+### 第 1 步：安装并构建
+
+```powershell
+git clone https://github.com/hh357418341-create/project_context_mcp.git D:\tools\project-context-mcp
+cd D:\tools\project-context-mcp
+npm install
+npm run typecheck
+npm test
+npm run build
+```
+
+需要 Node.js 22 或更高版本。下面示例中的安装目录和项目根目录请替换为自己的绝对路径。
+
+### 第 2 步：一次性初始化个人存储
+
+Windows 示例：
+
+```powershell
+node dist/cli.js init --storage user --allow-project-root D:\project
+```
+
+macOS/Linux 示例：
+
+```bash
+node dist/cli.js init --storage user --allow-project-root "$HOME/code"
+```
+
+这一步只需执行一次。`--allow-project-root` 是允许注册项目的安全边界；有多个代码目录时可以在同一条命令后继续列出其他绝对路径。MCP 不会静默选择存储目录。
+
+### 第 3 步：添加到所用 MCP 客户端
+
+选择实际使用的客户端执行对应命令，不需要同时配置所有客户端。
+
+#### Codex
+
+推荐使用 Codex CLI，避免手写 TOML：
+
+```powershell
+codex mcp add project-context -- node D:/tools/project-context-mcp/dist/mcp/server.js
+codex mcp get project-context
+```
+
+`codex mcp get project-context` 应显示 `enabled: true`。也可以手动编辑 `~/.codex/config.toml`：
+
+```toml
+[mcp_servers.project-context]
+type = "stdio"
+command = "node"
+args = ["D:/tools/project-context-mcp/dist/mcp/server.js"]
+```
+
+如果 `node` 不在 `PATH` 中，将 `command` 改为 Node 可执行文件的绝对路径。修改配置后，重启 Codex 或新建会话。
+
+#### Claude Code
+
+使用用户级 scope，配置会对当前用户的所有 Claude Code 项目生效：
+
+```powershell
+claude mcp add --scope user project-context -- node D:/tools/project-context-mcp/dist/mcp/server.js
+claude mcp get project-context
+```
+
+`claude mcp get project-context` 应能显示该 stdio 服务。其他支持 stdio MCP 的客户端，请将命令设置为 `node`，参数设置为构建产物 `dist/mcp/server.js` 的绝对路径。
+
+### 第 4 步：添加客户端全局会话规则
+
+根据所用客户端创建或编辑对应文件：
+
+- Codex：Windows 使用 `%USERPROFILE%\.codex\AGENTS.md`，macOS/Linux 使用 `~/.codex/AGENTS.md`；
+- Claude Code：Windows 使用 `%USERPROFILE%\.claude\CLAUDE.md`，macOS/Linux 使用 `~/.claude/CLAUDE.md`；
+- Cursor 或其他客户端：加入其全局 User Rules，不要只放在某一个项目的局部规则中。
+
+加入下面的启动规则。若文件中已有个人规则，只追加这段，不要覆盖原内容。这里修改的是客户端的用户级全局规则，不是当前代码仓库里的局部规则文件。
+
+```markdown
+<!-- project-context-mcp:start -->
+# Cross-session Project Context (project-context-mcp)
+
+Use project-context-mcp to retain sourced project knowledge across AI coding sessions.
+
+## Session Workflow
+1. At the beginning of the first user turn in a repository, call `storage_status`.
+2. Call `project_open` with the repository's absolute root path and reuse the returned project ID. The MCP server synchronizes the index and manages change tracking for the current process.
+3. Before substantial implementation work, call `project_context` with the current task and `budgetTokens: 3000`; increase the budget explicitly only when the task needs a larger snapshot.
+4. Use `project_search` for indexed text, symbols, memories, and code relationships instead of guessing. Managed pending changes are flushed before reads.
+5. For non-trivial work, call `task_start` with an appropriate stage and acceptance criteria. Save concrete progress/next actions with `task_checkpoint`; omitted fields are preserved and supplied arrays replace the field. Complete only after required verification passes, acceptance evidence is saved, and no next actions/blockers remain. Use `task_reopen` with a reason, requestId and latest task_history sequence as expectedRevision if required work was omitted. Completion flushes pending project changes.
+
+## Memory Rules
+- Review `memory_candidates` after indexing Git changes. Accept or reject candidates explicitly; never accept them automatically.
+- Use `memory_remember` only for durable decisions, constraints, lessons, or facts with a clear source.
+- Never store credentials, private keys, tokens, full chat transcripts, or full Git diffs.
+- Run `project_doctor` when stored context appears incomplete or inconsistent.
+<!-- project-context-mcp:end -->
+```
+
+启动流程必须放在客户端启动任务前就能读取的用户级全局规则中，不能只放在 Project Context 工作台的“全局规则”中。工作台规则只有在 `project_context` 已被调用后才能返回，无法负责引导第一次 MCP 调用。
+
+完成这一步后，不需要为每个项目重复添加相同区块，也不需要在日常任务提示词中写“请启动 watcher”或“修改后重新索引”。
+
+### 第 5 步：验证第一次自动初始化
+
+进入一个位于允许根目录下、尚未注册的仓库，然后启动已经配置好的 MCP 客户端并发送第一条正常任务消息。按照上面的全局规则，客户端应依次调用：
+
+```text
+storage_status
+project_open
+project_context
+```
+
+验证结果：
+
+- `project_open` 返回一个稳定的 `prj_...` 项目 ID；
+- 项目中出现 `.project-context/project.db`；
+- `project_open` 完成首次或增量索引，并在当前 MCP 进程中自动启动变更监听；
+- `project_context` 返回与当前任务有关的记忆、规则、任务检查点和索引证据。
+
+建议将 `.project-context/` 加入项目的 `.gitignore`。项目路径不在初始化时配置的允许根目录下时，`project_open` 会拒绝注册；重新运行 `init` 并显式加入正确根目录即可。
+
+### MCP 托管索引不是永久后台服务
+
+客户端会根据自身的 MCP 配置启动服务，并根据全局会话规则在首个任务中调用 `project_open`。MCP 会先完成增量索引，再为当前项目启动进程级 watcher；`project_search`、`project_context`、`task_complete` 和 `task_cancel` 会在执行前刷新待处理变化。客户端或 MCP 进程重启后旧 watcher 不会恢复，但下一次 `project_open` 会重新同步并启动新的 watcher。CLI 仍保留显式的 `index` 和 `watch` 工作流。
+
+客户端配置细节可参考对应官方文档：Codex 的 [MCP](https://developers.openai.com/codex/mcp/) 与 [Customization / AGENTS.md](https://developers.openai.com/codex/concepts/customization/)，以及 Claude Code 的 [MCP](https://docs.anthropic.com/en/docs/claude-code/mcp) 文档。
+
+## MCP 工具（53 个，本地 stdio）
+
+- `project_backup_remote`、`project_restore_remote`
+- `sync_status`、`sync_push`、`sync_pull`、`sync_conflicts`、`sync_resolve`
+- `project_search_enhanced`、`project_definition`（明确配置插件/服务后使用）
+
+- `storage_status`
+- `project_open`、`project_list`、`project_update`、`project_archive`、`project_unarchive`、`project_relocate`
+- `project_delete`、`project_restore`、`project_restore_encrypted`
+- `project_index`、`project_search`、`project_context`、`project_health`
+- `project_watch_start`、`project_watch_stop`、`project_watch_list`
+- `project_doctor`、`project_backup`、`project_backup_encrypted`、`project_export`
+- `project_storage`、`project_cleanup`、`project_maintenance_configure`
+- `memory_remember`、`memory_list`、`memory_update_status`
+- `memory_graph`、`memory_graph_node`
+- `memory_knowledge`：本地实体、别名和带原文证据的关系候选，支持查询、提议与明确审核；网页入口为“记忆关系 → 实体与关系”。无需新增服务或模型依赖，审核后别名参与任务上下文。见[整理与使用说明](docs/memory-graph.md)。
+- `memory_candidates`、`memory_candidate_accept`、`memory_candidate_reject`
+- `user_memory_remember`、`user_memory_list`、`user_memory_update_status`
+- `task_start`、`task_checkpoint`、`task_list`、`task_query`、`task_history`、`task_complete`、`task_cancel`、`task_reopen`
+
+`project_index` 会返回符号与关系总数、过期记忆 ID、新生成的候选以及 Git 元数据。索引和 watcher 会跳过常见跨语言编译产物，包括 C/C++ 的 `.d` 依赖文件、`.o/.obj` 目标文件、`.a/.lib` 静态库、预编译头、Java/Python 字节码以及覆盖率和性能分析输出。存在 Git 时优先使用 Git 证据；没有 Git 的项目仍可以根据新增或修改的知识文档生成候选。每个已完成任务最多生成一条候选，依次优先使用任务摘要、第一条风险和第一条明确具有长期价值的已完成事项，避免把普通执行记录拆成多条待审记忆。系统不会返回或保存完整 diff。候选记忆在调用 `memory_candidate_accept` 前始终只处于待审核状态。
+
+打开 Schema v4 之前创建的数据库时，只会创建 n-gram 表并立即返回。现有内容会在下一次 `project_index` 中通过小批量提交重建，期间 MCP 取消和进度报告保持有效。中断的重建会继续标记为未完成，并在之后的索引运行中安全重试。`project_doctor` 会报告该状态，也可以显式修复。
+
+Schema v11 把 n-gram 行改为引用整数条目编号（`search_items` / `search_terms`），真实项目中这部分体积减少约 73%，查询也更快。打开数据库时只把旧表改名，下一次 `project_index` 按词条顺序分批原地转换，不重新分词；转换可中断续跑，期间检索结果不变。`search_ngrams` 保留为兼容视图，旧版进程仍可读写；知识包仍声明 schema 10，新旧版本可互相导入。转换只把空间留在数据库空闲页中，执行一次带压缩的 `project_cleanup` 后文件才会变小。升级后请重启所有相关 MCP/Web 进程。
+
+Schema v5 为 `chunks(source_id)` 添加索引，使来源删除和外键检查只与受影响的文本块数量相关，避免反复扫描整个文本块表。
+
+项目 Schema v6 为文件来源记忆绑定增加段落摘录和摘录哈希。当整文件哈希变化但标准化后的来源段落仍然存在时，绑定会更新文件哈希与行号范围并保持活跃；段落变化或缺失时则变为 `stale`。没有摘录的旧版绑定继续使用保守的整文件失效策略。注册表 Schema v2 增加项目归档状态和用户记忆。
+
+MCP 的 `project_open` 会完成索引并自动启动受控 watcher；显式的 `project_watch_start`、`project_watch_stop` 和 `project_index` 继续作为诊断与手动控制接口。watcher 只在 MCP 或 CLI 进程生命周期内存在，会忽略内部数据库、版本控制元数据、依赖和常见构建目录，并与索引器使用同一套 `.git/info/exclude`、根目录 `.gitignore` 和 `.project-context-ignore` 规则（修改后立即重新加载），对其余文件事件防抖并运行相同的增量索引。多个进程（如同时运行的 Claude Code、Codex 与 Web 工作台）监听同一项目时，数据库内的索引租约保证同一时间只有一个进程索引；其他进程等待其结束，若该次索引已覆盖自己看到的文件变化则直接跳过。持有者每 30 秒续期，进程退出后租约 2 分钟内失效，其未完成的运行记录随即标记为失败。它不会接受记忆候选；MCP 连接关闭时会释放 watcher。
+
+加密备份使用带版本号的认证格式，包含随机盐和 IV、scrypt 密钥派生以及 AES-256-GCM。MCP 和 CLI 只接受环境变量名称 `passphraseEnv`，不接受原始口令。口令不会被存储，因此一旦丢失，备份将无法恢复。无论成功还是失败，明文临时备份文件都会被删除。
+
+当注册的项目根目录本身名为 `.codex` 时，系统会自动排除 `sessions`、`.tmp`、`plugins/cache`、日志、附件、SQLite 状态和密钥存储等运行时目录。普通应用仓库中的同名目录仍可被索引。
+
+所有成功工具都会返回经过校验的 `structuredContent`，并保留 JSON `TextContent` 兼容旧客户端。为避免把同一份大结果重复放进模型上下文，超过约 2,000 个字符的 `TextContent` 会改为简短提示；完整结果仍在 `structuredContent.result` 中。MCP 和恢复任务提示的隐式 `project_context` 预算为 3,000 tokens，需要更多信息时请显式传入更高的 `budgetTokens`。
+
+## MCP 资源与提示词
+
+- 静态项目注册表：`project-context://projects`
+- 项目健康状态、单条记忆、任务和索引来源的资源模板
+- 用于任务上下文和检查点恢复的 `resume-project-task` 提示词
+- 用于显式审核候选的 `review-memory-candidates` 提示词
+
+## 存储结构
+
+```text
+<storage-root>/
+├── registry.db
+└── recovery/
+    └── <project-id>-<timestamp>.db
+
+<project-root>/
+└── .project-context/
+    └── project.db
+```
+
+`registry.db` 保存项目注册信息和用户级记忆。每项目数据库保存索引、项目记忆、候选审计记录和任务检查点。在覆盖已归档项目数据库或迁移旧版中央项目数据库前，系统会在 recovery 目录中创建内部安全备份。
+
+注册表 Schema v3 会先创建经过校验的恢复快照，再将现有 `<storage-root>/projects/<project-id>/project.db` 迁移到对应项目根目录。`.project-context/` 始终不参与索引，并已加入仓库的 `.gitignore`。系统不会存储完整聊天记录、完整 Git diff、检测到的密钥值或加密口令。

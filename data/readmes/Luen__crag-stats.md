@@ -21,7 +21,8 @@
 
 <p align="center">
   <a href="#-showcase">Showcase</a> •
-  <a href="#quick-start-local">Quick start</a> •
+  <a href="#run-crag-stats-on-your-own-computer-docker">Run on your computer</a> •
+  <a href="#quick-start-local">Developer setup</a> •
   <a href="#homeserver-deploy-recommended">Deploy</a> •
   <a href="./docs/dev/BRANDING.md">Design guide</a>
 </p>
@@ -70,7 +71,7 @@ Inspired by [Dreeve](https://dreeve.app/) (Stats for Strava) and [RoxClimbs](htt
 - **Badges & milestones:** 90+ badges dated by the climb that earned them (newest first), including distance climbed up to 150 km, streaks, holidays, weather and first ascents. Badges and ascent cards name the partners you climbed with.
 - **Route popularity** (busy vs quiet crags, hidden gems), **karma**, **partners**, streaks and a **climbing story** written from your logbook.
 - **Weather conditions** (optional): heat, freeze, rain, snow, wind, fair and perfect days, and whether you climb in fair or tough weather.
-- **Customize the dashboard** (which cards and in what order) from Settings. Grade system is site-wide.
+- **Customize the dashboard** (which cards and in what order) from Settings. Route and boulder grade systems are site-wide.
 - **How it works** pages at `/docs` for every analytic, linked from each card.
 
 ### More pages
@@ -106,7 +107,182 @@ Inspired by [Dreeve](https://dreeve.app/) (Stats for Strava) and [RoxClimbs](htt
 
 Contributor / agent notes: see [AGENTS.md](./AGENTS.md) (living document).
 
+## Run Crag Stats on your own computer (Docker)
+
+Crag Stats turns your theCrag logbook into a dashboard you open in your browser.
+Docker runs the app and stores its data on your computer. You do not need to
+install Git, Node.js, or pnpm, or download the source code.
+
+You will need an internet connection to download the app and import data, and a
+theCrag account. Automatic logbook sync requires a **supporter Logbook Read API
+key**. Without one, you can upload your logbook CSV by hand instead (see step 5).
+
+### 1. Download and install Docker Desktop
+
+- **Windows:** follow [Docker's Windows installation guide](https://docs.docker.com/desktop/setup/install/windows-install/). Run the installer, use the WSL 2 backend, and follow any prompts to set up WSL or restart your computer. Crag Stats uses **Linux containers**.
+- **macOS:** follow [Docker's Mac installation guide](https://docs.docker.com/desktop/setup/install/mac-install/). Choose the download for your chip (**Apple silicon** or **Intel**, shown under Apple menu → About This Mac), open the downloaded `.dmg`, and drag Docker into Applications.
+
+Open **Docker Desktop**, finish its setup, and wait until its engine is running.
+Keep Docker Desktop running whenever you want to use Crag Stats.
+
+### 2. Open a terminal and download two setup files
+
+A terminal is a window where you paste commands and press Enter. On **Windows**,
+open Start, type **PowerShell**, and open it. On **macOS**, open Spotlight
+(Command + Space), type **Terminal**, and press Enter.
+
+Run only the block for your operating system, one line at a time. These commands
+create a `crag-stats` folder in your home folder and download the startup file
+and a settings template. Use a new folder for first-time setup: downloading
+`.env` again would replace settings you already saved.
+
+**Windows (PowerShell):**
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$HOME/crag-stats" | Out-Null
+Set-Location "$HOME/crag-stats"
+curl.exe -fsSL https://raw.githubusercontent.com/Luen/crag-stats/main/docker-compose.ghcr.yml -o docker-compose.ghcr.yml
+curl.exe -fsSL https://raw.githubusercontent.com/Luen/crag-stats/main/.env.example -o .env
+notepad .env
+```
+
+**macOS (Terminal; also works in a Linux terminal with Docker Engine and Compose installed):**
+
+```bash
+mkdir -p ~/crag-stats
+cd ~/crag-stats
+curl -fsSL https://raw.githubusercontent.com/Luen/crag-stats/main/docker-compose.ghcr.yml -o docker-compose.ghcr.yml
+curl -fsSL https://raw.githubusercontent.com/Luen/crag-stats/main/.env.example -o .env
+nano .env
+```
+
+### 3. Fill in your settings
+
+The last command opens `.env`, a plain-text settings file. In it, replace the
+values on these existing lines:
+
+```dotenv
+THECRAG_API_KEY='paste-your-theCrag-logbook-read-key-here'
+APP_PASSWORD='choose-your-own-Crag-Stats-password'
+SESSION_SECRET='replace-with-a-long-random-secret'
+AUTH_SCOPE=all
+```
+
+- Get your **Logbook Read API key** from [theCrag → API keys](https://www.thecrag.com/settings/apikey) while signed in. Paste the key between the quotes. If you do not have supporter API access, leave `THECRAG_API_KEY=` empty and use CSV import in step 5.
+- `APP_PASSWORD` is a new password you choose for **Crag Stats**. It is the password you will enter in your browser.
+- `SESSION_SECRET` is a separate random value used internally. Generate one with your password manager (at least 32 random letters and digits), then paste it between the quotes. You do not need to memorise it.
+- `AUTH_SCOPE=all` asks for your Crag Stats password before showing any page.
+
+For the fullest dashboard, enable **both** optional imports. Find
+`# ROUTE_DATA_IMPORT=false` and `# WEATHER_IMPORT=false`, remove their leading
+`#`, and change them to:
+
+```dotenv
+ROUTE_DATA_IMPORT=true
+WEATHER_IMPORT=true
+```
+
+Route data adds route details and first-ascent history; weather adds historical
+conditions for outdoor climbing days. These run gradually in the background.
+Route data uses theCrag's route API with browser impersonation; read the
+[route import notes](docs/dev/ROUTE_HISTORY.md) before opting in. Weather uses
+Open-Meteo's free non-commercial service for personal use.
+
+You can also uncomment `TZ=Australia/Brisbane` and replace it with your own
+[IANA time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+so scheduled syncs and displayed times use your zone.
+
+Leave `HOST`, `PORT`, and `DATABASE_PATH` as supplied. The Compose file handles
+the Docker-specific values. Local browser access defaults to
+`HOST_BIND=127.0.0.1` and `HOST_PORT=8097`; keep those defaults for access from
+this computer only.
+
+**Save and close:** in Notepad, press Ctrl + S, then close the window; make sure
+the filename remains exactly `.env`, not `.env.txt`. In nano, press
+Ctrl + O, Enter, then Ctrl + X.
+
+Keep `.env` private: it contains your key, password, and secret. API keys can
+read private ascent notes.
+
+### 4. Download and start Crag Stats
+
+Back in the same terminal window, run these commands (the same on both systems):
+
+```sh
+docker compose -f docker-compose.ghcr.yml pull
+docker compose -f docker-compose.ghcr.yml up -d
+```
+
+The first command downloads the ready-made app from GitHub Container Registry
+(GHCR); the second starts the app and its background worker. The first download
+can take a few minutes. Once the commands finish, you can close the terminal.
+
+### 5. Open your dashboard
+
+Open **[http://localhost:8097](http://localhost:8097)** in a browser on the
+**same computer** and sign in with the `APP_PASSWORD` you chose.
+
+With an API key configured, a fresh installation starts its first logbook sync
+automatically. Open the gear icon → **Settings** to check progress or choose
+**Sync now**. Your dashboard fills as data arrives; route and weather enrichment
+can take longer and continue over later runs. Keep the app running while it works.
+
+**No supporter API key?** On theCrag, open your logbook and choose
+**Action → Export logbook as CSV**. In Crag Stats, open **Settings → CSV import**
+and upload that file. Repeat this yourself when you want to import new ticks.
+See [logbook sync](docs/guide/logbook-sync.md) for details.
+
+Use the sidebar to explore your logbook, pyramids, projects, and badges. You
+continue recording and editing climbs on theCrag; Crag Stats brings those
+changes into your local dashboard through sync.
+
+### Using it again, stopping it, and updating it
+
+For later commands, first return to your setup folder:
+
+- **Windows PowerShell:** `Set-Location "$HOME/crag-stats"`
+- **macOS Terminal:** `cd ~/crag-stats`
+
+To stop Crag Stats:
+
+```sh
+docker compose -f docker-compose.ghcr.yml stop
+```
+
+To start it again, open Docker Desktop, wait for its engine, then run:
+
+```sh
+docker compose -f docker-compose.ghcr.yml up -d
+```
+
+Open [http://localhost:8097](http://localhost:8097) again. It is available while
+your computer and Docker are running and the containers are started. Your
+climbing data is stored in a Docker volume and survives stops and app updates.
+Do not delete that volume if you want to keep your data and settings; see the
+[backup guide](docs/guide/logbook-sync.md#backup-keep-a-local-copy).
+
+To download and use the latest image:
+
+```sh
+docker compose -f docker-compose.ghcr.yml pull
+docker compose -f docker-compose.ghcr.yml up -d
+```
+
+After editing `.env` later, run `docker compose -f docker-compose.ghcr.yml up -d`
+again to apply the new settings.
+
+### If something does not work
+
+- **`docker` is not recognised / command not found:** finish installing Docker Desktop and open a new terminal window.
+- **Cannot connect to the Docker daemon:** open Docker Desktop and wait for its engine to start. On Windows, check that it is using Linux containers.
+- **Missing Compose file or `.env`:** return to your `crag-stats` folder and check that both downloads succeeded. On Windows, check for an accidental `.env.txt` filename.
+- **Browser cannot connect:** wait a little after starting the app, then run `docker compose -f docker-compose.ghcr.yml ps` to check the app and worker, or `docker compose -f docker-compose.ghcr.yml logs --tail=100` to see startup errors.
+- **Port 8097 is already in use:** add `HOST_PORT=8098` to `.env`, run the `up -d` command again, and open [http://localhost:8098](http://localhost:8098).
+- **Dashboard is empty:** check **Settings** for sync errors. Verify your Logbook Read key, or upload a CSV if you have no supporter key. After changing the key in `.env`, run the `up -d` command again.
+
 ## Quick start (local)
+
+For contributors running the source code:
 
 Requires [pnpm](https://pnpm.io/) (Node 26 LTS+).
 
@@ -124,7 +300,7 @@ Open http://localhost:5173 — then **`/settings`** → sync API or upload CSV. 
 
 ### Admin access (`/settings` and `/login`)
 
-- **`/settings`** — sync, wipe, grade system, private notes, dashboard layout, and other owner controls.
+- **`/settings`** — sync, wipe, route and boulder grade systems, private notes, dashboard layout, and other owner controls.
 - **`/login`** — unlock with `APP_PASSWORD` when that env var is set. Visiting `/settings` (or any protected route) while logged out redirects here (`/login?next=…`).
 - With no `APP_PASSWORD`, `/settings` is open to anyone who can reach the host — fine on localhost or a private LAN; set a password (and prefer Cloudflare Access in front of public tunnels) before exposing the app.
 - `AUTH_SCOPE=settings` (default) only gates admin; `AUTH_SCOPE=all` requires login for the whole UI.
@@ -185,7 +361,7 @@ docker compose up --build -d
 | `ROUTE_DATA_REFRESH_DAYS` | Optional route-data refresh age: whole days 30–3650 (e.g. `90` recommended, `180` ≈ half a year); unset/`0`/`<30`/`>3650` keeps fetch-once behavior. Requires `ROUTE_DATA_IMPORT=true`. Runs after successful syncs within the same 100-route limit, prioritizing new routes then oldest stale data.     |
 | `WEATHER_IMPORT`          | `true` to cache outdoor daily weather from Open-Meteo after sync (default `false`): 50 days per run, ≤1 request/s, heat/freeze/rain/snow/wind badges. Free non-commercial tier for personal self-hosted installs; see [docs/guide/weather.md](docs/guide/weather.md).                                    |
 
-Grade system and private ascent notes are configured in **Settings** (stored in SQLite), not via environment variables. If an older install set `PREFERRED_GRADE_SYSTEM` or `SHOW_PRIVATE_NOTES`, the first start after upgrading copies them into Settings (unless Settings already has a value).
+Grade systems and private ascent notes are configured in **Settings** (stored in SQLite), not via environment variables. If an older install set `PREFERRED_GRADE_SYSTEM` or `SHOW_PRIVATE_NOTES`, the first start after upgrading copies them into Settings (unless Settings already has a value).
 
 ## Privacy
 

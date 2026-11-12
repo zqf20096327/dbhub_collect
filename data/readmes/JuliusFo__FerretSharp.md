@@ -172,7 +172,7 @@ developer works with an Oracle database day to day:
 - Optimistic concurrency check on the changed columns; insert and delete rows; edit CLOBs and BLOBs in a dialog
   (text in the code editor with line wrap, JSON/XML coloring and JSON indenting).
 - **Change primary keys** of existing rows like any other value. Before writing, FerretSharp counts the rows that still
-  point to the old key – along constraints and relationships without one (manual, by convention, from the C# model) –
+  point to the old key – along constraints and relationships without one (by convention, from the C# model) –
   and asks first if there are any; behind a constraint Oracle refuses the change, nothing is changed along.
 - **One value for many cells**: type it into one of the marked cells and press <kbd>Ctrl</kbd>+<kbd>Enter</kbd>, or
   paste a copied value with <kbd>Ctrl</kbd>+<kbd>V</kbd> – into the marked cells, the selected rows or just the focused
@@ -234,7 +234,10 @@ developer works with an Oracle database day to day:
   file with a description and typed parameters in its head – in your personal folder, one per connection group or a general one (e.g. a shared
   repository). The explorer lists them as a tree (*Scripts*); a click opens one in a new tab without running it, and the
   panel beside the history inserts one at the cursor. A tab opened from a script saves only when asked and reloads when
-  the file changes on disk (format: `docs/sql-scripts.md`).
+  the file changes on disk (format: `docs/sql-scripts.md`). A script that names the column its parameter comes from
+  (`-- @target customer_id CUSTOMER.CUSTOMER_ID`) shows in the **right-click menu of a cell** of that column and of every
+  column referring to it, and runs right away with the cell's value; a `list` parameter takes the values of all marked
+  rows (`IN (:ids)`). Other parameters are asked for in a small dialog; a script that writes only opens.
 - **Keep results:** *Keep result* above a query's result keeps it, with its rows as they were read, when the next
   statement runs – up to ten per tab, side by side in the bar above the grid, each named by its table and time (a double
   click renames it). A kept result never reads again: it sorts, copies and exports the rows it holds. Every result shows
@@ -290,11 +293,18 @@ changes, and a new build is picked up automatically:
   Computed from what is loaded: no query of its own.
 - **Relationships**: navigations without a foreign-key constraint become navigable relationships.
 - **LINQ console**: paste a query from your code – unknown variables become suggested declarations, your context and
-  cancellation token are recognized. FerretSharp shows the SQL EF Core would send and runs it in the workspace's session,
+  cancellation token are recognized, and `using` lines at the top are taken along. FerretSharp shows the SQL EF Core
+  would send and runs it in the workspace's session,
   so your uncommitted changes are visible. Completion knows your DbSets, properties, enums and the LINQ/EF methods.
 - **Code generation**: the grid's filters as a LINQ `Where`, rows as C# objects or `HasData` seed data – and, DB-first,
   the entity class and its `IEntityTypeConfiguration` for a table the model does not know yet (or the property and
   configuration line for a new column), in the style of your project.
+- **Designer changes into your project**: after the table designer ran its DDL, *Write to project* brings the entity
+  along – a new column becomes a property and its configuration line, a changed length, precision or NULL adjusts what
+  your project configures, a dropped column takes its property with it. A table without entity becomes new files where
+  your entities and configurations lie, with its `DbSet` and registration. Each file is shown as a diff first and written
+  only into the *work clone* of the connection group, never into the linked clone of a connection – nothing is built or
+  committed.
 - **App statements**: attach to your app while it runs (debugging in Visual Studio, `dotnet run`) – no code change – and
   see every statement it sends through EF Core, grouped by origin (LINQ, lazy loading, raw SQL, `SaveChanges` …), the
   most frequent and most expensive ones, and N+1 patterns. Look a statement up in V$SQL of the app's connection with its
@@ -400,7 +410,7 @@ dotnet run --project src/FerretSharp.App
   `dotnet publish src/FerretSharp.App -c Release -r win-x64 --self-contained -o <folder>`.
 
 **Tech stack:** .NET 10, WPF host with Blazor Hybrid (WebView2), [AG Grid Community](https://www.ag-grid.com/),
-[Monaco Editor](https://microsoft.github.io/monaco-editor/), Oracle.ManagedDataAccess.Core, Roslyn for the LINQ console,
+[Monaco Editor](https://microsoft.github.io/monaco-editor/), Oracle.ManagedDataAccess.Core, Roslyn for the LINQ console and for writing designer changes into your C# project,
 [SpreadCheetah](https://github.com/sveinungf/spreadcheetah) for the Excel export, Velopack for install and updates.
 
 **Design notes:** [CHANGELOG.md](CHANGELOG.md) lists every release; architecture decisions are in

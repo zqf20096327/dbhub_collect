@@ -18,6 +18,10 @@
 </p>
 
 <p align="center">
+  <a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" height="20" alt="As seen on Open Source Alternatives"></a>
+</p>
+
+<p align="center">
   <img src="docs/images/home-light.png" width="49%" alt="Excaliself home screen in the light theme: a sidebar with starred drawings and folders next to a grid of drawing previews">
   <img src="docs/images/home-dark.png" width="49%" alt="The same home screen in the dark theme">
 </p>
@@ -61,7 +65,9 @@ Data lives in memory and is gone when the container stops. For real use, see
 
 Each path runs the app next to its Postgres database and pulls the prebuilt
 image `ghcr.io/maciekzygmunt/excaliself` (amd64 and arm64), so nothing is built
-on your server. `latest` is the newest release. The app applies database
+on your server. The same image is on Docker Hub as
+[`maciekzygmunt/excaliself`](https://hub.docker.com/r/maciekzygmunt/excaliself).
+`latest` is the newest release. The app applies database
 migrations when it starts, so updating is running a newer image.
 
 ### Docker Compose
@@ -108,6 +114,15 @@ The template runs the app next to a Railway Postgres database. It generates the
 auth secret and a domain, so there is nothing to configure. Open the domain to create
 the admin account. To set it up by hand or to upgrade, see the
 [docs](https://excaliself.com/docs/railway/).
+
+### Hostinger
+
+[![Deploy on Hostinger](https://assets.hostinger.com/vps/deploy.svg)](https://www.hostinger.com/docker-hosting?compose_url=https://raw.githubusercontent.com/maciekzygmunt/excaliself/main/docker-compose.yaml)
+
+The button opens Hostinger's Docker Manager with `docker-compose.yaml`. Before
+you deploy, set `POSTGRES_PASSWORD`, `BETTER_AUTH_SECRET`, and `BASE_URL` in the
+project's environment, as for [Docker Compose](#docker-compose). Open `BASE_URL`
+to create the admin account. See the [docs](https://excaliself.com/docs/hostinger/).
 
 ### Configuration
 

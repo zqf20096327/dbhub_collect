@@ -4,7 +4,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.2",
   "rel_pub": "2025-10-22",
-  "rel_days": 385,
+  "rel_days": 386,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -82,7 +82,7 @@
   "commit_7d": 10,
   "rel_ver": "v1.7.5.3555",
   "rel_pub": "2026-11-06",
-  "rel_days": 5,
+  "rel_days": 6,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -156,8 +156,8 @@
  "strelov1/freehire": {
   "commit_90d": 2690,
   "commit_7d": 239,
-  "rel_ver": "deploy-20261111-2227",
-  "rel_pub": "2026-11-11",
+  "rel_ver": "extension-v0.1.14",
+  "rel_pub": "2026-11-12",
   "rel_days": 0,
   "rel_n90": 30,
   "rel_pre": false,
@@ -174,68 +174,83 @@
    "HTML": 1,
    "JavaScript": 1
   },
-  "enriched_at": "20261111",
+  "enriched_at": "20261112",
   "dim_ts": {
    "commit": "20261110",
-   "release": "20261111",
+   "release": "20261112",
    "security": "20261027"
   },
   "rel_notes": [
    {
-    "t": "deploy-20261111-2227",
-    "d": "2026-11-11",
-    "n": "- The running revision is `a2302979ecf9a2278fe5b97579c9bb9958137193`; the public asset-version response matches the active build. API health returned HTTP 200 and database status up."
+    "t": "extension-v0.1.14",
+    "d": "2026-11-12",
+    "n": "Automated build from commit 746d461f25cb2552bbd404981982770fa5729e92."
    },
    {
-    "t": "deploy-20261111-1740",
-    "d": "2026-11-11",
-    "n": "## Changes\n- #4448 fix(reindex): rebuild facetd alone when it falls out of the tee\n- #4445 feat(api): move saved searches and subscriptions into the contract\n\n## How it was verified\n- Pre-flight: CI green on the target (29 check runs success, 1 skipped); no migrations, no search settings or embedder change, no new command, no new env var, no new route path; no release running, no backup running, load 14, search drain not paused.\n- Baseline before the flip: 75 rps, API 5xx 0, p95 0.213s, public smoke 15/15.\n"
+    "t": "deploy-20261112-2320",
+    "d": "2026-11-12",
+    "n": "## Changes\n- #4526 feat(dict): expand industrial maintenance skill vocabulary\n- #4524 refactor: remove dead code (bakeoff in prod binary, anonymous-only MCP server, trivial web type copies)\n- #4525 refactor(assistant): share the small helpers of the assistant tools\n- #4521 fix(web): improve interface typography and reduce decorative motion\n- #4523 fix(web): prevent profile tier badge overlap\n- #4519 fix(design-system): inset the chevron on every native select\n- #4522 chore(openspec): archive mcp-cli-session"
    },
    {
-    "t": "deploy-20261111-1640",
-    "d": "2026-11-11",
-    "n": "## Changes\n- #4439 perf: avoid repeated background writes and search failures\n- #4432 fix: resolve remaining tech-debt sweep findings\n\n## How it was verified\n- Pre-flight: CI green on 9197658 (29 checks success, 1 skipped); no migrations, no Meilisearch settings change, no new cmd/, no new routes, no new env vars; no release or backup running, load 11.8.\n- Baseline (30 min before): 110 rps, p95 0.114 s, API 5xx 0, nginx 5xx 0, public smoke 15/15, settings drift 0.\n- After the flip: the live color serves 919"
+    "t": "deploy-20261112-1514",
+    "d": "2026-11-12",
+    "n": "## Changes\n- #4507 feat(mcp): let agents read the plan and today's AI allowances\n- #4510 refactor(web): alias API wire types to the contract (mentors, companies, intake, tracking, employer, experience)\n\n## How it was verified\n- Pre-flight: CI green on the target (28 checks success, 2 skipped); no migrations, no search settings change, no new cmd, no new env vars, no new routes outside /api; no release or dump running, load 12.5, no outage open.\n- After the flip: the live color serves the target, the other t"
    },
    {
-    "t": "deploy-20261111-1604",
-    "d": "2026-11-11",
-    "n": "## Changes\n- #4436 feat(api): move votes, ghost reports and Talent Network membership into the contract\n- #4441 fix(ci): add independent HTTPS apt mirror fallback\n\n## How it was verified\n- Pre-flight: CI green on the target (29 of 29 checks); no migrations, no search settings change, no new cmd/, no new routes outside /api/, no new env vars; no release running, no backup running, no invalid index, deploys not paused, load 9-11.\n- Baseline (30 min): 109 rps, p95 0.155 s, 5xx 0, smoke 15/15.\n- After the flip:"
+    "t": "deploy-20261112-1442",
+    "d": "2026-11-12",
+    "n": "## Changes\n- #4508 feat(mcp): let agents see who wrote to the inbox\n\n## How it was verified\n- Pre-flight: CI green on the target (29 checks success, 1 skipped); no migrations, no search-settings change, no new cmd/, no new env vars, no new routes; no release, backup or reindex running, pause flag off, no open outage.\n- After the flip: live color serves the target commit, the other holds the previous build; nginx reloaded (new workers after the flip, 0 emerg); daemons run the new build.\n- #4508 (new MCP tool"
    },
    {
-    "t": "deploy-20261111-1509",
-    "d": "2026-11-11",
-    "n": "## Changes\n- #4435 feat(api): move screening answers, the survey and onboarding completion into the contract\n\n## How it was verified\n- Pre-flight: CI green on the target (30 of 30 checks). Flags: no migrations, no search-settings change, no new `cmd/`, no new routes outside `/api/`, no new env vars. Waited for server load to drop below the limit before releasing.\n- Baseline before the release: API p95 0.094s at 109 rps, 5xx 0, public smoke 15/15.\n- After the flip: the live color serves the target commit, th"
+    "t": "deploy-20261112-1413",
+    "d": "2026-11-12",
+    "n": "- #4506 fix(rollup-stats): rerun a statement the analytics standby cancelled\n- #4506: not exercised, the retry only runs when the analytics standby cancels a statement; next rollup-stats run 17:00 UTC."
    },
    {
-    "t": "deploy-20261111-1415",
-    "d": "2026-11-11",
-    "n": "## Changes\n- #4434 feat(api): move plans, dictionary gaps and job-description resolve into the contract\n- #4433 fix(api): reserve watchlist import methods\n- #4431 feat(api): move city search, suggestions, agent permissions and usage into the contract\n- #4430 feat(api): move the company watchlist into the contract\n- #4428 ci: fuzz the TypeSpec contract with Schemathesis against a running API\n\n## How it was verified\n- Pre-flight: CI green on 224c09d (29 checks success, 1 PR-only check skipped). No migrations,"
+    "t": "deploy-20261112-0913",
+    "d": "2026-11-12",
+    "n": "## Changes\n- #4475 feat(api): let a person switch account on the consent screen and name the account in get_profile\n\n## How it was verified\n- Pre-flight: CI green on fe038ac85 (29 checks success, 1 skipped); no migrations, no search settings change, no new cmd/, no new env vars, no new routes; production served the previous build, no release or backup running, load 15.7.\n- After the flip: the live color and the current checkout serve fe038ac85, the other color the previous build; nginx reloaded (new workers"
    },
    {
-    "t": "deploy-20261111-1252",
-    "d": "2026-11-11",
-    "n": "## Changes\n- #4426 feat(api): move the Talent Network catalogue into the contract, with shared list models\n\n## How it was verified\n- pre-flight: CI green on 431feee99 (30 of 30 checks); no migrations, no Meilisearch settings change, no new cmd/, no new routes outside /api/, no new env vars; the batch changes the shared contract wrapper that also serves the email-prefs routes, so both were exercised.\n- after the flip: live color serves 431feee99, the other color the previous build; web server reloaded, no em"
+    "t": "deploy-20261112-0834",
+    "d": "2026-11-12",
+    "n": "## Changes\n- #4492 feat(web): suggest what to ask a connected agent\n\n## How it was verified\n- pre-flight: CI green on 16ac218c1 (28 checks success); no migrations, no search settings change, no new cmd/, no new env vars, no new routes; no release running, no backup running, pause flag off, no invalid index, host load 14.\n- baseline before release: API p95 0.100 s at 105 rps, 5xx 0, public smoke 15/15.\n- after the flip: new color serves 16ac218c1, previous color holds the prior build, nginx workers reloaded "
    },
    {
-    "t": "deploy-20261111-1133",
-    "d": "2026-11-11",
-    "n": "## Changes\n- #4425 build: bump Go to 1.27.4 for the net/http MaxBytesReader fix\n\n## How it was verified\n- Pre-flight: CI green on the target (4/4 check runs). Flags: no migrations, no Meilisearch settings change, no new cmd/, no new routes, no new env vars. The build toolchain (Go 1.27.4) was fetched on first build; the build succeeded in one attempt.\n- After the flip: the live color serves the target commit, the previous color holds the previous build, nginx workers restarted at the flip with no errors, ma"
+    "t": "deploy-20261112-0655",
+    "d": "2026-11-12",
+    "n": "## Changes\n- #4498 feat(web): /salaries page with distribution and role/country comparison\n- #4491 feat(mcp): tell agents what freehire can do and to read the profile first\n- #4500 feat(mcp): offer prompts for what freehire can do on the account server\n- #4501 fix(mcp): sort the bad_args names so the log line is stable\n\n## How it was verified\n- Pre-flight: CI green on 302755de1 (all 32 check runs success, web-work skipped by design). No migrations, no search/Meilisearch change, no new cmd/, no new env vars."
    },
    {
-    "t": "deploy-20261111-0149",
-    "d": "2026-11-11",
-    "n": "## Changes\n- #4422 feat(api): TypeSpec contract with an ogen server, starting with email prefs\n- #4421 fix(web): polish job cards on company pages and the Find people link\n- #4420 docs(workers): fix the relative link to the sources AGENTS.md\n- #4419 fix(location): stop an office address narrowing a stated scope; read UNOPS and hybrid Greenhouse places\n- #4418 test(ingest): cover cutshort edge rows and state the city-merge rule\n- #4417 perf(search): drop the Meilisearch desc embedder\n- #4416 perf(search): tu"
+    "t": "deploy-20261112-0614",
+    "d": "2026-11-12",
+    "n": "## Changes\n- #4490 feat(mcp): add a short next hint to search_jobs and get_job results\n- #4499 feat(mcp): log the argument a handler refused as bad_args\n- #4483 fix(billing): mint a fresh coupon when a declined attempt spent it\n\n## How it was verified\n- Pre-flight: CI green on 97933beba (32/32 checks, one skipped); no migrations, no search settings change, no new cmd, no new env vars, no routes outside /api/.\n- After the flip: the live color serves 97933beba, the other color the previous build; nginx reload"
    },
    {
-    "t": "deploy-20261110-0020",
-    "d": "2026-11-10",
-    "n": "## Changes\n- #4388 fix(assistant): support knows the MCP connector, chat session waits for the first message\n- #4387 docs(handler): note the Cloudflare edge exemption for MCP and OAuth discovery\n\n## How it was verified\n- Pre-flight: CI green on 7779f7545 (30/30 checks). No migrations, no Meilisearch settings change, no new cmd, no new routes outside /api/, no new env vars. No other release running, no incident open.\n- After the flip: the live color serves 7779f7545, the other holds the previous build; nginx"
+    "t": "deploy-20261112-0535",
+    "d": "2026-11-12",
+    "n": "## Changes\n- #4497 feat(insights): salary history by role, grade and country, with a distribution\n- #4496 fix(mcp): log bad argument names and give subscribe's refusals a code\n- #4494 docs(mcp): say what search_jobs text matches against\n- #4493 feat(mcp): cap anonymous search_jobs and similar_jobs at 10 results\n- #4479 feat(web): move job discussion into a tab, widen similar jobs\n- #4495 feat(broadcast): tell Brazilian accounts they can pay in reais\n- #4488 feat(api): move account settings and auth reads in"
    }
   ],
   "etag": {
-   "release": "W/\"6704948aec608f3d49d059387aacd213bb3ff4cdbb4645cd7ad02f7a9fb3d7fe\""
+   "release": "W/\"81a87f59d40b91cb7a66e412dfcfa984ce01a59de79738c9c850be36f04894ad\""
   },
   "rel_dates": [
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
+   "2026-11-12",
    "2026-11-11",
    "2026-11-11",
    "2026-11-11",
@@ -250,22 +265,7 @@
    "2026-11-10",
    "2026-11-10",
    "2026-11-09",
-   "2026-11-10",
-   "2026-11-09",
-   "2026-11-09",
-   "2026-11-09",
-   "2026-11-09",
-   "2026-11-09",
-   "2026-11-09",
-   "2026-11-08",
-   "2026-11-08",
-   "2026-11-08",
-   "2026-11-08",
-   "2026-11-08",
-   "2026-11-08",
-   "2026-11-08",
-   "2026-11-07",
-   "2026-11-07"
+   "2026-11-10"
   ]
  },
  "proofrock/ws4sqlite": {
@@ -273,7 +273,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.16.6",
   "rel_pub": "2025-10-31",
-  "rel_days": 376,
+  "rel_days": 377,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -309,7 +309,7 @@
   "commit_7d": 3,
   "rel_ver": "v1.38.10",
   "rel_pub": "2026-10-18",
-  "rel_days": 24,
+  "rel_days": 25,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -383,7 +383,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.11",
   "rel_pub": "2026-09-22",
-  "rel_days": 50,
+  "rel_days": 51,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -405,7 +405,7 @@
   "commit_7d": 0,
   "rel_ver": "0.14.0",
   "rel_pub": "2025-05-21",
-  "rel_days": 539,
+  "rel_days": 540,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -445,7 +445,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2020-01-10",
-  "rel_days": 2497,
+  "rel_days": 2498,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -464,7 +464,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2021-04-21",
-  "rel_days": 2030,
+  "rel_days": 2031,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -487,7 +487,7 @@
   "commit_7d": 0,
   "rel_ver": "2.3.0",
   "rel_pub": "2018-10-22",
-  "rel_days": 2942,
+  "rel_days": 2943,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -507,7 +507,7 @@
   "commit_7d": 66,
   "rel_ver": "v3.0.2",
   "rel_pub": "2026-10-26",
-  "rel_days": 16,
+  "rel_days": 17,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -551,7 +551,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.1",
   "rel_pub": "2025-09-05",
-  "rel_days": 432,
+  "rel_days": 433,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -592,14 +592,15 @@
   "etag": {
    "release": "\"2442c31fe7795c6d824092b579433fa02653c665513670d2c7de6f4769564a23\""
   },
-  "rel_dates": []
+  "rel_dates": [],
+  "rel_n90": 0
  },
  "h-sphere/sql-seal": {
   "commit_90d": 0,
   "commit_7d": 0,
   "rel_ver": "0.40.1",
   "rel_pub": "2026-05-04",
-  "rel_days": 191,
+  "rel_days": 192,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -621,7 +622,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.9.0",
   "rel_pub": "2018-12-15",
-  "rel_days": 2888,
+  "rel_days": 2889,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -668,7 +669,7 @@
  "pomm-project/pomm-bundle": {
   "rel_ver": "3.0.0",
   "rel_pub": "2020-10-18",
-  "rel_days": 2215,
+  "rel_days": 2216,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -687,7 +688,7 @@
  "VMDashboard/vmdashboard": {
   "rel_ver": "v19.01.03",
   "rel_pub": "2020-11-25",
-  "rel_days": 2177,
+  "rel_days": 2178,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -708,7 +709,7 @@
  "andrei-polukhin/pgdbtemplate": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-05-07",
-  "rel_days": 188,
+  "rel_days": 189,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -742,7 +743,7 @@
  "simonw/paginate-json": {
   "rel_ver": "1.0",
   "rel_pub": "2023-08-30",
-  "rel_days": 1169,
+  "rel_days": 1170,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -833,7 +834,7 @@
  "jpazvd/wbopendata": {
   "rel_ver": "v18.8.0",
   "rel_pub": "2026-08-08",
-  "rel_days": 95,
+  "rel_days": 96,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -881,7 +882,7 @@
  "TeamDerUntergang/Telegram-UserBot": {
   "rel_ver": "v3.4",
   "rel_pub": "2020-06-18",
-  "rel_days": 2337,
+  "rel_days": 2338,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -966,7 +967,7 @@
  "ansible-collections/community.elastic": {
   "rel_ver": "latest",
   "rel_pub": "2024-04-18",
-  "rel_days": 937,
+  "rel_days": 938,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1148,7 +1149,7 @@
  "oceanbase/dify-on-mysql": {
   "rel_ver": "1.8.0",
   "rel_pub": "2025-09-16",
-  "rel_days": 421,
+  "rel_days": 422,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1204,7 +1205,7 @@
  "Lombiq/UI-Testing-Toolbox": {
   "rel_ver": "v15.0.0",
   "rel_pub": "2026-07-18",
-  "rel_days": 116,
+  "rel_days": 117,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1240,7 +1241,7 @@
  "LuckyIndraEfendi/Mangazuna": {
   "rel_ver": "3.1",
   "rel_pub": "2024-02-09",
-  "rel_days": 1006,
+  "rel_days": 1007,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1288,7 +1289,7 @@
  "pierreforstmann/pg_readonly": {
   "rel_ver": "1.0.6",
   "rel_pub": "2026-07-15",
-  "rel_days": 119,
+  "rel_days": 120,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1320,7 +1321,7 @@
  "circuitsacul/apgorm": {
   "rel_ver": "v1.0.0-b.14",
   "rel_pub": "2022-11-22",
-  "rel_days": 1450,
+  "rel_days": 1451,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1363,7 +1364,7 @@
  "JumpCodeFrog/telegram-shop-bot": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-25",
-  "rel_days": 47,
+  "rel_days": 48,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1411,7 +1412,7 @@
  "kbennett2000/lan-games": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-28",
-  "rel_days": 167,
+  "rel_days": 168,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1448,7 +1449,7 @@
  "raw-lab/NFixDB": {
   "rel_ver": "v2.1",
   "rel_pub": "2024-04-23",
-  "rel_days": 932,
+  "rel_days": 933,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1508,7 +1509,7 @@
  "SiavashGolchoobian/SqlDeep": {
   "rel_ver": "v3.0.0.7",
   "rel_pub": "2025-01-03",
-  "rel_days": 677,
+  "rel_days": 678,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1630,7 +1631,7 @@
  "Marco-Sulla/ewa": {
   "rel_ver": "v1.5.7",
   "rel_pub": "2019-05-29",
-  "rel_days": 2723,
+  "rel_days": 2724,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1687,11 +1688,11 @@
   }
  },
  "damarals/biblias": {
-  "commit_90d": 91,
+  "commit_90d": 90,
   "commit_7d": 7,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-12",
-  "rel_days": 152,
+  "rel_days": 153,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1703,14 +1704,18 @@
   "lang": {
    "Python": 100
   },
-  "enriched_at": "20261029",
+  "enriched_at": "20261112",
   "dim_ts": {
-   "commit": "20261029",
-   "release": "20261029",
+   "commit": "20261112",
+   "release": "20261112",
    "security": "20260929",
    "contrib": "20260929",
    "lang": "20260929"
-  }
+  },
+  "etag": {
+   "release": "W/\"f99a6c5e0d76e0b91ababddb8c2ffb86194c6fce5dca59b9bb7f57051f6df4af\""
+  },
+  "rel_dates": []
  },
  "mapbox/rio-mbtiles": {
   "commit_90d": 0,
@@ -2374,7 +2379,7 @@
  "DerKezorm/nexlore": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-10-06",
-  "rel_days": 36,
+  "rel_days": 37,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2424,7 +2429,7 @@
  "Vincentkeio/clover-mail": {
   "rel_ver": "v2.0.2",
   "rel_pub": "2026-10-15",
-  "rel_days": 27,
+  "rel_days": 28,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2451,7 +2456,7 @@
  "federicoaecom/mimir": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 24,
+  "rel_days": 25,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2503,7 +2508,7 @@
  "directus/monospace-starter": {
   "rel_ver": "monoerp@0.1.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2542,7 +2547,7 @@
  "XWJ-z/ZXDesk": {
   "rel_ver": "v0.9.7",
   "rel_pub": "2026-11-05",
-  "rel_days": 6,
+  "rel_days": 7,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2586,7 +2591,7 @@
  "catzoidhub/DevCatz": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-11-04",
-  "rel_days": 7,
+  "rel_days": 8,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,

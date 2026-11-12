@@ -4,26 +4,25 @@
 
 <p align="center"><strong>Every agent you run. One studio.</strong></p>
 
-<p align="center">Tyslin Studio is an open-source desktop app for running AI agencies made of AI agents.</p>
+<p align="center">Tyslin Studio is a free AI agent dashboard: an open-source desktop app for running AI agencies made of AI agents.</p>
 
 > **BETA.** Tyslin Studio is in beta. Tested on Linux; macOS and Windows builds are not yet tested much or signed. Expect rough edges and breaking changes.
 
 ## Run your own AI agency
 
-You give an agency a task. Its Lead plans the work and hands it to a team of agents on Claude Code, Codex or Gemini CLI. They work on their own, and you approve what ships. It is open source and runs on your machine with your keys.
+You give an agency a task. Its Lead plans the work and hands it to a team of agents on Claude Code, Codex or Gemini CLI. They work on their own, and you approve what ships. It is a free dashboard for agents: open source, on your machine, with your keys, and one place to see every agent, what it is doing and what it needs from you.
 
 Three places, one left column (New task, Search, Agencies, Scheduled, Files; the logo and New task take you Home): **Home** (type a task, see what needs you: questions, file changes to review and plans waiting for your OK, and what is running), a **Task** (one conversation with the Lead: the plan, the workers' progress, questions and the changes to review), and the **Agency** (goals, team, skills, connectors, channel, memory, schedule).
 
-- **Agency templates:** nine agencies you can create today: five software (App Development, Mobile Apps, Web Design, QA & Testing, DevOps) and four marketing and sales (Social Media Marketing, SEO, Email Marketing, Sales & Lead Gen), with Paid Ads and the Documents and data templates coming soon. Each is a Lead and a team with jobs, a goal, a plan and skills, around one folder.
+- **Agency templates:** ten agencies you can create today: Research & Planning (researches an idea before you build it and writes the plan and roadmap), five software (App Development, Mobile Apps, Web Design, QA & Testing, DevOps) and four marketing and sales (Social Media Marketing, SEO, Email Marketing, Sales & Lead Gen), with Paid Ads and the Documents and data templates coming soon. Each is a Lead and a team with jobs, a goal, a plan and skills, around one folder.
 - **One thread per task:** the Lead's plan, each worker's work, questions, reviews and the digest all land in the task. Away from the computer, the Lead reaches you on Telegram or Slack.
 - **Memory:** plain Markdown notes per agency and per agent, added to every run.
 - **Connectors:** tools from GitHub, Linear, Stripe and any MCP server, including search and install from the official MCP Registry.
 - **Your keys or your sign-in:** API keys for Claude, OpenAI and Gemini, or your Claude, ChatGPT or Google sign-in through Claude Code, Codex and Gemini CLI.
 - **You approve:** every file change is a diff you accept or reject, the plan waits for your OK and cards run one at a time, and each agency has a monthly budget. Agents on Claude Code, Codex or Gemini CLI ask before each command; read-only looks inside the folder (`ls`, `cat`, `git status`, version checks) are allowed without asking unless you turn that off in Settings → Notifications → Approvals.
 
-<!-- TODO: replace with docs/screenshots/agency-board.png (an agency's Kanban board) once it is added. -->
 <p align="center">
-  <img src="docs/screenshots/agency-overview.png" alt="The Research & Intelligence agency in Tyslin Studio: Iris, the Lead, with Hugo (Analyst), Beatrice (Fact-check) and Felix (Writer) on Claude Code, the five-step plan and how it runs" width="900">
+  <img src="docs/screenshots/home.png" alt="Tyslin Studio's Home screen: the mascot, the question What should your agency do?, a box to describe the task for Hannah, the Lead of the QA & Testing agency, and three starter cards: Build a feature, Fix a bug, Write the docs." width="900">
 </p>
 
 ## Download
@@ -56,11 +55,12 @@ Only the Lead messages you; workers report to the Lead on the card (you can stil
 
 ## The agencies
 
-Nine agencies can be created today (the five software ones and Social Media Marketing, SEO, Email Marketing, Sales & Lead Gen, opened on 10 Nov 2026); the rest are shown as coming soon. Seven earlier templates (Customer Support, Research & Intelligence, Startup Visa, Finance & Bookkeeping, Legal & Contracts, HR & Recruiting, Video & Creative) are in `archive/shared/agencies/`. Each template comes with a goal, a five-step plan, starter cards, skills and the Lead's scheduled planning run. The Lead runs on your default model; the adapters below are where the workers run, and you can keep that mix or put every worker on one adapter.
+Ten agencies can be created today (Research & Planning, added on 12 Nov 2026, the five software ones and Social Media Marketing, SEO, Email Marketing, Sales & Lead Gen, opened on 10 Nov 2026); the rest are shown as coming soon. Seven earlier templates (Customer Support, Research & Intelligence, Startup Visa, Finance & Bookkeeping, Legal & Contracts, HR & Recruiting, Video & Creative) are in `archive/shared/agencies/`. Each template comes with a goal, a five-step plan, starter cards, skills and the Lead's scheduled planning run. The Lead runs on your default model; the adapters below are where the workers run, and you can keep that mix or put every worker on one adapter.
 
 <!-- agencies:start (generated by scripts/readme-agencies.mjs) -->
 | Agency | Group | What it does | Lead | Agents | Adapters | Status |
 |---|---|---|---|---|---|---|
+| Research & Planning | Research and planning | Researches an idea before you build it and writes the project plan and roadmap. | Sofia | 5 | Gemini CLI, Claude Code, Codex | Available |
 | App Development | Software | Plans, builds, tests and ships web and desktop apps from a spec. | Alex | 5 | Claude Code, Codex, Gemini CLI | Available |
 | Mobile Apps | Software | Designs and builds iOS and Android apps, then gets them ready for the stores. | Maya | 5 | Claude Code, Codex, Gemini CLI | Available |
 | Web Design | Software | Designs and builds marketing sites and landing pages. | Jade | 5 | Claude Code, Gemini CLI, Codex | Available |
@@ -191,7 +191,9 @@ Assistants, Automation, Canvas and Mind mapper from earlier versions are archive
 
 ## Contributing
 
-Report bugs and ideas in [GitHub Issues](https://github.com/ReactiveSpace2/tyslin-studio/issues). Discussions are off. Pull requests will open once the licence is set. Keep changes small and run `npm run typecheck`.
+Pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) has the ten-minute setup, where things live, the rules that keep the app consistent and the three easiest contributions: an agency template, a skill, a connector preset. Issues labelled [good first issue](https://github.com/ReactiveSpace2/tyslin-studio/labels/good%20first%20issue) name the file to touch and how to check the result. Report bugs and ideas in [GitHub Issues](https://github.com/ReactiveSpace2/tyslin-studio/issues); security problems go to the address in [SECURITY.md](SECURITY.md), not to a public issue. Keep changes small and run `npm run typecheck`.
+
+If Tyslin is useful to you, [star the repo](https://github.com/ReactiveSpace2/tyslin-studio). It is how other people find it.
 
 **Add an agency template.** Create one file in `src/shared/agencies/` exporting an `AgencyTemplate` (see `src/shared/agencies.ts` for the type), and add it to `AGENCY_TEMPLATES` there. The roster lists the Lead first, with `engine: 'builtin'` and `lead: true`; workers run on `claude-code`, `codex` or `gemini-cli`. Set `group` (`software`, `documents` or `marketing`) and `comingSoon: true` to show it without letting people create it yet. Name agents by first name and job (they show as "Sam (Backend)"), give each a different head from `src/shared/heads.ts`, and start each of the five plan steps with the first name of the member who does it. Every name in `skills` must be a built-in skill. Then run `node scripts/readme-agencies.mjs --write`.
 

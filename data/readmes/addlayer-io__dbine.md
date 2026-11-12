@@ -151,7 +151,9 @@ and queries are organized inside each database.
 - **Virtualized grid** with several results per run, messages and a cell
   viewer (with formatted JSON).
 - **Result tabs:** earlier runs keep their results in tabs with their query
-  and time; a pinned result isn't replaced by later runs. Details:
+  and time; a pinned result isn't replaced by later runs. They're kept,
+  encrypted on your computer, when DBine closes or crashes, and each editor
+  shows them again when it opens. Details:
   [docs/query-editor.md](docs/query-editor.md#result-tabs).
 - **Column filters** on a table's data (values, ranges, nulls, text). They are
   applied on the server, with each engine's own filter.
@@ -166,7 +168,7 @@ and queries are organized inside each database.
   on every engine: it unfolds nested fields and JSON columns, with search in
   keys and values, types per field and large arrays grouped.
 - **Graphical execution plans**, in the style of Management Studio: estimated,
-  actual or both, with zoom and panning.
+  actual or both, with zoom, panning and full screen.
 - **Search the database:** a text in object names, column names and the code
   of views, routines and triggers, with results as it progresses. Details:
   [`docs/search.md`](docs/search.md).
@@ -251,13 +253,17 @@ and queries are organized inside each database.
   connection, on different connections or on different engines. It pairs them
   by the primary key, or by the columns you choose, and compares values by what
   they are worth and not by how each engine returns them.
+  - It compares whole tables, millions of rows included: big ones go through
+    a local DuckDB database, encrypted and deleted when the comparison ends.
+    It shows the rows read as it goes and can be cancelled.
   - It shows the rows that differ, with each value marked, and the ones that
     are on one side only. For each row you choose which way it goes: update,
     insert or delete. Deletions are never chosen automatically.
   - It generates one script per side that changes, in its engine's language,
     which can be copied, opened in a query or run. Then it compares again.
   - It warns if the two tables aren't the same, if there are duplicate keys or
-    if one exceeds 200,000 rows. Read-only connections reject the script.
+    if more than 1,000,000 rows differ (the script then covers the first
+    ones). Read-only connections reject the script.
   - It compares on every engine. Applying the changes depends on what the
     target allows writing: Drill, for example, has no INSERT, UPDATE or DELETE.
   - With the AI it explains what the differences have in common (a time zone,
@@ -326,6 +332,11 @@ and queries are organized inside each database.
   documentation and emails that run by themselves with DBine closed, with a
   system notification, history and prior approval of anything that changes
   data. Details: [`docs/scheduled-tasks.md`](docs/scheduled-tasks.md).
+- **Server jobs:** each server's own scheduled work next to DBine's tasks —
+  SQL Server Agent, Oracle DBMS_SCHEDULER, pg_cron, pgAgent, TimescaleDB,
+  Snowflake tasks, Databricks jobs, MySQL events and more — with their steps
+  and run history, and run now, stop, enable or script them where the engine
+  allows it. Details: [`docs/server-jobs.md`](docs/server-jobs.md).
 
 - **Health check:** reviews a database and lists what deserves attention by
   severity, with each engine's own checks and fix scripts that are reviewed

@@ -37,7 +37,7 @@ And on a phone, with a single trip snapped to the roads and coloured against the
 
 <!-- markdownlint-enable MD033 -->
 
-The statistics, trip log, maintenance list and light theme are in the [screenshot gallery](documentation/screenshots/README.md).
+The statistics, trip log, route editor, settings, maintenance list and light theme are in the [screenshot gallery](documentation/screenshots/README.md).
 
 **Want to try it?** Read [MG iSmart account and session limits](#mg-ismart-account-and-session-limits) first, because GarageStack and the MG app cannot be signed in to the same account at once, then pick an [installation option](#installation). A single `docker run` is enough to get going.
 
@@ -62,7 +62,7 @@ The statistics, trip log, maintenance list and light theme are in the [screensho
 - **Tyre history** -- Tap a tyre's pressure on the dashboard's car to see a month of daily pressures for all four tyres, and how each one moved against the other three over the last two weeks: a tyre falling behind the others while they hold is a slow puncture, which also sends a notification.
 - **Trip history** -- Browse past journeys on an interactive map, each drawn on the roads it took and coloured by speed or by the speed limit, with a heatmap of the roads you drive most. Each trip is saved to the database a few minutes after the car parks. After upgrading from a version that did not save trips, the existing history is saved in the background on the Worker's first start.
 - **Phone GPS (Dawarich)** -- Fill gaps in recorded car trips with phone locations from your own Dawarich instance. Identify trackers by their app/device ID and last-seen time; you can link multiple phones, and GarageStack uses the best match for each trip. See [Phone GPS setup](documentation/PHONE_GPS.md).
-- **Trip log** -- Mark each trip as business, commute or private (commutes between your home and work are marked automatically), add notes, hide a GPS glitch, join two trips a fuel stop split, and export a month or a year as a spreadsheet with the addresses and odometer readings a tax trip log (such as the Dutch *rittenregistratie*) asks for. See [Trip log](#trip-log).
+- **Trip log** -- Mark each trip as business, commute or private (commutes between your home and work are marked automatically), add notes, hide a GPS glitch, join two trips a fuel stop split, fix a route the car recorded badly on the map, and export a month or a year as a spreadsheet with the addresses and odometer readings a tax trip log (such as the Dutch *rittenregistratie*) asks for. See [Trip log](#trip-log).
 - **Maintenance** -- Keep the car's service items (oil, tyres, the yearly inspection, ...) with a distance interval, a time interval or both. GarageStack works out from the odometer and your service log when each one is due, shows the most urgent on the dashboard, and sends a notification when an item reaches 90 % of its interval. Log each service with its date, odometer reading and notes.
 - **Dutch registration (RDW)** -- For a car with a Dutch licence plate, a dashboard card with the date the APK runs out and the days left, open recalls with what can go wrong and what the dealer does about it, and whether the car is insured, from the [RDW's open data](https://opendata.rdw.nl). Notifications come for a new recall, the APK a month and a week ahead, and a car with no insurance on record. Off until `RDW_ENABLED=true`; the plate, entered under Settings, is the only thing sent. See [Dutch registration (RDW)](#dutch-registration-rdw).
 - **Energy statistics** -- Track daily energy consumption, efficiency (Wh/km on a plug-in car, L/100 km on a hybrid), fuel use, electric share, average driving speed, and more, for any period from a week to several years.
@@ -84,9 +84,9 @@ The statistics, trip log, maintenance list and light theme are in the [screensho
 - **Speed limits** -- The selected trip can be coloured against the limits signposted along it, green within and red above, with how far over it went and over how much of the trip a limit was known. Read from OpenStreetMap's `maxspeed` tags by the same match that snapped the trip, so it costs no extra request and needs no configuration.
 - **Themed vector basemap** -- Every map is drawn from OpenStreetMap vector tiles by MapLibre GL, in a dark or light style that follows the interface theme (or in full colour, if you prefer) and with labels in the interface language. Served by [OpenFreeMap](https://openfreemap.org) without an API key, point it at your own tile server if you prefer, and it falls back to raster tiles where WebGL is unavailable.
 - **Single sign-on** -- Sign in through your own identity provider (Authentik, Authelia, Keycloak, Pocket ID, Google, and anything else speaking OpenID Connect), with optional auto-login and group or email based access restrictions. A built-in username/password login remains available for installs without a provider. See [`AUTHENTICATION.md`](documentation/AUTHENTICATION.md).
-- **Multi-language support** -- Interface available in English, Dutch and Spanish. It follows the browser's language until you pick one under Settings, and the choice then follows your account. Push notifications are sent in `NOTIFICATION_LANGUAGE` (`en`, `nl` or `es`).
+- **Multi-language support** -- Interface available in English, Dutch, Spanish and Brazilian Portuguese. It follows the browser's language until you pick one under Settings, and the choice then follows your account. Push notifications are sent in `NOTIFICATION_LANGUAGE` (`en`, `nl`, `es` or `pt`).
 - **Region and units** -- Kilometres or miles, Celsius or Fahrenheit, bar, psi or kPa for tyres, L/100 km or miles per UK or US gallon for fuel, and a 24-hour or 12-hour clock. Each one follows the region the browser is in (taken from its time zone, so an English browser in the Netherlands still gets kilometres and 14:05), and can be set by hand under Settings > General > Region and units, as can the region itself, which also sets the date order. Everything is stored in metric and converted only for display, so switching back and forth loses nothing; the trip log's CSV export follows the chosen distance unit and clock. The homepage widget, Home Assistant and the `TYRE_PRESSURE_*_BAR` thresholds stay metric, and notifications use a 24-hour clock.
-- **Settings follow you** -- Theme, language, units, the dashboard layout and the map's layers and filters are saved to your account, so every phone, tablet and computer you sign in on looks the same. Each browser keeps a copy too, so pages open instantly and the login page keeps your theme and language. After upgrading, the first device to sign in brings its settings along.
+- **Settings follow you** -- Theme, language, units, the dashboard layout and the map's layers and filters are saved to your account, so every phone, tablet and computer you sign in on looks the same. The theme can also be set to System, which lets each device follow its own light or dark setting. Each browser keeps a copy too, so pages open instantly and the login page keeps your theme and language. After upgrading, the first device to sign in brings its settings along.
 - **Grouped settings** -- Settings is divided into General, Vehicle, Map, Phone GPS, Notifications and Data & API tabs. A tab with nothing to set for your car or deployment is left out, and switching tabs keeps unsaved edits.
 - **Self-hosted** -- Runs entirely on your own infrastructure via Docker (all-in-one container or Docker Compose). No cloud account or subscription required beyond the SAIC iSmart API.
 
@@ -226,7 +226,7 @@ Then open `.env` and fill in at minimum:
 | ---------- | ----------- |
 | `SAIC_USER` | MG iSmart account email |
 | `SAIC_PASSWORD` | MG iSmart account password |
-| `SAIC_REGION` | Region the car is registered in: `eu` (default), `au`, or `tr` -- automatically mapped to the right API endpoint |
+| `SAIC_REGION` | Region the car is registered in: `eu` (default), `au`, `tr` or `br` -- automatically mapped to the right API endpoint |
 | `SAIC_REST_URI` | Optional, only needed for a region not listed above -- set directly to your gateway's endpoint |
 | `CORS_ORIGIN` | The URL you open in your browser, e.g. `http://192.168.1.100:8080` |
 | `POSTGRES_PASSWORD` | Generate with `openssl rand -hex 32`. Using an external Postgres server instead of the bundled one? Set this to match its existing password. |
@@ -282,7 +282,7 @@ docker stop garagestack && docker rm garagestack
 # Re-run your original docker run command
 ```
 
-When a newer release is out, the footer says so and links to its release notes. GarageStack asks GitHub once a day; set `UPDATE_CHECK_ENABLED=false` to stop it. A Compose build only knows its own version when you pass one, so build with `APP_VERSION=$(git describe --tags) docker compose up -d --build` to get the notice.
+When a newer release is out, the footer (on a phone, the bottom of the menu) says so and links to its release notes. GarageStack asks GitHub once a day; set `UPDATE_CHECK_ENABLED=false` to stop it. A Compose build only knows its own version when you pass one, so build with `APP_VERSION=$(git describe --tags) docker compose up -d --build` to get the notice.
 
 ### Monitoring
 
@@ -391,7 +391,7 @@ Push notifications require VAPID keys to be configured (`VAPID_PUBLIC_KEY` / `VA
 
 Settings > Notifications has a push switch for the device you are on and a per-type checklist for these alerts, which offers only the types the car's drivetrain can produce: the plug-in alerts (low EV battery, charging complete, charging interrupted) are left out for a plain hybrid, low fuel for a full electric car, and the RDW type (APK, recalls and insurance) wherever `RDW_ENABLED` is off. Both are kept per device: a type switched off on your phone still reaches your laptop, and still shows up in the notification panel. Only the switch turns push on or off; the checklist never asks the browser for permission.
 
-Notification texts are written by the background worker, which has no browser to take a language from, so their language is a deployment setting: `NOTIFICATION_LANGUAGE=en` (default), `nl` or `es`. The web UI's language selection does not affect them.
+Notification texts are written by the background worker, which has no browser to take a language from, so their language is a deployment setting: `NOTIFICATION_LANGUAGE=en` (default), `nl`, `es` or `pt`. The web UI's language selection does not affect them.
 
 MG app messages are the exception: they are passed on as SAIC wrote them, in the language of your MG account. Each one is sent once, even though the gateway repeats its latest message every time it starts, because GarageStack remembers which message it last saw. Two kinds are left out: the "vehicle started" message, which the engine started alert already covers, and any message sent more than a day ago, so a new install does not announce whatever the account last received. A message that arrives while the worker is not running is not sent afterwards.
 
@@ -425,10 +425,11 @@ Note: "keys left in the car" is not currently supported because the SAIC MQTT ga
 - **Notes.** Record anything a trip log should say, such as who you visited or why you took another route. Notes save when you leave the field.
 - **Hide a trip.** A trip the GPS got wrong, or one that should not count, can be hidden: it leaves the map, the statistics, the dashboard, the totals and the export, and is listed only under **Show hidden trips**, where **Show again** brings it back. Nothing is deleted.
 - **Join two trips.** A short stop, such as filling up on the way to work, splits one drive into two trips. **Join with next trip** (tap twice) makes them one, from the first one's start to the second one's end, with both notes kept. A purpose you chose for either is kept; otherwise it is labelled again from the new ends, so home to the fuel station to work becomes a commute. A join cannot be undone.
-- **Totals.** The distance per purpose for the period is shown at the top.
+- **Edit the route.** When the car reported its first position some way down the road, or the line cuts through places you never drove, **Edit route** (in a trip's details, or under the selected trip on the map) opens the trip on a map of its own. Move the start or the end by tapping the map or dragging the marker, use the parking spot before or after the trip with one tap, and add or remove points in between. Every step can be undone, and **Reset to recorded** goes back to the route as the car reported it. The car's own positions are never moved, only added to, and points you placed are drawn dashed. Saving updates the map, the addresses and the speeds; the distance in the log stays the one the odometer counted. Leaving with unsaved changes asks first.
+- **Totals.** The distance per purpose for the period is shown at the top. On a phone only the total shows until you open **Show purposes and driving figures**.
 - **Distance.** A trip counts for the distance on its odometer when the car reported a reading at both ends. Otherwise it counts for the distance along its GPS fixes, which is a little short because the fixes cut corners.
 - **Addresses** are looked up once through the same OpenStreetMap geocoder as the map, and then kept with the trip for good, so a log exported next year still shows them. With place names switched off (Settings > Map, or `GEOCODING__ENABLED=false`), ends show as coordinates and no lookups are made.
-- **Export CSV** saves the period, hidden trips left out, as a spreadsheet: date, departure and arrival time, from and to address, odometer start and end, distance, purpose and notes. The file follows the interface language: comma-separated in English, and semicolon-separated with decimal commas in Dutch and Spanish, so it opens in columns in Excel either way.
+- **Export CSV** saves the period, hidden trips left out, as a spreadsheet: date, departure and arrival time, from and to address, odometer start and end, distance, purpose and notes. The file follows the interface language: comma-separated in English, and semicolon-separated with decimal commas in Dutch, Spanish and Portuguese, so it opens in columns in Excel either way.
 
 Only trips the Worker has saved can be logged, so the trip being driven, and one finished in the last few minutes, appear once the car has been parked for a while.
 
@@ -578,7 +579,7 @@ Sourced from OpenStreetMap via [Nominatim](https://nominatim.openstreetmap.org) 
 - The dashboard's location card and the car's map popup show the street and city the car is standing in.
 - Answers are cached in PostgreSQL for 90 days, keyed by a coordinate grid and by language, so the same parking spot is looked up once. "Nothing mapped here" is cached for a day, since OSM coverage grows.
 - The public Nominatim instance allows about one request per second, so a request resolves at most three new coordinates and the browser asks again for the rest; a cold trip list fills in over a few seconds and is instant from then on.
-- Names follow the interface language, so switching between English, Dutch and Spanish looks the places up again in that language.
+- Names follow the interface language, so switching between English, Dutch, Spanish and Portuguese looks the places up again in that language.
 - **Settings > Map > Show place names** turns the whole thing off (it is on by default). Off, trips are listed by date, the location card shows no address, and no coordinates leave the browser.
 - Set `GEOCODING__ENABLED=false` to switch it off for the whole deployment instead, or point `GEOCODING__BASEURL` at your own Nominatim instance.
 

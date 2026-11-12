@@ -1,10 +1,10 @@
 # Mnemo MCP Server
 
-> **Distribution & CLI:** the repo is `mnemo`; the PyPI distribution is **`n24q02m-mnemo`** (install `pip install n24q02m-mnemo` / `uvx n24q02m-mnemo`). Two console scripts ship: **`n24q02m-mnemo`** (legacy alias `mnemo-mcp`) starts the HTTP MCP server, and **`mnemo`** is the CLI-first memory surface that never serves. See [CLI](#cli).
-
 mcp-name: io.github.n24q02m/mnemo
 
 **Persistent AI memory with hybrid search. Open, free, unlimited.**
+
+> **Distribution & CLI:** the repo is `mnemo`; the PyPI distribution is **`n24q02m-mnemo`** (install `pip install n24q02m-mnemo` / `uvx n24q02m-mnemo`). Two console scripts ship: **`n24q02m-mnemo`** (legacy alias `mnemo-mcp`) starts the HTTP MCP server, and **`mnemo`** is the CLI-first memory surface that never serves. See [CLI](#cli).
 
 <!-- Badge Row 1: Status -->
 [![CI](https://github.com/n24q02m/mnemo/actions/workflows/ci.yml/badge.svg)](https://github.com/n24q02m/mnemo/actions/workflows/ci.yml)
@@ -26,7 +26,7 @@ mcp-name: io.github.n24q02m/mnemo
 
 | Project | Tagline | Tag |
 |---|---|---|
-| [better-code-review-graph](https://github.com/n24q02m/better-code-review-graph) | Knowledge graph for token-efficient code reviews -- semantic search and call-... | MCP |
+| [crg](https://github.com/n24q02m/crg) | Knowledge graph for token-efficient code reviews -- semantic search and call-... | MCP |
 | [better-drive](https://github.com/n24q02m/better-drive) | 2-way Google Drive sync with .driveignore filter — rclone engine, Windows tray | Tooling |
 | [better-email-mcp](https://github.com/n24q02m/better-email-mcp) | IMAP/SMTP email for AI agents -- read, send, organize folders, and manage att... | MCP |
 | [better-godot-mcp](https://github.com/n24q02m/better-godot-mcp) | Composite MCP server for Godot Engine -- 17 composite tools for AI-assisted g... | MCP |
@@ -43,7 +43,7 @@ mcp-name: io.github.n24q02m/mnemo
 | [skret](https://github.com/n24q02m/skret) | Secrets without the server. | CLI |
 | [tacet](https://github.com/n24q02m/tacet) | A self-distilling neuro-symbolic cascade that amortises LLM cost across knowl... | Tooling |
 | [web-core](https://github.com/n24q02m/web-core) | Shared web infrastructure package for search, scraping, HTTP security, and st... | Library |
-| [wet-mcp](https://github.com/n24q02m/wet-mcp) | Open-source MCP server for AI agents: web search, content extraction, and lib... | MCP |
+| [wet](https://github.com/n24q02m/wet) | Open-source MCP server for AI agents: web search, content extraction, and lib... | MCP |
 
 </details>
 <!-- END: AUTO-GENERATED-CROSS-PROMO -->
@@ -63,8 +63,6 @@ mcp-name: io.github.n24q02m/mnemo
 - [Remote (HTTP mode)](#remote-http-mode)
 - [Trust Model](#trust-model)
 - [License](#license)
-
-
 
 <a href="https://glama.ai/mcp/servers/n24q02m/mnemo-mcp">
   <img width="380" height="200" src="https://glama.ai/mcp/servers/n24q02m/mnemo-mcp/badge" alt="Mnemo MCP server" />
@@ -173,13 +171,13 @@ or the client's equivalent).
 > next publish carries correct metadata.
 >
 > **Related plugins from the same author**:
-> - [wet-mcp](https://github.com/n24q02m/wet-mcp) -- Web search + content extraction
+> - [wet](https://github.com/n24q02m/wet) -- Web search + content extraction
 > - [imagine-mcp](https://github.com/n24q02m/imagine-mcp) -- Image/video understanding + generation
 > - [better-notion-mcp](https://github.com/n24q02m/better-notion-mcp) -- Notion API
 > - [better-email-mcp](https://github.com/n24q02m/better-email-mcp) -- Email management
 > - [better-telegram-mcp](https://github.com/n24q02m/better-telegram-mcp) -- Telegram
 > - [better-godot-mcp](https://github.com/n24q02m/better-godot-mcp) -- Godot Engine
-> - [better-code-review-graph](https://github.com/n24q02m/better-code-review-graph) -- Code review knowledge graph
+> - [crg](https://github.com/n24q02m/crg) -- Code review knowledge graph
 >
 > All plugins share the same architecture -- install once, learn pattern transfers.
 
@@ -193,7 +191,7 @@ Full docs at **[docs.n24q02m.com/servers/mnemo/setup/](https://docs.n24q02m.com/
 
 **Install with AI agent** -- paste this to your AI coding agent:
 
-> Install MCP server `mnemo-mcp` following the steps at
+> Install MCP server `n24q02m-mnemo` following the steps at
 > https://raw.githubusercontent.com/n24q02m/claude-plugins/main/plugins/mnemo/setup-with-agent.md
 
 ## Smithery
@@ -403,7 +401,6 @@ credential, records the outcome, and rotates:
 - The cell always owns the model id: all four task cells may share one provider
   pool, so an entry contributes its key and endpoint, not a model override.
 
-
 ## Remote (HTTP mode)
 
 mnemo speaks Streamable HTTP on a single `/mcp` endpoint — remote access is a
@@ -427,7 +424,6 @@ mnemo is **TC-Local** (machine-bound): every storage artifact lives under
 | `no-auth` (default) | loopback only (non-loopback bind refused) | `~/.mnemo/memories.db` + `config.toml` | Only your OS user |
 | `token` | any | same, one shared `default` namespace | Anyone holding the shared token |
 | `multi` | any | per-namespace `~/.mnemo/subs/<ns>/memories.db` (via `users.toml`) | Each token holder sees only their own namespace |
-
 
 ## License
 

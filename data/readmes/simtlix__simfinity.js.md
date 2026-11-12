@@ -6,7 +6,7 @@ A Node.js framework that turns GraphQL object types into generated queries, muta
 
 Read the [documentation website](https://simtlix.github.io/simfinity.js/): start with the [quick start](https://simtlix.github.io/simfinity.js/guide/getting-started.html), explore the [guides](https://simtlix.github.io/simfinity.js/guide/schema.html), or consult the [API reference](https://simtlix.github.io/simfinity.js/reference/api.html). The website source is in [`docs/`](docs/).
 
-For a complete application, run the [Barber examples](examples/barber/README.md): independent MongoDB and PostgreSQL backends with one shared Next.js frontend, synthetic demo data, Docker setup, and a dedicated CI workflow. Both backends consume released Simfinity 3.8.0 packages from npm. Their shared HTTP matrix verifies filters, aggregates, scopes and nested mutations; see the [API test commands and reference-integrity boundary](examples/barber/README.md#validate-changes).
+For a complete application, run the [Barber examples](examples/barber/README.md): independent MongoDB and PostgreSQL backends with one shared Next.js frontend, synthetic demo data, Docker setup, and a dedicated CI workflow. Both backends consume the released Simfinity packages from npm. Their shared HTTP matrix verifies filters, aggregates, scopes and nested mutations; see the [API test commands and reference-integrity boundary](examples/barber/README.md#validate-changes).
 
 Run the documentation website locally with Node.js 22.12.0+:
 
@@ -62,11 +62,11 @@ For builds and hosting, see the [website maintainer guide](docs/.vitepress/READM
   - [Quick Start](#quick-start-1)
   - [Permission Schema](#permission-schema)
   - [Rule Helpers](#rule-helpers)
-  - [
+  - [Po
 
 [...截断...]
 
-Policy Expressions (JSON AST)](#policy-expressions-json-ast)
+licy Expressions (JSON AST)](#policy-expressions-json-ast)
   - [Integration with GraphQL Yoga / Envelop](#integration-with-graphql-yoga--envelop)
   - [Legacy: Integration with graphql-middleware](#legacy-integration-with-graphql-middleware)
 - [Middlewares](#-middlewares)
@@ -117,11 +117,11 @@ Policy Expressions (JSON AST)](#policy-expressions-json-ast)
 ## 📦 Installation
 
 ```bash
-npm install mongoose@^8.24.2 graphql@^16.11.0 @simtlix/simfinity-js@3.16.0
+npm install @simtlix/simfinity-js graphql@^16.11.0 mongoose@^8.24.2
 ```
 
 **Prerequisites**: Simfinity.js requires `mongoose` and `graphql` as peer dependencies. Keep them within the ranges above so your application and Simfinity share a single Mongoose and GraphQL instance; npm reports an out-of-range version as a peer conflict. The MCP transports need the optional peer `@modelcontextprotocol/sdk@^1.31.0`, which is not installed automatically, and `graphql-middleware` is not a Simfinity dependency.
 
 ## PostgreSQL support
 
-Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, sta
+Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transi

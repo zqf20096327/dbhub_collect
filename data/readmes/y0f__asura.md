@@ -17,7 +17,6 @@
   <a href="https://y0f.github.io/asura/">Documentation</a> &middot;
   <a href="https://y0f.github.io/asura/getting-started.html">Quick start</a> &middot;
   <a href="https://y0f.github.io/asura/api.html">API</a> &middot;
-  <a href="https://y0f.github.io/asura/upgrading.html">Upgrading</a> &middot;
   <a href="CONTRIBUTING.md">Contributing</a>
 </p>
 
@@ -59,10 +58,11 @@ docker compose build
 docker compose run --rm --no-deps asura --setup
 ```
 
-Save the generated **API Key** and put its **Hash** in a local `.env` file:
+Save the generated **API Key**. Put its **Hash** and **Encryption Key** in a local `.env` file, and back up the encryption key separately:
 
 ```dotenv
 ASURA_ADMIN_KEY_HASH=your_generated_hash
+ASURA_ENCRYPTION_KEY=your_generated_encryption_key
 ```
 
 ```bash
@@ -83,16 +83,10 @@ For Linux services, binaries or source builds, see [installation options](https:
 
 ![Public status page with grouped services, availability history and incident updates](assets/statuspage.png)
 
-## Upgrading
-
-Read the [upgrade guide](https://y0f.github.io/asura/upgrading.html) and release notes before replacing an existing installation. Back up the database, configuration and encryption key together, and keep probe agents compatible with the server.
-
-Rollback requires the previous binary and its matching database backup. A configuration export is not a database backup.
-
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development, tests and review requirements, [architecture](https://y0f.github.io/asura/architecture.html) for the internals, and [SECURITY.md](SECURITY.md) for reporting vulnerabilities. Built with Go, templ, HTMX, Alpine.js and Tailwind CSS; Node is not required.
 
-Use Go 1.27.3 for development. CI tests both Go 1.27.3 and the supported minimum, Go 1.26.10.
+Use Go 1.27.4 for development. CI tests both Go 1.27.4 and the supported minimum, Go 1.26.11.
 
 Licensed under [MIT](LICENSE). Copyright 2025-2026 [hu.ci](https://hu.ci).

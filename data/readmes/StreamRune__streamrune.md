@@ -4,18 +4,51 @@ Event sourcing framework for Java.
 
 ## Status
 
-StreamRune is not released yet. The only published build is `1.0.0-alpha-SNAPSHOT`, an unreleased
-preview of `1.0.0` that lives in the Maven Central snapshot repository, not in Maven Central itself:
-a plain `mavenCentral()` repository does not resolve it (see [Preview builds](#preview-builds)).
-Every module shares the `org.streamrune` group and that version. See the
-[CHANGELOG](CHANGELOG.md) for what the preview contains.
+`1.0.0` is the first release of StreamRune. Releases are published to Maven Central, signed, with
+every module under the `org.streamrune` group at the release's version; the
+[releases page](https://github.com/StreamRune/streamrune/releases) and the
+[CHANGELOG](CHANGELOG.md) say what each release contains. `1.0.0-alpha-SNAPSHOT` is the unsigned
+preview of the next release, published from `main` (see [Preview builds](#preview-builds)).
+
+## Installation
+
+A release resolves from a plain `mavenCentral()` repository.
+
+Gradle (Kotlin DSL):
+
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.streamrune:streamrune-core:1.0.0")
+    implementation("org.streamrune:streamrune-runtime:1.0.0")
+    implementation("org.streamrune:streamrune-postgres:1.0.0")
+}
+```
+
+Maven:
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>org.streamrune</groupId>
+    <artifactId>streamrune-core</artifactId>
+    <version>1.0.0</version>
+  </dependency>
+</dependencies>
+```
+
+The other modules in the [Modules](#modules) table use the same group and version.
 
 ## Preview builds
 
-`1.0.0-alpha-SNAPSHOT` is an unreleased preview of `1.0.0`, rebuilt from `main` each time the Build
-workflow passes on it. It is published only to the Maven Central snapshot repository, not to Maven
-Central itself, its artifacts are not signed, and it can change or break at any time. It is licensed
-under the Business Source License 1.1, like every StreamRune version (see [License](#license)).
+`1.0.0-alpha-SNAPSHOT` is the unsigned preview of the next release, rebuilt from `main` each time
+the Build workflow passes on it. It is published only to the Maven Central snapshot repository, not
+to Maven Central itself, its artifacts are not signed, and it can change or break at any time. It is
+licensed under the Business Source License 1.1, like every StreamRune version (see
+[License](#license)).
 
 To try it, add the snapshot repository and depend on `org.streamrune:*:1.0.0-alpha-SNAPSHOT`.
 
@@ -122,7 +155,9 @@ leaves it out. Application code does not call, implement or bind it.
 
 The `@Bean`, producer and factory methods of the Spring, Quarkus and Micronaut integrations are
 wiring that the container calls, not API: an application replaces a bean with one of its own, and
-does not call these methods.
+does not call these methods. Their properties types (Spring's `StreamRuneProperties`,
+`StreamRuneMicronautProperties` with its `withDefaults()`, Quarkus' `StreamRuneQuarkusProperties`)
+are read-only for applications: the configuration keys are API, the types' constructors are not.
 
 Interfaces that applications implement (an `EventStore`, a `CommandBus` decorator, a
 `CommandInterceptor`, a `SagaStore` and the other ports) may gain new `default` methods in a minor

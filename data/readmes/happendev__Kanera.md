@@ -30,19 +30,30 @@ Kanban, Table, Calendar, Timeline, and dependency views over one set of cards. M
 
 ### Self-host with Docker
 
-Prebuilt images ship with every release, so the server needs no checkout or build:
+With Docker running (Compose 2.23 or newer), Bash, curl, and OpenSSL installed, run:
 
 ```bash
-mkdir kanera && cd kanera
-curl -fsSLo docker-compose.yml https://github.com/happendev/Kanera/releases/latest/download/docker-compose.yml
-curl -fsSLo .env https://github.com/happendev/Kanera/releases/latest/download/env.example
-for key in POSTGRES_PASSWORD JWT_SECRET MCP_INTERNAL_SECRET MFA_ENCRYPTION_KEY MEDIA_SIGNING_SECRET SECRETS_ENCRYPTION_KEY; do
-  sed -i "s|^$key=.*|$key=$(openssl rand -hex 32)|" .env
-done
-docker compose up -d
+curl -fsSL https://www.kanera.app/install.sh | bash
 ```
 
-Open <http://localhost:4200> to try it. To serve it on a domain, set it in `.env` and point your HTTPS reverse proxy at `127.0.0.1:4200`. [DEPLOY.md](DEPLOY.md) covers the proxy, email, backups, and upgrades; [DOKPLOY_DEPLOY.md](DOKPLOY_DEPLOY.md) covers Dokploy.
+The interactive installer asks whether you want localhost or production, generates the secrets,
+downloads the release's prebuilt images, and starts Kanera. No checkout or build is needed.
+For localhost, open <http://localhost:4200> when setup finishes.
+
+To supply the mode directly:
+
+```bash
+# Localhost
+curl -fsSL https://www.kanera.app/install.sh | bash -s -- --mode localhost
+
+# Production with automatic HTTPS (requires public DNS and inbound ports 80/443)
+curl -fsSL https://www.kanera.app/install.sh | bash -s -- --mode production --domain kanera.example.com
+```
+
+Already have an HTTPS proxy? Add `--https existing` to the production command and point your proxy
+at `127.0.0.1:4200`. The installer creates a new `./kanera` directory; use `--directory` to choose another.
+[DEPLOY.md](DEPLOY.md#one-command-install) covers setup, email, backups, and upgrades;
+[DOKPLOY_DEPLOY.md](DOKPLOY_DEPLOY.md) covers Dokploy.
 
 Prefer not to run it yourself? The [hosted service](https://board.kanera.app/signup) has a free plan and a 30-day Pro trial with no card required.
 
@@ -271,6 +282,16 @@ For Jira, ClickUp, Asana, monday.com, Notion, Linear, spreadsheets, or an intern
 **Hosted Kanera** is the simplest way to get started. New accounts include a 30-day Pro trial with no card required; teams can then stay on Free or upgrade to Pro. Pro adds unlimited boards and automations, board guests for clients and contractors, the REST API, webhooks, chat destinations, personal notification channels, and email support, typically within one business day. See [current pricing](https://www.kanera.app/pricing).
 
 **Self-hosted Kanera** has no plan gating and no per-seat charges. Everything above is included, including guests, the REST API, webhooks, chat destinations, and personal notification channels. You control the infrastructure, storage, maintenance, and backups.
+
+Start a local installation with Docker already installed:
+
+```bash
+curl -fsSL https://www.kanera.app/install.sh | bash -s -- --mode localhost
+```
+
+For automatic production HTTPS, use `--mode production --domain kanera.example.com`.
+The [installer guide](DEPLOY.md#one-command-install) covers requirements, generated secrets,
+existing reverse proxies, and updates.
 
 - [Self-hosting guide](https://www.kanera.app/docs/self-host)
 - [Docker deployment](DEPLOY.md)

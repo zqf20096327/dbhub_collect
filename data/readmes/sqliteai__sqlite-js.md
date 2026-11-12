@@ -53,6 +53,7 @@
 - [Utility Functions](#utility-functions)
 - [Examples](#examples)
 - [Update Functions](#update-functions)
+- [Functions in the Schema](#functions-in-the-schema)
 - [Function Naming Rules](#function-naming-rules)
 - [Building from Source](#building-from-source)
 - [License](#license)
@@ -175,6 +176,21 @@ SQLite-JS provides several ways to extend SQLite functionality with JavaScript:
 | Window Functions | Similar to aggregates but can access the full dataset |
 | Collation Sequences | Define custom sort orders for text values |
 | JavaScript Evaluation | Directly evaluate JavaScript code within SQLite |
+
+### Values
+
+SQL values reach JavaScript as follows:
+
+| SQL | JavaScript |
+|-----|------------|
+| NULL | `null` |
+| INTEGER, REAL | number |
+| TEXT | string |
+| BLOB | `ArrayBuffer` |
+
+A JavaScript result goes back to SQL as follows: `null` and `undefined` become NULL, a boolean an INTEGER (1 or 0), a number an INTEGER if it is a whole number from -(2^53 - 1) to 2^53 - 1 (`Number.isSafeInteger`) and a REAL otherwise, a BigInt an INTEGER, a string TEXT, and an `ArrayBuffer` or a typed array such as `Uint8Array` a BLOB. Other objects become NULL; return `JSON.stringify(value)` to keep one as TEXT. The parameters of `db.exec()` convert the same way.
+
+JavaScript has a single number type, a double. So a REAL that holds a whole number, such as 3.0, comes back as the INTEGER 3, and an INTEGER beyond ±(2^53 - 1) loses precision in JavaScript: pass it as TEXT, `CAST(x AS TEXT)`, and convert it with `BigInt(args[0])`.
 
 ## Scalar Functions
 
@@ -382,6 +398,22 @@ SELECT js_eval('Math.PI * Math.pow(5, 2)');
 SELECT js_eval('new Date(1629381600000).toLocaleDateString()');
 ```
 
+### Running SQL from JavaScript
+
+JavaScript can run SQL on the same connection through the global `db` object. `db.exec(sql, ...parameters)` prepares one statement, binds the parameters to its `?` placeholders, and returns a result set. The statement runs as you step through it: `next()` moves to the next row and returns `true`, or `false` after the last; `get(i)` and `name(i)` give a column's value and name; `columnCount` is the number of columns; and `toArray()` returns the remaining rows as arrays. A statement that returns no rows, such as an `INSERT`, also runs only when you call `next()` or `toArray()`.
+
+An error while the statement runs, such as a failed constraint, is thrown from `next()` or `toArray()`, as an error in the SQL itself is thrown from `db.exec()`.
+
+```sql
+CREATE TABLE t(a UNIQUE);
+SELECT js_eval('db.exec("INSERT INTO t VALUES (?)", 1).next()');  -- 0: the row is inserted, and next() is false, as there are no rows
+SELECT js_eval('(function () { try { db.exec("INSERT INTO t VALUES (?)", 1).next(); } catch (e) { return e.message; } })()');  -- UNIQUE constraint failed: t.a
+```
+
+### Interrupting JavaScript
+
+JavaScript runs inside the SQL statement that calls it, so `sqlite3_interrupt()` stops it as it stops any statement: the statement fails with an "interrupted" error, even if the code catches exceptions. In the `sqlite3` shell, Ctrl-C does this. Interrupting JavaScript needs SQLite 3.41.0 or later.
+
 ## Utility Functions
 
 ### js_version
@@ -404,10 +436,24 @@ SELECT js_load_blob('/path/to/file.bin');   -- Returns file contents as a blob
 
 ### js_set_max_stack_size
 
-Configures the maximum stack size (in bytes) for the JavaScript engine.
+Sets the most stack, in bytes, that JavaScript may use, which limits how deeply functions can call themselves; code that goes deeper fails with "Maximum call stack size exceeded". The default is 1 MB. Each call into JavaScript measures the stack of the thread it runs on, so a connection can be used from several threads, and the size is lowered for a call on a thread with less stack. The size must be an integer no larger than the calling thread's stack allows, less a margin for the native code that runs between QuickJS's checks (`SQLITE_JS_STACK_MARGIN`, 256 KB); the error message gives the largest size allowed. A larger size, or text, which would read as 0, is an error, because QuickJS's check would never trip and code that calls itself without end would crash the process.
+
+`0` turns the check off. Code that calls itself without end then crashes the process.
 
 ```sql
 SELECT js_set_max_stack_size(1048576);  -- Set max stack size to 1 MB
+SELECT js_set_max_stack_size(0);        -- No check
+```
+
+### js_set_memory_limit
+
+Sets the most memory, in bytes, that JavaScript may allocate on this connection; 0 means no limit. The default is 64 MB (64 × 1024 × 1024 bytes); build with `-DSQLITE_JS_DEFAULT_MEMORY_LIMIT=bytes` to change it. Code that needs more fails with an "out of memory" error, and the connection stays usable. JavaScript that catches the error receives `null` instead when the limit leaves no room even for the error.
+
+Garbage is collected before the limit is reached, and as the limit changes, so a new limit under the memory a connection has already allocated still leaves it usable. A limit under the memory that is still *in use*, such as a large value held in a global, is another matter: nothing can be allocated until the limit is raised again.
+
+```sql
+SELECT js_set_memory_limit(268435456);  -- Allow 256 MB
+SELECT js_set_memory_limit(0);          -- No limit
 ```
 
 ## Examples
@@ -489,6 +535,12 @@ FROM exam_results;
 
 Due to a constraint in [SQLite](https://www3.sqlite.org/src/info/cabab62bc10568d4), it is not possible to update or redefine a user-defined function using the same database connection that was used to initially register it. To modify an existing JavaScript function, the update must be performed through a separate database connection.
 
+## Functions in the Schema
+
+Every SQL function this extension registers, except `js_version`, runs JavaScript, reads files or changes the JavaScript runtime, so it is registered with `SQLITE_DIRECTONLY`: only top-level SQL can call it, never a view, trigger, CHECK constraint, generated column or index stored in the database. (TEMP views and triggers can call it: SQLite trusts them, since only the connection itself can make them.) That way a database from an untrusted source cannot run JavaScript just by being queried. The functions you create with `js_create_scalar`, `js_create_aggregate`, `js_create_window` and `js_create_collation` are not restricted.
+
+A database can still store JavaScript in its `js_functions` table, and `js_init_table(1)` runs it. Call it only on databases you trust.
+
 ## Function Naming Rules
 
 Function names must comply with SQLite identifier rules and must be unique within the database and its schema.
@@ -535,6 +587,10 @@ make PLATFORM=windows
 # Install
 make install
 ```
+
+## License
+
+SQLite-JS is released under the [Apache License 2.0](LICENSE).
 
 ---
 

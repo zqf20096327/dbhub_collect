@@ -27,7 +27,7 @@
 
 Plans and issues live on your server instead of in the context window, so work outlives the session. Agents use it over MCP; you use the web UI.
 
-- **31 MCP tools in 5,781 tokens**, about one long file read.
+- **32 MCP tools in 6,159 tokens**, about one long file read.
 - **One 25 to 32 MB binary** with SQLite, the web UI and backups built in. No Docker, no Postgres.
 - **`lific connect` writes MCP config for 11 AI clients.**
 - **Identifiers like `APP-42`**, never UUIDs.
@@ -35,7 +35,7 @@ Plans and issues live on your server instead of in the context window, so work o
 ## 60-second setup
 
 ```bash
-cargo install lific   # or Homebrew (below), or download a binary from Releases
+cargo install lific   # or Homebrew / winget (below), or download a binary from Releases
 lific init            # config, database, admin account, background service on :3456
 lific connect         # MCP config for your AI clients
 ```
@@ -43,6 +43,7 @@ lific connect         # MCP config for your AI clients
 Restart your AI client. The web UI is at http://localhost:3456. `lific doctor` checks config, database, server and an MCP round trip, and exits nonzero if anything is broken.
 
 - `brew install voidnullable/tap/lific` replaces `cargo install` on macOS and Linux: a release binary in seconds, no Rust toolchain.
+- `winget install VoidNullable.lific` does the same on Windows.
 - `lific init --here` keeps config and database in the current directory.
 - `lific init --no-service` skips the background service; run `lific start` yourself.
 - `lific service status | restart | stop | uninstall` manages the service.
@@ -53,7 +54,7 @@ More: [Installation](https://lific.dev/docs/installation) · [Quickstart](https:
 
 | Call | What it does |
 | --- | --- |
-| `get_briefing(project="APP")` | Resume a project: plans and next steps, blocked and workable issues, and with `since`, what changed |
+| `get_briefing(project="APP", since="last")` | Resume a project: the human queue across projects, what changed since your last briefing, plans and next steps, blocked and workable issues |
 | `list_issues(project="APP", workable=true)` | Open issues whose blockers are all resolved |
 | `list_issues(members=["me"])` | Your active work across the projects you belong to |
 | `create_plan` / `get_plan` | Nested step plans that survive the session; a step and its issue close together |
@@ -69,7 +70,7 @@ Each AI tool connects as its own bot under your account. The history says "OpenC
 
 | Family | Tools |
 | --- | --- |
-| Issues | `list_issues` · `get_issue` · `create_issue` · `update_issue` · `bulk_update` · `edit_issue` · `get_board` |
+| Issues | `list_issues` · `get_issue` · `create_issue` · `update_issue` · `move_issue` · `bulk_update` · `edit_issue` · `get_board` |
 | Relations and waits | `link_issues` · `unlink_issues` |
 | Pages | `get_page` · `create_page` · `update_page` · `edit_page` |
 | Plans | `create_plan` · `get_plan` · `edit_plan_step` · `update_plan_step` |
@@ -79,7 +80,7 @@ Each AI tool connects as its own bot under your account. The history says "OpenC
 | Structure | `list_resources` · `manage_resource` · `delete` |
 | Export | `export` |
 
-The 5,781 tokens are the `tools/list` definitions as compact JSON, counted with tiktoken's o200k_base. Parameters and output: [MCP tools](https://lific.dev/docs/mcp/tools).
+The 6,159 tokens are the `tools/list` definitions as compact JSON, counted with tiktoken's o200k_base. Parameters and output: [MCP tools](https://lific.dev/docs/mcp/tools).
 
 ## Connect your AI tools
 

@@ -26,11 +26,12 @@ At the core of every IaCM workflow is the provision pipeline: **init → plan �
 A complete Plan/Apply pipeline using Harness IaCM — **no cloud account needed**. This Tidbit uses the **Harness Terraform provider** to provision a Harness pipeline from within Harness itself.
 
 1. **Set up connectors** — a GitHub connector for the Terraform code.
-2. **Create a workspace** — link the connector, point to this repository, set Terraform version.
-3. **Add workspace variables** — set Harness account ID, API key, org, project, and pipeline name.
-4. **Import the pipeline** — load `.harness/pipeline.yaml` via Import from Git.
-5. **Run the pipeline** — init runs, plan shows **1 resource to add**, approval gate pauses for review, apply provisions it.
-6. **Verify** — "Provisioned by IaCM" appears in Deployments → Pipelines.
+2. **Create an API key** — generate a Harness API key token and store it as a Harness secret.
+3. **Create a workspace** — link the connector, point to this repository, set Terraform version.
+4. **Add workspace variables** — set Harness account ID, API key secret, org, project, pipeline name, and pipeline identifier.
+5. **Import the pipeline** — load `.harness/pipeline.yaml` via Import from Git, then set the workspace ID inside the pipeline editor.
+6. **Run the pipeline** — init runs, plan shows **1 resource to add**, approval gate pauses for review, apply provisions it.
+7. **Verify** — "Provisioned by IaCM" appears in Deployments → Pipelines.
 
 ---
 
@@ -108,14 +109,6 @@ Before you start, make sure you have:
 - A GitHub Personal Access Token with `repo` scope
 - A Harness delegate running (for connector connectivity)
 
-**Create a Harness API key:**
-1. Go to your user profile in Harness
-2. Go to the **API Keys** tab → **+ New API Key** → name it `iacm-terraform-key` → **Save**
-3. Click **+ New Token** under the key → name it → **Generate**
-4. Copy the token — you'll add it as a workspace secret variable
-
-> See the [Harness API Key quickstart](https://developer.harness.io/harness-platform/use-harness-platform/automation/api/api-quickstart#create-a-harness-api-key-and-token) for a detailed walkthrough.
-
 ---
 
 ## Project Structure
@@ -125,7 +118,7 @@ iacm-tidbits-plan-apply-pipeline/
 ├── .harness/
 │   └── pipeline.yaml    — IaCM provision pipeline (init → plan → approval → apply)
 ├── main.tf              — Harness provider + pipeline resource
-├── variables.tf         — harness_account_id, harness_api_key, org_id, project_id, pipeline_name
+├── variables.tf         — harness_account_id, harness_api_key, org_id, project_id, pipeline_name, pipeline_identifier
 ├── outputs.tf           — pipeline_id, pipeline_name, pipeline_url
 └── README.md
 ```
@@ -138,12 +131,26 @@ iacm-tidbits-plan-apply-pipeline/
 2. Name: `iacm-github-connector`
 3. Authentication: **Username and Token**
 4. Enter your GitHub username and a Personal Access Token with `repo` scope
-5. Connectivity Mode: **Connect through a Harness Platform**
+5. Connectivity Mode: **Connect through a Harness Delegate**
 6. Test the connection → Save
 
 ---
 
-## Step 2 — Create the Workspace
+## Step 2 — Create the API Key and Store It as a Secret
+
+1. Go to your **user profile** in Harness (profile icon → **My Profile**)
+2. Open the **API Keys** tab → **+ New API Key** → name it `iacm-terraform-key` → **Save**
+3. Click **+ New Token** under the key → name it → **Generate**
+4. Copy the token immediately — you won't be able to see it again
+5. Go to **Project Settings → Secrets → + New Secret → Secret Text**
+6. Name it `harness-api-key`, paste the token in → **Save**
+7. Note the secret identifier — you'll reference it in Step 4 when adding the `harness_api_key` workspace variable
+
+> See the [Harness API Key quickstart](https://developer.harness.io/harness-platform/use-harness-platform/automation/api/api-quickstart#create-a-harness-api-key-and-token) for a detailed walkthrough.
+
+---
+
+## Step 3 — Create the Workspace
 
 1. Go to **Infrastructure → Workspaces → + New Workspace → Start from scratch**
 2. Fill in:
@@ -162,9 +169,9 @@ iacm-tidbits-plan-apply-pipeline/
 
 ---
 
-## Step 3 — Add Workspace Variables
+## Step 4 — Add Workspace Variables
 
-The Terraform configuration requires five variables. Set them in the workspace so Harness injects them into every pipeline run.
+The Terraform configuration requires six variables. Set them in the workspace so Harness injects them into every pipeline run.
 
 1. Open the workspace → **Variables** tab → **+ Add Variable**
 2. Add the following:
@@ -172,30 +179,33 @@ The Terraform configuration requires five variables. Set them in the workspace s
 | Variable | Value | Type | Secret? |
 |---|---|---|---|
 | `harness_account_id` | `<+account.identifier>` | Terraform | No |
-| `harness_api_key` | Your API key token | Terraform | **Yes** |
+| `harness_api_key` | Secret identifier of `harness-api-key` | Terraform | **Yes** |
 | `org_id` | `<+org.identifier>` | Terraform | No |
 | `project_id` | `<+project.identifier>` | Terraform | No |
 | `pipeline_name` | `Provisioned by IaCM` | Terraform | No |
+| `pipeline_identifier` | `provisioned_by_iacm` | Terraform | No |
 
 > **Tip:** Mark `harness_api_key` as a **Secret** variable so the token never appears in logs.
 > `<+account.identifier>`, `<+org.identifier>`, and `<+project.identifier>` are built-in Harness expressions that resolve at runtime — no need to look up or hardcode any IDs.
 
 ---
 
-## Step 4 — Import the Pipeline
+## Step 5 — Import the Pipeline
 
-1. Open `.harness/pipeline.yaml` on GitHub and update the one placeholder:
-   - `YOUR_WORKSPACE_ID` → the identifier of the workspace you just created
+1. Open `.harness/pipeline.yaml` on GitHub and update the two placeholders:
+   - `YOUR_PROJECT_ID` → your Harness project identifier
+   - `YOUR_ORG_ID` → your Harness org identifier
    - Commit and push the change
 2. Go to **Infrastructure → Pipelines → Import from Git**
 3. Select `iacm-github-connector`, repo: `harness-community/iacm-tidbits-plan-apply-pipeline`, file: `.harness/pipeline.yaml`
 4. Click **Import**
+5. Open the imported pipeline → go to the **Plan and Apply** stage → update the **Workspace** field with the identifier of the workspace you just created → **Save**
 
-> **Note:** `projectIdentifier` and `orgIdentifier` in the pipeline YAML are automatically set by Harness during import based on the current project context — no need to update them manually.
+> **Tip:** You don't need to update `YOUR_WORKSPACE_ID` in the YAML file. Set it directly inside the pipeline editor after importing.
 
 ---
 
-## Step 5 — Run the Pipeline
+## Step 6 — Run the Pipeline
 
 1. Go to **Infrastructure → Pipelines → IaCM Plan Apply Pipeline → Run**
 2. Watch the execution:

@@ -10,6 +10,8 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15671384.svg)](https://doi.org/10.5281/zenodo.15671384)
 
+**[Open the QUESTDB website](https://pfloos.github.io/QUESTDB/)** to explore reference energies, benchmark methods, and download molecular geometries. The site is rebuilt from the database after pushes to `main`.
+
 ---
 
 ## 📚 Table of Contents
@@ -113,6 +115,7 @@ The QUESTDB project is maintained by a collaboration between:
 - [Mickael Véril](https://mveril.github.io) (Toulouse)
 - [Yann Damour](https://ydrnan.github.io/damour) (Toulouse)
 - [Antoine Marie](https://antoine-marie.github.io) (Toulouse)
+- [Loris Burth](https://github.com/lburth) (Toulouse)
 
 ---
 
@@ -174,9 +177,9 @@ A. Marie, P. Romaniello, X. Blase, and P.-F. Loos,
 *J. Chem. Phys.* **162**, 134105 (2025).
 
 - Core IPs:  
-[**Reference energies for non-relativistic core ionization potentials**](https://arxiv.org/pdf/2604.05920)  
+[**Reference energies for non-relativistic core ionization potentials**](https://doi.org/10.1021/acs.jctc.6c00713)  
 A. Marie, L. Burth, and P.-F. Loos,  
-*J. Chem. Theory Comput.* (submitted) arXiv:2604.05920.
+*J. Chem. Theory Comput.* **22**, 6609 (2026).
 
 ---
 
@@ -215,5 +218,5 @@ This database is also funded, in part, by the Agence Nationale de la Recherche (
 
 ## 🧮 HPC resources
 
-This work was performed using HPC resources from [**CALMIP**](https://www.calmip.univ-toulouse.fr) (Toulouse, France) under allocations **2018-18005 through 2026-18005**, as well as resources provided[...]
+This work was performed using HPC resources from [**CALMIP**](https://www.calmip.univ-toulouse.fr) (Toulouse, France) under allocations **2018-18005 through 2026-18005**.
 

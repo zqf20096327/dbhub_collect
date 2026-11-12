@@ -21,6 +21,18 @@
 
 ---
 
+## 🧩 How the pieces fit — in plain English
+
+Three parts, one picture:
+
+- **SWIVEL** (the phone app) hears the Bluetooth and Wi-Fi right around you as you go about your day, and writes it all down.
+- **Kismet** (optional, on a laptop) hears *more* Wi-Fi, from farther off — a second set of ears.
+- **DEBRIEF** (this tool) pours both logs into **one database**, matches up anything that *both* heard, and keeps a **running history across every outing** — so it can answer the one question that matters: **what keeps showing up wherever you go?**
+
+You don't need Kismet to start — your phone alone is plenty. Kismet just makes the picture sharper.
+
+---
+
 ## 👣 See what's been following you
 
 Every AirTag, Tile, car hotspot and Bluetooth gadget near you is **broadcasting all the time.** Run [SWIVEL](https://github.com/officialtomblack/SWIVEL) on your phone (and Kismet on a laptop, if you have one) and you've got a log of everything that was around you — every place you went.
@@ -82,9 +94,22 @@ The tracker floats to the top, flagged **followed** at **3 places** — and the 
 
 ## 🛰️ Use it on your own captures
 
-1. **Capture.** Run [SWIVEL](https://github.com/officialtomblack/SWIVEL) while you go about your day. Optional: run Kismet on a laptop at the same time — DEBRIEF merges the two.
-2. **Copy the logs to your computer.** SWIVEL: tap **EXPORT** and copy the session `.ndjson` (or `.json` / WigleCSV) off the phone. Kismet: the `.kismet` file it writes.
-3. **Run DEBRIEF.**
+**1. Capture.** Run [SWIVEL](https://github.com/officialtomblack/SWIVEL) while you go about your day. Optional: run Kismet on a laptop at the same time — DEBRIEF merges the two.
+**2. Copy the logs into one folder.** From SWIVEL, tap **EXPORT** and copy the session off the phone (`.ndjson`, `.json` or WigleCSV); from Kismet, the `.kismet` file it wrote. Drop them in the same folder.
+**3. Fold them in** — the easy way or by hand, below.
+
+### 🔁 Your everyday routine — one command
+
+Grab the starter script **[`debrief-run.sh`](debrief-run.sh)**, open it, and edit the **two path lines** at the top (where you cloned DEBRIEF, and your captures folder). From then on, your whole routine after any outing is:
+
+```bash
+./debrief-run.sh          # fold everything new, then open the report
+./debrief-run.sh -n       # dry-run: show what it would do, change nothing
+```
+
+It folds every new capture in your folder into one database — already-folded files are skipped automatically, so **running it again is always safe** — and opens the ranked report. Drop new files in, run it again, and the picture of *what keeps showing up* gets sharper every outing. (If your phone is plugged in and you built the debug app, it even pulls new sessions off the phone for you; if not, it just folds the folder.)
+
+### Or run it by hand
 
 ```bash
 python3 swivel_enhance.py run session.ndjson capture.kismet --kismet-window 60
@@ -94,7 +119,7 @@ datasette out/swivel.db -m datasette_metadata.json --static assets:datasette-ass
   --setting facet_time_limit_ms 3000 --setting sql_time_limit_ms 5000   # optional: browse + map in your browser
 ```
 
-**`run` accumulates.** Every run adds the new captures to the same database (files already ingested are skipped by content hash) and re-scores everything — so after each outing you just run it again and the picture of *what keeps showing up* gets sharper. `--fresh` starts over.
+**`run` accumulates.** Every run adds the new captures to the same database (files already ingested are skipped by content hash) and re-scores everything. `--fresh` starts over.
 
 ---
 

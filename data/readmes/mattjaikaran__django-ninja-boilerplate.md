@@ -164,10 +164,9 @@ project/
 │   ├── services/             # Business logic layer
 │   └── tests/                # Unit and integration tests
 ├── todos/                    # Example app with CRUD functionality
-├── scripts/                  # Utility scripts
-├── .cursor/                  # Cursor IDE rules
-│   └── rules/
-│       └── backend_guidelines.mdc
+├── scripts/                  # Utility scripts and gauntlet gates
+├── AGENTS.md                 # Canonical agent rules; CLAUDE.md imports it
+├── SKILLS.md                 # Index of .agents/skills/ (Agent Skills)
 ├── docker-compose.yml        # Profiled Docker setup (dev, prod, single, celery)
 ├── justfile                  # Task runner (the old Makefile is Makefile.legacy)
 └── pyproject.toml            # Project configuration
@@ -197,7 +196,7 @@ app_name/
 ### Core Stack
 
 - **Python 3.13** with type hints
-- **[Django 5.2 LTS](https://docs.djangoproject.com/en/5.2/)** - The only supported version; `just test-django6` runs the suite on 6.0 by hand (see `DEPENDENCIES.md`)
+- **[Django 5.2 LTS](https://docs.djangoproject.com/en/5.2/)** - The only supported version; `just django-upgrade-check 6.0` reports whether 6.0 (or 6.1) is safe to adopt (see `DEPENDENCIES.md`)
 - **[Django Ninja](https://django-ninja.dev/)** - Fast API framework
 - **[Django Ninja Extra](https://eadwincode.github.io/django-ninja-extra/)** - Class-based controllers
 - **[Django Ninja JWT](https://eadwincode.github.io/django-ninja-jwt/)** - JWT authentication
@@ -1629,6 +1628,38 @@ See [`deploy/`](deploy/) for detailed deployment configurations:
 - `deploy/paas/` - Railway, Render configs
 - `deploy/kubernetes/` - Helm chart
 
+### Deploy notifications
+
+`scripts/deploy.sh` sends a notification when a deploy finishes. It sends `deploy_complete` on success. It sends `deploy_failed` when a step fails or the VPS health check does not pass. A failed notification prints a warning. It never fails the deploy.
+
+| Variable | Purpose |
+|----------|---------|
+| `DEPLOY_NOTIFY` | Comma list of `webhook`, `telegram`, `hermes`. Empty sends to every channel whose settings are set. `none` turns notifications off. |
+| `DEPLOY_WEBHOOK_URL` | URL that receives a JSON `POST`. |
+| `TELEGRAM_BOT_TOKEN` | Bot token. The script sends it only to the Telegram API. |
+| `TELEGRAM_CHAT_ID` | Chat that receives the message. |
+| `HERMES_URL` | Hermes base URL. The script posts to `<HERMES_URL>/deploy_webhook`. |
+
+The JSON envelope has these string fields:
+
+- `event`: `deploy_complete` or `deploy_failed`.
+- `app`, `env`, `frontend_url`, `backend_url`: Values from your config.
+- `commit`: Full SHA of the local checkout. `commit_short` and `subject` describe the same commit.
+- `provider`: Deploy provider name.
+- `duration_seconds`: Seconds from the start of the deploy to the notification.
+- `health`: `ok` or `failed` after a VPS health check. Empty when no health check ran.
+- `failed_step`: Step that failed. Empty on `deploy_complete`.
+- `exit_code`: Script exit code. `0` on success.
+
+The Telegram message uses the same lines as mattstack-cli. It adds `provider`, `subject`, `duration`, and `health`. Failures also add `step` and `exit code`.
+
+Keep these caveats in mind:
+
+- The commit and subject come from your local checkout. On the VPS provider, the server pulls its own branch, so the deployed commit can differ.
+- A failed VPS health check now exits the script with status 1 and sends `deploy_failed` with `health: failed`.
+- Notifications need `jq` or `python3` to build the JSON payload. Without either, the script warns and skips the notification.
+- `--dry-run` prints the channels that would receive a message. It never prints URLs or tokens.
+
 ### Production Features
 
 - Multi-stage Docker builds
@@ -1646,11 +1677,11 @@ See [`deploy/`](deploy/) for detailed deployment configurations:
 
 The API mounts once at /api/ with no version in the path. That surface is
 v1. It does not move when the project version changes, and there is no
-/api/v1/ alias. A breaking v2 ships beside it at /api/v2/; /api/ keeps
-serving v1 until it is retired. Contract tests assert that both versioned
-prefixes return 404 (`tests/contract/test_route_access.py`) and that the
-OpenAPI document lists no versioned paths
-(`tests/contract/test_openapi_contract.py`).
+/api/v1/ alias. /api/v2/ is the first prefixed version, and it appears
+only when a breaking v2 ships beside /api/; /api/ stays v1. Contract
+tests assert that neither versioned prefix is mounted today
+(`tests/contract/test_route_access.py`) and that the OpenAPI document
+lists no versioned paths (`tests/contract/test_openapi_contract.py`).
 
 The OpenAPI `info.version` is the release version from the `VERSION` file,
 so a generated client can tell which build published the schema.

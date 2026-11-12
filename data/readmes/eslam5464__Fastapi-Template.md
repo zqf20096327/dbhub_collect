@@ -24,6 +24,9 @@ A production-ready FastAPI project template with modern best practices, async su
 - **⚠️ No authentication** - every route is public until you add your own login and access checks
 <!-- --- FEATURE[!auth] END --- -->
 - **🏗️ Clean Architecture** - Repository pattern, dependency injection, and enforced module boundaries (tach)
+<!-- --- FEATURE[example_items] START --- -->
+- **📦 Example CRUD domain** - Items: a model, repository, service, `/v1/items` endpoints, migration and tests to copy from
+<!-- --- FEATURE[example_items] END --- -->
 - **🔒 Security** - Security headers middleware, trusted hosts and a CORS allowlist
 <!-- --- FEATURE[csrf] START --- -->
 - **🛡️ CSRF protection** - Double-submit cookie middleware for browser clients
@@ -151,7 +154,7 @@ uvx copier copy gh:eslam5464/Fastapi-Template <new-project-dir> --trust
 
 **Alternative:** if you'd rather have `copier` installed permanently (e.g. for `copier update` later), use `uv tool install copier` instead. On Windows, that installs into a user tools directory that's often **not yet on PATH** in your *current* terminal session — if you see `'copier' is not recognized as an internal or external command` right after installing, either open a **new** terminal window, or run `uv tool update-shell` and then restart the terminal. The `uvx` command above sidesteps the PATH issue entirely since it doesn't need `copier` installed anywhere persistent.
 
-You'll be prompted for a project name, description, author name/email, GitHub username, Python version, and whether to keep the minimal base or choose optional services one by one (currently the Redis cache, rate limiting, the token blacklist, Celery, Firebase, Firestore, Google Cloud Storage, BackBlaze B2, Resend, Brevo, OpenObserve and Apple Pay); running `copier copy ... --defaults` gives you the minimal base. Everything identity-specific — the `pyproject.toml` name, Docker container names, the Postgres schema, `README.md`, `LICENSE`, `CODEOWNERS` — is filled in automatically; see [docs/features.md](docs/features.md) for what ships by default versus what's opt-in.
+You'll be prompted for a project name, description, author name/email, GitHub username, Python version, and how much of the template to include. The `services` question offers three values: `minimal` (the base, pre-selected in an interactive run), `custom` (choose optional services one by one), or `full` (everything). `copier copy ... --defaults` selects `full`, so it generates the project with every optional service; for a scripted minimal base use `copier copy ... --defaults --data services=minimal`. The optional services are authentication, the example Items domain, the `/v2` API scaffold, the CSRF middleware, the Redis cache, rate limiting, the token blacklist, Celery, Firebase, Firestore, Google Cloud Storage, BackBlaze B2, Resend, Brevo, OpenObserve and Apple Pay. Everything identity-specific — the `pyproject.toml` name, Docker container names, the Postgres schema, `README.md`, `LICENSE`, `CODEOWNERS` — is filled in automatically; see [docs/features.md](docs/features.md) for what ships by default versus what's opt-in.
 
 `--trust` is required because generation runs a small post-processing script (`scripts/generate/post_gen.py`) that substitutes your answers into the copied files, removes unused Apple Pay files when you opt out, regenerates `uv.lock`, and runs `git init` for you.
 
@@ -296,25 +299,7 @@ The interactive version of this diagram lives at [`docs/architecture/fastapi-tem
 <!-- --- FEATURE[auth] START --- -->
 ## 🔐 Authentication
 
-The template includes a complete JWT-based authentication system:
-
-- User registration and login
-- Access and refresh tokens
-- Password hashing with Argon2 (via pwdlib)
-<!-- --- FEATURE[redis_token_blacklist] START --- -->
-- Token blacklisting for secure logout
-<!-- --- FEATURE[redis_token_blacklist] END --- -->
-- Protected routes with dependency injection
-
-### Example Usage
-
-```python
-from app.api.v1.deps.auth import get_current_user
-
-@router.get("/protected")
-async def protected_route(current_user: User = Depends(get_current_user)):
-    return {"message": f"Hello {current_user.username}!"}
-```
+JWT authentication with a User model: signup, login, access and refresh tokens, Argon2 password hashing, and a `get_current_user` dependency for protected routes. See **[docs/integrations/auth.md](docs/integrations/auth.md)** for the endpoints, the settings and how to protect a route.
 
 <!-- --- FEATURE[auth] END --- -->
 

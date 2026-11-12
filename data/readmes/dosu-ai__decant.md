@@ -191,7 +191,7 @@ Linux. See [Running in the background](docs/data-lifecycle.md#running-in-the-bac
 | Page | What it shows |
 | --- | --- |
 | Analytics | Token, cost, context, and agent-time rollups across sessions |
-| Insights | Recommendations drawn from your history, and the ones you have implemented |
+| Insights | Recommendations drawn from your history, the ones you have implemented, and general setup ideas not derived from your archive |
 | Sessions | Sessions and their retained transcript messages |
 | Search | Full-text matches in prompts, responses, tool names, and tool inputs |
 | Projects | Sessions and cost for each project |
@@ -204,8 +204,12 @@ Linux. See [Running in the background](docs/data-lifecycle.md#running-in-the-bac
 decant                         # start the local web UI
 decant sync                    # index new and changed sessions
 decant ls                      # list sessions
+decant ls --repo . --since 2026-11-01  # this repository and its worktrees
+decant ls --json --fields id,title     # only the fields you name
 decant show 1                  # render a transcript
+decant show 1 --outline        # list its messages and their sizes
 decant search "auth bug"       # full-text search
+decant project ls --limit 20   # projects with session counts and cost
 decant stats --by model        # usage and cost rollups
 decant economics               # token, cost, and time breakdowns
 decant files --group ext       # file hotspots
@@ -227,7 +231,80 @@ decant doctor                  # redacted environment report for bug reports
 Run `decant --help` or `decant <command> --help` for every command and flag.
 Read commands support `--json`. Global flags include `--db`, `--format`,
 `--quiet`, `--no-color`, and `--no-sync`. `--db` or `DECANT_DB` sets the
-archive path.
+archive path. A read command does not create an archive at a path you name, so
+a mistyped path is an error.
+
+Commands exit 0 on success, 1 when the command fails, 2 on a usage error, and 3
+when `sync` drops lines it cannot parse. With `--json`, an error is a JSON
+object with a stable `code` on stderr. See
+[CLI output, errors, and exit codes](docs/cli.md).
+
+#### Read one session in pieces
+
+`decant show <id>` prints the whole transcript, which can be megabytes for a
+long session. To read part of one, list its messages first and then ask for
+the ones you need:
+
+```sh
+decant show 1 --outline                    # one row per message
+decant show 1 --offset 10 --limit 5        # five messages, starting at index 10
+decant show 1 --limit 20 --max-chars 2000  # cut long text and tool output
+```
+
+| Flag | What it does |
+| --- | --- |
+| `--outline` | Prints one row per message with its index, role, size in characters, block kinds, and tool names. Message bodies are left out, except that each user prompt row ends with the first 80 characters of the prompt. With `--json`, the `outline` array holds up to 240 characters of each prompt. Read the whole message with `--offset <index> --limit 1`. |
+| `--limit <n>` | Shows at most `n` messages. |
+| `--offset <n>` | Skips the first `n` messages. The outline's `index` column is the offset of each message. |
+| `--max-chars <n>` | Cuts each text, tool input, and tool output to `n` characters. |
+
+`--limit` and `--offset` read the same page that `message_limit` and
+`message_offset` return from `GET /api/sessions/{id}`, and they also page the
+outline. Without any of these flags, `show` prints what it always has.
+
+Text output ends with the range it covers, such as
+`[showing 5 of 64 messages from offset 10]`, and with the command for the next
+page when there is one. Each cut is marked where the content stops:
+`[truncated: 3000 of 5000 chars omitted. Raise --max-chars to read more.]`.
+
+With `--json`, the result adds `message_count`, `message_offset`,
+`message_limit`, `has_more_messages`, and `partial`. `partial` is true when
+messages were skipped, messages remain, or a block was cut. `--max-chars` also
+adds `max_chars` and `truncated_blocks`, and each cut block carries
+`truncated: true` and `original_chars`, the length of each cut field before the
+cut. `--outline --json` holds the per-message rows in `messages` and the items
+of `GET /api/sessions/{id}/outline` in `outline`.
+
+`show` and `export` take Decant's session id or the id the source tool gave the
+session, such as the Claude Code session UUID in its transcript file name. An
+integer names the Decant id first. When one source id belongs to sessions from
+two tools, the command exits 2 and lists each match with its id, tool, and
+start time.
+
+`decant ls` and `decant search` take the same scope flags:
+
+- `--project <path>` matches one project directory. Decant resolves `.`, a
+  relative path, `~`, a trailing slash, and a symlink before it compares.
+- `--repo <value>` matches a repository, its worktrees, and any other checkout
+  with the same `origin` remote. The value is a directory inside the repository
+  (`--repo .` works from a worktree or a subdirectory), a remote such as
+  `github.com/acme/widget`, or the name of the repository's directory. A bare
+  name such as `widget` is checked against repository names first, so write
+  `./widget` to mean a folder in the current directory.
+- `--since` and `--until` take `YYYY-MM-DD` days in UTC. Both days are
+  included, and each session counts on the UTC day it started, including a
+  session whose log records a local time with an offset.
+- `--limit` and `--offset` page through the rows.
+
+A path or repository the archive has never recorded exits with code 1 and an
+error on stderr, so an empty list always means the scope is known and holds no
+matching session.
+
+`decant ls --json` prints every field of each session. `--fields` keeps only
+the fields you name, in the order you name them, on both `decant ls` and
+`decant project ls`. Without `--json` they print as tab-separated columns. An
+unknown field is a usage error that lists the valid names. `decant project ls`
+prints every project unless `--limit` and `--offset` say otherwise.
 
 ### Local API
 
@@ -240,6 +317,7 @@ at <http://127.0.0.1:3000/api/openapi.json>. See
 
 Using Decant:
 
+- [CLI output, errors, and exit codes](docs/cli.md)
 - [Sources and where Decant finds them](docs/sources.md)
 - [How the analytics are calculated](docs/analytics-methodology.md)
 - [Pricing estimates and their sources](docs/pricing.md)

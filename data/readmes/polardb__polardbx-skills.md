@@ -30,6 +30,9 @@ skills/
 ├── polardbx-ttl20/        # PolarDB-X TTL 2.0 冷数据归档与自动加分区
 │   ├── SKILL.md
 │   └── references/
+├── polardbx-external-column/ # 外列机会识别、适用性评估与 MCE 灰度计划
+│   ├── SKILL.md
+│   └── references/
 ├── polardbx-standard/     # PolarDB-X 标准版特性与运维
 │   ├── SKILL.md
 │   └── references/
@@ -59,6 +62,7 @@ skills/
 | `polardbx-pagination` | 高效分页与大表遍历 | 深分页、批量导出、大表游标遍历 | 推荐 Keyset 分页，覆盖索引要求和批处理代码示例 |
 | `polardbx-cci` | CCI 列存索引（OLAP/HTAP） | 分析查询、宽表聚合、行列混存、列存快照 | 创建和使用 Clustered Columnar Index，处理分区键、排序键和管理命令 |
 | `polardbx-ttl20` | TTL 2.0 冷数据归档 | 数据过期、冷热分离、自动加 Range 分区 | 分析表结构并生成 TTL 归档或自动预建分区 SQL |
+| `polardbx-external-column` | 外列采用与灰度变更 | 大字段、存储增长、上下文存储及有证据支撑的资源优化机会 | 从结构、实际长度和流量评估适用性，强调最低版本与推荐升级，生成建表/MCE SQL 和双暂停观察计划 |
 | `polardbx-plan-analysis` | 执行计划分析与等价性验证 | EXPLAIN 解读、代价分析、运行时瓶颈定位、SQL/计划一致性检查 | 覆盖 17 类算子、14 维等价性检查和可选 Graphviz 可视化 |
 | `polardbx-standard` | 标准版特性与运维 | X-Cluster、X-Paxos HA、Lizard、Panda Index、向量检索 | 说明标准版架构、MySQL 兼容行为和独有功能最佳实践 |
 | `polardbx-zero` | 免认证临时实例创建 | AI agent 存储、MCP 后端、临时测试、教程演示 | 通过 API 创建支持标准版/企业版的短期 PolarDB-X 实例 |

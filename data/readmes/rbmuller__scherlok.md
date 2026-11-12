@@ -12,9 +12,7 @@
 
 <br><br>
 
-<img src="assets/scherlok-logo.png" alt="Scherlok" width="120">
-
-<h1>Scherlok</h1>
+<img src="assets/scherlok-hero.svg" alt="Scherlok: don't wait for your data pipelines to break. Data reliability for the AI era." width="100%">
 
 <p><strong>Zero-config anomaly detection for your database tables.</strong><br>
 No YAML, no rules, no thresholds. Scherlok learns what "normal" looks like, then tells you when something changes.</p>
@@ -273,7 +271,7 @@ Prefer staying inside dbt? Install Scherlok as a dbt package for native data qua
 # packages.yml
 packages:
   - git: https://github.com/rbmuller/scherlok.git
-    revision: v1.4.0
+    revision: v1.5.0
 ```
 
 Once the dbt Package Hub listing lands ([dbt-labs/hubcap#456](https://github.com/dbt-labs/hubcap/pull/456)), this becomes `package: rbmuller/scherlok` with `version: [">=1.0.0", "<2.0.0"]`.
@@ -422,6 +420,8 @@ pip install scherlok[duckdb]
 scherlok connect duckdb:///path/to/file.db
 ```
 
+The connection string names the dataset or schema, and every table in it is monitored. To monitor only some, name them when you connect: `scherlok connect bigquery://project-id/dataset-name --table orders --table customers`. 📖 [Choosing the tables →](https://rbmuller.github.io/scherlok/getting-started/#choosing-the-tables)
+
 | Database | Status |
 |----------|--------|
 | PostgreSQL | Available |
@@ -463,10 +463,10 @@ Every claim links to the other tool's own documentation in the [full comparison]
 ## CLI Reference
 
 ```
-scherlok connect <url>          Connect to a database
-scherlok investigate            Profile all tables (learn patterns)
-scherlok watch [-w <url>] [-e <email>]  Detect anomalies and alert
-scherlok ci <url> [opts]        All-in-one CI/CD command (connect + watch + exit code)
+scherlok connect <url> [--table T]  Connect to a database; --table monitors only those tables
+scherlok investigate [--table T]  Profile the monitored tables (learn patterns)
+scherlok watch [--table T] [-w <url>] [-e <email>]  Detect anomalies and alert
+scherlok ci <url> [--table T] [opts]  All-in-one CI/CD command (connect + watch + exit code)
 scherlok verify [--table T] [--dbt-project DIR] [--fail-on L] [--output json] [--record PATH] [--against SCOPE] [--ignore volume]  Read-only gate: compare, keep the baseline
 scherlok reconcile --source S --target T [--key K] [--sum C] [--tolerance X] [--output json]  Check an output table against its input
 scherlok accept --table T --reason "..." [--yes]  Make the current state the baseline, with a recorded approval

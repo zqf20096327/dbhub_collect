@@ -29,7 +29,7 @@
 
 ## Supported agents
 
-Rembric works with any agent that speaks MCP or HTTP. First-class plugins handle session lifecycle + per-project path-scoping automatically, and redact `<private>…</private>` spans client-side before any transcript-derived text is uploaded (see [docs/agents.md](./docs/agents.md#private-content-redaction-private-tags)); everything else gets the same memory tools via a plain MCP URL. **Pi** ships no MCP client of its own, so its extension speaks MCP directly and discovers the tool surface at runtime — see [docs/agents.md](./docs/agents.md#pi-npm-package). **ChatGPT** connects as a custom MCP connector over OAuth 2.1 (no static token) — see [docs/agents.md](./docs/agents.md#chatgpt-custom-mcp-connector-over-oauth).
+Rembric works with any agent that speaks MCP or HTTP. First-class plugins handle session lifecycle + per-project path-scoping automatically, and redact `<private>…</private>` spans client-side before any transcript-derived text is uploaded (see [docs/agents.md](./docs/agents.md#private-content-redaction-private-tags)); everything else gets the same memory tools via a plain MCP URL. Whatever the client, the server stores credential-shaped text (API keys, tokens, private keys, passwords) as `[REDACTED:<kind>]` — see [docs/agents.md](./docs/agents.md#server-side-secret-redaction). **Pi** ships no MCP client of its own, so its extension speaks MCP directly and discovers the tool surface at runtime — see [docs/agents.md](./docs/agents.md#pi-npm-package). **ChatGPT** connects as a custom MCP connector over OAuth 2.1 (no static token) — see [docs/agents.md](./docs/agents.md#chatgpt-custom-mcp-connector-over-oauth).
 
 <table>
   <tr>
@@ -240,7 +240,7 @@ The engine is code, not configuration: there is no model selector, no threshold 
 
 ### Consolidation sweep
 
-Deterministic — decay + deadline orphaning, no LLM, no cron. Runs on session start (throttled to one run per scope per 6h) and on demand via the dashboard or `POST /admin/consolidation/run`. Pre-0.21/0.22 vars (`CONSOLIDATION_*`, `OPENAI_*`, `LLM_PROVIDER`, `EMBEDDING_*`, `CANDIDATE_*_THRESHOLD`) are ignored with a boot warning.
+Deterministic — decay, deadline orphaning and the stale pending drain; no LLM, no cron. The drain orphans a pending judgment that no current save-time channel would create (lexical overlap below the floor, stored vectors below the similarity threshold, no shared entity), and one whose endpoint was superseded or archived before retirement started closing those pairs itself. It reads stored vectors only, never the model, keeps any pair it cannot evaluate, works in bounded batches, and journals every drain so it can be undone; an undone pair is never drained again. Runs on session start (throttled to one run per scope per 6h) and on demand via the dashboard or `POST /admin/consolidation/run`. Pre-0.21/0.22 vars (`CONSOLIDATION_*`, `OPENAI_*`, `LLM_PROVIDER`, `EMBEDDING_*`, `CANDIDATE_*_THRESHOLD`) are ignored with a boot warning.
 
 | Variable                      | Default      | Description                                                                                                                |
 | ----------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------- |
@@ -282,11 +282,11 @@ Applied to every bearer-authenticated surface (`/mcp`, `/api`, `/healthz`, `/adm
 
 Controls how `memory.save` surfaces conflict candidates to the agent for fresh-context judgment.
 
-| Variable                  | Default | Description                                                                                                                                     |
-| ------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CANDIDATES_PER_SAVE_MAX` | `5`     | Max number of similar memories surfaced per save. `0` disables surfacing (pending rows are still inserted and re-surface via `memory.context`). |
-| `CANDIDATE_VEC_THRESHOLD` | `0.85`  | Cosine-similarity floor on the embedding match. Range `0..1`. Lower = more candidates, more noise.                                              |
-| `CANDIDATE_FTS_THRESHOLD` | `0.4`   | BM25-derived score floor on the FTS5 match. Range `0..1`.                                                                                       |
+| Variable                  | Default | Description                                                                                                          |
+| ------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
+| `CANDIDATES_PER_SAVE_MAX` | `5`     | Max number of similar memories surfaced per save. `0` turns save-time detection off: no candidates, no pending rows. |
+
+This is the only setting. The similarity thresholds behind it are compile-time constants, not configuration, each calibrated by a committed measurement: see [`docs/embeddings.md`](docs/embeddings.md#engine-constants-not-configuration).
 
 </details>
 
@@ -439,7 +439,7 @@ Four load-bearing invariants:
 - **Append-only**: rows are never deleted; `content` never updated. Lifecycle is `status` flips + `replaces` links. Every consolidation op is reversible. An agent MAY retire a memory at the user's explicit request via `memory.archive` (a reversible, journaled `active → archived` flip, scoped to the connection — no successor link, distinct from a `topic_key`/`memory.judge_batch` supersede); physical purge stays operator-only in `/dashboard/maintenance`.
 - **Project scoping by construction**: every memory is attached to exactly one `project_id`. Consolidation, relations and every write never cross scope. One read may, and only when asked: `memory.search({across_projects: true})` reads the projects the connection's token is authorized to read and names them in `searchedProjects[]` — opt-in, read-only, and a compile error on any write path. See [docs/agents.md](./docs/agents.md#searching-across-projects).
 - **Convergent topics via `topic_key`**: on `memory.save`, the previously-active row in the same `(scope, project_id, topic_key)` is auto-superseded atomically.
-- **Fresh-context judgment**: candidate conflicts surface at save time (`candidates[]`); the agent that produced the conflict judges it. Aged pendings re-surface in `memory.context` until an agent closes them, unless an endpoint has been retired since — those are withheld from the agent queue and left to the sweep. The deterministic sweep (no LLM, no cron — runs on session start) only handles decay + deadline orphaning.
+- **Fresh-context judgment**: candidate conflicts surface at save time (`candidates[]`); the agent that produced the conflict judges it. Aged pendings re-surface in `memory.context` until an agent closes them. Retiring a memory (a `topic_key` revision, a `supersedes` verdict, a merge, an archive or decay) orphans its pending pairs in the same transaction, journaled and restored when the retirement is undone. The deterministic sweep (no LLM, no cron — runs on session start) only handles decay, deadline orphaning and the stale pending drain, which retires pending pairs the current save-time rules would never create.
 
 Memory also exposes a **derived review state** alongside decay: a `needs_review` flag on `memory.search` / `memory.get_batch` rows (and a `needsReview[]` list in `memory.context`) for active memories whose per-type shelf life elapsed without re-affirmation. It is computed at read time — no column, no sweep — and is cleared by re-affirming with `memory.confirm_batch` (not by merely reading). See [docs/relations.md](./docs/relations.md) for the relation taxonomy and the review axis.
 
@@ -540,7 +540,7 @@ It deliberately does **not** contribute a stream to the hybrid RRF fusion: in it
    │  │   embedder: gte-multilingual-base, ONNX q8, loaded at boot       │  │
    │  │   embedding drain worker      → fills memory_vec                 │  │
    │  │   entity backfill worker      → fills entities/memory_entities   │  │
-   │  │   deterministic sweep: decay + deadline orphaning (no LLM/cron)  │  │
+   │  │   deterministic sweep: decay · deadline · stale drain (no LLM)   │  │
    │  └─────────────────────────────────────────────────────────────────┘  │
    └───────────────────────────────────────────────────────────────────────┘
 ```

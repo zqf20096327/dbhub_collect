@@ -30,7 +30,7 @@
 | **下载** | [Gitee 发行版（分卷）](https://gitee.com/super_rgh/jync/releases/latest) · [GitHub Releases（完整 jar）](https://github.com/vfaner/jync/releases/latest) |
 | **文档** | [官网](https://jync.qqmu.com) · [用户操作手册](https://jync.qqmu.com/docs/jync-user-guide.pdf) · [部署与运维手册](https://jync.qqmu.com/docs/jync-ops-guide.pdf) · [产品介绍](https://jync.qqmu.com/docs/jync-overview.pdf) |
 | **演示** | [Bilibili · 14 分钟，从建连接到实时同步](https://www.bilibili.com/video/BV1iHYJ6vEEd) |
-| **更新日志** | [各版本发布说明](docs/release-notes/)（当前 v2.0.0） |
+| **更新日志** | [各版本发布说明](docs/release-notes/) |
 | **源码** | [GitHub](https://github.com/vfaner/jync) · [Gitee](https://gitee.com/super_rgh/jync) · [AtomGit 镜像](https://atomgit.com/vfaner/jync)（代码与发布包同步，国内加速） |
 
 > 下载、问题反馈与 PR 以 Gitee / GitHub 为准；AtomGit 为只读镜像。
@@ -51,15 +51,15 @@
 |---|---|
 | 全量加载 | 主键 keyset 分块 + 单表内并行 + 结果集流式读取 + 逐块检查点；空表 INSERT-first、延迟二级索引；单表 20 万行/秒量级 |
 | 增量同步 | 时间戳 / 行级 SCN / 自增列 / 全表比对自动选策略；一条游标区间查询；水位线安全回退；游标提交后推进 |
-| 日志 CDC | MySQL binlog、Oracle LogMiner、达梦 LogMiner、PostgreSQL 系逻辑解码、SQL Server CDC、崖山 YStream；长驻线程流式回放，秒级延迟 |
+| 日志 CDC | MySQL binlog、Oracle LogMiner、达梦 LogMiner、PostgreSQL 系逻辑解码、SQL Server CDC、崖山 YStream；长驻线程流式回放，秒级延迟；源库 DDL 让目标缺列时流内裁剪并登记待办，任务不停摆；目标表被删时只重建并重灌这张表，位点不动（次数有上限） |
 | Redis 缓存投影 | 实时同步的目标也可以是 Redis：按 CDC 把每一行投影成 `<前缀><表>:<主键>` 的 JSON 或 HASH，基线 + 回放 + 前缀清扫重建；只支持日志 CDC，缓存语义与边界见[已知限制](docs/known-limitations.md) |
 | 结构同步 | 表、索引、视图、存储过程/函数；类型映射、函数转换、标识符引号、分页语法、DDL 覆盖 |
-| ETL | 按客户取数 SQL 复制结果行；7 种分析型引擎；多语句脚本；覆盖 / 追加 / 范围覆盖；断点续跑；同源同目标的表可组成**批次**共享连接与调度 |
+| ETL | 按客户取数 SQL 复制结果行；7 种分析型引擎；多语句脚本；覆盖 / 追加 / 范围覆盖 / 主键更新；断点续跑；同源同目标的表可组成**批次**共享连接与调度 |
 | 专属迁移 | Elasticsearch / OpenSearch → Easysearch、MongoDB → MongoDB、MongoDB → KingbaseES 三种整库复制，连接模型独立于 JDBC；带预检，手动或 cron 运行，可取消并查看运行历史 |
 | 数据加工 | 列清洗（13 种规则，含手机号/身份证/姓名/邮箱掩码与 SHA-256 哈希）、表名映射、只读数据预览、按需行数核对、任务克隆、批量建任务（按表大小分箱） |
-| 系统管理 | 配置包导出/导入（口令加密、可选运行状态、目标密钥重加密）、元数据库连接测试器、强制 HTTPS 页面开关、应用内 TLS 证书上传（PKCS#12 / JKS / PEM） |
+| 系统管理 | 配置包导出/导入（口令加密、可选运行状态、目标密钥重加密）、强制 HTTPS 页面开关、应用内 TLS 证书上传（PKCS#12 / JKS / PEM） |
 | AI 辅助（可选） | 模型起草存储过程/函数的候选 SQL，人工审阅后才落库；AI 永不参与同步 |
-| 告警通知 | Webhook 推送同步失败、轮询卡死、项目未运行、CDC 停摆、数据漂移、连接健康、PG slot 积压；钉钉 / 企业微信 / 飞书 / 通用 JSON；冷却与恢复通知 |
+| 告警通知 | Webhook 推送同步失败、轮询卡死、项目未运行、CDC 停摆、数据漂移、连接健康、PG slot 积压，以及「CDC 目标表已自动修复」；钉钉 / 企业微信 / 飞书 / 通用 JSON；冷却与恢复通知 |
 | 可靠性与可观测 | 幂等 upsert、检查点续传、数据库租约锁、at-least-once；看板、变更 / 审计 / 系统日志、性能曲线、可选 Prometheus 指标端点 |
 | 交付形态 | jar / Docker / Kubernetes；中英双语、昼夜主题；响应式布局；本地账号与三种统一认证 |
 
@@ -151,7 +151,7 @@ sync:
   crypto-salt: ""
 ```
 
-首次访问 `http://<服务器>:8080`，使用 `admin / 123456`（管理员）或 `view / 123456`（访客），**首次登录强制修改密码**（未修改前只能停留在改密页）。生产部署、外部元数据库、systemd、Docker / Kubernetes、反向代理与 HTTPS、升级备份见[部署与运维手册](https://jync.qqmu.com/docs/jync-ops-guide.pdf)、[部署页](https://jync.qqmu.com/deploy.html)与[容器部署说明](docs/deploy-container.md)。HTTPS 有两种方式：前置反向代理终止 TLS（推荐），或直接在「系统管理 → 系统配置」上传 PKCS#12 / JKS 密钥库或 PEM 证书与私钥，由 Jync 自己监听 HTTPS，重启后生效；同一页还可开关强制 HTTPS、导出/导入配置包、测试候选元数据库——细节见[配置文档](docs/configuration.md)。
+首次访问 `http://<服务器>:8080`，使用 `admin / 123456`（管理员）或 `view / 123456`（访客），**首次登录强制修改密码**（未修改前只能停留在改密页）。生产部署、外部元数据库、systemd、Docker / Kubernetes、反向代理与 HTTPS、升级备份见[部署与运维手册](https://jync.qqmu.com/docs/jync-ops-guide.pdf)、[部署页](https://jync.qqmu.com/deploy.html)与[容器部署说明](docs/deploy-container.md)。HTTPS 有两种方式：前置反向代理终止 TLS（推荐），或直接在「系统管理 → 系统配置」上传 PKCS#12 / JKS 密钥库或 PEM 证书与私钥，由 Jync 自己监听 HTTPS，重启后生效；同一页还可开关强制 HTTPS、导出/导入配置包——细节见[配置文档](docs/configuration.md)。
 
 > 🔐 升级前备份 `./data`（连同 `<库名>.key`）、`./logs` 与 `application.yml`。密钥丢失后，已保存的连接密码、AI 密钥与告警地址将无法解密。
 

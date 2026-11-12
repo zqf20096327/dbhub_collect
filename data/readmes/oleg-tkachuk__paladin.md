@@ -39,6 +39,7 @@ flowchart LR
     cp["<b>Paladin</b><br/>IAM · Cedar policy · quotas<br/>object metadata · audit · events"]
 
     pg[("<b>PostgreSQL</b>")]
+    vk[("<b>Valkey</b><br/>rate limits · optional")]
     sinks{{"<b>Event sinks</b><br/>webhooks · brokers"}}
     s3[("<b>S3 backends</b><br/>SeaweedFS · MinIO<br/>Garage · AWS")]
 
@@ -46,6 +47,7 @@ flowchart LR
     agent -- "MCP" --> cp
     app -- "Connect RPC" --> cp
     cp --> pg
+    cp -. "rate limits" .-> vk
     cp -- "events" --> sinks
     cp -- "bucket and object management" --> s3
     app -. "object bytes, presigned" .-> s3
@@ -59,6 +61,7 @@ flowchart LR
     class app,agent,op client
     class cp role
     class pg,s3 store
+    class vk optional
     class sinks external
 ```
 
@@ -75,16 +78,19 @@ Paladin is one Go binary. Each role below runs as its own Deployment
 
 | Role | What it does |
 |------|--------------|
-| `api` | the data plane (object metadata, presigned upload and download URLs) and IAM (sign-in, users, API tokens) |
+| `api` | the data plane: object metadata, presigned upload and download URLs |
+| `iam` | sign-in and tokens, users, the OAuth authorization server; the one role holding the session signing key |
 | `admin` | tenants, buckets, storage backends, quotas, policies, capabilities, audit |
 | `mcp` | the api and admin operations, as tools for AI agents |
 | `worker` | background jobs: bucket provisioning, batch operations, trash purge, lifecycle, migration between backends |
 | `dispatcher` | delivers events, as CloudEvents 1.0, to webhooks and message brokers ([event-delivery-dedup.md](docs/event-delivery-dedup.md)) |
 | `ingest` | turns storage-side notifications into object updates; off by default |
-| `console` | the web UI, with a BFF in front of `api` and `admin`; its own chart and Deployment |
+| `session` | the console's session: holds the session cookie and forwards the browser's calls to the planes with an access token it mints at `iam` |
+| `console` | the web UI, rendered by Next.js; its own chart and Deployment |
 
 It needs PostgreSQL and an S3-compatible store — SeaweedFS, MinIO, Garage or
-AWS S3.
+AWS S3. Valkey is optional: the rate limits count there when
+`middleware.rate_limit.backend` is `valkey`, and in PostgreSQL otherwise.
 
 ## Contents
 
@@ -101,8 +107,8 @@ Two Helm charts, published to GHCR with every release (`release/vX.Y.Z`):
 
 | Chart | Runs |
 |-------|------|
-| `oci://ghcr.io/oleg-tkachuk/charts/paladin-core` | the backend planes, plus the migrate and bootstrap Jobs |
-| `oci://ghcr.io/oleg-tkachuk/charts/paladin-console` | the web console and its BFF |
+| `oci://ghcr.io/oleg-tkachuk/charts/paladin-core` | the backend planes and the console's session role, plus the migrate and bootstrap Jobs |
+| `oci://ghcr.io/oleg-tkachuk/charts/paladin-console` | the web console, and the ingress that routes its `/session/` paths to the session role |
 
 The charts and the images they deploy are signed keyless with Sigstore, and
 each image carries a signed SPDX SBOM per platform;
@@ -173,7 +179,7 @@ planes, and what to set when ArgoCD renders the charts.
 |----------|--------|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | what the pieces are and why the boundaries fall where they do |
 | [backend/README.md](backend/README.md) | roles, ports, packages, wire contracts, database |
-| [frontend/README.md](frontend/README.md) | the console and its BFF |
+| [frontend/README.md](frontend/README.md) | the console |
 | [limes](https://github.com/oleg-tkachuk/limes) | the capability primitive: tokens, delegation, Biscuit, DPoP, metering |
 | [docs/install.md](docs/install.md) | installing on Kubernetes with the Helm charts |
 | [docs/task.md](docs/task.md) | running it with Task — compose, a local cluster, the gates — and the prerequisites of each |
@@ -193,7 +199,7 @@ planes, and what to set when ArgoCD renders the charts.
 | Path | Holds |
 |------|-------|
 | [backend/](backend) | the Go control plane: binary, migrations, policies, chart, compose stack |
-| [frontend/](frontend) | the Next.js console and BFF, its chart and Playwright suite |
+| [frontend/](frontend) | the Next.js console, its chart and Playwright suite |
 | [proto/](proto) | the API contract |
 | [sdk/go/](sdk/go) | the Go SDK |
 | [sdk/python/](sdk/python) | the Python SDK |

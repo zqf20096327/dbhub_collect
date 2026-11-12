@@ -28,9 +28,10 @@ LumenFlow (Chinese: 流光) is a Flutter-based AI chat application for Android, 
 
 ### Tool Calling and MCP
 
-- **Built-in tools**: current time, calculator, text comparison, and text statistics.
+- **Built-in tools**: current time, date math, Chinese lunar calendar conversion, calculator, text comparison, text statistics, and unit conversion.
 - **MCP tools**: connect Streamable HTTP MCP servers, discover their tools, and expose them to the model.
 - **Unified tool loop**: `AgentRunner` alternates model turns and tool executions with a bounded iteration budget.
+- **Attachment-aware tool mode**: text attachments are listed in a compact manifest with request-scoped ids, and `builtin__read_attachment` reads their content on demand with paging. Tool-enabled chats no longer fall back to a text-only provider request when text files are attached.
 - **Parallel tool calls**: multiple function calls in one model turn are executed and returned together.
 - **Protocol-aware adapters**:
   - Chat Completions: DeepSeek, Kimi, MiniMax, Zhipu, SiliconFlow, Xiaomi MiMo, Other
@@ -44,16 +45,19 @@ LumenFlow (Chinese: 流光) is a Flutter-based AI chat application for Android, 
 - **Rolling memory**: conversations that exceed the raw history window are compressed into a story summary, current relationship/emotional state, and a ledger of agreements, facts, and decisions.
 - **Hard memory**: agreements, rules, and decisions keep their original wording; superseded entries are retained but not injected. Rejected proposals and their reasons are remembered separately to avoid re-proposing them.
 - **Automatic maintenance**: memory is updated in the background after a reply. Before sending, the app briefly waits if older messages are about to leave the window.
+- **Active notes**: the conversation model can call `remember_note` to record a new agreement, fact, emotional turn, or rejected proposal immediately; the next maintenance pass merges the note into the ledger instead of waiting for the background window.
+- **On-demand recall**: once older messages fall outside the raw window, the model can call `recall` with short keywords to search old messages and the full memory ledger, including superseded and rejected entries. The tool is only exposed when there is older content to search.
 - **Automatic invalidation**: editing, regenerating, or deleting covered messages invalidates the memory and triggers a rebuild.
-- **Read-only viewer**: chat ⋯ menu → **View Memory** shows the stored summary, emotional state, agreements, superseded entries, and rejected proposals. It does not modify anything.
-- **Travels with the conversation**: JSON, LumenFlow archive, and ZIP exports include memory; import remaps message IDs and restores it.
+- **Read-only viewer**: chat ⋯ menu → **View Memory** shows the stored summary, emotional state, agreements, superseded entries, rejected proposals, and notes waiting to be merged. It does not modify anything.
+- **Roleplay memory page**: conversations using a role card get a dedicated view with the character profile, mood, relationship stage, scene, story time, intimacy change, newly learned memories, and unresolved threads, so the story state stays easy to check.
+- **Travels with the conversation**: JSON, LumenFlow archive, and ZIP exports include memory and pending active notes; import remaps message IDs and restores them.
 
 ### Data and Export
 
 - **SQLite storage** with foreign keys, indexes, transactions, and automatic migration from legacy SharedPreferences.
 - **Conversation management**: history, message search, edit, regenerate, resubmit, delete, and per-conversation settings.
 - **Attachments**: images, video, audio, PDF, and text extraction.
-- **Export formats**: TXT, JSON, PDF, and LumenFlow archive. JSON, LumenFlow, and ZIP exports include rolling memory and can optionally embed the active user role card.
+- **Export formats**: TXT, JSON, PDF, and LumenFlow archive. JSON, LumenFlow, and ZIP exports include rolling memory and pending active notes, and can optionally embed the active user role card.
 - **Conversation import**: LumenFlow archives (including ZIP) and raw conversation JSON; missing user presets can be recreated from the embedded snapshot after confirmation. Imported memory is restored with remapped message IDs.
   - [LumenFlow format specification](./LumenFlowFormatSpecification.md)
 - **PDF export**: CJK-safe PDFs using embedded Noto Sans SC; fonts are subset per document.
@@ -114,14 +118,14 @@ lib/
 │   │   ├── responses_tool_provider.dart
 │   │   ├── claude_tool_provider.dart
 │   │   └── gemini_tool_provider.dart
-│   ├── tools/                        # Built-in time, calculator, and text tools
+│   ├── tools/                        # Built-in time, calculator, text, memory-note, and recall tools
 │   └── transport/
 │       └── sse_decoder.dart          # Incremental SSE parser
 ├── controllers/
 │   ├── chat_screen_controller.dart   # Interface between desktop shell and embedded chat
 │   └── chat_send_controller.dart     # One streaming send lifecycle
 ├── l10n/                             # ARB files and generated localizations
-├── models/                           # Conversation, message, attachment, memory, platform, profile, preset models
+├── models/                           # Conversation, message, attachment, memory, memory-note, platform, profile, preset models
 ├── providers/                        # Per-platform chat/streaming providers
 ├── screens/                          # Chat, conversations, settings, tools, profiles, preset management, memory viewer
 ├── services/
@@ -130,6 +134,7 @@ lib/
 │   ├── conversation_database.dart    # SQLite and migration
 │   ├── conversation_service.dart     # Conversation CRUD, export/import, snapshots
 │   ├── memory_service.dart           # Rolling memory coverage, updates, and injection
+│   ├── memory_recall.dart            # Local search over old messages and memory ledger
 │   ├── memory_policy.dart            # Window/coverage/chunk policy
 │   ├── memory_prompt.dart            # <memory> block and update prompts
 │   ├── memory_update.dart            # Model output parsing and ledger merge
@@ -188,7 +193,7 @@ UI (screens/widgets)
 - **Tool layer**: `ToolChatService` and `AgentRunner` run the model/tool loop. `CompositeToolExecutor` merges built-in tools and enabled MCP tools.
 - **Protocol layer**: each provider family has a dedicated streaming/tool adapter with its own request and event mapping.
 - **Data layer**: SQLite for conversations/messages/attachments/memory; `SettingsService` for configuration and active-platform resolution.
-- **Memory layer**: `MemoryService` validates coverage/fingerprints, rolls old messages into `ConversationMemory`, and appends a `<memory>` block to the end of the system prompt. The ledger lives in SQLite and travels with conversation exports.
+- **Memory layer**: `MemoryService` validates coverage/fingerprints, rolls old messages into `ConversationMemory`, merges active `remember_note` notes, and appends a `<memory>` block to the end of the system prompt. `MemoryRecallService` provides local, on-demand search over older messages and the full ledger. The ledger lives in SQLite and travels with conversation exports.
 - **Preset layer**: `PromptService` loads localized built-in cards and schema-v2 user presets; `PresetRepository` shares one loading state between chat and settings.
 - **Localization layer**: generated `AppLocalizations` from ARB files.
 
@@ -214,9 +219,10 @@ Each platform keeps its own endpoint, credentials, model list, and parameters. T
 
 Open **Settings → Tool Management** to:
 
-- Enable or disable built-in tools (time, calculator, text tools).
+- Enable or disable built-in tools.
 - Add MCP servers with a Streamable HTTP JSON-RPC endpoint and optional custom headers.
 - Review which platforms support tool calling.
+- Memory Tools (`remember_note` and `recall`) are shown at the top as automatic, read-only tools. They have no separate switch and follow the Memory Compression setting.
 
 MCP tools are exposed with a server-specific prefix so tools from different servers do not collide.
 
@@ -226,6 +232,8 @@ Open **Settings → History Conversation**:
 
 - **Enable History** must be on for memory to work.
 - **Memory Compression** is on by default. Long conversations are summarized into story/emotional state, agreements/facts, and rejected proposals.
+- The conversation model can call `remember_note` to record durable agreements, facts, emotional turns, or rejected proposals immediately; the next maintenance pass merges them into the ledger.
+- Once older messages fall outside the raw window, the model can call `recall` with short keywords to search old messages and the full ledger.
 - In a chat, open the ⋯ menu → **View Memory** to inspect the current memory. The view is read-only.
 
 Memory is stored only on the device and is included in conversation JSON/LumenFlow/ZIP exports.
@@ -234,7 +242,7 @@ Memory is stored only on the device and is included in conversation JSON/LumenFl
 
 Role-play presets pair a small metadata record with an optional character-card body.
 
-### Built-in presets
+### [Built-in presets](./README/presets.md)
 
 - `assets/prompt/presets-<locale>.json` contains metadata; `prompt_file` points to XML cards under `assets/prompt/characters/<locale>/`.
 - Locale fallback is `lzh → zh → en`; other locales fall back to `en → zh`. Missing cards are shown as unavailable instead of disappearing silently.
@@ -266,7 +274,7 @@ SQLite database location:
 - **macOS**: inside the App Sandbox container at `~/Library/Containers/me.huanmeng.lumenFlow/Data/.lumenflow/conversations.db`.
 - **iOS**: `Library/Application Support/conversations.db` inside the app data container.
 
-Tables: `conversations`, `messages`, `attachments`, `conversation_memory`, and application metadata/settings.
+Tables: `conversations`, `messages`, `attachments`, `conversation_memory`, `conversation_memory_notes`, and application metadata/settings.
 
 User presets live next to the database in `user_prompts/`:
 

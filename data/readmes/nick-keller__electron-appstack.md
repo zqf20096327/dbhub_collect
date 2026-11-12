@@ -6,6 +6,63 @@ A complete Electron + TypeScript starter (React, tRPC, SQLite, auto update, sign
 
 **Documentation: [electron-appstack.com](https://electron-appstack.com)**
 
+## Screenshots
+
+The app you get after `npm run dev`: a todo list stored in SQLite and a settings page with light and dark themes. The license activation window appears once you turn licensing on.
+
+<p>
+  <img src="docs/content/main-app.png" alt="Electron AppStack main window: todo list stored in a local SQLite database with Drizzle ORM" width="49%" />
+  <img src="docs/content/dark-mode-settings-window.png" alt="Electron AppStack settings window in dark mode with theme, language and versions" width="49%" />
+</p>
+<p>
+  <img src="docs/content/activation-window.png" alt="Electron AppStack license key activation window" width="33%" />
+</p>
+
+## Stack
+
+**Desktop**
+
+- [Electron](https://www.electronjs.org): cross-platform desktop runtime
+- [electron-vite](https://electron-vite.org): build tool and dev server
+- [Node.js](https://nodejs.org): main process runtime
+- [V8 bytecode](https://v8.dev): compiled main process
+
+**Frontend**
+
+- [React](https://react.dev): UI library, version 19
+- [TypeScript](https://www.typescriptlang.org): strict types everywhere
+- [Vite](https://vite.dev): instant hot reload
+- [TanStack Router](https://tanstack.com/router): type-safe file-based routing
+- [TanStack Query](https://tanstack.com/query): data fetching and caching
+- [Tailwind CSS](https://tailwindcss.com): utility-first styling, v4
+- [shadcn/ui](https://ui.shadcn.com): accessible components
+- [Radix UI](https://www.radix-ui.com): headless primitives
+- [Lucide](https://lucide.dev): icon set
+- [i18next](https://www.i18next.com): typed translations
+
+**Backend and data**
+
+- [tRPC](https://trpc.io): end-to-end typed IPC
+- [Zod](https://zod.dev): runtime validation
+- [SQLite](https://sqlite.org): embedded local database
+- [Drizzle ORM](https://orm.drizzle.team): typed queries and migrations
+- [electron-store](https://github.com/sindresorhus/electron-store): typed app config
+
+**Shipping and selling**
+
+- [electron-builder](https://www.electron.build): installers for every platform
+- [electron-updater](https://www.electron.build/auto-update): automatic updates
+- [GitHub Actions](https://github.com/features/actions): build, sign and publish
+- [Changesets](https://github.com/changesets/changesets): versions and changelog
+- [LicenseManager.dev](https://licensemanager.dev): license keys and activation
+- [Stripe](https://stripe.com): payments
+
+**Tooling**
+
+- [Biome](https://biomejs.dev): linting and formatting
+- [Vitest](https://vitest.dev): unit tests
+- [Claude Code](https://claude.com/claude-code): AGENTS.md and skills included
+
 ## Create an app
 
 Copy the template with [degit](https://github.com/Rich-Harris/degit):
@@ -56,6 +113,6 @@ The comparison page (`/compare`) and the ranking page (`/best-electron-boilerpla
 
 ## License
 
-Electron AppStack is free, source-available software under the [Electron AppStack License](LICENSE.md). You can use and modify it to build commercial apps and sell them, but not sell the boilerplate itself or publish it as a competing starter kit.
+Electron AppStack is open source under the [MIT License](LICENSE.md). Contributions are welcome: open an issue or a pull request.
 
-The license is also published at [electron-appstack.com/doc/license](https://electron-appstack.com/doc/license), from `docs/content/license.mdx`: keep it in sync with `LICENSE.md`.
+The license is also published at [electron-appstack.com/doc/license](https://electron-appstack.com/doc/license), from `docs/content/license.mdx`: keep it in sync with `LICENSE.md` and `template/LICENSE.md`.

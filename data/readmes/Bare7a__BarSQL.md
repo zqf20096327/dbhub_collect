@@ -12,7 +12,7 @@ Just a focused, native desktop tool for **PostgreSQL**, **MySQL / MariaDB**, **S
 
 🌐 **[barsql.bare7a.eu](https://barsql.bare7a.eu)** · 🎬 **[Demo video](https://barsql.bare7a.eu/demo.mp4)** · 📖 **[User Guide](guide/README.md)**
 
-https://github.com/user-attachments/assets/ea4b7bd3-82b9-469b-b99c-4619aeb6e83a
+https://github.com/user-attachments/assets/50aee6fa-c4e9-4271-9903-0fbe7c2c7fcc
 
 ---
 
@@ -35,6 +35,16 @@ Grab the latest build for **Windows**, **macOS**, or **Linux** from the [**Relea
 No account required - just download and run.
 
 Every build above updates itself. The installer, the Linux packages and copies in protected folders ask for admin rights first.
+
+### Homebrew
+
+On macOS, [Homebrew](https://brew.sh) installs it too, and the app keeps updating itself:
+
+```bash
+brew install bare7a/tap/barsql
+```
+
+Already have BarSQL in Applications? Add `--adopt` to take over that copy.
 
 ### First launch
 

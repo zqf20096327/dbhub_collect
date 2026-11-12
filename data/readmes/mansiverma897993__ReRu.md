@@ -24,14 +24,14 @@ It reimplements a growing slice of Redis and its persistence formats in safe, de
 
 <table>
   <tr>
-    <td align="center" width="25%"><strong>203</strong><br><sub>Redis command names wired</sub></td>
-    <td align="center" width="25%"><strong>208</strong><br><sub>tests passing</sub></td>
+    <td align="center" width="25%"><strong>204</strong><br><sub>Redis command names wired</sub></td>
+    <td align="center" width="25%"><strong>219</strong><br><sub>tests passing</sub></td>
     <td align="center" width="25%"><strong>1</strong><br><sub>runtime dependency</sub></td>
     <td align="center" width="25%"><strong>10</strong><br><sub>eviction policies</sub></td>
   </tr>
 </table>
 
-<p align="center"><sub>44.2% command-name coverage against Redis 8.10.2 metadata. Name presence, not complete behavior.</sub></p>
+<p align="center"><sub>44.4% command-name coverage against Redis 8.10.2 metadata. Name presence, not complete behavior.</sub></p>
 
 ## Why ReRu
 
@@ -136,8 +136,8 @@ print(client.get("greeting"))
   </tr>
 </table>
 
-**203 of 459 command metadata entries** from Redis 8.10.2 have implementation
-paths: **44.2% command-name coverage**. This counts command names, not complete
+**204 of 459 command metadata entries** from Redis 8.10.2 have implementation
+paths: **44.4% command-name coverage**. This counts command names, not complete
 behavior. Supported options, differences, and tests are listed in the
 [compatibility inventory](docs/COMPATIBILITY.md).
 
@@ -151,6 +151,9 @@ fan out from a single write-out point. Read the full
 path.
 
 ## Server options
+
+Defaults, valid values, valid combinations, and error text for every flag are in
+the [CLI reference](docs/CLI.md).
 
 | Option | Default | Description |
 | --- | --- | --- |
@@ -216,6 +219,40 @@ The image binds to `0.0.0.0` inside the container so the port mapping works.
 Keep that exposure inside a trusted network and set a password for anything
 beyond local development.
 
+### Docker Compose (with persistence)
+
+For a one-command setup with AOF persistence across restarts:
+
+```sh
+docker compose up -d --build
+```
+
+This starts three services:
+
+- `init` — a one-off container that creates `/home/reru/data` on a named
+  volume and sets its ownership to the `reru` user (uid `10001`), since the
+  image runs as non-root.
+- `reru` — the server, built from the local `Dockerfile`, with
+  `--appendonly /home/reru/data/reru.aof` enabled so data survives restarts.
+- `client` — the official `redis:7` image, idle, for testing with
+  `redis-cli` against the `reru` service.
+
+Try it:
+
+```sh
+docker compose exec client redis-cli -h reru SET greeting "Hello from ReRu"
+docker compose exec client redis-cli -h reru GET greeting
+docker compose restart reru
+docker compose exec client redis-cli -h reru GET greeting   # still there
+```
+
+Stop everything:
+
+```sh
+docker compose down       # keeps the data volume
+docker compose down -v    # also deletes the data volume
+```
+
 ## Development
 
 <details>
@@ -229,7 +266,7 @@ beyond local development.
 git clone https://github.com/mansiverma897993/ReRu.git
 cd ReRu
 make setup     # or: cargo fetch
-make test      # 208 tests
+make test      # 219 tests
 make run       # or: cargo run -- --port 6379
 make check     # fmt + clippy + tests
 ```
@@ -267,30 +304,14 @@ together.
 ## Contributing
 
 Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the
-[roadmap](docs/ROADMAP.md). Good first issues are labeled
+[roadmap](docs/ROADMAP.md). See who has helped in
+[CONTRIBUTORS.md](CONTRIBUTORS.md). Good first issues are labeled
 [`good first issue`](https://github.com/mansiverma897993/ReRu/labels/good%20first%20issue).
 
 - Read the [Code of Conduct](CODE_OF_CONDUCT.md).
 - Report vulnerabilities privately per [SECURITY.md](SECURITY.md).
-- Claiming a command? Add it to the [compatibility inventory](docs/COMPATIBILITY.md)
-  and cover it with an integration test in `tests/`.
-
-<table>
-  <tr>
-    <td align="center" width="33%" valign="top">
-      <strong>🐛 Found a bug?</strong><br>
-      <sub><a href="https://github.com/mansiverma897993/ReRu/issues/new?template=bug_report.yml">Open a bug report</a></sub>
-    </td>
-    <td align="center" width="33%" valign="top">
-      <strong>💡 Have an idea?</strong><br>
-      <sub><a href="https://github.com/mansiverma897993/ReRu/issues/new?template=feature_request.yml">Request a feature</a></sub>
-    </td>
-    <td align="center" width="33%" valign="top">
-      <strong>🔒 Found a vulnerability?</strong><br>
-      <sub><a href="https://github.com/mansiverma897993/ReRu/security/advisories/new">Report it privately</a></sub>
-    </td>
-  </tr>
-</table>
+- Found a bug? [Open a bug report](https://github.com/mansiverma897993/ReRu/issues/new?template=bug_report.yml).
+- Have an idea? [Request a feature](https://github.com/mansiverma897993/ReRu/issues/new?template=feature_request.yml).
 
 ## Project status
 

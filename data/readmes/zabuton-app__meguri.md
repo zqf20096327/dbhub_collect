@@ -380,9 +380,25 @@ ProRes clips play in Meguri through a local H.264 preview at up to
 1920 × 1080. The original clip is still used when you drag it into an editor
 or open it externally.
 
-When the player repackages a container such as MKV, it converts Dolby Digital
-(AC-3) or Dolby Digital Plus (E-AC-3) audio to AAC for playback. The preview
-keeps the original picture and the surround channel count.
+The built-in player converts Dolby Digital (AC-3) or Dolby Digital Plus
+(E-AC-3) audio to AAC when needed for playback. This includes MP4, M4V, and MOV
+clips with a default Dolby audio track, as well as repackaged containers such
+as MKV. The Dolby conversion copies the original picture stream and preserves
+the surround channel count. The original file stays untouched.
+
+For ProRes, MKV, AVI, WMV, FLV, or TS clips with multiple audio tracks, use
+**Audio track** beside the volume control in the full player. **Default**
+uses the usual playback selection when you open a clip. Switching tracks
+keeps the playhead and play or pause state.
+
+### Embedded subtitles
+
+Use **Subtitle track** in the clip player or fullscreen to choose an embedded
+text track or turn captions off. Meguri remembers the choice per clip. When the
+audio language is known, **Match audio language** can choose the corresponding
+subtitle. Meguri loads text near the playhead as you watch or seek.
+
+Supported tracks include SRT, ASS/SSA as plain text, WebVTT, and MP4 timed text.
 
 ## Custom CSS
 
@@ -521,7 +537,8 @@ Meguri is **privacy-first**: everything stays on your machine.
 ```text
 Meguri/
 ├─ electron/                # main process (Node/TypeScript)
-│  ├─ main.ts               # startup, windows, tray
+│  ├─ main.ts               # entry point: calls startApp() with Meguri's identity
+│  ├─ app.ts                # startup, windows, tray
 │  ├─ scanManager.ts        # scan orchestration (start / abort, renderer events)
 │  ├─ ipc/                  # IPC handlers, one module per domain
 │  ├─ preload.ts            # contextBridge (window.api)
@@ -537,6 +554,7 @@ Meguri/
 │  ├─ ipc/                  # typed client for window.api
 │  ├─ components/  routes/  themes/  hooks/
 ├─ electron.vite.config.ts  # unified build of main/preload/renderer
+├─ electron.vite.shared.ts  # the build settings it uses
 └─ index.html
 ```
 
@@ -595,7 +613,8 @@ A few conventions to follow:
   (e.g. `feat/#9-hover-preview`), branched from `main`.
 - **Keep all locales in sync**: when adding or changing UI strings, update every
   locale in [src/i18n/locales/](src/i18n/locales/) (ja / en / es / fr / ko /
-  zh-CN). `ja.ts` is the source of truth for translation keys.
+  zh-CN). `ja.ts` is the source of truth for translation keys. Write `{app}`
+  for the app's name instead of "Meguri"; it is filled in at run time.
 - **Read the developer docs first**: [docs/README.md](docs/README.md) is the
   index of the architecture reference — worth a look before touching scanning,
   the database, IPC, or the media server.

@@ -31,7 +31,7 @@ You publish typed events. Good Webhooks stores them in your PostgreSQL database,
   </picture>
 </p>
 
-> **Stable API.** From `0.1.0` the public API and upgrade path follow the [stability policy](https://good-webhooks.dev/docs/operations/compatibility#stability-policy). Throughput beyond the [measured profile](https://good-webhooks.dev/docs/operations/performance) is not yet verified. `1.0.0-rc.1` is available on the `rc` tag: `npm install good-webhooks@rc`.
+> **Stable API.** From `1.0.0` the public API and upgrade path follow the 1.x [stability policy](https://good-webhooks.dev/docs/operations/compatibility#stability-policy). Throughput beyond the [measured profile](https://good-webhooks.dev/docs/operations/performance) is not yet verified.
 
 ## Install
 
@@ -75,7 +75,7 @@ Each example has its own npm lockfile, PostgreSQL setup, browser UI, receiver, a
 | [`examples`](examples)                             | Complete applications that install the published npm package |
 | [`docs`](docs)                                     | Engineering plans and architecture decisions                 |
 
-Use Node.js 24 or 26 and the repository's pinned pnpm version, 12.10.1. If Corepack is available, enable its shims with `corepack enable`; otherwise install that pnpm version using the [pnpm installation instructions](https://pnpm.io/installation).
+Use Node.js 24 or 26 and the repository's pinned pnpm version, 12.18.0. If Corepack is available, enable its shims with `corepack enable`; otherwise install that pnpm version using the [pnpm installation instructions](https://pnpm.io/installation).
 
 ```sh
 pnpm install --frozen-lockfile
@@ -124,7 +124,7 @@ pnpm --dir packages/good-webhooks pack
 In your application, install the resulting archive using npm or your preferred package manager:
 
 ```sh
-npm install /absolute/path/to/packages/good-webhooks/good-webhooks-1.0.0-rc.1.tgz
+npm install /absolute/path/to/packages/good-webhooks/good-webhooks-1.0.0.tgz
 ```
 
 `pnpm test:package` verifies the archive with fresh npm consumers, both with and without Better Auth, including the published declarations and SQL exports. Registry publication is a separate release step.

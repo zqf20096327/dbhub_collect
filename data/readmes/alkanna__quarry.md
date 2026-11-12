@@ -2,7 +2,7 @@
 
 <h1 align="center">Quarry</h1>
 
-<p align="center">A fast, stable and full-featured client for MongoDB, MySQL, MariaDB and PostgreSQL, written in Rust with egui.<br>Inspired by <a href="https://mingo.io">Mingo</a>.</p>
+<p align="center">A native desktop client for MongoDB, MySQL, MariaDB and PostgreSQL.</p>
 
 <p align="center">
   <a href="https://github.com/alkanna/quarry/releases/latest"><img src="https://img.shields.io/github/v/release/alkanna/quarry" alt="Latest release"></a>
@@ -13,25 +13,45 @@
 
 ![Documents view](docs/documents.png)
 
+## Why Quarry
+
+**It is native.** Quarry is one Rust binary, a download of about 25 MB, drawn on the GPU with [egui](https://github.com/emilk/egui). There is no Electron and no web view. Database work never runs on the UI thread, so the window stays responsive while a slow query is out, and result pages are held as raw BSON, which takes about a tenth of the memory of decoded documents.
+
+Measured on an M1 Pro with `bench.py`, on a full page of 1,000 rows:
+
+| | MongoDB documents | SQL rows |
+|---|---|---|
+| Memory footprint | 46 MB | 50 MB |
+| CPU when idle | 0.1 % | 0 % |
+| Frame time, median | 0.9 ms | 2.1 ms |
+| Frame time, 95th percentile | 3.0 ms | 4.1 ms |
+
+With nothing open, the footprint is 33 MB.
+
+**It is hard to break production with.** Every connection opens read-only until you unlock it. Edits are staged as drafts, previewed, saved together and can be undone, and a save never overwrites a change someone else made in the meantime.
+
+**It is one tool for four engines.** MongoDB, MySQL (5.7 to 9), MariaDB (10.6+) and PostgreSQL (13+) open side by side in tabs, with the same shortcuts, the same editing model and the same admin windows. One shell script can read from several of them at once.
+
 ## Features
 
-- **MongoDB, MySQL, MariaDB and PostgreSQL** side by side (MySQL 5.7, 8 and 9, MariaDB 10.6+, PostgreSQL 13+), in tabs with a table or JSON view. PostgreSQL databases show their schemas in a picker in the sidebar.
-- **Safe editing.** Every connection opens read-only until you unlock it. Edits are staged, saved together and can be undone, and never overwrite a change someone else made meanwhile. Bulk updates, structure changes and drops show what they will run first. On PostgreSQL every statement of a locked connection runs in a read-only transaction that is rolled back; a function on the server that writes by itself still runs with your role's rights, so use a read-only role where that matters.
-- **Queries.** Paste `db.orders.find(...)` or `aggregate([...])`, use date shortcuts like `#today`, build a pipeline with a preview after each stage, read explain plans and copy as driver code. For SQL, filter with typed rules or plain SQL, or run several statements at once with autocomplete, Format, Explain and Stop. Saved queries, history and a query log (Cmd+L).
-- **Scripting.** A JavaScript shell on [Bun](https://bun.sh) with npm packages and autocomplete: the MongoDB driver, `` sql`...` `` templates, and other connections attached to the same script.
-- **Structure.** MongoDB indexes with usage and suggestions, field types, validators, references and live change streams. SQL columns, indexes, foreign keys and triggers through a previewed ALTER. On PostgreSQL each change runs in one transaction that checks nobody changed the table since, and undo puts back exactly what it can or says what it cannot.
-- **Import and export.** JSON, CSV, TSV and SQL dumps, on every engine, compare and sync two collections, dump and restore with the MongoDB Database Tools (installed for you).
-- **Server.** Status, variables, running operations with Kill, users, roles and privileges (MongoDB, MySQL and MariaDB).
-- **Connections.** SSH tunnels, SOCKS5 proxies and TLS. Paste a `postgresql://` string to fill the form. Passwords stay in the system keychain. Tag connections as Production, Staging or anything you like.
-- **Keyboard and reading.** Cmd+K searches every connection and runs commands, Cmd+[ and Cmd+] move through visited tabs, Cmd+/ lists every shortcut (Ctrl on Linux and Windows). Reading options: larger text, the OpenDyslexic font, a soft background, a line that follows the pointer across wide tables, and grouped digits.
+- Query MongoDB with `find` and `aggregate`, with a preview after each pipeline stage, explain plans and copy as code.
+- Query SQL with typed filter rules or a full editor: several statements at once, autocomplete, Format, Explain and Stop.
+- Keep saved queries, history and a query log.
+- Script in JavaScript on [Bun](https://bun.sh), across Mongo and SQL connections in the same script.
+- Edit structure: indexes, columns, foreign keys, triggers and validators.
+- Administer servers: status, sessions with Kill or Cancel, users, roles and privileges on every engine.
+- Import and export JSON, CSV, TSV and SQL dumps, compare and sync collections, and run MongoDB dump and restore.
+- Connect through SSH tunnels, SOCKS5 and TLS, with client certificates on PostgreSQL. Passwords stay in the system keychain.
+- Pick a Google Cloud SQL instance from your gcloud account, and Quarry runs the Cloud SQL Auth Proxy for you.
+- Work from the keyboard: Cmd+K searches every connection and runs commands, Cmd+/ lists every shortcut.
+- Read comfortably: 17 themes, larger text, OpenDyslexic, a soft background and a reading line for wide tables.
+
+Read-only mode blocks what Quarry sends. A server function that writes by itself still runs with your role's rights, so use a read-only role where that matters.
 
 | | |
 |---|---|
-| ![A MySQL table filtered with rules](docs/sql-content.png) | ![SQL Query with several statements](docs/sql-query.png) |
-| ![Structure with staged column and index changes](docs/sql-structure.png) | ![A SQL shell reading a MongoDB connection in the same script](docs/shell-attach.png) |
-| ![Editing a document](docs/edit.png) | ![Aggregation pipeline with a preview after each stage](docs/aggregate.png) |
-| ![Schema](docs/schema.png) | ![Compare and sync](docs/compare.png) |
-| ![Server processes](docs/sql-server.png) | ![Connection with a tag and an SSH tunnel](docs/connection.png) |
+| ![SQL Query with several statements](docs/sql-query.png) | ![Aggregation pipeline with a preview after each stage](docs/aggregate.png) |
+| ![A shell script reading a SQL and a MongoDB connection](docs/shell-attach.png) | ![PostgreSQL roles and privileges](docs/pg-roles.png) |
 
 ## Install
 
@@ -55,32 +75,24 @@ tar -xzf quarry-linux-x86_64.tar.gz -C ~/.local/bin
 quarry
 ```
 
-Quarry needs GTK 3, xkbcommon, Wayland or X11, and a keyring such as GNOME Keyring or KWallet to store passwords. Most desktops have them; on Debian and Ubuntu, `sudo apt install libgtk-3-0 libxkbcommon0` covers what is usually missing.
-
-<details>
-<summary>NixOS</summary>
-
-Add `wayland`, `libxkbcommon`, `libGL`, `vulkan-loader` and `gtk3` to `programs.nix-ld.libraries` (or set `LD_LIBRARY_PATH`).
-</details>
+Quarry needs GTK 3, xkbcommon, Wayland or X11, and a keyring such as GNOME Keyring or KWallet. Most desktops have them. On Debian and Ubuntu, `sudo apt install libgtk-3-0 libxkbcommon0` covers what is usually missing. On NixOS, add `wayland`, `libxkbcommon`, `libGL`, `vulkan-loader` and `gtk3` to `programs.nix-ld.libraries`.
 
 **Windows.** Unzip and run `quarry.exe`. The binary is not signed, so SmartScreen may warn the first time: choose **More info**, then **Run anyway**.
 
-Quarry keeps itself up to date: it installs new releases in the background and restarts once you have been idle for a minute with nothing unsaved. You can turn this off in Settings.
+**Updates.** Quarry installs new releases in the background and restarts once you have been idle for a minute with nothing unsaved. A release is installed only if it matches its published checksum. You can turn updates off in Settings.
 
-## Build
+## Build from source
 
-Needs Rust (stable). The Shell needs [Bun](https://bun.sh) and MongoDB dump and restore need the [Database Tools](https://www.mongodb.com/docs/database-tools/). Quarry finds both, or you can set their paths in Settings.
+You need stable Rust. The Shell also needs [Bun](https://bun.sh), and MongoDB dump and restore need the [Database Tools](https://www.mongodb.com/docs/database-tools/). Quarry finds both, or you can set their paths in Settings.
 
 ```sh
-cargo run --release                              # run it
-cargo test                                       # run the tests
-./bundle.sh                                      # package for this machine into dist/ (--help lists other targets)
-./target/release/quarry --screenshot out.png     # draw the offline demo to a picture and exit
+cargo run --release    # run it
+cargo test             # run the tests
+./bundle.sh            # package for this machine into dist/
+make demo              # open the offline demo, no server needed
 ```
 
-`make` lists shortcuts: `make demo` opens the offline demo, and `make test-live` starts throwaway MongoDB, MySQL, MariaDB, PostgreSQL and PgBouncer servers in Docker and runs every test against them, including the headless UI tests.
-
-On Linux and Windows, `bundle.sh` makes a release archive. To run your own build, take the binary from `target/release/`.
+The suite has about 1,200 tests. `make test-live` starts throwaway MongoDB, MySQL, MariaDB, PostgreSQL and PgBouncer servers in Docker and runs all of them, including headless UI tests that click through the real app and check the server afterwards.
 
 <details>
 <summary>Stop the Keychain prompts on macOS</summary>
@@ -92,10 +104,10 @@ Each build gets a new ad-hoc signature, so macOS asks for your password again fo
 3. Run `cargo run` and click **Always Allow** at each prompt. Later builds won't ask again.
 </details>
 
-## Releasing
+## Contributing
 
-Commits to `master` follow [Conventional Commits](https://www.conventionalcommits.org). [release-please](https://github.com/googleapis/release-please) keeps a release PR open; merging it tags the version and the release workflow attaches the builds. GitHub Actions needs permission to create pull requests (Settings > Actions > General).
+Issues and pull requests are welcome. Commits to `master` follow [Conventional Commits](https://www.conventionalcommits.org), and [release-please](https://github.com/googleapis/release-please) cuts releases from them. [CLAUDE.md](CLAUDE.md) describes the architecture and the UI conventions.
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE). Quarry was inspired by [Mingo](https://mingo.io).
