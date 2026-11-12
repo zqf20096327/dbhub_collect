@@ -628,15 +628,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T04:22:06Z",
+  "collected_at": "2026-11-12T02:06:47Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-10",
-  "stars": 50252,
+  "pushed_at": "2026-11-11",
+  "stars": 50286,
   "tree": {
-   "sha": "73035f3fd4fedc68bb7cdf1ae2207057ba918915",
-   "etag": "W/\"397f53bedc492a6d5ae34c57bfef5aa5e071d0447ba495a05d7722fc93f479dd\"",
+   "sha": "25358db26c59c1cea0d8dade1370ac122813f0ae",
+   "etag": "W/\"119617ff6edb1b6cadc9bf486f60c6932dc8bb6d4712a558b5da222864453cd4\"",
    "truncated": false,
-   "path_count": 23430,
+   "path_count": 23609,
    "matched": [
     "package.json",
     "release/package.json",
@@ -703,9 +703,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "16a3581d22945ee7141e5f5701cbc0719f91aa50",
+    "blob_sha": "aba2db666c6011606738eb92e1c0d47901f8530b",
     "ecosystem": "npm",
-    "bytes": 27137,
+    "bytes": 27213,
     "names": [
      "@codemirror/autocomplete",
      "@codemirror/commands",
@@ -847,7 +847,6 @@
      "@types/geojson",
      "@types/glob",
      "@types/hast",
-     "@types/icepick",
      "@types/iframe-resizer",
      "@types/inflection",
      "@types/jest",
@@ -868,7 +867,8 @@
      "@types/react-grid-layout",
      "@types/react-is",
      "@types/react-resizable",
-     "@types/react-transition-group"
+     "@types/react-transition-group",
+     "@types/react-virtualized"
     ]
    },
    {
@@ -1141,8 +1141,8 @@
    {
     "path": ".github/workflows/ai-benchmark.yml",
     "kind": "ci",
-    "blob_sha": "83d9f3fd197986e336e157dc30175c59ccf479e3",
-    "bytes": 11302,
+    "blob_sha": "2df6f773904dd6c019d0da68bc22133034cd817d",
+    "bytes": 11615,
     "images": [
      "needs:"
     ]
@@ -1201,8 +1201,8 @@
    {
     "path": ".github/workflows/build-private-ee-docker-image.yml",
     "kind": "ci",
-    "blob_sha": "6c598689201e5b15468297f5bacaaef33c46ba90",
-    "bytes": 6039
+    "blob_sha": "a48112830800c92cd8be83ca75a269f3c08553df",
+    "bytes": 6188
    },
    {
     "path": ".github/workflows/build-scripts.yml",
@@ -1341,8 +1341,8 @@
    {
     "path": ".github/workflows/drivers.yml",
     "kind": "ci",
-    "blob_sha": "813a6679fd335b79992d87fd99eb70b5222b1853",
-    "bytes": 60825,
+    "blob_sha": "f36adba5b9ea4d0224a07cde75ecfb72190f3cef",
+    "bytes": 61134,
     "images": [
      "metabase/druid:29.0.1-json-no-ingestion",
      "metabase/mariadb:10.6",
@@ -1450,11 +1450,11 @@
     "src/metabase/cmd/README_BEFORE_ADDING_FILES.txt"
    ],
    "docs_matrix": [
+    "docs/cloud/connecting-to-your-database.md",
     "docs/developers-guide/community-drivers.md",
     "docs/developers-guide/driver-changelog.md",
     "docs/developers-guide/drivers/driver-tests.md",
-    "docs/installation-and-operation/configuring-application-database.md",
-    "docs/installation-and-operation/creating-RDS-database-on-AWS.md"
+    "docs/installation-and-operation/configuring-application-database.md"
    ],
    "paths": [
     "modules/drivers/clickhouse/LICENSE.txt",
@@ -1481,6 +1481,7 @@
     "src/metabase/driver/postgres/actions.clj",
     "src/metabase/driver/postgres/ddl.clj",
     "test/metabase/driver/postgres/index_test.clj",
+    "test/metabase/driver/postgres/workspace_test.clj",
     "modules/drivers/clickhouse/.docker/clickhouse/users.xml",
     "modules/drivers/clickhouse/.docker/nginx/local.conf",
     "modules/drivers/sqlserver/resources/timezones/windowsZones.xml",
@@ -1635,6 +1636,7 @@
     "enterprise/frontend/src/metabase-enterprise/sdk-iframe-embedding-plugins.ts",
     "enterprise/frontend/src/metabase-enterprise/sdk-iframe-embedding-script-plugins.ts",
     "enterprise/frontend/src/metabase-enterprise/sdk-plugins.ts",
+    "enterprise/frontend/src/metabase-enterprise/sdk-plugins.unit.spec.ts",
     "frontend/build/shared/esbuild/side-effect-free-modules-plugin.js",
     "frontend/build/shared/rspack/copy-js-from-tmp-directory-plugin.js",
     "frontend/lint/eslint-plugin-metabase/rules/enforce-module-public-api.js",
@@ -1654,9 +1656,7 @@
     "frontend/lint/eslint-plugin-metabase/rules/no-unjustified-type-casts.js",
     "frontend/lint/eslint-plugin-metabase/rules/no-unordered-test-helpers.js",
     "frontend/lint/eslint-plugin-metabase/rules/no-unsafe-element-filtering.js",
-    "frontend/lint/eslint-plugin-metabase/rules/no-unscoped-text-selectors.js",
-    "frontend/lint/eslint-plugin-metabase/rules/valid-theme-tokens.js",
-    "frontend/lint/oxlint/plugins/boundaries.mjs"
+    "frontend/lint/eslint-plugin-metabase/rules/no-unscoped-text-selectors.js"
    ],
    "matrix_urls": [
     "https://www.metabase.com/docs/latest/cloud/cloud-vs-self-hosting",
@@ -2165,13 +2165,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:01:24Z",
+  "collected_at": "2026-11-12T02:58:31Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-10",
   "stars": 56,
   "tree": {
    "sha": "ede5fb36c22063ba99091e3f9c501b75661391ff",
-   "etag": "W/\"bdef86f6975aa9932ecf01a9649b57f0b9adfaae80e1e1f12abe6a2ecf8a6da6\"",
+   "etag": "W/\"fc62371278d6395058e26d56d6d0a958fdf2c0b01742683ef615467f2a66fa9f\"",
    "truncated": false,
    "path_count": 4717,
    "matched": [
@@ -4199,15 +4199,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:04:21Z",
+  "collected_at": "2026-11-12T03:02:21Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-10",
   "stars": 43,
   "tree": {
-   "sha": "2f56114123a2a7913c3e86e87c10847e626dbc18",
-   "etag": "W/\"7ee6890d0a7f73bbb5c64ba343feed20b52ad3cc76683a44e8a0c2152a31ca20\"",
+   "sha": "e0047eb9f2131cc85cb4bb64b8192be73ce809bb",
+   "etag": "W/\"3ee8fb88d515991c43c20f2022c33fa8ef0234ecc3571b3e32869a70e63f9e08\"",
    "truncated": false,
-   "path_count": 4488,
+   "path_count": 4489,
    "matched": [
     "Examples/EFDebugTest/EFDebugTest.csproj",
     "Examples/SharpCoreDB.EFCoreCrudDemo/SharpCoreDB.EFCoreCrudDemo.csproj",
@@ -7519,13 +7519,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T04:35:17Z",
+  "collected_at": "2026-11-12T02:24:42Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-09",
-  "stars": 1726,
+  "pushed_at": "2026-11-11",
+  "stars": 1727,
   "tree": {
-   "sha": "af53668f93f1d1e38b5ae4d3c0e48a5d45e8f937",
-   "etag": "W/\"ad2da42768e3cf299a94287547a1e03f1482083ba0e53cc947d90796b5a9922f\"",
+   "sha": "b0b3348fcf786b0f7aa00c8de6e8e52849393985",
+   "etag": "W/\"d56168fb9b7ec61fc4c00fbf7c3b0390637b75603c5fef226bb1f1a3cf8646b6\"",
    "truncated": false,
    "path_count": 596,
    "matched": [
@@ -7547,7 +7547,7 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "3e4a618fb6f80141d569063abf0f9f8a8e706289",
+    "blob_sha": "e336c0fe9ca1b2699abfd0396791a993684f6ce7",
     "ecosystem": "go",
     "bytes": 5340,
     "names": [
@@ -7684,37 +7684,37 @@
    {
     "path": ".github/workflows/build_release.yml",
     "kind": "ci",
-    "blob_sha": "cad1c80a9b0a3543b0462df9d507729cbe70d0e0",
-    "bytes": 7901
+    "blob_sha": "63e4248704f0bc45371e7f35c4ca0497a2f480f5",
+    "bytes": 7884
    },
    {
     "path": ".github/workflows/codeql-analysis.yml",
     "kind": "ci",
-    "blob_sha": "4615d01362c1cca4cb93084a4435527d8822c3eb",
+    "blob_sha": "90e5940f9cb7b93c09f1ce488074268a95b31e24",
     "bytes": 2549
    },
    {
     "path": ".github/workflows/fuzz.yml",
     "kind": "ci",
-    "blob_sha": "7fb14a3dad9ab8d5bcd5433d6234dfdcc6239d69",
+    "blob_sha": "20c44b2a5690170a320fc451399bf96c739e32a7",
     "bytes": 1472
    },
    {
     "path": ".github/workflows/go-version-sync.yml",
     "kind": "ci",
-    "blob_sha": "85b613a4c1660c558e2bf78d52e3aa63cd294387",
+    "blob_sha": "150b7a521d1ffd41f1356233794ab3c4f9f3317b",
     "bytes": 4856
    },
    {
     "path": ".github/workflows/go.yml",
     "kind": "ci",
-    "blob_sha": "cdd528a1fe8a90eb27d299e7178f7d15efbde0d4",
+    "blob_sha": "e0228152ce9378b5c5bb3706aeee8901fb63a7d5",
     "bytes": 1137
    },
    {
     "path": ".github/workflows/integration.yml",
     "kind": "ci",
-    "blob_sha": "55dd68609bf05a9a1732edb4441faa7fd893a790",
+    "blob_sha": "0578dc2c61f78a158beebc46ee440c0a2f86d92b",
     "bytes": 1816,
     "images": [
      "clickhouse/clickhouse-server:24.9.1"
@@ -7723,8 +7723,8 @@
    {
     "path": ".github/workflows/k6_test.yml",
     "kind": "ci",
-    "blob_sha": "d7c858320820e016e0e2cbb33ff390dee0c96054",
-    "bytes": 5894,
+    "blob_sha": "04b728a4f85732d59dbc10f376b7a4657e655534",
+    "bytes": 5890,
     "images": [
      "${{",
      "ghcr.io/metrico/qryn:${{"
@@ -7733,13 +7733,13 @@
    {
     "path": ".github/workflows/node-clickhouse-cluster.js.yml",
     "kind": "ci",
-    "blob_sha": "a5e1275a744dc78a91f95f5bb1fdbc2b11df25d6",
+    "blob_sha": "97fa3e5811a1d5ccc68cb0d81f460eaa3e44f1c4",
     "bytes": 845
    },
    {
     "path": ".github/workflows/resync.yml",
     "kind": "ci",
-    "blob_sha": "d7e5a1598b9f191ae2f44a91038e744f1c1658fb",
+    "blob_sha": "07127b5e052f823bca31bc474e585d7dff3f7247",
     "bytes": 1071
    }
   ],
@@ -8839,13 +8839,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T04:54:33Z",
+  "collected_at": "2026-11-12T02:50:00Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-09",
-  "stars": 113,
+  "pushed_at": "2026-11-11",
+  "stars": 114,
   "tree": {
    "sha": "e9a4fd89e5811ae4b5da19b2f204063d80c893d4",
-   "etag": "W/\"c85ccdd41ff4917839051c74aab685b993fe91ae95781a90fc9e2cc6da1fc27f\"",
+   "etag": "W/\"2fbe51bd73a01476b5a6e5c215cf92efaf39d67f2c1bad354ac820925261f7c9\"",
    "truncated": false,
    "path_count": 1669,
    "matched": [
@@ -9507,13 +9507,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:00:04Z",
+  "collected_at": "2026-11-12T02:56:43Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-11",
   "stars": 64,
   "tree": {
    "sha": "6ff1253f3c45f30e982eafffc3a9a0ac457f1705",
-   "etag": "W/\"134f1a3bd453d7df0ccbffaf8466699e93a26d7e2cb3e3ac8ab1bd1caac9d331\"",
+   "etag": "W/\"ef5aa5cff826bf05396916f2071f57892a12ec801f5af2a9899af5bbf215af44\"",
    "truncated": false,
    "path_count": 834,
    "matched": [
@@ -9807,15 +9807,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:49:26Z",
+  "collected_at": "2026-11-12T03:02:28Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
-  "stars": 42,
+  "pushed_at": "2026-11-11",
+  "stars": 43,
   "tree": {
-   "sha": "7fccad73c8758468aa6789d790c8814351726d89",
-   "etag": "W/\"4663d831eebc84ed2890f902128aa80204ce2b24c55e8577d359e931cf1bc650\"",
+   "sha": "f2f25e775ad9faf7f298a925adb6ad23bcdca9fc",
+   "etag": "W/\"57fa421f3176cfe5d38b21962c39bc2fd9361d316c7f4308669bb40cd18e3557\"",
    "truncated": false,
-   "path_count": 688,
+   "path_count": 735,
    "matched": [
     "KillerNotes.csproj",
     "KillerNotes.Cli/KillerNotes.Cli.csproj",
@@ -9830,7 +9830,7 @@
    {
     "path": "KillerNotes.csproj",
     "kind": "dep",
-    "blob_sha": "d2b39717bb8fc4585ee5c1317d6c6561af8f22df",
+    "blob_sha": "423b210d83698ed64c3df7ee95e8af88154bb993",
     "ecosystem": "csproj",
     "bytes": 9703,
     "names": [
@@ -9855,7 +9855,7 @@
    {
     "path": "KillerNotes.Tests/KillerNotes.Tests.csproj",
     "kind": "dep",
-    "blob_sha": "49a581353174ba6422c4f985e031caa0b84130d1",
+    "blob_sha": "8996c43469df44ebe3645da3cc1c33f405eed2a6",
     "ecosystem": "csproj",
     "bytes": 831,
     "names": [
@@ -11463,15 +11463,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:11:15Z",
+  "collected_at": "2026-11-12T03:11:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-11",
   "stars": 26,
   "tree": {
-   "sha": "8231190243f5faa0c2cb7ead9808b871d0ab1219",
-   "etag": "W/\"4faec7ab0ec60f1981e5257b9e4198534dd4e6d9c948661452ee2b04970f5d81\"",
+   "sha": "0714d5c08d6fd03f94ebc67e2ef1dea2e6d6ad83",
+   "etag": "W/\"dcb63ccc184ba64dbd0b541cf79087295e1f42b1a3a8ec1923eebc77addf1796\"",
    "truncated": false,
-   "path_count": 1152,
+   "path_count": 1204,
    "matched": [
     "go.mod",
     "gocrm-ui/package.json",
@@ -11667,12 +11667,12 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "6c58e0db16a186cbded2ea7229e4623d675e4505",
-    "bytes": 13974,
+    "blob_sha": "5590bef631ba68803625a768bfe6062cca958f16",
+    "bytes": 15678,
     "images": [
      "${{",
-     "mysql:8.0",
-     "mariadb:10.11"
+     "mariadb:10.11",
+     "mysql:8.0"
     ]
    },
    {
@@ -13002,15 +13002,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:17:47Z",
+  "collected_at": "2026-11-12T03:19:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-10",
+  "pushed_at": "2026-11-11",
   "stars": 16,
   "tree": {
-   "sha": "6391aae405ca1b97353b0118c1706ffae1718898",
-   "etag": "W/\"b4e4e91c783a258d03229fd65429f837330e5ea75f86506bfbc065011a7b5076\"",
+   "sha": "c334455d35ac3b6dd5df13b5a17a7c4111b57bfc",
+   "etag": "W/\"da4e4e51ada0ad69ae729608d62fe6a3faf086a1c7e9195127a1c525b265863c\"",
    "truncated": false,
-   "path_count": 173,
+   "path_count": 174,
    "matched": [
     "package.json",
     "Dockerfile",
@@ -13022,7 +13022,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "1986dc396c0a3bef436723cc2c820a095a7fe511",
+    "blob_sha": "f112d44606edc7fe45bbe98b02e3b9f3254600bd",
     "ecosystem": "npm",
     "bytes": 3553,
     "names": [
@@ -13057,8 +13057,8 @@
    {
     "path": ".github/workflows/publish.yml",
     "kind": "ci",
-    "blob_sha": "4c73ad6455825f20b29cb7eef13f070a2cfd0e49",
-    "bytes": 13716
+    "blob_sha": "8fd7fb08e1be171548b168a04db0b6b9312414e3",
+    "bytes": 14368
    }
   ],
   "clues": {
@@ -15136,15 +15136,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:23:23Z",
+  "collected_at": "2026-11-12T03:27:02Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-10",
+  "pushed_at": "2026-11-11",
   "stars": 11,
   "tree": {
-   "sha": "5557d43c467e90c1f3d5701d6eb06defa586bf53",
-   "etag": "W/\"d169d5ba9f6a023afe14931792de44ac26432891c9f14027a17d6808cd771fc7\"",
+   "sha": "c56c58ddcd4ae684ec481c5de7257f0829a9dc94",
+   "etag": "W/\"a125275320fc9e8c39b406f20089ef49ac0e15d624fc2522836e59cd5ae4b068\"",
    "truncated": false,
-   "path_count": 1307,
+   "path_count": 1316,
    "matched": [
     "go.mod",
     "scripts/regress/Dockerfile",
@@ -15576,15 +15576,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:49:41Z",
+  "collected_at": "2026-11-12T03:34:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-11",
   "stars": 3,
   "tree": {
-   "sha": "7aa2eecaf574654eebe2da793868f86e5ba5ccb0",
-   "etag": "W/\"b639f22c29de5f981446b62895bf13645b15585eb5fd0d10f8fc0a04a038cf7e\"",
+   "sha": "3992e6833c75bbb33aed07ddc691eb2c980b72b8",
+   "etag": "W/\"e43a8be08746df460c1e53fa4ac12b7f38c876e53360bef9099015ac414a5ba4\"",
    "truncated": false,
-   "path_count": 981,
+   "path_count": 988,
    "matched": [
     "package.json",
     "backend/package.json",
@@ -15740,6 +15740,8 @@
    "changelog": [],
    "readme_i18n": [],
    "docs_matrix": [
+    "docs/DATABASE_INDEXING_OPTIMIZATIONS.md",
+    "docs/DATABASE_REPLICATION_AND_FAILOVER.md",
     "docs/DATABASE_SCHEMA.md",
     "docs/Testing/10-loyalty-reviews-notifications-support.md"
    ],
@@ -17112,15 +17114,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:28:27Z",
+  "collected_at": "2026-11-12T03:34:17Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
+  "pushed_at": "2026-11-11",
   "stars": 3,
   "tree": {
-   "sha": "8f93389f05867f75491bb51a36f55089ddb2b483",
-   "etag": "W/\"0073f2bc97e127a02b3d7d0c1ac1148a5195eae39f789d57bb3f47ff491fc05a\"",
+   "sha": "01132c7a3591e1beec0d9a391ef55af37c3db739",
+   "etag": "W/\"11f3a489b0238930a923e784271ca3f5a6e3d765e0bd87f2153581348c0e0e9a\"",
    "truncated": false,
-   "path_count": 74,
+   "path_count": 87,
    "matched": [
     "go.mod"
    ]
@@ -17319,15 +17321,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:14:14Z",
+  "collected_at": "2026-11-12T03:30:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-08",
+  "pushed_at": "2026-11-10",
   "stars": 6,
   "tree": {
-   "sha": "77ae06b1e674a08a5911358a5a354385ee7e53ac",
-   "etag": "W/\"3bc2f32793a8574c0679b7683c44b90954a781f32f854d7cbdee4377d8fa4c83\"",
+   "sha": "adf76c754d09288833de9a2c0466cf7032ea2c83",
+   "etag": "W/\"f9497b0e449673f36bcb5c080be40929fc5e1b4174e71cf4fc7ad3194f1c9ddf\"",
    "truncated": false,
-   "path_count": 381,
+   "path_count": 348,
    "matched": [
     "Cargo.toml",
     "admin/visual-editor/package.json",
@@ -17340,9 +17342,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d0e63c9606bd1c97034f69aa2cc7037dd14ffea8",
+    "blob_sha": "1b496049c489261aa861f05d9d8c42cc560e9c17",
     "ecosystem": "cargo",
-    "bytes": 4470,
+    "bytes": 4623,
     "names": [
      "axum",
      "axum-extra",
@@ -17430,7 +17432,7 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "f86d552cbaf0046bb9d8702350daa9af72b62b25",
+    "blob_sha": "154484fcfa2a90eccaa05d9f18a63ae5c64bcedc",
     "bytes": 7137,
     "images": [
      "needs:"
@@ -17491,6 +17493,82 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "mpecan/upsert": {
+  "fn": "mpecan/upsert",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-12T02:02:49Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-20",
+  "stars": 11,
+  "tree": {
+   "sha": "292beb87e47fafbe856857b21712968e7e4b5237",
+   "etag": "W/\"e01949e27fecabb8e12e628e36dd41fe9dd8f32a4536eb1dd5a90863ddeead68\"",
+   "truncated": false,
+   "path_count": 128,
+   "matched": [
+    "build.gradle.kts",
+    ".github/workflows/ci.yml",
+    ".github/workflows/release-deployment.yml",
+    ".github/workflows/release-please.yml",
+    ".github/workflows/snapshot-deployment.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "1403c4584cb121be6c3b476b25e217e818b6003e",
+    "ecosystem": "gradle",
+    "bytes": 10160
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "ab6be6e6e2733502acf0df916fedb32fd132013c",
+    "bytes": 1761
+   },
+   {
+    "path": ".github/workflows/release-deployment.yml",
+    "kind": "ci",
+    "blob_sha": "b317931ea726eeac6a5c39fca7172e3de7b62e5e",
+    "bytes": 4443
+   },
+   {
+    "path": ".github/workflows/release-please.yml",
+    "kind": "ci",
+    "blob_sha": "f0e562a559cdd22e09558bbeb9e40f8948f56bc1",
+    "bytes": 687
+   },
+   {
+    "path": ".github/workflows/snapshot-deployment.yml",
+    "kind": "ci",
+    "blob_sha": "ee95defa37e50c06dcc87137b6bb465d4f2fa701",
+    "bytes": 3411
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "src/main/kotlin/io/github/mpecan/upsert/dialect/AbstractMySqlUpsertDialect.kt",
+    "src/main/kotlin/io/github/mpecan/upsert/dialect/MySqlLegacyUpsertDialect.kt",
+    "src/main/kotlin/io/github/mpecan/upsert/dialect/MySqlUpsertDialect.kt",
+    "src/main/kotlin/io/github/mpecan/upsert/dialect/PostgreSqlUpsertDialect.kt",
+    "src/main/kotlin/io/github/mpecan/upsert/dialect/UpsertDialect.kt",
+    "src/main/kotlin/io/github/mpecan/upsert/dialect/UpsertDialectFactory.kt",
+    "src/test/kotlin/io/github/mpecan/upsert/dialect/MySqlUpsertDialectTest.kt",
+    "src/test/kotlin/io/github/mpecan/upsert/dialect/PostgreSqlUpsertDialectTest.kt",
+    "src/test/kotlin/io/github/mpecan/upsert/dialect/UpsertDialectFactoryTest.kt"
+   ]
   },
   "fail_count": 0
  }

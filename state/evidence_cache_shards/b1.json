@@ -2511,15 +2511,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:17:30Z",
+  "collected_at": "2026-11-12T03:19:15Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-11",
   "stars": 16,
   "tree": {
-   "sha": "6bbd726d9ee0d666e910206f8d8f6a0ffd588e50",
-   "etag": "W/\"8b7f14a64eaf98d20528c2737aefd4fd9886103a7b72988e9181390329ac3918\"",
+   "sha": "656b9431060f66b0b7c71085e027e651970740f2",
+   "etag": "W/\"b344056cb6af39b7828796a1446456f0f0abf9f8d8b177641059eb5188a20f81\"",
    "truncated": false,
-   "path_count": 713,
+   "path_count": 803,
    "matched": [
     "Cargo.toml",
     "stories/Cargo.toml",
@@ -2527,6 +2527,7 @@
     "crates/odk-a11y/Cargo.toml",
     "crates/odk-cli/Cargo.toml",
     "crates/odk-db/Cargo.toml",
+    "crates/odk-plugin/Cargo.toml",
     "crates/odk-theme/Cargo.toml",
     "crates/odk-ui/Cargo.toml",
     "crates/odk-view/Cargo.toml",
@@ -2547,16 +2548,16 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a99a825bc4cd0b5329091bc42d32fc658e1d6c58",
+    "blob_sha": "8623a96cd67f491d7ce1c2768ebfb550c6106e35",
     "ecosystem": "cargo",
-    "bytes": 1852
+    "bytes": 2046
    },
    {
     "path": "stories/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "007ecc70cb892aacd121f08b168b1997c1e4e837",
+    "blob_sha": "ea4d10f9ea06154ebebac8de305c01d746209b82",
     "ecosystem": "cargo",
-    "bytes": 2169,
+    "bytes": 3347,
     "names": [
      "deps.workspace",
      "odk.workspace",
@@ -2568,9 +2569,9 @@
    {
     "path": "crates/deps/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "6def162029c8707acb085268a8c2680bac4c1383",
+    "blob_sha": "7e1fba3f6f1478ea5b7d2a29e57c54e2bf50b4bc",
     "ecosystem": "cargo",
-    "bytes": 13224,
+    "bytes": 13821,
     "names": [
      "libc",
      "linux-raw-sys",
@@ -2662,7 +2663,9 @@
      "serde",
      "zvariant",
      "zvariant_utils",
-     "indexmap"
+     "indexmap",
+     "libc",
+     "cc"
     ]
    },
    {
@@ -2699,6 +2702,24 @@
      "async-channel",
      "rusqlite",
      "thiserror"
+    ],
+    "dev": [
+     "tempfile"
+    ]
+   },
+   {
+    "path": "crates/odk-plugin/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "5b02507522d943fceae44b012961960ee8478c29",
+    "ecosystem": "cargo",
+    "bytes": 419,
+    "names": [
+     "deps.workspace",
+     "mlua.workspace",
+     "semver",
+     "serde",
+     "thiserror",
+     "toml"
     ],
     "dev": [
      "tempfile"
@@ -2748,13 +2769,14 @@
    {
     "path": "crates/odk-view/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "cb70821caac8cad52e71e26a35cb147abd6b3ee8",
+    "blob_sha": "5ee2f0ea89861abe3caa2ef900b8f6e6904c1457",
     "ecosystem": "cargo",
-    "bytes": 383,
+    "bytes": 463,
     "names": [
      "deps.workspace",
      "odk-a11y.workspace",
      "odk-theme.workspace",
+     "read-fonts",
      "rune.workspace"
     ],
     "dev": [
@@ -2764,13 +2786,14 @@
    {
     "path": "crates/odk/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b501f8bd2cecb5192978886751cb2deb54ec9097",
+    "blob_sha": "b6666e76e2032df0c5497742b65f29799ee5f9d6",
     "ecosystem": "cargo",
-    "bytes": 668,
+    "bytes": 858,
     "names": [
      "deps.workspace",
      "odk-a11y.workspace",
      "odk-db",
+     "odk-plugin",
      "odk-theme.workspace",
      "odk-ui.workspace"
     ]
@@ -2778,34 +2801,38 @@
    {
     "path": "crates/odkd/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "62fb2e4922e513b9d341d677317eafb1b4a9defb",
+    "blob_sha": "289d01a7c52761d983b2cde86eae07baf0334d74",
     "ecosystem": "cargo",
-    "bytes": 799,
+    "bytes": 856,
     "names": [
      "deps.workspace",
      "ashpd",
+     "async-channel",
      "futures-lite",
      "libc",
      "odk-theme",
-     "toml"
+     "toml",
+     "zbus"
     ],
     "dev": [
-     "tempfile",
-     "zbus"
+     "tempfile"
     ]
    },
    {
     "path": "crates/oma-consent/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "038b39217563f19503ba6d2e197573e0bc4824a8",
+    "blob_sha": "70739612c32a73c0b311fbe716f492aaa9ce8179",
     "ecosystem": "cargo",
-    "bytes": 338,
+    "bytes": 375,
     "names": [
      "deps.workspace",
-     "gpui.workspace",
+     "rune.workspace",
      "serde",
      "serde_json",
      "toml"
+    ],
+    "dev": [
+     "serde_json"
     ]
    },
    {
@@ -2907,10 +2934,20 @@
     "docs/adr/0049-odk-ships-a-sqlite-database-handle-over-rusqlite.md"
    ],
    "paths": [
+    "crates/odk-plugin/Cargo.toml",
     "docs/adr/0003-rust-gpui-apps-with-luau-plugins.md",
     "docs/adr/0020-plugins-declare-capabilities-the-host-grants-them.md",
     "docs/adr/0021-odk-v1-is-ui-theming-and-plugins.md",
-    "docs/spec/plugin-manifest.md"
+    "docs/adr/0091-odk-runs-plugins-in-luau-through-mlua.md",
+    "docs/adr/0092-each-plugin-has-its-own-luau-state-and-a-small-api-the-host-grants.md",
+    "docs/spec/plugin-api.md",
+    "docs/spec/plugin-manifest.md",
+    "crates/odk-plugin/src/data.rs",
+    "crates/odk-plugin/src/host.rs",
+    "crates/odk-plugin/src/lib.rs",
+    "crates/odk-plugin/src/manifest.rs",
+    "crates/odk-plugin/src/paths.rs",
+    "crates/odk-plugin/tests/host.rs"
    ]
   },
   "fail_count": 0
@@ -5195,13 +5232,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-08T11:30:45Z",
+  "collected_at": "2026-11-12T02:41:20Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-07",
-  "stars": 239,
+  "pushed_at": "2026-11-10",
+  "stars": 243,
   "tree": {
-   "sha": "20868c9e99ef547fdb31368879ee68f945aa3c53",
-   "etag": "W/\"525b85608dc1ea3f1f5eb1acb3267dcbae1a00c5585096d9215f9f6db765d218\"",
+   "sha": "5a999ca2b25ac9b8a1df04a123d253a99a14d49b",
+   "etag": "W/\"33caaa217c4c6e998183d4fa447e25459c81c3bd819a7d20ab5af79b7fdc809f\"",
    "truncated": false,
    "path_count": 959,
    "matched": [
@@ -5218,7 +5255,7 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "d1fdff47f06a10bce4e44a46a6a469dd3f6b8183",
+    "blob_sha": "d4690e993382b1aba8da0d8d106dd608ef181fc6",
     "ecosystem": "go",
     "bytes": 3155,
     "names": [
@@ -6935,15 +6972,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T04:56:30Z",
+  "collected_at": "2026-11-12T02:52:37Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
-  "stars": 89,
+  "pushed_at": "2026-11-11",
+  "stars": 90,
   "tree": {
-   "sha": "24adb3547befbad4aaf8513c0c5c2e476cabcfc7",
-   "etag": "W/\"8ac5482f7120505b2f12f34399ba4944680b03b68ce8b8bd67396cfcf037ddd4\"",
+   "sha": "e2efedb1d549fb9ceaa22d59358bf88cc5f756c3",
+   "etag": "W/\"cf3e1b2cfedb5ea7f1c09e27f148da0e7186e45ae374d41977eb5b0e725434b1\"",
    "truncated": false,
-   "path_count": 372,
+   "path_count": 403,
    "matched": [
     "go.mod",
     "integration/matrix/go.mod",
@@ -6962,7 +6999,7 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "b6480be9b938d2d91075b2265291b6488e6241cc",
+    "blob_sha": "7928433524efc78c1b936f576d401399d68cc3c8",
     "ecosystem": "go",
     "bytes": 560,
     "names": [
@@ -7011,10 +7048,16 @@
    {
     "path": "testdata/e2e/package.json",
     "kind": "dep",
-    "blob_sha": "5739e296354130b009258afd222741555ed8bb8b",
+    "blob_sha": "ef3f140ae8b87e3e32fe2f0c681b904e650b3c45",
     "ecosystem": "npm",
-    "bytes": 331,
+    "bytes": 702,
     "names": [
+     "@hocuspocus/provider",
+     "@hocuspocus/server",
+     "hocuspocus-provider-2",
+     "hocuspocus-provider-3",
+     "hocuspocus-server-2",
+     "hocuspocus-server-3",
      "ws",
      "y-websocket",
      "y-websocket-2",
@@ -7088,8 +7131,8 @@
    {
     "path": ".github/workflows/test.yml",
     "kind": "ci",
-    "blob_sha": "f71f06a0ee57a9704147c63ca22dbb73ad317293",
-    "bytes": 14564
+    "blob_sha": "7424e0f8f537474e420987acdd86c693d16ef9fa",
+    "bytes": 16448
    },
    {
     "path": ".github/workflows/vuln.yml",
@@ -12622,13 +12665,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:25:53Z",
+  "collected_at": "2026-11-12T03:30:48Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-10",
   "stars": 6,
   "tree": {
-   "sha": "a4c1219606ab3ee29d3a9542a47a4b80de068ce7",
-   "etag": "W/\"9d2b01011a18e25b73b225ac08eb83543b72cbe6dceb7ed109f6287980476ba4\"",
+   "sha": "4c9d623296b64acc390d874df79df2a07f8f143e",
+   "etag": "W/\"1d436a142fd8d806965df2b91cabf969c04e62cdac7de422369335dc7e714edf\"",
    "truncated": false,
    "path_count": 509,
    "matched": [
@@ -13754,13 +13797,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:05:16Z",
+  "collected_at": "2026-11-12T03:04:06Z",
   "default_branch": "unstable",
-  "pushed_at": "2026-11-06",
-  "stars": 39,
+  "pushed_at": "2026-11-10",
+  "stars": 40,
   "tree": {
-   "sha": "dfd81a80567769826d45ff95c50b17ba5d90962b",
-   "etag": "W/\"30c168e3b66764e1b08dced790566456c7bee6ec5bc14fffa9b9df621497e7bb\"",
+   "sha": "e45fcdb230f836534520727e70d93b1a8a25bf1e",
+   "etag": "W/\"967cee961b32bf67ecba6ee2d8920190af77127b7c38aaa0db5900bc1aa91a67\"",
    "truncated": false,
    "path_count": 38,
    "matched": [
@@ -13894,15 +13937,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:46:52Z",
+  "collected_at": "2026-11-12T03:30:35Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-11",
   "stars": 7,
   "tree": {
-   "sha": "6cd8e00e629f9fe04c75e70dc8bf922c7af5f8a7",
-   "etag": "W/\"2ddcca0ae9164677c235fde6cef8f26fac6afbe884b7432fb30058378bb839de\"",
+   "sha": "370f7c207cd52b8d0026db9a366d83f7dd25d3ab",
+   "etag": "W/\"5a80b60a3107875394f9a2d4cffbaede17635e9d28be7ac1abaea20f67366f0b\"",
    "truncated": false,
-   "path_count": 21,
+   "path_count": 23,
    "matched": []
   },
   "files": [],
@@ -13932,6 +13975,180 @@
    "matched": []
   },
   "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "guithepc/money-flow": {
+  "fn": "guithepc/money-flow",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-12T02:01:51Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-23",
+  "stars": 53,
+  "tree": {
+   "sha": "af7d5ac5ecbe875f72d746a02e4201c82ab80dce",
+   "etag": "W/\"bfc1ae2300703b654fe609098feb271105fbd944a89826a8c53f423a9103a38d\"",
+   "truncated": false,
+   "path_count": 248,
+   "matched": [
+    "backend/pom.xml",
+    "frontend/package.json",
+    "docker-compose.yml",
+    "backend/Dockerfile",
+    "frontend/Dockerfile"
+   ]
+  },
+  "files": [
+   {
+    "path": "backend/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4515ac69b2140939644bb3f55feb5170d5110374",
+    "ecosystem": "maven",
+    "bytes": 3776,
+    "names": [
+     "com.openai:openai-java",
+     "io.jsonwebtoken:jjwt-api",
+     "io.jsonwebtoken:jjwt-impl",
+     "io.jsonwebtoken:jjwt-jackson",
+     "com.fasterxml.jackson.core:jackson-databind",
+     "org.springframework.boot:spring-boot-starter-security",
+     "org.springframework.boot:spring-boot-starter-data-jpa",
+     "org.springframework.boot:spring-boot-starter-webmvc",
+     "org.springframework.boot:spring-boot-starter-flyway",
+     "org.flywaydb:flyway-database-postgresql",
+     "org.postgresql:postgresql",
+     "org.telegram:telegrambots-meta",
+     "org.projectlombok:lombok",
+     "org.springframework.boot:spring-boot-starter-data-jpa-test",
+     "org.springframework.boot:spring-boot-starter-webmvc-test"
+    ]
+   },
+   {
+    "path": "frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "ac0b76e1313e0b4854a5bafd2845f5e17ac1871e",
+    "ecosystem": "npm",
+    "bytes": 902,
+    "names": [
+     "@fontsource-variable/plus-jakarta-sans",
+     "@fontsource-variable/space-grotesk",
+     "@fontsource/space-mono",
+     "@tailwindcss/vite",
+     "clsx",
+     "lucide-react",
+     "react",
+     "react-dom",
+     "recharts",
+     "tailwind-merge",
+     "tailwindcss"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "oxlint",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "docker-compose.yml",
+    "kind": "image",
+    "blob_sha": "47ca8f16541b9918e595b61d2ccdeac9baec2f83",
+    "bytes": 2515,
+    "images": [
+     "postgres:17"
+    ]
+   },
+   {
+    "path": "backend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "96bfb5e5a788959fcc9940dc59ec921cbb88239d",
+    "bytes": 317,
+    "images": [
+     "eclipse-temurin:25-jdk",
+     "eclipse-temurin:25-jre-alpine"
+    ]
+   },
+   {
+    "path": "frontend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "767762b99eb4164c21565f388aa251026c9bdaee",
+    "bytes": 422,
+    "images": [
+     "node:26-alpine",
+     "nginx:alpine"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "nenuadrian/smollerGraph": {
+  "fn": "nenuadrian/smollerGraph",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-12T02:05:07Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-10",
+  "stars": 3,
+  "tree": {
+   "sha": "7bfbcd6f8c549ebfd4d55486b7754b184cc70136",
+   "etag": "W/\"111d3df45a53f35471ac68680c7ac86368ceeb228b1e714a24486c7e4ed84899\"",
+   "truncated": false,
+   "path_count": 70,
+   "matched": [
+    "Dockerfile",
+    "compose.yaml",
+    ".github/workflows/ci.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "2382d1cc7e17080489f3f4068692173ebac09b4a",
+    "bytes": 1255,
+    "images": [
+     "ubuntu:24.04",
+     "toolchain",
+     "build",
+     "python:3.13-slim"
+    ]
+   },
+   {
+    "path": "compose.yaml",
+    "kind": "image",
+    "blob_sha": "942c7f4e270abc0b68617d2c4781207fe8a40417",
+    "bytes": 928,
+    "images": [
+     "caddy:2.10.2-alpine"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "70c282401fec4188ff2d852231f2063ad99f373f",
+    "bytes": 414
+   }
+  ],
   "clues": {
    "changelog": [],
    "readme_i18n": [],

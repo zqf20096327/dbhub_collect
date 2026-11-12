@@ -3718,21 +3718,24 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:29:37Z",
+  "collected_at": "2026-11-12T03:35:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-11",
   "stars": 0,
   "tree": {
-   "sha": "962fe93627b4c6d7514a81f5f26f9e79be195c0c",
-   "etag": "W/\"1e5738dbb93a3695f0ed1652ebb6d49aa3f0836b72d1f00f17bde6d10111e8d2\"",
+   "sha": "3dd77d1a828ea23e5e5563e5f328f9d79b3f3d1d",
+   "etag": "W/\"e01f06bdaf4b10198261eee2dd28c1d67c1b0cbf2dfb03e3e2ab12b77016a244\"",
    "truncated": false,
-   "path_count": 806,
+   "path_count": 968,
    "matched": [
     "Cargo.toml",
     "crates/base/Cargo.toml",
     "crates/chunk/Cargo.toml",
     "crates/codec/Cargo.toml",
     "crates/distsql/Cargo.toml",
+    "crates/execdetails/Cargo.toml",
+    "crates/expression/Cargo.toml",
+    "crates/infoschema/Cargo.toml",
     "crates/kv/Cargo.toml",
     "crates/memory/Cargo.toml",
     "crates/meta/Cargo.toml",
@@ -3744,9 +3747,11 @@
     "crates/runtime/Cargo.toml",
     "crates/sessionctx/Cargo.toml",
     "crates/sql/Cargo.toml",
+    "crates/systable/Cargo.toml",
     "crates/tablecodec/Cargo.toml",
     "crates/types/Cargo.toml",
     "tools/ab/Cargo.toml",
+    "crates/expression/macros/Cargo.toml",
     "crates/poc/domain/Cargo.toml",
     "crates/poc/executor/Cargo.toml",
     "crates/poc/kv/Cargo.toml",
@@ -3777,9 +3782,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "121bd2168cce3a8305526de336baa2ee1271106c",
+    "blob_sha": "c6499b99cbecad02b906f35c7a26e351c19ea1ef",
     "ecosystem": "cargo",
-    "bytes": 7039
+    "bytes": 7417
    },
    {
     "path": "crates/base/Cargo.toml",
@@ -3867,6 +3872,70 @@
     ],
     "dev": [
      "tokio"
+    ]
+   },
+   {
+    "path": "crates/execdetails/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "7f03cea71b2a78f9f414e50794407be949a41324",
+    "ecosystem": "cargo",
+    "bytes": 725,
+    "names": [
+     "tidb-base",
+     "tipb"
+    ],
+    "dev": [
+     "flate2",
+     "serde",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "crates/expression/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "9de719813b2e4b319a4eb42884b80f559daf193f",
+    "ecosystem": "cargo",
+    "bytes": 1414,
+    "names": [
+     "tidb-base",
+     "tidb-types",
+     "tidb-chunk",
+     "tidb-codec",
+     "tidb-model",
+     "tidb-parser",
+     "tidb-sessionctx",
+     "parking_lot",
+     "tidb-expression-macros",
+     "smallvec",
+     "zerocopy"
+    ],
+    "dev": [
+     "criterion",
+     "tikv-jemallocator",
+     "zerocopy",
+     "flate2",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "crates/infoschema/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a2101438ba28b9c33f1186062b7197a78a560fc7",
+    "ecosystem": "cargo",
+    "bytes": 1164,
+    "names": [
+     "tidb-base",
+     "tidb-parser",
+     "tidb-types",
+     "tidb-model",
+     "tidb-kv",
+     "tidb-codec",
+     "regex"
+    ],
+    "dev": [
+     "flate2",
+     "serde_json",
+     "futures"
     ]
    },
    {
@@ -4036,16 +4105,20 @@
    {
     "path": "crates/sessionctx/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ef714a1bf1941df4111009af9932b0f8536376ff",
+    "blob_sha": "0d60d1d206df412a165aa8970ccb4e7c39c06fa1",
     "ecosystem": "cargo",
-    "bytes": 1176,
+    "bytes": 1610,
     "names": [
      "tidb-base",
      "tidb-types",
      "tidb-model",
      "tidb-kv",
+     "tidb-codec",
      "tidb-memory",
      "tidb-parser",
+     "tipb",
+     "tidb-execdetails",
+     "tidb-chunk",
      "parking_lot"
     ],
     "dev": [
@@ -4064,6 +4137,27 @@
      "tidb-meta",
      "tidb-mysql-protocol",
      "tidb-parser"
+    ]
+   },
+   {
+    "path": "crates/systable/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "4681c3857f5519c7ebb6611c77e9aeed6b100fed",
+    "ecosystem": "cargo",
+    "bytes": 1238,
+    "names": [
+     "tidb-base",
+     "tidb-types",
+     "tidb-parser",
+     "tidb-model",
+     "tidb-kv",
+     "tidb-tablecodec",
+     "tidb-sessionctx",
+     "parking_lot"
+    ],
+    "dev": [
+     "flate2",
+     "serde_json"
     ]
    },
    {
@@ -4127,11 +4221,23 @@
     ]
    },
    {
+    "path": "crates/expression/macros/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "15bf3a9a45dab55be920400d81231586358b28ba",
+    "ecosystem": "cargo",
+    "bytes": 437,
+    "names": [
+     "proc-macro2",
+     "quote",
+     "syn"
+    ]
+   },
+   {
     "path": "crates/poc/domain/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "06d033bea95868e26cdd53273d25631f8007e816",
+    "blob_sha": "5535c7da28a464979d4aef981411982daf0498c2",
     "ecosystem": "cargo",
-    "bytes": 965,
+    "bytes": 1438,
     "names": [
      "etcd-client",
      "futures",
@@ -4145,8 +4251,19 @@
      "tidb-mysql-protocol",
      "tidb-sql",
      "tokio",
+     "tidb-systable",
+     "tidb-base",
+     "tidb-model",
+     "tikv-client",
+     "parking_lot",
      "tracing",
      "uuid"
+    ],
+    "dev": [
+     "tidb-infoschema",
+     "tidb-kv",
+     "tidb-tablecodec",
+     "tidb-types"
     ]
    },
    {
@@ -4532,15 +4649,18 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "8151d569b4a5ca26dd2cd848bd147aba1e4b5d12",
-    "bytes": 4174
+    "blob_sha": "588af2ef2ae5052b64a423d0395de40da65fc334",
+    "bytes": 5765
    }
   ],
   "clues": {
    "changelog": [],
    "readme_i18n": [],
-   "docs_matrix": [],
+   "docs_matrix": [
+    "docs/compatibility.md"
+   ],
    "paths": [
+    "crates/expression/tests/eval_drivers.rs",
     "crates/parser/src/driver.rs",
     "crates/parser/tests/driver.rs"
    ]
@@ -4758,13 +4878,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T04:31:13Z",
+  "collected_at": "2026-11-12T02:19:23Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
-  "stars": 3754,
+  "pushed_at": "2026-11-11",
+  "stars": 3756,
   "tree": {
-   "sha": "487b95e45461b5865686bd2e90a68a6601ae4971",
-   "etag": "W/\"8b5d9fda9b64c9442e8b5fca66e564b5f167a5d15f4af52c264b63d05d6c847c\"",
+   "sha": "54e5a23a29e2c48a8abeff2253fb314767c4243a",
+   "etag": "W/\"454a7d2ed240b40420f1c34f131920442a15d0872b7bf32f4d968489055b9d74\"",
    "truncated": false,
    "path_count": 1982,
    "matched": [
@@ -6517,17 +6637,19 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:45:32Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-12T02:34:06Z",
   "default_branch": "main",
-  "pushed_at": "2026-08-28",
-  "stars": 506,
+  "pushed_at": "2026-11-10",
+  "stars": 507,
   "tree": {
-   "sha": "007de4ffe73dcf4e816932f3a12ffaad0f1aaaf2",
-   "etag": "W/\"07bde02b88fd05cb6339763c6a8cca03a62c976f4017e9d7d382f3d963cf342c\"",
+   "sha": "a850600fe8c0030daa6ef852dfa99bf7dcca936b",
+   "etag": "W/\"4c93c18fd1539259b2ed35b7fa2a18783aec341796a83bfd0b628f8c3c824715\"",
    "truncated": false,
-   "path_count": 289,
+   "path_count": 634,
    "matched": [
     "package.json",
+    "scripts/benchmark/baseline/package.json",
     ".github/workflows/nodejs.yml"
    ]
   },
@@ -6535,9 +6657,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "5edfe3db3c303ded5836ef7a625c6c2f8815e1ed",
+    "blob_sha": "4de93255b840151ee89e9bcd21d72534d78f48f7",
     "ecosystem": "npm",
-    "bytes": 4800,
+    "bytes": 7535,
     "names": [
      "@turf/helpers",
      "better-sqlite3",
@@ -6546,32 +6668,51 @@
      "gtfs-realtime-bindings",
      "kysely",
      "lodash-es",
-     "long",
-     "node-stream-zip",
      "sanitize-filename",
+     "yauzl",
      "yoctocolors"
     ],
     "dev": [
+     "@arethetypeswrong/core",
+     "@release-it/keep-a-changelog",
      "@types/better-sqlite3",
      "@types/geojson",
      "@types/lodash-es",
      "@types/node",
      "@types/pg",
+     "@types/pg-cursor",
+     "@types/yauzl",
+     "fast-check",
+     "github-slugger",
      "husky",
      "lint-staged",
+     "markdown-it",
      "mysql2",
      "oxlint",
      "pg",
+     "pg-cursor",
      "prettier",
+     "publint",
+     "release-it",
      "tsdown",
      "typescript"
     ]
    },
    {
+    "path": "scripts/benchmark/baseline/package.json",
+    "kind": "dep",
+    "blob_sha": "b4f2340a565ac718110a80913456fda2e98b4c7e",
+    "ecosystem": "npm",
+    "bytes": 133,
+    "names": [
+     "gtfs"
+    ]
+   },
+   {
     "path": ".github/workflows/nodejs.yml",
     "kind": "ci",
-    "blob_sha": "8e95be8a6e1633bdd799b8dc6868cde682064e26",
-    "bytes": 2385,
+    "blob_sha": "bfdcca4bd8b8cee94ddf265353b08cd9ab09419c",
+    "bytes": 3279,
     "images": [
      "postgres:17",
      "mysql:8.4"
@@ -6584,10 +6725,12 @@
    ],
    "readme_i18n": [],
    "docs_matrix": [
-    "docs/database-portability.md"
+    "docs/databases.md"
    ],
    "paths": [
-    "src/lib/database-dialects.ts"
+    "src/database/dialects.ts",
+    "test/helpers/kysely-dialect.ts",
+    "test/integration/gtfs-realtime-cleanup-dialects.test.ts"
    ]
   },
   "fail_count": 0
@@ -8978,15 +9121,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:05:49Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-12T02:55:26Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-07",
-  "stars": 57,
+  "pushed_at": "2026-11-10",
+  "stars": 68,
   "tree": {
-   "sha": "913e4ec3360f82aa55c9217555ed34bc30a97333",
-   "etag": "W/\"a1def73d62d9cffde931b84cec8f4d89ce021ce022be3bd9c9a7d1de5ddceb1d\"",
+   "sha": "51fc744df0046b65b4ff81be68d2412ab27a428e",
+   "etag": "W/\"8360f1105a1f358a8ca820b2c6a29f5cff28e1df7dea9c23f2a63b6988a65e2e\"",
    "truncated": false,
-   "path_count": 230,
+   "path_count": 260,
    "matched": [
     "viewer/package.json",
     "integrations/mcp-server/pyproject.toml",
@@ -9031,8 +9175,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "2a1b1b14150c140ceb37aa6b836f1a811b147ae1",
-    "bytes": 5843
+    "blob_sha": "31b69401b282cbdc0e6c5233dbd55905304c8404",
+    "bytes": 6641
    },
    {
     "path": ".github/workflows/release.yml",
@@ -10146,15 +10290,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:04:36Z",
+  "collected_at": "2026-11-12T03:02:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
-  "stars": 42,
+  "pushed_at": "2026-11-11",
+  "stars": 44,
   "tree": {
-   "sha": "35a29c140bfabfbe09af3fa4ebc9cb9e9604f211",
-   "etag": "W/\"a1c8390de25f33a0079831619657c6da82aea3e7e4875d2a31e5a817fc05cc47\"",
+   "sha": "f1ff1b0970909645d50a452d90a9fbc505907f25",
+   "etag": "W/\"720014cce675024276e9ce12200704e25fb5a15ed3ccdf3d8541acffb25031bd\"",
    "truncated": false,
-   "path_count": 2996,
+   "path_count": 3076,
    "matched": [
     "package.json",
     "adapters/mcp/package.json",
@@ -10173,7 +10317,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "35919465edef48c34a80037b293fdb8ed8260de0",
+    "blob_sha": "699fb884fee6ed79d8989ec7debf61d2f96914a4",
     "ecosystem": "npm",
     "bytes": 9284
    },
@@ -10204,7 +10348,7 @@
    {
     "path": "packages/setup/package.json",
     "kind": "dep",
-    "blob_sha": "f859b5b1b9cefc75c922f909017b15fcf0c35a43",
+    "blob_sha": "053ab558a958140b41248e95bd7002ade0e99b60",
     "ecosystem": "npm",
     "bytes": 817
    },
@@ -10316,6 +10460,7 @@
     "adapters/mcp/package-lock.json",
     "adapters/mcp/package.json",
     "adapters/mcp/private-card-access.mjs",
+    "adapters/mcp/raw-command.mjs",
     "adapters/mcp/retained-raw-profile.mjs",
     "adapters/mcp/retained-raw.mjs",
     "adapters/mcp/review-card.mjs",
@@ -10328,6 +10473,7 @@
     "adapters/mcp/server.mjs",
     "adapters/mcp/walkthrough.mjs",
     "adapters/openai/classification-wire.mjs",
+    "adapters/openai/consolidate-schema.mjs",
     "adapters/openai/context-counter.mjs",
     "adapters/openai/embedding.mjs",
     "adapters/openai/index.mjs",
@@ -10360,12 +10506,17 @@
     "adapters/local-embedder/test/runtime.test.mjs",
     "adapters/local-embedder/test/supervisor-offline.test.mjs",
     "adapters/local-embedder/test/wiring.test.mjs",
+    "adapters/local/test/capture-busy-worker.test.mjs",
     "adapters/local/test/configuration-binding.test.mjs",
     "adapters/local/test/configuration.test.mjs",
     "adapters/local/test/content-safety-s2h.test.mjs",
     "adapters/local/test/dispatch.test.mjs",
     "adapters/local/test/oneshot.test.mjs",
     "adapters/local/test/qualified-duplicates.test.mjs",
+    "adapters/local/test/raw-epoch-arrival.test.mjs",
+    "adapters/local/test/raw-epoch-deadline.test.mjs",
+    "adapters/local/test/raw-epoch-retry.test.mjs",
+    "adapters/local/test/request-reuse.test.mjs",
     "adapters/mcp/test/asset-export-cases.mjs",
     "adapters/mcp/test/asset-export.test.mjs",
     "adapters/mcp/test/asset-files.test.mjs",
@@ -10374,6 +10525,7 @@
     "adapters/mcp/test/bounded-collections.test.mjs",
     "adapters/mcp/test/candidate-capture.test.mjs",
     "adapters/mcp/test/capture-admission-inspection.test.mjs",
+    "adapters/mcp/test/capture-busy-worker.test.mjs",
     "adapters/mcp/test/capture-deadline.test.mjs",
     "adapters/mcp/test/card-current-legacy-deadline.test.mjs",
     "adapters/mcp/test/card-current.test.mjs",
@@ -10391,6 +10543,7 @@
     "adapters/mcp/test/context-read.test.mjs",
     "adapters/mcp/test/context-support.mjs",
     "adapters/mcp/test/defaults.test.mjs",
+    "adapters/mcp/test/engine-cards.test.mjs",
     "adapters/mcp/test/episodes.test.mjs",
     "adapters/mcp/test/evidence.test.mjs",
     "adapters/mcp/test/method-package-confinement.test.mjs",
@@ -10405,6 +10558,7 @@
     "adapters/mcp/test/procedural.test.mjs",
     "adapters/mcp/test/qualified-capture.test.mjs",
     "adapters/mcp/test/rationale.test.mjs",
+    "adapters/mcp/test/raw-command.test.mjs",
     "adapters/mcp/test/raw-default-store.test.mjs",
     "adapters/mcp/test/receipt-cards.test.mjs",
     "adapters/mcp/test/retained-raw-profile.test.mjs",
@@ -10426,6 +10580,7 @@
     "adapters/openai/test/capture-budget.test.mjs",
     "adapters/openai/test/checklist.test.mjs",
     "adapters/openai/test/classification-wire.test.mjs",
+    "adapters/openai/test/consolidate.test.mjs",
     "adapters/openai/test/currentness.test.mjs",
     "adapters/openai/test/diagnostics.test.mjs",
     "adapters/openai/test/direct-candidate-wire-experiment.test.mjs",
@@ -10460,18 +10615,7 @@
     "adapters/openai/test/qualification-text-catalog.test.mjs",
     "adapters/openai/test/qualification.test.mjs",
     "adapters/openai/test/rationale-claim-focus.test.mjs",
-    "adapters/openai/test/rationale-model-controls.test.mjs",
-    "adapters/openai/test/rationale.test.mjs",
-    "adapters/openai/test/recall-budget.test.mjs",
-    "adapters/openai/test/reconciliation.test.mjs",
-    "adapters/openai/test/reference-constraints.test.mjs",
-    "adapters/openai/test/semantic-evaluation.test.mjs",
-    "adapters/openai/test/source-basis.test.mjs",
-    "adapters/openai/test/tokenizer-performance.test.mjs",
-    "adapters/openai/test/tokenizer-vectors.mjs",
-    "adapters/openai/test/transport.test.mjs",
-    "adapters/openai/test/usage-bounds.test.mjs",
-    "evaluation/live/test/source-pair-preparation-adapter.test.mjs"
+    "adapters/openai/test/rationale-model-controls.test.mjs"
    ]
   },
   "fail_count": 0
@@ -11063,13 +11207,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:13:13Z",
+  "collected_at": "2026-11-12T03:13:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-10",
   "stars": 23,
   "tree": {
-   "sha": "1784660b3a9d2ddf9bdae9ef3dc1a5fa5296d063",
-   "etag": "W/\"58472b6950a5dc3dda16a8e26daea917c41833eecb83ca9b905baba290318e88\"",
+   "sha": "25b65030ced75a1a3e72a19ebdd978fd89567736",
+   "etag": "W/\"abae67518e419e28b57af599bab71c60e3420d0557de304537b12e6a60e2fdbd\"",
    "truncated": false,
    "path_count": 26,
    "matched": [
@@ -16008,15 +16152,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:45:21Z",
+  "collected_at": "2026-11-12T03:28:08Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-10",
   "stars": 10,
   "tree": {
-   "sha": "e00585201c4ac166dde5a858e83d5691e83aca3e",
-   "etag": "W/\"f1033a3b0dabb1861036e3b093b57f41485514f01fa5aad59b2b48deed259b7d\"",
+   "sha": "dc06f9db1d41e27cf587b8b6a3c8806059edbf1f",
+   "etag": "W/\"be7420fca7f6fe1d8ecd51c09e729ce6b54dd190c42d09344912aff209b2e06d\"",
    "truncated": false,
-   "path_count": 1537,
+   "path_count": 1554,
    "matched": [
     "Gemfile",
     "package.json",
