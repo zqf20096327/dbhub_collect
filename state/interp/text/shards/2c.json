@@ -3218,5 +3218,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0cf256b07ff4": {
+  "identity": {
+   "one_liner": "面向 TypeScript 应用的 webhook 投递库，基于 PostgreSQL 与事务性 outbox 模式。",
+   "review": "Good Webhooks 是一个 TypeScript npm 包：应用调用 publish() 将类型化事件和各端点的投递记录写入 PostgreSQL，由独立 worker 完成签名（Standard Webhooks）、发送、重试与记录；接收方调用 parseWebhook() 验证请求。端点管理可独立使用、经 Better Auth 插件或自建 sender。运行需 Node.js 24+ 与 PostgreSQL 16-18，parseWebhook() 另验证于 Bun、Deno、Cloudflare Workers。",
+   "highlights": [
+    "通过 publish() 将类型化事件与每端点投递记录写入 PostgreSQL，由独立 worker 负责签名、发送、重试并记录每次尝试",
+    "发送遵循 Standard Webhooks 签名规范，接收方调用 parseWebhook() 一步验证并取得类型化事件",
+    "端点管理支持独立使用、Better Auth 插件和自定义 sender 三种方式，1.0.0 起公开 API 遵循 1.x 稳定性策略"
+   ],
+   "use_cases": [
+    "在 Node.js + PostgreSQL 应用内向多个 HTTPS 端点投递带签名的事件并需要重试与尝试记录",
+    "使用 Better Auth 的应用让登录用户自行管理各自的 webhook 端点",
+    "仅需在接收侧验证 webhook 签名并解析类型化事件（Bun、Deno、Cloudflare Workers 等运行时）"
+   ]
+  },
+  "sha": "0cf256b07ff4",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

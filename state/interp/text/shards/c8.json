@@ -2901,5 +2901,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dc75a8655f6b": {
+  "identity": {
+   "one_liner": "在任意云或自有服务器上原样运行 Cloudflare Workers 与 Durable Objects 的运行时平台",
+   "review": "OpenOrange 由 Rivet 开发，在 Node.js 上实现 Workers API，将每个 Durable Object 映射为带独立 SQLite 数据库的 Rivet Actor。已有 Worker 项目无需改代码即可通过 orange CLI 在 AWS、GCP、Azure 或自托管环境运行，并提供 orange migrate 做不停机数据迁移。部分绑定（如 Analytics Engine、Vectorize）不支持。采用 Apache-2.0 许可。",
+   "highlights": [
+    "读取 Wrangler 配置，运行现有 Workers 与 Durable Objects 代码，无需修改应用代码",
+    "每个 Durable Object 作为一个 Rivet Actor 运行，其 SQLite 数据存储在 S3",
+    "支持 Durable Objects、KV、D1、Queues、Cron Triggers 等绑定，分为 drop-in、partial、pluggable 三类"
+   ],
+   "use_cases": [
+    "将现有 Cloudflare Workers 项目部署到 AWS、Google Cloud、Azure 或自有服务器",
+    "需要通过 orange migrate 将 Durable Objects 数据从 Cloudflare 迁出且不停服",
+    "在本地用 orange dev 运行 Worker，每个 Durable Object 配独立 SQLite 数据库"
+   ]
+  },
+  "sha": "dc75a8655f6b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "54bc7fee921e": {
+  "identity": {
+   "one_liner": "在 macOS/Linux 上用 Ansible 兼容清单启动固定 IP 的本地 QEMU 虚拟机",
+   "review": "Barn 是一个用 Go 编写的本地虚拟机管理工具，读取 Ansible 兼容的 YAML 清单，在 macOS/Linux 上通过 QEMU（macOS 用 HVF、Linux 用 KVM，跨架构用 TCG）创建固定 IP、带 SSH 和数据盘的虚拟机；在 Apple Silicon 上还可用 Apple Virtualization.framework 运行 macOS 客户机。它可独立于 Pigsty 运行，也可用同一清单配合 Pigsty 部署 PostgreSQL 等服务，适用于本地开发测试环境搭建。安装支持 Homebrew 和 Linux 安装脚本，许可证为 Apache 2.0。",
+   "highlights": [
+    "读取一份 Ansible 兼容 YAML 清单，创建带固定 IP、SSH 访问和测试数据盘的 QEMU 虚拟机",
+    "支持 macOS（HVF）、Linux（KVM）原生虚拟化和 TCG 软件模拟跨架构客户机；Apple Silicon 上通过 Apple Virtualization.framework 创建 macOS 客户机",
+    "提供 status/plan/resize/recreate/destroy/purge 等生命周期命令，支持节点选择器、--json/--yaml 结构化输出和 vm_shares 目录共享"
+   ],
+   "use_cases": [
+    "在 macOS 或 Linux 上搭建多节点 Linux 实验环境，配合 Pigsty 部署 PostgreSQL 等服务",
+    "通过 TCG 软件模拟进行跨架构（如 Apple Silicon 上跑 amd64 客户机）兼容性测试",
+    "在 Apple Silicon Mac 上创建带桌面、SSH 和共享文件夹的 macOS 27 虚拟机用于开发测试"
+   ]
+  },
+  "sha": "54bc7fee921e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "478138c06226": {
+  "identity": {
+   "one_liner": "面向Windows的以人格为中心的AI伴侣运行时，含持久记忆与版本化身份。",
+   "review": "PCAR是一个运行于Windows的AI伴侣运行时，通过Tkinter工作台提供窗口对话，支持人格创建、导入、版本对比与回退，以及自动记忆提取、独立复核和版本化管理。模型通过Chat Completions兼容接口接入，数据以SQLite存储于本地数据库。QQ私聊接入（NapCat/SnowLuma等）已按作者政策暂停开发与实测。适合希望在本地长期维护AI角色及其记忆的用户；项目无独立安装包，需Python 3.12与uv环境。",
+   "highlights": [
+    "支持人格的独立身份设定、核心与关系编辑、版本比较与回退",
+    "自动记忆按角色开启后最多10轮提取并独立复核，明确更正形成版本，无法裁定内容隔离",
+    "提供会话摘要、长期记忆、来源修订与撤回，以及本地语义检索选材"
+   ],
+   "use_cases": [
+    "在Windows本地通过工作台窗口与AI人格角色进行日常对话",
+    "对AI角色的人格设定、关系和长期记忆进行版本化管理与修订",
+    "通过命令行持久化接口与脚本进行开发、测试与验收操作"
+   ]
+  },
+  "sha": "478138c06226",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

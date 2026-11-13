@@ -2639,5 +2639,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "70ed53f9ba83": {
+  "identity": {
+   "one_liner": "基于BDD的实时查询增量更新算法，从变更事件在内存中计算新查询结果",
+   "review": "EventReduce 是一个用于实时查询的算法库：当数据库发生写入事件时，它接收旧查询结果与变更事件，在内存中计算出新的结果集，而无需重新执行查询。它通过 18 个状态函数与 16 个动作函数构建真值表并优化为二叉决策图（BDD）。适用于需要保持查询结果实时更新的应用开发者。限制包括：仅支持单表/集合查询，排序必须有可预测顺序（通常以主键作为最后排序字段）。",
+   "highlights": [
+    "提供 18 个状态函数与 16 个动作函数，预计算出 2^18 种状态组合对应的动作真值表，并优化为二叉决策图（BDD）",
+    "适用于任何提供变更流（change stream）的数据库，README 列举 MongoDB、PostgreSQL、MySQL、IndexedDB、SQLite 及内存存储",
+    "除 JavaScript 参考实现外，提供 Rust、Dart、Kotlin、Swift、C#、Python、Go 实现，各实现运行同一共享测试套件"
+   ],
+   "use_cases": [
+    "响应式 UI 与实时仪表盘中保持查询结果随数据库写入自动更新",
+    "本地优先应用的实时查询及后端向客户端推送查询结果订阅",
+    "以更新内容代替缓存失效的查询结果缓存场景"
+   ]
+  },
+  "sha": "70ed53f9ba83",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f18f283e80b": {
+  "identity": {
+   "one_liner": "基于 NATS 的 PostgreSQL 与边缘 SQLite/PGLITE/DuckDB 双向本地优先同步引擎",
+   "review": "ZeBridge 用 Zig 实现桥接服务，让每台设备维护本地数据库副本，离线时将写入排入 outbox，重连后经 NATS 同步，由 PostgreSQL 作为权威方裁决冲突写入。面向 B2B 多租户运营类应用（字段团队、车队等），支持按租户隔离数据。官方不面向每用户单租户的 B2C 应用。提供 TS/Python 客户端及 Docker Compose、Ansible 部署方式。",
+   "highlights": [
+    "客户端库提供 query 读取本地副本、mutate 提交写入（含版本管理、outbox、重试与裁决处理）、request 查询远程服务、ingest 本地保留结果",
+    "写入顺序控制：默认等待同客户端最近的未决有序写入，支持 after 指定前置写入、independent 声明无依赖写入",
+    "通过一次性邀请码完成设备注册，后端仅需调用 PostgreSQL 的 zebridge_invite 函数签发，无需编写写 API 或同步端点"
+   ],
+   "use_cases": [
+    "弱网或离线环境下仍需持续作业的 B2B 多租户运营应用（车队、仓库、站点等）",
+    "需要设备本地查询且写操作最终由 PostgreSQL 规则（含外键）裁决的业务系统",
+    "多设备协同编辑场景，含同一记录不同字段的协作写入"
+   ]
+  },
+  "sha": "7f18f283e80b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "467d6354d87e": {
+  "identity": {
+   "one_liner": "Rust 编写的通用数据库，面向 AI 代理、HTAP 并兼容 MySQL 协议",
+   "review": "MyDB 是用 Rust 编写的通用数据库，围绕 AI 代理、HTAP 和 MySQL 兼容三个方向设计。用户可通过 MySQL 客户端、JDBC 驱动、REST SQL API 或 MCP Server 访问，在 SQL 中执行事务、分析查询、关键词与向量混合检索，并调用文本生成与嵌入服务。当前 1.2.1 为公开预览版，用于功能验证与受控环境评估，非生产级 MySQL 替代品，磁盘格式不保证向后兼容。",
+   "highlights": [
+    "提供 SQL 内 AI 调用：AI_GENERATE 生成文本、AI_EMBED 生成 FLOAT32 VECTOR 嵌入，可配置 Ollama、OpenAI 等本地或远程模型服务",
+    "实现 HTAP 执行能力，包括并行哈希连接、向量化执行和基于代价的优化器；用户表默认启用自动 Zone Maps 实现块裁剪",
+    "支持 MySQL 协议兼容（复用 MySQL 客户端与 JDBC 驱动）、ROW/FULL binlog 集成、在线 DDL、原生 WAL 复制、MVCC 事务与时间旅行查询，并提供可选 REST SQL API 与 MCP Server"
+   ],
+   "use_cases": [
+    "构建 RAG、知识库或代理持久记忆：在 SQL 中混合事务数据、BM25+RRF 混合检索与模型调用",
+    "事务与分析混合负载的单库部署场景",
+    "使用既有 MySQL 客户端与驱动的应用接入评估，或通过预构建二进制/ Docker 在 macOS、Linux、Windows 上本地运行"
+   ]
+  },
+  "sha": "467d6354d87e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3019,5 +3019,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4f63f4dfc494": {
+  "identity": {
+   "one_liner": "基于 Selenium 的 Google 地图评论抓取工具，支持多语言、图片下载与增量存储。",
+   "review": "该项目用 Python 与 Selenium 驱动 Chrome，抓取 Google Maps 商家的评论、评分与图片，结果写入 SQLite 并可导出 JSON，同步至 MongoDB，图片上传到 S3 兼容存储。需 Python 3.10+ 与 Chrome，支持 Docker 与 REST API。登录态浏览器可读取更多评论，未登录时 Google 仅返回前 5 条，容器模式不支持登录。",
+   "highlights": [
+    "提供 CLI 工具集：导出、导入、隐藏/恢复评论、查看统计与日志，并支持日期范围过滤",
+    "支持多商家配置继承与逐项覆盖，SQLite 记录变更审计历史并检测新增/更新评论",
+    "支持 25+ 语言评论解析、子评分抓取、相对日期转 ISO 时间戳，图片多线程下载并上传 S3/R2/MinIO"
+   ],
+   "use_cases": [
+    "定期抓取自家商家在 Google Maps 上的评论并同步到自有数据库做后续分析",
+    "通过 docker-compose 部署 API 服务，以 HTTP 触发抓取任务并存入 MongoDB",
+    "需要评论图片与分项评分（如酒店/餐饮）的本地化数据采集流程"
+   ]
+  },
+  "sha": "4f63f4dfc494",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d96465f9013e": {
+  "identity": {
+   "one_liner": "基于 LMDB 的持久化键值存储，提供异步与同步的 ES6 Map 风格 API。",
+   "review": "FlashStore 是一个 Node.js 本地键值存储库，底层由 LMDB 实现，对外暴露类似 ES6 Map 的异步（FlashStore）与同步（FlashStoreSync）API。同步版本维护内存 Map 并在后台按序写入；值经 JSON 序列化存储，存在 Date、NaN、BigInt 等往返失真。要求 Node.js 26+，仅支持 ESM。适用于需要将数据持久化到本地文件系统、或为其他 API 数据做本地缓存的场景。",
+   "highlights": [
+    "提供 async set/get/has/delete/clear/forEach 与 entries/keys/values 异步迭代，迭代支持 gt/gte/lt/lte/reverse/limit/prefix 范围选项",
+    "FlashStoreSync 维护全量内存 Map 并按序后台写入，写入失败后进一步变更会抛出异常",
+    "通过 flash-store.operation diagnostics channel 在 set/delete/clear 成功后发布不含键值路径的消息，并附带基于 LMDB 的基准测试脚本"
+   ],
+   "use_cases": [
+    "需要以 Map 风格 API 将键值数据持久化到本地文件系统的 Node.js 应用",
+    "为其他 API 返回的数据建立本地缓存",
+    "需要按键序范围扫描或字符串前缀扫描的场景"
+   ]
+  },
+  "sha": "d96465f9013e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

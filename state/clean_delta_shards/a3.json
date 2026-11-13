@@ -23528,5 +23528,891 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "7e079a4f5714+2": {
+  "fn": "vmikhailov/code-explorer",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    9,
+    2,
+    9,
+    [
+     "Website",
+     "License: MIT",
+     "Homebrew",
+     ".NET",
+     "NuGet",
+     "VS Marketplace",
+     "Open VSX"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    21,
+    9,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "*(We run two distinct types of benchmarks: **1. End-to-End AI Agent Workflows** (measuring how much time, tokens, and missed dependencies a graph saves an LLM on real tasks) and **2. Deterministic Graph Engine Head-to-Head** (cold indexing speed, RAM, MCP latency, and extraction recall across `371` verified items without an LLM). Full catalog: benchmarks/README.md and code-explorer.app/benchmarks.html.)*"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    31,
+    23,
+    29,
+    [
+     "|Metric|**`twentyhq/twenty` (`24.5k` files): `CBM` → `CodeExplorer`** (Case 01)|**324-Service Multi-Repo (`13.8k` files): `ripgrep` → `CodeExplorer`** (Case 02)|**`OrchardCore` (`334` .NET projects): `ripgrep` → `CodeExplorer`** (Case 05)|",
+     "|:---|:---|:---|:---|",
+     "|**Time to Answer**|`9m 15s` → **`1m 33s` (`6.0×` faster)**|`29m 52s` → **`4m 16s` (`7.00×` faster)**|`11m 04s` → **`4m 25s` (`2.51×` faster)**|",
+     "|**Cumulative Input Tokens**|`1.68M` → **`242K` (`7.0×` fewer)**|`17.19M` → **`686K` (`25.07×` fewer, `11.50×` cheaper)**|`16.10M` → **`3.91M` (`4.12×` fewer, `1.95×` less tool output, `2.94×` cheaper)**|",
+     "|**Agent Effort**|`28` turns (`8` `CBM` + `3` AST scripts + `10` reads) → **`7` turns (`13` queries, `0` reads)**|`285` turns (`142` CLI, `114` reads, `14` scripts) → **`18` turns (`10` CLI, `16` reads, `0` scripts)**|`193` turns / `389` steps (`117` file reads) → **`92` turns / `184` steps (`36` file reads, `3.25×` fewer)**|",
+     "|**Recall & Context Health**|`3.4%` (`13 / 381`) from `CBM` graph → **`100%` (`381 / 381`) from `graph.db`**|`82%` *(missed 9 RTB services, 1 compaction)* → **`100%` recall (`0` blind spots)**|`92.7%` (`307 / 331`, *24 caller errors*) → **`100%` (`331 / 331`)**|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    29,
+    31
+   ],
+   [
+    "replace",
+    33,
+    34,
+    31,
+    32,
+    [
+     "*(Evaluated on `immich-app/immich` (`3,205` files, `461k` LOC) and `twentyhq/twenty` (`24,527` files, `2.49M` LOC) against a frozen seed-42 ground-truth dataset (`371` items across `C1–C11`: `130` Group A Basic Code + `241` Group B Architecture, DB & Queues). Full reproducible reports and scripts: Case Study 03 (`ce` vs. `codebase-memory-mcp`) and Case Study 04 (`ce` vs. `graphify`).)*"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    32,
+    33
+   ],
+   [
+    "replace",
+    35,
+    42,
+    33,
+    40,
+    [
+     "|Dimension|**`CodeExplorer` (`ce`)**|**`codebase-memory-mcp` (`CBM`)**|**`graphify`**|",
+     "|:---|:---:|:---:|:---:|",
+     "|**Cold Index (`immich`, `3.2k` files)**|**`17.60 s`** (`55.1 MB` DB)|`20.60 s` (`282.0 MB` DB)|`107.60 s` (`52.3 MB` dir)|",
+     "|**Cold Index (`twenty`, `24.5k` files)**|`147.33 s` (**`784.0 MB`** DB)|**`96.90 s`** (`842.5 MB` DB)|`DNF (>45 min timeout)`|",
+     "|**Part 1 Recall (`L1–L3`: Endpoints, HTTP, Call Graph, Inheritance)**|**`78%`** (`102 / 130`; `7W/1T` vs `CBM`, `6W/2T` vs `graphify`)|`38%` (`49 / 130`; `50%` on `immich`)|`18%` (`23 / 130`; `35%` on `immich`)|",
+     "|**Part 2 Recall (`L4–L5`: Queues, DB Tables, Read/Write Lineage, Services)**|**`97.5%`** (`235 / 241`)|*Not modeled*|*Not modeled*|",
+     "|**Structured Query & CI Governance**|**OpenCypher (`4.3–4.7 ms`) + 32+ CI Gates**|Cypher subset (`38–71 ms`), snapshot diff|Keyword BFS/DFS (`334 ms`), Leiden clusters|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    40,
+    41
+   ],
+   [
+    "replace",
+    43,
+    46,
+    41,
+    42,
+    [
+     " CodeExplorer Service Topology"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    42,
+    43
+   ],
+   [
+    "replace",
+    47,
+    50,
+    43,
+    44,
+    [
+     " Service topology projected across concentric architectural tiers (Ingress, Public Services, Message Brokers, Domain Services, and Databases). "
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    44,
+    45
+   ],
+   [
+    "replace",
+    51,
+    65,
+    45,
+    55,
+    [
+     " Installation •",
+     " Quick Start •",
+     " MCP Server •",
+     " Invariant Gates •",
+     " VS Code Extension •",
+     " Languages •",
+     " Ontology •",
+     " Comparison •",
+     " CLI Reference •",
+     " MCP Tools"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    78,
+    55,
+    68
+   ],
+   [
+    "replace",
+    78,
+    79,
+    68,
+    69,
+    [
+     "Install from the Visual Studio Marketplace or Open VSX Registry — on activation, the extension offers one-click registration of the CodeExplorer MCP server in your IDE (VS Code Copilot Agent Mode, Cursor, Windsurf, Google Antigravity, and Claude Code) and manages the native `ce` binary automatically:"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    117,
+    69,
+    107
+   ],
+   [
+    "replace",
+    117,
+    118,
+    107,
+    108,
+    [
+     "Standalone archives are available on GitHub Releases:"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    108,
+    109
+   ],
+   [
+    "replace",
+    119,
+    127,
+    109,
+    117,
+    [
+     "|OS|Architecture|Asset|",
+     "|:---|:---|:---|",
+     "|macOS|Apple Silicon (`arm64`)|`ce-osx-arm64.tar.gz`|",
+     "|macOS|Intel (`x64`)|`ce-osx-x64.tar.gz`|",
+     "|Linux|`x64`|`ce-linux-x64.tar.gz`|",
+     "|Linux|`arm64`|`ce-linux-arm64.tar.gz`|",
+     "|Windows|`x64`|`ce-win-x64.zip`|",
+     "|Windows|`arm64`|`ce-win-arm64.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    129,
+    117,
+    119
+   ],
+   [
+    "delete",
+    129,
+    132,
+    119,
+    119
+   ],
+   [
+    "equal",
+    132,
+    139,
+    119,
+    126
+   ],
+   [
+    "replace",
+    139,
+    154,
+    126,
+    127,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    127,
+    128
+   ],
+   [
+    "delete",
+    155,
+    157,
+    128,
+    128
+   ],
+   [
+    "equal",
+    157,
+    176,
+    128,
+    147
+   ],
+   [
+    "replace",
+    176,
+    181,
+    147,
+    148,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    198,
+    148,
+    165
+   ],
+   [
+    "delete",
+    198,
+    200,
+    165,
+    165
+   ],
+   [
+    "equal",
+    200,
+    223,
+    165,
+    188
+   ],
+   [
+    "replace",
+    223,
+    239,
+    188,
+    189,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    257,
+    189,
+    207
+   ],
+   [
+    "delete",
+    257,
+    259,
+    207,
+    207
+   ],
+   [
+    "equal",
+    259,
+    263,
+    207,
+    211
+   ],
+   [
+    "replace",
+    263,
+    269,
+    211,
+    214,
+    [
+     " Focused Sub-Graph and Inspector",
+     "",
+     " Focused service neighborhood with transitive broker links and the unified right-hand inspector panel. "
+    ]
+   ],
+   [
+    "equal",
+    269,
+    273,
+    214,
+    218
+   ],
+   [
+    "replace",
+    273,
+    277,
+    218,
+    222,
+    [
+     " * **Domain Microservice Map**: Interactive graph with Concentric Orbits, Swimlanes, Domain Islands, Hive Plot, Grid, and Dependency Matrix modes.",
+     " * **Architecture Tiers**: Layered view across Presentation, Application, Domain, and Infrastructure tiers.",
+     " * **Project Flow**: Upstream/downstream dependency columns for a selected project, showing endpoints, database tables, and message topics.",
+     " * **Bounded Context Map**: Visualizes domain groupings, capabilities, and domain entities."
+    ]
+   ],
+   [
+    "equal",
+    277,
+    279,
+    222,
+    224
+   ],
+   [
+    "replace",
+    279,
+    283,
+    224,
+    228,
+    [
+     " * **Info**: Displays inbound/outbound calls, database dependencies, topics, and source links for the selected node or edge.",
+     " * **Orbits**: Reorders concentric tiers and toggles tier visibility.",
+     " * **Hidden**: Lists filtered nodes with search and one-click restore.",
+     " * **Gates**: Evaluates Semantic Invariant Gates, displays new vs. tolerated violations, ratchets baselines, and jumps directly to offending lines of code."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    285,
+    228,
+    230
+   ],
+   [
+    "replace",
+    285,
+    291,
+    230,
+    231,
+    [
+     " Project Flow View"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    231,
+    232
+   ],
+   [
+    "replace",
+    292,
+    293,
+    232,
+    233,
+    [
+     " Project Flow view showing service cards, inbound/outbound dependencies, database links, and source navigation. "
+    ]
+   ],
+   [
+    "equal",
+    293,
+    296,
+    233,
+    236
+   ],
+   [
+    "replace",
+    296,
+    297,
+    236,
+    237,
+    [
+     "CodeExplorer combines Tree-sitter parsers, SQL parsers, and **250 framework analyzers** across 8 languages. Maturity reflects how much real-world code each analyzer has been validated against: **Stable** means validated on large open-source and production repositories, **Beta** means coverage is still growing. If the graph looks wrong on your repository, please open an issue."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    237,
+    238
+   ],
+   [
+    "replace",
+    298,
+    311,
+    238,
+    249,
+    [
+     "|Language|Maturity|Files & Manifests|Extracted Framework Semantics (250 Library Parsers)|",
+     "|:---|:---|:---|:---|",
+     "|**C#**|Stable|`.cs`, `.csproj`, `.sln`, `.slnx`|ASP.NET Core Controllers & Minimal APIs, FastEndpoints, Carter, YARP, gRPC, HttpClient, EF Core, Dapper, Marten, Linq2Db, NHibernate, MassTransit (incl. Sagas), Wolverine, NServiceBus, Rebus, Hangfire, Quartz.NET, CAP, MediatR, Dapr, Azure/AWS SDKs, Semantic Kernel|",
+     "|**TypeScript / JS**|Stable|`.ts`, `.tsx`, `.js`, `.jsx`, `package.json`|NestJS (REST, GraphQL `@Resolver`, DI), Express, Fastify, Next.js, Hono, tRPC, Remix, SvelteKit, Astro, Cloudflare Workers, React/Vue/Angular/Svelte, Prisma, TypeORM, Kysely, MikroORM, BullMQ, Inngest, Temporal, NATS/MQTT, TanStack Query/SWR, Vercel AI SDK, Playwright/Cypress|",
+     "|**SQL**|Stable|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "|**Go**|Stable|`.go`, `go.mod`|Gin, Fiber, Echo, Fasthttp, Beego, Gorilla Mux, Go-Zero, Go-Kit/Kratos, `net/http`, gRPC, gRPC-Gateway, ConnectRPC/Twirp, Watermill, Asynq, Machinery/River, Kafka-Go/Franz-Go, Dapr, GORM, `sqlx`, `sqlc`, Ent, Bun, `pgx`, Temporal, Uber Fx/Wire|",
+     "|**Java**|Stable|`.java`, `pom.xml`, `build.gradle`|Spring Boot/Cloud/Batch/Integration/Gateway, Quarkus (RESTEasy, Panache, SmallRye), Micronaut, Dropwizard/Jersey, Vert.x, Akka/Pekko, Netty, Apache Dubbo, Camel, Pulsar, Axon, JPA/Hibernate, MyBatis (Annotations & XML), jOOQ, JDBI, R2DBC, OpenFeign/Retrofit, Temporal, LangChain4j/Spring AI|",
+     "|**Kotlin & Android**|Stable|`.kt`, `.kts`, `build.gradle.kts`, `AndroidManifest.xml`|Spring Web/Data, Ktor Server & Client DSL, Micronaut, http4k, gRPC-Kotlin, Apollo GraphQL, Exposed, Ktorm, Room DAO/Entities, SQLDelight, Coroutines Channels/SharedFlow, Retrofit/OkHttp, Hilt/Dagger/Koin/Kodein DI, Jetpack Compose, Voyager/Decompose, Kotest/MockK|",
+     "|**Python**|Stable|`.py`, `pyproject.toml`, `requirements.txt`|FastAPI, Litestar, Flask, Django, Sanic/Tornado/Falcon, Strawberry GraphQL, SQLAlchemy, SQLModel, Tortoise ORM, `asyncpg`/`psycopg3`, Motor/Mongo, ClickHouse, Qdrant/Milvus/Weaviate, Celery, Dramatiq, RQ, FastStream, AIOKafka, Pika/RabbitMQ, Airflow/Prefect, Temporal, OpenAI/Anthropic/LangChain/CrewAI/PydanticAI|",
+     "|**Rust**|Stable|`.rs`, `Cargo.toml`|Axum, Actix Web, Warp, Rocket, Tonic gRPC, Reqwest, SQLx, SeaORM, Diesel, Tokio, Lapin/rdkafka|",
+     "|**ColdFusion**|Beta|`.cfc`, `.cfm`|Components, functions, `cfquery` SQL extraction, HTTP calls|"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    314,
+    249,
+    252
+   ],
+   [
+    "replace",
+    314,
+    315,
+    252,
+    253,
+    [
+     "The graph schema is organized into five decoupled layers (see `docs/ontology.md` for the full node and relationship specification):"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    322,
+    253,
+    260
+   ],
+   [
+    "delete",
+    322,
+    324,
+    260,
+    260
+   ],
+   [
+    "equal",
+    324,
+    328,
+    260,
+    264
+   ],
+   [
+    "replace",
+    328,
+    339,
+    264,
+    275,
+    [
+     "|Tool|What it does best|How CodeExplorer differs|",
+     "|:---|:---|:---|",
+     "|**Sourcegraph** (code search, SCIP)|Compiler-accurate code navigation and search across many repositories, run as a server.|Runs locally as a single binary. Models system-level architecture (services, endpoints, topics, tables) and enforces rules on it. Its symbol resolution is less precise than SCIP indexers.|",
+     "|**GitHub CodeQL**|Deep semantic and security dataflow queries over per-language databases, built from the compiler for compiled languages.|No build required. One graph across all languages, with cross-service HTTP/gRPC/queue edges and architecture gates with ratchet baselines. Not a security dataflow engine.|",
+     "|**Joern**|Open-source Code Property Graph for vulnerability research, queried with a Scala DSL.|Architecture-level ontology instead of a low-level CPG, standard OpenCypher, and MCP / VS Code / CI integration out of the box.|",
+     "|**Serena** and other LSP-based MCP servers|Precise symbol lookup and editing for agents through language servers.|Gives agents the system view (cross-service calls, data lineage, blast radius) rather than symbol-level edits. Works well alongside an LSP-based server.|",
+     "|**`codebase-memory-mcp` (`CBM`)**|Fast Go/C Tree-sitter structural & call-graph indexing (`96.9s` on `twenty`), low RAM usage, branch graph diffing (`compare_graphs`), and runtime trace overlays (`ingest_traces`).|Adds Layer 4–5 architectural ontology (ORM/SQL database tables, `READS_FROM`/`WRITES_TO` lineage, BullMQ/Kafka queues, GraphQL/REST endpoints), NestJS DI call resolution, and CI Semantic Invariant Gates (Case Study 03).|",
+     "|**`graphify`**|Unsupervised Leiden community clustering, cross-community bridge detection (`graphify://surprises`), docstring rationale extraction, GitHub PR triage, and Obsidian/HTML knowledge vault exports.|Scales to 24.5k-file monorepos (`147s` vs. `>45m` timeout on `twenty`), queries an indexed SQLite database via OpenCypher (`599ms` cold MCP init vs. `3.7s`), and models endpoints, queues, and database lineage (Case Study 04).|",
+     "|**Aider repo map**|Compact Tree-sitter summary of important symbols, placed directly into the prompt.|A persistent graph the agent can query on demand with multi-hop questions, instead of a static summary.|",
+     "|**ArchUnit**, **NetArchTest**, **dependency-cruiser**|Architecture rules written as tests inside one language ecosystem. ArchUnit can also freeze existing violations.|One rule language (OpenCypher) across languages and services, and the same graph also powers visualization and agent context.|",
+     "|**Structurizr**, C4 diagrams-as-code|Carefully authored architecture models and diagrams.|The model is derived from code, so it does not drift. Diagrams can be exported to Mermaid or C4 (`ce export`).|"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    344,
+    275,
+    280
+   ],
+   [
+    "replace",
+    344,
+    345,
+    280,
+    281,
+    [
+     "* **Language maturity varies.** See the Maturity column in Supported Languages."
+    ]
+   ],
+   [
+    "equal",
+    345,
+    351,
+    281,
+    287
+   ],
+   [
+    "delete",
+    351,
+    353,
+    287,
+    287
+   ],
+   [
+    "equal",
+    353,
+    355,
+    287,
+    289
+   ],
+   [
+    "replace",
+    355,
+    372,
+    289,
+    304,
+    [
+     "|Command|Description|",
+     "|:---|:---|",
+     "|`ce init [name]`|Initialize `.codeexplorer/` workspace directory and SQLite schema.|",
+     "|`ce scan [path]`|Parse source files, build AST and semantic layers, and resolve cross-project edges (`--clear` for full rebuild).|",
+     "|`ce status`|Show workspace statistics, database size, project counts by language, and node/edge totals (`--json` for JSON).|",
+     "|`ce query <cypher>`|Run an ad-hoc OpenCypher query (`-n <name>` for saved queries, `-j` for JSON output).|",
+     "|`ce queries`|List built-in and workspace-saved OpenCypher queries.|",
+     "|`ce gate check`|Evaluate Semantic Invariant Gates (`-g <id>` for a single gate, `-f markdown|json|console`).|",
+     "|`ce gate ratchet --update`|Create or tighten violation baseline files in `.codeexplorer/baselines/`.|",
+     "|`ce gate init`|Generate a starter gate template in `.codeexplorer/gates/`.|",
+     "|`ce export`|Export architecture, C4, data lineage, or event pipeline diagrams (`--format mermaid|c4`, `--type lineage|cqrs`).|",
+     "|`ce mcp`|Start the local MCP server over `stdio` JSON-RPC (or run `ce mcp configure` to set up IDE agents).|",
+     "|`ce intent`|Classify files into business domains and bounded contexts (supports local GGUF via `llama.cpp` or OpenAI-compatible APIs).|",
+     "|`ce model [status\\|download]`|Check or download the optional local GGUF model for offline intent classification.|",
+     "|`ce clear [path]`|Clear indexed graph data for a path or reset the workspace graph (`-y`).|"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    375,
+    304,
+    307
+   ],
+   [
+    "replace",
+    375,
+    399,
+    307,
+    329,
+    [
+     "|Tool|Description|",
+     "|:---|:---|",
+     "|`get_architecture_map`|High-level workspace architecture: projects, services, databases, ingress endpoints, and egress calls.|",
+     "|`get_project_dependencies`|Direct and transitive project/package dependencies (`projectFilter` optional).|",
+     "|`get_project_entry_points`|HTTP endpoints, gRPC methods, GraphQL resolvers, CLI commands, and message consumers for a project.|",
+     "|`find_symbol`|Locate types, interfaces, methods, or functions by name pattern.|",
+     "|`get_file_outline`|Return classes, methods, fields, and line ranges for a file without reading the full file.|",
+     "|`get_call_chain`|Trace invocation paths between two functions up to `maxDepth`.|",
+     "|`resolve_call_target`|Resolve concrete class implementations of an interface or abstract method.|",
+     "|`analyze_code_impact`|Compute downstream callers and files affected by changing a symbol.|",
+     "|`inspect_data_lineage`|Find all SQL queries, ORM entities, methods, and services reading from or writing to a table.|",
+     "|`find_refactoring_opportunities`|Identify unreferenced symbols, dead code, or high-coupling types.|",
+     "|`execute_custom_read_cypher`|Execute a read-only OpenCypher (`MATCH`) query against the graph.|",
+     "|`list_project_queries`|List saved parameterized queries in `.codeexplorer/queries/`.|",
+     "|`save_project_query`|Validate and save a reusable OpenCypher query to `.codeexplorer/queries/`.|",
+     "|`execute_project_query`|Run a saved or built-in query by name with parameter binding.|",
+     "|`export_architecture_diagram`|Export Mermaid or C4 diagrams for architecture, data lineage, or CQRS flows.|",
+     "|`fetch_code_snippets`|Read source snippets by file and line range from graph node results.|",
+     "|`get_taxonomy`|Return active node labels, relationship types, and counts in the workspace graph.|",
+     "|`get_node_definition`|Return schema documentation for a specific ontology node kind.|",
+     "|`init_workspace` / `scan_workspace`|Initialize or re-index the workspace graph from an MCP client.|",
+     "|`get_workspace_status`|Return index health, schema version, and node/edge counts.|"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    406,
+    329,
+    336
+   ],
+   [
+    "replace",
+    406,
+    417,
+    336,
+    337,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    419,
+    337,
+    339
+   ],
+   [
+    "delete",
+    419,
+    421,
+    339,
+    339
+   ],
+   [
+    "equal",
+    421,
+    422,
+    339,
+    340
+   ],
+   [
+    "replace",
+    422,
+    424,
+    340,
+    341,
+    [
+     "MIT License"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "82c8b1b7b33a+2": {
+  "fn": "giuliodali/ha-db-storage-manager",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "DB Storage Manager icon"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " DB Storage Manager "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    10,
+    4,
+    6,
+    [
+     " See exactly where your Home Assistant database space goes, and safely get it back. ",
+     " A HACS integration with a sidebar panel, undo for everything it clears, and per-entity history retention."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    17,
+    7,
+    11,
+    [
+     " HACS Custom",
+     " Release",
+     " Validate",
+     " License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    11,
+    12
+   ],
+   [
+    "replace",
+    18,
+    21,
+    12,
+    13,
+    [
+     " Walkthrough: find a spike, filter to leftover history, clear it with a backup, set a retention rule, undo from History"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    42,
+    13,
+    34
+   ],
+   [
+    "replace",
+    42,
+    43,
+    34,
+    35,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    35,
+    36
+   ],
+   [
+    "replace",
+    44,
+    53,
+    36,
+    45,
+    [
+     "|**Overview**|Live database size, free space, unreferenced data, cleanup candidates, treemap by integration and type, largest entities, size over time with free space / undo data and long-term statistics stacked.|",
+     "|**Entities**|Search and faceted filters (Suggestion, Referenced In, Integration, Device, Type, Defined in, Retention, Status, Last update). Size bars split states from statistics.|",
+     "|**Referenced In**|Counts every place an entity is used: automations, scripts, scenes, dashboards (per view), helpers, Energy dashboard, YAML files (including `sql` and `command_line` definitions).|",
+     "|**Actions**|Disable, clear history, disable and clear, change retention. Each shows a preview first: what happens to each entity, how much it frees, and warnings.|",
+     "|**Undo**|Whole-batch undo from the History tab. Only missing rows are restored, so data recorded since is kept.|",
+     "|**Retention**|Per-entity limits on *state* history, enforced nightly by an automation named \"DB Storage: nightly retention\", followed by a repack to return the space.|",
+     "|**Inspector**|Browse the raw stored states (with collapsible JSON attributes), hourly and 5-minute statistics for any entity.|",
+     "|**Reclaim**|Repack the database so freed space goes back to the disk, and watch the file shrink.|",
+     "|**Sensors, event, services**|Database size and free space, retention rules and last run, a `db_storage_manager_retention_run` event and a `db_storage_manager.run_retention` action for your own automations.|"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    45,
+    46
+   ],
+   [
+    "replace",
+    54,
+    60,
+    46,
+    49,
+    [
+     " Overview",
+     "",
+     " Entities filtered to Remove history"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    82,
+    49,
+    71
+   ],
+   [
+    "replace",
+    82,
+    83,
+    71,
+    72,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    72,
+    73
+   ],
+   [
+    "replace",
+    84,
+    91,
+    73,
+    80,
+    [
+     "|Getting started|Requirements, install, first scan, what each tab is for|",
+     "|Finding things|Search, filters, suggestions, Referenced In, the period drill-down, the inspector|",
+     "|Actions and undo|What each action does, previews, backups, undoing, History tab|",
+     "|Retention|Per-entity limits, the maintained automation, how to see and trace it|",
+     "|Options, sensors and services|Everything you can configure or automate against|",
+     "|How it stays safe|What it touches, what it never touches, where files live|",
+     "|Troubleshooting and FAQ|Common questions and fixes|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    105,
+    80,
+    94
+   ],
+   [
+    "replace",
+    105,
+    114,
+    94,
+    95,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

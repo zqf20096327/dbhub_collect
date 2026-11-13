@@ -3063,5 +3063,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d53b2f4888ca": {
+  "identity": {
+   "one_liner": "基于 pingap 与 Pingora 的分布式集中管控型 Web 应用防火墙",
+   "review": "PingWAF 是用 Rust 编写的开源 WAF，构建在 pingap 反向代理（Pingora 框架）之上。控制平面定义站点与规则，数据平面 agent 经 gRPC 双向流同步规则并回传日志与指标，策略变更无需重载即可下发。支持 all-in-one 单进程与 server+agent 分布式两种部署；防护特性默认关闭，需按站点启用。",
+   "highlights": [
+    "提供基于 libinjection 与 Aho-Corasick 的四阶段检测管道（规范化、签名、表达式规则、异常评分），覆盖 SQLi、XSS、RCE、路径穿越与命令注入",
+    "控制平面与 agent 通过 gRPC 七个 RPC 实现规则下发、心跳、日志与指标回传，支持边缘自动 ACME 证书签发、mTLS 客户端证书吊销",
+    "内置 i18n 管理控制台，含 JWT/bcrypt 与 Passkey 认证、多租户隔离及配置版本快照回滚；请求日志写入 Elasticsearch，原始请求/响应存于 PostgreSQL"
+   ],
+   "use_cases": [
+    "在自有基础设施上自建反向代理型 WAF，替代托管边缘安全服务",
+    "多站点/多区域边缘节点需集中管理规则、证书与日志的场景",
+    "需要 CC 防护、Bot 识别、多维限速（IP/路径/ASN/国家等）及边缘缓存的流量管控"
+   ]
+  },
+  "sha": "d53b2f4888ca",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

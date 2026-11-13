@@ -16454,5 +16454,3756 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "5953be3846ca+2": {
+  "fn": "kitfunso/hippo-memory",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    11,
+    6,
+    11,
+    [
+     "npm",
+     "npm downloads",
+     "CI",
+     "license",
+     "website"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    15,
+    12,
+    13,
+    [
+     " hippo init adding memory to one project"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    13,
+    16
+   ],
+   [
+    "replace",
+    18,
+    19,
+    16,
+    17,
+    [
+     "Install it, then run `hippo init` inside one project. Init creates the project's `.hippo/` store and adds a block to the `CLAUDE.md` or `AGENTS.md` already there. On your machine it adds hooks for the agents it finds, such as Claude Code's in `~/.claude/settings.json`, and a daily 6:15am run. What hippo init changes lists all of it and the flags that skip each part."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    24,
+    17,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     "Setting up every git repo under a folder in one go is a second step. The Quick start says what it changes, then gives the command."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    23,
+    26
+   ],
+   [
+    "replace",
+    28,
+    29,
+    26,
+    27,
+    [
+     "Having an AI agent install it? Point it at llms-install.md: it installs, wires hippo into the agents it finds, and verifies with `hippo doctor`."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    37,
+    27,
+    35
+   ],
+   [
+    "replace",
+    37,
+    40,
+    35,
+    36,
+    [
+     "**Contents:** Why · Receipts · Quick start · Agent setup · MCP server · How it works · Features · CLI · Comparison · Benchmarks · FAQ · Contributing"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    45,
+    36,
+    41
+   ],
+   [
+    "replace",
+    45,
+    46,
+    41,
+    42,
+    [
+     "Hippo learns from outcomes. When a recalled memory turns out wrong, mark it bad and it drops out of the top results. Memories you keep using get stronger. Those two are the parts we measured helping retrieval, on a synthetic test (mechanism audit, round 2). When a fact changes, run `hippo supersede` and the old version leaves recall; we have not measured whether that helps. The design borrows from the hippocampus (decay, three layers, sleep consolidation), but that is inspiration. In our tests, decay tied with decay switched off and sleep lowered recall (Benchmarks)."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    48,
+    42,
+    44
+   ],
+   [
+    "delete",
+    48,
+    50,
+    44,
+    44
+   ],
+   [
+    "equal",
+    50,
+    54,
+    44,
+    48
+   ],
+   [
+    "replace",
+    54,
+    55,
+    48,
+    49,
+    [
+     "Every measurement we have ever published is indexed in `docs/evals/`,"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    58,
+    49,
+    52
+   ],
+   [
+    "replace",
+    58,
+    64,
+    52,
+    58,
+    [
+     "- **Correct your agent once, and with hippo it repeats that mistake about half as often. Z0 round 3, real Claude Code sessions on 29 repositories, hippo against built-in memory alone: 11 repeats in 100 against 21, 2 to 4 tasks after the correction, at no extra cost (ratio 1.006 [0.964, 1.049]).** With no memory the agent repeats it 83 times in 100. Over every first chance to repeat, the pre-registered read is 14.9 points fewer [5.5, 24.3], adjusted p 0.006, against a full-win line of 15. The gain is the same with lesson capture switched off, so round 4 tests how much of it the stored lessons carry. (result; round 2, on 16 repositories, was inconclusive at -8.9 points)",
+     "- **Sequential Learning Benchmark.** benchmarks/sequential-learning/. 50 tasks, 10 buried traps. Measures whether agents learn from past mistakes, not just retrieve text. v0.11.0 informal magnitude RETRACTED v1.7.9; mechanism remains shipped. See CHANGELOG.md v1.7.9 entry.",
+     "- **LongMemEval oracle split, all 500 questions in one pooled store, BM25 only, no embeddings, v0.11: R@5 = 74.0%** (benchmarks/README.md, scripts in benchmarks/longmemeval/). A different setup from the per-haystack results under Benchmarks, so the two are not a before and after.",
+     "- **On a private 300-query developer store, R@1 0.41 to 0.62 with `hippo recall \"<query>\" --reranker jev`**, the free local cross-encoder against Jev (full eval). The opt-in TypeSafe Jev reranker, off by default, about 0.0004 USD a recall. 2000-draw paired bootstrap; the margin held in 20 of 20 seeds and a permutation null reached it in 0 of 200 runs. Ranking only: three graded tests on one 150-question LongMemEval set did **not** show a better answer rate than the free local cross-encoder, and that negative result is in the same doc. What it buys today is a shorter context: on that set, 2 memories ranked by Jev answered as well as 5 ranked by the cross-encoder.",
+     "- **Staged Slack corpus, 10 incident scenarios: recall beat transcript replay in 10 of 10** (benchmarks/e1.3/). The answers sit mid-channel by design. In every scenario hippo's top 10 results held all the answer messages, and the channel's last 10 messages held none.",
+     "- **Slack connector, 1000-event ingestion smoke: 0 outbound HTTP** (benchmarks/e1.3/). Proven by a `globalThis.fetch` spy that throws on call, not a hardcoded zero. Recall makes no network call by default. One default does: `hippo sleep` sends memory text to Anthropic for fact extraction when `ANTHROPIC_API_KEY` is set. Sleep runs at the end of every Claude Code and OpenCode session and in the daily job, so with the key set the call happens without you asking. `{\"extraction\":{\"enabled\":false}}` in `.hippo/config.json` turns that off. Opt-in features such as the Jev reranker above, the LLM reranker and the API embedders also call out."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    58,
+    59
+   ],
+   [
+    "replace",
+    65,
+    68,
+    59,
+    60,
+    [
+     "- **3-cluster fixture where BM25 alone cannot discriminate: dlPFC goal-conditioned cluster discrimination passes 3 of 3 queries.** Full goal stack with policy weighting and lifespan-windowed outcome propagation, one query per goal; deterministic test in `benchmarks/micro/results/b3-depth.json`."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    77,
+    60,
+    69
+   ],
+   [
+    "delete",
+    77,
+    79,
+    69,
+    69
+   ],
+   [
+    "equal",
+    79,
+    81,
+    69,
+    71
+   ],
+   [
+    "replace",
+    81,
+    82,
+    71,
+    72,
+    [
+     "Start in one project. What hippo init changes lists everything the second command writes. A step-by-step version is on the website: hippo-memory.com/quickstart."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    90,
+    72,
+    80
+   ],
+   [
+    "replace",
+    90,
+    91,
+    80,
+    81,
+    [
+     "**Optional: many repos at once.** Read what it changes first. `hippo init --scan <folder>` looks for git repos in the folder and up to three levels below it, skipping dot-folders and `node_modules`. Each repo gets a `.hippo/` store, seeded with lessons from the last 365 days of its commits and with its agent memories, and is added to the daily run's list. For the agents it finds, it installs the same user-level hooks as `hippo init`: 8 Claude Code hook entries in `~/.claude/settings.json` and the OpenCode plugin. It also sets up the daily 6:15am run, a crontab line on Linux and macOS or a scheduled task on Windows. It adds no block to any repo's `CLAUDE.md` or `AGENTS.md`. `--no-hooks`, `--no-schedule` and `--no-learn` leave out the hooks, the daily run and the history import."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    99,
+    81,
+    89
+   ],
+   [
+    "replace",
+    99,
+    100,
+    89,
+    90,
+    [
+     "2. **Imports** what your coding agents remember, about this project and about you (Agent memories)"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    110,
+    90,
+    100
+   ],
+   [
+    "replace",
+    110,
+    114,
+    100,
+    101,
+    [
+     "Full release history: **CHANGELOG.md** · GitHub Releases"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    120,
+    101,
+    107
+   ],
+   [
+    "replace",
+    120,
+    122,
+    107,
+    109,
+    [
+     "- **Instruction files.** A block between ` ` and ` ` in the project's `CLAUDE.md` or `AGENTS.md`, only if that file already exists. Codex, Cursor, OpenClaw, OpenCode and Pi read `AGENTS.md`.",
+     "- **Claude Code,** when the project has `CLAUDE.md` or `.claude/settings.json`: 8 hook entries in `~/.claude/settings.json`, one each on SessionEnd, UserPromptSubmit, PreCompact, PostCompact and PostToolUseFailure and three on SessionStart. Framework Integrations says what each one runs."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    125,
+    109,
+    112
+   ],
+   [
+    "replace",
+    125,
+    126,
+    112,
+    113,
+    [
+     "- **Agent memories.** On every run, the notes your coding agents keep about this project go into its store, and the ones about you go into the global store. Agent memories lists what is read."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    131,
+    113,
+    118
+   ],
+   [
+    "replace",
+    131,
+    138,
+    118,
+    119,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    163,
+    119,
+    144
+   ],
+   [
+    "delete",
+    163,
+    165,
+    144,
+    144
+   ],
+   [
+    "equal",
+    165,
+    173,
+    144,
+    152
+   ],
+   [
+    "replace",
+    173,
+    184,
+    152,
+    153,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    196,
+    153,
+    165
+   ],
+   [
+    "replace",
+    196,
+    201,
+    165,
+    166,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    228,
+    166,
+    193
+   ],
+   [
+    "replace",
+    228,
+    233,
+    193,
+    194,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    245,
+    194,
+    206
+   ],
+   [
+    "replace",
+    245,
+    256,
+    206,
+    207,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    268,
+    207,
+    219
+   ],
+   [
+    "replace",
+    268,
+    274,
+    219,
+    220,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    286,
+    220,
+    232
+   ],
+   [
+    "replace",
+    286,
+    290,
+    232,
+    233,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    306,
+    233,
+    249
+   ],
+   [
+    "delete",
+    306,
+    308,
+    249,
+    249
+   ],
+   [
+    "equal",
+    308,
+    318,
+    249,
+    259
+   ],
+   [
+    "replace",
+    318,
+    325,
+    259,
+    260,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    326,
+    260,
+    261
+   ],
+   [
+    "delete",
+    326,
+    328,
+    261,
+    261
+   ],
+   [
+    "equal",
+    328,
+    337,
+    261,
+    270
+   ],
+   [
+    "replace",
+    337,
+    351,
+    270,
+    271,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    355,
+    271,
+    275
+   ],
+   [
+    "replace",
+    355,
+    356,
+    275,
+    276,
+    [
+     "Every memory has a half-life: 365 days by default. Until 1.46.0 the default was 7 days. A pre-registered evaluation found 7 days lost the current version of a fact far more often: it was in the top five 29% of the time at 7 days and 75% at 365 (result). 730 days and decay off both tied with 365. So 365 was not tuned: it is the tested value that tied with the others, and on that test decay made no measurable difference to recall. `hippo sleep` moves memories still on the old 7-day base to the new one, once, and records each move in the audit log. Set `defaultHalfLifeDays` in `.hippo/config.json` to choose your own."
+    ]
+   ],
+   [
+    "equal",
+    356,
+    366,
+    276,
+    286
+   ],
+   [
+    "delete",
+    366,
+    368,
+    286,
+    286
+   ],
+   [
+    "equal",
+    368,
+    376,
+    286,
+    294
+   ],
+   [
+    "replace",
+    376,
+    382,
+    294,
+    295,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    383,
+    295,
+    296
+   ],
+   [
+    "delete",
+    383,
+    385,
+    296,
+    296
+   ],
+   [
+    "equal",
+    385,
+    404,
+    296,
+    315
+   ],
+   [
+    "delete",
+    404,
+    406,
+    315,
+    315
+   ],
+   [
+    "equal",
+    406,
+    414,
+    315,
+    323
+   ],
+   [
+    "replace",
+    414,
+    422,
+    323,
+    324,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    423,
+    324,
+    325
+   ],
+   [
+    "delete",
+    423,
+    425,
+    325,
+    325
+   ],
+   [
+    "equal",
+    425,
+    438,
+    325,
+    338
+   ],
+   [
+    "delete",
+    438,
+    440,
+    338,
+    338
+   ],
+   [
+    "equal",
+    440,
+    474,
+    338,
+    372
+   ],
+   [
+    "delete",
+    474,
+    476,
+    372,
+    372
+   ],
+   [
+    "equal",
+    476,
+    484,
+    372,
+    380
+   ],
+   [
+    "replace",
+    484,
+    489,
+    380,
+    381,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    489,
+    492,
+    381,
+    384
+   ],
+   [
+    "delete",
+    492,
+    494,
+    384,
+    384
+   ],
+   [
+    "equal",
+    494,
+    503,
+    384,
+    393
+   ],
+   [
+    "replace",
+    503,
+    509,
+    393,
+    394,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    509,
+    513,
+    394,
+    398
+   ],
+   [
+    "replace",
+    513,
+    514,
+    398,
+    399,
+    [
+     "Sleep keeps the store tidy. It has not been shown to improve recall. In round 2 of the mechanism audit, a slept LongMemEval store scored 3.6 points lower at hit@5 than the same store never slept, and no scorer showed sleep helping (PR #232)."
+    ]
+   ],
+   [
+    "equal",
+    514,
+    608,
+    399,
+    493
+   ],
+   [
+    "delete",
+    608,
+    610,
+    493,
+    493
+   ],
+   [
+    "equal",
+    610,
+    618,
+    493,
+    501
+   ],
+   [
+    "replace",
+    618,
+    625,
+    501,
+    502,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    625,
+    629,
+    502,
+    506
+   ],
+   [
+    "replace",
+    629,
+    632,
+    506,
+    507,
+    [
+     "This is the mechanism with the clearest measured win. On the synthetic E1 test, plain BM25 plus the outcome nudge cut how often a marked-bad memory stayed in the top five from 71.9% to 0.0% (mechanism audit, round 2). Every mark in E1 is correct; real marks are noisier, since `--bad` marks the whole recall batch."
+    ]
+   ],
+   [
+    "equal",
+    632,
+    641,
+    507,
+    516
+   ],
+   [
+    "replace",
+    641,
+    646,
+    516,
+    517,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    646,
+    656,
+    517,
+    527
+   ],
+   [
+    "delete",
+    656,
+    658,
+    527,
+    527
+   ],
+   [
+    "equal",
+    658,
+    666,
+    527,
+    535
+   ],
+   [
+    "replace",
+    666,
+    671,
+    535,
+    536,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    681,
+    536,
+    546
+   ],
+   [
+    "delete",
+    681,
+    683,
+    546,
+    546
+   ],
+   [
+    "equal",
+    683,
+    696,
+    546,
+    559
+   ],
+   [
+    "delete",
+    696,
+    698,
+    559,
+    559
+   ],
+   [
+    "equal",
+    698,
+    700,
+    559,
+    561
+   ],
+   [
+    "replace",
+    700,
+    701,
+    561,
+    562,
+    [
+     "|Command|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    701,
+    702,
+    562,
+    563
+   ],
+   [
+    "replace",
+    702,
+    802,
+    563,
+    663,
+    [
+     "|`hippo init`|Create `.hippo/`, install agent hooks and the daily run (what it changes)|",
+     "|`hippo init --global`|Create global store at `~/.hippo/`|",
+     "|`hippo init --no-hooks`|Create `.hippo/` without auto-installing hooks|",
+     "|`hippo remember \"<text>\"`|Store a memory|",
+     "|`hippo remember \"<text>\" --tag <t>`|Store with tag (repeatable)|",
+     "|`hippo remember \"<text>\" --error`|Store as error (2x half-life)|",
+     "|`hippo remember \"<text>\" --pin`|Store with no decay|",
+     "|`hippo remember \"<text>\" --verified`|Set confidence: verified (default)|",
+     "|`hippo remember \"<text>\" --observed`|Set confidence: observed|",
+     "|`hippo remember \"<text>\" --inferred`|Set confidence: inferred|",
+     "|`hippo remember \"<text>\" --global`|Store in global `~/.hippo/` store|",
+     "|`hippo recall \"<query>\"`|Retrieve relevant memories (local + global)|",
+     "|`hippo recall \"<query>\" --budget <n>`|Recall within token limit (default: 4000)|",
+     "|`hippo recall \"<query>\" --limit <n>`|Cap result count|",
+     "|`hippo recall \"<query>\" --why`|Show match reasons and source buckets|",
+     "|`hippo recall \"<query>\" --hops <n>`|Also surface memories N hops away in the entity/relation graph (0..3, default off)|",
+     "|`hippo recall \"<query>\" --json`|Output as JSON|",
+     "|`hippo context --auto`|Smart context injection (auto-detects task from git)|",
+     "|`hippo context \"<query>\" --budget <n>`|Context injection with explicit query (default: 1500)|",
+     "|`hippo context --limit <n>`|Cap memory count in context|",
+     "|`hippo context --budget 0`|Skip entirely (zero token cost)|",
+     "|`hippo context --framing <mode>`|Framing: observe (default), suggest, assert|",
+     "|`hippo context --format <fmt>`|Output format: markdown (default) or json|",
+     "|`hippo import --chatgpt <path>`|Import from ChatGPT memory export (JSON or txt)|",
+     "|`hippo import --claude <path>`|Import from CLAUDE.md or Claude memory.json|",
+     "|`hippo import --cursor <path>`|Import from .cursorrules or .cursor/rules|",
+     "|`hippo import --markdown <path>`|Import from structured markdown (headings -> tags)|",
+     "|`hippo import --file <path>`|Import from any text file|",
+     "|`hippo import --dry-run`|Preview import without writing|",
+     "|`hippo import --global`|Write imported memories to `~/.hippo/`|",
+     "|`hippo capture --stdin`|Extract memories from piped conversation text|",
+     "|`hippo capture --file <path>`|Extract memories from a file|",
+     "|`hippo capture --dry-run`|Preview extraction without writing|",
+     "|`hippo sleep`|Run consolidation (decay + merge)|",
+     "|`hippo sleep --dry-run`|Preview consolidation without writing|",
+     "|`hippo status`|Memory health: counts, strengths, last sleep|",
+     "|`hippo outcome --good`|Strengthen last recalled memories|",
+     "|`hippo outcome --bad`|Weaken last recalled memories|",
+     "|`hippo outcome --id <id> --good`|Target a specific memory|",
+     "|`hippo inspect <id>`|Full detail on one memory|",
+     "|`hippo forget <id>`|Force remove a memory|",
+     "|`hippo dormant [<query>]`|List faded memories sleep kept instead of deleting|",
+     "|`hippo dormant restore <id>`|Bring a dormant memory back to active memory|",
+     "|`hippo dormant forget <id>`|Delete a dormant memory permanently|",
+     "|`hippo doctor [--json]`|Check the install: Node, store, schema, sleep, agent hooks; each problem names its fix. It never changes `hippo.db`, though SQLite may leave empty `hippo.db-wal` and `hippo.db-shm` files beside it|",
+     "|`hippo support-bundle [--out <file>] [--include-logs]`|Write a redacted JSON file for a support ticket: versions, doctor checks, config, store counts and log names, never memory text; `--include-logs` adds each log's last 200 lines, which can quote it|",
+     "|`hippo tokens [--days n]`|Estimated tokens of memory text handed to agents, per surface, what later model calls re-read of the hook and compact-resume blocks, and what skipping unchanged hook blocks saved|",
+     "|`hippo failures [--days n]`|Failed tool calls the capture-error hook saw, by outcome, and how many errors first happened in another session|",
+     "|`hippo embed`|Embed all memories for semantic search|",
+     "|`hippo embed --status`|Show embedding coverage|",
+     "|`hippo watch -- <command> [args...]`|Run command with no shell, auto-learn from failures|",
+     "|`hippo learn --git`|Scan recent git commits for lessons|",
+     "|`hippo learn --git --days <n>`|Scan N days back (default: 7)|",
+     "|`hippo learn --git --repos <paths>`|Scan multiple repos (comma-separated)|",
+     "|`hippo daily-runner`|Sweep registered workspaces and run daily learn+sleep|",
+     "|`hippo conflicts`|List detected open memory conflicts|",
+     "|`hippo conflicts --json`|Output conflicts as JSON|",
+     "|`hippo resolve <id>`|Show both conflicting memories for comparison|",
+     "|`hippo resolve <id> --keep <mem_id>`|Resolve: keep winner, weaken loser|",
+     "|`hippo resolve <id> --keep <mem_id> --forget`|Resolve: keep winner, delete loser|",
+     "|`hippo promote <id>`|Copy a local memory to the global store|",
+     "|`hippo share <id>`|Share with attribution + transfer scoring|",
+     "|`hippo share <id> --force`|Share even if transfer score is low|",
+     "|`hippo share --auto`|Auto-share all high-scoring memories|",
+     "|`hippo share --auto --dry-run`|Preview what would be shared|",
+     "|`hippo peers`|List projects contributing to global store|",
+     "|`hippo sync`|Pull global memories into local project|",
+     "|`hippo invalidate \"<pattern>\"`|Actively weaken memories matching an old pattern|",
+     "|`hippo invalidate \"<pattern>\" --reason \"<why>\"`|Include what replaced it|",
+     "|`hippo decide \"<decision>\"`|Record architectural decision|",
+     "|`hippo decide \"<decision>\" --context \"<why>\"`|Include reasoning|",
+     "|`hippo decide \"<decision>\" --supersedes <id>`|Supersede a previous decision|",
+     "|`hippo hook list`|Show available framework hooks|",
+     "|`hippo hook install <target>`|Install hook (claude-code also adds its 8 settings.json hook entries: session start and end, each prompt, compaction, failed tool calls)|",
+     "|`hippo hook uninstall <target>`|Remove hook|",
+     "|`hippo handoff create --summary \"...\"`|Create a session handoff|",
+     "|`hippo handoff latest`|Show the most recent handoff|",
+     "|`hippo handoff show <id>`|Show a specific handoff by ID|",
+     "|`hippo session latest`|Show latest task snapshot + events|",
+     "|`hippo session resume`|Re-inject latest handoff as context|",
+     "|`hippo current show`|Compact current state (task + session events)|",
+     "|`hippo card create --title \"...\"`|Create a work-queue card (`--repo`, `--contract`, `--budget`, repeatable `--depends-on <id>`)|",
+     "|`hippo card show <id>`|Show a card, its deps, runs, comments and latest handoff|",
+     "|`hippo card list [--status <status>]`|List cards, newest-updated first|",
+     "|`hippo card claim <id> --runtime <name>`|Claim a ready or blocked card; prints its run id and the time its 4-hour lease expires|",
+     "|`hippo card heartbeat <id> --run <n>`|Extend a claimed card's lease|",
+     "|`hippo card block <id> --reason \"<why>\" [--run <n>]`|Block a running card; the reason is recorded as a comment|",
+     "|`hippo card review <id> [--run <n>]`|Move a running card to review|",
+     "|`hippo card complete <id> --outcome <success\\|failure\\|partial> [--run <n>]`|Complete a card in review: `success` marks it done and promotes children whose parents are all done; `failure` or `partial` shelves it|",
+     "|`hippo card reclaim`|Sweep every card whose lease has passed and return it to ready|",
+     "|`hippo card comment <id> --body \"...\"`|Add a comment to a card|",
+     "|`hippo wm push --scope <s> --content \"...\"`|Push to working memory|",
+     "|`hippo wm read --scope <s>`|Read working memory entries|",
+     "|`hippo wm clear --scope <s>`|Clear working memory|",
+     "|`hippo wm flush --scope <s>`|Flush working memory (session end)|",
+     "|`hippo dashboard`|Open web dashboard at localhost:3333 (memory health by project, and the card board); open the URL in the `dashboard.url` file the start line names (on Windows it sits in the global hippo folder under your profile); its one-time ticket opens the dashboard once, within 10 minutes of the start|",
+     "|`hippo dashboard --port <n>`|Use custom port|",
+     "|`hippo mcp`|Start MCP server (stdio transport)|",
+     "|`hippo serve`|Start the HTTP API server for this store on `127.0.0.1:6789` (`--port <n>` or `HIPPO_PORT`; `--host <host>`, which off loopback needs TLS or `--allow-cleartext`). Every request needs an API key, from this machine too (`hippo auth create`, then `Authorization: Bearer <key>`). Each start writes a fresh member key to `.hippo/server.key`, readable by you alone, and the hippo CLI and hooks send it when `HIPPO_API_KEY` is unset (sleep and the quarantine routes need an admin key). Each caller gets 20 requests a second, burst 40 (`HIPPO_CALLER_RPS`; `0` turns it off). See Security defaults|",
+     "|`hippo serve --tls-cert <file> --tls-key <file>`|Serve HTTPS with that PEM certificate and key (or set `HIPPO_TLS_CERT` and `HIPPO_TLS_KEY`). Without them a network bind refuses to start, since API keys and memory text would travel in cleartext; behind a TLS-terminating proxy, pass `--allow-cleartext` (or set `HIPPO_ALLOW_CLEARTEXT=1`)|"
+    ]
+   ],
+   [
+    "equal",
+    802,
+    804,
+    663,
+    665
+   ],
+   [
+    "delete",
+    804,
+    806,
+    665,
+    665
+   ],
+   [
+    "equal",
+    806,
+    813,
+    665,
+    672
+   ],
+   [
+    "replace",
+    813,
+    814,
+    672,
+    673,
+    [
+     "|Framework|Detected by|Patches|"
+    ]
+   ],
+   [
+    "equal",
+    814,
+    815,
+    673,
+    674
+   ],
+   [
+    "replace",
+    815,
+    821,
+    674,
+    680,
+    [
+     "|Claude Code|`CLAUDE.md` or `.claude/settings.json`|`CLAUDE.md` + 8 hook entries in `~/.claude/settings.json` (listed below)|",
+     "|Codex|`AGENTS.md` or `.codex`|`AGENTS.md` + `UserPromptSubmit`/`SessionStart(compact)` hooks in Codex's `hooks.json` when Codex is installed (trust them once in `/hooks`); session capture is opt-in with `hippo hook install codex`, which wraps the Codex launcher|",
+     "|Cursor|`AGENTS.md`|`AGENTS.md`, which Cursor reads from the project root|",
+     "|OpenClaw|`.openclaw` or `AGENTS.md`|`AGENTS.md`; the native plugin is a separate install: `openclaw plugins install hippo-memory`|",
+     "|OpenCode|`.opencode/` or `opencode.json`|`AGENTS.md` + TS plugin at `~/.config/opencode/plugins/hippo.ts` (subscribes to `session.idle` + `session.created`)|",
+     "|Pi|`.pi` or `.pi/agent`|`AGENTS.md`; copy the Pi extension for session hooks|"
+    ]
+   ],
+   [
+    "equal",
+    821,
+    822,
+    680,
+    681
+   ],
+   [
+    "replace",
+    822,
+    823,
+    681,
+    682,
+    [
+     "Init patches an instruction file only if it already exists. It also sets up a daily run and imports your coding agents' own memories; What hippo init changes lists everything."
+    ]
+   ],
+   [
+    "equal",
+    823,
+    824,
+    682,
+    683
+   ],
+   [
+    "replace",
+    824,
+    825,
+    683,
+    684,
+    [
+     "Setup guides on the website: Claude Code · Codex · Cursor."
+    ]
+   ],
+   [
+    "equal",
+    825,
+    838,
+    684,
+    697
+   ],
+   [
+    "replace",
+    838,
+    839,
+    697,
+    698,
+    [
+     "This adds a ` ` ... ` ` block that tells the agent to:"
+    ]
+   ],
+   [
+    "equal",
+    839,
+    866,
+    698,
+    725
+   ],
+   [
+    "replace",
+    866,
+    867,
+    725,
+    726,
+    [
+     "For GitHub Copilot, when `$COPILOT_HOME` (else `~/.copilot`) or a VS Code User folder exists, `hippo setup` writes hippo's own `hooks/hippo.json`. When the Copilot folder was there before setup, it also adds a `hippo` server to `mcp-config.json` and a block to `copilot-instructions.md`. The block asks the agent to call `hippo_recall` and `hippo_remember`. The Copilot CLI, including its sessions inside VS Code, uses the session-start, tool-failure, pre-compact and session-end hooks, the server and the block. VS Code's agent mode (the Local agent, VS Code 1.109.3 or later) reads the same hooks file. It gets session start, the pre-compact snapshot and a capture after every reply. Setup also adds hippo to VS Code's own `mcp.json` and writes `prompts/hippo.instructions.md`, so its recall tools and instructions work too. The hooks, the VS Code files and how to remove them: integrations/copilot.md."
+    ]
+   ],
+   [
+    "equal",
+    867,
+    886,
+    726,
+    745
+   ],
+   [
+    "replace",
+    886,
+    887,
+    745,
+    746,
+    [
+     "Setup for each client: hippo-memory.com/mcp."
+    ]
+   ],
+   [
+    "equal",
+    887,
+    900,
+    746,
+    759
+   ],
+   [
+    "replace",
+    900,
+    905,
+    759,
+    760,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    905,
+    933,
+    760,
+    788
+   ],
+   [
+    "replace",
+    933,
+    934,
+    788,
+    789,
+    [
+     "Plugin docs: extensions/openclaw-plugin/. Integration guide: integrations/openclaw.md."
+    ]
+   ],
+   [
+    "equal",
+    934,
+    937,
+    789,
+    792
+   ],
+   [
+    "replace",
+    937,
+    938,
+    792,
+    793,
+    [
+     "Plugin with session, prompt and compaction hooks plus error auto-capture. See extensions/claude-code-plugin/."
+    ]
+   ],
+   [
+    "equal",
+    938,
+    939,
+    793,
+    794
+   ],
+   [
+    "replace",
+    939,
+    942,
+    794,
+    795,
+    [
+     "Full integration details: integrations/"
+    ]
+   ],
+   [
+    "equal",
+    942,
+    945,
+    795,
+    798
+   ],
+   [
+    "replace",
+    945,
+    946,
+    798,
+    799,
+    [
+     "Hippo's design borrows seven properties of the human hippocampus. This section is design inspiration, not measured benefit. For what we measured, see the Receipts and PR #232."
+    ]
+   ],
+   [
+    "equal",
+    946,
+    955,
+    799,
+    808
+   ],
+   [
+    "replace",
+    955,
+    956,
+    808,
+    809,
+    [
+     "**Why does sleep consolidate?** During sleep, the hippocampus replays compressed versions of recent episodes and \"teaches\" the neocortex by repeatedly activating the same patterns. Hippo's `sleep` command borrows the idea for a consolidation pass. In hippo's own audit it lowered recall (Sleep consolidation has the numbers)."
+    ]
+   ],
+   [
+    "equal",
+    956,
+    957,
+    809,
+    810
+   ],
+   [
+    "replace",
+    957,
+    958,
+    810,
+    811,
+    [
+     "The 7 mechanisms in full: PLAN.md#core-principles"
+    ]
+   ],
+   [
+    "equal",
+    958,
+    959,
+    811,
+    812
+   ],
+   [
+    "replace",
+    959,
+    960,
+    812,
+    813,
+    [
+     "For how these mechanisms connect to LLM training, continual learning, and open research problems: **RESEARCH.md**"
+    ]
+   ],
+   [
+    "equal",
+    960,
+    961,
+    813,
+    814
+   ],
+   [
+    "replace",
+    961,
+    962,
+    814,
+    815,
+    [
+     "**Why does reward modulate decay?** In spiking neural networks, reward-modulated STDP strengthens synapses that contribute to positive outcomes and weakens those that don't. Hippo's reward-proportional decay (v0.11.0) borrows this idea: memories with consistent positive outcomes decay slower, negatives decay faster, with no fixed deltas. Inspired by MH-FLOCKE's R-STDP architecture for quadruped locomotion, where the same mechanism produces stable learning with 11.6x lower variance than PPO."
+    ]
+   ],
+   [
+    "equal",
+    962,
+    963,
+    815,
+    816
+   ],
+   [
+    "replace",
+    963,
+    964,
+    816,
+    817,
+    [
+     "**Prior art in agent memory simulation.** The idea that human-like memory produces human-like behavior as an emergent property was explored in IEEE research from 2010-2011 (5952114, 5548405, 5953964). Walking between rooms and forgetting why you went there doesn't need direct simulation; it emerges naturally from a memory system with capacity limits and decay. Hippo takes the mechanisms as design ideas. Whether better agent behavior follows from them has not been shown."
+    ]
+   ],
+   [
+    "equal",
+    964,
+    965,
+    817,
+    818
+   ],
+   [
+    "replace",
+    965,
+    968,
+    818,
+    819,
+    [
+     "**Related work:** HippoRAG (Gutierrez et al., 2024) applies hippocampal indexing to RAG via knowledge graphs. MemPalace (Sigman & Jovovich, 2026) organizes memory spatially (wings/halls/rooms) with AAAK compression, achieving 100% on LongMemEval. MH-FLOCKE (Hesse, 2026) uses spiking neurons with R-STDP for embodied cognition. Each system tackles a different facet: HippoRAG optimizes retrieval quality, MemPalace optimizes retrieval organization, MH-FLOCKE optimizes embodied learning, and Hippo works on the memory lifecycle."
+    ]
+   ],
+   [
+    "equal",
+    968,
+    971,
+    819,
+    822
+   ],
+   [
+    "replace",
+    971,
+    972,
+    822,
+    823,
+    [
+     "The AI-memory category matured fast in 2026. Hippo's specific take (bio-decay, strengthen-on-use, outcome-weighted half-lives) is one stance among several. The table below is a feature snapshot, not a verdict: graph-first systems (gbrain, Zep, Cognee), agent-managed systems (Letta), and version-control / skill-distillation takes (Memoria, EverMind) all solve adjacent problems with different mechanics."
+    ]
+   ],
+   [
+    "equal",
+    972,
+    973,
+    823,
+    824
+   ],
+   [
+    "replace",
+    973,
+    974,
+    824,
+    825,
+    [
+     "|Feature|Hippo|MemPalace|Mem0|Basic Memory|gbrain|Zep|Letta|Cognee|Memoria|EverMind|"
+    ]
+   ],
+   [
+    "equal",
+    974,
+    975,
+    825,
+    826
+   ],
+   [
+    "replace",
+    975,
+    995,
+    826,
+    846,
+    [
+     "|Decay by default|Yes|No|No|No|No|No|No|No|No|No|",
+     "|Retrieval strengthening|Yes|No|No|No|No|No|No|Partial (recall tuning)|No|Partial (Skill Memory distills patterns)|",
+     "|Reward-proportional decay|Yes|No|No|No|No|No|No|No|No|No|",
+     "|Hybrid search (BM25 + embeddings)|Yes|Embeddings + spatial|Yes (semantic + BM25 + entity)|No|Yes (vec + rerank + graph)|Yes (graph + vec)|?|Yes (GraphRAG)|Yes (vector + full-text)|Yes (mRAG, multi-modal)|",
+     "|Schema acceleration / knowledge graph|Yes (schema)|No|Partial (entity linking; graph memory on Pro)|No|Yes (typed KG, self-wiring)|Yes (temporal KG)|No|Yes (auto-ontologies)|No (typed claims)|Yes (hierarchical: user/group/agent)|",
+     "|Conflict detection + resolution|Yes|No|Partial (hosted platform marks superseded facts)|No|Yes (eval-surfaced)|Yes (auto-invalidate stale facts)|No|No|Yes (auto-detect + quarantine)|Partial (temporal tracking)|",
+     "|Multi-agent shared memory|Yes|No|No|No|Yes (brain repo, team mounts)|Yes|Yes (shared memory blocks)|Yes|Yes (branch/merge across sessions)|Yes (multi-agent coordination)|",
+     "|Transfer scoring|Yes|No|No|No|No|No|No|No|No|No|",
+     "|Outcome tracking|Yes|No|No|No|No|No|No|No|No|Partial (Cases: agent trajectories)|",
+     "|Confidence tiers|Yes|No|No|No|No (typed facts)|No|No|No|No|No|",
+     "|Spatial organization|No|Yes (wings/halls/rooms)|No|No|No|No|No|No|No|No|",
+     "|Lossless compression|No|Yes (AAAK, 30x)|No|No|No|No|No|No|No|No|",
+     "|Cross-tool import (ChatGPT/Claude/Cursor)|Yes|No|No|No|Partial (data sources)|?|No|Partial (28 data sources)|No (Git ops)|Partial (mRAG: PDFs/images/URLs)|",
+     "|Auto-hook install|Yes|No|No|No|No|No|No|No|No|No|",
+     "|MCP server|Yes|Yes|Yes (hosted, needs an account)|Yes|Yes (stdio + HTTP/OAuth)|Yes (hosted, needs an account)|Yes (hosted, needs an API key)|Yes (first-party Claude/LangGraph)|Yes|?|",
+     "|Zero runtime deps|Yes|No (ChromaDB)|No|No|No (PGLite or PG+pgvector)|No (managed service)|No (npm deps)|No (Python deps)|Yes (single Rust binary)|No (managed + OSS)|",
+     "|LongMemEval (best published)|98.0% any / 88.5% all R@5\\* (local MiniLM; 99.8% any-evidence with voyage-3-large; s_cleaned, per-haystack)|96.6% raw / 100% reranked R@5|94.4 (hosted platform)\\*\\*|N/A|95.53% all R@5\\* (paid reranker; 93.19% without; s_cleaned)|90.2% accuracy\\*\\* (LoCoMo 94.7%)|N/A|N/A|88.78% accuracy\\*\\* (overall, with a reader)|83.00% accuracy\\*\\* (overall; LoCoMo 93.05%, HaluMem 93.04%)|",
+     "|Git-friendly|Yes|No|No|Yes|Yes|No|Yes (memory tracked in git)|No|Yes (Git is the model)|?|",
+     "|Framework agnostic|Yes|Yes|Partial|Yes|Yes|Yes|Yes|Yes|Yes|Yes|",
+     "|License|MIT|(open)|Apache-2.0|(open)|MIT|Proprietary cloud (Graphiti: Apache-2.0)|Apache-2.0|MIT (core)|Apache-2.0|Apache-2.0 (OSS) + cloud|"
+    ]
+   ],
+   [
+    "equal",
+    995,
+    996,
+    846,
+    847
+   ],
+   [
+    "replace",
+    996,
+    997,
+    847,
+    848,
+    [
+     "\\* Hippo's figures are on `longmemeval_s_cleaned` with a per-question haystack, each the best of five retrieval settings in the benchmark scripts, not `hippo recall`. Any-evidence R@5 counts a hit when any answer session is in the top 5, over all 500 questions: 98.0% with the free local MiniLM embedder (an optional install) and 99.8% with voyage-3-large (measured 2026-06-09, not re-run). All-evidence R@5 counts a hit only when every answer session is in the top 5, over the 470 questions that have an answer: 86.8 to 88.5% with MiniLM. gbrain first published 97.6%, an any-evidence score over all 500; its report now leads with all-evidence, 95.53% (449 of 470) with the paid Voyage rerank-2.5 reranker and 93.19% without it. On all-evidence recall gbrain is ahead. The June 2026 build scored 98.6 any-evidence; `docs/evals/2026-09-23-longmemeval-reproduction.md` has both runs. An older hippo number, 86.8% R@5 on `longmemeval_oracle` under pooled (non-per-haystack) retrieval, is not comparable to per-haystack figures."
+    ]
+   ],
+   [
+    "equal",
+    997,
+    1002,
+    848,
+    853
+   ],
+   [
+    "replace",
+    1002,
+    1005,
+    853,
+    854,
+    [
+     "Side-by-side pages on the website: hippo vs mem0 · hippo vs Zep · hippo vs Letta · CLAUDE.md vs MEMORY.md."
+    ]
+   ],
+   [
+    "equal",
+    1005,
+    1008,
+    854,
+    857
+   ],
+   [
+    "replace",
+    1008,
+    1009,
+    857,
+    858,
+    [
+     "Three benchmarks testing three different things. Full details in `benchmarks/`."
+    ]
+   ],
+   [
+    "equal",
+    1009,
+    1012,
+    858,
+    861
+   ],
+   [
+    "replace",
+    1012,
+    1013,
+    861,
+    862,
+    [
+     "LongMemEval (ICLR 2025) is the industry-standard benchmark: 500 questions across 5 memory abilities, embedded in 115k+ token chat histories."
+    ]
+   ],
+   [
+    "equal",
+    1013,
+    1014,
+    862,
+    863
+   ],
+   [
+    "replace",
+    1014,
+    1015,
+    863,
+    864,
+    [
+     "**`hippo recall` (measured 2026-09-28 on hippo-memory 1.52.5, re-run 2026-10-06 on 1.64.0).** On a default install, `hippo recall` puts an answer session in its top 5 for 85.6% of the 500 `_s` questions (95% CI 82.4 to 88.6), and 87.8% with the optional MiniLM embedder (84.8 to 90.6; 87.6% on 1.52.5). Most of the gap to the scripts below is the default 4,000-token budget. Each memory in this test is a whole session, about 2,600 tokens at the median, so recall returns a median of 2 sessions. With the budget lifted, the same rankings score 96.8% (95.2 to 98.2) and 97.4% (96.0 to 98.6). A lifted call returns every candidate, a median of 47 sessions and 123,491 tokens per question, so those two figures measure the ranking, not an amount of text an agent could take in. Result: `docs/evals/2026-09-28-recall-cli-longmemeval-result.md`; re-run: `docs/evals/2026-10-06-recall-cli-longmemeval-rerun-1.64.0.md`."
+    ]
+   ],
+   [
+    "equal",
+    1015,
+    1018,
+    864,
+    867
+   ],
+   [
+    "replace",
+    1018,
+    1019,
+    867,
+    868,
+    [
+     "|Embedder|Dense-only R@5|Best of five settings, R@5|R@1|"
+    ]
+   ],
+   [
+    "equal",
+    1019,
+    1020,
+    868,
+    869
+   ],
+   [
+    "replace",
+    1020,
+    1022,
+    869,
+    871,
+    [
+     "|MiniLM-L6 (local, optional install)|96.8|98.0|88.4|",
+     "|voyage-3-large (opt-in, paid)|99.8|99.8|94.6|"
+    ]
+   ],
+   [
+    "equal",
+    1022,
+    1023,
+    871,
+    872
+   ],
+   [
+    "replace",
+    1023,
+    1024,
+    872,
+    873,
+    [
+     "These are any-evidence scores: a hit when any answer session is in the top 5, over all 500 questions. Counting a hit only when every answer session is in the top 5, over the 470 questions that have an answer, the MiniLM runs score 86.8 to 88.5. gbrain first published 97.6 any-evidence and now reports 95.53 all-evidence with a paid reranker, 93.19 without, so on all-evidence recall gbrain is ahead. These numbers come from the scripts in `benchmarks/longmemeval/`, which index every turn and fuse BM25 with dense ranks; they are not `hippo recall`, and a default install has no embedder. Re-measure: `docs/evals/2026-09-23-longmemeval-reproduction.md`. Any-evidence recall is near its ceiling on this task; all-evidence recall is not. Method and the global-pool comparison: `docs/evals/2026-06-09-longmemeval-per-haystack-dual.md`."
+    ]
+   ],
+   [
+    "equal",
+    1024,
+    1027,
+    873,
+    876
+   ],
+   [
+    "replace",
+    1027,
+    1030,
+    876,
+    879,
+    [
+     "- **Decay tied with decay switched off.** On hippo's synthetic lifecycle test, full@365 minus decay-off is -0.7 points [-1.4, 0.1] on currentR5, no measurable effect. That test runs 20 sessions, so a 365-day half-life barely decays inside it (mechanism audit, round 2; decay default).",
+     "- **Sleep lowered LongMemEval recall.** The slept store loses 3.6 points of hit@5 [-5.8, -1.4] to the never-slept one under the audit's declared scorer, and no scorer there shows sleep helping recall (mechanism audit, round 2).",
+     "- **Outcome marks helped on the synthetic test.** Plain BM25 plus the fast outcome nudge drops trap persistence from 71.9% to 0.0% (round 2). Round 1 found outcome feedback and retrieval strengthening each help there, in the test's best case: every outcome mark is right, and every scheduled recall repeats the probe's query (round 1). Supersession is not measured yet."
+    ]
+   ],
+   [
+    "equal",
+    1030,
+    1035,
+    879,
+    884
+   ],
+   [
+    "replace",
+    1035,
+    1036,
+    884,
+    885,
+    [
+     "|Metric|v0.28|v0.11 (BM25 only)|"
+    ]
+   ],
+   [
+    "equal",
+    1036,
+    1037,
+    885,
+    886
+   ],
+   [
+    "replace",
+    1037,
+    1042,
+    886,
+    891,
+    [
+     "|Recall@1|46.6%|50.4%|",
+     "|Recall@3|**67.0%**|66.6%|",
+     "|Recall@5|73.8%|74.0%|",
+     "|Recall@10|81.0%|82.6%|",
+     "|Answer in content@5|**49.6%**|46.6%|"
+    ]
+   ],
+   [
+    "equal",
+    1042,
+    1043,
+    891,
+    892
+   ],
+   [
+    "replace",
+    1043,
+    1044,
+    892,
+    893,
+    [
+     "|Question Type|Count|R@5|R@10|"
+    ]
+   ],
+   [
+    "equal",
+    1044,
+    1045,
+    893,
+    894
+   ],
+   [
+    "replace",
+    1045,
+    1051,
+    894,
+    900,
+    [
+     "|single-session-assistant|56|100.0%|100.0%|",
+     "|knowledge-update|78|89.7%|96.2%|",
+     "|multi-session|133|72.2%|82.0%|",
+     "|temporal-reasoning|133|72.9%|78.9%|",
+     "|single-session-user|70|62.9%|71.4%|",
+     "|single-session-preference|30|20.0%|33.3%|"
+    ]
+   ],
+   [
+    "equal",
+    1051,
+    1056,
+    900,
+    905
+   ],
+   [
+    "replace",
+    1056,
+    1057,
+    905,
+    906,
+    [
+     "> Note: v0.28 R@10 is 1.6pp below v0.11's BM25-only result. The earlier v0.27 benchmark showed an apparent 35pp regression; that was a methodology bug (budget-limited retrieval vs unlimited), fixed in v0.28 with the `minResults` option. See `evals/README.md` for the full investigation and per-type breakdown."
+    ]
+   ],
+   [
+    "equal",
+    1057,
+    1067,
+    906,
+    916
+   ],
+   [
+    "replace",
+    1067,
+    1068,
+    916,
+    917,
+    [
+     "LoCoMo is 10 long multi-session conversations (5,882 turns, 1,986 questions). Hippo scores it with a deterministic metric: did the gold evidence turn land in the top 5 recalled memories? No LLM judge is in the scoring path, so the numbers are not comparable to the LLM-as-judge accuracy Mem0 and Letta publish for LoCoMo."
+    ]
+   ],
+   [
+    "equal",
+    1068,
+    1071,
+    917,
+    920
+   ],
+   [
+    "replace",
+    1071,
+    1072,
+    920,
+    921,
+    [
+     "|Category|n|Evidence recall@5|"
+    ]
+   ],
+   [
+    "equal",
+    1072,
+    1073,
+    921,
+    922
+   ],
+   [
+    "replace",
+    1073,
+    1079,
+    922,
+    928,
+    [
+     "|single-hop|282|0.239|",
+     "|multi-hop|321|0.491|",
+     "|temporal-reasoning|92|0.169|",
+     "|open-domain|841|0.450|",
+     "|adversarial|446|0.226|",
+     "|**overall**|1,982|**0.363**|"
+    ]
+   ],
+   [
+    "equal",
+    1079,
+    1080,
+    928,
+    929
+   ],
+   [
+    "replace",
+    1080,
+    1081,
+    929,
+    930,
+    [
+     "Read these as a point estimate, not an exact value: n=1, and the run predates the v1.26.0 determinism fix and the harness fix in #126 (0.9% of stored rows lost their tags at run time). The table has not been re-run on a newer build. Overall recall is 2.10x the April v0.32.0 baseline under the identical protocol. Informational only, gates no feature. Full protocol, caveats and regeneration commands: `benchmarks/LOCOMO_INVESTIGATION.md`; harness in `benchmarks/locomo/`."
+    ]
+   ],
+   [
+    "equal",
+    1081,
+    1090,
+    930,
+    939
+   ],
+   [
+    "replace",
+    1090,
+    1092,
+    939,
+    940,
+    [
+     " Original v0.11.0 informal numbers (RETRACTED, preserved as audit trail in git, not reproduced here) "
+    ]
+   ],
+   [
+    "equal",
+    1092,
+    1095,
+    940,
+    943
+   ],
+   [
+    "replace",
+    1095,
+    1098,
+    943,
+    944,
+    [
+     "The benchmark, harness, and adapter contract remain shipped. Any memory system can run this benchmark by implementing the adapter interface."
+    ]
+   ],
+   [
+    "equal",
+    1098,
+    1103,
+    944,
+    949
+   ],
+   [
+    "delete",
+    1103,
+    1105,
+    949,
+    949
+   ],
+   [
+    "equal",
+    1105,
+    1122,
+    949,
+    966
+   ],
+   [
+    "replace",
+    1122,
+    1123,
+    966,
+    967,
+    [
+     "`hippo init` detects Claude Code, Codex, Cursor, OpenClaw, OpenCode and Pi, and wires itself into each one's instruction file, hooks or plugin. What runs automatically differs by agent. Any MCP client can use the MCP server, and anything else can call the CLI."
+    ]
+   ],
+   [
+    "equal",
+    1123,
+    1130,
+    967,
+    974
+   ],
+   [
+    "replace",
+    1130,
+    1131,
+    974,
+    975,
+    [
+     "mem0 uses a language model to extract memories, and its hosted MCP server keeps them in your Mem0 account (mem0 docs, checked 2026-09-28). Hippo stores memories in SQLite on your machine and needs no account and no model. On LoCoMo, a public test of questions about long conversations, Mem0 scored 94.9 and hippo 89.4 when we ran both."
+    ]
+   ],
+   [
+    "equal",
+    1131,
+    1142,
+    975,
+    986
+   ],
+   [
+    "replace",
+    1142,
+    1143,
+    986,
+    987,
+    [
+     "Yes, for short standing rules such as build commands and code style. Claude Code's memory docs say that when two rules contradict each other, Claude may pick one arbitrarily. Hippo holds the lessons that pile up and recalls the ones that match the task."
+    ]
+   ],
+   [
+    "equal",
+    1143,
+    1162,
+    987,
+    1006
+   ],
+   [
+    "replace",
+    1162,
+    1165,
+    1006,
+    1007,
+    [
+     "On repeat mistakes, yes, in one test of our own. We corrected Claude Code once on 29 repositories and counted repeats 2 to 4 tasks later, finding 11 in 100 with hippo added, against 21 with built-in memory alone, at the same cost. We can't yet say why, because the gain was the same with lesson capture switched off. Failed runs are in docs/evals too."
+    ]
+   ],
+   [
+    "equal",
+    1165,
+    1167,
+    1007,
+    1009
+   ],
+   [
+    "replace",
+    1167,
+    1179,
+    1009,
+    1010,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1179,
+    1183,
+    1010,
+    1014
+   ],
+   [
+    "replace",
+    1183,
+    1184,
+    1014,
+    1015,
+    [
+     "The commercial edition is planned; its private repository is a scaffold, not a released enterprise product. It is intended for larger companies as a separate package under a commercial licence from KITFUNSO LTD. Planned capabilities include SSO (OIDC and SAML sign-in), SCIM, organisation/team/project policy, an org admin view, the pilot report and telemetry join, SIEM export of the audit log, offline licence keys, serving agent hooks to laptops that keep no store of their own, hosted SaaS, and support with an SLA. Pull requests implementing those commercial features belong there; see CONTRIBUTING.md. Release availability and independently verified benefit are separate milestones in the roadmap."
+    ]
+   ],
+   [
+    "equal",
+    1184,
+    1186,
+    1015,
+    1017
+   ],
+   [
+    "delete",
+    1186,
+    1187,
+    1017,
+    1017
+   ],
+   [
+    "equal",
+    1187,
+    1188,
+    1017,
+    1018
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "644547d8e439+2": {
+  "fn": "91zgaoge/StoryMoss",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "StoryMoss 草苔"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " StoryMoss · 草苔 "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    10,
+    4,
+    6,
+    [
+     " 🌿 越写越懂的 AI 小说创作桌面应用 ",
+     " 幕后管理故事资产，幕前沉浸式写作，AI 在需要时随行辅助"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    22,
+    7,
+    14,
+    [
+     " Version",
+     " License",
+     " Build",
+     " Platform",
+     " Tauri",
+     " React",
+     " Rust"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    14,
+    17
+   ],
+   [
+    "replace",
+    25,
+    49,
+    17,
+    39,
+    [
+     "||特性|说明|",
+     "|:---:|---|---|",
+     "|🎬|**双界面创作**|幕前「墨纸」沉浸写作 + 幕后「机械」工作室管理，两套设计语言各得其所|",
+     "|🎛️|**自适应幕后工作台**|暗色主题、容器感知卡片与表单、独立面板滚动；800×600 到宽屏均无逐字竖排、固定限高裁切或悬浮遮挡|",
+     "|🤖|**Agency 多代理创作**|主创 / 管理 / 编辑审计三代理黑板并行协作，每章经 Gate v2 加权质量门（代码 0.2 / 规则 0.3 / 编辑 0.5，阈值 0.75）才交付；你的修改率作为独立信号回流|",
+     "|🗂️|**语料资产**|新闻 / 故事 / 概念 / 灵感 / 图片 / 链接 / 笔记按故事隔离；支持导入、AI 提炼、转为角色/世界观/伏笔草稿、交给导演调度|",
+     "|🎬|**导演 Agent 与剧组对话**|代理工作室三栏：导演统筹管理 / 编审 / 主创；子 agent 异步派发、心跳、租约、重试与审批；幕后可直接 @ 三个 agent|",
+     "|⚡|**分时介入架构**|幕前续写走三角色主创、编辑审计后台化；划词改写仍可走完整质检——解开「质量与速度不可兼得」的根本矛盾|",
+     "|🧠|**越写越懂你**|持续学习：从创作事件观察模式 → 提炼 instinct → 确认后晋升为可复用技能；Tab 接受 / Esc 放弃还会回灌到每拍写作手法的选择（章法偏好）|",
+     "|🧭|**长篇记性与计划**|续写前按需检索前文原文（【前文相关原文】只读块）；卷/弧中层计划（卷目标 / 卷末高潮 / 须兑现伏笔）；改稿后下游章纲标记待重规划、逐条勾选才落库——长篇不崩的四件套|",
+     "|🧪|**判官一致率与文笔校准**|「创作评估」按你的改动核对编辑的每条审查意见（判得准不准有数字）；文笔基线阈值经公版人类语料校准（`resources/voice_corpus/`）|",
+     "|📝|**PROBLEM 七元素**|简单指令自动基于 Erik Bork 七元素增强为强力 Logline，驱动大纲与续写|",
+     "|🌍|**资产强关联**|世界观 / 故事大纲 / 场景大纲 / 用户指令四位一体显式调和，剧情不跑偏|",
+     "|🔄|**资产回流**|每章正文生成后自动提取角色 / 关系 / 世界观 / 大纲回流累积进资产库，手工编辑永不覆盖，续写越写越强关联|",
+     "|🔌|**多模型适配**|OpenAI / Anthropic / Ollama / 本地 API，角色 × 任务模型路由|",
+     "|🔄|**双源自动更新**|GitHub Releases 优先、官网备用；清单与下载网络故障自动换源，备用源限同一版本，签名验证始终启用|",
+     "|📚|**全链路资产管理**|角色 / 世界构建 / 场景 / 知识图谱 / 伏笔看板 / 叙事分析 / 拆书，AI 不「吃书」|",
+     "|❤️|**情感回路**|单拍强制「事件→评估→情绪变化→行动/台词→代价」因果链；批量续写按章生成 1–3 幕；关系张力账本、情感债务与读者面板；情感驱动情节，不是形容词|",
+     "|🧩|**叙事契约**|每拍先编译场契约（目标 / 具名阻力 / 转折 / 必须结果 / 情感链 / 字数），writer 按这一页写；gate 对具名阻力缺席、正文过短、契约无效硬拦截；幕后选中另一部小说即切换，生成中也不静默拒绝|",
+     "|🧵|**多 write 并行**|同一故事最多 3 个 write 任务并行；章号由数据库原子分配，Append 同章排队，资产补齐加租约，不抢号、不重复造资产|",
+     "|📌|**固定语料**|语料页「固定用于续写」后，素材以只读块进入单拍/批量 writer prompt（≤4 条、≤1200 字）；图片语料读取尺寸/摘要；deepseek-v4.1-flash 等视觉模型可读原图，作者可强制 AI 遵守/化用|",
+     "|🪪|**姓名编译**|创世角色名做重名 / 同用字 / 同姓扎堆 / 长度塌缩 / 模型陈词组合校验；常见姓可正常使用，但不再整组「林雪/沈夜/苏墨/顾寒」式二字塌缩|"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    39,
+    42
+   ],
+   [
+    "replace",
+    52,
+    55,
+    42,
+    43,
+    [
+     " 幕前写作界面"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    43,
+    44
+   ],
+   [
+    "replace",
+    56,
+    57,
+    44,
+    45,
+    [
+     " 幕前 · 极简全屏写作，AI 输入栏随行辅助，文思模式主动给萤火提示 "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    45,
+    46
+   ],
+   [
+    "replace",
+    58,
+    61,
+    46,
+    47,
+    [
+     " 幕后工作室"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    47,
+    48
+   ],
+   [
+    "replace",
+    62,
+    65,
+    48,
+    49,
+    [
+     " 幕后 · 故事 / 角色 / 世界构建 / 场景 / 知识图谱 / 代理工作室等全套资产管理 "
+    ]
+   ],
+   [
+    "equal",
+    65,
+    74,
+    49,
+    58
+   ],
+   [
+    "replace",
+    74,
+    75,
+    58,
+    59,
+    [
+     "需要安装 Node.js（推荐 20 LTS）和 Rust。"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    81,
+    59,
+    65
+   ],
+   [
+    "replace",
+    81,
+    89,
+    65,
+    66,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    111,
+    66,
+    88
+   ],
+   [
+    "delete",
+    111,
+    113,
+    88,
+    88
+   ],
+   [
+    "equal",
+    113,
+    171,
+    88,
+    146
+   ],
+   [
+    "replace",
+    171,
+    172,
+    146,
+    147,
+    [
+     "真机检查发现两个训练沙盒的续写与前作严重脱节：一轮写出了现代都市「陈默/铜钱」的新故事（与《阴脉先生》第 106 章的桐人镇魇现场无关），另一轮生成正文后又被幕前切书的 ` ` 空文档覆盖。本版修复了根因："
+    ]
+   ],
+   [
+    "equal",
+    172,
+    177,
+    147,
+    152
+   ],
+   [
+    "replace",
+    177,
+    178,
+    152,
+    153,
+    [
+     "- **空稿守卫**：判分前把 ` `/空白/拒绝话术判为不可用产出，任务失败且不落假报告；`update_scene` 统一把视觉空 HTML 视为 None，幕前切书空文档不再覆盖已有正文。"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    187,
+    153,
+    162
+   ],
+   [
+    "replace",
+    187,
+    188,
+    162,
+    163,
+    [
+     "###"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "5b35e9fe7e0a+2": {
+  "fn": "alfredang/AI-LMS-TMS",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "Google Automations registry and source-editor guide"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    6,
+    4,
+    6
+   ],
+   [
+    "replace",
+    6,
+    9,
+    6,
+    7,
+    [
+     " A comprehensive Learning Management System (LMS) and Training Management System (TMS) with AI capabilities, designed for Singapore's SkillsFuture training ecosystem. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    18,
+    8,
+    14,
+    [
+     " Next.js",
+     " TypeScript",
+     " React",
+     " PostgreSQL",
+     " Tailwind CSS",
+     " Google AI"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    14,
+    15
+   ],
+   [
+    "replace",
+    19,
+    23,
+    15,
+    17,
+    [
+     " Live Demo",
+     " Documentation"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    17,
+    18
+   ],
+   [
+    "replace",
+    24,
+    31,
+    18,
+    19,
+    [
+     " AI-LMS-TMS Login Screen"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    19,
+    22
+   ],
+   [
+    "replace",
+    34,
+    35,
+    22,
+    23,
+    [
+     "AI Provider settings lets an"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    40,
+    23,
+    28
+   ],
+   [
+    "replace",
+    40,
+    41,
+    28,
+    29,
+    [
+     "See setup and verification."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    29,
+    30
+   ],
+   [
+    "replace",
+    42,
+    43,
+    30,
+    31,
+    [
+     "AI provider settings"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    62,
+    31,
+    50
+   ],
+   [
+    "delete",
+    62,
+    64,
+    50,
+    50
+   ],
+   [
+    "equal",
+    64,
+    65,
+    50,
+    51
+   ],
+   [
+    "replace",
+    65,
+    76,
+    51,
+    52,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    110,
+    52,
+    86
+   ],
+   [
+    "replace",
+    110,
+    127,
+    86,
+    103,
+    [
+     " - Ice Breaker, Pinboard, Break Timer, Word Cloud, Flash Cards, Live Q&A, Whiteboard, QR Code Generator, Padlet, Collaborative Note, Collaborative Flow, Collaborative Kanban, Live Poll, MindMaps, Spinning Wheel",
+     "- **Project Mgt Tools** — RACI Matrix, Digital/AI Transformation, Agile/Scrum, Design Thinking Studio, BMC Studio",
+     "- **Six Sigma Tools** — 5 Whys, Fishbone Diagram, Pareto Chart, System Thinking, SIPOC",
+     "- **Cyber Security Tools** — Cyber Labs, Ethical Hacking Labs, Pentest Labs, Cryptography",
+     "- **Finance Tools** — Tax Calculator, Financial Planning & Analysis, Financial Ratio Calculators, Financial Trend Analysis, Credit Loan Analysis",
+     "- **HR Tools** — HR Recruitment, AI Interviewing, AI Job Coaching, MBTI",
+     "- **Data Analytics Tools** — Pivot Visualization, Anomaly Detection, Factor Analysis, Mock Data Generator",
+     "- **ML Tools** — Classification, Clustering",
+     "- **Statistical Tools** — Probability, Descriptive, Correlation, Regression, Hypothesis, Confidence Interval, Bayesian Inference (NovaStats)",
+     "- **DOE Tools** — Full Factorial, Fractional Factorial, Taguchi, Central Composite, Box-Behnken, Plackett-Burman, Latin Square, Response Surface (NovaDOE)",
+     "- **SPC Tools** — c, u, np, p, X-mR, X̄-R, X̄-s charts, Distribution, Process Capability (NovaSPC)",
+     "- **Sustainability Tools** — Carbon Footprint Calculator",
+     "- **Networking Tools** — IP Calculator, PCAP Analyzer, Regex Generator",
+     "- **K8s Tools** — Ubuntu Playground, Kubernetes Playground",
+     "- **Blockchain Tools** — Certify NFT, Supply Verify, Hashing Tool",
+     "- **Quantum Tools** — Quantum Labs, IBM Composer, Quantum Programming Studio",
+     "- **Design Tools** — Logo Maker, AR/VR Playground"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    103,
+    104
+   ],
+   [
+    "replace",
+    128,
+    134,
+    104,
+    110,
+    [
+     " - **Text**: ChatGPT, Gemini, Claude, Grok, DeepSeek, Kimi, Qwen, Perplexity",
+     " - **Image**: Firefly, Nano Banana, Microsoft Designer, Leonardo, Face Swap",
+     " - **Video**: Kling, Invideo, Veed, Descript, Pictory",
+     " - **Music**: Suno",
+     " - **Presentation**: Gamma, NotebookLM, Napkin",
+     " - **UI Design**: Figma, Stitch"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    110,
+    111
+   ],
+   [
+    "replace",
+    135,
+    139,
+    111,
+    115,
+    [
+     " - **No Code Platforms**: AgentX, Opal, Relevance AI, Promptly AI",
+     " - **Low Code Platforms**: n8n, Langflow, Flowise",
+     " - **Voice Agents**: ElevenLabs, Retell AI, Vapi",
+     " - **Video Agents**: HeyGen, Synthesia"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    151,
+    115,
+    127
+   ],
+   [
+    "replace",
+    151,
+    155,
+    127,
+    131,
+    [
+     " - Course Run: Create, search, view, upload, delete course runs; manage sessions and attendance",
+     " - Enrolment: Enroll learners, bulk upload, search/view/update/cancel enrolments, manage fees",
+     " - Assessment: Submit, update, search, and view SSG assessments",
+     " - Grant: Search grants and view grant status"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    173,
+    131,
+    149
+   ],
+   [
+    "replace",
+    173,
+    178,
+    149,
+    154,
+    [
+     " 1. Create enrollment and grant on SSG",
+     " 2. Retrieve Enrolment ID and Grant ID from SSG",
+     " 3. Trigger QuickBooks to generate invoice and send to learner",
+     " 4. Download PDF to Google Drive",
+     " 5. Record in learner's billing history"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    154,
+    155
+   ],
+   [
+    "replace",
+    179,
+    187,
+    155,
+    163,
+    [
+     " 1. Send Excel template to company contact",
+     " 2. Receive completed Excel file",
+     " 3. Upload Excel file to TMS",
+     " 4. Create enrollment and grant for each record on SSG",
+     " 5. Retrieve Enrolment ID and Grant ID from SSG",
+     " 6. Trigger QuickBooks consolidated invoice and send to company contact",
+     " 7. Download PDF to Google Drive",
+     " 8. Record in company contact's billing history"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    199,
+    163,
+    175
+   ],
+   [
+    "replace",
+    199,
+    201,
+    175,
+    177,
+    [
+     " - WSQ: Meta title (with WSQ prefix), keywords, description with 70% funding subsidy, course description, and 20 job roles",
+     " - Non-WSQ: Region-specific meta titles (Singapore, Malaysia with HRD Corp, International), keywords, description, course description, and 20 job roles"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    210,
+    177,
+    186
+   ],
+   [
+    "replace",
+    210,
+    220,
+    186,
+    196,
+    [
+     " - Company profile (name, UEN, address, logo, color scheme)",
+     " - Contact person management",
+     " - **Integrations** — Virtual class meeting provider selection (Google Meet, Zoom, Microsoft Teams), course-run meeting links override the company default, Google (Calendar, OAuth, Certificate Folder), Zoom OAuth meeting generation, Microsoft Teams meeting generation, n8n, Magento, MailerLite, AI Agent (external WhatsApp/Telegram chat links — separate ops and trainer groups), Reference Links",
+     " - **SSG Authentication** — SSG certificate, private key, and encryption key (with support for App1, App3, App4 credentials)",
+     " - **LLM Credentials** — Anthropic, OpenAI, Gemini, MiniMax, Kimi, DeepSeek with default and fallback provider selection",
+     " - **Security Settings** — OTP login, default OTP, force first password change, default password, sensitive data masking",
+     " - **Admin Settings** — Auto-send pro-forma invoices, confirmation emails, invoices on grant success, receipts, certificates, thank-you emails",
+     " - **Gaming Settings** — Leaderboard and points system toggles",
+     " - **Funding Settings** — Normal/enhanced funding rates, GST configuration",
+     " - **Document Templates** — Proforma invoice, invoice, receipt, and certificate templates (text IDs or file uploads)"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    236,
+    196,
+    212
+   ],
+   [
+    "replace",
+    236,
+    241,
+    212,
+    217,
+    [
+     " - **Ops widget** (green — Admin, Finance, Training Provider, Developer, Payroll): 5 starter suggestions, with search or \"Browse all\" revealing the full catalogue of **40 fill-in-the-blank templates** across Trainers, Learners, Classes, Sessions, SSG/TPGateway, Finance and Reports",
+     " - **Trainer widget** (blue — Trainer role only): a deliberately narrow set of 4 requests — cannot find my class, assign me to this class, send me the Google Meet link, send me the e-attendance link. Classes are identified by course title + start date, never by a course run ID, and the trainer catalogue is a **separate array** rather than a filter, so no admin action (schedules, run IDs, enrolments, SSG, finance) is reachable from the trainer widget",
+     " - Field names mirror the agent's tools and the `/api/external/*` parameters, so a completed template maps onto a real operation",
+     " - Selecting one opens an editable message bubble; the message is copied to the clipboard and the chat opens. WhatsApp only accepts a pre-filled body on `wa.me` one-to-one links — **group invite links cannot be pre-filled**, so for a group the user pastes the copied message",
+     " - Destinations are set per tenant under Company Settings → Integrations → AI Agent (`whatsapp_chat_url` and `trainer_whatsapp_chat_url`); each widget auto-detects WhatsApp vs Telegram and hides itself when its link is blank"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    259,
+    217,
+    235
+   ],
+   [
+    "replace",
+    259,
+    265,
+    235,
+    241,
+    [
+     " - Course run management (create, view, edit, delete, publish)",
+     " - Session and attendance management",
+     " - Enrolment synchronization",
+     " - Assessment submission and updates",
+     " - Grant search and status tracking",
+     " - SSG data encryption/decryption"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    271,
+    241,
+    247
+   ],
+   [
+    "replace",
+    271,
+    272,
+    247,
+    248,
+    [
+     "|Role|Description|Key Permissions|"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    248,
+    249
+   ],
+   [
+    "replace",
+    273,
+    280,
+    249,
+    256,
+    [
+     "|**Learner**|Course participants|Enroll in courses, track progress, submit assessments, download certificates, raise support tickets|",
+     "|**Trainer**|Course instructors|View, publish assessments for, and grade only their assigned classes; take attendance; access Ed Tools and GenAI tools. Can also hold Learner (dual-role flag) to attend courses|",
+     "|**Developer**|Course developers|Create and edit course content, assessments, learning materials, SEO metadata generation|",
+     "|**Admin**|System administrators|Full class management, trainer/learner assignment, TPG management, certificate generation, ticket system, workflow guides|",
+     "|**Finance**|Financial operations|Financial dashboard, FMS automation, QuickBooks, claims, grants, personal/company invoice workflows, Bizfile lookup|",
+     "|**Payroll**|Trainer payout operations|Manage payout tiers, per-class trainer payouts (WSQ auto-materialised + hand-entered non-WSQ classes), QuickBooks bill numbers, approval workflow, payout history, and a compact per-class **Review Score** column showing the class average of learners' overall course-feedback scores (each the mean of the 1–5 star questions; 2 and below in red, above in green) with a link that pops up each learner's score broken down by feedback question (Learning Objectives, Trainer Knowledge, Training Environment, or a custom question's own label), with the class average for every question, and flags how many scored 2 or below, to apply the no-payout-for-low-rating rule (gated by `payroll_enabled` feature flag)|",
+     "|**Training Provider**|Organization admins|Company settings, user/role management, finance management, scheduler, webhooks, email templates, API documentation|"
+    ]
+   ],
+   [
+    "equal",
+    280,
+    283,
+    256,
+    259
+   ],
+   [
+    "replace",
+    283,
+    284,
+    259,
+    260,
+    [
+     "|Category|Technology|"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    285,
+    260,
+    261
+   ],
+   [
+    "replace",
+    285,
+    302,
+    261,
+    278,
+    [
+     "|**Framework**|Next.js 16 (Pages Router, TypeScript)|",
+     "|**Frontend**|React 18, Tailwind CSS|",
+     "|**Database**|PostgreSQL 17|",
+     "|**Authentication**|bcryptjs password hashing + OTP flow; server-side session tokens (hashed at rest in `user_session`) with role-based authorization on every API route|",
+     "|**AI Integration**|Claude Agent SDK, Anthropic SDK, Google Generative AI (Gemini), OpenAI, MiniMax, Kimi, DeepSeek|",
+     "|**Finance Integration**|QuickBooks Online (OAuth2), Bizfile API|",
+     "|**File Uploads**|Multer, Google Drive API|",
+     "|**Document Conversion**|LibreOffice 26.2 headless (official build, installed in the Dockerfile) + libheif `heif-convert` — Mac Pages assessment submissions → PDF for assessor signing|",
+     "|**Email**|Nodemailer (Gmail OAuth2)|",
+     "|**Password Hashing**|bcryptjs|",
+     "|**Icons**|Lucide React|",
+     "|**Database Client**|pg (node-postgres)|",
+     "|**Container**|Docker, Docker Compose|",
+     "|**Deployment**|Coolify (self-hosted)|",
+     "|**Automation**|n8n workflows, Task Scheduler, Webhooks|",
+     "|**Email Marketing**|MailerLite (daily learner-email subscriber sync)|",
+     "|**E-commerce**|Magento integration|"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    308,
+    278,
+    284
+   ],
+   [
+    "replace",
+    308,
+    309,
+    284,
+    285,
+    [
+     "> API Authentication for how to authenticate."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    316,
+    285,
+    292
+   ],
+   [
+    "replace",
+    316,
+    327,
+    292,
+    293,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    330,
+    293,
+    296
+   ],
+   [
+    "replace",
+    330,
+    331,
+    296,
+    297,
+    [
+     "docs/orion-certificate-tool.md."
+    ]
+   ],
+   [
+    "equal",
+    331,
+    380,
+    297,
+    346
+   ],
+   [
+    "replace",
+    380,
+    386,
+    346,
+    347,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    386,
+    421,
+    347,
+    382
+   ],
+   [
+    "replace",
+    421,
+    425,
+    382,
+    383,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    433,
+    383,
+    391
+   ],
+   [
+    "replace",
+    433,
+    440,
+    391,
+    392,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    440,
+    448,
+    392,
+    400
+   ],
+   [
+    "replace",
+    448,
+    452,
+    400,
+    401,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    452,
+    462,
+    401,
+    411
+   ],
+   [
+    "replace",
+    462,
+    517,
+    411,
+    412,
+    [
+     "…（55 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    517,
+    527,
+    412,
+    422
+   ],
+   [
+    "replace",
+    527,
+    564,
+    422,
+    423,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    564,
+    568,
+    423,
+    427
+   ],
+   [
+    "replace",
+    568,
+    569,
+    427,
+    428,
+    [
+     "|Table|Description|"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    570,
+    428,
+    429
+   ],
+   [
+    "replace",
+    570,
+    584,
+    429,
+    443,
+    [
+     "|`app_user`|Core user accounts with email, password hash, and profile|",
+     "|`user_role_map`|Maps users to roles (Learner, Trainer, Admin, Developer, Finance, Payroll, Training Provider)|",
+     "|`training_provider`|Organization settings, templates, integrations, and security config|",
+     "|`training_provider_member`|User membership in training provider organizations|",
+     "|`course`|Course templates with metadata, materials, funding info, and assessment methods|",
+     "|`course_code_history`|Every course reference code a course has carried, with validity windows — funding renewal issues a new code for the same course|",
+     "|`course_title_history`|Every title a course has carried — a renamed course stays findable by its former titles|",
+     "|`course_change_log`|Append-only audit of key course field changes (old → new, when, by whom) behind the Course Change Control page|",
+     "|`course_run`|Scheduled course instances with dates, trainers, and digital attendance|",
+     "|`enrollment`|Learner enrollments with progress, payment, and sponsorship tracking|",
+     "|`assessment`|Course assessments (Written, Practical, Case Study, Role Play, etc.)|",
+     "|`submission`|Learner assessment submissions|",
+     "|`learning_unit`|Course chapters/modules|",
+     "|`subtopic`|Individual learning topics within units|"
+    ]
+   ],
+   [
+    "equal",
+    584,
+    592,
+    443,
+    451
+   ],
+   [
+    "replace",
+    592,
+    593,
+    451,
+    452,
+    [
+     "- *(optional)* LibreOffice — only needed locally to sign Mac Pages (.pages) submissions; the binary is auto-detected (set `SOFFICE_PATH` to override). The Docker image already includes it."
+    ]
+   ],
+   [
+    "equal",
+    593,
+    627,
+    452,
+    486
+   ],
+   [
+    "replace",
+    627,
+    628,
+    486,
+    487,
+    [
+     " The application will be available at `http://localhost:3000`."
+    ]
+   ],
+   [
+    "equal",
+    628,
+    629,
+    487,
+    488
+   ],
+   [
+    "replace",
+    629,
+    633,
+    488,
+    492,
+    [
+     " `npm run dev` disables the startup cron scheduler by setting",
+     " `ENABLE_APP_SCHEDULER=false`. This prevents local development servers from",
+     " automatically executing production-like scheduled jobs when developers are",
+     " connected to shared, production, or production-clone databases."
+    ]
+   ],
+   [
+    "equal",
+    633,
+    634,
+    492,
+    493
+   ],
+   [
+    "replace",
+    634,
+    635,
+    493,
+    494,
+    [
+     " To test scheduled jobs locally, run the scheduler-enabled dev script instead:"
+    ]
+   ],
+   [
+    "equal",
+    635,
+    640,
+    494,
+    499
+   ],
+   [
+    "replace",
+    640,
+    644,
+    499,
+    503,
+    [
+     " Only one app instance connected to a shared database should run with",
+     " `ENABLE_APP_SCHEDULER=true`. Manual \"Run Now\" actions in the admin UI and",
+     " direct API-triggered jobs can still run even when the startup scheduler is",
+     " disabled."
+    ]
+   ],
+   [
+    "equal",
+    644,
+    653,
+    503,
+    512
+   ],
+   [
+    "replace",
+    653,
+    672,
+    512,
+    513,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    672,
+    680,
+    513,
+    521
+   ],
+   [
+    "replace",
+    680,
+    681,
+    521,
+    522,
+    [
+     "|Tenant|Build Pack|URL|"
+    ]
+   ],
+   [
+    "equal",
+    681,
+    682,
+    522,
+    523
+   ],
+   [
+    "replace",
+    682,
+    684,
+    523,
+    525,
+    [
+     "|**Tertiary Infotech Academy**|Dockerfile|https://lms-tms.tertiaryinfotech.com|",
+     "|**Chariot / Intellisoft**|Docker Compose|(per-tenant)|"
+    ]
+   ],
+   [
+    "equal",
+    684,
+    701,
+    525,
+    542
+   ],
+   [
+    "replace",
+    701,
+    702,
+    542,
+    543,
+    [
+     "Full documentation is available at **https://alfredang.github.io/AI-LMS-TMS/**"
+    ]
+   ],
+   [
+    "equal",
+    702,
+    703,
+    543,
+    544
+   ],
+   [
+    "replace",
+    703,
+    704,
+    544,
+    545,
+    [
+     "|Role|Guide|"
+    ]
+   ],
+   [
+    "equal",
+    704,
+    705,
+    545,
+    546
+   ],
+   [
+    "replace",
+    705,
+    711,
+    546,
+    552,
+    [
+     "|**Learner**|Learner User Guide|",
+     "|**Trainer**|Trainer User Guide|",
+     "|**Developer**|Developer User Guide|",
+     "|**Admin**|Admin User Guide|",
+     "|**Finance**|Finance User Guide|",
+     "|**Training Provider**|Training Provider Guide|"
+    ]
+   ],
+   [
+    "equal",
+    711,
+    713,
+    552,
+    554
+   ],
+   [
+    "delete",
+    713,
+    714,
+    554,
+    554
+   ],
+   [
+    "equal",
+    714,
+    715,
+    554,
+    555
+   ],
+   [
+    "delete",
+    715,
+    723,
+    555,
+    555
+   ],
+   [
+    "equal",
+    723,
+    725,
+    555,
+    557
+   ],
+   [
+    "replace",
+    725,
+    726,
+    557,
+    558,
+    [
+     "The learner/trainer-only Tertiary Learning iPhone and iPad app uses the scoped mobile API, email OTP, courseware, a class calendar and APNs class reminders. See iOS backend setup."
+    ]
+   ],
+   [
+    "equal",
+    726,
+    729,
+    558,
+    561
+   ],
+   [
+    "replace",
+    729,
+    730,
+    561,
+    562,
+    [
+     "The Android companion supports email OTP, scoped courseware, class calendars, and optional 3-day/1-day Firebase reminders. See Android API and deployment notes for configuration and validation."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "467d6354d87e+2": {
+  "fn": "yzsind/mydb",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "MyDB whale logo with layered database storage"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    10,
+    1,
+    8
+   ],
+   [
+    "replace",
+    10,
+    15,
+    8,
+    9,
+    [
+     "Download · Performance evaluation · Quick Start · Built for AI Agents · Documentation · MySQL Compatibility"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    20,
+    9,
+    14
+   ],
+   [
+    "replace",
+    20,
+    25,
+    14,
+    19,
+    [
+     "|Core capability|What it gives you|",
+     "|---|---|",
+     "|**Built for AI agents**|SQL model calls, native vectors, BM25 + RRF hybrid search, and model access controls support retrieval and generation; online DDL and automatic zone maps simplify data management.|",
+     "|**High-performance HTAP**|Parallel hash joins, vectorized execution, and a cost-based optimizer power both transactional and analytical workloads.|",
+     "|**MySQL compatible**|Reuse MySQL clients, JDBC drivers, core SQL, and row binlog integration.|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    30,
+    19,
+    24
+   ],
+   [
+    "replace",
+    30,
+    37,
+    24,
+    31,
+    [
+     "|Workload|MyDB|MySQL|Advantage|",
+     "|---|---:|---:|---:|",
+     "|Point queries · 100M rows, 20 clients|316,968 queries/s|174,566 queries/s|**1.82x throughput**|",
+     "|Read-only transactions · 100M rows, 20 clients|14,323 transactions/s|7,294 transactions/s|**1.96x throughput**|",
+     "|TPC-H-derived analytics · SF=10, 22 query medians summed|57.727 s|882.784 s|**15.29x speedup**|",
+     "|TPC-DS-derived analytics · SF=10, 55 matching query files|113.968 s|2,576.552 s|**22.61x speedup**|",
+     "|Bulk import · TPC-H SF=10, `LOAD DATA LOCAL INFILE`|25.708 s|357.495 s|**13.91x speedup**|"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    31,
+    34
+   ],
+   [
+    "replace",
+    40,
+    41,
+    34,
+    35,
+    [
+     "the detailed comparison for all results, test"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    46,
+    35,
+    40
+   ],
+   [
+    "replace",
+    46,
+    47,
+    40,
+    41,
+    [
+     "1.2.1 release page, which also"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    88,
+    41,
+    82
+   ],
+   [
+    "replace",
+    88,
+    89,
+    82,
+    83,
+    [
+     "vertical output, TLS, and query cancellation. See the client manual."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    121,
+    83,
+    115
+   ],
+   [
+    "replace",
+    121,
+    135,
+    115,
+    116,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    149,
+    116,
+    130
+   ],
+   [
+    "replace",
+    149,
+    151,
+    130,
+    132,
+    [
+     "detected effective memory. See configuration and",
+     "hardware and OS requirements for all"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    157,
+    132,
+    138
+   ],
+   [
+    "replace",
+    157,
+    159,
+    138,
+    140,
+    [
+     "the server identity (see TLS configuration).",
+     "Runnable Java, Python, Go, C++, and Rust examples cover"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    170,
+    140,
+    151
+   ],
+   [
+    "replace",
+    170,
+    177,
+    151,
+    152,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    184,
+    152,
+    159
+   ],
+   [
+    "replace",
+    184,
+    185,
+    159,
+    160,
+    [
+     "See the Docker deployment guide for certificates, mounted"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    191,
+    160,
+    166
+   ],
+   [
+    "replace",
+    191,
+    192,
+    166,
+    167,
+    [
+     "hardware and OS requirements for"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    196,
+    167,
+    171
+   ],
+   [
+    "replace",
+    196,
+    197,
+    171,
+    172,
+    [
+     "MyDB product architecture: MySQL, optional REST SQL and MCP access; shared SQL engine with online DDL, hybrid retrieval and external AI model calls; native heap storage, Zone Maps, HNSW and IVF; MVCC transactions and time travel; unified memory, sessions, security and metadata; queryable backups, native WAL replication and MySQL ROW/FULL binlog integration"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    200,
+    172,
+    175
+   ],
+   [
+    "replace",
+    200,
+    201,
+    175,
+    176,
+    [
+     "An optional REST SQL API accepts parameterized SQL over HTTPS, supports persistent transactions and NDJSON streaming, and shares MySQL account permissions. Accounts can create, list, retrieve, and revoke API keys through TLS MySQL SQL. Each account supports 1024 keys; keys never expire unless an expiration is specified."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    176,
+    177
+   ],
+   [
+    "replace",
+    202,
+    203,
+    177,
+    178,
+    [
+     "The optional MCP Server provides native AI client tools over the same HTTP listener."
+    ]
+   ],
+   [
+    "equal",
+    203,
+    218,
+    178,
+    193
+   ],
+   [
+    "replace",
+    218,
+    220,
+    193,
+    195,
+    [
+     "assignment. See LLM and embedding calls and the",
+     "AI function reference for setup and supported SQL contexts."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    223,
+    195,
+    198
+   ],
+   [
+    "replace",
+    223,
+    224,
+    198,
+    199,
+    [
+     "MyDB enables automatic **zone maps** on persistent user tables by default: per-block statistics let queries skip data blocks that cannot match a predicate, often turning a full scan into a small range read on tables with no hand-built B-tree index. Pruning is conservative — whenever statistics are missing or a predicate cannot be proven safe, the executor falls back to a regular scan. See the feature overview for how the mechanism and fallbacks work."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    233,
+    199,
+    208
+   ],
+   [
+    "replace",
+    233,
+    234,
+    208,
+    209,
+    [
+     "\"Lock-free DDL\" is a design direction, not a current guarantee: publication still coordinates with write transactions, and replacing primary keys, rewriting column data, or converting charsets still takes locks. See ALTER TABLE and the DDL compatibility boundaries."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    242,
+    209,
+    217
+   ],
+   [
+    "replace",
+    242,
+    243,
+    217,
+    218,
+    [
+     "Combined with JSONB, full-text, and structured queries, this supports semantic search, knowledge retrieval, and agent memory. Start with the vector data and similarity search guide, then see vector datatypes and indexes for options, training, limits, and recovery, and the vector function reference. The current implementation is HNSW / IVF; disk residency does not imply a complete DiskANN implementation."
+    ]
+   ],
+   [
+    "equal",
+    243,
+    246,
+    218,
+    221
+   ],
+   [
+    "replace",
+    246,
+    247,
+    221,
+    222,
+    [
+     "MyDB combines BM25 full-text search, boolean search,"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    255,
+    222,
+    230
+   ],
+   [
+    "replace",
+    255,
+    256,
+    230,
+    231,
+    [
+     "statement's transaction view. The hybrid search guide"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    231,
+    232
+   ],
+   [
+    "replace",
+    257,
+    258,
+    232,
+    233,
+    [
+     "LangChain adapter. RRF is a technical"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    270,
+    233,
+    245
+   ],
+   [
+    "replace",
+    270,
+    272,
+    245,
+    247,
+    [
+     "already received by a provider. See the execution boundaries",
+     "and administration guide."
+    ]
+   ],
+   [
+    "equal",
+    272,
+    282,
+    247,
+    257
+   ],
+   [
+    "replace",
+    282,
+    299,
+    257,
+    258,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    304,
+    258,
+    263
+   ],
+   [
+    "replace",
+    304,
+    307,
+    263,
+    266,
+    [
+     "CREATE INDEX,",
+     "vector functions, and",
+     "INSERT RETURNING."
+    ]
+   ],
+   [
+    "equal",
+    307,
+    309,
+    266,
+    268
+   ],
+   [
+    "replace",
+    309,
+    310,
+    268,
+    269,
+    [
+     "with the Ollama setup, try model calls through the"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    328,
+    269,
+    287
+   ],
+   [
+    "replace",
+    328,
+    336,
+    287,
+    295,
+    [
+     "|Design|Capability|",
+     "|---|---|",
+     "|**Transactional storage**|Heap tables, B-trees, MVCC, row locks, WAL, undo, and crash recovery, with SAVEPOINT and XA two-phase commit.|",
+     "|**Cost-based optimizer**|Chooses access paths, join orders, and join algorithms from statistics and a cost model.|",
+     "|**Parallel hash join**|Uses multiple cores for joins, scans, and aggregation on complex analytical SQL.|",
+     "|**Vectorized execution and SIMD**|Processes data in batches, cutting per-row dispatch and computation overhead on suitable paths.|",
+     "|**Automatic scan reduction**|Combines zone maps, partition pruning, predicate pushdown, projection pruning, and covering indexes.|",
+     "|**Unified memory management**|Coordinates the buffer pool, caches, and executor budgets; sort and hash-join operators spill to disk.|"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    337,
+    295,
+    296
+   ],
+   [
+    "replace",
+    337,
+    338,
+    296,
+    297,
+    [
+     "Query capabilities include CTEs, recursive CTEs, subquery decorrelation, set operations, window functions, and `ROLLUP` / `CUBE` / `GROUPING SETS`. See optimizer and operators, and MVCC and locking."
+    ]
+   ],
+   [
+    "equal",
+    338,
+    347,
+    297,
+    306
+   ],
+   [
+    "replace",
+    347,
+    348,
+    306,
+    307,
+    [
+     "The full coverage map, transactional differences, and unsupported features are listed in the MySQL 8.0 compatibility matrix."
+    ]
+   ],
+   [
+    "equal",
+    348,
+    351,
+    307,
+    310
+   ],
+   [
+    "replace",
+    351,
+    360,
+    310,
+    319,
+    [
+     "|Feature|Use|",
+     "|---|---|",
+     "|**Wider TIMESTAMP range**|Supports dates beyond 2038, up to year 9999.|",
+     "|**Sequences**|Standalone sequence objects with `NEXTVAL`, `CURRVAL`, and friends.|",
+     "|**DML `RETURNING`**|Return rows directly from INSERT, UPDATE, and DELETE, saving follow-up queries.|",
+     "|**`generate_series()`**|Integer, decimal, and datetime series for time axes, gap filling, and data generation.|",
+     "|**`EXPLAIN ANALYZE`**|Inspect actual per-step performance of an execution plan.|",
+     "|**`SHOW MYDB MEMORY`**|Inspect global memory usage for capacity planning and diagnostics.|",
+     "|**Native backup and replication**|Online physical backup, WAL archiving, PITR, and an independent primary/replica physical replication protocol.|"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    361,
+    319,
+    320
+   ],
+   [
+    "replace",
+    361,
+    362,
+    320,
+    321,
+    [
+     "See sequences, series generation, backup and recovery, and native replication."
+    ]
+   ],
+   [
+    "equal",
+    362,
+    370,
+    321,
+    329
+   ],
+   [
+    "replace",
+    370,
+    371,
+    329,
+    330,
+    [
+     "Unimplemented SQL or protocol capabilities return clear errors rather than failing silently. The detailed scope is defined by the compatibility matrix, the source, and the tests."
+    ]
+   ],
+   [
+    "equal",
+    371,
+    374,
+    330,
+    333
+   ],
+   [
+    "replace",
+    374,
+    382,
+    333,
+    341,
+    [
+     "|Entry point|Contents|",
+     "|---|---|",
+     "|Documentation index|Product, SQL, operations, and implementation docs|",
+     "|Feature overview|Capability map and implementation boundaries|",
+     "|AI model calls / Hybrid search|Model setup, embeddings, generation, permissions, and retrieval fusion|",
+     "|SQL statements / Functions|Syntax, semantics, and usage examples|",
+     "|Configuration guide / Config template|Startup options, environment variables, and runtime settings|",
+     "|Data directory and recovery|File roles, format compatibility, durability, and crash recovery|"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    389,
+    341,
+    348
+   ],
+   [
+    "replace",
+    389,
+    391,
+    348,
+    350,
+    [
+     "Submit bug reports through GitHub Issues.",
+     "Follow the issue reporting guide and include the exact"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    393,
+    350,
+    352
+   ],
+   [
+    "replace",
+    393,
+    394,
+    352,
+    353,
+    [
+     "MyDB is licensed under the Apache License 2.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

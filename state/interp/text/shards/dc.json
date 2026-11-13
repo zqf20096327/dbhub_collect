@@ -2407,5 +2407,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f1d24b53f2c0": {
+  "identity": {
+   "one_liner": "Rust 编写的 Debian 多节点托管控制面板",
+   "review": "Hyperion 是面向 Debian 12/13 的自托管主机控制面板，用 Rust 编写并声明 forbid(unsafe_code)。主节点运行 Web UI，每个节点运行 agent，通过签名 RPC 组成集群。它以事务方式创建站点（Linux 用户、nginx vhost、PHP-FPM 池、数据库、TLS），失败即回滚，并提供 HTTP API（/api/v1）与 CLI（hctl）。支持从 HestiaCP、CloudPanel 导入。项目自述尚处早期，多节点路径使用较少。",
+   "highlights": [
+    "主节点 + N 个 worker 的多节点架构，节点间使用签名 RPC；站点配置在单一事务内完成，任一步失败即回滚",
+    "提供 OpenAPI 风格的 /api/v1 HTTP API、hctl CLI、后台作业实时进度页，以及基于 BLAKE3 哈希链的防篡改审计日志",
+    "支持 PHP 8.1–8.4 并存、Let's Encrypt HTTP-01/DNS-01 证书与自动续期、内核级磁盘配额、S3（age 加密）及 FTP/FTPS/SFTP 异地备份"
+   ],
+   "use_cases": [
+    "在自有 Debian 服务器上为多个站点（WordPress、PHP、静态站、反向代理）配置运行环境并通过 Web UI/API/CLI 日常管理",
+    "管理多台服务器组成的集群，在节点间创建、迁移站点并查看各节点指标",
+    "从 HestiaCP 或 CloudPanel 迁移现有主机到该面板，或对 WordPress 站点执行更新、备份与文件完整性扫描"
+   ]
+  },
+  "sha": "f1d24b53f2c0",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f8f57e6df685": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 的桌面工具，通过 ADB 与 CDP 调试 Android WebView 应用。",
+   "review": "Capubridge 是面向调试 Android Chromium WebView 应用的开发者的桌面工具，将 ADB 设备管理、CDP 目标检查、存储浏览（IndexedDB、LocalStorage、Cache API、OPFS、SQLite）、网络检查、logcat 与屏幕镜像整合在一个 GUI 中。基于 Tauri 2、Vue 3 与 Rust 构建。限制：仅支持暴露可调试 CDP 目标的 WebView，原生 React Native/Hermes 与 iOS WebKit 不在范围内，且目标应用需允许检查。",
+   "highlights": [
+    "自动发现设备上的可调试 WebView 目标并自动转发 CDP 端口，支持外接 Chrome DevTools 或内置控制台",
+    "通过 CDP 写入真实设备，提供 IndexedDB 编辑删除、LocalStorage 修改、Cache API/OPFS 浏览与 SQLite 查询",
+    "集成 scrcpy 屏幕镜像（触控/键盘注入、录屏）、lease 生命周期管理的 logcat 流与性能监控，支持 Linux/macOS/Windows 多平台构建"
+   ],
+   "use_cases": [
+    "调试运行在物理 Android 设备上的 Capacitor/Ionic/混合应用 WebView",
+    "通过官方 Vue/React DevTools 在真实 Android WebView 中检查组件树与状态（目标应用需开启相应构建选项）",
+    "录制并回放应用会话（DOM 变更、网络请求、控制台日志），并导出 .zip 归档"
+   ]
+  },
+  "sha": "f8f57e6df685",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "830ad4f45ccc": {
+  "identity": {
+   "one_liner": "2.5D 射击游戏，用有限子弹击倒语言与框架方块堆，基于 vanilla JS 与 Matter.js。",
+   "review": "一款 2.5D 弹球射击游戏：玩家操作屏幕底部的固定炮台，击落由 HTML、CSS、PHP、Laravel 等技术命名的方块堆，弹药数量有限。面向休闲玩家，提供在线版、PWA 和 Android APK。物理由 Matter.js 驱动并在 2D 引擎上用 z 轴模拟深度；关卡以 JSON 描述，支持 12 种背景和随进度解锁的技术方块。存档可选 Firebase、本地 SQLite、Tauri 原生 SQLite 或 localStorage。README 中部分宣传性描述（如优化效果）未经独立验证。",
+   "highlights": [
+    "包含 1000 个 JSON 格式关卡和 50 种技术方块，关卡由 tools/generate-levels.js 生成，npm test 校验关卡合法性",
+    "提供四种存档引擎：Firebase/Firestore、本地服务器 SQLite、Tauri 原生 SQLite、localStorage",
+    "零 npm 依赖，需 Node.js 22.5+，npm start 后通过 localhost:3000 运行"
+   ],
+   "use_cases": [
+    "浏览器、移动端（PWA 或 APK）休闲游戏娱乐",
+    "开发者克隆仓库后本地运行或自定义编辑 JSON 关卡",
+    "打包为 Tauri 桌面/移动应用进行本地存档运行"
+   ]
+  },
+  "sha": "830ad4f45ccc",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

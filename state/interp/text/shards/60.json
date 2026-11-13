@@ -3012,5 +3012,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "128b47b7c00d": {
+  "identity": {
+   "one_liner": "Rust 编写的自托管错误追踪服务，兼容 Sentry 协议与 SDK。",
+   "review": "Rustrak 是用 Rust 编写的自托管错误追踪服务，同时接收日志、事务、release 健康数据和 AI agent 追踪。它实现 Sentry 协议，现有 Sentry SDK 只需修改 DSN 即可接入。单进程运行，默认使用 SQLite，也可切换 PostgreSQL。采用两阶段摄取，事件先写磁盘返回 200，数据库写入由后台任务完成。以 AGPL-3.0 许可发布。",
+   "highlights": [
+    "实现 Sentry 协议，兼容标准 Sentry SDK 的 envelope 格式与 Spans Protocol v2",
+    "单容器同时提供 API 与仪表盘，默认 SQLite 存储，支持 PostgreSQL",
+    "两阶段摄取：端点解析后先写磁盘并返回 200，数据库写入由后台任务执行"
+   ],
+   "use_cases": [
+    "已有 Sentry SDK 的项目需将数据接入自托管实例",
+    "需要单容器、无需单独数据库预配的错误追踪部署",
+    "需要查看 LLM 调用、工具调用与 agent 交接的 AI agent 追踪场景"
+   ]
+  },
+  "sha": "128b47b7c00d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4aee2fa2609e": {
+  "identity": {
+   "one_liner": "基于 SawBot-MD 的 WhatsApp 群聊机器人，集 AI 对话、游戏、经济与群管理于一体",
+   "review": "这是一个为乌拉圭一个 WhatsApp 好友群定制的聊天机器人（Node.js，基于 Baileys，衍生自 SawBot-MD），由多位社区成员协作开发。它包含多供应商 AI 回复（Gemini 主用，Groq/OpenRouter/NVIDIA/Cerebras 备份）、语音回复、群组记忆、UruCoins 经济系统、 casino 游戏和群管理命令。README 明确说明其运行依赖 Termux/Tablet 等环境，且消息发送速率受限、WhatsApp 曾封禁过号码；数据存于内存，重启即丢失。",
+   "highlights": [
+    "多供应商 AI 对话与语音回复（edge-tts），支持按群组记忆用户信息",
+    "内置 UruCoins 虚拟货币系统，含游戏、赌场和每日任务",
+    "提供群管理功能：警告、黑名单、 inactive 成员处理、加入申请审批"
+   ],
+   "use_cases": [
+    "小型私交 WhatsApp 群的娱乐与互动（聊天、游戏、赌场、足球赛事投注）",
+    "需要带角色设定、地域语言风格（Rioplatense 西班牙语）的群聊 AI 机器人",
+    "群管理员自动化处理：审批入群、清理长期不发言成员、反链接管理"
+   ]
+  },
+  "sha": "4aee2fa2609e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "106ff7b760a1": {
+  "identity": {
+   "one_liner": "基于 Django Ninja Extra 的意见化 Django + PostgreSQL REST API 项目模板",
+   "review": "这是一个使用 Django Ninja Extra 构建的 Django API 项目模板，通过 @api_controller 等装饰器以类控制器方式组织接口，配套 PostgreSQL 数据库。内置 JWT、魔法链接、OTP、2FA 等多种认证方式，以及缓存、Celery 任务、Centrifugo 实时消息和监控组件，并提供 CLI 工具用于生成新功能模块。适用于需要快速启动 Django REST API 项目的团队，注意其技术选型为固定组合，替代方案需自行移除。",
+   "highlights": [
+    "提供四种 todos 控制器实现变体（声明式、基础、部分、服务层），展示同一 CRUD 接口的不同抽象层级",
+    "内置 JWT、魔法链接、OTP、2FA、API Key 多种认证方式及速率限制",
+    "包含 Valkey 缓存、Celery/Huey/django-q2 等多种任务后端、Centrifugo WebSocket 实时消息与可观测性组件"
+   ],
+   "use_cases": [
+    "作为 Django REST API 新项目的起始模板，快速搭建含认证、缓存、任务队列的基础设施",
+    "学习 Django Ninja Extra 类控制器与服务层架构的不同抽象写法",
+    "搭建带 Docker Compose 多 profile 配置的本地开发与生产部署环境"
+   ]
+  },
+  "sha": "106ff7b760a1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0fb398cceb20": {
+  "identity": {
+   "one_liner": "面向 Java 的事件溯源框架，以 PostgreSQL 为存储，支持 Spring Boot、Quarkus、Micronaut。",
+   "review": "StreamRune 是一个 Java 事件溯源框架，包含核心 EventStore API、命令总线、投影、SagaStore 等运行时组件，事件可持久化到 PostgreSQL 或内存存储。它提供 crypto-shredding 加密模块（密钥可存放于目录、PostgreSQL、Vault 或 AWS KMS）以及 Kafka、RabbitMQ 的 Transactional outbox 发布器，面向需要在 Java 应用中实现 CQRS/事件溯源并处理 GDPR 数据删除的团队。要求 Java 25 和 PostgreSQL 17+，采用 Business Source License 1.1 双许可。",
+   "highlights": [
+    "提供 core、runtime、postgres、test 等模块，发布至 Maven Central，模块以 org.streamrune 组统一版本管理",
+    "支持 Spring Boot（含 starter 单依赖接入）、Quarkus、Micronaut 三种框架集成，并提供共享的指标、请求标识与启动校验器",
+    "实现事件载荷加密（crypto-shredding），密钥可存放于文件目录、PostgreSQL、HashiCorp Vault 或 AWS KMS"
+   ],
+   "use_cases": [
+    "在 Spring Boot、Quarkus 或 Micronaut 应用中构建基于事件溯源的 Java 服务",
+    "需要对事件载荷做静态加密并支持按主体删除（crypto-shredding）以配合 GDPR 要求的场景",
+    "需要通过 Transactional outbox 将事件可靠发布到 Kafka 或 RabbitMQ 的系统"
+   ]
+  },
+  "sha": "0fb398cceb20",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -16804,5 +16804,814 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "4582394bebd0+2": {
+  "fn": "alikarami76/keygraph",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    1,
+    [
+     "keygraph: map how your tables connect, for people and AI agents"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    9,
+    1,
+    6
+   ],
+   [
+    "replace",
+    9,
+    10,
+    6,
+    7,
+    [
+     "**At a glance.** MIT licence. Python 3.11 or newer. Reads MySQL, MariaDB, PostgreSQL, SQLite, SQL Server, ClickHouse, Metabase and MongoDB, or `information_schema` dumps. Fifteen MCP tools: fourteen read-only and one that logs a query. Runs without a server, and the bundled demo webshop has 35 tables in three schemas. Jump to: build a data analyst agent, quickstart, MCP setup, FAQ."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    7,
+    8
+   ],
+   [
+    "replace",
+    11,
+    12,
+    8,
+    9,
+    [
+     "PyPI Python License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    35,
+    9,
+    32
+   ],
+   [
+    "replace",
+    35,
+    36,
+    32,
+    33,
+    [
+     "||No context|Made on the fly|keygraph|"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    33,
+    34
+   ],
+   [
+    "replace",
+    37,
+    43,
+    34,
+    40,
+    [
+     "|Covers the whole schema|no|only what fits in the prompt|yes|",
+     "|Cost per question|low, but answers are often wrong|repeated exploration every session|one lookup|",
+     "|Same answer each run|no|no|yes|",
+     "|Shows which joins are guesses|no|no|yes, with confidence and reason|",
+     "|Business meaning of codes and grain|no|rediscovered, then lost|stored, curated, reused|",
+     "|Personal data in prompts|no|often|masked|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    50,
+    40,
+    47
+   ],
+   [
+    "replace",
+    50,
+    51,
+    47,
+    48,
+    [
+     "**The loop.** An agent that uses keygraph follows the same six steps for each question. The order is the one recommended in AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    59,
+    48,
+    56
+   ],
+   [
+    "replace",
+    59,
+    60,
+    56,
+    57,
+    [
+     "Register the MCP server once and the fifteen tools appear in your agent (the configs for other clients are in MCP):"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    57,
+    58
+   ],
+   [
+    "replace",
+    61,
+    62,
+    58,
+    59,
+    [
+     " claude mcp add keygraph -- uvx --from 'keygraph[mcp]' keygraph mcp --dir /abs/path/to/out"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    78,
+    59,
+    75
+   ],
+   [
+    "replace",
+    78,
+    82,
+    75,
+    76,
+    [
+     " Quickstart"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    89,
+    76,
+    83
+   ],
+   [
+    "replace",
+    89,
+    90,
+    83,
+    84,
+    [
+     "The agent detects your database and its own harness, then asks you up to six questions. It builds the map, connects keygraph over MCP, and checks the result with `keygraph doctor`. Your credentials never go into a config file. Details are in setup/."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    117,
+    84,
+    111
+   ],
+   [
+    "replace",
+    117,
+    118,
+    111,
+    112,
+    [
+     "The build writes `graph.json`, `RELATIONS_REPORT.md`, `keygraph.html` (a self-contained explorer that works from disk, offline), `keygraph.db` (SQLite with full-text search) the agent pages `areas/*.md` and `tables/*.md`, and `build.json` (build time, keygraph version, source kind and database name, covered schemas; no host or credentials; the only file that differs between two identical builds, and `SOURCE_DATE_EPOCH` fixes its time). An unknown-table answer names the schemas the map covers. Details of every step are in How keygraph works (PDF) and examples/shop."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    131,
+    112,
+    125
+   ],
+   [
+    "replace",
+    131,
+    132,
+    125,
+    126,
+    [
+     "|Source|What keygraph reads|How you use it|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    126,
+    127
+   ],
+   [
+    "replace",
+    133,
+    142,
+    127,
+    136,
+    [
+     "|MySQL, MariaDB|`information_schema` (columns, indexes with column order, foreign keys, table facts, enum members)|`keygraph scan --url`, dumps, or the `mysql` adapter|",
+     "|PostgreSQL|`information_schema` and `pg_catalog` (indexes, foreign keys, enum types, row estimates, comments, checks)|`keygraph scan --url`, or the `postgres` adapter|",
+     "|SQLite|the SQLAlchemy inspector (metadata only)|`keygraph scan --url sqlite:///file.db`|",
+     "|SQL Server|`INFORMATION_SCHEMA` and `sys.*`; samples use `SELECT TOP n`|`keygraph scan --url`, the `sqlserver` adapter, `keygraph profile --source sqlserver`|",
+     "|ClickHouse|`system.tables`, `system.columns`, `system.data_skipping_indices`; the primary key becomes the PRIMARY index, `ORDER BY` an index|`keygraph scan --url`, the `clickhouse` adapter, `keygraph profile --source clickhouse`|",
+     "|Metabase|REST `GET /api/database/:id/metadata` (tables, fields, semantic types, foreign-key targets, field fingerprints) and native SELECTs through `POST /api/dataset`; no other request|`metabase` adapter (Python API)|",
+     "|MongoDB|schema inferred from sampled documents (nested paths become columns), indexes, `_id` as primary key, DBRef values as references; only `list_collection_names`, `find`, `index_information` and `estimated_document_count` can be called|`mongodb` adapter, `keygraph profile --source mongodb`|",
+     "|`information_schema` dumps (JSON, JSONL, CSV)|the files you give it|`keygraph load`|",
+     "|Any read-only command that prints JSON rows|the rows|`keygraph fetch --cmd`|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    136,
+    139
+   ],
+   [
+    "replace",
+    145,
+    149,
+    139,
+    140,
+    [
+     " Explorer views"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    156,
+    140,
+    147
+   ],
+   [
+    "replace",
+    156,
+    157,
+    147,
+    148,
+    [
+     "keygraph Areas view: the database as business areas"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    160,
+    148,
+    151
+   ],
+   [
+    "replace",
+    160,
+    161,
+    151,
+    152,
+    [
+     "keygraph Area view: tables with key columns and relations"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    152,
+    155
+   ],
+   [
+    "replace",
+    164,
+    165,
+    155,
+    156,
+    [
+     "keygraph Path view: join routes between two tables with fan-out warnings"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    168,
+    156,
+    159
+   ],
+   [
+    "replace",
+    168,
+    169,
+    159,
+    160,
+    [
+     "keygraph Table view: grain, pitfalls, metrics and columns"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    172,
+    160,
+    163
+   ],
+   [
+    "replace",
+    172,
+    173,
+    163,
+    164,
+    [
+     "keygraph Search view: results grouped by type with the reason for each match"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    164,
+    165
+   ],
+   [
+    "replace",
+    174,
+    175,
+    165,
+    166,
+    [
+     "There is also a Column view that sets documented status codes next to the values found in a sample. All screenshots come from the fictional demo in examples/shop."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    166,
+    167
+   ],
+   [
+    "replace",
+    176,
+    180,
+    167,
+    168,
+    [
+     " Use with AI agents"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    183,
+    168,
+    171
+   ],
+   [
+    "replace",
+    183,
+    184,
+    171,
+    172,
+    [
+     "An agent can use the same graph four ways: MCP tools, the Claude Code skill, the CLI with `--json`, and plain markdown files. The recommended order for an agent is in AGENTS.md: search or list the areas, describe the table, find the path before writing any join, and use `keys` to choose index-friendly filters."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    187,
+    172,
+    175
+   ],
+   [
+    "replace",
+    187,
+    188,
+    175,
+    176,
+    [
+     "The Claude Code skill is in skills/keygraph/SKILL.md. It tells an agent when to use each command and how to read confidence."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    205,
+    176,
+    193
+   ],
+   [
+    "replace",
+    205,
+    207,
+    193,
+    195,
+    [
+     " claude mcp add keygraph -- uvx --from 'keygraph[mcp]' keygraph mcp --dir /abs/path/to/out",
+     " claude mcp add keygraph -- uv --directory /abs/path/to/keygraph run --extra mcp keygraph mcp --dir /abs/path/to/out"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    210,
+    195,
+    198
+   ],
+   [
+    "replace",
+    210,
+    218,
+    198,
+    206,
+    [
+     " {",
+     " \"mcpServers\": {",
+     " \"keygraph\": {",
+     " \"command\": \"uvx\",",
+     " \"args\": [\"--from\", \"keygraph[mcp]\", \"keygraph\", \"mcp\", \"--dir\", \"/abs/path/to/out\"]",
+     " }",
+     " }",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    206,
+    207
+   ],
+   [
+    "replace",
+    219,
+    227,
+    207,
+    215,
+    [
+     " {",
+     " \"mcpServers\": {",
+     " \"keygraph\": {",
+     " \"command\": \"uv\",",
+     " \"args\": [\"--directory\", \"/abs/path/to/keygraph\", \"run\", \"--extra\", \"mcp\", \"keygraph\", \"mcp\", \"--dir\", \"/abs/path/to/out\"]",
+     " }",
+     " }",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    230,
+    215,
+    218
+   ],
+   [
+    "replace",
+    230,
+    233,
+    218,
+    221,
+    [
+     " [mcp_servers.keygraph]",
+     " command = \"uvx\"",
+     " args = [\"--from\", \"keygraph[mcp]\", \"keygraph\", \"mcp\", \"--dir\", \"/abs/path/to/out\"]"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    221,
+    222
+   ],
+   [
+    "replace",
+    234,
+    238,
+    222,
+    226,
+    [
+     " # or, from a checkout",
+     " [mcp_servers.keygraph]",
+     " command = \"uv\"",
+     " args = [\"--directory\", \"/abs/path/to/keygraph\", \"run\", \"--extra\", \"mcp\", \"keygraph\", \"mcp\", \"--dir\", \"/abs/path/to/out\"]"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    226,
+    229
+   ],
+   [
+    "replace",
+    241,
+    245,
+    229,
+    230,
+    [
+     " How relations are inferred"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    315,
+    230,
+    300
+   ],
+   [
+    "replace",
+    315,
+    322,
+    300,
+    301,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    346,
+    301,
+    325
+   ],
+   [
+    "replace",
+    346,
+    347,
+    325,
+    326,
+    [
+     "|Tool|What it is for|How keygraph differs|"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    348,
+    326,
+    327
+   ],
+   [
+    "replace",
+    348,
+    354,
+    327,
+    333,
+    [
+     "|SchemaSpy|Generates static HTML documentation and ER diagrams from a live database.|SchemaSpy also guesses implied relationships from column names (`-noimplied` turns this off). keygraph adds a confidence score and evidence for each guess, ranked join paths with fan-out warnings, business context, value profiles, MCP and agent files. SchemaSpy is the more established documentation generator.|",
+     "|dbdocs (DBML)|Publishes database documentation from DBML files that describe a schema.|keygraph reads an existing database or its dumps instead of a hand-written schema file. It does not host documentation online.|",
+     "|DataHub, OpenMetadata|Metadata platforms run as servers: ingestion, lineage, ownership, governance, glossary.|keygraph is a command-line tool that writes a folder of files. It has no server, users, lineage or governance. It is smaller in scope and needs no deployment.|",
+     "|Database IDE diagrams (DBeaver, DataGrip)|Generate ER diagrams from an existing database, mostly from its declared foreign keys.|keygraph groups a large schema into areas so each diagram stays readable, and shows inferred relations next to declared ones.|",
+     "|Diagram design tools (dbdiagram)|Design a schema as code and draw it, usually before the database exists.|keygraph starts from an existing database and does not design or change schemas.|",
+     "|Text-to-SQL schema linking|Choose which tables and columns are relevant to a natural-language question, often with a model.|keygraph supplies the inputs such a system can use (keys, join paths with fan-out warnings, grain, status codes). It does not turn a question into SQL and it makes no LLM calls.|"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    357,
+    333,
+    336
+   ],
+   [
+    "replace",
+    357,
+    361,
+    336,
+    337,
+    [
+     " FAQ"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    374,
+    337,
+    350
+   ],
+   [
+    "replace",
+    374,
+    375,
+    350,
+    351,
+    [
+     "Connect the keygraph MCP server, or let the agent call the CLI with `--json`. The agent should search, describe the tables, ask for the path before writing a join, and use `keys` for index-friendly filters. Grain, status codes, pitfalls and fan-out warnings come with the answers, which are the things a model otherwise has to guess. See AGENTS.md."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    394,
+    351,
+    370
+   ],
+   [
+    "replace",
+    394,
+    395,
+    370,
+    371,
+    [
+     "keygraph is a smaller tool with a narrower job. It reads an existing database and builds a map of keys, joins and business meaning as a folder of files. It does not define metrics for dashboards, transform data, track lineage, run a server or manage governance, which is what DataHub, OpenMetadata and similar catalogs are for (see the comparison). The metrics and status codes you record in keygraph's context file help search and agents, but keygraph does not compute them. This README does not compare keygraph with dbt or semantic-layer products feature by feature."
+    ]
+   ],
+   [
+    "equal",
+    395,
+    397,
+    371,
+    373
+   ],
+   [
+    "replace",
+    397,
+    398,
+    373,
+    374,
+    [
+     "Databases: MySQL, MariaDB, PostgreSQL, SQLite, SQL Server, ClickHouse, Metabase and MongoDB, plus `information_schema` dumps (see Supported sources). Agents: anything that can call MCP tools or run a command-line tool. There are no official plugins for specific frameworks."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    415,
+    374,
+    391
+   ],
+   [
+    "replace",
+    415,
+    416,
+    391,
+    392,
+    [
+     "Install `keygraph[mcp]`, build an output directory, then register `keygraph mcp --dir /abs/path/to/out` with your client. Copy-paste configs for Claude Code, Claude Desktop, Cursor and Codex are in the MCP section above. The server exposes fifteen tools (fourteen read-only, plus `query_submit`, which only logs a query) and never runs SQL against your database."
+    ]
+   ],
+   [
+    "equal",
+    416,
+    425,
+    392,
+    401
+   ],
+   [
+    "replace",
+    425,
+    429,
+    401,
+    405,
+    [
+     "- How keygraph works (PDF with screenshots)",
+     "- examples/shop, a fictional webshop you can build in a minute",
+     "- AGENTS.md, skills/keygraph/SKILL.md, llms.txt",
+     "- Design system and CHANGELOG"
+    ]
+   ],
+   [
+    "equal",
+    429,
+    449,
+    405,
+    425
+   ],
+   [
+    "replace",
+    449,
+    451,
+    425,
+    426,
+    [
+     "MIT. See LICENSE. If you use keygraph in research, see CITATION.cff."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "7f5caaf93832+2": {
+  "fn": "yhg-xxx/restaurant-management",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    12,
+    [
+     "|层次|技术|",
+     "|---|---|",
+     "|后端|Java 17、Spring Boot 3.5.3、Spring Data JPA / Hibernate、Hutool、Maven|",
+     "|数据库|openGauss，驱动 `org.opengauss:opengauss-jdbc:3.0.0`（`org.opengauss.Driver`）|",
+     "|前端|Vue 3、Vite 7、Vue Router 4、Element Plus、Axios、ECharts|",
+     "|服务端口|后端 `8080`，前端 `5173`（Vite 默认）|"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    19,
+    12,
+    19
+   ],
+   [
+    "replace",
+    19,
+    37,
+    19,
+    20,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    41,
+    20,
+    24
+   ],
+   [
+    "replace",
+    41,
+    49,
+    24,
+    32,
+    [
+     "|模块|说明|",
+     "|---|---|",
+     "|登录与个人信息|用户登录、资料查看、修改密码|",
+     "|桌台管理|桌台状态维护|",
+     "|菜品管理|菜品与分类维护、图片上传|",
+     "|订单管理|开单、加菜、订单明细与状态流转|",
+     "|菜品制作|后厨看板|",
+     "|销售报表|菜品销量排行、时段热力、分类销售额等（ECharts）|"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    101,
+    32,
+    84
+   ],
+   [
+    "replace",
+    101,
+    111,
+    84,
+    94,
+    [
+     "|路径前缀|用途|",
+     "|---|---|",
+     "|`/api/auth`|登录认证|",
+     "|`/api/users`|用户与个人信息|",
+     "|`/api/categories`|菜品分类|",
+     "|`/api/dishes`|菜品管理|",
+     "|`/api/tables`|桌台管理|",
+     "|`/api/orders`|订单与明细|",
+     "|`/api/sales`|销售统计与报表数据|",
+     "|`/api/files`|图片上传与下载|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    115,
+    94,
+    98
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

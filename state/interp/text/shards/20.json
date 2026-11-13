@@ -2697,5 +2697,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0e75f959a2da": {
+  "identity": {
+   "one_liner": "Rust 编写的多线程内存键值数据库，兼容 Redis 协议并内置全文与向量搜索。",
+   "review": "KiviDB 是用 Rust 编写的多线程内存键值数据库，实现 RESP2/RESP3 协议，现有 Redis 客户端可直接连接使用。数据结构支持字符串、列表、哈希、集合、有序集合、流等，并内置 FT.* 全文/向量搜索与 JSON、时间序列命令；通过快照和可选 AOF 持久化，支持复制与集群。默认监听 6380 端口，采用 AGPL-3.0 许可证，提供 apt/dnf/Homebrew/Cargo/Docker 多种安装方式。",
+   "highlights": [
+    "实现 RESP2 和 RESP3 协议，兼容 Redis 8.10 的字符串、列表、哈希、集合、有序集合、流、位图、HyperLogLog、geo、pub/sub 和事务命令",
+    "内置 Redis Stack 风格的 FT.* 命令，支持全文、标签、数值和向量（FLAT/HNSW）搜索，以及 JSON.* 和 TS.* 命令",
+    "提供快照与可选 append-only 文件持久化、--replicaof 复制、含故障检测和故障转移的集群模式、ACL 用户与 TLS；Lua 脚本（EVAL/FUNCTION/FCALL）在 lua 和 full 构建版本中提供"
+   ],
+   "use_cases": [
+    "以 6380 端口与现有 Redis 并行部署，或通过 --port 6379 直接替换原服务",
+    "需要全文检索或向量搜索的 AI 与实时应用场景",
+    "通过 systemd、Docker 或 Kubernetes operator（默认 protected mode，可配置 TLS 与 ACL）进行部署运行"
+   ]
+  },
+  "sha": "0e75f959a2da",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "644547d8e439": {
+  "identity": {
+   "one_liner": "Tauri+Rust桌面端AI小说创作软件，内置多代理协作与长篇资产管理体系",
+   "review": "StoryMoss（草苔）是一款基于 Tauri、React 与 Rust 的桌面小说写作应用，面向使用大模型进行长篇创作的作者。它包含幕前沉浸式写作与幕后资产管理两个界面，支持知识图谱、伏笔看板、角色/世界观资产回流，以及主创/管理/编辑审计三代理协作流程。可通过官网或 GitHub Releases 安装预构建版本，也可用 Node.js 20 LTS 与 Rust 1.95.0 从源码构建运行。",
+   "highlights": [
+    "支持 OpenAI、Anthropic、Ollama 及本地 API 多模型接入，并可按角色与任务配置模型路由",
+    "提供角色/世界观/场景/知识图谱/伏笔看板等资产管理，每章生成后自动提取资产回流累积",
+    "包含三代理并行协作与 Gate 质量门机制，每章交付前经加权评分检查"
+   ],
+   "use_cases": [
+    "长篇小说连续续写创作，依赖前文检索与卷/弧中层计划保持情节承接",
+    "使用本地 Ollama 模型在离线或私有环境下进行 AI 辅助写作",
+    "通过本地书籍训练源与编审对比报告校准个人文风"
+   ]
+  },
+  "sha": "644547d8e439",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ce97d350e2ca": {
+  "identity": {
+   "one_liner": "自托管工作数据库：单 SQLite 文件承载关联表、文档与 MCP/REST/CLI 接入",
+   "review": "weave 是一个 MIT 许可的自托管工作数据库，用单个 SQLite 文件存储空间、表、行及其双向关联、公式、rollup、工作流状态和每行的 markdown 文档。它面向同时使用 Web UI 的人和 AI agent：内置 MCP server、REST API 和 CLI 操作同一数据文件。运行需 Node ≥ 22.16，零运行时依赖，可 Docker 部署；无账号、无遥测，支持 undo 与文档版本化。",
+   "highlights": [
+    "数据存储于单一 SQLite 文件，运行时依赖为 0，git clone 后即可运行",
+    "内置 MCP server（默认 17 个工具，可扩展至 66 个）、REST API 与 CLI，与 Web UI 操作同一引擎和数据文件",
+    "每行可挂多个 markdown 文档，支持修订历史、行级 undo（weave undo / POST /api/undo / weave_undo）"
+   ],
+   "use_cases": [
+    "个人或团队自托管管理工作数据（任务、看板、表单），数据保留在自有磁盘文件中",
+    "让 Claude Code、Cursor 等 stdio MCP 客户端的 AI agent 通过 MCP 工具读写同一套表和文档",
+    "在笔记本或小型 VPS 上以一个 Node 进程运行，或通过 Docker 镜像部署并持久化到 /data 卷"
+   ]
+  },
+  "sha": "ce97d350e2ca",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ca4283cdff7b": {
+  "identity": {
+   "one_liner": "基于 collectd Rust 插件和 COPY 批量写入的 Postgres collectd 写入插件",
+   "review": "pg-collectd 是一个以 Rust 编写的 collectd 插件，用于将 collectd 指标批量写入 Postgres。它通过 collectd 的 Rust 绑定接入 C API，使用纯 Rust 的 postgres 驱动（无需 libpq），将数据展开为单表单值列，并以内存 CSV 格式通过 COPY 批量导入。仅以 deb 包或源码分发，需要 glibc 2.34+。",
+   "highlights": [
+    "通过 collectd Rust 插件绑定 C API，静态编译 rust-postgres 驱动，不依赖 libpq",
+    "将数据展开反规范化后写入单表，列中只包含单个值而非数组",
+    "以内存 CSV 形式使用 COPY 批量导入，可配置 BatchSize、StoreRates、LogTimings 等参数"
+   ],
+   "use_cases": [
+    "在 Ubuntu/Debian 环境下将 collectd 指标写入 Postgres（Collectd 5.7–5.12、Postgres 9.0+）",
+    "结合 TimescaleDB 存储时序指标数据",
+    "无法使用官方 collectd postgres writer 或需要 deb/源码方式部署的场景"
+   ]
+  },
+  "sha": "ca4283cdff7b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

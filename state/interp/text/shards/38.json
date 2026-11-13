@@ -3296,5 +3296,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fe749012c9e3": {
+  "identity": {
+   "one_liner": "面向开发者的 Rust ORM，基于字段声明式关联与流式查询构建器",
+   "review": "TideORM 是一个 Rust ORM，当前版本 0.17.4，通过 `#[tideorm::model]` 属性宏定义模型，支持 PostgreSQL、MySQL、SQLite 三种后端，运行在 Tokio 或 async-std 异步运行时上。核心机制包括模型上直接声明的 HasOne/HasMany 等关联、`with(...)` 预加载缓解 N+1 查询，以及可选的加密字段、脏检查等 feature 模块；加密字段功能暂不支持对查询谓词做透明改写。适用于使用 async Rust 访问关系型数据库的应用开发者。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 三种数据库后端，可通过 `Database::connect` 同时连接多个数据库并用 `db.scope` 切换作用域",
+    "提供字段级声明式关联（HasOne/HasMany/BelongTo/HasManyThrough）、嵌套预加载、分块读取与游标分页",
+    "可选 feature 模块包括字段加密、脏检查、实体管理器、附件、翻译与全文搜索"
+   ],
+   "use_cases": [
+    "使用 async Rust（Tokio/async-std）构建需要访问 PostgreSQL、MySQL 或 SQLite 的应用程序",
+    "多租户或读写分离场景中需要按代码块切换数据库连接",
+    "需要在数据库中对敏感字段做写入加密、读取解密的应用（注意加密列不支持透明的明文条件查询）"
+   ]
+  },
+  "sha": "fe749012c9e3",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2d5157f8629f": {
+  "identity": {
+   "one_liner": "基于 LangGraph 的带来源标注 AI 对话 agent，支持检索、文件解读与版本化写作",
+   "review": "这是一个基于 LangGraph 的对话 agent 项目：能联网搜索、读取文件和图片、查询用户上传的资料库并回答来源，用户需要成品时把文档、网页、代码写成文件并出版本。面向需要资料检索和文档产出的个人用户。技术栈为 FastAPI、LangGraph/LangChain、React 和 Postgres（pgvector），模型默认 DeepSeek 并支持多家直连。README 包含架构图、检索评测数据（36 题与 47 题两套）、本地部署说明，但整体版本信息、许可证、贡献指南等常规章节未在 README 中出现。",
+   "highlights": [
+    "主 agent 与子 agent 均基于 LangChain create_agent 构建，挂载 16 个自写 AgentMiddleware，支持子 agent 并行调用并设置工具调用次数硬上限",
+    "资料库检索将向量存于 pgvector，采用向量+关键词 RRF 合并后再重排取前 8 块的流程，删除操作在事务内完成",
+    "检查点、长期记忆、运行记录、资料库向量与成本记录统一存于 Postgres；上下文压缩围绕前缀缓存设计，压缩内容与页面显示分离"
+   ],
+   "use_cases": [
+    "需要搜索并读取网页、文档、表格后整理对比资料的场景",
+    "上传个人文件建立资料库，后续对话引用原文段落",
+    "生成文档、网页、图表、PPT 等成品文件并保留修改版本"
+   ]
+  },
+  "sha": "2d5157f8629f",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e57004d7c469": {
+  "identity": {
+   "one_liner": "Android 离线考公刷题 App，内置 SQLite 真题库，支持 Leitner 复习与模考。",
+   "review": "一个面向公务员、事业单位、三支一扶考试的 Android 刷题客户端，基于 Capacitor 构建前端壳，题目数据存储于本地 SQLite 数据库，内置 156,282 道真题与 3,620 套试卷，题库 gzip 压缩后随 APK 分发。适用于需要在无网络环境下练习行测、公基、申论等科目的备考者。限制包括申论、综应解析覆盖率不足七成，以及部分题目因内容打码被屏蔽。",
+   "highlights": [
+    "内置 15.6 万道去重真题与 3,620 套历年试卷，运行于本地 SQLite，离线可完整刷题",
+    "题库更新采用逐行 diff 增量包（14–40 MB），分事务写入，失败不损坏本地库",
+    "提供背题模式、限时模考、Leitner 间隔复习、基础测评与学习统计/报告，AI 讲题与申论批改为可选功能"
+   ],
+   "use_cases": [
+    "无网络或不愿使用联网题库 App 的公务员/事业单位备考刷题",
+    "按省份、年份、卷型筛选历年真题卷进行整卷限时模考与估分",
+    "通过错题本、每日任务与间隔复习安排周期性备考计划"
+   ]
+  },
+  "sha": "e57004d7c469",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

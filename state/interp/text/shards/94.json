@@ -2938,5 +2938,70 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ffccb2366448": {
+  "identity": {
+   "one_liner": "用 Rust 编写的 Redis 兼容缓存与数据结构服务器，采用 RESP2 协议",
+   "review": "ReRu 是一个用安全 Rust 实现的 Redis 兼容数据服务器，通过 RESP2 协议支持 redis-cli、redis-py 等现有客户端直连，提供字符串、列表、哈希、集合、有序集合、流等数据结构，含 TTL、十种淘汰策略、AOF/RDB/快照持久化、只读副本与 pub/sub。官方声明为实验性预览，适合开发与兼容性实验，不适合生产使用；TLS、ACL、PSYNC、集群等尚未实现。",
+   "highlights": [
+    "支持 204 个 Redis 命令名（对 Redis 8.10.2 元数据的名称覆盖率为 44.4%），二进制安全 RESP2 协议",
+    "提供 TTL、后台过期、十种内存淘汰策略、MULTI/EXEC/WATCH 事务、带消费者组的流和本地 pub/sub",
+    "支持 ReRu 快照、单文件 AOF（含在线重写）、Redis RDB 子集读取，以及经认证的快照加流复制协议"
+   ],
+   "use_cases": [
+    "本地开发与测试环境中替代连接目标，供现有 Redis 客户端（redis-cli、redis-py、ioredis、Lettuce）使用",
+    "对照 pinned Redis 8.10.2 参考进行协议与命令行为的兼容性研究和差分测试",
+    "通过 Docker Compose 以 AOF 持久化运行实验性自托管缓存服务"
+   ]
+  },
+  "sha": "ffccb2366448",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e4a610fbca8": {
+  "identity": {
+   "one_liner": "零配置数据库表异常检测工具，通过学习历史基线发现数据漂移。",
+   "review": "Scherlok 是一个 Python 编写的命令行数据质量监控工具，通过先采集表画像（行数、NULL 率、分布、基数、更新频率）建立基线，再检测漂移，无需编写 YAML 规则。支持 PostgreSQL、BigQuery、Snowflake、MySQL、DuckDB 与 dbt 模型。画像仅存 SQLite 聚合值，不保存行数据；提供 MCP 服务器和 GitHub Action 集成。检测到 CRITICAL 时基线不更新，需人工 accept 确认。",
+   "highlights": [
+    "支持 9 类异常检测：行数骤变、更新停滞、schema 漂移、NULL 率激增、分布偏移、基数爆炸等，自动分级 INFO/WARNING/CRITICAL",
+    "提供 reconcile 命令对比管道输入输出（行数、键、金额合计），可捕获 join 扇出等自历史无法发现的问题",
+    "包含 MCP 服务器、GitHub Action、Slack/Discord/Teams/邮件通知，以及 --against 跨库对比和 --fail-on CI 门禁选项"
+   ],
+   "use_cases": [
+    "CI/CD 流水线中作为 pull request 的数据质量门禁，用 scherlok ci 或 verify 对比基线",
+    "dbt 项目运行后自动对全部物化模型做异常检测，无需编写 dbt test 规则",
+    "通过 reconcile 校验 ETL 管道输出与源表的行数、键和数值总和一致性"
+   ]
+  },
+  "sha": "2e4a610fbca8",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41fb80ca441c": {
+  "identity": {
+   "one_liner": "Windows 下基于完好的 SQLite 数据诊断并恢复 Codex Desktop 丢失本地项目的非官方工具",
+   "review": "该工具面向 Windows 10/11 上的 Codex Desktop 用户，用于 Projects 侧边栏本地项目丢失、但本地 state_5.sqlite 仍完好且包含项目记录的情形。它只读打开 SQLite 做完整性与模式校验，仅依据无歧义证据重建/合并 .codex-global-state.json，写入前生成时间戳备份，失败时回滚。不修改源文件夹、会话历史或在线数据库，无法恢复已删除文件夹或损坏数据库。",
+   "highlights": [
+    "只读打开 state_5.sqlite 并执行 SQLite 完整性校验，写 JSON 前生成时间戳备份且失败时尝试回滚",
+    "进程检测（Codex 运行时拒绝执行）、预览模式、schema 校验与多级安全停止机制",
+    "仅使用 Python 标准库，无第三方依赖，本地运行无网络请求与遥测"
+   ],
+   "use_cases": [
+    "Codex Desktop Projects 侧边栏本地项目条目消失但本地数据库完好时恢复项目目录与会话归属",
+    "执行恢复前用 -PreviewOnly 预览可恢复项目与冲突情况，恢复后异常时用 Restore-CodexBackup.ps1 回滚"
+   ]
+  },
+  "sha": "41fb80ca441c",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

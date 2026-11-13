@@ -3076,5 +3076,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2061b55f11a1": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 代理记忆 CLI，以 Markdown 文件存储项目规则、决策与会话交接",
+   "review": "Mora 是一个 Go 编写的命令行工具，将用户确认的规则、决策和会话 handoff 存入本地 Markdown 库（~/vault/mora）与 SQLite 索引，通过 Claude Code/Codex 生命周期钩子和 MCP 服务器注入到代理会话中。写入需在真实终端确认，代理保存的笔记须经 mora review 审核。README 标注其为 beta 软件，安装后不自动配置连接器与钩子。",
+   "highlights": [
+    "提供 mora mcp serve 暴露 brief、search_memory、write_memory、handoff 相关等 MCP 工具，可按 --project-dir 绑定到单个项目文件夹",
+    "通过 SessionStart/UserPromptSubmit/SessionEnd 钩子注入项目简报与限定范围的全文检索召回（stemmed search，最多三条匹配）",
+    "记录交付日志（mora given）与本地状态页（mora status --web，仅 127.0.0.1），保存与检索不调用 AI 模型，可选本地 Ollama 增加向量搜索"
+   ],
+   "use_cases": [
+    "在多个项目文件夹中让 Claude Code、Codex、Antigravity 会话读取已确认的项目规则与决策",
+    "跨会话或跨机器交接工作上下文（handoff 记录方向、进展与下一步）",
+    "审核代理写入的笔记（mora review / mora confirm）并撤销不当内容（mora undo / retract）"
+   ]
+  },
+  "sha": "2061b55f11a1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c95b2ca79e61": {
+  "identity": {
+   "one_liner": "自托管的 NetFlow/IPFIX/sFlow 流量采集与 ClickHouse 存储分析平台",
+   "review": "这是一个用 Go 编写的单组织自托管流量采集平台，接收 NetFlow v1–v10、IPFIX、sFlow 遥测，归一化为统一模型后存入本地 JSONL 或 ClickHouse，并提供 Web 门户、认证 API、报表与健康监控。它不存储数据包载荷，非 NDR/SIEM/IDS 类系统。安装程序默认将门户绑定到 0.0.0.0，首次启动会生成引导管理员凭据文件，需登录后修改密码并删除该文件。",
+   "highlights": [
+    "支持 NetFlow v1/v5/v7/v8/v9、IPFIX/NetFlow v10（UDP/TCP/SCTP）和 sFlow v5 解码，统一为同一查询模型",
+    "支持无依赖的本地 JSONL 存储或 ClickHouse 存储，ClickHouse 不可用时提供 CRC 校验的 spool/WAL 重放",
+    "包含 RBAC、MFA/Passkey、OIDC、LDAP、作用域 API 令牌、审计日志、备份恢复等管理控制"
+   ],
+   "use_cases": [
+    "对网络设备导出的 NetFlow/IPFIX/sFlow 流量进行集中采集与流量分析",
+    "需要 Top-N、会话、P95 带宽、周期对比等容量与流量基线分析的运维场景",
+    "通过 PDF/XLSX/CSV/JSON 报表及定时邮件/webhook 报表输出流量汇总"
+   ]
+  },
+  "sha": "c95b2ca79e61",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

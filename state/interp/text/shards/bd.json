@@ -3363,5 +3363,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b773bb5dc269": {
+  "identity": {
+   "one_liner": "基于官方 API 的激战 2 数据库网站",
+   "review": "gw2treasures.com 是一个基于 Guild Wars 2 官方 API 的数据库网站，代码采用 monorepo 结构，包含 Next.js 前端（apps/web 与 packages/ui）和负责后台任务的 worker（apps/worker），数据库运行于 Docker，使用 Prisma 管理数据模型与迁移。README 主要面向开发者，说明本地环境搭建（Node.js 24+、pnpm、Docker）、身份认证（gw2.me）、端到端测试与数据库升级流程。项目以 MIT 许可证发布。",
+   "highlights": [
+    "使用 Next.js 与 TypeScript 构建，代码按 apps/web、packages/ui、apps/worker 组织为 monorepo 结构",
+    "worker 负责全部后台任务，可在 /status/jobs 页面查看当前排队的作业",
+    "数据库 schema 通过 Prisma 管理，提供 prisma:studio 访问、迁移流程及旧版数据库导入与跨大版本迁移脚本"
+   ],
+   "use_cases": [
+    "参与或研究 gw2treasures.com 网站与 worker 的开发",
+    "本地搭建基于官方 API 的 Guild Wars 2 数据查询站点",
+    "学习 Next.js + Docker + Prisma 的多组件 monorepo 项目组织方式"
+   ]
+  },
+  "sha": "b773bb5dc269",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0701dc41703f": {
+  "identity": {
+   "one_liner": "本地 SQLite+FTS5 邮件归档，供 AI 代理经 CLI/Python/MCP 查询 PST 与 IMAP 邮件",
+   "review": "mailattic 将多年 Outlook PST 归档与增量 IMAP 同步导入一个本地 SQLite 数据库并提供 FTS5 全文检索。面向需要在本地磁盘归档中查旧邮件的 AI 代理与脚本，提供 CLI（bes）、Python API 和 MCP 服务器三种接口，三者共用同一查询代码。发送采用草稿加 SHA-256 指纹机制，代理须提交审核后指纹方可发送。仅支持 Windows 11、Python 3.13 与 uv；PST 导入依赖运行中的 Outlook。",
+   "highlights": [
+    "提供 CLI、Python API、MCP 服务器三种接口，运行同一套查询代码",
+    "支持 PST（经运行中的 Outlook 读取）与 Maildir 导入及 IMAP 增量同步",
+    "回复草稿含 SHA-256 指纹，发送时须传入指纹，变更后的草稿被拒绝"
+   ],
+   "use_cases": [
+    "在服务器有保留期限、旧邮件仅存于本地归档时供代理检索历史邮件",
+    "无法运行主机 CLI 的沙箱助手经 MCP 工具查询附件导出与草稿生成",
+    "按部件号、订单号、地址、日期等精确关键词检索商务邮件"
+   ]
+  },
+  "sha": "0701dc41703f",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

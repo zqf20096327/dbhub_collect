@@ -3412,5 +3412,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4b408e090b9a": {
+  "identity": {
+   "one_liner": "基于 FastAPI 和 PostgreSQL 的自托管 LangSmith Deployments 兼容后端",
+   "review": "Aegra 实现与 LangSmith Deployments 兼容的 API，运行既有的 LangGraph 代码，通过 PostgreSQL 做检查点持久化、Redis 做任务队列与 SSE 跨实例发布订阅，支持 JWT/OAuth/Firebase 认证、cron 定时任务、Webhooks、OpenTelemetry 追踪和 pgvector 语义存储，Apache 2.0 协议发布。面向希望在自有基础设施上运行 LangGraph agent 的开发者，需 Python 3.12+ 与 Docker/Podman，经 aegra-cli 初始化项目或 docker compose 启动。",
+   "highlights": [
+    "兼容 LangGraph SDK 与 API，配合 Agent Chat UI、LangGraph Studio、CopilotKit 使用",
+    "基于 Redis 队列的 worker 架构，支持多实例水平扩展与租约式崩溃恢复，含定时任务与 Webhooks",
+    "支持 SSE 流式传输（含 Agent Protocol v2 线程级流）、OpenTelemetry 追踪与 pgvector 向量存储"
+   ],
+   "use_cases": [
+    "在自有服务器上部署和运行 LangGraph agent 并用 PostgreSQL 持久化状态",
+    "需要定时触发 agent 运行、Webhook 回调或人机协同审批流程的场景",
+    "需将追踪数据发送到 Langfuse、Phoenix 等 OTLP 后端的 agent 应用"
+   ]
+  },
+  "sha": "4b408e090b9a",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "82dc5d13f2c9": {
+  "identity": {
+   "one_liner": "基于开源项目 POETIZE 扩展的博客系统，含内容创作、IM聊天室与Docker一键部署",
+   "review": "该项目是基于开源博客 POETIZE 的 AGPL 分支，由 LeapYa 维护，集内容创作、社交互动与 IM 聊天室于一体。技术栈为 Vue3.5、Java 25 + Spring Boot、MariaDB、Redis，通过 Docker 与 poetize 管理脚本部署，面向想自建个人博客的开发者。README 提示该分支主要供作者自用，不定时更新。",
+   "highlights": [
+    "支持一键部署脚本，自动完成 Docker 安装、数据库初始化与 HTTPS 配置，并提供 poetize 命令管理安装、升级、迁移与服务状态",
+    "集成 GitHub、Google、QQ 等17个第三方登录平台，支持自定义 OIDC/OAuth2 接入，并将密码哈希升级为 BCrypt、token 采用 HMAC-SHA256 签名",
+    "内置预渲染 SEO 优化、AI 翻译（支持 Ollama 本地模型）、插件系统（.zip 包扩展前端）、Live2D 看板娘与多图床存储支持"
+   ],
+   "use_cases": [
+    "个人博客自建站点：在云服务器上通过一行命令完成主站、聊天室与管理后台的部署",
+    "需要搜索引擎收录的写作站点：使用内置预渲染、站点地图与搜索引擎推送等 SEO 功能",
+    "容器化或已有外部 MariaDB/Redis 的环境：支持容器内隔离部署与外部数据库接入配置"
+   ]
+  },
+  "sha": "82dc5d13f2c9",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

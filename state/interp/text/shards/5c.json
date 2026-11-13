@@ -2479,5 +2479,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8df3e76315eb": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，以 PostgreSQL/pgvector 存储带出处与生命周期的证据",
+   "review": "Dense-Mem 是一个用 Go 编写、以 Streamable HTTP 提供 MCP 接口（/mcp）的自托管记忆服务器，将证据、出处、生命周期与授权交由 PostgreSQL（含 pgvector）持久化，Redis 仅用于多实例协调。面向需要为 LLM 客户端提供可控记忆的团队，通过 Docker Compose 部署，启动时要求完整的嵌入与校验模型配置，v2.6.x 升级须执行停机迁移。",
+   "highlights": [
+    "提供 MCP 端点 /mcp、用户门户与控制门户，支持证据追加写入、生命周期事件与冲突检测",
+    "以 PostgreSQL+pgvector 作为唯一持久权威，支持向量检索与慢查询日志配置",
+    "认证绑定 team+identity+membership+永久所有者别名，客户端不可选择或替换语义所有者"
+   ],
+   "use_cases": [
+    "为 AI 客户端/代理提供带出处与权限门控的长期记忆服务",
+    "需要多实例部署与分布式协调的团队记忆基础设施",
+    "控制面自动化与运维诊断（日志过滤、迁移、嵌入批量测量）场景"
+   ]
+  },
+  "sha": "8df3e76315eb",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9b02f12a7c94": {
+  "identity": {
+   "one_liner": "基于 Lead–Worker 架构的 Hermes Agent 插件，管理后台子代理委派",
+   "review": "这是一个 Hermes Agent 插件，用于在聊天会话中实现 Lead–Worker 分工：Lead Agent 保持与用户对话，Worker 子代理在后台执行构建、测试、重构等多步任务。插件通过 Python 钩子实现，自身不做模型推理；提供上下文交接简报、循环终止、决策升级、交付验证，并用 SQLite 台账记录任务。适用于已部署 Hermes Agent 并通过消息渠道交互的场景。",
+   "highlights": [
+    "Lead Agent 每回合有 60 秒软预算与 120 秒硬暂停，超时后挂起变更类工具",
+    "Worker 子代理接收包含用户消息、USER.md/MEMORY.md、并发任务注册表等内容的交接简报",
+    "跨完整生命周期的归一化结果跟踪：第 3 次相同结果警告，第 5 次终止并以 blocked 状态结束"
+   ],
+   "use_cases": [
+    "在聊天渠道执行长时编译、测试套件或多步代码重构而不阻塞会话回复",
+    "子代理遇到架构选择或不可逆操作时升级为结构化 needs_decision 决策请求",
+    "需要防止子代理重复工具调用、未经核实的完成声明及后台报告被竞态丢弃的场景"
+   ]
+  },
+  "sha": "9b02f12a7c94",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "029c0191e4e0": {
+  "identity": {
+   "one_liner": "面向 TiDB 升级场景的离线执行计划采集与比较工具，生成 HTML 评审报告",
+   "review": "PCC Core 通过导出 SQL 及其表结构、统计信息构成 CaptureBundle，将其导入升级前、后的两套 TiDB 后执行 EXPLAIN 比较执行计划，产出 HTML 报告并按规则卡分类差异，供 DBA 逐条人工评审。工具只执行 EXPLAIN，不运行业务 DML；运行在 Linux x86_64（glibc 2.28+），导入步骤需 MySQL 8 客户端，比较结果经返回码 0/1/3 区分。",
+   "highlights": [
+    "提供 CLI 与 SDK，支持采集、prepare、compare 等命令及菜单交互模式，既有接口保持兼容",
+    "生成带规则卡（64 张）、复核勾选、备注、分页搜索与 JSON/CSV 导出的 HTML 比较报告",
+    "支持完整采集包离线传输后在临时端自动导入，并提供 413 条、17 类固定 SQL 回归案例与 1,203 项离线回归"
+   ],
+   "use_cases": [
+    "TiDB 版本升级前后批量比较同批 SQL 的执行计划是否一致",
+    "生产与临时环境分网场景下，导出采集包后在临时环境离线完成导入与比较",
+    "从 Statement Summary 按时间范围与 top-n 指标（执行次数、总耗时等）采集待比对 SQL"
+   ]
+  },
+  "sha": "029c0191e4e0",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

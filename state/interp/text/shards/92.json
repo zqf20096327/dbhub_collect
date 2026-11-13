@@ -3038,5 +3038,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "480495a0a504": {
+  "identity": {
+   "one_liner": "用 Rust 独立实现的 opencode 服务器，兼容 v1/v2 HTTP 与 SSE API",
+   "review": "ocserve 是 opencode 服务器的独立 Rust 实现，提供与上游相同的 v1（188 个操作）和 v2（169 个操作）HTTP/SSE API，官方客户端无需改动即可连接。它使用 SQLite 存储，做增量 vacuum 与保留策略以回收磁盘空间，v2-only 的 123 个操作需设 OCSERVE_V2=1 开启。可通过 cargo、预编译二进制或源码安装，支持从上游数据库导入会话历史，适合需要长期驻留服务的部署。",
+   "highlights": [
+    "实现 v1（1.19.5，188/188 操作）与 v2（2.2.5，169/169 操作）两套 HTTP/SSE API，并基于 OpenAPI 3.1.0 规范在 /doc 提供契约",
+    "使用 SQLite 存储，执行增量 vacuum 与保留环，支持从上游 opencode.db 导入会话（--limit、--session、--bulk）",
+    "提供 ocserve serve、import、doctor、env-reference 等命令，内嵌与服务器版本匹配的 web UI，可离线访问"
+   ],
+   "use_cases": [
+    "在小 VPS、旧笔记本等资源受限环境运行长期驻留的 opencode 服务器",
+    "多并发会话、长期积累大量历史且需要数据库回收磁盘空间的部署",
+    "让现有 TUI（opencode attach）、web 应用等客户端在不变更接口的情况下接入替换服务器"
+   ]
+  },
+  "sha": "480495a0a504",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5dfb6d4d251d": {
+  "identity": {
+   "one_liner": "基于官方 dmdb Node.js 驱动的达梦 DM8 MCP server，默认纯只读",
+   "review": "这是一个让 MCP 客户端访问达梦 DM8 数据库的服务器，用 TypeScript 实现并基于官方 dmdb 驱动与 MCP TypeScript SDK v2，通过 stdio 传输运行 JSON-RPC 2.0。默认注册 9 个只读工具，dm_execute_dml 与 dm_execute_ddl 分别需 DM_ALLOW_WRITE、DM_ALLOW_DDL 环境变量开启才会注册。SQL 需连续通过归一化、顶层切分、关键字黑名单、服务端判定、交叉裁决五层检查；TRUNCATE、GRANT 等语句在任意开关状态下都被禁止。需 Node >= 20，凭据经环境变量注入，进程不监听网络端口。适合需要在 Claude Desktop 等 MCP 客户端中查询或管理 DM8 数据的开发与运维人员。",
+   "highlights": [
+    "默认注册 9 个只读工具（ping、列模式/表、表结构、SELECT 查询、采样、行数、执行计划、对象搜索），写与 DDL 工具由环境变量开启后才注册",
+    "SQL 执行前经过五层连续检查，DML 强制要求 where 条件，DDL 需 confirm 参数并写审计日志",
+    "数据库连接懒加载、启动不触网，仅支持 stdio 传输，凭据通过环境变量注入且不监听网络端口"
+   ],
+   "use_cases": [
+    "在支持 MCP 的客户端（如 Claude Desktop）中以自然语言方式查询达梦 DM8 数据库的结构与数据",
+    "需要受控开启写入能力的开发环境：通过开关分级启用 DML 与 DDL，并依赖内置的 SQL 检查与回滚机制",
+    "对 DM8 实例做只读巡检：连通性探测、表/列/注释搜索、执行计划查看与精确行数统计"
+   ]
+  },
+  "sha": "5dfb6d4d251d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

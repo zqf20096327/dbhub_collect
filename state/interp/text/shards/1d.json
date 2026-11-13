@@ -2637,5 +2637,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "09d525e1a25c": {
+  "identity": {
+   "one_liner": "Flutter 编写的本地优先跨平台 AI 聊天客户端，内置 SQLite 存储",
+   "review": "LumenFlow（流光）是一个基于 Flutter 的 AI 聊天应用，运行于 Android、iOS、Windows、Linux 与 macOS。它接入 13 类模型平台，提供流式回复、工具调用与 MCP 支持，并将对话、记忆、凭据等数据以 SQLite 存储在本机。采用分层架构，UI 为 Cupertino 风格，许可证为 MIT。",
+   "highlights": [
+    "支持 13 类 AI 平台，按协议族提供 Chat Completions、Responses、Claude Messages、Gemini Interactions 四类适配器",
+    "提供滚动记忆与硬记忆机制，超过上下文窗口的历史被压缩为摘要与条目账本，模型可通过 recall 工具检索旧消息",
+    "本地 SQLite 存储对话、消息、附件、记忆与设置，支持 TXT/JSON/PDF 及自研归档格式导出，PDF 内嵌 Noto Sans SC 字体"
+   ],
+   "use_cases": [
+    "在移动端或桌面端通过各平台 API Key 使用多个模型服务进行对话",
+    "需要工具调用、MCP 服务器接入的模型交互场景",
+    "使用角色卡进行角色扮演对话并保留本地历史记录的场景"
+   ]
+  },
+  "sha": "09d525e1a25c",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df65f5081e69": {
+  "identity": {
+   "one_liner": "S3 兼容对象存储的多租户控制平面，基于 Cedar 策略与预签名 URL",
+   "review": "Paladin 是面向 S3 兼容对象存储的多租户控制平面，用 Go 编写为单一二进制。应用以租户范围的凭据接入，Paladin 依据租户的 Cedar 策略校验请求、计量配额并写审计日志，对象字节经其签发的预签名 URL 在客户端与后端间直传，API 仅承载元数据。部署需 PostgreSQL 16+ 与 S3 兼容存储，经双 Helm 图安装于 Kubernetes 1.25+。采用 AGPL-3.0-only 许可，各版本间尚不保持兼容。",
+   "highlights": [
+    "提供 Connect API、Next.js Web 控制台及 Go、Python SDK，并通过 MCP 将相同操作暴露为 AI 代理工具",
+    "支持用户、API 令牌与短期可撤销的能力令牌，租户按 Cedar 策略校验并按配额计量用量",
+    "以九个角色（api、iam、admin、worker、dispatcher 等）运行，事件以 CloudEvents 1.0 投递至 Webhook 与消息代理"
+   ],
+   "use_cases": [
+    "多租户 S3 兼容存储平台的租户隔离、配额与审计管理",
+    "不将存储凭据下发给应用的托管访问场景",
+    "为 AI 代理提供存储管理操作作为 MCP 工具"
+   ]
+  },
+  "sha": "df65f5081e69",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

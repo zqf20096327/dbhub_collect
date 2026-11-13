@@ -3144,5 +3144,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9d2f29faed6b": {
+  "identity": {
+   "one_liner": "Duroxide 持久执行运行时的 MySQL 8.0+/TiDB 存储提供者",
+   "review": "该 crate 基于 sqlx 0.9 为 Rust 持久执行运行时 Duroxide 实现 Provider 与 ProviderAdmin 接口，在 MySQL 8.0 和 TiDB 8.5 上通过全部 232 项官方验证测试。其设计不使用存储过程、触发器、FOR UPDATE SKIP LOCKED 等特性，以兼容连接代理与分布式集群；队列通过有限候选窗口加比较交换更新认领任务，锁按固定顺序获取。适用于需要在 MySQL/TiDB 上运行 Duroxide 的 Rust 项目。",
+   "highlights": [
+    "基于 sqlx 0.9 实现完整 Provider 与 ProviderAdmin 契约，通过 232 项官方验证测试（MySQL 8.0 与 TiDB 8.5）",
+    "不依赖存储过程、触发器、RETURNING、FOR UPDATE SKIP LOCKED 或数据库咨询锁，队列采用候选窗口加比较交换更新认领",
+    "提供表前缀隔离多应用/租户、自动迁移或外部 DDL 管理、固定顺序加锁的租约纪律，以及多种 TLS 后端 Cargo 特性"
+   ],
+   "use_cases": [
+    "在 MySQL 8.0+ 或 TiDB 上为 Rust 应用提供 Duroxide 持久执行的存储层",
+    "通过表前缀在单一数据库内隔离多应用或多租户",
+    "模式由外部迁移管线管理、需禁用运行时 DDL 的部署环境"
+   ]
+  },
+  "sha": "9d2f29faed6b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

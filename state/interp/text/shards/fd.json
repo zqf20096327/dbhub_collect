@@ -3378,5 +3378,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "26bb4ae57fee": {
+  "identity": {
+   "one_liner": "纯 V 编写的嵌入式 SQL 数据库，数据库存于单个文件，兼容 PostgreSQL 客户端协议",
+   "review": "vsql 是一个用纯 V 编写的嵌入式 SQL 数据库，整个数据库保存在单个文件或内存中，提供 CLI、PostgreSQL 兼容服务器和浏览器应用三种使用方式。它遵循 SQL:2016 标准，默认隔离级别为 SERIALIZABLE，基于 MVCC 实现，支持多进程共享同一文件并通过预写日志做崩溃恢复。提供 V、C、Go、Python、Java、Rust、Node.js 七种语言的库，MIT 许可，提供 macOS、Linux、Windows 的预编译二进制及 Docker 镜像。",
+   "highlights": [
+    "遵循 SQL:2016 标准，支持连接、子查询、聚合、索引、主键/外键/CHECK 约束、序列、游标、ALTER TABLE 和标准 INFORMATION_SCHEMA 视图，错误使用标准 SQLSTATE 代码",
+    "支持全部四种标准隔离级别，默认 SERIALIZABLE，基于 MVCC；数据库为单个文件，支持多进程共享同一文件，写入通过预写日志保证崩溃后可恢复",
+    "可通过 `vsql server` 启动 PostgreSQL 兼容服务器供任何 PostgreSQL 客户端连接，并提供 `vsql app` 浏览器应用用于浏览、编辑数据和导入导出 SQL/CSV/TSV/JSON"
+   ],
+   "use_cases": [
+    "在测试中使用嵌入式数据库运行针对 PostgreSQL 或其他标准 SQL 数据库编写的应用查询",
+    "需要多个连接（连接池、多进程或后台任务）共享同一数据库文件的应用",
+    "下载预编译二进制或通过 Docker 在本机以 CLI 方式执行 SQL，或用浏览器应用查看数据"
+   ]
+  },
+  "sha": "26bb4ae57fee",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "038de2a1a312": {
+  "identity": {
+   "one_liner": "chDB 的 Go 绑定与 CLI，进程内运行 ClickHouse 引擎的 SQL OLAP 接口",
+   "review": "chdb-go 为嵌入式 SQL OLAP 引擎 chDB 提供 Go 绑定和命令行工具，底层由 ClickHouse 驱动。它支持运行时加载本机 libchdb，或通过引擎模块将引擎打包进二进制。提供 database/sql 驱动、chdb/durable 对象存储持久化协议，以及简单与交互两种 CLI 模式。",
+   "highlights": [
+    "提供 Go 绑定、database/sql 驱动与 CLI，支持嵌入引擎模块实现自包含二进制",
+    "支持 S3/R2/MinIO 等对象存储上的 durable 持久化（checkpoint 加 WAL），可被 Python/Node 绑定按同一协议读取",
+    "并发模型为每进程单个引擎、单数据路径，多个连接可并行执行查询，可用 SetMaxOpenConns 控制并行度"
+   ],
+   "use_cases": [
+    "在 Go 程序中以内嵌方式执行 ClickHouse 方言 SQL 查询",
+    "构建 FROM scratch 镜像或免安装步骤的自包含二进制",
+    "以自有对象存储为后端管理 chDB 数据库的检查点与写前日志"
+   ]
+  },
+  "sha": "038de2a1a312",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "614b5ab48067": {
+  "identity": {
+   "one_liner": "一款基于 Electron 的桌面数据库客户端，支持七种数据库且无需额外客户端软件。",
+   "review": "Lookup 是一个桌面应用，用于连接 Oracle、PostgreSQL、MySQL/MariaDB、SQLite、ClickHouse、Redis 和 MongoDB。它通过纯 JavaScript 驱动（如 node-oracledb Thin 模式、mysql2 等）访问数据库，因此无需安装 Oracle Instant Client、psql、redis-cli 等客户端软件。适合需要同时管理多种数据库的开发者与运维人员。构建依赖 Node.js 20+；当前未设置打包的 Linux 构建，发布包未做代码签名。",
+   "highlights": [
+    "支持 Oracle、PostgreSQL、MySQL/MariaDB、SQLite、ClickHouse、Redis、MongoDB 七种数据库，多个连接可同时打开且各自维护独立的事务",
+    "数据网格支持服务端分页、过滤、排序与待提交的行内编辑；SQL 编辑器提供高亮、自动补全、Explain 和运行中查询的 Stop",
+    "提供 CSV、Excel、JSON、SQL INSERT 四种流式导出；密码通过操作系统钥匙串加密存储，支持只读连接与 Production 连接变更确认"
+   ],
+   "use_cases": [
+    "需要在同一桌面应用中同时打开和查询多种数据库（含 Redis 键浏览、MongoDB 集合视图）的开发场景",
+    "通过 Production 标签、手动提交默认和只读连接进行生产环境数据查看与受控修改",
+    "通过 kubectl port-forward 转发各 master 节点后访问 Kubernetes 中的 Redis Cluster"
+   ]
+  },
+  "sha": "614b5ab48067",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3045,5 +3045,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9cf8c4628888": {
+  "identity": {
+   "one_liner": "面向 Go 的 SurrealDB 类型安全对象映射与查询构建代码生成器",
+   "review": "SOM 是针对 SurrealDB 的 ORM 与查询构建器，通过代码生成机制为嵌入了 som.Node[T] 的 Go 模型生成类型安全的客户端代码，用于数据库访问。使用 go run 命令行工具从模型目录生成代码。项目自述处于早期实验阶段，可能存在破坏性变更，不建议用于生产环境；测试针对 SurrealDB 4.0.1。",
+   "highlights": [
+    "提供代码生成机制，从 Go 模型生成带模型映射的类型安全查询操作客户端",
+    "支持 Go 泛型、迭代器和 ID 类型泛型参数（ULID、UUID、自定义键等）",
+    "覆盖多种基础数据类型及其切片、指针版本，以及 google/uuid 等特殊类型"
+   ],
+   "use_cases": [
+    "在 Go 项目中以类型安全方式访问 SurrealDB",
+    "基于 Go 结构体模型生成数据库客户端代码",
+    "构建使用 SurrealDB 图数据库能力（记录间边连接）的应用"
+   ]
+  },
+  "sha": "9cf8c4628888",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b22dfcffbc61": {
+  "identity": {
+   "one_liner": "Rust 编写的结构化 JSON 日志存储，用 trie 存键集、按类型列存值",
+   "review": "kibbr 是一个用 Rust 编写、以单个静态二进制发布的结构化 JSON 日志存储。它将每行的键集（shape）在内存 trie 中只存一次，值按类型化列追加到磁盘，从而压缩体积且保持可查询。内置 TrieQL 查询语言、HTTP API 和 Web 控制台，定位为热搜索集群与冷归档之间的中温层。不适用于自由文本搜索和键集频繁变化的日志。许可为 AGPL-3.0，项目仍在开发中。",
+   "highlights": [
+    "键集在 trie 中存储一次，值以类型化列追加到磁盘，支持 SQL 式 TrieQL 查询",
+    "/ingest 返回 200 表示数据已写入 WAL 并落盘，可原样返回 JSON",
+    "通过 cargo install 或 Docker 镜像部署，内置 http://127.0.0.1:7700 Web 控制台"
+   ],
+   "use_cases": [
+    "存储需要按字段查询、长期保留（三天到六个月）的结构化 JSON 日志",
+    "在 Elasticsearch/Loki 热层与冷归档之间承载中温日志数据",
+    "对 MongoDB/PostgreSQL/Elasticsearch 等服务器日志做存储压缩并保持可查询"
+   ]
+  },
+  "sha": "b22dfcffbc61",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "904a89d95106": {
+  "identity": {
+   "one_liner": "本地项目记忆 MCP 服务，用 SQLite 索引与任务记忆让编程助手跨会话延续上下文",
+   "review": "这是一个为 MCP 客户端（Cursor、Claude Code、Codex 等）提供本地项目记忆的 TypeScript 服务。它将代码符号索引、用户确认的决策记忆和带检查点的跨会话任务存入项目目录下的 SQLite 数据库（WAL + FTS5 + n-gram），数据默认留在本机。要求 Node.js 22+，源码安装需 npm 构建并重启 MCP/Web 进程；云托管和团队共享需自行配置远程备份或远程 MCP。",
+   "highlights": [
+    "使用 SQLite WAL 存储，结合 FTS5、Unicode n-gram 与代码关系搜索，通过 Tree-sitter 解析 TypeScript/Python/Go/Rust/Java/C/C++ 等语言的符号与导入、调用、继承关系",
+    "支持结构化记忆类型、user/workspace/project/module/task 作用域、记忆候选审核流程，以及带检查点和更新历史的跨会话任务",
+    "提供本地工作台与 CLI，包含增量索引、数据库维护与空间回收、AES-256-GCM 加密备份、JSONL 导出及版本化 Schema 迁移"
+   ],
+   "use_cases": [
+    "使用 Cursor、Claude Code、Codex 等 MCP 客户端，需要助手在新会话中延续项目决策、约定和未完成任务的上下文",
+    "需要本地代码与文档检索的场景，如按符号名、中文长问句或代码调用关系查找已索引项目内容",
+    "数据需保留在本机的个人或团队环境：可通过加密远程备份或多机增量同步共享记忆，代码索引默认排除在远程备份之外"
+   ]
+  },
+  "sha": "904a89d95106",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

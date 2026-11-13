@@ -2845,5 +2845,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "eedb4e67f7b1": {
+  "identity": {
+   "one_liner": "chDB 的 Node.js 原生绑定，进程内运行 ClickHouse SQL OLAP 引擎。",
+   "review": "chdb-node 为 chDB（进程内 ClickHouse 引擎）提供 Node/Bun/Deno 绑定，通过 npm 安装预编译二进制子包，无需本地编译。提供同步/异步查询、Session 持久化、服务端参数绑定、插入、流式结果与 Arrow IPC 输出。每个进程绑定一个数据目录，占用中的连接会被拒绝打开新会话；Windows 不受支持，需用 WSL2。",
+   "highlights": [
+    "支持无状态查询（同步/异步）、Session 持久/内存会话、服务端参数绑定与对象/位置行插入",
+    "结果可流式输出（AsyncIterable）并支持 Arrow IPC 输出格式",
+    "错误类型化（语法/查询/连接/绑定/插入等），携带 code、clickhouseCode 与 cause；支持 AbortSignal 与超时"
+   ],
+   "use_cases": [
+    "在 Node/Bun/Deno 应用中嵌入进程内 ClickHouse 引擎执行 SQL 分析查询",
+    "需要将嵌入式数据库通过检查点加语句 WAL 恢复到另一台机器的场景",
+    "从 @clickhouse/client 迁移或复用现有代码访问本地 chDB 的场景"
+   ]
+  },
+  "sha": "eedb4e67f7b1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "50d36d97fc7d": {
+  "identity": {
+   "one_liner": "面向海康威视/大华/TVT录像机磁盘镜像的系统日志取证提取工作台",
+   "review": "CCTVLogAnalyzer 是基于 PySide6 的取证工作台，用于从 Hikvision、Dahua、TVT DVR/NVR 磁盘镜像中识别并提取系统日志，是 HikvisionLogAnalyzer 的后继版本。支持 Raw/DD 与 E01 镜像格式，采用案例文件夹加工作区结构记录检测、进度与结果，并提供熵扫描定位、配置备份解码与 HTML 报告导出。开发者通过 run_dev.bat 启动。",
+   "highlights": [
+    "支持读取 Raw/DD（.001/.dd/.img/.bin）镜像和通过 libewf-python 原生读取 EnCase E01 镜像",
+    "识别 Hikvision HIKFAT/RATS 记录、Dahua GPT/XFS SQLite 数据库、TVT 变长 mlogtype 记录，并解析两家厂商的配置备份文件",
+    "提供只读熵扫描工具以定位未知镜像中的区域，扫描流式写入临时 SQLite 数据库并支持取消与部分结果保留"
+   ],
+   "use_cases": [
+    "对海康威视、大华、TVT 录像机磁盘镜像执行系统日志提取与检查",
+    "无导出代码时生成 hashcat 26401 哈希行以恢复海康配置备份的导出码，或解密已验证的大华配置导出",
+    "将筛选后的日志记录导出为可搜索、分页的 HTML 报告用于调查存档"
+   ]
+  },
+  "sha": "50d36d97fc7d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a68d9e7f482f": {
+  "identity": {
+   "one_liner": "本地 Agent 工作台，将飞书/Web 会话与 ACP Agent 经 acpx 接入并持久化到 SQLite",
+   "review": "AgentDock 是一个本地 Agent 工作台，通过固定版本的 acpx/runtime 接口连接 Claude Code、Codex、Gemini 等本机已安装 CLI 的 ACP Agent，把飞书消息、Web 会话与执行轨迹统一写入 SQLite。服务以 npm 全局包发布，提供 HTTP+SSE API、Web 控制台与 Electron 桌面端。README 明确说明无 API Key、多用户账号或租户隔离，对外暴露需自建反代与认证。",
+   "highlights": [
+    "支持自动发现本机已安装 CLI 的 ACP Agent（Claude Code、Codex、Cursor Agent、Gemini 等），不内嵌供应商专属适配器",
+    "提供 HTTP + SSE 服务化接口，消息、推理过程、工具调用、权限请求和终端输出落盘 SQLite",
+    "支持飞书机器人接入、多 Agent 群聊协作，以及扫码登录网页端的「AI 飞书替身」触发方式"
+   ],
+   "use_cases": [
+    "在飞书私聊或群聊中 @ 机器人，在指定本地工作区运行 Agent 并以卡片实时回写过程与结果",
+    "部署在本地或远端开发机作为常驻 Agent 服务，供手机扫码或局域网访问",
+    "作为上层多 Agent 平台的执行底座，通过 HTTP/SSE 接口接入"
+   ]
+  },
+  "sha": "a68d9e7f482f",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

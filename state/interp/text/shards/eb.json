@@ -2998,5 +2998,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e37935338f6f": {
+  "identity": {
+   "one_liner": "基于 Paxos 协议的分布式关系数据库，提供 HTAP 能力与 MySQL 兼容",
+   "review": "OceanBase 是由蚂蚁集团开发的分布式关系数据库，基于普通服务器集群运行，依赖 Paxos 协议与分布式结构提供高可用和水平扩展能力，不依赖特定硬件架构。兼容 MySQL 协议便于迁移，支持 HTAP 场景，并提供 all-in-one 安装包、Docker 镜像和 Kubernetes 的 ob-operator 三种部署方式，仅支持 Linux 运行。",
+   "highlights": [
+    "基于 Paxos 协议实现高可用，README 标注 RPO=0、RTO<8s",
+    "支持 MySQL 兼容，用于从 MySQL 迁移",
+    "支持单机、Docker、Kubernetes（ob-operator）部署方式"
+   ],
+   "use_cases": [
+    "需要从 MySQL 迁移的分布式数据库场景",
+    "事务与分析混合处理（HTAP）场景",
+    "在 Kubernetes 集群中部署管理数据库实例"
+   ]
+  },
+  "sha": "e37935338f6f",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4e5734fa72e1": {
+  "identity": {
+   "one_liner": "chDB 嵌入式 SQL 引擎的实验性 Rust FFI 绑定库",
+   "review": "chdb-rust 通过 FFI 将 chDB（ClickHouse 驱动的嵌入式 SQL 引擎）接入 Rust。支持无状态查询、持久会话、参数化查询、结果流式读取、Arrow 数据接入与流式导出等。构建时自动下载 libchdb，也可通过环境变量指向已有引擎。项目处于实验阶段，接口不稳定。",
+   "highlights": [
+    "支持无状态查询与持久化会话，参数化查询在 chDB 库内绑定值，不拼接 SQL 文本",
+    "提供查询结果分块流式读取与流式 INSERT，支持 JSON、CSV、TabSeparated 等多种输出格式",
+    "支持 Arrow 数据批量插入与 RecordBatch 流式导出，连接可跨线程发送（Send）"
+   ],
+   "use_cases": [
+    "在 Rust 应用中嵌入 SQL 引擎执行分析查询",
+    "处理大数据量结果集的流式读取与写入场景",
+    "需要在内存 Arrow 数据与 SQL 查询之间交互的数据处理流程"
+   ]
+  },
+  "sha": "4e5734fa72e1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9b1daed81d65": {
+  "identity": {
+   "one_liner": "基于 Next.js 的开源 SaaS 脚手架，集成认证、支付与管理后台",
+   "review": "这是一个 MIT 协议的 Next.js SaaS 起步模板，面向需要快速搭建订阅制产品的开发者。内置 Better Auth 认证、Stripe 支付（含 Checkout、Customer Portal 与 Webhook）、Prisma + PostgreSQL 数据层、Resend 邮件、管理面板与 i18n。运行需 Node 24+ 与 PostgreSQL 数据库，通过 clone、npm install、配置环境变量、执行 Prisma 迁移后即可在 localhost:3000 运行。",
+   "highlights": [
+    "提供 Better Auth 认证（Google/GitHub OAuth、魔法链接、邮箱密码、TOTP 两步验证与会话管理）及 Stripe 支付集成（订阅、一次性付款、签名校验 Webhook、PDF 发票）",
+    "包含管理面板（用户管理、MRR 指标）、用户仪表盘、MDX 博客、next-intl 国际化、演示模式及 SEO 组件",
+    "技术栈为 Next.js 16 App Router + TypeScript 严格模式 + Tailwind v4 + Prisma 7/PostgreSQL，含 Vitest 与 Playwright 测试及 GitHub Actions CI"
+   ],
+   "use_cases": [
+    "快速搭建包含订阅计费的 SaaS Web 应用",
+    "作为学习 Next.js App Router、Prisma、Stripe 集成完整实践的参考项目",
+    "需要自托管、多语言支持或可公开演示的产品原型启动项目"
+   ]
+  },
+  "sha": "9b1daed81d65",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "15d6a4fa57c9": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 DSH 社区插件，用多个会话组成带长期角色的 agent 团队",
+   "review": "这是 DeepSeek Harness（DSH）的社区插件（非官方产品），用多个 DSH 会话组成团队：负责人线拆解派单，成员线各持稳定名字与可替换会话，消息落盘本地 SQLite，支持租约、交接、重绑、休眠与失败重投。适用于长期固定分工、需跨重启续做的场景；不做任务 DAG、跨机与任务板双向写回。",
+   "highlights": [
+    "每条线由稳定 label 与可替换 sessionId 组成，支持 line_handoff/line_rebind 交接换代，历史会话保留",
+    "消息投递为至少一次语义，提供 line_messages/line_trace/line_redeliver 查询与重投，幂等权威为 DSH requestId",
+    "提供 26 个工具、Web 只读看板（组织/任务/数据等视图）、line_metrics 成本采样、休眠唤醒，并只读融合 DSH 官方任务板"
+   ],
+   "use_cases": [
+    "长期项目（小说/研究/开发/运营）中多个 agent 固定分工、避免每次重讲背景",
+    "任务中断关窗口或重启后需接着做的落盘场景",
+    "会话已满但需保留角色、通过交接换会话继承任务与关键记忆"
+   ]
+  },
+  "sha": "15d6a4fa57c9",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "38b4eecfc6fc": {
+  "identity": {
+   "one_liner": "Harness IaCM 教程，用 Terraform provider 构建 init→plan→apply 流水线",
+   "review": "这是 Harness 官方 IaCM 模块的入门教程仓库，演示如何在不连接云账号的情况下，通过 Harness Terraform provider 在 Harness 内部创建一条流水线。内容包含 GitHub 连接器配置、API Key 密钥存储、工作区创建、变量注入、流水线导入到运行的完整步骤，附带 init→plan→审批→apply 六步流水线 YAML。适用对象是已开通 IaCM 模块的 Harness 用户。限制：Terraform 仅支持至 v1.5.7，更新版本需用 OpenTofu。",
+   "highlights": [
+    "提供 init→plan→审批→apply 四步 provision 流水线模板（.harness/pipeline.yaml），含人工审批门禁与完整日志",
+    "使用 harness Terraform provider 通过 API key 认证，无需云账号连接即可完成演示",
+    "通过 workspace 变量注入账号/组织/项目标识，支持内置表达式在运行时解析，API key 以 Secret 变量存储"
+   ],
+   "use_cases": [
+    "初次使用 Harness IaCM 的用户学习 plan/apply 流水线的配置与执行流程",
+    "以 Harness 平台自身资源作为目标，验证 Terraform provision 流水线的端到端运行",
+    "参考其步骤编排，搭建带审批环节与审计日志的基础设施变更流程"
+   ]
+  },
+  "sha": "38b4eecfc6fc",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

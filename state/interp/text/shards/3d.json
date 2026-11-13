@@ -3466,5 +3466,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5006aa8434fd": {
+  "identity": {
+   "one_liner": "开源SQL时序数据库，单二进制，以Parquet存储遥测数据",
+   "review": "Arc 是一个 SQL 时序分析数据库，用于机器与设备的遥测数据采集与长期保存。它以 Apache Parquet 格式存储数据于本地磁盘、S3、Azure 等对象存储，内置摄取管线、后台压缩、保留策略、连续查询与备份，使用 DuckDB 作为查询引擎，兼容 InfluxDB Line Protocol 和 Telegraf。单二进制运行，采用 AGPL-3.0 许可证，适合需要保留全分辨率历史数据并使用标准 SQL 查询的团队。",
+   "highlights": [
+    "支持 InfluxDB Line Protocol 与 Telegraf 兼容摄取，官方基准测试中 MessagePack 列式写入达 38.1M 记录/秒",
+    "数据以开放 Apache Parquet 格式存储在本地磁盘、S3、Azure 或 S3 兼容存储上，并支持后台自动压缩",
+    "查询层基于 DuckDB，支持窗口函数、CTE、连接等标准 SQL，提供 JSON、MessagePack、Arrow IPC 三种线协议及可选 Arrow Flight SQL 监听"
+   ],
+   "use_cases": [
+    "需要长期保留全分辨率遥测历史并可用 SQL 查询的物联网、边缘设备与基础设施监控场景",
+    "从 InfluxDB 等系统渐进迁移：通过 Line Protocol 双写并对比验证后切换",
+    "对存储格式开放性有要求、希望数据以 Parquet 存放在自有基础设施（含气隙环境）的团队"
+   ]
+  },
+  "sha": "5006aa8434fd",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f3d21748fce2": {
+  "identity": {
+   "one_liner": "本地优先的周规划任务管理器，浏览器内置数据库离线读写",
+   "review": "Will Be Done 是一个围绕可视化周时间线组织的任务规划工具，面向偏重计划而非收集的个人用户。数据保存在浏览器本地数据库中，离线可读写，联网时在设备间同步；服务端可用单条 Docker 命令自托管，默认使用 SQLite，无需 Redis 或外部数据库。它还提供 HTTP API 和 Todoist/TickTick 导入，商业化采用云端付费、自托管免费的模式。",
+   "highlights": [
+    "提供周时间线、项目看板、Today、Stash 焦点列表和思维导图等多种任务视图，支持任务、笔记与循环模板（日/周/月/年及自定义间隔规则）",
+    "浏览器端完整本地数据库，支持离线读写、按需读取与多标签页/多设备实时同步，底层使用自研的 HyperDB 数据层",
+    "支持 Vim 风格键盘操作、拖拽重排、桌面端全局快速添加（含 Wayland 合成器配置说明），并暴露带 Bearer Token 的 HTTP API"
+   ],
+   "use_cases": [
+    "个人或团队的每周任务排期：按天为列拖拽任务、评估工作量并重新平衡",
+    "自托管数据自主管理场景：单条 Docker 命令部署，SQLite 存储，不依赖外部服务",
+    "从 Todoist（API Token）或 TickTick（CSV）迁移既有任务数据，或在弱网/离线环境下继续记录任务"
+   ]
+  },
+  "sha": "f3d21748fce2",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2eabe7ed3eb4": {
+  "identity": {
+   "one_liner": "自托管 X/Twitter 媒体下载器，内置 Web UI 与后台任务队列",
+   "review": "open-Xdownload 是一个本地优先的 X/Twitter 媒体归档工具，用于下载单帖媒体并归档用户、列表及关注账号的媒体。它以 Go 编写、SQLite 存储，通过 Docker Compose 或二进制运行，Web UI 提供任务队列、定时计划与媒体库浏览。用户/列表/关注归档依赖登录账号的 auth_token 与 ct0 Cookie 调用 X 认证 GraphQL API，单帖下载则无需 Cookie。",
+   "highlights": [
+    "支持单帖、用户、列表、关注账号四类任务，单批最多 200 个任务并自动去重",
+    "提供增量归档、定时计划、失败重试队列与 Cookie 组轮换",
+    "视频按 X 媒体 ID 匹配，已存在可用本地文件的媒体自动跳过，避免重复下载"
+   ],
+   "use_cases": [
+    "批量归档指定用户或列表成员发布的媒体到本地目录",
+    "通过定时计划对关注账号媒体做增量备份",
+    "经 Docker 或二进制在本地/局域网环境自托管运行，可选 WebDAV/SMB 挂载目录存储"
+   ]
+  },
+  "sha": "2eabe7ed3eb4",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

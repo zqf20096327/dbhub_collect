@@ -3424,5 +3424,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ffaa1114fea6": {
+  "identity": {
+   "one_liner": "为 DeepSeek Harness 提供跨会话记忆的本地插件，SQLite 存储 + Markdown 镜像。",
+   "review": "Mneme（dsh-mneme）是 DeepSeek Harness 的跨会话记忆插件，将记忆存为本机 SQLite 并配可手改的 Markdown 镜像，支持 autoDream 巩固与关键词/向量/BM25/实体四路召回。要求 Node 24+ 与 DSH 0.1.x/0.2.x；通过 MCP 服务端、CLI、常驻 daemon 及 Web 面板访问，数据仅存本机。",
+   "highlights": [
+    "四路召回（关键词/向量/BM25/实体），含实体关系图谱与状态审计面板",
+    "每条记忆带来源记录，巩固过程可复现回放；冲突记忆冻结后由用户裁决，手改 Markdown 优先保留",
+    "提供零依赖 stdio MCP 服务端（mneme-memory）、CLI 与独立 daemon，支持按 agent/工作区隔离与本地嵌入模型离线检索"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 会话持久化项目、偏好与决策等跨会话上下文",
+    "向 Claude Code / Cursor / Codex / OpenCode 等 MCP 客户端挂载记忆工具",
+    "脚本或自有面板通过常驻 daemon 读写同一份本地记忆库"
+   ]
+  },
+  "sha": "ffaa1114fea6",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "21610d89eb36": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 MySQL 的芯片供应链采购协同平台",
+   "review": "面向芯片采购业务的开源企业级平台，覆盖物料、供应商、库存预警、采购订单与履约跟踪流程。技术栈为 Java 17、Spring Boot 3.1、MyBatis-Plus 与 MySQL 8，配套原生 Web 工作台，并通过 REST API 作为 ChipChain-Procurement-Agent 的业务数据底座。仓库内置脱敏种子数据供本地联调；Agent 接入采用独立 RBAC 角色与字段白名单限制，需自行配置生产环境数据库密码。",
+   "highlights": [
+    "提供物料、供应商、库存、采购订单、物流、统计与决策中心等 REST API，并通过 Swagger UI 公开接口文档",
+    "采用 MySQL Transactional Outbox、RabbitMQ Publisher Confirm、幂等消费者与 DLQ 实现事件投递，以统一 Trace ID 串联各业务模块",
+    "首次启动自动建库建表并写入脱敏预置业务数据（6 类芯片分类、24 条物料、72 笔采购订单），通过环境变量覆盖端口与数据库配置"
+   ],
+   "use_cases": [
+    "作为芯片采购协同的业务平台，独立运行承载物料、库存与订单流程",
+    "作为 ChipChain-Procurement-Agent 的业务数据底座，通过 REST API 支撑多智能体查询与订单执行",
+    "用于本地接口联调、流程验证与采购业务流程演示，借助内置种子数据初始化环境"
+   ]
+  },
+  "sha": "21610d89eb36",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fc2b8291a9bc": {
+  "identity": {
+   "one_liner": "全栈模拟面试平台：预约时段、共享编辑器实时编码、Gemini AI 评分反馈",
+   "review": "这是一个用于练习编程面试的全栈 Web 应用：面试官开设时段，候选人预约后双方进入带共享实时代码编辑器的房间；结束后代码发送至 Gemini API，返回 10 分制评分与改进建议。支持候选人与面试官两种角色（JWT 鉴权、bcrypt 加密），采用 REST 与 GraphQL 双 API，数据存储于 MySQL/TiDB，部署于 Render。注意：AI 评阅可能因免费额度限流失败，代码不会被实际执行。",
+   "highlights": [
+    "支持角色注册登录（JWT + bcrypt），按角色返回 401/403，预约采用原子更新防止重复占用（冲突返回 409）",
+    "Socket.io 实现每次面试独立房间的共享实时代码编辑器，面试结束后调用 Gemini API 生成评分与反馈并支持重试",
+    "提供 REST 与 GraphQL 双接口，GraphQL 端点返回 me、myInterviews、stats 等查询；含 15 个 Jest 测试并由 GitHub Actions 自动运行"
+   ],
+   "use_cases": [
+    "候选人练习编程面试并获得 AI 生成的评分与改进建议",
+    "面试官开设时段、与候选人协同编码并进行评阅",
+    "需要同时实践 REST、GraphQL、Socket.io 与 MySQL/TiDB 全栈场景的开发参考"
+   ]
+  },
+  "sha": "fc2b8291a9bc",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

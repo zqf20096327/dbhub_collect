@@ -3057,5 +3057,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4fb34bba8b14": {
+  "identity": {
+   "one_liner": "基于 MongoDB 的后端服务，自动将集合暴露为 REST/GraphQL API。",
+   "review": "RESTHeart 是构建在 MongoDB 之上的后端服务，无需编写路由即可把数据库集合暴露为 REST API（filter、pagesize 等参数直接映射 MongoDB 查询语言），并内置 MCP 服务器供 AI agent 使用。面向 Web、移动、AI 和 IoT 应用开发者。核心采用 AGPL v3 许可，部分功能如事务、变更流需副本集，向量搜索需 mongot 支持。",
+   "highlights": [
+    "将 MongoDB 集合自动生成 REST API，支持 CRUD、聚合、过滤、分页与 JSON Schema 校验",
+    "内置 MCP 服务器、写时向量嵌入（支持 Voyage AI、OpenAI 兼容端点、Ollama）与 RAG 分块、重排",
+    "提供账户体系（注册、登录、Google 登录、令牌）、JWT/OAuth2/LDAP 认证与基于数据的 ACL 文档级权限控制"
+   ],
+   "use_cases": [
+    "为 MongoDB 数据快速搭建 Web/移动应用后端 API",
+    "构建需要 RAG 与向量检索的 AI agent 应用",
+    "通过 MQTT 桥接与 SSE/WebSocket 实现物联网数据流与实时同步场景"
+   ]
+  },
+  "sha": "4fb34bba8b14",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8f88e22acfc": {
+  "identity": {
+   "one_liner": "面向 TypeScript 与 AI 代理的零原生依赖嵌入式 NoSQL 文档数据库",
+   "review": "AxioDB 是一个纯 JavaScript/TypeScript 实现的嵌入式文档数据库，直接在应用进程内运行，无需数据库服务器或原生编译。核心机制包括 ACID 事务、Write-Ahead Logging 崩溃恢复、内存缓存、$lookup 聚合管道，以及 Cosine/Dot/Euclidean 三种度量的精确 k-NN 向量搜索。支持 Node.js ≥22 与 Bun，内置 HTTP、TCP、MCP 服务器接口；文档量建议在 1,000 到 500,000 之间，不适用于百万级记录或分布式集群场景。",
+   "highlights": [
+    "零原生依赖的纯 TypeScript 实现，通过 npm 安装即可使用，并提供 Deno 经 esm.sh 的免安装导入方式",
+    "支持 ACID 事务与 Write-Ahead Logging，内置内存缓存与磁盘索引，可执行操作符过滤、分页排序与 $lookup 聚合",
+    "内置精确 k-NN 向量搜索（Cosine/Dot/Euclidean），并可通过 { MCP: true } 启动含 46 个工具的 Model Context Protocol 服务器"
+   ],
+   "use_cases": [
+    "为 AI 代理在本地保存会话历史、工具调用与状态，或执行语义检索与 RAG 场景的向量相似度搜索",
+    "桌面/Electron 应用、CLI 工具与本地应用中需要嵌入式数据存储而无需运行数据库服务器的场景",
+    "不依赖 Docker 或云数据库的功能原型开发；或需要远程访问时启用内置 HTTP/TCP/MCP 服务器接口的场景"
+   ]
+  },
+  "sha": "c8f88e22acfc",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f901c70571c9": {
+  "identity": {
+   "one_liner": "Go 编写的 WhatsApp LLM 机器人，内置人物长期记忆系统",
+   "review": "wagoya 是一个用 Go 编写的 WhatsApp 机器人，通过 whatsmeow 以伴随设备方式接入，编译为无 CGO 的单一静态二进制（内置纯 Go SQLite）。私聊或群组 @提及触发回复；它为每个联系人维护以 WhatsApp 身份为键的人物档案，由模型通过受校验工具自行写入事实，支持 FTS5 与嵌入混合检索。私聊仅限白名单用户，支持 Anthropic 与 OpenRouter 提供商。",
+   "highlights": [
+    "以 WhatsApp LID/号码为键的人物档案系统，事实带来源与可信度分级，由模型通过 save_fact 等校验工具读写",
+    "SQLite FTS5 加嵌入的事实检索工具，按人名、句柄或事实文本搜索，无条目数量上限",
+    "支持 MCP 客户端、http_request 工具、提醒任务、Claude Code 编码任务队列，单静态二进制部署"
+   ],
+   "use_cases": [
+    "群聊中 @提及触发回答，结合跨聊天的人物记忆与网页搜索",
+    "为白名单用户提供提醒定时消息、API 调用与 MCP 工具扩展",
+    "通过 Claude Code 任务队列在本地机器上远程执行编码任务"
+   ]
+  },
+  "sha": "f901c70571c9",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

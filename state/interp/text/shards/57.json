@@ -2801,5 +2801,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d5df74750c2e": {
+  "identity": {
+   "one_liner": "自托管的 AI 可见度追踪工具，单个 Go 二进制加 SQLite，内置 MCP 服务器。",
+   "review": "Limelit Open 是 Limelit 的开源核心，用于测量 ChatGPT、Claude、Perplexity、Gemini、Google AI Overview 等引擎对品牌的提及与引用。数据存于用户自有 SQLite 文件，支持自带 API 密钥。当前为 pre-release，11 个提供商中 6 个已实现；Google AI Overview 等 3 个引擎因无 API 通过抓取器实现。适用于希望在自己基础设施上运行 AI 可见度度量的团队。",
+   "highlights": [
+    "提供七个引擎的可见度追踪，含品牌提及排名、share of voice、平均位置与引用来源分类（自有/竞品/社交/信息类/其他）",
+    "内置 MCP 服务器（stdio 与 streamable HTTP），提供 14 个读取工具，工具命名与 Limelit Cloud 一致",
+    "单二进制运行，首次启动自动创建并迁移 SQLite 数据库，仪表盘嵌入二进制内，支持 limelit export 导出 JSON/CSV"
+   ],
+   "use_cases": [
+    "品牌方追踪各 AI 引擎在品类相关提问中提及与引用自己及竞品的情况",
+    "通过 limelit serve 定时（每日/每小时）或 limelit run 按需执行评估，并受 runs_per_day 上限约束",
+    "通过 limelit upgrade --key 将本地实例数据上传至 Limelit Cloud 工作区"
+   ]
+  },
+  "sha": "d5df74750c2e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5f1800b1fb95": {
+  "identity": {
+   "one_liner": "将 pg_dumpall 经 restic 加密去重备份到 S3/B2 的 Docker 容器",
+   "review": "pg-restic 是一个 Docker 镜像，按 cron 计划运行 pg_dumpall，将数据流直接写入 restic 仓库（不落本地磁盘），支持 S3、Backblaze B2 及 S3 兼容存储或 restic REST 服务端，并按保留策略自动清理旧快照。适用于自托管 Postgres 实例的运维者；要求 Postgres 14+ 的 pg_read_all_data 用户或超级用户，镜像内置 pg_dumpall 18，可备份 9.2 至 18 版本的服务器，无法备份更新版本。",
+   "highlights": [
+    "备份流式写入 restic 仓库，不写入本地磁盘；dump 失败时不保存快照",
+    "首次运行自动初始化 restic 仓库，通过环境变量配置 cron 计划、保留策略（小时/天/月）与每日 prune 时间",
+    "支持 PING_URL/PRUNE_PING_URL 心跳监测，并透传任意 restic 环境变量；镜像基于 Alpine，仅含 postgresql-client 与 restic"
+   ],
+   "use_cases": [
+    "定时将自托管 Postgres 全库（含角色）加密备份到 S3、B2 或 S3 兼容存储",
+    "配合 healthchecks.io 或 Uptime Kuma 等心跳监控，在备份或 prune 停止时收到提醒",
+    "通过 restic snapshots/restore 命令在任意装有 restic 的机器上恢复快照"
+   ]
+  },
+  "sha": "5f1800b1fb95",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

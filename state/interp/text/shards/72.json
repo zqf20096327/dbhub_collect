@@ -3124,5 +3124,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d5c224800897": {
+  "identity": {
+   "one_liner": "对比两库生成双向迁移 SQL 的数据库差异工具",
+   "review": "DBDiff 是一个命令行工具，用于对比两个本地或远程的 MySQL、PostgreSQL 或 SQLite 数据库，生成包含 UP 与 DOWN 的 SQL 迁移文件，覆盖 schema 与数据。可通过 `--driver` 选择数据库，经 DSN URL 或 Unix socket 连接，内置 `migration:up/down/status` 等迁移命令，也可与 Flyway、Liquibase 等配合用于版本控制。已知限制：PostgreSQL 枚举标签删除/重排时涉及例程或分区键等场景需手动处理。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQLite 三种数据库，通过 `--driver` 参数切换",
+    "生成同文件包含 UP 与 DOWN 的 SQL 迁移，覆盖表、视图、触发器、枚举类型、RLS 策略及数据等对象",
+    "内置 migration:up/down/status/validate/repair/baseline 迁移执行器，兼容 Flyway、Liquibase、Laravel Migrations"
+   ],
+   "use_cases": [
+    "数据库版本控制：将 schema 与数据变更以迁移脚本形式纳入版本管理",
+    "多环境同步：在开发、测试、生产等环境间应用 schema 与数据变更",
+    "Supabase 项目：通过 `--supabase` 简写参数对比含 RLS 策略的实例（默认仅读 public schema）"
+   ]
+  },
+  "sha": "d5c224800897",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5d79a102e785": {
+  "identity": {
+   "one_liner": "由 Video2Book 从91门网课音频重构的教材、笔记与逐字稿文本仓库",
+   "review": "该仓库收录91门网课的三类文本产物：832册模块合辑全书、1166篇复习笔记、4327份逐字稿，全部由 Video2Book 流水线从课程音频生成，涵盖计算机、数学、法学、医学等方向。产物按 PXX_ 与 模块XX_ 前缀互相追溯；仓库文本约195 MB不含音频，可克隆本地或走配套 GitHub Pages 在线阅读，需 Typora 开启内联公式。内容属二次整理，仅供个人学习，无开源许可证。",
+   "highlights": [
+    "每门课提供三类产物：textbooks/ 下的模块合辑全书、notes/ 下支持 Markmap/XMind 导入的复习笔记、subtitles/ 下逐集逐字稿",
+    "生成流程包含 ffmpeg 音频切片、逐集精读、模块整编与机器门禁，逐字稿要求实际处理对应音频",
+    "配套 GitHub Pages 在线阅读站，支持 KaTeX 公式渲染、标题自动编号与代码块复制"
+   ],
+   "use_cases": [
+    "对看不完的长视频课程，用于体系化通读、考前速查与逐讲原文核对",
+    "计算机、数学、考研408等课程的复习与知识盘点",
+    "需要脑图复习时，通过 Markmap 插件或 XMind 导入 Markdown 大纲生成导图"
+   ]
+  },
+  "sha": "5d79a102e785",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "92e265ba29ec": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的多源交叉验证记忆系统 MCP 服务器，Rust 实现",
+   "review": "rein 是一个用 Rust 编写的 MCP 记忆服务器，供 AI 编码代理在多会话间存储、检索和管理记忆。核心机制包括基于 embedding 的语义去重、数据驱动的记忆衰减（Kaplan-Meier 生存曲线）以及自学习参数回路；操作通过 #[op] 宏一次性声明后同时暴露为 CLI、MCP 与 REST 接口。支持 jieba 中文分词、本地优先存储（SQLite/Tantivy）、OAuth 2.0 远程接入，采用 AGPL 许可，构建需 Rust 1.89+。",
+   "highlights": [
+    "提供 40 个 MCP 工具，覆盖记忆操作、知识图谱、时序召回与自适应维护，一次 #[op] 声明同时驱动 CLI/MCP/REST 三种接口",
+    "实现基于 embedding 的语义去重、Kaplan-Meier 生存曲线驱动的记忆衰减，以及自学习参数校准管线（校准记录存于 SQLite）",
+    "内置 OAuth 2.0 提供者（DCR + PKCE S256 + RFC 9728/8414）支持远程 MCP 接入，并附带 React + Tailwind 的 Neural Wiki Web 控制台"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex 等 AI 编码代理提供跨会话记忆存储与召回",
+    "需要中文文本处理（jieba 分词）的记忆/知识图谱场景",
+    "希望在本地优先存储条件下通过 CLI、REST 或 MCP 管理记忆的个人部署"
+   ]
+  },
+  "sha": "92e265ba29ec",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

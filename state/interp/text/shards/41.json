@@ -2502,5 +2502,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3ba4ea5e4046": {
+  "identity": {
+   "one_liner": "基于 .NET 10 与 Blazor 的企业级数据库备份调度与恢复验证平台",
+   "review": "Backora 用于调度、执行、验证并复制 PostgreSQL 与 MariaDB 备份，备份脚本在用户自有服务器上通过固定 SSH 运行，产物经 SHA-256 清单校验后上传至 S3 兼容存储并复制到灾备站点。面向需要管理多台服务器备份与恢复的运维人员。部署依赖 Docker Compose，包含 PostgreSQL、API、Web 与 Caddy TLS 代理等容器。",
+   "highlights": [
+    "支持 pg_basebackup、pg_dump、mariadb-backup、mysqldump 模板及自定义脚本模板，备份产物经 SHA-256 清单与双重上传校验",
+    "支持一主多灾备站点复制、基于 age（X25519）的可选客户端加密，私钥不由平台存储",
+    "基于 PostgreSQL 租约（FOR UPDATE SKIP LOCKED）的可恢复执行，含六种内置角色、TOTP 二步验证、审计记录与 OpenTelemetry 指标"
+   ],
+   "use_cases": [
+    "集中管理多台服务器上 PostgreSQL/MariaDB 的定时物理与逻辑备份",
+    "需要将备份复制到多个灾备站点并逐副本独立恢复的部署",
+    "要求备份在离开本机前完成加密、且恢复前进行预检与逐字节校验的场景"
+   ]
+  },
+  "sha": "3ba4ea5e4046",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

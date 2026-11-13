@@ -3100,5 +3100,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "21a55299b90c": {
+  "identity": {
+   "one_liner": "本地优先的 Android Markdown 笔记应用，数据仅存设备端",
+   "review": "Markleaf 是一款 Android 平台上的 Markdown 笔记应用，使用 Kotlin 与 Jetpack Compose 构建，数据以纯 .md/.txt 文件形式仅存于设备本地。它面向需要离线笔记与文件可移植性的用户，通过 SAF 文件夹镜像实现同步，自身不做任何上传。限制包括：只读取所选文件夹顶层文件、不进入子目录，且编辑笔记会按标题重命名文件。",
+   "highlights": [
+    "支持 / 快速插入、实时预览、GFM 表格/任务列表/脚注，代码块高亮 10 种语言",
+    "基于 SQLite FTS 的全文搜索、#标签自动索引、Wikilinks 与反链面板",
+    "通过 SAF 将每篇笔记镜像为标题命名的 .md 文件到用户选定文件夹，可导出全部笔记为 .md"
+   ],
+   "use_cases": [
+    "在 Android 设备上离线记录与整理 Markdown 笔记",
+    "将既有 Markdown 文件夹（含 Obsidian/Logseq 打开的目录）作为移动端编辑入口，通过外部同步工具跨设备使用",
+    "注重本地数据持有与文件可移植性的个人笔记场景"
+   ]
+  },
+  "sha": "21a55299b90c",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a53d31aadf04": {
+  "identity": {
+   "one_liner": "让 AI 助手调用阿里云 Data Agent 进行自然语言数据分析的技能包",
+   "review": "该仓库提供一组 AI Agent 技能，使 Claude Code、Qoder、Codex 等运行时能够调用阿里云 Data Agent for Analytics，将自然语言问题转为 SQL、洞察与分析报告。包含 CLI（Python 3.10+）与 MCP Server（Go 构建，19-30 个工具）两种接入方式，二者独立不可混用；另含一个教 AI 编写技能包的元技能。需阿里云账号、DMS 数据源或内置演示库，并配置 RAM 权限。",
+   "highlights": [
+    "提供 CLI 与 MCP Server 两种独立接入方式，MCP 含 19 个基础工具，启用网关后可扩展至 28-30 个",
+    "支持自然语言问答、多步深度分析生成报告、本地 CSV/XLSX/JSON/TXT 文件分析与会话多轮复用",
+    "data-agent-arcvis-skill 元技能用于生成 Quest 技能包与自包含 HTML 报告模板包"
+   ],
+   "use_cases": [
+    "在支持的 Agent 运行时中对企业数据库或文件做自然语言查询、趋势分析与报告生成",
+    "通过 MCP 客户端调用 data_agent_* 工具进行数据发现、会话管理与图表获取",
+    "将周期性多步分析流程或已有 HTML 报告固化为可复用的技能包/模板包"
+   ]
+  },
+  "sha": "a53d31aadf04",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b52d0aaa977": {
+  "identity": {
+   "one_liner": "GaussDB 数据库智能体后端，用 Kubernetes 隔离环境运行 opencode 诊断技能",
+   "review": "该项目是 GaussDB/openGauss 智能体的后端部分，由接入网关、用户运行环境、知识库导入环境、标准知识库和可选发版台组成，通过 K8s 按用户分配隔离 Pod 或池化槽位，状态存于 NAS。交付以 diag 与 kbimport 两个技能包分支为主，代码在测试仓库维护后由脚本生成。适用于与前端方联合搭建面向 DBA 的数据库诊断场景。",
+   "highlights": [
+    "包含接入网关（认身份、分配用户环境、反向代理）与 17 个诊断技能包，提供部署自检脚本核对版本、白名单与权限",
+    "每个用户一个隔离 Pod 或固定池化槽位，凭据代理使中间件令牌、签名私钥、模型 Key 不进模型所在容器，状态统一存于 NAS 的 RWX 卷",
+    "提供 128 条白名单诊断脚本清单、含升级增量的 SQL 文件、五组 pytest 测试与 Apache License 2.0 许可的技能代码"
+   ],
+   "use_cases": [
+    "为 GaussDB / openGauss 诊断环境部署带 K8s 隔离与网关认证的智能体后端",
+    "运维通过发版台容器执行资源扫描、变更预览确认、按槽位在线替换与回滚",
+    "知识库管理员导入官方文档集（CHM）、网页剪藏、扫描件 PDF 转录与 PPT 到标准知识库"
+   ]
+  },
+  "sha": "2b52d0aaa977",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

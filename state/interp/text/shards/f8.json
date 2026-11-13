@@ -2823,5 +2823,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "61da92f0ec7b": {
+  "identity": {
+   "one_liner": "免登录免 API 抓取 X/推特内容的 Python CLI 与库，三后端自动回退",
+   "review": "x-tweet-fetcher 是一个 Python 命令行工具与库，用于在不登录、不使用 X API 的情况下读取推文、回复、时间线、搜索、Lists 与 X Articles。它在 FxTwitter、Nitter 和浏览器驱动（Camofox/Playwright）之间自动路由回退，输出统一 JSON；单条推文零依赖，时间线/搜索需自建 Nitter，Article 需浏览器。可通过 --ledger 将结果按 tweet_id 去重存入 SQLite 离线查询。工具只读，不能发推；未上架 PyPI，需源码安装。",
+   "highlights": [
+    "三种后端（FxTwitter/Nitter/浏览器驱动）自动回退，所有结果归一化为统一 JSON schema",
+    "错误输出带机器可读的 error_code 字段，提供 cron 友好的退出码（0/1/2）",
+    "支持 --ledger 将抓取结果按 tweet_id 幂等去重写入 SQLite，可离线 --query/--stats 检索"
+   ],
+   "use_cases": [
+    "为 AI agent 或脚本提供按需读取推文/线程/时间线/Lists 的命令行工具，附 SKILL.md",
+    "无需 X 凭据的小规模只读抓取与本地 SQLite 存档",
+    "通过 --monitor 以 cron 增量监控用户 mentions"
+   ]
+  },
+  "sha": "61da92f0ec7b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b4b5cd680a3": {
+  "identity": {
+   "one_liner": "面向MES制造执行系统的自然语言AI助手，集成RAG与GraphRAG知识检索。",
+   "review": "该项目面向智能调光台灯制造场景，在Spring Boot + Vue 3 + MySQL实现的MES基础上，通过AI工作台提供自然语言查询分析与业务办理，并集成基于pgvector的私有文档RAG、基于LightRAG与Apache AGE的GraphRAG。业务能力目录含20项查询分析和19项直接办理，办理流程须经校验、预览与用户确认后由领域服务执行。运行需JDK 21、Node.js 24、MySQL 8，RAG/GraphRAG部分另需Python 3.12与PostgreSQL，模型密钥通过本机环境提供。",
+   "highlights": [
+    "业务能力目录包含20项查询分析与19项直接办理，办理前经结构化计划、校验预览和用户确认",
+    "支持本地中文嵌入与pgvector的文档RAG，以及LightRAG抽取实体关系、Apache AGE保存图谱的GraphRAG融合问答",
+    "提供研判工作单，保存答复与来源快照，可导出交接稿并衔接业务草稿"
+   ],
+   "use_cases": [
+    "通过自然语言查询库存、工单等业务数据并办理订单、排产、领料、发货等任务",
+    "检索私有制造文档与图谱，追溯产品、物料、工序与检验规范的关联依据",
+    "用于教学演示场景，配套10份合成资料包与24个核对问题"
+   ]
+  },
+  "sha": "5b4b5cd680a3",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

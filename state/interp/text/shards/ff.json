@@ -3191,5 +3191,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5953be3846ca": {
+  "identity": {
+   "one_liner": "开源的本地长期记忆层，为编码代理跨工具存储并召回经验教训",
+   "review": "Hippo 是一个运行于本机的开源记忆系统，为 Claude Code、Codex、Cursor 等编码代理提供长期存储。记忆存于 SQLite 并附带可提交的 markdown 镜像，检索默认用 BM25，无需模型和网络调用。`hippo init` 在项目中创建 `.hippo/` 存储、向 CLAUDE.md/AGENTS.md 写入说明并安装代理钩子；依赖 Node.js 22.16+，零运行时依赖，嵌入为可选安装。README 称其在 29 仓库的 Claude Code 测试中将重复错误从每百次 21 降至 11。",
+   "highlights": [
+    "SQLite 存储 + 可读可提交的 markdown 镜像，BM25 检索默认离线运行，零运行时依赖",
+    "标记错误记忆可降低其排名，`hippo supersede` 使被替代事实退出召回；错误标签记忆获得两倍半衰期",
+    "支持导入 CLAUDE.md、.cursorrules、ChatGPT 导出、Slack 历史等，任何 MCP 客户端可通过 MCP 或 HTTP 查询"
+   ],
+   "use_cases": [
+    "跨 Claude Code、Cursor、Codex 等多个工具共享同一份项目记忆",
+    "希望将 ChatGPT 记忆、Cursor 规则、Slack 历史集中到单一可查询存储",
+    "在会话结束后自动从 git 提交学习、合并去重并整理记忆（hippo sleep 的每日 6:15 任务）"
+   ]
+  },
+  "sha": "5953be3846ca",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c0c33c574e8a": {
+  "identity": {
+   "one_liner": "基于 Python 3.11 与 pyodbc 的 Docker 镜像，内置三种数据库 ODBC 驱动",
+   "review": "该仓库提供一个包含 Python 3.11、pyodbc 及 MSSQL、PostgreSQL、MySQL 三种 ODBC 驱动的 Docker 镜像，可通过 docker pull 直接拉取，或作为基础镜像构建数据库脚本容器。README 标注该项目已停止维护，建议用户复制 Dockerfile 自行维护；仓库附有基本连接与数据传输示例，采用 MIT 许可证。",
+   "highlights": [
+    "镜像内置 Python 3.11 与 pyodbc",
+    "包含 MSSQL、PostgreSQL、MySQL 三种 ODBC 驱动",
+    "提供基本连接与数据传输示例，支持以 --target=test 构建测试容器"
+   ],
+   "use_cases": [
+    "作为基础镜像运行访问 MSSQL、PostgreSQL 或 MySQL 的 Python 脚本",
+    "参照仓库示例实现数据库间数据传输流程",
+    "复制 Dockerfile 自行构建和维护定制镜像"
+   ]
+  },
+  "sha": "c0c33c574e8a",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

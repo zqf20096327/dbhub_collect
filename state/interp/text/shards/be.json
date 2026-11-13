@@ -2797,5 +2797,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "29d6d9af0ef1": {
+  "identity": {
+   "one_liner": "基于 MySQL binlog 的零 ETL 分析副本，以 Parquet 存储并经 DuckDB 查询",
+   "review": "DBTrail 通过复制协议读取 MySQL/MariaDB/RDS/Aurora 的 binlog，在本地磁盘或 S3 维护 Parquet 列式副本并用 DuckDB 应答查询。应用可保持单一连接，由路由将写入和键查询发往 MySQL、重查询交给副本。要求 ROW binlog 全行镜像及主键，副本存在秒到分钟级延迟。",
+   "highlights": [
+    "通过复制协议读取 binlog，无需在 MySQL 上安装插件、代理或触发器",
+    "支持 `AS OF` 时间 travel 查询和生成撤销 SQL 的行级回退",
+    "提供 MySQL 协议端口和自动路由，兼容 mysql 客户端、Metabase、Grafana 及 MCP 客户端"
+   ],
+   "use_cases": [
+    "在独立副本上运行重报告与大表聚合查询，避免占用主库",
+    "为 Metabase、Grafana 等 MySQL 协议工具提供分析数据源",
+    "审计与数据恢复：查看某时刻的表内容、追溯行变更历史并生成回退 SQL"
+   ]
+  },
+  "sha": "29d6d9af0ef1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e28ccfa50703": {
+  "identity": {
+   "one_liner": "Stard：将 GitHub Stars 整理进 Lists 并生成卡片对战与资料卡的工具",
+   "review": "Stard 是一个围绕 GitHub Stars 的工具：用 AI 代理将星标仓库批量分类写入 GitHub Lists，为每个仓库生成 0–10 健康分以标注停止维护的项目，并支持标签、评分、笔记与图表。它还能把星标变成卡片游戏，以及生成可嵌入 README 的资料卡。可通过 npx 或 Docker（含认证配置）运行。",
+   "highlights": [
+    "支持通过 Claude Code、Codex 或可运行 curl 的代理对 Stars 进行分类，并双向同步写入 GitHub Lists",
+    "提供基于最近提交、Issue 状态、贡献者、Star 增长和最近发布计算的健康分（归档仓库为 0）",
+    "支持 npx 一键运行或 Docker 自托管，提供 OIDC/密码认证、启动前备份与 Agent API"
+   ],
+   "use_cases": [
+    "批量整理数百个 GitHub Stars 并归入 Lists，识别已停止维护的仓库",
+    "为 GitHub 个人主页 README 生成由图片链接构成的资料卡（Top 仓库、评论、Lists）",
+    "让 AI 编码代理在推荐依赖前先检索你已星标的仓库"
+   ]
+  },
+  "sha": "e28ccfa50703",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "94896b6c5b9c": {
+  "identity": {
+   "one_liner": "纯 Python 实现的 CUBRID 数据库 DB-API 2.0 (PEP 249) 驱动",
+   "review": "pycubrid 是连接 CUBRID 数据库服务器的纯 Python 驱动，无 C 扩展、无需编译，通过 pip 安装。它实现 PEP 249 接口，直接实现 CUBRID CAS 协议，提供 asyncio 异步 API（pycubrid.aio）与 TLS/SSL 连接选项，并可作为 sqlalchemy-cubrid 方言的底层驱动。要求 Python 3.11+ 和 CUBRID 10.2+ 服务器；服务器需单独部署，安装本包不含数据库。",
+   "highlights": [
+    "实现 PEP 249 (DB-API 2.0) 接口，含标准异常层级、类型对象与游标接口，paramstyle 为 qmark",
+    "提供同步与异步（pycubrid.aio）连接 API，支持 ssl=True 或自定义 SSLContext 的 TLS 连接",
+    "支持 LOB（CLOB/BLOB）读写、executemany 批量操作、autocommit 控制与 get_schema_info 模式内省"
+   ],
+   "use_cases": [
+    "Python 应用程序连接 CUBRID 数据库执行查询、CRUD 与事务操作",
+    "asyncio 事件循环下的异步数据库访问",
+    "配合 sqlalchemy-cubrid 使用 SQLAlchemy ORM/Core 与 Alembic 迁移"
+   ]
+  },
+  "sha": "94896b6c5b9c",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1ebe260d0b67": {
+  "identity": {
+   "one_liner": "Kotlin 多平台 SQLite 绑定库，全目标使用同一 SQLite 构建并集成多加密方案",
+   "review": "ksqlite 为 Kotlin Multiplatform 各目标提供接近完整的 SQLite C API 绑定，所有平台共用同一套 SQLite 编译产物与版本。每个构建内置 SQLite3MultipleCiphers，支持多算法加密；提供 C API 映射层与面向对象 API 两套实现，自动加载原生库并管理内存。项目处于活跃开发中的实验状态，仅暴露 UTF-8 接口，不支持 VFS 与 wasmWasi 目标。",
+   "highlights": [
+    "支持 JVM、Android、Linux、Windows、macOS、iOS、tvOS、watchOS、JS、WasmJs 等 Kotlin 目标（不含 wasmWasi 与 Node.js）",
+    "约 220+ SQLite C 函数绑定，含备份、快照、WAL、增量 blob I/O、虚表及自定义函数（标量/聚合/窗口）",
+    "每个目标内置 SQLite3MultipleCiphers，支持 AES、ChaCha20-Poly1305、Ascon、AEGIS 等内置加密算法及 Kotlin 动态注册自定义加密器"
+   ],
+   "use_cases": [
+    "需要在多个 Kotlin 平台目标上使用统一版本 SQLite 的应用开发",
+    "需要对数据库文件或列级数据进行加密的场景",
+    "需要调用较完整 SQLite C API（如虚表、备份、快照）的 Kotlin 项目"
+   ]
+  },
+  "sha": "1ebe260d0b67",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f9159ce684bf": {
+  "identity": {
+   "one_liner": "咖啡店与炸鸡店之间的订单转递应用，基于 Expo 与 Supabase 构建",
+   "review": "Cluck & Cup 是德拉萨大学 CSSWENG 软件工程课程的八人团队学术项目，为两家同店主、相距约一公里的实体店实现订单在安卓平板间自动传递。应用不替代门店现有 POS、不处理收款，仅传递订单并记录支付方式；源码在私有仓库，本仓库仅作项目说明。",
+   "highlights": [
+    "Expo/React Native 单一应用按登录门店呈现咖啡馆或炸鸡侧界面，TanStack Query 维护持久化离线队列，断网时写入本地并在恢复后发送",
+    "平板不直接写表，所有变更经由 Postgres RPC 校验角色与七个允许的状态流转并在同一事务写入事件日志；pg_cron 每分钟检查迟到订单并经 pg_net 触发推送",
+    "附 Vite + React 店主仪表盘，提供销售、订单、菜单、迟到告警计时器与设备 PIN 管理等功能"
+   ],
+   "use_cases": [
+    "共享店主的餐饮门店间需要人工通过 Messenger 转单的场景",
+    "需要离线可用、带订单号与状态跟踪、支付方式记录的平板点单转递",
+    "需要给店主提供销售与订单查看仪表盘的多门店管理"
+   ]
+  },
+  "sha": "f9159ce684bf",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

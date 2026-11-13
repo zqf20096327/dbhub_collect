@@ -26550,5 +26550,1503 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "cec61bfec6c1+2": {
+  "fn": "bcgov/quickstart-openshift",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    4,
+    [
+     "MIT License",
+     "Merge",
+     "Analysis",
+     "Scheduled"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    9,
+    4,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "This repository provides a template to rapidly deploy a modern web application stack to OpenShift using GitHub Actions, incorporating best practices for CI/CD, security, and observability. By hitting the ground running we can save weeks‑to‑months of development time, receive regular updates, and built‑in **Maintenance Mode Automation**, which allows an app to go on autopilot for security and dependency updates. This limits developmer involvement to critical issues only, drastically reducing labor costs and freeing up resources for higher priority work."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    16,
+    10,
+    16
+   ],
+   [
+    "replace",
+    16,
+    18,
+    16,
+    18,
+    [
+     "* Out-of-the-box alignment with **OWASP ASVS** Level 1 & 2 controls (see SECURITY.md)",
+     "* Automatic dependency patching via bcgov/renovate-config"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    29,
+    18,
+    29
+   ],
+   [
+    "replace",
+    29,
+    33,
+    29,
+    32,
+    [
+     " * Database: Postgres, Flyway",
+     " * Frontend: TypeScript, React, Caddy Server with Coraza WAF (prefers native `fetch` over Axios)",
+     " * Backend: TypeScript, Nest.js"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    32,
+    35
+   ],
+   [
+    "replace",
+    36,
+    37,
+    35,
+    36,
+    [
+     "Setup takes an hour or less. Scripts in `scripts/` do the GitHub and OpenShift parts. Each one previews its changes by default, makes them only with `--apply`, and is safe to re-run: it changes only what differs and leaves everything else alone. Running any of them without `--apply` verifies the setup: it ends with `All set: nothing to change.`, or exits non-zero with the number of things to change. It confirms secrets exist but can't verify their values. Run them yourself, with your own logins."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    36,
+    39
+   ],
+   [
+    "replace",
+    40,
+    42,
+    39,
+    41,
+    [
+     "1. **Accounts** (by hand): GitHub accounts for the team. For BC Government, also IDIR accounts and membership in the bcgov GitHub organization (instructions).",
+     "2. **OpenShift namespaces** (by hand): request a project set (DEV, TEST and PROD) from Platform Services at the registry. You get a licence plate, e.g. `abc123`, and namespaces `abc123-dev`, `abc123-test` and `abc123-prod`."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    44,
+    41,
+    43
+   ],
+   [
+    "replace",
+    44,
+    48,
+    43,
+    45,
+    [
+     "4. **Log in** (by hand): `gh auth login`, then in the OpenShift console select your name (top right) > `Copy login command` and paste it into a shell (`oc login --token=... --server=...`). You need admin rights on the repo and edit rights in all three namespaces.",
+     " Then run steps 5 to 7 with one command, which previews by default and exits non-zero if anything needs changing; add `--apply` to make the changes:"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    51,
+    45,
+    48
+   ],
+   [
+    "replace",
+    51,
+    52,
+    48,
+    49,
+    [
+     "5. **OpenShift deploy account** (optional helper; see by hand): creates the `github-actions` service account, `edit` role binding and token Secret in each namespace."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    55,
+    49,
+    52
+   ],
+   [
+    "replace",
+    55,
+    56,
+    52,
+    53,
+    [
+     "6. **GitHub environments, secrets and variables** (optional helper; see by hand): creates the `test` and `prod` environments, and sets the `OC_NAMESPACE` variable and `OC_TOKEN` and `DB_PASSWORD` secrets for pull requests (repository level), TEST and PROD, plus the `OC_SERVER` variable. Without `--plate` it reads the plate from existing `OC_NAMESPACE` variables. It won't generate a `DB_PASSWORD` for a namespace that already has a database, since a new password would lock the app out. Secrets that are already set are never overwritten. Secret values are piped from `oc` or `openssl` straight into `gh secret set`; they're never printed or written to disk, and previews show only the secret's name."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    59,
+    53,
+    56
+   ],
+   [
+    "replace",
+    59,
+    60,
+    56,
+    57,
+    [
+     "7. **GitHub repository settings**: the `main` ruleset, pull request settings and private vulnerability reporting (see Repository Configuration)."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    57,
+    60
+   ],
+   [
+    "replace",
+    63,
+    65,
+    60,
+    62,
+    [
+     "8. **First pull request**: open one to run the pipeline, then make the packages public (see Packages).",
+     "9. **Optional** (by hand): SonarCloud, Renovate, Sysdig, a vanity URL with TLS, PROD deployment rules and team members, all described below."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    62,
+    65
+   ],
+   [
+    "replace",
+    68,
+    69,
+    65,
+    66,
+    [
+     "Workflows read these values. Repository-level values are used by pull request deploys; `test` and `prod` environment values override them for those deploys. Steps 5 and 6 set the required ones."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    66,
+    67
+   ],
+   [
+    "replace",
+    70,
+    71,
+    67,
+    68,
+    [
+     "|Environment|Name|Description|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    68,
+    69
+   ],
+   [
+    "replace",
+    72,
+    89,
+    69,
+    86,
+    [
+     "|none|`vars.OC_SERVER`|OpenShift API server URL (repository-level)|",
+     "|none|`vars.OC_NAMESPACE`|PR namespace, `<plate>-dev`|",
+     "|none|`secrets.OC_TOKEN`|PR service token|",
+     "|none|`secrets.DB_PASSWORD`|PR database password|",
+     "|test|`vars.OC_NAMESPACE`|TEST namespace, `<plate>-test`|",
+     "|test|`secrets.OC_TOKEN`|TEST service token|",
+     "|test|`secrets.DB_PASSWORD`|TEST database password|",
+     "|prod|`vars.OC_NAMESPACE`|PROD namespace, `<plate>-prod`|",
+     "|prod|`secrets.OC_TOKEN`|PROD service token|",
+     "|prod|`secrets.DB_PASSWORD`|PROD database password|",
+     "|none (opt)|`vars.ROUTE_HOST`|Vanity URL hostname (repository-level)|",
+     "|prod (opt)|`vars.S3_BUCKET`|S3 bucket name for offsite database backups|",
+     "|prod (opt)|`vars.S3_ENDPOINT`|S3 endpoint URL (e.g. `https://nrs.objectstore.gov.bc.ca`)|",
+     "|prod (opt)|`secrets.S3_USER`|S3 access key ID for offsite database backups|",
+     "|prod (opt)|`secrets.S3_PASSWORD`|S3 secret access key for offsite database backups|",
+     "|none (opt)|`secrets.SONAR_TOKEN_BACKEND`, `secrets.SONAR_TOKEN_FRONTEND`|See SonarCloud|",
+     "|none (opt)|`secrets.SYSDIG_API_TOKEN`|PROD alert sync|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    86,
+    87
+   ],
+   [
+    "replace",
+    90,
+    91,
+    87,
+    88,
+    [
+     "`DB_PASSWORD` is generated separately for each environment. Don't change it after the first deploy: PostgreSQL keeps its first password."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    88,
+    89
+   ],
+   [
+    "replace",
+    92,
+    93,
+    89,
+    90,
+    [
+     "**Copied the template before `OC_NAMESPACE` became a variable?** Move it: `gh variable set OC_NAMESPACE --body <plate>-dev`, and the same with `--env test` / `--env prod` (or run `scripts/setup-environments.sh --apply`). The old secret is unused and can be deleted."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    90,
+    93
+   ],
+   [
+    "replace",
+    96,
+    97,
+    93,
+    94,
+    [
+     "Steps 5 and 6 above are an optional helper. Everything they do can be done by hand, as below."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    94,
+    95
+   ],
+   [
+    "replace",
+    98,
+    99,
+    95,
+    96,
+    [
+     "Variables and secrets are consumed by workflows. Variables are visible in workflows and logs, while secrets are hidden/redacted."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    117,
+    96,
+    114
+   ],
+   [
+    "replace",
+    117,
+    118,
+    114,
+    115,
+    [
+     "1. Login to your OpenShift console, e.g. Silver or Gold."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    141,
+    115,
+    138
+   ],
+   [
+    "replace",
+    141,
+    142,
+    138,
+    139,
+    [
+     "1. Create and copy a token. It cannot be retrieved again:"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    139,
+    142
+   ],
+   [
+    "replace",
+    145,
+    146,
+    142,
+    143,
+    [
+     "1. Save it as the `OC_TOKEN` secret: repository level for `<plate>-dev` (pull requests), or in the `test` / `prod` environment for those namespaces. To pipe it straight in without printing it:"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    150,
+    143,
+    147
+   ],
+   [
+    "replace",
+    150,
+    151,
+    147,
+    148,
+    [
+     "* Alternate steps using an inline template can be found here. `scripts/setup-openshift.sh` uses the same approach: a `github-actions-token` Secret of type `kubernetes.io/service-account-token`, which doesn't expire."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    156,
+    148,
+    153
+   ],
+   [
+    "replace",
+    156,
+    157,
+    153,
+    154,
+    [
+     "Teams will receive a set of project namespaces, usually DEV (for PRs), TEST and PROD. TOOLS namespaces (e.g. Jenkins, shared Oracle resources) are not used here. Provided by your OpenShift platform team."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    164,
+    154,
+    161
+   ],
+   [
+    "replace",
+    164,
+    165,
+    161,
+    162,
+    [
+     "OpenShift API server URL for your cluster. One repository-level variable, shared by pull requests, TEST and PROD (not set per environment)."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    188,
+    162,
+    185
+   ],
+   [
+    "replace",
+    188,
+    189,
+    185,
+    186,
+    [
+     "* Alert templates live in `monitoring/alerts/`. Add or remove files to customize the alert set per app — see `bcgov/action-sysdig-monitor` for the template schema and placeholder vocabulary."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    192,
+    186,
+    189
+   ],
+   [
+    "replace",
+    192,
+    193,
+    189,
+    190,
+    [
+     "Vanity URL hostname for the application (e.g., `myapp.gov.bc.ca`, hostname only, no scheme). Optional repository variable. While it is unset, the standalone `Cert Keeper` workflow (`cert-keeper.yml`) does nothing."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    196,
+    190,
+    193
+   ],
+   [
+    "replace",
+    196,
+    197,
+    193,
+    194,
+    [
+     "* Once `ROUTE_HOST` is set, `Cert Keeper` runs daily and by hand. It reads the certificate the host serves. If the host has no valid certificate, or a third or less of its life is left, it gets a free Let's Encrypt certificate and installs it on the PROD vanity Route (`<repository>-vanity-url`). Otherwise it stops. If a run fails, it opens an issue and notifies CODEOWNERS."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    194,
+    195
+   ],
+   [
+    "replace",
+    198,
+    199,
+    195,
+    196,
+    [
+     "* Before you set `ROUTE_HOST`: the hostname's DNS must already point at the cluster router, and port 80 must reach it, because Let's Encrypt checks ownership over plain HTTP. Let's Encrypt limits a hostname to 5 certificates a week, so avoid repeated forced runs. See the cert-keeper README for limits, staging rehearsals and common fixes."
+    ]
+   ],
+   [
+    "equal",
+    199,
+    225,
+    196,
+    222
+   ],
+   [
+    "replace",
+    225,
+    227,
+    222,
+    224,
+    [
+     " * To gate by branch: select **Branch** and enter `main` (or your protected release branch).",
+     " * To gate by release tag: select **Tag** and enter a pattern like `v*.*.*` or `v*` so only release tags can trigger deployment."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    233,
+    224,
+    230
+   ],
+   [
+    "replace",
+    233,
+    234,
+    230,
+    231,
+    [
+     "* `release.yml` deploys a published GitHub release to PROD. It finds the PR that the release's commit came from and deploys that PR's images, the same ones `merge.yml` deployed. Nothing is rebuilt."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    246,
+    231,
+    243
+   ],
+   [
+    "replace",
+    246,
+    250,
+    243,
+    247,
+    [
+     "* **PROD gets the tested images.** PROD runs the same images TEST ran, and `release.yml` logs their digests; nothing is rebuilt. Google's SRE book describes builds that are reproducible and releases cut from the last revision that passed all tests (Release Engineering).",
+     "* **Review on the PR, automation after.** Changes are reviewed on the PR and checked by automated tests, and publishing a release is the decision to ship. DORA's research finds that peer review during development, supported by automated tests and monitoring that catch bad changes early, works best (DORA capability guide).",
+     "* **The `prod` environment holds PROD secrets and deploy rules.** Only jobs that reference the environment can read its secrets, and its deployment branch and tag rules choose what may deploy (Deployments and environments).",
+     "* **Smoke check, then roll back fast.** Add a smoke check against PROD after deploys to catch what TEST can't. If a release misbehaves, re-run the `Release` workflow for the previous release; it redeploys that release's images without a rebuild. GitHub allows re-runs up to 30 days after the initial run; for an older release, publish a new release whose tag targets the previous release's commit, which deploys that commit's PR images."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    253,
+    247,
+    250
+   ],
+   [
+    "replace",
+    253,
+    254,
+    250,
+    251,
+    [
+     "Dependabot and Mend Renovate can both provide dependency updates using pull requests. Dependabot is simpler to configure, while Renovate is much more configurable and lighter on resources."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    257,
+    251,
+    254
+   ],
+   [
+    "replace",
+    257,
+    258,
+    254,
+    255,
+    [
+     "A configuration file (`renovate.json`) is included with this template that sources configuration from our renovate repository."
+    ]
+   ],
+   [
+    "equal",
+    258,
+    260,
+    255,
+    257
+   ],
+   [
+    "replace",
+    260,
+    261,
+    257,
+    258,
+    [
+     "> Once Renovate is set up, you can enable **Maintenance Mode Automation** by following the checklist in the Maintenance Mode Automation section of this README. This will let Renovate auto‑merge safe updates after all CI checks pass."
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    258,
+    259
+   ],
+   [
+    "replace",
+    262,
+    263,
+    259,
+    260,
+    [
+     "BC Government employees can request having the Renovate and Renovate Approve GitHub Apps installed on their repository through the CITZ Service Desk. Most others can add their repositories directly from the Renovate and Renovate Approve GitHub Apps."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    266,
+    260,
+    263
+   ],
+   [
+    "replace",
+    266,
+    267,
+    263,
+    264,
+    [
+     "Dependabot is no longer recommended as an alternative to Renovate for generating security, vulnerability and dependency pull requests. It can still be used to generate warnings under the GitHub Security tab, which is only viewable by repository administrators."
+    ]
+   ],
+   [
+    "equal",
+    267,
+    270,
+    264,
+    267
+   ],
+   [
+    "replace",
+    270,
+    271,
+    267,
+    268,
+    [
+     "SonarCloud performs static code analysis, test coverage tracking, and quality gate checks via the `bcgov/action-test-and-analyse` action in `.github/workflows/analysis.yml`. SonarCloud integration is optional—the test suites and CI pipeline run successfully without it."
+    ]
+   ],
+   [
+    "equal",
+    271,
+    272,
+    268,
+    269
+   ],
+   [
+    "replace",
+    272,
+    273,
+    269,
+    270,
+    [
+     "BC Government employees can request SonarCloud projects via devops-requests (select **Request for import GitHub repository on SonarCloud**) or directly through the CITZ Service Desk."
+    ]
+   ],
+   [
+    "equal",
+    273,
+    276,
+    270,
+    273
+   ],
+   [
+    "replace",
+    276,
+    277,
+    273,
+    274,
+    [
+     "Before submitting the request, ensure the designated project administrator has logged in to the SonarCloud console under bcgov-sonarcloud using their GitHub account."
+    ]
+   ],
+   [
+    "equal",
+    277,
+    280,
+    274,
+    277
+   ],
+   [
+    "replace",
+    280,
+    287,
+    277,
+    284,
+    [
+     "|Field|Selection|Notes|",
+     "|---|---|---|",
+     "|**GitHub username**|`<admin-username>`|Must be the user who logged into SonarCloud above; will be assigned project administrator.|",
+     "|**GitHub Repo URL**|`https://github.com/bcgov/<repo>`|Full repository URL.|",
+     "|**New Code Definition**|**Previous version**|Quality gates evaluate changes relative to previous releases rather than a rolling day count.|",
+     "|**Setup as a monorepo**|**Yes**|Quickstart repositories contain both `backend` and `frontend`.|",
+     "|**Additional Comments**|`backend, frontend`|Explicitly list component names so separate SonarCloud sub-projects are created.|"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    292,
+    284,
+    289
+   ],
+   [
+    "replace",
+    292,
+    293,
+    289,
+    290,
+    [
+     "2. Update `-Dsonar.projectKey` in `.github/workflows/analysis.yml` for both jobs to match your repository (e.g. `<repo>_backend` and `<repo>_frontend` instead of `quickstart-openshift_*`)."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    296,
+    290,
+    293
+   ],
+   [
+    "replace",
+    296,
+    297,
+    293,
+    294,
+    [
+     "This repository uses Knip for dependency scanning to identify unused dependencies and exports. Knip runs automatically as part of the Analysis workflow via the `bcgov/action-test-and-analyse` action."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    314,
+    294,
+    311
+   ],
+   [
+    "replace",
+    314,
+    318,
+    311,
+    315,
+    [
+     " - Is it exported from a utility file (e.g., `test-utils.tsx`)?",
+     " - Is it used via dynamic imports?",
+     " - Is it required by build tools or other dependencies?",
+     " - Is it used in configuration files that Knip doesn't analyze?"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    320,
+    315,
+    317
+   ],
+   [
+    "replace",
+    320,
+    323,
+    317,
+    320,
+    [
+     " - Repository: `bcgov/action-test-and-analyse`",
+     " - File: `.knip.json`",
+     " - Add the dependency to the `ignoreDependencies` array"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    325,
+    320,
+    322
+   ],
+   [
+    "replace",
+    325,
+    328,
+    322,
+    325,
+    [
+     " - Why it's a false positive",
+     " - How the dependency is used",
+     " - Example: \"Exported from test-utils files for use in tests but may not be directly imported yet. Common pattern in testing utilities.\""
+    ]
+   ],
+   [
+    "equal",
+    328,
+    338,
+    325,
+    335
+   ],
+   [
+    "replace",
+    338,
+    348,
+    335,
+    336,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    368,
+    336,
+    356
+   ],
+   [
+    "replace",
+    368,
+    371,
+    356,
+    359,
+    [
+     " * `PR Results` (PR workflow)",
+     " * `Analysis Results` (Analysis workflow)",
+     " * `Validate Results` (PR Validate workflow)"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    372,
+    359,
+    360
+   ],
+   [
+    "replace",
+    372,
+    373,
+    360,
+    361,
+    [
+     " Each is the summary job of a workflow that runs on every pull request. The jobs they summarize (builds, deploys, tests, scans) are left out because they're skipped when their paths don't change, which would block merges. Repository admins may bypass the ruleset only by merging a pull request. Trivy results are still reported to the Security tab, but Trivy is deliberately not a merge gate because it fails often. Other rules already in the ruleset (e.g. Copilot code review) are kept."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    374,
+    361,
+    362
+   ],
+   [
+    "replace",
+    374,
+    375,
+    362,
+    363,
+    [
+     "* **Private vulnerability reporting**, which SECURITY.md points reporters to."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    378,
+    363,
+    366
+   ],
+   [
+    "replace",
+    378,
+    379,
+    366,
+    367,
+    [
+     "Packages are available from your repository (link on right). All should have visibility set to public for the workflows to run successfully."
+    ]
+   ],
+   [
+    "equal",
+    379,
+    384,
+    367,
+    372
+   ],
+   [
+    "replace",
+    384,
+    385,
+    372,
+    373,
+    [
+     "Don't forget to add your team members! "
+    ]
+   ],
+   [
+    "equal",
+    385,
+    386,
+    373,
+    374
+   ],
+   [
+    "replace",
+    386,
+    391,
+    374,
+    379,
+    [
+     "1. Select Settings (gear, top right) *> Collaborators and teams (under `Access`)",
+     "2. Click `Add people` or `Add teams`",
+     "3. Use the search box to find people or teams",
+     "4. Choose a role (read, triage, write, maintain, admin)",
+     "5. Click Add"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    394,
+    379,
+    382
+   ],
+   [
+    "replace",
+    394,
+    395,
+    382,
+    383,
+    [
+     "This repository is architected and hardened out-of-the-box to align with Levels 1 and 2 of the **OWASP Application Security Verification Standard (ASVS) v4.0.3**. A detailed security mapping matrix is documented in SECURITY.md, detailing our implementation of:"
+    ]
+   ],
+   [
+    "equal",
+    395,
+    415,
+    383,
+    403
+   ],
+   [
+    "replace",
+    415,
+    420,
+    403,
+    404,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    420,
+    430,
+    404,
+    414
+   ],
+   [
+    "replace",
+    430,
+    448,
+    414,
+    415,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    448,
+    456,
+    415,
+    423
+   ],
+   [
+    "replace",
+    456,
+    499,
+    423,
+    424,
+    [
+     "…（43 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    499,
+    514,
+    424,
+    439
+   ],
+   [
+    "delete",
+    514,
+    516,
+    439,
+    439
+   ],
+   [
+    "equal",
+    516,
+    521,
+    439,
+    444
+   ],
+   [
+    "delete",
+    521,
+    524,
+    444,
+    444
+   ],
+   [
+    "equal",
+    524,
+    533,
+    444,
+    453
+   ],
+   [
+    "delete",
+    533,
+    535,
+    453,
+    453
+   ],
+   [
+    "equal",
+    535,
+    541,
+    453,
+    459
+   ],
+   [
+    "delete",
+    541,
+    543,
+    459,
+    459
+   ],
+   [
+    "equal",
+    543,
+    557,
+    459,
+    473
+   ],
+   [
+    "delete",
+    557,
+    559,
+    473,
+    473
+   ],
+   [
+    "equal",
+    559,
+    567,
+    473,
+    481
+   ],
+   [
+    "delete",
+    567,
+    569,
+    481,
+    481
+   ],
+   [
+    "equal",
+    569,
+    575,
+    481,
+    487
+   ],
+   [
+    "replace",
+    575,
+    576,
+    487,
+    488,
+    [
+     "1. **Automated Dependency Updates**: The repository includes a `renovate.json` file configured to extend `bcgov/renovate-config`. This allows Mend Renovate to scan for updates, group related package updates together, and prepare automated Pull Requests."
+    ]
+   ],
+   [
+    "equal",
+    576,
+    606,
+    488,
+    518
+   ],
+   [
+    "replace",
+    606,
+    609,
+    518,
+    521,
+    [
+     " - Linting and unit tests complete.",
+     " - Preview environment successfully deploys to OpenShift.",
+     " - Automated smoke tests verify the preview environment is fully functional."
+    ]
+   ],
+   [
+    "equal",
+    609,
+    615,
+    521,
+    527
+   ],
+   [
+    "delete",
+    615,
+    617,
+    527,
+    527
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "0fb398cceb20+2": {
+  "fn": "StreamRune/streamrune",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    11,
+    8,
+    11,
+    [
+     "releases page and the",
+     "CHANGELOG say what each release contains. `1.0.0-alpha-SNAPSHOT` is the unsigned",
+     "preview of the next release, published from `main` (see Preview builds)."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    22,
+    11,
+    22
+   ],
+   [
+    "replace",
+    22,
+    28,
+    22,
+    23,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    36,
+    23,
+    31
+   ],
+   [
+    "replace",
+    36,
+    40,
+    31,
+    32,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    42,
+    32,
+    34
+   ],
+   [
+    "replace",
+    42,
+    43,
+    34,
+    35,
+    [
+     "The other modules in the Modules table use the same group and version."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    50,
+    35,
+    42
+   ],
+   [
+    "replace",
+    50,
+    51,
+    42,
+    43,
+    [
+     "License)."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    60,
+    43,
+    52
+   ],
+   [
+    "replace",
+    60,
+    70,
+    52,
+    53,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    78,
+    53,
+    61
+   ],
+   [
+    "replace",
+    78,
+    91,
+    61,
+    62,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    93,
+    62,
+    64
+   ],
+   [
+    "replace",
+    93,
+    94,
+    64,
+    65,
+    [
+     "The other modules in the Modules table use the same group and version."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    98,
+    65,
+    69
+   ],
+   [
+    "replace",
+    98,
+    100,
+    69,
+    71,
+    [
+     " with `-XX:+UnlockExperimentalVMOptions -XX:-UseJVMCICompiler` — see",
+     " Supported JVMs."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    71,
+    72
+   ],
+   [
+    "replace",
+    101,
+    105,
+    72,
+    76,
+    [
+     " store needs no database). Every PostgreSQL-backed suite of `postgresTest` runs on 17 and on 18 in",
+     " CI (the broker end-to-end suite on 18 only), nothing older is tested, and the runtime refuses an",
+     " older server at startup — see",
+     " Production Deployment."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    108,
+    76,
+    79
+   ],
+   [
+    "replace",
+    108,
+    109,
+    79,
+    80,
+    [
+     "Step-by-step guide →"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    111,
+    80,
+    82
+   ],
+   [
+    "replace",
+    111,
+    112,
+    82,
+    83,
+    [
+     "StreamRune e-commerce demo — a separate"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    119,
+    83,
+    90
+   ],
+   [
+    "replace",
+    119,
+    120,
+    90,
+    91,
+    [
+     "|Module|Description|"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    91,
+    92
+   ],
+   [
+    "replace",
+    121,
+    137,
+    92,
+    108,
+    [
+     "|streamrune-core|Core API: EventStore contracts, aggregate types, upcasting|",
+     "|streamrune-runtime|Runtime: command bus, projections, locker|",
+     "|streamrune-postgres|PostgreSQL-backed EventStore|",
+     "|streamrune-test|Test support: in-memory store, fixtures|",
+     "|streamrune-spring|Spring Boot auto-configuration|",
+     "|streamrune-spring-boot-starter|Single-dependency setup for Spring Boot: auto-configuration, PostgreSQL store and runtime|",
+     "|streamrune-quarkus|Quarkus integration|",
+     "|streamrune-micronaut|Micronaut integration|",
+     "|streamrune-integration-api|Pieces shared by the three integrations: metrics, request identity, startup validators|",
+     "|streamrune-crypto-api|Encryption at rest for event payloads: the crypto-shredding Jackson module and the caching engine|",
+     "|streamrune-filesystem-crypto|Crypto engine with keys in a directory|",
+     "|streamrune-postgres-crypto|Crypto engine with keys in PostgreSQL|",
+     "|streamrune-vault-crypto|Crypto engine on the HashiCorp Vault transit engine|",
+     "|streamrune-aws-kms-crypto|Crypto engine on an AWS KMS key|",
+     "|streamrune-kafka-outbox|Transactional outbox publisher for Kafka|",
+     "|streamrune-rabbitmq-outbox|Transactional outbox publisher for RabbitMQ|"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    108,
+    109
+   ],
+   [
+    "replace",
+    138,
+    139,
+    109,
+    110,
+    [
+     "The crypto modules have a shared overview."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    142,
+    110,
+    113
+   ],
+   [
+    "replace",
+    142,
+    143,
+    113,
+    114,
+    [
+     "From `1.0.0` on, StreamRune follows Semantic Versioning:"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    148,
+    114,
+    119
+   ],
+   [
+    "replace",
+    148,
+    149,
+    119,
+    120,
+    [
+     " database schema the migrations create."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    167,
+    120,
+    138
+   ],
+   [
+    "delete",
+    167,
+    168,
+    138,
+    138
+   ],
+   [
+    "equal",
+    168,
+    169,
+    138,
+    139
+   ],
+   [
+    "delete",
+    169,
+    182,
+    139,
+    139
+   ],
+   [
+    "equal",
+    182,
+    183,
+    139,
+    140
+   ],
+   [
+    "replace",
+    183,
+    187,
+    140,
+    141,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

@@ -3129,5 +3129,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "858e8cf53609": {
+  "identity": {
+   "one_liner": "基于 BNF 语法的 SQL 随机生成与差异测试工具",
+   "review": "go-randgen 是 MySQL randgen 的 Go 版本，用于数据库模糊测试。它依据 yy/zz 语法文件随机生成 DDL、测试数据和 SQL，支持在无数据库连接的情况下离线生成，并提供 exec 子命令在两个 DSN 上执行同一批 SQL 并转储结果不一致的语句。内置 SQL 执行安全策略与受限 Lua 沙箱，也可作为无状态库调用。",
+   "highlights": [
+    "通过 yy（BNF 语法）与 zz（Lua 定义表结构/字段/数据）文件生成 SQL，可离线运行",
+    "提供 gentest、gendata、gensql、exec 子命令，exec 可在两个 DSN 执行同一 SQL 并 dump 不一致结果",
+    "嵌入的 Lua 代码在受限环境运行，生成的 SQL 写入前经过执行安全策略校验"
+   ],
+   "use_cases": [
+    "为数据库或 SQL 兼容层生成随机查询进行模糊测试",
+    "对两个数据库实例执行相同 SQL 并比对执行结果",
+    "仅需随机 SQL 样本而无需连接数据库的场景"
+   ]
+  },
+  "sha": "858e8cf53609",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "46bde3e9286b": {
+  "identity": {
+   "one_liner": "本地工具调用录制与回放调试器，基于 SQLite 与浏览器界面",
+   "review": "agent-blackbox 是一个运行在本地的 AI 工作流录制与回放调试工具，用 Python 编写，数据存于 SQLite，通过浏览器界面查看。它记录嵌套工具调用，支持在检查点替换某条响应后从最近检查点分叉（fork）出新运行并对比决策差异；回放要求显式、带版本的工作流实现，不支持任意 Python 栈帧。每次调用包含校验、脱敏和两次 SQLite 持久化事务，实测中位数增加约 8.795 毫秒延迟。适合需要复现和检查工具响应如何影响决策的开发者。",
+   "highlights": [
+    "提供三种执行模式：浏览器/inspect 回放读取存储事件、离线回放以录制响应替代、分叉模式在最近检查点替换单条响应后重放其余响应",
+    "支持 CLI 命令 list/inspect/replay/fork/compare/export，及可选 OpenAI 适配器记录输出文本、模型标识与 token 计数",
+    "录制前执行基于敏感键名、token 前缀与配置字面量的脱敏，异步工具经 Recorder.acall 支持且上下文局部父 span 隔离并发任务"
+   ],
+   "use_cases": [
+    "复现并检查工具响应（如过期数据）导致的决策差异",
+    "对显式注册且带版本的确定性工作流进行离线回放验证",
+    "导出版本化 JSON trace 用于离线存档或分析"
+   ]
+  },
+  "sha": "46bde3e9286b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

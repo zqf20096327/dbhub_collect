@@ -2747,5 +2747,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7d3b17dc7c7b": {
+  "identity": {
+   "one_liner": "自托管单用户基础设施开销记录面板，通过托管商 API 自动同步余额、资源与付款数据。",
+   "review": "这是一个面向个人用户的自托管基础设施费用记录面板，覆盖 VPS、独立服务器、域名、CDN、对象存储等。它通过托管商 API 定时同步账户余额、资源列表和扣费日期，按日保存余额快照并生成分析预测；无 API 的供应商可手动维护。部署需 Docker、PostgreSQL 及带 TLS 的反向代理，会话 Cookie 带 Secure 标记，无 HTTPS 无法登录。技术栈为 NestJS、Prisma、PostgreSQL 与 React。",
+   "highlights": [
+    "支持约 28 家带 API 的托管商（含 Hetzner Cloud、Vultr、Cloudflare、Yandex Cloud 等）的余额、资源与扣费日期自动同步，无 API 供应商可手动录入",
+    "提供月度/年度支出分析（按供应商、国家、类型、币种拆分）、未来扣费预测、多币种换算（可使用俄罗斯央行汇率）及低余额/临近扣费/同步失败的 Telegram 通知",
+    "登录方式包括密码、passkey（WebAuthn）和 Telegram（OpenID Connect），供应商令牌以 AES-256-GCM 加密存储；另提供 /api/mcp 的 MCP 服务器与 Bearer 令牌的 REST API 访问（默认只读）"
+   ],
+   "use_cases": [
+    "个人或单用户管理分布在不同托管商的多台服务器、域名与云服务的订阅与扣费记录",
+    "需要按日余额快照追踪历史支出并进行未来扣费预测的场景",
+    "希望通过 MCP 客户端或 REST API 程序化读取（或写入）费用、余额与服务数据的部署"
+   ]
+  },
+  "sha": "7d3b17dc7c7b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "101b13b3ea7f": {
+  "identity": {
+   "one_liner": "基于 Go+Wails 的移动端本地数据库桌面检查工具",
+   "review": "VetroLog 是一款面向移动开发者的桌面数据库检查工具，基于 Go、Wails 和 React 构建，支持通过 ADB 连接 Android 设备实时查看 SQLite 数据库，无需修改应用代码。它同时提供 VS Code 扩展、macOS/Windows/Linux 桌面端与 --web 浏览器模式，源码需 Go 1.23+ 与 Node.js 20+ 构建。注意其零代码检查能力依赖 Android USB 调试模式。",
+   "highlights": [
+    "通过 USB 连接 Android 设备后可直接读取调试模式应用的 SQLite 数据库，无需修改项目代码",
+    "支持 SQLite WAL/-shm 文件的实时同步检测，可在界面中双向编辑记录并写回",
+    "提供 VS Code 扩展，可检查本地工作区 SQLite 及 PostgreSQL、MySQL、Redis 等远程数据库"
+   ],
+   "use_cases": [
+    "Flutter/Android 开发过程中通过 USB 调试实时查看与编辑应用沙盒内的 SQLite 数据",
+    "在 VS Code 中检查本地工作区数据库文件或连接远程数据库进行查询",
+    "以 --web 模式在浏览器中运行，用于远程机器或 Docker 容器环境下的数据库检查"
+   ]
+  },
+  "sha": "101b13b3ea7f",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

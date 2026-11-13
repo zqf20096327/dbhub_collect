@@ -23466,5 +23466,1197 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "14b7b8fc18b6+2": {
+  "fn": "EdiWang/Moonglade",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "Deploy a published release at the URL root. Enable HTTPS and HTTP/2 on the public web server. Behind a reverse proxy, configure trusted addresses under `ForwardedHeaders:KnownProxies` so the application receives the correct public scheme and client IP. Subpath hosting is unsupported."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    18,
+    13,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "Stop all Moonglade hosts, back up the database, and test the required SQL scripts against a restored copy. Apply the applicable scripts in numerical order from PostgreSQL or SQL Server, following each script's prerequisites and the database execution guide. The activity event-key script discards legacy activity history when converting the schema. If the upgraded database lacks initialized local credentials, complete owner setup before reopening access."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    19,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "Set `POSTGRES_PASSWORD` in a local `.env` file using .env.example as a template, then run:"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    28,
+    23,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "Open `http://localhost:8080` and complete owner setup. Compose starts PostgreSQL and supplies the database connection string to the web container. Keep the database volume and both image volumes when replacing containers."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    46,
+    29,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "In PowerShell, `./start.ps1` runs the same project with the Development launch profile. Open `https://localhost:10210`. See the test guide for test commands and the engineering reference for module ownership and implementation contracts."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    56,
+    47,
+    56
+   ],
+   [
+    "replace",
+    56,
+    57,
+    56,
+    57,
+    [
+     "Host options use appsettings.json and standard environment overrides (`:` becomes `__`). Manage persisted blog preferences at `/admin/settings` and the owner profile and credentials at `/admin/account`."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    62,
+    57,
+    62
+   ],
+   [
+    "replace",
+    62,
+    70,
+    62,
+    70,
+    [
+     "|Setting|When it takes effect|",
+     "|---|---|",
+     "|Rendering, theme, and feed options|On subsequent requests. Browser, CDN, proxy, and feed-reader caches retain their own lifetimes.|",
+     "|FOAF and sitemap switches|On subsequent requests. Disabled endpoints return HTTP 404.|",
+     "|Watermark and original-image retention|On future uploads.|",
+     "|Notification switches|On future enqueue decisions. Queued email retains its recipient and content.|",
+     "|Notification sender display name|After an application restart.|",
+     "|Scheduled publishing|Saving wakes the worker. Publication already dispatched runs to completion.|"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    95,
+    70,
+    95
+   ],
+   [
+    "replace",
+    95,
+    99,
+    95,
+    99,
+    [
+     "|Host option|Default behavior|",
+     "|---|---|",
+     "|`CommentRateLimit`|Allows five submissions per client IP and post in a ten-minute fixed window.|",
+     "|`CommentSubmissionGuard`|Checks a honeypot and rejects forms submitted before three seconds or after 240 minutes. Set `MaxFormAgeMinutes` to `0` to disable the age limit.|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    106,
+    99,
+    106
+   ],
+   [
+    "replace",
+    106,
+    110,
+    106,
+    110,
+    [
+     "|Option|Purpose|",
+     "|---|---|",
+     "|`ImageStorage:FileSystemPath`|Public processed images served at `/image/{filename}`. Compose mounts `/app/images`.|",
+     "|`ImageStorage:OriginalFileSystemPath`|Private originals when retention is enabled. Compose mounts `/app/images-origin`.|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    113,
+    110,
+    113
+   ],
+   [
+    "replace",
+    113,
+    114,
+    113,
+    114,
+    [
+     "When CDN delivery is enabled in the image settings, posts and feeds use CDN URLs directly and `/image/{filename}` redirects to the CDN. Expose only the public root at the CDN origin. Preserve filename-to-key mapping and media types, and make files visible only after writing completes. The owner avatar is served separately at `/avatar` from account storage. See the optional Cloudflare R2 mount example."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    125,
+    114,
+    125
+   ],
+   [
+    "replace",
+    125,
+    132,
+    125,
+    132,
+    [
+     "|Option|Purpose|",
+     "|---|---|",
+     "|`Enabled`|Enables email capability by default. Set to `false` to disable it explicitly.|",
+     "|`SmtpServer`, `SmtpPort`|SMTP endpoint. Port 465 uses implicit TLS. On other ports, `EnableSsl=true` requires STARTTLS and `false` uses STARTTLS when offered and otherwise allows an unencrypted connection.|",
+     "|`SmtpUserName`, `SmtpPassword`|SMTP credentials. Supply the password through deployment secrets, for example `Email__SmtpPassword`.|",
+     "|`SmtpSenderAddress`|Bare email address used in the sender headers and SMTP envelope. Blank values use `SmtpUserName`.|",
+     "|`SenderDisplayName`|Deployment fallback for a blank sender name in Notification settings.|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    137,
+    132,
+    137
+   ],
+   [
+    "replace",
+    137,
+    144,
+    137,
+    144,
+    [
+     "|Endpoint|Purpose|",
+     "|---|---|",
+     "|`/rss`, `/atom`, `/opml`|Feeds and subscriptions|",
+     "|`/opensearch`|OpenSearch discovery|",
+     "|`/foaf.xml`|FOAF profile|",
+     "|`/webmention`|Webmention reception|",
+     "|`/sitemap.xml`, `/robots.txt`|Crawler discovery and directives|"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    151,
+    144,
+    151
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "e243549c74c2+2": {
+  "fn": "Wayn-Git/Amethyst",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Amethyst — the chat view with a live agent turn"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    1,
+    10
+   ],
+   [
+    "delete",
+    12,
+    16,
+    10,
+    10
+   ],
+   [
+    "equal",
+    16,
+    27,
+    10,
+    21
+   ],
+   [
+    "replace",
+    27,
+    28,
+    21,
+    22,
+    [
+     "See docs/architecture/library.md."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    22,
+    25
+   ],
+   [
+    "replace",
+    31,
+    32,
+    25,
+    26,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    26,
+    27
+   ],
+   [
+    "replace",
+    33,
+    46,
+    27,
+    40,
+    [
+     "|Main page|**Main** — the chat interface with live agent turns, streaming responses and tool traces|",
+     "|Today view|**Today** — the whole day on one page: morning briefing, events, what is owed|",
+     "|Tasks view|**Tasks** — lists and buckets on a board of cards, with a calendar engine that finds free slots and flags conflicts|",
+     "|Library view|**Library** — your knowledge vault: articles, videos, podcasts, papers, posts, books and notes from any source; search by meaning and keyword, filter by kind, tag or category, stored as plain markdown on disk|",
+     "|Memory view|**Memory** — per-conversation extracted memories that persist context across sessions|",
+     "|Plugin overview|**Plugin Overview** — a birds-eye view of all installed connectors and their status|",
+     "|Plugins view|**Skills & connectors** — Microsoft To Do, Google Workspace, GitHub, Spotify, and more, installed from one page|",
+     "|Automations view|**Automations** — a prompt on an interval, with its own run history|",
+     "|Mail view|**Mail** — Gmail through Google Workspace, or AgentMail for your agent's own inbox|",
+     "|Spotlight|**Keyboard-first UI** — command palette (`⌘K`), full shortcut reference on `?`, no mouse required|",
+     "|Command palette|**Command palette** — every view, skill, connector and setting reachable by name|",
+     "|Settings|**Settings** — manage providers, permissions, standing approvals, and preferences|",
+     "|Agent turn trace|**Live turn trace** — every tool call and argument streams as it happens, so you always know what the agent is doing|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    50,
+    40,
+    44
+   ],
+   [
+    "replace",
+    50,
+    55,
+    44,
+    49,
+    [
+     " comparison, freshness-sensitive, URL extraction, deep research) and dispatches",
+     " to LangSearch, Exa, Firecrawl or Tavily through a circuit breaker with a live",
+     " provider-health registry, falling back to keyless search when a provider is",
+     " down or unconfigured. Plus a deep-research engine that plans, runs concurrent",
+     " multi-step queries, and synthesises with citations. See `backend/web/`."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    49,
+    50
+   ],
+   [
+    "replace",
+    56,
+    58,
+    50,
+    52,
+    [
+     " against local MCP so the agent never sees two paths to the same provider.",
+     " See docs/architecture/connectors.md."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    52,
+    53
+   ],
+   [
+    "replace",
+    59,
+    60,
+    53,
+    54,
+    [
+     " gathering, with depth limits, heartbeats and automatic reaping of stale runs."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    54,
+    55
+   ],
+   [
+    "replace",
+    61,
+    62,
+    55,
+    56,
+    [
+     " bound to semantic CSS variables throughout."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    56,
+    57
+   ],
+   [
+    "replace",
+    63,
+    64,
+    57,
+    58,
+    [
+     " video/audio conversion pipeline. Nothing uploads anywhere."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    58,
+    59
+   ],
+   [
+    "replace",
+    65,
+    66,
+    59,
+    60,
+    [
+     " companion that works over the Cloudflare relay while your laptop sleeps."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    69,
+    60,
+    63
+   ],
+   [
+    "replace",
+    69,
+    70,
+    63,
+    64,
+    [
+     "|From|Path|"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    64,
+    65
+   ],
+   [
+    "replace",
+    71,
+    79,
+    65,
+    73,
+    [
+     "|**The Library page**|the box at the top of `/library`: paste a URL and press Enter (the same box searches when it is not a URL). \"More capture options\" beside it adds an **uploaded or dropped file**, a **note** you type, and a **Wikipedia topic** resolved to its article|",
+     "|**The bookmarklet**|drag it out of **Sync & Capture**, click it on any page|",
+     "|**Your phone, directly**|share sheet → `POST /api/share/capture` with a bearer token|",
+     "|**Your phone, through the relay**|the same call against the Cloudflare Worker, when the laptop may be asleep|",
+     "|**Instagram**|a DM, a mention, or a comment on a reel — through the webhook or the relay|",
+     "|**Your browser**|continuous capture of Firefox-family bookmarks — off by default, `amethyst bookmarks enable` then `amethyst bookmarks sync`|",
+     "|**The agent**|`log_library_item` — \"save this link\", \"remember this recipe\"|",
+     "|**Anything with a URL**|the generic path: normalise, check it is not a private address, deduplicate, then try Instagram, X, YouTube, Pinterest, then plain readable text|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    83,
+    73,
+    77
+   ],
+   [
+    "replace",
+    83,
+    84,
+    77,
+    78,
+    [
+     "docs/architecture/library.md."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    91,
+    78,
+    85
+   ],
+   [
+    "replace",
+    91,
+    94,
+    85,
+    88,
+    [
+     " before it binds and raises the running window instead of starting a second",
+     " server against the same SQLite file. No lock file, so nothing goes stale when",
+     " a process dies."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    88,
+    89
+   ],
+   [
+    "replace",
+    95,
+    97,
+    89,
+    91,
+    [
+     " MCP manager, automations, reminders, the journal, Instagram capture). A second",
+     " uvicorn worker would run all six twice against one database."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    91,
+    92
+   ],
+   [
+    "replace",
+    98,
+    100,
+    92,
+    94,
+    [
+     " `BackgroundTasks`, so a client that vanishes mid-turn does not leave a reader",
+     " behind; stream resume has an explicit budget."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    94,
+    95
+   ],
+   [
+    "replace",
+    101,
+    103,
+    95,
+    97,
+    [
+     " terminal manager are reaped by process group on shutdown; stale subagents are",
+     " auto-cancelled when their heartbeat expires."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    97,
+    98
+   ],
+   [
+    "replace",
+    104,
+    105,
+    98,
+    99,
+    [
+     " write, because the operation, not the tool, is what gets approved."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    110,
+    99,
+    104
+   ],
+   [
+    "replace",
+    110,
+    113,
+    104,
+    107,
+    [
+     " `write_file`, `run_shell_command:read-only` vs. destructive — and approving a",
+     " read never approves a write. Standing approvals can be revoked anytime in",
+     " Settings."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    107,
+    108
+   ],
+   [
+    "replace",
+    114,
+    116,
+    108,
+    110,
+    [
+     " code lifecycle. Write one in the app, import a link, or install from the",
+     " catalogue."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    110,
+    111
+   ],
+   [
+    "replace",
+    117,
+    118,
+    111,
+    112,
+    [
+     " streamable HTTP — registers into one flat tool registry."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    112,
+    113
+   ],
+   [
+    "replace",
+    119,
+    120,
+    113,
+    114,
+    [
+     " automatic task name correction and error recovery."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    114,
+    115
+   ],
+   [
+    "replace",
+    121,
+    122,
+    115,
+    116,
+    [
+     " hard limits prevent token explosion."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    127,
+    116,
+    121
+   ],
+   [
+    "replace",
+    127,
+    128,
+    121,
+    122,
+    [
+     "Download and run standalone installers across macOS, Windows, and Linux directly from GitHub Releases or the in-app `/install` page:"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    149,
+    122,
+    143
+   ],
+   [
+    "replace",
+    149,
+    150,
+    143,
+    144,
+    [
+     "builds the frontend, and opens **http://127.0.0.1:8000**. See docs/architecture/desktop.md."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    167,
+    144,
+    161
+   ],
+   [
+    "replace",
+    167,
+    168,
+    161,
+    162,
+    [
+     "Quickstart for the full guide, including OAuth connectors and"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    180,
+    162,
+    174
+   ],
+   [
+    "replace",
+    180,
+    181,
+    174,
+    175,
+    [
+     " not just the tool."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    183,
+    175,
+    177
+   ],
+   [
+    "replace",
+    183,
+    184,
+    177,
+    178,
+    [
+     " markdown in `~/.amethyst/library/`."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    178,
+    179
+   ],
+   [
+    "replace",
+    185,
+    186,
+    179,
+    180,
+    [
+     " the test suite."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    180,
+    181
+   ],
+   [
+    "replace",
+    187,
+    188,
+    181,
+    182,
+    [
+     " \"any page the user happens to visit\" is not an acceptable set of callers."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    198,
+    182,
+    192
+   ],
+   [
+    "replace",
+    198,
+    199,
+    192,
+    193,
+    [
+     "See CONTRIBUTING.md for the conventions the codebase holds —"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    204,
+    193,
+    198
+   ],
+   [
+    "replace",
+    204,
+    205,
+    198,
+    199,
+    [
+     "Start at **docs/README.md** for the full index. The main ones:"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    199,
+    200
+   ],
+   [
+    "replace",
+    206,
+    207,
+    200,
+    201,
+    [
+     "|Doc|What it covers|"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    201,
+    202
+   ],
+   [
+    "replace",
+    208,
+    218,
+    202,
+    212,
+    [
+     "|QUICKSTART.md|2-minute start, setup wizard, Ollama, FAQ|",
+     "|docs/CONFIGURATION_GUIDE.md|Every integration: providers, OAuth, Cloudflare relay, Library capture|",
+     "|docs/architecture/overview.md|Layer diagram, request lifecycle, design principles, ADRs|",
+     "|docs/architecture/library.md|The Library deep dive: all eight capture paths, storage, enrichment, search|",
+     "|docs/interface.md|The web UI: views, keyboard bindings, design rationale|",
+     "|docs/architecture/desktop.md|The desktop app: launching, startup order, single instance, tray, global shortcut|",
+     "|docs/architecture/connectors.md|What a connector is, what is offered, local vs. Composio ownership|",
+     "|docs/deployment.md|Local single-process vs. Vercel + Render split deploy|",
+     "|relay/README.md|The Cloudflare Worker: why it exists, deploy, routes, the share token|",
+     "|CONTRIBUTING.md|Setup, conventions, rules of the codebase|"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    225,
+    212,
+    219
+   ],
+   [
+    "replace",
+    225,
+    248,
+    219,
+    220,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    257,
+    220,
+    229
+   ],
+   [
+    "replace",
+    257,
+    260,
+    229,
+    232,
+    [
+     " - Create a free account at agentmail.to (free tier allows 100 sends/day).",
+     " - Create an inbox and obtain your `AGENTMAIL_API_KEY` and `AGENTMAIL_INBOX_ID`.",
+     " - Set `NOTIFIER_RECIPIENT_EMAIL` to your destination email address. (Recipients are strictly env-configured; the LLM never chooses recipients)."
+    ]
+   ],
+   [
+    "equal",
+    260,
+    262,
+    232,
+    234
+   ],
+   [
+    "replace",
+    262,
+    264,
+    234,
+    236,
+    [
+     " - Create a free database at turso.tech (`turso db create amethyst-notifier`).",
+     " - Copy your database URL (`TURSO_DATABASE_URL`) and create an auth token (`turso db tokens create amethyst-notifier` -> `TURSO_AUTH_TOKEN`)."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    266,
+    236,
+    238
+   ],
+   [
+    "replace",
+    266,
+    274,
+    238,
+    246,
+    [
+     " - In your GitLab repository, go to **Settings > CI/CD > Variables** and add:",
+     " - `NOTIFIER_RECIPIENT_EMAIL`, `AGENTMAIL_API_KEY`, `AGENTMAIL_INBOX_ID`",
+     " - `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`",
+     " - `COMPOSIO_API_KEY`, `GROQ_API_KEY` (or `GEMINI_API_KEY`)",
+     " - `DISCORD_BOT_TOKEN` (optional)",
+     " - Go to **Build > Pipeline schedules** and create two schedules:",
+     " - **Morning Briefing**: Cron `30 2 * * *` (08:00 IST), Variable: `JOB` = `brief`.",
+     " - **Weekly Digest**: Cron `0 3 * * 0` (Sunday mornings), Variable: `JOB` = `digest`."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    286,
+    246,
+    258
+   ],
+   [
+    "replace",
+    286,
+    292,
+    258,
+    259,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    293,
+    259,
+    260
+   ],
+   [
+    "replace",
+    293,
+    295,
+    260,
+    261,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "b773bb5dc269+2": {
+  "fn": "GW2Treasures/gw2treasures.com",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# gw2treasures.com"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**gw2treasures.com** is a Guild Wars 2 database powered by the official API."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    7,
+    3,
+    7
+   ],
+   [
+    "replace",
+    7,
+    12,
+    7,
+    8,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    23,
+    8,
+    19
+   ],
+   [
+    "replace",
+    23,
+    24,
+    19,
+    20,
+    [
+     "The website uses Next.js and the code is found in apps/web and packages/ui."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    31,
+    20,
+    27
+   ],
+   [
+    "replace",
+    31,
+    32,
+    27,
+    28,
+    [
+     "The workers powering all background tasks of gw2treasures.com are located in apps/worker. You can see the currently queued jobs on the /status/jobs page when running the frontend."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    42,
+    28,
+    38
+   ],
+   [
+    "delete",
+    42,
+    43,
+    38,
+    38
+   ],
+   [
+    "equal",
+    43,
+    51,
+    38,
+    46
+   ],
+   [
+    "replace",
+    51,
+    52,
+    46,
+    47,
+    [
+     "1. Make your changes in schema.prisma"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    65,
+    47,
+    60
+   ],
+   [
+    "replace",
+    65,
+    66,
+    60,
+    61,
+    [
+     "If you need to work on features that required you to be logged in, you need to create a new application on gw2.me. Then add the generated `client_id` and `client_secret` in `apps/web/.env.local`:"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    74,
+    61,
+    69
+   ],
+   [
+    "replace",
+    74,
+    75,
+    69,
+    70,
+    [
+     "You can also run gw2.me locally (gw2.me repository), then you also need to set `GW2ME_URL` to `http://localhost:4000/`."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    70,
+    71
+   ],
+   [
+    "replace",
+    76,
+    78,
+    71,
+    72,
+    [
+     "You can also add the `Admin` role to your user if required, see Database Access."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    81,
+    72,
+    75
+   ],
+   [
+    "replace",
+    81,
+    82,
+    75,
+    76,
+    [
+     "The e2e tests are located in e2e."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    112,
+    76,
+    106
+   ],
+   [
+    "replace",
+    112,
+    113,
+    106,
+    107,
+    [
+     "**gw2treasures.com** is licensed under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

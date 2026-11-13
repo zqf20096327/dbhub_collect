@@ -3399,5 +3399,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7ed3affab27c": {
+  "identity": {
+   "one_liner": "本地运行的媒体整理工具，用感知哈希去重、EXIF 按日期归档并支持设备端 AI 分类。",
+   "review": "Clean-Backup 是一个媒体库整理工具，用于去重、按日期归档、场景与人脸分类、压缩和可选的 Google Drive/S3 同步，全部在本地运行。核心去重基于 Rust 实现的 DCT 感知哈希（PyO3 桥接 Python），ML 推理使用 ONNX Runtime，前后端为 Flask + React，打包为单个 Docker 镜像，依赖 SQLite 存储。需注意媒体目录以读写方式挂载，官方建议保留备份。",
+   "highlights": [
+    "基于感知哈希的重复检测，可识别缩放、重压缩、格式转换后的视觉重复文件，汉明距离阈值可在 0 到 10+ 之间调整",
+    "集成 MobileNetV3 场景分类（15 类）、YuNet 人脸检测与 ArcFace 人脸嵌入，模型经 ONNX 本地推理，低置信度结果进入人工复核队列",
+    "所有文件操作记录日志并支持事务性回滚，含会话过滤与 JSON 导出；支持 watchdog 监视目录触发可配置的处理流水线"
+   ],
+   "use_cases": [
+    "整理散落在多设备间的照片/视频库：识别跨设备的重复副本并按 Year/Month 目录归档",
+    "在本地离线环境中对图片做场景标签和人脸分组，数据不出本机",
+    "通过 docker run 挂载媒体目录一键启动 Web 控制台，配合 drop folder 自动执行分类-归档-去重-同步流水线"
+   ]
+  },
+  "sha": "7ed3affab27c",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3100,5 +3100,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "841c367837d9": {
+  "identity": {
+   "one_liner": "本地优先的多平台消息收件箱，聚合 Google Messages、WhatsApp 与 Signal 并通过 MCP 暴露",
+   "review": "OpenMessage 用 Go 实现本地运行的消息工作区，基于 mautrix/gmessages 协议库配对 Android 手机收发 SMS/RCS，并以伴随设备方式接入 WhatsApp 和 Signal。数据存于本地 SQLite，提供 macOS 原生应用与 localhost Web UI，可通过 stdio、HTTP 或 SSE 向 MCP 客户端开放收发、搜索、导入等工具。Google 配对需账号加 emoji 确认（不支持二维码），构建需 Go 1.22+。",
+   "highlights": [
+    "支持读取与发送 SMS/RCS、WhatsApp、Signal 消息，包含媒体、回复、转发、表情回应与定时发送",
+    "通过 stdio、Streamable HTTP 或 SSE 提供 MCP 工具，包含会话查询、全文搜索、发送、导入与统计生成",
+    "使用本地 SQLite 存储数据，支持从 Google Chat、iMessage、WhatsApp 导出及 Signal Desktop 导入历史"
+   ],
+   "use_cases": [
+    "在 Mac 或本地 Web UI 统一查看和回复多个平台的消息",
+    "让 Claude Code 等 MCP 客户端读写本地消息库",
+    "用演示模式生成截图或录制演示，避免真实消息进入界面"
+   ]
+  },
+  "sha": "841c367837d9",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bc030e87a3dc": {
+  "identity": {
+   "one_liner": "为 TUI AI 编码助手提供跨工具持久记忆与知识库的 MCP 插件",
+   "review": "total-recall 是一个面向 Claude Code、Copilot CLI、Cursor、Cline 等 TUI 编码助手的记忆插件，通过 MCP 服务器实现会话间、跨工具、跨设备的持久记忆。它采用 Hot/Warm/Cold 三层记忆模型，每条提示注入受 4000 token 预算约束，检索结合 BM25 与向量相似度，嵌入模型 bge-small-en-v1.5 经 ONNX 本地运行，默认本地 SQLite 存储，无需 API 密钥；团队可配置 Postgres/pgvector 后端。",
+   "highlights": [
+    "三层记忆模型（Hot/Warm/Cold）加 sticky 固定标记：Hot 层上限 50 条、每条 1200 字符并受 4000 token 预算约束自动注入；Warm 层条目在 access_count ≥ 5 且 decay_score ≥ 0.7 时晋升",
+    "混合检索：BM25 全文搜索与余弦向量相似度合并排序，BM25/向量权重可通过 [search] fts_weight 调整",
+    "内置 local Web UI（total-recall ui 命令）提供 Dashboard、Memory、Knowledge Base、Usage 等面板，并支持按主机、项目、时间窗细分记录 token 消耗"
+   ],
+   "use_cases": [
+    "在不同 TUI AI 编码助手（Claude Code、Copilot CLI、Cursor、Cline 等）之间共享偏好、纠错与架构决策等记忆，切换工具无需重新输入上下文",
+    "将文档、README、API 参考与架构笔记摄入知识库（Cold 层），供语义检索在相关时调用",
+    "通过 `TOTAL_RECALL_DB_PATH` 指向云同步文件夹实现记忆跨设备迁移，或为团队配置共享 Postgres 后端"
+   ]
+  },
+  "sha": "bc030e87a3dc",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

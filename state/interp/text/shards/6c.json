@@ -3063,5 +3063,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2756310f3e57": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL v15+ 实例的监控管理环境，内置可选 AI 智能体",
+   "review": "pgEdge AI DBA Workbench 是一个用于监控和管理 PostgreSQL v15+ 实例（含 Supabase、Amazon RDS）的统一环境，由 Collector、Server、Alerter、Client 四个组件构成，通过 MCP Server 向语言模型暴露工具与数据源。LLM 可在云端（如 Claude）与本地 Ollama 模型间切换，支持气隙环境。安装方式包括二进制文件、源码构建、Docker 容器及 pgEdge 软件包仓库。",
+   "highlights": [
+    "由 Collector（采集指标）、Server（提供 MCP 工具与资源）、Alerter（阈值与 AI 异常检测生成告警）、Client（Web 界面）四个组件构成",
+    "架构支持在云端 LLM（如 Claude）与本地 Ollama 模型之间切换",
+    "可通过二进制文件、源码构建、Docker 容器或 pgEdge 软件包安装"
+   ],
+   "use_cases": [
+    "监控 PostgreSQL v15+ 实例，包括 Supabase 和 Amazon RDS 等托管环境",
+    "在气隙或安全环境中使用本地模型进行数据库诊断",
+    "以自然语言查询、分析和管理分布式集群（如 Spock 复制状态与集群配置）"
+   ]
+  },
+  "sha": "2756310f3e57",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0f5632a24ffa": {
+  "identity": {
+   "one_liner": "从表格数据生成并校验 ISO 20022 pain.001/pain.008 支付文件的 Python 工具",
+   "review": "Pain001 是一个 Python 库与 CLI，用于从 CSV、SQLite、JSON、JSONL、Parquet 等输入生成 ISO 20022 支付文件（pain.001.001.03–13、pain.008），并依据内置 XSD 与 scheme 规则（含防重复、CEL 策略）校验输出，另提供 pain.002/camt.053 解析与合成构建、REST API、MCP 与 LSP 服务。面向需要构建支付文件流水线的开发者；项目明确说明不含 EBICS/SWIFT 连接与真实结算能力，插件以进程权限运行且不受沙箱限制，由单一维护者维护。",
+   "highlights": [
+    "从 CSV、SQLite、JSON、JSONL 或 Parquet 等表格数据生成 pain.001.001.03–13 与 pain.008.001.02/.08 XML，写入文件前经内置 XSD 校验",
+    "提供 XSD 与 scheme 规则（含 anti-duplicate、可选 CEL 策略）校验，可经 CLI、REST API、GitHub Action 或 pre-commit hook 执行 `pain001 check`，输出文本/JSON/SARIF",
+    "附带 pain.002 与 camt.053 解析器及测试用构建器、mockbank 合成应答服务，并提供 MCP 服务器、LSP 服务器与 XML-DSig 签名、显式 SFTP 上传等可选能力"
+   ],
+   "use_cases": [
+    "在支付文件流水线中把数据库或表格记录批量转换为银行可提交前的 ISO 20022 XML 文件",
+    "在 CI 或编辑器中对已有支付数据文件做 XSD 与 scheme 规则校验诊断",
+    "为集成测试生成合成 pain.002 回执与 camt.053 对账单样本，或经 MCP/LSP 将支付数据校验接入智能体工具与编辑器"
+   ]
+  },
+  "sha": "0f5632a24ffa",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d0382a255511": {
+  "identity": {
+   "one_liner": "自托管图书库与阅读进度同步服务器，单个 Go 二进制 + SQLite。",
+   "review": "liseur-sync 是 Liseur 的配套服务器，提供书库管理与阅读位置同步，并兼容 kosync API 供 KOReader、CrossPoint 使用。程序为单 Go 二进制，默认 SQLite，可选 PostgreSQL，支持多用户。位置更新以追加日志存储，书名识别不依赖文件路径；部署支持 Docker、rootless Podman 或源码构建。",
+   "highlights": [
+    "提供原生 REST API 与 kosync 兼容 API，支持 OPDS 1.2/2.0 目录和 EPUB 索引搜索",
+    "阅读位置以 append-only 日志存储，可合并多设备更新并派生阅读会话与统计",
+    "内置浏览器 EPUB 阅读器（PWA，支持离线）、m4b 有声书播放及可选 Audiobookshelf 章节同步"
+   ],
+   "use_cases": [
+    "在 KOReader、CrossPoint、Liseur 与浏览器阅读器之间同步阅读进度与阅读时长统计",
+    "自托管 EPUB/m4b 书库，通过 OPDS 目录分发书籍并按账户授予文件夹访问权限",
+    "将已有 KOReader 同步服务器的位置数据通过镜像功能保持同步"
+   ]
+  },
+  "sha": "d0382a255511",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1670e9de0357": {
+  "identity": {
+   "one_liner": "面向 AI 代码智能体的 PolarDB-X Agent Skills 文档集",
+   "review": "该仓库为 AI 代码智能体提供 PolarDB-X 相关的 Agent Skills，包含 polardbx-sql、polardbx-ccl、polardbx-online-ddl 等 12 个 Skill，覆盖 SQL 编写、DDL 变更、列存索引、运维管理等场景。面向使用 AI 智能体操作 PolarDB-X 的开发者，可通过 Qoder Plugin、skills.sh 或符号链接方式安装，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "包含 12 个 Skill，覆盖 SQL 编写与兼容性、Online DDL、列存索引、TTL 归档、执行计划分析、云上运维等场景",
+    "支持 Qoder Plugin、skills.sh（npx skills add）和手动符号链接三种安装方式",
+    "提供 sql-review Skill，可全仓库/模块/Git 增量扫描 SQL，并用 mock 数据与 EXPLAIN 分析索引使用"
+   ],
+   "use_cases": [
+    "在 AI 代码智能体中生成和改写 PolarDB-X 企业版 SQL，处理 MySQL 兼容性差异",
+    "数据库运维与开发任务，如 DDL 锁表风险评估、大表 Keyset 分页遍历、冷数据归档",
+    "对代码库中的 SQL 进行提取与索引使用分析"
+   ]
+  },
+  "sha": "1670e9de0357",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

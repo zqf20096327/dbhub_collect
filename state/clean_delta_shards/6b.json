@@ -26945,5 +26945,306 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "fc22d56bc186+2": {
+  "fn": "nemo-crypto/pay",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "equal",
+    0,
+    7,
+    0,
+    7
+   ],
+   [
+    "replace",
+    7,
+    17,
+    7,
+    17,
+    [
+     "",
+     "|方式|用户如何付款|本项目的业务结果|接入重点|独立教程|",
+     "|---|---|---|---|---|",
+     "|**微信支付**|小程序、微信网页、H5、PC扫码、App|CNY付款后增加平台点数|场景与AppID/OpenID隔离、API v3签名、通知解密、主动查单|微信支付|",
+     "|**Stripe**|信用卡，经Stripe Checkout|储值成功，增加平台点数|Session、原始body验签、幂等入账、退款冲回|Stripe|",
+     "|**Allscale**|用收银台支持的USDT/USDC等稳定币付款|储值成功，增加平台点数|Checkout Intent、HMAC、金额核对、链上确认|Allscale|",
+     "|**MoonPay**|法币买币，由托管页完成KYC/支付|USDC交付到用户钱包|URL签名、Webhook key、外部ID查询|MoonPay|",
+     "|**Alchemy Pay**|法币买币，由Ramp Page完成KYC/支付|USDC交付到用户钱包|参数排序签名、v4查询、FINISHED状态|Alchemy Pay|",
+     "|**Transak**|法币买币，经一次性Widget Session|USDC交付到用户钱包|Token缓存、Session API、JWT通知|Transak|",
+     "|**Ramp**|法币买币，经Hosted Widget|USDC交付到用户钱包|ECDSA、公钥、purchaseViewToken、资产精度|Ramp|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    30,
+    17,
+    30
+   ],
+   [
+    "replace",
+    30,
+    34,
+    30,
+    31,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    38,
+    31,
+    35
+   ],
+   [
+    "replace",
+    38,
+    39,
+    35,
+    36,
+    [
+     "默认`PAY_MODE=demo`，只允许监听本机。程序直接读取环境变量，**不会自动加载.env文件**。完整配置见 .env.example，数据库目录已被Git忽略。"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    36,
+    39
+   ],
+   [
+    "replace",
+    42,
+    51,
+    39,
+    48,
+    [
+     "|通道|在演示页执行|预期结果|",
+     "|---|---|---|",
+     "|微信支付|选择NT$1000 → 微信支付 → 选择五种场景之一 → 模拟成功|succeeded，增加2000点；冻结CNY报价（演示¥222.23）|",
+     "|Stripe|选择NT$1000 → Stripe → 前往支付 → 模拟成功|succeeded，增加2000点|",
+     "|Allscale|选择NT$1000 → Allscale → 前往支付 → 模拟成功|succeeded，增加2000点，记录加密支付信息|",
+     "|MoonPay|选择MoonPay → 30 USD → 创建 → KYC通过 → 付款 → 交付|completed，29模拟USDC到用户钱包|",
+     "|Alchemy Pay|选择Alchemy Pay → 30 USD → 创建 → KYC通过 → 付款 → 交付|completed，29模拟USDC到用户钱包|",
+     "|Transak|选择Transak → 30 USD → 创建 → KYC通过 → 付款 → 交付|completed，29模拟USDC到用户钱包|",
+     "|Ramp|选择Ramp → 30 USD → 创建 → KYC通过 → 付款 → 交付|completed，29.000000模拟USDC到用户钱包|"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    48,
+    51
+   ],
+   [
+    "replace",
+    54,
+    55,
+    51,
+    52,
+    [
+     "微信支付普通商户使用CNY：`nt_amount`仍是TWD业务额度，实际人民币分金额在`payment_amount_minor`中；报价由服务端`WECHAT_TWD_PER_CNY`冻结。五个场景的身份要求、客户端调用、商户配置与当前边界见微信支付教程。"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    60,
+    52,
+    57
+   ],
+   [
+    "replace",
+    60,
+    69,
+    57,
+    66,
+    [
+     "|通道|本地自动提供的mock凭据|真实模式需要的配置|",
+     "|---|---|---|",
+     "|微信支付|临时RSA密钥、公开演示APIv3密钥、模拟prepay_id|商户私钥/证书序列号 + APIv3密钥 + 平台公钥/ID + 各场景AppID|",
+     "|Stripe|`whsec_local_demo_only`，虚拟Session|secret key + webhook secret|",
+     "|Allscale|`local-demo-key` / `local-demo-secret`|API key + API secret + TWD/USD报价|",
+     "|MoonPay|`mock-public-moonpay` / `mock-secret-moonpay` / `mock-webhook-moonpay`|public key + secret key + webhook key|",
+     "|Alchemy Pay|`mock-public-alchemypay` / `mock-secret-alchemypay`|appId + appSecret|",
+     "|Transak|`mock-public-transak` / `mock-secret-transak` / `mock-transak-partner-access-token`|API key + secret，自动获取并缓存token|",
+     "|Ramp|`mock-public-ramp`，公开本地测试ECDSA密钥对|hostApiKey + 官方环境公钥；逐单保存view token|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    66,
+    69
+   ],
+   [
+    "replace",
+    72,
+    81,
+    69,
+    78,
+    [
+     "|通道|创建/打开收银台|Webhook认证|主动查询|",
+     "|---|---|---|---|",
+     "|微信支付|JSAPI（含小程序）/H5/Native/App下单|平台RSA验签 + AES-256-GCM解密|商户单号GET查单，响应验签|",
+     "|Stripe|`POST /v1/checkout/sessions`|Stripe-Signature，原始body + HMAC|Session GET|",
+     "|Allscale|`POST /v1/checkout_intents/`|原始body哈希 + HMAC canonical string|Intent详情GET|",
+     "|MoonPay|服务端签名Widget URL|Moonpay-Signature-V2 + Webhook key|`/v1/transactions/ext/{id}`，返回数组|",
+     "|Alchemy Pay|排序参数签名Ramp Page|timestamp + 方法 + 路径 + 排序JSON|`/open/api/v4/merchant/query/trade`|",
+     "|Transak|缓存Token → `POST /api/v2/auth/session`|Partner Access Token验证HS256 JWT|`/partners/api/v2/order/{id}`|",
+     "|Ramp|Hosted Widget参数|secp256k1 ECDSA + 稳定JSON|`/host-api/purchase/{id}?secret=...`|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    135,
+    78,
+    132
+   ],
+   [
+    "replace",
+    135,
+    141,
+    132,
+    133,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    143,
+    133,
+    135
+   ],
+   [
+    "replace",
+    143,
+    151,
+    135,
+    143,
+    [
+     "|场景|演示与处理方式|",
+     "|---|---|",
+     "|回调丢失|勾选丢回调，等待约30秒Worker；买币页也可点击“向网关重新查询”|",
+     "|重复/乱序回调|持久化去重，完成后不被旧pending覆盖|",
+     "|金额/钱包/币种不符|不完成业务，转人工核对|",
+     "|创建请求超时|保留原幂等订单；非明确支持幂等的网关不盲目重建|",
+     "|浏览器关闭或回跳|不直接当取消/成功，查询服务端实际结果|",
+     "|Stripe全额退款|验证退款通知后冲回点数；部分退款转复核|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    160,
+    143,
+    152
+   ],
+   [
+    "replace",
+    160,
+    169,
+    152,
+    161,
+    [
+     "|教程|重点|",
+     "|---|---|",
+     "|微信支付完整教程|五场景选择、登录身份、人民币报价、商户签名、平台验签、通知解密与查询恢复|",
+     "|Stripe完整教程|Checkout、测试卡、事件注册、订单恢复、全额退款|",
+     "|Allscale完整教程|HMAC、USD报价、网络/币种、少付和未知建单|",
+     "|MoonPay完整教程|三种key、URL签名、外部ID数组查询|",
+     "|Alchemy Pay完整教程|Page签名、v4查询、新签名、付款/交付区别|",
+     "|Transak完整教程|Token缓存、Session、JWT、真实用户IP和引用绑定|",
+     "|Ramp完整教程|ECDSA、资产精度、view token和回调关联|"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    170,
+    161,
+    162
+   ],
+   [
+    "replace",
+    170,
+    171,
+    162,
+    163,
+    [
+     "首页提供七通道统一入口，每家均可直接进入演示或教程。教程内嵌到Go二进制，本地 `/guides/` 是总入口，`/guides/stripe` 等提供可离线阅读的页面，含目录、代码复制和手机端表格滚动。追加 `?format=raw` 或 `.md` 可取得 Markdown 原文。更多参考前端接入说明见 接入与运维，买币公共接口见 买币API说明。"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    180,
+    163,
+    172
+   ],
+   [
+    "replace",
+    180,
+    186,
+    172,
+    173,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    192,
+    173,
+    179
+   ],
+   [
+    "replace",
+    192,
+    200,
+    179,
+    180,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    204,
+    180,
+    184
+   ],
+   [
+    "replace",
+    204,
+    205,
+    184,
+    185,
+    [
+     "提供Dockerfile及Go CI。测试与验证记录见 validation.md。本实现不包含消费扣点、通用退款发起、出款、拒付处理或原应用的营销分成；商户真实联调与生产验收仍须逐家完成。"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    215,
+    185,
+    195
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

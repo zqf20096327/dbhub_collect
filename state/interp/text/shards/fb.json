@@ -2699,5 +2699,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1dd0bbbc47a6": {
+  "identity": {
+   "one_liner": "在 AWS 上创建数据库实验环境的命令行工具",
+   "review": "easy-db-lab 用于在 AWS EC2 上自动化创建用于测试、基准测试和学习的数据库实验环境，支持 Cassandra、ClickHouse 及任意兼容 Kubernetes 的数据库。它通过 Packer 构建预装多版本数据库的 AMI，在节点上运行 K3s，并内置 Prometheus、Grafana、OpenTelemetry 等观测组件。使用需配置 AWS 凭证和四项 IAM 策略；Homebrew 或发布版安装目前要求使用 us-west-2 区域。README 建议使用独立的 AWS 账户以实现资源和成本隔离。",
+   "highlights": [
+    "支持 Apache Cassandra 2.2 至 trunk 版本、混合版本集群、自定义分支，以及带可配置副本的分片 ClickHouse 集群，并可通过 Kubernetes 清单部署任意 K8s 兼容数据库",
+    "通过 Packer 构建单个 AMI，预装多个 Cassandra 版本、ClickHouse、bcc-tools、async-profiler、cassandra-easy-stress 和 K3s",
+    "内置 Prometheus/Grafana 仪表盘、OpenTelemetry 追踪、火焰图与内核级性能指标；提供 REPL 模式 CLI、REST 状态端点和 Homebrew/Docker 两种安装方式"
+   ],
+   "use_cases": [
+    "在隔离的 AWS 环境中搭建 Cassandra 集群，进行版本切换（如 use 4.1 配合 -j 指定 Java 版本）、配置修改与压力测试",
+    "为 ClickHouse、OpenSearch、Spark EMR 等数据组件搭建可观测的测试与基准环境",
+    "通过容器镜像在 CI/CD 流水线中运行环境创建命令"
+   ]
+  },
+  "sha": "1dd0bbbc47a6",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "72068c5e817d": {
+  "identity": {
+   "one_liner": "以 Git 事务层强制约束编码代理的 Go 运行时",
+   "review": "Nomos 是一个 Go 编写的运行时工具，运行于编码代理（Claude Code、Cursor 等）与 Git 仓库之间。它通过 nomos init 初始化仓库，注入 Git 钩子与 AGENTS.md 协议，将任务隔离在独立 git worktree 中，并以 42 项 AST 质量门与两阶段提交合并到 main。适用于希望通过工具层约束代理行为的开发团队；要求仓库使用 Git 且代理需读取注入的协议文件。",
+   "highlights": [
+    "提供 42 项多语言 AST 检查门，覆盖 Go、TypeScript、Python、Rust、Ruby、C/C++、Java、Kotlin、C#，检测空桩、跳过的测试、函数超长等问题",
+    "将任务隔离在独立 git worktree 中，以 INT-*/SUB-* 因果 DAG 分离规格与代码，main 上的直接提交会失败",
+    "提供基于 SQLite（mneme.db）的凭据门控记忆与原子 2PC 发布，并写入 Git Notes 验证回执"
+   ],
+   "use_cases": [
+    "使用 Claude Code、Cursor 等编码代理的仓库，需要防止代理绕过失败测试或留下空实现",
+    "需要将代理任务隔离在独立 worktree 并在合并前强制执行质量检查的团队",
+    "需要审计回执与任务状态机（IDLE→PLAN→EDIT→REVIEW→SYNC→LEARN）管理的多代理开发流程"
+   ]
+  },
+  "sha": "72068c5e817d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

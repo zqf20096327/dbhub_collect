@@ -3278,5 +3278,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f617e81e785f": {
+  "identity": {
+   "one_liner": "本地运行的 Rust 个人助理，内存按回合写入可查看的 append-only 账本",
+   "review": "Joy 是一个完全在本机运行的个人助理：Rust 核心实现代理循环、记忆与 29 个工具，TypeScript 提供仪表盘与聊天网关，Python 为轻量 SDK。每回合写入一条 append-only 账本记录，含检索决策、工具调用与模型成本；支持 FTS5 记忆索引、12 家 LLM 供应商与 Ollama 离线模式。适合希望在本地保存对话与密钥的个人用户；写文件、执行命令等功能需环境变量显式开启。",
+   "highlights": [
+    "每回合向 append-only 账本写入一条记录，包含检索决策、工具执行、模型与 token 用量，FTS5 索引可从账本重建",
+    "内置 29 个工具（21 个默认开启，8 个需开关），支持 MCP 服务器、cron 定时任务与子代理并发委派（最多 4 个）",
+    "预适配 12 家 LLM 供应商及 Ollama，密钥优先写入系统钥匙串，支持 JSON-RPC 协议（45 个方法）与确定性回放评测"
+   ],
+   "use_cases": [
+    "在终端、仪表盘或 Telegram/Discord/微信/飞书网关上进行本地对话与记忆管理",
+    "需要查看和审计助理记忆与每回合成本的隐私敏感场景",
+    "通过 Skills、MCP 连接器与定时任务扩展助理能力（写文件、执行命令等需显式开关）"
+   ]
+  },
+  "sha": "f617e81e785f",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "046a134d1c85": {
+  "identity": {
+   "one_liner": "自托管轻量媒体服务器，单 Rust 二进制内置 Web 应用，GPU 转码流媒体。",
+   "review": "Kinora 是一个用 Rust 编写的自托管媒体服务器，用于管理电影和电视剧媒体库：扫描本地文件后从 TMDB 拉取元数据与海报，在浏览器中播放，必要时经 FFmpeg 转码为 HLS。存储用 SQLite，全部功能打包为单个二进制。面向想在自有设备上架设影视库的用户，支持 Docker 与 Unraid 部署，采用 GPLv2 许可证，仓库当前为私有状态。",
+   "highlights": [
+    "单二进制包含服务端与 Web 界面，SQLite 存储，Docker 一条命令启动",
+    "按设备能力决定直播或转码，支持 NVENC、Quick Sync、VAAPI、VideoToolbox 及 CPU 回退",
+    "支持 HDR10/HLG/Dolby Vision 检测与 SDR 色调映射，内置用户角色、字幕、观看进度管理"
+   ],
+   "use_cases": [
+    "在家庭服务器或 NAS（含 Unraid）上集中管理电影和剧集并通过浏览器观看",
+    "GPU 硬件可用时对无法直接播放的格式按需转码，包括 HDR 内容映射到 SDR",
+    "通过 Nginx/Caddy/Tailscale 反代或子路径部署访问"
+   ]
+  },
+  "sha": "046a134d1c85",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

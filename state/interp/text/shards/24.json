@@ -2760,5 +2760,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "65675b628abf": {
+  "identity": {
+   "one_liner": "基于 Ansible IaC 的自托管 PostgreSQL 发行版，集成 HA、备份与监控",
+   "review": "Pigsty 是 Apache-2.0 协议的开源 PostgreSQL 发行版，通过 Ansible playbook 以声明式配置部署数据库集群。它打包了 626 个 PG 扩展和 12 种 PG 内核分支，集成 Patroni 高可用、pgBackRest PITR 备份及 Victoria/Grafana 监控栈。面向需要在自有 Linux 节点（EL 8/9/10、Debian、Ubuntu）上运行数据库的运维与开发人员，可在裸 Linux 上运行，也支持 Docker 方式。",
+   "highlights": [
+    "提供 HA 集群（Patroni+Etcd）、PITR 备份（pgBackRest）和基于 Victoria/Grafana 的监控模块",
+    "打包 626 个 PostgreSQL 扩展与 12 种内核分支（含 Citus、Babelfish、IvorySQL、PolarDB 等），支持 16 种 Linux 平台",
+    "通过单一配置文件中的 300+ 参数声明集群、用户、数据库与服务，可组合 PGSQL/INFRA/NODE/ETCD 及 Redis、MinIO、Docker 等可选模块"
+   ],
+   "use_cases": [
+    "在自有节点或数据中心部署多节点 HA PostgreSQL 集群，替代云托管数据库服务",
+    "使用 Citus 做水平分片，或以 Babelfish/IvorySQL/OpenHalo 等内核模拟其他数据库协议",
+    "自托管 Supabase、GitLab、Dify 等以 PostgreSQL 为核心的软件"
+   ]
+  },
+  "sha": "65675b628abf",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "33d9b03c3aaa": {
+  "identity": {
+   "one_liner": "pgrx 是用 Rust 开发 PostgreSQL 扩展的框架，提供自动化 schema 生成与安全管理。",
+   "review": "pgrx 是一个用 Rust 语言开发 PostgreSQL 扩展的框架，面向需要编写 Postgres 扩展的开发者。它通过 cargo-pgrx 提供从创建项目、安装 Postgres、运行测试到打包 RPM/DEB 的完整开发流程，并自动生成 SQL schema、将 Rust panic 转换为 Postgres ERROR。支持 Postgres 15 至 19rc2，已测试平台为 x86_64/aarch64 Linux、aarch64 macOS 和 x86_64 Windows。",
+   "highlights": [
+    "cargo-pgrx 提供 new/init/run/test/regress/package/migrate 等子命令，覆盖扩展的创建、测试与打包流程",
+    "支持通过 #[pg_extern]、#[pg_trigger]、#[derive(PostgresType)] 等宏暴露 UDF、触发器函数和自定义类型，并自动生成 SQL schema",
+    "将 Rust panic 转换为中止事务的 Postgres ERROR，内存管理遵循 Rust drop 语义，并通过 #[pg_guard] 宏保障"
+   ],
+   "use_cases": [
+    "使用 Rust 编写包含自定义函数、类型或触发器的 PostgreSQL 扩展",
+    "需要在 Postgres 15 至 19 多个版本上从同一代码库构建并测试扩展",
+    "为扩展生成 RPM/DEB 安装包以及版本升级脚本"
+   ]
+  },
+  "sha": "33d9b03c3aaa",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "83b74bf884d9": {
+  "identity": {
+   "one_liner": "让编码代理探索、转换、维护分析工程的技能与引擎组合",
+   "review": "Dex 由 Exmergo 开发，通过 Agent Skills 将编码代理连接到 exmergo-dex-core 引擎，用于探索数据库、构建 dbt 模型与语义层，并在源结构变化时检测漂移。源数据保持只读，构建在开发目标执行，查询费用先报价后执行。支持 Claude Code、Codex 等代理，需 PATH 中的 uv；不支持 claude.ai 聊天环境。",
+   "highlights": [
+    "提供 explore/transform/maintain 三个技能：映射表与连接关系、生成列画像与 Mermaid ER 图、检测模式/体量/粒度/指标定义漂移",
+    "查询防火墙拦截个人数据进入上下文，凭据不进入代理上下文；每次扫描先估算、确认并设上限，支出记录本地账本",
+    "通过连接器支持 Snowflake、BigQuery、Databricks、Redshift、Postgres、DuckDB、ClickHouse、Trino，语义层支持 dbt、Ossie、SLayer、Cube"
+   ],
+   "use_cases": [
+    "在 Claude Code 或 Codex 中让代理基于现有数仓探索表结构与连接关系后再编写 SQL",
+    "让代理以可审查 diff 的形式创建和重构 dbt 模型、测试、文档与指标定义",
+    "在源表结构或体量变化后，对比快照找出受影响的模型与指标并审查提议的修改"
+   ]
+  },
+  "sha": "83b74bf884d9",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d59b7a469fc1": {
+  "identity": {
+   "one_liner": "AI 工作负载去中心化编排控制平面，基于租约的作业唯一所有权机制",
+   "review": "AetherGrid 是面向 AI 工作负载的编排控制平面，将作业按资源需求匹配到自有计算节点并管理排队、调度、运行、重试、取消等完整生命周期。面向在审计要求下运行 AI 平台与基础设施团队，核心机制为时间限租约保证作业同时只有一个属主、租户级数据隔离、API Key 最小权限及升级演练。技术栈为 Python/FastAPI、PostgreSQL、React、Docker，关键决策以 ADR 记录。",
+   "highlights": [
+    "基于时间限租约的作业独占所有权，租约释放与结果上报按租约身份校验，过期属主无法终止作业",
+    "所有租户数据强制携带租户标识，Postgres 层拒绝无租户行，读取按调用方租户作用域隔离",
+    "除根路由与健康探针外所有路由需 API Key，扩权操作需显式 scope；提供升级演练流程比对前后数据、schema 与 API 启动"
+   ],
+   "use_cases": [
+    "多个团队或客户共用一个集群、需按租户隔离作业与数据的 AI 平台运维",
+    "节点掉线、网络分区、worker 重启后需自动回收并重新分配作业的故障恢复场景",
+    "需要对调度与隔离保证进行审计、升级前进行数据演练验证的受监管环境"
+   ]
+  },
+  "sha": "d59b7a469fc1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "433c5c70d040": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Java 分布式锁、选主与消息队列工具库",
+   "review": "Fencepost 是面向 Java 17+ 应用的分布式并发工具库，依赖仅 org.postgresql:postgresql。它提供 advisory、session、lease 三种锁（session/lease 支持 fencing token）、基于 lease 的 leader election 以及支持 at-least-once 投递、visibility timeout 和 LISTEN/NOTIFY 阻塞消费的消息队列。锁实例非线程安全，session 锁会为每个名称创建永不删除的序列，不适合高基数动态名称。",
+   "highlights": [
+    "提供 advisory、session、lease 三种锁策略，其中 session 与 lease 支持单调递增 fencing token",
+    "内置基于 lease 的 leader election，带 onElected/onRevoked 回调与自动续租检测",
+    "消息队列支持 at-least-once 投递、visibility timeout、LISTEN/NOTIFY 阻塞消费及事务内发布"
+   ],
+   "use_cases": [
+    "在仅依赖 PostgreSQL 的 Java 应用中实现分布式互斥与 fencing token 保护的写操作",
+    "多实例部署下进行 leader 选举，指定单一实例持续执行任务并在故障后自动接管",
+    "用同一数据库实现需要 at-least-once 语义的后台消息队列与事务性发布"
+   ]
+  },
+  "sha": "433c5c70d040",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8236f6f060e": {
+  "identity": {
+   "one_liner": "开源自托管投资工作台，多智能体研究结合 AI 模拟交易",
+   "review": "Squabble 是一个开源投资工作空间，支持美股、港股、A股持仓跟踪，提供多智能体多空辩论式研究报告、带风险限额的 AI 模拟盘交易和研究记忆管理。面向需要记录和复核投资决策过程的个人投资者。提供 Windows/macOS 桌面安装包和 Docker Web 部署两种方式，可接入 Codex、Claude Code 等本地 CLI 代理；数据自托管，默认无外部遥测。注意：模拟盘不会自动提交真实券商订单。",
+   "highlights": [
+    "支持美股/港股/A股持仓管理，内置 USD/HKD/CNY 换算；AI 研究采用多空辩论加批评者复核机制，生成 14 节版本化报告并保留落败论点",
+    "模拟盘 AI 交易配有硬性风险限额（日亏损熔断、单笔上限），支持手动与 MCP 代理下单，账户级暂停控制",
+    "可接入本地已安装的 Codex、Claude Code、Gemini CLI 等原生研究代理，兼容版本自动获得任务级只读研究工具"
+   ],
+   "use_cases": [
+    "对美/港/A股持仓进行日常跟踪，并定期生成多空对照研究报告",
+    "用带风险限额的模拟盘验证策略，再将研究报告以草稿形式保存到指定模拟账户复核后应用",
+    "通过自托管部署将持仓与决策数据保留在本地，接入本地 CLI 智能体进行研究协作"
+   ]
+  },
+  "sha": "b8236f6f060e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

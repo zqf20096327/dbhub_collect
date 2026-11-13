@@ -2590,5 +2590,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b47ddc96c7b1": {
+  "identity": {
+   "one_liner": "自托管音乐元数据编辑 Web 应用，含三面板界面与内置播放器",
+   "review": "Tagr 是一个自托管的 Web 应用，用于在浏览器中浏览、播放和编辑音频文件标签，标签修改直接写回音频文件。采用 Next.js、React、Prisma + SQLite 构建，通过 Docker 或 Node.js 22+ 手动安装运行，扫描 /music 目录并支持多用户与角色（admin/tagger/listener）。适用于需要集中管理音乐文件元数据的家庭服务器或 NAS 环境。",
+   "highlights": [
+    "支持内联编辑 40+ 元数据字段及自定义标签，修改直接写回 MP3、FLAC、WAV、AAC、OGG 等 10 种音频格式，并记录完整变更历史、支持逐条或批量撤销",
+    "三面板布局（文件夹树、歌曲列表、详情编辑器）配虚拟滚动、高级过滤、可自定义列，内置带波形可视化的播放器及可选 ListenBrainz scrobbling",
+    "多用户认证（bcrypt 哈希密码）与角色权限在 UI 和 API 两层生效；提供 amd64/arm64 双架构 Docker 镜像，支持通过 glob/正则排除文件夹"
+   ],
+   "use_cases": [
+    "在浏览器或移动端集中管理 NAS 或家庭服务器上的音乐文件标签与封面",
+    "多人共用音乐库时按角色分配权限：标签员可编辑，听者仅可浏览和播放",
+    "将播放记录转发到 ListenBrainz 或对接自有 ListenBrainz 兼容服务器"
+   ]
+  },
+  "sha": "b47ddc96c7b1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b11a1b28f42e": {
+  "identity": {
+   "one_liner": "面向主流 Linux 的 PostgreSQL 及扩展包管理器 CLI",
+   "review": "PIG 是一个用 Go 编写的无依赖单二进制工具，为 EL/Debian/Ubuntu 系统上的 PostgreSQL 14–18 提供内核与扩展包管理，内置含 625 个条目的扩展目录。它封装 apt/dnf 完成 repo 配置与安装，并提供实例管理、Patroni、pgBackRest、PITR 等运维命令。注意其安装的是宿主机包，在数据库内启用扩展是另一回事；部分命令需显式 --yes 才执行破坏性操作。",
+   "highlights": [
+    "支持在 amd64/arm64 的 EL 8/9/10、Debian 12/13、Ubuntu 22/24/26 上通过原生包管理器安装 PostgreSQL 14–18 及 625 个目录条目的扩展",
+    "提供 repo、ext、build、pg、pt、pb、pitr 等子命令组，部分 PIG 命令可用 -o json/-o yaml 输出结构化结果",
+    "支持别名解析（如 pg18-gis、pgsql-olap）、-v/-p 指定目标 PostgreSQL 版本或 pg_config 路径，以及 pig update 自更新与 pig ext reload 刷新目录"
+   ],
+   "use_cases": [
+    "在主流 Linux 发行版上批量配置 PGDG/PIGSTY 仓库并安装指定版本的 PostgreSQL 内核与扩展包",
+    "按名称、描述或类别模糊检索扩展并查看其在不同 OS/架构/PG 大版本下的可用性矩阵",
+    "对本地 PostgreSQL 实例及 Patroni、pgBackRest、PITR 恢复流程执行管理操作"
+   ]
+  },
+  "sha": "b11a1b28f42e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fce80e628bfa": {
+  "identity": {
+   "one_liner": "CloudNativePG 操作数的 PostgreSQL 容器镜像维护脚本仓库",
+   "review": "该仓库提供维护脚本，用于为 PostgreSQL 13–18（及 19 RC2）生成不可变容器镜像，作为 CloudNativePG 操作符在 Kubernetes 中的操作数，不用于独立运行。镜像基于 Debian slim，分 minimal、standard 和已弃用的 system 三类，支持 amd64/arm64，每周自动重建，附 SBOM、provenance 与 cosign 签名。",
+   "highlights": [
+    "提供覆盖 PostgreSQL 13–18 各主版本的镜像，基于 Debian stable/oldstable，支持 linux/amd64 与 linux/arm64 多架构",
+    "提供 minimal、standard、system 三类镜像，standard 额外包含 PGAudit、pgvector、全部 locale 及 LLVM JIT",
+    "镜像附 SBOM 与 SLSA provenance 构建证明，minimal/standard 镜像由 cosign 签名，CI 中运行 Dockle 与 Snyk 扫描"
+   ],
+   "use_cases": [
+    "在 Kubernetes 中作为 CloudNativePG 操作符的 PostgreSQL 操作数镜像",
+    "需要 SBOM、镜像签名等供应链可追溯信息的部署环境",
+    "配合 Barman Cloud 插件实现备份的 PostgreSQL 集群"
+   ]
+  },
+  "sha": "fce80e628bfa",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "87658b857b89": {
+  "identity": {
+   "one_liner": "运行于 QQ 的陪伴型 AI 桥接，经 SnowLuma 收发、DSH 思考，本地常驻",
+   "review": "一个 Node.js 编写的 QQ 机器人桥接程序，将 QQ 群聊与私聊接入 DeepSeek Harness（DSH）作为思考层，通过 SnowLuma 的 OneBot 接口收发消息。内置规则筛选加语义判断两级唤醒机制、跨会话记忆、本地控制台与状态页，支持将用户反馈整理为开发提案交给外部 coding agent 实现。仅支持 Windows 10/11，本地运行，文本聊天不需 GPU。",
+   "highlights": [
+    "提供两级消息处理：确定性规则筛选（白名单、唤醒条件、命令快路径）后，8 秒内消息合并为一次模型调用",
+    "包含 13 页本地控制台与只读实时状态页 /live，SSE 自动刷新，默认只监听 127.0.0.1",
+    "实现代码提案闭环：私聊反馈生成带验收标准的提案，由用户自己的 coding agent 在隔离副本实现，用户确认合并且失败自动回滚"
+   ],
+   "use_cases": [
+    "在 QQ 群中部署一个低频率发言、具备跨会话记忆与人物印象的群聊机器人",
+    "本地自托管场景下为个人 QQ 私聊提供长期记忆与定时提醒服务",
+    "配合 Codex、Claude Code 等 coding agent，通过私聊反馈驱动自身功能的迭代开发"
+   ]
+  },
+  "sha": "87658b857b89",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ceed171eebe": {
+  "identity": {
+   "one_liner": "检测 PostgreSQL 查询延迟回退并关联到触发部署的 Kubernetes 工具。",
+   "review": "pg-regression-radar 是一个面向在 Kubernetes 上运行 Postgres 并频繁发布应用变更的团队的工具。它定时采样 pg_stat_statements，接入 Argo CD、Argo Rollouts、Flux 或通用 webhook 的部署事件，对每条查询执行 E-divisive 变化点定位并以 Welch t 检验确认，输出查询、对应部署、变化幅度与置信分。项目以单个二进制提供 operator、manager、collector、ingester 四种命令，支持 PostgreSQL 16–18，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "对每条查询运行两阶段统计检测：E-divisive 变化点定位加 Welch t 检验确认",
+    "从 Argo CD、Argo Rollouts、Flux、Kubernetes 或通用 webhook 读取部署事件并做关联，也支持无部署事件的周期性检测",
+    "提供 operator、manager、collector、ingester 四个子命令，manager 模式将每条回退记录为 PerformanceRegression 资源并支持多集群 PostgresWatch"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上运行 CloudNativePG、Zalando 等发行版并每日多次发布，需要定位哪次部署引起查询变慢的团队",
+    "在回退发生时捕获 EXPLAIN 计划以区分执行计划变更与同计划变慢",
+    "通过 Slack、Microsoft Teams、PagerDuty 或自定义 webhook 接收回退告警，或在置信分超过阈值时中止 Argo Rollouts 金丝雀（默认关闭）"
+   ]
+  },
+  "sha": "2ceed171eebe",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

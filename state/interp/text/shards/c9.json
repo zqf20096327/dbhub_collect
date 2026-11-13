@@ -2694,5 +2694,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3af7d3760389": {
+  "identity": {
+   "one_liner": "默认只读的 PostgreSQL MCP 服务器，供 AI 编码代理安全查询与分析数据库",
+   "review": "该包提供一套 MCP 工具，让 Claude Code、Cursor 等 MCP 客户端查询 PostgreSQL：模式内省、参数化查询、EXPLAIN 执行计划、性能诊断与健康检查。默认只读，通过 ALLOW_WRITES 环境变量开启写操作；用户 SQL 经扩展查询协议发送以限制单语句执行。适用于需要接入 AI 代理的数据库开发者与 DBA。",
+   "highlights": [
+    "提供 schema 内省、pg_query、pg_explain（可选 ANALYZE）、pg_top_queries、pg_table_bloat、pg_replication_status 等工具",
+    "默认只读，pg_query 在 BEGIN READ ONLY 事务中执行并用扩展查询协议限制单语句；写操作需设置 ALLOW_WRITES=1",
+    "包含 pg_index_advisor（基于 HypoPG 假设索引的成本估算推荐）、可选审计日志与结构化工具输出"
+   ],
+   "use_cases": [
+    "让 Claude Code 或 Cursor 等代理以只读角色查询与内省生产/开发库结构",
+    "通过 pg_top_queries、pg_seq_scan_tables、pg_index_advisor 等工具排查慢查询与索引建议",
+    "以 pg_health、pg_inspect_locks、pg_replication_status 做数据库健康与复制状态检查"
+   ]
+  },
+  "sha": "3af7d3760389",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

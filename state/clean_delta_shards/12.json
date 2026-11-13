@@ -25885,5 +25885,1282 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "a53d31aadf04+2": {
+  "fn": "aliyun/data-agent-skill",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Besides invoking the service, the repository also ships **data-agent-arcvis-skill** — a meta-skill that teaches an AI agent how to author its own skill packages for Data Agent (see Authoring Skill Packages)."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "||alibabacloud-data-agent-skill (CLI)|alibabacloud-data-agent-mcp-skill (MCP Server)|"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    20,
+    14,
+    20,
+    [
+     "|Integration|Python CLI — the agent runs shell commands|Go MCP Server — 19 `data_agent_*` tools; 28 with the base gateway (9 tools), 30 with P2b summaries too (11 gateway tools)|",
+     "|Runtime requirement|Python 3.10+ with venv|Go 1.26.10+ to build the server once (or a deployed binary)|",
+     "|Session monitoring|Async worker + `sessions/<ID>/` progress files + `attach`|Built-in Session Daemon with background SSE monitoring|",
+     "|Plan confirmation (deep analysis)|Manual via `attach -q \"confirm\"`|Automatic with `auto_confirm=true`|",
+     "|Chart images|Saved under `sessions/<ID>/images/`|Returned inline as MCP ImageContent (base64)|",
+     "|Best for|Any environment that can run Python; scripting; log tailing|MCP-capable runtimes (Claude Code, Qoder, hosted runtimes)|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    32,
+    20,
+    32
+   ],
+   [
+    "replace",
+    32,
+    36,
+    32,
+    36,
+    [
+     "1. An Alibaba Cloud account with data sources managed in DMS (or use the built-in demo database `internal_data_employees`).",
+     "2. **MCP Server:** AK/STS via the credentials-go default chain (SDK-supported environment credentials or instance/workload-role provider). Providers are retained for dynamic credential retrieval and RAM AssumeRole source chaining; static STS environment values do not self-renew. The server does not hand-read `~/.aliyun/config.json` or promise CLI-profile compatibility. API Key runtime mode is removed across the Go Server, including SSE. Old YAML keys or nonempty old environment variables cause a sanitized migration error even when the gateway is disabled; see migration instructions. Inbound identity tokens/JWT, dacli `--token`, STS and OSS signatures remain supported.",
+     "3. **CLI Skill:** its authentication and setup are unchanged; follow the independent CLI instructions. Go Server migration rules do not apply to the Python skill.",
+     "4. RAM API permissions and service-side data access must both be configured; see MCP RAM requirements or CLI RAM requirements."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    43,
+    36,
+    43
+   ],
+   [
+    "replace",
+    43,
+    62,
+    43,
+    44,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    64,
+    44,
+    46
+   ],
+   [
+    "replace",
+    64,
+    65,
+    46,
+    47,
+    [
+     "Full documentation: SKILL.md · references/COMMANDS.md · references/WORKFLOWS.md · references/ANALYSIS_MODE.md"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    47,
+    50
+   ],
+   [
+    "replace",
+    68,
+    69,
+    50,
+    51,
+    [
+     "**Security remediation is implemented locally, not accepted for production release.** Build with Go **1.26.10 minimum** (or a newer supported, rescanned version) and verify/rebuild Server, dacli and platform artifacts. Historical gateway cloud results below do not verify the remediated binary. See the post-remediation release gates; real JWT-platform and differential-role gates remain open."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    75,
+    51,
+    57
+   ],
+   [
+    "replace",
+    75,
+    76,
+    57,
+    58,
+    [
+     "Register the server in your MCP client (**local-only stdio**, one SDK process identity, shown below). For HTTP/SSE, configure mandatory `identity.enabled=true`, `require_identity=true`, nonempty `auth_token` and a stable `namespace` for **every** tool/protocol request, gateway on or off. Shared group/default mappings accept trusted Header identity when JWT is absent, including with JWT enabled, or valid JWTs without tenant/agent claims. Explicitly scoped mappings still require complete matching JWT scope. Present empty, invalid or expired JWTs never fall back to headers, and valid JWT identity takes precedence over plain headers. Keep the platform token with trusted upstreams, never end users; no anonymous/global-identity fallback or automatic Header/JWT history merging is permitted. Follow the identity, storage migration, secret-file and HTTP-limit reference:"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    81,
+    58,
+    63
+   ],
+   [
+    "replace",
+    81,
+    89,
+    63,
+    64,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    97,
+    64,
+    72
+   ],
+   [
+    "replace",
+    97,
+    98,
+    72,
+    73,
+    [
+     "**Historical pre-remediation evidence (2026-10-29):** P2a automation and real-cloud discovery in stdio and configured-role HTTP/SSE passed. P2b automated tests, race and vet passed, as did independent-binary stdio/HTTP/SSE checks for all 19/28/30 configurations. Real calls verified source pagination, type filtering, sanitized details and missing-source errors; remote calls used a configured test role's STS in `cn-hangzhou`. These checks must not be treated as post-remediation acceptance. A format-preserving nonexistent ID returned HTTP 404 `DATA_SOURCE_NOT_FOUND`, not successful `Data:null`; current Get requires an object and keeps this response as `ERROR` (`GATEWAY_UPSTREAM_INCOMPATIBLE`). Success-null support is deferred for lack of a real sample. These results do not prove account-wide visibility, cross-role isolation, least privilege or production readiness. RAM machine-readable definitions and help-page authorization descriptions differ; see RAM evidence and pending acceptance."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    73,
+    74
+   ],
+   [
+    "replace",
+    99,
+    100,
+    74,
+    75,
+    [
+     "P2c/P3 and Wiki/ACL remain unimplemented. No gateway SQL history/execution, data-source writes, connection tests or Token tools are exposed. Gateway identifiers cannot be used as Data Agent `database_id`, and the existing SQL path gains no gateway row/column protection. See gateway configuration and contract."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    75,
+    76
+   ],
+   [
+    "replace",
+    101,
+    102,
+    76,
+    77,
+    [
+     "Full documentation: alibabacloud-data-agent-mcp-skill/README.md (deployment guide: stdio / Streamable HTTP / Aily multi-tenant) · alibabacloud-data-agent-mcp-skill/SKILL.md (tool reference & workflows)"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    107,
+    77,
+    82
+   ],
+   [
+    "replace",
+    107,
+    108,
+    82,
+    83,
+    [
+     "data-agent-arcvis-skill (English, with Chinese counterparts `SKILL_zh.md` / `references/*_zh.md`) is a **meta-skill** that teaches an AI agent how to author skill packages Data Agent can reliably load and follow:"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    126,
+    83,
+    101
+   ],
+   [
+    "replace",
+    126,
+    146,
+    101,
+    102,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    149,
+    102,
+    105
+   ],
+   [
+    "replace",
+    149,
+    151,
+    105,
+    106,
+    [
+     "Apache License 2.0 — see alibabacloud-data-agent-skill/assets/LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "caf7ac1b93b2+2": {
+  "fn": "kixwho/SQL-cheatsheet",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    17,
+    2,
+    17,
+    [
+     "|Operator|Function|Example|",
+     "|-------------|-------------|-------------|",
+     "|=|Equal to|WHERE school = 'USC'|",
+     "|<> or !=|Not equal to|WHERE school <> 'UCLA'|",
+     "|>|Greater than|WHERE salary > 20000|",
+     "|<|Less than|WHERE salary < 60500|",
+     "|>=|Greater than or equal to|WHERE salary >= 20000|",
+     "|<=|Less than or equal to|WHERE salary <= 60500|",
+     "|BETWEEN|Within a range|WHERE salary BETWEEN 20000 AND 40000|",
+     "|IN|Match one of a set of values|WHERE last_name IN ('Bush', 'Roush')|",
+     "|LIKE|Match a pattern (case sensitive)|WHERE first_name LIKE 'Sam%'|",
+     "|ILIKE|Match a pattern (case insensitive)|WHERE first_name ILIKE 'sam%'|",
+     "|NOT|Negates a condition|WHERE first_name NOT ILIKE 'sam%'|",
+     "|\\|\\||CONCAT within the same row|SELECT name \\|\\|' works as a ' \\|\\|job|",
+     "|~|Matches regular expression|WHERE product_code ~ '^[A-Z]{2}[0-9]{4}$'|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    21,
+    18,
+    19,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    19,
+    20
+   ],
+   [
+    "replace",
+    22,
+    26,
+    20,
+    21,
+    [
+     "Need more practical recipes? SQL Excel translator"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    21,
+    23
+   ],
+   [
+    "replace",
+    28,
+    29,
+    23,
+    24,
+    [
+     "LeetCode SQL 50 study plan covers all the essential patterns :)"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    24,
+    25
+   ],
+   [
+    "replace",
+    30,
+    31,
+    25,
+    26,
+    [
+     "Browser-based SQLite playground Drop a data file, start querying in SQL immediately. No installation needed 👍"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "f96874feaecb+2": {
+  "fn": "mahakammoonlightstudio-beep/OpenPlot-AI",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "OpenPlot AI — a local-first story studio"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    1,
+    10
+   ],
+   [
+    "replace",
+    12,
+    17,
+    10,
+    15,
+    [
+     "**Download the latest release** ·",
+     "Website ·",
+     "Changelog ·",
+     "Security ·",
+     "Contributing"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    15,
+    16
+   ],
+   [
+    "replace",
+    18,
+    29,
+    16,
+    23,
+    [
+     "Release",
+     "CI",
+     "License",
+     "Downloads",
+     "Platform",
+     "Electron",
+     "Local-first"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    35,
+    23,
+    29
+   ],
+   [
+    "replace",
+    35,
+    41,
+    29,
+    35,
+    [
+     "|||",
+     "|---|---|",
+     "|**One window, one project**|Chat, story bible, outline board, chapters and statistics share the same project. No copy-pasting canon between tabs, no “which doc has the latest version?”|",
+     "|**Canon that is data, not a prompt**|Worlds, locations, characters, items and lore are real records with tags, links and reference files. The agent reads all of it with native tools.|",
+     "|**The model you already pay for**|OpenAI, Anthropic, OpenRouter, Groq, Ollama, LM Studio, or any OpenAI-compatible `/v1` endpoint. One provider card per service, any model per chat.|",
+     "|**Local by default**|SQLite on your disk, keys in the OS credential vault, no account, no cloud sync, no telemetry. The renderer cannot even open a socket.|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    46,
+    35,
+    40
+   ],
+   [
+    "replace",
+    46,
+    84,
+    40,
+    60,
+    [
+     " Home screen with a time-based greeting, quick starts, recent chats and model health",
+     " Home first. A greeting that follows the clock, four quick starts, recent chats and the live model-health strip. ",
+     "",
+     " Chat with streaming replies, model health, reasoning and token counts",
+     " Chat that stays out of the way. Streaming replies, reasoning display, agent tools, per-message tokens and model health. ",
+     "",
+     " Story Bible entries with tags, categories and reference files",
+     " Canon you can browse. Structured Story Bible entries with tags, links and attached reference files. ",
+     "",
+     " Chapter editor with statuses, word counts and version history",
+     " Write where the book lives. Draft, revise and finish chapters with version history and a scene board. ",
+     "",
+     " Three-act story flow board with beats linked to chapters",
+     " The shape of the story. A three-act board of beats you can link to chapters and move between acts. ",
+     "",
+     " Writing statistics with daily goal, streaks, heatmap and project totals",
+     " Progress you can see. Daily goal, streaks, weekly totals, a 90-day heatmap and per-project progress. ",
+     "",
+     " The light-paper theme",
+     " Light or dark, your call. Follows your system by default, with 14 themes and 10 accents in English or Bahasa Indonesia. "
+    ]
+   ],
+   [
+    "equal",
+    84,
+    90,
+    60,
+    66
+   ],
+   [
+    "replace",
+    90,
+    92,
+    66,
+    68,
+    [
+     " with its schema and size, and switches with a restart. Import a portable `.db`",
+     " without touching the source, or start a new, empty one."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    68,
+    69
+   ],
+   [
+    "replace",
+    93,
+    96,
+    69,
+    72,
+    [
+     " before a migration, import, reset or restore, plus one daily and any manual",
+     " copy. Restore confirms, snapshots the current state first, then restarts into",
+     " the chosen copy."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    72,
+    73
+   ],
+   [
+    "replace",
+    97,
+    100,
+    73,
+    76,
+    [
+     " chapters, attachments, prompts, styles, skills and settings to another",
+     " machine. Provider keys, the web-search key, MCP environment variables and",
+     " execution approvals stay behind."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    76,
+    77
+   ],
+   [
+    "replace",
+    101,
+    103,
+    77,
+    79,
+    [
+     " anywhere: every chat is searchable, results name their project, and the",
+     " current chat and project lead the list."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    79,
+    80
+   ],
+   [
+    "replace",
+    104,
+    106,
+    80,
+    82,
+    [
+     " in one newest-first timeline, with a word-level before/after diff and a",
+     " one-click restore that is itself undoable."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    82,
+    83
+   ],
+   [
+    "replace",
+    107,
+    109,
+    83,
+    85,
+    [
+     " instruction inspector, a live preview of the prompt block, a 12,000-character",
+     " budget, and duplicate/overlap/tension warnings."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    85,
+    86
+   ],
+   [
+    "replace",
+    110,
+    112,
+    86,
+    88,
+    [
+     " default, plus a font stack, whole-UI zoom, comfortable/compact density and",
+     " corner radius — applied immediately and stored locally."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    88,
+    89
+   ],
+   [
+    "replace",
+    113,
+    114,
+    89,
+    90,
+    [
+     "Full changelog →"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    120,
+    90,
+    96
+   ],
+   [
+    "replace",
+    120,
+    122,
+    96,
+    98,
+    [
+     " streaming replies, reasoning traces, per-message tokens and a model-health",
+     " strip."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    98,
+    99
+   ],
+   [
+    "replace",
+    123,
+    124,
+    99,
+    100,
+    [
+     " Empathetic, Formal) or your own, injected as a system fragment."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    100,
+    101
+   ],
+   [
+    "replace",
+    125,
+    127,
+    101,
+    103,
+    [
+     " entries, create or update canon, write and append chapters, and save",
+     " memories — with write actions refreshing the Bible immediately."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    103,
+    104
+   ],
+   [
+    "replace",
+    128,
+    130,
+    104,
+    106,
+    [
+     " expand entries and chapters into context, edit-and-resend, regenerate,",
+     " delete, and Markdown export."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    106,
+    107
+   ],
+   [
+    "replace",
+    131,
+    133,
+    107,
+    109,
+    [
+     " you can read before sending, stay in the transcript, and open in a popup",
+     " after a restart."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    109,
+    110
+   ],
+   [
+    "replace",
+    134,
+    135,
+    110,
+    111,
+    [
+     " the model's window; nothing is deleted from the transcript."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    139,
+    111,
+    115
+   ],
+   [
+    "replace",
+    139,
+    141,
+    115,
+    117,
+    [
+     " cross-links, full-text search, per-category counts, reference files and bulk",
+     " import from Markdown, JSON or CSV."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    117,
+    118
+   ],
+   [
+    "replace",
+    142,
+    144,
+    118,
+    120,
+    [
+     " a scene board, and version history (snapshots on save, before an AI append",
+     " and before a restore; the last 30 are kept)."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    146,
+    120,
+    122
+   ],
+   [
+    "replace",
+    146,
+    147,
+    122,
+    123,
+    [
+     " world → three-act outline) that can create the whole project in one click."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    123,
+    124
+   ],
+   [
+    "replace",
+    148,
+    149,
+    124,
+    125,
+    [
+     " 90-day heatmap, per-project stakes and an AI arc analysis."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    153,
+    125,
+    129
+   ],
+   [
+    "replace",
+    153,
+    155,
+    129,
+    131,
+    [
+     " Coach, Pacing Analyst, Beta Reader, Worldbuilding Architect) plus your own.",
+     " A new skill starts disabled; switch any skill off per chat."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    131,
+    132
+   ],
+   [
+    "replace",
+    156,
+    157,
+    132,
+    133,
+    [
+     " access. They run only after you approve that exact code."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    133,
+    134
+   ],
+   [
+    "replace",
+    158,
+    160,
+    134,
+    136,
+    [
+     " callable as `mcp__{server}__{tool}`, with status, restart and logs. An MCP",
+     " definition is an arbitrary local command — it runs only after approval."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    136,
+    137
+   ],
+   [
+    "replace",
+    161,
+    162,
+    137,
+    138,
+    [
+     " history and loop guards."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    165,
+    138,
+    141
+   ],
+   [
+    "replace",
+    165,
+    173,
+    141,
+    149,
+    [
+     "|Provider|Base URL|",
+     "|---|---|",
+     "|OpenAI|`https://api.openai.com/v1`|",
+     "|Anthropic|`https://api.anthropic.com/v1`|",
+     "|OpenRouter|`https://openrouter.ai/api/v1`|",
+     "|Groq|`https://api.groq.com/openai/v1`|",
+     "|Ollama|`http://localhost:11434/v1`|",
+     "|LM Studio|`http://localhost:1234/v1`|"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    182,
+    149,
+    158
+   ],
+   [
+    "replace",
+    182,
+    183,
+    158,
+    159,
+    [
+     "GitHub releases."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    185,
+    159,
+    161
+   ],
+   [
+    "replace",
+    185,
+    191,
+    161,
+    167,
+    [
+     "|Platform|Full app|Folder|",
+     "|---|---|---|",
+     "|Windows|`OpenPlot.AI.Setup.1.3.0.exe` (NSIS installer)|`OpenPlot.AI-1.3.0-win.zip`|",
+     "|macOS|`OpenPlot.AI-1.3.0-universal.dmg` (universal)|`OpenPlot.AI-1.3.0-universal-mac.zip` / `OpenPlot.AI-1.3.0-arm64-mac.zip`|",
+     "|Linux (x64)|`OpenPlot.AI-1.3.0.AppImage`|`openplot-ai-1.3.0.tar.gz`|",
+     "|Linux (arm64)|`OpenPlot.AI-1.3.0-arm64.AppImage`|`OpenPlot.AI-1.3.0-arm64.tar.gz`|"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    196,
+    167,
+    172
+   ],
+   [
+    "replace",
+    196,
+    197,
+    172,
+    173,
+    [
+     "AppImageUpdate delta"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    207,
+    173,
+    183
+   ],
+   [
+    "replace",
+    207,
+    215,
+    183,
+    184,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    240,
+    184,
+    209
+   ],
+   [
+    "replace",
+    240,
+    246,
+    209,
+    215,
+    [
+     "|Group|What it covers|",
+     "|---|---|",
+     "|`headless`|DB and migrations, engine and parsers, tools, prompt assembly, guide, MCP, security, approvals, perf and bundle budgets, fuzz|",
+     "|`e2e-local`|boots its own Vite + Electron in an isolated profile: chat/tools/prompts, keyboard focus, studio UX, hostile-markdown XSS|",
+     "|`e2e-attach`|drives an already-running dev app over CDP (skipped when it is not running)|",
+     "|`manual`|real installed app / real profile / packaged build; only with an explicit flag|"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    253,
+    215,
+    222
+   ],
+   [
+    "replace",
+    253,
+    259,
+    222,
+    223,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    262,
+    223,
+    226
+   ],
+   [
+    "replace",
+    262,
+    263,
+    226,
+    227,
+    [
+     "CONTRIBUTING.md. Read that before renaming or moving"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    282,
+    227,
+    246
+   ],
+   [
+    "replace",
+    282,
+    283,
+    246,
+    247,
+    [
+     "SECURITY.md for the full boundary."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    285,
+    247,
+    249
+   ],
+   [
+    "replace",
+    285,
+    287,
+    249,
+    251,
+    [
+     "**SECURITY.md**. To report a vulnerability, email",
+     "mr.fauzan121314@gmail.com — please do not"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    291,
+    251,
+    255
+   ],
+   [
+    "replace",
+    291,
+    297,
+    255,
+    261,
+    [
+     "- Security policy",
+     "- Contributing and file map",
+     "- Changelog",
+     "- Plugin API",
+     "- Handbook · Panduan (ID)",
+     "- Stress test notes"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    299,
+    261,
+    263
+   ],
+   [
+    "replace",
+    299,
+    302,
+    263,
+    264,
+    [
+     "MIT — Mahakam Moonlight Studio."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    264,
+    265
+   ],
+   [
+    "replace",
+    303,
+    309,
+    265,
+    266,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "a1b93fc01988+2": {
+  "fn": "ctsilva/OpenGauss",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    3,
+    [
+     "<a href=\"https://morph.new/gauss-batteries-opengauss-dev-wipv2-latest-20260319-024019\">",
+     " Open in Morph",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    34,
+    3,
+    32
+   ],
+   [
+    "replace",
+    34,
+    35,
+    32,
+    33,
+    [
+     "- `/project create <path> [--template-source ] [--name <name>]` bootstraps a project from a template and registers it"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    72,
+    33,
+    70
+   ],
+   [
+    "replace",
+    72,
+    76,
+    70,
+    71,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    125,
+    71,
+    120
+   ],
+   [
+    "replace",
+    125,
+    127,
+    120,
+    122,
+    [
+     " - the normal `claude auth login` flow / Claude credential files",
+     " - a saved `ANTHROPIC_API_KEY` in `~/.gauss/.env`"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    129,
+    122,
+    124
+   ],
+   [
+    "replace",
+    129,
+    131,
+    124,
+    126,
+    [
+     " - the normal `codex login` flow / `~/.codex/auth.json`",
+     " - a saved `OPENAI_API_KEY` in `~/.gauss/.env`"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    126,
+    127
+   ],
+   [
+    "replace",
+    132,
+    135,
+    127,
+    130,
+    [
+     " - `auto` (default): prefer local backend auth, then fall back to saved env/API-key auth when supported",
+     " - `login`: ignore staged API-key auth and let the backend use the normal interactive login flow",
+     " - `api-key`: force the managed session onto saved env/API-key auth"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    130,
+    131
+   ],
+   [
+    "replace",
+    136,
+    138,
+    131,
+    133,
+    [
+     " plus `GAUSS_AUTOFORMALIZE_AUTH_MODE=login` or `GAUSS_AUTOFORMALIZE_AUTH_MODE=api-key`",
+     " before launching `gauss`"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    143,
+    133,
+    138
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

@@ -2975,5 +2975,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ae5b2745373d": {
+  "identity": {
+   "one_liner": "R 包，用于按可选参考分类标准解析、匹配并归并物种异名",
+   "review": "taxastand 是一个 R 包，用于将来自不同数据源的物种名称标准化为统一的接受名。它把名称解析为属、种加词、种下等级、命名人等组成部分，与用户指定的参考分类库（Darwin Core 格式 dataframe）进行匹配，容忍加词与命名人拼写差异并解析异名。内置加载 World Flora Online、PPG、ITIS、Catalogue of Life、GBIF 等参考库，支持本地文件或 URL。适合需要跨数据源合并生物学数据的用户；参考库需自行选择和版本化管理，部分来源的 Parquet 文件需另装 nanoparquet 或 duckdb。",
+   "highlights": [
+    "将名称解析为属、种加词、种下等级、命名人等部分后与参考分类库匹配，容忍拼写差异并返回 resolved_name 与 match_type",
+    "ts_load_ref() 可下载并格式化 World Flora Online、PPG、ITIS、Catalogue of Life、GBIF backbone 等参考库，也支持自定义文件/URL，ts_subset_ref() 可按科等类群取子集",
+    "参考库须符合 Darwin Core 标准；安装来源为 r-universe 或 GitHub，下载缓存目录可用 cache_dir 设置"
+   ],
+   "use_cases": [
+    "合并来自不同数据源的物种数据前，将各源名称统一解析到同一参考分类库",
+    "需要可复现、可版本化的本地分类名称解析流程（避免依赖远程 Web 服务的变动）",
+    "针对特定类群（如蕨类，用 PPG）或大型参考库子集进行名称标准化"
+   ]
+  },
+  "sha": "ae5b2745373d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e1b465fe138": {
+  "identity": {
+   "one_liner": "Oracle 产品的 OpenRewrite 迁移配方集合，用于自动化升级 WebLogic 等应用",
+   "review": "该项目为 Oracle 产品实现 OpenRewrite 配方，代码按文件夹组织为组配方，组内包含多个复合配方，每个复合配方对应迁移到特定产品版本。典型用例 rewrite-weblogic 支持将 WebLogic 应用迁移到 26.1.0（Java 21/25、Jakarta EE 11）等版本。适用于维护 Oracle 产品应用的团队；使用前需按各配方 README 构建安装，部分 26.1 配方仅存在于快照版本中。",
+   "highlights": [
+    "提供 rewrite-weblogic 组配方，包含迁移到 WebLogic 26.1.0、15.1.1、14.1.2 等版本的复合配方",
+    "复合配方覆盖多组 Java 与 Jakarta EE 版本组合，如 Java 21/25 与 Jakarta EE 11",
+    "项目以 Maven 构件形式发布，当前检出可构建 rewrite-weblogic:0.7.0-SNAPSHOT"
+   ],
+   "use_cases": [
+    "将 WebLogic 应用迁移到新版 WebLogic 与 Java/Jakarta EE 版本",
+    "按目标产品版本选择对应的复合配方执行批量代码迁移",
+    "配合 OpenRewrite 流程自动化处理应用升级中的代码改动"
+   ]
+  },
+  "sha": "9e1b465fe138",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

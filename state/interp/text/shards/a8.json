@@ -3212,5 +3212,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0febcf71df99": {
+  "identity": {
+   "one_liner": "基于自研协议客户端与列式批处理的 MySQL/MariaDB/TiDB 数据迁移与备份工具",
+   "review": "quiver 用 OxCaml 编写，实现 dump、load、copy、stream 四类命令，用于 MySQL、MariaDB 和 TiDB 之间的数据导出、导入与复制。它不依赖客户端库，直接解析 MySQL 协议并按 Arrow 布局解码为列式批次；通过一次快照保证一致性，在 TiDB 上以 tidb_snapshot 读取。许可证为 AGPL-3.0，提供 Linux、macOS 二进制及多种包管理器安装方式。",
+   "highlights": [
+    "自实现 MySQL 协议客户端，将 socket 缓冲中的二进制行直接解码为 Arrow 布局的列式批次，支持 zstd 压缩",
+    "提供 dump/load/copy/mirror 等命令：dump 输出 mydumper 兼容布局的 SQL 或 CSV；load 支持断点续传；copy 经 LOAD DATA LOCAL INFILE 流式写入，支持 --ingest tablespace 自建 InnoDB 表空间",
+    "支持 MySQL 8.0/8.4、MariaDB 10.11/11.4/11.8、TiDB 8.5；TiDB 下无锁读取单一 TSO，mirror 命令直接从 TiKV 读取行和索引"
+   ],
+   "use_cases": [
+    "从 MySQL/MariaDB 生成一致性快照备份文件（含 binlog 位点与 GTID 集合，便于配合 TiCDC 等增量链路）",
+    "服务器到服务器的免落盘数据复制、跨 MySQL/MariaDB/TiDB 的数据迁移",
+    "TiDB 集群间基于 TiKV 的表级数据镜像导入"
+   ]
+  },
+  "sha": "0febcf71df99",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

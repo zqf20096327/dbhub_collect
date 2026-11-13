@@ -3193,5 +3193,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "98fbbbe211c1": {
+  "identity": {
+   "one_liner": "Dofus 3 协议被动嗅探器与 protobuf 解码器，附带基于捕获数据的交易看板。",
+   "review": "该项目用 Rust/libpcap 在 TCP 5555 端口被动捕获 Dofus 3 流量，经 TCP 重组、自适应分帧、Any 信封解包后按恢复的 schema 解码 protobuf 并写入 Postgres；Next.js 看板读取这些数据展示符文拆解收益、合成机会与价格历史。嗅探与看板仅通过数据库耦合，可独立运行。仅适用于 Dofus 3 协议分析。",
+   "highlights": [
+    "被动捕获不连接不注入，支持自适应分帧发现与 schema 不一致检测，所有消息归档至 packets 表",
+    "看板提供拆解收益、物品目录、合成清单、回收对比、价格时间序列等视图，通过 LISTEN/NOTIFY 转 SSE 实时刷新",
+    "提供 seed_sample.py 演示数据库，无需游戏客户端即可浏览看板；Windows 下 --dev 支持按 IP 或适配器描述片段选择接口"
+   ],
+   "use_cases": [
+    "分析 Dofus 3 游戏的 protobuf 协议流量并归档原始报文",
+    "基于捕获的市场与拆解数据评估物品拆解、合成与回收的收益",
+    "在无游戏客户端环境下用示例数据演示与调试看板功能"
+   ]
+  },
+  "sha": "98fbbbe211c1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0556f947bb65": {
+  "identity": {
+   "one_liner": "自托管的笔记与任务协作应用，单 Go 二进制加一个 SQLite 文件运行。",
+   "review": "MindSift 是一个自托管应用，提供大纲式笔记、看板与日历任务、共享清单和快速收集收件箱。多个用户可实时共同编辑同一条笔记，内置 MCP 服务器与 REST API 供 AI 代理读取和管理数据。数据存储于单一 SQLite 文件，部署为单个 Docker 容器或单文件二进制，面向想在自有服务器上运行的个人、家庭或小团队。",
+   "highlights": [
+    "提供实时协作的大纲笔记、看板/日历任务、共享清单和收件箱式快速收集与分类流程",
+    "内置 MCP 服务器与带作用域密钥的 REST API，支持 OAuth 接入 claude.ai 和 ChatGPT",
+    "以单个 Docker 容器或单文件二进制部署，数据保存在一个 SQLite 文件中，支持 amd64 与 arm64"
+   ],
+   "use_cases": [
+    "个人或家庭在自有服务器上管理笔记、待办和购物清单",
+    "团队多人同时编写同一条笔记或共享任务列表",
+    "通过 MCP/REST API 让 AI 代理或 Home Assistant 等脚本读写任务与笔记"
+   ]
+  },
+  "sha": "0556f947bb65",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

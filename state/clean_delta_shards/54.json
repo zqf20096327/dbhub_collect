@@ -22099,5 +22099,272 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "5475916f0764+2": {
+  "fn": "Dalibex/urban-incidence-manager",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "CI",
+     "Release",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    9,
+    5,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "> **In development.** What is built is in Current Scope, the status of each requirement in the requirements, and how to use the apps in the user guide."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    21,
+    10,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "- **Authentication:** sign up, sign in, refresh and sign out with JWT access tokens and refresh tokens, a password change that a staff account must make at its first sign-in, and a role check on every operation (security guide)."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    24,
+    22,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "- **Incidents:** reporting with a position, listing with filters, the positions on a live map of the web app, clustered by zoom (#195, #196), detail, status history and photos (JPEG, PNG or WebP, kept on the `evidence_data` volume; the mobile app uploads them after reporting, and the incident detail of the web app shows them to staff (#194)), scoped by role, validation, rejection and information requests by an operator, the assignment to a department and, optionally, an active technician from the list of active technicians, acceptance and resolution by the assigned technician, closing or reopening a resolved incident by an operator, classification by category and manual priority, with its changes read back from the audit trail, and internal comments between staff that citizens never see (the web incident detail adds them and shows them in its timeline), through the operations of the OpenAPI 3.1 contract (`docs/api/openapi.yml`, served with Swagger UI). The lifecycle service applies the transitions of ADR-0020 with optimistic locking, and an append-only audit trail records the relevant actions."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    29,
+    26,
+    29,
+    [
+     "- **Clients:** a pnpm workspace in `frontend/` with the web app for staff (operator inbox with filters, and incident detail with its photos, where operators classify the incident, validate, reject or ask for information on a reported one, assign it and close or reopen it once resolved, and staff add internal comments; the technician's work queue and detail, where they accept and resolve their incidents; the administrator's *Users* screen and audit log; and the reports screen with its CSV download), the mobile app for citizens (report an incident by moving the base map under a pin, which starts on the GPS position or, without it, on Málaga; \"My reports\"), which runs as an Expo development build, and their shared packages, including the API client generated from the contract. How each role uses them is in the user guide.",
+     "- **Data:** the database schema of the whole data model, created by Flyway migrations, and sample data behind the `dev`, `demo` and `perf` profiles (datasets).",
+     "- **Base map:** a self-hosted OpenStreetMap map of the province of Málaga, built as a one-off process (ADR-0016)."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    49,
+    29,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "Install Java 25, Docker Engine or Docker Desktop, and Git. Maven and PostgreSQL do not need to be installed locally. To work on the web or mobile clients, also install Node.js 24; pnpm is provided by Corepack (see the development guide)."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    81,
+    50,
+    81
+   ],
+   [
+    "replace",
+    81,
+    82,
+    81,
+    82,
+    [
+     "Write the values without quotes. Every variable is described in the deployment guide."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    99,
+    82,
+    99
+   ],
+   [
+    "replace",
+    99,
+    100,
+    99,
+    100,
+    [
+     "The database starts empty. To try the API and the clients with sample users and incidents, start the backend with the `dev` profile (see the development guide), and to run the web and mobile apps, see *Client Workspace* in the same guide."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    100,
+    101
+   ],
+   [
+    "replace",
+    101,
+    102,
+    101,
+    102,
+    [
+     "To run the backend as a container instead, with the same image as the CI, use `docker compose --profile app up --build` (see the deployment guide)."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    125,
+    102,
+    125
+   ],
+   [
+    "replace",
+    125,
+    165,
+    125,
+    126,
+    [
+     "…（40 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    171,
+    126,
+    132
+   ],
+   [
+    "replace",
+    171,
+    172,
+    132,
+    133,
+    [
+     "UrbanPulse database schema"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    133,
+    134
+   ],
+   [
+    "replace",
+    173,
+    174,
+    134,
+    135,
+    [
+     "The diagram is a `.drawio.svg`: GitHub shows it as an image, and draw.io opens it as an editable diagram. The Flyway migrations in `backend/src/main/resources/db/migration` (ADR-0014) are the source of truth for the schema; if the diagram and the migrations disagree, the migrations are right. Update this diagram in the same pull request that changes the schema."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    177,
+    135,
+    138
+   ],
+   [
+    "replace",
+    177,
+    195,
+    138,
+    156,
+    [
+     "- User guide: how each role uses the web and mobile apps",
+     "- Requirements and prioritization (the plan is in the GitHub milestones)",
+     "- Development guide",
+     "- Deployment guide (local Compose stack for now)",
+     "- Database guide and database schema",
+     "- Datasets and measurements and demo script",
+     "- Testing guide",
+     "- API guide and OpenAPI contract",
+     "- Security guide",
+     "- Architecture overview: drivers and quality attribute scenarios",
+     "- C4 architecture model",
+     "- CI guide",
+     "- Twelve-factor traceability: how each factor is applied and how to check it",
+     "- Architecture Decision Records",
+     "- Changelog",
+     "- Contributing guide",
+     "- Security policy",
+     "- AI Agents Context"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    200,
+    156,
+    161
+   ],
+   [
+    "replace",
+    200,
+    201,
+    161,
+    162,
+    [
+     "This project is licensed under the Apache License 2.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

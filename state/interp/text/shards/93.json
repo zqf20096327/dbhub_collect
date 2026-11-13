@@ -3119,5 +3119,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c6b2852a5afa": {
+  "identity": {
+   "one_liner": "chkit：用 TypeScript 定义 ClickHouse 模式并生成 SQL 迁移的 CLI",
+   "review": "chkit 是一个面向 TypeScript 项目的 ClickHouse 模式与迁移 CLI，工作流为定义、生成、审查、迁移、检查。开发者用 @chkit/core 的 DSL 在代码中定义表、视图、物化视图和字典，CLI 生成可审查的 SQL 迁移文件，并通过 status/check/drift 命令对比线上模式差异。支持 Node.js 22+ 或 Bun 运行，采用 MIT 许可。配置通过 CLICKHOUSE_URL 等环境变量提供；对于已存在数据的库需走 adoption 流程，排序/分区键变更可生成零停机 cutover 迁移。",
+   "highlights": [
+    "提供 schema DSL，在 TypeScript 中定义表、视图、物化视图和字典，并生成可审查的 SQL 迁移",
+    "check --strict 对未应用迁移、校验和变更或线上漂移以非零退出码作为 CI 门禁",
+    "插件体系包含 live schema 导入、Tinybird 项目导入、TypeScript 类型与 Zod schema 生成及 backfill（beta）"
+   ],
+   "use_cases": [
+    "在 CI/CD 中以 check --strict 作为门禁，阻断待迁移、校验和不一致或线上漂移",
+    "通过 generate --cutover 对排序/分区键变更生成零停机切换迁移",
+    "用 plugin-pull 采用既有线上表，或用 plugin-codegen 生成 TypeScript 行类型与 Zod schema"
+   ]
+  },
+  "sha": "c6b2852a5afa",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c90e4cdd6bea": {
+  "identity": {
+   "one_liner": "数字记忆工程，含事件证据基座与召回准入引擎，经 AstrBot 插件接入",
+   "review": "该项目由数字记忆基座（事件、证据、来源、租约/回执）与记忆引擎（召回、证据准入、重评、上下文渲染）两部分组成，提供 AstrBot 接入插件与本地控制台。README 标明当前状态为 R0/R1 NO-GO，运行包仅用于隔离验收，不接入生产；质量验收依赖本机 BGE 模型目录。",
+   "highlights": [
+    "包含基座与引擎两部分：基座管理事件、证据、来源、租约/回执/连续水位，引擎实现候选召回、证据准入、重评与上下文渲染",
+    "提供本地控制台，默认绑定 127.0.0.1 并每次启动生成令牌，支持备份/轮转/checkpoint/完整性/VACUUM/归档，也可作为 AstrBot 插件页运行",
+    "输出模块将已准入证据组装为预算内临时上下文块，默认关闭注入，只修改 ProviderRequest.extra_user_content_parts 且不写入持久化历史"
+   ],
+   "use_cases": [
+    "在隔离验收环境中运行和测试数字记忆基座与引擎（不接入生产）",
+    "作为 AstrBot 插件接入记忆存储，或通过 host_shadow 以观察模式运行记忆输出",
+    "使用 BGE 模型目录运行质量验收脚本（query_admission_challenge、quality_v3_accept）"
+   ]
+  },
+  "sha": "c90e4cdd6bea",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

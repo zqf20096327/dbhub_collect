@@ -2937,5 +2937,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7e04b3be4caf": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理记忆层，以 MCP 接口提供持久化存储",
+   "review": "Rembric 为 AI 编码代理提供自托管的持久记忆、会话与仪表盘，服务对象是使用 Claude Code、Codex CLI、opencode 等 MCP 或 HTTP 客户端的开发者。部署形式为一个 Docker 镜像加一个 SQLite 文件，MCP 端点与仪表盘均运行在 8787 端口的单个 Node 进程内。所有端点要求 Bearer token 鉴权；嵌入模型在进程内运行，不依赖外部服务；配置全部通过环境变量，镜像为 distroless 无 shell，备份须通过仪表盘或外部命令完成。",
+   "highlights": [
+    "支持任何通过 MCP 或 HTTP 接入的代理客户端，并为 Claude Code、opencode、Codex CLI、Hermes Agent、Pi、ChatGPT 提供原生插件或连接器",
+    "以单个 Docker 镜像加一个 SQLite 文件部署，镜像内置嵌入模型（gte-multilingual-base，ONNX q8），无需外部 API 或网络调用",
+    "存储前将凭证类文本替换为 [REDACTED:<kind>]，并在客户端脱敏 <private>…</private> 内容；整合清扫为确定性流程，仅读取已存向量且可撤销"
+   ],
+   "use_cases": [
+    "为多个 MCP 客户端（Claude Code、Cursor、Gemini CLI 等）提供共享的持久记忆与审计记录",
+    "在离线或内网环境（air-gapped、LXC、NAS、Tailscale）自托管运行，不依赖外部嵌入服务",
+    "需要可回滚升级、快照备份与仪表盘运维的长期记忆服务部署"
+   ]
+  },
+  "sha": "7e04b3be4caf",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3da12444f963": {
+  "identity": {
+   "one_liner": "收录55个开发者免费工具的清单，按分类整理并自动检查可用状态",
+   "review": "该项目是一个开发者免费/免费额度工具的编目清单，共收录55个工具，覆盖AI编码代理、云托管、数据库后端、开发者工具、DevOps、支付、安全、自托管等16个分类。每个条目包含用途说明、定价模式和在线状态；状态由GitHub Actions每晚自动检测。面向开发者与独立开发者，通过PR和Issue接受贡献，采用MIT许可证。",
+   "highlights": [
+    "收录55个工具，按16个分类组织，每条含用途、定价模式（免费/免费额度/开源/付费）信息",
+    "通过GitHub Actions每晚自动检查各工具在线状态，状态定义为服务器响应码小于500",
+    "采用MIT许可证，接受通过Pull Request和Issue的贡献"
+   ],
+   "use_cases": [
+    "查找AI编码IDE与终端代理类工具及其定价模式",
+    "为项目选型免费额度的云托管、数据库与后端服务",
+    "查找API测试、Webhook调试、监控等开发运维类工具"
+   ]
+  },
+  "sha": "3da12444f963",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bab021e269e0": {
+  "identity": {
+   "one_liner": "面向德国自由职业者的本地记账桌面应用，基于 Tauri 2 与 SQLite。",
+   "review": "Midnight 是一款面向德国自由职业者和自雇人士的本地记账桌面应用，覆盖收支、发票、客户、计时和税务预估，支持德国 EÜR 类目、§ 19 UStG 小企业方案及 ZUGFeRD/Factur-X 与 XRechnung 电子发票。基于 Tauri 2、React 18 与 SQLite 构建，PDF 经 LaTeX 生成；数据本地存储，并提供经 stdio 暴露读写工具的 MCP 服务器。macOS 应用未公证、Windows 安装包未签名，首次启动需手动放行。",
+   "highlights": [
+    "本地存储数据于 SQLite（midnight.db 与 files/ 目录），支持 CSV 导出、LaTeX 排版 PDF 与 ZUGFeRD/Factur-X、XRechnung 3.0 电子发票",
+    "包含计时（计时器与手动录入、按小时/预算/固定价项目）、按 15 分钟执行的后台任务、⌘K/Ctrl+K 搜索及英/德双语界面",
+    "内置 MCP 服务器（midnight-mcp），经 stdio 暴露读写工具，可直接操作同一数据库并支持只读与脱敏设置"
+   ],
+   "use_cases": [
+    "德国自由职业者管理收支、发票（含增值税与小企业方案）、客户与未计费时间",
+    "生成年度所得税预估与利润表（EÜR），并导出含清单、发票和收据的 ZIP 包",
+    "通过 MCP 工具在应用关闭时对账本数据进行程序化读写"
+   ]
+  },
+  "sha": "bab021e269e0",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee5167c7ac6d": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库浏览器，含工作区与 EF Core 模型桥接",
+   "review": "FerretSharp 是运行在 Windows（.NET 10）上的 Oracle 数据库浏览工具，MIT 许可，界面提供英文和德文。它按连接组织工作区，每个工作区持有一个独立数据库会话；表格浏览中显示 C# 实体/属性名与枚举成员，提供外键跳转、沙箱式编辑（显式事务提交或回滚）、LINQ 控制台与 EF Core 模型映射。适合在日常开发中查看和编辑 Oracle 数据的 .NET 开发者使用。",
+   "highlights": [
+    "每个工作区拥有独立数据库会话，支持多连接同时打开并通过快捷键切换，生产连接默认由 Oracle 端强制只读",
+    "表格网格按 500 行分块加载并提供服务端排序与分页；过滤器组合为绑定 SQL，可查看生成的语句及执行计划",
+    "右键跳转到引用行或被引用行，包含仅存在于 EF Core 模型中的导航关系，并支持在关系图上生成 LINQ 与 SQL 查询"
+   ],
+   "use_cases": [
+    ".NET 开发者在开发或测试环境中按业务任务组织工作区浏览、过滤和编辑 Oracle 表数据",
+    "通过 EF Core 模型中定义的导航关系在无外键约束的表间跳转并排查数据关联",
+    "检查表的对象详情、同义词、权限、PL/SQL 源码与依赖，或将关系图导出为 Mermaid 用于工单"
+   ]
+  },
+  "sha": "ee5167c7ac6d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "97a0b5c70968": {
+  "identity": {
+   "one_liner": "基于 SQLite 与纯静态前端的《红楼梦》人物谱系与关系交互图谱。",
+   "review": "该项目将《红楼梦》173 个人物、870 条关系、判词、隐语、事件与地点结构化为 SQLite 数据，生成可搜索、可点击浏览的在线关系图谱。适合《红楼梦》读者、教学与数字人文研究者查阅人物脉络。运行需 Python 构建种子数据并启动本地服务，不支持直接打开 index.html。",
+   "highlights": [
+    "提供 173 个人物、870 条带标签关系与 50 个谱系节点的图谱，连线按亲缘、情缘、主仆等分类着色",
+    "包含判词、谶语结局对照、隐语、府邸示意图等栏目，争议内容以「一说」「探佚」等标注",
+    "纯静态、前端零依赖，数据由 tools/ 脚本合并生成 seed.json 后重建 SQLite，MIT 许可开源"
+   ],
+   "use_cases": [
+    "阅读原著时检索人物姓名或别号、查看两人关系与共同出场事件",
+    "查阅判词与谶语到结局的对照及学界异说",
+    "浏览宁荣二府与大观园的府邸方位与院落归属"
+   ]
+  },
+  "sha": "97a0b5c70968",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

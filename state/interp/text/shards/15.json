@@ -3299,5 +3299,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "85faf1d4936d": {
+  "identity": {
+   "one_liner": "Go 语言 database/sql 包的 MySQL 驱动，纯 Go 实现",
+   "review": "go-sql-driver/mysql 实现了 Go 标准库 database/sql/driver 接口，供 Go 程序通过 database/sql API 访问 MySQL 数据库。驱动为纯 Go 实现，无 C 绑定；连接池由 database/sql 包提供。README 注明维护者官方支持 MySQL 8.0+ 与 MariaDB 10.11+，要求 Go 1.25 及以上。使用时需配置 db.SetConnMaxLifetime、SetMaxOpenConns 等连接设置，通过 DSN 字符串或 Config 结构体配置连接参数。",
+   "highlights": [
+    "纯 Go 实现，支持 TCP/IPv4、TCP/IPv6、Unix domain socket 及自定义协议连接",
+    "支持超过 16MB 的查询、LOAD DATA LOCAL INFILE（含文件白名单与 io.Reader）、zlib/zstd 压缩",
+    "DSN 支持数十个连接参数（charset、collation、interpolateParams、compress 等），也可用 Config.FormatDSN 生成"
+   ],
+   "use_cases": [
+    "Go 应用程序通过 database/sql 标准接口连接 MySQL 或 MariaDB",
+    "需要通过 Unix socket 或 TCP（含 IPv6）连接数据库，或需要压缩连接的场景",
+    "使用 TiDB 的项目（由 PingCAP 提供支持）"
+   ]
+  },
+  "sha": "85faf1d4936d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f82a5b01e8b0": {
+  "identity": {
+   "one_liner": "基于 Next.js 与本地 SQLite 的 AI 长篇网文写作桌面工作台",
+   "review": "Novel Smith 是一个运行在本地（Next.js + Electron 桌面版）的长篇网文写作工具，提供从灵感、世界观、章纲到逐章正文的 AI 起草流程，AI 生成需用户自配 LLM API Key。数据存储于本地单个 SQLite 文件，README 声明正文与 Key 不上传。通过分层记忆（近章全文+摘要+压缩）与全书 LLM 互审维持跨章一致性，写作规则、去 AI 味规则支持用户自行扩展。适合需要长期维护人设与设定的中长篇写作者；短篇一次性文本写作不在其目标范围。",
+   "highlights": [
+    "分层记忆引擎：近 4 章全文 + 近 3 章摘要 + 远楼层压缩装配上下文，配 S/A/B/C 四级事件衰减",
+    "全书一致性互审：全部设定事实跨章 LLM 互审，矛盾带章号锚点，含误报抑制规则",
+    "本地规则引擎提供 12 条去 AI 味检测规则，零 LLM 调用、零网络请求，可自行添加规则"
+   ],
+   "use_cases": [
+    "撰写需要长期维护人设、伏笔与世界观的中长篇网文/小说",
+    "未发表稿件不希望上传云端、需本地存储与本地处理的写作场景",
+    "在无代码签名 LLM Key 时先使用本地去 AI 味检测、字数统计、拆书分析、格式导出等免 Key 功能"
+   ]
+  },
+  "sha": "f82a5b01e8b0",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2895,5 +2895,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "05a02beb0529": {
+  "identity": {
+   "one_liner": "自托管的 OPNsense 防火墙机队管理平台，通过 Agent 检入实现监控、备份与分环更新",
+   "review": "OPNManager 是运行在自有服务器上的 OPNsense 防火墙机队管理系统，面向 MSP 和 IT 团队。防火墙通过原生 Agent 插件每两分钟检入一次，上报网关延迟、VPN、CARP、证书等遥测数据；服务器提供按客户/站点分组的仪表盘、定时配置备份与基线漂移比对、以及 canary/pilot/production 三环更新（手动推进、CARP 对不同时更新）。需 Ubuntu 22.04+、PHP 8.0+、MySQL/MariaDB、Apache/Nginx。客户与站点仅为组织分组，非租户登录。",
+   "highlights": [
+    "Agent 以原生 OPNsense 插件形式安装，默认每两分钟检入，上报网关延迟与丢包、VPN 隧道状态、CARP、服务状态、证书到期及 WAN 流量、CPU、内存、磁盘趋势",
+    "按计划进行配置备份，可将一份备份标记为批准基线并逐台比对差异，差异按规则描述命名，不自动恢复任何配置",
+    "更新以 campaign 形式经 canary/pilot/production 环推进，推进需手动确认，CARP 对的两个成员不会同时更新；事件（incident）按持续状态开关一次，支持维护窗口静默通知"
+   ],
+   "use_cases": [
+    "托管服务商（MSP）按客户和站点分组管理多台 OPNsense 防火墙，集中查看离线设备、待更新、网关故障、配置漂移和证书到期",
+    "通过基线比对审查防火墙配置变更，并在维护窗口内以分环方式推送 OPNsense 版本更新",
+    "管理 OPNsense、pfSense CE 与 pfSense Plus 混合机队（README 注明仅 OPNsense 经过实机验证，pfSense 支持已实现）"
+   ]
+  },
+  "sha": "05a02beb0529",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "048da3eff782": {
+  "identity": {
+   "one_liner": "自托管书签管理器，自动抓取标题、图片、标签并分类保存链接",
+   "review": "Pageslop 是一个自托管书签管理器，基于 Next.js 与 PostgreSQL 构建，通过 Docker Compose 部署。粘贴链接即可自动抓取标题、图片、描述、标签和分类；配套 Firefox 扩展可在标签页闲置后保存并关闭它们。默认仅监听 127.0.0.1，需自配 HTTPS 反向代理；worker 运行 Chromium 约 2 GB RAM。适合想在自己服务器上集中管理链接的个人用户。",
+   "highlights": [
+    "提供 REST API 与 MCP 服务器（docs/api.md、docs/mcp.md），供脚本和 AI agent 调用",
+    "支持规则式自动打标签、描述与分类，可配置 Anthropic API 密钥生成 AI 标签",
+    "包含链接健康检查（uptime monitoring）、基于共享标签的力导向关系图、书签 HTML 导入与 JSON/HTML 导出"
+   ],
+   "use_cases": [
+    "自托管场景下自动归档浏览器闲置标签页并稍后整理",
+    "通过脚本或 AI agent 以 REST API/MCP 服务器方式批量读写书签",
+    "导入浏览器书签 HTML 并按标签、分类浏览检索链接"
+   ]
+  },
+  "sha": "048da3eff782",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

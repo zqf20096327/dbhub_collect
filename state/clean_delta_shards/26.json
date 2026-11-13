@@ -31674,5 +31674,760 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "a7921067ade0+2": {
+  "fn": "Alex-Xcl/sqlweb_offline_common",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "delete",
+    6,
+    8,
+    6,
+    6
+   ],
+   [
+    "equal",
+    8,
+    12,
+    6,
+    10
+   ],
+   [
+    "replace",
+    12,
+    17,
+    10,
+    15,
+    [
+     "|困境|本项目的做法|",
+     "|---|---|",
+     "|内网机器装不了 Navicat / DBeaver|纯 Web，浏览器访问，无需客户端|",
+     "|有安全扫描，裸奔的 Web 工具会被通报|强制登录 + 动态图片验证码 + 限流，扫描器看到的是 401|",
+     "|每换一种数据库就要换一套工具|六种数据库统一到同一界面，驱动按库自动降级|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    15,
+    17
+   ],
+   [
+    "delete",
+    19,
+    21,
+    17,
+    17
+   ],
+   [
+    "equal",
+    21,
+    40,
+    17,
+    36
+   ],
+   [
+    "delete",
+    40,
+    42,
+    36,
+    36
+   ],
+   [
+    "equal",
+    42,
+    64,
+    36,
+    58
+   ],
+   [
+    "replace",
+    64,
+    72,
+    58,
+    59,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    143,
+    59,
+    130
+   ],
+   [
+    "replace",
+    143,
+    151,
+    130,
+    138,
+    [
+     "|数据库|3.7.9 下|说明|",
+     "|---|---|---|",
+     "|PostgreSQL|✅ `pg8000`|纯 Python|",
+     "|MySQL / MariaDB|✅ `pymysql`|纯 Python|",
+     "|达梦 DM8|✅ `dmpy`（dm-pure）|纯 Python|",
+     "|SQLite|✅ 标准库|无依赖|",
+     "|SQL Server|⚠️ 不可用|`pymssql` 要求 Python 3.8+ 的二进制 wheel|",
+     "|Oracle|⚠️ 不可用|`oracledb` 要求 Python 3.8+ 的二进制 wheel|"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    173,
+    138,
+    160
+   ],
+   [
+    "delete",
+    173,
+    175,
+    160,
+    160
+   ],
+   [
+    "equal",
+    175,
+    179,
+    160,
+    164
+   ],
+   [
+    "replace",
+    179,
+    187,
+    164,
+    172,
+    [
+     "|数据库|驱动（优先级从高到低）|依赖形态|跨平台|",
+     "|---|---|---|---|",
+     "|PostgreSQL|`psycopg2` → `pg8000`|二进制 / 纯 Python|全平台（pg8000 兜底）|",
+     "|MySQL / MariaDB|`PyMySQL`|纯 Python|全平台|",
+     "|SQL Server|`pymssql`|二进制（含 FreeTDS）|Linux/Windows/macOS 均有 wheel|",
+     "|Oracle|`oracledb`（thin 模式）→ `cx_Oracle`|二进制（thin 模式免客户端）|全平台|",
+     "|达梦 DM8|`dmPython` → `dmpy`（dm-pure）|官方二进制 / **纯 Python**|**macOS 只能走 dmpy**|",
+     "|SQLite|标准库 `sqlite3`|无|全平台|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    214,
+    172,
+    199
+   ],
+   [
+    "replace",
+    214,
+    218,
+    199,
+    203,
+    [
+     "|目录|形态|用途|",
+     "|---|---|---|",
+     "|`vendor/`|已经解包好的纯 Python 包（含 `.dist-info`）|**运行时直接 `sys.path` 加载，零安装** —— 默认走这条|",
+     "|`wheels/`|10 个 `py3-none-any` whl|留档 / 需要重装或补齐时用，`install.sh` 会在 vendor 不完整时**就地解包**（只用标准库 `zipfile`，不调 pip）|"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    233,
+    203,
+    218
+   ],
+   [
+    "replace",
+    233,
+    240,
+    218,
+    219,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    248,
+    219,
+    227
+   ],
+   [
+    "replace",
+    248,
+    252,
+    227,
+    231,
+    [
+     "|驱动|最新版|wheel 形态|意味着|",
+     "|---|---|---|---|",
+     "|`pymssql`|2.4.6|`cp39`~`cp315` × {win_amd64, win_arm64, manylinux_x86_64, manylinux_aarch64, musllinux_*, macosx_arm64, macosx_x86_64}|光一个 Python 版本就要 8 个平台文件，6 个版本合计 40+|",
+     "|`oracledb`|26.1.0|`cp310`~`cp315` × {win32, win_amd64, win_arm64, manylinux2014_x86_64, manylinux2014_aarch64, musllinux_*, macosx_universal2}|同上，且最低 cp310|"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    266,
+    231,
+    245
+   ],
+   [
+    "delete",
+    266,
+    268,
+    245,
+    245
+   ],
+   [
+    "equal",
+    268,
+    274,
+    245,
+    251
+   ],
+   [
+    "replace",
+    274,
+    283,
+    251,
+    260,
+    [
+     "|项|实现|",
+     "|---|---|",
+     "|口令存储|`sqlweb.db` 的 `users` 表只存 `salt` + `PBKDF2-HMAC-SHA256` 哈希，20 万次迭代；库文件权限 `0600`；每次落盘是一个事务（不会留半个文件）|",
+     "|时序侧信道|用户名错也跑一次假 PBKDF2，账号是否存在无法通过响应时间判断|",
+     "|失败提示|用户名错与口令错返回**同一句话**|",
+     "|会话|32 字节随机 token，`httpOnly` + `SameSite=Strict` Cookie；TTL 8 小时，闲置 30 分钟失效；进程内存表，重启全部失效|",
+     "|登录限速|按 **IP + 账号** 计次，1 分钟内失败 5 次即封 60 秒（HTTP 429）；同一出口 IP 的多人互不牵连|",
+     "|改密|需原口令；改密成功后只注销**该账号**的既有会话|",
+     "|初始化|首启需控制台一次性令牌，防被抢先设置|"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    312,
+    260,
+    289
+   ],
+   [
+    "replace",
+    312,
+    316,
+    289,
+    293,
+    [
+     "|角色|能力|",
+     "|---|---|",
+     "|`admin` 管理员|看全部数据源；可管账号、管数据源、改配置|",
+     "|`user` 普通账号|只能看被授权的那几个数据源；其它源界面里不出现，直接调接口返回 403|"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    344,
+    293,
+    321
+   ],
+   [
+    "replace",
+    344,
+    352,
+    321,
+    329,
+    [
+     "|区域|内容|",
+     "|---|---|",
+     "|实例下拉|多实例切换；标签后带 `127.0.0.1:6379 / db0 · 只读` 这类摘要|",
+     "|概览|版本、角色 / 模式（master / standalone）、已连接客户端、运行天数、已用 / 峰值 / maxmemory、dbN 的 keys 与过期数、DBSIZE、命中 / 未命中、过期 / 淘汰、总命令数、maxmemory 策略|",
+     "|浏览|`SCAN` 匹配（默认 `*`）+ 每批条数（≤500），列出 key / 类型 / TTL（`常驻` 或秒数），超过一批可\"继续\"翻页|",
+     "|key 详情|string 超 4 KB 截断；hash / zset 二维列表；list 带下标；set / stream 等给类型说明|",
+     "|命令执行|单行命令（`GET user:1`、`HGETALL cfg:app`），返回 JSON 与耗时；`readonly` 实例只放行读命令白名单（GET / TYPE / TTL / SCAN / HGETALL / LRANGE / SMEMBERS / ZRANGE / INFO 等），写命令直接拒绝并给出改法|",
+     "|实例配置（仅管理员）|新增 / 编辑 / 删除实例，**改完立即生效**，不用重启|"
+    ]
+   ],
+   [
+    "equal",
+    352,
+    365,
+    329,
+    342
+   ],
+   [
+    "replace",
+    365,
+    370,
+    342,
+    347,
+    [
+     "|触发|行为|",
+     "|---|---|",
+     "|输入 1 个字符|只在**已经展开、已经加载过的表**里本地过滤，即时出结果（不连库）|",
+     "|停顿 350 ms（≥2 字符）或按回车 / 点\"搜\"|调 `GET /api/search_tables`，跨当前数据源的**全部可见模式**搜表名，结果按 `schema.table` 扁平列出，并在顶部标出扫了几个模式、命中几张、耗时多少|",
+     "|`Esc` / 清空输入框|退出搜索结果，回到原来的树|"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    384,
+    347,
+    361
+   ],
+   [
+    "replace",
+    384,
+    388,
+    361,
+    362,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    388,
+    392,
+    362,
+    366
+   ],
+   [
+    "replace",
+    392,
+    394,
+    366,
+    368,
+    [
+     " - 表 → 右侧出列结构（双击直接生成 `SELECT * FROM schema.table LIMIT 100` 并执行）",
+     " - 视图 / 存储过程 / 函数 / 触发器 → 弹窗显示定义，带语法高亮，可一键复制"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    397,
+    368,
+    371
+   ],
+   [
+    "replace",
+    397,
+    405,
+    371,
+    379,
+    [
+     "|驱动|对象来源|定义来源|备注|",
+     "|---|---|---|---|",
+     "|PostgreSQL|`pg_class`（r/p/f/v/m/S）+ `pg_proc`（prokind 区分过程/函数）+ `pg_trigger`（`NOT tgisinternal`，排掉外键自动生成的内部触发器）|`pg_get_functiondef`（过程同样适用）/ `pg_get_viewdef` / `pg_get_triggerdef` / `pg_sequence` 读序列参数|PG 10 无 `prokind`，自动退回\"全部归函数\"；物化视图按 `relkind='m'` 输出 `CREATE MATERIALIZED VIEW`（不是 `CREATE VIEW`）；PG 9.x 无 `pg_sequence` 视图，序列定义退为空串|",
+     "|MySQL / MariaDB|`information_schema.TABLES` + `ROUTINES` + `TRIGGERS`|`ROUTINES.ROUTINE_DEFINITION` / `SHOW CREATE VIEW` / `SHOW CREATE TRIGGER`|过程体需要账号有 `SHOW ROUTINE`/相应权限，否则只能拿到名字|",
+     "|SQL Server|`sys.objects`（U/V/P/FN/IF/TF/SO/TR/SV）|`sys.sql_modules.definition`||",
+     "|Oracle|`ALL_OBJECTS`（失败退回 `ALL_TABLES`+`ALL_VIEWS`）|视图 `ALL_VIEWS.TEXT`；过程/函数/触发器 `ALL_SOURCE`||",
+     "|达梦 DM8|同 Oracle（`ALL_OBJECTS` / `ALL_SOURCE` 兼容视图）|同上|低版本若 `ALL_OBJECTS` 不可用，会退回只列表与视图|",
+     "|SQLite|`sqlite_master`（table/view）|`sqlite_master.sql`|没有过程/函数/序列/触发器，组自然为空|"
+    ]
+   ],
+   [
+    "equal",
+    405,
+    408,
+    379,
+    382
+   ],
+   [
+    "replace",
+    408,
+    413,
+    382,
+    387,
+    [
+     "|接口|作用|",
+     "|---|---|",
+     "|`GET /api/objects?schema=`|一次返回 `{table:[],view:[],procedure:[],function:[],sequence:[],trigger:[]}`；`&refresh=1` 绕过缓存|",
+     "|`GET /api/source?schema=&name=&kind=`|返回该对象的定义文本（`data` 为空串表示库里取不到，不是错误）|",
+     "|`GET /api/catalog?schema=`|表 + 列的类型字典，供编辑器补全，缓存 300 s|"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    420,
+    387,
+    394
+   ],
+   [
+    "replace",
+    420,
+    428,
+    394,
+    402,
+    [
+     "|对象|库里实际对象|树里分组|点开看到的定义首行|",
+     "|---|---|---|---|",
+     "|表|`t_user` / `t_order`|表 2|表走\"看列结构\"（单击出列，双击出 `SELECT … LIMIT 100`）|",
+     "|视图|`v_user` / 物化视图 `mv_dept`|视图 2|`CREATE OR REPLACE VIEW \"app\".\"v_user\" AS …` / `CREATE MATERIALIZED VIEW \"app\".\"mv_dept\" AS …`|",
+     "|存储过程|`proc_bump(int)`（PG11+ `CREATE PROCEDURE`）|存储过程 1|`CREATE OR REPLACE PROCEDURE app.proc_bump(IN p_id integer)`|",
+     "|函数|`fn_grade(int)` / 触发器函数 `trg_touch()`|函数 2|`CREATE OR REPLACE FUNCTION app.fn_grade(a integer)`|",
+     "|序列|`seq_demo` + serial 隐式 `t_user_id_seq` / `t_order_id_seq`|序列 3|`CREATE SEQUENCE \"app\".\"seq_demo\"`|",
+     "|触发器|`trg_user_bi BEFORE INSERT ON app.t_user`|触发器 1|`CREATE TRIGGER trg_user_bi BEFORE INSERT ON app.t_user FOR EACH ROW EXECUTE FUNCTION app.trg_touch();`|"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    449,
+    402,
+    423
+   ],
+   [
+    "replace",
+    449,
+    455,
+    423,
+    429,
+    [
+     "|你打的|候选来源|",
+     "|---|---|",
+     "|`sel`|SQL 关键字（`select` …）|",
+     "|`t_user` 之后、`FROM t_user` 只涉及一张表|该表的列名|",
+     "|别名或表名加点，如 `t.`（`FROM t_user t`）|该表全部列名（别名会按 `FROM/JOIN/UPDATE/INTO` 自动解析）|",
+     "|无关上下文|当前 schema 的表 / 视图 / 过程 / 函数名|"
+    ]
+   ],
+   [
+    "equal",
+    455,
+    462,
+    429,
+    436
+   ],
+   [
+    "replace",
+    462,
+    467,
+    436,
+    441,
+    [
+     "|机制|行为|影响面|",
+     "|---|---|---|",
+     "|元数据 TTL 缓存|`/api/objects`、`/api/source`、`/api/catalog`、`/api/tables` 按\"数据源 + 库 + schema\"缓存 120 s（字典 300 s）；`&refresh=1` 强制重查|反复展开同一 schema 不再打库；改完对象想立刻看到，加 `refresh=1` 或重启|",
+     "|连接复用|每个数据源保留最多 2 条空闲连接，下次请求先 `SELECT 1`（Oracle/达梦用 `SELECT 1 FROM DUAL`）验活，失败就丢弃重连；SQLite 因 `check_same_thread` 不复用|省掉 TCP 握手 + 登录鉴权；连接异常自动降级为新建，不会把坏连接传下去|",
+     "|响应压缩|任何 `/api/*` JSON 超过 2 KB 且客户端支持时用 gzip|补全字典 / 对象树这类响应通常压到 1/5 以内|"
+    ]
+   ],
+   [
+    "equal",
+    467,
+    469,
+    441,
+    443
+   ],
+   [
+    "delete",
+    469,
+    471,
+    443,
+    443
+   ],
+   [
+    "equal",
+    471,
+    509,
+    443,
+    481
+   ],
+   [
+    "replace",
+    509,
+    561,
+    481,
+    482,
+    [
+     "…（52 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    561,
+    565,
+    482,
+    486
+   ],
+   [
+    "replace",
+    565,
+    582,
+    486,
+    503,
+    [
+     "|字段|说明|",
+     "|---|---|",
+     "|`host` / `port`|监听地址与端口。只给本机用填 `127.0.0.1`|",
+     "|`base_path`|nginx 子路径前缀，如 `/sqlweb`；根路径部署留空|",
+     "|`readonly`|全局默认只读，可被单个数据源的 `readonly` 覆盖|",
+     "|`max_rows`|单次查询最多返回行数（上限 20000），超出标记\"已截断\"|",
+     "|`connect_timeout`|连接超时（秒）|",
+     "|`statement_timeout_ms`|语句超时（毫秒）。PG 走 `statement_timeout`，MySQL 走 `max_execution_time`|",
+     "|`databases[].driver`|`postgresql` / `mysql` / `sqlserver` / `oracle` / `dameng` / `sqlite`|",
+     "|`databases[].dbname`|PG / MySQL / SQLServer 填库名；Oracle 填 **服务名或 SID**；达梦留空（用 user 当 schema）|",
+     "|`databases[].path`|SQLite 文件绝对路径（`dbname` 会被自动同步）|",
+     "|`databases[].visible_schemas`|可见模式白名单，数组或逗号分隔字符串均可；留空/不写=全部可见。大小写不敏感|",
+     "|`redis`|Redis 实例数组，**为空时顶栏不出现 Redis 按钮**。字段：`key` / `label` / `host` / `port` / `db` / `username` / `password` / `readonly` / `timeout`|",
+     "|`redis[].db`|库号（0-15），对应 `SELECT n`|",
+     "|`redis[].username`|Redis 6+ ACL 用户名，没有就留空（老版本只认口令）|",
+     "|`redis[].readonly`|该实例只读：命令框只放行读命令白名单，写命令直接拒绝|",
+     "|`redis[].timeout`|连接与单条命令超时（秒），默认 5|"
+    ]
+   ],
+   [
+    "equal",
+    582,
+    588,
+    503,
+    509
+   ],
+   [
+    "replace",
+    588,
+    595,
+    509,
+    516,
+    [
+     "|表|内容|",
+     "|---|---|",
+     "|`kv`|标量配置：`title` / `host` / `port` / `base_path` / `readonly` / `max_rows` / `default_db` …|",
+     "|`datasources`|每个数据源一行；`key` 主键，`payload` 存主机、端口、账号、口令、`visible_schemas` 等|",
+     "|`redis`|每个 Redis 实例一行（含 ACL 用户名与口令），只存在服务端|",
+     "|`users`|每个账号一行：`salt` + `hash`（PBKDF2-SHA256，20 万次）+ `role` + `allow_dbs` / `allow_redis`|",
+     "|`meta`|版本与迁移记录|"
+    ]
+   ],
+   [
+    "equal",
+    595,
+    628,
+    516,
+    549
+   ],
+   [
+    "delete",
+    628,
+    631,
+    549,
+    549
+   ],
+   [
+    "equal",
+    631,
+    639,
+    549,
+    557
+   ],
+   [
+    "replace",
+    639,
+    653,
+    557,
+    558,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    653,
+    668,
+    558,
+    573
+   ],
+   [
+    "replace",
+    668,
+    672,
+    573,
+    577,
+    [
+     "|服务端 `base_path`|nginx `proxy_pass`|说明|",
+     "|---|---|---|",
+     "|`/sqlweb`|`http://127.0.0.1:8899`（**不带结尾斜杠**）|原样把 `/sqlweb/...` 转给上游，服务端自己剥前缀|",
+     "|空（根路径）|`http://127.0.0.1:8899/`（带结尾斜杠）|nginx 剥掉 `/sqlweb` 再转，上游只看到 `/login`|"
+    ]
+   ],
+   [
+    "equal",
+    672,
+    677,
+    577,
+    582
+   ],
+   [
+    "delete",
+    677,
+    679,
+    582,
+    582
+   ],
+   [
+    "equal",
+    679,
+    681,
+    582,
+    584
+   ],
+   [
+    "replace",
+    681,
+    692,
+    584,
+    595,
+    [
+     "|项|麒麟版 v2.3|本版 common|",
+     "|---|---|---|",
+     "|数据库|PG + 达梦（driver 分派写死）|6 种，独立适配层|",
+     "|驱动来源|只打包 cp37–cp312 的 Linux wheel|优先纯 Python，跨平台，且随包 vendor|",
+     "|登录|无|强制登录 + 验证码 + 限流|",
+     "|数据源|改 `config.json` 重启|界面增删改 + 测试连接 + 热加载|",
+     "|验证码|无|纯标准库 PNG|",
+     "|启动预检|会去连默认库，连不上拒绝启动|**不连默认库**，连接按需建立|",
+     "|Redis 面板|有（`/api/redis/*` 5 个接口，前端面板）|概览 / SCAN 浏览 / key 详情 / 命令执行，加界面增删改实例与按账号授权|",
+     "|前端|单库 + Redis 双面板|多数据源 + 对象树 + 数据源管理 + 改密 + 账号管理|",
+     "|账号|无|单用户 → 多账号（admin / user）+ 按账号分配数据源 + 并发互不影响|"
+    ]
+   ],
+   [
+    "equal",
+    692,
+    699,
+    595,
+    602
+   ],
+   [
+    "replace",
+    699,
+    702,
+    602,
+    605,
+    [
+     " - `auth.json`（v1 单用户或 v2 多用户）在首次启动时整批导入 `sqlweb.db` 的 `users` 表，旧管理员口令继续可用；没有 Redis 授权的账号导入后 `allow_redis` 为空（=看不到 Redis 实例）",
+     " - `config.json` 里的老数据源导入 `datasources` 表（缺 `visible_schemas` 的按\"全部可见\"处理）；原有 `redis` 段导入 `redis` 表，**升级后数据源下拉里的「Redis 缓存」组立即回来**",
+     " - 1.3.0 没有新增配置字段，旧 `config.json` / `auth.json` 直接可用——导入后原文件被改名为 `*.migrated-<时间>`，内容不动，可随时回滚"
+    ]
+   ],
+   [
+    "equal",
+    702,
+    705,
+    605,
+    608
+   ],
+   [
+    "delete",
+    705,
+    707,
+    608,
+    608
+   ],
+   [
+    "equal",
+    707,
+    714,
+    608,
+    615
+   ],
+   [
+    "replace",
+    714,
+    737,
+    615,
+    616,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    737,
+    738,
+    616,
+    617
+   ],
+   [
+    "delete",
+    738,
+    740,
+    617,
+    617
+   ],
+   [
+    "equal",
+    740,
+    754,
+    617,
+    631
+   ],
+   [
+    "delete",
+    754,
+    756,
+    631,
+    631
+   ],
+   [
+    "equal",
+    756,
+    758,
+    631,
+    633
+   ],
+   [
+    "replace",
+    758,
+    777,
+    633,
+    650,
+    [
+     "|现象|处理|",
+     "|---|---|",
+     "|麒麟上 `./install.sh` 报 `需要 Python 3.8 及以上`|那是旧包。本版门槛是 3.7，重新解压新包即可|",
+     "|麒麟上 `./install.sh` 或 `./kylin.sh` 报 `Permission denied`|解包工具丢了执行位：改跑 `sh install.sh` / `sh kylin.sh`，或在解包后 `chmod +x *.sh`|",
+     "|界面里六种库**全部**显示\"驱动缺失\"|服务跑到了错误的解释器上（常见于 `.venv` 建了一半、或直接用系统 python3 而 vendor 被漏打）。先看启动日志里的 `Python: x.y.z`，确认 vendor 目录在包内，然后删掉 `.venv` 重跑 `./install.sh`|",
+     "|界面里某库显示\"驱动缺失\"|vendor 在的话先看解释器版本（3.7 下 SQL Server / Oracle 本就不可用）；否则把对应 whl 放进 `wheels/` 后重跑 `./install.sh`|",
+     "|登录页提示\"验证码已失效\"|验证码 5 分钟过期且一次性，刷新图片重试|",
+     "|登录 429|同一 IP 1 分钟内失败 5 次被限速，等 60 秒|",
+     "|忘记管理员口令|停服后删掉 `sqlweb.db` 的 `users` 行（或整库），重启回到初始化模式并打印新令牌|",
+     "|手改了 SQL / 状态库但界面没变|界面与接口一律以 `sqlweb.db` 为准；用 `sqlite3` 直接改库要重启服务才生效。界面里改则不用|",
+     "|nginx 反代 `/sqlweb/` 打不开（404 / 白屏 / 资源全丢）|先看启动日志有没有 `访问前缀: /sqlweb`；没有就是 `base_path` 没读到——用 `python3 setconfig.py --set base_path=/sqlweb` 写状态库再重启，不要再改 `config.json`。另确认 `proxy_pass` 的斜杠跟模式配套：服务端 `base_path=/sqlweb` 时写 `http://127.0.0.1:8899`（不带斜杠），`base_path` 为空时才写 `http://127.0.0.1:8899/`。配反了必然 404，页面会提示当前前缀|",
+     "|`CREATE [OR REPLACE] PROCEDURE` / 触发器报语法错误、像是被截断|数据源是只读时先在【数据源管理】改成「可写」；仍报错就看错误里的语句片段——1.3.0 起程序块整段提交，若片段以 `END` 开头说明用了旧包，换新包即可|",
+     "|改了 `config.json` 但端口 / 子路径没变|1.3.0 起配置真源是 `sqlweb.db`，`config.json` 只在首次启动导入一次。用 `python3 setconfig.py --set ...` 或界面改；启动日志会对残留的 `config.json` 打出提示|",
+     "|达梦在 mac 上报 `ModuleNotFoundError: dmPython`|装纯 Python 驱动：`pip install dm-pure`，服务会自动降级（3.7 上走 vendor 里的 `dmpy`）|",
+     "|Windows 下中文乱码|用 `chcp 65001` 或在 PowerShell 里跑；`start.bat` 已内置|",
+     "|端口被占、启动后立刻退出|`./install.sh` 会打印日志尾部；先 `./stop.sh`，或换端口 `./install.sh --port 8898`|",
+     "|systemd 服务起不来|`journalctl -u sqlweb-offline -n 50`；多半是端口占用或 `sqlweb.db` 内容有误（可用 `sqlite3 sqlweb.db .schema` 自查）|"
+    ]
+   ],
+   [
+    "equal",
+    777,
+    781,
+    650,
+    654
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

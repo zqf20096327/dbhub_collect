@@ -3106,5 +3106,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c4b238415c9": {
+  "identity": {
+   "one_liner": "基于 Chef 自定义资源管理 Oracle MySQL 服务、配置、客户端、数据库与账号的 cookbook。",
+   "review": "该 cookbook 提供一组扁平自定义资源（mysql_service、mysql_client、mysql_database、mysql_user 等），用于在 Linux 平台上安装、配置和管理 Oracle MySQL 实例。面向使用 Chef Infra 17+ 与 systemd 的运维人员。版本 12 从库资源继承迁移为扁平资源，取消 root recipe 和节点属性默认值；仓库配置由调用方负责，需自行准备 MySQL 包或使用 install_method 'none'。SQL 经临时私有选项文件执行，密码属性为敏感值。",
+   "highlights": [
+    "提供 mysql_service、mysql_client、mysql_config、mysql_database、mysql_user 等自定义资源，统一管理 MySQL 实例、配置与账号",
+    "SQL 通过厂商客户端和临时私有选项文件执行，不含 shell 插值与密码参数，错误报告仅含 MySQL 错误号",
+    "在存在 AppArmor profile 的主机上追加实例级访问规则并重载，不禁用 SELinux；默认使用 MySQL 8.4 LTS"
+   ],
+   "use_cases": [
+    "使用 Chef Infra 在 RHEL、Debian、Ubuntu 等发行版上声明式安装和管理 MySQL 8.x 服务实例",
+    "在 wrapper cookbook 中管理 MySQL 数据库、用户与授权配置，密码接入既有 secret store",
+    "通过 Kitchen（dokken 配置）对真实 MySQL 服务、授权与认证进行收敛与验证测试"
+   ]
+  },
+  "sha": "0c4b238415c9",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9cdcc5688db6": {
+  "identity": {
+   "one_liner": "基于 Electron + React + tRPC + SQLite 的 TypeScript 桌面应用启动模板",
+   "review": "该仓库是一个 pnpm monorepo，包含 template 目录下的 Electron 应用模板（通过 degit 复制使用）和 Next.js + Nextra 构建的文档站点。模板以 React 19、TanStack Router/Query、Tailwind CSS、Drizzle ORM 搭配 SQLite，通过 tRPC 实现端到端类型化 IPC，并集成 electron-builder、electron-updater、GitHub Actions 等发布流程。开发要求 Node.js 22.12+ 和 pnpm，模板本身用 npm 安装。项目采用 MIT 许可证。",
+   "highlights": [
+    "提供 tRPC + Zod 的端到端类型化 IPC，数据层为 SQLite 搭配 Drizzle ORM 的类型化查询与迁移",
+    "包含 electron-builder 打包、electron-updater 自动更新、GitHub Actions 构建签名发布流程，以及主进程 V8 字节码编译",
+    "内置 LicenseManager.dev 许可证密钥与激活、Stripe 支付集成，前端提供 i18next 类型化翻译与明暗主题"
+   ],
+   "use_cases": [
+    "使用 `npx degit nick-keller/electron-appstack/template` 复制模板后以 `npm install && npm run dev` 启动新桌面应用项目",
+    "需要本地 SQLite 数据存储、类型安全 IPC 通信的 Electron 应用开发",
+    "计划通过自动更新、代码签名和许可证密钥分发付费桌面软件的团队"
+   ]
+  },
+  "sha": "9cdcc5688db6",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

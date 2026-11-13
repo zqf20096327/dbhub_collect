@@ -19212,5 +19212,1475 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "8db16cc57735+2": {
+  "fn": "github/gh-ost",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "ci replica-tests downloads release"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "#### GitHub's online schema migration for MySQL "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    12,
+    5,
+    12
+   ],
+   [
+    "delete",
+    12,
+    14,
+    12,
+    12
+   ],
+   [
+    "equal",
+    14,
+    18,
+    12,
+    16
+   ],
+   [
+    "replace",
+    18,
+    19,
+    16,
+    17,
+    [
+     "`gh-ost` uses the same pattern. However it differs from all existing tools by not using triggers. We have recognized the triggers to be the source of many limitations and risks."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    17,
+    18
+   ],
+   [
+    "replace",
+    20,
+    21,
+    18,
+    19,
+    [
+     "Instead, `gh-ost` uses the binary log stream to capture table changes, and asynchronously applies them onto the _ghost_ table. `gh-ost` takes upon itself some tasks that other tools leave for the database to perform. As result, `gh-ost` has greater control over the migration process; can truly suspend it; can truly decouple the migration's write load from the master's workload."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    19,
+    20
+   ],
+   [
+    "replace",
+    22,
+    23,
+    20,
+    21,
+    [
+     "In addition, it offers many operational perks that make it safer, trustworthy and fun to use."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    21,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     "gh-ost general flow"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    29,
+    23,
+    27
+   ],
+   [
+    "replace",
+    29,
+    31,
+    27,
+    29,
+    [
+     "- True pause: when `gh-ost` throttles, it truly ceases writes on master: no row copies and no ongoing events processing. By throttling, you return your master to its original workload",
+     "- Dynamic control: you can interactively reconfigure `gh-ost`, even as migration still runs. You may forcibly initiate throttling."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    29,
+    31
+   ],
+   [
+    "replace",
+    33,
+    34,
+    31,
+    32,
+    [
+     "- External hooks can couple `gh-ost` with your particular environment."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    32,
+    33
+   ],
+   [
+    "replace",
+    35,
+    36,
+    33,
+    34,
+    [
+     "Please refer to the docs for more information. No, really, read the docs."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    34,
+    37
+   ],
+   [
+    "replace",
+    39,
+    40,
+    37,
+    38,
+    [
+     "For online schema changes, see the cheatsheet. You may be interested in invoking `gh-ost` in various modes:"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    47,
+    38,
+    45
+   ],
+   [
+    "replace",
+    47,
+    48,
+    45,
+    46,
+    [
+     "`gh-ost` also supports **moving tables across clusters** without a schema change (`--move-tables`); you switch application traffic yourself after cut-over. See the user guide and design doc."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    51,
+    46,
+    49
+   ],
+   [
+    "replace",
+    51,
+    52,
+    49,
+    50,
+    [
+     "- Testing above all, try out `--test-on-replica` first few times. Better yet, make it continuous. We have multiple replicas where we iterate our entire fleet of production tables, migrating them one by one, checksumming the results, verifying migration is good."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    59,
+    50,
+    57
+   ],
+   [
+    "replace",
+    59,
+    60,
+    57,
+    58,
+    [
+     "- Get familiar with the interactive commands"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    58,
+    61
+   ],
+   [
+    "replace",
+    63,
+    70,
+    61,
+    68,
+    [
+     "- requirements and limitations",
+     "- common questions",
+     "- what if?",
+     "- the fine print",
+     "- Community questions",
+     "- Using `gh-ost` on AWS RDS",
+     "- Using `gh-ost` on Azure Database for MySQL"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    73,
+    68,
+    71
+   ],
+   [
+    "replace",
+    73,
+    74,
+    71,
+    72,
+    [
+     "Originally this was named `gh-osc`: GitHub Online Schema Change, in the likes of Facebook online schema change and pt-online-schema-change."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    78,
+    72,
+    76
+   ],
+   [
+    "replace",
+    78,
+    83,
+    76,
+    77,
+    [
+     "`gh-ost` is licensed under the MIT license"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    77,
+    78
+   ],
+   [
+    "replace",
+    84,
+    91,
+    78,
+    79,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    97,
+    79,
+    85
+   ],
+   [
+    "replace",
+    97,
+    98,
+    85,
+    86,
+    [
+     "Download latest release here"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    100,
+    86,
+    88
+   ],
+   [
+    "replace",
+    100,
+    102,
+    88,
+    90,
+    [
+     "- script/build - this is the same build script used by CI hence the authoritative; artifact is `./bin/gh-ost` binary.",
+     "- build.sh for building the release artifacts (`tar.gz` archives plus `.rpm`/`.deb` packages and a `SHA256SUMS` manifest) in `/tmp/gh-ost-release`"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    90,
+    91
+   ],
+   [
+    "replace",
+    103,
+    104,
+    91,
+    92,
+    [
+     "Generally speaking, `master` branch is stable, but only releases are to be used in production."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    108,
+    92,
+    96
+   ],
+   [
+    "replace",
+    108,
+    115,
+    96,
+    103,
+    [
+     "- @jonahberquist",
+     "- @ggunson",
+     "- @tomkrouper",
+     "- @shlomi-noach",
+     "- @jessbreckenridge",
+     "- @gtowey",
+     "- @timvaillancourt"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "abc62fc579b9+2": {
+  "fn": "supabase/supabase-swift",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "replace",
+    0,
+    8,
+    0,
+    1,
+    [
+     "<a href=\"https://supabase.io\">"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    1,
+    2
+   ],
+   [
+    "replace",
+    9,
+    10,
+    2,
+    3,
+    [
+     " Supabase Logo"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    3,
+    4
+   ],
+   [
+    "replace",
+    11,
+    17,
+    4,
+    5,
+    [
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    5,
+    6
+   ],
+   [
+    "replace",
+    18,
+    19,
+    6,
+    7,
+    [
+     " Supabase Swift SDK "
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    7,
+    8
+   ],
+   [
+    "replace",
+    20,
+    23,
+    8,
+    11,
+    [
+     " Guides",
+     " ·",
+     " Reference Docs"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    11,
+    12
+   ],
+   [
+    "replace",
+    24,
+    25,
+    12,
+    13,
+    [
+     "Coverage Status"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    13,
+    16
+   ],
+   [
+    "replace",
+    28,
+    29,
+    16,
+    17,
+    [
+     "|Library|Description|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    17,
+    18
+   ],
+   [
+    "replace",
+    30,
+    36,
+    18,
+    24,
+    [
+     "|**Supabase**|Full client — includes all libraries below|",
+     "|**Auth**|User authentication and session management|",
+     "|**PostgREST**|Query your Postgres database via REST|",
+     "|**Realtime**|Subscribe to database changes over WebSocket|",
+     "|**Storage**|Manage files and objects|",
+     "|**Functions**|Invoke Supabase Edge Functions|"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    46,
+    24,
+    34
+   ],
+   [
+    "replace",
+    46,
+    47,
+    34,
+    35,
+    [
+     "> Check the Support Policy to learn when dropping Xcode, Swift, and platform versions will not be considered a **breaking change**."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    52,
+    35,
+    40
+   ],
+   [
+    "delete",
+    52,
+    54,
+    40,
+    40
+   ],
+   [
+    "equal",
+    54,
+    58,
+    40,
+    44
+   ],
+   [
+    "replace",
+    58,
+    72,
+    44,
+    45,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    45,
+    46
+   ],
+   [
+    "delete",
+    73,
+    74,
+    46,
+    46
+   ],
+   [
+    "equal",
+    74,
+    75,
+    46,
+    47
+   ],
+   [
+    "replace",
+    75,
+    76,
+    47,
+    48,
+    [
+     "If you're using Xcode, use this guide to add `supabase-swift` to your project. Use `https://github.com/supabase/supabase-swift.git` for the URL when Xcode asks."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    94,
+    48,
+    66
+   ],
+   [
+    "replace",
+    94,
+    107,
+    66,
+    67,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    115,
+    67,
+    75
+   ],
+   [
+    "replace",
+    115,
+    119,
+    75,
+    76,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    124,
+    76,
+    81
+   ],
+   [
+    "delete",
+    124,
+    125,
+    81,
+    81
+   ],
+   [
+    "equal",
+    125,
+    129,
+    81,
+    85
+   ],
+   [
+    "replace",
+    129,
+    135,
+    85,
+    86,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    141,
+    86,
+    92
+   ],
+   [
+    "delete",
+    141,
+    142,
+    92,
+    92
+   ],
+   [
+    "equal",
+    142,
+    146,
+    92,
+    96
+   ],
+   [
+    "replace",
+    146,
+    150,
+    96,
+    97,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    162,
+    97,
+    109
+   ],
+   [
+    "replace",
+    162,
+    179,
+    109,
+    110,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    196,
+    110,
+    127
+   ],
+   [
+    "replace",
+    196,
+    200,
+    127,
+    128,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    208,
+    128,
+    136
+   ],
+   [
+    "replace",
+    208,
+    213,
+    136,
+    137,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    233,
+    137,
+    157
+   ],
+   [
+    "delete",
+    233,
+    234,
+    157,
+    157
+   ],
+   [
+    "equal",
+    234,
+    241,
+    157,
+    164
+   ],
+   [
+    "delete",
+    241,
+    242,
+    164,
+    164
+   ],
+   [
+    "equal",
+    242,
+    253,
+    164,
+    175
+   ],
+   [
+    "replace",
+    253,
+    254,
+    175,
+    176,
+    [
+     "Additional examples are available in the Examples directory."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    257,
+    176,
+    179
+   ],
+   [
+    "replace",
+    257,
+    262,
+    179,
+    184,
+    [
+     "- API documentation",
+     " on the Swift Package Index. It has a guide for each library: getting started, error handling,",
+     " standalone use, and testing with a stub transport.",
+     "- V3 migration guide, to move an app from v2.",
+     "- Examples."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    264,
+    184,
+    186
+   ],
+   [
+    "replace",
+    264,
+    265,
+    186,
+    187,
+    [
+     "DEVELOPMENT.md."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    295,
+    187,
+    217
+   ],
+   [
+    "replace",
+    295,
+    302,
+    217,
+    224,
+    [
+     "|Service|Library|Server releases|Lowest supported version|",
+     "|---------|--------------------------------|--------------------------------------------------------------------------|------------------------|",
+     "|Auth|`Auth`|supabase/auth|Latest release|",
+     "|Storage|`Storage`|supabase/storage|Latest release|",
+     "|Functions|`Functions`|supabase/edge-runtime|Latest release|",
+     "|PostgREST|`PostgREST`|PostgREST/postgrest|Latest release|",
+     "|Realtime|`Realtime`|supabase/realtime|Latest release|"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    304,
+    224,
+    226
+   ],
+   [
+    "replace",
+    304,
+    315,
+    226,
+    227,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    316,
+    227,
+    228
+   ],
+   [
+    "replace",
+    316,
+    322,
+    228,
+    229,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    323,
+    229,
+    230
+   ],
+   [
+    "replace",
+    323,
+    333,
+    230,
+    231,
+    [
+     "This project is licensed under the MIT License — see the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "0158efaa9274+2": {
+  "fn": "Nyrest/hindsight-ingestion",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    2,
+    [
+     "🧠 Hindsight Ingestion ",
+     " Keep your notes and files in sync with Hindsight, automatically. "
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    2,
+    3
+   ],
+   [
+    "replace",
+    5,
+    9,
+    3,
+    5,
+    [
+     "Latest tag ",
+     " Image size "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    11,
+    6,
+    7,
+    [
+     "Sync **Notion, SiYuan, DeepWiki, S3, WebDAV, WebCAL, CalDAV, Email (IMAP), Steam, Google People, Google Drive, OneDrive and local files** into Hindsight memory banks. Self-host with Docker and manage everything from the WebUI."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    7,
+    8
+   ],
+   [
+    "replace",
+    12,
+    15,
+    8,
+    9,
+    [
+     " Features · Sources · Quick start · Usage · Configuration · Development"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    9,
+    10
+   ],
+   [
+    "replace",
+    16,
+    19,
+    10,
+    11,
+    [
+     " Hindsight Ingestion task dashboard"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    37,
+    11,
+    29
+   ],
+   [
+    "replace",
+    37,
+    56,
+    29,
+    48,
+    [
+     "|Source|Text|Multimodal|Incremental Sync|Use Cases|",
+     "|:---|:---:|:---:|:---:|:---|",
+     "|**Notion**|✅|✅|✅|Databases or pages with optional subpages, PRDs, engineering wikis, meeting notes|",
+     "|**SiYuan**|✅|✅|✅|Personal notes, academic research, linked Zettelkasten, offline docs|",
+     "|**S3 / S3-compatible storage**|✅|✅|✅|Enterprise document archives, data lakes, multimodal buckets, pipeline artifacts|",
+     "|**WebDAV**|✅|✅|✅|NAS storage (Synology/QNAP/Nextcloud), Obsidian & Zotero vaults|",
+     "|**WebCAL**|✅|—|✅|iCalendar events, todo tasks|",
+     "|**CalDAV**|✅|—|—|Calendar collections, events and to-dos|",
+     "|**Steam**|✅|—|✅|Player profile, game library, playtime and achievements|",
+     "|**Email (IMAP)**|✅|—|✅|Email conversations, inbox indexing|",
+     "|**Google Drive**|✅|✅|✅|Google Workspace collaboration (Docs, Sheets, Slides), shared team drives|",
+     "|**Google People**|✅|—|✅|Saved contacts, people and organizations, relationships and contact notes|",
+     "|**OneDrive**|✅|✅|✅|Microsoft 365 workspaces, Office files (Word, Excel, PPT), SharePoint folders|",
+     "|**File System**|✅|✅|✅|Local source code repos, developer specs, local Obsidian/Logseq vaults|",
+     "|**SQL**|✅|—|—|Data analysis, reporting from query results|",
+     "|**DeepWiki**|✅|—|—|Public repository documentation|",
+     "|**FTP / FTPS / SFTP**|✅|✅|✅|Remote files, shared folders|",
+     "|**Git**|✅|✅|✅|Codebase Wiki, repo documentation, file sync|",
+     "|**Cloudflare Browser Run (Web scraping)**|✅|—|✅|Online documentation, API references, blogs, public help centers & FAQs|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    61,
+    48,
+    53
+   ],
+   [
+    "replace",
+    61,
+    62,
+    53,
+    54,
+    [
+     "Add a read-only directory mount to the service in docker-compose.yml:"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    86,
+    54,
+    78
+   ],
+   [
+    "replace",
+    86,
+    90,
+    78,
+    82,
+    [
+     "|Variable|What to enter|",
+     "|---|---|",
+     "|`BASIC_AUTH_PASSWORD`|WebUI login password. The username defaults to `admin`.|",
+     "|`CREDENTIAL_ENCRYPTION_KEY`|Generate with `openssl rand -hex 32`, or use a random passphrase of at least 16 characters.|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    99,
+    82,
+    91
+   ],
+   [
+    "replace",
+    99,
+    100,
+    91,
+    92,
+    [
+     "Open http://localhost:8080 and sign in with `admin` and the password you set."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    112,
+    92,
+    104
+   ],
+   [
+    "replace",
+    112,
+    121,
+    104,
+    113,
+    [
+     "|Action|When to use it|",
+     "|---|---|",
+     "|**Run now**|Sync without waiting for the next scheduled run.|",
+     "|**Dry-run**|Preview changes without writing to Hindsight or changing sync progress.|",
+     "|**Full reconcile**|Scan the whole source to check for changes and deletions. Unchanged content is still skipped.|",
+     "|**Full re-ingest**|Upload every matching item again, including unchanged content.|",
+     "|**Cancel run**|Stop the current run. Changes already made in Hindsight are not rolled back.|",
+     "|**Delete documents**|Pause the task and delete its tagged Hindsight documents and associated memories, with live progress and an estimated remaining time. Source content stays intact; retry if cleanup fails.|",
+     "|**Disable**|Pause scheduled syncs while keeping the task's configuration and progress.|"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    126,
+    113,
+    118
+   ],
+   [
+    "replace",
+    126,
+    135,
+    118,
+    127,
+    [
+     "|Variable|Required|Default / purpose|",
+     "|---|:---:|---|",
+     "|`BASIC_AUTH_USERNAME`|✅|WebUI and API username. Compose default: `admin`.|",
+     "|`BASIC_AUTH_PASSWORD`|✅|WebUI and API password.|",
+     "|`CREDENTIAL_ENCRYPTION_KEY`|✅|Credential encryption key: 64 hex characters, base64-encoded 32 bytes, or a passphrase of at least 16 characters.|",
+     "|`PUBLIC_URL`|—|Empty by default; OAuth uses the current browser origin. Set to use a fixed external URL.|",
+     "|`LOG_LEVEL`|—|`info`. Also accepts `debug`, `warn` and `error`.|",
+     "|`TZ`|—|Unset. Optional container timezone override; also initializes the application timezone (UTC when unset).|",
+     "|`DISABLE_AUTH`|—|`false`. Set to `true` to allow access without signing in; DO THIS ONLY IF YOU HAVE EXTERNAL AUTHENTICATION SETUP LIKE CLOUDFLARE ACCESS.|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    138,
+    127,
+    130
+   ],
+   [
+    "replace",
+    138,
+    143,
+    130,
+    135,
+    [
+     "|Variable|Default|Purpose|",
+     "|---|---|---|",
+     "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.|",
+     "|`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "|`LISTEN_ADDR`|`:8080`|HTTP listen address.|"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    146,
+    135,
+    138
+   ],
+   [
+    "replace",
+    146,
+    148,
+    138,
+    139,
+    [
+     " Build, run and check the project locally "
+    ]
+   ],
+   [
+    "equal",
+    148,
+    155,
+    139,
+    146
+   ],
+   [
+    "replace",
+    155,
+    161,
+    146,
+    147,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    178,
+    147,
+    164
+   ],
+   [
+    "delete",
+    178,
+    180,
+    164,
+    164
+   ],
+   [
+    "equal",
+    180,
+    182,
+    164,
+    166
+   ],
+   [
+    "replace",
+    182,
+    183,
+    166,
+    167,
+    [
+     "MIT."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "a7e6b3d9ea69+2": {
+  "fn": "hash-wk/JobTracker",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    18,
+    5,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "|Board|Analytics|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "|Board|Analytics|"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "|Interviews|Application detail|"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "|Interviews|Detail|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    25,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "|Layer|Technology|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    29,
+    30
+   ],
+   [
+    "replace",
+    30,
+    33,
+    30,
+    33,
+    [
+     "|Frontend|React (Vite), React Router, Axios, Recharts, @hello-pangea/dnd, plain CSS|",
+     "|Backend|Node.js, Express, JWT, bcryptjs|",
+     "|Database|PostgreSQL (Neon) with Prisma ORM|"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    40,
+    33,
+    40
+   ],
+   [
+    "replace",
+    40,
+    45,
+    40,
+    41,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    49,
+    41,
+    45
+   ],
+   [
+    "replace",
+    49,
+    50,
+    45,
+    46,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    46,
+    47
+   ],
+   [
+    "replace",
+    51,
+    58,
+    47,
+    54,
+    [
+     "|POST|`/api/auth/register`|Create an account|",
+     "|POST|`/api/auth/login`|Log in and receive a token|",
+     "|GET, POST|`/api/applications`|List (with search and filters) or create|",
+     "|GET, PUT, DELETE|`/api/applications/:id`|Read, update or delete one application|",
+     "|GET|`/api/stats`|Analytics data|",
+     "|GET, POST|`/api/interviews`|List or schedule interviews|",
+     "|PUT, DELETE|`/api/interviews/:id`|Update or delete an interview|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    63,
+    54,
+    59
+   ],
+   [
+    "replace",
+    63,
+    64,
+    59,
+    60,
+    [
+     "You need Node.js 18+ and a free Neon PostgreSQL database."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    69,
+    60,
+    65
+   ],
+   [
+    "replace",
+    69,
+    80,
+    65,
+    66,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    93,
+    66,
+    79
+   ],
+   [
+    "replace",
+    93,
+    94,
+    79,
+    80,
+    [
+     "Wandana Kulathilaka · LinkedIn · GitHub"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

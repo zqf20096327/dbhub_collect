@@ -3136,5 +3136,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "965b190ff27c": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 MCP 记忆服务器，用 wikilink 作图检索 markdown 笔记",
+   "review": "该项目为 Claude Code、Cursor、Codex 等 MCP 客户端提供对本地 markdown/Obsidian 笔记的只读检索：向量搜索定位入口笔记，查询时解析 [[wikilinks]] 做一跳图扩展补充候选，SQLite 为唯一存储。通过 uvx 或 pip 安装，sgm-index 建索引、sgm-mcp 接入客户端、sgm-ask 命令行查询。自述为试点性质项目，测试覆盖不均匀。",
+   "highlights": [
+    "支持任意 markdown 文件夹（含 Obsidian 库）增量索引，仅重嵌入新增或变更笔记",
+    "查询时解析 wikilinks 做一跳图扩展（上限 40 邻居），与向量命中合并排序；图失败时降级为纯向量检索",
+    "提供 lite（ONNX Runtime，无 torch）与 torch 两种后端，索引互相兼容；提供 --ab 对比两种检索效果"
+   ],
+   "use_cases": [
+    "让编码代理在会话之间回忆用户已写下的 markdown 笔记内容",
+    "对含 wikilinks 的 Obsidian/Logsec 或普通 markdown 库做 Graph RAG 检索",
+    "用 sgm-ask --ab 在自己的笔记上测量向量与图模式的检索差异"
+   ]
+  },
+  "sha": "965b190ff27c",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

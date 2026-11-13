@@ -3064,5 +3064,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4cbdfa1a7492": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL/MySQL 现有数据库即时生成 REST 与 MCP API 的 Go 服务",
+   "review": "pRESTd 是一个用 Go 编写的后端服务，连接已有或新建的 PostgreSQL（9.5+，默认引擎）或 MySQL（8.0.19+，v2.5 起原生支持），将表自动暴露为 GET /{database}/{schema}/{table} 形式的 CRUD 端点，并提供自定义 SQL 路由、JWT 认证、ACL 以及只读 MCP 端点。适合希望不手写后端即可为数据库提供 API 的使用者；部署支持 Docker、Homebrew、Go 安装及 Heroku 一键部署，可通过注册表或 allowed_databases 配置同时服务多个数据库。",
+   "highlights": [
+    "对现有 PostgreSQL/MySQL 数据库自动生成 REST CRUD 端点及只读 MCP 端点，无需编写后端代码",
+    "支持多数据库服务（注册表模式与 allowed_databases 模式），并提供自定义 SQL 路由与查询参数绑定辅助函数",
+    "配置方式包含 TOML 文件与环境变量，提供 Docker/Homebrew/Go 安装及 Heroku 一键部署"
+   ],
+   "use_cases": [
+    "为已有 PostgreSQL 或 MySQL 数据库快速暴露 REST API 的场景",
+    "需要为 AI 客户端（如 Cursor、Claude）提供数据库只读 MCP 接口的集成",
+    "低代码/无后端项目中需要 CRUD、认证与 ACL 的数据服务层"
+   ]
+  },
+  "sha": "4cbdfa1a7492",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "82cae083c156": {
+  "identity": {
+   "one_liner": "QQNT 数据库解密与消息导出的一站式 Python 流水线工具",
+   "review": "这是一个面向 Android、Windows、Linux 三平台 QQNT 数据的 Python 工具，实现数据库密钥获取、sqlcipher 解密、好友查询、消息导出（TXT/MD/HTML）及本地 WebUI。Legacy 模块覆盖红包、图片、引用等消息类型渲染；解密含锁页迁移以处理超 1 GiB 数据库。仅供学习交流，不可用于法律取证。",
+   "highlights": [
+    "自动获取数据库密钥：Android 由文件头算出，Windows/Linux 从已登录 QQ 进程内存扫描，取得后存入密钥缓存",
+    "解密超过 1 GiB 的数据库时通过锁页迁移避免 malformed 报错，并读取 -wal 文件中的近期数据",
+    "Legacy 消息导出支持 TXT、MD、HTML 三种格式，覆盖红包、图片、Ark 卡片、引用、撤回提示等消息类型渲染"
+   ],
+   "use_cases": [
+    "备份和导出自己在各平台 QQ 上的聊天记录",
+    "查询数据库中的好友信息（含已删除好友、分组、亲密度等）",
+    "对 QQNT 数据库与 protobuf 消息结构进行学习研究"
+   ]
+  },
+  "sha": "82cae083c156",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7e6b3d9ea69": {
+  "identity": {
+   "one_liner": "面向学生与求职者的实习/求职申请跟踪 Web 应用，含看板与统计。",
+   "review": "JobTracker 是一个全栈求职申请跟踪应用，面向学生和求职者，管理从愿望清单到录用各阶段的申请记录。前端基于 React（Vite），后端为 Node.js/Express，数据库使用 PostgreSQL（Neon）加 Prisma ORM。账户采用 JWT 与 bcrypt 密码哈希，接口除注册和登录外均需 Bearer 令牌，用户只能查看自己的数据。本地运行需 Node.js 18+ 和一个 Neon PostgreSQL 数据库。",
+   "highlights": [
+    "支持应用的增删改查、搜索、过滤和排序，状态变更记录日期与时间",
+    "提供看板拖拽（Wishlist/Applied/Interview/Offer/Rejected）、面试日历及状态分布、周申请量与回复/面试/录用率的图表",
+    "实现 JWT 认证、bcrypt 密码哈希与按用户隔离的数据访问"
+   ],
+   "use_cases": [
+    "在 Kanban 看板上跟踪实习与工作申请的各阶段状态",
+    "通过图表查看申请状态分布、周申请量及回复/面试/录用率",
+    "在月历中安排面试并管理面试日程"
+   ]
+  },
+  "sha": "a7e6b3d9ea69",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f5caaf93832": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3 与 Vue 3、以 openGauss 为数据库的前后端分离餐饮管理系统。",
+   "review": "该项目实现登录、桌台、菜品、点单、后厨制作与销售报表等餐饮业务功能，后端为 Spring Boot 3.5.3 + JPA，前端为 Vue 3 + Element Plus + ECharts，通过 openGauss JDBC 驱动接入数据库。仓库不含建表 SQL，需按 entity 定义自行建表；README 标明用途为学习与课程实践。",
+   "highlights": [
+    "提供登录认证、桌台、菜品、订单、后厨看板、销售报表（ECharts 图表）及图片上传/下载等 REST 接口",
+    "通过 org.opengauss:opengauss-jdbc:3.0.0 驱动接入 openGauss，JPA 配置为 validate 模式仅校验表结构",
+    "数据源凭据通过环境变量或被 .gitignore 忽略的 application-local.yaml 配置，仓库不含真实凭据"
+   ],
+   "use_cases": [
+    "学习 Spring Boot 3 与 openGauss 结合的前后端分离开发",
+    "作为餐饮点单与销售统计业务的课程实践或扩展基础",
+    "练习按实体类手工建表、profile 分离配置与环境变量管理凭据"
+   ]
+  },
+  "sha": "7f5caaf93832",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

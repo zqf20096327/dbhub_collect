@@ -3205,5 +3205,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bb419c31a438": {
+  "identity": {
+   "one_liner": "面向 Ruby/Rails 的特性开关库，支持多存储适配器与开启条件控制",
+   "review": "Flipper 是一个用于 Ruby 和 Rails 应用的特性开关工具，用于控制应用中不同用户对功能的访问。它支持面向所有人、特定 actor、actor 分组、actor 百分比或时间百分比开启或关闭功能，可通过控制台或 Web UI 配置。功能默认全部关闭，需显式开启。存储通过适配器实现，支持 ActiveRecord、Redis、Sequel 等；可加装 flipper-ui 获得界面。适合需要在 Ruby 应用中做功能发布控制的团队。",
+   "highlights": [
+    "支持按所有人、特定 actor、actor 分组、actor 百分比或时间百分比开启功能",
+    "通过适配器机制支持多种数据存储，如 ActiveRecord、Redis、Sequel",
+    "可从控制台或 Web UI 配置特性开关，并提供 Flipper#enabled? 检查接口"
+   ],
+   "use_cases": [
+    "Rails 应用中以 gem 形式集成功能开关，数据存入应用自身数据库",
+    "需要按用户、用户组或百分比灰度控制功能可见性的 Ruby 应用",
+    "需要通过 flipper-ui 提供管理界面的团队使用场景"
+   ]
+  },
+  "sha": "bb419c31a438",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b139a286945": {
+  "identity": {
+   "one_liner": "基于 signal-cli 的 MCP 服务器与 CLI，将 Signal 消息存入本地 SQLite 并提供检索与 80+ 工具。",
+   "review": "signal-mcp 以附加设备方式链接现有 Signal 账号，把消息存入本地 SQLite 数据库，提供全文检索、会话分页、@提及解析、投票、群标签等能力，并提供发送、回复、定时消息等约 80 个工具，可通过只读模式（SIGNAL_MCP_READONLY=1）禁用写操作。数据全部留在本机，支持导入 Signal Desktop 历史。适用于已使用 Signal 并想让 MCP 客户端读取或管理消息的用户。",
+   "highlights": [
+    "将消息存储于本地 SQLite，支持按发送者与日期范围过滤的全文检索（FTS5）",
+    "提供 80+ 工具与配套 CLI，涵盖收发、群组、投票、@提及、标签等操作",
+    "支持只读模式、文件上传白名单限制、可选后台服务持续捕获消息"
+   ],
+   "use_cases": [
+    "让 AI 助手检索与总结群聊历史（如群通知、错过消息）",
+    "通过自然语言执行回复、定时发送、创建投票等消息操作",
+    "从终端直接查看、搜索与导出 Signal 会话（CSV）"
+   ]
+  },
+  "sha": "6b139a286945",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "168f4b8e0d52": {
+  "identity": {
+   "one_liner": "开源 Agent 记忆引擎，用符号短期记忆加分层长期记忆存储与检索对话事实。",
+   "review": "InfinityDB 是面向 AI Agent 的本地记忆引擎，将原始对话日志与规则抽取的原子事实分层存储，支持时间戳事实替换、SHA-256 溯源链、按租户隔离的策略，以及基于 SQLite FTS5 的混合检索。读写路径无需 API 密钥和网络调用，后端可运行于 SQLite 或 Postgres。注意内置规则只能解析特定句式事实，自由文本事实不会自动替换。",
+   "highlights": [
+    "L0–L6 分层记忆结构：原始日志、原子事实、事件图，均可离线检查，附 Mermaid 导出",
+    "带时间戳的事实历史，单值新事实自动替代旧值，recall 支持 as_of 时间点查询",
+    "每条事实含 SHA-256 哈希链接到原始日志片段；内置 MCP server，examples/ 提供 LangChain、CrewAI、LlamaIndex 适配器"
+   ],
+   "use_cases": [
+    "为多轮对话 Agent 提供本地持久化记忆，减少模型上下文中的历史对话占用",
+    "多租户环境下需要按会话/租户隔离记忆与策略的应用",
+    "需要事实时间演进追踪（如地点、角色、雇主变化）与来源可验证的 Agent 系统"
+   ]
+  },
+  "sha": "168f4b8e0d52",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

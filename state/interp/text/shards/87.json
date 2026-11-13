@@ -2533,5 +2533,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "074ae714532c": {
+  "identity": {
+   "one_liner": "基于 SereneDB 的角色感知 MCP 日志分析服务器，提供可溯源证据链。",
+   "review": "这是一个 MCP 服务器，为 Claude 提供面向 BGL、OpenStack、Zookeeper 日志（存于 SereneDB）的查询工具，按工程师/组长/管理者三种角色提供提示词与工具集。每次工具调用生成参数化 SQL 并记入 SQLite 哈希链证据账本，返回 evidence_id，可回放与校验完整性。需 Python 3.10+ 与自行启动的 SereneDB，通过只读角色连接。",
+   "highlights": [
+    "提供 13 个 MCP 工具，包括 search_logs、count_by、trend、episodes、concentration_anomalies、verify_ledger_integrity、generate_report 等",
+    "每次工具调用记录 SQL、参数与结果至 SQLite 哈希链账本，支持 get_evidence 回放与完整性校验",
+    "按三种角色提供不同 MCP 提示词与工具子集，答案遵循四段式契约（Observed/Hypotheses/Recommended checks/Unknown）"
+   ],
+   "use_cases": [
+    "在 Claude Code、Claude Desktop 或配套 Web 控制台中按角色排查 BGL/OpenStack/Zookeeper 日志中的故障",
+    "需要每次分析结论附带可回放 SQL 证据、并可事后验证结果未被篡改的审计场景",
+    "管理者需要跨三套系统的汇总概览与排序优先级，而非逐系统查看"
+   ]
+  },
+  "sha": "074ae714532c",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

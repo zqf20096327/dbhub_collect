@@ -3094,5 +3094,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5338697508a9": {
+  "identity": {
+   "one_liner": "面向分析型数据库的开源基准测试，基于真实流量数据集运行43条SQL查询",
+   "review": "ClickBench是一个分析型数据库基准测试项目，数据源自真实网页分析平台流量记录（匿名化，约1亿条记录），包含43条SQL查询，覆盖点击流分析、日志和事件数据等负载。测试流程以shell脚本记录，可在云VM上半自动化复现。项目文档明示其局限：单表模型、无并发测试等。适用于需要可复现结果的分析数据库评测者。",
+   "highlights": [
+    "数据集提供CSV、TSV、JSONlines、Parquet等多种格式下载",
+    "负载包含43条查询，测试全表扫描、过滤扫描、索引查找及主要关系运算",
+    "每个测试以shell脚本记录安装、加载、运行和结果收集过程，数据集公开发布"
+   ],
+   "use_cases": [
+    "对多种数据库系统在相同数据集和查询集上进行性能数据采集与横向比较",
+    "以半自动化脚本方式在云VM上复现基准测试结果",
+    "评估数据库在压缩、索引、编解码、硬件吞吐等方面的表现，或为基准测试贡献新系统的测试脚本"
+   ]
+  },
+  "sha": "5338697508a9",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f96874feaecb": {
+  "identity": {
+   "one_liner": "本地优先的 AI 聊天与小说创作桌面工作室，基于 Electron + React + SQLite。",
+   "review": "OpenPlot AI 是一个运行于 Windows、macOS 和 Linux 的开源桌面应用，将 AI 聊天、结构化 Story Bible、三幕大纲、章节编辑和写作统计整合在同一项目中。数据以 SQLite 存储在本地磁盘，API 密钥保存在系统凭据库，渲染进程不开网络套接字。支持 OpenAI、Anthropic、OpenRouter、Groq、Ollama、LM Studio 等 OpenAI 兼容端点，每个聊天可选不同模型。面向需要在本地管理长篇故事设定的创作者。",
+   "highlights": [
+    "Story Bible 以结构化记录管理世界、地点、角色、物品与设定，支持标签、交叉链接、全文搜索及从 Markdown/JSON/CSV 批量导入；代理工具可一次性读取全库、搜索条目、创建或更新 canon 并写入章节",
+    "多提供商多模型聊天：流式回复、推理轨迹、逐条 token 计数、上下文超窗裁剪（不删转录）、每消息最多 8 个附件；Ollama 与 LM Studio 无需密钥",
+    "章节版本历史（保存/AI 追加/恢复前生成快照，保留最近 30 个）、Revision Timeline 字级 diff、库级快照（每库最多 12 个）与便携 .db 导出"
+   ],
+   "use_cases": [
+    "在单一桌面应用中维护长篇小说的设定库、章节草稿与三幕大纲，避免多文档间复制粘贴",
+    "通过 Ollama 或 LM Studio 连接本地模型，进行不依赖云端同步的离线写作与聊天",
+    "通过 Plot Smith 四步引导流程（brief → premises → cast & world → 三幕大纲）批量生成项目初始结构"
+   ]
+  },
+  "sha": "f96874feaecb",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4003a277a228": {
+  "identity": {
+   "one_liner": "基于 Flutter + Rust + BASS + SQLite(FTS5) 的本地音乐播放器",
+   "review": "Lamp Player 是一款运行于 Windows 的本地音乐播放器，界面层用 Flutter（Material 3），核心逻辑如文件扫描、元数据解析和系统集成由 Rust 实现，二者经 flutter_rust_bridge 桥接；曲库存于 rusqlite（含 FTS5 全文索引），音频输出用 BASS 2.4，支持 WASAPI 独占输出。项目处于 M3 打磨阶段，采用 MIT 许可；BASS 为闭源库，需脚本下载且 m4a/aac 播放需额外插件。",
+   "highlights": [
+    "提供曲库视图（全部/艺术家/专辑）、五种排序、万级曲目虚拟滚动及 FTS5 全文检索（300ms 防抖）",
+    "支持 WASAPI 独占输出（设备不支持时自动回落共享）、SMTC 系统媒体控制、单实例与托盘运行",
+    "提供歌单/收藏/历史页面、播放队列、快捷键、会话恢复与按内容哈希去重的专辑封面缓存"
+   ],
+   "use_cases": [
+    "在 Windows 上管理并播放本地音乐文件，按艺术家/专辑浏览并通过全文检索查找曲目",
+    "需要绕过系统混音器进行 WASAPI 独占输出的播放场景",
+    "配合媒体键、耳机线控与托盘常驻的后台播放使用"
+   ]
+  },
+  "sha": "4003a277a228",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9f37fa85627e": {
+  "identity": {
+   "one_liner": "纯网页版多源数据库直连工作台，Go 单二进制 + React，支持六种数据库",
+   "review": "紫东直连是一个纯 Web 数据库管理工作台，面向运维、研发与企业内网场景。后端用纯 Go 协议驱动（无 CGO、无 JRE、无 Oracle Instant Client），打包为单个 Docker 容器运行，提供 MySQL、PostgreSQL、SQLite、SQL Server、Oracle、达梦 DM7/DM8 的连接、SQL 查询、在线改数、表结构设计与导入导出。前端构建目标锁定 Chrome 109 / Firefox 115 ESR，README 称可在 Windows 7 老终端的浏览器中直接使用。",
+   "highlights": [
+    "使用纯 Go 协议驱动直连 MySQL/MariaDB、PostgreSQL、SQLite 3、SQL Server、Oracle（Service Name/SID）与达梦 DM7/DM8，无需 Java 环境或 Oracle/达梦 C 客户端",
+    "提供数据网格在线增删改查、CodeMirror 6 SQL 编辑器（方言高亮与表/列补全）、可视化表结构设计器（含差异 DDL 预览）及 13 种格式导出、多来源格式导入",
+    "凭据采用 AES-256-GCM 加密存储，支持签名 Cookie 登录保护、SSH 隧道与内置 SSH 终端，前端构建目标为 Chrome 109 / Firefox 115 ESR 并有自动化兼容性检查脚本"
+   ],
+   "use_cases": [
+    "企业内网中需要统一管理多种数据库（含达梦等国产数据库）的运维与研发场景",
+    "仅能运行 Windows 7 及旧版浏览器（Chrome 109 / Firefox 115 ESR）的老旧终端，希望通过浏览器访问数据库工作台",
+    "需要单容器部署、免安装桌面客户端的数据库连接、查询与数据导入导出环境"
+   ]
+  },
+  "sha": "9f37fa85627e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

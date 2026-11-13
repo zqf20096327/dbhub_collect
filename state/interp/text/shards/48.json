@@ -2738,5 +2738,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5055f6d4763e": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的自托管持久化后台任务执行服务器",
+   "review": "Runcoil 是一个用 Go 编写、依赖 PostgreSQL 的自托管持久化执行服务器，用于运行后台任务函数。其核心机制是把工作拆成 Step，已完成的 Step 会被保存，重试或重启时函数回放并跳过已完成部分。项目处于早期开发阶段，首个版本发布前可能出现破坏性变更，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持 Step 机制：已完成步骤持久化保存，重试或重启时跳过已完成的 Step",
+    "支持按失败重试策略（含退避）自动重试，以及 cron、固定时间、固定间隔的任务调度",
+    "支持长时间休眠或等待事件且不占用 worker，部署仅需一个服务器加 PostgreSQL，可用 docker compose 启动并提供 /readyz 健康检查端点"
+   ],
+   "use_cases": [
+    "需要崩溃或重新部署后不丢失进度的后台任务处理",
+    "基于 cron、固定时间或间隔的定时任务调度",
+    "需要跨天休眠或等待事件、且不长期占用 worker 的长时流程"
+   ]
+  },
+  "sha": "5055f6d4763e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "56493fc3e82d": {
+  "identity": {
+   "one_liner": "pgNimbus 是基于 .NET 与 Avalonia 的开源 PostgreSQL 图形客户端，NativeAOT 编译",
+   "review": "pgNimbus 是一个用 .NET 与 Avalonia 编写、以 NativeAOT 编译发布的 PostgreSQL 图形客户端，面向需要频繁连接数据库查看数据、执行迁移检查、排查锁与慢查询的开发者和 DBA。它提供 SQL 编辑器、流式结果网格、安全模式编辑、EXPLAIN 树视图、pg_dump/pg_restore 备份恢复、SSH 隧道与 TLS 连接等能力。无遥测、无账号、无云服务，Windows 支持最完整，macOS 与 Linux 为 beta 版本",
+   "highlights": [
+    "采用 NativeAOT 编译发布，README 记载启动至窗口显示约 0.2 秒，查询结果可在执行过程中流式显示，Esc 可中途停止查询",
+    "提供安全模式数据编辑：变更暂存为 SQL 审阅后以单事务提交，提交时在锁下重读各行，冲突则整批回滚",
+    "内置 PostgreSQL 运维工具：EXPLAIN 计划树与 Query Lab 计划对比、锁阻塞树、pg_stat_statements 慢查询、pg_dump/pg_restore 备份恢复、基于 has_*_privilege() 的角色权限查询"
+   ],
+   "use_cases": [
+    "开发者日常快速查看行数据、核实迁移结果、定位持锁会话等短时数据库操作",
+    "DBA 通过活动监控、阻塞树、慢查询排行与数据库概览进行服务器巡检与排查",
+    "使用 Query Lab 保存并对比 EXPLAIN 计划，如建索引前后的性能变化分析"
+   ]
+  },
+  "sha": "56493fc3e82d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4c0295266b42": {
+  "identity": {
+   "one_liner": "Rust 编写的 MongoDB/MySQL 等桌面数据库客户端，GPU 绘制、单二进制",
+   "review": "Quarry 是用 Rust 与 egui 编写的原生桌面客户端，支持 MongoDB、MySQL、MariaDB 和 PostgreSQL 四种引擎，提供 find/aggregate、SQL 编辑器、Bun 脚本、结构编辑与服务器管理。每个连接默认只读，编辑以草稿暂存并支持撤销。安装时下载对应系统的压缩包解压即可，Linux 需 GTK 3 等依赖，也可用 cargo 从源码构建。",
+   "highlights": [
+    "以单个 Rust 二进制运行，数据操作不在 UI 线程执行，结果页以原始 BSON 保存",
+    "跨 Mongo 与 SQL 连接运行 Bun JavaScript 脚本；连接默认只读，编辑可预览、批量保存并撤销",
+    "支持 SSH 隧道、SOCKS5、TLS 连接，密码存于系统钥匙串，并提供后台自动更新与校验和检查"
+   ],
+   "use_cases": [
+    "需要在同一界面同时查看和编辑多种数据库（MongoDB/MySQL/MariaDB/PostgreSQL）的场景",
+    "需要通过 SSH 隧道或 Cloud SQL Auth Proxy 连接远程数据库实例",
+    "需要导入导出 JSON/CSV/TSV/SQL、比较同步集合或运行 mongodump/mongorestore 的运维工作"
+   ]
+  },
+  "sha": "4c0295266b42",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

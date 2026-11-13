@@ -3008,5 +3008,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "28be2d5cc1f2": {
+  "identity": {
+   "one_liner": "把十个编码渠道封装为 OpenAI/Anthropic 兼容 API 的凭证池网关",
+   "review": "基于 FastAPI（uv/Python 3.12+）的服务，将 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce、小浣熊、灵犀等渠道的接口转发为 /v1/chat/completions、/v1/responses、/v1/messages 等标准端点。核心机制是公共凭证池加健康度调度、会话粘性与到期额度优先排序；数据存 SQLite，支持 Docker 部署。README 明确标注为逆向接口，仅供学习研究，未做安全审计。",
+   "highlights": [
+    "提供 OpenAI/Responses/Anthropic 兼容端点，支持流式与非流式，模型名可用归一键、原代号或 模型@渠道 三种写法请求",
+    "公共凭证池支持加密入库、设备码登录、额度探测、每日签到，调度按健康度、权重与到期额度排序，多轮对话粘同一凭证",
+    "三角色权限（admin/operator/viewer）、审计日志、按人/渠道/模型用量统计与月度账单 CSV/JSONL 导出"
+   ],
+   "use_cases": [
+    "团队内搭建统一 API 出口，供 Claude Code、Codex CLI 等 OpenAI 兼容客户端接入多个上游渠道",
+    "管理员集中维护多渠道凭证并按人统计用量与成本",
+    "本地学习研究上游渠道接口协议的运行环境"
+   ]
+  },
+  "sha": "28be2d5cc1f2",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

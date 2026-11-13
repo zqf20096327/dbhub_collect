@@ -44905,5 +44905,190 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "7d008bd7b7b1+2": {
+  "fn": "dennysjmarquez/MemoryBioRAG",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "delete",
+    9,
+    11,
+    9,
+    9
+   ],
+   [
+    "equal",
+    11,
+    13,
+    9,
+    11
+   ],
+   [
+    "replace",
+    13,
+    14,
+    11,
+    12,
+    [
+     "> **v34.0:** con una DB nueva, o sin campeón, la neurona no actúa y estos números se mantienen **idénticos** (son el piso). Con el campeón ya aprendido sobre la copia del snapshot (`despertar_neurona.sh`, 500 ciclos), la misma suite da **Recall@5 100.00 % · Recall@1 94.06 % (823/875) · MRR 0.964 · FP 0/40**, sin ninguna categoría por debajo del piso. Detalle en La Neurona de BioRAG."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    12,
+    13
+   ],
+   [
+    "replace",
+    15,
+    16,
+    13,
+    14,
+    [
+     "> **v35.0:** la QA oficial sale **idéntica** antes y después de todos los cambios de la v35 (Recall@5 100.00 % · Recall@1 91.89 % · MRR 0.950 · FP 0/40, misma máquina y semilla). Detalle en La Neurona Asociativa."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     "> **Cada base tiene su propia neurona.** La neurona aprende con los recuerdos de la base donde vive y se guarda dentro de ella. Esta tabla mide una copia del snapshot oficial, que no trae neurona entrenada: por eso muestra la fórmula a mano sola (el piso), aunque tu neurona esté trabajando en tu DB viva. La QA ahora lo dice antes de medir y nombra el parámetro para verla: `python scripts/evaluar_qa.py --con-neurona`. Detalle en La neurona en la QA."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    24,
+    16,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     "|Métrica|Resultado observado|Contexto y Significado Científico|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    23,
+    24
+   ],
+   [
+    "replace",
+    26,
+    30,
+    24,
+    28,
+    [
+     "|**Recall@5 global**|**100.00% (875/875)**|**100% de cobertura en ventana de trabajo**: todo recuerdo gold ingresa al Top-5 del agente sin fallos de recuperación (0 fallos).|",
+     "|**Recall@1 (Top-1)**|**91.77% (803/875)**|**Precisión de primer resultado**: 803 de 875 casos quedan en primer lugar directo (métrica complementaria observada en benchmark).|",
+     "|**MRR (Mean Reciprocal Rank)**|**0.950**|Posición recíproca promedio ponderada (0.9497 sin redondear; métrica complementaria observada).|",
+     "|**Falsos positivos**|**0/40 (0.00%)**|Calibración conforme efectiva en los 40 controles negativos del benchmark (FP rate observada 0.00%).|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    35,
+    28,
+    33
+   ],
+   [
+    "replace",
+    35,
+    44,
+    33,
+    42,
+    [
+     "|**Tests unitarios**|**430/430 aprobados** (v35.0)|Cobertura completa de invariantes, validación pre-DB fail-fast, contratos MCP, normalización, catálogo, las 18 capas de protección de la neurona, el script de despertar, la neurona asociativa, los enlaces del agente intocables y el MCP sin sugerencias de enlace.|",
+     "|**Suite Concept Hub**|**5/5 TOP-1 (100.00%)**|Precisión perfecta en los 5 casos de prueba de puentes asociativos registrados.|",
+     "|**Abismo léxico (EXP-Q)**|**3/3 Pool · 2/3 Top-5 · 1/3 Top-1**|3/3 descubiertos en pool de grafo; 2/3 en Top-5 (pos #1 y #4) y 1/3 en Top-1 (pos #1).|",
+     "|**Sinónimos · Recall@5 / Recall@1**|**100% (55/55) / 56.36%**|Cobertura total en Top-5; el 43.64% restante queda entre Top-2 y Top-5.|",
+     "|**Por tema · Recall@5 / Recall@1**|**100% (65/65) / 63.08%**|Cobertura total en Top-5; ordenamiento Top-1 guiado por Jaccard y PPMI-SVD (MRR: 0.772).|",
+     "|**Pregunta natural · R@5 / R@1**|**100% (65/65) / 93.85%**|Alta precisión Top-1 en formulaciones conversacionales.|",
+     "|**Cruce de idioma · R@5 / R@1**|**100% (8/8) / 62.50%**|Rescate bilingüe en Top-5; Top-1 asistido por WordNet y Concept Hubs.|",
+     "|**Smoke multicampo en DB local**|**Objetivo #2 → #1**|Promoción de `version_actual_biorag` de #2 a #1 por convergencia multicampo.|",
+     "|**Tiempo de la evaluación global**|**~877 s**|Ejecución determinista de la suite QA de 921 casos en CPU local (sin GPUs ni APIs).|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    51,
+    42,
+    49
+   ],
+   [
+    "delete",
+    51,
+    53,
+    49,
+    49
+   ],
+   [
+    "equal",
+    53,
+    55,
+    49,
+    51
+   ],
+   [
+    "replace",
+    55,
+    59,
+    51,
+    54,
+    [
+     " La neurona asociativa de BioRAG: un cuerpo dentro de la silueta de un hipocampo, cinco dendritas que tocan dos recuerdos y un puente de luz que nace entre ellos",
+     "",
+     " La neurona asociativa de BioRAG (ilustración). El cuerpo vive dentro de la silueta de un hipocampo, la parte del cerebro que decide qué se une con qué. Sus cinco dendritas (oro: el texto; celeste: el tiempo; verde: las etiquetas) tocan dos recuerdos. Arriba nace la sinapsis entre ellos. Los hilos grises del fondo son las conexiones con ruido que la neurona sabe reconocer. "
+    ]
+   ],
+   [
+    "equal",
+    59,
+    62,
+    54,
+    57
+   ],
+   [
+    "replace",
+    62,
+    63,
+    57,
+    58,
+    [
+     "**Estado honesto al cerrar la v35.** La neurona está **construida, calibrada, examinada y cerrada**, pero"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

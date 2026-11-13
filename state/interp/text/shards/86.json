@@ -2976,5 +2976,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "95569f8c85dc": {
+  "identity": {
+   "one_liner": "面向 Agent 的长期记忆模块，SQLite 存储，BM25 检索，CJK 优先",
+   "review": "Brain4Agent 是为 Agent 提供长期记忆的 Python 库，把对话轮次存入单个 SQLite 文件并按 session 级检索。核心检索用 BM25，不调用模型、无需 API key；中文等 CJK 文本用字符 bigram 分词，开箱即用。安装需 Python 3.11+，可选 20 MB jieba 词典提升精确度。提供 CLI、Python 库和 MCP server 三种接口，搜索结果返回 corpus_missing 等证据信息而非置信分。",
+   "highlights": [
+    "支持 CLI、Python 库（MemoryStore）和 MCP server 三种使用方式，MCP 提供 b4a_remember/b4a_recall/b4a_session 等 5 个工具",
+    "CJK 文本无需词典和分词模型即可检索，可选安装 jieba 词典（20 MB）；核心路径无模型调用，README 报告单次查询为个位数毫秒级",
+    "搜索返回 corpus_missing、missing_terms、term_frequencies、related_terms 等证据字段；记忆携带 tags、superseded_by、refs 元数据，支持 JSONL 批量导入与 batch() 批量写入"
+   ],
+   "use_cases": [
+    "为在代码库中长期工作的 Agent 保存和检索决策原因、失败尝试等会话上下文",
+    "中文/日文/韩文等 CJK 场景下本地存储与检索 Agent 对话历史（local-first，数据在单个 SQLite 文件）",
+    "需要无模型、无 API key 的轻量记忆检索，或已有 JSONL 对话记录的批量导入场景"
+   ]
+  },
+  "sha": "95569f8c85dc",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c837fdfebaf2": {
+  "identity": {
+   "one_liner": "面向 SRC 的资产测绘流水线：主动测绘→每日增量对比→本地仪表盘，共用一个 SQLite。",
+   "review": "srcradar 用 Go/Python 实现一条面向 SRC（安全应急响应中心）运营的资产测绘与监控流水线，覆盖业务录入、主动测绘、每日增量对比与本地可视化。它通过 pdtm 编排 4 个测绘阶段，依赖 ProjectDiscovery 工具链（subfinder/dnsx/httpx/naabu 等），所有输出汇入单个 SQLite（db/recon.sqlite3）并按业务名隔离；每日 03:00（北京时间）自动运行生成增量报告，仪表盘绑定在 127.0.0.1:8765。仅做信息收集、不利用漏洞，要求使用者持有合法书面授权，合规责任由操作者承担。支持脚本方式安装（check.sh/install.sh）和 Docker 单容器启动。",
+   "highlights": [
+    "通过 ./srcradar 分发器统一调用各模块脚本，按 modules/private→main→public 顺序解析",
+    "单一 SQLite（db/recon.sqlite3）承载全部输出，按 businesses.id 隔离各业务数据",
+    "可选插件：katana URL 资产扫描、health 运行健康检查、notify 加密报告推送，以及仅适用于中国目标的 db_align/ymicp 工商与备案查询插件"
+   ],
+   "use_cases": [
+    "持有 SRC 协议或渗透测试授权的团队，需要对授权资产进行子域名枚举、端口探测等主动测绘",
+    "需要对已授权资产做每日增量对比监控并生成报告",
+    "需要在本地隔离环境中（Docker 或直接安装）运行资产信息收集流水线"
+   ]
+  },
+  "sha": "c837fdfebaf2",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ad954f893098": {
+  "identity": {
+   "one_liner": "基于 Next.js 16 的数学课程销售平台，集成 CMS、认证与支付",
+   "review": "一个用于管理和销售在线数学课程的全栈平台，面向课程创作者。课程内容以 Markdown 编写，支持 LaTeX 公式、Desmos 交互图表和 Mermaid 图；免费课程预渲染、付费课程服务端渲染并经 Mux 签名 URL 控制访问。使用 Payload CMS 管理内容，BetterAuth 处理认证，Stripe 处理一次性付款，依赖 PostgreSQL 与 MongoDB 双数据库。",
+   "highlights": [
+    "课程内容使用 Markdown 编写，支持 LaTeX 公式、Desmos 交互图表、Mermaid 图和自定义 callout 块",
+    "集成 Payload CMS、BetterAuth 认证（含 Google OAuth、邮件验证）与 Stripe 一次性付款",
+    "提供 MCP 服务器，AI 客户端可通过 API key 直接草拟和编辑 CMS 中的课程内容"
+   ],
+   "use_cases": [
+    "搭建需要视频、测验和数学公式展示的在线数学课程销售站点",
+    "通过 CMS 集中管理课程、章节、媒体并支持定时发布",
+    "让 AI 客户端通过 MCP 协议协助管理课程内容"
+   ]
+  },
+  "sha": "ad954f893098",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7d008bd7b7b1": {
+  "identity": {
+   "one_liner": "基于 Python+SQLite FTS5 的 AI 智能体仿生符号化持久记忆引擎",
+   "review": "BioRAG 是一个为 AI 智能体提供跨会话持久记忆的系统，用混合检索（SQLite FTS5 BM25、PPMI-SVD 100 维向量、Hebbian 突触图、Concept Hubs）替代稠密嵌入与外部 API，检索路径不依赖 GPU。支持西班牙语与英语双语词干化，含 MCP server 接口。性能数字仅针对其冻结快照基准（921 例 QA 套件）成立；每库的『神经元』需单独训练。",
+   "highlights": [
+    "提供 FTS5 BM25 + PPMI-SVD + 突触图 + Concept Hubs + 多字段重排的混合检索，检索路径不使用稠密嵌入、GPU 或外部 API",
+    "支持西班牙语与英语双语检索，包含 WordNet 符号扩展与领域词典",
+    "纯 Python + SQLite（WAL 模式）实现，提供 MCP server 与 QA 评估脚本（scripts/evaluar_qa.py）"
+   ],
+   "use_cases": [
+    "需要跨会话保持上下文记忆的 AI 智能体（经 MCP 协议接入）",
+    "在西语/英语环境下做本地离线的语义与关键词混合检索",
+    "在无 GPU、无外部 API 依赖约束下运行持久化记忆与知识图谱检索"
+   ]
+  },
+  "sha": "7d008bd7b7b1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

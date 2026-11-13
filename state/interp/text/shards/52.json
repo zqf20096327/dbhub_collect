@@ -3281,5 +3281,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1b08a7f05cb2": {
+  "identity": {
+   "one_liner": "开源桌面 SQL 工作台，内置 3 种数据库驱动并提供 29 个驱动插件，含 MCP 服务器",
+   "review": "Tabularis 是一款桌面 SQL 工作台，内置 PostgreSQL、MySQL/MariaDB、SQLite 驱动，其余数据库通过 JSON-RPC 插件接入（已发布 29 个，含 ClickHouse、DuckDB、Redis、Oracle 等）。提供 SQL 编辑器、笔记本、ER 图、可视化 EXPLAIN 及供 AI 客户端读取 schema 并执行查询的 MCP 服务器。安装支持 WinGet、Homebrew、Snap、Flatpak、AUR 与直接下载，UI 提供 13 种以上语言；Snap 下保存连接需手动连接 password-manager-service 接口。",
+   "highlights": [
+    "支持 3 种内置驱动（PostgreSQL、MySQL/MariaDB、SQLite）和 29 个可从插件注册表安装的驱动插件",
+    "内置 MCP 服务器，供 Claude、Cursor、Devin 等 AI 客户端读取 schema 并运行查询",
+    "提供 SQL 笔记本（SQL 与 Markdown 单元、跨单元变量 {{cell_N}}）、可视化查询构建器与交互式 EXPLAIN 计划图"
+   ],
+   "use_cases": [
+    "在单一桌面应用中连接和管理多种数据库（SQL 与 NoSQL）并浏览表结构、编辑数据",
+    "编写含参数与图表的 SQL 分析笔记本，导出为 HTML/CSV/JSON",
+    "通过 MCP 让本地的 AI 编程工具直接查询数据库 schema 并执行查询"
+   ]
+  },
+  "sha": "1b08a7f05cb2",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a503e9851e07": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的 MongoDB 沙箱工具，提供 Git 式分支、数据捕获与合并回滚机制。",
+   "review": "Argon 是一个基于 Go 的 CLI 工具，为每次 Agent 运行 fork 出独立的真实 MongoDB 数据库，通过 change-stream 捕获写入形成 diff，支持三路合并、按 actor 撤销与时间旅行查询，并提供 MCP 服务器、Python SDK 和本地 Web 控制台。适用于让 LLM Agent 操作真实数据但保留人工审查的团队；沙箱为完整物理副本，数据增长后创建耗时随之上升，索引与集合选项不做版本化。",
+   "highlights": [
+    "提供一条命令创建沙箱（fork + checkout + TTL），任何 MongoDB 驱动可直接连接真实 mongod 实例",
+    "通过 `argon watch` 将文档写入捕获为历史，支持 diff 预览、三路合并（data PR）、按 actor 标签撤销和保留 LSN 的时间旅行查询",
+    "集成 MCP 服务器（13 个工具）、Python SDK 与 LangGraph 适配器，可禁用合并工具或启用只读模式以保留人工审批环节"
+   ],
+   "use_cases": [
+    "为 AI Agent 每次运行分配独立数据库副本，运行结束后审查、合并或丢弃其写入",
+    "在共享数据集上创建可随时回退的长期分支，配合 pin 固定关键数据状态",
+    "通过 `argon mcp --read-only` 或禁用合并工具，实现需要人工批准合并的受控 Agent 工作流"
+   ]
+  },
+  "sha": "a503e9851e07",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e27525f83a3c": {
+  "identity": {
+   "one_liner": "自托管的多LLM工作流上下文中间件，提供版本化、经评审的共享上下文仓库与按模型路由",
+   "review": "Cohereny 是面向多 LLM 工作流的自托管上下文中间件，基于 FastAPI、PostgreSQL 和 LiteLLM 实现。它将系统提示、领域知识、工具架构、路由规则等以版本化块的形式存放在团队共享仓库中，经评审后生效，运行时按工作流步骤组合上下文并路由到指定模型。项目未发布 1.0，API 不稳定，作者明确声明不适用于生产环境。",
+   "highlights": [
+    "提供版本化上下文块仓库，支持评审生命周期、范围树组合及隐私棘轮（深层范围只能收紧继承的隐私规则）",
+    "实现工作流运行器：图定义、分支/连接/限次循环、human_review 人工门控、按步骤 JSON Schema 校验模型输出",
+    "包含模型调用前的标识符替换、按保留类配置的留存清理、应用无法触碰的追加式审计日志，以及基于 OpenID Connect 的四类 API 面"
+   ],
+   "use_cases": [
+    "多步骤、多模型工作流中需要集中管理、评审和复用提示词与上下文块的团队",
+    "需要人工审批门控、按范围控制数据保留和审计日志的受监管场景（README 提及 EU AI Act、MaRisk 等参考）",
+    "希望通过路由规则和数据类别约束，控制哪些内容可发送给哪些模型的组织"
+   ]
+  },
+  "sha": "e27525f83a3c",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

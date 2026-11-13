@@ -3170,5 +3170,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b8f70496b3dd": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 PHP/Symfony 全文搜索层，索引存于旁车表，不改动原表",
+   "review": "Fuzzphony 是一个面向 PHP 8.4+ 与 PostgreSQL 15+ 环境的搜索库，在已有数据库内建立旁车索引表，提供容错拼写、忽略重音、带排序的全文搜索。索引通过触发器或队列同步，不改原表结构；Symfony 7.4+/8.1 可选。适合无法新增搜索服务、需要搜索与数据同事务一致的应用；项目状态为 pre-1.0（v0.12.3），API 可能变动。",
+   "highlights": [
+    "支持拼写容错（trigram）、重音折叠（unaccent）及 PostgreSQL Snowball 28 种语言的词干化，并提供字段权重排序",
+    "提供查询语法：短语匹配、OR、排除词；支持过滤、多租户隔离、字段级角色授权与限流",
+    "索引位于原表旁的 sidecar 表，trigger 模式下索引与数据在同一事务内变更；reindex 为可恢复的在线重建"
+   ],
+   "use_cases": [
+    "替换后台管理、CRM、支持工具中的 LIKE 查询，处理拼写错误与重音差异",
+    "禁止改动表结构或不允许新增搜索服务的遗留系统、ERP 环境",
+    "共享 schema 的多租户 SaaS，需要查询级强制租户过滤与字段级权限控制"
+   ]
+  },
+  "sha": "b8f70496b3dd",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3cba9993ed7": {
+  "identity": {
+   "one_liner": "单容器自托管日志聚合器，整合Docker与syslog日志，用SQLite FTS5搜索并支持告警。",
+   "review": "LogShed是一个面向家庭网络和个人服务器的自托管日志聚合与syslog服务器，以单一容器运行，通过内置syslog服务（UDP/TCP 1514端口）、本地Docker socket及HTTP接口收集日志，数据存储于本地SQLite。它定位为家庭实验室场景，README明确说明不面向多租户或高流量企业环境，默认保留期为14天。",
+   "highlights": [
+    "内置syslog服务器（UDP/TCP 1514端口），支持从OPNsense、pfSense、Synology、TrueNAS、Proxmox等设备接收日志，并通过HTTP POST /api/v1/ingest接收脚本、Vector或Fluent Bit推送",
+    "使用SQLite FTS5实现全文搜索，支持按主机、应用、严重级别与相对时间（如15m、24h）过滤，并提供实时日志流；摄入丢弃规则可在内存中过滤重复日志行",
+    "提供阈值与模式告警、速率激增检测和每日摘要，通过Apprise向100余种服务发送通知；可选接入AI模型解释错误，发送前对常见密钥进行脱敏"
+   ],
+   "use_cases": [
+    "集中收集家庭网络中路由器、NAS、虚拟化平台（如OPNsense、TrueNAS、Proxmox）发来的syslog日志",
+    "在单个容器中同时查看本机及远程Docker主机的容器日志，进行实时流式查看和全文检索",
+    "通过维护窗口在备份或升级期间暂停通知，或借助Home Assistant自动化管理告警状态"
+   ]
+  },
+  "sha": "b3cba9993ed7",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

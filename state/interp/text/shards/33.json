@@ -2642,5 +2642,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "80dc57561432": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 AI 长期记忆库，人工审核闸门加审计账本",
+   "review": "memory-eternal 是一个为 AI Agent 提供长期记忆的开源插件，数据以 SQLite 与 Markdown 形式存在本地磁盘。新记忆先进待审队列，由人通过 Web、TUI 或 CLI 批准后才入库，状态变更写入审计日志，Agent 不能批准自己写的卡。面向 DSH、Claude Code、Codex、Cursor 及任意 MCP 客户端，多端共享同一个库，MIT 协议发布。",
+   "highlights": [
+    "提供先审后入的写入闸门：新卡与修改副本均进待审队列，批准/驳回仅能由人在 Web、TUI 或 CLI 中执行，Agent 只能写入隔离区或提交提议",
+    "召回路径基于 FTS5 + BM25 实现零模型调用，主库物理上只存已批准卡片；语义召回支持内置模式、本地 Ollama（bge-m3）或 OpenAI 兼容在线 API 三种部署",
+    "内置记忆账本，记录召回命中数与注入字符、蒸馏 LLM 调用次数及有用/没用反馈，可用 dsh-memory ledger 命令查询"
+   ],
+   "use_cases": [
+    "多会话开发项目中让 Claude Code、Codex、Cursor 等 Agent 共享同一份本地记忆，避免每次会话重复解释上下文",
+    "需要对 AI 记忆内容进行人工审核与留痕追溯的私有化部署场景",
+    "通过 MCP 协议为任意兼容客户端接入统一记忆库的集成需求"
+   ]
+  },
+  "sha": "80dc57561432",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae760ae2184f": {
+  "identity": {
+   "one_liner": "面向2-6人小家庭的自托管协作应用，集成待办、动态、记录本与记账。",
+   "review": "我们一家是一款私有部署的家庭协作网页应用，提供万年历待办、图文动态、上锁记录本和一句话记账四大模块，数据存于SQLite单文件。技术上基于Node.js（≥22.5）运行，无需npm安装依赖，可用Docker Compose或Node直跑部署，适合希望数据本地自持的家庭使用。",
+   "highlights": [
+    "支持公历/农历/节气日历的待办管理，含周期提醒与邮件提醒，成员间自动同步",
+    "记账支持本地一句话解析与截图识别确认入库，可导出CSV（UTF-8 BOM）",
+    "提供一键备份导出/恢复、邮件SMTP配置及企业微信/钉钉/飞书推送教程"
+   ],
+   "use_cases": [
+    "小家庭成员共同管理待办事项与周期提醒（如缴费、纪念日）",
+    "家庭内部记录重要信息（证件存放、账号备忘）并设置访问密码",
+    "内网或NAS环境下私有部署，进行本地化的家庭共同记账"
+   ]
+  },
+  "sha": "ae760ae2184f",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

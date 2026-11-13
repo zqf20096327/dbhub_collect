@@ -3340,5 +3340,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4e95acfc4ba8": {
+  "identity": {
+   "one_liner": "本地运行的 WhatsApp 网关，通过 MCP 将消息路由给 AI 代理。",
+   "review": "Piumy 是一个用 Go 编写的单二进制网关，内嵌 whatsmeow 库连接 WhatsApp，无需浏览器或外部客户端。它通过 MCP 服务器将消息转发给 AI 代理，使用 SQLite 存储历史、按聊天规则和记忆。代理的每个操作必须关联到正在处理的真实来电消息，该限制由代码层强制执行。适合需要在本地设备上部署 AI 代理处理 WhatsApp 消息的用户。",
+   "highlights": [
+    "内嵌 whatsmeow 库处理 WhatsApp 协议，纯 Go 实现（CGO_ENABLED=0），跨 Windows/Linux/macOS/树莓派多平台分发",
+    "提供 MCP 服务器接口供代理调用工具，并内置代码级权限控制，代理操作必须关联当前处理的消息",
+    "使用 SQLite 存储消息历史、按聊天权限规则、记忆和发件箱，本地仪表盘地址为 127.0.0.1:8092"
+   ],
+   "use_cases": [
+    "在个人 Windows/Linux/macOS 设备或树莓派上部署 AI 代理自动处理 WhatsApp 消息",
+    "需要按聊天粒度控制 AI 代理权限（从自主回复到完全需人工审批）的场景",
+    "自托管环境：通过 systemd 用户服务或 launch agent 常驻运行，本地仪表盘查看和调控"
+   ]
+  },
+  "sha": "4e95acfc4ba8",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "745cc9741b2a": {
+  "identity": {
+   "one_liner": "Rust 自托管 RAG 引擎，索引文档并返回可回溯的引用段落",
+   "review": "AnyRAG 是一个 Rust 编写的自托管文档检索与 RAG 引擎，为个人笔记和团队私有搜索服务。它索引 Markdown、文本及可选的 PDF/Word 文件，返回带源版本信息的引用段落，可在源文件变更后检查引用是否仍可解析。默认构建内置 SQLite，无需模型或数据库服务；可选嵌入、重排序、图谱提取与 HTTP 共享服务等配置。",
+   "highlights": [
+    "Rust CLI 内置 SQLite，索引 Markdown 和文本，可解释排序依据并按源版本回溯引用段落",
+    "可选配置文件增加嵌入、重排序、类型化关系遍历与带引用的模型回答；Linux 镜像含 PDF/Word 读取、HTTP 服务与本地仪表盘",
+    "提供 Rust SDK、只读 MCP 和经过鉴权的共享 HTTP 服务，共享服务在搜索和引用读取时校验当前集合授权"
+   ],
+   "use_cases": [
+    "对个人 Obsidian 或本地笔记做精确匹配与语义搜索",
+    "在单台 Linux 主机上为私有团队提供带引用的 Graph RAG 服务",
+    "通过 MCP 或 SDK 将检索证据接入编码代理或自有应用"
+   ]
+  },
+  "sha": "745cc9741b2a",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

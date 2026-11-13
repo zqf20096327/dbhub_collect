@@ -2768,5 +2768,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0b326b5fa6da": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 兼容运行时，单进程托管数千个隔离的一次性数据库。",
+   "review": "PGX 是用 Rust 实现的数据库运行时，支持 Postgres 线协议与 SQL 方言，面向 AI agent 沙箱、CI、PR 与预览环境等短生命周期数据库场景。它从密封模板按写时复制分支数据库，空闲占用约 70 KB 内存；运行于 fsync=off 的配置，无崩溃恢复保障，不适用于生产数据。",
+   "highlights": [
+    "实现 Postgres 线协议与 SQL 方言，Rails、Django、Prisma、SQLAlchemy、node-postgres 可不经修改运行迁移、测试与模式变更流程",
+    "支持从密封模板按写时复制（如 ZFS 块克隆）创建数据库，连接时以 <prefix><template>__<token> 命名即自动生成，会话结束后由 janitor 在宽限期后删除",
+    "内置会话、数据库与运行时层级内存限制，超限返回 SQLSTATE 53200 错误；通过 pgrust_runtime_status() 以 JSON 返回运行状态"
+   ],
+   "use_cases": [
+    "为 AI agent 会话分配独立数据库分支，会话开始创建、结束后自动删除，各 agent 数据互相隔离",
+    "CI 流水线与每个 PR 的独立测试数据库，迁移→测试→删除的完整生命周期",
+    "从生产库脱敏副本生成的预览/测试环境数据库"
+   ]
+  },
+  "sha": "0b326b5fa6da",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

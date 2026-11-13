@@ -2679,5 +2679,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2b60d89a2493": {
+  "identity": {
+   "one_liner": "Hermes Agent 的 /btw 侧信道插件，支持回合中途提问与会话状态读取",
+   "review": "BTW Studio 是面向 Hermes Agent（>=0.23.1）的插件，提供 /btw 侧信道工作区，使用户在回合运行中提问且不修改主转录；同时从只读 state.db 生成会话雷达，并通过 3 次工具调用的 Δτ 行为对比评估转向（steer）是否有效，仅将有证据的规则写入 BTW.md、btw-skills/ 和可选 MEMORY.md。支持多模态附件、语音转写与子代理查询。",
+   "highlights": [
+    "拦截 /btw 请求，在回合运行中回答且不改动主转录（ΔMainTranscript = 0 bytes）",
+    "以只读模式 state.db?mode=ro 读取会话数据，生成零 token 消耗的 Session Radar",
+    "通过 3-call Δτ 行为对比将转向结果标记为 helped/self_recovered/hurt/no_observed_effect/confounded，仅 helped 或 self_recovered 进入 BTW.md"
+   ],
+   "use_cases": [
+    "在 Hermes Agent 长回合执行工具时向代理提出旁路问题而不中断回合",
+    "查看当前运行的工具、最近命令退出码、已改动文件等活动会话状态",
+    "评估并记录对运行中回合或子代理的转向操作是否有效，沉淀经验规则"
+   ]
+  },
+  "sha": "2b60d89a2493",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

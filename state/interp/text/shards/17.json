@@ -3461,5 +3461,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c0e5b22cd6f5": {
+  "identity": {
+   "one_liner": "自托管的 Excalidraw 白板应用，数据存于自己的 Postgres",
+   "review": "Excaliself 将 Excalidraw 画布封装为可自托管的小型应用，提供实时协作、团队共享空间、文件夹、全文搜索与 MCP 接口，绘图数据存储在自有的 Postgres 中。部署依赖 Docker 与配套数据库，镜像需在 Compose 配置中设置 Postgres 密码、会话密钥与 BASE_URL；首次访问 /setup 创建管理员，其余成员通过邀请链接或 SSO 加入。",
+   "highlights": [
+    "包含完整 Excalidraw 编辑器并自动保存，支持实时协作、共享链接（可允许访客）与团队空间",
+    "内置 MCP 服务器（/api/mcp），AI 客户端可查找、读取、创建、导出绘图并提议编辑，实例无需 LLM API 密钥",
+    "支持 OIDC/Google Workspace/Microsoft Entra ID 单点登录、按标题与画布内文本搜索、回收站 30 天保留及 Excalidraw+ 导入"
+   ],
+   "use_cases": [
+    "团队在自有服务器上集中管理白板绘图，配合文件夹与共享空间协作",
+    "通过 Docker Compose、Coolify、Railway 等部署私有实例，数据留存于自建 Postgres",
+    "将 Claude 等 MCP 客户端接入白板，用 AI 查找、生成或提议修改绘图"
+   ]
+  },
+  "sha": "c0e5b22cd6f5",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "023ae01a4e76": {
+  "identity": {
+   "one_liner": "基于 FastAPI 的项目模板，集成 JWT 认证、PostgreSQL 异步访问与 Copier 生成机制",
+   "review": "这是一个 FastAPI 项目模板，供需要搭建 Python API 服务的开发者使用。包含 JWT 认证与 Redis token 黑名单、SQLAlchemy 2.0 异步集成、Alembic 迁移、版本化路由（/v1、/v2）、限流与 CSRF 中间件，并提供 Items 示例 CRUD 域。可通过 Copier 生成自定义项目，选择 minimal/custom/full 服务组合；还以 Agent Skills 形式打包架构规则供 AI 编码助手使用。需 Python 3.14+、PostgreSQL 与 uv。",
+   "highlights": [
+    "支持 JWT 认证、Redis token 黑名单、限流、CSRF 防护与安全头中间件",
+    "提供 SQLAlchemy 2.0 异步数据库集成与 Alembic 迁移，附 Items 示例 CRUD 域与测试",
+    "可作为 Copier 模板生成新项目，可选服务包括缓存、Celery 后台任务、云存储、Firebase、邮件等"
+   ],
+   "use_cases": [
+    "需要带认证、数据库迁移与分层架构的 FastAPI 新项目脚手架",
+    "通过 Copier 按需选择可选服务（如缓存、后台任务、云存储）生成定制项目",
+    "为 AI 编码助手提供架构规则，用于按该模板扩展或审查代码库"
+   ]
+  },
+  "sha": "023ae01a4e76",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3149,5 +3149,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7b2100ef32b1": {
+  "identity": {
+   "one_liner": "基于 NestJS 的微服务样板项目，结合 Clean Architecture、DDD 与六边形架构。",
+   "review": "这是一个 NestJS 微服务项目模板，提供 MongoDB 与 PostgreSQL 的通用仓储、认证授权、错误处理、Swagger 文档、Docker 配置等模块。架构上以 UseCase 统一 DDD 的服务层职责，使用 abstract class 作为仓储契约以适配 NestJS 依赖注入，输入校验放在 UseCase 内并通过 Zod 实现。README 未给出完整安装步骤，基础设施部分另见其 IaC 文档。",
+   "highlights": [
+    "实现结合 Clean Architecture、DDD 与六边形架构的分层结构，实体、Use Case、仓储接口位于 src/core，框架与数据库实现位于 modules 与 infra",
+    "提供 MongoDB 与 PostgreSQL 仓储、HTTP 与缓存适配器抽象，认证授权、日志拦截、异常过滤与 Swagger 文档支持",
+    "UseCase 内使用 Zod 进行输入校验，仓储契约使用 abstract class 以支持 NestJS 运行时依赖注入"
+   ],
+   "use_cases": [
+    "以 NestJS 启动新微服务项目时复用现成的分层结构与模块",
+    "学习或参照 Clean Architecture/DDD/六边形架构在 Node.js 中的简化实现方式",
+    "需要在 MongoDB 与 PostgreSQL 之间切换数据访问实现的项目开发"
+   ]
+  },
+  "sha": "7b2100ef32b1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5cb5dcc0a905": {
+  "identity": {
+   "one_liner": "将 PostgreSQL 线协议转换为 Cloud Spanner PostgreSQL 接口的代理",
+   "review": "PGAdapter 是一个代理服务，把 PostgreSQL 线协议翻译为 Cloud Spanner PostgreSQL 接口的等价协议，使 psql、JDBC、psycopg2 等标准 PostgreSQL 驱动和工具能连接 Cloud Spanner。可通过 Docker、独立 jar 或 JVM 进程内嵌方式运行，支持指定项目、实例和数据库，部分客户端（如 npgsql、PDO_PGSQL、postgres_fdw）仅为实验性支持。",
+   "highlights": [
+    "支持 psql 11–14、JDBC 42.x+、psycopg2/psycopg3、pgx、node-postgres 等多种 PostgreSQL 驱动和客户端",
+    "提供 Docker 镜像（含 distroless 版）、预构建 jar、本地构建和 JVM 进程内嵌四种运行方式",
+    "支持连接 Cloud Spanner Emulator，并可通过 OpenTelemetry 导出追踪到 Google Cloud Trace"
+   ],
+   "use_cases": [
+    "让依赖 PostgreSQL 驱动或连接池的现有应用直接访问 Cloud Spanner PostgreSQL 接口数据库",
+    "在 Kubernetes 中以 sidecar 代理形式运行，为应用提供 PostgreSQL 协议端点",
+    "本地使用 Spanner Emulator 进行开发测试，无需预建实例和数据库"
+   ]
+  },
+  "sha": "5cb5dcc0a905",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

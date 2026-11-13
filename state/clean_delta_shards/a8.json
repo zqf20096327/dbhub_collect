@@ -19628,5 +19628,2410 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "33d9b03c3aaa+2": {
+  "fn": "pgcentralfoundation/pgrx",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    11,
+    [
+     "GitHub Actions badge",
+     "crates.io badge",
+     "docs.rs badge",
+     "Twitter Follow",
+     "[Discord Chat][Discord]"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    19,
+    11,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     " + **Please join our [Discord Server][Discord].**"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    19,
+    20
+   ],
+   [
+    "replace",
+    21,
+    22,
+    20,
+    21,
+    [
+     " + **We are also in need of financial sponsorship.**"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    21,
+    24
+   ],
+   [
+    "replace",
+    25,
+    34,
+    24,
+    33,
+    [
+     "- **A fully managed development environment with `cargo-pgrx`**",
+     " + `cargo pgrx new`: Create new extensions quickly",
+     " + `cargo pgrx init`: Install new (or register existing) PostgreSQL installs",
+     " + `cargo pgrx run`: Run your extension and interactively test it in `psql` (or `pgcli`)",
+     " + `cargo pgrx test`: Unit-test your extension across multiple PostgreSQL versions",
+     " + `cargo pgrx regress`: Run SQL regression tests and compare their output with expected files",
+     " + `cargo pgrx package`: Create installation packages for your extension, including RPM and DEB packages on Linux",
+     " + `cargo pgrx migrate`: Optionally build upgrade scripts from one small SQL file per change",
+     " + More in the `README.md`!"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    33,
+    34
+   ],
+   [
+    "replace",
+    35,
+    38,
+    34,
+    37,
+    [
+     " + Support from Postgres 15 to Postgres 19 from the same codebase",
+     " + Use Rust feature gating to use version-specific APIs",
+     " + Seamlessly test against all versions"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    37,
+    38
+   ],
+   [
+    "replace",
+    39,
+    43,
+    38,
+    42,
+    [
+     " + Implement extensions entirely in Rust",
+     " + Automatic mapping for many Rust types into PostgreSQL",
+     " + SQL schemas generated automatically (or manually via `cargo pgrx schema`)",
+     " + Include custom SQL with `extension_sql!` & `extension_sql_file!`"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    42,
+    43
+   ],
+   [
+    "replace",
+    44,
+    48,
+    43,
+    47,
+    [
+     " + During binding generation, pgrx transpiles nearly all of PostgreSQL's function-style C `#define` macros into Rust `macro_rules!` macros",
+     " + Call them through `pgrx::` with their original C names and `!`, such as `pgrx::VARSIZE_ANY!(ptr)`",
+     " + Their behavior follows the selected PostgreSQL installation, compiler flags, and target",
+     " + See Using PostgreSQL C macros for extension examples and the transpiler architecture for implementation details"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    47,
+    48
+   ],
+   [
+    "replace",
+    49,
+    54,
+    48,
+    53,
+    [
+     " + Translates Rust `panic!`s into Postgres `ERROR`s that abort the transaction, not the process",
+     " + Memory Management follows Rust's drop semantics, even in the face of `panic!` and `elog(ERROR)`",
+     " + `#[pg_guard]` procedural macro to ensure the above",
+     " + Postgres `Datum`s are `Option<T> where T: FromDatum`",
+     " - `NULL` Datums are safely represented as `Option::<T>::None`"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    53,
+    54
+   ],
+   [
+    "replace",
+    55,
+    59,
+    54,
+    58,
+    [
+     " + Annotate functions with `#[pg_extern]` to expose them to Postgres",
+     " + Return `pgrx::iter::SetOfIterator<'a, T>` for `RETURNS SETOF`",
+     " + Return `pgrx::iter::TableIterator<'a, T>` for `RETURNS TABLE (...)`",
+     " + Create trigger functions with `#[pg_trigger]`"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    58,
+    59
+   ],
+   [
+    "replace",
+    60,
+    66,
+    59,
+    65,
+    [
+     " + `#[derive(PostgresType)]` to use a Rust struct as a Postgres type",
+     " - By default, represented as a CBOR-encoded object in-memory/on-disk, and JSON as human-readable",
+     " - Supports `#[pg_binary_protocol]` to generate binary protocol send/recv functions",
+     " - Provide custom in-memory/on-disk/human-readable representations",
+     " + `#[derive(PostgresEnum)]` to use a Rust enum as a Postgres enum",
+     " + Composite types supported with the `pgrx::composite_type!(\"Sample\")` macro"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    65,
+    66
+   ],
+   [
+    "replace",
+    67,
+    69,
+    66,
+    68,
+    [
+     " + Safe access into SPI",
+     " + Transparently return owned Datums from an SPI context"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    68,
+    69
+   ],
+   [
+    "replace",
+    70,
+    77,
+    69,
+    76,
+    [
+     " + Safe access to Postgres' `MemoryContext` system via `pgrx::PgMemoryContexts`",
+     " + Executor/planner/transaction/subtransaction hooks",
+     " + Safely use Postgres-provided pointers with `pgrx::PgBox<T>` (akin to `alloc::boxed::Box<T>`)",
+     " + `#[pg_guard]` proc-macro for guarding `extern \"C-unwind\"` Rust functions that need to be passed into Postgres",
+     " + Access Postgres' logging system through `eprintln!`-like macros",
+     " + Direct `unsafe` access to large parts of Postgres internals via the `pgrx::pg_sys` module",
+     " + New features added regularly!"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    76,
+    85
+   ],
+   [
+    "replace",
+    86,
+    88,
+    85,
+    87,
+    [
+     "target limits.",
+     "A cross build has further requirements; see Cross-compiling."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    87,
+    91
+   ],
+   [
+    "replace",
+    92,
+    100,
+    91,
+    99,
+    [
+     " - Debian-likes: `apt install clang llvm libclang-dev`",
+     " - RHEL-likes: `yum install clang llvm`",
+     " - Windows: download installers from https://github.com/llvm/llvm-project/releases",
+     " - On Linux, pgrx's CI generates the C macros with every Clang major from 14 through 23, on x86_64 and aarch64, and requires those versions to generate the same macros. Other Clang versions are not tested on Linux.",
+     " - `pgrx-pg-sys` uses the driver to find the target's system headers, to check the C macro profile against the PostgreSQL headers and to compile its native support archive, including the `cshim` feature. Its major version must match `libclang`. pgrx uses `CLANG_PATH` when it is set; otherwise it uses the first match among the `CLANG` recorded in a `pg_config` program's `--configure` output, the `clang` installed with `libclang`, and `clang-<major>` or `clang` on `PATH`.",
+     " - The archiver is `llvm-ar` from the driver's LLVM release, or `llvm-lib` for Windows targets. pgrx looks for `llvm-ar-<major>` beside a `clang-<major>` driver, then `llvm-ar` beside the driver or beside its resolved path, such as Debian's `/usr/lib/llvm-<major>/bin/llvm-ar`. Without one, builds for Unix targets use the system `ar`, which works for native builds but may not index objects built for another target.",
+     " - A failure to generate the C macros stops the build with an error that names the cause.",
+     " - A driver that loads a default configuration file, as Gentoo's Clang does, is refused. Set `CLANG_NO_DEFAULT_CONFIG=1` to build without it."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    99,
+    100
+   ],
+   [
+    "replace",
+    101,
+    106,
+    100,
+    105,
+    [
+     " - Linux and macOS: a host C compiler, which builds the generator's SHA-256 backend",
+     " - Windows: MSVC, which Rust's MSVC targets need for linking",
+     "- PostgreSQL's build dependencies ‡",
+     " - Debian-likes: `sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache pkg-config libicu-dev`",
+     " - RHEL-likes: `sudo yum install -y bison-devel readline-devel zlib-devel openssl-devel wget ccache && sudo yum groupinstall -y 'Development Tools'`"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    120,
+    105,
+    119
+   ],
+   [
+    "replace",
+    120,
+    121,
+    119,
+    120,
+    [
+     "The Mac C compiler (clang) and related tools are bundled with Xcode."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    123,
+    120,
+    122
+   ],
+   [
+    "replace",
+    123,
+    124,
+    122,
+    123,
+    [
+     "For additional C libraries, it's easiest to use Homebrew. In particular,"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    142,
+    123,
+    141
+   ],
+   [
+    "replace",
+    142,
+    166,
+    141,
+    142,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    178,
+    142,
+    154
+   ],
+   [
+    "replace",
+    178,
+    183,
+    154,
+    155,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    197,
+    155,
+    169
+   ],
+   [
+    "replace",
+    197,
+    198,
+    169,
+    170,
+    [
+     " └── lib.rs"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    218,
+    170,
+    190
+   ],
+   [
+    "delete",
+    218,
+    219,
+    190,
+    190
+   ],
+   [
+    "equal",
+    219,
+    225,
+    190,
+    196
+   ],
+   [
+    "replace",
+    225,
+    262,
+    196,
+    197,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    281,
+    197,
+    216
+   ],
+   [
+    "replace",
+    281,
+    390,
+    216,
+    217,
+    [
+     "…（109 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    392,
+    217,
+    219
+   ],
+   [
+    "replace",
+    392,
+    400,
+    219,
+    227,
+    [
+     " --> pgrx/src/lib.rs:151:5",
+     " |",
+     "151 | / assert!(",
+     "152 | | same_slice(pg_sys::FMGR_ABI_EXTRA, b\"xPostgreSQL\\0\"),",
+     "153 | | \"Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?\",",
+     "154 | | );",
+     " | |_____^ the evaluated program panicked at 'Unsupported Postgres ABI. Perhaps you need `--features unsafe-postgres`?', pgrx/src/lib.rs:151:5",
+     " |"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    404,
+    227,
+    231
+   ],
+   [
+    "replace",
+    404,
+    451,
+    231,
+    232,
+    [
+     "…（47 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    462,
+    232,
+    243
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "8381ea071450+2": {
+  "fn": "yilecoding/fastapi-react-admin",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "fastapi-react-admin"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     "**English** | 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    5,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "Live demo · Docs · DeepWiki project guide · Quick start · Features · Releases"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    21,
+    12,
+    17,
+    [
+     "Release",
+     "CI",
+     "E2E report",
+     "License: MIT",
+     "zread"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    24,
+    17,
+    20
+   ],
+   [
+    "replace",
+    24,
+    38,
+    20,
+    28,
+    [
+     " Dashboard ",
+     " Departments ",
+     "",
+     " Roles: permission matrix ",
+     " Row-level data permissions ",
+     "",
+     " Approval inbox ",
+     " Approval designer "
+    ]
+   ],
+   [
+    "equal",
+    38,
+    55,
+    28,
+    45
+   ],
+   [
+    "replace",
+    55,
+    63,
+    45,
+    46,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    74,
+    46,
+    57
+   ],
+   [
+    "replace",
+    74,
+    75,
+    57,
+    58,
+    [
+     "- **Tests** — 1,600+ tests against a real database and a real browser, no mocks, on every CI run; the E2E report is public"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    92,
+    58,
+    75
+   ],
+   [
+    "replace",
+    92,
+    93,
+    75,
+    76,
+    [
+     "||Typical template|Here|"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    76,
+    77
+   ],
+   [
+    "replace",
+    94,
+    100,
+    77,
+    83,
+    [
+     "|**Permission granularity**|menus + buttons|menus + buttons + **data scopes** — the role decides which **rows** you see|",
+     "|**Multi-tab**|free with Vue's `keep-alive`; most React templates don't have it, or lose state when you switch away|React 19 **`<Activity>`**: open tabs stay mounted, DOM and state survive switching|",
+     "|**Component base**|most are still on shadcn's older Radix version|already on **Base UI**, shadcn's current default (zero `@radix-ui` imports), plus a component sandbox you can copy code from|",
+     "|**Database**|usually just one|**pick one of three**: PostgreSQL (default) · SQL Server · MySQL|",
+     "|**Business features**|users / roles / menus|plus approval workflow, AI assistant, open API, files & storage, messaging and scheduled jobs|",
+     "|**Tests**|mostly none, or component unit tests with mocks|1,400+ backend + 150+ end-to-end browser tests, **against real dependencies, no mocks**|"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    83,
+    86
+   ],
+   [
+    "replace",
+    103,
+    104,
+    86,
+    87,
+    [
+     "|Area|What you get|"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    87,
+    88
+   ],
+   [
+    "replace",
+    105,
+    118,
+    88,
+    101,
+    [
+     "|**Access & org**|RBAC (menus / buttons / data scopes) · row-level data permissions · department tree · users & roles|",
+     "|**Import & export**|server-side xlsx / csv export (current filter or selected rows · large exports run in the background and notify you when done · formula-injection safe) · generic import (templates with dropdowns · preview & validation · insert only / upsert / update only · error report · all-or-nothing) · build a whole department tree from one file|",
+     "|**Sign-in & security**|captcha · lockout · password history & expiry · SMS code sign-in · two-factor auth (TOTP + recovery codes) · OAuth2 (GitHub / Google) · session management (idle timeout + absolute limit · per-client session caps · tells users why they were signed out · force sign-out)|",
+     "|**Workspace**|customizable dashboard (cards appear by permission · layout saved per user on the server) · multi-tab (pin / drag / reload) · command palette ⌘K · shortcuts · guided tour · theme / radius / tab style · per-user time zone · Chinese & English|",
+     "|**Files & storage**|file manager with previews (pdf / docx / xlsx / images / archives) · local + S3-compatible storage · pre-signed downloads · recycle bin · instant upload · chunked & resumable uploads · attachment panel for any page|",
+     "|**Approval workflow**|form designer · flow tree (approve / CC / conditional branches) · approve / reject / transfer / send back / take back / add approvers · timeout reminders and auto-actions · drafts · urgent · handover · AI pre-review / form filling / AI approval nodes|",
+     "|**AI assistant**|full-page chat + side drawer · tool calls bound by permissions and data scopes · preview + confirm for writes · audit log · MCP gateway|",
+     "|**Open API**|AK/SK-signed endpoints · scopes / IP allow-list / replay protection / rate limits · call logs · incremental sync · Python / Node / Java SDKs · webhook subscriptions (Standard Webhooks signatures · retries · delivery log · bulk resend)|",
+     "|**Messages & notifications**|in-app notifications (real-time) · notices (rich text + attachments · audiences · scheduled publishing · pinned / level / expiry · pop-up after sign-in with required acknowledgement · top banner · sign-in page notices · read stats) · notification routing (email / SMS / Feishu · DingTalk · WeCom group bots · per-event policies · delivery log) · SMS (Alibaba Cloud / Tencent Cloud)|",
+     "|**Scheduled jobs**|online scheduling · cron preview · run history|",
+     "|**Operations**|settings · dictionaries · sign-in / operation logs (redacted) · data change history (who changed which field from what to what, when and from where · linked to the operation log) · server & Redis monitoring · new-version prompt|",
+     "|**Clients**|Electron desktop (installers for three platforms · silent printing · local hardware · auto-update) · native Expo app (not a WebView wrapper; scope below)|",
+     "|**Developers**|component sandbox (every component tweakable and copy-pasteable) · color palette · type-safe API contract generated from OpenAPI|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    121,
+    101,
+    104
+   ],
+   [
+    "replace",
+    121,
+    122,
+    104,
+    105,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    105,
+    106
+   ],
+   [
+    "replace",
+    123,
+    128,
+    106,
+    111,
+    [
+     "|**Frontend**|React 19 · TypeScript 6 · Vite 8 · TanStack Router / Query / Table v9 · Tailwind CSS 4 · shadcn/ui (Base UI) · zustand · Tiptap 3 · i18next|",
+     "|**Backend**|FastAPI · Pydantic 2 · SQLAlchemy 2 (async) · Alembic · Redis · Celery · Socket.IO · Apache OpenDAL · pydantic-ai|",
+     "|**Databases**|PostgreSQL · SQL Server · MySQL|",
+     "|**Clients**|Electron 42 · Expo 57 / React Native 0.86|",
+     "|**Tooling**|pnpm + turbo monorepo · uv · ruff · pytest · Playwright · GitHub Actions|"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    131,
+    111,
+    114
+   ],
+   [
+    "replace",
+    131,
+    132,
+    114,
+    115,
+    [
+     "The Expo app covers **the things people actually do on a phone** (#224); admin-console modules stay on the web. It is versioned separately from the web app."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    135,
+    115,
+    118
+   ],
+   [
+    "replace",
+    135,
+    136,
+    118,
+    119,
+    [
+     "- **Not yet verified:** no automated tests (#137), most screens only run on an emulator, no release pipeline"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    141,
+    119,
+    124
+   ],
+   [
+    "replace",
+    141,
+    142,
+    124,
+    125,
+    [
+     "||Good for|How it's verified|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    125,
+    126
+   ],
+   [
+    "replace",
+    143,
+    146,
+    126,
+    129,
+    [
+     "|**PostgreSQL** (default)|new projects; `docker compose up` gives you one|full backend suite on every CI run|",
+     "|**SQL Server**|teams already on the Microsoft stack|full backend suite + browser E2E on every CI run|",
+     "|**MySQL**|teams already running MySQL|not in CI; full suite run locally on demand — last run (2026-10-31) passed in full, including an upgrade from v0.0.1|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    149,
+    129,
+    132
+   ],
+   [
+    "replace",
+    149,
+    150,
+    132,
+    133,
+    [
+     "You need Node ≥ 22.13, Python ≥ 3.11, uv and Docker."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    159,
+    133,
+    142
+   ],
+   [
+    "replace",
+    159,
+    160,
+    142,
+    143,
+    [
+     "Sign in as `admin` with the password you set during `pnpm db:init`. Switching to SQL Server / MySQL, S3, skipping the captcha and running tests are covered in CONTRIBUTING.md (Chinese; the commands are language-independent)."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    165,
+    143,
+    148
+   ],
+   [
+    "replace",
+    165,
+    166,
+    148,
+    149,
+    [
+     "The E2E report from every `main` run is public, with screenshots and videos of failures."
+    ]
+   ],
+   [
+    "equal",
+    166,
+    169,
+    149,
+    152
+   ],
+   [
+    "replace",
+    169,
+    170,
+    152,
+    153,
+    [
+     "|To…|Read|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    153,
+    154
+   ],
+   [
+    "replace",
+    171,
+    179,
+    154,
+    162,
+    [
+     "|get started step by step: quick start, deployment, your first module, FAQ, upgrading|docs site|",
+     "|develop locally, run tests, open a PR, release|CONTRIBUTING.md|",
+     "|learn the engineering rules and pitfalls|CLAUDE.md — task-indexed, 40+ module notes, every claim backed by a test or measurement|",
+     "|deploy to a server|deploy/README.md|",
+     "|desktop app|apps/desktop/README.md|",
+     "|integrate with the open API|apps/api/backend/plugin/open/README.md|",
+     "|reuse the component library|packages/ui/PORTING.md|",
+     "|security notes|SECURITY.md|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    181,
+    162,
+    164
+   ],
+   [
+    "replace",
+    181,
+    184,
+    164,
+    165,
+    [
+     "MIT"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    186,
+    165,
+    167
+   ],
+   [
+    "replace",
+    186,
+    187,
+    167,
+    168,
+    [
+     "The backend was originally built on fastapi-best-architecture (FBA) — its three-layer structure, plugin system and RBAC / data-scope model come from FBA's design. Thanks to its author and contributors 🙏 FBA is also MIT-licensed; its original copyright notice is kept in `apps/api/LICENSE`. Thanks also to shadcn/ui, TanStack, Tiptap, file-viewer and the other open-source projects this is built on."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "a79532b6c525+2": {
+  "fn": "maximdr86/tikpilot",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**English** · Русский"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "tests",
+     "license: MIT",
+     "python"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    17,
+    7,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "> How this project came about."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "> The prompt and the project context behind it: docs/prompt-mikrotik-panel.en.md."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "insert",
+    21,
+    21,
+    21,
+    22,
+    [
+     "**Site: tikpilot.ru**"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    22,
+    23
+   ],
+   [
+    "replace",
+    22,
+    23,
+    23,
+    24,
+    [
+     "Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    24,
+    25
+   ],
+   [
+    "replace",
+    24,
+    25,
+    25,
+    35,
+    [
+     "|||",
+     "|---|---|",
+     "|Devices|Monitoring|",
+     "|**Devices.** Filters, search, sorting, RouterOS version, uptime and mobile operator for each site|**Monitoring.** Fleet map, uptime over 24 h, latency and loss|",
+     "|Scripts|Device log|",
+     "|**Scripts.** A library of commands and what actually sits on the routers|**Device log.** Syslog from the whole fleet, with filters and hiding rules|",
+     "|Bulk action|Jobs|",
+     "|**One action for the whole fleet.** Reboot, upgrade, a script, a backup, an API call|**Jobs.** History with per-device success and failure counts|",
+     "|Device card|WireGuard|",
+     "|**Device card.** Status, clients behind the router, latency and loss|**WireGuard.** Router-to-router links through a hub, with handshakes and traffic|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    35,
+    36
+   ],
+   [
+    "replace",
+    26,
+    36,
+    36,
+    37,
+    [
+     " More screenshots: clients, backups, groups, audit log, rights, ports and services "
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    37,
+    38
+   ],
+   [
+    "replace",
+    37,
+    50,
+    38,
+    46,
+    [
+     "Clients",
+     "Backups",
+     "Groups",
+     "Audit log",
+     "Rights",
+     "Settings",
+     "Ports and services",
+     "WireGuard links"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    54,
+    46,
+    50
+   ],
+   [
+    "delete",
+    54,
+    56,
+    50,
+    50
+   ],
+   [
+    "equal",
+    56,
+    72,
+    50,
+    66
+   ],
+   [
+    "replace",
+    72,
+    73,
+    66,
+    67,
+    [
+     " lines joined back and the current menu remembered;"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    67,
+    68
+   ],
+   [
+    "replace",
+    74,
+    75,
+    68,
+    69,
+    [
+     " configuration unless the change is confirmed;"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    164,
+    69,
+    158
+   ],
+   [
+    "delete",
+    164,
+    166,
+    158,
+    158
+   ],
+   [
+    "equal",
+    166,
+    170,
+    158,
+    162
+   ],
+   [
+    "replace",
+    170,
+    171,
+    162,
+    163,
+    [
+     "|Resource|Minimum|Recommended|"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    163,
+    164
+   ],
+   [
+    "replace",
+    172,
+    177,
+    164,
+    169,
+    [
+     "|CPU|1 core|2 cores|",
+     "|RAM|512 MB|1 GB|",
+     "|Disk|2 GB|10 GB and up if you keep backups|",
+     "|Python|3.10|3.12|",
+     "|OS|anything with systemd|Ubuntu 22.04 or 24.04 LTS|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    187,
+    169,
+    179
+   ],
+   [
+    "delete",
+    187,
+    189,
+    179,
+    179
+   ],
+   [
+    "equal",
+    189,
+    277,
+    179,
+    267
+   ],
+   [
+    "delete",
+    277,
+    279,
+    267,
+    267
+   ],
+   [
+    "equal",
+    279,
+    287,
+    267,
+    275
+   ],
+   [
+    "replace",
+    287,
+    300,
+    275,
+    276,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    304,
+    276,
+    280
+   ],
+   [
+    "replace",
+    304,
+    305,
+    280,
+    281,
+    [
+     "|Policy|Why|"
+    ]
+   ],
+   [
+    "equal",
+    305,
+    306,
+    281,
+    282
+   ],
+   [
+    "replace",
+    306,
+    313,
+    282,
+    289,
+    [
+     "|`api`|required, nothing works without it|",
+     "|`read`|status, version, uptime|",
+     "|`write`|configuration changes, creating scripts|",
+     "|`test`|running scripts|",
+     "|`ftp`|downloading backups|",
+     "|`reboot`|mass reboot|",
+     "|`policy`|needed for scripts that carry policies|"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    323,
+    289,
+    299
+   ],
+   [
+    "delete",
+    323,
+    325,
+    299,
+    299
+   ],
+   [
+    "equal",
+    325,
+    341,
+    299,
+    315
+   ],
+   [
+    "delete",
+    341,
+    343,
+    315,
+    315
+   ],
+   [
+    "equal",
+    343,
+    398,
+    315,
+    370
+   ],
+   [
+    "delete",
+    398,
+    400,
+    370,
+    370
+   ],
+   [
+    "equal",
+    400,
+    457,
+    370,
+    427
+   ],
+   [
+    "delete",
+    457,
+    458,
+    427,
+    427
+   ],
+   [
+    "equal",
+    458,
+    465,
+    427,
+    434
+   ],
+   [
+    "delete",
+    465,
+    468,
+    434,
+    434
+   ],
+   [
+    "equal",
+    468,
+    520,
+    434,
+    486
+   ],
+   [
+    "delete",
+    520,
+    522,
+    486,
+    486
+   ],
+   [
+    "equal",
+    522,
+    531,
+    486,
+    495
+   ],
+   [
+    "replace",
+    531,
+    534,
+    495,
+    498,
+    [
+     " name comes from the code: `25001` is always MTS, while the string baked into",
+     " the firmware differs from model to model. The technology and signal level are",
+     " shown under the name;"
+    ]
+   ],
+   [
+    "equal",
+    534,
+    535,
+    498,
+    499
+   ],
+   [
+    "replace",
+    535,
+    539,
+    499,
+    503,
+    [
+     " about the public address of the site. This is the only place in the whole",
+     " panel that reaches out to the internet, so it is off by default:",
+     " `OPERATOR_LOOKUP=1`. Private and CGNAT addresses are never looked up: behind",
+     " a carrier NAT the registry knows the owner of the NAT, not of the link;"
+    ]
+   ],
+   [
+    "equal",
+    539,
+    540,
+    503,
+    504
+   ],
+   [
+    "replace",
+    540,
+    541,
+    504,
+    505,
+    [
+     " and is never overwritten by a poll; a contract number fits nicely there too."
+    ]
+   ],
+   [
+    "equal",
+    541,
+    543,
+    505,
+    507
+   ],
+   [
+    "delete",
+    543,
+    545,
+    507,
+    507
+   ],
+   [
+    "equal",
+    545,
+    557,
+    507,
+    519
+   ],
+   [
+    "delete",
+    557,
+    559,
+    519,
+    519
+   ],
+   [
+    "equal",
+    559,
+    568,
+    519,
+    528
+   ],
+   [
+    "replace",
+    568,
+    569,
+    528,
+    529,
+    [
+     " changes in six hours; packet loss measured by the site's own ping;"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    570,
+    529,
+    530
+   ],
+   [
+    "replace",
+    570,
+    572,
+    530,
+    532,
+    [
+     " meaning the site used to send it and stopped; armed rollback safety nets;",
+     " jobs with errors in the last day;"
+    ]
+   ],
+   [
+    "equal",
+    572,
+    573,
+    532,
+    533
+   ],
+   [
+    "replace",
+    573,
+    574,
+    533,
+    534,
+    [
+     " board's memory free; the panel's own disk filling up;"
+    ]
+   ],
+   [
+    "equal",
+    574,
+    575,
+    534,
+    535
+   ],
+   [
+    "replace",
+    575,
+    576,
+    535,
+    536,
+    [
+     " available updates."
+    ]
+   ],
+   [
+    "equal",
+    576,
+    583,
+    536,
+    543
+   ],
+   [
+    "delete",
+    583,
+    585,
+    543,
+    543
+   ],
+   [
+    "equal",
+    585,
+    613,
+    543,
+    571
+   ],
+   [
+    "delete",
+    613,
+    615,
+    571,
+    571
+   ],
+   [
+    "equal",
+    615,
+    659,
+    571,
+    615
+   ],
+   [
+    "delete",
+    659,
+    661,
+    615,
+    615
+   ],
+   [
+    "equal",
+    661,
+    671,
+    615,
+    625
+   ],
+   [
+    "replace",
+    671,
+    672,
+    625,
+    626,
+    [
+     " `10.0.0.1=hub,8.8.8.8=internet`."
+    ]
+   ],
+   [
+    "equal",
+    672,
+    677,
+    626,
+    631
+   ],
+   [
+    "replace",
+    677,
+    678,
+    631,
+    632,
+    [
+     "|What goes up|Where to look|"
+    ]
+   ],
+   [
+    "equal",
+    678,
+    679,
+    632,
+    633
+   ],
+   [
+    "replace",
+    679,
+    682,
+    633,
+    636,
+    [
+     "|the hub only|the tunnel or the hub side|",
+     "|both targets|the site's own link degraded|",
+     "|the internet only|the site's ISP has upstream trouble|"
+    ]
+   ],
+   [
+    "equal",
+    682,
+    697,
+    636,
+    651
+   ],
+   [
+    "delete",
+    697,
+    699,
+    651,
+    651
+   ],
+   [
+    "equal",
+    699,
+    730,
+    651,
+    682
+   ],
+   [
+    "delete",
+    730,
+    732,
+    682,
+    682
+   ],
+   [
+    "equal",
+    732,
+    766,
+    682,
+    716
+   ],
+   [
+    "replace",
+    766,
+    767,
+    716,
+    717,
+    [
+     "|Rule|Why|"
+    ]
+   ],
+   [
+    "equal",
+    767,
+    768,
+    717,
+    718
+   ],
+   [
+    "replace",
+    768,
+    772,
+    718,
+    722,
+    [
+     "|site unreachable > 15 min|an outage rather than a flap|",
+     "|age of the last backup > 26 h|the backup did not happen and nobody would know|",
+     "|free memory < 16 MiB|it is about to start failing on memory|",
+     "|loss > 10 % for half an hour|the link degraded but the site is still up|"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    783,
+    722,
+    733
+   ],
+   [
+    "replace",
+    783,
+    784,
+    733,
+    734,
+    [
+     " up and go out in the morning, and the range may cross midnight;"
+    ]
+   ],
+   [
+    "equal",
+    784,
+    785,
+    734,
+    735
+   ],
+   [
+    "replace",
+    785,
+    786,
+    735,
+    736,
+    [
+     " does not drown out the rest."
+    ]
+   ],
+   [
+    "equal",
+    786,
+    814,
+    736,
+    764
+   ],
+   [
+    "delete",
+    814,
+    816,
+    764,
+    764
+   ],
+   [
+    "equal",
+    816,
+    836,
+    764,
+    784
+   ],
+   [
+    "replace",
+    836,
+    837,
+    784,
+    785,
+    [
+     " longest step, and the device keeps working normally throughout."
+    ]
+   ],
+   [
+    "equal",
+    837,
+    850,
+    785,
+    798
+   ],
+   [
+    "replace",
+    850,
+    851,
+    798,
+    799,
+    [
+     "|Option|Default|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    851,
+    852,
+    799,
+    800
+   ],
+   [
+    "replace",
+    852,
+    859,
+    800,
+    807,
+    [
+     "|Update channel|`long-term`|written to the device before the check|",
+     "|Take a backup|on|without a backup the install does not start|",
+     "|Package download wait|1800 s|set it higher on a thin link|",
+     "|Return wait|420 s|0 means do not wait and do not verify|",
+     "|Upgrade RouterBOOT|off|needs one more reboot|",
+     "|Batch size|5|0 means all at once|",
+     "|Pause between batches|120 s|time to spot a problem and hit \"Cancel\"|"
+    ]
+   ],
+   [
+    "equal",
+    859,
+    873,
+    807,
+    821
+   ],
+   [
+    "replace",
+    873,
+    874,
+    821,
+    822,
+    [
+     " get lost;"
+    ]
+   ],
+   [
+    "equal",
+    874,
+    910,
+    822,
+    858
+   ],
+   [
+    "delete",
+    910,
+    912,
+    858,
+    858
+   ],
+   [
+    "equal",
+    912,
+    929,
+    858,
+    875
+   ],
+   [
+    "replace",
+    929,
+    930,
+    875,
+    876,
+    [
+     "|Choice|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    930,
+    931,
+    876,
+    877
+   ],
+   [
+    "replace",
+    931,
+    935,
+    877,
+    881,
+    [
+     "|Where it is missing|sites without the marker. The question that matters|",
+     "|To all sites|the whole fleet within your scope|",
+     "|To a group|one group|",
+     "|Pick sites manually|checkboxes|"
+    ]
+   ],
+   [
+    "equal",
+    935,
+    957,
+    881,
+    903
+   ],
+   [
+    "delete",
+    957,
+    959,
+    903,
+    903
+   ],
+   [
+    "equal",
+    959,
+    973,
+    903,
+    917
+   ],
+   [
+    "delete",
+    973,
+    975,
+    917,
+    917
+   ],
+   [
+    "equal",
+    975,
+    1021,
+    917,
+    963
+   ],
+   [
+    "delete",
+    1021,
+    1023,
+    963,
+    963
+   ],
+   [
+    "equal",
+    1023,
+    1055,
+    963,
+    995
+   ],
+   [
+    "delete",
+    1055,
+    1057,
+    995,
+    995
+   ],
+   [
+    "equal",
+    1057,
+    1067,
+    995,
+    1005
+   ],
+   [
+    "delete",
+    1067,
+    1069,
+    1005,
+    1005
+   ],
+   [
+    "equal",
+    1069,
+    1077,
+    1005,
+    1013
+   ],
+   [
+    "delete",
+    1077,
+    1079,
+    1013,
+    1013
+   ],
+   [
+    "equal",
+    1079,
+    1133,
+    1013,
+    1067
+   ],
+   [
+    "delete",
+    1133,
+    1135,
+    1067,
+    1067
+   ],
+   [
+    "equal",
+    1135,
+    1151,
+    1067,
+    1083
+   ],
+   [
+    "delete",
+    1151,
+    1153,
+    1083,
+    1083
+   ],
+   [
+    "equal",
+    1153,
+    1180,
+    1083,
+    1110
+   ],
+   [
+    "delete",
+    1180,
+    1182,
+    1110,
+    1110
+   ],
+   [
+    "equal",
+    1182,
+    1188,
+    1110,
+    1116
+   ],
+   [
+    "replace",
+    1188,
+    1190,
+    1116,
+    1117,
+    [
+     "|Variable|Default|What it sets|"
+    ]
+   ],
+   [
+    "equal",
+    1190,
+    1191,
+    1117,
+    1118
+   ],
+   [
+    "replace",
+    1191,
+    1222,
+    1118,
+    1149,
+    [
+     "|`DEFAULT_LANG`|`en`|interface language: `en` or `ru`|",
+     "|`ADMIN_USERNAME` / `ADMIN_PASSWORD`|`admin` / `admin`|the account created on first start|",
+     "|`SECRET_KEY`|generated|cookie signing|",
+     "|`FERNET_KEY`|generated|device password encryption|",
+     "|`DATA_DIR`|`./data`|where the database, keys and backups live|",
+     "|`HOST` / `PORT`|`0.0.0.0` / `8080`|listen address and port|",
+     "|`MAX_WORKERS`|`12`|how many devices are processed at once|",
+     "|`API_TIMEOUT`|`10`|RouterOS API timeout, seconds|",
+     "|`FTP_TIMEOUT`|`30`|backup download timeout, seconds|",
+     "|`BACKUP_TRANSPORT`|`auto`|how backups are fetched: `auto` (SFTP, then FTP), `sftp`, `ftp`|",
+     "|`MONITOR_ENABLED`|`1`|availability monitoring|",
+     "|`MONITOR_INTERVAL`|`60`|how often to check the link, seconds|",
+     "|`MONITOR_FULL_INTERVAL`|`900`|how often to poll in detail, seconds|",
+     "|`MONITOR_FAIL_THRESHOLD`|`3`|misses before the \"unreachable\" status|",
+     "|`ICMP_CHECK_ENABLED`|`1`|**panel** · ping a site when it did not answer over the API|",
+     "|`MONITOR_WORKERS`|`0`|concurrent checks (0 means same as `MAX_WORKERS`)|",
+     "|`MONITOR_EVENT_RETENTION_DAYS`|`30`|how long to keep the outage history|",
+     "|`DISK_MIN_FREE_PERCENT`|`15`|**panel** · free space threshold for the panel's own disk, 0 turns it off|",
+     "|`LATENCY_ENABLED`|`1`|latency and loss measurement|",
+     "|`LATENCY_TARGETS`|`8.8.8.8`|shared ping targets, comma-separated|",
+     "|`LATENCY_PING_GATEWAY`|`1`|also ping each site's gateway|",
+     "|`LATENCY_COUNT`|`5`|packets per measurement|",
+     "|`METRICS_RETENTION_DAYS`|`14`|how long to keep the graphs|",
+     "|`VENDORS_AUTO_UPDATE`|`1`|refresh the MAC vendor database from IEEE once a month|",
+     "|`UI_REFRESH_INTERVAL`|`15`|how often the page refreshes itself, seconds|",
+     "|`SESSION_MAX_AGE`|`43200`|session lifetime, seconds|",
+     "|`SESSION_REMEMBER_AGE`|`2592000`|session lifetime with \"Remember me\" ticked, seconds|",
+     "|`JOB_RETENTION_DAYS`|`90`|how long to keep the job history|",
+     "|`ADMIN_NETWORKS`|empty|networks allowed to reach the panel (the status page stays public)|",
+     "|`TRUSTED_PROXIES`|`127.0.0.1,::1`|proxies whose `X-Forwarded-For` may be trusted|",
+     "|`COOKIE_SECURE`|`0`|set to `1` when running behind HTTPS|"
+    ]
+   ],
+   [
+    "equal",
+    1222,
+    1225,
+    1149,
+    1152
+   ],
+   [
+    "delete",
+    1225,
+    1227,
+    1152,
+    1152
+   ],
+   [
+    "equal",
+    1227,
+    1247,
+    1152,
+    1172
+   ],
+   [
+    "delete",
+    1247,
+    1249,
+    1172,
+    1172
+   ],
+   [
+    "equal",
+    1249,
+    1258,
+    1172,
+    1181
+   ],
+   [
+    "replace",
+    1258,
+    1271,
+    1181,
+    1182,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1271,
+    1275,
+    1182,
+    1186
+   ],
+   [
+    "delete",
+    1275,
+    1277,
+    1186,
+    1186
+   ],
+   [
+    "equal",
+    1277,
+    1279,
+    1186,
+    1188
+   ],
+   [
+    "replace",
+    1279,
+    1280,
+    1188,
+    1189,
+    [
+     "|What you see|What to check|"
+    ]
+   ],
+   [
+    "equal",
+    1280,
+    1281,
+    1189,
+    1190
+   ],
+   [
+    "replace",
+    1281,
+    1290,
+    1190,
+    1199,
+    [
+     "|Connection refused|`/ip service print`: is `api` enabled, is the port right, is `address=` in the way|",
+     "|Invalid username or password|the user's password and the `api` policy on its group|",
+     "|Connection timeout|host reachability, a firewall on the path. You can raise `API_TIMEOUT`|",
+     "|Did not answer within N s|the command is long, usually a script. Raise \"wait for completion\". The device is reachable|",
+     "|RouterOS rejected the command|the user lacks a policy (`write`, `test`, `policy`, `reboot`)|",
+     "|FTP: download failed|is the `ftp` service on, does the user have the `ftp` policy, is port 21 reachable|",
+     "|SFTP: download failed|is the `ssh` service on, does the user have the `ssh` policy, is port 22 reachable|",
+     "|The backup file never appeared|not enough space on the device (`/system/resource print`)|",
+     "|Every device went offline after changing `FERNET_KEY`|the passwords are encrypted with the old key. Restore `data/fernet.key` or re-enter the passwords|"
+    ]
+   ],
+   [
+    "equal",
+    1290,
+    1292,
+    1199,
+    1201
+   ],
+   [
+    "delete",
+    1292,
+    1294,
+    1201,
+    1201
+   ],
+   [
+    "equal",
+    1294,
+    1310,
+    1201,
+    1217
+   ],
+   [
+    "replace",
+    1310,
+    1313,
+    1217,
+    1220,
+    [
+     " them, just do not lose any;",
+     "* tags such as `<code>` and ` ` inside a string must be kept, only the",
+     " words between them are translated;"
+    ]
+   ],
+   [
+    "equal",
+    1313,
+    1315,
+    1220,
+    1222
+   ],
+   [
+    "replace",
+    1315,
+    1318,
+    1222,
+    1223,
+    [
+     " example with a number of seconds inside."
+    ]
+   ],
+   [
+    "equal",
+    1318,
+    1325,
+    1223,
+    1230
+   ],
+   [
+    "replace",
+    1325,
+    1340,
+    1230,
+    1231,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1340,
+    1353,
+    1231,
+    1244
+   ],
+   [
+    "delete",
+    1353,
+    1355,
+    1244,
+    1244
+   ],
+   [
+    "equal",
+    1355,
+    1364,
+    1244,
+    1253
+   ],
+   [
+    "replace",
+    1364,
+    1376,
+    1253,
+    1254,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1376,
+    1392,
+    1254,
+    1270
+   ],
+   [
+    "delete",
+    1392,
+    1394,
+    1270,
+    1270
+   ],
+   [
+    "equal",
+    1394,
+    1454,
+    1270,
+    1330
+   ],
+   [
+    "delete",
+    1454,
+    1456,
+    1330,
+    1330
+   ],
+   [
+    "equal",
+    1456,
+    1457,
+    1330,
+    1331
+   ],
+   [
+    "replace",
+    1457,
+    1466,
+    1331,
+    1332,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1466,
+    1472,
+    1332,
+    1338
+   ],
+   [
+    "replace",
+    1472,
+    1473,
+    1338,
+    1339,
+    [
+     "The other half of the work belongs to maximdr86,"
+    ]
+   ],
+   [
+    "equal",
+    1473,
+    1475,
+    1339,
+    1341
+   ],
+   [
+    "replace",
+    1475,
+    1476,
+    1341,
+    1342,
+    [
+     "what broke. Most of the entries in CHANGELOG.md exist because"
+    ]
+   ],
+   [
+    "equal",
+    1476,
+    1491,
+    1342,
+    1357
+   ],
+   [
+    "delete",
+    1491,
+    1493,
+    1357,
+    1357
+   ],
+   [
+    "equal",
+    1493,
+    1494,
+    1357,
+    1358
+   ],
+   [
+    "replace",
+    1494,
+    1503,
+    1358,
+    1359,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1503,
+    1504,
+    1359,
+    1360
+   ],
+   [
+    "replace",
+    1504,
+    1506,
+    1360,
+    1361,
+    [
+     "MIT. Use it, modify it, embed it. No warranty of any kind."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

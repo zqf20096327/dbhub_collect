@@ -3080,5 +3080,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "287ffc69fdaa": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 MCP 持久记忆服务器，提供混合检索与时序知识图谱",
+   "review": "Mnemo 是一个实现 Model Context Protocol 的 AI 记忆服务器，通过 memory action 提供持久化存储与检索，供 Claude Code、Cursor、Codex 等 MCP 客户端使用。检索采用 FTS5 全文与 sqlite-vec 向量经 RRF 融合并重排，v2 增加带 valid_from/valid_to 双时态列的知识图谱与 as_of 时间旅行查询。2026-09 移除云端部署后仅支持 Streamable HTTP 传输，需自托管运行 HTTP 实例，数据存于本地单个 SQLite 文件。",
+   "highlights": [
+    "混合检索：FTS5 + sqlite-vec 向量经 RRF(k=60) 融合，可经 rerank provider cell 重排，含时间衰减与重要性加权",
+    "类型化 capture：6 种 context_type、嵌入去重，支持 [models.chat] 压缩与 0.0-1.0 重要性评分及软归档/恢复",
+    "时序知识图谱：双时态 valid_from/valid_to 列、embedding KNN 实体解析、entity_search/entity_graph/history/as_of 动作及 memory_audit 审计表"
+   ],
+   "use_cases": [
+    "为 Claude Code/Cursor 等 MCP 客户端提供跨会话的本地持久记忆存储与检索",
+    "需要按时间点查询记忆历史或追踪实体关系演化的 agent 工作流",
+    "单机自托管场景下用 rclone 备份、跨机器迁移本地 SQLite 记忆库"
+   ]
+  },
+  "sha": "287ffc69fdaa",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

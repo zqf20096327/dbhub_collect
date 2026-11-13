@@ -2932,5 +2932,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "19e32fdf3643": {
+  "identity": {
+   "one_liner": "每30分钟自动生成的DMR用户数据库，提供多机型格式",
+   "review": "该项目提供DMR用户ID数据库的BETA版本，包含317412条记录，每30分钟自动重新生成，新注册的DMR用户会自动加入。数据库按Ailunce HD1、Anytone、Tytera MD380/MD390、Tytera MD-2017和Pi-Star等设备格式分别生成，部分机型有条目数或头部格式限制，例如MD-2017仅支持前10万条。README给出在Pi-Star中通过SSH修改HostFilesUpdate.sh脚本、替换数据库下载地址的安装步骤。",
+   "highlights": [
+    "每30分钟自动生成，包含317412条用户记录",
+    "提供Ailunce HD1、Anytone、Tytera MD380/390、MD-2017和Pi-Star五种格式的数据库文件",
+    "提供Pi-Star的SSH配置教程，可通过替换curl下载地址接入"
+   ],
+   "use_cases": [
+    "为Ailunce HD1、Anytone D868UV/D878UV等DMR数字电台导入最新呼号数据库",
+    "替换Pi-Star默认的DMRIds.dat数据源，使显示和Web界面呈现更多新注册用户",
+    "需要比已验证版本更新的用户数据、且可接受部分新用户信息不完整的场景"
+   ]
+  },
+  "sha": "19e32fdf3643",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "54dc5472affd": {
+  "identity": {
+   "one_liner": "面向程序调用的短链接服务，通过带 DPoP 签名的 HTTP API 创建和管理链接",
+   "review": "这是一个供程序调用的 URL 短链接服务：客户端程序以 DPoP 密钥注册后通过 HTTP API 创建、查询、禁用自己的短链接，访问者跟随链接获取 302 重定向。技术栈为 Spring Boot、Kotlin、Java 25、Postgres、Keycloak 与 nginx，提供 docker-compose/Docker Swarm 生产部署脚本和部署前签名校验。项目包含威胁模型、ADR 决策记录及各保证对应的测试；尚无 Web UI，不支持编辑链接目标、过期与多域名等特性。",
+   "highlights": [
+    "客户端使用 DPoP 绑定的密钥签名请求，仅能查看和操作自己的链接；短码不复用，禁用链接返回 410",
+    "提供创建、认领、分页列表、统计（按小时/天）、禁用等 API，契约记录于 openapi.yaml 并有测试校验漂移",
+    "部署脚本含 nginx TLS 边缘、Prometheus 观测 overlay 及镜像签名验证；README 列出 644 项测试及覆盖率数据"
+   ],
+   "use_cases": [
+    "开发者程序或脚本需要在公共互联网上生成并管理短链接",
+    "需要按部署检查清单在 Docker Swarm 或单主机 Compose 上自托管短链接服务",
+    "需要追踪短链接点击量（按小时/天粒度）并在必要时下线链接"
+   ]
+  },
+  "sha": "54dc5472affd",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

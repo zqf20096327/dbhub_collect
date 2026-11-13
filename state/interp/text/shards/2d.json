@@ -2941,5 +2941,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c86cc26a36ca": {
+  "identity": {
+   "one_liner": "基于 Git 的编码代理协调协议，在写码前检测意图冲突",
+   "review": "Foremerge 是一个 Rust 编写的 CLI/MCP 工具，为多个 AI 编码代理提供共享意图登记：各代理在隔离 worktree 工作前先声明要修改的目标（如符号、依赖），工具用 SQLite 存储并做确定性冲突检测，冲突时给出建议性警告而非锁定文件。数据存于仓库 .git 目录，属本机协调，不覆盖跨机器场景。当前为 0.7.0 pre-1.0 版本，公共 schema 仍可能变化。适用于在同一仓库并行运行多个代理的团队。",
+   "highlights": [
+    "代理在写码前声明意图与语义作用域（如 symbol:PaymentService 的 replace/extend 操作），以确定性检测器比较声明并产出分级建议（如 HIGH）",
+    "协调状态存于仓库 Git common 目录下的 SQLite 数据库，变更以哈希链事件日志追加记录，作为篡改证据",
+    "验收采用验证门控机制：工具自行运行注册的检查命令（如 cargo test）而非采信代理自述，未验证的工作记录为 UNVERIFIED"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理（Claude Code、Codex、Cursor 等）在同一仓库并行工作，需在代码落地前发现彼此计划间的语义冲突",
+    "代理使用隔离 Git worktree 各自开发，需要共享的意图、声明与验证状态视图",
+    "团队需要审计代理协作过程，记录意图、决策、测试结果与来源信息"
+   ]
+  },
+  "sha": "c86cc26a36ca",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

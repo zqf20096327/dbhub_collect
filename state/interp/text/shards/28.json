@@ -2886,5 +2886,92 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cec61bfec6c1": {
+  "identity": {
+   "one_liner": "面向 OpenShift 的应用快速部署模板，含示例应用与 GitHub Actions CI/CD 流水线",
+   "review": "该仓库是 GitHub 模板项目，用于在 OpenShift 上部署一套现代 Web 应用栈：前端 React/Caddy、后端 Nest.js、数据库 Postgres+Flyway。面向需要在 OpenShift 上搭建 CI/CD 的开发团队。安装流程由 scripts/ 下的脚本驱动，脚本默认预览变更、需加 --apply 才生效；需自备 GitHub 账号、OpenShift 命名空间（DEV/TEST/PROD）及相应权限。",
+   "highlights": [
+    "提供基于 Pull Request 的部署流水线及 ghcr.io 容器发布、OpenShift 导入",
+    "内置安全扫描、OWASP ASVS Level 1 & 2 对齐、Renovate 依赖自动更新与维护模式自动化",
+    "示例栈含 Prometheus 指标导出、HPA 水平扩缩容、Flyway 数据库迁移与滚动更新"
+   ],
+   "use_cases": [
+    "团队想在 OpenShift 上以模板方式启动带 CI/CD 的 Web 应用项目",
+    "需要 DEV/TEST/PROD 三环境命名空间部署与密钥管理的场景",
+    "希望集成安全扫描、依赖自动更新与数据库迁移的 Node.js 应用栈"
+   ]
+  },
+  "sha": "cec61bfec6c1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "65ea8547d8dd": {
+  "identity": {
+   "one_liner": "开源自托管数据库服务平台，在自己的服务器上运行多种数据库并支持高可用集群。",
+   "review": "Databasify 是一个开源的自托管数据库管理平台，用于在自有服务器上运行 PostgreSQL、MySQL、MariaDB、MongoDB、Valkey 和 Redis，支持从单节点到带自动故障转移的高可用集群，并提供时间点备份与 TLS。通过一行脚本安装在至少 1GB 内存的 Linux 服务器上，技术栈为 Laravel 与 React。",
+   "highlights": [
+    "支持 PostgreSQL 15–18、MySQL 8.4/9.7、MariaDB 10.11–12.3、MongoDB 7.0–9.0、Valkey 7–9、Redis 7.2/8 等多版本引擎",
+    "提供主备集群、自动故障转移、只读节点、时间点备份、TLS 和连接池等能力",
+    "每个引擎独立仓库并以容器镜像分发，可通过 plugin SDK 注册自定义数据库引擎"
+   ],
+   "use_cases": [
+    "在自有或云服务器（DigitalOcean、Hetzner、Vultr、Linode）上自建数据库集群管理面板",
+    "需要多数据库实例统一管理、用户、指标、日志与邮件告警的团队",
+    "从现有数据库迁移并借助每周维护窗口自动更新的环境"
+   ]
+  },
+  "sha": "65ea8547d8dd",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8289e26dcd4d": {
+  "identity": {
+   "one_liner": "对比两个 Postgres 数据库结构并生成迁移 SQL 的工具",
+   "review": "pgmig 是一个 Python 工具，用于比较 source 和 target 两个 Postgres 数据库的结构差异，生成将 source 转变为 target 的 SQL 语句。它以只读方式连接数据库，不执行生成的 SQL，由使用者审查后自行应用。支持 CLI（uvx 调用）和 Python API 两种使用方式，官方支持 Postgres 14–18 并在 CI 中测试，采用 MIT 许可证发布。",
+   "highlights": [
+    "以只读方式连接两个 Postgres 数据库进行结构比较，生成迁移 SQL，但不自动执行",
+    "支持 CLI（uvx pgmig generate）和 Python API 两种调用方式",
+    "官方支持 Postgres 14–18 版本，并在 CI 中对各版本进行测试"
+   ],
+   "use_cases": [
+    "需要生成两个 Postgres 数据库之间的结构差异迁移 SQL 并人工审查后应用",
+    "通过 Python 代码以编程方式生成数据库结构变更脚本"
+   ]
+  },
+  "sha": "8289e26dcd4d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0caa96e27bf": {
+  "identity": {
+   "one_liner": "面向 AI 代理的消费护栏系统：LLM 提议、确定性策略引擎决策并全程审计",
+   "review": "Mandate 是 PayPal AI Hackathon 的参赛项目，用于为代付款的 AI 代理设置支出约束：财务人设定预算、单品上限、品类和人工审批阈值，LLM 仅输出商品候选和数量，纯 TypeScript 策略引擎重新计算价格并返回 ALLOW/NEEDS_APPROVAL/DENY。支付走 PayPal sandbox，仅限沙盒、不涉及真实资金。面向小额团体采购等场景（README 标注为待验证假设）。",
+   "highlights": [
+    "策略引擎为纯函数包，无 I/O、无 LLM 参与，从规范化目录数据重算价格并返回带机器可读原因的决策",
+    "LLM 模块不持有支付工具和凭证，输出经 Zod 的 JSON Schema 校验；仅 ALLOW 或有记录的审批后才调用 PayPal",
+    "包含针对 naive、prompt-hardened、Mandate 三种配置的同一攻击套件基准，以及追加写入的审计日志与 AG Grid 仪表盘"
+   ],
+   "use_cases": [
+    "为代团队采购的 AI 代理设置预算、单品上限与人工审批阈值",
+    "需要留存每笔支付决策及拦截原因审计记录的代理购物流程",
+    "仅限 PayPal sandbox 环境的代理支付原型与攻击防御评估"
+   ]
+  },
+  "sha": "b0caa96e27bf",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

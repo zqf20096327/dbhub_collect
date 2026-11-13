@@ -27030,5 +27030,316 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "116e554b8c3f+2": {
+  "fn": "renorai/renor-engine",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Renor"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    3,
+    [
+     " Shared memory for coding agents, over MCP. "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    3,
+    5
+   ],
+   [
+    "delete",
+    10,
+    12,
+    5,
+    5
+   ],
+   [
+    "equal",
+    12,
+    29,
+    5,
+    22
+   ],
+   [
+    "replace",
+    29,
+    30,
+    22,
+    23,
+    [
+     "`--client` is `claude-code`, `codex`, `cursor`, `grok`, `gemini`, `vscode`, `opencode` or `pi`. One command adds Renor to that app, signs you in through the app's own flow (no token to copy), writes the memory rule below, and ends with a live check that your workspace answers. Search is hybrid (keywords and meaning). Sign up at renor.cloud."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    42,
+    23,
+    35
+   ],
+   [
+    "replace",
+    42,
+    43,
+    35,
+    36,
+    [
+     "**Then add the memory rule** to the agent's instructions file, so it saves on its own."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    36,
+    39
+   ],
+   [
+    "replace",
+    46,
+    48,
+    39,
+    41,
+    [
+     "Add to Cursor",
+     "Add to VS Code"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    55,
+    41,
+    48
+   ],
+   [
+    "replace",
+    55,
+    56,
+    48,
+    49,
+    [
+     "Trust the folder in Grok, then restart Grok. To check it: ask Grok to save a real decision from your project, restart Grok, and ask about it in the new session. To turn telemetry off, set `DO_NOT_TRACK=1` in the environment Grok runs in. Paste the memory rule into the project's `AGENTS.md`."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    65,
+    49,
+    58
+   ],
+   [
+    "replace",
+    65,
+    66,
+    58,
+    59,
+    [
+     "Something wrong? `npx renor-engine doctor` is a read-only health report (folder, index, ledger, embeddings, client configs) that is safe to paste into a support request; secrets are redacted. See troubleshooting."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    69,
+    59,
+    62
+   ],
+   [
+    "replace",
+    69,
+    70,
+    62,
+    63,
+    [
+     "Running it on a server or with Docker: docs/self-hosting.md."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    63,
+    64
+   ],
+   [
+    "replace",
+    71,
+    72,
+    64,
+    65,
+    [
+     "Several agents on one memory: start each with its own `RENOR_CONNECTION_NAME` and they get the multi-agent (\"hive\") tools (details)."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    83,
+    65,
+    76
+   ],
+   [
+    "replace",
+    83,
+    87,
+    76,
+    77,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    89,
+    77,
+    79
+   ],
+   [
+    "replace",
+    89,
+    90,
+    79,
+    80,
+    [
+     "Self-hosted, the local tools are `search`, `remember_fact` and `note`; agents map the rule onto them (tool list)."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    95,
+    80,
+    85
+   ],
+   [
+    "replace",
+    95,
+    96,
+    85,
+    86,
+    [
+     "- **No embedding model needed.** Search is by keyword; when the exact words miss, it retries with word stems. Hybrid search (keywords and meaning) is the hosted default; self-hosters can opt in to OpenAI or a local model (details)."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    86,
+    87
+   ],
+   [
+    "replace",
+    97,
+    98,
+    87,
+    88,
+    [
+     "- **Telemetry:** anonymous usage numbers (never text, names or paths) are on by default, with a notice on first run. `renor-engine telemetry off` or `DO_NOT_TRACK=1` turns them off. Your memory text is never shared unless you say yes to that separately. Every field: docs/TELEMETRY.md."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    88,
+    91
+   ],
+   [
+    "replace",
+    101,
+    108,
+    91,
+    98,
+    [
+     "|Benchmark|Renor|Setup|",
+     "|---|---|---|",
+     "|LongMemEval-S|**98.4%** (492/500)|Default (deep search)|",
+     "|LongMemEval-S|**94.4%** (472/500)|Lean mode (`RENOR_DEEP_SEARCH=0`)|",
+     "|LoCoMo (categories 1 to 4)|**96.7%** (1,489/1,540)|Default (deep search)|",
+     "|BEAM 128K / 1M / 10M|**76.2 / 74.7 / 60.2**|Default (deep search), score out of 100|",
+     "Claude Opus 5.5 answers LongMemEval, LoCoMo and BEAM. One run each, Oct 2026. Deep search, the default, reads 50 matches with a 4,000-token budget; `get_context` replies in up to 8,000 tokens. Lean mode (`RENOR_DEEP_SEARCH=0`) reads 20 matches with 1,300 tokens and an 800-token `get_context`. These runs used Vertex embeddings, as hosted Renor does; without an embedding model, self-hosted search is by keyword only, which they do not measure. Judges and methods for every run: renor.cloud/research."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    120,
+    98,
+    110
+   ],
+   [
+    "replace",
+    120,
+    121,
+    110,
+    111,
+    [
+     "The last command starts the MCP server in a temporary folder, saves one fact, finds it again and ends with `PASS: self-hosted stdio MCP can remember and retrieve a current fact.` It never touches your notes. Downloaded a ZIP instead of cloning? Build with `RENOR_BUILD_COMMIT=0000000 npm run build`. Connecting a local build to each agent: docs/self-hosting.md."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    124,
+    111,
+    114
+   ],
+   [
+    "replace",
+    124,
+    125,
+    114,
+    115,
+    [
+     "Docs · Self-hosting, servers and Docker · Every setting · Telemetry"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    127,
+    115,
+    117
+   ],
+   [
+    "replace",
+    127,
+    133,
+    117,
+    118,
+    [
+     "The engine is **Apache-2.0** (LICENSE); 1.0.0 was released under AGPL-3.0; 1.1.0 and later are Apache-2.0; files imported from the upstream project stay ISC (NOTICE, UPSTREAM.md). The `renor` CLI, the SDKs and the integrations are MIT."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

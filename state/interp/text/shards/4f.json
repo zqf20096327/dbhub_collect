@@ -3129,5 +3129,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0125af1a5e47": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 JavaScript 客户端，基于 HTTP/Stream API 访问数据库。",
+   "review": "该仓库是 ClickHouse 官方的 JS 客户端，纯 TypeScript 编写，无外部依赖，包含四个包：Node.js 版（支持查询与插入的双向流式传输）、Web 版（基于 Fetch，兼容浏览器与 Cloudflare workers）、共享公共库及 RowBinary 读取库。通过 npm 安装，可连接 ClickHouse Cloud 或自托管实例。客户端 1.12.0+ 要求 ClickHouse 24.8+。",
+   "highlights": [
+    "提供 Node.js 版与 Web 版两个客户端包，分别基于 HTTP/Stream 与 Fetch/Web Streams API 实现",
+    "Node.js 版支持查询与插入的双向流式传输，Web 版支持查询流式传输",
+    "仓库另含 @clickhouse/client-common 公共库与 @clickhouse/rowbinary 二进制格式读取库，并提供 AI agent 排障技能安装方式"
+   ],
+   "use_cases": [
+    "在 Node.js 服务端应用中通过 HTTP 接口查询与写入 ClickHouse 数据",
+    "在浏览器或 Cloudflare workers 中以 Fetch 方式查询 ClickHouse",
+    "在 ClickHouse Cloud 或自托管部署中使用统一 JS 客户端接入"
+   ]
+  },
+  "sha": "0125af1a5e47",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "68c4e7d36092": {
+  "identity": {
+   "one_liner": "基于 SQLite JSONB 的 Kotlin 多平台键值存储，支持按值查询",
+   "review": "Sqkon 是一个 Kotlin Multiplatform 键值存储库，数据以 JSON 形式存入 SQLite（基于 androidx.sqlite bundled driver 与 kotlinx.serialization），并提供类型安全 DSL 对 JSON 字段进行查询。支持 sealed 类多态查询、caseWhen 按变体分支过滤、事务（transaction/rollback/afterCommit）、以及接入 AndroidX Paging 3 的两种分页源。当前可用平台为 Android 与 JVM；iOS 仅发布 compile-only 脚手架。使用需在构建中应用 kotlinx-serialization 插件，早期版本（≤2.x）基于 SQLDelight。",
+   "highlights": [
+    "提供类型安全查询 DSL，可对序列化后的 JSON 路径字段进行条件查询，支持 sealed 类与 CaseWhen/caseWhere 分支表达式",
+    "提供 transaction 原子事务（含 rollback、afterCommit/afterRollback、transactionWithResult），以及 deleteWhere/deleteExpired/deleteStale 等删除方法和 expiresAt/readAt/writeAt 元数据字段",
+    "提供 selectPagingSource（offset 分页）与 selectKeysetPagingSource（keyset 分页）两种工厂，接入 AndroidX Paging 3"
+   ],
+   "use_cases": [
+    "Android 或 JVM 的 Kotlin 项目中需要将 @Serializable 对象持久化到本地 SQLite 并按 JSON 字段查询",
+    "与 AndroidX Paging 3 配合构建分页列表（含 RemoteMediator 数据源场景）",
+    "需要多写操作原子提交、或需自行管理缓存过期（expiresAt/deleteExpired）的键值存储场景"
+   ]
+  },
+  "sha": "68c4e7d36092",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a3468b8e1889": {
+  "identity": {
+   "one_liner": "Windows 自动点击器，用 Blockly 积木块可视化编排点击场景，无需写代码。",
+   "review": "ClicKit 是一款基于 Python + PySide6 的 Windows 自动点击工具，提供两种模式：设定坐标/间隔/次数的 Simple 模式，以及基于 Blockly 的场景编辑器。场景以版本化的 .acl.json 数据格式（IR）保存，解释器只执行已知节点类型，不执行任意代码；脚本在 worker 线程运行，F6 全局急停热键可随时中断。v1.0.0 提供 PyInstaller 打包的免安装 Windows 版本，可选的 ClicKit Cloud（FastAPI + PostgreSQL）支持场景共享。条件/if/while 与输入录制器仍在路线图中。",
+   "highlights": [
+    "提供 Simple 模式与 Blockly 场景编辑器两种模式，支持 click/move/drag/delay/key/scroll/loop 等节点类型，保存为版本化 .acl.json 格式",
+    "支持可配置的全局热键（默认 F5 启动、F6 急停、F8 取坐标），脚本在 worker 线程运行以保证急停响应",
+    "发布版为 PyInstaller 打包的 ClicKit-win64.zip 或单文件 .exe，无需安装 Python；提供 CLI 脚本 demo_click.py 和 run_scenario.py（含 --dry-run）"
+   ],
+   "use_cases": [
+    "重复性屏幕点击任务：设定坐标、间隔与重复次数进行自动点击",
+    "通过拖拽积木块编排多步鼠标/键盘操作序列（点击、移动、延迟、循环）",
+    "从源码运行的开发者可用命令行场景执行器验证 .acl.json 场景文件"
+   ]
+  },
+  "sha": "a3468b8e1889",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

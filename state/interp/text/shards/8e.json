@@ -2347,5 +2347,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fffb3f8e3ea1": {
+  "identity": {
+   "one_liner": "面向 .NET 的 ADO.NET 扩展库，用流式命令封装连接、参数、执行与行映射。",
+   "review": "Open.Database.Extensions 是一组针对 ADO.NET 类型（DbConnection、DbCommand 等）的扩展方法与抽象，开发者自写 SQL，库负责连接开关、参数添加、命令执行、Dispose 及结果映射到对象。通过连接工厂创建命令，终端操作（ExecuteScalar、ToArrayAsync 等）触发执行；Map<T>() 按名称匹配列与属性。支持异步、Channels、Dataflow 及 SQL Server 专用包。适合直接写 SQL 的 .NET 开发者；不同数据库需相应 provider 包。",
+   "highlights": [
+    "提供对 DbConnection/DbCommand/DbDataReader 的扩展方法，默认按惯例处理连接开关、事务提交回滚与资源释放",
+    "提供 Map<T>() 行映射，按名称（忽略大小写和下划线）匹配列到公共属性与构造参数，支持 RowMap<T> 声明重命名列",
+    "提供 Channels 与 TPL Dataflow 扩展包，可将行流入 Channel<T> 或数据流块；命令终端均有 Async 版本"
+   ],
+   "use_cases": [
+    "在 .NET 项目中直接编写 SQL，替代手写 ADO.NET 样板代码",
+    "需要将查询结果映射为强类型对象或记录（含 init/required 属性）",
+    "需要将数据库行流式导入 System.Threading.Channels 或 TPL Dataflow 流水线的场景"
+   ]
+  },
+  "sha": "fffb3f8e3ea1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "96117fd69016": {
+  "identity": {
+   "one_liner": "自托管错误追踪服务，兼容 Sentry SDK，两容器部署",
+   "review": "Epure 是一个用 Rust 编写的错误追踪引擎，供一两人规模开发的 SaaS 团队使用。保留官方 Sentry SDK 仅替换 DSN 即可接入；由 ingest 与 Postgres 16 组成两容器架构，不含 Kafka/Redis/ClickHouse。不存储 tracing、replay、profiling 数据，需将对应采样率设为 0。当前为 Beta 阶段，引擎为 AGPL-3.0 许可。",
+   "highlights": [
+    "兼容官方 Sentry SDK 协议，替换 DSN 即可接入；提供 MCP 服务器与 agent skills 集成",
+    "两容器部署（Rust 单二进制 + PostgreSQL 16），支持 RBAC、RLS、sourcemaps、告警 webhook 与 spike 防洪",
+    "自托管免费（AGPL-3.0），CLI 与 MCP 客户端为 Apache-2.0 许可"
+   ],
+   "use_cases": [
+    "一两人开发的 SaaS 团队自托管错误追踪",
+    "已有 Sentry SDK 的项目迁移或回滚 DSN",
+    "让编码代理（如 Claude Code）通过 MCP 读取错误 issue 进行排查"
+   ]
+  },
+  "sha": "96117fd69016",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "66201c8e85e4": {
+  "identity": {
+   "one_liner": "容器化部署的 GaussDB/openGauss 诊断智能体，每用户一个 K8s Pod",
+   "review": "该项目将 opencode 与 GaussDB/openGauss DBA 技能集打包进 Kubernetes 运行，面向行内 DBA 提供诊断与知识库导入能力。关键机制：Pod 无状态，会话与知识库数据存于 NAS（RWX PVC）的按工号目录；诊断、知识库导入、前端等拆分为多个镜像，离线包交付；SQL 操作由白名单约束，凭据经代理存放于 Secret。部分网关与 NFS 压测仍在客户侧完成。",
+   "highlights": [
+    "提供 runtime、kb-import、frontend、kbstd 等多个镜像，支持 x86_64 与 aarch64 双架构，可打包为离线交付包",
+    "SQL 白名单机制，共 132 条，区分业务库与 postgres 库的读取对象",
+    "会话数据存于 NAS users/<工号>/ 目录，新 Pod 挂载后历史会话自动可用"
+   ],
+   "use_cases": [
+    "行内 DBA 对 GaussDB/openGauss 进行慢 SQL、WDR、健康检查等诊断",
+    "知识库管理员导入文档、网页剪藏、扫描件 PDF 并维护知识库索引",
+    "离线环境部署实施与售前单机演示"
+   ]
+  },
+  "sha": "66201c8e85e4",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

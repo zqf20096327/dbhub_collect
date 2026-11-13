@@ -17366,5 +17366,957 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "4f63f4dfc494+2": {
+  "fn": "georgekhananaev/google-reviews-scraper-pro",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "Google Reviews Scraper Pro",
+     "Python",
+     "License",
+     "CI",
+     "Last Update"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    19,
+    7,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "That's it. Reviews land in `reviews.db` and `google_reviews.json`, photos in `review_images/`. You need Python 3.10+ and Chrome. Rather not install anything? Run it in Docker."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "Only 5 reviews came back? That's Google's cap for signed-out browsers, and Signed-In Mode gets past it."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    24,
+    22,
+    24
+   ],
+   [
+    "replace",
+    24,
+    38,
+    24,
+    25,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    126,
+    25,
+    113
+   ],
+   [
+    "replace",
+    126,
+    127,
+    113,
+    114,
+    [
+     "- The container runs signed out, so Google's 5-review wall (see Signed-In Mode) applies. The one-time `browser-login` needs a visible Chrome window, which a container doesn't have, so use the local install when you need full review lists."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    140,
+    114,
+    127
+   ],
+   [
+    "replace",
+    140,
+    145,
+    127,
+    128,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    155,
+    128,
+    138
+   ],
+   [
+    "replace",
+    155,
+    168,
+    138,
+    139,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    178,
+    139,
+    149
+   ],
+   [
+    "replace",
+    178,
+    198,
+    149,
+    150,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    204,
+    150,
+    156
+   ],
+   [
+    "replace",
+    204,
+    205,
+    156,
+    157,
+    [
+     "|Section|Key|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    157,
+    158
+   ],
+   [
+    "replace",
+    206,
+    254,
+    158,
+    206,
+    [
+     "|**Scraper**|`headless`|`true`|Run Chrome without visible window|",
+     "||`sort_by`|`\"newest\"`|`newest`, `highest`, `lowest`, `relevance`|",
+     "||`scrape_mode`|`\"update\"`|`new_only`, `update`, or `full`|",
+     "||`stop_threshold`|`3`|Consecutive fully-matched scroll batches before stopping (0 = disabled)|",
+     "||`max_reviews`|`0`|Max reviews to look at per run, already-stored ones included: \"check the newest N\" (0 = unlimited)|",
+     "||`max_scroll_attempts`|`50`|Max scroll iterations|",
+     "||`scroll_idle_limit`|`15`|Max idle iterations with zero new cards|",
+     "||`browser_profile_dir`|`\"\"`|Chrome profile folder signed in to Google (empty = fresh incognito window). See Signed-In Mode|",
+     "|**Database**|`db_path`|`\"reviews.db\"`|SQLite database path (auto-created)|",
+     "|**Processing**|`convert_dates`|`true`|Convert relative dates to ISO format|",
+     "|**Images**|`download_images`|`true`|Download review/profile images|",
+     "||`image_dir`|`\"review_images\"`|Base directory (stored as `{image_dir}/{place_id}/`, with `:` in the ID replaced by `_` so it works on Windows)|",
+     "||`download_threads`|`4`|Parallel download threads|",
+     "||`max_width`|`1200`|Max image width|",
+     "||`max_height`|`1200`|Max image height|",
+     "|**MongoDB**|`use_mongodb`|`false`|Enable MongoDB sync|",
+     "||`mongodb.uri`|`\"mongodb://localhost:27017\"`|Connection string|",
+     "||`mongodb.database`|`\"reviews\"`|Database name|",
+     "||`mongodb.collection`|`\"google_reviews\"`|Collection name|",
+     "||`mongodb.tls_allow_invalid_certs`|`false`|Allow self-signed TLS certificates|",
+     "|**S3-Compatible**|`use_s3`|`false`|Enable S3-compatible upload (AWS S3, R2, MinIO, etc.)|",
+     "||`s3.provider`|`\"aws\"`|Provider preset: `aws`, `minio`, or `r2` (applies sensible defaults)|",
+     "||`s3.bucket_name`|`\"\"`|Bucket name|",
+     "||`s3.prefix`|`\"google_reviews/\"`|Key prefix (stored as `{prefix}/{place_id}/`)|",
+     "||`s3.region_name`|`\"us-east-1\"`|Region (or `\"auto\"` for R2)|",
+     "||`s3.endpoint_url`|`null`|Custom endpoint for R2/MinIO (leave empty for AWS)|",
+     "||`s3.path_style`|`false`|Path-style addressing (MinIO requires `true`)|",
+     "||`s3.acl`|`\"public-read\"`|ACL for uploads (empty string = skip ACL entirely)|",
+     "||`s3.delete_local_after_upload`|`false`|Remove local files after upload|",
+     "|**Output**|`custom_params`|`{}`|Extra fields added to every review document, e.g. `{\"company\": \"Acme\"}`|",
+     "|**URL Replacement**|`replace_urls`|`false`|Replace Google URLs with custom CDN URLs|",
+     "||`custom_url_base`|`\"\"`|Base URL for replacements|",
+     "||`preserve_original_urls`|`true`|Keep originals in `original_*` fields|",
+     "|**Logging**|`log_level`|`\"INFO\"`|`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`|",
+     "||`log_dir`|`\"logs\"`|Directory for rotating JSON log files|",
+     "||`log_file`|`\"scraper.log\"`|Log file name (inside `log_dir`)|",
+     "|**JSON**|`backup_to_json`|`true`|Export JSON snapshot after each scrape|",
+     "||`json_path`|`\"google_reviews.json\"`|Output file path|",
+     "|**Date Filter**|`date_filter.after`|`\"\"`|ISO date; keep only reviews on/after this (disabled if empty)|",
+     "||`date_filter.before`|`\"\"`|ISO date; keep only reviews on/before this|",
+     "||`date_filter.mode`|`\"post_filter\"`|`post_filter` (applies at write time) or `early_stop` (quits scrolling when sorted newest)|",
+     "||`date_filter.on_unparseable_date`|`\"include\"`|`include` or `exclude` — what to do with review dates the parser couldn't understand|",
+     "|**Resilience**|`resilience.retry_on_session_death`|`1`|Retries with a fresh driver when Chrome crashes mid-scrape|",
+     "||`resilience.retry_backoff_base_seconds`|`3`|Exponential backoff base (3s → 9s → 27s)|",
+     "||`resilience.rate_limit_cooldown_seconds`|`60`|Sleep duration when Google shows `/sorry/` or a CAPTCHA|",
+     "|**Health Probe**|`health.synthetic_url`|`\"\"`|Place URL used by `python start.py health` to verify end-to-end scraping|",
+     "|**Audit**|`audit.retention_days`|`90`|API audit log rows older than this get pruned on API server startup|",
+     "|**Adaptive**|`adaptive.tab_detection_threshold`|`1.5`|Lower = looser tab-matching; `0.0` reverts to pre-v1.2.2 behavior|"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    274,
+    206,
+    226
+   ],
+   [
+    "replace",
+    274,
+    275,
+    226,
+    227,
+    [
+     " A normal Chrome window opens on Google's sign-in page. Sign in, then quit that Chrome completely (Cmd+Q on macOS). The command tells you whether the sign-in stuck."
+    ]
+   ],
+   [
+    "equal",
+    275,
+    297,
+    227,
+    249
+   ],
+   [
+    "replace",
+    297,
+    319,
+    249,
+    250,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    327,
+    250,
+    258
+   ],
+   [
+    "replace",
+    327,
+    338,
+    258,
+    259,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    346,
+    259,
+    267
+   ],
+   [
+    "replace",
+    346,
+    354,
+    267,
+    268,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    383,
+    268,
+    297
+   ],
+   [
+    "replace",
+    383,
+    388,
+    297,
+    298,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    388,
+    396,
+    298,
+    306
+   ],
+   [
+    "replace",
+    396,
+    401,
+    306,
+    307,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    401,
+    409,
+    307,
+    315
+   ],
+   [
+    "replace",
+    409,
+    414,
+    315,
+    316,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    434,
+    316,
+    336
+   ],
+   [
+    "replace",
+    434,
+    443,
+    336,
+    337,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    443,
+    451,
+    337,
+    345
+   ],
+   [
+    "replace",
+    451,
+    482,
+    345,
+    346,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    500,
+    346,
+    364
+   ],
+   [
+    "replace",
+    500,
+    505,
+    364,
+    365,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    505,
+    525,
+    365,
+    385
+   ],
+   [
+    "replace",
+    525,
+    541,
+    385,
+    386,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    541,
+    559,
+    386,
+    404
+   ],
+   [
+    "replace",
+    559,
+    560,
+    404,
+    405,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    560,
+    561,
+    405,
+    406
+   ],
+   [
+    "replace",
+    561,
+    562,
+    406,
+    407,
+    [
+     "|`ALLOWED_ORIGINS`|`*`|Comma-separated list of allowed CORS origins|"
+    ]
+   ],
+   [
+    "equal",
+    562,
+    573,
+    407,
+    418
+   ],
+   [
+    "replace",
+    573,
+    577,
+    418,
+    419,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    577,
+    589,
+    419,
+    431
+   ],
+   [
+    "replace",
+    589,
+    595,
+    431,
+    432,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    595,
+    603,
+    432,
+    440
+   ],
+   [
+    "replace",
+    603,
+    608,
+    440,
+    441,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    608,
+    644,
+    441,
+    477
+   ],
+   [
+    "replace",
+    644,
+    671,
+    477,
+    478,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    678,
+    478,
+    485
+   ],
+   [
+    "replace",
+    678,
+    682,
+    485,
+    489,
+    [
+     " - **Good news!** SeleniumBase handles Chrome/ChromeDriver version matching automatically",
+     " - Update Chrome browser: Go to chrome://settings/help",
+     " - SeleniumBase will automatically download the matching ChromeDriver — no manual intervention needed!",
+     " - If issues persist: `pip install --upgrade seleniumbase`"
+    ]
+   ],
+   [
+    "equal",
+    682,
+    684,
+    489,
+    491
+   ],
+   [
+    "replace",
+    684,
+    689,
+    491,
+    496,
+    [
+     " - Double-check your connection string — typos are the #1 culprit",
+     " - Is your IP whitelisted? MongoDB Atlas loves to block new IPs",
+     " - Run `nc -zv your-mongodb-host 27017` to check if the port's even reachable",
+     " - Did you forget to start Mongo? `sudo systemctl start mongod` (Linux) or `brew services start mongodb-community` (Mac)",
+     " - **SSL/TLS errors?** If using self-signed certs or local MongoDB, set `mongodb.tls_allow_invalid_certs: true` in your `config.yaml`"
+    ]
+   ],
+   [
+    "equal",
+    689,
+    691,
+    496,
+    498
+   ],
+   [
+    "replace",
+    691,
+    697,
+    498,
+    504,
+    [
+     " - **Only 5 reviews and an `INCOMPLETE` warning?** Google is capping the list for signed-out browsers. Switch on Signed-In Mode.",
+     " - **Google \"Limited View\" (Feb 2026):** direct place URLs open a stripped-down page for signed-out users. The scraper navigates via search to get the full place page — just make sure you're on the latest version!",
+     " - **`Reviews tab is not open after clicking it - stopping`?** The scraper refuses to scrape the wrong tab. Usually a Google layout change: run with `--headless false` to watch, and open an issue with the URL.",
+     " - Make sure your URL isn't garbage — copy directly from the address bar in Google Maps",
+     " - Not all sort options work for all businesses. Try `--sort relevance` if all else fails",
+     " - Some locations have zero reviews. Yes, it happens. No, it's not the scraper's fault."
+    ]
+   ],
+   [
+    "equal",
+    697,
+    699,
+    504,
+    506
+   ],
+   [
+    "replace",
+    699,
+    702,
+    506,
+    509,
+    [
+     " - Check if Google is throttling you (likely if you've been hammering them)",
+     " - Check file permissions on the `review_images/` directory",
+     " - Some images vanish from Google's CDN faster than your ex. Nothing we can do about that."
+    ]
+   ],
+   [
+    "equal",
+    702,
+    704,
+    509,
+    511
+   ],
+   [
+    "replace",
+    704,
+    708,
+    511,
+    515,
+    [
+     " - Double-check your credentials and bucket permissions",
+     " - For R2/MinIO: make sure `endpoint_url` is set correctly",
+     " - Make sure your bucket exists and is in the specified region",
+     " - Check if your bucket policy allows public-read for uploaded objects"
+    ]
+   ],
+   [
+    "equal",
+    708,
+    719,
+    515,
+    526
+   ],
+   [
+    "replace",
+    719,
+    725,
+    526,
+    527,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    725,
+    733,
+    527,
+    535
+   ],
+   [
+    "replace",
+    733,
+    739,
+    535,
+    536,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    739,
+    747,
+    536,
+    544
+   ],
+   [
+    "replace",
+    747,
+    752,
+    544,
+    545,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    752,
+    781,
+    545,
+    574
+   ],
+   [
+    "delete",
+    781,
+    782,
+    574,
+    574
+   ],
+   [
+    "equal",
+    782,
+    783,
+    574,
+    575
+   ],
+   [
+    "delete",
+    783,
+    784,
+    575,
+    575
+   ],
+   [
+    "equal",
+    784,
+    806,
+    575,
+    597
+   ],
+   [
+    "replace",
+    806,
+    807,
+    597,
+    598,
+    [
+     "A: Google caps signed-out browsers at the first 5 reviews of a place. Signed-In Mode gets you the rest."
+    ]
+   ],
+   [
+    "equal",
+    807,
+    824,
+    598,
+    615
+   ],
+   [
+    "replace",
+    824,
+    825,
+    615,
+    616,
+    [
+     "A: In Discussions (Q&A). Answers stay searchable there for the next person."
+    ]
+   ],
+   [
+    "equal",
+    825,
+    830,
+    616,
+    621
+   ],
+   [
+    "replace",
+    830,
+    835,
+    621,
+    622,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    835,
+    836,
+    622,
+    623
+   ],
+   [
+    "replace",
+    836,
+    839,
+    623,
+    624,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    839,
+    841,
+    624,
+    626
+   ],
+   [
+    "replace",
+    841,
+    850,
+    626,
+    633,
+    [
+     "- Python Documentation",
+     "- Selenium Documentation",
+     "- MongoDB Documentation",
+     "- AWS S3 Documentation",
+     "- Cloudflare R2 Documentation",
+     "- MinIO Documentation",
+     "- Boto3 Documentation"
+    ]
+   ],
+   [
+    "equal",
+    850,
+    854,
+    633,
+    637
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "1611aae083a0+2": {
+  "fn": "edidada/test_rust_tidb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "> **项目定位**：一个用 Rust 实现、贴近工业界架构、面向博士研究/高阶实验的分布式 HTAP 关系数据库实验平台（下文简称 **LatticeDB**，代号可替换）。整体对标 TiDB / CockroachDB 的分层设计，采用「计算层（SQL）— 分布式 KV 存储层 — 元数据调度层」三层解耦，并以 **Lab 实验** 形式逐阶段构建。"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "delete",
+    6,
+    8,
+    6,
+    6
+   ],
+   [
+    "equal",
+    8,
+    10,
+    6,
+    8
+   ],
+   [
+    "replace",
+    10,
+    16,
+    8,
+    14,
+    [
+     "|诉求|本设计的回应|",
+     "|---|---|",
+     "|贴近工业界|组件划分、协议、编码、事务模型、优化器结构均对齐真实系统（TiDB/TiKV/PD、Volcano/Cascades、Percolator、Raft、Arrow/DataFusion），而非玩具实现|",
+     "|面向博士|每个关键子系统给出**问题定义、形式化模型、算法族、可证伪假设、消融实验与量化验收指标**，可直接支撑论文/技术报告|",
+     "|类似 Lab|全项目拆为 `L0 … L14` 递进实验，每个 Lab 有前置依赖、交付物、Definition of Done 与可复现实验脚本|",
+     "|重点：算子 / 执行计划 / CBO / RBO|这四块拥有独立的编号体系、完整枚举清单、专项验收方法与基准，是本项目的**核心贡献区**|"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    14,
+    17
+   ],
+   [
+    "replace",
+    19,
+    27,
+    17,
+    25,
+    [
+     "|文档|内容|主要读者|",
+     "|---|---|---|",
+     "|01-architecture.md|架构设计：分层架构、组件职责、数据流、技术选型、部署形态、非功能目标、研究问题地图|全体|",
+     "|02-high-level-design.md|概要设计：核心数据结构、模块接口、SQL 全生命周期、KV 编码、事务/下推/DDL 关键机制、Crate 划分|开发者|",
+     "|03-roadmap.md|项目排期：阶段、Lab 列表、周次计划、里程碑 M0–M7、关键路径、风险缓冲、论文产出点|导师 / 项目负责人|",
+     "|04-feature-list.md|功能点列表：按 19 个功能域枚举全部功能点（含优先级、Lab 映射、依赖、验收引用）；算子/RBO/CBO/计划四块单独全量枚举|全体（需求基线）|",
+     "|05-acceptance-plan.md|功能验收规划：V0–V5 验收分级、各域验收标准与量化阈值、差分/模糊/混沌测试、可复现实验规范、追溯矩阵|测试 / 评审|",
+     "|06-distributed-test-plan.md|分布式功能测试计划：DTP-1..7 阶段、DT-* 测试矩阵（存储/事务/元数据/DDL/MPP/HTAP/混沌/基准）、一致性验证方法、CI 门禁映射与追溯|测试 / 分布式开发|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    32,
+    25,
+    30
+   ],
+   [
+    "replace",
+    32,
+    48,
+    30,
+    46,
+    [
+     "|前缀|含义|示例|定义位置|",
+     "|---|---|---|---|",
+     "|`C-`|架构组件（Component）|`C-OPT-CBO`|01 §3|",
+     "|`OP-L-` / `OP-P-` / `OP-E-` / `OP-X-`|逻辑算子 / 物理算子 / 分布式交换算子 / 表达式与向量化原语|`OP-P-HASHJOIN`|04 §4、01 §5|",
+     "|`R-`|RBO 规则|`R-PPD`|04 §5|",
+     "|`CB-`|CBO 能力点|`CB-HIST-EQUIHEIGHT`|04 §6|",
+     "|`PL-`|执行计划能力点|`PL-ANALYZE`|04 §7|",
+     "|`F-<域>-`|功能点，`域` 见 04 §2|`F-OP-012`|04|",
+     "|`L0 … L14`|Lab 实验编号|`L7`|03 §3|",
+     "|`M0 … M7`|里程碑|`M4`|03 §4|",
+     "|`W01 … W48`|排期周次|`W23`|03 §2|",
+     "|`AC-`|验收项（Acceptance Criterion）|`AC-CBO-003`|05|",
+     "|`V0 … V5`|验收等级（Level）|`V3`|05 §2|",
+     "|`P0 / P1 / P2`|功能优先级：核心必做 / 重要 / 研究拓展|`P0`|04 §2|",
+     "|`DT-<域>-`|分布式功能测试项（Distributed Test）|`DT-TXN-001`|06 §4|",
+     "|`DTP-`|分布式测试阶段（Test Phase）|`DTP-4`|06 §3|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    53,
+    46,
+    51
+   ],
+   [
+    "replace",
+    53,
+    68,
+    51,
+    66,
+    [
+     "|缩写|全称 / 含义|",
+     "|---|---|",
+     "|RBO / CBO|Rule-Based Optimizer / Cost-Based Optimizer|",
+     "|Memo / Group|Cascades 优化器中保存逻辑等价类与物理实现的搜索结构|",
+     "|Cop / Coprocessor|下推到存储节点执行的算子与表达式任务|",
+     "|MPP|Massively Parallel Processing，本库指跨节点的并行执行片段|",
+     "|Region / Raft Group|一段连续 Key 范围及其多副本一致性组（对标 TiKV Region）|",
+     "|TSO|Timestamp Oracle，全局单调递增时间戳|",
+     "|2PC / Percolator|两阶段提交 / Google 提出的分布式事务模型|",
+     "|MVCC / SI / SSI|多版本并发控制 / 快照隔离 / 可串行化快照隔离|",
+     "|Chunk / Block|向量化执行中列式的、定长批的数据单元（对标 Arrow RecordBatch）|",
+     "|Property / Enforcer|物理属性（排序、分布、分区）与强制满足属性的算子（Sort / Exchange）|",
+     "|q-error|基数估计误差度量：`max(est/act, act/est)`|",
+     "|NDV / CMSketch|Number of Distinct Values / Count-Min Sketch|",
+     "|HTAP|Hybrid Transactional / Analytical Processing|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    77,
+    66,
+    75
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

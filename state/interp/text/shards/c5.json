@@ -3047,5 +3047,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6579c4169d11": {
+  "identity": {
+   "one_liner": "SQLite 扩展，用 JavaScript 编写自定义函数，基于 QuickJS 沙箱运行",
+   "review": "SQLite-JS 是一个 SQLite 扩展，通过 QuickJS 沙箱在数据库内运行 JavaScript，用于创建标量、聚合、窗口函数和排序规则，并提供 js_eval 直接执行 JS、通过 db.exec 在 JS 中执行 SQL。函数通过 js_create_scalar 等 SQL 语句注册，可配合 js_init_table 持久化并随 sqlite-sync 在集群间复制。提供 Linux/macOS/Windows/Android/iOS 预编译包及 Swift、Gradle、npm、Flutter 集成。整数超出 ±(2^53-1) 会丢失精度，需以 TEXT 传递并用 BigInt 处理；中断执行需 SQLite 3.41.0 及以上。",
+   "highlights": [
+    "支持用 JavaScript 创建标量、聚合、窗口函数和自定义排序规则，并提供 js_eval 直接求值 JS 代码",
+    "SQL 与 JS 之间按映射规则转换 NULL/整数/实数/文本/BLOB 与 null/number/string/ArrayBuffer 等类型",
+    "JS 内可通过全局 db.exec 在同一连接执行带参数绑定和占位符的 SQL 语句，返回结果集可逐行遍历"
+   ],
+   "use_cases": [
+    "在 SQL 查询中以 JS 实现数据转换、计算或文本处理等自定义标量逻辑",
+    "定义 median、moving average 等聚合与窗口函数，或自然排序等自定义排序规则",
+    "配合 SQLite Cloud Edge Functions 将同一套 JS 函数部署到服务端，并通过 sqlite-sync 在设备间同步"
+   ]
+  },
+  "sha": "6579c4169d11",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ba4c3b380a85": {
+  "identity": {
+   "one_liner": "命令行爬虫，用 SQLite 存 E-Hentai/ExHentai 画廊列表、标签与图片。",
+   "review": "该工具用于抓取 E-Hentai/ExHentai 的画廊列表、标签、收藏数、评分与图片，元数据写入 SQLite（两张表），图片存入 img/<gallery id>/。面向需要长期无人值守归档的用户，默认请求间隔 1–2 秒，含指数退避重试与断点续爬。使用需遵守站点条款，/s/ 图片页被 robots.txt 排除。",
+   "highlights": [
+    "支持断点续爬：中断后重跑同一命令，已完成的画廊与已存图片会被跳过",
+    "按主机限速（默认 1–2 秒间隔），对 503/429/5xx/超时做 5 秒起步、上限 300 秒的指数退避重试",
+    "默认用纯 HTTP 抓取，可选安装 browser 额外依赖改用 Selenium 加载真实 Chrome"
+   ],
+   "use_cases": [
+    "定期运行增量抓取，把新画廊的列表与元数据收录进本地 SQLite 数据库",
+    "长时间无人值守下载画廊图片到按 ID 组织的本地目录",
+    "用 -cu 参数按 URL 单独下载某个画廊，或用 -ds 合并另一台机器上的抓取数据库"
+   ]
+  },
+  "sha": "ba4c3b380a85",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

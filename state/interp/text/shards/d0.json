@@ -3097,5 +3097,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c07082c3c1eb": {
+  "identity": {
+   "one_liner": "自托管媒体服务器，索引本地电影与剧集并转码串流",
+   "review": "Oblecto 是一个用 Node.js 编写的自托管媒体服务器，用于索引用户自有目录中的电影与电视剧文件，从 TMDb、TVDB、fanart.tv 获取元数据并串流播放。它自带 Web 应用，并在 8096 端口提供 Jellyfin 兼容 API 供 Jellyfin 客户端连接。依赖 Node.js 24+、FFmpeg 和 guessit，数据库支持 SQLite 或 MariaDB/MySQL，可通过 npm、systemd 或 Docker 安装。",
+   "highlights": [
+    "支持直接播放及经 FFmpeg 实时转换为 HLS 输出，可按带宽自适应调整码率",
+    "提供 Jellyfin 兼容 API（端口 8096），供手机、电视和桌面端的 Jellyfin 应用登录与播放",
+    "数据库支持 SQLite 与 MariaDB/MySQL，配置文件、数据库、图片和日志集中存放在配置目录"
+   ],
+   "use_cases": [
+    "在家庭服务器上集中存放并串流自有的电影与剧集文件",
+    "通过 Jellyfin 客户端访问由 Oblecto 托管的媒体库",
+    "多服务器间可选联邦同步媒体库并远程播放"
+   ]
+  },
+  "sha": "c07082c3c1eb",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "018d3ac6dd53": {
+  "identity": {
+   "one_liner": "监控 AI 订阅额度余量的本地任务调度器，在容量闲置时分派排队的代理任务",
+   "review": "Redline 是一款 Go 编写的 macOS 菜单栏应用与无头服务，监控 Codex、Claude 等订阅的 5 小时与每周额度窗口，在额度可能过期前分派排队的代理任务。每个调度周期记录 RUN/WAIT/UNKNOWN 及理由；默认关闭自动分派，保留额度储备。数据存于本地 SQLite，通过 MCP 服务器供代理查询队列。",
+   "highlights": [
+    "监控 5 小时与每周额度窗口，基于 pace gap 与策略决定运行、等待或失败关闭，并记录每条决策的理由",
+    "任务在 Git worktree 或 DevX 会话中隔离运行，完成后保留结果、产物与日志；支持 Codex CLI、Claude Code、Pi、Hermes 或任意命令作为执行工具",
+    "提供 MCP 服务器（默认只读工具，分派工具标注为 mutating）、回环 HTTP 服务、SQLite 存储、菜单栏应用与 CLI，无云端依赖"
+   ],
+   "use_cases": [
+    "在额度重置窗口临近、余量可能失效时，自动消化积压任务：补测试、重构、依赖升级、文档整理",
+    "在 Linux 服务器上以无头服务方式运行，配合 launchd 在夜间等无人值守时段分派任务",
+    "通过 MCP 让编码代理在会话中查询额度、检查队列、添加任务并询问调度等待原因"
+   ]
+  },
+  "sha": "018d3ac6dd53",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

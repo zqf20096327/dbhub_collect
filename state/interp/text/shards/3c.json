@@ -3081,5 +3081,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "78f7f791ef0b": {
+  "identity": {
+   "one_liner": "基于 libpg_query 解析器的 Postgres 语言服务器（LSP）实现",
+   "review": "该项目为 Postgres 开发提供语言工具集与 LSP 实现，底层使用 Postgres 自身的解析器 libpg_query。所有功能可通过 LSP、CLI、HTTP API 和 WebAssembly 模块访问，采用传输无关的 Server-Client 架构，适配 VSCode、Neovim、Zed 等编辑器。功能包含自动补全、语法诊断、类型检查、格式化、迁移与数据库 lint 及 PL/pgSQL 支持。本地开发依赖 Nix 与 just 工作流。",
+   "highlights": [
+    "提供自动补全、悬停提示、Inlay Hints 与语义高亮，支持语法诊断、类型检查与格式化",
+    "包含迁移 lint、数据库 lint 与 PL/pgSQL 支持，解析基于 libpg_query",
+    "功能可通过 LSP、CLI、HTTP API 和 WebAssembly 模块四种途径访问"
+   ],
+   "use_cases": [
+    "在 VSCode、Cursor、Neovim、Zed、Sublime Text 等编辑器中接入 Postgres SQL 语言服务",
+    "通过 CLI 或 HTTP API 在编辑器之外运行 SQL 诊断、格式化与 lint 检查",
+    "在浏览器等 WebAssembly 运行环境中调用其语言工具能力"
+   ]
+  },
+  "sha": "78f7f791ef0b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f74a528c917e": {
+  "identity": {
+   "one_liner": "通过 FFI 内嵌 Zend 引擎的 Rust 单二进制 PHP 应用服务器",
+   "review": "ePHPm 是用 Rust 编写的单二进制 PHP 运行环境，通过 FFI 内嵌真实 Zend 引擎，并将 Web 服务器、PHP 进程池、KV 缓存、SQLite 兼容数据库（Turso）、连接池 SQL 代理和 gossip 集群合并到单一进程。面向希望从开发到生产以同一方式运行 PHP 应用的开发者。限制包括：php -a/-S 不可用、扩展集以编译内建为准、Windows 部分功能未验证。",
+   "highlights": [
+    "通过 FFI 链接真实 Zend PHP 引擎，支持 alias 为系统 PHP CLI 使用",
+    "内置 Tokio+Hyper Web 服务器、PHP 执行池、DashMap KV 缓存、SQLite 兼容 Turso 数据库和带连接池/读写分离的 SQL 代理",
+    "提供 ACME 自动 TLS、OpenTelemetry 追踪（OTLP）与 gossip 集群同步"
+   ],
+   "use_cases": [
+    "本地开发（ephpm dev）与 CI/CD 容器化部署同一份代码",
+    "无需修改代码地为 Laravel/Drupal 等 PHP 应用接入连接池代理或内嵌数据库",
+    "通过 alias 将二进制作为系统 PHP CLI 使用"
+   ]
+  },
+  "sha": "f74a528c917e",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3a2d2ab270ba": {
+  "identity": {
+   "one_liner": "Laravel 风格的 Go ORM，提供查询构建器、模型与迁移",
+   "review": "ThinkORM 是一个面向 Go 语言的 ORM 库，为熟悉 Laravel/ThinkPHP 风格的开发者提供查询构建器、Eloquent 风格模型、关联、Schema 构建器与迁移。支持 MySQL、MariaDB、Postgres、SQLite、SQL Server 五种方言，要求 Go 1.27+，通过 go get 安装，测试套件使用内存 fake 驱动可离线运行。采用 Apache 2.0 许可证。",
+   "highlights": [
+    "查询构建器包含嵌套/子查询/JSON where、lateral join、union、聚合、锁与超时等能力",
+    "模型支持软删除、脏跟踪、批量赋值保护、UUID/ULID 键、事件与观察者",
+    "连接管理支持命名连接、读写分离、嵌套事务保存点与死锁重试"
+   ],
+   "use_cases": [
+    "需要在 Go 项目中使用 Laravel 风格 ORM 的开发场景",
+    "需要多数据库方言及 Schema 迁移管理的应用",
+    "需要读写分离与嵌套事务的项目"
+   ]
+  },
+  "sha": "3a2d2ab270ba",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e3e791a9d4aa": {
+  "identity": {
+   "one_liner": "基于 Bun + Hono + React 19 的多租户 SaaS 脚手架，预集成认证、邮件与存储",
+   "review": "clean-stack 是一个面向 SaaS 开发的 monorepo 脚手架，API 使用 Bun + Hono，前端为 Vite + React 19 + TanStack，数据层用 Drizzle + Postgres，采用 Clean Architecture 与实用主义 DDD 组织代码。内置 BetterAuth 认证、多租户、Resend 邮件和 R2 直传，Stripe 尚在路线图中。支持本机或纯 Docker 两种运行方式；README 标注项目为进行中，无支持与 SLA。",
+   "highlights": [
+    "认证涵盖邮箱密码、magic-link、passkeys（WebAuthn）、2FA（TOTP + 备份码），支持 bearer 与 cookie 并存及跨标签页会话同步",
+    "每个业务表自首个迁移起带 organizationId 外键，由 ScopedRepository 在端口层强制租户隔离；授权谓词在服务端中间件、路由 beforeLoad 与 <Can> UI 三处共用同一 SSOT",
+    "实现事务性 outbox + Postgres LISTEN/NOTIFY 派发，提供 100 个类型化事件、append-only audit_log 及 HMAC 签名的出站 webhook；文件直传采用 presign → PUT → 确认三步流程，支持 R2/S3/B2/Wasabi/Tigris"
+   ],
+   "use_cases": [
+    "需要多租户与组织/邀请/角色体系的 SaaS 产品起步项目",
+    "需要 GDPR 合规功能（条款版本再确认、数据更正、删除、可携带导出）的应用",
+    "希望 AI 编码助手遵循仓库架构规则的团队（根目录及各包提供 CLAUDE.md）"
+   ]
+  },
+  "sha": "e3e791a9d4aa",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

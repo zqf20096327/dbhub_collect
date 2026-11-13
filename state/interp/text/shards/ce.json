@@ -3119,5 +3119,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0e0203031fc3": {
+  "identity": {
+   "one_liner": "面向 irssi 用户的 IRC 客户端，借助 lobby-server 写入 SQLite 实现历史回看",
+   "review": "Lobby 是一个基于 Rust 和 Tauri 构建的桌面/移动 IRC 客户端，主要面向长期在服务器上运行 irssi 的用户。它通过 lobby-server 连接 irssiproxy，把所有消息写入 SQLite，从而在客户端关闭期间也保留完整历史；也可直连 irssiproxy 或 IRC 服务器（仅显示在线期间的消息）。lobby-server 只监听 127.0.0.1，客户端经 SSH 访问。支持 Linux、macOS、Windows、Android，iPhone 需自行编译安装。",
+   "highlights": [
+    "lobby-server 以 systemd 用户服务运行，将消息写入 SQLite，支持客户端离线期间的完整历史记录",
+    "内置 SSH 连接能力，通过受限密钥（仅允许端口转发到 lobby-server）访问服务器，无需额外开放端口",
+    "支持 reactions 和 replies（以纯 IRC 消息 nick: emoji / nick: text 发送）、附件上传（S3、Cloudflare R2、SFTP、catbox.moe 等）以及 per-channel 通知配置"
+   ],
+   "use_cases": [
+    "已长期运行 irssi 并希望保留离线期间消息历史、进行补看（backlog）的用户",
+    "需要在 Linux 桌面与手机等多设备间同步已读位置、人员设置与高亮收藏的场景",
+    "需要自托管且不向互联网暴露新端口、经 SSH 隧道访问 IRC 的环境"
+   ]
+  },
+  "sha": "0e0203031fc3",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

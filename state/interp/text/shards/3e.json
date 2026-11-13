@@ -3171,5 +3171,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5e33967f3b8a": {
+  "identity": {
+   "one_liner": "开源电话交换系统，由 AI 代理接听来电并在通话中执行工具，可自托管于 VPS。",
+   "review": "DeskVoice 是运行在自托管 VPS 上的开源电话交换系统（MIT 协议，Node 22），由 AI 代理接听电话、通话中调用工具、向人工请求批准、转接呼叫并在通话结束后执行任务。技术栈包含 Asterisk、Postgres、Docker，语音引擎支持 OpenAI Realtime 与 Gemini Live。安装脚本一条命令完成部署，后续配置通过 Web 面板操作。README 明确区分了模拟验证、真实部署验证与待验证的能力：SIP 中继接入来电、HTTPS 面板等功能尚待真实环境验证。",
+   "highlights": [
+    "代理可在通话中执行工具、向人工请求批准、转接呼叫并在通话结束后运行任务",
+    "支持 OpenAI Realtime 与 Gemini Live 两种语音引擎，以及浏览器语音对话界面",
+    "提供模拟语音引擎的本地演示模式（pnpm demo），无需 AI 密钥或 SIP 中继即可运行完整通话流程"
+   ],
+   "use_cases": [
+    "自托管 AI 电话客服/呼叫中心，代理接听来电并在通话中操作工具",
+    "需要人工批准环节的 AI 外呼或来电处理流程",
+    "通话后自动执行任务：生成摘要、通知、跟进事项"
+   ]
+  },
+  "sha": "5e33967f3b8a",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b423a822c56": {
+  "identity": {
+   "one_liner": "面向SAIC产MG汽车的自托管车辆仪表盘、行程记录与地图Web应用",
+   "review": "GarageStack是一个自托管的开源Web应用，通过登录SAIC iSmart API读取MG（MG4、MG5、ZS EV、HS PHEV等）车辆数据，提供实时仪表盘、行程地图、能耗统计、远程控制与保养提醒。以Docker单容器或Compose部署，使用PostgreSQL存储，面向使用MG iSmart的车主。限制：与官方MG应用不能同时登录同一账号，不兼容SAIC收购前的经典MG车型。",
+   "highlights": [
+    "通过SAIC iSmart API读取车辆遥测数据，支持HEV、PHEV、BEV车型并按车型自动调整仪表盘卡片",
+    "提供远程控制（空调预热、锁车、开尾门、充放电控制等）、气候定时计划与推送通知",
+    "保存行程到数据库并在地图上绘制轨迹、热力图与限速信息，支持行程标记与电子表格导出"
+   ],
+   "use_cases": [
+    "在自托管环境中集中查看MG车辆的电量、胎压、门窗与位置等实时状态",
+    "记录并导出行程日志用于税务申报（如荷兰rittenregistratie）",
+    "远程控制车辆空调、充电与车锁，并按工作日设置气候定时计划"
+   ]
+  },
+  "sha": "6b423a822c56",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74804cd368d0": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 调用安全网关，用终端 TUI 审批与审计 AI 代理的工具调用",
+   "review": "Foreman 是一个终端优先的本地安全网关，拦截 Claude Code、Codex、Gemini CLI 等 MCP 代理的每一次工具调用，按 policy.yaml 与风险规则评分，危险调用需人工批准，全部决策写入本地 SQLite 审计库。它还提供 MCP 服务器目录、工具描述投毒检测与代理组织架构管理。适用于在本机同时运行多个 AI 代理并需人工把关的用户。注意它是执行前闸门，不能回滚已产生的副作用。",
+   "highlights": [
+    "提供统一审批管道：policy.yaml、风险规则、人工批准与审计日志，无法判定时调用失败关闭",
+    "内置 MCP Hub，含 19 个服务器的目录，密钥存于加密存储；工具描述首次使用时被固定，变更后暂停使用",
+    "审计数据存储于本地 SQLite 并支持全文检索，无云端与遥测；支持通过 Telegram、Slack、Discord 远程审批"
+   ],
+   "use_cases": [
+    "在本机并行运行多个 AI 代理，需要统一拦截与人工审批高风险工具调用",
+    "检测 MCP 工具描述中的隐藏指令，以及首次信任后定义变更的工具",
+    "用组织模板为代理分配部门与汇报线，按最小权限控制各代理可见的工具"
+   ]
+  },
+  "sha": "74804cd368d0",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

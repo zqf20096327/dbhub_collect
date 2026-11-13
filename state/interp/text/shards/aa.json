@@ -3179,5 +3179,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8db16cc57735": {
+  "identity": {
+   "one_liner": "基于 binlog 的无触发器 MySQL 在线表结构迁移工具",
+   "review": "gh-ost 是 GitHub 开发的 MySQL 在线表结构迁移工具，通过读取二进制日志而非触发器来捕获表变更并异步应用到影子表，从而将迁移写入负载与主库工作负载解耦。支持暂停、动态重配置、状态审计等运维能力，提供 Linux/macOS 二进制，采用 MIT 许可证。",
+   "highlights": [
+    "不依赖触发器，通过二进制日志流异步捕获并应用表变更到影子表",
+    "支持真实暂停（停止行复制与事件处理）、运行中动态重配置与强制节流",
+    "提供 noop 测试、基于副本、直接在主库等多种运行模式，支持跨集群移动表（--move-tables）"
+   ],
+   "use_cases": [
+    "在运行中的 MySQL 主库上执行不中断服务的表结构变更",
+    "先在副本上做测试迁移（--test-on-replica）验证流程后再执行主库迁移",
+    "跨集群移动表并在切换后自行切换应用流量"
+   ]
+  },
+  "sha": "8db16cc57735",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe3a2d62fc9b": {
+  "identity": {
+   "one_liner": "本地会话索引工具：将 Claude Code、Codex、Pi 的 JSONL 会话统一解析入 SQLite，供 CLI 查询与 App 浏览。",
+   "review": "Trajex 将 Claude Code、Codex 与 Pi 的 JSONL 会话历史解析为统一的 canonical record 并持久化到同一个 SQLite 数据库，通过 FTS5 全文索引支持检索。Agent 可通过 trajex CLI 编写 JS 查询历史，用户可通过 Electron + Vue 桌面 App 浏览会话时间线、管理 memories 和查看统计。CLI 与 App 可独立安装，共享同一份本地索引。需要 Node.js 22.13+，数据存储于 ~/.trajex/trajex.sqlite。",
+   "highlights": [
+    "将 Claude Code、Codex、Pi 三个 provider 的 JSONL 会话解析为同一 SQLite schema，按 source 区分，非 Claude ID 带 provider 前缀避免主键冲突",
+    "CLI 无运行时 npm 依赖，使用 Node 22 内置 node:sqlite 与 FTS5；核心 API 包括 search()、context()、sql() 及 sessions、memories、fileHistory 等结构化 helpers",
+    "索引器通过 @parcel/watcher 监听 provider 目录变化做增量更新，工具结果采用三层投影限制 FTS 索引体积，完整原文可通过 raw() 分段回读"
+   ],
+   "use_cases": [
+    "让 coding agent 通过 /trajex skill 以自然语言查询自身历史会话，如查找某文件的修改记录、失败的 tool calls 等",
+    "在桌面 App 中浏览、搜索本地多个 provider 的会话记录，查看 tool call 详情、token 统计与活动热力图",
+    "将检索结论经用户批准后注册为 markdown memory 文件，供后续会话通过 memories() 召回"
+   ]
+  },
+  "sha": "fe3a2d62fc9b",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

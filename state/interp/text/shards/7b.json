@@ -3287,5 +3287,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f48b1964a9db": {
+  "identity": {
+   "one_liner": "自托管的 Rust Web 应用宿主，每个应用及其 SQLite 数据库运行在独立 Wasm 沙箱中",
+   "review": "spared 是一个开源宿主程序，用于运行 Rust 编写的 Web 应用，应用以 Wasm 形式部署，SQLite 编译后运行在每个应用的沙箱内部而非宿主中。它以单个二进制运行在一台服务器上，可承载多个隔离应用，应用间可并行处理请求。README 标注版本为 0.0.1-preview，未经外部审计，不支持 TLS，每个应用同一时刻处理一个请求。",
+   "highlights": [
+    "以单个二进制运行，可在同一服务器上托管多个相互隔离的应用，每个应用带各自的 SQLite 沙箱",
+    "提供 spared setup/new/deploy/serve 等命令，应用为 Rust crate，编译目标为 wasm32-wasip2",
+    "通过 install.sh 脚本安装，应用可通过子域名形式访问，管理端口与请求端口分离"
+   ],
+   "use_cases": [
+    "在同一台 Linux x86_64 服务器上自托管多个 Rust Web 应用并实现数据隔离",
+    "需要每个应用内嵌 SQLite 数据库、随应用一起部署的场景",
+    "通过 Claude Code 或 Codex 等 AI 编码代理按 AGENTS.md 生成并部署应用"
+   ]
+  },
+  "sha": "f48b1964a9db",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d31c97fb1e2": {
+  "identity": {
+   "one_liner": "自托管 MCP 服务器，为 AI 代理提供共享长期记忆、文档检索与代码索引",
+   "review": "Loom 是 ClickHouse 开源、Apache-2.0 协议的自托管 MCP 服务器，为 Claude Code、Codex、Cursor 等编码代理及自建代理提供跨会话共享记忆、带引用的文档搜索（PDF/docx/pptx）与代码索引。数据存于 ClickHouse，可选 Postgres；通过 Docker/Helm 部署，经 MCP、HTTP、Python 或 TypeScript SDK 接入。默认安装离线可用，配置 LLM 后才有摘要与回答生成。",
+   "highlights": [
+    "支持 MCP、HTTP、Python 和 TypeScript 四种接入方式，提供 Claude Code 与 Codex 插件",
+    "记忆包含作者、版本历史与冲突审查，namespace 可回滚到任意时间点",
+    "代码索引提供定义、调用方、变更影响查询，结果标注修订版本与来源位置"
+   ],
+   "use_cases": [
+    "为团队编码代理建立跨会话共享记忆与仓库代码索引",
+    "通过 Python/TypeScript SDK 为代理应用构建按用户的长期记忆",
+    "搭建带权限、审计与任务收件箱的多代理协作环境"
+   ]
+  },
+  "sha": "6d31c97fb1e2",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "08320936e0d1": {
+  "identity": {
+   "one_liner": "基于 Go 泛型的类型安全 ORM，字段指针替代字符串列名",
+   "review": "ant 是一个使用 Go 泛型实现的 ORM，模型为普通结构体，查询条件、关联、投影等通过字段指针在编译期检查，无需代码生成。支持 PostgreSQL、MySQL、MariaDB、SQLite、SQL Server 的读写，迁移目前仅支持 PostgreSQL。要求 Go 1.27+，采用 MIT 许可，处于 1.0 之前的开发阶段。",
+   "highlights": [
+    "查询条件、关联、聚合、子查询、CTE、窗口函数均由编译器做类型检查，不依赖代码生成",
+    "支持 1:1、1:N、多对多关联，通过 Include 显式批量加载；变更跟踪仅写入发生变化的列",
+    "提供事务（保存点、隔离级别、重试、读副本）、迁移（仅 PostgreSQL）、go vet 分析器、OpenTelemetry 与测试夹具"
+   ],
+   "use_cases": [
+    "希望在编译期检查列名、字段类型与关联名的 Go 数据库应用",
+    "使用 PostgreSQL 且需要从结构体生成 SQL 迁移的项目",
+    "需要显式控制关联加载、避免隐式查询的场景"
+   ]
+  },
+  "sha": "08320936e0d1",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

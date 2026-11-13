@@ -3011,5 +3011,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "88f62c5effc2": {
+  "identity": {
+   "one_liner": "基于 aiogram 与 yt-dlp 进程隔离的 Telegram 媒体下载机器人，Docker Compose 部署。",
+   "review": "一个 Telegram 机器人，通过 yt-dlp 从 YouTube、TikTok、X 等站点下载视频与音频，用户发送链接后选择画质或 MP3，文件在聊天中交付，单文件上限 2 GB。面向需要自建下载服务的用户，采用 Clean Architecture 分层，yt-dlp 在可终止的子进程中运行，进度经 Redis pub/sub 跨进程传递，依赖 Docker Compose 与 PostgreSQL、Redis。项目处于 pre-beta，仅在本地栈上端到端运行，尚未部署到服务器。",
+   "highlights": [
+    "yt-dlp 的预览与下载分别在 forkserver 与 spawn 子进程中运行，超时后终止并杀死进程，避免阻塞 asyncio 事件循环",
+    "通过本地 Telegram Bot API 服务器将上传上限从 50 MB 提升至 2000 MB，文件以可内联播放的视频交付",
+    "提供预览卡片、实时进度、720p/1080p/MP3 选项、英俄双语、按用户限速及域名白名单/黑名单与按源格式开关"
+   ],
+   "use_cases": [
+    "自建 Telegram 机器人，向聊天发送链接获取视频或 MP3 文件",
+    "需要下载超过 50 MB 的媒体文件并在 Telegram 中内联播放的场景（需启用本地 Bot API 服务器）",
+    "作为采用 Clean Architecture、arq 任务队列与多进程隔离模式的 Python 项目参考实现"
+   ]
+  },
+  "sha": "88f62c5effc2",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ebc03ba61c85": {
+  "identity": {
+   "one_liner": "自托管的豆包体验套餐卡密发放与领取核验运营平台",
+   "review": "doubao-claim-hub 是一个自托管的会员权益发放与运营平台，面向发卡方、代理商和买家，覆盖批量生成卡密、扫码或手机号登录领取、到账核验与售后追溯流程。系统采用纯协议实现，单进程 + SQLite 架构，提供总台/代理/子代理三级权限与额度流水管理。README 要求必须单 worker 运行，并提示使用者自行确认目标平台条款与法律合规，风险由部署者承担。",
+   "highlights": [
+    "支持批量生成卡密、批次/备注管理、一码一次领取限制，并可导出纯净链接 TXT",
+    "提供扫码登录与手机号短信验证码登录双通道，含会话池与设备指纹管理（random/pool 两种来源）",
+    "内置总台/代理/子代理三级租户体系、额度划拨回收流水、充值码与兑换站功能"
+   ],
+   "use_cases": [
+    "发卡方需要批量发行、追踪领取状态并做售后补核的场景",
+    "需要多级代理分销、额度管理与业绩流水查看的运营场景",
+    "买家通过扫码或手机号登录领取体验套餐并查看到账结果（含到期时间）"
+   ]
+  },
+  "sha": "ebc03ba61c85",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52fe4cb045b3": {
+  "identity": {
+   "one_liner": "为 Tidbyt 设备渲染自定义 Pixlet 小部件，用 AWS Lambda 定时渲染并推送到设备的组件集合",
+   "review": "该项目是一组用于 Tidbyt 显示设备的自定义 Pixlet 小部件（.star 文件），涵盖日出日弧、附近航班、Oura 健康数据、股票行情、比特币走势等。AWS Lambda 在 EventBridge 计划下定时渲染各小部件并推送至设备轮播槽位，令牌存于 SSM；GitHub Actions 在推送到 main 时构建镜像并部署。使用者需自备 Tidbyt 设备、AWS 账户、Docker 与 AWS CLI。",
+   "highlights": [
+    "包含 Sun Arc、Flights Overhead、Oura、Stock Watch、Market Map、Sectors、Bitcoin、Stock Alert 等多个 Pixlet 小部件",
+    "Lambda 通过容器镜像运行 Pixlet 渲染，EventBridge 白天每分钟、夜间每 10 分钟触发，推送仅更新画面不中断当前显示",
+    "GitHub Actions 经 OIDC 登录 AWS，在 main 分支推送时构建 arm64 镜像、对每个小部件做渲染冒烟测试并部署"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上轮播显示个性化信息：日出日落、附近 ADS-B 飞机、健康评分、股票与比特币行情",
+    "通过 Stock Alert 在关注标的涨跌幅跨过设定档位时全屏提醒",
+    "以 fork 仓库加 AWS 的方式自建一套推送式小部件渲染管线"
+   ]
+  },
+  "sha": "52fe4cb045b3",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

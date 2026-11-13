@@ -22407,5 +22407,585 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "88f62c5effc2+2": {
+  "fn": "IvanSytnik/Universal-Media-Downloader",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    9,
+    2,
+    9,
+    [
+     "CI",
+     "Python 3.13",
+     "aiogram 3",
+     "Docker Compose",
+     "Code style: ruff",
+     "Type checked: mypy --strict",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    22,
+    9,
+    22
+   ],
+   [
+    "replace",
+    22,
+    38,
+    22,
+    23,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    23,
+    24
+   ],
+   [
+    "delete",
+    39,
+    55,
+    24,
+    24
+   ],
+   [
+    "equal",
+    55,
+    58,
+    24,
+    27
+   ],
+   [
+    "replace",
+    58,
+    59,
+    27,
+    28,
+    [
+     "(`locales/en/messages.ftl`). Values in angle"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    28,
+    36
+   ],
+   [
+    "replace",
+    67,
+    97,
+    36,
+    37,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    113,
+    37,
+    53
+   ],
+   [
+    "replace",
+    113,
+    119,
+    53,
+    59,
+    [
+     "- **Downloads run in killable processes, not threads.** A thread running `yt-dlp` cannot be stopped, and `asyncio.wait_for` only stops waiting. Previews run in a `forkserver` child and downloads in a `spawn` child, both terminated and then killed on timeout. → ADR 0003, `ytdlp_downloader.py`",
+     "- **Progress crosses three process boundaries.** yt-dlp hooks in the child → `multiprocessing.Queue` → worker event loop → Redis pub/sub → the bot's listener → throttled `editMessageText`. → architecture.md, Progress bridge",
+     "- **No request is lost silently.** Status transitions that a job and the stale-request reaper can race on are compare-and-set updates, with `FOR UPDATE SKIP LOCKED` on the reaper side. Each repository call is its own transaction, and the request row is committed before its job is enqueued. → ADR 0004",
+     "- **Quality is the short side of the frame.** `DownloadSpec = VideoSpec(tier) | AudioSpec` makes meaningless combinations unrepresentable. A vertical 1080x1920 Short is \"1080p\", and the inline-playable codec is one constant shared by the preview and the download. → ADR 0001",
+     "- **The database is untrusted input.** An unreadable value degrades to a truthful default or raises a domain error that the worker reports to the user, instead of a `ValueError` after the user was told \"accepted\". → architecture.md",
+     "- **Errors are keys, not text.** yt-dlp failures are classified into domain exceptions carrying an `error_key`, which is rendered through Fluent in the user's language; raw diagnostics go only to logs and Sentry. A test fails on any Cyrillic literal in code, so text cannot bypass the locale files. → `error_classifier.py`"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    137,
+    59,
+    77
+   ],
+   [
+    "replace",
+    137,
+    143,
+    77,
+    78,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    147,
+    78,
+    82
+   ],
+   [
+    "replace",
+    147,
+    148,
+    82,
+    83,
+    [
+     "explained in docs/architecture.md."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    155,
+    83,
+    90
+   ],
+   [
+    "replace",
+    155,
+    184,
+    90,
+    91,
+    [
+     "…（29 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    192,
+    91,
+    99
+   ],
+   [
+    "replace",
+    192,
+    200,
+    99,
+    100,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    202,
+    100,
+    102
+   ],
+   [
+    "replace",
+    202,
+    203,
+    102,
+    103,
+    [
+     "More in docs/architecture.md: ports, process"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    208,
+    103,
+    108
+   ],
+   [
+    "replace",
+    208,
+    209,
+    108,
+    109,
+    [
+     "|Area|Choice|Why|"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    109,
+    110
+   ],
+   [
+    "replace",
+    210,
+    219,
+    110,
+    119,
+    [
+     "|Bot framework|aiogram 3|async, typed, FSM with Redis storage|",
+     "|Extraction|yt-dlp (Python API) + `yt-dlp-ejs`, deno, ffmpeg|the maintained extractor; deno solves YouTube's JS challenge; ffmpeg merges and transcodes|",
+     "|Jobs|arq on Redis|asyncio-native and small; jobs only carry a request id, so Celery's routing and result backends add nothing|",
+     "|Isolation|`multiprocessing` (`spawn` / `forkserver`)|the only way to stop a stuck extraction for real|",
+     "|Large files|local Telegram Bot API server|raises the upload limit from 50 MB to 2000 MB and keeps inline playback, instead of re-encoding or sending a link|",
+     "|Storage|PostgreSQL 16, SQLAlchemy 2 async, Alembic|request history and state transitions with row locks|",
+     "|i18n|aiogram-i18n + Fluent|plural rules and translator-friendly files|",
+     "|Observability|structlog (JSON), opt-in Sentry|persistent per-service logs with request context|",
+     "|Tooling|uv + `uv.lock`, ruff, mypy `--strict`, pytest|the image, CI and local runs install the same locked versions|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    223,
+    119,
+    123
+   ],
+   [
+    "replace",
+    223,
+    224,
+    123,
+    124,
+    [
+     "@BotFather."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    237,
+    124,
+    137
+   ],
+   [
+    "replace",
+    237,
+    238,
+    137,
+    138,
+    [
+     "- **full**: a local Bot API server, uploads up to 2000 MB. Set `USE_LOCAL_BOT_API=true` and `COMPOSE_PROFILES=local-bot-api`, add `TELEGRAM_API_ID` / `TELEGRAM_API_HASH` (free at my.telegram.org/apps) and `MAX_DELIVERABLE_FILE_SIZE_MB=2000`. A bot that has been used with the cloud API must be logged out of it once before its first local start, otherwise updates are not guaranteed:"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    243,
+    138,
+    143
+   ],
+   [
+    "replace",
+    243,
+    244,
+    143,
+    144,
+    [
+     " After that call the bot cannot use the cloud API again for 10 minutes. To move a bot that already runs on a local server, see docs/deployment.md."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    248,
+    144,
+    148
+   ],
+   [
+    "replace",
+    248,
+    249,
+    148,
+    149,
+    [
+     "`src/config/settings.py`; `.env.example`"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    252,
+    149,
+    152
+   ],
+   [
+    "replace",
+    252,
+    253,
+    152,
+    153,
+    [
+     "|Variable|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    153,
+    154
+   ],
+   [
+    "replace",
+    254,
+    266,
+    154,
+    166,
+    [
+     "|`BOT_TOKEN`|required|token from @BotFather|",
+     "|`USE_LOCAL_BOT_API`, `COMPOSE_PROFILES`|`false`, empty|full profile: `true`, `local-bot-api`|",
+     "|`TELEGRAM_API_ID`, `TELEGRAM_API_HASH`|empty|required when `USE_LOCAL_BOT_API=true`|",
+     "|`MAX_DELIVERABLE_FILE_SIZE_MB`|`50`|up to `2000` with the local server|",
+     "|`WORKER_MAX_JOBS`|`4`|concurrent downloads per worker (RAM, disk, source-site load)|",
+     "|`DOWNLOAD_MIN_FREE_DISK_MB`|`3072`|refuse downloads below this free space; `0` disables|",
+     "|`ALLOWED_DOMAINS`, `BLOCKED_DOMAINS`|YouTube, TikTok, Instagram, X, VK; `music.youtube.com`|JSON lists, suffix match per label|",
+     "|`DISABLED_FORMATS`|`{}`|per extractor, e.g. `{\"youtube\": [\"audio\"]}`|",
+     "|`ADMIN_TELEGRAM_IDS`|`[]`|who may run `/health` and the worker commands|",
+     "|`RATE_LIMIT_DOWNLOADS_PER_HOUR`, `RATE_LIMIT_PREVIEWS_PER_MINUTE`|`10`, `5`|per Telegram user|",
+     "|`POSTGRES_PASSWORD`|`umd`|change it anywhere but a laptop|",
+     "|`SENTRY_DSN`|empty|set to enable error reporting|"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    166,
+    167
+   ],
+   [
+    "replace",
+    267,
+    269,
+    167,
+    168,
+    [
+     " All other variables "
+    ]
+   ],
+   [
+    "equal",
+    269,
+    270,
+    168,
+    169
+   ],
+   [
+    "replace",
+    270,
+    271,
+    169,
+    170,
+    [
+     "|Variable|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    272,
+    170,
+    171
+   ],
+   [
+    "replace",
+    272,
+    288,
+    171,
+    185,
+    [
+     "|`ENVIRONMENT`|`local`|`local`, `staging` or `production`|",
+     "|`LOG_LEVEL`|`INFO`|log level for all services|",
+     "|`LOG_DIR`|unset (stdout only); `/var/log/umd` in Compose|directory for the rotating JSON log files|",
+     "|`LOG_FILE_MAX_MB`, `LOG_FILE_BACKUPS`|`50`, `10`|rotation: size per file, files kept|",
+     "|`LOCAL_BOT_API_BASE_URL`|`http://telegram-bot-api:8081`|address of the local Bot API server (full profile)|",
+     "|`DEFAULT_LOCALE`|`en`|used when the user has not run `/language` and Telegram's language is not `en` or `ru`|",
+     "|`POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_DB`, `POSTGRES_USER`|`postgres`, `5432`, `umd`, `umd`|database connection inside the Docker network|",
+     "|`REDIS_HOST`, `REDIS_PORT`, `REDIS_DB`|`redis`, `6379`, `0`|Redis connection inside the Docker network|",
+     "|`HOST_POSTGRES_PORT`, `HOST_REDIS_PORT`|`5433`, `6380`|ports published on `127.0.0.1` for `psql` / `redis-cli` (Compose only)|",
+     "|`PREVIEW_CONTEXT_TTL_SECONDS`|`600`|how long a preview card's buttons stay usable|",
+     "|`PREVIEW_TIMEOUT_SECONDS`|`60`|one preview extraction; the process is killed on expiry|",
+     "|`DOWNLOAD_TIMEOUT_SECONDS`|`1800`|one download; keep it below the worker's `job_timeout` (2100 s)|",
+     "|`FILE_UPLOAD_TIMEOUT_SECONDS`|`1800`|uploading one file to Telegram|",
+     "|`STALE_REQUEST_GRACE_SECONDS`|`300`|added to `job_timeout` before the reaper fails a stuck request|"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    301,
+    185,
+    198
+   ],
+   [
+    "replace",
+    301,
+    302,
+    198,
+    199,
+    [
+     "- **CI** (`ci.yml`): lint, types and tests from `uv.lock` (with ffmpeg installed), migrations on PostgreSQL 16, and a Docker image build."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    310,
+    199,
+    207
+   ],
+   [
+    "replace",
+    310,
+    322,
+    207,
+    208,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    326,
+    208,
+    212
+   ],
+   [
+    "replace",
+    326,
+    327,
+    212,
+    213,
+    [
+     "|ADR|Decision|"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    328,
+    213,
+    214
+   ],
+   [
+    "replace",
+    328,
+    334,
+    214,
+    220,
+    [
+     "|0001|`DownloadSpec` as a sum type with explicit columns|",
+     "|0002|Per-extractor format kill switch, enforced in UI and use case|",
+     "|0003|Preview extraction in a killable child process|",
+     "|0004|Stale-request reaper with per-call transactions|",
+     "|0005|Disk guard for the download directory|",
+     "|0006|Persistent JSON logs and opt-in Sentry|"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    341,
+    220,
+    227
+   ],
+   [
+    "replace",
+    341,
+    342,
+    227,
+    228,
+    [
+     "- **Deployment:** a provider-neutral runbook for a Linux VPS (firewall, backups, migrations, moving the bot to a new Bot API server, updating yt-dlp) is in docs/deployment.md."
+    ]
+   ],
+   [
+    "equal",
+    342,
+    363,
+    228,
+    249
+   ],
+   [
+    "replace",
+    363,
+    369,
+    249,
+    250,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    375,
+    250,
+    256
+   ],
+   [
+    "replace",
+    375,
+    376,
+    256,
+    257,
+    [
+     "SECURITY.md for the security model and how to report a"
+    ]
+   ],
+   [
+    "equal",
+    376,
+    382,
+    257,
+    263
+   ],
+   [
+    "replace",
+    382,
+    383,
+    263,
+    264,
+    [
+     "- **No warranty.** The software is provided \"as is\", without warranty of any kind, under the MIT License."
+    ]
+   ],
+   [
+    "equal",
+    383,
+    385,
+    264,
+    266
+   ],
+   [
+    "replace",
+    385,
+    389,
+    266,
+    267,
+    [
+     "MIT © 2026 Ivan Sytnik ·"
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }

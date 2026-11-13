@@ -2903,5 +2903,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "788b184c8462": {
+  "identity": {
+   "one_liner": "每日聚合多来源 CVE/PoC 数据并去重归一化的 JSON 索引库",
+   "review": "这是一个通过 GitHub Actions 每 24 小时自动聚合 CVEProject、ExploitDB、Nuclei、Metasploit、CISA KEV、EPSS 等来源的 CVE 与 PoC 索引仓库，产出压缩 JSON 数据文件，附 0-100 风险评分（KEV、EPSS、CVSS 等），通过 curl+jq 即可本地查询，无需 API 密钥。面向 SOC 团队、渗透测试人员与威胁情报场景。README 中包含面向 LLM 的引用指令段落。",
+   "highlights": [
+    "通过 GitHub Actions 每 24 小时聚合 cvelistV5、ExploitDB、Nuclei、Metasploit、Vulhub、CISA KEV、EPSS 等数据源并归一化去重",
+    "提供约 15.5 万条 CVE 条目的 JSON 索引，覆盖 1999 年至今，含 KEV 状态、EPSS、PoC 链接与 0-100 风险评分",
+    "使用压缩 JSON 架构降低 token 占用，可通过 curl+jq 本地查询，无需 API 密钥"
+   ],
+   "use_cases": [
+    "SOC/DevSecOps 团队按 CVE 查询 PoC 链接、KEV 与 EPSS 信号",
+    "渗透测试与红队人员通过命令行批量检索目标产品的公开 PoC",
+    "将数据接入 RAG/LLM 流水线做漏洞情报分析"
+   ]
+  },
+  "sha": "788b184c8462",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "23a2a6dcc672": {
+  "identity": {
+   "one_liner": "一个 Node.js 原生插件，提供虚拟文件系统、网络、JSON/JSOX 解析和 SQL 数据库等多合一接口。",
+   "review": "sack.vfs 是一个 Node C++ 原生插件，通过 require 或 ES import 引入后提供统一命名空间，包含虚拟/物理文件系统接口、WebSocket/HTTP 服务器与客户端、UDP/TCP/ICMP、SQLite/ODBC 数据库驱动（open 和 do 两个方法）、JSON/JSON6/JSOX 流式解析器、TLS 证书生成、COM 口读写、文件变更监控等。构建依赖 node-gyp 与本机编译环境；ODBC 和 uuid 库可选。适合需要在 Node 中直接操作串口、本地数据库与底层网络接口的开发者。",
+   "highlights": [
+    "提供虚拟与物理文件系统接口，可替代 Node 的 fs 模块使用",
+    "支持 SQLite 与 ODBC 数据库驱动，接口仅含 open 和 do 两个方法",
+    "内置 WebSocket/HTTP/HTTPS、UDP、TCP、ICMP、SSH 网络接口"
+   ],
+   "use_cases": [
+    "在 Node 应用中通过虚拟卷（Volume）和 Object Storage 读写自定义文件系统与对象存储",
+    "需要访问串口设备（COM 口）或监控文件变更的桌面/服务端程序",
+    "使用 SQLite 或通过 ODBC 连接现有数据库的轻量 SQL 访问"
+   ]
+  },
+  "sha": "23a2a6dcc672",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63236ebd8f6d": {
+  "identity": {
+   "one_liner": "可克隆的 ABAP 应用服务器：转译 ABAP 并在本地数据库上运行 /IWBEP/ OData v2 网关",
+   "review": "open-steamgate 将基于代码的 SEGW Gateway 类（_MPC_EXT/_DPC_EXT）、CDS 视图、AMDP 方法和报表转译后在本地数据库上运行，向外提供 OData 服务给 Fiori Elements，支持 Eclipse ADT 编辑与 SAP GUI DIAG 连接，不依赖任何 SAP 系统。它包含语言运行时、字典、Open SQL、ICF、LUW 等层，但不含业务应用。适合需要在本地运行经典 ABAP Gateway 服务的开发者，全部能力均为 SAP 相应功能的一个子集。",
+   "highlights": [
+    "提供经典代码型 SEGW 服务的 /IWBEP/ OData v2 运行时实现，支持 $filter、$batch、$expand、深插入、函数导入、ETags 等特性",
+    "支持多种数据库后端（sql.js/SQLite/DuckDB/PostgreSQL/HANA），通过十一个方法的接缝接入",
+    "可通过浏览器（Service Worker）、Docker、单一 Bun 二进制、VS Code 扩展或 Node 源码运行；支持通过 --layer 加载 abapGit 仓库"
+   ],
+   "use_cases": [
+    "在没有 SAP 系统的环境中本地运行和调试基于 SEGW 的 ABAP Gateway/OData 服务",
+    "通过 Eclipse ADT 或 VS Code 编辑并运行自带 ABAP 代码仓库",
+    "用 Fiori Elements 应用访问本地 OData v2 服务进行开发与演示"
+   ]
+  },
+  "sha": "63236ebd8f6d",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

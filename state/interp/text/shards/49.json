@@ -3005,5 +3005,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a72e7dcf323a": {
+  "identity": {
+   "one_liner": "Go 单二进制 DMARC 聚合报告解析器，IMAP 读取、SQLite 存储、内置仪表盘。",
+   "review": "Parse DMARC 是 DMARC 聚合（RUA）报告解析器：通过 IMAP 或 Maildir 拉取邮件接收方发来的 gzip/zip/XML 报告，解析后存入单个 SQLite 文件，并在仪表盘展示通过率、邮件量与主要发送源。面向自有域名的邮件管理员，以 Docker、Homebrew、Nix 等方式部署。仅支持 RUA 报告，RUF、TLS-RPT 与多邮箱收取尚未实现。",
+   "highlights": [
+    "通过 IMAP 或本地 Maildir 拉取报告，解析 gzip、zip 与原始 XML，单报告解压上限 16 MB",
+    "暴露 28 个 Prometheus 指标并附带 Grafana 仪表盘，另提供五个 GET 路由的 HTTP API",
+    "内置 MCP 服务器（stdio 或 HTTP，九个工具）供 AI 助手查询报告数据"
+   ],
+   "use_cases": [
+    "域名在 DMARC 记录中设置了 rua= 地址，需要集中收取并解析 Google、Microsoft、Yahoo 等接收方发来的聚合报告",
+    "自托管场景下用单个 SQLite 文件和静态二进制运行，避免部署 Elasticsearch 或 JVM 数据库服务",
+    "需要将 SPF/DKIM 通过率等指标接入 Prometheus/Grafana 监控体系，或通过 MCP 让 AI 助手查询报告"
+   ]
+  },
+  "sha": "a72e7dcf323a",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

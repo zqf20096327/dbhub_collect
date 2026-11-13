@@ -2794,5 +2794,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f30665ed42ee": {
+  "identity": {
+   "one_liner": "自托管的 GitHub 组织安全仪表盘，通过 GitHub API 生成安全评分并执行维护任务。",
+   "review": "Clevis 是一个自托管面板，读取 GitHub API 数据用于展示仓库活动、组织安全状况（MFA、分支保护、密钥扫描等六项核心检查的安全评分）及协作者信息，并支持带 dry-run 与审计日志的维护任务（如清理 Actions 缓存）。采用 FastAPI、Next.js 与 PostgreSQL 架构，worker 通过 Postgres 任务队列可多副本扩展。连接组织推荐 GitHub App 方式，PAT 仅作后备。适合需要集中查看 GitHub 组织安全检查状态的自托管使用者。",
+   "highlights": [
+    "包含六项核心安全检查（MFA 强制、分支保护、密钥扫描、Dependabot 告警、代码扫描告警、默认分支强推保护）及可选仓库卫生检查，生成安全评分并附整改指引",
+    "特权维护任务支持 dry-run 与追加式审计日志，任务经 Postgres 队列（SELECT … FOR UPDATE SKIP LOCKED）分发，worker 可多副本运行",
+    "凭据以 Fernet 加密存储，支持 GitHub App 短期 installation token 及 JWT + 组织角色 RBAC 授权"
+   ],
+   "use_cases": [
+    "集中查看 GitHub 组织/仓库的安全检查状态与评分趋势",
+    "运行带审计记录的维护任务，如清理 GitHub Actions 缓存",
+    "自托管部署，通过 Docker Compose 快速启动并连接 GitHub 组织"
+   ]
+  },
+  "sha": "f30665ed42ee",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb70fa802bc0": {
+  "identity": {
+   "one_liner": "基于 wxWidgets 与 wxSQLite3 的跨平台 SQLite 数据库浏览与 SQL 客户端工具",
+   "review": "wxSQLitePlus 是一个跨平台开源 SQLite 数据库浏览器和 SQL 客户端，提供语法高亮的 SQL 工作区、语句与脚本执行、查询计划查看、表格结果导出 CSV，并可浏览表、视图、外键、索引、触发器与 DDL。项目还支持通过 wxSQLite3 编解码器打开加密数据库及 MMEX .mmb/.emb 文件，密钥不保存。采用 GPL v3 许可，通过 CMake（3.27+）、C++20 编译器与 wxWidgets 3.3 构建。",
+   "highlights": [
+    "SQL 工作区支持语法高亮、一键执行语句与脚本、查询计划检查、标签页结果展示，网格结果可复制或导出为 UTF-8 CSV",
+    "可按列、数据、外键、索引、触发器、DDL 浏览表和视图，支持筛选排序、BLOB 值检查及跨附加数据库搜索对象",
+    "支持 wxSQLite3 编解码器打开加密 SQLite 数据库及 MMEX .mmb/.emb 文件，密钥不被保存"
+   ],
+   "use_cases": [
+    "浏览和查询本地 SQLite 数据库，查看表结构、数据、索引与触发器等对象",
+    "打开使用 wxSQLite3 加密的数据库，包括 MMEX 的 .mmb/.emb 加密文件",
+    "执行 SQL 脚本并检查查询计划，导出查询结果为 CSV"
+   ]
+  },
+  "sha": "eb70fa802bc0",
+  "source": "readme",
+  "generated_at": "2026-11-13",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -19040,5 +19040,668 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "54dc5472affd+2": {
+  "fn": "christ008/shortener",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "CI",
+     "Quality gate status"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    15,
+    4,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "> **Live: <https://shortener.codes>**, a small demo with no promise of availability. Follow a link: <https://shortener.codes/RQM4j56>. See CLOUD.md."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    18,
+    16,
+    18
+   ],
+   [
+    "replace",
+    18,
+    21,
+    18,
+    19,
+    [
+     " Grafana dashboard of the service at 1,500 requests a second"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    26,
+    19,
+    24
+   ],
+   [
+    "replace",
+    26,
+    27,
+    24,
+    25,
+    [
+     "Links are created by programs, not in a browser: there is no web page to sign in to yet (docs/UI.md plans one)."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    25,
+    26
+   ],
+   [
+    "replace",
+    28,
+    29,
+    26,
+    27,
+    [
+     "|Role|Is|Can|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    27,
+    28
+   ],
+   [
+    "replace",
+    30,
+    33,
+    28,
+    31,
+    [
+     "|**Client**|a program or script, usually a developer's, registered with the service and holding its own key|create links with a generated or a chosen code, list and read them, see their click counts, disable them. Only its own: another client's link answers `404`|",
+     "|**Visitor**|anyone with a short link, with no key or account|follow it: `GET /{code}` redirects|",
+     "|**Administrator**|a client with the administrator scope, or a person with a second factor|read and disable any client's links, to take one down|"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    31,
+    32
+   ],
+   [
+    "replace",
+    34,
+    35,
+    32,
+    33,
+    [
+     "A developer becomes a client with an invitation from the operator, in one command (DEPLOY.md)."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    39,
+    33,
+    37
+   ],
+   [
+    "replace",
+    39,
+    40,
+    37,
+    38,
+    [
+     " so a browser does not keep following a link after a takedown."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    38,
+    39
+   ],
+   [
+    "replace",
+    41,
+    42,
+    39,
+    40,
+    [
+     " path: ADR 0037)."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    40,
+    41
+   ],
+   [
+    "replace",
+    43,
+    44,
+    41,
+    42,
+    [
+     " the cache TTL (30 s)."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    52,
+    42,
+    50
+   ],
+   [
+    "replace",
+    52,
+    56,
+    50,
+    51,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    60,
+    51,
+    55
+   ],
+   [
+    "replace",
+    60,
+    61,
+    55,
+    56,
+    [
+     "|Property|How|Where|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    56,
+    57
+   ],
+   [
+    "replace",
+    62,
+    69,
+    57,
+    64,
+    [
+     "|A stolen token is useless|DPoP-bound tokens; HMAC nonces that any instance can check|SECURITY.md, ADR 0032|",
+     "|A code is never reused, even by a compromised application|the application's database role cannot delete a row or change a code|Roles and migrations|",
+     "|Redirects survive a database outage, for a bounded time|a cache of active links with `stale-if-error`; readiness leaves the database out|Redirect cache, ADR 0012|",
+     "|A client sees only its own links|ownership checked in the service; another client's link is `404`|SECURITY.md|",
+     "|Production refuses an unsafe configuration|no target-host decision, DPoP off or no nonce secret stops the start|Invariants|",
+     "|One JVM image, at least 12,000 req/s on 2 CPUs behind the edge|Liberica Lite 25, G1, compact object headers|Performance, ADR 0036|",
+     "|Each invariant has a test|the test that fails without it|Invariants|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    83,
+    64,
+    78
+   ],
+   [
+    "replace",
+    83,
+    85,
+    78,
+    80,
+    [
+     "docs/OPERATING.md. Metrics, dashboard and traces: `docker compose --profile observability up -d`, then",
+     "<http://localhost:3000/d/shortener/shortener> (OBSERVABILITY.md)."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    89,
+    80,
+    84
+   ],
+   [
+    "replace",
+    89,
+    90,
+    84,
+    85,
+    [
+     "your own with `java deploy/keycloak/dpop/DpopClient.java register NAME INVITATION KEY_FILE` (DEPLOY.md). With its key file:"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    98,
+    85,
+    93
+   ],
+   [
+    "replace",
+    98,
+    99,
+    93,
+    94,
+    [
+     "|Request|Scope|Success|Errors|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    94,
+    95
+   ],
+   [
+    "replace",
+    100,
+    107,
+    95,
+    102,
+    [
+     "|`POST /api/short-links`|`shortlinks:create`|`201` with the link and its `Location`. The code is generated, and `shortUrl` is the URL to share|`400`|",
+     "|`PUT /api/short-links/{code}`|`shortlinks:create` and `shortlinks:claim`|for a code you choose: `201`, or `200` when you already have this link, so repeating is safe|`400`; `409` when the code is reserved, taken, or yours for another target|",
+     "|`GET /api/short-links?page&size&sort`|`shortlinks:read`|`200` with `items`, `page`, `size`, `hasNext`, `totalItems` and `totalPages`. Sort by `createdAt` or `shortCode`|none of its own|",
+     "|`GET /api/short-links/{code}`|`shortlinks:read`|`200`|`404`|",
+     "|`GET /api/short-links/{code}/stats?granularity&from&to`|`shortlinks:read`|`200` with the clicks of the link as a series of hours or days, their total, and where its visitors came from and which language they asked for. Approximate (ADR 0037)|`400` for a window it cannot answer; `404`|",
+     "|`PATCH /api/short-links/{code}` with `{\"disabled\": true}`|`shortlinks:delete`|`200` with the link, disabled. Repeating is safe|`400`; `404`|",
+     "|`GET /{code}`|none|`302`|`404`; `410` when disabled|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    111,
+    102,
+    106
+   ],
+   [
+    "replace",
+    111,
+    112,
+    106,
+    107,
+    [
+     "- Contract: docs/openapi.yaml. A test fails if it drifts from the code."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    117,
+    107,
+    112
+   ],
+   [
+    "replace",
+    117,
+    118,
+    112,
+    113,
+    [
+     "docs/REFERENCE.md#configuration."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    122,
+    113,
+    117
+   ],
+   [
+    "replace",
+    122,
+    123,
+    117,
+    118,
+    [
+     "- **Mutation score:** 92% on the logic of the `shortlink` and `security` modules (249 mutants). INTERNALS.md#testing"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    118,
+    119
+   ],
+   [
+    "replace",
+    124,
+    125,
+    119,
+    120,
+    [
+     " SECURITY.md, THREAT_MODEL.md"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    120,
+    121
+   ],
+   [
+    "replace",
+    126,
+    129,
+    121,
+    124,
+    [
+     " The figure is for the cache, not the database. Method and a warning to read before load testing:",
+     " INTERNALS.md#performance.",
+     "- **Decisions:** one ADR each, with its cost. docs/adr/"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    145,
+    124,
+    140
+   ],
+   [
+    "replace",
+    145,
+    146,
+    140,
+    141,
+    [
+     "|Document|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    141,
+    142
+   ],
+   [
+    "replace",
+    147,
+    158,
+    142,
+    153,
+    [
+     "|OPERATING.md|develop, rehearse production, a go-live checklist, call the API, troubleshoot|",
+     "|REFERENCE.md|every configuration key, secret file and script|",
+     "|DEPLOY.md|production stack runbook: first deploy, updates, Keycloak, backups|",
+     "|OBSERVABILITY.md|metrics, dashboard, traces, alerts, logs|",
+     "|INTERNALS.md|request flows, database, cache, image, deployment, tests and measurements|",
+     "|DESIGN.md|invariants, modules, types, conventions|",
+     "|SECURITY.md|the controls: filter chain, tokens, DPoP, scopes, rate limits|",
+     "|THREAT_MODEL.md|STRIDE, OWASP, the open findings, and the risks accepted|",
+     "|adr/|decision records: why each choice, and what it costs|",
+     "|CLOUD.md, UI.md|the public instance: shape, setup, cost, status; a plan for a web UI (nothing built)|",
+     "|openapi.yaml|API contract|"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    163,
+    153,
+    158
+   ],
+   [
+    "replace",
+    163,
+    164,
+    158,
+    159,
+    [
+     "Built with Claude Code since 2026-09-19; about three in four commits name Claude as co-author."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    170,
+    159,
+    165
+   ],
+   [
+    "replace",
+    170,
+    172,
+    165,
+    166,
+    [
+     "Copyright 2026 Christian Tejeda. Licensed under the Apache License, Version 2.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-13"
+ },
+ "fc2b8291a9bc+2": {
+  "fn": "Bhavya027/ai-interview-platform",
+  "clean_ver": "2",
+  "raw_lines": 24,
+  "ops": [
+   [
+    "equal",
+    0,
+    24,
+    0,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "|Part|Technology|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    35,
+    26,
+    35,
+    [
+     "|Backend|Node.js, Express 5|",
+     "|Database|MySQL (local), TiDB Cloud (online), Sequelize|",
+     "|Real time|Socket.io|",
+     "|APIs|REST and GraphQL (GraphQL Yoga)|",
+     "|AI|Google Gemini API (`@google/genai`)|",
+     "|Email|Nodemailer, Brevo SMTP|",
+     "|Frontend|HTML, CSS, JavaScript|",
+     "|Testing and CI|Jest, GitHub Actions|",
+     "|Hosting|Render|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    50,
+    35,
+    50
+   ],
+   [
+    "replace",
+    50,
+    55,
+    50,
+    51,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    51,
+    52
+   ],
+   [
+    "replace",
+    56,
+    57,
+    52,
+    53,
+    [
+     " Optional, only for the booking email:"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    64,
+    53,
+    60
+   ],
+   [
+    "replace",
+    64,
+    65,
+    60,
+    61,
+    [
+     " For an online database such as TiDB Cloud, also set `DB_SSL=true`."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    69,
+    61,
+    65
+   ],
+   [
+    "replace",
+    69,
+    70,
+    65,
+    66,
+    [
+     " Open http://localhost:3000. The tables are created automatically on the first run."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    79,
+    66,
+    75
+   ],
+   [
+    "replace",
+    79,
+    80,
+    75,
+    76,
+    [
+     "|Method|Path|Who|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    76,
+    77
+   ],
+   [
+    "replace",
+    81,
+    91,
+    77,
+    87,
+    [
+     "|POST|/api/auth/register|Anyone|Create an account|",
+     "|POST|/api/auth/login|Anyone|Log in, get a JWT|",
+     "|GET|/api/auth/me|Logged in|Current user|",
+     "|POST|/api/interviews|Interviewer|Create a slot|",
+     "|GET|/api/interviews/available|Candidate|Open slots|",
+     "|GET|/api/interviews/my|Both|My interviews|",
+     "|POST|/api/interviews/:id/book|Candidate|Book a slot|",
+     "|POST|/api/interviews/:id/feedback|Interviewer|Generate or regenerate the AI review|",
+     "|GET|/api/interviews/:id/result|Members|Saved code, score and feedback|",
+     "|POST|/graphql|Logged in|me, myInterviews, interview, availableSlots, stats|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    98,
+    87,
+    94
+   ],
+   [
+    "replace",
+    98,
+    107,
+    94,
+    95,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    114,
+    95,
+    102
+   ]
+  ],
+  "at": "2026-11-13"
  }
 }
