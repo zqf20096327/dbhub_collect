@@ -36,7 +36,7 @@ Clubedge Starter is built the other way around. Every service is an optional mod
 
 Every combination in the CI matrix is generated as a real project and runs its full pipeline: install, lint, typecheck, unit tests, browser tests against real local services, a production build, and a smoke test.
 
-To try the mobile app on an Android phone, download [clubedge-demo.apk](https://github.com/Clubedge/clubedge-starter/releases/latest/download/clubedge-demo.apk) from the latest release and open it, allowing installs from unknown sources when Android asks. It is the app's demo build, with sample data that stays on the phone and no server behind it. iPhones install apps only from the App Store or TestFlight, so there is no file for them.
+To try the mobile app on an Android phone, download [clubedge-demo.apk](https://github.com/Clubedge/clubedge-starter/releases/latest/download/clubedge-demo.apk) from the latest release and open it, allowing installs from unknown sources when Android asks. It is the app's demo build, with sample data that stays on the phone and no server behind it. Once a newer release is out, it asks you to update, with a link to the new release's APK. iPhones install apps only from the App Store or TestFlight, so there is no file for them.
 
 To try the native app, download [clubedge-native-demo.apk](https://github.com/Clubedge/clubedge-starter/releases/latest/download/clubedge-native-demo.apk) the same way. It is the native app of a project without a website, and you sign up and sign in for real against that project's API. The API runs on Render's free plan, so after a quiet spell its first answer takes about a minute. Use a password you don't use elsewhere: the demo's accounts can be deleted at any time.
 
@@ -150,6 +150,8 @@ Pick modules when you create a project, and change them later with `pnpm clubedg
 | Deploy        | `docker`, `fly`, `railway`, `render`, `vercel`, `netlify`, `cloudflare` | `docker`   |
 
 A module you leave out takes its packages, provider SDK, environment variables, documentation, and lockfile entries with it.
+
+Each option has a support level, Stable, Beta, or Experimental, earned from what CI runs; from create-clubedge-app 0.49.0, the CLI warns before you choose one below Stable. [STABILITY.md](STABILITY.md) lists them with their evidence, and says what stays compatible between releases, how an option is retired, and what an upgrade promises.
 
 `cloudflare` deploys React + Vite with its API (`--framework vite` with `--api hono` or `--api fastapi`): the website as static files, and the API's image as a container. Next.js and TanStack Start would each need a Cloudflare adapter, which the Starter does not have, so the CLI refuses the option with them.
 
@@ -450,6 +452,8 @@ Change the project later:
 
 These commands merge the change into your code instead of overwriting it: files you never touched are updated, your edits are kept, and lines you both changed get conflict markers, listed per file afterward. Commit first, because they need a clean Git tree so that `git diff` shows the result. Add `--dry-run` to preview a change.
 
+What an upgrade promises, how ready each module option is, and how an option is retired: [Stability and compatibility](https://github.com/Clubedge/clubedge-starter/blob/main/STABILITY.md).
+
 ## Documentation
 
 | I want to                                   | Read                                          |
@@ -559,7 +563,9 @@ Each phase ends with a Starter release and a create-clubedge-app release pinned 
 | v0.28.0            | The native app with Expo, and projects without a website                                       |
 | v0.29.0            | An update policy for installed apps, and a new design for the native app                       |
 | v0.30.0            | Shipping the mobile apps to stores, push notifications, and over-the-air updates               |
-| next               | Proposed: real-time, Cloudflare, two-step verification, then organizations and teams           |
+| v0.31.0            | Deploying to Cloudflare, downloads by byte range, and browser tests in three engines           |
+| v0.32.0            | Support levels and a stability policy, and upgrade pull requests from the CLI's report         |
+| next               | Proposed: real-time, two-step verification, then organizations and teams                       |
 
 ## Community
 

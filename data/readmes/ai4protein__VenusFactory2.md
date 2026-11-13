@@ -111,6 +111,7 @@ hardware requirements, component selection and health checks, and the
 [service guide](docs/architecture/services.md) for online or multi-process deployment.
 
 For PBS clusters, see [online/local deployment](docs/deployment-pbs.md). The job supervises both services, keeps their data separate and cleans up its processes on exit.
+For local research, connect a [PBS or Slurm cluster](docs/local-clusters.md) through the Scientist CLI.
 
 ### Online or local?
 

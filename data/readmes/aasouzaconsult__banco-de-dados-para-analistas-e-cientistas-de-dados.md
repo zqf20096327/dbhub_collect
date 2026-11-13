@@ -1,82 +1,193 @@
-# Banco de Dados
+# Banco de Dados para Analistas e Cientistas de Dados
 
-Um banco de dados (sua abreviatura é BD, em inglês DB, database) é uma entidade na qual é possível armazenar dados de maneira estruturada e com a menor redundância possível. Estes dados devem poder ser utilizados por programas e por diferentes tipos de usuários (usuários finais, analistas, cientistas, etc). Assim, a noção básica de dados é acoplada geralmente a uma rede, a fim de poder pôr, conjuntamente, estas informações, daí o nome banco. Fala-se, geralmente, de sistema de informação para designar toda a estrutura que reúne os meios organizados para poder compartilhar dados. ([mais...](https://blogdozouza.wordpress.com/dados/estruturados/banco-de-dados/))
+**Aprenda a consultar dados e transformar perguntas de negócio em análises com SQL.**
 
-# SQL
-Essa habilidade consiste na capacidade de consultar dados contidos em tabelas (não apenas em tabelas) nas mais diversas Fontes de Dados ([consulte na seção Classificação de dados (Data Classification)](https://medium.com/blog-do-zouza/dos-dados-at%C3%A9-a-tomada-de-decis%C3%A3o-534f61abd3cb)). Em grande parte das vezes, estas consultas, buscam atender alguma necessidade do negócio, da empresa na qual esta trabalhando!
-Normalmente utilizando a linguagem padrão SQL (Structured Query Language). A Linguagem SQL, é subdivida em alguns tipos de linguagem, são elas:
-- **DDL (Data Definition Language)** — principais comandos: CREATE DATABASE | DROP DATABASE | ALTER DATABASE | CREATE TABLE | ALTER TABLE | DROP TABLE | TRUNCATE | RENAME
-- **DML (Data Manipulation Language)** — principais comandos: INSERT | UPDATE | DELETE
-- **DCL (Data Control Language)** — principais comandos: GRANT | REVOKE
-- **TCL (Transaction Control Language)** — principais comandos: ROLLBACK | COMMIT | SAVE POINT
-- **DQL (Data Query Language)** — principais comandos: SELECT (esse aqui será nosso foco) — observação, na literatura também pode ser que encontrem comandos SELECT dentro de DML. ([mais...](https://medium.com/@aasouzaconsult/sql-para-an%C3%A1lise-de-dados-2183f746f2e1))
+Este repositório reúne materiais de aula, e-books, scripts e um projeto prático de análise de vendas. O foco principal é SQL com MySQL, com materiais complementares de MongoDB, integração com R e Spark SQL.
 
-# Ferramentas utilizadas
-- [MySQL - Documentação](https://dev.mysql.com/doc/)
-- [MySQL - Download](https://dev.mysql.com/downloads/mysql/)
-- [MySQL - Instalação Passo a Passo](https://dicasdeprogramacao.com.br/como-instalar-o-mysql-no-windows/)
-- [MySQL - Executar comandos de exemplo direto no navegador](https://www.w3schools.com/mysql/mysql_examples.asp)
-- [Modelagem do BD](https://github.com/aasouzaconsult/banco-de-dados-para-analistas-e-cientistas-de-dados/blob/main/sales.z/1.%20Modelagem_BD_ERP.png)
-- [Ambiente de BD - script](https://github.com/aasouzaconsult/banco-de-dados-para-analistas-e-cientistas-de-dados/blob/main/sales.z/1.%20Script_Criacao_BD_ERP.sql)
+O projeto **sales.z** simula uma demanda de consultoria: compreender uma base de vendas, construir consultas e documentar respostas para o cliente.
 
-# Projeto
+## Navegação
 
-**Análise de Dados utilizando SQL**
------------------------------------
-Somos a empresa: *data.z - consultoria em dados*
+- [Para quem é este material](#para-quem-é-este-material)
+- [O que você vai praticar](#o-que-você-vai-praticar)
+- [Materiais do repositório](#materiais-do-repositório)
+- [Como começar](#como-começar)
+- [SQL: principais grupos de comandos](#sql-principais-grupos-de-comandos)
+- [Projeto prático: análise de vendas da sales.z](#projeto-prático-análise-de-vendas-da-salesz)
+- [Como documentar a entrega](#como-documentar-a-entrega)
+- [Referências e ferramentas](#referências-e-ferramentas)
+- [Sobre o autor](#sobre-o-autor)
 
-A empresa **sales.z** nos contratou para realizarmos uma consultoria em seus dados de venda. Nos passaram um [banco de dados de amostra](https://github.com/aasouzaconsult/banco-de-dados-para-analistas-e-cientistas-de-dados/blob/main/sales.z/1.%20Script_Criacao_BD_ERP.sql) e como sua [modelagem relacional](https://github.com/aasouzaconsult/banco-de-dados-para-analistas-e-cientistas-de-dados/blob/main/sales.z/1.%20Modelagem_BD_ERP.png), contendo alguns dados fictícios, mas que obedece a estrutura real do banco de dados deles em produção.
+## Para quem é este material
 
-Nos informaram por e-mail, que estão realizando um estudo e gostaria que nós criássemos algumas consultas para auxiliar neste processo, consultas para responder as seguintes questões: 
+- Estudantes que estão começando a trabalhar com bancos de dados.
+- Analistas que precisam consultar, relacionar e resumir dados para responder a demandas de negócio.
+- Cientistas de dados que desejam fortalecer a etapa de obtenção e exploração dos dados.
+- Professores e pessoas que buscam um caso prático para estudar SQL.
 
-*Observação 1: não alterar nada na base de dados, apenas nas consultas mesmo! (uma consulta por questão)*
+Conhecimentos básicos de tabelas, linhas e colunas ajudam no início. Os materiais de fundamentos podem ser usados como apoio durante os exercícios.
 
-*Observação 2: qualquer dúvida, pode procurar diretamente o cliente - Alex Souza*
+## O que você vai praticar
 
-Fase 1:
--------
-- Quantidade de dependentes
-- Quantidade de dependentes por sexo
-- Quantidade de clientes da região sul
-- Uma descrição breve dos produtos da empresa (codigo, nome, tipo)
-- Quais os 5 produtos mais vendidos, em quantidade, de 2021?
-- Nome, Nome em Maiúsculo e Nome em Minúsculo, dos vendedores do sexo feminino
-- Nome e idade de todos os dependentes, ordenados do mais velho para o mais novo
-- Somatório do Valor Total de Vendas (concluídas e não deletadas) por Estado
-- Somatório de Unidades Vendidas (concluídas e não deletadas) por Produto
-- Média do Valor Total de Vendas por Estado
-- Nome dos clientes que compram o produto 1
-- Quantidade mínima e qual o respectivo produto
-- Uma descrição detalhada dos produtos da empresa (codigo, nome, tipo, Qtd em Estoque)
-- Nome dos Vendedores que realizaram determinadas Vendas (Codigo da Venda, Data da Venda, Produto e nome do vendedor)
-- Relação com o nome dos vendedores e seus respectivos filhos (dependentes - nome e data de nascimento) -- montar uma view com estes dados
-- Criar uma view com informações de vendas, produto, estoque, cliente, vendedores (apenas concluídas e não deletadas)
-- View de quantidade de vendas por canal
+- Interpretar um modelo relacional e identificar como as tabelas se conectam.
+- Selecionar, filtrar e ordenar registros.
+- Relacionar dados com `JOIN`.
+- Calcular contagens, somas, médias e outros indicadores.
+- Trabalhar com textos, datas e expressões condicionais.
+- Combinar resultados e criar views para organizar consultas.
+- Enriquecer uma análise com uma fonte de dados complementar.
+- Documentar o SQL, os resultados e as regras adotadas.
 
-Fase 2:
--------
-- Filtrar a tabela de vendedores pelo vendedor de nome: Vendedor 6
-- Uma consulta que retorne o nome dos dependentes, mas quando for o dependente de código 5, retorne o seu nome. (Usando IF ou CASE)
-- Retornar todas as vendas entre os dias 07/05/2019 a 03/03/2021 unidas com as todas as vendas entre os dias 11/09/2011 a 03/09/2012
-- Retornar o nome do produto (apenas os 5 primeiros caracteres) e a quantidade de venda com 10 dígitos, completando com zeros a esquerda.
-- Qual o produto que tem a maior quantidade de vendas no canal: Ecommerce?
-- Existiram vendas para produtos em MVP - validação? Quais foram?
-- Quantas vendas encontram-se deletadas logicamente?
-- Quantas vendas encontram-se canceladas?
-- Na tabela de dependentes, temos o código da Escola que o dependente estuda, precisamos além do códido da escola (INEP), saber o nome da escola de cada um dos dependentes estudam. (planilha com nome da escola em [anexo](https://github.com/aasouzaconsult/banco-de-dados-para-analistas-e-cientistas-de-dados/blob/main/sales.z/Censo2020_inep.csv))
+## Materiais do repositório
 
-Entrega do Projeto para o cliente:
-----------------------------------
-A entrega do projeto para o cliente fica a seu critério, normalmente aqui na *data.z* utilizamos o [GitHub](https://github.com/aasouzaconsult/banco-de-dados-para-analistas-e-cientistas-de-dados/blob/main/sales.z/modelo_doc.md) para documentar nossas entregas, mas fique a vontade para utilizar a ferramenta que mais tem familiaridade.
+| Material | Conteúdo |
+| --- | --- |
+| [Fundamentos de SQL](Material%20da%20Aula/Fundamentos%20de%20SQL.pdf) | Material de aula em PDF. |
+| [E-book SQL](Ebook%20-%20SQL/SQL.pdf) | Material de apoio para estudo da linguagem. |
+| [SQL Ilustrado](Ebook%20-%20SQL/SQL%20Ilustrado.pdf) | Material complementar em PDF. |
+| [Exemplos de SQL](scripts/1.%20SQL/SQL.sql) e [modelo](scripts/1.%20SQL/Modelo.png) | Script didático e modelagem da base de aula. |
+| [Exemplos de NoSQL](scripts/2.%20noSQL/noSQL.txt) | Comandos e referências de MongoDB. |
+| [Integração de R com MySQL](scripts/3.%20R/R.R) | Conexão, consultas e uso dos resultados em R. |
+| [Integração de R com NoSQL](scripts/3.%20R/R_noSQL.R) | Exemplo complementar de integração. |
+| [Spark SQL e PySpark](scripts/4.%20Spark%20SQL/) | Notebook de instalação do PySpark no Google Colab e arquivo de dados. |
+| [Projeto sales.z](sales.z/) | Script de criação da base ERP, modelo relacional, dados complementares e exemplo de documentação. |
 
-**Data**: *08/05/2022 até as 23:59hs*
+> A base dos exemplos de aula (`db_aula`) e a base do projeto (`ERP`) são diferentes. Use o script correspondente à atividade que estiver realizando.
 
------------
-**Alex Souza**
-- [Portfólio de Serviços](https://github.com/aasouzaconsult/Cientista-de-Dados)
-- [Blog](https://medium.com/blog-do-zouza)
-- [Linkedin](https://www.linkedin.com/in/alex-souza/)
-- [Instagram](https://www.instagram.com/alexsouzamsc/)
+## Como começar
 
-------
-![github-contribution-grid-snake](https://user-images.githubusercontent.com/29084827/164712340-6b03015f-a428-4731-b1b9-a5605de203b2.svg)
+### 1. Prepare o ambiente
+
+Para o projeto principal, utilize uma instalação do [MySQL](https://dev.mysql.com/downloads/mysql/) e um cliente SQL, como o [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
+
+MongoDB, R e PySpark são necessários apenas para os respectivos materiais complementares.
+
+### 2. Conheça a base do projeto
+
+Abra o [modelo relacional da sales.z](sales.z/1.%20Modelagem_BD_ERP.png) e consulte o [script de criação e carga](sales.z/1.%20Script_Criacao_BD_ERP.sql).
+
+O script cria o banco `ERP` e tabelas de vendas, vendedores, dependentes e estoque de produtos. As vendas também contêm informações de clientes, produtos e canais de venda.
+
+### 3. Crie a base em um ambiente de estudo
+
+Baixe o script, abra-o no cliente SQL, revise os comandos e execute a criação das tabelas e a carga dos dados em uma instância de estudo.
+
+O script usa variações de maiúsculas e minúsculas nos nomes das tabelas. Se o seu ambiente diferenciar esses nomes, padronize as referências antes de executá-lo.
+
+Após a carga, selecione a base e confira as tabelas:
+
+```sql
+USE ERP;
+SHOW TABLES;
+```
+
+### 4. Resolva as perguntas e documente as respostas
+
+Comece pela Fase 1 e avance para a Fase 2. Para cada questão, registre a consulta, o resultado e uma breve interpretação.
+
+Consulte os exemplos de aula quando precisar revisar um comando. Para os materiais em R, ajuste os parâmetros de conexão ao seu ambiente.
+
+## SQL: principais grupos de comandos
+
+SQL (*Structured Query Language*) permite definir estruturas, consultar e manipular dados, controlar acessos e gerenciar transações.
+
+| Grupo | Finalidade | Exemplos |
+| --- | --- | --- |
+| **DDL — Data Definition Language** | Definir e alterar estruturas. | `CREATE`, `ALTER`, `DROP`, `TRUNCATE` |
+| **DML — Data Manipulation Language** | Inserir, atualizar e excluir registros. | `INSERT`, `UPDATE`, `DELETE` |
+| **DQL — Data Query Language** | Consultar dados — foco principal do projeto. | `SELECT` |
+| **DCL — Data Control Language** | Controlar permissões de acesso. | `GRANT`, `REVOKE` |
+| **TCL — Transaction Control Language** | Controlar transações. | `COMMIT`, `ROLLBACK`, `SAVEPOINT` |
+
+A classificação pode variar entre referências: algumas incluem `SELECT` em DML. A sintaxe e os recursos disponíveis também dependem do sistema de banco de dados utilizado.
+
+## Projeto prático: análise de vendas da sales.z
+
+### Contexto
+
+Você faz parte da **data.z — consultoria em dados**. A empresa fictícia **sales.z** contratou sua equipe para analisar os dados de vendas e apoiar um estudo sobre clientes, produtos, vendedores e canais.
+
+O cliente disponibilizou uma base de amostra com dados fictícios, estruturada para representar um cenário de ERP.
+
+### Arquivos do projeto
+
+- [Modelo relacional](sales.z/1.%20Modelagem_BD_ERP.png).
+- [Script de criação e carga da base ERP](sales.z/1.%20Script_Criacao_BD_ERP.sql).
+- [Dados de escolas — Censo Escolar 2020/INEP](sales.z/Censo2020_inep.csv).
+- [Exemplo de documentação da entrega](sales.z/modelo_doc.md).
+
+![Modelo relacional da base ERP utilizada no projeto sales.z](sales.z/1.%20Modelagem_BD_ERP.png)
+
+### Orientações
+
+- Elabore uma consulta por questão.
+- Preserve os registros e a estrutura das tabelas durante a análise. A criação de views faz parte dos exercícios que a solicitam.
+- Respeite os filtros de vendas concluídas e não deletadas quando indicados.
+- Confira os valores existentes na base antes de definir filtros de status, sexo, canal ou exclusão lógica.
+- Quando uma pergunta admitir mais de uma interpretação, documente a regra utilizada.
+- Para o enriquecimento com dados do INEP, importe o CSV para uma tabela auxiliar no ambiente de estudo, preservando os dados originais do ERP.
+- Em uma atividade orientada, alinhe dúvidas de negócio com o professor ou responsável pelo papel de cliente.
+
+### Fase 1 — consultas, agregações, relacionamentos e views
+
+1. Calcular a quantidade de dependentes.
+2. Calcular a quantidade de dependentes por sexo.
+3. Calcular a quantidade de clientes da região Sul.
+4. Apresentar uma descrição breve dos produtos: código, nome e tipo.
+5. Identificar os cinco produtos mais vendidos em quantidade no ano de 2021.
+6. Apresentar o nome original, em maiúsculas e em minúsculas dos vendedores do sexo feminino.
+7. Apresentar o nome e a idade de todos os dependentes, do mais velho para o mais novo.
+8. Calcular o valor total de vendas concluídas e não deletadas por estado.
+9. Calcular o total de unidades vendidas, considerando vendas concluídas e não deletadas, por produto.
+10. Calcular a média do valor total de vendas por estado.
+11. Listar os nomes dos clientes que compram o produto de código 1.
+12. Identificar a quantidade mínima e o respectivo produto, explicitando a medida considerada.
+13. Apresentar uma descrição detalhada dos produtos: código, nome, tipo e quantidade em estoque.
+14. Relacionar os vendedores às vendas realizadas, apresentando código da venda, data da venda, produto e nome do vendedor.
+15. Criar uma view com os nomes dos vendedores e seus respectivos filhos/dependentes, incluindo nome e data de nascimento dos dependentes.
+16. Criar uma view com informações de vendas, produtos, estoque, clientes e vendedores, considerando apenas vendas concluídas e não deletadas.
+17. Criar uma view com a quantidade de vendas por canal.
+
+### Fase 2 — condicionais, combinação de resultados e enriquecimento
+
+1. Filtrar a tabela de vendedores pelo nome `Vendedor 6`.
+2. Retornar os nomes dos dependentes, substituindo o nome do dependente de código 5 pelo seu próprio nome no resultado da consulta, usando `IF` ou `CASE`.
+3. Unir as vendas do período de **07/05/2019 a 03/03/2021** às vendas do período de **11/09/2011 a 03/09/2012**.
+4. Retornar os cinco primeiros caracteres do nome do produto e a quantidade vendida formatada com dez dígitos, preenchendo com zeros à esquerda.
+5. Identificar o produto com a maior quantidade vendida no canal `Ecommerce`.
+6. Verificar se existem vendas de produtos com status `MVP - validação` e identificar quais são.
+7. Calcular quantas vendas estão deletadas logicamente.
+8. Calcular quantas vendas estão canceladas.
+9. Relacionar o código INEP da escola de cada dependente ao nome da escola, utilizando o [CSV do Censo Escolar 2020](sales.z/Censo2020_inep.csv).
+
+## Como documentar a entrega
+
+A entrega pode ser organizada no GitHub ou em outra ferramenta de documentação. O objetivo é permitir que outra pessoa compreenda a pergunta, confira a consulta e interprete o resultado.
+
+Para cada questão, registre:
+
+1. **Pergunta de negócio:** o que precisa ser respondido.
+2. **Consulta SQL:** código utilizado, com formatação legível.
+3. **Resultado:** tabela, resumo ou captura de tela.
+4. **Interpretação:** o que o resultado informa ao cliente.
+5. **Regras adotadas:** filtros, tratamento de duplicidades, datas de referência e outras decisões relevantes.
+
+O [modelo de documentação](sales.z/modelo_doc.md) serve como referência de formato. Revise e adapte as consultas de exemplo à pergunta e ao esquema da base utilizada.
+
+## Referências e ferramentas
+
+- [MySQL — documentação oficial](https://dev.mysql.com/doc/).
+- [MySQL — download](https://dev.mysql.com/downloads/mysql/).
+- [MySQL Workbench — download](https://dev.mysql.com/downloads/workbench/).
+- [Exemplos de MySQL no navegador — W3Schools](https://www.w3schools.com/mysql/mysql_examples.asp).
+- [MongoDB — documentação oficial](https://www.mongodb.com/docs/).
+- [Conceitos de banco de dados — Blog do Zouza](https://blogdozouza.wordpress.com/dados/estruturados/banco-de-dados/).
+- [SQL para análise de dados — Alex Souza](https://medium.com/@aasouzaconsult/sql-para-an%C3%A1lise-de-dados-2183f746f2e1).
+- [Dos dados até a tomada de decisão — Alex Souza](https://medium.com/blog-do-zouza/dos-dados-at%C3%A9-a-tomada-de-decis%C3%A3o-534f61abd3cb).
+- [Formatação de documentos no GitHub](https://docs.github.com/pt/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+
+## Sobre o autor
+
+**Alex Souza** — materiais e projetos voltados ao ensino e à aplicação de dados.
+
+[Portfólio de projetos](https://github.com/aasouzaconsult/portfolio-dados) · [Blog](https://medium.com/blog-do-zouza) · [LinkedIn](https://www.linkedin.com/in/alex-souza/) · [Instagram](https://www.instagram.com/alexsouzamsc/)

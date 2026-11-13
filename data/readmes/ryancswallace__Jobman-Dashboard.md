@@ -1,4 +1,10 @@
-# Jobman Dashboard
+<!-- markdownlint-disable MD041 -->
+<!-- markdownlint-disable MD033 -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dashboard.svg">
+  <img alt="Jobman Dashboard" src="assets/logo-dark-dashboard.svg" width="420">
+</picture>
+<!-- markdownlint-enable MD033 -->
 
 Download the [latest stable release](https://github.com/ryancswallace/Jobman-Dashboard/releases/latest)
 and use the [release process](RELEASE.md) to verify its source and artifacts.
@@ -14,7 +20,7 @@ Lab evidence identifies the exact tested revisions and limitations.
 
 ## Development
 
-Use Go **1.26.10** (`go.version`), Node **26.5.1** and the committed npm lockfile. Full Xcode is required for the iPhone simulator and physical-device builds; the native core is also a Swift package.
+Use Go **1.26.11** (`go.version`), Node **26.5.1** and the committed npm lockfile. Full Xcode is required for the iPhone simulator and physical-device builds; the native core is also a Swift package.
 
 ```sh
 make web

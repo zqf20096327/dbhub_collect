@@ -193,7 +193,7 @@ v4.6.0 targets the LongMemEval categories a top-k retriever alone cannot win: mu
 | HTTP API | Multi-threaded REST server (optional) | No | REST + MCP + leases + signals | Cloud hosted | REST + GraphQL |
 | Memory types | 13 types, importance 1-5 | Wings/Rooms hierarchy | Tier-based (working / short / long / archival) | 1 type | Episodic / semantic |
 | MCP tools | 41 tools | 29 tools | **65 tools** | N/A | Limited MCP server |
-| Hooks / event capture | SessionStart auto-recall + Stop auto-ingest for **Cursor, Claude Code and Codex** (incremental, distilled, agent narration filtered, secrets redacted) + file watcher | No | **12 named hooks** (Claude Code, Cursor, Codex, Copilot CLI…) | No | No |
+| Hooks / event capture | SessionStart auto-recall for **Cursor, Claude Code and Codex**, per-prompt recall (Claude Code), conversation index at session end, opt-in Stop auto-ingest (incremental, distilled, agent narration filtered, secrets redacted) + file watcher | No | **12 named hooks** (Claude Code, Cursor, Codex, Copilot CLI…) | No | No |
 | Privacy | 100% local, zero API calls | 100% local | 100% local (SQLite) | Cloud dependent | Cloud or self-host (LLM required) |
 | Language | Rust (single binary, zero deps) | Python (pip install) | TypeScript / Node (npm install) | SaaS | Python + Neo4j |
 | Startup | 1-2 ms (`open_at`) / synchronous warm via `open_at_warm` | ~5 ms | Node boot + iii-engine init | N/A (cloud) | Heavy (Neo4j boot) |
@@ -509,21 +509,31 @@ MemoryPilot --backfill-force
 MemoryPilot --install-hooks
 ```
 
-Installs three hooks in every agent found (`./install.sh` runs it for you) (existing settings and hooks are kept, a `.bak` is written):
+Installs the hooks in every agent found (`./install.sh` runs it for you) (existing settings and hooks are kept, a `.bak` is written):
 
-| Agent | File | Session start output |
-|---|---|---|
-| Cursor | `~/.cursor/hooks.json` | `additional_context` |
-| Claude Code | `~/.claude/settings.json` | `hookSpecificOutput.additionalContext` |
-| Codex | `~/.codex/hooks.json` | `hookSpecificOutput.additionalContext` |
+| Agent | File | Hooks | Context output |
+|---|---|---|---|
+| Cursor | `~/.cursor/hooks.json` | session start, session end | `additional_context` |
+| Claude Code | `~/.claude/settings.json` | session start, user prompt, session end | `hookSpecificOutput.additionalContext` |
+| Codex | `~/.codex/hooks.json` | session start | `hookSpecificOutput.additionalContext` |
 
 - **Session start** runs `MemoryPilot --hook session-start --agent <agent>` and injects the compact recall of the opened project.
 - **Session start** also runs `MemoryPilot --sync-agents` in the background (see below). When Cursor runs both its own hook and the Claude Code one, a session is served once.
+- **User prompt** (Claude Code `UserPromptSubmit`) runs `MemoryPilot --hook user-prompt --agent claude`: the prompt the user just sent is searched in the store, and up to 3 memories that answer it are injected in full (4,000 characters at most). Only hits scoring at least 60% of the top hit are kept. Nothing is injected when the ranker abstains (`confidence.abstain`), for a slash command or a prompt of fewer than 4 words, for memories of another project, for credentials and raw transcripts, or for a memory already injected in the session. A session gets 10 memories at most, all prompts together: past that the hook returns at once, without searching. The search is the default one, cross-encoder rerank included: about 1 to 1.6 s per searched prompt on an M-series Mac (the models load in each hook process), nothing for a prompt that is not searched.
+- **Session end** (`SessionEnd`, Cursor `sessionEnd`) runs `MemoryPilot --hook session-index --agent <agent>`: the conversation index is brought up to date in a detached process, so `find_conversation` sees the session that just ended. Nothing is distilled into memories.
+
+```bash
+MemoryPilot --install-hooks --with-ingest
+```
+
+Opt-in: also distills every turn into memories.
+
 - **Stop** runs `MemoryPilot --hook stop --agent <agent>`, answers `{}` immediately and distills, in a detached process, only the transcript lines added since the previous turn. From user messages only what the user typed is kept (Cursor `<user_query>`, Claude Code meta lines skipped), agent narration ("Checking…", "Let me…", "Je vais…") is filtered out, and obvious secrets (API keys, JWTs, IBANs) are redacted before storage.
+- **Session end** then runs `MemoryPilot --hook session-end --agent <agent>`: the same incremental ingest, for the lines the last stop did not cover, followed by the conversation index.
 
-- **Session end** (`SessionEnd`, Cursor `sessionEnd`) runs `MemoryPilot --hook session-end --agent <agent>`: the same incremental ingest, for the lines the last stop did not cover.
+Running `--install-hooks` without `--with-ingest` removes the distilling hooks a previous install added.
 
-State: `~/.MemoryPilot/state/cursor-hooks-state.json`. Log: `~/.MemoryPilot/logs/cursor-hooks.log`. Set `MEMORYPILOT_DB=/path/copy.db` to test against a copy.
+State: `~/.MemoryPilot/state/cursor-hooks-state.json`, `~/.MemoryPilot/state/prompt-injections/`. Log: `~/.MemoryPilot/logs/cursor-hooks.log`. Set `MEMORYPILOT_DB=/path/copy.db` to test against a copy.
 
 #### Rules and skills for your agents
 
@@ -563,6 +573,19 @@ MemoryPilot --uninstall-agents [--tools codex]  # unwire, your files stay
 - `agents/catalog.json`, rewritten by every `--setup-agents` and `--sync-agents` when it changes, lists each rule, skill, plugin and McpHub MCP server: `type`, `origin` (perso, vendor, or external for a skill of `~/.claude/skills` or `~/.cursor/skills` left to the tool that installed it, with `managed_by`), `version`, `source` and `url` for vendor items, `targets` (Claude Code, Cursor, Claude app through `get_agent_skill`), `updated` and `status` (`ok`, `partial`, `not_deployed`). MCP servers are listed by name only: their arguments and environment are never copied.
 - Vendor plugins carry `plugin.source.json` (`repo`, `commit`, optional `branch`, `claude` and `cursor` folders in the repository). `MemoryPilot --update-plugins [name]` fetches the upstream head and prints the diff (full diff in `plugins/.updates/<name>.diff`); nothing changes until `--update-plugins <name> --apply`, which keeps the previous copy in `plugins/.backups/` (3 per plugin).
 - Over MCP, `list_agent_skills` returns every skill (name, description, origin: `perso`, `vendor` or `plugin:<name>`) and `get_agent_skill(name, file?)` returns its `SKILL.md` and the list of its other files, or one of them such as `references/guide.md` (never a path outside the skill folder). The server `instructions` carry the skill names, so a client that does not read the folder (Claude app, remote access) still knows they exist. Plugin skills (`agents/plugins/<plugin>/skills/<name>/SKILL.md`) are named `<plugin>:<name>`.
+
+#### Third-party skills, reviewed before they are installed
+
+```bash
+MemoryPilot --add-skill vercel-labs/skills@find-skills          # fetch for review, install nothing
+MemoryPilot --add-skill vercel-labs/skills@find-skills --apply  # install the copy you just reviewed
+MemoryPilot --update-skills                                     # what changed upstream, for every imported skill
+MemoryPilot --update-skills find-skills --apply                 # install a reviewed update
+```
+
+`--add-skill` takes `owner/repo` (GitHub), `owner/repo@skill`, or any Git URL, with `--skill NAME`, `--path DIR` and `--branch B` when the repository needs them. A repository holding several skills lists them. The first run only stages the skill in `~/.MemoryPilot/agents/vendor/.updates/<name>/` and prints its files (anything that is not plain text is flagged), or the diff with the copy you already have. Nothing a skill ships is run, and symbolic links are left out. `--apply` then moves that exact copy to `agents/vendor/<name>/`, keeps the previous one in `agents/vendor/.backups/` (3 kept), and syncs every wired tool, so the skill reaches Claude Code, Cursor and the others the same way your own skills do.
+
+`skill.source.json` next to `SKILL.md` records the repository, the commit and the folder; `--update-skills` follows it. A skill copied by hand has no such file: `--add-skill owner/repo@name` adopts it, showing the diff with upstream first. A skill of yours with the same name in `agents/skills/` always wins, and `--apply` refuses to add a vendor skill it would hide.
 
 ## Knowledge Graph
 

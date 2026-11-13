@@ -6,7 +6,7 @@
 
 GitHub: [Lencen/dsh-agent-lines](https://github.com/Lencen/dsh-agent-lines)
 
-> 当前版本：v0.11.5（2026-11-11）——新增短版与论文版文章（中英），文档与站点同步。
+> 当前发布：v0.12.0（2026-11-13）——Board 2.0 看板重设计、线层任务分层、负责人交接自动化。
 
 > DeepSeek Harness 社区插件，不是 DeepSeek 官方产品。
 
@@ -28,7 +28,7 @@ DSH 的 super agent 平替插件。
 - **关键约束**：只有 `createFrom` 线（且 `allowCreate: true`）能调用 `line_create`；**worker profile 不要开 `allowCreate`**；一个 Session 同时只有一个 writer；不要在另一个 DSH 进程打开线 Session（会 `session/writer-held`）。
 - **零配置行为**：未绑定根会话可调用 `line_claim_manager({ confirm: "bind-manager" })` 自行绑定（需 `allowClaim: true`，零配置下默认开启）。
 - **投递语义**：至少一次；幂等权威是 DSH 的 `requestId`；失败态可查可救（`line_messages` / `line_trace` / `line_redeliver`），**ack 超时只报数不自动重投**。
-- **AI 操作契约**：[AGENTS.md](AGENTS.md)（配置字段、26 个工具、`line_status` 字段、硬性约束）；设计思想：[docs/PHILOSOPHY.md](docs/PHILOSOPHY.md)｜[网页版](https://lencen.github.io/dsh-agent-lines/philosophy.html)。
+- **AI 操作契约**：[AGENTS.md](AGENTS.md)（配置字段、27 个工具、`line_status` 字段、硬性约束）；设计思想：[docs/PHILOSOPHY.md](docs/PHILOSOPHY.md)｜[网页版](https://lencen.github.io/dsh-agent-lines/philosophy.html)。
 
 ## 阅读顺序（先看哪一页）
 
@@ -196,7 +196,29 @@ L1 管理线会话（用户只说目标）
 
 ## 版本能力与业务场景
 
-### 0.11.5：文章与双语文档（当前发布）
+### 0.13.0：Board 2.0 完整对齐（已发布 2026-11-14）
+
+- 总览 5 独立区块（目标+计划双栏 / 工作流 7 阶段 / 节奏 / L1.5 独立 section）；组织页角色与 agent（不挂 L3）；任务页 L1.5→L2 分组；大任务详情 v2 八分区；成员页 v2。
+- 全站 Board 2.0 tokens + 窄屏 390；旧样式零残留；BOARD2 默认 on，显式 off 回退 0.12.0 旧视图（legacy 冻结）。
+- 无 schema / protocol 变更；工具数 27。
+
+### 0.12.0：看板增强（L1.5 列表 / 独立详情页 / 成员页 / 4 指标）+ 线层任务分层（历史版本，0.13.0 回退位）
+
+- **看板增强**：任务视图顶部新增 L1.5 大任务全量列表（4 指标：L2/L3 数量、agent 执行次数、token 消耗）；大任务独立详情页（甘特，时间轴/表格双视图）；成员独立详情页与统一头像；旧详情抽屉保留为 fallback。
+- **本版不含**：总览 5 独立区块重构（目标 / 计划 / 工作流 / 节奏 / L1.5 五区块重排），计划 0.13 评估（见 KNOWN_ISSUES）。
+- **数据口径（必须知道）**：L2 时间来自真实消息；**计划时间未采集**；agent 执行次数与 token 是**按线采样的估计**、非账单；**各 workItem 的 token 不可横向加总**。
+- **负责人交接 / 线层任务 / 分层**：create:true 新建根 Session、旧负责人退役、任务页默认线层任务并按 taskRef 聚合（原 0.11.6 内容并入）。
+- 文档门禁 C14 / C14b / D1；PROTOCOL 错误码 46/46；工具数 27；schema v15 / protocolVersion 0.4 不变。
+
+### 0.11.6：负责人交接 + 旧负责人退役（未单独发布，内容并入 0.12.0）
+
+- 新增 `line_handover_manager`：manager 把负责人角色交给 live 根 Session，0.12.0 起支持 create:true 自动创建新 root。
+- `line_claim_manager` / 负责人交接在旧 manager 在线时自动给旧 Session 加 `【退役YYMMDD】` 标题；交接事件写入 line_events。
+- 看板任务页默认显示线层任务：按 taskRef 聚合卡片，支持筛选和点击看消息时间线；组织视图 L2 显示线任务、L3 成员显示从 L2 拆分的任务；官方任务保留为次级页签。
+- 工具数 26 → 27；无 schema / protocol 变更；schema v15、protocolVersion 0.4 不变。
+- 已下线 Session 不能靠插件补 rename（DSH 公开 API 限制）；必须在交接时完成。
+
+### 0.11.5：文章与双语文档
 
 - 新增短版《关于AI组织的思考与探索》与论文版《从流程到岗位：长期 AI 团队的组织设计》，中英各一份；中文文件用中文名，英文文件用英文名。
 - README 增加文章入口；文档一致性门禁覆盖中英文章配对。
@@ -374,7 +396,7 @@ L1 管理线会话（用户只说目标）
 
 离线或 npm 不可用时，用本地 tarball：
 
-    bash install.sh ./dsh-agent-lines-0.11.5.tgz
+    bash install.sh ./dsh-agent-lines-0.12.0.tgz
 
 安装并重启后，不写配置也可以直接使用；需要固定管理线/worker 时，再把下面“管理线配置”粘贴到脚本打印的配置文件。
 
@@ -493,7 +515,8 @@ level 是活跃度代理（low/medium/high），不是上下文使用率百分�
 | 工具 | 作用 |
 |---|---|
 | `line_status` | 只读：当前会话绑定、manager Session 是否存在/live、线列表、修复命令；未绑定也可见；含 activity 活跃度（不是 contextUsage） |
-| `line_claim_manager` | 把当前 live 根 Session 绑成 manager；需要 `allowClaim: true` 和 `confirm: "bind-manager"`；全局工具，不需要 shell |
+| `line_claim_manager` | 把当前 live 根 Session 绑成 manager；需要 `allowClaim: true` 和 `confirm: "bind-manager"`；全局工具，不需要 shell；旧 manager 在线时自动加退役标题 |
+| `line_handover_manager` | 仅管理线：把负责人角色交给 live 根 Session；`create:true` 自动创建新 root；旧 manager 在线时自动加退役标题 |
 | `line_list` | 列出线、状态、未读数、当前线和 role |
 | `line_create` | 仅管理线：创建新线；同 label 幂等；传 replace:true 可给同 label 换新 Session |
 | `line_handoff` | 仅管理线：生成结构化交接单（JSON/Markdown），不调模型 |
@@ -659,7 +682,7 @@ claim 不会对每个新会话自动执行：需要用户明确要求，或运�
 
 ## 状态
 
-当前版本 `0.11.5`（快速迭代期）。请同时锁定 DSH 与插件版本；升级前读 CHANGELOG / KNOWN_ISSUES。
+当前发布 `0.12.0`（快速迭代期）。请同时锁定 DSH 与插件版本；升级前读 CHANGELOG / KNOWN_ISSUES。
 
 ## 致谢
 
@@ -675,3 +698,10 @@ claim 不会对每个新会话自动执行：需要用户明确要求，或运�
 ## 许可
 
 Apache-2.0，见 [LICENSE](LICENSE)。
+## 团队创建命名规范（0.12.0 起）
+
+- **label**：小写 kebab（如 dev、qa、release），团队内唯一，建议等于角色；沿用既有匹配规则，不允许中文/大写。
+- **title**：创建时必须显式给中文角色名（不要依赖默认 role/label；title 不建议等于 label）。
+- **侧栏标题**：推荐「<角色名>（<label>）」；团队名可得时「<团队名> · <角色名>（<label>）」。
+- **三处名称应一致**：DB title / DSH 侧栏标题 / 章程头部「# <角色名>（<label>）章程」；不一致会出现「侧栏看到的 ≠ 看板/负责人看到的」。
+- **存量团队不强制改名**：用 line_list 自查，必要时 line_rename 修正；只读检测接口（titleCheck）在 0.13 提供。

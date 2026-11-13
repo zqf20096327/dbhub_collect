@@ -8,8 +8,9 @@
 **A deterministic, auditable orchestrator for multi-bot AI agents.** Models propose, and a rule-based
 **Observe → Decide → Act** engine decides. Every decision, tool call, and MCP call is written to a
 replayable SQLite event log. It runs fully offline with a deterministic fake provider, and it works with GPT-6,
-Claude 5.5, Gemini, Kimi K3, and any [Model Context Protocol](https://modelcontextprotocol.io) server. It is
-a portfolio-quality, local-first reference implementation.
+Claude 5.5 and Fable 5.2, Gemini 4 and 3.8 Flash, Kimi K3.1, and any
+[Model Context Protocol](https://modelcontextprotocol.io) server. It is a portfolio-quality, local-first reference
+implementation.
 
 ![MCP tool bridge demo: official MCP servers in both protocol eras, an MCP-calling run, and its replay](assets/demo/mcp-tools.gif)
 
@@ -19,11 +20,14 @@ a portfolio-quality, local-first reference implementation.
   engine picks the next action and records a `RationaleTrace`: the rule, the observations it used, and the
   actions it rejected.
 - **Every run is auditable.** Lifecycle transitions, observations, decisions, and tool and MCP calls are
-  persisted per run. `replay` and `report` never call a provider, so postmortems are safe and deterministic.
+  persisted per run. `replay`, `report`, and `trace` never call a provider, so postmortems are safe and
+  deterministic.
+- **Observable where you already look.** `trace` exports any recorded run as an OpenTelemetry GenAI trace for
+  Jaeger, Grafana Tempo, or Langfuse, or as a Mermaid sequence diagram of who handed off to whom.
 - **Tools are explicit and bounded.** Built-in and MCP tools pass the same allowlist and per-bot scopes. MCP
   calls also get per-call timeouts and result byte caps. Built-in tools run offline and in-process with
   size-limited inputs. A model can only request a tool; the engine decides whether it runs.
-- **Provider-neutral.** One adapter interface covers GPT-6, the Claude Code CLI, Gemini, and Kimi K3, and every
+- **Provider-neutral.** One adapter interface covers GPT-6, the Claude Code CLI, Gemini, and Kimi K3.1, and every
   adapter sends parameters that current reasoning models accept.
 - **CI-friendly.** The fake provider exercises the real runtime, so lint, types, tests, a smoke run, and
   offline evaluation need no API keys.
@@ -34,14 +38,14 @@ a portfolio-quality, local-first reference implementation.
 flowchart LR
     goal([Goal]) --> observe[Observe]
     observe --> decide{"Decide<br/>deterministic rules<br/>+ rationale trace"}
-    decide -->|call_llm| llm["LLM adapter<br/>GPT-6 · Claude 5.5 · Gemini · Kimi K3 · fake"]
+    decide -->|call_llm| llm["LLM adapter<br/>GPT-6 · Claude 5.5 / Fable 5.2 · Gemini · Kimi K3.1 · fake"]
     decide -->|call_tool| tool["Allowlisted tool<br/>built-in or mcp__server__tool"]
     decide -->|handoff| bot["Bot handoff<br/>scoped tool allowlist"]
     decide -->|finish / fail / cancel| done([Terminal state])
     llm --> observe
     tool --> observe
     bot --> observe
-    observe -.-> log[("SQLite event log<br/>replay · report · resume")]
+    observe -.-> log[("SQLite event log<br/>replay · report · resume · fork · trace")]
     decide -.-> log
     tool -.-> log
 ```
@@ -62,6 +66,15 @@ multi-bot-agentic run --goal "Create a launch checklist" --provider fake --event
 multi-bot-agentic replay --event-log data/runs.sqlite --run-id demo --event-type decision --format text
 multi-bot-agentic report --event-log data/runs.sqlite --run-id demo
 
+# Export the run as an OpenTelemetry GenAI trace (OTLP/JSON) or a Mermaid sequence diagram
+multi-bot-agentic trace --event-log data/runs.sqlite --run-id demo --format mermaid
+multi-bot-agentic trace --event-log data/runs.sqlite --run-id demo --otlp-endpoint http://localhost:4318/v1/traces
+
+# Time travel: list the forkable steps, then branch the run after step 1 with a new goal
+multi-bot-agentic history --event-log data/runs.sqlite --run-id demo
+multi-bot-agentic fork --event-log data/runs.sqlite --run-id demo --at-step 1 --new-run-id demo-rollback \
+  --goal "Create a rollback checklist" --provider fake
+
 # Tools from an MCP server (bundled demo server, works offline)
 multi-bot-agentic mcp-tools --mcp-config examples/mcp/mcp.json
 MULTIBOT_FAKE_TOOL=mcp__notes__search_notes multi-bot-agentic run --provider fake \
@@ -72,16 +85,25 @@ To use a real model, export its key and pick the provider, for example
 `export OPENAI_API_KEY=... && multi-bot-agentic run --provider openai --goal "..."`. For a full scenario, see the
 [release-readiness walkthrough](docs/use-cases/USE-CASE-mcp-release-readiness.md).
 
+**Time-travel forks:** `fork` branches any recorded run after any step into a new run with a new goal,
+provider, bot, or step budget. It rebuilds the state from the event log without calling a provider and leaves
+the original untouched, and the new run records its lineage
+([Run fork guide](docs/guides/RUN_FORK_GUIDE.md)).
+
+![Time-travel fork demo: history of a run, a fork with a new goal, a fork of the fork as another bot, refused forks, lineage, and the fork's trace](assets/demo/run-fork.gif)
+
 ## Feature Map
 
 | Capability | What you get | Code | Docs |
 | --- | --- | --- | --- |
 | Deterministic ODA loop | Rule-based decisions with rationale traces and an explicit run state machine | `runner.py`, `decision.py`, `lifecycle.py` | [Architecture](docs/ARCHITECTURE.md) |
 | Durable event log | Append-only SQLite log per run. `replay` and `report` never call providers | `event_log.py`, `cli.py` | [Replay diff](docs/guides/RUN_REPLAY_DIFF_GUIDE.md) |
+| **OpenTelemetry trace export** | `trace` turns any recorded run into OTLP/JSON with GenAI semantic conventions (`invoke_agent`, `chat`, `execute_tool` spans with rationale attributes), pushes it to Jaeger, Tempo, or Langfuse, or draws a Mermaid sequence diagram. Deterministic ids, content off by default | `tracing/` | [Trace export](docs/guides/OTEL_TRACE_EXPORT_GUIDE.md) |
 | Checkpoint & resume | Resume an interrupted run; the active bot's tool scope is restored | `checkpoint.py` | [Checkpoint resume](docs/guides/CHECKPOINT_RESUME_GUIDE.md) |
+| **Time-travel forks** | `fork` branches any recorded run after any step into a new run, with a new goal, provider, bot, or budget. The state is rebuilt from the log, and bot scopes are re-checked. `history` lists the forkable steps. Lineage shows up in `report`, and `trace` adds a span link to the parent run | `fork.py`, `cli.py` | [Run fork](docs/guides/RUN_FORK_GUIDE.md) |
 | Multi-bot handoffs | `HANDOFF:<bot>:<summary>` with per-bot tool allowlists | `bots.py` | [Bot handoff](docs/guides/BOT_HANDOFF_GUIDE.md) |
 | **MCP tool bridge** | Tools from any MCP server, with a dual-era (2026-07-28 + legacy) stdio client and no dependencies | `mcp/` | [MCP tools](docs/guides/MCP_TOOLS_GUIDE.md) |
-| Provider adapters | GPT-6, Claude Code CLI, Gemini, Kimi K3, and a fake provider, all sending reasoning-safe parameters | `llm/` | [Configuration](docs/CONFIGURATION.md) |
+| Provider adapters | GPT-6, Claude Code CLI, Gemini, Kimi K3.1, and a fake provider, all sending reasoning-safe parameters | `llm/` | [Configuration](docs/CONFIGURATION.md) |
 | Safety controls | Step budgets, timeouts, cancellation file, tool allowlists, prompt bounds | `safety.py` | [Safety](docs/SAFETY.md) |
 | Human-in-the-loop | File-backed approval gate for sensitive tools | `approval.py` | [HITL gate](docs/guides/HITL_APPROVAL_GATE_GUIDE.md) |
 | Parallel fan-out | Capped, order-preserving task batches | `fanout.py` | [Fan-out](docs/guides/PARALLEL_FANOUT_GUIDE.md) |
@@ -95,15 +117,19 @@ To use a real model, export its key and pick the provider, for example
 | Provider (`--provider`) | Adapter | Default | Also current | Credential |
 | --- | --- | --- | --- | --- |
 | OpenAI (`openai`) | `OpenAIAdapter` | `gpt-6.1-sol` | `gpt-6-astra`, `gpt-6.1-terra`, `gpt-6-luna` | `OPENAI_API_KEY` |
-| Anthropic via Claude Code CLI (`claude_code`) | `ClaudeCodeCLIAdapter` | the CLI's configured model (recommended: `CLAUDE_CODE_COMMAND="claude -p --model claude-opus-5-5"`; keep `-p`, print mode) | `claude-sonnet-5-5`, `claude-haiku-5-5`, `claude-fable-5-1` | local `claude` |
-| Google Gemini (`gemini`) | `GeminiAdapter` | `gemini-3.8-flash` | `gemini-4-argon` | `GEMINI_API_KEY` |
+| Anthropic via Claude Code CLI (`claude_code`) | `ClaudeCodeCLIAdapter` | the CLI's configured model (recommended: `CLAUDE_CODE_COMMAND="claude -p --model claude-opus-5-5"`; keep `-p`, print mode) | `claude-fable-5-2`, `claude-sonnet-5-5`, `claude-haiku-5-5` | local `claude` |
+| Google Gemini (`gemini`) | `GeminiAdapter` | `gemini-3.8-flash` | `gemini-4-hydrogen` (Google's recommended upgrade), `gemini-4-carbon`, `gemini-4-argon`, `gemini-3.5-flash-lite` | `GEMINI_API_KEY` |
 | Kimi / Moonshot (`kimi`) | `KimiAdapter` | `kimi-k3.1-pro` | `kimi-k3.1-pro-highspeed`, `kimi-k3` | `KIMI_API_KEY` |
 | Deterministic (`fake`) | `FakeLLMAdapter` | offline, used by CI | n/a | none |
 
-Verified against provider docs on 2026-11-06. Every adapter normalizes output into `ModelOutput`, which the runner
-treats as an observation. `OPENAI_BASE_URL` points the OpenAI adapter at any OpenAI-compatible gateway. No adapter
-sends `temperature`, `top_p`, or `top_k`: current GPT-6, Claude 5.5, Gemini 3.x, and Kimi K3 models reject, fix, or
-ignore them ([parameter rules](docs/CONFIGURATION.md#provider-parameter-rules)).
+Verified on 2026-11-12 against the [OpenAI](https://developers.openai.com/api/docs/models),
+[Anthropic](https://platform.claude.com/docs/en/models/overview), [Google](https://aistudio.google.com/docs/models),
+and [Moonshot](https://platform.kimi.ai/docs/models.md) model pages. The Gemini default stays on 3.8 Flash for now;
+[Configuration › Gemini default](docs/CONFIGURATION.md#gemini-default) explains why and how to switch to Hydrogen.
+Every adapter normalizes output into `ModelOutput`, which the runner treats as an observation. `OPENAI_BASE_URL`
+points the OpenAI adapter at any OpenAI-compatible gateway. No adapter sends `temperature`, `top_p`, or `top_k`:
+current GPT-6, Claude 5.5 and Fable 5.2, Gemini 4 and 3.x, and Kimi K3.1 models reject, fix, or ignore them
+([parameter rules](docs/CONFIGURATION.md#provider-parameter-rules)).
 
 ## Documentation Map
 
@@ -111,8 +137,10 @@ ignore them ([parameter rules](docs/CONFIGURATION.md#provider-parameter-rules)).
   settings), and the [release-readiness walkthrough](docs/use-cases/USE-CASE-mcp-release-readiness.md)
 - **Concepts:** [Architecture](docs/ARCHITECTURE.md), [Safety](docs/SAFETY.md)
 - **Core guides:** [MCP tools](docs/guides/MCP_TOOLS_GUIDE.md),
+  [OpenTelemetry trace export](docs/guides/OTEL_TRACE_EXPORT_GUIDE.md),
   [Bot handoff](docs/guides/BOT_HANDOFF_GUIDE.md),
   [Checkpoint resume](docs/guides/CHECKPOINT_RESUME_GUIDE.md),
+  [Run fork (time travel)](docs/guides/RUN_FORK_GUIDE.md),
   [HITL approval gate](docs/guides/HITL_APPROVAL_GATE_GUIDE.md),
   [Parallel fan-out](docs/guides/PARALLEL_FANOUT_GUIDE.md),
   [Eval harness](docs/guides/EVAL_HARNESS_GUIDE.md),
@@ -121,7 +149,8 @@ ignore them ([parameter rules](docs/CONFIGURATION.md#provider-parameter-rules)).
 - **Catalogs:** [Built-in tools](docs/TOOLS.md), [Advisor & guard catalog](docs/ADVISOR_CATALOG.md),
   [All guides](docs/guides/), [Use cases](docs/use-cases/README.md)
 - **Project:** [CHANGELOG](CHANGELOG.md) and demo assets ([`assets/demo/`](assets/demo/); `docs/demo.gif` is
-  rendered by `scripts/render_demo_gif.py`, and `docs/demo.svg` is a static architecture card)
+  rendered by `scripts/render_demo_gif.py`, tool-guide demos by `scripts/render_guide_demos.py`, and
+  `docs/demo.svg` is a static architecture card)
 
 ## Use Cases
 
@@ -139,11 +168,15 @@ These are the problems the project was built for. Each one is explained in
 8. "Agents should produce artifacts, not just chat." Allowlisted tools with recorded results do the work.
 9. "I need a clean example of agent architecture." Each module has one clear job.
 10. "CI must prove the agent works without credentials." `scripts/check.sh` runs on Python 3.10–3.12.
+11. "I want to see agent runs in our tracing backend, not a terminal." `trace` exports OpenTelemetry GenAI spans.
+12. "I want to retry from the middle of a run with another goal, bot, or provider, without re-running the start."
+    `fork` branches any recorded step into a new run.
 
 ## Repository Layout
 
 ```text
-src/multi_bot_agentic/   runtime, decision engine, event log, adapters (llm/), tools (tools/), MCP bridge (mcp/)
+src/multi_bot_agentic/   runtime, decision engine, event log, adapters (llm/), tools (tools/), MCP bridge (mcp/),
+                         trace export (tracing/)
 tests/                   deterministic unit and integration tests (MCP server fixtures in tests/fixtures/mcp/)
 examples/mcp/            demo MCP server and mcpServers configs (bundled + official servers)
 scripts/                 check, demo, and GIF rendering scripts
@@ -159,8 +192,9 @@ scripts/check.sh
 ```
 
 `scripts/check.sh` runs `ruff check`, `ruff format --check`, `mypy src tests`, `pytest`, and a fake-provider
-smoke run with replay and report. CI runs the same script on Python 3.10, 3.11, and 3.12. For a richer local
-demo, run `scripts/run_demo.sh`.
+smoke run with replay, report, and trace (OTLP/JSON and Mermaid), then lists its steps with `history`, forks it,
+and reports and traces the fork. CI runs the same script on Python 3.10, 3.11, and 3.12. For a richer local demo,
+run `scripts/run_demo.sh`.
 
 ## Contributing
 
@@ -170,6 +204,12 @@ demo, run `scripts/run_demo.sh`.
 - New built-in tools need four things: registration in `build_default_tools()`, an entry in the
   `SafetyPolicy.allowed_tools` default, an entry in [`docs/TOOLS.md`](docs/TOOLS.md), and a guide in
   `docs/guides/`.
+- A tool guide's demo GIF shows its own example running. Give the guide a self-contained python code block that
+  prints its result and embed `![<name> demo](../../assets/demo/<name>.gif)`. Then run
+  `python scripts/render_guide_demos.py` (stdlib only, offline). It runs every example whose GIF is missing or a
+  placeholder and draws the code and its real output. To redraw one guide's GIF after you edit its example,
+  pass the guide's path. `tests/test_demo_gifs_real.py` fails on any missing, corrupt, or placeholder GIF that a
+  README or docs page embeds.
 - Keep this README a short showcase. Link new guides from the Documentation Map only if they're core.
 
 ## License

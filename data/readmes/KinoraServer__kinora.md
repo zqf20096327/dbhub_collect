@@ -21,7 +21,7 @@ docker run -d --name kinora -p 8420:8420 \
   -v /path/to/config:/config \
   -v /path/to/media:/media:ro \
   --device /dev/dri:/dev/dri \
-  ghcr.io/lancealthouse/kinora:latest
+  ghcr.io/kinoraserver/kinora:latest
 ```
 
 Then open `http://<server-ip>:8420`, create your account, and add a library
@@ -121,7 +121,7 @@ crates/server/      the binary: HTTP API (axum), SQLite (sqlx), scanner,
                     transcoder, hardware detection, module host
 web/                React + Tailwind web app (Vite)
 packaging/          Unraid template
-docs/               plan, decisions, theme, app skin and Storybook guides
+docs/               plan, decisions, theme, app skin, Storybook and code quality guides
 ```
 
 Most behaviour lives in `crates/core` as plain functions, so it's tested
@@ -147,6 +147,10 @@ The type is one of `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `
 scope is optional; use a crate name (`core`, `server`, `plugin-api`), `web`, or an area like `docker`, `docs`, `ci` or
 `deps`. Add `!` after the scope for a breaking change. Run `pnpm lint:commits` to check your branch, and
 `git commit --no-verify` to skip the hook once.
+
+Every push and pull request also runs SonarQube Cloud and free linters (Oxlint, Knip, cargo-deny, actionlint,
+ShellCheck, Hadolint). What each one checks, how to run them locally and the one-time SonarQube setup are in
+[docs/code-quality.md](docs/code-quality.md).
 
 ## License
 

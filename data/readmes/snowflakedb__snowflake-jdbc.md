@@ -12,6 +12,17 @@ Snowflake JDBC Driver
 
 Snowflake provides a JDBC type 4 driver that supports core functionality, allowing Java program to connect to Snowflake.
 
+.. note::
+
+   **JDBC Driver 5.x is in public preview.** Snowflake JDBC Driver 5.x, built on the Universal Core, is
+   published under new Maven artifacts, ``net.snowflake:snowflake-jdbc-native``
+   and ``net.snowflake:snowflake-jdbc-native-all``, so it does not replace this driver and your existing
+   ``snowflake-jdbc`` dependency is unchanged. This repository is JDBC Driver 4.x, which remains the default and the
+   version Snowflake recommends for production.
+
+   - Migration guide: https://docs.snowflake.com/en/developer-guide/jdbc/jdbc-migrate-5x
+   - Source and releases: https://github.com/snowflakedb/drivers/releases?q=snowflake-jdbc&expanded=true
+
 .. |maven-snowflake-jdbc| image:: https://maven-badges.herokuapp.com/maven-central/net.snowflake/snowflake-jdbc/badge.svg?style=plastic
     :target: https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/
 

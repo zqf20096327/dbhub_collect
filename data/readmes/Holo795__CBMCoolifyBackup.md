@@ -42,28 +42,32 @@ resource), and alerts when something fails, goes missing, or never ran.
 
 ## Why CBM? (vs Coolify's built‑in backups)
 
-Coolify ships **scheduled database backups** — and that's it. Everything else your stack
-needs to actually come back to life isn't covered. CBM backs up the whole resource.
+Coolify backs up **databases** on a schedule (and restores most of them from its dashboard), and
+can archive an **application's** volumes and folders - but it doesn't restore those archives, nor
+cover Redis, compose services' volumes or host files. CBM backs up and **restores** the whole
+resource, and checks that the backups actually work.
 
 | | Coolify built‑in backups | **CBM** |
 | --- | :---: | :---: |
-| Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo) | ✅ | ✅ |
+| Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo) | ✅ (also ClickHouse, SQLite) | ✅ |
 | **Redis / KeyDB / Dragonfly** | ❌ | ✅ (live RDB) |
-| **Application** data (named volumes) | ❌ | ✅ |
+| **Application** volumes and folders | archive only, restored by hand | ✅ backup **and** restore |
 | **Docker‑compose services** (every volume + each internal DB) | ❌ | ✅ |
-| **Host bind mounts** (data in host folders) | ❌ | ✅ |
+| **Host file mounts** | ❌ | ✅ |
 | Capture **env vars** so a snapshot restores standalone | ❌ | ✅ |
-| **No restart** of the running resource during backup | n/a | ✅ |
+| **Consistent copy** of a running resource (brief freeze, no restart) | n/a | ✅ |
 | **Incremental + deduplicated + encrypted** storage (restic) | ❌ | ✅ |
 | Restore **to a new resource** (clone, re‑pin commit/image) | ❌ | ✅ |
 | Restore onto a **fresh / different Coolify** (source can be gone) | ❌ | ✅ |
-| **Multiple destinations** (local / SSH‑SFTP / S3, jump host) | partial | ✅ |
-| **Multi‑server** Coolify instances | n/a | ✅ |
-| Alerts on **failed / missing / overdue** backups | ❌ | ✅ |
-| **Reconciliation** (detect backups deleted at the destination) | ❌ | ✅ |
-| **Integrity check** (detect silently corrupted backups) | ❌ | ✅ |
-| **Mirror** a backup to a second destination (redundancy) | ❌ | ✅ |
-| **Disaster recovery** — back up CBM itself, restore it elsewhere | ❌ | ✅ |
+| **Destinations** | local, S3 | local, SSH/SFTP (jump host), S3 |
+| **Multi‑server** Coolify instances | ✅ | ✅ |
+| Alerts on **failed** / **not run** backups | ✅ | ✅ |
+| Alerts on backups **deleted at the destination**, **corrupt**, or **not succeeding** for a while | ❌ | ✅ |
+| **Test restores** in a sandbox, weekly | ❌ | ✅ |
+| **Mirror** a backup to a second destination | several S3 | ✅ any destination |
+| **Disaster recovery** — back up CBM and Coolify itself, restore elsewhere | ❌ | ✅ |
+
+*Compared with Coolify's documentation in November 2026 (Coolify 4.x).*
 
 ---
 
@@ -120,7 +124,7 @@ needs to actually come back to life isn't covered. CBM backs up the whole resour
 - **Deletion-proof second copy.** Mirror copies can keep their own retention, a destination can
   be **protected** (CBM never deletes there), and CBM checks that an S3 bucket really refuses a
   permanent deletion by its key (versioning + no `DeleteObjectVersion`), alerting if that changes.
-- **Scheduling** with grandfather‑father‑son retention, in a **configurable timezone**.
+- **Scheduling** with retention rules like `restic forget` (latest, hourly, daily, weekly, monthly, yearly) and pinned backups, in a **configurable timezone**.
 - **Team access with roles.** Invite people as **admin / operator / viewer** via one‑time
   invitation links (copy‑paste or emailed). Operators run backups/restores; only admins
   configure instances, destinations, schedules, and settings — enforced server‑side, with the
@@ -189,8 +193,10 @@ reference in **[docs/configuration.md](docs/configuration.md)**.
 
 ### 2. First run — create the admin
 
-Open your `BETTER_AUTH_URL` and **register**. The **first account becomes the administrator**,
-then public sign‑up closes automatically — no seeding, no default password. To add teammates,
+Open the link the controller prints in its logs at startup (`/login?setup=…`) and **register**:
+the **first account becomes the administrator** — it needs that setup token (or the
+`SETUP_TOKEN` you set) — then public sign‑up closes automatically: no seeding, no default
+password. To add teammates,
 use **Users → Invite** with a role (admin / operator / viewer); see
 **[docs/accounts.md](docs/accounts.md)**. For password reset and verification emails, configure
 SMTP in **Settings → Email (SMTP)** (**[docs/email.md](docs/email.md)**).
@@ -270,8 +276,8 @@ Being upfront so you don't lose data by surprise.
 
 - Secrets (Coolify tokens, SSH/S3 creds, encryption & restic keys) are **AES‑256‑GCM
   encrypted at rest** with `MASTER_KEY` (falls back to `BETTER_AUTH_SECRET`).
-- Agents authenticate with a bearer token (sha256‑hashed in the DB); enrollment tokens are
-  per instance, shown once, and rotated on every reveal. API tokens (MCP) are likewise shown
+- Agents authenticate with a bearer token (sha256‑hashed in the DB) they keep themselves;
+  install tokens are per instance, shown once, and enroll one agent within 24 hours. API tokens (MCP) are likewise shown
   once and stored only as a hash.
 - **Role‑based access** (admin / operator / viewer) is enforced on every mutating action
   server‑side; invitation links are single‑use, expiring, and stored only as a sha256 hash.

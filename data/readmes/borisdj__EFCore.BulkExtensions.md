@@ -43,7 +43,7 @@ And even with Community license, if you want help Development, you can make a Do
 ## Contributing
 Please read [CONTRIBUTING](https://github.com/borisdj/EFCore.BulkExtensions/blob/master/CONTRIBUTING.md) for details on code of conduct, and the process for submitting Pull Requests.  
 When opening issues do write detailed explanation of the problem or feature with reproducible example.  
-Want to **Contact** for Development & Consulting: [**codis**](https://codis.tech) (*Quality Delivery*).  
+Want to **Contact** for Development & Consulting: [***codis.tech***](https://codis.tech) (*Quality Delivery*).  
 
 ## Description
 Supported databases:  
@@ -53,7 +53,8 @@ Supported databases:
 -**Oracle** (8+) is using [OracleBulkCopy](https://docs.oracle.com/cd/E11882_01/win.112/e23174/OracleBulkCopyClass.htm#ODPNT7446) combined with [MERGE](https://docs.oracle.com/en/database/oracle/oracle-database/21/sqlrf/MERGE.html) for Update.  
 -**SQLite** has no Copy tool, instead library uses [plain SQL](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert) combined with [UPSERT](https://www.sqlite.org/lang_UPSERT.html).  
 Bulk Tests can not have UseInMemoryDb because InMemoryProvider does not support Relational-specific methods.  
-Instead Test options are  SqlServer(Developer or Express), LocalDb(if alongside [Developer v.](https://stackoverflow.com/questions/42885377/sql-server-2016-developer-version-can-not-connect-to-localdb-mssqllocaldb?noredirect=1&lq=1)), or with  other adapters.
+Instead Test options are  SqlServer(Developer or Express), LocalDb(if alongside [Developer v.](https://stackoverflow.com/questions/42885377/sql-server-2016-developer-version-can-not-connect-to-localdb-mssqllocaldb?noredirect=1&lq=1)), or with  other adapters.  
+***NOTE:*** Native **JSON** Sql types do not map correctly with SqlServer 2025 prior CU5 (for Json use MSSQL 2025_CU5+).
 
 ## Installation
 Available on [![NuGet](https://img.shields.io/nuget/v/EFCore.BulkExtensions.svg)](https://www.nuget.org/packages/EFCore.BulkExtensions/)  [![Downloads](https://img.shields.io/nuget/dt/EFCore.BulkExtensions.svg)](https://www.nuget.org/packages/EFCore.BulkExtensions/)  
@@ -81,7 +82,7 @@ Its assembly is [Strong-Named](https://docs.microsoft.com/en-us/dotnet/standard/
 | 1.x   | NetStandard 1.4 | EF Core 1 | NetCore(1.0+)                   |
 
 Supports follows official [.Net lifecycle](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core), currently v.10 as latest(LTS) and v.9.  
-MySql nuget is still and v.9 as their provider is not yet updated to EF 10.  
+MySql Net10 package now uses Microting's EF Core 10 MySQL provider fork of original Pomelo repo.
 
 ## Usage
 It's pretty simple and straightforward.  

@@ -1,6 +1,6 @@
 # SaaSy Land
 
-Source code for the SaaSy Land website, customer workspace, and admin console. The application combines a multilingual marketing site, documentation and blog, authentication, newsletter subscriptions, and Polar checkout and licence management in one TanStack Start application deployed to Cloudflare Workers.
+Source code for the SaaSy Land website, customer workspace, and admin console. The application combines a multilingual marketing site, documentation and blog, authentication, newsletter subscriptions, video streaming and courses, and Polar checkout and licence management in one TanStack Start application deployed to Cloudflare Workers.
 
 This repository contains the website application. The SaaSy Land CLI and private generator templates are maintained separately and are not included here. See [licensing](#licensing) for the distinction between the website source and the commercial product.
 
@@ -27,19 +27,22 @@ The landing page in September 2026. [View the full page](.github/assets/landing-
 
 The application includes both connected workflows and UI demonstrations. A rendered admin screen does not necessarily have a persistent backend workflow.
 
-| Area                        | Current implementation                                                                                                                                                                                                                                                                                                             |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Public website              | Landing page, pricing presentation, localized legal pages, responsive layouts, theme support, and reduced-motion presentations. Public pages are prerendered during builds, and every count on the landing page is measured from the repository at build time ([`scripts/repository-facts.ts`](scripts/repository-facts.ts)).      |
-| Documentation and blog      | Localized MDX content, navigation, and documentation search through Fumadocs. Published content is maintained in Git.                                                                                                                                                                                                              |
-| Authentication              | Email/password registration with required email verification, GitHub and Google sign-in, password recovery, TOTP with backup codes, and session management. Better Auth's own endpoints enforce the same password, name, email and image rules as the forms, and verification and password-reset emails are limited per recipient. |
-| Customer workspace          | Protected `/app` area and `/app/license` for the customer's licence key, machine activations, and activation deactivation.                                                                                                                                                                                                         |
-| Billing                     | Authenticated Polar checkout for the Core, Complete, and Agency tiers with regional (PPP) discounts, and webhook handling for purchases, full refunds (a partial refund keeps the licence), and licence-key benefits. Requires configured provider products and credentials.                                                       |
-| Newsletter                  | Double opt-in subscription with localized email delivery, limited per recipient. The confirmation and unsubscribe links open a page that acts only when the visitor presses its button. Subscription preferences are managed from the workspace.                                                                                   |
-| Admin users and security    | Database-backed user listing, password reset, ban/unban, and deletion. The settings security tab connects password changes, TOTP, and session revocation.                                                                                                                                                                          |
-| Products and categories     | D1 schemas, permission-checked CRUD use cases, and database-backed lists. Product creation/publishing controls are not fully connected.                                                                                                                                                                                            |
-| Demo and unfinished screens | Analytics, payment administration, pricing models, blog administration, invitations, and role-management views, and the dashboard revenue chart, show demo data. General settings, course creation, and the landing-page editor include unconnected controls. `/premium` is a placeholder.                                         |
+| Area                        | Current implementation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Public website              | Landing page, pricing presentation, localized legal pages, responsive layouts, theme support, and reduced-motion presentations. Public pages are prerendered during builds, and every count on the landing page is measured from the repository at build time ([`scripts/repository-facts.ts`](scripts/repository-facts.ts)).                                                                                                                                                                                                                                                                                                                                                                                                |
+| Documentation and blog      | Localized MDX content, navigation, and documentation search through Fumadocs. Published content is maintained in Git.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Authentication              | Email/password registration with required email verification, GitHub and Google sign-in, password recovery, TOTP with backup codes, and session management. Better Auth's own endpoints enforce the same password, name, email and image rules as the forms, and verification and password-reset emails are limited per recipient.                                                                                                                                                                                                                                                                                                                                                                                           |
+| Customer workspace          | Protected `/app` area and `/app/license`. Accounts without a licence see the landing page's tier cards with regional prices and the course lessons a purchase unlocks (counted from D1), and start checkout in one press; a tier picked on the landing page carries through sign-up. After payment the workspace waits for the licence to activate. Licence owners see their key, machine activations, and activation deactivation.                                                                                                                                                                                                                                                                                          |
+| Billing                     | Authenticated Polar checkout for the Core, Complete, and Agency tiers with regional (PPP) discounts, returning the buyer to the workspace in their language, and webhook handling for purchases, full refunds (a partial refund keeps the licence), and licence-key benefits. One licence per account: checkout is refused while a licence is active, and Polar's checkout endpoint is reachable only through that server-side check. Requires configured provider products and credentials.                                                                                                                                                                                                                                 |
+| Newsletter                  | Double opt-in subscription with localized email delivery, limited per recipient. The confirmation and unsubscribe links open a page that acts only when the visitor presses its button. Server functions read and change a signed-in user's subscription, but no workspace screen uses them yet.                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Admin users and security    | Database-backed user listing, password reset, ban/unban, and deletion. The settings security tab connects password changes, TOTP, and session revocation.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Products and categories     | D1 schemas, permission-checked CRUD use cases, and database-backed lists. Product creation/publishing controls are not fully connected.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Courses                     | A public catalogue at `/courses` with course and lesson pages backed by D1 (`course`, `chapter`, `lesson`, and `lesson_progress`). Each lesson is a free preview, free with an account, or paid (an active Complete or Agency licence); the server functions enforce access, and admins can watch every lesson. The player resumes where the viewer stopped and saves progress. Admins create and edit courses, chapters, and lessons at `/admin/courses`, where each lesson picks its video from the library. The landing page lists the published courses and their first lessons from D1, links each to its page, and plays a tour of the course pages. See the [Courses guide](content/docs/features/courses.en-US.mdx). |
+| Videos                      | Recordings are encoded on your machine to adaptive HLS with FFmpeg (`bun run video:publish:<environment>`), stored in a private R2 bucket, and streamed through signed, expiring `/media/` links with the Workers cache and range requests. `/admin/videos` lists, previews, and deletes them, and course lessons play them. See the [Videos guide](content/docs/features/videos.en-US.mdx).                                                                                                                                                                                                                                                                                                                                 |
+| Affiliates                  | Referral links tracked by Affonso, loaded only on visits that carry a referral parameter; checkout passes the referral to Polar as order metadata, so commissions follow Polar's own order and refund records. `/affiliates` publishes the terms. Turned on by the `AFFONSO_PROGRAM_ID` variable. See the [Affiliate programme guide](content/docs/features/affiliates.en-US.mdx).                                                                                                                                                                                                                                                                                                                                           |
+| Demo and unfinished screens | Analytics, payment administration, pricing models, blog administration, invitations, and role-management views, and the dashboard revenue chart, show demo data. General settings and the landing-page editor include unconnected controls. `/premium` is a placeholder.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-The admin blog editor does not publish the MDX blog, and the course and page-editor screens do not yet constitute complete authoring systems. User creation/edit/profile controls also remain incomplete. The built-in application roles are `admin` and `customer`; new accounts receive `customer`.
+The admin blog editor does not publish the MDX blog, and the page-editor screen is not yet a complete authoring system. User creation/edit/profile controls also remain incomplete. The built-in application roles are `admin` and `customer`; new accounts receive `customer`.
 
 ## Technology
 
@@ -47,13 +50,14 @@ The admin blog editor does not publish the MDX blog, and the course and page-edi
 | -------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Application and routing          | React 19, TypeScript, TanStack Start and Router                                                        |
 | Toolchain                        | Bun, Vite+, formatting, linting, and type checking configured in `vite.config.ts`                      |
-| Hosting and storage              | Cloudflare Workers, D1 (SQLite), KV, and static assets                                                 |
+| Hosting and storage              | Cloudflare Workers, D1 (SQLite), KV, R2, and static assets                                             |
 | Database access                  | Drizzle ORM and checked-in SQLite migrations                                                           |
 | Authentication and authorization | Better Auth with module-level permissions and server-function middleware                               |
 | Data and forms                   | TanStack Query, Form, and Table; Zod validation                                                        |
 | UI                               | Tailwind CSS 4, shadcn-styled components with React Aria and Base UI, Motion, and locally served fonts |
 | Localization and content         | `use-intl`, ICU messages, Fumadocs, and MDX                                                            |
-| External services                | Resend for email; Polar for checkout, billing, and licence keys                                        |
+| External services                | Resend for email; Polar for checkout, billing, and licence keys; Affonso for affiliate referrals       |
+| Video                            | FFmpeg encoding to HLS (CMAF) on the publisher's machine; Video.js 10 playback                         |
 | Verification                     | Vite+/Vitest, Testing Library, jsdom, and Playwright with axe-core accessibility scans                 |
 
 [`package.json`](package.json) and [`bun.lock`](bun.lock) define the application toolchain. The separate [Remotion project](remotion/README.md) uses its own npm lockfile.
@@ -76,11 +80,10 @@ The install lifecycle configures Vite+ and generates the class-name tables and F
 
 ### Run an isolated local preview
 
-Use the committed test environment to explore the application with local D1/KV storage, test accounts, and intercepted provider requests:
+Use the committed test environment to explore the application with local D1/KV/R2 storage, test accounts, a sample course at `/courses`, and intercepted provider requests:
 
 ```sh
-bun run db:migrate:test
-bun run db:seed:test
+bun run db:reset:test
 bun run build:test
 bun run start:test
 ```
@@ -96,7 +99,7 @@ This serves a built test application; rebuild it to see source changes. It uses 
 
 ### Develop with Cloudflare and provider integrations
 
-The development server supports hot reload at <http://localhost:3000>. Its `DB` and `CACHE` bindings connect to **remote preview resources**. Consequently, development database writes and `db:migrate:development` affect that preview database.
+The development server supports hot reload at <http://localhost:3000>. Its `DB`, `CACHE`, and `MEDIA` bindings connect to **remote preview resources**. Consequently, development database writes and `db:migrate:development` affect that preview database.
 
 1. Sign in to Cloudflare and copy the environment template:
 
@@ -107,7 +110,7 @@ The development server supports hot reload at <http://localhost:3000>. Its `DB` 
    ```
 
 2. Set the generated value as `AUTH_SECRET` in `.env.development`, then fill in the [integration settings](#configuration-and-integrations). Use `POLAR_SERVER=sandbox` for development.
-3. If using your own Cloudflare account, [provision D1 and KV](#provision-cloudflare-resources) and replace the development and preview binding IDs before continuing. The checked-in IDs belong to the existing deployment.
+3. If using your own Cloudflare account, [provision D1, KV, and R2](#provision-cloudflare-resources) and replace the development and preview binding IDs and bucket names before continuing. The checked-in values belong to the existing deployment.
 4. Apply the migrations and start the server:
 
    ```sh
@@ -125,19 +128,20 @@ There is no development admin seed. To bootstrap an installation, create and ver
 
 Use `.env.development`, `.env.preview`, and `.env.production` for their corresponding environments. These files are ignored by Git; [`.env.example`](.env.example) lists the configuration keys. `.env.test` contains committed dummy values for isolated tests.
 
-Server integrations read secrets through `env` from `cloudflare:workers`. Do not give private credentials a `VITE_` prefix, which makes values available to browser code. Deployment scripts upload the matching environment file with Wrangler's `--secrets-file` option.
+Server integrations read secrets through `env` from `cloudflare:workers`. Do not give private credentials a `VITE_` prefix, which makes values available to browser code. Deployment scripts upload only the keys that `secrets.required` in [`wrangler.jsonc`](wrangler.jsonc) declares, read from the matching environment file.
 
-| Variables                                                                       | Purpose                                                                                                                  |
-| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `AUTH_SECRET`                                                                   | Long random secret used by Better Auth. Generate a separate value for each deployment environment.                       |
-| `AUTH_GITHUB_CLIENT_ID`, `AUTH_GITHUB_CLIENT_SECRET`                            | GitHub OAuth application credentials.                                                                                    |
-| `AUTH_GOOGLE_CLIENT_ID`, `AUTH_GOOGLE_CLIENT_SECRET`                            | Google OAuth application credentials.                                                                                    |
-| `RESEND_API_KEY`, `RESEND_EMAIL_FROM`                                           | Email API credentials and the sender accepted by your Resend account.                                                    |
-| `POLAR_SERVER`                                                                  | Polar environment: `sandbox` for development or `production` for live billing.                                           |
-| `POLAR_ACCESS_TOKEN`, `POLAR_ORGANIZATION_ID`                                   | Polar API access and the organization used for discounts and licence operations.                                         |
-| `POLAR_WEBHOOK_SECRET`                                                          | Secret used to verify Polar webhook deliveries.                                                                          |
-| `POLAR_PRODUCT_ID_CORE`, `POLAR_PRODUCT_ID_COMPLETE`, `POLAR_PRODUCT_ID_AGENCY` | Product IDs mapped to the three checkout tiers. Use IDs from the selected Polar environment.                             |
-| `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_DATABASE_ID`, `CLOUDFLARE_ACCESS_TOKEN`    | Credentials for Drizzle Studio and introspection over the D1 HTTP API. Application queries use the `DB` binding instead. |
+| Variables                                                                       | Purpose                                                                                                                                                                                |
+| ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AUTH_SECRET`                                                                   | Long random secret used by Better Auth. Generate a separate value for each deployment environment.                                                                                     |
+| `AUTH_GITHUB_CLIENT_ID`, `AUTH_GITHUB_CLIENT_SECRET`                            | GitHub OAuth application credentials.                                                                                                                                                  |
+| `AUTH_GOOGLE_CLIENT_ID`, `AUTH_GOOGLE_CLIENT_SECRET`                            | Google OAuth application credentials.                                                                                                                                                  |
+| `RESEND_API_KEY`, `RESEND_EMAIL_FROM`                                           | Email API credentials and the sender accepted by your Resend account.                                                                                                                  |
+| `POLAR_SERVER`                                                                  | Polar environment: `sandbox` for development or `production` for live billing.                                                                                                         |
+| `POLAR_ACCESS_TOKEN`, `POLAR_ORGANIZATION_ID`                                   | Polar API access and the organization used for discounts and licence operations.                                                                                                       |
+| `POLAR_WEBHOOK_SECRET`                                                          | Secret used to verify Polar webhook deliveries.                                                                                                                                        |
+| `POLAR_PRODUCT_ID_CORE`, `POLAR_PRODUCT_ID_COMPLETE`, `POLAR_PRODUCT_ID_AGENCY` | Product IDs mapped to the three checkout tiers. Use IDs from the selected Polar environment.                                                                                           |
+| `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_DATABASE_ID`, `CLOUDFLARE_ACCESS_TOKEN`    | Credentials for Drizzle Studio and introspection over the D1 HTTP API. Application queries use the `DB` binding instead.                                                               |
+| `AFFONSO_PROGRAM_ID`                                                            | Optional Worker variable (`vars` in `wrangler.jsonc`), set only for the environment that takes real payments. The public Affonso program ID that turns on affiliate referral tracking. |
 
 The development, preview, and production environments currently declare **all of these keys** in `secrets.required`, including the Cloudflare credentials used by Drizzle tooling. Supply the required secrets for the selected environment; see [`wrangler.jsonc`](wrangler.jsonc) for the authoritative list.
 
@@ -151,7 +155,7 @@ When adapting the application to your own domain, update these locations togethe
 | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | [`src/presentation/branding/index.ts`](src/presentation/branding/index.ts) | Application name, canonical domain, contact addresses, and GitHub identity.                                          |
 | [`src/modules/_core/constants/api.ts`](src/modules/_core/constants/api.ts) | `appHostsForMode`, the hosts allowed per mode for authentication and newsletter requests, derived from `APP_DOMAIN`. |
-| [`wrangler.jsonc`](wrangler.jsonc)                                         | Worker names, custom-domain routes, D1 databases, and KV namespaces for each environment.                            |
+| [`wrangler.jsonc`](wrangler.jsonc)                                         | Worker names, custom-domain routes, D1 databases, KV namespaces, and R2 buckets for each environment.                |
 | [`src/data/marketing.ts`](src/data/marketing.ts)                           | Displayed tiers and prices (`TIERS`, `TIER_PRICES`); keep them aligned with the configured Polar products.           |
 | [`src/presentation/styles/`](src/presentation/styles)                      | Theme, typography, fonts, and shared style definitions.                                                              |
 
@@ -174,28 +178,28 @@ content/
   blog/                          Localized MDX posts
   docs/                          Localized MDX documentation and navigation metadata
 messages/{locale}/               JSON catalogues split into dotted namespaces
-e2e/                             Playwright specs and local test-account fixtures
+e2e/                             Playwright specs and the seeded test accounts, video, and course
 scripts/                         Content checks, build checks, seeding, and tooling
 remotion/                        Video authoring source and isolated npm toolchain
 src/
   routes/                        TanStack file routes, loaders, guards, and HTTP handlers
   routes.ts                      Shared route constants
   router.tsx                     Per-request QueryClient and SSR integration
-  server.ts                      Cloudflare Worker entry, locale middleware, and security headers
+  server.ts                      Cloudflare Worker entry, signed media routing, locale middleware, and security headers
   integrations/{vendor}/         Vendor configuration and adapters ({prefix}.{concern}.ts, e.g. auth.server.ts)
   modules/{table}/               One folder per database table: schema, zod, constants, types, use-cases/*.ts
   modules/_core/                 Shared error codes, catalogues, and helpers
   presentation/
     assets/motion/               Published landing-page videos and posters
     branding/                    Application identity and canonical URL
-    components/shadcn/           UI primitives (React Aria; Base UI for the drawer and toggle)
-    components/custom/           Shared components, plus app/, auth/, blog/, admin/{page}/, landing-page/
+    components/shadcn/           UI primitives (React Aria; Base UI for the drawer)
+    components/custom/           Shared components, plus app/, auth/, blog/, courses/, admin/{page}/, landing-page/
     emails/                      Email templates (markup and message namespace only)
     styles/                      Theme, typography, and local font declarations
   providers/                     Application-wide React providers
   data/                          Data shared by several files: navigation, marketing, admin demo rows
   hooks/                         Shared React hooks
-  lib/                           Shared utilities (cn, cookies, hashing, rate limits, route search params, SEO, GitHub stars)
+  lib/                           Shared utilities (cn, confetti, cookies, durations, hex hashes and tokens, rate limits, route search params, select options, SEO, GitHub stars, not-found errors)
   platform/testing/              Test Worker, mocks, RPC helpers, and render helpers
 ```
 
@@ -203,7 +207,7 @@ Routes coordinate loading and rendering. Business operations live in table modul
 
 A route file only composes its page: it defines the `<Name>Page` or `<Name>Layout` component, `const NAMESPACE` (page routes) or `const NAMESPACES` (layout routes), a loader that runs metadata, message and data loading in one `Promise.all`, and `head: pageHead(ROUTES.X)`. Widgets, dialogs, forms, and table columns live in their own files under `presentation/components/custom`, one per file, and read their own translations and data instead of receiving labels as props. Forms follow the shadcn TanStack Form pattern with the module's Zod schema; tables use the generic `DataTable` with columns defined in an `{entity}-columns.tsx` file. Email templates contain markup only; the use case that sends an email loads its messages and renders the template.
 
-Validate inputs at the server boundary and authorize protected functions themselves, in addition to page guards. Query and mutation keys are readonly tuples owned by the feature's `*.constants.ts`; include inputs that change the result in the query key. Reuse exported options for cache access, and invalidate only the data a mutation changes. Application documentation lives in [`content/docs/`](content/docs), including the [architecture guides](content/docs/architecture).
+Validate inputs at the server boundary and authorize protected functions themselves, in addition to page guards. Query and mutation keys are readonly tuples owned by the feature's `*.constants.ts`; include inputs that change the result in the query key. Domain values such as statuses, kinds, tiers, roles and provider IDs are named once in a constant object (`PRODUCT_STATUS`, `LICENSE_TIER`, `AUTH_PROVIDER`) in the owning module's or integration's `*.constants.ts`, and code, tests and e2e data import it instead of repeating the string. Reuse exported options for cache access, and invalidate only the data a mutation changes. Application documentation lives in [`content/docs/`](content/docs), including the [architecture guides](content/docs/architecture) and the [conventions](content/docs/conventions/index.en-US.mdx), the coding standard every change follows. Coding agents start from [`AGENTS.md`](AGENTS.md).
 
 Authentication entry points are in [`src/integrations/better-auth/`](src/integrations/better-auth):
 
@@ -216,7 +220,7 @@ Authentication entry points are in [`src/integrations/better-auth/`](src/integra
 | `auth.middleware.ts` | Server-function authorization, error handling, and rate limiting.                               |
 | `auth.session.ts`    | Request-scoped session lookup and UI query options.                                             |
 
-Authorization shares a fresh session lookup within one HTTP request; a new request checks session storage again. Route navigation rechecks sessions. Sign-in and sign-out clear private caches; route guards also clear cached data when the authenticated user changes. Rate limiting uses atomic D1 operations and rejects requests when its storage is unavailable. Expired counters are removed in bounded batches during rate-limit checks; there is no scheduled cleanup Worker. Verification, password-reset and newsletter emails are also limited to three per hour for each address, keyed by a SHA-256 of the address; an email over the limit is skipped without an error.
+Authorization shares a fresh session lookup within one HTTP request; a new request checks session storage again. Route navigation rechecks sessions. Sign-in and sign-out clear private caches; route guards also clear cached data when the authenticated user changes. Rate limiting uses atomic D1 operations and rejects requests when its storage is unavailable. Expired counters are removed in bounded batches during rate-limit checks; there is no scheduled cleanup Worker. Verification, password-reset and newsletter confirmation emails are also limited to three of each kind per hour for each address, keyed by a SHA-256 of the address; an email over the limit is skipped without an error.
 
 Email-verification links enter `/auth/verify-email` and redirect to Better Auth's native endpoint. Newsletter confirmation and unsubscribe links open a page that only loads its messages; the action runs when the visitor presses the button, so link scanners cannot confirm or unsubscribe. Success replaces the token URL with a result notice; a failure shows an error and keeps the token for retry.
 
@@ -226,26 +230,27 @@ Email-verification links enter `/auth/verify-email` and redirect to Better Auth'
 
 Use `bun run test` to invoke the configured Vite+ test runner. Running `bun test` directly does not use this test setup.
 
-| Command                                                                     | Purpose                                                                                |
-| --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `bun run dev`                                                               | Generate content/class-name tables and start development with remote preview bindings. |
-| `bun run typegen`                                                           | Generate Worker declarations, class-name tables, and Fumadocs content/types.           |
-| `bun run check`                                                             | Generate class-name tables; check localization/content, formatting, lint, and types.   |
-| `bun run check:fix`                                                         | Run checks and apply supported formatting/lint fixes.                                  |
-| `bun run check:i18n`                                                        | Validate message parity, scoped translation keys, ICU formats, and localized content.  |
-| `bun run test`                                                              | Run node, integration, and component test projects.                                    |
-| `bun run test:unit` / `bun run test:integration` / `bun run test:component` | Run one test project.                                                                  |
-| `bun run test:watch` / `bun run test:changed`                               | Watch tests or run tests affected by changes.                                          |
-| `bun run test:coverage`                                                     | Run tests with the configured coverage gate and reports.                               |
-| `bun run test:e2e:install`                                                  | Install Chromium/WebKit and their Playwright dependencies.                             |
-| `bun run test:e2e`                                                          | Run the browser suite in Chromium and WebKit.                                          |
-| `bun run test:e2e:pr`                                                       | Run the browser suite in Chromium, as pull request CI does.                            |
-| `bun run test:e2e:smoke`                                                    | Run the Chromium smoke suite.                                                          |
-| `bun run test:all`                                                          | Run the Vite+ tests followed by Chromium smoke tests.                                  |
-| `bun run build` / `bun run build:preview`                                   | Build the preview Worker, prerender public pages, and verify/optimize output.          |
-| `bun run build:production`                                                  | Build and verify the production application.                                           |
-| `bun run build:test` / `bun run start:test`                                 | Build or serve the isolated test application.                                          |
-| `bun run start`                                                             | Serve the most recently built application at `127.0.0.1:3000`.                         |
+| Command                                                                     | Purpose                                                                                 |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `bun run dev`                                                               | Generate content/class-name tables and start development with remote preview bindings.  |
+| `bun run typegen`                                                           | Generate Worker declarations, class-name tables, and Fumadocs content/types.            |
+| `bun run check`                                                             | Generate class-name tables; check localization/content, formatting, lint, and types.    |
+| `bun run check:fix`                                                         | Run checks and apply supported formatting/lint fixes.                                   |
+| `bun run check:i18n`                                                        | Validate message parity, scoped translation keys, ICU formats, and localized content.   |
+| `bun run test`                                                              | Run node, integration, and component test projects.                                     |
+| `bun run test:unit` / `bun run test:integration` / `bun run test:component` | Run one test project.                                                                   |
+| `bun run test:watch` / `bun run test:changed`                               | Watch tests or run tests affected by changes.                                           |
+| `bun run test:coverage`                                                     | Run tests with the configured coverage gate and reports.                                |
+| `bun run test:e2e:install`                                                  | Install Chromium/WebKit and their Playwright dependencies.                              |
+| `bun run test:e2e`                                                          | Run the browser suite in Chromium and WebKit.                                           |
+| `bun run test:e2e:pr`                                                       | Run the browser suite in Chromium, as pull request CI does.                             |
+| `bun run test:e2e:smoke`                                                    | Run the Chromium smoke suite.                                                           |
+| `bun run test:all`                                                          | Run the Vite+ tests followed by Chromium smoke tests.                                   |
+| `bun run build` / `bun run build:preview`                                   | Build the preview Worker, prerender public pages, and verify/optimize output.           |
+| `bun run build:production`                                                  | Build and verify the production application.                                            |
+| `bun run build:test` / `bun run start:test`                                 | Build or serve the isolated test application.                                           |
+| `bun run start`                                                             | Serve the most recently built application at `127.0.0.1:3000`.                          |
+| `bun run video:publish:preview` / `bun run video:publish:production`        | Encode a recording with FFmpeg, then upload and register it with your `wrangler login`. |
 
 Run the commands from the root [package scripts](package.json); the Remotion commands run inside `remotion/`.
 
@@ -262,11 +267,11 @@ bun run test:e2e:install
 bun run test:e2e
 ```
 
-Locally, Playwright migrates and seeds the test database, builds the test application, and starts its preview server unless an existing server already answers at the configured URL. Stop other servers on port 3000 before running the suite so it uses the intended test application. `PLAYWRIGHT_BASE_URL` overrides the default `http://127.0.0.1:3000`.
+Locally, Playwright recreates the test database with `db:reset:test`, builds the test application, and starts its preview server unless an existing server already answers at the configured URL. Stop other servers on port 3000 before running the suite so it uses the intended test application. `PLAYWRIGHT_BASE_URL` overrides the default `http://127.0.0.1:3000`.
 
-[`e2e/specs/accessibility.spec.ts`](e2e/specs/accessibility.spec.ts) runs axe-core with the WCAG 2.0, 2.1 and 2.2 A and AA rules and axe's best practices on the public pages, a blog post, and both workspaces in the light and dark themes, and fails on any violation.
+[`e2e/specs/accessibility.spec.ts`](e2e/specs/accessibility.spec.ts) runs axe-core with the WCAG 2.0, 2.1 and 2.2 A and AA rules and axe's best practices on the public pages, the course pages, the docs home, every Conventions page and one page from each other docs section, a blog post, and both workspaces in the light and dark themes, and fails on any violation.
 
-`build:test` selects `env.test` in the root `wrangler.jsonc` using `CLOUDFLARE_ENV=test`. It uses the test Worker entry, local bindings, `.env.test`, and `.wrangler/test`; no separate test Wrangler file or `E2E=true` flag is needed. In CI, migrations, seeding, and building run explicitly before Playwright starts the server.
+`build:test` selects `env.test` in the root `wrangler.jsonc` using `CLOUDFLARE_ENV=test`. It uses the test Worker entry, local bindings, `.env.test`, and `.wrangler/test`; no separate test Wrangler file or `E2E=true` flag is needed. In CI, `db:reset:test` and `build:test` run explicitly before Playwright starts the server.
 
 - [Main CI](.github/workflows/ci.yml) runs checks, coverage, and Chromium E2E on pull requests and pushes to `main`. Successful eligible runs then deploy to Cloudflare.
 - [Full E2E](.github/workflows/e2e-full.yml) adds WebKit on pushes to `main` and runs Chromium and WebKit weekly and on manual dispatch.
@@ -278,37 +283,39 @@ The [deployment workflow](.github/workflows/deploy-reusable.yml) records actual 
 
 ### Provision Cloudflare resources
 
-For a new Cloudflare account, create a preview database and KV namespace:
+For a new Cloudflare account, create a preview database, KV namespace, and R2 bucket:
 
 ```sh
 bunx wrangler login
 bunx wrangler d1 create saasyland_com_preview
 bunx wrangler kv namespace create CACHE --env preview
+bunx wrangler r2 bucket create saasyland-preview
 ```
 
-Replace `database_id`, `database_name`, and the KV namespace `id` under both `development` and `preview` in `wrangler.jsonc`. Keep the binding names `DB` and `CACHE`, and preserve `migrations_dir`. These two environments share resources by default. Update Worker names and custom-domain routes for your account.
+Replace `database_id`, `database_name`, the KV namespace `id`, and the `MEDIA` `bucket_name` under both `development` and `preview` in `wrangler.jsonc`. Keep the binding names `DB`, `CACHE`, and `MEDIA`, and preserve `migrations_dir`. These two environments share resources by default. Update Worker names and custom-domain routes for your account.
 
-Create separate production resources with `saasyland_com_production` and `bunx wrangler kv namespace create CACHE --env production`, then update the `production` bindings. The deployment guard rejects placeholder IDs; it does not verify that the existing IDs belong to your account.
+Create separate production resources with `saasyland_com_production`, `bunx wrangler kv namespace create CACHE --env production`, and `bunx wrangler r2 bucket create saasyland`, then update the `production` bindings. The deployment guard rejects missing bindings, placeholder IDs, and a production environment that shares its database, namespace, or bucket with preview; it does not verify that the existing IDs belong to your account or that the R2 buckets exist, and a deploy fails while a bound bucket is missing.
 
 ### Migrations
 
-Module schemas are collected by [`drizzle.schemas.ts`](src/integrations/drizzle-orm/drizzle.schemas.ts). Generate migrations with:
+Module schemas are collected by [`drizzle.schemas.ts`](src/integrations/drizzle-orm/drizzle.schemas.ts), and every table with `createdAt` and `updatedAt` spreads them from `timestamps()` in [`drizzle.columns.ts`](src/integrations/drizzle-orm/drizzle.columns.ts). Generate migrations with:
 
 ```sh
 bun run db:generate
 ```
 
-Review and commit SQL files under `src/integrations/drizzle-orm/migrations/` with their schema changes. Apply migrations before deploying code that depends on them.
+Review and commit SQL files under `src/integrations/drizzle-orm/migrations/` with their schema changes. The deployment scripts and CI apply the target's migrations before deploying; apply them to the development and local databases yourself.
 
 | Command                          | Database affected                                                                      |
 | -------------------------------- | -------------------------------------------------------------------------------------- |
 | `bun run db:migrate:test`        | Local test database in `.wrangler/test`.                                               |
+| `bun run db:reset:test`          | Deletes `.wrangler/test`, then migrates and seeds the local test database.             |
 | `bun run db:migrate:local`       | Local development database; the regular development server still uses remote bindings. |
 | `bun run db:migrate:development` | Remote database configured for development, shared with preview by default.            |
 | `bun run db:migrate:preview`     | Remote preview database.                                                               |
 | `bun run db:migrate:production`  | Remote production database.                                                            |
 
-`db:studio:development`, `db:studio:preview`, and `db:studio:production` open Drizzle Studio using the corresponding environment file. The matching `db:introspect:*` scripts introspect D1 through its HTTP API. Set the three `CLOUDFLARE_*` credentials to the target account/database for these tools.
+`db:migrations:development`, `db:migrations:preview`, and `db:migrations:production` list the migrations each remote database has not applied yet, without changing anything. `db:studio:development`, `db:studio:preview`, and `db:studio:production` open Drizzle Studio using the corresponding environment file. The matching `db:introspect:*` scripts introspect D1 through its HTTP API. Set the three `CLOUDFLARE_*` credentials to the target account/database for these tools.
 
 ### Automatic GitHub deployments
 
@@ -319,20 +326,20 @@ The CI workflow deploys only after formatting, lint, types, localization, covera
 | Pull request opened, reopened, or updated from a branch in this repository | `saasyland-preview` (`preview`) | `Preview`          | <https://preview.saasyland.com> |
 | Push to `main`, including merging a pull request                           | `saasyland` (`production`)      | `Production`       | <https://saasyland.com>         |
 
-Preview is a **shared environment**: each successful PR deployment replaces the previous preview, using the same preview D1 database and KV namespace. It does not create a separate Worker or database for each PR. Fork and Dependabot PRs run validation without privileged deployments; move a reviewed change to a trusted repository branch to preview it.
+Preview is a **shared environment**: each successful PR deployment replaces the previous preview, using the same preview D1 database, KV namespace, and R2 bucket. It does not create a separate Worker or database for each PR. Fork and Dependabot PRs run validation without privileged deployments; move a reviewed change to a trusted repository branch to preview it.
 
 In [repository Settings → Environments](https://github.com/saasyland/saasyland.com/settings/environments), configure the existing `Preview` and `Production` environments with these secrets:
 
 | Secret                  | Purpose                                                                                                                                                                          |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CLOUDFLARE_API_TOKEN`  | Wrangler authentication with permission to deploy the Worker, manage its configured bindings/routes, and apply D1 migrations. Scope the token to the intended account and zones. |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account containing the selected Worker, D1 database, and KV namespace.                                                                                                |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account containing the selected Worker, D1 database, KV namespace, and R2 bucket.                                                                                     |
 
 These are deployment credentials. `CLOUDFLARE_API_TOKEN` is separate from the `CLOUDFLARE_ACCESS_TOKEN` used by Drizzle Studio. Repository secrets with the same names can be used as a fallback; environment-specific secrets allow different credentials for preview and production. Follow [Cloudflare's GitHub Actions authentication guide](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/) when creating the token.
 
 The existing Workers must already have all runtime secrets required by `wrangler.jsonc`. CI builds with committed dummy credentials from `.env.test` because prerendering initializes provider clients, while still selecting the real preview/production configuration and Worker entry. It removes the generated local `.dev.vars` file before deployment. No real provider credentials are needed in GitHub, and no secrets file is uploaded: Wrangler inherits the selected Worker's existing secrets. A new Worker still needs the initial provisioning described in the manual deployment section.
 
-Deployment jobs build and verify artifacts, apply the target D1 migrations, then deploy the tested revision. Workflow runs and deployments queue rather than cancel one another, with a separate deployment queue per environment. Schema changes must remain compatible with the currently running application because migrations run before the new Worker is deployed. WebKit's additional main-branch suite runs independently of the production deployment gate.
+Deployment jobs build and verify artifacts, apply the target D1 migrations, then deploy the tested revision. They do not run the live site check (`scripts/verify-deployment.ts`) that the manual deployment scripts run, because Cloudflare's bot protection answers 403 to requests from CI runners. Workflow runs and deployments queue rather than cancel one another, with a separate deployment queue per environment. Schema changes must remain compatible with the currently running application because migrations run before the new Worker is deployed. WebKit's additional main-branch suite runs independently of the production deployment gate.
 
 GitHub creates deployment records from the job's `environment` declaration and shows the job's real result. See [GitHub's deployment tracking documentation](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/control-deployments).
 
@@ -345,7 +352,6 @@ After provisioning resources and configuring domains and secrets:
 ```sh
 cp .env.example .env.preview
 # Fill in preview secrets and sandbox provider settings before continuing.
-bun run db:migrate:preview
 bun run deploy:preview
 ```
 
@@ -354,13 +360,12 @@ For production:
 ```sh
 cp .env.example .env.production
 # Fill in production secrets and live provider settings before continuing.
-bun run db:migrate:production
 bun run deploy:production
 ```
 
-Each deployment script verifies binding IDs, builds the selected environment, checks the generated artifacts, optimizes prerendered HTML, and deploys through Wrangler using the corresponding secrets file. The Cloudflare Vite plugin generates the deployment configuration consumed by Wrangler. Builds alone do not apply remote migrations or deploy resources.
+Each deployment script verifies the bindings, builds the selected environment, checks the generated artifacts, and optimizes prerendered HTML. It then writes the secrets that `wrangler.jsonc` declares for that environment from the environment file to `.wrangler/secrets.<environment>.json`, failing if any is empty, applies the environment's D1 migrations, deploys `dist/server/wrangler.json` (the configuration the Cloudflare Vite plugin generates) with that secrets file, and requests the home page, the course catalogue, `robots.txt`, `/api`, and `/api/auth/get-session` from the live site, retrying twice. Builds alone do not apply remote migrations or deploy resources.
 
-Public pages are prerendered to `dist/client`; protected, authentication, newsletter-action, and API routes are excluded from prerendering. The build verifier checks the Worker deployment configuration, localized home/legal pages and SEO links, fonts, client JavaScript, and selected route exclusions. The application still requires a Worker for server-rendered routes, authentication, APIs, and locale handling.
+Public pages are prerendered to `dist/client`; protected, authentication, newsletter-action, course, and API routes are excluded from prerendering. After prerendering, [`scripts/deployed-worker.ts`](scripts/deployed-worker.ts) builds the Worker that is deployed again, without the rendered MDX of docs and blog pages and without the landing and legal page translations, which only prerendered pages use. The build verifier checks the Worker deployment configuration, localized home/legal pages and SEO links, that every docs page and published blog post was prerendered, fonts, client JavaScript, and selected route exclusions. The application still requires a Worker for server-rendered routes, authentication, APIs, video delivery, and locale handling.
 
 ## Localization and content
 
@@ -406,7 +411,8 @@ The following decisions produce these results. Review them before changing the r
 - Public pages are prerendered. [`optimize-prerendered-html.ts`](scripts/optimize-prerendered-html.ts) removes dependency `modulepreload` hints and keeps each page's entry hint at low priority, so the stylesheet and fonts load first.
 - Providers whose value changes after hydration, such as the [theme](src/providers/theme-provider.tsx) and [Motion](src/providers/motion-provider.tsx) providers, wrap only their consumers and never a route `<Outlet />`. A change above a route's Suspense boundary forces that route to hydrate synchronously in one long task, or to render on the client and shift the layout.
 - `robots.txt` and `llms.txt` are static files that bypass the Worker through `run_worker_first` in [`wrangler.jsonc`](wrangler.jsonc). Lighthouse fails the SEO and Agentic Browsing audits for these files when the requests time out.
-- [`src/server.ts`](src/server.ts) serves prerendered pages from static assets and imports the TanStack Start handler only for other requests, so page requests do not load the full server bundle.
+- [`src/server.ts`](src/server.ts) serves prerendered pages from static assets and imports the TanStack Start handler only for other requests, so page requests do not load the full server bundle. Its static imports stay free of TanStack Start and provider SDKs, because a cold Worker evaluates them before it can answer.
+- The deployed Worker leaves out what only prerendering needs: [`scripts/deployed-worker.ts`](scripts/deployed-worker.ts) rebuilds it after prerendering without rendered MDX and without the landing and legal page translations, which keeps the upload well below Cloudflare's Worker size limit.
 
 ## Landing page videos
 
@@ -419,19 +425,20 @@ npm run check
 npm run dev
 ```
 
-Remotion Studio runs on port 3001. Finished videos and full-size/responsive posters live in `src/presentation/assets/motion/`; Vite emits them with content hashes under `/assets/`. Keep the source and published assets in Git. Editor dependencies, bundles, caches, and temporary renders are ignored.
+Remotion Studio runs on port 3001. Finished videos and full-size/responsive posters live in `src/presentation/assets/motion/`; Vite emits them with content hashes under `/assets/`. The course tour, which plays on request with controls, also ships an MP4 and AVIF posters. Keep the source and published assets in Git. Editor dependencies, bundles, caches, and temporary renders are ignored.
 
 Normal application builds serve the checked-in assets without installing Remotion or rendering videos. Follow the [rendering instructions](remotion/README.md#rendering) when updating a composition, and regenerate its video and posters together.
 
 ## Contributing
 
-Follow the [architecture guides](content/docs/architecture) and use the existing [theme and typography definitions](src/presentation/styles). Keep tests beside their owner, and update localized content and documentation under `content/docs/` when changing user-facing behavior.
+Follow the [conventions](content/docs/conventions/index.en-US.mdx) and the [architecture guides](content/docs/architecture), and use the existing [theme and typography definitions](src/presentation/styles). Keep tests beside their owner, and update localized content and documentation under `content/docs/` when changing user-facing behavior.
 
 Before opening a pull request, run the checks relevant to your change. The application verification sequence is:
 
 ```sh
 bun run check
 bun run test:coverage
+bun run build:test
 bun run test:e2e:install
 bun run test:e2e:pr
 ```

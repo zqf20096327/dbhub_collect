@@ -47,8 +47,10 @@ For a simpler setup that just wraps the existing npm package in Docker, see [str
 | `get_activity_streams` | Time-series data (heart rate, elevation, GPS) | 7 days |
 | `get_athlete_profile` | Authenticated athlete info | 24 hours |
 | `get_athlete_stats` | YTD and all-time totals | 1 day |
-| `get_cache_stats` | Cache hit/miss rates and API rate limit status | none |
+| `get_cache_stats` | Cache hit/miss rates, API rate limits (general and read), recent syncs | none |
 | `sync_activities` | Bulk-sync recent activities into cache | varies |
+| `check_vault` | Compare the vault with Strava: what is missing, what is gone, by month | none |
+| `repair_vault` | Add what `check_vault` found missing; delete only with `delete_gone=true` | none |
 | `query_vault` | Filter and aggregate cached activities by date, sport type | none |
 | `get_activities_near` | Vault activities that started near a place name | none |
 | `set_activity_location` | Hand-label an indoor or GPS-less activity | none |
@@ -86,8 +88,9 @@ guarantee is removed:
   privacy-zone trimming is not a substitute: it is applied inconsistently, and
   `start_latlng` is the raw recorded start regardless.
 
-Curated spots live in their own `ride_spots` table, so `sync_activities` cannot
-wipe them the way it wipes `set_activity_location` overrides.
+Curated spots live in their own `ride_spots` table, which `sync_activities`
+never writes. A re-sync also keeps any location set with
+`set_activity_location`; older versions wiped those.
 
 ### Route tracks, and why they are clipped
 
@@ -190,34 +193,69 @@ Total Activities: 24
    - **Application Name:** Whatever you want (e.g., "My MCP Server")
    - **Category:** Choose any
    - **Club:** Leave blank
-   - **Website:** Any URL you own (e.g., `https://example.com`)
-   - **Authorization Callback Domain:** A domain you own (e.g., `example.com`). This cannot be `localhost`. It doesn't need to be running a web server or have anything to do with this project. You're only using it as a redirect target to grab an authorization code (explained below).
-3. After creating the app, you'll see your **Client ID** and **Client Secret** on the app settings page. You'll need both for the next steps.
+   - **Website:** Any URL (e.g., `https://example.com`)
+   - **Authorization Callback Domain:** `localhost`. You do not need a domain of your own. Strava's [authentication documentation](https://developers.strava.com/docs/authentication/) says of the redirect address: "`localhost` and `127.0.0.1` are white-listed." (Earlier versions of this README said the callback could not be `localhost`. That was wrong.)
+3. After creating the app, you'll see your **Client ID** and **Client Secret** on the app settings page. Keep the page open; the next step asks for both.
 
-### OAuth: Get your access tokens
+### Sign in to Strava with one command
 
-This is the trickiest part, and Strava's docs don't make it easy. Here's what actually works.
+From the folder you cloned, on a computer with a web browser:
 
-**Step 1: Build the authorization URL**
+```bash
+cp .env.example .env
+python3 src/strava_mcp_vault/login.py --env-file .env
+```
+
+It asks for your Client ID and Client Secret (the secret is not shown as you type, and it skips the question for any value already in `.env`), opens Strava in your browser, and waits. Click **Authorize** on Strava's page and leave every box ticked. The terminal then shows:
+
+```
+Signed in to Strava as Alex. Tokens saved to .env (readable by you only).
+Next step: docker compose up -d
+```
+
+That command needs only Python 3, no install. If you installed the package instead (`pip install .`), the same thing is available as `strava-mcp-vault-login`.
+
+What it does to keep your credentials safe:
+
+- The temporary listener that catches Strava's redirect accepts connections from this computer only (`127.0.0.1`), with a single 5 minute limit on the whole wait (`--timeout`). It closes as soon as the real redirect arrives or the wait ends. Only an exact `GET /callback` addressed to `localhost` or `127.0.0.1` on its own port is considered; anything else a browser or another program sends (a favicon, an idle connection, a lookalike path) gets a 404 and cannot use up the sign-in or stretch the limit.
+- Each sign-in carries a fresh random `state` value. A `/callback` request without it is refused, nothing is stored, and the terminal says so in one line while it keeps waiting for the real one. After 10 such refusals it stops, because something else on your computer is sending them; run the command again.
+- Tokens and the client secret are never printed or logged. `.env` is rewritten readable by you only. Each line it sets is written as plain `KEY=value` (an `export ` in front of one of those lines is dropped), the file is saved with Unix line endings, and comments and other settings keep their text.
+- If `TOKEN_ENCRYPTION_KEY` is set but is not a valid key, it stops before opening the browser rather than let the server store tokens unencrypted. It only says tokens are encrypted when they were.
+- It refuses to store tokens that lack the `activity:read_all` permission, since every activity request fails without it.
+
+The server copies the tokens from `.env` into its vault the first time it starts with an empty vault. After that it refreshes them on its own and stores them in SQLite (encrypted if you set `TOKEN_ENCRYPTION_KEY`).
+
+> **Already running with Docker? Running this command again changes nothing.** Once the server's vault holds tokens, it never reads `STRAVA_ACCESS_TOKEN` or `STRAVA_REFRESH_TOKEN` from `.env` again, so new tokens written there are ignored. You do not need to re-run it: the server keeps its own tokens fresh.
+
+**Server with no browser (reached over SSH):** forward a port, then run the command on the server and open the address it prints in your own browser:
+
+```bash
+ssh -L 8765:127.0.0.1:8765 you@your-server
+python3 src/strava_mcp_vault/login.py --env-file .env --port 8765 --no-browser
+```
+
+**Without Docker:** run `strava-mcp-vault-login` with no `--env-file`. It writes the tokens straight into the vault at `VAULT_DB_PATH` (read from `.env` the same way the server reads it), through the server's own storage code, so `TOKEN_ENCRYPTION_KEY` applies. Then start the server with `strava-mcp-vault`.
+
+### Manual fallback: get your tokens by hand
+
+Use this only if the command above cannot run on your machine.
 
 > **CRITICAL: You MUST include `activity:read_all` in the scope parameter.** The default `read` scope only gives profile access. Without `activity:read_all`, every activity request returns a 401 with `"field": "activity:read_permission", "code": "missing"`. This is the #1 gotcha and it's poorly documented.
 
+**Step 1: Build the authorization URL**
+
 ```
-https://www.strava.com/oauth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=https://YOUR_DOMAIN&response_type=code&scope=read,activity:read_all
+https://www.strava.com/oauth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=http://localhost/exchange_token&response_type=code&approval_prompt=force&scope=read,activity:read_all
 ```
 
-Replace `YOUR_CLIENT_ID` with the Client ID from your app settings, and `YOUR_DOMAIN` with the callback domain you entered when creating the app.
+Replace `YOUR_CLIENT_ID` with the Client ID from your app settings.
 
 **Step 2: Authorize and grab the code**
 
-Open that URL in your browser. Authorize the app. Strava will redirect to your callback domain.
-
-**Here's the trick:** The redirect page will 404 (or show your unrelated website). This is expected and totally fine. You don't need a working web server at that domain. The only thing you need is the **authorization code in your browser's address bar**.
-
-After the redirect, your browser URL will look something like:
+Open that URL in your browser and authorize the app. Strava redirects to `localhost`, where nothing is listening, so the browser shows an error page. That is expected. The only thing you need is the **authorization code in your browser's address bar**, which will look something like:
 
 ```
-https://yourdomain.com/?state=&code=abc123def456ghi789&scope=read,activity:read_all
+http://localhost/exchange_token?state=&code=abc123def456ghi789&scope=read,activity:read_all
 ```
 
 Copy the value between `code=` and `&scope` (in this example, `abc123def456ghi789`). That's your one-time authorization code for the next step.
@@ -240,7 +278,7 @@ Copy `access_token` and `refresh_token` from the JSON response into your `.env` 
 git clone https://github.com/pete-builds/strava-mcp-vault.git
 cd strava-mcp-vault
 cp .env.example .env
-# Edit .env with your credentials (see Setup above)
+python3 src/strava_mcp_vault/login.py --env-file .env
 docker compose up -d
 ```
 
@@ -297,6 +335,63 @@ Run `sync_activities` after first setup to pull your recent history into the cac
 
 Cached data persists across container restarts through a Docker volume (`strava-data`). Use `get_cache_stats` to check hit/miss rates and see how much of your API budget remains.
 
+## Is my vault complete?
+
+A routine sync only asks Strava for activities newer than the newest one already
+stored, so it can never fill a gap behind that point, and it reports success
+either way. Rides deleted on Strava also stay in the vault. To find out, ask:
+
+```
+check_vault(after="2026-01-01", sport_types="Ride,MountainBikeRide,GravelRide")
+```
+
+It reads Strava's activity list for that window (about one call per 200
+activities), changes nothing, and reports each side's count and distance, a
+per-month table, every activity on Strava that the vault lacks, every activity
+re-dated or re-typed on Strava, and every vault activity missing from Strava's
+list. It says the vault matches only when the counts agree and the distances
+agree within a metre. Leave out `after` and `before` to check the whole account.
+
+To fix what it found, run `repair_vault` with the same arguments. It stores the
+activities through the same update a sync uses, so a location you set with
+`set_activity_location` is kept. If Strava answers for a different athlete than
+the vault belongs to (a token from another account), it stores and deletes
+nothing.
+
+Activities missing from Strava's list are kept. A ride can be absent from the
+list because the token cannot see it or because Strava's answer was incomplete,
+so `delete_gone=true` deletes one only when all of these hold: the vault knows
+its token holds `activity:read_all` (recorded when `strava-mcp-vault-login`
+writes to the vault; a token seeded from environment variables, including the
+`--env-file` Docker setup, has no record, so deletes are refused), the vault's
+stored activities name its Strava athlete, the whole window was read, Strava's side of it is not empty, the number to delete is at most 10
+or 5 percent of the window (whichever is larger; `max_delete` changes that for
+one run), the ride was not stored as private, and Strava answers 404 when asked
+for that ride by id. Anything else keeps the ride and the report says why. The
+report always shows the delete limit that applied, and `max_delete` is only
+accepted together with `delete_gone`. Sport names are matched without regard to
+case, and a window where both sides have nothing says so instead of "matches".
+
+**Back up the vault before using `delete_gone`.** With the shipped
+`docker-compose.yml` and the default `VAULT_DB_PATH`, this writes a consistent
+copy next to the vault on the `strava-data` volume (SQLite's own backup, which
+includes the WAL; do not `docker cp` the live file):
+
+```bash
+docker exec strava-mcp-vault python -c "import sqlite3; sqlite3.connect('/app/data/vault.db').backup(sqlite3.connect('/app/data/vault-backup.db'))"
+```
+
+If you run it some other way, back up the vault file first.
+
+Strava allows 100 read calls per 15 minutes and 1,000 a day. The check stops
+while 5 are still left, says how far it got, and prints the exact call to
+continue once the limit resets. `get_cache_stats` shows the read budget and the
+last ten syncs, including any that did not finish, so a hole can be dated.
+
+From Python (for a nightly job), the same logic is
+`await CacheManager(db, client).check_vault(after="2026-01-01")`, which returns
+the report as a dict.
+
 ## Development
 
 Running locally without Docker:
@@ -306,6 +401,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env
 # Edit .env, set VAULT_DB_PATH=./data/vault.db
+strava-mcp-vault-login
 strava-mcp-vault
 ```
 

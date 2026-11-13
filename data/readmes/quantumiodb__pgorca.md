@@ -1,0 +1,269 @@
+<p align="center">
+  <img src="docs/logo.svg" alt="pg_orca" width="140"/>
+</p>
+
+<h1 align="center">pgorca</h1>
+
+<p align="center">
+  <a href="https://github.com/quantumiodb/pgorca/actions/workflows/build.yml"><img src="https://github.com/quantumiodb/pgorca/actions/workflows/build.yml/badge.svg?branch=main" alt="build"/></a>
+</p>
+
+A PostgreSQL 18 / 19 extension that plugs the **ORCA query optimizer** (originally from Greenplum / Apache Cloudberry) into a standard single-node PostgreSQL instance.
+
+## Overview
+
+ORCA is a **Cascades-style** cost-based optimizer: instead of a fixed bottom-up
+dynamic-programming pass, it stores all equivalent plan alternatives in a memo and
+explores them by firing transformation rules (*xforms*), so logical rewrites and
+physical implementation choices are made together and priced by the same cost model.
+It operates on an intermediate representation called DXL (Data eXchange Language). It
+was designed for massively-parallel processing (MPP) databases but contains a powerful
+optimization engine that is useful in single-node mode as well.
+
+That architecture lets ORCA address several known limits of the built-in PostgreSQL
+planner:
+
+- **Correlated subqueries.** PG pulls up only a limited set of sublink shapes; the
+  rest stay as SubPlans re-executed per outer row. ORCA models them as `Apply` and
+  decorrelates them into regular joins through xforms, so the subquery side
+  participates in join ordering and costing like any other relation.
+- **Join ordering beyond the collapse limits.** PG stops exhaustive search at
+  `join_collapse_limit`/`from_collapse_limit` (8 by default) and falls back to the
+  syntactic order or GEQO. ORCA enumerates join orders as part of the search itself
+  (`optimizer_join_order`: `exhaustive2` by default, or `exhaustive` / `greedy` /
+  `query`), with `pg_orca.join_order_dynamic_threshold` downshifting to a cheaper
+  strategy only when the query is genuinely large.
+- **Rewrites the planner does not attempt.** Eager aggregation (pushing a `GROUP BY`
+  below a join), CTE inlining as a *cost-based* decision rather than a syntactic rule,
+  aggregate splitting, and inferred/transitive predicates pushed across join
+  boundaries.
+- **Unified search space.** Because rewriting and implementation live in the same
+  memo, a rewrite that only pays off with a particular physical shape (index scan,
+  merge join, partition pruning) can be chosen on cost instead of being applied — or
+  skipped — ahead of the plan search.
+
+The trade-off is planning time: exploring the full space costs more than PG's planner,
+which is why ORCA is opt-in per session and any query it cannot handle falls back to
+the standard planner automatically.
+
+This project extracts ORCA's four core libraries and the PostgreSQL integration layer from Apache Cloudberry, adapts them for PG18 and PG19, and packages the result as a `CREATE EXTENSION`-installable plugin.
+
+The ORCA optimizer is the work of many people from the Greenplum, Pivotal/VMware, and Apache Cloudberry projects. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for acknowledgments.
+
+### Components
+
+| Directory | Description |
+|-----------|-------------|
+| `libgpos/` | ORCA memory pool, error handling, concurrency primitives |
+| `libnaucrates/` | DXL parser/serializer, metadata abstractions |
+| `libgpopt/` | Core optimizer: search, transformation rules, cost model |
+| `libgpdbcost/` | GPDB-specific cost model implementation |
+| `gpopt/` | PostgreSQL ↔ DXL translation layer (relcache, planner bridge) |
+| `compat/` | Stub headers replacing MPP-only Cloudberry types |
+| `pg_orca.cpp` | Extension entry point, `planner_hook`, GUC definitions |
+
+## Requirements
+
+- PostgreSQL 18 (primary target), or PostgreSQL 19 beta
+- [xerces-c](https://xerces.apache.org/xerces-c/) (XML parsing for DXL)
+- CMake ≥ 3.20
+- C++17 compiler (clang or gcc)
+
+The same source tree builds against both majors — version differences are handled
+with `#if PG_VERSION_NUM >= 190000` guards, there is no separate branch. CI builds
+PG18 on Ubuntu (gcc/clang, Debug/Release), Ubuntu arm64, CentOS Stream 9, Rocky 9
+and macOS, and builds + runs the ORCA regression tests against PG19 on Rocky 9.
+See [PostgreSQL 19](#postgresql-19) for what is PG19-specific.
+
+On macOS with Homebrew:
+```bash
+brew install xerces-c cmake
+```
+
+## Build & Install
+
+### 1. Locate pg_config
+
+CMake needs `pg_config` from the PostgreSQL installation you are building
+against to find headers, libraries, and install paths. Either add the PG `bin/`
+directory to `PATH`:
+
+```bash
+export PATH="/path/to/pg/bin:$PATH"
+# verify
+pg_config --version   # should print "PostgreSQL 18.x" or "PostgreSQL 19..."
+```
+
+Or pass it explicitly on the CMake command line with `-DPG_CONFIG=...` (see below).
+
+### 2. Configure & Build
+
+Two generators are supported. Pick whichever suits your environment.
+
+#### CMake (Unix Makefiles — no extra tools needed)
+
+```bash
+mkdir build && cd build
+
+# pg_config is on PATH
+cmake .. -DCMAKE_BUILD_TYPE=Debug
+
+# pg_config NOT on PATH — pass it explicitly
+cmake .. -DPG_CONFIG=/path/to/pg/bin/pg_config -DCMAKE_BUILD_TYPE=Debug
+```
+
+```bash
+cmake --build . --target install -j$(nproc)
+```
+
+To rebuild after source changes:
+
+```bash
+cmake --build build -j$(nproc)
+```
+
+#### Ninja (faster incremental builds)
+
+```bash
+mkdir build && cd build
+cmake .. -DPG_CONFIG=/path/to/pg/bin/pg_config -DCMAKE_BUILD_TYPE=Debug -GNinja
+```
+
+```bash
+ninja -j$(nproc)
+ninja install
+```
+
+To rebuild after source changes:
+
+```bash
+ninja -j$(nproc) -C build
+```
+
+### Release build
+
+Replace `Debug` with `Release` in either generator. Example with Ninja:
+
+```bash
+mkdir build-release && cd build-release
+cmake .. -DPG_CONFIG=/path/to/pg/bin/pg_config -DCMAKE_BUILD_TYPE=Release -GNinja
+ninja -j$(nproc)
+ninja install
+```
+
+Or with plain CMake:
+
+```bash
+mkdir build-release && cd build-release
+cmake .. -DPG_CONFIG=/path/to/pg/bin/pg_config -DCMAKE_BUILD_TYPE=Release
+cmake --build . --target install -j$(nproc)
+```
+
+Release mode enables `-O3 -DNDEBUG` and disables ORCA internal assertions (`GPOS_DEBUG`).
+
+## Usage
+
+```sql
+-- 1. Install the extension in the target database.  This LOADs the
+--    shared library into the current session so pg_orca.* GUCs and
+--    the planner_hook are live immediately:
+CREATE EXTENSION pg_orca;
+
+-- 2. (Recommended) Have every new connection to this database
+--    auto-load pg_orca.  Per-database scope; no restart, no cluster
+--    GUC change, takes effect for subsequent connections:
+ALTER DATABASE mydb SET session_preload_libraries = 'pg_orca';
+
+-- 3. Enable ORCA per session (or persistently via
+--    ALTER DATABASE mydb SET pg_orca.enable_orca = on):
+SET pg_orca.enable_orca = on;
+
+-- 4. Run a query — ORCA optimizes it.
+EXPLAIN SELECT * FROM t WHERE id > 100;
+```
+
+Existing sessions are unaffected by step 2 until they reconnect.  If
+ORCA cannot handle a query (unsupported feature or internal error) it
+falls back to the standard PostgreSQL planner automatically.
+
+Alternative scopes for the preload setting:
+
+```sql
+-- Cluster-wide (every database, every role):
+ALTER SYSTEM SET session_preload_libraries = 'pg_orca';
+SELECT pg_reload_conf();
+
+-- Single role only:
+ALTER ROLE bench SET session_preload_libraries = 'pg_orca';
+```
+
+`ALTER DATABASE ... SET` and `ALTER SYSTEM SET` overwrite the value;
+if a sibling library was already present (`pg_stat_statements`, etc.),
+include it explicitly:
+
+```sql
+ALTER DATABASE mydb SET session_preload_libraries = 'pg_orca,pg_stat_statements';
+```
+
+Roll back:
+
+```sql
+ALTER DATABASE mydb RESET session_preload_libraries;
+DROP EXTENSION pg_orca;
+```
+
+## GUC Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `pg_orca.enable_orca` | `off` | Enable ORCA optimizer |
+| `pg_orca.trace_fallback` | `off` | Log a message on fallback to standard planner |
+| `optimizer_segments` | `1` | Number of segments for cost estimation |
+| `optimizer_sort_factor` | `1.0` | Cost scaling factor for sort operations |
+| `optimizer_metadata_caching` | `on` | Cache relation metadata between calls |
+| `optimizer_mdcache_size` | `16384` | Metadata cache size (KB) |
+| `optimizer_search_strategy_path` | `""` | Path to custom search strategy XML (empty = built-in) |
+
+
+## Testing
+
+See **[testing.md](testing.md)** for the full guide. Quick start:
+
+```bash
+export PG_CONFIG=/Users/jianghua/pg-install/bin/pg_config
+export PG_REGRESS_SQL=/Users/jianghua/code/postgresql/src/test/regress
+
+# pg_orca's own regression tests
+test/test.sh --orca-tests
+
+# PostgreSQL standard suite with ORCA loaded (--ignore-plans suppresses plan-shape diffs)
+test/test.sh --pg-tests --ignore-plans
+```
+
+## Architecture Notes
+
+### MPP Stubs
+
+Cloudberry's translation layer references many MPP-only types (`Motion`, `PlanSlice`, `DynamicSeqScan`, etc.). These are stubbed in `compat/cdb/cdb_plan_nodes.h` so the code compiles. ORCA will never generate these nodes in single-node mode.
+
+### GPDB GUCs
+
+Many ORCA configuration knobs were GPDB-specific GUCs. They are re-defined as real GUCs in `pg_orca.cpp` under the `optimizer.*` prefix, so existing ORCA code referencing them continues to work.
+
+### PostgreSQL 19
+
+PG19 is still a moving target, so treat it as preview support: it builds and passes
+`test/test.sh --orca-tests`, but the PG18 path is the one that gets the benchmark and
+regression mileage. Everything version-dependent is behind `#if PG_VERSION_NUM >= 190000`:
+
+- **`planner_hook` signature** — PG19 passes an extra `ExplainState *` argument; the hook
+  and both `standard_planner()` fallback paths are conditionally compiled (`pg_orca.cpp`).
+- **`RESPECT`/`IGNORE NULLS` window functions** (SQL:2003, new in PG19) — supported
+  natively rather than falling back: the null treatment is carried on
+  `CScalarWindowFunc` and round-tripped through DXL.
+- **SQL/PGQ `GRAPH_TABLE`** — the PG rewriter expands it into a LATERAL-joined subquery
+  before `planner_hook` runs, so these queries go through ORCA on the normal LATERAL path.
+  A defensive check falls back cleanly if an `RTE_GRAPH_TABLE` ever reaches the translator.
+- **`Int8GetDatum()`** — removed from `postgres.h` in PG19; `gpdbwrappers.cpp` supplies a
+  byte-identical `#ifndef`-guarded replacement so call sites are unchanged on both versions.
+

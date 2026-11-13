@@ -25,7 +25,7 @@ La lista completa de comandos, con lo que hace cada uno, está en [docs/comandos
 
 - **Juegos**: trivia (y trivias relámpago que salen solas), acertijos, banderas, ordenar palabras, ahorcado, ta-te-ti, 4 en línea (aporte de [@gabriel10lg200](https://github.com/gabriel10lg200)) y la batalla de aura (`.aura @persona`: el grupo vota cinco minutos y el que gana suma aura del mes, que no son UruCoins). Los de ingenio dan premio en UruCoins, con tope por día.
 - **Casino** con UruCoins: ruleta europea, tragamonedas, blackjack, mines, póker Texas Hold'em entre los del grupo (las cartas se piden por privado con `.cartas`), carrera de caballos, duelos y peleas por turnos, lotería semanal y mercados de apuestas sobre eventos reales. Sigue partidos del Uruguayo, la Libertadores, la Sudamericana y la selección (`.partidos`): abre sola los mercados de los de Peñarol y Nacional, un admin abre el de cualquier otro (`.evento partido N`), y los resuelve sola cuando terminan, a los 90 minutos o según quién pasa. Topes por jugada, y si el bot se apaga o se reinicia devuelve lo que estaba en juego (salvo que Android lo mate de golpe). La idea inicial fue de [@libeelula](https://github.com/libeelula).
-- **Interruptores por grupo**: `.juegos` y `.casino` apagan todo, `.horariojuegos` les pone horario (también al ta-te-ti y al 4 en línea), y `.juego mines off` apaga un juego solo sin cortar las partidas en curso.
+- **Interruptores por grupo**: `.juegos` y `.casino` apagan todo, `.horariojuegos` les pone horario (también al ta-te-ti y al 4 en línea; los mercados de apuestas andan a cualquier hora), y `.juego mines off` apaga un juego solo sin cortar las partidas en curso.
 
 **Economía (UruCoins)**
 
@@ -43,7 +43,7 @@ La lista completa de comandos, con lo que hace cada uno, está en [docs/comandos
 **Herramientas y más**
 
 - **Música y video**: descarga de YouTube (con cookies, reintentos y varios candidatos; si ninguno sale, prueba SoundCloud y deja `.reintentar`), TikTok e Instagram.
-- **Útiles**: clima, traductor, RAE, stickers (y los del grupo: los junta, los mira una vez y los manda con criterio, con `.stickerazar` o contestando), recordatorios, versículos de la Biblia (`.versiculo Levítico 18:22`), `.ping` para saber si está prendida, y la batería del teléfono con `.bat`, con aviso al owner por privado cuando se queda sin carga (aporte de [@Daniel-Nalerio](https://github.com/Daniel-Nalerio); necesita Termux:API).
+- **Útiles**: clima, traductor, RAE, stickers (y los del grupo: los junta, los mira una vez y los manda con criterio, con `.stickerazar` o contestando), códigos QR (`.qr`), calculadora con porcentajes (`.calc`), recordatorios, versículos de la Biblia (`.versiculo Levítico 18:22`), `.ping` para saber si está prendida, y la batería del teléfono con `.bat`, con aviso al owner por privado cuando se queda sin carga (aporte de [@Daniel-Nalerio](https://github.com/Daniel-Nalerio); necesita Termux:API).
 - **Aviación**: METAR, TAF y SIGMET decodificados en español, los claros horarios de Inumet, viento cruzado y hora Zulu.
 - **Temáticas y ranking**: hashtags semanales (`#historiasrandom`, `#quejadelunes`, `#recomendado`) con sus listas, y el ranking mensual por reacciones, con el aura de las batallas y la corona 👑 para el primero.
 - **Parejas y familia**: parejas, casamientos y adopciones dentro del grupo; `.parentesco` dice qué es alguien tuyo y `.familias` muestra cada familia con su árbol. **Redes**: las del grupo (`.redes`, que Claudia también pasa en la charla) y las de cada uno en su perfil (`.misredes`).

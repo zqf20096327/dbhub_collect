@@ -262,7 +262,7 @@ Useful resources and dependencies that are used in Genius.
 
 - Thanks to CodeWithAntonio: https://codewithantonio.com/
 <!--- DEPENDENCIES_START --->
-- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.11
+- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.25
 - [@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers): ^6.0.0
 - [@prisma/adapter-mariadb](https://www.npmjs.com/package/@prisma/adapter-mariadb): ^7.10.1
 - [@prisma/client](https://www.npmjs.com/package/@prisma/client): ^7.10.1
@@ -272,7 +272,7 @@ Useful resources and dependencies that are used in Genius.
 - [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.1.8
 - [@radix-ui/react-select](https://www.npmjs.com/package/@radix-ui/react-select): ^2.4.1
 - [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.2.0
-- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
+- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.5.0
 - [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
 - [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.6
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19
@@ -281,7 +281,7 @@ Useful resources and dependencies that are used in Genius.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [crisp-sdk-web](https://www.npmjs.com/package/crisp-sdk-web): ^1.2.1
-- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.8
+- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.10
 - [eslint](https://www.npmjs.com/package/eslint): 9.39.5
 - [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.2
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.62.0
@@ -295,7 +295,7 @@ Useful resources and dependencies that are used in Genius.
 - [react-markdown](https://www.npmjs.com/package/react-markdown): ^10.1.0
 - [replicate](https://www.npmjs.com/package/replicate): ^1.4.0
 - [sonner](https://www.npmjs.com/package/sonner): ^2.0.7
-- [stripe](https://www.npmjs.com/package/stripe): ^22.6.2
+- [stripe](https://www.npmjs.com/package/stripe): ^23.1.0
 - [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.7.0
 - [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^4.3.4
 - [typescript](https://www.npmjs.com/package/typescript): ^6.0.3

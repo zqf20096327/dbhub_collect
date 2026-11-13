@@ -322,6 +322,7 @@ cd mini-services/chat-service && bun run dev
 
 - [x] 🌌 **Live Universe** — real-data WebGL globe (`v1.74.0`)
 - [x] 🧬 **Project DNA** — verified project identity (`v1.75.0`)
+- [x] 📚 **NEXUS Library** — verified reference implementations + public Knowledge API + MCP server + llms.txt
 - [ ] 🤖 **AI Autonomous Studio** — 6 agents, human approval checkpoints
 - [ ] ⚔️ **War Room** — decision records
 - [ ] 🧠 **Code Intelligence** — GitHub OAuth-only repo intelligence
@@ -332,6 +333,25 @@ cd mini-services/chat-service && bun run dev
 - [ ] WebRTC audio in Voice Rooms · season leaderboards · Code Battle 1v1 duels
 - [ ] More tracks: Git, SQL, React, full **Security** curriculum
 - [ ] 🇷🇺 Russian scholarship chapter — bilingual (ru/en) admissions dossier
+
+## 🧾 Build log
+
+Engineering session notes — what was recently built, fixed, and verified.
+
+### 2026-11 · reliability, hygiene, deployment pipeline
+
+- **Browser-verified end-to-end** — every product view (Home, Explore, Projects, Workspace, Academy portal, Live Universe, Project DNA, the full Arena family, Skill Tree, Code Pet, Coder Cards, Red vs Blue, Coin Shop, Teams, Notifications, Messages, Saved, Live) loads with **zero page errors**; the whole user journey was exercised live: registration → 4-step onboarding → academy lesson playback → project publish → project workspace.
+- **Repo hygiene ([#18](https://github.com/mhmdsdqi87-cloud/TEKA-NEXUS/pull/18))** — removed three one-off debug scripts (`.tmp-*.ts`), untracked local sandbox tooling (`.zscripts/`), and hardened `.gitignore` (`.tmp-*`, `.zscripts/`) so local artifacts can never be committed again.
+- **Deployment pipeline hardening** — a project-level *Ignored Build Step* on Vercel skips the assets-only `output` branch; bot commits carry skip keywords; background builds no longer produce failed-deployment noise.
+- **Function Storage cleanup** — 163 stale/failed deployments removed across all projects (183 → 20); all six live sites verified serving `200` afterwards.
+- **Community space** — Discussions enabled: an architecture reference ([#19](https://github.com/mhmdsdqi87-cloud/TEKA-NEXUS/discussions/19)) and a public roadmap thread ([#20](https://github.com/mhmdsdqi87-cloud/TEKA-NEXUS/discussions/20)). Questions welcome in Q&A.
+
+### 2026-11 · Knowledge Library: catalog resilience + builder expansion
+
+- **Catalog fallback ([#26](https://github.com/mhmdsdqi87-cloud/TEKA-NEXUS/pull/26))** — the Library API and `llms.txt` answered `internal error` in production because the `LibraryEntry` table had not been pushed to the production Postgres yet. All three endpoints now fall back to the seed catalog with identical shapes and identical search semantics, honest `draft` labels, and `meta.source: "catalog"` — a fresh deployment works before anyone touches the database.
+- **Builder expansion** — 4 new entries distilled from the platform's own code, each pipeline-verified: [`boot-env-guard`](scripts/library-entries.ts) (from the boot guard in `next.config.ts`), `sandboxed-demo-verifier` (from `scripts/library-verify.ts`), `idempotent-seed-upsert` (from `scripts/library-seed.ts`), and `db-singleton-client` (from `src/lib/db.ts`). Builders now reuse the exact patterns TEKA NEXUS itself runs on.
+- **Pipeline proof** — 15 entries verified by real execution, 0 failed, 1 honestly stays `draft` (no runnable demo). The pipeline even caught an escaping bug in a new entry before merge — statuses are computed, never claimed.
+- **Builders guide** — [`docs/NEXUS-LIBRARY.md`](docs/NEXUS-LIBRARY.md) gained a "For builders" section: copy an entry, call the API, or plug your AI agent in via `llms.txt` / MCP.
 
 ## 🤝 Contributing
 
@@ -354,9 +374,9 @@ Read our [Code of Conduct](CODE_OF_CONDUCT.md). Questions and support → [`SUPP
 <!-- TEKA:METRICS:START -->
 | 👀 Visitors (14d) | 📄 Views (14d) | 🧬 Cloners (14d) | 📥 Clones (14d) | ⭐ Stars | 🍴 Forks | 🐞 Open issues |
 |---:|---:|---:|---:|---:|---:|---:|
-| n/a | n/a | n/a | n/a | 3 | 0 | 0 |
+| 9 | 52 | 261 | 638 | 3 | 0 | 0 |
 
-<sub>Real numbers from GitHub's own API · auto-refreshed daily · last update 2026-11-12 11:28 UTC · nothing sampled, nothing invented.</sub>
+<sub>Real numbers from GitHub's own API · auto-refreshed daily · last update 2026-11-13 11:13 UTC · nothing sampled, nothing invented.</sub>
 <!-- TEKA:METRICS:END -->
 
 <div align="center">
@@ -387,6 +407,25 @@ Read our [Code of Conduct](CODE_OF_CONDUCT.md). Questions and support → [`SUPP
 </picture>
 
 </div>
+
+<img src=".github/assets/divider.svg" width="100%">
+
+## 🛠️ Repository infrastructure — shipped & verified
+
+Everything below is live in this repo **right now** — nothing on this list is aspirational. If any row ever goes stale, that's a bug: open an issue and we'll fix it the same day.
+
+| System | Status | What it does |
+|---|---|---|
+| 📊 Real-metrics pipeline | ✅ built | Daily cron refreshes the metrics block above from GitHub's own API — stars, forks, open issues, plus real 14-day views & clones via a scoped `TRAFFIC_TOKEN` secret |
+| 🐍 Contribution snake | ✅ built | [`snake.yml`](.github/workflows/snake.yml) draws the eat-the-graph animation daily onto the `output` branch |
+| 🤝 Welcome workflow | ✅ built | [`welcome.yml`](.github/workflows/welcome.yml) greets every first-time issue author and contributor |
+| 🤖 Dependabot | ✅ built | Monthly freshness for GitHub Actions — first bump already merged |
+| 💬 Discussions | ✅ built | Q&A · Ideas · Announcements categories open for every visitor — real answers, marked accepted |
+| 🧭 Community docs | ✅ built | [`SUPPORT.md`](SUPPORT.md) · [`CODEOWNERS`](.github/CODEOWNERS) · [`CITATION.cff`](CITATION.cff) · issue templates · categorized release notes |
+| 🖼️ Social preview | ✅ built | [`public/og.png`](public/og.png) (1440×736) ships with the repo — one click away in Settings → Social preview |
+| 🚀 Release pipeline | ✅ built | Tag-driven releases with categorized notes — v1.75.0 shipped |
+
+<sub>Verified 2026-11-13 · every number in this README comes from GitHub's own counters — nothing sampled, nothing invented.</sub>
 
 ## 📜 License & credits
 

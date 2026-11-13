@@ -41,10 +41,12 @@ PostgreSQL 10+ ships with a built-in logical decoding plugin called `pgoutput`, 
 
 No extra plugins needed — `pgoutput` comes with PostgreSQL by default.
 
+PgOutput2Json needs **PostgreSQL 14 or newer**, and is tested with versions 14 to 18. Row filters and column lists in publications need PostgreSQL 15.
+
 The change events JSON format:
 ```
 {
-  "c": "U",             // Change type: I (insert), U (update), D (delete)
+  "c": "U",             // Change type: I (insert), U (update), D (delete), C (row of the initial data copy)
   "w": 2485645760,      // Transaction final LSN — part of the deduplication key
   "n": 1,               // Message number within the transaction — part of the deduplication key
   "t": "schema.table",  // Table name (if enabled in JSON options)
@@ -54,18 +56,62 @@ The change events JSON format:
 }
 ```
 
-## 🔁 Deduplication
+### Message Key
 
-The current position of a replication slot is persisted only at checkpoints, so after a crash or a reconnect the slot may replay changes that were already consumed. To make replays harmless, every published message carries a deduplication key — the transaction final LSN (`"w"`) plus the message number within that transaction (`"n"`).
+Besides the JSON, every message has a key: the values of the table's key columns, e.g. `[1]`. Depending on the output, it is the message key (Kafka), the routing or partition key (RabbitMQ, Redis, Kinesis, and Kafka without partition-key columns), or the message id (Azure Event Hubs, RabbitMQ Streams).
 
-Deduplication is enabled by default (disable it with `.WithDeduplication(false)`) and works on two levels:
+The key columns are the **replica identity** columns PostgreSQL sends with the change. The replication protocol does not carry the primary key, and the library does not query the database while streaming, so:
 
-1. **On connect**, the library asks the publisher for the last durably published position and skips every replayed message at or below it. For partitioned publishers (Kafka, RabbitMQ Streams super streams, and Azure Event Hubs when partition-key columns are configured) the last position of every partition is read, and the **lowest** one is used — only that position is guaranteed to be published to all partitions. With `.WithDeduplication(false)` this startup scan is skipped.
-2. **During publishing**, partitioned publishers additionally skip messages already sent to their resolved target partition. The target partition is computed client-side using the same deterministic hash the publisher routes with (Kafka murmur2, RabbitMQ super stream murmur3, Event Hubs murmur2 over the configured partition-key columns), so routing stays stable across restarts. Azure Event Hubs routes client-side only when partition-key columns are set (`WithPartitionKeyFields`); without them it keeps the legacy table-name partition key with service-side routing, and only the listener-level skip applies.
+- `REPLICA IDENTITY DEFAULT`: the primary key, stable for all changes to a row.
+- `REPLICA IDENTITY USING INDEX`: the index columns.
+- `REPLICA IDENTITY FULL`: **all columns**, so the key changes with every update. Kafka log compaction, and routing by key, then treat each version of a row as a different row. Partition-key columns (`WithPartitionKeyFields`) keep the routing stable, but the Kafka message key still changes.
+- `REPLICA IDENTITY NOTHING`: empty.
 
-If a partition has no readable history — an empty partition, one emptied by retention, or one that cannot be read during the scan — it contributes a `(0,0)` watermark: messages routed to it are never skipped, and RabbitMQ Streams additionally drops the resume point to the beginning of the stream. The failure mode is therefore always duplicate messages, never silently dropped ones, but consumers should still handle duplicates idempotently (see the note about permanent replication slots below).
+If the message key matters, use `DEFAULT`, or `USING INDEX` on a stable unique key. The initial data copy reads the primary key from the catalog, so for `FULL`, `NOTHING` and `USING INDEX` tables its keys differ from those of the streamed changes.
 
-**Amazon Kinesis is the exception:** the Kinesis adapter does not support deduplication at all — Kinesis offers no cheap way to read the last published record of a shard, nor to target a shard client-side, so no watermark can be recovered. On every restart the stream is re-published in full, and consumers must protect themselves by filtering duplicates with the `(w, n)` key, skipping anything at or below the highest pair already processed. See the Kinesis adapter's README for details.
+### Values
+
+| PostgreSQL type | JSON |
+|---|---|
+| `smallint`, `integer`, `bigint`, `oid`, `numeric`, `real`, `double precision` | A number, with every digit PostgreSQL sent. `NaN`, `Infinity` and `-Infinity` are `null`, because JSON has no such numbers. |
+| `boolean` | `true` or `false` |
+| `bytea` | A string of hex digits, e.g. `"deadbeef"` |
+| Everything else, including `json`, `jsonb`, `uuid`, dates and timestamps | A string, in PostgreSQL's text format. `timestamptz` is in UTC. |
+| Arrays of the types above | A JSON array, nested for more dimensions. A `NULL` element is `null`. |
+| Arrays of other types (enums, user-defined types) | A string with the PostgreSQL array literal, e.g. `"{sad,happy}"` |
+
+A large value that an update did not change is not sent by PostgreSQL. It is written as `"__TOAST__"`.
+
+### Compact Mode
+
+With `.WithJsonOptions(o => o.WriteMode = JsonWriteMode.Compact)`, `"k"` and `"r"` are arrays of values without column names. The SQLite, MongoDB and DynamoDB adapters always use compact mode. The column names come in a schema property:
+
+```
+"s": ["schema.table", ["id", 1, 23], ["name", 0, 1043, 104], ...]
+                       // column name, part of the key (1/0), type OID, type modifier (only if present)
+```
+
+The schema is not repeated in every message. It comes with the first row of a table after the listener connects, and again after the table changes. After a reconnect it is not always repeated for every table. **Consumers must remember the last schema per table** and decode rows with it, as the SQLite, MongoDB and DynamoDB adapters do. A consumer that starts reading in the middle of a stream must already know the schema, for example from its own store.
+
+Partitioned outputs (Kafka topics with more than one partition, RabbitMQ super streams, and Azure Event Hubs with partition-key columns) spread the rows of a table across partitions, so the schema lands only in the partition of the row it comes with. Consumers must therefore share the last schema per table across all partitions, for example in a common store.
+
+## 🔁 Delivery and Deduplication
+
+Delivery is **at-least-once**. A batch of changes is confirmed to PostgreSQL only after the output has acknowledged it. After a failure or a restart, PostgreSQL replays everything that was not confirmed, and those changes are published again, in their original order.
+
+A replay is usually one batch, but it can be more:
+
+- A transaction that was interrupted part-way is replayed from its start.
+- The position of a replication slot is persisted only at checkpoints, so after a PostgreSQL crash the slot can go back further.
+
+Every message carries a deduplication key: the transaction final LSN (`"w"`) plus the message number within that transaction (`"n"`). Consumers use it in one of two ways:
+
+- **Apply changes idempotently.** Upsert and delete by key. Replayed changes arrive in order, so the result is the same.
+- **Keep a watermark.** Remember the highest `(w, n)` pair processed and skip anything at or below it. Keep one watermark per table, in each partition or stream you read: the order is guaranteed only there. On Kafka, a message the broker rejects can arrive late and out of order; see the Kafka output for how to prevent that.
+
+The rows of the initial data copy have change type `"C"` and no position: `"w"` and `"n"` are 0. Upsert them by key and leave them out of the watermark. A copy that failed and started again publishes its rows again. While a table is being copied and synced, its changes are published behind the changes of the other tables, which is one more reason to keep the watermark per table.
+
+The outputs that store data instead of forwarding messages (SQLite, MongoDB, DynamoDB) save their position with the data, and the changes replayed after a reconnect are skipped for them. `.WithDeduplication(false)` turns that off; it has no effect on the other outputs.
 
 ## ⚠️ Development Status
 
@@ -617,7 +663,7 @@ Optionally, initial data copy can be enabled with `WithInitialDataCopy(true)` wh
 The PgOutput2Json library will create DynamoDB tables for each table included in logical replication. 
 
 Tables are created the first time a row belonging to the respective table is changed. 
-The first PK column is used as partition key, and the rest of PK columns are joined in a string, for the sort key.
+The first PK column is used as partition key. The other PK columns are joined with `|` into a string, stored in the sort key attribute `SK`. An array column is stored as a string with its JSON text.
 
 > ⚠️ **Important:** Be sure to set up the PostgreSQL database first, as described in the **QuickStart** section above.
 
@@ -802,7 +848,7 @@ Changes are delivered in batches to your webhook. The POST request body is an ar
 
 ```jsonc
 {
-  "c": "U",             // Change type: I (insert), U (update), D (delete)
+  "c": "U",             // Change type: I (insert), U (update), D (delete), C (row of the initial data copy)
   "w": 2485645760,      // Transaction final LSN — part of the deduplication key
   "n": 1,               // Message number within the transaction — part of the deduplication key
   "t": "schema.table",  // Table name (if enabled in JSON options)

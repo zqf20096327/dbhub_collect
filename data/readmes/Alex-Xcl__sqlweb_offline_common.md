@@ -32,9 +32,10 @@
 - **多库浏览**：PostgreSQL / SQL Server 这类一个实例挂多库的，对象树先列库再列 schema，点库名即换 `dbname` 重连取数（不写回配置）
 - **多账号并发**：状态库 `sqlweb.db` 的 `users` 表存多个账号，管理员可逐个分配"能看哪几个数据源"；多人不同账号同时用，会话与限速互不影响
 - **可见模式白名单**：每个数据源可配 `visible_schemas`，只把要给人看的库/模式列进对象树（达梦一长串 SYS / SYSDBA / EAL* 全都能藏掉）
-- **Redis 面板**：Redis 既在"新增数据源 → 数据库类型"下拉里（选 Redis 就填主机 / 端口 / 库号 / ACL 用户名，测试连与保存都落到状态库 `sqlweb.db` 的 `redis` 表），也保留独立面板：概览（版本 / 内存 / 命中率 / keyspace）、SCAN 浏览 key（带类型与 TTL）、按 key 展开 string / hash / list / set / zset，以及命令框直接执行（只读实例按白名单放行）。管理员可在两处增删改 Redis 实例，并按账号分配可见实例
+- **Redis 面板**：Redis 既在"新增数据源 → 数据库类型"下拉里（选 Redis 就填连接方式（单机 / 哨兵 Sentinel）、主机或哨兵节点清单、master 名称、库号 / ACL 用户名，测试连与保存都落到状态库 `sqlweb.db` 的 `redis` 表），也保留独立面板：概览（版本 / 内存 / 命中率 / keyspace）、SCAN 浏览 key（带类型与 TTL）、按 key 展开 string / hash / list / set / zset，以及命令框直接执行（只读实例按白名单放行）。管理员可在两处增删改 Redis 实例，并按账号分配可见实例
 - **表名搜索**：对象树顶部输入框，按表名模糊搜（不区分大小写）。已展开的库在本地即时过滤；停顿 350 ms 或回车则跨**所有可见模式**搜表，点结果直接看列、双击直接生成 `SELECT * FROM schema.table`。搜索严格受 `visible_schemas` 白名单约束，没权限的模式不会被搜到
 - **对象树按类型分组**（common-1.3.0 新增）：schema 展开后分成 **表 / 视图 / 存储过程 / 函数 / 序列 / 触发器** 六组，每组带数量，空组不显示；点视图、过程、函数直接看**定义（DDL）**
+- **对象树三套交互**（common-1.3.0 新增）：双击表看列结构 + 建表语句、双击视图/过程/函数看语句；右击表可「查询（前 100 行）/ 生成 INSERT 语句（取 1 行真实数据，只填不执行）/ 查看建表语句 / 复制表名」；右击过程与函数可「执行」——按参数清单弹窗列出参数名、类型、IN/OUT 与输入框，实时预览 `CALL` / `SELECT ... FROM DUAL` 语句，跑完直接出结果集。详见 5.10
 - **编辑器语法高亮 + 自动补全**（common-1.3.0 新增）：零外部依赖（不引 CodeMirror），关键字 / 字符串 / 数字 / 注释分色；输入时按"关键字 / 表名 / 别名.列名"给候选，Tab 或回车落地
 - **性能**（common-1.3.0 新增）：元数据 TTL 缓存（默认 120 s）+ 每数据源空闲连接复用（最多 2 条，取出先 `SELECT 1` 验活）+ >2 KB 的 JSON 响应 gzip
 - **子路径部署**：支持 nginx 反代到 `/sqlweb/` 这类前缀，不需要改端口
@@ -329,6 +330,8 @@ python -m pip download -d wheels pymssql oracledb
 - 大小写不敏感，`muapp,muconfig` 与 `MUAPP,MUCONFIG` 等价
 - 达梦里"库"就是 schema（即用户名），所以填 `MUAPP,MUCONFIG` 就能把 `SYS / SYSAUDITOR / SYSDBA / SYSSSO / EALDWD / EALEPM / EALODS` 一起藏掉
 - 白名单外的 schema 不是"藏起来但能绕"：带 `schema` 参数读表或执行 SQL 会直接 403
+- **各家"模式"的含义不一样，别填错层**：PostgreSQL 的库（database）和模式（schema）是两层，白名单要填 schema（常见 `public`），把库名填进去会一个都匹配不上；MySQL 没有独立 schema，填的就是库名；Oracle 填用户名；SQL Server 填 `dbo` 这类 schema；达梦填用户名或 `CREATE SCHEMA` 建的独立模式。数据源表单里的说明会随所选驱动自动切换
+- **白名单零命中时不再只显示"没有可显示的模式"**：`/api/overview` 会额外回 `white_missing`（配了但库里没有的名字）与 `schemas_hint`（该库真实存在的模式，最多 12 个），对象树直接把这两条摊开讲，并提示去数据源管理改哪个字段
 
 **并发**：每次请求独立建连接、用完即关；服务端多线程处理请求；状态库的写操作（增删改数据源 / Redis 实例 / 账号）
 用一把进程内锁串行化。所以多人同时查询互不干扰，有人同时在改数据源也不会读坏配置。
@@ -339,7 +342,7 @@ python -m pip download -d wheels pymssql oracledb
 
 Redis 有两个入口，**改的是同一份状态库 `sqlweb.db` 的 `redis` 表**；common-1.3.0 起顶栏不再单开 Redis 按钮，实例直接进数据源下拉的「Redis 缓存」组：
 
-1. **新增数据源 → 数据库类型 = Redis**（common-1.3.0 起）：字段是主机 / 端口 / 库号 `db` / ACL 用户名 / 口令 / 只读，测试连接与保存直接落到 `redis` 段，实例也列在数据源管理列表里（带 `redis` 角标），可"编辑 / 删除"。ACL 用户名与口令**编辑时留空即沿用原值**。
+1. **新增数据源 → 数据库类型 = Redis**（common-1.3.0 起）：字段是连接方式（单机 / 哨兵）、主机、端口、哨兵节点、master 名称、库号 `db`、ACL 用户名、口令、只读，测试连接与保存直接落到 `redis` 段，实例也列在数据源管理列表里（带 `redis` 角标），可"编辑 / 删除"。ACL 用户名与口令**编辑时留空即沿用原值**。
 2. **顶栏数据源下拉的「Redis 缓存」组**（选中某个实例即打开该实例面板，功能更全）：登录后，只有状态库里有实例、且该账号被授权时这一组才出现。
 
 | 区域 | 内容 |
@@ -358,6 +361,27 @@ Redis 有两个入口，**改的是同一份状态库 `sqlweb.db` 的 `redis` �
 - `password` / `username` 只存在服务端状态库，`/api/config` 返回给前端的实例信息不含口令
 
 **接口**：`GET /api/redis/overview|scan|key|info`、`POST /api/redis/run`（以上 5 个为查看与执行），加上新增的 `POST /api/redis/test|save|delete`（仅管理员，在配置写锁内执行）。
+
+#### 5.5.1 Redis 哨兵（Sentinel）集群（common-1.3.0 新增）
+
+「连接方式」多一项 `哨兵 Sentinel`：不再填一台固定的地址，而是填**哨兵节点清单 + master 名称**，真正连哪台 master 每次由哨兵现给，主从切换后自动跟上。
+
+| 字段 | 说明 | 一套三节点哨兵集群的填法 |
+| --- | --- | --- |
+| 连接方式 | `单机 / 直连` 或 `哨兵 Sentinel` | 哨兵 Sentinel |
+| 哨兵节点 | 每行一个 `host:port`（也支持逗号 / 分号分隔、带 `redis://` 前缀、省略端口默认 26379） | `10.8.18.27:26379`、`10.8.18.28:26379`、`10.8.18.29:26379` |
+| master 名称 | 哨兵监控的 master 名，即 `SENTINEL get-master-addr-by-name` 的参数 | `mymaster` |
+| 库号 db | 数据节点上的逻辑库 | `0` |
+| 口令 | 数据节点口令；哨兵若开了 `requirepass` 用同一个（实现上先免密问，回 `NOAUTH` 再带口令重问一次） | `zSAN#@34` |
+| 只读 | 沿用原语义，只放行读命令白名单 | 建议只读 |
+
+连接顺序：**并发**向所有哨兵问 `get-master-addr-by-name`（并发是为了不让不通的节点叠加超时——3 个哨兵串行各 3 s 是 9 s，并发只要 ≈3 s）→ 拿到的地址先 `ROLE` 校验必须是 master（故障转移中间态若指向从库会直接报错让你重试，不会把从库当 master 用）→ 连 master 再 `AUTH` / `SELECT db`。解析结果按实例缓存 5 秒，翻 key 列表时不会每页都去问哨兵。
+
+- `POST /api/redis/test` 的返回多两个字段：`mode`（`standalone` / `sentinel`）、`target`（哨兵解析到的 `host:port`）；失败时把**每个哨兵的探测结果**放进错误文案，不用去翻日志
+- `/api/config` 返回的实例信息里带 `mode` / `sentinels` / `master_name`，但**仍然不含口令**
+- 顶栏数据源下拉与实例下拉在哨兵模式下显示 `哨兵 mymaster · db0`，不显示机器地址（地址是动态的）
+- 哨兵模式不填主机/端口，表单会自动隐藏这两项；保存时 `host/port` 落成第一个哨兵地址 + 26379，只用于列表展示，**不参与连接**
+- 本机（开发机）到 `10.8.18.0/24` 生产网段 TCP 全超时，所以本地只用假哨兵验证解析链路（`过程文件\_redis_sentinel_test.py`，自起最小 RESP 服务端覆盖 7 组用例）；真实连通性需在能进该网段的机器上点"测试连接"
 
 ### 5.6 左侧对象树按表名搜索（common-1.3.0 新增）
 
@@ -389,9 +413,8 @@ main ▾ 2
 ```
 
 - **空组不渲染**：SQLite 没有存储过程/函数，就只出现"表"和"视图"两组
-- 组标题可点开/收起（记住状态），点击对象名：
-  - 表 → 右侧出列结构（双击直接生成 `SELECT * FROM schema.table LIMIT 100` 并执行）
-  - 视图 / 存储过程 / 函数 / 触发器 → 弹窗显示定义，带语法高亮，可一键复制
+- **组默认收起**：展开一个 schema 只看到「表 462 / 视图 38 / 存储过程 40 …」这几行，点组标题才列出对象——大库才不会一展开就铺满几百行；组标题可点开/收起，状态随会话记着，换库或刷新树时重置；搜索框有关键字时组强制展开，免得命中项被折叠挡住
+- 对象名的单击 / 双击 / 右击各有不同动作，完整矩阵见 **5.10**（双击看结构或语句、右击查询 / 生成 INSERT / 执行过程与函数）
 - 顶部"过滤表名…"同时过滤**所有类型**的对象名；跨模式搜索仍走 `/api/search_tables`（只搜表）
 - 各驱动的对象来源与定义来源：
 
@@ -464,9 +487,81 @@ HTTP 层同时核对：`/api/schemas` 只回白名单里的 `app`，`/api/object
 | --- | --- | --- |
 | 元数据 TTL 缓存 | `/api/objects`、`/api/source`、`/api/catalog`、`/api/tables` 按"数据源 + 库 + schema"缓存 120 s（字典 300 s）；`&refresh=1` 强制重查 | 反复展开同一 schema 不再打库；改完对象想立刻看到，加 `refresh=1` 或重启 |
 | 连接复用 | 每个数据源保留最多 2 条空闲连接，下次请求先 `SELECT 1`（Oracle/达梦用 `SELECT 1 FROM DUAL`）验活，失败就丢弃重连；SQLite 因 `check_same_thread` 不复用 | 省掉 TCP 握手 + 登录鉴权；连接异常自动降级为新建，不会把坏连接传下去 |
-| 响应压缩 | 任何 `/api/*` JSON 超过 2 KB 且客户端支持时用 gzip | 补全字典 / 对象树这类响应通常压到 1/5 以内 |
+| 响应压缩 | 任何 `/api/*` JSON 超过 2 KB 且客户端支持时用 gzip（**发的是真 gzip 容器，头 `1f 8b`**；早期写成 zlib 容器会触发浏览器 `ERR_CONTENT_DECODING_FAILED`，见 11 节排障） | 补全字典 / 对象树这类响应通常压到 1/5 以内 |
 
 改数据源（保存 / 删除 / 设默认）时缓存与空闲连接一起清掉，避免换源后还看到旧 schema。
+
+### 5.10 对象树交互：单击 / 双击 / 右击（common-1.3.0 新增）
+
+左侧树不再是"点一下看列"，按对象类型给出三套动作：
+
+| 对象 | 单击 | 双击 | 右击 |
+| --- | --- | --- | --- |
+| 表 | 右侧出列结构（列名/类型/可空/默认值/键，带「查看建表语句」） | 列结构 + 建表语句弹窗（DDL 一键复制） | 查询（前 100 行）/ 生成 INSERT 语句 / 查看建表语句 / 复制表名 |
+| 视图 | 弹窗出视图定义 | 同左 | 查询（前 100 行）/ 查看视图语句 / 复制名称 |
+| 存储过程 | 弹窗出过程语句 | 同左 | 执行（填参数后运行）/ 查看过程语句 / 复制名称 |
+| 函数 | 弹窗出函数语句 | 同左 | 执行（填参数后运行）/ 查看函数语句 / 复制名称 |
+| 序列 / 触发器 | 弹窗出定义 | 同左 | 查看定义 / 复制名称 |
+| 分组标题（表/视图/…） | 展开、收起（**默认收起**） | — | 无菜单（点标题本身即可） |
+| 模式（schema） | 展开、收起 | — | 刷新该模式（强制绕过缓存）/ 复制模式名 |
+
+- **查询（前 100 行）**：右击表或视图点这条，先把 `SELECT * FROM "schema"."表" LIMIT 100` **写进 SQL 编辑器并同步高亮**，再立刻执行，所以「左边点了查询 → 右边既能看到语句、也能看到结果」。编辑器是"透明 textarea + 高亮层叠字"的实现，程序里改 `value` 必须同时刷高亮层（`syncHL()`），否则会看起来一片空白——清空按钮与生成 INSERT 走的是同一套 `setEditorSql()`。
+- **生成 INSERT**：取该表 1 行真实数据拼 `INSERT INTO "schema"."table" (...) VALUES (...)`，只填进编辑器、**不执行**；空表用 `?` 占位并在状态栏写明"空表，值用 ? 占位"。字符串走驱动方言的 `quote_literal`（`O'Brien` → `'O''Brien'`），纯数字不加引号，`NULL` 不加引号。
+- **执行过程 / 函数**：弹窗按参数清单生成"参数名 + 类型 · IN/OUT + 输入框"，下方实时预览将执行的语句；`OUT` 参数置灰（值按 `NULL` 传，并在返回里给一条 note）；结果区复用的表格渲染，有结果集（`SELECT ... FROM DUAL` / `CALL` 里带 `SELECT`）就出列，没有就提示"该对象执行完成，没有返回结果集"。
+- **只读数据源**：执行被拦下（`stage=readonly`），但仍然把可复制的 `CALL ...` 语句回给前端 —— 只读环境里也能拿到一条准确语句去 DBA 那边跑。
+- 右击菜单贴鼠标出现，超出视口自动翻边；点空白、Esc、窗口 resize 都会收起。
+
+**六种驱动是同一套行为（分组默认收起 / 右击查询同时写进编辑器 / 组标题无右键菜单）**，差异只在「库里实际有什么对象」和「取前 N 行的方言」——空组不渲染，所以 SQLite 只有两组、达梦某库可能只有三组，这不是漏做：
+
+| 驱动 | 点验环境 | 展开 schema 看到的分组（全部默认收起） | 右击「查询」写进编辑器的语句 | 实测结果 |
+| --- | --- | --- | --- | --- |
+| PostgreSQL | 172.168.9.164:4321 / `HC_APP`（462 表） | 表 462 / 视图 38 / 存储过程 40 / 函数 2 / 序列 4 | `SELECT * FROM "public"."act_evt_log" LIMIT 100;` | 0 行 · 49 ms |
+| 达梦 DM8（DBA 账号） | 172.168.3.122:5236 / `SQLWEB_DMTEST` | 表 2 / 视图 1 / 存储过程 2 / 函数 1 / 序列 1 / 触发器 1 | `SELECT * FROM "SQLWEB_DMTEST"."T_USER" LIMIT 100;` | 1 行 · 42 ms |
+| 达梦 DM8（业务账号） | 172.168.3.122:5236 / `EALEPM`（345 表） | 表 345 / 视图 23 / 存储过程 5 | `SELECT * FROM "EALEPM"."ACT_WF_GROUP_MULTI" LIMIT 100;` | 0 行 · 23 ms |
+| MySQL / Doris | 10.189.5.86:29992 / `dm_fin_guanbao`（1735 表 + 52 视图） | 表 1735 / 视图 52 | ``SELECT * FROM `dm_fin_guanbao`.`dim_account` LIMIT 100;`` | 100 行 · 379 ms |
+| SQLite | 包内 `demo.sqlite` / `main` | 表 2 / 视图 1 | `SELECT * FROM "main"."t_order" LIMIT 100;` | 1 行 · 2 ms |
+| Oracle 19c EE | 172.168.7.31:1521 / `ORCL`，业务库账号 `SGHB_8089` | 表 1491 / 视图 32 / 存储过程 133 / 函数 2 / 序列 2 | `SELECT * FROM "SGHB_8089"."ACT_EVT_LOG" WHERE ROWNUM <= 100;` | 0 行 · 161 ms |
+| Oracle 19c EE | 同上，中央库账号 `SGCONFIG_8089`（只有表） | 表 75 | `SELECT * FROM "SGCONFIG_8089"."BIZ_REMOTE_DEFINE" WHERE ROWNUM <= 100;` | 0 行 · 138 ms |
+| SQL Server 2019 | 172.168.6.32:1433 / `JG_YS001`（业务库，`dbo`） | 表 740 / 视图 115 / 存储过程 439 / 函数 6 | `SELECT TOP 100 * FROM [dbo].[ACT_EVT_LOG];` | 0 行 · 74 ms |
+
+> 方言校验脚本：`过程文件\_dialect_check.py`，从 `index.html` 里抠出 `quoteIdent` / `selectAllSql` 在 node 里对六种驱动各生成一条，用来复核 Oracle / SQL Server 的 `ROWNUM` / `TOP` 与三种标识符引号（`"`、`` ` ``、`[]`）。
+>
+> 现场拿到实例后补测到的两个雷：① SQL Server 2019 上 `sa` 能登实例却进不了指定的库时，`pymssql` 报的是 `18456 登录失败` 而不是「库不存在」，实际库里并没有那个名字（`USE [JG_CONF]` 直接 `911 Database does not exist`）——遇到登录失败先用 `master` 库登进去 `SELECT name FROM sys.databases` 核对库名；② Oracle thin 模式连 19c 不需要装客户端，`oracledb` 直连即通，两个账号各自是一个 schema，按账号建两个数据源即可（`dbname` 填服务名 `ORCL`，`visible_schemas` 填账号名）。
+
+**参数探测（六驱动）**：`drivers.proc_args(conn, schema, name, kind)`
+
+| 驱动 | 来源 | 关键处理 |
+| --- | --- | --- |
+| Oracle / 达梦 | `ALL_ARGUMENTS`（`PACKAGE_NAME IS NULL`，按 `SEQUENCE` 排） | 函数返回值混在参数里（达梦 `ARGUMENT_NAME='V_RET'`、Oracle 名为空），必须剔除，否则调用凭空多一个参数；达梦 `POSITION` 从 0 起，排序不能用它 |
+| PostgreSQL | `pg_proc` + `proargnames` / `proargmodes` / `COALESCE(proallargtypes, proargtypes)` + `format_type` | psycopg2 给 list、pg8000 给 `{a,b}` 文本，两种都接住 |
+| MySQL / MariaDB | `information_schema.PARAMETERS` | 过程/函数共用 |
+| SQL Server | `sys.parameters` + `TYPE_NAME` | 过程/函数共用 |
+| SQLite | — | 返回空 |
+
+**语句生成**：`sqlweb.proc_call_sql(driver, schema, name, kind, args)` —— 参数**内联成字面量**而不是占位符（达梦 `?`、psycopg2 `%s`、pymysql `%s`、oracledb `:1` 各不相同，统一占位符反而处处踩坑）。函数在达梦/Oracle 用 `SELECT "S"."F"(...) AS "RETURN_VALUE" FROM DUAL`，SQL Server 用 `EXEC`，其余 `CALL`。
+
+**接口**（与表/列同一套 `visible_schemas` 白名单，越界 403）：
+
+| 接口 | 作用 |
+| --- | --- |
+| `GET /api/proc_args?schema=&name=&kind=` | 参数清单 `[{name, mode, type, default}]`，缓存 60 s，`&refresh=1` 重查 |
+| `POST /api/proc` | 体 `{db, schema, name, kind, args:[{name, mode, value}], max_rows}`；返回 `{ok, call_sql, columns, rows, affected, notes, elapsed_ms}`，只读源返回 `stage=readonly` 并附 `call_sql` |
+
+**达梦真机实测（DM8 8.4 企业版，172.168.3.122:5236，schema `SQLWEB_DMTEST`）**
+
+| 对象 | 参数探测 | 生成的语句 | 执行结果 |
+| --- | --- | --- | --- |
+| `P_NOOP(MSG VARCHAR(100))` | `[{name:'MSG', mode:'IN', type:'VARCHAR(100)'}]` | `CALL "SQLWEB_DMTEST"."P_NOOP"('hello')` | 成功，无结果集，约 40 ms |
+| `F_ADD(A INT, B INT)` | `[A INT, B INT]`（`V_RET` 已剔除） | `SELECT "SQLWEB_DMTEST"."F_ADD"(1, 2) AS "RETURN_VALUE" FROM DUAL` | 返回 `[[3]]` |
+| `P_ROWS`（无参，内部 `SELECT`） | `[]`（弹窗提示"该对象没有入参，直接执行即可"） | `CALL "SQLWEB_DMTEST"."P_ROWS"()` | 返回 `K/V` 各一列、`A/1` 一行 |
+
+达梦另有两处与 Oracle 的差异已在这版里吃掉：
+
+1. **schema 列表要合并两个来源**。达梦的 `CREATE SCHEMA` 只建模式对象、不建用户，`DBA_USERS` / `ALL_USERS` 里根本没有它 —— 只查用户表会让"独立模式"整块从树上消失。现在三源合并（`DBA_USERS` + `ALL_USERS` + `SYS.SYSOBJECTS WHERE TYPE$='SCH'`）并去重，系统模式（`SYS` / `SYSDBA` / `SYSAUDITOR` / `SYSSSO` / `CTISYS` / `SYSJOB` / `GUEST`）排在业务模式之后。
+2. **业务账号的字典权限边界**：`EALEPM` 这类业务账号只有 `CREATE SESSION` / `RESOURCE`，读任何 `SYS.*` 一律 `-5504`，只能用 `ALL_*` 兼容视图；`TABLEDEF()` 与 `DBMS_METADATA.GET_DDL()` 在其下返回空（表 DDL 是本工具按字典拼的）；`ALL_TAB_COLUMNS` 看不到自增列，要看 `SYS.SYSCOLUMNS.INFO2`（要 DBA）；`ALL_TABLES.NUM_ROWS` 全 NULL。用一个 DBA 账号建数据源，自增列、列注释、行数才齐全。
+3. **不再执行 `SET SCHEMA`**（这条曾经让每条达梦查询白等 10 秒）。包内 `wheels/` 带的纯 Python 驱动 dm-pure（`dmpy`）执行 `SET SCHEMA` / `ALTER SESSION SET CURRENT_SCHEMA` 时，达梦对"切换成功"的响应 dmpy 解析不了，会一直读到 socket 超时才抛 `TimeoutError`，而 `_use_schema` 又把异常吞掉 —— 于是前端看到的每条查询都耗时 `10044 ms`、而且 schema 根本没切过去。现在达梦直接跳过这句：对象树生成的语句本来就带 `"SCHEMA"."对象"` 全限定名，手写 SQL 时也请用全限定名。实测同一条 `SELECT * FROM "SQLWEB_DMTEST"."T_USER" LIMIT 100` 由 10044 ms 降到 42 ms，`EALEPM` 大库由 10044 ms 降到 23 ms。
+
+> **为什么业务库里建不了存储过程**：`CREATE OR REPLACE PROCEDURE EALEPM.PROC_x(...)` 在 `EALEPM` 账号下报错，不是工具拦的，是账号没有 `CREATE PROCEDURE` 权限（该账号只有 `CREATE SESSION` / `RESOURCE`）。要么让 DBA 执行 `GRANT CREATE PROCEDURE TO EALEPM;`，要么用 `SYSDBA` 建完再 `GRANT EXECUTE` 给业务账号。工具侧对"能建的账号"已经实测通过（`SQLWEB_DMTEST` 下的过程/函数都是由本工具执行 DDL 建的）。
 
 ---
 
@@ -767,6 +862,8 @@ sqlweb_offline_common_common-1.3.0/
 | 忘记管理员口令 | 停服后删掉 `sqlweb.db` 的 `users` 行（或整库），重启回到初始化模式并打印新令牌 |
 | 手改了 SQL / 状态库但界面没变 | 界面与接口一律以 `sqlweb.db` 为准；用 `sqlite3` 直接改库要重启服务才生效。界面里改则不用 |
 | nginx 反代 `/sqlweb/` 打不开（404 / 白屏 / 资源全丢） | 先看启动日志有没有 `访问前缀: /sqlweb`；没有就是 `base_path` 没读到——用 `python3 setconfig.py --set base_path=/sqlweb` 写状态库再重启，不要再改 `config.json`。另确认 `proxy_pass` 的斜杠跟模式配套：服务端 `base_path=/sqlweb` 时写 `http://127.0.0.1:8899`（不带斜杠），`base_path` 为空时才写 `http://127.0.0.1:8899/`。配反了必然 404，页面会提示当前前缀 |
+| 执行查询只报 `Failed to fetch`，F12 里请求是 `200 (OK)` + `net::ERR_CONTENT_DECODING_FAILED` | 服务端压缩流格式不匹配：声明 `Content-Encoding: gzip` 却发了 zlib 容器（头 `78 9c`）。**只有响应 >2048 字节（触发压缩）时才出现，小查询完全正常**，所以常被误判成"SQL 或网络问题"。1.3.0 已修（改发真 gzip 容器，头 `1f 8b`）。老包热修：`sqlweb.py` 里把 `body = zlib.compress(body, 6)` 换成 `_c = zlib.compressobj(6, zlib.DEFLATED, 31); body = _c.compress(body) + _c.flush()`，重启服务即可；不想压缩就临时把 `len(body) > 2048` 改成 `False` |
+| 点执行后状态栏一直是 `执行中…` 且连接被重置 | 查大字段（`text` 里存 XML/JSON，单行数 MB）时内存与传输压力大。先用 `select count(*), pg_size_pretty(pg_total_relation_size('<表>'))` 看体积，再给查询补 `LIMIT`；或调小 `max_rows` |
 | `CREATE [OR REPLACE] PROCEDURE` / 触发器报语法错误、像是被截断 | 数据源是只读时先在【数据源管理】改成「可写」；仍报错就看错误里的语句片段——1.3.0 起程序块整段提交，若片段以 `END` 开头说明用了旧包，换新包即可 |
 | 改了 `config.json` 但端口 / 子路径没变 | 1.3.0 起配置真源是 `sqlweb.db`，`config.json` 只在首次启动导入一次。用 `python3 setconfig.py --set ...` 或界面改；启动日志会对残留的 `config.json` 打出提示 |
 | 达梦在 mac 上报 `ModuleNotFoundError: dmPython` | 装纯 Python 驱动：`pip install dm-pure`，服务会自动降级（3.7 上走 vendor 里的 `dmpy`） |

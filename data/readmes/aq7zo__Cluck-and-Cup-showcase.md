@@ -1,8 +1,10 @@
 <div align="center">
 
-<img src="docs/images/logo-cafe.png" alt="But First, Coffee" height="110">
+<img src="docs/images/logo-But First, Coffee.png" alt="But First, Coffee" height="110">
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="docs/images/logo-chicken.png" alt="Urban StrEat" height="110">
+<img src="docs/images/logo-Cluck & Cup.png" alt="Cluck & Cup" height="110">
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="docs/images/logo-Urbant Streat.png" alt="Urban StrEat" height="110">
 
 # Cluck & Cup
 
@@ -13,7 +15,7 @@
 [![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%2B%20RLS-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-[The problem](#the-problem) · [Our solution](#our-solution) · [The Results](#results) · [Screenshots](#screenshots) · [Tech stack](#tech-stack) · [Team](#cluck--cup-team)
+[The problem](#the-problem) · [Our solution](#our-solution) · [The Results](#the-results) · [Screenshots](#screenshots) · [Tech stack](#tech-stack) · [Team](#cluck--cup-team)
 
 </div>
 
@@ -46,7 +48,7 @@ Cluck & Cup runs on the Android tablets both stores already have and connects th
 > [!IMPORTANT]
 > Cluck & Cup does not replace the stores' existing POS (Utak POS PH), and it doesn't process payments. Staff still ring up sales as before. The app only passes orders between the two stores and records how each customer paid.
 
-## Results
+## The Results
 
 | | Before | After |
 | :--- | :--- | :--- |
@@ -213,13 +215,13 @@ flowchart LR
 
 CSSWENG Group 1, De La Salle University, 2026.
 
-| Name | Role |
-| :--- | :--- |
-| Morgan, Jack Owen | Project Manager |
-| Hallare, Zach Benedict | Business Analyst |
-| Tan, Neil Justine | Business Analyst |
-| Campo, Benette Enzo | Lead Developer |
-| Fortunato, Jayel James | Developer |
-| Yee, Ivan Rae | Developer |
-| Cheung, Tsz Man | Quality Assurance |
-| Maglente, Michael Stephen | Quality Assurance |
+| Name | Role | Connect |
+| :--- | :--- | :---: |
+| Morgan, Jack Owen | Project Manager | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jack-owen-morgan-4134322b1/) |
+| Hallare, Zach Benedict | Business Analyst | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/zach-benedict-hallare/) |
+| Tan, Neil Justine | Business Analyst | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/neil-justine-tan-b03b6b397/) |
+| Campo, Benette Enzo | Lead Developer | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/enzo-campo/) |
+| Fortunato, Jayel James | Developer | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jayel-james-fortunato-a37063385/) |
+| Yee, Ivan Rae | Developer | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ivan-rae-yee-86abba308/) |
+| Cheung, Tsz Man | Quality Assurance | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/%E6%A2%93%E6%B3%AF-%E5%BC%A0-6bb53644b/) |
+| Maglente, Michael Stephen | Quality Assurance | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://linkedin.com) |

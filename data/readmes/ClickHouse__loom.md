@@ -13,7 +13,9 @@
 </p>
 
 <p align="center">
-  English · <a href="./README.zh-CN.md">简体中文</a>
+  <!-- languages -->
+  English · <a href="./i18n/zh-CN/README.md">简体中文</a> · <a href="./i18n/ja/README.md">日本語</a> · <a href="./i18n/ko/README.md">한국어</a> · <a href="./i18n/pt-BR/README.md">Português (Brasil)</a> · <a href="./i18n/es/README.md">Español</a> · <a href="./i18n/ru/README.md">Русский</a>
+  <!-- /languages -->
 </p>
 
 <p align="center">
@@ -22,10 +24,14 @@
   <a href="#get-started">Get started</a> ·
   <a href="#why-loom">Capabilities</a> ·
   <a href="#integrations">Integrations</a> ·
-  <a href="./docs/index.md">Documentation</a>
+  <a href="https://clickhouse.github.io/loom/">Documentation</a>
 </p>
 
-![Loom dashboard showing shared agent memories, a pinned fact and flagged conflicts](./docs/images/dashboard-memories.png)
+<p>
+  <img src="./docs/assets/screenshots/memories.webp" width="32%" alt="Loom dashboard showing shared agent memories, a pinned fact and flagged conflicts">
+  <img src="./docs/assets/screenshots/document-search.webp" width="32%" alt="Library search: three passages from a refunds policy, an on-call runbook and an FX note, each cited by document, revision and lines">
+  <img src="./docs/assets/screenshots/code-callers.webp" width="32%" alt="A repository's Explore tab: payments.fx.convert with its definition and callers">
+</p>
 
 Loom is an open-source, self-hosted MCP server that gives your agents long-term, shared
 memory: what one agent learns in a session, the next agent or tool can find.
@@ -80,7 +86,8 @@ Both coding setups use Claude Code (`claude-sonnet-5`) on the ClickHouse codebas
 cost is the whole session's model bill, excluding Loom's server-side model calls, hosting
 and indexing. Answer quality
 measures coverage of a verified answer's key points, with a contradiction penalty.
-File localization counts the right file among three named files.
+File localization counts whether the right file is among the up to three files the agent is
+asked to name at the end of its answer.
 
 The memory row compares retrieved memories with full conversation history using
 the same `gpt-5` reader. Token savings exclude memory construction; the 94% vs 90%
@@ -115,7 +122,9 @@ To try it with nothing installed, open it in a codespace:
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ClickHouse/loom?quickstart=1)
 ([what it runs and who can reach it](./docs/getting-started/quickstart.md#try-it-in-github-codespaces))
 
-For the default personal installation, with Docker installed:
+For the default personal installation, with Docker installed (on Windows, in a WSL 2
+terminal where `docker` works: Docker Desktop with its WSL integration on, or Docker Engine
+installed in the distribution):
 
 ```bash
 curl -fsSL https://github.com/ClickHouse/loom/releases/latest/download/install.sh -o loom-install.sh && sh loom-install.sh && rm loom-install.sh
@@ -124,9 +133,11 @@ curl -fsSL https://github.com/ClickHouse/loom/releases/latest/download/install.s
 Run it from your home directory, or another
 [directory only you can write to](./docs/getting-started/quickstart.md#fast-path-released-image-no-clone).
 The installer starts Loom and ClickHouse, applies migrations and prints the dashboard URL:
-**http://localhost:7777/**. The image includes the server, workers, dashboard and
-Python, TypeScript and Go compiler indexers; TypeScript dependencies are prepared
-automatically. [Quickstart and pinned releases](./docs/getting-started/quickstart.md)
+**http://localhost:7777/**; on a new install it then checks that a memory saves and reads
+back. On a terminal it also offers to connect the coding agents it finds (Claude Code, Codex,
+VS Code) and, on a new install, opens the dashboard. The image includes the server,
+workers, dashboard and Python, TypeScript and Go compiler indexers, plus the C++ one on
+`amd64`; TypeScript dependencies are prepared automatically. [Quickstart and pinned releases](./docs/getting-started/quickstart.md)
 
 The installation lives in `~/.loom` (`LOOM_INSTALL_DIR` chooses another directory): the
 Compose file and the startup settings in `~/.loom/.env`. Running the install command again
@@ -180,7 +191,8 @@ where each value came from ([runtime settings](./docs/operations/runtime-setting
 
 ### 3. Connect your agents
 
-On the machine running a personal installation, the plugins need no token:
+If the installer connected your agent, skip the commands below. On the machine running a
+personal installation, the plugins need no token:
 
 ```bash
 # Claude Code
@@ -270,7 +282,7 @@ and the full protocols, models and artifacts.
 ## Documentation and contributing
 
 For shared agent context, code intelligence and permissioned retrieval, start with the
-[documentation](./docs/index.md). For deployment requirements, see the
+[documentation](https://clickhouse.github.io/loom/). For deployment requirements, see the
 [prerequisites](./docs/getting-started/overview.md#prerequisites).
 
 [Deployment](./docs/operations/deployment.md) · [FAQ](./docs/faq.md) ·

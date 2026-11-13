@@ -221,7 +221,7 @@ Most tools that "detect" things overpromise. DEBRIEF does the opposite — on pu
 
 **[SWIVEL](https://github.com/officialtomblack/SWIVEL)** hears it. **DEBRIEF** tells you what it meant.
 
-Maintained by [**@officialtomblack**](https://github.com/officialtomblack). Licensed under the **MIT License** — see [LICENSE](LICENSE).
+Maintained by [**@officialtomblack**](https://github.com/officialtomblack) — questions or bug reports: [theredwake.sh@protonmail.com](mailto:theredwake.sh@protonmail.com). Licensed under the **MIT License** — see [LICENSE](LICENSE).
 
 For **authorized, personal** security research. DEBRIEF describes **devices, not people.**
 

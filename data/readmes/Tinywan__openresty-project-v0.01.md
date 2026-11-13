@@ -1,5 +1,3 @@
-![Markdown](https://github.com/Tinywan/lua_project_v0.01/blob/master/public/images/tinywan_title.png)
-------
 ##  Wiki manual
 [https://github.com/Tinywan/lua_project_v0.01/wiki](https://github.com/Tinywan/lua_project_v0.01/wiki)
 ##  Project structure

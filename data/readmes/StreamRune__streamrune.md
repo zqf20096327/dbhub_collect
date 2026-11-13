@@ -4,11 +4,13 @@ Event sourcing framework for Java.
 
 ## Status
 
-`1.0.0` is the first release of StreamRune. Releases are published to Maven Central, signed, with
-every module under the `org.streamrune` group at the release's version; the
-[releases page](https://github.com/StreamRune/streamrune/releases) and the
-[CHANGELOG](CHANGELOG.md) say what each release contains. `1.0.0-alpha-SNAPSHOT` is the unsigned
-preview of the next release, published from `main` (see [Preview builds](#preview-builds)).
+`1.0.0` will be the first release of StreamRune. `1.0.0` is not on Maven Central yet: the
+coordinates under [Installation](#installation) resolve once it is released, and until then the
+preview build is the way to try StreamRune (see [Preview builds](#preview-builds)). Releases are
+published to Maven Central, signed, with every module under the `org.streamrune` group at the
+release's version; the [releases page](https://github.com/StreamRune/streamrune/releases) and the
+[CHANGELOG](CHANGELOG.md) say what each release contains. The unsigned preview of the next release
+is published from `main`.
 
 ## Installation
 
@@ -49,6 +51,17 @@ the Build workflow passes on it. It is published only to the Maven Central snaps
 to Maven Central itself, its artifacts are not signed, and it can change or break at any time. It is
 licensed under the Business Source License 1.1, like every StreamRune version (see
 [License](#license)).
+
+Each module of the preview is published on its own. A Publish Snapshot run that stops part-way
+leaves the modules it did not reach on an earlier commit until a later run completes, so while the
+newest [Publish Snapshot run](https://github.com/StreamRune/streamrune/actions/workflows/publish-snapshot.yml)
+on `main` is red, the preview may mix modules of different commits.
+
+The preview version moves with every release, in the commit that is released, to one that sorts
+above that release, and this section names the current one. Depend on every StreamRune module at the
+preview version: Maven and Gradle resolve a module that a build also reaches at a release version
+(through a starter, a BOM or a platform) to the higher of the two versions, which is the release
+whenever the preview version sorts below it.
 
 To try it, add the snapshot repository and depend on `org.streamrune:*:1.0.0-alpha-SNAPSHOT`.
 
@@ -152,6 +165,13 @@ A type or member annotated `@Internal` (from `streamrune-core`) is public only b
 StreamRune module uses it: the runtime, the PostgreSQL store or one of the integrations. It is not
 covered by this policy and may change or disappear in any release. The generated API documentation
 leaves it out. Application code does not call, implement or bind it.
+
+The build records the public types and members of each published module in a checked-in file
+(`api/<module>.api`), and `check` fails when the compiled module differs from it or when a public
+signature names an `@Internal` type, so every change to them is deliberate and visible in review.
+The files also list the integrations' `@Bean`, producer and factory methods and the constructors of
+their properties types, which are wiring, not API (see below): a change there is reviewed, and does
+not wait for a major version.
 
 The `@Bean`, producer and factory methods of the Spring, Quarkus and Micronaut integrations are
 wiring that the container calls, not API: an application replaces a bean with one of its own, and

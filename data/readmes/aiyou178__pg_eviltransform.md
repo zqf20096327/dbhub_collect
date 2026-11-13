@@ -1,38 +1,203 @@
-# pg_eviltransform (Rust/pgrx)
+<p align="center">
+  <img src="assets/logo/pg-eviltransform-512.png" alt="pg_eviltransform logo" width="160" height="160">
+</p>
 
-[中文文档 (Chinese README)](README.zh-CN.md)
+# pg_eviltransform
 
-`pg_eviltransform` extends PostGIS `ST_Transform` with BD09/GCJ02 support and a geographic CGCS2000 name.
+[中文](README.zh-CN.md) | [Logo assets](assets/logo)
 
-It exposes one public function name, following the same overload interface as `ST_Transform`:
+PostGIS coordinate conversion for GCJ02, BD09 and CGCS2000, plus exact Jenks natural breaks.
 
-- `ST_EvilTransform(geometry, to_srid integer)`
-- `ST_EvilTransform(geometry, to_proj text)`
-- `ST_EvilTransform(geometry, from_proj text, to_srid integer)`
-- `ST_EvilTransform(geometry, from_proj text, to_proj text)`
+## Installation
 
-Behavior:
+Requires PostGIS and PostgreSQL with the following minimum versions for both
+the server runtime and build headers. Later minor releases within each listed
+major version are supported:
 
-- If neither side uses custom coordinates, it delegates directly to `ST_Transform`.
-- If BD09/GCJ02 is involved, it transforms via WGS84 (`4326`) when needed.
+| PostgreSQL | Minimum runtime / build headers |
+| --- | --- |
+| 15 | 15.20+ |
+| 16 | 16.16+ |
+| 17 | 17.12+ |
+| 18 | 18.7+ |
+| 19 | 19rc2, experimental |
 
-Custom SRIDs:
+These are compatibility requirements, not just CI test versions. Current
+builds use the patched PostgreSQL headers required for pgrx 0.20.0's composite
+datum security fix (CVE-2026-6460); binaries built against those headers cannot
+load on earlier minor releases. PG19 support is experimental and targets 19rc2.
+PG14 is no longer supported by current source builds. Binary availability is
+release-specific: the [pgext.cloud catalog](https://pgext.cloud/ext/pg_eviltransform)
+currently lists older 0.0.7 / pgrx 0.19.3 packages for PG14-18. Check its
+PostgreSQL, OS and architecture matrix before choosing a package.
 
-- `990001`: GCJ02
-- `990002`: BD09
+### Install server packages
 
-Geographic CGCS2000 uses the standard `EPSG:4490` SRID. All text overloads accept
-`CGCS2000`, `CGCS-2000`, `4490`, and `EPSG:4490`; the integer overload accepts
-`4490` already. PostGIS/PROJ selects the datum operation. For a projected
-CGCS2000 Gauss-Kruger zone, pass that zone's explicit integer EPSG SRID instead.
+With [pig](https://pig.pgsty.com) installed, enable the catalog's repository
+and install for your PostgreSQL major (PG18 shown):
 
-## Regex SQL Variant
+```bash
+pig repo add pgsql -u
+pig install pg_eviltransform -v 18
+```
 
-`regex_eviltransform.sql` defines `Regex_EvilTransform(...)` with the same overload interface as `ST_EvilTransform(...)`.
+With the same repository configured, you can instead use:
 
-`Regex_EvilTransform` is a SQL/PLpgSQL + regex implementation used for comparison and benchmarking against `pg_eviltransform`.
+```bash
+sudo apt install postgresql-18-eviltransform  # Debian / Ubuntu
+sudo dnf install pg_eviltransform_18          # RPM distributions
+```
 
-## Citation
+Alternatively, use a matching binary from [GitHub Releases](https://github.com/aiyou178/pg_eviltransform/releases),
+or [build from source](#development). Upstream DEB filenames use
+`postgresql-18-pg-eviltransform_*.deb`; catalog package names differ.
+
+### Enable in a database
+
+Run as a database administrator after installing the server packages:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION pg_eviltransform;
+SELECT extversion FROM pg_extension WHERE extname = 'pg_eviltransform';
+```
+
+No `shared_preload_libraries` setting is needed. Application roles can call the
+installed API; text overloads also need `USAGE` on `eviltransform_internal`.
+
+### Upgrade from 0.0.7
+
+Upgrade PostgreSQL to a supported minor version and install the matching 0.0.8
+package. Reconnect to the database, then run:
+
+```sql
+ALTER EXTENSION pg_eviltransform UPDATE TO '0.0.8';
+```
+
+## Usage
+
+### Coordinate conversion
+
+`ST_EvilTransform` follows the four `ST_Transform` overloads:
+
+```text
+ST_EvilTransform(geometry, to_srid integer)
+ST_EvilTransform(geometry, to_proj text)
+ST_EvilTransform(geometry, from_proj text, to_srid integer)
+ST_EvilTransform(geometry, from_proj text, to_proj text)
+```
+
+| Coordinate system | SRID | Text aliases |
+| --- | --- | --- |
+| WGS84 | 4326 | `EPSG:4326` |
+| GCJ02 | 990001 | `GCJ02`, `GCJ-02`, `EPSG:990001` |
+| BD09 | 990002 | `BD09`, `BD-09`, `EPSG:990002` |
+| Geographic CGCS2000 | 4490 | `CGCS2000`, `CGCS-2000`, `EPSG:4490` |
+
+```sql
+-- WGS84 to GCJ02 or BD09
+SELECT ST_EvilTransform('SRID=4326;POINT(120 30)'::geometry, 'GCJ02');
+SELECT ST_EvilTransform('SRID=4326;POINT(120 30)'::geometry, 990002);
+
+-- BD09 to Web Mercator
+SELECT ST_EvilTransform('SRID=990002;POINT(120.01107 30.00388)'::geometry, 3857);
+
+-- Explicit source and target systems
+SELECT ST_EvilTransform('POINT(120 30)'::geometry, 'EPSG:4326', 'GCJ02');
+SELECT ST_EvilTransform('POINT(120 30)'::geometry, 'CGCS2000', 990001);
+```
+
+Standard systems delegate to PostGIS/PROJ; custom systems bridge through WGS84
+when needed. CGCS2000 aliases mean geographic EPSG:4490; projected Gauss-Kruger
+zones require their own explicit EPSG codes.
+
+### Jenks natural breaks
+
+`ST_JenksBins` returns `double precision[]` class edges:
+
+```sql
+SELECT ST_JenksBins(ARRAY[1, 2, NULL, 10, 11]::double precision[], 2);
+-- {2,11}
+
+SELECT ST_JenksBins(value::double precision, 7) FROM measurements;
+SELECT ST_JenksBins(value::double precision, 7, true) FROM measurements;
+-- true selects lower edges; the default is upper edges
+```
+
+Arrays accept `numeric`, `double precision`, `real`, `bigint`, `integer` and
+`smallint`; aggregates accept `numeric` and `double precision`. NULLs are ignored,
+empty input returns NULL, and non-finite values or fewer than one class raise
+an error. If distinct values do not exceed the class count, sorted unique
+values are returned. Numeric inputs are computed as finite f64 values.
+
+## Benchmark
+
+Local ARM64, pgrx 0.20.0, PostGIS 3.7.0, JIT/parallel query off;
+median of five runs after one warm-up. Coordinate tests use 200,000 points.
+
+| PostgreSQL | Conversion | Native | Regex SQL |
+| --- | --- | ---: | ---: |
+| 18.7 | 4326 -> GCJ02 | 120.61 ms | 5546.00 ms |
+| 18.7 | 4326 -> BD09 -> 3857 | 320.75 ms | 15343.10 ms |
+| 19rc2 | 4326 -> GCJ02 | 117.47 ms | 5457.14 ms |
+| 19rc2 | 4326 -> BD09 -> 3857 | 321.29 ms | 14996.98 ms |
+
+Jenks: 100,000 rows, 1,000 distinct values, 7 classes, work_mem=8MB:
+
+| PostgreSQL | Rust array | Rust aggregate | CartoDB SQL |
+| --- | ---: | ---: | ---: |
+| 18.7 | 10.49 ms | 9.11 ms | 84.07 ms |
+| 19rc2 | 9.25 ms | 8.36 ms | 82.90 ms |
+
+The [full report](doc/benchmarks/2026-11-13-pgrx-0.20.0.md) includes before/after
+comparisons, timing ranges and differences between the SQL baselines
+and native functions. Results depend on the workload and host.
+
+Reproduce in a disposable database (the scripts recreate benchmark tables):
+
+```bash
+PGDATABASE=bench ROWS=200000 PG_MAJOR=18 scripts/benchmark_pg18.sh /tmp/coordinates.txt
+PGDATABASE=bench ROWS=100000 DISTINCT_VALUES=1000 BREAKS=7 WORK_MEM=8MB \
+  scripts/benchmark_jenksbins.sh /tmp/jenks.txt
+```
+
+## Development
+
+Use Rust **1.99.1**, cargo-pgrx **0.20.0**, matching Clang/libclang/LLVM majors,
+PostgreSQL server headers, PostGIS, and ICU/GEOS/librttopo development libraries.
+See the [benchmark Dockerfile](docker/Dockerfile.benchmark-trixie) for Debian dependencies.
+
+```bash
+rustup toolchain install 1.99.1 --profile minimal
+cargo install --locked cargo-pgrx --version 0.20.0
+cargo pgrx init --pg18=/usr/lib/postgresql/18/bin/pg_config
+cargo test --locked --lib
+cargo pgrx package --release --no-default-features --features pg18 \
+  --pg-config /usr/lib/postgresql/18/bin/pg_config
+cargo pgrx test pg18 --release --no-default-features --features pg_test
+```
+
+Replace `pg18` and the header path for other majors. Distro PostgreSQL tests
+need permission to install extension files; root/container runs should add
+`--runas postgres --pgdata /tmp/pg-eviltransform-tests` to the test command.
+
+The CI matrix builds, tests and benchmarks **PG15-19 on amd64 and arm64**.
+Release builds use portable CPU targets, `opt-level=3`, fat LTO and C `-O3`.
+
+```bash
+scripts/release_debian_trixie.sh  # Docker: PG15-19 DEBs in dist/
+```
+
+The tag-triggered release workflow also produces RPMs.
+
+## Acknowledgments and License
+
+- [googollee/eviltransform](https://github.com/googollee/eviltransform): coordinate formulas.
+- [PostGIS](https://postgis.net/) and [librttopo](https://git.osgeo.org/gitea/rttopo/librttopo): geometry processing.
+- [pgrx](https://github.com/pgcentralfoundation/pgrx) and [natural-breaks](https://github.com/uratne/natural-breaks): Rust extension framework and Jenks implementation.
+- [CartoDB CDB_JenksBins](https://github.com/CartoDB/cartodb-postgresql/blob/master/scripts-available/CDB_JenksBins.sql): benchmark-only SQL baseline, copyright 2014 Vizzuality, BSD 3-Clause.
+
+### Citation
 
 Patent reference for the regex-based SQL approach:
 
@@ -52,194 +217,7 @@ If you use the regex-based SQL approach, cite:
 }
 ```
 
-## Thanks
+### License
 
-- [googollee/eviltransform](https://github.com/googollee/eviltransform) for the open-source coordinate transform implementation and reference formulas.
-
-## Requirements
-
-- Rust stable 1.96+
-- `cargo-pgrx` 0.19.3:
-  `cargo install --locked cargo-pgrx --version 0.19.3`
-- PostgreSQL + PostGIS (PG 14-19 packages; PG19 Beta 4 is experimental until PostgreSQL 19 GA)
-- `librttopo-dev` (for the native GSERIALIZED fast path)
-
-For PG19 Beta 4 testing, use PostGIS built against Beta 4 headers. The Trixie
-PG19 benchmark image builds PostGIS 3.7.0rc2 from source; the available PGDG
-PostGIS 3.6.4 package segfaulted in a plain `ST_Transform` test on ARM64.
-
-Packaging note:
-
-- DEB packages have no hard runtime package dependency to keep installation lightweight.
-- PostgreSQL/PostGIS are kept as suggested packages to avoid pulling a large dependency tree during `apt install`.
-- Runtime still requires PostGIS (`CREATE EXTENSION postgis`) before `CREATE EXTENSION pg_eviltransform`.
-
-## Build
-
-```bash
-cargo pgrx init \
-  --pg14=/usr/lib/postgresql/14/bin/pg_config \
-  --pg15=/usr/lib/postgresql/15/bin/pg_config \
-  --pg16=/usr/lib/postgresql/16/bin/pg_config \
-  --pg17=/usr/lib/postgresql/17/bin/pg_config \
-  --pg18=/usr/lib/postgresql/18/bin/pg_config \
-  --pg19=/usr/lib/postgresql/19/bin/pg_config
-
-cargo pgrx package --release --features pg18 --no-default-features --pg-config /usr/lib/postgresql/18/bin/pg_config
-# Experimental PG19 beta:
-cargo pgrx package --release --features pg19 --no-default-features --pg-config /usr/lib/postgresql/19/bin/pg_config
-```
-
-## Test (native Rust)
-
-```bash
-cargo test
-cargo pgrx test pg18 --features "pg18 pg_test"
-# Experimental PG19 beta:
-cargo pgrx test pg19 --features "pg19 pg_test"
-```
-
-## Usage
-
-```sql
--- Preferred: explicit literals (no need to remember custom SRID numbers)
-SELECT ST_EvilTransform(ST_SetSRID('POINT(120 30)'::geometry, 4326), 'GCJ02');
-SELECT ST_EvilTransform(ST_SetSRID('POINT(120 30)'::geometry, 4326), 'BD09');
-
--- Equivalent numeric custom SRID form
-SELECT ST_EvilTransform(ST_SetSRID('POINT(120 30)'::geometry, 4326), 990001);
-
--- BD09 (990002) -> Web Mercator (3857)
-SELECT ST_EvilTransform(ST_SetSRID('POINT(120.011070620552 30.0038830555128)'::geometry, 990002), 3857);
-
--- from_proj / to_proj overload with literals
-SELECT ST_EvilTransform('POINT(120 30)'::geometry, 'EPSG:4326', 'GCJ02');
-
--- Geographic CGCS2000 (EPSG:4490), including conversions with custom CRSs
-SELECT ST_EvilTransform(ST_SetSRID('POINT(120 30)'::geometry, 4326), 'CGCS2000');
-SELECT ST_EvilTransform('POINT(120 30)'::geometry, 'CGCS2000', 'GCJ02');
-SELECT ST_EvilTransform('POINT(120 30)'::geometry, 'BD09', 'EPSG:4490');
-```
-
-## Jenks Natural Breaks
-
-`ST_JenksBins` computes exact Jenks natural breaks and returns `double precision[]` bin edges.
-
-Supported array inputs:
-
-- `numeric[]`
-- `double precision[]`
-- `real[]`
-- `bigint[]`
-- `integer[]`
-- `smallint[]`
-
-Supported aggregate inputs:
-
-- `numeric`
-- `double precision`
-
-Integer and `real` aggregate inputs can be cast to `double precision` or `numeric`. `numeric` inputs are accepted, but computation is normalized to finite `f64`, so output edges are floating-point values.
-
-Examples:
-
-```sql
--- Array form. NULL elements are ignored.
-SELECT ST_JenksBins(ARRAY[1, 2, NULL, 10, 11]::numeric[], 2);
-
--- Streaming aggregate form. Prefer this for large tables.
-SELECT ST_JenksBins(value, 7)
-FROM big_table;
-
--- Lower bin edges instead of the default upper edges.
-SELECT ST_JenksBins(value, 7, true)
-FROM big_table;
-```
-
-Behavior:
-
-- `NULL` inputs are ignored.
-- `breaks < 1`, `NaN`, infinity, and numeric values outside finite `f64` conversion range error.
-- No valid input rows return `NULL`.
-- If the distinct value count is less than or equal to `breaks`, sorted unique values are returned.
-
-## Benchmark (PG18)
-
-Use the benchmark script to compare `ST_EvilTransform` and `Regex_EvilTransform`:
-
-```bash
-# optional env: PGHOST, PGPORT, PGUSER, PGDATABASE, ROWS
-scripts/benchmark_pg18.sh
-# Experimental PG19 beta:
-PG_MAJOR=19 scripts/benchmark_pg18.sh
-```
-
-It will:
-
-- Ensure `postgis` and `pg_eviltransform` extensions exist.
-- Load `regex_eviltransform.sql` (creating `Regex_EvilTransform`).
-- Generate benchmark data in `public.bench_points`.
-- Run `EXPLAIN (ANALYZE, BUFFERS)` for `ST_EvilTransform` and `Regex_EvilTransform`.
-- Write report to `benchmark_pg18_report.txt` (or custom output path).
-
-Example:
-
-```bash
-ROWS=500000 PGDATABASE=testdb scripts/benchmark_pg18.sh /tmp/bench_pg18.txt
-```
-
-Latest run (PG18, `ROWS=200000`, report: `benchmark_pg18_report.txt`):
-
-| Scenario | `ST_EvilTransform` | `Regex_EvilTransform` | Speedup (`Regex` / `ST`) |
-|---|---:|---:|---:|
-| `4326 -> 990001` | `92.402 ms` | `2832.821 ms` | `30.7x` |
-| `990002 -> 3857 (via 4326)` | `183.856 ms` | `8393.272 ms` | `45.7x` |
-
-Experimental PG19 Beta 4 run (`postgres:19beta4-trixie`, PostGIS 3.7.0rc2, `ROWS=200000`, report: `benchmark_pg19_report.txt`):
-
-| Scenario | `ST_EvilTransform` | `Regex_EvilTransform` | Speedup (`Regex` / `ST`) |
-|---|---:|---:|---:|
-| `4326 -> 990001` | `92.822 ms` | `3057.853 ms` | `32.9x` |
-| `990002 -> 3857 (via 4326)` | `200.395 ms` | `7916.158 ms` | `39.5x` |
-
-## Jenks Benchmark
-
-Use `scripts/benchmark_jenksbins.sh` to compare CartoDB's SQL baseline with Rust array and streaming aggregate forms:
-
-```bash
-# optional env: ROWS, DISTINCT_VALUES, BREAKS, WORK_MEM, PGHOST, PGPORT, PGUSER, PGDATABASE
-scripts/benchmark_jenksbins.sh
-```
-
-The CartoDB baseline SQL used by the benchmark is vendored at `scripts/CDB_JenksBins.sql` with upstream attribution and license notes.
-
-PG19 Beta 4 Docker run (`postgres:19beta4-trixie`, PostGIS 3.7.0rc2, `ROWS=100000`, `DISTINCT_VALUES=1000`, `BREAKS=7`, `WORK_MEM=8MB`):
-
-| Scenario | Execution time |
-|---|---:|
-| `CDB_JenksBins(array_agg(value::numeric), breaks)` | `89.695 ms` |
-| `ST_JenksBins(array_agg(value), breaks)` | `11.341 ms` |
-| `ST_JenksBins(value, breaks)` streaming aggregate | `9.881 ms` |
-
-The streaming aggregate avoids materializing an `array_agg` input and keeps an internal distinct-value count map during aggregation.
-
-## Release Debian (Trixie, PG14-19)
-
-```bash
-scripts/release_debian_trixie.sh
-```
-
-This builds `.deb` artifacts under `dist/`:
-
-- `postgresql-14-pg-eviltransform_<version>_trixie_<arch>.deb`
-- `postgresql-15-pg-eviltransform_<version>_trixie_<arch>.deb`
-- `postgresql-16-pg-eviltransform_<version>_trixie_<arch>.deb`
-- `postgresql-17-pg-eviltransform_<version>_trixie_<arch>.deb`
-- `postgresql-18-pg-eviltransform_<version>_trixie_<arch>.deb`
-- `postgresql-19-pg-eviltransform_<version>_trixie_<arch>.deb`
-
-GitHub Release CI publishes both `amd64` and `arm64` package artifacts (`.deb` + `.rpm`).
-
-## License
-
-MIT. See `LICENSE`.
+Project source is [MIT licensed](LICENSE). librttopo is GPL-2.0-or-later;
+third-party components retain their own licenses.

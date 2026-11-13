@@ -48,7 +48,12 @@ slacrawl search "incident"
 slacrawl tui
 ```
 
-`init` writes `~/.slacrawl/config.toml`; database-backed commands use `~/.slacrawl/slacrawl.db` by default. A configured bot takes precedence; failed bot authentication never falls back to the user token. Without a bot, the user owns discovery, profiles and history. Slacrawl uses the user token for historical replies and optional DMs. Live Socket Mode tailing still requires both bot and app tokens.
+`init` writes `~/.slacrawl/config.toml`; database-backed commands use `~/.slacrawl/slacrawl.db` by default. A configured bot takes precedence; failed bot authentication never falls back to the user token. Without a bot, the user owns discovery, profiles and history. Live Socket Mode tailing still requires both bot and app tokens.
+
+Slacrawl prefers the user token for historical replies and optional DMs. With no
+user token configured, API sync fetches channel replies with the bot where its
+scopes and membership permit; workspace thread coverage stays partial. A rejected
+user credential never triggers bot reply fallback.
 
 Already have a Slack export? Import its ZIP or extracted directory instead of syncing from the API:
 
@@ -115,6 +120,33 @@ slacrawl --json status
 ```
 
 Use `--format text`, `--format json`, or `--format log` on commands that support structured output. Color turns off when stdout is not a TTY; `--no-color` and `NO_COLOR=1` force plain output.
+
+Schema 9 retains a private, key-only native change journal and exposes its generation
+and sequence anchors in `status --json`. This is the foundation for later
+incremental delivery; no delivery worker or journal compaction is enabled. See
+[the journal contract](SPEC.md#native-change-journal).
+
+Library callers can capture a bounded, read-only six-table native seed at one
+consistent journal head and project it through the private archive profile.
+This does not deliver data or qualify an incremental baseline; see
+[native seed capture](SPEC.md#bounded-native-seed-capture).
+
+The internal delivery API upgrades recognized version-1 outboxes to version 2
+on open, preserving pending requests and receipts exactly. Older binaries
+reject the upgraded file. Explicit library callers can stage a complete private
+seed and resume exact requests through the existing delivery driver; only the
+final verified receipt qualifies its native baseline. Ambiguous keys retain
+evidence but block completion. No scheduler is enabled. See
+[the outbox contract](SPEC.md#local-delivery-outbox).
+
+Explicit operator commands are available as `slacrawl delivery init`,
+`stage-seed`, `stage-changes`, and `deliver`. They require a separately qualified private scope,
+explicit native/outbox paths and bounded operations; only `deliver` contacts the
+registered service using `CRAWL_REMOTE_TOKEN` (or `--token-env`). They neither
+sync nor migrate the source/outbox and reject `--config`. See
+[the command and scope contract](SPEC.md#operator-delivery-commands) before use.
+Incremental staging uses the latest receipt-qualified baseline; unchanged H is
+a no-op, while excluded changes still require an empty part and receipt.
 
 ## Keep it current
 

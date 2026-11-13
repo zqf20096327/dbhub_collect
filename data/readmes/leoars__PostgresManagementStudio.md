@@ -6,7 +6,7 @@ English | [Português (Brasil)](README.pt-BR.md)
 
 **The SQL Server Management Studio experience, for PostgreSQL.** A native Windows client with **database diagrams**, a **visual query designer** and **context-aware IntelliSense**, plus Object Explorer, F5 to run, execution plans, session monitoring and backup/restore, built for people who already think in SSMS.
 
-**[Download v0.1.0-alpha.5 for Windows x64](https://github.com/leoars/PostgresManagementStudio/releases/tag/v0.1.0-alpha.5)** · Graphical installer (EN/pt-BR) or portable ZIP, .NET runtime included · Works with PostgreSQL 16–18
+**[Download v0.1.0-alpha.6 for Windows x64](https://github.com/leoars/PostgresManagementStudio/releases/tag/v0.1.0-alpha.6)** · Graphical installer (EN/pt-BR) or portable ZIP, .NET runtime included · Works with PostgreSQL 16–18
 
 ![PGMS editor, Object Explorer and query results](docs/assets/pgms-results-m959.jpg)
 
@@ -19,6 +19,8 @@ English | [Português (Brasil)](README.pt-BR.md)
 ![A database diagram in PGMS with eight tables and their foreign keys](docs/assets/pgms-diagram.png)
 
 See your schema the way you see it in SSMS. Add tables and their related tables, drag one column onto another to create a foreign key, change columns and primary keys inside the diagram, and let **Arrange Tables** lay everything out. Every change to the database is shown as a SQL script for review first. Diagrams are saved on the server, in a small `pgms` schema that PGMS asks permission to create.
+
+Diagrams also show each table's **indexes** (GIN, GiST, BRIN and operator classes such as `gin_trgm_ops`, in a section closed by default) and warn about foreign keys that no index serves. Tables, columns and relationships can carry **descriptions**, stored as PostgreSQL `COMMENT ON`. **Export for AI…** writes the diagram as Markdown (columns, keys, relationships, indexes and descriptions) to give an AI agent before it writes SQL; an optional `pgms.diagram_markdown(name)` function returns the same text inside the database. See [Using diagrams with AI agents](docs/en/user-guide.md#using-diagrams-with-ai-agents).
 
 ### Visual query designer
 
@@ -34,7 +36,8 @@ Press `Ctrl+Space` and get what fits that position. After `FROM`: tables, views 
 
 ### Also in PGMS
 
-- **Generate SQL with AI.** Describe a query and review the SQL before it reaches the editor, using Anthropic, OpenAI or a local Ollama with your own key. Your request and the database structure go to the provider you configure; table data is never read or sent.
+- **Generate SQL with AI.** Describe a query and review the SQL before it reaches the editor, using Anthropic, OpenAI or a local Ollama with your own key. Your request and the database structure go to the provider you configure; table data is never read or sent. On large databases the provider first picks the relevant tables by name, within a context limit you set.
+- **Execution plan advice.** Graphical plans flag operators that discard many rows and suggest a missing index as a commented `CREATE INDEX` script, checked against the catalog and never run for you.
 - **Configure Server TLS.** A guided setup that installs a certificate and turns on TLS, restoring the previous settings if it fails. Requires a superuser connection to a server running on Windows.
 
 ## Why PGMS
@@ -72,7 +75,7 @@ Get-FileHash .\PGMS-* -Algorithm SHA256
 Compare the hashes with `SHA256SUMS.txt` in the release. Starting with v0.1.0-alpha.2 the assets are built by the [release workflow](.github/workflows/release.yml) on GitHub Actions and carry a build provenance attestation, so you can also confirm that the ZIP or installer came from that workflow and this repository (requires the [GitHub CLI](https://cli.github.com/)):
 
 ```powershell
-gh attestation verify .\PGMS-0.1.0-alpha.5-Setup-x64.exe --repo leoars/PostgresManagementStudio
+gh attestation verify .\PGMS-0.1.0-alpha.6-Setup-x64.exe --repo leoars/PostgresManagementStudio
 ```
 
 v0.1.0-alpha.1 was built on the maintainer's machine and has checksums only. Code signing through the SignPath Foundation open source program is planned.

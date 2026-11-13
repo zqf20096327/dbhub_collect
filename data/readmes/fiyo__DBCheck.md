@@ -8,7 +8,7 @@
 >
 > Formerly known as **DBCheck**.
 
-[![Version](https://img.shields.io/badge/Version-v26.11.11.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/Version-v26.11.13.1-blue.svg)]()
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)]()
 [![AI](https://img.shields.io/badge/AI-Ollama%20%7C%20OpenAI-orange.svg)]()
@@ -260,7 +260,7 @@ so the host only needs **kernel ≥ 4.x** — Galaxy Kylin V10 SP3 ships kernel 
 ```bash
 uname -m                                      # expect aarch64
 # Version list: https://github.com/fiyo/DBCheck/releases
-VERSION=26.11.11.0
+VERSION=26.11.13.1
 docker pull jackge12345/dbcheck:$VERSION     # pin an explicit version
 docker run -d -p 5003:5003 \
   --memory=2g --memory-swap=2g \
@@ -288,10 +288,17 @@ docker run -d -p 5003:5003 \
 | Oracle | ⚠️ | Thick mode needs the x86_64 Instant Client and is unavailable on arm64; thin mode and the oracle_jdbc path work |
 | GBase 8s | ⚠️ | The native Python driver needs the GBase SDK — use the JDBC path on arm64 |
 
-> **Do not run the binary package directly on Kylin**
+> **Pick the right install method for Kylin / ARM64 servers**
 >
-> Only Windows / macOS clients are published; on Linux use the container or build from source.
-> Debian-built binaries fail with `GLIBC_2.34 not found` on Kylin's glibc 2.28.
+> Linux binaries are published for **x86_64 and aarch64**, both built in
+> `manylinux_2_28` containers and requiring glibc >= 2.28. Pick by `uname -m`:
+>
+> - `x86_64` -> `RaccoonX-Linux-x86_64-*.tar.gz` (Galaxy Kylin V10 SP3 x86_64)
+> - `aarch64` -> `RaccoonX-Linux-aarch64-*.tar.gz` (Kunpeng 920 / Phytium, Kylin V10 arm64)
+>
+> Unpack and run `bash start.sh`. Older glibc 2.17 systems (CentOS 7) still need the
+> multi-arch image above; Oracle thick / GBase native drivers remain x86_64-only.
+> Do not build on a newer glibc host and copy the binary over: `GLIBC_2.34 not found`.
 
 ---
 
@@ -1461,6 +1468,7 @@ Thank you to everyone who has supported RaccoonX through donations, Stars, Issue
 | 2026-09-06 | leon          | No.000013 |
 | 2026-09-24 | James.Yao          | No.000014 |
 | 2026-10-10 | acdante-zhang          | No.000015 |
+| 2026-11-13 | yunlong          | No.000016 |
 ---
 
 # 📜 License

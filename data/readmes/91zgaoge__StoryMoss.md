@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.98.1-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.98.3-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -120,6 +120,16 @@ npm run build
 
 OG.md`](./CHANGELOG.md)。
 
+### v0.98.3 · 训练风格 DNA 与资产重建适配推理模型
+
+- **JSON 截断可修复**：风格分析 JSON 中途被截断时，自动补全未闭合括号并采用已生成字段；两次尝试仍不完整才降级。
+- **思维链里的 JSON 可用**：推理模型（如 deepseek-v4）把答案留在 `reasoning_content`、正文为空时，结构化任务（资产重建/风格分析）会从思维链提取最终 JSON；普通写作请求仍不会把思维链当正文。
+- **不再空手重建**：资产重建提高输出额度并启用 JSON mode，世界观/大纲/角色/关系不再因一次空响应整段丢失。
+
+### v0.98.2 · 续写训练 10 章不再被 token 预算中途熔断
+
+- **长批量训练不再中途判死**：run 级 token 硬熔断已暂停（`AgencyBudget::check()` 恒放行），10 章批量续写不会在 gate（编辑审计）阶段因累计 30 万 token 报「预算耗尽」而整批失败；token 用量仍照常记账，运行检查点与成本观测不受影响。
+
 ### v0.98.1 · 本地书籍训练的取章起点修复
 
 - **固定起点不再跳过首章**：本地 epub/txt 作为训练源时，起始章号现在按 1-based 正确转换为 0-based 切片起点；此前「从指定章连取」会跳过指定章本身并整体错一位。默认（第 1 章起）与 MCP 源不受影响。
@@ -175,14 +185,4 @@ v0.95.0 留下的一批状态机债务已逐项收口：
 - **硬承接锚点**：训练指令始终携带上一章结尾原文（900 字），并明确「同一地点/同批人物/同一时代、未完结事件先落地，禁止新主角/新委托/新场景」；指令上限由 1200 字提高到 4096 字，锚点不再被截断。
 - **过期建议过滤**：上轮训练建议只在承接区间重叠时采用，跨章节区间（如第 1–10 章的建议）不再污染第 97 章之后的续写。
 - **资产缺失兜底**：沙盒无世界观/角色卡/大纲时，writer 不得输出「无法完成/创作资产为空」拒绝话术；续写管线的散文回退改为「带前文的续写 prompt」，不再复用创世开篇 prompt。
-- **空稿守卫**：判分前把 `<p></p>`/空白/拒绝话术判为不可用产出，任务失败且不落假报告；`update_scene` 统一把视觉空 HTML 视为 None，幕前切书空文档不再覆盖已有正文。
-
-### v0.93.15 · 续写训练不再被一次网络抖动判死
-
-真机训练在连续取章时遇到栗子读书回环 HTTP 的一次 `Connection reset`，整条训练任务直接失败。现在只读工具调用遇到这类瞬时传输故障会自动重试两次（写工具绝不重发，避免重复副作用），单次抖动不再毁掉整轮训练。同时修复训练报告的「假 0.00」：判官返回缺失五维评分时不再落库成 0.00 假报告，而是先重试判官；仍不可用则存「评分不可用」降级报告，趋势图跳过这一轮。报告里也标清「沙盒第 N 章（对应真实第 M 章）」，不再把沙盒章号与真实章号混在一起。
-
-### v0.93.14 · 任务进度和日志时间终于对齐了
-
-任务页此前会出现「进度已经更新，日志时间却停在几分钟前」的情况：进度、日志、心跳分三处独立写入。现在每次进度更新会用同一个时间戳同时写入进度、心跳与一条日志，毫秒级一致。界面上的最近更新、上次运行、心跳与每条日志也都改成完整本地日期时间，诊断页不再直接截取 UTC 字符串。风格学习与训练报告页同步受益。
-
-### 
+- **空稿守卫**：判分前把 `<p></p>`/空白/拒绝话术判为不可用产出，任务失败且不落假报告；`update_scene` 统一把视觉空 HTML 视为 None，幕前切

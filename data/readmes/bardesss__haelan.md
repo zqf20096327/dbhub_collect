@@ -244,14 +244,21 @@ client, and consent. After that it asks which data types to fetch and how far ba
 builds an unprivileged Debian container from the latest release rather than running the image,
 because that catalogue takes bare-metal installs and not Docker. Run it on the Proxmox VE host:
 
+<!-- x-release-please-start-version -->
 ```
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/bardesss/haelan/master/proxmox/ct/haelan.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/bardesss/haelan/v2.24.1/proxmox/ct/haelan.sh)"
 ```
+<!-- x-release-please-end -->
+
+The command is pinned to the current release, and so are the scripts it fetches in turn.
 
 It creates the container, installs Node, builds the web app, writes a systemd unit and prints the
 address to open, which lands on the same setup wizard. Running the same command again updates an
 existing container to the latest release. The data directory is `/opt/haelan_data`, deliberately
-outside the tree an update replaces, so the database, the key and the backups survive it.
+outside the tree an update replaces, so the database, the key and the backups survive it. The
+service runs as an unprivileged `haelan` user, and `/opt/haelan_data` is readable only by it. An
+update builds the new release beside the running copy and goes back to that copy if the new one
+does not answer.
 
 Nobody has run these on a Proxmox host yet, so compose above is still the path that is tested.
 [#232](https://github.com/bardesss/haelan/issues/232) is where to report it if you do, and every
@@ -606,12 +613,12 @@ documents for whoever is building, not part of what ships.
 
 ## Translations
 
-The app ships English and Dutch, both complete at 1544 keys. Locales are plain JSON
+The app ships English and Dutch, both complete at 1550 keys. Locales are plain JSON
 (`apps/web/src/i18n/en.json`, `apps/web/src/i18n/nl.json`), imported and registered in a
 `resources` map in `apps/web/src/i18n/index.tsx`; `fallbackLng` is `en`. The language is derived
 from the browser's `navigator.language` - there is no in-app language switch.
 
-Adding one is three steps: copy `en.json`, translate its 1544 keys, then import and register it
+Adding one is three steps: copy `en.json`, translate its 1550 keys, then import and register it
 beside `en` and `nl`. Translate all of them. i18next falls back per key rather than per file, so a
 half-finished locale does not show the fallback language throughout - it shows one screen carrying
 two languages at once, which is worse than shipping no locale at all.

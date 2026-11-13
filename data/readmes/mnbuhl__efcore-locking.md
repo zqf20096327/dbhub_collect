@@ -39,6 +39,28 @@ services.AddDbContext<AppDbContext>(o =>
 
 All row-level locking queries **require an active transaction**.
 
+This can be an EF transaction (`BeginTransaction` / `UseTransaction`), an active transaction
+explicitly enlisted through `Database.EnlistTransaction`, or an ambient `TransactionScope`.
+For row locks, provider automatic ambient enlistment is sufficient; no explicit
+`Database.EnlistTransaction` call or additional `UseLocking` option is needed.
+The provider must support `System.Transactions` and enlist the connection. Provider
+opt-outs such as Npgsql's `Enlist=false` require an EF or explicitly enlisted transaction.
+Enable async flow when using asynchronous queries:
+
+```csharp
+using (var scope = new TransactionScope(
+    TransactionScopeOption.Required,
+    new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted },
+    TransactionScopeAsyncFlowOption.Enabled))
+{
+    var product = await ctx.Products.Where(p => p.Id == id).ForUpdate().SingleAsync();
+    // Read or update the locked rows within the scope.
+    scope.Complete();
+} // Commit (or rollback without Complete) releases the locks.
+```
+
+Keep context/connection disposal outside the scope, after the transaction has completed.
+
 ```csharp
 await using var tx = await ctx.Database.BeginTransactionAsync();
 
@@ -366,6 +388,8 @@ dotnet run -c Release --project benchmarks/EntityFrameworkCore.Locking.Benchmark
 ```
 
 `--version` is required and labels the results folder (`results/v<x.y.z>/`). Additional BenchmarkDotNet arguments (e.g. `--filter '*SqlGeneration*'`) can be appended.
+
+Latest results: [v0.6.1 benchmark summary](benchmarks/EntityFrameworkCore.Locking.Benchmarks/results/v0.6.1/README.md).
 
 ## License
 

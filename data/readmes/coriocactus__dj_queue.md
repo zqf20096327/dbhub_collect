@@ -54,9 +54,14 @@ PEP 561-compatible type checkers.
 Optional extras:
 
 ```bash
-pip install "dj-queue[postgres]"    # psycopg for PostgreSQL + LISTEN/NOTIFY
-pip install "dj-queue[prometheus]"  # prometheus_client for /dj_queue/metrics
+pip install "dj-queue[postgres]" "psycopg[binary]"  # psycopg for PostgreSQL + LISTEN/NOTIFY
+pip install "dj-queue[prometheus]"                  # prometheus_client for /dj_queue/metrics
 ```
+
+Deployments that manage libpq through the operating system should install
+`psycopg[c]` instead of `psycopg[binary]`. The `postgres` extra on its own pulls
+in `psycopg` without choosing an implementation, which leaves the pure-Python
+driver: it needs a system libpq and is much slower.
 
 Add `dj_queue` to `INSTALLED_APPS`, register the router, and point Django's task
 backend at `DjQueueBackend`:
@@ -791,8 +796,11 @@ policy, and autovacuum tuning.
   logs `connection_budget.warning` on startup when the local worker footprint
   appears close to PostgreSQL connection capacity.
 - Keep retention short. Set `preserve_finished_jobs = False` if you do not need
-  successful results. Otherwise use bounded `clear_finished_jobs_after`,
-  `clear_failed_jobs_after`, and `clear_recurring_executions_after` values.
+  successful results. That still reduces table growth, but completion without
+  retention sends more statements per job than completion with retention (11
+  against 1) and is slower per completion. Otherwise use bounded
+  `clear_finished_jobs_after`, `clear_failed_jobs_after`, and
+  `clear_recurring_executions_after` values.
 - Run `python manage.py dj_queue_prune` regularly for stricter cleanup.
 - Keep `use_skip_locked = True` and `listen_notify = True` unless you have a
   specific reason not to.
@@ -960,7 +968,7 @@ Recurring entry options:
 
 On PostgreSQL, `listen_notify` uses the same Django PostgreSQL driver
 configuration as the main database connection. Install a compatible driver in
-your project, or use `dj-queue[postgres]` to pull in `psycopg`.
+your project, as shown under [Installation](#installation).
 
 ### Precedence
 

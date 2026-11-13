@@ -58,13 +58,17 @@ Dameng Exporter 是一个专为达梦数据库（DM8）设计的 Prometheus 监�
 ```
 dameng_exporter/
 ├── docs/                         # 文档和配置模板
-│   ├── documents/               # 文档文件
-│   │   ├── 参数配置指南.md     # 参数详细说明文档
-│   │   ├── 自定义指标使用指南.md # 自定义指标使用指南
+│   ├── documents/               # 使用文档
+│   │   ├── 参数配置指南.md       # 参数详细说明
+│   │   ├── 自定义指标使用指南.md # 自定义指标及告警示例
+│   │   ├── 采集日志排查指南.md   # 采集日志与慢 SQL 定位
+│   │   └── 指标清单_20260402.md  # 内置指标、标签和查询说明
+│   ├── config/                  # 发行包配置模板
 │   ├── dashboards/              # Grafana 面板模板
 │   │   └── *.json               # 监控面板文件
+│   ├── 历史版本/                # 旧版 Exporter 配套面板
 │   ├── alertmanager/            # 告警配置模板
-│   └── prometheus_告警规则/      # Prometheus 告警规则
+│   └── protheues_告警规则/       # Prometheus 告警规则
 ├── collector/                   # 指标采集器实现
 ├── config/                      # 配置文件目录
 ├── logs/                        # 日志文件目录
@@ -227,6 +231,8 @@ GRANT SELECT ON V$ASMGROUP TO MONITOR_USER;
 
 > 📖 **配置参数详解**：查看 [参数配置指南](https://github.com/gaoyuan98/dameng_exporter/blob/master/docs/documents/参数配置指南.md) 了解所有参数的详细说明和使用示例。
 
+采集变慢或面板缺少指标时，参见[采集日志排查指南](docs/documents/采集日志排查指南.md)。控制台显示中文摘要，文件保留精简 JSON。正常 INFO 每轮一条采集完成摘要；错误显示定位信息与同级 SQL 详情，文件仍是一条完整事件。达到整轮 `scrapeSlowThresholdMs`（默认 30000ms）时输出诊断总览与最多五条 SQL 排名；0 关闭总览与排名，独立错误及前台超时继续记录。DEBUG 保留逐 SQL 过程，字段随事件选择；文件 `sql_started` 保留完整模板，结束记录不重复全文。文件字段迁移与时间口径详见排查指南。旧 `collectorSlowThresholdMs` 已移除，加载时会报错。
+
 1. 创建配置文件 `dameng_exporter.toml`：
 
 #### 配置示例
@@ -336,7 +342,7 @@ curl -X POST http://localhost:9090/-/reload
 
 1. 登录 Grafana（默认 http://localhost:3000）
 2. 导航到 **Dashboard** → **Import**
-3. 上传面板文件：`docs/dashboards/达梦DB监控面板_多标签_20250903.json`
+3. 上传面板文件：`docs/dashboards/达梦监控面板_20251204.json`
    - 支持多维度标签过滤（datasource、env、region、cluster）
    - 适用于多数据源、多环境监控场景
    - 向后兼容，即使只配置了 datasource 标签也能正常工作
@@ -357,7 +363,7 @@ curl -X POST http://localhost:9090/-/reload
 1. 复制告警规则到 Prometheus：
 
 ```bash
-cp docs/prometheus_告警规则/rules/*.yml /etc/prometheus/rules/
+cp docs/protheues_告警规则/rules/*.yml /etc/prometheus/rules/
 ```
 
 2. 配置 AlertManager：
@@ -388,7 +394,7 @@ cp docs/alertmanager/*.yml /etc/alertmanager/
    ```
    `registerCustomMetrics` 默认为 `true`，若显式设置为 `false` 将跳过自定义指标；`customMetricsFile` 必须指向实际存在的 `.metrics`、`.sql.toml` 或 `.queries.toml` 文件。
 2. 在 `custom_queries.metrics` 中新增一个或多个 `[[metric]]` 区块以定义 SQL 查询。
-3. 保存文件后重新启动 Exporter（或重新部署容器），日志中出现 `loaded X custom metric(s)` 表示加载成功。
+3. 保存文件后重新启动 Exporter（或重新部署容器），控制台出现“自定义指标加载完成”或文件事件 `custom_metrics_loaded` 表示加载成功。
 
 #### 指标定义模板
 
@@ -468,6 +474,10 @@ scrape_configs:
 
 ### 文档与教程
 
+- [参数配置指南](docs/documents/参数配置指南.md)
+- [自定义指标使用指南](docs/documents/自定义指标使用指南.md)
+- [采集日志排查指南](docs/documents/采集日志排查指南.md)
+- [内置指标清单](docs/documents/指标清单_20260402.md)
 - [达梦数据库+Prometheus监控适配速览](https://mp.weixin.qq.com/s/CGKakimuFNTQx7epHS6YdA)
 - [Prometheus+Grafana基础监控平台搭建](https://mp.weixin.qq.com/s/TL2j3WrwILI9AnG73yPgJg)
 - [部署dameng_exporter数据采集组件](https://mp.weixin.qq.com/s/Dca0j4UcIFL4FUxCqkcJ7A)
@@ -497,17 +507,17 @@ scrape_configs:
 ### 📌 v1.1.6 - 单数据源最终版
 - **适用场景**：监控单个达梦数据库实例
 - **配置方式**：命令行参数
-- **Grafana面板**：使用 `达梦DB监控面板_20250518.json`
+- **Grafana面板**：使用 `docs/历史版本/达梦DB监控面板_20250518_v1.1.6版本单标签.json`
 - **特点**：配置简单，稳定可靠
 
 ### 🚀 v1.2.0+ - 多数据源新架构
 - **适用场景**：需要同时监控多个数据库实例
 - **配置方式**：TOML 配置文件（不兼容旧版命令行参数）
-- **Grafana面板**：必须使用 `达梦DB监控面板_多标签_*.json`
+- **Grafana面板**：使用 `docs/dashboards/达梦监控面板_20251204.json`
 - **特点**：支持多实例、标签过滤、更灵活的配置
 
 ### ⚡ 升级注意事项
-1. **配置文件**：从 v1.1.6 升级需要完全重新配置，参考[配置说明](#配置说明)
+1. **配置文件**：从 v1.1.6 升级需要完全重新配置，参考[参数配置指南](docs/documents/参数配置指南.md)
 2. **Grafana面板**：必须更新到多标签版本面板
 3. **建议**：先在测试环境验证，确认无误后再升级生产环境
 4. **回退方案**：如果只需监控单实例，可继续使用 v1.1.6 版本

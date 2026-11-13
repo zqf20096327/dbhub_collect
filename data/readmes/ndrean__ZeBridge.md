@@ -74,7 +74,7 @@ The hub is NATS, the bridge, mutation admission and the sweeper on one server. P
 - **Docker Compose:** two files on the server. HAProxy and Let's Encrypt are included, and PostgreSQL optionally:
 
   ```sh
-  V=0.3.2
+  V=0.3.3
   mkdir zebridge && cd zebridge
   curl -fsSLO https://raw.githubusercontent.com/ndrean/ZeBridge/v$V/deploy/compose/compose.yml
   curl -fsSL -o .env https://raw.githubusercontent.com/ndrean/ZeBridge/v$V/deploy/compose/.env.example
@@ -104,7 +104,7 @@ return { invite: rows[0].code }; // in the login response
 
 ### The app
 
-The app passes the code to the library on its first start. The library enrolls the device, stores its identity, seeds its replica and follows changes; later starts need no code, and the library renews the device's credentials by itself. See [Users: invites](AUTHENTICATION.md#users-invites) for other ways to deliver the code (a link, an email) and the enrollment steps.
+The app passes the code to the library on its first start. The library enrolls the device, stores its identity, seeds its replica and follows changes; later starts need no code, and the library renews the device's credentials by itself. See [How a device gets access](AUTHENTICATION.md#how-a-device-gets-access) for the role of the NATS operator, the bridge and the device key. [Users: invites](AUTHENTICATION.md#users-invites) shows how to deliver the code.
 
 For a browser app:
 
@@ -146,7 +146,18 @@ The TypeScript client drives its own synchronization loop. With native `libzb`, 
 
 ### Write order: what waits for what
 
-⚠️ On tables that support ordering, a write waits by default for this client's most recent unsettled ordered write. That lets you queue an order and then its lines without a line overtaking the order. Use `after` to name a specific earlier write from the same client. Use `independent` for a write such as a page view that can be judged in any order. It can still wait for a free lane or a database lock.
+**Why.** The bridge applies writes in parallel, on up to 8 lanes, each with its own connection to PostgreSQL. Two writes made one after the other on a device could therefore reach PostgreSQL in either order. A user creates an order, then a line of that order: if the line arrives first, its foreign key refuses it, although the app did everything right.
+
+```
+device:            INSERT orders #1   then   INSERT order_lines #10 (order_id 1)
+bridge:            lane 3 takes #1           lane 5 takes #10
+without ordering:  #10 can reach PostgreSQL first → refused by its foreign key
+with ordering:     #10 waits for the verdict of #1 → applied after it
+```
+
+**What.** Ordering makes a write wait for the verdict of an earlier write from the same device, so a write is never judged before the one it depends on. It does not turn them into one transaction: each write still gets its own verdict.
+
+**What a table needs: nothing of its own.** Every writable table (`zebridge_enable(…, writable => true)`) supports ordering with a bridge and client libraries from 0.3.0 on, once that version's init SQL is applied. The clients order writes by default: each waits for this device's most recent unsettled write. Use `after` to name a specific earlier write instead, and `independent` for a write that depends on nothing, such as a page view; it can still wait for a free lane or a database lock.
 
 The default is also a constraint: a slow write (a long trigger, a lock) delays later writes that depend on it, directly or through the tail. Ordering never spans clients: a line written on a phone cannot wait for an order written on a laptop.
 
@@ -187,9 +198,27 @@ What to know:
 - `after` means "wait for that write's verdict", not "only if it succeeded". A refused parent still lets its child be judged; your foreign keys decide what happens to the child.
 - Two writes can name the same parent, for example two lines of one order. Either may be judged first. A later write without options follows whichever of them was made last, not both.
 - An ID is returned only for a write that was queued. A write refused on the device before it was queued (for example, one older than what the server still keeps) has no ID: `mutateWithId()` rejects, so nothing can be made to wait for it.
-- `after` and `independent` work on tables whose bridge offers ordering, which a current bridge does for every writable table. `after` is refused on a table that does not offer it, and so is an ID that is not one of this device's writes.
+- `after` is refused before anything is queued on a table whose bridge does not offer ordering (a bridge before 0.3.0), and so is an ID that is not one of this device's writes.
 
 The details are in [Clients: ordering a write](CLIENTS.md#ordering-a-write) and the protocol in [PROTOCOL, Ordered ingress](PROTOCOL.md#ordered-ingress-version-1).
+
+### Write conflicts: who wins
+
+Two devices edit the same row while offline. When they reconnect, PostgreSQL judges each write, and one of three rules decides what survives. You choose it per table, by how you shape the data:
+
+| Rule | Unit that wins | Use it for | Example |
+| --- | --- | --- | --- |
+| **Last writer wins** (the default) | the row | most tables: orders, statuses, settings | every example |
+| **Per-field registers** | each field of a record | one record several people edit at once | [Shared record](examples/15-shared-record/README.md) |
+| **A CRDT in the app** | nothing: no write ever conflicts | collaborative text | [Yjs](examples/17-yjs/README.md) |
+
+**Last writer wins.** Each write carries a version stamp from the library's clock (the table's version column, `updated_at` by default). PostgreSQL accepts a write only if its stamp is newer than the row's; equal stamps are decided by the writer's ID when the table has a tiebreak column. The older write gets the verdict `stale` and the winning row reaches the device through the change stream. The library then retries a losing UPDATE with a fresh stamp when the winner changed none of its columns, and reports it as lost when they overlap. Constraints, triggers and row-level security still apply: any write can be refused on its own.
+
+**Per-field registers.** A `jsonb` column holds one register per field, each with its own stamp. The row still follows last writer wins, but a write merges the fields instead of replacing them: two people editing different fields both keep their edit. See [COOPERATIVE_EDITING](COOPERATIVE_EDITING.md).
+
+**A CRDT in the app.** Each edit is a new, immutable row holding the CRDT library's update as bytes, sent with `independent: true`. Rows never collide, so nothing is `stale`; the library on each device merges the updates (Yjs for text). ZeBridge stores and delivers the bytes without reading them, and PostgreSQL can still enforce the tenant and refuse a write, but it cannot read the document: SQL sees bytes, not text. An optional server job compacts a document's rows into one.
+
+The rules for version columns, clocks and ties are in [PROTOCOL, the version value](PROTOCOL.md#73-the-version-value); what a device does with each verdict is in [Clients](CLIENTS.md).
 
 ### Choose the local database
 
@@ -272,7 +301,8 @@ The Electric column summarizes its documented architecture. We tested its read-s
 | Table schema on the client            | Sent by the bridge                                                                                                                              | Declared again in the app                                                                                            | Shape rows can be dynamic; TanStack's Electric adapter requires a key accessor, while its validation schema is optional ([adapter docs](https://tanstack.com/db/latest/docs/collections/electric-collection)) |
 | Reads                                 | SQL on the local replica                                                                                                                        | SQL on the local replica                                                                                             | HTTP Shapes, materialized by a client or integration into its local store |
 | Writes                                | `mutate()`; the library sends them, PostgreSQL judges them and returns a verdict                                                                | Plain SQL on local tables; your `uploadData()` sends them to **your backend**, which applies its own rules           | No built-in write path in Electric Sync; use your API. TanStack DB can add optimistic mutations and reconcile them with synced changes |
-| Exactly once, authorization, refusals | Built in: receipts, tenant credentials and row-level security, a verdict per write                                                              | Your backend's job; the SDK retries until `uploadData()` succeeds                                                    | Your API owns write guarantees; a proxy/gatekeeper must enforce authorization for Shapes |
+| Tenant access | Membership-scoped NATS credentials control private reads. PostgreSQL checks tenant writes under the authenticated principal. | Sync Streams can restrict downloads by authenticated identity. Your write API enforces tenant policy, for example with Supabase RLS. | Your auth proxy controls Shapes and your API authorizes writes. |
+| Lost reply or refused write | A retry with the same ID and payload gets the retained PostgreSQL receipt. The app gets a per-write outcome. | The SDK retries incomplete uploads. Your backend defines how it recognizes a retry and reports a permanent refusal. | Your write API defines retry and refusal handling. |
 | Services for the app                  | Responders on the same NATS connection and credentials, on the hub or a regional leaf ([Connect a service](#connect-a-service-if-you-need-one)) | No built-in equivalent: services are your own APIs, reached outside the sync connection and authenticated separately | No built-in NATS responder model; call your own APIs or services |
 | Client platforms                      | Browser, Node, Python, Dart/Flutter, React Native, Android, C ABI                                                                               | Many mature SDKs, including web, React Native, Flutter, Kotlin, Swift and Node                                       | TypeScript/JavaScript client and integrations; the local store and persistence depend on the chosen stack |
 
@@ -284,17 +314,23 @@ The Electric column summarizes its documented architecture. We tested its read-s
 | PowerSync / Node SDK | 12.76 s / 12.99 s | 13.00 s / 13.14 s |
 | Electric / TanStack DB / Node SQLite | 12.052 s / 11.481 s | 18.548 s / 17.636 s |
 
-On these runs, ZeBridge's median seed time was about **4.2–4.4× lower than PowerSync's** and **3.7–4.1× lower than Electric's**. This is a client-side seeding result, not a general throughput claim. Server-side state was warm for the timed rounds: ZeBridge's snapshot chain was ready, PowerSync had a one-client readiness seed, and Electric's second round reused the shape created in its first. The clients ran on the same 8-core Mac under OrbStack, which exposed about 4 GB to Docker; sync services ran one at a time. PowerSync's test stream used the fixed tenant predicate `tenant_id = 'cmp'`, so this does not compare per-user authorization. Full methodology, versions, checksum and startup sensitivity: [local seed comparison](COMPARISON.md#local-cold-seed-zebridge-powersync-and-electric).
+On these runs, ZeBridge's median seed time was about **4 lower than PowerSync's and Electric's**. This is a client-side seeding result, not a general throughput claim. Server-side state was warm for the timed rounds: ZeBridge's snapshot chain was ready, PowerSync had a one-client readiness seed, and Electric's second round reused the shape created in its first. The clients ran on the same 8-core Mac under OrbStack, which exposed about 4 GB to Docker; sync services ran one at a time. PowerSync's test stream used the fixed tenant predicate `tenant_id = 'cmp'`, so this does not compare per-user authorization. Full methodology, versions, checksum and startup sensitivity: [local seed comparison](COMPARISON.md#local-cold-seed-zebridge-powersync-and-electric).
 
-**Measured, same workload:** 500 clients, one Supabase database, the same table rules for both (2026-11-02).
+**Measured, the same workload for both.** For the November 13 write measurements: ZeBridge 0.3.2, PowerSync 1.28.3 writing through PostgREST under the same table rules.
 
-|                                                                                                      | ZeBridge                                                        | PowerSync                                                       |
-| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| **Delivery:** 500 clients starting cold receive the 10,000-row table, median (excluding local apply) | **5.3–5.7 s**: one shared compressed snapshot, 0.23 MB a client | 61–76 s: every operation of the bucket, 4.63 MB a client        |
-| **Writes,** offered at 1,000/s / 2,000/s                                                             | 990/s, verdict median 0.69 s / 1,572/s                          | 879/s through PostgREST, acknowledgement median 4.8 s / 1,702/s |
-| **A write reaching every client,** one write to each of the 500, median                              | **0.4–0.8 s**                                                   | 0.7–1.6 s                                                       |
+| | ZeBridge | PowerSync |
+| --- | --- | --- |
+| **Delivery:** 500 clients starting cold receive the 10,000-row table, median, excluding local apply (2026-11-02, 23.6 ms from Supabase) | **5.3–5.7 s**: one shared compressed snapshot, 0.23 MB a client | 61–76 s: every operation of the bucket, 4.63 MB a client |
+| **Writes, database 29 ms away:** 500 light writers, unordered inserts, offered 1,000/s / <br> 2,000/s | **1,021/s, verdict median 0.2 s / <br> 1,932–2,001/s, 0.3–0.5 s** | 878–895/s, acknowledgement median 3.8 s / <br> 1,714–1,718/s, 4.0 s |
+| **Writes, database 29 ms away:** 1 client / <br> 10 clients writing as fast as they can | 336–387/s / <br> 2,054–2,210/s | **774–821/s / <br> 5,568–6,911/s** |
+| **Writes, database on the same machine:** 500 light writers, unordered inserts, offered 10,000/s | 9,900/s, median 16 ms | 9,792/s, median 415 ms |
+| **A write reaching another client,** median, database 29 ms away | **143–156 ms** | 212 ms |
 
-The configurations, both servers' figures, what the runs do not measure, and what a disconnect does to a write in each are in [COMPARISON](COMPARISON.md).
+Both systems committed close to 10,000 writes/s with PostgreSQL on the same machine. With a remote database, ZeBridge confirmed individual writes sooner under steady load, while PowerSync's batched uploads drained bursts from a few clients faster. Both can enforce tenant isolation. With PowerSync, you provide the write path (your API, or PostgREST plus RLS) and decide how retries and refusals are handled. ZeBridge provides that path itself: a durable receipt and an outcome for each write.
+
+For unordered inserts at 29 ms, ZeBridge's ceiling was about 2,000 writes/s with 8 lanes, set mainly by the database round-trip time: **put the bridge as close to PostgreSQL as you can.**
+
+Both write paths used the same PostgreSQL tenant policy in this benchmark. ZeBridge also recorded a receipt for each write. For what each system does when a reply is lost or a write is refused, see [Tenant access and write outcomes](COMPARISON.md#tenant-access-and-write-outcomes).
 
 ## How it works
 
@@ -391,7 +427,7 @@ ZeBridge fits mobile apps, intermittently connected devices, field equipment and
 
 - **Replication is tenant-based.** A followed table brings the tenant's rows into the replica. A local SQL `WHERE` clause filters what the app reads, not what the device receives. One tenant per consumer at B2C scale is outside the intended topology.
 - **PostgreSQL is the authority.** Offline writes are provisional until judged by the server. This is not peer-to-peer or multi-master replication.
-- **Conflict semantics are explicit.** Ordinary writes use last-writer-wins. Cooperative editing can merge per-field registers; it is not collaborative text editing. See [COOPERATIVE_EDITING](COOPERATIVE_EDITING.md).
+- **Conflict semantics are explicit.** Ordinary writes use last-writer-wins; a record several people edit can merge per-field registers; collaborative text needs a CRDT in the app, whose rows PostgreSQL stores but cannot read. See [Write conflicts](#write-conflicts-who-wins).
 - **Recovery has retention requirements.** CDC retention, chain availability, tombstone GC and mutation receipt retention serve different purposes. An offline duration that permits reads to recover does not automatically permit every old pending write to execute: a write stamped before the GC floor is refused, because the tombstone that would have overruled it may be gone. See [catching up](OPERATIONS.md#catching-up-the-chain-and-the-stream) and [indeterminate write recovery](PROTOCOL.md#74c-reconciling-an-indeterminate-write).
 - **Local persistence matters.** Deleting a replica or reinstalling an app can destroy unsent writes. Protect device identity and storage as application data.
 - **Operate NATS and PostgreSQL deliberately.** Credentials, replication slots, disk budgets, backups and restore procedures are part of the deployment.
@@ -410,6 +446,7 @@ See [SCOPE](SCOPE.md) for the boundaries and [SECURITY](SECURITY.md) for tenant 
 | Shared plans, a map and routing                      | [Depot](examples/14-depot/README.md), [running live](https://bridge.zebridge.eu/demo) |
 | Several editors on one record                        | [Shared record](examples/15-shared-record/README.md)                                  |
 | Archiving readings to Parquet                        | [Archive](examples/16-archive/README.md)                                              |
+| Collaborative text, including offline edits          | [Yjs](examples/17-yjs/README.md)                                                      |
 
 ## Testing and performance
 
@@ -421,20 +458,17 @@ Measure CDC distribution, snapshot download/apply, mutation commits and outbox r
 
 Each figure is one run on the hardware named, not a capacity guarantee.
 
-**On a production hub, 0.2.10.** The bridge, admission, the sweeper and NATS on one VPS (6 vCPU, 11.7 GB, 4 ingress lanes); PostgreSQL on Supabase in London, 17 ms per query from the hub; the clients on one Mac, 23 ms from the hub, with the published Python package; a table of 10,000 rows of about 200 bytes. Measured 2026-11-02.
+**On the production hub.** The bridge, admission, the sweeper and NATS on one VPS (6 vCPU, 11.7 GB, 4 ingress lanes); PostgreSQL on Supabase in London, 17 ms per query from the hub; the clients on one Mac, 23 ms from the hub, with the published Python package; a table of 10,000 rows of about 200 bytes. Measured 2026-11-02.
 
 | Direction            | What                                                          | Figure                                                                                               |
 | -------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | PostgreSQL → clients | 10 clients seeding the table                                  | synced in 0.98 s (median), 0.35 s when their replicas were already seeded                            |
 | PostgreSQL → clients | 100,000 rows inserted in one statement                        | the bridge published them at about 46,700 events/s; one client held them all 2.95 s after the commit |
 | both                 | one client's write reaching all 10 clients through PostgreSQL | median 117–121 ms                                                                                    |
-| clients → PostgreSQL | writes judged and answered, one client                        | 263 writes/s                                                                                         |
-| clients → PostgreSQL | 10 clients                                                    | 1,414 writes/s                                                                                       |
-| clients → PostgreSQL | 50 clients, each sending 400 at once                          | 1,447 writes/s, median verdict 3.2 s                                                                 |
 
-**What the write figures are.** They are the hub's total, shared by every tenant: all writes go through the same ingress lanes, each with one connection to PostgreSQL, so more tenants do not add capacity. More ingress lanes can, until the database's round trips dominate: 8 lanes are measured in the comparison above. The runs used one tenant, which is not the designed topology but shows what one tenant can take when nothing else writes. During them PostgreSQL and the bridge were nearly idle: a batch of writes costs its round trips to the database, so the distance between the bridge and PostgreSQL sets the ceiling. 1,450 writes/s is 14,500 devices each sending one write every 10 seconds.
+**What sets the write ceiling.** All writes go through the same ingress lanes, each with one connection to PostgreSQL, so the ceiling is the hub's total, shared by every tenant: more tenants do not add capacity, more lanes do (8 at most). For unordered inserts with the database 29 ms away, all eight lanes were busy, each averaging about 4 ms a write, which gives roughly 2,000 writes/s across the bridge; database round-trip time was the main constraint, with PostgreSQL waiting on the bridge and no lock contention ([COMPARISON](COMPARISON.md#writes-the-same-machine-then-29-ms-away)). Ordered writes (the SDKs' default) were not measured there. With the database on the same machine the same bridge took 10,000 writes/s. So the distance between the bridge and PostgreSQL sets the ceiling: put the bridge next to the database. 2,000 writes/s is 20,000 devices each sending one write every 10 seconds.
 
-**The rate limit sets what one tenant gets.** By default there is none (`MUTATION_RATE_PER_PRINCIPAL=0`), and a tenant can use the whole ceiling, as above. Set, it applies to each principal and to each tenant: at 100 per second (burst 200, this hub's setting) one tenant is held to about 100 writes/s, whatever the hub could take. These runs used 2,000 (burst 4,000) and no write was delayed. See [Write limits, as a client sees them](OPERATIONS.md#write-limits-as-a-client-sees-them).
+**The rate limit sets what one tenant gets.** By default there is none (`MUTATION_RATE_PER_PRINCIPAL=0`), and a tenant can use the whole ceiling. Set, it applies to each principal and to each tenant: at 100 per second (burst 200, this hub's setting) one tenant is held to about 100 writes/s, whatever the hub could take. The comparison's runs had it off. See [Write limits, as a client sees them](OPERATIONS.md#write-limits-as-a-client-sees-them).
 
 **On one machine, and earlier deployments.**
 
@@ -444,16 +478,16 @@ Each figure is one run on the hardware named, not a capacity guarantee.
 | A client applying a busy table live            | libzb ~50k events/s, zb-client-ts ~33k                                                                                                | one Mac, a table under a steady write load                                        |                                                                       |
 | A change reaching a replica                    | median 12 ms                                                                                                                          | dev stack on one Mac, libzb on the DuckDB engine                                  |                                                                       |
 | Seeding a large table on a phone               | libzb 35.0 s (React Native), 70.8 s (Flutter); JavaScript client 725 s                                                                | iPhone 12, the same table                                                         | [Large table](examples/06-large-table/README.md)                      |
-| Client writes into PostgreSQL                  | ~8,500 writes/s on one ingress lane, ~19,500 on four                                                                                  | one Mac, PostgreSQL on the same machine, before 0.2.7's durable mutation receipts | [the ramp](examples/09-event/README.md#the-ramp-how-far-one-mac-goes) |
+| Client writes into PostgreSQL                  | 9,900 writes/s committed from 500 writers, verdict median 16 ms: what the load generator sent, not a ceiling reached | one Linux machine (9 cores), PostgreSQL on it, 8 ingress lanes | [COMPARISON](COMPARISON.md#writes-the-same-machine-then-29-ms-away) |
 | 500 clients starting at once, empty replicas   | all synced, the slowest in 8.6 to 12 s; NATS at 140–165 % CPU, about 1 MB per client; PostgreSQL under 16 % CPU; the bridge near idle | 2-vCPU, 3.7 GB VPS, clients 100 ms away                                           | [storm](storm/README.md)                                              |
 | One write reaching those 500                   | median 288 ms, p95 491 ms (100 ms of it network)                                                                                      | same                                                                              |                                                                       |
 | NATS restarted under the 500                   | none lost; half back within 6 s, the last at 23 s                                                                                     | same                                                                              |                                                                       |
 | 100 clients through a leaf across the Atlantic | cold sync median 13.2 s, slowest 14.7 s; warm 1.7 s; after a NATS restart, longest gap 2.9 s, none lost                               | 0.2.8 test hub in Canada, clients on a Mac in Europe (~100 ms)                    |                                                                       |
 | The bridge's memory under a steady stream      | ~8 MB resident, allocation flat over 70 minutes                                                                                       | 20,246 ticks of insert, update, delete                                            | `scripts/scenarios/drip.py`                                           |
 
-A comparison with PowerSync on the same workload is in [Compared with PowerSync](#compared-with-powersync).
+A comparison with PowerSync on the same workload is in [Compared with PowerSync](#compared-with-powersync-and-electricsql).
 
-**Not measured:** the production hub's write ceiling with more than 4 ingress lanes (8 were measured only on the comparison's server); how long each component may stay down before recovery needs a re-seed; NATS memory at a steady load (it follows recent load, not stored data); a long network partition under load.
+**Not measured:** the production hub's write ceiling (it was measured against a scratch database 29 ms away, never on the hub); how long each component may stay down before recovery needs a re-seed; NATS memory at a steady load (it follows recent load, not stored data); a long network partition under load.
 
 ## Documentation
 

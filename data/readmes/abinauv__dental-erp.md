@@ -186,9 +186,9 @@ See [`.env.example`](.env.example) for all available variables. Key ones:
 | `NEXTAUTH_SECRET`                           | Yes      | Random secret for session encryption          |
 | `ENCRYPTION_KEY`                            | Yes      | 64-char hex string for AES-256-GCM encryption |
 | `CRON_SECRET`                               | Yes      | Secret for securing cron job endpoints        |
+| `OUTBOX_INTERVAL_SECONDS`                   | No       | How often scheduled email/SMS are sent (60)   |
 | `OPENROUTER_API_KEY`                        | No       | Required for AI features                      |
-| `SMTP_HOST` / `SMTP_USER` / `SMTP_PASSWORD` | No       | Required for email features                   |
-| `SMS_API_KEY`                               | No       | Required for SMS features                     |
+| `SMTP_HOST` / `SMTP_USER` / `SMTP_PASSWORD` | No       | Email for clinics without their own settings  |
 
 ## Available Scripts
 

@@ -1,5 +1,7 @@
 # Ringbinder
 
+> **Note (2026-11-13):** Google released Gemini 4 Hydrogen as the successor to Gemini 3.8 Flash, but Ringbinder sticks with 3.8 Flash for now. Hydrogen costs twice as much per token until 3.8 Flash's price goes up on January 1, 2027, and Google's model card says it refuses more image requests it shouldn't, which means more pages failing or falling back to Mistral. There's also no evidence yet that it reads documents or handwriting more accurately.
+
 Ringbinder makes PDFs and images on your computer searchable. It uses vision LLM APIs (Gemini and Mistral) to read documents, and store the resulting text in a local SQLite database. Your original files stay where they are and are never modified.
 
 ![Ringbinder demo: installing, indexing a pile of scans, photos, and screenshots, then searching them](docs/demo.gif)

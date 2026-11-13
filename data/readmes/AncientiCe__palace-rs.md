@@ -252,7 +252,8 @@ the server). In remote mode the server owns the model, so these commands run on 
 
 Agent-generated query dumps are cleaned up before retrieval. Results come back
 with score provenance (`combined`, `cosine`, `bm25`, `coding_boost`,
-`preference_match`, `mined_discount`, `rerank_score`, `intent`) and the
+`preference_match`, `mined_discount`, `repeat_discount`, `rerank_score`,
+`intent`) and the
 chunks right before and after each hit in its source file. Pass
 `context: false` to `palace_search` to leave those out.
 
@@ -789,7 +790,10 @@ for comparison with other systems.
   ranking weight chosen on LongMemEval data (how much a session's other
   matching chunks count) was picked on the `m_cleaned` split together with
   probes from a real palace, then frozen before this run.
-- **Metric:** `recall_any@K` at session granularity.
+- **Metric:** `recall_any@K` at session granularity. The five drawers behind
+  R@5 hold about 1,700 tokens between them, 1.3% of the haystack.
+  [docs/benchmarks.md](docs/benchmarks.md) also reports `recall_all@K`, where
+  every gold session has to be in the top K.
 - **Hardware:** Windows, 16 threads.
 
 | Question type | Per session, `minilm-l6-v2` R@1 / R@5 | Exchange pairs, `q8` R@1 / R@5 |
