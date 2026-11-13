@@ -1510,15 +1510,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:50:07Z",
+  "collected_at": "2026-11-13T03:33:03Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-12",
   "stars": 112,
   "tree": {
-   "sha": "eabd29c4882defb43b5020dda71083c2cb6afc6a",
-   "etag": "W/\"45b6c3612f3337439d3ee4033df27658028d422eaf60ccf06d617e78fdaece90\"",
+   "sha": "8898ef06ed6c1a8d21498192a792b4254c2944fb",
+   "etag": "W/\"dd6a10389d082f0673d763bcdb676cb544e3482f134fbbd0a67c8d073bc30702\"",
    "truncated": false,
-   "path_count": 547,
+   "path_count": 645,
    "matched": [
     "joy-rs/Cargo.toml",
     "joy-ts/package.json",
@@ -1537,6 +1537,7 @@
     "joy-rs/joyczl-protocol-noop-macros/Cargo.toml",
     "joy-rs/joyczl-protocol/Cargo.toml",
     "joy-rs/joyczl-provider/Cargo.toml",
+    "joy-rs/joyczl-schedule/Cargo.toml",
     "joy-rs/joyczl-state/Cargo.toml",
     "joy-rs/joyczl-tools/Cargo.toml",
     "packaging/npm/package.json",
@@ -1554,9 +1555,9 @@
    {
     "path": "joy-rs/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "64b7e17befb7ad98cd4b6cf29799211f9f92c6b7",
+    "blob_sha": "336a0896f9e69a49a3f59ee6983dbfd1ff5f8a92",
     "ecosystem": "cargo",
-    "bytes": 6300
+    "bytes": 6370
    },
    {
     "path": "joy-ts/package.json",
@@ -1585,9 +1586,9 @@
    {
     "path": "joy-rs/joyczl-agent/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "aacf4e914662fe49d229ffd6b19f8e432aa9ee8a",
+    "blob_sha": "13183c6efccec99a80c748db51dcd8b6a2e663bb",
     "ecosystem": "cargo",
-    "bytes": 597,
+    "bytes": 625,
     "names": [
      "joyczl-memory",
      "joyczl-provider",
@@ -1596,6 +1597,7 @@
      "serde_json"
     ],
     "dev": [
+     "sqlx",
      "tempfile",
      "tokio"
     ]
@@ -1633,14 +1635,15 @@
    {
     "path": "joy-rs/joyczl-cli/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7225df93eef06742cbe344ff48f5f2ed6ca21d73",
+    "blob_sha": "42509871b563e499d6fb27976ee2ea1d6f052e8e",
     "ecosystem": "cargo",
-    "bytes": 983,
+    "bytes": 1022,
     "names": [
      "anyhow",
      "chrono",
      "joyczl-app-server",
      "joyczl-config",
+     "joyczl-schedule",
      "joyczl-connector",
      "joyczl-eval",
      "joyczl-graph",
@@ -1704,9 +1707,9 @@
    {
     "path": "joy-rs/joyczl-eval/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "10cc945ebba0e0b2875487c07814d4ef0ac0f649",
+    "blob_sha": "fb2b6db296d39284941705f2ceed8605403f5f01",
     "ecosystem": "cargo",
-    "bytes": 869,
+    "bytes": 905,
     "names": [
      "anyhow",
      "chrono",
@@ -1714,6 +1717,7 @@
      "joyczl-config",
      "joyczl-protocol",
      "joyczl-provider",
+     "joyczl-state",
      "joyczl-tools",
      "serde",
      "serde_json",
@@ -1783,15 +1787,16 @@
    {
     "path": "joy-rs/joyczl-memory/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b5fd5d4836d1b563a779ef25ac9e5334d594acf6",
+    "blob_sha": "7c2e7dd0661c5517c910fb5b7db2ff474c6f9614",
     "ecosystem": "cargo",
-    "bytes": 768,
+    "bytes": 866,
     "names": [
      "anyhow",
      "chrono",
      "joyczl-provider",
      "joyczl-state",
      "reqwest",
+     "sha2",
      "serde_json"
     ],
     "dev": [
@@ -1803,15 +1808,16 @@
    {
     "path": "joy-rs/joyczl-ops/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7301d82449e75f47197ab6f395acc618fefcf7db",
+    "blob_sha": "179dec011ba7fd5e26061ac7fe6ca7747f26b19c",
     "ecosystem": "cargo",
-    "bytes": 1244,
+    "bytes": 1283,
     "names": [
      "anyhow",
      "axum",
      "chrono",
      "futures-util",
      "joyczl-config",
+     "joyczl-schedule",
      "joyczl-connector",
      "joyczl-mcp",
      "joyczl-memory",
@@ -1875,15 +1881,31 @@
     ]
    },
    {
+    "path": "joy-rs/joyczl-schedule/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "803bc86d11a9b8535c32657cc008ad5b33b9f6ba",
+    "ecosystem": "cargo",
+    "bytes": 482,
+    "names": [
+     "chrono",
+     "serde",
+     "serde_json"
+    ],
+    "dev": [
+     "tempfile"
+    ]
+   },
+   {
     "path": "joy-rs/joyczl-state/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c12f1bba9f8d38061eb666cb3722bebea0b27e52",
+    "blob_sha": "99aaa530b08e7b98720bc4f38b87bf96210c6b2f",
     "ecosystem": "cargo",
-    "bytes": 555,
+    "bytes": 671,
     "names": [
      "serde_json",
      "anyhow",
-     "sqlx"
+     "sqlx",
+     "sha2"
     ],
     "dev": [
      "tempfile",
@@ -1893,9 +1915,9 @@
    {
     "path": "joy-rs/joyczl-tools/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "1484280634686344119762ab80b42a6bf37566a5",
+    "blob_sha": "df8b7e1ab82388821df6f8e2339b17d8fdd0d69f",
     "ecosystem": "cargo",
-    "bytes": 943,
+    "bytes": 982,
     "names": [
      "anyhow",
      "chrono",
@@ -1904,6 +1926,7 @@
      "joyczl-memory",
      "jsonschema",
      "joyczl-provider",
+     "joyczl-schedule",
      "joyczl-state",
      "serde_json",
      "reqwest",
@@ -1916,21 +1939,21 @@
    {
     "path": "packaging/npm/package.json",
     "kind": "dep",
-    "blob_sha": "3adcfc6fd76259ee4b5e511bdec24677b058688b",
+    "blob_sha": "916cfeab15deef11cec5518eb9fb668486bf043d",
     "ecosystem": "npm",
     "bytes": 609
    },
    {
     "path": "sdk/python-bin/pyproject.toml",
     "kind": "dep",
-    "blob_sha": "d465abafcca8428fe5f01afa8694110a706a726f",
+    "blob_sha": "ac98883efca619e121c5fce34d673039e5c20932",
     "ecosystem": "pyproject",
     "bytes": 544
    },
    {
     "path": "sdk/python/pyproject.toml",
     "kind": "dep",
-    "blob_sha": "fdfbfd6828afcd19ca532f943e426aee7b18ee41",
+    "blob_sha": "43022b55e80e946343823d2a5be6f2ec9646a318",
     "ecosystem": "pyproject",
     "bytes": 2179,
     "names": [
@@ -1977,14 +2000,14 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "ec46682e08b7dae64f45137877b777cfcd4d0d4b",
-    "bytes": 4844
+    "blob_sha": "212a8fdc830643aa5e8f5f4a0e718d03d47683d8",
+    "bytes": 5316
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "8c4a6c279fb3449740b2b679d4b2a53419f4fce5",
-    "bytes": 2998
+    "blob_sha": "9f91788f4d477557b7bc9d4aa6b233704d83ea09",
+    "bytes": 3867
    }
   ],
   "clues": {
@@ -1999,6 +2022,7 @@
    "paths": [
     "scripts/smoke-connector.sh",
     "joy-rs/joyczl-connector/Cargo.toml",
+    "joy-rs/joyczl-app-server/src/turn_driver.rs",
     "joy-rs/joyczl-cli/src/connector_cmd.rs",
     "joy-rs/joyczl-connector/src/config.rs",
     "joy-rs/joyczl-connector/src/config_tests.rs",
@@ -2014,6 +2038,9 @@
     "joy-rs/joyczl-connector/src/smtp.rs",
     "joy-rs/joyczl-state/migrations/0015_connector_inbox.sql",
     "joy-rs/joyczl-protocol/schema/typescript/v2/ConnectorStatus.ts"
+   ],
+   "matrix_urls": [
+    "https://github.com/ChrisVip001/joyczl-agent/issues"
    ]
   },
   "fail_count": 0
@@ -2759,15 +2786,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:08:49Z",
+  "collected_at": "2026-11-13T03:47:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-12",
   "stars": 30,
   "tree": {
-   "sha": "ac1938033dcc26e7c43b7af8a28df6b00f5f0913",
-   "etag": "W/\"9a2ff2e07bf03ff989aeacb42ecb1c75dcceb2a332ed16aa0e5a42de3c9f3333\"",
+   "sha": "6fb49645d34337b26ca2d5852f51f036350bcd60",
+   "etag": "W/\"5b3ec5e2c21ef6245dc917c2b7988578abb234f50349d056e4ad0f120b5353a7\"",
    "truncated": false,
-   "path_count": 2346,
+   "path_count": 2348,
    "matched": [
     "CamusDB.Cluster.Tests/CamusDB.Cluster.Tests.csproj",
     "CamusDB.Core/CamusDB.Core.csproj",
@@ -2830,7 +2857,7 @@
    {
     "path": "CamusDB.Core/CamusDB.Core.csproj",
     "kind": "dep",
-    "blob_sha": "f503b22980da07734699f421fc4938674d7df1a6",
+    "blob_sha": "f0722306b469f006d7d07b914ce378ba251a6194",
     "ecosystem": "csproj",
     "bytes": 6299,
     "names": [
@@ -2998,7 +3025,7 @@
    {
     "path": "CamusDB.Workload/CamusDB.Workload.csproj",
     "kind": "dep",
-    "blob_sha": "56da58fc3f5ec1883e63aa7fc8215a9a1f841b67",
+    "blob_sha": "f24964619b62eefad8d6a936869dbee5e390a6f8",
     "ecosystem": "csproj",
     "bytes": 610,
     "names": [
@@ -3500,13 +3527,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:43:29Z",
+  "collected_at": "2026-11-13T04:00:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-12",
   "stars": 12,
   "tree": {
    "sha": "8866972f83461f44b4b00d4bb44cc5c015267139",
-   "etag": "W/\"55715f4d0d3b7a1450fb3874e14a0f184a153f51ce3fb0a5bfc6f5aed850119e\"",
+   "etag": "W/\"faffb42a6c84713983d69cd230182054e5231043c02dc4821fbdd6cf96a22677\"",
    "truncated": false,
    "path_count": 376,
    "matched": [
@@ -3844,15 +3871,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:58:38Z",
+  "collected_at": "2026-11-13T03:39:42Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-12",
   "stars": 56,
   "tree": {
-   "sha": "cc06add6f1015bb4b070c797e86bfd4da3ac478f",
-   "etag": "W/\"83b7afefd77ac1bb0dc24a4975c028f77171eb3d25492bf0ebacc4822b6d8ee0\"",
+   "sha": "1d3f0b17e5efd2fa151517c60498bcacefdcd044",
+   "etag": "W/\"47f3c4e1903df05c04f9df792461daf87474f3835bbd3b711d9218009ffbea89\"",
    "truncated": false,
-   "path_count": 2246,
+   "path_count": 2247,
    "matched": [
     "go.mod",
     "tools/check/go.mod",
@@ -5759,15 +5786,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:33:54Z",
+  "collected_at": "2026-11-13T03:20:08Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-12",
   "stars": 526,
   "tree": {
-   "sha": "c78e6467db863e63c0a5dea245116cb047924d02",
-   "etag": "W/\"7e2d09666c39aee55c96c67ee57d3c5bf41672188e6f185ce636da1d374b85e2\"",
+   "sha": "551a6f79548d1f36bc74d9b1c399c0704ad530b8",
+   "etag": "W/\"4ff4dd2e52448b02040c48aac2c5d7f579ac60fa2f266b7211177c6967400ae4\"",
    "truncated": false,
-   "path_count": 831,
+   "path_count": 839,
    "matched": [
     "go.mod",
     "ui/dashboard/package.json",
@@ -5784,9 +5811,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "ba02235aec531b5df8a960b87ed6edfd65b3bdc2",
+    "blob_sha": "13ae7f4126b9b153f92cf281ebe68f065e04e8b5",
     "ecosystem": "go",
-    "bytes": 14250,
+    "bytes": 14238,
     "names": [
      "github.com/Masterminds/semver/v3",
      "github.com/fatih/color",
@@ -5809,6 +5836,7 @@
      "github.com/gin-contrib/gzip",
      "github.com/gin-contrib/size",
      "github.com/go-sql-driver/mysql",
+     "github.com/gorilla/websocket",
      "github.com/jackc/pgx/v5",
      "github.com/logrusorgru/aurora",
      "github.com/marcboeker/go-duckdb/v2",
@@ -6297,15 +6325,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:38:21Z",
+  "collected_at": "2026-11-13T03:23:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-12",
   "stars": 326,
   "tree": {
-   "sha": "835ca454338328f7a8da2eaa1aa99ea4d42483a2",
-   "etag": "W/\"a9d09cbc222b4dc4cfa5cf048b7bf380a215fe0bb0a55010d7b18fe75babefb9\"",
+   "sha": "27cf1df4adfa27b7f212bf4d1bae88cfca0aaf33",
+   "etag": "W/\"8b53d49558d1c6e85569c02ca44bff8473645309948aec894398bf3d7d6c776a\"",
    "truncated": false,
-   "path_count": 570,
+   "path_count": 574,
    "matched": [
     "contrib/docker/Dockerfile.alpine",
     "contrib/docker/Dockerfile.rocky10",
@@ -6338,8 +6366,8 @@
    {
     "path": "test/postgresql/src/postgresql14/Dockerfile",
     "kind": "image",
-    "blob_sha": "fb6e324e6270797d7fd100c71cf0d54cc5969edd",
-    "bytes": 3287,
+    "blob_sha": "ac524dcec78648e873c391baa6e4b9226883ac54",
+    "bytes": 3503,
     "images": [
      "rockylinux/rockylinux:10"
     ]
@@ -6347,8 +6375,8 @@
    {
     "path": "test/postgresql/src/postgresql15/Dockerfile",
     "kind": "image",
-    "blob_sha": "b2a06a2421b333346c5c0022936d3ff8551e28b7",
-    "bytes": 3287,
+    "blob_sha": "697a5d55f018c7bf7c13783efe38b75a134e4e99",
+    "bytes": 3503,
     "images": [
      "rockylinux/rockylinux:10"
     ]
@@ -6356,8 +6384,8 @@
    {
     "path": "test/postgresql/src/postgresql17/Dockerfile",
     "kind": "image",
-    "blob_sha": "56caa7032b0d9919f5c1d6b52858ace879fe2d06",
-    "bytes": 3465,
+    "blob_sha": "8747031dc006e17db6ae8244d71aa2ce55f88ff5",
+    "bytes": 3497,
     "images": [
      "rockylinux/rockylinux:10"
     ]
@@ -8295,15 +8323,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T19:17:20Z",
+  "collected_at": "2026-11-13T03:53:20Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-11",
+  "pushed_at": "2026-11-12",
   "stars": 20,
   "tree": {
-   "sha": "dfb31b61fc1c027251a4ca7a2205174fb04b90df",
-   "etag": "W/\"e63d9c890aec6506336413296ea39fda9a851ca2111e8e78951641130668ba5d\"",
+   "sha": "d2da091eb0adde01ac672e3ea94d25c0847ed079",
+   "etag": "W/\"55fd44b279de5364b7b9b9061afabdd42182b8eceafa08cc8466a0b4447a7c57\"",
    "truncated": false,
-   "path_count": 828,
+   "path_count": 833,
    "matched": [
     "Cargo.toml",
     "docs/package.json",
@@ -8342,9 +8370,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "db42a20df6f5346a46c56a289b52c651bd9545ad",
+    "blob_sha": "ab53dbe2b772c09184350a5695a2ab790ad4581d",
     "ecosystem": "cargo",
-    "bytes": 9962,
+    "bytes": 9965,
     "names": [
      "prax-schema.workspace",
      "prax-codegen.workspace",
@@ -8501,9 +8529,9 @@
    {
     "path": "prax-cassandra/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7418f77b384b1a91635bdfec960cb567827051be",
+    "blob_sha": "6a919da2a92bd899183eac44c3045d64bffd9a40",
     "ecosystem": "cargo",
-    "bytes": 1707,
+    "bytes": 1704,
     "names": [
      "prax-query.workspace",
      "tokio",
@@ -8657,9 +8685,9 @@
    {
     "path": "prax-migrate/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "0cd4ac3f54067ed9a6f22b994f83d9d324a98b85",
+    "blob_sha": "f116ebe4150f218a9d939325e3dfab150ea5708a",
     "ecosystem": "cargo",
-    "bytes": 885,
+    "bytes": 888,
     "names": [
      "prax-schema.workspace",
      "tokio",
@@ -8950,9 +8978,9 @@
    {
     "path": "prax-sqlx/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "50a103712683b147a661b5ef5cd1ad09da21a9a8",
+    "blob_sha": "7dd6aad77557302944c389296b7edea928a73c71",
     "ecosystem": "cargo",
-    "bytes": 1460,
+    "bytes": 1463,
     "names": [
      "prax-query",
      "sqlx",
@@ -9868,13 +9896,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T21:02:16Z",
+  "collected_at": "2026-11-13T03:56:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
-  "stars": 14,
+  "pushed_at": "2026-11-12",
+  "stars": 15,
   "tree": {
    "sha": "9abd3fdd1b3451bbf18dace8bd10bfef1075c8b6",
-   "etag": "W/\"7c669fed4d43f123907e1366127102eca50e166c70e6a6e15b8a80f16e52b423\"",
+   "etag": "W/\"159330975e43295ac23a3088e3d8b827c9451cd75d16e8ea47a64b289bfcef04\"",
    "truncated": false,
    "path_count": 427,
    "matched": [
@@ -11020,13 +11048,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T05:22:20Z",
+  "collected_at": "2026-11-13T04:00:50Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-11",
   "stars": 12,
   "tree": {
-   "sha": "5400542076a406539664b2ed375bb1863213f06a",
-   "etag": "W/\"596a83f21c4931791f1ffdaca721d3ff824f8021af1625a849d635d0fa3b853d\"",
+   "sha": "8a89eff2aee0a2dfc8b6664110d634b1c14e5131",
+   "etag": "W/\"ab215e1062c0f36f0fd030721b2bd27d8b3a031a46899ba022a733caa2a112df\"",
    "truncated": false,
    "path_count": 1801,
    "matched": [
@@ -12881,15 +12909,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:13:00Z",
+  "collected_at": "2026-11-13T03:49:54Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
-  "stars": 23,
+  "pushed_at": "2026-11-12",
+  "stars": 25,
   "tree": {
-   "sha": "f5b1cf195d5d1b551a7e5be0522d9682213c8540",
-   "etag": "W/\"537ea295d0aeabd6d335c22bc43114c2b67c451e285e623422f395a70463cc7c\"",
+   "sha": "554224534af0af4f41274fb4d0d4d0cfc68cbd3f",
+   "etag": "W/\"5fb0c988008df573f961bfea29dbeb5c365f2b6012426303a98465f6c3c7f32f\"",
    "truncated": false,
-   "path_count": 3885,
+   "path_count": 3886,
    "matched": [
     "package.json",
     "packages/dms/package.json",
@@ -12936,7 +12964,7 @@
    {
     "path": "packages/dms/package.json",
     "kind": "dep",
-    "blob_sha": "07c7a4a33323fe7e317ca2fcb15fc8725120e2d5",
+    "blob_sha": "62a230f34d2dde45adcb37148d69dfaed3d6bc40",
     "ecosystem": "npm",
     "bytes": 6089,
     "names": [
@@ -13345,15 +13373,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:33:56Z",
+  "collected_at": "2026-11-13T03:20:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
-  "stars": 521,
+  "pushed_at": "2026-11-12",
+  "stars": 522,
   "tree": {
-   "sha": "58f82db5aba3a3bad07cd05713a38f392d2da567",
-   "etag": "W/\"83b1fe4316c5a5e8b20b421f951a92f88242f351a84dfb66f6adc65e740b97b8\"",
+   "sha": "750320c868c81f1ebf6717756ec060284c626ee4",
+   "etag": "W/\"a4cabf102af8309f2873782a2ead0b7f2872e0feebd7529cdda0a28257782417\"",
    "truncated": false,
-   "path_count": 14105,
+   "path_count": 14104,
    "matched": [
     "app-e2e-tests/package.json",
     "app/package.json",
@@ -17140,6 +17168,58 @@
     "css222/umllab2/MediaAdapter.class",
     "css222/umllab2/MediaAdapter.java"
    ]
+  },
+  "fail_count": 0
+ },
+ "Cadet-Priyanshu/GDMS": {
+  "fn": "Cadet-Priyanshu/GDMS",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-13T02:52:49Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-12",
+  "stars": 0,
+  "tree": {
+   "sha": "33d73c219075cedc54696bc58ff90f1d3bdc3451",
+   "etag": "W/\"09a6151e4123805ebd4af1d6381b7a1205b13612b7a385ad7750d644201f6278\"",
+   "truncated": false,
+   "path_count": 22,
+   "matched": [
+    "requirements.txt"
+   ]
+  },
+  "files": [
+   {
+    "path": "requirements.txt",
+    "kind": "dep",
+    "blob_sha": "797797dd4a66cc47bda5dd1f6e75f072da842a90",
+    "ecosystem": "pypi",
+    "bytes": 454,
+    "names": [
+     "��b\u0000l\u0000i\u0000n\u0000k\u0000e\u0000r\u0000",
+     "\u0000",
+     "\u0000c\u0000l\u0000i\u0000c\u0000k\u0000",
+     "\u0000f\u0000l\u0000a\u0000s\u0000k\u0000",
+     "\u0000f\u0000l\u0000a\u0000s\u0000k\u0000-\u0000l\u0000o\u0000g\u0000i\u0000n\u0000",
+     "\u0000f\u0000l\u0000a\u0000s\u0000k\u0000-\u0000w\u0000t\u0000f\u0000",
+     "\u0000g\u0000u\u0000n\u0000i\u0000c\u0000o\u0000r\u0000n\u0000",
+     "\u0000i\u0000t\u0000s\u0000d\u0000a\u0000n\u0000g\u0000e\u0000r\u0000o\u0000u\u0000s\u0000",
+     "\u0000j\u0000i\u0000n\u0000j\u0000a\u00002\u0000",
+     "\u0000m\u0000a\u0000r\u0000k\u0000u\u0000p\u0000s\u0000a\u0000f\u0000e\u0000",
+     "\u0000p\u0000y\u0000m\u0000y\u0000s\u0000q\u0000l\u0000",
+     "\u0000p\u0000y\u0000t\u0000h\u0000o\u0000n\u0000-\u0000d\u0000o\u0000t\u0000e\u0000n\u0000v\u0000",
+     "\u0000w\u0000e\u0000r\u0000k\u0000z\u0000e\u0000u\u0000g\u0000",
+     "\u0000w\u0000t\u0000f\u0000o\u0000r\u0000m\u0000s\u0000"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
   },
   "fail_count": 0
  }
