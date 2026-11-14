@@ -1461,19 +1461,18 @@
   "epoch": "sweep-1",
   "status": "partial",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:35:50Z",
+  "collected_at": "2026-11-14T03:16:34Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 80,
   "tree": {
-   "sha": "2968573cf505a9749bb9725c645efcf5d162a169",
-   "etag": "W/\"53cf8c4693da46e4b7df27ab2ee031756b0bb4289938f86244d81f47b8eedad8\"",
+   "sha": "52900b5c0cfb17fcbbd11200375e12cdc7fa26ce",
+   "etag": "W/\"c90ab7c8c43da30fbf646dca04dc406b0625c6ca46dbcd07fd0e8cef7f0d6f3c\"",
    "truncated": true,
-   "path_count": 39069,
+   "path_count": 38844,
    "matched": [
     "package.json",
     "infra/package.json",
-    "scratchpad/package.json",
     "apps/architecture-lab-proof/package.json",
     "apps/beep-effect-web/package.json",
     "apps/docket-intake/package.json",
@@ -1489,7 +1488,6 @@
     "apps/professional-desktop/package.json",
     "apps/storybook/package.json",
     "apps/todox/package.json",
-    "tools/tsgo-shim/package.json",
     "apps/labs/api-docs/package.json",
     "apps/labs/ciops/package.json",
     "apps/labs/lane-cockpit/package.json",
@@ -1531,6 +1529,8 @@
     "packages/drivers/exiftool/package.json",
     "packages/drivers/eyecite/package.json",
     "packages/drivers/ffmpeg/package.json",
+    "packages/drivers/firecrawl/package.json",
+    "packages/drivers/freshbooks/package.json",
     "docker-compose.yml",
     "packages/tooling/test-kit/test-utils/docker/pglite/Dockerfile",
     ".github/workflows/beep-ci-binary.yml",
@@ -1539,9 +1539,12 @@
     ".github/workflows/cache-producer-prepare.yml",
     ".github/workflows/cache-producer.yml",
     ".github/workflows/cache-warm.yml",
+    ".github/workflows/catalog-regeneration.yml",
+    ".github/workflows/certainty-nightly.yml",
     ".github/workflows/check.yml",
     ".github/workflows/data-sync.yml",
     ".github/workflows/deploy-beep-effect-web.yml",
+    ".github/workflows/deploy-storybook.yml",
     ".github/workflows/fleet-lane-probe.yml",
     ".github/workflows/fleet-shadow-check.yml",
     ".github/workflows/heavy-admit.yml",
@@ -1554,6 +1557,7 @@
     ".github/workflows/property-laws-nightly.yml",
     ".github/workflows/release-desktop.yml",
     ".github/workflows/rerun-runner-loss.yml",
+    ".github/workflows/shard-overflow.yml",
     ".github/workflows/skills-update-train.yml",
     ".github/workflows/storybook.yml",
     ".github/workflows/vercel-deploy.yml"
@@ -1563,12 +1567,10 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "d0c7051a2a25bca28f0da86343a37d5951782b6f",
+    "blob_sha": "9bbef5123aa3d13aa1c3a697740ec7bef86ab05e",
     "ecosystem": "npm",
-    "bytes": 25344,
+    "bytes": 25057,
     "dev": [
-     "@babel/cli",
-     "@babel/core",
      "@beep/fc-runs",
      "@beep/glob",
      "@beep/jsonc",
@@ -1590,7 +1592,6 @@
      "@vitest/browser",
      "@vitest/coverage-istanbul",
      "@vitest/coverage-v8",
-     "babel-plugin-annotate-pure-calls",
      "effect",
      "fallow",
      "lefthook",
@@ -1640,71 +1641,11 @@
     ]
    },
    {
-    "path": "scratchpad/package.json",
-    "kind": "dep",
-    "blob_sha": "b08554121f36be0901172147f7bd531dba4a2999",
-    "ecosystem": "npm",
-    "bytes": 3046,
-    "names": [
-     "@alchemy.run/cloudflare",
-     "@beep/dock",
-     "@beep/dock-react",
-     "@beep/drizzle",
-     "@beep/effect-drizzle",
-     "@beep/epistemic-domain",
-     "@beep/epistemics",
-     "@beep/file-processing",
-     "@beep/identity",
-     "@beep/law-practice-use-cases",
-     "@beep/m365",
-     "@beep/md",
-     "@beep/n3",
-     "@beep/nlp",
-     "@beep/nlp-processing",
-     "@beep/ontology",
-     "@beep/oxigraph",
-     "@beep/postgres",
-     "@beep/pretext",
-     "@beep/provenance",
-     "@beep/rdf",
-     "@beep/repo-utils",
-     "@beep/schema",
-     "@beep/semantic-web",
-     "@beep/shacl",
-     "@beep/utils",
-     "@beep/wink",
-     "@effect/ai-anthropic",
-     "@effect/ai-openai",
-     "@effect/platform-bun",
-     "@google-cloud/pubsub",
-     "@google-cloud/storage",
-     "@xenova/transformers",
-     "alchemy",
-     "drizzle-orm",
-     "effect",
-     "lexical",
-     "n3"
-    ],
-    "dev": [
-     "@alchemy.run/test",
-     "@beep/pglite",
-     "@beep/repo-cli",
-     "@beep/test-utils",
-     "@effect/doctest",
-     "@effect/platform-node",
-     "@effect/vitest",
-     "@types/n3",
-     "@types/node",
-     "drizzle-kit",
-     "vitest"
-    ]
-   },
-   {
     "path": "apps/architecture-lab-proof/package.json",
     "kind": "dep",
-    "blob_sha": "7e8001faca5b84d05421212fcc09ff1c142abacb",
+    "blob_sha": "31b8c3f30ae9c957a405538f3dba54be25d8ac0b",
     "ecosystem": "npm",
-    "bytes": 2683,
+    "bytes": 2618,
     "names": [
      "@beep/architecture-lab-config",
      "@beep/architecture-lab-domain",
@@ -1852,9 +1793,9 @@
    {
     "path": "apps/practice-gateway/package.json",
     "kind": "dep",
-    "blob_sha": "5f77a8e4d0fb2e2c3a2bfae38c878b688cf33fe0",
+    "blob_sha": "18e82ee4af6f5b53526acfe14603a289b50b5c4e",
     "ecosystem": "npm",
-    "bytes": 3393,
+    "bytes": 3328,
     "names": [
      "@beep/doc-text",
      "@beep/duckdb",
@@ -1910,9 +1851,9 @@
    {
     "path": "apps/practice-kg-mcp/package.json",
     "kind": "dep",
-    "blob_sha": "5079a0da6a8bc941d65f514e279838ef323e4f5a",
+    "blob_sha": "49f4df01cac641d2f35200c3dd507ff69d1b409f",
     "ecosystem": "npm",
-    "bytes": 2449,
+    "bytes": 2487,
     "names": [
      "@beep/anthropic",
      "@beep/duckdb",
@@ -2133,12 +2074,13 @@
    {
     "path": "apps/storybook/package.json",
     "kind": "dep",
-    "blob_sha": "437df149524f51cdde429cc38a8dcb2010db90d6",
+    "blob_sha": "78a289472a2006532c64d9b816e8f21fd29c70a1",
     "ecosystem": "npm",
-    "bytes": 3687,
+    "bytes": 3967,
     "names": [
      "@beep/epistemic-ui",
      "@beep/graph-3d",
+     "@beep/public-site",
      "@beep/ui",
      "@storybook/addon-a11y",
      "@storybook/addon-docs",
@@ -2157,12 +2099,15 @@
      "vite"
     ],
     "dev": [
+     "@alchemy.run/aws",
+     "@alchemy.run/cloudflare",
      "@beep/utils",
      "@types/node",
      "@types/react",
      "@types/react-dom",
      "@vitest/browser",
      "@vitest/browser-playwright",
+     "alchemy",
      "bippy",
      "playwright",
      "react-grab",
@@ -2196,16 +2141,6 @@
      "jsdom",
      "tailwindcss",
      "typescript"
-    ]
-   },
-   {
-    "path": "tools/tsgo-shim/package.json",
-    "kind": "dep",
-    "blob_sha": "9a295135132f01e459b5ecc75c2d4368d27a8ed1",
-    "ecosystem": "npm",
-    "bytes": 294,
-    "names": [
-     "@effect/tsgo"
     ]
    },
    {
@@ -2320,7 +2255,7 @@
    {
     "path": "apps/labs/semantica/package.json",
     "kind": "dep",
-    "blob_sha": "282d7eeacfa2b10c2fdc555eb76d072862bdd1bd",
+    "blob_sha": "91fcf4a1ded4940fc2a7b21ada6f6b5b89ae5b5e",
     "ecosystem": "npm",
     "bytes": 2919,
     "names": [
@@ -2330,6 +2265,7 @@
      "@beep/epistemics",
      "@beep/file-processing",
      "@beep/identity",
+     "@beep/jsonc",
      "@beep/langextract",
      "@beep/nlp",
      "@beep/nlp-processing",
@@ -2349,7 +2285,6 @@
      "unpdf"
     ],
     "dev": [
-     "@beep/jsonc",
      "@beep/test-runner",
      "@beep/test-utils",
      "@effect/vitest",
@@ -2441,9 +2376,9 @@
    {
     "path": "packages/_internal/db-admin/package.json",
     "kind": "dep",
-    "blob_sha": "af91c370d8d586127bf6ab1321fd721277ae72fb",
+    "blob_sha": "0e883db700ade93946dcf417f12cbaf4c8a2226d",
     "ecosystem": "npm",
-    "bytes": 3519,
+    "bytes": 3454,
     "names": [
      "@beep/architecture-lab-tables",
      "@beep/documents-tables",
@@ -2476,9 +2411,9 @@
    {
     "path": "packages/agents/client/package.json",
     "kind": "dep",
-    "blob_sha": "e3a24ac1d9da3a7c902213647c14570a18e5c202",
+    "blob_sha": "eda2360659e2a8121057a21d19df27c12554200d",
     "ecosystem": "npm",
-    "bytes": 3329,
+    "bytes": 3264,
     "names": [
      "@beep/agents-domain",
      "@beep/agents-use-cases",
@@ -2502,9 +2437,9 @@
    {
     "path": "packages/agents/domain/package.json",
     "kind": "dep",
-    "blob_sha": "fb99448913924c738ea8071772be6496a824bd64",
+    "blob_sha": "e26c3aed10fd7ff91c2992a218b4347b1f422d23",
     "ecosystem": "npm",
-    "bytes": 2364,
+    "bytes": 2402,
     "names": [
      "@beep/identity",
      "@beep/md",
@@ -2524,9 +2459,9 @@
    {
     "path": "packages/agents/server/package.json",
     "kind": "dep",
-    "blob_sha": "b02eaa6307a148f49ca4aa448a9c52351b58a532",
+    "blob_sha": "7a034ece0b8f28e12194b91935dc9a0cffdad1de",
     "ecosystem": "npm",
-    "bytes": 3646,
+    "bytes": 3581,
     "names": [
      "@beep/agents-domain",
      "@beep/agents-tables",
@@ -2554,9 +2489,9 @@
    {
     "path": "packages/agents/tables/package.json",
     "kind": "dep",
-    "blob_sha": "0fda41e4e15e7f80457cc0dec943236b2d78eb5f",
+    "blob_sha": "bcba73349f0ce3d65e2df6c041922895afbc6d58",
     "ecosystem": "npm",
-    "bytes": 2673,
+    "bytes": 2608,
     "names": [
      "@beep/agents-domain",
      "@beep/effect-drizzle",
@@ -2573,9 +2508,9 @@
    {
     "path": "packages/agents/use-cases/package.json",
     "kind": "dep",
-    "blob_sha": "03eff3fe9649c6128a658d980943b33348c3eaf4",
+    "blob_sha": "edac1a55cb8fee3ea9234e5a89e0df9176efdda9",
     "ecosystem": "npm",
-    "bytes": 2545,
+    "bytes": 2583,
     "names": [
      "@beep/agents-domain",
      "@beep/identity",
@@ -2599,9 +2534,9 @@
    {
     "path": "packages/architecture-lab/client/package.json",
     "kind": "dep",
-    "blob_sha": "90ffb9f46839c490aaee4f3cf74954e0f5babdb7",
+    "blob_sha": "4b0acf7b0001be0b7a84f1e77e9ab65cd3374214",
     "ecosystem": "npm",
-    "bytes": 2593,
+    "bytes": 2528,
     "names": [
      "@beep/architecture-lab-domain",
      "@beep/architecture-lab-use-cases",
@@ -2617,9 +2552,9 @@
    {
     "path": "packages/architecture-lab/config/package.json",
     "kind": "dep",
-    "blob_sha": "38b2fccc64395e7f14dfc8109f5a666761edf28f",
+    "blob_sha": "e46236b2b20694ed82b4fdcf7359b6a6075d0eb6",
     "ecosystem": "npm",
-    "bytes": 2970,
+    "bytes": 2905,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -2635,9 +2570,9 @@
    {
     "path": "packages/architecture-lab/domain/package.json",
     "kind": "dep",
-    "blob_sha": "e7a8c31af6b9222d263616b446107024c7c901f1",
+    "blob_sha": "4302361480e111c9a025fce3e911d13e495f676a",
     "ecosystem": "npm",
-    "bytes": 3262,
+    "bytes": 3197,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -2656,9 +2591,9 @@
    {
     "path": "packages/architecture-lab/server/package.json",
     "kind": "dep",
-    "blob_sha": "d6dc8f454b5a95b89348c16c3610cd424a4df2ac",
+    "blob_sha": "9e802b9632e2e3ab6ecf1b1cc144e88681d8377e",
     "ecosystem": "npm",
-    "bytes": 3344,
+    "bytes": 3279,
     "names": [
      "@beep/architecture-lab-config",
      "@beep/architecture-lab-domain",
@@ -2683,9 +2618,9 @@
    {
     "path": "packages/architecture-lab/tables/package.json",
     "kind": "dep",
-    "blob_sha": "db2624532f27ec7d147c7ba3d4d91b2b0f9d551d",
+    "blob_sha": "a17df9d7891cde9d20a585b9c266c0c13cb8b321",
     "ecosystem": "npm",
-    "bytes": 2936,
+    "bytes": 2871,
     "names": [
      "@beep/architecture-lab-domain",
      "@beep/effect-drizzle",
@@ -2704,9 +2639,9 @@
    {
     "path": "packages/architecture-lab/ui/package.json",
     "kind": "dep",
-    "blob_sha": "d5fd3791e5df1b98a5229311bba07504d6766a89",
+    "blob_sha": "b65d01a92371d593d7f0561409cc7ceef9b51dfa",
     "ecosystem": "npm",
-    "bytes": 2767,
+    "bytes": 2702,
     "names": [
      "@beep/architecture-lab-config",
      "@beep/architecture-lab-domain",
@@ -2726,9 +2661,9 @@
    {
     "path": "packages/architecture-lab/use-cases/package.json",
     "kind": "dep",
-    "blob_sha": "fcd606d8581c86a1a3dd2d2156a0a49a30d3bae8",
+    "blob_sha": "3673bc90e618d49ffa1e70ce6240d903303eed41",
     "ecosystem": "npm",
-    "bytes": 3300,
+    "bytes": 3235,
     "names": [
      "@beep/architecture-lab-domain",
      "@beep/identity",
@@ -2746,9 +2681,9 @@
    {
     "path": "packages/documents/domain/package.json",
     "kind": "dep",
-    "blob_sha": "3a226a8e5c7193044d8badfdee6b6d8cd566d3a3",
+    "blob_sha": "4d7bacb8ef18640fb6456704856ea5046190babc",
     "ecosystem": "npm",
-    "bytes": 3230,
+    "bytes": 3165,
     "names": [
      "@alchemy.run/domain",
      "@beep/identity",
@@ -2772,9 +2707,9 @@
    {
     "path": "packages/documents/server/package.json",
     "kind": "dep",
-    "blob_sha": "1e25d637cdb3883b2bdb9b04e31941ba2d6d8594",
+    "blob_sha": "74234bd42a3ef434a713ba698e4d3c4baf89b21e",
     "ecosystem": "npm",
-    "bytes": 3455,
+    "bytes": 3390,
     "names": [
      "@alchemy.run/domain",
      "@beep/alchemy-postgres",
@@ -2810,9 +2745,9 @@
    {
     "path": "packages/documents/tables/package.json",
     "kind": "dep",
-    "blob_sha": "5ca81f2ce0d46f334e98160a858b5f0b0e2ab46d",
+    "blob_sha": "06dc1568c4200b8f6534b85480582a34e1644678",
     "ecosystem": "npm",
-    "bytes": 3184,
+    "bytes": 3119,
     "names": [
      "@beep/documents-domain",
      "@beep/effect-drizzle",
@@ -2832,9 +2767,9 @@
    {
     "path": "packages/documents/use-cases/package.json",
     "kind": "dep",
-    "blob_sha": "7c4f466e254dbfa2280f70c7f7d07e248eccf3e6",
+    "blob_sha": "84219d804f8d26d2c9873078c696259673c93172",
     "ecosystem": "npm",
-    "bytes": 3042,
+    "bytes": 2977,
     "names": [
      "@alchemy.run/domain",
      "@beep/documents-domain",
@@ -2857,9 +2792,9 @@
    {
     "path": "packages/drivers/acp/package.json",
     "kind": "dep",
-    "blob_sha": "321719a98299f69fbb9999ad014671563986fc30",
+    "blob_sha": "4b25a022b7c52e197ae4d1259e97e68c1c4c5db2",
     "ecosystem": "npm",
-    "bytes": 3923,
+    "bytes": 3858,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -2879,9 +2814,9 @@
    {
     "path": "packages/drivers/ai-provider-cli/package.json",
     "kind": "dep",
-    "blob_sha": "0adf1ba56e4e1a7b413c1532cd420352fd09882a",
+    "blob_sha": "43ccecdc9ccee7fc465c556275b54f6500679499",
     "ecosystem": "npm",
-    "bytes": 2663,
+    "bytes": 2598,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -2900,9 +2835,9 @@
    {
     "path": "packages/drivers/alchemy-postgres/package.json",
     "kind": "dep",
-    "blob_sha": "e3a52830d742008aeeaefb8fa5637fc83a1c4ef1",
+    "blob_sha": "f81109d0c0645d54c8009c977da818cc855fa871",
     "ecosystem": "npm",
-    "bytes": 2726,
+    "bytes": 2661,
     "names": [
      "@alchemy.run/domain",
      "@beep/identity",
@@ -2924,9 +2859,9 @@
    {
     "path": "packages/drivers/anthropic/package.json",
     "kind": "dep",
-    "blob_sha": "99216fb2a27388af0e345d2752ad826d81c778bc",
+    "blob_sha": "ff25e10900dc23d2b391a57420f890d88fbeda8e",
     "ecosystem": "npm",
-    "bytes": 2364,
+    "bytes": 2299,
     "names": [
      "@beep/identity",
      "@effect/ai-anthropic",
@@ -2943,9 +2878,9 @@
    {
     "path": "packages/drivers/box-provisioning/package.json",
     "kind": "dep",
-    "blob_sha": "da16a9a6fa98d0ad2b564647468d6598dd88541a",
+    "blob_sha": "e34b91879db51ad301010e056eece53bd0319407",
     "ecosystem": "npm",
-    "bytes": 2758,
+    "bytes": 2693,
     "names": [
      "@beep/box",
      "@beep/identity",
@@ -2967,9 +2902,9 @@
    {
     "path": "packages/drivers/box/package.json",
     "kind": "dep",
-    "blob_sha": "010c077bc0975d4410cbed86795f9897fb5dc11c",
+    "blob_sha": "239403979ed229bce8ac7f8155cf62c96c04d8e8",
     "ecosystem": "npm",
-    "bytes": 3002,
+    "bytes": 2921,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -2991,9 +2926,9 @@
    {
     "path": "packages/drivers/commands/package.json",
     "kind": "dep",
-    "blob_sha": "77712131d3040c944e42ffea59010294587ec1de",
+    "blob_sha": "3fe47e0c1b37c396fd96c9c3a94ee0e401ce9558",
     "ecosystem": "npm",
-    "bytes": 2607,
+    "bytes": 2542,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -3011,9 +2946,9 @@
    {
     "path": "packages/drivers/cosmos/package.json",
     "kind": "dep",
-    "blob_sha": "c9f1753c321317b9a30dfa54104a0378dd76bc83",
+    "blob_sha": "ab918003d90de1678ba5f217c674eeeaf8f16e2a",
     "ecosystem": "npm",
-    "bytes": 2474,
+    "bytes": 2409,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -3035,9 +2970,9 @@
    {
     "path": "packages/drivers/discord/package.json",
     "kind": "dep",
-    "blob_sha": "63bfdf24137d5491c623d9114285a74df6c80735",
+    "blob_sha": "b515ce925bea61145cfdefa5195a995ba16f63cd",
     "ecosystem": "npm",
-    "bytes": 2595,
+    "bytes": 2530,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -3054,9 +2989,9 @@
    {
     "path": "packages/drivers/doc-text/package.json",
     "kind": "dep",
-    "blob_sha": "56b32c7bc35706956d0e740ba52e095ca36323f5",
+    "blob_sha": "f5eb4f6bcb0dbcab48dd19b5b23fa2cef7d65bd4",
     "ecosystem": "npm",
-    "bytes": 2840,
+    "bytes": 2775,
     "names": [
      "@beep/file-processing",
      "@beep/identity",
@@ -3081,9 +3016,9 @@
    {
     "path": "packages/drivers/drizzle/package.json",
     "kind": "dep",
-    "blob_sha": "44ddad3c07f09e4aebbe145671f5720b0936e122",
+    "blob_sha": "115a0099143b4cf09b00133a69e0cbaceaef184b",
     "ecosystem": "npm",
-    "bytes": 2632,
+    "bytes": 2567,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -3101,9 +3036,9 @@
    {
     "path": "packages/drivers/duckdb/package.json",
     "kind": "dep",
-    "blob_sha": "5dcc4de7451c5c5fed18b3faa4be84807f1d71e2",
+    "blob_sha": "44a9d2120613736748573e065a7e7039a6f459bd",
     "ecosystem": "npm",
-    "bytes": 3520,
+    "bytes": 3455,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -3124,9 +3059,9 @@
    {
     "path": "packages/drivers/ecfr/package.json",
     "kind": "dep",
-    "blob_sha": "e4ec0965d3f0ef915e26a4e7833750dd04494da4",
+    "blob_sha": "6045462fda6a0e5743402444a75f76743ed3c9df",
     "ecosystem": "npm",
-    "bytes": 2990,
+    "bytes": 2925,
     "names": [
      "@beep/api-transport",
      "@beep/identity",
@@ -3146,9 +3081,9 @@
    {
     "path": "packages/drivers/exiftool/package.json",
     "kind": "dep",
-    "blob_sha": "fa1b6a0289097ebe2e8cc3f4da543165b06f7fad",
+    "blob_sha": "093c88d51e9356da1aabfe4f42b0d67ff97cc7b5",
     "ecosystem": "npm",
-    "bytes": 2762,
+    "bytes": 2697,
     "names": [
      "@beep/commands",
      "@beep/identity",
@@ -3169,9 +3104,9 @@
    {
     "path": "packages/drivers/eyecite/package.json",
     "kind": "dep",
-    "blob_sha": "7379d875aa02fd115de42b7cfde2238833d6836c",
+    "blob_sha": "a1aeb9ea69ef467cc07a0b9691257241a333d8f9",
     "ecosystem": "npm",
-    "bytes": 2622,
+    "bytes": 2557,
     "names": [
      "@beep/identity",
      "@beep/schema",
@@ -3188,9 +3123,9 @@
    {
     "path": "packages/drivers/ffmpeg/package.json",
     "kind": "dep",
-    "blob_sha": "fcb94e46c1a0739d1c8277de653774bbcff59772",
+    "blob_sha": "911ff6bf88b9eed32821e5157b7052ba7ca56ef6",
     "ecosystem": "npm",
-    "bytes": 2759,
+    "bytes": 2694,
     "names": [
      "@beep/file-processing",
      "@beep/identity",
@@ -3202,6 +3137,42 @@
      "@beep/test-runner",
      "@beep/test-utils",
      "@effect/platform-node",
+     "@effect/vitest",
+     "@types/node",
+     "bun-types"
+    ]
+   },
+   {
+    "path": "packages/drivers/firecrawl/package.json",
+    "kind": "dep",
+    "blob_sha": "5b3118e96f725ab5c97e9b53b94fdfb0f3c3a7a3",
+    "ecosystem": "npm",
+    "bytes": 2410,
+    "names": [
+     "@beep/identity",
+     "@beep/schema",
+     "effect"
+    ],
+    "dev": [
+     "@effect/vitest",
+     "@types/node",
+     "bun-types"
+    ]
+   },
+   {
+    "path": "packages/drivers/freshbooks/package.json",
+    "kind": "dep",
+    "blob_sha": "5dd3164956e5ac58d25b5ff275499a17cf459aa5",
+    "ecosystem": "npm",
+    "bytes": 2466,
+    "names": [
+     "@beep/identity",
+     "@beep/schema",
+     "@beep/utils",
+     "effect"
+    ],
+    "dev": [
+     "@beep/test-runner",
      "@effect/vitest",
      "@types/node",
      "bun-types"
@@ -3230,8 +3201,8 @@
    {
     "path": ".github/workflows/beep-ci-binary.yml",
     "kind": "ci",
-    "blob_sha": "7d98403ecabf49f23f278aa74492b2d30f87b2e7",
-    "bytes": 7365
+    "blob_sha": "3df2307e19507b2957794e94bdf4ce1570b2c624",
+    "bytes": 11141
    },
    {
     "path": ".github/workflows/cache-local-observe.yml",
@@ -3264,10 +3235,22 @@
     "bytes": 3946
    },
    {
+    "path": ".github/workflows/catalog-regeneration.yml",
+    "kind": "ci",
+    "blob_sha": "7ef6dbf95e3b885ec5cfeb120a32419ab1e3945d",
+    "bytes": 11262
+   },
+   {
+    "path": ".github/workflows/certainty-nightly.yml",
+    "kind": "ci",
+    "blob_sha": "201e59d00f72911050b4733647a5c74169fcd383",
+    "bytes": 8852
+   },
+   {
     "path": ".github/workflows/check.yml",
     "kind": "ci",
-    "blob_sha": "4f07199198b945ed2f35e83716d956b639ff5e45",
-    "bytes": 104190
+    "blob_sha": "95beab20cfe580fa30d2bc423f87a0cc56da2258",
+    "bytes": 122073
    },
    {
     "path": ".github/workflows/data-sync.yml",
@@ -3280,6 +3263,12 @@
     "kind": "ci",
     "blob_sha": "7b9e47b651cdde8e54dc291466a38d2758b59d07",
     "bytes": 4443
+   },
+   {
+    "path": ".github/workflows/deploy-storybook.yml",
+    "kind": "ci",
+    "blob_sha": "8a21fa602f6617b6171bcdc2c1aad3c8fc5914ab",
+    "bytes": 4381
    },
    {
     "path": ".github/workflows/fleet-lane-probe.yml",
@@ -3296,14 +3285,14 @@
    {
     "path": ".github/workflows/heavy-admit.yml",
     "kind": "ci",
-    "blob_sha": "5ede59f9fb4aadda87d27a5a50148399fbdef5f7",
-    "bytes": 4750
+    "blob_sha": "dfeef276fc827243d935b5810223d312beaa3efa",
+    "bytes": 15055
    },
    {
     "path": ".github/workflows/heavy.yml",
     "kind": "ci",
-    "blob_sha": "c604345215784c8ed1ee400576c1f7d0e6ae9264",
-    "bytes": 45756
+    "blob_sha": "d0a788b30a8f4f83a891c7aa2cf43b91820fd93e",
+    "bytes": 45905
    },
    {
     "path": ".github/workflows/history-notes-publish.yml",
@@ -3354,22 +3343,28 @@
     "bytes": 2745
    },
    {
+    "path": ".github/workflows/shard-overflow.yml",
+    "kind": "ci",
+    "blob_sha": "2420fd34ce704cbc6d40da26624ce35f577dcdba",
+    "bytes": 8739
+   },
+   {
     "path": ".github/workflows/skills-update-train.yml",
     "kind": "ci",
-    "blob_sha": "0f9c5bebb22609ff4b1b5f2313dbe9262c0909ea",
-    "bytes": 12036
+    "blob_sha": "9e6973366daa4d2b9ca6374dfc71782fe598314b",
+    "bytes": 14588
    },
    {
     "path": ".github/workflows/storybook.yml",
     "kind": "ci",
-    "blob_sha": "998f00c28940fb58e361fec90279ba9a40bf842f",
-    "bytes": 8934
+    "blob_sha": "e44b137e7a2a5a13d5282af474ab8cc830eee178",
+    "bytes": 9471
    },
    {
     "path": ".github/workflows/vercel-deploy.yml",
     "kind": "ci",
-    "blob_sha": "1e3af72af9db645320a72f8e9df90666f04b3e60",
-    "bytes": 11668
+    "blob_sha": "2856d299620d36e7cd66f86c039a80ad359aee64",
+    "bytes": 12186
    }
   ],
   "clues": {
@@ -3453,7 +3448,6 @@
     "goals/openai-driver/README.md",
     "goals/pretext-driver/README.md",
     "infra/r2-cache/adapter.sh",
-    "standards/architecture/03-driver-boundaries.md",
     "apps/practice-claude-mod/plugin-test/oip-practice.test.ts",
     "apps/practice-claude-mod/plugin-test/tsconfig.json",
     "apps/practice-claude-mod/src/build-plugin.ts",
@@ -3486,6 +3480,8 @@
     "goals/boolean-creep/designs/r3-foundation-mention-plugin-lookup-phase.md",
     "goals/boolean-creep/designs/r40-drivers-openai-compat-stream-choice-writer.md",
     "goals/box-driver/ops/manifest.json",
+    "goals/citation-engine-install-once/decisions/2026-11-13-delete-the-unused-cleaner-operation-adapter.md",
+    "goals/citation-engine-install-once/decisions/2026-11-13-remove-only-the-deleted-cleaner-adapter-coverage-row.md",
     "goals/citation-extraction-engine/decisions/2026-11-08-normalize-nested-safety-attribution-in-the-existing-effect-timing-adapter.md",
     "goals/claim-check-performance/decisions/2026-11-07-preserve-intrinsic-adapter-runtime-immutability-at-the-fixed-sdk-boundary.md",
     "goals/claim-check-performance/history/2026-11-03-inspection-source-adapter.json",
@@ -3498,6 +3494,7 @@
     "goals/freshbooks-driver/ops/manifest.json",
     "goals/freshbooks-driver/research/OPPORTUNITIES.md",
     "goals/github-budget-ledger/decisions/2026-11-10-a13-driver-label.md",
+    "goals/goal-portfolio-driver/decisions/2026-11-13-finish-board-ruling-close.md",
     "goals/goal-portfolio-driver/history/.gitkeep",
     "goals/goal-portfolio-driver/ops/manifest.json",
     "goals/goal-portfolio-driver/ops/queue.json",
@@ -3519,6 +3516,8 @@
     "goals/openai-driver/ops/manifest.json",
     "goals/openai-driver/research/OPPORTUNITIES.md",
     "goals/pretext-driver/ops/manifest.json",
+    "goals/python-free-repo/decisions/2026-11-13-skills-private-fifo-and-ts-adapters.md",
+    "goals/skill-effect-probe/decisions/2026-11-13-cell-a-from-an-empty-plugin-b-and-c-from-one-with-without-run.md",
     "goals/turborepo-cache-trust-observability/research/adapter-dependency-review.json",
     "goals/turborepo-cache-trust-observability/research/adapter-policy-lab.json",
     "goals/turborepo-cache-trust-observability/research/adapter-runtime-checkpoint.json",
@@ -3580,11 +3579,7 @@
     "packages/drivers/box-provisioning/docgen.json",
     "packages/drivers/box-provisioning/package.json",
     "packages/drivers/box-provisioning/tsconfig.check.json",
-    "packages/drivers/box-provisioning/tsconfig.json",
-    "packages/drivers/box-provisioning/tsconfig.test.json",
-    "packages/drivers/box-provisioning/vitest.config.ts",
-    "packages/drivers/box/README.md",
-    "packages/drivers/box/docgen.json"
+    "packages/drivers/box-provisioning/tsconfig.json"
    ]
   },
   "fail_count": 0
@@ -8104,15 +8099,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T02:59:50Z",
+  "collected_at": "2026-11-14T02:45:50Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-12",
-  "stars": 14351,
+  "pushed_at": "2026-11-13",
+  "stars": 14353,
   "tree": {
-   "sha": "51221fb192b0622b35c4b11013e84a2ba8228ab5",
-   "etag": "W/\"0b6c36c0ab6be453f602f735e784212eb0a6abacb1e658ca41f8ffd8125f31f9\"",
+   "sha": "59711a302418ce3f34cd16d60599a68e9a7f7d95",
+   "etag": "W/\"7c723d152cba59a6596e1b236288d1a558384b717e2c4a143ac8844494dec6b1\"",
    "truncated": false,
-   "path_count": 836,
+   "path_count": 837,
    "matched": [
     "package.json",
     "site/package.json",
@@ -8137,7 +8132,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "8755196657349ef253b630f69ad62a6cc4019a5b",
+    "blob_sha": "a21bedada25cedf9a9bb0f54e727f292c3c3c5da",
     "ecosystem": "npm",
     "bytes": 5238,
     "dev": [
@@ -9070,13 +9065,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:28:01Z",
+  "collected_at": "2026-11-14T03:09:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 185,
   "tree": {
    "sha": "0d795da2d1c61d901fdeed7d6c47c78e5efcf997",
-   "etag": "W/\"988c1833c996f7f148771c52356cdb6769a1341f07a9a9870ae020ab6d3dbe4d\"",
+   "etag": "W/\"81b08bf4fe0bd95640ab4982a52fe3445177b64eb45e1f51fb4d3fdc01e9b584\"",
    "truncated": false,
    "path_count": 2453,
    "matched": [
@@ -10090,13 +10085,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:33:08Z",
+  "collected_at": "2026-11-14T03:13:56Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 110,
   "tree": {
    "sha": "46c4edc57291c2fb053152e3fa6136c4d70880b3",
-   "etag": "W/\"42dde00b0c85c7aad3b32340622edf31c8c9b73882d689191a21335612e8870c\"",
+   "etag": "W/\"273f81a37bfafd5fb17d54f2a02a848c005ac8f03ec547b09dbe970b2a11eb31\"",
    "truncated": false,
    "path_count": 895,
    "matched": [
@@ -10671,13 +10666,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:33:49Z",
+  "collected_at": "2026-11-14T03:14:44Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 104,
   "tree": {
    "sha": "e7004adfe0fd46e72cab757703305b1a21cf0f21",
-   "etag": "W/\"0ee6d2e56ae3db9623762307a4c34d79adadb202b66d0595d54c98329e49fb92\"",
+   "etag": "W/\"edf5dd4749c274aad60e656f5e6518efa6681130c37802a57d1d1921181663fe\"",
    "truncated": false,
    "path_count": 1373,
    "matched": [
@@ -13458,13 +13453,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:49:05Z",
+  "collected_at": "2026-11-14T03:28:15Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 27,
   "tree": {
    "sha": "dc5faa0226b7935816427780fa2f5584a9986d2e",
-   "etag": "W/\"73abe81a05967c8a9ff286ea607a8293bcb536a7793e0b55dff04f8d30cca034\"",
+   "etag": "W/\"04b05a900e9a0b3ddef6099e648cc240ec1354c11b3c4ba975311a9886eb3699\"",
    "truncated": false,
    "path_count": 3989,
    "matched": [
@@ -14749,13 +14744,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:57:08Z",
+  "collected_at": "2026-11-14T03:35:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 15,
   "tree": {
    "sha": "8b906821824c47d7cef8ae05b36768f7142e23f0",
-   "etag": "W/\"a6def532b7f49a374aabd9659c882d42d7dc6bf809bbdd9d9a738839a431167c\"",
+   "etag": "W/\"21968bf40cb2a322bc4dd4e8711f876d6c2a53312c54ce21f9faf0a22fa6ac67\"",
    "truncated": false,
    "path_count": 105,
    "matched": [
@@ -18342,13 +18337,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:57:39Z",
+  "collected_at": "2026-11-14T03:19:20Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-10",
+  "pushed_at": "2026-11-13",
   "stars": 61,
   "tree": {
    "sha": "d86aa08254e82f8da2aeed5d3a847c3b0fcf3a75",
-   "etag": "W/\"b81f29425a8ebd3a4f6a9317624cc38ca2d8bc60ffbb881d429492d322031f36\"",
+   "etag": "W/\"554d29c5eb1105ef3815a9c3633d055c3e9b664cc8e3ab0e838135eaef033e1e\"",
    "truncated": false,
    "path_count": 1986,
    "matched": [
@@ -19091,15 +19086,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:46:22Z",
+  "collected_at": "2026-11-14T03:25:49Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 32,
   "tree": {
-   "sha": "e053bf59d4c5c24c83c32b101ba80f25e3e41b16",
-   "etag": "W/\"f4a236cf98090fa1938827c71b2604d21d9f2ec6c1c672ca5552e0c2e0c3ade9\"",
+   "sha": "d4f8b220f910ffe83ef3bd2ff2e05d0e0b87096b",
+   "etag": "W/\"28cb01cc2c36c3128833419f87456ddbcce386ef6886b061667d1f764ba1ab8a\"",
    "truncated": false,
-   "path_count": 5450,
+   "path_count": 5493,
    "matched": [
     "backend/go.mod",
     "examples/plugin-template/go.mod",
@@ -19661,6 +19656,404 @@
     "examples/plugins/hello/.gitignore",
     "examples/plugins/hello/README.md",
     "examples/plugins/hello/go.mod"
+   ]
+  },
+  "fail_count": 0
+ },
+ "DZBuild-com/dzbuild-pos": {
+  "fn": "DZBuild-com/dzbuild-pos",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-14T02:41:05Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-03",
+  "stars": 3,
+  "tree": {
+   "sha": "5ec5fd916651a0282d2ad633de865c48aa2f7b1b",
+   "etag": "W/\"897fedf0934e67d0974818c9c864e77de2eaa263967711bf3e32d71e8b21efbc\"",
+   "truncated": false,
+   "path_count": 2384,
+   "matched": [
+    "Cargo.toml",
+    "package.json",
+    "src-tauri/Cargo.toml",
+    "crates/pos-core/Cargo.toml",
+    "crates/pos-docs/Cargo.toml",
+    "crates/pos-hw/Cargo.toml",
+    "crates/pos-license-cli/Cargo.toml",
+    "crates/pos-license/Cargo.toml",
+    "crates/pos-server/Cargo.toml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/codeql.yml",
+    ".github/workflows/dependency-review.yml",
+    ".github/workflows/labeler.yml",
+    ".github/workflows/nightly.yml",
+    ".github/workflows/release.yml",
+    ".github/workflows/scorecard.yml",
+    ".github/workflows/secret-scan.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "fa91e010f5cdc0301b31c3f220af175a27ba6b0e",
+    "ecosystem": "cargo",
+    "bytes": 2707
+   },
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "ef91c69b322d3040a99ab71429b3c3dc9bcdbf11",
+    "ecosystem": "npm",
+    "bytes": 3161,
+    "names": [
+     "@fontsource/cairo",
+     "@fontsource/inter",
+     "@hookform/resolvers",
+     "@tanstack/react-query",
+     "@tanstack/react-table",
+     "@tanstack/react-virtual",
+     "@tauri-apps/api",
+     "class-variance-authority",
+     "clsx",
+     "i18next",
+     "lucide-react",
+     "radix-ui",
+     "react",
+     "react-dom",
+     "react-hook-form",
+     "react-i18next",
+     "react-router",
+     "sonner",
+     "tailwind-merge",
+     "zod",
+     "zustand"
+    ],
+    "dev": [
+     "@eslint/js",
+     "@playwright/test",
+     "@resvg/resvg-js",
+     "@tailwindcss/vite",
+     "@tauri-apps/cli",
+     "@testing-library/dom",
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "eslint",
+     "eslint-plugin-react-hooks",
+     "fontkit",
+     "globals",
+     "jsdom",
+     "prettier",
+     "prettier-plugin-tailwindcss",
+     "tailwindcss",
+     "tw-animate-css",
+     "typescript",
+     "typescript-eslint",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "src-tauri/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "ffcf314868cc03c0fc94a761d7283957a9b0b7ab",
+    "ecosystem": "cargo",
+    "bytes": 4453,
+    "names": [
+     "pos-core.workspace",
+     "pos-docs.workspace",
+     "pos-hw.workspace",
+     "pos-server.workspace",
+     "pos-license.workspace",
+     "base64",
+     "crossbeam-channel.workspace",
+     "tauri",
+     "tauri-plugin-single-instance",
+     "tauri-plugin-opener",
+     "tauri-plugin-os",
+     "tauri-plugin-dialog",
+     "tauri-plugin-fs",
+     "tauri-plugin-updater",
+     "minisign-verify",
+     "semver",
+     "url.workspace",
+     "tokio",
+     "tauri-specta",
+     "specta",
+     "specta-typescript",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tracing.workspace",
+     "tracing-appender",
+     "tracing-subscriber",
+     "tempfile.workspace",
+     "toml.workspace",
+     "sysinfo"
+    ],
+    "dev": [
+     "tauri-build",
+     "pos-license",
+     "image",
+     "insta.workspace",
+     "wiremock.workspace",
+     "tokio",
+     "reqwest",
+     "sha2.workspace",
+     "hex.workspace",
+     "zip"
+    ]
+   },
+   {
+    "path": "crates/pos-core/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "5d798dcd38fe42983c9e397401e1cba439475270",
+    "ecosystem": "cargo",
+    "bytes": 1831,
+    "names": [
+     "serde.workspace",
+     "serde_json",
+     "thiserror.workspace",
+     "specta",
+     "tracing.workspace",
+     "rusqlite.workspace",
+     "rusqlite_migration.workspace",
+     "uuid.workspace",
+     "chrono.workspace",
+     "crossbeam-channel.workspace",
+     "sha2.workspace",
+     "hex.workspace",
+     "getrandom.workspace",
+     "argon2.workspace",
+     "unicode-normalization.workspace",
+     "url.workspace",
+     "reqwest",
+     "tiny_http.workspace",
+     "base64.workspace",
+     "keyring-core.workspace",
+     "semver",
+     "regex",
+     "aho-corasick",
+     "icu_calendar",
+     "minisign-verify"
+    ],
+    "dev": [
+     "proptest.workspace",
+     "insta.workspace",
+     "tempfile.workspace",
+     "wiremock.workspace",
+     "tokio",
+     "tracing-subscriber.workspace"
+    ]
+   },
+   {
+    "path": "crates/pos-docs/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a26663fb78147198c52e0148ad28961453db52a5",
+    "ecosystem": "cargo",
+    "bytes": 1096,
+    "names": [
+     "chrono.workspace",
+     "qrcode",
+     "image",
+     "serde.workspace",
+     "serde_json.workspace",
+     "specta.workspace",
+     "pos-core.workspace",
+     "rust_xlsxwriter",
+     "csv",
+     "calamine",
+     "encoding_rs",
+     "chardetng",
+     "zip",
+     "sha2.workspace",
+     "hex.workspace",
+     "rusqlite.workspace"
+    ],
+    "dev": [
+     "pos-core",
+     "insta.workspace",
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "crates/pos-hw/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "e5b496839d78a1ee78bed6f9267c1bd82847ff5e",
+    "ecosystem": "cargo",
+    "bytes": 1343,
+    "names": [
+     "pos-core.workspace",
+     "pos-docs.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "specta.workspace",
+     "thiserror.workspace",
+     "tracing.workspace",
+     "serialport",
+     "cosmic-text",
+     "image",
+     "barcoders",
+     "qrcode",
+     "base64"
+    ],
+    "dev": [
+     "pos-core",
+     "hex.workspace",
+     "sha2.workspace",
+     "insta.workspace",
+     "proptest.workspace",
+     "tempfile.workspace",
+     "png"
+    ]
+   },
+   {
+    "path": "crates/pos-license-cli/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "76ff98e3cdd3938d17a98b1f5b492b3b1a3222b4",
+    "ecosystem": "cargo",
+    "bytes": 931,
+    "names": [
+     "pos-core.workspace",
+     "pos-license.workspace",
+     "ed25519-dalek.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "hex.workspace",
+     "getrandom.workspace",
+     "age.workspace",
+     "rpassword"
+    ],
+    "dev": [
+     "pos-license",
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "crates/pos-license/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "27c2eed6ebf2ebdfa29b89f86e7f2b70290b094c",
+    "ecosystem": "cargo",
+    "bytes": 1442,
+    "names": [
+     "pos-core.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "specta.workspace",
+     "tracing.workspace",
+     "rusqlite.workspace",
+     "sha2.workspace",
+     "hex.workspace",
+     "base64.workspace",
+     "ed25519-dalek.workspace"
+    ],
+    "dev": [
+     "tempfile.workspace",
+     "tracing-subscriber.workspace"
+    ]
+   },
+   {
+    "path": "crates/pos-server/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "92611f46ca0b5e3a581c738b0b7299bc73b69259",
+    "ecosystem": "cargo",
+    "bytes": 1014,
+    "names": [
+     "pos-core.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "specta",
+     "tracing.workspace",
+     "sha2.workspace",
+     "hex.workspace",
+     "crossbeam-channel.workspace",
+     "axum.workspace",
+     "tokio",
+     "tokio-util.workspace",
+     "tokio-tungstenite.workspace",
+     "futures-util.workspace",
+     "reqwest",
+     "mdns-sd.workspace"
+    ],
+    "dev": [
+     "tempfile.workspace",
+     "reqwest"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "b91b148b320f7b3b9add7056d8179ae03e43b41b",
+    "bytes": 4251
+   },
+   {
+    "path": ".github/workflows/codeql.yml",
+    "kind": "ci",
+    "blob_sha": "187d3fe8c884b6762f18520f52e08d703b145a7c",
+    "bytes": 1467
+   },
+   {
+    "path": ".github/workflows/dependency-review.yml",
+    "kind": "ci",
+    "blob_sha": "7395898aeed49b6dc213bc747482b095f8394a8e",
+    "bytes": 1124
+   },
+   {
+    "path": ".github/workflows/labeler.yml",
+    "kind": "ci",
+    "blob_sha": "cca7b51264186be5007023e0d71c75b5395469fd",
+    "bytes": 586
+   },
+   {
+    "path": ".github/workflows/nightly.yml",
+    "kind": "ci",
+    "blob_sha": "cbd313fe93fe1927d3d3d9ef40a61365722f555b",
+    "bytes": 1699
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "f903c0a3c0c0c39227115bf3b865c4396af23549",
+    "bytes": 10871
+   },
+   {
+    "path": ".github/workflows/scorecard.yml",
+    "kind": "ci",
+    "blob_sha": "cc1530599484d5377dae26e0380083c097e913b0",
+    "bytes": 1186
+   },
+   {
+    "path": ".github/workflows/secret-scan.yml",
+    "kind": "ci",
+    "blob_sha": "7b729cb9db7682d89865725d09358845a9ffd8f7",
+    "bytes": 1436
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md",
+    "crates/pos-core/src/sync/changelog.rs"
+   ],
+   "readme_i18n": [
+    "README.ar.md",
+    "README.fr.md"
+   ],
+   "docs_matrix": [],
+   "paths": [
+    "src/app/DriverPrintFallback.tsx",
+    "src/app/driver-print.test.tsx",
+    "crates/pos-hw/src/driver.rs",
+    "crates/pos-hw/src/driver/winspool.rs"
+   ],
+   "matrix_urls": [
+    "https://dzbuild.com/pos/support"
    ]
   },
   "fail_count": 0

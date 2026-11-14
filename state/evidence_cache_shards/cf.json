@@ -1829,19 +1829,20 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T11:42:11Z",
+  "collected_at": "2026-11-14T03:22:26Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-28",
+  "pushed_at": "2026-11-13",
   "stars": 43,
   "tree": {
-   "sha": "83f4bb51eb21814a9767edb46b01a29c60ae3d18",
-   "etag": "W/\"05d2b7dd49238b0c5c4f89adf4b7d8e8d9590c8554440b67a85008d41aa2d7a2\"",
+   "sha": "40d11fc748a5341056696c2935429842a77dc4bc",
+   "etag": "W/\"5dfb7ec2a2a52d102d623bed9187d77cd7f7ac53a0b5efe181ece055251b8692\"",
    "truncated": false,
-   "path_count": 275,
+   "path_count": 368,
    "matched": [
     "influxdb-lineprotocol/requirements.txt",
     "keyboard-monitor/requirements.txt",
     "ollama-opentelemetry/pyproject.toml",
+    "weather-data-ingester/requirements.txt",
     "cloudflare-workers/worker/package.json",
     "dify-monitoring/load-generator/requirements.txt",
     "ev-open-telemetry/ev_observer/pyproject.toml",
@@ -1849,10 +1850,13 @@
     "flink-ingestion/flink-sink/pom.xml",
     "genai-observability/app/requirements.txt",
     "genai-observability/load-generator/requirements.txt",
+    "native-histogram-lab/app/requirements.txt",
     "opentelemetry-trace-django/django-app/pyproject.toml",
     "opentelemetry-trace-django/todo-client/pyproject.toml",
+    "vibration-lab/app/requirements.txt",
     "self-hosted-game-analytics/analytics-server/src/AnalyticsServer.csproj",
     "self-hosted-game-analytics/simulator/src/GameSimulator.csproj",
+    "weather-data-ingester/Dockerfile",
     "cloudflare-workers/worker/Dockerfile",
     "dify-monitoring/load-generator/Dockerfile",
     "ev-open-telemetry/ev_observer/Dockerfile",
@@ -1863,6 +1867,7 @@
     "genai-observability/app/Dockerfile",
     "genai-observability/load-generator/Dockerfile",
     "kafka-ingestion/producer/Dockerfile",
+    "native-histogram-lab/app/Dockerfile",
     "nginx-log-metrics/client/Dockerfile",
     "nginx-log-metrics/grafana/Dockerfile",
     "nginx-log-metrics/server/Dockerfile",
@@ -1870,6 +1875,7 @@
     "opentelemetry-trace-django/todo-client/Dockerfile",
     "self-hosted-game-analytics/analytics-server/Dockerfile",
     "self-hosted-game-analytics/simulator/Dockerfile",
+    "vibration-lab/app/Dockerfile",
     ".github/workflows/bump-patch-version.yml",
     ".github/workflows/lint.yml"
    ]
@@ -1913,6 +1919,22 @@
      "langchain-ollama",
      "ollama",
      "openlit"
+    ]
+   },
+   {
+    "path": "weather-data-ingester/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "7129db6b16cf514dc0ab2f25e1fd2ca74ba134e2",
+    "ecosystem": "pypi",
+    "bytes": 106,
+    "names": [
+     "aiohttp",
+     "fsspec",
+     "numpy",
+     "pandas",
+     "requests",
+     "xarray",
+     "zarr"
     ]
    },
    {
@@ -1980,9 +2002,9 @@
    {
     "path": "flink-ingestion/flink-sink/pom.xml",
     "kind": "dep",
-    "blob_sha": "3f704f84a93dce05b8be1141636a677153dbb536",
+    "blob_sha": "2994fb5fc352469649ba2bf129fb4a3f8fee828a",
     "ecosystem": "maven",
-    "bytes": 7655,
+    "bytes": 7656,
     "names": [
      "org.apache.flink:flink-streaming-java",
      "org.apache.flink:flink-clients",
@@ -2025,6 +2047,17 @@
     ]
    },
    {
+    "path": "native-histogram-lab/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "b4e38f856ab92621d7bfddc37daffee6ddc25dcd",
+    "ecosystem": "pypi",
+    "bytes": 73,
+    "names": [
+     "opentelemetry-sdk",
+     "opentelemetry-exporter-otlp-proto-http"
+    ]
+   },
+   {
     "path": "opentelemetry-trace-django/django-app/pyproject.toml",
     "kind": "dep",
     "blob_sha": "60c947a145c3c318e4a47e52f838fec371f1d470",
@@ -2056,6 +2089,16 @@
     ]
    },
    {
+    "path": "vibration-lab/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "aaa34fa3b2377114be9997b741b6add7774f2f9e",
+    "ecosystem": "pypi",
+    "bytes": 13,
+    "names": [
+     "numpy"
+    ]
+   },
+   {
     "path": "self-hosted-game-analytics/analytics-server/src/AnalyticsServer.csproj",
     "kind": "dep",
     "blob_sha": "bab1b246cedd8d0badd68da1c9409576d3c4fe11",
@@ -2080,6 +2123,15 @@
     ]
    },
    {
+    "path": "weather-data-ingester/Dockerfile",
+    "kind": "image",
+    "blob_sha": "032e128906bdc2e0c49f46919fe7b7277d5b8704",
+    "bytes": 223,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
     "path": "cloudflare-workers/worker/Dockerfile",
     "kind": "image",
     "blob_sha": "bf3e935319c5fbae630dc050390b4fb0f887c31d",
@@ -2100,10 +2152,10 @@
    {
     "path": "ev-open-telemetry/ev_observer/Dockerfile",
     "kind": "image",
-    "blob_sha": "79c3e7229ea6467949020d940c4b03ac5dda97fe",
-    "bytes": 618,
+    "blob_sha": "3e978cc6799ee6a76b1795ca888840c7cc504c88",
+    "bytes": 626,
     "images": [
-     "python:3.9-slim"
+     "python:3.11-slim"
     ]
    },
    {
@@ -2127,10 +2179,10 @@
    {
     "path": "flink-ingestion/flink-demo/Dockerfile",
     "kind": "image",
-    "blob_sha": "4ea8e3d6da768d82535a7a0e62fdcd1f9bd13fd9",
-    "bytes": 349,
+    "blob_sha": "79e1a9b3f62fe04f868b2bf87467a39c9ce54d8b",
+    "bytes": 276,
     "images": [
-     "adoptopenjdk/openjdk11:jdk-11.0.9.1_1",
+     "maven:3.9-eclipse-temurin-11",
      "flink:1.20.1-java11"
     ]
    },
@@ -2168,6 +2220,15 @@
     "bytes": 113,
     "images": [
      "docker.io/python:3.10"
+    ]
+   },
+   {
+    "path": "native-histogram-lab/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "4bb03e73d54ca381541187327b6dc5cd3295e449",
+    "bytes": 170,
+    "images": [
+     "python:3.11-slim"
     ]
    },
    {
@@ -2236,6 +2297,15 @@
     ]
    },
    {
+    "path": "vibration-lab/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "4bb03e73d54ca381541187327b6dc5cd3295e449",
+    "bytes": 170,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
     "path": ".github/workflows/bump-patch-version.yml",
     "kind": "ci",
     "blob_sha": "54bec5ea9994aa0ce28f3c6d26f425e615028713",
@@ -2244,13 +2314,15 @@
    {
     "path": ".github/workflows/lint.yml",
     "kind": "ci",
-    "blob_sha": "dd93e16c03506adfaf490c54355f3d85ee4ce6f0",
-    "bytes": 256
+    "blob_sha": "b27b1e5dcf2a8d3f614697d654d208a9082b4982",
+    "bytes": 506
    }
   ],
   "clues": {
    "changelog": [],
-   "readme_i18n": [],
+   "readme_i18n": [
+    "opentelemetry-playground/README.zh-CN.md"
+   ],
    "docs_matrix": [],
    "paths": [
     "nginx-log-metrics/grafana_provisioning/datasources/greptime_plugin_ds.yml"
@@ -7227,15 +7299,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:02:48Z",
+  "collected_at": "2026-11-14T02:48:10Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
-  "stars": 8581,
+  "pushed_at": "2026-11-13",
+  "stars": 8586,
   "tree": {
-   "sha": "ef4c7459b8433603b306dc46618eccae9d2b6957",
-   "etag": "W/\"3c794d4ed5a8e64a4013c837ed4780045cbeb58d25e69a9857293e0e2fa41353\"",
+   "sha": "52391ebe4feb56c8ccbbf33a29ea3acbb7b7cea7",
+   "etag": "W/\"af7f400cf9bd5bcf0b64315a27a676fe7653a7e5e7b4bdfeb76e168d14d1ddbc\"",
    "truncated": false,
-   "path_count": 27856,
+   "path_count": 27868,
    "matched": [
     "storage/mroonga/vendor/groonga/bindings/python/ql/setup.py",
     ".github/workflows/backup.yml",
@@ -8499,15 +8571,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:27:31Z",
+  "collected_at": "2026-11-14T03:09:00Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
-  "stars": 193,
+  "pushed_at": "2026-11-13",
+  "stars": 195,
   "tree": {
-   "sha": "92418100ca3bc8201f065197361d41329cf6e703",
-   "etag": "W/\"9d7a6c1fc18d7ef9fbdd0ece435373efe946ca3cf4db10b31f7a8fbf15e0070d\"",
+   "sha": "468e7f214dd92801bdcba3ab38546421960509d5",
+   "etag": "W/\"b1527825cd2081416dec6428faaa6517eda6e3d1bfbd72f33961d9938ef0989b\"",
    "truncated": false,
-   "path_count": 5729,
+   "path_count": 5730,
    "matched": [
     "package.json",
     "packages/analytics/package.json",
@@ -10859,15 +10931,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:32:09Z",
+  "collected_at": "2026-11-14T03:13:07Z",
   "default_branch": "v1.5.0",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 124,
   "tree": {
-   "sha": "8564ed8acd04e061d4e4d5d5cdc4a72f12a73e45",
-   "etag": "W/\"a55024e1517cc668a70f80a5d9ac5b5330152f2a30d4d3a9ba065fec5238ac8b\"",
+   "sha": "080b16bf1128100964d9ab09f574315f10b6f106",
+   "etag": "W/\"3e581ae1fb6450c6ab02170c7f8d55421e26e7e9842ab393ff4d4a566e8cd869\"",
    "truncated": false,
-   "path_count": 15576,
+   "path_count": 15579,
    "matched": [
     "dbm-ui/pyproject.toml",
     "dbm-services/k8s-dbs/go.mod",
@@ -11166,7 +11238,7 @@
    {
     "path": "dbm-ui/frontend/package.json",
     "kind": "dep",
-    "blob_sha": "6381c18f09baea021d2acdb6668e68bc6d2ccf34",
+    "blob_sha": "3eddf7bc0433e45722f5e080afd59c7046fc37f3",
     "ecosystem": "npm",
     "bytes": 4740,
     "names": [
@@ -12661,7 +12733,7 @@
    {
     "path": "dbm-services/common/dbha/hadb-api/go.mod",
     "kind": "dep",
-    "blob_sha": "e351ec35fa40f212c4d714e610fd9e891a5e31a0",
+    "blob_sha": "507b8f7bb1937ae9032c11650ba3e6e86bf648c3",
     "ecosystem": "go",
     "bytes": 1790,
     "names": [
@@ -13834,10 +13906,10 @@
    {
     "path": "dbm-ui/Dockerfile",
     "kind": "image",
-    "blob_sha": "d9c59a4097a333bc6e918d672875a7882dbd4f2d",
+    "blob_sha": "1c4ed911dbd22d5e21d8f55d6ea8e9adfde20adf",
     "bytes": 3248,
     "images": [
-     "node:24.15.0-slim",
+     "node:24.22.3-slim",
      "frontend-installer",
      "python:3.11.10-slim",
      "base"
@@ -15577,13 +15649,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:26:01Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-14T03:22:03Z",
   "default_branch": "master",
-  "pushed_at": "2017-12-28",
+  "pushed_at": "2026-11-13",
   "stars": 45,
   "tree": {
-   "sha": "8b8c6b2f6a7afe2a5f86e36d8e3ed612031cd6ca",
-   "etag": "W/\"525beff4c7016713b52f9c246e02567db4906e1b2c4f60ba847d6f7afc9be533\"",
+   "sha": "7349053bde8decd46e25198f5b6258498edf74f5",
+   "etag": "W/\"e697e4100919ca1b5530741fde5cc1857270c382f93be04fdcb6679d78415a3f\"",
    "truncated": false,
    "path_count": 201,
    "matched": []
@@ -17264,13 +17337,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:09:48Z",
+  "collected_at": "2026-11-14T03:27:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
-  "stars": 26,
+  "pushed_at": "2026-11-13",
+  "stars": 29,
   "tree": {
-   "sha": "448700b7caac7f9ab99abc0a2da23676006227e7",
-   "etag": "W/\"100221c35420d8be2320ba0154af4b9a17beba10a7185af487cb2a92bf09a001\"",
+   "sha": "b11eeb6898ec24f3f77cdef11c14d5d544487e45",
+   "etag": "W/\"8abe878841008d3ff00ad57476bc0264135d18bc5364a75b58586503e7aae69a\"",
    "truncated": false,
    "path_count": 203,
    "matched": [
@@ -17380,6 +17453,11 @@
    "docs_matrix": [],
    "paths": [
     "e2e/lib/webdriver.mjs"
+   ],
+   "matrix_urls": [
+    "https://t21.dev",
+    "https://www.patreon.com/triptex",
+    "https://www.supportkori.com/triptex"
    ]
   },
   "fail_count": 0
@@ -21940,15 +22018,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:58:36Z",
+  "collected_at": "2026-11-14T03:36:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 13,
   "tree": {
-   "sha": "dc18d2b35c05d98e64d2df6306f850dc495beaa0",
-   "etag": "W/\"e31019f4536442ee3ec8df55e58fac9020d2fb18fa5a6b696a89bd05a4cde449\"",
+   "sha": "cd20b1f076c8e8df8b232f242fac3d252dda57c2",
+   "etag": "W/\"26f746ce306ea6b057a62f551500800f5d459d0d6cb09d90b8309e55433b6738\"",
    "truncated": false,
-   "path_count": 6311,
+   "path_count": 6356,
    "matched": [
     "Cargo.toml",
     "pyproject.toml",
@@ -22640,15 +22718,16 @@
    {
     "path": "crates/medulla-decision-policy/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9b91b327f7c8d15d2831f6bd4968d7224f338a39",
+    "blob_sha": "d0e638ec0e3d61756a38fb4a14d64ea98993a430",
     "ecosystem": "cargo",
-    "bytes": 1270,
+    "bytes": 1328,
     "names": [
      "medulla-types",
      "medulla-query-types",
      "serde",
      "tracing",
-     "medulla-decision-types"
+     "medulla-decision-types",
+     "medulla-agent-types"
     ],
     "dev": [
      "medulla-types",
@@ -23999,11 +24078,11 @@
    {
     "path": "docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "c81e2454dd7db1340df571ba86feb4c5767f8750",
-    "bytes": 2496,
+    "blob_sha": "74ecb66ba824e12ad11cce2354c607cb316fab85",
+    "bytes": 4020,
     "images": [
      "python:3.14-slim@sha256:cea0e6040540fb2b965b6e7fb5ffa00871e632eef63719f0ea54bca189ce14a6",
-     "debian:bookworm-slim"
+     "debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc"
     ]
    },
    {
@@ -24036,8 +24115,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "547d4108e403fe72c176225c5e7b53bb3bbca7cf",
-    "bytes": 109359
+    "blob_sha": "66cbae46c36fdf176d1eb979be00f0caddc97ec2",
+    "bytes": 109698
    },
    {
     "path": ".github/workflows/macos-release-probe.yml",
@@ -24108,8 +24187,8 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "504e575cdecdf7432aaaf3c67ed08d73b933aaff",
-    "bytes": 36381,
+    "blob_sha": "046cdb06bc6c1b85d374bae085eac9d1a540d8a1",
+    "bytes": 36419,
     "images": [
      "${{"
     ]
@@ -24251,6 +24330,9 @@
     "crates/medulla-h-admin/src/admin/connector_pack/self_served_catalog.rs",
     "crates/medulla-h-admin/src/admin/connector_pack/surface_vocab.rs",
     "crates/medulla-h-admin/src/admin/connector_pack/tests.rs",
+    "crates/medulla-h-decide/src/decide/family/connector_event_triage.rs",
+    "crates/medulla-h-decide/src/decide/family/connector_tool_choice.rs",
+    "crates/medulla-h-decide/src/decide/family/connector_write_back.rs",
     "crates/medulla-h-decide/src/decide/stat_tests/connector_toolchoice_tests.rs",
     "crates/medulla-h-decide/src/decide/stat_tests/connector_triage_tests.rs",
     "crates/medulla-h-decide/src/decide/stat_tests/connector_writeback_tests.rs",

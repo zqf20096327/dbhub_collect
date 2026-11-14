@@ -1261,15 +1261,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:13:30Z",
+  "collected_at": "2026-11-14T02:56:40Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
-  "stars": 1358,
+  "pushed_at": "2026-11-13",
+  "stars": 1360,
   "tree": {
-   "sha": "d4e7b9e76474c464586e837e35d47e36f32b71b7",
-   "etag": "W/\"822f1f366a5a132f44c7cd29ff8dc0b766577b84cfbaef61d90ec06df4fdf802\"",
+   "sha": "8c427f96eb1083c8828982df09acac1a2e8921dc",
+   "etag": "W/\"6e4c43fe46f9e97288dfecd8315ec8b8444d871567967a960bcb3fca875edee1\"",
    "truncated": false,
-   "path_count": 3543,
+   "path_count": 3576,
    "matched": [
     "Cargo.toml",
     "crates/common-build-info/Cargo.toml",
@@ -1307,6 +1307,7 @@
     "modules/web/web-app/package.json",
     "modules/metering/crates/metering-grpc/Cargo.toml",
     "modules/metering/crates/metering-server/Cargo.toml",
+    "modules/meteroid/crates/billing-core/Cargo.toml",
     "modules/meteroid/crates/diesel-models/Cargo.toml",
     "modules/meteroid/crates/diesel-schema/Cargo.toml",
     "modules/meteroid/crates/gocardless-client/Cargo.toml",
@@ -1330,7 +1331,6 @@
     "modules/meteroid/crates/meteroid-workers/Cargo.toml",
     "modules/meteroid/crates/mollie-client/Cargo.toml",
     "modules/meteroid/crates/pennylane-client/Cargo.toml",
-    "modules/meteroid/crates/stancer-client/Cargo.toml",
     "k8s/meteroid/values.yaml",
     "modules/metering/Dockerfile",
     "modules/web/web-app/Dockerfile",
@@ -1348,9 +1348,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ccb368758497102f609dd4c432b3439cd140725f",
+    "blob_sha": "4207b567bc3f44e528e0ce5cb9aaa46224860797",
     "ecosystem": "cargo",
-    "bytes": 13623
+    "bytes": 13730
    },
    {
     "path": "crates/common-build-info/Cargo.toml",
@@ -1378,9 +1378,9 @@
    {
     "path": "crates/common-domain/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b92c5d6f8264b0e44f586c514981f22520370a6d",
+    "blob_sha": "6042f8fe948ed30104cc99d831facd629e925662",
     "ecosystem": "cargo",
-    "bytes": 1176,
+    "bytes": 1267,
     "names": [
      "serde",
      "serde_json",
@@ -1708,9 +1708,9 @@
    {
     "path": "crates/workspace-hack/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "11228d5ff6f9aca651f07194d6e2918b3cdc146c",
+    "blob_sha": "333ecdc34c42c77129a7263607d496803df52ae6",
     "ecosystem": "cargo",
-    "bytes": 21793,
+    "bytes": 22097,
     "names": [
      "ahash",
      "anstream",
@@ -2330,6 +2330,24 @@
     ]
    },
    {
+    "path": "modules/meteroid/crates/billing-core/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "56386e0a70760235bf84483cff3f095b84c3c3e2",
+    "ecosystem": "cargo",
+    "bytes": 533,
+    "names": [
+     "chrono",
+     "rust_decimal",
+     "sha2",
+     "uuid",
+     "workspace-hack"
+    ],
+    "dev": [
+     "proptest",
+     "rust_decimal_macros"
+    ]
+   },
+   {
     "path": "modules/meteroid/crates/diesel-models/Cargo.toml",
     "kind": "dep",
     "blob_sha": "c8da484883ea1e1a9e9d4e735b66ffbbd40d744f",
@@ -2914,10 +2932,11 @@
    {
     "path": "modules/meteroid/crates/meteroid-store/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "3c5e21d024ddb958563931a1d5d61303b4c5ed42",
+    "blob_sha": "caa0833ad7cac9094f0d9d65a8b57be030e3a6ab",
     "ecosystem": "cargo",
-    "bytes": 3156,
+    "bytes": 3186,
     "names": [
+     "billing-core.workspace",
      "common-eventbus.workspace",
      "common-logging.workspace",
      "opentelemetry.workspace",
@@ -2996,10 +3015,11 @@
    {
     "path": "modules/meteroid/crates/meteroid-tax/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "aec1460fc8b59a1dc0700c9a1cf4af6ba12030a0",
+    "blob_sha": "51c302541e677e430621a3c7a65d094d15c97da5",
     "ecosystem": "cargo",
-    "bytes": 1239,
+    "bytes": 1275,
     "names": [
+     "billing-core",
      "http-client-tracing",
      "tokio",
      "serde",
@@ -3024,9 +3044,9 @@
    {
     "path": "modules/meteroid/crates/meteroid-testkit/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "4ca6785ecab5245529574748cdbf21accadd9858",
+    "blob_sha": "0f5ea9ffb0688124e5354757ffadddda7c3ff67e",
     "ecosystem": "cargo",
-    "bytes": 2219,
+    "bytes": 2233,
     "names": [
      "meteroid-app.workspace",
      "meteroid",
@@ -3187,29 +3207,6 @@
     ]
    },
    {
-    "path": "modules/meteroid/crates/stancer-client/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "fa14a9c9fc88567f800932af24c8e776c971471e",
-    "ecosystem": "cargo",
-    "bytes": 765,
-    "names": [
-     "http-client-tracing",
-     "tokio",
-     "serde",
-     "serde_json",
-     "serde_path_to_error",
-     "serde_with",
-     "secrecy",
-     "thiserror",
-     "reqwest",
-     "bytes",
-     "workspace-hack"
-    ],
-    "dev": [
-     "wiremock"
-    ]
-   },
-   {
     "path": "k8s/meteroid/values.yaml",
     "kind": "image",
     "blob_sha": "2e75b836dabae0b5508070ef4160a99787956a99",
@@ -3255,8 +3252,8 @@
    {
     "path": ".github/workflows/ci-rust.yaml",
     "kind": "ci",
-    "blob_sha": "c34b0f985b649b2904d03472ae08595c2f96cf07",
-    "bytes": 8373,
+    "blob_sha": "8f014d3754393da1e9ed87e27526b98f9cec7a31",
+    "bytes": 9564,
     "images": [
      "ghcr.io/meteroid-oss/meteroid-postgres:18.3-standard"
     ]
@@ -3264,14 +3261,14 @@
    {
     "path": ".github/workflows/ci-ui.yaml",
     "kind": "ci",
-    "blob_sha": "d036e75be4ae80a8eb4dd5ca05cd6c0eeb815240",
-    "bytes": 1602
+    "blob_sha": "76d38f416a7776f5e20038a13a76275d360da4ff",
+    "bytes": 1836
    },
    {
     "path": ".github/workflows/model-tests.yaml",
     "kind": "ci",
-    "blob_sha": "cabc5139dec5cff1f9acce95996b9e3640c51946",
-    "bytes": 2151,
+    "blob_sha": "876b1035569e39039adf620208b478d3a5c855ac",
+    "bytes": 2558,
     "images": [
      "ghcr.io/meteroid-oss/meteroid-postgres:18.3-standard"
     ]
@@ -3792,13 +3789,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:43:35Z",
+  "collected_at": "2026-11-14T03:23:20Z",
   "default_branch": "1.5",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 39,
   "tree": {
    "sha": "6b8665b6a4bb0ecf8aabce8ed70c92a4a5eb53af",
-   "etag": "W/\"f80bbdecf72fe1f20596560ced28ee604f29db2a3f89cf41f9557df92d607381\"",
+   "etag": "W/\"06aabecc98619913715bc7d2a9c2cc64402ad36d2bd917949794f81d749cd6dd\"",
    "truncated": false,
    "path_count": 256,
    "matched": [
@@ -4838,15 +4835,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T02:57:07Z",
+  "collected_at": "2026-11-14T02:43:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
-  "stars": 30183,
+  "pushed_at": "2026-11-13",
+  "stars": 30306,
   "tree": {
-   "sha": "bf174f4d731d52cff3225e9fe4e4841d69a1bd4e",
-   "etag": "W/\"df3757f59e38c8981946e36f991024ffbcaf5d2fcfd94d262f60c6d463d5a099\"",
+   "sha": "acc33f6358d32cd634240e26a06f482f23c88ba9",
+   "etag": "W/\"ad2b55a9553bc9b4d1eaf37b4238698af9a203d2a6e814dbec323330be00a929\"",
    "truncated": false,
-   "path_count": 8311,
+   "path_count": 8318,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -4960,7 +4957,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "c041a897217071cbcdd17d647f9ef788ee6b465e",
+    "blob_sha": "648e9bd94edbdf442ba41663d60037a925143fef",
     "ecosystem": "npm",
     "bytes": 6873,
     "names": [
@@ -5111,7 +5108,7 @@
    {
     "path": "src-tauri/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a6cfca6c11d83599334bce8bad52385c8bb10c64",
+    "blob_sha": "dfbb8d736969840efeaf20fd67e1f49afc1f2feb",
     "ecosystem": "cargo",
     "bytes": 4957,
     "names": [
@@ -5880,7 +5877,7 @@
    {
     "path": "crates/dbx-web/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9f6562fc518db900363efce80f6900eba2e9385e",
+    "blob_sha": "20da5fd390f0a4e75497fecee41f61e86596f485",
     "ecosystem": "cargo",
     "bytes": 2378,
     "names": [
@@ -6106,7 +6103,7 @@
    {
     "path": "plugins/jdbc/build.gradle",
     "kind": "dep",
-    "blob_sha": "a9012c0f720fa6fd53e5b394510dd12b0f367374",
+    "blob_sha": "4d6b55d99e51417891c2c75763ced442f43649bb",
     "ecosystem": "gradle",
     "bytes": 2113,
     "names": [
@@ -6227,8 +6224,8 @@
    {
     "path": ".github/workflows/daily-beta-release.yml",
     "kind": "ci",
-    "blob_sha": "6b6f524a4a06d2e935c3f12ec499909e878a71f1",
-    "bytes": 6496
+    "blob_sha": "f560deb6c2016fddea6a21403b0256591de0af9a",
+    "bytes": 6819
    },
    {
     "path": ".github/workflows/database-environments.yml",
@@ -6245,14 +6242,14 @@
    {
     "path": ".github/workflows/dockerhub-description.yml",
     "kind": "ci",
-    "blob_sha": "6c483c7bcd9734a7c0058239b908fcfed7296c59",
-    "bytes": 734
+    "blob_sha": "dd410b0e3337dab01525b97018e222de4b107f17",
+    "bytes": 1059
    },
    {
     "path": ".github/workflows/docs.yml",
     "kind": "ci",
-    "blob_sha": "c92def809a434f35301bd814ed6d1419638f8f5e",
-    "bytes": 1007
+    "blob_sha": "a81c1173da61767aeebd94d3f80726fb941e9d65",
+    "bytes": 1461
    },
    {
     "path": ".github/workflows/fnos-package.yml",
@@ -6275,8 +6272,8 @@
    {
     "path": ".github/workflows/issue-database-label.yml",
     "kind": "ci",
-    "blob_sha": "605a41f2ca8b72ee45c8d65d4aa7bfc39c263d96",
-    "bytes": 1845
+    "blob_sha": "dc465ddc8a77e0dae01b394522d0f41e87392185",
+    "bytes": 1475
    },
    {
     "path": ".github/workflows/mcp-release.yml",
@@ -6383,14 +6380,14 @@
    {
     "path": ".github/workflows/ui-preview.yml",
     "kind": "ci",
-    "blob_sha": "ff07c03cae498b035a6d9a073dd643879d264be7",
-    "bytes": 7569
+    "blob_sha": "3a7e92562e1af5b92a641a976f1007543e111aed",
+    "bytes": 7418
    },
    {
     "path": ".github/workflows/update-nix-pnpm-hash.yml",
     "kind": "ci",
-    "blob_sha": "8d9e72fd01e9961654bbc648da053a423c1dfa24",
-    "bytes": 2744
+    "blob_sha": "a64b0a0dde18f5de3380a35e74e2a53d3743983a",
+    "bytes": 2969
    },
    {
     "path": ".github/workflows/vsign-operator-bootstrap.yml",
@@ -6476,6 +6473,7 @@
     "agents/drivers/oracle-go/main_test.go",
     "agents/drivers/oracle-go/native_jobs.go",
     "agents/drivers/oracle-go/native_jobs_test.go",
+    "agents/drivers/oracle-go/object_comments.go",
     "agents/drivers/oracle-go/oci.go",
     "agents/drivers/oracle-go/oci_disabled.go",
     "agents/drivers/oracle-go/oci_dsn.go",
@@ -6623,8 +6621,7 @@
     "agents/drivers/dameng/libs/.gitkeep",
     "agents/drivers/gbase8a/libs/gbase-connector-java-9.5.0.10-build1-bin.jar",
     "agents/drivers/gbase8c/libs/gbase8c-jdbc-3.0.0B02.jar",
-    "agents/drivers/goldendb/libs/.gitkeep",
-    "agents/drivers/oceanbase-oracle/scripts/README.md"
+    "agents/drivers/goldendb/libs/.gitkeep"
    ],
    "matrix_urls": [
     "https://my.feishu.cn/wiki/WMTkwdATDiiu4rk14JMcoyhTnoh"
@@ -7192,13 +7189,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:02:29Z",
+  "collected_at": "2026-11-14T02:48:01Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
-  "stars": 8708,
+  "pushed_at": "2026-11-13",
+  "stars": 8710,
   "tree": {
    "sha": "4fec6cb5108895288405e1ffdabae63b76579f3a",
-   "etag": "W/\"e75b7efb9bcd7a607d89746c1c16827b140c6b3f03faa8fe242430df12890c2c\"",
+   "etag": "W/\"e9b4b1926933ffe0b60d934204311e50539ffeb34f2525eb582603331c441469\"",
    "truncated": false,
    "path_count": 906,
    "matched": [
@@ -8944,13 +8941,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:30:20Z",
+  "collected_at": "2026-11-14T03:11:54Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 139,
   "tree": {
-   "sha": "b77dc197b1c642e8817df75c2988fb184664d006",
-   "etag": "W/\"99f9710220acea6fd34cf13b7183076c2dd167db1bdadfbd75166bc05da3b7b5\"",
+   "sha": "dd1c59e320f7017db8a65c13643d3c92c88ddfdf",
+   "etag": "W/\"d4e1697c13d4c466531468a15d47ce51f7d6fb25f12313bbc6974ad9bd556c01\"",
    "truncated": false,
    "path_count": 925,
    "matched": [
@@ -11813,15 +11810,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:32:31Z",
+  "collected_at": "2026-11-14T03:26:39Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
-  "stars": 29,
+  "pushed_at": "2026-11-13",
+  "stars": 30,
   "tree": {
-   "sha": "b73a536481628da812581bc87666d062a43fdceb",
-   "etag": "W/\"7fa6d21a3023bd5af9b1a779d6415a81e11f16e5f9335377023fd7e15dee4523\"",
+   "sha": "a8ea9e70bdd4e5626b84b276873f34179eb6db6d",
+   "etag": "W/\"851f7fb49adbfbb22d0c1cd53a91feff70f04f80caeb876124a6ce5819d65faf\"",
    "truncated": false,
-   "path_count": 3129,
+   "path_count": 3132,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -11862,7 +11859,7 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "90c5bcc72fad1e67cef4296a70cde798298d9718",
+    "blob_sha": "b6f3307a8d30b9803fb173a96163403b03cf81d6",
     "ecosystem": "cargo",
     "bytes": 4246
    },
@@ -11879,7 +11876,7 @@
    {
     "path": "mcp-server/package.json",
     "kind": "dep",
-    "blob_sha": "4f3ac6d9cfca142abec9dbe570baccbce388206c",
+    "blob_sha": "5a8d88b1ff90eff777b714102608f7cce671f677",
     "ecosystem": "npm",
     "bytes": 1323,
     "names": [
@@ -12280,8 +12277,8 @@
    {
     "path": "Dockerfile.bundle",
     "kind": "image",
-    "blob_sha": "80ab7a3512b4805c229b6916acd853693adc50cb",
-    "bytes": 11416,
+    "blob_sha": "e530e802f8cec4eacde11c201a556359890ab05e",
+    "bytes": 11657,
     "images": [
      "rust:1.92.0-slim-bookworm@sha256:f1f73538ebe623fd3673a35aff3df358ae1084c64c55646516e5b17b321b6c9b",
      "node:22-bookworm-slim@sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3",
@@ -12386,8 +12383,8 @@
    {
     "path": "build/Dockerfile.testdb",
     "kind": "image",
-    "blob_sha": "c15aa1029aa7edec2cbfe34e088398b20a40c7ab",
-    "bytes": 2094,
+    "blob_sha": "62f083d4f6f94e51ec69069aa58195a4bc3495ad",
+    "bytes": 2610,
     "images": [
      "pgvector/pgvector:pg18@sha256:12a379b47ad65289572ea0756efc11b7c241a6662833e8af7038cd3b73d647e0"
     ]
@@ -13287,13 +13284,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:10:34Z",
+  "collected_at": "2026-11-14T03:27:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-13",
   "stars": 27,
   "tree": {
-   "sha": "d040e20ee1a56d0f7bf5ab435a5a62be53d4383c",
-   "etag": "W/\"12613bb6dfa4dd547c3ec9c3ac6c57d73b2453158b3abc2ff3af44be527bda1a\"",
+   "sha": "ec961871331bedc6062751eb3bc88a017b444e22",
+   "etag": "W/\"322a653ac733c8496c5f447112f1720937964c93538d5b19ffcd99358c0a70c2\"",
    "truncated": false,
    "path_count": 93,
    "matched": [
@@ -13309,7 +13306,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "7464b1d69921db3412c687d57381d5cd5f1ea3a1",
+    "blob_sha": "ae522d341e1000c9da9688285c1cd29d1f50341d",
     "ecosystem": "npm",
     "bytes": 6766,
     "names": [
@@ -17260,13 +17257,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:15:58Z",
+  "collected_at": "2026-11-14T02:59:05Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 896,
   "tree": {
    "sha": "e152b5cab59d80c3e199a38de8231ff64cc35b2a",
-   "etag": "W/\"d0394eb5e7f665b23adeaecadd868cf0a6d36af437b6617e73245f6721aae27d\"",
+   "etag": "W/\"662e53b26a7dc94ac7dba4376f4905d0c9741496e152db5379eec14033ca4df3\"",
    "truncated": false,
    "path_count": 2627,
    "matched": [
@@ -18126,13 +18123,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:33:51Z",
+  "collected_at": "2026-11-14T03:14:45Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 104,
   "tree": {
    "sha": "7bfba7d144a496332abea6d1d5fddda587316f43",
-   "etag": "W/\"3f78f09df8553977eded0b4eeb2179cb2c4e5d94b026d7b77256c349380614a6\"",
+   "etag": "W/\"9517326d8329adb15fb964fec6374fe4c849eff04864361b7cf0f750d3a92f84\"",
    "truncated": false,
    "path_count": 1302,
    "matched": [

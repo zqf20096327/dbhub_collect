@@ -3305,15 +3305,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:05:06Z",
+  "collected_at": "2026-11-14T02:49:48Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
-  "stars": 5358,
+  "pushed_at": "2026-11-13",
+  "stars": 5357,
   "tree": {
-   "sha": "5e1cb41682ae749bb111d5a95a1a0f4fb56d137f",
-   "etag": "W/\"2a2f2ee605dd42a25a587e5e9a56da06ea05f604a2bca1c505ff6bffa79eda75\"",
+   "sha": "a7f829b4d9d1e458e87f11b841951e9a67b821f8",
+   "etag": "W/\"9125cc248507bebe1d09a0ef44b8b676804e7d661edace0665e7150de3e686ba\"",
    "truncated": false,
-   "path_count": 2023,
+   "path_count": 2048,
    "matched": [
     "package.json",
     "apps/docs/package.json",
@@ -3328,6 +3328,7 @@
     "packages/screenshots/package.json",
     "packages/tailwind-config/package.json",
     "packages/test-helpers/package.json",
+    "packages/translations/package.json",
     "packages/tsconfig/package.json",
     "packages/ui/package.json",
     "packages/utils/package.json",
@@ -3338,16 +3339,17 @@
     ".github/workflows/db-backup.yml",
     ".github/workflows/docker-image.yml",
     ".github/workflows/release.yml",
-    ".github/workflows/subprocessor-notice.yml"
+    ".github/workflows/subprocessor-notice.yml",
+    ".github/workflows/translate.yml"
    ]
   },
   "files": [
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "2806099fdddbaeaca12bafd9150ab17390870943",
+    "blob_sha": "bda60b1225e01e2456ad83d05f6e4567079b37c0",
     "ecosystem": "npm",
-    "bytes": 3022,
+    "bytes": 3092,
     "dev": [
      "@biomejs/biome",
      "@playwright/test",
@@ -3431,7 +3433,7 @@
    {
     "path": "apps/web/package.json",
     "kind": "dep",
-    "blob_sha": "4f4dcd46beda3e6dd3f7c38f401f18a99a28bb58",
+    "blob_sha": "57de824a390cfae387eea48ba837b7ed269fb5ef",
     "ecosystem": "npm",
     "bytes": 4428,
     "names": [
@@ -3709,6 +3711,25 @@
     ]
    },
    {
+    "path": "packages/translations/package.json",
+    "kind": "dep",
+    "blob_sha": "3405cbeee1bf04c57db87d1b579946fff225e794",
+    "ecosystem": "npm",
+    "bytes": 515,
+    "names": [
+     "@formatjs/icu-messageformat-parser",
+     "openai",
+     "undici",
+     "zod"
+    ],
+    "dev": [
+     "@rallly/tsconfig",
+     "@types/node",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
     "path": "packages/tsconfig/package.json",
     "kind": "dep",
     "blob_sha": "95e034a7d4b7a550565974e68ae87d076952ba62",
@@ -3854,6 +3875,12 @@
     "kind": "ci",
     "blob_sha": "8846e6d899a4e23c170d6dc4f3648dc563f54552",
     "bytes": 1014
+   },
+   {
+    "path": ".github/workflows/translate.yml",
+    "kind": "ci",
+    "blob_sha": "33e4a3424e39793cb9131408c73b9d08f7db89d7",
+    "bytes": 5998
    }
   ],
   "clues": {
@@ -9449,15 +9476,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:01:53Z",
+  "collected_at": "2026-11-14T02:47:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
-  "stars": 9508,
+  "pushed_at": "2026-11-13",
+  "stars": 9511,
   "tree": {
-   "sha": "e6c9a447693e0c89787ad9e567a2b829d9dec9a4",
-   "etag": "W/\"14a32629bab4e128330f6513bfd38245c513a89758873a8900eb8b0dc941e0c6\"",
+   "sha": "6f9a01de88c7c93b591dd7a1aa23446c06c62319",
+   "etag": "W/\"fe5926f2b87af9f7a6ccb7f5e0e36bb5bd095f622bf8042e9b979593bb934f66\"",
    "truncated": false,
-   "path_count": 2406,
+   "path_count": 2470,
    "matched": [
     "Cargo.toml",
     "basescan/Cargo.toml",
@@ -9537,9 +9564,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d5b6c3c1edf9ab658037df4790942f53383a219b",
+    "blob_sha": "d8d872334ded5464fccf4fb9c6b836b8f4f363d2",
     "ecosystem": "cargo",
-    "bytes": 5971
+    "bytes": 6024
    },
    {
     "path": "basescan/Cargo.toml",
@@ -9961,32 +9988,34 @@
    {
     "path": "tests/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "221054968eb250fc856e4971a9bc2d3e9f38b041",
+    "blob_sha": "50707e7fb324034535843b8bb864a5192e857181",
     "ecosystem": "cargo",
-    "bytes": 1993,
+    "bytes": 1811,
     "names": [
      "anyhow",
-     "approx",
      "async-std",
      "bigdecimal",
      "bytes",
      "chrono",
-     "cmd_lib",
      "dotenvy",
      "dst",
      "env_logger",
      "futures",
      "lockfree-object-pool",
-     "num-traits",
-     "pgvector",
-     "pretty_assertions",
      "proptest",
      "proptest-derive",
      "rand",
      "rstest",
-     "rustc-hash",
      "serde_json",
-     "sqlx",
+     "sqlx"
+    ],
+    "dev": [
+     "approx",
+     "cmd_lib",
+     "num-traits",
+     "pgvector",
+     "pretty_assertions",
+     "rustc-hash",
      "strum",
      "tantivy.workspace",
      "tempfile",
@@ -10120,10 +10149,10 @@
    {
     "path": "docker/Dockerfile.proptests",
     "kind": "image",
-    "blob_sha": "9c4e574fe96a6efc3596c2c57bf7272f01590c26",
-    "bytes": 2451,
+    "blob_sha": "3398254155f76f6611b429158ee52c20c5eae00f",
+    "bytes": 2452,
     "images": [
-     "rust:1.99-slim-trixie"
+     "rust:1.100-slim-trixie"
     ]
    },
    {
@@ -10139,10 +10168,10 @@
    {
     "path": "docker/Dockerfile.stressgres",
     "kind": "image",
-    "blob_sha": "9f2be645e2ec11374b26692096f91176b0bc0c4d",
-    "bytes": 3599,
+    "blob_sha": "cee8bd4fece91f2cb460cd1d6b8fdef2a81770f3",
+    "bytes": 3600,
     "images": [
-     "rust:1.99-slim-trixie",
+     "rust:1.100-slim-trixie",
      "debian:trixie-slim"
     ]
    },
@@ -10170,20 +10199,20 @@
    {
     "path": ".github/workflows/benchmark-pg_search-benchmarker-cohere.yml",
     "kind": "ci",
-    "blob_sha": "c9ad64bd188a53c408578385c71f58302772fd45",
-    "bytes": 23909
+    "blob_sha": "999f59c46e2c2095cf6aa0b011ee3010e38d370a",
+    "bytes": 20715
    },
    {
     "path": ".github/workflows/benchmark-pg_search-benchmarker-hn.yml",
     "kind": "ci",
-    "blob_sha": "61e232c541968f4ffa3e65d347d157249a253777",
-    "bytes": 16861
+    "blob_sha": "3aa07e7438850faf733d50868ee6ceb80cdacd16",
+    "bytes": 20951
    },
    {
     "path": ".github/workflows/benchmark-pg_search-benchmarker-msmarco.yml",
     "kind": "ci",
-    "blob_sha": "282558d47195f1cebb4b539fa8dd40e49e720262",
-    "bytes": 17667
+    "blob_sha": "6d1fb820693d4bdd090e2483b88683a71b02e078",
+    "bytes": 18736
    },
    {
     "path": ".github/workflows/benchmark-pg_search-benchmarker.yml",
@@ -10436,15 +10465,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:02:27Z",
+  "collected_at": "2026-11-14T02:48:00Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-12",
-  "stars": 8830,
+  "pushed_at": "2026-11-13",
+  "stars": 8832,
   "tree": {
-   "sha": "f8f5c84a059a609390c29f424d2a133ca664f41f",
-   "etag": "W/\"5143dc40cdc35146b646d2f9c95074c2ef43eacbc908141ac37a269d747fe8e3\"",
+   "sha": "3a89e19cec7b6d3e08c1901ff1ec3b9f680949da",
+   "etag": "W/\"1b8c7140a48bd0ca277fd50a1cc0f3d112a14ff623585c81dd7a7e40a24ec7d5\"",
    "truncated": false,
-   "path_count": 284,
+   "path_count": 290,
    "matched": [
     "requirements.txt",
     "setup.py",
@@ -10967,15 +10996,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:17:27Z",
+  "collected_at": "2026-11-14T03:00:11Z",
   "default_branch": "develop",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 745,
   "tree": {
-   "sha": "4bf2d617649b74c1844f75e3050a212d63ac7c6c",
-   "etag": "W/\"52a805a8f6ca8b9aa0cf0efe50b50e903821009132e2802a1a8bb34605802300\"",
+   "sha": "6c4bd9aea2221964447885329080ca44c41c290b",
+   "etag": "W/\"ed3b547a43461fbd2ea4637581e8038715e37f013deedba874460d6b30e16b77\"",
    "truncated": false,
-   "path_count": 2810,
+   "path_count": 2814,
    "matched": [
     "go.mod",
     "share/dashboard_react/package.json",
@@ -11768,13 +11797,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:18:45Z",
+  "collected_at": "2026-11-14T03:01:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 614,
   "tree": {
    "sha": "385c244ea60be45f93e66d86d8398806f5454cec",
-   "etag": "W/\"5e480d66dec3e8cfda948b2899c0223f38d8b3d6929943e4a407a4f5bf2e3386\"",
+   "etag": "W/\"663a666ca8a7900813eef5f8b15d789dfb82254e067269630f6096c32a2eecb2\"",
    "truncated": false,
    "path_count": 3099,
    "matched": [
@@ -15369,13 +15398,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:53:21Z",
+  "collected_at": "2026-11-14T03:16:15Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-13",
   "stars": 84,
   "tree": {
-   "sha": "17303094f5cb349f48aa8551f99c32f6f5525e2b",
-   "etag": "W/\"e8639a705c1425495ff30e814d46f5f4f2dc5c4bb420a9b8bbe7f0607db8fa92\"",
+   "sha": "26ee6e7813e09152072ffe784fdd2792804ff78e",
+   "etag": "W/\"4692b1eebfeec9754a14114f19e06f690e137ed70f870743aa96487be474629d\"",
    "truncated": false,
    "path_count": 634,
    "matched": []
@@ -16218,15 +16247,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:46:11Z",
+  "collected_at": "2026-11-14T03:25:38Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 33,
   "tree": {
-   "sha": "5156a281db8f46238682210f4bd62b9b4c784b22",
-   "etag": "W/\"49025d43d438ba4789a59e3cc76ad248340d60ef90a64f976b7513888ff7788c\"",
+   "sha": "67dab010d31d86d6d84b4353df8c85744fd55e6f",
+   "etag": "W/\"ae46d12ee98859bd7e82ba0fb17d1d7f315d222020643db7d821b748ebae7067\"",
    "truncated": false,
-   "path_count": 7292,
+   "path_count": 7302,
    "matched": [
     "src/Rask.Api.Client/Rask.Api.Client.csproj",
     "src/Rask.Api.Generators/Rask.Api.Generators.csproj",
@@ -16310,12 +16339,9 @@
    {
     "path": "src/Rask.Api.Client/Rask.Api.Client.csproj",
     "kind": "dep",
-    "blob_sha": "d8ab371ee86ea5d31de798943953db61ababe7c9",
+    "blob_sha": "b02e1438b9f303f532ed9d104938588a60ad99c3",
     "ecosystem": "csproj",
-    "bytes": 1870,
-    "names": [
-     "Microsoft.Extensions.DependencyInjection.Abstractions"
-    ]
+    "bytes": 1782
    },
    {
     "path": "src/Rask.Api.Generators/Rask.Api.Generators.csproj",
@@ -16330,14 +16356,14 @@
    {
     "path": "src/Rask.Api/Rask.Api.csproj",
     "kind": "dep",
-    "blob_sha": "018e185ef5e8e4816a248d42eb4e2e084c199e11",
+    "blob_sha": "14a81bc6b9452b708886e4b3690df93e8627d9a3",
     "ecosystem": "csproj",
     "bytes": 4158
    },
    {
     "path": "src/Rask.Auth.Api/Rask.Auth.Api.csproj",
     "kind": "dep",
-    "blob_sha": "f2a08d3077379b654fd39cdc3dbb76f6043289d4",
+    "blob_sha": "00628524fca5ba6db7829bc1c56b300047318b22",
     "ecosystem": "csproj",
     "bytes": 7670,
     "names": [
@@ -16349,14 +16375,14 @@
    {
     "path": "src/Rask.Auth.Client/Rask.Auth.Client.csproj",
     "kind": "dep",
-    "blob_sha": "3dc58b747d91efa0bf14f8f9f57470ae272becd6",
+    "blob_sha": "c686ba221c4a6b2df297cfead981a17cab970ba7",
     "ecosystem": "csproj",
     "bytes": 2601
    },
    {
     "path": "src/Rask.Auth/Rask.Auth.csproj",
     "kind": "dep",
-    "blob_sha": "6fa73ddd84a97ce97475e58e48e3f2d3c449ed71",
+    "blob_sha": "9bb8f714af3baa407b5dfbef78577792b3ef14fa",
     "ecosystem": "csproj",
     "bytes": 5551,
     "names": [
@@ -16377,23 +16403,18 @@
    {
     "path": "src/Rask.Cache/Rask.Cache.csproj",
     "kind": "dep",
-    "blob_sha": "04ddda873963b85f8f7b55c923b72d38fcd49d53",
+    "blob_sha": "b84f83aabda0334c212f0fd783b0ef458ea0189e",
     "ecosystem": "csproj",
-    "bytes": 4872,
+    "bytes": 4499,
     "names": [
      "Microsoft.EntityFrameworkCore",
-     "Microsoft.Extensions.Caching.Abstractions",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
-     "Microsoft.Extensions.Options"
+     "Microsoft.Extensions.Configuration.Binder"
     ]
    },
    {
     "path": "src/Rask.Cli/Rask.Cli.csproj",
     "kind": "dep",
-    "blob_sha": "fab7fa21028c5ce4c683e238d75e756ac99120b2",
+    "blob_sha": "7f590d683780bd4832e1409d7ab67f9216af8af1",
     "ecosystem": "csproj",
     "bytes": 8447,
     "names": [
@@ -16405,12 +16426,10 @@
    {
     "path": "src/Rask.Core/Rask.Core.csproj",
     "kind": "dep",
-    "blob_sha": "0c625896b332725f4e539a019030883e32195913",
+    "blob_sha": "71343c81ff353d7540c873074a172f429a3d2beb",
     "ecosystem": "csproj",
-    "bytes": 11517,
+    "bytes": 11363,
     "names": [
-     "Microsoft.Extensions.Primitives",
-     "Microsoft.Extensions.DependencyInjection.Abstractions",
      "Microsoft.Extensions.ObjectPool",
      "Microsoft.AspNetCore.Authorization",
      "Microsoft.JSInterop"
@@ -16419,62 +16438,52 @@
    {
     "path": "src/Rask.Cqrs.Client/Rask.Cqrs.Client.csproj",
     "kind": "dep",
-    "blob_sha": "0a6db88046c7b3cb3b60a7c6840db23a7cb7e647",
+    "blob_sha": "c2ddedd7b3ed550b0e432f5a82382e3d613f59ca",
     "ecosystem": "csproj",
     "bytes": 3931
    },
    {
     "path": "src/Rask.Cqrs.Server/Rask.Cqrs.Server.csproj",
     "kind": "dep",
-    "blob_sha": "4fd77fab37dfeabd58359ae641efc969f2aad370",
+    "blob_sha": "07bb8f6f46ff5a5ad9e305f4c55d00790b1a0a90",
     "ecosystem": "csproj",
     "bytes": 2922
    },
    {
     "path": "src/Rask.Cqrs/Rask.Cqrs.csproj",
     "kind": "dep",
-    "blob_sha": "37fc6298504e0f2d64b8d7c6f932940bf2fff6a8",
+    "blob_sha": "6b1446221c4f37551fdaf684b5ade218cc4b7f00",
     "ecosystem": "csproj",
-    "bytes": 5890,
-    "names": [
-     "Microsoft.Extensions.DependencyInjection.Abstractions",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Hosting.Abstractions"
-    ]
+    "bytes": 5644
    },
    {
     "path": "src/Rask.Dashboard/Rask.Dashboard.csproj",
     "kind": "dep",
-    "blob_sha": "a035f002877575ee26315455fa01f39a3583821d",
+    "blob_sha": "b4a1cbccfc0f4fd6c23fad3e069f8fe5e811741a",
     "ecosystem": "csproj",
-    "bytes": 7862,
+    "bytes": 7565,
     "names": [
      "Microsoft.EntityFrameworkCore",
      "Microsoft.EntityFrameworkCore.Relational",
      "Microsoft.AspNetCore.Authorization",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
-     "Microsoft.Extensions.Options"
+     "Microsoft.Extensions.Configuration.Binder"
     ]
    },
    {
     "path": "src/Rask.Data/Rask.Data.csproj",
     "kind": "dep",
-    "blob_sha": "dde9e5dfe40ff0c04ea534e5ea892fe42cd6d996",
+    "blob_sha": "e4b7265bb21638d6c868dbc4fd12c7b7b0f9e588",
     "ecosystem": "csproj",
-    "bytes": 8471,
+    "bytes": 8395,
     "names": [
      "Microsoft.EntityFrameworkCore",
-     "Microsoft.EntityFrameworkCore.Relational",
-     "Microsoft.Extensions.Hosting.Abstractions"
+     "Microsoft.EntityFrameworkCore.Relational"
     ]
    },
    {
     "path": "src/Rask.DevTools/Rask.DevTools.csproj",
     "kind": "dep",
-    "blob_sha": "8c69f944fd1268b42a7af4e1c4a2df6c341f8529",
+    "blob_sha": "72422e7faaa4b860537a99c7f5bbf237e1f82d3e",
     "ecosystem": "csproj",
     "bytes": 12203
    },
@@ -16511,49 +16520,36 @@
    {
     "path": "src/Rask.Jobs/Rask.Jobs.csproj",
     "kind": "dep",
-    "blob_sha": "1051ed9db0e888c36d0feb7047d23a15ebdfa326",
+    "blob_sha": "593a224439bbb26f2b5cdce372e5165bfeedbc94",
     "ecosystem": "csproj",
-    "bytes": 5885,
+    "bytes": 5588,
     "names": [
      "Microsoft.EntityFrameworkCore",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
-     "Microsoft.Extensions.Options"
+     "Microsoft.Extensions.Configuration.Binder"
     ]
    },
    {
     "path": "src/Rask.Logging/Rask.Logging.csproj",
     "kind": "dep",
-    "blob_sha": "38ed1cd2cb4bd15d8d9b0143383b923860b52f6c",
+    "blob_sha": "1b348f2d64b700d458cd8601c2df72b5df1017bf",
     "ecosystem": "csproj",
-    "bytes": 4672,
+    "bytes": 4287,
     "names": [
      "Microsoft.Data.Sqlite",
      "Microsoft.EntityFrameworkCore",
      "Microsoft.EntityFrameworkCore.Relational",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.DependencyInjection.Abstractions",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
-     "Microsoft.Extensions.Options"
+     "Microsoft.Extensions.Configuration.Binder"
     ]
    },
    {
     "path": "src/Rask.Mail/Rask.Mail.csproj",
     "kind": "dep",
-    "blob_sha": "3ad3a119669009956a4a53839f15df35cc2ad060",
+    "blob_sha": "2e070e9c0c4499c00988c083dbb4a0acee962257",
     "ecosystem": "csproj",
-    "bytes": 5581,
+    "bytes": 5284,
     "names": [
      "Microsoft.EntityFrameworkCore",
-     "Microsoft.Extensions.Configuration.Abstractions",
      "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
-     "Microsoft.Extensions.Options",
      "MailKit",
      "System.Security.Cryptography.Pkcs"
     ]
@@ -16561,36 +16557,32 @@
    {
     "path": "src/Rask.Outbox/Rask.Outbox.csproj",
     "kind": "dep",
-    "blob_sha": "b1f317ab101fd8fb7fc6509c6808bcfb9713136d",
+    "blob_sha": "0482f66e95bc32c55b04a0504550c1f890e2ef2c",
     "ecosystem": "csproj",
-    "bytes": 5387,
+    "bytes": 5090,
     "names": [
      "Microsoft.EntityFrameworkCore",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
-     "Microsoft.Extensions.Options"
+     "Microsoft.Extensions.Configuration.Binder"
     ]
    },
    {
     "path": "src/Rask.Pdf/Rask.Pdf.csproj",
     "kind": "dep",
-    "blob_sha": "7e9ddcaba9fd8db00832b37cbc71c73c8d072c4e",
+    "blob_sha": "552891d3b7978893a4d53bd3d4a41ff42999ddc4",
     "ecosystem": "csproj",
     "bytes": 3854
    },
    {
     "path": "src/Rask.Postgres/Rask.Postgres.csproj",
     "kind": "dep",
-    "blob_sha": "2004073d8f1d37a27d198f57e3a120fa6a3793cf",
+    "blob_sha": "e3f999e5b029498acc267e29383cb6bf629b579c",
     "ecosystem": "csproj",
-    "bytes": 2730,
+    "bytes": 4760,
     "names": [
      "Npgsql.EntityFrameworkCore.PostgreSQL",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.Options"
+     "Microsoft.EntityFrameworkCore",
+     "Microsoft.EntityFrameworkCore.Relational",
+     "Microsoft.Extensions.Configuration.Binder"
     ]
    },
    {
@@ -16603,74 +16595,57 @@
    {
     "path": "src/Rask.SQLite.Browser/Rask.SQLite.Browser.csproj",
     "kind": "dep",
-    "blob_sha": "75e37d6c32746fd1cbdfe56303d4d71bbf81ffc9",
+    "blob_sha": "4655838608f62183fedd4e8ef0c1852911f9553f",
     "ecosystem": "csproj",
-    "bytes": 4762,
+    "bytes": 4522,
     "names": [
      "Microsoft.Data.Sqlite",
-     "Microsoft.Extensions.DependencyInjection.Abstractions",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
      "SQLitePCLRaw.bundle_e_sqlite3"
     ]
    },
    {
     "path": "src/Rask.SQLite.EntityFrameworkCore/Rask.SQLite.EntityFrameworkCore.csproj",
     "kind": "dep",
-    "blob_sha": "47ab8ef0c4ad45fa1c61218e97a3d6a0fcdc08f1",
+    "blob_sha": "24442943887000af2bdb724dcad03f780ec25fec",
     "ecosystem": "csproj",
-    "bytes": 3475,
+    "bytes": 3412,
     "names": [
      "Microsoft.EntityFrameworkCore.Sqlite",
      "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.Options",
      "SQLitePCLRaw.bundle_e_sqlite3"
     ]
    },
    {
     "path": "src/Rask.SQLite.Litestream/Rask.SQLite.Litestream.csproj",
     "kind": "dep",
-    "blob_sha": "24755292868ba1e656b224346491b58106519b05",
+    "blob_sha": "be10b2e6929a1232fae33d048744308e8a6d10af",
     "ecosystem": "csproj",
-    "bytes": 4209,
+    "bytes": 3824,
     "names": [
      "CliWrap",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.DependencyInjection.Abstractions",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
-     "Microsoft.Extensions.Options"
+     "Microsoft.Extensions.Configuration.Binder"
     ]
    },
    {
     "path": "src/Rask.SQLite.Snapshots/Rask.SQLite.Snapshots.csproj",
     "kind": "dep",
-    "blob_sha": "530c407d26670a445d3923fb53a39bbe58f83965",
+    "blob_sha": "528c7b9565abff639fa59f1d6c420c352b2249f9",
     "ecosystem": "csproj",
-    "bytes": 3548,
+    "bytes": 3163,
     "names": [
      "Microsoft.Data.Sqlite",
      "SQLitePCLRaw.bundle_e_sqlite3",
-     "Microsoft.Extensions.Configuration.Abstractions",
-     "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.DependencyInjection.Abstractions",
-     "Microsoft.Extensions.Hosting.Abstractions",
-     "Microsoft.Extensions.Logging.Abstractions",
-     "Microsoft.Extensions.Options"
+     "Microsoft.Extensions.Configuration.Binder"
     ]
    },
    {
     "path": "src/Rask.SQLite/Rask.SQLite.csproj",
     "kind": "dep",
-    "blob_sha": "46d55469056cc9d5037369135a4f2936ee530843",
+    "blob_sha": "a7806ed470eea18fa3932c6332dd9900fcc42ebc",
     "ecosystem": "csproj",
-    "bytes": 4012,
+    "bytes": 3779,
     "names": [
-     "Microsoft.Extensions.Configuration.Abstractions",
      "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.DependencyInjection.Abstractions",
-     "Microsoft.Extensions.Options",
      "Microsoft.Data.Sqlite",
      "SQLitePCLRaw.bundle_e_sqlite3",
      "SQLitePCLRaw.core"
@@ -16679,21 +16654,21 @@
    {
     "path": "src/Rask.Server/Rask.Server.csproj",
     "kind": "dep",
-    "blob_sha": "2f8812080b2e4a542e30239f3f1f2c73b342a140",
+    "blob_sha": "2295e9a3ff23a22fffa126f6870a491be8994102",
     "ecosystem": "csproj",
-    "bytes": 16886
+    "bytes": 17222
    },
    {
     "path": "src/Rask.Signaling/Rask.Signaling.csproj",
     "kind": "dep",
-    "blob_sha": "3d105b81b5fbc757468eb6571ab8625e70a4bb7e",
+    "blob_sha": "3656c9b168df86741d44c63771f5b532fb40538e",
     "ecosystem": "csproj",
     "bytes": 2220
    },
    {
     "path": "src/Rask.Site.DataDemo/Rask.Site.DataDemo.csproj",
     "kind": "dep",
-    "blob_sha": "a1222bd6ab593404e11e04835560a5dcd8e7bae1",
+    "blob_sha": "ea0ad87276ff1333f5ee7e96b2ff1cced6d80369",
     "ecosystem": "csproj",
     "bytes": 5705,
     "names": [
@@ -16704,7 +16679,7 @@
    {
     "path": "src/Rask.Site/Rask.Site.csproj",
     "kind": "dep",
-    "blob_sha": "78fa02cc766dfaed691d2ef032571e2e1b702822",
+    "blob_sha": "24e4565917d92986bb6dbbb4af4b616191de7e9c",
     "ecosystem": "csproj",
     "bytes": 12950,
     "names": [
@@ -16722,21 +16697,19 @@
    {
     "path": "src/Rask.SqlServer/Rask.SqlServer.csproj",
     "kind": "dep",
-    "blob_sha": "2fbc249467b568e5d04e8be5d02a42b1d161ab04",
+    "blob_sha": "e3815629e4eb5d1550668996e3c09671065b278b",
     "ecosystem": "csproj",
-    "bytes": 2804,
+    "bytes": 2659,
     "names": [
      "Microsoft.EntityFrameworkCore.SqlServer",
-     "Microsoft.Extensions.Configuration.Abstractions",
      "Microsoft.Extensions.Configuration.Binder",
-     "Microsoft.Extensions.Options",
      "System.Security.Cryptography.Pkcs"
     ]
    },
    {
     "path": "src/Rask.Storage/Rask.Storage.csproj",
     "kind": "dep",
-    "blob_sha": "b9f236703eae898be726ed2e6a531498b8b71674",
+    "blob_sha": "bd03bc40394765f7c9739fb22a3663a73cdfbef7",
     "ecosystem": "csproj",
     "bytes": 5964,
     "names": [
@@ -16764,7 +16737,7 @@
    {
     "path": "src/Rask.Testing.Playwright/Rask.Testing.Playwright.csproj",
     "kind": "dep",
-    "blob_sha": "f39ce59bcf94966c421dcbfd0513161c9e26119f",
+    "blob_sha": "1de59bf8d2a4a778c909d0ec70885e6b8753d39f",
     "ecosystem": "csproj",
     "bytes": 2882,
     "names": [
@@ -16774,7 +16747,7 @@
    {
     "path": "src/Rask.Testing/Rask.Testing.csproj",
     "kind": "dep",
-    "blob_sha": "a93bd9e6373dcb2c64f2fb56fe15d7a2adf9e77a",
+    "blob_sha": "043d482e7962d4ac4f3a0bbb14dd4b8003542137",
     "ecosystem": "csproj",
     "bytes": 3476,
     "names": [
@@ -16794,14 +16767,14 @@
    {
     "path": "src/Rask.Ui/Rask.Ui.csproj",
     "kind": "dep",
-    "blob_sha": "92fa22f50a3fe92db194fbb8a7761997aea331e1",
+    "blob_sha": "aadc0a1a12b60e1bd2c513651528d81c9fca73cf",
     "ecosystem": "csproj",
     "bytes": 21605
    },
    {
     "path": "src/Rask.Validation.FluentValidation/Rask.Validation.FluentValidation.csproj",
     "kind": "dep",
-    "blob_sha": "0288d9326aa9e52369f262d4ae88831b0e1f3df8",
+    "blob_sha": "327e93e0861b3e2b2d78c3f6f33db51e15f05147",
     "ecosystem": "csproj",
     "bytes": 2224,
     "names": [
@@ -16821,13 +16794,12 @@
    {
     "path": "src/Rask.Wasm/Rask.Wasm.csproj",
     "kind": "dep",
-    "blob_sha": "88cbbd691b66233f40e4364464d2bce411fb62aa",
+    "blob_sha": "f902891436be90732cbdf87c1448082f03acaadf",
     "ecosystem": "csproj",
-    "bytes": 18623,
+    "bytes": 18547,
     "names": [
      "Microsoft.Extensions.DependencyInjection",
      "Microsoft.Extensions.Logging",
-     "Microsoft.Extensions.Hosting.Abstractions",
      "Microsoft.AspNetCore.Authorization",
      "Microsoft.JSInterop",
      "Microsoft.Extensions.ObjectPool"
@@ -16836,14 +16808,14 @@
    {
     "path": "src/Rask.Web/Rask.Web.csproj",
     "kind": "dep",
-    "blob_sha": "bdc13743c86ce132a6abe67e8d5ed6c0885e7653",
+    "blob_sha": "97705dbe0d775a1e39babc9e9002be862b0e470f",
     "ecosystem": "csproj",
     "bytes": 2232
    },
    {
     "path": "src/Rask.WebPush/Rask.WebPush.csproj",
     "kind": "dep",
-    "blob_sha": "25ea4d197d317c7a0fc9bac03f08fc6cd5ef202e",
+    "blob_sha": "90b15a018ae43f53c8804edd70b85ee3c2977785",
     "ecosystem": "csproj",
     "bytes": 3716,
     "names": [
@@ -16853,14 +16825,14 @@
    {
     "path": "src/Rask.Wire/Rask.Wire.csproj",
     "kind": "dep",
-    "blob_sha": "8d6616e6dd006fbbcae8591071841c9f2957db30",
+    "blob_sha": "ca041dd123237c17d76fc0f8aa5af885e57518f9",
     "ecosystem": "csproj",
     "bytes": 2472
    },
    {
     "path": "src/Rask.Xlsx/Rask.Xlsx.csproj",
     "kind": "dep",
-    "blob_sha": "442b0b63632c07c58ae0f436054988a4d397b561",
+    "blob_sha": "7d047ce4f9bad166d159c35f8099ea9928acd527",
     "ecosystem": "csproj",
     "bytes": 1577
    },
@@ -16998,7 +16970,7 @@
    {
     "path": "scripts/devhost/Dockerfile",
     "kind": "image",
-    "blob_sha": "90ef9a9f9948e3b67477aa2a248aa73629e69c02",
+    "blob_sha": "47165a19ce2fb6ddf12dcc3c0b84bc8bfd61b870",
     "bytes": 1483,
     "images": [
      "${SDK}"
@@ -17007,30 +16979,30 @@
    {
     "path": "src/Rask.Templates/server/Dockerfile",
     "kind": "image",
-    "blob_sha": "5c87537ca637374b3f662dfbc055fe127b39ae1c",
+    "blob_sha": "500e410560fe76c99e22c113400145b2ef9d0f51",
     "bytes": 4554,
     "images": [
-     "mcr.microsoft.com/dotnet/sdk:10.0",
-     "mcr.microsoft.com/dotnet/aspnet:10.0"
+     "mcr.microsoft.com/dotnet/sdk:11.0",
+     "mcr.microsoft.com/dotnet/aspnet:11.0"
     ]
    },
    {
     "path": "src/Rask.Templates/wasm-hosted/Dockerfile",
     "kind": "image",
-    "blob_sha": "5c87537ca637374b3f662dfbc055fe127b39ae1c",
+    "blob_sha": "500e410560fe76c99e22c113400145b2ef9d0f51",
     "bytes": 4554,
     "images": [
-     "mcr.microsoft.com/dotnet/sdk:10.0",
-     "mcr.microsoft.com/dotnet/aspnet:10.0"
+     "mcr.microsoft.com/dotnet/sdk:11.0",
+     "mcr.microsoft.com/dotnet/aspnet:11.0"
     ]
    },
    {
     "path": "src/Rask.Templates/wasm/Dockerfile",
     "kind": "image",
-    "blob_sha": "29bf449a1831ee865d81ab92bd29ce1c76b8dfd1",
+    "blob_sha": "c955ef14777444c31db4130bba228f214a463d9f",
     "bytes": 1850,
     "images": [
-     "mcr.microsoft.com/dotnet/sdk:10.0",
+     "mcr.microsoft.com/dotnet/sdk:11.0",
      "nginx:alpine"
     ]
    },
@@ -17067,19 +17039,19 @@
    {
     "path": ".github/workflows/gates.yml",
     "kind": "ci",
-    "blob_sha": "9bd14b128c051f979d533227be8cc204941941bc",
+    "blob_sha": "68d54c5cfd22a2fb2199ba3275a8c75048093206",
     "bytes": 15991
    },
    {
     "path": ".github/workflows/nightly.yml",
     "kind": "ci",
-    "blob_sha": "33a538ab850e68db829d0ca0c1b77a0ee9d7cbe2",
+    "blob_sha": "50843a02cd9264187ce11edf339bebc9e14fb84d",
     "bytes": 13662
    },
    {
     "path": ".github/workflows/pages.yml",
     "kind": "ci",
-    "blob_sha": "097818fd8336ddfef5106030507ec59c2ab051fa",
+    "blob_sha": "6aeb9a3bd91d41f4f8d1d0e6b8e24e52ae56a5bd",
     "bytes": 8250
    },
    {
@@ -17103,7 +17075,7 @@
    {
     "path": ".github/workflows/upstream.yml",
     "kind": "ci",
-    "blob_sha": "7b119aae771c596e90f9a515633b7a5d28ce51f5",
+    "blob_sha": "3c00ee15d433bc239dccdd38582fe2e210ca1e98",
     "bytes": 13535
    }
   ],
@@ -18319,13 +18291,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:58:23Z",
+  "collected_at": "2026-11-14T03:36:21Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 14,
   "tree": {
-   "sha": "695d5e0313e220e69df43c0de192fa0106fa549c",
-   "etag": "W/\"847d4c9276667ae3d5ff03e0389677d3ee7923664ce07106280a0ba3d8666fa1\"",
+   "sha": "d4b5c284f4f387f32be9a1e12c4d601d4d7c3e4b",
+   "etag": "W/\"f458bd701db8b9b7efa266cb017447bc20a9a8e912dc3f1861649baa63521b5b\"",
    "truncated": false,
    "path_count": 32,
    "matched": [
@@ -18883,13 +18855,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:23:50Z",
+  "collected_at": "2026-11-14T03:37:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-13",
   "stars": 13,
   "tree": {
-   "sha": "17360ce03ce580a9e44bde1f4ad3d76b21200452",
-   "etag": "W/\"b09f35e3219e36a1af1ea22b8d84e5fcc621d0e8951ef3e5e41092c088a295fc\"",
+   "sha": "b7277450dfa309bde906b7d7ee0d0ce40a504613",
+   "etag": "W/\"09e18e1958795b6a19be704d781050cf25903e7dfc8dcdcad4c39aaac25f82db\"",
    "truncated": false,
    "path_count": 1158,
    "matched": [
@@ -20000,13 +19972,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:15:15Z",
+  "collected_at": "2026-11-14T02:58:23Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 1087,
   "tree": {
-   "sha": "1d477b65046634c03bd1c08c1f713e581ecc2de3",
-   "etag": "W/\"ed98f2946f224eadd9cc78f0f2674179c4d155e2abf371bad9d01a2374daf622\"",
+   "sha": "8edc20d7d17d9117b6d53f2c32aa4b0a6e7b4446",
+   "etag": "W/\"f9202255e8c33c762630992f93cd0bbb2396b8be17e8e5bf64994c75063dc382\"",
    "truncated": false,
    "path_count": 32,
    "matched": [
@@ -21543,13 +21515,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:47:34Z",
+  "collected_at": "2026-11-14T03:26:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 30,
   "tree": {
    "sha": "b79a82918f2990fe3ca5a2a7d55a868103a0d3b4",
-   "etag": "W/\"3ccbd74308a0daec7c529fb9d0ff6c0ac6053552c40ce06385ea9cf1b35e2fe7\"",
+   "etag": "W/\"54c6d4f74a205d1fad29dce67c713feb4cdaecfaed01b7061dadf92ab1cf0ab6\"",
    "truncated": false,
    "path_count": 472,
    "matched": [
@@ -21834,6 +21806,133 @@
    "matrix_urls": [
     "https://haui-implsolution.github.io/DX-OS/docs/evidence-matrix"
    ]
+  },
+  "fail_count": 0
+ },
+ "ismail-ashraf/Lexi-Core": {
+  "fn": "ismail-ashraf/Lexi-Core",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-14T02:41:17Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-31",
+  "stars": 3,
+  "tree": {
+   "sha": "8d0735a7d3952d7a52b4e843c239743bff549582",
+   "etag": "W/\"6149457173d6e65a4f4ab7749a6cbd6db69312dbab26605d2d344d4ca740e865\"",
+   "truncated": false,
+   "path_count": 79,
+   "matched": [
+    "package.json",
+    "pyproject.toml",
+    "frontend/package.json"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "b68636212b272aa6aa348e718d1b2d83910594bb",
+    "ecosystem": "npm",
+    "bytes": 122,
+    "names": [
+     "@tailwindcss/vite",
+     "lucide-react",
+     "tailwindcss"
+    ]
+   },
+   {
+    "path": "pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "303dcd068dd8000fdc7f43fe7a29a0ba7ecf86db",
+    "ecosystem": "pyproject",
+    "bytes": 1644,
+    "names": [
+     "accelerate",
+     "alembic",
+     "bitsandbytes",
+     "celery-types",
+     "celery",
+     "chromadb",
+     "fastapi",
+     "gliner",
+     "groq",
+     "langchain-text-splitters",
+     "mlflow",
+     "numpy",
+     "onnxruntime",
+     "pandas",
+     "pdf2image",
+     "pdfminer",
+     "pdfminer-six",
+     "pillow",
+     "psycopg",
+     "pydantic",
+     "pydantic-settings",
+     "pymupdf",
+     "pypdf",
+     "pytesseract",
+     "pytest",
+     "python-dotenv",
+     "python-multipart",
+     "pyyaml",
+     "regex",
+     "scikit-learn",
+     "sentence-transformers",
+     "sentencepiece",
+     "sqlalchemy",
+     "tiktoken",
+     "torch",
+     "torchaudio",
+     "torchvision",
+     "unstructured",
+     "uvicorn"
+    ]
+   },
+   {
+    "path": "frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "4240cec4453c74a15cae731804e61745d9c6e72e",
+    "ecosystem": "npm",
+    "bytes": 1056,
+    "names": [
+     "@base-ui/react",
+     "@fontsource-variable/geist",
+     "@tailwindcss/vite",
+     "axios",
+     "class-variance-authority",
+     "cn",
+     "framer-motion",
+     "lucide-react",
+     "react",
+     "react-dom",
+     "shadcn",
+     "tailwindcss",
+     "tw-animate-css"
+    ],
+    "dev": [
+     "@eslint/js",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "eslint",
+     "eslint-plugin-react-hooks",
+     "eslint-plugin-react-refresh",
+     "globals",
+     "typescript",
+     "typescript-eslint",
+     "vite"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
   },
   "fail_count": 0
  }

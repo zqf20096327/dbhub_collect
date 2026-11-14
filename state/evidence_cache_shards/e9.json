@@ -3718,15 +3718,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T04:09:22Z",
+  "collected_at": "2026-11-14T03:45:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 0,
   "tree": {
-   "sha": "975134a1b1f83d55d0ae3be5af492f3840ee9710",
-   "etag": "W/\"bdf5fa25624f463192c5fc40f9b99a6fa52bd8a0712feb7121016cd270663362\"",
+   "sha": "12e314915432b3d51ac3ca90420f4e0c95d4e897",
+   "etag": "W/\"80814f77ff790a47f9fd004eae6f46aa3dfc27a5d293490ef5777cf5289daf0a\"",
    "truncated": false,
-   "path_count": 989,
+   "path_count": 1125,
    "matched": [
     "Cargo.toml",
     "crates/base/Cargo.toml",
@@ -3734,6 +3734,7 @@
     "crates/codec/Cargo.toml",
     "crates/distsql/Cargo.toml",
     "crates/execdetails/Cargo.toml",
+    "crates/expr-pushdown/Cargo.toml",
     "crates/expression/Cargo.toml",
     "crates/infoschema/Cargo.toml",
     "crates/kv/Cargo.toml",
@@ -3757,6 +3758,7 @@
     "crates/poc/kv/Cargo.toml",
     "crates/poc/server/Cargo.toml",
     "crates/poc/session/Cargo.toml",
+    "crates/spike/planner-pilot/Cargo.toml",
     "third_party/tikv-shims/api_version/Cargo.toml",
     "third_party/tikv-shims/crypto/Cargo.toml",
     "third_party/tikv-shims/file_system/Cargo.toml",
@@ -3775,16 +3777,20 @@
     "third_party/tikv/tidb_query_datatype/Cargo.toml",
     "third_party/tikv/tidb_query_expr/Cargo.toml",
     "third_party/tikv/tipb_helper/Cargo.toml",
-    ".github/workflows/ci.yml"
+    "tools/ab/locks/go.mod",
+    "tools/sync-drill/funcdiff/go.mod",
+    ".github/workflows/ci.yml",
+    ".github/workflows/eval-gate.yml",
+    ".github/workflows/weekly.yml"
    ]
   },
   "files": [
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c6499b99cbecad02b906f35c7a26e351c19ea1ef",
+    "blob_sha": "06a1c9663284043405839d8b44f3d11f70c8f3b5",
     "ecosystem": "cargo",
-    "bytes": 7417
+    "bytes": 8471
    },
    {
     "path": "crates/base/Cargo.toml",
@@ -3891,6 +3897,31 @@
     ]
    },
    {
+    "path": "crates/expr-pushdown/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "28bd4b9a7267327737dcff998f8bb97c589be8f7",
+    "ecosystem": "cargo",
+    "bytes": 1481,
+    "names": [
+     "tidb-base",
+     "tidb-types",
+     "tidb-parser",
+     "tidb-chunk",
+     "tidb-codec",
+     "tidb-kv",
+     "tidb-sessionctx",
+     "tidb-expression",
+     "tipb",
+     "protobuf",
+     "arc-swap",
+     "log"
+    ],
+    "dev": [
+     "flate2",
+     "serde_json"
+    ]
+   },
+   {
     "path": "crates/expression/Cargo.toml",
     "kind": "dep",
     "blob_sha": "9de719813b2e4b319a4eb42884b80f559daf193f",
@@ -3920,9 +3951,9 @@
    {
     "path": "crates/infoschema/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a2101438ba28b9c33f1186062b7197a78a560fc7",
+    "blob_sha": "6907907dee9df3aa8a2ee6ec794def8322da5f6b",
     "ecosystem": "cargo",
-    "bytes": 1164,
+    "bytes": 1718,
     "names": [
      "tidb-base",
      "tidb-parser",
@@ -3930,7 +3961,12 @@
      "tidb-model",
      "tidb-kv",
      "tidb-codec",
-     "regex"
+     "regex",
+     "tidb-sessionctx",
+     "parking_lot",
+     "futures",
+     "tokio",
+     "log"
     ],
     "dev": [
      "flate2",
@@ -4085,9 +4121,9 @@
    {
     "path": "crates/runtime/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b8298114660597b3bfc9b7bb4720787c0193308f",
+    "blob_sha": "7aedf79c7234f211ddc799eae7966a1349caeffa",
     "ecosystem": "cargo",
-    "bytes": 1666,
+    "bytes": 1977,
     "names": [
      "tidb-base",
      "tokio",
@@ -4099,6 +4135,7 @@
     "dev": [
      "tracing-subscriber",
      "criterion",
+     "nix",
      "tokio"
     ]
    },
@@ -4298,9 +4335,9 @@
    {
     "path": "crates/poc/server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "8ac1856f3192a1bb9e66665e24751da08ee1d09e",
+    "blob_sha": "07e80df4b48ebf888c049bb0e3ec54fb8c110815",
     "ecosystem": "cargo",
-    "bytes": 1474,
+    "bytes": 2047,
     "names": [
      "bytes",
      "clap",
@@ -4308,9 +4345,14 @@
      "hyper",
      "hyper-util",
      "serde_json",
+     "tidb-base",
      "tidb-distsql",
      "poc-domain",
      "poc-kv",
+     "prost",
+     "flate2",
+     "protobuf",
+     "tipb",
      "tidb-meta",
      "tidb-metrics",
      "tidb-mysql-protocol",
@@ -4320,6 +4362,9 @@
      "tokio",
      "tracing",
      "tracing-subscriber"
+    ],
+    "dev": [
+     "hyper"
     ]
    },
    {
@@ -4343,6 +4388,21 @@
     "dev": [
      "tidb-distsql",
      "tokio"
+    ]
+   },
+   {
+    "path": "crates/spike/planner-pilot/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "afc776bf2fad02d6120ed9bb32d28dbaf3b2545b",
+    "ecosystem": "cargo",
+    "bytes": 774,
+    "names": [
+     "tidb-base",
+     "tidb-types",
+     "tidb-parser",
+     "tidb-model",
+     "tidb-sessionctx",
+     "tidb-expression"
     ]
    },
    {
@@ -4647,10 +4707,85 @@
     ]
    },
    {
+    "path": "tools/ab/locks/go.mod",
+    "kind": "dep",
+    "blob_sha": "2ee0aa27c5b05a82d22f39e9672a49387cb9a5ca",
+    "ecosystem": "go",
+    "bytes": 2586,
+    "names": [
+     "github.com/pingcap/kvproto",
+     "github.com/pingcap/log",
+     "github.com/tikv/client-go/v2"
+    ],
+    "dev": [
+     "github.com/beorn7/perks",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cloudfoundry/gosigar",
+     "github.com/coreos/go-semver",
+     "github.com/coreos/go-systemd/v22",
+     "github.com/cznic/mathutil",
+     "github.com/dgryski/go-farm",
+     "github.com/docker/go-units",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/google/btree",
+     "github.com/google/uuid",
+     "github.com/grpc-ecosystem/go-grpc-middleware",
+     "github.com/munnerz/goautoneg",
+     "github.com/opentracing/opentracing-go",
+     "github.com/pingcap/errors",
+     "github.com/pingcap/failpoint",
+     "github.com/pkg/errors",
+     "github.com/prometheus/client_golang",
+     "github.com/prometheus/client_model",
+     "github.com/prometheus/common",
+     "github.com/prometheus/procfs",
+     "github.com/remyoudompheng/bigfft",
+     "github.com/tiancaiamao/gp",
+     "github.com/tikv/pd/client",
+     "github.com/twmb/murmur3",
+     "go.etcd.io/etcd/api/v3",
+     "go.etcd.io/etcd/client/pkg/v3",
+     "go.etcd.io/etcd/client/v3",
+     "go.uber.org/atomic",
+     "go.uber.org/multierr",
+     "go.uber.org/zap",
+     "golang.org/x/exp",
+     "golang.org/x/net",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/genproto/googleapis/api",
+     "google.golang.org/genproto/googleapis/rpc",
+     "google.golang.org/grpc",
+     "google.golang.org/protobuf",
+     "gopkg.in/natefinch/lumberjack.v2"
+    ]
+   },
+   {
+    "path": "tools/sync-drill/funcdiff/go.mod",
+    "kind": "dep",
+    "blob_sha": "1b63f01c98b8edfa3ca0eb0a822550c64242e1f3",
+    "ecosystem": "go",
+    "bytes": 71
+   },
+   {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "588af2ef2ae5052b64a423d0395de40da65fc334",
-    "bytes": 5765
+    "blob_sha": "9673976c604b3e132bcdd6ac48731ed7011a052c",
+    "bytes": 6007
+   },
+   {
+    "path": ".github/workflows/eval-gate.yml",
+    "kind": "ci",
+    "blob_sha": "9471092419c0dfbe0b8d0bb292037fdb7de606b7",
+    "bytes": 3297
+   },
+   {
+    "path": ".github/workflows/weekly.yml",
+    "kind": "ci",
+    "blob_sha": "fd8b4c175749b610b3b106c7d7aa09bbdfb0d22c",
+    "bytes": 10614
    }
   ],
   "clues": {
@@ -4878,13 +5013,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:19:23Z",
+  "collected_at": "2026-11-14T02:51:35Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
-  "stars": 3756,
+  "pushed_at": "2026-11-13",
+  "stars": 3757,
   "tree": {
    "sha": "54e5a23a29e2c48a8abeff2253fb314767c4243a",
-   "etag": "W/\"454a7d2ed240b40420f1c34f131920442a15d0872b7bf32f4d968489055b9d74\"",
+   "etag": "W/\"81c7c610e38d36049ee3a1d6e4cbf0df9404b0f9c5b9d605e1f99a47052a31b0\"",
    "truncated": false,
    "path_count": 1982,
    "matched": [
@@ -10290,19 +10425,20 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:42:01Z",
+  "collected_at": "2026-11-14T03:22:00Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 45,
   "tree": {
-   "sha": "6e39a30396355ed2d353097134a2b51da9ba1e7d",
-   "etag": "W/\"c3768729da56c464a26d4fffc035e9ef72a7a8c25f0d5b3078a162d8713ef1ba\"",
+   "sha": "435ddb829cc60976208383c33df02cb15bf29d17",
+   "etag": "W/\"560fd1d0e8bf800bedc4b90dee9a967b8fbd86a851dd214d4ddc039f85a08126\"",
    "truncated": false,
-   "path_count": 3103,
+   "path_count": 3186,
    "matched": [
     "package.json",
     "adapters/mcp/package.json",
     "adapters/openai/package.json",
+    "integrations/openclaw/package.json",
     "packages/setup/package.json",
     "tools/plugin-validation/package.json",
     "docs/promotion/demo/package.json",
@@ -10346,6 +10482,16 @@
     ]
    },
    {
+    "path": "integrations/openclaw/package.json",
+    "kind": "dep",
+    "blob_sha": "12a334a8a9fc78b2b883226883791e92c74e5818",
+    "ecosystem": "npm",
+    "bytes": 567,
+    "names": [
+     "openclaw"
+    ]
+   },
+   {
     "path": "packages/setup/package.json",
     "kind": "dep",
     "blob_sha": "053ab558a958140b41248e95bd7002ade0e99b60",
@@ -10383,8 +10529,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "f1b1503479c776331ddf2596f755ddb344190c3f",
-    "bytes": 9316
+    "blob_sha": "b409ea4da1464420279ae26efcfb2b01f9414a91",
+    "bytes": 9613
    },
    {
     "path": ".github/workflows/local-embedder-qualification.yml",
@@ -10485,6 +10631,7 @@
     "adapters/openai/qualification-evidence-pool.mjs",
     "adapters/openai/schemas.mjs",
     "evaluation/context-read-qualification/adapter.mjs",
+    "integrations/openclaw/openclaw.plugin.json",
     "plugins/cairn-memory/.mcp.json",
     "plugins/cairn-memory/README.md",
     "tools/plugin-validation/package-lock.json",
@@ -10543,6 +10690,8 @@
     "adapters/mcp/test/context-read.test.mjs",
     "adapters/mcp/test/context-support.mjs",
     "adapters/mcp/test/defaults.test.mjs",
+    "adapters/mcp/test/engine-card-pause.test.mjs",
+    "adapters/mcp/test/engine-card-raw-consent.test.mjs",
     "adapters/mcp/test/engine-cards.test.mjs",
     "adapters/mcp/test/episodes.test.mjs",
     "adapters/mcp/test/evidence.test.mjs",
@@ -10560,6 +10709,7 @@
     "adapters/mcp/test/rationale.test.mjs",
     "adapters/mcp/test/raw-command.test.mjs",
     "adapters/mcp/test/raw-default-store.test.mjs",
+    "adapters/mcp/test/raw-semantic-optin.test.mjs",
     "adapters/mcp/test/receipt-cards.test.mjs",
     "adapters/mcp/test/retained-raw-profile.test.mjs",
     "adapters/mcp/test/retained-raw-review.test.mjs",
@@ -10611,11 +10761,7 @@
     "adapters/openai/test/qualification-interpretation-guidance.test.mjs",
     "adapters/openai/test/qualification-meaning-probe.test.mjs",
     "adapters/openai/test/qualification-meaning-results.test.mjs",
-    "adapters/openai/test/qualification-pool-wire.mjs",
-    "adapters/openai/test/qualification-text-catalog.test.mjs",
-    "adapters/openai/test/qualification.test.mjs",
-    "adapters/openai/test/rationale-claim-focus.test.mjs",
-    "adapters/openai/test/rationale-model-controls.test.mjs"
+    "adapters/openai/test/qualification-pool-wire.mjs"
    ]
   },
   "fail_count": 0
@@ -14807,15 +14953,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:51:59Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-14T03:43:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-10",
+  "pushed_at": "2026-11-13",
   "stars": 4,
   "tree": {
-   "sha": "5457171965adf6ed1ff92b66ade995fe7c3983e3",
-   "etag": "W/\"b6cdc7727500a5b2350bbf3ba794f5bb914d073f6d3b77da0ff10829864625ea\"",
+   "sha": "ee2e0d50970772aa8aceb0493bb3fdb776d67261",
+   "etag": "W/\"47b67bf6d19c28de6a4273657e5c2342829030ee229e4c63327243d30ec5f696\"",
    "truncated": false,
-   "path_count": 186,
+   "path_count": 266,
    "matched": [
     "package.json",
     ".github/workflows/ci.yml"
@@ -14825,18 +14972,23 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "895e5782509ee005cffee5741b4279bf206b5c8e",
+    "blob_sha": "ce3b89a354d58a38b865b7b45fd656d7a5ab50f6",
     "ecosystem": "npm",
-    "bytes": 2660,
+    "bytes": 2831,
     "names": [
      "@react-three/fiber",
      "@tiptap/core",
      "@tiptap/react",
      "@tiptap/starter-kit",
+     "cheerio",
+     "docx",
+     "mammoth",
      "opentype.js",
+     "pdfjs-dist",
      "pngjs",
      "react",
      "react-dom",
+     "sanitize-html",
      "stream-json",
      "three",
      "yauzl"
@@ -14868,7 +15020,9 @@
    ],
    "readme_i18n": [],
    "docs_matrix": [],
-   "paths": []
+   "paths": [
+    "docs/licenses/parse5-htmlparser2-tree-adapter-7.1.0.txt"
+   ]
   },
   "fail_count": 0
  },
@@ -16152,13 +16306,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T04:02:38Z",
+  "collected_at": "2026-11-14T03:40:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 10,
   "tree": {
    "sha": "5eb8a94688fcf460b27a04008fb65978194b271d",
-   "etag": "W/\"6d0c3b7ffc46a9b7b130260ccc05a47f85e59ba4052bf1e42bc4d38af500f33b\"",
+   "etag": "W/\"6153a553e4fd02a8bc734963b8b69ff4df9db53ecfa03fcf7427f0249c965fea\"",
    "truncated": false,
    "path_count": 1557,
    "matched": [

@@ -5,15 +5,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:26:52Z",
+  "collected_at": "2026-11-14T02:46:16Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-06",
-  "stars": 13182,
+  "pushed_at": "2026-11-13",
+  "stars": 13240,
   "tree": {
-   "sha": "f5b949eea78dac6ee5e57eeb9366836e76c5dd16",
-   "etag": "W/\"384c9eb5cb31c46a18414a9fc9d70ea1b3421369f2aede895964036db3aaf72b\"",
+   "sha": "b5c96b9d194bc8e6b84a31e466227bc221d5ed8a",
+   "etag": "W/\"054ee0549e46f7dbe650f7420dec1f28c9465898de2fed45761e8e8f2b3dfe0b\"",
    "truncated": false,
-   "path_count": 4394,
+   "path_count": 4478,
    "matched": [
     "CubeAPI/Cargo.toml",
     "CubeMaster/go.mod",
@@ -77,6 +77,7 @@
     "hypervisor/test_infra/Cargo.toml",
     "CubeAPI/Dockerfile",
     "CubeEgress/Dockerfile",
+    "CubeObservability/Dockerfile",
     "CubeOps/Dockerfile",
     "CubeOps/Dockerfile.dockerignore",
     "CubeProxy/Dockerfile",
@@ -98,7 +99,6 @@
     "CubeTemplateCenter/docker/Dockerfile.dockerignore",
     "deploy/guest-image/Dockerfile",
     "examples/cubesandbox-base-nginx/Dockerfile",
-    "examples/langchain-integration/Dockerfile",
     ".github/workflows/build-builder-image.yml",
     ".github/workflows/build-check.yml",
     ".github/workflows/build-envd-base-image.yml",
@@ -116,6 +116,7 @@
     ".github/workflows/kubernetes-chart-check.yml",
     ".github/workflows/migration-check.yml",
     ".github/workflows/publish-go-sdk.yml",
+    ".github/workflows/publish-node-sdk.yml",
     ".github/workflows/publish-python-sdk.yml",
     ".github/workflows/release-docker-images.yml",
     ".github/workflows/release-guest-image.yml",
@@ -532,9 +533,9 @@
    {
     "path": "Cubelet/go.mod",
     "kind": "dep",
-    "blob_sha": "0542a7046a3c693d7ac0a618cfca0a43eaf9a87a",
+    "blob_sha": "9d7cb8eba61507069cc5926ef06645d9396b2e29",
     "ecosystem": "go",
-    "bytes": 10433,
+    "bytes": 10475,
     "names": [
      "github.com/cilium/ebpf",
      "github.com/containerd/console",
@@ -673,6 +674,7 @@
      "github.com/mattn/go-isatty",
      "github.com/mdlayher/netlink",
      "github.com/mdlayher/socket",
+     "github.com/miekg/dns",
      "github.com/miekg/pkcs11",
      "github.com/minio/blake2b-simd",
      "github.com/minio/sha256-simd",
@@ -694,8 +696,7 @@
      "github.com/multiformats/go-varint",
      "github.com/munnerz/goautoneg",
      "github.com/mxk/go-flowrate",
-     "github.com/onsi/ginkgo/v2",
-     "github.com/onsi/gomega"
+     "github.com/onsi/ginkgo/v2"
     ]
    },
    {
@@ -979,12 +980,13 @@
    {
     "path": "CubeNet/cubevs/go.mod",
     "kind": "dep",
-    "blob_sha": "7b1166e15991876cda123dc70a4a14f254abf949",
+    "blob_sha": "3cbf94ad1d4e729853b3b2b4b4c2aa02449f81f8",
     "ecosystem": "go",
-    "bytes": 503,
+    "bytes": 611,
     "names": [
      "github.com/cilium/ebpf",
      "github.com/florianl/go-tc",
+     "github.com/miekg/dns",
      "golang.org/x/sys"
     ],
     "dev": [
@@ -993,8 +995,10 @@
      "github.com/jsimonetti/rtnetlink",
      "github.com/mdlayher/netlink",
      "github.com/mdlayher/socket",
+     "golang.org/x/mod",
      "golang.org/x/net",
-     "golang.org/x/sync"
+     "golang.org/x/sync",
+     "golang.org/x/tools"
     ]
    },
    {
@@ -1746,6 +1750,15 @@
     ]
    },
    {
+    "path": "CubeObservability/Dockerfile",
+    "kind": "image",
+    "blob_sha": "5538a229bd93a612593934397446b4737c46a70a",
+    "bytes": 662,
+    "images": [
+     "${GRAFANA_IMAGE}"
+    ]
+   },
+   {
     "path": "CubeOps/Dockerfile",
     "kind": "image",
     "blob_sha": "06c1e45d18d31fa66c05a1e6fbed6e8ce93058f8",
@@ -1924,15 +1937,6 @@
     ]
    },
    {
-    "path": "examples/langchain-integration/Dockerfile",
-    "kind": "image",
-    "blob_sha": "d1e9e176b66a77a67ccb6e0c1d26db7c6551f2d0",
-    "bytes": 1064,
-    "images": [
-     "${CUBE_BASE_IMAGE}"
-    ]
-   },
-   {
     "path": ".github/workflows/build-builder-image.yml",
     "kind": "ci",
     "blob_sha": "b8e54b48c8f45f3cc680bb25e9d01da49212d34d",
@@ -2019,8 +2023,8 @@
    {
     "path": ".github/workflows/kubernetes-chart-check.yml",
     "kind": "ci",
-    "blob_sha": "fadd217aba0b1e53d1c1ed1fe918bc27f1a320fa",
-    "bytes": 3264
+    "blob_sha": "e3de5f6a7003a4e5f25980b147637b7fc3c712a9",
+    "bytes": 10582
    },
    {
     "path": ".github/workflows/migration-check.yml",
@@ -2033,6 +2037,12 @@
     "kind": "ci",
     "blob_sha": "ad846cf2fa83ee2219a91a4c933aba9076ec2ad7",
     "bytes": 5928
+   },
+   {
+    "path": ".github/workflows/publish-node-sdk.yml",
+    "kind": "ci",
+    "blob_sha": "f5e65b9aea1315d83aee733a9972075784b397ba",
+    "bytes": 4441
    },
    {
     "path": ".github/workflows/publish-python-sdk.yml",
@@ -2095,8 +2105,8 @@
    {
     "path": ".github/workflows/terraform-validate.yml",
     "kind": "ci",
-    "blob_sha": "774d7b462ee87f50f43f4ac005973541e1a65966",
-    "bytes": 3408
+    "blob_sha": "0132da78acb8237ded6322b0686f5f2ae1c599f4",
+    "bytes": 5688
    },
    {
     "path": ".github/workflows/test-arc-runer.yml",
@@ -2142,6 +2152,8 @@
     "Cubelet/network/plugin.go",
     "Cubelet/network/plugin_fd_handoff.go",
     "Cubelet/network/plugin_http.go",
+    "Cubelet/network/plugin_metrics.go",
+    "Cubelet/network/plugin_metrics_test.go",
     "Cubelet/network/plugin_policy.go",
     "Cubelet/network/plugin_shim.go",
     "Cubelet/network/plugin_tap.go",
@@ -2209,6 +2221,7 @@
     "CubeMaster/pkg/selector/plugin/registry_test.go",
     "CubeMaster/pkg/selector/plugin/resource_fit_builtin_test.go",
     "CubeMaster/pkg/service/sandbox/plugin_volume_annotation_test.go",
+    "CubeMaster/pkg/volume/plugin/errors.go",
     "CubeMaster/pkg/volume/plugin/plugin.go",
     "CubeMaster/pkg/volume/plugin/plugin_test.go",
     "Cubelet/plugins/cbri/cubeboxcbri/annotation_test.go",
@@ -2267,8 +2280,10 @@
     "CubeMaster/pkg/volume/plugin/binary/driver.go",
     "CubeMaster/pkg/volume/plugin/binary/driver_test.go",
     "CubeMaster/pkg/volume/plugin/rpc/driver.go",
+    "CubeMaster/pkg/volume/plugin/rpc/driver_test.go",
     "Cubelet/cmd/cubecli/commands/ctrcommands/adapter.go",
     "Cubelet/plugins/cube/internals/appsnapshot/appsnapshot_plugin.go",
+    "Cubelet/plugins/cube/internals/appsnapshot/appsnapshot_plugin_test.go",
     "Cubelet/plugins/cube/internals/cgroup/cgroup.go",
     "Cubelet/plugins/cube/internals/cgroup/local.go",
     "Cubelet/plugins/cube/internals/cgroup/plugin.go",
@@ -2327,12 +2342,7 @@
     "pkgs/proto/services/volumeplugin/v1/volumeplugin.pb.go",
     "pkgs/proto/services/volumeplugin/v1/volumeplugin.proto",
     "pkgs/proto/services/volumeplugin/v1/volumeplugin_grpc.pb.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/interface.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/rawfile.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/rawfile_test.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/usage.go",
-    "Cubelet/plugins/cube/internals/metric/types/types.go",
-    "docs/zh/blog/posts/assets/2026-08-20-lenovo-cloud-agent/01-adapter-architecture.jpg"
+    "Cubelet/plugins/cube/internals/cgroup/handle/interface.go"
    ],
    "matrix_urls": [
     "https://img.shields.io/badge/🔌_API-E2B_Compatible-blueviolet"
@@ -10977,13 +10987,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:21:11Z",
+  "collected_at": "2026-11-14T02:52:44Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-10",
-  "stars": 3025,
+  "pushed_at": "2026-11-13",
+  "stars": 3032,
   "tree": {
    "sha": "06b4643db016efb9c3b59fcc4c8c18e35b8553c0",
-   "etag": "W/\"6b3a291e7f47c87ac85069f7304e9a6b3cadf36cd530881c3a8ce09e7f912544\"",
+   "etag": "W/\"940a88898745a6ec5c693da5d03deab8c92e7aedf324f6307f37c99b5cbcb948\"",
    "truncated": false,
    "path_count": 597,
    "matched": [
@@ -13901,15 +13911,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:42:13Z",
+  "collected_at": "2026-11-14T03:22:12Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 45,
   "tree": {
-   "sha": "9650b687bd8d87d1aa94f6211d1ecddbaaa80e65",
-   "etag": "W/\"1a9831d416a2c76123bb723f7850644e3b843b9e7c64bcdc2cbafed7f759fdf9\"",
+   "sha": "01ef46bef52dd6ac23431157f5706b9e03d96f47",
+   "etag": "W/\"466963fcc40d4b192d95440f04cd281ee19081be4f385fcf68ce0c0bcac4dfaf\"",
    "truncated": false,
-   "path_count": 245,
+   "path_count": 247,
    "matched": [
     "Banana.AutoCode/Banana.AutoCode.VS2022.csproj",
     "Banana.AutoCode/Banana.AutoCode.csproj",
@@ -13943,9 +13953,9 @@
    {
     "path": "Banana.AutoCode/Banana.AutoCode.csproj",
     "kind": "dep",
-    "blob_sha": "2cc201b5cc2f04ba7f15aa67b364a83e2223ce4b",
+    "blob_sha": "bf9483cd53f50505e6edb8787794d78ae5dfbb87",
     "ecosystem": "csproj",
-    "bytes": 24185
+    "bytes": 24371
    },
    {
     "path": "Banana.AutoCode/_src/Mono.TextTemplating.Roslyn/Mono.TextTemplating.Roslyn.csproj",
@@ -18797,15 +18807,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:52:27Z",
+  "collected_at": "2026-11-14T03:44:05Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-13",
   "stars": 3,
   "tree": {
-   "sha": "fac630b664ffc86a2e71ed704331c49958a2c309",
-   "etag": "W/\"e4840477a520936fd796bd223812cd396426016ff4de5d5074247f1b4c1f14d3\"",
+   "sha": "e8cb1f7f0c29d473ceb39efaaec2ec550ca839d5",
+   "etag": "W/\"ec35e81b5ad3dfabda8a45207461b8ecfd9f5059d1eb502028f7eb7583ad3931\"",
    "truncated": false,
-   "path_count": 77,
+   "path_count": 78,
    "matched": [
     "package.json",
     ".github/workflows/bump-version.yml"
@@ -18815,7 +18825,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "aa6ed6527dcc8050123a16b67f4afadc491fbf44",
+    "blob_sha": "1aaa8511366373e42f04dbf52559219a4cbd59d0",
     "ecosystem": "npm",
     "bytes": 838,
     "names": [
@@ -18999,13 +19009,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:44:18Z",
+  "collected_at": "2026-11-14T03:23:57Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-13",
   "stars": 37,
   "tree": {
    "sha": "5d3a2a08dacc213172693195da8528722f046066",
-   "etag": "W/\"6277d6d3f41e85c12b8b95a0775fccec5c11fd32c45b6cbd4b933e21547ec10e\"",
+   "etag": "W/\"1613c4414776653d0fb04f5e0d7f45ab4a96260e5ba80fc82ba4496c50770360\"",
    "truncated": false,
    "path_count": 2548,
    "matched": [
@@ -19438,15 +19448,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:10:54Z",
+  "collected_at": "2026-11-14T03:27:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
-  "stars": 27,
+  "pushed_at": "2026-11-13",
+  "stars": 29,
   "tree": {
-   "sha": "f049e1293428f8d4064100c83c9f177b790f2cc4",
-   "etag": "W/\"93e904a043e40ed6f6952520db9f9a70547191e06bc227f8823a4f12c773d48c\"",
+   "sha": "7238b2ff4e3b0d37cd37f19b1d9d928495626762",
+   "etag": "W/\"0c47646acad2851c4e5c80b544ca13a26aa87a6a44b67d5181a460f4b508e13f\"",
    "truncated": false,
-   "path_count": 291,
+   "path_count": 314,
    "matched": [
     "requirements.txt",
     "dsh-plugin/package.json",
@@ -19499,6 +19509,8 @@
     "dsh-plugin/install-to-profile.py",
     "dsh-plugin/package.json",
     "dsh-plugin/sync-to-profile.ps1",
+    "tools/install_plugins.py",
+    "tools/pack_plugins.py",
     "dsh-plugin/lib/card.js",
     "dsh-plugin/lib/client.js",
     "dsh-plugin/lib/index.js",
@@ -19564,13 +19576,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T02:57:24Z",
+  "collected_at": "2026-11-14T02:43:51Z",
   "default_branch": "unstable",
-  "pushed_at": "2026-11-12",
-  "stars": 27708,
+  "pushed_at": "2026-11-13",
+  "stars": 27705,
   "tree": {
-   "sha": "d5763ea44e86cfb978cc98387782a89b6da53bd3",
-   "etag": "W/\"8d431a5991f354ab7e52172482f64355adba8498144de21c64c17761008fe03e\"",
+   "sha": "c98c0e2e6c271a24c829d17b2ed94d64c576c33f",
+   "etag": "W/\"39c3369e3334e57ef367ced5192e6ff13b299f10028ceaedbe4ab74e0f53a4bf\"",
    "truncated": false,
    "path_count": 2059,
    "matched": [
@@ -19677,8 +19689,8 @@
    {
     "path": ".github/workflows/daily.yml",
     "kind": "ci",
-    "blob_sha": "0a92882f66b6873c0acf4dcb21760722aa9bc4ec",
-    "bytes": 128972
+    "blob_sha": "e8fddc0ce16b82fa957322bfcbf8b7601484ad8a",
+    "bytes": 129041
    },
    {
     "path": ".github/workflows/external.yml",
