@@ -23,13 +23,16 @@ v1.2（2026-11-14 用户令「把已解读的放进去，不再解读」+「所�
   应用类口径扩到 desc 层类目（is_app）——无 README 仓按 desc 判应用的同样不出卡、归档。
   应用类补档（archive_apps）：全量跑时给档案清单里还没有的应用类仓各生成一张档案卡，
   直接落 archive/（清单条目带 backfill=true）；档案是快照，之后不刷新。
+v1.3（2026-11-14 用户令「全部保持一致」）:
+  档案卡模板跟随渲染器（rerender_archive）：数据仍是归档快照——JSON 一字不动，只拿它用当前 gen_card
+  重出 HTML。档案清单记 render_ver；全量跑发现它落后于当前渲染器就自动重出，全部成功才盖新版本戳。
 """
 import argparse, datetime, io, json, os, re, shutil, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_card as gc
 
-VER = "gen_cards/1.2"
+VER = "gen_cards/1.3"
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = HERE + os.sep + "cache"
 OUT = HERE + os.sep + "cards"
@@ -143,6 +146,21 @@ def fingerprint(card):
 
 # ---------- 出池归档（只搬不删） ----------
 
+def _load_arc(amp):
+    """读档案清单：返回 (整份文档, cards)；清单不存在 -> (None, {})。"""
+    if not os.path.exists(amp): return None, {}
+    doc = loadj(amp)
+    return doc, (doc.get("cards") or {})
+
+def _dump_arc(amp, doc, acards, run_date, render_ver=None):
+    """写档案清单并保住 render_ver（档案 HTML 是哪版渲染器出的）。老清单/新建清单没有该键就不写，
+    留给 rerender_archive 全部重出成功后再盖——宁可多渲染一遍，不谎报版本。"""
+    rv = render_ver or (doc or {}).get("render_ver")
+    out = {"ver": VER, "updated_at": run_date, "count": len(acards)}
+    if rv: out["render_ver"] = rv
+    out["cards"] = acards
+    io.open(amp, "w", encoding="utf-8", newline="\n").write(json.dumps(out, ensure_ascii=False, indent=1))
+
 def exit_reason(fn, repos):
     """一张卡为什么退出活跃清单。below-min-stars = 仓仍是合格目标、只是本次没选中，不算出池不归档
     （防 --min-stars 300 跑一次把 1.9 万张低星卡整批搬走）。"""
@@ -172,7 +190,7 @@ def archive_exited(exited, repos, out_dir, arc_dir, run_date, active, absent=Non
     exited: {fn: 旧清单条目}；active: 本次活跃清单；absent: 出池台账 {fn: 出池日}。"""
     absent = absent or {}
     amp = os.path.join(arc_dir, "manifest.json")
-    acards = (loadj(amp).get("cards") or {}) if os.path.exists(amp) else {}
+    doc, acards = _load_arc(amp)
     st = {"moved": 0, "kept": 0, "restored": 0, "by": {}}
     changed = False
     for fn, old in sorted(exited.items()):
@@ -200,9 +218,7 @@ def archive_exited(exited, repos, out_dir, arc_dir, run_date, active, absent=Non
             e["restored_at"] = run_date; st["restored"] += 1; changed = True
     if changed:
         os.makedirs(arc_dir, exist_ok=True)
-        io.open(amp, "w", encoding="utf-8", newline="\n").write(
-            json.dumps({"ver": VER, "updated_at": run_date, "count": len(acards), "cards": acards},
-                       ensure_ascii=False, indent=1))
+        _dump_arc(amp, doc, acards, run_date)
     st["total"] = len(acards)
     return st
 
@@ -221,7 +237,7 @@ def archive_apps(repos, make_card, arc_dir, run_date):
     只补档案清单里还没有的仓——档案是归档当时的快照，之后不刷新；GitHub 已归档的仓与活跃卡
     同口径不出。make_card(fn, r) -> 收尾后的整卡。返回补档张数。"""
     amp = os.path.join(arc_dir, "manifest.json")
-    acards = (loadj(amp).get("cards") or {}) if os.path.exists(amp) else {}
+    doc, acards = _load_arc(amp)
     n = 0
     for fn, r in repos.items():
         if fn in acards or not is_app(r) or r.get("archived"): continue
@@ -236,10 +252,35 @@ def archive_apps(repos, make_card, arc_dir, run_date):
                       "backfill": True}   # backfill=直接生成进档案（非从 cards/ 搬来）
         n += 1
     if n:
-        io.open(amp, "w", encoding="utf-8", newline="\n").write(
-            json.dumps({"ver": VER, "updated_at": run_date, "count": len(acards), "cards": acards},
-                       ensure_ascii=False, indent=1))
+        _dump_arc(amp, doc, acards, run_date)
     return n
+
+def rerender_archive(arc_dir, run_date):
+    """档案卡模板跟随渲染器（2026-11-14 用户令「全部保持一致」）：数据仍是归档当时的快照——JSON 一字
+    不动，只拿它用当前 gen_card 重出 HTML。全部成功才把清单 render_ver 盖成当前版本；有一张失败或
+    缺 JSON 就不盖，下次全量跑自动重试（不许静默留旧模板）。返回统计；无档案清单返回 None。"""
+    amp = os.path.join(arc_dir, "manifest.json")
+    doc, acards = _load_arc(amp)
+    if doc is None: return None
+    st = {"ok": 0, "fail": 0, "no_json": 0, "fails": []}
+    for fn in acards:
+        owner, repo = fn.split("/")
+        jp = os.path.join(arc_dir, owner, repo + ".json")
+        if not os.path.exists(jp):
+            st["no_json"] += 1
+            if len(st["fails"]) < 5: st["fails"].append(f"{fn}: no json")
+            continue
+        try:
+            page = gc.render(loadj(jp))
+        except Exception as ex:
+            st["fail"] += 1
+            if len(st["fails"]) < 5: st["fails"].append(f"{fn}: {type(ex).__name__}")
+            continue
+        io.open(os.path.join(arc_dir, owner, repo + ".html"), "w", encoding="utf-8", newline="\n").write(page)
+        st["ok"] += 1
+    if not (st["fail"] or st["no_json"]):
+        _dump_arc(amp, doc, acards, run_date, render_ver=gc.VER)
+    return st
 
 def _selftest():
     rc = gc._selftest() or 0
@@ -283,7 +324,21 @@ def _selftest():
         assert am2["b/app"]["reason"] == "app-category" and am2["b/dapp"]["backfill"] and "b/arch" not in am2
         assert os.path.exists(os.path.join(arc, "b", "dapp.html")) and am2["x/gone"]["reason"] == "pool-exit"
         assert archive_apps(r2, mk, arc, "2026-11-17") == 0                       # 幂等：已在清单不重生成
-    print("OK gen_cards selftest: 21 asserts passed")
+        io.open(os.path.join(arc, "b", "app.html"), "w", encoding="utf-8").write("OLD")
+        jb = io.open(os.path.join(arc, "b", "app.json"), "rb").read()
+        rs = rerender_archive(arc, "2026-11-18")
+        assert rs["ok"] == 2 and rs["fail"] == 1                        # x/gone 残缺 json：渲染失败不写盘
+        assert "overflow-wrap" in io.open(os.path.join(arc, "b", "app.html"), encoding="utf-8").read()
+        assert io.open(os.path.join(arc, "b", "app.json"), "rb").read() == jb       # 数据快照一字不动
+        assert "render_ver" not in loadj(os.path.join(arc, "manifest.json"))        # 有失败不盖版本戳
+        io.open(os.path.join(arc, "x", "gone.json"), "w", encoding="utf-8").write(
+            json.dumps(mk("x/gone", r2["x/gone"]), ensure_ascii=False))
+        assert rerender_archive(arc, "2026-11-18")["fail"] == 0
+        assert loadj(os.path.join(arc, "manifest.json"))["render_ver"] == gc.VER    # 全过才盖戳
+        r2["b/new"] = {"stars": 1, "judge": {"cat": "应用"}}
+        assert archive_apps(r2, mk, arc, "2026-11-19") == 1
+        assert loadj(os.path.join(arc, "manifest.json"))["render_ver"] == gc.VER    # 后续写清单保住戳
+    print("OK gen_cards selftest: 28 asserts passed")
     return rc
 
 def main():
@@ -298,6 +353,8 @@ def main():
     p.add_argument("--archive-dir", default=ARCHIVE)
     p.add_argument("--sweep-archive", action="store_true",
                    help="全量跑前先盘面清点，把历史孤儿卡（盘上有、清单无）一并归档")
+    p.add_argument("--rerender-archive", action="store_true",
+                   help="全量跑后强制用当前渲染器重出全部档案卡 HTML（数据不动）；render_ver 落后时本来就会自动触发")
     p.add_argument("--selftest", action="store_true")
     a = p.parse_args()
     if a.selftest: sys.exit(_selftest() or 0)
@@ -379,6 +436,14 @@ def main():
             build_card(f, r, hist, mcounts, arenas, repos, run_date, arena_ver), corpus, mdate),
             a.archive_dir, run_date)
         if n_app: print(f"ARCHIVE app-backfill={n_app} -> archive total={st['total'] + n_app}")
+        # 档案模板跟随渲染器：清单 render_ver 落后（或 --rerender-archive 强制）就全部重出 HTML，数据快照不动
+        adoc, _ = _load_arc(os.path.join(a.archive_dir, "manifest.json"))
+        if adoc is not None and (a.rerender_archive or adoc.get("render_ver") != gc.VER):
+            t1 = time.time(); rs = rerender_archive(a.archive_dir, run_date)
+            stamped = gc.VER if not (rs["fail"] or rs["no_json"]) else "NOT-STAMPED(下次重试)"
+            print(f"ARCHIVE rerender ok={rs['ok']} fail={rs['fail']} no-json={rs['no_json']} "
+                  f"render_ver={stamped} in {time.time()-t1:.1f}s", flush=True)
+            if rs["fails"]: print("WARN archive rerender:", rs["fails"], flush=True)
 
 if __name__ == "__main__":
     main()
