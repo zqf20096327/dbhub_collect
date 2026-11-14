@@ -115,7 +115,7 @@ def main() -> int:
     diff = subprocess.run(
         ["git", "diff-tree", "--no-commit-id", "-r", "--name-status",
          "--diff-filter=AMD", "-z", args.commit],
-        cwd=ROOT, capture_output=True, text=True).stdout.split("\0")
+        cwd=ROOT, capture_output=True, encoding="utf-8").stdout.split("\0")   # 中文路径：Windows 默认 GBK 会解码崩
     changes = [(diff[i], diff[i + 1]) for i in range(0, len(diff) - 1, 2)]
     if not changes:
         print("该 commit 无文件变更，无需推送")
@@ -152,7 +152,7 @@ def main() -> int:
     tree = _req(f"{API}/repos/{slug}/git/trees", token, "POST",
                 {"base_tree": remote_tree, "tree": entries})["sha"]
     msg = subprocess.run(["git", "log", "-1", "--format=%B", args.commit],
-                         cwd=ROOT, capture_output=True, text=True).stdout.strip()
+                         cwd=ROOT, capture_output=True, encoding="utf-8").stdout.strip()   # 中文提交信息同理
     new_c = _req(f"{API}/repos/{slug}/git/commits", token, "POST",
                  {"message": msg, "tree": tree, "parents": [head]})
     _req(f"{API}/repos/{slug}/git/refs/heads/main", token, "PATCH",

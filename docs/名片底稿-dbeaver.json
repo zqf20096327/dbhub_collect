@@ -1,0 +1,125 @@
+{
+  "schema": "dbhub.card/1.1",
+  "card_no": 2,
+  "fn": "dbeaver/dbeaver",
+  "status": "draft",
+  "freshness": { "pool_snapshot": "2026-11-08", "api_refreshed_on": null, "trend_window": ["2026-10-14", "2026-11-08"] },
+
+  "badge": {
+    "main": "今日一库 · 项目名片",
+    "sub": "数据库客户端 · 管理",
+    "basis": "judge.cat_primary=管理 + domain_tags gui-client/erd 实证，文案人工润色"
+  },
+
+  "basics": {
+    "name": "dbeaver",
+    "stars": 52336, "forks": 4451, "open_issues": 3352,
+    "language": "Java", "license": { "pool_value": "Apache-2.0", "display": "Apache-2.0", "how": "池值即净，无需人工核对", "src": "pool.license" },
+    "pushed_at": "2026-11-08", "owner": "dbeaver", "owner_type": "Organization",
+    "created_at": "2015-10-21", "homepage": "https://dbeaver.io",
+    "topics": ["ai","database","databricks","db2","dbeaver","erd","gui","java","jdbc","mysql","nosql","oracle","postgresql","redshift","snowflake"],
+    "version": { "latest": "26.2.4", "published": "2026-11-01", "n90": 6, "src": "enrich.rel_*" },
+    "activity": { "commit_7d": 92, "commit_90d": 738, "contributors": 365, "security_advisories": 0, "src": "enrich" },
+    "_src": "data/live/pool.ndjson full_name=dbeaver/dbeaver"
+  },
+
+  "trend": {
+    "points": [["2026-10-14",52058],["2026-10-17",52094],["2026-10-20",52149],["2026-10-23",52184],["2026-10-26",52216],["2026-10-29",52244],["2026-10-31",52254],["2026-11-05",52317],["2026-11-08",52336]],
+    "src": "git 历史 data/live/pool.ndjson 9 个日值实抽"
+  },
+
+  "interp": {
+    "sha": "fa3040964a6e",
+    "judge": { "cat_primary": "管理", "persona": ["ops","use"], "eco": "tool", "ai_kind": "dba-agent", "confidence": "high", "src": "judge 层 v4" },
+    "text": {
+      "one_liner": "基于 Java/Eclipse RCP 的多平台免费数据库工具与 SQL 客户端",
+      "highlights": ["内置超过 100 种数据库驱动，支持所有提供 JDBC 或 ODBC 驱动的数据库","模式编辑器、SQL 编辑器、ER 图、执行计划、空间数据查看器","集成 AI Chat，可生成/分析/优化 SQL"],
+      "use_cases": ["图形界面管理和查询多种关系型数据库","结构查看、ER 图绘制与数据导入导出迁移","AI 辅助编写和分析 SQL"],
+      "src": "text 层 v4t（底料参考，卡面文案人写）"
+    },
+    "domain_tags": ["gui-client","sql-editor","erd"],
+    "domain_tags_src": "vc1.0 全 high"
+  },
+
+  "evidence": {
+    "ci_matrix": { "count": 2, "workflows": ["codeql.yml", "push-pr-devel.yml"], "note": "CI 指纹薄（GUI 项目常态），不上卡面", "src": "evidence 层 2026-11-08" },
+    "stars_ref": { "value": 52336, "at": "2026-11-08", "note": "与池同日一致" }
+  },
+
+  "anchor": null,
+  "anchor_note": "2026-11-09 用户裁定：『相当于开源版 DataGrip』一类类比开头删除，不上卡",
+
+  "solve": {
+    "sub": "痛点与方案",
+    "pains": "每个库一个官方客户端——<b>pgAdmin、MySQL Workbench、MongoDB Compass</b> 各管一摊，装满一屏；商业客户端（Navicat/DataGrip）按人收 license；跨库搬个数据要来回导出。",
+    "meds": "<b>dbeaver</b> 一个客户端连 100+ 库（JDBC/ODBC 通吃），ER 图、数据编辑器、导入导出、AI 辅助 SQL 全带。",
+    "src": "人写（先苦后药）+ text 层底料参考"
+  },
+
+  "adapt": {
+    "sub": "12 库直连 + JDBC 通道",
+    "lines": [
+      "PostgreSQL · MySQL · Oracle · SQL Server · SQLite · ClickHouse · MariaDB，含国产四件套 <b>TiDB / OceanBase / Dameng / GaussDB</b>（+GBase）",
+      "经 JDBC/ODBC 再通吃 100+ 库"
+    ],
+    "src": "db_scan.v2 cands（12 库程序读出）+ text highlights，行文案人排"
+  },
+
+  "news": {
+    "sub": "近 90 天",
+    "window": "90 天",
+    "items": [ { "ver": "26.2.4", "date": "2026-11-01", "story": "新增 Mimer SQL 驱动（原生对象/权限/空间数据）" } ],
+    "cadence": "90 天 6 发 · 安全通告 0",
+    "src": "enrich.rel_notes/rel_n90/sec_n"
+  },
+
+  "arena": {
+    "sub": "算法圈选 arena_v2.4 · 相似度 ≥0.60 起展",
+    "cohort": "数据库客户端同类（算法圈选 arena_v2.4）",
+    "rule": "同 pgbackrest 卡；本卡星门槛显式上调 1500（客户端为大众品类，P50 被长尾拖低）",
+    "display": { "min_score": 0.6, "max_n": 5, "sort": "score desc, star desc" },
+    "rank": 1, "total": 5,
+    "rows": [
+      { "fn": "dbeaver/dbeaver", "stars": 52336, "score": 1.0, "why": "多库客户端 · ER 图/AI 辅助", "me": true },
+      { "fn": "OtterMind/Chat2DB", "stars": 28352, "score": 1.0, "why": "AI 加持 · 免费跨平台客户端" },
+      { "fn": "TabularisDB/tabularis", "stars": 5406, "score": 0.673, "why": "桌面 SQL 工作台 · 插件生态" },
+      { "fn": "gridex/gridex", "stars": 1991, "score": 0.673, "why": "原生跨平台 IDE · Swift 构建" },
+      { "fn": "feigeCode/navop", "stars": 2113, "score": 0.652, "why": "数据库 + SSH 终端一体工作台" },
+      { "fn": "beekeeper-studio/beekeeper-studio", "stars": 23861, "score": 0.631, "why": "轻量高颜值 · 主流库即开即用" }
+    ],
+    "adjudications": {
+      "star_floor": "1500（explicit，理由：大众品类长尾拖低 P50；若用默认 300 需 7 笔 veto，上调后 0 笔）",
+      "veto": [],
+      "below_floor_note": "dbcodeio/public（VSCode 插件层位）、datawan-labs/pg（浏览器 playground）、dory/sabiql/WebDB（低星）等随门槛自然出局，未计入 veto"
+    },
+    "src": "tools/arena_select.py v2.4 --star-floor 1500；圈选结果存 擂台圈选-dbeaver-v2.4.json"
+  },
+
+  "production_users": {
+    "sub": "一手来源 + README 提及数",
+    "items": [
+      { "text": "README 明示商业版（PRO）双轨运营（一手）", "type": "primary", "source": "README 存档" }
+    ]
+  },
+
+  "verdict": {
+    "sub": "选型建议",
+    "should": "天天连 3 种以上库、不想按人买商业客户端、需要 ER 图和跨库迁移",
+    "avoid": "单库轻度用户（官方客户端顺手）；追求秒开轻量（Java/Eclipse RCP 内存偏高）",
+    "src": "DBA 选型判断（人写）"
+  },
+
+  "hands_on": {
+    "sub": "档 A · 安装包即用",
+    "lines": [
+      "# 官网下载安装包，装完点图标即用（安装包自带 Java）",
+      "# https://dbeaver.io"
+    ],
+    "docs_url": "https://dbeaver.io",
+    "note": "README 原文 run an installer and click on app icon；安装包自带 Java",
+    "verified_on": null
+  },
+
+  "weak_fields": ["hands_on（命令待实跑回填）", "production_users 第二条为公开通识"],
+  "fill_stats": { "internal": "basics/trend/interp/evidence/adapt/news/arena 全部", "external": "零", "human": "痛点/判决/简介/文案排版", "ai_layer": "卡面零直接引用" }
+}

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""同类擂台圈选器 arena_select v2.3（2026-11-09）
+"""同类擂台圈选器 arena_select v2.6（2026-11-14）
 
 相对 v2.2 的三处修正（消融实验结论）：
   1. judge 类目加分降级为安全网——仅"无标签候选"用类目兜底（记 0.40 分并标
@@ -12,7 +12,8 @@
      |候选库集∩主角库集| / |候选库集|：PG 专属工具保持满分，多库通用工具最多
      降 30%（区分"PG 专属引擎"与"顺带支持 PG 的通用工具"，库集来自 db_scan）。
 
-门槛：同生态（db_scan 库交集，或 db 名 topics 交集）∩ 在池 ∩ 未出池 ∩ 非归档非 fork
+门槛：同生态（db_scan 库交集，或 db 名 topics 交集）∩ 在池 ∩ 未出池 ∩ 非归档非 fork ∩ 非应用类
+      （v2.6：judge cat=应用 的仓不出档案卡，也不再当擂台候选——2026-11-14 用户令，两用同口径）
 星数门槛：默认过线候选星数 P75（钳位 [100,1000]），--star-floor 显式覆盖
 界面层剔除：候选带 UI 标签（web-console/gui-client/dashboard）而主角无 → excluded_ui
 人工否决：--veto owner/repo,...（进 adjudications 留痕）
@@ -33,9 +34,10 @@ from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VER = "arena_v2.4"
+VER = "arena_v2.6"
 CONF_W = {"high": 1.0, "mid": 0.6, "low": 0.3}
 UI_TAGS = {"web-console", "gui-client", "dashboard"}
+EXCL_CAT = {"应用"}   # 该 judge 类目的仓不出档案卡（2026-11-13），也不当擂台候选（2026-11-14）
 CAT_FALLBACK_SCORE = 0.40
 
 
@@ -55,12 +57,14 @@ def sim(ta: dict, tb: dict, idf: dict) -> float:
     """IDF 加权覆盖度：候选覆盖主角身份的比例。
     分子 = Σ共享标签 idf×max(conf)——两边都提取到即算覆盖，置信取乐观侧
     （候选侧 mid/low 是提取噪声，实测 barman restore@mid 被 min() 错杀到 0.489）；
-    分母 = Σ主角标签 idf×conf；候选私有标签不计入（不惩罚额外专长）。"""
+    分母 = Σ主角标签 idf×conf；候选私有标签不计入（不惩罚额外专长）。
+    v2.5：封顶 1.0——主角 mid 置信标签遇上候选 high 置信时分子>分母会冲破 100%
+    （实测全量 19,938 行候选 >1，如 cycle/database 候选 1.211），覆盖度语义不该超 100%。"""
     den = sum(idf.get(t, 1.0) * ta[t] for t in ta)
     if not den:
         return 0.0
     num = sum(idf.get(t, 1.0) * max(ta[t], tb[t]) for t in set(ta) & set(tb))
-    return num / den
+    return min(1.0, num / den)
 
 
 def p75(vals: list) -> int:
@@ -131,7 +135,7 @@ def select(target_fn: str, top_n=5, min_score=0.45, star_floor=None,
     db_topics = {k.lower() for e in dscan.values() for k in (e or {}).get("cands", {})}
     idf = idf_map(tags)
 
-    cand_rows, excluded_ui, below_floor_pool = [], [], []
+    cand_rows, excluded_ui, excluded_app, below_floor_pool = [], [], [], []
     for fn, r in pool.items():
         if fn == target_fn or fn in absent or r.get("archived") or r.get("fork"):
             continue
@@ -140,6 +144,9 @@ def select(target_fn: str, top_n=5, min_score=0.45, star_floor=None,
         c_dbs = {k.lower() for k in (dscan.get(fn) or {}).get("cands", {})}
         c_topics = {x.lower() for x in (r.get("topics") or [])}
         if not ((c_dbs & t_dbs) or (c_topics & t_topics & db_topics)):
+            continue
+        if judge.get(sha) in EXCL_CAT:   # v2.6：应用类候选剔除（同生态圈内先剔再算分，名次由非应用补位）
+            excluded_app.append({"fn": fn, "stars": r.get("stars", 0)})
             continue
         stars = r.get("stars", 0)
         if tb is None:  # 安全网：无标签 + 类目相同 → 兜底分
@@ -176,6 +183,8 @@ def select(target_fn: str, top_n=5, min_score=0.45, star_floor=None,
         "hero": {"fn": target_fn, "stars": trow.get("stars"), "tags": sorted(ta)},
         "top": top,
         "adjudications": {"veto": vetoed, "excluded_ui": excluded_ui,
+                          "excluded_app": {"n": len(excluded_app),
+                                           "sample": [c["fn"] for c in excluded_app[:20]]},
                           "below_star_floor": below_floor_pool},
         "cohort_kept": len(kept), "cohort_passing_score": len(passing),
     }
@@ -208,7 +217,10 @@ def selftest() -> int:
     assert specificity(set(), {"postgresql"}) == 1.0
     # 7) p75 钳位
     assert p75([]) == 100
-    print("[PASS] arena_select selftest 9 断言")
+    # 8) v2.5 封顶：主角 mid 置信 × 候选 high 置信，未封顶会得 ~1.27，封在 1.0
+    t4 = {"backup": 1.0, "restore": 0.6}
+    assert abs(sim(t4, {"backup": 1.0, "restore": 1.0}, idf) - 1.0) < 1e-9
+    print("[PASS] arena_select selftest 10 断言")
     return 0
 
 
@@ -237,6 +249,8 @@ def main() -> int:
         print(f"{c['score']:6.3f} {c['stars']:6d}  {c['fn']}  [{c['source']}]")
     if res["adjudications"]["excluded_ui"]:
         print(f"界面层剔除 {len(res['adjudications']['excluded_ui'])} 个（详情见 JSON）")
+    if res["adjudications"]["excluded_app"]["n"]:
+        print(f"应用类候选剔除 {res['adjudications']['excluded_app']['n']} 个（sample 见 JSON）")
     if a.out:
         Path(a.out).write_text(json.dumps(res, ensure_ascii=False, indent=1),
                                encoding="utf-8")
