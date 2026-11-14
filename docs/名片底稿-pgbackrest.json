@@ -4,38 +4,43 @@
   "fn": "pgbackrest/pgbackrest",
   "status": "draft",
   "freshness": {
-    "pool_snapshot": "2026-11-05",
+    "pool_snapshot": "2026-11-14",
     "api_refreshed_on": null,
-    "trend_window": ["2026-10-14", "2026-11-05"]
+    "trend_window": ["2026-10-11", "2026-11-14"]
   },
 
   "basics": {
     "name": "pgbackrest",
-    "stars": 4478,
-    "forks": 404,
-    "open_issues": 41,
+    "stars": 4499,
+    "forks": 408,
+    "open_issues": 43,
     "language": "C",
     "lang_mix": { "C": 90, "Python": 10 },
     "license": { "pool_value": "NOASSERTION", "display": "MIT", "how": "README 存档自述 MIT（'completely free and open source under the MIT'）+ 人工核对", "src": "pool.license + data/readmes/pgbackrest__pgbackrest.md" },
-    "pushed_at": "2026-11-05",
+    "pushed_at": "2026-11-13",
     "owner": "pgbackrest",
     "owner_type": "Organization",
     "created_at": "2013-11-11",
     "homepage": "https://pgbackrest.org",
     "topics": ["postgres", "postgresql", "backup", "restore", "s3", "incremental", "wal", "checksum", "archiving"],
-    "version": { "latest": "2.60.0", "published": "2026-10-18", "n90": 4, "src": "enrich.rel_ver/rel_pub/rel_n90 (2026-11-07)" },
-    "activity": { "commit_7d": 8, "commit_90d": 123, "contributors": 66, "security_advisories": 0, "src": "enrich.commit_*/contrib_n/sec_n (2026-11-07)" },
+    "version": { "latest": "2.60.0", "published": "2026-10-18", "n90": 4, "src": "enrich.rel_ver/rel_pub/rel_n90 (2026-11-14 复读，无新版本)" },
+    "activity": { "commit_7d": 15, "commit_90d": 124, "contributors": 66, "security_advisories": 0, "src": "enrich.commit_*/contrib_n/sec_n (2026-11-14 复读)" },
     "_src": "data/live/pool.ndjson full_name=pgbackrest/pgbackrest + state/enrich_cache_shards"
   },
 
   "trend": {
     "points": [
-      ["2026-10-14", 4442], ["2026-10-17", 4447], ["2026-10-20", 4453],
-      ["2026-10-23", 4455], ["2026-10-26", 4458], ["2026-10-29", 4461],
-      ["2026-10-31", 4463], ["2026-11-05", 4478]
+      ["2026-10-11", 4430], ["2026-10-13", 4437], ["2026-10-14", 4442], ["2026-10-15", 4444],
+      ["2026-10-16", 4446], ["2026-10-17", 4447], ["2026-10-18", 4448], ["2026-10-19", 4451],
+      ["2026-10-20", 4453], ["2026-10-21", 4453], ["2026-10-22", 4453], ["2026-10-23", 4455],
+      ["2026-10-24", 4455], ["2026-10-25", 4454], ["2026-10-26", 4458], ["2026-10-27", 4460],
+      ["2026-10-28", 4462], ["2026-10-29", 4461], ["2026-10-30", 4462], ["2026-10-31", 4463],
+      ["2026-11-02", 4467], ["2026-11-03", 4471], ["2026-11-04", 4475], ["2026-11-05", 4478],
+      ["2026-11-06", 4484], ["2026-11-07", 4485], ["2026-11-08", 4485], ["2026-11-10", 4488],
+      ["2026-11-12", 4495], ["2026-11-13", 4499], ["2026-11-14", 4499]
     ],
-    "delta": 36,
-    "src": "git 历史 data/live/pool.ndjson（rev-list --before + git show，8 个日值实抽）"
+    "delta": 69,
+    "src": "cache/stars_history.json（build_cache 趋势缓存：git 历史 data/live/pool.ndjson 逐日快照，31 个日值，skipped=0；与档案卡同源）"
   },
 
   "interp": {
@@ -74,34 +79,35 @@
 
   "pain": {
     "pains": ["全量备份窗口撑不住（库到 TB 级）", "WAL 堆积", "备份从未验证过能否恢复"],
-    "meds": ["页级增量（8KB 粒度）", "并行备份/恢复", "每文件校验和+恢复时复核（内建 verify）"],
-    "src": "人写结构（先苦后药）+ text.highlights 第 3 条实证校验和复核 + 公开对比检索（2026-11）"
+    "meds": ["全量/差异/增量备份（文件或块级）", "并行备份/恢复", "每文件校验和，恢复时复核"],
+    "src": "人写结构（先苦后药）+ README 存档原文概念转写（File or Block Level / checksum 段）；「8KB 粒度」「verify 唯一内建」两说法已按 2026-11-09 严格审计剔除（11-14 回补到底稿）"
   },
 
   "arena": {
-    "cohort": "PG 备份同类（算法圈选 arena_v2.4）",
-    "rule": "IDF 加权覆盖度（共享标签 idf×max(conf)）× 生态专注度（0.7+0.3×库集专注比）；门槛≥0.45；∩ 同生态（db_scan/topics）∩ 在池 ∩ star≥max(300,P50)；界面层标签剔除；TOP5 + 人工 veto 留痕",
+    "cohort": "PG 备份同类（算法圈选 arena_v2.6）",
+    "sub": "算法圈选 arena_v2.6",
+    "rule": "IDF 加权覆盖度（共享标签 idf×max(conf)，封顶 1.0）× 生态专注度（0.7+0.3×库集专注比）；门槛≥0.45；∩ 同生态（db_scan/topics）∩ 在池 ∩ star≥max(300,P50)；界面层标签剔除；应用类（judge cat=应用）候选圈选期剔除；TOP5 + 人工 veto 留痕",
     "rank": 1,
     "total": 5,
     "rows": [
-      { "fn": "pgbackrest/pgbackrest", "stars": 4478, "score": 1.0, "why": "PG 专用备份恢复 · 全/差/增 + 校验和复核", "me": true },
-      { "fn": "wal-g/wal-g", "stars": 4327, "score": 0.775, "dbs": ["mongodb", "mysql", "postgresql"], "why": "云对象存储直备 · Go 单二进制（多库支持致专注度降分，语义正确）" },
-      { "fn": "wal-e/wal-e", "stars": 3470, "score": 0.627, "dbs": ["postgresql"], "why": "wal-g 前身 · 已停更" },
-      { "fn": "EnterpriseDB/barman", "stars": 3275, "score": 0.627, "dbs": ["postgresql"], "why": "中心化备份服务器模型" },
-      { "fn": "Aiven-Open/pghoard", "stars": 1428, "score": 0.627, "dbs": ["postgresql"], "why": "Aiven 出品 · 云原生直备（算法新发现）" },
-      { "fn": "postgrespro/pg_probackup", "stars": 799, "score": 0.627, "dbs": ["postgresql"], "why": "PostgresPRO 系多线程备份" }
+      { "fn": "pgbackrest/pgbackrest", "stars": 4499, "score": 1.0, "why": "PG 专用备份恢复 · 全/差/增 + 校验和复核", "me": true },
+      { "fn": "wal-g/wal-g", "stars": 4336, "score": 0.775, "dbs": ["mariadb", "mysql", "postgresql", "sql server"], "why": "云对象存储直备 · Go 单二进制（多库支持致专注度降分，语义正确）" },
+      { "fn": "wal-e/wal-e", "stars": 3470, "score": 0.626, "dbs": ["postgresql"], "why": "wal-g 前身" },
+      { "fn": "EnterpriseDB/barman", "stars": 3276, "score": 0.626, "dbs": ["postgresql"], "why": "中心化备份服务器模型" },
+      { "fn": "Aiven-Open/pghoard", "stars": 1428, "score": 0.626, "dbs": ["postgresql"], "why": "Aiven 出品 · 云原生直备（算法新发现）" },
+      { "fn": "postgrespro/pg_probackup", "stars": 800, "score": 0.626, "dbs": ["postgresql"], "why": "PostgresPRO 系多线程备份" }
     ],
     "adjudications": {
       "veto（人工否决，留痕）": [
-        "nfrastack/db-backup 0.775/1564★——多库 docker 备份脚本，非 PG 专属引擎",
-        "Skyfay/DBackup 0.760/436★——通用备份工具",
-        "commanded/eventstore 0.627/1166★——事件溯源数据库本体，带备份功能非备份工具（层位混淆，v2.5 候选规则：judge 类目作层位过滤器）",
-        "Archmonger/django-dbbackup 0.627/1113★——Django 应用框架层备份",
-        "prodrigestivill/docker-postgres-backup-local 0.627/1211★——pg_dump+cron 封装脚本，非引擎"
+        "nfrastack/db-backup 0.775/1565★——多库 docker 备份脚本，非 PG 专属引擎",
+        "Skyfay/DBackup 0.760/454★——通用备份工具",
+        "prodrigestivill/docker-postgres-backup-local 0.626/1213★——pg_dump+cron 封装脚本，非引擎",
+        "commanded/eventstore 0.626/1165★——事件溯源数据库本体，带备份功能非备份工具（层位混淆；judge 类目=开发库）",
+        "Archmonger/django-dbbackup 0.626/1113★——Django 应用框架层备份"
       ],
-      "落榜真同类（备捞回）": ["ossc-db/pg_rman 0.627/505★", "pgmoneta/pgmoneta 0.627/324★——tie 输于 star"]
+      "落榜真同类（备捞回）": ["ossc-db/pg_rman 0.626/505★", "pgmoneta/pgmoneta 0.626/326★——tie 输于 star"]
     },
-    "src": "tools/arena_select.py v2.4（2026-11-09 四卡回归验证：pgbackrest/dbeaver/timescaledb/patroni）"
+    "src": "tools/arena_select.py v2.6（2026-11-14 复算：候选 10,408 → 剔应用类 3,598 → 过门槛 117 → 星门槛 300 留 17 → 人工否决 5 → TOP5；名单与 v2.4 一致，同分组分数 0.627→0.626，wal-e 停更标记改由程序派生）"
   },
 
   "production_users": {
@@ -117,7 +123,7 @@
     "should_basis": "text.use_cases 1/2 条实证 + DBA 判断",
     "avoid": "<20GB 小库单机（pg_basebackup + cron 足够）；纯云托管 PG（RDS 等自带备份体系）",
     "avoid_basis": "DBA 行当判断（选型辅助边界，非性能实测声明）",
-    "insight": "备份工具先看恢复——verify 是五虎将里唯一内建的（公开对比 2026-11 佐证）；66 位贡献者、近 90 天 123 commits，bus factor 与活跃度无红灯（enrich 实证）",
+    "insight": "备份工具先看恢复——README 校验相关词 20 处（checksum 16 + verify 1 + validate 3，程序词频，2026-11-14 复算）；66 位贡献者、近 90 天 124 commits，bus factor 与活跃度无红灯（enrich 实证）",
     "src": "人写 + enrich.activity + text 层佐证"
   },
 
@@ -146,7 +152,7 @@
       "src": "state/evidence_cache_shards/9e.json（tree.files kind=ci，collected_at 2026-11-07）"
     },
     "clues": { "changelog": [], "readme_i18n": [], "docs_matrix": [], "note": "本仓 clues 全空——evidence 层对工具仓可用面即 CI 指纹" },
-    "stars_ref": { "value": 4484, "at": "2026-11-07", "note": "比池快照新 2 天；按同源原则不与池值混用，仅作漂移参考" },
+    "stars_ref": { "value": 4484, "at": "2026-11-07", "note": "2026-11-07 采集值；池快照已更新到 2026-11-14（4,499），仅留作历史漂移参考，不与池值混用" },
     "src": "state/evidence_cache_shards/9e.json 键 pgbackrest/pgbackrest"
   },
 
