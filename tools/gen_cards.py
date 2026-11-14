@@ -17,21 +17,33 @@
   {owner}/{repo}.html / .json    从 cards/ 搬来的卡（全量跑时自动：旧清单有、新清单没有）
   manifest.json                  {fn -> {html, stars, fp, archived_at, reason, absent_since[, restored_at]}}
                                  reason = pool-exit / github-archived / app-category；低星未选中的不搬
+
+v1.2（2026-11-14 用户令「把已解读的放进去，不再解读」+「所有应用类都归档」）:
+  简介块带综述段（text.review）；无 README 仓挂 desc 降级层一句话（标注仅据描述·低置信）；
+  应用类口径扩到 desc 层类目（is_app）——无 README 仓按 desc 判应用的同样不出卡、归档。
+  应用类补档（archive_apps）：全量跑时给档案清单里还没有的应用类仓各生成一张档案卡，
+  直接落 archive/（清单条目带 backfill=true）；档案是快照，之后不刷新。
 """
 import argparse, datetime, io, json, os, re, shutil, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_card as gc
 
-VER = "gen_cards/1.1"
+VER = "gen_cards/1.2"
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = HERE + os.sep + "cache"
 OUT = HERE + os.sep + "cards"
 ARCHIVE = HERE + os.sep + "archive"
 ROOT = "D:/dbhub_collect"
-SKIP_CATS = {"应用"}   # judge cat_primary 属应用类的仓不出卡（2026-11-13 用户令；无解读层的不受影响）
+SKIP_CATS = {"应用"}   # 应用类的仓不出卡（2026-11-13 用户令）；类目取法见 is_app
 
 def loadj(p): return json.load(io.open(p, encoding="utf-8"))
+
+def is_app(r):
+    """应用类判定：judge 类目为准；无 README 仓没有 judge，退 desc 降级层类目（2026-11-14）。
+    两层都没有的仓（无资料）不算应用，照常出卡。"""
+    if (r.get("judge") or {}).get("cat") in SKIP_CATS: return True
+    return (r.get("desc") or {}).get("cat") in SKIP_CATS
 
 def clean_ver(t):
     """剥版本标签前缀：release/2.60.0、v2.60.0 -> 2.60.0（空值原样）。"""
@@ -66,9 +78,13 @@ def build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver="arena_v
     }
     mk = gc.stale_marker(r.get("pushed_at"), datetime.date.fromisoformat(run_date))
     if mk: card["stale_chip"] = mk[2:].strip()            # 去掉前导「· 」
-    if tx.get("one_liner") or tx.get("highlights") or tx.get("use_cases"):
+    if tx.get("one_liner") or tx.get("review") or tx.get("highlights") or tx.get("use_cases"):
         card["intro"] = {"text": tx.get("one_liner") or "", "sub": "解读层（AI·证据行可回查）",
                          "points": tx.get("highlights") or [], "uses": tx.get("use_cases") or []}
+        if tx.get("review"): card["intro"]["review"] = tx["review"]
+    elif (r.get("desc") or {}).get("one_liner"):   # 无 README 仓：desc 降级层只有一句话，如实标注证据强度
+        card["intro"] = {"text": r["desc"]["one_liner"], "sub": "解读层（AI·仅据仓库描述·低置信）",
+                         "points": [], "uses": []}
     if r.get("readme0"):
         card["readme"] = {"text": r["readme0"], "sub": "存档原文 · 程序抽取"}
     # 擂台（cache/arena_all.json，算法 ver 以其 meta.algorithm 为准；简介=池内 description（无则退共享标签），停更自动标记）
@@ -133,7 +149,7 @@ def exit_reason(fn, repos):
     r = repos.get(fn)
     if r is None: return "pool-exit"
     if r.get("archived"): return "github-archived"
-    if (r.get("judge") or {}).get("cat") in SKIP_CATS: return "app-category"
+    if is_app(r): return "app-category"
     return "below-min-stars"
 
 def sweep_strays(out_dir, active):
@@ -190,12 +206,55 @@ def archive_exited(exited, repos, out_dir, arc_dir, run_date, active, absent=Non
     st["total"] = len(acards)
     return st
 
+def finish_card(card, corpus, mdate):
+    """build_card 之后的收尾：提及块 + 指纹（活跃卡与补档卡同一口径）。"""
+    mc = card.pop("_mc", None)
+    if mc is not None:
+        card["production_users"] = {"sub": "README 提及数",
+            "items": [{"text": gc.mention_line(mc, corpus, mdate), "type": "mention-count",
+                       "source": "data/readmes slug(owner/repo) 整串扫描（排除本仓与同 org，仅计池内）"}]}
+    card["_fp"] = fingerprint(card)
+    return card
+
+def archive_apps(repos, make_card, arc_dir, run_date):
+    """应用类补档（2026-11-14 用户令「所有应用类都归档」）：应用类不出活跃卡，但各留一张档案卡。
+    只补档案清单里还没有的仓——档案是归档当时的快照，之后不刷新；GitHub 已归档的仓与活跃卡
+    同口径不出。make_card(fn, r) -> 收尾后的整卡。返回补档张数。"""
+    amp = os.path.join(arc_dir, "manifest.json")
+    acards = (loadj(amp).get("cards") or {}) if os.path.exists(amp) else {}
+    n = 0
+    for fn, r in repos.items():
+        if fn in acards or not is_app(r) or r.get("archived"): continue
+        card = make_card(fn, r)
+        owner, repo = fn.split("/")
+        d = os.path.join(arc_dir, owner); os.makedirs(d, exist_ok=True)
+        io.open(os.path.join(d, repo + ".html"), "w", encoding="utf-8", newline="\n").write(gc.render(card))
+        io.open(os.path.join(d, repo + ".json"), "w", encoding="utf-8", newline="\n").write(
+            json.dumps(card, ensure_ascii=False, indent=2))
+        acards[fn] = {"html": f"archive/{owner}/{repo}.html", "stars": r.get("stars"), "fp": card["_fp"],
+                      "archived_at": run_date, "reason": "app-category", "absent_since": None,
+                      "backfill": True}   # backfill=直接生成进档案（非从 cards/ 搬来）
+        n += 1
+    if n:
+        io.open(amp, "w", encoding="utf-8", newline="\n").write(
+            json.dumps({"ver": VER, "updated_at": run_date, "count": len(acards), "cards": acards},
+                       ensure_ascii=False, indent=1))
+    return n
+
 def _selftest():
     rc = gc._selftest() or 0
-    repos = {"a/live": {"stars": 5}, "a/arch": {"archived": True}, "a/app": {"judge": {"cat": "应用"}}}
+    repos = {"a/live": {"stars": 5}, "a/arch": {"archived": True}, "a/app": {"judge": {"cat": "应用"}},
+             "a/dapp": {"desc": {"cat": "应用", "one_liner": "x"}}, "a/dlib": {"desc": {"cat": "开发库", "one_liner": "据描述"}}}
     assert exit_reason("x/gone", repos) == "pool-exit"
     assert exit_reason("a/arch", repos) == "github-archived"
     assert exit_reason("a/app", repos) == "app-category"
+    assert exit_reason("a/dapp", repos) == "app-category"             # 无 README 仓按 desc 类目也算应用
+    assert not is_app(repos["a/dlib"]) and not is_app(repos["a/live"])   # desc 非应用/无资料：照常出卡
+    h0 = {"dates": [], "series": {}}
+    cd = build_card("a/dlib", repos["a/dlib"], h0, {}, {}, repos, "2026-11-14")
+    assert cd["intro"]["text"] == "据描述" and "低置信" in cd["intro"]["sub"] and "review" not in cd["intro"]
+    ct = build_card("a/t", {"text": {"one_liner": "L", "review": "R"}, "desc": {"one_liner": "D"}}, h0, {}, {}, repos, "2026-11-14")
+    assert ct["intro"]["review"] == "R" and ct["intro"]["text"] == "L"   # 综述段带上；有 text 层不退 desc
     assert exit_reason("a/live", repos) == "below-min-stars"          # 合格目标没选中：不算出池
     assert clean_ver("release/2.60.0") == "2.60.0" and clean_ver("v1.2") == "1.2" and clean_ver(None) is None
     with tempfile.TemporaryDirectory() as td:                          # 归档搬迁实测
@@ -215,7 +274,16 @@ def _selftest():
         st2 = archive_exited({}, repos, out, arc, "2026-11-15", {"x/gone": {}})   # 回池：打标不删档
         assert st2["restored"] == 1 and st2["moved"] == 0 and os.path.exists(os.path.join(arc, "x", "gone.json"))
         assert loadj(os.path.join(arc, "manifest.json"))["cards"]["x/gone"]["restored_at"] == "2026-11-15"
-    print("OK gen_cards selftest: 13 asserts passed")
+        r2 = {"b/app": {"stars": 7, "judge": {"cat": "应用"}}, "b/dapp": {"stars": 3, "desc": {"cat": "应用", "one_liner": "d"}},
+              "b/arch": {"stars": 9, "archived": True, "judge": {"cat": "应用"}}, "b/lib": {"stars": 5},
+              "x/gone": {"stars": 9, "judge": {"cat": "应用"}}}                    # x/gone 已在档案清单：不重复
+        mk = lambda f, r: finish_card(build_card(f, r, h0, {}, {}, r2, "2026-11-16"), 0, "")
+        assert archive_apps(r2, mk, arc, "2026-11-16") == 2                       # 只补 b/app、b/dapp
+        am2 = loadj(os.path.join(arc, "manifest.json"))["cards"]
+        assert am2["b/app"]["reason"] == "app-category" and am2["b/dapp"]["backfill"] and "b/arch" not in am2
+        assert os.path.exists(os.path.join(arc, "b", "dapp.html")) and am2["x/gone"]["reason"] == "pool-exit"
+        assert archive_apps(r2, mk, arc, "2026-11-17") == 0                       # 幂等：已在清单不重生成
+    print("OK gen_cards selftest: 21 asserts passed")
     return rc
 
 def main():
@@ -250,7 +318,7 @@ def main():
     else:
         targets = [fn for fn, r in repos.items()
                    if (r.get("stars") or 0) >= a.min_stars and not r.get("archived")
-                   and (r.get("judge") or {}).get("cat") not in SKIP_CATS]
+                   and not is_app(r)]
         targets.sort(key=lambda fn: -(repos[fn].get("stars") or 0))
         if a.limit: targets = targets[:a.limit]
     n_new = n_skip = 0; cov = {"trend": 0, "intro": 0, "readme": 0, "adapt": 0, "arena": 0,
@@ -265,14 +333,8 @@ def main():
     for fn in targets:
         r = repos.get(fn)
         if not r: print(f"SKIP not-in-index {fn}"); continue
-        if (r.get("judge") or {}).get("cat") in SKIP_CATS: print(f"SKIP app-category {fn}"); continue
-        card = build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver)
-        mc = card.pop("_mc", None)
-        if mc is not None:
-            card["production_users"] = {"sub": "README 提及数",
-                "items": [{"text": gc.mention_line(mc, corpus, mdate), "type": "mention-count",
-                           "source": "data/readmes slug(owner/repo) 整串扫描（排除本仓与同 org，仅计池内）"}]}
-        card["_fp"] = fingerprint(card)
+        if is_app(r): print(f"SKIP app-category {fn}"); continue
+        card = finish_card(build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver), corpus, mdate)
         owner, repo = fn.split("/")
         d = os.path.join(a.out_dir, owner); os.makedirs(d, exist_ok=True)
         jp = os.path.join(d, repo + ".json"); hp = os.path.join(d, repo + ".html")
@@ -312,6 +374,11 @@ def main():
         if st["moved"] or st["kept"] or st["restored"]:
             print(f"ARCHIVE moved={st['moved']} {st['by']} kept-below-min-stars={st['kept']} "
                   f"restored-marked={st['restored']} -> archive total={st['total']}")
+        # 应用类补档：排在搬迁之后——刚从 cards/ 搬走的应用类卡已在档案清单里，不会重复生成
+        n_app = archive_apps(repos, lambda f, r: finish_card(
+            build_card(f, r, hist, mcounts, arenas, repos, run_date, arena_ver), corpus, mdate),
+            a.archive_dir, run_date)
+        if n_app: print(f"ARCHIVE app-backfill={n_app} -> archive total={st['total'] + n_app}")
 
 if __name__ == "__main__":
     main()

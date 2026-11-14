@@ -15,7 +15,7 @@
 """
 import argparse, datetime, io, json, os, re, subprocess, sys, time, glob
 
-VER = "build_cache/1.0"
+VER = "build_cache/1.1"   # 1.1：text 层带 review（综述段）+ desc 降级层（无 README 仓一句话/类目）
 ROOT = "D:/dbhub_collect"
 POOL = ROOT + "/data/live/pool.ndjson"
 ENRICH_DIR = ROOT + "/state/enrich_cache_shards"
@@ -117,15 +117,22 @@ def build_index():
                         [x.get("t"), x.get("d"), note_first(x.get("n") or "")] for x in notes]
                     n_notes += 1
     layers = {}
-    for layer in ("judge", "text", "domain_tags"):
+    for layer in ("judge", "text", "domain_tags", "desc"):
         m = {}
         for f in glob.glob(f"{INTERP_DIR}/{layer}/shards/*.json"):
             for sha, e in loadj(f).items(): m[sha] = e
         layers[layer] = m
-    n_j = n_t = n_tag = 0
+    n_j = n_t = n_tag = n_desc = 0
     for fn, ent in loadj(INTERP_STATE)["items"].items():
         k = fn.lower(); sha = ent.get("sha")
         if k not in repos or not sha: continue
+        if sha.startswith("desc::"):    # 无 README 仓：desc 降级层（AI·仅据描述·低置信，键不与三层相交）
+            d = layers["desc"].get(sha)
+            if d:
+                repos[k]["desc"] = {"one_liner": (d.get("identity") or {}).get("one_liner"),
+                                    "cat": (d.get("classification") or {}).get("cat_primary")}
+                n_desc += 1
+            continue
         j = layers["judge"].get(sha)
         if j:
             repos[k]["judge"] = {"cat": j.get("classification", {}).get("cat_primary"),
@@ -136,6 +143,7 @@ def build_index():
         if t:
             ident = t.get("identity", {})
             repos[k]["text"] = {"one_liner": ident.get("one_liner"),
+                                "review": ident.get("review"),
                                 "highlights": ident.get("highlights"),
                                 "use_cases": ident.get("use_cases")}
             n_t += 1
@@ -151,10 +159,10 @@ def build_index():
                 repos[k]["dbs"] = sorted(e["cands"].keys()); n_db += 1
     meta = {"ver": VER, "built_at": now(), "pool_file": POOL,
             "counts": {"pool": n_pool, "enrich": n_en, "rel_notes": n_notes, "judge": n_j, "text": n_t,
-                       "domain_tags": n_tag, "dbscan": n_db, "readme0": n_rm}}
+                       "domain_tags": n_tag, "desc": n_desc, "dbscan": n_db, "readme0": n_rm}}
     size = dumpj({"meta": meta, "repos": repos}, CACHE + "/index.json")
     print(f"OK index: pool={n_pool} enrich={n_en} relnotes={n_notes} judge={n_j} text={n_t} tags={n_tag} "
-          f"dbscan={n_db} readme0={n_rm} -> {size//1024} KB in {time.time()-t0:.1f}s")
+          f"desc={n_desc} dbscan={n_db} readme0={n_rm} -> {size//1024} KB in {time.time()-t0:.1f}s")
     return meta
 
 # ---------- ② 星数历史（按快照循环） ----------

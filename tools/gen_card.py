@@ -15,7 +15,7 @@ v1.1（2026-11-12 用户三条指令）:
 """
 import argparse, copy, datetime, html, io, json, os, sys
 
-VER = "gen_card/1.4"
+VER = "gen_card/1.5"   # 1.5：简介块渲染综述段（intro.review，一句话之下、亮点之上）
 STALE_DAYS = 180
 POOL_DEFAULT = "D:/dbhub_collect/data/live/pool.ndjson"
 
@@ -308,8 +308,11 @@ def _sec(title, icon, sub, body):
 
 def sec_intro(card):
     d = card.get("intro") or {}
-    if not (d.get("text") or d.get("points") or d.get("uses")): return ""
+    if not (d.get("text") or d.get("review") or d.get("points") or d.get("uses")): return ""
     body = f'<p>{join_text(d.get("text", ""))}</p>' if d.get("text") else ""
+    if d.get("review"):   # 综述段：解读层已有内容原样搬（2026-11-14 用户令：只放已解读的，不再解读）
+        body += ('<p class="pts-label">综述（解读层）</p>'
+                 f'<p class="pain">{html.escape(str(d["review"]), quote=False)}</p>')   # esc=透传，须真转义
     if d.get("points"):
         body += '<ul class="pts">' + "".join(f"<li>{esc(x)}</li>" for x in d["points"]) + "</ul>"
     if d.get("uses"):
@@ -376,7 +379,7 @@ def _selftest():
             "arena": {"rows": rows + [{"fn": "f/f", "stars": 1, "score": 0.62, "why": "a<b & c"}]}, "news": {"items": [{"ver": "v", "date": "2026-01-02", "story": "s"}]},
             "production_users": {"items": [{"text": "u"}]},
             "verdict": {"should": "s", "avoid": "a"}, "hands_on": {"docs_url": "https://x"},
-            "intro": {"text": "one liner", "sub": "sub", "points": ["p1"], "uses": ["u1"]},
+            "intro": {"text": "one liner", "review": "rv<para>", "sub": "sub", "points": ["p1"], "uses": ["u1"]},
             "readme": {"text": "rm first para"}}
     c2 = enrich(card, pool, (188, 35017, "2026-11-12"), "2026-11-12")
     assert c2["derived"]["mentions"]["count"] == 188
@@ -389,12 +392,14 @@ def _selftest():
     assert "one liner" in h and "p1" in h and "u1" in h and "rm first para" in h
     assert '<a class="c-title" href="https://github.com/t/t"' in h   # 标题跳 GitHub
     assert 'class="pts-label">适用场景' in h                        # 场景标签加粗
+    assert 'class="pts-label">综述（解读层）' in h and "rv&lt;para&gt;" in h   # 综述段上卡且转义
+    assert h.index("one liner") < h.index("rv&lt;para&gt;") < h.index("p1")   # 位置：一句话→综述→亮点
     assert "旧式徽章" in h                                          # badge.text 兜底
     assert "188 个其他项目" in h and "创建于 2015" in h
     assert "截至 2026-11-12" in h                                     # 截至戳=缓存建成日
     assert "官网占位" in h and "专用工具" in h                       # hands_on/adapt 兜底
     assert "a&lt;b &amp; c" in h and "a<b & c" not in h         # 擂台简介=外部 description，转义后上 HTML
-    print(f"OK {VER} selftest: 17 asserts passed")
+    print(f"OK {VER} selftest: 19 asserts passed")
     return 0
 
 def main():
