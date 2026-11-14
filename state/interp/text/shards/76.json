@@ -2960,5 +2960,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9728681fd99c": {
+  "identity": {
+   "one_liner": "基于逻辑复制协议解析并流式消费 PostgreSQL WAL 的 Rust 库。",
+   "review": "pg-walstream 是一个 Rust 库，通过 PostgreSQL 逻辑与物理复制协议解析并流式传输 WAL 数据，提供类型化消息解析、serde 行反序列化和复制槽管理。默认使用 rustls 纯 Rust TLS 后端，不依赖 libpq 与 OpenSSL；协议解析器可编译为 no_std/wasm。适用于需要在 Rust 中订阅 PostgreSQL 变更流的开发者。",
+   "highlights": [
+    "实现 PostgreSQL 逻辑复制协议版本 1-4，支持流式大事务、两阶段提交（v3+）与并行流复制（v4+）",
+    "提供 BASE_BACKUP、物理复制流、复制槽管理和全部 SSL 模式（含 SCRAM-SHA-256 认证）",
+    "支持内置 serde 行反序列化、快照对齐流、按目标 LSN 的有界回放，协议解析层可构建 no_std/wasm 版本"
+   ],
+   "use_cases": [
+    "在 Rust 应用中订阅 PostgreSQL 表变更并反序列化为自定义结构体",
+    "搭建 standby 流复制或通过 BASE_BACKUP 与物理流获取 WAL 数据",
+    "在 wasm 或嵌入式目标中使用纯解析层处理 pgoutput 负载"
+   ]
+  },
+  "sha": "9728681fd99c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2565,5 +2565,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e26b05b85963": {
+  "identity": {
+   "one_liner": "纯 C 零依赖的嵌入式列式分析引擎，DAG 查询计划即时编译为字节码执行",
+   "review": "Rayforce 是用纯 C 编写、零外部依赖的嵌入式分析引擎，查询以惰性 DAG 构建，经多遍优化后按 1024 行 morsel 并行执行，列式分析与图遍历共用同一执行管线。它提供 Rayfall Lisp 式查询语言、C API、静态/动态库三种集成方式，并内置 HNSW 向量索引与 mmap 列式存储，MIT 协议，需注意不承诺跨版本 ABI 稳定，Windows 暂不支持动态库构建。",
+   "highlights": [
+    "惰性 DAG 查询计划，多遍优化器含 SIP、谓词下推、分区剪枝等重写步骤，经 ray_execute 才执行",
+    "内存管理自包含：buddy 分配器加 slab 缓存、线程本地 arena、COW 引用计数，不使用系统分配器",
+    "图引擎采用双向 CSR 存储，提供 BFS、Dijkstra、PageRank、Louvain 等算法，支持 mmap；另有多度量 HNSW 向量索引及过滤感知 ANN 查询"
+   ],
+   "use_cases": [
+    "将分析能力以静态/动态库嵌入 C/C++ 或经 FFI（Python、JVM 等）宿主应用",
+    "时间序列与行情类数据的列式存储、查询与图遍历联合分析",
+    "向量检索场景下带 where 过滤的近邻搜索（knn/HNSW）"
+   ]
+  },
+  "sha": "e26b05b85963",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b8809ab599d9": {
+  "identity": {
+   "one_liner": "自托管的 OpenWrt/GL.iNet 家用网络监控面板，Go 后端加 React 前端。",
+   "review": "NetPulse 是一个自托管的家用网络监控仪表盘：单个 Go 二进制加 React 前端，通过部署在 OpenWrt/GL.iNet 路由器上的 agent 采集路由器健康、设备清单、WireGuard 对端、AdGuard Home 统计等数据，实时经 SSE 推送到 PWA。数据存 SQLite，仅限局域网运行，另支持通过集成对接 MikroTik、Asuswrt、OPNsense、UniFi 等平台。",
+   "highlights": [
+    "提供车队总览页面，以 0-100 健康评分汇总每台路由器的延迟、丢包、运行时间与温度，经 SSE 每 5 秒更新",
+    "支持从网桥 FDB 与 LLDP 实时推断网络拓扑图，包含有线/无线客户端、交换机、Proxmox 主机与 WireGuard 隧道",
+    "提供按需或定时的 WAN 测速（M-Lab NDT/Ookla/Cloudflare/LibreSpeed），结果存入 SQLite 并可配置低于套餐百分比的告警"
+   ],
+   "use_cases": [
+    "在局域网内的 Linux 主机（x86_64/arm64/armv7，systemd）上集中监控多台 OpenWrt/GL.iNet 路由器及接入设备",
+    "需要查看每台设备的主机名、IP、类型、Wi-Fi 频段信号及所连接路由器的设备清单管理",
+    "通过 ntfy、Telegram、Web Push 或 webhook 接收温度、新设备、WAN 断开等告警通知"
+   ]
+  },
+  "sha": "b8809ab599d9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "494cbe2dc13e": {
+  "identity": {
+   "one_liner": "开源动态核心系统：一个模型文件驱动生成数据库、权限API、审批流程与界面",
+   "review": "DX-OS 是面向有审批流程档案系统的开源核心，由河内工业大学团队开发，Apache-2.0 协议。部署者在模型文件中声明实体、字段、角色、权限与流程，核心读取后生成 PostgreSQL 数据库、Keycloak 角色、带权限的 API、审批流程和 Web 界面，变更业务通过修改文件完成。基于 APISIX、Spring Boot、Flowable 等开源组件编排，支持 Docker 在 Linux 上一条命令安装运行。",
+   "highlights": [
+    "从单个模型文件生成数据库表、Keycloak 角色、带权限的 API、审批流程与 Web 界面，模型变更支持预览影响、保留数据与版本回退",
+    "支持行级权限控制、带校验链的不可篡改历史记录、按日归档至 Parquet 并可用 DuckDB 查询，以及带签名的外部 Webhook 通知（Mattermost、Slack）",
+    "内置十个业务模板（学生一站式服务、技术支持、设备借用、预约等），每模型生成 OpenAPI 文档，支持 OIDC Authorization Code + PKCE 的外部应用接入"
+   ],
+   "use_cases": [
+    "学校、院系或小型企业需要申请-审批类流程系统且希望以声明文件而非编码方式定义业务",
+    "需要自助部署、数据完全留在本地的档案管理系统（Linux + Docker 环境）",
+    "需要为多个业务流程（请假、设备借用、预约等）统一复用登录、权限、存储与审批基础设施的团队"
+   ]
+  },
+  "sha": "494cbe2dc13e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

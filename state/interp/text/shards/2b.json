@@ -3079,5 +3079,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0936fd25f5e0": {
+  "identity": {
+   "one_liner": "CVE 漏洞与 PoC 聚合索引，每日归并多源威胁情报为 JSON 数据集",
+   "review": "该仓库通过 GitHub Actions 每 24 小时从 CVEProject/cvelistV5、Nuclei、ExploitDB、Metasploit、CISA KEV、EPSS 等数据源聚合并去重 CVE 信息，生成约 15.6 万条记录的 JSON 索引，每条含风险评分（基于 KEV、EPSS、CVSS、PoC 证据等）。面向 SOC 团队、DevSecOps 与渗透测试人员，通过 curl 拉取本地查询，无需 API 密钥，采用 MIT 许可。",
+   "highlights": [
+    "通过 GitHub Actions 每 24 小时聚合 CVEProject、Nuclei、ExploitDB、Metasploit、CISA KEV、EPSS 等数据源并归一化去重",
+    "提供约 15.6 万条 CVE 记录，每条包含 0-100 的 exploit-risk 评分（评分规则见 docs/SCORING.md）",
+    "数据为压缩 JSON 架构，可通过 curl 直接拉取 raw 文件本地查询，无需 API 密钥"
+   ],
+   "use_cases": [
+    "SOC 团队与威胁情报系统按 KEV 状态、EPSS 分数和 PoC 数量查询漏洞武器化情况",
+    "渗透测试与漏洞复现人员检索特定 CVE 对应的 PoC 链接（Nuclei 模板、Exploit-DB ID 等）",
+    "RAG/AI 系统以小体积 JSON 架构批量读取漏洞数据用于分析流程"
+   ]
+  },
+  "sha": "0936fd25f5e0",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f10d3cccf9a6": {
+  "identity": {
+   "one_liner": "基于 MCP 的本地记忆服务器，Rust 单二进制，混合检索与知识图谱",
+   "review": "MemoryPilot 是一个为 MCP 客户端（如 Cursor、Claude Desktop、VS Code 等）提供持久化、可检索记忆的服务器，纯 Rust 单二进制、完全本地运行、不调用外部 API。核心机制包括 BM25 与 jina-embeddings-v5 的 RRF 混合检索、交叉编码器重排、时序知识图谱、AAAK 压缩（声称 5-10 倍 token 节省）与自动分类、自动压缩。安装提供面向主流编辑器/客户端的一行式安装，支持签名自动更新。",
+   "highlights": [
+    "混合检索：BM25 + jina-embeddings-v5 RRF 融合，可选交叉编码器重排",
+    "时序知识图谱与 GraphRAG、记忆自动分类与 TTL 管理",
+    "支持 100+ 语言，内置法语确定性基准脚本 --benchmark-fr"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Desktop、VS Code 等支持 MCP 的编码助手提供跨会话记忆",
+    "需按模糊描述检索历史对话记录的场景",
+    "多语言环境下的本地语义与关键词混合检索"
+   ]
+  },
+  "sha": "f10d3cccf9a6",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

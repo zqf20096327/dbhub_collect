@@ -13269,5 +13269,224 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "08b17e410df2+2": {
+  "fn": "cambra-dev/cambra",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Cambra is a programming language for building data-intensive applications — transaction processing, streaming, analytics, serving — as **one coherent program** rather than a stack of separately-modeled components. The premise (argued at length in Composition Shouldn't be this Hard) is that systems turn brittle when their components interact through a model lower than the one they're written in: tooling loses its leverage at exactly the boundaries where the hard bugs live. Cambra collapses those boundaries — one language, one type system, one execution model, whole-program tooling."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    3,
+    8
+   ],
+   [
+    "replace",
+    8,
+    10,
+    8,
+    10,
+    [
+     "",
+     "These features are landing incrementally; the demo program library tracks exactly what runs today."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    17,
+    10,
+    17
+   ],
+   [
+    "replace",
+    17,
+    19,
+    17,
+    19,
+    [
+     "- **Not for production.** The interpreter is a single-node runtime under active development; substantial parts of the language are decided but not yet implemented. docs/demo-programs.md is an honest ledger of what runs today and what doesn't.",
+     "- **Closed contribution, open discussion.** We aren't accepting pull requests at this stage, but issues — bug reports, questions, design discussion — are welcome. See CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    33,
+    19,
+    33
+   ],
+   [
+    "replace",
+    33,
+    48,
+    33,
+    34,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    52,
+    34,
+    38
+   ],
+   [
+    "replace",
+    52,
+    53,
+    38,
+    39,
+    [
+     "The ingest half of this program runs today, and so does the batch form of the query — swap the endpoint for an order list and the join-plus-`sum` runs end to end (`[\"> \" + line for line in stdin()]` is likewise a complete streaming program). The `/revenue` handler is written in the decided-but-still-landing part of the language — transactional reads over feeds with time-pinned aggregates; the program ledger pins this exact shape (`txn_kv`) and tracks its blockers. The direction (spec) is the full storefront this example is trimmed from: concurrent handlers over transactional state, promotion budgets as time-pinned views just like this one, and invariants like non-negative inventory discharged by the refinement type system (deleting the guard that maintains them is a type error) — decided and specified, not yet running."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    58,
+    39,
+    44
+   ],
+   [
+    "replace",
+    58,
+    63,
+    44,
+    49,
+    [
+     "1. docs/design.md — the guided tour: the language feature by feature, the compilation pipeline, and the execution model — with explicit markers for what runs today versus decided direction.",
+     "2. docs/chl-spec.md — the surface-language specification. Status markers separate implemented behaviour from decided-but-unimplemented direction.",
+     "3. docs/operational-semantics/summary.md — the runtime's formal model: **tilings** (progress algebras of monotonically-growing partial results), **guards** (structural decomposition of a computation), and **operators** (the producer/consumer counterpart of a function). Full definitions in semantics.md, a worked end-to-end example in example.md.",
+     "4. docs/demo-programs.md — runnable programs mapped to their status: what works, what's blocked, and on what.",
+     "5. src/design.md — source layout and the index of per-module design docs."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    66,
+    49,
+    52
+   ],
+   [
+    "replace",
+    66,
+    68,
+    52,
+    54,
+    [
+     "Requires a recent Rust toolchain (pinned in rust-toolchain.toml) and",
+     "z3 on `PATH`. The type checker decides a refinement"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    70,
+    54,
+    56
+   ],
+   [
+    "replace",
+    70,
+    71,
+    56,
+    57,
+    [
+     "release pinned in .github/workflows/ci.yml."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    87,
+    57,
+    73
+   ],
+   [
+    "replace",
+    87,
+    88,
+    73,
+    74,
+    [
+     "`~/.cargo/config.toml`. CLAUDE.md has the details."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    115,
+    74,
+    101
+   ],
+   [
+    "replace",
+    115,
+    116,
+    101,
+    102,
+    [
+     "Both default to port 8080 (`--inspect=9090` to change it; `--inspect=0` lets the OS pick a free one, and the startup line on stderr names the port it picked). Under `--inspect` values are recorded only while a client holds `/api/live` open, and the process stays alive after the program finishes, so a client connected through the run can still read them; Ctrl+C to exit. `--dump-snapshot` prints the static payload as JSON and exits. See docs/inspector.md."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    131,
+    102,
+    117
+   ],
+   [
+    "replace",
+    131,
+    132,
+    117,
+    118,
+    [
+     "A reload may change the program's logic freely, add endpoints, and stop serving ones it no longer wants (their addresses then answer 404). A variable may even move to another loop: it keeps its value and starts counting positions in whatever it now iterates. The one thing a reload may not do is break continuity of state: a variable the running program is holding a value for must be one the new version declares, or one it loads under another name with `@LoadFrom`, at a type the value fits, and one the source names well enough to tell from its siblings — or the reload is refused and the running program is left serving. See program-evolution.md."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    136,
+    118,
+    122
+   ],
+   [
+    "replace",
+    136,
+    138,
+    122,
+    123,
+    [
+     "Apache 2.0 — see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

@@ -2891,5 +2891,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f9b09b314ffb": {
+  "identity": {
+   "one_liner": "自托管 Obsidian 双向同步插件与服务器，单 Go 二进制加 SQLite 实现",
+   "review": "该项目为 Obsidian 提供跨 macOS、Windows、Linux、iOS 和 Android 的双向库同步，由用户自己的服务器中转。服务器是单个 Go 二进制内置 SQLite，可用脚本或 Docker 安装。插件在设备端以 AES-256-GCM 加密文件与目录名，冲突时保留双方版本并询问用户。密钥由口令派生，设置后不可更改或恢复。",
+   "highlights": [
+    "同一插件同步桌面与移动端，服务器为单二进制内置 SQLite，无需 CouchDB、S3 或第三方云",
+    "设备端 AES-256-GCM 加密（文件与目录名含在内），密钥经 Argon2id 从口令派生，可事后对已有库启用",
+    "同行编辑自动合并，同行冲突保留双方版本并按设备命名询问；删除文件默认三十天内可从任意设备恢复"
+   ],
+   "use_cases": [
+    "在多台桌面与移动设备间通过自拥有的服务器或 VPS 同步 Obsidian 库",
+    "希望服务器只存储密文、不持有可读内容的端到端加密同步需求",
+    "通过 Tailscale 等私有网络地址连接、跳过 TLS 的内网部署场景"
+   ]
+  },
+  "sha": "f9b09b314ffb",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6bc11cc11996": {
+  "identity": {
+   "one_liner": "本地法律助手：BM25 法条 RAG、规则化合同审查与金额测算链路",
+   "review": "面向劳动争议与合同审查场景的本地法律助手，用 FastAPI + LangGraph 将检索、规则、计算、引用串成可审计链路：回答只引用本地 33 条法条，风险由规则引擎识别，金额由独立计算器测算并附公式。LLM 仅组织措辞，未配置时可离线运行；数据与条文均为合成样本，单机 SQLite 部署。",
+   "highlights": [
+    "本地法条库 33 条，中文二元组 BM25 检索加同义扩展，配引用守卫，检索不足时不生成确定性结论",
+    "12 条合同风险规则扫描，输出风险等级、修改建议与法条依据；金额测算覆盖 N、2N、N+1 并展示公式与假设",
+    "提供 FastAPI 接口、React 合同审查控制台与 Streamlit 前端，问答与审查记录落 SQLite 可回溯，支持 Docker Compose 与 GitHub Actions"
+   ],
+   "use_cases": [
+    "劳动争议问题（解除补偿、试用期、竞业限制等）的带引用本地问答与赔偿金额测算",
+    "劳动合同条款风险扫描与逐条修改建议的生成与阅读",
+    "法条检索、规则引擎、LLM 编排等法律 RAG 工程实现的参考样例"
+   ]
+  },
+  "sha": "6bc11cc11996",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

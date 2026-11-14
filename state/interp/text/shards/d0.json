@@ -3185,5 +3185,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b88cfc3784af": {
+  "identity": {
+   "one_liner": "本地优先的单二进制项目管理工具，含 CLI、Web UI 与 AI 代理技能",
+   "review": "Pad 是一个用 Go 编写的项目管理工具，数据存储在本地 SQLite 中，提供 CLI、运行于 localhost:7777 的 Web UI 以及面向 AI 编码代理的 /pad 技能。内置任务、想法、计划、文档、约定、剧本六类集合，支持自定义字段。安装方式包括 Homebrew、源码构建（需 Go 1.26+ 与 Node.js 22+）和 Docker；可选 Pad Cloud 提供同步与协作。",
+   "highlights": [
+    "单二进制、本地优先运行，数据存于本地 SQLite，支持可选的 Pad Cloud 同步与工作区邀请",
+    "提供 /pad 技能供 Claude Code、Cursor、Codex、Windsurf、OpenCode、GitHub Copilot、Amazon Q、JetBrains Junie 读取和写入项目条目",
+    "支持约定（触发式规则）、剧本（多步工作流，可经 slug 调用）、代理命名归属以及带版本历史的条目变更记录"
+   ],
+   "use_cases": [
+    "在终端与浏览器中管理个人或本机项目的任务、想法与计划",
+    "让 AI 编码代理通过自然语言创建、更新任务，并通过约定与剧本约束代理行为",
+    "在无网络环境下以完整功能运行项目管理（数据保留在本机）"
+   ]
+  },
+  "sha": "b88cfc3784af",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "917378df8446": {
+  "identity": {
+   "one_liner": "自托管定时任务面板：Rust + QuickJS 插件引擎，SQLite 持久化，单静态二进制运行",
+   "review": "插件面板是一个跑在自有设备上的定时任务工具，通过浏览器界面添加任务、设置计划、查看运行结果，无需云服务和数据库服务器，仅靠单个程序加 SQLite 文件工作。适用于树莓派、小主机等设备，支持 JavaScript 插件和 sh/python/php 等第三方脚本。当前版本 0.4.2 提供 aarch64 与 x86_64 musl 静态产物，暂无 32 位 ARM 产物；仓库尚未附带开源许可证。",
+   "highlights": [
+    "支持标准五段 cron 与 @every 表达式，带抖动后缀、提前量唤醒与连续失败自动熔断",
+    "插件通过 panel:host API 使用日志、SQLite、HTTP、通知和定时任务能力，网络出站经 SSRF 门（默认禁回环与云元数据地址）",
+    "提供 Server酱、ntfy、Gotify、自定义 webhook、SMTP 等通知渠道，及一键导出/恢复备份"
+   ],
+   "use_cases": [
+    "在树莓派、小主机或低配 ARM 盒子上长期运行定时签到、备份文件、清理临时目录等任务",
+    "用 JavaScript 编写带 Web 界面、配置表单和数据库的插件，将重复操作做成按钮或定时任务",
+    "直接托管 sh/node/bun/python3/php 脚本或二进制程序，按计划或手动触发并记录 stdout/stderr 与退出码"
+   ]
+  },
+  "sha": "917378df8446",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e15ba11886dd": {
+  "identity": {
+   "one_liner": "自托管预约排班平台，基于 Next.js 与 PostgreSQL，Docker 一键部署",
+   "review": "NexCal 是一个面向多服务者团队（诊所、沙龙、咨询机构等）的开源预约排班系统，采用 Next.js 16、TypeScript、Prisma 7 与 PostgreSQL 构建，通过 Docker Compose 部署。提供预约管理、患者自助门户、管理后台与数据看板，集成 Midtrans 支付、Google Calendar、WhatsApp 通知。支付与第三方集成凭据需在管理界面按组织配置；数据库迁移依赖 PostgreSQL 的 btree_gist 扩展。",
+   "highlights": [
+    "支持多服务者（multi-provider）组织架构与基于角色的访问控制（OWNER/STAFF）",
+    "包含防重复预约机制（Zod 校验与实时可用性复查两层）与按服务的缓冲时间设置",
+    "支持 Midtrans 支付网关、Google Calendar 同步与 Meet 链接生成、WhatsApp 通知及外部 ICS 日历读取"
+   ],
+   "use_cases": [
+    "多医生诊所、多发型师沙龙等多从业者团队的预约管理",
+    "需要自托管并从管理界面配置支付/通知/日历集成的场景",
+    "提供线上虚拟咨询并需自动生成 Google Meet 链接的服务"
+   ]
+  },
+  "sha": "e15ba11886dd",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "229ac6946d75": {
+  "identity": {
+   "one_liner": "以 MCP 工具形式向 AI 客户端暴露十种数据库的 Go 网关服务",
+   "review": "database-mcp-go 用单个静态 Go 二进制把 MySQL、PostgreSQL、MongoDB、Redis 等十种数据库包装成六个 MCP 工具。连接凭证集中存于服务端，客户端只用别名加库名调用；数据源可存 JSON 文件或加密落库的 MySQL 配置表，并内嵌 /admin 管理页维护配置。适合需要让 MCP 客户端访问多种数据库的团队自托管使用。",
+   "highlights": [
+    "一套接口覆盖 MySQL、MariaDB、TiDB、OceanBase、KingbaseES、PostgreSQL、SQL Server、SQLite、MongoDB、Redis，每库独立连接池",
+    "提供 execute-sql、get-datasources、增删改数据源配置与 refresh-config 共六个 MCP 工具，凭证不下发客户端",
+    "SQL 类库多条语句在同一事务执行并整体回滚，配置支持热生效，mysql 模式下密码以 AES-256-GCM 加密落库"
+   ],
+   "use_cases": [
+    "让支持 MCP Streamable HTTP 的 AI 客户端通过统一入口查询和操作多种数据库",
+    "集中管理多实例数据源连接配置，通过 /admin 管理页或 MCP 工具维护，避免凭证分散在客户端",
+    "单文件部署于内网服务器，为本机或经隧道访问的 AI 工作流提供数据库执行通道"
+   ]
+  },
+  "sha": "229ac6946d75",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

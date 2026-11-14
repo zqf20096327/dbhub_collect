@@ -2791,5 +2791,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "edde4a9ad7d1": {
+  "identity": {
+   "one_liner": "自托管的数据库备份工具，提供 PITR 与恢复验证",
+   "review": "Databasus 是一个 Apache 2.0 许可的自托管备份工具，支持 PostgreSQL（物理+逻辑）、MySQL、MariaDB、MongoDB（逻辑）备份，通过 WAL 流实现时间点恢复（PITR），并可在容器中执行真实恢复以验证备份可用性。提供 Web 界面、多存储目的地、通知与保留策略，适合运维团队管理数据库备份。部署方式包括脚本、Docker、Compose 与 Helm。",
+   "highlights": [
+    "物理备份基于 PostgreSQL 原生增量机制并持续流式捕获 WAL，支持 Patroni 与 CloudNativePG 集群主从切换后的 timeline 变更",
+    "通过启动数据库容器执行真实恢复进行验证，输出逐表行数报告",
+    "支持本地、S3、Cloudflare R2、Azure Blob Storage、FTP、SFTP 等存储目的地及多种保留策略（时间段、数量、GFS、大小上限）"
+   ],
+   "use_cases": [
+    "需要对 PostgreSQL 进行时间点恢复（PITR）和低 RPO/RTO 灾备的运维场景",
+    "自托管环境中集中管理多数据库（PostgreSQL/MySQL/MariaDB/MongoDB）的计划备份与恢复验证",
+    "需要工作区、角色权限和审计日志的团队协作备份管理"
+   ]
+  },
+  "sha": "edde4a9ad7d1",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79e2bc99cd81": {
+  "identity": {
+   "one_liner": "开源自托管大会运营平台，贯通官网、报名、票务、支付、发票与签到流程",
+   "review": "TokEMS 是一个自托管的一体化大会运营平台，面向大会主办方、活动运营团队和技术服务商，覆盖官网发布、报名、票务、订单、发票、通知与现场签到。当前为 v0.1.0 公开预览版，含 16 个前台页面、32 个 API Controller 和 78 张数据库表，使用 Docker Compose 一键部署；界面以简体中文为主，支付与短信流程按中国大陆场景实现。",
+   "highlights": [
+    "覆盖官网、报名、票务、候补队列、发票、通知与现场签到的完整业务流程，支持多组织隔离与细粒度 RBAC",
+    "现场签到支持设备令牌、二维码核销、重复核销识别与离线批次同步",
+    "技术栈为 Nuxt 4/Vue 3 前台、NestJS API、BullMQ/Redis Worker、PostgreSQL 16，通过 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "中大型行业大会的官网发布、报名与付费票务管理",
+    "多活动组织方的模板复用、发布回滚与审计管理",
+    "弱网环境下的现场签到与票务核销"
+   ]
+  },
+  "sha": "79e2bc99cd81",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5888f1f930cc": {
+  "identity": {
+   "one_liner": "纯 Rust 实现的 Access 式数据库工具，通过统一命令总线读写 mdb/accdb/SQLite/CSV。",
+   "review": "DataCraft 是以 clean-room 方式用 Rust 重写的 Microsoft Access 工作流工具，提供 ribbon、数据表视图、QBE 查询构建器、表单/报表画布等界面，并可在 macOS/Windows/Linux 上运行。它读取 Jet3/Jet4 .mdb、ACE .accdb、SQLite 与 CSV，写入 Jet4/ACE 与 SQLite，GUI、CLI 与 MCP/JSON-RPC 端点共享同一命令总线。项目处于 pre-1.0，Jet3 只读，宏/VBA 仅提取分析不执行；MIT OR Apache-2.0 双许可。",
+   "highlights": [
+    "读取 Jet3/Jet4 .mdb、ACE .accdb、SQLite 与 CSV 目录；写入 Jet4/ACE（表、行、schema、索引、关系）与 SQLite，路径均有兼容矩阵标注",
+    "桌面 shell（egui）、CLI 与 MCP/JSON-RPC stdio 端点通过同一命令总线执行相同命令，可被人和 AI 代理操作",
+    "包含 QBE 查询构建、SQL 执行、宏与 VBA 提取及静态分析（只读、不执行）、表单运行时与关系映射器"
+   ],
+   "use_cases": [
+    "在 macOS/Windows/Linux 上以数据表和设计视图方式查看与编辑 Access（Jet/ACE）、SQLite 及 CSV 数据",
+    "通过 CLI 或 MCP/JSON-RPC 端点以命令方式对同一数据库文件进行无头自动化操作",
+    "使用 datacraft-import 工具迁移 Access 表单/报表，并以 sidecar 文件保存设计数据而不改动原生数据库"
+   ]
+  },
+  "sha": "5888f1f930cc",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "25f88f8d3c16": {
+  "identity": {
+   "one_liner": "跨平台开发者工作台，将AI编码代理、Git、数据库、Kubernetes集成于单窗口。",
+   "review": "DevCat 是一个基于 Tauri 2（Rust）与 React + TypeScript 构建的免费跨平台桌面应用，面向使用 AI 编码代理的开发者。它提供终端运行 Claude Code、Codex、Gemini CLI 等已安装代理及内置 DevCat Agent，并集成 Git 提交图、SQL/NoSQL 编辑器、Kubernetes、RabbitMQ、VPN/SSH 隧道，按项目分组；支持无服务器无账号运行，移动端通过 QR 配对连接桌面端。注意：发布包暂不含 Android APK，需自行构建。",
+   "highlights": [
+    "支持在真实终端中运行 Claude Code、OpenAI Codex、Gemini CLI、GitHub Copilot、Aider 等编码代理，或使用内置 DevCat Agent 连接任意 OpenAI/Anthropic 兼容模型 API",
+    "提供 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、MongoDB、Redis 连接，SQL 编辑器含 schema 感知自动补全、explain 与导出",
+    "内置 Git 提交图/blame/stash、Kubernetes 集群管理、Docker、RabbitMQ、OpenVPN/WireGuard/SSH 隧道，并提供 Telegram/Discord 机器人与移动端远程控制代理"
+   ],
+   "use_cases": [
+    "在同一窗口内让 AI 代理修改代码并同时查询数据库、查看 Kubernetes 日志等基础设施",
+    "通过手机或 Telegram/Discord 远程审批代理请求、查看结果与改动文件",
+    "在服务器或无窗口环境用 devcat serve CLI 提供代理与数据库的远程访问"
+   ]
+  },
+  "sha": "25f88f8d3c16",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

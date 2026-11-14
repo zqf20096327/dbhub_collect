@@ -23939,5 +23939,583 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "375082b795d6+2": {
+  "fn": "skudra-go/ant",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "ant"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    10,
+    2,
+    3,
+    [
+     " A typed ORM for Go. Plain structs, compiler-checked queries, no code generation."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    3,
+    4
+   ],
+   [
+    "replace",
+    11,
+    16,
+    4,
+    7,
+    [
+     " Documentation ·",
+     " Quick start ·",
+     " Examples"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    7,
+    8
+   ],
+   [
+    "replace",
+    17,
+    25,
+    8,
+    12,
+    [
+     " CI",
+     " Go Reference",
+     " Go 1.27+",
+     " MIT license"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    32,
+    12,
+    19
+   ],
+   [
+    "replace",
+    32,
+    59,
+    19,
+    20,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    76,
+    20,
+    37
+   ],
+   [
+    "replace",
+    76,
+    77,
+    37,
+    38,
+    [
+     "examples/hello is one file on SQLite. It needs only Go:"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    90,
+    38,
+    51
+   ],
+   [
+    "replace",
+    90,
+    91,
+    51,
+    52,
+    [
+     "The first run takes about 30 seconds, mostly compiling the SQLite driver. The quick start walks through the same program."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    94,
+    52,
+    55
+   ],
+   [
+    "replace",
+    94,
+    99,
+    55,
+    56,
+    [
+     "The same query in each: users over 18 with their posts, sorted by name, 10 at a time. A test checks that all four return the same rows."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    111,
+    56,
+    68
+   ],
+   [
+    "delete",
+    111,
+    114,
+    68,
+    68
+   ],
+   [
+    "equal",
+    114,
+    120,
+    68,
+    74
+   ],
+   [
+    "replace",
+    120,
+    126,
+    74,
+    75,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    75,
+    76
+   ],
+   [
+    "delete",
+    127,
+    132,
+    76,
+    76
+   ],
+   [
+    "equal",
+    132,
+    139,
+    76,
+    83
+   ],
+   [
+    "replace",
+    139,
+    145,
+    83,
+    84,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    84,
+    85
+   ],
+   [
+    "delete",
+    146,
+    149,
+    85,
+    85
+   ],
+   [
+    "equal",
+    149,
+    161,
+    85,
+    97
+   ],
+   [
+    "delete",
+    161,
+    165,
+    97,
+    97
+   ],
+   [
+    "equal",
+    165,
+    167,
+    97,
+    99
+   ],
+   [
+    "replace",
+    167,
+    174,
+    99,
+    106,
+    [
+     "|Mistake|ant|GORM|Bun|ent|sqlc|",
+     "|---|:---:|:---:|:---:|:---:|:---:|",
+     "|Misspelled column, `agee`|✅|❌|❌|✅|⚠️|",
+     "|`\"18\"` for an `int`|✅|❌|❌|✅|✅|",
+     "|Misspelled relation, `Psots`|✅|❌|❌|✅|⚠️|",
+     "|Column of another model|⚠️|❌|❌|✅|⚠️|",
+     "|No code generation step|✅|✅|✅|–|–|"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    177,
+    106,
+    109
+   ],
+   [
+    "replace",
+    177,
+    178,
+    109,
+    110,
+    [
+     "Each cell was tested by compiling the mistake. GORM also has an optional CLI that generates typed field helpers."
+    ]
+   ],
+   [
+    "equal",
+    178,
+    181,
+    110,
+    113
+   ],
+   [
+    "replace",
+    181,
+    182,
+    113,
+    114,
+    [
+     "tools/compare runs the same operations in each library against PostgreSQL 17 on one machine (Ryzen 5 3600, Docker on WSL2). Each number is the median of 10 runs, and each run repeats the operation hundreds to thousands of times. The database round trip is included, which is why small queries are close. Commits don't wait for the disk, so writes measure the library and not the drive. Plain SQL (a hand-written query and `Scan`, what sqlc generates) is the baseline. Lower is better; 🟢 is the best in each row, shared by any within 1%."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    114,
+    115
+   ],
+   [
+    "replace",
+    183,
+    192,
+    115,
+    124,
+    [
+     "|µs per operation|ant|ant NoTracking|GORM|Bun|ent||Plain SQL baseline|",
+     "|---|---:|---:|---:|---:|---:|-|---:|",
+     "|Read 1000 rows|2,075|🟢 **1,692**|3,361|2,370|2,240||1,692|",
+     "|Find one by key|442|397|405|🟢 **384**|398||398|",
+     "|Filter, sort, 10 rows|557|🟢 **539**|568|🟢 **535**|556||535|",
+     "|100 users, 500 posts|2,238|🟢 **1,774**|2,731|2,030|2,031||1,581|",
+     "|Insert one|410|–|420|1,112|🟢 **404**||392|",
+     "|Update one column|🟢 **399**|–|407|424|🟢 **402**||390|",
+     "|Load, edit, save|🟢 **805**|–|818|🟢 **812**|1,869||798|"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    193,
+    124,
+    125
+   ],
+   [
+    "replace",
+    193,
+    202,
+    125,
+    134,
+    [
+     "|KiB per operation|ant|ant NoTracking|GORM|Bun|ent||Plain SQL baseline|",
+     "|---|---:|---:|---:|---:|---:|-|---:|",
+     "|Read 1000 rows|582|🟢 **275**|392|295|589||257|",
+     "|Find one by key|3.8|🟢 **3.5**|5.7|6.3|4.9||1.5|",
+     "|Filter, sort, 10 rows|11.5|🟢 **7.9**|9.7|9.2|11.9||3.8|",
+     "|100 users, 500 posts|486|🟢 **241**|362|277|335||257|",
+     "|Insert one|🟢 **2.5**|–|7.0|6.8|3.7||1.3|",
+     "|Update one column|🟢 **2.5**|–|5.6|5.0|3.1||0.3|",
+     "|Load, edit, save|🟢 **5.8**|–|11.2|11.2|10.7||1.8|"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    208,
+    134,
+    140
+   ],
+   [
+    "replace",
+    208,
+    209,
+    140,
+    141,
+    [
+     "- Bun's insert is slow by default (it prepares every insert as a new statement), and ent's update reads the row back. tools/compare has the details."
+    ]
+   ],
+   [
+    "equal",
+    209,
+    224,
+    141,
+    156
+   ],
+   [
+    "replace",
+    224,
+    228,
+    156,
+    160,
+    [
+     "||PostgreSQL|MySQL|MariaDB|SQLite|SQL Server|",
+     "|---|:---:|:---:|:---:|:---:|:---:|",
+     "|Queries and writes|✅|✅|✅|✅|✅|",
+     "|Migrations|✅|||||"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    229,
+    160,
+    161
+   ],
+   [
+    "replace",
+    229,
+    230,
+    161,
+    162,
+    [
+     "PostgreSQL gets every feature first. docs/databases.md lists what each database lacks."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    237,
+    162,
+    169
+   ],
+   [
+    "replace",
+    237,
+    238,
+    169,
+    170,
+    [
+     "The roadmap lists what's planned, and why some items were skipped."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    170,
+    173
+   ],
+   [
+    "replace",
+    241,
+    245,
+    173,
+    177,
+    [
+     "- Documentation: guides, recipes and reference.",
+     "- Feature examples: a short test for every feature, edge cases included",
+     "- ant-examples: small projects built on ant",
+     "- Roadmap and design decisions"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    250,
+    177,
+    182
+   ],
+   [
+    "replace",
+    250,
+    251,
+    182,
+    183,
+    [
+     "- **Claude Code**: `/plugin marketplace add skudra-go/ant`, then `/plugin install ant@ant`. The skill loads whenever a task touches ant."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    252,
+    183,
+    184
+   ],
+   [
+    "replace",
+    252,
+    253,
+    184,
+    185,
+    [
+     "- **Any assistant**: point it at skudra.net/llms.txt, the docs as Markdown, or llms-full.txt, all of them in one file."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    261,
+    185,
+    193
+   ],
+   [
+    "replace",
+    261,
+    270,
+    193,
+    194,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    272,
+    194,
+    196
+   ],
+   [
+    "replace",
+    272,
+    273,
+    196,
+    197,
+    [
+     "*Skudra* means *ant* in Latvian, which is where skudra.net gets its name :)"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    275,
+    197,
+    199
+   ],
+   [
+    "replace",
+    275,
+    277,
+    199,
+    200,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "05fbe6daea33+2": {
+  "fn": "TVIEIL/RadioTranscribe-Store",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Gemini_Generated_Image_hki91qhki91qhki9"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    10,
+    1,
+    10
+   ],
+   [
+    "delete",
+    10,
+    12,
+    10,
+    10
+   ],
+   [
+    "equal",
+    12,
+    18,
+    10,
+    16
+   ],
+   [
+    "replace",
+    18,
+    30,
+    16,
+    17,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    51,
+    17,
+    38
+   ],
+   [
+    "delete",
+    51,
+    53,
+    38,
+    38
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

@@ -2723,5 +2723,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4fdfa92be386": {
+  "identity": {
+   "one_liner": "用 Rust 编写的低延迟分布式缓存，兼容 RESP3 协议",
+   "review": "Ember 是用 Rust 编写的内存键值缓存服务器，实现 RESP3 协议，可通过 redis-cli 和现有 Redis 客户端直接连接。支持字符串、列表、哈希、集合、有序集合、位图等数据类型及事务、ACL、Pub/Sub，内置基于 16384 哈希槽与 SWIM gossip 的集群模式、AOF 持久化与 Prometheus 指标。适合需要 Redis 协议接口的缓存场景；Lua 脚本、Streams、多数据库等功能未实现，跨分片事务非全局原子。",
+   "highlights": [
+    "实现 RESP3 协议及字符串、列表、哈希、集合、有序集合、位图等数据类型命令，支持 MULTI/EXEC 事务与 ACL 用户权限控制",
+    "支持集群模式：16384 哈希槽分布、SWIM gossip 成员传播、MOVED/ASK 重定向与在线槽位迁移",
+    "提供 AOF 与快照持久化、可选 AES-256-GCM 静态加密、Prometheus 指标端口及 HNSW 向量相似度搜索（需编译特性启用）"
+   ],
+   "use_cases": [
+    "替换现有 Redis 客户端接入的缓存层，无需修改客户端代码",
+    "需要多节点分布式键空间与故障转移的部署场景",
+    "需要 Prometheus 监控、TLS 与静态加密的缓存基础设施"
+   ]
+  },
+  "sha": "4fdfa92be386",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a49079d21f5a": {
+  "identity": {
+   "one_liner": "TRMNL 电子墨水屏的自托管 BYOS 后端，单 Docker 容器加 Postgres",
+   "review": "Kuroshiro 是 TRMNL 生态的 BYOS 后端，用于接管 TRMNL、Xteink、Kindle 等运行开源 TRMNL 固件的设备显示内容与轮换。它将 NestJS API 与 Vue 3 管理界面打包进一个镜像，部署只需该镜像加一个 Postgres。项目处于 alpha 阶段，1.0.0 前管理界面、API 与配置归档格式尚未冻结，升级时数据库迁移在启动时执行，README 提示更新前需备份数据库。",
+   "highlights": [
+    "可从 trmnl.com 目录内浏览、搜索并一键导入 Recipe 为 Plugin，包含 serverless-transform 类型",
+    "支持 Poll 数据源与 Webhook 推送两种 Plugin 数据方式，用 Liquid 模板渲染并实时预览；Screen 可按日/时 Schedule 门控，Plugin 可组成 7 种布局的 Mashup",
+    "提供设备自动配置、Qwiic 传感器读数、低电量/离线/抓取失败告警（经 Apprise 通知）、/metrics Prometheus 指标、无硬件的 Device Simulator，以及 Home Assistant add-on 部署方式"
+   ],
+   "use_cases": [
+    "在家庭实验室/自托管环境中用自有服务器驱动 TRMNL 类电子墨水屏设备",
+    "通过 Home Assistant OS 的 add-on 一体化部署并纳入 HA 备份",
+    "无实体硬件时用 Device Simulator 轮询并测试面板内容"
+   ]
+  },
+  "sha": "a49079d21f5a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "09e74a5bcbc9": {
+  "identity": {
+   "one_liner": "基于 LLVM/JIT 编译 SQL 内核、直接对 Parquet 文件执行分析查询的数据库引擎",
+   "review": "QumirDB 是一个在 Parquet 文件上运行分析型 SQL 的编译式查询引擎。查询表达式与算子计算经 Qumir 编译为机器码或 WebAssembly 后执行；原生路径面向命令行与本地应用，浏览器路径基于 OPFS 数据集运行。通过 CREATE MODULE 可注册 Rust 模块并与查询内核一同经 LLVM 优化。本地构建见 docs/building.md。",
+   "highlights": [
+    "支持原生机器码与 WebAssembly 两种内核编译目标，浏览器端可基于 OPFS 数据集运行",
+    "提供分布式执行：qdbd 守护进程按节点切分任务图并以 sink/source 对流式交换数据行",
+    "支持 CREATE MODULE 注册 Rust UDF，其 LLVM bitcode 与查询内核链接后联合优化"
+   ],
+   "use_cases": [
+    "在本地或浏览器中直接对 Parquet 文件执行过滤、连接、聚合与排序查询",
+    "多表连接、复杂连接条件与关联子查询等复杂分析查询",
+    "用 Rust 编写数值模型、解析器等域逻辑并从 SQL 中调用"
+   ]
+  },
+  "sha": "09e74a5bcbc9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

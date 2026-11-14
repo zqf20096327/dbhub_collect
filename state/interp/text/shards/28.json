@@ -3015,5 +3015,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e3831a3d1d9c": {
+  "identity": {
+   "one_liner": "Go + Next.js 构建的开源 ITSM 平台，覆盖 ITIL 流程与 BPMN 工作流",
+   "review": "这是一个基于 Go/Gin/Ent 后端与 Next.js 前端的开源 IT 服务管理系统，实现工单、事件、问题、变更、SLA、CMDB、知识库等 ITIL 流程，支持 BPMN 2.0 审批编排与多租户隔离。异步关键操作采用事务加 outbox 模式，可通过 MCP server 供 Agent 调用 353 条命令。支持私有化、SaaS、MSP 三种部署模式，面向 IT 服务台、运维治理与二次开发团队。部分模块处于预览阶段，v1.6.x 界面中文优先。",
+   "highlights": [
+    "覆盖 ITIL 事件、问题、变更、SLA、CMDB 核心流程，审批统一由 BPMN 2.0 流程编排，支持租户隔离、RBAC 与审计日志",
+    "关键异步操作使用事务加 outbox 模式实现，支持重试、死信和投递审计；提供 MCP server 暴露 353 条 CLI 命令",
+    "支持 Milvus、Qdrant、PGVector 等向量存储与 Ollama 可选 AI 组件，AI 能力按配置降级并保留审计记录"
+   ],
+   "use_cases": [
+    "IT 服务台统一受理、分派和跟踪员工请求与事件",
+    "多组织场景下的私有化、SaaS 或 MSP 模式多租户部署",
+    "基于 Go + Next.js 与开放 API 进行二次开发与流程定制"
+   ]
+  },
+  "sha": "e3831a3d1d9c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5203abfa3d4d": {
+  "identity": {
+   "one_liner": "基于C++后端与WebSocket/Protobuf的实时文字与语音聊天系统",
+   "review": "Kergit 是一个实时聊天与语音系统，使用 C++ 后端（Bazel 构建）、Protobuf over WebSocket 通信、Nuxt 4 网页与管理客户端，语音媒体由 LiveKit 承载，持久化与认证依赖 PostgreSQL/Supabase，Redis 用于短时协调。README 标明其为高级原型/个人系统项目，尚非生产就绪，部分语音流程仍需完善。适合想自托管运行或研究其架构的开发者。",
+   "highlights": [
+    "支持基于 Supabase 身份的认证会话、hub/channel 状态同步、实时文字聊天与邀请链接",
+    "实现会话拥有的语音加入/撤销/恢复流程，语音媒体由 LiveKit 提供",
+    "提供 docker 脚本本地运行完整技术栈，并支持仅后端的独立运行方式"
+   ],
+   "use_cases": [
+    "本地自托管实时文字与语音频道系统",
+    "研究 C++ 后端 + WebSocket/Protobuf + LiveKit 架构的参考实现",
+    "作为操作员仪表盘（admin 客户端）查看指标与控制面（仅限操作员）"
+   ]
+  },
+  "sha": "5203abfa3d4d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "219d905cf46f": {
+  "identity": {
+   "one_liner": "基于 LangGraph 编排的招聘筛选 Agent，规则评分与 LLM 语言生成解耦",
+   "review": "HireAgent 是面向中小团队招聘场景的单机服务，覆盖简历解析、六维加权评分、人岗匹配、批量排名与面试回答评估，工作流由 LangGraph 状态图编排并记录节点轨迹。评分由确定性规则计算，LLM 仅用于评语、面试题与反馈生成，未配置 API Key 时回退离线模板。提供 FastAPI、Streamlit 工作台、React 看板及可选 Java Spring Boot ATS 服务；当前为 SQLite 单机部署，评估集为 5 份合成简历。",
+   "highlights": [
+    "支持 PDF/DOCX/TXT/Markdown 简历解析，六维加权评分与人岗匹配可输出技能命中/缺失列表",
+    "评分与面试分数由固定权重规则计算，LLM 仅生成评语与面试题；默认 REDACT_PII=true 隐藏候选人姓名与联系方式",
+    "包含 FastAPI 筛选接口、Streamlit 工作台、React 五列看板及可选 Spring Boot ATS 服务，Docker Compose 可一键启动三端"
+   ],
+   "use_cases": [
+    "校招/社招批量简历初筛与排名导出（CSV、Markdown 报告）",
+    "需要可解释评分依据与可审计流程的候选人筛选与面试评估",
+    "企业已有 ATS 系统时通过 Java 服务集成岗位与筛选记录回写"
+   ]
+  },
+  "sha": "219d905cf46f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7bd56a1af4e3": {
+  "identity": {
+   "one_liner": "单 Go 二进制的自托管单社区聊天与语音服务",
+   "review": "Mnema Talk 是一个自托管的社区聊天平台，面向朋友、社团或小团队等单一社区场景，提供文字频道、语音通话和屏幕共享。部署为 Go 二进制加 PostgreSQL 与 S3 兼容存储，共三个容器；音视频经浏览器端 MLS 派生密钥加密后由 Pion SFU 转发，不做转码；文字消息不经端到端加密，服务器可读。桌面客户端为 Beta 未签名版本。",
+   "highlights": [
+    "单个 Go 二进制内置 Web 应用，支持 linux/amd64 与 arm64，依赖 PostgreSQL 与 S3 兼容存储",
+    "音视频（麦克风、摄像头、屏幕）在浏览器内用 MLS 派生密钥端到端加密，经 Pion SFU 转发 RTP 包，不做转码；屏幕共享最高 4K 60 FPS 并支持分层画质选择",
+    "提供文字频道、线程、论坛频道、Wiki、投票、定时消息、Webhook 与 Bot、斜杠命令等聊天功能；无遥测，成员可自行导出和删除数据"
+   ],
+   "use_cases": [
+    "朋友、社团、公会或小团队自建单一社区聊天与语音空间",
+    "在 NAS、树莓派或小型 VPS 上以 Docker Compose 部署私有聊天服务",
+    "需要端到端加密音视频与 4K 屏幕共享的远程协作场景"
+   ]
+  },
+  "sha": "7bd56a1af4e3",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -19246,5 +19246,986 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "cfbf7df49c2d+2": {
+  "fn": "syiibfs-hash/cc-agent-brain",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "English | 中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    14,
+    3,
+    14
+   ],
+   [
+    "delete",
+    14,
+    16,
+    14,
+    14
+   ],
+   [
+    "equal",
+    16,
+    24,
+    14,
+    22
+   ],
+   [
+    "replace",
+    24,
+    39,
+    22,
+    23,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    47,
+    23,
+    31
+   ],
+   [
+    "replace",
+    47,
+    56,
+    31,
+    40,
+    [
+     " (`SessionStart`, `UserPromptSubmit`, `PreCompact`, `Stop`) merged into",
+     " `.claude/settings.json`. `transcript_capture.py` reads the Claude Code",
+     " transcript JSONL (`transcript_path`) and indexes assistant text plus",
+     " `tool_use` name/input. It skips `tool_result` payloads. Cursor, Codex,",
+     " Gemini CLI, and Claude Desktop have no capture hooks and no automatic",
+     " recall. The installer does write project MCP entries for Claude Code,",
+     " Cursor, and Codex that launch this same `serve-mcp`. Those entries do not",
+     " capture sessions. Gemini CLI and Claude Desktop get no config from the",
+     " installer."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    40,
+    41
+   ],
+   [
+    "replace",
+    57,
+    66,
+    41,
+    50,
+    [
+     " ranked with FTS5 `bm25()` after CJK-bigram tokenization. Reciprocal rank",
+     " fusion (`rrf_fuse`) merges those ranked lists: project memories, project",
+     " events, and, when `~/.cc-agent-brain/brain.db` exists, the global memories",
+     " and events as well. Both sides are keyword search. This is not",
+     " lexical-plus-vector hybrid retrieval. No embedding model and no vector",
+     " index are queried. A vector channel is later work and is not part of",
+     " `search` today. \"Project first, global fallback\" is also inaccurate: when",
+     " the global file exists, its lists are fused in the same RRF call, not used",
+     " only after the project search misses."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    50,
+    51
+   ],
+   [
+    "replace",
+    67,
+    72,
+    51,
+    56,
+    [
+     " memory row has `valid_from`, `valid_to`, `created_at`, and `updated_at`.",
+     " `memory add --supersedes` and `memory expire` keep the old row, set its",
+     " status, and fill `valid_to`. `search` returns rows with `status='active'`",
+     " only. `timeline` lists recent memory rows ordered by `updated_at`. No",
+     " command takes a past timestamp and returns the store as of that time."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    56,
+    57
+   ],
+   [
+    "replace",
+    73,
+    90,
+    57,
+    74,
+    [
+     " process.** `initialize`, with no modern envelope, still returns",
+     " `protocolVersion` `2024-11-05`, `capabilities: {tools: {}}`, and",
+     " `serverInfo.version` `\"2\"` (the schema id). `ping`, `tools/list`, and",
+     " `tools/call` on that path omit `resultType`. A request whose `params._meta`",
+     " has both `io.modelcontextprotocol/protocolVersion` (string) and",
+     " `io.modelcontextprotocol/clientCapabilities` (object) is the modern era.",
+     " When that version is `2026-07-28`, `server/discover`, `tools/list`, and",
+     " `tools/call` return `resultType: \"complete\"` and",
+     " `_meta[\"io.modelcontextprotocol/serverInfo\"]` with version `0.2.0`.",
+     " `server/discover` lists `supportedVersions` as `2026-07-28` then",
+     " `2024-11-05`. Any other version string on that envelope returns JSON-RPC",
+     " `-32022` with `data.supported` and `data.requested`. Either kind of modern",
+     " envelope sticks for that process, so a later `initialize` returns `-32022`",
+     " too. A process that only sends `initialize` is unchanged. Messages without",
+     " an `id` get no response. Details:",
+     " `docs/mcp.md`. Speaking the protocol does not add",
+     " auto-capture for other clients."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    74,
+    75
+   ],
+   [
+    "replace",
+    91,
+    106,
+    75,
+    90,
+    [
+     " `installer/update.py` calls `install.py` again. It overwrites",
+     " `.claude/hooks/cc-agent-brain/`, `.claude/skills/cc-agent-brain-*/`, and",
+     " `.claude/agents/cc-agent-brain-*.md` with the copies from this package. It",
+     " does not replace the rest of `.claude/`. `memory/`, `wiki/`, `private/`,",
+     " and template files that already exist stay as they are.",
+     " `.cc-agent-brain/brain.db` is not replaced or deleted. The installer runs",
+     " `brain_store.py init` on that file even when it already exists",
+     " (`engine_state` is `migrated` when the file was already there, and",
+     " `initialized` when it was created). `_migrate()` creates missing tables;",
+     " rows already in the file stay. Hook merge appends Claude Code hook entries",
+     " that are not already in `settings.json`. The same run merges one stdio",
+     " server named `cc-agent-brain` into `.mcp.json`, `.cursor/mcp.json`, and",
+     " `.codex/config.toml`, and leaves other servers in those files alone. A",
+     " config that does not parse is left untouched. See",
+     " `docs/install.md`."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    90,
+    91
+   ],
+   [
+    "replace",
+    107,
+    119,
+    91,
+    103,
+    [
+     " database for the current working directory. They never pass `--global`.",
+     " Nothing in this tree namespaces memory per agent or runs a shared daemon.",
+     " Several local MCP processes can still open one global SQLite file. Point",
+     " `serve-mcp` at it with `--global` or `CC_AGENT_BRAIN_GLOBAL_DIR` (default",
+     " `~/.cc-agent-brain/`, which also holds `library.md`). Set",
+     " `CC_AGENT_BRAIN_WRITER`, or pass `writer` on the write. The engine stores",
+     " that string. It does not detect Cursor versus Codex. `library.md` is",
+     " rebuilt from active memories and from event counts. Event text stays in",
+     " SQLite. The installer does not create this directory and does not retarget",
+     " the three project MCP entries. There is no cross-machine sync. `search`",
+     " still fuses the global file when it exists and is not the file already",
+     " open. See `docs/mcp.md`."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    133,
+    103,
+    117
+   ],
+   [
+    "replace",
+    133,
+    134,
+    117,
+    118,
+    [
+     "entries described below. See `docs/install.md`."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    141,
+    118,
+    125
+   ],
+   [
+    "replace",
+    141,
+    155,
+    125,
+    126,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    165,
+    126,
+    136
+   ],
+   [
+    "replace",
+    165,
+    166,
+    136,
+    137,
+    [
+     "`docs/mcp.md`."
+    ]
+   ],
+   [
+    "equal",
+    166,
+    173,
+    137,
+    144
+   ],
+   [
+    "replace",
+    173,
+    178,
+    144,
+    145,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    180,
+    145,
+    147
+   ],
+   [
+    "replace",
+    180,
+    182,
+    147,
+    149,
+    [
+     "Reference: `docs/memory-engine.md`. MCP methods and",
+     "the protocol version: `docs/mcp.md`."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    187,
+    149,
+    154
+   ],
+   [
+    "replace",
+    187,
+    188,
+    154,
+    155,
+    [
+     "|Hook|Claude Code event|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    189,
+    155,
+    156
+   ],
+   [
+    "replace",
+    189,
+    195,
+    156,
+    162,
+    [
+     "|`session_start.py`|SessionStart|onboarding check, engine counts|",
+     "|`prompt_capture.py`|UserPromptSubmit|user prompt → `wiki/sessions` + an event|",
+     "|`wiki_context_hint.py`|UserPromptSubmit|FTS recall printed for this Claude Code turn|",
+     "|`transcript_capture.py`|Stop|assistant text and `tool_use` inputs from the Claude Code transcript (idempotent). Skips tool results|",
+     "|`pre_compact_save.py`|PreCompact|writes a marker note and a system event. Does not copy the conversation|",
+     "|`memory_audit.py`|Stop|SQL audit: duplicate active rows, broken supersede links, stale rows, empty memory set|"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    208,
+    162,
+    175
+   ],
+   [
+    "replace",
+    208,
+    209,
+    175,
+    176,
+    [
+     "columns, and there is no as-of query. See `docs/memory-design.md`."
+    ]
+   ],
+   [
+    "equal",
+    209,
+    236,
+    176,
+    203
+   ],
+   [
+    "replace",
+    236,
+    237,
+    203,
+    204,
+    [
+     "- a shared daemon, per-agent namespaces, or cross-machine sync (local MCP processes can open one global SQLite file; see `docs/mcp.md`)"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    240,
+    204,
+    207
+   ],
+   [
+    "replace",
+    240,
+    241,
+    207,
+    208,
+    [
+     "|Label|Idea|Status|"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    208,
+    209
+   ],
+   [
+    "replace",
+    242,
+    247,
+    209,
+    214,
+    [
+     "|v0.1|Markdown scaffold, capture hints|released earlier|",
+     "|v0.2|SQLite + FTS5, Claude Code capture hooks, versioned rows, audit, dual-era MCP (`2024-11-05` and `2026-07-28`)|this tree (`installer` / `PRODUCT_VERSION` `0.2.0`)|",
+     "|v0.3 idea|optional local vector channel, recall eval set|not shipped|",
+     "|v0.4 idea|marketplace packaging, import/export|not shipped|",
+     "|v0.5 idea|optional encrypted backup|not shipped|"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    253,
+    214,
+    220
+   ],
+   [
+    "replace",
+    253,
+    255,
+    220,
+    222,
+    [
+     "`docs/memory-engine.md`. Product notes:",
+     "`docs/product-analysis.md`."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    257,
+    222,
+    224
+   ],
+   [
+    "delete",
+    257,
+    258,
+    224,
+    224
+   ],
+   [
+    "equal",
+    258,
+    259,
+    224,
+    225
+   ],
+   [
+    "delete",
+    259,
+    262,
+    225,
+    225
+   ],
+   [
+    "equal",
+    262,
+    274,
+    225,
+    237
+   ],
+   [
+    "replace",
+    274,
+    288,
+    237,
+    238,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    297,
+    238,
+    247
+   ],
+   [
+    "replace",
+    297,
+    300,
+    247,
+    250,
+    [
+     "4. **MCP 服务器在同一个 stdio 进程上同时说 `2024-11-05` 和 `2026-07-28`。** 没有现代信封时，`initialize` 仍返回 `protocolVersion` `2024-11-05`、`capabilities: {tools: {}}`，以及 `serverInfo.version` `\"2\"`（这是 schema id）。这条路径上的 `ping`、`tools/list`、`tools/call` 不带 `resultType`。`params._meta` 里同时有字符串 `io.modelcontextprotocol/protocolVersion` 和对象 `io.modelcontextprotocol/clientCapabilities` 时走现代协议。版本是 `2026-07-28` 时，`server/discover`、`tools/list`、`tools/call` 返回 `resultType: \"complete\"`，并在 `_meta[\"io.modelcontextprotocol/serverInfo\"]` 里放版本 `0.2.0`。`server/discover` 的 `supportedVersions` 先是 `2026-07-28`，然后是 `2024-11-05`。该信封上的其他版本字符串返回 JSON-RPC `-32022`，`data` 里有 `supported` 和 `requested`。成功的 `2026-07-28` 请求和这种被拒绝的现代信封都会把该进程固定在现代时代，之后的 `initialize` 也返回 `-32022`。只发 `initialize` 的进程保持旧握手。没有 `id` 的消息不会得到响应。细节见 `docs/mcp.md`。协议能对上，并不等于其他客户端有了自动捕获。",
+     "5. **再次运行会升级框架文件，并合并 MCP 配置。** `installer/update.py` 再次调用 `install.py`。它覆盖 `.claude/hooks/cc-agent-brain/`、`.claude/skills/cc-agent-brain-*/` 和 `.claude/agents/cc-agent-brain-*.md`。它不替换整个 `.claude/`。已存在的 `memory/`、`wiki/`、`private/` 和模板文件保持原样。`.cc-agent-brain/brain.db` 不会被替换或删除。即使库已经存在，安装器也会对它执行 `brain_store.py init`（文件已存在时 `engine_state` 为 `migrated`，新建时为 `initialized`）。`_migrate()` 只补建缺失的表，已有记忆行还在。settings 合并只追加还没有的 Claude Code 钩子。同一次运行把名为 `cc-agent-brain` 的一条 stdio 服务合并进 `.mcp.json`、`.cursor/mcp.json` 和 `.codex/config.toml`，其他服务保留。解析失败的配置文件保持不动。详见 `docs/install.md`。",
+     "6. **没有多 Agent 共享记忆服务。** 钩子写入当前工作目录下的项目库，并且不会传 `--global`。本仓库没有按 Agent 分命名空间，也没有共享守护进程。多个本地 MCP 进程仍然可以打开同一份全局 SQLite。用 `--global` 或 `CC_AGENT_BRAIN_GLOBAL_DIR` 把 `serve-mcp` 指过去（默认目录是 `~/.cc-agent-brain/`，里面还有 `library.md`）。设置 `CC_AGENT_BRAIN_WRITER`，或在写入时传 `writer`。引擎只保存这个字符串，不会判断当前是 Cursor 还是 Codex。`library.md` 由活跃记忆和事件计数重新生成，事件原文留在 SQLite。安装器不会创建这个目录，也不会把三条项目 MCP 配置改指到全局库。没有跨机器同步。全局库文件存在、且不是当前打开的那个文件时，`search` 仍会把它的列表融合进去。详见 `docs/mcp.md`。"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    311,
+    250,
+    261
+   ],
+   [
+    "replace",
+    311,
+    312,
+    261,
+    262,
+    [
+     "也可以把 `prompts/install-from-github.md` 里的提示词粘贴到 Claude Code。钩子属于 Claude Code。同一次安装还会写入下面的 Cursor 和 Codex MCP 条目。详见 `docs/install.md`。"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    319,
+    262,
+    269
+   ],
+   [
+    "replace",
+    319,
+    333,
+    269,
+    270,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    337,
+    270,
+    274
+   ],
+   [
+    "replace",
+    337,
+    338,
+    274,
+    275,
+    [
+     "安装器不会创建 `~/.cc-agent-brain/brain.db`。只有你自己用 `--global` 建好并写入之后，`search` 才会把这个文件融合进去。同一目录下的 `library.md` 会跟着这份库更新。详见 `docs/mcp.md`。"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    345,
+    275,
+    282
+   ],
+   [
+    "replace",
+    345,
+    350,
+    282,
+    283,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    352,
+    283,
+    285
+   ],
+   [
+    "replace",
+    352,
+    353,
+    285,
+    286,
+    [
+     "完整说明见 `docs/memory-engine.md`。MCP 方法与协议版本见 `docs/mcp.md`。"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    358,
+    286,
+    291
+   ],
+   [
+    "replace",
+    358,
+    359,
+    291,
+    292,
+    [
+     "|Hook|Claude Code 事件|实际行为|"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    360,
+    292,
+    293
+   ],
+   [
+    "replace",
+    360,
+    366,
+    293,
+    299,
+    [
+     "|`session_start.py`|SessionStart|初始化检查、引擎计数|",
+     "|`prompt_capture.py`|UserPromptSubmit|用户提示写入 `wiki/sessions` 和事件流|",
+     "|`wiki_context_hint.py`|UserPromptSubmit|把 FTS 命中打印到当前 Claude Code 回合|",
+     "|`transcript_capture.py`|Stop|从 Claude Code transcript 索引助手正文和 `tool_use` 入参（幂等），跳过 tool result|",
+     "|`pre_compact_save.py`|PreCompact|写一份标记笔记和一条 system 事件，不复制对话内容|",
+     "|`memory_audit.py`|Stop|SQL 审计：重复的 active 行、断开的 supersede、陈旧行、还没有任何记忆|"
+    ]
+   ],
+   [
+    "equal",
+    366,
+    373,
+    299,
+    306
+   ],
+   [
+    "replace",
+    373,
+    374,
+    306,
+    307,
+    [
+     "四层：`working`、`episodic`、`semantic`、`procedural`。状态：`active`、`superseded`、`expired`、`archived`。列里包括 `valid_from`、`valid_to`、置信度、来源、`writer`、`supersedes`、`created_at`、`updated_at`。活跃检索不按这些时间列过滤，也没有 as-of 查询。详见 `docs/memory-design.md`。"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    392,
+    307,
+    325
+   ],
+   [
+    "replace",
+    392,
+    393,
+    325,
+    326,
+    [
+     "- 共享守护进程、按 Agent 分命名空间，或跨机器同步（多个本地 MCP 进程可以打开同一份全局 SQLite，见 `docs/mcp.md`）"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    396,
+    326,
+    329
+   ],
+   [
+    "replace",
+    396,
+    397,
+    329,
+    330,
+    [
+     "|标记|想法|状态|"
+    ]
+   ],
+   [
+    "equal",
+    397,
+    398,
+    330,
+    331
+   ],
+   [
+    "replace",
+    398,
+    403,
+    331,
+    336,
+    [
+     "|v0.1|Markdown 脚手架与捕获提示|更早发布|",
+     "|v0.2|SQLite + FTS5、Claude Code 捕获钩子、带版本的行、审计、双协议 MCP（`2024-11-05` 与 `2026-07-28`）|本仓库（安装器 / `PRODUCT_VERSION` `0.2.0`）|",
+     "|v0.3 想法|可选本地向量通道、召回评测集|未交付|",
+     "|v0.4 想法|Marketplace 打包、导入导出|未交付|",
+     "|v0.5 想法|可选加密备份|未交付|"
+    ]
+   ],
+   [
+    "equal",
+    403,
+    406,
+    336,
+    339
+   ],
+   [
+    "replace",
+    406,
+    407,
+    339,
+    340,
+    [
+     "框架本身不含个人数据。引擎和钩子不发起网络连接。`memory/`、`wiki/`、`private/` 和 `*.db` 被 git 忽略。写入时的密钥脱敏是按常见形态做的替换，不是完整的秘密扫描。说明见 `docs/memory-engine.md`。产品笔记见 `docs/product-analysis.md`。"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    411,
+    340,
+    344
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "b1aa504dfef7+2": {
+  "fn": "HashaamShoukat/apex-login-studio",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "APEX 26.1+ License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Login Studio preview"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "**Live demo** - browse the gallery and try every option in the Designer (no sign-in needed)."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    14,
+    9,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "|Design|Look|"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    29,
+    16,
+    29,
+    [
+     "|Classic|A card over an animated aurora; follows the Layout, Card Style and Background options|",
+     "|Curved Panel|One card - a coloured panel with a big curve next to the form|",
+     "|Arc|A big coloured circle sweeps in from the side, the form sits on white|",
+     "|Neon|A dark card with glowing corner lines and a glowing button|",
+     "|Soft UI|Neumorphic - the card is raised, the fields are pressed in (light or dark)|",
+     "|Minimal Line|No card, a large title and underlined fields|",
+     "|Diagonal|A two-tone page split on the diagonal|",
+     "|Wave|A coloured band with a wave edge across the top|",
+     "|Bold|Neo-brutalist - thick ink outlines and hard offset shadows|",
+     "|Gradient Border|A colour ring turning around the card|",
+     "|Layered Cards|Two coloured cards fanned out behind the form|",
+     "|Editorial|Paper colours, a serif headline and fine rules|",
+     "|Terminal|A console window with a blinking cursor|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    40,
+    29,
+    40
+   ],
+   [
+    "replace",
+    40,
+    42,
+    40,
+    42,
+    [
+     "Gallery",
+     "Gallery"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    42,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     " Every look on a phone "
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    44,
+    45
+   ],
+   [
+    "replace",
+    45,
+    47,
+    45,
+    46,
+    [
+     "Phones"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    46,
+    49
+   ],
+   [
+    "replace",
+    50,
+    51,
+    49,
+    50,
+    [
+     "1. Download `login-studio.sql`."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    50,
+    53
+   ],
+   [
+    "replace",
+    54,
+    55,
+    53,
+    54,
+    [
+     "The APEXlang source of the application is in `apexlang/` (`apex import -input apexlang` with SQLcl 26.1)."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    62,
+    54,
+    61
+   ],
+   [
+    "replace",
+    62,
+    63,
+    61,
+    62,
+    [
+     "|Slot|Use it for|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    62,
+    63
+   ],
+   [
+    "replace",
+    64,
+    69,
+    63,
+    68,
+    [
+     "|Brand Panel|Welcome text next to the form (Curved Panel, Arc, Split / Floating layouts); a banner on phones|",
+     "|Top Bar|A logo and links above the form|",
+     "|Body Header / Body Footer|Notes inside the card|",
+     "|Page Footer|Copyright and links under the card|",
+     "|Background Image|` ` for Background = Image|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    82,
+    68,
+    81
+   ],
+   [
+    "replace",
+    82,
+    83,
+    81,
+    82,
+    [
+     "Designer"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    91,
+    82,
+    90
+   ],
+   [
+    "replace",
+    91,
+    95,
+    90,
+    91,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

@@ -2911,5 +2911,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2b0361d3ce5d": {
+  "identity": {
+   "one_liner": "E-Hentai 标签中文翻译数据库，由社区协作编辑维护。",
+   "review": "该项目存储 E-Hentai 站点标签的中文翻译数据，数据通过 EhTag Editor 由社区编辑者协作维护，内容归全体编辑者共同所有，以 CC BY-NC-SA 3.0 协议发布。数据按 all、female、male、language、artist、parody 等分类组织，供 EhSyringe、各 EhViewer 分支等下游项目读取使用。",
+   "highlights": [
+    "提供 female、male、mixed、language、artist、cosplayer、parody、character 等多种类别的标签翻译数据",
+    "通过 EhTag Editor 支持社区协作编辑翻译内容",
+    "在 CC BY-NC-SA 3.0 协议下发布，下游项目使用前需提交 Issue 登记"
+   ],
+   "use_cases": [
+    "为浏览器插件和 UserScript（如 EhSyringe）提供 E 站标签中文翻译数据源",
+    "为 Android、iOS、Flutter 等多平台 EhViewer 阅读器客户端提供翻译数据库",
+    "转换为 MDict 等词典格式，供词典类工具使用"
+   ]
+  },
+  "sha": "2b0361d3ce5d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "58105caae67e": {
+  "identity": {
+   "one_liner": "将多 Provider AI 编码会话 JSONL 索引至统一 SQLite，供 Agent CLI 查询与桌面 App 浏览。",
+   "review": "Trajex 把 Claude Code、Codex、Pi、DeepSeek Harness 的本地 JSONL 会话解析为统一 record 存入 ~/.trajex/trajex.sqlite，经 FTS5 支持检索。CLI 零 npm 运行时依赖，使用 Node 22 内置 node:sqlite；Agent 通过编写 JS 查询检索历史。配套 Electron + Vue 桌面 App 用于浏览会话和管理 memories，两者共享同一索引。工具结果采用三层投影限制存储长度，需完整内容时经 raw() 回读原文。需要 Node.js 22.13+。",
+   "highlights": [
+    "将 Codex、Claude Code、Pi、DeepSeek Harness 的 JSONL 会话解析为统一 canonical record 并持久化至 SQLite，行带 source 值且非 Claude ID 加 provider 前缀",
+    "提供 JS Query API（search/context/sql 及 sessions、memories、failures 等结构化 helpers），CLI 无运行时 npm 依赖，使用 Node 22 内置 node:sqlite 与 FTS5",
+    "App 含 Sessions 浏览（含可读 tool calls、diffs）、Memory、Activity 热力图与 token 图表、Settings 数据源配置；支持目录监听与增量索引"
+   ],
+   "use_cases": [
+    "让具备 shell 权限的 coding agent 通过 /trajex skill 以自然语言查询历史会话，如定位某次 bug 修改涉及的文件或失败的 tool calls",
+    "在桌面 App 中按项目过滤浏览全部历史会话、查看 tool call 详情与 token 使用统计",
+    "将检索结论经用户批准后注册为 memory file，供后续会话通过 memories() 召回"
+   ]
+  },
+  "sha": "58105caae67e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2abc0eca556b": {
+  "identity": {
+   "one_liner": "基于 Apache Arrow Flight 的分布式向量引擎，面向 Agent 内存共享场景",
+   "review": "Longbow 是用 Go 编写的分布式向量引擎，通过 Arrow Flight（gRPC/HTTP2）提供零拷贝数据路径，采用共享无（shared-nothing）架构、SWIM 协议成员管理和一致性哈希分片，面向 AI/Agent 工作负载的内存共享。支持多种向量类型与距离度量、HNSW 检索、WAL 与 Parquet 快照持久化，可通过环境变量配置并暴露 Prometheus 指标。运行需 Go 1.27.4+，GPU 加速需单独编译对应二进制。",
+   "highlights": [
+    "基于 Apache Arrow Flight 协议，将数据端口（3000）与元数据端口（3001）分离为两个 gRPC 服务器，并同时提供 REST v1 和 GraphQL 接口",
+    "支持多向量数据类型（float32/16/64、int8-64、complex、turboquant，维度 128–3072），带 SIMD 内核（AVX2/AVX-512/Neon）与可插拔距离度量（欧氏、余弦、点积）",
+    "搜索模式包含 Dense ANN/k-NN、稀疏/BM25、混合（RRF）、地理空间、时序、GraphRAG、联邦跨集合检索等；存储为内存临时存储，配合 io_uring 可选 WAL 与 Parquet 快照"
+   ],
+   "use_cases": [
+    "需要多节点集群部署的 Agent 记忆/向量数据共享与高吞吐读写场景",
+    "需要通过 Go SDK 智能客户端进行透明路由请求的应用",
+    "需要 Prometheus 指标监控与结构化日志可观测性的向量检索服务部署"
+   ]
+  },
+  "sha": "2abc0eca556b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

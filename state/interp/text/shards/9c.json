@@ -3478,5 +3478,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c7de401f1c5b": {
+  "identity": {
+   "one_liner": "单文件嵌入式双时态图数据库，支持Datalog查询与时间旅行",
+   "review": "Minigraf是一个用Rust编写的单文件嵌入式图数据库，以EAV事实存储数据，支持带递归规则的Datalog查询和双时态（事务时间+有效时间）查询，可用于AI代理记忆、移动端离线存储等场景。提供Python/Node/Java/Android/iOS/C/WASM绑定。设计上不做分布式、客户端-服务器模式，优化目标为百万节点以下规模；文件模式每条事实最大4080序列化字节。",
+   "highlights": [
+    "支持双时态模型：每条事实携带事务时间和有效时间，可重建任意过去时刻的知识状态",
+    "支持Datalog查询语言，含递归规则、窗口函数和带 $slot 绑定标记的预编译语句",
+    "可嵌入运行于原生、WASM浏览器（IndexedDB后端）、WASI、Android/iOS/Python/Node/Java/C等多种平台"
+   ],
+   "use_cases": [
+    "为AI代理存储信念与关系数据，支持撤回、纠正并回放审计历史决策",
+    "移动端离线优先存储，允许追溯性纠正同时保留原始记录",
+    "配合向量存储构建GraphRAG模式，回答关系与时间点状态类问题"
+   ]
+  },
+  "sha": "c7de401f1c5b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "08b17e410df2": {
+  "identity": {
+   "one_liner": "面向编码代理的编程语言与数据库基座，以精化类型与数据流运行时为核心。",
+   "review": "Cambra 是一门用 Rust 编写的研究性编程语言，面向数据密集型应用，将事务、流处理与分析统一为单一程序：Pythonic 语法 CHL 编译到核心语言 CCL，再转为数据流算子图运行。类型系统基于精化类型并依赖 z3 求解器。目前为研究预览：无发布版本，需从源码构建，不适用于生产环境，暂不接受 PR。",
+   "highlights": [
+    "提供精化类型系统，类型携带语义谓词，类型检查通过子进程调用 z3 求解约束",
+    "程序编译为数据流算子，以流式数据流语义运行，内建流水线、增量计算与并行化",
+    "提供 --inspect（查看算子流经数据）、--inspect-only（查看 IR 树）与 --control（/diff 与 /reload 对比并热替换运行中程序）"
+   ],
+   "use_cases": [
+    "阅读与研究统一事务/流/分析的语言设计与形式语义文档",
+    "从源码构建后运行 tests/programs 下的示例程序并借助 inspector 观察数据流",
+    "使用 control 端口对运行中程序做版本 diff 与原地 reload 实验验证"
+   ]
+  },
+  "sha": "08b17e410df2",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

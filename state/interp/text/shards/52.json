@@ -3369,5 +3369,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b1ee0140ec1b": {
+  "identity": {
+   "one_liner": "基于 k6 的可视化负载测试服务，通过画布构建场景并生成脚本",
+   "review": "Ballast 将 k6 负载测试作为服务运行，支持同时管理多个项目：用户在画布上以可视化方式绘制测试场景（请求、条件、循环、断言），系统据此生成 k6 脚本并排队执行。项目仅允许向通过所有权验证的目标环境发送负载，负载生成器运行在隔离容器中，并对虚拟用户数和时长设硬限制。技术栈为 Go、Postgres、Next.js，需 Go 1.23、Docker、Node.js 22。API 与数据库模式仍在变动，尚未稳定。",
+   "highlights": [
+    "提供可视化画布构建测试场景（请求、变量、条件、循环、断言），也可直接编写 k6 脚本，同一图形生成同一脚本",
+    "支持导入 OpenAPI、Postman 集合、cURL 和 HAR 文件，不复制文件中发现的密钥",
+    "负载仅发送给已验证所有权的环境（基于目标源站提供的挑战文件），负载生成器运行在无自身网络路由的隔离容器中，并对虚拟用户数与时长设硬限制"
+   ],
+   "use_cases": [
+    "团队中不编写基础设施代码的成员需要创建和读取负载测试结果",
+    "已有 OpenAPI 规范或 Postman 集合需要转化为负载测试场景",
+    "需要对多个项目的环境集中排队运行 k6 负载测试"
+   ]
+  },
+  "sha": "b1ee0140ec1b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51d2ae5f31a7": {
+  "identity": {
+   "one_liner": "为编码代理提供自演化避坑记忆：失败-修复对存为规则并按需注入。",
+   "review": "该插件把代理工具调用的「失败→成功」配对蒸馏为规则，存入 SQLite+FTS5，并在后续会话中匹配注入，避免重复错误。支持 DSH、ZCode 原生安装，Claude Code、Codex CLI、Google Antigravity 通过 connect 写入 hooks 接入，运行时零依赖。注意引擎要求 Node ^22.19 或 >=24。",
+   "highlights": [
+    "将失败后修复的工具调用蒸馏为规则，以 SQLite+FTS5 存储，按匹配提示注入上下文",
+    "一套 core 引擎多宿主接入：DSH/ZCode 原生插件，Claude Code/Codex/Antigravity 经 connect 写入 hooks，支持 --remove 与幂等重连",
+    "immune audit 可回放本机 ZCode/Codex/Claude Code 会话历史并蒸馏首批规则；另提供 seed 预置规则包与 ingest-skill 索引外部指导文档"
+   ],
+   "use_cases": [
+    "希望编码代理不重复已修复过的工具调用错误",
+    "从既有会话历史中批量挖掘可复用的避坑规则（immune audit）",
+    "将团队 SKILL.md 等大型指导文档按需召回，而非每轮全量注入"
+   ]
+  },
+  "sha": "51d2ae5f31a7",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "32df7826c334": {
+  "identity": {
+   "one_liner": "将聊天、任务、文档与工时整合于单一数据模型的团队工作区，附带受权限约束的 AI 代理。",
+   "review": "Synk 是一个面向小型团队的协作工作区，将聊天、任务跟踪、文档与工时记录放入同一 PostgreSQL 模式，由 Next.js 自定义服务器与 Socket.IO 提供服务。AI 代理为独立的 Python LangGraph 服务，不持有数据库凭据，仅通过携带短时 HMAC 令牌的工具端点操作。限制：单实例部署，不支持 next start 与 serverless。",
+   "highlights": [
+    "人员与 AI 代理共用同一权限函数，权限检查在写操作同一 Prisma 事务内执行",
+    "AI 代理无数据库凭据，凭 5 分钟 HMAC 令牌调用工具端点，所有调用（含拒绝）写入 ActionLog",
+    "update_ticket 先以 dry-run 运行并经 LangGraph interrupt 暂停，显示字段新旧值等待用户确认；歧义名称返回候选列表"
+   ],
+   "use_cases": [
+    "小团队希望聊天、任务看板、文档与工时记录共用同一账号、权限与数据模型",
+    "需要 AI 代理在用户既有权限范围内执行任务操作（创建/更新工单、检索、写文档）并逐项确认",
+    "需要会话可撤销、审计日志与一次性的邀请/重置令牌等安全机制的内部部署协作系统"
+   ]
+  },
+  "sha": "32df7826c334",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

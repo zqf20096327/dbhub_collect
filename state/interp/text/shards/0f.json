@@ -2939,5 +2939,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "010421aa9635": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台：事实台账防编造，含求职全流程管理",
+   "review": "ResumeForge 是一个本地运行的 AI 简历编辑器，无需账号登录，数据保留在本机。它覆盖从职位筛选、匹配分析、简历生成、导出投递到面试复盘的流程，支持 Windows/macOS 安装包和本地启动脚本。核心机制是将事实与措辞分离：生成内容逐条与 Profile 库比对，不匹配触发防编造警告，含【待补】标记时阻断导出。提供职位解析、批量匹配、网申表单补充等功能。",
+   "highlights": [
+    "事实台账机制：生成内容与 Profile 库逐条比对，不匹配项触发防编造警告，含【待补】标记时导出被阻断",
+    "简历工作台左侧排版设置、中间内容编辑、右侧 A4 精确预览联动更新，预览即导出的 PDF 本身",
+    "支持职位解析、逐条批量匹配分析、AI 多职位对比、求职进度跟踪与网申表单填写"
+   ],
+   "use_cases": [
+    "需要精细化排版与字体控制、生成可精确预览的 A4 PDF 简历",
+    "希望将职位描述、简历版本、投递进度集中管理，避免多处碎片化记录",
+    "使用生成式 AI 撰写简历但需要防止内容编造、控制导出质量"
+   ]
+  },
+  "sha": "010421aa9635",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a5e3fbcf1a17": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 CLI 知识管理工具，支持书签、代码片段与 AI 代理记忆",
+   "review": "bkmr 是一个用 Rust 编写的命令行知识管理工具，数据存储在本地 SQLite 数据库中，用于管理 URL、代码片段、Shell 脚本、Markdown 文档等多种内容类型。它提供全文检索（FTS）与基于本地 ONNX 嵌入的语义搜索，并通过 `_mem_` 系统标签为 AI 代理提供持久化读写记忆接口。支持 JSON 输出与非交互模式，可经 cargo 安装，内置 LSP 服务器对接编辑器。",
+   "highlights": [
+    "支持全文搜索与基于本地嵌入的语义搜索（离线运行，无需 API 密钥），hsearch 以 RRF 融合两种检索结果",
+    "通过 `_mem_` 系统标签与 JSON 输出、非交互模式提供代理记忆读写接口，附带 history/restore 状态管理命令",
+    "内置 LSP 服务器将 `_snip_` 书签注入编辑器补全列表，兼容 VS Code、Vim、Emacs 等 LSP 兼容编辑器"
+   ],
+   "use_cases": [
+    "为 AI 代理（如 Claude Code）安装 bkmr-memory skill，实现本地持久化长期记忆的存取",
+    "管理开发者常用的书签、代码片段与 Shell 命令，通过内容类型对应的智能动作打开、复制或执行",
+    "在编辑器中通过 LSP 补全或 Neovim/IntelliJ 插件直接调用代码片段库"
+   ]
+  },
+  "sha": "a5e3fbcf1a17",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3416dc0995b": {
+  "identity": {
+   "one_liner": "Go 编写的 AI 辅助 macOS 桌面数据库客户端，单二进制无 Webview",
+   "review": "MiniDB 是用 Go 和 MyGo 原生 UI 编写的 macOS 桌面数据库客户端，无 Webview、无前端工具链，构建为单个二进制。它支持 MySQL、PostgreSQL、SQLite 等多种数据库的连接、数据浏览编辑、SQL 编辑、ER 图和导入导出，并集成可配置 AI 助手。仅支持 macOS 12+（Apple Silicon 和 Intel），采用 MIT 许可证。",
+   "highlights": [
+    "支持 MySQL、MariaDB、PostgreSQL、SQL Server、ClickHouse、SQLite、TiDB、StarRocks 连接，含 SSH 隧道、只读模式与加密备份",
+    "SQL 编辑器提供语法高亮、补全、多结果集、执行计划树形展示，结果可渲染为折线/柱状/饼图",
+    "AI 助手支持 OpenAI、DeepSeek、Ollama 等 preset 或任意 OpenAI 兼容端点，仅允许单条只读语句自动执行"
+   ],
+   "use_cases": [
+    "在 macOS 上通过图形界面浏览和编辑多种数据库的数据表",
+    "编写 SQL 并借助 AI 生成或改写语句、查看执行计划",
+    "导入 CSV/TSV/JSON/Excel 数据或流式导出为 CSV/JSON/SQL INSERT"
+   ]
+  },
+  "sha": "c3416dc0995b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2c502389fdf7": {
+  "identity": {
+   "one_liner": "面向 AI 代理编写的 MFL 语言，经 C 编译为单个原生二进制文件",
+   "review": "machin 是一门自举的编程语言，语法为每行一条声明、无类型标注，设计目标为降低 AI 代理的输出 token 成本。工具链（词法、解析、类型检查、C 代码生成）用 machin 自身编写，编译经 C 生成原生二进制。运行/构建需系统安装 C 编译器（默认 cc，可用 CC 指定）；Web 目标需 zig。",
+   "highlights": [
+    "编译经 C 生成单个静态原生二进制，内建 SQLite、HTTP 服务器与路由，无需解释器",
+    "自托管工具链编译自身源码并逐字节复现（fixpoint），CI 在每次推送时校验",
+    "提供并发（goroutine/channel）、TCP/TLS/WebSocket、多种数据库客户端、加密原语与 C FFI"
+   ],
+   "use_cases": [
+    "AI 代理生成与维护的 REST + SQLite 后端服务",
+    "部署为静态二进制的命令行工具或小型 Web 服务",
+    "通过 C FFI 调用 C 库（如 raylib）的程序"
+   ]
+  },
+  "sha": "2c502389fdf7",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3152,5 +3152,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a2cf691c45c6": {
+  "identity": {
+   "one_liner": "JavaScript 键值存储库，支持内存、文件系统与浏览器驱动的键值存储库",
+   "review": "storage-box 是一个 MIT 许可的 JavaScript 键值存储库，通过 Client 与可替换驱动实现存储：默认为内存驱动，Node.js/Bun 环境可用文件系统驱动（JSON 或 MessagePack 序列化），浏览器端提供 Local/Session 存储驱动。API 包含 TTL 过期、哈希与列表操作，并支持继承 HashMap/List 自定义数据结构。适合需要在 JS 应用中统一管理键值数据持久化的开发者。",
+   "highlights": [
+    "提供内存、文件系统（Node.js/Bun，JSON/MessagePack 序列化）、浏览器 Local/Session 三类存储驱动",
+    "支持以秒为单位的键 TTL 过期设置及剩余时间查询",
+    "提供哈希与列表操作，并可扩展 HashMap/List 类实现自定义数据结构"
+   ],
+   "use_cases": [
+    "Node.js/Bun 服务端需要将键值数据持久化到文件系统的场景",
+    "Web 应用需要基于 Local/Session 存储管理键值数据",
+    "需要带 TTL 过期或哈希/列表等结构化键值操作的应用"
+   ]
+  },
+  "sha": "a2cf691c45c6",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "471f9a1de6f5": {
+  "identity": {
+   "one_liner": "通过读取 MySQL binlog 维护 Parquet 列式副本并用 DuckDB 应答分析查询的 HTAP Zero-ETL 工具。",
+   "review": "DBTrail 以副本方式通过复制协议读取 MySQL 系数据库的 binlog，在本机磁盘或 S3 桶生成 Parquet 列式副本，并通过 MySQL 协议端口用 DuckDB 应答查询，可按路由将写事务与按键查找发回源库，同时提供 AS OF 时间旅行查询、行级撤销 SQL 生成与 MCP 工具接入。适用于需要在 MySQL 8.0+/RDS/Aurora/Percona/MariaDB 上运行重分析查询、保留变更历史或接入 BI 工具的团队。限制包括副本存在秒到分钟级延迟、需 ROW binlog 与全行镜像及 InnoDB 表主键，不提供高可用，也不能替代备份。",
+   "highlights": [
+    "通过复制协议读取 binlog，在磁盘或 S3 生成 Parquet 副本，无需在源库安装插件、代理或触发器",
+    "开启路由后同一连接自动分发：写入、事务与按键查找发往源 MySQL，重读取由副本应答；支持 Metabase、Grafana 等 MySQL 协议工具，并可配合 ProxySQL",
+    "提供 AS OF 时间旅行查询、记录变更前后值并生成撤销 SQL，包含 MCP server；命令行工具 bintrail 完全运行于用户基础设施内，遥测默认仅报元数据且可一行关闭"
+   ],
+   "use_cases": [
+    "将全表汇总、多年趋势等重分析查询从源 MySQL 卸载到列式副本，仪表盘工具直接指向副本端口",
+    "查询表在历史时刻的状态或某行的各版本，并为误操作生成待人工执行的撤销 SQL",
+    "通过 MCP 客户端（如 Claude）用自然语言查询最近变更内容，而不在源库上执行 SQL"
+   ]
+  },
+  "sha": "471f9a1de6f5",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1535e4284f61": {
+  "identity": {
+   "one_liner": "为 SQL 智能体提供模式地图的 MCP 服务器，确定性输出、无 LLM 调用",
+   "review": "keygraph 是面向构建数据分析或 text-to-SQL 智能体的开源模式地图工具。它扫描数据库元数据，映射键、索引、外键、join 路径、表粒度、状态码与值画像，并通过 MCP 服务器、CLI --json、markdown 文件或离线 HTML 探索器输出。运行于 Python 3.11+，MIT 协议，只读取元数据且不做 LLM 调用，不执行查询；查询需配合 DBHub 等只读数据库服务器。",
+   "highlights": [
+    "提供 20 个 MCP 工具（14 个只读、1 个查询日志、5 个 LLM 索引工具），path 命令返回带证据、置信度和 JOIN 片段的路径，并标记一对多 fan-out",
+    "describe 命令输出行粒度、状态码含义及数据中存在但未文档化的码值；推断关系带置信度，低于 0.6 默认隐藏",
+    "支持 MySQL、MariaDB、PostgreSQL、SQLite、SQL Server、ClickHouse、Metabase、MongoDB 及 information_schema 转储；scan 接受任意 SQLAlchemy URL"
+   ],
+   "use_cases": [
+    "为 text-to-SQL / 数据分析智能体提供表连接路径、键与状态码上下文，避免在 join 时重复计数",
+    "将离线 HTML 探索器和 markdown 页面用于人工查看或只读文件的智能体",
+    "无法直连数据库时，从 information_schema 转储构建模式地图"
+   ]
+  },
+  "sha": "1535e4284f61",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "950a3067d457": {
+  "identity": {
+   "one_liner": "Go 编写的 LLM 驱动 WhatsApp 机器人，内置人物记忆系统与可编辑人设。",
+   "review": "wagoya 是一个用 Go 编写的 WhatsApp 机器人，可作为 WhatsApp 伴侣设备接入（基于 whatsmeow），支持私聊和群聊 @提及触发。它以 SQLite 存储以 WhatsApp 身份为键的人物画像，事实由模型通过校验工具写入并带来源与信任等级；支持 Claude/Anthropic 与 OpenRouter 等模型提供商，并以单个静态二进制运行。",
+   "highlights": [
+    "按 WhatsApp LID/号码为键的人物画像系统，事实带来源信任分级，通过 SQLite FTS5 加嵌入向量按需检索",
+    "人设存储于 SQLite 并带版本历史，仅限所有者用自然语言修改；含提示注入加固与消息发送限速队列",
+    "提供 http_request 与 MCP 客户端工具，支持所有者 API 密钥存储、Claude Code 任务队列与每日模型支出上限"
+   ],
+   "use_cases": [
+    "将一个 WhatsApp 号码接入 LLM，用于私聊问答、群聊 @提及回复与网络搜索",
+    "跨聊天维护联系人事实记忆，支持提醒定时任务与人物画像检索",
+    "所有者通过机器人远程向本地 Claude Code 下发编码任务并审批权限请求"
+   ]
+  },
+  "sha": "950a3067d457",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

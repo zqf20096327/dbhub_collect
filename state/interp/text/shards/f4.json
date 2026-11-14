@@ -3107,5 +3107,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "496f17440028": {
+  "identity": {
+   "one_liner": "针对 Debezium CDC 管道三份 Schema 一致性的静态 Lint 工具",
+   "review": "cdclint 是一个命令行 Linter，读取 Postgres/MySQL 迁移脚本、Debezium 连接器 JSON 与下游 Sink（ClickHouse、BigQuery、Snowflake、Iceberg）的 Schema 文件，构建统一模型并运行规则检查两者之间的不一致，发现问题时以非零退出码使 PR 失败并给出修复建议。当前为 v0.5，包含 11 条规则，仅读取文件、不连接运行中的系统，支持 --disable 与 cdclint:ignore。",
+   "highlights": [
+    "静态读取迁移 SQL、连接器 JSON 和 Sink Schema 三类文件进行规则检查，不连接任何运行中的系统",
+    "提供 11 条规则，覆盖 column.include.list 遗漏、topic 映射、Flatten 变换、物化视图列匹配、replica identity 等，发现时输出文件、列、规则与修复建议",
+    "可通过 --disable 关闭规则、用 cdclint:ignore 在行内记录决策，并可集成到 GitHub Marketplace"
+   ],
+   "use_cases": [
+    "在修改迁移脚本、Debezium 连接器配置或 Sink Schema 的拉取请求中运行检查，使配置不一致在合并前暴露",
+    "排查下游列全为默认值（0、空串、NULL）或新列未出现在 Sink 的 CDC 管道问题",
+    "CI 中配合 --base 检查新增列是否被有意或无意地排除在捕获范围之外"
+   ]
+  },
+  "sha": "496f17440028",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d4213b013ff": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的开源自托管 PDM/PLM 系统，单二进制配 PostgreSQL。",
+   "review": "TeamCraft 是一个自托管的产品生命周期管理系统，面向早期硬件创业团队和学生工程团队。它实现 CAD 文件的检出/检入、版本与 ASME Y14.35 风格的生命周期、多级 BOM、变更单审批，以及浏览器端 STEP/网格等格式的 3D 预览。项目目前处于 0.x 开发阶段，尚无稳定版本，README 明确提示勿用于生产数据。",
+   "highlights": [
+    "支持按修订版独占锁定的检出/检入、完整版本历史与回滚，基于过期版本的检入会被拒绝",
+    "提供浏览器端 3D 预览（STEP、NX、SOLIDWORKS、CATIA V5、Creo、JT、点云等格式，服务器端转换）、160+ 文件格式识别与全文检索",
+    "包含多级 BOM（质量/成本汇总、CSV/Excel 导出）、变更请求与变更单流程、仿真管理、REST API、MCP 服务器和桌面客户端"
+   ],
+   "use_cases": [
+    "硬件初创团队需要记录交付修订版、审批人和变更历史等可追溯信息时使用",
+    "成员众多且每年换届的赛车、火箭、卫星、机器人等学生工程团队做知识交接",
+    "需要通过 OpenID Connect 单点登录集成已有账号体系的自托管场景"
+   ]
+  },
+  "sha": "6d4213b013ff",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

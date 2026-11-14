@@ -3598,5 +3598,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cfbf7df49c2d": {
+  "identity": {
+   "one_liner": "基于 SQLite+FTS5 的本地记忆引擎，为编码代理存储会话与长期记忆",
+   "review": "cc-agent-brain 是一个本地运行的编码代理记忆插件，主要面向 Claude Code 用户。它通过 .claude/ 下的六个钩子自动捕获用户提示、助手文本和工具调用输入，写入 SQLite+FTS5 数据库，并在后续会话中用 FTS 关键词召回回显给模型。长期记忆仅在执行 memory add 时写入。仅依赖 Python 标准库，无网络调用；检索为纯词法 RRF 融合，无向量检索，也不支持 as-of 时间查询。",
+   "highlights": [
+    "提供 SQLite+FTS5 存储，使用 CJK-bigram 分词和 bm25() 排序，并通过 RRF 融合项目与全局记忆列表",
+    "包含 stdio MCP 服务器，同时支持 2024-11-05 与 2026-07-28 两个协议版本，与 CLI 读取同一数据库文件",
+    "记忆记录含 working/episodic/semantic/procedural 四层、supersede/expire 状态管理及 valid_from/valid_to 等双时间列"
+   ],
+   "use_cases": [
+    "在 Claude Code 项目中自动捕获会话内容，并在后续会话通过 FTS 关键词召回相关记忆",
+    "为编码代理沉淀长期记忆（部署决策、流程等），通过 memory add --supersedes/expire 管理记忆生命周期",
+    "通过 memory_audit 钩子做 SQL 审计（重复行、断裂的 supersede 链接、过期行）"
+   ]
+  },
+  "sha": "cfbf7df49c2d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fcb9cabbc52a": {
+  "identity": {
+   "one_liner": "为 Claude Code 与 Codex 提供可检视、可更正的跨会话共享记忆，基于 SQLite 与 MCP。",
+   "review": "Cairn.ink Memory 是一个面向 AI 代理的跨会话记忆工具，通过 MCP 服务器让 Claude Code 和 Codex 读写同一份记忆存储。每条记忆附带保存时的原文（Source Receipt），支持检视、更正与遗忘。提供本地 SQLite（无需账号）和 cairn.ink 云端两种模式，目前处于开发者预览阶段，会话保存仅支持 Linux 和 WSL。",
+   "highlights": [
+    "提供 remember_memory、inspect_memory、correct_memory、forget_memory 等工具，每条记忆保存来源原文",
+    "本地模式将数据存于明文 SQLite 数据库，无需账号，关键词搜索不调用模型",
+    "通过 npx @cairn-ink/memory setup 一条命令安装，支持 --local/--cloud 模式选择"
+   ],
+   "use_cases": [
+    "在 Claude Code 或 Codex 的新会话中保留此前的偏好与项目决策",
+    "需要检查记忆出处并更正过时信息的开发流程",
+    "多代理运行环境（需按 README 配置避免 worker 加载记忆服务器）"
+   ]
+  },
+  "sha": "fcb9cabbc52a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "102d604b59d9": {
+  "identity": {
+   "one_liner": "面向持久化代理 harness 的领域语言，按平台编译为对应持久化保证的代码",
+   "review": "harnesslang 是一种用于编写代理 harness 的语言，用语言描述模型、工具、状态与轮次循环，编译器将程序按目标平台（Rust/JSONL、SQLite、Postgres、Cloudflare Durable Object、Vercel Workflow）的持久化机制生成代码并证明正确性。适合需要跨崩溃恢复运行外部副作用（如支付、命令发送）的代理开发者。使用 cargo 构建后通过 hl check/prove/sim/emit 命令运行；项目注明部分平台限额未经核实，且尚未实现超过 Cloudflare 请求限制的 handler 拆分。",
+   "highlights": [
+    "hl check/hl prove 对每个 handler 在各目标（含崩溃与重跑路径）证明：外部副作用先持久化记录再执行、结束状态仅确认一次、无 u64 溢出与列表溢出、不变量成立、出站请求符合平台限制",
+    "hl sim 按种子对各目标的故障模型（崩溃、撕裂/丢失写入、租约接管、步骤重试）运行模拟，每项性质配有植入 bug",
+    "提供五个编译目标：native-jsonl（CRC-32 校验行）、native-sqlite、server-postgres（owner epoch 防护）、cloudflare、vercel，生成代码仅依赖标准库与平台 API"
+   ],
+   "use_cases": [
+    "编写需在崩溃后不重复执行不可撤回外部操作（shell 命令、评论、支付）的代理 harness",
+    "需要将同一 harness 逻辑部署到多平台并各自获得该平台的持久化保证",
+    "对代理运行时进行崩溃与故障注入模拟验证，以及连接 Anthropic API 运行编码代理（hl-agent）"
+   ]
+  },
+  "sha": "102d604b59d9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

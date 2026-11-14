@@ -3055,5 +3055,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c684b8c107b5": {
+  "identity": {
+   "one_liner": "Go 库，将 CSV/JSON/Parquet 等文件加载为内存 SQLite 表供 SQL 查询。",
+   "review": "filesql 是一个 Go 模块，将 CSV、TSV、LTSV、JSON、JSONL、Parquet、XLSX、ACH、Fedwire 等文件加载进内存 SQLite 数据库，用标准 SQL 查询，支持跨格式 join 与多种压缩格式。面向需要在 Go 程序中以 database/sql 方式处理文件数据的开发者；数据全部驻留内存，且不支持 cgo 之外的部署方式。配套 prep 组件可在建表前做行清洗与校验。",
+   "highlights": [
+    "支持 9 种文件格式与 8 种压缩包装（gz、bz2、xz、zst 等），透明解压读取",
+    "可通过 WithDialect 以 MySQL、PostgreSQL、GoogleSQL 语法编写查询，翻译为 SQLite 执行，超子集构造返回带行列位置的错误",
+    "提供 DumpDatabase、EnableAutoSave 等保存机制，并支持加载到用户自有的 *sql.DB 或事务中"
+   ],
+   "use_cases": [
+    "在 Go 程序中用 SQL 查询本地文件数据，无需搭建数据库服务器",
+    "跨 CSV、JSONL、Parquet 等不同格式文件执行 join 分析",
+    "配合 prep 对文件行做规范化（去空格、大小写、默认值）和校验后再建表"
+   ]
+  },
+  "sha": "c684b8c107b5",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

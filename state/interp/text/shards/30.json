@@ -3029,5 +3029,29 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "da15fc9379c0": {
+  "identity": {
+   "one_liner": "DSH 插件：在本地起 OpenAI 兼容网关，按任务属性选路、容灾与缓存",
+   "review": "这是 DeepSeek Harness（≥0.2.1-rc.3）的模型调度插件，在 127.0.1 起一个 OpenAI 兼容网关，将 DSH 的 llm-pi-ai baseURL 指向它即可生效。网关实现硬过滤→打分→降级链的选路流水线、四档调度模式、429/5xx/401 容灾和 SQLite 精确缓存，并在面板记录路由维度用量。配置经「管家设置」页或 token_steward_manage 工具维护；包未发布 npm，需从 GitHub 安装。",
+   "highlights": [
+    "容灾机制：429 指数退避冷却、5xx 熔断与半开试探、401 一次即下线、上下文超限自动换更大窗口",
+    "支持 SQLite 本地精确缓存（命中 0 token 不出站）、路由维度计量，API 密钥以 AES-256-GCM 加密存储"
+   ],
+   "use_cases": [
+    "同时接入官方 API、免费镜像与自建中转，让不同类型的 DSH 请求落到不同模型",
+    "希望在 429/5xx/401 等上游故障时于同一请求内自动切换候选、不中断会话",
+    "需要零成本档调度，或在面板查看按模型维度的 token 与费用记录"
+   ],
+   "softened": [
+    "highlights:『最强』删条x1"
+   ]
+  },
+  "sha": "da15fc9379c0",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3030,5 +3030,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bbe4407b1aef": {
+  "identity": {
+   "one_liner": "开源产品分析平台，基于 Go、PostgreSQL、ClickHouse 与 NATS 构建。",
+   "review": "Pug 是一个开源产品分析平台，提供事件采集、用户识别与漏斗、留存、趋势、用户流等分析功能，面向需要自建或托管产品数据分析的团队。后端以 Go 编写，经 Connect RPC 暴露接口，事件存储于 ClickHouse，关系数据存于 PostgreSQL，NATS 作为采集与工作流的消息管道。它内置 MCP 服务器供 AI 客户端查询，并支持 GDPR/DPDP 数据主体删除；自托管通过容器镜像与静态前端部署。",
+   "highlights": [
+    "提供基于 NATS 的事件采集管道，自动进行地理、User-Agent、机器人检测与归因富化",
+    "内置 MCP 服务器，提供 16 个读取工具和 1 个仪表盘创建编辑工具，供 Claude、ChatGPT 等 MCP 客户端查询",
+    "支持 GDPR/DPDP 数据主体的个人事件与画像删除，提供趋势、漏斗、留存、Sankey 用户流等洞察类型"
+   ],
+   "use_cases": [
+    "产品团队需要自建事件采集、漏斗转化与用户留存分析",
+    "通过 MCP 客户端让 AI 助手查询分析数据并自动构建仪表盘",
+    "有 GDPR/DPDP 合规需求、需对个人数据进行删除操作的场景"
+   ]
+  },
+  "sha": "bbe4407b1aef",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5267e4aecf93": {
+  "identity": {
+   "one_liner": "将 Markdown 解析为区间索引块并以 SQL/mq 查询的嵌入式数据库",
+   "review": "mq-db 是 Rust 编写的嵌入式数据库，把 Markdown 文档解析为带前序/后序区间索引的块列表，使章节层级查询化为单次整数比较，支持 SQL 与 mq 查询、写回源文件，并提供 CLI、REPL、TUI、HTTP 服务与 Rust 库多种使用形式。安装走脚本或 cargo install。项目处于活跃开发期，README 明确警告 API 可能变动。",
+   "highlights": [
+    "块列表采用前序/后序区间索引，配合 under() 支持章节层级查询",
+    "支持 SQL 与 mq 查询、CTE、EXPLAIN、视图、ATTACH，以及 INSERT/UPDATE/DELETE 写回源 Markdown",
+    "提供全文检索（match/bm25）、基于 HNSW 的向量搜索，以及增量重建索引、zone map 和二级索引"
+   ],
+   "use_cases": [
+    "对文档目录建立索引后按章节层级检索 Markdown 内容",
+    "通过 SQL 或 mq 对 Markdown 块执行查询、更新并写回源文件",
+    "结合 bm25 全文检索与 HNSW 向量搜索做语义查找"
+   ]
+  },
+  "sha": "5267e4aecf93",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2785,5 +2785,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2dd53ac56737": {
+  "identity": {
+   "one_liner": "TypeScript 引擎与 Next.js 参考应用，集成文档摄取、OCR、RAG 与知识图谱。",
+   "review": "LaunchStack 是一个用于 AI 原生应用的 TypeScript 引擎，提供文档摄取、OCR、RAG、知识图谱、LLM 抽象与后台任务，并附带一个 Next.js 参考应用展示组装方式。面向自托管用户与开发者，仅依赖 Docker 即可安装；包尚未发布到 npm，当前需通过运行仓库本身使用。文档处理在独立 worker 中执行。",
+   "highlights": [
+    "提供文档摄取、OCR、RAG、知识图谱与 LLM 抽象，采用端口化架构，通过 @launchstack/engine 聚合包组装",
+    "自托管安装仅需 Docker，通过安装脚本与 setup 命令生成密钥、拉取镜像并启动服务，支持域名自动 HTTPS",
+    "对话与嵌入模型通过 CHAT_BASE_URL/EMBEDDING_API_KEY 配置，兼容 OpenAI chat-completions 协议的各供应商"
+   ],
+   "use_cases": [
+    "自托管一个支持上传、检索与对话的文档问答实例",
+    "基于 ports 架构将引擎嵌入自建 AI 应用，复用其摄取、索引与检索能力",
+    "本地开发调试：Docker Compose 或 Node ≥20 + pnpm 运行 web 与 worker 进行文档摄取流程开发"
+   ]
+  },
+  "sha": "2dd53ac56737",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "375082b795d6": {
+  "identity": {
+   "one_liner": "基于 Go 泛型的类型安全 ORM，用字段指针替代字符串编写查询",
+   "review": "ant 是一个使用 Go 泛型实现的 ORM，供 Go 开发者在编译期检查查询中的列名、值类型和关联，无需代码生成步骤。README 注明其要求 Go 1.27 及以上，支持 PostgreSQL、MySQL、MariaDB、SQLite、SQL Server，其中迁移功能目前仅支持 PostgreSQL，且项目处于 1.0 之前的阶段，API 可能变更。安装通过 go get 完成，附带 vet 分析器、变更追踪（含 NoTracking 模式）及 anttest 测试工具。",
+   "highlights": [
+    "使用字段指针（如 ant.Gt(&Users.Age, 18)）编写查询条件，编译器检查列与值类型，无需代码生成",
+    "支持类型化条件、连接、投影、聚合、子查询、CTE、窗口函数，以及 1:1/1:N/多对多关系的显式 Include 批量加载",
+    "提供变更追踪与 SaveChanges（只写变更列）、事务（savepoint、隔离级别、重试、读副本）、软删除、乐观并发控制等特性，并附 go vet 分析器与 OpenTelemetry 支持"
+   ],
+   "use_cases": [
+    "希望在 Go 项目中以编译期检查替代字符串列名的数据库读写",
+    "使用 PostgreSQL 且需要从结构体生成迁移 SQL 并做漂移检查的场景",
+    "为 AI 编程助手配置 ORM 技能文档后进行 Go 数据库开发的团队"
+   ]
+  },
+  "sha": "375082b795d6",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d1bda0277b29": {
+  "identity": {
+   "one_liner": "TiDB Cloud 的 Terraform Provider，以代码方式管理 TiDB Cloud 配置",
+   "review": "这是 tidbcloud 官方维护的 Terraform Provider，用于通过 Terraform 声明式管理 TiDB Cloud 配置（如 Serverless 集群）。使用前需 Terraform >= 1.0，并通过 TIDBCLOUD_PUBLIC_KEY/TIDBCLOUD_PRIVATE_KEY 环境变量或 provider block 提供 API 密钥。仓库含 Serverless 示例、源码构建（Go >= 1.18）与开发调试说明，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "支持通过 Terraform 创建 TiDB Cloud Serverless 集群并输出连接字符串",
+    "API 密钥可通过环境变量（TIDBCLOUD_PUBLIC_KEY/TIDBCLOUD_PRIVATE_KEY）或 provider block 配置",
+    "支持通过 TIDBCLOUD_HOST 等环境变量覆盖 API 端点，支持 HTTPS 本地 mock API 调试"
+   ],
+   "use_cases": [
+    "以代码方式创建和管理 TiDB Cloud 集群配置",
+    "在 CI 环境中从密钥存储注入 API 密钥进行非交互式部署",
+    "开发者构建、调试和测试自定义 Provider 二进制"
+   ]
+  },
+  "sha": "d1bda0277b29",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

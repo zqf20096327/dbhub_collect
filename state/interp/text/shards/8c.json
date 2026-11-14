@@ -2766,5 +2766,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4dae3de0b07e": {
+  "identity": {
+   "one_liner": "基于 SQLite 文件的 MCP 项目任务跟踪服务器，提供 41 个工具",
+   "review": "saga-mcp 是一个 MCP 服务器，在项目内的 SQLite 文件中管理项目、epic、任务、子任务、依赖、评论与决策，供编码代理跨会话读写计划。依赖变更自动阻塞/解除阻塞，提供 tracker_next 推荐与 tracker_dashboard 概览，配合 saga-web 可在浏览器读写同一数据库。需 Node 环境，仅要求设置 DB_PATH，无账号与外部服务；支持 core 模式减少 41 工具的上下文开销。",
+   "highlights": [
+    "提供 41 个 MCP 工具，覆盖项目、epic、任务、子任务、依赖与活动日志，每项含 MCP 安全注解，可选 core 模式仅列出 13 个常用工具",
+    "任务与子任务依赖在写入时强制执行：前置未完成则拒绝开始/完成，循环依赖被拒绝并指名环路，支持 force: true 覆盖并记录日志",
+    "包含任务描述锁定机制（手动或 SAGA_DESCRIPTION_LOCK=on_progress 自动）、模板变量替换、归档与软删除，所有变更加新旧值写入审计日志"
+   ],
+   "use_cases": [
+    "为 Claude Code、Claude Desktop 等 MCP 客户端中的编码代理提供跨会话的任务与计划持久化",
+    "管理含任务依赖与子任务检查清单的多步开发计划，自动跟踪阻塞与解除阻塞",
+    "多个仓库共享一个数据库时，通过 SAGA_PROJECT 按项目隔离跟踪内容"
+   ]
+  },
+  "sha": "4dae3de0b07e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ecca9a8f5d06": {
+  "identity": {
+   "one_liner": "基于 Rust + Tauri 的桌面多引擎数据库管理器，支持 130+ 数据库与云服务",
+   "review": "DBine 是 AddLayer 出品的开源桌面数据库管理工具，运行于 Windows、macOS 和 Linux，采用 Tauri 2、Rust 核心与 Vue 3 + Element Plus 界面。它连接关系型、文档、键值、图、时序等 130+ 数据库，提供树形浏览器、SSH 隧道、密钥管理器集成、脚本执行、Profiler、多数据库运行与结果导出。适合需要同时管理多种数据库引擎的开发者与 DBA。许可证为 Apache 2.0，可通过 Homebrew、winget、Flatpak 等方式安装。",
+   "highlights": [
+    "支持 130+ SQL 和 NoSQL 数据库及云服务，内置 SSH 隧道（含堡垒机链、ProxyJump）和从 1Password、Vault、AWS Secrets Manager 等密钥源解析密码",
+    "提供 CodeMirror 6 编辑器（各引擎方言、自动补全）、逐语句脚本执行、Profiler、图形化执行计划、基于 Apache ECharts 的图表和多数据库同时运行",
+    "支持从 DBeaver、DbGate、DataGrip、Azure Data Studio、SSMS 导入连接，结果可复制为 10 种格式并导出 CSV/JSON/XLSX 等，只读连接可屏蔽非读取操作"
+   ],
+   "use_cases": [
+    "在同一桌面应用中集中管理多种数据库引擎的连接、查询与对象浏览",
+    "通过 Profiler 和服务器监控查看会话、运行中查询及各查询的耗时与资源占用",
+    "在受限网络环境下经 SSH 隧道连接数据库，并使用密钥管理器而非明文保存密码"
+   ]
+  },
+  "sha": "ecca9a8f5d06",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f9e164e985a0": {
+  "identity": {
+   "one_liner": "SchemaCrawler 的 Spring Boot Web 应用，在线生成数据库图表和文档",
+   "review": "该应用是 SchemaCrawler 的 Web 版本，基于 Spring Boot 和 Bootstrap 实现，用户可通过浏览器在线生成数据库的鸦脚式 ERD 图与文档。构建依赖 Maven，运行需安装 Graphviz，并要求配置 AWS S3 相关环境变量。当前演示针对 SQLite 数据库，也可打包为 Docker 镜像部署。",
+   "highlights": [
+    "提供基于 Spring Boot 和 Bootstrap 的 Web 界面",
+    "生成 SQLite 数据库的鸦脚式 ERD 图",
+    "支持 Maven 构建、Docker 镜像部署，并通过 JaCoCo 与 Codecov.io 度量测试覆盖率"
+   ],
+   "use_cases": [
+    "在浏览器中在线查看 SQLite 数据库的结构图表与文档",
+    "本地或容器化部署 SchemaCrawler Web 服务",
+    "作为 SchemaCrawler 命令行工具的配套 Web 入口"
+   ]
+  },
+  "sha": "f9e164e985a0",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c1e1a11d4c20": {
+  "identity": {
+   "one_liner": "本地优先的 provider 无关桌面 Agent Harness，含 MCP 客户端与多提供者回退链",
+   "review": "UH 是一个 Python 编写的本地优先 Agent Harness，提供 CLI 与浏览器驾驶舱界面，面向希望在桌面本地运行 LLM Agent 的用户。核心机制包括同步 run_turn 工具循环、provider 回退链（Ollama→Cloudflare→DeepSeek→OmniRouter→router）、SQLite FTS5 会话存储和经 stdio 接入的 MCP 客户端。运行时仅依赖 httpx，首次启动无需 API key；危险工具集默认关闭。",
+   "highlights": [
+    "同步 run_turn Agent 循环执行模型请求的工具并以硬性 max_iterations 预算终止，内置 file、terminal、memory、web_search 工具集",
+    "支持通过 config.toml 中 [[mcp.servers]] 接入 MCP 服务器（stdio），工具以 mcp__<server>__<tool> 命名并提供按服务器 allowlist 与消息/结果大小上限",
+    "会话存储于 SQLite FTS5，支持 list/show/search/delete/resume；uh web 从 127.0.0.1 提供带 per-process token 的本地界面，无构建步骤"
+   ],
+   "use_cases": [
+    "在本地 Ollama 或免费/云提供者上运行带工具调用与持久会话的命令行 Agent",
+    "通过 MCP 客户端接入文件系统、AWS S3、Google Drive 等外部工具服务器",
+    "桌面本地浏览器驾驶舱：多提供者配置、记忆图、遥测与全文搜索会话管理"
+   ]
+  },
+  "sha": "c1e1a11d4c20",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bba24c7d98a1": {
+  "identity": {
+   "one_liner": "基于 LLM 的自然语言数据库查询与可视化分析工作台",
+   "review": "SmartDBChat 是一个将自然语言转换为只读 SQL 并生成可视化图表的 Web 工作台。后端为 FastAPI，前端为 React 19 + TypeScript，通过构建表-列-外键 SchemaGraph 查找跨表 JOIN 路径，用 sqlglot AST 解析拦截写操作与注入，并提供 MCP Server、语义层配置与 admin/editor/viewer 三级 RBAC。连接 MySQL 数据源或使用内置 SQLite 演示沙箱，经 uv 安装后默认运行在 8000 端口。",
+   "highlights": [
+    "提供图谱 Schema Linking、sqlglot AST 只读校验、自动 LIMIT 钳位与有界纠错重试流程",
+    "内置支持 STDIO/SSE/Streamable HTTP 传输的 MCP Server，暴露 list_tables、ask_database 等六项工具，并生成 Claude Desktop/Cursor 等客户端接入配置",
+    "基于 OpenAI 兼容协议支持 DeepSeek、GLM、OpenAI、Qwen、Gemini、OpenRouter 与本地 Ollama，数据经服务端 SQLite 持久化"
+   ],
+   "use_cases": [
+    "业务人员通过自然语言查询 MySQL 数据库并生成图表，无需手写 SQL",
+    "将数据库以 MCP 工具形式接入 Claude Desktop、Cursor 等支持 MCP 的客户端",
+    "团队内通过语义层维护指标口径、业务规则与 Golden SQL 示例，并按角色分级使用"
+   ]
+  },
+  "sha": "bba24c7d98a1",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bc44ed211462": {
+  "identity": {
+   "one_liner": "自托管的渗透测试报告平台，支持 AI 草拟发现与定制化报告输出",
+   "review": "Pental Report 是一个运行在自有服务器上的开源（AGPL-3.0）渗透测试报告工具，面向安全测试团队与公司。它以 Docker 方式部署并自带 PostgreSQL，管理客户、项目、测试日历与发现（findings），内置 CVSS 3.1/4.0 评分、可自定义字段与清单/运行手册库，支持 AI 凭用户自己的密钥与提示词草拟内容，最终生成 PDF 或 Word 报告并可通过品牌设置定制外观。团队可通过 Tailscale、自有域名或本地访问。",
+   "highlights": [
+    "提供项目（engagement）、测试日历、清单与运行手册（含 OSSTMM、PTES、OWASP WSTG/ASVS/MASVS 等方法库）以及发现编辑器，支持 CVSS 3.1 和 4.0 评分",
+    "发现字段、章节、品牌标识（logo、颜色、主题）均可自定义，AI 草拟使用用户自己的 API 密钥和提示词",
+    "通过一条命令安装，Docker 部署并附带 PostgreSQL，支持 Tailscale、自有域名（Caddy HTTPS）或本地三种共享方式"
+   ],
+   "use_cases": [
+    "渗透测试团队协作撰写、维护发现库并交付 PDF/Word 客户报告",
+    "需要在自有服务器上托管报告数据并用自己的 AI 密钥/提示词草拟发现的场景",
+    "按自定义清单（WSTG、ASVS、MASVS 等）执行测试并管理复测结果的场景"
+   ]
+  },
+  "sha": "bc44ed211462",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

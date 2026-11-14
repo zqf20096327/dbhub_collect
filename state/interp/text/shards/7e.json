@@ -3689,5 +3689,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9db6d4103fe5": {
+  "identity": {
+   "one_liner": "开源地理空间数据管理平台，以索引库加CLI组织并分享无人机测绘数据。",
+   "review": "DroneDB 是 MPL-2.0 许可的地理空间数据存储与管理软件，用于存储、可视化和分享正射影像、点云、3D模型、带地理标签的文件等数据。它由 C++ 核心库（基于 SQLite/SpatiaLite）和 ddb 命令行工具组成，可自动提取图像 EXIF、栅格、点云等元数据，生成瓦片、COG、COPC、3D Tiles 等衍生产品，并可与 DroneDB Hub 同步协作。适用于无人机数据管理、地理空间数据集编目与在线发布等场景。",
+   "highlights": [
+    "自动提取图像 EXIF、栅格数据（GDAL）、点云（PDAL）和矢量文件的元数据并建立索引",
+    "支持生成地图瓦片、缩略图、COG、COPC、OGC 3D Tiles 及多分辨率 3D 模型格式 bm3d 等衍生产品",
+    "支持与 DroneDB Hub 推拉同步（push/pull）、克隆远程仓库及在线分享数据集"
+   ],
+   "use_cases": [
+    "无人机（UAV）影像、点云和 3D 模型数据集的本地存储与编目",
+    "为正射影像和点云生成 COG/COPC/瓦片以便 Web 端发布与在线查看",
+    "将数据集导出为 STAC 目录或通过 Hub 与他人同步协作"
+   ]
+  },
+  "sha": "9db6d4103fe5",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "34fabcd7bb31": {
+  "identity": {
+   "one_liner": "Go 编写的可组合电商引擎，以库形式提供商品、购物车、订单、支付与库存。",
+   "review": "GoCommerce 是一个以 Go 库形式集成的开源电商引擎，覆盖商品与变体、库存、购物车、结算、订单、支付与履约，数据存储于 PostgreSQL。集成模块为普通 Go 包，在 main() 中组装，附嵌入式管理面板。README 标注 1.0 版本，导出 API 与 HTTP 契约保持稳定，破坏性变更走主版本号。适合在 Go 代码中组装自有商店的开发者。",
+   "highlights": [
+    "提供商品变体、库存、购物车、结算、订单、支付与库存等模块，运行于 PostgreSQL 数据库",
+    "事件写入 outbox 表并随状态变更同事务提交，dispatcher 用 FOR UPDATE SKIP LOCKED 投递，投递语义为 at-least-once",
+    "内置支付、通知、履约、发票、B2B、AI 相关等多个模块，模块间通过 REST 与 HMAC 通信，不引入第三方 SDK 依赖"
+   ],
+   "use_cases": [
+    "用 Go 程序组装自有商店，将电商能力作为库引入 main() 运行",
+    "需要多价格表（客户分组、数量阶梯、日期窗口、多店面）与访客结算的场景",
+    "通过 MCP 模块将店铺操作暴露为 AI 工具调用，并保留审计记录"
+   ]
+  },
+  "sha": "34fabcd7bb31",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0832fd9da45b": {
+  "identity": {
+   "one_liner": "基于 Django 与 Docker 的自托管个人照片画廊，带 WebP 多版本处理",
+   "review": "面向个人摄影师的自托管照片画廊，基于 Django 6.1 与 PostgreSQL 16。照片按等高行网格排列，点击进入全屏浏览；上传时自动生成缩略图、中等、优化三档 WebP 版本，并用 SHA-256 内容哈希拦截重复文件。通过 docker compose 一条命令启动，默认配置仅限本地运行，服务器部署需另行配置 nginx、SECRET_KEY 等环境变量。",
+   "highlights": [
+    "等高行网格布局，滚动时每次加载 12 张，手机端每行两张；全屏浏览支持键盘、双击缩放与触摸手势",
+    "上传支持 JPEG/PNG/WebP 单文件最大 100 MB，生成 800/1600/2560 px 三档 WebP 版本，处理 EXIF 旋转、色彩配置与 PNG 透明度",
+    "管理页支持拖拽排序、多选批量删除/置顶、真实进度条上传；仅管理员可操作，登录连续失败五次锁定 15 分钟"
+   ],
+   "use_cases": [
+    "个人摄影作品展示站，需要无社交feed、无广告的自托管画廊",
+    "本地 Docker 一键部署的个人照片备份与浏览",
+    "配置 nginx 与环境变量后部署到自有服务器作为作品集网站"
+   ]
+  },
+  "sha": "0832fd9da45b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4097d9580f3f": {
+  "identity": {
+   "one_liner": "从快照创建一次性隔离数据库分支的工具，支持 MySQL/PostgreSQL/TiDB/MongoDB。",
+   "review": "Forkget 从固定的数据库快照创建隔离分支，供应用与 AI 代理使用。分支支持只读或可写（可写分支物化原生副本，耗时与空间随快照增长），内置权限、行数预算与过期机制，可通过原生客户端、SQLAlchemy 或 Web Console 连接，导出 JSON diff 且不会自动合并回生产库。当前 0.0.9 为实验性早期版本，仅适合本地评估，TiDB 并发外键完整性尚存未解决的问题。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、TiDB、MongoDB 四种引擎，从固定快照创建隔离分支",
+    "分支具备显式权限、行数预算和过期机制，提供 fork/diff/drop 命令行流程",
+    "数据连接支持原生客户端、SQLAlchemy 与 Web Console，两段数据跳转均校验 TLS"
+   ],
+   "use_cases": [
+    "为应用或 AI 代理提供一次性测试数据沙箱",
+    "对分支写入后用 JSON diff 检查变更并将结果回放到基线",
+    "本地评估非生产数据场景下的数据库快照分支工作流"
+   ]
+  },
+  "sha": "4097d9580f3f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3043,5 +3043,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dca97ef99aab": {
+  "identity": {
+   "one_liner": "面向 24/7 常驻 Agent 的开放控制平面，跨运行时持久化目标与证据",
+   "review": "LoopX 是一个 harness 中立的控制平面，为跨会话运行的长时程 Agent 工作保存目标、验收标准、决策与证据等持久状态，供工程、研究与运维场景使用。运行时（Codex、Claude Code、DeepSeek Harness 等）执行工作，LoopX 通过本地 SQLite 存储管理状态流转，并保留人类授权门控。安装需 Python 3.11+ 与 Node.js 22.22.3+，通过 pip 安装后可用自然语言下发目标。",
+   "highlights": [
+    "支持 Codex、Claude Code、DeepSeek Harness 等运行时，本地以 SQLite 持久化目标、租约、决策与证据，团队场景可扩展至 PostgreSQL",
+    "包含事件收件箱、Guarded Heartbeat 定时唤醒、上下文压缩递增交付、owner/safety/publication 等权限门控与工作区/Lark/GitHub 输出视图五类子系统",
+    "提供 loopx workflow-skills 安装、preset list 查看预设（daily-triage、changelog-draft、pr-watch）等命令，发布、生产写入等受保护操作保留人工授权"
+   ],
+   "use_cases": [
+    "需要跨会话、跨重启延续的多日工程、研究或基准实验目标",
+    "需保留范围、证据与评审状态的 issue/PR 循环及周期性心跳监控任务",
+    "涉及所有者审批、发布或私有数据门控，或需向非工程人员展示进度的多 Agent 协作工作流"
+   ]
+  },
+  "sha": "dca97ef99aab",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c59bf23f0713": {
+  "identity": {
+   "one_liner": "基于 Git 仓库的 AI 编程代理故障记忆库，通过 MCP 提供证据分级修复经验检索",
+   "review": "MisakaNet 是一个面向 AI 编码代理的故障恢复知识库：每条修复经验（lesson）都是仓库中的 Markdown 文件，按 E0–E4 证据等级分级，检索使用基于 Python 标准库的 BM25，托管端点在无匹配时可选用 bge-m3 语义回退（可用 MISAKANET_SEMANTIC=0 关闭）。代理经 MCP 搜索命中则返回经验文件与等级，未命中返回 no_match 及可提交的 intake 表单。仅覆盖已收录的故障，intake 队列为待处理瓶颈。",
+   "highlights": [
+    "提供本地 stdio MCP 服务（pip install misakanet，含 11 个工具）与托管 MCP 端点（8 个工具，匿名读取），支持 Claude Code、Codex、DeepSeek Harness 等多客户端安装方式",
+    "经验条目按 E0–E4 五级证据分级；E4 需两个不同客户端实际检索观察到，无法由单方文件声明，CI 会核验声明的等级分布",
+    "发布 267 查询检索评测数据（语义回退 R@1 0.446、no_match 0.453）及可下载、带 SHA-256 与逐文件许可的版本化语料包"
+   ],
+   "use_cases": [
+    "AI 编码代理在开发或 CI 中遇到已收录的故障时，检索并应用先前已验证的修复步骤",
+    "通过 intake 流程提交 no_match 未命中的故障，补充语料供后续代理检索",
+    "基于公开下载的语料包与评测脚本，离线运行检索或复现基准测试"
+   ]
+  },
+  "sha": "c59bf23f0713",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

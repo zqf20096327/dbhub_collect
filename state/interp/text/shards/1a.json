@@ -2834,5 +2834,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ebe77e099997": {
+  "identity": {
+   "one_liner": "本地优先的企业文档知识工作台，内置三种检索引擎并返回带引用的答案",
+   "review": "CompanyBrain 是一个本地优先的知识工作台：上传企业文档后，可通过 pgvector 融合关键词检索的朴素 RAG、基于 PostgreSQL 与 Apache AGE 的 LightRAG GraphRAG 引擎，以及含分页、事实和类型化链接的 nano brain 三种方式查询并获取带引用的答案。面向需要自托管文档问答的团队，要求 PostgreSQL 17 与 OpenAI 兼容的模型端点，`postgres:dev` 启动脚本仅支持 macOS，Linux 需自行配置数据库。",
+   "highlights": [
+    "单一工作区内提供三种独立检索引擎（朴素 RAG、GraphRAG、nano brain），各含独立 HTTP API 与数据库",
+    "每个答案返回源证据引用，并在界面中展示文档与图上下文",
+    "GraphRAG 模块可作 stdio MCP 服务器运行，暴露 graph_search、graph_list_sources、graph_get_document 三个工具"
+   ],
+   "use_cases": [
+    "上传公司内部材料并自托管查询，获取带引用来源的问答",
+    "将 GraphRAG 能力通过 MCP 服务器接入 Agent 会话与工具编排流程",
+    "用附带的基准测试框架评估检索配置改动前后的效果"
+   ]
+  },
+  "sha": "ebe77e099997",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0203e26f9e24": {
+  "identity": {
+   "one_liner": "TiDB Rust 版迁移的测试清单与进度追踪项目，以 TSV 数据和报告呈现",
+   "review": "该项目为 tidb-rs（TiDB SQL 层的 Rust 重写）建立追踪库：用 Go AST 扫描清点 TiDB v8.5.8 的单元与集成测试，通过覆盖率工具建立测试到 Go 函数的映射并按信息熵加权归类到特性，再记录 tidb-rs 通过集成测试的情况。数据以排序 TSV 存于 git 便于 diff 审查，SQLite 仅作本地缓存，通过 Datasette 提供浏览查询。",
+   "highlights": [
+    "基于 Go AST 扫描与覆盖率运行，生成 TiDB v8.5.8 全量测试清单及测试到函数、特性的覆盖映射",
+    "数据以排序 TSV 文件存放于 git，支持 diff 审查重提取结果；CI 在报告过期时失败",
+    "通过 Datasette 提供 SQL 查询、过滤和预设查询，tracker.db 同时作为 CI 产物发布；原始覆盖数据（1.4 GB）以带 sha256 校验的 release asset 发布"
+   ],
+   "use_cases": [
+    "查询 TiDB 某个特性由哪些测试覆盖、某个测试映射是否完整及原因",
+    "查看 tidb-rs 集成测试逐文件、逐语句的结果及与 Go TiDB 的每条不匹配记录",
+    "为测试—函数映射补充权重筛选（specificity ≥ 0.01）后的特性归属分析"
+   ]
+  },
+  "sha": "0203e26f9e24",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

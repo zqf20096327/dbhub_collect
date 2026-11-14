@@ -3227,5 +3227,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1b2be2f92095": {
+  "identity": {
+   "one_liner": "面向网络犯罪调查的自托管案件系统，图谱断言可溯源至WORM证物链",
+   "review": "NocTORnal 是一个自托管的网络犯罪调查案件系统，基于 FastAPI 和 Postgres 16（Python 3.12+），采用 AGPL v3 许可。它把行动者、身份、群组及其信任关系构成社交网络图，每个节点属性与关系都由数据库触发器强制锚定到带来源和 Admiralty 分级的断言账本，并可回溯至双重哈希（SHA-256/BLAKE3）、WORM 锁定的证物及哈希链保管账本。内置 RSS、XenForo/MyBB 论坛与 Telegram 采集适配器；证据架构依据美国联邦证据规则 902(13)/(14) 与加拿大证据法 31.1–31.8 设计。README 要求加载真实案件数据前须经法律审查，且系统提供行级安全、TLP 分级、双人控制与单一出口代理等机制。",
+   "highlights": [
+    "每个图元素写入均须携带带来源、Admiralty 可靠性/可信度分级和时间戳的断言，由数据库触发器强制执行",
+    "证物入库时以 SHA-256 与 BLAKE3 双重哈希并写一次锁定，每次读取/导出/校验记录进仅追加的哈希链保管账本",
+    "包含身份与人员分离的可撤销归因模型、SNA 指标（介数中心性、Burt 约束、key-player）、ACH 矩阵与按 TLP 分级结构化扣留的报告导出"
+   ],
+   "use_cases": [
+    "构建勒索软件附属结构或初始访问经纪网络的关联图谱",
+    "商业电子邮件妥协（BEC）案件的邮件头、钓鱼页与通话记录证据固定",
+    "追踪骡子网络等金融犯罪之上的招募与担保社交层"
+   ]
+  },
+  "sha": "1b2be2f92095",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e2e8ea00c23": {
+  "identity": {
+   "one_liner": "DBD::Pg：Perl DBI 的 PostgreSQL 驱动，基于 libpq 实现",
+   "review": "DBD::Pg 是 Perl DBI 接口的 PostgreSQL 数据库驱动，版本 3.22.0，基于 PostgreSQL 的 libpq 库实现连接与查询。面向需要在 Perl 程序中访问 PostgreSQL 的开发者。构建依赖 Perl 5.8.1+、DBI、PostgreSQL 8.0+ 开发库，通过 perl Makefile.PL / make / make test / make install 安装，支持服务端占位符；README 提供占位符、共享库、macOS 与 Windows/Strawberry Perl 等排障指引。",
+   "highlights": [
+    "通过 Perl DBI 接口连接 PostgreSQL，基于 libpq 库实现",
+    "支持服务端原生占位符（可通过 pg_server_prepare 关闭）",
+    "提供 Makefile.PL 构建流程，支持 POSTGRES_HOME/POSTGRES_INCLUDE/POSTGRES_LIB 等环境变量定位库"
+   ],
+   "use_cases": [
+    "在 Perl 应用中读写 PostgreSQL 数据库",
+    "需要构建依赖 PostgreSQL 的 Perl 模块并运行连接测试的环境",
+    "使用 DBI 编写带占位符参数化查询的脚本"
+   ]
+  },
+  "sha": "2e2e8ea00c23",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6e79bb74d466": {
+  "identity": {
+   "one_liner": "自托管分布式任务调度与编排系统，基于 Docker 执行队列与 Kafka 事件驱动架构",
+   "review": "Chronoverse 是一个可自托管部署的分布式任务调度与编排系统，用于在自有基础设施的 Docker 节点池上运行定时或手动触发的工作流。它采用 HTTP 网关、gRPC 微服务、Kafka worker 组成的消息驱动架构，用 PostgreSQL 存事务状态、ClickHouse 存作业日志、Meilisearch 提供日志检索。支持 Kubernetes/Kustomize 部署，但 Docker 工作流要求节点使用 Docker Engine，containerd-only 集群不受支持。",
+   "highlights": [
+    "支持 HEARTBEAT 与 CONTAINER 两种工作流类型，按分钟间隔定时执行或按需手动触发，作业状态含排队、运行、完成、失败、取消及重试处理",
+    "通过幂等键、工作流代际、事务性 outbox、持久化租约、Redis 协调镜像拉取等机制实现重放安全执行",
+    "提供 ClickHouse 存储的日志保留、Meilisearch 日志搜索、SSE 实时日志输出，以及 OpenTelemetry 遥测导出至 Grafana LGTM 栈"
+   ],
+   "use_cases": [
+    "需要自托管定时任务调度（cron 类工作流）并保留可搜索执行日志的运维场景",
+    "在自有 Kubernetes/Docker 节点上运行容器化工作负载并集中监控执行状态",
+    "需要作业执行分析、通知与可共享日志片段的团队工作流管理"
+   ]
+  },
+  "sha": "6e79bb74d466",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "28b47ed5afb2": {
+  "identity": {
+   "one_liner": "本地优先的记忆 CLI，将消息、邮件、日历与文件汇编为带引用的本地知识库供 MCP 智能体读取。",
+   "review": "Mora 是一款运行于 macOS 的 Go 语言 CLI 工具（现处 beta 阶段），以只读方式接入 iMessage、Gmail、日历和本地文件，将内容存入 Markdown 仓库与 SQLite 索引，通过 MCP 协议向 Claude Code、Codex 等客户端提供检索、摘要与会话交接功能。写入需经 `mora review` 由所有者确认，全部数据存储于本地。",
+   "highlights": [
+    "提供只读 iMessage、Gmail、日历与文件连接器，数据存入本地 Markdown 仓库与 SQLite 索引",
+    "实现 MCP 服务器，暴露 brief、search_memory、meeting_prep 等 13 个工具，并通过会话钩子注入项目简报与范围检索",
+    "所有者写入需在真实终端确认（--mine），智能体写入的笔记进入待审队列，支持 mora given 查看每次交付记录"
+   ],
+   "use_cases": [
+    "为编码智能体跨会话保存项目决策、修正与会话交接（handoff）",
+    "无云端邮箱环境下本地检索 iMessage 与 Gmail，结合日历生成会前简报",
+    "通过人员图谱检索与某人相关的消息和会议证据"
+   ]
+  },
+  "sha": "28b47ed5afb2",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

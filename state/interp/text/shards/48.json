@@ -2848,5 +2848,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ac3048a9f2bb": {
+  "identity": {
+   "one_liner": "基于 Nano Stores 的 SQL 响应式封装，从 SQLite/PGLite 查询生成响应式 store",
+   "review": "@nanostores/sql 是 Nano Stores 的数据库封装，通过 db.store() 将 SELECT 查询转为响应式 store，数据库变更时自动更新。支持官方 SQLite WASM、SQLocal、Expo、PGLite 及自定义驱动，可运行于浏览器（含 OPFS）、React Native 和 Node.js。查询经标签模板实现参数化以防止 SQL 注入，也可搭配 Drizzle 获得类型安全的查询构建；迁移使用 localStorage 记录版本并借助 Web Lock 协调多标签页。",
+   "highlights": [
+    "提供 store/select/exec 三类接口：store 生成随数据库变更自动更新的响应式 store，select 用于单次查询，exec 用于写入",
+    "支持官方 SQLite WASM、SQLocal、Expo、Node.js、PGLite 多种驱动，并可实现自定义 Driver 接口",
+    "标签模板自动将 ${} 转为参数化查询以防止 SQL 注入，且可通过 toDrizzle 接入 Drizzle ORM 的类型安全查询构建器"
+   ],
+   "use_cases": [
+    "浏览器端应用使用 OPFS 或 SQLocal 持久化 SQLite 数据，并将逻辑从 UI 组件迁移到智能 store",
+    "React Native 应用通过 Expo 驱动（需安装 expo-sqlite 的 localStorage polyfill）访问本地 SQLite",
+    "需要在浏览器中使用 PostgreSQL 特性的场景可选用 PGLite 驱动（注意 JSONB 操作符需改用 jsonb_exists() 函数族）"
+   ]
+  },
+  "sha": "ac3048a9f2bb",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fff8fd752c9d": {
+  "identity": {
+   "one_liner": "自托管 CRM，Go + React，内置线索捕获表单，支持 SQLite 或 MySQL",
+   "review": "GopherCRM 是一个面向小型销售与支持团队的开源自托管 CRM，提供线索、客户、公司、五阶段商机管道、工单、任务等模块，并内置可嵌入网站的线索捕获表单（含多层反垃圾与可选双重确认）。部署提供 Docker Compose 的 SQLite 与 MySQL 两种方案，SQLite 模式写操作在单连接上串行且要求本地文件系统。许可证为 MIT。",
+   "highlights": [
+    "提供线索、客户、公司、五阶段商机、工单、任务、产品与报价、跟进自动化规则等模块，含管理员/销售/支持/客户四种角色",
+    "内置表单生成与一键脚本嵌入，提交转化为线索，带蜜罐、时间陷阱、速率限制、可选 reCAPTCHA v3 与可选 double opt-in",
+    "认证采用 JWT 与 HMAC-SHA256 API Key 加基于角色的访问控制；支持 SQLite（DB_DRIVER=sqlite，单文件）或 MySQL 8/MariaDB 10.11，两种模式均有 Docker Compose 文件"
+   ],
+   "use_cases": [
+    "小型团队在自有服务器上集中管理线索、商机与支持工单",
+    "在网站上嵌入线索收集表单，需要反垃圾与邮件双重确认流程",
+    "需要定期检测多家 LLM 答案引擎对品牌的提及情况（AEO 报告）"
+   ]
+  },
+  "sha": "fff8fd752c9d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "df32d6174f45": {
+  "identity": {
+   "one_liner": "基于 SawBot-MD 的 WhatsApp 群聊机器人，为乌拉圭一个朋友群定制，带 AI 对话与群管理。",
+   "review": "这是一个为乌拉圭某 WhatsApp 朋友群定制的聊天机器人，由开发者的首个编程项目演化而来，基于 SawBot-MD（其上游为 GataBot-MD），使用 Node.js 与 Baileys 库运行。功能涵盖多供应商 AI 对话（Gemini 为主、Groq 等作备用）、拉普拉塔河方言语音合成、UruCoins 虚拟经济的游戏与赌场系统、群成员管理与工具命令。README 记载该号码曾因消息量被 WhatsApp 封禁过一次，现内置消息间隔与速率限制。",
+   "highlights": [
+    "支持多 AI 供应商级联调用：以 Gemini 为主，可回退到 Groq、OpenRouter、NVIDIA、Cerebras",
+    "内置 UruCoins 经济系统，包含 trivia、 Hangman、德州扑克等游戏与欧洲轮盘、老虎机等赌场功能",
+    "提供群管理能力：警告与黑名单、不活跃成员清理、入群审批、按角色的权限分级"
+   ],
+   "use_cases": [
+    "需要 AI 对话、游戏和经济系统的朋友群或社群群聊",
+    "需要对成员活动、入群审批和不活跃成员进行管理的 WhatsApp 群组",
+    "需要媒体下载、天气查询、航空信息（METAR/TAF）等工具命令的群聊场景"
+   ]
+  },
+  "sha": "df32d6174f45",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

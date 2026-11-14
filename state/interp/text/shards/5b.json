@@ -2692,5 +2692,48 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d7c76a8fe468": {
+  "identity": {
+   "one_liner": "针对特定 PostgreSQL 服务进程设置 log_statement 的扩展",
+   "review": "pg_log_statements (PGLS) 是一个 PostgreSQL 扩展，用于将 log_statement 设置到特定服务进程，而非实例或数据库级别。它提供 pid 模式（按 pid 启停日志）和 filter 模式（按 application_name、用户、主机、IP、数据库过滤，仅作用于新进程），两种模式不可混用。需通过 shared_preload_libraries 在服务器级加载，兼容 PostgreSQL 9.5–18。",
+   "highlights": [
+    "提供 pgls_start/pgls_stop 按 pid 启停指定进程的 SQL 语句日志，pgls_state 查看全部进程状态",
+    "filter 模式支持按 application_name、user_name、hostname、ip_address、database_name 过滤新进程并启用 log_statement=all",
+    "基于 PGXS 构建，通过 shared_preload_libraries 加载，已在 PostgreSQL 9.5 至 18 上验证"
+   ],
+   "use_cases": [
+    "需对单个指定服务进程开启 SQL 语句日志并随时停止的场景",
+    "按应用名、用户、来源主机/IP 或数据库维度筛选新连接进程记录语句",
+    "实例级或数据库级 log_statement 粒度不满足进程级定位需求时的补充手段"
+   ]
+  },
+  "sha": "d7c76a8fe468",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "603b1273c70d": {
+  "identity": {
+   "one_liner": "基于 Django 的多用户博客应用，含认证、文章、评论、标签等功能",
+   "review": "BinBlogger 是一个用 Django 3.1 构建的多用户博客应用，面向需要完整博客功能的开发者。它实现用户认证、文章增删改查、评论回复、标签分类、搜索、可视化编辑器（medium-editor）、图片上传优化及 Mailchimp 订阅集成。README 明确声明该项目已停止维护（2020 年构建，依赖已过时），仅可作参考，不建议用于生产环境。",
+   "highlights": [
+    "提供多用户认证、文章 CRUD、评论与回复、搜索、标签与分类等博客功能",
+    "集成 medium-editor 可视化编辑器、Jquery 多选/实时搜索、Prism 代码高亮插件",
+    "支持上传图片预览与自动优化，密钥及 Mailchimp 配置通过 .env 环境变量读取"
+   ],
+   "use_cases": [
+    "作为 Django 项目结构与功能的参考代码进行学习",
+    "作为多用户博客功能实现的示例，在其基础上自行修改与扩展"
+   ]
+  },
+  "sha": "603b1273c70d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

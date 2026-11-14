@@ -2989,5 +2989,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b246878addba": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3 + Vue 3 的 B2C 商城，含秒杀与多 Agent 客服",
+   "review": "该仓库包含后端服务、管理后台、用户门户和智能客服四个模块，覆盖注册登录、商品浏览、购物车、下单与模拟支付流程。运行需 JDK 17、Node.js 18、Docker，智能客服另需 Python 3.11 并配置 OpenAI API 密钥；支付未接入真实第三方渠道。",
+   "highlights": [
+    "秒杀流程使用 Redis Lua 脚本扣减库存，通过 RabbitMQ 异步下单，消费失败最多重试 3 次并回滚库存",
+    "智能客服模块基于 LangGraph 编排 Supervisor 路由、RAG 知识库、订单查询与工单处理 Agent，采用 SSE 流式响应",
+    "订单通过 RabbitMQ 延迟队列（TTL 10 分钟）自动取消并恢复库存，前端倒计时轮询兜底"
+   ],
+   "use_cases": [
+    "部署 B2C 商城前台与运营管理后台的完整本地环境",
+    "学习秒杀高并发、多级缓存、延迟队列等电商后端实现方案",
+    "作为多 Agent 智能客服（LangChain/LangGraph + RAG）集成示例运行"
+   ]
+  },
+  "sha": "b246878addba",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "da76fcd2b697": {
+  "identity": {
+   "one_liner": "美国AI数据中心与挖矿设施的来源引注追踪数据库",
+   "review": "Compute Atlas 是一个带来源引注的美国数据中心、加密货币矿场及配套电力设施追踪数据集，覆盖从规划、许可到在建、运营各阶段，并记录能源、水、补贴、社区反馈等信息。面向记者、研究者、地方官员和周边居民。每条记录至少引用一个公开来源并标注置信度；候选记录须经人工审核后发布，派生数值被禁止写入字段。完整数据文件对在校生免费，其他用户需订阅。",
+   "highlights": [
+    "每条记录包含至少一个带 URL、标签、来源类型和检索日期的公开来源，sourceIndex 将具体论断指向具体文件",
+    "所有提交（含自动发现管道）先进入 pending 状态，需人工审核后才发布；管道候选用本地模型对引用 URL 做机器核验",
+    "数据模型按 facilityType（data_center/crypto_mining/power_generation）做判别联合，Zod schema 在每次 PR 中验证全部记录，CI 不通过则拒绝合并"
+   ],
+   "use_cases": [
+    "记者和研究者按状态、运营方、类型、容量筛选并引注设施信息（CC BY 4.0）",
+    "地方官员和居民查询设施的能源、水、排放、补贴、就业及社区反对等公民足迹字段",
+    "开发者以 npm run dev 启动站点，未设 DATABASE_URL 时从 data/facilities.json 快照渲染，无需数据库即可开发"
+   ]
+  },
+  "sha": "da76fcd2b697",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "02fad196f107": {
+  "identity": {
+   "one_liner": "自托管于 AWS 的 AI 代理长期记忆存储，通过 MCP 提供带来源检索。",
+   "review": "Memrain 是一个运行在用户自己 AWS 账户中的长期记忆服务（MIT 协议），面向日常使用 AI 代理的开发者与小团队。它将笔记、决策记录和代码存入 Postgres 数据库，通过 MCP 接口供 Claude、ChatGPT、Codex 等客户端检索，每条结果附带来源指针；默认搜索只调用一次 embedding，不调用聊天模型。部署需 AWS、Terraform、AWS CLI 及 Cloudflare 或 Route53 域名；可用 Docker 在本地以纯关键词模式试用，语义检索需要 AWS 凭证。托管版本尚未提供。",
+   "highlights": [
+    "通过 MCP 端点（/mcp）供 Claude Code、Codex CLI、claude.ai、ChatGPT 等客户端使用统一地址检索",
+    "支持 TypeScript、Python、Go 代码检索，Bash 与 SQL 文件可搜索；结果附带来源页面指针",
+    "存储前自动抹除 API 密钥、令牌、私钥和数据库密码；事实修正采用标记替代而非静默覆盖"
+   ],
+   "use_cases": [
+    "让 AI 代理在多轮会话间检索团队的笔记、决策记录与聊天历史",
+    "查询代码符号的定义、调用关系与影响范围",
+    "团队共享一个记忆连接器，同时为每人保留私有数据空间和消费上限"
+   ]
+  },
+  "sha": "02fad196f107",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

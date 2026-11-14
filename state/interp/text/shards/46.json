@@ -2517,5 +2517,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "babdd7bc76b2": {
+  "identity": {
+   "one_liner": "本地运行的 Rust 个人助理代理，记忆以逐轮追加账本形式可查看",
+   "review": "Joy 是一个完全在本机运行的个人助理代理：Rust 实现代理循环、记忆（SQLite+FTS5）与工具集，TypeScript 提供仪表盘和聊天网关，Python 提供轻量 SDK。记忆采用每轮一行的追加式账本，可查看、可从账本重建索引；预适配 12 家 LLM 提供商并支持 Ollama 离线运行。适合希望数据留在本地、且需要检查代理记忆与执行轨迹的用户。",
+   "highlights": [
+    "记忆系统为逐轮追加账本，每行记录检索决策、工具调用、模型与开销，FTS5 索引可从账本重建",
+    "提供 45 个 JSON-RPC 方法、预适配 12 家 LLM 提供商，支持 Ollama 离线运行与免重启的 /model add 配置",
+    "发布以确定性回放 evals 加判分把关；34 个内置工具含写入边界、沙箱与审批开关，另支持 MCP 服务器"
+   ],
+   "use_cases": [
+    "在终端、仪表盘或 Telegram/Discord/微信/飞书网关中处理需要记忆的日常任务",
+    "需要逐轮检查代理记忆、工具调用与 token 用量的本地隐私场景",
+    "通过 cron 定时任务、todo 列表与子代理委派执行多步骤任务，并用 eval 回放验证行为"
+   ]
+  },
+  "sha": "babdd7bc76b2",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ce5a865dd9f": {
+  "identity": {
+   "one_liner": "单体全栈民宿预订系统，Spring Boot 3 + Vue 3 双前端，含支付、MQ 与 AI 客服。",
+   "review": "面向房客、房东与管理员三类角色的民宿预订系统，覆盖房源发布审核、搜索推荐、下单支付、退款争议与收益管理。作者定位为学习与面试展示的单人全栈项目，使用 AI 编码工具辅助开发；通过 Flyway 管理 52 张业务表的迁移，README 明确说明其演示配置不构成生产级安全与数据保障。",
+   "highlights": [
+    "支持支付宝沙箱支付（页面与扫码）、异步回调、超时订单处理与退款流程；通过 RabbitMQ TTL + 死信队列实现订单超时关闭、批量发券与通知推送，并配套消费重试与定时扫描/HTTP 读取兜底",
+    "集成 Elasticsearch（IK 分词）提供关键词、条件与地理位置检索，推荐基于订单、收藏和浏览行为构建画像；AI 客服 Agent 采用工具白名单与用户确认机制，退款、取消、争议操作先起草再确认提交",
+    "使用 Flyway 维护数据库结构（52 张表 + 2 个视图），AOP 注解实现接口限流与审计日志，Actuator/Micrometer 接入 Prometheus/Grafana，GitHub Actions 执行后端测试与前端类型检查、构建"
+   ],
+   "use_cases": [
+    "作为全栈学习与面试展示项目，用于研读订单支付、MQ 死信队列、AOP 限流审计等模块的实现方式（仓库提供完整架构图集与实现边界说明）",
+    "本地 Docker 一键启动演示环境（约 5000 房源、8000 订单的脱敏数据），用于前后端联调与功能演示",
+    "作为参考代码了解 Spring Boot 3 + Vue 3 + MySQL/Redis/ES/RabbitMQ 组合下预订类系统的目录结构与模块划分"
+   ]
+  },
+  "sha": "4ce5a865dd9f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

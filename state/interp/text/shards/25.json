@@ -3172,5 +3172,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f5876af92f94": {
+  "identity": {
+   "one_liner": "纯 Ruby 实现的 SQLite 词法/语法解析库，可将 SQL 解析为 AST",
+   "review": "Plume 是一个 Ruby 库，用纯 Ruby 实现 SQLite 的词法分析器和兼容解析器，把 SQL 语句解析为 AST 节点。它提供 to_sql、transform、tokenize、参数编号、截断、归一化、指纹和读取表列分析等能力，适合需要内省或处理 SQL 语句结构的 Ruby 工具开发者。需要 Ruby 3.2 及以上版本。",
+   "highlights": [
+    "提供纯 Ruby 实现的 SQLite 词法分析器与解析器，返回每条语句的 AST 节点，并支持 to_sql、dump/load（JSON 序列化）与 transform 等树操作",
+    "支持 tokenize（含 token 文本与字节位置）、语句切分、绑定参数编号、SQL 截断、常量归一化、跨进程稳定的查询指纹",
+    "提供 Plume.reads 分析语句读取的表和列（含别名、子查询、CTE、视图），并列出调用的函数与 CTE 定义"
+   ],
+   "use_cases": [
+    "内省 SQL 查询结构，如判断一条查询读取哪些表和列",
+    "构建处理 SQL 的工具，如日志归一化、查询指纹去重、日志截断",
+    "对 SQL 进行格式化、token 定位（如高亮）或跨进程缓存解析后的语法树"
+   ]
+  },
+  "sha": "f5876af92f94",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "24efd977687e": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 LLM 长期记忆库，提供事实抽取、检索与图遍历。",
+   "review": "expo-llm-wiki 是一组跨平台 TypeScript 包，将对话记录与文档写入 SQLite，构建由事实、任务和图边组成的结构化知识库，支持事实抽取、语义搜索、记忆修剪与 OKF 导入导出。调用方需自行提供 generateText 与可选的 embed 函数。提供 Expo、React、Node 及纯 JS 多种包形态，使用时数据存放在应用自带的数据库表中。",
+   "highlights": [
+    "数据（事实、向量、图边）存放于应用自有 SQLite 数据库的前缀表中，不要求额外部署向量库或图数据库",
+    "关键词搜索在进程内运行；提供 embed() 时启用语义搜索，网络不可用时回退到关键词搜索",
+    "支持多实体记忆，可在单个数据库中维护多个独立记忆并通过加权读取跨实体访问；支持 OKF v0.2 导入导出"
+   ],
+   "use_cases": [
+    "为 Expo / React Native / 浏览器 / Node.js 应用中的 LLM 对话添加持久化长期记忆",
+    "需要事实溯源、草稿审核或 GDPR 删除等合规流程的智能体记忆管理",
+    "需要基于本体生成类型化边并执行 GraphRAG 图遍历检索的应用"
+   ]
+  },
+  "sha": "24efd977687e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "af5e59e3469b": {
+  "identity": {
+   "one_liner": "面向 Ubuntu VPS 的开源主机控制面板，一条命令安装",
+   "review": "RAYXO 是一个运行于 Ubuntu 24.04 的免费开源主机控制面板，采用 Laravel+React 面板与 Go agent 的架构：面板以非 root 用户运行，通过 Unix socket 以封闭动作列表调用 root 权限的 rayxod agent。提供 Admin/Reseller/User 三级账户，集成 Nginx、Apache、PHP-FPM、MariaDB、PowerDNS、Postfix/Dovecot/Roundcube 邮件栈。当前为 beta（v0.7.2），备份与迁移功能尚未实现；安装要求干净的 Ubuntu 24.04、FQDN 主机名及 A/PTR 记录。",
+   "highlights": [
+    "支持域名管理、Let's Encrypt SSL（含 wildcard）、PHP 7.4–8.5 多版本、MariaDB、PowerDNS、Postfix/Dovecot/Rspamd/Roundcube 邮件与网页邮箱、FTP、文件管理器和 cron 任务",
+    "每个托管账户对应独立 Linux 用户，通过 cgroups 限制 CPU/RAM/IO，面板以非 root 运行并经封闭动作列表的 Go agent 执行系统操作",
+    "提供三级权限（Admin/Reseller/User）、可超额销售的套餐、REST API、2FA/passkey 登录，安装脚本校验包 checksum 并支持重跑"
+   ],
+   "use_cases": [
+    "在单台 Ubuntu VPS 上向客户提供共享托管服务（Admin→Reseller→User 分级售卖）",
+    "需要域名、DNS、邮件托管、SSL 证书等自助管理的个人或小型托管环境",
+    "从 DirectAdmin 类面板结构迁移的主机管理场景（目录结构与 2222 端口遵循 DirectAdmin，支持 .htaccess）"
+   ]
+  },
+  "sha": "af5e59e3469b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f24cf1d67e1": {
+  "identity": {
+   "one_liner": "Telegram 集换式卡牌游戏机器人，内置抽卡与经济系统",
+   "review": "这是一个运行在 Telegram 上的集换式卡牌游戏（CCG）机器人，用 Python 3 与 Aiogram 3 实现，数据存储于 SQLite。面向国际社区玩家，提供抽卡（每小时限一次）、库存堆叠、积分转账、商店购买、重复卡合成与玩家间卡牌交换等功能，部署于 Ubuntu 虚拟机并通过 systemd 自启动。README 本地运行说明只写到安装依赖，后续步骤未展示。",
+   "highlights": [
+    "抽卡系统发放 2-4 星稀有度卡牌，每小时限抽一次以防刷屏",
+    "内置经济系统：积分转账（/give）、商店购买（/buy）、重复卡合成（/craft）、玩家间卡牌交换（/givecard）",
+    "使用 Python 3 + Aiogram 3 + SQLite，部署于 Ubuntu VM 并以 systemd 自动启动"
+   ],
+   "use_cases": [
+    "为 Telegram 群组提供卡牌收集与玩家互动玩法",
+    "作为学习 Aiogram 3 与 SQLite 构建游戏机器人的参考项目",
+    "需要抽卡、合成、交易等完整游戏经济循环的 CCG 场景"
+   ]
+  },
+  "sha": "8f24cf1d67e1",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

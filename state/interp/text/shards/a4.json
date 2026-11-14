@@ -2619,5 +2619,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3b868494d94a": {
+  "identity": {
+   "one_liner": "本地优先的桌面媒体库应用，扫描、浏览、检索并播放本地视频与图片",
+   "review": "Meguri 是基于 Electron + React + TypeScript 的桌面应用，用于管理和播放本地视频、图片及音频。它递归扫描指定文件夹，用内置 ffmpeg 静态二进制生成 WebP 缩略图，元数据存于 SQLite。支持多工作区、FTS5 全文检索、标签/评分/历史、自动标签规则与播放列表。全离线运行，无遥测；macOS 版暂未公证，首次启动需手动放行。",
+   "highlights": [
+    "递归扫描文件夹并通过 mtime/size 与内容哈希做增量扫描和移动/重命名追踪，缩略图与元数据由内置 ffmpeg 与 SQLite（better-sqlite3）生成存储",
+    "提供全文检索（FTS5）、标签、评分、日期范围过滤，支持正则规则自动打标，标签与历史在文件移动/重命名后保留",
+    "支持工作区多目录管理、全屏播放列表（含随机/循环）、Discovery 随机推荐、时间线/图谱/文件夹等多种浏览视图，可自定义 CSS 与主题"
+   ],
+   "use_cases": [
+    "在本地磁盘管理大量视频、照片和音频文件，需要缩略图浏览与检索",
+    "整理并多维度检索个人媒体收藏（按标签、评分、日期），并跟踪观看历史",
+    "无人值守连续播放收藏夹、文件夹或搜索结果（如按专辑逐个播放音乐文件夹）"
+   ]
+  },
+  "sha": "3b868494d94a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "058bdb233711": {
+  "identity": {
+   "one_liner": "用纯 SQL 在 SQLite 中运行 SmolLM-135M 推理的项目",
+   "review": "该项目将 HuggingFaceTB/SmolLM-135M 权重从 safetensors 读入 SQLite，用 SQL 语句、视图和触发器实现分词、Transformer 层、注意力、KV 缓存与贪心生成，不依赖任何宿主语言函数。需 SQLite 3.51、约 6 GB 磁盘空间；每生成一个 token 约需一分钟，上下文上限 2,048。项目定位为 SQL 推理概念验证，另提供基于 SQLPage 的本地网页面板。",
+   "highlights": [
+    "完整推理链路（safetensors 解析、BPE 分词、272 个张量的层计算、KV 缓存、贪心解码）均以 SQL 实现，无 Python/JS/扩展",
+    "提供 SQLPage 网页面板，可在浏览器输入提示词并逐 token 流式查看解码文本",
+    "附带逐 token 加速的行式矩阵乘触发器及导入校验（张量计数、quick_check、SHA-256）"
+   ],
+   "use_cases": [
+    "研究 SQL 实现语言模型推理的机制与教学演示",
+    "在仅具备 sqlite3 CLI 的环境中运行小模型推理实验",
+    "通过网页面板或 SQL shell 交互式生成最多 8 个 token 的文本"
+   ]
+  },
+  "sha": "058bdb233711",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

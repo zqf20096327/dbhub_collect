@@ -3099,5 +3099,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f51ee1d147ad": {
+  "identity": {
+   "one_liner": "自托管的 Excalidraw 白板应用，含协作、团队空间与 Postgres 存储",
+   "review": "Excaliself 将 Excalidraw 画布封装为自托管应用，提供实时协作、团队空间、文件夹、搜索与成员账户体系，数据存于自有 Postgres。面向需要在本机服务器上维护团队绘图库的团队。部署依赖 Docker Compose、Coolify、Railway 等方式，内置 MCP 服务器供 AI 客户端读写绘图，AI 变更需用户点击 Apply 确认。",
+   "highlights": [
+    "提供完整 Excalidraw 编辑器与自动保存，支持链接分享的实时协作、实时光标与跟随模式",
+    "内置 MCP 服务器，支持 Claude 等 AI 客户端查找、读取、创建、导出绘图并提议变更；实例无需 LLM API 密钥",
+    "支持 OIDC/Google Workspace/Microsoft Entra 单点登录、邀请制账户、回收站 30 天自动清除及从 Excalidraw+ 导入（beta）"
+   ],
+   "use_cases": [
+    "团队在自有服务器上托管共享白板与绘图库，数据存于自有 Postgres",
+    "通过 MCP 让 Claude.ai、Claude Code 等 AI 客户端查找、创建和修改团队绘图",
+    "需要 OIDC/SSO 登录、成员角色管理或多主题界面的小型团队绘图场景"
+   ]
+  },
+  "sha": "f51ee1d147ad",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cbfd5fad2af1": {
+  "identity": {
+   "one_liner": "为 TUI 编码助手提供本地持久记忆与知识库的 MCP 插件",
+   "review": "total-recall 是一个面向 TUI 编码助手（Claude Code、Copilot CLI、OpenCode、Cline、Cursor 等）的记忆与知识库插件。它将用户的纠正、偏好、决策与项目知识存入本地 SQLite，通过关键词与向量混合检索、warm/hot/cold 分层模型在会话间提供记忆，嵌入模型随二进制本地运行；也可配置 Postgres 或 Cortex 作为团队共享后端。安装需 Node.js 20+，不支持 Intel Mac。",
+   "highlights": [
+    "以 SQLite 本地存储，内置嵌入模型，默认不依赖外部服务或 API 密钥",
+    "采用 warm/hot/sticky/cold 分层记忆模型，混合关键词与向量检索，支持 pin 固定指令",
+    "通过 MCP 服务器或插件形式支持十余种 harness，附带本地 Web 仪表盘与 /develop 技能"
+   ],
+   "use_cases": [
+    "在多个编码助手之间跨会话保留修正、偏好与项目决策",
+    "通过 ingest 命令将本地文档纳入可检索知识库",
+    "团队场景下切换 Postgres 或 Cortex 后端共享记忆库"
+   ]
+  },
+  "sha": "cbfd5fad2af1",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

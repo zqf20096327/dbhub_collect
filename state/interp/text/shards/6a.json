@@ -2985,5 +2985,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f6e1649f5e1e": {
+  "identity": {
+   "one_liner": "Rust 编写的通用数据库，兼容 MySQL 协议，面向 AI 代理与 HTAP 场景",
+   "review": "MyDB 是一个用 Rust 实现的通用数据库，通过 MySQL 协议接口提供事务、分析、向量检索和 AI 模型调用能力。面向应用与 AI 代理开发者，可通过 MySQL 客户端、JDBC、REST SQL 或 MCP 访问。README 明确说明 1.2.1 为公开预览版，用于功能验证，尚非生产级 MySQL 替代品，且磁盘格式不保证向后兼容。",
+   "highlights": [
+    "提供 SQL 内置 AI 函数（AI_GENERATE 生成文本、AI_EMBED 生成嵌入向量），支持 Ollama、OpenAI 等本地与远程模型服务",
+    "实现 HTAP 执行引擎，包含并行哈希连接、向量化执行与基于代价的优化器；README 附有与 MySQL 8.0 及 PostgreSQL+pgvector 的性能测试数据",
+    "支持 MySQL 客户端/JDBC 复用、ROW binlog 集成、BM25+RRF 混合检索、HNSW/IVF 向量索引、在线 DDL、MVCC 与可选 REST SQL/MCP 接口"
+   ],
+   "use_cases": [
+    "需要通过 SQL 实现检索增强生成（RAG）、知识库或代理持久化记忆的应用",
+    "需要同时运行事务与分析负载（HTAP）的业务数据处理",
+    "已有 MySQL 客户端、JDBC 驱动或 binlog 集成流程，希望接入新数据库的评估环境"
+   ]
+  },
+  "sha": "f6e1649f5e1e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "594cc1833d1e": {
+  "identity": {
+   "one_liner": "自托管的 Node.js 认证服务，基于 Fastify、PostgreSQL 与 JWT 管理账户、会话和登录。",
+   "review": "Knell 是一个自托管认证服务（v0.3.0），用 TypeScript 编写，通过 HTTP API 处理注册、邮箱验证、登录、密码重置和会话管理，数据存储在 PostgreSQL。面向不想使用按用户计费第三方认证服务、希望自行掌握用户数据的应用开发者。需 Node.js 20+、PostgreSQL 14+，支持 Docker Compose 部署，采用 MIT 许可证。",
+   "highlights": [
+    "提供 Argon2id 密码哈希、TOTP 双因素认证、Google/GitHub OAuth 登录与 WebAuthn passkey 无密码认证",
+    "实现 JWT 访问令牌（15 分钟有效期）加可撤销刷新令牌（7 天）的会话机制，支持设备跟踪、会话列表查询与按设备或全部撤销",
+    "包含登录限速（15 分钟内 5 次）、账户锁定、IP 封禁、审计日志、密码强度与常见密码拦截等防护功能"
+   ],
+   "use_cases": [
+    "为 Web 或移动应用提供自托管的注册、登录与会话管理后端",
+    "需要邮箱验证、密码重置、双因素认证和多设备会话控制的账户体系搭建",
+    "通过 Docker Compose 部署、数据保留在自有 PostgreSQL 实例中的私有化认证场景"
+   ]
+  },
+  "sha": "594cc1833d1e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

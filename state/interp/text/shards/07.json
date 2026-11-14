@@ -3070,5 +3070,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7315ad0b77c9": {
+  "identity": {
+   "one_liner": "Go 编写的本地 Granola 笔记归档工具，以 SQLite 存储，支持 Markdown 导出与 TUI 浏览",
+   "review": "graincrawl 将 Granola 的笔记、转写、面板、人员、工作区与同步元数据同步到本地 SQLite 归档，供需要可搜索、可导出会议数据的用户使用。同步默认走 Granola 桌面私有 API 会话，会话不可用时回退到明文桌面缓存，官方公开 API 需显式启用；对 Granola 仅作只读访问。注意 Granola 7.427+ 的 Keychain 加密边界可能使部分源不可用。",
+   "highlights": [
+    "通过命令行或 TUI 浏览归档，支持 search 检索、note get 单条查看与 export markdown 批量导出",
+    "提供 --json 输出与只读 SQL 查询接口，支持 snapshot create/import 的导入合并与 --replace 精确还原",
+    "通过 Homebrew 安装，或以 Go 1.27.4+ 从源码构建，macOS 二进制要求 macOS 13+"
+   ],
+   "use_cases": [
+    "在本地建立 Granola 笔记的可搜索归档并导出 Markdown",
+    "不写入 Granola 档案的前提下归档会议转写与元数据",
+    "通过快照在机器之间迁移归档数据，或以只读 SQL 进行自动化查询"
+   ]
+  },
+  "sha": "7315ad0b77c9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "38cf4cfa2f7f": {
+  "identity": {
+   "one_liner": "Node.js 本地优先加密数据库，每个项目为一个 AES-256-GCM 加密的 .rizz 文件",
+   "review": "Rizzbase 是面向 Node.js/TypeScript 开发者的本地优先数据库，数据以 AES-256-GCM（PBKDF2 600,000 次迭代）加密的单个 .rizz 文件存储，由单独安装的 Go 引擎处理，通过本地 stdin 传递密钥。V1 无索引与云端服务，查询将 Lobby 读入内存过滤，单文件上限 64 MiB，无口令恢复机制。另提供 Python SDK、CLI 与 Wails 桌面应用 Studio。",
+   "highlights": [
+    "支持 AES-256-GCM 加密与 PBKDF2-HMAC-SHA256 密钥派生，密钥仅经 stdin 传给本地引擎",
+    "提供 Node.js 20+/Python 3.10+ SDK 与 Go 引擎，支持 AND 过滤、orderBy、limit 及 JSON 导出/恢复",
+    "create()/export/import 均拒绝覆盖已有文件，支持 JSON 备份迁移实现口令轮换"
+   ],
+   "use_cases": [
+    "需要本地加密存储 JSON 文档、无云服务的 Node.js 应用",
+    "需要可移植加密文件备份与明文 JSON 快照导出的数据管理",
+    "通过示例应用（Notes/Todo）学习过滤排序查询与持久化更新"
+   ]
+  },
+  "sha": "38cf4cfa2f7f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2e12a95785a2": {
+  "identity": {
+   "one_liner": "基于 Excel 上传的 TikTok 视频播放量批量查询工具",
+   "review": "面向需要批量核对 TikTok 视频播放量的用户：上传含达人昵称、视频ID等字段的 .xlsx 文件，后端逐条实时查询当次播放量，页面展示明细、四类状态标注与批次汇总，并支持导出 CSV/.xlsx，导出时保留 19 位 ID 精度。前端 React 19 + Vite，后端 Spring Boot + Kotlin；当前仓库为初始化脚手架，查询、展示与导出逻辑尚未实现。",
+   "highlights": [
+    "接收指定结构的 Excel 上传，批量实时查询视频最新播放量，并为每条记录标注成功、不可用（下架/删除/私密）或失败三类状态",
+    "页面展示批次汇总（输入总数、成功数、不可用数、失败数、播放量总和、耗时），支持导出内容与展示一致的 CSV/.xlsx，达人ID/视频ID 以文本完整保留",
+    "部署通过 GitHub Actions 推送到 prod 分支触发，构建产物经阿里云 OSS 中转链接下发服务器，支持 yt-dlp 代理与 4 位数字访问密码配置"
+   ],
+   "use_cases": [
+    "批量获取一批 TikTok 视频（如 264 条记录的 Excel 清单）的当次最新播放量",
+    "需要区分视频可用状态并生成含完整 19 位 ID 的可导出明细报表的场景",
+    "自建服务器部署运行，通过 yt-dlp 代理执行抓取查询"
+   ]
+  },
+  "sha": "2e12a95785a2",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

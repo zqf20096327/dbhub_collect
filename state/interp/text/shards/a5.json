@@ -2910,5 +2910,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3d8db842c7cd": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制将行级变更转为 JSON 流向消息代理的 .NET 库",
+   "review": "PgOutput2Json 是一个 .NET 库，通过 PostgreSQL 内置的 pgoutput 逻辑解码插件读取复制槽中的行级变更（INSERT/UPDATE/DELETE），转换为 JSON 后发送到应用委托处理器或 Kafka、RabbitMQ、Redis 等输出端。需 PostgreSQL 14 及以上，wal_level 须设为 logical。投递语义为 at-least-once，消息携带 (LSN, 序号) 去重键，消费方需按幂等应用或水位线处理重复。",
+   "highlights": [
+    "使用 PostgreSQL 内置 pgoutput 插件，无需额外安装解码插件；支持 PostgreSQL 14–18",
+    "支持多种输出端：.NET 委托、Kafka、RabbitMQ、Redis、MongoDB、SQLite、ClickHouse、Amazon Kinesis、DynamoDB、Azure Event Hubs、Webhooks",
+    "投递为 at-least-once，按原始顺序重放未确认批次，消息包含事务 LSN 与序号组成的去重键；提供紧凑模式以省略列名、减小消息体积"
+   ],
+   "use_cases": [
+    "事务提交后近实时触发后台任务或异步日志",
+    "低延迟更新应用缓存",
+    "面向数据仓库的轻量 ETL 与实时数据聚合"
+   ]
+  },
+  "sha": "3d8db842c7cd",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7f055b4dd11e": {
+  "identity": {
+   "one_liner": "圣克拉拉大学商业智能与数据仓库研究生课程的完整教学资料库",
+   "review": "该仓库存放 Santa Clara 大学 MSIS-2494（商业智能与数据仓库）课程资料，面向信息系统与分析方向的研究生，为期 10 周 20 次课。内容涵盖分析 SQL、星型模型、Medallion 架构（Bronze/Silver/Gold），以披萨店为贯穿案例，工具链为 DuckDB、Marimo notebook、Python 与 Tableau，每节课含 30 分钟随堂实验。仓库按周组织文件夹，含教学大纲、评分政策与软件安装说明。",
+   "highlights": [
+    "包含 10 周 20 次课程的完整资料，每周提供幻灯片、Marimo notebook 与 2 个随堂实验，共 20 个实验",
+    "以披萨店 POS 与外卖应用文件为贯穿案例，实现 Bronze→Silver→Gold 的 Medallion 管道、星型模式、增量加载与 Tableau 仪表板",
+    "工具链为 DuckDB（内嵌于 Python、无需服务器）+ Marimo notebook（.py 文件）+ Tableau，依赖通过 pip 安装"
+   ],
+   "use_cases": [
+    "自学数据仓库与 BI 课程内容：按周文件夹学习 SQL 分析、星型模式设计与 Medallion 管道",
+    "教师参考课程结构与实验设计，复用其以单一案例贯穿全学期与随堂实验的教学安排",
+    "按 Week 0 安装 DuckDB、Marimo 等工具，运行示例 notebook 验证环境并上手 ELT 流程"
+   ]
+  },
+  "sha": "7f055b4dd11e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

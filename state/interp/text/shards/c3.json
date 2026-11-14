@@ -3340,5 +3340,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b6252d577881": {
+  "identity": {
+   "one_liner": "PostgreSQL 18 流表扩展，用增量视图维护自动刷新物化查询",
+   "review": "pg_trickle 是运行于 PostgreSQL 18+ 的扩展，由 Rust 编写的差分数据流引擎驱动（基于 pgrx 构建），用于定义随基础表数据变更自动更新的流表。用户正常执行 INSERT/UPDATE/DELETE，扩展通过变更捕获与调度机制增量计算查询结果。支持 Docker playground 快速体验；项目尚未发布 1.0，API 与配置在次版本间可能变动。面向应用开发者、DBA/SRE 与数据工程师。",
+   "highlights": [
+    "实现增量视图维护（IVM），提供 AUTO/DIFFERENTIAL/FULL/IMMEDIATE 四种刷新模式，IMMEDIATE 模式在基础表 DML 同一事务内完成维护",
+    "支持 GROUP BY、多类型 JOIN、窗口函数、集合操作、CTE（含 WITH RECURSIVE）、LATERAL 与子查询等 SQL 范围；流表可相互依赖形成 DAG 并按拓扑序刷新",
+    "默认采用语句级 AFTER 触发器做变更捕获（无需 wal_level=logical）；提供 Citus 分布式表支持、健康检查与刷新时间线等观测函数"
+   ],
+   "use_cases": [
+    "基础表频繁变更、需保持聚合/连接结果实时的分析场景",
+    "多个流表构成依赖 DAG、需按拓扑序与原子一致性刷新的数据管道",
+    "基于 Citus 分布式表的分布式聚合/物化结果维护"
+   ]
+  },
+  "sha": "b6252d577881",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "593299e44c86": {
+  "identity": {
+   "one_liner": "自托管 MG 车辆仪表盘，登录 SAIC iSmart API 获取车辆数据",
+   "review": "GarageStack 是一个自托管 Web 应用，通过登录 SAIC iSmart API（官方 iSmart 应用使用的同一后端）获取现代 MG 车辆的数据，提供实时仪表盘、行程记录、充电历史、远程控制和推送通知等功能，基于 .NET/C# 开发并使用 PostgreSQL 存储。适用于使用 iSmart 应用的 MG4、MG5、ZS EV、HS PHEV 等车型车主，以 Docker 容器方式部署在自己的硬件上。需注意 GarageStack 与 MG 应用不能同时登录同一账号。",
+   "highlights": [
+    "提供实时仪表盘，展示燃油、电量、胎压、车门车窗、空调等遥测数据，卡片根据 HEV/PHEV/BEV 车型自动显示或隐藏",
+    "自动保存行程并在地图上绘制路线，支持按速度/限速着色、热力图展示，以及按月或按年导出电子表格行程日志",
+    "支持远程指令（空调预热、锁车、开关充电等）并返回车辆执行结果与原因，可通过 MQTT discovery 接入 Home Assistant，并支持 OpenID Connect 单点登录"
+   ],
+   "use_cases": [
+    "希望在自己的服务器上集中查看和管理 MG 车辆状态、充电与行程数据的 iSmart 车型车主",
+    "需要为报税目的记录并导出公务/通勤/私人行程日志的用户（如荷兰 rittenregistratie）",
+    "运行 Home Assistant 或 homelab 环境、希望通过 MQTT 和 API 集成车辆数据的用户"
+   ]
+  },
+  "sha": "593299e44c86",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

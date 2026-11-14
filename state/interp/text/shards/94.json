@@ -3047,5 +3047,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9fe659febf5c": {
+  "identity": {
+   "one_liner": "为开发 Convex 应用的编码代理提供工作流、安全与写作技能的 CLI 工具",
+   "review": "builder-skills 是一个面向使用 Convex 的开发者及其编码代理（Claude Code、Codex、Cursor、OpenCode 等）的技能包，通过 npx 安装到各代理的 skills 目录。包含 11 个技能，覆盖任务分诊、PRD 编写、项目文档同步、git 安全操作、部署前安全检查与文案写作；Convex API 知识由官方技能提供，本工具专注周边流程。安装时写入普通文件，可编辑、可通过 skills update 拉取更新。",
+   "highlights": [
+    "提供 11 个技能，分为工作流（workflow、create-prd、git-safety 等）、编码（think-first、dev、state-machines）、安全（sec-check）与写作（write）四组",
+    "sec-check 附带密钥扫描脚本与逐函数清单，要求代理先证明攻击路径再标记发现",
+    "支持 --target 参数安装到 claude/codex/cursor/opencode/agents 目录，--link 可用符号链接代替复制；init 命令可生成 task.md、changelog.md、SECURITY.md 等项目模板文件"
+   ],
+   "use_cases": [
+    "在多步骤功能开发前生成 PRD 并以 task.md、changelog.md、files.md 跟踪任务与文档同步",
+    "部署前或仓库公开前运行 sec-check 检查泄漏密钥、无鉴权公开函数、未签名 webhook 等风险",
+    "需要限制 git 破坏性操作、控制功能范围蔓延，或为项目撰写 README、文档与提交信息时"
+   ]
+  },
+  "sha": "9fe659febf5c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8472577dc088": {
+  "identity": {
+   "one_liner": "Rust+egui 编写的原生桌面数据库客户端，支持 PostgreSQL、MySQL、SQLite 和 BigQuery。",
+   "review": "Tabletist 是用 Rust 和 egui 编写的跨平台桌面数据库客户端，运行于 Linux、macOS 和 Windows。它提供连接管理（含 TLS 与 SSH 隧道）、表格数据网格编辑、SQL 编辑器、只读事务保护与冲突检测保存。密码存于系统密钥环；BigQuery 连接为只读。安装支持 Homebrew cask、Windows 安装包、Linux AppImage 及源码构建。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite 与 BigQuery（只读）四种数据库，提供 TLS 连接和 SSH 隧道（密码、密钥文件或 agent）",
+    "表格编辑以单个事务保存，保存前可查看 SQL 语句，检测到他人已修改的行时提示逐行选择保留方案；只读连接与生产环境的语句在只读事务中运行并回滚",
+    "数据可导出为 CSV、TSV、JSON、JSON Lines、SQL INSERT、Markdown，复制为 TSV/CSV/JSON 等格式；提供带补全、格式化、行数限制和超时的 SQL 编辑器"
+   ],
+   "use_cases": [
+    "在 Linux（Omarchy/Hyprland）、macOS 或 Windows 桌面上以图形界面浏览和编辑数据库表数据",
+    "连接生产或 staging 环境需要只读保护、保存前审查 SQL 与冲突检测的工作流",
+    "将查询结果或表数据批量导出为 CSV、JSON、SQL INSERT 等多种格式"
+   ]
+  },
+  "sha": "8472577dc088",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ef6a7be3136": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的嵌入式三模数据库，单内核融合向量、图谱与文档存储。",
+   "review": "TriviumDB 是一个进程内嵌入式数据库引擎，用 Rust 编写并提供 Python（PyO3）、Node.js（napi-rs）和 Rust 原生 API。每个节点同时携带稠密向量、稀疏文本倒排、JSON 元数据和图关系，通过统一 NodeId 关联，查询由 TQL 语言编排并由 Cascades 优化器规划。数据持久化为单文件 `*.tdb`（Rom 模式）或分离的 `.vec/.pld` sidecar（Mmap 模式），依赖 WAL、原子替换等机制保障写入。安装通过 pip/npm/cargo 提供预编译包，面向需要在单进程内同时使用向量检索与图谱的 AI 应用开发者。",
+   "highlights": [
+    "提供 TQL 查询语言，可编排向量召回、BM25/AC 文本召回、属性索引、图扩展、图算法、FISTA/DPP/NMF 算子与集合代数，支持参数化 Prepared TQL",
+    "内置图算法库（PageRank、Leiden、Betweenness、Label Propagation、SA-PPR 等）可在查询内直接调用，并提供四类持久化属性索引（Hash / Ordered ART / Composite ART / Roaring Bitmap）",
+    "支持 Rom 单文件与 Mmap sidecar 双存储模式、WAL 与原子事务、多进程共享只读打开，以及通过共享 ResourceRuntime 管理多实例配额、诊断与受控关闭"
+   ],
+   "use_cases": [
+    "AI Agent 长期记忆：将对话存为带向量与属性的节点，实体间建边，召回时先向量匹配再沿关系链扩散",
+    "知识库与 RAG 应用：文档切片入库后同时支持语义搜索与图谱导航（MATCH、GraphFirst、SA-PPR 扩散）",
+    "嵌入式单机或容器化应用：通过 pip/npm/cargo 安装预编译包，进程内直接打开数据库实例，无需独立部署服务端"
+   ]
+  },
+  "sha": "6ef6a7be3136",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3076,5 +3076,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9c7e7e2b0d98": {
+  "identity": {
+   "one_liner": "面向 DSH 的社区记忆插件集，用 SQLite FTS5 与向量混合检索实现跨会话记忆回读。",
+   "review": "这是 DeepSeek Harness（DSH）的社区记忆插件集合，共 8 个包，可用一个 bundle 一键安装。它让模型在新会话中通过 memory_search_workspace 搜索同工作区旧讨论、用 memory_read 回读原文与后续纠正，并提供中文子串检索（FTS5 trigram 双 tokenizer）、长期事实写入、技能自我进化与用户固定保护层。宿主版本要求 DSH >=0.1.5-rc.3 <0.3.0；不提供跨设备云同步，也不能为普通 DeepSeek 网页聊天增加记忆。",
+   "highlights": [
+    "提供 memory_search_workspace 与 memory_read 工具，按来源回读有界原文窗口，检索结果带 provenance",
+    "中文检索采用 FTS5 双 tokenizer 双表（unicode61 + trigram），按查询是否含 CJK 自动路由，支持中英混排与扩展汉字",
+    "用户通过 /memory-pin、/skill-pin 固定的内容受写入接口保护，模型工具与后台进化拒绝改写并记录审计日志"
+   ],
+   "use_cases": [
+    "同一工作区新会话需要找回旧讨论的最终决定与原文依据时",
+    "中文会话历史在使用 unicode61 tokenizer 的检索中难以命中时",
+    "需要将偏好、约定、决策、教训等作为长期事实在后续请求中注入系统提示时"
+   ]
+  },
+  "sha": "9c7e7e2b0d98",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2839,5 +2839,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7f984b4fefde": {
+  "identity": {
+   "one_liner": "可自托管的开源任务管理器，本地优先，单 Go 二进制加 SQLite 存储。",
+   "review": "OpenTodo 是一个可自托管的开源待办事项应用，使用 Go 与 SQLite 作为服务端，前端为 React PWA，另有 iOS 应用。采用本地优先架构：设备在 IndexedDB 中保存完整副本，编辑以带时间戳与设备标识的字段级操作记录同步。支持 Kanban 看板、时间块、番茄钟计时、项目共享，以及 Todoist 等来源的任务导入。可通过 Docker、单二进制等方式部署，许可证为 AGPL-3.0。",
+   "highlights": [
+    "本地优先同步：每台设备保存完整数据副本，离线可编辑，联网后按字段级操作日志同步，笔记按字符合并",
+    "支持端到端加密选项，开启后服务器仅保存密文；数据可导出并备份到磁盘、S3 或 WebDAV",
+    "提供 REST API、CalDAV、CLI 与 MCP 接入，所有写入经过同一操作日志；支持自然语言快速录入任务"
+   ],
+   "use_cases": [
+    "在自有服务器、树莓派或 NAS 上搭建个人与家庭任务管理服务",
+    "需要在无网络环境下继续使用并稍后同步任务的移动与桌面办公场景",
+    "与家人或团队共享项目，按 viewer/editor/admin 角色协作的任务管理"
+   ]
+  },
+  "sha": "7f984b4fefde",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4be1017816a4": {
+  "identity": {
+   "one_liner": "将工程师定义的 SQL 模板发布为受治理 MCP 工具的 .NET 服务器",
+   "review": "hs-sql-agent 是一个 .NET 实现的 MCP 服务器，允许在 Admin UI 中定义参数化 SQL 模板并发布为带类型参数的 MCP 工具，供 AI 客户端调用。它包含基于 F# 闭式 AST 的 SQL 编译器、per-key 数据库/表策略、DML 审批流程和审计记录，支持 PostgreSQL、MySQL、SQL Server、Oracle、SQLite、Firebird 六种数据库，可独立运行或嵌入 ASP.NET Core 应用。部署需配置三个独立加密密钥。",
+   "highlights": [
+    "将参数化 SQL 模板发布为带 JSON Schema 的 MCP 工具，占位符仅接受值参数，不接受标识符或 SQL 片段注入",
+    "SQL 经 closed AST 编译器的 parsed → bound → canonical → validated → executable 阶段处理，不支持的语法按 fail-closed 拒绝",
+    "DML 执行遵循预览 → 审批 → 提交时行集重校验流程，并包含 per-key 访问策略、速率/执行限制与审计记录"
+   ],
+   "use_cases": [
+    "为 Claude Desktop、Cursor、VS Code 等 MCP 客户端提供受治理的数据库查询工具",
+    "需要 DML 操作经人工审批后才能写入数据库的场景",
+    "通过 HsSqlAgent.Hosting 包将 MCP SQL 工具能力嵌入现有 ASP.NET Core 应用"
+   ]
+  },
+  "sha": "4be1017816a4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9442b2d34d6e": {
+  "identity": {
+   "one_liner": "本地优先的 Windows 桌面监控套件，覆盖网站、协议与远程 Linux VPS。",
+   "review": "Surf Monitor 是运行于 Windows 的 Electron 桌面应用，用于监控网站、多协议服务及远程 Linux VPS 上的 Docker、systemd、PM2 进程。数据存储在本地 SQLite（31 张表，WAL 模式），支持通过 SSH 隧道连接远程 agent，通知渠道含 Discord、Telegram、Webhook 与 SMTP 邮件。面向需要在本地管理监控的个人或服务器运维者。",
+   "highlights": [
+    "支持 HTTP/HTTPS、SSL 证书到期、DNS、TCP 端口、ICMP ping、关键词匹配、心跳接收与 RDAP 域名到期等多协议检测，含 UP/DEGRADED/DOWN 三态健康分类",
+    "通过绑定 127.0.0.1:47200 的本地 agent 与 SSH forwardOut 隧道采集远程 Linux 的 PM2、Docker、systemd 指标与日志",
+    "通知渠道包括 Discord Webhook、Telegram、自定义 Webhook、Windows 桌面通知与 SMTP 邮件，凭据经 Electron safeStorage 加密存储"
+   ],
+   "use_cases": [
+    "对个人或团队的网站、API、证书与端口可用性做本地化监控",
+    "在 Windows 桌面端查看远程 Linux VPS 上 Docker、systemd 与多用户 PM2 进程的运行指标和日志",
+    "需要无账号、无许可证密钥的本地监控方案，并配置多渠道告警通知"
+   ]
+  },
+  "sha": "9442b2d34d6e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

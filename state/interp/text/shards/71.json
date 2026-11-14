@@ -2825,5 +2825,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9001fadec11b": {
+  "identity": {
+   "one_liner": "将 PromQL/LogQL/TraceQL 翻译为 ClickHouse SQL 的只读 HTTP 查询网关",
+   "review": "Cerberus 是一个用 Go 编写的只读查询网关，在 Grafana 中表现为 Prometheus、Loki、Tempo 三个数据源，把查询翻译成 ClickHouse SQL 后按上游 wire 格式返回。它不摄取数据，读取 OTel Collector 写入的标准 ClickHouse schema 表；不含规则引擎，迁移需靠 migrate 子命令逐查询比对验证。要求 ClickHouse 24.8+，通过 Docker、Homebrew、二进制或 Helm chart 部署。",
+   "highlights": [
+    "逐字实现上游 HTTP API（/api/v1/query_range、/loki/api/v1/query_range、/api/search 等），无需 Grafana 插件",
+    "PromQL 使用上游 prometheus/promql/parser，LogQL 与 TraceQL 为 Apache 许可的干净室语法重实现，不链接 AGPL 代码",
+    "三语言共用一条 parse→lower→optimize→SQL 管线，含优化自动探测（CERBERUS_CH_OPTIMIZATIONS=auto）与 migrate 查询比对/门禁工具"
+   ],
+   "use_cases": [
+    "已用 OTel Collector 将指标、日志、追踪写入 ClickHouse，需在 Grafana 中以现有 PromQL/LogQL/TraceQL 仪表盘和告警查询这些数据",
+    "从 Prometheus 迁移存储与查询引擎时，用 cerberus migrate 对真实查询做逐条结果比对与切换门禁",
+    "本地用 docker compose --profile grafana 启动 ClickHouse、fixture 数据与预配置 Grafana 做体验验证"
+   ]
+  },
+  "sha": "9001fadec11b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

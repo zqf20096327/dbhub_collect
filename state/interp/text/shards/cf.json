@@ -3325,5 +3325,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ab0a1d0c166a": {
+  "identity": {
+   "one_liner": "基于 ANTLR4 的 JVM 端 SQL 血缘解析库，输出表级与列级血缘。",
+   "review": "LineSQL 是运行于 JVM 的 SQL 血缘解析库，基于 ANTLR4 实现，支持 Spark、Hive、Flink、StarRocks、MySQL、Oracle、SQL Server、PostgreSQL 和 OceanBase 方言。调用 LineSql.parse(sql) 后返回表血缘、列血缘、子句级列使用和解析诊断。它不做 SQL 执行或查询优化，适用于数据目录、元数据和数据治理类 Java 服务，需 Java 8 及以上运行时。",
+   "highlights": [
+    "支持 9 种 SQL 方言，提供基于锚点的自动方言检测，也可显式指定方言",
+    "统一结果模型包含表血缘、列血缘、子句级列使用、警告与错误信息",
+    "面向脚本解析：临时视图解析、调度变量替换、单条失败语句不阻塞整个脚本，并保留部分结果"
+   ],
+   "use_cases": [
+    "数据目录采集：从 SQL 脚本提取源表、目标表及解析诊断",
+    "影响分析：分析 SQL 脚本中下游表与列的依赖关系",
+    "数据治理：获取过滤、分组、排序等子句中的列使用情况"
+   ]
+  },
+  "sha": "ab0a1d0c166a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b19e4422a730": {
+  "identity": {
+   "one_liner": "生态箱游戏的 Rust+SQLite 独立服务端，兼容既有 HTTP/WS 协议与 TS 存档",
+   "review": "这是“生态箱”游戏的服务端实现，用 Rust 与 SQLite 重写原有 TS 版的生产 HTTP/WS 与存储层，兼容既有客户端协议、旧 ID/token 与 TS 存档。提供论坛、排行榜、公告、云控、私网管理台及观察站剧情等功能。写服务仍依赖 Node 22+ 子进程复用原 TS 校验器，读服务可纯 Rust 运行。适合需要自建或迁移生态箱服务端的部署者。",
+   "highlights": [
+    "使用 SQLite WAL 与持久写连接存储数据，提供旧 JSON 存档的导入、导出、完整性检查与在线备份",
+    "兼容现有客户端的 Bearer 鉴权、HTTP 完整上报与 WS 完整/增量上报，内置限流、缓冲上限与心跳检查",
+    "内置论坛（含 SQLite FTS5 搜索）、公告、反馈、云控、私网管理台与观察站剧情系统，支持与旧 TS 服务端的数据迁移和回滚"
+   ],
+   "use_cases": [
+    "将生态箱部署从原 TS 服务端迁移到 Rust+SQLite 存储的生产环境",
+    "为生态箱社区提供论坛、排行榜、公告与反馈等运营功能",
+    "需要旧客户端无需更新即可使用论坛功能（通过反馈通道文本命令协议）的场景"
+   ]
+  },
+  "sha": "b19e4422a730",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3438,5 +3438,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aa36414411bf": {
+  "identity": {
+   "one_liner": "面向业务应用的 AI-native Java 库与运行时，以模型驱动 Q/E 查询与经审计的图变更。",
+   "review": "TeaQL Java 提供 Q 查询、E 数据读取与带审计原因的 Save 变更三类 API，运行时负责 SQL 生成、关系加载、Checker/Policy 执行及自动执行日志。它面向使用编码代理开发 Java 业务应用的团队，配合生成的领域库与 AGENTS.md 渐进式 Assist 使用。注意原子性限于 provider/route 范围，且变更审计非持久化 outbox。",
+   "highlights": [
+    "由语义模型生成 Q 查询、E 表达式与变更方法，运行时通过元数据、Context、Checker、Policy 与数据库 provider 执行",
+    "E 访问路径区分已加载 NULL 与未加载字段，未加载访问产生语言级诊断",
+    "Q 与 Save 无需手写日志代码即生成执行诊断、trace 上下文与字段级变更事件，敏感绑定经掩码处理并标记 MASKED"
+   ],
+   "use_cases": [
+    "需要审查者直接检视业务操作而非追踪查询拼装与持久化代码的业务应用开发",
+    "与编码代理协作开发，通过渐进式 Assist 按需获取实体/字段级 API 指引",
+    "需要查询意图、生成 SQL、执行结果与字段级审计原因关联排查的调试与运维场景"
+   ]
+  },
+  "sha": "aa36414411bf",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ed58c0655a17": {
+  "identity": {
+   "one_liner": "Rust 编写的 MCP 网关，统一管理外部 MCP 服务器、工具组与 Code Mode 沙箱。",
+   "review": "OmniMCP 是一个 Rust 实现的 MCP 网关与运行时，用于将外部 stdio/HTTP MCP 服务器、虚拟工具组、OpenAPI/Protobuf/Thrift 服务及进程内 Code Mode 沙箱接入统一入口。面向使用 Claude、Cursor 等 MCP 客户端的用户。关键机制包括 Okapi BM25 工具路由、wasmi Wasm 沙箱、SQLite WAL 审计；安装方式为 npx 或下载各平台预编译二进制，许可证为 Apache-2.0。",
+   "highlights": [
+    "支持 stdio 与 Streamable HTTP 两种 MCP 传输方式，可协商 2024-11-05 至 2026-07-28 多个 MCP 协议版本",
+    "内含 Code Mode 脚本沙箱：进程内 AST VM 与可选的 wasmi Wasm 沙箱，并生成 .d.ts 声明供模型调用",
+    "提供 rustls TLS/mTLS、OIDC/JWKS（RS256/ES256/EdDSA）认证、RBAC、速率限制与 SQLite WAL + SHA-256 Merkle 审计日志"
+   ],
+   "use_cases": [
+    "将多个 MCP 服务器通过单一网关接入 Claude、Codex、Cursor、Windsurf 等 MCP 客户端",
+    "需要对状态变更类工具调用设置人工审批门与 Saga 回滚的多步骤编排场景",
+    "需要统一认证（mTLS/OIDC）、审计与限流的 MCP 服务托管场景"
+   ]
+  },
+  "sha": "ed58c0655a17",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

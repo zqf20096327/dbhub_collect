@@ -2997,5 +2997,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5925a139889d": {
+  "identity": {
+   "one_liner": "PHP/Symfony 的 PostgreSQL 原生模糊全文搜索层，旁车索引表实现容错排序搜索",
+   "review": "Fuzzphony 是面向已有 PostgreSQL 的 PHP/Symfony 应用的搜索库，通过在数据库内建旁车索引表，提供容错、忽略重音、带排序与筛选的全文搜索，不引入外部搜索服务且不改动原表结构。索引可通过触发器/队列同步或手动模式维护。要求 PHP 8.4+、PostgreSQL 15+ 并启用 pg_trgm 与 unaccent 扩展；当前为 pre-1.0（v0.12.4），API 仍可能变动。安装用 composer require fuzzphony/fuzzphony。",
+   "highlights": [
+    "提供容错（trigram）、忽略重音（unaccent）及 28 种语言的词干化全文搜索，支持字段权重排序",
+    "支持含 AND/OR/NOT、精确短语、前缀、字段限定与分组的查询语法，以及按字段筛选",
+    "索引位于旁车表，不改原表结构；trigger 模式下索引与数据在同一事务内变更"
+   ],
+   "use_cases": [
+    "数据库表结构不可改动（遗留系统、ERP、他人维护的表）时替换 LIKE 查询",
+    "多租户 SaaS 后台搜索，需要按租户强制过滤与字段级权限控制",
+    "不希望新增独立搜索服务、数据需留在数据库内受同一备份与权限管理"
+   ]
+  },
+  "sha": "5925a139889d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3146d4ebf681": {
+  "identity": {
+   "one_liner": "基于 Tauri 的本地 PHP 等多语言开发环境，www 文件夹一键映射为 https://<folder>.test 域名。",
+   "review": "LampRabit 是一个桌面应用，用于在本地搭建 PHP、Node.js、Python、Go、Rust、Java 开发栈，面向 Windows、macOS 和 Linux 用户。它将 www 目录下的文件夹映射为 *.test 本地域名并签发 HTTPS 证书，支持按需安装多版本运行时与服务。构建需 Node.js 22+ 与 Rust；当前安装包未做代码签名，首次运行需手动放行。",
+   "highlights": [
+    "支持 Apache、Nginx、Caddy、FrankenPHP、Tomcat 等服务器，以及 MariaDB、MySQL、PostgreSQL、MongoDB、SQLite、ClickHouse 等数据库，运行时可按需安装并多版本并存",
+    "www 文件夹自动映射为 https://<folder>.test 域名，由本地 CA 签发受信任证书，hosts 文件自动同步",
+    "提供 CLI 与 MCP 服务器接口，可从终端或支持的 AI 客户端（如 Claude、Cursor、VS Code）操作同一后端"
+   ],
+   "use_cases": [
+    "在本地运行 PHP 框架项目（Laravel、Symfony、WordPress 等模板可一键创建）并自动获得本地 HTTPS 域名",
+    "同时管理多语言、多版本运行时的本地开发服务，按项目切换 PHP/Node 版本",
+    "通过 Cloudflare Tunnel 或 ngrok 生成的公开 URL 分享本地站点给他人访问"
+   ]
+  },
+  "sha": "3146d4ebf681",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

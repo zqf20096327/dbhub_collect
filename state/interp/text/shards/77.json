@@ -3366,5 +3366,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "516b85482f2d": {
+  "identity": {
+   "one_liner": "面向电信网络运维的 AIOps Agent，基于拓扑与时间窗压缩告警并定位根因。",
+   "review": "TelecomAgent 是一个面向电信网络运维的告警分析 Agent：输入一天的原始告警（CSV 或 API），按拓扑关系与 10 分钟时间窗压缩告警、定位根因、计算影响面、匹配历史案例并生成派单建议，低置信度事件转人工复核。技术栈为 Python 3.11 + FastAPI + LangGraph，配 Streamlit 值班台与 React/TypeScript 只读大屏，Node 网关实时消费告警并经 WebSocket 推送。数据与评估集均为合成数据，指标仅作回归参考。",
+   "highlights": [
+    "拓扑感知压缩：10 分钟时间窗内按 CORE→TRANSPORT→OLT→BASE_STATION 下游关系聚合告警，样本上 223 条压缩为 10 起事件",
+    "根因由本地规则逻辑判定，可识别光缆中断、电源故障、信令过载、光路劣化等类型；LLM 仅用于生成值班摘要，未配置 Key 时使用确定性模板",
+    "提供 Streamlit 值班台与 React 只读 NOC 大屏两套前端，Node/TypeScript 网关通过 WebSocket 推送实时告警流"
+   ],
+   "use_cases": [
+    "值班场景将大量原始告警压缩为可处置事件并生成派单清单",
+    "告警分析过程需要在控制台查看分析轨迹、影响面与判断依据以便追溯",
+    "以合成数据做工程评估或替换 data/ 目录接入真实 CSV 告警进行离线分析"
+   ]
+  },
+  "sha": "516b85482f2d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

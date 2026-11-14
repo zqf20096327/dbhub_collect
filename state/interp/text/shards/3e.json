@@ -3237,5 +3237,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "61e48ec582fe": {
+  "identity": {
+   "one_liner": "终端中的 MongoDB 日志与 profile 分析 TUI，按查询形态聚合慢查询。",
+   "review": "MongoScope 是一个运行于终端的 MongoDB 分析工具，读取 mongod 日志或连接实例，按形态（shape）聚合慢查询并统计次数、平均延迟、examined/returned 与执行计划，另提供 currentOp、副本集延迟、索引与日志查看标签页。采用 Bun + OpenTUI 构建为单一二进制，通过键盘操作，适合在数据库主机上通过 SSH 直接运行，无需 GUI。Windows 需下载 release 压缩包；需要真实交互式终端，不能管道 stdout。",
+   "highlights": [
+    "支持解析 mongod 日志（默认解析最后 10 万行）与实时 system.profile 两种来源，慢查询结果可导出为 JSON/CSV/Markdown",
+    "提供 currentOp、COLLSCAN 高亮与 kill-op、副本集拓扑/oplog 窗口/延迟曲线、索引清单与构建进度、日志 tail 或 getLog 五个功能区域",
+    "以单一二进制分发，安装脚本会校验 checksums.txt；连接凭据可存入 OS keychain（Bun.secrets），不支持时回退为配置文件明文"
+   ],
+   "use_cases": [
+    "在无 GUI 的数据库主机上通过 SSH 分析事故期间的 mongod 日志",
+    "自托管 MongoDB 环境下查看 currentOp、副本集延迟与索引构建进度",
+    "对静态日志进行慢查询模式聚合，并通过 History 比较前后计划变化后导出报告"
+   ]
+  },
+  "sha": "61e48ec582fe",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "64fc2014f16c": {
+  "identity": {
+   "one_liner": "基于 NestJS + TypeORM + MySQL 的后台管理框架，含通用 CRUD、多租户与代码生成器",
+   "review": "这是一个企业后台后端框架：通过 @CrudController 装饰器由实体配置生成分页、增删改查、导出接口与页面描述，内置 RBAC、数据/字段权限、共享库 tenant_id 多租户隔离。技术栈为 NestJS 12、MySQL 8.4、Redis、Vitest，配套 Vue 3 前端仓库。需 Node.js 22+ 与 Docker，本地初始化脚本仅限开发环境指定库名。",
+   "highlights": [
+    "通过 @CrudController 自动生成 CRUD 接口、权限码与 schema 页面描述，支持乐观锁、软删除回收站、主子表事务聚合保存",
+    "提供 RBAC 菜单/按钮权限、数据权限（组织/本人/自定义）、字段级编辑/只读/脱敏/隐藏控制，以及基于 tenant_id 的共享库多租户隔离",
+    "包含代码生成器（支持单表/树表/主子表模板，生成前后端代码）、OpenAPI 导出、双令牌刷新轮换与 Pino 结构化日志脱敏"
+   ],
+   "use_cases": [
+    "作为企业后台管理系统项目的后端起点，复用权限、租户、组织架构等基础设施",
+    "需要多级组织（集团-公司-部门-站点）与按组织隔离数据的业务系统开发",
+    "开发阶段用代码生成器从实体快速产出列表、表单、字段权限相关前后端代码"
+   ]
+  },
+  "sha": "64fc2014f16c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3527,5 +3527,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c38d665246cf": {
+  "identity": {
+   "one_liner": "按请求路径加载命名空间控制器并调用方法的轻量 PHP 框架",
+   "review": "SlightPHP 是一个轻量 PHP 框架，将 URL 路径映射到命名空间控制器方法，请求处理由控制器完成，响应输出、状态码、权限与输入校验由应用自行负责。要求 PHP 8.0+、PDO 和 Redis 扩展，通过 Composer 安装；插件如 Config、Db、Tpl 也经 Composer 加载。6.3 起以 Request/Response 对象替代原 $inPath 传参，属于不兼容变更，升级需参照迁移指南。",
+   "highlights": [
+    "按请求路径映射到命名空间控制器及公开方法，路径默认最多 10 段且可通过 setMaxDepth 调整",
+    "提供 Request/Response 对象，可读取 route、get/post/cookie/files/header/server 数据并设置响应",
+    "通过 Composer 加载插件，包含 \\SlightPHP\\Config、\\SlightPHP\\Db、\\SlightPHP\\Tpl 等"
+   ],
+   "use_cases": [
+    "基于 Composer 的 PHP 8.0+ Web 应用开发",
+    "需要路径到控制器方法直接映射的路由场景",
+    "配合 PDO 数据库、Redis 服务或验证码组件的应用构建"
+   ]
+  },
+  "sha": "c38d665246cf",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d9be208e13d8": {
+  "identity": {
+   "one_liner": "用于管理 libSQL 数据库的开源 Web GUI 平台",
+   "review": "MylibSQLAdmin 是一个面向 libSQL 数据库的开源 Web 管理界面，提供数据库、令牌、用户、团队与分组管理等操作功能。它可通过 Docker Service 连接 libsql-server，也可接入已有实例。安装需 Docker、Docker Compose 与 openssl，支持脚本安装或手动安装；全新生产环境无默认账号，需通过 BootstrapSeeder 创建超级管理员，演示用户仅限本地测试。",
+   "highlights": [
+    "提供数据库统计、数据库管理、令牌管理功能",
+    "支持用户、团队、分组及成员邀请管理，包含活动日志",
+    "可连接 Docker Service 中的 libsql-server 或已有 libsql-server 实例"
+   ],
+   "use_cases": [
+    "通过 Web 界面管理自托管的 libSQL/SQLite 数据库",
+    "团队协作场景下管理用户角色、访问令牌与权限分组",
+    "在 Docker 环境中部署 libsql-server 并进行日常管理"
+   ]
+  },
+  "sha": "d9be208e13d8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7caff44b51a9": {
+  "identity": {
+   "one_liner": "基于Go与SQLite的七通道支付接入实验室，含mock演示与逐步教程",
+   "review": "该项目是一个用Go编写的支付接入教学仓库，覆盖微信支付、Stripe、Allscale及四家法币买币通道，统一订单、验签、幂等与对账流程，默认demo模式无需真实密钥即可本地运行。适合需要学习支付网关接入流程的开发者；README注明真实商户API未做公网交易验收，且不含扣点、出款、拒付处理等业务功能。",
+   "highlights": [
+    "提供微信支付（小程序/JSAPI/H5/Native/App）、Stripe、Allscale及MoonPay、Alchemy Pay、Transak、Ramp七通道的本地演示与内嵌教程",
+    "实现Webhook验签、幂等键入账、重复/乱序回调去重、回调丢失后的主动查询恢复及SQLite账本持久化",
+    "默认demo模式不使用真实密钥即可本地跑通七通道，live模式通过环境变量与数据库路径实现环境隔离"
+   ],
+   "use_cases": [
+    "学习各支付网关的签名、验签、状态映射与字段精度差异",
+    "在本地演练回调丢失、重复通知、退款冲回等异常恢复流程",
+    "作为接入真实商户API前的代码结构与流程参考"
+   ]
+  },
+  "sha": "7caff44b51a9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e7b28704e40d": {
+  "identity": {
+   "one_liner": "开源课程改进系统：证据采集、人工决策与长期记忆追踪课程版本效果。",
+   "review": "Plot Ark 是一个开源的课程改进平台，将课程结构、学习者行为（xAPI）与反馈采集为证据，经多智能体诊断学习摩擦点，由教师或 L&D 负责人审核修订建议，并将证据与决策存入长期记忆（PostgreSQL 快照），用于比较下一版课程效果。技术栈为 Flask+React+PostgreSQL+Redis+LightRAG，提供学术与企业两个工作区；企业端 UI 仍为合成数据预览，xAPI 存储非认证 LRS。",
+   "highlights": [
+    "提供 A2A 多智能体分析管线（sql-only），生成诊断快照并持久化到 LTM",
+    "支持上传 PDF/PPTX/DOCX 构建交互式知识图谱（LightRAG），并注入诊断上下文",
+    "导出 PDF/DOCX/Excel 分析报告，Docker Compose 一键启动本地环境"
+   ],
+   "use_cases": [
+    "高校教师依据 xAPI 证据与学生反馈诊断课程摩擦点并修订课程",
+    "企业 L&D 团队对比培训版本效果（当前为合成数据预览阶段）",
+    "将自有课程资料摄取为知识图谱并探索概念依赖关系"
+   ]
+  },
+  "sha": "e7b28704e40d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

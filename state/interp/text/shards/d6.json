@@ -3102,5 +3102,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0a0e824dd4b7": {
+  "identity": {
+   "one_liner": "SQL Server 健康检查与性能调优的存储过程脚本集合",
+   "review": "该项目为管理 Microsoft SQL Server 的 DBA、系统管理员和开发者提供一组 T-SQL 存储过程：sp_Blitz 输出按优先级排列的服务器健康检查结果，sp_BlitzCache 读取计划缓存找出资源消耗高的查询，sp_BlitzIndex 分析索引，sp_BlitzFirst 用于诊断当前服务器缓慢原因。脚本安装在 master 或其他数据库中运行，需以 sysadmin 授权 VIEW SERVER STATE 等权限；支持 Windows/Linux 上的 SQL Server 与 Amazon RDS，不正式支持 Azure SQL DB，sp_DatabaseRestore 在 Linux 上不可用。",
+   "highlights": [
+    "sp_Blitz 生成带优先级、FindingsGroup、URL 和 Details 列的健康检查结果，支持 @OutputDatabaseName 等参数写入表以跟踪历史，并可通过 BlitzChecksToSkip 表跳过指定检查或数据库",
+    "sp_BlitzCache 读取计划缓存，默认返回最消耗资源的 10 条查询",
+    "sp_BlitzIndex 分析缺失或影响性能的索引，sp_BlitzFirst 用于查看服务器当前运行缓慢的原因"
+   ],
+   "use_cases": [
+    "对 SQL Server 实例执行日常或每周整体健康检查并留存结果历史",
+    "排查当前消耗服务器资源最多的查询",
+    "分析数据库索引的缺失与性能影响"
+   ]
+  },
+  "sha": "0a0e824dd4b7",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "27e17aeaba6c": {
+  "identity": {
+   "one_liner": "SQLGlot 的 TypeScript 移植版，可在浏览器与 Node 中解析、转换、优化 SQL。",
+   "review": "sqlingo 是 Python SQL 工具 SQLGlot 的 JavaScript/TypeScript 移植，在浏览器和 Node 运行时中提供 SQL 的解析、方言转换、优化、列血缘追踪和执行，覆盖 32 种方言。包为纯 JavaScript 实现，无需 WASM 或原生依赖，依赖 luxon 作为 peer dependency 处理日期时间。README 标注其处于 alpha 阶段，当前对齐 SQLGlot v30.5.0。适合需要在 JS 环境做 SQL 分析或转换的开发者。",
+   "highlights": [
+    "支持 32 种 SQL 方言的解析、转换、优化、列血缘、diff 与执行",
+    "纯 JavaScript 实现，兼容浏览器与 Node 运行时，无 WASM 或原生依赖",
+    "提供流式 API 的 SQL Builder，并支持注册自定义方言或覆写现有行为"
+   ],
+   "use_cases": [
+    "在浏览器端解析、转换或分析 SQL 语句",
+    "跨方言（如 MySQL 转 DuckDB）转写查询语句",
+    "基于 schema 优化查询、追踪列血缘，或以编程方式构建 SQL"
+   ]
+  },
+  "sha": "27e17aeaba6c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

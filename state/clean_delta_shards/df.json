@@ -24876,5 +24876,347 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "769b80fd6f60+2": {
+  "fn": "snz1dp/alphafold-mirror",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "AlphaFold 镜像下载中心"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    17,
+    6,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "|特性|说明|"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    26,
+    19,
+    26,
+    [
+     "|**路径同构**|镜像 URL 与上游一一对应，客户端只改基址|",
+     "|**懒加载**|首次请求触发回源落盘，后续本地命中（sendfile 零拷贝）|",
+     "|**正确性**|单飞防击穿 · 原子发布 · crc32c/md5/sha256 校验，绝不服务半截文件|",
+     "|**大文件友好**|aria2c 多连接 · Range/206 · `curl -C -`/`wget -c` 断点续传 · 202+Retry-After|",
+     "|**滚动文件**|EBI/wwPDB TTL 再验证 + stale-while-revalidate，替换无 downtime|",
+     "|**离线交付**|透明整文件布局，rsync 拷入内网 + `reindex` 重建元数据|",
+     "|**合规**|AF3 权重默认 302 回源**永不落盘**；AF2 数据按许可镜像并署名|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    77,
+    26,
+    77
+   ],
+   [
+    "replace",
+    77,
+    83,
+    77,
+    78,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    85,
+    78,
+    80
+   ],
+   [
+    "replace",
+    85,
+    86,
+    80,
+    81,
+    [
+     "详见 examples/client_usage.md。"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    81,
+    84
+   ],
+   [
+    "replace",
+    89,
+    90,
+    84,
+    85,
+    [
+     "|镜像路径|上游|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    85,
+    86
+   ],
+   [
+    "replace",
+    91,
+    98,
+    86,
+    93,
+    [
+     "|`/alphafold-databases/<obj>`|GCS alphafold-databases（AF2 v2.3/casp14/reduced + AF3 v3.0）|",
+     "|`/alphafold/<obj>`|GCS alphafold（AF2 params）|",
+     "|`/alphafold3/<obj>`|GCS alphafold3（**restricted**，默认 302 回源）|",
+     "|`/ebi/<path>`|ftp.ebi.ac.uk/pub（UniRef90/UniProt 滚动）|",
+     "|`/gwdg/<path>`|wwwuser.gwdg.de/~compbiol（PDB70）|",
+     "|`/wwpdb/<path>`|files.wwpdb.org/pub（seqres/obsolete/CCD 滚动）|",
+     "|`/colabfold/<file>`|opendata.mmseqs.org/colabfold（需启用开关）|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    93,
+    96
+   ],
+   [
+    "replace",
+    101,
+    102,
+    96,
+    97,
+    [
+     "|方法|路径|鉴权|说明|"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    97,
+    98
+   ],
+   [
+    "replace",
+    103,
+    113,
+    98,
+    108,
+    [
+     "|GET|`/health`|公开|PG/aria2c/磁盘探活|",
+     "|GET|`/v1/manifest`|公开|全量清单 + 实时缓存状态|",
+     "|GET|`/v1/cache` `/v1/cache/<key>/sha256`|公开|缓存对象 / 校验和|",
+     "|GET|`/v1/stats` `/v1/jobs`|公开|命中率 / 任务进度|",
+     "|POST|`/v1/prefetch`|admin|预热 profile 或 key 列表|",
+     "|POST/DELETE|`/v1/pin/<key>`|admin|固定/解除固定|",
+     "|DELETE|`/v1/cache/<key>` `/v1/jobs/<id>`|admin|淘汰 / 取消|",
+     "|GET|`/v1/licenses`|公开|署名与许可（含中文合规声明 notice）|",
+     "|GET|`/licenses`|公开|合规声明页（科研/非商业声明 + 上游署名 + 权重条款 + 免责）|",
+     "|GET|`/docs` `/openapi.json` `/metrics`|公开|API 文档 / Prometheus|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    123,
+    108,
+    118
+   ],
+   [
+    "replace",
+    123,
+    124,
+    118,
+    119,
+    [
+     "- 许可核实记录与官方出处：plans/licenses.md。"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    128,
+    119,
+    123
+   ],
+   [
+    "replace",
+    128,
+    129,
+    123,
+    124,
+    [
+     "仅当你已代表组织接受 AF3 权重条款（非商业、仅组织内部使用、不得组织外再分发）时才可启用。启用后权重**只在本组织内网节点落盘缓存**，内网即视为已授权，**无需 admin token**（省带宽、用户不必每次回 Google 拉取）："
+    ]
+   ],
+   [
+    "equal",
+    129,
+    147,
+    124,
+    142
+   ],
+   [
+    "replace",
+    147,
+    148,
+    142,
+    143,
+    [
+     "**代码许可：MIT License**（Copyright © 2026 长沙慧码至一信息科技有限公司）。本仓库的**源代码及随附文档**采用 MIT 许可，可自由使用、复制、修改、合并、发布、分发、再授权与出售，唯须保留版权与许可声明，且软件按\"现状\"提供、不作任何担保。"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    163,
+    143,
+    158
+   ],
+   [
+    "replace",
+    163,
+    164,
+    158,
+    159,
+    [
+     "|变量|默认|说明|"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    159,
+    160
+   ],
+   [
+    "replace",
+    165,
+    183,
+    160,
+    178,
+    [
+     "|`ROLE`|standalone|standalone / origin / fetcher|",
+     "|`DATA_DIR`|/data|cache/staging/meta 根|",
+     "|`PORT`|8080|HTTP 端口（数据面+控制面）|",
+     "|`BASE_PATH`|/af|路由基路径（空或 `/` = 根路径）|",
+     "|`PUBLIC_URL`|http://afmirror:8080|对外展示/生成命令的基址（内网默认；公网可设 https://<你的域名>/af）|",
+     "|`DATABASE_URL`|postgres://afmirror:afmirror@postgres:5432/afmirror|PG DSN（目标库不存在时启动自动创建，需账号 CREATEDB 权限；无权限则报错提示手动建库）|",
+     "|`WEIGHTS_POLICY`|redirect|redirect / deny / internal（internal 仅限已授权组织内网，内网即授权、免 token 落盘缓存）|",
+     "|`MAX_CONCURRENT_FETCHES`|2|全局回源并发|",
+     "|`ARIA2_CONNECTIONS`|8|单文件回源连接数|",
+     "|`ARIA2_PORT`|6800|aria2 RPC 端口|",
+     "|`UPSTREAM_PROXY`|空|回源 HTTP 代理|",
+     "|`TTL_MUTABLE_HOURS`|168|滚动文件再验证周期|",
+     "|`DISK_HIGH` / `DISK_LOW`|85 / 75|LRU 水位（%）|",
+     "|`ADMIN_TOKEN`|空（禁用管理）|管理鉴权（BUILD.yaml 部署默认 `snz1dp9527`，公网部署务必覆盖为强随机值）|",
+     "|`FETCHER_URL` / `FETCHER_TOKEN`|空|形态 B origin 派单|",
+     "|`INGEST_TOKEN`|空|形态 B 接收鉴权|",
+     "|`ENABLE_COLABFOLD`|false|ColabFold 命名空间（BUILD.yaml 部署默认 true；关闭时 `/colabfold/*` 一律 404）|",
+     "|`UPSTREAM_DISABLED`|false|离线只读模式|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    190,
+    178,
+    185
+   ],
+   [
+    "replace",
+    190,
+    200,
+    185,
+    186,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    208,
+    186,
+    194
+   ],
+   [
+    "replace",
+    208,
+    219,
+    194,
+    195,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    229,
+    195,
+    205
+   ],
+   [
+    "replace",
+    229,
+    230,
+    205,
+    206,
+    [
+     "- 设计：plans/001-design.md · 实施：plans/002-implementation.md"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    232,
+    206,
+    208
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

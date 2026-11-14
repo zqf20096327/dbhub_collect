@@ -3365,5 +3365,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6ad0a2e83ca1": {
+  "identity": {
+   "one_liner": "用 Rust 编写的 Redis 兼容缓存与数据结构服务器，基于 RESP2 协议。",
+   "review": "ReRu 是用安全 Rust 实现的 Redis 兼容数据服务器，通过 RESP2 协议让现有 Redis 客户端无需修改即可连接。它按 Redis 8.10.2 参考实现了字符串、列表、哈希、集合、有序集合、流等结构，支持 TTL、十种淘汰策略、快照/AOF/RDB 持久化、只读副本复制与 Pub/Sub。命令名为 459 条元数据中的 222 条（48.4%）。项目声明为实验性预览，适用于开发与兼容性实验，不支持生产环境；缺少 TLS、多用户 ACL、RESP3 与 PSYNC。",
+   "highlights": [
+    "支持 RESP2 协议，兼容 redis-cli、redis-py、ioredis、Lettuce 等 Redis 客户端",
+    "实现 459 条 Redis 8.10.2 命令元数据中的 222 条（48.4% 命令名覆盖），包含字符串、列表、哈希字段级 TTL、集合、有序集合、流消费者组、地理空间查询等结构",
+    "提供快照、单文件 AOF（含在线重写）、部分 Redis RDB 持久化，以及基于认证快照加流协议的只读副本复制和两节点静态 Cluster 槽映射"
+   ],
+   "use_cases": [
+    "本地开发与测试环境中替代 Redis 服务器进程，配合现有 Redis 客户端使用",
+    "Redis 命令行为兼容性研究，可借助对实时 Redis 的差分测试进行对照验证",
+    "阅读和学习以 Rust 实现 RESP2 服务器、持久化与复制机制的代码（约 2.1 万行、单一运行时依赖、禁用 unsafe）"
+   ]
+  },
+  "sha": "6ad0a2e83ca1",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "865280211503": {
+  "identity": {
+   "one_liner": "基于Wiktionary数据的德英学习词典，含词形折叠检索与SQLite REST API",
+   "review": "Lexikon是一个面向德语学习者的德→英词典应用，数据来自kaikki.org后处理的德语Wiktionary转储（约1GB JSONL），经Python脚本折叠词形后写入SQLite，由Node.js + Hono提供REST API，前端为React 18 + Vite。支持正反查、整句切词还原原型、复合词拆分，词条含IPA、音频、性属与完整语法表；无账户与广告。需自建数据库并分别启动API与前端。",
+   "highlights": [
+    "每个索引键存三种规范化形式（精确/转写ä→ae/剥离变音），同套折叠规则在Python构建端与TypeScript查询端共用同一fixture校验",
+    "支持反向查询：英文gloss的内容词被索引，多词短语要求条目包含全部词并按相关性分数排序",
+    "变位形式页不单独存储，而作为原型的检索键；可选接入Leipzig词频表、德语版Wiktionary IPA与Wikimedia Commons音频补充数据"
+   ],
+   "use_cases": [
+    "沉浸式阅读/听看德语内容时查词或粘贴整句逐词解析",
+    "需要反查英文对应德语词（如house→Haus）的场景",
+    "想基于Wiktionary数据自托管词典服务并定制数据富化的开发者"
+   ]
+  },
+  "sha": "865280211503",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

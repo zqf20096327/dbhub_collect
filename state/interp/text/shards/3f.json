@@ -3241,5 +3241,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b75dbb2cddf8": {
+  "identity": {
+   "one_liner": "Flutter 跨平台本地优先 AI 聊天客户端，内置工具循环与滚动记忆机制",
+   "review": "LumenFlow 是用 Flutter 编写的 AI 聊天应用，运行于 Android、iOS、Windows、Linux 与 macOS。它支持 13 类模型平台（OpenAI、Claude、Gemini、DeepSeek 等），实现流式响应、有界工具调用循环、MCP 工具接入、SQLite 本地存储、角色卡与世界信息、PDF 导出（内嵌 CJK 字体）。数据与凭据保存在设备本地；Android 要求 10+。",
+   "highlights": [
+    "支持 13 类平台类型，各平台可独立配置端点、API 密钥、模型列表与默认模型",
+    "实现 AgentRunner 统一工具循环，支持内置工具、Streamable HTTP MCP 服务器发现，工具活动随消息持久化",
+    "超窗对话压缩为摘要、关系/情感状态与条款账本的滚动记忆，支持 recall 关键词检索与导出/导入恢复"
+   ],
+   "use_cases": [
+    "在多台不同操作系统设备上管理多平台模型接入的本地聊天",
+    "使用角色卡与世界信息进行角色扮演对话，并查看角色记忆页",
+    "需要 MCP 工具调用与长对话记忆保留的对话场景"
+   ]
+  },
+  "sha": "b75dbb2cddf8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "54b5e2f06fcd": {
+  "identity": {
+   "one_liner": "基于 Rust 与 GPUI 的原生代码编辑器，带 AI 代理面板与内置 Git。",
+   "review": "FluxCode 是用 Rust 编写、经 GPUI 由 GPU 绘制的原生代码编辑器，运行于 Windows、macOS（预览）和 Linux，单进程无遥测。它提供 ACP 协议的 AI 代理面板、Python 友好终端、内置 Source Control，以及对二进制、PDF、Office、ZIP、SQLite 文件的只读查看。界面布局与快捷键沿用 VS Code 习惯；尚无调试器和扩展目录。构建以时间戳命名，安装包无需管理员权限，可一键更新。",
+   "highlights": [
+    "代理面板支持 Agent Client Protocol，可列出并一键安装 ACP 注册表中的代理，代理运行命令或改文件前需询问，且每轮文件更改可撤销",
+    "内置 Source Control、实时协作（Live share，经 ChaCha20-Poly1305 加密，支持局域网/UPnP/IPv6/中继连接）、GitHub Copilot 行内补全",
+    "提供二进制、PDF、Office、ZIP、SQLite 文件的只读视图，支持六种主题、三种界面尺寸及印尼语界面"
+   ],
+   "use_cases": [
+    "需要通过 ACP 运行 AI 代理（如 OpenCode、Mura）协助编写代码，并控制代理权限的场景",
+    "在同一编辑器中查看代码及 PDF、Office、SQLite 等附件文件的只读内容",
+    "通过邀请码在局域网或互联网上进行多人实时协作编辑，无需自建服务器"
+   ]
+  },
+  "sha": "54b5e2f06fcd",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f5475c4a4e8": {
+  "identity": {
+   "one_liner": "位于编码代理与 Git 之间的事务化 Go 运行时，强制 AST 验证后才合并",
+   "review": "Nomos 是约 20 MB 的静态 Go 单二进制（Apache 2.0），运行在编码代理（Claude Code、Cursor、Gemini CLI 等）与 Git 之间：任务在独立 git worktree 沙箱执行，main 分支物理只读，需通过 42 项多语言 AST 检查与 2PC 收据后才能合并。附带 SQLite 本地记忆与 pre-tool 钩子。通过 curl 脚本安装，nomos xray 扫描、nomos init --baseline 初始化。",
+   "highlights": [
+    "支持 Go、TypeScript、Python、Rust 等 11 种语言的 AST 检查门，并支持对新增 diff 做变异测试以验证测试有效性",
+    "任务在独立 git worktree 沙箱执行，main 分支直连提交失败关闭，合并时写入 SHA-256 Git Notes 收据",
+    "提供 pre-tool 钩子拦截对 ~/.ssh、~/.aws 等主机凭证路径的读取及云元数据 SSRF 请求"
+   ],
+   "use_cases": [
+    "在遗留仓库中引入编码代理，用 baseline 冻结存量债务并约束代理触碰的文件",
+    "多个代理并行开发时，通过 worktree 隔离与符号碰撞检测减少语义合并冲突",
+    "在 GitHub Actions 中对 PR 运行变异测试与验证收据"
+   ]
+  },
+  "sha": "3f5475c4a4e8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

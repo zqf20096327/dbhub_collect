@@ -17486,5 +17486,1034 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "a83cfdd978ce+2": {
+  "fn": "phuchoang2603/payment-gateway-fraud-detection",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "A payment gateway for a refurbished-electronics marketplace, built to connect reliable checkout with real-time fraud decisions and explainable investigations. Payment events feed streaming and historical data pipelines for model training, scoring and analyst agents, using synthetic cards and fraud labels. The documentation starts at `docs/Home.md`, which holds the status roadmap, and is also published as the project wiki."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    13,
+    5,
+    6,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    15,
+    6,
+    8
+   ],
+   [
+    "replace",
+    15,
+    20,
+    8,
+    13,
+    [
+     "- **Gateway:** Go services, Postgres, Kafka CDC, idempotent payment attempts, timeout recovery and signed webhooks. Integrates with the marketplace. Architecture.",
+     "- **Lakehouse:** Spark Bronze → Silver → Gold, audited publication and OpenMetadata lineage. **133.5 GB** synthetic v19 source dataset (AWS run). Offline data.",
+     "- **Warehouse:** ClickHouse marts and skip indexes. Same-query GCP plan: **5,541 → 156 granules, 97.18% fewer**, with query-condition cache disabled. Storage.",
+     "- **Streaming:** shared Java Flink operators for live traffic and historical replay; Feast/Redis for online features. Parity tests compare **2,498 snapshots from 503 deliveries**. Historical replay · Feature store.",
+     "- **ML:** Kubeflow/Katib, GPU XGBoost, Triton and drift-triggered retraining. Dev synthetic test set: **PR-AUC 0.9370**, **91.1% recall at 1% FPR**. Training · Pipeline."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    13,
+    14
+   ],
+   [
+    "replace",
+    21,
+    22,
+    14,
+    15,
+    [
+     "Payment gateway, lakehouse, streaming features and ML pipeline"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    15,
+    18
+   ],
+   [
+    "replace",
+    25,
+    28,
+    18,
+    21,
+    [
+     "- **Agents:** coordinator, evidence and risk agents; read-only tools, cited knowledge retrieval and Langfuse prompts/traces. Agents.",
+     "- **Model access:** agentgateway API keys, rate limits, PII masking and request screening; vLLM/KServe inference. Gateway · Inference.",
+     "- **Knowledge API:** dev load test, 60 users over 5 minutes: **181.7 requests/s**, **p95 86 ms**, **0 failures across 54,453 requests**, with KEDA scaling 2 → 4 replicas. Autoscaling · RAG."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    21,
+    22
+   ],
+   [
+    "replace",
+    29,
+    30,
+    22,
+    23,
+    [
+     "Agents, model gateway, inference and knowledge tools"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    33,
+    23,
+    26
+   ],
+   [
+    "replace",
+    33,
+    36,
+    26,
+    29,
+    [
+     "- **Platform:** Talos on Proxmox (dev) and GCP (prod, now retired), OpenTofu, Argo CD and shared operators, owned by talos-proxmox.",
+     "- **Delivery:** GitHub Actions → GHCR → Argo CD; Istio checkout canary stages at **10%, 25%, 50%**. CI · Delivery · Analysis-gated promotion.",
+     "- **Access:** Cloudflare Tunnel/HTTPS, Istio ambient mTLS, service-account policies and Doppler/External Secrets. Networking · Security."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    29,
+    30
+   ],
+   [
+    "replace",
+    37,
+    38,
+    30,
+    31,
+    [
+     "Application delivery, infrastructure, secrets and service mesh"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    41,
+    31,
+    34
+   ],
+   [
+    "replace",
+    41,
+    42,
+    34,
+    35,
+    [
+     "|Path|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    35,
+    36
+   ],
+   [
+    "replace",
+    43,
+    52,
+    36,
+    45,
+    [
+     "|`src/payment-gateway/`|Go payment services and synthetic vault/processor|",
+     "|`src/data-pipeline/`|Java Flink, Python simulators, Spark, Feast and catalog jobs|",
+     "|`src/ml/`|Training, evaluation, registry, serving and drift|",
+     "|`src/llm/`|Agents, RAG pipeline and knowledge API/MCP tools|",
+     "|`contracts/`|Protobuf, data-product contracts and feature definitions|",
+     "|`infra/`|Application Dockerfiles, Helm charts and Argo CD releases|",
+     "|`openspec/`|Specifications and changes|",
+     "|`docs/`|Project wiki sources|",
+     "|`scripts/`|CI, generation, releases and wiki publication|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    55,
+    45,
+    48
+   ],
+   [
+    "replace",
+    55,
+    56,
+    48,
+    49,
+    [
+     "|Section|Pages|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    49,
+    50
+   ],
+   [
+    "replace",
+    57,
+    63,
+    50,
+    56,
+    [
+     "|Overview and status|Home · Novel ideas|",
+     "|Payment gateway|Architecture · Conventions|",
+     "|Data|Offline · Online · Storage · Orchestration and governance · Write–audit–publish · Cluster Autoscaler|",
+     "|ML|Feature store · Training · Pipeline · Drift · Serving · NVIDIA DRA GPU sharing · Analysis-gated promotion · Background|",
+     "|LLM|Agents · Inference · Gateway and Jev policy · Custom Go ADK runtime · RAG · Autoscaling · MCP releases · Langfuse|",
+     "|Deployment|CI · Infrastructure · CD · Observability · Security · Networking|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    67,
+    56,
+    60
+   ],
+   [
+    "replace",
+    67,
+    68,
+    60,
+    61,
+    [
+     "- See CONTRIBUTING.md for setup and local checks."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "f29873a0f0c0+2": {
+  "fn": "mohamadzoh/tideorm",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    8,
+    4,
+    8,
+    [
+     "CI",
+     "Website",
+     "Rust",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    43,
+    8,
+    43
+   ],
+   [
+    "replace",
+    43,
+    146,
+    43,
+    44,
+    [
+     "…（103 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    158,
+    44,
+    56
+   ],
+   [
+    "replace",
+    158,
+    159,
+    56,
+    57,
+    [
+     "Swap the `sqlite` feature and the URL for `postgres` (`postgres://user:pass@localhost/app`) or `mysql` to run the same program on another backend; Installation lists the feature sets."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    160,
+    57,
+    58
+   ],
+   [
+    "replace",
+    160,
+    161,
+    58,
+    59,
+    [
+     "The global connection the quick start sets up is a default, not a limit. `Database::connect(url)` opens another database, `User::query_with(&replica)` reads from it, and `tenant_db.scope(async { .. })` runs every model call inside the block on it, so no handle has to be threaded through your code; see Choosing the Database a Call Uses."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    170,
+    59,
+    68
+   ],
+   [
+    "replace",
+    170,
+    171,
+    68,
+    69,
+    [
+     "For aggregate workflows with an explicit persistence context, enable the `entity-manager` feature and see docs/entity-manager.md."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    187,
+    69,
+    85
+   ],
+   [
+    "replace",
+    187,
+    204,
+    85,
+    86,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    227,
+    86,
+    109
+   ],
+   [
+    "replace",
+    227,
+    251,
+    109,
+    110,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    265,
+    110,
+    124
+   ],
+   [
+    "replace",
+    265,
+    266,
+    124,
+    125,
+    [
+     "|Feature|Description|"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    125,
+    126
+   ],
+   [
+    "replace",
+    267,
+    278,
+    126,
+    137,
+    [
+     "|`postgres`|PostgreSQL support (default)|",
+     "|`mysql`|MySQL/MariaDB support|",
+     "|`sqlite`|SQLite support|",
+     "|`runtime-tokio`|Tokio runtime (default)|",
+     "|`runtime-async-std`|async-std runtime|",
+     "|`attachments`|Compile-time-only feature gate for the attachments API and attachment-specific benchmarks/tests; adds no extra dependencies|",
+     "|`translations`|Compile-time-only feature gate for the translations API and translation-specific benchmarks/tests; adds no extra dependencies|",
+     "|`fulltext`|Compile-time-only feature gate for the full-text search API and fulltext-specific benchmarks/tests; adds no extra dependencies|",
+     "|`entity-manager`|Enables the `EntityManager` facade (`find`, `find_managed`, `load`, `save`, `persist`, `merge`, `remove`, `detach`, `flush`), entity-manager-aware relation loads, and aggregate synchronization for loaded `HasOne`, `HasMany`, and `HasManyThrough` relations|",
+     "|`dirty-tracking`|Enables the model-level `changed_fields()` and `original_value()` helpers and their persisted-state tracking hooks|",
+     "|`encrypted-fields`|Enables `#[tideorm(encrypted = \"...\")]` model auto-encrypt/decrypt hooks for persisted columns of any serializable type|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    285,
+    137,
+    144
+   ],
+   [
+    "replace",
+    285,
+    286,
+    144,
+    145,
+    [
+     "The entity manager is opt-in. Enable the `entity-manager` feature when you want an explicit persistence context for aggregate workflows: `entity_manager.find::<Model>(...)`, `entity_manager.find_managed::<Model>(...)`, `entity_manager.load(&mut relation)`, `entity_manager.save(&model)`, and managed lifecycle operations such as `persist`, `merge`, `remove`, `detach`, and `flush`. See docs/entity-manager.md for the full workflow."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    295,
+    145,
+    154
+   ],
+   [
+    "replace",
+    295,
+    298,
+    154,
+    157,
+    [
+     "- API cheat sheet — signatures, typed constants, common patterns and feature requirements.",
+     "- Runnable examples — CRUD, relations, transactions, migrations, scopes and PostgreSQL.",
+     "- Rust API reference — includes all optional module APIs."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    310,
+    157,
+    169
+   ],
+   [
+    "delete",
+    310,
+    311,
+    169,
+    169
+   ],
+   [
+    "equal",
+    311,
+    313,
+    169,
+    171
+   ],
+   [
+    "replace",
+    313,
+    316,
+    171,
+    174,
+    [
+     "- Read the book locally in the repo: docs/introduction.md",
+     "- Published site: **tideorm.com**",
+     "- Lightweight markdown index: DOCUMENTATION.md"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    319,
+    174,
+    177
+   ],
+   [
+    "replace",
+    319,
+    328,
+    177,
+    186,
+    [
+     "- Getting Started - Configuration, type mappings, examples, and testing",
+     "- Models - Model definition, CRUD behavior, lifecycle hooks, validation, tokenization, and advanced TideORM helpers",
+     "- Queries - Query builder, full-text search, multi-database behavior, raw SQL, logging, and errors",
+     "- Profiling - Global query timing, slow-query stats, manual reports, and query analysis",
+     "- Benchmarking - Benchmark target matrix, PostgreSQL setup, feature-gated bench commands, and Criterion baseline workflow",
+     "- Relations - Field-declared relations, attachments, translations, and runtime relation wrappers",
+     "- Entity Manager - Persistence-context identity map, aggregate synchronization helpers, and managed entity lifecycle operations",
+     "- Migrations - Schema builder column types, migration authoring, and schema sync guidance",
+     "- Project Rules - Opt-in limits on models and queries, written in `tideorm.toml`, with per-model exceptions"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    333,
+    186,
+    191
+   ],
+   [
+    "replace",
+    333,
+    335,
+    191,
+    193,
+    [
+     "- **TideORM CLI** - External command-line tooling for TideORM",
+     "- **TideORM Examples** - End-to-end example applications and demos"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    338,
+    193,
+    196
+   ],
+   [
+    "replace",
+    338,
+    339,
+    196,
+    197,
+    [
+     "For runnable applications and broader demos, see **tideorm-examples**."
+    ]
+   ],
+   [
+    "equal",
+    339,
+    350,
+    197,
+    208
+   ],
+   [
+    "replace",
+    350,
+    358,
+    208,
+    209,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    360,
+    209,
+    211
+   ],
+   [
+    "replace",
+    360,
+    361,
+    211,
+    212,
+    [
+     "The backends do not share gate semantics: SQLite is opt-out (`SKIP_SQLITE_TESTS`), MySQL is opt-in (`RUN_MYSQL_TESTS` or `MYSQL_DATABASE_URL`, overridden by `SKIP_MYSQL_TESTS`), so is MariaDB (the same with `MARIADB`), and PostgreSQL is opt-in as well (`TEST_DATABASE_URL`, `POSTGRESQL_DATABASE_URL` or `RUN_POSTGRES_TESTS`, overridden by `SKIP_POSTGRES_TESTS`). See CONTRIBUTING.md for the full variable table."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    362,
+    212,
+    213
+   ],
+   [
+    "replace",
+    362,
+    363,
+    213,
+    214,
+    [
+     "See docs/getting-started.md for more."
+    ]
+   ],
+   [
+    "equal",
+    363,
+    374,
+    214,
+    225
+   ],
+   [
+    "replace",
+    374,
+    386,
+    225,
+    226,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    386,
+    388,
+    226,
+    228
+   ],
+   [
+    "replace",
+    388,
+    389,
+    228,
+    229,
+    [
+     "See docs/benchmarking.md for the full benchmark matrix and Criterion baseline workflow."
+    ]
+   ],
+   [
+    "equal",
+    389,
+    391,
+    229,
+    231
+   ],
+   [
+    "replace",
+    391,
+    398,
+    231,
+    232,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    398,
+    399,
+    232,
+    233
+   ],
+   [
+    "replace",
+    399,
+    402,
+    233,
+    234,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    402,
+    404,
+    234,
+    236
+   ],
+   [
+    "replace",
+    404,
+    405,
+    236,
+    237,
+    [
+     "If you need to report a suspected vulnerability, please use the private reporting process described in the Security Policy instead of opening a public issue."
+    ]
+   ],
+   [
+    "equal",
+    405,
+    407,
+    237,
+    239
+   ],
+   [
+    "replace",
+    407,
+    409,
+    239,
+    240,
+    [
+     "This project is licensed under the MIT License - see the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "52f9931fbe12+2": {
+  "fn": "GoubaLab/TARA_JieHeng",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    25,
+    6,
+    25,
+    [
+     "|环节|能力|",
+     "|---|---|",
+     "|项目管理|维护项目名称与范围说明，记录修订与审计；项目基本信息与分析工作产品独立管理|",
+     "|相关项与 DFD|实体模式或展开 DFD；信任边界、内部软件/存储、操作系统、数据流与电能流；有线/无线协议标注|",
+     "|通信参数|4G/5G、无线电及自定义技术和频段；项目内复用通信预设，安全属性逐流确认|",
+     "|布线与图形|拖动端点换边、调整线段和标签、网格整理；无线链路以虚线及协议标识呈现；流动效果仅用于画布，导出保持静态|",
+     "|资产识别|保存架构时同步生成资产并沿用 DFD 来源编号；属性不适用须说明理由，范围约束贯穿覆盖检查、自动分析与报告|",
+     "|TARA 工作产品|分步维护功能、资产、损害、影响、威胁、攻击路径、可行性、风险及处置；编号与引用内容同时展示|",
+     "|风险方法|SFOP 四维分级准则、项目方法与标准参考；五因子档位或攻击向量评级，缺项时阻止风险结论|",
+     "|处置与验证|区分残余风险目标和已验证结果；依据变化后需复核；草案可独立放弃；删除检查关联依赖，并自动保存可恢复的项目版本|",
+     "|法规引用|本地条款目录、版本定位和勾选引用；公开仓库初始为空，由使用者接入资料|",
+     "|工作簿与报告|约定格式 XLSX 预览与原子导入、原文件保留；当前工作产品、来源快照和审计记录导出|",
+     "|企业模型|四种协议、用途模型、加密凭据、显式备用链、健康与用量、无密钥配置交换|",
+     "|辅助分析|图片转原生 DFD、全流程草案、质量复核；来源追溯、人工采用、可恢复|",
+     "|自动分析|8 条内置确定性规则、命中理由与前提、人工采用、去重和还原点，无需模型|",
+     "|攻击路径|分行步骤编辑、16 类预置模板、有向最短通路和协议替代路线；确认攻击条件后独立评级|",
+     "|企业知识|8 个公开漏洞分析案例、版本化待复核导入、CISA KEV 增量收集工具；语义和关键词检索|",
+     "|内网交付|账号角色、项目成员、确定性交付检查、还原点与独立备份恢复|",
+     "|开发接口|版本化资源 API、OpenAPI、并发修订检查、幂等写入和统一错误格式|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    34,
+    25,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "分步 TARA 与影响评级"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    38,
+    35,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "项目管理"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    39,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "实体与数据流"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    43,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "项目通信预设"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    47,
+    50
+   ],
+   [
+    "replace",
+    50,
+    51,
+    50,
+    51,
+    [
+     "自动资产清单"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    51,
+    54
+   ],
+   [
+    "replace",
+    54,
+    55,
+    54,
+    55,
+    [
+     "自定义编号规则"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    58,
+    55,
+    58
+   ],
+   [
+    "replace",
+    58,
+    59,
+    58,
+    59,
+    [
+     "模型服务"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    59,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     "交付检查"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    61,
+    64
+   ],
+   [
+    "replace",
+    64,
+    65,
+    64,
+    65,
+    [
+     "自动分析"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    65,
+    68
+   ],
+   [
+    "replace",
+    68,
+    69,
+    68,
+    69,
+    [
+     "攻击路径预置"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    87,
+    69,
+    87
+   ],
+   [
+    "replace",
+    87,
+    88,
+    87,
+    88,
+    [
+     "源码仓库不附运行数据库、项目报告、本机二进制或前端构建产物。法规目录初始为空，可直接进行建模与开发测试。按 法规接入说明 在本地接入有权使用的资料；应用不会自动联网获取正文。"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    91,
+    88,
+    91
+   ],
+   [
+    "replace",
+    91,
+    92,
+    91,
+    92,
+    [
+     "企业模式通过同机 HTTPS 反向代理提供登录及项目权限；本机模式仍可独立使用。接入企业模型后，可从图片生成原生 DFD，结合自有知识生成全流程分析草案，审阅采用后继续人工验证和报告交付。模型输出以草案形式采用，验证与签署需在相应流程中独立记录。详见 企业部署 和 模型服务与辅助分析。"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    97,
+    92,
+    97
+   ],
+   [
+    "replace",
+    97,
+    98,
+    97,
+    98,
+    [
+     "当前提供 `tara-chinese-v1` 约定版式适配器，**不支持任意 Excel 自动识别**。表头、编号、计算方法和大小限制见 TARA 工作簿接入。导入后的残余风险仍是设计目标，确认和签署状态按实际记录展示。"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    98,
+    99
+   ],
+   [
+    "replace",
+    99,
+    100,
+    99,
+    100,
+    [
+     "标准 XLSX 导出包含 17 张基础工作表；使用扩展 TARA 工作产品时增加 6 张追溯表，导入项目再追加全部来源表页快照。采用 AI 时按需增加辅助分析追溯及待确认建议表；采用确定性规则时增加自动化分析追溯表。当前资产元数据和编辑结果进入工作产品表，原表快照保持不变。报告图形为静态；来源公式作为文本保留，不执行。见 Excel 导出格式。"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    111,
+    100,
+    111
+   ],
+   [
+    "replace",
+    111,
+    120,
+    111,
+    120,
+    [
+     "- TARA 工作产品与评审",
+     "- 工作流设计参考",
+     "- 攻击路径模板",
+     "- 确定性自动分析 · 公开知识积累",
+     "- 功能和开发说明",
+     "- 领域与模块",
+     "- 版本化 API · OpenAPI",
+     "- 扩展流程、算法和报告",
+     "- 后端运行与数据兼容"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    128,
+    120,
+    128
+   ],
+   [
+    "replace",
+    128,
+    130,
+    128,
+    129,
+    [
+     "除另有说明外，本项目采用 Apache License 2.0。第三方依赖与引用资料遵循各自的许可证或使用条款。"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

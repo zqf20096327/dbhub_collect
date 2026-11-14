@@ -3269,5 +3269,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "993993fa4889": {
+  "identity": {
+   "one_liner": "基于 ScyllaDB Rust Driver 的 Rust ORM，通过宏生成模型操作与查询",
+   "review": "Charybdis 是构建在 scylla_rust_driver 之上的 Rust ORM，面向使用 ScyllaDB 和 Apache Cassandra 的 Rust 开发者。它通过 charybdis_model 等属性宏定义模型、UDT 和物化视图，自动生成 CRUD 操作、partial_<model>! 与 find_<model>! 宏；查询在编译期生成为静态字符串常量，并要求使用 CachingSession。配套 charybdis-migrate 工具可对比模型定义与数据库差异自动执行迁移，但不会删除无模型对应的表。",
+   "highlights": [
+    "提供 CRUD 与复杂语句的 API，并自动生成 partial_<model>! 与 find_<model>! 宏",
+    "自动迁移工具分析项目文件，按模型定义与数据库的差异执行建表、加列、删列、索引及 UDT/物化视图创建",
+    "使用 prepared statements（shard/token aware），查询语句在编译期生成为 &'static str 常量，运行时无需拼接"
+   ],
+   "use_cases": [
+    "在 Rust 项目中以模型宏方式访问 ScyllaDB 或 Cassandra 数据库",
+    "希望依据代码中的模型定义自动生成并执行数据库结构迁移",
+    "需要按主键、分区键或二级索引查找并支持分页查询的场景"
+   ]
+  },
+  "sha": "993993fa4889",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

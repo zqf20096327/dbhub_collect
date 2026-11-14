@@ -3038,5 +3038,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "183408e37a09": {
+  "identity": {
+   "one_liner": "GFS 是为数据库提供 Git 式版本控制的 CLI 工具，基于 Docker 隔离运行环境。",
+   "review": "GFS（Git For database Systems）为 PostgreSQL、MySQL、SQLite 数据库提供提交、分支、checkout 回滚等 Git 式操作，面向 AI 编码代理和开发者。它用 Docker 管理隔离的数据库容器，通过 MCP 服务器（stdio/HTTP）供 Claude Code、Cursor、Cline 等代理调用，支持 schema diff、数据导入导出和懒克隆远程 PostgreSQL。项目处于活跃开发阶段，API 可能变动。",
+   "highlights": [
+    "提供 commit、branch、checkout、log 等 Git 式数据库版本控制命令，支持 HEAD~N 等修订引用语法",
+    "内置 MCP 服务器（stdio 与 HTTP 模式），可被 MCP 兼容的 AI 代理直接调用",
+    "支持 PostgreSQL 13-18、MySQL 8.0-8.1、SQLite 3；实验性的 copy-on-read 远程 PostgreSQL 懒克隆，含 source_changed/source_drift/pull 等同步检查机制"
+   ],
+   "use_cases": [
+    "AI 编码代理操作数据库前自动提交检查点，出错后用一条命令回滚",
+    "在独立分支上试验迁移或批量改动，再合入主数据库",
+    "通过 gfs clone 懒克隆远程 PostgreSQL 用于本地测试或只读分析"
+   ]
+  },
+  "sha": "183408e37a09",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cb4260d480e6": {
+  "identity": {
+   "one_liner": "运行在自有 Supabase 项目上的 Gugu 社区版后端，提供身份、消息、同步与文件服务。",
+   "review": "Gugu 的社区版后端，部署在用户自己的 Supabase Cloud 项目上，包含身份、消息、同步、设备通信、权限与基础文件服务，官方云托管与模型网关不在开源范围内。通过 Node 24 与 pnpm 运行安装工具，在全新的 Postgres 17 项目上以事务方式安装 foundation 及按序安装后续 release。权限由数据库层强制执行，依赖自定义 SMTP 完成邮件验证码登录。",
+   "highlights": [
+    "提供安装工具，检查空项目后在单事务中安装 foundation 并按版本顺序安装后续 release，记录于 gugu_install.releases",
+    "设备所有权、组成员、消息与文件权限均由数据库 RLS 与策略强制执行，新增 API 函数默认对客户端关闭并需显式授权",
+    "附件上传、提交与签名下载使用自有 Supabase Storage；协作文件编辑需自行运行 services/files 的 Node 服务"
+   ],
+   "use_cases": [
+    "为 Gugu 客户端搭建社区版自托管后端（个人或单一组织内部使用）",
+    "需要数据库层权限控制与消息同步的应用部署",
+    "需本地 Docker 测试数据库验证客户端—后端契约的开发流程"
+   ]
+  },
+  "sha": "cb4260d480e6",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7538c9f66588": {
+  "identity": {
+   "one_liner": ".NET 学习笔记库：C#、ASP.NET Core、EF Core、SQL Server 笔记与可运行示例",
+   "review": "这是一个个人学习日志仓库，作者 Daim Ali 在学习 .NET 技术栈的同时，以 Markdown 笔记加可运行 C# 示例代码的形式记录内容。仓库包含 130 篇笔记，按 csharp、aspnet、efcore、sql、dsa 目录组织，覆盖从语言基础、Web API、ORM 到数据结构与算法的主题。示例代码可直接放入控制台项目运行。采用 MIT 许可证，目标读者为学习同一技术栈的人。",
+   "highlights": [
+    "包含 130 篇笔记，覆盖 C#、ASP.NET Core、EF Core、SQL Server 和数据结构与算法五个领域",
+    "examples/ 目录提供可运行的 C# 示例，涵盖双指针、滑动窗口、LINQ、BFS/DFS、动态规划等主题",
+    "示例文件可直接放入控制台项目或 C# 脚本运行器执行"
+   ],
+   "use_cases": [
+    "学习 C# 语言特性与 ASP.NET Core Web API 开发时查阅单项概念的笔记",
+    "练习数据结构与算法时参考配套的 C# 可运行示例",
+    "学习 EF Core 与 SQL Server 查询、索引、事务等数据库主题时作为笔记参考"
+   ]
+  },
+  "sha": "7538c9f66588",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

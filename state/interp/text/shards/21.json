@@ -3188,5 +3188,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "85df5374f003": {
+  "identity": {
+   "one_liner": "将 Slack 工作区数据镜像到本地 SQLite 的终端 CLI 工具",
+   "review": "slacrawl 是一个 Go 编写的命令行工具，把 Slack 工作区的消息、线程、用户等数据同步到本地 SQLite 数据库，支持 FTS5 全文搜索、TUI 浏览、只读 SQL 查询和报告生成。数据摄入支持 Slack API、桌面端本地缓存、MCP 连接器、外部 JSONL 适配器和 Slack 导出 ZIP 五种来源。需要可读工作区的 bot 或 user token；不同工作区应使用独立的配置与数据库路径。",
+   "highlights": [
+    "多种摄入来源：Slack API 同步、桌面端本地缓存恢复、MCP 连接器、外部 JSONL 提供方及 Slack 导出 ZIP 导入",
+    "基于 SQLite FTS5 的搜索（带子串回退），同一存档可通过 TUI、结构化命令和只读 SQL 访问",
+    "支持增量刷新、Socket Mode 实时 tail、purge 保留策略及 git 快照的发布/订阅共享"
+   ],
+   "use_cases": [
+    "在终端本地检索和浏览 Slack 历史消息",
+    "对 Slack 存档运行只读 SQL 统计或生成报告",
+    "将存档快照共享给无 Slack 凭据的机器本地查询"
+   ]
+  },
+  "sha": "85df5374f003",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ca6a3b882b8d": {
+  "identity": {
+   "one_liner": "支持命名参数的 JDBC 工具库",
+   "review": "MJdbcUtils 是一个 Java 库，用于在 SQL 查询和 DML/DDL 语句中使用命名参数（如 :Customer_Id）。当数据库不直接支持命名参数时，它将命名参数替换为位置参数 ? 并维护名称与位置的映射，同时提供参数值绑定与类型信息获取方法。适用于使用 JDBC 访问 Oracle、H2 等数据库的开发者。对于 Oracle 等 DDL 不允许绑定参数的数据库，它提供 SQL 重写与参数值直接注入的方式执行语句；也可基于参数及其类型信息构建 UI 参数对话框。",
+   "highlights": [
+    "将 SQL 中的命名参数替换为位置参数 ?，并维护参数名与位置的映射",
+    "支持 PreparedStatement 传参、批量更新（Batch Updates），以及 SQL 重写/参数值直接注入执行",
+    "可按出现顺序列出命名参数及其 Java 类型信息（如 java.sql.Timestamp、java.lang.String）"
+   ],
+   "use_cases": [
+    "在命名参数不被数据库原生支持的 RDBMS 上编写带命名参数的查询与 DML 语句",
+    "对 Oracle 等不允许 DDL 绑定参数的数据库，通过重写注入参数值执行 CTAS 等 DDL 语句",
+    "根据语句中的命名参数及类型信息构建用户输入参数的 UI 对话框"
+   ]
+  },
+  "sha": "ca6a3b882b8d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2599,5 +2599,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bdc5833e6e18": {
+  "identity": {
+   "one_liner": "聚合多个 RSS 优惠来源的每日优惠情报工具，提供 AI 评分与微信推送",
+   "review": "Deal Radar 用 Bun 运行单进程服务，配合 SQLite 存储数据，从 V2EX、NodeSeek、小众软件等 6 个 RSS 来源抓取优惠信息，经 AI 打 0~100 价值分并归入 12 个类别，高价值条目通过息知公众号推送到微信。所有 Key 均可选，未配置时抓取、浏览、收藏功能仍可用，AI 与推送自动关闭。适合个人自用的优惠信息聚合场景。",
+   "highlights": [
+    "聚合 6 个 RSS 来源，自动去重，保留近 7 天数据，每 2 小时自动刷新",
+    "AI 价值评分（0~100 分档）与 12 类自动分类，支持自定义决策接口地址和模型",
+    "微信推送支持夜间静默时段、去重不重复推、按来源勾选推送范围"
+   ],
+   "use_cases": [
+    "个人自部署优惠信息聚合站，本地浏览器访问 localhost:3000 浏览筛选",
+    "需要微信定时接收高价值优惠提醒、可设置静默时段避免打扰",
+    "在服务器上以 Docker 长期运行，或部署到 Muse 托管平台定时刷新"
+   ]
+  },
+  "sha": "bdc5833e6e18",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f9389f655b04": {
+  "identity": {
+   "one_liner": "自托管的 Telegram 个人 AI 助手，以 PostgreSQL + pgvector 实现持久记忆",
+   "review": "Syne 是一个可自托管的个人 AI 助手，通过 Telegram 交互（可选 WhatsApp/Discord 通道）。它只显式保存用户要求记住的内容，配合 pgvector 语义检索、知识图谱与衰减引擎管理记忆；身份、规则等运行时配置存于 PostgreSQL 表中，可对话修改。嵌入与评估模型经 Ollama 本地运行，聊天模型使用用户自有 API key。",
+   "highlights": [
+    "仅存储显式要求记住的内容（永久），其余留在聊天历史，可经 history_search 检索；记忆检索支持 pgvector HNSW 语义搜索与知识图谱 1-hop 实体关系遍历",
+    "嵌入与规则检查评估模型通过 Ollama 在本地运行；聊天模型支持 Anthropic/Gemini/Vertex AI/OpenAI 等多家供应商，使用用户自有 API key",
+    "身份、规则、配置存于 PostgreSQL 表，可经对话修改；可选扩展包含文档读写、图像生成与 OCR、语音输入输出、远程节点与子代理"
+   ],
+   "use_cases": [
+    "希望在自有服务器与 PostgreSQL 中运行、并让助手跨会话记住指定事实的个人用户",
+    "需要通过 Telegram（或 WhatsApp/Discord）与带长期记忆的助手日常对话的场景",
+    "需要多级权限（owner/family/public，八进制式工具权限）控制记忆可见范围的多用户环境"
+   ]
+  },
+  "sha": "f9389f655b04",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b2d29cd44470": {
+  "identity": {
+   "one_liner": "本地优先科研平台，以多智能体研究循环与确定性质量门驱动论文流水线",
+   "review": "SciFlow 是一个本地优先的研究平台，实现自主研究循环（问题→假设→协议→运行→主张→证据）和论文写作流水线，面向研究人员与学术写作者。其质量门基于规则打分并生成稳定指纹，引用锚点可逐级溯源至参考文献行。需 Node ≥ 20 与 pnpm，支持无 API Key 的 mock 模式运行；Python 沙箱为本地实现，不作为对抗恶意代码的安全边界。",
+   "highlights": [
+    "自主研究循环由 PI、Experimenter、Critic 与独立 Expert 审稿四个 LLM 智能体分工实现，协议执行前须经人工批准或 Expert 智能体自动批准",
+    "确定性质量门按七个维度以规则打分，同一文本得相同分数，低于阈值触发针对性修改",
+    "引用采用三级溯源：每个 [n] 锚点可解析到引用行与参考文献行，幽灵锚点、孤立条目、断号与重复 DOI 均按数量报告"
+   ],
+   "use_cases": [
+    "在本地运行多智能体自主研究循环，将实验证据与主张绑定存储",
+    "执行从选题验证到引用格式化的论文写作流水线，每步设检查点并可安全重启",
+    "在隔离沙箱中运行 Python/Node/Shell 实验脚本，并用内置浏览器对生成的 Web 页面做机器断言验收"
+   ]
+  },
+  "sha": "b2d29cd44470",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

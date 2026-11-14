@@ -3808,5 +3808,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "99974b2fb79d": {
+  "identity": {
+   "one_liner": "Go 从零实现的关系型数据库，含 COW B+树、事务、SQL 与向量搜索",
+   "review": "SoldierDB 是用 Go 从零编写的关系型数据库，包含崩溃安全页存储、写时复制 B+树、事务和 SQL 层，并通过稳定 C ABI 提供 Rust 与 C++ 客户端。其存储引擎遵循 Build Your Own Database From Scratch in Go 教程构建。项目处于积极开发中，向量搜索仅支持暴力相似度计算。适合想研究数据库内部机制的开发者阅读源码与配套的学习笔记。",
+   "highlights": [
+    "支持固定维度 VECTOR 列与基于余弦距离的暴力相似度搜索",
+    "提交时最后写入备用元页并 fsync，实现树根的原子可见；事务在单个原子提交中发布写入",
+    "页大小 4096 字节，采用交替校验和元页与持久化空闲列表回收页"
+   ],
+   "use_cases": [
+    "学习存储引擎、B+树与事务实现机制",
+    "在 SQL 表中以 VECTOR 列存储嵌入并进行相似度查询",
+    "从 Go、Rust 或 C++ 程序中连接使用该数据库"
+   ]
+  },
+  "sha": "99974b2fb79d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "985f59aec0a9": {
+  "identity": {
+   "one_liner": "基于浏览器的 Codex 会话远程控制工作台",
+   "review": "RemCodex 是一个基于浏览器的 Codex 会话远程控制工作台，通过 `npx remcodex` 在本机运行，默认监听 18840 端口，供离开终端的用户从手机或另一台设备查看执行时间线、批准或拒绝命令、发送后续消息。会话写入工作区外文件需审批；跨设备访问须显式配置 token；提供 MCP 接口与语音录入。",
+   "highlights": [
+    "提供实时执行时间线，将消息、命令、补丁、审批等渲染为语义化活动块",
+    "支持工作区外文件写入的审批机制，可逐次或按轮次放行",
+    "通过 MCP 端点集成，支持 Codex app-server 会话发现与历史导入"
+   ],
+   "use_cases": [
+    "在手机或其他设备上监控并控制本机长时间运行的 Codex 会话",
+    "对 AI 代理执行的文件系统操作进行人工审批（human-in-the-loop）",
+    "导入并统一查看 `~/.codex/sessions` 中的历史会话记录"
+   ]
+  },
+  "sha": "985f59aec0a9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

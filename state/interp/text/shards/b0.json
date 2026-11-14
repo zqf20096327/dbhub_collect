@@ -2806,5 +2806,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "173f0257c716": {
+  "identity": {
+   "one_liner": "单二进制 SQL 数据库 MCP 服务器，支持 MySQL/MariaDB、PostgreSQL 与 SQLite",
+   "review": "dbmcp 是一个将 AI 助手接入 SQL 数据库的 MCP 服务器，以约 7 MB 的单二进制分发，无需 Python/Node/Docker 运行时。提供 schema 发现、读写查询、DDL 与 explainQuery 等工具，默认开启只读模式，支持 stdio 和 HTTP 传输、SSH 隧道及分层配置。适合需要让 MCP 客户端安全访问数据库的开发者。",
+   "highlights": [
+    "一个二进制连接 MySQL/MariaDB、PostgreSQL 和 SQLite，提供 listTables、readQuery、writeQuery、explainQuery 等 MCP 工具，只读模式隐藏写入类工具",
+    "支持 stdio 与 HTTP 两种传输、内置 SSH 隧道客户端（密码或密钥认证、known_hosts 校验）、bearer token 认证",
+    "配置通过 DBMCP_* 环境变量、env 文件与 YAML 配置文件分层解析，各后端有默认值"
+   ],
+   "use_cases": [
+    "为 Claude Desktop、Cursor、VS Code 等 MCP 客户端提供数据库连接",
+    "通过 SSH 堡垒机访问内网 MySQL/MariaDB/PostgreSQL",
+    "以默认只读模式向 AI 助手开放数据库查询，避免写入操作"
+   ]
+  },
+  "sha": "173f0257c716",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "354a1551d42b": {
+  "identity": {
+   "one_liner": "面向多品牌DMR电台的DMR用户ID数据库，每30分钟自动生成",
+   "review": "该项目为Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017及Pi-Star提供DMR用户ID数据库文件，每30分钟自动重新生成，新注册用户会被自动收录但信息可能不完整。README给出了各版本条目数差异的原因（表头、条目上限等），并提供修改Pi-Star更新脚本的接入教程。",
+   "highlights": [
+    "每30分钟自动生成，覆盖Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017和Pi-Star多种格式",
+    "BETA版条目数多于verified版，例如Anytone BETA含317605条，verified含198634条",
+    "README提供在Pi-Star的HostFilesUpdate.sh中替换数据库下载地址的SSH操作步骤"
+   ],
+   "use_cases": [
+    "为Pi-Star节点替换DMR ID数据源，使显示和网页界面显示呼号",
+    "为Ailunce HD1、Anytone、Tytera等电台下载格式适配的DMR用户数据库",
+    "需要收录最新注册DMR用户（即使信息可能不完整）的场景"
+   ]
+  },
+  "sha": "354a1551d42b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "483b3ba758a9": {
+  "identity": {
+   "one_liner": "Sesame 的 Go 服务端，提供账户门户、管理控制台与加密同步",
+   "review": "该仓库包含 Sesame 密码管理器的服务端：一是运行于 PostgreSQL 的托管服务（Go API 加账户与管理门户），二是可自托管的 sesame-server（单程序配 SQLite 与浏览器控制台），二者不共享数据。服务器不接收 vault 密码或加密密钥，仅存储加密的 Sync 快照；API 不自行迁移数据库，schema 过期即退出。",
+   "highlights": [
+    "服务器不接收 vault 密码、加密密钥、TOTP seed 或恢复套件，仅在开启 Sync 时存储加密的 vault 快照",
+    "托管服务与自托管服务为两个互不共享数据的独立服务",
+    "API 不自行执行数据库迁移，schema 过期时直接退出以避免多副本竞争迁移"
+   ],
+   "use_cases": [
+    "需要自托管桌面端配对与加密 vault 同步的用户",
+    "通过邀请制注册并提供账户门户与管理后台的托管服务部署",
+    "本地开发调试托管的 API、账户门户、管理门户与邮件收件箱"
+   ]
+  },
+  "sha": "483b3ba758a9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0d57690ebb96": {
+  "identity": {
+   "one_liner": "单二进制 Rust CLI，将仓库错误记录为项目本体的笔记库",
+   "review": "MISTOLOGY 是一个 Rust 编写的单二进制 CLI 与 agent skill，用于把代码仓库中已验证的错误整理为项目本地本体。错误以 Git 跟踪的 Markdown 笔记（.mistology/notes/*.md）存储，配合可随时删除重建的 SQLite FTS5 索引与有向 2-hop 耦合图，为编码 agent 提供简短的检索简报。通过 cargo install 安装，mistology setup 可将内置 SKILL.md 写入常见 agent 的技能目录，写入笔记要求同时提供失败证据与验证证明。",
+   "highlights": [
+    "以 SQLite FTS5（bm25 加权）与有向 1-hop/2-hop 耦合图实现检索，索引库删除后可在下次搜索时自动重建",
+    "search -b 返回最多 6 条简报，search 返回 3 卡片摘要；支持 --explain、doctor 诊断与 supersede 版本演进",
+    "通过 mistology setup 将嵌入式 SKILL.md 写入 ~/.claude、~/.gemini、~/.codex、~/.cursor、~/.agents 等技能目录"
+   ],
+   "use_cases": [
+    "在多文件修改前由 agent 执行 preflight 检索，查看目标文件 1-hop/2-hop 关联模块中的已记录错误",
+    "构建或测试失败时按错误签名检索历史已验证修复，避免重复尝试已废弃方案",
+    "团队仓库可通过 git 跟踪的 .mistology/notes 共享错误笔记，mistology setup --project 安装工作区技能"
+   ]
+  },
+  "sha": "0d57690ebb96",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

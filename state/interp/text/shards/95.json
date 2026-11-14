@@ -3152,5 +3152,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "769b80fd6f60": {
+  "identity": {
+   "one_liner": "AlphaFold2/3 遗传数据库与权重的 Read-Through 缓存镜像服务，Go 单二进制实现。",
+   "review": "该项目是一个数据分发层服务，用于缓存和分发 AlphaFold2（约564GB）与 AlphaFold3（约239GB）遗传数据库及参数，面向国内或离线内网的研究部署场景。机制上采用路径同构镜像（客户端只改基址）、懒加载回源落盘、校验和验证与断点续传；技术栈为 Go 单二进制加 aria2c 回源子进程和 PostgreSQL 元数据，配置通过 BUILD.yaml 与 AFMIRROR_ 前缀环境变量完成。AF3 受限权重默认 302 回源不落盘，代码 MIT 许可，数据按各自上游许可分发。",
+   "highlights": [
+    "路径同构镜像：URL 与上游一一对应，支持单飞防击穿、原子发布及 crc32c/md5/sha256 校验，支持 Range/206 与断点续传",
+    "提供单机、公网双节点（origin/fetcher）、离线导入（reindex）三种部署形态，内置中文下载中心与合规声明页",
+    "AF3 权重按 redirect/deny/internal 三种策略处理，公开站点默认不落盘；提供 prefetch、pin、缓存淘汰等管理 API 与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "国内科研团队搭建内网 AlphaFold 数据库镜像，替代境外直连下载",
+    "气隙内网通过 export_cache.sh 导出加 rsync 拷入后以只读模式服务",
+    "已接受 AF3 权重条款的非商业组织在内网以 internal 模式本地缓存权重"
+   ]
+  },
+  "sha": "769b80fd6f60",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

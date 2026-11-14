@@ -3392,5 +3392,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0d64fbaf7775": {
+  "identity": {
+   "one_liner": "DSH 插件：经本机 ComfyUI 调用 Qwen-Image/Wan 2.2/Qwen3-TTS，实现生图、视频与语音合成。",
+   "review": "该插件面向 DeepSeek Harness（DSH）用户，在对话中调用本地 ComfyUI 完成文生图、局部重绘、扩图、文生视频/图生视频、图→音→视频混合及 Qwen3-TTS 语音合成。出图数据仅走 127.0.0.1 回环并由 net-guard 代码层强制；生成历史用 SQLite 持久化（需 Node ≥ 22.5）；CPU 模式按指令集分五档加速。音频模型权重不自动下载，需自行准备。",
+   "highlights": [
+    "提供 draw_image、inpaint_image、outpaint_image、upscale_image、generate_video、generate_speech、generate_hybrid 等工具，支持 1–16 张参考图编辑",
+    "出图数据由 lib/net-guard.js 强制发往本机回环地址，无需 API 密钥；联网参考图检索默认拒绝、须逐次显式同意",
+    "生成历史写入 SQLite（node:sqlite，零外部依赖），支持关键词/类型/日期筛选，软删除不动磁盘文件；CPU 按 AVX2/AVX512/AVX512-BF16 提供五档加速"
+   ],
+   "use_cases": [
+    "在 DSH 对话中直接说需求生成图片、视频或配音，并对结果图做圈选重绘、移除物体、四向扩图等编辑",
+    "制作带旁白的短片：一张图配一段语音合成视频，并可按帧选取修改后贴回生成新 mp4（需 ffmpeg）",
+    "在无独立显卡或低显存（含 8 GB 档位）环境下，通过核显共享内存或 CPU 加速档运行生图/视频流程"
+   ]
+  },
+  "sha": "0d64fbaf7775",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8fc4f34840db": {
+  "identity": {
+   "one_liner": "Rust 编写的内存键值数据库，实现 Redis RESP 协议",
+   "review": "Redistill 是一个用 Rust 编写的内存键值数据库，实现了 Redis 的 RESP 协议，可直接使用现有 Redis 客户端连接。README 称其单实例吞吐可达 9.07M ops/s（基准测试数据），默认不启用持久化，支持可选的 RDB 快照与 AOF。限制包括：无多键事务、复制为异步且需手动晋升、不支持自动故障转移。适合已有 Redis 使用经验的团队做缓存类负载。",
+   "highlights": [
+    "实现 RESP 协议，兼容 Redis 客户端，默认监听 6379 端口",
+    "多线程架构，支持无锁读；可选 RDB 快照与 AOF（always/everysec/no fsync）持久化",
+    "支持异步主从复制（手动晋升）、TLS、认证、健康检查，并通过 redistill.toml 配置分片数、内存上限与淘汰策略（allkeys-lru/allkeys-random/allkeys-s3fifo/noeviction）"
+   ],
+   "use_cases": [
+    "会话存储、API 响应缓存等内存缓存负载（支持 TTL 与 LRU 淘汰）",
+    "限流计数、实时排行榜等高频读写场景",
+    "作为 Redis 的协议兼容替代，接入现有 Redis 客户端代码"
+   ]
+  },
+  "sha": "8fc4f34840db",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

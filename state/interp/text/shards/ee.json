@@ -3075,5 +3075,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1b65ef874edc": {
+  "identity": {
+   "one_liner": "本地运行的编程代理插件，将工具输出存入本地 SQLite 索引并按需检索",
+   "review": "Context Mode 是一个面向 11 种编程代理（如 Claude Code、Codex、Gemini CLI 等）的本地插件。它在本地沙箱中执行代理的工具调用，将完整输出存入机器上每项目一个的 SQLite 索引，代理通过 ctx_execute、ctx_index、ctx_search 等 MCP 工具按需查询并只取回所需部分。插件采用 source-available 许可（ELv2），安装需 Node 24.15.0 以上；另有独立的付费托管服务 Gateway，与本地插件是不同产品。",
+   "highlights": [
+    "支持 11 种编程代理，通过 hooks、MCP 服务器和 skills 三种机制集成",
+    "工具输出在本地沙箱运行并存入 ~/.context-mode 下的 SQLite 索引（FTS5 检索），README 记录的 36 行基准数据中位节省 99.4% 的输出字节",
+    "安装后可离线运行，README 声明插件零遥测，并列出其发起的每个网络调用"
+   ],
+   "use_cases": [
+    "代理需要抓取网页或处理大体量 JSON 数据时，在沙箱中运行脚本、仅返回精简结果",
+    "长会话压缩后需要检索此前工具输出的场景",
+    "希望在本地保留全部使用数据、不外发的开发环境"
+   ]
+  },
+  "sha": "1b65ef874edc",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3168ee9570b2": {
+  "identity": {
+   "one_liner": "基于 Tauri + Rust + SQLite FTS5 的桌面文档全文搜索工具",
+   "review": "Paperlight 是一款开源（MIT）桌面应用，用于对 PDF、Word、Excel、PowerPoint 等文档按文件名、文件夹或内容做全文检索，采用 Tauri 2、Rust、SQLite FTS5 和 React 构建，安装包约 5 MB。支持热键唤起的快速搜索、结果拖拽、重复文件查找和标签收藏；为只读访问，文件不会被修改。面向需要在本地大量文档中查找内容的 Windows/Linux 用户，Linux 版为 beta，不支持 OCR。",
+   "highlights": [
+    "支持按文件名、文件夹及文档内文检索 PDF、Word、Excel、PowerPoint 文件，容错拼写并高亮匹配段落",
+    "提供 Alt+Space 热键快速搜索、结果拖拽/复制、收藏与标签、重复文件查找和存储占用查看",
+    "离线运行、只读访问文件，安装包约 5 MB；可通过应用内更新，Linux 提供 .deb/.rpm/AppImage 包"
+   ],
+   "use_cases": [
+    "在 Downloads、桌面、项目文件夹等多处散落的文档中按内容关键词定位文件",
+    "通过全局热键在任意应用中快速调出并打开文档",
+    "查找字节级相同的重复文件副本并查看磁盘空间占用"
+   ]
+  },
+  "sha": "3168ee9570b2",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "43bc8dd275ec": {
+  "identity": {
+   "one_liner": "开源桌面端 AI 代理团队仪表盘，Lead 规划并分派任务给 CLI 代理",
+   "review": "Tyslin Studio 是一款基于 Electron 的免费开源桌面应用，用户组建 AI 代理团队并下达任务：Lead 代理制定计划并将卡片分派给运行于 Claude Code、Codex 或 Gemini CLI 的工人代理，文件改动以 diff 形式逐块等待用户批准。应用本地运行，使用用户自己的 API 密钥或 CLI 登录，目前处于 beta 阶段，主要在 Linux 上测试。",
+   "highlights": [
+    "内置 10 个团队模板（研究规划、软件开发、营销销售等），每个模板包含 Lead、代理、目标、五步计划与技能",
+    "通过 Agent Client Protocol 驱动 Claude Code、Codex、Gemini CLI 三种适配器，自动从 npm 下载并更新适配器",
+    "支持 Anthropic、OpenAI、Gemini、OpenRouter 密钥或对应 CLI 登录；每个团队设月度预算，改动逐块审批"
+   ],
+   "use_cases": [
+    "本地管理多个 AI 代理并行执行软件研发、测试、DevOps 等任务",
+    "在代理改动文件前逐块审查并批准，配合预算控制成本",
+    "在 Telegram/Slack 上远程跟进代理团队进度与摘要"
+   ]
+  },
+  "sha": "43bc8dd275ec",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8b9e24f6a12d": {
+  "identity": {
+   "one_liner": "食品小店自托管的批次临期与库存管理 Web 应用",
+   "review": "Racoonix 是一个部署在店内小型 Linux 主机（如 Raspberry Pi）上的 Web 应用，通过 Docker 安装，供店员、仓管和店主在手机或 PC 浏览器中使用。它按批次记录商品及到期日，生成按角色的待办任务、折扣提醒和按供应商分组的订单列表，数据保留在本地网络内。技术栈为 Flask、PostgreSQL 与 Caddy，支持意大利语和英语界面，不连接收银系统。",
+   "highlights": [
+    "支持 EAN-13/EAN-8、UPC、GS1 DataMatrix 及含批次与到期信息的 GS1 Digital Link 条码扫描，可从 Open Food Facts 自动填充新商品信息（可关闭）",
+    "提供按角色区分的实时待办、临期自动折扣、供应商订单列表、库存盘点及含损耗价值的仪表盘",
+    "基于 mDNS 提供 racoonix.local 访问地址，支持用户角色权限、设备审批、活动日志与每日自动备份脚本"
+   ],
+   "use_cases": [
+    "需要在到货时登记批次到期日并提前处理临期商品的食品零售小店",
+    "多名员工轮班、需共享缺货标记与补货/上架任务的店铺",
+    "无收银系统、希望数据留在本地网络内管理的自托管部署场景"
+   ]
+  },
+  "sha": "8b9e24f6a12d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5adad4dbd48d": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 + React 的本地优先习惯打卡与待办桌面应用",
+   "review": "DailyTask 是一款仅支持 Windows 的本地桌面应用，用于日常习惯打卡与待办管理，以基于区间的任务机制替代每次改动习惯就复制新 Excel 表的做法。数据存于本地 SQLite，无账户、无云同步，支持置顶小组件与表格网格视图。安装包通过 GitHub Releases 下载，应用内提供签名更新。",
+   "highlights": [
+    "支持打卡（done/missed/skip）、间隔暂停续用与每 N 天重复任务",
+    "提供置顶小组件、表格网格视图与按任务的连续记录及 30 天完成率统计",
+    "数据存于本地 SQLite，支持 JSON 导入导出与签名应用内更新"
+   ],
+   "use_cases": [
+    "需要管理每日习惯打卡与待办清单",
+    "习惯变更频繁、希望暂停任务而不重写历史记录",
+    "偏好数据仅存本地、不使用账户与云同步的使用方式"
+   ]
+  },
+  "sha": "5adad4dbd48d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

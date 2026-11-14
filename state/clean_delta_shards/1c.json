@@ -19157,5 +19157,522 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "183408e37a09+2": {
+  "fn": "Guepard-Corp/gfs",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Guepard"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    28,
+    2,
+    23,
+    [
+     " Git For database Systems ",
+     " Safe database version control for AI coding agents and developers. ",
+     "",
+     " <a href=\"https://youtu.be/WlOkLnoY2h8?si=hb6-7kLhlOvVL1u6\">",
+     " Watch on YouTube",
+     " </a>",
+     " <a href=\"https://discord.gg/SEdZuJbc5V\">",
+     " Join our Community",
+     " </a>",
+     " <a href=\"https://github.com/Guepard-Corp/gfs/actions/workflows/main.yml\" target=\"_blank\">",
+     " Build",
+     " </a>",
+     " <a href=\"https://github.com/Guepard-Corp/gfs/blob/main/LICENSE\" target=\"_blank\">",
+     " License",
+     " </a>",
+     " <a href=\"https://github.com/Guepard-Corp/gfs/pulls\" target=\"_blank\">",
+     " PRs Welcome",
+     " </a>",
+     "",
+     " Works with Claude Code, Cursor, Cline, Windsurf, and any skills / MCP-compatible agent ",
+     " GFS Showcase"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    30,
+    23,
+    25
+   ],
+   [
+    "replace",
+    30,
+    50,
+    25,
+    26,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    102,
+    26,
+    78
+   ],
+   [
+    "replace",
+    102,
+    103,
+    78,
+    79,
+    [
+     " detection of source changes so a clone never serves stale rows"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    204,
+    79,
+    180
+   ],
+   [
+    "replace",
+    204,
+    209,
+    180,
+    181,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    254,
+    181,
+    226
+   ],
+   [
+    "replace",
+    254,
+    265,
+    226,
+    227,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    333,
+    227,
+    295
+   ],
+   [
+    "replace",
+    333,
+    338,
+    295,
+    300,
+    [
+     "|situation|what you get|speed|",
+     "|---|---|---|",
+     "|source unchanged|the local copy (provably identical to the source)|fast, no network|",
+     "|source changed|read from the source|slower|",
+     "|source changed **and** you wrote to that table|**your** version, plus a conflict warning|—|"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    377,
+    300,
+    339
+   ],
+   [
+    "delete",
+    377,
+    378,
+    339,
+    339
+   ],
+   [
+    "equal",
+    378,
+    386,
+    339,
+    347
+   ],
+   [
+    "replace",
+    386,
+    393,
+    347,
+    354,
+    [
+     "|setting|default|what it controls|",
+     "|---|---|---|",
+     "|`autopull`|`false`|after a changed table costs one federated read, re-copy it in the background so later reads are local|",
+     "|`autoschema`|`false`|apply **additive** source schema changes automatically (a new column, a new partition). Never destructive: a column drop stays a conflict for a human|",
+     "|`check_interval`|`5 min`|how stale a drift verdict may be before a read triggers a fresh background check|",
+     "|`autopull_interval`|`1 min`|minimum gap between background re-copies of the same table|",
+     "|`autopull_max_bytes`|(see table)|ceiling on how much data background work will re-copy unattended|"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    413,
+    354,
+    374
+   ],
+   [
+    "replace",
+    413,
+    418,
+    374,
+    379,
+    [
+     "|what changed on the source|what `pull` does|",
+     "|---|---|",
+     "|a new partition of a partitioned table|creates it locally with the source's bound and registers it for copy-on-read|",
+     "|a new `INHERITS` child|creates it under the same parent, with its own key, and registers it|",
+     "|a materialized view refreshed upstream|recomputes the clone's own matview from the clone's tables|"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    457,
+    379,
+    418
+   ],
+   [
+    "replace",
+    457,
+    465,
+    418,
+    426,
+    [
+     "|output|meaning|",
+     "|---|---|",
+     "|`source unchanged`|a guarantee nothing was written upstream since the last anchor|",
+     "|`N of M tables changed on the source`|which tables drifted, and why|",
+     "|`new table <name>`|a table exists upstream that this clone does not have|",
+     "|`changed, unattributed`|the source moved but nothing accounts for it, so every copied table is suspect|",
+     "|`this clone spans N source moments`|tables were copied at different moments while the source moved; a JOIN across them can return combinations that never existed at the source (run `gfs freeze`)|",
+     "|`all copied data is from one source moment`|possibly stale, but coherent: everything copied reflects one instant|"
+    ]
+   ],
+   [
+    "equal",
+    465,
+    481,
+    426,
+    442
+   ],
+   [
+    "replace",
+    481,
+    490,
+    442,
+    451,
+    [
+     "|action|what happened|",
+     "|---|---|",
+     "|`adopt`|a new partition or inheritance child of a table you already have was created locally and registered|",
+     "|`schema`|the table's shape was repaired (a column the source added was applied)|",
+     "|`reset`|the table is back on the lazy path; the next read refetches it|",
+     "|`enum`|a label the source added was replicated, in the source's own order|",
+     "|`sequence`|a local sequence was advanced to match the source|",
+     "|`matview`|a materialized view was recomputed from this clone's tables|",
+     "|`conflict`|**needs you.** Either you wrote to a table the source also changed, or the source made a destructive change. Nothing was touched|"
+    ]
+   ],
+   [
+    "equal",
+    490,
+    547,
+    451,
+    508
+   ],
+   [
+    "replace",
+    547,
+    553,
+    508,
+    514,
+    [
+     "|code|meaning|",
+     "|----|-------|",
+     "|`0`|consistent, nothing to collect|",
+     "|`1`|unreachable objects found — a collector would have work to do|",
+     "|`2`|corruption found: something referenced is missing, or an entry could not be identified|",
+     "|`3`|**the check could not be completed**, so the report says nothing about the repository|"
+    ]
+   ],
+   [
+    "equal",
+    553,
+    651,
+    514,
+    612
+   ],
+   [
+    "replace",
+    651,
+    652,
+    612,
+    613,
+    [
+     "> #116."
+    ]
+   ],
+   [
+    "equal",
+    652,
+    752,
+    613,
+    713
+   ],
+   [
+    "replace",
+    752,
+    754,
+    713,
+    715,
+    [
+     "- cargo-nextest: Faster, clearer test output. Install with `cargo install cargo-nextest`, then run `cargo nextest run` or `cargo nt`.",
+     "- cargo-llvm-cov: Code coverage. Install with `cargo install cargo-llvm-cov` (requires `rustup component add llvm-tools-preview`). Run `cargo llvm-cov --html --open` for an HTML report."
+    ]
+   ],
+   [
+    "equal",
+    754,
+    764,
+    715,
+    725
+   ],
+   [
+    "replace",
+    764,
+    768,
+    725,
+    726,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    768,
+    773,
+    726,
+    731
+   ],
+   [
+    "replace",
+    773,
+    774,
+    731,
+    732,
+    [
+     "`tests/paths/README.md` for what every test proves and for the"
+    ]
+   ],
+   [
+    "equal",
+    774,
+    779,
+    732,
+    737
+   ],
+   [
+    "replace",
+    779,
+    784,
+    737,
+    742,
+    [
+     "|status|meaning|",
+     "|---|---|",
+     "|`FAIL`|a real product defect|",
+     "|`ABORT`|the **environment** failed (a container never came up). Never a product defect|",
+     "|`known-open now passes`|a test that documents an unfixed behaviour started passing. Either a fix landed or the assertion is too weak|"
+    ]
+   ],
+   [
+    "equal",
+    784,
+    808,
+    742,
+    766
+   ],
+   [
+    "replace",
+    808,
+    814,
+    766,
+    767,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    814,
+    881,
+    767,
+    834
+   ],
+   [
+    "replace",
+    881,
+    882,
+    834,
+    835,
+    [
+     "The way out is `gfs freeze` (#132):"
+    ]
+   ],
+   [
+    "equal",
+    882,
+    887,
+    835,
+    840
+   ],
+   [
+    "replace",
+    887,
+    889,
+    840,
+    842,
+    [
+     "Detection is #131; the snapshot mode",
+     "is #132. The two properties genuinely"
+    ]
+   ],
+   [
+    "equal",
+    889,
+    898,
+    842,
+    851
+   ],
+   [
+    "replace",
+    898,
+    899,
+    851,
+    852,
+    [
+     "Tracked as #139."
+    ]
+   ],
+   [
+    "equal",
+    899,
+    906,
+    852,
+    859
+   ],
+   [
+    "replace",
+    906,
+    907,
+    859,
+    860,
+    [
+     "Tracked as #140."
+    ]
+   ],
+   [
+    "equal",
+    907,
+    915,
+    860,
+    868
+   ],
+   [
+    "replace",
+    915,
+    926,
+    868,
+    869,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    926,
+    927,
+    869,
+    870
+   ],
+   [
+    "replace",
+    927,
+    932,
+    870,
+    871,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    932,
+    933,
+    871,
+    872
+   ],
+   [
+    "replace",
+    933,
+    936,
+    872,
+    873,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    936,
+    937,
+    873,
+    874
+   ],
+   [
+    "replace",
+    937,
+    945,
+    874,
+    875,
+    [
+     "This project is licensed under MIT License. See the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

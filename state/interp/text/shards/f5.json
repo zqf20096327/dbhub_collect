@@ -2862,5 +2862,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "be9f83a70b1d": {
+  "identity": {
+   "one_liner": "基于 FastAPI+FAISS+GigaChat 的私有文档 RAG 问答服务，附来源引用",
+   "review": "该服务用于对用户上传的文档（PDF/DOCX/TXT/MD）进行分块、嵌入并写入 FAISS 索引，再通过 GigaChat 等生成带来源引用的回答，面向需要私有文档问答的个人或团队。采用 api→services→repositories→core 分层结构，内置 JWT 认证并按 user_id 隔离数据；需配置 GigaChat 凭据与 PostgreSQL，嵌入模型首次运行需下载约 1.1 GB。",
+   "highlights": [
+    "支持检索阈值过滤（RETRIEVER_MIN_SCORE），无相关分块时不调用 LLM，直接返回固定拒答；上下文包裹于 <context> 标签",
+    "LLM 提供方可通过环境变量在 gigachat/openai/deepseek 间切换，无需改动代码",
+    "提供 Docker Compose 一键部署（API、Streamlit 前端、PostgreSQL），含 160 个不访问外部 LLM 的测试与 CI"
+   ],
+   "use_cases": [
+    "对企业内部合同、手册等自有文档搭建问答服务，回答附带文件名、页码与分块引用",
+    "需要用户注册登录且各用户文档与历史相互隔离的多用户部署",
+    "需在 GigaChat 与 OpenAI/DeepSeek 之间按环境切换模型提供方的场景"
+   ]
+  },
+  "sha": "be9f83a70b1d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

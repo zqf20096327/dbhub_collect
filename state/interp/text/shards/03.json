@@ -3337,5 +3337,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "74584a0654db": {
+  "identity": {
+   "one_liner": "用 Elixir 编写的 Firecracker microVM 分布式编排器",
+   "review": "Hyper 是一个面向 Firecracker microVM 的分布式编排器，采用 Elixir/BEAM 实现，主要为其开发方的核心 VM 编排组件。它支持节点加入集群后自动成为 VM 运行节点、基于亲和性的调度、通过 thin COW 层实现磁盘分层 fork，并提供 BEAM 原生接口和默认关闭且未认证的 gRPC 接口，外部依赖仅需 Postgres。项目处于早期开发阶段，接口和行为可能变化，不提供 SLA 或专门支持，不支持 RAM 快照。",
+   "highlights": [
+    "基于 copy-on-write 磁盘分层实现 VM fork，生成 thin COW 层而非完整磁盘快照",
+    "节点加入集群后自动成为 VM 运行节点，采用基于亲和性的调度策略",
+    "通过 OpenTelemetry 提供追踪，提供 BEAM 原生接口和 gRPC 接口（默认关闭、无认证）"
+   ],
+   "use_cases": [
+    "需要在多主机节点集群上调度和运行 Firecracker microVM",
+    "需要基于块存储 fork VM 而不复制完整磁盘镜像的场景",
+    "希望在 Elixir/Mix 应用中嵌入 VM 编排能力，或通过 gRPC 从其他语言调用"
+   ]
+  },
+  "sha": "74584a0654db",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

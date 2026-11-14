@@ -2666,5 +2666,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2d52722e1614": {
+  "identity": {
+   "one_liner": "SQL 原生开源时序数据库，以标准 Parquet 文件存储遥测数据",
+   "review": "Arc 是一个 SQL 原生的开源时序数据库，用 Go 编写并采用 AGPL-3.0 许可。它通过 InfluxDB Line Protocol 或 MessagePack 接收遥测写入，将数据存储为 Apache Parquet 文件（本地磁盘、S3、Azure 或 S3 兼容存储），内部使用 DuckDB 作为查询引擎，并把摄入、压缩、保留策略、连续查询等功能打包为单个二进制文件。README 提供的性能数字基于 MacBook Pro M3 Max 基准测试，官方给出的适用方向包括物联网、日志、可观测性和边缘部署。",
+   "highlights": [
+    "兼容 InfluxDB Line Protocol 与 Telegraf，支持 Arrow IPC、MessagePack、JSON 三种查询线路格式，另有可选 Arrow Flight SQL 监听器",
+    "数据以标准 Apache Parquet 存储于用户自有基础设施（本地磁盘、S3、Azure、MinIO/R2 等兼容存储），后台自动执行小文件压缩合并",
+    "单二进制零依赖运行，包含保留策略、连续查询、认证、备份恢复与企业集群；配套提供自托管控制台 Launchpad 和命令行工具 arcli"
+   ],
+   "use_cases": [
+    "机器、设备、车辆遥测数据的长期全分辨率存储与分析查询",
+    "通过 Line Protocol 双写方式从 InfluxDB 体系逐步迁移的既有监控链路",
+    "无法连接外部服务（air-gap）或以本地/对象存储自建数据仓的边缘与内网环境"
+   ]
+  },
+  "sha": "2d52722e1614",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b2ce0d36b66c": {
+  "identity": {
+   "one_liner": "位于 AI 编码代理与 shell 之间的命令网关，预览后果、备份并可回滚。",
+   "review": "Termaxa 是一个 Rust 单二进制工具，部署在 Claude Code、Codex、Cursor、Copilot CLI 等代理的 hook 路径中。它按仓库内的策略文件对命令执行允许/询问/拒绝判断，预览破坏性命令的具体影响（删除的文件、丢失的提交、DROP 的行），运行前做备份并支持 rollback，内置跨 shell 语法的熔断器，并以哈希链日志记录决策。策略未匹配的命令默认询问。",
+   "highlights": [
+    "按仓库内 policy.yaml 决策，首个匹配规则生效，未匹配命令默认询问；支持 observe 模式先观察后强制",
+    "拆分复合命令（&&、||、;、| 等）逐段判断，按最危险段裁决；熔断器跨 shell 统计破坏性意图，默认阈值 2",
+    "运行前备份文件、钉住 ref、导出表，termaxa rollback 可撤销；决策写入仅追加的哈希链日志"
+   ],
+   "use_cases": [
+    "在无人监督或无人值守场景下运行 AI 编码代理的项目",
+    "接入新代理工具前，用 replay 评估历史命令中有多少会被询问",
+    "需要对 rm -rf、git reset --hard、force push、DROP TABLE 等操作先看影响范围并留备份的团队"
+   ]
+  },
+  "sha": "b2ce0d36b66c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

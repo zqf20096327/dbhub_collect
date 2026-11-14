@@ -2787,5 +2787,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a77e844e8408": {
+  "identity": {
+   "one_liner": "基于 Tree-sitter 索引的 MCP 服务器，为 AI 编码助手提供持久代码索引与检索。",
+   "review": "AiDex 是一个 MCP 服务器，使用 Tree-sitter 解析代码并将标识符、文档和工作区条目索引到本地 SQLite 数据库，供 Claude Code、Cursor、Gemini CLI 等 MCP 兼容客户端查询。支持精确/语义/混合三种检索模式、跨项目全局搜索、会话笔记、任务管理与 HTTP 日志接收。需 Node.js 20+，通过 npm 全局安装。LLM 增强层（翻译、重排）为可选项，需配置 API 密钥。",
+   "highlights": [
+    "基于 Tree-sitter 解析 14 种语言的代码，将标识符索引到本地 SQLite（WAL 模式）文件，支持增量更新与按时间过滤查询",
+    "提供 exact、semantic（本地 embeddings）、hybrid（RRF 融合）三种检索模式，可跨已索引项目全局搜索",
+    "包含 33 个 MCP 工具，涵盖签名提取、项目概览、任务/笔记持久化、HTTP 日志接收和浏览器 Viewer 界面"
+   ],
+   "use_cases": [
+    "AI 编码助手需要在不读取整个文件的情况下获取类与方法签名",
+    "多项目开发者在跨仓库查找标识符或检索历史会话笔记与任务",
+    "通过 MCP 客户端以语义方式按概念（而非精确名称）检索代码与文档"
+   ]
+  },
+  "sha": "a77e844e8408",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e9e70901bbbe": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 MCP 记忆服务器，用 wikilink 图检索 markdown 笔记",
+   "review": "sqlite-graph-memory 是一个面向 Claude Code、Cursor、Codex 等 MCP 客户端的记忆服务器，为本地 markdown 笔记（如 Obsidian 库）提供检索层。它将 [[wikilinks]] 视作图结构，以 SQLite 作为唯一存储，检索时返回 DIRECT 与 ASSOCIATIVE 两类结果并标注经由链接发现的条目。工具只读笔记不写入，需 Python 3.12 或 uvx，首次运行约下载 1.1 GB 模型，无需账号或 API key。",
+   "highlights": [
+    "将笔记中的 [[wikilinks]] 作为图结构，实现向量与图结合的双路检索（DIRECT / ASSOCIATIVE）",
+    "以 SQLite 为唯一存储，提供 sgm-index、sgm-ask、sgm-mcp、sgm-doctor 等命令行工具与 MCP 服务器接口",
+    "只读取笔记，不写入或编辑；支持增量索引，仅重新嵌入新增或变更的笔记"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等 MCP 客户端接入个人 markdown/Obsidian 笔记库作为记忆层",
+    "问题未直接提及笔记名称时，通过 wikilink 链路发现相关笔记",
+    "本地离线式知识检索场景（无需账号或 API key）"
+   ]
+  },
+  "sha": "e9e70901bbbe",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7eefe65121f3": {
+  "identity": {
+   "one_liner": "语音优先、本地优先的中文一句话语音记账应用",
+   "review": "声账是一款面向中国内地 18–35 岁学生和年轻职场人的语音记账应用：按住按钮说一句话，经火山流式 ASR 转写后由 DeepSeek 提取金额、分类等字段，多笔账单写入本地 SQLite。客户端为 Expo/React Native，语音链路经 Fastify WebSocket 网关，需自行配置 ASR 与 LLM 密钥；本地开发要求 Node.js 22+ 与 pnpm 11+。当前公开版本为 Android `0.3.3 (41)`，尚未上架应用商店。",
+   "highlights": [
+    "语音链路：PCM 经 Fastify WebSocket 到火山流式 ASR，再由 DeepSeek 结构化提取金额、收支类型、分类、日期与备注，保存后 8 秒内可整批撤销",
+    "本地优先：账单写入本地 SQLite，首次启动不要求登录，网络或云服务失败不阻塞记账；支持 JSON 备份/恢复与 CSV 导出",
+    "包含手动记账、两级自定义分类、月度统计与分类下钻、离线搜索筛选，仓库含 410 项自动化测试"
+   ],
+   "use_cases": [
+    "付款后按住说一句'午饭 25，咖啡 18'等自然语句，一句话记录多笔账单",
+    "Android 11+ 在微信、支付宝付款详情页通过控制中心磁贴触发快捷记账，生成可编辑卡一次确认入账",
+    "月度统计、分类下钻与每日明细查看消费构成，配合手动记账补齐缺失信息"
+   ]
+  },
+  "sha": "7eefe65121f3",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

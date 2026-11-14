@@ -3534,5 +3534,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bcf003d23582": {
+  "identity": {
+   "one_liner": "纯本地 SQLite 的跨会话长期记忆插件，含混合检索与证据门",
+   "review": "dsh-engram 是 DeepSeek Harness 的记忆插件，把跨会话记忆存入本地 SQLite（数据目录 ~/.dsh/engram），不依赖外部服务或 API Key。面向 DSH 用户与 agent 使用场景。关键机制：FTS5 + 本地向量 RRF 混合检索、23 个窄参数 engram_* 工具、代码强制的证据门（engram_assess）、SM-2 间隔重复复习与来源审计。限制：嵌入模型首次使用需联网下载，失败时降级纯关键词检索；自动信念巩固与 Jev 裁决默认关闭。",
+   "highlights": [
+    "混合检索：FTS5（unicode61 + 中文 2-gram）与本地向量（384 维 q8 WASM 引擎）经 RRF 融合，模型离线运行，失败自动降级纯关键词并显式标记",
+    "23 个窄参数 engram_* 工具覆盖保存/检索/事实链/时间线/审计/导出/蒸馏/信念/复习；写入采用 accept·merge·defer·drop 四态处置",
+    "证据门由代码强制：sufficient 需同时满足声称充足、本批次有效证据、nextStrategy=answer 三者；每条记忆记录来源会话/轮次/seq 三级溯源与 op_log 全量流水"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 会话注入用户画像与跨会话召回历史事实，支持 user.db 与按 git origin 隔离的项目分库",
+    "需要检索练习闭环时，通过 engram_review_queue/engram_review 以 SM-2 调度做先回忆后揭示的间隔重复复习",
+    "将历史会话回填入库（按每会话 cwd 分库、幂等续跑），或导出 Markdown/JSON 及 Obsidian/Logseq 友好镜像目录"
+   ]
+  },
+  "sha": "bcf003d23582",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "da0cd34dc18e": {
+  "identity": {
+   "one_liner": "Laravel 风格的 Go ORM，提供查询构建器、模型与迁移",
+   "review": "ThinkORM（仓库 go-think/torm）是一个面向 Go 的 ORM 库，设计上对齐 Laravel Eloquent 的语义，包含查询构建器、模型、关系、Schema 构建与迁移。支持 MySQL、MariaDB、Postgres、SQLite、SQL Server 五种方言。要求 Go 1.27+，通过 go get 安装，测试套件使用内置内存 fake 驱动、无需真实数据库即可离线运行。README 还列出相对 1.x 的行为变更及 Go 语境下有意不实现的能力（如动态属性 accessor/mutator）。",
+   "highlights": [
+    "查询构建器包含 where 族、CTE、游标分页、联接、upsert、returning 等；提供 ToSql/ToRawSql 检查生成 SQL",
+    "模型支持时间戳、软删除、脏检查、mass-assignment 守卫、事件与观察者、UUID/ULID 主键；关系含 hasOne/hasMany/belongsTo/morph/belongsToMany 等及预加载、WhereHas、WithCount",
+    "支持命名连接与读写分离（sticky 窗口）、嵌套事务（savepoint）与死锁重试、五方言的 Schema 构建与带批次/锁的迁移"
+   ],
+   "use_cases": [
+    "希望在 Go 项目中使用 Laravel Eloquent 风格模型与关系查询的开发者",
+    "需要跨 MySQL、Postgres、SQLite、SQL Server 等多方言构建查询与执行迁移的项目",
+    "需要读写分离、嵌套事务、软删除等数据库访问能力的 Web 服务（README 标签含 gin/thinkgo）"
+   ]
+  },
+  "sha": "da0cd34dc18e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a56c6aeeca8": {
+  "identity": {
+   "one_liner": "面向游戏运营的 Server/Agent/SDK 控制平面平台",
+   "review": "Croupier 是面向单个游戏公司多游戏、多环境运营场景的控制平面平台，由 Web 控制台、Server 控制面、游戏 VPC 内 Agent 代理和六语言 SDK 组成。传输采用统一 TCP 会话模型（双向请求、多路复用、重连），业务边界为 gameId+env，底层基于 Gin、GORM、Casbin 等开源组件。README 明确说明高风险生产写入尚未获得审批，属于需注意的当前限制。",
+   "highlights": [
+    "提供 sidecar、devops、capture、synthetics 四类 Agent 角色，分别承担函数网关、带审计的内网远程访问、数据库 CDC 与外部探测",
+    "统一会话传输：单长连接、双向请求、心跳/重连/背压/流分离，Agent-Server 与 SDK-Agent 共享同一会话运行时",
+    "提供 Go/C#/Java/C++/Python/JS 六种官方 SDK，并通过 MCP 协议以只读方式和身份审计方式向 AI 代理暴露控制面"
+   ],
+   "use_cases": [
+    "游戏公司内部 GM 运营：通过 Web 控制台统一管理多游戏多环境的函数注册、调度与作业",
+    "游戏服务可观测性运维：数据库 CDC 捕获、HTTP/TCP/ICMP 外部探测与带回放存档的远程访问",
+    "开发调试：SQLite 驱动支持本地开发测试，JSON Schema 能力契约自动生成控制台 UI"
+   ]
+  },
+  "sha": "1a56c6aeeca8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

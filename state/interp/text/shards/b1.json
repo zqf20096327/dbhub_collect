@@ -3260,5 +3260,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aa6281508d2f": {
+  "identity": {
+   "one_liner": "基于 Go、OpenTelemetry 与 Tempo 的分布式请求延迟诊断参考应用",
+   "review": "该项目是一个 Go 编写的参考应用，通过 gateway、auth、orders、inventory、payment 等服务演示分布式追踪与延迟根因分析。诊断器读取 Tempo 追踪、基于 span 时间戳计算独占时间，并结合 PostgreSQL pg_stat_activity 与 pg_blocking_pids 的锁等待证据区分 confirmed 与 inferred 结论。适用于本地学习观测性与延迟排查；README 明确其为教学部署，无认证与 TLS，身份与支付均为演示实现。",
+   "highlights": [
+    "提供 /api/traces、/api/traces/{id}/diagnosis、/api/comparisons 等 HTTP 接口及 debugger 二进制的 serve/diagnose/compare/demo 子命令",
+    "通过独立连接检查 pg_stat_activity 与 pg_blocking_pids，仅在存在 PostgreSQL Lock 观测时生成确认级锁发现",
+    "支持 healthy、inventory-db-lock、slow-payment、upstream-timeout、missing-propagation 五种演示场景与双追踪 ID 对比"
+   ],
+   "use_cases": [
+    "本地学习 OpenTelemetry、Tempo、Prometheus 与 Grafana 组成的分布式追踪链路",
+    "演示和复现 PostgreSQL 行锁等待导致的请求延迟分析流程",
+    "对比变更前后两个追踪 ID 的各服务操作耗时变化"
+   ]
+  },
+  "sha": "aa6281508d2f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

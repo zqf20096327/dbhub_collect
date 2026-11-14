@@ -25733,5 +25733,451 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "ab0a1d0c166a+2": {
+  "fn": "jarredhj0214/linesql",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    9,
+    4,
+    9,
+    [
+     "Maven",
+     "Maven Central",
+     "License",
+     "Java",
+     "ANTLR4"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    24,
+    9,
+    24
+   ],
+   [
+    "replace",
+    24,
+    30,
+    24,
+    25,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    60,
+    25,
+    55
+   ],
+   [
+    "replace",
+    60,
+    69,
+    55,
+    56,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    77,
+    56,
+    64
+   ],
+   [
+    "replace",
+    77,
+    84,
+    64,
+    65,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    110,
+    65,
+    91
+   ],
+   [
+    "replace",
+    110,
+    118,
+    91,
+    99,
+    [
+     "|Use case|What LineSQL provides|",
+     "|---|---|",
+     "|Data catalog ingestion|Source tables, target tables, affected tables, and parser diagnostics|",
+     "|Column-level lineage|Projection, insert, CTAS, view, update, and merge dependencies where supported|",
+     "|Impact analysis|Downstream table and column dependencies from SQL scripts|",
+     "|Data governance|Clause-level usages for filters, grouping, ordering, and DML predicates|",
+     "|SQL inventory|Statement type, dialect, parse warnings, and unsupported SQL visibility|",
+     "|Migration assessment|Dialect detection and case-backed compatibility checks|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    133,
+    99,
+    114
+   ],
+   [
+    "replace",
+    133,
+    139,
+    114,
+    120,
+    [
+     "|Project type|Primary goal|Best fit|LineSQL difference|",
+     "|---|---|---|---|",
+     "|Query planner and optimizer|Validate, transform, and optimize relational plans|Engines, optimizers, federated query layers|LineSQL avoids planning and focuses on practical lineage output|",
+     "|General SQL parser|Parse SQL syntax into generic AST structures|SQL editors, simple analyzers, generic tooling|LineSQL returns a lineage model directly instead of only AST nodes|",
+     "|SQL transpiler|Convert SQL across dialects|Migration and dialect conversion|LineSQL focuses on source-to-target lineage, diagnostics, and production scripts|",
+     "|LineSQL|Extract table and column lineage from platform SQL|Catalogs, governance, quality, metadata, impact analysis|JVM-native, multi-dialect, lineage-first, case-backed|"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    158,
+    120,
+    139
+   ],
+   [
+    "replace",
+    158,
+    161,
+    139,
+    142,
+    [
+     "Detailed compatibility is case-backed and tracked in Supported Scenarios.",
+     "Grammar-domain coverage and development priorities are tracked in Grammar Coverage Matrix.",
+     "Case coverage and benchmark methodology are tracked in Benchmark and Coverage."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    162,
+    142,
+    143
+   ],
+   [
+    "replace",
+    162,
+    173,
+    143,
+    154,
+    [
+     "|Dialect|Status|Auto Detection|Table Lineage|Column Lineage|Column Usage|",
+     "|---|---|---|---|---|---|",
+     "|Spark|Active parser|Yes|Broad production SQL coverage|Broad production SQL coverage including inline and named windows|Predicate, join, merge, grouping, ordering, and named/inline window usages|",
+     "|MySQL|Active parser|Yes|Broad SELECT, DML, DDL, transaction, account, admin, and lifecycle statement coverage|Direct mappings and common expressions|Common predicate and clause usages|",
+     "|Hive|Active parser|Yes|SELECT, DML, multi-insert, view/materialized-view lifecycle, metadata/control, storage/layout DDL, constraints, maintenance, lateral view, sampling, grouping, and named-window coverage|Direct mappings, branch-specific multi-insert mappings, view/CTAS mappings, lateral-view generated columns, collections, aggregates, and common expressions|Predicate, merge, sampling, grouping, ordering, named window, table-model, and layout usages|",
+     "|Flink|Active parser|Yes|SELECT, DML, default/Hive-compatible DDL, connector/CDC DDL, materialized table, SQL Client utility, temporal join, window TVF, and MATCH_RECOGNIZE coverage|Direct mappings, common expressions, TVF generated columns, window TVF sink mappings, pattern measures|Common predicate, grouping, window descriptor, temporal join, pattern, and clause usages|",
+     "|StarRocks|Active parser|Yes|Broad SELECT, DML, DDL, load, `FILES`, `native_query`, warehouse, lifecycle, proc-path, and vertical-output metadata statement coverage|Direct mappings and common expressions, including external table-function alias-column load mappings|Predicate, clause, metadata/statistics, index, and table-model usages|",
+     "|Oracle|Active parser|Yes|Common SELECT, data dictionary views, TABLE(function)/JSON_TABLE/XMLTABLE sources, MATCH_RECOGNIZE, Oracle Text search, DML, DDL, ALTER TABLE maintenance, locking read/control, synonym/DBLink/directory object references, table privilege grants, routine/package lifecycle, DBMS_STATS metadata calls, and PL/SQL block envelope coverage|Direct mappings, common expressions, and MATCH_RECOGNIZE measures|Common predicate, text-search predicate, clause, window, and pattern usages|",
+     "|SQL Server|Active parser|Yes|Common SELECT, temporal-table reads, DML, table variables, table-valued/external query functions, external table/data-source/file-format objects, OPENJSON/OPENXML schema columns, DML OUTPUT capture, PIVOT/UNPIVOT relation and generated-column lineage, transaction/session control, backup/restore utilities, DBCC and `sp_*` metadata handling, privilege DDL, synonym object references, sequence/routine/trigger lifecycle with static routine-body table references, and index option coverage|Direct mappings, common expressions, sequence generated values, PIVOT aggregate columns, OPENJSON/OPENXML derived columns, and UNPIVOT generated columns|Common predicate, full-text predicate, and clause usages|",
+     "|PostgreSQL|Active parser|Yes|SELECT, DML, EXPLAIN wrappers, CTAS, VIEW, `ON CONFLICT`, `RETURNING`, `MERGE`, result limiting/pagination, natural and lateral joins, generated columns, table constraints, partition/inheritance DDL, ALTER TABLE column/constraint maintenance, schema/routine/trigger/extension DDL, privilege/default-privilege statements, foreign data wrapper objects, table maintenance/locking, routine, notification, and session control, JSON/array expressions|Direct mappings, generated column expressions, common expressions, `DISTINCT ON`, aggregate `FILTER`, ordered-set aggregates, grouping extensions, lateral derived columns, window frames, named windows|Predicate, merge, grouping, window, table-model, and clause usages|",
+     "|OceanBase|Compatibility-mode parser|Yes|MySQL-mode and Oracle-mode SELECT, DML, DDL, constraints, DBLink, directory, sequence, synonym, package/block envelopes, flashback query, OUTFILE export, locking read, transaction control, EXPLAIN, outline, partition, set-operation, CTE, aggregate, window, hint, MERGE, resource, tenant, tablegroup, cluster zone/server, backup/restore control, and proxy-control coverage|Direct mappings and common expressions through compatibility modes|Predicate, join, merge, DBLink, flashback, and compatibility-mode clause usages|"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    178,
+    154,
+    159
+   ],
+   [
+    "replace",
+    178,
+    184,
+    159,
+    165,
+    [
+     "|Metric|Current value|",
+     "|---|---:|",
+     "|Dialects|9|",
+     "|SQL cases|3329|",
+     "|Column-lineage cases|1458|",
+     "|Diagnostic cases|14|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    189,
+    165,
+    170
+   ],
+   [
+    "replace",
+    189,
+    203,
+    170,
+    184,
+    [
+     "|Module|Description|",
+     "|---|---|",
+     "|`linesql-all`|Aggregate dependency for core plus all bundled dialect parsers|",
+     "|`linesql-core`|Public model, facade API, parser SPI, statement splitter, dialect detector, diagnostics|",
+     "|`linesql-dialect-spark`|Spark SQL parser and lineage visitor|",
+     "|`linesql-dialect-mysql`|MySQL parser module|",
+     "|`linesql-dialect-hive`|Hive parser module|",
+     "|`linesql-dialect-flink`|Flink parser module|",
+     "|`linesql-dialect-starrocks`|StarRocks parser module|",
+     "|`linesql-dialect-oracle`|Oracle parser module|",
+     "|`linesql-dialect-sqlserver`|SQL Server parser module|",
+     "|`linesql-dialect-postgresql`|PostgreSQL parser for common lineage, DML, DDL, maintenance, routine, and control SQL|",
+     "|`linesql-dialect-oceanbase`|OceanBase MySQL/Oracle compatibility-mode parser module|",
+     "|`linesql-cli`|Command-line JSON output|"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    222,
+    184,
+    203
+   ],
+   [
+    "replace",
+    222,
+    230,
+    203,
+    204,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    251,
+    204,
+    225
+   ],
+   [
+    "replace",
+    251,
+    256,
+    225,
+    226,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    264,
+    226,
+    234
+   ],
+   [
+    "replace",
+    264,
+    270,
+    234,
+    235,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    278,
+    235,
+    243
+   ],
+   [
+    "replace",
+    278,
+    288,
+    243,
+    244,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    296,
+    244,
+    252
+   ],
+   [
+    "replace",
+    296,
+    305,
+    252,
+    253,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    305,
+    311,
+    253,
+    259
+   ],
+   [
+    "replace",
+    311,
+    323,
+    259,
+    271,
+    [
+     "|Field|Meaning|",
+     "|---|---|",
+     "|`version`|Output model version|",
+     "|`dialect`|Selected SQL dialect|",
+     "|`dialectConfidence`|Auto-detection confidence|",
+     "|`dialectDetectionReason`|Why the dialect was selected|",
+     "|`statementType`|Statement category such as `SELECT`, `INSERT`, `CREATE_TABLE`, `CREATE_SCHEMA`, `CREATE_ROUTINE`, `CONTROL`|",
+     "|`inputTables`|Source tables|",
+     "|`outputTables`|Target or affected tables|",
+     "|`columnLineage`|Projection lineage edges from source columns to target columns|",
+     "|`columnUsages`|Non-projection column usages such as `WHERE`, `GROUP_BY`, `HAVING`, `ORDER_BY`, `READ_METADATA`, `INDEX`, `TABLE_MODEL`|",
+     "|`diagnostics`|Parser warnings and errors|"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    330,
+    271,
+    278
+   ],
+   [
+    "replace",
+    330,
+    385,
+    278,
+    279,
+    [
+     "…（55 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    431,
+    279,
+    325
+   ],
+   [
+    "replace",
+    431,
+    432,
+    325,
+    326,
+    [
+     "When adding a scenario, update both the manifest and Supported Scenarios."
+    ]
+   ],
+   [
+    "equal",
+    432,
+    434,
+    326,
+    328
+   ],
+   [
+    "replace",
+    434,
+    445,
+    328,
+    329,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    445,
+    455,
+    329,
+    339
+   ],
+   [
+    "replace",
+    455,
+    463,
+    339,
+    347,
+    [
+     "- Architecture Vision",
+     "- Benchmark and Coverage",
+     "- Supported Scenarios",
+     "- Spark Stage 1",
+     "- Development",
+     "- Launch and Community Notes",
+     "- License Policy",
+     "- Third-party Notices"
+    ]
+   ],
+   [
+    "equal",
+    463,
+    465,
+    347,
+    349
+   ],
+   [
+    "replace",
+    465,
+    470,
+    349,
+    350,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    471,
+    350,
+    351
+   ],
+   [
+    "replace",
+    471,
+    473,
+    351,
+    352,
+    [
+     "LineSQL is released under the Apache License 2.0. Third-party grammar and dependency provenance is tracked in Third-party Notices and License Policy."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

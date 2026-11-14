@@ -30536,5 +30536,1164 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "0d64fbaf7775+2": {
+  "fn": "yanfei0725/dsh-qwen-paint",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    19,
+    6,
+    19,
+    [
+     "|能力|工具|说明|",
+     "|---|---|---|",
+     "|文生图|`draw_image`|按提示词出图，成品落盘并直接显示在会话里|",
+     "|图生图 / 多参考图编辑|`draw_image`|1–16 张参考图（0.19.0 起），按序号接入 `images.image_N`|",
+     "|局部重绘|`inpaint_image`|蒙版内重绘，裁剪回贴|",
+     "|元素移除|`remove_image`|移除蒙版内物体并补全背景|",
+     "|四向扩图|`outpaint_image`|上 / 下 / 左 / 右按百分比外扩|",
+     "|高清放大|`upscale_image`|与内置放大共用同一套节点图|",
+     "|角色参考（模型无关）|`draw_image` / `generate_video`|可选 `referenceStrategy`：按后端 `/object_info` 真实能力协商，协商不到专属适配器自动回落通用兜底|",
+     "|文生视频 / 图生视频|`generate_video`|经本机 ComfyUI 调用 Wan 2.2 / XT-5B 系列视频模型，成品落盘并显示在会话里|",
+     "|语音合成（TTS）|`generate_speech`（独立） / `generate_hybrid`（三段中的一段）|本机 `ComfyUI-Qwen-TTS` + Qwen3-TTS 权重，产出 mp3 / flac（按 ComfyUI 返回的真实扩展名）；两条路共用同一条 TTS 段，只想配音不必跑完三段，**插件不自动下载音频模型**|",
+     "|图→音→视频混合|`generate_hybrid`|一张图配一段语音再合成视频，适合做带旁白的短片|",
+     "|生成历史（可搜索）|`list_generated_images`|本机 SQLite 记录每次生成的提示词 / 参数 / 时间 / 路径，支持关键词、类型、日期筛选与分页；界面里可看大图、复制路径、从历史移除（**只划掉记录，不删磁盘文件**）|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    54,
+    19,
+    54
+   ],
+   [
+    "replace",
+    54,
+    62,
+    54,
+    62,
+    [
+     "|想做的事|在哪点|",
+     "|---|---|",
+     "|出图 / 图生视频|直接说话：「画一只橘猫」「把这张图做成 5 秒视频」|",
+     "|**圈选重绘**：手动涂出要改的地方|结果图下方「圈选重绘」，或直接点图片 → 用画笔把要改的地方涂白 → 写一句要改成什么（也可点常用说法）|",
+     "|**移除物体**|结果图下方「更多编辑」→「移除物体」→ 涂出要去掉的东西 → 点「移除并补全」，不用写提示词|",
+     "|**四向扩图 / 高清放大**|「更多编辑」→ 点预设（四周各 20%、左右各 30%、2/4/8 倍…），不用填参数|",
+     "|选一张以前的图来编辑|菜单**最上面**「常用（点开就能用）」→「图片编辑台」列出最近生成的图；或「圈选重绘最近一张图」懒人直达|",
+     "|**翻旧账**：找上周生成的那张图|菜单**最上面**「历史」→「生成历史」|按关键词 / 类型 / 日期筛，点缩略图看大图，可复制路径贴到别处；「移除」只从列表划掉，不会删你的文件|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    67,
+    62,
+    67
+   ],
+   [
+    "replace",
+    67,
+    70,
+    67,
+    70,
+    [
+     "|**截取视频的一段**|同一个浮层：按帧数（起始/结束帧）或按时间（`0:01.5`）选 →「截取这一段」；也可「按间隔抽帧」批量取关键帧（这两项需要 ffmpeg）|",
+     "|**缩略图轨道 / 把改稿贴回视频**|同一个浮层：加载后自动生成 10 张缩略图，点一下跳到该处；改完图点「把改好的图贴回这一帧」→ 选最近改好的图 → 产出新 mp4（缩略图零依赖；**贴回需要 ffmpeg**，没装会明确提示）|",
+     "|画幅 / 速度 / 负面词 / CFG / 角色参考|「Comfy 控制」浮标面板（可拖动）|"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    110,
+    70,
+    110
+   ],
+   [
+    "delete",
+    110,
+    112,
+    110,
+    110
+   ],
+   [
+    "equal",
+    112,
+    122,
+    110,
+    120
+   ],
+   [
+    "replace",
+    122,
+    127,
+    120,
+    125,
+    [
+     "|层|机制|前提|",
+     "|---|---|---|",
+     "|参数层|固定 seed / 锚定关键帧 / 段间 overlap|无|",
+     "|节点层|按后端 `/object_info` 的**真实节点集合**选策略（`requires` 取 AND、`requiresAny` 取 OR，按优先级排）|后端在线且装了对应节点|",
+     "|通用兜底|只用任何扩散模型都有的基础节点：生图找带 `latent_image` 输入的节点并接 `VAEEncode`；视频找带 `start_image` 输入的节点接首帧|无|"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    144,
+    125,
+    142
+   ],
+   [
+    "replace",
+    144,
+    146,
+    142,
+    144,
+    [
+     " **不在 required 里**）。优先级：**显式工具入参 > 面板选择 > 未启用**。",
+     " 面板选择只存进程内存，不写配置、不写记忆，重启回默认。"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    144,
+    145
+   ],
+   [
+    "replace",
+    147,
+    148,
+    145,
+    146,
+    [
+     " 当前选中策略、视频分段计划、联网同意要求）。"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    150,
+    146,
+    148
+   ],
+   [
+    "replace",
+    150,
+    151,
+    148,
+    149,
+    [
+     " 不提交 ComfyUI、不下载任何字节。"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    159,
+    149,
+    157
+   ],
+   [
+    "replace",
+    159,
+    160,
+    157,
+    158,
+    [
+     "（渲染 ` ` 会让浏览器自动下载，等于绕过同意门）。"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    164,
+    158,
+    162
+   ],
+   [
+    "replace",
+    164,
+    165,
+    162,
+    163,
+    [
+     " **未自动接入 RIFE 或时序平滑节点**，计划里会明确标注，不谎称已平滑。"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    163,
+    164
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "d1bda0277b29+2": {
+  "fn": "tidbcloud/terraform-provider-tidbcloud",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    2,
+    [
+     "TiDB logo",
+     " Terraform logo"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    2,
+    5
+   ],
+   [
+    "replace",
+    7,
+    9,
+    5,
+    7,
+    [
+     "License",
+     "Release"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "This is the repository for the terraform-provider-tidbcloud, which allows one to use Terraform with TiDB Cloud. Learn more about TiDB Cloud"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "For general information about Terraform, visit the official website and the GitHub project page."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    11,
+    14
+   ],
+   [
+    "replace",
+    16,
+    28,
+    14,
+    15,
+    [
+     "（目录 12 行略）"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    15,
+    18
+   ],
+   [
+    "replace",
+    31,
+    33,
+    18,
+    20,
+    [
+     "- Terraform >= 1.0",
+     "- Go >= 1.18 (if you want to build the provider plugin)"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    35,
+    20,
+    22
+   ],
+   [
+    "replace",
+    35,
+    49,
+    22,
+    23,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    53,
+    23,
+    27
+   ],
+   [
+    "replace",
+    53,
+    54,
+    27,
+    28,
+    [
+     "Install terraform in Mac. See official doc for other OS."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    74,
+    28,
+    48
+   ],
+   [
+    "replace",
+    74,
+    75,
+    48,
+    49,
+    [
+     "3. The provider requires an API key set in an environment variable. Copy the API key from the TiDB Cloud console and create the environment variables."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    87,
+    49,
+    61
+   ],
+   [
+    "replace",
+    87,
+    88,
+    61,
+    62,
+    [
+     " The examples do not include a password. Enter a strong, unique database password when Terraform prompts, or supply `TF_VAR_password` from your secret store for non-interactive runs."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    102,
+    62,
+    76
+   ],
+   [
+    "replace",
+    102,
+    110,
+    76,
+    77,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    112,
+    77,
+    79
+   ],
+   [
+    "replace",
+    112,
+    113,
+    79,
+    80,
+    [
+     " The `connection_strings` will be generated after the cluster is available. If you find the output is empty, you can execute the `terraform refersh` to refresh the state of cluster."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    116,
+    80,
+    83
+   ],
+   [
+    "replace",
+    116,
+    117,
+    83,
+    84,
+    [
+     "See TiDB Cloud Terraform Integration Overview for more details."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    122,
+    84,
+    89
+   ],
+   [
+    "replace",
+    122,
+    123,
+    89,
+    90,
+    [
+     "Rotate keys according to your organization's policy: create a replacement key with the required permissions, update all consumers, verify access, then delete the old key. Revoke potentially compromised keys immediately. See API key management for creation and deletion instructions."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    132,
+    90,
+    99
+   ],
+   [
+    "replace",
+    132,
+    133,
+    99,
+    100,
+    [
+     "If you wish to work on the provider, you'll first need Go installed on your machine (see Requirements above)."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    155,
+    100,
+    122
+   ],
+   [
+    "replace",
+    155,
+    156,
+    122,
+    123,
+    [
+     "see here for more detail."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    159,
+    123,
+    126
+   ],
+   [
+    "replace",
+    159,
+    160,
+    126,
+    127,
+    [
+     "I will introduce how to debug with Terraform CLI development overrides. About other ways to debug the provider, see terraform official doc for more detail"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    168,
+    127,
+    135
+   ],
+   [
+    "replace",
+    168,
+    176,
+    135,
+    136,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    188,
+    136,
+    148
+   ],
+   [
+    "replace",
+    188,
+    192,
+    148,
+    149,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    196,
+    149,
+    153
+   ],
+   [
+    "replace",
+    196,
+    198,
+    153,
+    154,
+    [
+     "Twitter @PingCAP"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    200,
+    154,
+    156
+   ],
+   [
+    "replace",
+    200,
+    202,
+    156,
+    157,
+    [
+     "terraform-provider-tidbcloud is under the Apache 2.0 license. See the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "9442b2d34d6e+2": {
+  "fn": "rootSTARYYY/SurfMonitor",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Surf Monitor Logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " Surf Monitor (v4.2.1) "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " A local-first Windows desktop infrastructure, website, and remote Linux VPS monitoring suite built with Electron 33 , React 18 , TypeScript , Vite , Tailwind CSS , Recharts , and SQLite (<code>better-sqlite3</code>) ."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    15,
+    6,
+    7,
+    [
+     " Surf Monitor Overview Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    39,
+    7,
+    31
+   ],
+   [
+    "delete",
+    39,
+    41,
+    31,
+    31
+   ],
+   [
+    "equal",
+    41,
+    44,
+    31,
+    34
+   ],
+   [
+    "replace",
+    44,
+    47,
+    34,
+    37,
+    [
+     "|Monitors|Heartbeat Monitors|",
+     "|:---:|:---:|",
+     "|Monitors|Heartbeat Monitors|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    49,
+    37,
+    39
+   ],
+   [
+    "replace",
+    49,
+    52,
+    39,
+    42,
+    [
+     "|Remote Servers|Server Details|",
+     "|:---:|:---:|",
+     "|Remote Servers|Server Details|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    54,
+    42,
+    44
+   ],
+   [
+    "replace",
+    54,
+    57,
+    44,
+    47,
+    [
+     "|PM2 Processes|PM2 Process Details & Logs|",
+     "|:---:|:---:|",
+     "|PM2 Processes|PM2 Process Details|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    59,
+    47,
+    49
+   ],
+   [
+    "delete",
+    59,
+    62,
+    49,
+    49
+   ],
+   [
+    "equal",
+    62,
+    63,
+    49,
+    50
+   ],
+   [
+    "replace",
+    63,
+    64,
+    50,
+    51,
+    [
+     " Surf Monitor Settings"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    67,
+    51,
+    54
+   ],
+   [
+    "replace",
+    67,
+    77,
+    54,
+    62,
+    [
+     "|Layer|Technology|",
+     "|---|---|",
+     "|Desktop Shell|Electron 33 (`contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`)|",
+     "|Frontend|React 18, TypeScript, Vite, Tailwind CSS, Lucide Icons, Recharts|",
+     "|Persistence|SQLite (`better-sqlite3`, WAL mode, foreign keys, 31 tables)|",
+     "|Remote Tunnel|`ssh2` SFTP + `forwardOut` + `agent/surf-agent.mjs`|",
+     "|Email Transport|`nodemailer` with TLS verification & error classification|",
+     "|Testing|Vitest, ESLint 9, TypeScript (`tsc`)|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    90,
+    62,
+    75
+   ],
+   [
+    "delete",
+    90,
+    93,
+    75,
+    75
+   ],
+   [
+    "equal",
+    93,
+    100,
+    75,
+    82
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "5f97bd01a18e+2": {
+  "fn": "KumarManuSaraswat/miu",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Miu's calm speaking expressions"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "**Miu 1.0 · Windows x64 and Android 9+ ARM64 · Offline Gemma 3 included.** Download, extract or install, and chat without an account, API key, server or GPU. Original application code is MIT licensed; bundled model weights have their own terms."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Website · Downloads · Build status · Commands · Support · Contribute"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    14,
+    11,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "Download the signed **Miu Android APK** on a phone and open it to install. The native Android app includes Gemma 3 1B for offline chat, 24 animated reactions, tap-to-talk using Android speech services, local phone commands, a floating mascot, and the optional Neon-backed preset catalog. Allow about 3 GB free storage for installation and first-use preparation. A 64-bit ARM phone with Android 9+ and at least 4 GB RAM is recommended. Voice requires microphone permission and a suitable installed English speech pack; typing works independently."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    15,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "Android Gmail support reads opened message bodies through optional Gmail-only accessibility access. It uses the account selected in the phone's Gmail app, without OAuth credentials or notification-preview substitution. Search and latest-message navigation depend on Gmail's interface; opening a message may mark it read. Email text stays on the phone and is excluded from AI requests. See the **Android guide, privacy details and build instructions** before enabling permissions."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "Optional WhatsApp access reads visible chat text and prepares explicitly requested messages for review before a single Send action. Screen integrations are experimental and depend on the installed apps' controls. See the Android verification record for what has and has not been tested."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    26,
+    21,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "Download `miu-1.0.1-windows-x64.zip` from Releases, extract it into a writable folder, and double-click **Start Miu.cmd**. Keep its folders together. Windows with .NET Framework 4.8 is required; Windows 11 x64 and 8 GB RAM are recommended. The executable is currently unsigned. Releases include SHA-256 checksums."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "The ready-to-use download includes Gemma, offline English recognition and the natural English voice. No setup scripts or separate AI downloads are needed. Allow about 3 GB free space for the ZIP and extraction. Dependency licenses and speech sources travel with the download; see speech bundle details. Developer/CI archives omit downloaded runtimes and are not the end-user bundle."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    42,
+    29,
+    42
+   ],
+   [
+    "replace",
+    42,
+    52,
+    42,
+    52,
+    [
+     "|Feature|Example|Connection|",
+     "|---|---|---|",
+     "|Local facts|“What time is it?”, “Check my battery”|None|",
+     "|Open supported apps|“Open calculator”, “Open downloads”|None|",
+     "|Notes and volume|“Take a note buy milk”, “Volume down”|None|",
+     "|Expressive companion|“Look playful”, “Show reactions”|None|",
+     "|Voice conversation|One spoken turn at a time|Included offline Windows speech|",
+     "|Read and search Gmail|“Latest email”, “Emails from Alex”|Your Google Desktop OAuth setup|",
+     "|Open-ended AI chat|Ask a general question|Included Gemma 3, offline|",
+     "|Community presets|Load curated companion profiles|Optional Neon-backed catalog|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    52,
+    53
+   ],
+   [
+    "replace",
+    53,
+    54,
+    53,
+    54,
+    [
+     "See the command guide. Commands use an explicit allowlist. Neither model replies, email text, nor downloaded presets can execute arbitrary commands."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    59,
+    54,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     "Follow Gmail setup, import your own Google Desktop OAuth JSON, and sign in. Only `gmail.readonly` is requested. Miu does not send, delete, or mark messages read. Gmail results are processed locally and are not added to AI conversation context. A shared public OAuth client has additional Google verification requirements; the release does not ship the maintainer's credentials."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    60,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     "Offline Gemma 3 chat is enabled by default. The small model can make mistakes; see measurements, limits and resource requirements. Its output cannot execute commands. To use optional Gemini instead, explicitly turn Offline AI off and cloud chat on. Gemini sends your chat text and bounded context to Google, requires your own eligible API project, and has provider quotas and terms. Miu cannot verify your project's billing status."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    64,
+    65
+   ],
+   [
+    "replace",
+    65,
+    66,
+    65,
+    66,
+    [
+     "Use **Settings** to configure a key and model. Consult Gemini pricing, terms, and privacy details before enabling it. No API key is included in a release."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    69,
+    66,
+    69
+   ],
+   [
+    "replace",
+    69,
+    70,
+    69,
+    70,
+    [
+     "The optional service in services/catalog stores curated presets in **Neon Postgres** and exposes a small read-only API through a **Cloudflare Worker**. Profiles such as Focus and Cheerful contain only a known face, speaking speed, and reduced-motion preference."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    77,
+    70,
+    77
+   ],
+   [
+    "replace",
+    77,
+    78,
+    77,
+    78,
+    [
+     "Three built-in profiles work offline. The public Miu catalog is live with six curated profiles. To try it, open **Companion presets → Community catalog**, paste this address, and click **Load community presets**:"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    89,
+    78,
+    89
+   ],
+   [
+    "replace",
+    89,
+    90,
+    89,
+    90,
+    [
+     "The language model loads only while answering. CPU benchmarks measured about 0.91 GiB for its Windows process and 1.29 GiB RSS on the tested Android phone, in addition to UI and speech memory. The small native UI stays available between turns without retaining that model process. These are sample measurements, not fixed limits; the UI memory figure excludes helper processes. See the benchmark record."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    90,
+    91
+   ],
+   [
+    "replace",
+    91,
+    92,
+    91,
+    92,
+    [
+     "Vosk loads for each listening turn; Piper loads to generate each spoken reply. Both exit when finished. Chat stays in memory for the session. Notes and Windows-encrypted account secrets stay in `%LOCALAPPDATA%\\Miu`. No app telemetry or automatic mail polling is implemented. See PRIVACY.md for optional network services and data removal."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    107,
+    92,
+    107
+   ],
+   [
+    "replace",
+    107,
+    108,
+    107,
+    108,
+    [
+     "Public packages use explicit file allowlists and include SHA-256 checksums. Local configuration, accounts and credentials are excluded. The ready-to-use downloads include verified model/runtime files; the source ZIP and CI artifacts omit them. Read release instructions before distributing a build. Microphone compatibility and optional hosted services need their own checks."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    111,
+    108,
+    111
+   ],
+   [
+    "replace",
+    111,
+    112,
+    111,
+    112,
+    [
+     "Start with CONTRIBUTING.md. Bug reports, documentation improvements, accessibility feedback, and reproducible speech issues are welcome. Use SUPPORT.md for help and SECURITY.md for private vulnerability reports. See the code of conduct, governance, and changelog."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    112,
+    113
+   ],
+   [
+    "replace",
+    113,
+    114,
+    113,
+    114,
+    [
+     "Miu is an independent project maintained by its repository owner and contributors. Original Miu source is under the MIT license; upstream components retain their own licenses. It is not affiliated with the services it optionally connects to."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    114,
+    115
+   ],
+   [
+    "replace",
+    115,
+    116,
+    115,
+    116,
+    [
+     "The Neon sponsorship preparation notes describe eligibility and the remaining application steps. Neon does not require a project to use its database to apply. No sponsorship or funding is currently claimed."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

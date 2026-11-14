@@ -3458,5 +3458,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cdc14a1fb780": {
+  "identity": {
+   "one_liner": "面向 AI 代理的本地优先持久记忆层，以 MCP 服务器形式提供语义检索与跨代理共享。",
+   "review": "Mnemo Cortex 是一个以 MCP 服务器运行的本地记忆系统，为 AI 代理提供跨会话持久存储、语义检索和代理间消息传递。保存时将内容分为两级：经分类的精炼笔记（Tier 1）与原始会话日志（Tier 2），默认召回仅返回前者。提供加密 USB 同步、防篡改账本、结构化事实存储等模块。支持 Claude、ChatGPT（经网关）及本地 MCP 客户端。",
+   "highlights": [
+    "以 MCP 服务器与 REST 接口暴露能力，支持 stdio 传输的本地客户端，ChatGPT 通过带鉴权与限流的网关接入",
+    "保存时由推理模型将记忆分类为八类精炼笔记，原始日志单独归档且默认不参与召回，模型不可用时回退到正则标记",
+    "包含夜间整合、SQLite FTS5 文件索引、代理间消息、AES-256 加密 USB 同步与防篡改记忆账本等模块"
+   ],
+   "use_cases": [
+    "为 Claude Code、Claude Desktop、LM Studio 等本地 MCP 客户端提供跨会话持久记忆",
+    "多代理协作场景下通过代理间消息与夜间整合共享上下文",
+    "需要本地运行、不依赖云端的记忆存储与语义检索部署"
+   ]
+  },
+  "sha": "cdc14a1fb780",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1c605cc2016b": {
+  "identity": {
+   "one_liner": "通过 MCP 由编码代理驱动的自治后端平台，内置 PostgreSQL、REST API 与治理回滚",
+   "review": "Backenly 是一个后端平台，开发者通过编码代理（Claude Code、Cursor、Codex）经 MCP 服务器操作，代理以自然语言描述需求，平台由 LLM 规划器推导数据模型、生成端点并通过统一的 executeAction 内核执行、验证与回滚，再由 MAPE-K 循环监测修复漂移。每个项目独享 PostgreSQL schema，经 PostgREST 提供 API。支持云托管与自托管（npm run selfhost），结构变更有 dry-run、审计与 History 回滚。",
+   "highlights": [
+    "MCP 服务器提供 20 个工具及 backenly://state 等资源，代理可读取状态、执行迁移、管理 auth/storage/realtime/functions",
+    "所有结构变更经由带 dry-run、审计与回滚的类型化 executeAction 内核，无原始 SQL 修改路径；读取为标准 SQL，支持 pg_dump 导出",
+    "多租户按项目分 PostgreSQL schema，隔离由 grants 与 RLS 强制；MAPE-K 循环自动修复安全范围内的漂移、缺失索引与 RLS 缺口"
+   ],
+   "use_cases": [
+    "通过编码代理以自然语言构建和维护带数据库、认证、实时订阅的应用后端",
+    "自托管场景需要带审计、回滚与分项目 schema 隔离的 PostgREST 后端",
+    "团队让 AI 代理执行结构变更但要求风险操作（auth、破坏性变更）经人工审批的流程"
+   ]
+  },
+  "sha": "1c605cc2016b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

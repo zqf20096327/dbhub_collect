@@ -3004,5 +3004,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bba052fc3cbd": {
+  "identity": {
+   "one_liner": "本地媒体库整理工具，感知哈希去重+端侧AI分类",
+   "review": "Clean-Backup 用于本地整理照片/视频库：用基于 DCT 的感知哈希（Rust+Rayon 并行）检测缩放、重压缩后的视觉重复文件，按 EXIF 日期归档，并通过 ONNX Runtime 在端侧做场景分类与人脸检测识别。前端为 React+Flask，打包为单 Docker 镜像运行。适合需要在本地管理分散重复媒体文件的个人用户。注意 Web UI 无登录、默认仅绑定 127.0.0.1，媒体目录以读写方式挂载。",
+   "highlights": [
+    "基于感知哈希的重复检测，可识别缩放、重压缩、格式转换后的重复图像，阈值可调（0 到 10+ 汉明距离）",
+    "端侧 ONNX 推理：MobileNetV2 场景分类（15 类）、YuNet 人脸检测、ArcFace 人脸识别，无需云 API",
+    "操作日志化撤销：整理、分类、Trash 操作记录于 append-only journal，可按会话回滚；支持 Google Drive 增量同步与 watchdog 监控目录流水线"
+   ],
+   "use_cases": [
+    "整理跨设备积累、存在大量视觉重复文件的本地照片库",
+    "需要按日期归档并做场景/人脸分类、且要求全程本地处理的媒体管理",
+    "通过 drop 文件夹自动触发分类-归档-去重-同步流水线的媒体入库流程"
+   ]
+  },
+  "sha": "bba052fc3cbd",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1704ebf46f7d": {
+  "identity": {
+   "one_liner": "为 AI 编码代理提供的自托管 SaaS 替代品 .plan.md 蓝图集",
+   "review": "该仓库提供一套 .plan.md 架构规格与 PostgreSQL DDL，用于配合 Claude Code、Cursor、Windsurf 或 Devin 生成 Harvest、Calendly、Typeform 等五类 SaaS 工具的自托管替代实现。每个蓝图采用 schema 优先、200 行文件上限和两阶段 Vitest 验证的流程组织代码生成，根目录另附 CLAUDE.md 与 .cursorrules 通用约束文件，MIT 许可。",
+   "highlights": [
+    "包含五个蓝图目录，对应时间追踪、预约、表单、流程图画布与数字销售引擎，附 PostgreSQL DDL 与实现阶段划分",
+    "强制 schema 优先 PostgreSQL DDL、单文件不超过 200 行、每阶段后执行两道 Vitest 验证门",
+    "提供可放入任意仓库的 CLAUDE.md 与 .cursorrules 守护文件，覆盖计划模式、文件行数上限与密钥隔离"
+   ],
+   "use_cases": [
+    "用 Claude Code 或 Cursor 按蓝图分阶段生成自托管的时间追踪/预约/表单等应用",
+    "在现有 AI 生成项目中引入统一的规划模式与测试门禁约束",
+    "参考蓝图中并发锁、UTC 时间、整数分计费等具体工程问题处理方式"
+   ]
+  },
+  "sha": "1704ebf46f7d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2750,5 +2750,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "24dde9cd3f30": {
+  "identity": {
+   "one_liner": "Quail 是基于 Apache DataFusion 扩展的 SQL 推理引擎，在 GPU 上运行 AI 函数。",
+   "review": "Quail 允许在 SQL 查询中调用 AI 函数（如 AI.IF、AI.CLASSIFY），将行的文本发送给模型并返回结果。它作为 DataFusion 扩展解析、规划和执行 SQL，模型在用户自己的 CUDA GPU 上运行，使用 Python 3.12 通过 quail-engine 包安装，也可通过 Quail Server 在远程 GPU 上执行查询，或从 Rust 调用。适用于需要在数据库查询中集成大模型处理的场景。",
+   "highlights": [
+    "提供 AI.IF、AI.SCORE、AI.CLASSIFY、AI.EXTRACT、AI.MAP 等 AI 函数，在 SQL 过滤、连接等操作中调用模型",
+    "作为 Apache DataFusion 扩展实现，支持 Python（quail-engine 包）和 Rust（quail crate）两种调用方式",
+    "支持 Quail Server 在远程 GPU 上运行查询，客户端断开后查询继续执行"
+   ],
+   "use_cases": [
+    "对包含文本、评论等非结构化数据的表执行模型驱动的过滤、分类、抽取查询",
+    "在本机 CUDA GPU 或远程 GPU 服务器上运行模型推理，无云服务依赖",
+    "在已有 DataFusion 会话的 Rust 程序中添加 AI 函数能力"
+   ]
+  },
+  "sha": "24dde9cd3f30",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b4597e8e6afe": {
+  "identity": {
+   "one_liner": "面向 Prisma + PostgreSQL 的 Vitest 测试环境，以事务回滚实现测试隔离。",
+   "review": "这是一个 Vitest 自定义测试环境，用于针对真实 PostgreSQL 实例运行 Prisma 集成测试。核心机制是：每次测试运行开始时迁移并种子一次数据库，每个测试包裹在独立数据库事务中，测试结束后自动回滚。适用于使用 Prisma 7.x 与 Vitest 4.1+ 的 Node.js 项目（需 Node.js 22+）。需注意不支持 vmThreads 池，且数据库测试不可并发。",
+   "highlights": [
+    "每次测试运行只需种子一次数据库，测试在独立事务中运行并在结束后自动回滚",
+    "应用层事务可正常工作，测试相互隔离且与执行顺序无关",
+    "支持自定义 Prisma client 工厂与扩展，可配合本地、Docker、Testcontainers 或云端 PostgreSQL 实例"
+   ],
+   "use_cases": [
+    "为使用 Prisma 的 Node.js 后端编写针对真实 PostgreSQL 的集成测试",
+    "替换每个测试前重新种子数据库的慢速测试流程",
+    "在 CI（Node.js 22/24/26）中运行数据库集成测试"
+   ]
+  },
+  "sha": "b4597e8e6afe",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "521aa458ea20": {
+  "identity": {
+   "one_liner": "本地自托管的墙面触屏家庭中心，单 SQLite 文件存储，可运行于树莓派",
+   "review": "Lucarne 是一个面向壁挂式 1920×1080 触摸屏（树莓派 5 或小型 Linux PC）的自托管家庭中心应用，提供共享日历、家务与奖励、习惯打卡、膳食计划、购物清单、儿童画板和照片屏保。家庭数据存储在本机单个 SQLite 文件中，同一 Wi-Fi 下的手机可获得伴侣页面。项目处于早期活跃开发阶段，功能包含粗糙边缘；部分功能（Magic Import、地点搜索）需另行配置 Gemini 或 Google Maps 密钥。",
+   "highlights": [
+    "提供 5 天/周/月/个人列四种日历视图，支持多 Google 账户双向增量同步（每 90 秒）及 .ics/webcal 只读订阅",
+    "包含家务、流程清单、习惯打卡与星星奖励系统，附面向不识字儿童的大图标 Kid Mode",
+    "提供按商店货架排序的购物清单、每周膳食计划器、无广告食谱 URL 导入及全屏 Cook Mode"
+   ],
+   "use_cases": [
+    "用树莓派驱动壁挂触摸屏，作为家庭共享日历与事务看板",
+    "替代订阅制家庭日历设备，自托管存储家人日程、家务与奖励数据",
+    "为家庭墙面展示照片相册并叠加今日日程、天气与出门提示摘要"
+   ]
+  },
+  "sha": "521aa458ea20",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

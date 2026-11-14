@@ -3314,5 +3314,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "624ebb1ac02a": {
+  "identity": {
+   "one_liner": "从表格数据生成并校验 ISO 20022 支付文件的 Python 工具",
+   "review": "Pain001 是一个 Python 库和 CLI 工具，用于从 CSV、SQLite、JSON、JSONL、Parquet 等输入生成 pain.001（v03–v13）和 pain.008 XML 文件，并在写入前依据内置 XSD 及 scheme 规则校验。它还提供 pain.002/camt.053 解析与合成构建、REST API、MCP 和 LSP 服务。README 明确其不做真实清算、不保证银行受理，插件以进程权限运行且无沙箱，项目由一名维护者维护。",
+   "highlights": [
+    "支持从 CSV、SQLite、JSON、JSONL、Parquet 及插件格式生成 pain.001.001.03–13 和 pain.008.001.02/.08 XML，写入前按内置 XSD 校验",
+    "提供 CLI、REST API、MCP 服务器和 LSP 服务器，可解析 pain.002 状态报告与 camt.053 对账单，并生成用于测试的合成报文",
+    "支持 SFTP 上传、XML-DSig 签名、CEL 规则校验、asyncio 适配器及流式生成（逐块重算控制总额），可经 openapi.json 生成类型化客户端"
+   ],
+   "use_cases": [
+    "从业务系统导出的表格数据批量生成符合 XSD 的银行付款或直接借记文件",
+    "在 CI、pre-commit hook 或编辑器（经 LSP）中对既有支付文件做 XSD 与 scheme 规则校验",
+    "通过 MCP 服务器向 Agent 暴露支付数据生成与 review-only 修正建议工具，或集成测试中用 mockbank 生成合成 pain.002 回报"
+   ]
+  },
+  "sha": "624ebb1ac02a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c09cd333cd4": {
+  "identity": {
+   "one_liner": "在 VS Code 中管理和查询 Weaviate 向量数据库的扩展，内置 GraphQL 编辑器",
+   "review": "Weaviate Studio 是一款 VS Code 扩展，用于连接、管理和查询 Weaviate 向量数据库，支持自托管与云实例。功能包含多连接管理、Data Explorer 数据浏览（过滤、四种向量搜索、导入导出）、Monaco GraphQL 编辑器、RBAC 用户/角色管理、只读模式、备份恢复及集群监控。可通过 Marketplace、Open VSX 或 VSIX 安装；沙箱环境经 Docker Compose 启动，查询性能分析要求 Weaviate ≥ 1.36.9，MMR 多样化要求 ≥ 1.39。",
+   "highlights": [
+    "提供 Data Explorer，支持文本/对象/向量/混合四种向量搜索模式、10+ 过滤算子、JSON/CSV 导入导出与只读连接保护",
+    "基于 Monaco 实现 schema 感知的 GraphQL 编辑器，包含模板生成、自动补全与实时校验",
+    "支持 RBAC 用户/角色/组管理、API key 轮换、凭据经 VS Code secret storage 存储及跨文件系统/S3/GCS/Azure 的备份恢复"
+   ],
+   "use_cases": [
+    "开发者在 VS Code 内直接浏览、编辑和导出 Weaviate 集合数据而无需切换浏览器",
+    "运维人员监控集群健康状态、管理用户权限并执行备份与恢复",
+    "通过内置 Docker 沙箱学习 Weaviate，并使用生成式搜索界面测试 RAG 查询"
+   ]
+  },
+  "sha": "0c09cd333cd4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c54ec827a1d8": {
+  "identity": {
+   "one_liner": "自托管的 Git 原生 Obsidian 同步服务器，单二进制加 SQLite 实现",
+   "review": "PKV Sync 是一个部署在自有服务器上的 Obsidian 仓库同步服务，每个 vault 对应一个裸 git 仓库作为数据源，元数据存于 SQLite，附件以内容寻址 blob 存储。面向需要跨手机、平板、桌面同步笔记并自行管理数据的用户。通过 Docker Compose 部署，配合官方 Obsidian 插件使用；当前版本不含端到端加密，服务器可读取 vault 内容，E2EE 列为 1.x 路线图计划。",
+   "highlights": [
+    "支持多用户多仓库同步，基于 Server-Sent Events 实现实时推送，并以轮询作为兜底；冲突以 .conflict-* 文件呈现并提供一键解决器",
+    "每个 vault 为裸 git 仓库，提供单文件历史、统一 diff 和单文件恢复，插件与管理面板内均可使用",
+    "通过 MCP 协议暴露读写工具，支持 stdio 与内嵌 /mcp 路由，提供按 frontmatter 检索、链接 lint、dry run 写入等面向 AI 代理的能力"
+   ],
+   "use_cases": [
+    "在自有服务器上同步 Obsidian vault，覆盖手机、平板、桌面多设备场景",
+    "利用 git 历史进行单文件版本回溯、diff 查看与恢复",
+    "通过 MCP 让本地 AI 工具读写并检索 vault，构建由 LLM 维护的 wiki 工作流"
+   ]
+  },
+  "sha": "c54ec827a1d8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
