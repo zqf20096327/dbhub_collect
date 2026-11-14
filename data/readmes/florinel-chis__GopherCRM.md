@@ -85,12 +85,12 @@ Three things catch most first runs from source (`cp .env.example .env`, then `go
 - 🏭 **Companies**: Organisation records that leads and customers link to, with domain de-duplication and per-company customer and lead views
 - 💼 **Deals**: Sales opportunities with a five-stage pipeline, integer money per currency, per-stage probabilities and an append-only stage history
 - 🧾 **Products & Quotes**: A product catalogue and quotes on deals and customers, with lines that copy the catalogue price, server-computed totals, a draft → sent → accepted/rejected/expired lifecycle with history, and a plaintext quote email; the UI has the products list and admin form, the quotes list and detail with draft-only line editing and status actions, an email confirmation, a print page and a Quotes section on each deal
-- ⏱️ **Follow-up Automation**: Admin-defined rules that start on lead, deal or ticket events (ticket rules are API-only until a later frontend change), or on a daily UTC schedule, and run ordered steps — wait, condition, create task, assign owner, staff email, in-app notification — as persisted runs that survive a restart, with a dry run that writes, sends and notifies nothing; the UI has the admin rule list and form with a dry-run dialog, the run list and detail (admin and sales, with an admin cancel), Automation sections on lead and deal pages, and a notification bell and page for staff ([screenshots](docs/SCREENSHOTS.md#follow-up-automation))
+- ⏱️ **Follow-up Automation**: Admin-defined rules that start on lead, deal or ticket events, or on a daily UTC schedule, and run ordered steps — wait, condition, create task, assign owner, staff email, in-app notification — as persisted runs that survive a restart, with a dry run that writes, sends and notifies nothing; the UI has the admin rule list and form with a dry-run dialog, the run list and detail (admin and sales, with an admin cancel), Automation sections on lead and deal pages, and a notification bell and page for staff ([screenshots](docs/SCREENSHOTS.md#follow-up-automation))
 - 🎫 **Ticket System**: Support ticket management with assignments
 - ✅ **Task Management**: Task tracking and assignment
 - ⚙️ **Configuration Management**: System-wide settings with admin interface
 - 🔎 **Answer Engine Optimization (AEO)**: Track how often LLM answer engines mention your brand — daily runs across Anthropic, OpenAI, Gemini, Kimi, Perplexity and any OpenAI-compatible endpoint, with visibility, share-of-voice and citation reporting
-- 📝 **Forms**: Build contact, quote-request and lead-capture forms in the CRM and embed them on any website with one script tag — submissions land in the CRM, create leads, and can require double opt-in email confirmation before delivering gated content; layered spam protection (honeypot, time trap, rate limits, optional invisible reCAPTCHA v3)
+- 📝 **Forms**: Build contact, quote-request and lead-capture forms in the CRM and embed them on any website with one script tag — submissions land in the CRM, create leads, and can require double opt-in email confirmation before delivering gated content; layered spam protection (honeypot, time trap, rate limits, optional invisible reCAPTCHA v3). A double opt-in form can instead open a support ticket for the customer whose email matches the confirmed address (fixed ticket text, no submitted value), deduplicated by an `idempotency_key` that API clients send with the submission (the hosted view and embed script do not send one yet)
 - 🎨 **Modern UI**: React TypeScript frontend with Material-UI
 - 📊 **Dashboard**: Analytics and activity overview
 - 👤 **Role-Based Access**: Admin, Sales, Support, and Customer roles
@@ -370,6 +370,12 @@ prompt needs admin.
    competitors and their trend, over 7, 30 or 90 days.
 4. **Citations** (`/aeo/citations`) — how often each company's domains are cited, and how often a
    citation coincides with a brand mention.
+5. **Export** — the dashboard's **Export CSV** / **Export JSON** buttons download the selected 7,
+   30 or 90-day window, and the answer drawer's **Export run as CSV** / **Export run as JSON**
+   buttons download the run picked in its run filter (every prompt of that run). Both call
+   `GET /api/v1/aeo/export` (`run_id` or `days`), which integrations can use directly: CSV (one
+   row per citation, formula-guarded cells) or JSON (with the full answer text), for client
+   reporting. Admin, sales and support; at most 10,000 answers per file.
 
 ![AEO answer drawer](docs/img/gophercrm-aeo-answers.png)
 
@@ -428,10 +434,11 @@ tick that finds no profile, key or active prompt is logged once and skipped unti
 answers 503 `SHUTTING_DOWN`), cancels the scheduler and every run in flight, waits for them to
 finalize, and only then closes the database. An interrupted run ends `failed`, or `partial` when
 some answers were already recorded; queries cut short count as failed and are not stored as
-answers. A failed finalizing write leaves its row for startup reconciliation even if the
+answers. A failed finalizing write leaves its row for recovery even if the
 work drains successfully. The AEO drain waits at most 15 seconds. If a provider call or database write still has not
 released by then, the process exits without closing the database and the run row left in
-`running` is failed by the next start's reconciliation, exactly as after a crash.
+`running` is failed once its heartbeat is older than 3 minutes, by the next boot or start on any
+replica, exactly as after a crash (see *Known Limitations*).
 
 Prompt generation (`POST /aeo/prompts/generate`) deliberately runs on one named engine rather than
 whatever happens to be configured, so its output keeps a consistent shape. Anthropic is the default;
@@ -822,6 +829,12 @@ expired, or if its owner has been deactivated or erased.
   `won_this_month` (count and amounts per currency of the deals won in the current calendar month,
   UTC) *(admin sees all deals, sales its own; support and customer get 403 — no deal access)*
 
+### AEO *(entire group requires admin, sales or support; the profile, prompt and run routes are in the [API reference](api/index.html))*
+- `GET /api/v1/aeo/export?format=csv|json&run_id=<id>|days=7|30|90` - Download one run's answers
+  and citations, or a window's (default 30 days), as a CSV (one row per citation, no answer text)
+  or JSON (runs, answers with their text and citations) attachment; at most 10,000 answers, a
+  larger selection is 422 `EXPORT_TOO_LARGE`; an invalid parameter or `run_id` with `days` is 400
+
 ### Automation *(rules and dry run: admin; runs: admin and sales, sales narrowed to the leads and deals it owns; support and customer get 403)*
 - `GET /api/v1/automation/rules` - List rules with their steps (`entity_type`, `enabled`, `sort_by` in
   `id, name, entity_type, trigger_type, enabled, version, created_at, updated_at`, anything else is
@@ -1014,13 +1027,25 @@ gophercrm/
   admin and sales retry a failed, log-only or stuck one with
   `POST /api/v1/forms/deliveries/{id}/retry`. Nothing retries automatically, and `sent` means the
   relay accepted the message: bounces are not tracked.
-- **The automation worker assumes a single API replica.** Runs are claimed by conditional updates
-  and recovered only at boot of the worker process (`AUTOMATION_ENABLED`, see `.env.example`);
-  there is no lease timeout, so a run left `running` by a crashed worker is handed back only
-  when that process restarts. Enable the worker on exactly one instance: a replica started with
-  `AUTOMATION_ENABLED=false` serves the API and records events but neither executes runs nor
-  reconciles them at boot, so it leaves the worker replica's runs alone. Processed events and
-  finished runs are kept; there is no retention pruning yet.
+- **The automation worker is replica-safe on MySQL/MariaDB, with conditions.** Every replica with
+  `AUTOMATION_ENABLED=true` (see `.env.example`) may run the worker against one shared database
+  (#237): each run claim carries the replica's instance id and a heartbeat lease, every later
+  write is fenced on that owner, and a run whose lease is older than 3 minutes (a crashed or
+  paused worker) is recovered by the next tick of any worker, without a restart. A replica with
+  the worker off serves the API and records events but neither executes nor recovers runs.
+  Replica clocks must agree to well under 90 seconds, and an upgrade stops every replica before
+  starting the new version (an older binary resets live runs at boot). Several processes on one
+  SQLite file are still not supported. An email whose worker paused between its final owner check
+  and the relay call can still go out once after another worker recorded it `email_unconfirmed`;
+  it is never resent. Processed events and finished runs are kept; there is no retention pruning
+  yet.
+- **AEO is replica-safe on MySQL/MariaDB, with conditions.** One AEO run is admitted across every
+  replica sharing the database and the daily scheduled run starts once per slot (#229). A run of a
+  crashed or killed process is recovered up to 3 minutes after the crash, at the next boot or start
+  attempt; until then a manual run answers 409. Every replica must use the same `TZ` and
+  `AEO_SCHEDULE_HOUR`, replica clocks must be synchronised to well under 90 seconds, and an
+  upgrade stops every replica before starting the new version (mixed versions are not supported).
+  Several processes on one SQLite file are not supported.
 - **CSRF middleware is not wired.** `internal/middleware/csrf.go` implements HMAC-SHA256 tokens with
   a 24h expiry and is unit-tested, but `cmd/main.go` never installs it, so no route currently
   requires a CSRF token.

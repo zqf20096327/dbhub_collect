@@ -2,7 +2,7 @@
 
 Tidbytr runs a custom app on a **Tidbyt Gen 2 with stock firmware**, alongside Store apps. A local TypeScript server and Home Assistant add-on render clock, U.S. National Weather Service forecasts/alerts, and favorite-team sports scores, then push the selected screen through the Tidbyt API.
 
-By default, a 30-second clock separates 15-second weather, baby-age, and star-flight screens. Critical warnings/watches can interrupt. Quiet hours, snooze, and manual controls remain available. Priority scheduling is an alternative mode for event-driven weather/sports and background coexistence with Store apps. These rules govern Tidbytr's selections; device/cloud latency and other installed apps can affect physical display time.
+By default, a 30-second clock separates 15-second weather, baby-age, and star-flight screens. Critical warnings/watches can interrupt. Quiet hours, snooze, and manual controls remain available. Upcoming games join the clock-led rotation, and live games pause it. Priority scheduling is available for background coexistence with Store apps. These rules govern Tidbytr's selections; device/cloud latency and other installed apps can affect physical display time.
 
 ## Install and configure
 
@@ -22,8 +22,7 @@ You need a Gen 2 configured in the Tidbyt mobile app, its device ID/API key, Int
    nws_contact: "Tidbytr (you@example.com)"
    favorite_teams:
      - KC
-   baby_birth_date: ""
-   baby_name: ""
+   children: []
    starfield_enabled: true
    schedule_mode: clock-cycle
    clock_seconds: 30
@@ -35,16 +34,16 @@ You need a Gen 2 configured in the Tidbyt mobile app, its device ID/API key, Int
    quiet_hours_end: ""
    ```
 
-   Replace the credentials, location, timezone, and contact. Favorite teams accept abbreviations or full names from the NFL, NBA, MLB, and NHL; use `[]` to disable sports. Set both quiet-hour fields (for example `22:00` and `06:00`) to enable quiet hours.
+   Replace the credentials, location, timezone, and contact. Open **Screens → Sports → Favorite teams** to select college teams. Pro favorites accept NFL, NBA, MLB, and NHL abbreviations or full names. Use the sports switches to pause upcoming, live, or final screens while keeping your teams. Set both quiet-hour fields (for example `22:00` and `06:00`) to enable quiet hours.
 4. Save and start the add-on. Use **Open Web UI** through Home Assistant Ingress. Enable Start on boot if desired.
 5. Check cloud delivery reports **Accepted**, then check the physical device. Keep `installation_id` unchanged to update the same app. Other apps stay managed in the Tidbyt mobile app.
 
-API acceptance confirms a server response, not physical display. Outbound HTTPS is required to `api.tidbyt.com`, `api.weather.gov`, and `site.api.espn.com` (when sports are enabled).
+API acceptance confirms a server response, not physical display. Outbound HTTPS is required to `api.tidbyt.com` and `api.weather.gov`. Sports use `site.api.espn.com` for scores and `a.espncdn.com` for team logos.
 
 ## Upgrade from 0.5 / HDK
 
 1. Back up the existing add-on and note its settings. If you flashed HDK, restore production firmware using [HDK's Back to Normal instructions](https://github.com/tidbyt/hdk#back-to-normal) for Gen 2. If already on stock firmware, no firmware change is needed. This server does not flash the device.
-2. Refresh/check for updates in the HA Add-on Store and update Tidbytr to **0.8.1**. HA builds from the versioned `tidbytr/source.tar.gz` bundle.
+2. Refresh/check for updates in the HA Add-on Store and update Tidbytr to **0.11.0**. HA builds from the versioned `tidbytr/source.tar.gz` bundle.
 3. Enter `tidbyt_api_token` and `tidbyt_device_id`, keeping your location, timezone, teams, and quiet hours.
 4. Remove the obsolete `display_base_url` option and any retained port 8788 mapping. Save and restart. The old `/current.webp` firmware feed is no longer served.
 5. Open the dashboard, check API acceptance, then try Show now and observe the actual device and animated weather app.
@@ -53,7 +52,7 @@ Saved screen priorities, provider caches, and ordinary settings are retained. No
 
 ## Dashboard and troubleshooting
 
-The dashboard separates the last API-accepted screen from the selected preview and next candidate. Show now requests immediate display and a one-minute Tidbytr selection hold; critical alerts can take precedence. Skip and Snooze immediately select replacement Tidbytr content. These actions do not suspend the device's other apps.
+**Display** separates the last image accepted by the Tidbyt API from the scheduler's prediction and your local preview. **Show on Tidbyt** requests immediate display with a one-minute hold. **Skip current** acts on the last sent screen. Enabled weather alerts can interrupt the hold. **Screens** has independent switches for clock, baby age, star flight, forecast, weather alerts, upcoming games, live scores, and finals. Child profiles and favorite teams stay saved when you turn a screen off. **Settings** contains rotation and quiet hours. **Diagnostics** shows delivery, source health, and activity.
 
 | Symptom | Check |
 | --- | --- |
@@ -80,7 +79,23 @@ Open **Rotation** in the dashboard to choose a mode and adjust durations. The de
 | Clock | 30 seconds |
 | Star flight | 15 seconds |
 
-Then repeat. Clock occupies two-thirds of the default 2-minute, 15-second cycle. Disabled/unavailable screens are skipped; no eligible screens means clock continues. Each cycle item gets a turn regardless of the priority-mode cooldown settings. Ordinary sports/advisories are not inserted into this three-screen cycle; choose Priority scheduling to include them.
+When a favorite-team game is available, the cycle adds a 30-second clock slot followed by 15 seconds of sports. Multiple games take turns. Disabled or unavailable screens are skipped. Ordinary weather advisories appear in Priority mode.
+
+### Favorite teams
+
+Use **Favorite teams** in the dashboard, or set these values under `favorite_teams` in the add-on configuration. Use the dashboard for changes after it has saved settings.
+
+```yaml
+favorite_teams:
+  - nebraska-football
+  - nebraska-volleyball
+  - nebraska-mens-basketball
+  - iowa-state-football
+  - iowa-state-mens-basketball
+  - kansas-mens-basketball
+```
+
+Upcoming games show the sport and local start time, switching to a countdown in the final hour. Each team row shows the overall season record and any top-25 ranking ESPN supplies. Live games pause the regular rotation until play ends. If games overlap, their scoreboards take turns. Final scores rejoin the regular rotation for an hour. ESPN is checked every 30 seconds during live games. As soon as Tidbytr detects a changed score, it requests immediate display, including when that game is already on screen. Sports screens put the away team above the home team, with a logo and abbreviation on the left and the score on the right. Live volleyball displays current-set points in large numbers and sets won beneath each team abbreviation. Volleyball finals display sets won as the final score. Logos load in the background, with a team-colored abbreviation while artwork is unavailable. The team rows draw inspiration from the [NCAAB Scores app in Tidbyt's community repository](https://github.com/tidbyt/community/tree/main/apps/ncaabscores). Critical weather alerts and manual holds take precedence, and score updates respect quiet hours and snooze.
 
 Critical warnings/watches interrupt immediately. After an alert clears, a full clock interval precedes the next pending cycle item. Show now overrides with its selection hold; Skip returns to clock and advances to the following item; Snooze/quiet hours allow clock and critical alerts. Render failures publish a degraded clock and skip that item for this round after successful delivery. Failed uploads do not advance the cycle. Cursor state persists across restarts.
 
@@ -90,13 +105,27 @@ The HA baseline options are `schedule_mode` (`clock-cycle` or `priority`), `cloc
 
 ## Clock, baby age, and star flight
 
-The clock uses **12-hour time with AM/PM**, without a leading zero, in your configured timezone.
+The 12-hour clock uses white time above a thin red divider and a centered white date below it.
 
-Open **Personal screens** in the dashboard to set a birth date and optional name, and to enable/disable Star flight. Save personal screens to apply changes immediately. The baby screen stays hidden until a valid, non-future birth date is configured. It shows calendar months/days (then years/months) plus weeks or remaining days. Month-end and leap-day anniversaries clamp to the final day of that month. It is based on your timezone's calendar date, including across daylight-saving changes.
+Under **Screens → Everyday → Child profiles**, use **Add child** for each child, enter their name and birth date, then choose **Boy · Blue**, **Girl · Pink**, or **Neutral · Green** and save. Switch off **Baby age** to hide age screens and keep all profiles. Names are abbreviated only on the display; full names remain in settings. Future birth dates are hidden until that local date. Up to 20 children are supported.
 
-The equivalent HA options are `baby_birth_date` (`YYYY-MM-DD`, empty disables), `baby_name` (optional), and `starfield_enabled` (default true). As with other ordinary settings, dashboard saves take ownership after a save; make later edits there. Personal data is entered in HA or the dashboard; repository samples use synthetic dates.
+In clock-led mode, one child appears in each age slot, alternating across rounds: weather → first child → stars, then weather → second child → stars, with a 30-second clock between each 15-second screen. Age uses calendar months/days in the configured timezone, including month-end and leap-year anniversaries.
 
-Star flight is a smooth four-second animated loop of stars moving outward from a distant center, with subtle perspective streaks. Baby age and Star flight share the Personal & ambient source toggle. Both respect quiet hours and snooze; critical alerts retain precedence. In priority mode, their priorities/cooldowns are editable in Screen priorities (defaults: baby 25 / 600 seconds, stars 10 / 300 seconds). In clock-led mode, Rotation controls their slot durations.
+HA baseline configuration supports a `children` list (synthetic example):
+
+```yaml
+children:
+  - name: Sample One
+    birth_date: "2026-03-18"
+    style: boy
+  - name: Sample Two
+    birth_date: "2024-02-29"
+    style: girl
+```
+
+HA child IDs are optional; the dashboard assigns and preserves IDs automatically. Existing `baby_birth_date`/`baby_name` settings remain supported until saved as a list in the dashboard. Dashboard saves take ownership of ordinary settings; make later edits there. To clear legacy settings using HA, clear the old birth-date field as well as the list. Personal data belongs in HA/dashboard settings; repository fixtures use synthetic dates.
+
+Star flight is a smooth four-second loop at 20 frames per second, with 64 stars accelerating outward and longer speed-linked streaks. Most stars cross the scene three times per loop. Motion design references [gabe565’s Starfield in the official Tidbyt community repo](https://github.com/tidbyt/community/blob/main/apps/starfield/starfield.star); the renderer uses its own deterministic seamless trajectories. Baby age and Star flight share the Personal & ambient source toggle. Both respect quiet hours and snooze; critical alerts retain precedence. In priority mode, their priorities/cooldowns are editable in Screen priorities (defaults: baby 25 / 600 seconds, stars 10 / 300 seconds). In clock-led mode, Rotation controls their slot durations.
 
 `pnpm render:local` creates clock, synthetic baby-age, and animated starfield previews for both renderer paths.
 

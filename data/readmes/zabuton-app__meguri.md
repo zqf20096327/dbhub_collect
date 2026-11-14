@@ -86,7 +86,7 @@ Prebuilt packages for all platforms are also available on
 
 | Platform | Packages                                      |
 | -------- | --------------------------------------------- |
-| Linux    | AppImage / deb                                |
+| Linux    | AppImage / deb (glibc 2.35 or later)          |
 | Windows  | Microsoft Store / Installer (NSIS) / portable |
 | macOS    | dmg / zip (Apple silicon, macOS 13 or later)  |
 
@@ -210,7 +210,7 @@ Or run from source — see [Setup and Launch](#setup-and-launch).
   window: drop a file on it to queue it in Watch Later, double-click it for
   Discovery, or put it away from its menu
 - 🎨 **Themes** — base16-based multi-theme switching (gruvbox / solarized /
-  monokai / nord / dracula, etc.)
+  monokai / nord / catppuccin, etc.)
 - 🖌️ **Custom CSS** — layer your own `custom.css` over the theme to recolor or
   restyle the UI, or keep several stylesheets as CSS themes and pick one next
   to the built-in themes; saved changes apply instantly
@@ -327,7 +327,7 @@ the seed step with `MEGURI_SEED_SAMPLE_CONFIG=force`.
 
 ```bash
 npm run build      # build main / preload / renderer
-npm run dist       # generate AppImage / deb (electron-builder)
+npm run dist       # this platform's packages (electron-builder; see Download)
 ```
 
 ### Type checking
@@ -378,20 +378,36 @@ To drag a file to another app, hover over it in grid or list view and drag
 the arrow beside its selection checkbox. Drag from a selected file's arrow
 to carry the whole selection.
 
-ProRes clips play in Meguri through a local H.264 preview at up to
-1920 × 1080. The original clip is still used when you drag it into an editor
-or open it externally.
+Clips whose video the built-in player cannot decode, such as ProRes, MPEG-4
+Part 2, Motion JPEG, WMV or MPEG-2, play in Meguri through a local H.264 preview
+at up to 1920 × 1080. H.264, HEVC, VP8, VP9 and AV1 play as they are. For
+clips tagged as PQ or HLG HDR, the preview uses the available FFmpeg color
+filters to fit the highlights and colors into SDR. SDR clips use the regular
+preview. Dragging a clip into an editor or opening it externally uses the
+original file. HEVC plays only where the system has a decoder for it; on Linux
+the player says the picture could not be decoded, and **Open in external
+player** plays the clip.
 
-The built-in player converts Dolby Digital (AC-3) or Dolby Digital Plus
-(E-AC-3) audio to AAC when needed for playback. This includes MP4, M4V, and MOV
-clips with a default Dolby audio track, as well as repackaged containers such
-as MKV. The Dolby conversion copies the original picture stream and preserves
-the surround channel count. The original file stays untouched.
+The built-in player converts audio it cannot decode, such as Dolby Digital
+(AC-3), Dolby Digital Plus (E-AC-3), DTS, TrueHD, ALAC or MP2, to AAC. This
+includes MP4, M4V, and MOV clips with such a default audio track, as well as
+repackaged containers such as MKV. The conversion copies the original picture
+stream when the player can decode it and preserves the surround channel count.
+The original file stays untouched.
 
-For ProRes, MKV, AVI, WMV, FLV, or TS clips with multiple audio tracks, use
-**Audio track** beside the volume control in the full player. **Default**
-uses the usual playback selection when you open a clip. Switching tracks
-keeps the playhead and play or pause state.
+For previewed clips and MKV, AVI, WMV, FLV, or TS clips with multiple audio
+tracks, use **Audio track** beside the volume control in the full player.
+**Default** uses the usual playback selection when you open a clip. Switching
+tracks keeps the playhead and play or pause state.
+
+### Download origin on macOS
+
+Open a file’s details and look for **Where from**. When macOS has a download
+record, Meguri shows the website and lets you expand **Recorded URLs** to copy
+or open the recorded download link or referrer. These links can expire. If the
+browser or filesystem did not preserve the record, the section is hidden.
+Meguri reads this metadata when you open the details and keeps it out of the
+catalogue. A link opens in your browser only when you choose **Open**.
 
 ### Embedded subtitles
 

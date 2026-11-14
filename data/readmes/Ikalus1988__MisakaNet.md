@@ -1,6 +1,6 @@
 <div align="right">
 
-[English](README.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md) | [＋ 你的语言](https://github.com/Ikalus1988/MisakaNet/issues?q=is%3Aissue+is%3Aopen+label%3Ai18n)
+[English](README.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md) | [Español](README.es.md) | [＋ 你的语言](https://github.com/Ikalus1988/MisakaNet/issues?q=is%3Aissue+is%3Aopen+label%3Ai18n)
 
 </div>
 
@@ -173,6 +173,8 @@ large enough to show the fallback works, not large enough to call R@1 solved.
 
 This is 267 queries from the 300-entry pool, not the full 650; 33 pool entries yielded no query, 2 semantic requests
 errored, and the eval corpus was not refreshed. → [full report](docs/benchmarks/retrieval-l1-267-2026-10-27.md)
+
+Reproduce it yourself: the gate's 42 queries against the live endpoint, in a [Colab notebook](https://colab.research.google.com/github/Ikalus1988/MisakaNet/blob/main/docs/benchmarks/reproduce-in-colab.ipynb). It clones the repository, runs `scripts/bench_production_recall.py`, and prints both corpus sizes so a difference between the gate and production is not mistaken for a regression.
 
 ### What changed since: the gate, not the model
 

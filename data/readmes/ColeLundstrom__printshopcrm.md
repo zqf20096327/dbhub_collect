@@ -6,8 +6,9 @@
 **Open-source shop management for screen printers, embroiderers, and DTF shops — with the CRM built in.**
 
 Quoting, estimates, invoicing, a production board, art proofing, purchasing, and per-job
-profitability in one app. Node.js + SQLite. No build step, four runtime dependencies, and every
-shop's data in a plain SQLite file you can copy.
+profitability in one app. Node.js + SQLite. No build step, a small runtime dependency set, and every
+shop's records in SQLite, with uploaded artwork stored separately. Use the documented
+[backup and restore tools](INSTALL.md#backups) to protect the complete installation.
 
 [![CI](https://github.com/ColeLundstrom/printshopcrm/actions/workflows/ci.yml/badge.svg)](https://github.com/ColeLundstrom/printshopcrm/actions/workflows/ci.yml)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
@@ -19,13 +20,25 @@ shop's data in a plain SQLite file you can copy.
 ```bash
 git clone https://github.com/ColeLundstrom/printshopcrm.git
 cd printshopcrm
-npm install
-npm run seed      # optional: a demo shop mid-week, so the app isn't empty
-npm start         # → http://localhost:3333
+npm ci
+npm run doctor    # check this computer before the first run
+npm run demo -- ../printshopcrm-evaluation 4380
+node ../printshopcrm-evaluation/start.mjs
 ```
 
-That's the whole install — measured at about 3 seconds on a cold npm cache. No Postgres, no Redis,
-no build pipeline, nothing to compile.
+Open http://127.0.0.1:4380/login and use the local credentials in
+`../printshopcrm-evaluation/LOGIN.txt`. Keep that file private. The destination must be a new
+directory; this evaluation keeps fictional data separate and blocks outbound application
+connections. [Run your first quote-to-payment walkthrough](docs/FIRST-JOB.md).
+
+The complete software runs on your own computer or server. No software subscription or hosted
+account is required. No Postgres, no Redis, and no build pipeline. Installation time depends on
+your computer and connection. See the [self-host checks](docs/SELF-HOST-CHECK.md) if anything fails.
+
+For a blank local shop, use the [local installation guide](INSTALL.md#start-a-blank-local-shop).
+The [evaluation details](docs/DEMO.md) explain what the sample can verify. For a public
+server, follow [INSTALL.md](INSTALL.md#production-install) for authentication, HTTPS, persistent artwork and backups.
+Optional managed hosting is a paid service; it does not unlock additional features.
 
 Prefer containers?
 
@@ -77,15 +90,17 @@ Four more things it does that are unusual:
 - **Per-size pricing is a first-class object.** The size grid carries real per-size upcharges and
   flows estimate → job → work ticket → PDF → export. Quantity is *derived* from the grid, so the two
   can never disagree.
-- **Your data is not the moat.** Customers, quotes, invoices, payments, jobs, artwork history and
-  the timeline each export to CSV — including line items with size breakdowns, which nobody else
-  gives you — and **everything**, every table, exports as one JSON file. No ticket, no fee. The
-  data for each shop is a plain SQLite file you can copy — see INSTALL.md for what a backup has to
-  include, because a multi-tenant install has more than one of them.
+- **Take your records with you.** Supported business records export to CSV, including document
+  line items with size breakdowns. The shop-data JSON export (`/api/export/all.json`) lists its omitted or redacted
+  credentials and cached data. Uploaded artwork and recovery data need the separate
+  [backup procedure](INSTALL.md#backups), including all applicable control and shop databases.
 
 ---
 
 ### Further reading
+
+Start with a working example: [48 shirts, one proof and a reconciled invoice](docs/FIRST-JOB.md).
+The walkthrough uses fictional data in the isolated demo, without connecting providers.
 
 Longer write-ups of the things people ask about most, on the project site:
 
@@ -101,14 +116,16 @@ Read the [core readiness and remaining gaps](docs/CORE-READINESS.md) before eval
 **Sales**
 - Customers with billing/shipping addresses, tags, notes, lifetime value, and a timeline fed by other modules
 - Separate buyer and accounts-payable contacts saved on each document. Recipient changes hold older unsent messages for review ([details](docs/BILLING-RECIPIENTS.md))
-- Estimates with a size/color matrix, per-size upcharges, live totals, PDF, and a no-login customer approval link. Commercial revisions expire the old approval link, preserve approval history, and require another review
+- Estimates with a size/color matrix, per-size upcharges, live totals, PDF, and a no-login customer approval link. A live profit meter on every quote shows the margin against your target while you type, and the walk-away price that hits it — one click raises the garment prices to it, with undo. Commercial revisions expire the old approval link, preserve approval history, and require another review
 - Sales pipeline with weighted value and win rate, auto-synced from estimate events
 - Conversation history for outbound email/SMS and connected inbound messages; SMTP alone does not synchronize a mailbox. Unsent drafts stay with their customer while navigating
 - Follow-ups: quotes that went quiet and invoices nobody chased, ranked by value
 - Reorder Radar: customers due for their next run, based on their own history
+- One customer portal link per customer: their quotes to approve, proofs to sign off, invoices to pay and jobs in production on one page, without a login ([details](docs/CUSTOMER-PORTAL.md))
 
 **Production**
 - Drag-to-move job board (pointer-based, works on touch) with rush/late/unpaid/assignee filters
+- Shop TV: a full-screen live wallboard for the screen over the presses — pieces on the floor, due today, late, proofs out, every job by stage — repainting as cards move. Revenue appears only for managers
 - Art & prepress: versioned proofs, customer approve/reject with notes, approval advances the job *and* moves the due date
 - Printable work tickets with a hard "NO APPROVED ART — do not print" block when the proof isn't signed off
 - Screenprinting capacity estimates exclude completed presswork and flag unsupported/mixed work for review. A partial queue does not produce a positive print-date verdict
@@ -117,14 +134,16 @@ Read the [core readiness and remaining gaps](docs/CORE-READINESS.md) before eval
 - DTF resize and a gang-sheet builder (embeddable on your own site, checking out through your Stripe or Authorize.net account)
 
 **Money**
+- Free profit planner: cost-plus quantity price breaks using machine, loaded labor, overhead and payment-fee assumptions; monthly break-even and profit goals. CSV export, no provider account, and no changes to existing customer prices ([model limits](docs/PROFIT-PLANNER.md))
 - Quoting calculator: garment × markup + imprint charge scaled by run length and colors-per-location + one-time screens; tiered rush; dark garments automatically add an underbase
 - Custom price matrices: any number of price sheets with **your own name, rows, and columns** — screen printing by ink colour, mugs by size, engraving by area, rush fees by turnaround. Import a CSV, duplicate a sheet to make a variant, and choose which matrix prices each line of a quote (one estimate can use several). Seven starter templates to edit or ignore
 - Per-cell overrides on the built-in calculator too — type your real price into any cell and it wins
-- Invoices with partial payments, running balance, saved postal addresses, and separate payment/production deadlines
+- Invoices with partial payments, running balance, saved postal addresses, and separate payment/production deadlines. Invoice PDFs with a balance carry a scan-to-pay QR code
+- Shop pulse on Today: twelve weeks of won vs collected, quote win rate, and the margin finished jobs actually kept
 - Stripe and Authorize.net hosted checkout with signed callbacks, test-mode isolation, refund/void reconciliation and explicit invoice credits ([setup and limits](docs/PAYMENTS.md))
 - Per-job and shop-wide profitability with cost breakdown and $/productive-hour
 - Books & A/R: aging buckets and customer statements
-- QuickBooks IIF export (Online sync is API-only for now — it has no setup screen yet)
+- QuickBooks Online: connect from Books, one-way push of customers, invoices and payments with a visible sync log; IIF export for Desktop; CSV export for Xero
 
 **Purchasing**
 - Garment catalog with editable baseline costs feeding the ROI estimates
@@ -136,13 +155,14 @@ Read the [core readiness and remaining gaps](docs/CORE-READINESS.md) before eval
 - Autopilot: paste a customer email and it becomes a structured draft order — review-first by default
 - AI receptionist for inbound quote requests (bring your own Anthropic or OpenAI key; a deterministic parser runs with no key at all)
 - Public REST API (`/api/v1`) with Bearer keys, plus signed outbound webhooks — see [docs/API.md](docs/API.md)
-- CSV mapping for customers and supported order-history fields, with preview; check unsupported attachments and payment history separately before migrating
+- CSV mapping for customers and supported order-history fields, with preview and auto-detected Printavo and YoPrint customer-export presets; check unsupported attachments and payment history separately before migrating
 
 **The app itself**
 - Light and dark themes, tuned separately rather than inverted
 - ⌘K command palette, full keyboard navigation, undo-instead-of-confirm on reversible actions
 - A sidebar that starts with the daily loop — quote → produce → invoice → get paid — and folds the
-  power tools behind one click, so the first screen isn't 27 destinations deep
+  power tools behind one click
+- Dates follow the shop's own time zone (Settings → Shop), not the server's
 - Multi-tenant mode: one isolated SQLite database per shop, real staff logins with owner/manager/staff roles
 - PWA — installable, works on a shop-floor tablet
 
@@ -292,6 +312,9 @@ npm test           # 90+ unit tests, no network, runs in seconds
 npm run test:e2e   # 70+ end-to-end checks against a throwaway database
 npm run test:all   # both
 ```
+
+The [self-host release rehearsal](docs/SELF-HOST-RELEASE-REHEARSAL.md) exercises a disposable
+first install, release-directory switch and backup restore across the same candidate commit.
 
 Pure Node, no test framework and no shell dependencies — they run identically on Linux, macOS, and
 Windows. CI runs both on Node 22 and current LTS, on Ubuntu and Windows, plus a Docker build that

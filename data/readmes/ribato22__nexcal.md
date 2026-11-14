@@ -186,9 +186,15 @@ docker compose -f docker-compose.prod.yml up -d --build
 open http://localhost:3000
 ```
 
-The first launch will automatically:
-- ✅ Create database tables (Prisma migrations)
-- ✅ Seed demo data (1 org, 3 users, services with prices, schedules, bookings)
+The app applies Prisma migrations at startup. On a fresh demo instance, set a custom `SEED_PASSWORD` in `.env` before starting Compose, then load the demo organization, users, schedules, and bookings:
+
+```bash
+docker compose -f docker-compose.prod.yml exec app ./node_modules/.bin/prisma db seed
+```
+
+Use the seed command on an empty demo database. It resets the demo providers' schedules if run again. For remote hosting, set `NEXT_PUBLIC_APP_URL` to the public URL and configure `APP_BIND_ADDRESS` for your reverse proxy.
+
+The booking migration uses PostgreSQL's `btree_gist` extension. For an existing deployment, ensure the migration role can install it or ask the database administrator to install it first. Resolve overlapping active bookings for the same provider before upgrading.
 
 > 💡 **After first login**, go to **Admin → Settings** to configure Midtrans, WhatsApp, and Google Calendar — all from the UI!
 
@@ -200,9 +206,11 @@ The first launch will automatically:
 | 👤 STAFF | `dr.budi@kliniku.com` |
 | 👤 STAFF | `bidan.sari@kliniku.com` |
 
-> 🔑 **Default password** is defined in [`prisma/seed.ts`](prisma/seed.ts). Change all passwords immediately after deployment!
+Use the `SEED_PASSWORD` you set for these demo accounts.
 
 ### Local Development
+
+Use Node.js 22 or later.
 
 ```bash
 # Start PostgreSQL
@@ -211,13 +219,21 @@ docker compose up -d
 # Install dependencies
 npm install
 
-# Setup database
-npx prisma db push
+# Apply the project migrations, then seed with a custom SEED_PASSWORD
+npx prisma migrate deploy
 npx prisma db seed
 
 # Start dev server
 npm run dev
 ```
+
+Run `sh tests/docker-smoke.sh` to verify startup, demo seeding, legacy booking migration, and slot reuse against a temporary PostgreSQL database.
+
+### External calendar availability (Outlook / ICS)
+
+In Outlook, open **Settings → Calendar → Shared calendars → Publish a calendar**, choose the smallest permission that exposes busy times, and copy the **ICS** link. In NexCal, sign in as the provider and paste it under **Admin → Settings → Kalender Eksternal (ICS)**. Other providers can use their public HTTPS or `webcal://` calendar link. Treat published links as private, since anyone with the link can read the published calendar.
+
+NexCal reads busy times for that provider. Slot browsing may use a feed downloaded in the last minute. Booking and patient rescheduling recheck the feed before saving. If the feed cannot be read, those bookings wait until it is reachable again or the provider disconnects it. Calendar changes must first appear in the feed published by Outlook or the other provider. Timed events use their calendar time zones and all-day events use the NexCal server's calendar day. Feeds using `RDATE`, `RECURRENCE-ID;RANGE=THISANDFUTURE`, or recurrences every second or minute are unsupported. Run `npm run test:calendar` to check ICS handling.
 
 ---
 
@@ -270,7 +286,7 @@ NexCal follows a **SaaS-first architecture**: integration credentials (Midtrans,
 | `AUTH_TRUST_HOST` | ✅ | Set `true` behind a reverse proxy |
 | `NEXT_PUBLIC_APP_URL` | ✅ | Public URL (e.g., `https://booking.yourdomain.com`) |
 | `NEXT_PUBLIC_APP_NAME` | ❌ | Display name (default: "NexCal") |
-| `SEED_PASSWORD` | ❌ | Admin password for initial seed |
+| `SEED_PASSWORD` | ❌ | Custom password required when running the demo seed |
 
 ### Tenant-Level (Configured via Admin → Settings UI)
 

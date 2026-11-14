@@ -26,7 +26,7 @@
 ## 核心亮点
 
 - ⚡ **秒杀高并发方案**：Redis Lua 脚本原子扣减库存防超卖；RabbitMQ 消息削峰异步下单；消费失败自动重试（最多 3 次），超限回滚库存；用户级防重与消费幂等
-- 🤖 **多 Agent 智能客服**：基于 LangGraph 编排 Supervisor 路由、知识库 RAG 与工单处理 Agent，合规审查兜底；全链路 SSE 流式响应，会话持久化与历史上下文管理
+- 🤖 **多 Agent 智能客服**：基于 LangGraph 编排 Supervisor 路由、知识库 RAG、订单只读查询与工单处理 Agent，出口合规审查兜底；Python 经 MCP 调用后端工具，工单落库并回流会话；全链路 SSE 流式响应，会话持久化与历史上下文管理
 - ⏰ **订单超时取消双保险**：RabbitMQ 延迟队列（TTL 10 分钟）到期自动取消订单并恢复库存，前端倒计时轮询兜底
 - 🔍 **Elasticsearch 商品搜索**：商品文档同步 + 定时增量同步任务，关键词/分类检索
 - 🔐 **认证与安全**：Sa-Token 双端登录态隔离、同端互踢（同账号新登录踢掉旧会话）；`@RateLimit` 注解 + Redis 滑动窗口限流；Redisson 分布式锁；布隆过滤器防缓存穿透
@@ -199,10 +199,12 @@ mall/
 │   ├── src/views/                # 页面（首页 / 商品 / 秒杀 / 购物车 / 订单等）
 │   └── src/components/           # 公共组件（客服弹窗 CustomerModal 等）
 └── mall-customer/                # 多 Agent 智能客服（Python FastAPI，端口 8000）
-    ├── agents/                   # LangGraph 编排（Supervisor、RAG、合规审查等）
-    ├── api/                      # FastAPI 入口与 SSE 聊天接口
-    ├── memory/                   # 短期（Redis）与长期（FAISS）记忆
-    ├── mcp/                      # 工具服务
+    ├── agent/                    # LangGraph 工作流：节点文件与节点名同名，graph.py 负责编排
+    ├── api/                      # FastAPI 入口与 SSE 协议编码
+    ├── knowledge_base/           # 电商政策知识库（25 篇 markdown，启动时向量化并落盘索引）
+    ├── eval/                     # RAG 检索评测（42 条用例，hit@3 与空召回准确率）
+    ├── memory/                   # 工作记忆、短期（Redis checkpoint）与长期（FAISS 向量库）记忆
+    ├── tools/                    # MCP 客户端（建单、订单只读查询经 /mcp 工具调用）
     └── tracing/                  # OpenTelemetry 全链路追踪
 ```
 
@@ -259,9 +261,11 @@ npm run dev
 ```bash
 cd mall-customer
 pip install -r requirements.txt
-cp .env.example .env    # 至少配置 MODEL_NAME、OPENAI_API_KEY 与 OPENAI_BASE_URL
+cp .env.example .env    # 需配置 MODEL_NAME、OPENAI_API_KEY、OPENAI_BASE_URL 与 INTERNAL_API_TOKEN
 python -m api.main
 ```
+
+`INTERNAL_API_TOKEN` 需与 `mall-server` 的 `MALL_CUSTOMER_TOKEN` 一致，否则对话请求会被拒绝。该服务只接受带 `Authorization: Bearer <token>` 的调用。
 
 访问：http://localhost:8000/docs（Swagger UI 文档）
 
@@ -277,10 +281,3 @@ python -m api.main
 | 管理端 | `admin` | `123456` | 管理员，登录框已预填 |
 | 门户端 | `user` | `123456` | 测试用户（也可用 admin 登录门户） |
 
-## 参考开源项目
-
-- **[smart-cs-multi-agent](https://github.com/bcefghj/smart-cs-multi-agent)**：本项目 `mall-customer` 模块的多 Agent 智能客服（LangGraph + FastAPI 架构编排、三层记忆体系设计等）参考了该开源项目。
-
-## 交流群
-
-欢迎加入 QQ 交流群：**967925576**

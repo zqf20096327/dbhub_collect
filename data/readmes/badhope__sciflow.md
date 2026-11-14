@@ -20,6 +20,9 @@
 | **Deterministic quality gate** | Seven dimensions scored by rules with a stable fingerprint — same text, same score. The gate is the acceptance criterion; the LLM score is reference only. Below threshold triggers targeted revision, not a reroll. |
 | **Citations you can trace** | Every `[n]` anchor resolves to a citation row and then to a reference row. Ghost anchors, orphan entries, broken numbering and duplicate DOIs are reported by number. An empty reference pool forbids citation markers outright. |
 | **Evidence, not prose** | Claims are stored with stance, strength and verbatim quotes from experiment stdout. The Critic cannot mark `supported` without a matching `supports` evidence item. |
+| **Web project sandbox** | Create a project in an isolated directory, `npm install`, build, and preview it on loopback. Two built-in templates (zero-dependency static, React + Vite); logs and status per step; one-click run. |
+| **Built-in browser** | Real Chromium on the server: navigate any site, read visible text, capture screenshots, list interactive elements, click and fill, and **assert page expectations** (`exists` / `visible` / `count` / `text` / `value`) so a built page can be accepted or rejected by machine. |
+| **Long-form writing** | Book → volume → chapter, generated one chapter at a time. Each chapter is stored independently, a failed chapter retries once then the batch continues, and cross-chapter continuity rides on compressed summaries — so length is not bounded by the context window. A built-in consistency checker reports entity gaps and suspected renames deterministically. |
 | **Manuscript pipeline** | Topic validation → literature survey → outline gate → section drafting → quality gate → polish → citation formatting. Checkpoints after every step; restart-safe. |
 | **Grounded retrieval** | SQLite FTS5 + sqlite-vec, RRF fusion and MMR; OpenAlex / Crossref / arXiv search with relevance gating and TTL cache. Literature hits enter the research loop as background, never as fabricated citations. |
 | **Open by design** | MCP server and client, OpenAI-compatible / Anthropic / Gemini protocols, local Ollama or GGUF, desktop app, headless CLI, JWT mode for shared deployments. |
@@ -70,12 +73,16 @@ Every number below comes from a command run on the current tree (2026-11-13).
 
 | Check | Command | Result |
 |---|---|---|
-| Server unit/integration | `pnpm --filter @sciflow/server test` | 84 files, 660 tests |
+| Server unit/integration | `pnpm --filter @sciflow/server test` | 88 files, 687 tests |
 | Web unit | `pnpm --filter @sciflow/web test` | 29 files, 201 tests |
 | Desktop unit | `pnpm --filter @sciflow/desktop test` | 1 file, 5 tests |
 | Types / build | `pnpm -r typecheck` · `pnpm -r build` | clean |
-| Browser UI sweep | `npx playwright test e2e/ui-sweep.spec.ts` | 4 passed |
+| Long-form live run | `POST /api/longform/books/:id/write` | 2 chapters, 1,254 chars, summaries chained |
+| Browser UI sweep | `npx playwright test e2e/ui-sweep.spec.ts` | 4 passed (incl. long-form page) |
 | Settings interaction | `npx playwright test e2e/settings-interaction.spec.ts` | 2 passed |
+| Long-form E2E | `npx playwright test e2e/longform.spec.ts` | 1 passed |
+| API coverage (26 modules) | `pnpm test:api` | 90/90 passed |
+| Screenshot sweep | `pnpm capture:ui` | 15 light + 3 dark, 0 page errors |
 | AI access policy | `pnpm --filter @sciflow/server test -- agent-policy` | 7 passed |
 | Real-model manuscript run | pipeline API, 2026-11-13 | 20 refs, 10,834 chars, 18 anchors, 0 ghost, objective 97 |
 | Real-model research loop | cycle `50a629be` | supported/90, 5 verified evidence items |
@@ -108,7 +115,7 @@ flowchart LR
 | `packages/db` | Schema · migrations · secret encryption |
 | `packages/retrieval` | Vector + full-text retrieval · RRF · MMR · embeddings |
 
-Research data chain: `ResearchProgram → ResearchCycle → ResearchQuestion → ResearchHypothesis → ResearchProtocol → ResearchRun → ResearchClaim → ResearchEvidence`. Manuscript chain: `Project → Document (versioned) → Citation → Reference`.
+Sandbox runtimes: Python, Node and shell scripts all run in the same isolated temp-dir runner (timeout, memory guard, output truncation). Research data chain: `ResearchProgram → ResearchCycle → ResearchQuestion → ResearchHypothesis → ResearchProtocol → ResearchRun → ResearchClaim → ResearchEvidence`. Manuscript chain: `Project → Document (versioned) → Citation → Reference`.
 
 ## Configuration
 

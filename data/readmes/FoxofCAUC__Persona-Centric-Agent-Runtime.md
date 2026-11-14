@@ -1,6 +1,6 @@
 # Persona-Centric Agent Runtime（PCAR）
 
-> **QQ接口开发暂停（2026-11-12）**：鉴于第三方QQ启动器／插件带来的账号禁用风险，PCAR暂时停止NapCat、SnowLuma等QQ接入方式的开发与实测。是否恢复请等待作者明确公告或推送通知；当前使用工作台。详见[暂停政策](docs/QQ接口开发暂停政策.md)。
+> **QQ接口开发暂停，持续跟踪SnowCat（2026-11-15）**：NapCat、SnowLuma等QQ接入的开发与实测保持暂停。已指定[SnowCat](https://github.com/DandanLLab/SnowCatQQ)为恢复候选，持续跟踪公开进展，待作者明确批准后重启QQ支持；当前使用工作台。详见[暂停政策](docs/QQ接口开发暂停政策.md)及[SnowCat开发指导](docs/SnowCat-持续跟踪与QQ恢复开发指导.md)。
 
 **PCAR 的目标是开发一个能够持续陪伴、让人愿意长期相处的 AI 伴侣。**
 
@@ -8,19 +8,26 @@
 
 对话连续性、长期记忆、关系维护和故障恢复，是让这份陪伴更好发生的支持能力。工程正确性与可溯源应服务产品体验，不能用更多通过的检查、完整的架构或精细的记录，代替一个好相处的 AI 伴侣。
 
-![Version](https://img.shields.io/badge/version-0.9.0.dev17-4263eb)
+![Version](https://img.shields.io/badge/version-v0.1-4263eb)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![Platform](https://img.shields.io/badge/platform-Windows-0078D4)
 [AGPL-3.0-only 开源协议](LICENSE)
 
-[产品方向与大肥鱼参考线](docs/AI伴侣产品方向与大肥鱼参考线.md) · [当前状态](docs/STATUS.md) · [快速开始](#快速开始) · [文档导航](#文档导航)
+**首个发行版[v0.1](https://github.com/FoxofCAUC/Persona-Centric-Agent-Runtime/releases/tag/v0.1)** · [Agent部署与启用手册](AGENT_INSTALL.md)。采用Agent辅助部署：下载桌面包、解压为工作区，让DSH/Codex等Agent阅读入口并完成环境与配置。作者已确认二、三台电脑验收及第三台正式迁移通过；一键安装另行规划。
+
+
+[产品方向与大肥鱼参考线](docs/AI伴侣产品方向与大肥鱼参考线.md) · [当前状态](docs/STATUS.md) · [M9全阶段验收](docs/acceptance/M9-全阶段桌面交付验收.md) · [快速开始](#快速开始) · [文档导航](#文档导航)
+
+**后续开发已采用[M9R开发手册](docs/M9R-DeepSeek原生能力接入与后续研发规划.md)**：人格、经历与长期记忆继续由PCAR持有，云端生成及应用能力只支持DeepSeek官方API，Jev保留独立联网判断。M9R先将现有检索编排迁至官方原生工具并保留v8人物表达，再比较单段式；原M10及后续编号保留。下一次实施从M9R.0开始，当前发行仍为v0.1，新能力尚未上线。
+
+桌面“联网与资料”页现使用通用LLM检索：按需查官网、社区或其他相关公开网页，再由人物结合常识自然回应并表达自己的判断。官网不是裁判，未知日期、不完整材料或单页失败不否决聊天；旧来源权威与逐数字审核路线已退役并删除。见[当前交付与实际限制](docs/M9.B-通用检索重构与交付记录.md)。
 
 当前采用 **v8 伴侣聊天**：本地选材、原生文本、即时通讯表达指导，无表达样例。新建、原生导入和复制角色的工作台、QQ入口统一默认v8；可以在入口政策中关闭并恢复启用前设置。已有角色及历史请求不会随初始化自动改写。
 
 阶段6后台百轮、记忆修复及阶段7正式交付验收已完成；M8.D已交付自动覆盖、独立复核、事实更正与局部修复。工程、隔离真实、正式短验收、清理及验收限流偏差分别记录于[当前状态](docs/STATUS.md)和[实施记录](docs/M8.D-自动记忆实施记录.md)。后台仍随工作台启停，不宣称无人值守或G-AUTO通过。
 
 <!-- M8E_README_BEGIN -->
-M8.E规定范围已交付。工作台和托盘运行期间自动工作，退出确认注销本次Bot并释放所属组件。当前正式组合已完成两小时白天连续观察，详情见[实施记录](docs/M8.E-工作台绑定运行实施记录.md)及[当前状态](docs/STATUS.md)。G-AUTO后续仍需世界知识、时效学习与联合验收。
+M8.E规定范围已交付。工作台和托盘运行期间自动工作，退出确认注销本次Bot并释放所属组件。当前正式组合已完成两小时白天连续观察，详情见[实施记录](docs/M8.E-工作台绑定运行实施记录.md)及[当前状态](docs/STATUS.md)。世界知识与时效使用已按当前M9桌面范围交付，G-AUTO的跨设备配套与联合运行验收另行安排。
 <!-- M8E_README_END -->
 
 [完整施工指导](docs/AI伴侣底层重构总施工指导.md) · [大肥鱼参考结论](docs/AI伴侣产品方向与大肥鱼参考线.md) · [源码交付清单](source-delivery.json) · [当前M8.A交接](docs/M8.A-v8当前系统职责交接.md)
@@ -31,7 +38,7 @@ M8.A受管整理统一了授权、领取、逐次调用额度和原回执恢复�
 
 当前自动整理额度为每小时60次、滚动24小时240次，提取、复核、修复与重试共同计数。人工手动调用不设次数额度，仍记录真实用量；其他原本不限额的自动项保持不限额。详见[额度规则](docs/自动调用额度与人工免限额.md)。
 
-世界知识正式采用**B方案（Jev判断是否检索＋授权来源联网查询＋知识整理与复核）**。新角色默认选择仅联网，能力按角色显式开启；无需下载本地百科包。已支持按角色开启未登记公共话题定位，并由独立复核约束来源请求；持续维护、工作台验收与后续范围见[当前状态](docs/STATUS.md)。见[自动定位](docs/M9.A-未登记公共话题自动查询实施记录.md)及[选型与清理](docs/M9.A-B方案正式选型与本地百科清理.md)。开发模式可取消自动调用次数额度，调用与费用继续留账。
+世界知识当前采用**通用联网检索（conversational_web_v1）**：Jev判断是否联网、主模型high规划、普通Search/Fetch、high资料底稿、原人物按语境转译，无主题/网站登记名单；Jev只负责是否联网，不对来源、数字或观点作裁决，无需下载本地百科。当前日常角色桌面已正式启用，新角色可在“联网与资料”页开启。公共外发走Windows系统代理，失败不回退直连。开发调用和费用继续留账。
 
 ## 已有支持能力
 
@@ -54,31 +61,13 @@ M8.A受管整理统一了授权、领取、逐次调用额度和原回执恢复�
 
 ### 1. 准备环境
 
-需要 Windows、已安装的 **Python 3.12** 和 `uv`。仓库提供源码，不附虚拟环境、模型密钥、QQ客户端或第三方组件二进制。
+公开发行tag为 **v0.1**，程序版本 **0.1.0**，已验证目标 **Windows 11 x64**。从Release下载 **PCAR-v0.1-Windows-x64-desktop.zip**，核对SHA256SUMS后解压，将该目录交给Agent，并让其先阅读根目录 **AGENTS.md** 与 **AGENT_INSTALL.md**。
 
-克隆后在仓库根目录打开PowerShell：
+包内已有公开CPU模型与全部有效桌面源码；Python3.12 x64、uv、依赖和用户自己的主模型/Jev配置由Agent按本机情况准备。程序、业务和工具目录分开，公共下载只走Windows手动系统代理。包中没有作者人物、聊天、密钥或正式业务。
 
-```powershell
-git clone https://github.com/FoxofCAUC/Persona-Centric-Agent-Runtime.git
-cd Persona-Centric-Agent-Runtime
+详细手册区分新建、整库迁移、登记已有实例，提供显式BasePython、普通新机与缺少py启动器时的流程。已有实例保留原数据和.venv，不重复初始化或覆盖。迁移后当前角色和提供商重新授权，Jev仍只判断是否联网，High负责检索/整理，人物按v8与原主模型配置回应。
 
-# 创建D盘数据目录，不调用模型。
-python -B -m persona_runtime init-storage
-
-# 仅作用于当前PowerShell会话及其子进程。
-$env:UV_CACHE_DIR = 'D:\Persona-Centric Agent Runtime\cache\uv'
-$env:PIP_CACHE_DIR = 'D:\Persona-Centric Agent Runtime\cache\pip'
-$env:PYTHONPYCACHEPREFIX = 'D:\Persona-Centric Agent Runtime\cache\pycache'
-$env:TEMP = 'D:\Persona-Centric Agent Runtime\tmp'
-$env:TMP = 'D:\Persona-Centric Agent Runtime\tmp'
-$env:UV_PROJECT_ENVIRONMENT = 'D:\Persona-Centric Agent Runtime\.venv'
-
-uv venv --no-managed-python --python 3.12 'D:\Persona-Centric Agent Runtime\.venv'
-uv sync --frozen --no-managed-python
-.\scripts\dev.ps1 db init
-```
-
-已部署用户使用现有环境，不重复创建或覆盖数据。数据库升级先备份，再事务迁移。
+这是可复用的Agent辅助部署包，一键安装器、自带全部依赖和自动更新还未交付。GitHub自动生成的Source code包不含模型/演练资产，不能替代桌面包。
 
 ### 2. 开始窗口对话
 
@@ -116,17 +105,17 @@ flowchart LR
     Memory --> DB
 ```
 
-当前候选版本 **0.7.6.dev23**，数据库结构 **20**、全量导出 **17**、配置 **2**、桥接插件 **0.7.2**。QQ出站使用纯文本，原语义回复及传输片段分别留存。候选版本号不代表实验能力已经正式启用。
+当前发行版本 **v0.1（程序0.1.0）**，数据库结构 **27**、配置 **3**。QQ出站使用纯文本，原语义回复及传输片段分别留存。候选版本号不代表实验能力已经正式启用。
 
 | 位置 | 内容 |
 | --- | --- |
 | Git仓库 | 源码、模板、测试、进度和验收手册 |
-| `D:\Persona-Centric Agent Runtime\data\database` | 数据库、人格、会话、记忆及版本事实 |
+| 所选数据目录下 `data/database` | 数据库、人格、会话、记忆及版本事实 |
 | 数据根目录下 `config` / `runtime` | 配置、DPAPI密文、实例状态与锁 |
 | `logs` / `backups` / `exports` | 元数据日志、备份、导出及本机验收证据 |
 | `.venv` / `components` / `cache` / `tmp` | 依赖环境、独立组件、缓存与临时文件 |
 
-`PERSONA_RUNTIME_HOME` 可显式覆盖业务数据根目录；磁盘不可用时失败，不自动退回C盘。现有Windows启动/开发脚本的项目解释器仍使用默认D盘 `.venv`，并非完全可移植启动器。`.env.example` 仅作参考，不会自动加载。
+定位顺序为显式参数、进程 `PERSONA_RUNTIME_HOME`、源码根 `.pcar-local.json`；未指定时由桌面选择或命令行报错。解释器跟随所选实例 `.venv`，不退回其他盘或其他项目。`.env.example` 仅作参考，不会自动加载。
 
 默认端口均绑定回环地址：人格服务 **8765**、NapCat管理页 **6399**、AstrBot管理页 **6285**、OneBot **6299**。正常启停核对归属，不接管未知端口。
 
@@ -134,7 +123,7 @@ flowchart LR
 
 自然交流、人物差异和长期相处仍需真实体验验证。新实验不会因离线通过就自动成为正式默认；已知的历史待验项继续保留，详见[当前状态](docs/STATUS.md)。
 
-目前没有独立可执行安装包，第三方组件来源和解释器路径仍有本机约定。引用校验不能保证模型判断正确；QQ发送状态不确定时需要核对，不能自动从头重发。私人角色和聊天资料不提交到仓库；验证副本及其派生正文按约定在审阅后清除。
+当前采用可跨机复用的Agent辅助部署包，一键安装与自动更新另行规划。引用校验不能保证模型判断正确；历史QQ发送状态不确定时不能自动从头重发，QQ接入继续暂停。私人角色和聊天资料不提交到仓库；验证副本及其派生正文按约定在审阅后清除。
 
 ## 文档导航
 
@@ -142,7 +131,9 @@ flowchart LR
 | --- | --- |
 | 产品目标、开发取舍与外部参考 | [AI伴侣产品方向与大肥鱼参考线](docs/AI伴侣产品方向与大肥鱼参考线.md) |
 | 当前版本、进度和缺口 | [当前状态](docs/STATUS.md) |
-| 后续开发指导 | [现状与路线衔接](docs/后续开发指导与规划衔接.md) |
+| 下一阶段开发手册 | [M9R原生能力接入与后续开发](docs/M9R-DeepSeek原生能力接入与后续研发规划.md) |
+| QQ候选项目与恢复安排 | [SnowCat持续跟踪与QQ恢复开发指导](docs/SnowCat-持续跟踪与QQ恢复开发指导.md) |
+| 总路线与历次衔接 | [项目规划书](docs/pcar_project_plan_zh.md) · [现状与路线衔接](docs/后续开发指导与规划衔接.md) |
 | 社会认知、关系与人格演化的理论及开发指导 | [社会科学开发指导（四册）](docs/social-science/README.md) |
 | 人格与关系操作 | [M5使用说明](docs/M5.md) · [真人手册](docs/acceptance/M5-人格与关系真人验收手册.md) |
 | 记忆与每日整理 | [M4使用说明](docs/M4.md) · [补验跟踪](docs/acceptance/M4-补验跟踪.md) |
@@ -164,10 +155,12 @@ flowchart LR
 .\scripts\dev.ps1 db status
 ```
 
-默认按改动影响运行必要的局部检查，遵循[分级验证原则](docs/开发验证与验收分级原则.md)。全量测试入口为 `.\scripts\test.ps1`，需要D盘项目环境及独立AstrBot SDK环境，不是每次文档或局部修订的必做步骤。核心持久化测试可单独运行：
+默认按改动影响运行必要的局部检查，遵循[分级验证原则](docs/开发验证与验收分级原则.md)。全量测试入口为 `.\scripts\test.ps1`，使用所选实例环境；历史QQ测试另需独立AstrBot SDK环境，不是每次文档或局部修订的必做步骤。核心持久化测试可单独运行：
 
 ```powershell
-& 'D:\Persona-Centric Agent Runtime\.venv\Scripts\python.exe' -B -m unittest discover -s tests -p test_runtime.py -v
+$pcarData = 'C:\PCAR数据' # 换成所选实例目录
+$env:PERSONA_RUNTIME_HOME = $pcarData
+& (Join-Path $pcarData '.venv\Scripts\python.exe') -B -m unittest tests.test_decoupling tests.test_runtime -v
 ```
 
 离线验证使用隔离数据、模拟模型和模拟QQ。真实调用、用户体验和实际QQ投递分别记录，不能相互冒充。用户偏好与具体出戏点是产品判断的重要依据；工程检查负责发现缺陷，不替代体验判断。提交前请阅读[协作约定](AGENTS.md)。

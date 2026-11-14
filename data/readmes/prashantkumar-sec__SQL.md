@@ -59,10 +59,10 @@ Every checkpoint has a pass mark of 70%. Below that, the weak topics are re-lear
 | Day | Date | Topic | Status |
 |---|---|---|---|
 | 1 | 20-Oct | Databases, DBMS vs SQL, installing PostgreSQL, `psql`, pgAdmin | Done ([notes](notes/day-01-notes.md)) |
-| 2 | 21-Oct | Tables, rows, columns, psql meta-commands | Not started |
-| 3 | 22-Oct | Data types | Not started |
-| 4 | 23-Oct | Basic `INSERT` and `SELECT *` | Not started |
-| 5 | 24-Oct | Selecting specific columns, aliases with `AS` | Not started |
+| 2 | 21-Oct | Tables, rows, columns, psql meta-commands | Done ([notes](notes/day-02-notes.md)) |
+| 3 | 22-Oct | Data types | Done ([notes](notes/day-03-notes.md)) |
+| 4 | 23-Oct | Basic `INSERT` and `SELECT *` | Done ([notes](notes/day-04-notes.md)) |
+| 5 | 24-Oct | Selecting specific columns, aliases with `AS` | Done ([notes](notes/day-05-notes.md)) |
 | 6 | 25-Oct | `WHERE` with comparison operators | Not started |
 | 7 | 26-Oct | Revision: Days 1 to 6 | Not started |
 | 8 | 27-Oct | `AND`, `OR`, `NOT`, operator precedence | Not started |

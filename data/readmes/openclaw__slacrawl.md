@@ -87,6 +87,14 @@ work across restarts and token changes. Explicit `--since` and Tail repair leave
 that backlog alone. See [Retained API threads](docs/configuration.md#retained-api-threads)
 for scope and partial-coverage behavior.
 
+Inactive [Linux acquisition templates](docs/configuration.md#scheduled-incremental-acquisition)
+are available under `operations/`; installation and source qualification are separate.
+
+For recurring API acquisition, `sync --incremental` requires explicit workspace
+and channels, disabled joining/media and no automatic Git-share imports. It
+refuses missing local history checkpoints instead of starting a backfill; see
+[qualified incremental acquisition](docs/configuration.md#archive-schema-upgrades).
+
 External provider v1 sync rejects `[sync].include_dms = false` before reading its
 checkpoint or launching the adapter. Use API sync or a supported Slack workspace
 JSON export when excluding DMs. Omitted/true retain provider intake behavior.
@@ -121,6 +129,8 @@ slacrawl --json status
 
 Use `--format text`, `--format json`, or `--format log` on commands that support structured output. Color turns off when stdout is not a TTY; `--no-color` and `NO_COLOR=1` force plain output.
 
+`metadata` also accepts `--format` after the command, such as `slacrawl metadata --format=json`. Its `--json` flag takes precedence over `--format`.
+
 Schema 9 retains a private, key-only native change journal and exposes its generation
 and sequence anchors in `status --json`. This is the foundation for later
 incremental delivery; no delivery worker or journal compaction is enabled. See
@@ -140,13 +150,18 @@ evidence but block completion. No scheduler is enabled. See
 [the outbox contract](SPEC.md#local-delivery-outbox).
 
 Explicit operator commands are available as `slacrawl delivery init`,
-`stage-seed`, `stage-changes`, and `deliver`. They require a separately qualified private scope,
-explicit native/outbox paths and bounded operations; only `deliver` contacts the
+`stage-seed`, `stage-changes`, `deliver`, and `cycle`. They require a separately qualified private scope,
+explicit native/outbox paths and bounded operations; `deliver` and `cycle` contact the
 registered service using `CRAWL_REMOTE_TOKEN` (or `--token-env`). They neither
 sync nor migrate the source/outbox and reject `--config`. See
 [the command and scope contract](SPEC.md#operator-delivery-commands) before use.
 Incremental staging uses the latest receipt-qualified baseline; unchanged H is
-a no-op, while excluded changes still require an empty part and receipt.
+a no-op, while excluded changes still require an empty part and receipt. The
+cycle resumes pending requests before capture and stops on failed or incomplete
+resume. Use an external source/outbox lock when scheduling; the command itself
+does not install or enable a timer. Inactive Linux units under
+`operations/` require separate source, limit and credential qualification before
+installation.
 
 ## Keep it current
 

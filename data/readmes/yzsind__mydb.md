@@ -41,6 +41,21 @@ cover different development builds and TPC-derived results are unaudited. See
 the [detailed comparison](docs/performance-comparison.md) for all results, test
 conditions, and limitations.
 
+**Cohere 1M HNSW**, November 12, 2026, 768-dimensional FLOAT32 cosine top-100:
+
+| Measurement | MyDB, candidate memo OFF | PostgreSQL 18.6 + pgvector 0.8.7 |
+| --- | ---: | ---: |
+| Search, 16 clients, median of three rounds | 3,005.3 queries/s | 1,968.5 queries/s |
+| Recall@100 | 94.283% | 94.341% |
+| HNSW build, one run | 92.017 s | 258.007 s |
+
+The measured search throughput ratio is 1.53x. Both configured ef=200; MyDB's
+resolved ef was 400. These are warm repeated-query measurements on one 16-vCPU
+host, with no per-engine cgroup cap. See the [full report](docs/vector-cohere-1m-hnsw-benchmark-2026-11-12.md)
+for source/build identity, candidate memo ON results, loading precision differences
+and reproducibility. They are historical development measurements, not a current
+release performance guarantee.
+
 ## Quick Start
 
 Download prebuilt packages for macOS ARM64, Linux x86_64, and Windows x64 from the
@@ -63,12 +78,12 @@ On Windows, run the equivalent command in PowerShell:
 .\mydb.exe --data-dir ./data
 ```
 
-The server listens locally on port `8738` and stores data in `./data`. No Rust
+The server listens on all IPv4 interfaces (`0.0.0.0:8738`) and stores data in `./data`. No Rust
 toolchain or config file is needed. With a MySQL 8.0 client installed, connect
 from another terminal:
 
 ```bash
-mysql -h127.0.0.1 -P8738 -uroot -proot  test
+mysql -h127.0.0.1 -P8738 -uroot -proot test
 ```
 
 A fresh data directory includes the `test` database and the local `root` account
@@ -105,13 +120,25 @@ MYDB_DATA_DIR=/tmp/mydb/data \
 When the server is ready, connect from another terminal:
 
 ```bash
-mysql -h127.0.0.1 -P8738 -uroot -proot --ssl-mode=REQUIRED test
+mysql -h127.0.0.1 -P8738 -uroot -proot test
 ```
 
 A fresh data directory creates `root@localhost` with password `root` and a `test`
 database. This account accepts only loopback connections. `MYDB_ROOT_PASSWORD`
 sets the initial password on first start; it does not change existing accounts.
 The default protocol port is `8738`; override it with `--port`.
+
+The default authentication plugin is `caching_sha2_password`. TLS is available
+without certificate configuration: the server generates a temporary self-signed
+certificate. The MySQL 8.0 client negotiates TLS by default when the server offers
+it, so the commands above need no explicit TLS option. For a local JDBC
+connection, use `jdbc:mysql://127.0.0.1:8738/test`; no TLS or
+`allowPublicKeyRetrieval` setting is needed with the server's default TLS
+configuration. Connector/J defaults to
+`sslMode=PREFERRED`, which negotiates TLS when available without verifying server
+identity. For remote connections, configure a trusted certificate and use
+`sslMode=VERIFY_IDENTITY`; see [TLS configuration](docs/configuration.md#tls)
+and the [runnable client examples](examples/README.md).
 
 Try a write, an aggregate, and a window function:
 
@@ -162,17 +189,18 @@ calls, including JDBC URLs for local evaluation.
 
 ### Docker
 
-Build and run a container (stop any local instance using port `8738` first):
+Pull the prebuilt image from Docker Hub and run a container (stop any local
+instance using port `8738` first):
 
 ```bash
-docker build -t mydb:local .
+docker pull ninedata/mydb:latest
 docker volume create mydb-data
 
-docker run --name mydb \
+docker run -d --name mydb \
   -p 127.0.0.1:8738:8738 \
   -v mydb-data:/var/lib/mydb \
   -e MYDB_ROOT_PASSWORD='change-me' \
-  mydb:local
+  ninedata/mydb:latest
 
 docker exec -it mydb mysql -h127.0.0.1 -P8738 -uroot -p --ssl
 ```
@@ -180,8 +208,8 @@ docker exec -it mydb mysql -h127.0.0.1 -P8738 -uroot -p --ssl
 Enter `change-me` for the password on a fresh volume. Stop with `docker stop
 mydb` and restart with `docker start mydb`; the named volume retains the data.
 Bridge/NAT connections through the published port do not match `root@localhost` —
-create a dedicated account in that SQL session for host connections. Local image
-builds enable TLS, `fast-alloc`, and the MySQL replication receiver by default.
+create a dedicated account in that SQL session for host connections. The image
+enables TLS, `fast-alloc`, and the MySQL replication receiver by default.
 See the [Docker deployment guide](docs/docker.md) for certificates, mounted
 configuration, cross-architecture builds, and connecting from the host.
 
@@ -231,7 +259,7 @@ MyDB minimizes DDL locking and query waiting by coordinating schema versions, in
 - **Read-compatible column changes**: adding columns without storage rewrites, compatible type modifications, and some metadata-only changes keep ordinary queries running.
 - **Constraints and charset settings**: online foreign keys, CHECK constraints, and default charset/collation metadata changes.
 
-"Lock-free DDL" is a design direction, not a current guarantee: publication still coordinates with write transactions, and replacing primary keys, rewriting column data, or converting charsets still takes locks. See [ALTER TABLE](docs/statements/ddl/alter-table.md) and the [DDL compatibility boundaries](docs/mysql80-compatibility.md#table-ddl).
+"Lock-free DDL" is a design direction, not a current guarantee: publication still coordinates with write transactions, and replacing primary keys, rewriting column data, or converting charsets still takes locks. See [ALTER TABLE](docs/statement/ddl/alter-table.md) and the [DDL compatibility boundaries](docs/mysql80-compatibility.md#table-ddl).
 
 ### Native vectors: from storage to large-scale similarity search
 
@@ -302,9 +330,9 @@ LIMIT 2;
 The INSERT returns IDs `1`, `2`, `3`; the query returns the two rows nearest to
 `[1,0,0]` by L2 distance. HNSW provides approximate nearest-neighbor search —
 recall and performance on larger collections depend on data and parameters. See
-[CREATE INDEX](docs/statements/ddl/create-index.md),
+[CREATE INDEX](docs/statement/ddl/create-index.md),
 [vector functions](docs/function/vector/README.md), and
-[INSERT RETURNING](docs/statements/dml/insert.md).
+[INSERT RETURNING](docs/statement/dml/insert.md).
 
 After configuring and authorizing `test.local_chat` and `test.local_embed`
 with the [Ollama setup](docs/ai.md#configure-ollama), try model calls through the
@@ -359,12 +387,14 @@ The full coverage map, transactional differences, and unsupported features are l
 | **`SHOW MYDB MEMORY`** | Inspect global memory usage for capacity planning and diagnostics. |
 | **Native backup and replication** | Online physical backup, WAL archiving, PITR, and an independent primary/replica physical replication protocol. |
 
-See [sequences](docs/statements/ddl/create-sequence.md), [series generation](docs/generate-series.md), [backup and recovery](docs/backup-and-recovery.md), and [native replication](docs/native-replication.md).
+Persistent DROP/TRUNCATE tables are protected by the default-on [recycle bin](docs/recycle-bin.md), including read-only inspection, restore and asynchronous reclamation.
+
+See [sequences](docs/statement/ddl/create-sequence.md), [series generation](docs/generate-series.md), [backup and recovery](docs/backup-and-recovery.md), and [native replication](docs/native-replication.md).
 
 ## Compatibility boundaries
 
 - **MySQL compatibility has explicit scope**: the classic protocol is supported, X Protocol is not; the native storage engine is not file- or plugin-ABI-compatible with InnoDB.
-- **Transaction semantics differ**: the default isolation level is `READ COMMITTED`; `REPEATABLE READ` is snapshot isolation without InnoDB gap/next-key locks; `SERIALIZABLE` range-insert prevention uses table-level shared locks.
+- **Transaction semantics differ**: the default isolation level is `READ COMMITTED`; `REPEATABLE READ` intentionally uses MVCC snapshot isolation without InnoDB gap/next-key locks to avoid range-lock contention, insert blocking, and the associated deadlock patterns. `SERIALIZABLE` range-insert prevention uses table-level shared locks. See [MVCC and locking](docs/mvcc-and-locking.md#snapshot-lifecycle-and-isolation-levels) for the design and semantic boundaries.
 - **Replication has prerequisites**: MySQL → MyDB replication is built into every server build and requires ROW/FULL binlog on the source; native physical replication uses controlled, manual role switching with no automatic leader election.
 - **Time travel has a window**: table-level `FOR SYSTEM_TIME AS OF` depends on undo retention settings, and the default retention window is `0`; queries across schema DDL boundaries are explicitly rejected.
 
@@ -377,7 +407,7 @@ Unimplemented SQL or protocol capabilities return clear errors rather than faili
 | [Documentation index](docs/README.md) | Product, SQL, operations, and implementation docs |
 | [Feature overview](docs/feature-overview.md) | Capability map and implementation boundaries |
 | [AI model calls](docs/ai.md) / [Hybrid search](docs/hybrid-search.md) | Model setup, embeddings, generation, permissions, and retrieval fusion |
-| [SQL statements](docs/statements/README.md) / [Functions](docs/function/README.md) | Syntax, semantics, and usage examples |
+| [SQL statements](docs/statement/README.md) / [Functions](docs/function/README.md) | Syntax, semantics, and usage examples |
 | [Configuration guide](docs/configuration.md) / [Config template](mydb.cnf.example) | Startup options, environment variables, and runtime settings |
 | [Data directory and recovery](docs/storage-format.md) | File roles, format compatibility, durability, and crash recovery |
 

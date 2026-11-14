@@ -128,14 +128,27 @@ Kick the tyres locally, no ClickHouse of your own required:
 
 ```sh
 git clone https://github.com/tsouza/cerberus.git && cd cerberus
-docker compose up --wait
+docker compose --profile grafana up --wait
 open http://localhost:3000   # Grafana (auto-login as admin); cerberus on :8080
 ```
 
 That builds cerberus, boots a single-node ClickHouse, loads a deterministic
 OTel fixture (logs / traces / metrics), and brings up Grafana
 pre-provisioned with cerberus as three datasources. A fresh dashboard
-populates in ~30s; `docker compose down -v` wipes the volume.
+populates in ~30s; `docker compose --profile grafana down -v` wipes the volume.
+
+The `grafana` profile runs the official `grafana/grafana` image, which is
+licensed AGPL-3.0, with the Logs, Traces, Profiles and Metrics Drilldown apps
+installed from the Grafana plugin catalogue. The catalogue's Metrics
+Drilldown 2.5.1 lacks the group-by guard that
+[`deploy/grafana/metrics-drilldown.patch`](deploy/grafana/metrics-drilldown.patch)
+adds, so when label discovery is slow, opening a metric's Breakdown tab can send
+a query with an empty label matcher that fails with HTTP 400
+([#3762](https://github.com/tsouza/cerberus/issues/3762)); moving to a plugin
+release that carries the guard is tracked in
+[#4082](https://github.com/tsouza/cerberus/issues/4082). Leave the profile off
+(`docker compose up --wait`) to run only cerberus, ClickHouse and the
+collector, and point a Grafana of your own at `http://localhost:8080`.
 
 ### Install a release
 

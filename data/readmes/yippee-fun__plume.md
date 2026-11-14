@@ -197,6 +197,34 @@ stmt.to_sql
 # => "SELECT a FROM t WHERE (b = 1) AND (tenant_id = ?)"
 ```
 
+`walk` yields every node with its parent, and `walk_with_slots` also gives the prop the node sits in, plus its index when that prop is a list. `transform` builds a changed copy and leaves the original alone. Return a node from the block to keep it, or another node to put in its place:
+
+```ruby
+stmt = Plume.parse("SELECT a FROM t WHERE b IN (1, 2) ORDER BY 1").first
+stmt.transform { |node, parent| Plume::LiteralExpression === node && !(Plume::OrderingTerm === parent) ? Plume::Variable.new(name: "?") : node }.to_sql
+# => "SELECT a FROM t WHERE b IN (?, ?) ORDER BY 1"
+```
+
+Only the nodes on the way to a replacement are copied, and the rest is shared with the original. Neither method recurses, so trees as deep as SQLite allows are fine. This works on shareable trees as well.
+
+`Plume.split` finds the statements in a script by their tokens alone, so it also works on SQL that doesn't parse. A trigger's body stays in one piece:
+
+```ruby
+Plume.split("SELECT 1; CREATE TRIGGER t AFTER INSERT ON x BEGIN DELETE FROM y; END; SELEC oops")
+# => ["SELECT 1", "CREATE TRIGGER t AFTER INSERT ON x BEGIN DELETE FROM y; END", "SELEC oops"]
+```
+`to_sql(pretty: true)` lays the SQL out over lines. Each clause starts a line. A clause too long for `max_line_length` (80 by default) puts its items one per line, indented by `indent_size` (4), and a long `AND` or `OR` chain puts each operand on its own line. Subqueries are indented inside their parentheses. `commas_start_of_line: true` puts the commas at the start of the lines:
+
+```ruby
+Plume.parse("select id, title from posts p join users u on u.id = p.user_id where u.active and p.draft = 0").first.to_sql(pretty: true)
+# => SELECT id, title
+#    FROM posts AS p
+#    JOIN users AS u ON u.id = p.user_id
+#    WHERE u.active AND (p.draft = 0)
+```
+
+Pretty SQL parses back into the same tree, which is checked across the whole fixture corpus.
+
 Tokenize SQL with `Plume.tokenize`:
 
 ```ruby
@@ -204,7 +232,83 @@ tokens = Plume.tokenize("SELECT * FROM users WHERE id = 1")
 # => [:SELECT, :STAR, :FROM, :ID, :WHERE, :ID, :EQ, :INTEGER]
 ```
 
+`with_values: true` adds each token's text, and `with_positions: true` its byte range in the SQL - for highlighting, or for finding a token's place in the original:
+
+```ruby
+Plume.tokenize("SELECT a FROM t", with_values: true, with_positions: true)
+# => [[:SELECT, "SELECT", 0, 6], [:ID, "a", 7, 8], [:FROM, "FROM", 9, 13], [:ID, "t", 14, 15]]
+```
+
+`dump` turns a tree into a plain hash that JSON can carry, and `Plume.load` turns that hash back into the same tree. Positions, keywords as written and the source all come through, so the loaded tree prints, locates and compares as the original did. That makes it possible to cache parsed trees, or to hand them to another process:
+
+```ruby
+json = JSON.generate(Plume.parse("SELECT DISTINCT a FROM t").first.dump)
+Plume.load(JSON.parse(json)).to_sql
+# => "SELECT DISTINCT a FROM t"
+```
+
+Neither `dump` nor `load` recurses, but JSON's own generator and parser do, so a very deep tree needs `max_nesting: false` and enough stack.
+
 The lexer knows _183_ token types: _153_ keywords, and _30_ more for punctuation, operators, literals and names. Words like `rowid`, `strict` and `stored`, which SQLite reads as plain names and checks by their text, are keywords here that fall back to names wherever SQLite would take a name.
+The lexer knows _184_ token types: _153_ keywords, and _31_ more for punctuation, operators, literals, names and comments. Words like `rowid`, `strict` and `stored`, which SQLite reads as plain names and checks by their text, are keywords here that fall back to names wherever SQLite would take a name.
+
+### Comments
+
+Comments are tokens of their own (`:COMMENT`), which the parser skips the same way SQLite does. `Plume.comments` lists them with their byte ranges. `tags` reads [sqlcommenter](https://google.github.io/sqlcommenter/) comments, including the ones Rails' `query_log_tags` adds, in its current format and the older `key:value` one:
+
+```ruby
+sql = "SELECT * FROM posts /*controller='posts',action='index'*/"
+Plume.comments(sql).first.tags # => {"controller" => "posts", "action" => "index"}
+```
+
+`to_sql(comments: true)` keeps the comments directly before and after a statement, such as a header line or the sqlcommenter tags. Comments inside the statement are left out. A trailing `--` comment is printed as `/* */`, so a semicolon after it doesn't become part of the comment:
+
+```ruby
+Plume.parse("-- report
+select a from t /*app='shop'*/").first.to_sql(comments: true)
+# => "-- report
+SELECT a FROM t /*app='shop'*/"
+```
+
+`Plume.parameters` numbers a statement's bind parameters the way SQLite does - `?` takes the next number, `?N` takes N, and a name keeps the number it first got - so you know what to bind where before preparing anything:
+
+```ruby
+parameters = Plume.parameters("SELECT * FROM posts WHERE user_id = :user AND (title = ? OR body = ?) LIMIT :user")
+parameters.count             # => 3
+parameters.names             # => [":user", nil, nil]
+parameters.index(":user")    # => 1
+parameters.map(&:number)     # => [1, 2, 3, 1]
+```
+
+`count`, `names` and `index` answer what `sqlite3_bind_parameter_count`, `_name` and `_index` would. Each parameter also carries its `node`, and with it the `location` it was written at.
+
+### Truncating
+
+`Plume.truncate(sql, max_length)` shortens SQL to fit a log line or an error tracker. It replaces the parts you need least to recognise the query with `...`: result columns, `WHERE` conditions, `VALUES` rows, CTE bodies, `INSERT` column lists and `UPDATE` assignments. The most deeply nested parts go first, and the longest first among those. Only if that is still not short enough is the end cut off:
+
+```ruby
+sql = "WITH recent AS (SELECT id, title FROM posts WHERE created_at > ?) SELECT r.id, r.title, u.name FROM recent r JOIN users u ON u.id = r.user_id WHERE u.active"
+Plume.truncate(sql, 100)
+# => "WITH recent AS (...) SELECT ... FROM recent r JOIN users u ON u.id = r.user_id WHERE u.active"
+```
+
+### Normalizing
+
+`Plume.normalize` replaces a query's constants with `?` and leaves everything else as written, so the same query with different values comes out the same. That lets you group a log the way `pg_stat_statements` does, or keep values out of it:
+
+```ruby
+Plume.normalize("SELECT * FROM posts /* app */ WHERE user_id = 42 AND title LIKE 'Re: %' ORDER BY 1 LIMIT 10")
+# => "SELECT * FROM posts /* app */ WHERE user_id = ? AND title LIKE ? ORDER BY 1 LIMIT ?"
+```
+
+Numbers (including their sign), strings and blobs are replaced. `NULL`, `TRUE`, `FALSE` and `CURRENT_*` are left alone, and so is an integer on its own in `ORDER BY` or `GROUP BY`, where SQLite reads it as a column position. Only `SELECT`, `INSERT`, `UPDATE` and `DELETE` are normalized. Pass a parsed statement to get a tree back with `Variable`s in place of the constants. The tests bind the constants back into the normalized SQL and check that SQLite returns the same rows.
+
+`Plume.fingerprint` goes one step further and gives the same short hash for every spelling of a query: whatever its values, parameter names, spacing, keyword and name case, or parentheses, and however many constants an `IN` list or `VALUES` holds. It is stable across processes and Ruby versions, so it can be stored:
+
+```ruby
+Plume.fingerprint("SELECT a FROM t WHERE b IN (1, 2, 3)") # => "07b540b0c5ed57e1"
+Plume.fingerprint("select A from T where b in (?)")       # => "07b540b0c5ed57e1"
+```
 
 ### What does this query read?
 
@@ -226,7 +330,12 @@ reads.tables     # => #<Set: {"posts", "users"}>
 reads.columns    # => {"posts" => #<Set: {"id", "user_id", "title"}>, "users" => #<Set: {"id", "name", "email"}>}
 reads.projected  # columns whose values can end up in the result rows
 reads.referenced # columns only used to filter, join, sort or group
+reads.calls      # => #<Set: {"like"}>
 ```
+
+`reads.calls` lists the functions the statement calls, including the ones inside the views it reads. It also covers what `LIKE`, `GLOB`, `REGEXP`, `MATCH`, `->`, `->>` and `CURRENT_*` call, because SQLite's authorizer counts those as calls too. Table-valued functions in `FROM`, like `json_each`, are listed separately in `reads.functions`.
+
+`reads.ctes` lists the names the statement's `WITH` clauses define, and `reads.aliases` maps each table alias to what it stands for, spelled as written: `{"r" => "recent", "u" => "users"}` above.
 
 `Plume.reads` also takes what you already parsed - a statement node, or the array `Plume.parse` returns - so the SQL is not parsed twice, and a tree you changed after parsing is analyzed as changed. So do `Plume.writes` and `Plume.access` below.
 
@@ -267,7 +376,7 @@ Around the edges:
 - An `INSERT` without a column list writes every column of the table except generated ones, or `"*"` without a catalog. `DEFAULT VALUES` writes the table but names no columns.
 - Setting `rowid`, `oid` or `_rowid_` writes `"ROWID"`, even when an `INTEGER PRIMARY KEY` stands in for it - unless the table has a real column by that name.
 - `RETURNING` and CTEs only read. A CTE never stands in for the table being written, even when it has the same name.
-- Writing to a view reports the view. Plume does not look into triggers, so what an `INSTEAD OF` trigger or any other trigger writes is not reported, and neither are the rows a `REPLACE` deletes to make room.
+- Writing to a view reports the view. The triggers a statement fires are not looked into, so what an `INSTEAD OF` trigger or any other trigger writes is not reported, and neither are the rows a `REPLACE` deletes to make room. Pass the `CREATE TRIGGER` itself to find out what a trigger does - see below.
 - A `SELECT` writes nothing.
 - Tables outside `main` are keyed with their schema, as in `"aux.users"`.
 
@@ -295,6 +404,59 @@ access.reads.referenced # => {"users" => #<Set: {"id"}>, "posts" => #<Set: {"use
 A value copied into a column being written counts as projected, just like one returned in the result rows.
 
 Writes are checked against the authorizer as well, and must match it exactly - except for the columns of an `INSERT`, which the authorizer does not name.
+
+`Plume.access`, `reads` and `writes` also take a `CREATE TRIGGER`. They report what its `WHEN` clause and body read, write and call each time the trigger fires. `NEW` and `OLD` stand for the row of the table the trigger is on, so reading `new.total` reads that table, as SQLite's authorizer reports it:
+
+```ruby
+access = Plume.access(<<~SQL, catalog: catalog)
+  CREATE TRIGGER audit AFTER UPDATE ON posts WHEN new.title <> old.title BEGIN
+    UPDATE users SET name = upper(name) WHERE id = new.user_id;
+  END
+SQL
+access.reads.columns     # => {"posts" => #<Set: {"title", "user_id"}>, "users" => #<Set: {"name", "id"}>}
+access.writes.updated    # => {"users" => #<Set: {"name"}>}
+```
+
+### What else does a statement do?
+
+`Plume.access` takes every other kind of statement too, and reports in `actions` what it does besides reading and writing rows. The names follow SQLite's authorizer action codes, and the actions are checked against it:
+
+```ruby
+catalog = Plume::Catalog.from_sql(<<~SQL)
+  CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT UNIQUE);
+  CREATE TRIGGER touch AFTER UPDATE ON posts BEGIN SELECT 1; END;
+SQL
+
+Plume.access("DROP TABLE posts", catalog:).actions.map { |a| [a.action, a.name, a.detail] }
+# => [[:drop_table, "posts", nil], [:drop_trigger, "touch", "posts"]]
+Plume.access("CREATE TEMP TABLE drafts (slug PRIMARY KEY)").actions.map { |a| [a.action, a.name] }
+# => [[:create_temp_table, "drafts"], [:create_temp_index, "sqlite_autoindex_drafts_1"]]
+```
+
+Each action has an `action` (`:create_table`, `:drop_temp_index`, `:alter_table`, `:pragma`, `:transaction`, `:savepoint`, `:attach`, `:reindex` and the rest), a `name`, a `detail` (the table an index or trigger is on, a pragma's value, the column `ALTER TABLE` drops) and a `schema`.
+
+As with SQLite, a `CREATE TABLE … AS` reads what its `SELECT` reads, a `CREATE INDEX` reads the columns it indexes, and `DROP TABLE` deletes the table's rows. A `CREATE VIEW` reads nothing, because SQLite only checks a view's body when the view is used. `EXPLAIN` reports what the statement it explains would do. The catalog also keeps track of indexes and triggers, which is how a `DROP INDEX` knows its table.
+
+### What does a whole script touch?
+
+`reads`, `writes` and `access` each take exactly one statement. `Plume.summary` takes any number of statements, such as a migration or a batch from a log, and merges what they touch:
+
+```ruby
+summary = Plume.summary(<<~SQL)
+  CREATE TABLE archive (id INTEGER PRIMARY KEY, title TEXT);
+  INSERT INTO archive SELECT id, upper(title) FROM posts WHERE id < 100;
+  DELETE FROM posts WHERE id < 100;
+SQL
+
+summary.statement_types  # => ["CreateTableStatement", "InsertStatement", "DeleteStatement"]
+summary.tables           # => #<Set: {"posts", "archive"}>
+summary.tables(:delete)  # => #<Set: {"posts"}>
+summary.calls            # => #<Set: {"upper"}>
+summary.actions.map(&:action)  # => [:create_table]
+summary.accesses         # => one Plume::Analysis::Access per statement
+```
+
+It takes the same `catalog:` and `strict:` arguments. Each statement sees the schema as the statements before it left it, so a script that creates a table and then fills it checks out against a catalog that has never heard of the table. The changes go to a copy of the catalog, and the one you pass in stays as it was. `Catalog#apply(statement)` makes the same changes to a catalog of your own.
 
 ### Ractors
 

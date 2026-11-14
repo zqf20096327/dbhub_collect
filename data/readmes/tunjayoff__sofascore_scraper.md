@@ -10,11 +10,11 @@
 
 One core, three faces: a **Python library**, the **`ssc` command line** for servers and automation, and a versioned **HTTP API** with a **web app** on top. It runs on your own machine or server.
 
-> **3.1.0 is released from source.** Install it from a checkout (the Docker or pip steps below); each release on GitHub also has a source archive with the built web app, and its Docker image is `ghcr.io/tunjayoff/sofascore_scraper`. There is no package on PyPI. Coming from 3.0: [Upgrading from 3.0](#upgrading-from-30); from 2.x: [Upgrading from 2.x](#upgrading-from-2x).
+> **3.1.2 is released from source.** Install it from a checkout (the Docker or pip steps below); each release on GitHub also has a source archive with the built web app, and its Docker image is `ghcr.io/tunjayoff/sofascore_scraper`. There is no package on PyPI. Coming from 3.0: [Upgrading from 3.0](#upgrading-from-30); from 2.x: [Upgrading from 2.x](#upgrading-from-2x).
 
 Unofficial and not affiliated with SofaScore; see the [disclaimer](#disclaimer).
 
-**Contents:** [Features](#features) · [Screenshots](#screenshots) · [Quick start](#quick-start) · [Command line](#command-line-ssc) · [HTTP API](#http-api) · [Python library](#python-library) · [Configuration](#configuration) · [Data and exports](#data-and-exports) · [Live watching](#live-watching) · [Security model](#security-model) · [Upgrading from 3.0](#upgrading-from-30) · [Upgrading from 2.x](#upgrading-from-2x) · [FAQ](#faq) · [Documentation](#documentation) · [Contributing](#contributing-and-development) · [License](#license)
+**Contents:** [Features](#features) · [Screenshots](#screenshots) · [Quick start](#quick-start) · [Command line](#command-line-ssc) · [HTTP API](#http-api) · [Python library](#python-library) · [Configuration](#configuration) · [Data and exports](#data-and-exports) · [Live watching](#live-watching) · [Security model](#security-model) · [Upgrading from 3.0](#upgrading-from-30) · [Upgrading from 2.x](#upgrading-from-2x) · [FAQ](#faq) · [Documentation](#documentation) · [Contributing](#contributing-and-development) · [Contact](#contact) · [License](#license)
 
 ## Features
 
@@ -104,6 +104,7 @@ For servers, scripts and agents. It never asks questions: results go to stdout, 
 | `ssc status` | Data summary, store health, the running and last job, the live service |
 | `ssc export --dataset events --format csv --out events.csv` | Writes a dataset (`events`, `slices`, `changes`, `odds`, `standings`) |
 | `ssc backup create` | Backs up the data folder; `backup list`, `backup verify NAME`, `backup restore NAME --yes` |
+| `ssc trust show` | On a network that re-signs HTTPS: shows the certificate it presents; `trust add --sha256 FINGERPRINT`, `trust list`, `trust remove FINGERPRINT` |
 | `ssc watch --stdout` | Watches the followed live matches and prints their changes as JSON lines |
 
 `ssc --help` and `ssc <command> --help` describe every command and option; `ssc describe` prints the sports, data types, commands, schemas, config keys, error codes and exit codes as JSON for programs. Other commands: `refresh`, `jobs`, `events`, `data`, `config`, `catalog`, `migrate`, `diagnostics`, `version`.
@@ -244,8 +245,9 @@ The app itself answers only to allowed host names, refuses state-changing reques
 git pull
 pip install -r requirements.txt -c constraints.txt
 pip install -e .
+python -m patchright install chromium --no-shell   # when a release raised the browser stack (3.1.2 did)
 cd frontend && npm install && npm run build && cd ..
-ssc doctor                # names every 2.x setting name that is still set
+ssc doctor                # names every 2.x setting name that is still set, and a missing browser build
 ```
 
 With Docker Compose: `git pull`, then `docker compose pull` (or `docker compose build`) and `docker compose up -d`.
@@ -281,7 +283,7 @@ The full list of changes is in [CHANGELOG.md](CHANGELOG.md).
 No. It reads the public data the SofaScore website shows without login, through a browser, as the site does. It is not affiliated with or endorsed by SofaScore. Keep the request budget low and follow SofaScore's terms and the law where you are.
 
 **Why does it need Chromium?**
-SofaScore refuses plain HTTP clients, so the app sends its requests from a headless browser page (patchright's Chromium) and solves the site's challenge there. An installed Google Chrome is not used. `ssc doctor` checks that the browser is installed and starts.
+Most requests are plain HTTP requests that present themselves as a current browser. When SofaScore answers with its challenge, the app opens a headless browser page (patchright's Chromium), solves the challenge there and sends the requests from it; the `page` live source listens through such a page too. An installed Google Chrome is not used. `ssc doctor` checks that the browser is installed and starts.
 
 **How long does a download take?**
 With the default data types a football match costs 7 requests, so a 380-match season is about 2,700 requests, roughly 9 minutes at the default 5 requests per second. Raising the budget (`--rate`, **Settings → Requests**) is faster and makes a block more likely.
@@ -294,6 +296,9 @@ Usually the newest season has only fixtures, and match details are downloaded on
 
 **Downloads fail or stop with exit code 4. What now?**
 SofaScore is refusing requests and the circuit breaker stopped the job. Look at **Health** (or `ssc status`), lower the request budget, and try later. For a bug report, attach the bundle from `ssc diagnostics` or the **Logs** page; secrets are masked, but read it before you send it.
+
+**The connection check fails with a certificate error. Why?**
+The log says `curl: (60) SSL certificate … self signed certificate in certificate chain`, and **Health** says the secure connection could not be set up. Something between the app and SofaScore re-signs HTTPS with its own CA: an antivirus that scans HTTPS, a company proxy, or a provider's block page. Exclude `www.sofascore.com` from that scanning, or let the app trust that certificate: after the failed check **Health** shows the certificate the network presents and the button **Trust this certificate** (on a server without the web app: `ssc trust show`, then `ssc trust add --sha256 <fingerprint>`). It works at once, without a restart, for the HTTP client and the built-in browser. Whoever holds the key of a trusted certificate can read and change what the app downloads, so trust only the certificate of an inspection you know about, such as your antivirus or your company's proxy. You can also put the CA certificate as a PEM file into the `ca` folder of the config folder, or name it in `SSL_CERT_FILE`; all three ways are in [docs/deploy/docker.md](docs/deploy/docker.md#a-network-that-inspects-https). `ssc doctor --live` tells you whether it worked.
 
 **Can I run it on a NAS or a server and use it from my laptop?**
 Yes, with Docker or the systemd units. Set the access token and the allowed host names first, and put TLS in front of it ([Security model](#security-model), [docs/deploy](docs/deploy/README.md)).
@@ -330,9 +335,13 @@ CI runs ruff and the Python tests (Linux with Python 3.10 and 3.14; Windows and 
 
 By submitting a contribution, you agree that it is licensed under the project's license and that the maintainer may also offer it under other terms (for example, a commercial license).
 
+## Contact
+
+For collaborations, project-based work (custom scrapers, data pipelines, integrations built on this project) and commercial licenses, write to **[tuncay.essiz@outlook.com](mailto:tuncay.essiz@outlook.com)** or see **[tuncayessiz.dev](https://tuncayessiz.dev)**. Bugs and feature requests belong in the [issues](https://github.com/tunjayoff/sofascore_scraper/issues).
+
 ## License
 
-[PolyForm Noncommercial 1.0.0](LICENSE): use, change and share it for **noncommercial purposes** (personal use, study, research, hobby projects, charities, education, public bodies). Commercial use needs a separate license; ask in an issue or contact [@tunjayoff](https://github.com/tunjayoff). Versions released before this license remain available under the MIT license.
+[PolyForm Noncommercial 1.0.0](LICENSE): use, change and share it for **noncommercial purposes** (personal use, study, research, hobby projects, charities, education, public bodies). Commercial use needs a separate license; see [Contact](#contact). Versions released before this license remain available under the MIT license.
 
 ## Disclaimer
 

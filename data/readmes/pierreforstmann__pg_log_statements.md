@@ -25,7 +25,7 @@ It must also be created with following SQL statement at server level:
 
     create extension pg_log_statements;
 
-This extension has been validated with PostgreSQL 9.5, 9.6, 10, 11, 12, 13, 14, 15 and 16.
+This extension has been validated with PostgreSQL 9.5, 9.6, 10, 11, 12, 13, 14, 15, 16, 17 and 18.
 
 ## Usage
 
@@ -77,6 +77,14 @@ NB: IP address is tested against `remote_host` of `Port` structure.
 To enable `log_statement` parameter for new server process started for some specific database, run:
 
 `select pgls_start_filter('database_name', 'your_database_name');`
+
+To disable `log_statement` filter mode, run for the specific filter:
+
+`select pgls_stop_filter('<filter name>','<filter value>');`
+
+For example to disable `user_name` filter for user `your_user`, run:
+
+`select pgls_stop_filter('user_name','your_user');`
     
 Current filter mode configuration can be listed with:
 

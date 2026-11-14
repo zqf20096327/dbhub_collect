@@ -18,6 +18,10 @@ Sync **Notion, SiYuan, DeepWiki, S3, WebDAV, WebCAL, CalDAV, Email (IMAP), Steam
   <img src="docs/hero.jpg" alt="Hindsight Ingestion task dashboard" width="600">
 </p>
 
+## ✨ Learn more about this project in 2 minutes
+
+https://github.com/user-attachments/assets/1944b647-b06f-420f-a5ba-4f1b633a871e
+
 ## ✨ Features
 
 - ⚡ **Incremental sync** — Fetch source changes where supported and skip unchanged items during ingestion.

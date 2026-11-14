@@ -5,7 +5,7 @@
 <h1 align="center">Quail</h1>
 
 <p align="center">
-  <b>An open-source inference engine for AI functions in SQL</b><br>
+  <b>SQL with AI functions on your GPUs</b><br>
   from the <a href="https://fsdatalab.github.io/">Full Stack Data Lab</a> at CMU
 </p>
 
@@ -15,37 +15,32 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT"></a>
 </p>
 
-Quail (QUery-Aware Inference Layer) runs LLMs over large datasets,
-from SQL, on your own GPUs. Quail's secret sauce is to optimize LLM
-inference and memory management for each query as a whole. This makes
-Quail lightning fast: **1.8x faster on average** than well-tuned vLLM
-baselines, and **up to 14x faster** on queries with AI joins
-([details](https://fsdatalab.github.io/blog/introducing-quail/))!
-
-```sql
-SELECT r.id,
-       AI.EXTRACT(r.body, {'actor': 'Which actor does the reviewer name?'}) AS review
-FROM reviews r
-WHERE AI.IF(PROMPT('Does this review discuss the ending?\n\n{0}', r.body))
-```
+Quail runs SQL with AI functions on your GPUs. An AI function, such as
+`AI.IF`, sends a row's text to a model and returns the model's answer.
+Quail is an [Apache DataFusion](https://datafusion.apache.org) extension:
+we use DataFusion to parse, plan, and run the rest of the SQL.
 
 [Documentation](https://fsdatalab.github.io/quail) |
 [Quickstart](https://fsdatalab.github.io/quail/docs/user-guide/quickstart) |
-[Blog](https://fsdatalab.github.io/blog/) |
 [QUAIL-B](https://github.com/fsdatalab/quail-bench)
 
 ## Install
 
-Install [quail-engine from PyPI](https://pypi.org/project/quail-engine/).
-In Python, import `quail`.
+Quail needs Python 3.12 and a
+[supported CUDA GPU](https://fsdatalab.github.io/quail/docs/user-guide/models).
 
 ```bash
 uv pip install quail-engine
 ```
 
-You need Python 3.12 and a CUDA GPU.
+The package is `quail-engine`, and you import it as `quail`.
+[Install from source](https://fsdatalab.github.io/quail/docs/contributing)
+to run the code on `main`, which can be ahead of the last release.
 
 ## Example
+
+The query below keeps the reviews that discuss the ending, and labels
+each one as praise or a complaint. It runs Qwen3 4B on one H100:
 
 ```python
 import pyarrow as pa
@@ -54,101 +49,62 @@ import quail
 reviews = pa.table({
     "id": ["r1", "r2", "r3"],
     "body": [
-        "A beautiful film with outstanding performances.",
-        "Terrible pacing and a nonsensical plot.",
-        "The cinematography was stunning, though the story dragged.",
+        "The ending was perfect and the cast was great.",
+        "Too long, and the ending made no sense.",
+        "Great music, but I want my money back.",
     ],
 })
-
 config = quail.EngineConfig(model="qwen3-4b-fp8", device="h100-sxm")
 with quail.Session(config=config) as session:
     session.register("reviews", quail.DocumentProvider.from_table(reviews, id_col="id"))
     result = session.sql("""
-        SELECT r.id
+        SELECT r.id, AI.CLASSIFY(r.body, ['praise', 'complaint']) AS kind
         FROM reviews r
-        WHERE AI.IF(PROMPT(
-            'Does this review mention a positive aspect of the movie?\n\n{0}',
-            r.body))
-    """, dialect="bq").collect()
+        WHERE AI.IF(PROMPT('Does the review discuss the ending? {0}', r.body))
+    """).collect()
     print(result)
 ```
 
+`AI.IF` keeps a review when the model answers yes, and `AI.CLASSIFY`
+returns one of the two labels. Quail reads each review once for both
+functions, and classifies only the reviews that `AI.IF` keeps.
+
+## AI functions
+
+| Function | Returns |
+| --- | --- |
+| `AI.IF` | `TRUE` when the model answers yes; use it in a filter or a join |
+| `AI.SCORE` | A number from 0 to 1; a higher number is a stronger yes |
+| `AI.CLASSIFY` | The one label the model chooses from your list |
+| `AI.EXTRACT` | Each question's answer, as text copied from the document |
+| `AI.EXTRACT_SPAN` | The position of each `AI.EXTRACT` answer in the document |
+| `AI.MAP` | Open-ended text: the model's answer to your instruction, up to a token limit |
+| `AI.SAE_FEATURES` | The model's strongest internal features for the prompt |
+
+The [SQL reference](https://fsdatalab.github.io/quail/docs/user-guide/sql)
+describes each function. The model decides which functions you can use;
+[Supported models and GPUs](https://fsdatalab.github.io/quail/docs/user-guide/models)
+lists the models and the GPU each one needs.
+
 ## Quail Server
 
-You can use Quail Server to run queries on the machine with your GPU.
-Start the HTTP server and set `endpoint` to its address. Your queries
-continue if you disconnect. `submit()` returns after the server saves
-your query. Use `get_run(query_id)` to reconnect later.
+[Quail Server](https://fsdatalab.github.io/quail/docs/user-guide/server)
+runs your queries on a remote GPU. Start `quail-server` on the GPU
+machine, and pass its address as `endpoint` when you create the session.
+The server keeps a submitted query running after the client disconnects.
 
-```bash
-uv pip install "quail-engine[server]"
-quail-server
-```
+## Rust
 
-```python
-import pyarrow as pa
-import quail
-
-reviews = pa.table({
-    "id": ["r1", "r2"],
-    "body": ["The ending was excellent.", "I liked the soundtrack."],
-})
-sql = """
-    SELECT r.id
-    FROM reviews r
-    WHERE AI.IF(PROMPT('Does this discuss the ending? {0}', r.body))
-"""
-config = quail.EngineConfig(model="qwen3-4b-fp8", device="h100-sxm")
-
-with quail.Session(
-    config=config,
-    endpoint="http://127.0.0.1:8642",
-) as session:
-    session.register(
-        "reviews",
-        quail.DocumentProvider.from_table(reviews, id_col="id"),
-    )
-    run = session.sql(sql, dialect="bq").submit()
-    for status in run.watch():
-        print(status.phase["message"])
-    table = run.result().collect()
-    print(table)
-```
-
-See [Quail Server](https://fsdatalab.github.io/quail/docs/user-guide/server).
-
-## Supported functions
-
-You can use filters and joins evaluated by a language model,
-`EXISTS` / `NOT EXISTS`, numeric scores (`AI.SCORE`), classification
-(`AI.CLASSIFY`), extracting text that answers a question (`AI.EXTRACT`),
-and writing a text answer for each document (`AI.MAP`).
-
-You can write queries in two SQL dialects for AI functions:
-[Snowflake `AI_FILTER`](https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql)
-and
-[BigQuery `AI.IF`](https://cloud.google.com/blog/products/data-analytics/sql-reimagined-for-the-ai-era-with-bigquery-ai-functions).
-
-## Supported models and GPUs
-
-Quail runs Qwen3, Qwen3.5, Qwen3.6, Qwen3.8, LFM2, d1, DiffusionGemma,
-and Decision 2.0 Kai models on NVIDIA H100 SXM, B200, L40S, and RTX PRO 6000
-Blackwell GPUs, with 1, 2, 4, or 8 GPUs per query. See
-[Supported models and GPUs](https://fsdatalab.github.io/quail/docs/user-guide/models)
-for each model's AI functions and GPU limits.
-
-## Development
-
-```bash
-uv run ruff check quail bench calibrate tests experiments tools
-uv run python tools/check_long_strings.py
-uv run python tools/check_names.py
-uv run vulture
-uv run lint-imports
-uv run pytest -q
-```
+A Rust program adds the `quail-engine` crate and calls `quail::Session`.
+A program with its own DataFusion session adds Quail's AI functions to
+the session.
+[Use Quail from Rust](https://fsdatalab.github.io/quail/docs/contributing#use-quail-from-rust)
+shows both.
 
 ## Contributing
 
-See the [contributing guide](https://fsdatalab.github.io/quail/docs/contributing)
-for how to propose and submit changes.
+[Report a bug](https://github.com/fsdatalab/quail/issues) on GitHub.
+Follow the
+[developer guide](https://fsdatalab.github.io/quail/docs/contributing)
+to contribute to Quail; the guide says how to build from source and
+which checks to run.

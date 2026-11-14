@@ -275,6 +275,8 @@ Within the JSON structure, the following values are replaced by randomly generat
 - Every `vector:X:LO..HI` will be replaced by an `X`-dimension vector with uniform components in `[LO, HI]`.
 - Every `vector:X:clustered:N` will be replaced by an `X`-dimension unit vector drawn from a mixture
   of `N` clusters. Add `:SIGMA` (default `0.35`) to widen or tighten the clusters.
+- Every `vector_file:PATH` will be replaced by a row of real embeddings read from the `.fbin` file at `PATH`:
+  sample `n` takes row `n`. See [Vector data](#vector-data).
 
 ```json
 {
@@ -441,7 +443,8 @@ block describes one KNN benchmark:
 |---|---|---|---|---|---|
 | SurrealDB (3.x) | ✓ | ✓ | ✓ | ✓ (HNSW + DiskANN) | `<\|k,ef\|>` operator; DiskANN needs a build that has the DDL; HNSW and DiskANN legs need a server that reports `building.compacting` (see [Index build time](#index-build-time)) |
 | SurrealDB (2.x) | ✓ | ✓ | — | — | 2.6 has no DiskANN; filtered legs are declined, not answered unfiltered |
-| PostgreSQL | ✓ | ✓ | — | ✓ | pgvector; DiskANN would need pgvectorscale |
+| PostgreSQL (pgvector) | ✓ | ✓ | — | ✓ | `-d postgres+pgvector`: pgvector's `hnsw` |
+| PostgreSQL (pgvectorscale) | ✓ | ✓ | ✓ | ✓ | `-d postgres+pgvectorscale`: pgvector's `hnsw` for HNSW, pgvectorscale's `diskann` for DiskANN, in its `plain` layout; no L1/Manhattan DiskANN |
 | Redis Stack | ✓ (FLAT) | ✓ | — | ✓ | no native L1/Manhattan metric |
 | everything else | — | — | — | — | the run is skipped, not failed |
 
@@ -461,6 +464,41 @@ sits at 65% of a random pair's distance under `vector:128`, and at 8% under
 Clusters are drawn from the corpus seed, so two seeds give two genuinely different datasets rather
 than one structure populated differently. Query vectors come from the same generator, so they follow
 the corpus distribution by construction.
+
+Synthetic clusters do not behave like real embeddings in every index. Quantised indexes, which search
+over compressed vectors, can lose far more recall on one than on the other. To measure on real
+embeddings, use `vector_file:<path>`. The file uses the `.fbin` layout from big-ann-benchmarks: the row
+count and the dimension as little-endian `u32`s, then each row's `f32` components, little-endian.
+
+- Sample `n` takes row `n`, in both the create and the update phase, so the update phase rewrites each
+  vector unchanged.
+- Query `i` takes row `rows - 1 - i`, counting back from the end of the file. The holdout `seed` does
+  not apply. With `-s N`, the file must hold at least `N` plus the holdout `count` rows, so the queries
+  stay out of the corpus. crud-bench checks this before it starts.
+- An unfiltered leg on a file column reports recall without a corpus `seed`, because the file sets
+  every row and every query. A filtered leg still needs the `seed`, to rebuild the columns it filters on.
+- Every component must be a finite number. crud-bench refuses a file with a `NaN` or an infinity.
+- crud-bench hashes the contents of the file. The ground-truth cache, the split-run manifest and the
+  template digest in the results all change when the file changes, even under the same path.
+- The whole file is read into memory once, at startup: 1M 768-d rows take 3 GB. This memory belongs to
+  the crud-bench process. For an embedded engine, the Memory column measures that process, so it
+  includes the file. For a server or a Docker engine, it measures the server only. Do not compare the
+  Memory column of an embedded run with a server run that reads the same file.
+
+For example, VectorDBBench's Cohere dataset of 1M 768-d Wikipedia embeddings ships as Parquet. Append
+its 1,000 test vectors after its 1M training vectors to get one file, then run with `-s 1000000`:
+
+```python
+import numpy as np, pyarrow.parquet as pq
+
+def emb(path):
+    return np.stack(pq.read_table(path, columns=["emb"])["emb"].to_numpy(zero_copy_only=False)).astype("<f4")
+
+rows = np.concatenate([emb("train.parquet"), emb("test.parquet")])
+with open("cohere-1m.fbin", "wb") as f:
+    np.array(rows.shape, dtype="<u4").tofile(f)
+    rows.tofile(f)
+```
 
 Corpus size matters more than dimension. Dimension scales cost linearly without making the search
 harder; rows add candidates that can confuse a graph. Measured against embedded SurrealDB at 128
@@ -590,9 +628,9 @@ why the calibration had to happen at the target scale. Selective predicates do n
 at all — at 1% pgvector's post-filter never passes 0.271 on this ladder, while Redis brute-forces the
 matching rows at 1.000 — so the ladder is chosen on the unfiltered and 50% columns.
 
-The DiskANN ladder, `[50, 200]`, is **not calibrated**. DiskANN runs only on SurrealDB, whose 1M arm
-is blocked: the index keeps materialising for over an hour after reporting ready, so there is nothing
-yet to calibrate against.
+The DiskANN ladder, `[50, 200]`, is **not calibrated**. When this calibration ran, DiskANN ran only on
+SurrealDB, whose 1M arm was blocked: the index kept materialising for over an hour after reporting
+ready, so there was nothing to calibrate against. pgvectorscale's DiskANN came later.
 
 Note every **exact** leg reads `1.000` under both predicates on all three engines. That is the check
 that the three renderings select the same rows the harness does: if SurrealQL, ANSI SQL and the
@@ -638,7 +676,7 @@ nothing — a configuration mistake, not a result.
 | engine | rendering |
 |---|---|
 | SurrealDB (3.x) | `WHERE <field> <\|k,ef\|> $q AND <pred>`, with the KNN operator leading — HNSW and DiskANN share this path; bruteforce gets a plain `WHERE` before the `ORDER BY` |
-| PostgreSQL | `SELECT id FROM record WHERE <pred> ORDER BY <field> <op> $1 LIMIT k` |
+| PostgreSQL | `SELECT id FROM record WHERE <pred> ORDER BY <field> <op> $1 LIMIT k`, for both its HNSW and pgvectorscale's DiskANN index |
 | Redis Stack | `(<pred>)=>[KNN k @v $q …]`, a hybrid query; filter columns are mirrored into the `vec:{key}` HASH and declared `NUMERIC` / `TAG CASESENSITIVE` in `FT.CREATE` |
 
 `CASESENSITIVE` matters: RediSearch folds case on TAG fields by default, which would admit rows the
@@ -648,9 +686,9 @@ SurrealDB 2.x declines filtered legs and reports `-`. Running the unfiltered que
 against a filter-aware answer key would report a recall collapse that says nothing about the engine,
 and a skip is distinguishable from that where a wrong number is not.
 
-DiskANN is filtered wherever it exists, which today is SurrealDB 3.x alone — it shares the index path
-above with HNSW. Neither pgvector nor Redis Stack ships a DiskANN index, so there is nowhere else to
-apply it; pgvectorscale's `diskann` would be a separate adapter and is tracked in #284.
+DiskANN is filtered wherever it exists: on SurrealDB 3.x it shares the index path above with HNSW,
+and on pgvectorscale it takes the same SQL as pgvector's HNSW, whose filter the planner applies to
+the index scan. Neither pgvector alone nor Redis Stack ships a DiskANN index.
 
 ##### Indexed filter columns
 
@@ -871,7 +909,32 @@ cargo run -r -- -d neo4j -e '127.0.0.1:7687' -s 100000 -c 12 -t 24 -r
 
 ### [Postgres](https://www.postgresql.org/)
 
-Postgres is a networked, object-relational, ACID-compliant, SQL-based database.
+Postgres is a networked, object-relational, ACID-compliant, SQL-based database. crud-bench runs it in three
+variants. Each one uses an image pinned by digest, because an image tag can be rebuilt with a different base
+or package build.
+
+| `-d` | Image | Postgres package | Extensions | Vector indexes |
+|---|---|---|---|---|
+| `postgres` | `postgres:18.6`, the official image | `18.6-1.pgdg13+2` (Debian 13) | none | none |
+| `postgres+pgvector` | `pgvector/pgvector:0.8.7-pg18` | `18.6-1.pgdg12+2` (Debian 12) | pgvector 0.8.7 | HNSW |
+| `postgres+pgvectorscale` | built by crud-bench from the `postgres+pgvector` image | `18.6-1.pgdg12+2` (Debian 12) | pgvector 0.8.7, pgvectorscale 0.9.1 | HNSW, DiskANN |
+
+`postgres` is stock Postgres. It has no vector type, so it stores a vector column as `REAL[]` and skips
+vector scans, as MySQL and SQLite do.
+
+`postgres+pgvector` uses the image that the pgvector project publishes. This image is not built on the
+official `postgres:18.6` image: it uses the Debian 12 build of Postgres 18.6, and the official image uses the
+Debian 13 build. Do not compare `postgres` with `postgres+pgvector` as if only the extension is different.
+
+`postgres+pgvectorscale` is the `postgres+pgvector` image with only the official pgvectorscale 0.9.1 package
+added. Timescale publishes pgvectorscale only in its `timescaledb-ha` image, which has a different build of
+Postgres and more extensions. crud-bench builds this image from
+[`docker/postgres-pgvectorscale.Dockerfile`](docker/postgres-pgvectorscale.Dockerfile) before the run, and
+checks the release archive against its SHA-256. HNSW legs therefore run on the same server as on
+`postgres+pgvector`.
+
+All three variants run the same client, SQL and server settings. The server variants differ only in the
+image.
 
 ```bash
 cargo run -r -- -d postgres -s 100000 -c 12 -t 24 -r
@@ -884,6 +947,25 @@ following command:
 
 ```bash
 cargo run -r -- -d postgres -e 'host=127.0.0.1 user=postgres password=postgres' -s 100000 -c 12 -t 24 -r
+```
+
+With `-e`, the `-d` variant tells crud-bench which extensions the server has installed.
+
+#### DiskANN with pgvectorscale
+
+pgvectorscale adds a DiskANN index, `diskann`, to Postgres and pgvector. On `-d postgres+pgvectorscale`, DiskANN
+legs build a `diskann` index (`num_neighbors`, `search_list_size` and `max_alpha` from `degree`, `l_build` and
+`alpha`) and search with `diskann.query_search_list_size` set from `l_search`. HNSW legs use pgvector, as on
+`-d postgres+pgvector`.
+
+The index uses the `plain` storage layout, which searches over the full vectors, so its recall follows
+`l_search` as SurrealDB's DiskANN does. The default `memory_optimized` layout searches over 2-bit codes
+and sets its recall by the rescore count, `diskann.query_rescore`, which has a maximum of 1000. At
+1M x 768 with a rescore count of 1000, that layout reaches only 0.72 recall@10. The `plain` layout
+builds about four times slower.
+
+```bash
+cargo run -r -- -d postgres+pgvectorscale -s 100000 -c 12 -t 24 -r
 ```
 
 ### [ReDB](https://www.redb.org/)

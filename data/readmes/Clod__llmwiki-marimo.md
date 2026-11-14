@@ -69,13 +69,13 @@ that also keeps live data and computes grounded advice over it.*
 
 - **Dynamic data, not just prose** — a domain-neutral `datasets` engine ingests structured, periodically-refreshed tables (rates/prices/stats) as a lane separate from the durable concept pages, exposed to the chat agent as a `query_dataset` tool; values are quoted verbatim with their `as_of` date, never recalled from memory.
 - **Deterministic, grounded advisory** — the example `finance_argentina` overlay computes "what would I earn" over those datasets in pure Python (effective-rate math, eligibility), lists every option ranked and cited, and refuses to estimate the non-deterministic (equities, inflation, FX) rather than fabricating a number.
-- **Enforceable grounding (cite-or-refuse)** — a deterministic post-check: if an answer isn't backed by a tool result it's replaced with an honest refusal, so the model can't quietly fall back on general knowledge. A mode selector in the chat switches between pre-retrieval, strict (buffered + gated) and unverified (streamed).
+- **Enforceable grounding (cite-or-refuse)** — a deterministic post-check: if an answer isn't backed by a tool result it's replaced with an honest refusal, so the model can't quietly fall back on general knowledge. A mode selector in the chat switches between pre-retrieval, strict (buffered + gated) and unverified (streamed). In the pre-retrieval and strict modes, a figure of the answer that no passage, table or question supports is marked in red (the figure check), and the text is never edited or blocked. The unverified mode changes nothing between the user and the agent: the agent receives the conversation as written, and the user sees the text of the agent with no check.
 - **Wiki-first RAG** — reads a curated, interlinked encyclopedia first (`index.md` → wiki FTS5 → raw source chunks as a fallback), so knowledge is compiled once and compounds instead of being re-retrieved per query.
 - **Per-wiki language (en/es, extensible)** — choose the language when you create the wiki (it is stored as `[wiki] language` in `wiki_config.toml`), and the whole wiki — generated pages, section headers, *and* chat answers — is produced in that language, **regardless of the source documents' language**. Every prompt the model receives is a file per language in `prompts/`, so a Spanish wiki gets Spanish instructions. Run an English wiki and a Spanish wiki side by side; adding a third language is one `Locale` entry and one translated file per prompt.
 - **LLM-as-judge eval packet** — one command bundles the questions, the model's own answers, the cited evidence, and source-vs-generated page pairs against a *frozen* 1–5 rubric, to score chat **and** ingestion quality (and compare models).
 - **Model-suitability check** — a one-command PASS/FAIL on whether a given model clears the bar for off-corpus refusal, citations, and cited synthesis.
 - **Evidence-based prompting** — the default system prompt (`prompts/system_prompt.<lang>.md`) embeds a worked, fully-cited example because testing proved that's what reliable cross-document citation took.
-- **Self-maintaining wiki** — twelve lint checks (contradictions, stale pages, orphans, missing concepts, missing cross-refs, data gaps, filled gaps, vocabulary drift, thin pages, sources that produced no page, sentences with no support in the sources, pages with no valid verification) with auto-repair of the safe ones. The last two are report only: they list the unsupported sentences of a verified page and the pages that need verification, and nothing rewrites the text.
+- **Self-maintaining wiki** — sixteen lint checks (contradictions, stale pages, orphans, missing concepts, missing cross-refs, data gaps, filled gaps, vocabulary drift, thin pages, sources that produced no page, missing images, orphan images, images with no description, stale image descriptions, sentences with no support in the sources, pages with no valid verification) with auto-repair of the safe ones. The last two are report only: they list the unsupported sentences of a verified page and the pages that need verification, and nothing rewrites the text.
 - **Provider-agnostic, split-model** — any OpenAI-compatible endpoint; run a cheap local model for chat and a stronger one for ingestion, via `.env` alone.
 
 **Engineering quality**
@@ -456,16 +456,32 @@ If `WIKI_LLM_*` are blank, ingestion falls back to `LLM_*`.
 > broken. You can keep a cheap model for ingestion and a stronger one for chat (or
 > vice versa) via the split config above.
 >
-> **Not sure if a model clears the bar?** Run `uv run python scripts/eval_chat_model.py`
-> — it asks the built-in sample wiki a few fixed questions and gives a PASS/FAIL on
-> exactly these behaviours (off-corpus refusal, citations, cited synthesis). It
-> verifies the model **actually called a retrieval tool**, not just that the answer
-> *looks* cited — so a model that fabricates a citation from memory (zero tool
-> calls) fails. See [`docs/uat_test_plan.md`](docs/uat_test_plan.md) Part C.
+> **Not sure if a model clears the bar?** Press **Test** next to the model in the
+> block "Models" of the **Settings** screen, or run
+> `uv run python scripts/eval_chat_model.py`. Both run the same tests, on material
+> that ships with the product, in a temporary wiki that is deleted at the end:
+>
+> - **Reading model** — three questions to a wiki of two pages. The model answers
+>   with the datum of the page and cites the page, declines a question the page does
+>   not answer, and, in the mode with tools, searches the wiki before it answers.
+> - **Ingestion model** — the ingestion of a text of one paragraph. The model writes
+>   the summary page and a concept page that names the source, and the lint finds no
+>   error.
+> - **Vision model** — a scanned page with an invented text and table. The fourteen
+>   data of the page are in what the model reads, and the description of the page has
+>   the format the product asks for.
+>
+> Each check prints ✓, ✗, or ? when the service gave no answer. The test does not
+> write `.env`. The **Save** button next to it writes that model, and asks for a
+> confirmation when the values were not tested or failed their last test. Passing is
+> necessary, not sufficient: the tests find a model that cannot do the work, and they
+> do not compare two models that can. See [`docs/uat_test_plan.md`](docs/uat_test_plan.md) Part C.
 >
 > **A data point from local testing** (LM Studio on an M2 Pro, Q4_K_M quants, chat
-> agent pinned at `temperature=0`). The strict retrieve-then-cite protocol is
-> demanding, and local models under ~12B each broke it in a different way:
+> agent pinned at `temperature=0`), measured with an earlier version of
+> `eval_chat_model.py` that asked three questions to a sample wiki of fairy tales.
+> The strict retrieve-then-cite protocol is demanding, and local models under ~12B
+> each broke it in a different way:
 >
 > | Model (local) | `eval_chat_model.py` | How it failed |
 > | --- | --- | --- |
@@ -549,7 +565,7 @@ See [`docs/manual/apps.md`](docs/manual/apps.md) §8.
 
 | Format | Parser | Needs |
 | ------ | ------ | ----- |
-| PDF | opendataloader-pdf | A Java runtime. Text-heavy PDFs work well |
+| PDF | opendataloader-pdf | A Java runtime. Text-heavy PDFs work well; a scanned PDF needs an OCR engine (below) |
 | DOCX | LibreOffice → PDF → opendataloader-pdf | LibreOffice **and** a Java runtime |
 | DOC | LibreOffice → PDF → opendataloader-pdf | LibreOffice **and** a Java runtime |
 | ODT | LibreOffice → PDF → opendataloader-pdf | LibreOffice **and** a Java runtime |
@@ -559,9 +575,41 @@ See [`docs/manual/apps.md`](docs/manual/apps.md) §8.
 
 The list of formats is one place in the code, `base/domain/ingestion/formats.py`. LibreOffice needs its word processor component (Writer) to convert; the **Maintain** tab shows whether the installed LibreOffice converts a document.
 
-**Text-based PDFs only.** Scanned / image-only PDFs are not OCR'd yet — they  
-ingest as empty or garbled text. OCR for scanned PDFs is on the roadmap  
-(see [`ROADMAP.md`](ROADMAP.md)).
+**Images of a PDF.** opendataloader-pdf extracts the images of a PDF while it converts
+it. Ingestion keeps them in the document's ingestion folder,
+`.llmwiki/cache/local/<document id>/images/`, beside `converted.pdf`. The folder is
+derived from the source, so it stays out of `wiki/` and out of git. The stored text
+links to each kept image with a path relative to the workspace root,
+`![Imagen, página 3](.llmwiki/cache/local/<document id>/images/imageFile4.png)`, and
+the summary page of a source with images gets a "Figures" section, written by the code,
+with one thumbnail per image, its page number and its caption. The web application
+serves the images at `/w/{wiki_id}/images/{document_id}/{file}`. The model receives the
+link only; it does not see the image. A DOCX goes through the same path, as a PDF.
+Ingesting a changed source replaces its images, and deleting a source deletes them.
+Two lint checks look after the images: `missing_image` (a stored link whose file does
+not exist) and `orphan_image` (a kept file that no link uses). Their repairs call no
+model: the first extracts the images again when the source is still in `sources/`, or
+replaces the link with "[Imagen no disponible, página N]" when it is gone; the second
+deletes the file. A rebuild of the index must extract the images again.
+
+**Describing the images (opt-in).** With `describe = true` in the `[images]` section of `wiki_config.toml`, a vision model (`VISION_BASE_URL`, `VISION_API_KEY`, `VISION_MODEL` in `.env`, falling back to the ingestion and then the chat model) describes each kept image. The description is a file beside the image (`<image>.desc.json`, outside git), enters the stored text of the source as a block delimited by `<!-- image-description: … -->` so the search, the ingestion model and the verification see it, and appears in the Figures section of the summary page in a folded block labelled "Generated description". The verification marks a sentence supported only by a description with its own state (a dotted underline). Images of a Markdown source (local raster files inside `sources/`) are kept and described the same way, and an image file (`.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`) is a source whose text is its description. The text inside an image is untrusted input: see [`SECURITY.md`](SECURITY.md). Details: [`docs/design_image_handling.md`](docs/design_image_handling.md).
+
+**Scanned PDFs (OCR).** A PDF whose pages carry almost no text (fewer than 20
+characters on at least a quarter of its pages) is read with the OCR engine set in
+`.env` as `OCR_ENGINE`:
+
+| `OCR_ENGINE` | What it does |
+| ------------ | ------------ |
+| `none` (default) | The ingestion fails with a message that names the setting and the two engines. |
+| `tesseract` | Local: `ocrmypdf` with Tesseract, run as external programs. Install them with `brew install ocrmypdf tesseract tesseract-lang` (macOS) or `sudo apt-get install ocrmypdf tesseract-ocr tesseract-ocr-spa` (Debian, Ubuntu); on Windows follow the [ocrmypdf instructions](https://ocrmypdf.readthedocs.io/en/latest/installation.html#windows). The language follows the wiki language (`spa` for `es`, `eng` for `en`). The copy with a text layer is kept as `ocr.pdf` in the document's cache directory, and the source viewer shows it. |
+| `vision` | A model with vision reads each page through an OpenAI-compatible API: one model call per page, and the text may vary between runs. Set `OCR_MODEL`, `OCR_BASE_URL` and `OCR_API_KEY`; each falls back to its `LLM_*` value. |
+
+`quickstart.py` asks which engine to use and writes the setting. In a mixed PDF
+(some pages with text, some scanned) both engines read only the scanned pages.
+The images of a scanned page are kept as on any other page: the extraction keeps
+them first, OCR then replaces the text of the page, and the page keeps the links to
+its kept images, so the image handling (the Figures section, the lint checks, the
+optional description) applies to them.
 
 ---
 
@@ -613,10 +661,11 @@ a user-acceptance test in three parts:
 - **Part B** — a manual checklist: does the chat stay grounded and cite sources?
   do generated pages read like real entries? do lint findings make sense?
 - **Part C** — *is the model you picked good enough?* A one-command check of the
-  chat model (no documents needed — it uses the built-in sample wiki):
+  models of `.env` (no documents needed — the tests bring their own material). The
+  **Test** buttons of the Settings screen run the same tests:
 
   ```bash
-  uv run python scripts/eval_chat_model.py    # PASS/FAIL for the chat model (LLM_MODEL)
+  uv run python scripts/eval_chat_model.py    # PASS/FAIL for the reading, ingestion and vision models
   ```
 
 Test PDFs live in `tests/fixtures/pdfs/`; the E2E workspace is gitignored and
@@ -690,8 +739,9 @@ the way you'd treat untrusted code: at ingestion its text is turned into wiki
 pages automatically — see [`SECURITY.md`](SECURITY.md).
 - **No image / vision handling.** Text-only ingestion — images embedded in a  
 document are skipped, not described or summarised.
-- **Text-based PDFs only.** No OCR yet, so a scanned / image-only PDF ingests as  
-empty or garbled text. Use a text-based PDF or convert it first.
+- **OCR is off by default.** A scanned / image-only PDF fails with a message until  
+you set `OCR_ENGINE` (see [Document formats](#document-formats)). The `vision`  
+engine costs one model call per page and its text may vary between runs.
 - **Output is markdown only — no alternate formats.** The wiki  
 records a full citation/link graph in the database (`document_references`:  
 which page cites which source, which pages link to which), and the  

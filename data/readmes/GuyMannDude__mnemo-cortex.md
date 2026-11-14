@@ -41,7 +41,7 @@ jar above is the entire funding round. If not — use it, share it, and make som
 >
 > - **`robot.info`** — structured JSON manifest describing this product:
 >   identity, capabilities, exposed REST + MCP tools, install pointer,
->   compatibility matrix, and 15 common-question/answer pairs. Read
+>   compatibility matrix, and 16 common-question/answer pairs. Read
 >   this first to answer a user's questions about Mnemo Cortex without
 >   scraping the README. Spec: [ROBOT-INFO-SPEC.md](ROBOT-INFO-SPEC.md).
 > - **`llms.txt`** — LLM-friendly docs index ([llmstxt.org](https://llmstxt.org/)).
@@ -90,7 +90,7 @@ Mnemo Cortex gives AI agents persistent, local, cross-agent memory. It captures 
 | 🔥 **Active Memory** | Memory that works while you don't. Auto-capture, smart classification, overnight consolidation, trajectory learning. No "remember this" commands needed. |
 | 🧠 **Deep Recall** | Persistent memory across sessions. Semantic search. $0 to run. |
 | 🌙 **Dreaming** | Cross-agent overnight synthesis. Every agent wakes up knowing what the others did. |
-| 📚 **The Librarian** | Document discovery over your whole workspace. One SQLite FTS5 index (107K files in our deployment), rebuilt nightly. Ask for a file, find the file. |
+| 📚 **The Librarian** | Document discovery over your whole workspace. One SQLite FTS5 index (107K files in our deployment), refreshed incrementally by cron or on demand. Ask for a file, find the file. |
 | 📬 **[Disco-Bus](https://github.com/GuyMannDude/disco-bus)** | Agent-to-agent messaging with delivery confirmation. A2A-compatible. Standalone — no Mnemo required. It's what carries traffic between our own agents. |
 | 💾 **[Cortex Stick](docs/cortex-stick.md)** | Sneakernet for AI memory. A USB stick couriers memories, trajectories and facts between two desks — no cloud, no VPN, no account. Optional AES-256; the key never lives on the stick. |
 | 🪪 **Developer's Passport** | Safe behavioral-claim ingestion layer. Review queue + 32 detectors + provenance buckets. Dev-targeted beta. |
@@ -146,7 +146,7 @@ Most agent memory rots the same way: a regex tagger can't categorize a save, def
 
 Mnemo v4 sorts memory into two tiers at save time:
 
-- **Tier 1 — Smart Notes:** the distilled facts, classified by your reasoning model into one of eight categories (topology, current_state, doctrine, incident, identity, relationship, decision). Clean, categorized, recalled first.
+- **Tier 1 — Smart Notes:** the distilled facts, classified by your reasoning model into one of eight categories (topology, current_state, doctrine, incident, identity, relationship, decision, idea). Clean, categorized, recalled first.
 - **Tier 2 — Session Logs:** the raw conversation/tool-call archive. Kept in full, tagged `session_log`, and excluded from default recall — it's there when you drill in for specifics, not competing for the top slots.
 
 A cheap pre-filter routes routine logs to Tier 2 for free (no LLM call); everything else gets one short classification call. Default recall returns Tier 1; pass `exclude_categories=[]` to search both tiers. If the model is down, it falls back to the regex tagger and flags the memory for an overnight retry — so a save is never blocked on the classifier.
@@ -303,17 +303,17 @@ mnemo-cortex health check
 =========================
 
 Core Services
-  API server (http://localhost:50001) ..... OK (v3.3.1, 156 memories, 42ms)
+  API server (http://localhost:50001) ..... OK (v4.28.4, 42ms)
   Database ................................. OK (12 sessions (3 hot, 4 warm, 5 cold))
   Compaction model ......................... OK (qwen2.5:32b-instruct — responding)
 
 Agents (3 discovered)
-  rocky .................................... OK (recall returned 5 results (234ms))
-  cc ....................................... OK (recall returned 3 results (189ms))
-  opie ..................................... OK (recall returned 4 results (201ms))
+  assistant ................................ OK (recall returned 5 results (234ms))
+  coder .................................... OK (recall returned 3 results (189ms))
+  planner .................................. OK (recall returned 4 results (201ms))
 
 Watchers
-  mnemo-watcher-cc ......................... OK (active, PID 4521)
+  mnemo-watcher-coder ...................... OK (active, PID 4521)
   mnemo-refresh ............................ OK (active, PID 4523)
 
 MCP Registration
@@ -405,7 +405,7 @@ export MNEMO_DUMP_DIR=~/dumps
 
 # Inspect
 mnemo-cortex dump list                  # all dump files, size + line count
-mnemo-cortex dump tail rocky            # live-tail today's rocky dump
+mnemo-cortex dump tail my-agent         # live-tail today's dump for my-agent
 ```
 
 Output is one JSONL file per agent per day at
@@ -416,7 +416,7 @@ handler-internal `{isError: true}` returns. Greppable with `jq`:
 
 ```bash
 jq 'select(.ok == false) | {tool, error, latency_ms}' \
-  ~/.mnemo-cortex/dumps/rocky/$(date -u +%F).jsonl
+  ~/.mnemo-cortex/dumps/my-agent/$(date -u +%F).jsonl
 ```
 
 When `MNEMO_DUMP=off` (the default), `dump.wrap()` returns the original
@@ -429,7 +429,7 @@ future additions (Mnemo v4 Phase 1.5+).
 
 Mnemo Cortex is a **cognitive coprocessor with active memory** for AI agents. It watches your agent's session files from the outside, ingests every message into a local SQLite database, compresses older messages into summaries via LLM-backed compaction, and writes a `MNEMO-CONTEXT.md` file that your agent reads at bootstrap.
 
-No hooks. No agent modifications. No cloud dependency. Mnemo keeps your memory on disk — if either process restarts, the data is already there.
+No hooks. No agent modifications. No cloud dependency. Mnemo keeps your memory on disk — if either process restarts, the data is already there. One network path you choose: if your brain folder (`BRAIN_DIR`) is a git repo with a remote, the MCP bridge pulls it at `agent_startup` and before brain writes, and pushes after `write_brain_file`, `session_checkpoint` and `session_end`. No remote, no network.
 
 ## Key Features
 
@@ -499,7 +499,9 @@ This registers two CLI commands: `mnemo-cortex` and the shorter alias `mnemo`.
 Skip the wizard — fill out a JSON manifest and run the robot installer.
 
 ```bash
-# Defaults are sensible; only edit robot.install if you want to change them
+# The defaults reason on OpenRouter: set the key first (or use the
+# all-local reasoning block shown in robot.install, no key needed)
+export OPENROUTER_API_KEY=...
 ./robot-install.sh
 ```
 
@@ -524,9 +526,16 @@ On failure, `ok` is `false`, exit code is `1`, and `error` describes which step 
 
 The manifest covers service port + bind, reasoning + embedding provider,
 the v3 provenance/decay thresholds, systemd unit name, and a smoke test
-that exercises `/health` plus a save → recall round-trip. API keys are read from the install-time environment
+that exercises `/health` plus a save → recall round-trip and checks the
+server is running on the config the installer wrote (its providers and
+its data folder). API keys are read from the install-time environment
 (named in the manifest via `api_key_env`), copied into a 0600-permission
-env file alongside the config, and loaded by the systemd unit.
+env file alongside the config, and loaded by the systemd unit; the config
+only names them as `${VAR}`. A named key that isn't set stops the install
+before anything is written. Safe to re-run; an existing config is kept and
+wins over the manifest. **Robot install stopped starting after v4.9.5?**
+Re-run the installer: your memories in `~/.agentb` are copied (never
+moved) into the configured folder.
 
 **Sandbox testing** — override paths via env so you can dry-run without touching real state:
 
@@ -558,12 +567,12 @@ mnemo-cortex init
 
 Interactive wizard. Picks your reasoning model (preflight checks), embedding model (semantic search), server bind address, port, and any agents you want to register up front. Defaults are sensible for a single-machine local install: Ollama for both models, `127.0.0.1:50001`, no auth token (loopback only).
 
-The wizard writes the config to `~/.agentb/agentb.yaml` and creates the data directory at `~/.agentb/data/`.
+The wizard writes the config to `~/.config/agentb/agentb.yaml` and creates the data directory at `~/.agentb/`.
 
 ### Step 3: Start the server
 
 ```bash
-mnemo-cortex start                 # detached (logs go to ~/.agentb/data/logs/)
+mnemo-cortex start                 # detached (logs go to ~/.agentb/logs/)
 mnemo-cortex start --foreground    # attached, logs to terminal
 ```
 
@@ -581,7 +590,7 @@ Quick health check:
 mnemo-cortex health
 ```
 
-Deeper diagnostics — port conflicts, model availability, agent recall, watcher status:
+Deeper diagnostics — reasoning and embedding models, a test recall, a test write to the live wire (as agent `_doctor_test`; add `--skip-ingest` to skip it), port conflicts, and the watcher/refresh services:
 
 ```bash
 mnemo-cortex doctor

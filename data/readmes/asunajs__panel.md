@@ -5,53 +5,80 @@
 适合这些场景：
 
 - 每天定时签到、领积分、备份文件、清理临时目录
-- 在旧手机、树莓派或低配盒子上长期挂一个小服务
+- 在家里的小主机、树莓派或低配盒子上长期挂一个小服务
 - 用 JavaScript 写插件，把一组重复操作做成按钮或定时任务
-- 只想跑一段 Shell / Python / JavaScript，不想为它写完整插件
+- 只想跑一段 Shell / Python / PHP / 二进制程序，不想为它写完整插件
 
-当前版本：**0.3.2**。设置页可以直接看到正在运行的面板版本和构建 commit。
-
-![面板首页](docs/screenshots/web-dashboard.png)
+当前版本：**0.4.2**。设置页可以直接看到正在运行的面板版本。
 
 ---
 
 ## 最快跑起来
 
-零基础只看这三步，后面所有章节都可以先跳过。
-
 ### 1. 装
 
-Linux、树莓派、旧手机（Termux）一行搞定：
+Linux、树莓派、家里的小主机一行搞定：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/asunajs/panel/main/install.sh | bash
 ```
 
-Windows 直接下 [`plugin-panel-windows-x86_64.exe`](https://github.com/asunajs/panel/releases/latest)，双击就能跑。
+脚本会识别 CPU 架构，从 GitHub Release 下载对应的静态二进制，**强制校验 SHA256**
+（还有 ELF/体积自检），然后装进 `~/.local/bin`。GitHub 下载慢可以走镜像
+（`PANEL_BASE_URL=https://你的镜像/panel bash install.sh`）；脚本其他行为不变。
+
+支持的产物：`aarch64-linux-musl`（64 位 ARM：手机、盒子、树莓派 3/4/5）、
+`x86_64-linux-musl`（PC / VPS）。**0.4.0 暂时没有 32 位 ARM（armv7）产物**：
+引擎依赖的 `rquickjs-sys` 没给 `armv7-unknown-linux-musleabihf` 预生成绑定，
+走 bindgen 那条路还要再通一层容器内的构建脚本问题；install.sh 在 armv7 上会明确
+告诉你「这个版本没有 32 位 ARM 产物」而不是含糊失败。要装在 32 位设备上，
+按下面的「从源码构建」本地编（或先用 0.3.x）。
 
 ### 2. 运行
 
 ```bash
-plugin-panel
+panel
 ```
 
-第一次启动会在终端打印一行**一次性口令**，形如 `K7QM-3XP9`。留着它，下一步要用。
+第一次启动还没有口令，直接跑就行 —— **口令在浏览器里设**，不用提前配环境变量。
 
-### 3. 打开浏览器，设一个口令
+### 3. 打开浏览器
 
 ```text
 http://127.0.0.1:8787
 ```
 
-会自动跳到设置页：输两遍新口令，再填终端里那个一次性口令，点「完成设置」。
+首次打开会弹「**给面板设一个口令**」：
 
-> 从**别的设备**访问（树莓派、盒子这类没有本机屏幕的机器）：用 `BIND_ADDR=0.0.0.0:8787` 启动，
-> 终端会把局域网地址排在前面打印出来，照那条打开就行。
-面板会自动重启，然后用刚设的口令登录就行。
+- 自己填一个（至少 8 个字符），或点「随机生成一个」（只显示这一次，先抄下来）；
+- 设完**立即生效并直接进入**，不用重启；
+- 只想在自己机器上快速试用，可以点「先不设（仅本机）」，之后在
+  **设置 → 安全** 里补设。
 
-> 一次性口令只在**还没设过口令**时出现，设完就没有了。
-> 要服务化部署（systemd / 反代 / 容器、想跳过引导）可以直接配 `PANEL_TOKEN_HASH`，
-> 见[第一次启动](#第一次启动)。
+设过口令之后，打开就是解锁页，输一次就进仪表盘。
+
+> **想把口令放进环境变量**（服务化 / 无头部署、不想每次手输）：
+> `PANEL_TOKEN=你的令牌 panel`。启动时派生成「盐 + 哈希」存进 `data/auth.json`，
+> 明文不落盘、也会立刻从进程环境里删掉。这条是「跳过引导」的旁路，不是必经之路。
+
+> 从**别的设备**访问：用 `PANEL_BIND=0.0.0.0:8787` 启动，
+> 然后用 `http://那台机器的局域网IP:8787` 打开。公网访问请走 HTTPS 反向代理，
+> 见下面的[安全提醒](#安全提醒)。
+
+<details>
+<summary>macOS / 从源码构建</summary>
+
+macOS 没有预编译产物，本地构建（需要 Rust 和 Node——构建时生成引擎的内置 JS）：
+
+```bash
+npm ci --prefix tools/bundle
+node tools/bundle/build.mjs
+cargo build --release
+```
+
+产物是 `target/release/panel`，单文件，拷到哪都能跑。
+
+</details>
 
 ---
 
@@ -59,336 +86,98 @@ http://127.0.0.1:8787
 
 打开面板后，左侧有几项：
 
-- **仪表盘**：插件任务与脚本任务数量、最近运行、引擎状态
-- **插件任务**：插件注册的定时任务，可以执行、暂停、修改时间
-- **脚本任务**：放在任务目录里的脚本，以及由面板创建的脚本任务
-- **日志**：按插件和级别查看运行输出
-- **插件列表**：安装、启用、打开插件自己的页面（切换运行时的入口默认隐藏，可在设置里开启）
-- **插件商城**：在插件列表右上角的入口，从 GitHub Release / 单文件安装（不占侧边栏）
-- **推送**：任务失败 / 熔断时把结果发到 10 个渠道（pushplus、Server酱、企业微信、Telegram、Bark、钉钉、邮件……）
-- **设置**：主题、插件执行引擎开关、面板版本和编译信息
-
-第一次使用，建议先按下面的步骤跑一个最简单的脚本任务。成功一次以后，再装插件或写复杂任务。
+- **仪表盘**：引擎健康、任务数量、最近运行、最近日志
+- **插件**：已安装的插件，安装 / 启停 / 重载 / 配置，带界面的插件从这里打开它自己的页面
+- **脚本**：第三方脚本（sh / node / bun / python3 / php / 二进制…），手动跑或按计划跑
+- **任务**：所有定时任务的总览，手动运行、暂停、改时间
+- **运行记录**：每次运行的状态、耗时、错误
+- **日志**：按插件 / 任务 / 级别查看运行输出
+- **设置**：安全（令牌）、通知渠道、备份恢复、版本信息
 
 ---
 
-## 安装
+## 第一个定时任务：用脚本
 
-### Linux、树莓派、旧手机（Termux）
+脚本就是**第三方程序**：sh、node、bun、python3、php、编译好的二进制都行。
+面板只做三件事——保管文件、按时触发、把 stdout/stderr 和退出码记下来。
 
-在终端执行：
+1. 脚本页点「**新建脚本**」，名字填 `daily.sh`（扩展名决定运行时，也能手动改），
+   计划填 `@every 1h`（或标准 cron：`0 9 * * *`），点创建。
+2. 编辑器里写内容，保存：
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/asunajs/panel/main/install.sh | bash
-```
+   ```sh
+   #!/bin/sh
+   echo "开始备份 $(date)"
+   tar czf "$PANEL_SCRIPT_DATA/backup.tgz" ~/Documents/重要资料
+   echo "备份完成"
+   ```
 
-脚本会识别 CPU 架构，从 GitHub Release 下载对应的静态二进制，校验 SHA256，然后放到 `PATH` 里。Termux 会装到 `$PREFIX/bin`，普通 Linux 一般装到 `~/.local/bin`。
+3. 点「**立即运行**」跑一次；之后每到整点面板会自动触发。
+4. 到「运行记录」和「日志」页看结果：stdout 进日志（info）、stderr 标 error、
+   退出码非 0 = 这一次运行失败。
 
-如果 GitHub 下载慢，可以先把 `install.sh` 保存到本地再运行，或者用镜像：
-
-```bash
-PANEL_BASE_URL=https://你的镜像地址/plugin-panel bash install.sh
-```
-
-用 `gh-proxy.com` 加速时，脚本和产物都要走代理：
-
-```bash
-curl -fsSL -o /tmp/panel-install.sh \
-  https://gh-proxy.com/https://raw.githubusercontent.com/asunajs/panel/main/install.sh
-
-PANEL_BASE_URL=https://gh-proxy.com/https://github.com/asunajs/panel/releases/latest/download \
-  bash /tmp/panel-install.sh
-```
-
-也可以一行跑完：
-
-```bash
-curl -fsSL https://gh-proxy.com/https://raw.githubusercontent.com/asunajs/panel/main/install.sh \
-  | PANEL_BASE_URL=https://gh-proxy.com/https://github.com/asunajs/panel/releases/latest/download bash
-```
-
-固定版本就把 `latest/download` 换成 `download/v0.1.9`。代理只解决访问问题，安装脚本仍会校验 SHA256；但代理和校验和同源，正式环境建议优先用官方地址。
-
-### 手动下载
-
-到 [Releases](https://github.com/asunajs/panel/releases) 下载：
-
-- 64 位 ARM（ARM 盒子、树莓派 3/4/5、手机）：`plugin-panel-aarch64-linux-musl`
-- 32 位 ARM（armv7l、老树莓派、部分电视盒子）：`plugin-panel-armv7-linux-musleabihf`
-- 普通电脑、VPS：`plugin-panel-x86_64-linux-musl`
-
-下载后改个名字，加上执行权限：
-
-```bash
-chmod +x plugin-panel
-./plugin-panel
-```
-
-<details>
-<summary>从源码运行（需要 Rust 工具链）</summary>
-
-第一次编译会久一点。
-
-```bash
-git clone https://github.com/asunajs/panel.git
-cd panel
-cargo build --release
-./target/release/plugin-panel
-```
-
-</details>
+脚本自己的数据目录在环境变量 `PANEL_SCRIPT_DATA` 里（每次执行都会建好），
+往里写文件不会撒到别处。脚本能用什么运行时、二进制怎么上传、超时和输出上限，
+详见 [docs/scripts.md](docs/scripts.md)。
 
 ---
 
-## 第一次启动
+## 插件
 
-第一次启动会在终端打印一次性口令，浏览器打开面板会自动跳到设置页。
-下面这条路是**服务化部署**用的（systemd / 反代 / 容器，没有终端可看一次性口令）；
-单机直接跑的话看上面的[最快跑起来](#最快跑起来)就够了。
+插件是面板的**一等公民**：除了定时任务，还能有自己的 Web 界面、配置表单、
+数据库和通知能力——这些由面板的 `panel:host` API 提供（网络出站有 SSRF 门，
+日志自动归属到对应的运行记录）。
 
-先生成一个口令哈希：
+- **安装**：插件页点「上传」（单个 `.js` 或 zip 包），或直接把文件放进插件目录
+  （默认 `plugins/`），再点「扫描目录」。
+- **配置**：插件卡片 → 配置。带清单的插件会出表单，改完立刻生效。
+- **任务**：插件自己注册定时任务，出现在「任务」页，可以手动运行、暂停、改时间。
 
-```bash
-printf '%s' '换成你自己的口令' | plugin-panel hash-token
-```
+想写一个插件：一个 `.js` 文件就够，`import host from 'panel:host'` 之后就能用
+日志、SQLite、HTTP、通知和定时任务。文档：
 
-命令会输出一行 `export PANEL_TOKEN_HASH='prehash1:...'`，复制它，然后启动：
+- [插件契约](docs/plugin-contract.md)：插件与面板的分工、部署路径
+- [host API](docs/host-api.md)：全部能力与限额（fetch 走标准 Web 用法）
+- [插件开发](docs/plugins.md)：生命周期、自带界面、上传规则
+- [界面准则](docs/ui.md)：插件自带界面怎么跟面板长得像
 
-```bash
-export PANEL_TOKEN_HASH='prehash1:...'
-plugin-panel
-```
-
-看到类似下面的日志就说明启动成功：
-
-```text
-监听 http://127.0.0.1:8787
-```
-
-浏览器打开：
-
-```text
-http://127.0.0.1:8787
-```
-
-输入刚才的口令。登录成功后，会话会保存在浏览器里，短时间内不用重复输入。
-
-> 本机临时调试也可以使用明文口令，但要显式打开开发开关：
->
-> ```bash
-> PANEL_TOKEN=dev-token PANEL_ALLOW_PLAIN_TOKEN=1 plugin-panel
-> ```
->
-> 这个开关只适合本机调试。放到服务器上时请用 `PANEL_TOKEN_HASH`。
-
-### 让别的设备访问
-
-默认只监听 `127.0.0.1`，也就是只有本机能打开。要让手机或另一台电脑访问，需要监听局域网地址：
-
-```bash
-BIND_ADDR=0.0.0.0:8787 plugin-panel
-```
-
-然后用 `http://这台机器的局域网IP:8787` 打开。
-
-注意：一旦监听 `0.0.0.0`，同一网络里的人都能访问登录页。请使用强口令；如果要从公网访问，建议放在 Nginx、Caddy 或 Cloudflare Tunnel 后面，并开启 HTTPS。
-
-没有公网 IP 时不要做端口映射，改用**出站隧道**：本机主动连出去，不需要公网 IP、不需要改路由器，面板继续绑回环。cloudflared、frp、Tailscale 怎么选，完整配置和排障见 [远程访问](docs/remote-access.md)。
+> 插件只面向 0.4：老面板（0.3.x QuickJS 版）的插件不能直接拿来用，契约见
+> 插件契约文档。
 
 ---
 
-## 第一个定时任务
+## 任务管理
 
-先不写插件，用 Shell 脚本试一次。
+「任务」页是所有定时任务的总览：
 
-### 1. 找到任务目录
+- **手动运行**：不用等计划，点一下就跑
+- **暂停 / 恢复**：停掉定时触发，手动运行照旧
+- **改时间**：覆盖插件建议的计划（能一键恢复默认）
+- **提前量**：让任务在计划时刻之前多少毫秒被唤醒（给需要预热的任务）
+- **熔断**：任务连续失败会自动熔断并通知，避免每个周期都白跑一遍
 
-面板默认从当前目录下的 `tasks/` 读取脚本。第一次启动后，这个目录会自动创建。结构可以是：
-
-```text
-tasks/
-├── hello.sh
-├── js/
-│   └── report.mjs
-├── py/
-│   └── cleanup.py
-└── sh/
-    └── backup.sh
-```
-
-根目录、`js/`、`py/`、`sh/` 都会被扫描。脚本放在根目录也可以，放子目录只是为了整齐。
-
-### 2. 写一个脚本
-
-创建 `tasks/hello.sh`：
-
-```sh
-#!/bin/sh
-# @name 打个招呼
-# @cron */5 * * * *
-
-echo "hello $(date)"
-```
-
-文件开头这两行是给面板看的：
-
-- `@name`：任务在面板上显示的名字
-- `@cron`：什么时候执行
-
-保存后回到面板，打开「脚本任务」，应该能看到「打个招呼」，并且显示下一次执行时间。
-
-### 3. 手动跑一次
-
-在任务卡片上点「运行一次」。然后打开「日志」，应该能看到 `hello ...` 这一行。
-
-如果看不到，先检查：
-
-- 脚本有没有执行权限：`chmod +x tasks/hello.sh`
-- `@cron` 是否写对
-- 面板日志里有没有「脚本任务」相关报错
-
-### 4. 改执行时间
-
-可以直接改文件里的 `@cron`，也可以在面板任务卡片上点「编辑」，修改运行时间。面板上的修改会单独记住，文件本身不会被改。
-
-常用写法：
-
-| 表达式 | 含义 |
-|---|---|
-| `*/5 * * * *` | 每 5 分钟 |
-| `0 * * * *` | 每小时整点 |
-| `0 9 * * *` | 每天 9:00 |
-| `30 8 * * 1-5` | 周一到周五 8:30 |
-| `0 10,20 * * *` | 每天 10:00 和 20:00 |
-| `0 10 1 * *` | 每月 1 日 10:00 |
-
-面板同时支持 5 段和 6 段 cron。5 段是「分 时 日 月 周」，6 段在最前面多一个「秒」。
-
-### 5. 用 Python 或 JavaScript
-
-Python 脚本：
-
-```python
-# @name 清理临时文件
-# @cron 0 3 * * *
-# @timeout 120000
-
-import os
-import time
-
-print("start", time.time())
-```
-
-需要机器上有 Python 3.8 以上。面板默认调用 `python3`，也可以用 `PANEL_PYTHON` 指定路径。
-
-JavaScript 脚本需要 Node.js 20.6 以上，或者 Bun 1.0 以上：
-
-```js
-// @name 生成日报
-// @cron 0 8 * * *
-// @runtime node
-
-console.log('report', new Date().toISOString())
-```
-
-`@runtime` 可以写 `node` 或 `bun`。JS 脚本还能 `import 'host-api'`，使用日志、SQLite、HTTP、WebSocket 等能力。
-
-Python 和 Shell 脚本是普通进程，没有 `host-api`。这是有意的：它们本来就是操作系统的一部分。
+计划表达式认标准五段 cron 和 `@every <n><s|m|h|d>` 两种写法，还支持抖动后缀
+（`0 8 * * * ~1h` = 每天 8 点前后一小时随机，避免掐点触发被风控），
+细节见 [docs/scheduler.md](docs/scheduler.md)。
 
 ---
 
-## 安装插件
+## 通知与推送
 
-插件适合放更复杂的功能，比如带配置页的工具、需要保持状态的签到程序。插件用 JavaScript 写，默认跑在面板内置的 QuickJS 里，不占一个 Node 进程。
+任务失败、熔断、插件主动喊话，都会进右上角的**通知**（未读数在那儿）。
 
-写法上**尽量贴近 Node**：`async` / `await` 在任务、路由、`on_tick` 里都能用，
-配 `setTimeout` / `setInterval` / `sleep(ms)` / `await fetch_async(url)`。
-`await` 期间执行线程会让给别的活 —— 毫秒级定时器照常触发，不会被一个慢任务堵住。
-（细节与边界见 [plugin-api.md §4.5](docs/plugin-api.md)、[host-api.md §1.2.11](docs/host-api.md)）
-
-### 从插件商城安装
-
-打开「插件列表」→ 右上角「插件商城」，找到条目后点「安装」。商城从 GitHub 解析版本、资产和 SHA-256，确认后直接写入 `plugins/`：
-
-- 支持 Release 资产（`.zip` / `.js` / `.mjs` / `.ts`）和仓库里的单文件；
-- 私有仓库配置 `PANEL_GITHUB_TOKEN` 或 `PANEL_GITHUB_TOKEN_FILE`（Contents: Read）即可；
-- 单文件 `.ts` 在安装时用**内置 OXC** 转成 `.js`，运行时仍然只加载 `.js`；不需要 Bun 或 Node；
-- 国内网络可选用 `PANEL_MARKET_PROXY=https://gh-proxy.com` 给**公开仓库**加速；私有仓库始终直连；
-- 目录和格式见 [插件商城](docs/market.md)。
-
-商城不提供评分、评论、自动更新或卸载；安装仍是覆盖写，确认弹层会提示同名文件会被覆盖。
-
-### 上传插件
-
-打开「插件列表」，点右上角「上传插件」：
-
-- 单文件插件：选 `.js` 文件，会上传到 `plugins/js/`
-- 多文件插件或带配置页的插件：打包成 `.zip` 上传
-- 带配置页的目录插件，zip 里保留外层目录名，例如 `mcloud/index.html`、`mcloud/app.js`
-
-上传后面板会自动扫描。插件卡片出现后，点「启用」或「加载」。如果没反应，点「全部重载」。
-
-### 给插件配置
-
-简单插件不用自己写配置页。插件列表每张卡上有一个「配置」按钮：
-
-- 文本、数字、开关会显示成普通表单；
-- 嵌套对象和数组切到「JSON」页改；
-- 配置存在插件数据目录的 `config.json` 里，不在插件源码目录，覆盖安装不会丢。
-
-插件代码只读一行：
-
-```js
-import { config } from 'host-api';
-
-const cfg = config();
-```
-
-配置文件也可以直接编辑或用 `curl` 写：
-
-```bash
-curl -X PUT \
-  -H 'X-Panel-Token: <令牌>' \
-  -H 'x-panel: 1' \
-  -H 'Content-Type: application/json' \
-  --data @config.json \
-  http://127.0.0.1:8787/api/plugins/插件名/config
-```
-
-保存后下一次任务生效，不需要重载插件。
-
-### 插件从哪来
-
-插件是别人写的程序，安装前先看一遍源码。Node/Bun 插件能读写文件、启动子进程、访问网络，面板不会把它们关进沙箱。
-
-### 切换运行时
-
-执行引擎设置默认隐藏（大多数插件用内置 QuickJS 就够了）。先在「设置 → 插件」里勾上「显示执行引擎设置」，插件卡片上才会出现运行时的下拉框和自定义解释器路径。
-
-- **QuickJS**：默认，内存占用小，适合大多数插件
-- **Node**：需要机器上有 Node.js 20.6+
-- **Bun**：需要 Bun 1.0+
-
-切换后插件会重新加载。某个插件用了 npm 包或原生 `fs`，通常就需要 Node/Bun。
-
-反过来不必因为「它用了 `fetch` / `URL` / `TextEncoder` / `crypto` / `Buffer`」就切到 Node：这些 Web/Node 全局
-由面板补进内嵌 QuickJS（[§4.10](docs/plugin-api.md#410-nodeweb-兼容层全局与内置模块)），
-照着 Node 写的插件在默认引擎里能直接跑。
+要发到手机 / IM，在 **设置 → 通知** 里配渠道：Server酱、ntfy、Gotify、自定义
+webhook、SMTP 邮件等，再配一条**推送规则**（什么等级、哪些事件、发给哪条渠道）。
+任务失败默认就会推。详见 [docs/notify.md](docs/notify.md)。
 
 ---
 
-## 定时、提前量和插件任务
+## 备份与恢复
 
-普通脚本的 cron 就是它真正执行的时间。
+**设置 → 备份恢复**：一键导出全部内容（插件、脚本、配置、运行历史）成一份备份
+文件；换机器或重装时一键恢复。脚本文件和插件文件都在里面。
 
-有些插件需要在目标时间之前准备，比如抢兑、开抢前登录、提前拉取数据。这类任务会在插件任务页显示两个信息：
-
-- **运行时间**：用户设置的目标时间，例如 `0 10,20 * * *`
-- **提前唤醒**：提前多少秒唤醒，例如 `60s`
-
-所以下一次执行可能显示 `19:59`，但目标仍然是 `20:00`。提前量由插件声明，也可以在插件自己的设置页里改。
-
-插件任务卡片上的「编辑」修改的是运行时间；「暂停」会停止触发，但不会删除任务；「删除」对插件声明的任务是隐藏，插件更新后不会自动回来，需要点「恢复」。
+日常建议定期备份 `data/panel.db` 和插件目录。
 
 ---
 
@@ -396,160 +185,105 @@ curl -X PUT \
 
 ### 登录不上
 
-先确认启动时用的是哪个口令。用 `PANEL_TOKEN_HASH` 启动时，浏览器里输入的是原始口令，不是那串 `prehash1:...`。
+确认浏览器里输入的是启动时 `PANEL_TOKEN` 给的那串令牌。换过令牌后旧会话失效，
+重新输入即可。
 
-如果之前登录过，换口令后旧会话会失效，重新登录即可。
+### 令牌忘了怎么办
 
-### 口令忘了怎么办
-
-凭据存在 **`<数据库所在目录>/credential`**（默认 `data/credential`，权限 0600）。
-删掉它、重启面板，就会重新进引导页，用终端里打印的一次性口令设个新口令：
+凭据存在 `data/auth.json`（只有盐和哈希，明文不存）。删掉它重启面板，然后在
+**设置 → 安全** 里设一个新的：
 
 ```bash
-rm data/credential
-plugin-panel
+rm data/auth.json
 ```
 
-⚠ 删之前确认你还要保留 `data/panel.db` —— 只删 `credential`，别把整个目录清空。
+⚠ 只删 `auth.json`，别把整个 `data/` 清空——`panel.db` 是全部数据。
 
 ### 端口被占用
 
-换一个端口：
-
 ```bash
-BIND_ADDR=127.0.0.1:8790 plugin-panel
+PANEL_BIND=127.0.0.1:8790 ./target/release/panel
 ```
-
-### 手机锁屏后任务不跑
-
-Android 会清理后台进程。Termux 里执行：
-
-```bash
-termux-wake-lock
-```
-
-再到系统设置里关掉 Termux 的电池优化。不同手机的入口不一样，通常在「应用管理 → Termux → 电池 → 不受限制」。
-
-想**开机自动起来**、或者让进程退了自动拉起，见 [部署与分发 · 旧手机（Termux）](docs/deployment.md#旧手机termux) 里的「开机自启」和「常驻」。
-
-### Python 插件在哪
-
-没有 Python 插件了。`.py` 只作为脚本任务执行，不注册任务、不提供路由、不常驻。需要长期运行的 Python 程序，建议写成系统服务，或者用 Shell 脚本调用它。
 
 ### 任务不执行
 
 按顺序检查：
 
-1. 任务是不是被暂停了
-2. cron 是不是写成了未来的时间
-3. 脚本文件是否还在，路径是否正确
-4. 「日志」里有没有报错
-5. 插件任务的处理函数是否还存在
+1. 任务是不是被暂停了（任务页的状态列）
+2. 计划是不是写错了（脚本编辑抽屉里改一个能算出来的表达式试试）
+3. 运行记录里有没有失败原因（脚本看日志：stdout/stderr 都按这次运行记着）
+4. 插件是不是被停用了（停用 = 卸载，重启面板也不会自动加载）
+
+### 从 0.3.x 老面板迁移
+
+老面板的插件账号、任务计划、脚本、运行历史、通知渠道可以整体搬进 0.4：
+任务页的暂停与改过的计划原样接管，没装 0.4 版的插件先以占位形式列着。
+步骤与矩阵见 [docs/migrate.md](docs/migrate.md)。
 
 ### 数据放在哪
 
-默认都在启动目录下：
+都在 `data/` 一个目录里（可用 `PANEL_DATA_DIR` 改）：
 
-```text
-data/panel.db      任务、账号、插件状态
-plugins/           插件代码和插件页面
-tasks/             脚本任务
-logs/              插件日志
-data/plugin-data/  插件自己的数据
-```
-
-备份时把这几个目录一起复制走即可。升级面板不会删除这些文件。
+- `panel.db` —— 任务、运行记录、日志、插件状态（SQLite）
+- `auth.json` —— 令牌凭据（0600）
+- `plugin-data/` —— 每个插件 / 脚本自己的配置和数据
+- `scripts/` —— 脚本文件
+- `trash/` —— 删除的脚本 / 插件（可找回）
 
 ### 怎么升级
 
-**方式一：设置页里自更新（推荐，官方 Linux 产物）**
+换新二进制、重启面板即可。数据库会自动迁移，旧的插件、脚本、任务、
+运行历史都保留。
 
-打开「设置 → 关于」，点「检查更新」；有新版且 SHA256 校验通过后，点「更新并重启」。
-下载、校验、原子替换和重启都在面板里完成，数据目录不变。
+### 常驻运行
 
-- 只对官方发布的 Linux musl 三平台产物开放；macOS / 自编译版本会提示「本平台无产物」，请走方式二。
-- 拿不到 `SHA256SUMS` 或摘要不匹配会中止，不会替换文件；详见 [自更新说明](docs/update.md)。
-- 不想让面板联网检查，设 `PANEL_UPDATE=0`。
-
-**方式二：手动替换二进制**
-
-```bash
-# 默认安装到 ~/.local/bin（Termux 为 $PREFIX/bin）
-curl -fsSL https://raw.githubusercontent.com/asunajs/panel/main/install.sh | bash
-
-# 或固定版本
-PANEL_VERSION=v0.1.8 \
-  curl -fsSL https://raw.githubusercontent.com/asunajs/panel/main/install.sh | bash
-```
-
-安装脚本只负责替换文件，**不会重启正在运行的进程**。按原来的部署方式重启：
-
-```bash
-# systemd
-sudo systemctl restart plugin-panel
-
-# launchd / macOS
-launchctl kickstart -k gui/$(id -u)/com.asunajs.panel
-
-# 手动前台运行：停掉旧进程后重新启动
-pkill -x plugin-panel
-plugin-panel
-```
-
-如果旧版本装在自定义目录（例如 systemd 的 `/opt/plugin-panel`），一键安装默认写
-`~/.local/bin` 不会替换它。先看 `systemctl cat plugin-panel` 的 `ExecStart`，再用
-`PANEL_PREFIX=/opt/plugin-panel` 安装，或直接替换那个路径的二进制。
-
-升级前建议停服务后备份 `data/panel.db`、`plugins/`、`tasks/` 和 `data/plugin-data/`。
-新版本启动异常时没有自动回滚，保留上一版 Release 产物以便手动换回。
+macOS 用 launchd、Linux 用 systemd，把面板注册成服务（开机自启、崩了自动拉起）。
+本仓自带一个本机日常部署脚本 `scripts/deploy-daily.sh`（构建 + 换二进制 + 重启），
+示例服务文件见 [docs/ops.md](docs/ops.md)。
 
 ---
 
 ## 安全提醒
 
-- 不要把没有口令的面板直接暴露到公网。
-- 公网访问请走 HTTPS 反向代理。
-- 从公网访问时优先再套一层身份校验（Cloudflare Access、VPS 上的 basic auth），不要只靠面板口令，见 [远程访问](docs/remote-access.md)。
-- 插件和脚本都是可信代码，只安装来源明确的插件。
-- 不要把 `PANEL_TOKEN`、`PANEL_TOKEN_HASH` 提交到 Git。
-- 定期备份 `data/panel.db` 和 `plugins/`。
+- 不要把没有令牌的面板直接暴露到公网；公网访问走 HTTPS 反向代理。
+- 插件和脚本都是**在你机器上执行的可信代码**——只安装来源明确的插件和脚本。
+- 插件的全部网络出站都过面板的 SSRF 门（默认禁回环与云元数据地址）。
+- 不要把 `PANEL_TOKEN` 提交到 Git。
+- 定期备份 `data/` 目录。
 
 ---
 
 ## 更多文档
 
-- [文档索引](docs/README.md)：按「使用」「开发」「工程记录」分组
-- [部署与分发](docs/deployment.md)：systemd、Termux、镜像、Release 产物
-- [远程访问](docs/remote-access.md)：没有公网 IP 时用出站隧道（Cloudflare Tunnel、frp、Tailscale）
-- [运行与配置](docs/configuration.md)：全部环境变量
-- [脚本任务](docs/script-jobs.md)：文件头、退出码、两种来源
-- [上传插件与脚本](docs/upload.md)：单文件和 zip 的路径规则
-- [插件 API](docs/plugin-api.md)：写插件时看这份
-- [host-api 规范](docs/host-api.md)：日志、SQLite、HTTP、WebSocket、SMTP、任务注册
-- [运行时选型](docs/runtimes.md)：QuickJS、Node、Bun 怎么选
-- [安全](docs/security.md)：鉴权、令牌存储、外部代码边界
-- [开发日志](docs/changelog/)：每次改动的原因和踩过的坑
+| 文档 | 内容 |
+|---|---|
+| [docs/README.md](docs/README.md) | 全部文档的索引（按使用 / 开发 / 工程记录分组） |
+| [docs/scripts.md](docs/scripts.md) | 脚本：运行时、任务名、输出、护栏、迁移 |
+| [docs/plugins.md](docs/plugins.md) | 插件生命周期、自带界面、上传规则、与旧面板的对照 |
+| [docs/plugin-contract.md](docs/plugin-contract.md) | 插件契约：两个仓库、两条部署路径、十条铁律 |
+| [docs/host-api.md](docs/host-api.md) | host API：能力、限额、SSRF 门、日志脱敏 |
+| [docs/scheduler.md](docs/scheduler.md) | 调度：任务状态、熔断、时钟回拨、休眠补跑 |
+| [docs/notify.md](docs/notify.md) | 通知与推送渠道 |
+| [docs/ops.md](docs/ops.md) | 运维：配置、备份恢复、保留策略、健康摘要 |
+| [docs/api.md](docs/api.md) | HTTP API 参考（脚本 / curl 调用时看这份） |
+| [docs/pitfalls.md](docs/pitfalls.md) | 踩过的坑（每条带复现方式或守卫位置） |
 
 ---
 
 ## 开发
 
 <details>
-<summary>跑测试 / 冒烟</summary>
+<summary>跑测试与门禁</summary>
 
 ```bash
-cargo test
-cargo clippy --all-targets -- -D warnings
-node scripts/test-web-assets.mjs
-cargo build --release
-python3 scripts/smoke.py ./target/release/plugin-panel
+cargo test                      # 全部单测（含引擎 / 调度 / 网络层）
+bash scripts/check-pitfalls.sh  # 踩过的坑要有守卫盯着
+bash scripts/check-docs.sh      # 文档内链与篇幅
+bash scripts/check-plugin-boundary.sh  # 面板仓不放插件产物
+node --check web/app.js         # 前端零构建，改完刷新浏览器即可
 ```
 
-前端在 `web/`，没有构建步骤，改完刷新浏览器即可。开发时可以用：
-
-```bash
-PANEL_TOKEN=dev-token PANEL_ALLOW_PLAIN_TOKEN=1 WEB_DEV_DIR=./web ./target/release/plugin-panel
-```
+前端在 `web/`，没有构建步骤。日常部署用 `scripts/deploy-daily.sh`。
 
 </details>
 

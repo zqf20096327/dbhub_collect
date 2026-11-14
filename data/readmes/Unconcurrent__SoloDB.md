@@ -4,6 +4,8 @@ Store your C# and F# objects, query them with LINQ, and keep related documents a
 
 Upgrading to 1.4 requires manual migration of existing Decimal and BigInteger data. Follow the [upgrade instructions](https://github.com/Unconcurrent/SoloDB/blob/master/docs/numeric-migration.md).
 
+See the [changelog](https://github.com/Unconcurrent/SoloDB/blob/master/CHANGELOG.md) for versioned changes and usage examples, starting with 1.4.2.
+
 ## Core Features
 
 SoloDB is packed with features that provide a seamless and powerful developer experience.
@@ -15,6 +17,7 @@ SoloDB is packed with features that provide a seamless and powerful developer ex
 - **Full NativeAOT Support**: Build C# and F# applications with generated operations for your models and queries. See the [NativeAOT setup guide](https://github.com/Unconcurrent/SoloDB/blob/master/docs/generated-metadata.md).
 - **ACID Transactions**: Guarantees atomicity, consistency, isolation, and durability for all operations, thanks to SQLite's transactional nature.
 - **Expressive Indexing**: Create unique or non-unique indexes on document properties for lightning-fast queries, using simple attributes.
+- **Full-Text Search**: Declare weighted string fields and query documents with FTS5 ranking, text and snippets. See the [search guide](https://github.com/Unconcurrent/SoloDB/blob/master/docs/full-text-search.md).
 - **Integrated File Storage**: A robust, hierarchical file system API (similar to System.IO) for storing and managing large files and binary data directly within the database.
 - **Polymorphic Collections**: Store objects of different derived types within a single collection and query them by their base or concrete type.
 - **Events API**: Subscribe to collection lifecycle events (`OnInserting`, `OnInserted`, `OnUpdating`, `OnUpdated`, `OnDeleting`, `OnDeleted`) with full transactional guarantees via SQLite triggers.
@@ -37,6 +40,7 @@ SoloDB is packed with features that provide a seamless and powerful developer ex
   - [Relations (DBRef, DBRefMany, SoloRef)](#relations-dbref-dbrefmany-soloref)
   - [Compiled Queries](#compiled-queries)
   - [Indexing for Performance](#indexing-for-performance)
+  - [Full-Text Search](#full-text-search)
   - [Atomic Transactions](#atomic-transactions)
   - [Storing Polymorphic Data](#storing-polymorphic-data)
   - [Custom ID Generation](#custom-id-generation)
@@ -63,7 +67,7 @@ Install SoloDB from NuGet:
 dotnet add package SoloDB
 ```
 
-Before upgrading a database to 1.4, stop every older SoloDB process using it. Opening the file advances its database version to 6; SoloDB 1.3 then refuses to reopen it. Do not lower `PRAGMA user_version` to bypass that protection. See [numerical storage and migration](https://github.com/Unconcurrent/SoloDB/blob/master/docs/generated-metadata.md#numerical-storage-and-migration).
+Before upgrading a database to 1.4.2, stop every older SoloDB process using it. A normal writable opening migrates the file to schema 7; SoloDB 1.4.1 and earlier then refuse to reopen it. Upgrade every participating application before reopening the database. Do not lower `PRAGMA user_version` to bypass that protection. See [numerical storage and migration](https://github.com/Unconcurrent/SoloDB/blob/master/docs/generated-metadata.md#numerical-storage-and-migration).
 
 ## Generated Metadata Registration
 
@@ -475,6 +479,10 @@ var nextPage = findUsers("Jo", 20, 20).ToArray();
 
 The source parameter is bound to the receiving collection. Supply zero to three additional arguments; `Select` can change the result type. Query values are bound on invocation, and each enumeration reads current data through the ordinary query executor. Retain the function rather than calling `Compile` for every request. Pass stateful values as invocation arguments; do not rely on callback evaluation order inside an optimized query expression.
 
+A captured `IQueryable<T>` source property is read once during compilation to discover its query structure; getter effects and exceptions occur then. Compilation does not enumerate local rows. If that property returns an in-memory query, each invocation reads and enumerates its fresh value. Use an `IEnumerable<T>` property or an invocation argument for local values that should first be acquired at invocation. Database query structure remains fixed by compilation.
+
+Default-comparer overloads accept `EqualityComparer<T>.Default` or `null` for supported keys. Explicit string ordering accepts `Comparer<string>.Default` for current-culture ordering and `StringComparer.Ordinal` for ordinal ordering. Compiled queries read captured comparers at each invocation. Other comparers are refused; normalize the key in the selector or use `AsEnumerable()` to choose CLR execution explicitly.
+
 Read terminals and materializers can be included directly:
 
 ```csharp
@@ -488,7 +496,7 @@ long count = countUsers("Al");
 
 Counts, quantifiers, aggregates and element terminals share ordinary query execution, including empty-result and multiple-result behavior. Materializers such as `ToArray`, `ToList` and `ToDictionary` execute on each invocation. An explicit `AsEnumerable()` keeps subsequent operations on the client, just as in an ordinary query. Compiling retains query machinery, never result rows or counts.
 
-Compile from a nontransactional collection and keep that collection alive while using the function. Recompile after changing its model or indexes, or to use refreshed statistics. Unindexed filtering and deep offsets still require database work.
+Keep the collection alive while using the compiled function. A function compiled from a transactional collection uses that transaction: invoke and finish enumerating it before its callback returns. Recompile after changing its model or indexes, or to use refreshed statistics. Unindexed filtering and deep offsets still require database work.
 
 For supported ordered pages with an explicit `Id` tie-breaker, compiled queries select page IDs before fetching payloads. Planning considers compound-index ordering, bounded early-page scans and, when statistics are available, a capped covering count to choose a deep-page strategy within the same statement. These choices preserve your results and ordering; gains depend on the filter, indexes and data distribution.
 
@@ -572,6 +580,10 @@ Invalid index expressions are rejected with typed exceptions (argument/operation
 - constant or outside expressions,
 - expressions with captured variables,
 - unsupported expression node shapes.
+
+### Full-Text Search
+
+Declare search fields with `EnsureSearchIndex`, then compose `Search` or named `SearchIn` results with LINQ. Hits contain the original Item and Score; select Text/Snippet inside the query. Shared and Copied storage, literal and native query modes, versioned declarations and explicit maintenance are described in the [full-text search guide](https://github.com/Unconcurrent/SoloDB/blob/master/docs/full-text-search.md).
 
 ### Atomic Transactions
 

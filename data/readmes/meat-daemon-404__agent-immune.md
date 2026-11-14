@@ -26,7 +26,7 @@
 
 When a tool call fails and the next attempt fixes it, the plugin saves that pair as a rule. Rules that match the current work get injected into context on later runs, before the agent repeats the same mistake.
 
-One `core/` engine: **DSH** and **ZCode** install natively (plugin bundles, checked against the real host contracts), and `immune connect` wires the same engine into **Claude Code** and **Codex CLI** as plain hooks — no plugin system required.
+One `core/` engine: **DSH** and **ZCode** install natively (plugin bundles, checked against the real host contracts), and `immune connect` wires the same engine into **Claude Code**, **Codex CLI**, and **Google Antigravity** as plain hooks — no plugin system required.
 
 <div align="center">
   <img src="docs/hero.svg" alt="immune demo: distill, recall, inject" width="720">
@@ -73,27 +73,31 @@ node "<zcode.cjs>" plugins install dsh-immune-system@dev-dsh-plugin-immune
 
 Start a new task afterwards; existing tasks keep the capability catalog they started with.
 
-### Hooking Claude Code & Codex
+### Hooking Claude Code, Codex & Antigravity
 
-Native plugin installs are for DSH and ZCode. For Claude Code and Codex CLI the
-same engine installs as plain hooks — no plugin system required:
+Native plugin installs are for DSH and ZCode. For Claude Code, Codex CLI, and
+Google Antigravity the same engine installs as plain hooks — no plugin system
+required:
 
 ```bash
 npx dsh-immune-system@latest connect               # auto-detect and wire every installed host
 npx dsh-immune-system@latest connect claude-code   # writes ~/.claude/settings.json
 npx dsh-immune-system@latest connect codex         # writes ~/.codex/hooks.json
+npx dsh-immune-system@latest connect antigravity   # writes ~/.gemini/config/hooks.json
 ```
 
 What it does: copies the engine into a fixed `~/.dsh-immune/` install (so the
 hooks survive npx-cache cleanups and package upgrades), merges six hook
-entries (five on Codex, which has no `PostToolUseFailure` event) into the
+entries (five on Codex and Antigravity, which have no `PostToolUseFailure` event;
+Antigravity uses `PreInvocation`, camelCase payloads, and `injectSteps` /
+`decision` responses under `"dsh-immune-system"`) into the
 host's own config pointing **there**, leaving every other setting alone;
 keeps a one-time `.bak-immune` backup before the first write; re-running is a
 no-op (`--refresh` forces a re-copy); a stale install — an npx cache path from
 an older connect — is upgraded in place; `connect <host> --remove` takes only
 the immune entries back out and deletes `~/.dsh-immune/` when no host remains.
 With no host argument, `connect` detects which hosts this machine actually
-has (`~/.claude`, `~/.codex`) and wires each one idempotently — ZCode is
+has (`~/.claude`, `~/.codex`, `~/.gemini/antigravity`) and wires each one idempotently — ZCode is
 detected too but reported rather than written, because ZCode installs immune
 through its own plugin marketplace. `connect --status` keeps the read-only
 survey. `immune doctor` reports broken
@@ -146,24 +150,43 @@ cannot run hooks reach the same report over MCP: `immune_audit` is the
 read-only preview (the applying pass stays in the terminal — an MCP-only host
 has no turn-end drain), and `immune_seed_packs` lists the starter packs.
 
-### Starter packs
+### Starter packs & on-demand skill indexing
 
-Not every pitfall has happened to you yet. Four hand-authored packs — the same
+Not every pitfall has happened to you yet. Five hand-authored packs — the same
 trust class as the built-in generic lessons, **not** model output — install
 through the normal insert path, so a rule you already learned merges instead
 of doubling:
 
 ```bash
-npx dsh-immune-system@latest seed            # list the packs
-npx dsh-immune-system@latest seed git-safety # install one (6 rules)
+npx dsh-immune-system@latest seed                      # list packs + detected project Baseline
+npx dsh-immune-system@latest seed git-safety           # install one pack
+npx dsh-immune-system@latest seed modern-web           # modern web APIs scoped to project Baseline
+npx dsh-immune-system@latest seed modern-web --baseline widely  # force legacy-safe subset
 npx dsh-immune-system@latest seed git-safety --remove  # take it back out
 ```
 
 Removal is conservative: a seeded rule the agent has since delivered, or whose
 wording you changed, is kept — it carries your evidence now. Packs: `git-safety`,
-`node-ts`, `python-uv`, `docker`. Every shipped rule is gated by
+`node-ts`, `python-uv`, `docker`, `modern-web` (automatically prewarmed only when
+frontend markers like Vite/Next/React or `index.html` exist, and filtered against
+`.browserslistrc`, `package.json#browserslist`, and `tsconfig.json` `target` so
+`Baseline: Newly available` APIs such as CSS Anchor Positioning or View Transitions
+are not pushed into legacy-target codebases). Every shipped rule is gated by
 `scripts/bench-seed-recall.mjs` (and CI): a paraphrased user prompt must recall
 it in the top-3 — currently R@3 100% with zero false positives.
+
+To index large external guidance files (for example `modern-web-guidance` or
+team `SKILL.md` / Markdown playbooks) **without bloating every turn's context**,
+ingest them into FTS5 for on-demand hook recall:
+
+```bash
+npx dsh-immune-system@latest ingest-skill ./path/to/guidance --pack web-guidance
+npx dsh-immune-system@latest ingest-skill ./SKILL.md --baseline widely
+npx dsh-immune-system@latest ingest-skill --remove --pack web-guidance
+```
+
+Ingested rules are scrubbed through the secret/path redactor, filtered by project
+Baseline, and surfaced only when a matching prompt or tool call fires.
 
 ### After installing: what you should see
 
@@ -204,7 +227,7 @@ description: Pitfalls this project already paid for once … 11 proven rules.
 | … | … | … | … |
 ```
 
-The dashboard's `/api/export?format=json` produces a snapshot that `immune import` reads back, so a team can start from one person's proven rules. The export is gated: a rule that still carries a machine path or a secret-shaped string **fails the export** instead of shipping to the team — redaction scrubs traces at capture time, and the gate checks the rules themselves.
+The dashboard's `/api/export?format=json` produces a snapshot that `immune import` reads back, so a team can start from one person's proven rules. Every export surface (CLI `export` / `export-json` / `sync-doc`, MCP `immune_export`, DSH `/immune-export`, and HTTP `/api/export` returning HTTP `422`) is privacy-gated: redaction scrubs JSON-quoted/escaped secrets, `.npmrc` `_authToken`, URL query credentials, secret HTTP headers, PEM/SSH keys, emails, and home paths before disk or outbound LLM/dashboard display, and rules still carrying machine paths or secret-shaped text are blocked rather than shipped.
 
 ### Telemetry: detours, evolution, and a CI gate
 

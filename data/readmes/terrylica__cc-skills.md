@@ -2,7 +2,7 @@
 
 Claude Code Skills Marketplace: Meta-skills, foundational tools and workflow hooks for Claude Code.
 
-[![Plugins](https://img.shields.io/badge/plugins-39-green.svg)](#plugins)
+[![Plugins](https://img.shields.io/badge/plugins-40-green.svg)](#plugins)
 [![Version](https://img.shields.io/github/package-json/v/terrylica/cc-skills.svg)](./CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](./LICENSE)
 
@@ -10,39 +10,41 @@ Claude Code Skills Marketplace: Meta-skills, foundational tools and workflow hoo
 
 > Generated from `.claude-plugin/marketplace.json` (the SSoT). Run `bun scripts/validate-plugins.mjs` to verify the table reflects reality.
 
-| Plugin                                                  | Description                                                                                                                                                                                                                                                          | Category      |
-| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| [agent-reach](./plugins/agent-reach/)                   | Give your AI agent eyes to see the entire internet. Search and read 15+ platforms with auto-update preflight: Twitter/X, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu, Douyin, Weibo, WeChat, Xiaoyuzhou Podcast, LinkedIn, V2EX, RSS, Exa web search.             | productivity  |
-| [asciinema-tools](./plugins/asciinema-tools/)           | Terminal recording automation: asciinema capture, launchd daemon for background chunking, Keychain PAT storage, Pushover notifications, cast conversion, and semantic analysis                                                                                       | utilities     |
-| [calcom-commander](./plugins/calcom-commander/)         | Cal.com + Telegram bot lifecycle - booking management, interactive commands, scheduled sync, Agent SDK routing, 1Password API key                                                                                                                                    | productivity  |
-| [chrome-profiles](./plugins/chrome-profiles/)           | Drive your everyday Google Chrome on macOS: choose a profile by account email, zero-click control via Microsoft's Playwright Extension (one `setup` per account), and when not to use a real browser                                                                 | productivity  |
-| [cli-anything](./plugins/cli-anything/)                 | Reference guide for CLI-Anything: auto-generate production-ready agent-controllable CLI harnesses for any GUI app via 7-phase pipeline. Covers all validated commands, per-app examples (GIMP, Blender, LibreOffice, Inkscape), testing, and HARNESS.md methodology. | development   |
-| [crucible](./plugins/crucible/)                         | Self-evolving research methodology: 18 universal principles for LLM-driven investigation, distilled from a 376-turn session with 1 positive + 17 null campaigns.                                                                                                     | ai            |
-| [devops-tools](./plugins/devops-tools/)                 | DevOps automation: ClickHouse, Doppler, MLflow, Cloudflare Workers, pueue orchestration, notifications, session recovery, LLM session debriefs                                                                                                                 | devops        |
-| [doc-tools](./plugins/doc-tools/)                       | Comprehensive documentation tooling: ASCII diagrams, markdown standards, LaTeX build, Pandoc PDF, glossary management, plotext financial charts                                                                                                                      | documentation |
-| [dotfiles-tools](./plugins/dotfiles-tools/)             | Chezmoi dotfile management via natural language workflows                                                                                                                                                                                                            | utilities     |
-| [floating-clock](./plugins/floating-clock/)             | macOS floating clock overlay with profile-based aesthetics, controlled via SwiftBar control center                                                                                                                                                                   | utilities     |
-| [gemini-deep-research](./plugins/gemini-deep-research/) | Run Gemini Deep Research via browser automation (claude-in-chrome MCP). Submit prompts, monitor progress, retrieve final reports.                                                                                                                                    | research      |
-| [gh-tools](./plugins/gh-tools/)                         | GitHub workflow automation with intelligent GFM link validation, fork intelligence, and issue creation tooling                                                                                                                                                       | development   |
-| [git-town-workflow](./plugins/git-town-workflow/)       | Prescriptive git-town workflow enforcement for fork-based development                                                                                                                                                                                                | devops        |
-| [gmail-commander](./plugins/gmail-commander/)           | Gmail CLI + draft builder with 1Password OAuth; shared Telegram bot code (commands, on-demand triage, Agent SDK routing) imported by a private deployment                                                                                                            | productivity  |
-| [html-showcase](./plugins/html-showcase/)               | Canonical CSS kernel + HTML skeleton for static showcase pages (provenance reports, dashboards); single design-system SSoT via jsDelivr, per-page CSS overrides                                                                                                      | documents     |
-| [itp](./plugins/itp/)                                   | Implement-The-Plan workflow: ADR-driven 4-phase development with preflight, implementation, and release                                                                                                                                                              | productivity  |
-| [itp-hooks](./plugins/itp-hooks/)                       | ITP workflow enforcement + code correctness: PreToolUse / PostToolUse / Stop hooks for SSoT principles, file-size guard, type checks, ASCII art blocking, ty/oxlint/biome lint                                                                                       | enforcement   |
-| [link-tools](./plugins/link-tools/)                     | Link validation: portability checks, broken link detection, path policy linting                                                                                                                                                                                      | quality       |
-| [macro-keyboard](./plugins/macro-keyboard/)             | Karabiner remap for cheap 3-key USB-C/Bluetooth macro pads + HID diagnostic + Fn-key emit utilities                                                                                                                                                                  | utilities     |
-| [media-tools](./plugins/media-tools/)                   | Download YouTube audio and push to BookPlayer for offline listening                                                                                                                                                                                                  | productivity  |
-| [mql5](./plugins/mql5/)                                 | MQL5 development: indicator patterns, mql5.com article extraction, Python workspace, MT5 tick collection ops, FXView Parquet consumer                                                                                                                                | trading       |
-| [openwolf](./plugins/openwolf/)                         | Wraps the third-party openwolf npm middleware (token-saving project memory): installs the global binary, runs `openwolf init`, surfaces status, and adds a clean removal path                                                                                        | productivity  |
-| [plugin-dev](./plugins/plugin-dev/)                     | Plugin development: skill architecture, plugin validation, silent failure auditing, TodoWrite templates                                                                                                                                                              | development   |
-| [productivity-tools](./plugins/productivity-tools/)     | Slash command generation, Notion (SDK + CLI), iMessage queries, iTerm2 layouts, calendar event manager, Google Drive access                                                                                                                                          | productivity  |
-| [pushover-commander](./plugins/pushover-commander/)     | Pushover end-to-end: send (+image), priority-2 emergency with receipt polling, headless web-control for apps/sounds, incident-report PNGs, UUID/JSONL audit + quota                                                                                                  | devops        |
-| [quality-tools](./plugins/quality-tools/)               | Code quality and validation: clone detection, dead-code, multi-agent E2E + performance profiling, ClickHouse architect, refactoring guide                                                                                                                            | quality       |
-| [quant-research](./plugins/quant-research/)             | Quantitative research: SOTA range bar metrics, Sharpe ratios, ML prediction quality, WFO epochs                                                                                                                                                                      | trading       |
-| [rust-tools](./plugins/rust-tools/)                     | Rust dependency audit + SOTA Rust arsenal reference                                                                                                                                                                                                                  | development   |
-| [ssh-tunnel-companion](./plugins/ssh-tunnel-companion/) | macOS launchd companion for SSH tunnels (Tailscale + CF Access) — see plugin's CLAUDE.md for the SSoT on tunnel architecture                                                                                                                                         | devops        |
-| [statusline-tools](./plugins/statusline-tools/)         | Custom Claude Code status line with git status indicators + global ignore patterns + session-info reporter                                                                                                                                                           | utilities     |
-| [tlg](./plugins/tlg/)                                   | Telegram operations toolkit: messages, channels, dialogs, members, media, search, dump, drafting, cleanup                                                                                                                                                            | productivity  |
+| Plugin                                                  | Description                                                                                                                                                                                                                                                                                             | Category      |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| [agent-reach](./plugins/agent-reach/)                   | Give your AI agent eyes to see the entire internet. Search and read 15+ platforms with auto-update preflight: Twitter/X, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu, Douyin, Weibo, WeChat, Xiaoyuzhou Podcast, LinkedIn, V2EX, RSS, Exa web search.                                                | productivity  |
+| [asciinema-tools](./plugins/asciinema-tools/)           | Terminal recording automation: asciinema capture, launchd daemon for background chunking, Keychain PAT storage, Pushover notifications, cast conversion, and semantic analysis                                                                                                                          | utilities     |
+| [calcom-commander](./plugins/calcom-commander/)         | Cal.com + Telegram bot lifecycle - booking management, interactive commands, scheduled sync, Agent SDK routing, 1Password API key                                                                                                                                                                       | productivity  |
+| [chrome-profiles](./plugins/chrome-profiles/)           | Drive your everyday Google Chrome on macOS: choose a profile by account email, zero-click control via Microsoft's Playwright Extension (one `setup` per account), and when not to use a real browser                                                                                                    | productivity  |
+| [cli-anything](./plugins/cli-anything/)                 | Reference guide for CLI-Anything: auto-generate production-ready agent-controllable CLI harnesses for any GUI app via 7-phase pipeline. Covers all validated commands, per-app examples (GIMP, Blender, LibreOffice, Inkscape), testing, and HARNESS.md methodology.                                    | development   |
+| [crucible](./plugins/crucible/)                         | Self-evolving research methodology: 18 universal principles for LLM-driven investigation, distilled from a 376-turn session with 1 positive + 17 null campaigns.                                                                                                                                        | ai            |
+| [devops-tools](./plugins/devops-tools/)                 | DevOps automation: ClickHouse, Doppler, MLflow, Cloudflare Workers, pueue orchestration, notifications, session recovery, LLM session debriefs                                                                                                                                                          | devops        |
+| [doc-tools](./plugins/doc-tools/)                       | Comprehensive documentation tooling: ASCII diagrams, markdown standards, LaTeX build, Pandoc PDF, glossary management, plotext financial charts                                                                                                                                                         | documentation |
+| [dotfiles-tools](./plugins/dotfiles-tools/)             | Chezmoi dotfile management via natural language workflows                                                                                                                                                                                                                                               | utilities     |
+| [floating-clock](./plugins/floating-clock/)             | macOS floating clock overlay with profile-based aesthetics, controlled via SwiftBar control center                                                                                                                                                                                                      | utilities     |
+| [gemini-deep-research](./plugins/gemini-deep-research/) | Run Gemini Deep Research via browser automation (claude-in-chrome MCP). Submit prompts, monitor progress, retrieve final reports.                                                                                                                                                                       | research      |
+| [gh-tools](./plugins/gh-tools/)                         | GitHub workflow automation with intelligent GFM link validation, fork intelligence, and issue creation tooling                                                                                                                                                                                          | development   |
+| [git-town-workflow](./plugins/git-town-workflow/)       | Prescriptive git-town workflow enforcement for fork-based development                                                                                                                                                                                                                                   | devops        |
+| [gmail-commander](./plugins/gmail-commander/)           | Gmail CLI + draft builder with 1Password OAuth; shared Telegram bot code (commands, on-demand triage, Agent SDK routing) imported by a private deployment                                                                                                                                               | productivity  |
+| [html-showcase](./plugins/html-showcase/)               | Canonical CSS kernel + HTML skeleton for static showcase pages (provenance reports, dashboards); single design-system SSoT via jsDelivr, per-page CSS overrides                                                                                                                                         | documents     |
+| [itp](./plugins/itp/)                                   | Implement-The-Plan workflow: ADR-driven 4-phase development with preflight, implementation, and release                                                                                                                                                                                                 | productivity  |
+| [itp-hooks](./plugins/itp-hooks/)                       | ITP workflow enforcement + code correctness: PreToolUse / PostToolUse / Stop hooks for SSoT principles, file-size guard, type checks, ASCII art blocking, ty/oxlint/biome lint                                                                                                                          | enforcement   |
+| [link-tools](./plugins/link-tools/)                     | Link validation: portability checks, broken link detection, path policy linting                                                                                                                                                                                                                         | quality       |
+| [macro-keyboard](./plugins/macro-keyboard/)             | Karabiner remap for cheap 3-key USB-C/Bluetooth macro pads + HID diagnostic + Fn-key emit utilities                                                                                                                                                                                                     | utilities     |
+| [media-tools](./plugins/media-tools/)                   | Download YouTube audio and push to BookPlayer for offline listening                                                                                                                                                                                                                                     | productivity  |
+| [mql5](./plugins/mql5/)                                 | MQL5 development: indicator patterns, mql5.com article extraction, Python workspace, MT5 tick collection ops, FXView Parquet consumer                                                                                                                                                                   | trading       |
+| [openwolf](./plugins/openwolf/)                         | Wraps the third-party openwolf npm middleware (token-saving project memory): installs the global binary, runs `openwolf init`, surfaces status, and adds a clean removal path                                                                                                                           | productivity  |
+| [orca-tools](./plugins/orca-tools/)                     | Orca IDE: spin a task off into its own Orca worktree with one agent terminal and a committed handoff, locally or on a paired runtime                                                                                                                                                                    | devops        |
+| [plugin-dev](./plugins/plugin-dev/)                     | Plugin development: skill architecture, plugin validation, silent failure auditing, TodoWrite templates                                                                                                                                                                                                 | development   |
+| [productivity-tools](./plugins/productivity-tools/)     | Slash command generation, Notion (SDK + CLI), iMessage queries, iTerm2 layouts, calendar event manager, Google Drive access                                                                                                                                                                             | productivity  |
+| [pushover-commander](./plugins/pushover-commander/)     | Pushover end-to-end: send (+image), priority-2 emergency with receipt polling, headless web-control for apps/sounds, incident-report PNGs, UUID/JSONL audit + quota                                                                                                                                     | devops        |
+| [quality-tools](./plugins/quality-tools/)               | Code quality and validation: clone detection, dead-code, multi-agent E2E + performance profiling, ClickHouse architect, refactoring guide                                                                                                                                                               | quality       |
+| [quant-research](./plugins/quant-research/)             | Quantitative research: SOTA range bar metrics, Sharpe ratios, ML prediction quality, WFO epochs                                                                                                                                                                                                         | trading       |
+| [rust-tools](./plugins/rust-tools/)                     | Rust dependency audit + SOTA Rust arsenal reference                                                                                                                                                                                                                                                     | development   |
+| [ssh-tunnel-companion](./plugins/ssh-tunnel-companion/) | macOS launchd companion for SSH tunnels (Tailscale + CF Access) — see plugin's CLAUDE.md for the SSoT on tunnel architecture                                                                                                                                                                            | devops        |
+| [statusline-tools](./plugins/statusline-tools/)         | Custom Claude Code status line with git status indicators + global ignore patterns + session-info reporter                                                                                                                                                                                              | utilities     |
+| [tlg](./plugins/tlg/)                                   | Telegram operations toolkit: messages, channels, dialogs, members, media, search, dump, drafting, cleanup                                                                                                                                                                                               | productivity  |
+| [web-forge](./plugins/web-forge/)                       | Browser automation for API-less operations, one harness: console recipes as data (idempotent ensure, read-back, per-step screenshots, a login gate that never types a password; first family Google Workspace Admin), extension or per-site CDP profiles, DOM-to-vault secrets, Cloudflare Access walls |
 
 ## Installation
 
@@ -60,16 +62,12 @@ Run these commands in your **terminal** (not inside Claude Code):
 # 1. Add the cc-skills marketplace
 claude plugin marketplace add terrylica/cc-skills
 
-# 2. Install all 39 plugins (one-liner, alphabetically ordered; the set matches marketplace.json, whose own order is not alphabetical)
-for p in agent-reach arxiv-source-first asciinema-tools calcom-commander chrome-profiles cli-anything crucible devops-tools doc-tools dotfiles-tools floating-clock garch-volatility-toolkit gemini-deep-research gh-tools git-town-workflow gmail-commander html-showcase itp itp-hooks link-tools macos-font-defaults macos-permissions macro-keyboard media-tools mql5 notes-commander openwolf plugin-dev productivity-tools pushover-commander quality-tools quant-research rust-tools ssh-tunnel-companion statusline-tools tlg unlimited-ocr web-forge whatsapp-commander; do
+# 2. Install all 40 plugins (one-liner, alphabetically ordered; the set matches marketplace.json, whose own order is not alphabetical)
+for p in agent-reach arxiv-source-first asciinema-tools calcom-commander chrome-profiles cli-anything crucible devops-tools doc-tools dotfiles-tools floating-clock garch-volatility-toolkit gemini-deep-research gh-tools git-town-workflow gmail-commander html-showcase itp itp-hooks link-tools macos-font-defaults macos-permissions macro-keyboard media-tools mql5 notes-commander openwolf orca-tools plugin-dev productivity-tools pushover-commander quality-tools quant-research rust-tools ssh-tunnel-companion statusline-tools tlg unlimited-ocr web-forge whatsapp-commander; do
   claude plugin install "$p@cc-skills"
 done
 
-# 3. Sync hooks to settings.json (requires cloning the repo)
-git clone https://github.com/terrylica/cc-skills.git /tmp/cc-skills
-/tmp/cc-skills/scripts/sync-hooks-to-settings.sh
-
-# 4. Restart Claude Code to activate hooks
+# 3. Restart Claude Code; plugin hooks load from each plugin's hooks/hooks.json
 claude
 ```
 
@@ -113,19 +111,17 @@ claude plugin install productivity-tools@cc-skills
 claude plugin install statusline-tools@cc-skills
 ```
 
-The full alphabetical list is in `.claude-plugin/marketplace.json` — `jq -r '.plugins[].name' .claude-plugin/marketplace.json` enumerates all 36.
+The full alphabetical list is in `.claude-plugin/marketplace.json` — `jq -r '.plugins[].name' .claude-plugin/marketplace.json` enumerates them all.
 
-#### Step 3: Sync Hooks
+#### Step 3: Hooks (nothing to sync)
 
-Hooks provide pre/post tool use enforcement and session events. They must be explicitly synced to `~/.claude/settings.json`:
+Hooks provide pre/post tool use enforcement and session events. Claude Code loads each installed plugin's `hooks/hooks.json` on its own, so nothing is copied into `~/.claude/settings.json`.
+
+Installs older than v20.2.3 copied the hooks into `settings.json` as well, which made every hook fire twice. If you upgraded from one of those, remove the copies once:
 
 ```bash
-# Clone the repository (if not already cloned)
-git clone https://github.com/terrylica/cc-skills.git ~/cc-skills-temp
-
-# Run the hook sync script
-~/cc-skills-temp/scripts/sync-hooks-to-settings.sh
-# Output: ✓ Hooks synced: PreToolUse=7, PostToolUse=3, Stop=5
+~/.claude/plugins/marketplaces/cc-skills/scripts/sync-hooks-to-settings.sh
+# Output: ✓ Pruned N marketplace-path entries   (or "already clean")
 ```
 
 #### Step 4: Restart Claude Code
@@ -159,8 +155,7 @@ git pull
 # Reinstall updated plugins (or specific ones)
 claude plugin install itp@cc-skills
 
-# Re-sync hooks
-./scripts/sync-hooks-to-settings.sh  # From the repo directory
+# Restart Claude Code to load the updated hooks
 ```
 
 ## Troubleshooting
@@ -215,24 +210,11 @@ claude plugin install plugin-name@cc-skills
 
 ### Hooks Not Working
 
-**Cause**: Hooks not synced to settings.json.
+**Cause**: The plugin is not installed or enabled, or Claude Code has not been restarted since it was.
 
-**Fix**:
+**Fix**: `claude plugin install <plugin>@cc-skills`, then restart Claude Code.
 
-```bash
-# Sync hooks
-cd /path/to/cc-skills
-./scripts/sync-hooks-to-settings.sh
-
-# Restart Claude Code
-```
-
-**Verify hooks are registered:**
-
-```bash
-cat ~/.claude/settings.json | jq '.hooks | keys'
-# Should show: ["PreToolUse", "PostToolUse", "Stop"]
-```
+**Verify hooks are registered:** type `/hooks` in Claude Code. It lists every configured hook with its source; cc-skills hooks show as coming from a plugin, never from user settings. A cc-skills hook listed under user settings is a leftover from before v20.2.3: run `~/.claude/plugins/marketplaces/cc-skills/scripts/sync-hooks-to-settings.sh` once to remove it.
 
 ### "Plugin not found" After Adding Marketplace
 
@@ -478,8 +460,8 @@ Marketplace plugin commands display with the `plugin:command` format:
 ```text
 cc-skills/
 ├── .claude-plugin/
-│   └── marketplace.json          # Plugin registry (39 plugins) — SSoT
-├── plugins/                      # 39 marketplace plugins (each with its own CLAUDE.md)
+│   └── marketplace.json          # Plugin registry (40 plugins) — SSoT
+├── plugins/                      # 40 marketplace plugins (each with its own CLAUDE.md)
 │   ├── itp/                      # ADR-driven 4-phase development workflow
 │   ├── itp-hooks/                # Workflow enforcement + code-correctness hooks
 │   ├── plugin-dev/               # Plugin / skill architecture meta-tools
@@ -493,7 +475,7 @@ cc-skills/
 │   ├── macro-keyboard/           # Karabiner remap for 3-key macro pads
 │   ├── …                         # 20 more — see Plugins table for the full set
 ├── scripts/
-│   ├── sync-hooks-to-settings.sh    # Hook synchronization (called by release:sync)
+│   ├── sync-hooks-to-settings.sh    # Prunes pre-v20.2.3 hook copies from settings.json (called by release:sync)
 │   ├── sync-commands-to-settings.sh # Command synchronization
 │   ├── validate-plugins.mjs         # Plugin validation
 │   └── marketplace.schema.json      # JSON Schema for marketplace.json
@@ -589,7 +571,7 @@ Execute approved plans from Claude Code's Plan Mode through a structured workflo
 
 ### devops-tools
 
-**Doppler credentials, Firecrawl self-hosted, ML pipelines, MLflow queries, notifications, and session recovery.**
+**Doppler credentials, Firecrawl (public API), ML pipelines, MLflow queries, notifications, and session recovery.**
 
 17 bundled skills: clickhouse-cloud-management, clickhouse-pydantic-config, claude-code-proxy-patterns, disk-hygiene, distributed-job-safety, doppler-workflows, doppler-secret-validation, dual-channel-watchexec, firecrawl-research-patterns, ml-data-pipeline-architecture, ml-failfast-validation, mlflow-python, project-directory-migration, pueue-job-orchestration, python-logging-best-practices, session-chronicle, session-recovery
 

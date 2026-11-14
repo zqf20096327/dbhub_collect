@@ -8,12 +8,14 @@
 [![CD](https://github.com/kyledelfin2006/libro-library-system/actions/workflows/cd.yml/badge.svg?branch=main)](https://github.com/kyledelfin2006/libro-library-system/actions/workflows/cd.yml)
 ![Java](https://img.shields.io/badge/Java-25-orange?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.2-6DB33F?logo=springboot&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
 
 ## Project Overview
 
-Libro is a Spring Boot REST API for the library of Aklan State University – College of Computer Studies (ASU-CCS). It manages physical book copies, user accounts, and loan history. Each catalog record is one physical copy, which keeps loan history accurate per copy (see [Domain Decisions](docs/guides/domain-decisions.md)).
+Libro is a full-stack library management system for the library of Aklan State University – College of Computer Studies (ASU-CCS): a Java 25 / Spring Boot REST API with a React and TypeScript web UI (`ui/`), backed by PostgreSQL. It manages physical book copies, user accounts, and loan history, with role-based screens for students, faculty, library assistants, and the librarian. Each catalog record is one physical copy, which keeps loan history accurate per copy (see [Domain Decisions](docs/guides/domain-decisions.md)).
 
 ## Table of Contents
 
@@ -66,11 +68,13 @@ Libro is a Spring Boot REST API for the library of Aklan State University – Co
 - **Loans:** students and faculty borrow for 14 days, up to three active loans each; overdue loans block new checkouts. See the [Loan Implementation Guide](docs/guides/loan.md).
 - **Accounts and roles:** public signup creates students; librarians create faculty and library-assistant accounts. Four roles (`STUDENT`, `FACULTY`, `ADMINISTRATOR`, `LIBRARIAN`) are enforced at the route and service layers.
 - **Security:** stateless HS256 JWT Bearer authentication, BCrypt passwords, per-IP rate limits on login and signup, and a uniform JSON error contract. See the [JWT Authentication Design](docs/reference/jwt-authentication-design.md).
+- **Web UI:** a React app in `ui/` for sign-in, student signup, catalog and borrowing, My Loans, My Account, and staff dashboards, loan management, inventory, accounts, and audit log. See the [Web UI guide](docs/guides/web-ui.md).
 - **Operations:** Flyway-owned schema, Docker Compose, public `/livez` and `/readyz` probes, and Prometheus metrics on a private management port.
 
 | Layer | Technology |
 | --- | --- |
-| Language and framework | Java 25, Spring Boot 4.1.2 (Web, Data JPA, Security, OAuth2 Resource Server, Validation) |
+| Backend | Java 25, Spring Boot 4.1.2 (Web, Data JPA, Security, OAuth2 Resource Server, Validation) |
+| Frontend | React 19, TypeScript, Vite, TanStack Query, React Router; Vitest, Playwright, and axe for tests |
 | Data | PostgreSQL 18, Flyway 13.3.0, Hibernate with schema validation |
 | Build and test | Maven, JUnit 5, Mockito, Testcontainers, JaCoCo |
 | Delivery | Docker, Docker Compose, Caddy, GitHub Actions, Trivy |
@@ -79,7 +83,8 @@ Libro is a Spring Boot REST API for the library of Aklan State University – Co
 
 ```mermaid
 flowchart LR
-    Client[API client] --> Security[Spring Security<br/>JWT Bearer and role gates]
+    UI[React web UI<br/>ui/] --> Security[Spring Security<br/>JWT Bearer and role gates]
+    Client[Other API clients] --> Security
     Security --> Controller[Feature controllers<br/>HTTP and DTO validation]
     Controller --> Service[Feature services<br/>rules, ownership, transactions, mapping]
     Service --> Repository[Spring Data JPA repositories]
@@ -87,7 +92,7 @@ flowchart LR
     Flyway[Flyway migrations] --> Database
 ```
 
-The single-module codebase groups `auth`, `book`, `loan`, `user`, `audit`, and `info` by feature, then by layer. Controllers accept and return DTOs; services own business rules, transactions, and entity-to-DTO mapping; repositories own persistence. Shared responses, errors, request IDs, time handling, and OpenAPI configuration live in `global`. Flyway owns the schema, and Hibernate validates it at startup. [Architecture Overview](docs/architecture.md) shows the request and data flows; its Design Rules section records the package decision.
+The React UI is a separate app in `ui/` that calls the API with a Bearer token; it has no server-side code of its own. The single-module backend codebase groups `auth`, `book`, `loan`, `user`, `audit`, and `info` by feature, then by layer. Controllers accept and return DTOs; services own business rules, transactions, and entity-to-DTO mapping; repositories own persistence. Shared responses, errors, request IDs, time handling, and OpenAPI configuration live in `global`. Flyway owns the schema, and Hibernate validates it at startup. [Architecture Overview](docs/architecture.md) shows the request and data flows; its Design Rules section records the package decision.
 
 ## Notable code changes
 
@@ -112,7 +117,7 @@ The [Development Problems Solved](docs/guides/development-problems-solved.md) gu
 
 ## Demo Accounts
 
-> **Try Libro:** [Demo patron accounts](#demo-accounts) are documented below. The public demo instance is not deployed yet; seed them locally to use the API now. Staff credentials stay private.
+> **Try Libro:** sign in with the [demo patron accounts](#demo-accounts) below and browse a seeded [catalog of 50 academic books](docs/guides/demo-catalog.md) (software engineering, cybersecurity, networking, project management). The public demo instance is not deployed yet; seed it locally to use the API now. Staff credentials stay private.
 
 These **public patron-only accounts** use synthetic data. They can browse and borrow under the normal loan rules, but cannot manage books or other accounts. Their shared password is published on purpose; do not reuse it elsewhere.
 
@@ -121,7 +126,7 @@ These **public patron-only accounts** use synthetic data. They can browse and bo
 | `STUDENT` | `2025-0001` | `DemoPatron@2026` | `bash scripts/seed-demo.sh --patrons-only` |
 | `FACULTY` | `2025-0002` | `DemoPatron@2026` | `bash scripts/seed-demo.sh` (requires a librarian) |
 
-After starting the [local stack](#quick-start), use the first command to create the student. The full seed also creates the faculty account and sample books and prompts for the librarian password. See [Demo Accounts](docs/guides/demo-accounts.md) for staff-account setup and [Local Setup](docs/guides/local-setup.md) for the optional first-librarian bootstrap. No public instance is available yet.
+After starting the [local stack](#quick-start), use the first command to create the student. The full seed also creates the faculty account and the [50-book demo catalog](docs/guides/demo-catalog.md) and prompts for the librarian password. See [Demo Accounts](docs/guides/demo-accounts.md) for staff-account setup and [Local Setup](docs/guides/local-setup.md) for the optional first-librarian bootstrap. No public instance is available yet.
 
 On a **fresh, disposable local database**, run the full seed and then `bash scripts/smoke-journey.sh http://127.0.0.1:8080` with `SMOKE_STAFF_ID` and `SMOKE_STAFF_PASSWORD` set in the shell. Enable `LIBRO_API_DOCS_ENABLED=true` for this check. The journey borrows, returns, marks a faculty loan lost, resets the demo student, and restores that student's original password; do not run it against data you need to keep. The short deployment check remains `scripts/smoke.sh`.
 
@@ -511,6 +516,7 @@ The web UI under `ui/` covers sign-in and registration, the catalog, borrowing a
 | The web UI: pages, roles, build, tests, and delivery | [Web UI guide](docs/guides/web-ui.md) |
 | Running and configuring a local stack | [Local Setup](docs/guides/local-setup.md) |
 | Public patron logins and private staff-account policy | [Demo Accounts](docs/guides/demo-accounts.md) |
+| Seeded demo books and how to load them | [Demo Catalog](docs/guides/demo-catalog.md) |
 | Physical-copy and loan decisions | [Domain Decisions](docs/guides/domain-decisions.md) and [Loan Implementation Guide](docs/guides/loan.md) |
 | Role boundaries and authentication internals | [Roles and JWT Guide](docs/reference/security-roles-and-jwt-guide.md) and [JWT Authentication Design](docs/reference/jwt-authentication-design.md) |
 | API documentation conventions | [API Documentation Guideline](docs/guides/api-documentation-guideline.md) |

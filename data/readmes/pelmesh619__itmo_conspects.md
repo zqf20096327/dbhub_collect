@@ -19,7 +19,7 @@
 
         * [Лекция №1](https://pelmesh619.github.io/itmo_conspects/devopstech/devopstech-nexign/devopstech-nexign_2026_09_01.html)
         * [Лекция №2](https://pelmesh619.github.io/itmo_conspects/devopstech/devopstech-nexign/devopstech-nexign_2026_09_12.html)
-        * Лекция №3 - в разработке
+        * [Лекция №3](https://pelmesh619.github.io/itmo_conspects/devopstech/devopstech-nexign/devopstech-nexign_2026_09_15.html)
         * Лекция №4 - в разработке
         * Лекция №5 - в разработке
         * Лекция №6 - в разработке
@@ -322,6 +322,12 @@
 Для сборки есть 3 скрипта, для их запуска нужны:
 
 * Python версии 3.10 или новее
+    *   Библиотека PyYAML:
+
+        ```bash
+        pip install pyyaml
+        ```
+
 * Для TeX-конспектов утилита `latexmk`, поставляемая дистрибутивами (например, [MikTeX](https://miktex.org/) или [TeXLive](https://tug.org/texlive/))
 * Для Typst-конспектов утилита `typst` (подробнее на <https://github.com/typst/typst?tab=readme-ov-file#installation>)
 

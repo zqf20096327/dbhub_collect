@@ -322,6 +322,7 @@ Start with `ravenrs`. The others come in as you need them.
 | [`ravenrs-spreadsheet`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-spreadsheet), [`ravenrs-sheet`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-sheet) | A spreadsheet component and its engine: formulas, recalculation, `.xlsx` in and out. |
 | [`ravenrs-word`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-word) | A word-processing engine without a screen: a document model, and `.docx`, `.doc`, RTF, ODT, HTML and Markdown in and out. |
 | [`ravenrs-pdf`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-pdf) | A PDF engine without a screen: reading (encrypted and damaged files too), saving, merging and splitting, attachments, and pages rendered to pixels. |
+| [`ravenrs-deck`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-deck) | A presentation engine without a screen: a slide model, `.pptx` and its own format in and out, slides drawn to pixels, PDF export, and commands with undo for an editor. |
 | [`ravenrs-grid-export`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-grid-export) | What a `DataGrid` shows, as Excel, PDF or CSV. |
 | [`ravenrs-app`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-app), [`-derive`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-app-derive), [`-ui`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-app-ui) | The application framework: model, attributes and generated screens. |
 | [`ravenrs-app-i18n`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-app-i18n) | Languages and words of the screens and components, by key, with English to fall back on. |
@@ -354,6 +355,7 @@ Start with `ravenrs`. The others come in as you need them.
 | [`ravenrs-wayland-gestures`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-wayland-gestures) | Touchpad pinches on Wayland. |
 | [`ravenrs-mcp`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-mcp) | A read-only MCP server for coding assistants. A tool, not a dependency of your app. |
 | [`ravenrs-lint`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-lint) | Lints for applications: theme tokens, the 4px grid, named controls, no state or blocking work in `body`. A dev-dependency and `cargo ravenrs-lint`. |
+| [`ravenrs-xcache`](https://github.com/alexkads/RavenRS/blob/master/crates/ravenrs-xcache) | A compiler cache that worktrees share: it stands in front of rustc, takes the checkout and build paths out of what is compiled, and says why each compilation came from the cache or not. A tool of this repository, not published; libraries only for now. |
 
 ## Roadmap
 

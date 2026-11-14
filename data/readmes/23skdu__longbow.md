@@ -1,8 +1,10 @@
 # Longbow
 
-![CI](https://github.com/23skdu/longbow/actions/workflows/ci.yml/badge.svg)
-![Helm Validation](https://github.com/23skdu/longbow/actions/workflows/helm-validation.yml/badge.svg)
-![Markdown Lint](https://github.com/23skdu/longbow/actions/workflows/markdown-lint.yml/badge.svg)
+[![CI Pipeline](https://github.com/23skdu/longbow/actions/workflows/ci.yml/badge.svg)](https://github.com/23skdu/longbow/actions/workflows/ci.yml)
+[![Dependabot Auto-Merge](https://github.com/23skdu/longbow/actions/workflows/dependabot-auto-merge.yml/badge.svg)](https://github.com/23skdu/longbow/actions/workflows/dependabot-auto-merge.yml)
+[![GitHub Advanced Security](https://github.com/23skdu/longbow/actions/workflows/agents/github-advanced-security/badge.svg)](https://github.com/23skdu/longbow/actions/workflows/agents/github-advanced-security)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/23skdu/longbow)](go.mod)
+[![Go Reference](https://pkg.go.dev/badge/github.com/23skdu/longbow.svg)](https://pkg.go.dev/github.com/23skdu/longbow)
 
 ![image](https://github.com/user-attachments/assets/775eb0b4-7e55-4524-abda-c9489de0194e)
 
@@ -90,7 +92,7 @@ Longbow is configured via environment variables. Key limits include:
 - `LONGBOW_MAX_MEMORY` (Soft limit with exponential backpressure)
 - `LONGBOW_MAX_MEMORY_HARD` (Absolute hard ceiling that triggers `ResourceExhausted` rejection)
 
-See [Deployment & Configuration](docs/deploy.md#2-configuration) and [Limits](docs/limits.md) for details.
+See [Deployment & Configuration](docs/deploy.md) and [Limits & Constraints](docs/deploy.md#5-limits--constraints) for details.
 
 Notable flags:
 
@@ -206,7 +208,12 @@ docker run -p 3000:3000 -p 3001:3001 -p 9090:9090 longbow
 ## Documentation
 
 - [API Reference](docs/api.md)
+- [CLI Reference (`longbow-cli`)](docs/cli.md)
 - [Deployment & Configuration](docs/deploy.md)
+- [Features & Competitive Landscape](docs/features.md)
+- [Feature Parity Roadmap](docs/roadmap.md)
+- [Security & Compliance](docs/security-compliance.md)
+- [Serverless, Edge SDKs & WASM Client](docs/edge-wasm.md)
 - [Performance Benchmarks](docs/performance.md)
 - [Systems Architecture](docs/architecture.md)
 - [Vector Search Architecture](docs/vectorsearch.md)

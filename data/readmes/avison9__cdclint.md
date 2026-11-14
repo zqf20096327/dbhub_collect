@@ -3,11 +3,18 @@
 Lint the contract between your database, your Debezium connector and your
 sink, before the deploy that silently drops a column.
 
-**Status: v0.4.** Ten rules run against a corpus of real incidents; two
-more are next. Reads Postgres and MySQL (or MariaDB) sources. `--disable`
+**Status: v0.5.** Eleven rules run against a corpus of real incidents; one
+more is next. Reads Postgres and MySQL (or MariaDB) sources. `--disable`
 leaves a rule out and `cdclint:ignore` records a decision on the line it is
 about. Released for macOS, Linux and Windows, on Homebrew and on the GitHub
 Marketplace.
+
+![Installing cdclint, checking the download, and running it on a dropped column](docs/demo.gif)
+
+Under a minute: download a release, check it against the published
+checksums, and run it on a real failure from the [corpus](corpus/). The
+same recording as [an MP4](docs/demo.mp4); the script that records it is
+[`docs/demo.tape`](docs/demo.tape).
 
 ## Why are my columns null?
 
@@ -67,6 +74,14 @@ anything running.
 
 ## What it checks
 
+![cdclint architecture: inputs read as files, one model, every sink column resolved to the source column it expects, three groups of rules, decisions recorded in the SQL, findings with an exit code](docs/diagrams/architecture.svg)
+
+cdclint reads the three schemas and the connector as files into one model,
+resolves every sink column to the source column it expects, and asks three
+questions of the result. The diagram's source is
+[`docs/diagrams/architecture.svg`](docs/diagrams/architecture.svg), plain SVG
+edited by hand.
+
 | rule | catches | status |
 |---|---|---|
 | `sink-column-not-captured` | the sink reads a column the connector does not include | v0.1 |
@@ -79,7 +94,7 @@ anything running.
 | `sink-column-flattened` | a sink table names its columns as the source does while a `Flatten` transform on the way delivers the envelope as `after.<column>`, so every column stays at its default | v0.3 |
 | `mv-column-match` | ClickHouse streaming materialized views match by name, refreshable ones by position. ClickHouse 25.4 and later reject a streaming view that writes a column the target lacks when it is created; a refreshable view's order mismatch was loud on 24.8 and is silent on 26.8 | v0.1 |
 | `schema-before-connector` | this change adds a column to a captured table and leaves it out of the stream without deciding to, the trap itself, judged on the diff (warning: leaving PII off is right, so it asks for the decision) | v0.2 |
-| `replica-identity` | a captured table's replica identity cannot supply what the sink reads | next |
+| `replica-identity` | a captured Postgres table has no replica identity (`NOTHING`, or `DEFAULT` with no primary key, after the connector's `replica.identity.autoset.values`): through `pgoutput` Postgres rejects the application's `UPDATE` and `DELETE` on it, through `decoderbufs` Debezium streams only its inserts (warning: an insert-only table loses nothing, and a `cdclint:ignore` says so) | v0.5 |
 | `migration-numbering` | duplicate or gapped migration prefixes | next |
 
 Findings name the file, the column, the rule and the fix:
@@ -195,7 +210,7 @@ points at, with the reason:
 
 ```sql
 ALTER TABLE users
-    ADD COLUMN ssn_hash TEXT, -- cdclint:ignore schema-before-connector: PII, never streamed
+    ADD COLUMN ssn_hash TEXT, -- cdclint:ignore schema-before-connector,source-column-not-captured: PII, never streamed
     ADD COLUMN nickname TEXT;
 ```
 
@@ -206,13 +221,16 @@ below. It works in migrations and in sink DDL, with `--` or MySQL's `#`, and
 names one or more rules separated by commas. The reason after the colon is
 required, because it is the record of the decision. A marker with no reason,
 with a rule name that does not exist, or that covers no finding is itself a
-warning (`ignore-marker`). A `schema-before-connector` marker is expected to
-go quiet once its pull request merges, since that rule judges the change;
-to keep the column out of the inventory afterwards too, name both rules:
-`-- cdclint:ignore schema-before-connector,source-column-not-captured: PII`.
+warning (`ignore-marker`). Name both rules for a column left out of the
+stream, as above and as the diff rule's own fix suggests:
+`schema-before-connector` only exists in the pull request that adds the
+column, and after the merge the same column is `source-column-not-captured`
+on every run. A marker naming only the first goes quiet at the merge and the
+column comes back into the inventory.
 
 Files in, findings out, non-zero exit. No database, no daemon, no credentials.
-Under a second on a laptop. `--fail-on warning` or `info` raises the bar;
+Under a second on a laptop. `--fail-on warning` or `info` raises the bar
+(any other value is an error, not the default);
 `--format json` is for anything that wants to post findings somewhere. A
 later live mode reads the deployed Postgres, Kafka Connect and sink to report
 drift against what is actually running.

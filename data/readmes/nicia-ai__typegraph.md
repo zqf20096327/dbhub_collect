@@ -1,0 +1,161 @@
+<!-- markdownlint-disable MD013 MD033 MD041 -->
+<p align="center">
+  <img src="apps/docs/typegraph-logo.svg" width="120" height="120" alt="TypeGraph logo">
+</p>
+
+<h1 align="center">TypeGraph</h1>
+
+<p align="center">
+  <a href="https://github.com/nicia-ai/typegraph/actions/workflows/ci.yml"><img src="https://github.com/nicia-ai/typegraph/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://www.npmjs.com/package/@nicia-ai/typegraph"><img src="https://img.shields.io/npm/v/@nicia-ai/typegraph" alt="npm"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+</p>
+<!-- markdownlint-enable MD013 MD033 MD041 -->
+
+TypeScript-first embedded knowledge graph library.
+
+TypeGraph brings property graph modeling and practical ontology support to your existing SQLite or PostgreSQL
+database. Define nodes and edges with Zod, query with a fluent TypeScript API, and keep graph + app data in one
+deployment.
+
+## Why teams use it
+
+- Keep graph data in your existing SQL database (no separate graph service)
+- Model richer semantics with `subClassOf`, `implies`, `inverseOf`, and `disjointWith`
+- Traverse relationships with compile-time type safety
+- Filter and project with typed database expressions, then compose results with grouping, set operations,
+  preparation, and streaming
+- Chain fixed and recursive traversal stages with qualified paths, per-hop constraints,
+  completed-match filters, and explicit stop rules
+- Assemble independent reads in one statement and bound edge traversals before hydration
+- Run vector and hybrid search across every backend — pgvector, sqlite-vec, and libSQL/Turso native vectors
+- Start with SQLite, move to PostgreSQL without changing your graph definition
+- Evolve the schema at runtime from agent-proposed JSON — no redeploy
+  ([Graph Extensions](https://typegraph.dev/graph-extensions))
+- Reconstruct valid-time and recorded-time history with bitemporal reads
+  ([Temporal queries](https://typegraph.dev/queries/temporal))
+
+## Best fit
+
+TypeGraph works well for:
+
+- Knowledge graphs and RAG context modeling
+- Auditable agent memory, decision replay, and bitemporal forensics
+- Identity/permissions and other relationship-heavy domain models
+- Applications that want graph semantics without extra infrastructure
+
+TypeGraph is not designed for:
+
+- Distributed graph processing
+- Broad graph-data-science suites—its focused
+  [Graph Algorithms](https://typegraph.dev/graph-algorithms) API includes
+  shortest path, reachability, neighborhoods, degree, exact WCC, deterministic
+  label propagation, and global/personalized PageRank, but not broad community
+  detection or centrality suites
+- Billion-scale graphs requiring dedicated graph-engine performance
+
+## Installation
+
+```bash
+npm install @nicia-ai/typegraph zod drizzle-orm better-sqlite3
+npm install -D @types/better-sqlite3
+```
+
+For edge/serverless environments (Cloudflare Durable Objects, D1, libsql,
+bun:sqlite), see the docs:
+[Edge and Serverless](https://typegraph.dev/integration#edge-and-serverless).
+
+## Quick Start
+
+```typescript
+import { z } from "zod";
+import { defineEdge, defineGraph, defineNode } from "@nicia-ai/typegraph";
+import { createLocalSqliteStore } from "@nicia-ai/typegraph/sqlite/local";
+
+const Person = defineNode("Person", {
+  schema: z.object({ name: z.string(), role: z.string().optional() }),
+});
+const Project = defineNode("Project", {
+  schema: z.object({ name: z.string(), status: z.enum(["active", "done"]) }),
+});
+const worksOn = defineEdge("worksOn");
+
+const graph = defineGraph({
+  id: "my_app",
+  nodes: {
+    Person: { type: Person },
+    Project: { type: Project },
+  },
+  edges: {
+    worksOn: { type: worksOn, from: [Person], to: [Project] },
+  },
+});
+
+const store = await createLocalSqliteStore(graph);
+
+const alice = await store.nodes.Person.create({ name: "Alice", role: "Engineer" });
+const website = await store.nodes.Project.create({ name: "Website", status: "active" });
+await store.edges.worksOn.create(alice, website, {});
+
+const results = await store
+  .query()
+  .from("Person", "p")
+  .traverse("worksOn", "e")
+  .to("Project", "proj")
+  .select((ctx) => ({ person: ctx.p.name, project: ctx.proj.name }))
+  .execute();
+
+console.log(results);
+// [{ person: "Alice", project: "Website" }]
+```
+
+For production schema management, see:
+[createStoreWithSchema](https://typegraph.dev/getting-started#store-creation-which-function-to-use).
+
+The managed SQLite entrypoint provisions the schema and returns the complete,
+schema-derived `Store` API without exposing Drizzle types. PostgreSQL consumers
+can use the equivalent `createLocalPgliteStore` from
+`@nicia-ai/typegraph/postgres/pglite`. Bring-your-own-connection integrations
+live under the explicit `/adapters/drizzle/...` entrypoints.
+
+Packages that only define or share graph schemas can import the DSL and its
+schema-derived types from `@nicia-ai/typegraph/core`. Custom backend and search
+strategy authors can use the complete Drizzle-free contract vocabulary from
+`@nicia-ai/typegraph/backend`.
+
+`drizzle-orm` is an optional peer dependency. `@nicia-ai/typegraph/sqlite/local`
+and `@nicia-ai/typegraph/postgres/pglite` load it only when their factory is
+called and refuse with a typed `ConfigurationError`
+(`MISSING_PEER_DEPENDENCY`) naming the package and the install command
+(`npm install drizzle-orm`) when it is absent. The six explicit
+`/adapters/drizzle/...` entrypoints expose Drizzle-native backends, connections,
+or schema builders and load `drizzle-orm` when the module is evaluated. Importing
+one without the peer installed therefore surfaces the raw module-resolution
+error, which names the same package.
+
+## Learn More
+
+- Docs: [typegraph.dev](https://typegraph.dev)
+- Overview: [What is TypeGraph?](https://typegraph.dev/overview)
+- Setup: [Getting Started](https://typegraph.dev/getting-started)
+- Query builder: [Queries Overview](https://typegraph.dev/queries/overview)
+- Parallel and durable reconciliation: [Graph Merge](https://typegraph.dev/graph-merge)
+- Typed expressions and relational composition: [Expressions](https://typegraph.dev/queries/expressions), [Relations](https://typegraph.dev/queries/relations)
+- Traversal and recursive paths: [Traverse](https://typegraph.dev/queries/traverse), [Recursive queries](https://typegraph.dev/queries/recursive)
+- Temporal and bitemporal history: [Temporal queries](https://typegraph.dev/queries/temporal)
+- Application patterns: [Common Patterns](https://typegraph.dev/recipes)
+- Complete examples: [packages/typegraph/examples](packages/typegraph/examples/)
+- Project docs: [Testing](docs/TESTING.md), [Release Process](docs/RELEASE.md)
+
+## LLM/Coding Agent Support
+
+TypeGraph publishes one curated [llms.txt](https://typegraph.dev/llms.txt) following the
+[llms.txt](https://llmstxt.org/) convention. It states when to recommend TypeGraph (and when not to), includes a
+working quick start, and links every documentation page as clean markdown (append `.md` to any docs URL, for example
+[overview.md](https://typegraph.dev/overview.md)).
+
+See [LLM Support](https://typegraph.dev/llm-support/) for a copy-paste block for `AGENTS.md` / `CLAUDE.md`.
+
+## License
+
+MIT

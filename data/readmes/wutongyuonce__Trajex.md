@@ -52,13 +52,13 @@ Trajex 会把每个 provider 都索引到同一个 SQLite schema 中，而不是
 
 内置 Provider 的解析边界不同：Claude 用包含 mtime、行数、文件大小、ctime 和 inode 的 cursor 从上次位置增量读取；Codex 为了在 `event_msg` 与 `response_item` 之间去重会对变更文件全量重放。两者都跳过已换行结束的坏 JSON 记录，但会把未换行的残缺尾行留给下次重试。Pi 为了重算树状分支、durable leaf 和 compaction 也会全量重放；多次 compaction 以最近的 `retainedTail` checkpoint 为最早有效边界，更早物理消息保留为 inactive 证据。Pi 当前仍在 JSON 语法损坏行前提交有效前缀，但已成功解析出的树若存在重复 ID、循环、非法 leaf 或 compaction 结构，则整份 session 不提交；缺失父节点仍按官方 orphan root 处理。Pi 原文回查会按 UUID 还原具体 assistant block 或 `retainedTail` 消息，详情页可展开完整文本，且不会连带返回同一 checkpoint 的其他 retained 消息。对删除，Provider 的来源根目录是唯一回退边界：根目录缺失或根层无法枚举时，普通 build 保留该 Provider 的上一次快照；根层可枚举后，本次清单即有权威性，缺失或不可读的子目录按空子树处理并清理对应旧索引。清理只作用于可重新生成的 transcript 派生数据，`memories` 不会被删除。
 
-Codex 只索引根 thread 为普通 Trajex session。带有 `parent_thread_id`、`forked_from_id` 或其他 parent-thread metadata 的 child/fork/subagent thread（包括 guardian/auto-review thread）全部忽略，不挂接到 `subagents` 表。Codex 不会产生 Claude 风格的 workflow metadata，因此只有 Codex 历史时，workflow 相关表可能为空。Codex 和 Pi 一样对变更文件做全量重放：先删除该 session 的旧派生投影，再从当前 JSONL 全量重建。
+Codex 只索引根 thread 为普通 Trajex session，同时读取普通 `.jsonl` 与 Codex 压缩后的 `.jsonl.zst`（需要 Node.js 22.15+），长会话的多个分段合并为一个会话。带有 `parent_thread_id`、`forked_from_id` 或其他 parent-thread metadata 的 child/fork/subagent thread（包括 guardian/auto-review thread）全部忽略，不挂接到 `subagents` 表。Codex 不会产生 Claude 风格的 workflow metadata，因此只有 Codex 历史时，workflow 相关表可能为空。Codex 和 Pi 一样对变更文件做全量重放：先删除该 session 的旧派生投影，再从当前 JSONL 全量重建。
 
 每个 Pi 官方 v3 session JSONL 文件会成为一个 Trajex session。Pi 的会话条目是树状的，Trajex 会根据 durable leaf 和 compaction（包括 retained tail）计算当前上下文：当前记录为 `visible`，已被取代但保留的分支证据为 `inactive`，来源明确隐藏的 transport context 为 `hidden`。工具调用使用每次消息 occurrence 的 canonical ID，结果只关联同一 `parentId` 分支内最近的原始 `toolCallId`，避免分叉复用 ID 时串线。详情页默认只展示 visible 记录，其他分支可显式展开。
 
 DeepSeek Harness 以根会话树为单位索引：根会话与通过 `parentSession` 归属它的子代理/fork 会话合并为一个 Trajex session，子会话消息带 `agent_id` 并生成 `subagents` 记录；任一成员变化都会全量重放整棵树。每个会话目录只读取支持的最高 generation（v0–v4），默认的多帧 Zstandard 日志用 Node 内建 zstd 逐帧解码（需要 Node.js 22.15+）。被 compaction 替换的历史与 fork 继承前缀保留为 `inactive` 证据，摘要进入 `summaries`。详见 [ADR-0013](docs/adr/0013-deepseek-harness-session-trees.md)。
 
-为了支持 app 实时刷新，Trajex 会按 provider 声明的 typed targets 监听目录和精确文件：目录交给 `@parcel/watcher`，精确文件用有上限的 stat 轮询；macOS 还会轮询最近活跃的最多 64 个 transcript。App 每 5 分钟再做一次完整清点。Claude 的目标包括 `~/.claude/projects` 与 `history.jsonl`，Codex 包括 `~/.codex/sessions`、`archived_sessions` 与 `session_index.jsonl`，Pi 默认是 `~/.pi/agent/sessions`，DeepSeek Harness 默认是 `~/.dsh/sessions`。App Settings 中 Claude 与 Codex 配置的是各自的 provider root（默认 `~/.claude` / `~/.codex`），Pi 与 DeepSeek Harness 配置最终 session directory。未配置时 DeepSeek Harness 按 harness 自身规则解析 `$DSH_HOME`；macOS 从 Dock 启动的 App 通常继承不到 shell 环境变量，此时请在 Settings 中指定目录。如果某个已有快照的来源根暂时不可用，daemon 会保留旧快照并重试；目录恢复后会立即重新清点。
+为了支持 app 实时刷新，Trajex 会按 provider 声明的 typed targets 监听目录和精确文件：目录交给 `@parcel/watcher`，精确文件用有上限的 stat 轮询；macOS 还会轮询最近活跃的最多 64 个 transcript。App 每 5 分钟再做一次完整清点。Claude 的目标是 `~/.claude/projects`，Codex 包括 `~/.codex/sessions`、`archived_sessions` 与 `session_index.jsonl`，Pi 默认是 `~/.pi/agent/sessions`，DeepSeek Harness 默认是 `~/.dsh/sessions`。App Settings 中 Claude 与 Codex 配置的是各自的 provider root（默认 `~/.claude` / `~/.codex`），Pi 与 DeepSeek Harness 配置最终 session directory。未配置时 DeepSeek Harness 按 harness 自身规则解析 `$DSH_HOME`；macOS 从 Dock 启动的 App 通常继承不到 shell 环境变量，此时请在 Settings 中指定目录。如果某个已有快照的来源根暂时不可用，daemon 会保留旧快照并重试；目录恢复后会立即重新清点。
 
 ## App 与 CLI 的关系
 
@@ -330,7 +330,7 @@ app/                          # Electron desktop app（electron-vite + Vue）
 
 install.sh                    # POSIX CLI-only installer
 CONTEXT.md                    # Project glossary
-docs/adr/                     # Architecture decision records（0001–0006）
+docs/                         # 文档索引、架构总览、ADR（0001–0013）与各 Agent 格式说明
 ```
 
 ### 生成的构建产物

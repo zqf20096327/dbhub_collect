@@ -70,7 +70,7 @@ What the current codebase already supports:
 
 Click the diagram to view the full-resolution architecture image.
 
-See the [Documentation index](docs/README.md) for source-level guides and the [Chinese documentation index](docs/README.zh-CN.md).
+See the [Documentation index](docs/README.md), the [editable architecture diagrams](docs/architecture.drawio), and the [Chinese documentation index](docs/README.zh-CN.md).
 
 Detailed source-level guide: [Architecture documentation](docs/architecture.md).
 
@@ -139,6 +139,8 @@ Detailed source-level guide: [Architecture documentation](docs/architecture.md).
    - `WEAVIATE_API_KEY`
    - `VITE_API_PREFIX`
    - At least one provider key such as `OPENAI_API_KEY`, `ATLASCLOUD_API_KEY`, `DEEPSEEK_API_KEY`, or `DASHSCOPE_API_KEY`
+
+   For Docker Compose, also set the same `WEAVIATE_API_KEY` in `docker/.env`. Compose reads that file to configure Weaviate's allowed-key list; `api/.env` supplies the key to OpenAgent services.
 
 4. Start the Docker stack.
 
@@ -224,6 +226,8 @@ Key capabilities:
 - Sandbox and artifact output: support script execution, code handling, file generation, and attachment export for tasks that need concrete outputs.
 - Debugging and result verification: use the right-side panel to run real conversations and inspect deep execution timelines, task state, produced artifacts, and final results.
 
+Callable execution traces arrive with live runs and are not restored from message history. See the [Trace guide](docs/trace.md) for the event lifecycle and persistence behavior.
+
 ### 3. Visual Workflow Editor
 
 <img width="2560" height="1599" alt="OpenAgent Workflow Editor" src="https://github.com/user-attachments/assets/23b510e2-1232-4f52-9262-812a7523ae21" />
@@ -241,6 +245,8 @@ Create datasets, upload documents, inspect segments, and wire retrieval nodes in
 <img width="2560" height="1418" alt="OpenAgent OpenAPI" src="https://github.com/user-attachments/assets/40769d35-89e1-4b76-9686-a431a77a42c7" />
 
 Publish an app and call it over `POST /api/openapi/chat` with standard or streaming responses, including support for multi-turn conversation identifiers.
+
+Manage credentials and supported API Key scopes in the [API Key guide](docs/api-keys.md).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

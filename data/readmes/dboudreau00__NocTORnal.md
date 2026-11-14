@@ -48,6 +48,19 @@ first. Nothing in this repository is legal advice.
 | **L4** | Message-level capture, including group channels and call recordings | That interception law, one-party vs two-party consent, and retention of uninvolved third parties' content are settled. `provenance_class` records *which kind* of capture it was; it cannot confer authority for any of them. |
 | **L5** | Web capture of phishing infrastructure | That fetching attacker infrastructure is authorised, and (separately) that **entering any input into a phishing page, including canary credentials, is covered.** That may constitute unauthorised access. The schema refuses to record a submission without a written authority reference. |
 
+### For law enforcement in the US and Canada
+
+The evidence handling is architected on **US Federal Rules of Evidence
+902(13) and 902(14)** and **Canada Evidence Act sections 31.1 to 31.8**.
+Each exhibit is hashed twice (SHA-256 and BLAKE3) and locked write-once when
+it is lodged, and re-verified on every read and export. Each lodging, read,
+export and verification is a row in an append-only, hash-chained custody
+ledger. That is the technical half. Those rules also need a qualified person
+to certify or swear to how the system ran, and the agency supplies that,
+with counsel's written determinations, a hardened deployment and written
+procedures.
+[docs/21](docs/21-law-enforcement-readiness.md) lists those steps, in order.
+
 
 ---
 
@@ -312,7 +325,7 @@ export DATABASE_URL=postgresql+psycopg://noctornal:dev_only_change_me@127.0.0.1:
 .venv/bin/python -m pytest apps/api/tests packages/ontology -q
 ```
 
-With the containers up, expect **no failures** across **8434 tests** (`def test_`
+With the containers up, expect **no failures** across **8446 tests** (`def test_`
 functions across both pytest roots, maintained by
 `scripts/refresh_counters.py`; each parametrises to one or more collected
 items, and the collected total for a given release is in
@@ -342,7 +355,7 @@ structural edges wait on a shelf at the side (five here: three crews, a
 wallet and a domain). Inferred edges render **dashed**, like the one beside
 the selected vouch between bit_forge and bit_lathe, and count toward the
 metrics only when a projection opts in. The console's default projection
-does, and the readout under the legend says so. The bar along the bottom is
+does, and the "i" beside the count at the foot of the canvas says so. The bar along the bottom is
 world time: drag it and the graph becomes the network as it stood on that
 date, as the case records it today.
 
@@ -676,7 +689,7 @@ enforces it.
 
 ### Testing
 
-**8434 tests** (`def test_` functions across two pytest roots, maintained by
+**8446 tests** (`def test_` functions across two pytest roots, maintained by
 `scripts/refresh_counters.py`). Every invariant has a test named
 after it. About half are database-backed and gated on `DATABASE_URL`; the
 rest need no services at all.
@@ -722,6 +735,7 @@ noctornal/
 | **[`release/MANUAL.md`](release/MANUAL.md)** ([PDF](release/NocTORnal-Manual.pdf)) | operating it: what each pane is for, what the numbers mean, every refusal and why |
 | [`docs/18-legal-review-pack.md`](docs/18-legal-review-pack.md) | **the sign-off document**, with a row to answer each question in |
 | [`docs/16-legal-and-external.md`](docs/16-legal-and-external.md) | **the register**: every place the build stops because the next step is a legal question, and why holding this material is dangerous |
+| [`docs/21-law-enforcement-readiness.md`](docs/21-law-enforcement-readiness.md) | **for an agency in the US or Canada**: what FRE 902(13), (14) and Canada Evidence Act ss. 31.1-31.8 ask, what the build supplies, and the steps before real casework |
 | [`docs/17-flagged-for-review.md`](docs/17-flagged-for-review.md) | what may need to change: data not to be trusted, the Beta 1 review, known residuals, judgement calls |
 | [`docs/00-decisions.md`](docs/00-decisions.md) | the numbered decisions and why the architecture is the way it is |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | the map of what was built |
@@ -756,8 +770,14 @@ noctornal/
 
 **Beta. Unaudited. Not certified for evidential use. Not lawful to operate against real material until the five blocking items above are settled.** It is fit for other people to try on synthetic or published, non-personal data.
 
-This is Beta 1.5b, release 0.9.5, tag `v0.9.5b-beta`: Beta 1.5 with the findings it
-listed as not fixed closed, each with a test, and one more migration, 0184, which keeps
+This is Beta 1.5c, release 0.9.5, tag `v0.9.5c-beta`: Beta 1.5b with a new look for
+the sociogram and a quieter console, and no migration. The graph sits on a lit navy
+stage with a soft halo behind each entity, the rows of legend and keys under it are one
+row with a Key and a Shortcuts button, and what a pane says once (what a setting
+covers, how a figure is counted) opens from a small "i" instead of staying on the
+screen. A warning, a refusal or a consequence still stays on screen. Beta 1.5b was
+Beta 1.5 with the findings it listed as not fixed closed, each with a test, and one
+more migration, 0184, which keeps
 the request role from dropping a compartment from case material or lowering its label.
 Beta 1.5 was Beta 1.4 with the 18 findings of a code review of the whole tree closed,
 each with a test, and one migration, 0183, which stops the request role from lowering
@@ -794,7 +814,7 @@ reads, selectors, search and the audit log hold at 100,000 entities and
 about 5,000 entities a case, and the ego network and the path search stop at
 5,000. That load was measured from a Windows host with Postgres in WSL2.
 
-Beyond what the tour shows, Beta 1.5b has entity merge under the two-person
+Beyond what the tour shows, Beta 1.5c has entity merge under the two-person
 policy; PGP verification and vendor keys; collection from feeds, forums and
 Telegram under a two-person authority (the operator's end-to-end Telegram
 check is `docs/17` F31); ingest; similarity search; Jira, the delivery

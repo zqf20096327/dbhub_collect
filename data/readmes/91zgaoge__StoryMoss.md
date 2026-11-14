@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.98.3-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.98.5-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -120,6 +120,16 @@ npm run build
 
 OG.md`](./CHANGELOG.md)。
 
+### v0.98.5 · 训练源章节缓存 + 栗子读书 MCP 读竞态修复
+
+- **反复训练不再重复取章**：MCP 源章节按「服务器 + 书 + 章号」缓存到本地 SQLite；第一次训练取章并回写，后续训练直接命中缓存，日志显示命中/新读数量。取章更省时，也不再反复触碰回环 HTTP。
+- **配套栗子读书 v0.14.26**：服务端在 accept 后清除客户端 socket 继承的 `O_NONBLOCK`，header/body 分次到达时不再立即返回 400「请求不完整」；分离写入 1–500ms 实测全部成功。
+
+### v0.98.4 · 续写训练取章不再被栗子读书「请求不完整」中断
+
+- **取章竞态可自愈**：Legado MCP 在 TCP 连接建立后立即读取请求，客户端若在连接与写请求之间被调度延迟（本机 LLM 高负载时偶发），body 未到达就会返回 400「请求不完整」。现在这类拒绝被识别为「JSON-RPC 尚未解析、工具未执行」，回环请求会安全重发一次；只读工具另有退避重试，写工具不会重复执行副作用。
+- **训练不再在第 136/137 章中途判死**：同一本书连续取 20 章、风格/资产重建、续写与编审链路可继续推进。
+
 ### v0.98.3 · 训练风格 DNA 与资产重建适配推理模型
 
 - **JSON 截断可修复**：风格分析 JSON 中途被截断时，自动补全未闭合括号并采用已生成字段；两次尝试仍不完整才降级。
@@ -179,10 +189,4 @@ v0.95.0 留下的一批状态机债务已逐项收口：
 
 ### v0.93.16 · 续写训练不再「另起新故事」，空稿不再冒充正文
 
-真机检查发现两个训练沙盒的续写与前作严重脱节：一轮写出了现代都市「陈默/铜钱」的新故事（与《阴脉先生》第 106 章的桐人镇魇现场无关），另一轮生成正文后又被幕前切书的 `<p></p>` 空文档覆盖。本版修复了根因：
-
-- **基准章泄漏**：训练指令的文风锚点此前取「最后两章」，末位是真实后续基准章（答案），会把基准章末段喂给模型；现在只用上下文章，基准章绝不进入续写指令。
-- **硬承接锚点**：训练指令始终携带上一章结尾原文（900 字），并明确「同一地点/同批人物/同一时代、未完结事件先落地，禁止新主角/新委托/新场景」；指令上限由 1200 字提高到 4096 字，锚点不再被截断。
-- **过期建议过滤**：上轮训练建议只在承接区间重叠时采用，跨章节区间（如第 1–10 章的建议）不再污染第 97 章之后的续写。
-- **资产缺失兜底**：沙盒无世界观/角色卡/大纲时，writer 不得输出「无法完成/创作资产为空」拒绝话术；续写管线的散文回退改为「带前文的续写 prompt」，不再复用创世开篇 prompt。
-- **空稿守卫**：判分前把 `<p></p>`/空白/拒绝话术判为不可用产出，任务失败且不落假报告；`update_scene` 统一把视觉空 HTML 视为 None，幕前切
+真机检查发现两个训练沙盒的续写与前作

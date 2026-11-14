@@ -360,7 +360,7 @@ Useful resources and dependencies that are used in MeetAI.
 
 - Thanks to CodeWithAntonio: https://codewithantonio.com/
 <!--- DEPENDENCIES_START --->
-- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser): ^8.0.6
+- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser): ^8.0.7
 - [@dicebear/collection](https://www.npmjs.com/package/@dicebear/collection): ^9.2.4
 - [@dicebear/core](https://www.npmjs.com/package/@dicebear/core): ^9.4.3
 - [@eslint/eslintrc](https://www.npmjs.com/package/@eslint/eslintrc): ^3
@@ -375,12 +375,12 @@ Useful resources and dependencies that are used in MeetAI.
 - [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.1.24
 - [@radix-ui/react-label](https://www.npmjs.com/package/@radix-ui/react-label): ^2.1.17
 - [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.1.16
-- [@radix-ui/react-scroll-area](https://www.npmjs.com/package/@radix-ui/react-scroll-area): ^1.2.18
+- [@radix-ui/react-scroll-area](https://www.npmjs.com/package/@radix-ui/react-scroll-area): ^1.4.0
 - [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.1.15
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.3.0
 - [@radix-ui/react-tabs](https://www.npmjs.com/package/@radix-ui/react-tabs): ^1.2.1
 - [@radix-ui/react-tooltip](https://www.npmjs.com/package/@radix-ui/react-tooltip): ^1.4.1
-- [@stream-io/node-sdk](https://www.npmjs.com/package/@stream-io/node-sdk): ^0.8.13
+- [@stream-io/node-sdk](https://www.npmjs.com/package/@stream-io/node-sdk): ^0.9.1
 - [@stream-io/openai-realtime-api](https://www.npmjs.com/package/@stream-io/openai-realtime-api): ^0.4.2
 - [@stream-io/video-react-sdk](https://www.npmjs.com/package/@stream-io/video-react-sdk): ^1.43.4
 - [@t3-oss/env-nextjs](https://www.npmjs.com/package/@t3-oss/env-nextjs): ^0.13.10
@@ -413,7 +413,7 @@ Useful resources and dependencies that are used in MeetAI.
 - [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^5.5.7
 - [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss): ^4.4.0
 - [humanize-duration](https://www.npmjs.com/package/humanize-duration): ^3.34.1
-- [inngest](https://www.npmjs.com/package/inngest): ^4.21.0
+- [inngest](https://www.npmjs.com/package/inngest): ^4.26.2
 - [jsonl-parse-stringify](https://www.npmjs.com/package/jsonl-parse-stringify): ^1.0.3
 - [lodash.debounce](https://www.npmjs.com/package/lodash.debounce): ^4.0.8
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.24.0
@@ -433,7 +433,7 @@ Useful resources and dependencies that are used in MeetAI.
 - [react-hot-toast](https://www.npmjs.com/package/react-hot-toast): ^2.6.0
 - [react-markdown](https://www.npmjs.com/package/react-markdown): ^10.1.0
 - [server-only](https://www.npmjs.com/package/server-only): ^0.0.1
-- [stream-chat](https://www.npmjs.com/package/stream-chat): ^9.54.0
+- [stream-chat](https://www.npmjs.com/package/stream-chat): ^9.55.0
 - [stream-chat-react](https://www.npmjs.com/package/stream-chat-react): ^14.8.0
 - [superjson](https://www.npmjs.com/package/superjson): ^2.2.6
 - [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.6.0

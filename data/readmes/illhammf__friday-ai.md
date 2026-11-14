@@ -104,6 +104,16 @@ file:
 npm ci
 ```
 
+If you use [nvm](https://github.com/nvm-sh/nvm), select the supported major
+version in the same terminal before installing or starting Friday:
+
+```bash
+nvm install 24
+nvm use 24
+node --version
+npm --version
+```
+
 ### 3. Install media tools
 
 Install `ffmpeg` using your operating system's package manager. Install
@@ -259,8 +269,10 @@ temporarily prevent downloads.
 ### Voice notes
 
 Incoming voice notes are transcribed before Friday generates a response.
-Friday may send a voice reply; if voice generation or delivery fails, it
-provides a text explanation and the answer as text instead.
+Friday may send a voice reply. If voice generation fails before sending, it
+can provide the answer as text. If WhatsApp's voice-send result is uncertain,
+Friday does not send a second reply because the voice note may already have
+been accepted.
 
 ### Manage private memory
 
@@ -303,6 +315,7 @@ service if every configured model is unavailable or out of quota.
 ## Runtime checks and tests
 
 ```bash
+node --version # Must report v24 or newer
 npm run doctor  # Check Node.js, API-key presence, ffmpeg, and yt-dlp
 npm run check   # Syntax-check the application entry point
 npm test        # Run automated feature and regression tests

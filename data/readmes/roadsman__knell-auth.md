@@ -29,6 +29,11 @@ Knell is auth without the bloat. It does one thing well: secure authentication f
 
 - **Secure by default**: Argon2id password hashing, timing-attack protection
 - **Session management**: JWT access tokens + secure refresh tokens
+- **Email verification**: Verify emails on signup
+- **Password reset**: Secure token-based password recovery
+- **Two-factor authentication**: TOTP-based 2FA support
+- **OAuth providers**: Sign in with Google, GitHub
+- **WebAuthn**: Passwordless authentication with passkeys
 - **Account protection**: Rate limiting, brute force protection, account lockout
 - **Audit logging**: Track all authentication events
 - **IP blocking**: Automatic and manual IP blocklisting
@@ -83,13 +88,31 @@ POST /signup
 {"email": "user@example.com", "password": "SecurePassword123!"}
 ```
 
+**Verify email:**
+```bash
+POST /verify-email
+{"token": "..."}
+```
+
 **Log in:**
 ```bash
 POST /login
 {"email": "user@example.com", "password": "SecurePassword123!"}
 ```
 
-Both return:
+**Request password reset:**
+```bash
+POST /password-reset/request
+{"email": "user@example.com"}
+```
+
+**Reset password:**
+```bash
+POST /password-reset/confirm
+{"token": "...", "password": "NewPassword123!"}
+```
+
+Both signup and login return:
 ```json
 {
   "user": {"id": "...", "email": "...", "verified": false},
@@ -113,6 +136,12 @@ Authorization: Bearer <accessToken>
 **List sessions:**
 ```bash
 GET /sessions
+Authorization: Bearer <accessToken>
+```
+
+**Revoke specific session:**
+```bash
+DELETE /sessions/:sessionId
 Authorization: Bearer <accessToken>
 ```
 
@@ -174,22 +203,13 @@ See [PERFORMANCE.md](PERFORMANCE.md) for benchmarks.
 
 ## What's Missing?
 
-This is v0.1.0. Here's what's coming:
-
-**v0.2.0:**
-- Email verification
-- Password reset
-- TOTP/2FA
-
-**v0.3.0:**
-- OAuth (Google, GitHub)
-- WebAuthn/passkeys
-- GDPR compliance (account deletion)
+This is v0.3.0. Here's what's coming:
 
 **v1.0.0:**
 - Battle-tested in production
 - SOC2 docs
 - HA setup guides
+- Admin dashboard (optional)
 
 ## Contributing
 

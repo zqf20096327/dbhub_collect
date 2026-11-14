@@ -26,13 +26,13 @@
 
 ## Features
 
-- **Query Builder** — full where family (nested / sub-query / JSON / fulltext / binary / row values), joins (incl. lateral & join-sub), unions, aggregates, group limit, in-order-of, index hints, locks & timeouts
+- **Query Builder** — full where family (nested / sub-query / JSON / fulltext / binary / row values), joins (incl. lateral & join-sub), unions, aggregates, group limit, in-order-of, index hints, locks & timeouts, CTE (`WithExpression` / `WithRecursiveExpression`), cursor pagination (Laravel-aligned boundaries), chunkByIdDesc / lazyByIdDesc
 - **Multiple dialects** — MySQL, MariaDB, Postgres, SQLite, SQL Server (identifier quoting, limit/offset rewrites, upsert, returning, ctid/rowid deletes, JSON compilation)
-- **Eloquent-style Models** — timestamps, soft deletes, dirty tracking, mass-assignment guards, casts, UUID/ULID keys, increment, events & observers
-- **Relations** — hasOne / hasMany / hasOneThrough / hasManyThrough / belongsTo / morphOne / morphMany / morphTo / belongsToMany / morphToMany with eager loading, `WhereHas` family, `withCount` aggregates, pivot read & write side
-- **Connections** — named connections, read/write splitting with sticky, reconnect with lost-connection retry, query log & pretend, before/after hooks
-- **Transactions** — nested savepoints, deadlock retry, `AfterCommit` / `AfterRollBack` hooks, transaction events
-- **Schema Builder & Migrations** — full Blueprint (25+ column types, morphs, index kinds), per-dialect introspection, registered migrations with batching, step/batch/pretend and events
+- **Eloquent-style Models** — timestamps (customizable columns), soft deletes, dirty tracking, mass-assignment guards (Unguard/Reguard), casts (`cast:datetime:格式`), UUID/ULID keys, increment, events & observers, serialization (`ToMap`/`ToJson` with hidden/visible), `Replicate`, PG/SQLServer `RETURNING`-based id backfill
+- **Relations** — hasOne / hasMany / hasOneThrough / hasManyThrough / belongsTo / morphOne / morphMany / morphTo / belongsToMany / morphToMany with eager loading, `WhereHas` family, `withCount` aggregates (all relation shapes incl. pivot/through joins), pivot read (`WithPivot` + `torm:"pivot:..."` 回填) & write side (incl. MorphToMany attach/detach/sync), relation-level soft-delete scopes, automatic parent `touches`
+- **Connections** — named connections, read/write splitting with sticky (optional time window), reconnect with lost-connection retry, query log & pretend, before/after hooks, pool tuning (`MaxOpenConns`/`ConnMaxLifetimeSec`...), pool-safe session config (MySQL connector wrapper / PG `options=-c` / SQLite DSN pragmas), SQLite `foreign_keys` default on, MySQL `parseTime` default injection
+- **Transactions** — nested savepoints, deadlock retry, `AfterCommit` / `AfterRollBack` hooks, transaction events, panic-safe rollback
+- **Schema Builder & Migrations** — full Blueprint (25+ column types, morphs, index kinds), per-dialect introspection, registered migrations with batching, step/batch/pretend, SQL-file `LoadDir`, `Fresh`, advisory locking (PG/MySQL), per-migration `WithinTransaction`
 - **Error classification** — deadlock / lost connection / unique constraint detection by driver error codes and messages
 
 ## Requirements
@@ -404,6 +404,58 @@ rolled, _ := mig.Rollback() // last batch
 rolled, _ = mig.Rollback(migrations.RollbackOptions{Step: 2})
 rolled, ran, _ = mig.Refresh() // reset + migrate
 ```
+
+---
+
+## 行为变更与补齐（相对 1.x）
+
+> 语义均以 Laravel 对齐为目标；标注 N/A 的能力受 Go 静态结构体限制，不提供伪实现。
+
+### 行为变更（升级前必读）
+
+- **attach 批量化**：`Attach` 由逐行 INSERT 改为单条多值 INSERT（每 100 行一批）。
+- **chunk 游标**：`ChunkById` / `LazyById` 首块不再硬编码 `where id > 0`，
+  改为 `where id is not null`（Laravel 语义，字符串/负值主键可用）；列缺失时
+  报错而非无限循环。`CursorPaginate` 游标取截断后页内末行（旧实现每页边界丢一行）。
+- **SQLite foreign_keys 默认开启**（Laravel 默认行为；`Config.ForeignKeys` 显式关闭）。
+- **MySQL DSN 默认注入 `parseTime=true`**（`Config.ParseTime=false` 关闭）。
+- **软删 scope 全路径生效**：关系查询（eager/lazy/whereHas/withCount/BTM/through）、
+  `Exists`/`Pluck`/`SoleValue` 此前漏用软删 scope，现已统一（关联模型软删行不再泄漏）。
+- **withCount 约束闭包**支持全部 where 类型（旧实现仅 Basic 等值），morph 类型
+  值参数化绑定（旧实现字符串拼接）。
+- **无监听器不再默认打印 SQL** 到 stdout。
+
+### 新增 API（节选）
+
+| 能力 | API |
+|---|---|
+| CTE | `Builder.WithExpression` / `WithRecursiveExpression` |
+| 降序分块 | `ChunkByIdDesc` / `LazyByIdDesc` |
+| 模型序列化 | `ToMap` / `ToJson` / `MapsToSlice` / `SliceToJson`（hidden/visible 生效） |
+| 副本 | `Connection.Replicate`（replicating 事件） |
+| 守卫开关 | `Unguard(fn)` / `Reguard` / `SetDefaultUnguarded(false)`（Laravel 严格方向） |
+| 时间戳列名 | `SetTimestampColumns` / `SetDeletedAtColumn`；tag `torm:"created=x;updated=y;deleted=z"` |
+| 日期格式 | `SetDateWriteFormats`；tag `cast:datetime:Y-m-d H:i` |
+| 连接池 | `Config.MaxOpenConns` / `MaxIdleConns` / `ConnMaxLifetimeSec` / `ConnMaxIdleTimeSec` |
+| sticky 窗口 | `Config.StickyWindowSec`（>0 时写后窗口内粘主） |
+| 方言开关 | `Config.ServerVersion` / `IsMariaDB` / `UseUpsertAlias` / `UseLegacyGroupLimit`（查询侧接线） |
+| pivot 载体 | `WithPivot` 列回填到 `torm:"pivot:roles"` 的 map 字段 |
+| MorphToMany 写侧 | `Attach/Detach/Sync/Toggle/UpdateExistingPivot/SyncWithPivotValues` 接受 `PivotRelation` |
+| morph map | `EnforceMorphMap`（严格模式） |
+| 观察者 | `AddObserver`（叠加注册）/ `Unobserve`；`Retrieving` / `Replicating` 钩子 |
+| 事件总线 | 通配 `event.*` / `Once` / `ListenUntil` / `ListenWithPriority` |
+| 集合 | `KeyBy` / `GroupBy` / `Chunk` / `Last` / `SortByDesc` / `Median` / `Mode` / `CrossJoin` 等 20+ |
+| 分页器 | `HasMorePages` / `FirstItem` / `PageLinks(onEachSide)` / `URL` / `Appends` |
+| 迁移 | `migrations.LoadDir`（SQL 文件迁移）/ `Fresh` / `MigrateOptions.Pretend` / 并发锁 / `WithinTransaction` |
+
+### Go 语境下的 N/A 能力（有意不实现）
+
+- **accessor/mutator（Attribute::make）与动态 appends**：Go 结构体无动态属性；
+  读写转换由 `cast:*` 与 `ReadCast`/`WriteCast` 承担。
+- **属性访问触发的自动 lazy loading 与 preventLazyLoading**：用
+  `conn.Load/LoadMissing` 显式加载（见 Relations 章节）。
+- **每模型 per-instance hidden**：`ToMap` 的 `SerializeOptions` 提供调用级
+  hidden/visible；`MakeHidden/MakeVisible` 为类型级注册表。
 
 ---
 
