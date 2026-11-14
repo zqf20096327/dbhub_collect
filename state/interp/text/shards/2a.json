@@ -2838,5 +2838,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1c16e916853a": {
+  "identity": {
+   "one_liner": "面向数据库事故响应的 AI SRE 系统，含治理执行与演练知识库",
+   "review": "aiHelpDesk 是一个数据库事故诊断与修复的 AI 代理系统，供运维 DBA/SRE 团队在 VM、Docker/Podman 或 K8s 上自托管使用。其关键机制包括：执行动作需经治理框架（审计、爆炸半径限制、人工审批）；每次事故解决后自动生成 playbook 草稿存入 Vault 知识库；playbook 上线前需通过 outcome/conclusion/evaluation 三维稳定性认证。它不处理数据库迁移、模式优化或一般 SQL 咨询。",
+   "highlights": [
+    "故障注入测试工具 faulttest 支持 SQL-only、SSH、K8s 三类共 32 种已知故障模式，可对外部目标运行且无需集群访问",
+    "舰队操作支持金丝雀分阶段执行、审批门、模式漂移检测与完整审计轨迹，可通过自然语言 Planner 生成计划",
+    "基于 Google ADK 与 A2A 协议构建，专家代理（数据库、K8s、系统管理、事故、编排）可独立替换或扩展"
+   ],
+   "use_cases": [
+    "对生产数据库事故执行带审批与审计的 AI 辅助诊断和修复",
+    "在自管数据库环境（VM/容器/K8s）中替代云厂商托管 DBaaS 的运维支持",
+    "通过故障注入在预发布环境验证代理的诊断与修复行为，并将解决过程沉淀为可复用 playbook"
+   ]
+  },
+  "sha": "1c16e916853a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1bf12393be8": {
+  "identity": {
+   "one_liner": "记忆系统与 Agent 工作的 benchmark 编排平台，用 Skill 插件统一执行与报告。",
+   "review": "memory_bench_platform 是面向记忆系统评测的 benchmark 编排底座，提供 Skill 装载、执行计划、资源采样、评分和 HTML 报告，供需要评测 LoCoMo、LongMemEval 等基准配合 Agent 与记忆后端的使用者。平台核心保持薄，benchmark/agent/memory 差异通过目录型 Skill 描述，统一 Run/Case/Step/Trace/Metric/JudgeResult 执行对象，支持原生 workflow 与外部 runner 导入两条执行路径。",
+   "highlights": [
+    "提供 CLI 入口（memory-bench），支持 skill 列举、校验、计划生成、run、smoke、score 与 analyze 命令",
+    "支持原生 workflow（$ref/$template 引用前序 Step 输出）和外部 runner 结果导入两种执行路径",
+    "每次 run 归档日志、结构化结果、CPU/内存/IO 资源采样、JudgeResult、analysis.json 与 HTML 报告"
+   ],
+   "use_cases": [
+    "对 LoCoMo、LongMemEval 等记忆基准统一执行 OpenClaw、Generic CLI 等被测 Agent 并生成报告",
+    "运行 smoke 链路验证 benchmark、Agent 与记忆后端组合是否可用",
+    "将已有 benchmark runner 的结果导入平台，进行二次分析与统一归档"
+   ]
+  },
+  "sha": "e1bf12393be8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

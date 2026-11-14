@@ -2413,5 +2413,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a535a527fc8e": {
+  "identity": {
+   "one_liner": "确定性可审计的多机器人 AI 代理编排器，采用 Observe→Decide→Act 规则引擎",
+   "review": "该项目是一个多机器人 AI 代理编排器，LLM 输出仅作为观察输入，由规则引擎决定下一步动作，并将每条决策、工具与 MCP 调用写入可回放的 SQLite 事件日志。适用于需要审计代理运行过程、限制模型直接执行工具的开发者。支持 GPT-6、Claude Code CLI、Gemini、Kimi 及离线 fake 提供商，含 fork 时间回溯、OpenTelemetry trace 导出与人工审批门。",
+   "highlights": [
+    "基于规则的 Observe→Decide→Act 循环，为每个决策生成包含所用观察和被拒动作的 RationaleTrace",
+    "每个运行生成只追加的 SQLite 事件日志，replay、report、trace 不调用模型提供商；fork 可从任意步骤重建状态派生新运行",
+    "MCP 工具桥接支持 2026-07-28 与旧版双协议 stdio 客户端，并提供 OpenTelemetry GenAI trace 导出及 Mermaid 时序图"
+   ],
+   "use_cases": [
+    "需要回放并解释代理运行决策过程的事后复盘",
+    "在多个模型提供商之间切换编排流程而不改代码，或用 fake 提供商进行无 API 密钥的 CI 测试",
+    "从已有运行中间步骤以新目标、机器人或预算派生分支运行"
+   ]
+  },
+  "sha": "a535a527fc8e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

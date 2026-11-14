@@ -3223,5 +3223,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "349d4f2f647c": {
+  "identity": {
+   "one_liner": "基于OpenResty的Lua MVC Web项目骨架，集成MySQL、Redis、WebSocket与WAF",
+   "review": "该项目是作者基于OpenResty（nginx + lua-nginx-module）搭建的MVC模式Web工程，包含application目录、控制器约定（如ProductController.lua）、lua-resty-template视图渲染，以及封装的MySQL增删改查、Redis缓存、helper工具类和ngx_lua_waf防火墙示例。README附OpenResty源码编译步骤、启动/停止脚本、多端口配置文件和开发日志。代码以company/home分支提交，master分支不再更新。",
+   "highlights": [
+    "提供MVC目录结构与控制器路由约定，URL请求映射到对应Controller.lua文件",
+    "封装MySQL增删改查、Redis页面缓存、JSON解析及字符串处理helper函数",
+    "内置ngx_lua_waf防火墙集成示例，支持IP黑白名单与文件扩展名黑名单配置"
+   ],
+   "use_cases": [
+    "学习OpenResty下Lua Web项目的MVC组织方式与nginx.conf配置",
+    "搭建包含MySQL/Redis访问的API接口或直播活动页面服务",
+    "在Nginx层部署WAF规则与WebSocket负载统计等实验性功能"
+   ]
+  },
+  "sha": "349d4f2f647c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c95e4bddc467": {
+  "identity": {
+   "one_liner": "嵌入四种数据库引擎的倾斜稀疏关系连接聚合加速算子",
+   "review": "Tessera 是一个嵌入 DuckDB、PostgreSQL、SQLite 和 Spark 的连接聚合算子，将 join-aggregate 计算为稀疏乘积加 AMX 上的稠密核心，避免逐行构建连接结果。它挂接引擎规划器，SQL 无需修改，遵循引擎的取消、线程数与内存限制，超限部分落盘。发布于 PyPI、Maven Central 和 PGXN，二进制包覆盖 Linux x86-64 与 macOS Apple silicon，密集核心路径需第四代及以后 Intel Xeon 与 Linux 5.16+。",
+   "highlights": [
+    "以一次输入遍历计算矩阵乘积 XᵀX，不构建中间连接行，稀疏部分走稀疏路径、稠密核心在 CPU 矩阵加速器上以 8-bit tile 运行",
+    "通过 `HAVING` 或 `ORDER BY ... LIMIT` 剪枝无法达到阈值的值，结果保持精确；支持 `COUNT(DISTINCT)`、`AVG`、多列键/组、NULL 处理及 64/128 位精确整数求和",
+    "以成本模型为每个查询选择稠密边界位置；作为 DuckDB 社区扩展安装（INSTALL tessera FROM community），其余引擎经 PyPI、PGXN、Maven Central 分发"
+   ],
+   "use_cases": [
+    "词共现、物品对物品推荐、共同邻居计数等成对计数与求和的连接聚合查询",
+    "含偏斜分布的稀疏关系数据集上的分析查询，如新闻文章词对、MovieLens 评分电影对、基因网络基因对",
+    "希望在不修改 SQL 的前提下让 DuckDB、PostgreSQL、SQLite 或 Spark 中的特定连接聚合查询走专用算子路径"
+   ]
+  },
+  "sha": "c95e4bddc467",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

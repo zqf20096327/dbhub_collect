@@ -3144,5 +3144,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6980f0297351": {
+  "identity": {
+   "one_liner": "读取数据模型（YAML/DBML），生成可通过dbt测试的合成数据集及dbt项目",
+   "review": "model2data是一个Python CLI工具，读取用户编写的表结构定义（YAML或DBML），生成外键可解析、日期逻辑一致、指标数值可预先确定的合成数据，并输出包含种子文件、staging模型和测试的dbt项目，支持DuckDB与Postgres。MIT许可证，支持Python 3.10–3.14，通过pip安装。官方还提供基于同一引擎的浏览器版studio。",
+   "highlights": [
+    "提供约40种列名模式与全部Faker provider（任意locale）生成字段值；按依赖顺序生成表，保证外键指向存在的行，并通过 after/when 等提示维护父子表日期关系",
+    "生成的dbt项目包含seeds、staging模型、not_null/unique/relationships/accepted_values测试及DuckDB或Postgres profile；metrics文件定义指标后输出每月精确数值及验证测试",
+    "支持 --seed/--as-of 确定性输出（相同输入产出相同字节）、--days/--next 增量批次、history: true 生成SCD2历史表、--skew/weights/distribution 控制分布，以及 --defects 有意制造测试失败场景"
+   ],
+   "use_cases": [
+    "无生产数据访问权限时，依据模型生成演示与开发用的合成数据及可运行的dbt项目",
+    "在CI中以固定seed和as-of参数生成可提交的fixture数据用于流水线测试",
+    "培训/教学场景使用 --defects 生成各类dbt测试各失败一次的数据集"
+   ]
+  },
+  "sha": "6980f0297351",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "774bdbc0bbfe": {
+  "identity": {
+   "one_liner": "面向单游戏公司多游戏多环境的运营控制平台（Server/Agent/SDK）",
+   "review": "Croupier 是用 Go 编写的游戏运营与控制平台，由控制面 Server、部署于游戏 VPC 内的 Agent 和六种语言 SDK 组成，供游戏公司对多游戏多环境进行功能网关、任务调度、远程访问与 CDC 采集等操作。传输采用 TCP 会话模型，支持双向请求、重连与背压；README 注明高风险生产写入尚未获批，自装实例不预置默认密码。",
+   "highlights": [
+    "以 gameId + env 为业务边界，scope 与 target 分离，提供多游戏多环境的范围模型",
+    "统一的应用层会话传输：单连接、双向请求、并发多路复用、心跳/重连/背压/流分离",
+    "提供 Go、C#、Java、C++、Python、JS/TS 六个官方 SDK，并通过 MCP 以 stdio 向 AI agent 暴露只读查询与函数调用"
+   ],
+   "use_cases": [
+    "游戏公司内部对多游戏、多环境（dev/staging/prod）的统一运营控制与任务调度",
+    "游戏侧功能网关与任务转发（sidecar）、带审计的内部远程访问（devops）、数据库 CDC 变更捕获与告警（capture）",
+    "通过 HTTP/TCP/ICMP 探针与插件 SDK 对游戏服务进行外部可用性检查（synthetics）"
+   ]
+  },
+  "sha": "774bdbc0bbfe",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

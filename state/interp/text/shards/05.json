@@ -2795,5 +2795,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2a846c367d62": {
+  "identity": {
+   "one_liner": "Rust 编写的本地优先编码代理记忆系统，MCP 服务器加单个 SQLite 文件实现跨会话记忆。",
+   "review": "Palace 为 Claude Code、Codex、Cursor 等支持 MCP 的编码代理提供跨会话记忆，以单二进制和单个 SQLite 文件运行，无需 API 密钥或云端。文本按原文存储，检索融合 BM25 与本地嵌入相似度，通过 hooks 在会话各阶段自动注入记忆并标注来源。支持 Linux x86_64、macOS Apple Silicon、Windows x86_64，macOS Intel 因无 ONNX Runtime 构建而不支持。",
+   "highlights": [
+    "检索融合 BM25 关键词评分与本地嵌入余弦相似度，嵌入由 ONNX Runtime 在 CPU 上运行 all-MiniLM-L6-v2 等模型生成",
+    "通过用户级 hooks 在会话启动、提交提示、工具调用后自动注入相关记忆，会话结束时让代理写入日记条目与决策事实",
+    "组织结构包含 wing、room、drawer、知识图谱、日记与跨 wing 链接，每条结果附带 wing、room、来源文件与评分分解"
+   ],
+   "use_cases": [
+    "多代理开发工作流中保留决策、修复记录、命令与偏好，供后续会话引用",
+    "需要对记忆来源可核查、数据不出本机的本地检索场景",
+    "通过 creative 与 personal profile 用于世界观构建、小说、教练记录或家庭笔记等非软件项目"
+   ]
+  },
+  "sha": "2a846c367d62",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

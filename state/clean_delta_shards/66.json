@@ -22168,5 +22168,820 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "88e3d3bdc748+2": {
+  "fn": "dolthub/dumbodb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "MongoDB and Git had a baby, and it's named **Dumbo**. It's a document database with built-in version control, so you can track changes, branch, and merge just like you would with code -- but for your data."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "DumboDB leverages the power of the Dolt storage engine. Dolt's prolly trees enable efficient storage of data over time thanks to structural sharing between commits. This means you can have a rich history of changes without worrying about storage bloat. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "DumboDB is pre-1.0 software and not yet ready for production use -- come chat with us on our Discord server, where the developers hang out all day."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    18,
+    9,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "Then connect with `mongosh` shell, or any MongoDB driver:"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    26,
+    19,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "To pass flags (e.g. enable auto-commit or change the log level), append them after the image name. See the Docker image guide for the full set of options."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    39,
+    27,
+    39
+   ],
+   [
+    "replace",
+    39,
+    40,
+    39,
+    40,
+    [
+     "We publish pre-built binaries for Linux, MacOS, and Windows on our GitHub Releases page. Download the appropriate binary for your platform, put it somewhere in your `PATH`. The specifics will depend on your operating system, as they have protections against running arbitrary binaries from the internet, so please refer to your OS documentation for how to run downloaded binaries. We are working on getting signed binaries published to make this easier!"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    49,
+    40,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "DumboDB implements the MongoDB 8.0 wire protocol and is designed for high parity with core MongoDB operations. It functions as a drop-in replacement for standard drivers and `mongosh` in single-node environments."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    61,
+    50,
+    61
+   ],
+   [
+    "replace",
+    61,
+    62,
+    61,
+    62,
+    [
+     "- TLS: `--tlsMode` supports `disabled`, `allowTLS`, `preferTLS`, and `requireTLS`. For inbound connections, `allowTLS` and `preferTLS` accept plaintext and TLS on the same port, while `requireTLS` rejects plaintext. The `--tlsCertificateKeyFile`, `--tlsCertificateKeyFilePassword`, `--tlsCAFile`, `--tlsCRLFile`, `--tlsDisabledProtocols`, and `--tlsAllowConnectionsWithoutCertificates` options are supported. Encrypted PKCS#8 private keys are accepted; legacy encrypted PEM keys are rejected with conversion guidance. As in MongoDB 8.0, TLS requires a chain of trust, so `--tlsCAFile` is mandatory and client certificates are then verified unless you pass `--tlsAllowConnectionsWithoutCertificates`. Certificate material is validated when the server starts rather than on the first connection. Unsupported `--tls*` options mongod accepts are rejected at startup with a message naming the option, so a setting DumboDB does not implement is never silently ignored."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    65,
+    62,
+    65
+   ],
+   [
+    "replace",
+    65,
+    66,
+    65,
+    66,
+    [
+     "- Ecosystem Features: Proprietary features specific to MongoDB Atlas (e.g., Search Indexes, Serverless Triggers) are not supported. Support not planned."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    69,
+    66,
+    69
+   ],
+   [
+    "replace",
+    69,
+    73,
+    69,
+    73,
+    [
+     " - A query without a sort, and `$natural` order, return documents in `_id` order rather than insertion order. With the default ObjectId `_id`s that is close to insertion order.",
+     " - `_id` equality, ranges and sorts read the collection directly (`CLUSTERED_IXSCAN` in explain).",
+     " - Secondary index entries carry the encoded `_id`, so large `_id`s (long strings, embedded documents) make secondary indexes larger.",
+     " - `mongodump` of a DumboDB database restored into MongoDB creates clustered collections."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    73,
+    74
+   ],
+   [
+    "replace",
+    74,
+    78,
+    74,
+    78,
+    [
+     " - Strings carry a terminator, and each NUL byte inside one takes two bytes, so a 4095-character ASCII `_id` encodes to 4097 bytes.",
+     " - An index with a collation stores each string's collation sort key, which can be longer than the string; at strength 3, 1500 'e-acute' characters (3000 bytes of UTF-8) become a 4540-byte key.",
+     " - A hashed index stores the value itself rather than a 64-bit hash, so a long string on a hashed field is subject to the limit.",
+     " - A text index stores each word, so a single word longer than the limit is refused."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    78,
+    80
+   ],
+   [
+    "replace",
+    80,
+    81,
+    80,
+    81,
+    [
+     "- RecordIds: `showRecordId()` and `$recordId` return MongoDB's KeyString bytes for the `_id`, except for a Decimal128 `_id` below 2^-255 that is not exactly a double, whose last bytes can differ (see mongodb-keystring.md). Order and uniqueness are unaffected."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    83,
+    81,
+    83
+   ],
+   [
+    "replace",
+    83,
+    84,
+    83,
+    84,
+    [
+     "If you are needing missing features, please file an issue, or join our Discord server to start a conversation with us. We'd love your feedback!"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    88,
+    84,
+    88
+   ],
+   [
+    "replace",
+    88,
+    89,
+    88,
+    89,
+    [
+     "|Command|Description|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    89,
+    90
+   ],
+   [
+    "replace",
+    90,
+    106,
+    90,
+    106,
+    [
+     "|`dumboCommit`|Commit the current working set with a message and author|",
+     "|`dumboBranch`|Create or delete a branch|",
+     "|`dumboBranchStatus`|Report how many commits each target refspec is ahead and behind a base refspec|",
+     "|`dumboMerge`|Merge a source branch into the current branch|",
+     "|`dumboCherryPick`|Apply one commit's diff onto the current branch|",
+     "|`dumboRebase`|Reapply branch commits onto another branch tip, rewriting history|",
+     "|`dumboLog`|Return commit history for the current branch|",
+     "|`dumboStatus`|Show summary of uncommitted changes on the current branch|",
+     "|`dumboDiff`|Document-level diff between two states|",
+     "|`dumboReset`|Move branch HEAD to a target commit (soft or hard)|",
+     "|`dumboRevert`|Revert a commit, creating a new inverse commit|",
+     "|`dumboConflicts`|List or inspect conflicts from an in-progress merge/cherry-pick/rebase|",
+     "|`dumboResolveConflict`|Resolve a single document conflict (ours / theirs / custom)|",
+     "|`dumboTag`|Create, list, or delete tags at specific commits|",
+     "|`dumboGC`|Run garbage collection on the database's chunk store|",
+     "|`dumboUndrop`|Restore a soft-deleted database, or list databases available to undrop|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    109,
+    106,
+    109
+   ],
+   [
+    "replace",
+    109,
+    110,
+    109,
+    110,
+    [
+     "Full command reference: Command Reference"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    148,
+    110,
+    148
+   ],
+   [
+    "replace",
+    148,
+    155,
+    148,
+    149,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    177,
+    149,
+    171
+   ],
+   [
+    "replace",
+    177,
+    190,
+    171,
+    172,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    201,
+    172,
+    183
+   ],
+   [
+    "replace",
+    201,
+    215,
+    183,
+    184,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    230,
+    184,
+    199
+   ],
+   [
+    "replace",
+    230,
+    248,
+    199,
+    200,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    257,
+    200,
+    209
+   ],
+   [
+    "replace",
+    257,
+    261,
+    209,
+    210,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    273,
+    210,
+    222
+   ],
+   [
+    "replace",
+    273,
+    274,
+    222,
+    223,
+    [
+     "There are also legitimate merges which join two commit histories, complete with conflict detection and resolution. Look at the Command Reference for more details and examples."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    293,
+    223,
+    242
+   ],
+   [
+    "replace",
+    293,
+    295,
+    242,
+    244,
+    [
+     "- **FerretDB** -- The wire protocol, connection handling, type system, and handler packages were adapted from FerretDB v1.24.2 (Apache 2.0). See ACKNOWLEDGEMENTS for details.",
+     "- **Dolt** -- The version-controlled storage engine powering every commit, branch, and merge."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    297,
+    244,
+    246
+   ],
+   [
+    "replace",
+    297,
+    302,
+    246,
+    247,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "674c8e73859c+2": {
+  "fn": "alkanna/quarry",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Quarry icon "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " Quarry "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     " A native desktop client for MongoDB, MySQL, MariaDB and PostgreSQL. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    10,
+    [
+     " Latest release",
+     " Downloads",
+     " macOS, Linux and Windows",
+     " MIT license"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    10,
+    11
+   ],
+   [
+    "replace",
+    13,
+    14,
+    11,
+    12,
+    [
+     "Documents view"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    12,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     "It is free and open source under the MIT license. There is no paid edition."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    37,
+    16,
+    35
+   ],
+   [
+    "replace",
+    37,
+    38,
+    35,
+    36,
+    [
+     "- A JavaScript shell that runs on Bun, with completion and diagnostics from a language server."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    65,
+    36,
+    63
+   ],
+   [
+    "replace",
+    65,
+    66,
+    63,
+    64,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    64,
+    65
+   ],
+   [
+    "replace",
+    67,
+    69,
+    65,
+    67,
+    [
+     "|SQL Query with several statements|Aggregation pipeline with a preview after each stage|",
+     "|A shell script reading a SQL and a MongoDB connection|PostgreSQL roles and privileges|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    67,
+    70
+   ],
+   [
+    "replace",
+    72,
+    73,
+    70,
+    71,
+    [
+     "Quarry is a single Rust binary, about 25 MB to download. It draws its own window on the GPU with egui and uses neither Electron nor a web view. Database work runs off the UI thread, so the window keeps responding while a slow query is out. Result pages are kept as raw BSON, which takes about a tenth of the memory of decoded documents."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    71,
+    74
+   ],
+   [
+    "replace",
+    76,
+    77,
+    74,
+    75,
+    [
+     "||MongoDB documents|SQL rows|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    75,
+    76
+   ],
+   [
+    "replace",
+    78,
+    82,
+    76,
+    80,
+    [
+     "|Memory footprint|46 MB|50 MB|",
+     "|CPU when idle|0.1 %|0 %|",
+     "|Frame time, median|0.9 ms|2.1 ms|",
+     "|Frame time, 95th percentile|3.0 ms|4.1 ms|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    87,
+    80,
+    85
+   ],
+   [
+    "replace",
+    87,
+    88,
+    85,
+    86,
+    [
+     "Quarry includes an MCP server, so agents such as Claude Code, Claude Desktop, Cursor and Codex can query and change your databases through it. It is off until you turn it on in Settings > AI agents, which also shows the command that adds Quarry to each client. For Claude Code on macOS:"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    102,
+    86,
+    100
+   ],
+   [
+    "replace",
+    102,
+    103,
+    100,
+    101,
+    [
+     "Download the file for your system from the latest release:"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    101,
+    102
+   ],
+   [
+    "replace",
+    104,
+    105,
+    102,
+    103,
+    [
+     "|System|File|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    103,
+    104
+   ],
+   [
+    "replace",
+    106,
+    112,
+    104,
+    110,
+    [
+     "|macOS, Apple silicon|`Quarry-macos-arm64.zip`|",
+     "|macOS, Intel|`Quarry-macos-x86_64.zip`|",
+     "|Linux x86_64|`quarry-linux-x86_64.tar.gz`|",
+     "|Linux ARM64|`quarry-linux-aarch64.tar.gz`|",
+     "|Windows x86_64|`quarry-windows-x86_64.zip`|",
+     "|Windows ARM64|`quarry-windows-aarch64.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    130,
+    110,
+    128
+   ],
+   [
+    "replace",
+    130,
+    131,
+    128,
+    129,
+    [
+     "You need stable Rust. The Shell also needs Bun, and MongoDB dump and restore need the Database Tools. Quarry finds both, or you can set their paths in Settings."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    141,
+    129,
+    139
+   ],
+   [
+    "replace",
+    141,
+    143,
+    139,
+    140,
+    [
+     " Stop the Keychain prompts on macOS "
+    ]
+   ],
+   [
+    "equal",
+    143,
+    149,
+    140,
+    146
+   ],
+   [
+    "delete",
+    149,
+    150,
+    146,
+    146
+   ],
+   [
+    "equal",
+    150,
+    152,
+    146,
+    148
+   ],
+   [
+    "replace",
+    152,
+    155,
+    148,
+    149,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    149,
+    150
+   ],
+   [
+    "replace",
+    156,
+    158,
+    150,
+    151,
+    [
+     "MIT, see LICENSE. Quarry was inspired by Mingo."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

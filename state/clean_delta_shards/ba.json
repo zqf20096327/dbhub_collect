@@ -27919,5 +27919,1001 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "6825376551f0+2": {
+  "fn": "skudra-go/ant",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "ant"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    10,
+    2,
+    3,
+    [
+     " A typed ORM for Go. Plain structs, compiler-checked queries, no code generation."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    3,
+    4
+   ],
+   [
+    "replace",
+    11,
+    16,
+    4,
+    7,
+    [
+     " Documentation ·",
+     " Quick start ·",
+     " Examples"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    7,
+    8
+   ],
+   [
+    "replace",
+    17,
+    25,
+    8,
+    12,
+    [
+     " CI",
+     " Go Reference",
+     " Go 1.27+",
+     " MIT license"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    32,
+    12,
+    19
+   ],
+   [
+    "replace",
+    32,
+    59,
+    19,
+    20,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    72,
+    20,
+    33
+   ],
+   [
+    "replace",
+    72,
+    73,
+    33,
+    34,
+    [
+     "examples/hello is one file on SQLite. It needs only Go:"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    86,
+    34,
+    47
+   ],
+   [
+    "replace",
+    86,
+    87,
+    47,
+    48,
+    [
+     "The first run takes about 30 seconds, mostly compiling the SQLite driver. The quick start walks through the same program."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    90,
+    48,
+    51
+   ],
+   [
+    "replace",
+    90,
+    95,
+    51,
+    52,
+    [
+     "The same query in each: users over 18 with their posts, sorted by name, 10 at a time. A test checks that all four return the same rows."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    107,
+    52,
+    64
+   ],
+   [
+    "delete",
+    107,
+    110,
+    64,
+    64
+   ],
+   [
+    "equal",
+    110,
+    116,
+    64,
+    70
+   ],
+   [
+    "replace",
+    116,
+    122,
+    70,
+    71,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    71,
+    72
+   ],
+   [
+    "delete",
+    123,
+    128,
+    72,
+    72
+   ],
+   [
+    "equal",
+    128,
+    135,
+    72,
+    79
+   ],
+   [
+    "replace",
+    135,
+    141,
+    79,
+    80,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    80,
+    81
+   ],
+   [
+    "delete",
+    142,
+    145,
+    81,
+    81
+   ],
+   [
+    "equal",
+    145,
+    157,
+    81,
+    93
+   ],
+   [
+    "delete",
+    157,
+    161,
+    93,
+    93
+   ],
+   [
+    "equal",
+    161,
+    163,
+    93,
+    95
+   ],
+   [
+    "replace",
+    163,
+    170,
+    95,
+    102,
+    [
+     "|Mistake|ant|GORM|Bun|ent|sqlc|",
+     "|---|:---:|:---:|:---:|:---:|:---:|",
+     "|Misspelled column, `agee`|✅|❌|❌|✅|⚠️|",
+     "|`\"18\"` for an `int`|✅|❌|❌|✅|✅|",
+     "|Misspelled relation, `Psots`|✅|❌|❌|✅|⚠️|",
+     "|Column of another model|⚠️|❌|❌|✅|⚠️|",
+     "|No code generation step|✅|✅|✅|–|–|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    173,
+    102,
+    105
+   ],
+   [
+    "replace",
+    173,
+    174,
+    105,
+    106,
+    [
+     "Each cell was tested by compiling the mistake. GORM also has an optional CLI that generates typed field helpers."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    177,
+    106,
+    109
+   ],
+   [
+    "replace",
+    177,
+    178,
+    109,
+    110,
+    [
+     "tools/compare runs the same operations in each library against PostgreSQL 17 on one machine (Ryzen 5 3600, Docker on WSL2). Each number is the median of 10 runs, and each run repeats the operation hundreds to thousands of times. The database round trip is included, which is why small queries are close. Commits don't wait for the disk, so writes measure the library and not the drive. Plain SQL (a hand-written query and `Scan`, what sqlc generates) is the baseline. Lower is better; 🟢 is the best in each row."
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    110,
+    111
+   ],
+   [
+    "replace",
+    179,
+    188,
+    111,
+    120,
+    [
+     "|µs per operation|ant|ant NoTracking|GORM|Bun|ent||Plain SQL baseline|",
+     "|---|---:|---:|---:|---:|---:|-|---:|",
+     "|Read 1000 rows|2,799|🟢 **1,688**|3,285|2,259|2,226||1,557|",
+     "|Find one by key|406|389|416|🟢 **372**|383||365|",
+     "|Filter, sort, 10 rows|574|🟢 **552**|561|584|635||518|",
+     "|100 users, 500 posts|3,039|🟢 **2,091**|3,034|2,198|2,194||1,750|",
+     "|Insert one|🟢 **431**|–|442|1,164|441||400|",
+     "|Update one column|🟢 **413**|–|444|444|🟢 **412**||396|",
+     "|Load, edit, save|830|–|861|🟢 **779**|1,784||806|"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    189,
+    120,
+    121
+   ],
+   [
+    "replace",
+    189,
+    198,
+    121,
+    130,
+    [
+     "|KiB per operation|ant|ant NoTracking|GORM|Bun|ent||Plain SQL baseline|",
+     "|---|---:|---:|---:|---:|---:|-|---:|",
+     "|Read 1000 rows|823|🟢 **277**|392|295|589||257|",
+     "|Find one by key|7.5|6.5|5.7|6.3|🟢 **4.9**||1.5|",
+     "|Filter, sort, 10 rows|15.1|10.5|9.7|🟢 **9.3**|11.9||3.8|",
+     "|100 users, 500 posts|649|327|362|🟢 **277**|335||257|",
+     "|Insert one|4.3|–|7.0|6.8|🟢 **3.7**||1.3|",
+     "|Update one column|🟢 **2.9**|–|5.6|5.0|3.1||0.3|",
+     "|Load, edit, save|🟢 **10.2**|–|11.2|11.2|10.7||1.8|"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    203,
+    130,
+    135
+   ],
+   [
+    "replace",
+    203,
+    204,
+    135,
+    136,
+    [
+     "- Bun's insert is slow by default (it prepares every insert as a new statement), and ent's update reads the row back. tools/compare has the details."
+    ]
+   ],
+   [
+    "equal",
+    204,
+    219,
+    136,
+    151
+   ],
+   [
+    "replace",
+    219,
+    223,
+    151,
+    155,
+    [
+     "||PostgreSQL|MySQL|MariaDB|SQLite|SQL Server|",
+     "|---|:---:|:---:|:---:|:---:|:---:|",
+     "|Queries and writes|✅|✅|✅|✅|✅|",
+     "|Migrations|✅|||||"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    224,
+    155,
+    156
+   ],
+   [
+    "replace",
+    224,
+    225,
+    156,
+    157,
+    [
+     "PostgreSQL gets every feature first. docs/databases.md lists what each database lacks."
+    ]
+   ],
+   [
+    "equal",
+    225,
+    232,
+    157,
+    164
+   ],
+   [
+    "replace",
+    232,
+    233,
+    164,
+    165,
+    [
+     "The roadmap lists what's planned, and why some items were skipped."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    236,
+    165,
+    168
+   ],
+   [
+    "replace",
+    236,
+    240,
+    168,
+    172,
+    [
+     "- Documentation: guides, recipes and reference.",
+     "- Feature examples: a short test for every feature, edge cases included",
+     "- ant-examples: small projects built on ant",
+     "- Roadmap and design decisions"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    245,
+    172,
+    177
+   ],
+   [
+    "replace",
+    245,
+    246,
+    177,
+    178,
+    [
+     "- **Claude Code**: `/plugin marketplace add skudra-go/ant`, then `/plugin install ant@ant`. The skill loads whenever a task touches ant."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    178,
+    179
+   ],
+   [
+    "replace",
+    247,
+    248,
+    179,
+    180,
+    [
+     "- **Any assistant**: point it at skudra.net/llms.txt, the docs as Markdown, or llms-full.txt, all of them in one file."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    256,
+    180,
+    188
+   ],
+   [
+    "replace",
+    256,
+    265,
+    188,
+    189,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    267,
+    189,
+    191
+   ],
+   [
+    "replace",
+    267,
+    268,
+    191,
+    192,
+    [
+     "*Skudra* means *ant* in Latvian, which is where skudra.net gets its name :)"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    270,
+    192,
+    194
+   ],
+   [
+    "replace",
+    270,
+    272,
+    194,
+    195,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "1d2a4a2298ad+2": {
+  "fn": "mlapeter/counterparts",
+  "clean_ver": "2",
+  "raw_lines": 19,
+  "ops": [
+   [
+    "equal",
+    0,
+    19,
+    0,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "You need Node 22.15 or newer, or bun 1.3 or newer,"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    20,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "there is in QUICKSTART. Under WSL it works as on Linux."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    53,
+    24,
+    53
+   ],
+   [
+    "replace",
+    53,
+    54,
+    53,
+    54,
+    [
+     "walkthrough is in `docs/QUICKSTART.md`."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    58,
+    54,
+    58
+   ],
+   [
+    "replace",
+    58,
+    59,
+    58,
+    59,
+    [
+     " where you left off. Claude writes these as notes in its own words, not transcripts."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    59,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     " project."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    61,
+    62
+   ],
+   [
+    "replace",
+    62,
+    64,
+    62,
+    64,
+    [
+     " only. You can read, export or delete them. Search by meaning runs on a small model on your",
+     " machine, about 30 MB."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    64,
+    65
+   ],
+   [
+    "replace",
+    65,
+    68,
+    65,
+    68,
+    [
+     " Counterparts' one request of its own (since 0.3.39) is a daily check with npm for the",
+     " newest version number. It sends nothing about you, and you can turn it off (see",
+     " Status)."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    68,
+    69
+   ],
+   [
+    "replace",
+    69,
+    71,
+    69,
+    71,
+    [
+     " 3 days after that, or about two weeks after the conversation goes quiet, whichever comes",
+     " first, the next time Counterparts runs. It is never in a backup."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    71,
+    72
+   ],
+   [
+    "replace",
+    72,
+    76,
+    72,
+    76,
+    [
+     " credentials in recognisable shapes (API keys, tokens, private keys, passwords in URLs, a",
+     " value after a name like `password=` or `api_key:`), and most passwords named in a sentence",
+     " (\"my wifi password is …\", \"the PIN is …\"): the value goes, the sentence stays. Not every",
+     " secret has a shape, so don't paste things you wouldn't want kept."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    76,
+    77
+   ],
+   [
+    "replace",
+    77,
+    79,
+    77,
+    79,
+    [
+     " (MEMORY.md), so they run side by side. A committed CLAUDE.md stays the place for rules",
+     " your team shares through git."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    81,
+    79,
+    81
+   ],
+   [
+    "replace",
+    81,
+    84,
+    81,
+    84,
+    [
+     "counterparts.ai/guides/claude-code-memory.",
+     "More at counterparts.ai. A hosted version for claude.ai is coming",
+     "soon, in beta; sign up on the home page to hear when it"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    86,
+    84,
+    86
+   ],
+   [
+    "replace",
+    86,
+    87,
+    86,
+    87,
+    [
+     "Found a bug? Open an issue. For anything"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    92,
+    87,
+    92
+   ],
+   [
+    "replace",
+    92,
+    93,
+    92,
+    93,
+    [
+     " learned, in its own words. Notes, not transcripts."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    93,
+    94
+   ],
+   [
+    "replace",
+    94,
+    95,
+    94,
+    95,
+    [
+     " sticks; the rest lets go."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    95,
+    96
+   ],
+   [
+    "replace",
+    96,
+    97,
+    96,
+    97,
+    [
+     " note it wrote itself: who it is, where the work stands, what's coming up."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    97,
+    98
+   ],
+   [
+    "replace",
+    98,
+    99,
+    98,
+    99,
+    [
+     " your time together."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    99,
+    100
+   ],
+   [
+    "replace",
+    100,
+    101,
+    100,
+    101,
+    [
+     " evidence, and it keeps the history of what it used to think."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    101,
+    102
+   ],
+   [
+    "replace",
+    102,
+    103,
+    102,
+    103,
+    [
+     " thing reminds you of another."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    103,
+    104
+   ],
+   [
+    "replace",
+    104,
+    105,
+    104,
+    105,
+    [
+     " What it remembers, and where it lives."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    131,
+    105,
+    131
+   ],
+   [
+    "replace",
+    131,
+    132,
+    131,
+    132,
+    [
+     "The dashboard"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    142,
+    132,
+    142
+   ],
+   [
+    "replace",
+    142,
+    143,
+    142,
+    143,
+    [
+     "|module|what it does|"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    144,
+    143,
+    144
+   ],
+   [
+    "replace",
+    144,
+    154,
+    144,
+    154,
+    [
+     "|store|One SQLite database, plus a rebuildable search cache and daily snapshots|",
+     "|encode|Filters what comes in: strips credentials, drops junk, scores what's new|",
+     "|remember|Takes what the AI writes during and at the end of a session|",
+     "|recall|Finds related memories as you talk|",
+     "|associate|Links memories that come up together|",
+     "|schemas|Beliefs about people and things, revised slowly|",
+     "|self|Identity, the journal, and the start-of-session briefing|",
+     "|prospective|Reminders for later, triggered by a date or a topic|",
+     "|sleep|Nightly housekeeping: fading, pruning, merging, promoting|",
+     "|physics|The math for strength and decay|"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    155,
+    154,
+    155
+   ],
+   [
+    "replace",
+    155,
+    157,
+    155,
+    157,
+    [
+     "More: `docs/ELI5.md` (the whole system in plain words) and",
+     "`docs/module-map.md`."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    164,
+    157,
+    164
+   ],
+   [
+    "replace",
+    164,
+    165,
+    164,
+    165,
+    [
+     "open an issue when you hit one."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    184,
+    165,
+    184
+   ],
+   [
+    "replace",
+    184,
+    185,
+    184,
+    185,
+    [
+     "`CONSTITUTION.md` holds the principles."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    187,
+    185,
+    187
+   ],
+   [
+    "delete",
+    187,
+    188,
+    187,
+    187
+   ],
+   [
+    "equal",
+    188,
+    189,
+    187,
+    188
+   ],
+   [
+    "delete",
+    189,
+    201,
+    188,
+    188
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

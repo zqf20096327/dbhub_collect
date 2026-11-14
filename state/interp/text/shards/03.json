@@ -3271,5 +3271,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "04d0e93c7841": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的图书馆管理 REST API，按物理副本管理借阅。",
+   "review": "面向 Aklan State University 计算机研究学院图书馆的借阅管理系统，管理物理图书副本、用户账户与借阅历史。技术栈为 Java 25、Spring Boot、PostgreSQL 18、Flyway、Docker Compose 与 GitHub Actions。每条目录记录对应一个物理副本；借阅规则为 14 天期限、每人最多三笔在借、逾期阻断新借出。需通过 Docker Compose 与环境变量配置运行。",
+   "highlights": [
+    "提供目录检索（按书名、作者、类型、成本过滤排序分页）与借阅、账户、审计等按功能分包的 REST 接口",
+    "实现 HS256 JWT 无状态认证、BCrypt 密码、登录/注册按 IP 限流，四种角色在路由与服务层强制执行",
+    "通过 Flyway 管理 schema、Hibernate 启动校验，并使用 Testcontainers 测试迁移、约束与并发借阅竞争（含行锁与活跃借阅唯一索引）"
+   ],
+   "use_cases": [
+    "高校图书馆管理实体书册的编目、借出与归还流程",
+    "需要区分学生、教职工、管理员、图书管理员四类角色权限的借阅场景",
+    "本地以 Docker Compose 部署并通过 /livez、/readyz 与 Prometheus 指标接入运维监控"
+   ]
+  },
+  "sha": "04d0e93c7841",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b1dca8548180": {
+  "identity": {
+   "one_liner": "NestJS+React 全栈 monorepo 脚手架，含认证、Prisma、测试与一键初始化。",
+   "review": "这是一个 pnpm workspace 组织的 monorepo 模板项目，包含 NestJS API（Prisma 7 + Postgres 18）、React 19 Web 应用（Vite、TanStack Query、Tailwind 4）以及共享 Zod schema 包。面向需要从模板快速启动全栈项目的开发者，提供邮箱密码登录（access token 存内存、refresh token 用 httpOnly cookie 且轮换）、用户管理模块、单元/e2e/浏览器测试和 GitHub Actions CI。要求 Node 24、pnpm 10 和 Docker Desktop；Windows 下路径长度约 150 字符以内。",
+   "highlights": [
+    "pnpm init:project 一条命令完成重命名包、写环境文件、启动 Postgres、应用迁移并播种首个管理员账号",
+    "认证实现 access token 仅存内存、refresh token 存 httpOnly cookie 并在每次使用时轮换，重用则撤销会话",
+    "测试体系包含 Vitest 单元测试、连接真实 Postgres 的 API e2e 测试、覆盖 Chromium 和 Firefox 生产构建的 Playwright 测试"
+   ],
+   "use_cases": [
+    "基于模板创建新的 NestJS + React + Postgres 全栈项目",
+    "需要前后端共享 Zod 校验 schema 并保持一致的项目",
+    "需要带 CI 的单元测试、API e2e 测试和浏览器测试工程结构的项目"
+   ]
+  },
+  "sha": "b1dca8548180",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7ebd1b77db62": {
+  "identity": {
+   "one_liner": "基于 Flask 与 openGauss 的数据库课程三层架构 Web 应用，含 Docker Compose 部署。",
+   "review": "该项目是“数据库系统原理”课程实验 34 的实现，用 Flask 提供页面和 JSON 接口，通过 psycopg2 访问 openGauss，并以 Docker Compose 部署。面向需要完成该课程实验的学生使用者。运行前需在 .env 中填写数据库连接信息，先用 gsql 执行 sql 目录下的建表与数据加载脚本，再通过 docker compose 启动，应用监听 8080 端口。",
+   "highlights": [
+    "提供学生列表、学生详情、新增学生、课程列表、院系统计等页面路由，学生列表支持 kw 关键字搜索",
+    "提供 /api/students JSON 接口和 /api/health 数据库健康检查接口",
+    "通过环境变量配置数据库连接，包含 sql 建表与数据加载脚本，支持 Docker Compose 一键启动"
+   ],
+   "use_cases": [
+    "数据库系统原理课程实验 34 的三层架构 Web 应用作业",
+    "学习 Flask + psycopg2 + openGauss 的三层架构搭建流程",
+    "通过 Docker Compose 在服务器上运行学生选课数据管理页面与统计接口"
+   ]
+  },
+  "sha": "7ebd1b77db62",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

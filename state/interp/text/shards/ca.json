@@ -2936,5 +2936,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f601a504d50e": {
+  "identity": {
+   "one_liner": "本地 Python 应用，演示工具调用型 Agent 的循环与 SQLite 记忆持久化",
+   "review": "Loop Agent 是一个用于理解工具调用型 Agent 循环（选择动作、执行、读取结果、决定下一步）的本地 Python 学习项目。内置计算、记忆、获取时间等四个工具，执行步骤与事实存入本地 SQLite，重启后仍可召回。默认 Demo 模式无需 API 密钥，Live 模式连接 OpenAI 兼容端点。适合想了解 Agent 工具调用、预算限制与轨迹记录机制的开发者。",
+   "highlights": [
+    "提供计算、保存事实、召回事实、获取时间四个工具，核心循环位于 agent.py",
+    "将事实与运行历史（含模型来源）持久化到本地 SQLite，重启后可通过召回工具读取",
+    "对 planner 调用（默认 6 次）、工具调用（12 次）、参数 8 KiB、工具输出 16 KiB、模型回复 32 KiB 设置预算与校验"
+   ],
+   "use_cases": [
+    "学习工具调用型 Agent 的基本循环与失败处理机制",
+    "本地演示计算结果的保存与跨进程重启后的召回",
+    "基于固定规则轨迹或接入 OpenAI 兼容模型观察工具选择行为"
+   ]
+  },
+  "sha": "f601a504d50e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9555854d8d48": {
+  "identity": {
+   "one_liner": "基于 PDO 的 PostgreSQL 互斥锁驱动，实现 yiisoft/mutex 接口",
+   "review": "该库为 yiisoft/mutex 提供 PostgreSQL 实现，通过 PDO 扩展连接数据库，要求 PHP 7.4 以上。提供 MutexInterface 与 MutexFactoryInterface 两个实现类，支持回调同步执行、手动开关锁、底层 acquire/release 及自定义重试间隔（默认 50 毫秒）四种使用层级，采用 BSD 许可证发布，适合已在用 PostgreSQL 的 Yii3 项目接入互斥锁机制。",
+   "highlights": [
+    "提供实现 MutexInterface 与 MutexFactoryInterface 的 PgsqlMutex 等类",
+    "支持回调同步执行、手动 acquire/release 及 withRetryDelay 自定义重试间隔（默认 50 毫秒）",
+    "通过 Composer 安装，依赖 PHP 7.4+ 与 PDO 扩展，BSD 许可证"
+   ],
+   "use_cases": [
+    "多进程/多实例环境下需对临界代码段做互斥执行的 PHP 应用",
+    "已使用 PostgreSQL 且基于 yiisoft/mutex 抽象的 Yii3 项目",
+    "需要可配置锁等待超时与重试频率的后台任务调度场景"
+   ]
+  },
+  "sha": "9555854d8d48",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "812abea14150": {
+  "identity": {
+   "one_liner": "基于 React 19 与 Node.js/Express 的项目与任务管理系统，含 RBAC 与实时通知",
+   "review": "这是一个面向团队的项目与任务管理 Web 应用，前端采用 React 19 + Vite + Tailwind CSS，后端为 Node.js/Express，数据库支持 MySQL 8.0+ 或 TiDB Cloud。系统按 6 种角色划分权限（RBAC），通过 Socket.io 实现任务状态、评论与通知的实时更新，并包含 JWT/OTP 认证、Excel 批量导入用户、Kanban 看板与 FullCalendar 日历拖拽。首次运行时由 initDb.js 自动建表；需配置 .env 中的数据库、JWT 密钥与邮件服务凭证。README 及界面以泰文/英文为主。",
+   "highlights": [
+    "实现 6 角色 RBAC 权限体系，提供按角色的能力对照表与 Activity Log 记录",
+    "通过 Socket.io 实时推送任务状态、评论与通知，并用 Cron Job 定时检查逾期任务",
+    "支持 JWT 认证（Token 40 分钟自动续期）、6 位 OTP 密码重置、登录与 OTP 请求的频率限制，以及 Excel/CSV 批量导入用户（带预览确认与临时密码邮件）"
+   ],
+   "use_cases": [
+    "需要按角色（如 storyboard、animation、designer、programmer 等岗位）分派与跟踪任务的工作室或团队协作场景",
+    "使用 MySQL 或 TiDB Cloud、前端部署于 Vercel、后端部署于 Railway/Render 的部署环境",
+    "需要 Kanban 看板、FullCalendar 日历排期与实时通知的项目进度管理流程"
+   ]
+  },
+  "sha": "812abea14150",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

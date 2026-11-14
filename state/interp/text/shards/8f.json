@@ -2840,5 +2840,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "54165c8dd957": {
+  "identity": {
+   "one_liner": "Rust 内存数据库，用位（标志）列以维恩图方式查询行",
+   "review": "VennDB 是一个仅追加的 Rust 内存数据库，通过为结构体标注 #[derive(VennDB)] 自动生成查询代码，支持对 bool 过滤器和 filter map 的组合筛选、any 值匹配、set 多值属性及运行时列。面向启动时加载、此后高频简单过滤的静态数据集。键须唯一且非可选，README 明确不适用于常规数据库需求。",
+   "highlights": [
+    "通过 #[derive(VennDB)] 宏为命名字段结构体生成查询 API，过滤器属性只需实现 Eq + Hash + Clone",
+    "支持 bool 过滤器、filter map（含 any 全匹配值）、set 类多值属性（HashSet/BTreeSet/FilterSet）及可设可删的运行时列",
+    "仅追加（append-only）设计，README 提供 10 万与 100 万行规模下与 roaring 位图、内存 SQLite、朴素 Vec 遍历的对比基准数据"
+   ],
+   "use_cases": [
+    "启动时一次性加载、之后持续用简单二进制过滤查询的大型静态数据集",
+    "为 rama 等场景提供内存中的（上游）代理数据库，按属性筛选并随机选取匹配行",
+    "需要在多线程下无锁设置/取消行标志、按键回查先前查询结果的场景"
+   ]
+  },
+  "sha": "54165c8dd957",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3059,5 +3059,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e3730389708f": {
+  "identity": {
+   "one_liner": "本地优先的个人 AI 助理框架，以可读代码实现循环、记忆与评测四大模块",
+   "review": "waku-agent 是一个可在本地运行的个人 AI 助理代码库，用 Python 实现，通过 pip 或克隆安装后以 `waku` 命令在终端或浏览器仪表盘运行。其核心由 Harness、Loop、Memory、Eval 四部分组成：主循环约 95 行 Python，记忆存于单个 SQLite 文件（~/.waku/state.db），包含语义、情景与程序三类记忆及写入门控；内置确定性测试与 LLM-as-judge 两种评测及发布门控。适合想阅读和修改代码的开发者。许可方面主体为 MIT，hosted/ 目录为 Elastic License 2.0。",
+   "highlights": [
+    "记忆层包含语义、情景与程序三类记忆，由门控决定是否记忆、由整合决定保留内容",
+    "评测同时提供确定性测试与 LLM-as-judge，并带发布门控与每轮 trace",
+    "支持 Anthropic、OpenAI、Gemini、DeepSeek、MiniMax、Kimi、GLM、OpenRouter 等多个模型提供方，经约 60 行适配器接入"
+   ],
+   "use_cases": [
+    "想阅读、逐步调试 agent 主循环与记忆架构的开发者",
+    "在本地管理带持久记忆的个人助理（如记录偏好并在后续对话中调用）",
+    "通过 Waku Memory 插件在 Claude Code、Codex 等多个 agent 间共享记忆与技能"
+   ]
+  },
+  "sha": "e3730389708f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "06e0cf89ab3f": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，用 Rust 与 SQL 实现 中文到拼音的按字/按词转换与检索查询构建",
+   "review": "pg_pinyin 是 PostgreSQL 扩展，包含 SQL 基线和 Rust（pgrx）实现两部分，提供按字（pinyin_char_romanize）与按词（pinyin_word_romanize）的拼音转换函数及批量接口。它依赖 pinyin.pinyin_token 词表，可与 pg_trgm 或 pg_search 组合用于拼音检索查询构建。0.0.9 版本要求 PG 15.20/16.16/17.12/18.7 及以上，已移除 PG14 支持；升级迁移保留现有词表和生成列值。",
+   "highlights": [
+    "提供按字与按词的罗马化函数、数组和批量接口，函数标记为 IMMUTABLE、STRICT、PARALLEL SAFE",
+    "提供 pinyin_regex_phrase 等 pg_search 查询辅助函数，支持 full/initials/autocomplete/auto/compat 多种显式查询模式",
+    "默认与 compat 模式将撇号（含智能撇号）识别为硬音节边界，如 xi'an 生成 xi.* 与 an.*"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中将中文文本转换为拼音存储或生成列",
+    "配合 pg_search 或 pg_trgm 构建拼音前缀/首字母/自动补全检索查询",
+    "批量转换多篇独立文本文档为拼音数组"
+   ]
+  },
+  "sha": "06e0cf89ab3f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3141,5 +3141,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "05345a84548e": {
+  "identity": {
+   "one_liner": "让 DuckDB 直接读取和查询 Apache Paimon 数据湖表的扩展",
+   "review": "duckdb-paimon 是 DuckDB 扩展，基于 paimon-cpp 库以纯 C++ 实现读取 Paimon 表，无需 JVM 或 Flink/Spark 集群。支持本地与对象存储（OSS、S3、COS）数据源、REST catalog ATTACH、投影与谓词下推、快照时间旅行查询及 append-only 表写入。适用于需要在本地 SQL 环境直接访问 Paimon 数据的分析与开发人员。限制：暂无 Windows、Intel macOS、musl Linux 与 WebAssembly 构建，二进制须与 DuckDB 版本和平台精确匹配。",
+   "highlights": [
+    "零 JVM 依赖，通过 Apache Arrow 实现与 DuckDB 的数据交换，并按 Split 并行扫描多核读取",
+    "支持读取本地文件系统与远程对象存储（OSS/S3/COS）中的 Paimon 表，含投影与谓词下推、快照历史查看与基于快照的时间旅行查询",
+    "提供 DDL（CREATE/DROP SCHEMA/TABLE）与 append-only 表写入，凭据通过 DuckDB Secret Manager 管理，并支持 filesystem 与 REST catalog ATTACH"
+   ],
+   "use_cases": [
+    "对实时写入 Paimon 的数据在本地 DuckDB shell 中直接执行即席 SQL 查询，无需启动计算集群",
+    "在 CI/CD 流水线中对 Paimon 表运行数据质量断言，验证 Flink 作业输出",
+    "结合 DuckDB 对 Parquet、CSV、JSON、Iceberg 等的支持，对 Paimon 表与其他数据源做跨格式联邦 JOIN 查询"
+   ]
+  },
+  "sha": "05345a84548e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c461ed58b5e2": {
+  "identity": {
+   "one_liner": "面向 WhatsApp 群聊的机器人，基于 SawBot-MD 改制，内置 AI 对话、游戏、虚拟经济与群管理功能。",
+   "review": "一个运行于 Node.js 的 WhatsApp 群机器人，为乌拉圭一个朋友群组定制开发，起点是 SawBot-MD（其本身基于 GataBot-MD）。它提供 rioplatense 风格的 AI 聊天（Gemini 为主，多供应商备用）、UruCoins 经济系统、赌场与小游戏、群管理与版主角色、音乐下载及多种工具命令。AI 回复依赖外部 LLM API key；README 明确记载该号码曾因消息量被 WhatsApp 封禁一次，消息间设有间隔。安装通过 npm start 运行。",
+   "highlights": [
+    "支持以 Gemini 为主的 AI 对话，配 Groq、OpenRouter、NVIDIA、Cerebras 备用；部分功能仅限 Gemini 付费计划",
+    "包含 UruCoins 经济系统：赌场游戏、周彩票、体育赛事投注市场，以及带每日上限的益智游戏奖励",
+    "提供群管理功能：Bot 角色（adminbot/moderador）、警告与黑名单、不活跃成员清理、入群申请审批、反链接"
+   ],
+   "use_cases": [
+    "面向熟悉成员的 WhatsApp 社交群，需要聊天、游戏与虚拟经济互动",
+    "需要群管理工具（警告、黑名单、不活跃成员处理、入群审批）的群组",
+    "需要音乐/视频下载、天气、翻译、贴纸、航空 METAR/TAF 等工具命令的群聊场景"
+   ]
+  },
+  "sha": "c461ed58b5e2",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

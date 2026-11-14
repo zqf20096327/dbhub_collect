@@ -2686,5 +2686,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c3cdcfc6f11": {
+  "identity": {
+   "one_liner": "基于 Flask 与 SQLite 的短链接服务，支持自定义别名、过期时间与 TinyURL 镜像。",
+   "review": "SharpLink 是一个 Flask 编写的 URL 短链接 Web 应用：将长链接转为短链接，支持自定义别名、到期时间和可选的 TinyURL 镜像生成，数据存于本地 SQLite 文件。提供复制按钮、按 IP 限流和 REST API（POST /api/shorten、GET /ALIAS，过期返回 410）。通过 PowerShell 虚拟环境安装后本地运行，也可部署到公网服务器使用。",
+   "highlights": [
+    "支持自定义别名（限字母、数字、-、_）与日期时间级的链接过期功能，过期链接返回 HTTP 410",
+    "提供 REST API 与按 IP 限流，限流存储可在本地内存与 Redis 之间通过环境变量切换",
+    "数据持久化到 SQLite（可用 SHARPLINK_DB_PATH 覆盖路径），并支持迁移旧版 JSON 存储；附带 /health 健康检查与 pytest 测试"
+   ],
+   "use_cases": [
+    "本地或自托管服务器上生成短链接，分享时使用自定义别名",
+    "通过 REST API 在脚本或后端流程中批量创建短链接",
+    "作为 Flask + SQLite 后端项目的学习与部署练习样例"
+   ]
+  },
+  "sha": "6c3cdcfc6f11",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e5daf3ef989": {
+  "identity": {
+   "one_liner": "Oracle Fusabase 模块化 JavaScript SDK，提供 Firebase 与 Supabase 兼容的后端访问接口。",
+   "review": "Fusabase 是 Oracle 发布的模块化 JavaScript SDK，面向从 Web 应用直接访问 Oracle 后端服务的开发者。它包含两套接口：与 Firebase API 兼容的应用初始化、认证、文档数据、存储、App Trust 及浏览器 UI 模块；以及与 Supabase 兼容的关系型客户端，覆盖数据、认证、存储、App Trust 与离线数据。可按需安装 scoped 包，或使用提供完整 SDK 的 fusabase 包及其子路径。",
+   "highlights": [
+    "提供 Firebase 兼容的应用初始化、认证（含多因素认证）、文档数据、对象存储、App Trust 浏览器证明与 UI 模块",
+    "提供 Supabase 兼容的关系型客户端，覆盖数据、认证、存储与离线数据",
+    "按 scoped 包模块化发布，另有无作用域的完整 SDK 包 fusabase，支持子路径导入"
+   ],
+   "use_cases": [
+    "Web 应用中通过 Firebase 风格 API 访问 Oracle 后端的文档数据与存储",
+    "需要关系型数据访问（含离线数据支持）的 Supabase 风格前端应用",
+    "需要浏览器认证 UI 或 App Trust 证明能力的应用集成场景"
+   ]
+  },
+  "sha": "9e5daf3ef989",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2178825731ac": {
+  "identity": {
+   "one_liner": "全栈文档智能系统，基于 RAG、语义检索与 LLM 实现文档问答",
+   "review": "LexiCore 是一个基于 Python 的全栈文档问答系统，前端通过 REST API 调用 FastAPI 后端，文档解析、NER、嵌入索引等耗时任务由 Celery 配合 Redis 异步执行，向量存于 ChromaDB，答案由 Groq 托管的 LLM 生成。适合需要自托管文档问答服务的开发者。运行需 PostgreSQL、Redis、Node.js 及 Groq API Key。",
+   "highlights": [
+    "提供文档解析、NER（GLiNER+ONNX）、BERT 语义理解、向量检索到 RAG 问答的完整处理链路",
+    "使用 Celery 与 Redis 将文档处理和索引任务与 FastAPI 请求进程分离，支持独立扩展 worker",
+    "支持基于 ChromaDB 的语义检索与文档级过滤，并返回答案关联的来源引用"
+   ],
+   "use_cases": [
+    "上传文档后以自然语言提问，获取基于文档内容的答案与来源",
+    "从非结构化文本中提取实体并建立可语义搜索的向量索引",
+    "需要 API 与后台任务分离的文档处理服务部署参考"
+   ]
+  },
+  "sha": "2178825731ac",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2868,5 +2868,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "26dde3c63d5b": {
+  "identity": {
+   "one_liner": "EF Core 批量 CRUD 扩展库，基于各数据库 BulkCopy 协议实现",
+   "review": "该库为 EF Core 提供 BulkInsert、BulkUpdate、BulkDelete、BulkRead、Upsert/Sync、Truncate 及 BulkSaveChanges 等批量操作方法，通过 DbContext 扩展调用实体列表，并支持 IQueryable 上的 Batch Delete/Update。针对 SQL Server、PostgreSQL、MySQL、Oracle、SQLite 分别使用 SqlBulkCopy、COPY BINARY、MySqlBulkCopy、OracleBulkCopy 及 UPSERT SQL 实现。最新版本对应 EF Core 10，提供统一主包与按数据库的单提供者包，通过 NuGet 安装。",
+   "highlights": [
+    "Bulk 操作在 SQL Server 底层使用 SqlBulkCopy，Update/Delete 由 BulkInsert 加原生 MERGE 语句组合实现",
+    "提供 BulkConfig 配置参数，可用 PropertiesToInclude/PropertiesToExclude 控制更新列，支持 SetSynchronizeFilter 做部分同步（SQLite 与 PostgreSQL 不支持 Sync）",
+    "包含 BulkSaveChanges 方法，借助 Change Tracker 识别增删改实体并按表调用对应 Bulk 操作"
+   ],
+   "use_cases": [
+    "需要在单个连接中对大量实体执行 Insert 与 Update 组合（Upsert）或表数据同步的场景",
+    "大列表按唯一列查询时替代 Contains/IN 或整表加载 JOIN 的读取场景（BulkRead）",
+    "通过重写 SaveChanges，将超过一定数量的修改实体条目转交 Bulk 版本处理的场景"
+   ]
+  },
+  "sha": "26dde3c63d5b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9cf7bcda07d7": {
+  "identity": {
+   "one_liner": "开发者 Pablo Pérez 的个人主页仓库，聚合其视频、课程与博客索引",
+   "review": "该仓库是 Pablo Pérez-Aradros 的 GitHub 个人主页，以 README 呈现其 DevSecOps 与网络安全方向的公开内容：包含最新 YouTube 视频、Docker/Kubernetes/Ansible 三门免费课程的视频、网页与 GitHub 链接，以及博客文章列表。适合想按 Spanish 内容来源追踪 DevOps 主题教程的观众；内容以链接索引为主，仓库本身不含代码实现。",
+   "highlights": [
+    "提供 Docker、Kubernetes、Ansible 三门免费课程，并附 YouTube、网页与 GitHub 链接",
+    "展示最新发布的 YouTube 视频与直播/播客链接",
+    "列出博客最新文章，涵盖 AWS 模拟器、WAF、Kubernetes Gateway API 等主题"
+   ],
+   "use_cases": [
+    "追踪该作者的 DevSecOps/容器主题视频与课程更新",
+    "按课程索引跳转学习 Docker、Kubernetes、Ansible 的配套资料",
+    "通过博客列表查找容器、安全与 homelab 方向的文章"
+   ]
+  },
+  "sha": "9cf7bcda07d7",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bbe0023e8251": {
+  "identity": {
+   "one_liner": "基于 CLI 的多数据库工具，将连接、查询与元信息读取封装为 Agent 可调用命令",
+   "review": "agent-database-cli 是用 Rust 编写、通过 npm 分发的本地 CLI 工具，封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询与元信息读取，供 Agent 作为本地命令调用。默认启用只读模式并支持命令黑名单，凭据在首次使用时加密为密文引用存入本地文件；Oracle 默认走 SQLcl，原生驱动需显式配置。适用于需要让 AI Agent 在受控权限下访问数据库的场景。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、Redis（单机与集群）、Oracle（SQLcl 或原生驱动）、MongoDB 的连接与查询执行",
+    "默认只读模式叠加命令黑名单，检查顺序为先黑名单后只读，并拦截 SELECT INTO、$out、$merge 等带写入语义的查询",
+    "敏感信息（数据库密码、SSH 密码与通行短语）首次使用时加密写入 secrets.json，配置中以 *Ref 引用；支持 SSH 隧道与本地 daemon 连接复用"
+   ],
+   "use_cases": [
+    "让 Claude Code、Codex 等 Agent 通过本地命令查询数据库与读取元信息",
+    "通过分组、标签筛选管理多环境连接，并经 SSH 隧道访问内网数据库",
+    "使用本地编辑页面可视化维护连接配置，配合只读与黑名单控制 Agent 可执行的操作范围"
+   ]
+  },
+  "sha": "bbe0023e8251",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5284c755268b": {
+  "identity": {
+   "one_liner": "用一次性 Docker 容器验证 PostgreSQL 逻辑备份可恢复性的 CLI 工具",
+   "review": "pbrc 是一个用 Rust 编写的命令行工具，将 pg_dump 逻辑备份恢复到隔离的 Docker 容器中，验证数据完整性并输出 JSON/Markdown 报告。适用于需要验证备份产物的运维与 CI 流程。仅支持逻辑转储（custom/tar/directory/plain SQL/gzip），不支持物理备份、WAL 回放与 PITR；恢复不可信备份时建议使用一次性 VM。",
+   "highlights": [
+    "支持 PostgreSQL 16/17/18 与五种逻辑格式，恢复前用 pg_restore --list 检查归档",
+    "容器运行于 none 网络，无端口发布、主机挂载与 socket 挂载，可配置内存/CPU 限制",
+    "支持 TOML 期望清单（表、行数、索引、约束、只读 SELECT 断言）与三级保证等级报告"
+   ],
+   "use_cases": [
+    "CI 中验证定时备份产物（如 GitHub Actions 下载 artifact 后运行 check）",
+    "灾备演练前检验备份文件的可恢复性与内容完整性",
+    "按目录/通配符选取最新备份文件进行批量或并行恢复检查"
+   ]
+  },
+  "sha": "5284c755268b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

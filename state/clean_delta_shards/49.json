@@ -26271,5 +26271,582 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "2e681b96bd9c+2": {
+  "fn": "liliang-cn/cortexdb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Go Reference CI codecov License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "The CortexDB live view: two recalls light up the graph, then the Recalls, Ontology and Library pages"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    20,
+    10,
+    20,
+    [
+     "|||",
+     "|---|---|",
+     "|Go library|`go get github.com/liliang-cn/cortexdb/v2`|",
+     "|Claude Code|`/plugin marketplace add liliang-cn/cortexdb`, then `/plugin install cortexdb@cortexdb`|",
+     "|Codex|`codex plugin marketplace add liliang-cn/cortexdb && codex plugin add cortexdb@cortexdb`|",
+     "|Claude Code mod (optional)|`/plugin install cortexdb-live@cortexdb`|",
+     "|DeepSeek Harness|`dsh plugin --profile web add \"github:liliang-cn/cortexdb#semver:^2&path:/plugins/dsh-cortexdb-memory\"` (guide)|",
+     "|Obsidian|unzip a release's `cortexdb-obsidian.zip` into `<vault>/.obsidian/plugins/` (guide)|",
+     "|Shared-brain server|`go install github.com/liliang-cn/cortexdb/v2/cmd/cortexdb-grpc@latest`|",
+     "|Clients|`cargo add cortexdb-client` · `pip install cortexdb-client` · `npm install cortexdb-client`|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    35,
+    20,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "recall. See the plugin guide for setup and"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    48,
+    36,
+    48
+   ],
+   [
+    "replace",
+    48,
+    49,
+    48,
+    49,
+    [
+     "Read-only, light by default, works on a phone, in English or Chinese (the toggle in the top bar). See the guide."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    49,
+    52
+   ],
+   [
+    "replace",
+    52,
+    53,
+    52,
+    53,
+    [
+     "`cortexdb-live` is an optional mod that runs inside Claude Code on top of the `cortexdb` plugin. Install it after the plugin:"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    64,
+    53,
+    64
+   ],
+   [
+    "replace",
+    64,
+    68,
+    64,
+    65,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    96,
+    65,
+    93
+   ],
+   [
+    "replace",
+    96,
+    119,
+    93,
+    116,
+    [
+     "|Variable|Meaning|",
+     "|---|---|",
+     "|`CORTEXDB_PATH`|Database file (default `~/.cortexdb/cortexdb.db`)|",
+     "|`CORTEXDB_REMOTE`|Use a shared `cortexdb-grpc` at `host:port` (plaintext) or `https://host` (TLS, behind a proxy) instead of a local file|",
+     "|`CORTEXDB_GRPC_TOKEN`|Bearer token for that server|",
+     "|`CORTEXDB_GRPC_ADDR`|Server listen address (default `127.0.0.1:47821`)|",
+     "|`CORTEXDB_EMBED_BASE_URL` / `CORTEXDB_EMBED_API_KEY`|`cortexdb-mcp-stdio`: OpenAI-compatible embeddings endpoint and its key (fall back to `OPENAI_BASE_URL` / `OPENAI_API_KEY`); unset = lexical mode|",
+     "|`OPENAI_BASE_URL` / `OPENAI_API_KEY`|Server: the embeddings endpoint and key (`cortexdb-grpc` reads only these, not `CORTEXDB_EMBED_BASE_URL`); unset = lexical mode|",
+     "|`CORTEXDB_EMBED_MODEL` / `CORTEXDB_EMBED_DIM`|Embedding model and dimension, for both (default `text-embedding-3-small` / `1536`)|",
+     "|`CORTEXDB_VECTOR_INDEX` / `CORTEXDB_BINARY_OVERSAMPLE`|Server: `hnsw` (default) or, on a SQLite store, `binary` (1-bit codes in memory, 1/32 of the vectors, each search rescored from the stored vectors, no snapshot); the oversample is the binary shortlist multiplier, from 1 to 1000 (default `8`)|",
+     "|`CORTEXDB_REVIEW_GATE`|Server and `cortexdb-mcp-stdio`: `1` leaves proposed and rejected documents and memories out of search and recall (default off; a curation filter, not access control)|",
+     "|`CORTEXDB_SLOW_MS`|Server: log calls slower than this, with the time each stage took (default `1000`, `0` = none)|",
+     "|`CORTEXDB_TRACE` / `CORTEXDB_TRACE_FILE`|Server: log every call; also append the records to a JSON-lines file|",
+     "|`CORTEXDB_LOG_FORMAT` / `CORTEXDB_LOG_LEVEL`|Server: `text` (logfmt, default) or `json`; `debug`, `info` (default), `warn`, `error`|",
+     "|`CORTEXDB_TRACE_MAX_MB` / `CORTEXDB_TRACE_KEEP` / `CORTEXDB_TRACE_MAX_AGE_DAYS`|Server: rotate the trace file at this size (`100`), keep this many old files (`5`) for at most this many days (`30`)|",
+     "|`CORTEXDB_EMBED_PROBE_SECONDS`|Server: probe the embedder this often, for `/healthz` and `/metrics` (default `60`, `0` = off)|",
+     "|`CORTEXDB_RECALL_LOG`|Server and `cortexdb-mcp-stdio`: `1` keeps a log of recalls — queries included — for the `/recalls` page and the `recall_log_*` tools (default off)|",
+     "|`CORTEXDB_RECALL_LOG_DAYS` / `CORTEXDB_RECALL_LOG_MAX_ROWS`|How long (`30` days) and how many (`100000`) recalls the log keeps|",
+     "|`CORTEXDB_MEDIA_VISION_URL` / `CORTEXDB_MEDIA_VISION_MODEL`|Server and `cortexdb-mcp-stdio`: an Ollama vision model that captions images and video frames for `ingest_media` (e.g. `http://localhost:11434` / `qwen3.5:4b`)|",
+     "|`CORTEXDB_MEDIA_TRANSCRIBE_URL` / `CORTEXDB_MEDIA_TRANSCRIBE_MODEL` / `CORTEXDB_MEDIA_TRANSCRIBE_API_KEY`|An OpenAI-compatible `…/v1` transcription endpoint for audio and the sound of videos (OpenAI, or whisper.cpp's `whisper-server --inference-path /v1/audio/transcriptions --convert`)|",
+     "|`CORTEXDB_MEDIA_EMBED_URL` / `CORTEXDB_MEDIA_EMBED_MODEL` / `CORTEXDB_MEDIA_EMBED_API_KEY`|A CLIP-style embedding endpoint (infinity's `/embeddings` with `modality`) that puts images, video frames and text in one space, so an image is found by what it shows and `search_media` takes an image as the query|",
+     "|`CORTEXDB_MEDIA_EMBED_AUDIO` / `CORTEXDB_MEDIA_EMBED_MIN_SCORE`|`1` when that model embeds sound too (CLAP); the cosine a media vector must reach to be a hit (`0.2`)|",
+     "|`CORTEXDB_MEDIA_FRAME_INTERVAL` / `CORTEXDB_MEDIA_MAX_BYTES`|Seconds between the video frames captioned (`10`, `0` = none; needs `ffmpeg`), and the size cap of one file (32 MiB)|"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    116,
+    119
+   ],
+   [
+    "replace",
+    122,
+    123,
+    119,
+    120,
+    [
+     "Website · Guide (full feature reference) · Examples · Changelog · 中文"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    125,
+    120,
+    122
+   ],
+   [
+    "delete",
+    125,
+    126,
+    122,
+    122
+   ],
+   [
+    "equal",
+    126,
+    127,
+    122,
+    123
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "d2cda04ec3f0+2": {
+  "fn": "ochi-team/ochi",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Ochi is a cost-effective, Loki compatible, database for logs. "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Ochi Logo"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " Ochi (pronounced oh-chee) translates to \"Eyes\" in various Slavic languages. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    25,
+    5,
+    21
+   ],
+   [
+    "replace",
+    25,
+    26,
+    21,
+    22,
+    [
+     "- install zig 0.16.0"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    33,
+    22,
+    29
+   ],
+   [
+    "replace",
+    33,
+    51,
+    29,
+    30,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    62,
+    30,
+    41
+   ],
+   [
+    "replace",
+    62,
+    72,
+    41,
+    42,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    82,
+    42,
+    52
+   ],
+   [
+    "replace",
+    82,
+    100,
+    52,
+    53,
+    [
+     "…（18 行代码略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "ee459542316c+2": {
+  "fn": "fianbiasa/rayxo",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "RAYXO"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    11,
+    2,
+    7,
+    [
+     " Website ·",
+     " Dokumentasi ·",
+     " Panduan instalasi ·",
+     " Changelog ·",
+     " Diskusi"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    16,
+    7,
+    12
+   ],
+   [
+    "replace",
+    16,
+    17,
+    12,
+    13,
+    [
+     "**Status:** beta, versi terbaru v0.7.0. Fase P0–P3 di roadmap sudah selesai; backup dan migrasi (P4) belum ada."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    31,
+    13,
+    27
+   ],
+   [
+    "replace",
+    31,
+    32,
+    27,
+    28,
+    [
+     "Daftar lengkap per level ada di docs/01-fitur.md, dan panduan pemakaian di rayxopanel.com/docs."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    35,
+    28,
+    31
+   ],
+   [
+    "replace",
+    35,
+    42,
+    31,
+    38,
+    [
+     "|#|Dokumen|Isi|",
+     "|---|---------------------------------------------|--------------------------------------------------------------------|",
+     "|1|Daftar fitur|Semua fitur per level (User, Reseller, Admin) dan fase pengerjaannya|",
+     "|2|Arsitektur|Komponen, stack layanan, isolasi user, model keamanan, alur task|",
+     "|3|Database|Skema tabel panel dan view SQL untuk layanan|",
+     "|4|Agent & server|Daftar aksi agent, aturan validasi, layout folder, port|",
+     "|5|Roadmap|Fase P0–P6, estimasi, kriteria selesai, strategi migrasi, risiko|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    45,
+    38,
+    41
+   ],
+   [
+    "replace",
+    45,
+    60,
+    41,
+    56,
+    [
+     "|Topik|Pilihan|Alasan|",
+     "|------------------|--------------------------------------------------------------------------------|------------------------------------------------------------------------------------|",
+     "|OS|Ubuntu 24.04 LTS dulu, Debian menyusul|Paling umum di provider VPS; satu OS mengurangi beban perawatan|",
+     "|Panel web|Laravel + Inertia + React (TypeScript, Tailwind, shadcn/ui)|UI dibangun sendiri; interaktif untuk file manager, editor, dan progres task|",
+     "|Login|Laravel Fortify|Username/email, 2FA, passkey; pendaftaran publik dimatikan|",
+     "|Pengembangan lokal|Herd (`rayxo.test`)|SSL & versi PHP diatur dari aplikasi Herd; agent disimulasikan (`AGENT_DRIVER=fake`)|",
+     "|Agent|Go, satu binary, jalan sebagai root|Eksekusi tanpa shell, mudah dipasang; SSL lewat certbot yang sudah ada di server|",
+     "|Pemisahan hak|Panel bukan root; semua perubahan sistem lewat agent dengan daftar aksi tertutup|Bug di panel tidak otomatis jadi akses root|",
+     "|Web server|Nginx → Apache → PHP-FPM per user|Cepat, dan `.htaccess` tetap jalan untuk WordPress & pelanggan pindahan|",
+     "|DNS|PowerDNS|Ada API, siap DNSSEC & cluster|",
+     "|Email|Postfix + Dovecot + Rspamd + Roundcube|Standar industri|",
+     "|FTP|Pure-FTPd (auth MySQL)|Akun FTP virtual per domain|",
+     "|Isolasi|User Linux per akun, home `0710`, cgroups per user|Satu situs dibobol tidak menular ke akun lain|",
+     "|Struktur folder|Mengikuti DirectAdmin|Migrasi mudah, pelanggan familiar|",
+     "|Port panel|2222|Sama dengan DirectAdmin|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    56,
+    59
+   ],
+   [
+    "replace",
+    63,
+    68,
+    59,
+    64,
+    [
+     "|Fase|Isi|",
+     "|----|------------------------------------------------------------------------------------------------------------------|",
+     "|P4|Backup dan restore (lokal, FTP, SFTP, S3), impor backup cPanel dan DirectAdmin, transfer antar server, modul WHMCS|",
+     "|P5|Brute force monitor, firewall, ModSecurity, kebijakan 2FA dan password, update panel sekali klik, UI dua bahasa|",
+     "|P6|App installer dan WordPress manager, Git deploy, Node.js/Python, DNSSEC, multi-server|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    64,
+    65
+   ],
+   [
+    "replace",
+    69,
+    70,
+    65,
+    66,
+    [
+     "Panel dirancang untuk menjual shared hosting (Admin → Reseller → User) di satu server; desain agent sudah disiapkan untuk multi-server. Rinciannya di docs/05-roadmap.md."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    125,
+    66,
+    121
+   ],
+   [
+    "replace",
+    125,
+    133,
+    121,
+    129,
+    [
+     "|Port|Untuk|",
+     "|--------------------------------|-------------------------|",
+     "|80, 443|Website dan Let's Encrypt|",
+     "|2222|Panel|",
+     "|22|SFTP dan SSH|",
+     "|21, 35000–35999|FTP (passive)|",
+     "|25, 110, 143, 465, 587, 993, 995|Email (SMTP, POP3, IMAP)|",
+     "|53 TCP dan UDP|DNS|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    140,
+    129,
+    136
+   ],
+   [
+    "replace",
+    140,
+    145,
+    136,
+    141,
+    [
+     "|Rekaman|Nama|Nilai|",
+     "|-------|---------------------------------|---------------------------------------------------|",
+     "|SPF|TXT `<hostname>`|`v=spf1 a ~all`|",
+     "|DKIM|TXT `rayxo._domainkey.<hostname>`|`v=DKIM1; k=rsa; p=…` (kunci dibuat saat instalasi)|",
+     "|DMARC|TXT `_dmarc.<hostname>`|`v=DMARC1; p=none; adkim=r; aspf=r`|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    164,
+    141,
+    160
+   ],
+   [
+    "replace",
+    164,
+    165,
+    160,
+    161,
+    [
+     "Workflow menjalankan `installer/build-release.sh`, lalu menerbitkan `setup.sh`, `rayxo-<versi>-linux-{amd64,arm64}.tar.gz`, dan file `.sha256`-nya di Releases. Server tidak butuh Composer, Node.js, atau Go."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    172,
+    161,
+    168
+   ],
+   [
+    "replace",
+    172,
+    173,
+    168,
+    169,
+    [
+     "RAYXO adalah perangkat lunak bebas di bawah GNU Affero General Public License versi 3 (AGPL-3.0). Kamu boleh memakai, menyebarkan, dan mengubahnya. Kalau kamu memodifikasi RAYXO lalu menyediakannya untuk orang lain lewat jaringan, misalnya sebagai panel untuk pelanggan hosting, kode sumber versi modifikasimu juga wajib tersedia untuk mereka."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

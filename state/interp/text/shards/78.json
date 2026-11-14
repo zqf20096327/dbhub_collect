@@ -2468,5 +2468,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "97b6f4073e38": {
+  "identity": {
+   "one_liner": "基于 LangGraph 的对话式 AI agent，检索、引用与文件生成为一体",
+   "review": "LingDraft 是一个对话式 AI agent：支持联网搜索、读取网页与文件、查看图片、查询用户资料库并标注引用来源；用户需要成品时以文件形式产出文档、网页和代码，改一次存一版。后端为 FastAPI，主 agent 与子 agent 由 LangChain create_agent 搭建并挂载 16 个自写中间件，检查点、长期记忆与向量（pgvector）存于 Postgres。适合希望自行部署、定制 agent 运行机制的开发者参考。",
+   "highlights": [
+    "主 agent 与子 agent 基于 LangChain create_agent，挂载 16 个自写中间件；主 agent 可通过 task 工具派发并行子 agent（每轮最多 5 个、同时最多 3 个）",
+    "检索管线：资料库切块存入 pgvector，向量与关键词各取 20 块、RRF 合并后经重排模型取前 8 块，回答标注到文件段落",
+    "支持多模型接入（默认 DeepSeek，另直连 7 家），按首句难易判定选模型并路由免费额度、直连与备用模型；工具经 MCP 接入搜索、天气、地图、画图等"
+   ],
+   "use_cases": [
+    "需要多步检索并要求回答标注资料库来源的对话问答",
+    "文档、网页、图表类成品的生成与迭代修改",
+    "按 cron 定时在既有对话中自动执行简报类任务"
+   ]
+  },
+  "sha": "97b6f4073e38",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "da3d1f2cb5c1": {
+  "identity": {
+   "one_liner": "本地运行的 Telegram 群组归档工具，支持全文检索与基于消息的 AI 问答",
+   "review": "该项目将用户 Telegram 账号中关注的群组消息同步为本地 SQLite 归档，提供浏览、全文检索与 Ask-AI 问答功能，问答附引用链接并可回溯原消息。面向希望在本机保存和检索群组历史消息的个人用户。默认仅绑定 127.0.0.1，提问时只向所配置的 AI 端点发送检索到的消息摘录；Windows 安装包无需 Python/Node 依赖，源码运行需 Python 3.10+。",
+   "highlights": [
+    "支持阿拉伯语与英语全文检索，含方言词映射配置（TGQ_DIALECT_MAP）与检索归一化级别设置",
+    "Discover 视图以确定性计算方式生成热门话题、跨群组内容与未回答问题，不依赖 AI",
+    "Ask-AI 问答仅基于本地归档消息作答，每条回答附 [n] 引用并跳转原始消息；支持任意 OpenAI 兼容端点及按模型角色拆分配置"
+   ],
+   "use_cases": [
+    "在本机长期保存并浏览关注的 Telegram 群组完整历史消息",
+    "跨群组检索特定话题、优惠或问题解决方案，并通过引用回看原消息",
+    "用 sync.py 将消息同步与登录纳入脚本化流程"
+   ]
+  },
+  "sha": "da3d1f2cb5c1",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "42eab68e4674": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 统计数据的命令行性能诊断工具",
+   "review": "pgpa 是一个用 Rust 编写的 CLI 工具，读取 pg_stat_statements 统计、采样锁等待、生成 JSON EXPLAIN 计划，并按 TOML 清单运行固定速率的 HTTP 工作负载进行前后对比。面向需要排查 PostgreSQL 查询性能的数据库使用者。注意：它只支持 HTTP 负载而非任意 SQL 负载，compare 对单次试验结果标记为无结论，需自行多次试验验证。",
+   "highlights": [
+    "提供 inspect、capture、locks、explain、run、compare、report 等子命令，读取 pg_stat_statements 数据并按总耗时、调用次数、临时块等排序",
+    "EXPLAIN 默认不执行语句，EXPLAIN ANALYZE 与 POST 工作负载需显式传入 --allow-execution / --allow-writes，产物中不写入连接凭据",
+    "以终端、JSON、Markdown 或独立 HTML 形式生成离线报告，支持 PostgreSQL 16–18 并在 CI 中对三个版本运行集成测试"
+   ],
+   "use_cases": [
+    "从 pg_stat_statements 中按耗时、调用次数或共享读等维度排列开销较高的查询",
+    "对锁等待者、阻塞者与 pg_locks 进行有界间隔采样，排查行锁事务导致的阻塞",
+    "用 TOML 清单运行可重复的 HTTP 压测，捕获计数器增量并在多次试验后对比前后差异"
+   ]
+  },
+  "sha": "42eab68e4674",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -33649,5 +33649,2292 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "52b70b83f8ea+2": {
+  "fn": "yanfei0725/dsh-qwen-paint",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    19,
+    6,
+    19,
+    [
+     "|能力|工具|说明|",
+     "|---|---|---|",
+     "|文生图|`draw_image`|按提示词出图，成品落盘并直接显示在会话里|",
+     "|图生图 / 多参考图编辑|`draw_image`|1–16 张参考图（0.19.0 起），按序号接入 `images.image_N`|",
+     "|局部重绘|`inpaint_image`|蒙版内重绘，裁剪回贴|",
+     "|元素移除|`remove_image`|移除蒙版内物体并补全背景|",
+     "|四向扩图|`outpaint_image`|上 / 下 / 左 / 右按百分比外扩|",
+     "|高清放大|`upscale_image`|与内置放大共用同一套节点图|",
+     "|角色参考（模型无关）|`draw_image` / `generate_video`|可选 `referenceStrategy`：按后端 `/object_info` 真实能力协商，协商不到专属适配器自动回落通用兜底|",
+     "|文生视频 / 图生视频|`generate_video`|经本机 ComfyUI 调用 Wan 2.2 / XT-5B 系列视频模型，成品落盘并显示在会话里|",
+     "|语音合成（TTS）|`generate_speech`（独立） / `generate_hybrid`（三段中的一段）|本机 `ComfyUI-Qwen-TTS` + Qwen3-TTS 权重，产出 mp3 / flac（按 ComfyUI 返回的真实扩展名）；两条路共用同一条 TTS 段，只想配音不必跑完三段，**插件不自动下载音频模型**|",
+     "|图→音→视频混合|`generate_hybrid`|一张图配一段语音再合成视频，适合做带旁白的短片|",
+     "|生成历史（可搜索）|`list_generated_images`|本机 SQLite 记录每次生成的提示词 / 参数 / 时间 / 路径，支持关键词、类型、日期筛选与分页；界面里可看大图、复制路径、从历史移除（**只划掉记录，不删磁盘文件**）|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    54,
+    19,
+    54
+   ],
+   [
+    "replace",
+    54,
+    65,
+    54,
+    65,
+    [
+     "|想做的事|在哪点|",
+     "|---|---|",
+     "|出图 / 图生视频|直接说话：「画一只橘猫」「把这张图做成 5 秒视频」|",
+     "|**圈选重绘**：手动涂出要改的地方|结果图下方「圈选重绘」，或直接点图片 → 用画笔把要改的地方涂白 → 写一句要改成什么（也可点常用说法）|",
+     "|**移除物体**|结果图下方「更多编辑」→「移除物体」→ 涂出要去掉的东西 → 点「移除并补全」，不用写提示词|",
+     "|**四向扩图 / 高清放大**|「更多编辑」→ 点预设（四周各 20%、左右各 30%、2/4/8 倍…），不用填参数|",
+     "|选一张以前的图来编辑|菜单**最上面**「常用（点开就能用）」→「图片编辑台」列出最近生成的图；或「圈选重绘最近一张图」懒人直达|",
+     "|**翻旧账**：找上周生成的那张图|菜单**最上面**「历史」→「生成历史」|按关键词 / 类型 / 日期筛，点缩略图看大图，可复制路径贴到别处；「移除」只从列表划掉，不会删你的文件|",
+     "|**视频选帧去修**：只改中间某一帧|菜单「视频（选帧改 → 截一段）」→ 拖进度条或 `←` `→` 逐帧 →「抽这一帧去修」→ 直接进圈选重绘（**不需要 ffmpeg**）|",
+     "|**截取视频的一段**|同一个浮层：按帧数（起始/结束帧）或按时间（`0:01.5`）选 →「截取这一段」；也可「按间隔抽帧」批量取关键帧（这两项需要 ffmpeg）|",
+     "|**缩略图轨道 / 把改稿贴回视频**|同一个浮层：加载后自动生成 10 张缩略图，点一下跳到该处；改完图点「把改好的图贴回这一帧」→ 选最近改好的图 → 产出新 mp4（缩略图零依赖；**贴回需要 ffmpeg**，没装会明确提示）|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    110,
+    65,
+    110
+   ],
+   [
+    "delete",
+    110,
+    112,
+    110,
+    110
+   ],
+   [
+    "equal",
+    112,
+    122,
+    110,
+    120
+   ],
+   [
+    "replace",
+    122,
+    127,
+    120,
+    125,
+    [
+     "|层|机制|前提|",
+     "|---|---|---|",
+     "|参数层|固定 seed / 锚定关键帧 / 段间 overlap|无|",
+     "|节点层|按后端 `/object_info` 的**真实节点集合**选策略（`requires` 取 AND、`requiresAny` 取 OR，按优先级排）|后端在线且装了对应节点|",
+     "|通用兜底|只用任何扩散模型都有的基础节点：生图找带 `latent_image` 输入的节点并接 `VAEEncode`；视频找带 `start_image` 输入的节点接首帧|无|"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    144,
+    125,
+    142
+   ],
+   [
+    "replace",
+    144,
+    146,
+    142,
+    144,
+    [
+     " **不在 required 里**）。优先级：**显式工具入参 > 面板选择 > 未启用**。",
+     " 面板选择只存进程内存，不写配置、不写记忆，重启回默认。"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    144,
+    145
+   ],
+   [
+    "replace",
+    147,
+    148,
+    145,
+    146,
+    [
+     " 当前选中策略、视频分段计划、联网同意要求）。"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    150,
+    146,
+    148
+   ],
+   [
+    "replace",
+    150,
+    151,
+    148,
+    149,
+    [
+     " 不提交 ComfyUI、不下载任何字节。"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    159,
+    149,
+    157
+   ],
+   [
+    "replace",
+    159,
+    160,
+    157,
+    158,
+    [
+     "（渲染 ` ` 会让浏览器自动下载，等于绕过同意门）。"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    164,
+    158,
+    162
+   ],
+   [
+    "replace",
+    164,
+    165,
+    162,
+    163,
+    [
+     " **未自动接入 RIFE 或时序平滑节点**，计划里会明确标注，不谎称已平滑。"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    167,
+    163,
+    165
+   ],
+   [
+    "delete",
+    167,
+    169,
+    165,
+    165
+   ],
+   [
+    "equal",
+    169,
+    174,
+    165,
+    170
+   ],
+   [
+    "replace",
+    174,
+    176,
+    170,
+    172,
+    [
+     "|项|说明|",
+     "|---|---|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    172,
+    173
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "b006bf700712+2": {
+  "fn": "dofy/emojidb",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "replace",
+    11,
+    20,
+    11,
+    12,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    32,
+    12,
+    24
+   ],
+   [
+    "replace",
+    32,
+    37,
+    24,
+    29,
+    [
+     " - Import the file `import dfXXX from './formators/dfXXX.js'` — the `.js`",
+     " extension is required, this is ESM (`\"type\": \"module\"`) with",
+     " `moduleResolution: nodenext`",
+     " - Add the new format to the `types` array and a corresponding case in",
+     " the `format` switch"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    48,
+    29,
+    40
+   ],
+   [
+    "replace",
+    48,
+    50,
+    40,
+    42,
+    [
+     " specific release with `-s https://www.unicode.org/Public/emoji/16.0/emoji-test.txt`,",
+     " or pass a local file path to the same option."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    52,
+    42,
+    44
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "04d0e93c7841+2": {
+  "fn": "kyledelfin2006/libro-library-system",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Libro - Library Management System "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Libro system logo"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    12,
+    4,
+    10,
+    [
+     "CI",
+     "CD",
+     "Java",
+     "Spring Boot",
+     "PostgreSQL",
+     "Docker"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    15,
+    10,
+    13
+   ],
+   [
+    "replace",
+    15,
+    16,
+    13,
+    14,
+    [
+     "Libro is a Spring Boot REST API for the library of Aklan State University – College of Computer Studies (ASU-CCS). It manages physical book copies, user accounts, and loan history. Each catalog record is one physical copy, which keeps loan history accurate per copy (see Domain Decisions)."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    18,
+    14,
+    16
+   ],
+   [
+    "replace",
+    18,
+    62,
+    16,
+    17,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    65,
+    17,
+    20
+   ],
+   [
+    "replace",
+    65,
+    66,
+    20,
+    21,
+    [
+     "- **Loans:** students and faculty borrow for 14 days, up to three active loans each; overdue loans block new checkouts. See the Loan Implementation Guide."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    21,
+    22
+   ],
+   [
+    "replace",
+    67,
+    68,
+    22,
+    23,
+    [
+     "- **Security:** stateless HS256 JWT Bearer authentication, BCrypt passwords, per-IP rate limits on login and signup, and a uniform JSON error contract. See the JWT Authentication Design."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    70,
+    23,
+    25
+   ],
+   [
+    "replace",
+    70,
+    76,
+    25,
+    31,
+    [
+     "|Layer|Technology|",
+     "|---|---|",
+     "|Language and framework|Java 25, Spring Boot 4.1.2 (Web, Data JPA, Security, OAuth2 Resource Server, Validation)|",
+     "|Data|PostgreSQL 18, Flyway 13.3.0, Hibernate with schema validation|",
+     "|Build and test|Maven, JUnit 5, Mockito, Testcontainers, JaCoCo|",
+     "|Delivery|Docker, Docker Compose, Caddy, GitHub Actions, Trivy|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    83,
+    31,
+    38
+   ],
+   [
+    "replace",
+    83,
+    87,
+    38,
+    39,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    89,
+    39,
+    41
+   ],
+   [
+    "replace",
+    89,
+    90,
+    41,
+    42,
+    [
+     "The single-module codebase groups `auth`, `book`, `loan`, `user`, `audit`, and `info` by feature, then by layer. Controllers accept and return DTOs; services own business rules, transactions, and entity-to-DTO mapping; repositories own persistence. Shared responses, errors, request IDs, time handling, and OpenAPI configuration live in `global`. Flyway owns the schema, and Hibernate validates it at startup. Architecture Overview shows the request and data flows; its Design Rules section records the package decision."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    42,
+    45
+   ],
+   [
+    "replace",
+    93,
+    99,
+    45,
+    51,
+    [
+     "|Change|Result|",
+     "|---|---|",
+     "|Standardized feature packages and moved DTO mapping into services|Controllers stay focused on HTTP, and JPA entities do not cross the API boundary.|",
+     "|Moved account ownership and target-role rules into `UserAccessPolicy`|One policy handles student, faculty, assistant, and librarian account operations.|",
+     "|Introduced shared not-found and invalid-request exception types|Expected client errors have consistent status codes; unexpected faults get a generic 500 response.|",
+     "|Layered the test profile over runtime configuration|Tests exercise the real application defaults with only test-specific overrides.|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    102,
+    51,
+    54
+   ],
+   [
+    "replace",
+    102,
+    109,
+    54,
+    61,
+    [
+     "|Problem|Project change|",
+     "|---|---|",
+     "|Entity types and database columns disagreed at startup|Made Flyway the sole schema authority, aligned migrations with JPA, and kept Hibernate schema validation enabled.|",
+     "|Container startup could race PostgreSQL readiness|Added a database health check and made the app wait for a healthy database.|",
+     "|Concurrent checkout could assign one copy twice|Added row locking, a database unique index for active loans, and PostgreSQL concurrency tests.|",
+     "|HTTP-only or mocked tests could miss real persistence errors|Split fast unit/MVC tests from Testcontainers integration tests that exercise migrations, JPA, constraints, and loan races.|",
+     "|Scattered account rules and error handling were hard to audit|Centralized target-role/ownership checks in `UserAccessPolicy` and mapped client failures through shared exception types.|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    61,
+    62
+   ],
+   [
+    "replace",
+    110,
+    111,
+    62,
+    63,
+    [
+     "The Development Problems Solved guide traces more issues from symptom to fix and verification. The Engineering Reference documents current code contracts and test boundaries."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    63,
+    66
+   ],
+   [
+    "replace",
+    114,
+    115,
+    66,
+    67,
+    [
+     "> **Try Libro:** Demo patron accounts are documented below. The public demo instance is not deployed yet; seed them locally to use the API now. Staff credentials stay private."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    118,
+    67,
+    70
+   ],
+   [
+    "replace",
+    118,
+    122,
+    70,
+    74,
+    [
+     "|Role|University ID|Password|Seed method|",
+     "|---|---|---|---|",
+     "|`STUDENT`|`2025-0001`|`DemoPatron@2026`|`bash scripts/seed-demo.sh --patrons-only`|",
+     "|`FACULTY`|`2025-0002`|`DemoPatron@2026`|`bash scripts/seed-demo.sh` (requires a librarian)|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    74,
+    75
+   ],
+   [
+    "replace",
+    123,
+    124,
+    75,
+    76,
+    [
+     "After starting the local stack, use the first command to create the student. The full seed also creates the faculty account and sample books and prompts for the librarian password. See Demo Accounts for staff-account setup and Local Setup for the optional first-librarian bootstrap. No public instance is available yet."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    143,
+    76,
+    95
+   ],
+   [
+    "replace",
+    143,
+    144,
+    95,
+    96,
+    [
+     " In PowerShell, use `Copy-Item .env.example .env` for the last command. Set your own PostgreSQL credentials, `LIBRO_ADMIN_PASSWORD_HASH` (a BCrypt hash of a password you choose), and `LIBRO_JWT_SECRET_BASE64` (`openssl rand -base64 32`). The Operations Runbook shows hash generation. `.env` is git-ignored."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    151,
+    96,
+    103
+   ],
+   [
+    "replace",
+    151,
+    152,
+    103,
+    104,
+    [
+     "3. Check readiness at `http://localhost:8080/readyz`. Seed the demo student or create your own student through signup, then follow the login example."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    104,
+    105
+   ],
+   [
+    "replace",
+    153,
+    154,
+    105,
+    106,
+    [
+     "Swagger UI and `/v3/api-docs` are off unless `LIBRO_API_DOCS_ENABLED=true`, which you can set in your local `.env` (the template leaves it `false`). To run the app outside Docker, enable the TLS proxy profile, or provision the first librarian, see Local Setup and Configuration."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    159,
+    106,
+    111
+   ],
+   [
+    "replace",
+    159,
+    160,
+    111,
+    112,
+    [
+     "Copy `.env.example` for the local template. The settings below cover the app and Compose; blank optional values disable the related feature."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    112,
+    113
+   ],
+   [
+    "replace",
+    161,
+    180,
+    113,
+    132,
+    [
+     "|Variable|Required|Default or purpose|",
+     "|---|---|---|",
+     "|`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`|Yes for Compose|Set your own database name, role, and password.|",
+     "|`LIBRO_ADMIN_PASSWORD_HASH`|First startup of an empty database|BCrypt hash for Flyway V2's library-assistant account; may be blank once V2 has run.|",
+     "|`LIBRO_JWT_SECRET_BASE64`|Yes|No default; must decode to at least 32 random bytes.|",
+     "|`LIBRO_JWT_ISSUER`, `LIBRO_JWT_AUDIENCE`|No|`libro-api` for both.|",
+     "|`LIBRO_JWT_ACCESS_TOKEN_TTL_SECONDS`|No|`900` seconds.|",
+     "|`LIBRO_CORS_ALLOWED_ORIGINS`|No|Blank denies cross-origin browser access; accepts comma-separated exact origins.|",
+     "|`SERVER_FORWARD_HEADERS_STRATEGY`|No|`none`; use `native` only behind a trusted proxy with no direct app ingress.|",
+     "|`LIBRO_LOGIN_RATE_LIMIT_REQUESTS`, `LIBRO_LOGIN_RATE_LIMIT_WINDOW_SECONDS`|No|`20` requests per `60` seconds per client IP.|",
+     "|`LIBRO_SIGNUP_RATE_LIMIT_REQUESTS`, `LIBRO_SIGNUP_RATE_LIMIT_WINDOW_SECONDS`|No|`10` requests per `3600` seconds per client IP.|",
+     "|`LIBRO_RATE_LIMIT_MAX_TRACKED_CLIENT_ROUTES`|No|`10000` in-memory client/route counters.|",
+     "|`LIBRO_BOOTSTRAP_LIBRARIAN_UNIVERSITY_ID`, `LIBRO_BOOTSTRAP_LIBRARIAN_EMAIL`, `LIBRO_BOOTSTRAP_LIBRARIAN_FIRST_NAME`, `LIBRO_BOOTSTRAP_LIBRARIAN_LAST_NAME`, `LIBRO_BOOTSTRAP_LIBRARIAN_PASSWORD_HASH`|No|Set all five together to create the first librarian once; supply a BCrypt hash.|",
+     "|`LIBRO_API_DOCS_ENABLED`|No|`false`; `true` serves Swagger UI and `/v3/api-docs` publicly.|",
+     "|`LIBRO_ENVIRONMENT_NAME`|No|`local`; staff-visible label returned by `/app/info`.|",
+     "|`LIBRO_DOMAIN`|For the TLS proxy|`localhost` locally; set a real host name for deployment.|",
+     "|`MANAGEMENT_SERVER_PORT`|No|`9091`; private Actuator health and Prometheus port.|",
+     "|`LIBRO_DATA_DIR`|Production deploy only|Block-volume path for database data, backups, and release state.|",
+     "|`LIBRO_BACKUP_BUCKET`|No|Optional object-storage bucket for off-host backups; see the runbook before enabling uploads.|"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    185,
+    132,
+    137
+   ],
+   [
+    "replace",
+    185,
+    186,
+    137,
+    138,
+    [
+     "Image publishing uses GitHub's built-in `GITHUB_TOKEN`. The runbook setup explains the environment, deployment-enable variable, and branch checks."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    189,
+    138,
+    141
+   ],
+   [
+    "replace",
+    189,
+    190,
+    141,
+    142,
+    [
+     "Real `.env` files and private keys are git-ignored. Keep passwords, JWT keys, and staff credentials out of commits and logs. See CI/CD and DevOps for production handling."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    230,
+    142,
+    182
+   ],
+   [
+    "replace",
+    230,
+    236,
+    182,
+    188,
+    [
+     "|Area|Representative endpoints|Access|",
+     "|---|---|---|",
+     "|Books|`GET /app/books/all`, `GET /app/books/query`, `GET /app/books/{id}`, `POST /app/books/add`|All roles read; library assistants and librarians write. Book responses include advisory `available`; query supports `available` and `copyStatus`.|",
+     "|Users|`POST /app/users/signup`, `GET /app/users`, `GET /app/users/me`, `GET /app/users/{universityId}`, `PUT /app/users/{universityId}/password/reset`|Signup is public; the staff directory supports scoped `role` and text `q` filters. Profiles and resets remain role scoped.|",
+     "|Loans|`POST /app/loans/{bookId}`, `PUT /app/loans/{loanId}/return`, `GET /app/loans/me`, `GET /app/loans`, `GET /app/loans/activity`, `GET /app/loans/top-titles`|Students/faculty borrow and return their own loans; staff get scoped lists and chart aggregates.|",
+     "|Staff|`GET /app/info`, `GET /app/audit`|Staff can see safe build details and role-scoped change history.|"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    188,
+    189
+   ],
+   [
+    "replace",
+    237,
+    238,
+    189,
+    190,
+    [
+     "Successful responses use an `ApiResponse` envelope; errors use `ErrorResponse` with a `requestId` and optional stable `code`. List results are paginated (default size 12, maximum 100). Enable `LIBRO_API_DOCS_ENABLED=true` locally for `/swagger-ui.html` and `/v3/api-docs`; they are off by default. See the Engineering Reference for the API inventory and response contracts, and the Roles and JWT Guide for permissions."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    251,
+    190,
+    203
+   ],
+   [
+    "replace",
+    251,
+    267,
+    203,
+    204,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    271,
+    204,
+    208
+   ],
+   [
+    "replace",
+    271,
+    278,
+    208,
+    215,
+    [
+     "|Service|Container|Image|Role|",
+     "|---|---|---|---|",
+     "|`db`|`library-postgres`|`postgres:18-alpine`, pinned by digest|Stores all library data. Healthy when `pg_isready` succeeds.|",
+     "|`app`|`library-app`|Built from the repository `Dockerfile` (locally) or a digest-pinned GHCR image (production)|The Spring Boot REST API. Starts only after `db` is healthy.|",
+     "|`proxy`|`library-proxy`|`caddy:2.8-alpine`, pinned by digest|Optional (`--profile proxy`). Terminates TLS, serves the built UI, and forwards API traffic to `app`. The only service that listens on public interfaces.|",
+     "|`prometheus`|`library-prometheus`|`prom/prometheus:v3.5.0`, pinned by digest|Optional (`--profile metrics`). Scrapes the API's private management port (`app:9091`) every 15 s and keeps 15 days of data. Loopback only.|",
+     "|`grafana`|`library-grafana`|`grafana/grafana:12.2.0`, pinned by digest|Optional (`--profile metrics`). Shows the provisioned \"Libro API overview\" dashboard: request rate and latency, logins, rate-limit rejections, password resets, JVM heap, and database connections. Loopback only, anonymous read-only, no admin user.|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    281,
+    215,
+    218
+   ],
+   [
+    "replace",
+    281,
+    301,
+    218,
+    238,
+    [
+     "|File|Purpose|",
+     "|---|---|",
+     "|`Dockerfile`|Multi-stage build of the API image: Maven build stage, then a JRE-only runtime stage.|",
+     "|`.dockerignore`|Keeps secrets, version control, IDE files, build output, docs, `infra/`, and Markdown out of the build context.|",
+     "|`docker-compose.yml`|The base stack: `db`, `app`, and the optional `proxy`, `prometheus`, and `grafana` (profiles `proxy` and `metrics`). Used as-is for local development and as the base layer in production.|",
+     "|`infra/docker-compose.prod.yml`|Production override layered on top of the base file.|",
+     "|`infra/caddy/Caddyfile`|Caddy configuration: TLS, security headers, API routing, and static UI serving with SPA fallback.|",
+     "|`infra/metrics/`|`prometheus.yml` (the scrape job) and Grafana provisioning: the Prometheus data source, the dashboard provider, and `dashboards/libro-overview.json`.|",
+     "|`.env.example`|Template for the private `.env` that Compose and the scripts read. The real `.env` is git-ignored and never enters an image.|",
+     "|`scripts/common.sh`|Shared helpers: loads `.env`, wraps `docker compose` with both Compose files, and waits for container health.|",
+     "|`scripts/deploy.sh`|Release script: back up, start the new image, wait for health, smoke test, roll back on failure.|",
+     "|`scripts/install-ui.sh`|Installs a built UI (tarball on stdin) into `ui/dist` in place. CD streams the artifact to it over SSH after a successful deploy.|",
+     "|`scripts/smoke.sh`|Post-deploy check through the proxy (readiness, liveness, login, authenticated read, anonymous rejection).|",
+     "|`scripts/smoke-journey.sh`|Full client journey for a disposable, freshly seeded local stack.|",
+     "|`scripts/backup.sh` / `scripts/restore.sh`|`pg_dump` and `pg_restore` through the running `db` container.|",
+     "|`scripts/seed-demo.sh`|Creates the public demo accounts and a synthetic catalog through the API.|",
+     "|`scripts/ci/trivy-scan.sh`|Runs Trivy from its own pinned Docker image against the repository or a built image. Shared by CI and CD.|",
+     "|`.trivyignore`|Accepted vulnerability findings (one CVE per line with a reason and expiry). Currently empty.|",
+     "|`.github/dependabot.yml`|Weekly update PRs for Docker base images and Compose images, among other ecosystems.|",
+     "|`src/test/java/app/support/PostgresTestConfig.java`|Testcontainers uses the same PostgreSQL digest as `docker-compose.yml`, so tests run on the production database image.|"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    338,
+    238,
+    275
+   ],
+   [
+    "replace",
+    338,
+    345,
+    275,
+    282,
+    [
+     "|Change|Effect|",
+     "|---|---|",
+     "|`db.ports: !reset []`|PostgreSQL publishes no host port at all.|",
+     "|`db.volumes` bind mount|Data moves to `${LIBRO_DATA_DIR}/postgres` on a dedicated block volume instead of the boot-volume named volume. The directory must exist and be owned by UID 70 (the postgres user in the Alpine image).|",
+     "|`app.image: ${LIBRO_IMAGE}`|Runs a specific, recorded image (a locally built tag or a GHCR reference pinned by digest) so it can be rolled back.|",
+     "|`app.environment`|Sets `SERVER_FORWARD_HEADERS_STRATEGY=native` so per-IP rate limits see real client addresses, and `LIBRO_ENVIRONMENT_NAME=production`. Safe only because the app port stays on loopback behind the proxy.|",
+     "|`proxy.environment`|`LIBRO_DOMAIN` is required; there is no silent fallback to `localhost`.|"
+    ]
+   ],
+   [
+    "equal",
+    345,
+    348,
+    282,
+    285
+   ],
+   [
+    "replace",
+    348,
+    349,
+    285,
+    286,
+    [
+     "`infra/caddy/Caddyfile` serves `{$LIBRO_DOMAIN}`. For a real domain Caddy obtains and renews a Let's Encrypt certificate (ports 80 and 443 must be reachable); `localhost` uses Caddy's internal CA."
+    ]
+   ],
+   [
+    "equal",
+    349,
+    359,
+    286,
+    296
+   ],
+   [
+    "replace",
+    359,
+    367,
+    296,
+    304,
+    [
+     "|Script|What it does with Docker|",
+     "|---|---|",
+     "|`deploy.sh [--image REF]`|Checks configuration and `.env` permissions (mode `600`); builds `libro-api:<commit>` locally or accepts a digest-pinned `--image`; runs `backup.sh` if `db` is running; `compose up -d --no-build`; waits for `library-app` to be healthy; seeds the demo student; runs `smoke.sh`; on any failure restarts the previously recorded image. The live and previous images are recorded in `$LIBRO_DATA_DIR/state`.|",
+     "|`smoke.sh [BASE_URL]`|Checks `/readyz`, `/livez`, a patron login, an authenticated read, and that an anonymous read returns 401.|",
+     "|`backup.sh`|`compose exec -T db pg_dump -Fc` to a `.partial` file, renamed only when complete; keeps the newest N dumps (default 7); optional object-storage upload.|",
+     "|`restore.sh DUMP`|Confirms by typing the database name, takes a safety backup, stops `proxy` and `app`, runs `pg_restore --clean --single-transaction`, restarts and waits for health.|",
+     "|`seed-demo.sh`|Creates demo accounts and a synthetic catalog through the API (`127.0.0.1:8080` by default).|",
+     "|`smoke-journey.sh`|Full borrow/return/lost journey; for disposable local data only.|"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    370,
+    304,
+    307
+   ],
+   [
+    "replace",
+    370,
+    377,
+    307,
+    314,
+    [
+     "|Port|Service|Published to|Notes|",
+     "|---|---|---|---|",
+     "|80, 443|`proxy`|All interfaces|The only public entry.|",
+     "|8080|`app`|`127.0.0.1` only|HTTP API and the public `/livez` and `/readyz` probes.|",
+     "|9091|`app`|Never|Actuator `health` and `prometheus`; reachable only inside the Docker network. Security permits only GET of those paths, and only for connections that arrive on this port, so Prometheus can scrape without credentials.|",
+     "|5432|`db`|`127.0.0.1` locally; not published in production|The app reaches it as `db:5432`.|",
+     "|9090, 3000|`prometheus`, `grafana`|`127.0.0.1` only (profile `metrics`)|Reach them through an SSH tunnel; never publish them.|"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    394,
+    314,
+    331
+   ],
+   [
+    "replace",
+    394,
+    395,
+    331,
+    332,
+    [
+     "GitHub Actions runs two workflows: **CI** (`ci.yml`) validates every change, and **CD** (`cd.yml`) turns a validated `main` commit into a published, scanned image and, when enabled, deploys it. Both workflows pin third-party actions to full commit SHAs and default to read-only `contents` permission."
+    ]
+   ],
+   [
+    "equal",
+    395,
+    402,
+    332,
+    339
+   ],
+   [
+    "replace",
+    402,
+    420,
+    339,
+    340,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    420,
+    424,
+    340,
+    344
+   ],
+   [
+    "replace",
+    424,
+    425,
+    344,
+    345,
+    [
+     "#### CI (`ci.yml`)"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    428,
+    345,
+    348
+   ],
+   [
+    "replace",
+    428,
+    435,
+    348,
+    355,
+    [
+     "|Job|Runner and timeout|What it runs|What it proves|",
+     "|---|---|---|---|",
+     "|`unit-test`|`ubuntu-latest`, 15 min|JDK 25 (Temurin, Maven cache), `./mvnw -B -ntp verify`|Unit and MVC tests pass and line coverage meets the 80% JaCoCo floor. Surefire and JaCoCo reports upload as `unit-test-reports` (14 days, even on failure).|",
+     "|`integration-test`|`ubuntu-latest`, 25 min|`./mvnw -B -ntp -Pintegration -DskipUTs -Djacoco.haltOnFailure=false verify`|The `*IT` suite passes against a real PostgreSQL container via Testcontainers: Flyway migrations, schema validation, and loan concurrency. `-DskipUTs` avoids re-running unit tests; the coverage gate is not applied to this suite. Reports upload as `integration-test-reports`.|",
+     "|`security-scan`|`ubuntu-latest`, 20 min|`scripts/ci/trivy-scan.sh fs`, then `docker build -t libro-api:ci .`, then `scripts/ci/trivy-scan.sh image libro-api:ci`|No fixable HIGH or CRITICAL vulnerabilities in `pom.xml` dependencies or in the built image (OS packages and the packaged JAR).|",
+     "|`ui-test`|`ubuntu-latest`, 15 min|Node 24 and JDK 25, with a PostgreSQL 18 service container|Boots the API on the test profile with API docs on, regenerates `ui/src/api/schema.d.ts`, and fails on any `git diff` (generated-type drift); then `npm run typecheck`, `lint`, `test` (unit, contrast, and accessibility tests), and `build`.|",
+     "|`e2e-test`|`ubuntu-latest`, 20 min|Node 24, JDK 25, a PostgreSQL 18 service container, and Chromium|Starts the API on the test profile with a librarian created by the startup bootstrap (random password for this run, hash from the pinned Caddy image), then runs the Playwright journey: register, sign in, search, borrow, return, and a staff lost-resolution, with axe in both themes and a phone-width navigation check. Reports upload on failure.|"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    436,
+    355,
+    356
+   ],
+   [
+    "replace",
+    436,
+    437,
+    356,
+    357,
+    [
+     "The Trivy policy lives in one place, `scripts/ci/trivy-scan.sh`, so CI and CD apply identical rules: severities `HIGH,CRITICAL`, `--ignore-unfixed`, exit code 1 on any remaining finding, and accepted exceptions in `.trivyignore`. Trivy itself runs from a digest-pinned `aquasec/trivy` image, so no third-party GitHub Action is trusted for scanning. Branch protection should require all five check names before merging to `main`."
+    ]
+   ],
+   [
+    "equal",
+    437,
+    438,
+    357,
+    358
+   ],
+   [
+    "replace",
+    438,
+    439,
+    358,
+    359,
+    [
+     "#### CD (`cd.yml`)"
+    ]
+   ],
+   [
+    "equal",
+    439,
+    442,
+    359,
+    362
+   ],
+   [
+    "replace",
+    442,
+    447,
+    362,
+    367,
+    [
+     "|Trigger|Behavior|",
+     "|---|---|",
+     "|`workflow_run` of CI on `main`|The release path. The `image` job runs only when the CI run concluded `success` and was started by a `push`.|",
+     "|`workflow_dispatch`|Manual release of the current `main`; the deploy job still needs `production` approval.|",
+     "|`pull_request` touching `cd.yml`, `Dockerfile`, `scripts/ci/trivy-scan.sh`, `scripts/install-ui.sh`, or the release-history script|Dry run: build and scan the image and build the UI, no publishing or deploying.|"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    472,
+    367,
+    392
+   ],
+   [
+    "replace",
+    472,
+    473,
+    392,
+    393,
+    [
+     "#### Dependabot (`dependabot.yml`)"
+    ]
+   ],
+   [
+    "equal",
+    473,
+    478,
+    393,
+    398
+   ],
+   [
+    "replace",
+    478,
+    479,
+    398,
+    399,
+    [
+     "Gate summary, in order: (1) all five CI jobs pass; (2) CI succeeds on a `main` push, which unlocks the CD `image` job; (3) the image passes the Trivy scan before it is pushed; (4) the deploy job requires `OCI_DEPLOY_ENABLED=true` plus `production` environment approval; (5) `deploy.sh` passes its health check and smoke test or automatically rolls back. Setup for the environment, secrets, and enable variable is in the Operations Runbook."
+    ]
+   ],
+   [
+    "equal",
+    479,
+    490,
+    399,
+    410
+   ],
+   [
+    "replace",
+    490,
+    491,
+    410,
+    411,
+    [
+     "`scripts/deploy.sh` already does the deploy step by hand: it backs up the database, starts the new image, runs a smoke test (readiness, login, authenticated read, anonymous rejection), and restarts the previous image if anything fails. Flyway migrations are forward-only, so database recovery uses `scripts/restore.sh`. `backup.sh` and `seed-demo.sh` cover backups and demo data. The pipeline stages, environments, rollback, and monitoring are in CI/CD and DevOps; first deploy, manual update, restore, and automation setup are in the Operations Runbook."
+    ]
+   ],
+   [
+    "equal",
+    491,
+    494,
+    411,
+    414
+   ],
+   [
+    "replace",
+    494,
+    495,
+    414,
+    415,
+    [
+     "On a provisioned VM, use `scripts/deploy.sh` for a manual release or the runbook's update procedure for a rollback. If a release applied a bad database migration, restore the pre-deploy backup; an application image rollback cannot reverse Flyway migrations."
+    ]
+   ],
+   [
+    "equal",
+    495,
+    500,
+    415,
+    420
+   ],
+   [
+    "replace",
+    500,
+    501,
+    420,
+    421,
+    [
+     "Run `./mvnw verify` for unit/MVC tests and the 80% line-coverage gate. Run `./mvnw -Pintegration -DskipUTs -Djacoco.haltOnFailure=false verify` for the PostgreSQL suite (unit tests run once, in the first command); it needs Docker and a test-only `LIBRO_ADMIN_PASSWORD_HASH` in the shell environment, because Maven does not load Compose's `.env`. On Windows, use `mvnw.cmd`. The Engineering Reference explains test scope and where to add coverage."
+    ]
+   ],
+   [
+    "equal",
+    501,
+    502,
+    421,
+    422
+   ],
+   [
+    "replace",
+    502,
+    503,
+    422,
+    423,
+    [
+     "The web UI under `ui/` covers sign-in and registration, the catalog, borrowing and returning, My Account, and the staff dashboard, loans, inventory, accounts, audit log, status, version, and release history (see the Web UI guide). Start the API, then run `npm ci` and `npm run dev` from `ui/`; Vite proxies the API routes. Run `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` for its local checks. `npm run test:e2e` runs one Playwright journey (register, sign in, search, borrow, return, and a staff lost-resolution) against a running API and a staff login set in `E2E_STAFF_ID` and `E2E_STAFF_PASSWORD`; it writes to the database, so use a disposable one. With API docs enabled, `npm run gen:api` refreshes the checked-in TypeScript contract."
+    ]
+   ],
+   [
+    "equal",
+    503,
+    506,
+    423,
+    426
+   ],
+   [
+    "replace",
+    506,
+    519,
+    426,
+    439,
+    [
+     "|Start here for|Document|",
+     "|---|---|",
+     "|System design, flows, and data model|Architecture|",
+     "|Current repository map, API inventory, configuration, and tests|Engineering Reference|",
+     "|The web UI: pages, roles, build, tests, and delivery|Web UI guide|",
+     "|Running and configuring a local stack|Local Setup|",
+     "|Public patron logins and private staff-account policy|Demo Accounts|",
+     "|Physical-copy and loan decisions|Domain Decisions and Loan Implementation Guide|",
+     "|Role boundaries and authentication internals|Roles and JWT Guide and JWT Authentication Design|",
+     "|API documentation conventions|API Documentation Guideline|",
+     "|Pipeline, infrastructure, and recovery|CI/CD and DevOps and Operations Runbook|",
+     "|Engineering choices and institutional domain|Development Problems Solved and Institutional Context|",
+     "|Remaining work and contribution rules|Development Roadmap and Agent and Contributor Guide|"
+    ]
+   ],
+   [
+    "equal",
+    519,
+    526,
+    439,
+    446
+   ],
+   [
+    "replace",
+    526,
+    535,
+    446,
+    447,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    535,
+    537,
+    447,
+    449
+   ],
+   [
+    "replace",
+    537,
+    538,
+    449,
+    450,
+    [
+     "Start with Architecture and Reference for how the system works, the Engineering Reference for contracts and configuration, and Development Problems Solved for the engineering decisions behind it. Institutional Context explains the ASU-CCS user domain."
+    ]
+   ],
+   [
+    "equal",
+    538,
+    540,
+    450,
+    452
+   ],
+   [
+    "replace",
+    540,
+    543,
+    452,
+    453,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    543,
+    545,
+    453,
+    455
+   ],
+   [
+    "replace",
+    545,
+    554,
+    455,
+    464,
+    [
+     "|Area|State|",
+     "|---|---|",
+     "|Catalog, accounts, roles, JWT authentication, loans|Implemented and covered by unit, MVC, and PostgreSQL tests|",
+     "|CI (`unit-test`, `integration-test`, `security-scan`, `ui-test`, `e2e-test`)|Running on every pull request and push to `main`; all five checks are required by branch protection on `main`|",
+     "|Container image and Compose stack|Implemented, with health checks|",
+     "|Deploy, rollback, backup, and smoke-test scripts; runbook|Implemented and rehearsed locally|",
+     "|CD workflow (ARM64 build, scan, publish, gated deploy)|Implemented; deploy job off until the VM exists|",
+     "|Production VM|Not provisioned; see the Operations Runbook and Roadmap|",
+     "|Open items|TLS with a real domain, login-failure and rate-limit alerts, and an independent security review before public exposure|"
+    ]
+   ],
+   [
+    "equal",
+    554,
+    555,
+    464,
+    465
+   ],
+   [
+    "replace",
+    555,
+    556,
+    465,
+    466,
+    [
+     "The Development Roadmap tracks the detail."
+    ]
+   ],
+   [
+    "equal",
+    556,
+    558,
+    466,
+    468
+   ],
+   [
+    "replace",
+    558,
+    560,
+    468,
+    469,
+    [
+     "This project is licensed under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "1926a51edddc+2": {
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Awesome Free Dev Tools"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    11,
+    4,
+    9,
+    [
+     "Total Tools",
+     "Online",
+     "Offline",
+     "Auto Update",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    18,
+    9,
+    16
+   ],
+   [
+    "replace",
+    18,
+    19,
+    16,
+    17,
+    [
+     "|Metric|Value|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    17,
+    18
+   ],
+   [
+    "replace",
+    20,
+    26,
+    18,
+    22,
+    [
+     "|Total Tools|55|",
+     "|🟢 Online|55|",
+     "|🔴 Offline|0|",
+     "|Last Updated|11/13/2026, 11:36:03 AM (GMT+7)|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    22,
+    25
+   ],
+   [
+    "replace",
+    29,
+    47,
+    25,
+    26,
+    [
+     "（目录 16 行略）"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    26,
+    29
+   ],
+   [
+    "replace",
+    50,
+    182,
+    29,
+    33,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    33,
+    34
+   ],
+   [
+    "replace",
+    183,
+    184,
+    34,
+    133,
+    [
+     " Qoder ",
+     " Agentic coding platform with autonomous development ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Cursor ",
+     " AI coding agent and software development environment ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Devin (Windsurf) ",
+     " Agentic IDE with Devin cloud agent built-in ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Zed ",
+     " Open-source code editor with agentic editing ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " TraeCode ",
+     " AI coding engineer with IDE and SOLO modes ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Firebase Studio ",
+     " Agentic cloud-based development environment with Gemini ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Google Antigravity ",
+     " Agentic development platform with local and cloud agents ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Kilo Code ",
+     " Open-source AI coding agent for VS Code, JetBrains, CLI ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Cline ",
+     " Open-source coding agent in IDE and terminal ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Continue ",
+     " Open-source AI code agent for VS Code and JetBrains ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Roo Code ",
+     " AI-powered dev team in VS Code (archived) ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " GitHub Copilot ",
+     " AI pair programmer with agent mode ",
+     " Freemium ",
+     " 🟢 ",
+     "",
+     " Amazon Q Developer ",
+     " AWS AI coding assistant with agentic capabilities ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Tabnine ",
+     " Enterprise AI coding assistant (acquired by Tricentis, now AI Workspace) ",
+     " Enterprise ",
+     " 🟢 ",
+     "",
+     " Claude Code ",
+     " Agentic coding tool in terminal, IDE, desktop, browser ",
+     " BYOK ",
+     " 🟢 ",
+     "",
+     " Gemini CLI ",
+     " Open-source AI agent with Gemini in terminal ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " OpenAI Codex CLI ",
+     " Lightweight coding agent from OpenAI for terminal ",
+     " BYOK ",
+     " 🟢 ",
+     "",
+     " Aider ",
+     " AI pair programming in terminal with git integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " OpenCode ",
+     " Open-source AI coding agent for terminal, IDE, desktop ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " Goose ",
+     " Open-source AI agent for code, workflows, automation ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    184,
+    187,
+    133,
+    136
+   ],
+   [
+    "replace",
+    187,
+    205,
+    136,
+    140,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    140,
+    141
+   ],
+   [
+    "replace",
+    206,
+    207,
+    141,
+    145,
+    [
+     " Hugging Face ",
+     " AI models, datasets, and Spaces hosting ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    207,
+    210,
+    145,
+    148
+   ],
+   [
+    "replace",
+    210,
+    240,
+    148,
+    152,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    152,
+    153
+   ],
+   [
+    "replace",
+    241,
+    242,
+    153,
+    167,
+    [
+     " Render ",
+     " Application hosting (Web, Worker, Cron) ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Vercel ",
+     " Frontend cloud platform with serverless functions ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Shipvela ",
+     " Publish React, Vite and static sites from GitHub or a CLI; custom domains and managed HTTPS ",
+     " Free Tier: 3 projects, 20 publishes/month ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    242,
+    245,
+    167,
+    170
+   ],
+   [
+    "replace",
+    245,
+    299,
+    170,
+    174,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    174,
+    175
+   ],
+   [
+    "replace",
+    300,
+    301,
+    175,
+    209,
+    [
+     " Supabase ",
+     " PostgreSQL and backend services (Auth, Storage, Realtime) ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Neon ",
+     " Serverless PostgreSQL ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Firebase ",
+     " Authentication and cloud services ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Cloudflare D1 ",
+     " Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Turso ",
+     " Serverless SQLite database with edge replication ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Prisma ",
+     " Type-safe ORM for TypeScript and Node.js ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " DBeaver Community ",
+     " Connect to and manage multiple SQL and NoSQL databases with a graphical interface, SQL editor, and data browser ",
+     " Free: Open Source (Apache-2.0); commercial editions available ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    301,
+    304,
+    209,
+    212
+   ],
+   [
+    "replace",
+    304,
+    340,
+    212,
+    216,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    340,
+    341,
+    216,
+    217
+   ],
+   [
+    "replace",
+    341,
+    342,
+    217,
+    236,
+    [
+     " Webhook.site ",
+     " Instant webhook testing and debugging ",
+     " Free ",
+     " 🟢 ",
+     "",
+     " Agent QA ",
+     " Natural-language web and mobile regression testing with execution memory, CLI and MCP tools ",
+     " Free package; configured model, browser or device costs may apply ",
+     " 🟢 ",
+     "",
+     " Bruno ",
+     " Open-source API client for creating, testing, and organizing API requests with collections stored directly in Git ",
+     " Free: Open Source (MIT); paid plans available for additional features ",
+     " 🟢 ",
+     "",
+     " Mockoon ",
+     " Create and run mock REST APIs locally to develop and test frontend applications without a live backend ",
+     " Free: Open Source (MIT); paid plans available for team and cloud features ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    342,
+    345,
+    236,
+    239
+   ],
+   [
+    "replace",
+    345,
+    369,
+    239,
+    243,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    369,
+    370,
+    243,
+    244
+   ],
+   [
+    "replace",
+    370,
+    371,
+    244,
+    253,
+    [
+     " Dockhand ",
+     " Docker management ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " Uptime Kuma ",
+     " Self-hosted monitoring dashboard for websites, APIs, servers, and network services with notifications when services become unavailable ",
+     " Free: Open Source (MIT); self-hosted ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    371,
+    374,
+    253,
+    256
+   ],
+   [
+    "replace",
+    374,
+    392,
+    256,
+    260,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    260,
+    261
+   ],
+   [
+    "replace",
+    393,
+    394,
+    261,
+    265,
+    [
+     " Resend ",
+     " Transactional email for developers ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    394,
+    397,
+    265,
+    268
+   ],
+   [
+    "replace",
+    397,
+    415,
+    268,
+    272,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    415,
+    416,
+    272,
+    273
+   ],
+   [
+    "replace",
+    416,
+    417,
+    273,
+    277,
+    [
+     " Synology ",
+     " NAS for file and backup storage ",
+     " Paid ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    417,
+    420,
+    277,
+    280
+   ],
+   [
+    "replace",
+    420,
+    438,
+    280,
+    284,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    438,
+    439,
+    284,
+    285
+   ],
+   [
+    "replace",
+    439,
+    440,
+    285,
+    289,
+    [
+     " SePay ",
+     " Payment integration (VietQR & Banking) ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    440,
+    443,
+    289,
+    292
+   ],
+   [
+    "replace",
+    443,
+    461,
+    292,
+    296,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    461,
+    462,
+    296,
+    297
+   ],
+   [
+    "replace",
+    462,
+    463,
+    297,
+    301,
+    [
+     " Notion ",
+     " Documentation, planning and notes ",
+     " Free Tier ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    463,
+    466,
+    301,
+    304
+   ],
+   [
+    "replace",
+    466,
+    484,
+    304,
+    308,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    484,
+    485,
+    308,
+    309
+   ],
+   [
+    "replace",
+    485,
+    486,
+    309,
+    313,
+    [
+     " Gravatar ",
+     " Globally Recognized User Avatars ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    486,
+    489,
+    313,
+    316
+   ],
+   [
+    "replace",
+    489,
+    513,
+    316,
+    320,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    513,
+    514,
+    320,
+    321
+   ],
+   [
+    "replace",
+    514,
+    515,
+    321,
+    330,
+    [
+     " Google reCAPTCHA ",
+     " Anti-bot protection ",
+     " Free ",
+     " 🟢 ",
+     "",
+     " Tailscale ",
+     " Connect personal devices, development machines, and self-hosted services through a secure private network without complex VPN configuration ",
+     " Free Personal plan available; usage and user limits apply ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    515,
+    518,
+    330,
+    333
+   ],
+   [
+    "replace",
+    518,
+    536,
+    333,
+    337,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    536,
+    537,
+    337,
+    338
+   ],
+   [
+    "replace",
+    537,
+    538,
+    338,
+    342,
+    [
+     " Home Assistant ",
+     " Smart Home automation ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    538,
+    541,
+    342,
+    345
+   ],
+   [
+    "replace",
+    541,
+    595,
+    345,
+    349,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    595,
+    596,
+    349,
+    350
+   ],
+   [
+    "replace",
+    596,
+    597,
+    350,
+    384,
+    [
+     " FacebookBot ",
+     " Facebook automation bot ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " fb-messenger-bot ",
+     " Facebook Messenger bot template ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " messenger-bot ",
+     " Facebook Messenger bot implementation ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " MetaBot ",
+     " Meta (Facebook) bot for automation ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " meta-ai-agent ",
+     " Meta AI agent integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " instagram-mcp ",
+     " Instagram MCP (Model Context Protocol) integration ",
+     " Open Source ",
+     " 🟢 ",
+     "",
+     " messenger-platform-samples ",
+     " Official Facebook Messenger platform samples ",
+     " Open Source ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    597,
+    600,
+    384,
+    387
+   ],
+   [
+    "replace",
+    600,
+    624,
+    387,
+    391,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    624,
+    625,
+    391,
+    392
+   ],
+   [
+    "replace",
+    625,
+    626,
+    392,
+    401,
+    [
+     " Cloudinary ",
+     " Image/Video storage and on-the-fly optimization ",
+     " Free Tier ",
+     " 🟢 ",
+     "",
+     " PicCollages ",
+     " Compress multiple JPG, PNG and WebP images in the browser; adjust output quality and download images individually or as a ZIP ",
+     " Free: No account required ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    626,
+    629,
+    401,
+    404
+   ],
+   [
+    "replace",
+    629,
+    647,
+    404,
+    408,
+    [
+     " Tool & Link ",
+     " Purpose ",
+     " Pricing ",
+     " Status "
+    ]
+   ],
+   [
+    "equal",
+    647,
+    648,
+    408,
+    409
+   ],
+   [
+    "replace",
+    648,
+    649,
+    409,
+    413,
+    [
+     " UI.RIP ",
+     " Clone/recreate web UI elements ",
+     " Free ",
+     " 🟢 "
+    ]
+   ],
+   [
+    "equal",
+    649,
+    655,
+    413,
+    419
+   ],
+   [
+    "replace",
+    655,
+    656,
+    419,
+    420,
+    [
+     "- All contributions welcome via PR at GitHub."
+    ]
+   ],
+   [
+    "equal",
+    656,
+    657,
+    420,
+    421
+   ],
+   [
+    "replace",
+    657,
+    658,
+    421,
+    422,
+    [
+     " Made with 💜 by the Awesome Free Dev Tools community"
+    ]
+   ],
+   [
+    "equal",
+    658,
+    659,
+    422,
+    423
+   ],
+   [
+    "replace",
+    659,
+    666,
+    423,
+    424,
+    [
+     " 🕐 Last updated: 11/13/2026, 11:36:03 AM"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

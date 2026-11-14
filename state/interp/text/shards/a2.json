@@ -2990,5 +2990,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f65171df0ffd": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 上下文层，索引代码仓库并按需返回相关上下文。",
+   "review": "该工具为 AI 编码代理提供本地私有上下文层：通过 Python 索引器配合 tree-sitter 建立代码分块、符号、调用/导入图和文档索引，用 Qdrant 与 PostgreSQL 存储，经 StreamableHTTP 上的 MCP 提供语义搜索、文件切片、影响分析等工具。检索路径中不包含 LLM。依赖 Docker、mise、Python 3.12，通过 mise 任务启动，支持 lmstudio/omlx/ollama 等本地模型生成文件摘要。需注意：若连接的代理使用云端模型，返回的代码片段仍会发送给该模型提供商。",
+   "highlights": [
+    "提供 repo_structure、semantic_search、get_file、analyze_impact、resolve_symbol 五个 MCP 工具，另在 /mcp-admin 提供操作员专用工具",
+    "结合 tree-sitter 符号索引、标识符快速路径、混合向量搜索与 ColBERT 重排序，附带调用/导入图分析",
+    "文件监听器（2 秒防抖）加启动时 SHA 差量对账维护索引；索引、嵌入、重排序与向量搜索均在本地运行"
+   ],
+   "use_cases": [
+    "为支持 StreamableHTTP MCP 的客户端（如 GitHub Copilot 插件、JetBrains AI Assistant、Crush）提供仓库上下文检索",
+    "希望检索与嵌入流程不出本机的开发环境",
+    "通过调用图分析查询/被调用方及可能覆盖的测试，评估代码变更影响范围"
+   ]
+  },
+  "sha": "f65171df0ffd",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

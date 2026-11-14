@@ -3150,5 +3150,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "af2135327a50": {
+  "identity": {
+   "one_liner": "EF Core 悲观锁扩展库，提供行级锁与分布式咨询锁",
+   "review": "EntityFrameworkCore.Locking 为 EF Core 提供悲观锁定能力：通过 ForUpdate()/ForShare() LINQ 扩展实现行级锁（需活动事务），并通过 AcquireDistributedLockAsync() 提供基于咨询锁的跨进程分布式锁，支持 PostgreSQL、MySQL 和 SQL Server 三个提供程序，按数据库分别安装对应 NuGet 包并在 Use*() 后调用 .UseLocking() 启用。README 详细说明了各数据库的原生锁原语映射、PostgreSQL 专属锁模式、超时/取消行为及异常处理规则。",
+   "highlights": [
+    "提供 ForUpdate()/ForShare() 等 LINQ 扩展生成 FOR UPDATE、SKIP LOCKED 等原生 SQL 行级锁",
+    "提供会话级与事务级（仅 PostgreSQL/SQL Server）分布式咨询锁，支持共享/独占模式与超时设置",
+    "锁行为按提供程序映射到原生原语：pg_advisory_lock、GET_LOCK、sp_getapplock"
+   ],
+   "use_cases": [
+    "多消费者竞争认领任务的队列处理（SkipLocked 行为）",
+    "跨进程协调任务（如定时任务/资源处理）的分布式锁场景",
+    "保护读-检查-写序列直到事务提交或回滚的事务级锁定"
+   ]
+  },
+  "sha": "af2135327a50",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

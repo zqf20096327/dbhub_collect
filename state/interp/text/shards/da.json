@@ -3173,5 +3173,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e2ed2b5b6b48": {
+  "identity": {
+   "one_liner": "Rust 实现的 Kafka 协议兼容事件流平台，内置 SQL、全文检索与向量查询",
+   "review": "Chronik Stream 是一个使用 Rust 编写的事件数据平台，实现 Kafka 线协议（24 个 API），事件写入后可在同一系统内通过 SQL（DataFusion + Arrow/Parquet）、全文检索（Tantivy BM25）和向量检索（HNSW）查询。功能按 topic 配置启用，索引在写入确认后异步进行；索引可用存在延迟（全文检索 30-60 秒）。支持 3 节点以上 Raft 集群。适用于需要同时消费与多方式查询事件流的团队。",
+   "highlights": [
+    "实现 Kafka 线协议 24 个 API，可使用现有 Kafka 客户端读写",
+    "按 topic 启用 SQL、全文检索（Tantivy BM25）、向量检索（HNSW）能力，索引异步执行",
+    "支持 Raft 共识的多节点集群，提供添加节点的运维命令，支持 S3/GCS/Azure 分层存储"
+   ],
+   "use_cases": [
+    "通过 Kafka 协议写入事件并用 SQL 做即时聚合查询",
+    "日志、工单等文本事件写入后进行全文检索",
+    "事件数据自动生成向量索引，用于语义检索场景"
+   ]
+  },
+  "sha": "e2ed2b5b6b48",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7a56947c765b": {
+  "identity": {
+   "one_liner": "运行于编码代理与 Git 之间的事务层 Go 二进制，强制沙箱、AST 校验与原子合并。",
+   "review": "Nomos 是一个约 20 MB 的静态 Go 单二进制（Apache 2.0），插入编码代理与 Git 之间：任务在隔离的 git worktree 中执行，main 保持物理只读，合并前须通过 42 项多语言 AST 门禁和两阶段提交，并以 Git Notes 记录审计回执。通过 curl 安装脚本和 nomos init 两步接入，支持 Claude Code、Cursor、Gemini CLI 等代理的钩子接入。",
+   "highlights": [
+    "提供 git worktree 隔离沙箱、INT/SUB 规约-实现分离状态机和两阶段提交原子合并",
+    "支持跨 Go、TypeScript、Python、Rust 等 11 种语言的 42 项 AST 检查，含跳过测试与空桩检测",
+    "包含基于 SQLite 的本地记忆库、pre-tool 安全钩子以及对多种编码代理的钩子自动安装"
+   ],
+   "use_cases": [
+    "需要限制编码代理直接提交 main 的仓库治理流程",
+    "在遗留代码库上运行代理任务并约束新增复杂度",
+    "阻止代理读取本地凭证文件或声称虚假测试结果的 CI/本地流水线"
+   ]
+  },
+  "sha": "7a56947c765b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

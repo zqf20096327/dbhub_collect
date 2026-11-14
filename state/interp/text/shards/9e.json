@@ -3063,5 +3063,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "12dcf36b60ce": {
+  "identity": {
+   "one_liner": "单二进制加 PostgreSQL 的自托管 Web 媒体服务器，基于 Go 与 React 实现。",
+   "review": "LMBY 是一个自托管媒体服务器，部署物为一个 Go 二进制和一个 PostgreSQL 16+ 数据库（须 UTF8 编码），前端为 React + TypeScript 且运行期不含 Node。它提供浏览器播放、媒体库扫描、TMDB 刮削、ffmpeg 转码与直播电视，明确不做 DLNA、专有客户端协议、插件系统和音乐库。可通过 Docker、手动编译或 systemd 部署，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "播放决策引擎按直出（HTTP Range）、转封装 HLS、转码三级判断，并展示播放理由；字幕按 ASS 走 libass、纯文本转 WebVTT、图形字幕烧录三种形态处理",
+    "硬件转码能力通过启动时实跑 ffmpeg 编码小样探测并落盘缓存，支持 VAAPI / QSV / NVENC / VideoToolbox 及软件回退；直播电视每频道共享单路 ffmpeg 会话",
+    "元数据以本地 nfo 与图片优先，缺省时经 TMDB provider 刮削并配合打分器与人工匹配队列；扫描支持多根路径、增量指纹与移动识别"
+   ],
+   "use_cases": [
+    "在浏览器中观看本地的电影与剧集库，含续播、进度与继续观看记录",
+    "部署到带核显或显卡的机器上进行硬件转码播放",
+    "通过 M3U 订阅源在浏览器中收看 IPTV 直播频道"
+   ]
+  },
+  "sha": "12dcf36b60ce",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0031df653132": {
+  "identity": {
+   "one_liner": "自托管的多LLM上下文中间件：版本化、可评审的上下文仓库，按步骤组合、按模型路由。",
+   "review": "Cohereny 将系统提示、领域知识、工具模式等上下文存于团队共享的版本化仓库，经评审生效，运行时按工作流步骤组合并发送给路由规则选定的模型。技术栈为 FastAPI、PostgreSQL、Redis、LiteLLM，通过 Docker Compose 一键部署，含双人审批、审计日志、占位符替换等治理机制。项目未达 1.0，API 不稳定，不适合生产使用。",
+   "highlights": [
+    "提供版本化上下文块仓库，含评审生命周期、按作用域审批及隐私棘轮（深层作用域只能收紧继承的隐私规则）",
+    "工作流运行器支持图定义、分支/连接、受限循环、human_review 门控与每步 JSON Schema 校验",
+    "每次模型调用前替换邮箱、电话、IBAN 等标识符为占位符，映射按运行加密存储，回溯操作记入审计日志"
+   ],
+   "use_cases": [
+    "多步骤、多模型 LLM 工作流需要集中管理并按步骤组合提示与上下文",
+    "需要双人审批、审计追踪、数据保留策略等治理要求的场景（如受监管行业的内部系统）",
+    "团队希望将个人积累的提示与领域知识沉淀为共享、经评审的仓库"
+   ]
+  },
+  "sha": "0031df653132",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

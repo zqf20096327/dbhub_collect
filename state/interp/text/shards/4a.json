@@ -2932,5 +2932,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d3965124278d": {
+  "identity": {
+   "one_liner": "自托管多用户多智能体AI助手平台，单进程整合Web、CLI与IM渠道。",
+   "review": "Octop是腾讯开源的自托管AI助手平台，面向家庭与小团队，通过octop run单进程提供Web控制台、CLI、IM渠道（飞书、钉钉、Telegram等）和cron定时任务，数据存储于~/.octop/。支持多专家切换、AgentTeams协作调度、RAG知识库、ACP双向集成及浏览器/远程桌面自动化；默认SQLite，可选PostgreSQL，需Python 3.12+（安装器用uv自动配置）。",
+   "highlights": [
+    "单进程运行Web控制台、CLI、八种以上IM渠道与cron自动化，状态由控制面数据库（SQLite/PostgreSQL）在启动时重建",
+    "每个专家拥有独立工作区、提供商、渠道和cron，工作区后端可选本地磁盘、Docker沙箱、PostgreSQL或COS/S3，内存随工作区迁移",
+    "内置安全机制：JWT多用户隔离、工具审批、shell命令防护与PII脱敏；通过OAuth与MCP网关接入腾讯文档、会议等连接器"
+   ],
+   "use_cases": [
+    "个人助理：撰写周报、整理笔记、管理日程，记忆随工作区持久化",
+    "家庭共享：一个管理员账户，为各成员分配不同专家，可共享专家与知识库",
+    "团队协作与开发：通过IM渠道路由任务到群聊，经ACP委派给OpenCode/Claude Code等编码代理，或用自然语言配置cron定时任务"
+   ]
+  },
+  "sha": "d3965124278d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e2c002a56d1": {
+  "identity": {
+   "one_liner": "在 Kubernetes 上以 CRD 声明式管理 DocumentDB 集群的运维组件",
+   "review": "该项目是 documentdb 的 Kubernetes Operator，通过扩展 CRD 以 Kubernetes 清单声明式部署、扩缩和管理 DocumentDB 集群，底层基于 CloudNative-PG 构建的 PostgreSQL，对外提供 MongoDB 兼容 API。面向在自有 Kubernetes 环境中运行 DocumentDB 的用户，通过 Helm（OCI 制品）安装，需要 Helm 3.8+，完整前置条件包括 cert-manager 与受支持的 Kubernetes 版本。",
+   "highlights": [
+    "通过 CRD 与 Kubernetes 控制器以声明式清单管理 DocumentDB 集群的部署、扩缩与生命周期",
+    "提供 MongoDB API 兼容接口，底层基于 CloudNative-PG 的 PostgreSQL",
+    "Helm Chart 以 OCI 制品发布至 GitHub Container Registry，支持 cert-manager 及自签名/提供证书等多种 TLS 模式"
+   ],
+   "use_cases": [
+    "在自建或云上 Kubernetes 集群（AKS、EKS 等）中部署和管理 DocumentDB 集群",
+    "需要 MongoDB 兼容 API 且希望以 Kubernetes 清单声明式运维的场景",
+    "跨云或 Azure 多区域的高可用部署（KubeFleet/Istio、AzureFleet 脚本）"
+   ]
+  },
+  "sha": "1e2c002a56d1",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "30170f039aea": {
+  "identity": {
+   "one_liner": "面向 Prisma 与 PostgreSQL 的 Vitest 测试环境，用事务回滚实现测试隔离",
+   "review": "该包为 Vitest 提供自定义测试环境，用于 Prisma + PostgreSQL 集成测试：测试运行开始时迁移并填充一次数据库，每个测试在独立事务中执行并在结束后回滚，应用层事务仍可正常运行。需 Node.js 20+、Vitest 4.1+、Prisma 7.x 及 @prisma/adapter-pg，通过 DATABASE_URL 提供测试库连接，支持 vmThreads 池以外的并发限制要求。",
+   "highlights": [
+    "提供 Vitest 自定义测试环境，通过 setup 文件在每个测试外启动并回滚数据库事务",
+    "支持使用自定义 Prisma client 工厂与 Prisma 扩展（经 hooks 注册）",
+    "提供全局类型声明 prismaPostgresTestContext，需加入 tsconfig 的 compilerOptions.types"
+   ],
+   "use_cases": [
+    "为使用 Prisma 的 Node.js 项目编写 PostgreSQL 集成测试，避免每个测试前重新填充数据",
+    "测试数据库可指向本地 Postgres、docker-compose 容器、Testcontainers 实例或 Supabase / Prisma Postgres 等云托管实例",
+    "在应用代码使用 Prisma 扩展或自定义 client 工厂时保留现有 Vitest 环境（node/jsdom）并接入回滚钩子"
+   ]
+  },
+  "sha": "30170f039aea",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3688bf858aeb": {
+  "identity": {
+   "one_liner": "面向 Omarchy 的 Rust 应用开发套件与应用沙箱打包安装工具集",
+   "review": "ODK 提供一个 `odk` crate，用 Rust 构建带 Rune 界面、内嵌 Luau 插件机的应用，界面跟随用户 Omarchy 主题；OMA 定义 `.oma` 打包格式，`oma` 程序负责校验、安装、沙箱并启动应用。仅面向 Arch Linux + Hyprland + Wayland 环境，当前为预发布版本（0.0.0），使用 Stable Rust，仅支持 Linux x86_64。MIT 许可。",
+   "highlights": [
+    "提供单一 `odk` crate，包含 gpui 界面组件与内嵌 Luau 插件机",
+    "提供 `.oma` 打包格式与 `oma` 命令，用于校验、安装、沙箱并启动应用",
+    "安装到用户主目录，无需 root，提供 `tools/headless-shot`、`tools/idle-cpu` 等开发工具"
+   ],
+   "use_cases": [
+    "为 Omarchy 桌面环境开发主题一致的 Rust 应用",
+    "将应用打包为 `.oma` 格式并在沙箱中安装运行",
+    "通过 stories 与 headless 工具无窗口地预览和测试组件"
+   ]
+  },
+  "sha": "3688bf858aeb",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "84f3214aee71": {
+  "identity": {
+   "one_liner": "本地优先的自主科研平台，用确定性质量门与引用溯源管理多智能体研究循环",
+   "review": "SciFlow 是一个本地优先的科研平台，运行自主研究循环（程序→假设→协议→运行→主张→证据）与稿件流水线，PI、实验者、批评者、专家审稿为独立 LLM 智能体，协议执行前须通过人工或专家智能体批准。质量门基于规则评分，引用锚点可逐级溯源至参考文献行。需 Node ≥20 与 pnpm，支持 API key 或 AI_MOCK 无密钥运行，Python 沙箱非安全边界。",
+   "highlights": [
+    "七维规则化质量门评分带稳定指纹，同一文本得分一致，LLM 评分仅作参考",
+    "引用链路逐级可溯：每个 [n] 锚点解析到引用行再至参考文献行，按数量报告幽灵锚点、孤立条目、编号断裂与重复 DOI",
+    "基于 SQLite FTS5 + sqlite-vec 的混合检索（RRF 融合、MMR），支持 OpenAlex / Crossref / arXiv 搜索"
+   ],
+   "use_cases": [
+    "需要人工或专家智能体审批关卡的多智能体自主研究循环实验",
+    "带逐步检查点、重启安全的文献综述与稿件生成流水线",
+    "本地或桌面端（Electron）部署，或通过 headless CLI、Docker、JWT 共享部署运行"
+   ]
+  },
+  "sha": "84f3214aee71",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

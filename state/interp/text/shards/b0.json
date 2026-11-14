@@ -2762,5 +2762,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3a0fe30ea11a": {
+  "identity": {
+   "one_liner": "Strava MCP 服务器，SQLite 缓存 + 自动令牌刷新，基于 FastMCP",
+   "review": "strava-mcp-vault 是一个非官方的 Strava MCP 服务器，把活动、统计和流数据缓存进本地 SQLite 库，供 Claude Code 等 MCP 客户端查询运动数据。它采用 cache-aside 架构以减少 API 调用，令牌每 6 小时自动刷新，并通过 Docker 容器以 Streamable HTTP 方式运行，支持多设备访问；部署需先创建 Strava API 应用并用 login.py 完成 OAuth 授权。",
+   "highlights": [
+    "提供约 20 个 MCP 工具，覆盖活动查询、批量同步、缓存统计与本地库维护（check_vault/repair_vault/query_vault）",
+    "SQLite 缓存采用按工具区分的 TTL（1 小时至 7 天），支持分页批量导入完整活动历史",
+    "路线导出按 polyline 裁剪隐私区起点，照片导出剥离 EXIF 位置信息，仅发布 visibility 为 everyone 且经人工标记的地点"
+   ],
+   "use_cases": [
+    "让 MCP 客户端以自然语言查询 Strava 活动统计，缓存后可离线读取已同步数据",
+    "在家庭服务器或 VPS 上集中部署，供多台设备共享同一缓存库",
+    "整理并自托管公开骑行地点页面，导出经筛选的地点 JSON 与照片"
+   ]
+  },
+  "sha": "3a0fe30ea11a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51a2b77fec08": {
+  "identity": {
+   "one_liner": "基于 Arrow/Parquet/Iceberg 的 C++23 列式键值存储引擎，处于早期开发阶段",
+   "review": "GlamDB 是一个用 C++23 编写的开源列式存储引擎，将类型化记录写入 Parquet 文件，用 Apache Iceberg 管理快照，并以 SQLite 作为目录。它可作嵌入式 C++ 库使用，也提供 HTTP 服务器、浏览器工作台、CLI 客户端和 Python SDK。项目源自 ITMO 大学黑客松，处于早期开发阶段，不支持 SQL 查询接口、模式演进、对象存储与复制，且断电持久性认证尚未完成，不用于生产环境。",
+   "highlights": [
+    "支持追加型和显式键值两类集合，含整行 upsert、按键删除、快照批量查找与流式批量写入",
+    "持久化操作 ID 支持精确重试，写入区分已提交、确定未提交与未知三种结果",
+    "读取仅查询最新提交视图或保留的历史快照，扫描保守剪裁 Parquet 行组并只读所需列范围"
+   ],
+   "use_cases": [
+    "需要以嵌入式 C++ 库或 HTTP 服务方式存储带模式的类型化记录并进行谓词过滤扫描",
+    "需要查询保留的历史快照数据并结合 Arrow IPC/JSON 分页结果的应用",
+    "在断电持久性认证完成前，仅用于实验与评估而非生产环境的项目原型"
+   ]
+  },
+  "sha": "51a2b77fec08",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2555,5 +2555,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "09aee46f7195": {
+  "identity": {
+   "one_liner": "可调优的开源 text-to-SQL 引擎，含评测工具链",
+   "review": "mnemiq 是 Apache-2.0 的开源 text-to-SQL 引擎，用于在自己的数据库上以自然语言查询数据。它将问题到 SQL 之间的各环节（模型选择、检索范围、语义增强、拒绝阈值等）暴露为可配置项，并在执行前用确定性层校验只读、权限、方言编译和 EXPLAIN。评测框架按返回数据而非 SQL 字符串评分，并将正确、拒绝、错误分开统计。适用于需要在自有数据上评估和调优 NL2SQL 系统的团队。",
+   "highlights": [
+    "管道各阶段（模型、检索、语义分层增强、验证阈值、行列策略）均以配置文件形式开放，支持命名配置档案与 mnemiq sweep 参数扫描",
+    "查询须经确定性裁决层：只读检查、调用者权限、源方言编译与 EXPLAIN 验证，未通过则返回说明原因的拒绝",
+    "内置评测工具，按返回数据评分并分别报告正确/拒绝/错误三类结果，支持 BIRD、Spider 等公开基准；访问基于角色且 fail-closed，支持 OIDC 身份与 MCP over HTTP"
+   ],
+   "use_cases": [
+    "在自己业务的数据库上评估和调优自然语言查询系统",
+    "需要行/列级权限策略与审计追踪的数据问答部署",
+    "基于 DuckDB/Postgres/Oracle/Databricks 等数据源构建 MCP 服务暴露 NL2SQL 能力"
+   ]
+  },
+  "sha": "09aee46f7195",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "145042798c8a": {
+  "identity": {
+   "one_liner": "基于 Electron 与 Three.js 的 3D 方块风格本地笔记应用",
+   "review": "BlockNotes 是一个面向 Windows 的 3D 方块书房笔记应用，数据保存在本机 SQLite。用户通过书与笔写笔记、讲台阅读导入的 Word/PDF 资料、书架分类、箱子归档。固定主视角，无角色漫游。首次启动需联网从 Mojang 官方端点下载并校验 Java 1.21 资源，之后可离线使用；当前版本为 0.2.1 Windows x64，构建无代码签名。",
+   "highlights": [
+    "支持导入 Word .docx 和 PDF 资料，讲台提供只读翻页、目录、阅读位置记忆与划线",
+    "笔记数据保存在本机 SQLite，提供 JSON 导出备份、事务合并与大文件后台恢复",
+    "基于 Electron + Three.js 实现固定主视角 3D 书房，通过讲台、书架、箱子、唱片机等物体进入功能"
+   ],
+   "use_cases": [
+    "在 Windows 本机以方块风格界面记录、分类和检索中文富文本笔记",
+    "导入 Word/PDF 学习资料并配合摘录出处功能整理读书笔记，汇总导出 Word",
+    "从源码运行或构建桌面应用，需 Node.js 22.22+、npm 与 Git"
+   ]
+  },
+  "sha": "145042798c8a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

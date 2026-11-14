@@ -2820,5 +2820,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b1eda70790df": {
+  "identity": {
+   "one_liner": "基于 SQLite 的离线优先 LLM 长期记忆库，跨平台 TypeScript 包族。",
+   "review": "Core LLM Wiki 是一组跨平台 TypeScript 包，为 LLM 应用提供持久化记忆：将对话日志和文档转化为事实、任务和图边的结构化知识库，包含事实提取、语义搜索与记忆剪枝。开发者提供 generateText 与 embed 函数即可接入任意模型。提供 Expo、React、Node 及 MCP server 等多个包，数据存于自有 SQLite 表，支持 OKF v0.2 导入导出，MIT 许可。",
+   "highlights": [
+    "支持任意 LLM：只需提供一个 generateText 函数，库负责构建提示、解析 JSON 并写库，兼容 OpenAI、Gemini、Claude 或本地模型",
+    "数据存于自身 SQLite 数据库的前缀表（默认 llm_wiki_），无需向量数据库或图数据库；语义搜索断网时回退到进程内关键词搜索",
+    "内置 GraphRAG 与多实体记忆：可选种子本体生成类型化边，traverseGraph() 用递归 SQL 遍历；单库可承载多个独立实体并加权读取"
+   ],
+   "use_cases": [
+    "为 Expo/React Native 移动应用或 Node 服务添加持久化用户记忆（读写示例约三行代码）",
+    "需要事实溯源与信任控制的场景：文档事实防改写、草稿审核、可选 grounding 检查、GDPR 删除",
+    "通过 MCP server（@equationalapplications/mcp-server）为编码代理提供 SynapseTree 记忆，或用 prisma-outbox 同步事件到服务端数据库"
+   ]
+  },
+  "sha": "b1eda70790df",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "142369931582": {
+  "identity": {
+   "one_liner": "纯 Rust 单二进制的本地 MCP 记忆服务器，采用混合检索与时间知识图",
+   "review": "MemoryPilot 是一个 MCP 记忆服务器，为 AI 编码助手提供跨会话的持久化、可检索记忆。README 说明其核心机制包括混合检索（BM25 + jina 嵌入 + 交叉编码器重排）、时间知识图、AAAK 压缩与自动分类；以 Rust 单二进制运行，无运行时依赖，无外部 API 调用。README 提到基准分数均为各项目自发布、未经独立复现，且端到端问答准确率尚未测得。",
+   "highlights": [
+    "支持 BM25 与 jina-embeddings-v5 的 RRF 混合检索及交叉编码器自适应重排（可经 MEMORYPILOT_CROSS_RERANK 关闭）",
+    "包含时间知识图、GraphRAG、记忆自动分类、自动压缩及带签名的自动更新",
+    "纯 Rust 单二进制，全本地运行，无外部 API 调用，并附 LongMemEval-S 与自建法语基准脚本"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Desktop、VS Code、Windsurf 等支持 MCP 的客户端提供跨会话记忆检索",
+    "需要在本地以模糊描述查找过往 Cursor 或 Claude 对话记录",
+    "对多语言记忆检索（README 覆盖 100+ 语言）及时间性查询（日期窗口加权）有需求的场景"
+   ]
+  },
+  "sha": "142369931582",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6a947c0cff3e": {
+  "identity": {
+   "one_liner": "seekdb 的第三方依赖源码引用、构建配方与补丁仓库",
+   "review": "该仓库为 seekdb 维护固定版本的第三方依赖：每个包版本置于 packages/<name>/<version>/ 下，包含仅描述包特定构建与文件选择的配方及有序补丁；共享的下载、校验、打包逻辑由 scripts/ 提供。工具链要求 Python 3.8+、CMake 3.22.1+ 与 Ninja，产物 manifest.json 记录源版本、补丁摘要与构建环境用于溯源。注意仅 zlib 的 Linux x86_64 配置有构建记录，其余平台配置尚未构建。",
+   "highlights": [
+    "按 packages/<name>/<version>/ 组织包配方与补丁，配方通过 RecipeContext.cmake、ctx.run、ctx.install 声明构建流程",
+    "打包时校验源码 SHA256，产物附带 .sha256 校验文件与记录构建环境、补丁摘要、逐文件哈希的 manifest.json",
+    "支持 --kind source 生成含源码、配方与运行器的离线源码包，提取后无需网络即可构建二进制包"
+   ],
+   "use_cases": [
+    "为 seekdb 在 Linux/macOS/Windows/Android 等目标配置下构建 zlib、jemalloc 等固定版本依赖",
+    "生成可离线复现构建的源码包，交付到无网络环境编译二进制依赖",
+    "需要依赖构建溯源信息（编译器版本、补丁摘要、逐文件哈希）的场景"
+   ]
+  },
+  "sha": "6a947c0cff3e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b7a924bb63cf": {
+  "identity": {
+   "one_liner": "把 Oracle/MySQL 的 SQL 改写成达梦（DM8）写法的纯前端静态站点",
+   "review": "该工具基于 49 条规则（Oracle 24 条、MySQL 25 条）将 Oracle/MySQL 的 SQL 与建表语句改写为达梦（DM8）写法，并逐条标注改动原因与风险等级。规则以 JS 对象形式写在 rules.js 中，可按需追加。它不连接数据库、不执行 SQL，存储过程、触发器、动态 SQL 仅提示不改写，结果需人工在目标库验证。",
+   "highlights": [
+    "内置 49 条改写规则（Oracle 24 + MySQL 25），6 类高频写法仅给建议写法、不自动应用",
+    "逐条输出「改了什么、为什么改、风险几级」，advice 类规则只记录问题与建议",
+    "纯前端运行，双击 index.html 即可使用，规则通过在 rules.js 的 RULES 数组追加对象来扩展"
+   ],
+   "use_cases": [
+    "需要把 Oracle 或 MySQL 的 SQL/建表语句改写为达梦（DM8）可执行写法时逐条核对改动与风险",
+    "在离线或无后端环境中本地运行 SQL 改写检查（无需 Node、构建或联网）",
+    "按项目高频场景扩展自定义改写规则（编辑 rules.js 即可）"
+   ]
+  },
+  "sha": "b7a924bb63cf",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

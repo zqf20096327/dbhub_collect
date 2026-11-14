@@ -3091,5 +3091,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d7956a3d9120": {
+  "identity": {
+   "one_liner": "单机自托管的智能体长期记忆服务，基于 FastAPI 与自研 SQLite 内核",
+   "review": "aiduMEI 是运行在本机的 AI 智能体长期记忆服务（Python/FastAPI，MIT 许可）。它通过钩子接入 Claude Code、Codex CLI、Hermes 等宿主：对话前注入相关记忆，对话后写入，会话结束提炼精华。f0.7 起内核从 mem0 换成单库 SQLite native 内核，数据全部落在本地数据目录，支持备份、恢复与墓碑机制。需要 Python 3.10–3.12。",
+   "highlights": [
+    "native 单库内核将正文、FTS5 全文索引、向量、历史、墓碑写入同一 memory.db，检索用 bm25 与向量余弦两路 RRF 融合，未配置嵌入时仅走全文检索",
+    "提供 cloud/auto/local 三种引擎挡位，local 挡零外呼、零 token；提供 /add /search /delete 等 REST 接口与含 6 个工具的 MCP Server",
+    "支持一条命令接入宿主（connect_host.py）、心图体检（/graph/checkup）、墓碑快照恢复误删记忆，并提供备份、恢复、升级脚本"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex CLI、Hermes 等本地 AI 宿主添加跨会话的长期记忆存取与注入",
+    "希望记忆数据保留在本机、可备份可恢复的个人部署场景",
+    "无需云端 Key、只走本地全文检索的离线使用场景（local 挡）"
+   ]
+  },
+  "sha": "d7956a3d9120",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

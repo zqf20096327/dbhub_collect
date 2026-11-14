@@ -3348,5 +3348,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "71b90495cb24": {
+  "identity": {
+   "one_liner": "自托管的 MCP 记忆服务器，为 AI 编码代理提供共享长期记忆、文档检索与代码索引。",
+   "review": "Loom 是 ClickHouse 开源的 MCP 服务器，为编码代理提供跨会话共享的长期记忆、文档检索（含 PDF/docx/pptx）和代码索引，记忆关联文件与符号并在编辑时呈现。代理经 MCP/HTTP/Python/TypeScript 接入，支持 Claude Code、Codex 插件及 Cursor。数据存于 ClickHouse，可选 Postgres；Docker 一键安装后默认本地运行于 7777 端口，配置 LLM 与嵌入模型密钥后方可启用 AI 生成功能。",
+   "highlights": [
+    "支持通过 MCP、HTTP、Python 或 TypeScript SDK 接入，提供 Claude Code、Codex 插件与 Cursor/VS Code 的本地 MCP 接入",
+    "代码索引支持查询定义、调用者与变更影响，记忆包含作者、版本历史、冲突审查与命名空间回滚",
+    "以 Docker 或 Helm chart 在 Kubernetes 上自托管，支持单用户（仅本地访问）与多用户（含命名空间、角色、令牌）两种模式"
+   ],
+   "use_cases": [
+    "个人开发者为 Claude Code、Codex 等编码代理配置跨会话共享记忆与仓库代码索引",
+    "团队部署多用户 MCP 记忆服务器，通过命名空间与访问控制共享代理上下文",
+    "为自研代理应用构建按用户隔离的长期记忆与带引用的文档检索（RAG）"
+   ]
+  },
+  "sha": "71b90495cb24",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8be51a2b078": {
+  "identity": {
+   "one_liner": "自托管的电动车数据记录器，通过车辆状态机记录行驶、充电与电池健康。",
+   "review": "EVBook 是一个开源电动车日志应用，通过 Tesla Owner API 和 Volvo 官方 API 读取车辆数据，记录行驶、充电、电池健康、成本与状态历史。它可部署为 Cloudflare Worker 加 D1 数据库，或以单个 Docker 容器运行；每辆车由一个 actor 驱动纯状态机，通过轮询退避让车辆休眠。README 提到 Volvo 接口为只读且受市场限制，令牌由 ENCRYPTION_KEY 加密存储。适合想自己持有车辆历史数据的 Tesla/Volvo 车主。",
+   "highlights": [
+    "记录行驶路线地图、充电曲线、电池健康趋势、分时段电价成本与统计数据，支持 CSV 导出与 GPX 导出",
+    "支持 Cloudflare Workers + D1 与 Docker（ghcr.io 镜像，amd64/arm64）两种部署方式，bun run setup 一条命令完成部署",
+    "内置 Tessie 与 TeslaMate 历史导入，提供 PWA 前端、JSON API 与一键更新机制"
+   ],
+   "use_cases": [
+    "在 Cloudflare 免费套餐上为 Tesla 或 Volvo 车辆记录行驶、充电与电池衰减历史",
+    "从 TeslaMate 或 Tessie 迁移已有历史数据到自有数据库",
+    "以 Docker 或 Node 在自有服务器/VPS 上运行车辆数据记录"
+   ]
+  },
+  "sha": "e8be51a2b078",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3575,5 +3575,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "da9ba1bced7d": {
+  "identity": {
+   "one_liner": "自托管的 GitHub 组织安全仪表盘，基于 GitHub API 数据生成安全评分与维护自动化。",
+   "review": "Clevis 是一个自托管面板，通过 GitHub App 或 PAT 连接组织，展示仓库活动、协作者及由六项核心检查（MFA、分支保护、密钥扫描等）计算的安全评分与趋势，并提供带 dry-run 和审计日志的 Actions 缓存清理等维护任务。采用 FastAPI、Next.js 与 PostgreSQL 三服务架构，长任务经 Postgres 队列由后台 worker 执行。适合需要集中查看组织安全状况与执行特权维护操作的自托管场景。",
+   "highlights": [
+    "提供基于六项核心检查（MFA 强制、分支保护、密钥扫描、Dependabot 告警、代码扫描告警、默认分支强推保护）与可选卫生检查计算的安全评分，含修复指引",
+    "提供带 dry-run 支持与 append-only 审计日志的特权维护任务，任务经 Postgres 队列（SELECT … FOR UPDATE SKIP LOCKED）分发给可多副本运行的 worker",
+    "支持 GitHub App 安装令牌（短期 token）或 Fernet 加密的 PAT 两种凭据路径，路由级 JWT 鉴权与组织级 RBAC"
+   ],
+   "use_cases": [
+    "集中查看 GitHub 组织的安全检查状态、评分趋势与仓库活动流",
+    "以 dry-run 和审计记录方式执行 Actions 缓存清理等特权维护作业",
+    "团队自托管部署，通过 Docker Compose 与反向代理接入现有环境"
+   ]
+  },
+  "sha": "da9ba1bced7d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "31d6b47d1c51": {
+  "identity": {
+   "one_liner": "CUBRID 数据库的 SQLAlchemy 2.0–2.1 方言，提供 ORM、Alembic 迁移与异步连接支持",
+   "review": "sqlalchemy-cubrid 是一个让 SQLAlchemy 连接 CUBRID 数据库的方言库，适用于使用 Python ORM 操作 CUBRID 的开发者。它要求 CUBRID 服务器（10.2–11.4）已单独运行，支持 SQLAlchemy 2.0–2.1 与 Python 3.11+。提供三种驱动方案：纯 Python 的 pycubrid（含异步 aiopycubrid）为推荐方式，另有 CUBRIDdb C 扩展驱动。注意不支持 RETURNING 子句与序列，仅支持单一有效 schema。",
+   "highlights": [
+    "支持 SQLAlchemy 2.0–2.1，兼容 ORM、Schema 反射与 Alembic 迁移（通过 CubridImpl 自动注册）",
+    "提供三种驱动：cubrid+pycubrid://（同步纯 Python）、cubrid+aiopycubrid://（异步）、cubrid://（CUBRIDdb C 扩展）",
+    "实现 CUBRID 特有 DML 构造 ON DUPLICATE KEY UPDATE、MERGE、REPLACE INTO，以及三种 MVCC 隔离级别"
+   ],
+   "use_cases": [
+    "在 Python 项目中通过 SQLAlchemy ORM 或 Core 访问已运行的 CUBRID 数据库",
+    "使用 Alembic 管理 CUBRID 数据库的模式迁移与版本控制",
+    "需要异步访问 CUBRID 的 asyncio 应用（通过 aiopycubrid 驱动）"
+   ]
+  },
+  "sha": "31d6b47d1c51",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e2cb97c008dc": {
+  "identity": {
+   "one_liner": "Django.tasks 框架的数据库任务队列后端，任务与结果存储在数据库表中",
+   "review": "dj_queue 是 django.tasks 框架的数据库任务队列后端，面向 Django 6.0/6.1 应用开发者。它将队列、执行状态与结果存入 Django 管理的表，无需 Redis 等外部中间件；PostgreSQL 一等支持，MySQL、MariaDB、SQLite 也被支持。作业载荷须可 JSON 序列化；SQLite 仅轮询且有限制。",
+   "highlights": [
+    "任务通过 Django 的 @task API 定义，队列、运行状态与结果存于数据库表，支持 PostgreSQL、MySQL、MariaDB、SQLite",
+    "支持立即、定时、循环任务与并发限制，PostgreSQL 可选用 LISTEN/NOTIFY 与 SKIP LOCKED 优化",
+    "提供 Django admin 操作面板，含队列暂停/恢复、失败任务重试、循环任务取消调度等功能"
+   ],
+   "use_cases": [
+    "Django 6.0+ 项目中需要后台任务而引入 Redis 或消息代理不合适时",
+    "已有 PostgreSQL 数据库的 Django 应用实现定时、循环或并发受限的后台作业",
+    "开发、CI 或小型部署使用 SQLite 运行任务队列的场景"
+   ]
+  },
+  "sha": "e2cb97c008dc",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

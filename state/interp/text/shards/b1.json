@@ -3194,5 +3194,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "283806cf5017": {
+  "identity": {
+   "one_liner": "基于 FastAPI 的项目模板，集成 JWT 认证、PostgreSQL 异步访问与 Copier 脚手架生成。",
+   "review": "该仓库是一个 FastAPI 项目模板，提供版本化路由（/v1、/v2）、SQLAlchemy 2.0 异步集成、Alembic 迁移、Redis 令牌黑名单、限流与安全头等组件，并通过仓库模式与依赖注入组织代码。它面向需要快速启动 Python API 项目的开发者，可克隆运行，也可用 Copier 生成新项目并按 minimal/custom/full 选择可选服务。运行需 Python 3.14+、PostgreSQL 与 uv。",
+   "highlights": [
+    "提供版本化路由挂载（/v1 起）与示例 Items CRUD 域（模型、仓储、服务、端点、迁移、测试）",
+    "包含 JWT 认证、基于 Redis 的令牌黑名单、CSRF 中间件、OWASP 安全头与 Redis 滑动窗口限流",
+    "支持 Copier 模板生成，可选服务包括 Celery、Firebase、GCS、BackBlaze B2、Resend 等，并附带可用于 AI 编码助手的架构技能文件"
+   ],
+   "use_cases": [
+    "作为新 FastAPI API 项目的起点，直接克隆并配置 PostgreSQL 运行",
+    "通过 copier copy 生成包含自定义名称、作者信息和所选服务组合的新项目",
+    "在 Claude Code、Codex CLI 等支持的 AI 编码助手中安装该架构技能，用于按此架构生成或审查项目代码"
+   ]
+  },
+  "sha": "283806cf5017",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d9653dfffb0e": {
+  "identity": {
+   "one_liner": "自托管的访问日志网页分析工具，统计含AI爬虫在内的全量流量",
+   "review": "Skald 读取 Web 服务器自身的访问日志做统计分析，将请求归入真人、AI 助手、搜索引擎、爬虫扫描器和自有流量五组，并覆盖来自 Vercel、Cloudflare、CloudFront 等来源的日志。无 Cookie、无需浏览器脚本，数据留存于自托管服务器，提供实时面板、线索/收入归因和安全扫描分析，面向网站所有者与运维。需 Python 3.11+，采用 Elastic License 2.0，不拦截流量、只读日志。",
+   "highlights": [
+    "读取服务器访问日志并将每个请求归入五组互斥分类（真人/AI助手/搜索引擎/爬虫扫描/自有流量），五组之和等于日志总量",
+    "内置独立审计机制，用第二套解析规则重算全部数字，不一致时整天数据不予展示",
+    "通过 IP 所有方地址或 DNS 校验爬虫身份，识别伪造 UA 并单独归类；支持按 IP/邮箱/访客 ID 跨日追踪单个访客"
+   ],
+   "use_cases": [
+    "统计 JavaScript 分析工具覆盖不到的 AI 助手与爬虫流量，识别藏在 Direct 来源中的 AI 引荐点击",
+    "基于访问日志做线索与收入归因，对接 CRM 与预约工具的 webhook",
+    "监控站点安全扫描与攻击尝试，配合防火墙生成屏蔽规则"
+   ]
+  },
+  "sha": "d9653dfffb0e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6825376551f0": {
+  "identity": {
+   "one_liner": "基于泛型的 Go 类型安全 ORM，无需代码生成，编译期检查查询",
+   "review": "ant 是一个使用 Go 泛型实现编译期类型检查的 ORM，模型为普通结构体，查询以字段指针而非字符串表达列与关系。支持 PostgreSQL、MySQL、MariaDB、SQLite、SQL Server 的读写，但迁移与完整测试套件目前仅覆盖 PostgreSQL。要求 Go 1.27 以上，采用 MIT 许可，处于 1.0 之前的阶段，API 可能变化。适合需要编译期检查、且能接受迁移仅限 PostgreSQL 的 Go 开发者。",
+   "highlights": [
+    "提供编译期检查的类型化查询，支持条件、连接、投影、聚合、子查询、CTE 与窗口函数，无需代码生成步骤",
+    "支持 1:1、1:N、多对多关系，通过 Include 显式批量加载；变更跟踪下 SaveChanges 仅写入发生变化的列",
+    "内置事务（savepoint、隔离级别、重试、读副本）、软删除、钩子、乐观并发控制，以及 go vet 分析器和 OpenTelemetry 支持"
+   ],
+   "use_cases": [
+    "希望在 Go 项目中以编译期检查替代字符串查询的数据库访问层开发",
+    "使用 PostgreSQL 作为主库、需要从结构体生成 SQL 迁移的项目",
+    "使用 MySQL、SQLite、SQL Server 等数据库进行读写，并由自选工具管理 schema 的项目"
+   ]
+  },
+  "sha": "6825376551f0",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2875,5 +2875,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6c1df9a05aac": {
+  "identity": {
+   "one_liner": "基于SQLite记忆层的代码库问答感知层，用System One判定引擎实现快速检索",
+   "review": "unified-brain 是 DevLoops 发布的开源框架，为编码智能体提供持久化记忆：它用 tree-sitter 读取仓库完整 git 历史，把每个符号的各版本存入仓库内 SQLite 数据库，再经嵌入检索、决策判定模型评分，最后由用户选择的 LLM 一次性撰写答案，通过 MCP 接入 Cursor、Claude Code 等工具。它提供 Full、Cheap、Hybrid-reliable、Ultra-fast local 四种配置，判定模型可选 pplx-decider（Apache-2.0）或专有模型 Jev；README 标注所有能耗节省尚未实测，运行判定模型仍需托管服务。",
+   "highlights": [
+    "读取仓库完整 git 历史，用 tree-sitter 将函数、类型、宏等符号的全部版本连同引入提交存入仓库内 SQLite 数据库",
+    "提供 Ask（回答'X 为什么做 Y'）与 Timeline/报告（逐符号判定提交变更）两类查询，可通过 MCP 运行在 Cursor、OpenCode、Claude Code 等工具中",
+    "判定模型可用开放权重的 pplx-decider（Apache-2.0，27B）或专有模型 Jev，撰写模型可自选"
+   ],
+   "use_cases": [
+    "需要针对任意提交点提出代码级问题（如某函数为何如此实现）的仓库考古与理解",
+    "按提交区间生成变更报告，核对改动是否与提交信息一致",
+    "为长时间运行的编码智能体提供不随会话累积上下文的持久化记忆层"
+   ]
+  },
+  "sha": "6c1df9a05aac",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

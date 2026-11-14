@@ -18284,5 +18284,505 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "a535a527fc8e+2": {
+  "fn": "Francis1998/multi-bot-agentic",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "ci",
+     "python",
+     "license: MIT",
+     "MCP 2026-07-28 + legacy"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    6,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Model Context Protocol server. It is a portfolio-quality, local-first reference"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "MCP tool bridge demo: official MCP servers in both protocol eras, an MCP-calling run, and its replay"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    19,
+    15,
+    19
+   ],
+   [
+    "replace",
+    19,
+    21,
+    19,
+    21,
+    [
+     " engine picks the next action and records a `RationaleTrace`: the rule, the observations it used, and the",
+     " actions it rejected."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    24,
+    22,
+    24,
+    [
+     " persisted per run. `replay`, `report`, and `trace` never call a provider, so postmortems are safe and",
+     " deterministic."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     " Jaeger, Grafana Tempo, or Langfuse, or as a Mermaid sequence diagram of who handed off to whom."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    29,
+    27,
+    29,
+    [
+     " calls also get per-call timeouts and result byte caps. Built-in tools run offline and in-process with",
+     " size-limited inputs. A model can only request a tool; the engine decides whether it runs."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    29,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     " adapter sends parameters that current reasoning models accept."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    31,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     " offline evaluation need no API keys."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    40,
+    33,
+    40
+   ],
+   [
+    "replace",
+    40,
+    50,
+    40,
+    41,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    52,
+    41,
+    43
+   ],
+   [
+    "replace",
+    52,
+    54,
+    43,
+    45,
+    [
+     "The model only ever returns text: `TOOL:<name>:<payload>`, `HANDOFF:<bot>: `, or `DONE:<answer>`. It",
+     "never executes anything itself. See Architecture and Safety."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    45,
+    46
+   ],
+   [
+    "replace",
+    55,
+    56,
+    46,
+    47,
+    [
+     "Observe → Decide → Act → Replay animation"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    63,
+    47,
+    54
+   ],
+   [
+    "replace",
+    63,
+    81,
+    54,
+    55,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    85,
+    55,
+    59
+   ],
+   [
+    "replace",
+    85,
+    86,
+    59,
+    60,
+    [
+     "release-readiness walkthrough."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    90,
+    60,
+    64
+   ],
+   [
+    "replace",
+    90,
+    91,
+    64,
+    65,
+    [
+     "(Run fork guide)."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    65,
+    66
+   ],
+   [
+    "replace",
+    92,
+    93,
+    66,
+    67,
+    [
+     "Time-travel fork demo: history of a run, a fork with a new goal, a fork of the fork as another bot, refused forks, lineage, and the fork's trace"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    67,
+    70
+   ],
+   [
+    "replace",
+    96,
+    113,
+    70,
+    87,
+    [
+     "|Capability|What you get|Code|Docs|",
+     "|---|---|---|---|",
+     "|Deterministic ODA loop|Rule-based decisions with rationale traces and an explicit run state machine|`runner.py`, `decision.py`, `lifecycle.py`|Architecture|",
+     "|Durable event log|Append-only SQLite log per run. `replay` and `report` never call providers|`event_log.py`, `cli.py`|Replay diff|",
+     "|**OpenTelemetry trace export**|`trace` turns any recorded run into OTLP/JSON with GenAI semantic conventions (`invoke_agent`, `chat`, `execute_tool` spans with rationale attributes), pushes it to Jaeger, Tempo, or Langfuse, or draws a Mermaid sequence diagram. Deterministic ids, content off by default|`tracing/`|Trace export|",
+     "|Checkpoint & resume|Resume an interrupted run; the active bot's tool scope is restored|`checkpoint.py`|Checkpoint resume|",
+     "|**Time-travel forks**|`fork` branches any recorded run after any step into a new run, with a new goal, provider, bot, or budget. The state is rebuilt from the log, and bot scopes are re-checked. `history` lists the forkable steps. Lineage shows up in `report`, and `trace` adds a span link to the parent run|`fork.py`, `cli.py`|Run fork|",
+     "|Multi-bot handoffs|`HANDOFF:<bot>: ` with per-bot tool allowlists|`bots.py`|Bot handoff|",
+     "|**MCP tool bridge**|Tools from any MCP server, with a dual-era (2026-07-28 + legacy) stdio client and no dependencies|`mcp/`|MCP tools|",
+     "|Provider adapters|GPT-6, Claude Code CLI, Gemini, Kimi K3.1, and a fake provider, all sending reasoning-safe parameters|`llm/`|Configuration|",
+     "|Safety controls|Step budgets, timeouts, cancellation file, tool allowlists, prompt bounds|`safety.py`|Safety|",
+     "|Human-in-the-loop|File-backed approval gate for sensitive tools|`approval.py`|HITL gate|",
+     "|Parallel fan-out|Capped, order-preserving task batches|`fanout.py`|Fan-out|",
+     "|Tool-call hygiene|Rate limits, PII redaction, result truncation, per-bot permissions|`tool_runner.py`, `observation_redactor.py`, `tool_result_truncator.py`, `tool_permission.py`|Rate limiter|",
+     "|Offline evaluation|Golden-path fixtures scored on tool sequence and answer|`eval/`|Eval harness|",
+     "|122 built-in tools|Offline, in-process tools for text, JSON, CSV, HTML, MIME, and encodings|`tools/`|Tools catalog|",
+     "|Advisors & guards|150+ offline HITL guards for multi-bot failure modes|`*_band.py` and friends|Advisor catalog|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    116,
+    87,
+    90
+   ],
+   [
+    "replace",
+    116,
+    123,
+    90,
+    97,
+    [
+     "|Provider (`--provider`)|Adapter|Default|Also current|Credential|",
+     "|---|---|---|---|---|",
+     "|OpenAI (`openai`)|`OpenAIAdapter`|`gpt-6.1-sol`|`gpt-6-astra`, `gpt-6.1-terra`, `gpt-6-luna`|`OPENAI_API_KEY`|",
+     "|Anthropic via Claude Code CLI (`claude_code`)|`ClaudeCodeCLIAdapter`|the CLI's configured model (recommended: `CLAUDE_CODE_COMMAND=\"claude -p --model claude-opus-5-5\"`; keep `-p`, print mode)|`claude-fable-5-2`, `claude-sonnet-5-5`, `claude-haiku-5-5`|local `claude`|",
+     "|Google Gemini (`gemini`)|`GeminiAdapter`|`gemini-3.8-flash`|`gemini-4-hydrogen` (Google's recommended upgrade), `gemini-4-carbon`, `gemini-4-argon`, `gemini-3.5-flash-lite`|`GEMINI_API_KEY`|",
+     "|Kimi / Moonshot (`kimi`)|`KimiAdapter`|`kimi-k3.1-pro`|`kimi-k3.1-pro-highspeed`, `kimi-k3`|`KIMI_API_KEY`|",
+     "|Deterministic (`fake`)|`FakeLLMAdapter`|offline, used by CI|n/a|none|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    97,
+    98
+   ],
+   [
+    "replace",
+    124,
+    128,
+    98,
+    102,
+    [
+     "Verified on 2026-11-12 against the OpenAI,",
+     "Anthropic, Google,",
+     "and Moonshot model pages. The Gemini default stays on 3.8 Flash for now;",
+     "Configuration › Gemini default explains why and how to switch to Hydrogen."
+    ]
+   ],
+   [
+    "equal",
+    128,
+    131,
+    102,
+    105
+   ],
+   [
+    "replace",
+    131,
+    132,
+    105,
+    106,
+    [
+     "(parameter rules)."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    135,
+    106,
+    109
+   ],
+   [
+    "replace",
+    135,
+    153,
+    109,
+    127,
+    [
+     "- **Start:** Quickstart, Configuration (model stack, MCP, safety",
+     " settings), and the release-readiness walkthrough",
+     "- **Concepts:** Architecture, Safety",
+     "- **Core guides:** MCP tools,",
+     " OpenTelemetry trace export,",
+     " Bot handoff,",
+     " Checkpoint resume,",
+     " Run fork (time travel),",
+     " HITL approval gate,",
+     " Parallel fan-out,",
+     " Eval harness,",
+     " Rate-limited tool runner,",
+     " Observation redactor",
+     "- **Catalogs:** Built-in tools, Advisor & guard catalog,",
+     " All guides, Use cases",
+     "- **Project:** CHANGELOG and demo assets (`assets/demo/`; `docs/demo.gif` is",
+     " rendered by `scripts/render_demo_gif.py`, tool-guide demos by `scripts/render_guide_demos.py`, and",
+     " `docs/demo.svg` is a static architecture card)"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    157,
+    127,
+    131
+   ],
+   [
+    "replace",
+    157,
+    159,
+    131,
+    133,
+    [
+     "Problems this solves, and the",
+     "issue index links regression stories from real fixes."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    172,
+    133,
+    146
+   ],
+   [
+    "replace",
+    172,
+    173,
+    146,
+    147,
+    [
+     " `fork` branches any recorded step into a new run."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    180,
+    147,
+    154
+   ],
+   [
+    "replace",
+    180,
+    185,
+    154,
+    155,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    199,
+    155,
+    169
+   ],
+   [
+    "replace",
+    199,
+    214,
+    169,
+    170,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    215,
+    170,
+    171
+   ],
+   [
+    "replace",
+    215,
+    217,
+    171,
+    172,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

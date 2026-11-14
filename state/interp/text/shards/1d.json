@@ -2681,5 +2681,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7c755739a7fa": {
+  "identity": {
+   "one_liner": "基于 RustVMM 与 KVM 的 AI Agent 安全沙箱服务，兼容 E2B SDK",
+   "review": "CubeSandbox 是面向 AI Agent 代码执行场景的沙箱服务，基于 RustVMM 与 KVM 为每个沙箱运行独立内核的 MicroVM。README 称其冷启动低于 60ms、单沙箱内存开销低于 5MB。提供快照/克隆/回滚、凭证保管库、L7 安全代理、Volume 框架、调度插件与 WebUI 控制台，支持 Terraform、K8s、ARM64 部署。运行要求 x86_64 Linux 且支持 KVM。",
+   "highlights": [
+    "每个沙箱运行独立 OS 内核的 MicroVM，并通过 eBPF 实现沙箱间隔离与出站流量过滤",
+    "兼容 E2B SDK 接口，宣称通过修改一个环境变量即可切换，客户端代码无需改动",
+    "提供百毫秒粒度的快照、克隆与回滚，支持跨节点暂停/恢复（S3/JuiceFS 后端）与凭证注入不出沙箱的内置 L7 安全代理"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供代码执行沙箱环境（含 RL 训练、SWE-Bench 场景示例）",
+    "需要将现有 E2B SDK 接入迁移到自托管沙箱服务的团队",
+    "单节点部署并可扩展至多节点集群的沙箱服务自建场景（支持 Terraform 与 K8s 部署）"
+   ]
+  },
+  "sha": "7c755739a7fa",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

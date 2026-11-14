@@ -3258,5 +3258,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "21d67b75a236": {
+  "identity": {
+   "one_liner": "读取 MySQL binlog 构建列式副本的分析查询与时间回溯工具",
+   "review": "DBTrail 通过复制协议读取 MySQL 8.0+、RDS、Aurora、Percona、MariaDB 的 binlog，在自有机器上维护 Parquet 副本并用 DuckDB 应答查询，兼容 mysql 客户端与 MySQL 驱动，无需在源库安装插件。提供 AS OF 时间回溯、行级 undo SQL 生成与 MCP 接口。需 ROW binlog、FULL row image 及各表主键；副本有延迟，不提供高可用，历史从安装日起。Apache-2.0 协议。",
+   "highlights": [
+    "通过 binlog 复制协议维护 Parquet 列式副本，源库无需安装插件、代理或触发器，支持托管云数据库",
+    "支持 AS OF 时间回溯查询、行级变更历史与 undo SQL 生成，可经 mysql 客户端或 MCP 客户端使用",
+    "支持查询路由：写入与按键查找转发至 MySQL，重读查询由 DuckDB 副本应答；副本可存于本地磁盘或 S3"
+   ],
+   "use_cases": [
+    "在保留现有 MySQL 的前提下运行全表聚合、排行等重分析查询",
+    "仪表盘（Metabase、Grafana）等 MySQL 协议工具接入分析副本",
+    "按时间点查看表或行的历史版本，生成撤销误操作变更的 SQL"
+   ]
+  },
+  "sha": "21d67b75a236",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "590db32a250c": {
+  "identity": {
+   "one_liner": "基于 Apache Arrow Flight 的分布式向量引擎，面向 Agent 内存共享场景",
+   "review": "Longbow 是用 Go 编写的分布式向量引擎，通过 Apache Arrow Flight 协议（gRPC/HTTP2）对外服务，并附带 REST 和 GraphQL 接口。它采用 shared-nothing 架构、一致性哈希与 SWIM 协议做节点成员管理，存储为内存态并支持 WAL 与 Parquet 快照。安装需 Go 1.27.4+，默认编译为 CPU 版本；GPU（Metal/CUDA）需单独构建对应二进制，否则静默回退到 CPU 执行。适合需要在集群间读写向量数据的 Agentic 应用开发者。",
+   "highlights": [
+    "基于 Apache Arrow Flight 协议提供数据服务，端口拆分为数据（3000）与元数据（3001）两个 gRPC 服务器",
+    "支持多种搜索模式（稠密 ANN/k-NN、稀疏 BM25、混合、地理/时间、GraphRAG 等）、可插拔距离度量及 HNSW 路径内的 SIMD 谓词过滤",
+    "支持 float32/16/64、int8-64、complex64/128、turboquant 等数据类型（128–3072 维），提供 100+ Prometheus 指标与结构化 JSON 日志"
+   ],
+   "use_cases": [
+    "为多节点部署的 AI/Agentic 应用提供共享向量内存读写服务",
+    "需要混合搜索、元数据过滤或多模态检索的向量查询场景",
+    "使用 Helm/Docker 部署并需要 Prometheus 监控指标的集群环境"
+   ]
+  },
+  "sha": "590db32a250c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

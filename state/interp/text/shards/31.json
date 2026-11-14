@@ -2835,5 +2835,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "113690b9f61d": {
+  "identity": {
+   "one_liner": "基于现有 PostgreSQL/MySQL 数据库即时生成 REST 与 MCP API 的 Go 后端服务",
+   "review": "pRESTd 是用 Go 编写的数据库 HTTP 服务，连接 PostgreSQL 9.5+（默认）或 MySQL 8.0.19+（v2.5 起原生支持，需设 engine=\"mysql\"），将表暴露为 GET /{database}/{schema}/{table} 形式的 REST 端点，并提供只读 MCP 端点、JWT 认证、ACL、自定义 SQL 路由与多数据库服务。配置可用 TOML 文件或 PREST_CONFIG_JSON 环境变量注入，适合不想为数据库手写后端接口的开发者。",
+   "highlights": [
+    "对现有或新建的 PostgreSQL/MySQL 数据库提供 CRUD REST API 与自定义 SQL 路由",
+    "内置认证、ACL 与只读 MCP 端点，可通过 HTTP 供 AI 客户端调用",
+    "支持注册表模式与无注册表模式同时服务多个数据库，Postgres 最多 64 个连接池"
+   ],
+   "use_cases": [
+    "为现有 PostgreSQL/MySQL 数据库快速暴露 CRUD 接口而无需编写后端代码",
+    "为 Cursor、Claude 等 AI 客户端提供数据库的只读 MCP 接入",
+    "多数据库/多租户场景下通过别名注册表统一提供 API 服务"
+   ]
+  },
+  "sha": "113690b9f61d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8911b7bd1c7": {
+  "identity": {
+   "one_liner": "开源 Windows 桌面应用，用于管理并切换多个 OpenAI Codex 账户。",
+   "review": "Codex Account Switcher 是一款面向 Windows 10/11 的开源桌面应用（MIT 协议），用于保存并切换多个 OpenAI Codex 账户配置。账户凭据经 Windows DPAPI 以当前用户身份加密存储于 auth.dpapi，设置与配置元数据存于本地 SQLite；切换时保留共享的 .codex 目录（聊天、项目、MCP 等），并在替换登录前校验与备份。它不绕过订阅、速率限制或 OpenAI 访问规则；v2.2.0 尚无 Authenticode 代码签名。",
+   "highlights": [
+    "用 Windows DPAPI（CurrentUser）加密保存账户凭据，切换前校验 auth.json 并创建加密备份、支持回滚",
+    "所有已保存配置文件可查看 5 小时与每周使用限额，不显示 bearer token",
+    "提供可选的带认证 Remote API 与 Telegram 机器人控制（账户、限额、Codex/V2RayTun 启停、电源操作）"
+   ],
+   "use_cases": [
+    "在 Windows 上维护多个 OpenAI Codex 账户登录并在配置文件间切换",
+    "通过 Telegram 机器人远程查看账户限额、启停 Codex 或 V2RayTun、执行电源操作",
+    "需要凭据本地 DPAPI 加密存储且 token 不入 SQLite 的多账户管理场景"
+   ]
+  },
+  "sha": "c8911b7bd1c7",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

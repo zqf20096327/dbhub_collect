@@ -3202,5 +3202,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a821b57c2fbf": {
+  "identity": {
+   "one_liner": "基于Tauri v2与DuckDB的无人机飞行日志本地分析仪表盘",
+   "review": "Open DroneLog 是一款用于整理和分析无人机飞行日志的应用，支持导入 DJI .txt、Litchi CSV 和 Airdata CSV 格式，数据存储在本地 DuckDB 数据库中，无需上传云端（首次导入需获取 DJI 密钥）。它以 Tauri v2 桌面应用、Docker 网页应用和 Android APK 形式发布，面向需要私有管理飞行记录的无人机用户，并可配置外部解析器插件扩展日志格式。",
+   "highlights": [
+    "支持导入 DJI (.txt)、Litchi CSV、Airdata CSV 日志，并可通过 parsers.json 配置外部解析器插件；基于无人机序列号、电池序列号和起飞时间去重",
+    "数据存储于本地 DuckDB 数据库，提供交互式飞行地图（含3D地形、飞行回放 0.5x-16x 倍速）和多通道遥测图表",
+    "支持11种语言界面、多配置文件系统（可密码锁定）、数据库备份与恢复，以及 CSV/JSON/GPX/KML/摘要CSV 导出"
+   ],
+   "use_cases": [
+    "需要私有化存储与检索 DJI/Litchi 飞行记录、不愿上传云端日志的用户",
+    "按电池跟踪循环次数与健康趋势、设置维护阈值进行维护记录",
+    "生成 A4 飞行法规报告（可打印为 PDF）或 1080x1080 分享图（FlyCard）"
+   ]
+  },
+  "sha": "a821b57c2fbf",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "02d8b5e8ea6c": {
+  "identity": {
+   "one_liner": "Greptime 演示脚本与示例集合，覆盖可观测性与数据管道场景",
+   "review": "该仓库收录支撑 Greptime 演示与讲座的脚本和示例，包含应用（电机振动、键盘监控、Nginx 可观测性等）、可观测性（OpenTelemetry、直方图、追踪）、数据管道（Vector、Kafka、Flink、InfluxDB 协议）及 InfluxDB 迁移等类目。基于 Docker Compose 运行，多数演示共享端口，需逐个运行；适合希望上手 GreptimeDB 与相关集成的开发者按各演示 README 配置凭据后体验。",
+   "highlights": [
+    "包含应用、可观测性、数据管道、集成、数据迁移五类演示脚本与示例",
+    "基于 Docker 运行，使用 GreptimeDB v1.3.0，要求 Docker Compose 2.24 及以上",
+    "Grafana 面板支持英文与简体中文切换，可保留时间范围与过滤器"
+   ],
+   "use_cases": [
+    "学习 GreptimeDB 的数据接入方式（InfluxDB Line Protocol、Prometheus、Vector、Kafka、Flink 等）",
+    "搭建 OpenTelemetry 可观测性演示环境（指标、日志、追踪）",
+    "从 InfluxDB v1/v2 迁移到 GreptimeDB 前的流程演练"
+   ]
+  },
+  "sha": "02d8b5e8ea6c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5bd1a77350ce": {
+  "identity": {
+   "one_liner": "NativeScript 的 SQLite 插件，通过原生线程执行异步数据库调用。",
+   "review": "该 monorepo 为 NativeScript 应用提供 SQLite 访问：主包内置 Node-API 与 JNI/Objective-C 两套绑定及默认引擎（Android 用 androidx sqlite-bundled，iOS 用系统 SQLite），所有调用在原生线程上返回 Promise。支持 WAL、扩展加载、可替换引擎（如 SQLCipher）、TypeORM 接入，并可拆用 core/napi/bridge 等子包自选组件。适用于 NativeScript 移动开发者。",
+   "highlights": [
+    "所有调用在原生线程运行并返回 Promise，同步方法提供 *Sync 系列（NativeScript 8 的 bridge 下抛错）",
+    "默认 Android 引擎为 androidx sqlite-bundled（含 FTS5、JSON、RTREE、数学函数），iOS 使用进程内 SQLite",
+    "支持 WAL（默认关闭，需显式开启）、SQLite 扩展加载、按数据库配置 engine，并可拆分使用 sqlite-core/napi/bridge/android-framework 等子包"
+   ],
+   "use_cases": [
+    "NativeScript 移动应用中的本地 SQLite 数据持久化与查询",
+    "需要 SQLCipher 加密数据库或加载自定义 SQLite 扩展的场景",
+    "配合 TypeORM 使用，或仅依赖 sqlite-core 搭配自定义引擎构建"
+   ]
+  },
+  "sha": "5bd1a77350ce",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "38d80b7d8b39": {
+  "identity": {
+   "one_liner": "TIKVARON 是基于 GitHub Actions 的多智能体工程质量系统",
+   "review": "TIKVARON 是一个多智能体工程质量系统，v0.2.0 提供 AI 代码评审、安全扫描、架构与依赖分析、事件关联、文档影响分析及基于 JUnit 的测试智能，面向使用 GitHub Actions 的开发团队。其源码以 Base64 分段存放在 releases/.archive-data/ 下，需按字典序拼接并解码 ZIP 还原。PR 评审仅检出可信基线提交、通过 API 获取变更，评审结果仅为建议，不设合并门槛。",
+   "highlights": [
+    "提供 AI PR 评审、安全扫描、架构与依赖智能、事件关联、文档影响分析和 JUnit 测试智能",
+    "源码以 Base64 分段存放，工作流按字典序拼接、解码并用 unzip -t 校验后还原",
+    "PR 评审工作流只检出可信基线提交，经 GitHub API 获取变更，不执行贡献者控制的 PR 代码"
+   ],
+   "use_cases": [
+    "在 GitHub Actions 中为仓库启用 AI PR 评审工作流",
+    "对项目执行确定性安全扫描与架构、依赖分析",
+    "基于 JUnit 测试结果进行测试智能分析与文档影响评估"
+   ]
+  },
+  "sha": "38d80b7d8b39",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2836,5 +2836,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b5fc0c224093": {
+  "identity": {
+   "one_liner": "基于 MCP 的编码智能体共享记忆，笔记以纯 Markdown 存储。",
+   "review": "Renor 是一个供编码智能体跨会话共享记忆的服务：智能体保存决策与事实，之后通过 MCP 工具（remember、retrieve_memory、search_text 等）在新会话中召回。记忆存为用户拥有的 Markdown 文件，SQLite 仅作索引。提供托管版（npx renor connect 一条命令接入 Claude Code、Codex、Cursor 等）和自托管版（需 Node.js 22.16+，无需账号）。注意：自托管默认仅关键词检索，混合语义检索需嵌入模型；每次启动默认访问 npm registry 检查更新。许可证 Apache-2.0。",
+   "highlights": [
+    "记忆以纯 Markdown 存于本地文件夹，SQLite 索引可随时由笔记重建",
+    "通过 MCP stdio 提供工具：whats_new、get_context、search_text、retrieve_memory、remember",
+    "支持托管与自托管两种部署，兼容 Claude Code、Codex、Cursor、Grok、Gemini、VS Code 等 MCP 客户端；自托管默认关键词加词干检索，可选接入嵌入模型实现混合检索"
+   ],
+   "use_cases": [
+    "多个编码智能体共享同一份项目记忆（通过 RENOR_CONNECTION_NAME 启用多智能体 hive 工具）",
+    "本地/离线环境自托管，记忆保留在自己机器上的文件夹中（离线启动需 --prefer-offline 或固定版本）",
+    "为 Claude Code、Codex、Cursor 等客户端配置跨会话的事实记录与检索"
+   ]
+  },
+  "sha": "b5fc0c224093",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "201eac40c64a": {
+  "identity": {
+   "one_liner": "C++20 编写的业务应用开发平台，用元数据描述 ERP 业务并生成数据库与表单",
+   "review": "OES 是一个面向库存、会计、工资、销售等业务应用开发的源码可用平台。开发者以元数据描述业务（目录、单据、登记册、科目表等），用内置脚本语言编写规则，平台据此生成数据库表、表单和报表，并随描述变更同步数据库结构。当前版本为 2.0.0-preview.1，不支持从 1.x 迁移，数据库格式仍可能变化。支持 Windows、Linux、macOS 平台。",
+   "highlights": [
+    "提供查询语言、报表编辑器、脚本语言（CES/VES 双方言、LINQ、94 个内置函数）、设计器和基于 WebSocket 的远程调试器",
+    "支持 Firebird、PostgreSQL、ODBC、SQLite 多数据库层，通过 diff 方式应用配置变更并支持预演 DDL",
+    "内置 MCP 服务器，提供 132 个工具供 AI 助手读写元数据、运行代码、查询数据和驱动调试器"
+   ],
+   "use_cases": [
+    "构建库存、会计、工资、销售等记账类业务应用",
+    "需要双式记账、累计登记册、周期性信息登记册等业务对象的 ERP 场景",
+    "让 AI 助手通过 MCP 工具参与配置的读取、构建和检查工作流"
+   ]
+  },
+  "sha": "201eac40c64a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c64d1ef73573": {
+  "identity": {
+   "one_liner": "拦截MCP与Bash工具输出，压缩摘要存入SQLite并支持全文检索",
+   "review": "mcp-recall 是运行在 Bun 上的 TypeScript 插件，通过 PostToolUse 钩子拦截 Claude Code 等代理中的 MCP 工具和 Bash 大体积输出，向模型交付压缩摘要并将完整结果存入本地 SQLite，提供 11 个 recall__* 工具供模型按需检索。安装会修改 Claude Code 配置文件，数据不离本机。自 2026-11-04 起进入维护模式，仅按周发布修复，不新增功能。README 明确说明未测得任务完成率变化，且无法覆盖内置 Read/Grep/Glob 工具。",
+   "highlights": [
+    "通过 SessionStart/PostToolUse 两个钩子与一个 MCP 服务器拦截并压缩 MCP 与 Bash 输出，完整结果存入本地 SQLite 并建全文索引",
+    "提供 recall__search、recall__retrieve、recall__pin、recall__note 等 11 个检索与管理工具，支持摘要/预览/全文三种取回层级",
+    "支持 Claude Code、pi、OpenCode 与 grok CLI 四种代理，相同命令重复调用返回缓存头部"
+   ],
+   "use_cases": [
+    "会话依赖返回大体量结构化输出的 MCP 工具（浏览器自动化、GitHub API、搜索）且经常触发上下文压缩的场景",
+    "需要保留并检索早前会话工具输出的本地存档场景",
+    "对小型模型按 token 计费、需降低会话上下文占用的使用方式"
+   ]
+  },
+  "sha": "c64d1ef73573",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1e82e748c883": {
+  "identity": {
+   "one_liner": "基于 Java/Spring Boot 的开发者打卡 API，含连续打卡与小组周榜",
+   "review": "gitRats 是一个面向开发者的打卡类 REST API 后端，用 Java 21 和 Spring Boot 构建，数据存于 PostgreSQL，图片经 multipart 上传至 Cloudinary。支持邮箱密码与 GitHub OAuth 登录（JWT 有效期默认 1 小时），可创建/加入上限 20 人的小组，发布需强制上传图片的打卡，并统计全局连续打卡天数与每周小组排名。运行需配置数据库、JWT、GitHub OAuth 及 Cloudinary 等 10 个环境变量。",
+   "highlights": [
+    "提供 JWT 与 GitHub OAuth 双登录方式，通过 Authorization: Bearer 头鉴权，令牌默认 1 小时过期",
+    "支持创建/通过邀请码加入小组（每组上限 20 人），发布强制带图片、标题和描述的打卡，图片存储在 Cloudinary",
+    "实现全局每日连续打卡统计、小组内每周打卡数与 GitHub 提交数排名，附带 JUnit 5 + Mockito 单元测试"
+   ],
+   "use_cases": [
+    "学习小组或团队进行编程打卡监督与每周排名",
+    "作为 Spring Boot REST API 参考实现，用于研究分层架构（controllers/services/repositories/DTOs/@ControllerAdvice 统一异常处理）与 Cloudinary 图片上传集成",
+    "需要 GitHub OAuth + JWT 鉴权流程的 Java 后端项目参考"
+   ]
+  },
+  "sha": "1e82e748c883",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "73e60863bb8e": {
+  "identity": {
+   "one_liner": "本地运行的 MTG Commander 构卡器，按指令官与级别生成并评分卡组",
+   "review": "Commander Forge 是一个开源的万智牌 Commander（EDH）组卡工具，基于 Next.js 与 SQLite，本地运行。它可根据指挥官和官方 bracket 等级自动生成合规 100 张套牌，对每张卡按指挥官打 0–100 分并给出理由，支持导入已有套牌获取替换建议、收藏管理和可打印代牌。首次运行需下载约 5 GB 卡牌数据与图片，之后可离线使用；仅支持桌面端与英文卡牌。",
+   "highlights": [
+    "依据指挥官、官方 bracket 规则与禁牌表自动构建合规套牌，并解释每张卡的入选原因",
+    "对格式内每张卡按当前套牌打 0–100 分，分数由协同、角色需求、曲线等六部分加权组成，可展开查看",
+    "支持导入卡组生成带理由和评分变化的替换建议、管理本地收藏、打印 63×88 mm 实际尺寸代牌页或导出图片 zip"
+   ],
+   "use_cases": [
+    "为指定指挥官和目标 bracket 自动生成或手动构建合规的 Commander 套牌",
+    "导入已有卡组，按目标（如增加去除、法术力铺开）逐张获取换卡建议并查看评分影响",
+    "基于本地收藏筛选可用指挥官，生成购牌清单或打印代牌用于实体试玩"
+   ]
+  },
+  "sha": "73e60863bb8e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

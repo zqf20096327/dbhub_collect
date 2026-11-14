@@ -2602,5 +2602,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0ce3704d21d5": {
+  "identity": {
+   "one_liner": "针对 AI 逆向工程代理的蓝方防御 MCP 服务器与 CLI 工具",
+   "review": "BLA 是一个以 MCP 服务器和 CLI 形式发布的防御工具，面向保护自有发布产物的软件作者与安全团队，用于对抗 AI 逆向工程代理（如 REA）。它通过 audit→protect→verify 流程对 JS/TS、Electron ASAR、WASM、SQLite、Safetensors 等格式植入诱饵数据并触发分析器资源上限，运行 `npx bla-agents harden .` 即可处理构建产物。README 明确其仅供防御用途，且部分防御路径（Ghidra、Frida 等）未经实证运行验证。",
+   "highlights": [
+    "内置 19+ 种格式的防护处理，包括 JavaScript/TypeScript、Electron ASAR、WASM、SQLite、GGUF/Safetensors、Android DEX 及原生二进制，无外部加壳依赖",
+    "提供 CLI（`npx bla-agents harden .`）、MCP 服务器（`bla_weave_plan`/`bla_harden`/`bla_verify` 等工具）以及 Vite/Rollup/Webpack/esbuild 打包插件三种接入方式",
+    "README 记录了对真实 morluto/rea 的实证测试报告，并单独列出仅存在于代码中、未在本机实证运行的防护路径"
+   ],
+   "use_cases": [
+    "发布 Electron、WASM、SQLite 或模型权重（GGUF/Safetensors）等产物前对其进行防 AI 分析加固处理",
+    "在 Claude Code、Cursor、Codex 等编码代理中注册 MCP 工具，以代理驱动的闭环流程执行源码 weaving 与产物验证",
+    "在 Vite/Webpack 等构建流程中于打包阶段处理 JS chunk、SourceMaps 与 WASM 资产"
+   ]
+  },
+  "sha": "0ce3704d21d5",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6727e1b34df4": {
+  "identity": {
+   "one_liner": "解密 Defender mpenginedb.db 并提供 SQLECmd 映射文件的工具包",
+   "review": "该工具包用于处理 Microsoft Defender 的 RC4 加密 SQLite 数据库 mpenginedb.db。包含 PowerShell 解密脚本（只读证据、记录 SHA-256、校验并应用 WAL）和供 SQLECmd 使用的 .smap 映射，输出 RollingQueues、FileHashes 等多类 CSV。密钥来自 mpengine.dll 特定版本，不匹配时可从证据派生。适用于取证分析人员处理镜像中的该数据库。",
+   "highlights": [
+    "解密脚本只读证据，输出前后记录 SHA-256，拒绝覆盖已存在的输出文件",
+    "按 SQLite 规则校验 WAL（盐值、校验和链），仅应用已提交帧",
+    "映射输出 13 类 CSV，时间为 UTC 100 纳秒精度，并纠正 MD5/SHA-1 列名错位"
+   ],
+   "use_cases": [
+    "取证分析中通过 SQLECmd 提取 Defender 扫描数据库内容",
+    "解密已收集的 mpenginedb.db 及 WAL 文件用于离线分析",
+    "需要 FileHashes、RansomwareDetections、ProcessBlockHistory 等表数据时"
+   ]
+  },
+  "sha": "6727e1b34df4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

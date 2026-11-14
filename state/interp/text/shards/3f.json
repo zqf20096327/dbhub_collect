@@ -3197,5 +3197,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "441e9c661f05": {
+  "identity": {
+   "one_liner": "将 PromQL/LogQL/TraceQL 翻译为 ClickHouse SQL 的只读 HTTP 查询网关",
+   "review": "Cerberus 是 Go 编写的只读查询网关，为 ClickHouse 提供 Prometheus/Loki/Tempo 的 HTTP API 兼容层，可将 PromQL、LogQL、TraceQL 翻译成 ClickHouse SQL 并按上游格式返回响应。它不做数据摄入，适合已用 OpenTelemetry Collector 向 ClickHouse 写入遥测数据的团队；要求 ClickHouse 24.8+ 及标准 OTel 表结构，迁移可用 migrate 子命令做查询差异比对。",
+   "highlights": [
+    "作为无状态单二进制运行，在 Grafana 中表现为 Prometheus、Loki、Tempo 三个常规数据源，无需安装插件",
+    "通过 parse→共享执行计划→优化→ClickHouse SQL 的统一管线处理三种查询语言，PromQL 使用上游 prometheus/promql/parser 解析",
+    "提供 migrate 子命令，可从规则文件和导出的仪表盘收集查询、预览 SQL，并对参考后端与 Cerberus 的结果做逐条比对"
+   ],
+   "use_cases": [
+    "已通过 OTel Collector 将指标、日志、追踪统一写入 ClickHouse，需在 Grafana 中沿用 PromQL/LogQL/TraceQL 查询的场景",
+    "希望用单数据源替换 Prometheus/Loki/Tempo 读取侧，同时保留现有仪表盘与告警规则原样运行的迁移场景",
+    "需要离线预览生成 SQL 并用差异测试验证查询结果一致性后切换后端的运维评估场景"
+   ]
+  },
+  "sha": "441e9c661f05",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1cbd6bcd42e3": {
+  "identity": {
+   "one_liner": "Rust 编写的 Rekordbox 本地与导出数据交互库，含 Python/JS 绑定。",
+   "review": "rbox 是一个 Rust 库，用于读写 Pioneer DJ Rekordbox 的本地和导出数据，覆盖 master.db 数据库、One Library/Device Library 导出文件、ANLZ 分析文件、My-Setting 与 XML 数据库，并提供 Python 和 JavaScript 绑定。面向需要编程访问 Rekordbox 数据的用户；项目处于早期阶段，API 可能变动，且尚不能从音频生成分析文件。",
+   "highlights": [
+    "通过类型安全 ORM 查询和更新 Rekordbox v6/v7 master.db 数据库",
+    "支持读写 One Library、DeviceSql (.pdb)、ANLZ、My-Setting 及 XML 数据库文件",
+    "提供 Rust、Python（pyo3/maturin）、JavaScript（napi-rs）三种语言绑定"
+   ],
+   "use_cases": [
+    "编程方式查询或修改本地 Rekordbox 曲库数据",
+    "在没有 Rekordbox 的情况下创建或更新设备导出数据库（.pdb / One Library）",
+    "读取或修改包含波形、beat grid、热点的 ANLZ 分析文件"
+   ]
+  },
+  "sha": "1cbd6bcd42e3",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

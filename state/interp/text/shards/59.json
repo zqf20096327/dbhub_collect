@@ -2531,5 +2531,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7b7f4c57a15d": {
+  "identity": {
+   "one_liner": "提供带记录的临时 PostgreSQL 访问会话的开源 CLI",
+   "review": "PgStack CLI 用于从终端启动临时的、可记录的 PostgreSQL 访问会话，生成临时连接 URL，供 psql 或其他数据库客户端使用。使用者需拥有 PgStack 账户并配置 Access 的项目；该 CLI 连接托管的 PgStack API，仓库本身不含可自托管的后端。会话最长一小时，支持只读模式、延长与撤销。",
+   "highlights": [
+    "支持以 --read-only 启动只读会话，代理以只读事务模式运行并设置 60 秒语句与事务内空闲超时，按规则放行 SELECT 类语句、拦截写操作",
+    "支持会话的创建、延长、撤销与列表管理，凭据存储于本地配置文件，支持 --json 输出用于脚本",
+    "通过安装脚本分发独立可执行文件并校验 SHA-256，提供 macOS（Intel/Apple Silicon）与 Linux（glibc/musl、x64/arm64）及 Windows 版本"
+   ],
+   "use_cases": [
+    "工程师或团队管理员需要临时访问生产或 staging 环境数据库进行排查时，通过带 reason 的会话连接 PostgreSQL",
+    "需要防止误写数据库时，使用只读会话以只读事务和语句超时方式连接",
+    "脚本或自动化流程中通过 --json 输出管理会话生命周期"
+   ]
+  },
+  "sha": "7b7f4c57a15d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "65bb0e71a8b4": {
+  "identity": {
+   "one_liner": "面向 Google Antigravity 的零依赖本地实时 Token 与 API 价值监控面板",
+   "review": "该项目以只读方式解析 Antigravity 的本地 SQLite（含 WAL 页面）对话数据库，提供实时 Token 用量与计价统计。后端为纯 Python 3 标准库 HTTP 服务，前端为无 CDN 依赖的单文件页面；可选编译为 macOS 菜单栏应用。依赖 Python 3.8+，模型映射与价格需在源码中手动调整，且不含外部网络调用。",
+   "highlights": [
+    "以只读 URI 模式读取本地 SQLite/WAL 文件，通过 (mtime_ns, size) 跳过未变更会话，实现毫秒级增量刷新",
+    "提供 4 种计价模式、USD/CNY 切换、多时间窗口与自适应粒度趋势图，并可导出 CSV 与 PNG 快照",
+    "后端仅用 Python 标准库，前端 HTML/CSS/JS 内嵌无外部请求，所有数据留在 127.0.0.1"
+   ],
+   "use_cases": [
+    "本地查看 Antigravity 会话的 Token 消耗、5 分钟活跃窗口与 tok/min、$/hr 速率",
+    "按自定义时间区间或计价口径生成用量汇总并导出 CSV 报表",
+    "在 macOS 菜单栏持续显示近 7 天/今日用量摘要与燃烧率"
+   ]
+  },
+  "sha": "65bb0e71a8b4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

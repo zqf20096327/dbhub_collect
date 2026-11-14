@@ -3300,5 +3300,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1864a64f5b2c": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件：审批门控写入本地 SQLite，注入冻结快照",
+   "review": "dsh-memento 为 DeepSeek Harness 提供 ctx.memory 能力接缝，包含类型安全服务、零依赖 SQLite 提供方、memory 工具与注入 systemPrompt 的冻结快照。写入经服务内部审批门（writePolicy ask/auto/off），审计由 approval 事件对与插件审计表构成。面向 DSH 社区用户；另提供只读 stdio MCP 服务器供外部客户端检索。检索默认为大小写不敏感子串匹配，向量召回为可选项。",
+   "highlights": [
+    "两条轨道（user/agent）×两个层级（user-global/workspace）×按 agentPreset 隔离，每轨每层硬字符预算（默认 user 2000 / agent 4000），写满返回结构化错误而非截断",
+    "所有写路径（add/replace/remove/seed）经服务内部审批 waterfall，replace/remove/consolidate 审批载荷携带将被改动的条目全文，被拒写入落 *-denied 审计行",
+    "附带只读 stdio MCP 服务器（dsh-memento-mcp），以 node:sqlite readOnly 模式打开数据库，支持 memory_search 与 memory_stats 工具"
+   ],
+   "use_cases": [
+    "需要模型跨会话记住用户事实与环境约定，且每次写入需人工审批与可重建审计的 DSH 会话",
+    "外部 MCP 客户端（如 Claude、Codex）需免 harness 只读检索同一记忆库的场景",
+    "通过内置适配器从 mem0 fact collections、Hermes memory.md 或 CLAUDE.md 风格 markdown 导入既有记忆"
+   ]
+  },
+  "sha": "1864a64f5b2c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2bc9f9540083": {
+  "identity": {
+   "one_liner": "本地优先的桌面知识管理系统，用 Tauri+SQLite 实现文档管理与语义检索。",
+   "review": "ECHO Knowledge 是一款面向 Windows 10/11 的桌面知识管理应用，用于本地导入 PDF/Markdown/TXT 文档，提供关键词搜索、基于向量余弦相似度的语义搜索、带来源引用的问答（Ask ECHO）和交互式知识图谱。技术栈为 Tauri 2、Rust、React 19、TypeScript 与 SQLite（WAL 模式）；AI 功能需自备 Gemini 或 Groq API 密钥。限制包括不支持扫描件 OCR、数据不跨设备同步、仅提供 64 位 Windows 安装包。MIT 许可。",
+   "highlights": [
+    "本地存储：文档、元数据、向量嵌入与聊天记录存于本地 SQLite 数据库和文档库，关键词搜索与索引可完全离线运行",
+    "检索增强问答：从检索到的文档片段构建增强提示，生成带来源引用的回答；语义搜索在本地计算余弦相似度",
+    "安全与集成机制：SHA-256 去重、API 密钥经 DPAPI 存于 Windows 凭据管理器、支持 Gemini 嵌入与 Groq/Gemini 生成、基于 @xyflow/react 的交互式知识图谱"
+   ],
+   "use_cases": [
+    "在本地整理个人 PDF、Markdown 和纯文本文档，并按自定义集合归类管理",
+    "对本地文档库进行语义检索或向 AI 提问并核对引用来源（需配置自有 Gemini/Groq 密钥）",
+    "通过交互式知识图谱浏览文档间的概念关系与聚类"
+   ]
+  },
+  "sha": "2bc9f9540083",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

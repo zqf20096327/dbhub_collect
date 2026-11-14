@@ -2711,5 +2711,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "153b6f7df065": {
+  "identity": {
+   "one_liner": "面向自主 AI Agent 的身份基础设施，签发可验证凭证并管理委托链",
+   "review": "ZeroID 是一个面向自主 Agent 的身份管理系统，用 Go 编写。它为每个 Agent 分配 WIMSE/SPIFFE 身份 URI，基于 OAuth 2.1 与 RFC 8693 签发令牌，令牌内嵌 on-behalf-of 委托链，每跳自动收窄 scope，并支持实时级联吊销。适用于需要审计",
+   "highlights": [
+    "基于 OAuth 2.1、WIMSE/SPIFFE、RFC 8693 实现代理身份，签发携带完整委托链（act claim）的可验证令牌",
+    "委托时自动进行 scope 收窄（scope attenuation），并跟踪委托深度，上游凭证被吊销时触发级联吊销",
+    "每个代理获得稳定的全局唯一 WIMSE/SPIFFE 身份 URI，作为令牌中的 sub 标识"
+   ],
+   "use_cases": [
+    "自主 AI 代理执行多步工作流时进行可归因的身份认证与授权",
+    "需要细粒度审计与合规要求的代理操作场景",
+    "涉及多代理协作、权限分级（attenuation）与委托链追踪的代理架构"
+   ]
+  },
+  "sha": "153b6f7df065",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b7e219a3f25": {
+  "identity": {
+   "one_liner": "腾讯云 API 3.0 的 Go 语言 SDK，提供各产品 API 的调用封装",
+   "review": "该 SDK 面向 Go 开发者，用于调用腾讯云 API 3.0，需 Go 1.9 以上并预先在控制台获取 SecretID/SecretKey 凭证。支持 go get 或源码安装，每个 API 对应请求/响应结构体。提供客户端配置（超时、签名方法、自定义 Endpoint）、区域故障切换、多种凭证提供方式（环境变量、配置文件、实例角色、TKE OIDC 及 Provider 链）、网络错误与限流重试、CommonClient 通用调用等能力。区域切换仅支持同步请求，重试默认关闭且仅针对带 ClientToken 的幂等请求。",
+   "highlights": [
+    "提供凭证管理：环境变量、配置文件、角色扮演、CVM 实例角色、TKE OIDC 及可自定义的凭证提供链",
+    "支持区域故障切换（连续失败≥5次或失败率≥75%时切换备用区域）与网络错误、限流自动重试（默认关闭，仅限幂等请求）",
+    "支持通过 common 包的 CommonClient 进行通用 API 调用，以及自定义请求头、HTTP 代理、调试模式等配置"
+   ],
+   "use_cases": [
+    "Go 程序中调用腾讯云各产品 API（如查询 CVM 实例列表等）",
+    "需要多区域容错或自动重试的云服务调用场景",
+    "依赖实例角色或 TKE OIDC 等免密凭证方式管理鉴权的服务部署环境"
+   ]
+  },
+  "sha": "2b7e219a3f25",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

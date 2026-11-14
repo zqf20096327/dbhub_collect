@@ -21620,5 +21620,221 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "19209bfd8565+2": {
+  "fn": "michaelmagan/spared",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    10,
+    6,
+    7,
+    [
+     " Bar chart of spared against workerd on the same small app, one 4-vCPU VM, lower is better. Warm request p50: 148 against 388 microseconds, 2.6x faster. p99 at 16 connections: 5.45 against 16.53 ms, 3.0x lower. Waking an idle app: 0.9 against 1.07 ms, about level. Memory that cannot be reclaimed at 200 apps: 108 against 516 MiB, 4.8x less. Total memory at 200 apps: 889 against 574 MiB, where spared uses 1.5x more."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    7,
+    10
+   ],
+   [
+    "replace",
+    13,
+    14,
+    10,
+    11,
+    [
+     "- **Fast wake.** An idle app answers its next request in about 0.9 ms (workerd 1.07 ms). After a reboot, the first request to each app is slower until its code is back in the page cache (details)."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    22,
+    11,
+    19
+   ],
+   [
+    "replace",
+    22,
+    23,
+    19,
+    20,
+    [
+     "Tested on Linux x86_64 with glibc 2.35 or newer. Upgrades: docs/upgrading.md."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    20,
+    21
+   ],
+   [
+    "replace",
+    24,
+    25,
+    21,
+    22,
+    [
+     "Apps are Rust crates, so you need Rust from rustup. Then:"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    38,
+    22,
+    35
+   ],
+   [
+    "replace",
+    38,
+    39,
+    35,
+    36,
+    [
+     "`spared setup` compiles SQLite to Wasm once, which takes about a minute. The first build of an app then took 12 seconds on a 4-core Linux VM, and later builds take seconds. Without that step the first build compiles SQLite itself and takes about a minute. The full walk-through is docs/getting-started.md."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    46,
+    36,
+    43
+   ],
+   [
+    "replace",
+    46,
+    47,
+    43,
+    44,
+    [
+     "No Rust toolchain? Run three example apps from the server image with the try script."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    44,
+    47
+   ],
+   [
+    "replace",
+    50,
+    51,
+    47,
+    48,
+    [
+     "||Where SQLite runs|Shape|Apps|"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    48,
+    49
+   ],
+   [
+    "replace",
+    52,
+    57,
+    49,
+    54,
+    [
+     "|**spared**|Inside each app's sandbox|One binary|Rust, as Wasm|",
+     "|celld|In the host|Single node or a fleet|JavaScript|",
+     "|Spin|In the host|Pooled instances|Wasm components|",
+     "|workerd|In the host process|Self-hostable runtime|JavaScript|",
+     "|wasmCloud|Host plugins, no SQLite|Kubernetes plus NATS|Wasm components|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    54,
+    55
+   ],
+   [
+    "replace",
+    58,
+    59,
+    55,
+    56,
+    [
+     "The long version, with caveats, is in the FAQ."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    56,
+    64
+   ],
+   [
+    "replace",
+    67,
+    68,
+    64,
+    65,
+    [
+     "The numbers and how to rerun them are in docs/benchmarks.md."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    73,
+    65,
+    70
+   ],
+   [
+    "replace",
+    73,
+    74,
+    70,
+    71,
+    [
+     "- Stronger resource limits: disk and network bandwidth per app, and a memory cap per app set by the operator. Per-app data, CPU and outbound HTTP budgets are built (operating)."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    81,
+    71,
+    78
+   ],
+   [
+    "replace",
+    81,
+    82,
+    78,
+    79,
+    [
+     "Guides: getting started, how it works, cookbook, operating spared, FAQ. For coding agents: AGENTS.md. Contributing: CONTRIBUTING.md. License: Apache 2.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

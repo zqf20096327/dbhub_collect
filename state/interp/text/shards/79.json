@@ -2996,5 +2996,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9f0b93ae3645": {
+  "identity": {
+   "one_liner": "用 Rust 编写的 Redis 兼容缓存与数据结构服务器，支持 RESP2 协议",
+   "review": "ReRu 是一个用 Rust 实现的 Redis 兼容数据服务器，通过 RESP2 协议使现有 Redis 客户端（如 redis-cli、redis-py、ioredis）无需修改即可连接。它提供字符串、列表、哈希、集合、有序集合、流等数据结构，支持 TTL、十种淘汰策略、快照/AOF/RDB 持久化、只读副本复制与本地 Pub/Sub。命令实现覆盖 Redis 8.10.2 参考中 459 条命令元数据的 204 条（44.4%）。项目为实验性预览，README 明确不适用于生产环境；命令串行执行，每连接使用一个 OS 线程，TLS 与多用户 ACL 尚未实现。",
+   "highlights": [
+    "支持 RESP2 协议，兼容 redis-cli、redis-py、ioredis、Lettuce 等现有 Redis 客户端",
+    "实现 204/459 条 Redis 8.10.2 命令，涵盖字符串、列表、哈希、集合、有序集合、带消费者组的流、位图与地理空间查询",
+    "提供快照、单文件 AOF（含在线重写）、Redis RDB 子集三种持久化模式，以及经过认证的快照加流式只读副本复制协议"
+   ],
+   "use_cases": [
+    "本地开发与测试环境中替代 Redis 服务进程使用现有 Redis 客户端",
+    "以 Redis 8.10.2 为行为参考的兼容性实验与差异测试",
+    "研究 RESP2 协议实现、持久化格式与复制机制的 Rust 学习参考项目"
+   ]
+  },
+  "sha": "9f0b93ae3645",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

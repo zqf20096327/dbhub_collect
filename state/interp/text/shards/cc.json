@@ -2933,5 +2933,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0b367a7e4a6d": {
+  "identity": {
+   "one_liner": "PostGIS 扩展，实现 GCJ02/BD09/CGCS2000 坐标转换及 Jenks 自然断点计算",
+   "review": "pg_eviltransform 是基于 pgrx 开发的 PostgreSQL/PostGIS 扩展，用 Rust 实现 ST_EvilTransform 函数，在 WGS84、GCJ02、BD09 和地理 CGCS2000（EPSG:4490）之间转换坐标，接口沿用 ST_Transform 的四种重载形式；另提供 ST_JenksBins 计算 Jenks 自然断点。标准坐标系委托 PostGIS/PROJ 处理，自定义坐标系经 WGS84 桥接。支持 PostgreSQL 15-19（19 为实验性），要求 PostGIS，可用 pig、apt/dnf 包或源码安装，MIT 许可。",
+   "highlights": [
+    "提供 ST_EvilTransform 函数，支持 geometry 转 SRID 或 proj 文本的四种重载，覆盖 WGS84、GCJ02、BD09、CGCS2000 坐标系及其文本别名",
+    "提供 ST_JenksBins 函数，接受多种数值类型数组或聚合输入计算 Jenks 自然断点，忽略 NULL，空输入返回 NULL",
+    "支持 PostgreSQL 15-19（PG19 面向 19rc2 为实验性），CI 覆盖 amd64 和 arm64，发布 DEB 与 RPM 包"
+   ],
+   "use_cases": [
+    "在 PostGIS 数据库中转换 GCJ02、BD09 与 WGS84/CGCS2000 之间的坐标数据",
+    "对数值字段计算 Jenks 自然断点分级边界（如制图分类）",
+    "需要避开基于正则的 SQL 坐标转换方案（专利 CN112000902B）的场合"
+   ]
+  },
+  "sha": "0b367a7e4a6d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2866,5 +2866,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "01014a43419d": {
+  "identity": {
+   "one_liner": "内存键值数据存储，兼容 Redis 与 Memcached API，采用多线程架构。",
+   "review": "Dragonfly 是用 C++ 编写的内存数据存储，提供与 Redis 和 Memcached 兼容的 API，现有客户端无需改代码即可连接。它支持多线程运行，通过 --cache_mode 启用自适应缓存淘汰，支持 cron 定时快照、Prometheus 指标导出和 HTTP 控制台。键过期上限约 8.5 年，超出会被截断。README 中的性能数据来自 memtier_benchmark 的自测结果，供参考。",
+   "highlights": [
+    "兼容 Redis 与 Memcached API，支持 port、requirepass、maxmemory 等常见 Redis 参数",
+    "支持 cluster_mode、snapshot_cron 定时备份、cache_mode 自适应缓存淘汰",
+    "主端口同时识别 RESP 与 HTTP 协议，并提供 Prometheus 兼容的 /metrics 端点"
+   ],
+   "use_cases": [
+    "以 Redis 或 Memcached 为缓存的现有应用，寻求不改代码接入的内存数据存储",
+    "需要定时快照持久化与 Prometheus/Grafana 监控接入的部署环境",
+    "需要开启集群模式（emulated/yes）的分片场景"
+   ]
+  },
+  "sha": "01014a43419d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5c6224b469a": {
+  "identity": {
+   "one_liner": "基于.NET与React的开源GPS追踪系统，含API、监听服务与Web界面",
+   "review": "Navtrack是一个开源GPS追踪系统，由后端API、Listener设备监听服务和React前端组成，数据存储使用PostgreSQL。文档面向开发者和自托管用户，提供从源码运行（需.NET 11 SDK、Node.js、Docker）与Docker Compose两种部署方式，启动后通过浏览器访问localhost:3000。README未列明支持的设备协议数量等细节。",
+   "highlights": [
+    "包含API、Listener监听服务与React Web界面三个组件",
+    "使用PostgreSQL存储数据，提供开发用docker-compose文件",
+    "支持源码运行与Docker Compose两种部署方式"
+   ],
+   "use_cases": [
+    "自托管GPS追踪平台部署",
+    "GPS设备位置数据接收与存储",
+    "基于.NET与React的二次开发"
+   ]
+  },
+  "sha": "b5c6224b469a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "da020482e7bd": {
+  "identity": {
+   "one_liner": "无框架原生 PHP+PDO 实现的学生管理 MVC 学习项目",
+   "review": "该项目用原生 PHP 与 PDO 实现完整 MVC 结构，通过 query-string 前置路由（index.php）分发到 StudentController，对 students 表执行增删改查。面向初学者，用于演示关注点分离、预处理语句与视图渲染；依赖 XAMPP/MySQL 环境，附 setup.sql 建库和带安全检查的入口文件。",
+   "highlights": [
+    "前置控制器路由：通过 controller/action 两个查询参数分发到对应控制器方法",
+    "Student 模型使用 PDO 预处理语句提供 getAllStudents/addStudent 等五个 CRUD 方法",
+    "提供 indexWithSafetyChecks.php 入口，对缺失文件/类/方法给出更明确的错误提示"
+   ],
+   "use_cases": [
+    "学习 MVC 模式与前后端分离的目录结构组织方式",
+    "练习 PDO 预处理语句、服务端校验与重复键错误处理",
+    "作为起点扩展分页、搜索、CSRF 防护等功能练习"
+   ]
+  },
+  "sha": "da020482e7bd",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

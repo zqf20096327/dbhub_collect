@@ -21150,5 +21150,300 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "3a0fe30ea11a+2": {
+  "fn": "pete-builds/strava-mcp-vault",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "- Connects your AI to Strava through the Model Context Protocol (MCP)"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    38,
+    9,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "For a simpler setup that just wraps the existing npm package in Docker, see strava-mcp-docker."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    39,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "|Tool|Description|Cache TTL|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    63,
+    44,
+    63,
+    [
+     "|`get_recent_activities`|List recent activities with distance, time, HR|1 hour|",
+     "|`get_activity`|Full activity detail (segments, splits, gear)|24 hours|",
+     "|`get_activity_streams`|Time-series data (heart rate, elevation, GPS)|7 days|",
+     "|`get_athlete_profile`|Authenticated athlete info|24 hours|",
+     "|`get_athlete_stats`|YTD and all-time totals|1 day|",
+     "|`get_cache_stats`|Cache hit/miss rates, API rate limits (general and read), recent syncs|none|",
+     "|`sync_activities`|Bulk-sync recent activities into cache|varies|",
+     "|`check_vault`|Compare the vault with Strava: what is missing, what is gone, by month|none|",
+     "|`repair_vault`|Add what `check_vault` found missing; delete only with `delete_gone=true`|none|",
+     "|`query_vault`|Filter and aggregate cached activities by date, sport type|none|",
+     "|`get_activities_near`|Vault activities that started near a place name|none|",
+     "|`set_activity_location`|Hand-label an indoor or GPS-less activity|none|",
+     "|`delete_vault_activity`|Remove activities from the local vault|none|",
+     "|`set_ride_spot`|Name a riding location so it can be published|none|",
+     "|`list_ride_spots`|Show the curated spots the export may publish|none|",
+     "|`export_ride_spots`|Curated ride spots as JSON for a public page|none|",
+     "|`get_route_track`|Full-resolution route geometry, clipped, for GPX|7 days|",
+     "|`sync_route_tracks`|Warm the stream cache one rate-limited batch at a time|varies|",
+     "|`export_spot_photos`|A photo per curated spot, EXIF location stripped|7 days|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    80,
+    63,
+    80
+   ],
+   [
+    "replace",
+    80,
+    82,
+    80,
+    82,
+    [
+     " unrecognized visibility is withheld. Strava has changed this field before, so",
+     " an unknown value fails closed instead of open."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    82,
+    83
+   ],
+   [
+    "replace",
+    83,
+    85,
+    83,
+    85,
+    [
+     " `unassigned_rides` number, because those coordinates are exactly what must",
+     " stay off a public page."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    85,
+    86
+   ],
+   [
+    "replace",
+    86,
+    89,
+    86,
+    89,
+    [
+     " out, and a spot's map pin is the coordinate you curated. Strava's own",
+     " privacy-zone trimming is not a substitute: it is applied inconsistently, and",
+     " `start_latlng` is the raw recorded start regardless."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    145,
+    89,
+    145
+   ],
+   [
+    "replace",
+    145,
+    155,
+    145,
+    146,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    163,
+    146,
+    154
+   ],
+   [
+    "replace",
+    163,
+    167,
+    154,
+    155,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    192,
+    155,
+    180
+   ],
+   [
+    "replace",
+    192,
+    197,
+    180,
+    185,
+    [
+     " - **Application Name:** Whatever you want (e.g., \"My MCP Server\")",
+     " - **Category:** Choose any",
+     " - **Club:** Leave blank",
+     " - **Website:** Any URL (e.g., `https://example.com`)",
+     " - **Authorization Callback Domain:** `localhost`. You do not need a domain of your own. Strava's authentication documentation says of the redirect address: \"`localhost` and `127.0.0.1` are white-listed.\" (Earlier versions of this README said the callback could not be `localhost`. That was wrong.)"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    310,
+    185,
+    298
+   ],
+   [
+    "replace",
+    310,
+    318,
+    298,
+    299,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    420,
+    299,
+    401
+   ],
+   [
+    "replace",
+    420,
+    422,
+    401,
+    403,
+    [
+     " The release workflow refuses to publish if this disagrees with the git tag,",
+     " which stops a release from producing an image the compose does not reference."
+    ]
+   ],
+   [
+    "equal",
+    422,
+    430,
+    403,
+    411
+   ],
+   [
+    "replace",
+    430,
+    432,
+    411,
+    413,
+    [
+     " pushes to `ghcr.io/pete-builds/strava-mcp-vault`, attaches an SBOM and a",
+     " signed provenance attestation, and cuts a GitHub release."
+    ]
+   ],
+   [
+    "equal",
+    432,
+    459,
+    413,
+    440
+   ],
+   [
+    "replace",
+    459,
+    460,
+    440,
+    441,
+    [
+     "**401 Authorization Error**: Wrong OAuth scopes. You need `activity:read_all`, not just `read`. See the OAuth Walkthrough."
+    ]
+   ],
+   [
+    "equal",
+    460,
+    468,
+    441,
+    449
+   ],
+   [
+    "delete",
+    468,
+    469,
+    449,
+    449
+   ],
+   [
+    "equal",
+    469,
+    470,
+    449,
+    450
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

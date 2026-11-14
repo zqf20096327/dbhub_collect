@@ -2881,5 +2881,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ed0d63661728": {
+  "identity": {
+   "one_liner": "基于NATS在Postgres与边缘端SQLite/PGLITE/DuckDB之间双向同步数据的本地优先引擎",
+   "review": "ZeBridge是Zig编写的同步引擎，为每台设备维护本地副本并缓存离线写入，重连后经NATS同步；PostgreSQL保持权威地位，负责裁决冲突写入并返回结果。面向B2B多租户运营类应用（如现场团队、车队、站点），文档明确指出不针对每用户单租户的B2C场景。写入按同设备依赖顺序排队裁决，可经Docker Compose或Ansible部署hub。",
+   "highlights": [
+    "客户端通过 query() 读本地副本、mutate() 提交写入（含版本管理、outbox、重试与裁决结果处理）、request()/ingest() 查询远端服务",
+    "桥接端最多以8条并行通道应用写入，客户端默认按同设备写入依赖排序，支持 after 与 independent 选项",
+    "通过一次性邀请码完成设备注册并获取限定范围的NATS凭据，设备凭据由客户端库自行续期；支持Docker Compose与Ansible部署"
+   ],
+   "use_cases": [
+    "弱网或断网环境下持续作业的B2B多租户运营应用（现场团队、车队、仓储站点等，租户为共享工作数据集的组织）",
+    "浏览器应用使用 @zebridge/client 在本地SQLite/PGLITE副本上读写，并通过NATS调用路由、分析等远端服务",
+    "需要以PostgreSQL规则和约束（外键、触发器）作为写入最终裁决方的离线优先架构"
+   ]
+  },
+  "sha": "ed0d63661728",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "00b61fc255bf": {
+  "identity": {
+   "one_liner": "LLM 情感感知记忆引擎，以稀疏编码单元存储记忆并四通道注入召回",
+   "review": "MnemoVault 是面向 LLM 的持久化记忆插件，将记忆存为固定大小单元（稀疏码、int8 向量、类型化超边）而非文本，每轮注入约 117 tokens。可独立运行或作为 DeepSeek Harness 插件，由 11 个 TypeScript 包构成，运行时除 @deepseek-ai/* 外无第三方依赖。当前为 v0.7.3 开发者预览，中文文档为权威版本，README 列出 28 项已知弱点。",
+   "highlights": [
+    "记忆以固定大小单元存储：稀疏码、int8 向量、类型化超边与压缩残差，每轮注入约 117 tokens",
+    "包含情感感知内核、四通道召回、评分式遗忘机制与 3D 星图可视化",
+    "377 个测试，运行时无第三方依赖（仅 schemastery 用于配置 schema），提供 Prometheus 指标、导出/备份/审计等运维工具"
+   ],
+   "use_cases": [
+    "为基于 DeepSeek Harness 或独立运行的 LLM 应用提供跨轮持久记忆",
+    "多会话隔离场景（scopeMode: per-session）下的用户记忆管理",
+    "需要情感感知、PII 标记与危机检测机制检查的智能体记忆层"
+   ]
+  },
+  "sha": "00b61fc255bf",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aba13d2762fa": {
+  "identity": {
+   "one_liner": "开源数据库模式地图工具，预计算键、连接路径、粒度等，经 MCP/CLI/markdown 提供给 AI 代理。",
+   "review": "keygraph 是面向数据分析师代理、text-to-SQL 代理等 LLM 代理的数据库模式地图工具。它一次性读取元数据，生成外键、连接路径、表粒度、状态码与业务上下文，并推断缺失外键且标注置信度。仅读元数据、不做 LLM 调用，同一输入产生相同输出。支持 MySQL、PostgreSQL、SQLite、SQL Server、ClickHouse、MongoDB 等，需 Python 3.11+，MIT 协议。",
+   "highlights": [
+    "提供十五个 MCP 工具（十四个只读、一个记录查询），无运行查询的工具",
+    "推断的关系携带置信度与理由，业务上下文标注已验证/未验证",
+    "三种接口读取同一图：MCP 服务器、CLI --json、markdown 文件，另含离线 HTML 浏览器"
+   ],
+   "use_cases": [
+    "为 text-to-SQL 代理提供键、索引、连接路径、粒度与状态码等模式上下文",
+    "在声明外键很少的数据库中推断缺失外键并生成按业务区域分组的 ER 图",
+    "查找业务概念所在表、解读枚举/状态码含义，并对列值做脱敏画像"
+   ]
+  },
+  "sha": "aba13d2762fa",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

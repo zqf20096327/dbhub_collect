@@ -2953,5 +2953,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7868e61e1a68": {
+  "identity": {
+   "one_liner": "扫描自有网络中的摄像头，读取单帧画面，匹配 CVE，并聚类人脸为人物时间线。",
+   "review": "一个基于 Python 3.11 与 PostgreSQL 的命令行工具，用于扫描用户自有网络中的摄像头：通过 nmap/Shodan 发现设备，尝试凭据登录，按 NVD 源匹配 CVE 并读取单帧，再用 InsightFace 检测人脸并聚类为匿名人物 ID。所有结果写入 Postgres，通过 report/search 命令查询，无定时任务和监听端口。README 明确限定仅限授权使用，人脸不自动标注，须操作员手动命名。",
+   "highlights": [
+    "流水线分为发现、凭据、CVE、人脸、查询等阶段，各阶段写入 Postgres 行并支持只读报表",
+    "CVE 路径对每个匹配只读取一帧，不发送 payload，不向设备写入任何配置",
+    "targets.allowed_cidrs 默认为空列表，未声明的地址在扫描前会被拒绝"
+   ],
+   "use_cases": [
+    "对自有实验室网络中的摄像头进行资产发现、凭据与 CVE 检查",
+    "记录某人物在哪些摄像头、何时出现的只读时间线查询",
+    "用 measure threshold 测量人脸聚类阈值的适用数值"
+   ]
+  },
+  "sha": "7868e61e1a68",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7ddb53bfbc2f": {
+  "identity": {
+   "one_liner": "Hermes Agent 恢复演练插件，在隔离 Docker 网络中从备份重建应用并验证可恢复性",
+   "review": "RestoreProof 是 Hermes Agent 的社区插件，将备份在隔离的 Docker 网络中恢复、启动应用并执行检查（数据库行、文件引用、用户旅程、恢复时间与数据丢失窗口），输出带 sha256 的证据报告和 PASS/PARTIAL/FAIL 等五种判定。判定由确定性代码产生，模型仅起草合同。需 Docker 与 Hermes Agent，支持 PostgreSQL、MySQL/MariaDB、MongoDB、SQLite，可经 /drill 命令、CLI 或 CI 运行，采用 MIT 许可。",
+   "highlights": [
+    "六阶段演练流程（preflight、isolate、restore、boot、verify、cleanup），五类判定结果，退出码 0/1/2 可用于 CI 与 cron",
+    "恢复合同（YAML）声明式定义恢复标准，SQL 检查限定为只读 SELECT，MongoDB 检查为只读表达式，无 shell 命令执行",
+    "隔离网络运行、无出口流量、不拉取镜像、cap-drop ALL、密钥从 Hermes 密钥库读取并在报告中脱敏"
+   ],
+   "use_cases": [
+    "定期夜间恢复演练，将判定结果推送到手机或聊天应用",
+    "备份作业显示成功后，验证应用与客户工作流能否实际恢复",
+    "CI/CD 中以 hermes restoreproof run 命令运行恢复演练并按退出码判定"
+   ]
+  },
+  "sha": "7ddb53bfbc2f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

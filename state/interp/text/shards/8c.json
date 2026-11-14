@@ -2700,5 +2700,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9675c108b518": {
+  "identity": {
+   "one_liner": "面向 Go 服务开发的框架库，提供配置、DI、传输与遥测的一致性组装",
+   "review": "go-service 是一个以包库形式发布的 Go 服务构建框架，本身不含可执行入口，需配合 go-service-template 或 go-client-template 生成 main。它基于 go-signal v2 做依赖注入与生命周期管理（Dig 解析依赖），提供 module.Library/Server/Client 三个模块束，支持 HTTP、gRPC 传输、缓存、加密、遥测等子系统。配置支持 JSON、HJSON、TOML、YAML 四种格式，可通过 file:、env: 前缀指定来源，也可按默认路径查找。v3 相对 v2 是破坏性大版本，DI 接口需显式迁移。",
+   "highlights": [
+    "提供 module.Library、module.Server、module.Client 三个高层模块束，覆盖长驻服务与短生命周期命令两类进程",
+    "配置解码支持 JSON、HJSON、TOML、YAML 格式，来源支持文件、环境变量（base64 编码）及默认目录查找，并提供 config.NewConfig[T] 泛型辅助完成解码、空值检测与校验",
+    "依赖注入与生命周期由 go-signal v2 承担，App.Serve 与 App.Run 分别用于服务端与客户端命令，内置启动/停止超时（默认 15 秒）与 panic 恢复"
+   ],
+   "use_cases": [
+    "需要统一配置加载、依赖注入与遥测接线的长驻 Go 后台服务",
+    "控制、迁移或批处理类的短生命周期命令行工具",
+    "在现有模块中以包为单位引入传输（HTTP/gRPC）、缓存、加密等子系统组件"
+   ]
+  },
+  "sha": "9675c108b518",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4db7097a53a1": {
+  "identity": {
+   "one_liner": "本地优先的视频照片媒体库，扫描生成缩略图与标签，离线浏览搜索播放",
+   "review": "Meguri 是一款基于 Electron + React + SQLite（better-sqlite3）构建的桌面应用，用于管理和浏览本地视频、图片及音频。它递归扫描指定文件夹，生成缩略图、标签与元数据，通过 FTS5 提供全文搜索，内置 ffmpeg 静态二进制以支持播放和缩略图生成。面向希望离线管理个人媒体文件、不依赖云服务或账户的用户。macOS 版本未签名需手动允许运行。",
+   "highlights": [
+    "递归扫描文件夹并生成 WebP 缩略图、标签与元数据，基于内容哈希跟踪移动/重命名",
+    "FTS5 全文搜索，支持按标签、评分、日期范围等多条件过滤与排序",
+    "提供 Discovery 随机浏览模式与全屏播放列表，支持自动播放、随机、循环"
+   ],
+   "use_cases": [
+    "集中管理本地视频、照片和音频库，按标签/评分/日期检索浏览",
+    "全屏连续播放收藏列表（相册、稍后观看队列、搜索结果）",
+    "多工作区整理不同媒体目录，跨工作区统一维护标签与历史记录"
+   ]
+  },
+  "sha": "4db7097a53a1",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0da10c85ffda": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 社区插件，用多个持久会话组织长期多 agent 协作团队。",
+   "review": "dsh-agent-lines 是运行在 DSH Host 进程内的社区插件，用于把多个 DSH 会话组成由负责人 agent 带队的长期团队：每条「线」由稳定 label 与可替换 sessionId 构成，消息、任务与状态落盘到本地 SQLite，支持会话交接、退役与唤醒。数据存储限本地文件系统，不支持跨机多活，也不内置任务 DAG。适用于需要长期固定分工、跨重启延续记忆的多 agent 项目。",
+   "highlights": [
+    "以 line = label + sessionId 为核心实体，支持 line_handoff、line_rebind、line_handover_manager 等会话交接与负责人更替，历史记忆保留",
+    "消息投递为至少一次语义，幂等依赖 DSH 的 requestId，提供 line_messages / line_trace / line_redeliver 查询与重投",
+    "提供 27 个工具、只读看板（Board 2.0）与 line_metrics / line_hibernate 等 token 采样与休眠能力，数据存于本地 SQLite（schema v15）"
+   ],
+   "use_cases": [
+    "长期项目（小说、视频、研究、运营、开发等）中多个 agent 固定分工，避免每次会话重复交代背景",
+    "任务中断后重启需延续消息与状态，或会话满了需换新会话但保留角色记忆的场景",
+    "需要只读查看任务、组织与 token 消耗数据，并结合 DSH 官方任务板做局部并行的团队"
+   ]
+  },
+  "sha": "0da10c85ffda",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2877,5 +2877,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f86569f25389": {
+  "identity": {
+   "one_liner": "自托管离线优先的餐厅 POS 与管理系统，整栈运行于本地局域网服务器。",
+   "review": "Nodedr OrderRestro 是面向餐厅、咖啡店、云厨房及多门店连锁的自托管餐厅管理与收银系统。它将 Postgres、NestJS API 和 Next.js 前端打包为三个容器，通过 docker compose 运行在餐厅本地局域网服务器上，断网后点餐、结账、厨房显示和打印仍可工作；也支持部署到 VPS 或经隧道对外访问。README 标注 20 个模块中部分尚在规划，分账/分单支付等功能未完成；许可证为 AGPL v3。",
+   "highlights": [
+    "支持堂食/外带/外卖点餐、桌台与预订管理、厨房显示系统（KDS）、QR/NFC 扫码点餐与库存、考勤工资、会计报表等 20 个产品模块（部分模块状态为规划中）",
+    "提供三种部署方式：本地局域网服务器（docker compose）、VPS/云主机、以及 Cloudflare Tunnel 等隧道反向代理；CasaOS/ZimaOS 提供多架构预构建镜像",
+    "内置印度 GST、美国 Sales Tax、欧盟 VAT 等多地区税制，支持 UPI QR 收款、ESC/POS USB 打印与现金抽屉，所有金额计算在服务端完成"
+   ],
+   "use_cases": [
+    "餐厅内网部署：单店在本地服务器运行，断网时点餐、结账、KDS 与打印不中断",
+    "无订阅的自托管替代方案：使用者自行管理服务器（本地或 VPS），无需依赖厂商云服务",
+    "多门店与后厨协作场景：需要桌台可视平面图、多站点厨单路由、跨门店库存调拨的餐饮运营"
+   ]
+  },
+  "sha": "f86569f25389",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bd09563cd109": {
+  "identity": {
+   "one_liner": "基于 Rust 的 Sigma 检测工程工具链，含解析、评估、流式运行与转换",
+   "review": "RSigma 是面向 Sigma 检测标准的工具集，用 Rust 实现，包含 YAML 解析、规则评估、规则转换、流式守护进程、Linter、LSP/MCP 服务器等组件，按 crate 划分发布。它接收 JSON、syslog、EVTX、OTLP 等多种格式日志并实时评估规则，支持有状态相关性窗口与 SQLite 状态持久化。适用于安全团队编写、测试、部署 Sigma 规则及将规则转换为后端查询的场景。",
+   "highlights": [
+    "将 Sigma YAML 规则解析为强类型 AST，编译为优化匹配器后对事件实时评估，支持滑动/翻滚/会话窗口等有状态相关性逻辑",
+    "以守护进程运行，支持 stdin/HTTP/NATS/OTLP/Unix socket 输入与多格式输出 sink，具备热重载、Prometheus 指标与 TLS/mTLS",
+    "提供 90 项检查的内置 linter、LSP 服务器编辑器集成，以及面向 PostgreSQL/TimescaleDB、LynxDB、Fibratus 等后端的规则转换"
+   ],
+   "use_cases": [
+    "在 CI 中对规则仓库执行 lint、校验、回测与覆盖度检查（提供 timescale/rsigma-action GitHub Action）",
+    "通过 OTLP 或 NATS 接入多源日志流，运行长驻检测守护进程并进行告警分流与风险评分",
+    "将 Sigma 规则转换为后端原生查询，在 PostgreSQL/TimescaleDB 归档上以只读方式执行狩猎"
+   ]
+  },
+  "sha": "bd09563cd109",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

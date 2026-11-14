@@ -2928,5 +2928,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7ff7d4dc9e4e": {
+  "identity": {
+   "one_liner": "两家餐饮店之间的订单中转应用，基于 Expo/React Native 与 Supabase",
+   "review": "这是 De La Salle 大学软件工程课程（CSSWENG）2026 年八人团队为真实客户开发的订单中转系统，连接约一公里外的 But First, Coffee 咖啡店与 Urban StrEat 炸鸡店，用于替代 Messenger 手工传单流程。源码在私有仓库，此仓库为项目展示；应用不处理支付、不替代店内 POS。",
+   "highlights": [
+    "单个 Expo 应用按登录门店显示咖啡或炸鸡界面，TanStack Query 维护持久化离线队列，断网时本地保存、恢复连接后发送",
+    "平板不直接写表，所有变更经 Postgres RPC 校验角色与七种状态转换后写入订单和事件日志；pg_cron 每分钟检查迟到订单并经 Edge Function 推送通知",
+    "提供 owner 网页仪表盘，含销售统计、订单查询、菜单设置、迟到告警计时器与平板 PIN 管理；配 Vitest 单元测试与 pgTAP 数据库测试并在 GitHub Actions 运行"
+   ],
+   "use_cases": [
+    "两家门店间通过应用自动中转订单，包含接单、支付记录、烹饪、配送、收货的状态跟踪",
+    "离线场景下记录操作，网络恢复后同步并显示未发送提示",
+    "店主通过网页仪表盘查看销售、订单与问题报告并调整菜单与告警设置"
+   ]
+  },
+  "sha": "7ff7d4dc9e4e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3130,5 +3130,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e50fe9d36678": {
+  "identity": {
+   "one_liner": "基于 Turborepo 的全栈 Web 应用启动模板，集成认证、数据库与环境变量管理",
+   "review": "Vazen 是一个 TypeScript monorepo 启动模板，提供 Next.js、React、Tailwind CSS、oRPC、Drizzle ORM、PostgreSQL 与 Better-Auth 等预配置技术栈。它面向需要快速搭建全栈项目的开发者，内置 Varlock 环境变量类型生成、Infisical 密钥管理、portless 本地域名开发及 oxlint、Playwright 等开发工具链。项目依赖较多第三方服务（Upstash、Cloudflare R2 等），使用前需分别配置。",
+   "highlights": [
+    "提供 Next.js v16、React v19、Tailwind CSS v4、Drizzle ORM 与 PostgreSQL 的 monorepo 项目结构",
+    "集成 Better-Auth 认证框架、oRPC 接口层与 TanStack Query 数据获取",
+    "通过 .env.schema 声明环境变量并生成类型化 env.ts，支持 Infisical 按环境注入密钥"
+   ],
+   "use_cases": [
+    "作为新全栈 Web 项目的初始代码库模板",
+    "需要集中管理开发、staging、生产多环境密钥的团队项目",
+    "需要本地 OAuth 回调域名（.id 后缀替代 .localhost）的开发环境搭建"
+   ]
+  },
+  "sha": "e50fe9d36678",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee459542316c": {
+  "identity": {
+   "one_liner": "面向 Ubuntu VPS 的自托管开源主机控制面板，采用 Laravel 面板加 Go root 代理架构",
+   "review": "RAYXO 是一个在 Ubuntu 24.04 服务器上运行的自托管主机管理面板，提供 Admin、Reseller、User 三级账户体系，用于在单台服务器上运营共享主机业务。它以 Nginx→Apache→PHP-FPM 提供 Web 服务，集成 MariaDB、PowerDNS、Postfix/Dovecot/Rspamd/Roundcube 邮件栈与 Let's Encrypt 证书。面板本身不以 root 运行，系统改动通过封闭动作列表的 Go 代理执行。当前为 beta（v0.7.0），备份迁移（P4）尚未实现，许可证为 AGPL-3.0。",
+   "highlights": [
+    "支持域名/子域名管理、每域名 PHP 7.4–8.5、Let's Encrypt 证书（含通配符）、MariaDB、PowerDNS、Postfix+Dovecot+Rspamd+Roundcube 邮件栈、FTP/SFTP/SSH jail 与文件管理器",
+    "每个托管账户为独立 Linux 用户并用 cgroups 限制 CPU/RAM/进程/IO；面板不持 root，系统变更经 Go 代理的封闭动作清单执行",
+    "提供 REST API、三级账户（Admin/Reseller/User，含转售与品牌定制）、一键 setup.sh 安装（校验 checksum，端口 2222），本地开发可用 Herd 与模拟代理"
+   ],
+   "use_cases": [
+    "在单台 Ubuntu VPS 上运营共享主机业务（管理员→分销商→用户三层结构）",
+    "需要自带邮件托管（DKIM/SPF/DMARC 自动配置）、DNS（PowerDNS）与 Let's Encrypt SSL 的自托管服务器管理",
+    "从 DirectAdmin 迁移的场景：目录结构遵循 DirectAdmin，面板端口同为 2222（备份导入功能尚在 P4 阶段未实现）"
+   ]
+  },
+  "sha": "ee459542316c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b72e6036018": {
+  "identity": {
+   "one_liner": "自托管研究文献追踪平台，基于 Python 标准库与 SQLite 本地运行",
+   "review": "FrontierDock 前沿观察站是一个自托管研究情报平台，用于管理期刊目录、卷期题录、摘要译文、待读清单与关键词分布。基础功能仅依赖 Python 3.11+ 标准库和 SQLite，无需第三方包和 API 密钥，数据保留在本机。默认抓取模式只写任务队列，需由外部 Agent 执行。适合希望本地管理期刊文献追踪的研究者。",
+   "highlights": [
+    "基础功能无需第三方依赖与 API 密钥，数据存于本地 SQLite",
+    "提供期刊浏览、论文检索、摘要阅读、三态阅读管理和关键词统计等页面",
+    "原摘要与译文绑定指纹校验，跨记录冲突进入复核队列而非静默覆盖"
+   ],
+   "use_cases": [
+    "按期刊追踪近期论文并维护个人待读清单",
+    "本地管理题录、摘要译文与关键词分布",
+    "接入 Crossref、DeepSeek、MinerU 等可选外部服务补全数据"
+   ]
+  },
+  "sha": "5b72e6036018",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "569c672ecd6e": {
+  "identity": {
+   "one_liner": "纯 Python 标准库实现的离线 SQL 网页控制台，零第三方依赖运行。",
+   "review": "面向无外网、不能安装客户端或 pip 包的内网运维/实施场景，提供浏览器访问的数据库查询工具。驱动以纯 Python 形式随包放在 vendor/ 目录，解压后仅依赖目标机的 Python 3.7+ 即可运行；内置账号登录、动态图片验证码与默认只读拦截，支持在界面中配置数据源并热加载。SQL Server 与 Oracle 驱动因仅提供平台相关二进制包，需离线场景自行补入对应 wheel。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQL Server、Oracle、达梦 DM8、SQLite、Redis 七种数据源，驱动按优先级自动降级并在缺失时明确报错",
+    "强制登录采用 PBKDF2-HMAC-SHA256（20 万次迭代）与 32 字节随机会话 token，验证码 PNG 由标准库 zlib/struct 生成",
+    "语句级只读保护，剥注释、按分号切分并保留 BEGIN…END 程序块完整性，默认拦截 INSERT/UPDATE/DELETE/DDL，可按数据源放开"
+   ],
+   "use_cases": [
+    "内网或信创环境（含麒麟 V10）中无法安装客户端与 pip 包的目标机上查询数据库",
+    "需要多账号使用并按账号分配可见数据源与模式的团队共用控制台",
+    "有安全扫描要求的现场，通过登录、验证码、限流与只读拦截提供访问入口"
+   ]
+  },
+  "sha": "569c672ecd6e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

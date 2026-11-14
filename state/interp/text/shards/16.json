@@ -3463,5 +3463,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9d9dfe765f3d": {
+  "identity": {
+   "one_liner": "面向 Agent 的本地长期记忆库，基于 SQLite 与 BM25 检索，支持 CJK。",
+   "review": "Brain4Agent 将 Agent 对话轮次存入单个 SQLite 文件，按会话粒度检索，检索路径不调用模型，返回 corpus_missing、missing_terms 等证据字段而非置信分。索引与查询采用不同分词器，可选 jieba 词典。需 Python 3.11+；写入后首次查询需重建内存索引，10 万条记忆约需 1.2 GB 常驻内存。",
+   "highlights": [
+    "核心检索为 BM25，无模型调用与 API key，查询为毫秒级；CJK 文本通过字符 bigram 无需分词模型即可索引",
+    "支持 CLI、MCP server（五个工具）与 Python 库三种使用方式，可从 JSONL 批量导入历史对话",
+    "搜索结果附带 corpus_missing、missing_terms、term_frequencies、related_terms 等证据信息，是否拒绝由调用方决定"
+   ],
+   "use_cases": [
+    "为 MCP 兼容的 Agent 提供本地长期记忆存储与检索",
+    "记录代码库开发过程中决策、失败尝试等上下文并按会话回查",
+    "批量导入 JSONL 格式的既有对话历史进行检索"
+   ]
+  },
+  "sha": "9d9dfe765f3d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8cf8fcf1de97": {
+  "identity": {
+   "one_liner": "面向 .NET 11 的嵌入式加密数据库，含 gRPC 服务模式",
+   "review": "SharpCoreDB 是面向 .NET 团队的数据库引擎，提供嵌入式存储与 gRPC 服务（HTTP/2/HTTP/3）两种部署模式，文件层使用 AES-256-GCM 加密并支持 ACID、向量检索、图算法与 GraphRAG，SQL 采用 SQLite 方言。当前 v2.1.4 仅支持 net11.0，需 .NET 11 SDK 构建，图形界面已迁移至 SCDMS 仓库。",
+   "highlights": [
+    "提供嵌入式与 gRPC（HTTP/2 + HTTP/3）服务两种运行模式，采用 SQLite SQL 方言",
+    "支持 AES-256-GCM 静态加密、TLS 1.2+、JWT、可选 mTLS 与 RBAC",
+    "内置向量检索、分析功能与 GraphRAG/图算法，SIMD 路径基于 System.Runtime.Intrinsics（AVX-512→AVX2→SSE2→标量）"
+   ],
+   "use_cases": [
+    ".NET 11 应用中的单文件加密本地存储",
+    "需要 gRPC 网络访问的安全数据库服务部署",
+    "涉及向量检索或 GraphRAG 的数据应用"
+   ]
+  },
+  "sha": "8cf8fcf1de97",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f3c9bacbcd8a": {
+  "identity": {
+   "one_liner": "Herdr 应用的 Postgres 浏览器 mod，以笔记本组织 SQL 查询并可视化结果。",
+   "review": "这是一个为 Herdr 应用编写的 Postgres 浏览器 mod（mod）。它以笔记本形式保存各数据库的 SQL 查询并支持文件夹整理，每个结果可呈现为表格、15 种图表之一或列摘要。它本身不持有 API 密钥，AI 功能通过调用用户已安装并登录的编码代理（如 Claude Code）生成、修复和修改查询。查询经本机 psql 以只读默认事务执行；README 明确该设置并非锁，建议以仅读角色连接。适合已使用 Herdr 并需要浏览 Postgres 数据、保存查询的用户。",
+   "highlights": [
+    "将查询保存为笔记本并按文件夹整理，结果可显示为表格、15 种图表（柱状、折线、散点、直方图等）或列摘要，图表选择与查询一同保存",
+    "提供三个 AI 按钮（生成查询、修复被服务器拒绝的查询、按描述修改查询），由用户已安装的编码代理执行，mod 不持有 API 密钥且代理运行过程可在独立终端观看或中止",
+    "查询通过本机 psql 执行，会话默认只读（default_transaction_read_only=on），结果最多完整显示 50,000 行，可另存为 CSV"
+   ],
+   "use_cases": [
+    "在 Herdr 标签页中浏览、查询 Postgres 数据库并保存常用 SQL 查询",
+    "将查询结果绘制为图表或汇总，并把完整结果导出为 CSV",
+    "借助已安装的编码代理从自然语言生成 SQL，或修复语法/表列错误后重跑"
+   ]
+  },
+  "sha": "f3c9bacbcd8a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

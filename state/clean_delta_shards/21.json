@@ -16815,5 +16815,452 @@
    ]
   ],
   "at": "2026-11-10"
+ },
+ "2105ee212c3a+2": {
+  "fn": "tinbase/tinbase",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "tinbase logo "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "A pure-JS backend built on PGlite (Postgres compiled to WASM), with an embedded-native-Postgres and an ultralight pure-JS (`@tinbase/pg-mem`) engine too. One command, real Row Level Security, and 1:1 with Supabase's APIs and migration conventions."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    17,
+    7,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "- **Three engines, one API.** Default is embedded native Postgres 17 (macOS/Linux): ~59 MB of RAM at boot, PocketBase-class footprint, zero semantic differences; the first run downloads ~12 MB of binaries. `--engine wasm` runs PGlite (Postgres compiled to WASM) instead - portable, browser-ready, and the default on Windows. `--engine pgmem` is an ultralight pure-JS in-memory engine for local dev / previews - see Engines."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "- **Runs real projects unchanged.** A project's `CREATE EXTENSION` statements for extensions tinbase can't install (pg_cron, pg_net, http, hypopg, …) are skipped rather than aborting; `CREATE INDEX CONCURRENTLY` is applied without the (transaction-illegal) `CONCURRENTLY`; each migration runs with a fresh `search_path` like the Supabase CLI; and Vault, pgmq, cron, pg_net, and `moddatetime` are emulated. As a test, Cap-go/capgo's **335 migrations + seed apply and query cleanly**."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    53,
+    20,
+    53
+   ],
+   [
+    "replace",
+    53,
+    62,
+    53,
+    54,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    70,
+    54,
+    62
+   ],
+   [
+    "replace",
+    70,
+    86,
+    62,
+    63,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    90,
+    63,
+    67
+   ],
+   [
+    "replace",
+    90,
+    92,
+    67,
+    69,
+    [
+     "- **native** (default on macOS/Linux): embedded native Postgres 17. First run downloads platform binaries (~12 MB, from theseus-rs/postgresql-binaries, cached in `~/.cache/tinbase`), then `initdb` with memory-lean settings. ~59 MB RAM at boot. Listens only on a private unix socket (0700 dir, trust auth) - never TCP. macOS/Linux on x64/arm64.",
+     "- **wasm** (default on Windows and in a Lifo box): PGlite. Zero setup, runs anywhere Node runs - and in the browser. Its WASM heap sits around ~575-650 MB and does not shrink under load."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    69,
+    70
+   ],
+   [
+    "replace",
+    93,
+    94,
+    70,
+    71,
+    [
+     "- **pgmem** (`--engine pgmem`): an ultralight, pure-JS, in-memory engine via `@tinbase/pg-mem` — our fork of pg-mem — **no WASM**, so it's the lightest option for the browser (RapidNative local-dev / previews). The fork adds the Postgres surface real projects rely on: **PL/pgSQL, triggers, row-level-security policies, correlated subqueries, `information_schema` constraints, MERGE, range/full-text types, and declarative partitioning**. A full Supabase-style bootstrap and real migration sets now apply **unchanged — nothing skipped** (RLS/trigger/PL-pgSQL DDL runs). Runs the REST CRUD surface, email/password auth, **edge functions, realtime (broadcast/presence + `postgres_changes`), and database webhooks**. Caveats vs the Postgres engines: `LISTEN`/`NOTIFY` are no-ops, so realtime/webhook change events are synthesized in JS by the REST layer (every write goes through it in-process); the engine runs with superuser rights, so **RLS policies are created but not enforced per-request** (events are delivered unfiltered, not per-subscriber); **cron** and **pgmq** are absent. Local-dev / preview only — never production."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    113,
+    71,
+    90
+   ],
+   [
+    "replace",
+    113,
+    121,
+    90,
+    91,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    135,
+    91,
+    105
+   ],
+   [
+    "replace",
+    135,
+    148,
+    105,
+    118,
+    [
+     "|Service|Endpoint|Coverage|",
+     "|---|---|---|",
+     "|REST (PostgREST)|`/rest/v1`|select with embedded resources (to-one, to-many, many-to-many via junction, nested, `!inner`, aliases, hints, casts, JSON paths), all common filter operators incl. `or`/`and` trees, full-text search, order/limit/offset (top-level and per-embed), `single`/`maybeSingle`, `count`, insert/bulk insert, upsert (merge/ignore), update, delete, `Prefer` handling, RPC (scalar, `setof`, void, filters on results), PostgREST-shaped errors|",
+     "|Auth (GoTrue)|`/auth/v1`|email/password signup + sign-in, anonymous sign-in, email OTP / magic links / recovery, phone (SMS OTP) sign-in, signup and phone change through Supabase's `[auth.sms.twilio]` provider, session refresh with rotation, `getUser`, `updateUser`, sign-out, admin user CRUD (service key), GoTrue-shaped errors. JWTs are HS256 via WebCrypto; passwords are PBKDF2|",
+     "|Storage|`/storage/v1`|bucket CRUD, upload (raw + multipart), download (with byte ranges), public objects, signed URLs, signed upload URLs, list with folder entries, move/copy, remove, size/MIME limits, a project-wide storage quota. Metadata lives in `storage.objects` with RLS enforced; bytes go through a pluggable driver (fs in Node, memory anywhere)|",
+     "|Storage over S3|`/storage/v1/s3`|Supabase's S3 protocol on the same buckets and objects: AWS Signature V4 (header and presigned URLs, signed and unsigned aws-chunked bodies), bucket CRUD, Put/Get/Head/Delete/DeleteObjects, ListObjects(V2), CopyObject, multipart uploads (incl. UploadPartCopy). Works with the AWS SDKs, `@aws-sdk/lib-storage` and the AWS CLI. See S3 protocol|",
+     "|Edge Functions|`/functions/v1`|`supabase.functions.invoke()` - Supabase-style `Deno.serve(handler)` functions (with `Deno.env`) run unchanged, as do `export default` handlers; loaded from `supabase/functions/<name>/index.{ts,js,mjs}` by the CLI or passed via `createBackend({ functions })`. Web-API functions work as-is; with `esbuild` installed, TypeScript, `npm:`/`jsr:`/URL imports (remote `.ts` included) and import maps (`<fn>/deno.json`, `functions/import_map.json`) are bundled. The CLI loads each function on its first request (`TINBASE_FUNCTIONS_EAGER=1` loads all at startup)|",
+     "|Queues (pgmq)|`pgmq.*`|Message queues via a pure-SQL pgmq subset (create/send/read/pop/delete/archive, visibility timeouts). Call from SQL or `supabase.schema('pgmq').rpc(...)`. No extension|",
+     "|Cron|`cron.*`|Scheduled jobs, drop-in with pg_cron's API — `cron.schedule(name, '*/5 * * * *', 'sql')` (also the `'N seconds'` form), `cron.unschedule(...)`, and the `cron.job` / `cron.job_run_details` tables. Schedules match in **UTC**, like hosted pg_cron; an in-process scheduler runs due jobs and logs to `cron.job_run_details`. Jobs run while tinbase is up, with service-role privileges. No extension|",
+     "|HTTP from SQL (pg_net)|`net.*`|`net.http_post` / `net.http_get` / `net.http_delete(...)` enqueue a request that an in-process worker sends, recording the reply in `net._http_response`. Lets a cron job or trigger call an Edge Function or any URL — the common Supabase `cron.schedule(..., $$ select net.http_post(...) $$)` pattern works unchanged. No extension|",
+     "|Database Webhooks|config|Fire HTTP requests on table INSERT/UPDATE/DELETE with Supabase's exact payload (`type`/`table`/`schema`/`record`/`old_record`). Configured via `createBackend({ webhooks })`, `backend.webhooks.register()`, or `supabase/webhooks.json`. Built on the CDC pipeline — no extension needed|",
+     "|Studio (Admin UI)|`/_/`|A Supabase-Studio-style dashboard (React + Radix + Tailwind) with real URL routing and a command palette: table editor (filters, sorting, inline type-aware editing, FK navigation, RLS + role preview), database section (schema visualizer, tables, functions, triggers, enums, indexes, migrations, policies, roles), authentication, storage, edge functions, realtime, automations (cron/queues/webhooks), logs, SQL editor, settings, and a live Advisor. One self-contained HTML file (works in the single binary); log in with the service_role key|",
+     "|Realtime|`/realtime/v1`|Phoenix protocol (v1 JSON and v2 array/binary serializers), `postgres_changes` (INSERT/UPDATE/DELETE, filters) fed by triggers + `pg_notify`, broadcast (incl. binary payloads), presence. WebSocket server is a ~150-line RFC 6455 implementation - no `ws` dependency|"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    160,
+    118,
+    130
+   ],
+   [
+    "replace",
+    160,
+    168,
+    130,
+    131,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    254,
+    131,
+    217
+   ],
+   [
+    "replace",
+    254,
+    262,
+    217,
+    218,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    272,
+    218,
+    228
+   ],
+   [
+    "replace",
+    272,
+    277,
+    228,
+    233,
+    [
+     "|Setting|Default|",
+     "|---|---|",
+     "|`TINBASE_S3_ACCESS_KEY_ID` / `TINBASE_S3_SECRET_ACCESS_KEY` (set both)|the Supabase CLI local keys with the default JWT secret; otherwise derived from the JWT secret (`tinbase keys --s3` prints them)|",
+     "|`TINBASE_S3_REGION`|`local` (clients may sign with any region)|",
+     "|`TINBASE_S3_ENABLED=false` or `[storage.s3_protocol] enabled = false`|on|"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    295,
+    233,
+    251
+   ],
+   [
+    "replace",
+    295,
+    296,
+    251,
+    252,
+    [
+     "tinbase ships with a built-in dashboard at `/_/` - the same shape as Supabase Studio, with real URL routing (deep links, back/forward), a `Ctrl+K` command palette, light/dark theming, and drag-resizable panels:"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    329,
+    252,
+    285
+   ],
+   [
+    "replace",
+    329,
+    330,
+    285,
+    286,
+    [
+     "Memory footprint comparison"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    331,
+    286,
+    287
+   ],
+   [
+    "replace",
+    331,
+    332,
+    287,
+    288,
+    [
+     "Measured on an Apple Silicon Mac (48 GB), macOS 15. Same workload for all three: boot with one migrated table, then 1,000 single-row inserts followed by 1,000 filtered list queries. Memory is physical footprint (`vmmap`) for native processes and the sum of `docker stats` for containers. Reproduce with `bench/footprint.ts`; raw numbers in `bench/results.json`."
+    ]
+   ],
+   [
+    "equal",
+    332,
+    333,
+    288,
+    289
+   ],
+   [
+    "replace",
+    333,
+    343,
+    289,
+    299,
+    [
+     "||tinbase (single binary)|tinbase (native)|tinbase (pg-mem)|tinbase (wasm)|PocketBase v0.39.5|Supabase local|",
+     "|---|---|---|---|---|---|---|",
+     "|Database|real Postgres 17 + RLS|real Postgres 17 + RLS|in-memory, pure-JS¹|real Postgres (PGlite) + RLS|SQLite|Postgres 17|",
+     "|Runtime memory at boot|49 MB|59 MB|71 MB|~610 MB²|15 MB|1,441 MB|",
+     "|Runtime memory after workload|66 MB|100 MB|185 MB|~640 MB²|24 MB|1,626 MB|",
+     "|Data on disk (1k rows)|39 MB|39 MB|0 (in-memory)|40 MB|7 MB|70 MB|",
+     "|Install size|92 MB (58 MB binary + PG)|36 MB³|6.7 MB³|27 MB³|30 MB|2,291 MB⁴|",
+     "|Processes|2|2|1|1|1|12 containers + Docker|",
+     "|1,000 inserts|0.4 s|0.5 s|0.8 s|0.8 s|0.3 s|1.1 s|",
+     "|1,000 filtered reads|0.3 s|0.4 s|0.8 s|0.9 s|0.3 s|1.0 s|"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    344,
+    299,
+    300
+   ],
+   [
+    "replace",
+    344,
+    345,
+    300,
+    301,
+    [
+     "¹ **pgmem** is a pure-JS in-memory engine (local dev / preview) via the `@tinbase/pg-mem` fork. It now runs PL/pgSQL, triggers and RLS-policy DDL (migrations apply unchanged, nothing skipped), but the engine runs as superuser so RLS isn't enforced per-request (realtime/webhook events are unfiltered), and **cron**/**pgmq** are absent. Pure JS (no WASM), the lightest option for the browser. See Engines."
+    ]
+   ],
+   [
+    "equal",
+    345,
+    359,
+    301,
+    315
+   ],
+   [
+    "replace",
+    359,
+    367,
+    315,
+    323,
+    [
+     "|Module|Coverage|Supported|Missing|",
+     "|---|---|---|---|",
+     "|Database (`postgrest-js`)|~85%|full filter grammar, embeds (to-one/to-many/m2m/nested/`!inner`), JSON paths, upsert, count, single/maybeSingle, RPC|aggregates in select, full spread embeds, `.explain()`, `.csv()`, geojson|",
+     "|Auth (`auth-js`)|~80%|email/password, anonymous sign-in, OTP + magic links + password recovery (pluggable mailer), OAuth providers (Google/GitHub presets + generic) with PKCE and identity linking, refresh rotation, user updates, admin CRUD|MFA, SSO/SAML, phone auth|",
+     "|Storage (`storage-js`)|~80%|buckets, upload/download, signed URLs + signed uploads, list/move/copy/remove, size/MIME limits, the S3 protocol|resumable (TUS) uploads, image transformations|",
+     "|Realtime (`realtime-js`)|~85%|postgres_changes with filters + **per-subscriber RLS filtering** (INSERT/UPDATE), broadcast (incl. binary), presence, v1+v2 serializers|per-row DELETE RLS, private channel auth, DB-triggered broadcast|",
+     "|Edge Functions (`functions-js`)|~70%|`invoke()`; **Deno.serve/Deno.env-style functions run unchanged** + export-default; auth context, project-dir loading|`npm:`/`jsr:`/URL import resolution, `supabase functions deploy`|",
+     "|Type generation|~85%|`tinbase gen types typescript` → `Database` type (Tables/Views/Functions/Enums/Relationships)|composite-type args, multi-schema output|"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    389,
+    323,
+    345
+   ],
+   [
+    "replace",
+    389,
+    392,
+    345,
+    346,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    394,
+    346,
+    348
+   ],
+   [
+    "replace",
+    394,
+    395,
+    348,
+    349,
+    [
+     "tinbase was built for lifo - a project that maps Linux APIs into the browser - to let **Expo apps run fully in the browser with full-stack capability** (database, auth, storage, realtime, no server). It is part of RapidNative. That origin drives the architecture:"
+    ]
+   ],
+   [
+    "equal",
+    395,
+    401,
+    349,
+    355
+   ],
+   [
+    "replace",
+    401,
+    402,
+    355,
+    356,
+    [
+     "tinbase is built by the team behind **RapidNative** — AI that"
+    ]
+   ],
+   [
+    "equal",
+    402,
+    405,
+    356,
+    359
+   ],
+   [
+    "replace",
+    405,
+    411,
+    359,
+    365,
+    [
+     "|Project|What it is|",
+     "|---|---|",
+     "|RapidNative|AI that generates production-ready React Native apps and UIs from a prompt|",
+     "|Lifo|Linux APIs in the browser — real dev tooling with no VM and no container|",
+     "|ORCHD|A multi-tenant workload orchestrator — per-tenant workloads that sleep when idle and wake on the next request|",
+     "|jetplane|A Metro plugin and a thin dev server for Expo — many dev environments per machine|"
+    ]
+   ],
+   [
+    "equal",
+    411,
+    412,
+    365,
+    366
+   ],
+   [
+    "replace",
+    412,
+    413,
+    366,
+    367,
+    [
+     "See them all on rapidnative.com/open-source."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

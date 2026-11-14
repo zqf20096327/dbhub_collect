@@ -2976,5 +2976,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8fe77dbfc376": {
+  "identity": {
+   "one_liner": "基于 FoundationDB 的分布式事务型文档数据库，使用 RESP 协议",
+   "review": "Kronotop 是一个构建在 FoundationDB 之上的分布式文档数据库，通过 namespace（FoundationDB key prefix）实现租户级逻辑隔离，数据模型包含存储 BSON 文档的 Bucket 和有序键值的 ZMap，二者可参与同一 ACID 事务。协议使用 RESP2/RESP3，可用 redis-cli 或 valkey-cli 直接连接。目前处于 developer preview 阶段，API 与运维行为在首个稳定版发布前可能变动；运行需 Java 25 或更新版本，元数据与索引存于 FoundationDB，文档正文存于本地磁盘的 Volume 追加式引擎。",
+   "highlights": [
+    "支持事务跨任意多个 namespace 提交，默认严格可串行化，继承自 FoundationDB",
+    "Bucket 支持 BQL 查询语言、单字段/复合/向量二级索引，及游标分批返回结果",
+    "通过 RESP2/RESP3 协议兼容现有 RESP 客户端，README 记录单集群创建 1,000,001 个 namespace"
+   ],
+   "use_cases": [
+    "为 AI agent 提供记忆存储：namespace 隔离、向量检索与文档及 ZMap 状态的事务性更新",
+    "多租户文档存储：每个租户一个 namespace，键空间级隔离",
+    "分布式协调：基于 lease 的锁，含原子获取、安全释放与来自 versionstamp 提交的 fencing token"
+   ]
+  },
+  "sha": "8fe77dbfc376",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fd634752f402": {
+  "identity": {
+   "one_liner": "运行在Home Assistant附加组件中的本地Tidbyt屏幕调度与渲染服务器",
+   "review": "Tidbytr是一个TypeScript服务器与Home Assistant附加组件，用于在原生固件的Tidbyt Gen 2上渲染时钟、美国NWS天气预报/警报和体育比分，并通过Tidbyt API推送画面。需HA附加组件商店（amd64或aarch64）、设备ID/API密钥及出站HTTPS；时钟主导轮播为默认模式，另有优先级调度模式。",
+   "highlights": [
+    "提供时钟、NWS天气（美国范围）、NFL/NBA/MLB/NHL比分的本地渲染与推送，Node.js与Pixlet已打包",
+    "支持时钟主导轮播与优先级调度两种模式，包含静音时段、贪睡、Show now/Skip等手动控制",
+    "关键天气警报/监视可即时打断当前画面；仪表盘区分API已接受画面与预览及下一候选画面"
+   ],
+   "use_cases": [
+    "通过Home Assistant附加组件商店管理Tidbyt显示内容的家庭用户",
+    "需要天气警报打断与自定义轮播时长（clock_seconds 20–3600、screen_seconds 10–120）的场景",
+    "配置婴儿月龄和星空动画等个性化屏幕，并按静音时段控制显示的家庭显示设备使用"
+   ]
+  },
+  "sha": "fd634752f402",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3490,5 +3490,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f29fd25abb75": {
+  "identity": {
+   "one_liner": "PowerSync 的 Flutter/Dart 客户端 SDK，将后端数据库与本地 SQLite 同步",
+   "review": "该仓库是 PowerSync 的 Dart/Flutter 客户端 SDK，用于在客户端维护一个与后端数据库同步的 SQLite 数据库，后端支持 Postgres、MongoDB、MySQL 和 SQL Server。SDK 以 monorepo 形式组织，使用 melos 管理命令与包，主包为 powersync，另有已弃用的 attachments helper 包（新版本并入主包）。开发者可通过 pub.dev 获取 powersync 包，详细用法见该包文档。",
+   "highlights": [
+    "在客户端维护与后端数据库同步的 SQLite 数据库，改动可在多用户多设备间实时出现",
+    "后端支持 Postgres、MongoDB、MySQL、SQL Server",
+    "monorepo 使用 melos 管理，包含 powersync 与 attachments helper 等包"
+   ],
+   "use_cases": [
+    "Flutter/Dart 应用的离线数据存储与同步",
+    "需要客户端 SQLite 与 Postgres/MongoDB/MySQL/SQL Server 保持同步的场景",
+    "开发本地优先应用时接入 PowerSync 同步能力"
+   ]
+  },
+  "sha": "f29fd25abb75",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "616339c4ef21": {
+  "identity": {
+   "one_liner": "面向高中数学教师的私有部署 AI 批阅工作台，用本地模板差分去题干后做 OCR 与判分",
+   "review": "面向数学教师的私有部署批阅系统：导入试卷后完成模板确认、学生卷 OCR、数学判分、教师复核与成绩报告。核心机制是将学生卷与教师冻结模板经 SIFT+RANSAC 对齐后整幅相减，仅把差分后的笔迹送 OCR，判分阶段只收转录文本；采用 FastAPI+Vue3+SQLite 单实例部署，模型密钥 AES-GCM 加密存储。答题卡路由默认关闭，跨页续题截断为已知问题。",
+   "highlights": [
+    "差分管线：模板对齐相减去掉印刷题干，转录只看差分图，判分只收文本，text 阶段显式拒绝图片输入",
+    "按题分片与跨页尾块：并行请求按题负责，接上页的题追加上一页尾块，不新增调用",
+    "覆盖班级管理、成绩报告、题库、订正卷、课件库与教师助手；模型密钥加密存储，支持 Docker 与手动部署"
+   ],
+   "use_cases": [
+    "学校私有部署环境下的课后作业与试卷批阅",
+    "教师复核驱动的错题整理与题库建设",
+    "班级学情统计与成绩、报告导出"
+   ]
+  },
+  "sha": "616339c4ef21",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

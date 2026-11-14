@@ -22256,5 +22256,948 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "d3abf15fe6e1+2": {
+  "fn": "axelhamil/clean-stack",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    9,
+    0,
+    7
+   ],
+   [
+    "replace",
+    9,
+    16,
+    7,
+    8,
+    [
+     "> **Status: work in progress.** This boilerplate is under active iteration. No support, no SLA. Issues and pull requests follow `CONTRIBUTING.md`."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    23,
+    8,
+    15
+   ],
+   [
+    "replace",
+    23,
+    24,
+    15,
+    16,
+    [
+     "**Prerequisites**: Bun 1.4+, Node 26.13+, pnpm 12, Docker with Compose v2."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    29,
+    16,
+    21
+   ],
+   [
+    "replace",
+    29,
+    34,
+    21,
+    22,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    38,
+    22,
+    26
+   ],
+   [
+    "replace",
+    38,
+    39,
+    26,
+    27,
+    [
+     "No Bun, no Node, no pnpm on your host. Everything runs in containers (api + app + Postgres) with hot reload via `compose develop.watch`."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    27,
+    28
+   ],
+   [
+    "replace",
+    40,
+    41,
+    28,
+    29,
+    [
+     "**Prerequisites**: Docker with Compose v2.22+ (the `develop.watch` minimum). Follow the official guide for your OS: do not use `apt install docker.io` (Canonical's package, not Docker Inc.)."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    29,
+    30
+   ],
+   [
+    "replace",
+    42,
+    43,
+    30,
+    31,
+    [
+     "|OS|Official guide|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    31,
+    32
+   ],
+   [
+    "replace",
+    44,
+    52,
+    32,
+    40,
+    [
+     "|**macOS**|Docker Desktop for Mac|",
+     "|**Windows**|Docker Desktop for Windows (WSL2)|",
+     "|**Debian**|Install Docker Compose on Debian|",
+     "|**Ubuntu**|Install Docker Compose on Ubuntu|",
+     "|**Fedora**|Install Docker Compose on Fedora|",
+     "|**RHEL / Rocky / Alma**|Install Docker Compose on RHEL|",
+     "|**Arch / Manjaro**|`extra/docker` + `extra/docker-compose` (already v2, no plugin needed)|",
+     "|**NixOS**|Docker: NixOS Wiki|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    40,
+    41
+   ],
+   [
+    "replace",
+    53,
+    54,
+    41,
+    42,
+    [
+     "> v1 (`docker-compose`, hyphen) is EOL since June 2023: always use `docker compose` (space)."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    63,
+    42,
+    51
+   ],
+   [
+    "replace",
+    63,
+    66,
+    51,
+    52,
+    [
+     "Open `http://localhost:5173`. Sign-up requires email verification, and without `RESEND_API_KEY` mails are only logged (recipient and subject, not the link), so seed an account instead: `pnpm db:seed`, then sign in with it. Override the account with `SEED_EMAIL`, `SEED_NAME` and `SEED_PASSWORD`; defaults are in `apps/api/scripts/seed-dev-user.ts`."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    71,
+    52,
+    57
+   ],
+   [
+    "replace",
+    71,
+    72,
+    57,
+    58,
+    [
+     "||clean-stack|"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    58,
+    59
+   ],
+   [
+    "replace",
+    73,
+    87,
+    59,
+    71,
+    [
+     "|**Auth**|BetterAuth: passkeys (WebAuthn), 2FA (TOTP + backup codes), magic-link, DB-backed sessions, cross-tab sync via `BroadcastChannel`. Bearer alongside cookies for Capacitor. Native Bun + Hono, no hacks.|",
+     "|**Multi-tenant**|`organizationId` FK on every business table from migration #1 + `ScopedRepository` enforces it at the port. Personal org auto-created on signup, role-based invitations, ownership transfer. Bolting tenancy on later is hell: the reverse is free.|",
+     "|**Authorization**|Capability-based SSOT (`@packages/access-control`). **Same predicate** at server middleware, route `beforeLoad` gate, and `<Can requires={...}>` UI: drift impossible by construction.|",
+     "|**Legal / compliance**|Day-one EU-legal across the GDPR surface: **Art. 7** privacy/terms versioning (re-acceptance gate when a version bumps, `user.policy.accepted` evidence), **Art. 16** rectification (profile + email-change + password), **Art. 17** erasure (`POST /me/delete`: 2FA-required, 7-day soft-delete grace, sole-owner preflight, cancel-on-sign-in, cron wipe + ref anonymization), **Art. 20** portability (`POST /me/export`: signed 7-day R2 URL, 1/24h throttle). Passwords follow **NIST SP 800-63B** (min 15, HIBP k-anonymity breach check, contextual ban-list, no forced complexity). Without this, fines up to 4% of revenue.|",
+     "|**Direct uploads**|Three-step presign → `PUT` direct to provider → server `HeadObject` confirm. Server is blind during transfer; owner-scoped keys (`<userId>/<scope>/<uuid>-<filename>`); R2 / S3 / B2 / Wasabi / Tigris: provider swap = one env var.|",
+     "|**Internal endpoints**|`/internal/*` (cron, queues) HMAC-SHA256-signed (`X-Internal-Signature`); signing key never on the wire. Stack `private-network` on Coolify or Fly via `INTERNAL_AUTH_LAYERS` for defense-in-depth.|",
+     "|**Event-driven + audit**|Transactional outbox + LISTEN/NOTIFY dispatcher → **100 typed events** auto-emitted on every state change (35 public + 65 internal), append-only `audit_log` (SOC2 §CC7.2 / RGPD Art. 30), outbound webhooks (HMAC-signed, AEAD-encrypted secrets, decorrelated-jitter retry → dead-letter), operator UI at `/settings/webhooks`, public event catalog at `/developers/events`. Each audit row carries the request's `X-Request-Id` via an `AsyncLocalStorage` context: one key joins an audit entry to its logs and Sentry event.|",
+     "|**DDD scope**|Reserved for what your customers pay for. Not for billing, auth, gating, or quotas (config + middleware suffices). Lesson learned the hard way: ~70% less code than full-DDD on the SaaS plumbing.|",
+     "|**Type safety**|Hono RPC end-to-end (`hcWithType`). No client to write, no schema to sync, refactor in API → red squiggle in App on save.|",
+     "|**Performance**|Bun-native `Bun.serve()` (~7 ms cold). Route-level code-splitting on the front (initial bundle ~355 KB, route chunks 1 to 43 KB) + `defaultPreload: \"intent\"`: perceived latency near zero.|",
+     "|**AI-pair ready**|`CLAUDE.md` at the root + one per app and per package. Your agent already knows the rules: Result/Option, no `throw` in domain, capability gates, vertical-slice modules.|",
+     "|**Zero-warning pipeline**|Husky + lint-staged + commitlint + a pre-push chain (Biome, boundaries, build, type-check, tests, jscpd, knip) that CI replays on every PR. Conventional Commits enforced; release-please keeps a release PR on `develop`, and merging it tags and moves `main`. No `--no-verify` shortcut.|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    90,
+    71,
+    74
+   ],
+   [
+    "replace",
+    90,
+    91,
+    74,
+    75,
+    [
+     "Everything wired today, and the short list of what's left. Prefer prose? `docs/OVERVIEW.md` is the guided tour. Full inventory in `docs/FEATURES.md`; detailed plan with constraints in `ROADMAP.md`."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    158,
+    75,
+    142
+   ],
+   [
+    "replace",
+    158,
+    170,
+    142,
+    143,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    176,
+    143,
+    149
+   ],
+   [
+    "replace",
+    176,
+    177,
+    149,
+    150,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    150,
+    151
+   ],
+   [
+    "replace",
+    178,
+    184,
+    151,
+    157,
+    [
+     "|**Image**|`postgres:18-alpine`|",
+     "|**Host port**|`5433` (deliberately not the default `5432`: avoids collision with a system Postgres)|",
+     "|**In-network**|`postgres:5432` (used by the api container)|",
+     "|**Volume**|`postgres_data` (persistent across `compose down`: **not** across a Postgres major bump, see below)|",
+     "|**Healthcheck**|`pg_isready` every 5 s: api waits for healthy before starting|",
+     "|**Schema**|Drizzle ORM: kit tables in `packages/drizzle/src/schema/`, business tables in `modules/<name>/schemas/`|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    157,
+    158
+   ],
+   [
+    "replace",
+    185,
+    186,
+    158,
+    159,
+    [
+     "> **Action required if you already had `postgres_data` populated before this branch**: the volume mount moved from `/var/lib/postgresql/data` to `/var/lib/postgresql` (Postgres 18+ images store `PGDATA` in a major-version-specific subdirectory: docker-library/postgres#1259). An existing volume won't crash on `docker compose up`: it will **silently reinitialize as an empty database**, since the image finds nothing at the new mount point and just creates a fresh one. Run `docker volume rm clean-stack_postgres_data` once before the first `up` on this branch, then rebuild dev data with `pnpm db:push && pnpm db:seed`."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    200,
+    159,
+    173
+   ],
+   [
+    "replace",
+    200,
+    201,
+    173,
+    174,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    174,
+    175
+   ],
+   [
+    "replace",
+    202,
+    209,
+    175,
+    182,
+    [
+     "|**Dev image**|`chrislusf/seaweedfs`: Apache 2.0, ~96 MB (why not MinIO?)|",
+     "|**Compose profile**|`storage` (off by default)|",
+     "|**Host port**|pinned to `8333` (`ports: [\"8333:8333\"]`)|",
+     "|**In-network**|`seaweedfs:8333` (set as `S3_ENDPOINT` for the api)|",
+     "|**Bucket**|`clean-stack`: auto-created on startup by the `seaweedfs-init` sidecar|",
+     "|**Auth**|none required in dev: accepts any access key / secret|",
+     "|**Prod target**|Cloudflare R2 (zero egress fees): same SDK, swap via `S3_ENDPOINT` + creds|"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    214,
+    182,
+    187
+   ],
+   [
+    "replace",
+    214,
+    215,
+    187,
+    188,
+    [
+     "The S3 client is provider-agnostic (`region: \"auto\"`, `forcePathStyle: true`). Anything S3-compatible works: R2, AWS S3, Backblaze B2, Wasabi, Scaleway, Tigris."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    220,
+    188,
+    193
+   ],
+   [
+    "replace",
+    220,
+    221,
+    193,
+    194,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    222,
+    194,
+    195
+   ],
+   [
+    "replace",
+    222,
+    226,
+    195,
+    199,
+    [
+     "|**SDK**|`resend`|",
+     "|**Templates**|dashboard-managed, a failed chunk is replayed with the same idempotency key, provider-side suppression|",
+     "|**DNS prereq prod**|SPF + DKIM (3 CNAMEs) + DMARC: see `docs/INTEGRATIONS.md`|",
+     "|**Region**|chosen per sending domain in Resend (e.g. `eu-west-1`); it only changes where mail is sent from, account data and logs stay in the US; no adapter option|"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    231,
+    199,
+    204
+   ],
+   [
+    "replace",
+    231,
+    232,
+    204,
+    205,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    205,
+    206
+   ],
+   [
+    "replace",
+    233,
+    240,
+    206,
+    213,
+    [
+     "|**Packages**|`stripe@23.0.1` + `@better-auth/stripe@1.7.14`|",
+     "|**Webhook endpoint**|auto-mounted at `/api/auth/stripe/webhook` by the plugin|",
+     "|**Subscription SSOT**|plugin-managed `subscription` table (webhook-synced), not `organization.metadata`|",
+     "|**Entitlements**|typed `ENTITLEMENTS[tier]` in `modules/billing/src/application/services/entitlement-policy.service.ts`: edit + deploy to change gates|",
+     "|**Tiers**|`free` (3 members) · `pro` (20 members, audit_log + api) · `business` (unlimited members + SSO)|",
+     "|**Unlimited**|`maxMembers: null` (JSON-safe): not `Infinity`|",
+     "|**Org model**|unlimited team orgs per user; each is free or paid independently (seat-only gate)|"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    263,
+    213,
+    236
+   ],
+   [
+    "replace",
+    263,
+    264,
+    236,
+    237,
+    [
+     "|Service|Image|Port (host)|Profile|Persistent volume|"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    237,
+    238
+   ],
+   [
+    "replace",
+    265,
+    273,
+    238,
+    244,
+    [
+     "|`postgres`|`postgres:18-alpine`|`5433`|default|`postgres_data`|",
+     "|`api`|built (`apps/api/dev.Dockerfile`)|`3000`|default|n/a|",
+     "|`app`|built (`apps/app/dev.Dockerfile`)|`5173`|default|n/a|",
+     "|`admin`|built (`apps/admin/dev.Dockerfile`)|`5174`|default|n/a|",
+     "|`seaweedfs`|`chrislusf/seaweedfs`|`8333`|`storage`|`seaweedfs_data`|",
+     "|`seaweedfs-init`|`chrislusf/seaweedfs`|n/a|`storage`|n/a|"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    278,
+    244,
+    249
+   ],
+   [
+    "replace",
+    278,
+    279,
+    249,
+    250,
+    [
+     "|File|Holds|Why isolated|"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    280,
+    250,
+    251
+   ],
+   [
+    "replace",
+    280,
+    283,
+    251,
+    254,
+    [
+     "|`apps/api/.env`|DB password, auth secret, S3 keys, Resend key, RGPD/storage limits|Backend-only, never travels to the browser|",
+     "|`apps/app/.env`|`VITE_API_URL` and other `VITE_*` vars|**Vite inlines `VITE_*` into the client bundle**: these are publicly visible. Splitting prevents a backend secret from ending up in the JS bundle by mistake|",
+     "|`packages/drizzle/.env`|`DATABASE_URL`|Consumed by `drizzle-kit` at migration time (separate process, separate cwd)|"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    286,
+    254,
+    257
+   ],
+   [
+    "replace",
+    286,
+    289,
+    257,
+    258,
+    [
+     "Only four variables are **required to boot** in dev: `DATABASE_URL`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `APP_URL`. Everything else is optional with sensible behavior when missing (storage off, email warns, etc.). **In production the api additionally fails hard** if `CORS_ORIGIN`, `INTERNAL_SIGNING_KEY`, `INTERNAL_AUTH_LAYERS` (incl. `signature`), `WEBHOOK_MASTER_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (see `docs/INTEGRATIONS.md` section 4), `API_TOKEN_PEPPER` or `SCIM_CREDENTIAL_HASH_SECRET` is missing: a silent fallback there is worse than a refused boot. `API_TOKEN_PEPPER` (min 32 chars, `openssl rand -hex 32`) is the server secret that makes a database dump insufficient to forge tokens; `API_TOKEN_PREFIX` should be unique per clone (e.g. `myapp_`). Behind a proxy/PaaS, set `TRUSTED_PROXIES=private` (Coolify, Fly) or every request shares the LB IP as rate-limit key (collective lockout). See `apps/api/.env.example` for the full template."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    298,
+    258,
+    267
+   ],
+   [
+    "replace",
+    298,
+    299,
+    267,
+    268,
+    [
+     "❌ **Incompatible without re-wiring**: Vercel Functions, Netlify Functions, AWS Lambda, Cloudflare Workers, edge runtimes generally. Functions terminate after the response, killing `LISTEN`. To go serverless, swap the in-process dispatcher for a cron-triggered drain endpoint or an external queue (Inngest, QStash, SQS), see `docs/EVENTS.md` for the workaround. Edge runtimes also can't run the Postgres LISTEN client at all: keep the api on a regular runtime; if you need edge for specific endpoints, split them into a separate service."
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    268,
+    269
+   ],
+   [
+    "replace",
+    300,
+    301,
+    269,
+    270,
+    [
+     "**Reference deploy (Coolify)**: a VPS run by Coolify v4 with 3 apps (api + app + admin) + a Postgres resource + R2. The desired state is TypeScript (`infra/coolify/services.ts`), reconciled by `infra/coolify/apply.ts` (dry run by default, never deletes, never touches a secret value); `.github/workflows/deploy.yml` builds the images after a green CI and deploys them by sha256 digest with health gates, `rollback.yml` redeploys previous digests. The runbook covers the host, Tailscale, Cloudflare, tokens, the boot-trap gotchas (`NODE_ENV` override, empty start command, stop grace above the shutdown deadline) and cookie topology. Dockerfiles stay portable. See `docs/DEPLOY-COOLIFY.md`."
+    ]
+   ],
+   [
+    "equal",
+    301,
+    302,
+    270,
+    271
+   ],
+   [
+    "replace",
+    302,
+    303,
+    271,
+    272,
+    [
+     "**Health probes**: three endpoints (`/livez`, `/readyz`, `/startupz`) following K8s 2026 convention + IETF `draft-inadarei` format, with tri-state aggregation (pass/warn/fail) and `SIGTERM`-driven graceful shutdown. Per-platform recipes (Coolify, Fly, Render, K8s, Cloud Run) in `docs/HEALTH-PROBES.md`."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    304,
+    272,
+    273
+   ],
+   [
+    "replace",
+    304,
+    305,
+    273,
+    274,
+    [
+     "**Disaster recovery**: on the reference deploy, a Postgres 18 image with pgBackRest archives WAL continuously to an encrypted R2 repository (full weekly, differential daily, about 1 min RPO), with a local restore drill and a monthly drill in CI; on a managed Postgres, the provider's PITR. RPO/RTO targets, restore runbook and an optional weekly `pg_dump` export in `docs/DISASTER-RECOVERY.md`."
+    ]
+   ],
+   [
+    "equal",
+    305,
+    306,
+    274,
+    275
+   ],
+   [
+    "replace",
+    306,
+    309,
+    275,
+    276,
+    [
+     "**Observability**: error tracking via Sentry on api + app, RGPD-clean payload scrubbing by default, pino integration for log breadcrumbs, global TanStack Query/mutation error capture + user-id tagging on the front, NoOp without `SENTRY_DSN`. OpenTelemetry tracing and Prometheus `/metrics` are deferred to Phase D.1 (managed alongside dashboards). Port usage, removability runbook, provider swap recipe (GlitchTip / Highlight) in `docs/OBSERVABILITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    312,
+    276,
+    279
+   ],
+   [
+    "replace",
+    312,
+    313,
+    279,
+    280,
+    [
+     "|Layer|Choice|"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    314,
+    280,
+    281
+   ],
+   [
+    "replace",
+    314,
+    327,
+    281,
+    292,
+    [
+     "|**Runtime**|Bun 1.4+ (api, scripts, tests) · Node 26+ for tooling|",
+     "|**API**|Hono 4 on native `Bun.serve()`|",
+     "|**App**|Vite 8 · React 19 · TanStack Router/Query · Tailwind 4 · shadcn/ui|",
+     "|**Auth**|BetterAuth + `organization`, `twoFactor`, `passkey`, `magicLink`, `bearer`|",
+     "|**Email**|Resend (typed templates, idempotency, provider-side suppression)|",
+     "|**Storage**|Cloudflare R2 prod · SeaweedFS dev (S3-compatible, opt-in)|",
+     "|**DB**|Drizzle ORM + Postgres 18|",
+     "|**API ↔ App**|Hono RPC (`hcWithType`): end-to-end types|",
+     "|**i18n**|`i18next` + `react-i18next`: typed `.ts` catalogs (`@packages/i18n`), locale outside the URL|",
+     "|**DDD**|`@packages/ddd-kit` (Result, Option, Aggregate, ScopedRepository, …)|",
+     "|**Tooling**|pnpm 12 · Turborepo · Biome 2 · Husky · release-please · knip · jscpd|"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    330,
+    292,
+    295
+   ],
+   [
+    "replace",
+    330,
+    331,
+    295,
+    296,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    331,
+    332,
+    296,
+    297
+   ],
+   [
+    "replace",
+    332,
+    346,
+    297,
+    309,
+    [
+     "|**Guided tour**|`docs/OVERVIEW.md`: what you get, in plain terms|",
+     "|**What ships today**|`docs/FEATURES.md`: file-level inventory|",
+     "|**What's next**|`ROADMAP.md`: plumbing shipped; left: dependency refresh, Phase I (OpenUp resync), review pass, C.1 abuse signals|",
+     "|**Architecture rules**|`CLAUDE.md` (root) and the per-app and per-package `CLAUDE.md` files|",
+     "|**Back ↔ front surface map**|`docs/SURFACE.md`: every live route, its front consumer or the reason it has none, enforced by a parity test|",
+     "|**Integrations**|`docs/INTEGRATIONS.md`: BetterAuth, Stripe, Resend, R2, email DNS|",
+     "|**Events**|`docs/EVENTS.md`: DX guide · `docs/EVENT_PIPELINE.md`: visual walkthrough|",
+     "|**Health probes**|`docs/HEALTH-PROBES.md`: endpoints, registry, graceful shutdown, per-PaaS recipes|",
+     "|**Disaster recovery**|`docs/DISASTER-RECOVERY.md`: pgBackRest PITR to R2, restore runbook, local and monthly drills, managed-Postgres alternative|",
+     "|**Observability**|`docs/OBSERVABILITY.md`: Sentry api+app, RGPD scrubbing, removability runbook, provider swap recipe|",
+     "|**Deploy (Coolify)**|`docs/DEPLOY-COOLIFY.md`: VPS and Coolify runbook, apply, deploy by digest, rollback, boot-trap gotchas, cookie topology|",
+     "|**History**|`docs/HISTORY.md`: design decisions trail|"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    353,
+    309,
+    316
+   ],
+   [
+    "replace",
+    353,
+    359,
+    316,
+    317,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    361,
+    317,
+    319
+   ],
+   [
+    "delete",
+    361,
+    363,
+    319,
+    319
+   ],
+   [
+    "equal",
+    363,
+    364,
+    319,
+    320
+   ],
+   [
+    "replace",
+    364,
+    374,
+    320,
+    321,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "f61389bc1cd5+2": {
+  "fn": "langdalebecks204-bit/webweaver",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "中文 | English"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    45,
+    1,
+    45
+   ],
+   [
+    "replace",
+    45,
+    49,
+    45,
+    46,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    87,
+    46,
+    84
+   ],
+   [
+    "replace",
+    87,
+    88,
+    84,
+    85,
+    [
+     " - 国内网络直接下载 GitHub Release 资产容易受阻超时。更新时请在镜像下拉框选择 **`ghproxy.net`** 或 **`gh-proxy.com`** 等国内加速源。"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    85,
+    86
+   ],
+   [
+    "replace",
+    89,
+    90,
+    86,
+    87,
+    [
+     " - 若系统版本仍为 `0.5.6`，选择加速镜像点击【检查更新】后，**请将镜像下拉框切换为【官方直连】（切完后不要再点检查），直接点击【立即更新】**。这可规避 0.5.6 历史版本在双重代理组装上的缺陷。`v0.5.8` 及更高版本已修复此问题，后续更新直接一键点击即可。"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    87,
+    88
+   ],
+   [
+    "replace",
+    91,
+    100,
+    88,
+    95,
+    [
+     " - **现象**：热更新完成后显示正在重启，但在 Proxmox VE 中发现 CT 容器处于 `Stopped`（关机）状态。",
+     " - **原因**：热更新在覆盖代码后会通过让主进程正常退出（`os._exit(0)`）来交由守护进程拉起。在 PVE CT 容器中，如果 WebWeaver 进程是整个 CT 的主进程（PID 1），或者容器内 Docker 未配置重启策略，主进程退出会导致 Linux 内核判定容器生命周期结束而关闭 CT。",
+     " - **解决办法**：",
+     " - **手动启动**：在 PVE 管理界面中找到该 CT 容器，**手动点击一次【启动】**，即可正常加载并运行新版本。",
+     " - **一劳永逸设置自动重启**：",
+     " - 若 CT 内部通过 Docker 运行 WebWeaver，在 CT 终端执行：`docker update --restart unless-stopped <容器名>`。",
+     " - 若以独立 LXC 容器运行，在 PVE 宿主机设置中为该 CT 勾选【开机自启动】或在 CT 内通过 systemd 守护配置 `Restart=always`。"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    107,
+    95,
+    102
+   ],
+   [
+    "replace",
+    107,
+    118,
+    102,
+    103,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    128,
+    103,
+    113
+   ],
+   [
+    "replace",
+    128,
+    134,
+    113,
+    114,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    169,
+    114,
+    149
+   ],
+   [
+    "replace",
+    169,
+    170,
+    149,
+    150,
+    [
+     "|变量|默认|说明|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    150,
+    151
+   ],
+   [
+    "replace",
+    171,
+    183,
+    151,
+    163,
+    [
+     "|WEAVER_DB_URL|sqlite:///./weaver.db|SQLAlchemy 连接串（容器内为 sqlite:////data/weaver.db）|",
+     "|WEAVER_JWT_SECRET|dev-secret-change-me|JWT 签名密钥（生产必改）|",
+     "|WEAVER_TOKEN_EXPIRE_MINUTES|480|token 有效期|",
+     "|WEAVER_POLL_INTERVAL_MINUTES|5|巡检周期（分钟）|",
+     "|WEAVER_PING_CONCURRENCY|100|并发探测上限|",
+     "|WEAVER_PING_TIMEOUT|1.0|ICMP 超时（秒）|",
+     "|WEAVER_TCP_TIMEOUT|2.0|TCP 探测超时（秒）|",
+     "|WEAVER_DEFAULT_ADMIN|admin|首次启动的默认管理员|",
+     "|WEAVER_DEFAULT_ADMIN_PASSWORD|admin123|默认管理员密码（生产必改）|",
+     "|WEAVER_ENABLE_SCHEDULER|true|是否启用定时巡检|",
+     "|WEAVER_PROBE_HISTORY_DAYS|30|巡检历史保留天数（1-365）|",
+     "|WEAVER_FRONTEND_DIR|/app/frontend/dist|前端静态资源目录（容器内默认即可）|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    210,
+    163,
+    190
+   ],
+   [
+    "delete",
+    210,
+    211,
+    190,
+    190
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

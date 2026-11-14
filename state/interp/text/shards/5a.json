@@ -2477,5 +2477,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e65f83ebe744": {
+  "identity": {
+   "one_liner": "自托管的团队任务与项目协作工作台，单文件 Python 服务加 SQLite 存储",
+   "review": "Hola-Calendar（哗啦待办）是一个自托管的团队任务与项目协作工作台，把任务闭环（排期、执行、完成、归档）、项目协作、沟通区、档案室与日报放在本地服务里。实现方式为一个 Python 文件加一个 SQLite 数据库，无第三方依赖，数据留在本机；需要对外时通过 Cloudflare Tunnel 或反向代理发布。适合希望任务数据不放在第三方云上的团队使用。运行需 Python 3.11+，首次启动生成预置账户文件。",
+   "highlights": [
+    "任务体系包含项目任务、临时任务和固定安排三类，支持递延、打回与递延合并",
+    "内置沟通区、收件箱、档案室日报周报、项目会议与可选的 AI 助手（OpenAI 兼容接口，密钥存服务端）",
+    "单个 Python 文件加 SQLite 存储，零运行时依赖，支持 Docker Compose 与环境变量配置"
+   ],
+   "use_cases": [
+    "团队需要自托管任务排期、周视图与项目进度跟踪",
+    "需要项目会议记录、语音转写与自动生成纪要的协作场景",
+    "在本地或内网部署，通过 Cloudflare Tunnel 或 Caddy/Nginx 反向代理对外提供访问"
+   ]
+  },
+  "sha": "e65f83ebe744",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "36fb519e3aa8": {
+  "identity": {
+   "one_liner": "纯 Python 实现的 CUBRID 数据库 DB-API 2.0 驱动，支持 asyncio 与 SSL/TLS",
+   "review": "pycubrid 是面向 CUBRID 数据库服务器的纯 Python 驱动，实现 PEP 249（DB-API 2.0）接口，无需 C 扩展编译，pip 安装即用。它直接实现 CUBRID CAS 协议，支持同步与 asyncio（pycubrid.aio）两套 API、TLS/SSL 连接、CLOB/BLOB、executemany 批量操作，并作为 sqlalchemy-cubrid 的驱动使用。要求 Python 3.11+（1.10.0 起）与 CUBRID 10.2+，需数据库服务器已另行运行。",
+   "highlights": [
+    "纯 Python 实现，直接实现 CUBRID CAS 线协议，pip install 即可安装，无编译依赖",
+    "同步与 asyncio 双 API，支持 ssl=True 或自定义 SSLContext 的 TLS 连接（TLS 1.2 起）",
+    "完整 DB-API 2.0：标准异常层级、qmark 参数绑定、executemany 批量、LOB 读写、PEP 561 类型标注"
+   ],
+   "use_cases": [
+    "Python 应用连接 CUBRID 数据库执行查询与事务操作",
+    "基于 asyncio 事件循环的高并发数据访问场景",
+    "配合 sqlalchemy-cubrid 使用 SQLAlchemy ORM、Core 与 Alembic 迁移"
+   ]
+  },
+  "sha": "36fb519e3aa8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8641c762b805": {
+  "identity": {
+   "one_liner": "QUESTDB是收录高精度垂直激发能等参考数据的量子化学基准数据库",
+   "review": "QUESTDB收录小分子、自由基、带电物种及过渡金属配合物的垂直激发能、振子强度和电离势等参考数据，数据来自FCI、CC3、CCSDTQ等高级别计算。仓库提供.xxyz结构文件、.xlsx/.json数据文件及Python子集生成脚本（含遗传算法优化），面向需要基准测试激发态方法的计算化学研究者。",
+   "highlights": [
+    "提供分子结构（.xyz/.TeX）、垂直激发能、振子强度数据，以.xlsx/.json格式组织，附格式转换与分析的Python脚本",
+    "包含带电激发数据：价层/芯层电离势、双电离势，存于charged/目录的逐分子JSON文件",
+    "内置子集生成脚本，可按自旋态、价/Rydberg态、激发类型等过滤条件生成保留完整元数据的代表性子集，支持基于optuna的贝叶斯超参数调优遗传算法"
+   ],
+   "use_cases": [
+    "为TD-DFT、波函数方法及新兴激发态方法提供基准测试参考数据",
+    "生成匹配全数据集分布的小规模子集（如50/100/200个跃迁），用于快速基准测试或机器学习模型训练",
+    "下载几何结构和即用型基准包以辅助解释实验光谱与光化学过程"
+   ]
+  },
+  "sha": "8641c762b805",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b862930138da": {
+  "identity": {
+   "one_liner": "纯 Go 实现的 TiDB 优化器 Issue 分诊与 PR 状态追踪工作台，内置 SQLite 存储。",
+   "review": "该仓库提供独立的 TiDB 优化器 Issue 分诊工具，功能包括 Issue 同步分诊、动态重分诊与进行中 PR 的阻塞项追踪，面向参与 TiDB 优化器 Issue 治理的维护者与分诊人员。它使用 Go 编写，以 modernc.org/sqlite 作为本地存储（WAL 模式），通过 GitHub GraphQL API 同步数据，并提供中英双语前端和 CLI 命令（serve/status/sync-issues/sync-prs 等）。仓库内含分诊规则文档与 AI Agent SOP，初始数据来自 seed 快照。",
+   "highlights": [
+    "提供 CLI 与 HTTP 服务双入口，CLI 支持 serve、status、sync-issues、sync-prs、pending、triage 子命令",
+    "内置双语（zh-CN/en）自包含前端，含 Pending/Re-triage/Excluded 三标签收件箱",
+    "SQLite 以 WAL 模式运行，CLI 命令可在 web 服务在线时并发执行"
+   ],
+   "use_cases": [
+    "跟踪 pingcap/tidb 优化器相关 Issue 的分诊状态与标签变更",
+    "批量查询进行中 PR 的阻塞项分类状态",
+    "为 AI Agent 提供仓库内置的分诊 SOP 与领域规则文档"
+   ]
+  },
+  "sha": "b862930138da",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

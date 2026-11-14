@@ -3193,5 +3193,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a8e675a70d08": {
+  "identity": {
+   "one_liner": "基于 deepagents 的生产级 Agent 运行时，含模型路由与分层记忆",
+   "review": "octop-harness 是一个 MIT 协议的 Python 3.12+ 库（非应用），对 deepagents 的 create_deep_agent 原语做工程化封装，最终委托该原语执行。它提供多提供商模型路由（OpenAI/Anthropic/Bedrock 及 17 个可编辑预设）、L0→L3 分层记忆、浏览器/搜索/MCP 工具、多 Agent 注册表、可插拔工作区（本地/S3/COS/PostgreSQL）、ACP stdio 服务器与终端 CLI。适用于需要将 deepagents 部署为运行时的开发者。",
+   "highlights": [
+    "HarnessAgentManager 在单进程中注册并流式运行多个隔离 Agent，通过 LangGraph AsyncSqliteSaver 实现可恢复会话",
+    "ChatModelFactory 将模型名解析为客户端，支持 OpenAI（含 base_url 兼容端点）、Anthropic、AWS Bedrock 及 Hunyuan、Kimi、GLM、DeepSeek 等 17 个可编辑预设",
+    "octop-memory 中间件将对话捕获为 L0 原始事件，异步蒸馏为 L2 原子卡与 L3 实体页，记忆随工作区迁移"
+   ],
+   "use_cases": [
+    "将 deepagents Agent 封装为可部署运行时，按需替换模型、存储后端而不重写 Agent 逻辑",
+    "在 IDE 或终端中通过 ACP 协议驱动 Agent，或用内置 CLI 进行交互式对话与 Agent 管理",
+    "需要会话可恢复、跨工作区持久记忆及多 Agent 共存于单进程的应用构建"
+   ]
+  },
+  "sha": "a8e675a70d08",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d39199eb59a": {
+  "identity": {
+   "one_liner": "基于 Rust 与 Tauri 2 的桌面 RSS 阅读器，本地 SQLite 存储。",
+   "review": "Turbo Reader 是一款桌面 RSS 阅读器，用 Rust 核心、React 前端和 Tauri 2 构建，支持 RSS/Atom/JSON Feed、OPML 导入导出，全文搜索基于 SQLite FTS5。面向本地阅读用户，含 MCP 接口供 AI 代理读取订阅库。README 注明安装包未做代码签名，同步服务功能未实现。",
+   "highlights": [
+    "支持 RSS 0.9x/1.0/2.0、Atom 与 JSON Feed，自动检测格式，并提供 OPML 双向导入导出（保留文件夹嵌套）",
+    "全文搜索基于 SQLite FTS5，Feed HTML 在 Rust 层经允许列表清洗后交给 webview 渲染",
+    "通过 `turbo-reader --mcp` 或应用内本地服务器提供 14 个 MCP 工具，默认关闭、按密钥限定只读"
+   ],
+   "use_cases": [
+    "在 Windows/macOS/Linux 桌面本地管理并阅读 RSS 订阅源，无需账户或 API 密钥",
+    "通过 OPML 在不同阅读器之间迁移订阅和文件夹结构",
+    "让支持 MCP 的 AI 代理（如 Claude Code、Cursor）检索和摘要本地订阅文章"
+   ]
+  },
+  "sha": "6d39199eb59a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

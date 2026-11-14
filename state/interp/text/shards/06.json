@@ -3364,5 +3364,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ce4e136889fe": {
+  "identity": {
+   "one_liner": "自托管家庭网络监控面板：Go 单二进制后端加 React PWA，经 SSH/SNMP 轮询路由器并以 SSE 实时展示。",
+   "review": "NetPulse 是一个自托管的家庭网络监控面板，面向使用 OpenWrt/GL.iNet 路由器的局域网用户。服务端为单个 Go 静态二进制（Linux，支持 x86_64/arm64/armv7），通过路由器上的 netpulse-agent 或 SNMP/SSH 采集路由器健康、设备、WireGuard 与 AdGuard Home 数据，前端经 SSE 每 5 秒更新。需将服务端 SSH 公钥写入路由器 dropbear authorized_keys；数据存于 SQLite。",
+   "highlights": [
+    "提供 0-100 网络健康评分、实时流量图、AdGuard Home 统计、WireGuard peer 列表与告警流，经 SSE 每 5 秒刷新",
+    "从网桥 FDB（及 LLDP/SNMP LLDP-MIB）推断并绘制网络拓扑，支持 OpenWrt/GL.iNet 原生 .ipk/.apk agent，另有 MikroTik、Asuswrt、OPNsense、UniFi 等外部集成推送器",
+    "支持按需或定时 WAN 测速（M-Lab NDT、Ookla、Cloudflare、LibreSpeed 或自定义 HTTP 端点）、多用户角色（bcrypt）、ES/EN 双语、PWA 安装、可选 MQTT/Home Assistant 与只读 MCP 接口"
+   ],
+   "use_cases": [
+    "在同一局域网内自托管监控多台 OpenWrt/GL.iNet 路由器的 CPU、内存、温度与流量",
+    "查看局域网设备清单与自动推断的拓扑图，跟踪新设备出现和 Wi-Fi 信号/漫游事件",
+    "定时执行 WAN 测速并在速度低于设定阈值时通过 Web Push、ntfy 或 Telegram 接收告警"
+   ]
+  },
+  "sha": "ce4e136889fe",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2db27ffc245d": {
+  "identity": {
+   "one_liner": "本地优先的个人 SQL 工作区，支持查询 ClickHouse/Trino 并在画板与幻灯片上可视化结果。",
+   "review": "Miracle 是一个在本地电脑运行、通过浏览器访问的个人 SQL 工作区，用于连接 ClickHouse 和 Trino、执行查询，并将结果快照组织为表格、图表、画板和演示文稿。工作区存储于项目目录的 `.miracle/`（SQLite），无需账户、PostgreSQL 或 Docker；界面为俄语，面向桌面浏览器和单机单人使用，ClickHouse/Trino 需另行连接。",
+   "highlights": [
+    "提供多标签 SQL 编辑器（自动补全、格式化、运行选中片段），查询快照保留原始 SQL 与连接上下文并可独立刷新",
+    "支持画板与 16:9 幻灯片，可放置图表、Markdown/LaTeX 笔记、图形，并可集成本地 Codex CLI/Claude CLI 聊天与 Git 分支管理",
+    "内置 DuckDB 表格公式模式，安装包自带 Node.js 运行时，工作区数据与加密密钥存于项目 `.miracle/` 目录"
+   ],
+   "use_cases": [
+    "个人本地分析：连接 ClickHouse/Trino 执行 SQL 并将结果整理为表格和图表",
+    "制作包含查询结果快照的画板和 16:9 演示文稿",
+    "在项目文件夹中管理 SQL 文档、快照、画板与聊天记录，并用 `miracle backup` 备份恢复"
+   ]
+  },
+  "sha": "2db27ffc245d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

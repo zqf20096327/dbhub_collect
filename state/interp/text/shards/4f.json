@@ -3195,5 +3195,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b999e0fbbfe5": {
+  "identity": {
+   "one_liner": "本地 CLI，将 Claude Code/Codex 会话组织为带名称、笔记和信箱的持续任务",
+   "review": "flow 是一个 Go 编写的本地 CLI，运行在 Claude Code 或 Codex 之下，为每项工作建立名称、会话、简报、带日期的笔记和信箱，数据以 SQLite 和 markdown 存于 ~/.flow。用户通过对话让代理执行 flow 命令，支持无人值守运行和代理间消息传递，也可通过 Slack 联系人。README 明确其处于 alpha 阶段：无重试、无搜索、部分 headless 运行会失败。",
+   "highlights": [
+    "将每项工作组织为命名的任务，包含简报、笔记和信箱，数据存储于 ~/.flow（SQLite 和 markdown）",
+    "支持代理会话之间互发消息，以及 headless 子任务、定时运行和 Slack 通知",
+    "兼容 Claude Code 和 Codex 会话框架，支持 iTerm、Warp、kitty 等多种终端及无终端的 headless 模式"
+   ],
+   "use_cases": [
+    "一天运行多个代理会话、需要按名称恢复工作上下文的开发者",
+    "需要无人值守夜间运行任务并通过 Slack 接收询问或结果的场景",
+    "需要将一个主任务拆分为多个子会话并行处理并追踪各自进度的场景"
+   ]
+  },
+  "sha": "b999e0fbbfe5",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8241b76cc6b8": {
+  "identity": {
+   "one_liner": "本地 MCP 记忆服务器，为多个 AI 代理提供共享且带版本的记忆",
+   "review": "Make0 Brain 是一个本地优先的开源 MCP 记忆服务器，供 Claude Code、Cursor、Codex、Windsurf 等代理共享同一份记忆数据。数据存于本机单个 SQLite 文件，首次下载模型后可离线运行且无需 API key。安装通过 `npx @make0-ai/brain init` 完成，该命令会检测已装代理、写入配置并保留配置备份；自定义指令需部分应用手动粘贴。每条记忆保留编辑版本与写入者信息。",
+   "highlights": [
+    "通过 MCP 提供 7 个工具（list_brains、search_brain、get_memory、get_memory_versions、add_memory、update_memory、delete_memory），各连接应用使用同一套名称与 schema",
+    "所有记忆存储于本地单个 SQLite 文件（~/.make0/brain.db），每次编辑保留版本、写入者与时间，删除的记忆可从存档恢复",
+    "支持从 41 个编码代理读取历史会话，以及从 CLAUDE.md、AGENTS.md、Cursor 规则、Obsidian vault 等 Markdown 目录导入；会话导入前对凭据做脱敏处理"
+   ],
+   "use_cases": [
+    "多代理工作流：在一个代理中保存的偏好与决策，供其他代理在后续会话中通过 search_brain 检索",
+    "导入已有编码代理的磁盘会话历史，生成每个会话的记忆摘要并按项目归档",
+    "需要离线运行或本地数据存储的记忆场景；也支持创建多个 brain 以隔离不同项目的记忆"
+   ]
+  },
+  "sha": "8241b76cc6b8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

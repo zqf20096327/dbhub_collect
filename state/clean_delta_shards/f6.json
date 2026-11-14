@@ -23148,5 +23148,871 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "da9ba1bced7d+2": {
+  "fn": "nazarli-shabnam/clevis",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    6,
+    0,
+    4
+   ],
+   [
+    "replace",
+    6,
+    14,
+    4,
+    8,
+    [
+     "CI",
+     "CodeQL",
+     "License: GPL v3",
+     "Self-host"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    8,
+    11
+   ],
+   [
+    "delete",
+    17,
+    21,
+    11,
+    11
+   ],
+   [
+    "equal",
+    21,
+    23,
+    11,
+    13
+   ],
+   [
+    "replace",
+    23,
+    24,
+    13,
+    14,
+    [
+     "|Area|Description|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    14,
+    15
+   ],
+   [
+    "replace",
+    25,
+    31,
+    15,
+    21,
+    [
+     "|**Overview**|At-a-glance stats across your repositories and organization.|",
+     "|**Activity**|Repository and org event streams pulled from the GitHub API.|",
+     "|**Repositories**|Browse and inspect repositories with their key signals in one place.|",
+     "|**Health & Security**|A computed **security score** backed by six core automated checks — **MFA enforcement**, **branch protection**, **secret scanning**, **Dependabot alerts**, **code scanning alerts**, and **default-branch force-push protection** — plus optional informational repo-hygiene checks (CODEOWNERS, SECURITY.md, license, stale branches, unpinned Actions) that count toward the score only when enabled. Each check has a **pass**, **fail**, **error**, or **not_applicable** status and remediation guidance.|",
+     "|**Collaborators**|See who has access across the surface you manage.|",
+     "|**Automation**|Run privileged maintenance jobs (e.g. clearing GitHub Actions caches) with **dry-run** support and a full **audit trail**.|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    21,
+    23
+   ],
+   [
+    "delete",
+    33,
+    35,
+    23,
+    23
+   ],
+   [
+    "equal",
+    35,
+    40,
+    23,
+    28
+   ],
+   [
+    "replace",
+    40,
+    41,
+    28,
+    29,
+    [
+     "|Component|Stack|Responsibility|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    29,
+    30
+   ],
+   [
+    "replace",
+    42,
+    46,
+    30,
+    34,
+    [
+     "|**`apps/api`**|FastAPI · SQLAlchemy 2 · Alembic|REST backend — auth, analytics, RBAC, and job enqueueing.|",
+     "|**`apps/worker`**|Python · psycopg3|Polls the job queue (`SELECT … FOR UPDATE SKIP LOCKED`) and executes GitHub API tasks. Safe to run as multiple replicas; to scale with Docker Compose, remove the fixed `container_name: worker` from `docker-compose.yml` first, then `docker compose up --scale worker=N`.|",
+     "|**`apps/ui`**|Next.js 15 · React 19 · TanStack Query|The dashboard — dense, dark, keyboard-friendly.|",
+     "|**`packages/checks`**|`clevis-checks` (Python)|The security-check engine — six core checks (MFA, branch protection, secret scanning, Dependabot alerts, code scanning alerts, default-branch force-push protection) plus five optional repo-hygiene checks — with built-in GitHub pagination.|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    34,
+    37
+   ],
+   [
+    "delete",
+    49,
+    51,
+    37,
+    37
+   ],
+   [
+    "equal",
+    51,
+    53,
+    37,
+    39
+   ],
+   [
+    "replace",
+    53,
+    54,
+    39,
+    43,
+    [
+     "Python",
+     "FastAPI",
+     "PostgreSQL",
+     "SQLAlchemy"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    43,
+    44
+   ],
+   [
+    "replace",
+    55,
+    69,
+    44,
+    49,
+    [
+     "Next.js",
+     "React",
+     "TypeScript",
+     "Tailwind CSS",
+     "Docker"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    81,
+    49,
+    61
+   ],
+   [
+    "replace",
+    81,
+    82,
+    61,
+    62,
+    [
+     "Then open the UI at **`http://localhost:3000`**. The base `docker-compose.yml` publishes no host ports (a reverse proxy such as Traefik is expected to route to the containers), so the `docker-compose.local.yml` override is what makes the stack reachable on `localhost`; for a real deployment see Reaching the stack."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    62,
+    63
+   ],
+   [
+    "replace",
+    83,
+    86,
+    63,
+    64,
+    [
+     "Full env var reference, GitHub App registration, and production hardening notes live in `docs/self-hosting.md`. Local dev without Docker is covered in `AGENTS.md`."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    92,
+    64,
+    70
+   ],
+   [
+    "replace",
+    92,
+    93,
+    70,
+    71,
+    [
+     "2. **Connect a GitHub org or account.** Go to **Settings → Connected GitHub accounts** and click **Install GitHub App** — this sends you to GitHub to authorize Clevis for that org/account, which is what grants read access to its repos. GitHub redirects you back into the app once you approve it, and the org/account shows up under \"Connected GitHub accounts\" a few seconds later. (The App itself is a one-time setup step for whoever deployed the instance — see `docs/self-hosting.md` if that hasn't been done yet.) If you install into a brand-new org and the connection doesn't complete, sign out and back in with **\"Sign in with GitHub\"** once (this is what verifies your admin access on that org) and retry the install."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    98,
+    71,
+    76
+   ],
+   [
+    "delete",
+    98,
+    100,
+    76,
+    76
+   ],
+   [
+    "equal",
+    100,
+    101,
+    76,
+    77
+   ],
+   [
+    "replace",
+    101,
+    106,
+    77,
+    78,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    78,
+    79
+   ],
+   [
+    "replace",
+    107,
+    109,
+    79,
+    80,
+    [
+     "Released under the GNU General Public License v3.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "f89ab5cb3aa5+2": {
+  "fn": "Ben05-sys/QuantPilot",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "tests",
+     "codeql",
+     "python",
+     "platforms",
+     "licence",
+     "demo"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    13,
+    8,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "### Open the demo →"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    27,
+    14,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "The screener"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    35,
+    28,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "The heatmap"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    36,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     "Live news"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    66,
+    38,
+    66
+   ],
+   [
+    "replace",
+    66,
+    69,
+    66,
+    69,
+    [
+     " address, because SEC requires one in the User-Agent and returns 403",
+     " without it. Put your own email in `~/.quantpilot/config.json`:",
+     " `{\"sec_contact\": \"you@example.com\"}`. Everything else works without it."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    69,
+    70
+   ],
+   [
+    "replace",
+    70,
+    73,
+    70,
+    73,
+    [
+     " `requirements.txt` and give you the streaming price feed. Leave them out",
+     " and the terminal falls back to polling — slower, but it says so in the",
+     " header rather than pretending."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    90,
+    73,
+    90
+   ],
+   [
+    "delete",
+    90,
+    92,
+    90,
+    90
+   ],
+   [
+    "equal",
+    92,
+    234,
+    90,
+    232
+   ],
+   [
+    "delete",
+    234,
+    236,
+    232,
+    232
+   ],
+   [
+    "equal",
+    236,
+    246,
+    232,
+    242
+   ],
+   [
+    "replace",
+    246,
+    250,
+    242,
+    243,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    253,
+    243,
+    246
+   ],
+   [
+    "replace",
+    253,
+    259,
+    246,
+    252,
+    [
+     " `exdiv` is days until a stock trades without its next dividend — negative",
+     " once it has — alongside `divamt`, `divdrop` (that payment as a percent of",
+     " today's price), `fwdyield`, `exdate`, `recorddate` and `paydate`. An",
+     " ex-date is a *scheduled gap down*, so the last example above is the one",
+     " worth stealing: a momentum screen that does not exclude it is partly",
+     " measuring dividends."
+    ]
+   ],
+   [
+    "equal",
+    259,
+    260,
+    252,
+    253
+   ],
+   [
+    "replace",
+    260,
+    262,
+    253,
+    255,
+    [
+     " the next six weeks\" and \"pays no dividend\" are different facts and only",
+     " one of them is a reason to skip a stock."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    264,
+    255,
+    257
+   ],
+   [
+    "replace",
+    264,
+    267,
+    257,
+    260,
+    [
+     " session would have traded *by now*, not against the whole day. Without",
+     " that, every momentum screen returns nothing before noon. `relvolraw`",
+     " keeps the unadjusted ratio."
+    ]
+   ],
+   [
+    "equal",
+    267,
+    269,
+    260,
+    262
+   ],
+   [
+    "replace",
+    269,
+    270,
+    262,
+    263,
+    [
+     " substring search on a string."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    284,
+    263,
+    277
+   ],
+   [
+    "delete",
+    284,
+    286,
+    277,
+    277
+   ],
+   [
+    "equal",
+    286,
+    288,
+    277,
+    279
+   ],
+   [
+    "replace",
+    288,
+    289,
+    279,
+    280,
+    [
+     "|Source|What it gives|Cost|Freshness|"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    290,
+    280,
+    281
+   ],
+   [
+    "replace",
+    290,
+    300,
+    281,
+    291,
+    [
+     "|Nasdaq screener|7,000+ symbols with sector, industry, market cap|free, no key|one call, ~2.3s|",
+     "|Nasdaq dividend calendar|declared / ex / record / payment dates, market-wide|free, no key|one call **per exchange day**|",
+     "|Nasdaq IPO calendar|upcoming · priced · filed · withdrawn|free, no key|one call per month|",
+     "|Yahoo `/v7/quote`|83 fields per symbol, 200 per call|free, no key|near-real-time; needs a cookie+crumb pair|",
+     "|Yahoo websocket|streaming trades, incl. extended hours|free, no key|**sub-second**, but Yahoo throttles|",
+     "|Yahoo `/v8/chart`|OHLCV bars, any interval|free, no key|3–25s behind the tape|",
+     "|SEC EDGAR|filings, XBRL fundamentals|free|wants a contact string, not a browser UA|",
+     "|Yahoo search|per-company news with related tickers|free, no key|minutes old|",
+     "|Cboe|option chains **with greeks**|free, no key|**delayed** · parked, see below|",
+     "|Yahoo futures|ES, NQ, CL, GC and friends|free, no key|**~10 min delayed** (CME's free tier)|"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    312,
+    291,
+    303
+   ],
+   [
+    "delete",
+    312,
+    314,
+    303,
+    303
+   ],
+   [
+    "equal",
+    314,
+    319,
+    303,
+    308
+   ],
+   [
+    "replace",
+    319,
+    325,
+    308,
+    314,
+    [
+     " open, mid-session and the close, driven by the exchange's own",
+     " `marketState` rather than a calendar, so holidays and half-days come out",
+     " right with no table to maintain. Between rebuilds a rolling pass re-quotes",
+     " the universe in slices so the snapshot never drifts far from the tape.",
+     " This is what the screener filters against: locally, in pandas, with no",
+     " network in the hot path."
+    ]
+   ],
+   [
+    "equal",
+    325,
+    326,
+    314,
+    315
+   ],
+   [
+    "replace",
+    326,
+    330,
+    315,
+    319,
+    [
+     " question about *now*. The static half of the expression narrows the field",
+     " first, then the survivors get live quotes before the price predicates run.",
+     " The response says which prices it used — `live`, `snapshot` or `static` —",
+     " and the count line repeats it."
+    ]
+   ],
+   [
+    "equal",
+    330,
+    331,
+    319,
+    320
+   ],
+   [
+    "replace",
+    331,
+    335,
+    320,
+    324,
+    [
+     " and goes straight on screen; the live-priced answer follows a moment",
+     " later and replaces it. Waiting for the accurate one means staring at",
+     " nothing for over a second, so you get rows immediately and the count",
+     " line says which prices you are looking at."
+    ]
+   ],
+   [
+    "equal",
+    335,
+    336,
+    324,
+    325
+   ],
+   [
+    "replace",
+    336,
+    339,
+    325,
+    328,
+    [
+     " screen plus everything on your watchlist, and cells flash green or red in",
+     " place. It never re-screens: a row that stops matching mid-session stays",
+     " put, which is what you want when you're watching something move."
+    ]
+   ],
+   [
+    "equal",
+    339,
+    344,
+    328,
+    333
+   ],
+   [
+    "replace",
+    344,
+    345,
+    333,
+    334,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    345,
+    346,
+    334,
+    335
+   ],
+   [
+    "replace",
+    346,
+    348,
+    335,
+    337,
+    [
+     "|Yahoo's feed — venue timestamp to our socket|median **2.9s**, p90 3.9s|",
+     "|The terminal — socket to the browser|median **2ms**, worst case 51ms|"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    366,
+    337,
+    355
+   ],
+   [
+    "replace",
+    366,
+    373,
+    355,
+    362,
+    [
+     " minutes or seconds. The dividend calendar is a call *per exchange day*",
+     " against a host rate-limited to two a second, so a six-week window is",
+     " about twenty seconds — half again the cost of a whole universe rebuild,",
+     " for data that changes once a day. It refreshes on its own schedule on a",
+     " background thread and the screener joins whatever is currently known.",
+     " Before the first refresh lands every dividend column is null, which",
+     " renders as an em dash and not as \"no dividend\"."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    382,
+    362,
+    371
+   ],
+   [
+    "delete",
+    382,
+    384,
+    371,
+    371
+   ],
+   [
+    "equal",
+    384,
+    390,
+    371,
+    377
+   ],
+   [
+    "replace",
+    390,
+    413,
+    377,
+    378,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    447,
+    378,
+    412
+   ],
+   [
+    "replace",
+    447,
+    454,
+    412,
+    413,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    454,
+    489,
+    413,
+    448
+   ],
+   [
+    "replace",
+    489,
+    490,
+    448,
+    449,
+    [
+     "Found something? Please report it privately — **SECURITY.md**"
+    ]
+   ],
+   [
+    "equal",
+    490,
+    499,
+    449,
+    458
+   ],
+   [
+    "replace",
+    499,
+    538,
+    458,
+    459,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    538,
+    539,
+    459,
+    460
+   ],
+   [
+    "replace",
+    539,
+    551,
+    460,
+    461,
+    [
+     "**GNU AGPL-3.0** — see LICENSE."
+    ]
+   ],
+   [
+    "equal",
+    551,
+    564,
+    461,
+    474
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

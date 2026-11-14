@@ -18318,5 +18318,283 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "742fc5059c14+2": {
+  "fn": "EdiWang/Moonglade",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "Deploy a published release at the URL root. Enable HTTPS and HTTP/2 on the public web server. Behind a reverse proxy, configure trusted addresses under `ForwardedHeaders:KnownProxies` so the application receives the correct public scheme and client IP. Subpath hosting is unsupported."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    18,
+    13,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "Stop all Moonglade hosts, back up the database, and test the required SQL scripts against a restored copy. Follow the database execution guide."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "To upgrade a database already at 16.9.0 to 16.10.0, run these scripts in order from the PostgreSQL or SQL Server directory for your provider:"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    31,
+    21,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "For databases older than 16.9.0, complete the applicable category ID and PostgreSQL naming upgrades (`1` and `2`) first. Keep access restricted when starting the upgraded app. Complete owner setup if local credentials are uninitialized, then reopen access."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    35,
+    32,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "Set `POSTGRES_PASSWORD` in a local `.env` file using .env.example as a template, then run:"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    41,
+    36,
+    41
+   ],
+   [
+    "replace",
+    41,
+    42,
+    41,
+    42,
+    [
+     "Open `http://localhost:8080` and complete owner setup. Compose starts PostgreSQL and supplies the database connection string to the web container. Keep the database volume and both image volumes when replacing containers."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    59,
+    42,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     "In PowerShell, `./start.ps1` runs the same project with the Development launch profile. Open `https://localhost:10210`. See the test guide for test commands and the engineering reference for module ownership and implementation contracts."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    69,
+    60,
+    69
+   ],
+   [
+    "replace",
+    69,
+    70,
+    69,
+    70,
+    [
+     "Host options use appsettings.json and standard environment overrides (`:` becomes `__`). Manage persisted blog preferences at `/admin/settings` and the owner profile and credentials at `/admin/account`."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    75,
+    70,
+    75
+   ],
+   [
+    "replace",
+    75,
+    83,
+    75,
+    83,
+    [
+     "|Setting|When it takes effect|",
+     "|---|---|",
+     "|Rendering, theme, and feed options|On subsequent requests. Browser, CDN, proxy, and feed-reader caches retain their own lifetimes.|",
+     "|FOAF and sitemap switches|On subsequent requests. Disabled endpoints return HTTP 404.|",
+     "|Watermark and original-image retention|On future uploads.|",
+     "|Notification switches|On future enqueue decisions. Queued email retains its recipient and content.|",
+     "|Notification sender display name|After an application restart.|",
+     "|Scheduled publishing|Saving wakes the worker. Publication already dispatched runs to completion.|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    108,
+    83,
+    108
+   ],
+   [
+    "replace",
+    108,
+    112,
+    108,
+    112,
+    [
+     "|Host option|Default behavior|",
+     "|---|---|",
+     "|`CommentRateLimit`|Allows five submissions per client IP and post in a ten-minute fixed window.|",
+     "|`CommentSubmissionGuard`|Checks a honeypot and rejects forms submitted before three seconds or after 240 minutes. Set `MaxFormAgeMinutes` to `0` to disable the age limit.|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    119,
+    112,
+    119
+   ],
+   [
+    "replace",
+    119,
+    123,
+    119,
+    123,
+    [
+     "|Option|Purpose|",
+     "|---|---|",
+     "|`ImageStorage:FileSystemPath`|Public processed images served at `/image/{filename}`. Compose mounts `/app/images`.|",
+     "|`ImageStorage:OriginalFileSystemPath`|Private originals when retention is enabled. Compose mounts `/app/images-origin`.|"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    123,
+    126
+   ],
+   [
+    "replace",
+    126,
+    127,
+    126,
+    127,
+    [
+     "When CDN delivery is enabled in the image settings, posts and feeds use CDN URLs directly and `/image/{filename}` redirects to the CDN. Expose only the public root at the CDN origin. Preserve filename-to-key mapping and media types, and make files visible only after writing completes. The owner avatar is served separately at `/avatar` from account storage. See the optional Cloudflare R2 mount example."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    138,
+    127,
+    138
+   ],
+   [
+    "replace",
+    138,
+    145,
+    138,
+    145,
+    [
+     "|Option|Purpose|",
+     "|---|---|",
+     "|`Enabled`|Enables email capability by default. Set to `false` to disable it explicitly.|",
+     "|`SmtpServer`, `SmtpPort`|SMTP endpoint. Port 465 uses implicit TLS. On other ports, `EnableSsl=true` requires STARTTLS and `false` uses STARTTLS when offered and otherwise allows an unencrypted connection.|",
+     "|`SmtpUserName`, `SmtpPassword`|SMTP credentials. Supply the password through deployment secrets, for example `Email__SmtpPassword`.|",
+     "|`SmtpSenderAddress`|Bare email address used in the sender headers and SMTP envelope. Blank values use `SmtpUserName`.|",
+     "|`SenderDisplayName`|Deployment fallback for a blank sender name in Notification settings.|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    150,
+    145,
+    150
+   ],
+   [
+    "replace",
+    150,
+    157,
+    150,
+    157,
+    [
+     "|Endpoint|Purpose|",
+     "|---|---|",
+     "|`/rss`, `/atom`, `/opml`|Feeds and subscriptions|",
+     "|`/opensearch`|OpenSearch discovery|",
+     "|`/foaf.xml`|FOAF profile|",
+     "|`/webmention`|Webmention reception|",
+     "|`/sitemap.xml`, `/robots.txt`|Crawler discovery and directives|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    164,
+    157,
+    164
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

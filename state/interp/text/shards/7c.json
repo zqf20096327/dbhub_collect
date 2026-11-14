@@ -2966,5 +2966,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a3c083523df8": {
+  "identity": {
+   "one_liner": "Go 编写的 PostgreSQL/SQLite 迁移工具，带事务支持与 schema 漂移检测",
+   "review": "这是一个用于 PostgreSQL 和 SQLite 的数据库迁移工具，支持事务执行 SQL 迁移文件，并能对在线 PostgreSQL 库进行内省、将人工改动捕获为可评审的 up/down 迁移对。采用纯 Go 实现（无 cgo），无独立命令时启动图形界面，终端命令面向自动化。快照不建模视图、函数和触发器。",
+   "highlights": [
+    "每个迁移批次以事务提交或回滚，根据 URL 自动识别 PostgreSQL 或 SQLite",
+    "drift 检测将在线 schema 变化生成为迁移对，破坏性语句默认以注释形式输出",
+    "所有命令支持 -json 输出，diff 命令以退出码 2 表示存在漂移，可用于 CI"
+   ],
+   "use_cases": [
+    "以版本化 SQL 文件（NNN_name.up/down.sql）管理 PostgreSQL/SQLite schema 变更",
+    "检测开发者直接在数据库上的手工改动并生成可评审的迁移 SQL",
+    "离线或在线比较两个 schema 版本、快照或数据库之间的差异报告"
+   ]
+  },
+  "sha": "a3c083523df8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

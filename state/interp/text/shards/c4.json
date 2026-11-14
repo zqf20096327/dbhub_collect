@@ -3158,5 +3158,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "db17a00c59c4": {
+  "identity": {
+   "one_liner": "离线快照驱动的 PostgreSQL schema 情报 CLI 与 MCP 服务器",
+   "review": "dryrun 是一个 Go 编写的 CLI 工具兼 MCP 服务器：CLI 连接 PostgreSQL 14+ 内省完整目录（表、索引、约束、触发器、RLS 等）并写入 .dryrun/history.db 离线快照；MCP 服务器读取该快照，通过 stdio 或 SSE 向 AI 助手暴露 9 个工具，覆盖 schema 探索、查询校验、迁移检查、lint 等，无需向助手提供数据库凭据。支持 Homebrew、npm/npx 安装及源码构建，setup 命令可自动配置 Claude Code、Cursor、Codex、Zed。",
+   "highlights": [
+    "CLI 可对快照执行 lint（20+ 约定规则、13 结构审计规则）、迁移锁类型分析与查询校验（基于 libpg_query）",
+    "MCP 服务器经 stdio 或 SSE 暴露 9 个工具，读取离线快照，不读取实时数据库；连接实时库后追加 3 个工具",
+    "支持快照推送/拉取与多库配置，快照包含 planner 统计与活动数据，预编译二进制覆盖 macOS、Linux、Windows x64"
+   ],
+   "use_cases": [
+    "为 AI 编码助手提供数据库 schema 上下文，用于生成 SQL 前校验列引用与迁移安全",
+    "DBA 捕获快照后分发给无凭据的团队成员或 CI，离线执行 lint 与快照 diff",
+    "分析 pg_stat_statements 查询形态、多副本统计与 vacuum 健康状况"
+   ]
+  },
+  "sha": "db17a00c59c4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ddcd642eaa5b": {
+  "identity": {
+   "one_liner": "面向 AI agent 的受治理双时态知识图谱存储，基于 RDF/SPARQL 与 SQLite",
+   "review": "Quipu 是一个本地运行的知识图谱存储，使用 Rust 编写（crates.io 发布 quipu-ai）。它以 Turtle 格式写入事实，写入时校验词表与形状（SHACL/OWL），并通过事务保留可查询的历史版本。提供 CLI、REST、MCP 服务器和 Rust 库四种访问方式，支持 SPARQL 查询当前或指定事务的数据。适合需要在多个 agent 之间共享带出处和时间的结构化知识的开发者。",
+   "highlights": [
+    "支持 CLI、REST、MCP 与 Rust 库四种接口，CLI 本地运行，quipu-server 提供网络 API 与浏览器界面",
+    "写入时依据自有词表和 shapes 校验事实，记录来源（provenance），保留双时态历史，可按事务号查询早期版本",
+    "知识包附带 repository pendant、校验和与出处，导入时进入暂存区，ROOT 不变，冲突不静默合并"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 MCP 客户端配置本地知识库，通过 quipu mcp --db 连接数据库",
+    "集中存放项目事实、决策与关系，避免在多个 agent 会话中重复粘贴相同上下文",
+    "通过 export/import 工作流在隔离环境中验证后再显式提升，共享受治理的知识包"
+   ]
+  },
+  "sha": "ddcd642eaa5b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

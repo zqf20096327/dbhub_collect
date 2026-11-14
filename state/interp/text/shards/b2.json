@@ -3210,5 +3210,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "320ce0c3b71d": {
+  "identity": {
+   "one_liner": "基于事件、证据与准入机制的数字记忆系统，含 AstrBot 插件接入。",
+   "review": "该项目实现数字记忆基座与记忆引擎两部分，提供候选召回、证据准入、重评、上下文渲染及 AstrBot 临时注入，使用 SQLite 存储、BGE 模型做质量验收。README 明确标注当前为 R0/R1 NO-GO 状态，仅用于隔离验收，不接入生产环境，质量集为合成反例，尚未经真实长跑验证，MIT 许可证发布。",
+   "highlights": [
+    "提供记忆基座与引擎两部分：事件/证据/来源/Resolver/租约，以及候选召回、证据准入、重评、上下文与渲染",
+    "本机控制台绑定 127.0.0.1 并每次启动生成令牌，提供备份/轮转/checkpoint/完整性/VACUUM/归档功能",
+    "输出注入默认关闭，开启后仅修改 ProviderRequest.extra_user_content_parts，记忆块临时且不写入持久化历史，证据删除/撤回/修订时旧块被拒绝移除"
+   ],
+   "use_cases": [
+    "AstrBot 环境下的记忆功能隔离验收与影子运行（shadow）测试",
+    "Windows/Linux 本地环境运行 715 项单元测试与基于 BGE 模型的质量验收脚本",
+    "离线场景下通过独立启动方式查看记忆基座、影子引擎、输入队列与观察日志"
+   ]
+  },
+  "sha": "320ce0c3b71d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4ae5c952a8da": {
+  "identity": {
+   "one_liner": "Go 编写的多租户客户数据异步导出服务，含 PostgreSQL 任务队列与 S3 归档验证。",
+   "review": "这是一个面向显式声明的 PostgreSQL 模式的 Go 参考实现：租户管理员发起异步导出，worker 在可重复读快照下收集记录、校验附件并生成 ZIP 归档发布到 S3 兼容存储，附带离线归档校验工具 exportctl。README 明确其定位于本地评估与开发，认证仅支持 HS256、导出暂存上限 128 MiB，生产部署需按安全文档补充控制。",
+   "highlights": [
+    "基于 PostgreSQL 的持久化任务队列，支持 worker 租约、心跳续期、重试与取消",
+    "生成含 JSONL 数据、附件二进制与带 SHA-256 哈希的版本化 manifest 的 ZIP 归档，可离线验证租户归属、记录数与校验和",
+    "API 使用签名 bearer token 并依据活跃的 PostgreSQL 成员关系解析租户，支持 Idempotency-Key 幂等请求"
+   ],
+   "use_cases": [
+    "需要按租户隔离导出 SaaS 客户记录与附件、用于数据可携性请求的场景",
+    "本地开发环境中用 Docker Compose（PostgreSQL + MinIO）评估多租户导出队列与归档校验机制",
+    "通过 exportctl CLI 请求、跟踪、下载并离线校验导出归档"
+   ]
+  },
+  "sha": "4ae5c952a8da",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

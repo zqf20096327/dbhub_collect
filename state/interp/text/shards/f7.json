@@ -3166,5 +3166,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2e681b96bd9c": {
+  "identity": {
+   "one_liner": "用单个 SQLite 文件实现的本地优先 AI 代理记忆库与知识图谱",
+   "review": "CortexDB 是用 Go 编写的嵌入式 AI 代理记忆与知识图谱库，全部数据存于一个 SQLite 文件，无需运行独立服务，未配置嵌入模型时回退到词法检索。它为 Claude Code、Codex、DeepSeek Harness 提供插件形式的全局记忆（/remember、/recall），多个代理可通过 cortexdb-grpc 共享同一记忆库。库内包含向量索引、FTS5 全文检索、RDF 1.2 知识图谱与本体约束，也可切换 PostgreSQL + pgvector 存储。",
+   "highlights": [
+    "支持向量索引（HNSW、IVF、flat、二值编码）、FTS5 全文搜索、混合检索与图检索",
+    "实现 RDF 1.2 知识图谱，支持 SPARQL 1.1/1.2、RDFS 与 OWL 2 RL 推理、SHACL 约束及只读 Cypher",
+    "提供 100+ 工具，可在进程内或通过 MCP 调用；支持 via cortexdb-grpc 多代理共享记忆"
+   ],
+   "use_cases": [
+    "为 Claude Code / Codex 等 AI 编码代理提供跨会话的持久记忆与项目上下文召回",
+    "多代理或多机器场景下通过 gRPC 服务器共享同一份记忆与知识图谱",
+    "需要带来源追溯、可解释检索过程的知识密集型 RAG 应用"
+   ]
+  },
+  "sha": "2e681b96bd9c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "167c96169d9d": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 AI 长期记忆库，含人工审核闸门与审计日志",
+   "review": "memory-eternal 是一个为 AI Agent 提供长期记忆的 MCP 服务与 DSH 插件，数据以 SQLite 加 Markdown 形式存储在本地。新记忆先进待审队列，人工批准后写入主库，状态变更记录于审计日志；召回使用 FTS5/BM25 或可选的本地/在线 embedding。适用于使用 Claude Code、Codex、Cursor 等 MCP 客户端并希望人工控制记忆内容的开发者。",
+   "highlights": [
+    "写入路径含人工审核闸门：Agent 只能写入待审队列，批准/驳回由人在 Web、TUI 或 CLI 中完成，且 Agent 不能批准自己提交的卡片",
+    "召回基于 FTS5 + BM25，不调用模型（p50 约 2.3ms）；可选升级为 Ollama bge-m3 向量或 OpenAI 兼容在线 API",
+    "内置记忆账本，记录召回注入字符数、沉淀 LLM 调用次数与有用率反馈；已批准卡片状态变更追加写入 SQLite 层强制的不变审计日志"
+   ],
+   "use_cases": [
+    "多个 AI Agent（Claude Code / Codex / Cursor / DSH 等）需要共享同一份本地长期记忆库的开发环境",
+    "对记忆内容入库有人工把关需求、需要审计追溯记忆变更记录的团队",
+    "无网络或不愿将记忆数据外发的本地优先使用场景（内置语义模式零依赖、零网络）"
+   ]
+  },
+  "sha": "167c96169d9d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

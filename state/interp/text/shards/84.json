@@ -3018,5 +3018,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d8b6e775c8c7": {
+  "identity": {
+   "one_liner": "Laravel 数据库备份包：定时导出 PostgreSQL/MySQL/MariaDB 并上传 S3 兼容存储",
+   "review": "一个 Laravel 包，通过 pg_dump/mysqldump 在流式传输时压缩备份默认数据库连接，上传至私有 S3 兼容桶，并按 BACKUP_KEEP_DAYS 清理旧文件，通过邮件和 Discord 通知结果。要求 PHP 8.3+、Laravel 12/13 及服务器上安装对应 dump 工具。不提供恢复命令，恢复需手动下载后导入新数据库。MIT 许可。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB，dump 流式压缩为 .sql.gz，不经内存暂存整库",
+    "通过环境变量配置备份间隔（1-24 小时）、保留天数、S3 兼容端点（Amazon S3、Cloudflare R2、DigitalOcean Spaces、MinIO 等）",
+    "每次运行结果通过邮件（即时发送、不入队列）和 Discord webhook 通知；测试套件对真实数据库执行备份-恢复-逐行比对"
+   ],
+   "use_cases": [
+    "为 Laravel 应用的生产数据库设置定时自动备份",
+    "使用 Cloudflare R2、MinIO 等 S3 兼容存储存放数据库备份",
+    "需要备份成败均获邮件/Discord 通知的运维流程"
+   ]
+  },
+  "sha": "d8b6e775c8c7",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2743,5 +2743,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "30e248234af6": {
+  "identity": {
+   "one_liner": "用 SQL 查询 CSV、TSV、JSON、Parquet、Excel 等文件的命令行工具",
+   "review": "sqly 是一个用 Go 编写的命令行工具，将 CSV、TSV、LTSV、JSON、JSONL、Parquet、Excel、ACH、Fedwire 等格式的文件加载进内存中的 SQLite3 数据库后执行 SQL。它面向需要在终端对本地文件做查询、连接与格式转换的用户，支持跨格式 JOIN、窗口函数、CTE，可通过 --dialect 书写 MySQL/PostgreSQL/GoogleSQL 语法的查询，并用 .save 将修改写回源文件。",
+   "highlights": [
+    "支持 CSV、TSV、LTSV、JSON、JSONL、Parquet、Excel、ACH、Fedwire 等格式，并将透明读取 .gz、.bz2、.xz 等压缩文件",
+    "文件即表：不同格式文件可在同一条 SQL 中作为表 JOIN，SQLite 的窗口函数、CTE 和 json_extract 等均可用",
+    "提供交互式 shell，包含关键词/表/列的补全、跨会话历史、.edit 外部编辑器及 .save 将更改写回源文件"
+   ],
+   "use_cases": [
+    "在终端中用 SQL 查询、筛选、聚合本地表格文件",
+    "对不同格式的多个文件执行跨格式 JOIN 或格式转换",
+    "通过管道将查询结果以 jsonl/tsv 等格式输出给 jq、awk 等其他工具"
+   ]
+  },
+  "sha": "30e248234af6",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e1d7741d646": {
+  "identity": {
+   "one_liner": "离线分析 SWIVEL 与 Kismet 日志、标记多次出现的跟踪设备的 Python 工具",
+   "review": "DEBRIEF 是一款 Python 命令行工具，读取 SWIVEL 手机日志、Kismet 捕获及 WigleCSV，合并为单个 SQLite 数据库并离线富化，标记在多个地点（距离大于 200 米、时间跨度大于 5 分钟，参数可调）出现的设备。适用于关注蓝牙/Wi-Fi 跟踪器（Find My、Tile）的隐私研究者与个人用户，全程离线运行、无需账户、不上传数据；随机化地址不推断厂商，自带合成演示数据。",
+   "highlights": [
+    "识别 Find My 与 Tile 跟踪器，按同一地址出现在两处以上（>200 米、>5 分钟）标记 followed，参数可通过 --follow-distance 等调整",
+    "运行 run 命令将新捕获按内容哈希累加至同一数据库，输出 SQLite、CSV、GeoJSON 与排名 HTML 报告，支持 Datasette 浏览",
+    "离线富化：一次性下载 IEEE、Bluetooth SIG 等公共注册表，提供 OUI 厂商、探测 SSID、evil-twin 提示、Kismet IDS 告警及 ALPR 相机距离字段"
+   ],
+   "use_cases": [
+    "检查是否长期有跟踪设备（如 AirTag、Tile）随行，跨多次出行累计分析",
+    "对 SWIVEL 与 Kismet 双源捕获做合并去重与交叉确认",
+    "通过 SQLite/Datasette 查询设备出现天数、安全模式冲突与相机邻近记录"
+   ]
+  },
+  "sha": "8e1d7741d646",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

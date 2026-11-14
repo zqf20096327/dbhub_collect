@@ -3042,5 +3042,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9c9f7c17a2bc": {
+  "identity": {
+   "one_liner": "基于 postgis/postgis 的 Docker 镜像，额外打包百余个 PostgreSQL 扩展。",
+   "review": "该镜像在 postgis/postgis 基础上加入一百多个扩展并发布到 Docker Hub 与 GHCR，标签格式为「PostgreSQL 大版本-PostGIS 版本」，另有包含 Citus、PL/Java 等较重扩展的 -full 变体。需预加载的扩展通过 SHARED_PRELOAD_LIBRARIES 环境变量在启动时启用（3.7 起默认不预加载）。适合需要在一个镜像中同时使用 PostGIS、MobilityDB 及多种 FDW、调度类扩展的 PostgreSQL 容器部署。",
+   "highlights": [
+    "镜像每周基于匹配的 postgis/postgis 镜像重建，提供 PostgreSQL 14–18 与 PostGIS 3.6/3.7 的组合标签，仅 amd64",
+    "通过 SHARED_PRELOAD_LIBRARIES 环境变量控制预加载，支持 all、legacy 预设及逗号分隔的库名列表，可在每次启动时生效",
+    "附带上百个扩展，包括 MobilityDB、oracle_fdw/mysql_fdw/mongo_fdw/ogr_fdw 等外部数据封装器、pg_cron、pg_partman、PoWA 相关扩展及全部 contrib 扩展"
+   ],
+   "use_cases": [
+    "需要在 Docker 容器中同时使用 PostGIS/MobilityDB 地理空间扩展的 PostgreSQL 环境",
+    "通过 FDW 访问 Oracle、MySQL、MongoDB 或 OGR 数据源的集成场景",
+    "使用 pg_cron、pg_partman、PoWA 等需要 shared_preload_libraries 的扩展的容器化部署"
+   ]
+  },
+  "sha": "9c9f7c17a2bc",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c521074891c9": {
+  "identity": {
+   "one_liner": "本地开源检索层，为 AI 编码代理索引多格式内容并通过 MCP 提供检索。",
+   "review": "RTFM 是一个面向 AI 编码代理的本地检索层，将项目中的代码、文档、PDF、法律文本、研究资料等索引进单个 SQLite 文件，支持全文（FTS5）、语义与混合检索，并生成知识图谱，通过 MCP 工具（如 rtfm_search、rtfm_expand）供代理渐进式获取上下文。安装方式包括 Claude Code 插件或 pip install rtfm-ai 后运行 rtfm init；语义检索和 PDF 解析为可选组件，按需安装到隔离 venv。支持 Obsidian 仓库模式和跨项目 memory 文件索引，采用 MIT 许可。",
+   "highlights": [
+    "提供 24 种格式解析器（含 EPUB、DOCX、ODT、MIDI、音频），支持代码 AST 级索引与文档标题解析",
+    "实现 FTS5 全文检索、可选的 FastEmbed ONNX 语义检索及混合检索，并将 wikilink 等文件级关系存为知识图谱边",
+    "支持 MCP 协议接入，通过 rtfm_search 返回带分数排名的元数据，配合 rtfm_expand 按需展开段落；memory 文件提供无上限版本历史快照"
+   ],
+   "use_cases": [
+    "在包含代码、规范、PDF、法规等混合内容的项目中，为 Claude Code 等 MCP 客户端代理提供检索工具",
+    "对 Obsidian 研究笔记仓库运行 rtfm vault，生成索引、Mermaid 图谱与孤岛/断链导航文件",
+    "对 ~/.claude/projects 下的 memory 文件建立跨项目索引，配合 SessionEnd 钩子自动快照并查询历史版本"
+   ]
+  },
+  "sha": "c521074891c9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -20553,5 +20553,643 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "b5fc0c224093+2": {
+  "fn": "renorai/renor-engine",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Renor"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    3,
+    [
+     " Shared memory for coding agents, over MCP. "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    3,
+    5
+   ],
+   [
+    "delete",
+    10,
+    12,
+    5,
+    5
+   ],
+   [
+    "equal",
+    12,
+    29,
+    5,
+    22
+   ],
+   [
+    "replace",
+    29,
+    30,
+    22,
+    23,
+    [
+     "`--client` is `claude-code`, `codex`, `cursor`, `grok`, `gemini`, `vscode`, `opencode` or `pi`. One command adds Renor to that app, signs you in through the app's own flow (no token to copy), writes the memory rule below, and ends with a live check that your workspace answers. Search is hybrid (keywords and meaning). Sign up at renor.cloud."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    44,
+    23,
+    37
+   ],
+   [
+    "replace",
+    44,
+    45,
+    37,
+    38,
+    [
+     "**Then add the memory rule** to the agent's instructions file, so it saves on its own."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    48,
+    38,
+    41
+   ],
+   [
+    "replace",
+    48,
+    50,
+    41,
+    43,
+    [
+     "Add to Cursor",
+     "Add to VS Code"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    57,
+    43,
+    50
+   ],
+   [
+    "replace",
+    57,
+    58,
+    50,
+    51,
+    [
+     "Trust the folder in Grok, then restart Grok. To check it: ask Grok to save a real decision from your project, restart Grok, and ask about it in the new session. To turn telemetry off, set `DO_NOT_TRACK=1` in the environment Grok runs in. Paste the memory rule into the project's `AGENTS.md`."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    67,
+    51,
+    60
+   ],
+   [
+    "replace",
+    67,
+    68,
+    60,
+    61,
+    [
+     "Something wrong? `npx renor-engine doctor` is a read-only health report (folder, index, ledger, embeddings, client configs) that is safe to paste into a support request; secrets are redacted. See troubleshooting."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    71,
+    61,
+    64
+   ],
+   [
+    "replace",
+    71,
+    72,
+    64,
+    65,
+    [
+     "Running it on a server or with Docker: docs/self-hosting.md."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    65,
+    66
+   ],
+   [
+    "replace",
+    73,
+    74,
+    66,
+    67,
+    [
+     "Several agents on one memory: start each with its own `RENOR_CONNECTION_NAME` and they get the multi-agent (\"hive\") tools (details)."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    85,
+    67,
+    78
+   ],
+   [
+    "replace",
+    85,
+    89,
+    78,
+    79,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    91,
+    79,
+    81
+   ],
+   [
+    "replace",
+    91,
+    92,
+    81,
+    82,
+    [
+     "Self-hosted, `renor-engine mcp` lists the same names as the hosted service: `whats_new`, `get_context`, `search_text`, `retrieve_memory` and `remember` (tool list). The older names (`search`, `remember_fact`, `note`) are behind `RENOR_MCP_LEGACY_STDIO=1`."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    97,
+    82,
+    87
+   ],
+   [
+    "replace",
+    97,
+    98,
+    87,
+    88,
+    [
+     "- **No embedding model needed.** Search is by keyword; when the exact words miss, it retries with word stems. Hybrid search (keywords and meaning) is the hosted default; self-hosters can opt in to OpenAI or a local model (details)."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    88,
+    89
+   ],
+   [
+    "replace",
+    99,
+    100,
+    89,
+    90,
+    [
+     "- **Telemetry:** anonymous usage numbers (never text, names or paths) are on by default, with a notice on first run. `renor-engine telemetry off` or `DO_NOT_TRACK=1` turns them off. Your memory text is never shared unless you say yes to that separately. Every field: docs/TELEMETRY.md."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    90,
+    93
+   ],
+   [
+    "replace",
+    103,
+    110,
+    93,
+    100,
+    [
+     "|Benchmark|Renor|Setup|",
+     "|---|---|---|",
+     "|LongMemEval-S|**98.4%** (492/500)|Default (deep search)|",
+     "|LongMemEval-S|**94.4%** (472/500)|Lean mode (`RENOR_DEEP_SEARCH=0`)|",
+     "|LoCoMo (categories 1 to 4)|**96.7%** (1,489/1,540)|Default (deep search)|",
+     "|BEAM 128K / 1M / 10M|**76.2 / 74.7 / 60.2**|Default (deep search), score out of 100|",
+     "Claude Opus 5.5 answers LongMemEval, LoCoMo and BEAM. One run each, Oct 2026. Deep search, the default, reads 50 matches with a 4,000-token budget; `get_context` replies in up to 8,000 tokens. Lean mode (`RENOR_DEEP_SEARCH=0`) reads 20 matches with 1,300 tokens and an 800-token `get_context`. These runs used Vertex embeddings, as hosted Renor does; without an embedding model, self-hosted search is by keyword only, which they do not measure. Judges and methods for every run: renor.cloud/research."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    122,
+    100,
+    112
+   ],
+   [
+    "replace",
+    122,
+    123,
+    112,
+    113,
+    [
+     "The last command starts the MCP server in a temporary folder, saves one fact, finds it again and ends with `PASS: self-hosted stdio MCP can remember and retrieve a current fact.` It never touches your notes. Downloaded a ZIP instead of cloning? Build with `RENOR_BUILD_COMMIT=0000000 npm run build`. Connecting a local build to each agent: docs/self-hosting.md."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    113,
+    116
+   ],
+   [
+    "replace",
+    126,
+    127,
+    116,
+    117,
+    [
+     "Docs · Self-hosting, servers and Docker · Every setting · Telemetry"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    129,
+    117,
+    119
+   ],
+   [
+    "replace",
+    129,
+    135,
+    119,
+    120,
+    [
+     "The engine is **Apache-2.0** (LICENSE); 1.0.0 was released under AGPL-3.0; 1.1.0 and later are Apache-2.0; files imported from the upstream project stay ISC (NOTICE, UPSTREAM.md). The `renor` CLI, the SDKs and the integrations are MIT."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "213d447a17d2+2": {
+  "fn": "epure-sh/epure",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Epure issues dashboard"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    12,
+    2,
+    8,
+    [
+     " CI status",
+     " Container build status",
+     " Latest release",
+     " AGPL-3.0 license",
+     " Rust",
+     " PostgreSQL 16"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    20,
+    8,
+    16
+   ],
+   [
+    "replace",
+    20,
+    21,
+    16,
+    17,
+    [
+     "- **Pricing.** Self-hosting is free. Cloud Pro is $29 a month, Scale $89, monthly, unlimited seats, no automatic overage: epure.sh/pricing."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    23,
+    17,
+    19
+   ],
+   [
+    "replace",
+    23,
+    26,
+    19,
+    22,
+    [
+     "|Two containers|One flood, one issue|Errors only|",
+     "|:---|:---|:---|",
+     "|**Epure plus Postgres 16.** Idle about 5 MiB plus 48 MiB, measured 23 Sep 2026.|**Spike valve.** 100 stored per minute per identical error, 150 per throw site, every repeat counted.|**No tracing, replay or profiling.** Keep those sample rates at 0 in the SDK.|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    22,
+    24
+   ],
+   [
+    "replace",
+    28,
+    29,
+    24,
+    25,
+    [
+     "Issues list"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    25,
+    26
+   ],
+   [
+    "replace",
+    30,
+    31,
+    26,
+    27,
+    [
+     "Docs: architecture, deploy, and DSN migration."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    44,
+    27,
+    40
+   ],
+   [
+    "replace",
+    44,
+    45,
+    40,
+    41,
+    [
+     "Open http://localhost:8080. Register, create a project, copy the DSN."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    54,
+    41,
+    50
+   ],
+   [
+    "replace",
+    54,
+    63,
+    50,
+    51,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    69,
+    51,
+    57
+   ],
+   [
+    "replace",
+    69,
+    70,
+    57,
+    58,
+    [
+     "Other languages, same DSN: Pick your SDK. It also lives under **Settings → SDK connection**, and the in-app **Setup** wizard shows it."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    86,
+    58,
+    74
+   ],
+   [
+    "replace",
+    86,
+    87,
+    74,
+    75,
+    [
+     "What this binary stores, and what it refuses to store, is in docs/privacy.md. The sign-in page links to `/privacy`."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    75,
+    76
+   ],
+   [
+    "replace",
+    88,
+    89,
+    76,
+    77,
+    [
+     "Pin `EPURE_IMAGE` to the current release tag once the URL is public (Releases · Installation)."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    77,
+    80
+   ],
+   [
+    "replace",
+    92,
+    98,
+    80,
+    86,
+    [
+     "|Platform|Start here|",
+     "|---|---|",
+     "|Render|Blueprint `render.yaml`.|",
+     "|Railway|Drag `deploy/railway/docker-compose.yml` onto the project. Notes.|",
+     "|Coolify|Compose, base directory `deploy/templates/coolify`.|",
+     "|Dokploy|Compose file `deploy/templates/dokploy/docker-compose.yml`.|"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    86,
+    87
+   ],
+   [
+    "replace",
+    99,
+    100,
+    87,
+    88,
+    [
+     "Then the same steps: register, copy the DSN, throw once, open **Issues**. Longer list: Installation · `deploy/`."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    105,
+    88,
+    93
+   ],
+   [
+    "replace",
+    105,
+    110,
+    93,
+    94,
+    [
+     " How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    124,
+    94,
+    108
+   ],
+   [
+    "replace",
+    124,
+    130,
+    108,
+    114,
+    [
+     "||Epure|Bugsink|Sentry self-hosted|GlitchTip|",
+     "|---|---|---|---|---|",
+     "|**Primary focus**|Error tracking|Self-hosted error tracking|Errors plus tracing, replay, profiling|Errors and performance|",
+     "|**Deployment**|Two-container Compose|Single-container `docker run`|Large multi-service cluster|Multiple options|",
+     "|**License**|AGPL-3.0 engine, Apache-2.0 CLI/MCP. No `ee/` folder|PolyForm Shield 1.0.0|Check current Sentry license|MIT|",
+     "|**Database**|PostgreSQL 16|See their docs|Multiple datastores|PostgreSQL|"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    114,
+    115
+   ],
+   [
+    "replace",
+    131,
+    132,
+    115,
+    116,
+    [
+     "**Project status:** v0.2.2, first released 23 Sep 2026. Epure Cloud runs this engine in production; open release gates (published capacity results, grouping quality measurement) are tracked in docs/ingester-audit.md. Two-container Compose, PostgreSQL 16 with RLS, Spike Valve flood protection, and official Sentry SDK wire compatibility. Changelog."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    116,
+    117
+   ],
+   [
+    "replace",
+    133,
+    137,
+    117,
+    121,
+    [
+     "* Report an Issue",
+     "* Join Discussions",
+     "* Read CONTRIBUTING.md",
+     "* Security Policy"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    121,
+    122
+   ],
+   [
+    "replace",
+    138,
+    139,
+    122,
+    123,
+    [
+     "**License:** the engine (Rust crates and web UI) is GNU AGPL-3.0. The client packages `@epure-sh/cli` and `@epure-sh/mcp` stay Apache-2.0, so installing them never affects your code. Releases up to v0.1.7 were Apache-2.0. No separate closed-source core."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

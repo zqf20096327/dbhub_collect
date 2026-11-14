@@ -26275,5 +26275,3518 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "780703781529+2": {
+  "fn": "saasyland/saasyland.com",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "This repository contains the website application. The SaaSy Land CLI and private generator templates are maintained separately and are not included here. See licensing for the distinction between the website source and the commercial product."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "SaaSy Land landing page: the headline \"The 300+ hour head start for builders who care about quality\", the install command, and the admin dashboard"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "The landing page in September 2026. View the full page."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    25,
+    11,
+    12,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    29,
+    12,
+    16
+   ],
+   [
+    "replace",
+    29,
+    43,
+    16,
+    30,
+    [
+     "|Area|Current implementation|",
+     "|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|Public website|Landing page, pricing presentation, localized legal pages, responsive layouts, theme support, and reduced-motion presentations. Public pages are prerendered during builds, and every count on the landing page is measured from the repository at build time (`scripts/repository-facts.ts`).|",
+     "|Documentation and blog|Localized MDX content, navigation, and documentation search through Fumadocs. Published content is maintained in Git.|",
+     "|Authentication|Email/password registration with required email verification, GitHub and Google sign-in, password recovery, TOTP with backup codes, and session management. Better Auth's own endpoints enforce the same password, name, email and image rules as the forms, and verification and password-reset emails are limited per recipient.|",
+     "|Customer workspace|Protected `/app` area and `/app/license`. Accounts without a licence see the landing page's tier cards with regional prices and the course lessons a purchase unlocks (counted from D1), and start checkout in one press; a tier picked on the landing page carries through sign-up. After payment the workspace waits for the licence to activate. Licence owners see their key, machine activations, and activation deactivation.|",
+     "|Billing|Authenticated Polar checkout for the Core, Complete, and Agency tiers with regional (PPP) discounts, returning the buyer to the workspace in their language, and webhook handling for purchases, full refunds (a partial refund keeps the licence), and licence-key benefits. One licence per account: checkout is refused while a licence is active, and Polar's checkout endpoint is reachable only through that server-side check. Requires configured provider products and credentials.|",
+     "|Newsletter|Double opt-in subscription with localized email delivery, limited per recipient. The confirmation and unsubscribe links open a page that acts only when the visitor presses its button. Server functions read and change a signed-in user's subscription, but no workspace screen uses them yet.|",
+     "|Admin users and security|Database-backed user listing, password reset, ban/unban, and deletion. The settings security tab connects password changes, TOTP, and session revocation.|",
+     "|Products and categories|D1 schemas, permission-checked CRUD use cases, and database-backed lists. Product creation/publishing controls are not fully connected.|",
+     "|Courses|A public catalogue at `/courses` with course and lesson pages backed by D1 (`course`, `chapter`, `lesson`, and `lesson_progress`). Each lesson is a free preview, free with an account, or paid (an active Complete or Agency licence); the server functions enforce access, and admins can watch every lesson. The player resumes where the viewer stopped and saves progress. Admins create and edit courses, chapters, and lessons at `/admin/courses`, where each lesson picks its video from the library. The landing page lists the published courses and their first lessons from D1, links each to its page, and plays a tour of the course pages. See the Courses guide.|",
+     "|Videos|Recordings are encoded on your machine to adaptive HLS with FFmpeg (`bun run video:publish:<environment>`), stored in a private R2 bucket, and streamed through signed, expiring `/media/` links with the Workers cache and range requests. `/admin/videos` lists, previews, and deletes them, and course lessons play them. See the Videos guide.|",
+     "|Affiliates|Referral links tracked by Affonso, loaded only on visits that carry a referral parameter; checkout passes the referral to Polar as order metadata, so commissions follow Polar's own order and refund records. `/affiliates` publishes the terms. Turned on by the `AFFONSO_PROGRAM_ID` variable. See the Affiliate programme guide.|",
+     "|Demo and unfinished screens|Analytics, payment administration, pricing models, blog administration, invitations, and role-management views, and the dashboard revenue chart, show demo data. General settings and the landing-page editor include unconnected controls. `/premium` is a placeholder.|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    48,
+    30,
+    35
+   ],
+   [
+    "replace",
+    48,
+    61,
+    35,
+    48,
+    [
+     "|Responsibility|Implementation|",
+     "|--------------------------------|------------------------------------------------------------------------------------------------------|",
+     "|Application and routing|React 19, TypeScript, TanStack Start and Router|",
+     "|Toolchain|Bun, Vite+, formatting, linting, and type checking configured in `vite.config.ts`|",
+     "|Hosting and storage|Cloudflare Workers, D1 (SQLite), KV, R2, and static assets|",
+     "|Database access|Drizzle ORM and checked-in SQLite migrations|",
+     "|Authentication and authorization|Better Auth with module-level permissions and server-function middleware|",
+     "|Data and forms|TanStack Query, Form, and Table; Zod validation|",
+     "|UI|Tailwind CSS 4, shadcn-styled components with React Aria and Base UI, Motion, and locally served fonts|",
+     "|Localization and content|`use-intl`, ICU messages, Fumadocs, and MDX|",
+     "|External services|Resend for email; Polar for checkout, billing, and licence keys; Affonso for affiliate referrals|",
+     "|Video|FFmpeg encoding to HLS (CMAF) on the publisher's machine; Video.js 10 playback|",
+     "|Verification|Vite+/Vitest, Testing Library, jsdom, and Playwright with axe-core accessibility scans|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    48,
+    49
+   ],
+   [
+    "replace",
+    62,
+    63,
+    49,
+    50,
+    [
+     "`package.json` and `bun.lock` define the application toolchain. The separate Remotion project uses its own npm lockfile."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    69,
+    50,
+    56
+   ],
+   [
+    "replace",
+    69,
+    70,
+    56,
+    57,
+    [
+     "- **Node.js 26.13.1 or newer**, the version in `.nvmrc`: `nvm use` and CI read it, and `engines` in `package.json` requires it. 26.13.1 is the November 2026 security release of the Node 26 LTS line. Node is also needed by the SQLite test harness."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    90,
+    57,
+    77
+   ],
+   [
+    "replace",
+    90,
+    91,
+    77,
+    78,
+    [
+     "Open <http://127.0.0.1:3000>. Sign in with either account below; both use the password `WorkerTestPassword123!` from `e2e/data/accounts.ts`."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    78,
+    79
+   ],
+   [
+    "replace",
+    92,
+    96,
+    79,
+    83,
+    [
+     "|Role|Email|Workspace|",
+     "|--------|---------------------------------|---------|",
+     "|Admin|`admin@saasyland.example.test`|`/admin`|",
+     "|Customer|`customer@saasyland.example.test`|`/app`|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    83,
+    84
+   ],
+   [
+    "replace",
+    97,
+    98,
+    84,
+    85,
+    [
+     "This serves a built test application; rebuild it to see source changes. It uses dummy values from `.env.test`, the `test` environment in `wrangler.jsonc`, and isolated state under `.wrangler/test`. Provider interception is intended for local verification, not for validating real OAuth, email delivery, or payments. Keep this test configuration local."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    111,
+    85,
+    98
+   ],
+   [
+    "replace",
+    111,
+    113,
+    98,
+    100,
+    [
+     "2. Set the generated value as `AUTH_SECRET` in `.env.development`, then fill in the integration settings. Use `POLAR_SERVER=sandbox` for development.",
+     "3. If using your own Cloudflare account, provision D1, KV, and R2 and replace the development and preview binding IDs and bucket names before continuing. The checked-in values belong to the existing deployment."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    128,
+    100,
+    115
+   ],
+   [
+    "replace",
+    128,
+    129,
+    115,
+    116,
+    [
+     "Use `.env.development`, `.env.preview`, and `.env.production` for their corresponding environments. These files are ignored by Git; `.env.example` lists the configuration keys. `.env.test` contains committed dummy values for isolated tests."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    116,
+    117
+   ],
+   [
+    "replace",
+    130,
+    131,
+    117,
+    118,
+    [
+     "Server integrations read secrets through `env` from `cloudflare:workers`. Do not give private credentials a `VITE_` prefix, which makes values available to browser code. Deployment scripts upload only the keys that `secrets.required` in `wrangler.jsonc` declares, read from the matching environment file."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    118,
+    119
+   ],
+   [
+    "replace",
+    132,
+    144,
+    119,
+    131,
+    [
+     "|Variables|Purpose|",
+     "|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`AUTH_SECRET`|Long random secret used by Better Auth. Generate a separate value for each deployment environment.|",
+     "|`AUTH_GITHUB_CLIENT_ID`, `AUTH_GITHUB_CLIENT_SECRET`|GitHub OAuth application credentials.|",
+     "|`AUTH_GOOGLE_CLIENT_ID`, `AUTH_GOOGLE_CLIENT_SECRET`|Google OAuth application credentials.|",
+     "|`RESEND_API_KEY`, `RESEND_EMAIL_FROM`|Email API credentials and the sender accepted by your Resend account.|",
+     "|`POLAR_SERVER`|Polar environment: `sandbox` for development or `production` for live billing.|",
+     "|`POLAR_ACCESS_TOKEN`, `POLAR_ORGANIZATION_ID`|Polar API access and the organization used for discounts and licence operations.|",
+     "|`POLAR_WEBHOOK_SECRET`|Secret used to verify Polar webhook deliveries.|",
+     "|`POLAR_PRODUCT_ID_CORE`, `POLAR_PRODUCT_ID_COMPLETE`, `POLAR_PRODUCT_ID_AGENCY`|Product IDs mapped to the three checkout tiers. Use IDs from the selected Polar environment.|",
+     "|`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_DATABASE_ID`, `CLOUDFLARE_ACCESS_TOKEN`|Credentials for Drizzle Studio and introspection over the D1 HTTP API. Application queries use the `DB` binding instead.|",
+     "|`AFFONSO_PROGRAM_ID`|Optional Worker variable (`vars` in `wrangler.jsonc`), set only for the environment that takes real payments. The public Affonso program ID that turns on affiliate referral tracking.|"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    131,
+    132
+   ],
+   [
+    "replace",
+    145,
+    146,
+    132,
+    133,
+    [
+     "The development, preview, and production environments currently declare **all of these keys** in `secrets.required`, including the Cloudflare credentials used by Drizzle tooling. Supply the required secrets for the selected environment; see `wrangler.jsonc` for the authoritative list."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    149,
+    133,
+    136
+   ],
+   [
+    "replace",
+    149,
+    150,
+    136,
+    137,
+    [
+     "The public URL is configured in source: `src/presentation/branding/index.ts` defines `APP_DOMAIN` and derives `APP_URL` as `https://${APP_DOMAIN}`, together with the contact addresses and GitHub URL. **`VITE_APP_URL` is not read by the application.**"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    153,
+    137,
+    140
+   ],
+   [
+    "replace",
+    153,
+    160,
+    140,
+    147,
+    [
+     "|Location|What to configure|",
+     "|--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|",
+     "|`src/presentation/branding/index.ts`|Application name, canonical domain, contact addresses, and GitHub identity.|",
+     "|`src/modules/_core/constants/api.ts`|`appHostsForMode`, the hosts allowed per mode for authentication and newsletter requests, derived from `APP_DOMAIN`.|",
+     "|`wrangler.jsonc`|Worker names, custom-domain routes, D1 databases, KV namespaces, and R2 buckets for each environment.|",
+     "|`src/data/marketing.ts`|Displayed tiers and prices (`TIERS`, `TIER_PRICES`); keep them aligned with the configured Polar products.|",
+     "|`src/presentation/styles/`|Theme, typography, fonts, and shared style definitions.|"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    166,
+    147,
+    153
+   ],
+   [
+    "replace",
+    166,
+    167,
+    153,
+    154,
+    [
+     "- Configure Resend credentials and the sender address before testing verification, password recovery, or newsletter delivery. Templates live in `src/presentation/emails/`."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    154,
+    155
+   ],
+   [
+    "replace",
+    168,
+    170,
+    155,
+    157,
+    [
+     "- Configure Polar webhooks at `https://<your-host>/api/auth/polar/webhooks` with the matching webhook secret. The handlers process paid orders, full refunds (a partial refund keeps the licence), and licence-benefit creation and revocation.",
+     "- Regional checkout discounts require eligible percentage discounts without a discount code configured in Polar. The discount lookup uses the request country and the configured organization; synchronize provider discounts with the pricing rules."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    179,
+    157,
+    166
+   ],
+   [
+    "replace",
+    179,
+    203,
+    166,
+    167,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    209,
+    167,
+    173
+   ],
+   [
+    "replace",
+    209,
+    210,
+    173,
+    174,
+    [
+     "Validate inputs at the server boundary and authorize protected functions themselves, in addition to page guards. Query and mutation keys are readonly tuples owned by the feature's `*.constants.ts`; include inputs that change the result in the query key. Domain values such as statuses, kinds, tiers, roles and provider IDs are named once in a constant object (`PRODUCT_STATUS`, `LICENSE_TIER`, `AUTH_PROVIDER`) in the owning module's or integration's `*.constants.ts`, and code, tests and e2e data import it instead of repeating the string. Reuse exported options for cache access, and invalidate only the data a mutation changes. Application documentation lives in `content/docs/`, including the architecture guides and the conventions, the coding standard every change follows. Coding agents start from `AGENTS.md`."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    174,
+    175
+   ],
+   [
+    "replace",
+    211,
+    212,
+    175,
+    176,
+    [
+     "Authentication entry points are in `src/integrations/better-auth/`:"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    176,
+    177
+   ],
+   [
+    "replace",
+    213,
+    221,
+    177,
+    185,
+    [
+     "|File|Responsibility|",
+     "|--------------------|-----------------------------------------------------------------------------------------------|",
+     "|`auth.server.ts`|Better Auth, providers, plugins, and allowed hosts.|",
+     "|`auth.access.ts`|Roles, permissions, and permission checks.|",
+     "|`auth.hooks.ts`|Input policy run before Better Auth's own endpoints: the password, name, email and image rules.|",
+     "|`auth.routes.ts`|Sign-in/admin guards, the return path after sign-in, and role-based redirects.|",
+     "|`auth.middleware.ts`|Server-function authorization, error handling, and rate limiting.|",
+     "|`auth.session.ts`|Request-scoped session lookup and UI query options.|"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    226,
+    185,
+    190
+   ],
+   [
+    "replace",
+    226,
+    227,
+    190,
+    191,
+    [
+     "`src/server.ts` adds baseline security headers to every Worker response: a Content Security Policy limiting `base-uri`, `frame-ancestors` and `object-src`, `Cross-Origin-Opener-Policy`, `Permissions-Policy`, `Referrer-Policy`, `X-Content-Type-Options`, `X-Frame-Options: DENY`, and HSTS on HTTPS responses. Static files that bypass the Worker get the subset that applies to them from `public/_headers`."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    232,
+    191,
+    196
+   ],
+   [
+    "replace",
+    232,
+    253,
+    196,
+    217,
+    [
+     "|Command|Purpose|",
+     "|---------------------------------------------------------------------------|---------------------------------------------------------------------------------------|",
+     "|`bun run dev`|Generate content/class-name tables and start development with remote preview bindings.|",
+     "|`bun run typegen`|Generate Worker declarations, class-name tables, and Fumadocs content/types.|",
+     "|`bun run check`|Generate class-name tables; check localization/content, formatting, lint, and types.|",
+     "|`bun run check:fix`|Run checks and apply supported formatting/lint fixes.|",
+     "|`bun run check:i18n`|Validate message parity, scoped translation keys, ICU formats, and localized content.|",
+     "|`bun run test`|Run node, integration, and component test projects.|",
+     "|`bun run test:unit` / `bun run test:integration` / `bun run test:component`|Run one test project.|",
+     "|`bun run test:watch` / `bun run test:changed`|Watch tests or run tests affected by changes.|",
+     "|`bun run test:coverage`|Run tests with the configured coverage gate and reports.|",
+     "|`bun run test:e2e:install`|Install Chromium/WebKit and their Playwright dependencies.|",
+     "|`bun run test:e2e`|Run the browser suite in Chromium and WebKit.|",
+     "|`bun run test:e2e:pr`|Run the browser suite in Chromium, as pull request CI does.|",
+     "|`bun run test:e2e:smoke`|Run the Chromium smoke suite.|",
+     "|`bun run test:all`|Run the Vite+ tests followed by Chromium smoke tests.|",
+     "|`bun run build` / `bun run build:preview`|Build the preview Worker, prerender public pages, and verify/optimize output.|",
+     "|`bun run build:production`|Build and verify the production application.|",
+     "|`bun run build:test` / `bun run start:test`|Build or serve the isolated test application.|",
+     "|`bun run start`|Serve the most recently built application at `127.0.0.1:3000`.|",
+     "|`bun run video:publish:preview` / `bun run video:publish:production`|Encode a recording with FFmpeg, then upload and register it with your `wrangler login`.|"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    254,
+    217,
+    218
+   ],
+   [
+    "replace",
+    254,
+    255,
+    218,
+    219,
+    [
+     "Run the commands from the root package scripts; the Remotion commands run inside `remotion/`."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    258,
+    219,
+    222
+   ],
+   [
+    "replace",
+    258,
+    259,
+    222,
+    223,
+    [
+     "Unit and integration tests run in Node; component tests run in jsdom. Tests are colocated in `src/**/__test__/`. The test RPC helper exercises TanStack validation and middleware, and the D1 adapter applies the checked-in SQLite migrations. External provider operations are mocked. See the testing guide for fixtures and ownership conventions."
+    ]
+   ],
+   [
+    "equal",
+    259,
+    271,
+    223,
+    235
+   ],
+   [
+    "replace",
+    271,
+    272,
+    235,
+    236,
+    [
+     "`e2e/specs/accessibility.spec.ts` runs axe-core with the WCAG 2.0, 2.1 and 2.2 A and AA rules and axe's best practices on the public pages, the course pages, the docs home, every Conventions page and one page from each other docs section, a blog post, and both workspaces in the light and dark themes, and fails on any violation."
+    ]
+   ],
+   [
+    "equal",
+    272,
+    275,
+    236,
+    239
+   ],
+   [
+    "replace",
+    275,
+    278,
+    239,
+    242,
+    [
+     "- Main CI runs checks, coverage, and Chromium E2E on pull requests and pushes to `main`. Successful eligible runs then deploy to Cloudflare.",
+     "- Full E2E adds WebKit on pushes to `main` and runs Chromium and WebKit weekly and on manual dispatch.",
+     "- Video CI separately checks and bundles affected Remotion source."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    242,
+    243
+   ],
+   [
+    "replace",
+    279,
+    280,
+    243,
+    244,
+    [
+     "The deployment workflow records actual deployment results in GitHub's `Preview` and `Production` environments. Configure its credentials as described below before enabling deployments."
+    ]
+   ],
+   [
+    "equal",
+    280,
+    300,
+    244,
+    264
+   ],
+   [
+    "replace",
+    300,
+    301,
+    264,
+    265,
+    [
+     "Module schemas are collected by `drizzle.schemas.ts`, and every table with `createdAt` and `updatedAt` spreads them from `timestamps()` in `drizzle.columns.ts`. Generate migrations with:"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    308,
+    265,
+    272
+   ],
+   [
+    "replace",
+    308,
+    316,
+    272,
+    280,
+    [
+     "|Command|Database affected|",
+     "|--------------------------------|--------------------------------------------------------------------------------------|",
+     "|`bun run db:migrate:test`|Local test database in `.wrangler/test`.|",
+     "|`bun run db:reset:test`|Deletes `.wrangler/test`, then migrates and seeds the local test database.|",
+     "|`bun run db:migrate:local`|Local development database; the regular development server still uses remote bindings.|",
+     "|`bun run db:migrate:development`|Remote database configured for development, shared with preview by default.|",
+     "|`bun run db:migrate:preview`|Remote preview database.|",
+     "|`bun run db:migrate:production`|Remote production database.|"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    323,
+    280,
+    287
+   ],
+   [
+    "replace",
+    323,
+    327,
+    287,
+    291,
+    [
+     "|Event|Cloudflare target|GitHub environment|URL|",
+     "|--------------------------------------------------------------------------|-------------------------------|------------------|-------------------------------|",
+     "|Pull request opened, reopened, or updated from a branch in this repository|`saasyland-preview` (`preview`)|`Preview`|<https://preview.saasyland.com>|",
+     "|Push to `main`, including merging a pull request|`saasyland` (`production`)|`Production`|<https://saasyland.com>|"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    330,
+    291,
+    294
+   ],
+   [
+    "replace",
+    330,
+    331,
+    294,
+    295,
+    [
+     "In repository Settings → Environments, configure the existing `Preview` and `Production` environments with these secrets:"
+    ]
+   ],
+   [
+    "equal",
+    331,
+    332,
+    295,
+    296
+   ],
+   [
+    "replace",
+    332,
+    336,
+    296,
+    300,
+    [
+     "|Secret|Purpose|",
+     "|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`CLOUDFLARE_API_TOKEN`|Wrangler authentication with permission to deploy the Worker, manage its configured bindings/routes, and apply D1 migrations. Scope the token to the intended account and zones.|",
+     "|`CLOUDFLARE_ACCOUNT_ID`|Cloudflare account containing the selected Worker, D1 database, KV namespace, and R2 bucket.|"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    337,
+    300,
+    301
+   ],
+   [
+    "replace",
+    337,
+    338,
+    301,
+    302,
+    [
+     "These are deployment credentials. `CLOUDFLARE_API_TOKEN` is separate from the `CLOUDFLARE_ACCESS_TOKEN` used by Drizzle Studio. Repository secrets with the same names can be used as a fallback; environment-specific secrets allow different credentials for preview and production. Follow Cloudflare's GitHub Actions authentication guide when creating the token."
+    ]
+   ],
+   [
+    "equal",
+    338,
+    343,
+    302,
+    307
+   ],
+   [
+    "replace",
+    343,
+    344,
+    307,
+    308,
+    [
+     "GitHub creates deployment records from the job's `environment` declaration and shows the job's real result. See GitHub's deployment tracking documentation."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    367,
+    308,
+    331
+   ],
+   [
+    "replace",
+    367,
+    368,
+    331,
+    332,
+    [
+     "Public pages are prerendered to `dist/client`; protected, authentication, newsletter-action, course, and API routes are excluded from prerendering. After prerendering, `scripts/deployed-worker.ts` builds the Worker that is deployed again, without the rendered MDX of docs and blog pages and without the landing and legal page translations, which only prerendered pages use. The build verifier checks the Worker deployment configuration, localized home/legal pages and SEO links, that every docs page and published blog post was prerendered, fonts, client JavaScript, and selected route exclusions. The application still requires a Worker for server-rendered routes, authentication, APIs, video delivery, and locale handling."
+    ]
+   ],
+   [
+    "equal",
+    368,
+    371,
+    332,
+    335
+   ],
+   [
+    "replace",
+    371,
+    372,
+    335,
+    336,
+    [
+     "The supported locales are `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `ja-JP`, `pl-PL`, `pt-BR`, and `uk-UA`, defined in `i18n.config.ts`."
+    ]
+   ],
+   [
+    "equal",
+    372,
+    392,
+    336,
+    356
+   ],
+   [
+    "replace",
+    392,
+    393,
+    356,
+    357,
+    [
+     "PageSpeed Insights mobile scores: Performance 98, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 3/3"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    396,
+    357,
+    360
+   ],
+   [
+    "replace",
+    396,
+    397,
+    360,
+    361,
+    [
+     "PageSpeed Insights desktop scores: Performance 100, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 3/3"
+    ]
+   ],
+   [
+    "equal",
+    397,
+    398,
+    361,
+    362
+   ],
+   [
+    "replace",
+    398,
+    405,
+    362,
+    369,
+    [
+     "|Metric|Mobile|Desktop|",
+     "|------------------------|------|-------|",
+     "|First Contentful Paint|1.2 s|0.4 s|",
+     "|Largest Contentful Paint|2.3 s|0.7 s|",
+     "|Total Blocking Time|0 ms|10 ms|",
+     "|Cumulative Layout Shift|0|0|",
+     "|Speed Index|2.4 s|0.6 s|"
+    ]
+   ],
+   [
+    "equal",
+    405,
+    406,
+    369,
+    370
+   ],
+   [
+    "replace",
+    406,
+    407,
+    370,
+    371,
+    [
+     "These are lab results. PageSpeed Insights runs on shared hardware, so scores vary between runs; compare several runs before judging a change. Run the analysis for current results."
+    ]
+   ],
+   [
+    "equal",
+    407,
+    410,
+    371,
+    374
+   ],
+   [
+    "replace",
+    410,
+    415,
+    374,
+    379,
+    [
+     "- Public pages are prerendered. `optimize-prerendered-html.ts` removes dependency `modulepreload` hints and keeps each page's entry hint at low priority, so the stylesheet and fonts load first.",
+     "- Providers whose value changes after hydration, such as the theme and Motion providers, wrap only their consumers and never a route `<Outlet />`. A change above a route's Suspense boundary forces that route to hydrate synchronously in one long task, or to render on the client and shift the layout.",
+     "- `robots.txt` and `llms.txt` are static files that bypass the Worker through `run_worker_first` in `wrangler.jsonc`. Lighthouse fails the SEO and Agentic Browsing audits for these files when the requests time out.",
+     "- `src/server.ts` serves prerendered pages from static assets and imports the TanStack Start handler only for other requests, so page requests do not load the full server bundle. Its static imports stay free of TanStack Start and provider SDKs, because a cold Worker evaluates them before it can answer.",
+     "- The deployed Worker leaves out what only prerendering needs: `scripts/deployed-worker.ts` rebuilds it after prerendering without rendered MDX and without the landing and legal page translations, which keeps the upload well below Cloudflare's Worker size limit."
+    ]
+   ],
+   [
+    "equal",
+    415,
+    418,
+    379,
+    382
+   ],
+   [
+    "replace",
+    418,
+    419,
+    382,
+    383,
+    [
+     "`remotion/` contains editable video compositions with a separate npm toolchain. Install it only when editing videos:"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    429,
+    383,
+    393
+   ],
+   [
+    "replace",
+    429,
+    430,
+    393,
+    394,
+    [
+     "Normal application builds serve the checked-in assets without installing Remotion or rendering videos. Follow the rendering instructions when updating a composition, and regenerate its video and posters together."
+    ]
+   ],
+   [
+    "equal",
+    430,
+    432,
+    394,
+    396
+   ],
+   [
+    "replace",
+    432,
+    451,
+    396,
+    397,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    453,
+    397,
+    399
+   ],
+   [
+    "replace",
+    453,
+    454,
+    399,
+    400,
+    [
+     "The website source code and associated technical documentation, including account, checkout, and licence-management code, are covered by the MIT licence and scope statements in `LICENSE.md`. A commercial purchase is not required to reuse the MIT-covered website code."
+    ]
+   ],
+   [
+    "equal",
+    454,
+    458,
+    400,
+    404
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "31d6b47d1c51+2": {
+  "fn": "cubrid-lab/sqlalchemy-cubrid",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    1,
+    [
+     "sqlalchemy-cubrid icon (CUBRID Lab brand repository)"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    10,
+    1,
+    6
+   ],
+   [
+    "replace",
+    10,
+    11,
+    6,
+    7,
+    [
+     "🇰🇷 한국어 · 🇺🇸 English · 🇨🇳 中文 · 🇮🇳 हिन्दी · 🇩🇪 Deutsch · 🇷🇺 Русский"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    7,
+    8
+   ],
+   [
+    "replace",
+    12,
+    23,
+    8,
+    15,
+    [
+     "PyPI version",
+     "python version",
+     "ci workflow",
+     "integration-full workflow",
+     "license",
+     "GitHub stars",
+     "docs"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    32,
+    15,
+    24
+   ],
+   [
+    "replace",
+    32,
+    33,
+    24,
+    25,
+    [
+     "SQLAlchemy? Follow Your First SQLAlchemy Connection to CUBRID:"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    47,
+    25,
+    39
+   ],
+   [
+    "replace",
+    47,
+    48,
+    39,
+    40,
+    [
+     "- **Extensive offline test suite** — no database required to run it; CI enforces a minimum 95% line-coverage gate (`--cov-fail-under=95` in the `offline-tests` job, CI badge above)"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    57,
+    40,
+    49
+   ],
+   [
+    "replace",
+    57,
+    58,
+    49,
+    50,
+    [
+     "- **Status**: Production/Stable PyPI version"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    50,
+    51
+   ],
+   [
+    "replace",
+    59,
+    60,
+    51,
+    52,
+    [
+     "- Ordinary PRs run the full offline suite with the 95% coverage floor on one Ubuntu/Python 3.12 lane; high-risk changes add Python 3.14/CUBRID 11.4 live integration. Main/changed-weekly runs add Python 3.11/CUBRID 10.2 and run the offline suite on the oldest and newest supported Python (3.11, 3.15). The full supported integration matrix remains manual and release-gated. See CI execution policy."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    52,
+    53
+   ],
+   [
+    "replace",
+    61,
+    62,
+    53,
+    54,
+    [
+     "- See Known Limitations for behavior boundaries and unsupported features"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    69,
+    54,
+    61
+   ],
+   [
+    "replace",
+    69,
+    75,
+    61,
+    62,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    77,
+    62,
+    64
+   ],
+   [
+    "replace",
+    77,
+    78,
+    64,
+    65,
+    [
+     "See full communication architecture for the Broker, CAS and CCI path."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    81,
+    65,
+    68
+   ],
+   [
+    "replace",
+    81,
+    82,
+    68,
+    69,
+    [
+     "server and driver version terminology."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    91,
+    69,
+    78
+   ],
+   [
+    "replace",
+    91,
+    92,
+    78,
+    79,
+    [
+     "2026-10-01 (PEP 619)."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    99,
+    79,
+    86
+   ],
+   [
+    "replace",
+    99,
+    100,
+    86,
+    87,
+    [
+     "- pycubrid (pure Python, recommended) **or** the official CUBRIDdb C extension, installed from PyPI (`CUBRID-Python` 9.3.0) or built from the cubrid-python v11.3.0.51 source release"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    131,
+    87,
+    118
+   ],
+   [
+    "replace",
+    131,
+    132,
+    118,
+    119,
+    [
+     "or build CUBRIDdb from the cubrid-python"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    119,
+    120
+   ],
+   [
+    "replace",
+    133,
+    134,
+    120,
+    121,
+    [
+     "Building CUBRIDdb from source."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    142,
+    121,
+    129
+   ],
+   [
+    "replace",
+    142,
+    143,
+    129,
+    130,
+    [
+     "> known limitations."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    146,
+    130,
+    133
+   ],
+   [
+    "replace",
+    146,
+    147,
+    133,
+    134,
+    [
+     "sqlalchemy-cubrid in action"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    152,
+    134,
+    139
+   ],
+   [
+    "replace",
+    152,
+    153,
+    139,
+    140,
+    [
+     "The first-connection guide instead uses a local lab"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    162,
+    140,
+    149
+   ],
+   [
+    "replace",
+    162,
+    166,
+    149,
+    150,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    174,
+    150,
+    158
+   ],
+   [
+    "replace",
+    174,
+    194,
+    158,
+    159,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    211,
+    159,
+    176
+   ],
+   [
+    "replace",
+    211,
+    227,
+    176,
+    177,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    248,
+    177,
+    198
+   ],
+   [
+    "replace",
+    248,
+    291,
+    198,
+    199,
+    [
+     "…（43 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    308,
+    199,
+    216
+   ],
+   [
+    "replace",
+    308,
+    309,
+    216,
+    217,
+    [
+     "after the statement (see Known Limitations)."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    323,
+    217,
+    231
+   ],
+   [
+    "replace",
+    323,
+    324,
+    231,
+    232,
+    [
+     "- **No `RETURNING`** — `INSERT/UPDATE/DELETE ... RETURNING` not supported; for ORM use `await session.flush()` to populate `id` on the object (see Async Quick Start), or for Core use `cursor.lastrowid` / `SELECT LAST_INSERT_ID()` after the statement"
+    ]
+   ],
+   [
+    "equal",
+    324,
+    327,
+    232,
+    235
+   ],
+   [
+    "replace",
+    327,
+    328,
+    235,
+    236,
+    [
+     "- **SQLAlchemy 2.0–2.1 only** — capped at `<2.2`; SA 2.2 compatibility shims exist, but the advisory pre-release canary has not yet proven installation or compatibility of a published 2.2 beta (see #778) (details)"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    329,
+    236,
+    237
+   ],
+   [
+    "replace",
+    329,
+    332,
+    237,
+    240,
+    [
+     "- **CARDINALITY() broken** — `func.cardinality()` raises `CompileError` with workaround guidance; the CUBRID server has a known bug",
+     "- **Reserved words auto-quoted** — Column names matching CUBRID reserved words (`day`, `count`, `value`, etc.) are automatically double-quoted in DDL; see reserved word list",
+     "- **Timezone type reflection** — CUBRID's `TIMESTAMPTZ`, `TIMESTAMPLTZ`, `DATETIMETZ` and `DATETIMELTZ` reflect as distinct SQLAlchemy types (`sqlalchemy_cubrid.types.TIMESTAMPTZ`/`TIMESTAMPLTZ`/`DATETIMETZ`/`DATETIMELTZ`, each with `timezone=True`) rather than collapsing into plain `TIMESTAMP`/`DATETIME` (#181, #442); see Type Mapping"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    335,
+    240,
+    243
+   ],
+   [
+    "replace",
+    335,
+    336,
+    243,
+    244,
+    [
+     "|Guide|Description|"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    337,
+    244,
+    245
+   ],
+   [
+    "replace",
+    337,
+    349,
+    245,
+    257,
+    [
+     "|Your First Connection|Start here: prepare a database, first query, first saved row, first-connection problems|",
+     "|Connection|Connection strings, URL format, driver setup, pool tuning|",
+     "|Type Mapping|Full type mapping, CUBRID-specific types, collection types|",
+     "|DML Extensions|ON DUPLICATE KEY UPDATE, MERGE, REPLACE INTO, query trace|",
+     "|Isolation Levels|The three CUBRID MVCC isolation levels, configuration|",
+     "|Alembic Migrations|Setup, configuration, limitations, batch workarounds|",
+     "|Feature Support|Comparison with MySQL, PostgreSQL, SQLite|",
+     "|ORM Cookbook|Practical ORM examples, relationships, queries|",
+     "|Development|Dev setup, testing, Docker, coverage, CI/CD|",
+     "|Driver Compatibility|CUBRID-Python driver versions and known issues|",
+     "|Troubleshooting|Common issues, error solutions, debugging techniques|",
+     "|Async Connection|Async engine setup with `cubrid+aiopycubrid://`|"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    352,
+    257,
+    260
+   ],
+   [
+    "replace",
+    352,
+    353,
+    260,
+    261,
+    [
+     "|Component|Supported versions|"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    354,
+    261,
+    262
+   ],
+   [
+    "replace",
+    354,
+    360,
+    262,
+    268,
+    [
+     "|Python|3.11, 3.12, 3.13, 3.14, 3.15|",
+     "|CUBRID|10.2, 11.0, 11.2, 11.4|",
+     "|SQLAlchemy|2.0–2.1|",
+     "|Alembic|>=1.7.2|",
+     "|pycubrid (sync)|>=1.8.0,<2.0|",
+     "|pycubrid (async)|>=1.8.0,<2.0|"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    370,
+    268,
+    278
+   ],
+   [
+    "replace",
+    370,
+    371,
+    278,
+    279,
+    [
+     "The recommended way is the pure-Python `pycubrid` driver: `create_engine(\"cubrid+pycubrid://dba:password@localhost:33000/demodb\")`. The driver requires no CUBRID native libraries. The `[pycubrid]` extra also installs `greenlet` for SQLAlchemy's async bridge; it may require build tools when no compatible wheel is available. The bare `cubrid://` URL uses the CUBRIDdb C-extension driver, which has two supported installation options: the `[cubriddb]` (or `[cubrid]`) extra installs the PyPI `CUBRID-Python` 9.3.0 release, which has known limitations, or you can build it from the cubrid-python v11.3.0.51 source release, which CI tests. To select it explicitly and unambiguously use `cubrid+cubriddb://`."
+    ]
+   ],
+   [
+    "equal",
+    371,
+    394,
+    279,
+    302
+   ],
+   [
+    "replace",
+    394,
+    401,
+    302,
+    303,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    401,
+    413,
+    303,
+    315
+   ],
+   [
+    "delete",
+    413,
+    414,
+    315,
+    315
+   ],
+   [
+    "equal",
+    414,
+    416,
+    315,
+    317
+   ],
+   [
+    "replace",
+    416,
+    418,
+    317,
+    319,
+    [
+     "- pycubrid — Pure Python DB-API 2.0 driver for CUBRID",
+     "- cubrid-cookbook-python — Production-ready Python examples for CUBRID"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    420,
+    319,
+    321
+   ],
+   [
+    "replace",
+    420,
+    424,
+    321,
+    322,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    425,
+    322,
+    323
+   ],
+   [
+    "replace",
+    425,
+    428,
+    323,
+    324,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    432,
+    324,
+    328
+   ],
+   [
+    "replace",
+    432,
+    435,
+    328,
+    331,
+    [
+     "- Documentation and runnable examples: cubrid-cookbook-python",
+     "- Pure-Python driver fixes: pycubrid",
+     "- SQLAlchemy dialect fixes: sqlalchemy-cubrid"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    438,
+    331,
+    334
+   ],
+   [
+    "replace",
+    438,
+    439,
+    334,
+    335,
+    [
+     "Browse open `good first issue` tasks."
+    ]
+   ],
+   [
+    "equal",
+    439,
+    441,
+    335,
+    337
+   ],
+   [
+    "replace",
+    441,
+    451,
+    337,
+    338,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    453,
+    338,
+    340
+   ],
+   [
+    "replace",
+    453,
+    454,
+    340,
+    341,
+    [
+     "Report vulnerabilities privately through GitHub's private vulnerability reporting (email is the fallback) -- see SECURITY.md. Do not open public issues for security concerns."
+    ]
+   ],
+   [
+    "equal",
+    454,
+    457,
+    341,
+    344
+   ],
+   [
+    "replace",
+    457,
+    459,
+    344,
+    345,
+    [
+     "> This project is part of CUBRID Lab, an independent open-source initiative for CUBRID developer tooling, and is not affiliated with, sponsored by, or endorsed by CUBRID Corporation or the official CUBRID project."
+    ]
+   ],
+   [
+    "equal",
+    459,
+    461,
+    345,
+    347
+   ],
+   [
+    "replace",
+    461,
+    463,
+    347,
+    348,
+    [
+     "MIT -- see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "00b61fc255bf+2": {
+  "fn": "Rain13Sad/bcf-mnemovault",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    4,
+    0,
+    2
+   ],
+   [
+    "replace",
+    4,
+    9,
+    2,
+    3,
+    [
+     " MnemoVault — an emotion-aware memory engine for LLMs"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    3,
+    5
+   ],
+   [
+    "replace",
+    11,
+    12,
+    5,
+    6,
+    [
+     "affect kernel, 3D star map. Runs standalone, or as a plugin inside DeepSeek Harness."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    16,
+    6,
+    10
+   ],
+   [
+    "replace",
+    16,
+    23,
+    10,
+    17,
+    [
+     "CI",
+     "npm",
+     "License: MIT",
+     "Node",
+     "Tests",
+     "DSH",
+     "PRs Welcome"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    17,
+    18
+   ],
+   [
+    "replace",
+    24,
+    27,
+    18,
+    19,
+    [
+     "**English** · 简体中文 · 日本語 · 한국어 · Español"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    31,
+    19,
+    23
+   ],
+   [
+    "replace",
+    31,
+    32,
+    23,
+    24,
+    [
+     "> design rationale, the 28 known weaknesses (D1–D28, `PROJECT-GUIDE` §12)"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    34,
+    24,
+    26
+   ],
+   [
+    "replace",
+    34,
+    42,
+    26,
+    32,
+    [
+     "|||",
+     "|:---|:---|",
+     "|**Status**|**v0.7.3** · Developer Preview. Baseline DSH `0.2.1-rc.3` (`next` channel); the host itself still ships breaking changes|",
+     "|**Size**|11 packages · 79 source files / ~28,300 lines of TS (`.ts` + `.tsx`, UI included) · 377 tests · **no third-party runtime dependency outside `@deepseek-ai/*`** (the only external one is `schemastery` for config schemas; the rest is Node built-in: `node:sqlite` / `node:zlib`)|",
+     "|**Start here**|Maintaining it → Project guide (in Chinese) Hacking on it → CONTRIBUTING　Design rationale → design doc v0.2 All docs → docs/README.md|",
+     "|**Time budget**|*Just run it* → 5 min, Quick start　·　*Judge it for production* → 40 min, PROJECT-GUIDE §12 (28 weaknesses with evidence)　·　*Change its behaviour* → 60 min, CONTRIBUTING + `retention.ts`|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    44,
+    32,
+    34
+   ],
+   [
+    "replace",
+    44,
+    54,
+    34,
+    35,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    60,
+    35,
+    41
+   ],
+   [
+    "replace",
+    60,
+    63,
+    41,
+    44,
+    [
+     " isolation red line off (a server-side gate now blocks both the command and the panel action);",
+     " `vault-tools restore` accepted `blob/../../anything` in its manifest and could overwrite arbitrary",
+     " files; and a `NaN` inside evidence scoring bypassed abstention (`verdict = 'hit'` on trap questions)."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    44,
+    45
+   ],
+   [
+    "replace",
+    64,
+    68,
+    45,
+    49,
+    [
+     " placeholder; five separate short-id parsers resolved ids to non-existent cells (silent no-op",
+     " deletes, `SUPERSEDES` edges pointing nowhere, `explain` describing the wrong cell);",
+     " `clearLattice()` ran un-transactioned and deleted edges of preserved persona cells;",
+     " snapshot ids were truncated to a weak 64-bit tail and could silently drop new snapshots."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    49,
+    50
+   ],
+   [
+    "replace",
+    69,
+    72,
+    50,
+    53,
+    [
+     " without forking), semantic-level PII detection that flags rather than erases the memory,",
+     " `/mnemo doctor --json`, the long-promised `/mnemo export --user` plus `--no-raw`,",
+     " and full bundle-field validation."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    53,
+    54
+   ],
+   [
+    "replace",
+    73,
+    74,
+    54,
+    55,
+    [
+     " extraction configuration), each with a CI gate. These remain *mechanism checks*, not a public benchmark."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    86,
+    55,
+    67
+   ],
+   [
+    "replace",
+    86,
+    89,
+    67,
+    70,
+    [
+     " *entire* derived layer (logs, rendered snapshots, eviction records, source maps); and",
+     " hand-written harness configs silently disabled crisis detection and minor protection in",
+     " every benchmark run. Both now have red-on-revert assertions."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    70,
+    71
+   ],
+   [
+    "replace",
+    90,
+    91,
+    71,
+    72,
+    [
+     " session's cell invalid even though reads were isolated. Found by the new C8 stress test."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    72,
+    73
+   ],
+   [
+    "replace",
+    92,
+    95,
+    73,
+    76,
+    [
+     " longer fires inside `dislike`), double negation, indirect/\"I'm fine\" handling that abstains",
+     " instead of inventing an emotion, a 159-entry lexicon, and domain lexicon injection that",
+     " does not require forking the source."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    76,
+    77
+   ],
+   [
+    "replace",
+    96,
+    99,
+    77,
+    80,
+    [
+     " (`/mnemo export --json`), independent purge verification, Prometheus metrics, file-level",
+     " backup/restore with a sha256 manifest, opt-in access audit, and an atomic cross-process",
+     " consolidation lock with TTL and owner."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    80,
+    81
+   ],
+   [
+    "replace",
+    100,
+    103,
+    81,
+    84,
+    [
+     " cross-ablation, component ablation, sycophancy proxy, fault injection, purge integrity,",
+     " lock concurrency — with a CI gate. These are **mechanism checks, not a public benchmark**;",
+     " see Known limitations and `docs/V0.7.2-REVIEW-RESPONSE.md`."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    139,
+    84,
+    120
+   ],
+   [
+    "replace",
+    139,
+    146,
+    120,
+    127,
+    [
+     "|#|Was|Now|",
+     "|:---|:---|:---|",
+     "|R3|`我打算伤害他` → `level=none`|harm-others split by severity (`伤害/报复` critical, `打/揍` elevated), negation still respected|",
+     "|R4|`我儿子今年8岁` marked the **user** as a minor|third-party prefix check (`儿子/女儿/同学…`) excluded; `我今年15岁` still detected|",
+     "|R5|`verdict='weak'` still injected 5 memories next to a \"not confident\" line|verdict is computed **before** rendering; weak keeps exactly one candidate|",
+     "|R6|no `userId` → shared domain, warning only|`security.scopeMode: 'per-session'` one-liner: no identity layer needed, no cross-session leak|",
+     "|R7|egress guard only saw digest + slots|residual text is fingerprinted too — a 300-word confession whose slots hold three words is now covered|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    187,
+    127,
+    168
+   ],
+   [
+    "replace",
+    187,
+    188,
+    168,
+    169,
+    [
+     " domain **and say so** (warning in `doctor`, line in the panel's honesty list);"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    227,
+    169,
+    208
+   ],
+   [
+    "replace",
+    227,
+    235,
+    208,
+    216,
+    [
+     "|Input|0.6.2|0.7.0|",
+     "|:---|:---|:---|",
+     "|我的猫叫雪球|**0 cells**|猫=雪球|",
+     "|我不吃辣，但川菜除外|`吃辣=states` (value/negation/exception all lost)|eats · 辣 · neg · except=川菜|",
+     "|生日其实是 3 月不是 4 月|`上周说错=is`|生日=3月 · negated=4|",
+     "|上次提到的那个项目，它的 deadline 提前了|`上次提到=states`|项目=deadline (pronoun resolved)|",
+     "|新服务用 Go 写、gRPC 通信、部署在杭州，测试继续用 pytest|1 cell|4 cells, each with its own subject|",
+     "|我下周要去北京出差三天|only \"下周\"|去北京 · 三天 · time|"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    295,
+    216,
+    276
+   ],
+   [
+    "replace",
+    295,
+    296,
+    276,
+    277,
+    [
+     " integration is still open)."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    277,
+    278
+   ],
+   [
+    "replace",
+    297,
+    298,
+    278,
+    279,
+    [
+     " offline promise. The rule path is now at a usable level; LLM extraction remains an opt-in upgrade."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    306,
+    279,
+    287
+   ],
+   [
+    "replace",
+    306,
+    315,
+    287,
+    296,
+    [
+     "|#|Defect|Root cause|Consequence|",
+     "|:---|:---|:---|:---|",
+     "|M1|`identity()` silently produced **fewer than `k` bits**|`(hLo ^ hHi)` is a *signed* 32-bit int in JS; a negative index makes `out[neg] \\|= m` a non-index property — the bit is lost while `placed++` still runs|identity codes were weaker than documented; fixed with `>>> 0`, and the hash is now 64-bit (dual FNV-1a) instead of 32-bit|",
+     "|M2|`kWTA` kept the **lowest bit indices**|`idx.sort((x,y)=>x-y)` contradicted the documented \"hash decides ties\"|over-density systematically dropped high-index components; now sorted by per-bit hash strength|",
+     "|A8|`上月` / `本月` / `近几个月` / `前年` unparsed|sequential `if` chain over a whitelist|the temporal channel silently missed common expressions|",
+     "|§3.3|no way to say \"I don't know\"|`RecallResult` had no abstention primitive|trap questions got plausible-but-wrong memories injected; now `verdict: 'hit' \\|'weak' \\|'none'` plus an explicit line in the rendered block|",
+     "|§3.6|mixed emotion collapsed to **zero arousal**|`charge = (pos−neg)/total` fed both valence and arousal|\"难受但也挺开心\" read as flat; `intensity` is now an independent axis driving arousal|",
+     "|§5.1|preference sentences with no extracted value still produced a cell|`PATIENT` fell back to *any* entity — often the predicate itself|`我喜欢` became `PATIENT=喜欢`, a confidently wrong memory; such sentences now return `null` and fall back to the residual channel|",
+     "|§3.6b|star map collapsed to a single point|`project3` scaled by `v[i]/127` (int8 full range) while real vectors are only ±4…±8|1200 memories drew as one dot; now L2-normalized, and the projection basis is constant within each `pq4` dimension pair|"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    356,
+    296,
+    337
+   ],
+   [
+    "replace",
+    356,
+    360,
+    337,
+    341,
+    [
+     "|Claim|Reality in 0.6.0|Now|",
+     "|:---|:---|:---|",
+     "|\"price cap per turn\"|the gate only pushed a reason string; `maxPrice=0` still emitted 10 entries / ¥0.0057|the gate **trims**; when even the legend is unaffordable it emits nothing (`suppressed=true`)|",
+     "|\"adapts to common models\"|`deepseek-v3`, `gpt-5`, `claude-sonnet-4-5` fell through to the conservative profile → forced prose → 2.5× tokens|32 real model names hit; provider families have explicit defaults; unknown models are no longer priced at zero|"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    364,
+    341,
+    345
+   ],
+   [
+    "replace",
+    364,
+    365,
+    345,
+    346,
+    [
+     " reported the count *before* deletion. Now hard reports 0 (the truth), soft reports the pre-delete count."
+    ]
+   ],
+   [
+    "equal",
+    365,
+    366,
+    346,
+    347
+   ],
+   [
+    "replace",
+    366,
+    370,
+    347,
+    351,
+    [
+     " and the self-heal condition (`count` mismatch) could never fire. It now goes through",
+     " `memory.reindexCell()`, and an interrupted run is detectable: the inflight marker carries its target",
+     " space, `status().limits` and `doctor()` both report it, and switching providers resets the cursor",
+     " instead of stitching two spaces together."
+    ]
+   ],
+   [
+    "equal",
+    370,
+    371,
+    351,
+    352
+   ],
+   [
+    "replace",
+    371,
+    373,
+    352,
+    354,
+    [
+     " 45 entries, negation now uses word boundaries plus an `n't` suffix rule (the old 3-character window",
+     " could never match `not`), and intensifiers no longer fire on `太阳` / `超市` / `太空`."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    379,
+    354,
+    360
+   ],
+   [
+    "replace",
+    379,
+    380,
+    360,
+    361,
+    [
+     "What's new in 0.6.2 for the full correction."
+    ]
+   ],
+   [
+    "equal",
+    380,
+    401,
+    361,
+    382
+   ],
+   [
+    "replace",
+    401,
+    410,
+    382,
+    391,
+    [
+     "|||",
+     "|:---|:---|",
+     "|**Engine**|`EmotionMemoryEngine` — `observe / remember / recall / forget / status`. Host-agnostic; the DSH plugin is now one caller among many|",
+     "|**Ports**|`EmbeddingPort` / `ExtractorPort` / `TokenizerPort` / `ClockPort` / `AuditPort`. Missing port = documented degradation, never an error|",
+     "|**Models**|11 profiles across 6 providers (DeepSeek / OpenAI / Anthropic / Google / Ollama / OpenAI-compatible). Adding a model is **one row of data**, not a branch|",
+     "|**Compiler**|`compile()` gates on capability → tokens → **money**. Weak models get prose automatically; expensive models get pruned by price, not by token count|",
+     "|**Emotion**|Four mechanisms, each with an assertion: appraisal→PAD, mood-congruence (negative side damped 0.7 — the rumination brake), arousal **inverted-U**, byte-stable emotion brief|",
+     "|**Star map**|3D projection of the 64-d vectors by **fixed-seed random projection** — new memories add points, they never move old ones. Canvas, 1200 nodes, drag/zoom/hover|",
+     "|**Console**|16 knobs, each showing its effect on tokens-per-turn and cost *before* you apply it|"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    417,
+    391,
+    398
+   ],
+   [
+    "replace",
+    417,
+    418,
+    398,
+    399,
+    [
+     " synchronously from cache. A miss falls back to the hash — the `await` never leaks into `recall()`."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    419,
+    399,
+    400
+   ],
+   [
+    "replace",
+    419,
+    421,
+    400,
+    402,
+    [
+     " between 0 and 1 that mean nothing. `memory.embSpace === port.space` is now a hard gate; the only way to",
+     " switch is `engine.reembed()`, which walks the vault in batches and flips the space **only when finished**."
+    ]
+   ],
+   [
+    "equal",
+    421,
+    438,
+    402,
+    419
+   ],
+   [
+    "replace",
+    438,
+    449,
+    419,
+    430,
+    [
+     "|Before (0.5.1)|Now (0.5.2)|Measured|",
+     "|:---|:---|---:|",
+     "|Q1 decoded the whole library to run `cosine`|**In-memory vector matrix** (contiguous `Int8Array`, cold PQ vectors expanded on insert with the *same* `expandEmb`, so scores are bit-identical)|recall p50 @822: 18 → **4 ms**|",
+     "|Dedupe and conflict detection each scanned every cell|**SDR inverted index** — thresholds derived from the Jaccard/containment gate (`o = J(|a|+\\|b\\|)/(1+J)`), so candidates are a **superset**, not an approximation|ingest @822: 46 → **1.8 ms**|",
+     "|`findConflict` bucketed by `agent|pred` — which is 1/6 of the library|Bucketed by `agent|pred|manner|patient|polarity`; same-patient only needs *opposite* polarity|`getCell` per 5 turns: 2026 → **16**|",
+     "|Q4 scanned the whole table although `idx_time` had existed since v0.2|SQL range query|same results, verified against full scan|",
+     "|`stats()` decoded the library to count rows|SQL `GROUP BY`|@10k: 20 → **0.8 ms**|",
+     "|`doctor()` ran three full decodes per panel refresh|One merged pass + 30 s cache|@10k: ~700 → **~250 ms**|",
+     "|`demoteDue` recomputed all seven factors every tick, one WAL commit per cell|Retention **persisted** (`retention` table, no `cells` change), incremental sweep, monotonic pruning, **one transaction**|10k pass: 2066 → **658 ms**|",
+     "|Consolidation held one transaction for the whole pass|Committed per phase|lock per phase, not per pass|",
+     "|README's \"10k cells, p95 ≤ 40 ms\" was never asserted anywhere|`ci-assert-scale.mjs` in CI|**45–55 ms** (see note below)|"
+    ]
+   ],
+   [
+    "equal",
+    449,
+    460,
+    430,
+    441
+   ],
+   [
+    "replace",
+    460,
+    471,
+    441,
+    452,
+    [
+     "|#|Bug|Fix|",
+     "|:---|:---|:---|",
+     "|D20|`explain()` ran a **non-readOnly** recall, so `/mnemo why` raised the target's `tAccess`|`readOnly: true` — observation must not mutate what is observed|",
+     "|D21|Schema cells were written with `flags: FLAG.noDecay & 0` (always 0), so schemas were decayed like ordinary episodes|`FLAG.noDecay`; schemas now hold P5|",
+     "|D22|`maxResidualBytes` truncated by UTF-16 code unit, so \"8192\" stored ~24 KB of Chinese|truncate by UTF-8 bytes on code-point boundaries|",
+     "|D23|Two copies of short-id resolution, both **silently taking the first match** — on an irreversible `forget --hard`|merged into `tools/src/id.ts`; >1 match throws `AmbiguousCellIdError`|",
+     "|D24|Retention was never persisted|see the table above|",
+     "|D25|Main benchmark used `MemoryStore`; scale bench was not in CI|scale gate + explicit \"MemoryStore, not SQLite\" banner|",
+     "|D26|Two drivers disagree on residual refcount semantics|**not fixed** — small blast radius, needs a semantics decision (documented)|",
+     "|D27|Write path used `conn.prepare()` instead of the statement cache|all write paths go through `prep()`|",
+     "|D28|Docs drifted: command count (15 stated, real count differed), `trace` documented but not implemented, byte size wrong|`check-readme` now verifies **command count** and **command existence**; `trace` implemented; 342 B measured|"
+    ]
+   ],
+   [
+    "equal",
+    471,
+    475,
+    452,
+    456
+   ],
+   [
+    "replace",
+    475,
+    476,
+    456,
+    457,
+    [
+     " under-computed and **dedupe silently stopped merging** (test: \"same sentence twice → one cell\");"
+    ]
+   ],
+   [
+    "equal",
+    476,
+    477,
+    457,
+    458
+   ],
+   [
+    "replace",
+    477,
+    478,
+    458,
+    459,
+    [
+     " like `kind 0` and the next ingest created a duplicate (test: \"index self-heals after external write\")."
+    ]
+   ],
+   [
+    "equal",
+    478,
+    479,
+    459,
+    460
+   ],
+   [
+    "replace",
+    479,
+    481,
+    460,
+    461,
+    [
+     " What 0.5.1 fixed (sign loss, anniversary oscillation, dead switch) "
+    ]
+   ],
+   [
+    "equal",
+    481,
+    483,
+    461,
+    463
+   ],
+   [
+    "replace",
+    483,
+    484,
+    463,
+    464,
+    [
+     " (`-0.54` → `+1.48`). Fixed with `& 0xff` on write and sign-extending decode; **no rebuild needed**."
+    ]
+   ],
+   [
+    "equal",
+    484,
+    485,
+    464,
+    465
+   ],
+   [
+    "replace",
+    485,
+    486,
+    465,
+    466,
+    [
+     " band, so a compacted tombstone got promoted back to archive. Now capped at the current band's ceiling."
+    ]
+   ],
+   [
+    "equal",
+    486,
+    487,
+    466,
+    467
+   ],
+   [
+    "replace",
+    487,
+    488,
+    467,
+    468,
+    [
+     " Added a catalogue channel over `digest` tokens."
+    ]
+   ],
+   [
+    "equal",
+    488,
+    492,
+    468,
+    472
+   ],
+   [
+    "replace",
+    492,
+    496,
+    472,
+    473,
+    [
+     " What 0.5.0 fixed (the decision chain was inert) "
+    ]
+   ],
+   [
+    "equal",
+    496,
+    502,
+    473,
+    479
+   ],
+   [
+    "delete",
+    502,
+    506,
+    479,
+    479
+   ],
+   [
+    "equal",
+    506,
+    516,
+    479,
+    489
+   ],
+   [
+    "replace",
+    516,
+    539,
+    489,
+    490,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    539,
+    544,
+    490,
+    495
+   ],
+   [
+    "replace",
+    544,
+    546,
+    495,
+    497,
+    [
+     " `provenance = 0`, every user utterance was permanently warm. The panel shows both numbers:",
+     " `score` (what the formula says) and `effective` (what actually happens), plus the reason."
+    ]
+   ],
+   [
+    "equal",
+    546,
+    547,
+    497,
+    498
+   ],
+   [
+    "replace",
+    547,
+    550,
+    498,
+    499,
+    [
+     " That is what makes \"the library can shrink\" compatible with \"you can still see that it happened\"."
+    ]
+   ],
+   [
+    "equal",
+    550,
+    561,
+    499,
+    510
+   ],
+   [
+    "replace",
+    561,
+    564,
+    510,
+    513,
+    [
+     " sparse code (identity) + int8 vector (semantics) + typed hyperedges (relations) + event/invalid",
+     " timestamps (bi-temporal) + affect reading + version chain. The original bytes are kept separately",
+     " as a brotli residual and can always be recovered."
+    ]
+   ],
+   [
+    "equal",
+    564,
+    565,
+    513,
+    514
+   ],
+   [
+    "replace",
+    565,
+    566,
+    514,
+    515,
+    [
+     " scores, and lets a 4±1 slot competition decide what gets injected — rendered as table rows."
+    ]
+   ],
+   [
+    "equal",
+    566,
+    567,
+    515,
+    516
+   ],
+   [
+    "replace",
+    567,
+    568,
+    516,
+    517,
+    [
+     " a power-law forgetting curve demotes cells."
+    ]
+   ],
+   [
+    "equal",
+    568,
+    569,
+    517,
+    518
+   ],
+   [
+    "replace",
+    569,
+    570,
+    518,
+    519,
+    [
+     " all persisted as ordinary cells — evolvable and rollback-able."
+    ]
+   ],
+   [
+    "equal",
+    570,
+    575,
+    519,
+    524
+   ],
+   [
+    "replace",
+    575,
+    576,
+    524,
+    525,
+    [
+     " `affect_report` returns numbers and ships its own disclaimer."
+    ]
+   ],
+   [
+    "equal",
+    576,
+    577,
+    525,
+    526
+   ],
+   [
+    "replace",
+    577,
+    578,
+    526,
+    527,
+    [
+     " (supported range: `>=0.2.1-rc.3 <0.3.0`)."
+    ]
+   ],
+   [
+    "equal",
+    578,
+    579,
+    527,
+    528
+   ],
+   [
+    "replace",
+    579,
+    580,
+    528,
+    529,
+    [
+     " path runs today. A stated weakness, not a hidden one."
+    ]
+   ],
+   [
+    "equal",
+    580,
+    583,
+    529,
+    532
+   ],
+   [
+    "replace",
+    583,
+    586,
+    532,
+    533,
+    [
+     " Write side, read side and offline consolidation"
+    ]
+   ],
+   [
+    "equal",
+    586,
+    590,
+    533,
+    537
+   ],
+   [
+    "delete",
+    590,
+    592,
+    537,
+    537
+   ],
+   [
+    "equal",
+    592,
+    594,
+    537,
+    539
+   ],
+   [
+    "delete",
+    594,
+    595,
+    539,
+    539
+   ],
+   [
+    "equal",
+    595,
+    602,
+    539,
+    546
+   ],
+   [
+    "replace",
+    602,
+    606,
+    546,
+    547,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    606,
+    637,
+    547,
+    578
+   ],
+   [
+    "replace",
+    637,
+    638,
+    578,
+    579,
+    [
+     "differs from the design doc — is recorded in `docs/API-CONTRACT.md`."
+    ]
+   ],
+   [
+    "equal",
+    638,
+    639,
+    579,
+    580
+   ],
+   [
+    "replace",
+    639,
+    641,
+    580,
+    581,
+    [
+     " Working from source instead "
+    ]
+   ],
+   [
+    "equal",
+    641,
+    647,
+    581,
+    587
+   ],
+   [
+    "delete",
+    647,
+    651,
+    587,
+    587
+   ],
+   [
+    "equal",
+    651,
+    661,
+    587,
+    597
+   ],
+   [
+    "replace",
+    661,
+    678,
+    597,
+    598,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    678,
+    683,
+    598,
+    603
+   ],
+   [
+    "replace",
+    683,
+    685,
+    603,
+    604,
+    [
+     " Using <code>MemoryService</code> directly (no harness) "
+    ]
+   ],
+   [
+    "equal",
+    685,
+    690,
+    604,
+    609
+   ],
+   [
+    "replace",
+    690,
+    703,
+    609,
+    610,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    703,
+    708,
+    610,
+    615
+   ],
+   [
+    "delete",
+    708,
+    712,
+    615,
+    615
+   ],
+   [
+    "equal",
+    712,
+    716,
+    615,
+    619
+   ],
+   [
+    "replace",
+    716,
+    729,
+    619,
+    632,
+    [
+     "|Metric|Measured|Target|Note|",
+     "|:---|---:|:---|:---|",
+     "|Recall@8|**0.905**|≥ 0.80|21 facts / 24 topics, current-value ground truth|",
+     "|MRR|**0.73**|≥ 0.65|same|",
+     "|Dedupe precision|**1.00**|≥ 0.90|restating a fact should merge|",
+     "|Dedupe recall|**1.00**|—|same topic, different value should not merge|",
+     "|Temporal reasoning|**1.00**|≥ 0.75|`pnpm → npm → bun` across three versions|",
+     "|tokens / turn|**104.9**|≤ 240|legend amortised|",
+     "|Recall p95|**7 ms**|≤ 40 ms @1M|42 cells locally, not a million|",
+     "|Bytes per cell|**336 B**|—|MC03: 112 B header + sparse SDR + 128-dim vector (844 B in v0.2)|",
+     "|Storage ratio (short config-style DB)|5.32×|diagnostic only|~98 B turns (“我用 pnpm。”) — the fixed 342 B per cell dominates|",
+     "|Storage ratio (800-char turn, default split)|**0.832×**|≤ 0.90|762 chars/turn, 2.25 cells/turn|",
+     "|Storage ratio (800-char turn, one cell)|**0.626×**|≤ 0.72|coarse control, shows split-granularity sensitivity|"
+    ]
+   ],
+   [
+    "equal",
+    729,
+    742,
+    632,
+    645
+   ],
+   [
+    "replace",
+    742,
+    748,
+    645,
+    651,
+    [
+     "|Cells|recall p50|recall p95|steady ingest p50|index build|index memory|",
+     "|---:|---:|---:|---:|---:|---:|",
+     "|222|4 ms|9 ms|2.1 ms|10 ms|72 KB|",
+     "|422|4 ms|7 ms|2.1 ms|12 ms|137 KB|",
+     "|822|4 ms|7 ms|1.8 ms|20 ms|266 KB|",
+     "|10,000|20 ms|**25 ms**|10 ms|287 ms|1.6 MB|"
+    ]
+   ],
+   [
+    "equal",
+    748,
+    761,
+    651,
+    664
+   ],
+   [
+    "replace",
+    761,
+    762,
+    664,
+    665,
+    [
+     "CI turns these into failing assertions via `scripts/ci-assert-bench.mjs`"
+    ]
+   ],
+   [
+    "equal",
+    762,
+    764,
+    665,
+    667
+   ],
+   [
+    "replace",
+    764,
+    765,
+    667,
+    668,
+    [
+     "Scale is gated separately by `scripts/ci-assert-scale.mjs`:"
+    ]
+   ],
+   [
+    "equal",
+    765,
+    767,
+    668,
+    670
+   ],
+   [
+    "replace",
+    767,
+    769,
+    670,
+    671,
+    [
+     " Why 0.45–0.60× was unreachable, and what v0.3 actually fixed "
+    ]
+   ],
+   [
+    "equal",
+    769,
+    773,
+    671,
+    675
+   ],
+   [
+    "replace",
+    773,
+    776,
+    675,
+    678,
+    [
+     " (≈885 B) one, while the 0.45–0.60× estimate assumed ≈2.4 KB per turn. Fixed to 762 chars / 2072 B,",
+     " and the fixture no longer repeats identical sentences (verbatim repeats compress to 0.10 and",
+     " produce a number that only holds inside the fixture)."
+    ]
+   ],
+   [
+    "equal",
+    776,
+    777,
+    678,
+    679
+   ],
+   [
+    "replace",
+    777,
+    778,
+    679,
+    680,
+    [
+     " reporting 824 B when a cell is really 341 B."
+    ]
+   ],
+   [
+    "equal",
+    778,
+    796,
+    680,
+    698
+   ],
+   [
+    "delete",
+    796,
+    800,
+    698,
+    698
+   ],
+   [
+    "equal",
+    800,
+    810,
+    698,
+    708
+   ],
+   [
+    "replace",
+    810,
+    822,
+    708,
+    720,
+    [
+     "|Area|What changed|",
+     "|:---|:---|",
+     "|Release|sibling deps → `^0.3.1`, regenerated lockfile, verified `npm ci && build` in a clean tree, new `ci-check-publish.mjs` gate, `engines.node` → 22.13|",
+     "|Privacy (P0)|redaction now covers entities / slots / embeddings / topic / digest / **shadow log**; 7 → 11 PII classes; slot-level fallback|",
+     "|Deletion (P0)|`forget(hard)` releases the residual when no cell references it any more; `doctor` reports and purges orphan residuals|",
+     "|Approval|hard delete always asks; refuses outright with no approval surface; `mnemo_command` refuses `forget --hard`|",
+     "|Egress|guard is allowlist-based fail-closed (`webSearch` / `execute_shell` / `send_email` no longer slip through)|",
+     "|XSS|the explain panel no longer builds HTML strings|",
+     "|Read-side effects|opening the panel no longer wipes the proactive daily quota (v0.3 only fixed the test)|",
+     "|Reproducibility|seq off-by-one, three `Math.random` call sites, 32-bit edge prefix collisions, empty `snapshotId`|",
+     "|Performance|statement cache, streaming traversal, single-pass reads, `busy_timeout`, panel snapshot throttling|",
+     "|Panel|unified type scale and spacing, re-tuned dark palette, tag cloud from structured slots only, narrow-sidebar layout|"
+    ]
+   ],
+   [
+    "equal",
+    822,
+    825,
+    720,
+    723
+   ],
+   [
+    "delete",
+    825,
+    827,
+    723,
+    723
+   ],
+   [
+    "equal",
+    827,
+    829,
+    723,
+    725
+   ],
+   [
+    "replace",
+    829,
+    842,
+    725,
+    738,
+    [
+     "|Package|Role|Status|Key exports|",
+     "|:---|:---|:---|:---|",
+     "|`…-llm`|model adapters + engine|**Preview** — first release|`createEnginePorts`, `HttpEmbeddingProvider`, `LlmExtractor`, `PROVIDERS`|",
+     "|`…-core`|lattice + storage + recall + retention|**Preview** — API will move|`ctx.memory`, `SdrSpace`, `encodeCell`, `evaluateRetention`|",
+     "|`…-affect`|affect kernel|Preview|`ctx.affect`, `appraise`, `derivePolicy`, `classifyEmotion`|",
+     "|`…-encoder`|write side|Preview|`Encoder` (subscribes to `session/event`)|",
+     "|`…-recall`|read side|Preview|`agent/pre-step` gating and injection|",
+     "|`…-consolidator`|offline consolidation + sleep replay|Preview|`Consolidator` (NREM / REM / replay / forgetting)|",
+     "|`…-tools`|tools + commands|Stable-ish|6 tools, 27 subcommands, egress guard|",
+     "|`…-proactive`|speaking up first|Experimental|`ctx.mnemoProactive`, `candidate()`, `tick()`|",
+     "|`…-settings`|settings panel|Experimental|`ctx.mnemoSettings`, effect matrix|",
+     "|`…-ui`|panel (client, React)|Experimental — needs `react`|`main` + `sidebar.panellist` slot registration|",
+     "|`…-devkit`|host-free harness|Testing utility|`createHarness()` (real Cordis fiber)|"
+    ]
+   ],
+   [
+    "equal",
+    842,
+    845,
+    738,
+    741
+   ],
+   [
+    "delete",
+    845,
+    847,
+    741,
+    741
+   ],
+   [
+    "equal",
+    847,
+    864,
+    741,
+    758
+   ],
+   [
+    "replace",
+    864,
+    867,
+    758,
+    759,
+    [
+     " Overview — left rail, two-column content"
+    ]
+   ],
+   [
+    "equal",
+    867,
+    868,
+    759,
+    760
+   ],
+   [
+    "replace",
+    868,
+    871,
+    760,
+    761,
+    [
+     " Retention — six dispositions, factor breakdown, neuromodulators"
+    ]
+   ],
+   [
+    "equal",
+    871,
+    872,
+    761,
+    762
+   ],
+   [
+    "replace",
+    872,
+    875,
+    762,
+    763,
+    [
+     " Narrow mode — top tabs"
+    ]
+   ],
+   [
+    "equal",
+    875,
+    878,
+    763,
+    766
+   ],
+   [
+    "replace",
+    878,
+    887,
+    766,
+    775,
+    [
+     "|Tab|Question it answers|",
+     "|:---|:---|",
+     "|**Overview**|Where is the store, what state is it in — path + actions, metrics, categories, index status, tag cloud, four recent columns, backend capabilities|",
+     "|**Search**|Is the memory I want in there — filters, per-hit channel and score, inline \"why\" from the same `ScoreBreakdown`|",
+     "|**Organize**|How to make it better — consolidation pass, association/version-chain stats, graph, invalidated versions|",
+     "|**Retention**|**Why is this still here / why is it almost gone** — six-disposition distribution, library growth (archive / tombstone / KB), seven-factor bars per memory, DA/ACh/NE/CORT signals, reconsolidation log, revive button on tombstones|",
+     "|**Inbox**|What is waiting on me — disputed or isolated single-evidence memories, contradiction adjudication|",
+     "|**Affect**|What state it is in — PAD scatter, six variables, OCC labels, episode state machine, persona anchor|",
+     "|**Settings**|How to tune it — preset/surface/ignition, real L1 and index shape, maintenance actions|"
+    ]
+   ],
+   [
+    "equal",
+    887,
+    896,
+    775,
+    784
+   ],
+   [
+    "delete",
+    896,
+    898,
+    784,
+    784
+   ],
+   [
+    "equal",
+    898,
+    900,
+    784,
+    786
+   ],
+   [
+    "replace",
+    900,
+    909,
+    786,
+    795,
+    [
+     "||MnemoVault|Mem0|Zep / Graphiti|Letta (MemGPT)|",
+     "|:---|:---|:---|:---|:---|",
+     "|Storage format|fixed-size binary cells (sparse code + int8 + hyperedges)|text + vectors|graph nodes + vectors|text blocks|",
+     "|Bi-temporal|event time **and** transaction time|no|yes|no|",
+     "|Forgetting|seven-factor retention, six dispositions, never auto-deletes|TTL / none|none|manual|",
+     "|Reconsolidation|yes — retrieval rewrites confidence and valence|no|no|no|",
+     "|Emotion as state|appraisal → PAD → mood → relationship → persona, all persisted|no|no|no|",
+     "|Runtime dependencies|**zero** (`node:sqlite` + `node:zlib`)|vector DB + LLM|Neo4j + LLM|Postgres + LLM|",
+     "|Cost model|~116 tokens injected per turn|LLM call per write|LLM call per write|LLM call per turn|"
+    ]
+   ],
+   [
+    "equal",
+    909,
+    913,
+    795,
+    799
+   ],
+   [
+    "delete",
+    913,
+    915,
+    799,
+    799
+   ],
+   [
+    "equal",
+    915,
+    917,
+    799,
+    801
+   ],
+   [
+    "replace",
+    917,
+    918,
+    801,
+    802,
+    [
+     "The full catalogue is **28 known weaknesses (D1–D28)** in `PROJECT-GUIDE` §12,"
+    ]
+   ],
+   [
+    "equal",
+    918,
+    923,
+    802,
+    807
+   ],
+   [
+    "replace",
+    923,
+    925,
+    807,
+    809,
+    [
+     " tokens, but no word vectors and no context. Real semantics needs the host's embedding service",
+     " (`EmbeddingPort` is defined, not wired)."
+    ]
+   ],
+   [
+    "equal",
+    925,
+    926,
+    809,
+    810
+   ],
+   [
+    "replace",
+    926,
+    927,
+    810,
+    811,
+    [
+     " probe; the panel shows \"lite rule split\" until a probe passes."
+    ]
+   ],
+   [
+    "equal",
+    927,
+    928,
+    811,
+    812
+   ],
+   [
+    "replace",
+    928,
+    929,
+    812,
+    813,
+    [
+     " There is no million-cell benchmark — only overlap tests (≥0.85)."
+    ]
+   ],
+   [
+    "equal",
+    929,
+    932,
+    813,
+    816
+   ],
+   [
+    "replace",
+    932,
+    933,
+    816,
+    817,
+    [
+     " write at 1000 cells. A SDR inverted index is the fix; it is not here yet."
+    ]
+   ],
+   [
+    "equal",
+    933,
+    934,
+    817,
+    818
+   ],
+   [
+    "replace",
+    934,
+    935,
+    818,
+    819,
+    [
+     " panel, one full pass per demotion tick). At 10⁵ cells this needs a `retention_score` column."
+    ]
+   ],
+   [
+    "equal",
+    935,
+    936,
+    819,
+    820
+   ],
+   [
+    "replace",
+    936,
+    938,
+    820,
+    822,
+    [
+     " gives you the digest and slots, not the original sentence. That is the trade that makes byte reclamation",
+     " possible; the row and its lineage survive."
+    ]
+   ],
+   [
+    "equal",
+    938,
+    939,
+    822,
+    823
+   ],
+   [
+    "replace",
+    939,
+    940,
+    823,
+    824,
+    [
+     " rebuilt; `forget --hard` does not delete it (deleting it would make rebuild impossible). See SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    940,
+    941,
+    824,
+    825
+   ],
+   [
+    "replace",
+    941,
+    943,
+    825,
+    827,
+    [
+     " config-style sentences** (\"我用 pnpm。\") because the fixed per-cell cost dominates. Both numbers are in",
+     " Benchmarks; the 0.45–0.60× figure in older docs was measured on neither."
+    ]
+   ],
+   [
+    "equal",
+    943,
+    944,
+    827,
+    828
+   ],
+   [
+    "replace",
+    944,
+    945,
+    828,
+    829,
+    [
+     " edge-weight semantics and would invalidate the bench baseline; only the four neuromodulator signals shipped."
+    ]
+   ],
+   [
+    "equal",
+    945,
+    946,
+    829,
+    830
+   ],
+   [
+    "replace",
+    946,
+    947,
+    830,
+    831,
+    [
+     " there is no per-turn user feedback signal yet (`predictionErrorProxy` exists, unwired)."
+    ]
+   ],
+   [
+    "equal",
+    947,
+    948,
+    831,
+    832
+   ],
+   [
+    "replace",
+    948,
+    949,
+    832,
+    833,
+    [
+     " config — changing them changes what \"old\" means, so it should be a deliberate edit with a test."
+    ]
+   ],
+   [
+    "equal",
+    949,
+    950,
+    833,
+    834
+   ],
+   [
+    "replace",
+    950,
+    951,
+    834,
+    835,
+    [
+     " invent a memory the encoder never wrote."
+    ]
+   ],
+   [
+    "equal",
+    951,
+    952,
+    835,
+    836
+   ],
+   [
+    "replace",
+    952,
+    954,
+    836,
+    838,
+    [
+     " formula; the retention page says so explicitly.",
+     "16. **No encryption at rest.** The database holds real conversations. See SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    954,
+    955,
+    838,
+    839
+   ],
+   [
+    "replace",
+    955,
+    956,
+    839,
+    840,
+    [
+     " `affect_report` returns numbers and ships its own disclaimer."
+    ]
+   ],
+   [
+    "equal",
+    956,
+    959,
+    840,
+    843
+   ],
+   [
+    "delete",
+    959,
+    961,
+    843,
+    843
+   ],
+   [
+    "equal",
+    961,
+    966,
+    843,
+    848
+   ],
+   [
+    "replace",
+    966,
+    981,
+    848,
+    863,
+    [
+     "|Doc|What it is|",
+     "|:---|:---|",
+     "|`docs/README.md`|Documentation map — pick by intent, not by order|",
+     "|`docs/PROJECT-GUIDE.md`|What the code actually does; 28 weaknesses with evidence; 12 improvements ranked P0–P2|",
+     "|`docs/design/MNEMOVAULT-DESIGN.md`|Full derivation: sparse-code algebra, four-channel recall, MRS rendering, biphasic consolidation|",
+     "|`docs/design/V0.6-PLAN.md`|**0.6.0**: kernel/ports/engine split, the four emotion mechanisms, the star map and the console|",
+     "|`docs/design/V0.5.2-PLAN.md`|0.5.2: the nine defects, the scale work, and the measured numbers|",
+     "|`docs/releases/v0.5.2.md`|Release note for 0.5.2|",
+     "|`docs/design/V0.5-PLAN.md`|0.5.0: the eleven confirmed defects, the fixes, and the verification numbers|",
+     "|`docs/design/V0.4-PLAN.md`|0.4.0 scope: what was taken from the v0.4 proposal, what was deferred, and the formulas|",
+     "|`docs/API-CONTRACT.md`|Where the real DSH `0.2.1-rc.3` packages differ from the design doc|",
+     "|`docs/releases/v0.5.0.md`|Release note for 0.5.0|",
+     "|`docs/releases/v0.4.0.md`|Release note for 0.4.0|",
+     "|`CONTRIBUTING.md`|Environment, code map, hard constraints, commit style|",
+     "|`CHANGELOG.md` · `SECURITY.md` · `docs/PUBLISH.md`|History, threat model, release steps|"
+    ]
+   ],
+   [
+    "equal",
+    981,
+    983,
+    863,
+    865
+   ],
+   [
+    "replace",
+    983,
+    989,
+    865,
+    866,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    989,
+    990,
+    866,
+    867
+   ],
+   [
+    "replace",
+    990,
+    993,
+    867,
+    868,
+    [
+     "MIT. The research reports and the design doc under `docs/design/` remain the property of"
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

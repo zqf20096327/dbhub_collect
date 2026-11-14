@@ -2531,5 +2531,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ac43324b15fa": {
+  "identity": {
+   "one_liner": "面向 Bun 的任务队列，内嵌内存/SQLite 存储，可选 PostgreSQL 多代理模式，无需 Redis。",
+   "review": "bunqueue 是运行在 Bun 上的任务队列库，提供嵌入式（进程内）与独立服务器（TCP）两种模式，内置 DLQ、cron 调度、SQLite S3 备份和 MCP 服务器。服务器与嵌入式模式要求 Bun（≥1.4.0），不支持 MySQL；客户端覆盖 Node.js、Deno、Python 等多语言。",
+   "highlights": [
+    "支持嵌入式内存/SQLite 持久化与 PostgreSQL 16–18 多代理服务器模式，含数据库权威认领、围栏租约与故障转移状态",
+    "提供与 BullMQ 兼容的 Queue、Worker、QueueEvents、FlowProducer API，内含 79 个工具的 MCP 服务器",
+    "服务端实现重试退避、优先级、速率限制、死信队列与 cron 调度，Docker 镜像支持 amd64/arm64 四种发行版变体"
+   ],
+   "use_cases": [
+    "单机或嵌入式部署中不需要运维 Redis 的后台任务处理",
+    "需要调度器的 AI 代理与自动化流程（通过 MCP 控制队列）",
+    "以 PostgreSQL 为存储的多代理队列集群与边缘/serverless 任务缓冲"
+   ]
+  },
+  "sha": "ac43324b15fa",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "40cc3d89e144": {
+  "identity": {
+   "one_liner": "Java 事件溯源框架，基于 PostgreSQL，支持多框架集成与加密擦除",
+   "review": "StreamRune 是面向 Java 的事件溯源框架，提供 EventStore、命令总线、投影、 Saga 与事务性 outbox 等模块，支持 Spring Boot、Quarkus、Micronaut 三种集成方式，并可搭配 PostgreSQL 事件存储或内存测试存储。要求 Java 25 与 PostgreSQL 17+。1.0.0 尚未发布到 Maven Central，当前仅可通过未签名的 snapshot 预览版试用；项目采用 Business Source License 1.1，另有 Apache 2.0 许可的电商示例仓库。",
+   "highlights": [
+    "模块化发布：核心 API、运行时、PostgreSQL 存储、测试支持，以及 Kafka/RabbitMQ 事务性 outbox 发布器",
+    "提供 crypto-shredding 加密能力，支持文件目录、PostgreSQL、HashiCorp Vault、AWS KMS 等密钥管理方式",
+    "从 1.0.0 起遵循语义化版本，构建时以 API 清单文件校验公共签名变更"
+   ],
+   "use_cases": [
+    "需要事件溯源与 CQRS 架构的 Java 应用开发",
+    "需要实现 GDPR 数据删除（crypto-shredding）的事件负载加密场景",
+    "Spring Boot、Quarkus 或 Micronaut 项目的事件存储与消息发布集成"
+   ]
+  },
+  "sha": "40cc3d89e144",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

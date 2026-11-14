@@ -2774,5 +2774,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "46f3c59f4bc0": {
+  "identity": {
+   "one_liner": "将 GitHub Star 转为收藏整理与卡牌对战的本地应用",
+   "review": "Stard 是一个围绕 GitHub Stars 的工具：按用户名读取星标仓库，支持整理进 GitHub Lists、为每个仓库生成健康评分、添加标签/评分/笔记，并生成可粘贴到 README 的个人资料卡，另含用星标仓库生成卡牌对战的功能。可通过 npx 本地运行或 Docker 自托管，需 GitHub CLI 登录或带 repo 权限的 token；列表改动会同步回 GitHub，每次启动前自动备份，无遥测。",
+   "highlights": [
+    "支持将星标仓库排序写入 GitHub Lists，双向同步，并按健康评分（0–10，基于最近提交、issue、贡献者、star 增长、最近发布）标记仓库状态",
+    "提供 Markdown 格式的资料卡（top 仓库海报、评分短评、List 卡片）以及 AI 代理排序接口（npx skills、/api/* 与 AGENT_API_TOKEN）",
+    "实现卡牌对战模式：卡牌属性由仓库数据生成（star 定等级、贡献者定 HP、提交定攻击、语言定类型），可通过 GitHub Discussion 进行回合制对战"
+   ],
+   "use_cases": [
+    "整理大量历史星标仓库：批量归入 GitHub Lists、标记不再维护的项目并查找活跃替代",
+    "为 GitHub 个人主页 README 生成星标仓库展示卡片与个人评价",
+    "在本地或自托管服务器上私有管理星标库，通过代理 API 让 Claude Code/Codex 检索已有星标后再推荐库"
+   ]
+  },
+  "sha": "46f3c59f4bc0",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f7b207fda7af": {
+  "identity": {
+   "one_liner": "在 SQL Server 内运行的存储过程式 AI 索引调优工具，收集诊断并调用 Azure OpenAI",
+   "review": "该项目以单个存储过程 dbo.sp_AIIndexTuner 形式运行于 SQL Server 2025 及Azure SQL 系列平台，收集缺失索引、索引重叠、非SARGable谓词、Query Store 等诊断数据，发送至用户自有的 Azure OpenAI 部署，并将建议存入表；CREATE 模式可在校验后创建新索引。适用于 SQL Server 2025 环境、需要数据库内自动化索引分析的 DBA。需 sp_invoke_external_rest_endpoint 及相应权限。",
+   "highlights": [
+    "单个存储过程完成诊断收集、模型调用、建议存储，CREATE 模式可创建经过校验的新索引",
+    "收集缺失索引、重复/重叠索引、非SARGable谓词、Query Store 查询、倾斜低基数列等诊断信息",
+    "支持参数过滤（@SchemaName/@TableName）、优先级与置信度阈值、列存储与删除索引开关、可经 SQL Server Agent 定时运行"
+   ],
+   "use_cases": [
+    "对 SQL Server 2025 或 Azure SQL 数据库进行周期性索引分析与建议生成",
+    "需要限定到特定表或仅应用高置信度建议的受控索引变更流程",
+    "利用 Query Store 数据分析参数敏感查询与非SARGable谓词的索引优化"
+   ]
+  },
+  "sha": "f7b207fda7af",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "85be35341e26": {
+  "identity": {
+   "one_liner": "波兰语自托管电商订单管理面板，Node.js 24 + SQLite 单机运行",
+   "review": "Twój OMS 是一个面向波兰小型线上卖家的自托管订单管理面板，将 Allegro、ERLI、WooCommerce 渠道订单汇入统一界面，并支持开票（inFakt/Fakturownia/KSeF）、发运（DPD/InPost）、退货、成本与报表等模块。技术栈为 Node.js 24 + Fastify + SQLite + EJS 服务端渲染，界面与文档均为波兰语。无外部数据库、无订阅费；集成需自行提供密钥，无密钥时以试用模式启动。MIT 许可，不含保修与官方支持。",
+   "highlights": [
+    "模块化结构（订单/渠道/发票/发运/库存/退货/成本/报表等），每模块含独立路由、视图、数据库迁移与权限",
+    "集成 Allegro、ERLI、WooCommerce、inFakt、Fakturownia、KSeF、DPD、InPost、GUS、Meta、GA4，均可选且需自备密钥",
+    "提供带作用域的 API v1 密钥、OpenAPI 描述、/health 健康检查、备份与告警模块"
+   ],
+   "use_cases": [
+    "在波兰经营多渠道（Allegro/ERLI/WooCommerce）订单的小型卖家，需统一管理订单、发票与发运",
+    "需生成符合波兰规则发票（KSeF、WDT）并通过 DPD/InPost 寄件的店铺运营",
+    "希望在自有服务器上运行并自行修改、扩展代码（含借助 AI 代理，参考 AGENTS.md）的团队"
+   ]
+  },
+  "sha": "85be35341e26",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3a3670ba3bb3": {
+  "identity": {
+   "one_liner": "本地运行的求职助手：抓取、过滤、评分职位并准备申请材料，用户自行提交",
+   "review": "Talaash 是运行在个人电脑上的求职助手，抓取 Greenhouse、Lever、Himalayas 等招聘板的软件职位，按国家、签证、远程区域过滤，基于 CV 做关键词评分和 AI 审阅（0–100 分），生成求职信与表单答案。它从不代为提交，申请由用户自己完成。数据存于本地 PostgreSQL，需 Node 24+ 或 Docker，AI 可用 Claude CLI 或任意 OpenAI 兼容 API 密钥。",
+   "highlights": [
+    "从公司招聘系统（Greenhouse、Lever、Ashby、Workday 等）、职位板和 LinkedIn 游客搜索抓取职位，优先使用公开 API 并限制请求节奏",
+    "对每个匹配职位给出关键词得分与 AI 审阅（分数、结论、缺口、红旗），被过滤的职位保留拒绝原因",
+    "CV 版本只对 master CV 重新排序和措辞，不添加技能或声明，并由测试强制执行；Chrome 扩展仅向空表单字段填入内容，不点击按钮、不提交"
+   ],
+   "use_cases": [
+    "定向搜索特定国家及所在地可申请的远程软件职位的个人求职者",
+    "需要保留简历、档案与求职数据全部在本地的隐私敏感用户",
+    "希望追踪申请状态、跟进提醒、回复率与漏斗分析的求职流程管理"
+   ]
+  },
+  "sha": "3a3670ba3bb3",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

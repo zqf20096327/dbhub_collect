@@ -3163,5 +3163,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "eda4dffa75af": {
+  "identity": {
+   "one_liner": "基于 GraphBLAS 稀疏矩阵的图数据库，以 Redis 模块形式运行",
+   "review": "FalkorDB 是一个属性图数据库，本仓库为其 Rust 实现，构建为 Redis 模块（libfalkordb），底层用 GraphBLAS 稀疏矩阵表示图的邻接矩阵并以线性代数执行查询，支持 OpenCypher 查询语言（含自有扩展）。可通过任何 Redis 客户端调用 GRAPH.QUERY 等命令，官方提供 Java/Python/Node.js/Rust/Go/C# 客户端库，亦提供 Docker 镜像和浏览器界面。README 提到目标场景包括 LLM 知识图谱（GraphRAG）、Agent 记忆、云安全与欺诈检测。许可证为 SSPLv1，从源码构建需先编译 GraphBLAS、LAGraph 和 RediSearch 依赖。",
+   "highlights": [
+    "使用 GraphBLAS 稀疏矩阵表示图邻接矩阵，并通过线性代数执行查询",
+    "遵循属性图模型，支持带属性的节点与关系，兼容 OpenCypher 查询语言及专有扩展",
+    "作为 Redis 模块运行，可从任意 Redis 客户端发送命令调用；官方维护 Java、Python、Node.js、Rust、Go、C# 六种客户端库"
+   ],
+   "use_cases": [
+    "为 LLM 应用构建知识图谱（GraphRAG）与 Agent 记忆存储",
+    "需要通过 Redis 协议和现有 Redis 客户端访问的图数据查询场景",
+    "云安全与欺诈检测等涉及关系和图遍历的数据场景"
+   ]
+  },
+  "sha": "eda4dffa75af",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3c77f18e4e5b": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 MCP 服务器，用 wikilinks 作图对 markdown 笔记做 Graph RAG 记忆检索",
+   "review": "sqlite-graph-memory 是一个面向 AI 编码代理（Claude Code、Cursor、Codex 等 MCP 客户端）的记忆检索工具：对任意 markdown 文件夹（含 Obsidian vault）建立索引，向量搜索找入口笔记，再沿手写的 [[wikilinks]] 做一跳图扩展补充关联结果，SQLite 为唯一存储，无需图数据库或 ETL。通过 sgm-index 建索引、sgm-ask 查询或 MCP server 接入客户端。README 自述为 pilot 状态；Python 3.12 推荐，Intel Mac 或旧 macOS 不支持 Python 3.14 的 onnxruntime。",
+   "highlights": [
+    "提供 sgm-index / sgm-ask / MCP server 三个入口，增量索引仅重嵌入新增或变更笔记，--full 强制全量重建",
+    "查询时从笔记解析 wikilink 边，限制 1 跳 / 40 邻居，图不物化进 SQL，与笔记保持同步",
+    "提供 [lite]（ONNX Runtime，155 MB）与 [embeddings]（torch，879 MB）两种后端，索引可互查；--ab 可对比图模式与纯向量检索"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等 MCP 客户端接入本地 markdown/Obsidian 笔记作为跨会话记忆",
+    "对已手写 [[wikilinks]] 的知识库做结合图扩展的语义检索",
+    "需要单文件 SQLite 存储、无服务端部署的个人检索层"
+   ]
+  },
+  "sha": "3c77f18e4e5b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7fa2ce37adfd": {
+  "identity": {
+   "one_liner": "Rust 编写的开源关系数据库，可嵌入为库或运行为服务器。",
+   "review": "Turborel 是用 Rust 编写的关系数据库系统，既可作为库嵌入应用，也可通过 turboreld 以服务器方式运行，供多客户端用 SQL 查询。README 声明其当前处于 alpha 阶段（版本 0.0.0），SQL、API、协议与文件格式均可能在版本间变更，代码采用 BSD 2-Clause 许可证。",
+   "highlights": [
+    "存储引擎、索引方法、数据类型、认证、传输与线协议等均为可替换或扩展的接口",
+    "支持行式与列式存储（按表选择）、READ COMMITTED 至 SERIALIZABLE 的事务，以及 WAL、检查点与崩溃恢复",
+    "内置 LZ4 压缩与 AES-256-GCM/ChaCha20-Poly1305 加密，支持基于 Viewstamped Replication 加 mutual TLS 的复制"
+   ],
+   "use_cases": [
+    "需要将数据库以库形式嵌入应用进程内运行的场景",
+    "需要在 TCP、Unix 套接字或 Windows 命名管道上以服务器方式提供 SQL 服务的部署",
+    "通过命令行客户端导入 CSV 或制表符分隔文件并进行查询"
+   ]
+  },
+  "sha": "7fa2ce37adfd",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

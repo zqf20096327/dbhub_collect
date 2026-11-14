@@ -3085,5 +3085,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bfee4c6ac4d4": {
+  "identity": {
+   "one_liner": "用 Rust 编写的期权链 REST 模拟器，随每次请求按随机游走演进数据",
+   "review": "该项目提供基于 REST 的期权链模拟服务，包含 v1（单到期会话）与 v2（模拟时钟滚动到期）两套 API，通过种子化随机游走生成各步骤快照，支持 Redis/MongoDB 共享存储与 ClickHouse 持久化。适用于测试交易算法、可视化与分析流程而无需实时行情。README 明确标注尚未可用于生产环境，导出数值经归一化以避免精度差异。",
+   "highlights": [
+    "提供 v1/v2 两套 REST API，v1 单到期模拟，v2 提供模拟时钟下的绝对到期滚动清单",
+    "使用 Redis 原子脚本实现多实例共享状态，因子 tape 按参数指纹缓存于 Redis 供各实例复用",
+    "支持 ClickHouse 快照持久化，提供 /health 与 /ready 健康探针及按实例暴露的 Prometheus 指标"
+   ],
+   "use_cases": [
+    "为交易算法、可视化与分析管道提供期权链测试数据，替代实时行情依赖",
+    "以多副本方式部署，通过按副本抓取指标与部署级定价并发租约运行服务",
+    "测试依赖探针、持久化导出路径等运维场景的集成验证"
+   ]
+  },
+  "sha": "bfee4c6ac4d4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

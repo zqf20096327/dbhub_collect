@@ -2939,5 +2939,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "127bf1ab1157": {
+  "identity": {
+   "one_liner": "Aiven 提供的 PostgreSQL 扩展，让非超级用户使用逻辑复制等功能",
+   "review": "aiven-extras 是一个 PostgreSQL 扩展，提供一组 SQL 函数，使非超级用户能够创建逻辑复制的 PUBLICATION/SUBSCRIPTION、加载 auto_explain、配置 pgaudit 参数等。适用于数据库由 root 安装而用户仅持有 REPLICATION 权限的环境。安装只需 CREATE EXTENSION；刷新发布功能在 PostgreSQL 16+ 按调用者身份执行，且须作为顶层语句使用。采用 Apache 2.0 许可证。",
+   "highlights": [
+    "提供 pg_create_subscription、pg_create_publication 等函数，供非超级用户管理逻辑复制的订阅与发布",
+    "提供 auto_explain_load 及多个 set_auto_explain_* 函数，auto_explain 仅对当前会话加载",
+    "包含 session_replication_role、set_pgaudit_parameter、dblink 相关函数；刷新发布须作为顶层语句执行"
+   ],
+   "use_cases": [
+    "在托管数据库服务中让非超级用户配置 PostgreSQL 10+ 的逻辑复制订阅与发布",
+    "当前会话内启用 auto_explain 进行语句执行计划记录",
+    "配置 pgaudit 审计参数"
+   ]
+  },
+  "sha": "127bf1ab1157",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "906ab3e84fac": {
+  "identity": {
+   "one_liner": "为酒馆助手脚本提供分层 SQLite 数据库并内嵌 DVS 变量系统",
+   "review": "该项目为酒馆（SillyTavern）助手脚本提供全局、角色和单人聊天三层 SQLite 数据库，并内嵌 DVS 卡片变量系统：Helper 负责数据库读写，DVS 管理 AI 回复相关的状态，字段与更新规则由卡片作者定义。写入在内存事务提交后即返回，文件由后台保存，关闭或切换前需留意保存提示。使用前必须安装并启用酒馆助手 JS-Slash-Runner，且安装时需确认包含 manifest.json 的完整包。",
+   "highlights": [
+    "提供全局、角色、单人聊天三种层级的 SQLite 数据库读写",
+    "内嵌 DVS 卡片变量系统，可与 Helper 分开单独使用",
+    "写入在内存事务提交后返回，文件由后台异步保存"
+   ],
+   "use_cases": [
+    "为酒馆助手脚本提供持久化数据存储",
+    "角色卡作者通过 DVS 定义和管理随 AI 回复变化的字段状态",
+    "为角色卡附带可选的插件安装引导"
+   ]
+  },
+  "sha": "906ab3e84fac",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d4a25b52ed32": {
+  "identity": {
+   "one_liner": "Windows 下的 3D Gaussian Splatting 训练、查看、编辑与导出工具",
+   "review": "OpenGaussian 是 LichtFeld Studio 更名后随 Open3D 套件免费分发的 Windows 程序，用于从照片（COLMAP 等数据布局）训练 3D Gaussian Splatting 场景，支持训练中实时查看、选择/变换/编辑 splat（含撤销重做）、导出 PLY/SOG/SPZ/USD/HTML 查看器，可经 Python 插件、嵌入式 Python 或 MCP 扩展自动化。要求 Windows 10/11、NVIDIA GPU（算力 7.5+）及驱动 570+；当前为 0.1.0 早期开发版，仅英文与西班牙语界面。",
+   "highlights": [
+    "从照片训练 3D Gaussian Splatting 场景，支持从 checkpoint 恢复，训练中可实时查看",
+    "支持选择、变换和编辑 splat（含撤销/重做），可导出 PLY、SOG、SPZ、USD 或独立 HTML 查看器",
+    "可通过插件目录的 Python 插件扩展，支持嵌入式 Python 或 MCP 自动化，也可用命令行无界面运行训练"
+   ],
+   "use_cases": [
+    "在 Windows 上用照片数据集（COLMAP 布局等）训练并训练中监控 3D Gaussian Splatting 场景",
+    "对 splat 场景进行选择、变换等编辑并导出为 PLY/SOG/SPZ/USD 或 HTML 查看器",
+    "通过命令行或 MCP 在无图形界面下运行训练任务以实现流程自动化"
+   ]
+  },
+  "sha": "d4a25b52ed32",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

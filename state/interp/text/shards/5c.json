@@ -2545,5 +2545,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a5452834e999": {
+  "identity": {
+   "one_liner": "自托管的 AI 代理运行时，基于 Claude Agent SDK 构建",
+   "review": "Nerve 是一个自托管的 AI 代理运行时，基于 Claude Agent SDK 构建，提供持久记忆、定时执行、任务管理与技能机制。它面向个人与团队两类用户，分为个人助理模式与工作代理模式，可通过 Web UI、Telegram、Slack 或 cron 任务与代理交互。支持单进程运行，也可通过 Docker 部署。",
+   "highlights": [
+    "双层记忆：热记忆注入每次会话，深层记忆支持语义检索",
+    "提供 Web UI、Telegram、Slack 及 cron 定时任务等多种渠道，共享同一代理引擎与记忆",
+    "工作代理模式以计划驱动执行，计划需人工审批，破坏性操作需明确同意"
+   ],
+   "use_cases": [
+    "部署长期使用的个人助理，管理邮件、偏好与日程提醒",
+    "部署自动监控 CI、审查 PR 并提出修复方案的工作代理，经人工批准后执行",
+    "在无公网地址的内网或 NAT 环境中通过 Slack/Telegram 与代理交互"
+   ]
+  },
+  "sha": "a5452834e999",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae7db5578efe": {
+  "identity": {
+   "one_liner": "面向 LLM 智能体的持久化可迁移记忆系统，基于 SQLite/PostgreSQL 存储",
+   "review": "Octop Memory 是为 LLM 智能体提供的持久记忆库，将对话事件经抽取与提升转为带证据引用的 AtomCard 事实，支持跨会话召回及通过 .hmpkg 包在主机间迁移。核心依赖为零，可单独作为 Python 库、CLI 或 JSON-RPC 桥运行；自动抽取需注入 LLMClient，需 Python 3.12+。向量搜索接口存在但真实集成未经测试验证。",
+   "highlights": [
+    "零核心依赖，基于标准库与 SQLite/FTS5 实现手动存储与词法召回，无需模型",
+    "提供 RawEvent→Candidate→AtomCard→EntityPage 的记忆流水线，自动执行提升检查、去重与冲突处理",
+    "支持导出/导入 .hmpkg 便携包，并提供 Python API、JSON-RPC 桥与 OpenClaw/Hermes 插件三种接入方式"
+   ],
+   "use_cases": [
+    "为个人助手保存用户偏好，在多轮会话间维持项目上下文与决策记录",
+    "在支持的主机（OpenClaw、Hermes 等）之间迁移已积累的记忆数据",
+    "通过 CLI 或 JSON-RPC 在无 Python 主进程环境下管理、检查与召回记忆"
+   ]
+  },
+  "sha": "ae7db5578efe",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8301bf26d0ef": {
+  "identity": {
+   "one_liner": "基于 TOML DSL 将 SQLite 数据库发布为 REST/JSON-RPC/MCP 服务的工具",
+   "review": "Xepak 是一个用 Rust 编写的 DSL 配置型服务构建器，可将 SQL 数据库（当前支持 SQLite）暴露为 REST、JSON-RPC 或 MCP 服务。配置由一组 TOML 文件组成，支持 Lua 脚本处理校验、访问控制等逻辑。适合需要快速为本地 SQLite 数据构建 API 的开发者。项目采用 zer0ver 版本方案，暂无 1.x 发布计划。",
+   "highlights": [
+    "支持构建 REST、JSON-RPC 和 MCP 三种服务，配置基于 TOML 文件的 DSL",
+    "内置认证授权模块：支持 API key、基于角色/id 的授权表达式及 Lua 预处理器实现复杂逻辑",
+    "REST 端点可根据 HTTP 头动态接受和返回 JSON 与 CBOR 格式"
+   ],
+   "use_cases": [
+    "为本地 SQLite 数据快速搭建有状态 API 原型",
+    "在自有硬件或树莓派等嵌入式设备上自托管 API 服务",
+    "为本地优先应用或 AI/LLM 沙箱提供本地数据 API/RAG 层"
+   ]
+  },
+  "sha": "8301bf26d0ef",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8415d1ca75e9": {
+  "identity": {
+   "one_liner": "全栈个人作品集平台：React+Express+TiDB 后端驱动，含 JWT 管理后台与 Gemini AI 讲解",
+   "review": "一个个人作品集网站，前端 React+Vite、后端 Express REST API、数据库为 TiDB Cloud（MySQL 兼容）。内容存于数据库而非硬编码，提供 JWT 保护的管理后台（项目/技能/证书 CRUD、Cloudinary 图片上传、联系消息收件箱）、Gemini AI 技能讲解、实时服务器遥测页。本地可用 Docker Compose 运行整套应用，CI/CD 使用七任务 GitHub Actions 流水线。部署为 Vercel（前端）+ Render（API）。",
+   "highlights": [
+    "公开展示七个路由（首页/关于/技能/项目/证书/系统/联系），内容全部通过 API 从数据库读取",
+    "管理后台提供项目、技能、证书的完整增删改查，JWT 单管理员认证，图片经 Multer 内存缓冲上传至 Cloudinary（5 MB 上限）",
+    "包含本地 Docker Compose 栈（React+Nginx、Express、MySQL）与 GitHub Actions 七任务流水线（lint、测试、构建、部署、冒烟测试）"
+   ],
+   "use_cases": [
+    "作为开发者个人作品集站点，展示项目、技能、证书并接收联系表单",
+    "作为学习全栈部署与 CI/CD 流程的参考实现（Vercel/Render/TiDB 组合）",
+    "作为含认证、上传、限流、AI 集成的 Node.js REST API 示例工程"
+   ]
+  },
+  "sha": "8415d1ca75e9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

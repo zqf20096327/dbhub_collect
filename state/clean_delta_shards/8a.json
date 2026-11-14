@@ -13406,5 +13406,1874 @@
    ]
   ],
   "at": "2026-11-12"
+ },
+ "a73599246554+2": {
+  "fn": "Holo795/CBMCoolifyBackup",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**Back up and restore _everything_ in Coolify — not just databases.**"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    9,
+    6,
+    9,
+    [
+     "License",
+     "Release",
+     "Build"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    12,
+    9,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "storage via restic**, one‑click restore (in place or as a brand‑new"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    13,
+    16
+   ],
+   [
+    "replace",
+    16,
+    19,
+    16,
+    17,
+    [
+     "> restore a snapshot before relying on it. See Known limitations."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    17,
+    20
+   ],
+   [
+    "replace",
+    22,
+    23,
+    20,
+    21,
+    [
+     "Overview"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    21,
+    22
+   ],
+   [
+    "replace",
+    24,
+    27,
+    22,
+    25,
+    [
+     "|Resources|Snapshots|Snapshot & restore|",
+     "|---|---|---|",
+     "|Resources|Snapshots|Snapshot and restore|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    25,
+    26
+   ],
+   [
+    "replace",
+    28,
+    31,
+    26,
+    29,
+    [
+     "|Coolify instances|Destinations (tar · restic)|Agents|",
+     "|---|---|---|",
+     "|Coolify instances|Destinations|Agents|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    29,
+    30
+   ],
+   [
+    "replace",
+    32,
+    35,
+    30,
+    33,
+    [
+     "|Users & roles|Settings|Command palette|",
+     "|---|---|---|",
+     "|Users|Settings|Command palette|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    33,
+    34
+   ],
+   [
+    "replace",
+    36,
+    41,
+    34,
+    37,
+    [
+     "|Dark mode|Mobile|",
+     "|---|---|",
+     "|Dark mode|Mobile|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    49,
+    37,
+    45
+   ],
+   [
+    "replace",
+    49,
+    68,
+    45,
+    64,
+    [
+     "||Coolify built‑in backups|**CBM**|",
+     "|---|:---:|:---:|",
+     "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅ (also ClickHouse, SQLite)|✅|",
+     "|**Redis / KeyDB / Dragonfly**|❌|✅ (live RDB)|",
+     "|**Application** volumes and folders|archive only, restored by hand|✅ backup **and** restore|",
+     "|**Docker‑compose services** (every volume + each internal DB)|❌|✅|",
+     "|**Host file mounts**|❌|✅|",
+     "|Capture **env vars** so a snapshot restores standalone|❌|✅|",
+     "|**Consistent copy** of a running resource (brief freeze, no restart)|n/a|✅|",
+     "|**Incremental + deduplicated + encrypted** storage (restic)|❌|✅|",
+     "|Restore **to a new resource** (clone, re‑pin commit/image)|❌|✅|",
+     "|Restore onto a **fresh / different Coolify** (source can be gone)|❌|✅|",
+     "|**Destinations**|local, S3|local, SSH/SFTP (jump host), S3|",
+     "|**Multi‑server** Coolify instances|✅|✅|",
+     "|Alerts on **failed** / **not run** backups|✅|✅|",
+     "|Alerts on backups **deleted at the destination**, **corrupt**, or **not succeeding** for a while|❌|✅|",
+     "|**Test restores** in a sandbox, weekly|❌|✅|",
+     "|**Mirror** a backup to a second destination|several S3|✅ any destination|",
+     "|**Disaster recovery** — back up CBM and Coolify itself, restore elsewhere|❌|✅|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    70,
+    64,
+    66
+   ],
+   [
+    "delete",
+    70,
+    72,
+    66,
+    66
+   ],
+   [
+    "equal",
+    72,
+    76,
+    66,
+    70
+   ],
+   [
+    "replace",
+    76,
+    79,
+    70,
+    73,
+    [
+     " `mongodump`); Redis‑family stores via a live RDB export. For volumes, the agent briefly",
+     " *freezes* (`docker pause`) only the containers writing to a volume, copies it, and resumes",
+     " them — the container keeps its state and uptime, never stopped or recreated."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    73,
+    74
+   ],
+   [
+    "replace",
+    80,
+    82,
+    74,
+    76,
+    [
+     " (e.g. the Postgres in n8n) also gets its own logical dump on top of the volume copy —",
+     " application‑consistent and restorable across engine versions."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    76,
+    77
+   ],
+   [
+    "replace",
+    83,
+    86,
+    77,
+    80,
+    [
+     " a jump host), pick the **restic** engine: only changed data is uploaded, the repository is",
+     " encrypted, retention is delegated to restic, and restore works both in place and to a new",
+     " resource."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    80,
+    81
+   ],
+   [
+    "replace",
+    87,
+    89,
+    81,
+    83,
+    [
+     " is never touched): databases, git apps (commit re‑pinned), docker‑image apps (exact",
+     " tag/digest), and compose services (volumes re‑mapped to the clone)."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    83,
+    84
+   ],
+   [
+    "replace",
+    90,
+    94,
+    84,
+    88,
+    [
+     " you a portable **recovery file**, so a dead machine never takes the \"brain\" with it. Snapshots",
+     " are self‑describing, so `Restore → new` works onto a **fresh or different Coolify** even when",
+     " the source is gone — CBM recreates the projects/environments and re‑injects the config. See",
+     " docs/disaster-recovery.md."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    88,
+    89
+   ],
+   [
+    "replace",
+    95,
+    96,
+    89,
+    90,
+    [
+     " or S3 — with optional AES‑256‑GCM encryption at rest (the restic engine encrypts natively)."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    90,
+    91
+   ],
+   [
+    "replace",
+    97,
+    99,
+    91,
+    93,
+    [
+     " per server and each backup is routed to the agent on the resource's server automatically,",
+     " with a schedule per server."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    93,
+    94
+   ],
+   [
+    "replace",
+    100,
+    101,
+    94,
+    95,
+    [
+     " (deleted at the destination), and **overdue** (never ran) backups."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    95,
+    96
+   ],
+   [
+    "replace",
+    102,
+    107,
+    96,
+    101,
+    [
+     " loads each database dump into a network‑less sandbox container of the same engine and checks",
+     " every table came back, reads volume archives back end to end, then deletes everything —",
+     " Coolify and your resources are never touched. On demand (**Test restore** on a snapshot), via",
+     " the API/MCP, or weekly; a failure alerts you. See",
+     " docs/restore.md."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    101,
+    102
+   ],
+   [
+    "replace",
+    108,
+    111,
+    102,
+    105,
+    [
+     " **present**; an opt‑in weekly **integrity** check re‑reads the stored data to catch **silent",
+     " corruption** (`restic check` / tar re‑checksum); and a destination can **mirror** every backup",
+     " to a second destination for a redundant, independently‑restorable copy."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    105,
+    106
+   ],
+   [
+    "replace",
+    112,
+    113,
+    106,
+    107,
+    [
+     " pre/post‑backup commands** (e.g. quiesce an app, flush a cache)."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    107,
+    108
+   ],
+   [
+    "replace",
+    114,
+    118,
+    108,
+    112,
+    [
+     " from the UI, for all agents or per host — no reinstall. A volume too big for the host's disk",
+     " is **sent straight to the destination** instead of failing (or refused cleanly, your choice).",
+     " Agents are **updated from the controller** too — one click, or automatically when they're",
+     " idle — and the previous agent is put back if the new one doesn't start."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    112,
+    113
+   ],
+   [
+    "replace",
+    119,
+    121,
+    113,
+    115,
+    [
+     " backup are read, and a two-pass backup keeps the freeze to about a second — even for hundreds",
+     " of GB. Its cache survives agent updates, and read concurrency / pack size are tunable per host."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    115,
+    116
+   ],
+   [
+    "replace",
+    122,
+    123,
+    116,
+    117,
+    [
+     " untouched by a restore in place."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    117,
+    118
+   ],
+   [
+    "replace",
+    124,
+    126,
+    118,
+    120,
+    [
+     " be **protected** (CBM never deletes there), and CBM checks that an S3 bucket really refuses a",
+     " permanent deletion by its key (versioning + no `DeleteObjectVersion`), alerting if that changes."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    128,
+    120,
+    122
+   ],
+   [
+    "replace",
+    128,
+    131,
+    122,
+    125,
+    [
+     " invitation links (copy‑paste or emailed). Operators run backups/restores; only admins",
+     " configure instances, destinations, schedules, and settings — enforced server‑side, with the",
+     " UI hiding what a role can't use."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    125,
+    126
+   ],
+   [
+    "replace",
+    132,
+    134,
+    126,
+    128,
+    [
+     " **and** after GitHub / Google / GitLab sign-in; admins can require it for admins or everyone,",
+     " and reset it for someone who lost their phone."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    128,
+    129
+   ],
+   [
+    "replace",
+    135,
+    139,
+    129,
+    133,
+    [
+     " configured from Settings (or env), with a built‑in test that verifies the connection.",
+     "- **MCP server.** An MCP server lets any AI agent (Claude",
+     " Desktop, Claude Code, Cursor, Cline…) inspect your fleet and trigger backups over a",
+     " token‑authenticated API, with the same role model as the UI. See docs/mcp.md."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    133,
+    134
+   ],
+   [
+    "replace",
+    140,
+    146,
+    134,
+    138,
+    [
+     " The **⌘K / Ctrl+K** palette finds any page, settings section, resource, recent snapshot,",
+     " destination, instance, agent, user or API token, and runs actions (connect an instance, add a",
+     " destination, invite someone, create an MCP token, switch theme or language). Secondary actions",
+     " sit in each card's **…** menu; results show up as toasts."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    158,
+    138,
+    150
+   ],
+   [
+    "replace",
+    158,
+    159,
+    150,
+    151,
+    [
+     " encrypts secrets at rest, dispatches jobs. One per deployment."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    160,
+    151,
+    152
+   ],
+   [
+    "replace",
+    160,
+    164,
+    152,
+    154,
+    [
+     " hosts), runs dumps / volume archives, captures Git & image provenance, transfers to",
+     " destinations. **One per Docker host.**"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    188,
+    154,
+    178
+   ],
+   [
+    "replace",
+    188,
+    189,
+    178,
+    179,
+    [
+     "reference in **docs/configuration.md**."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    200,
+    179,
+    190
+   ],
+   [
+    "replace",
+    200,
+    202,
+    190,
+    192,
+    [
+     "**docs/accounts.md**. For password reset and verification emails, configure",
+     "SMTP in **Settings → Email (SMTP)** (**docs/email.md**)."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    217,
+    192,
+    207
+   ],
+   [
+    "replace",
+    217,
+    220,
+    207,
+    208,
+    [
+     "Full walkthrough: **docs/installation.md**."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    232,
+    208,
+    220
+   ],
+   [
+    "replace",
+    232,
+    236,
+    220,
+    222,
+    [
+     "The dev compose also starts **Mailpit** (a catch‑all SMTP",
+     "inbox on `:8025`) so you can test the email flows locally — see docs/email.md."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    239,
+    222,
+    225
+   ],
+   [
+    "replace",
+    239,
+    240,
+    225,
+    226,
+    [
+     "Detailed docs live in **`/docs`**, also published as the **wiki**:"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    226,
+    227
+   ],
+   [
+    "replace",
+    241,
+    255,
+    227,
+    239,
+    [
+     "- Installation — controller, agents, on Coolify",
+     "- Configuration — every environment variable",
+     "- Accounts & roles — users, roles, invitation links",
+     "- Email (SMTP) — password reset, verification, dev mailer",
+     "- Destinations — local · SSH/SFTP · jump host · S3 · tar vs restic",
+     "- Backups — how each resource type is captured, hooks, live mode",
+     "- Restore — in place vs → new",
+     "- Disaster recovery — self‑backup, recovery file, restore onto a fresh Coolify",
+     "- MCP server — drive CBM from any AI agent (Claude Desktop, Cursor, Cline…)",
+     "- Multi‑server, Alerts,",
+     " Reconciliation & retention",
+     "- Security · Troubleshooting / FAQ"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    261,
+    239,
+    245
+   ],
+   [
+    "replace",
+    261,
+    264,
+    245,
+    248,
+    [
+     " into an agent‑side sandbox (databases loaded into a real engine, archives read back), but it",
+     " doesn't redeploy the application in Coolify. An occasional real **→ new** restore remains the",
+     " ultimate check."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    248,
+    249
+   ],
+   [
+    "replace",
+    265,
+    267,
+    249,
+    251,
+    [
+     " in‑service database restored from its *volume* is version‑locked to the same engine version",
+     " — use the logical dump captured alongside it for a portable restore."
+    ]
+   ],
+   [
+    "equal",
+    267,
+    268,
+    251,
+    252
+   ],
+   [
+    "replace",
+    268,
+    270,
+    252,
+    254,
+    [
+     " reconciliation/retention/restore for a local destination run on the producing agent; if that",
+     " host is down, those operations wait for it. Use SSH/S3 for a single shared location."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    271,
+    254,
+    255
+   ],
+   [
+    "delete",
+    271,
+    273,
+    255,
+    255
+   ],
+   [
+    "equal",
+    273,
+    277,
+    255,
+    259
+   ],
+   [
+    "replace",
+    277,
+    278,
+    259,
+    260,
+    [
+     " encrypted at rest** with `MASTER_KEY` (falls back to `BETTER_AUTH_SECRET`)."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    260,
+    261
+   ],
+   [
+    "replace",
+    279,
+    281,
+    261,
+    263,
+    [
+     " install tokens are per instance, shown once, and enroll one agent within 24 hours. API tokens (MCP) are likewise shown",
+     " once and stored only as a hash."
+    ]
+   ],
+   [
+    "equal",
+    281,
+    282,
+    263,
+    264
+   ],
+   [
+    "replace",
+    282,
+    283,
+    264,
+    265,
+    [
+     " server‑side; invitation links are single‑use, expiring, and stored only as a sha256 hash."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    284,
+    265,
+    266
+   ],
+   [
+    "replace",
+    284,
+    285,
+    266,
+    267,
+    [
+     " social sign-in."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    287,
+    267,
+    269
+   ],
+   [
+    "replace",
+    287,
+    290,
+    269,
+    270,
+    [
+     "More in docs/security.md."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    292,
+    270,
+    272
+   ],
+   [
+    "replace",
+    292,
+    296,
+    272,
+    273,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    273,
+    274
+   ],
+   [
+    "replace",
+    297,
+    300,
+    274,
+    275,
+    [
+     "Apache License 2.0 — Copyright © 2026 Holo795."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "33d3800f8755+2": {
+  "fn": "jayin92/toefl-prep-tool",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**English** | 繁體中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    21,
+    3,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "The Dashboard, with an Overall band and four section Band Estimates against their Targets"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    22,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "A Reading Simulation showing an academic passage beside one of its questions, with a clock and a question navigator"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    30,
+    26,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "A Score Report for a Write an Email Item: summary, the Response with two Deductions underlined, the Model Rewrite, and the Deductions with their fixes"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    51,
+    31,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "You need Node.js at the version in `.nvmrc` (24) and Chrome. Recording uses"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    70,
+    52,
+    70
+   ],
+   [
+    "replace",
+    70,
+    71,
+    70,
+    71,
+    [
+     "docs/demo-data.md."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    79,
+    71,
+    79
+   ],
+   [
+    "replace",
+    79,
+    81,
+    79,
+    81,
+    [
+     " Speaking and Writing: it runs the Arbiter, which writes the final Score Report. Either works on its",
+     " own."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    81,
+    82
+   ],
+   [
+    "replace",
+    82,
+    83,
+    82,
+    83,
+    [
+     " generating Speaking and Listening Sets."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    83,
+    84
+   ],
+   [
+    "replace",
+    84,
+    85,
+    84,
+    85,
+    [
+     " the OpenAI Writing Judge when Codex is not available."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    85,
+    86
+   ],
+   [
+    "replace",
+    86,
+    87,
+    86,
+    87,
+    [
+     " Listening Sets."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    90,
+    87,
+    90
+   ],
+   [
+    "replace",
+    90,
+    91,
+    90,
+    91,
+    [
+     "is documented in `.env.example`."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    94,
+    91,
+    94
+   ],
+   [
+    "replace",
+    94,
+    95,
+    94,
+    95,
+    [
+     "|Page|Path|What it is for|"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    95,
+    96
+   ],
+   [
+    "replace",
+    96,
+    104,
+    96,
+    104,
+    [
+     "|Dashboard|`/`|The Setup checklist, one suggested next step, Band Estimates against your Targets, the next unattempted Sets, Full-Test Runs, recent Attempts, generating Sets|",
+     "|Progress|`/progress`|Trends per Task Type, your most common Deductions, how closely the two Judges agree, the full Attempt log|",
+     "|Sets|`/sets`|The whole Set bank, with a Simulation launcher per section|",
+     "|Drill Lab|`/drill-lab`|Backward buildup over Listen and Repeat sentences: practice only, never scored into a band|",
+     "|Drill|`/speaking/:setId` and likewise for the other sections|Relaxed practice: pick Task Types, see feedback as you go|",
+     "|Simulation|`/simulate/:section`|One section under exam conditions, feedback at the end|",
+     "|Full-Test Run|`/full-test/:runId`|All four sections in exam order, one combined report|",
+     "|Attempt review|`/attempts/:id`|Every Response, its score, Deductions, Model Rewrite or Explanation, and the Attempt's band|"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    111,
+    104,
+    111
+   ],
+   [
+    "replace",
+    111,
+    113,
+    111,
+    113,
+    [
+     " pre-written Explanation (錯題解析) per Item. Their Simulations are two-stage adaptive, like the",
+     " real test: the Router Module's score picks an easier or a harder second module."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    113,
+    114
+   ],
+   [
+    "replace",
+    114,
+    118,
+    114,
+    118,
+    [
+     " your recording, not just a transcript. An Arbiter, Claude or Codex, then commits its own score",
+     " before reading the Judges' scores, and reconciles the three into a Score Report. The report has a",
+     " 0–5 score, the Deductions with quotes from your Response, a summary in Traditional Chinese, and a",
+     " Model Rewrite built from your own ideas."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    119,
+    118,
+    119
+   ],
+   [
+    "replace",
+    119,
+    121,
+    119,
+    121,
+    [
+     " as 0), across every Task Type of the section. The Overall band appears only when all four sections",
+     " have one."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    121,
+    122
+   ],
+   [
+    "replace",
+    122,
+    124,
+    122,
+    124,
+    [
+     "`docs/architecture.md` has the full pipeline. The decisions behind it are in",
+     "`docs/adr/`."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    129,
+    124,
+    129
+   ],
+   [
+    "replace",
+    129,
+    130,
+    129,
+    130,
+    [
+     " subscription through its CLI. They use the subscription's quota, with no per-call charge."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    130,
+    131
+   ],
+   [
+    "replace",
+    131,
+    136,
+    131,
+    136,
+    [
+     " audio Judge. A full Speaking Simulation is at most about four minutes of your speech. At the",
+     " price researched in July 2026 (about US$0.05 per audio minute,",
+     " `docs/research/2026-07-28-audio-judge-apis.md`),",
+     " OpenAI's audio comes to roughly US$0.20 per Simulation, plus the Gemini calls on the same",
+     " recordings."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    136,
+    137
+   ],
+   [
+    "replace",
+    137,
+    138,
+    137,
+    138,
+    [
+     " while Codex is available."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    139,
+    138,
+    139
+   ],
+   [
+    "replace",
+    139,
+    143,
+    139,
+    143,
+    [
+     " audio clips with Gemini and makes one OpenAI image call and one Gemini vision call. A Listening Set",
+     " renders one clip per Stimulus, so its count depends on the Set. A clip whose pace misses its range",
+     " is rendered again. The Generate Sets dialog shows the cost as you choose, and a request for more",
+     " than one Set asks first, with its call counts."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    157,
+    143,
+    157
+   ],
+   [
+    "replace",
+    157,
+    158,
+    157,
+    158,
+    [
+     "(ADR 0012)."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    168,
+    158,
+    168
+   ],
+   [
+    "replace",
+    168,
+    169,
+    168,
+    169,
+    [
+     "`CONTRIBUTING.md` says which files to commit and how"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    175,
+    169,
+    175
+   ],
+   [
+    "replace",
+    175,
+    176,
+    175,
+    176,
+    [
+     "against them instead. `docs/official-rubrics.md` says how."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    178,
+    176,
+    178
+   ],
+   [
+    "replace",
+    178,
+    184,
+    178,
+    179,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    179,
+    180
+   ],
+   [
+    "replace",
+    185,
+    187,
+    180,
+    181,
+    [
+     "MIT, © 2026 Jie-Ying Lee."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
+ },
+ "aad5e3324dd8+2": {
+  "fn": "xxh11432/GitStarts",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    8,
+    0,
+    6
+   ],
+   [
+    "replace",
+    8,
+    19,
+    6,
+    13,
+    [
+     "在线体验",
+     "Java",
+     "Spring Boot",
+     "Next.js",
+     "MySQL",
+     "Redis",
+     "Docker"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    30,
+    13,
+    24
+   ],
+   [
+    "replace",
+    30,
+    31,
+    24,
+    25,
+    [
+     "|痛点|GitStarts 的做法|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    25,
+    26
+   ],
+   [
+    "replace",
+    32,
+    36,
+    26,
+    30,
+    [
+     "|想法有了，不知道搜什么关键词|自然语言 → 需求结构化（硬条件 / 软偏好 / 排除项）|",
+     "|候选太多，只看 star 不靠谱|语义召回 + 硬过滤 + 重排，输出**可解释的契合度分解**，而不是一个魔法分|",
+     "|关心「能不能用到我的场景」|部署方式、许可证、平台、活跃度可过滤、可解释|",
+     "|选型过程难以复盘|收藏、对比历史、会话记录、Markdown 导出|"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    43,
+    30,
+    37
+   ],
+   [
+    "replace",
+    43,
+    54,
+    37,
+    38,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    98,
+    38,
+    82
+   ],
+   [
+    "replace",
+    98,
+    99,
+    82,
+    83,
+    [
+     "|里程碑|内容|状态|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    83,
+    84
+   ],
+   [
+    "replace",
+    100,
+    109,
+    84,
+    93,
+    [
+     "|M0|工程基座与视觉系统：`llm-service` 骨架、Qdrant、Nginx `/ai/` 与内部接口隔离|已完成|",
+     "|M1|GitHub OAuth、会话（Spring Session）、每日配额原子扣减 + 幂等账本|已完成|",
+     "|M2|仓库数据补强：`platform` 字段、许可与更新时间筛选、相关推荐|已完成|",
+     "|M3|AI 网关与对话 MVP：SSE 流式、工具调用（`search_repos` / `get_repo` / `get_rank`）|已完成|",
+     "|M4|语义索引与匹配：README 分块 embedding、召回重排、`/ai/match`|已完成|",
+     "|M5|深读与对比工作台：逐维度证据、结论建议、缓存与导出|已完成|",
+     "|M6|个性化沉淀：收藏、历史、画像、分享链接|已完成|",
+     "|M7|上线打磨：压测、成本看板、安全复检、可访问性|已完成|",
+     "|M8|检索精度提升：分组召回、线性衰减融合、交叉编码 rerank、语义主排序、LLM-as-Judge 评测|进行中（P0 已实现，待 21 条新基线复测）|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    116,
+    93,
+    100
+   ],
+   [
+    "replace",
+    116,
+    147,
+    100,
+    101,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    151,
+    101,
+    105
+   ],
+   [
+    "replace",
+    151,
+    152,
+    105,
+    106,
+    [
+     "|服务|负责|不允许|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    106,
+    107
+   ],
+   [
+    "replace",
+    153,
+    158,
+    107,
+    112,
+    [
+     "|`frontend`|页面、SSE 消费、流式渲染|持有模型 Key、拼 prompt、直连向量库|",
+     "|`backend`|账号、配额、持久化、仓库检索（唯一数据出口）|引入模型 SDK、感知 prompt 与模型厂商|",
+     "|`llm-service`|唯一模型出口、prompt、工具编排、重排、SSE|直连 MySQL、判断业务权限|",
+     "|`ingest-worker`|抓取、清洗、分块、embedding、写索引；经 backend 内部接口读写文档元数据|直连 MySQL、对外提供业务 API|",
+     "|`alert-worker`|巡检容器状态与 ERROR 日志，异常时推送飞书卡片|承载业务流量、直连业务库|"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    161,
+    112,
+    115
+   ],
+   [
+    "replace",
+    161,
+    162,
+    115,
+    116,
+    [
+     "|层|选型|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    116,
+    117
+   ],
+   [
+    "replace",
+    163,
+    170,
+    117,
+    124,
+    [
+     "|后端|Java 17 · Spring Boot 3.5 · MyBatis-Plus|",
+     "|AI 网关|Python 3.12 · FastAPI · LangGraph · langchain-openai|",
+     "|认证|Spring Security · OAuth2 Client · Spring Session Redis|",
+     "|存储|MySQL 8 · Redis 7 · Qdrant 1.x|",
+     "|前端|Next.js 16（App Router）· React 19 · TypeScript · Tailwind CSS · shadcn/ui（Radix UI）|",
+     "|模型|OpenAI 兼容协议（默认 HiModels：DeepSeek V4 Flash）；embedding 本地 fastembed（1024 维多语言模型），可切供应商 API|",
+     "|部署|Nginx · Docker Compose|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    179,
+    124,
+    133
+   ],
+   [
+    "replace",
+    179,
+    183,
+    133,
+    134,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    207,
+    134,
+    158
+   ],
+   [
+    "replace",
+    207,
+    209,
+    158,
+    160,
+    [
+     "> ADD COLUMN readme_sha VARCHAR(64) COMMENT 'README blob sha',",
+     "> ADD COLUMN docs_indexed_at DATETIME COMMENT '最近完成索引时间';"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    235,
+    160,
+    186
+   ],
+   [
+    "replace",
+    235,
+    249,
+    186,
+    187,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    257,
+    187,
+    195
+   ],
+   [
+    "replace",
+    257,
+    258,
+    195,
+    196,
+    [
+     "|变量|说明|"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    196,
+    197
+   ],
+   [
+    "replace",
+    259,
+    314,
+    197,
+    252,
+    [
+     "|`GITHUB_TOKEN`|GitHub PAT，用于提升 Search / REST 限流|",
+     "|`SYNC_ENABLED`|是否启用定时采集，本地开发可设 `false`|",
+     "|`SYNC_MAX_REPOS` / `SYNC_INCREMENTAL_BATCH`|仓库总量目标（默认 2000）/ 每小时增量刷新数（默认 200）|",
+     "|`SYNC_ACTIVE_DAYS` / `SYNC_LANGUAGE_BATCH`|活跃判定天数（默认 90）/ 每种语言补齐上限（默认 100）|",
+     "|`SYNC_RELEASE_REFRESH`|每日 Release 刷新上限（默认 2000）|",
+     "|`AUTH_GITHUB_CLIENT_ID` / `AUTH_GITHUB_CLIENT_SECRET`|GitHub OAuth App 凭据；回调地址填 `http://<host>/api/auth/github/callback`|",
+     "|`AUTH_GITHUB_REDIRECT_URI` / `APP_FRONTEND_URL`|回调地址与登录成功后的前端回跳地址|",
+     "|`SESSION_COOKIE_SECURE`|会话 Cookie 是否仅 HTTPS 发送；生产开启，本地 HTTP 需为 `false`|",
+     "|`QUOTA_CHAT_DAILY` / `QUOTA_COMPARE_DAILY`|每日对话 / 深度对比额度（默认 30 / 3）|",
+     "|`QUOTA_TOKEN_DAILY`|单用户日 token 成本预算（默认 200000，0 表示关闭阻断）|",
+     "|`QUOTA_TOKENS_PER_UNIT`|加权计费：每 N tokens 追加消耗 1 次额度（默认 8000，0 表示纯按次数计）|",
+     "|`QUOTA_REAPER_*` / `QUOTA_LEDGER_RETENTION_DAYS`|超时预留回收阈值与账本保留天数|",
+     "|`API_INTERNAL_URL`|前端 SSR 访问后端的内部地址|",
+     "|`LLM_BASE_URL` / `LLM_API_KEY`|模型网关地址与密钥（仅 llm-service 可见）|",
+     "|`LLM_CHAT_MODEL` / `LLM_EMBEDDING_MODEL`|对话与向量模型（默认 DeepSeek V4 Flash 对话 + 硅基流动 `BAAI/bge-m3`）|",
+     "|`LLM_THINKING_MODE`|思考模式：`auto`（不传参数）/ `enabled` / `disabled`（默认，避免 reasoning 挤占正文）|",
+     "|`EMBEDDING_PROVIDER`|`api`（默认，硅基流动）或 `fastembed`（本地离线备用）|",
+     "|`EMBEDDING_BASE_URL` / `EMBEDDING_API_KEY`|embedding 供应商地址与密钥，独立于对话供应商；留空时回落到 `LLM_BASE_URL` / `LLM_API_KEY`|",
+     "|`EMBEDDING_BATCH_SIZE`|单次 embedding 请求文本数（默认 16，受供应商批量上限与限流约束）|",
+     "|`QDRANT_ON_DISK`|向量是否落盘（默认 `true`，低内存部署必开；仅对新建集合生效）|",
+     "|`QDRANT_HNSW_MEMORY`|HNSW 图的内存策略 `cold` / `cached` / `pinned`（默认 `pinned`，图常驻内存避免查询随机读盘）|",
+     "|`QDRANT_QUANTIZATION_ENABLED`|是否启用 int8 标量量化（默认 `false`；2C2G 低内存部署开启后量化向量常驻、原始向量落盘做 rescore；仅对新建集合生效，已有集合需 PATCH 集合配置）|",
+     "|`QDRANT_QUANTIZATION_QUANTILE`|标量量化分位数（默认 `0.99`）|",
+     "|`QDRANT_QUANTIZATION_MEMORY`|量化向量的内存策略 `cold` / `cached` / `pinned`（默认 `pinned`）|",
+     "|`QDRANT_QUANTIZATION_RESCORE`|查询是否用原始向量 rescore（默认 `true`，关闭会明显掉召回）|",
+     "|`QDRANT_QUANTIZATION_OVERSAMPLING`|rescore 过采样倍数（默认 `2.0`）|",
+     "|`PREWARM_MODELS`|仅 `EMBEDDING_PROVIDER=fastembed` 时使用：镜像构建期内置本地模型（默认 `false`）|",
+     "|`INTERNAL_TOKEN`|服务间调用鉴权（M0 起）|",
+     "|`BACKEND_URL`|llm-service 访问 backend 内部接口的地址（Compose 内为 `http://backend:8080`）|",
+     "|`QDRANT_URL` / `QDRANT_COLLECTION`|向量库地址与集合名（默认 `repo_chunks`；更换 embedding 模型时使用新集合名，如 `repo_chunks_bge_m3`）|",
+     "|`INDEX_ON_STARTUP` / `INDEX_INTERVAL_MINUTES`|worker 首次是否全量、之后增量扫描间隔（分钟）|",
+     "|`INDEX_FULL_REBUILD` / `INDEX_MAX_REPOS`|强制重扫全部仓库 / 小样本仓库数上限（0 为不限）|",
+     "|`MATCH_RECALL_LIMIT`|仓库级召回数（分组召回后 limit 表示仓库数，默认 60）|",
+     "|`RERANK_ENABLED` / `RERANK_MODEL`|是否启用交叉编码 rerank / 模型名（默认 true / `BAAI/bge-reranker-v2-m3`）|",
+     "|`RERANK_BASE_URL` / `RERANK_API_KEY`|rerank 接口地址与 Key；留空时复用 `EMBEDDING_BASE_URL` / `EMBEDDING_API_KEY`|",
+     "|`RERANK_BATCH_SIZE` / `RERANK_WEIGHT`|rerank 每批文档数 / 与 RRF 的融合权重（默认 32 / 0.6）|",
+     "|`RERANK_TIMEOUT_SECONDS`|rerank 接口超时秒数（默认 20）|",
+     "|`MATCH_KEYWORD_LIMIT`|每个关键词在站内检索的候选数（默认 12）|",
+     "|`MATCH_GROUP_RECALL_ENABLED` / `MATCH_GROUP_SIZE`|是否用 Qdrant `group_by=repo_id` 做仓库级召回 / 每仓库保留证据条数（默认 true / 2）|",
+     "|`MATCH_CACHE_VERSION`|匹配缓存 key 版本，改召回策略后递增以失效旧缓存（默认 v2）|",
+     "|`MATCH_CACHE_TTL_SECONDS`|匹配结果缓存秒数（默认 600）|",
+     "|`COMPARE_EVIDENCE_TOPK`|对比每个维度召回的 README / manifest 证据条数（默认 6）|",
+     "|`COMPARE_CACHE_TTL_SECONDS`|对比结果缓存秒数（默认 7 天，命中不计费）|",
+     "|`COMPARE_CHECKPOINT_TTL_SECONDS`|断流续跑 checkpoint 秒数（默认 3600）|",
+     "|`COMPARE_TIMEOUT_SECONDS`|单次对比总超时（默认 240 秒）|",
+     "|`INDEX_MANIFESTS_ENABLED`|worker 是否抓取关键 manifest（package.json / pom.xml 等）并入索引（默认 true）|",
+     "|`OPS_GITHUB_LOGINS`|可访问 `/ops` 成本看板的 GitHub 登录名，逗号分隔；留空时全部拒绝|",
+     "|`OPS_DAILY_TOKEN_BUDGET` / `OPS_DAILY_COMPARE_BUDGET`|日 token / 日对比次数预算（默认 200 万 / 200）|",
+     "|`OPS_P95_CHAT_MS` / `OPS_P95_MATCH_MS` / `OPS_P95_COMPARE_MS`|分类型 P95 延迟告警阈值（默认 30s / 30s / 180s）|",
+     "|`GITHUB_API_BASE` / `GITHUB_ALLOWED_HOSTS`|README / manifest 抓取地址与 SSRF 主机白名单（默认仅 `api.github.com`，强制 HTTPS）|",
+     "|`GITHUB_REQUESTS_PER_MINUTE`|worker 调用 GitHub 的分钟级限速（默认 60，0 为不限）；与 backend 共享同一 Token 配额|",
+     "|`REDIS_MAXMEMORY`|Redis 内存上限（默认 256mb）；淘汰策略固定 `volatile-lru`，只淘汰带 TTL 的缓存键|",
+     "|`OPS_METRICS_RETENTION_DAYS`|`ai_metrics` 保留天数（默认 180，0 关闭自动清理）|",
+     "|`ALERT_WEBHOOK` / `ALERT_SECRET`|飞书群机器人 webhook 与可选签名密钥；留空时 `alert-worker` 只巡检不推送|",
+     "|`ALERT_ENABLED` / `ALERT_ENV` / `ALERT_INTERVAL_SECONDS`|通知开关（默认 true）/ 卡片环境标识 / 巡检间隔（默认 60 秒）|"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    321,
+    252,
+    259
+   ],
+   [
+    "replace",
+    321,
+    345,
+    259,
+    260,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    345,
+    351,
+    260,
+    266
+   ],
+   [
+    "replace",
+    351,
+    352,
+    266,
+    267,
+    [
+     "|方法|路径|说明|"
+    ]
+   ],
+   [
+    "equal",
+    352,
+    353,
+    267,
+    268
+   ],
+   [
+    "replace",
+    353,
+    392,
+    268,
+    307,
+    [
+     "|GET|`/api/repos`|列表：搜索 / 平台 / 语言 / 分类 / 许可 / 排序（stars·forks·pushedAt·created）/ 分页|",
+     "|GET|`/api/repos/rank`|榜单（total / trend / new）|",
+     "|GET|`/api/repos/similar/{fullName}`|相关推荐：topics 重合、语言 / 平台 / 分类匹配、star 接近度|",
+     "|GET|`/api/repos/{owner}/{repo}/readme`|README 纯文本摘要（按需读取 GitHub 并缓存，失败时返回空摘要）|",
+     "|GET|`/api/repos/{fullName}`|仓库详情|",
+     "|GET|`/api/meta`|分类、语言、标签、平台聚合|",
+     "|GET|`/api/auth/github/login`|发起 GitHub 登录，支持 `next` 回跳|",
+     "|GET|`/api/auth/me`|当前登录用户与今日配额（未登录 401）|",
+     "|POST|`/api/auth/logout`|退出登录（需 CSRF token）|",
+     "|GET|`/api/quota`|今日对话 / 对比配额（未登录 401）|",
+     "|POST|`/api/ideas`|保存想法与结构化条件（登录 + CSRF）|",
+     "|GET|`/api/ideas`|我的想法分页列表|",
+     "|GET|`/api/ideas/{id}`|想法详情（仅本人）|",
+     "|PATCH|`/api/ideas/{id}`|编辑标题或结构化条件（仅本人，需 CSRF）|",
+     "|GET|`/api/comparisons`|我的对比历史（分页）|",
+     "|GET|`/api/comparisons/{id}`|对比详情（仅本人）|",
+     "|POST|`/api/comparisons/{id}/share`|生成（或复用）只读分享 token（仅本人，需 CSRF）|",
+     "|POST|`/api/comparisons/{id}/share/revoke`|撤销只读分享，旧链接立即失效（仅本人，需 CSRF）|",
+     "|DELETE|`/api/comparisons/{id}`|删除本人的对比记录（需 CSRF）|",
+     "|GET|`/api/comparisons/share/{token}`|只读分享内容，无需登录|",
+     "|GET|`/api/favorites`|我的收藏分页列表（含仓库卡与备注）|",
+     "|POST|`/api/favorites`|收藏仓库，支持备注（需 CSRF）|",
+     "|GET|`/api/favorites/status?fullName=`|查询单个仓库是否已收藏|",
+     "|GET|`/api/favorites/statuses?fullNames=`|批量查询收藏状态（逗号分隔，最多 50 个）|",
+     "|PATCH|`/api/favorites/{id}`|修改收藏备注（仅本人，需 CSRF）|",
+     "|DELETE|`/api/favorites/{id}`|取消收藏（仅本人，需 CSRF）|",
+     "|GET|`/api/profile`|我的技能 / 兴趣 / 偏好画像|",
+     "|PUT|`/api/profile`|更新画像（仅本人，需 CSRF）|",
+     "|GET|`/api/profile/recommendations?limit=`|基于画像的推荐位（排除已收藏）|",
+     "|GET|`/api/conversations`|我的会话历史分页列表|",
+     "|GET|`/api/conversations/{id}`|会话详情与消息（仅本人）|",
+     "|DELETE|`/api/conversations/{id}`|删除会话与消息（仅本人，需 CSRF）|",
+     "|DELETE|`/api/account`|删除账号并清理收藏 / 想法 / 对比 / 会话 / 画像 / 用量（需 CSRF）|",
+     "|GET|`/api/ops/metrics?days=7`|成本看板：日请求数、token、P95 延迟与预算告警（仅 `OPS_GITHUB_LOGINS`，未配置时 403）|",
+     "|GET|`/api/health`|健康检查：MySQL / Redis 任一不可用返回 503（供容器健康检查）|",
+     "|GET|`/ai/health`|AI 网关健康检查（含 Qdrant 连通性，始终 200）|",
+     "|POST|`/ai/chat/stream`|AI 对话 SSE（需登录，`X-User-Id` 由 Nginx 透传）：`meta` / `status` / `tool` / `repos` / `delta` / `done` / `error`|",
+     "|POST|`/ai/match`|语义匹配 SSE（需登录）：请求 `{ideaId?, rawText?, structured?, limit?}`，事件 `parsed` / `status` / `candidate` / `done` / `error`|",
+     "|POST|`/ai/compare`|深度对比 SSE（需登录）：请求 `{ideaId?, rawText?, structured?, repoKeys[2–4], force?}`，事件 `plan` / `cell` / `verdict` / `done` / `error`|"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    423,
+    307,
+    338
+   ],
+   [
+    "replace",
+    423,
+    428,
+    338,
+    343,
+    [
+     "- 完整方案（v1.1，Python + LangGraph）",
+     "- 四个差异化功能方案（F1–F4）：多周期趋势榜、AI 中文解读、健康度评分、Release 与安装包聚合",
+     "- 技术方案（基线）：技术栈、表结构、采集引擎与阶段计划",
+     "- 语义匹配基线报告：数据集、指标定义与运行结果",
+     "- 深度对比评测：10 个热门项目盲测数据集、证据覆盖率与信息不足率"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    432,
+    343,
+    347
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

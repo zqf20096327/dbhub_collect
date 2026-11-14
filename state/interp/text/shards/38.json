@@ -3362,5 +3362,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "88e3d3bdc748": {
+  "identity": {
+   "one_liner": "基于 Dolt 存储引擎的文档数据库，内置数据版本控制",
+   "review": "DumboDB 是 Dolthub 开发的文档数据库，使用 Dolt 存储引擎和 prolly tree 实现提交、分支、合并等数据版本控制功能。它实现 MongoDB 8.0 wire protocol，可连接标准驱动和 mongosh，支持单节点部署。项目处于 pre-1.0 阶段，README 明确说明尚未可用于生产环境。",
+   "highlights": [
+    "实现 MongoDB 8.0 wire protocol，支持 BSON、MQL 查询、聚合管道、二级索引和多文档事务",
+    "通过 dumboCommit、dumboBranch、dumboMerge 等自定义命令实现提交、分支、合并、查看历史",
+    "基于 Dolt 的 prolly tree 通过提交间结构共享存储数据历史"
+   ],
+   "use_cases": [
+    "需要数据变更历史与分支合并的文档存储场景",
+    "复用现有 MongoDB 驱动/工具且需版本控制的单节点应用",
+    "对 MongoDB Atlas 专有功能、副本集分片、capped collections、TTL 无依赖的场景"
+   ]
+  },
+  "sha": "88e3d3bdc748",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7452af42ffec": {
+  "identity": {
+   "one_liner": "零依赖 Node.js CLI，以规格驱动流程与验证门管理 AI 代理工程",
+   "review": "OmniSpec 是一个运行于 Node.js（>=22.19.0）的零运行时依赖 CLI，通过 npx omni-spec init 安装，为 Cursor、Claude Code、Codex 等 AI 代理生成适配器与 9 个 slash 命令工作流（init/discuss/specify/plan/tasks/implement/converge 等）。关键机制包括 SQLite/FTS5 持久化记忆、HMAC-SHA256 验证门、比例范围契约，按 feature/bugfix/debt/rfc 四类原型生成 spec、RCA 等产物。验证结果需人工复核充分性。",
+   "highlights": [
+    "零运行时依赖，通过 npx 或 npm 全局安装，生成适配器支持 Cursor、Copilot、Claude Code、Antigravity、Gemini CLI 等多种代理环境",
+    "提供 9 个 slash 命令的规格驱动工作流，并按 feature/bugfix/debt/rfc 原型生成 spec.md、rca.md 等不同产物",
+    "内置 SQLite/FTS5 持久化记忆（存于 %LOCALAPPDATA%）与基于 HMAC-SHA256 的确定性验证门，接受度依据通过 acceptance.json 记录"
+   ],
+   "use_cases": [
+    "在使用 AI 代理（Cursor、Claude Code、Codex 等）的仓库中引入结构化的规格驱动开发流程",
+    "需要对自动化验收依据与项目内容绑定的验证记录（acceptance.json 与配置的 checkCommands 关联）",
+    "在 Google Antigravity 中以原生插件或零仓库足迹模式使用，或通过通用 Markdown prompts 接入任意支持 Markdown 的 LLM"
+   ]
+  },
+  "sha": "7452af42ffec",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

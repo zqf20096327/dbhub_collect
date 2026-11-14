@@ -3225,5 +3225,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2d5b650d7120": {
+  "identity": {
+   "one_liner": "单二进制 SQLite 工单追踪器，内置 MCP 供 AI 代理使用",
+   "review": "Lific 是用 Rust 编写的本地优先工单追踪器，包含单个二进制文件与一个 SQLite 文件，内置 web UI、备份和 32 个 MCP 工具。面向一个人指挥多个 AI 代理的工作方式：代理通过 MCP 读写计划与工单，人通过 web UI 操作。README 明确其不适用于需要 SSO、多实例同步或大型团队协作的场景。安装支持 cargo、Homebrew、winget 或下载二进制。",
+   "highlights": [
+    "提供 32 个 MCP 工具，工具定义占 7,290 tokens（o200k_base 计量），覆盖工单、计划、页面、评论、附件、搜索与导出",
+    "单个 25–32 MB 二进制内置 SQLite、web UI 与每小时备份（保留 24 份），支持 Streamable HTTP 与 stdio 两种 MCP 接入方式",
+    "lific connect 可为 11 种 AI 客户端写入 MCP 配置，每个 AI 工具以独立 bot 账号连接并可单独吊销"
+   ],
+   "use_cases": [
+    "个人开发者让多个 AI 代理通过 MCP 接管工单与嵌套计划，工作状态跨会话保存",
+    "自托管轻量工单系统：单 SQLite 文件、无 Docker/Postgres 依赖，含备份与成员权限校验",
+    "通过 CLI 直接读写本地数据库或以 --backend http 访问远程服务器，管道输出 JSON 便于脚本集成"
+   ]
+  },
+  "sha": "2d5b650d7120",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7a9db58c1acf": {
+  "identity": {
+   "one_liner": "DSH 插件：在本地起 OpenAI 兼容网关，按任务属性为多上游模型自动选路与容灾",
+   "review": "该包是 DeepSeek Harness 的插件，在 127.0.0.1 起一个 OpenAI 兼容网关，把多个上游厂商接进同一模型矩阵，通过硬过滤、打分、降级链完成选路，并提供四档调度模式、429/5xx/401 容灾、SQLite 精确缓存与路由维度计量。密钥以 AES-256-GCM 加密存放，网关仅绑本机。需 DSH ≥ 0.2.1-rc.3，尚未发布到 npm，需从 GitHub 安装。",
+   "highlights": [
+    "提供四种调度模式（frugal/balanced/max_power/free）及子代理专用选型规则 steward:subagent",
+    "容灾覆盖 429 指数退避、5xx 熔断半开试探、401 下线、上下文超限换更大窗口",
+    "SQLite 精确缓存按 prompt SHA-256 命中回放，跨重启保留；API Key 以 AES-256-GCM 密文存储且文件权限 0600"
+   ],
+   "use_cases": [
+    "在 DSH 中混合使用官方 API、免费镜像与自建中转等多种 OpenAI 兼容上游",
+    "为子代理任务按 agentic 质量、成本、窗口与并发打散规则单独选型",
+    "通过虚拟模型 id（如 steward:pin、steward:alias）直通或按自定义意图路由模型"
+   ]
+  },
+  "sha": "7a9db58c1acf",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

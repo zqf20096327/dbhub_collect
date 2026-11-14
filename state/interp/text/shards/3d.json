@@ -3532,5 +3532,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c26cd9719653": {
+  "identity": {
+   "one_liner": "本地优先的 Rust 版 issue 跟踪器，SQLite 存储 + JSONL 导出配合 git 协作",
+   "review": "br 是 Steve Yegge 的 beads 的 Rust 移植，冻结在其经典 SQLite+JSONL 架构上，命令为 br 以区别原版 bd。它将 issue 存于仓库内 .beads/ 目录的 SQLite 数据库并导出 JSONL，支持依赖跟踪、--json 机器可读输出、同步与恢复工具；不自动 commit/push、不装 hooks、无后台进程，同步由用户显式执行。面向本地及 AI 代理工作流的开发者，可通过脚本、Homebrew、Scoop 或源码（需 Rust nightly）安装。",
+   "highlights": [
+    "提供依赖感知的 issue 跟踪，状态存于仓库内 .beads/（SQLite 数据库 + JSONL 导出）",
+    "所有命令支持 --json，另有 TOON、plain、quiet 等输出模式；默认不执行 git commit/push/pull、不安装 hooks、不运行后台服务",
+    "支持 auto-import 检查本地 JSONL 变更、sync --flush-only 导出检查，以及 MCP 支持、conformance 检查与恢复工具"
+   ],
+   "use_cases": [
+    "离线或仓库内跟踪任务与依赖关系，经 JSONL 在 git 中与协作者共享 issue 状态",
+    "AI 编码代理工作流：通过 --json/TOON 结构化输出读取 ready 列表并更新 issue",
+    "需要原 beads 经典 SQLite+JSONL 架构稳定快照、从 bd 迁移的用户（提供可选迁移 skill）"
+   ]
+  },
+  "sha": "c26cd9719653",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "243d404e53cb": {
+  "identity": {
+   "one_liner": "将 ORCA Cascades 代价优化器植入单机 PostgreSQL 的扩展",
+   "review": "pg_orca 把源自 Greenplum/Apache Cloudberry 的 ORCA 优化器四核心库及 PostgreSQL 集成层抽出，适配 PG18/19 并打包为 CREATE EXTENSION 可安装插件。它以 memo 结构和转换规则统一做逻辑改写与物理计划选择，含子查询去关联、连接序枚举等机制，经 planner_hook 挂接，默认关闭、按会话启用；无法处理的查询自动回退标准规划器，代价是更长的规划时间。",
+   "highlights": [
+    "基于 memo 与转换规则的 Cascades 式代价优化，逻辑改写与物理实现统一定价，支持相关子查询去关联、多种连接序搜索策略、eager aggregation 等改写",
+    "通过 planner_hook 接入，pg_orca.enable_orca 默认 off，按会话/数据库/角色启用，不可处理的查询自动回退标准规划器",
+    "同一源码树经 PG_VERSION_NUM 条件编译支持 PG18 与 PG19，提供 CMake/Ninja 构建与 ORCA 回归测试"
+   ],
+   "use_cases": [
+    "需要 ORCA 优化器能力的 PostgreSQL 18/19 单机环境",
+    "评估相关子查询去关联、超出 join_collapse_limit 的连接序搜索等改写行为",
+    "在数据库或角色级别按会话启用 ORCA、保留标准规划器回退的部署"
+   ]
+  },
+  "sha": "243d404e53cb",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b3b1221cd686": {
+  "identity": {
+   "one_liner": "dbk 是带 TUI 面板与 age 加密的终端数据库备份/恢复管理器。",
+   "review": "dbk 用 Go 编写，通过 Bubble Tea 交互面板和无头 CLI 两种方式管理 MySQL/MariaDB、PostgreSQL、MongoDB、SQLite 的备份与恢复。备份经 Gzip 压缩并用 age 加密后写入本地或 S3、R2、Google Drive 等远端，凭据存于 Argon2id 派生密钥加密的本地库，支持 crontab/systemd 定时与 SSH 隧道访问远端库。依赖目标数据库自带的 dump 工具，恢复等危险操作需输入确认词。",
+   "highlights": [
+    "支持 MySQL/MariaDB、PostgreSQL、MongoDB、SQLite 的流式备份与恢复，可经内置 SSH 隧道连接仅监听本机的远端库",
+    "备份默认经 age（X25519）加密，凭据以 XChaCha20-Poly1305 与 Argon2id 存储于 0600 权限的本地库",
+    "提供 Bubble Tea 终端面板、crontab/systemd 定时、Telegram/邮件/Webhook 通知及 YAML/JSON 配置导出导入"
+   ],
+   "use_cases": [
+    "通过 cron 或 systemd 定时将数据库备份加密后同步至 S3 兼容对象存储或 Google Drive",
+    "经 SSH 隧道备份位于内网或仅监听 127.0.0.1 的远程数据库",
+    "在 CI/CD 流水线中以 `dbk run --json` 等无头命令执行备份、恢复与凭据管理"
+   ]
+  },
+  "sha": "b3b1221cd686",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

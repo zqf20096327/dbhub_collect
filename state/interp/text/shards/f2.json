@@ -3348,5 +3348,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "14facd47acc3": {
+  "identity": {
+   "one_liner": "将多个 AI 编码工具的 JSONL 会话索引到统一 SQLite，供 Agent 查询与用户浏览",
+   "review": "Trajex 将 Claude Code、Codex、Pi、DeepSeek Harness 的本地 JSONL 会话记录解析为统一的 canonical record，持久化到同一个 SQLite 数据库并建立 FTS5 全文索引。Agent 侧通过 trajex CLI 编写 JS 查询检索历史，用户侧通过 Electron+Vue 桌面 App 浏览时间线、管理 memory。两侧共享 ~/.trajex/trajex.sqlite，可独立安装。需要 Node.js 22.13+。",
+   "highlights": [
+    "支持将四个 provider（Claude Code、Codex、Pi、DeepSeek Harness）的 JSONL 会话解析进同一 SQLite schema，ID 带 provider 前缀避免主键冲突",
+    "CLI 无运行时 npm 依赖，使用 Node 22 内置 node:sqlite 与 FTS5；提供 search()、context()、sql() 等可编程查询 API",
+    "App 提供 sessions 浏览、memory 管理、GitHub 风格活动热力图，并通过目录监听与周期清点实现索引增量刷新"
+   ],
+   "use_cases": [
+    "让具备 shell 权限的 coding agent 通过 /trajex skill 用自然语言查询自身历史会话（如某文件被哪些 session 反复修改）",
+    "在桌面 App 中跨 provider 浏览、搜索历史会话与 tool calls，查看 token 使用统计",
+    "将检索得出的结论登记为经过用户批准的 memory file，供后续会话通过 memories() 召回"
+   ]
+  },
+  "sha": "14facd47acc3",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "adb0c4fec851": {
+  "identity": {
+   "one_liner": "自托管的团队协作工作区，让小团队与AI代理在同一台Linux服务器上共建软件",
+   "review": "DevDash是一个自托管工作区，部署在用户自己的Linux服务器上，供小团队与其AI编码代理共同开发软件。每个成员是独立的Linux用户，会话以成员身份运行Claude Code或OpenCode，每个会话可用独立git worktree并行工作。内置个人代理Hamasa和规则驱动的Autopilot。采用PolyForm非商业许可，需Node 24与Ubuntu 24.04。",
+   "highlights": [
+    "支持Claude Code与OpenCode两种代理，可通过浏览器或手机启动、观看和共享会话",
+    "每个成员拥有独立Linux用户环境，会话各自使用git worktree避免并行冲突",
+    "Autopilot按用户编写的绿/黄/红三级规则处理例行决策，并对停滞会话进行监督提醒"
+   ],
+   "use_cases": [
+    "小团队在自有服务器上与AI代理协作开发项目",
+    "成员需要并行运行多个编码代理会话的场景",
+    "希望AI代理在成员离线时按预设规则处理例行问题的团队"
+   ]
+  },
+  "sha": "adb0c4fec851",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

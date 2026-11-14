@@ -3394,5 +3394,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "61fad04bbbff": {
+  "identity": {
+   "one_liner": "DuckDB 的 Rust 语言绑定，提供类 rusqlite 的类型安全 API",
+   "review": "duckdb-rs 是 DuckDB 的 Rust 封装，面向在 Rust 应用中使用 DuckDB 的开发者。它通过 libduckdb-sys 提供 C API 的 Rust 声明，支持类型安全查询、Arrow/Parquet/JSON/CSV 读写，以及用 Rust 编写带自定义标量与表函数的 DuckDB 扩展。构建时可选用 bundled 特性从源码编译 DuckDB，避免依赖系统库；另有针对 v2 C API 的 beta 版 crate duckdb-neo。",
+   "highlights": [
+    "提供类型安全查询 API，风格参考 rusqlite",
+    "原生读取和写入 Arrow、Parquet、JSON、CSV 格式",
+    "支持以 Rust 编写 DuckDB 扩展，含自定义标量函数与表函数"
+   ],
+   "use_cases": [
+    "在 Rust 应用中通过 SQL 创建表、插入与查询数据",
+    "将 Arrow RecordBatch、Parquet 等数据直接接入 DuckDB SQL 查询",
+    "用 Rust 开发可加载或静态链接的 DuckDB 扩展"
+   ]
+  },
+  "sha": "61fad04bbbff",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fc4870c6e99b": {
+  "identity": {
+   "one_liner": "PostgreSQL 数据分层扩展：单表冷热分区，热数据在本地分区，冷数据写入 Iceberg 对象存储",
+   "review": "ColdFront 运行在 PostgreSQL 内部，改写每条 SQL 语句路由到正确的层，应用看到的是同一张表：近期数据存于 PostgreSQL 分区，较老数据存于 S3、Azure 或 GCS 上的 Apache Iceberg，冷层可通过同一 SQL 读写。依赖 pg_duckdb 和 DuckDB 补丁版扩展，配合 Lakekeeper 作为 Iceberg 目录，并提供 archiver、partitioner、compactor 命令行工具。README 标注为 BETA 版，不用于生产环境；支持 PostgreSQL 16/17/18，分布式模式需 pgEdge 带 Spock 的构建。",
+   "highlights": [
+    "在 PostgreSQL 内部改写语句并路由到对应层级，应用通过同一关系读写冷热数据",
+    "冷层数据以 Apache Iceberg 格式存储于 S3 兼容、Azure 或 GCS 对象存储",
+    "提供 archiver、partitioner、compactor 三个命令行工具，配置存于服务器内而非配置文件"
+   ],
+   "use_cases": [
+    "需要将 PostgreSQL 大表的老旧数据归档到对象存储并保持 SQL 可读写的场景",
+    "已有 pgEdge Enterprise Postgres（含 Spock）环境，想部署分布式数据生命周期管理",
+    "使用 Docker Compose 加 SeaweedFS 本地对象存储搭建开发测试栈"
+   ]
+  },
+  "sha": "fc4870c6e99b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

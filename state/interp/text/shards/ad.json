@@ -2911,5 +2911,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4dd0abd4b451": {
+  "identity": {
+   "one_liner": "面向 Claude Code 的本地工作区工具集：多账号 Gmail/日历 MCP、联系人图谱与规则注入",
+   "review": "Pupsik 是一组为 Claude Code 打造的本地 MCP 服务器和脚本，提供多账号 Gmail/日历检索、WhatsApp/Telegram 只读访问、SQLite 联系人图谱（含 intro path 查询）、会话规则加载与日期锚点 hook。需 Node.js 18+、Python 3.10+ 和 Claude Code，经 install.sh 等三个脚本安装，macOS 环境下运行。作者为独立创始人，v2026-11 起移除了与 Claude 内置记忆/任务重叠的组件，仅保留 Claude 原生不覆盖的能力。",
+   "highlights": [
+    "gmail_search_all 可在单次调用中检索多个 Gmail 账号，日历服务器支持同样机制",
+    "Telegram MCP 只读且按白名单工作，代码层面不含发送/编辑/删除路径",
+    "CI 中运行隐私检查（多模式 grep），检测真实姓名、邮箱、电话、令牌等个人信息"
+   ],
+   "use_cases": [
+    "需要同时检索多个 Gmail/日历账号内容的 Claude Code 用户",
+    "在本地维护联系人、公司与互动记录的关系图谱查询",
+    "向 Claude Code 会话注入经过实践修正的规则文件与当前日期时间戳"
+   ]
+  },
+  "sha": "4dd0abd4b451",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2ed68d2ec1ac": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件全文检索数据库，含 WAL 写入与 BM25F 排序。",
+   "review": "Persia DB 是一个嵌入式全文检索数据库，通过库代码（persia-engine）打开单个 .persia 文件并写入、提交文档，执行带过滤、排序、分面和分页的 BM25F 排序搜索。面向希望在应用进程内获得搜索能力的开发者。项目处于 pre-alpha：计划中的 Db 门面（M10）与查询松弛（M8）尚未构建，crate 未发布到 crates.io，需通过 git 依赖引入，格式 1.0 在 v1.0 前不稳定。",
+   "highlights": [
+    "提供单文件容器存储，段（segment）不可变，通过 WAL 提交写入，并在死空间达阈值时自动或手动压缩回收",
+    "支持 BM25F 评分、过滤器、排序、分面与分页，schema 字段类型含 text、keyword、i64、f64、bool、datetime、stored",
+    "附带 CLI 可检查、校验段与容器（CRC32C 验证），提供 zstd 块压缩、mmap 只读映射及基于 UAX #29 与 NFKC（Unicode 17.0.0）的多语言分析器"
+   ],
+   "use_cases": [
+    "在 Rust 应用中以库形式嵌入全文索引与排序搜索，无需独立服务进程",
+    "检视与校验磁盘上的 .persia 容器或段文件（inspect、dump、verify 子命令）",
+    "通过 git 依赖在本地试用引擎层 API 并运行 README 快速入门示例"
+   ]
+  },
+  "sha": "2ed68d2ec1ac",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

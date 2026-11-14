@@ -3252,5 +3252,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5a2318f932df": {
+  "identity": {
+   "one_liner": "面向 iOS/macOS 的原生 Swift AI agent SDK，支持 ChatGPT 登录与流式工具调用",
+   "review": "CodexKit 是一个原生 Swift agent SDK，在应用内实现会话状态、工具执行、审批与持久化，通过用户的 ChatGPT 账号登录发送模型请求，无需开发者管理 API key。提供 SQLite（GRDB）或 Realm 两种持久化适配器，凭据存于 Keychain。要求 iOS 17+、macOS 14+、Swift 6.1+，采用 MIT 许可；账号资格与用量受提供方限制。",
+   "highlights": [
+    "支持 ChatGPT 账号登录（设备码与浏览器流程），推理请求发送至 ChatGPT Codex 服务，无需 API key",
+    "提供流式响应、结构化输出、应用自定义工具及审批控制，并支持图像输入、生成与编辑",
+    "提供 SQLite（GRDB）与 Realm 两种持久化适配器，保存会话并支持上下文压缩与可选本地记忆"
+   ],
+   "use_cases": [
+    "在 SwiftUI 应用中集成基于用户 ChatGPT 账号的流式 AI 对话功能",
+    "构建可读取应用数据或执行授权操作的 agent，包含工具注册与用户审批流程",
+    "需要跨启动保存会话、可恢复线程的应用，通过 Swift Package 添加对应持久化产品"
+   ]
+  },
+  "sha": "5a2318f932df",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "349536813800": {
+  "identity": {
+   "one_liner": "DuckDB 的 Slick 扩展，为 Scala 提供类型安全的内存数据处理支持",
+   "review": "该库是 Slick 对 DuckDB JDBC 驱动的扩展，供 Scala 开发者在 Slick 类型安全查询中使用 DuckDB。它提供 DuckDBProfile、Json 类型及 JSON 创建、聚合、提取、标量函数与 mutation 方法的映射。Blob 以字节数组方式处理；未覆盖 DuckDB 全部特性；JDBC 2.0 前后行为存在差异，README 列有已知限制。",
+   "highlights": [
+    "提供 DuckDBProfile，将 DuckDB JSON 函数（创建、聚合、提取、标量函数、patch/normalize、mutation）映射为 Slick 查询方法",
+    "提供 Json 类型，包含 JSON 引用、转义，并区分 JSON null 与 SQL NULL",
+    "JsonScalarPath 支持验证 JSONPath 与 JSON Pointer 标量路径提取，绑定 SQL 参数"
+   ],
+   "use_cases": [
+    "在 Scala/Slick 项目中以类型安全方式读写内存中的 DuckDB 数据",
+    "在 Slick 查询中生成、聚合与提取 JSON（如 jsonGroupArray、jsonExtract、箭头操作符）",
+    "通过 Slick schema 对 DuckDB 表进行创建与管理"
+   ]
+  },
+  "sha": "349536813800",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2db2a0f83c55": {
+  "identity": {
+   "one_liner": "自托管的 AI 编程代理记忆层，基于 MCP 协议与单文件 SQLite 存储",
+   "review": "Rembric 以单个 Docker 进程加一个 SQLite 文件的形式，为 AI 编程代理提供自托管的记忆、会话与仪表盘服务。它通过 MCP 或 HTTP 服务于 Claude Code、Codex CLI、opencode 等支持 MCP 的客户端，内置 in-process 嵌入模型（gte-multilingual-base）实现语义候选检测，无需外部 API；存储采用 append-only，凭证类文本以 [REDACTED:<kind>] 形式脱敏保存。运行要求约 1GB 内存与 Docker。",
+   "highlights": [
+    "单 Docker 镜像运行，数据存于一个 SQLite 文件，镜像内置 Node 22、better-sqlite3、sqlite-vec、onnxruntime-node 及嵌入模型，支持 linux/amd64 与 linux/arm64",
+    "兼容任何 MCP 或 HTTP 客户端，为 Claude Code、Codex CLI、opencode、Hermes Agent 等提供原生插件，ChatGPT 可通过 OAuth 2.1 自定义连接器接入",
+    "嵌入模型在进程内加载，语义候选检测（含跨语言匹配）无外部服务与网络调用，可在隔离网络环境运行"
+   ],
+   "use_cases": [
+    "为多个 MCP 编程代理（如 Claude Code、Cursor、Gemini CLI）提供共享的持久化记忆与审计记录",
+    "在无外部 API 依赖的本地或隔离网络环境中运行代理记忆服务",
+    "需要在远程主机（LXC、NAS、服务器）部署、通过 Tailscale 或反向代理访问的自托管场景"
+   ]
+  },
+  "sha": "2db2a0f83c55",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f5016eba4d8b": {
+  "identity": {
+   "one_liner": "用 Rails 风格生成器搭建并接线 Gin+Postgres Go API 服务的 CLI",
+   "review": "Bogie 是一个 Go CLI，用于生成 API-only、仅支持 Postgres 的服务脚手架，技术栈固定为 Gin、sqlc、goose、River（可选）和 Kamal。其生成器除创建文件外还会自动注册路由和构造代码，弥补 Go 无自动加载的限制；生成的应用不导入 Bogie 本身，可脱离工具独立运行。适合需要在 Postgres 上启动 Go API 服务并接受预置技术选型的团队。",
+   "highlights": [
+    "提供 new/g/d/doctor 命令，生成器写文件的同时完成代码注册，doctor 可检查注册标记完整性",
+    "技术栈固定为 Gin + sqlc/pgx v5 + goose + Kamal 2，后台任务通过 --jobs 选项加入 River，凭据以加密文件存储",
+    "生成的应用自带 bin/ci 流水线、Dockerfile 和 Kamal 部署配置，数据库默认经 Compose 运行在 :5440"
+   ],
+   "use_cases": [
+    "需要快速生成 API-only Go 服务且接受固定技术选型（Gin/Postgres/sqlc）的团队",
+    "从 Rails 开发环境过渡到 Go 后端、希望沿用生成器工作流的场景",
+    "需要本地 CI 流水线、加密凭据管理和 Kamal 部署配置一并列出的 Go 服务项目"
+   ]
+  },
+  "sha": "f5016eba4d8b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3033,5 +3033,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c9e51754456c": {
+  "identity": {
+   "one_liner": "面向 CLI Agent 的上下文生命周期管理引擎，含三级缓存与虚拟文件系统",
+   "review": "ContextEngine 为 CLI Agent 提供上下文全生命周期管理，在 Agent 循环边界的六个阶段拦截读、写、转换操作，不介入模型推理。它将上下文按七种类型以四种写策略存储，通过 ContextFS 以 ctx:// URI 文件操作访问，并用 Outbox 模式异步索引。适用于为 Agent 系统构建持久化、多租户上下文层的开发者。",
+   "highlights": [
+    "在 Agent 循环边界的六个阶段拦截上下文操作，支持提取、存储、检索、压缩与归档",
+    "七种上下文类型各采用合并、追加等对应写策略，模式由 YAML 声明并在运行时加载",
+    "提供 L0/L1/L2 三级检索与基于 ctx:// URI 的虚拟文件系统，写入经 Outbox 异步索引"
+   ],
+   "use_cases": [
+    "为 CLI Agent 实现跨会话的记忆持久化与冷启动注入",
+    "在固定 token 预算下按层级检索上下文以控制加载量",
+    "构建需要多租户隔离与并发写入的 Agent 上下文存储层"
+   ]
+  },
+  "sha": "c9e51754456c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

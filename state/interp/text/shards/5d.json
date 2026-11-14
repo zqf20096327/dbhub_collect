@@ -2887,5 +2887,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0758f11266d5": {
+  "identity": {
+   "one_liner": "Dyson HushJet HJ10 净化器 Web 仪表盘，经 MyDyson 云 API 读取空气质量与滤芯寿命并存入 TiDB。",
+   "review": "这是一个面向 Dyson HushJet Purifier Compact（HJ10）用户的 Web 仪表盘，通过社区文档化的 MyDyson App API 实时读取空气质量、滤芯寿命和故障报告，并借助 GitHub 定时任务将 Dyson 云保留的 15 分钟均值同步到 TiDB 形成历史记录。技术栈为 Vite/React/Recharts 客户端与 Express/tRPC 服务端，使用 Drizzle ORM。项目依赖 Dyson 未公开的 API，接口变更即失效；空气质量分级阈值取自 hass-dyson 等社区的记录而非官方公布。",
+   "highlights": [
+    "通过 MQTT 3.1.1 over TLS websockets 连接 Dyson 云获取实时状态、传感器数据与故障报告，单次读取约两到三秒，不要求与净化器同网",
+    "将 Dyson 云的七日 15 分钟均值复制到 TiDB 的 history_slots 表，并提供含 WHO 15 µg/m³ 标线的每日汇总",
+    "admin 角色可通过 Controls 页下发 STATE-SET 命令控制电源、Auto、风速、夜间模式、睡眠定时器与持续监测，viewer 角色仅可查看"
+   ],
+   "use_cases": [
+    "在家中或远程查看 HJ10 净化器的实时空气质量、滤芯寿命、Wi-Fi 信号与固件更新状态",
+    "长期留存并回看 PM2.5/PM10、风速与室外空气对比的历史曲线（超出 Dyson 应用自带的七日窗口）",
+    "记录做饭、开窗等家庭事件并在图表上标注，辅助分析污染来源与净化效果"
+   ]
+  },
+  "sha": "0758f11266d5",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

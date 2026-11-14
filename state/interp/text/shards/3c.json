@@ -3169,5 +3169,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7bdb10e4ca26": {
+  "identity": {
+   "one_liner": "面向 database.dev 的 Trusted Language Extensions 集合仓库",
+   "review": "该仓库包含多个 Postgres Trusted Language Extensions，包括 pg_idkit、pg_crdt、pg_permissions、pg_validate 等，供 database.dev 平台发布使用。开发者可通过 dbdev CLI 发布新版本，用 pgtle 提供的 SQL 命令查询可用扩展及版本。每个扩展附有研究文档，文档站分别部署于 Vercel 与 GitHub Pages，并配置了按目录变更跳过构建的 ignore 命令。",
+   "highlights": [
+    "提供多个 Trusted Language Extensions，通过 dbdev CLI 以 `dbdev publish` 命令发布",
+    "支持 pgtle SQL 命令查询可用扩展及版本，如 `pgtle.available_extensions()` 和 `pgtle.available_extension_versions()`",
+    "每个扩展的文档站点为独立 Vercel 项目，研究文档发布于 GitHub Pages"
+   ],
+   "use_cases": [
+    "为 database.dev 平台开发和发布 Postgres Trusted Language Extensions",
+    "在 Postgres 中使用 pg_idkit、pg_crdt、pg_permissions、pg_validate 等扩展",
+    "搭建和部署扩展的研究文档与文档站点"
+   ]
+  },
+  "sha": "7bdb10e4ca26",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7b92639fc8e4": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 数据库查询插件，支持多数据源并默认只读。",
+   "review": "该插件为 DSH 提供多数据源 SQL 查询工具，面向需要在会话中访问 Vastbase/openGauss、PostgreSQL、MySQL、SQLite 的用户。数据源经设置界面管理，密码存于 DSH 凭据库；只读通过 SQL 语句闸门、会话只读事务和界面开关三层实现，写入语句须逐条审批。",
+   "highlights": [
+    "支持 Vastbase/openGauss、PostgreSQL、MySQL、SQLite 四类数据源，通过 opengauss.js 实现 sha256 与 SM3 认证",
+    "提供 db_connections、db_schema、db_query、db_exec 四个工具；只读由语句闸门、会话级只读、界面开关三层保证",
+    "db_exec 每条写入语句调用审批通道，一次授权仅执行一条；数据源元数据以 mode 0600 存储，密码存于凭据库"
+   ],
+   "use_cases": [
+    "在 DSH 会话中让模型查询多个 PostgreSQL 协议系或 MySQL/SQLite 数据库的表结构与数据",
+    "对 openGauss/Vastbase 等使用 sha256/SM3 认证的数据库进行只读查询",
+    "需要逐条人工审批的受控写入场景"
+   ]
+  },
+  "sha": "7b92639fc8e4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

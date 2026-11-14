@@ -2999,5 +2999,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "238e96c5b951": {
+  "identity": {
+   "one_liner": "离线优先内存数据网格，通过 CRDT 同步并由 Rust 服务器托管。",
+   "review": "TopGun 是一个离线优先的数据同步栈：TypeScript 客户端将数据保存在内存并持久化到 IndexedDB，通过 LWW-Map/OR-Map 等 CRDT 和逻辑时钟自动解决冲突，服务器（Rust/axum）内置 RocksDB 存储，无需单独数据库，使用 Merkle 树进行增量同步。README 明确指出当前为单节点稳定状态，集群模式（Raft 共识）在路线图中，无人值守生产部署的稳定性验证程序仍在进行中。安装可通过 npx、Docker 或 cargo，提供 React hooks 包和 MCP server。适用于需要在断网环境下工作并在重连后同步的协作式或实时应用。",
+   "highlights": [
+    "客户端本地读写不经网络，变更持久化到 IndexedDB，重连后通过 CRDT（LWW-Map、OR-Map、逻辑时钟）自动合并冲突",
+    "服务器以 Rust 实现，使用嵌入式 RocksDB 存储，无需外部数据库；支持基于 Merkle 树的增量同步和服务端分区、发布/订阅",
+    "提供三路混合搜索（精确匹配 + BM25 全文 + 语义向量，RRF 融合），内置 HNSW 向量库，支持可插拔 embedding（Ollama 或 OpenAI 兼容端点）；附带 MCP server 供 AI 代理读写数据"
+   ],
+   "use_cases": [
+    "需要在离线状态下继续读写、重连后自动同步的实时协作应用",
+    "自托管的本地优先（local-first）应用后端，希望免于运维独立数据库",
+    "为 AI 代理（如 Claude Desktop、Cursor）提供可查询、订阅和变更的实时数据源，或需要混合搜索（关键词 + 语义）的应用"
+   ]
+  },
+  "sha": "238e96c5b951",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "41e047ab8d6e": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 MPV 的多源聚合流媒体客户端，支持电影、剧集、动漫与 IPTV 播放。",
+   "review": "Nivio 是一款开源流媒体客户端，聚合电影、剧集、动漫与 IPTV 直播源，本身不托管任何媒体内容，依赖用户自备 TMDB API Key 与 Firebase 项目运行。技术栈为 Flutter + Rust P2P 引擎（rqbit）+ MPV 播放，支持 Windows、Linux、Android 及 Android TV/Google TV，采用 GPL v3 许可证。",
+   "highlights": [
+    "内嵌 Rust 引擎（rqbit）支持直接播放磁力链接，提供离线下载",
+    "在 Android 与 Windows 上通过自定义 mpv 构建输出 HDR10/HLG 与硬件杜比视界，不支持 HDR 时进行色调映射",
+    "支持 M3U 与 Xtream Codes 的 IPTV 直播、AniList/MyAnimeList/Simkl 双向同步，以及基于 Supabase WebSocket 的同步观影（Watch Party）"
+   ],
+   "use_cases": [
+    "在 Android TV 或 Windows 桌面上集中管理影视、动漫与 IPTV 频道的播放",
+    "与好友通过 Watch Party 同步观看并共享播放控制",
+    "通过磁力链接即时串流观看，或下载后离线播放"
+   ]
+  },
+  "sha": "41e047ab8d6e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79eb33a18a1f": {
+  "identity": {
+   "one_liner": "面向法国示威活动的实时协作地图应用，支持匿名标记与自托管",
+   "review": "Cortège 是一个 AGPL-3.0 许可的自由/开源 Web 应用，用于在示威活动期间由在场者实时上报情况（如围堵、催泪弹、冲锋、救护点、法律援助团队位置等），并在地图上展示。使用者包括示威参与者、组织方、法律援助团队和街头救护人员。技术上它运行于 Node.js 22.13+，无外部依赖，使用 Leaflet 与 OpenStreetMap 地图，采用 SQLite 存储，支持 PWA 与 Tor 访问，可通过 node server.js 或 cPanel、Docker、VPS 部署。限制：单实例自托管，需自行运维；AGPL 要求修改后上线版本公开源码并保留来源标识。",
+   "highlights": [
+    "两步上报机制：其他用户可确认或否认某个标记，单票不足以下线标记，需来自至少两个不同网络的多次投票",
+    "隐私机制：位置数据不离开手机、上报坐标约十米级取整、无账号无 Cookie，地图可由服务器本身提供并通过 Tor 访问",
+    "针对组织方/法律团队/街头救护提供角色功能：本地化公告、虚假上报审核、QR 免密访问、团队间私有地图"
+   ],
+   "use_cases": [
+    "示威活动期间参与者实时标记危险、救护点和安全区域",
+    "组织方和法律援助团队发布位置公告并审核内容",
+    "街头救护团队之间共享私有战术信息"
+   ]
+  },
+  "sha": "79eb33a18a1f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "74ae9ffe5273": {
+  "identity": {
+   "one_liner": "面向 Windows 的 SSMS 风格 PostgreSQL 客户端，C#/WPF 原生实现",
+   "review": "PGMS 是一个运行于 Windows x64 的原生 PostgreSQL 图形客户端，面向熟悉 SSMS 操作习惯的用户。提供数据库关系图、可视化查询设计器、上下文感知 IntelliSense、图形执行计划、会话监控，以及通过 pg_dump/pg_restore 等官方工具实现的逻辑备份。当前为 v0.1.0-alpha 预发布版，支持 PostgreSQL 16–18，管理操作均以可审阅的 SQL 形式提交。",
+   "highlights": [
+    "提供数据库关系图、可视化查询设计器（Ctrl+Shift+Q）与按位置感知的 IntelliSense，JOIN 依据外键自动生成",
+    "SQL 编辑、对象浏览、估计/实际执行计划、会话与阻塞监控，管理操作以可审阅 SQL 脚本呈现",
+    "逻辑备份/恢复通过外部 PostgreSQL 工具实现，支持 custom、tar、SQL 和目录格式"
+   ],
+   "use_cases": [
+    "从 SQL Server 迁移到 PostgreSQL、习惯 SSMS 交互方式的使用者",
+    "需要图形化执行计划、会话监控与外键索引检查的日常查询与数据库巡检",
+    "需要通过 pg_dump/pg_restore 执行逻辑备份/恢复的 DBA 操作"
+   ]
+  },
+  "sha": "74ae9ffe5273",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

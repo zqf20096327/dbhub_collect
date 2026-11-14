@@ -2577,5 +2577,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1a336af2f57e": {
+  "identity": {
+   "one_liner": "按模块生成全栈脚手架的 CLI，前后端各技术栈可选组合",
+   "review": "这是一个通过 `pnpm dlx @clubedge/create-clubedge-app` 生成项目的全栈脚手架。前端可选 Next.js、TanStack Start 或 React + Vite，API 可选 Hono（TypeScript）或 FastAPI（Python），数据库为 PostgreSQL 加 Drizzle ORM。认证、存储、缓存、邮件、支付、后台任务、可观测性等均为可选模块，各提供方实现位于独立包中并隐藏在接口之后；CI 矩阵对每种组合生成真实项目并运行完整流水线。生成的项目采用 pnpm workspaces + Turborepo 单体仓库结构，并附 Docker 镜像与部署工作流。",
+   "highlights": [
+    "支持 Next.js、TanStack Start、React + Vite 三种前端与 Hono、FastAPI 两种 API 的组合，前后端通过 packages/contract 中的 OpenAPI 契约连接",
+    "认证、存储、缓存、邮件、支付、后台任务、推送、可观测性均为可选模块，每个提供方（如 Supabase Auth、Better Auth、Firebase、Appwrite 等）位于独立包并实现统一接口",
+    "包含 Docker 生产镜像（含迁移器）、`/api/health` 与 `/api/ready` 端点、Docker Compose + Caddy 部署配置及 GitHub Actions 工作流；CI 矩阵对每种组合执行安装、lint、类型检查、测试、构建与冒烟测试"
+   ],
+   "use_cases": [
+    "需要自选技术栈组合生成全栈项目起点的团队",
+    "需要在 Supabase、Better Auth、Firebase、Appwrite 等提供方之间保留替换可能的项目",
+    "需要包含 Docker 部署配置、CI 流水线和移动端壳（Capacitor/Expo）的单体仓库项目"
+   ]
+  },
+  "sha": "1a336af2f57e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

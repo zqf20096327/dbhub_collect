@@ -3182,5 +3182,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a6c87c5e8c28": {
+  "identity": {
+   "one_liner": "AI Agent 工具调用运行时拦截与防篡改审计平台",
+   "review": "PANOPTIS（原 AgentWatch）位于 Agent 与其工具之间，在工具调用执行前做出决策、执行后检查输出，并以 Merkle 链封存审计记录。通过 Python SDK、Claude Code hook、MCP 网关等 enforcing 集成接入，默认使用 SQLite 存储，pipx 安装后 panoptis up 启动本地 API 与仪表盘。覆盖经由受支持集成的调用，非沙箱；基于模式与解析器规则，无法捕获新型编码或改写式注入。",
+   "highlights": [
+    "决策管线按序执行威胁分析、RBAC、意图检查、人工审批等步骤，被拒绝的调用其工具体不会运行",
+    "工具结果中的注入指令行在 Agent 读取前被隔离移除，其余内容保留",
+    "记录按每 200 条或 30 秒封入 hash 链 Merkle 段，独立验证器可检测编辑、重排与截断；支持影子回放用证据回放运行并对比 traces"
+   ],
+   "use_cases": [
+    "为接入的 Python Agent、Claude Code 或 MCP 路由的工具调用提供执行前拦截与升级审批",
+    "需要可验证审计记录的场景：Merkle 封存证据与独立验证器校验",
+    "用影子回放将录制运行重放到新模型上，不接触真实环境即可对比行为差异"
+   ]
+  },
+  "sha": "a6c87c5e8c28",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "213d447a17d2": {
+  "identity": {
+   "one_liner": "自托管错误追踪服务，兼容 Sentry SDK，Rust 双容器部署",
+   "review": "Epure 是一个面向 1-2 人开发的 SaaS 团队的错误追踪服务，用 Rust 编写，由 ingest 和 Postgres 16 组成的两个容器运行。保留官方 Sentry SDK，仅更换 DSN 即可接入；需将 tracing、replay、profiling 采样率设为 0，因其不存储这些数据。支持 docker compose 快速启动，亦提供 $29/月起的云服务。当前版本 v0.2.2，引擎采用 AGPL-3.0，CLI 与 MCP 客户端为 Apache-2.0。",
+   "highlights": [
+    "兼容官方 Sentry SDK，更换 DSN 即可接入，同一 DSN 支持各语言 SDK",
+    "两个容器部署（ingest + PostgreSQL 16），无 Kafka、Redis 或 ClickHouse 依赖",
+    "提供 MCP 服务器与 agent skills，使编码 agent 可读取 issue；包含分组 issue、sourcemaps、回归检测、Spike 防洪、RBAC 与 PostgreSQL RLS"
+   ],
+   "use_cases": [
+    "1-2 人团队的 SaaS 项目需要自托管错误追踪",
+    "已有 Sentry SDK 接入、希望保留现有埋点并更换后端",
+    "通过 Claude Code 等 agent 的 MCP/skills 集成读取错误 issue 辅助修复"
+   ]
+  },
+  "sha": "213d447a17d2",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "61f0999aa86b": {
+  "identity": {
+   "one_liner": "Go 编写的数据库匿名化工具，基于确定性哈希脱敏并保持表间引用一致",
+   "review": "Mimicry 用 Go 编写，将生产数据库转换为脱敏后的副本。它通过确定性哈希保证同一值在多张表中替换结果一致，从而保留外键与 join 能力；自动按列名模式识别 PII，内置 13 种转换器（email、name、phone、gaussian 等），支持 YAML 按表/列配置覆盖和插件扩展。当前支持 PostgreSQL、MySQL、SQLite，MongoDB 计划中。需妥善保管配置中的 salt 并在多次运行间保持一致。",
+   "highlights": [
+    "基于确定性哈希进行脱敏，同一值在各表中替换结果一致，保留外键与 join 能力",
+    "自动按列名模式识别 PII 列，内置 email、name、phone、gaussian、credit_card 等 13 种转换器，支持 YAML 配置覆盖与插件扩展",
+    "采用流式处理，并提供增量模式和子集抽取模式"
+   ],
+   "use_cases": [
+    "为开发与测试环境生成保留关联关系的脱敏生产数据副本",
+    "为分析测试生成经过高斯模糊但保留分布特征的数值数据",
+    "在 CI/CD 流水线中以增量模式只脱敏上次运行以来的变更数据"
+   ]
+  },
+  "sha": "61f0999aa86b",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

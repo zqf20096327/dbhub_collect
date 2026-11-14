@@ -2575,5 +2575,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "af8e2b5acbd4": {
+  "identity": {
+   "one_liner": "用统一 Rust 测试器对嵌入式引擎与数据库服务器做 CRUD 基准",
+   "review": "CrudEval 是用 Rust 编写的 CRUD 基准框架，是 UCSB 的后继项目，通过同一套 runner 驱动 RocksDB、SQLite、Redis、MongoDB、Postgres、Neo4j 等多种嵌入式存储引擎与数据库服务器。它使用种子化数据并校验返回值，将延迟分布、吞吐、资源占用与配置写入 JSON。每个后端以独立 Cargo feature 编译，服务器后端通过 Docker 拉取固定版本镜像运行。",
+   "highlights": [
+    "提供键值、文档、图三种数据模型的 CRUD 负载，采样分布支持 uniform、zipf 与 latest",
+    "结果写入 JSON，包含延迟分布、吞吐、资源占用、有效持久化级别与逐操作的事务/管道/逐条模式区分",
+    "键类型支持 uuid-v7、uuid-v4、u32、u64，且均可解码回序数以做精确校验"
+   ],
+   "use_cases": [
+    "对嵌入式存储引擎或数据库服务器在相同负载链下采集延迟与吞吐数据",
+    "对比 bulk-load 与 ingest 等不同写入路径的开销",
+    "在持久化级别、键分布、速率控制等参数下复现可验证的基准运行"
+   ]
+  },
+  "sha": "af8e2b5acbd4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c9683e7a8804": {
+  "identity": {
+   "one_liner": "位于 AI 编码代理与 shell 之间的命令闸门，预判后果并备份回滚",
+   "review": "Termaxa 是一个 Rust 编写的单一二进制工具，插入 Claude Code、Codex、Cursor、Copilot CLI 等代理的 hook 路径，按仓库内策略文件对每条 shell 命令做允许/询问/拒绝判定，展示删除范围、丢失提交、受影响数据行等后果，执行前做可回滚备份，并记录防篡改审计日志。无模型、无服务、无账户，运行时状态存于 ~/.termaxa/。",
+   "highlights": [
+    "按策略文件判定命令，复合命令按 &&、||、; 等分段评估，以最危险段为准",
+    "预览删除文件、强推丢失提交、DROP 表行数（来自 pg_class.reltuples，不扫描表）等后果，执行前生成可 termaxa rollback 恢复的备份",
+    "跨 shell 统计破坏性意图的熔断器（默认阈值 2），以及代理无法改写的仅追加哈希链审计日志"
+   ],
+   "use_cases": [
+    "运行 AI 编码代理的项目需对 rm -rf、git reset --hard、git push --force、DROP TABLE 等命令做拦截与后果预览",
+    "无人值守运行代理前，用 observe 模式收集报告再切换 enforce 模式",
+    "用 termaxa replay 审查本机代理历史会话已执行过的命令"
+   ]
+  },
+  "sha": "c9683e7a8804",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

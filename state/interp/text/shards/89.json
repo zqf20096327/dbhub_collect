@@ -2705,5 +2705,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "03c9cf121e39": {
+  "identity": {
+   "one_liner": "开源自托管家庭事务管理应用，集成购物、任务、日历、菜谱与预算于一体。",
+   "review": "OpenFamily 是一个自托管的家庭组织应用，包含购物清单、任务、共享日历、周计划、菜谱、膳食规划与家庭预算模块。采用 React 19 与 Node.js、PostgreSQL 16 构建，前端为 PWA 支持离线浏览，设备间通过 WebSocket 实时同步。部署方式包括 Windows 图形安装器、Android APK 客户端、Docker Compose 或手动安装；后端依赖 PostgreSQL 数据库，支持 OpenID Connect 单点登录与父/子角色权限。许可协议为 AGPL-3.0。",
+   "highlights": [
+    "包含购物清单、任务、日历、周计划、菜谱、膳食规划、预算与家庭成员档案等模块，日历支持 iCal 导出，预算支持图表与分类限额提醒",
+    "支持与 Mealie、Tandoor、Grocy、Home Assistant、Nextcloud 的集成导入与同步，并提供可撤销的 API token 供第三方读写数据",
+    "提供 Windows 图形安装器（捆绑 Node.js 与 PostgreSQL）、Android APK 客户端、Docker Compose（含 amd64/arm64 镜像）与手动安装方式，支持八种界面语言"
+   ],
+   "use_cases": [
+    "希望在自有服务器上集中管理家庭日程、任务与预算的家庭",
+    "已运行 Mealie、Grocy、Home Assistant、Nextcloud 等自托管服务、需要数据互通的用户",
+    "需要通过 API token 或 WebSocket 将家庭数据接入 Home Assistant、n8n 等自动化平台的场景"
+   ]
+  },
+  "sha": "03c9cf121e39",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "eb1a03c354b8": {
+  "identity": {
+   "one_liner": "开源跨平台数据库巡检与运维平台，内置 839 条规则并支持 AI 辅助诊断",
+   "review": "RaccoonX（原 DBCheck）是面向 DBA、数据库工程师、DevOps 和基础设施团队的开源数据库巡检与运维平台，基于 Python/WebUI 构建。它将连接、巡检、慢查询分析、锁诊断、报告生成等流程整合到统一平台，支持 22 类数据库与 839 条巡检规则，可通过 Docker 或源码（Python 3.10+）部署。",
+   "highlights": [
+    "支持 22 种数据库类型（MySQL、PostgreSQL、Oracle、达梦、TiDB、OceanBase、Redis 等），包含 839 条巡检规则",
+    "提供 AI 辅助诊断（本地 Ollama 或云 API）、MCP Server（12 个工具）与 RAG 知识库",
+    "镜像为多架构（linux/amd64 + linux/arm64），支持麒麟等国产服务器部署"
+   ],
+   "use_cases": [
+    "对混合数据库环境执行批量巡检并生成自动化 Word 巡检报告",
+    "慢 SQL 分析、锁阻塞链与死锁诊断、索引健康与参数基线检查",
+    "通过 Cron 定时巡检任务配合 Email/Webhook 通知进行日常运维监控"
+   ]
+  },
+  "sha": "eb1a03c354b8",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c45ddf12e719": {
+  "identity": {
+   "one_liner": "Kpow 是 Apache Kafka 集群的 Web UI 与运维工具包",
+   "review": "Kpow 提供 Apache Kafka 集群的 Web UI，用于检查、管理和运维 Kafka 集群，面向生产环境的大规模 Kafka 团队，支持安全与隔离部署。本仓库发布官方 Docker 镜像和部署参考，提供社区版与企业版；企业版含 RBAC、审计日志、SSO 等，属专有软件，需遵守 EULA。",
+   "highlights": [
+    "提供用于检查、管理和运维 Kafka 集群的 Web UI",
+    "提供社区版与企业版 Docker 镜像，可通过 Docker 或 Helm 部署",
+    "企业版包含 RBAC、审计日志、SSO 等安全功能"
+   ],
+   "use_cases": [
+    "生产环境中多 Kafka 集群的可视化运维",
+    "通过 Helm 在 Kubernetes/托管集群中部署 Kafka 管理界面",
+    "本地开发与实验环境（Kpow Local / Factor House Local 的 Docker Compose）"
+   ]
+  },
+  "sha": "c45ddf12e719",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63407e4ba977": {
+  "identity": {
+   "one_liner": "以 PostgreSQL 扩展实现的数据库数据版本控制，支持分支、diff、合并与撤销。",
+   "review": "Gnomon 是一个安装于 PostgreSQL 15-18（含 RDS、Aurora、Supabase 等托管环境）的扩展，为被跟踪的表提供历史记录、分支、diff、合并与回退能力。分支仅保存变更内容、以连接字符串形式使用，面向需要为 agent 运行、PR 或测试提供独立数据库分支的开发者。组件包括 SQL 核心、可选 C 模块、Go 编写的 CLI/MCP server/review 应用、TypeScript 与 Python SDK、GitHub Action 及多语言集成，采用 PostgreSQL License。",
+   "highlights": [
+    "提供 track、use、begin 等接口，分支以连接字符串或 SET gnomon.branch 方式使用，支持按时间点查询历史",
+    "支持分支间合并、SQL 检查、冲突处理（计数累加、JSON 按键合并、文本按行合并）、事务级撤销与 gnomon bisect 定位事务",
+    "包含 MCP server、TypeScript/Python SDK、GitHub Action、历史流式输出到 Kafka/NATS/webhook 及 dbt 快照，历史可归档至对象存储"
+   ],
+   "use_cases": [
+    "为 agent 运行、pull request 或测试各分配一个生产数据的只读主库分支，事后审查并合并或撤销其变更",
+    "在迁移到分支上验证 schema 变更与数据，合并时一并带入主库",
+    "查询数据库在任意历史时刻的状态，或将变更流接入 Kafka、NATS、webhook 与 dbt"
+   ]
+  },
+  "sha": "63407e4ba977",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

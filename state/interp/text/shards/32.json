@@ -2548,5 +2548,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ea61c4859fef": {
+  "identity": {
+   "one_liner": "Rust ORM，以字段声明式关联与流式查询构建器为核心",
+   "review": "TideORM 是一个 Rust ORM，通过 #[tideorm::model] 宏声明模型并在字段上定义 HasOne/HasMany/BelongsTo 等关联，配合流式查询构建器使用。支持 PostgreSQL、MySQL、SQLite 三种后端及 tokio/async-std 运行时，附件、翻译、全文搜索、字段加密等功能通过 feature flag 按需启用。当前版本为 0.17.5。",
+   "highlights": [
+    "提供字段声明的关联定义与带嵌套预加载的批量加载，用于避免 N+1 查询",
+    "查询构建器支持过滤、OR 分组、连接、联合、CTE 与窗口函数，聚合结果可按指定类型读取",
+    "支持多数据库连接与 db.scope 域切换、复合主键、批量插入、迁移/种子/事务/软删除，以及基于 feature 的字段加密"
+   ],
+   "use_cases": [
+    "需要面向 async/await 的 Rust 数据访问层，覆盖 PostgreSQL、MySQL 或 SQLite 后端",
+    "多租户或读写分离场景，需在同一应用中连接并切换多个数据库",
+    "需要字段级加密存储敏感列，或需附件、翻译、全文搜索等可选功能的领域模型"
+   ]
+  },
+  "sha": "ea61c4859fef",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "54b12f4fa365": {
+  "identity": {
+   "one_liner": "Scala 3 类型安全 JDBC 库，用纯 SQL 字符串映射结果集",
+   "review": "Squery 是面向 Scala 3 开发者的 JDBC 访问库：不提供查询 DSL 或隐藏连接层，SQL 以字面字符串书写，插值自动转为 prepared-statement 参数，结果行可解码为 case class、named tuple 等值。需自行提供 JDBC DataSource；查询在 run/runTransaction 中执行，支持事务隔离级别配置。附带 CLI 与构建插件，可从现有数据库生成行模型与 DAO。",
+   "highlights": [
+    "支持任意 JDBC 驱动，并为 PostgreSQL、MySQL、MariaDB、Oracle、H2、SQLite 内置数据库专用编解码器",
+    "支持嵌套行、外连接可选行、三维以内 SQL 数组、UUID、Java time 类型及动态 SQL 组合",
+    "提供代码生成（CLI 或 Mill/sbt 2/Deder 插件），用 Regenesca 原地更新生成定义并保留自定义成员"
+   ],
+   "use_cases": [
+    "需要书写原生 SQL 并获得类型安全结果解码的 Scala 3 应用",
+    "在 JVM 或 Scala Native 上运行、需对接多种数据库的项目",
+    "希望从既有数据库 schema 自动生成行模型与 DAO 代码的团队"
+   ]
+  },
+  "sha": "54b12f4fa365",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "69fd52a331c9": {
+  "identity": {
+   "one_liner": "本地进程内运行的确定性上下文压缩器，通过 AST、TOON v2 编码与 SQLite 恢复机制减少 AI 编程代理的输入字符量。",
+   "review": "trimtok 是一个面向 AI 编程代理与 IDE 的上下文压缩 Python 工具，通过 stdio MCP 集成。它实现 AST 代码骨架化、无损 TOON v2 JSON 列表编码、跨轮次命令增量检测，以及基于 SQLite WAL 与 Zstandard 的内容恢复存储。全部在本地进程内运行，不开启网络端口。README 中的压缩率来自固定语料评测，非生产流量统计；任务准确性测试样本量为 5，作者标注为仅具参考性。",
+   "highlights": [
+    "提供终端输出压缩、AST 代码骨架化、TOON v2 JSON 表格编码与 traceback 裁剪等多种压缩门控",
+    "被省略内容通过 SQLite WAL + Zstandard 存储，可经 trimtok_retrieve 检索或 trimtok_exec 执行查询恢复",
+    "纯本地进程内运行，依赖 Python 标准库、RapidFuzz，可选安装 tree-sitter 多语言语法包；含 fail-open 超时守护与对抗性模糊测试用例"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等 AI 编程代理压缩测试输出、构建日志、源码文件与 MCP 工具 schema",
+    "需要本地运行、无守护进程与网络端口的场景",
+    "需要在压缩后检索被省略原文片段或对引用数据执行聚合查询的工作流"
+   ]
+  },
+  "sha": "69fd52a331c9",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

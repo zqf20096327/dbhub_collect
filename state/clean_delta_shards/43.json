@@ -20841,5 +20841,421 @@
    ]
   ],
   "at": "2026-11-13"
+ },
+ "243d404e53cb+2": {
+  "fn": "quantumiodb/pgorca",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "pg_orca"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " pgorca "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " build"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    26,
+    5,
+    22
+   ],
+   [
+    "replace",
+    26,
+    29,
+    22,
+    25,
+    [
+     " rest stay as SubPlans re-executed per outer row. ORCA models them as `Apply` and",
+     " decorrelates them into regular joins through xforms, so the subquery side",
+     " participates in join ordering and costing like any other relation."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    25,
+    26
+   ],
+   [
+    "replace",
+    30,
+    35,
+    26,
+    31,
+    [
+     " `join_collapse_limit`/`from_collapse_limit` (8 by default) and falls back to the",
+     " syntactic order or GEQO. ORCA enumerates join orders as part of the search itself",
+     " (`optimizer_join_order`: `exhaustive2` by default, or `exhaustive` / `greedy` /",
+     " `query`), with `pg_orca.join_order_dynamic_threshold` downshifting to a cheaper",
+     " strategy only when the query is genuinely large."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    31,
+    32
+   ],
+   [
+    "replace",
+    36,
+    39,
+    32,
+    35,
+    [
+     " below a join), CTE inlining as a *cost-based* decision rather than a syntactic rule,",
+     " aggregate splitting, and inferred/transitive predicates pushed across join",
+     " boundaries."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    35,
+    36
+   ],
+   [
+    "replace",
+    40,
+    43,
+    36,
+    39,
+    [
+     " memo, a rewrite that only pays off with a particular physical shape (index scan,",
+     " merge join, partition pruning) can be chosen on cost instead of being applied — or",
+     " skipped — ahead of the plan search."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    50,
+    39,
+    46
+   ],
+   [
+    "replace",
+    50,
+    51,
+    46,
+    47,
+    [
+     "The ORCA optimizer is the work of many people from the Greenplum, Pivotal/VMware, and Apache Cloudberry projects. See CONTRIBUTORS.md for acknowledgments."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    47,
+    50
+   ],
+   [
+    "replace",
+    54,
+    55,
+    50,
+    51,
+    [
+     "|Directory|Description|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    51,
+    52
+   ],
+   [
+    "replace",
+    56,
+    63,
+    52,
+    59,
+    [
+     "|`libgpos/`|ORCA memory pool, error handling, concurrency primitives|",
+     "|`libnaucrates/`|DXL parser/serializer, metadata abstractions|",
+     "|`libgpopt/`|Core optimizer: search, transformation rules, cost model|",
+     "|`libgpdbcost/`|GPDB-specific cost model implementation|",
+     "|`gpopt/`|PostgreSQL ↔ DXL translation layer (relcache, planner bridge)|",
+     "|`compat/`|Stub headers replacing MPP-only Cloudberry types|",
+     "|`pg_orca.cpp`|Extension entry point, `planner_hook`, GUC definitions|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    67,
+    59,
+    63
+   ],
+   [
+    "replace",
+    67,
+    68,
+    63,
+    64,
+    [
+     "- xerces-c (XML parsing for DXL)"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    75,
+    64,
+    71
+   ],
+   [
+    "replace",
+    75,
+    76,
+    71,
+    72,
+    [
+     "See PostgreSQL 19 for what is PG19-specific."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    108,
+    72,
+    104
+   ],
+   [
+    "replace",
+    108,
+    112,
+    104,
+    105,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    169,
+    105,
+    162
+   ],
+   [
+    "replace",
+    169,
+    182,
+    162,
+    163,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    184,
+    163,
+    165
+   ],
+   [
+    "replace",
+    184,
+    185,
+    165,
+    166,
+    [
+     "Existing sessions are unaffected by step 2 until they reconnect. If"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    216,
+    166,
+    197
+   ],
+   [
+    "replace",
+    216,
+    217,
+    197,
+    198,
+    [
+     "|Parameter|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    198,
+    199
+   ],
+   [
+    "replace",
+    218,
+    226,
+    199,
+    206,
+    [
+     "|`pg_orca.enable_orca`|`off`|Enable ORCA optimizer|",
+     "|`pg_orca.trace_fallback`|`off`|Log a message on fallback to standard planner|",
+     "|`optimizer_segments`|`1`|Number of segments for cost estimation|",
+     "|`optimizer_sort_factor`|`1.0`|Cost scaling factor for sort operations|",
+     "|`optimizer_metadata_caching`|`on`|Cache relation metadata between calls|",
+     "|`optimizer_mdcache_size`|`16384`|Metadata cache size (KB)|",
+     "|`optimizer_search_strategy_path`|`\"\"`|Path to custom search strategy XML (empty = built-in)|"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    229,
+    206,
+    209
+   ],
+   [
+    "replace",
+    229,
+    230,
+    209,
+    210,
+    [
+     "See **testing.md** for the full guide. Quick start:"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    235,
+    210,
+    215
+   ],
+   [
+    "replace",
+    235,
+    240,
+    215,
+    216,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    259,
+    216,
+    235
+   ],
+   [
+    "replace",
+    259,
+    260,
+    235,
+    236,
+    [
+     " and both `standard_planner()` fallback paths are conditionally compiled (`pg_orca.cpp`)."
+    ]
+   ],
+   [
+    "equal",
+    260,
+    261,
+    236,
+    237
+   ],
+   [
+    "replace",
+    261,
+    263,
+    237,
+    239,
+    [
+     " natively rather than falling back: the null treatment is carried on",
+     " `CScalarWindowFunc` and round-tripped through DXL."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    239,
+    240
+   ],
+   [
+    "replace",
+    264,
+    266,
+    240,
+    242,
+    [
+     " before `planner_hook` runs, so these queries go through ORCA on the normal LATERAL path.",
+     " A defensive check falls back cleanly if an `RTE_GRAPH_TABLE` ever reaches the translator."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    242,
+    243
+   ],
+   [
+    "replace",
+    267,
+    269,
+    243,
+    244,
+    [
+     " byte-identical `#ifndef`-guarded replacement so call sites are unchanged on both versions."
+    ]
+   ]
+  ],
+  "at": "2026-11-14"
  }
 }

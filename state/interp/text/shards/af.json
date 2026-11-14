@@ -3185,5 +3185,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "64694c224a89": {
+  "identity": {
+   "one_liner": "开源自托管在线状态监控与状态页，运行于 Cloudflare Workers + Postgres 或单容器 Docker",
+   "review": "OpenUptime 是开源的在线状态监控与状态页系统，基于 MIT 许可发布。它支持 HTTP/HTTPS、TCP、DNS、WebSocket、数据库等多种监控类型，提供事件管理、公共状态页和多渠道告警。部署方式有两种：Cloudflare Workers（API 与 Web 两个 Worker）加外部 Postgres，或单个 Docker 容器（compose 文件内置 Postgres）。注册可通过配置关闭，适合自托管。",
+   "highlights": [
+    "支持 HTTP/HTTPS（含关键词匹配与慢响应告警）、TCP、DNS、WebSocket、心跳推送、PostgreSQL/MySQL/Redis、域名到期及 EVM/Solana RPC 节点等监控类型，并支持多区域探测与监控依赖关系",
+    "提供事件确认、分配与复盘、维护窗口、公共状态页、Email/RSS 订阅、状态徽章，以及 Slack/Discord/Telegram/PagerDuty 等多渠道告警",
+    "提供 REST API 与 MCP 服务器（OAuth 或 API key 鉴权），供 AI 代理管理监控项、事件和状态页"
+   ],
+   "use_cases": [
+    "为 cron 任务和后台服务配置心跳推送监控，服务异常时通过 Slack、Telegram 等渠道接收告警",
+    "自托管部署公共状态页，向访问者提供事件公告与 Email/RSS 订阅",
+    "通过 REST API 或 MCP 服务器将监控、事件与状态页管理集成到自动化流程或 AI 代理工作流中"
+   ]
+  },
+  "sha": "64694c224a89",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dc3b1e3220b7": {
+  "identity": {
+   "one_liner": "基于 NestJS 与 React 的三角色实时外卖配送全栈平台",
+   "review": "MealDeli 是一个面向顾客、餐厅店主和骑手三种角色的全栈外卖配送平台，由 NestJS GraphQL API 与 React 前端两个独立项目组成。订单遵循 PENDING 到 DELIVERED 的严格状态机，通过 graphql-ws 推送实时更新；订单项以快照保存菜品数据。本地运行需 Node.js、pnpm、PostgreSQL、S3 兼容存储，可选 Resend 邮件服务；支付接口目前仅为 webhook 占位。MIT 许可。",
+   "highlights": [
+    "支持顾客、店主、骑手三种角色界面，订单通过 graphql-ws 订阅实时更新，订单状态由服务端按角色校验推进",
+    "认证采用短时效访问令牌与 HttpOnly Cookie 中哈希存储的刷新令牌服务端会话，支持注销与会话撤销",
+    "包含单元、集成与端到端测试，前端 GraphQL 类型由后端 schema 生成，以 PWA 形式可安装"
+   ],
+   "use_cases": [
+    "部署面向顾客点餐、店主管理菜单与厨房状态、骑手接单配送的完整配送业务流程",
+    "作为 NestJS + GraphQL + Prisma + React 全栈架构与订单状态机实现的参考项目",
+    "本地运行 CI 测试套件或基于种子演示账号体验三种角色功能"
+   ]
+  },
+  "sha": "dc3b1e3220b7",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "15cfe85aeea4": {
+  "identity": {
+   "one_liner": "基于 Docker 离线运行的 ClusterDuck 数据管理轻量版",
+   "review": "DMS Lite 是 Project OWL 数据管理系统的轻量版本，通过 Docker Compose 部署，用于在无云服务条件下收集并查看 ClusterDuck Protocol 网络的数据。PapaDuck 设备可经 USB 串口或 WiFi/MQTT 两种模式接入，消息存入 MariaDB，浏览器界面提供消息列表、设备状态与数值图表。要求 amd64/arm64 的 64 位 Linux 容器环境，串口模式需原生 Linux 主机。",
+   "highlights": [
+    "支持 USB 串口（换行分隔 JSON）与 WiFi/MQTT 两种数据接入模式，写入 MariaDB",
+    "浏览器界面提供消息浏览、设备新鲜度、数值图表与阈值告警，核心页面与资源可离线运行",
+    "技术栈包含 Express/EJS 应用、MariaDB 11.4、Python 接入适配器，WiFi 模式附带 Mosquitto broker，容器以非 root 运行"
+   ],
+   "use_cases": [
+    "在无互联网的本地网络中收集并查看 ClusterDuck 网络的传感器消息",
+    "在树莓派等 Linux 主机上通过 USB 串口接入 PapaDuck 设备",
+    "对数值类 payload 进行本地图表展示与浏览器端阈值告警检查"
+   ]
+  },
+  "sha": "15cfe85aeea4",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "de48f8b6286e": {
+  "identity": {
+   "one_liner": "TikTok 视频播放量批量查询工具：上传 Excel 列表，实时抓取并导出结果",
+   "review": "一个 Web 形式的 TikTok 播放量批量查询工具：用户上传指定结构的 .xlsx 视频列表，后端借助 yt-dlp 代理逐条实时查询最新播放量，页面展示明细与批次汇总，并支持导出 CSV/.xlsx。README 注明当前仓库为初始化脚手架，查询、展示与导出逻辑尚未实现。前端需输入 4 位数字密码方可访问。",
+   "highlights": [
+    "支持上传不依赖固定文件名和行顺序的 .xlsx 视频列表，逐条发起实时查询并标注成功、不可用、失败三类结果状态",
+    "提供批次汇总展示（输入总数、成功数、不可用数、失败数、播放量总和、耗时）及结果导出为 CSV/.xlsx，导出时保留 19 位达人ID/视频ID 文本精度",
+    "通过 YTDLP_PROXY 环境变量配置 yt-dlp 抓取代理，前端访问由 APP_PASSWORD 环境变量的 4 位数字密码控制"
+   ],
+   "use_cases": [
+    "批量获取一批 TikTok 视频当次的最新播放量并生成可下载报表",
+    "对包含达人昵称、达人ID、视频ID、发布时间、VV 字段的 Excel 视频记录清单做批次化查询与状态标注",
+    "需以 CSV/.xlsx 格式导出查询结果并保持长数字 ID 不失真"
+   ]
+  },
+  "sha": "de48f8b6286e",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

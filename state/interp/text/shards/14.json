@@ -3059,5 +3059,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "215de89fde12": {
+  "identity": {
+   "one_liner": "把 Slack 工作区数据镜像到本地 SQLite 的命令行工具",
+   "review": "slacrawl 将 Slack 工作区的消息、用户、线程同步到本地 SQLite 数据库，支持 Slack API、桌面缓存、MCP 连接器、外部 JSONL 适配器和导出 ZIP 五种数据来源。面向需要本地可查询 Slack 存档的终端用户，提供 TUI 浏览、FTS5 搜索、只读 SQL、报告、git 快照共享与保留策略；bot/user token 覆盖范围不同，线程覆盖可能不完整。Go 编写，MIT 协议。",
+   "highlights": [
+    "支持五种数据来源（Slack API、桌面缓存 wiretap、MCP、外部 JSONL provider、导出 ZIP）写入同一 SQLite 存档",
+    "搜索基于 SQLite FTS5 并含子串回退，可通过 TUI、结构化命令和只读 SQL 访问同一存档",
+    "支持 git 快照发布/订阅共享、purge 保留清理（线程为单位）及 --json/--format 结构化输出"
+   ],
+   "use_cases": [
+    "建立本地可全文搜索、可用 SQL 查询的 Slack 历史存档",
+    "导入已有的 Slack 导出 ZIP 进行离线浏览与报告分析",
+    "通过 git 快照在多台机器间共享存档，订阅端无需 Slack 凭证"
+   ]
+  },
+  "sha": "215de89fde12",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "394acb433956": {
+  "identity": {
+   "one_liner": "用于记录智能体与人类工作、信念和发现的认知数据库",
+   "review": "trackinizer 是一个基于 Postgres（或内置 PGlite）的集中式数据库，用于记录智能体与人类的 Inquiry（Issue/Artifact）、Belief、Experiment 等认知条目及其有向边关系。核心为 inquiries、edges、change_log 三张表，上层运行 FastAPI 服务并内置 Web 界面，通过 trax CLI 或 API token 访问。适用于需要追踪智能体工作产物与知识来源关系的团队或个人。",
+   "highlights": [
+    "提供带类型的节点与有向边图模型，关系含 proves/favors、produced_by、supersedes 等并在插入时拒绝成环（cites 除外）",
+    "提供三张核心表（inquiries、edges、change_log）及实验指标、会话记录、语义向量等附属表，change_log 为追加式审计日志",
+    "提供 trax CLI、HTTP API 与 Web 界面，支持 trax export 以 JSONL 导出全图或按标签筛选的子图"
+   ],
+   "use_cases": [
+    "记录和查询智能体研究会话中产生的实验、论文与信念及其证据关系",
+    "以有向图形式追踪任务（Issue）与产出（Artifact）之间的产出、依赖与取代关系",
+    "本地单用户模式（--no-auth）运行个人知识/实验追踪数据库，或部署多用户服务用 API token 接入智能体"
+   ]
+  },
+  "sha": "394acb433956",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a73599246554": {
+  "identity": {
+   "one_liner": "Coolify 自托管备份与恢复管理器，基于 restic 实现增量去重加密存储",
+   "review": "CBM 是面向 Coolify 平台的自托管备份与恢复工具，由 Next.js 控制器和部署在每个 Docker 主机上的轻量代理组成，用于备份应用、compose 服务、卷、bind mount 和数据库到本地、S3 或 SSH/SFTP 目的地。采用 restic 增量去重加密存储，备份时通过短暂 docker pause 冻结写卷容器而不重启服务，支持原位恢复、恢复为新资源、Webhook 告警和每周自动测试恢复。",
+   "highlights": [
+    "备份应用、compose 服务、命名卷、主机 bind mount 和数据库（含 Redis 系列 live RDB 与服务内数据库逻辑导出）到本地、SSH/SFTP（含跳板机）或 S3 目的地",
+    "使用 restic 引擎实现增量上传、去重与加密存储，恢复支持原位或恢复为全新 Coolify 资源（重新锚定 commit/镜像 tag）",
+    "通过通用 Webhook 发送失败、目的地缺失、逾期未运行告警；提供每日存在性检查、可选完整性检查、目的地镜像和沙箱测试恢复"
+   ],
+   "use_cases": [
+    "为运行 Coolify 的多服务器环境建立定期备份与灾难恢复流程",
+    "将应用、卷和数据库恢复到新的 Coolify 资源或全新/不同的 Coolify 实例",
+    "需要团队角色管理（admin/operator/viewer）、双因素认证和 AI 代理 MCP 接口接入的备份管理场景"
+   ]
+  },
+  "sha": "a73599246554",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

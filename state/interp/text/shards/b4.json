@@ -3570,5 +3570,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "19209bfd8565": {
+  "identity": {
+   "one_liner": "自托管 Rust Web 应用宿主，应用与 SQLite 均运行于独立 Wasm 沙箱",
+   "review": "spared 是一个开源的 Rust Web 应用托管程序，以单个二进制在单台服务器上运行多个相互隔离的应用，每个应用内嵌编译为 Wasm 的 SQLite 数据库。开发者需通过 rustup 安装 Rust 工具链，用 spared setup/serve/new/deploy 命令完成编译与部署。README 注明其为 0.0.1-preview 版本，未经外部审计，不支持 TLS，每个应用同时只处理一个请求。",
+   "highlights": [
+    "每个应用及其 SQLite 数据库运行在独立的 Wasm 沙箱（基于 wasmtime）中，SQLite 在 setup 时编译为 Wasm",
+    "以单个二进制进程托管多个应用，应用通过 my-app.localhost:8080 形式的子域名访问，另设 8081 管理端口",
+    "提供 install.sh 脚本安装，支持 Linux x86_64（glibc 2.35+），提供脚手架示例应用和供编程代理使用的 AGENTS.md"
+   ],
+   "use_cases": [
+    "在一台服务器上自托管多个数据隔离的 Rust Web 应用",
+    "通过 Claude Code 或 Codex 等编程代理按 AGENTS.md 自动构建和部署应用",
+    "无 Rust 工具链时用 try 脚本运行服务端镜像内置的三个示例应用"
+   ]
+  },
+  "sha": "19209bfd8565",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

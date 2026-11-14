@@ -3214,5 +3214,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d80374aaeece": {
+  "identity": {
+   "one_liner": "Go 编写的数据库 Schema 迁移工具，基于 goose 库与 gsmigrate 命令行工具实现版本化迁移。",
+   "review": "该项目是数据库 Schema 管理工具，由 goose 库和命令行工具 gsmigrate 组成。迁移以带版本号的文件形式顺序执行并支持回滚，版本状态记录在 goose_db_version 表中。支持 SQL 注解式迁移与通过 goose.AddMigration 注册的 Go 函数迁移，需 Go 1.24 及以上版本，采用 MIT 许可证发布。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQLite3、ClickHouse、CockroachDB、Redshift、TiDB 七种方言",
+    "提供 up/down/up-to/redo/reset/status/version/create 等子命令，迁移默认在事务内执行，可通过 NO TRANSACTION 注解关闭",
+    "SQL 迁移使用 -- +goose Up/Down 注解分区，并通过 StatementBegin/StatementEnd 支持 PL/pgSQL 复杂语句；项目 Makefile 提供 m-[driver]-[command] 目标"
+   ],
+   "use_cases": [
+    "Go 项目中对多种数据库执行带版本号、可回滚的 Schema 变更管理",
+    "需要将迁移逻辑以 Go 函数形式编译进自定义二进制的场景",
+    "通过 Makefile 目标统一管理项目内多数据库驱动的迁移流程"
+   ]
+  },
+  "sha": "d80374aaeece",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2895,5 +2895,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2105ee212c3a": {
+  "identity": {
+   "one_liner": "单进程运行的 Supabase 兼容本地后端，基于 PGlite 提供真实 Postgres 与 RLS。",
+   "review": "tinbase 是一个可在本地单命令启动的 Supabase 兼容后端，提供 REST、Auth、Storage、Realtime 等服务，官方 supabase-js 可直接连接。内置 native、wasm（PGlite）和纯 JS 的 pgmem 三种引擎，读取 supabase/migrations 迁移文件，支持嵌入 Node 或浏览器运行。README 标注为 Alpha，尚未达到生产可用。",
+   "highlights": [
+    "提供与 Supabase 相同的 REST、Auth、Storage、Edge Functions、Realtime 端点，兼容官方 supabase-js SDK",
+    "读取 supabase/migrations/*.sql 与 seed.sql，遵循 Supabase CLI 迁移约定，并以 pgmq、cron、pg_net 等模拟替代扩展",
+    "支持三种引擎：嵌入式原生 Postgres 17、PGlite（WASM，可在浏览器运行）与纯 JS 内存引擎 pgmem；每个服务实现为纯 fetch handler，可嵌入进程内运行"
+   ],
+   "use_cases": [
+    "无 Docker 环境下的 Supabase 项目本地开发，迁移文件可保持迁移至托管 Supabase 的可移植性",
+    "通过 createBackend 将整套后端嵌入 Node 服务或浏览器（经 IndexedDB/OPFS）运行",
+    "原型与预览环境：pgmem 引擎提供轻量内存模式，用于本地开发与预览（README 声明不可用于生产）"
+   ]
+  },
+  "sha": "2105ee212c3a",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "91a90fdc1e58": {
+  "identity": {
+   "one_liner": "Coherence 集群命令行管理监控工具 cohctl，基于 Management over REST 访问集群。",
+   "review": "cohctl 是 Oracle 提供的 Coherence 集群命令行工具，可在终端交互或脚本化方式查看服务、缓存、成员等集群信息并执行管理操作，如滚动重启时监控 StatusHA、抓取线程转储、实验性创建/启动/伸缩开发集群。它通过 HTTP Management over REST 访问集群，要求目标集群启用该接口；输出支持 text、JSON 及 JsonPath 提取。支持 CE 14.1.2+/22.06+/24.09+ 及商业版 12.2.1.4（补丁 12.2.1.4.10+）以上，可连接独立或 WebLogic 集群。",
+   "highlights": [
+    "通过 HTTP Management over REST 接口访问集群，可在交互或脚本模式下运行",
+    "输出支持 text 与 JSON 格式，可使用 JsonPath 提取指定属性",
+    "提供跨成员线程转储收集，并可实验性地创建、启动和伸缩开发集群"
+   ],
+   "use_cases": [
+    "在轻量终端界面交互式监控 Coherence 集群",
+    "将集群监控脚本化并集成到其他管理工具链",
+    "滚动重启期间监控服务 StatusHA 状态"
+   ]
+  },
+  "sha": "91a90fdc1e58",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

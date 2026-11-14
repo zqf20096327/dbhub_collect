@@ -2842,5 +2842,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "667dbe036fb3": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，单二进制提供 CLI、Web UI 和 AI 代理技能",
+   "review": "Pad 是一个用 Go 编写、数据存储在本机 SQLite 的项目管理工具，为开发者及其使用的 AI 编码工具（如 Claude Code、Cursor、Codex 等）提供任务、计划、文档等条目管理。它通过 `pad init` 初始化，在 localhost:7777 提供 Web UI，并以 `/pad` 技能形式让代理通过自然语言读写项目条目；支持约定（conventions）与多步工作流（playbooks），并对代理写入进行署名记录。数据默认留在本地，可通过导出导入迁移至 Pad Cloud。",
+   "highlights": [
+    "单二进制包含 CLI、Web UI（localhost:7777）和面向 7+ AI 编码工具的 `/pad` 技能，数据由本机 SQLite 存储",
+    "内置任务、想法、计划、文档、约定、工作流六类集合，支持用 select/text/date/number/relation 等类型字段自建集合，条目自动编号（如 TASK-5）",
+    "代理写入在活动流、时间线和审计日志中按注册名署名（如 `pad session register --agent rook`），可追溯人或具名代理的每处变更"
+   ],
+   "use_cases": [
+    "在终端和本地 Web 界面中管理个人或小型项目的任务、计划与文档，无需注册账号",
+    "让 Claude Code、Cursor 等 AI 编码代理读写项目条目，并通过约定和 playbook 约束其工作流程",
+    "通过 Docker 部署到 localhost:7777，用一次性 bootstrap token 创建管理员账号"
+   ]
+  },
+  "sha": "667dbe036fb3",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d943e4ca129c": {
+  "identity": {
+   "one_liner": "定时数据库备份工具，经 age 加密后上传至公有云存储。",
+   "review": "Ogion 是一个用 Python 编写的数据库定时备份工具，使用 pg_dump、mariadb-dump 等客户端导出数据，先经 lzip 压缩再用 age 加密，然后上传至 S3 兼容存储、Google Cloud Storage 或 Azure Blob Storage。它面向 home lab、个人项目等场景，可部署于 docker 或 Kubernetes，支持 amd64 和 arm64 架构。作者声明该项目不计划做根本性破坏变更，并在文档中注明更大的数据库可使用 pgBackRest 等工具。",
+   "highlights": [
+    "支持 PostgreSQL 18/17/16/15、MariaDB、MySQL 及单文件/目录备份",
+    "备份流程为 lzip 压缩后用 age 格式加密，再上传至 GCS、S3 兼容或 Azure 存储",
+    "提供 Discord、Email（SMTP）、Slack 通知，以 docker 镜像形式部署，支持 linux/amd64 与 linux/arm64"
+   ],
+   "use_cases": [
+    "为 home lab 或个人项目中的数据库设置每日定时备份并加密上传云端",
+    "在 Kubernetes 或 docker compose 环境中运行容器化备份任务",
+    "备份自托管服务的数据文件与配置目录（如 Nextcloud 配置、服务器文件）"
+   ]
+  },
+  "sha": "d943e4ca129c",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

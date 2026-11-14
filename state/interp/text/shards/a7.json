@@ -2658,5 +2658,136 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ba40c4390bb0": {
+  "identity": {
+   "one_liner": "面向达梦数据库 DM8 的 Prometheus 监控指标采集器",
+   "review": "Dameng Exporter 是用 Go 编写的达梦数据库（DM8+）Prometheus 采集器，通过 TOML 配置文件支持同时监控多个数据库实例，将指标以 dmdbms_ 前缀暴露在 :9200/metrics 端点，配套提供 Grafana 8.5+ 面板模板和 Prometheus 告警规则。支持预编译包、Docker 镜像（amd64/arm64）和源码编译三种部署方式，需先在达梦库中创建专用监控用户并授权。",
+   "highlights": [
+    "支持多数据源配置，同时采集多个达梦实例，内置 30+ 种性能指标，并可通过 SQL 文件定义自定义指标（支持 gauge/counter 类型）",
+    "支持配置文件密码加密、metrics 端点 Basic Auth 认证、enableHealthPing 探活开关及 dmdb_up 数据源状态指标",
+    "提供 Docker 镜像（amd64/arm64）及 Linux、Windows、macOS 预编译包，配置方式支持 TOML 文件和命令行参数"
+   ],
+   "use_cases": [
+    "为达梦 DM8 数据库搭建 Prometheus + Grafana 监控体系，采集会话、表空间、归档、慢 SQL 等性能指标",
+    "多实例、多环境（prod/test/dev）达梦数据库的统一监控，通过 datasource/env/region/cluster 标签级联过滤",
+    "监控单个达梦实例时使用 v1.1.6 单数据源版本，配置方式为命令行参数"
+   ]
+  },
+  "sha": "ba40c4390bb0",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f8649d7a1699": {
+  "identity": {
+   "one_liner": "连接 Oracle Fusion Cloud 的开源 JDBC 驱动，经 BI Publisher 服务转发 SQL 查询。",
+   "review": "OFJDBC 是一个 JDBC 驱动（MIT 许可），将标准 SQL 发送到 Oracle Fusion Cloud 的 BI Publisher 服务，并读取其 REST 资源，供需要在 DBeaver、IntelliJ 等 JDBC 兼容工具或 JVM 程序中查询 Fusion 数据的开发者和顾问使用。部署需向 Fusion 实例上传指定的 BI Publisher 目录文件；FUSION 与 REST 两种模式为只读，本地 DUCK 模式基于 DuckDB 可写。运行需 Java 环境。",
+   "highlights": [
+    "提供 FUSION、REST、DUCK 三种模式：FUSION 走 BI Publisher 执行 Oracle SQL，REST 将 Fusion REST 资源呈现为表并支持下推过滤，DUCK 为本地内嵌 DuckDB 工作区，可写并支持 `#d` 前缀调用 DuckDB 方言、读取 CSV/Parquet/JSON/Excel 文件",
+    "实现本地 DuckDB 元数据缓存用于自动补全与表/列发现，自动注入 `FETCH FIRST` 处理分页，并支持浏览器 SSO（含 MFA）与 OAuth 2.0 客户端凭证认证（可缓存并自动续期令牌）",
+    "提供 FIND、JOIN KEYS、LOOKUP、ESS REQUESTS、USER ACCESS、DESCRIBE FLEXFIELD 等顾问命令，返回缓存中的表/列、视图联接键、ESS 作业状态、用户角色、弹性域段映射等结果集"
+   ],
+   "use_cases": [
+    "在 DBeaver、IntelliJ DataGrip 等工具中用标准 SQL 查询 Oracle Fusion 表并导出 CSV、Excel、Parquet 等格式",
+    "在 Airflow、NiFi、Talend 等调度器或自研 Java/Kotlin 程序中通过 OAuth 无浏览器认证运行 Fusion 查询与 ETL 流水线",
+    "利用 DUCK 工作区导入 Fusion 数据后在本地做联接、聚合，或用 SNAPSHOT/DIFF 对比不同环境（如 DEV 与 PROD）的表数据"
+   ]
+  },
+  "sha": "f8649d7a1699",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "590b56c1cacb": {
+  "identity": {
+   "one_liner": "面向授权测试的 SQL Server 注入利用自动化工具",
+   "review": "SQL Nightmare 用于自动化利用 Microsoft SQL Server 后端应用中的 SQL 注入漏洞，面向渗透测试人员与学习者。使用时需按格式提供含可注入列（标记为 rummykhan）和结尾注释符 --X- 的目标 URL。提供预编译 exe，也可用 Visual Studio 或 MSBuild 从源码构建。仅限授权测试与教学用途。",
+   "highlights": [
+    "支持目录浏览、数据库枚举导出、文件读取与主机命令执行",
+    "通过指定可注入列标记和注释符构造目标 URL 进行利用",
+    "提供预编译可执行文件，源码可用 Visual Studio 或 MSBuild 编译"
+   ],
+   "use_cases": [
+    "对获授权的 SQL Server 应用测试注入漏洞利用",
+    "学习理解注入缺陷如何被作用于数据库后端"
+   ]
+  },
+  "sha": "590b56c1cacb",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "435feae9ecf2": {
+  "identity": {
+   "one_liner": "基于 Actix Web 与 Angular 并内置 JWT 认证的全栈项目模板",
+   "review": "该仓库提供 Rust 后端（Actix Web 4 + SQLx + PostgreSQL 18）与 Angular 22 前端的全栈模板，前后端均实现 JWT 认证并已 Docker 化，可通过 docker compose 一键启动。适合快速搭建需要用户注册登录的全栈项目。使用时需注意部署前设置 APP__JWT__SECRET，以及 PrimeNG 22 采用 PrimeUI 许可，非个人/小型组织用途需商业授权。",
+   "highlights": [
+    "包含已实现的 JWT 认证流程（注册、登录、登出、用户资料端点），并内置 USER 与 ADMIN 两种角色",
+    "数据库使用 PostgreSQL 18 与 SQLx 0.9，SQL 查询在编译期检查，迁移在 API 启动时自动应用",
+    "已提供 Docker Compose 配置，支持通过 APP__ 前缀环境变量覆盖 configuration.yaml 中的任意配置项"
+   ],
+   "use_cases": [
+    "作为需要前后端分离与用户认证的新全栈项目的起始代码库",
+    "本地或容器化环境快速运行含注册登录功能的演示应用",
+    "基于 Rust + Angular 技术栈进行二次开发的脚手架"
+   ]
+  },
+  "sha": "435feae9ecf2",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "97eb0cc549d5": {
+  "identity": {
+   "one_liner": "带来源引用的美国数据中心与加密矿场跟踪数据集，含配套地图站点",
+   "review": "Compute Atlas 收录美国数据中心、加密矿场及其配套电力设施的公开信息，覆盖从拟建到运营各阶段，并记录能源、水资源、补贴等社区影响字段。每条事实都附来源 URL 与获取日期，字段缺失表示未知而非零。适用于记者、研究者、地方官员及附近居民。技术栈为 Next.js + Zod + Drizzle/Postgres + MapLibre，完整数据文件需学生验证或商业订阅获取。",
+   "highlights": [
+    "每条记录至少引用一个含 URL、标签、来源类型和获取日期的公开来源，sourceIndex 将具体论断指向具体文档",
+    "字段按 facilityType（数据中心/加密矿场/发电设施）以 Zod 判别联合模式校验，测试套件在每次 PR 中验证全部记录",
+    "所有提交（含自动发现管道产出）均进入 pending 状态，需人工审核后才发布；缺失字段表示未获知而非零值"
+   ],
+   "use_cases": [
+    "通过状态、运营商、类型、容量筛选的地图与数据表浏览特定设施",
+    "查阅设施的空气许可文件中逐字记录的许可上限（标注为监管上限而非实测排放）",
+    "按 CC BY 4.0 引用单条设施记录用于学术或报道写作，注明访问日期"
+   ]
+  },
+  "sha": "97eb0cc549d5",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "25348d39d6cb": {
+  "identity": {
+   "one_liner": "面向 Dart/Flutter 的持久化可重试任务队列，任务数据化存储并由 worker 执行",
+   "review": "durable_queue 是一个 Dart/Flutter 任务队列包，将上传、消息、同步等工作描述为数据，通过可插拔存储接口保存，由 worker 执行重试、退避、并发与限速、优先级、去重、依赖和崩溃恢复。核心为纯 Dart 无运行时依赖，存储、门控、处理器均以独立包形式接入。安装方式为在 pubspec 中添加 durable_queue: ^1.0.0。",
+   "highlights": [
+    "核心引擎为纯 Dart 实现，无运行时依赖；存储、门控、处理器三个插槽均可替换为官方包或自定义实现",
+    "提供 SQLite、Hive、drift 存储适配包，以及 AES-256-GCM 静态加密包装包",
+    "支持崩溃恢复、指数退避重试、并发与速率限制、优先级、去重、依赖和离线等待"
+   ],
+   "use_cases": [
+    "离线场景下的表单提交、消息发送与数据同步，联网后自动执行",
+    "应用被最小化或关闭后仍需继续的上传/下载任务",
+    "已使用 Hive、drift 或 Dio 的 Flutter/Dart 应用需要持久化队列集成"
+   ]
+  },
+  "sha": "25348d39d6cb",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

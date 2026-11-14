@@ -2524,5 +2524,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3c5c310bc3f3": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制的 .NET 库，将行级变更编码为 JSON 并推送至消息中间件或应用。",
+   "review": "PgOutput2Json 是一个 .NET 库，通过 PostgreSQL 内置的 pgoutput 插件连接复制槽，将 INSERT/UPDATE/DELETE 行级变更转换为 JSON 消息，发送到 Kafka、RabbitMQ、Redis、MongoDB、DynamoDB 等。使用它需 PostgreSQL 14+ 并设置 wal_level=logical、创建复制用户和发布。项目处于开发早期。",
+   "highlights": [
+    "使用 PostgreSQL 内置的 pgoutput 逻辑解码插件，无需安装额外插件",
+    "支持 Kafka、RabbitMQ、Redis、MongoDB、DynamoDB、Amazon Kinesis、Azure Event Hubs、SQLite 及 .NET 委托处理器等多种输出",
+    "投递为 at-least-once，每条消息携带由事务 LSN 与消息序号组成的去重键"
+   ],
+   "use_cases": [
+    "在插入或更新后触发后台任务",
+    "低延迟刷新应用缓存",
+    "面向数据仓库的轻量 ETL 与实时数据聚合"
+   ]
+  },
+  "sha": "3c5c310bc3f3",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

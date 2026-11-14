@@ -3407,5 +3407,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0f4af07c0b5d": {
+  "identity": {
+   "one_liner": "JVM 平台 SQL 解析器，将 SQL 语句解析为可遍历的 Java 对象树",
+   "review": "JSqlParser 把 SQL 文本解析为 Java 类层次构成的 AST，可用 Visitor 模式遍历、改写并重新渲染为 SQL 文本，也支持通过 fluent API 从 Java 构建语句。它覆盖 SQL 标准及多种方言（MySQL、PostgreSQL、Oracle、SQL Server 等），纯 Java 实现、无原生扩展。还可对解析结果做语句特征分类（是否返回行/修改数据）。5.0+ 需 JDK 11，4.9 是最后的 JDK 8 版本。",
+   "highlights": [
+    "支持将 SQL 解析为 AST，并提供 Visitor 模式遍历、fluent API 构建语句、渲染回 SQL 文本",
+    "单语法覆盖多种方言，包括 MySQL、PostgreSQL、Oracle、SQL Server、BigQuery、Snowflake、ClickHouse 等，并支持绑定参数、窗口函数、Oracle hints 等语法",
+    "提供语句特征分类 API，以三值（proven/not excludable/ruled out）判定语句是否返回行或修改数据"
+   ],
+   "use_cases": [
+    "在 Java 应用中解析、遍历和改写 SQL 语句（如 SQL 审计、改写、格式化前的 AST 访问）",
+    "在只读客户端中拦截发往数据库的语句，判定其是否包含数据修改",
+    "处理多方言 SQL 的工具链，如格式化（JSQLFormatter）或跨方言改写（JSQLTranspiler）等姊妹项目场景"
+   ]
+  },
+  "sha": "0f4af07c0b5d",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bff2583ca80f": {
+  "identity": {
+   "one_liner": "基于 tree-sitter 的本地代码索引服务，通过 MCP 向 AI 提供 32 个结构查询工具。",
+   "review": "Codindex 用 tree-sitter 解析仓库 AST，把函数清单、调用图、模块依赖、控制流和影响分析存入单个 SQLite 文件，并以 MCP server 形式提供 32 个工具、4 个 Resource 和 1 个 Prompt。不调 LLM、不上传源码、无遥测；支持 6 种语言（单文件上限 1MB），需 Node.js ≥ 22.5，通过 npm 全局安装后接入 Claude Code、Cursor、VS Code 等 client。",
+   "highlights": [
+    "用 tree-sitter 解析 AST 生成函数清单、调用图、模块依赖图、控制流图与影响分析，存入单个 SQLite 文件（FTS5 支持全文搜索）",
+    "提供 32 个 MCP 工具及 4 个 Resource、1 个 Prompt，支持 Claude Code、Cursor、VS Code、Windsurf、Codex 等支持 MCP 的客户端",
+    "本地运行，不调用 LLM API、不上传源码、无遥测；支持增量扫描与文件监听（变更 3 秒内同步）"
+   ],
+   "use_cases": [
+    "让 AI 编码代理按需查询仓库结构（谁调用了某函数、修改波及哪些文件、模块依赖是否有循环），替代逐文件读取",
+    "查找死代码、可复用实现和修改前的完整影响面评估",
+    "在本地离线环境对多语言仓库建立可跨会话复用的静态分析索引"
+   ]
+  },
+  "sha": "bff2583ca80f",
+  "source": "readme",
+  "generated_at": "2026-11-14",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
