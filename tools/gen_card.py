@@ -15,7 +15,7 @@ v1.1（2026-11-12 用户三条指令）:
 """
 import argparse, copy, datetime, html, io, json, os, sys
 
-VER = "gen_card/1.5"   # 1.5：简介块渲染综述段（intro.review，一句话之下、亮点之上）
+VER = "gen_card/1.6"   # 1.6：长 token 串（a/b/c/... 无空格）撑破卡片 -> .card 加 overflow-wrap:anywhere（继承到 p/li/td）
 STALE_DAYS = 180
 POOL_DEFAULT = "D:/dbhub_collect/data/live/pool.ndjson"
 
@@ -33,7 +33,8 @@ CSS = """  :root{
   }
   b, strong{ font-weight:600; }
   .card{ max-width:680px; margin:0 auto; background:#fff; border:1px solid var(--line);
-    border-radius:14px; padding:20px 22px; display:flex; flex-direction:column; }
+    border-radius:14px; padding:20px 22px; display:flex; flex-direction:column;
+    overflow-wrap:anywhere; }   /* 继承属性：亮点里 a/b/c 无空格长串强制可断行，不撑破卡片 */
   .c-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .chip{ font-size:12.5px; font-weight:600; color:var(--brand); background:var(--brand-soft);
     padding:3px 8px; border-radius:4px; }
@@ -399,7 +400,8 @@ def _selftest():
     assert "截至 2026-11-12" in h                                     # 截至戳=缓存建成日
     assert "官网占位" in h and "专用工具" in h                       # hands_on/adapt 兜底
     assert "a&lt;b &amp; c" in h and "a<b & c" not in h         # 擂台简介=外部 description，转义后上 HTML
-    print(f"OK {VER} selftest: 19 asserts passed")
+    assert CSS.count("overflow-wrap:anywhere") == 1             # 长无空格串可断行（megamemory 溢出修复）
+    print(f"OK {VER} selftest: 20 asserts passed")
     return 0
 
 def main():
