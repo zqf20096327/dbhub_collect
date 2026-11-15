@@ -32,10 +32,13 @@ import argparse, datetime, io, json, os, re, shutil, sys, tempfile, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_card as gc
 
-VER = "gen_cards/1.4"
+VER = "gen_cards/1.5"
 # v1.4（2026-11-15 用户令「domain_tags 直接展示为能力」）:
 #   卡头能力徽章：index.json 的 tags（[slug,cn,conf]）过滤 high/mid 进 card["capabilities"]，
 #   low 与空标签不出块；manifest 条目带 tags 供建站按能力筛选。
+# v1.5（2026-11-15 用户令「readme 都没有的也归档」口径 A）:
+#   README 存档文件不存在 -> 不出活跃卡、全量跑时搬 archive（reason=no-readme，含 desc 降级层
+#   721 张）。判定源 = index 的 readme_file 字段；字段缺失（旧缓存）判 False 不归档，安全侧。
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = HERE + os.sep + "cache"
 OUT = HERE + os.sep + "cards"
@@ -50,6 +53,12 @@ def is_app(r):
     两层都没有的仓（无资料）不算应用，照常出卡。"""
     if (r.get("judge") or {}).get("cat") in SKIP_CATS: return True
     return (r.get("desc") or {}).get("cat") in SKIP_CATS
+
+def no_readme(r):
+    """无 README 归档判定（2026-11-15 口径 A）：README 存档文件不存在即归档。
+    判定源是 build_cache v1.3 的 readme_file 字段——旧缓存没这个字段时返回 False
+    （宁可一张不归，不可把 2 万张全归），必须重建 index 才生效。"""
+    return "readme_file" in r and not r["readme_file"]
 
 def clean_ver(t):
     """剥版本标签前缀：release/2.60.0、v2.60.0 -> 2.60.0（空值原样）。"""
@@ -176,6 +185,7 @@ def exit_reason(fn, repos):
     if r is None: return "pool-exit"
     if r.get("archived"): return "github-archived"
     if is_app(r): return "app-category"
+    if no_readme(r): return "no-readme"
     return "below-min-stars"
 
 def sweep_strays(out_dir, active):
@@ -311,6 +321,13 @@ def _selftest():
     assert "词控" in c3["capabilities"]["sub"]
     assert build_card("a/notag", {}, h0, {}, {}, repos, "2026-11-14").get("capabilities") is None  # 无标签不出块
     assert exit_reason("a/live", repos) == "below-min-stars"          # 合格目标没选中：不算出池
+    nr = {"a/nr": {"stars": 5, "readme_file": False},                    # 无 README：归档（口径 A）
+          "a/nr-app": {"stars": 5, "readme_file": False, "judge": {"cat": "应用"}},
+          "a/old": {"stars": 5}}                                          # 旧缓存无字段：安全侧不归档
+    assert no_readme(nr["a/nr"]) and not no_readme(nr["a/old"]) and not no_readme(repos["a/live"])
+    assert exit_reason("a/nr", nr) == "no-readme"
+    assert exit_reason("a/nr-app", nr) == "app-category"              # 应用类优先于 no-readme 归因
+    assert exit_reason("a/old", nr) == "below-min-stars"              # 字段缺失不触发归档
     assert clean_ver("release/2.60.0") == "2.60.0" and clean_ver("v1.2") == "1.2" and clean_ver(None) is None
     with tempfile.TemporaryDirectory() as td:                          # 归档搬迁实测
         out, arc = os.path.join(td, "cards"), os.path.join(td, "archive")
@@ -352,7 +369,7 @@ def _selftest():
         r2["b/new"] = {"stars": 1, "judge": {"cat": "应用"}}
         assert archive_apps(r2, mk, arc, "2026-11-19") == 1
         assert loadj(os.path.join(arc, "manifest.json"))["render_ver"] == gc.VER    # 后续写清单保住戳
-    print("OK gen_cards selftest: 31 asserts passed")
+    print("OK gen_cards selftest: 35 asserts passed")
     return rc
 
 def main():
@@ -389,7 +406,7 @@ def main():
     else:
         targets = [fn for fn, r in repos.items()
                    if (r.get("stars") or 0) >= a.min_stars and not r.get("archived")
-                   and not is_app(r)]
+                   and not is_app(r) and not no_readme(r)]
         targets.sort(key=lambda fn: -(repos[fn].get("stars") or 0))
         if a.limit: targets = targets[:a.limit]
     n_new = n_skip = 0; cov = {"trend": 0, "intro": 0, "readme": 0, "adapt": 0, "arena": 0,
@@ -405,6 +422,7 @@ def main():
         r = repos.get(fn)
         if not r: print(f"SKIP not-in-index {fn}"); continue
         if is_app(r): print(f"SKIP app-category {fn}"); continue
+        if no_readme(r): print(f"SKIP no-readme {fn}"); continue
         card = finish_card(build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver), corpus, mdate)
         owner, repo = fn.split("/")
         d = os.path.join(a.out_dir, owner); os.makedirs(d, exist_ok=True)

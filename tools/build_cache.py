@@ -15,7 +15,7 @@
 """
 import argparse, datetime, io, json, os, re, subprocess, sys, time, glob
 
-VER = "build_cache/1.2"   # 1.2：tags 带 cn 中文名（[slug,cn,conf] 三元组），下游卡面能力徽章用
+VER = "build_cache/1.3"   # 1.3：加 readme_file 字段（README 存档文件存在性，无 README 仓归档口径的判定源）
 ROOT = "D:/dbhub_collect"
 POOL = ROOT + "/data/live/pool.ndjson"
 VOCAB = ROOT + "/config/domain_vocab_v0.11.json"
@@ -112,7 +112,8 @@ def build_index():
     files = {f[:-3].lower(): f[:-3] for f in os.listdir(README_DIR) if f.endswith(".md")}
     for k in repos:
         stem = files.get(k.replace("/", "__"))
-        if not stem: continue
+        repos[k]["readme_file"] = bool(stem)   # 显式 True/False 都写：无 README 仓靠 False 触发归档；
+        if not stem: continue                  # 旧缓存（v1.2 前）整仓无此字段 -> 判 False 安全侧不归档
         para = readme_first_para(stem)
         if para:
             repos[k]["readme0"] = para; n_rm += 1
