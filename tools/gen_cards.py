@@ -32,7 +32,10 @@ import argparse, datetime, io, json, os, re, shutil, sys, tempfile, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_card as gc
 
-VER = "gen_cards/1.3"
+VER = "gen_cards/1.4"
+# v1.4（2026-11-15 用户令「domain_tags 直接展示为能力」）:
+#   卡头能力徽章：index.json 的 tags（[slug,cn,conf]）过滤 high/mid 进 card["capabilities"]，
+#   low 与空标签不出块；manifest 条目带 tags 供建站按能力筛选。
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = HERE + os.sep + "cache"
 OUT = HERE + os.sep + "cards"
@@ -81,6 +84,11 @@ def build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver="arena_v
     }
     mk = gc.stale_marker(r.get("pushed_at"), datetime.date.fromisoformat(run_date))
     if mk: card["stale_chip"] = mk[2:].strip()            # 去掉前导「· 」
+    caps = sorted((list(t) for t in (r.get("tags") or []) if len(t) >= 3 and t[2] in ("high", "mid")),
+                  key=lambda t: (t[2] != "high", t[0]))    # high 前 mid 后，同档按 slug 稳定序
+    if caps:
+        card["capabilities"] = {"sub": "解读层词控标签（vc1.0）· 证据行可回查；仅展 high/mid",
+                                "tags": caps}
     if tx.get("one_liner") or tx.get("review") or tx.get("highlights") or tx.get("use_cases"):
         card["intro"] = {"text": tx.get("one_liner") or "", "sub": "解读层（AI·证据行可回查）",
                          "points": tx.get("highlights") or [], "uses": tx.get("use_cases") or []}
@@ -93,7 +101,7 @@ def build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver="arena_v
     # 擂台（cache/arena_all.json，算法 ver 以其 meta.algorithm 为准；简介=池内 description（无则退共享标签），停更自动标记）
     ar = arenas.get(fn)
     if ar and ar.get("top"):
-        ttags = {t for t, c in (r.get("tags") or [])}
+        ttags = {t[0] for t in (r.get("tags") or [])}     # index.json v1.2 起 tags=[slug,cn,conf]
         def _why_desc(f):
             d = ((repos.get(f) or {}).get("description") or "").strip()
             return (d[:120] + "...") if len(d) > 120 else d
@@ -296,6 +304,12 @@ def _selftest():
     assert cd["intro"]["text"] == "据描述" and "低置信" in cd["intro"]["sub"] and "review" not in cd["intro"]
     ct = build_card("a/t", {"text": {"one_liner": "L", "review": "R"}, "desc": {"one_liner": "D"}}, h0, {}, {}, repos, "2026-11-14")
     assert ct["intro"]["review"] == "R" and ct["intro"]["text"] == "L"   # 综述段带上；有 text 层不退 desc
+    c3 = build_card("a/tag", {"tags": [["backup", "备份", "high"], ["orm", "ORM", "low"],
+                                       ["vector-search", "向量检索", "mid"], ["gui-client", "GUI 客户端", "high"]]},
+                    h0, {}, {}, repos, "2026-11-14")
+    assert [t[0] for t in c3["capabilities"]["tags"]] == ["backup", "gui-client", "vector-search"]  # low 滤掉、high 前 mid 后
+    assert "词控" in c3["capabilities"]["sub"]
+    assert build_card("a/notag", {}, h0, {}, {}, repos, "2026-11-14").get("capabilities") is None  # 无标签不出块
     assert exit_reason("a/live", repos) == "below-min-stars"          # 合格目标没选中：不算出池
     assert clean_ver("release/2.60.0") == "2.60.0" and clean_ver("v1.2") == "1.2" and clean_ver(None) is None
     with tempfile.TemporaryDirectory() as td:                          # 归档搬迁实测
@@ -338,7 +352,7 @@ def _selftest():
         r2["b/new"] = {"stars": 1, "judge": {"cat": "应用"}}
         assert archive_apps(r2, mk, arc, "2026-11-19") == 1
         assert loadj(os.path.join(arc, "manifest.json"))["render_ver"] == gc.VER    # 后续写清单保住戳
-    print("OK gen_cards selftest: 28 asserts passed")
+    print("OK gen_cards selftest: 31 asserts passed")
     return rc
 
 def main():
@@ -398,12 +412,14 @@ def main():
         if old_fps.get(fn) == card["_fp"] and not a.force:
             # 指纹比对走 manifest 单文件；清单缺指纹/丢清单时回退到重写，安全侧
             n_skip += 1
-            manifest[fn] = {"html": f"cards/{owner}/{repo}.html", "stars": r.get("stars"), "fp": card["_fp"]}
+            manifest[fn] = {"html": f"cards/{owner}/{repo}.html", "stars": r.get("stars"), "fp": card["_fp"],
+                            "tags": [t[0] for t in card["capabilities"]["tags"]] if card.get("capabilities") else []}
             continue
         io.open(hp, "w", encoding="utf-8", newline="\n").write(gc.render(card))
         io.open(jp, "w", encoding="utf-8", newline="\n").write(json.dumps(card, ensure_ascii=False, indent=2))
         n_new += 1
-        manifest[fn] = {"html": f"cards/{owner}/{repo}.html", "stars": r.get("stars"), "fp": card["_fp"]}
+        manifest[fn] = {"html": f"cards/{owner}/{repo}.html", "stars": r.get("stars"), "fp": card["_fp"],
+                        "tags": [t[0] for t in card["capabilities"]["tags"]] if card.get("capabilities") else []}
         if card["trend"]["points"]: cov["trend"] += 1
         if card.get("intro"): cov["intro"] += 1
         if card.get("readme"): cov["readme"] += 1

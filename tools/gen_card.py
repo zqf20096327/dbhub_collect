@@ -15,7 +15,7 @@ v1.1（2026-11-12 用户三条指令）:
 """
 import argparse, copy, datetime, html, io, json, os, sys
 
-VER = "gen_card/1.6"   # 1.6：长 token 串（a/b/c/... 无空格）撑破卡片 -> .card 加 overflow-wrap:anywhere（继承到 p/li/td）
+VER = "gen_card/1.7"   # 1.7：卡头能力徽章行（domain_tags 词控标签 high/mid 上卡，low 不展）
 STALE_DAYS = 180
 POOL_DEFAULT = "D:/dbhub_collect/data/live/pool.ndjson"
 
@@ -52,6 +52,11 @@ CSS = """  :root{
     display:flex; flex-wrap:wrap; row-gap:2px; line-height:1.5; }
   .c-meta span{ white-space:nowrap; }
   .c-meta span:not(:last-child)::after{ content:"\\00b7"; margin:0 6px; color:#D1D5DB; }
+  .cap{ margin-top:10px; display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
+  .cap-label{ font-size:12.5px; color:var(--sub); }
+  .capchip{ font-size:12px; font-weight:600; color:var(--brand); background:var(--brand-soft);
+    padding:2px 9px; border-radius:10px; }
+  .capchip.mid{ background:transparent; border:1px solid var(--line); color:var(--sub); font-weight:400; }
   .c-right{ flex:1; display:flex; flex-direction:column; align-items:flex-end; min-width:0; }
   .c-star{ font-size:28px; font-weight:600; line-height:1; font-variant-numeric:tabular-nums; }
   .c-star .u{ font-size:16px; color:var(--brand); margin-left:2px; }
@@ -214,6 +219,15 @@ def render_spark(name, pts):
         f'<text x="8" y="64" font-size="11" fill="#6B7280">{d0}</text>'
         f'<text x="252" y="64" font-size="11" fill="#6B7280" text-anchor="end">{d1}</text></svg>')
 
+def render_cap(card):
+    """能力徽章行（卡头 meta 之下）：解读层词控标签，high 实色 / mid 描边；低置信与空标签不出行。"""
+    tags = [t for t in ((card.get("capabilities") or {}).get("tags") or []) if t[2] in ("high", "mid")]
+    if not tags: return ""
+    chips = "".join(
+        f'<span class="capchip{" mid" if c == "mid" else ""}" title="{esc(s)} · 置信 {esc(c)}">{esc(n)}</span>'
+        for s, n, c in tags)
+    return f'<div class="cap"><span class="cap-label">能力</span>{chips}</div>'
+
 def render_head(card):
     b = card["basics"]; badge = card.get("badge", {})
     chips = f'<span class="chip">{esc(badge.get("main", "今日一库 · 项目名片"))}</span>'
@@ -226,10 +240,11 @@ def render_head(card):
     fn = card.get("fn")
     title = (f'<a class="c-title" href="https://github.com/{esc(fn)}" target="_blank" rel="noopener">{esc(b["name"])}</a>'
              if fn else f'<div class="c-title">{esc(b["name"])}</div>')
+    left = "\n".join(x for x in (title, anchor, render_meta(b), render_cap(card)) if x)
     return (
         f'<div class="c-top">{chips}{no}</div>\n'
         f'<div class="c-body">\n<div class="c-left">\n'
-        f'{title}\n{anchor}\n{render_meta(b)}\n</div>\n'
+        f'{left}\n</div>\n'
         f'<div class="c-right"><div class="c-star">{fmt_stars(b["stars"])}<span class="u">★</span></div>{spark}</div>\n</div>')
 
 def arena_rows(rows, disp):
@@ -370,6 +385,14 @@ def _selftest():
     assert "polyline" in s and "01-01" in s
     assert "polyline" in render_spark("x", [["2026-01-01", 5], ["2026-01-02", 5]])
 
+    # 能力徽章：无字段不出行；low 不展；high 实色 / mid 描边；title 带 slug 与置信
+    assert render_cap({"basics": b}) == ""
+    capcard = {"basics": b, "capabilities": {"tags": [
+        ["vector-search", "向量检索", "high"], ["orm", "ORM", "mid"], ["backup", "备份", "low"]]}}
+    cap = render_cap(capcard)
+    assert 'class="cap"' in cap and "向量检索" in cap and "ORM" in cap and "备份" not in cap
+    assert 'capchip mid' in cap and 'title="vector-search · 置信 high"' in cap
+
     # enrich：停更标记 + 提及数 + 年龄，全部进副本与 derived
     pool = {"t/t": {"stars": 1234, "pushed_at": "2026-11-01", "created_at": "2015-07-08"},
             "b/b": {"stars": 50, "pushed_at": "2020-11-02", "created_at": "2016-01-01"}}
@@ -381,7 +404,8 @@ def _selftest():
             "production_users": {"items": [{"text": "u"}]},
             "verdict": {"should": "s", "avoid": "a"}, "hands_on": {"docs_url": "https://x"},
             "intro": {"text": "one liner", "review": "rv<para>", "sub": "sub", "points": ["p1"], "uses": ["u1"]},
-            "readme": {"text": "rm first para"}}
+            "readme": {"text": "rm first para"},
+            "capabilities": {"tags": [["backup", "备份", "high"], ["orm", "ORM", "low"]]}}
     c2 = enrich(card, pool, (188, 35017, "2026-11-12"), "2026-11-12")
     assert c2["derived"]["mentions"]["count"] == 188
     assert c2["derived"]["age"]["created_year"] == "2015"
@@ -401,7 +425,10 @@ def _selftest():
     assert "官网占位" in h and "专用工具" in h                       # hands_on/adapt 兜底
     assert "a&lt;b &amp; c" in h and "a<b & c" not in h         # 擂台简介=外部 description，转义后上 HTML
     assert CSS.count("overflow-wrap:anywhere") == 1             # 长无空格串可断行（megamemory 溢出修复）
-    print(f"OK {VER} selftest: 20 asserts passed")
+    assert c2["capabilities"]["tags"] == [["backup", "备份", "high"], ["orm", "ORM", "low"]]  # enrich 不动能力
+    assert h.count('class="cap"') == 1 and "备份" in h and ">ORM<" not in h   # 卡头能力行：low 不上卡面
+    assert h.index('class="c-meta"') < h.index('class="cap"') < h.index('class="sec"')  # 位置：meta 下、块区前
+    print(f"OK {VER} selftest: 24 asserts passed")
     return 0
 
 def main():

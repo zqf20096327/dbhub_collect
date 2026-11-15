@@ -15,9 +15,10 @@
 """
 import argparse, datetime, io, json, os, re, subprocess, sys, time, glob
 
-VER = "build_cache/1.1"   # 1.1：text 层带 review（综述段）+ desc 降级层（无 README 仓一句话/类目）
+VER = "build_cache/1.2"   # 1.2：tags 带 cn 中文名（[slug,cn,conf] 三元组），下游卡面能力徽章用
 ROOT = "D:/dbhub_collect"
 POOL = ROOT + "/data/live/pool.ndjson"
+VOCAB = ROOT + "/config/domain_vocab_v0.11.json"
 ENRICH_DIR = ROOT + "/state/enrich_cache_shards"
 INTERP_STATE = ROOT + "/state/interp_state.json"
 INTERP_DIR = ROOT + "/state/interp"
@@ -79,8 +80,20 @@ def note_first(n):
 
 # ---------- ① 全池索引 ----------
 
+def vocab_cn():
+    """slug -> 中文名（词表是唯一真源；读不到词表返回空表，调用侧兜底用 slug 原样）。"""
+    m = {}
+    try:
+        for dom in loadj(VOCAB).get("domains") or []:
+            for w in dom.get("words") or []:
+                if w.get("slug") and w.get("cn"): m[w["slug"]] = w["cn"]
+    except Exception:
+        pass
+    return m
+
 def build_index():
     t0 = time.time(); repos = {}
+    cn = vocab_cn()
     for line in io.open(POOL, encoding="utf-8"):
         try: r = json.loads(line)
         except Exception: continue
@@ -149,7 +162,8 @@ def build_index():
             n_t += 1
         g = layers["domain_tags"].get(sha)
         if g:
-            repos[k]["tags"] = [[x.get("slug"), x.get("conf")] for x in (g.get("tags") or [])]
+            repos[k]["tags"] = [[x.get("slug"), cn.get(x.get("slug")) or x.get("slug"), x.get("conf")]
+                                for x in (g.get("tags") or []) if x.get("slug")]
             n_tag += 1
     n_db = 0
     if os.path.exists(DBSCAN):
