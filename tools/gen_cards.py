@@ -32,13 +32,16 @@ import argparse, datetime, io, json, os, re, shutil, sys, tempfile, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_card as gc
 
-VER = "gen_cards/1.5"
+VER = "gen_cards/1.6"
 # v1.4（2026-11-15 用户令「domain_tags 直接展示为能力」）:
 #   卡头能力徽章：index.json 的 tags（[slug,cn,conf]）过滤 high/mid 进 card["capabilities"]，
 #   low 与空标签不出块；manifest 条目带 tags 供建站按能力筛选。
 # v1.5（2026-11-15 用户令「readme 都没有的也归档」口径 A）:
 #   README 存档文件不存在 -> 不出活跃卡、全量跑时搬 archive（reason=no-readme，含 desc 降级层
 #   721 张）。判定源 = index 的 readme_file 字段；字段缺失（旧缓存）判 False 不归档，安全侧。
+# v1.6（2026-11-15 用户令「项目不完整的归档」）:
+#   内容块（简介/README首段/能力徽章/适配库）<=1 且星数 <10 -> 不出活跃卡、搬 archive
+#   （reason=incomplete）。星数条件防误伤：neo4j 本体 README 极简但项目真实，>=10 星保留。
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = HERE + os.sep + "cache"
 OUT = HERE + os.sep + "cards"
@@ -59,6 +62,20 @@ def no_readme(r):
     判定源是 build_cache v1.3 的 readme_file 字段——旧缓存没这个字段时返回 False
     （宁可一张不归，不可把 2 万张全归），必须重建 index 才生效。"""
     return "readme_file" in r and not r["readme_file"]
+
+def n_blocks(r):
+    """内容完整度：数四个内容块（简介/README 首段/能力徽章/适配库），块数=用户看到的卡面信息量。"""
+    n = 0
+    if ((r.get("text") or {}).get("one_liner") or (r.get("desc") or {}).get("one_liner")): n += 1
+    if r.get("readme0"): n += 1
+    if r.get("tags"): n += 1
+    if r.get("dbs"): n += 1
+    return n
+
+def incomplete(r):
+    """不完整归档判定（2026-11-15）：内容块 <=1 且星数 <10——没内容又没人验证过的空壳仓。
+    块少但 >=10 星的不算（README 懒得写但项目真实，如 neo4j 本体）。"""
+    return (r.get("stars") or 0) < 10 and n_blocks(r) <= 1
 
 def clean_ver(t):
     """剥版本标签前缀：release/2.60.0、v2.60.0 -> 2.60.0（空值原样）。"""
@@ -186,6 +203,7 @@ def exit_reason(fn, repos):
     if r.get("archived"): return "github-archived"
     if is_app(r): return "app-category"
     if no_readme(r): return "no-readme"
+    if incomplete(r): return "incomplete"
     return "below-min-stars"
 
 def sweep_strays(out_dir, active):
@@ -302,7 +320,8 @@ def rerender_archive(arc_dir, run_date):
 
 def _selftest():
     rc = gc._selftest() or 0
-    repos = {"a/live": {"stars": 5}, "a/arch": {"archived": True}, "a/app": {"judge": {"cat": "应用"}},
+    repos = {"a/live": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]]},   # 2 块：不触发 incomplete
+             "a/arch": {"archived": True}, "a/app": {"judge": {"cat": "应用"}},
              "a/dapp": {"desc": {"cat": "应用", "one_liner": "x"}}, "a/dlib": {"desc": {"cat": "开发库", "one_liner": "据描述"}}}
     assert exit_reason("x/gone", repos) == "pool-exit"
     assert exit_reason("a/arch", repos) == "github-archived"
@@ -323,11 +342,21 @@ def _selftest():
     assert exit_reason("a/live", repos) == "below-min-stars"          # 合格目标没选中：不算出池
     nr = {"a/nr": {"stars": 5, "readme_file": False},                    # 无 README：归档（口径 A）
           "a/nr-app": {"stars": 5, "readme_file": False, "judge": {"cat": "应用"}},
-          "a/old": {"stars": 5}}                                          # 旧缓存无字段：安全侧不归档
+          "a/old": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]]}}   # 旧缓存无 readme_file 字段：安全侧不归档
     assert no_readme(nr["a/nr"]) and not no_readme(nr["a/old"]) and not no_readme(repos["a/live"])
     assert exit_reason("a/nr", nr) == "no-readme"
     assert exit_reason("a/nr-app", nr) == "app-category"              # 应用类优先于 no-readme 归因
     assert exit_reason("a/old", nr) == "below-min-stars"              # 字段缺失不触发归档
+    ic = {"a/shell": {"stars": 0, "readme_file": True},                  # 0 块空壳：归档
+          "a/shell1": {"stars": 5, "readme_file": True, "readme0": "x"},  # 1 块低星：归档
+          "a/thin-star": {"stars": 300, "readme_file": True},            # 0 块但高星：保留（neo4j 型）
+          "a/ok": {"stars": 5, "readme_file": True, "readme0": "x",
+                   "tags": [["orm", "ORM", "high"]], "dbs": ["MySQL"]}}  # 3 块低星：保留
+    assert incomplete(ic["a/shell"]) and incomplete(ic["a/shell1"])
+    assert not incomplete(ic["a/thin-star"]) and not incomplete(ic["a/ok"])
+    assert n_blocks(ic["a/ok"]) == 3 and n_blocks(ic["a/shell"]) == 0
+    assert exit_reason("a/shell", ic) == "incomplete"
+    assert exit_reason("a/thin-star", ic) == "below-min-stars"        # 高星薄资料不归档
     assert clean_ver("release/2.60.0") == "2.60.0" and clean_ver("v1.2") == "1.2" and clean_ver(None) is None
     with tempfile.TemporaryDirectory() as td:                          # 归档搬迁实测
         out, arc = os.path.join(td, "cards"), os.path.join(td, "archive")
@@ -369,7 +398,7 @@ def _selftest():
         r2["b/new"] = {"stars": 1, "judge": {"cat": "应用"}}
         assert archive_apps(r2, mk, arc, "2026-11-19") == 1
         assert loadj(os.path.join(arc, "manifest.json"))["render_ver"] == gc.VER    # 后续写清单保住戳
-    print("OK gen_cards selftest: 35 asserts passed")
+    print("OK gen_cards selftest: 42 asserts passed")
     return rc
 
 def main():
@@ -406,7 +435,7 @@ def main():
     else:
         targets = [fn for fn, r in repos.items()
                    if (r.get("stars") or 0) >= a.min_stars and not r.get("archived")
-                   and not is_app(r) and not no_readme(r)]
+                   and not is_app(r) and not no_readme(r) and not incomplete(r)]
         targets.sort(key=lambda fn: -(repos[fn].get("stars") or 0))
         if a.limit: targets = targets[:a.limit]
     n_new = n_skip = 0; cov = {"trend": 0, "intro": 0, "readme": 0, "adapt": 0, "arena": 0,
@@ -423,6 +452,7 @@ def main():
         if not r: print(f"SKIP not-in-index {fn}"); continue
         if is_app(r): print(f"SKIP app-category {fn}"); continue
         if no_readme(r): print(f"SKIP no-readme {fn}"); continue
+        if incomplete(r): print(f"SKIP incomplete {fn}"); continue
         card = finish_card(build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver), corpus, mdate)
         owner, repo = fn.split("/")
         d = os.path.join(a.out_dir, owner); os.makedirs(d, exist_ok=True)
