@@ -32,7 +32,11 @@ import argparse, datetime, io, json, os, re, shutil, sys, tempfile, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_card as gc
 
-VER = "gen_cards/1.6"
+VER = "gen_cards/1.7"
+# v1.7（2026-11-15 用户令「下次生成时严格校验」）:
+#   全量跑末尾 verify() 四项校验（V1 清单内无应归档卡 / V2 合格仓无漏 / V3-V4 盘面与清单
+#   三方一致），任一失败打印明细并 exit 1——daily_cards 链自动中止，不带病收工。
+#   策略口径唯一真源 = docs/归档策略.md。
 # v1.4（2026-11-15 用户令「domain_tags 直接展示为能力」）:
 #   卡头能力徽章：index.json 的 tags（[slug,cn,conf]）过滤 high/mid 进 card["capabilities"]，
 #   low 与空标签不出块；manifest 条目带 tags 供建站按能力筛选。
@@ -194,6 +198,37 @@ def _dump_arc(amp, doc, acards, run_date, render_ver=None):
     if rv: out["render_ver"] = rv
     out["cards"] = acards
     io.open(amp, "w", encoding="utf-8", newline="\n").write(json.dumps(out, ensure_ascii=False, indent=1))
+
+def qualified(r, min_stars=0):
+    """活跃卡资格（docs/归档策略.md 第一节六条件）：targets 过滤与 verify V2 反向校验共用
+    同一函数——校验与过滤一套代码，口径永不漂移。"""
+    return ((r.get("stars") or 0) >= min_stars and not r.get("archived")
+            and not is_app(r) and not no_readme(r) and not incomplete(r))
+
+def verify(repos, manifest, out_dir, min_stars=0):
+    """全量跑末尾严格校验（归档策略.md 第三节 V1-V4）。返回错误明细列表，空=全过。
+    调用方打印明细并 exit 1，daily_cards 链自动中止——不带病收工。"""
+    errs = []
+    for fn in manifest:                                   # V1 清单内不得有应归档卡
+        r = repos.get(fn)
+        if r is None: errs.append(f"V1 {fn}: not-in-pool"); continue
+        if r.get("archived"): errs.append(f"V1 {fn}: github-archived")
+        elif is_app(r): errs.append(f"V1 {fn}: app-category")
+        elif no_readme(r): errs.append(f"V1 {fn}: no-readme")
+        elif incomplete(r): errs.append(f"V1 {fn}: incomplete")
+    expect = {fn for fn, r in repos.items() if qualified(r, min_stars)}   # V2 合格仓无漏
+    for fn in sorted(expect - set(manifest)):
+        errs.append(f"V2 {fn}: qualified but missing from manifest")
+    n_json = n_html = 0                                   # V3/V4 盘面与清单三方一致
+    for owner in os.listdir(out_dir):
+        d = os.path.join(out_dir, owner)
+        if not os.path.isdir(d): continue
+        for f in os.listdir(d):
+            if f.endswith(".json"): n_json += 1
+            elif f.endswith(".html"): n_html += 1
+    if n_json != len(manifest): errs.append(f"V3 disk-json {n_json} != manifest {len(manifest)}")
+    if n_html != len(manifest): errs.append(f"V4 disk-html {n_html} != manifest {len(manifest)}")
+    return errs
 
 def exit_reason(fn, repos):
     """一张卡为什么退出活跃清单。below-min-stars = 仓仍是合格目标、只是本次没选中，不算出池不归档
@@ -398,7 +433,21 @@ def _selftest():
         r2["b/new"] = {"stars": 1, "judge": {"cat": "应用"}}
         assert archive_apps(r2, mk, arc, "2026-11-19") == 1
         assert loadj(os.path.join(arc, "manifest.json"))["render_ver"] == gc.VER    # 后续写清单保住戳
-    print("OK gen_cards selftest: 42 asserts passed")
+        vd = os.path.join(td, "vcard"); os.makedirs(os.path.join(vd, "o"))         # verify 四项校验
+        io.open(os.path.join(vd, "o", "ok.html"), "w", encoding="utf-8").write("h")
+        io.open(os.path.join(vd, "o", "ok.json"), "w", encoding="utf-8").write("{}")
+        vr = {"o/ok": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]]}}
+        assert verify(vr, {"o/ok": {}}, vd) == []                       # 好例全过
+        bad = dict(vr); bad["o/shell"] = {"stars": 0, "readme_file": True}
+        assert any("V1 o/shell" in x for x in verify(bad, {"o/ok": {}, "o/shell": {}}, vd))   # incomplete 混进清单
+        bad["o/new"] = {"stars": 9, "readme0": "x", "tags": [["orm", "ORM", "high"]], "dbs": ["MySQL"]}
+        assert any(x.startswith("V2 o/new") for x in verify(bad, {"o/ok": {}}, vd))           # 合格仓漏收
+        os.remove(os.path.join(vd, "o", "ok.json"))
+        e3 = verify(vr, {"o/ok": {}}, vd)
+        assert any(x.startswith("V3") for x in e3) and not any(x.startswith("V4") for x in e3)  # 缺 json 只报 V3
+        os.remove(os.path.join(vd, "o", "ok.html"))
+        assert any(x.startswith("V4") for x in verify(vr, {"o/ok": {}}, vd))       # 缺 html 报 V4
+    print("OK gen_cards selftest: 50 asserts passed")
     return rc
 
 def main():
@@ -433,9 +482,7 @@ def main():
     if a.fn:
         targets = [f.lower() for f in a.fn]
     else:
-        targets = [fn for fn, r in repos.items()
-                   if (r.get("stars") or 0) >= a.min_stars and not r.get("archived")
-                   and not is_app(r) and not no_readme(r) and not incomplete(r)]
+        targets = [fn for fn, r in repos.items() if qualified(r, a.min_stars)]
         targets.sort(key=lambda fn: -(repos[fn].get("stars") or 0))
         if a.limit: targets = targets[:a.limit]
     n_new = n_skip = 0; cov = {"trend": 0, "intro": 0, "readme": 0, "adapt": 0, "arena": 0,
@@ -508,6 +555,13 @@ def main():
             print(f"ARCHIVE rerender ok={rs['ok']} fail={rs['fail']} no-json={rs['no_json']} "
                   f"render_ver={stamped} in {time.time()-t1:.1f}s", flush=True)
             if rs["fails"]: print("WARN archive rerender:", rs["fails"], flush=True)
+        # 严格校验（归档策略.md V1-V4）：任一失败 exit 1，daily_cards 链自动中止
+        errs = verify(repos, manifest, a.out_dir, a.min_stars)
+        if errs:
+            print(f"VERIFY FAIL ({len(errs)}):", flush=True)
+            for e in errs[:30]: print("  " + e, flush=True)
+            sys.exit(1)
+        print("VERIFY OK: V1-V4 all passed", flush=True)
 
 if __name__ == "__main__":
     main()
