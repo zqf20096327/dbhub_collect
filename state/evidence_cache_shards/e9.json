@@ -3718,15 +3718,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:45:51Z",
+  "collected_at": "2026-11-15T00:24:05Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
+  "pushed_at": "2026-11-14",
   "stars": 0,
   "tree": {
-   "sha": "12e314915432b3d51ac3ca90420f4e0c95d4e897",
-   "etag": "W/\"80814f77ff790a47f9fd004eae6f46aa3dfc27a5d293490ef5777cf5289daf0a\"",
+   "sha": "11824c0912b9962819781027ba32679d7e84a5c7",
+   "etag": "W/\"e556945e6eef7773b98b00f1a27026988d7ebfbbfa46ed75f389fba0a1ab7829\"",
    "truncated": false,
-   "path_count": 1125,
+   "path_count": 1276,
    "matched": [
     "Cargo.toml",
     "crates/base/Cargo.toml",
@@ -3734,6 +3734,7 @@
     "crates/codec/Cargo.toml",
     "crates/distsql/Cargo.toml",
     "crates/execdetails/Cargo.toml",
+    "crates/executor/Cargo.toml",
     "crates/expr-pushdown/Cargo.toml",
     "crates/expression/Cargo.toml",
     "crates/infoschema/Cargo.toml",
@@ -3744,10 +3745,14 @@
     "crates/model/Cargo.toml",
     "crates/mysql-protocol/Cargo.toml",
     "crates/parser/Cargo.toml",
+    "crates/planner/Cargo.toml",
     "crates/query-smoke/Cargo.toml",
     "crates/runtime/Cargo.toml",
+    "crates/session/Cargo.toml",
     "crates/sessionctx/Cargo.toml",
+    "crates/sessiontxn/Cargo.toml",
     "crates/sql/Cargo.toml",
+    "crates/store/Cargo.toml",
     "crates/systable/Cargo.toml",
     "crates/tablecodec/Cargo.toml",
     "crates/types/Cargo.toml",
@@ -3788,9 +3793,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "06a1c9663284043405839d8b44f3d11f70c8f3b5",
+    "blob_sha": "21d16948cace92a576f0819a6b41e6396773712f",
     "ecosystem": "cargo",
-    "bytes": 8471
+    "bytes": 9253
    },
    {
     "path": "crates/base/Cargo.toml",
@@ -3860,9 +3865,9 @@
    {
     "path": "crates/distsql/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "f984badad6a53c54064af15a94c3e04522b994af",
+    "blob_sha": "331127a980b83e6f51924c7511588244b90b8d32",
     "ecosystem": "cargo",
-    "bytes": 815,
+    "bytes": 905,
     "names": [
      "tidb-runtime",
      "collections",
@@ -3870,6 +3875,7 @@
      "serde_json",
      "thiserror",
      "poc-kv",
+     "tidb-kv",
      "tidb-meta",
      "tidb-metrics",
      "tidb_query_datatype",
@@ -3894,6 +3900,34 @@
      "flate2",
      "serde",
      "serde_json"
+    ]
+   },
+   {
+    "path": "crates/executor/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "913891d801f1fac6e149443adafca0ed221021dc",
+    "ecosystem": "cargo",
+    "bytes": 1488,
+    "names": [
+     "async-trait",
+     "tidb-base",
+     "tidb-chunk",
+     "tidb-sessionctx",
+     "tidb-planner",
+     "tidb-expression",
+     "tidb-parser",
+     "tidb-types",
+     "tidb-execdetails",
+     "tidb-memory",
+     "tidb-model",
+     "tidb-infoschema",
+     "tipb",
+     "futures",
+     "parking_lot",
+     "log"
+    ],
+    "dev": [
+     "tokio"
     ]
    },
    {
@@ -3951,9 +3985,9 @@
    {
     "path": "crates/infoschema/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "6907907dee9df3aa8a2ee6ec794def8322da5f6b",
+    "blob_sha": "5e0933d84766b84efabe4fbed7366b40d9c4e32f",
     "ecosystem": "cargo",
-    "bytes": 1718,
+    "bytes": 2526,
     "names": [
      "tidb-base",
      "tidb-parser",
@@ -3966,12 +4000,19 @@
      "parking_lot",
      "futures",
      "tokio",
-     "log"
+     "log",
+     "tidb-expression",
+     "tidb-chunk",
+     "tidb-tablecodec",
+     "tipb"
     ],
     "dev": [
      "flate2",
+     "protobuf",
      "serde_json",
-     "futures"
+     "futures",
+     "tikv-jemallocator",
+     "tikv-jemalloc-ctl"
     ]
    },
    {
@@ -4106,6 +4147,34 @@
     ]
    },
    {
+    "path": "crates/planner/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "91affa1359031000bd31cfe93fa0ca5a559f0a14",
+    "ecosystem": "cargo",
+    "bytes": 1723,
+    "names": [
+     "tidb-base",
+     "tidb-expression",
+     "tidb-expr-pushdown",
+     "tidb-sessionctx",
+     "tidb-types",
+     "tidb-parser",
+     "tidb-model",
+     "tidb-kv",
+     "tidb-chunk",
+     "tidb-codec",
+     "tidb-tablecodec",
+     "tidb-execdetails",
+     "tipb",
+     "log",
+     "parking_lot"
+    ],
+    "dev": [
+     "serde_json",
+     "flate2"
+    ]
+   },
+   {
     "path": "crates/query-smoke/Cargo.toml",
     "kind": "dep",
     "blob_sha": "5df0fd26a2a5600975af859695ca8f21c1db02ac",
@@ -4140,6 +4209,21 @@
     ]
    },
    {
+    "path": "crates/session/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "58474a6fff3208384191c7985892c356af85e723",
+    "ecosystem": "cargo",
+    "bytes": 796,
+    "names": [
+     "tidb-base",
+     "tidb-parser",
+     "tidb-sessionctx",
+     "tidb-types",
+     "tidb-planner",
+     "tidb-executor"
+    ]
+   },
+   {
     "path": "crates/sessionctx/Cargo.toml",
     "kind": "dep",
     "blob_sha": "0d60d1d206df412a165aa8970ccb4e7c39c06fa1",
@@ -4164,6 +4248,27 @@
     ]
    },
    {
+    "path": "crates/sessiontxn/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "26f5a0d883dc7016063f0334c2f703f8637fe65e",
+    "ecosystem": "cargo",
+    "bytes": 973,
+    "names": [
+     "tidb-base",
+     "tidb-kv",
+     "tidb-sessionctx",
+     "tidb-infoschema",
+     "futures",
+     "log"
+    ],
+    "dev": [
+     "futures",
+     "parking_lot",
+     "flate2",
+     "serde_json"
+    ]
+   },
+   {
     "path": "crates/sql/Cargo.toml",
     "kind": "dep",
     "blob_sha": "3e91aeee18e6ddfbf80f9dbdb2bb11a3ceed8d73",
@@ -4174,6 +4279,35 @@
      "tidb-meta",
      "tidb-mysql-protocol",
      "tidb-parser"
+    ]
+   },
+   {
+    "path": "crates/store/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "b1bbe8437094b9104b3630ae9c1ef3d04bdafa43",
+    "ecosystem": "cargo",
+    "bytes": 2032,
+    "names": [
+     "tidb-base",
+     "tidb-kv",
+     "tikv-client",
+     "tokio",
+     "log",
+     "prost",
+     "tidb-execdetails",
+     "tidb-memory",
+     "tidb-runtime",
+     "futures",
+     "tipb",
+     "protobuf",
+     "tidb-model",
+     "tidb-tablecodec",
+     "parking_lot",
+     "serde_json"
+    ],
+    "dev": [
+     "tokio",
+     "flate2"
     ]
    },
    {
@@ -4322,14 +4456,18 @@
    {
     "path": "crates/poc/kv/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7d3c446c10d20e6a143557d420a34296d07e1d12",
+    "blob_sha": "fe4ee2f48cd143b99ac5930618d87e7d0f91e991",
     "ecosystem": "cargo",
-    "bytes": 428,
+    "bytes": 779,
     "names": [
      "futures",
      "thiserror",
      "tikv-client",
-     "tokio"
+     "tokio",
+     "tidb-base",
+     "tidb-kv",
+     "tidb-runtime",
+     "tidb-store"
     ]
    },
    {
@@ -4370,9 +4508,9 @@
    {
     "path": "crates/poc/session/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "94dc7dd4dd65930c24f32a39019ab96ccbbdfc40",
+    "blob_sha": "188968dd36c2ab76e08c3fd26f8213bdca2a3ad6",
     "ecosystem": "cargo",
-    "bytes": 734,
+    "bytes": 1171,
     "names": [
      "futures",
      "tidb-distsql",
@@ -4383,10 +4521,16 @@
      "tidb-metrics",
      "tidb-mysql-protocol",
      "tidb-sql",
-     "tokio"
+     "tokio",
+     "tidb-base",
+     "tidb-expression",
+     "tidb-parser",
+     "tidb-session",
+     "tidb-sessionctx"
     ],
     "dev": [
      "tidb-distsql",
+     "tidb-sessiontxn",
      "tokio"
     ]
    },
@@ -4772,8 +4916,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "9673976c604b3e132bcdd6ac48731ed7011a052c",
-    "bytes": 6007
+    "blob_sha": "6a47ffc71acb2f8d6b3e3e9b392dbb9dff590612",
+    "bytes": 6476
    },
    {
     "path": ".github/workflows/eval-gate.yml",
@@ -4795,9 +4939,20 @@
     "docs/compatibility.md"
    ],
    "paths": [
+    "crates/store/src/driver/tikv.rs",
+    "docs/adr/0010-protocol-dialect-layering.md",
+    "crates/executor/src/adapter.rs",
     "crates/expression/tests/eval_drivers.rs",
     "crates/parser/src/driver.rs",
-    "crates/parser/tests/driver.rs"
+    "crates/parser/tests/driver.rs",
+    "crates/executor/src/adapter/tests.rs",
+    "crates/store/src/driver/backoff.rs",
+    "crates/store/src/driver/error.rs",
+    "crates/store/src/driver/mod.rs",
+    "crates/store/src/driver/txn/batch_getter.rs",
+    "crates/store/src/driver/txn/error.rs",
+    "crates/store/src/driver/txn/mod.rs",
+    "crates/store/src/driver/txn/snapshot.rs"
    ]
   },
   "fail_count": 0
@@ -6773,15 +6928,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:34:06Z",
+  "collected_at": "2026-11-14T23:42:39Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-10",
+  "pushed_at": "2026-11-14",
   "stars": 507,
   "tree": {
-   "sha": "a850600fe8c0030daa6ef852dfa99bf7dcca936b",
-   "etag": "W/\"4c93c18fd1539259b2ed35b7fa2a18783aec341796a83bfd0b628f8c3c824715\"",
+   "sha": "86ec715904868784eefe63e1ec33c54acbd6cdce",
+   "etag": "W/\"b3cc6cbfcfeb81beb02b5b0732d0a7050e479b5a00cc3079187d0a29b5d4bd16\"",
    "truncated": false,
-   "path_count": 634,
+   "path_count": 636,
    "matched": [
     "package.json",
     "scripts/benchmark/baseline/package.json",
@@ -6792,9 +6947,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "4de93255b840151ee89e9bcd21d72534d78f48f7",
+    "blob_sha": "7bb352a34433e7d73e199e6ac82f3be91b27cf54",
     "ecosystem": "npm",
-    "bytes": 7535,
+    "bytes": 7611,
     "names": [
      "@turf/helpers",
      "better-sqlite3",
@@ -9257,15 +9412,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:55:26Z",
+  "collected_at": "2026-11-14T23:57:07Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-10",
-  "stars": 68,
+  "pushed_at": "2026-11-14",
+  "stars": 69,
   "tree": {
-   "sha": "51fc744df0046b65b4ff81be68d2412ab27a428e",
-   "etag": "W/\"8360f1105a1f358a8ca820b2c6a29f5cff28e1df7dea9c23f2a63b6988a65e2e\"",
+   "sha": "f9913b045ef927f5b9afad37f3e6544111f05736",
+   "etag": "W/\"170573f5c5ce60f02d2ae691d418b347af6aa8351e2222d7a808c82daa3fb49a\"",
    "truncated": false,
-   "path_count": 260,
+   "path_count": 263,
    "matched": [
     "viewer/package.json",
     "integrations/mcp-server/pyproject.toml",
@@ -9310,14 +9465,14 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "31b69401b282cbdc0e6c5233dbd55905304c8404",
-    "bytes": 6641
+    "blob_sha": "feda222d1a795ca2497172c88a2b7850c9142f42",
+    "bytes": 6685
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "d1581d8094f73a6059c8d372492906bc4e25688e",
-    "bytes": 24260
+    "blob_sha": "02b2b4bb9aafb96be5f2abcfe084a03ce4b52a16",
+    "bytes": 24326
    }
   ],
   "clues": {
@@ -10425,15 +10580,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:22:00Z",
+  "collected_at": "2026-11-15T00:00:47Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
+  "pushed_at": "2026-11-14",
   "stars": 45,
   "tree": {
-   "sha": "435ddb829cc60976208383c33df02cb15bf29d17",
-   "etag": "W/\"560fd1d0e8bf800bedc4b90dee9a967b8fbd86a851dd214d4ddc039f85a08126\"",
+   "sha": "bcf86b8a94d9d39e20edd41347e4f876ee6bae8c",
+   "etag": "W/\"fa84275362272469b8001bbe02c13a591e0d03b2935156335046879dc242f0ea\"",
    "truncated": false,
-   "path_count": 3186,
+   "path_count": 3269,
    "matched": [
     "package.json",
     "adapters/mcp/package.json",
@@ -10453,9 +10608,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "c035166261b46fb6fcdf610f8c0c0a46e2d96077",
+    "blob_sha": "3ef075cf7b7bc816dc1157617d276321a2061ec4",
     "ecosystem": "npm",
-    "bytes": 9357
+    "bytes": 9491
    },
    {
     "path": "adapters/mcp/package.json",
@@ -10494,7 +10649,7 @@
    {
     "path": "packages/setup/package.json",
     "kind": "dep",
-    "blob_sha": "053ab558a958140b41248e95bd7002ade0e99b60",
+    "blob_sha": "025eccc4f8b07f4060a5ecacb8a8fb17313a86f9",
     "ecosystem": "npm",
     "bytes": 817
    },
@@ -10529,8 +10684,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "b409ea4da1464420279ae26efcfb2b01f9414a91",
-    "bytes": 9613
+    "blob_sha": "8a7a029b49d92ba8ac6bca7f0cc763e6a6b1f15c",
+    "bytes": 13506
    },
    {
     "path": ".github/workflows/local-embedder-qualification.yml",
@@ -17007,6 +17162,339 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "TheArmagan/vrc.zip": {
+  "fn": "TheArmagan/vrc.zip",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-14T23:20:37Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-14",
+  "stars": 10,
+  "tree": {
+   "sha": "5b0933218b0c8e3bb958cbf9b79df45191a08549",
+   "etag": "W/\"f832bfb11c38e42da1f81edd03df5d5db48d6e18a16e750ba907d55ee2eee7bb\"",
+   "truncated": false,
+   "path_count": 798,
+   "matched": [
+    "desktop-app/package.json",
+    "desktop-app/daemon/package.json",
+    "desktop-app/tools/package.json",
+    "desktop-app/ui/package.json",
+    "desktop-app/packages/api/package.json",
+    "desktop-app/packages/plugin-api/package.json",
+    "desktop-app/packages/shared/package.json",
+    ".github/workflows/desktop-app-release.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "desktop-app/package.json",
+    "kind": "dep",
+    "blob_sha": "31546f286b2585224e9c25d467f968492cd1fac1",
+    "ecosystem": "npm",
+    "bytes": 947,
+    "dev": [
+     "@biomejs/biome",
+     "@types/bun",
+     "typescript"
+    ]
+   },
+   {
+    "path": "desktop-app/daemon/package.json",
+    "kind": "dep",
+    "blob_sha": "91a9f15c8f28a562428d7d58addb5c6e021b76e3",
+    "ecosystem": "npm",
+    "bytes": 567,
+    "names": [
+     "@vrcz/api",
+     "@vrcz/plugin-api",
+     "@vrcz/shared",
+     "chalk",
+     "hono",
+     "typescript"
+    ]
+   },
+   {
+    "path": "desktop-app/tools/package.json",
+    "kind": "dep",
+    "blob_sha": "28650552bfa9af41c9e41d7a57e179eab7114043",
+    "ecosystem": "npm",
+    "bytes": 556,
+    "names": [
+     "@vrcz/shared"
+    ],
+    "dev": [
+     "@hey-api/openapi-ts"
+    ]
+   },
+   {
+    "path": "desktop-app/ui/package.json",
+    "kind": "dep",
+    "blob_sha": "afde4c1bb72da5974fce9ba12addcc97db1ef7ae",
+    "ecosystem": "npm",
+    "bytes": 1286,
+    "names": [
+     "@vrcz/plugin-api",
+     "@vrcz/shared",
+     "@xyflow/svelte",
+     "bits-ui",
+     "clsx",
+     "tailwind-merge",
+     "tailwind-variants",
+     "tw-animate-css"
+    ],
+    "dev": [
+     "@fontsource-variable/inter",
+     "@internationalized/date",
+     "@lucide/svelte",
+     "@sveltejs/vite-plugin-svelte",
+     "@tailwindcss/vite",
+     "@testing-library/jest-dom",
+     "@testing-library/svelte",
+     "@testing-library/user-event",
+     "jsdom",
+     "mode-watcher",
+     "shadcn-svelte",
+     "svelte",
+     "svelte-check",
+     "svelte-sonner",
+     "tailwindcss",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "desktop-app/packages/api/package.json",
+    "kind": "dep",
+    "blob_sha": "4658abcb3bbcab301c91845cdba9c8e124cf1c9c",
+    "ecosystem": "npm",
+    "bytes": 440
+   },
+   {
+    "path": "desktop-app/packages/plugin-api/package.json",
+    "kind": "dep",
+    "blob_sha": "40cf20213b565f1117734bd8f472dc9879ddc108",
+    "ecosystem": "npm",
+    "bytes": 578,
+    "names": [
+     "@vrcz/shared",
+     "zod"
+    ]
+   },
+   {
+    "path": "desktop-app/packages/shared/package.json",
+    "kind": "dep",
+    "blob_sha": "0e748c80b3e28f409b6e9334d8d85131e39804a4",
+    "ecosystem": "npm",
+    "bytes": 311
+   },
+   {
+    "path": ".github/workflows/desktop-app-release.yml",
+    "kind": "ci",
+    "blob_sha": "9b3bf97d581eaa7ed1dccb07ef983582f0316081",
+    "bytes": 18786
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "docs/renders/plugin-consent.jpg",
+    "docs/renders/plugins.jpg",
+    "docs/screenshots/plugin-consent.jpg",
+    "docs/screenshots/plugins.jpg",
+    "desktop-app/examples/plugins/README.md",
+    "desktop-app/packages/plugin-api/README.md",
+    "desktop-app/packages/plugin-api/package.json",
+    "desktop-app/packages/plugin-api/tsconfig.build.json",
+    "desktop-app/packages/plugin-api/tsconfig.json",
+    "desktop-app/tools/src/plugin-docs.ts",
+    "desktop-app/tools/src/publish-plugin-api.ts",
+    "desktop-app/daemon/src/plugins/budget.test.ts",
+    "desktop-app/daemon/src/plugins/budget.ts",
+    "desktop-app/daemon/src/plugins/consent.test.ts",
+    "desktop-app/daemon/src/plugins/consent.ts",
+    "desktop-app/daemon/src/plugins/disable-store.test.ts",
+    "desktop-app/daemon/src/plugins/disable-store.ts",
+    "desktop-app/daemon/src/plugins/dispatcher.test.ts",
+    "desktop-app/daemon/src/plugins/dispatcher.ts",
+    "desktop-app/daemon/src/plugins/events-bridge.test.ts",
+    "desktop-app/daemon/src/plugins/events-bridge.ts",
+    "desktop-app/daemon/src/plugins/frame-budget.test.ts",
+    "desktop-app/daemon/src/plugins/frame-budget.ts",
+    "desktop-app/daemon/src/plugins/job-object.test.ts",
+    "desktop-app/daemon/src/plugins/job-object.ts",
+    "desktop-app/daemon/src/plugins/limits.test.ts",
+    "desktop-app/daemon/src/plugins/limits.ts",
+    "desktop-app/daemon/src/plugins/node-registry.test.ts",
+    "desktop-app/daemon/src/plugins/node-registry.ts",
+    "desktop-app/daemon/src/plugins/plugin-vrchat.test.ts",
+    "desktop-app/daemon/src/plugins/plugin-vrchat.ts",
+    "desktop-app/daemon/src/plugins/prelude.test.ts",
+    "desktop-app/daemon/src/plugins/prelude.ts",
+    "desktop-app/daemon/src/plugins/process-transport.test.ts",
+    "desktop-app/daemon/src/plugins/process-transport.ts",
+    "desktop-app/daemon/src/plugins/registry.test.ts",
+    "desktop-app/daemon/src/plugins/registry.ts",
+    "desktop-app/daemon/src/plugins/runtime-fetch.test.ts",
+    "desktop-app/daemon/src/plugins/runtime-fetch.ts",
+    "desktop-app/daemon/src/plugins/scope-gate.test.ts",
+    "desktop-app/daemon/src/plugins/scope-gate.ts",
+    "desktop-app/daemon/src/plugins/shared-data.test.ts",
+    "desktop-app/daemon/src/plugins/shared-data.ts",
+    "desktop-app/daemon/src/plugins/supervisor.test.ts",
+    "desktop-app/daemon/src/plugins/supervisor.ts",
+    "desktop-app/daemon/src/plugins/transport.ts",
+    "desktop-app/daemon/src/plugins/ui-panels.test.ts",
+    "desktop-app/daemon/src/plugins/ui-panels.ts",
+    "desktop-app/daemon/src/store/plugins.test.ts",
+    "desktop-app/daemon/src/wiring/plugin-host.ts",
+    "desktop-app/examples/plugins/friend-watch/vrcz-plugin.json",
+    "desktop-app/examples/plugins/graph-nodes/vrcz-plugin.json",
+    "desktop-app/examples/plugins/hello-panel/vrcz-plugin.json",
+    "desktop-app/examples/plugins/instance-table/vrcz-plugin.json",
+    "desktop-app/examples/plugins/note-keeper/vrcz-plugin.json",
+    "desktop-app/packages/plugin-api/docs/README.md",
+    "desktop-app/packages/plugin-api/docs/cheatsheet.md",
+    "desktop-app/packages/plugin-api/docs/getting-started.md",
+    "desktop-app/packages/plugin-api/docs/lifecycle.md",
+    "desktop-app/packages/plugin-api/docs/manifest.md",
+    "desktop-app/packages/plugin-api/docs/nodes.md",
+    "desktop-app/packages/plugin-api/docs/protocol.md",
+    "desktop-app/packages/plugin-api/docs/security-model.md",
+    "desktop-app/packages/plugin-api/docs/status.md",
+    "desktop-app/packages/plugin-api/docs/ui.md",
+    "desktop-app/packages/plugin-api/schema/plugin.json",
+    "desktop-app/packages/plugin-api/src/capabilities.ts",
+    "desktop-app/packages/plugin-api/src/index.ts",
+    "desktop-app/packages/plugin-api/src/manifest.test.ts",
+    "desktop-app/packages/plugin-api/src/manifest.ts",
+    "desktop-app/packages/plugin-api/src/nodes.test.ts",
+    "desktop-app/packages/plugin-api/src/nodes.ts",
+    "desktop-app/packages/plugin-api/src/protocol.test.ts",
+    "desktop-app/packages/plugin-api/src/protocol.ts",
+    "desktop-app/packages/plugin-api/src/runtime.test.ts",
+    "desktop-app/packages/plugin-api/src/runtime.ts",
+    "desktop-app/packages/plugin-api/src/storage.ts",
+    "desktop-app/packages/plugin-api/src/ui.test.ts",
+    "desktop-app/packages/plugin-api/src/ui.ts",
+    "desktop-app/ui/src/screens/PluginPanelScreen.svelte",
+    "desktop-app/ui/src/screens/PluginsScreen.svelte",
+    "desktop-app/daemon/src/plugins/__fixtures__/README.md",
+    "desktop-app/daemon/src/plugins/__fixtures__/plugin-echo.js",
+    "desktop-app/daemon/src/plugins/__fixtures__/plugin-noisy.js",
+    "desktop-app/daemon/src/plugins/__fixtures__/plugin-throws.js",
+    "desktop-app/daemon/src/plugins/__fixtures__/prelude-deaf.js",
+    "desktop-app/daemon/src/plugins/__fixtures__/prelude-forbidden.js",
+    "desktop-app/daemon/src/plugins/__fixtures__/prelude-oversize.js",
+    "desktop-app/daemon/src/plugins/__fixtures__/prelude-silent.js",
+    "desktop-app/daemon/src/plugins/__fixtures__/prelude-spin.js",
+    "desktop-app/daemon/src/plugins/hostile/README.md",
+    "desktop-app/daemon/src/plugins/hostile/crash.js",
+    "desktop-app/daemon/src/plugins/hostile/filesystem-folded.js",
+    "desktop-app/daemon/src/plugins/hostile/filesystem.js",
+    "desktop-app/daemon/src/plugins/hostile/flood.js",
+    "desktop-app/daemon/src/plugins/hostile/globals.js",
+    "desktop-app/daemon/src/plugins/hostile/hang.js",
+    "desktop-app/daemon/src/plugins/hostile/harness-entry.js",
+    "desktop-app/daemon/src/plugins/hostile/hostile.test.ts",
+    "desktop-app/daemon/src/plugins/hostile/liar.js",
+    "desktop-app/daemon/src/plugins/hostile/memory-bomb-at-load.js",
+    "desktop-app/daemon/src/plugins/hostile/memory-bomb.js",
+    "desktop-app/daemon/src/plugins/hostile/network.js",
+    "desktop-app/daemon/src/plugins/hostile/polite.js",
+    "desktop-app/daemon/src/plugins/hostile/spin-at-load.js",
+    "desktop-app/daemon/src/plugins/hostile/spin.js",
+    "desktop-app/daemon/src/plugins/install/artifact.ts",
+    "desktop-app/daemon/src/plugins/install/bundle.ts",
+    "desktop-app/daemon/src/plugins/install/deny-scan.test.ts",
+    "desktop-app/daemon/src/plugins/install/deny-scan.ts",
+    "desktop-app/daemon/src/plugins/install/examples.test.ts",
+    "desktop-app/daemon/src/plugins/install/index.ts",
+    "desktop-app/daemon/src/plugins/install/pipeline.test.ts",
+    "desktop-app/daemon/src/plugins/install/pipeline.ts",
+    "desktop-app/daemon/src/plugins/install/runtime-bundle.test.ts",
+    "desktop-app/daemon/src/plugins/install/spawn-resolver.test.ts",
+    "desktop-app/daemon/src/plugins/install/spawn-resolver.ts",
+    "desktop-app/daemon/src/plugins/storage/database.ts",
+    "desktop-app/daemon/src/plugins/storage/methods.ts",
+    "desktop-app/daemon/src/plugins/storage/storage.test.ts",
+    "desktop-app/daemon/src/store/schema/006_plugins.sql",
+    "desktop-app/daemon/src/store/schema/010_drop_plugin_signing.sql",
+    "desktop-app/daemon/src/store/schema/011_plugin_grant_events.sql",
+    "desktop-app/examples/plugins/friend-watch/src/index.ts",
+    "desktop-app/examples/plugins/graph-nodes/src/index.ts",
+    "desktop-app/examples/plugins/hello-panel/src/index.ts",
+    "desktop-app/examples/plugins/instance-table/src/index.ts",
+    "desktop-app/examples/plugins/note-keeper/src/index.ts",
+    "desktop-app/packages/plugin-api/docs/generated/capabilities.md",
+    "desktop-app/packages/plugin-api/docs/generated/events.md",
+    "desktop-app/packages/plugin-api/docs/generated/limits.md",
+    "desktop-app/packages/plugin-api/docs/generated/ports.md",
+    "desktop-app/packages/plugin-api/docs/generated/scopes.md",
+    "desktop-app/ui/src/lib/commands/plugins.svelte.ts",
+    "desktop-app/ui/src/lib/state/plugin-contributions.svelte.ts",
+    "desktop-app/ui/src/lib/state/plugin-panels.svelte.ts",
+    "desktop-app/ui/src/lib/components/plugin-ui/PluginTable.svelte",
+    "desktop-app/ui/src/lib/components/plugin-ui/UiNode.svelte"
+   ]
+  },
+  "fail_count": 0
+ },
+ "hesixiaohao666/CoTalk": {
+  "fn": "hesixiaohao666/CoTalk",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-14T23:21:24Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-13",
+  "stars": 3,
+  "tree": {
+   "sha": "a43929bb1b5e830ee0be4f5bd8e0e475f53922b9",
+   "etag": "W/\"9ba6fe04a5073ed3f94fcc9b808453d92ed7fe0cb11db4c99f6ca93f48e8bfc2\"",
+   "truncated": false,
+   "path_count": 160,
+   "matched": [
+    "build.gradle",
+    "app/build.gradle"
+   ]
+  },
+  "files": [
+   {
+    "path": "build.gradle",
+    "kind": "dep",
+    "blob_sha": "37562787fc544e6bccb4ab62f9f1983c6debe54c",
+    "ecosystem": "gradle",
+    "bytes": 167
+   },
+   {
+    "path": "app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "a1485beb7405f03d0da5a0bd387d20762543e268",
+    "ecosystem": "gradle",
+    "bytes": 1420
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "app/src/main/java/com/example/cotalkproject/ui/chat/ChatAdapter.java",
+    "app/src/main/java/com/example/cotalkproject/ui/chat/EmojiAdapter.java",
+    "app/src/main/java/com/example/cotalkproject/ui/contacts/MemberAdapter.java",
+    "app/src/main/java/com/example/cotalkproject/ui/contacts/ServerAdapter.java",
+    "app/src/main/java/com/example/cotalkproject/ui/home/SessionAdapter.java"
+   ]
   },
   "fail_count": 0
  }
