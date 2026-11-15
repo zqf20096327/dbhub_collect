@@ -3152,5 +3152,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c61f8e78efe": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 .NET 桌面与移动端异步持久化键值存储",
+   "review": "Akavache 是面向 C# 桌面与移动应用的异步持久化键值存储，底层为 SQLite。它提供用户账户、本地缓存、加密和安全、内存四类缓存，序列化支持 System.Text.Json 与 Newtonsoft.Json，可同时用于持久数据（如用户设置）和会过期的缓存数据。安装需核心包加一个存储后端和一个序列化器，通过 WithAkavache<T> 初始化，支持静态初始化或 DI 注册。V12 重写 SQLite 后端，改为直接访问 SQLitePCLRaw 3.x。",
+   "highlights": [
+    "提供 UserAccount、LocalMachine、Secure、InMemory 四种缓存类型，分别对应持久设置、可清理缓存、加密存储和内存存储",
+    "V12 直接使用 SQLitePCLRaw 3.x 访问 SQLite，缓存预编译语句，对原生句柄访问使用独立工作线程序列化，并对并发写入做提交合并",
+    "模块化 NuGet 包结构：核心包加任一存储后端（Sqlite3 或 EncryptedSqlite3）加任一序列化器，另有 HTTP 下载、图像缓存和设置辅助等可选扩展包"
+   ],
+   "use_cases": [
+    "存储桌面或移动应用中需跨会话保留的用户设置与偏好",
+    "缓存会过期的本地数据或 HTTP 下载内容（配合 Akavache.HttpDownloader、Akavache.Drawing）",
+    "以加密方式保存凭据、API 密钥等敏感数据（Secure 缓存或 EncryptedSqlite3 包）"
+   ]
+  },
+  "sha": "0c61f8e78efe",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b7c432b9d94": {
+  "identity": {
+   "one_liner": "Rust 编写的自托管错误追踪服务，兼容 Sentry 协议与 SDK",
+   "review": "Rustrak 是一个用 Rust 实现的自托管错误追踪服务器，接收错误事件、结构化日志、性能事务、发布健康会话和 AI agent 追踪。它实现 Sentry envelope 协议，现有 Sentry SDK 修改 DSN 即可接入。默认以单进程运行并使用 SQLite，也可配置 PostgreSQL。适用对象为需要自行部署监控后端的开发团队。许可为 AGPL-3.0，客户端库 @rustrak/client 为 MIT。",
+   "highlights": [
+    "实现 Sentry 协议，兼容各语言的 Sentry SDK，通过修改 DSN 接入",
+    "采用两阶段摄入：先解析并写入磁盘返回 200，再异步写入数据库；README 记载 4 核 SQLite 环境下约 5k 事件/秒、峰值内存低于 60 MB",
+    "包含 AI agent 追踪（读取 Sentry Spans Protocol v2）、结构化日志六种级别、内置 MCP 端点，支持 SQLite 与 PostgreSQL"
+   ],
+   "use_cases": [
+    "使用 Sentry SDK 的项目在自有服务器上运行错误追踪与性能监控",
+    "采集并查看 LLM/agent 应用的调用追踪，含按模型和 token 的统计",
+    "需要崩溃率、发布对比及 Slack/SMTP/webhook 告警的自托管监控场景"
+   ]
+  },
+  "sha": "5b7c432b9d94",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "715d236c8a61": {
+  "identity": {
+   "one_liner": "Go 轻量向量存储库，支持 PostgreSQL/pgvector、嵌入式 SQLite 与内存三种后端",
+   "review": "go-vectorstore 是一个受 Microsoft.Extensions.VectorData 启发的 Go 向量存储库，用于构建语义搜索、RAG 流水线和基于自有数据的检索系统。它提供 PostgreSQL（pgvector）、嵌入式 SQLite 和内存三种后端，通过结构体标签定义类型化集合，支持稠密、稀疏与二进制向量搜索及元数据过滤；PostgreSQL 后端需 16+ 版本并安装 pgvector 扩展，最低要求 Go 1.25。",
+   "highlights": [
+    "提供 PostgreSQL（pgvector）、嵌入式 SQLite、内存三种存储后端，共享模型契约与一致性测试",
+    "支持稠密、稀疏、二进制向量搜索，Manhattan 距离、HNSW/IVFFlat 索引及 PostgreSQL 混合搜索",
+    "模型驱动的类型化 CRUD API，支持结构体标签、生成的键、命名向量、可选嵌入和 schema 迁移规划"
+   ],
+   "use_cases": [
+    "基于自有数据的语义搜索与 RAG 流水线开发",
+    "无需服务器或 API 密钥的本地嵌入式向量存储（SQLite/内存）",
+    "需要元数据过滤、混合搜索的 Go 检索应用"
+   ]
+  },
+  "sha": "715d236c8a61",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

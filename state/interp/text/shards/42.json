@@ -2619,5 +2619,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "47e8249dfbff": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编程代理可观测与评测工具，记录会话并转为评测",
+   "review": "coding.sh 是一个在本地运行的 AI 代理可观测与评测工具，通过 hooks、transcript 或 API 代理记录 Claude Code、Codex 等代理的提示词、模型调用、工具调用、文件改动与估算成本，存入本地 SQLite 索引并提供本地查看器、CLI 全文检索和 MCP 接口，还可将失败会话转为可重放评测。需 Node 22.16+，目前为 pre-1.0 版本（0.1.6）。",
+   "highlights": [
+    "通过 hooks、transcript、API 代理或 `coding.sh run -- <cmd>` 包装方式记录多种代理会话，含子代理与 OpenTelemetry 接收",
+    "将失败会话转为可重放评测，支持代码评分器、校准 LLM 评审与配对统计的 A/B 对比，并提供每日基准测试与静态报告",
+    "无运行时依赖，数据默认留在本地 SQLite，支持通过 MCP、--json 输出及 TypeScript/Python SDK 读取；远程后端可选 SQLite、Postgres 或 ClickHouse"
+   ],
+   "use_cases": [
+    "本地查阅 AI 编程代理会话的时间线、token、延迟与估算成本",
+    "将实际失败的代理会话固化为可重放评测集并对比提示词/模型改动",
+    "团队或应用侧集中接入代理与 LLM 网关的追踪与成本数据"
+   ]
+  },
+  "sha": "47e8249dfbff",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "547a810f02d3": {
+  "identity": {
+   "one_liner": "本地AI会话记忆库：以书/章/页结构存储对话证据，Python+SQLite+FTS5实现",
+   "review": "AI-Memory-Book 是一个面向编程代理的本地会话记忆存储工具，将项目组织为书、任务为章、证据为页，保留原始对话文本和来源引用。技术栈为 Python 3.10+ 与 SQLite FTS5，通过 CLI、Python、MCP 和 HTTP 接口提供检索，默认词法检索无需嵌入模型或数据库服务器，支持 Claude Code、Codex、Gemini 等客户端共享同一数据库。v0.5.0 为 MIT 许可。",
+   "highlights": [
+    "支持按项目、任务、会话和原始回合定位证据，保留页 ID 与来源引用",
+    "标识符检索支持驼峰、蛇形命名与缩写的跨风格匹配，且不改动原始拼写与项目边界",
+    "默认词法摄取与检索不调用模型，仅需 SQLite FTS5；支持在线备份、导入校验与导出暂存"
+   ],
+   "use_cases": [
+    "会话或客户端切换后恢复约束、参数修正与失败尝试并继续任务",
+    "代码评审或任务交接时打开引用页核对边界条件、错误信息等原始证据",
+    "跨 Claude Code、Codex、Gemini 等多个客户端共享同一份项目存档"
+   ]
+  },
+  "sha": "547a810f02d3",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

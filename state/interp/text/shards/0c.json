@@ -3487,5 +3487,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "add39f1314d2": {
+  "identity": {
+   "one_liner": "自托管的地理空间数据目录与地图构建工具，支持语义搜索与来源追踪",
+   "review": "GeoLens 是一个自托管的地理空间数据目录与地图构建工具，面向空间数据分散在文件共享、PostGIS 数据库、Web 服务和 STAC 目录中的团队。它将数据汇集到可搜索目录，记录每个数据集来源并检查上游源是否仍然可用；支持 OGC API 与 STAC 标准供 QGIS、脚本和 AI 客户端读取。默认不发送遥测数据，基于 Docker Compose 部署。",
+   "highlights": [
+    "支持上传 Shapefile、GeoPackage、GeoParquet、GeoTIFF 等多种格式，GeoTIFF 转换为 Cloud-Optimized GeoTIFF，并可托管 3D Tiles 与 COPC 点云",
+    "提供 OGC API Features（含 CQL2 过滤）、OGC API Records、STAC API 1.0 及 DCAT 系列输出，每个图层带瓦片 URL，可导出 GeoJSON、GeoPackage、PMTiles 等格式",
+    "记录数据集来源并跟踪刷新状态（fresh/due/overdue），检测上游 schema 变化，服务消失后本地副本仍可用；内置模糊搜索与配置嵌入模型后的语义搜索"
+   ],
+   "use_cases": [
+    "团队需要整合分散在文件共享、数据库、WFS/ArcGIS 服务和 STAC 目录中的空间数据并统一检索",
+    "通过 OGC API Features、STAC、DCAT 端点向 QGIS、GDAL/OGR、开放数据门户或 AI 代理提供数据访问",
+    "在浏览器中构建和共享地图、故事地图与仪表盘，或通过 CLI 与 SDK 发布数据集"
+   ]
+  },
+  "sha": "add39f1314d2",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dfa727075471": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 PHP/Symfony 全文搜索层，容错拼写与重音、支持过滤与查询语法",
+   "review": "Fuzzphony 是运行在 PostgreSQL 内的搜索库，为 PHP 8.4+ / Symfony 7.4+ 应用提供拼写容错、重音不敏感、带排序的全文检索，索引存放在业务表旁边的 sidecar 表中，不改动原有表结构。数据同步支持触发器同事务或队列模式；支持 28 种语言的词干化。仅支持 PostgreSQL（15+，需启用 pg_trgm 与 unaccent 扩展），尚处 pre-1.0 阶段，API 可能变动。",
+   "highlights": [
+    "提供含短语、OR、排除、前缀、字段限定与分组的查询语法，含拼写容错与重音折叠",
+    "索引以 sidecar 表形式存于同一数据库，支持触发器同事务同步或队列模式，不改动业务表",
+    "内置多租户过滤、字段级授权与限流选项，支持 28 种 Snowball 语言词干化"
+   ],
+   "use_cases": [
+    "替换后台管理、CRM、支持工具中基于 LIKE 的搜索",
+    "多租户 SaaS 中需强制租户过滤的站内搜索",
+    "数据库表结构不可改动的遗留系统或 ERP 场景下的搜索接入"
+   ]
+  },
+  "sha": "dfa727075471",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a7965de6f787": {
+  "identity": {
+   "one_liner": "纯 PHP 编写的 Laravel SQL 解析与转译包，移植自 sqlglot",
+   "review": "本包将 SQL 解析为语法树，并支持在 30 多种方言之间转译（如 MySQL 到 SQL Server、Postgres 到 SQLite），是 sqlglot v30.21.0 的 PHP 移植版，并通过了 sqlglot 的方言测试用例。提供解析、流式构建器、优化器、语法树序列化及 Artisan 命令；解析核心不依赖 Laravel。通过 composer 安装，支持缓存、memo 与自定义方言配置，无效 SQL 会抛出含行列信息的 ParseError。",
+   "highlights": [
+    "解析 SQL 为语法树，并在 30+ 方言间转译，Laravel 驱动名（mysql、pgsql、sqlite、sqlsrv 等）可直接作为方言名使用",
+    "提供 toSqlFor()/bindingsFor()/toRawSqlFor() 查询构建器宏、fluent Builder、Optimizer 优化器与 dump()/load() 序列化",
+    "纯 PHP 实现，解析核心可脱离 Laravel 使用；README 附带与 sqlglot（含编译版）在 16 组基准查询上的耗时数据"
+   ],
+   "use_cases": [
+    "在 Laravel 应用中生成面向特定数据库方言的 SQL（如同一查询输出 MySQL 与 SQL Server 两种版本）",
+    "对 SQL 做语法树层面的处理：优化、简化、表名替换、解析查询读取的表",
+    "跨方言迁移 SQL 文件或管道脚本（可通过 artisan sql:transpile 处理文件与标准输入）"
+   ]
+  },
+  "sha": "a7965de6f787",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

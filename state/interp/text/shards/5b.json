@@ -2735,5 +2735,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4db198b1a73b": {
+  "identity": {
+   "one_liner": "自托管的开源 issue 跟踪器，键盘驱动，覆盖问题、周期、项目、wiki 与 AI 编码代理协作",
+   "review": "Kuayle 是一个运行在自己服务器上的开源 issue 跟踪器，用 Go API 与 SvelteKit 前端实现，涵盖 issues、周期（burndown/velocity 图）、跨团队项目（Gantt 视图）、wiki 与每日日志。它内置 AI 助手并可将 issue 委派给自托管 Dev Machines 上的编码代理（Claude Code、Codex 等）。README 明确说明当前版本为可运行的 MVP，不包含 SSO，生产使用前需自行评估测试。",
+   "highlights": [
+    "提供键盘优先的 issue 工作流：命令面板、快捷键、多指派人、子任务、关系、版本历史 diff",
+    "内置 AI 助手与编码代理委派：OpenAI 兼容 provider 接入，Dev Machines 上的 Claude Code、Codex、OpenCode 等运行委派任务，可视化 agent 工作流编辑器（高风险操作需人工批准）",
+    "提供 Docker Compose 参考部署栈（Caddy、PostgreSQL、Redis），HTTP API、webhooks、MCP server、GitHub 集成及官方 CLI 与 Rust SDK"
+   ],
+   "use_cases": [
+    "团队在自有服务器上自托管管理 issues、周期冲刺与跨团队项目",
+    "将 issue 委派给编码代理执行实现、测试、PR、CI、合并等流程，并由人工审批关键步骤",
+    "通过 API、webhooks、MCP server 或 CLI 将 issue 跟踪器接入现有开发与自动化流程"
+   ]
+  },
+  "sha": "4db198b1a73b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "371a136e2680": {
+  "identity": {
+   "one_liner": "Rust 实现的 Kafka 协议兼容流平台，内置 SQL、全文与向量检索",
+   "review": "Chronik Stream 是用 Rust 编写的单二进制流平台，实现 Kafka wire protocol，可直接接入现有 Kafka 客户端。按 topic 开启能力：columnar（DataFusion/Arrow SQL 查询）、searchable（Tantivy BM25）、vector（HNSW），索引在写入确认后异步进行。支持 Raft 多节点集群（最少 3 节点）、S3/GCS/Azure 分层存储，另有环境变量控制的可选 Ontology 层与 MCP server。README 注明集群吞吐基准数据因 v2.2.25 复制缺陷已撤回待重测。",
+   "highlights": [
+    "实现 24 个 Kafka wire protocol API，可用标准 Kafka 客户端生产与消费",
+    "按 topic 启用 SQL（DataFusion + Arrow/Parquet）、全文（Tantivy BM25）与向量（HNSW）索引，索引异步执行不影响写入路径",
+    "支持 Raft 共识的多节点集群、分层存储（S3/GCS/Azure）及 RRF 多后端融合查询端点 /_query"
+   ],
+   "use_cases": [
+    "用 Kafka 客户端写入事件后直接以 SQL 聚合查询（日志/订单等操作型分析）",
+    "对事件流做全文检索，替代独立的搜索索引链路",
+    "对事件做向量嵌入检索，用于语义相似查询与 Agent 记忆场景"
+   ]
+  },
+  "sha": "371a136e2680",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d34b4625eeed": {
+  "identity": {
+   "one_liner": "校园运动社区 Web 应用，用 MediaPipe 在设备本地做姿态识别动作计数。",
+   "review": "MoveMate 是面向校园用户的运动社区网页应用，提供摄像头 AI 动作计数、AI 语音陪练、多人组队打怪、校园找搭子组局等功能。前端用 React + TypeScript，姿态识别经 MediaPipe 在浏览器本地完成；后端部署于 Cloudflare Workers 与 Durable Objects（SQLite 持久化、WebSocket）。注册限校园邮箱，组局按学校隔离，目前仅吉林大学开放注册，吉林体育学院内测中。",
+   "highlights": [
+    "提供 56 个摄像头动作的本地实时姿态识别与计数，视频不上传；智能复核使用关键帧且站点不保存图片",
+    "支持多人组队打怪、13 类运动的校园组局、可换装分身、计划训练与历史导入导出",
+    "生产环境运行于 Cloudflare Workers + Durable Objects（SQLite、WebSocket、Alarm），本机演示用 Express + node:sqlite"
+   ],
+   "use_cases": [
+    "校园用户通过摄像头进行 AI 计数的动作训练与语音陪练",
+    "好友组队以真实运动次数完成打怪挑战，或在本校范围内发局找运动搭子",
+    "开发者克隆仓库配合 MOVEMATE_PUBLIC_BUILD=1 完成公开构建与类型检查"
+   ]
+  },
+  "sha": "d34b4625eeed",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

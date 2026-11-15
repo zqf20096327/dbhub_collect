@@ -3113,5 +3113,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f5bbf1f9eb50": {
+  "identity": {
+   "one_liner": "开源汽车品牌-车型-代次-发动机参数数据集，提供 JSON/CSV/SQLite 三种格式",
+   "review": "该项目提供免费开放的汽车数据集，层级为品牌组-品牌-车型-代次-发动机，包含 216 个品牌、3,640 个车型与 31,520 个发动机变体，并含埃及市场品牌名。数据每周重新生成并以版本化 release 发布，代码为 MIT，数据采用 ODbL。CSV 与 SQLite 均由 JSON 源文件生成，构建时校验三者发动机数量一致性。",
+   "highlights": [
+    "以 JSON/CSV/SQLite 三种格式发布：品牌组级 JSON、23 列的发动机明细 CSV、带外键与索引的规范化 SQLite 及 EAV 原始参数表",
+    "每个发动机包含类型化核心字段（燃料、功率、扭矩、尺寸等）及无损保留源数据全部键值的 specs 映射",
+    "数据按周定期重新生成并随版本化 release 发布，构建流程断言三种格式中发动机条目数一致，不一致时报错"
+   ],
+   "use_cases": [
+    "需要按品牌、车型、代次或发动机参数查询车辆信息的应用或工具开发",
+    "数据分析与表格处理场景：可直接在 Excel/Sheets 打开 engines.csv 或用 SQLite 客户端执行查询",
+    "需要完整原始参数键值对的场景，可读取 JSON 文件或 SQLite 中的 engine_specs 表"
+   ]
+  },
+  "sha": "f5bbf1f9eb50",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9bd929851958": {
+  "identity": {
+   "one_liner": "OpenCode v2 插件，用于以 cron、DAG、矩阵方式调度 AI 代理任务并提供本地仪表盘",
+   "review": "该插件为 OpenCode v2 提供 AI 代理任务的调度与编排能力，包含 cron 与一次性运行、dependsOn DAG 管道、矩阵扇出、质量门（命令通过才标记成功）、SQLite 历史、指标与本地 Web 仪表盘。任务注册到操作系统原生调度器（Task Scheduler、launchd、crontab），OpenCode 关闭时仍可运行。需 OpenCode v2 与 Node.js 20+，通过 opencode plugin add 安装。注意 Windows 默认仅在用户登录时运行。",
+   "highlights": [
+    "支持 cron、一次性、git 提交、文件变更、MCP 事件和带 HMAC 的 webhook 六类触发方式",
+    "提供 24 个代理工具与内置 skill，涵盖调度、管道、观测与管理，任务经原生 OS 调度器注册可在 OpenCode 关闭后运行",
+    "可观测性包含 SQLite 历史、Prometheus /metrics、OTLP 导出、JSONL 日志与含 14 天分析的本地仪表盘"
+   ],
+   "use_cases": [
+    "需要按依赖顺序串联多步代理任务（DAG）或对一个模板在多个仓库扇出并行运行",
+    "需要质量门验证（如 npm test 通过才计为成功）并结合重试、超时与崩溃恢复保证任务可靠性",
+    "需要本地化的运行历史、成本与时长指标分析，无需 SaaS 或遥测的私有部署调度"
+   ]
+  },
+  "sha": "9bd929851958",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

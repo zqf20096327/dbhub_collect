@@ -26179,5 +26179,515 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "0f0045c9b405+2": {
+  "fn": "hugr-lab/mssql-extension",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "replace",
+    0,
+    10,
+    0,
+    6,
+    [
+     "CI",
+     "DuckDB",
+     "Latest release",
+     "Community downloads per week",
+     "License: MIT",
+     "GitHub stars"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    15,
+    6,
+    11
+   ],
+   [
+    "delete",
+    15,
+    17,
+    11,
+    11
+   ],
+   [
+    "equal",
+    17,
+    19,
+    11,
+    13
+   ],
+   [
+    "replace",
+    19,
+    20,
+    13,
+    14,
+    [
+     "Weekly downloads of the mssql DuckDB community extension"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    14,
+    15
+   ],
+   [
+    "replace",
+    21,
+    22,
+    15,
+    16,
+    [
+     "📊 **Interactive chart** — queried live in your browser with DuckDB-Wasm."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    16,
+    17
+   ],
+   [
+    "replace",
+    23,
+    26,
+    17,
+    18,
+    [
+     "> Regenerated weekly and served from GitHub Pages, so it stays current without a commit. Counts are a Cloudflare estimate of `INSTALL mssql FROM community` events, aggregated across DuckDB versions and platforms. Source: DuckDB Community Extensions download metrics."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    18,
+    21
+   ],
+   [
+    "delete",
+    29,
+    30,
+    21,
+    21
+   ],
+   [
+    "equal",
+    30,
+    32,
+    21,
+    23
+   ],
+   [
+    "replace",
+    32,
+    33,
+    23,
+    24,
+    [
+     "**Full documentation lives at hugr-lab.github.io/mssql-extension** —"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    39,
+    24,
+    30
+   ],
+   [
+    "replace",
+    39,
+    40,
+    30,
+    31,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    31,
+    32
+   ],
+   [
+    "replace",
+    41,
+    48,
+    32,
+    39,
+    [
+     "|Getting Started|install, ATTACH, first queries|",
+     "|Connections & Auth|connection strings, secrets, Azure AD, Kerberos|",
+     "|Writing Data|COPY (bulk load), CTAS, INSERT/UPDATE/DELETE|",
+     "|Backup Files|describe a `.bak` without SQL Server|",
+     "|Settings Reference|every `mssql_*` setting with defaults|",
+     "|Troubleshooting|common errors and limitations|",
+     "|Articles|Medium deep dives on design and performance|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    39,
+    40
+   ],
+   [
+    "replace",
+    49,
+    52,
+    40,
+    43,
+    [
+     "Contributor docs stay in the repository: DATAMODEL.md (layered",
+     "architecture), docs/ (internals), docs/TESTING.md,",
+     "CLAUDE.md (development guidelines)."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    59,
+    43,
+    50
+   ],
+   [
+    "replace",
+    59,
+    60,
+    50,
+    51,
+    [
+     "- **Code-page text arrives as UTF-8, converted on the client**: a single-byte code page travels as one byte a character and costs the server no conversion, a raw `mssql_scan` is correct on every code page (types)"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    71,
+    51,
+    62
+   ],
+   [
+    "replace",
+    71,
+    73,
+    62,
+    64,
+    [
+     "- Azure AD authentication (service principal, CLI, interactive device code flow)",
+     "- Kerberos / Windows SSPI integrated authentication — POSIX (`kinit` / keytab / raw credentials) and Windows (current logon session via `secur32.dll`)"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    75,
+    64,
+    66
+   ],
+   [
+    "replace",
+    75,
+    76,
+    66,
+    67,
+    [
+     "- **SQL Server backup files without SQL Server**: `mssql_backup_info('/backups/db.bak')` reports what `RESTORE HEADERONLY` / `LABELONLY` / `FILELISTONLY` do, read from the file alone through DuckDB's file system (local, `s3://`, `https://`) — full, differential and log backups, compressed (`MS_XPRESS`, `ZSTD`) and striped; compared with `RESTORE`'s own answers on SQL Server 2025 samples in CI, and on each version's backups from 2017 to 2025 when the oracle lane runs. `mssql_backup_tables` / `mssql_backup_views` list a full backup's tables (columns, types) and views, `mssql_backup_catalog` its system base tables as stored, and `mssql_backup_scan` reads a table's rows — values stored off row (`text` / `ntext` / `image`, long MAX values, row-overflow) included — in parallel, compared with `RESTORE` table by table (backup files)"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    90,
+    67,
+    81
+   ],
+   [
+    "replace",
+    90,
+    94,
+    81,
+    84,
+    [
+     "> on a case-insensitive column (#272).",
+     "> See Remote Pushdown",
+     "> and String comparisons and collation."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    117,
+    84,
+    107
+   ],
+   [
+    "replace",
+    117,
+    125,
+    107,
+    108,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    140,
+    108,
+    123
+   ],
+   [
+    "replace",
+    140,
+    145,
+    123,
+    124,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    154,
+    124,
+    133
+   ],
+   [
+    "delete",
+    154,
+    155,
+    133,
+    133
+   ],
+   [
+    "equal",
+    155,
+    163,
+    133,
+    141
+   ],
+   [
+    "delete",
+    163,
+    164,
+    141,
+    141
+   ],
+   [
+    "equal",
+    164,
+    165,
+    141,
+    142
+   ],
+   [
+    "replace",
+    165,
+    170,
+    142,
+    143,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    176,
+    143,
+    149
+   ],
+   [
+    "replace",
+    176,
+    179,
+    149,
+    152,
+    [
+     " License, Version 2.0. © The OpenSSL Project Authors and",
+     " contributors. Version pinned via `vcpkg.json`.",
+     " License text: LICENSES/openssl-LICENSE.txt"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    152,
+    153
+   ],
+   [
+    "replace",
+    180,
+    183,
+    153,
+    156,
+    [
+     " under the MIT License option of its dual Apache-2.0/MIT",
+     " licensing. © Daniel Lemire and simdutf contributors.",
+     " License text: LICENSES/simdutf-LICENSE-MIT.txt"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    156,
+    157
+   ],
+   [
+    "replace",
+    184,
+    188,
+    157,
+    161,
+    [
+     " backups), used under the BSD License option of its dual BSD/GPLv2",
+     " licensing. © Meta Platforms, Inc. and affiliates. Version pinned via",
+     " `vcpkg.json`.",
+     " License text: LICENSES/zstd-LICENSE-BSD.txt"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    190,
+    161,
+    163
+   ],
+   [
+    "replace",
+    190,
+    192,
+    163,
+    164,
+    [
+     "This project is licensed under the MIT License. See the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
+ },
+ "31aab7cdb66e+2": {
+  "fn": "SteveTheKiller/KillerNotes",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "KillerNotes - Free Encrypted Notepad"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    10,
+    1,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "See the help page for workflows and shortcuts, and the technical page for storage, rendering, and security details."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    60,
+    9,
+    58
+   ],
+   [
+    "replace",
+    60,
+    74,
+    58,
+    66,
+    [
+     " Cyanotic theme with a client review, system status table, editor card with table actions, and nested groups Cyanotic: rich text, a system status table, its editing card, and nested client groups. ",
+     " 98SE theme with Markdown source tools and the editor card 98SE: the familiar tools insert Markdown source, including links and pipe tables. ",
+     "",
+     " Group manager with a searchable nested group tree and note list Group manager keeps nested groups and note filing together. ",
+     " Black theme with the sidebar on the right and two notes selected with the multi-note card open Black, sidebar on the right: change color, tags, and group for several notes together. ",
+     "",
+     " Light theme with SketchPad, Dictation waveform, and speech model chooser Light: a rack diagram, recording waveform, and offline speech model chooser. ",
+     " KillerNotes unlock screen with a password visibility control Unlock an encrypted notebook or choose another database. "
+    ]
+   ],
+   [
+    "equal",
+    74,
+    77,
+    66,
+    69
+   ],
+   [
+    "replace",
+    77,
+    78,
+    69,
+    70,
+    [
+     "|Package|Why|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    70,
+    71
+   ],
+   [
+    "replace",
+    79,
+    87,
+    71,
+    79,
+    [
+     "|Microsoft.Data.Sqlite.Core|ADO.NET SQLite wrapper (managed)|",
+     "|SQLitePCLRaw.provider.e_sqlcipher|Managed P/Invoke shim to the SQLCipher native (static provider - the bundle's dynamic loader breaks under Costura)|",
+     "|SQLCipher + LibTomCrypt (vendored)|The encryption native itself, built from upstream source in `third_party/sqlcipher/` after the NuGet lib package line was deprecated|",
+     "|Markdig|Parses Markdown for native preview and rich text conversion (managed, MIT)|",
+     "|PolySharp|net48 polyfills for modern C# syntax (compile-time only)|",
+     "|libFLAC|Lossless storage for embedded recordings (native, BSD-3-Clause)|",
+     "|libmp3lame|MP3 export only, never storage (native, LGPL-2.1 - source shipped with every release)|",
+     "|whisper.cpp (+ ggml)|Offline speech recognition for dictation (native, MIT; downloaded on first use, not bundled)|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    99,
+    79,
+    91
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

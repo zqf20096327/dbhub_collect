@@ -2793,5 +2793,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ae77a32f2890": {
+  "identity": {
+   "one_liner": "基于类型标签 JSON 实现浏览器 IndexedDB 数据库导出与导入的 TypeScript 库。",
+   "review": "该库（@aossie-org/idb-backup）用于在浏览器中备份和恢复 IndexedDB 数据库：导出为自描述 JSON，通过 __type 标签保留 JSON.stringify 会损坏的类型（Uint8Array、bigint、Date、Map 等）；导入支持 overwrite 与 merge 两种策略。面向任意浏览器环境的前端应用，含 SSR 保护。注意核心 API 仍在开发中，导出的备份为未加密 JSON，使用时需自行处理文件安全。",
+   "highlights": [
+    "类型标签序列化：对 Uint8Array、bigint、Date、ArrayBuffer、Set、Map、RegExp 等类型实现无损往返",
+    "导入支持 overwrite（删除重建）和 merge（增量合并）两种策略",
+    "同时提供 ESM 与 CJS 双格式产物，依赖 idb 包装库，并含 SSR 环境的空操作保护"
+   ],
+   "use_cases": [
+    "为 local-first 浏览器应用实现 IndexedDB 数据的备份与恢复",
+    "在不同浏览器或设备间通过 JSON 文件迁移本地数据库",
+    "按 storeNames 选择部分对象仓库进行导出或导入（合并/覆盖策略）"
+   ]
+  },
+  "sha": "ae77a32f2890",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

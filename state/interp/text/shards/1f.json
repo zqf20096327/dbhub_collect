@@ -3436,5 +3436,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0aef6fe3e043": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地优先 AI 记忆层，经 MCP/SDK 接入各类 agent 框架。",
+   "review": "Mnemosyne 是面向 AI agent 的记忆组件，通过 pip 安装后以单个 SQLite 文件存储数据，无需外部服务。提供 remember/recall Python API 和内置 MCP 服务器，支持 Cursor、Claude Code、Codex 等 MCP 客户端及自定义 Python agent。核心为 BEAM 三层架构（工作记忆、情景记忆、TripleStore 知识图谱），混合检索使用二值化向量与 FTS5。README 中 BEAM 基准数据测于 v3.0.0，且不同评测使用不同 judge 模型，作者声明不可直接比较；LongMemEval 旧结果已撤回待重测。",
+   "highlights": [
+    "支持 MCP（stdio/SSE）、Python SDK、OpenWebUI 桥接等多种接入方式，覆盖 Cursor、Claude Code、Codex 等平台",
+    "BEAM 三层记忆架构：工作记忆（TTL 驱逐）、情景记忆（sqlite-vec + FTS5 混合检索）、带版本链的 TripleStore 知识图谱",
+    "384 维 float32 嵌入经 MIB 二值化压缩至 48 字节，汉明距离计算在 SQLite 内完成，无外部向量数据库"
+   ],
+   "use_cases": [
+    "为运行在本地或自托管环境的 AI agent 添加持久化记忆，避免数据外发",
+    "通过 MCP 将记忆能力接入 Cursor、Claude Code、Windsurf 等已支持的客户端",
+    "在 Python agent 中直接以 SDK 方式读写记忆，或经 CLI 管理 MCP 服务与检索"
+   ]
+  },
+  "sha": "0aef6fe3e043",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

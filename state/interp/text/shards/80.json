@@ -3141,5 +3141,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fede08677245": {
+  "identity": {
+   "one_liner": "面向小学至高中的配置驱动型 AI 教学平台，覆盖教学练评管",
+   "review": "SmartKBS 是一套面向小学、初中、高中三个学段的 AI 教学平台，把题库组卷、课堂互动、练习考试、学情分析与积分激励整合在同一账号体系内。学科、年级、题型与提示词模板均由配置文件驱动，内置 12 个预置年级。技术栈为 FastAPI + React，AI 链路支持 RAG、智能体与直接调用大模型三级降级，数据存本地 SQLite，可离线部署，采用 AGPL-3.0 许可证。手机浏览器可直接访问，管理类功能保留在电脑端。",
+   "highlights": [
+    "提供题库、组卷、考试、作业、自动批改、课堂互动（抢答/投票/抽问/分组讨论/协作白板）及学情分析、成长档案等功能，按教学主线组织为 50 个功能分区",
+    "AI 调用支持知识库 RAG、百炼智能体、直接调用大模型三级接管与降级，生成侧可在 DashScope/DeepSeek 云端与本地 Ollama 间按云端/混合/本地三档切换",
+    "学科、年级、班级、题型、称号与提示词模板全部来自配置，内置三个学段 12 个预置年级；数据落本地 SQLite 与本地目录，支持完全离线部署"
+   ],
+   "use_cases": [
+    "学校或教研组统一部署教学练评管一体化平台，按学科与学段通过配置切换课程体系",
+    "教师备课出题、发布考试与作业，并通过课堂测验、抢答、投票、分组讨论等互动工具组织教学",
+    "无外网环境的教学场景：本地 Ollama 引擎与本地数据存储支持完全离线运行"
+   ]
+  },
+  "sha": "fede08677245",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a415bf64a3f1": {
+  "identity": {
+   "one_liner": "将 Pinecone 向量搜索引擎引入 PostgreSQL 的开源扩展",
+   "review": "pg_pinecone 是一个基于 pgrx 构建的 PostgreSQL 扩展（Apache 2.0），用于在 Postgres 内执行向量与全文检索。它为每张表提供三种可切换的搜索引擎：pgvector、native（默认，本机过滤检索）和 remote（同步到 Pinecone serverless 索引），切换无需改写查询。要求 PostgreSQL 17/18、superuser 权限和已安装的 pgvector；可通过预编译包、Docker 镜像安装，或用 Rust 工具链从源码构建。",
+   "highlights": [
+    "支持 pgvector、native、remote 三种引擎按表切换且可逆，不改写现有 pgvector 查询",
+    "native 引擎在 Postgres 本机执行搜索时应用过滤条件，无需网络访问；remote 引擎将搜索迁移至 Pinecone serverless 索引",
+    "支持 BM25、向量及混合全文检索，并可直接索引现有 vector 列"
+   ],
+   "use_cases": [
+    "已使用 pgvector 的应用需按表选择或切换搜索后端",
+    "带租户 ID 等过滤条件的向量检索，需在本地无网络调用完成",
+    "单机 Postgres 容量不足以承载检索负载，需将搜索外移至 Pinecone serverless 索引的场景"
+   ]
+  },
+  "sha": "a415bf64a3f1",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d2099c9b894a": {
+  "identity": {
+   "one_liner": "面向 Claude Code 与 Codex 的跨会话记忆服务，含来源回执与 SQLite 存储",
+   "review": "为 Claude Code 和 Codex 提供共享的跨会话记忆，每条记忆附带保存时的来源文本（Source Receipt），可检索、更正或停用。支持本地 SQLite（无账号）与 cairn.ink 云端两种模式，同一电脑一次只运行一种。当前处于 developer preview，本地会话自动保存仅限 Linux/WSL 及 macOS 上的 Claude Code。",
+   "highlights": [
+    "提供 remember、find、inspect、correct、forget 等记忆工具，关键词检索无需模型密钥",
+    "每条记忆保存来源文本，更正/遗忘可回溯出处",
+    "本地模式数据存于明文 SQLite 数据库，支持会话自动保存与删除"
+   ],
+   "use_cases": [
+    "在 Claude Code 与 Codex 之间共享用户偏好与项目决策记忆",
+    "需要检查记忆来源并手动更正或遗忘的本地开发环境",
+    "多台设备同步同一份代理记忆的云端使用场景"
+   ]
+  },
+  "sha": "d2099c9b894a",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

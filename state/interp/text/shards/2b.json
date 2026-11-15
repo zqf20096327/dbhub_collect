@@ -3123,5 +3123,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "35ef2a483cc5": {
+  "identity": {
+   "one_liner": "AI 问数 Agent 与 MCP Server 数据库安全网关，Go 实现",
+   "review": "AgentSQL（智盾）是一个用 Go 编写的开源项目，包含两部分：自有页面的自然语言问数 Agent，以及可供外部 AI Agent 调用的 MCP Server 安全网关。两条入口共用身份授权、受控 SQL 执行、结果脱敏和审计。支持 MySQL、PostgreSQL，通过原生包或 Docker 安装，采用 Apache-2.0 许可。",
+   "highlights": [
+    "提供独立问数页面与 MCP Server 两种入口，支持 stdio、Streamable HTTP 和无状态 HTTP 传输",
+    "实现受控 SQL 执行、结果脱敏、逐次授权复核和持久审计",
+    "提供 CSV/XLSX 导出、图表生成及 ONNX 向量预热能力，SQLBot 经固定版本适配器可选接入"
+   ],
+   "use_cases": [
+    "员工在自有页面用自然语言查询已绑定数据源并核对 SQL 与审计",
+    "外部 AI Agent 通过 MCP Server 在授权范围内查询数据库",
+    "同时使用页面问数与 MCP 查询并统一安全审计的团队场景"
+   ]
+  },
+  "sha": "35ef2a483cc5",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "96ac33137f11": {
+  "identity": {
+   "one_liner": "用于迁移和备份 Coolify 服务器的 Go 语言 CLI 工具，通过一条命令完成备份与恢复。",
+   "review": "该工具面向使用 Coolify v4.3–v4.7 的运维人员，用于将项目、环境变量、密钥、卷、镜像及代理配置从一台服务器迁移到另一台，或在丢失服务器后从 rclone 远端（Google Drive、S3、SFTP 等 70+ 目标）恢复。备份经 age X25519 加密，恢复前需新服务器与旧服务器版本一致并可访问旧服务器 443 端口。数据库通过 pg_dumpall/mysqldump 原生导出，定时任务基于 systemd timer。",
+   "highlights": [
+    "支持按项目或整台服务器备份，资源包含应用、数据库、环境变量、密钥、卷和域名，并通过 Coolify 自身启动",
+    "支持定时整服务器备份至 rclone 可达的 70+ 存储目标，上传校验 checksum 后删除本地副本，保留远端最新 7 份",
+    "备份使用 age X25519 加密（含独立恢复密钥），传输走 HTTPS 且证书固定，分享链接密钥存放于 URL fragment"
+   ],
+   "use_cases": [
+    "将 Coolify 上的单个项目、多个项目或整台服务器的应用迁移到新服务器",
+    "配置每夜自动异地备份，服务器丢失后在同版本新 Coolify 上恢复",
+    "通过分享链接（443 或 8123 端口）在两台服务器间传输备份，支持断点续传"
+   ]
+  },
+  "sha": "96ac33137f11",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

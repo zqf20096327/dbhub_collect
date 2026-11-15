@@ -3125,5 +3125,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b6ebf81bc368": {
+  "identity": {
+   "one_liner": "基于 libpq 的轻量级 PostgreSQL C++ 客户端库",
+   "review": "taoPQ 是用于访问 PostgreSQL 数据库的 C++ 客户端库，仅依赖 libpq。它提供连接、事务、嵌套事务、预编译语句、大对象、连接池、管道模式与高速批量数据传输等功能，并通过可扩展的 traits 机制在 C++ 类型与 SQL 参数、查询结果之间转换。文档覆盖安装、连接池、聚合支持、错误处理等章节。",
+   "highlights": [
+    "支持数据库连接、事务与嵌套事务、预编译语句、连接池、管道模式等特性",
+    "通过可扩展 traits 机制实现 C++ 类型与 SQL 参数及查询结果的双向转换",
+    "除 libpq 外无其他依赖，包含高速批量数据传输能力"
+   ],
+   "use_cases": [
+    "在 C++ 应用中访问 PostgreSQL 数据库",
+    "需要批量导入/导出数据或使用大对象的场景",
+    "需要连接池或管道模式管理数据库交互的应用"
+   ]
+  },
+  "sha": "b6ebf81bc368",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "89b33a790c56": {
+  "identity": {
+   "one_liner": "基于原生 Go 微服务与 Clean Architecture 的电商系统，含秒杀库存锁定与 Outbox 一致性",
+   "review": "该系统以 Go 标准库与 MySQL 实现多服务电商后端，包含认证、用户、商品、订单、支付、通知六个服务，服务间通过 gRPC 同步调用、Kafka 加 Transactional Outbox 异步同步数据。数据访问使用 database/sql 原生 SQL，未使用重型 ORM。秒杀场景依赖数据库本地行锁防止超卖。README 提供了用例层测试命令与 Postman 格式的 API 端点示例，适合研究 Go 微服务工程实现的开发者阅读。",
+   "highlights": [
+    "采用 Clean Architecture 分层，每个服务内部划分为 Domain、Use Case、Repository、Delivery 四层，依赖只指向内层",
+    "订单服务在本地 MySQL 事务中同时写入订单与 Outbox 记录，由 Outbox Worker 轮询并通过 gRPC 调用商品服务扣减库存",
+    "秒杀库存扣减使用数据库层本地行锁；数据层使用 PrepareCtx 预编译 SQL"
+   ],
+   "use_cases": [
+    "学习 Go 原生实现微服务电商系统的分层组织与工程结构",
+    "参考 Transactional Outbox + Kafka + gRPC 实现跨服务数据一致性",
+    "参考数据库行锁方式处理秒杀库存扣减场景"
+   ]
+  },
+  "sha": "89b33a790c56",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

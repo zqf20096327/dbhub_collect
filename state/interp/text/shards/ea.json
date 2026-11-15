@@ -3079,5 +3079,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0265240b4ff3": {
+  "identity": {
+   "one_liner": "基于 Django 数据库表存储任务状态的任务队列后端，实现 django.tasks 接口。",
+   "review": "dj_queue 是 django.tasks 框架的数据库任务队列后端，任务、执行状态、并发信号量和周期调度均存于 Django 管理的 SQL 表，无需 Redis 等外部中间件。要求 Python 3.12+ 与 Django 6.0/6.1，支持 PostgreSQL、MySQL、MariaDB、SQLite。通过 supervisor/worker/dispatcher/scheduler 组件轮询取任务，PostgreSQL 上可选用 SKIP LOCKED 与 LISTEN/NOTIFY 降低延迟。",
+   "highlights": [
+    "任务定义使用 Django 标准 @task 装饰器，支持同步与异步 enqueue/get_result 方法",
+    "提供优先级（-100 到 100）、定时（run_after）、周期任务、并发信号量限制和批量事务入队",
+    "内置 supervisor 运行时监督、Django admin 视图、健康检查及 Prometheus/JSON 指标端点"
+   ],
+   "use_cases": [
+    "已有 Django 应用需在现有关系数据库上执行后台、定时或周期任务",
+    "不希望部署 Redis/RabbitMQ 等独立消息队列的基础设施",
+    "需要按 backend 别名将队列路由到独立数据库或实现多队列隔离存储"
+   ]
+  },
+  "sha": "0265240b4ff3",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

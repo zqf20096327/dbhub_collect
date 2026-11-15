@@ -2978,5 +2978,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8b2c59dc9482": {
+  "identity": {
+   "one_liner": "模块化 Go 工具包，以标准库为核心，为 HTTP 服务提供数据、任务与可观测能力。",
+   "review": "Arkoren 是面向 Go 开发者的模块化工具包，覆盖 HTTP 路由、缓存、数据库、消息、队列、支付、加密、AI 调用与 OpenTelemetry 观测等场景。设计上围绕 net/http、context 和 slog 组合，不依赖注入容器；核心无第三方依赖，各驱动为独立 Go 模块。需 Go 1.27+，项目处于 pre-1.0 阶段，v0 小版本可能破坏 API，采用前需查阅兼容性政策。",
+   "highlights": [
+    "提供 Cache、Database、Storage、Search 等服务契约，每种实现附本地 Memory 驱动或测试 fake，并配套一致性测试套件",
+    "驱动按需引入（如 arkoren.dev/driver/redis），vendor 驱动为独立 Go 模块，核心模块零第三方依赖",
+    "包含 HTTP 中间件、会话、Webhook 接收器、签名链接、CAPTCHA 及基于可选官方 SDK 适配器的 MCP 工具等组合能力"
+   ],
+   "use_cases": [
+    "在既有 Go 应用中按需引入单一服务（如队列、缓存或加密）而不迁移到框架",
+    "组合多个模块搭建 HTTP 微服务，本地用 Memory/SQLite 驱动开发，部署时切换 PostgreSQL、NATS、S3 等后端",
+    "为编码代理（coding agent）配置文档 skill，或通过服务契约测试套件验证自选驱动行为"
+   ]
+  },
+  "sha": "8b2c59dc9482",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

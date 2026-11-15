@@ -3104,5 +3104,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "714d6c6f3021": {
+  "identity": {
+   "one_liner": "多层语音认证引擎：深度伪造检测、说话人验证、ASR 短语匹配与策略引擎",
+   "review": "AAA Engine 是一个基于 FastAPI + React + PostgreSQL 的语音认证系统，通过深度伪造检测（Wav2Vec2）、短语匹配（Whisper，Levenshtein 相似度 0.6）、说话人验证（ECAPA-TDNN，192 维嵌入）串联流水线，由 PolicyEngine 输出 APPROVE/DENY/STEP_UP/REVIEW/UNAVAILABLE 五种判定。采用 SV 门控、EMA 声纹更新（0.8 旧 + 0.2 新）、AES-256-GCM 加密和行级安全多租户隔离。面向语音认证研究场景，依赖 Python 3.11+、Node 20+ 与 PostgreSQL 15。",
+   "highlights": [
+    "串联 AD→ASR→SV 检测层并由集中式 PolicyEngine 输出五种决策，AD 与 ASR 并发执行",
+    "声纹采用 EMA 演进机制并以 AES-256-GCM 按租户密钥加密，配合 PostgreSQL 行级安全实现租户隔离",
+    "提供 /v1/enroll、/v1/verify、/v1/challenges、/v1/risk/transcript 等 API，内置限流、健康检查、日志 PII 脱敏与同意管理"
+   ],
+   "use_cases": [
+    "需要语音生物特征认证流程的研究与原型验证",
+    "带有深度伪造检测和短语挑战的语音登录/交易验证场景",
+    "呼叫中心场景下的转写文本 vishing 风险分析（CallGuard 宿主应用）"
+   ]
+  },
+  "sha": "714d6c6f3021",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "97552015036c": {
+  "identity": {
+   "one_liner": "浏览与编辑 DaruDB 数据库文件的跨平台桌面应用",
+   "review": "DaruDB Studio 是一个基于 Electron 的桌面应用，用于打开、浏览、查询和编辑 DaruDB 本地数据库文件，支持 Windows、macOS 和 Linux。它以项目为单位管理文件，从文件本身读取 schema，提供分页表格、过滤查询、CSV/JSON 导入导出、完整性检查、备份与修复工具；加密文件的密钥可存入系统 keystore。适合使用 DaruDB 存储数据、需要在无代码情况下查看和修改数据的开发者。",
+   "highlights": [
+    "支持打开、浏览、编辑加密或非加密的 DaruDB 数据库文件，加密密钥可交由操作系统 keystore 加密保管",
+    "提供分页网格浏览、查询语言过滤、单元格及表单编辑，并可导出/导入 CSV 与 JSON",
+    "包含 schema 查看（TypeScript/JSON）、文件完整性检查、压缩、备份及损坏文件抢救等工具"
+   ],
+   "use_cases": [
+    "无需编写程序，直接查看和修改 DaruDB 文件中的 collections 与对象",
+    "检查数据库文件完整性、执行压缩、备份或更改加密密钥",
+    "通过示例商店数据库尝试和了解 DaruDB 的各类字段类型"
+   ]
+  },
+  "sha": "97552015036c",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

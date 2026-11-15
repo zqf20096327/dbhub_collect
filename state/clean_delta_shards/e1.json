@@ -19476,5 +19476,245 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "fd9b830f09de+2": {
+  "fn": "moqui/mr-moqui",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "It needs Rust 1.99 or newer and bash, on Linux, macOS, or Windows (Build). On Windows, use the MSVC toolchain, Visual Studio Build Tools and Git for Windows, and `moq.cmd` from PowerShell or cmd (Windows). This builds the release binary (target/release/moqui, the Maximal package: every feature, embedded Postgres and the dev tools, including SSH/SFTP, OAuth2/OIDC, SMTP/IMAP/POP, Git, XLSX and image processing) and uses it to load data and run. To deploy to a server, a container or a cluster, see Run and Deploy."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    18,
+    11,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "What is open is in plans/Remaining-Work.md."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    34,
+    19,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "MR Moqui spans five repositories in the moqui organization on GitHub. Component repositories use matching repository, `runtime/components/addon` directory and component.xml names."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     "|Repository|What it is|Where it came from|"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    37,
+    38
+   ],
+   [
+    "replace",
+    38,
+    43,
+    38,
+    43,
+    [
+     "|mr-moqui|The framework, the `moq` script, the base components (`runtime/components/base`: framework, tools, webroot), and the dev components (`runtime/components/dev`: dev-aide, example, the demo lock-down, and the component template)|A Rust rebuild of Moqui Java (moqui-framework and moqui-runtime), started 2026-10-09|",
+     "|mr-mantle|Mantle Business Artifacts: the data model (entities and data) and the services|The Java components mantle-udm and mantle-usl. They were forked as `mr-mantle-udm` and `mr-mantle-usl` and converted from Groovy to JavaScript. Then `mr-mantle-usl` was renamed and `mr-mantle-udm` was merged into it|",
+     "|mr-marble|Marble ERP and the Simple Screens library it is built from, with My Account|The Java components SimpleScreens and MarbleERP. They were forked as `MrSimpleScreens` and `MrMarbleERP` for the port. Then `MrSimpleScreens` was renamed and `MrMarbleERP` was merged into it|",
+     "|mr-boss|IronStone BOSS: Commons & Comms (groupware and communication), Projects, and the other BOSS applications|New for MR Moqui. The repository was named `ironstone-boss` until 2026-10-25|",
+     "|mr-pass|IronStone PASS: the public-facing companion suite: Forum, Shop, Smithy, the Billing, Supplier, Support and Sales customer pages, Marketing's public subscription, forms, landing pages and event registration, and Blog/Publishing|New for MR Moqui; Shop is specified in its design|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     "The merges into `mr-mantle` and `mr-marble` kept the commit history of both repositories. On GitHub the renamed repositories redirect from their old names. A Java component that depends on `mantle-udm`, `mantle-usl`, `SimpleScreens` or `MarbleERP` now depends on `mr-mantle` or `mr-marble`, and its `component://` locations change the same way. See Moqui Java migration notes."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    50,
+    45,
+    50
+   ],
+   [
+    "replace",
+    50,
+    51,
+    50,
+    51,
+    [
+     "- Use one language (JavaScript) for scripts and templates on the server, and for inline expressions on the client, so that XML Screens can become client-renderable. The engine is quickjs-oxide, a QuickJS-compatible engine in safe Rust."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    59,
+    51,
+    59
+   ],
+   [
+    "replace",
+    59,
+    67,
+    59,
+    67,
+    [
+     "1. **JavaScript for scripts and templates.** Scripts, XML actions, screen macros and text templates are JavaScript on quickjs-oxide; `ec.resource.expand()` is a template literal, and a small `if`/`list`/`assign` renderer (with a locked-down sandbox variant) handles structured text. Plan: Architecture-Proposal (Templating).",
+     "2. **SearchFacade replaces ElasticFacade.** Postgres full-text and JSON are the default backend; OpenSearch is optional. Plan: SearchFacade.",
+     "3. **qvt can be server-static.** With `server-static` set for `qvt`, the server sends a data-free compiled template and the client merges the data. Opt-in. Plan: QvtServerStatic.",
+     "4. **Print HTML is its own render mode.** `html-print` (print CSS and `@page`, also selected by the old `xsl-fo` name) is printed to PDF by one long-lived external Chromium; `/fop/<path>` sends a screen as PDF. Plan: Architecture-Proposal (Tool components and print).",
+     "5. **Cluster coordination uses the shared database.** Members find each other in a table; cache invalidation and notifications fan out over gRPC on client-certificate TLS (HTTP/1.1 POST as the alternative); no Hazelcast or Redis. Plan: Cluster.",
+     "6. **Sessions live in the database** (`moqui.server.HttpSession`, through the entity cache), with an optional guarantee mode so a load balancer without stickiness can fail over. Plan: Architecture-Proposal (Sessions and login).",
+     "7. **Keys are configuration, and unset secrets are generated.** Secrets are `default-property`s set by conf file or environment, never database rows; one still at its `CHANGEME` default is generated and saved to `runtime/.env`, which is loaded at startup like environment variables. Plan: MimoReview (Decisions 1–3).",
+     "8. **Feed registration commits with the entity change.** Search document keys are registered in the entity transaction; assembly and indexing run after commit, and an index failure does not roll back the change. Plan: SearchFacade."
+    ]
+   ],
+   [
+    "equal",
+    67,
+    74,
+    67,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     "Native component usage, the plan, and"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    80,
+    75,
+    80
+   ],
+   [
+    "replace",
+    80,
+    81,
+    80,
+    81,
+    [
+     "Reference guides for built features are in `docs/`, by tier and area with an index in `docs/README.md`, including building and testing, running and deploying and the practices for application development and Rust. The security policy links to the attack-surface map and the HTTP proof tests. For a Moqui Java deployment or component moving to MR Moqui, start with the Moqui Java migration notes. Design, status and review documents are in `plans/`, indexed by `plans/README.md`: what is still open, what comes next, the proposals, and the archive of built designs and finished reviews."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    85,
+    81,
+    85
+   ],
+   [
+    "replace",
+    85,
+    86,
+    85,
+    86,
+    [
+     "are in `docs/Build-Test.md`. Running and deploying (the runtime directory and conf lookup, HTTPS"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    86,
+    87
+   ],
+   [
+    "replace",
+    87,
+    88,
+    87,
+    88,
+    [
+     "`docs/Run-Deploy.md`; Podman and systemd are in `podman/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    100,
+    88,
+    100
+   ],
+   [
+    "replace",
+    100,
+    102,
+    100,
+    101,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

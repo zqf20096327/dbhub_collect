@@ -3086,5 +3086,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8afb19008923": {
+  "identity": {
+   "one_liner": "AI 代理的本地持久化记忆库，BM25 多跳检索进程内运行并经 MCP 提供服务",
+   "review": "CogniCore 是一个 Python 库加 MCP 服务器，为 AI 代理提供跨会话的持久记忆、会话交接与反思能力。依赖仅 numpy、jsonschema、requests，无需向量数据库或嵌入服务器，记忆存于本地 SQLite。通过 hooks 在会话结束时自动保存、下次启动注入摘要；开发者可手动维护项目上下文文件。适用于使用 Claude Code、Codex 等代理的开发者。需注意 README 明确词法检索在查询与会话用词差异大时可能漏检。",
+   "highlights": [
+    "通过 hooks 在会话结束后自动保存并注入简报，摘要按 token 预算生成，项目上下文写入可编辑的 .cognicore/context.md",
+    "支持 Claude Code 与 Codex 间的会话交接，任何 MCP 客户端可调用保存与恢复工具",
+    "内置 NexusShield 拦截提示注入与越狱输入，支持事件回放、分支及 Ed25519 签名的记忆捆绑导出"
+   ],
+   "use_cases": [
+    "在多个编码代理（Claude Code、Codex、Cursor）之间延续同一任务的上下文与未完成事项",
+    "为自定义 Python 代理函数增加跨运行的过去经验记忆与失败教训反思",
+    "需要本地存储、可审查且可脱敏导出记忆的代理应用场景"
+   ]
+  },
+  "sha": "8afb19008923",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

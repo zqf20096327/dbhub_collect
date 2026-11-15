@@ -3163,5 +3163,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ee142a528aef": {
+  "identity": {
+   "one_liner": "基于 TypeScript 从零实现线协议的 PostgreSQL 客户端，支持 Node.js 和 Bun。",
+   "review": "PostgreJS 是面向 Node.js 与 Bun 的 PostgreSQL 驱动，纯 TypeScript 实现，不依赖 libpq 或原生绑定，直接与服务器通信。提供连接池、预处理语句、服务端游标、LISTEN/NOTIFY、COPY 流、逻辑复制、两阶段提交、多主机故障转移等功能，通过 npm install postgrejs 安装，以 ESM 模块发布并附带类型定义。",
+   "highlights": [
+    "支持完整二进制线协议、逐列格式选择、自动预处理语句与服务端游标",
+    "内置连接池、事务 API、两阶段提交、多主机故障转移与 SCRAM channel binding",
+    "通过 diagnostics_channel 发布事件，配套 postgrejs-otel 提供 OpenTelemetry spans 与数据库客户端指标"
+   ],
+   "use_cases": [
+    "在 Node.js 或 Bun 应用中直接连接和查询 PostgreSQL 数据库",
+    "作为 Kysely、Drizzle ORM、TypeORM、Prisma 等查询构建器/ORM 的底层驱动适配",
+    "需要逻辑复制、大对象操作、二进制 COPY 或可观测性集成的数据管道与运维场景"
+   ]
+  },
+  "sha": "ee142a528aef",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2a47ac2ed631": {
+  "identity": {
+   "one_liner": "基于 Zig 编写的轻量级内存键值缓存系统，支持 RESP 类协议命令",
+   "review": "zcached 是用 Zig 编写的内存缓存服务器，通过 TCP 端口 7556 接收 SET/GET/PING 等数组格式命令，支持字符串、整数、浮点、列表等类型，并提供快照与 AOF 持久化。运行时使用 kqueue（macOS）/io_uring（Linux）反应器，每 worker 一个 OS 线程，连接以协程方式运行；除可选的 OpenSSL 外无其他依赖，需 Zig 0.17.1 编译。",
+   "highlights": [
+    "支持字符串、整数、浮点数、列表等多种数据结构，提供 SET、GET、PING 等命令",
+    "运行时采用 kqueue/io_uring 反应器，连接以协程运行，支持 TLS（基于 OpenSSL）",
+    "包含快照与 AOF 持久化（everysec 后台刷新），构建后除可选 OpenSSL 外零依赖"
+   ],
+   "use_cases": [
+    "需要快速读写键值数据的应用缓存场景",
+    "需要持久化能力（快照/AOF）的内存数据库使用场景",
+    "已具备 Zig 编译器环境、希望以单个服务进程部署缓存的场景"
+   ]
+  },
+  "sha": "2a47ac2ed631",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6887a17743a9": {
+  "identity": {
+   "one_liner": "面向游戏、3D/AR/VR 与 AI 代理购物场景的开源交易完整性层。",
+   "review": "OICT 提供规范、零运行时依赖的参考实现与可对任意服务运行的符合性套件，用于在 checkout 之前校验授权链、所见即所订快照、代理权限与未成年人保护等规则。适合在已有结账流程之上接入的交易平台团队；需 Node 22.18+，持久化部署依赖 PostgreSQL。",
+   "highlights": [
+    "以规范（RFC 2119，规则带稳定 ID）、参考实现和 HTTP 符合性套件（57 个用例、八个类别）三部分交付，实现零运行时依赖",
+    "授权链、快照哈希确认、幂等键与一次性确认、Ed25519 签名令牌等保证在 PostgreSQL 数据库层强制执行，支持多实例部署",
+    "提供 append-only 审计日志、Prometheus 指标、JWKS 公钥端点，以及带演示与基准脚本（demo/conformance/bench/test:cluster）的命令集"
+   ],
+   "use_cases": [
+    "为游戏、3D 世界、AR/VR 场景中的真实商品购买流程加入授权与确认校验层",
+    "限制 AI 代理只能起草购物车、不能下单，并为未成年人订单启用监护人同意流程",
+    "用符合性套件对自建实现进行规则验证，或通过注入异常基准检验幂等与撤销处理"
+   ]
+  },
+  "sha": "6887a17743a9",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "06e4b24183c7": {
+  "identity": {
+   "one_liner": "基于 DBUnit 的数据库集成测试 Kotlin 库",
+   "review": "DBKover 是一个基于 DBUnit 的数据库集成测试库，面向使用 Kotlin 和 JUnit 5 的开发者。它通过 @DBKover 注解声明数据库连接，用 @DBKoverDataSet 和 @DBKoverExpected 注解分别指定测试前后的数据集（XML 格式），实现测试前准备数据、测试后校验状态。注意其 API 在 v1 之前可能变更。",
+   "highlights": [
+    "支持测试前设置数据库状态与测试后校验数据库状态",
+    "提供 JUnit 5 集成，通过 @DBKover、@DBKoverDataSet、@DBKoverExpected 注解使用",
+    "发布于 Maven Central，以 testImplementation 方式引入依赖"
+   ],
+   "use_cases": [
+    "为依赖数据库的应用编写 JUnit 5 集成测试",
+    "测试前以 XML 数据集填充数据库初始数据",
+    "测试后比对数据库中的数据是否符合预期"
+   ]
+  },
+  "sha": "06e4b24183c7",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee44930aefc6": {
+  "identity": {
+   "one_liner": "离线优先的 SQL 审计引擎，提供 CLI 与 MCP 服务端。",
+   "review": "DeltaScope 是用 Go 编写的 SQL 审计引擎，支持 MySQL、TiDB、PostgreSQL 的 DDL/DML 语句审查，可离线运行或连接数据库做元数据感知审计。通过 CLI 执行审计，提供 reject/pass/review 三类判定，支持 JSON、SARIF、GitHub Actions、GitLab Code Quality 等输出格式；也可作为 MCP server 供 AI 客户端调用。存在语句配额（每请求 1024 条 MySQL/TiDB 顶层语句）限制，超出部分标记 incomplete。",
+   "highlights": [
+    "支持 --dialect mysql|tidb|postgresql 三方言离线审计，可联网读取实例元数据",
+    "提供 JSON、SARIF、github-actions、github-summary、gitlab-codequality 输出格式，含 --fail-on 阈值与 --target-version 版本事实输入",
+    "发布单一归档含 deltascope、deltascope-server、deltascope-mcp 三个二进制，支持 Homebrew、npm 启动器安装"
+   ],
+   "use_cases": [
+    "在 CI 流水线中对迁移文件执行 SQL 审计并以注解/摘要形式回写运行结果",
+    "将 MCP server 接入 AI 客户端，在执行 SQL 前调用审计",
+    "离线环境对 MySQL/TiDB/PostgreSQL 的 DDL/DML 变更做规则化审查"
+   ]
+  },
+  "sha": "ee44930aefc6",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

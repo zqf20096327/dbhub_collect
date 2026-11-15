@@ -3217,5 +3217,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0750f7976384": {
+  "identity": {
+   "one_liner": "面向 AI 代理的本地优先记忆层，以 Markdown 存储并经 MCP 服务器读写",
+   "review": "Noema 用 Rust 实现的单二进制为 AI 代理提供持久化记忆：每条记忆（Trace）是一个 Markdown 文件，本地 SQLite（FTS5）作索引，核心存储与词法检索无需 API 密钥。它作为 MCP 服务器（stdio + Streamable HTTP）供 Claude Code、Copilot、Cursor 等客户端使用，并支持跨 Cortex 的 P2P 联邦同步与编辑器文件监听。当前处于 v0.x，次版本间可能存在破坏性变更。",
+   "highlights": [
+    "记忆为磁盘上的纯 Markdown 文件，本地 SQLite + FTS5 作索引，核心存储和词法检索无需云服务或 API 密钥",
+    "以 MCP 服务器形式（stdio 和 Streamable HTTP）暴露记忆读写，并内置 Hermes/Obsidian 插件安装器",
+    "支持跨 Cortex 的点对点联邦，使用向量时钟与事件日志审计，并为并发编辑生成 divergence 记录"
+   ],
+   "use_cases": [
+    "为 Claude Code、Copilot、Cursor、Zed、Aider 等支持 MCP 的代理工具接入本地持久记忆",
+    "在多个代理或多个 Cortex 之间同步共享记忆，并审计并发编辑冲突",
+    "需要数据留在本地、以纯文本文件为数据源的记忆管理场景"
+   ]
+  },
+  "sha": "0750f7976384",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "107a443b5ee7": {
+  "identity": {
+   "one_liner": "内嵌 sing-box 的自托管代理控制面,单 Go 二进制加 SQLite,以线路统一管理入口与出口",
+   "review": "m-ui 是一个面向自托管部署的代理面板,用单个 Go 二进制和 SQLite 数据库实现,内嵌 sing-box 数据面。项目以「线路」概念合并入口协议、端口与出口上游的配置,保存前对整份配置做干跑校验,失败自动回滚,支持一台主机管理多台副机并统一判定配额。目标用户为自行搭建和维护代理服务器的个人或运营者,依赖 Linux amd64/arm64 与 systemd,需 root 权限安装。",
+   "highlights": [
+    "单二进制 + SQLite 架构,内嵌面板、订阅服务、sing-box 数据面与后台任务四个组件,共用同一数据库文件",
+    "配置保存前先经 sing-box 干跑校验,失败不落库;用户与上游改动热更新,线路改动重启数据面且新配置启动失败时自动回滚",
+    "支持一主多副部署:主机推送配置并统一判定配额,副机仅转发;订阅按客户端自动输出通用链接、Clash、sing-box 三种格式"
+   ],
+   "use_cases": [
+    "自托管代理服务器管理:从单台服务器自用,到多台服务器的集中配置推送与用户配额统一判定",
+    "面向多用户的订阅分发:通过订阅链接向客户端提供多格式节点配置、落地页与二维码",
+    "对外运营场景:多服务器、套餐模板、代理分销面板与外部 API 对接商城或 Telegram 机器人"
+   ]
+  },
+  "sha": "107a443b5ee7",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1810a60defc1": {
+  "identity": {
+   "one_liner": "面向瑞士、列支敦士登、德国、奥地利中小企业的开源自托管开票软件",
+   "review": "Rhinvoice 用于生成报价单、发票、催款单与电子发票，覆盖瑞士 QR-bill、ZUGFeRD/Factur-X 与 XRechnung 格式，并按各国实现增值税规则与舍入方式。可通过 Docker 部署在服务器、NAS 或 Raspberry Pi，也可作为 Windows/Mac 桌面应用运行，数据保存在本地。项目处于 beta 阶段（0.x），README 提示在正式开票前先在测试环境试用；软件本身不提供税务或法律建议。",
+   "highlights": [
+    "支持瑞士 QR-bill、EPC 二维码、ZUGFeRD/Factur-X（嵌入 PDF/A-3b）与 XRechnung 3.0，并使用 KoSIT validator 与 Mustang 进行校验",
+    "内置 CH、LI、DE、AT 四国的增值税率、小企业规则、支付码与舍入规则，税务处理自动判定并记录人工覆盖",
+    "提供 Docker 镜像（linux/amd64 与 linux/arm64）及 Windows/Mac 桌面安装包，带 restic 加密备份与可选两步验证登录"
+   ],
+   "use_cases": [
+    "四国中小企业自托管开具报价单、发票、催款单及含电子发票附件的邮件",
+    "需要向德国公共机构提交 XRechnung，或需要符合 EN 16931 的 ZUGFeRD/Factur-X 发票的场景",
+    "从其他开票软件迁移：通过 CSV/XLSX 导入客户与文章，旧发票连同原 PDF 一并导入"
+   ]
+  },
+  "sha": "1810a60defc1",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6be73b6b5c50": {
+  "identity": {
+   "one_liner": "本地优先的 AI 运营面板，用专项代理团队处理定时任务并审核交付物",
+   "review": "Pin2Pin 是一个基于 FastAPI 与本地 SQLite 的单用户 AI 运营面板，运行在 127.0.0.1，用于创建专项代理、安排定时任务、在任务板上追踪并审核交付物。首次启动需完成所有者与公司资料设置，外部动作（如发邮件、发 Telegram 帖）须所有者批准。安装脚本目前仅支持 Windows，无多用户登录，云模型提示词会发送到所配置的提供商。",
+   "highlights": [
+    "支持 OpenRouter、OpenAI、Gemini、Groq、Mistral 等 12 类模型提供商配置，并可选 Gemini 或 deAPI.ai 生成图像与视频",
+    "任务逐项派发，阻塞、拒绝与完成的任务卡包含仅限该任务的对话，可回复或继续先前任务",
+    "运行数据（team.db、.env、生成文件、对话）保留在 backend/ 下并被 .gitignore 排除"
+   ],
+   "use_cases": [
+    "在本地计算机上编排一组专项代理并安排每日/每周定时任务",
+    "需要所有者批准邮件发送、Telegram 发帖等外部动作的工作流",
+    "在 Project Workspace 中查看 Engineering 运行日志并通过私聊请求代码修改任务"
+   ]
+  },
+  "sha": "6be73b6b5c50",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

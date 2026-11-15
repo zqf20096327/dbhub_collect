@@ -2977,5 +2977,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7c4b96dc96ff": {
+  "identity": {
+   "one_liner": "自托管 PaaS 平台，通过 SSH 在自有服务器上部署应用、数据库与服务",
+   "review": "Coolify 是一个开源、可自托管的应用部署平台，用于在自有服务器（VPS、裸金属、树莓派等）上管理应用、数据库和 360 余种一键服务。它基于 Docker 构建部署，支持从 GitHub、GitLab、Bitbucket、Gitea 拉取代码，用 Nixpacks、Dockerfile 或 Docker Compose 构建。README 提到项目免费开源，另有官方维护的付费 Cloud 版本。",
+   "highlights": [
+    "支持从 GitHub、GitLab、Bitbucket、Gitea 构建部署，提供 Nixpacks、Railpack、Dockerfile、Docker Compose 及预构建镜像方式",
+    "提供 360+ 一键服务部署、托管数据库，含持久化存储与自动生成的凭据",
+    "支持 Git push 自动部署、Pull Request 预览、Webhook 触发部署及镜像回滚；可管理自定义域名、自动 HTTPS 证书与反向代理"
+   ],
+   "use_cases": [
+    "在自有 VPS 或裸金属服务器上部署静态站点、全栈应用与数据库",
+    "需要 Git push 自动部署和 Pull Request 预览环境的个人或团队开发流程",
+    "管理多台服务器的基础设施运维，包括日志查看、容器终端、健康检查与资源监控"
+   ]
+  },
+  "sha": "7c4b96dc96ff",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ad06fccac9f5": {
+  "identity": {
+   "one_liner": "基于数据库 Schema 生成 GraphQL 与 REST API 的 Java 引擎",
+   "review": "该引擎在启动时内省 Postgres 或 MySQL 的表结构，自动生成 GraphQL 类型和 REST 端点，并将每条 GraphQL 请求编译为单条 SQL 语句执行。权限按角色、表和操作（行过滤、列、写校验）在引擎内实施，同一规则可用于无行级安全的 MySQL。项目属于 Excalibase 平台的一个服务组件，提供 JVM 与 GraalVM 原生镜像两种运行方式，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "启动时内省数据库 Schema，自动生成 GraphQL 类型与 REST 端点，支持复合主键、外键关系、视图与多 Schema 发现",
+    "每条 GraphQL 请求编译为一条 SQL 语句，权限（角色×表×操作的行/列/写校验）编译进同一 SQL，支持 pgvector 向量 k-NN 搜索与基于 WAL/binlog CDC 的 WebSocket 实时订阅",
+    "提供 GraalVM 原生镜像（约 134 MB 二进制）与 TypeScript SDK @excalibase/sdk，通过 SqlDialect SPI 支持扩展新数据库方言"
+   ],
+   "use_cases": [
+    "为已有 Postgres 或 MySQL 数据库快速生成 GraphQL/REST 查询接口，无需手写 API 层",
+    "需要在无行级安全特性（如 MySQL）上按角色实施行/列级数据权限的场景",
+    "依赖实时数据推送的应用，可基于 WAL 或 binlog CDC 通过 WebSocket 订阅表变更"
+   ]
+  },
+  "sha": "ad06fccac9f5",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3f17fad7c87f": {
+  "identity": {
+   "one_liner": "自托管数据平台，以 Docker Compose 整合 Elasticsearch 与 PostgreSQL 全链路",
+   "review": "NYX 是面向野外数据采集机构的自托管数据平台，以 Docker Compose 栈部署，包含表单采集、XLS 导入与 Camel ETL、PostgreSQL/Elasticsearch 存储、Kibana/Grafana 分析看板及 Jasper 定时报表。仓库本身只含部署与配置，应用代码分布在 nyx_ui、nyx_rest 等独立仓库。移动端已废弃，README 明确说明其提供的是演示布局而非生产加固配置。",
+   "highlights": [
+    "通过单一 Docker Compose 栈编排 Web UI、REST API、PostgreSQL、Elasticsearch、ActiveMQ、Node-RED、Kibana、Grafana、Jupyter 等组件，nginx 终止 TLS 并路由",
+    "内置 Apache Camel 与 XLS 导入器实现数据清洗加载，Jasper 报表运行器可定时生成 PDF/XLS 报告，ElastAlert 与集中日志提供监控",
+    "登录支持密码、Active Directory、GitHub 与 Entra ID；所有配置文件以 bind-mount 方式挂载，修改后重启容器即可生效，无需重建镜像"
+   ],
+   "use_cases": [
+    "需要在本地或自有云账户上离线采集、导入并分析外勤数据的组织",
+    "希望以一套栈获得数据摄取、看板、Notebook 与定时报表交付的团队",
+    "需要自建包含消息队列、ETL 与日志监控的完整数据基础设施的部署场景"
+   ]
+  },
+  "sha": "3f17fad7c87f",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51f3bfe7d917": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 PostgreSQL 的教育管理 REST API",
+   "review": "ConnectUde 的后端仓库，提供学生、教师、课程、班级与成绩管理等 REST 接口，面向教育机构的管理场景。认证采用 JWT，授权基于角色的访问控制，数据库结构通过 Flyway 迁移管理，输入校验使用 Jakarta Validation。README 注明这是协作开发作品集项目，未包含前端部分与安装部署说明。",
+   "highlights": [
+    "提供学生、教师、课程、科目、班级与成绩管理的 REST API",
+    "基于 JWT 的用户认证与基于角色的访问控制",
+    "通过 Flyway 管理数据库模式迁移，使用 Jakarta Validation 处理校验"
+   ],
+   "use_cases": [
+    "教育机构的学生、教师与课程信息管理",
+    "需要角色区分权限的教学评估流程",
+    "作为 Spring Boot 分层架构与数据库迁移的参考实现"
+   ]
+  },
+  "sha": "51f3bfe7d917",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

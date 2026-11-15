@@ -3042,5 +3042,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8cea99379979": {
+  "identity": {
+   "one_liner": "跨 14 种 SQL 方言的数据库结构对比与迁移工具，含本地 Web UI",
+   "review": "FoxSchema 是一个数据库 schema diff 与迁移工具，以 monorepo 形式提供 CLI、本地 Web UI 与 Docker 自托管版本。它对源/目标库做内省，生成色标 diff 与目标方言 DDL（默认 dry-run），支持快照、迁移入 Git、SQL 编辑器与数据对比，覆盖 PostgreSQL、MySQL、Oracle、SQL Server、ClickHouse 等 14 种方言；需 Node.js ≥ 22.5，MongoDB 与 Redis 仅支持 SQL 子集编辑、不支持 schema 对比。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、Oracle、SQL Server、Db2、ClickHouse 等 14 种 SQL 方言的 schema 内省与对比，生成目标方言 DDL，默认 dry-run",
+    "提供快照时间线与版本对比、迁移提交到 Git、跨连接多目标运行的 SQL 编辑器（含 notebook 单元与 FoxScript）",
+    "可自托管（npm 全局安装或 Docker），提供 compare/migrate/tui 等 headless 与 CI 用子命令"
+   ],
+   "use_cases": [
+    "在 PostgreSQL、MySQL 等不同方言数据库之间比较表结构并生成迁移 DDL",
+    "用 CLI 子命令在 CI/无头环境中执行结构对比与迁移",
+    "通过快照与 Git 记录数据库结构的变更历史，或将某个 schema 版本迁移到另一数据库"
+   ]
+  },
+  "sha": "8cea99379979",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b925ebf5ff0f": {
+  "identity": {
+   "one_liner": "运行于 SQL Server 内部的存储过程式 AI 索引调优工具",
+   "review": "该项目以单个 T-SQL 存储过程在 SQL Server 内收集索引诊断信息（缺失索引、重复索引、非 SARGable 谓词、Query Store 统计等），发送到用户自有的 Azure OpenAI 部署，将建议存入表，并可在验证后创建新索引或删除冗余索引。面向使用 SQL Server 2025 及 Azure/Fabric SQL 数据库的 DBA，依赖 sp_invoke_external_rest_endpoint，需配置数据库作用域凭据，暂不支持 SQL Server 2022 及更早版本。",
+   "highlights": [
+    "通过单个存储过程收集缺失索引、索引重叠、非 SARGable 谓词、Query Store 查询等诊断信息",
+    "调用用户自有的 Azure OpenAI 部署生成建议，存储于数据库表中",
+    "支持 CREATE 模式验证并创建索引，可按优先级/置信度、允许删索引等参数控制变更"
+   ],
+   "use_cases": [
+    "为 SQL Server 2025 或 Azure SQL 数据库自动生成并应用索引优化建议",
+    "通过 SQL Server Agent 作业按计划定期运行索引调优",
+    "按架构和表名过滤，针对特定表（如 Sales.Orders）做索引诊断"
+   ]
+  },
+  "sha": "b925ebf5ff0f",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

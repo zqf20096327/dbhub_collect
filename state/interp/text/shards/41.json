@@ -2546,5 +2546,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0c5c1e4e7872": {
+  "identity": {
+   "one_liner": "基于 Ubuntu 的 WordPress LEMP 服务器自动化部署脚本，面向 Cloudflare 环境。",
+   "review": "EngineScript 是一套在 Ubuntu 24.04/26.04 LTS VPS 上自动化搭建 WordPress 服务器（Nginx、PHP 8.5、MariaDB、Redis）的脚本工具，处于 Beta 阶段。安装过程要求全新的 VPS 并会移除已有的 Apache、Nginx、PHP、MySQL 安装，通过 es.menu 提供域名创建/导入、备份、缓存清理等命令，并支持每日自动更新。适合需要在 Cloudflare + DigitalOcean 环境下自建 WordPress 站点的运维者。",
+   "highlights": [
+    "提供 es.* 命令行工具集，包含备份、缓存清理、域名配置、服务器信息查看等功能",
+    "安装时自动配置 Nginx FastCGI 缓存、ACME.sh SSL 证书和 Cloudflare DNS 记录",
+    "包含密码保护的 Web 管理面板，展示各组件状态并提供 phpMyAdmin、Adminer 等工具入口"
+   ],
+   "use_cases": [
+    "在全新 DigitalOcean droplet（或其他 Ubuntu VPS）上部署 WordPress 站点",
+    "通过 Import Domain 功能迁移已有 WordPress 站点到服务器",
+    "为托管多个 WordPress 站点的服务器配置 Cloudflare 集成与自动更新"
+   ]
+  },
+  "sha": "0c5c1e4e7872",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c9493fa40f71": {
+  "identity": {
+   "one_liner": "Sesame 密码管理器的服务端，含托管服务与可自托管同步服务器",
+   "review": "此仓库包含 Sesame 的服务端部分：面向 usesesame.app 的 Go API 与账户/管理门户（PostgreSQL），以及可自托管的 sesame-server 程序（SQLite，含浏览器控制台），用于桌面设备配对和可选的加密保险库同步。服务器不接收保险库密码或加密密钥，仅在开启 Sync 时存储加密快照。本地开发需 Node、Docker Compose 与 Go，注册默认仅限邀请。",
+   "highlights": [
+    "服务器设计上不接收保险库密码、加密密钥、TOTP 种子或未加密保险库，仅存储加密的 Sync 快照",
+    "托管服务与自托管服务器为两个互不共享数据的独立程序，分别基于 PostgreSQL 与 SQLite",
+    "API 不自行迁移数据库，schema 过期时退出，由 migrate 服务先行执行迁移"
+   ],
+   "use_cases": [
+    "自托管同步服务器，在个人设备间配对并同步加密保险库",
+    "运行托管服务的账户门户与管理门户，进行邀请注册管理",
+    "通过 npm run ci 与 CI 工作流运行门户测试和自托管测试任务"
+   ]
+  },
+  "sha": "c9493fa40f71",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

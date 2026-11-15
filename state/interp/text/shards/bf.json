@@ -3077,5 +3077,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b8fde4b573ab": {
+  "identity": {
+   "one_liner": "FalkorDB 图数据库的官方 Rust 客户端，含同步/异步双 API",
+   "review": "falkordb-rs 是 FalkorDB 图数据库的官方 Rust 客户端。它为需要图数据库与知识图谱应用的 Rust 开发者提供同步阻塞客户端与基于 tokio 的异步客户端，二者共享同一 API。关键机制包括类型化结果读取、参数绑定、批量发送、可选 RetryPolicy（写操作不重试）以及通过 cargo feature 按需启用 serde、TLS、tracing 等能力；异步客户端支持 Multiplexed 与 Pooled 两种连接策略。",
+   "highlights": [
+    "提供同步阻塞客户端与 tokio 异步客户端，共用同一 API；异步结果集为 Stream，可配合 futures 组合子使用",
+    "支持类型安全参数绑定与 serde 类型映射，通过 feature flags 按需启用 tokio、serde、TLS、tracing/metrics、嵌入式服务器等能力",
+    "支持重试策略、Redis Sentinel 副本读路由与 Redis Cluster 图命令路由"
+   ],
+   "use_cases": [
+    "在 Rust 应用中连接 FalkorDB 执行 Cypher 查询",
+    "构建知识图谱或图数据驱动的服务",
+    "测试与原型开发中使用嵌入式 FalkorDB 服务器"
+   ]
+  },
+  "sha": "b8fde4b573ab",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1a06d81c59d1": {
+  "identity": {
+   "one_liner": "面向 Claude Code 的 Spring Boot 插件，以 skills 与 agents 约束代码生成",
+   "review": "这是一个面向 Claude Code 的插件，包含针对 Spring Boot 4.x / Java 21+ 开发的 skills 与 agents 集合，覆盖 REST API、JPA、Flyway、安全、测试及 Kubernetes 部署等内容。技能采用开放 SKILL.md 格式，也可被 Codex 和 OpenCode 加载。使用方式为安装插件后用自然语言描述需求，由 Claude 依据内置规范生成应用。",
+   "highlights": [
+    "包含 6 个 agents（如 spring-boot-engineer、code-reviewer、kubernetes-specialist）和 8 个 skills（conventions、spring-boot、jpa-patterns、testing-patterns 等）",
+    "通过 conventions skill 强制执行规则：禁用 Lombok、构造器注入、RFC 9457 Problem Details、Flyway 管理 schema、Testcontainers + @ServiceConnection",
+    "skills 使用开放 SKILL.md 格式，同一仓库可作为 Codex 插件或以纯 skills 方式供 Codex 与 OpenCode 加载"
+   ],
+   "use_cases": [
+    "用 Claude Code 生成带 PostgreSQL 持久化、Flyway 迁移和 Testcontainers 测试的 Spring Boot REST API",
+    "为面向 UI 的 API 应用 OpenAPI 契约规则（/api 基路径、契约导出与 CI 校验等）",
+    "生成包含 kustomize overlays、Skaffold、探针和 TLS 配置的 Kubernetes 部署文件"
+   ]
+  },
+  "sha": "1a06d81c59d1",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4b56c1b51868": {
+  "identity": {
+   "one_liner": "本地优先的桌面媒体库：扫描、缩略图、搜索、播放视频照片音频",
+   "review": "Meguri 是一款离线运行的桌面应用（Electron + React + SQLite），用于浏览、搜索、播放本地视频、图片和音频。它递归扫描指定文件夹，用捆绑的 ffmpeg 生成 WebP 缩略图，并提供 FTS5 全文搜索、标签、评分、历史记录与自动标签等功能；唯一原生依赖为 SQLite，无需系统级 ffmpeg。支持 Windows、macOS 与 Linux（glibc 2.35+），macOS 版尚未公证，首次启动需手动放行。",
+   "highlights": [
+    "递归扫描媒体目录，按 mtime/size 增量更新，并通过内容哈希跟踪移动/重命名文件",
+    "支持全文搜索（FTS5）、标签、评分、多种日期范围过滤，以及基于规则（正则/关键词/文件夹）的自动打标签",
+    "播放由本地 HTTP 服务器流式提供，非 faststart 容器即时转封装为分片 MP4，不支持的编解码器交给系统默认播放器"
+   ],
+   "use_cases": [
+    "整理和检索存放在本地磁盘的大量视频、照片与音频文件",
+    "在完全离线环境下浏览媒体库并查看缩略图、时间线和播放历史",
+    "通过列表播放、Discovery 随机推荐等方式回顾已有媒体内容"
+   ]
+  },
+  "sha": "4b56c1b51868",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

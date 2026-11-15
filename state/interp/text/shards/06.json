@@ -3430,5 +3430,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6f824986c0ec": {
+  "identity": {
+   "one_liner": "以 wire-protocol 代理形式对 PostgreSQL 服务做确定性竞态检测的模型检查器",
+   "review": "PgLoom 作为 PostgreSQL wire 协议代理部署在服务与数据库之间，按协议往返（turn）为粒度调度事务交错，探索双重扣款、丢失更新、写偏斜与死锁，并以 .pgloom-repro.json 精确回放失败调度。面向任何使用 PostgreSQL v3 协议的语言编写的服务，无需修改代码，仅需将 DATABASE_URL 指向代理。要求 PostgreSQL 12+，连接角色需 CREATE 权限及查看/信号后端的能力；场景适合两三个并发请求。",
+   "highlights": [
+    "以协议轮次为调度单元，支持简单查询与扩展协议管道，按连接跟踪 prepared statements",
+    "提供 bounded、exhaustive（含 Source-DPOR 部分序约简）与 seeded random 探索策略，失败调度先收缩后保存并可 replay",
+    "通过 pg_blocking_pids() 检测锁等待，wait-for 图成环即报告死锁；事务真实提交，表数据从 _pgloom_snap 快照恢复"
+   ],
+   "use_cases": [
+    "检测钱包等服务的 check-then-act 双重扣款与丢失更新竞态",
+    "在 CI（如 GitHub Actions + Postgres 服务容器）中以 exit code 判定并发违规并回放",
+    "以纯 SQL 脚本作 worker，无服务实体地发现锁序死锁"
+   ]
+  },
+  "sha": "6f824986c0ec",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

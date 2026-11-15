@@ -3707,5 +3707,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "90e0f591e7cb": {
+  "identity": {
+   "one_liner": "集聊天、任务、文档、工时于一体的团队工作台，内置受权限约束的 AI 代理",
+   "review": "Synk 将聊天、问题跟踪、文档和工时记录合并到一个 Next.js 应用与同一 PostgreSQL 数据模型中，面向小团队。浏览器请求、Socket 推送和 AI 工具调用都经过同一权限函数，AI 代理（Python LangGraph 服务，用 Google Gemini）无数据库凭据，仅通过短时效 HMAC 令牌调用工具端点，更新已有数据前需用户确认。限制：单进程部署，不支持 serverless 和多实例。",
+   "highlights": [
+    "聊天、任务、文档、工时四模块共享一个数据模型与统一权限检查函数，权限在写事务内校验",
+    "AI 代理无自有凭据，每次工具调用经 5 分钟 HMAC 用户令牌鉴权并写入 ActionLog 审计表，update_ticket 先做 dry run 并要求确认",
+    "实时消息通过 Socket.IO 投递并在发布时逐接收者复查权限，会话可服务端撤销"
+   ],
+   "use_cases": [
+    "小团队需要一个同时覆盖聊天、任务看板、文档和工时的单一工作区",
+    "希望 AI 助手在用户既有权限范围内执行建单、改单、搜索等操作并留有审计记录",
+    "已使用 GitHub/Bitbucket，需要将 pull request 与任务工单关联并跟踪 sprint 报告"
+   ]
+  },
+  "sha": "90e0f591e7cb",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

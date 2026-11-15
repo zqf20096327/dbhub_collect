@@ -3664,5 +3664,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "929531b1dd04": {
+  "identity": {
+   "one_liner": "本地优先的个人 wiki：摄取文档生成可引用、可对话的知识库，Marimo/SQLite/FTS5 实现",
+   "review": "该项目在本地机器上运行，将用户文档摄取为结构化 wiki 页面并支持对话问答，检索基于 FTS5 全文索引与原始分块回退。它内置代理式检索、引用校验（cite-or-refuse）、数据集查询工具与 lint 自维护机制，每个 wiki 是独立的本地 git 仓库。使用任意 OpenAI 兼容模型，聊天与摄取可配置不同模型。适合希望在无云环境下管理个人知识并要求答案带引用出处的用户；非 Obsidian 插件，无插件生态。",
+   "highlights": [
+    "支持三种回答模式：预检索（可在调用模型前拒绝）、代理模式带证据校验、不校验流式输出；答案附引用页面与 token 统计",
+    "提供领域中立的 datasets 引擎，摄取可定期刷新的结构化数据表并以 query_dataset 工具暴露给聊天代理",
+    "包含 16 项 lint 检查与安全项自动修复，每个 wiki 为本地 git 仓库并支持回滚到历史点"
+   ],
+   "use_cases": [
+    "将个人文档整理为带交叉引用与历史版本的本地知识库并对话查询",
+    "构建需要引用出处和日期、对数值做确定性计算的本地顾问类知识库（如内置的阿根廷个人理财示例）",
+    "对 LLM 应用进行引用质量评估：内置 LLM-as-judge 评测包与模型适配性检查命令"
+   ]
+  },
+  "sha": "929531b1dd04",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "52fde416da51": {
+  "identity": {
+   "one_liner": "单容器自托管 DMARC 报告分析器，Rust 单二进制配 SQLite 存储",
+   "review": "Marcan 从多个邮箱（IMAP 或 Microsoft Graph）读取 DMARC 聚合报告，基于原始 SPF/DKIM 结果重新计算对齐判定，并支持 DMARC、SPF、DKIM、MTA-STS 等记录的实时 DNS 检查，结果在 Web 仪表盘展示。适用于管理自有邮件域名者及 MSP。限制：仅聚合报告、每账户单文件夹、无内置用户体系需反向代理登录，当前为 0.x 公测版。",
+   "highlights": [
+    "从报告原始 SPF/DKIM 结果按 RFC 9989 重新计算 DMARC 对齐判定，区分转发与真实失败",
+    "支持任意 IMAP/SMTP 或 Microsoft 365（Graph）多邮箱收取报告，凭据可选 AES-256-GCM 加密，对邮箱只读",
+    "提供实时 DNS 检查（含 SPF include 树与查找限制、DKIM、MTA-STS、TLS-RPT、BIMI）、变更告警、月度客户报告与 CSV 导出"
+   ],
+   "use_cases": [
+    "为自有域名集中处理 DMARC 聚合报告并排查投递认证失败",
+    "MSP 为多组织/多域名客户汇总报告并生成月度客户报告",
+    "监控域名 DNS 邮件安全记录（SPF/DKIM/DMARC/MTA-STS 等）变更并接收告警"
+   ]
+  },
+  "sha": "52fde416da51",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

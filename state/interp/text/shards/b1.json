@@ -3282,5 +3282,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "61555535035a": {
+  "identity": {
+   "one_liner": "零依赖的 Node.js/Bun/Next.js 键值缓存引擎，内置单飞防击穿与 L1/L2 多级存储",
+   "review": "kvdock 是一个键值与缓存引擎，核心零运行时依赖，通过可插拔适配器连接内存、SQLite、Redis、Postgres、Cloudflare KV 等后端，供 Node.js、Bun、Deno、边缘运行时及浏览器开发者使用。关键机制包括 getOrSet 单飞（single-flight）合并并发回源、TieredDock 的 L1/L2 多级缓存与自动提升、基于标签的失效及跨进程失效总线；分布式适配器以可选 peer dependency 形式引入。",
+   "highlights": [
+    "内置单飞 promise 合并机制，同一缺失键的并发请求只执行一次 fetcher（dock.getOrSet）",
+    "通过 TieredDock 实现内存 L1 与分布式/持久化 L2 的多级缓存，支持自动提升",
+    "提供 20 余种存储适配器（Memory、SQLite、Redis、Postgres、DynamoDB、Cloudflare KV、Deno KV 等）及 Next.js、Hono、Express、Fastify 等框架集成"
+   ],
+   "use_cases": [
+    "需要防止缓存击穿（thundering herd）的高并发读取服务",
+    "Next.js 15 App Router 增量缓存（ISR）等框架级缓存与会话存储",
+    "在内存、嵌入式 SQLite 与 Redis/DynamoDB 等分布式后端之间组合 L1/L2 多级缓存的 Node.js/Bun/边缘应用"
+   ]
+  },
+  "sha": "61555535035a",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -25391,5 +25391,808 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "7e02e4655b69+2": {
+  "fn": "mohamedboukari/bunmail",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    9,
+    2,
+    9,
+    [
+     "CI",
+     "CodeQL",
+     "License: MIT",
+     "Bun",
+     "Elysia",
+     "Drizzle ORM",
+     "PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    16,
+    9,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "||BunMail|SendGrid / Resend|Postal|Mailcow|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    26,
+    18,
+    26,
+    [
+     "|**Self-hosted**|✅|❌|✅|✅|",
+     "|**Free**|✅ MIT|$20/mo+|✅ MIT|✅|",
+     "|**API-first**|✅|✅|✅|❌ (mail hosting)|",
+     "|**One container**|✅|n/a|❌ (multiple services)|❌ (heavy stack)|",
+     "|**Modern stack**|Bun + Elysia + Drizzle|n/a|Ruby + RabbitMQ|PHP + many services|",
+     "|**Web dashboard**|✅|✅|✅|✅|",
+     "|**Templates**|✅|✅|❌|❌|",
+     "|**Inbound SMTP**|✅|$$|✅|✅|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    35,
+    26,
+    35
+   ],
+   [
+    "replace",
+    35,
+    43,
+    35,
+    36,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    45,
+    36,
+    38
+   ],
+   [
+    "replace",
+    45,
+    46,
+    38,
+    39,
+    [
+     "Replace `mail.yourcompany.com` with this server's real hostname (placeholders such as `*.example.com` are refused) and `you@yourcompany.com` with your email: it becomes the dashboard login. The app listens on `127.0.0.1:3000` only: reach it from outside through a reverse proxy with TLS (docs/self-hosting.md, section 6); host-specific ports such as inbound SMTP go in a `docker-compose.override.yml` copied from `docker-compose.override.example.yml`."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    53,
+    39,
+    46
+   ],
+   [
+    "replace",
+    53,
+    62,
+    46,
+    47,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    64,
+    47,
+    49
+   ],
+   [
+    "replace",
+    64,
+    65,
+    49,
+    50,
+    [
+     "In production mode the `from` domain must first be registered (see docs/self-hosting.md), otherwise the send is rejected with `422 SENDER_DOMAIN_NOT_REGISTERED`. Publish and verify its DKIM, SPF and DMARC records before sending real mail: until then the response lists `warnings` such as `dkim_unverified`, and `REQUIRE_VERIFIED_DOMAIN=true` refuses the send instead."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    50,
+    53
+   ],
+   [
+    "replace",
+    68,
+    69,
+    53,
+    54,
+    [
+     "> Local dev without Docker? See docs/self-hosting.md."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    74,
+    54,
+    59
+   ],
+   [
+    "replace",
+    74,
+    75,
+    59,
+    60,
+    [
+     "- ✅ **You'll land in inbox** if you send from a domain with a clean reputation, your server's IP isn't on a blacklist, and you've published correct SPF / DKIM / DMARC records (BunMail signs with DKIM, lists the records to publish and checks SPF, DKIM and DMARC for each domain; you publish them at your DNS provider, see docs/self-hosting.md)."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    60,
+    63
+   ],
+   [
+    "replace",
+    78,
+    79,
+    63,
+    64,
+    [
+     "Run mail-tester.com to get a deliverability score for your specific setup before deploying."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    64,
+    67
+   ],
+   [
+    "replace",
+    82,
+    83,
+    67,
+    68,
+    [
+     "Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    68,
+    69
+   ],
+   [
+    "replace",
+    84,
+    98,
+    69,
+    77,
+    [
+     " Send Email ",
+     " Emails list ",
+     "",
+     " Inbound emails ",
+     " Templates ",
+     "",
+     " Domains ",
+     " API Keys "
+    ]
+   ],
+   [
+    "equal",
+    98,
+    102,
+    77,
+    81
+   ],
+   [
+    "replace",
+    102,
+    103,
+    81,
+    82,
+    [
+     "- **SMTP submission**: apps (Infisical, Netbird, Dify, any Nodemailer backend) send *through* BunMail over SMTP using an API key as the password; switch an app off SendGrid/Brevo with a credentials-only change (docs/smtp-submission.md)"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    82,
+    85
+   ],
+   [
+    "replace",
+    106,
+    108,
+    85,
+    87,
+    [
+     "- **Several recipients and batch sends**: `to` takes an array of up to 50 addresses for one message (100 recipients with cc and bcc, delivered per recipient domain, bcc never in a header), and `POST /api/v1/emails/batch` queues up to 100 distinct emails in one request, each item validated and created on its own with per-item idempotency keys (docs/api.md)",
+     "- **Idempotency keys**: an optional `Idempotency-Key` header on the send API makes retries safe; a repeat with the same key and body returns the first response instead of sending twice, even under concurrent retries (docs/api.md)"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    110,
+    87,
+    89
+   ],
+   [
+    "replace",
+    110,
+    111,
+    89,
+    90,
+    [
+     "- **Inbound SMTP**: receive and store incoming mail with DNSBL, recipient validation, and per-IP rate limiting, optional STARTTLS, and an opt-in per-domain MTA-STS policy so senders require TLS (docs/inbound.md); reply from the dashboard with RFC 5322 threading headers, and see which of your emails a received reply answers"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    117,
+    90,
+    96
+   ],
+   [
+    "replace",
+    117,
+    120,
+    96,
+    99,
+    [
+     "- **Attachments**: up to 10 files per send (REST `attachments`, Resend-compatible, or the parts of an SMTP-submitted message), `ATTACHMENTS_MAX_TOTAL_MB` in total (default 5, up to 18); executables, scripts and installers refused by extension and by sniffed content, types derived from the bytes, inline `cid:` images; files kept only until the email is sent, fails or bounces, and downloadable from the dashboard as forced downloads until then (docs/api.md)",
+     "- **One-click unsubscribe**: single-recipient mail carries a per-recipient RFC 8058 `List-Unsubscribe` link (and an `unsub+` mailto when inbound SMTP is on); using it suppresses that recipient for the sending key and fires `email.unsubscribed` (docs/suppressions.md)",
+     "- **Open and click tracking** (off by default): a 1x1 pixel and signed redirects on your own host, opted in per domain by admins and per send, single-recipient mail only, with no IP address or user agent stored (docs/tracking.md)"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    99,
+    100
+   ],
+   [
+    "replace",
+    121,
+    123,
+    100,
+    102,
+    [
+     "- **DANE (opt-in)**: with `DANE_ENABLED=true` and a local validating resolver (the compose `dane` profile), recipient domains with DNSSEC-signed MX and TLSA records (RFC 7672) only get mail over TLS whose certificate matches them, never in plaintext; DANE wins over MTA-STS wherever a usable TLSA record lets it validate (docs/emails.md)",
+     "- **TLS reports (opt-in)**: with `TLSRPT_ENABLED=true`, BunMail sends recipient domains that publish a `_smtp._tls` record (Gmail, Outlook, Yahoo) a daily SMTP TLS report (RFC 8460) on how its TLS sessions to them went, by HTTPS (through the SSRF guard) or DKIM-signed mail (docs/tls-rpt.md)"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    125,
+    102,
+    104
+   ],
+   [
+    "replace",
+    125,
+    126,
+    104,
+    105,
+    [
+     "- **Observability**: structured JSON logs with request, job and SMTP-session IDs (docs/logging.md), and Prometheus metrics at `/metrics` behind a scrape token: queue depth and overdue age, sends by final status, delivery latency, MX deliveries by TLS, SMTP refusals by reason, webhook backlog, HTTP rate and latency, readable by Prometheus, the OpenTelemetry Collector and the Datadog Agent (docs/metrics.md); admins also see a System health card on the dashboard home; optional OpenTelemetry traces over OTLP for HTTP requests, send attempts and MX deliveries, webhook deliveries (with `traceparent`) and SMTP sessions, off by default (docs/tracing.md)"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    130,
+    105,
+    109
+   ],
+   [
+    "replace",
+    130,
+    131,
+    109,
+    110,
+    [
+     "All endpoints (except `/health`, the public unsubscribe pages at `/u/:token`, the tracking pixel and redirect at `/t/`, and `/metrics`, which takes its own `METRICS_TOKEN`) require `Authorization: Bearer <api-key>`. Full reference: docs/api.md."
+    ]
+   ],
+   [
+    "equal",
+    131,
+    134,
+    110,
+    113
+   ],
+   [
+    "replace",
+    134,
+    135,
+    113,
+    114,
+    [
+     "|Method|Path|Description|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    114,
+    115
+   ],
+   [
+    "replace",
+    136,
+    148,
+    115,
+    127,
+    [
+     "|POST|`/api/v1/emails/send`|Queue an email (direct or template), to one address or an array of up to 50|",
+     "|POST|`/api/v1/emails/batch`|Queue 1 to 100 distinct emails, one result per item|",
+     "|GET|`/api/v1/emails`|List emails (excludes trash)|",
+     "|GET|`/api/v1/emails/trash`|List trashed emails|",
+     "|GET|`/api/v1/emails/:id`|Get email by ID|",
+     "|DELETE|`/api/v1/emails/:id`|Move to trash|",
+     "|POST|`/api/v1/emails/bulk-delete`|Bulk move to trash|",
+     "|POST|`/api/v1/emails/:id/restore`|Restore from trash|",
+     "|DELETE|`/api/v1/emails/:id/permanent`|Permanently delete a trashed email|",
+     "|POST|`/api/v1/emails/trash/empty`|Empty trash|",
+     "|GET|`/api/v1/emails/tombstones`|List post-purge audit snapshots (optional `?messageId=`)|",
+     "|GET|`/api/v1/emails/tombstones/:id`|Get a tombstone by the original email ID|"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    151,
+    127,
+    130
+   ],
+   [
+    "replace",
+    151,
+    152,
+    130,
+    131,
+    [
+     "|Method|Path|Description|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    131,
+    132
+   ],
+   [
+    "replace",
+    153,
+    161,
+    132,
+    140,
+    [
+     "|GET|`/api/v1/inbound`|List received emails|",
+     "|GET|`/api/v1/inbound/trash`|List trashed inbound|",
+     "|GET|`/api/v1/inbound/:id`|Get inbound email by ID|",
+     "|DELETE|`/api/v1/inbound/:id`|Move to trash|",
+     "|POST|`/api/v1/inbound/bulk-delete`|Bulk move to trash|",
+     "|POST|`/api/v1/inbound/:id/restore`|Restore from trash|",
+     "|DELETE|`/api/v1/inbound/:id/permanent`|Permanently delete a trashed inbound|",
+     "|POST|`/api/v1/inbound/trash/empty`|Empty inbound trash|"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    140,
+    143
+   ],
+   [
+    "replace",
+    164,
+    165,
+    143,
+    144,
+    [
+     "|Method|Path|Description|"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    144,
+    145
+   ],
+   [
+    "replace",
+    166,
+    170,
+    145,
+    149,
+    [
+     "|POST|`/api/v1/suppressions`|Add an address to the suppression list (idempotent)|",
+     "|GET|`/api/v1/suppressions`|List suppressions (paginated, optional `?email=` filter)|",
+     "|GET|`/api/v1/suppressions/:id`|Get a suppression by ID|",
+     "|DELETE|`/api/v1/suppressions/:id`|Remove (recipient becomes eligible immediately)|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    149,
+    150
+   ],
+   [
+    "replace",
+    171,
+    172,
+    150,
+    151,
+    [
+     "Sends to suppressed recipients return 422 with `code: \"RECIPIENT_SUPPRESSED\"` and `suppressionId` (`null` when `SUPPRESSIONS_SHARED_HARD=true` applied another key's hard bounce or verified feedback-loop complaint). See docs/suppressions.md and docs/bounces.md for the auto-suppression flow on hard bounces."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    175,
+    151,
+    154
+   ],
+   [
+    "replace",
+    175,
+    176,
+    154,
+    155,
+    [
+     "|Method|Path|Description|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    155,
+    156
+   ],
+   [
+    "replace",
+    177,
+    179,
+    156,
+    158,
+    [
+     "|GET|`/api/v1/dmarc-reports`|List DMARC aggregate reports (paginated, optional `?domain=`)|",
+     "|GET|`/api/v1/dmarc-reports/:id`|Get a single report with its per-source-IP records|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    158,
+    159
+   ],
+   [
+    "replace",
+    180,
+    181,
+    159,
+    160,
+    [
+     "DMARC `rua` aggregate reports that arrive at BunMail's inbound SMTP are auto-detected, decompressed (gzip / zip / raw XML), parsed, and stored. The dashboard at `/dashboard/dmarc-reports` highlights misaligned source IPs in amber. See docs/dmarc-reports.md."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    184,
+    160,
+    163
+   ],
+   [
+    "replace",
+    184,
+    185,
+    163,
+    164,
+    [
+     "See docs/api.md for full coverage of `/api/v1/domains`, `/api/v1/templates`, `/api/v1/api-keys`, `/api/v1/webhooks` and `/api/v1/smtp-submission/stats`."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    192,
+    164,
+    171
+   ],
+   [
+    "replace",
+    192,
+    208,
+    171,
+    172,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    212,
+    172,
+    176
+   ],
+   [
+    "replace",
+    212,
+    213,
+    176,
+    177,
+    [
+     "|Layer|Technology|"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    177,
+    178
+   ],
+   [
+    "replace",
+    214,
+    223,
+    178,
+    187,
+    [
+     "|Runtime|Bun|",
+     "|Framework|Elysia|",
+     "|ORM|Drizzle ORM (`drizzle-orm/bun-sql`)|",
+     "|Database|PostgreSQL 16+|",
+     "|Shared state (optional)|Redis or Valkey via Bun's built-in client, only to run several replicas (`REDIS_URL`, #185)|",
+     "|SMTP outbound|Nodemailer (one transport per recipient MX on port 25 + DKIM)|",
+     "|SMTP inbound|smtp-server + mailparser|",
+     "|Dashboard|Elysia JSX (`@elysiajs/html` + `@kitajs/html`)|",
+     "|Deployment|Docker + Docker Compose|"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    230,
+    187,
+    194
+   ],
+   [
+    "replace",
+    230,
+    242,
+    194,
+    195,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    244,
+    195,
+    197
+   ],
+   [
+    "replace",
+    244,
+    245,
+    197,
+    198,
+    [
+     "Inbound mail arrives via the built-in SMTP server (port 25/2525), gets parsed by `mailparser`, and is stored in `inbound_emails`. Webhooks fire `email.received` on inbound and `email.sent` / `email.failed` on outbound. See ARCHITECTURE.md for full diagrams."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    252,
+    198,
+    205
+   ],
+   [
+    "replace",
+    252,
+    260,
+    205,
+    206,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    262,
+    206,
+    208
+   ],
+   [
+    "replace",
+    262,
+    263,
+    208,
+    209,
+    [
+     "See docs/ for module-level documentation:"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    209,
+    210
+   ],
+   [
+    "replace",
+    264,
+    275,
+    210,
+    221,
+    [
+     "- docs/api.md: Full API reference",
+     "- docs/dashboard.md: Dashboard routes and structure",
+     "- docs/emails.md: Outbound module",
+     "- docs/inbound.md: Inbound module",
+     "- docs/dmarc-reports.md: DMARC `rua` aggregate report ingest",
+     "- docs/tls-rpt.md: SMTP TLS reports (RFC 8460) sent to recipient domains",
+     "- docs/users.md: Dashboard accounts, roles, invitations, sessions, password reset links, password change, two-factor authentication, passkeys and single sign-on",
+     "- docs/logging.md: Log format, correlation IDs and tracing a request, email or SMTP session",
+     "- docs/self-hosting.md: Production deployment with DNS records",
+     "- THREAT_MODEL.md: Assets, attackers, controls, and operator responsibilities",
+     "- SECURITY.md: Reporting a vulnerability"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    281,
+    221,
+    227
+   ],
+   [
+    "replace",
+    281,
+    282,
+    227,
+    228,
+    [
+     "2. **A clean IP**: BunMail checks its sending IPs daily on Spamhaus ZEN, Barracuda and SpamCop (dashboard home, **Blocklists** card); mxtoolbox.com/blacklists checks many more."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    286,
+    228,
+    232
+   ],
+   [
+    "replace",
+    286,
+    287,
+    232,
+    233,
+    [
+     "See docs/self-hosting.md for the exact DNS record values."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    289,
+    233,
+    235
+   ],
+   [
+    "replace",
+    289,
+    296,
+    235,
+    236,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    236,
+    237
+   ],
+   [
+    "replace",
+    297,
+    300,
+    237,
+    238,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    301,
+    238,
+    239
+   ],
+   [
+    "replace",
+    301,
+    303,
+    239,
+    240,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

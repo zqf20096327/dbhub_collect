@@ -3690,5 +3690,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9314a9b6835b": {
+  "identity": {
+   "one_liner": "基于 Next.js + Prisma/SQLite 的图文教程发布平台，含前台与管理后台",
+   "review": "教程网是一个自托管的图文教程发布平台，使用 Next.js 16（App Router）、React 19、Prisma 7 与 SQLite 构建，面向想搭建教程/博客站点并自行部署运维的个人用户。前台提供分类导航、亮暗主题与文章阅读（服务端目录提取、响应式图片）；后台提供 Tiptap 富文本编辑、三级分类树与站点设置。内置会话与 TOTP 两步验证、登录限流、HTML 白名单过滤等安全机制，支持 deploy.sh 与后台一键更新，需 Node.js >= 22.12。",
+   "highlights": [
+    "文章支持服务端 TOC 提取、highlight.js 高亮，上传图片自动缩放转 WebP、去除 EXIF 并生成 800/1200px 响应式小图",
+    "安全方面提供服务端会话、TOTP 两步验证、受信任设备感知的登录限流、正文 HTML 白名单过滤与 CSP/HSTS 响应头",
+    "后台提供基于 Git 分支检测的一键更新流程，含数据库备份、迁移与失败回滚；npm run backup 可在线备份 SQLite"
+   ],
+   "use_cases": [
+    "自托管个人教程或技术文章站点",
+    "需要富文本后台编辑与多级分类管理的内容发布场景",
+    "单服务器 PM2 部署、希望从后台检测并部署新版本的运维方式"
+   ]
+  },
+  "sha": "9314a9b6835b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f66767736276": {
+  "identity": {
+   "one_liner": "面向 OceanBase 大赛参赛队伍的赛题资料问答与进度跟踪单页应用。",
+   "review": "赛题通将约 60 篇大赛语雀文档导入嵌入式向量库 seekdb，提供跨文档检索问答（附原文链接），并用 PowerContext 持久化队伍选题、进度与卡点，按未完成赛题从文档抽取待办并附倒计时。不配置 LLM Key 时走抽取式答案。采用 FastAPI + 无构建原生 JS 前端，支持 Docker 部署；seekdb 与 PowerContext 限单进程运行，语料需联网抓取。",
+   "highlights": [
+    "提供 /api/ask、/api/search 等 HTTP 接口，答案附带 sources 来源链接与 search_mode 模式标注",
+    "每次 seekdb / PowerContext / LLM 调用写 JSONL 审计日志，/stats 与 /api/logs 可核对",
+    "提供 scripts/verify.py 端到端验收脚本（25 项，含重启后档案保留检查），99 项离线 pytest"
+   ],
+   "use_cases": [
+    "参赛队伍跨多篇大赛文档检索赛题要求并获取原文出处",
+    "记录队伍所选赛题、完成状态、卡点，生成含截止天数的下一步待办",
+    "单容器或魔搭创空间部署，用于公开演示场景"
+   ]
+  },
+  "sha": "f66767736276",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

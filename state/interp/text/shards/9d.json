@@ -3137,5 +3137,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dfd172caa72b": {
+  "identity": {
+   "one_liner": "开源订阅/用量/AI 计费平台，接入自有支付网关运行",
+   "review": "Two Minute Billing 是一个面向 SaaS、AI 与按量计费业务的开源订阅计费平台，采用 AGPL-3.0 许可（SDK 为 MIT），可免费自托管（Docker）或使用其 Cloud。它不处理资金流转，而是通过用户自己的支付网关账户收费；核心机制包括用量事件计量、费率卡定价、预付额度与失败付款催收，报表基于只追加账本生成。",
+   "highlights": [
+    "提供订阅计划、按量计量、AI 模型价目表、预付额度、发票与催收功能，通过 12 种受支持的支付网关自有账户收款",
+    "内置 MRR、ARR、churn、留存、LTV、ARPU 等报表，数据来自只追加账本",
+    "提供 MCP 服务器（只读）与六个 Agent Skills，支持 Claude Code、Cursor 等编码代理集成计费"
+   ],
+   "use_cases": [
+    "SaaS 产品的订阅计费：计划、席位、试用、按比例升级降级",
+    "按用量或 AI token 计费：计量事件、分层定价、预付额度与消费上限",
+    "自托管或自有网关收款，需 GST/VAT 发票与失败付款恢复流程的团队"
+   ]
+  },
+  "sha": "dfd172caa72b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "65756eaaf41b": {
+  "identity": {
+   "one_liner": "面向 CloudNativePG 备份的定时恢复验证 Kubernetes 控制器",
+   "review": "该项目是一个 Kubernetes 控制器，按 cron 计划将 CloudNativePG（需 1.26+ 与 plugin-barman-cloud）的备份恢复到临时单实例集群，运行 amcheck、自定义 SQL 断言和新鲜度检查，测量恢复时间（RTO）与数据年龄（RPO），未达目标或恢复失败时记录结果、发送 Prometheus 告警并删除临时集群。适用于使用 barman-cloud 对象存储备份（S3/GCS/Azure Blob）且需例行验证备份可恢复性的运维团队。限制：只支持 barman-cloud 备份，freshness 检查需要数据库中频繁写入的时间戳数据；社区项目，非 CloudNativePG 官方组件。",
+   "highlights": [
+    "按 cron 计划创建临时 CloudNativePG Cluster，从备份走真实恢复路径，支持 backupID、targetTime、targetImmediate 等恢复目标",
+    "对恢复后的主库运行 amcheck（含可选堆页与堆-索引一致性检查）、用户自定义 SQL 断言及新鲜度查询，输出恢复耗时与数据年龄",
+    "导出 Prometheus 指标并内置五类告警规则（失败、数据年龄/恢复时间超标、无成功记录、运行卡住），每条附 runbook"
+   ],
+   "use_cases": [
+    "对生产 PostgreSQL 备份进行周期性可恢复性演练，发现 WAL 归档缺口、时间线切换失败等备份成功但恢复异常的情况",
+    "用实测恢复时间与数据年龄对照 RTO/RPO 目标，通过 PrometheusRule 触发告警",
+    "通过 run-now 注解在变更（配置、凭据、镜像、存储策略）后按需触发一次恢复验证"
+   ]
+  },
+  "sha": "65756eaaf41b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

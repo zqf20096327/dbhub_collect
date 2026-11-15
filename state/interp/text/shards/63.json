@@ -3237,5 +3237,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6ada037ad960": {
+  "identity": {
+   "one_liner": "面向AI代理的代码索引MCP服务器，SQLite存储，tree-sitter解析，支持1C导出",
+   "review": "code-index-mcp 是一个用 Rust 编写的 MCP 服务器，将源码解析为语法树并存入 SQLite，向 AI 代理提供搜索、调用图、文件读取等工具，以减少逐文件遍历的 token 消耗。支持 HTTP（默认仅监听 127.0.0.1）和 stdio 两种连接方式，后台索引器需单独运行。通过 bsl-indexer 构建版本可解析 1C:Предприятие 8.3（Конфигуратор与EDT）导出，含元数据、表单与权限等专用工具；非 1C 构建支持 14 种语言。提供 npm 包、单二进制发布与源码编译三种安装途径。",
+   "highlights": [
+    "提供约 32 个 MCP 工具：函数/类全文搜索、调用者/被调用者/调用路径等调用图查询、grep 与正则搜索、带行范围的文件读取（内容以 zstd 压缩存于索引）",
+    "可选 git 工具集（git_log、git_diff、git_changed_files 等），仅本地读取仓库，不访问网络",
+    "1C 构建在检测到导出仓库时自动启用 get_object_structure、find_references、get_register_writers 等对象级工具"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、VS Code 等 MCP 客户端提供 1C:BSL 或通用代码库的符号检索与调用图查询",
+    "在配置导出仓库上查询 1C 对象结构、表单事件处理器、角色权限引用等元数据级信息",
+    "需要离线、本地运行、依赖单一的代码搜索后端（SQLite + 单二进制）的环境"
+   ]
+  },
+  "sha": "6ada037ad960",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "640a16f43437": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis 兼容缓存服务器，通过 RESP2 协议复用现有客户端",
+   "review": "ReRu 是用安全 Rust 实现的 Redis 兼容内存数据服务器，支持 RESP2 协议，现有 Redis 客户端（redis-cli、redis-py 等）无需修改即可连接。实现约 203 条命令、TTL、多种淘汰策略、快照/AOF/RDB 持久化、只读副本、流与发布订阅。每个连接使用一个操作系统线程，写命令串行执行。项目处于实验阶段，官方明确不建议用于生产环境，TLS、多用户 ACL、RESP3、Lua 等尚未实现。",
+   "highlights": [
+    "支持 RESP2 协议，兼容 redis-cli、redis-py、ioredis、Lettuce 等客户端",
+    "实现 459 条命令元数据中的 228 条（49.7% 命令名覆盖），含字符串、列表、哈希、集合、有序集合、流、地理空间等结构",
+    "提供快照、单文件 AOF（支持在线重写）、Redis RDB 子集读取三种持久化模式及只读副本复制"
+   ],
+   "use_cases": [
+    "本地开发与兼容性实验环境",
+    "复用现有 Redis 客户端进行协议与命令行为验证",
+    "研究 Redis 命令语义与持久化格式的参考实现"
+   ]
+  },
+  "sha": "640a16f43437",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

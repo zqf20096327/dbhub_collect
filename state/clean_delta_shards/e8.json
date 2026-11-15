@@ -26339,5 +26339,553 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "990fcc62265b+2": {
+  "fn": "10xGraph/10xGraph",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    10,
+    4,
+    10,
+    [
+     "CI",
+     "Release",
+     "PyPI",
+     "Python",
+     "License",
+     "Star on GitHub"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    10,
+    13
+   ],
+   [
+    "replace",
+    13,
+    16,
+    13,
+    14,
+    [
+     "This repository is the core library of that infrastructure (PyPI `10xgraph`, import `tenxgraph`). The API server is `10xgraph-api` and the TypeScript client is `10xgraph-client`. Together they are one stack. Docs: 10xgraph.com."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    14,
+    17
+   ],
+   [
+    "replace",
+    19,
+    28,
+    17,
+    26,
+    [
+     "- **Graph engine.** Build workflows as a `StateGraph` of nodes, tools and conditional edges, or start from prebuilt agents. Multi-agent patterns (swarm, supervisor team, handoff) are included as features. State graph, prebuilt agents",
+     "- **Durable state and checkpointing.** `PgCheckpointer` keeps threads in Postgres with Redis as a hot cache and versioned compare-and-swap writes, so two runs on one thread cannot overwrite each other. `SqliteCheckpointer` and `InMemoryCheckpointer` cover local work. Checkpointing and threads",
+     "- **Tenant columns and row-level security.** Declare `tenant_columns` and `extra_columns` on the checkpointer and store. They become real indexed columns, filled from the verified identity in `config[\"user\"]`, never from client input. Native Postgres row-level security is opt-in. Multi-tenant data, tenancy and access",
+     "- **Long-term memory.** `PgVectorStore` keeps memory and RAG in the same Postgres (similarity, full-text or hybrid search). `QdrantStore` is there if you want a dedicated vector service. Use PgVectorStore, memory and store",
+     "- **Replay-safe tools.** The run loop persists the current node before running it. Before a tool runs, the checkpointer's tool ledger is checked, and each completed call is recorded as soon as it returns, so a tool that already ran is not executed again on resume. Requires a checkpointer. Limit: a crash before a tool returns, or in the short gap before its record is written, can repeat the tool, so send an idempotency key derived from stable inputs for side effects like payments. Replay-safe tools, limits",
+     "- **Tools and MCP.** Plain Python functions as tools, run in parallel, with dependency injection through InjectQ and native Model Context Protocol support. Remote tools run in the user's browser or client. `interrupt()` pauses a run for human approval. Use MCP, remote tools, human approval",
+     "- **Timeouts and graceful shutdown.** Set `node_timeout` and `tool_timeout` in the run config (no limit unless you set them). `aclose()` refuses new runs, lets active runs finish or saves them as interrupted. Graceful shutdown",
+     "- **Publishers and tracing.** Events to Kafka, Redis Pub/Sub, RabbitMQ and OpenTelemetry; tracing to Logfire, LangSmith, Phoenix or any OTLP endpoint. Publishers, Phoenix, Logfire and LangSmith, OTLP",
+     "- **Evaluation and testing.** An eval framework (LLM-as-judge, trajectory matching, rubrics, user simulation, JSON, HTML and JUnit reports) and `TestAgent` with mocks for unit tests without live LLM calls. Testing and evaluation"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    26,
+    27
+   ],
+   [
+    "replace",
+    29,
+    32,
+    27,
+    28,
+    [
+     "- **Also included:** structured output, skills (Agent Skills spec), streaming, realtime audio over Gemini Live, multimodal media handling."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    41,
+    28,
+    37
+   ],
+   [
+    "replace",
+    41,
+    42,
+    37,
+    38,
+    [
+     "|Extra|Adds|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    38,
+    39
+   ],
+   [
+    "replace",
+    43,
+    53,
+    39,
+    49,
+    [
+     "|`google-genai`, `openai`, `anthropic`|Provider SDK adapters|",
+     "|`anthropic-vertex`, `anthropic-bedrock`|Claude on Vertex AI or Amazon Bedrock|",
+     "|`realtime`|Audio-to-audio agents over Gemini Live|",
+     "|`mcp`|Model Context Protocol client and tools|",
+     "|`pg_checkpoint`, `sqlite_checkpoint`|Durable checkpointing (Postgres + Redis, or SQLite)|",
+     "|`pgvector`, `qdrant`|Long-term memory store (Postgres pgvector, or Qdrant)|",
+     "|`redis`, `kafka`, `rabbitmq`, `all_publishers`|Event publishers|",
+     "|`otel`, `logfire`, `langsmith`, `phoenix`, `otlp`, `observability`|Tracing and OpenTelemetry export|",
+     "|`images`, `cloud-storage`|Multimodal media handling and offload|",
+     "|`all`|Every extra at once, for development and CI|"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    72,
+    49,
+    68
+   ],
+   [
+    "replace",
+    72,
+    73,
+    68,
+    69,
+    [
+     "Requires Python 3.12 or newer. Tested on 3.12, 3.13, 3.14 and 3.15. Full guide: installation."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    69,
+    72
+   ],
+   [
+    "delete",
+    76,
+    78,
+    72,
+    72
+   ],
+   [
+    "equal",
+    78,
+    87,
+    72,
+    81
+   ],
+   [
+    "replace",
+    87,
+    101,
+    81,
+    82,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    135,
+    82,
+    116
+   ],
+   [
+    "replace",
+    135,
+    136,
+    116,
+    117,
+    [
+     "From those two files you get REST and streaming endpoints, WebSocket, thread, memory and file APIs, health probes and the playground. `10xgraph build --docker-compose --k8s` writes the Dockerfile, Compose file and Kubernetes manifest. For a scaffold with auth on, a Redis cache store, rate limits and tests, run `10xgraph init --template production`. See Why 10xGraph and the server docs."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    117,
+    118
+   ],
+   [
+    "replace",
+    137,
+    140,
+    118,
+    119,
+    [
+     "If this saved you time, star the repo. It helps other developers find 10xGraph."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    149,
+    119,
+    128
+   ],
+   [
+    "replace",
+    149,
+    170,
+    128,
+    129,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    172,
+    129,
+    131
+   ],
+   [
+    "replace",
+    172,
+    175,
+    131,
+    132,
+    [
+     "Nodes can be plain functions too, so you can call a provider SDK directly. See Build a graph."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    178,
+    132,
+    135
+   ],
+   [
+    "replace",
+    178,
+    179,
+    135,
+    136,
+    [
+     "|Package|Role|Install|Source|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    136,
+    137
+   ],
+   [
+    "replace",
+    180,
+    184,
+    137,
+    141,
+    [
+     "|`10xgraph` (this repository)|Core library: graph engine, durable state and checkpointing, long-term memory, replay-safe tools, MCP, publishers and tracing, evaluation|`pip install 10xgraph`|10xGraph/10xGraph|",
+     "|`10xgraph-api` (formerly `10xscale-agentflow-cli`)|API server and CLI: authentication, roles with reach, tenant isolation, cache store, background jobs, metrics, audit log, Docker and Kubernetes files|`pip install 10xgraph-api`|10xGraph/10xgraph-api|",
+     "|`10xgraph-client` (formerly `@10xscale/agentflow-client`)|Typed TypeScript client: invoke, stream, threads, memory, files, client-side tools|`npm install 10xgraph-client`|10xGraph/10xgraph-client|",
+     "|Docs|Tutorials, guides, concepts, reference|10xgraph.com|10xGraph/10xgraph-docs|"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    141,
+    142
+   ],
+   [
+    "replace",
+    185,
+    186,
+    142,
+    143,
+    [
+     "The playground is a React UI that `10xgraph dev` opens against your local server (10xHub/agentflow-playground)."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    143,
+    144
+   ],
+   [
+    "replace",
+    187,
+    190,
+    144,
+    145,
+    [
+     "Built for teams going through SOC 2 and ISO 27001 audits: see the control mapping for which controls the stack supports and which stay with you."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    193,
+    145,
+    148
+   ],
+   [
+    "replace",
+    193,
+    194,
+    148,
+    149,
+    [
+     "Runnable scripts in `examples/` (index in `examples/README.md`):"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    195,
+    149,
+    150
+   ],
+   [
+    "replace",
+    195,
+    196,
+    150,
+    151,
+    [
+     "|Topic|Directory|"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    151,
+    152
+   ],
+   [
+    "replace",
+    197,
+    212,
+    152,
+    167,
+    [
+     "|Quickstart, graph basics, ReAct agents|`quickstart/`, `graph_basics/`, `react/`|",
+     "|Streaming|`streaming/`, `react_stream/`|",
+     "|Tools, injection, remote tools|`tools/`, `dependency_injection/`|",
+     "|MCP servers and tools|`mcp/`, `react-mcp/`|",
+     "|Persistence and checkpointing|`persistence/`, `checkpointer/`|",
+     "|Long-term memory, RAG, vector stores|`long_term_memory/`, `rag/`|",
+     "|Multi-agent: swarm, supervisor, handoff, plan-act-reflect|`multi_agent/`|",
+     "|Human approval|`human_in_the_loop/`|",
+     "|Resilience, graceful shutdown|`resilience/`, `graceful_shutdown/`|",
+     "|Publishers and tracing|`observability/`|",
+     "|Serving over the API|`serving/`|",
+     "|Realtime audio, multimodal|`realtime/`, `multimodal/`|",
+     "|Structured output, skills|`structured_output/`, `skills/`|",
+     "|Providers|`providers/`|",
+     "|Evaluation and testing|`evaluation/`, `testing/`|"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    219,
+    167,
+    174
+   ],
+   [
+    "delete",
+    219,
+    221,
+    174,
+    174
+   ],
+   [
+    "equal",
+    221,
+    233,
+    174,
+    186
+   ],
+   [
+    "replace",
+    233,
+    236,
+    186,
+    187,
+    [
+     "More: production limits."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    239,
+    187,
+    190
+   ],
+   [
+    "replace",
+    239,
+    240,
+    190,
+    191,
+    [
+     "10xGraph is the new name of Agentflow. The license and maintainers are the same. `10xscale-agentflow` 0.10.1 is the last release under the old name. See coming from Agentflow."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    257,
+    191,
+    208
+   ],
+   [
+    "replace",
+    257,
+    258,
+    208,
+    209,
+    [
+     "|Item|Old|New|"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    209,
+    210
+   ],
+   [
+    "replace",
+    259,
+    271,
+    210,
+    220,
+    [
+     "|PyPI core|`10xscale-agentflow`|`10xgraph`|",
+     "|PyPI API and CLI|`10xscale-agentflow-cli`|`10xgraph-api`|",
+     "|npm client|`@10xscale/agentflow-client`|`10xgraph-client`|",
+     "|OpenTelemetry tracer and meter name, `GEN_AI_SYSTEM`|`agentflow`|`10xgraph`|",
+     "|Logger names|`agentflow.*`|`tenxgraph.*`|",
+     "|Media URI scheme|`agentflow://media/`|`graph://media/` (old URIs still read)|",
+     "|Default home directory|`~/.agentflow`|`~/.10xgraph` (falls back to `~/.agentflow` if only that exists)|",
+     "|Cloud media prefix|`agentflow-media`|`10xgraph-media` (old objects still read)|",
+     "|Server config file|`agentflow.json`|`10xgraph.json` (the CLI falls back to `agentflow.json`)|",
+     "|CLI command|`agentflow`|`10xgraph` (`agentflow` stays as a deprecated alias until 2.0)|"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    273,
+    220,
+    222
+   ],
+   [
+    "replace",
+    273,
+    304,
+    222,
+    223,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    306,
+    223,
+    225
+   ],
+   [
+    "replace",
+    306,
+    309,
+    225,
+    226,
+    [
+     "Found a vulnerability? Do not open a public issue. Follow the process in SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    311,
+    226,
+    228
+   ],
+   [
+    "replace",
+    311,
+    316,
+    228,
+    229,
+    [
+     "10xGraph is MIT licensed and made by 10xScale. Copyright 10xScale. Contributions are accepted under the same license."
+    ]
+   ],
+   [
+    "equal",
+    316,
+    318,
+    229,
+    231
+   ],
+   [
+    "replace",
+    318,
+    324,
+    231,
+    237,
+    [
+     "- Documentation: 10xgraph.com",
+     "- PyPI: `10xgraph`, `10xgraph-api`",
+     "- npm: `10xgraph-client`",
+     "- Issues and Discussions",
+     "- Changelog",
+     "- Examples"
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

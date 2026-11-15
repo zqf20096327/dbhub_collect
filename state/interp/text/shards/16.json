@@ -3529,5 +3529,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "43377077ddbe": {
+  "identity": {
+   "one_liner": "Rust 嵌入式键值存储：日志结构、无锁读、崩溃安全写",
+   "review": "hazeldb 是面向 Rust 应用的嵌入式键值存储，采用日志结构存储与哈希索引，支持可选的有序键与双向范围扫描。写入经每核心缓冲区追加落盘，读取无锁且乐观遍历索引；提供同步/异步两套 API，依赖任意 async 运行时。键值均为字节串，单进程独占打开；尚未发布到 crates.io，需以 path 或 git 依赖引入。",
+   "highlights": [
+    "读取无锁且不写共享内存，get 至多一次设备读取；put 为写入缓冲区的一次原子追加",
+    "记录携带 CRC32C 校验，删除写入 tombstone，块仅在替换写入落盘后复用",
+    "提供 put_async/delete_async/sync_async 与 put_deferred（附 Durability 句柄），不依赖特定 async 运行时"
+   ],
+   "use_cases": [
+    "Rust 应用内嵌持久化键值数据",
+    "需要按键字节序进行双向范围扫描的场景",
+    "async 服务中要求写操作不阻塞线程、可控制持久化时点的存储"
+   ]
+  },
+  "sha": "43377077ddbe",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

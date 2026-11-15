@@ -3306,5 +3306,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f683ef1ed614": {
+  "identity": {
+   "one_liner": "自托管家庭网络监控面板，Go 后端加 React PWA，实时读取多路由器状态",
+   "review": "NetPulse 是一个自托管的家用网络监控面板，面向在局域网内运行 OpenWrt/GL.iNet 等路由器的用户。它由单个 Go 静态二进制加 SQLite 组成，通过部署在各路由器上的 agent（MikroTik、Asuswrt、OPNsense、UniFi 走独立 pusher，交换机走 SNMP）采集数据，经 SSE 每 5 秒推送健康评分、设备清单、WireGuard 邻居、AdGuard Home 统计与告警；数据不出局域网。安装需一台 Linux systemd 主机，通过脚本装服务端后从界面一键装 agent。",
+   "highlights": [
+    "提供 0-100 健康评分、拓扑图、设备分类、WAN 测速（M-Lab/Ookla/Cloudflare/LibreSpeed）、WireGuard 与 AdGuard Home 统计，经 SSE 实时更新",
+    "支持 OpenWrt 原生 agent 包（.ipk/.apk、UCI、luci-app）、MikroTik/Asuswrt/OPNsense/UniFi 集成及 SNMP 管理型交换机",
+    "实现多用户（bcrypt、admin/viewer 角色）、ES/EN 多语言、Web Push/ntfy/Telegram/webhook 通知、嵌入式只读 MCP 服务器（默认关闭）"
+   ],
+   "use_cases": [
+    "监控多台 OpenWrt/GL.iNet 路由器组成的家庭网络（健康、温度、流量、新设备告警）",
+    "查看 LAN 拓扑、Wi-Fi 信道占用与漫游事件，或为 Home Assistant 提供 MQTT 实体",
+    "远程访问 WireGuard 隧道的邻居握手与流量，或让 AI 助手经 MCP 查询网络状态"
+   ]
+  },
+  "sha": "f683ef1ed614",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a64b878c31d0": {
+  "identity": {
+   "one_liner": "Rust 实现的混合搜索数据库，融合 KV 存储、文档模型与全文检索",
+   "review": "CameoDB 是一个 Rust 编写的数据库引擎，将 redb 键值存储、文档模型和 tantivy 全文搜索合并在单一二进制中，通过统一写入路径提交数据，并提供 MCP 接口供 Agent 查询。支持分布式无主节点部署、多语言分析器、字段投影和数组截断控制，可通过 Docker 单节点启动，默认 HTTP 端口 9480，支持 rustls TLS 配置。",
+   "highlights": [
+    "每个分片为原子单元，同时包含 KV 存储（redb）与倒排索引（tantivy），写入返回后即可按 ID 读取，提交后可全文搜索",
+    "提供 MCP 接口、字段投影、ghost 字段（一份文本以多个分析器检索而不重复存储）与按语言命名的分析器（含 Snowball 词干化与克罗地亚词典还原器）",
+    "去中心化拓扑：无主节点，使用一致性哈希与自定义 Kademlia DHT 行为进行节点发现与路由；数据加载支持 CSV/TSV/JSON/JSONL 及 Gzip/Zip 解压，可从本地磁盘或 HTTP(S) 流式读取"
+   ],
+   "use_cases": [
+    "为通过 MCP 协议查询数据的 AI Agent 提供带全文搜索的持久化存储",
+    "需要在单一进程内同时获得键值读写与全文检索、避免多系统同步的场景",
+    "需要多节点去中心化部署与 HTTPS 加密连接的检索型应用"
+   ]
+  },
+  "sha": "a64b878c31d0",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "de81f444d52e": {
+  "identity": {
+   "one_liner": "本地进程内运行的确定性上下文压缩器，供 AI 编码代理降低 token 占用",
+   "review": "trimtok 是一个面向 Claude Code、Cursor、Codex、Gemini 等 AI 编码代理的本地上下文压缩工具，用于削减测试输出、源码、traceback、JSON、日志等载荷占用的上下文窗口。其机制包括 AST 代码骨架化、TOON 列式 JSON 编码、跨轮次 delta 追踪，以及基于 SQLite WAL + Zstandard 的 #ref 可恢复存储。默认安装仅解析 Python，其他语言语法包需通过 trimtok[multilang] 可选安装。README 注明压缩率统计基于字符而非模型 token，语料库评测数据不构成生产流量估算。",
+   "highlights": [
+    "100% 本地进程内运行，仅依赖 Python 标准库、RapidFuzz，可选 tree-sitter AST 解析，无守护进程、无网络端口",
+    "被省略内容经 SQLite WAL + Zstandard 存储，可通过 trimtok_retrieve 检索或 trimtok_exec 执行 Python 聚合查询",
+    "提供 MCP 代理、slash 命令、代码库树图（map）、kv-lock 等接入方式，含 32 载荷可复现评测语料与审计脚本"
+   ],
+   "use_cases": [
+    "AI 编码代理反复运行 pytest/cargo test 等测试套件时，跨轮次仅呈现新增差异",
+    "将源码文件、构建日志、traceback、网页抓取内容等载荷压缩后再注入模型上下文",
+    "通过 stdio MCP 代理过滤工具 schema，降低 MCP 工具描述占用的上下文"
+   ]
+  },
+  "sha": "de81f444d52e",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

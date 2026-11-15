@@ -22632,5 +22632,1485 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "92302835b618+2": {
+  "fn": "screentinker/screentinker",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " ScreenTinker dashboard showing online displays with playlist assignments"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    13,
+    4,
+    9,
+    [
+     " Live demo ·",
+     " API reference ·",
+     " Self-hosting guide ·",
+     " Discord ·",
+     " What's new in 2.1 (video)"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    20,
+    9,
+    16
+   ],
+   [
+    "replace",
+    20,
+    24,
+    16,
+    20,
+    [
+     "**Hosted version:** screentinker.com — free tier available, no credit card required.",
+     "**Guides:** What is digital signage? · Open-source digital signage · Self-hosting guide",
+     "**Community:** Discord",
+     "**What's new in 2.1:** watch the release video — every scene in it is a real ScreenTinker slide, played on a real ScreenTinker screen."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    20,
+    24
+   ],
+   [
+    "replace",
+    28,
+    29,
+    24,
+    25,
+    [
+     "- **Slides** — a built-in slide editor: build decks of slides with templates, fields, and per-element entrance animations, an optional voiceover per slide and a music bed across the deck, then publish a deck straight to a playlist. (The 2.1 launch video is itself a ScreenTinker deck.)"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    33,
+    25,
+    29
+   ],
+   [
+    "replace",
+    33,
+    35,
+    29,
+    31,
+    [
+     "- **Live video & Talk** — optional WebRTC path via a go2rtc sidecar: sub-second live video of what a screen is actually playing (one screen watched by many dashboards without re-encoding), plus **Talk** — one-way announce or two-way intercom to a single screen, and one-way PA broadcast to a whole group or workspace, with an optional operator webcam shown fullscreen. Off by default and enabled per organization; an org can bring its own TURN/STUN. See `docs/live-video.md`",
+     "- **Live TV / IPTV & camera feeds** — play a **live stream on a screen** as an ordinary playlist item: an IPTV/TV channel over **HLS** (`.m3u8`, every player type), or an **RTSP** camera/NVR on native Android (lowest latency). On an Android TV box with an HDMI input (Fire TV Cube), the box's own **HDMI IN** plays as an item too: full screen or in a zone, with logos and lower-thirds layered on top. The screen opens the URL itself, so it can be a LAN address and the server never ingests or restreams it — a channel on 40 screens is 40 pulls from your source, not 40 through ScreenTinker. Capability-gated per transport, so a player only receives a stream it can decode. See `docs/live-playback.md`"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    31,
+    33
+   ],
+   [
+    "replace",
+    37,
+    40,
+    33,
+    36,
+    [
+     "- **Device-side REST** — make a **screen** perform an HTTP request from **its own network**, so a LAN target is reachable at all: a PLC, a sensor, a local Home Assistant on the shop's `192.168.x.x` that the ScreenTinker server has no route to. Nothing is proxied through the server. Up to 64 KiB of the response comes back for the dashboard to show. ⚠️ Only `http://`/`https://` — `file://` and `content://` are refused, because the boundary worth defending is not \"which host\" but \"is this still an HTTP fetch or has it become a local file read\". Cloud metadata addresses are refused too, a hostname that resolves to one is caught by re-checking and pinning the resolved address, and redirects are not followed. ⚠️ Deliberately **not** a mesh command: a hub must not be able to aim someone else's panel at addresses inside their private network. See `docs/android-troubleshooting.md`",
+     "- **Display power schedules** — blank the **screen** on a weekly clock (\"off 22:00–06:00, Mon–Fri\") to save backlight hours, per device or per group, with device-level overriding group-level as everywhere else. The panel keeps running the whole time — playlists, downloads, heartbeats and remote control all continue, and waking it is instant — so this is **not** the same as switching the device off, which ScreenTinker deliberately does not schedule (see `docs/android-troubleshooting.md`). Windows are evaluated **on the player** against its own timezone, so a screen sleeps and wakes on time with the network down. Android today; other players accept and store the schedule and report it as unsupported until their local evaluator lands",
+     "- **Widgets** — clocks, weather, RSS tickers, text/HTML, webpages, **social walls** (moderated posts from Instagram, Facebook, YouTube, X, Bluesky and Mastodon — see `docs/social-feeds.md`), and Directory Board (scrolling lobby tenant/room/staff directories with dark/light themes, category management, and anti-burn-in motion)"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    54,
+    36,
+    50
+   ],
+   [
+    "replace",
+    54,
+    55,
+    50,
+    51,
+    [
+     "- **Storage backends** — keep media on local disk (the default, unchanged), **Amazon S3 or any S3-compatible store** (MinIO, Garage, Ceph RGW, SeaweedFS, Cloudflare R2, Backblaze B2, Wasabi, DigitalOcean Spaces), or **Azure Blob** — instance-wide from env, or per organization so an MSP customer's media stays in their own account. Attach an existing bucket and import from it by reference or copy. Moving media between backends is live: files are copied and verified, both copies serve until you switch, and old copies are removed only when you say so — screens keep playing throughout. Players still just fetch a URL: a presigned link when the screen can reach the bucket, otherwise the server streams it, so air-gapped screens keep working. See `docs/storage.md`"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    61,
+    51,
+    57
+   ],
+   [
+    "replace",
+    61,
+    63,
+    57,
+    59,
+    [
+     "- **Public REST API** — scoped personal access tokens (`read` / `write` / `full`) over the same resources the dashboard uses, workspace-confined by construction. Documented as an OpenAPI 3.1 contract (`docs/openapi.yaml`) and browsable on any instance at `/docs` (served locally, no CDN, so it works air-gapped)",
+     "- **Node Mesh** — link ScreenTinker servers together so one dashboard can watch many. A site server reports upward to a hub over a consent-scoped link; a hub can relay content back down to a customer's server. Data flows up by default and nothing flows down uninvited: every write is a *request* the receiving server decides on against its own grant. See Node Mesh below"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    59,
+    60
+   ],
+   [
+    "replace",
+    64,
+    65,
+    60,
+    61,
+    [
+     "- **Embedded, E-Paper, Smart LED & RGB LCD Displays** — server-side renderer for low-power MCUs (ESP32-S3/C6/C3, Seeed Studio reTerminal Sticky & E-Series E1001–E1004, Seeed Studio XIAO Smart RGB LED strip & matrix controllers, Elecrow CrowPanel 4.3\" RGB LCD, Waveshare e-paper, SPI TFTs). Delivers pre-dithered 1-bit bitstreams, 4-level grayscale (`x-epd-gray4`), 6-color Spectra 6 (`x-epd-spectra6`), 16-level grayscale (`x-epd-gray16`), unquantized 24-bit RGB888 (`raw` for WS2812B/SK6812 LED matrices with dynamic parametric dimensions), 16-bit RGB565 (`raw` for high-color parallel/SPI LCDs), BMP, JPEG, or PNG over HTTP with ETag/304 caching, panel-stated orientation/rotation (`0°`/`90°`/`180°`/`270°`), battery & environmental telemetry (`SHT40` temp/humidity, USB/battery power source), diagnostic log uploads, and operator-started OTA firmware updates for Seeed panels from binaries this server hosts (SHA-256-verified). See `docs/embedded-renderer.md`"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    85,
+    61,
+    81
+   ],
+   [
+    "replace",
+    85,
+    86,
+    81,
+    82,
+    [
+     "|Role|Scope|Cap|"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    82,
+    83
+   ],
+   [
+    "replace",
+    87,
+    93,
+    83,
+    89,
+    [
+     "|`platform_admin`|every workspace in the system|full read/write (via acting-as on workspaces they're not a direct member of)|",
+     "|`org_owner`|one organization|billing + delete + admin within all workspaces in the org|",
+     "|`org_admin`|one organization|admin within all workspaces in the org (no billing)|",
+     "|`workspace_admin`|one workspace|manage members, rename, full read/write|",
+     "|`workspace_editor`|one workspace|create/edit content, devices, playlists, schedules; no member changes|",
+     "|`workspace_viewer`|one workspace|read-only|"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    111,
+    89,
+    107
+   ],
+   [
+    "replace",
+    111,
+    116,
+    107,
+    112,
+    [
+     "|Variable|Meaning|",
+     "|---|---|",
+     "|`MESH_ACCEPT_ENROLLMENT`|This server may host others (it can hand out pairing codes)|",
+     "|`MESH_ALLOW_UPLINK`|This server may report to another one|",
+     "|`MESH_MAX_DEPTH`|How deep a chain may be (default `2`)|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    139,
+    112,
+    135
+   ],
+   [
+    "replace",
+    139,
+    140,
+    135,
+    136,
+    [
+     "docs/scale-out.md."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    155,
+    136,
+    151
+   ],
+   [
+    "replace",
+    155,
+    156,
+    151,
+    152,
+    [
+     "the Roku guide."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    163,
+    152,
+    159
+   ],
+   [
+    "replace",
+    163,
+    164,
+    159,
+    160,
+    [
+     "signature, and it does self-update; see docs/webos-player.md. The"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    160,
+    162
+   ],
+   [
+    "replace",
+    166,
+    167,
+    162,
+    163,
+    [
+     "a kiosk and it has not been certified on hardware; see docs/vega-player.md."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    178,
+    163,
+    174
+   ],
+   [
+    "replace",
+    178,
+    179,
+    174,
+    175,
+    [
+     " rather than crash-looping; see Upgrading to 3.0. `.nvmrc` pins the major."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    182,
+    175,
+    178
+   ],
+   [
+    "replace",
+    182,
+    186,
+    178,
+    182,
+    [
+     " (`sudo apt-get install ffmpeg` / `brew install ffmpeg`). Without it, videos upload and",
+     " play fine but show no thumbnail in the content library. The Docker image includes it.",
+     " The server logs a `[MEDIA]` line at startup telling you whether it was found, and",
+     " backfills missing thumbnails automatically once ffmpeg appears after a restart."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    206,
+    182,
+    202
+   ],
+   [
+    "replace",
+    206,
+    207,
+    202,
+    203,
+    [
+     "|Variable|Description|Default|"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    203,
+    204
+   ],
+   [
+    "replace",
+    208,
+    244,
+    204,
+    240,
+    [
+     "|`PORT`|HTTP port|`3001`|",
+     "|`HTTPS_PORT`|HTTPS port (used when SSL certs are present)|`3443`|",
+     "|`NODE_ENV`|Runtime env (`production` enables Express production optimizations + stricter error handling)|_(none)_|",
+     "|`SELF_HOSTED`|First user gets all features unlocked|`false`|",
+     "|`OUTBOUND_ALLOW_HOSTS`|Hosts, `*.suffixes`, IPs or CIDRs that calendars, data sources, webhooks, OIDC and AI may reach on a private network (refused by default). Cloud metadata stays blocked. See Outbound requests.|_(none)_|",
+     "|`OUTBOUND_ALLOW_PRIVATE`|Open every private-network range at once (single-tenant installs)|`false`|",
+     "|`HIDE_BILLING`|Hide the Subscription nav item + billing view; `#/billing` redirects to the dashboard (UI-only, opt-in)|`false`|",
+     "|`DISABLE_REGISTRATION`|Block new account creation (including OAuth auto-signup). First-user setup on an empty DB is still allowed.|`false`|",
+     "|`DISABLE_HOMEPAGE`|Redirect `/` to `/app` instead of serving the marketing landing page. For internal-only self-hosted deployments.|`false`|",
+     "|`VIEW_ONLY_ENABLED`|View-only display links (`/view/<token>`). Each display is still off until a workspace admin turns it on. `false` removes the feature from the instance — see View-only display access.|`true` when `SELF_HOSTED=true`, else `false`|",
+     "|`VIEW_TRUSTED_PROXIES`|Comma-separated proxy addresses/CIDRs whose `X-Forwarded-For` the view-only **network** check believes. Unset = only the TCP peer counts.|unset|",
+     "|`WIFI_ALLOW_INSECURE`|Send screens their Wi-Fi passwords over a connection that is **not** HTTPS. ⚠️ Only for an install on a LAN you trust end to end; logged at every start. See Wi-Fi networks of a screen.|`false`|",
+     "|`APP_URL`|Your public URL (used for Stripe callbacks and invite-accept URLs in emailed invites)|_(none)_|",
+     "|`JWT_SECRET`|JWT signing key, also the source of the key that encrypts saved secrets. Auto-generated into `certs/.jwt_secret` if not set. ⚠️ Changing it later signs everyone out and makes saved secrets unreadable; the server warns at boot if it changed.|_(auto)_|",
+     "|`SSL_CERT`|Path to SSL certificate|`server/certs/cert.pem`|",
+     "|`SSL_KEY`|Path to SSL private key|`server/certs/key.pem`|",
+     "|`PING_INTERVAL`|Socket.IO Engine.IO ping interval (ms). Raise for slow TV WebKits that miss pongs under decode load.|`30000`|",
+     "|`PING_TIMEOUT`|Socket.IO Engine.IO pong wait (ms). Lower = faster dead-socket detection; higher = more forgiving of laggy clients.|`30000`|",
+     "|`HEARTBEAT_INTERVAL`|App-level offline-checker frequency (ms). How often the server sweeps the device list looking for stale heartbeats.|`10000`|",
+     "|`HEARTBEAT_TIMEOUT`|How long without an app-level heartbeat (ms) before marking a device offline. Raise for slow/jittery networks.|`45000`|",
+     "|`RATE_LIMIT_BACKSTOP`|Global abuse backstop: requests per minute allowed for ONE credential (dashboard session, API token, device token), wherever it connects from. Sits above the per-endpoint limits (login, uploads, MCP...), which are unchanged. Static assets, content downloads, `/download/*` and socket.io are never counted. `0` turns the backstop off entirely.|`6000`|",
+     "|`RATE_LIMIT_BACKSTOP_ANON`|The same backstop for requests with no credential: per minute, per client IP, or per IP + device for player requests that name their device (`?device=`, `?device_id=`). Many panels behind one NAT do not share a bucket once they carry a token or device id. `0` stops limiting anonymous requests (credentialed ones still use `RATE_LIMIT_BACKSTOP`). A 429 carries `Retry-After` and `RateLimit` headers.|`6000`|",
+     "|`MAX_FILE_SIZE`|Largest upload the server will accept. Bytes, or a suffix (`2GB`, `1500MB`). **A reverse proxy caps this independently** — see below.|`500MB`|",
+     "|`COMMAND_QUEUE_TTL_MS`|How long the server holds commands and playlist-updates for a device that's offline at emit time (ms). Flushed in order on reconnect within this window; dropped past TTL.|`30000`|",
+     "|`OTA_ALLOW_MANAGED_DEVICES`|Let Android players self-update even when an MDM/DPC owns the device. Off by default — see below before enabling.|`0`|",
+     "|`MESH_ACCEPT_ENROLLMENT`|Let other ScreenTinker servers report to this one. Off means the hub API is not mounted at all — see Node Mesh.|`false`|",
+     "|`MESH_ALLOW_UPLINK`|Let this server report to another one.|`false`|",
+     "|`MESH_MAX_DEPTH`|Longest chain of linked servers.|`2`|",
+     "|`MESH_MIN_NODE_VERSION`|Oldest peer version this server will pair with.|`2.0.0-0`|",
+     "|`PRIMARY_URL`|On a replica: where writes for copied workspaces are forwarded. No default — unset, a replica is read-only. See Scale-out.|unset|",
+     "|`PRIMARY_REDIRECT`|Answer those writes with a `307` to `PRIMARY_URL` instead of proxying. Only behind one load balancer.|`false`|",
+     "|`MCP_CORS_ORIGINS`|Browser origins allowed to call `/mcp` cross-origin, comma-separated (e.g. `http://localhost:6274` for the MCP Inspector in direct mode). Unset means no CORS on `/mcp`; native and server-side MCP clients need none.|unset|",
+     "|`PLUGINS_ENABLED`|Load the plugin system (widget types, data-source resolvers, optional routes). Off by default and invisible — see Plugins.|unset|",
+     "|`PLUGINS_DIR`|Operator-installed plugins. Survives `git pull`.|`$DATA_DIR/plugins`|",
+     "|`PLUGIN_INBOX_DIR`|Quarantine for uploaded plugin zips. Not a plugin root.|`$DATA_DIR/plugin-inbox`|",
+     "|`BUNDLED_PLUGINS_DIR`|Read-only sample plugins shipped with the app.|`plugins/` in the repo|"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    260,
+    240,
+    256
+   ],
+   [
+    "replace",
+    260,
+    263,
+    256,
+    259,
+    [
+     " the MDM has delegated `DELEGATION_PACKAGE_INSTALLATION` to it, Android still raises a confirm",
+     " dialog that somebody (or an accessibility service) has to accept. If installs are failing *with*",
+     " an MDM present, delegating that scope is usually the real fix — not this flag."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    259,
+    260
+   ],
+   [
+    "replace",
+    264,
+    265,
+    260,
+    261,
+    [
+     " `allow_managed` honour it. Older players keep standing down regardless."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    272,
+    261,
+    268
+   ],
+   [
+    "replace",
+    272,
+    273,
+    268,
+    269,
+    [
+     " self-update, by design."
+    ]
+   ],
+   [
+    "equal",
+    273,
+    275,
+    269,
+    271
+   ],
+   [
+    "replace",
+    275,
+    276,
+    271,
+    272,
+    [
+     " things, on purpose:"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    272,
+    273
+   ],
+   [
+    "replace",
+    277,
+    285,
+    273,
+    281,
+    [
+     " - After **3** failed installs the display **flags itself as needing attention** in the dashboard.",
+     " A human is demonstrably required by then, so it says so early rather than at the end.",
+     " - It **keeps retrying anyway**, up to 40 attempts. Attempts after the first are close to free —",
+     " the APK is downloaded and signature-checked once and then reused from cache, so retry number",
+     " twelve pulls no bytes.",
+     " - Past that it settles to about **one attempt a day**, indefinitely. It never gives up for good,",
+     " and a new version clears the count — so a display stuck for a week still picks up the next",
+     " release on its own."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    286,
+    281,
+    282
+   ],
+   [
+    "replace",
+    286,
+    287,
+    282,
+    283,
+    [
+     " The flag is what to watch for. Silence is not the signal."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    300,
+    283,
+    296
+   ],
+   [
+    "replace",
+    300,
+    301,
+    296,
+    297,
+    [
+     " `ScreenTinker.apk` — `/data/` in a container, or the install root)."
+    ]
+   ],
+   [
+    "equal",
+    301,
+    302,
+    297,
+    298
+   ],
+   [
+    "replace",
+    302,
+    306,
+    298,
+    302,
+    [
+     " the version — e.g. `1.9.27-rc1`. This is required. The server cannot read the version out of an",
+     " APK cheaply, and advertising a version that does not match the bytes it serves is how update",
+     " loops start, so **a beta with no declared version is ignored entirely** and opted-in displays",
+     " keep getting the stable build."
+    ]
+   ],
+   [
+    "equal",
+    306,
+    328,
+    302,
+    324
+   ],
+   [
+    "replace",
+    328,
+    329,
+    324,
+    325,
+    [
+     " in order to *clear* it, change the playlist after re-pairing rather than before."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    330,
+    325,
+    326
+   ],
+   [
+    "replace",
+    330,
+    334,
+    326,
+    330,
+    [
+     " be defeatable by deleting the display and pairing again. Use **Unblock** — that clears the stored",
+     " block as well as the live one. (Before 1.9.25, Unblock only cleared the live one and the block came",
+     " back on the next re-pair; if you have a display that refuses to pair for no visible reason, unblock",
+     " it once on this version.)"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    342,
+    330,
+    338
+   ],
+   [
+    "replace",
+    342,
+    343,
+    338,
+    339,
+    [
+     " default is 1MB, and a typical signage deployment sets 500M. Raise it to match:"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    349,
+    339,
+    345
+   ],
+   [
+    "replace",
+    349,
+    351,
+    345,
+    347,
+    [
+     " 413 at the edge, before your server is involved. Large uploads need a plan that allows them,",
+     " or a route that bypasses the proxy."
+    ]
+   ],
+   [
+    "equal",
+    351,
+    365,
+    347,
+    361
+   ],
+   [
+    "replace",
+    365,
+    366,
+    361,
+    362,
+    [
+     "enable + restart still required. See **docs/plugins.md**. Bundled samples:"
+    ]
+   ],
+   [
+    "equal",
+    366,
+    374,
+    362,
+    370
+   ],
+   [
+    "replace",
+    374,
+    375,
+    370,
+    371,
+    [
+     "**docs/local-ai-setup.md**."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    378,
+    371,
+    374
+   ],
+   [
+    "replace",
+    378,
+    379,
+    374,
+    375,
+    [
+     "Off by default. With a go2rtc sidecar and a"
+    ]
+   ],
+   [
+    "equal",
+    379,
+    392,
+    375,
+    388
+   ],
+   [
+    "replace",
+    392,
+    393,
+    388,
+    389,
+    [
+     "**docs/live-video.md**."
+    ]
+   ],
+   [
+    "equal",
+    393,
+    394,
+    389,
+    390
+   ],
+   [
+    "replace",
+    394,
+    395,
+    390,
+    391,
+    [
+     "|Variable|Description|Default|"
+    ]
+   ],
+   [
+    "equal",
+    395,
+    396,
+    391,
+    392
+   ],
+   [
+    "replace",
+    396,
+    402,
+    392,
+    398,
+    [
+     "|`LIVE_VIDEO_ENABLED`|Master switch for live video. Also enable per workspace + per device.|`false`|",
+     "|`TALK_ENABLED`|Master switch for Talk (voice intercom / PA). Then enable per organization under Admin → Organizations.|`false`|",
+     "|`GO2RTC_URL`|The sidecar's API, reached over the compose network only (never exposed to the browser).|`http://go2rtc:1984`|",
+     "|`GO2RTC_API_TOKEN`|Shared secret if you protect go2rtc's API; must match `go2rtc.yaml`.|_(none)_|",
+     "|`GO2RTC_STUN_URLS`|Comma-separated STUN servers; a public STUN helps most NATs.|`stun:stun.l.google.com:19302`|",
+     "|`GO2RTC_TURN_URL` / `_USER` / `_PASS`|TURN relay, only needed when UDP 8555 and host candidates are both unreachable.|_(none)_|"
+    ]
+   ],
+   [
+    "equal",
+    402,
+    411,
+    398,
+    407
+   ],
+   [
+    "replace",
+    411,
+    412,
+    407,
+    408,
+    [
+     "VP8/VP9-capable image in `docker/go2rtc-vp8/` (a"
+    ]
+   ],
+   [
+    "equal",
+    412,
+    419,
+    408,
+    415
+   ],
+   [
+    "replace",
+    419,
+    420,
+    415,
+    416,
+    [
+     "1. Create a Stripe account"
+    ]
+   ],
+   [
+    "equal",
+    420,
+    422,
+    416,
+    418
+   ],
+   [
+    "replace",
+    422,
+    426,
+    418,
+    422,
+    [
+     " - `checkout.session.completed`",
+     " - `customer.subscription.updated`",
+     " - `customer.subscription.deleted`",
+     " - `invoice.payment_failed`"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    432,
+    422,
+    428
+   ],
+   [
+    "replace",
+    432,
+    433,
+    428,
+    429,
+    [
+     "|Variable|Description|"
+    ]
+   ],
+   [
+    "equal",
+    433,
+    434,
+    429,
+    430
+   ],
+   [
+    "replace",
+    434,
+    437,
+    430,
+    433,
+    [
+     "|`STRIPE_SECRET_KEY`|Your Stripe secret key (`sk_live_...` or `sk_test_...`)|",
+     "|`STRIPE_WEBHOOK_SECRET`|Webhook signing secret (`whsec_...`)|",
+     "|`APP_URL`|Your public URL (e.g. `https://signage.yourcompany.com`)|"
+    ]
+   ],
+   [
+    "equal",
+    437,
+    455,
+    433,
+    451
+   ],
+   [
+    "replace",
+    455,
+    456,
+    451,
+    452,
+    [
+     "> **Setting it up?** **docs/sso-setup.md** is the step-by-step guide — Google and"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    480,
+    452,
+    476
+   ],
+   [
+    "replace",
+    480,
+    481,
+    476,
+    477,
+    [
+     "|Variable|Description|"
+    ]
+   ],
+   [
+    "equal",
+    481,
+    482,
+    477,
+    478
+   ],
+   [
+    "replace",
+    482,
+    487,
+    478,
+    483,
+    [
+     "|`GOOGLE_CLIENT_ID`|OAuth 2.0 client ID from Google Cloud Console|",
+     "|`GOOGLE_CLIENT_SECRET`|Optional — PKCE means a public client works|",
+     "|`MICROSOFT_CLIENT_ID`|Application (client) ID from the Azure portal|",
+     "|`MICROSOFT_TENANT_ID`|**Your tenant GUID — required.** `common`/`organizations` are refused|",
+     "|`MICROSOFT_CLIENT_SECRET`|Required in practice — register the redirect URI under the **Web** platform, which Entra treats as a confidential client. A **SPA** registration is rejected at the token endpoint, because this exchange runs server-side and sends no browser `Origin`|"
+    ]
+   ],
+   [
+    "equal",
+    487,
+    499,
+    483,
+    495
+   ],
+   [
+    "replace",
+    499,
+    500,
+    495,
+    496,
+    [
+     "nOAuth: any tenant admin can set an arbitrary, unverified"
+    ]
+   ],
+   [
+    "equal",
+    500,
+    510,
+    496,
+    506
+   ],
+   [
+    "replace",
+    510,
+    514,
+    506,
+    507,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    514,
+    645,
+    507,
+    638
+   ],
+   [
+    "replace",
+    645,
+    646,
+    638,
+    639,
+    [
+     " password that is going to be refused and then send them to reset it;"
+    ]
+   ],
+   [
+    "equal",
+    646,
+    647,
+    639,
+    640
+   ],
+   [
+    "replace",
+    647,
+    648,
+    640,
+    641,
+    [
+     " because the page must not tell a user to fix a credential that is not the problem;"
+    ]
+   ],
+   [
+    "equal",
+    648,
+    649,
+    641,
+    642
+   ],
+   [
+    "replace",
+    649,
+    652,
+    642,
+    645,
+    [
+     " Microsoft. Those belong to the operator and are not domain-restricted, so leaving them available",
+     " would be a side door straight past the customer's MFA — blocking passwords while leaving",
+     " \"Continue with Google\" is not requiring single sign-on, it is renaming the bypass."
+    ]
+   ],
+   [
+    "equal",
+    652,
+    686,
+    645,
+    679
+   ],
+   [
+    "replace",
+    686,
+    687,
+    679,
+    680,
+    [
+     " are rolling back because something is already wrong;"
+    ]
+   ],
+   [
+    "equal",
+    687,
+    688,
+    680,
+    681
+   ],
+   [
+    "replace",
+    688,
+    690,
+    681,
+    683,
+    [
+     " uses the built-in `node:sqlite` where the Node has it, and otherwise stops with \"upgrade Node\"",
+     " instead of letting the module crash the process."
+    ]
+   ],
+   [
+    "equal",
+    690,
+    691,
+    683,
+    684
+   ],
+   [
+    "replace",
+    691,
+    695,
+    684,
+    688,
+    [
+     " new release's lockfile arrives but its packages do not. Without the version check the server ran",
+     " on the old ones, and with them the old security bugs; now it updates them on that first restart.",
+     " It runs `npm install --omit=dev` on a production tree and leaves a developer's dev packages",
+     " alone. If the service user has no writable home, npm's cache goes in `.npm-cache` beside `server/`."
+    ]
+   ],
+   [
+    "equal",
+    695,
+    703,
+    688,
+    696
+   ],
+   [
+    "replace",
+    703,
+    704,
+    696,
+    697,
+    [
+     "|Variable|Description|Default|"
+    ]
+   ],
+   [
+    "equal",
+    704,
+    705,
+    697,
+    698
+   ],
+   [
+    "replace",
+    705,
+    706,
+    698,
+    699,
+    [
+     "|`EMAIL_TRANSPORT`|`graph` (Microsoft Graph) or `smtp` (any mail server)|`graph`|"
+    ]
+   ],
+   [
+    "equal",
+    706,
+    713,
+    699,
+    706
+   ],
+   [
+    "replace",
+    713,
+    714,
+    706,
+    707,
+    [
+     "|Variable|Description|"
+    ]
+   ],
+   [
+    "equal",
+    714,
+    715,
+    707,
+    708
+   ],
+   [
+    "replace",
+    715,
+    720,
+    708,
+    713,
+    [
+     "|`GRAPH_TENANT_ID`|Microsoft Azure AD tenant ID|",
+     "|`GRAPH_CLIENT_ID`|Azure AD app registration client ID|",
+     "|`GRAPH_CLIENT_SECRET`|Azure AD app registration client secret|",
+     "|`GRAPH_SENDER_EMAIL`|Mailbox to send from (must be a valid mailbox or alias in the tenant)|",
+     "|`GRAPH_SENDER_NAME`|Display name shown in the email `From` field (defaults to `ScreenTinker`)|"
+    ]
+   ],
+   [
+    "equal",
+    720,
+    732,
+    713,
+    725
+   ],
+   [
+    "replace",
+    732,
+    733,
+    725,
+    726,
+    [
+     "Send via any standard mail server (Postfix, Gmail, Mailgun, SendGrid, a corporate relay, …) using nodemailer. Ideal for self-hosters without an Azure/M365 setup."
+    ]
+   ],
+   [
+    "equal",
+    733,
+    734,
+    726,
+    727
+   ],
+   [
+    "replace",
+    734,
+    735,
+    727,
+    728,
+    [
+     "|Variable|Description|Default|"
+    ]
+   ],
+   [
+    "equal",
+    735,
+    736,
+    728,
+    729
+   ],
+   [
+    "replace",
+    736,
+    742,
+    729,
+    735,
+    [
+     "|`SMTP_HOST`|Mail server hostname (e.g. `mail.example.com`)|_(required)_|",
+     "|`SMTP_PORT`|Port — `587` for STARTTLS, `465` for implicit TLS|_(required)_|",
+     "|`SMTP_SECURE`|`true` = implicit TLS (465); `false` = STARTTLS (587)|`false`|",
+     "|`SMTP_USER`|Auth username. Omit (with `SMTP_PASSWORD`) for an unauthenticated relay|_(none)_|",
+     "|`SMTP_PASSWORD`|Auth password. Required **if** `SMTP_USER` is set|_(none)_|",
+     "|`SMTP_FROM`|From address — `Name <addr@example.com>` or `addr@example.com`|_(required; falls back to `SMTP_USER`)_|"
+    ]
+   ],
+   [
+    "equal",
+    742,
+    749,
+    735,
+    742
+   ],
+   [
+    "replace",
+    749,
+    753,
+    742,
+    743,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    753,
+    761,
+    743,
+    751
+   ],
+   [
+    "replace",
+    761,
+    762,
+    751,
+    752,
+    [
+     "|Variable|Description|"
+    ]
+   ],
+   [
+    "equal",
+    762,
+    763,
+    752,
+    753
+   ],
+   [
+    "replace",
+    763,
+    764,
+    753,
+    754,
+    [
+     "|`GRAPH_DEV_RESTRICT_TO`|Comma-separated allow-list of recipient emails (applies to **both** transports). When set, sends to addresses **not** in the list are suppressed (logged but never delivered).|"
+    ]
+   ],
+   [
+    "equal",
+    764,
+    773,
+    754,
+    763
+   ],
+   [
+    "replace",
+    773,
+    774,
+    763,
+    764,
+    [
+     "> **Running one day to day?** **docs/operations.md** is the runbook —"
+    ]
+   ],
+   [
+    "equal",
+    774,
+    786,
+    764,
+    776
+   ],
+   [
+    "replace",
+    786,
+    843,
+    776,
+    777,
+    [
+     "…（57 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    843,
+    855,
+    777,
+    789
+   ],
+   [
+    "replace",
+    855,
+    879,
+    789,
+    790,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    879,
+    884,
+    790,
+    795
+   ],
+   [
+    "replace",
+    884,
+    885,
+    795,
+    796,
+    [
+     "`X-Content-Type-Options`, etc. via helmet, and manages them"
+    ]
+   ],
+   [
+    "equal",
+    885,
+    911,
+    796,
+    822
+   ],
+   [
+    "replace",
+    911,
+    917,
+    822,
+    823,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    917,
+    927,
+    823,
+    833
+   ],
+   [
+    "replace",
+    927,
+    931,
+    833,
+    834,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    931,
+    1003,
+    834,
+    906
+   ],
+   [
+    "replace",
+    1003,
+    1009,
+    906,
+    907,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1009,
+    1037,
+    907,
+    935
+   ],
+   [
+    "replace",
+    1037,
+    1043,
+    935,
+    941,
+    [
+     " - **Android TV / tablets**: Download the APK from your instance (`/download/apk`) or build it from source (see above)",
+     " - **Raspberry Pi**: `curl -sSL https://your-instance/scripts/raspberry-pi-setup.sh | sudo bash` (see Raspberry Pi notes)",
+     " - **Debian 13 (headless)**: `curl -sSL https://your-instance/scripts/debian-13-setup.sh | sudo bash`",
+     " - **Windows**: Run the setup script from `scripts/windows-setup.bat`",
+     " - **Samsung Tizen TV / signage**: point the TV's URL Launcher (or browser) at `https://your-instance/player` - no signing needed. For an installed native app, see tizen/README.md",
+     " - **Any browser**: Open `https://your-instance/player` in kiosk/fullscreen mode"
+    ]
+   ],
+   [
+    "equal",
+    1043,
+    1080,
+    941,
+    978
+   ],
+   [
+    "replace",
+    1080,
+    1084,
+    978,
+    982,
+    [
+     " `<openbox_config/>`, and labwc ignores *every* keybinding while that root is there",
+     " (labwc#3190) — with no error to say so. The",
+     " installer replaces that stub (keeping a `.screentinker-bak`) and merges into a real",
+     " `<labwc_config>` rather than overwriting it."
+    ]
+   ],
+   [
+    "equal",
+    1084,
+    1085,
+    982,
+    983
+   ],
+   [
+    "replace",
+    1085,
+    1087,
+    983,
+    985,
+    [
+     " writing the file while a session is running does nothing until one or the other happens. The",
+     " installer attempts `--reconfigure` and the reboot it asks for at the end covers the rest."
+    ]
+   ],
+   [
+    "equal",
+    1087,
+    1123,
+    985,
+    1021
+   ],
+   [
+    "replace",
+    1123,
+    1124,
+    1021,
+    1022,
+    [
+     "> docs/android-troubleshooting.md."
+    ]
+   ],
+   [
+    "equal",
+    1124,
+    1144,
+    1022,
+    1042
+   ],
+   [
+    "replace",
+    1144,
+    1150,
+    1042,
+    1043,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1150,
+    1156,
+    1043,
+    1049
+   ],
+   [
+    "replace",
+    1156,
+    1157,
+    1049,
+    1050,
+    [
+     "**Reporting issues:** GitHub Issues for bugs and feature requests, or drop into Discord for quick questions and feedback."
+    ]
+   ],
+   [
+    "equal",
+    1157,
+    1166,
+    1050,
+    1059
+   ],
+   [
+    "replace",
+    1166,
+    1181,
+    1059,
+    1060,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1181,
+    1194,
+    1060,
+    1073
+   ],
+   [
+    "replace",
+    1194,
+    1203,
+    1073,
+    1074,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1203,
+    1204,
+    1074,
+    1075
+   ],
+   [
+    "replace",
+    1204,
+    1206,
+    1075,
+    1076,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

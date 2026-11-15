@@ -3281,5 +3281,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1d20fb4af0f6": {
+  "identity": {
+   "one_liner": "自托管日历共享平台，一个域名提供网页/PWA、多端客户端与 CalDAV/ICS/API 接入",
+   "review": "ByWave Calendar 是跑在自己服务器上的日历共享平台，面向个人、团队与小组织。同一域名下提供网页日历（可装为 PWA）、iOS/Android/macOS/Windows/Linux 客户端，并输出 CalDAV 双向同步、ICS 订阅与 REST API。服务端为 TypeScript + Fastify + PostgreSQL，支持宝塔一键部署。Roadmap 显示复杂 RRULE/VTIMEZONE 全支持与 OAuth refresh token 尚未完成。",
+   "highlights": [
+    "实现 CalDAV（RFC 4791）双向同步与 ICS 订阅发布/导入，供 Apple Calendar、Google、Outlook 等接入",
+    "支持邮箱密码、Passkey (WebAuthn)、TOTP MFA、OIDC/Keycloak/Okta/Google Workspace SSO 及应用密码",
+    "提供 Bearer Token REST API、OAuth 2.0 授权服务器（授权码 + PKCE）与 Webhooks 事件推送"
+   ],
+   "use_cases": [
+    "在自有服务器上自建日历，通过 CalDAV 同步到 iOS 系统日历或 Apple Calendar",
+    "通过 ICS 只读链接把日历发布为 Google/Apple/Outlook 订阅日历",
+    "用预约链接 (booking) 发布可约时段，或通过 REST API/Webhooks 与内部系统集成"
+   ]
+  },
+  "sha": "1d20fb4af0f6",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fd9b830f09de": {
+  "identity": {
+   "one_liner": "Rust 重写的 Moqui 框架，覆盖数据库到 Web/RTC 应用栈",
+   "review": "MR Moqui 是 Moqui Java 框架的 Rust 重写版本，保留 XML 作为配置、实体、服务与屏幕的规范语言，将实体门面、服务门面、屏幕渲染等移入 Rust，脚本与模板统一使用 JavaScript（基于 quickjs-oxide 引擎）。面向 Moqui Java 生态的应用开发者与迁移者。项目尚处早期开发阶段，首个发布（0.1.0 系列）前数据模型与存储布局不稳定，变更不带迁移，旧构建数据库可能需清空重载。构建需 Rust 1.99 及以上与 bash，默认内嵌 Postgres，也可配置外部 Postgres。",
+   "highlights": [
+    "提供 ./moq 脚本化构建、数据加载与运行流程，最大包内嵌 Postgres 并包含 SSH/SFTP、OAuth2/OIDC、SMTP/IMAP/POP、Git、XLSX 与图像处理等功能",
+    "组件可通过 Cargo.toml 与 src/ 提供链接进二进制的 Rust 服务、工具、资源方案、模板渲染器与自定义服务运行器",
+    "与 Moqui Java 的设计差异包括：SearchFacade 以 Postgres 全文检索为默认后端（OpenSearch 可选）、会话存于数据库、集群协调经共享数据库与 gRPC"
+   ],
+   "use_cases": [
+    "将既有 Moqui Java 部署或组件迁移到 Rust 运行时",
+    "在企业应用开发中使用 XML 规范语言配合 JavaScript 脚本与模板",
+    "部署到服务器、容器或集群，使用内嵌或外部 Postgres 作为数据库"
+   ]
+  },
+  "sha": "fd9b830f09de",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ba639e42a072": {
+  "identity": {
+   "one_liner": "共享费用分摊 Web 应用，实时计算群组内每人欠款并生成含精确金额的收款二维码。",
+   "review": "Hati（他加禄语“分摊”）面向合租室友、项目小组和朋友等共同消费群体，用于记录群组开支并计算成员间欠款。它只做记录，不转移资金。金额全程以整数分（centavos）运算保证精确，通过 WebSocket 轮询 group_events 表实现余额实时更新，可作为 ITE183 课程项目查看 docs/decisions.md 中的设计决策。",
+   "highlights": [
+    "支持等分、按精确金额、按百分比三种费用拆分方式，并计算结清全组所需的最少转账笔数",
+    "成员可保存最多 5 个 InstaPay 收款二维码（GCash、Maya、银行等），欠款人扫码时金额已自动填入",
+    "通过邀请链接、邀请码或扫描二维码加入群组，支持管理员与成员角色"
+   ],
+   "use_cases": [
+    "合租室友分摊房租、水电等共同开支并追踪各自欠款",
+    "朋友聚餐、旅行等临时群组的费用结算与还款安排",
+    "项目小组记录成员垫付支出并按月、按类别查看消费汇总"
+   ]
+  },
+  "sha": "ba639e42a072",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

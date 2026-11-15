@@ -2897,5 +2897,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ea346c463b31": {
+  "identity": {
+   "one_liner": "异步 Rust 消息桥接库，以统一 route 机制在多种消息系统与数据库间移动和转换数据",
+   "review": "mq-bridge 是一个异步 Rust 库，用于在 Kafka、NATS、MQTT、AMQP、SQL/MongoDB/ClickHouse、HTTP、文件与对象存储等系统间路由消息。所有端点实现相同的 receive_batch/send_batch 接口，路由通过 YAML 配置定义转换、过滤、重试等步骤，并提供 Rust、Python、Node.js、C/C++、Nim 绑定，以及命令行工具 mq-bridge-app。数据仓库类系统通过写入 Parquet 文件方式接入，而非原生连接器。",
+   "highlights": [
+    "所有输入输出端点遵循同一 batch 形状的 receive_batch/send_batch 接口，任意源可对接任意目标",
+    "支持路由内 transform、filter、switch、fanout、重试、DLQ、去重、限流等中间件，可用 YAML 配置或 Rust/Python/Node.js 处理器扩展",
+    "通过插件引入 Redpanda Connect 组件与 faucet 连接器（含 MySQL/SQL Server/Oracle CDC），插件按需加载并在同一进程内运行"
+   ],
+   "use_cases": [
+    "通过 Postgres CDC 或 MongoDB change stream 将变更同步到 Kafka、向量索引或数据仓库",
+    "用 YAML 路由或 mqb copy 命令在消息代理与数据库、文件、HTTP 服务之间搬运数据",
+    "使用内存端点在不启动消息代理的情况下测试消息处理逻辑"
+   ]
+  },
+  "sha": "ea346c463b31",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

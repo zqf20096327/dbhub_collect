@@ -2870,5 +2870,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cce44b1bd656": {
+  "identity": {
+   "one_liner": "为 AI 编码代理提供跨会话持久记忆的工具，记录、压缩并回注上下文",
+   "review": "Claude-Mem 在编码代理运行时由伴随代理记录会话观察，经压缩后在新会话开始时注入索引式上下文，按需加载细节。支持 Claude Code、Codex、OpenCode 等多个代理，数据存储在本地 ~/.claude-mem。部分代理（如 Copilot CLI、Goose）仅支持记忆搜索，不记录会话；观测者模式为付费试用，可选择自备 API 密钥。",
+   "highlights": [
+    "会话开始时注入压缩索引，按分层渐进披露机制在需要时加载完整细节",
+    "mem-search 技能按索引、时间线、细节三步检索项目历史",
+    "本地存储于 ~/.claude-mem，支持 SQLite/FTS5 与 Chroma 向量混合搜索；<private> 标签内容不存储"
+   ],
+   "use_cases": [
+    "希望代理在新会话中延续上次工作进度，避免重复读取文件",
+    "通过自然语言检索项目历史中的过往决策、bugfix 记录",
+    "团队通过可选的 TeamBrain 工作区共享工作项与发现"
+   ]
+  },
+  "sha": "cce44b1bd656",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "94c74e2a8836": {
+  "identity": {
+   "one_liner": "Rust 编写的 MySQL 兼容 HTAP 数据库，内置向量检索与 AI 接口",
+   "review": "MyDB 是用 Rust 编写的通用数据库，面向 HTAP 混合负载、AI 代理与 MySQL 兼容场景。它复用 MySQL 客户端与 JDBC 驱动，提供原生全文与向量检索（HNSW/IVF）、SQL 外部模型调用、REST/MCP 接口、自动 Zone Maps、在线 DDL 与可查询备份。当前 1.2.1 为公开预览版，面向功能验证与受控环境评估，磁盘格式不保证向后兼容。",
+   "highlights": [
+    "支持 MySQL 客户端/驱动复用、ROW/FULL binlog 集成及原生 REST SQL 与 MCP 接口",
+    "在同一数据集上并行处理事务读写与分析查询，包含向量检索、全文混合检索与外部模型调用",
+    "提供 MVCC 事务、时间旅行查询、在线 schema 变更与可直接查询的备份"
+   ],
+   "use_cases": [
+    "同一业务数据上混合事务与分析查询的 HTAP 应用",
+    "需要通过 SQL、REST 或 MCP 访问向量与全文检索的 AI 代理/服务",
+    "希望复用现有 MySQL 客户端与 JDBC 驱动接入新引擎的应用评估场景"
+   ]
+  },
+  "sha": "94c74e2a8836",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

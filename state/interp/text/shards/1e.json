@@ -2908,5 +2908,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "95c43c3471e5": {
+  "identity": {
+   "one_liner": "Python 工具调用代理教学应用，用 SQLite 持久化执行记录",
+   "review": "Loop Agent 是一个本地运行的 Python 应用，演示使用工具的代理循环：选择动作、执行工具、读取结果、决定下一步。它提供计算、记忆保存/召回、获取时间四个工具，事实与运行记录存于本地 SQLite，重启后可召回。适合想理解工具调用代理循环机制的开发者学习。Demo 模式用固定规则，Live 模式接入 OpenAI 兼容模型；仅限本机使用，无多用户支持。",
+   "highlights": [
+    "提供四个工具（计算、保存事实、召回事实、获取时间），事实与运行历史持久化在本地 SQLite",
+    "实现预算机制：默认六次规划调用、12 次工具调用、8 KiB 参数、16 KiB 工具结果、32 KiB 模型回复上限",
+    "对每次运行执行七项确定性完整性检查，并保留失败轨迹供查看与导出"
+   ],
+   "use_cases": [
+    "本地学习代理调用工具、保存结果、重启后召回的完整循环",
+    "通过浏览器演示回放计算保存、重启召回、失败处理三类已录制运行",
+    "接入 OpenAI 兼容端点观察模型驱动的工具选择行为"
+   ]
+  },
+  "sha": "95c43c3471e5",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "71021844ac19": {
+  "identity": {
+   "one_liner": "基于本体驱动解析代码库并写入本地 SQLite 图数据库的索引与 MCP 查询服务。",
+   "review": "CodeExplorer（ce）将 C#、TypeScript/JS、Go、Python、SQL 源码及 HTTP/gRPC/GraphQL 端点、消息队列拓扑、SQL 模式解析为本地 SQLite 图（.codeexplorer/graph.db），内嵌 OpenCypher-to-SQL 编译器，并提供 MCP 工具供 Claude Code、Cursor 等 AI 代理做静态分析。以单文件二进制分发，无需 .NET 运行时或独立图数据库服务。README 含大量作者自述基准数据，未经独立验证。",
+   "highlights": [
+    "支持 C#、TypeScript/JS、Go、Python、SQL 解析为本地 SQLite 图，通过 OpenCypher 语法查询",
+    "提供 MCP 工具与 `ce gate check` CI 门禁，使用 OpenCypher 规则和 SHA-256 ratchet 基线",
+    "以单文件二进制分发，内嵌 Tree-sitter 语法与 SQLite，数据不出本机"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供调用链、跨服务依赖与数据血缘的图查询上下文",
+    "在 IDE（VS Code/Cursor/Windsurf）中查看交互式 C1/C2/C3 服务拓扑图",
+    "在 CI 中以声明式规则执行架构边界检查与回归基线管理"
+   ]
+  },
+  "sha": "71021844ac19",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "043a30dd38f0": {
+  "identity": {
+   "one_liner": "为 GSPro 模拟高尔夫提供挥杆记录、统计网页与 AI 双解说播报的工具",
+   "review": "该项目面向 GSPro 3.1.x 模拟高尔夫用户，通过 OCR 读取每次击球的起飞数据、落点与成绩，写入本地 SQLite 数据库，生成包含标准杆得分、球杆距离分布等内容的统计网页，并可选由两个 LLM 驱动的 AI 解说员实时播报。统计默认本地运行，发布到线上需自备 AWS 账户；解说使用云端模型时每轮约花费 0.40–0.60 美元，也可完全本地运行。",
+   "highlights": [
+    "将每次击球的发射数据、落点、得分及整轮记分卡存入本地 SQLite 文件，无需云服务、账户或 API 密钥",
+    "提供本地统计页面，包含 Strokes Gained、球杆距离与散布、按距离分的攻果岭与推杆、洞回放、差点指数等内容",
+    "两个 AI 解说员在击球飞行中实时播报，支持自定义联盟名单与剧情文件、七种语言语音，并可密码保护发布统计页与直播流"
+   ],
+   "use_cases": [
+    "模拟高尔夫联盟保存赛季数据、生成可分享的成绩页与集锦",
+    "在练习或比赛时获得实时 AI 解说播报",
+    "球员通过手机查看个人各轮、击球与纪录，并接收直播与纪录刷新提醒"
+   ]
+  },
+  "sha": "043a30dd38f0",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

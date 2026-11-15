@@ -3667,5 +3667,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "615a8c5be5bb": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制的 Go 语言 CDC 库，捕获变更并流式转发",
+   "review": "go-pq-cdc 是 Trendyol 开源的 Go 语言 CDC 库，利用 PostgreSQL 逻辑复制槽捕获数据库变更并流式输出到下游系统，官方提供 Kafka、Elasticsearch 连接器，第三方有 RabbitMQ 连接器。库支持快照初始同步、TOAST 列恢复、心跳推进 WAL 位点等机制。运行需具备 REPLICATION 属性的角色及 pg_hba.conf 允许复制连接，无超级用户也可部署。适合需要在 Go 应用内嵌入 CDC 能力、将 Postgres 变更接入事件驱动架构的团队。",
+   "highlights": [
+    "基于 PostgreSQL 内置逻辑复制机制捕获变更，支持 pgoutput 协议 proto_version 1 和 2",
+    "提供快照功能：通过 pg_export_snapshot() 实现一致性快照、分块处理大表、多实例并行、失败自动恢复，并支持仅快照模式（无需复制槽）",
+    "提供基于心跳表的 WAL 保护机制，在低流量数据库中定期生成并确认小型事务以推进 confirmed_flush_lsn，控制 WAL 堆积；被动/主动模式在复制槽失活时自动重新接管"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 变更实时同步到 Kafka、Elasticsearch、RabbitMQ 等下游系统",
+    "对新表做初始数据快照导出后无缝切换到增量 CDC 同步",
+    "多数据库共用同一 PostgreSQL 实例、CDC 库流量较低时防止复制槽导致 WAL 无法回收"
+   ]
+  },
+  "sha": "615a8c5be5bb",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

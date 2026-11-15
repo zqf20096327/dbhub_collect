@@ -3502,5 +3502,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b61545b6fdb0": {
+  "identity": {
+   "one_liner": "开源电话交换机，由 AI 代理接听并在通话中执行工具，可自托管",
+   "review": "DeskVoice 是部署在用户 VPS 上的开源电话系统（MIT 许可），由 AI 代理接听来电，通话中调用工具、请求人工批准、转接，并在通话结束后生成摘要与后续任务。需自备 Ubuntu/Debian 等系统的 VPS、SIP 中继号码和 Gemini 或 OpenAI 语音密钥；一条脚本命令即可安装，Web 面板支持葡/英/西语。项目将功能按'模拟验证/真实安装验证/待验证'分级标注，部分 SIP 接听功能尚待真实运营商通话验证。",
+   "highlights": [
+    "通话中执行工具、中途请求人工批准并支持转接，通话结束后生成摘要与后续任务",
+    "每次通话设有成本与时长上限，写入类工具按类型设次数上限",
+    "提供模拟语音引擎，无 AI 密钥和 SIP 中继也可完整演示一次通话"
+   ],
+   "use_cases": [
+    "需要自托管 AI 电话接听的小型客服/呼叫中心",
+    "在接入真实运营商前，用模拟引擎本地预演完整通话流程",
+    "按通话记录时间线与成本明细追踪来电历史与待办事项"
+   ]
+  },
+  "sha": "b61545b6fdb0",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17953d529e08": {
+  "identity": {
+   "one_liner": "通过读取 MySQL binlog 生成 Parquet 列式副本并用 DuckDB 查询的 HTAP 工具",
+   "review": "DBTrail 以复制协议读取 MySQL/MariaDB/RDS/Aurora 的 binlog，在本地磁盘或 S3 维护 Parquet 副本，并通过兼容 MySQL 协议的端口接受现有客户端查询，重查询由 DuckDB 从副本应答。支持基于 binlog 的 AS OF 时间旅行与行级 undo SQL 生成。要求 ROW 格式 binlog、完整行镜像和主键，副本有延迟且不提供高可用。",
+   "highlights": [
+    "以复制协议读取 binlog，无需在 MySQL 上安装插件、代理或触发器",
+    "通过 MySQL 协议端口路由：写入和按键查找发往 MySQL，重读取由 Parquet/DuckDB 副本应答",
+    "提供 AS OF 时间旅行查询和生成撤销 SQL 的行级 undo，可通过 MCP 客户端查询"
+   ],
+   "use_cases": [
+    "为现有 MySQL 应用分担全表聚合、排名、多年趋势等重分析查询，应用 SQL 无需改动",
+    "接入 Metabase、Grafana 等支持 MySQL 协议的仪表盘工具",
+    "查询表的历史时点状态或生成误操作撤销 SQL"
+   ]
+  },
+  "sha": "17953d529e08",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d5a17fc32652": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，用 PostgreSQL+pgvector 存储带证据溯源的 AI 记忆",
+   "review": "Dense-Mem 是一个独立运行的 HTTP MCP 记忆服务器（Streamable HTTP），供 AI 客户端跨会话存取记忆。它保存确切 Evidence 及其来源与生命周期，支持私有/团队共享记忆、溯源追踪（Trace）与基于 pgvector 的检索。以 PostgreSQL 为持久层，多实例部署需 Redis 协调。通过 Docker Compose 部署，Apache-2.0 许可。",
+   "highlights": [
+    "以 MCP（Streamable HTTP）接口提供 Remember/Recall/Trace 工作流，保留 Evidence 的来源、版本与 append-only 生命周期",
+    "支持私有与团队共享两类记忆目标，共享可见性不授予修改他人 Evidence 的权限",
+    "持久层为 PostgreSQL+pgvector，单实例可用进程内存协调，多实例需 Redis 等分布式协调"
+   ],
+   "use_cases": [
+    "为自托管 AI 客户端提供跨会话记忆存取",
+    "需要记录记忆来源与更正/撤回谱系的团队场景",
+    "需将模型与数据流量限定在自有基础设施内的部署（可自托管嵌入与模型服务）"
+   ]
+  },
+  "sha": "d5a17fc32652",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9d47b04198a": {
+  "identity": {
+   "one_liner": "面向 Spring Boot 的事务性幂等库，将去重标记与业务数据原子提交",
+   "review": "Namastack Once 是用于 Spring Boot 应用（Java/Kotlin）的事务性幂等实现：按 scope+key 预留标记，与业务写入在同一本地事务中提交，重复请求被跳过，失败则回滚以便重试。支持 JDBC 与 MongoDB 持久化、自动过期清理、Micrometer 指标与 Spring Modulith。限制：业务写入须共享同一数据库与事务管理器，远程调用等外部副作用不在事务内。",
+   "highlights": [
+    "提供 @Idempotent 注解与 IdempotencyOperations.execute 编程 API 两种使用方式",
+    "支持 JDBC（关系型数据库）与 MongoDB 原生事务两种持久化，可配置命名 Once 实例对接不同库/表",
+    "提供标记保留期与自动清理配置，及可选的 Micrometer 指标与分布式追踪"
+   ],
+   "use_cases": [
+    "事件驱动消费者在重投递场景下防止业务操作重复执行",
+    "多个应用实例并发消费时通过共享数据库协调去重",
+    "Spring Modulith 异步模块监听器防重复投递"
+   ]
+  },
+  "sha": "a9d47b04198a",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6d327c2f1d70": {
+  "identity": {
+   "one_liner": "VS Code 及兼容 IDE 的本地数据库客户端扩展，支持多库连接、SQL 开发与数据管理。",
+   "review": "DMSQL 是一个运行于 VS Code、Cursor 等兼容 IDE 的数据库客户端扩展，面向需要在本机管理多种数据库的开发者。它宣称支持 34 种数据库（含 MySQL、Oracle、PostgreSQL、达梦、Hive 等），提供连接管理、SQL 编辑、可视化表设计、结果集编辑、导入导出、Mock 数据与性能监控。密码存于本地 SecretStorage，支持中英文界面，配套官网与文档。",
+   "highlights": [
+    "支持连接多种数据库（README 列出 34 种，含 MySQL、Oracle、PostgreSQL、ClickHouse、Doris、Dameng、Hive 等），提供对象树浏览、SQL 编辑与执行",
+    "提供可视化表设计器、CSV/Excel/JSON/SQL 导入导出、跨连接复制数据、42+ 种 Faker 规则及 OpenAI 兼容 API 生成 Mock 数据",
+    "提供只读连接模式、危险语句确认（DROP/TRUNCATE、无 WHERE 的 DELETE/UPDATE）、会话监控与可筛选的 SQL 执行历史"
+   ],
+   "use_cases": [
+    "在 VS Code 系 IDE 中统一连接和浏览多种数据库的表、视图、存储过程等对象并执行 SQL",
+    "设计表结构（含主键、索引、外键与 DDL 预览）、生成测试数据、进行 CSV/Excel/JSON/SQL 数据导入导出",
+    "通过只读连接与危险语句确认机制进行日常数据查询、结果集编辑和会话/历史监控"
+   ]
+  },
+  "sha": "6d327c2f1d70",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

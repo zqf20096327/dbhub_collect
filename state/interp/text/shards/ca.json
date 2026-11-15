@@ -3024,5 +3024,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7e02e4655b69": {
+  "identity": {
+   "one_liner": "自托管事务邮件 API 服务，基于 Bun/Elysia 构建，以单个 Docker 容器运行。",
+   "review": "BunMail 是一个面向开发者的自托管事务邮件服务，通过 REST API 与 SMTP 提交两种方式发送邮件，内置 Postgres 队列、DKIM 签名、SPF/DMARC 校验、Webhook、模板与入站 SMTP。技术栈为 Bun、Elysia、Drizzle ORM 和 PostgreSQL，以单个 Docker 容器部署，生产模式强制要求真实主机名和反向代理 TLS，未注册的 from 域名会被拒绝发送（422）。许可协议为 MIT。",
+   "highlights": [
+    "提供 REST 发送 API、SMTP 提交、Mustache 风格模板与 HMAC 签名的事件 Webhook，支持批量发送（单次最多 100 封）和幂等键",
+    "内置 DKIM 签名（2048 位 RSA，支持零停机轮换）、SPF/DKIM/DMARC 校验、DMARC 聚合报告解析及可选的 MTA-STS/DANE TLS 策略",
+    "包含基于 Postgres 的邮件队列（MTA 风格退避重试，最长 48 小时）、软删除回收站、抑制列表和可选 Redis 实现的多副本限速共享"
+   ],
+   "use_cases": [
+    "在自有服务器上通过 API 或 SMTP 发送事务性邮件（如验证码、通知），替代 SaaS 发信服务",
+    "需要入站邮件接收、Webhook 事件与模板管理的应用后端集成",
+    "需要 DKIM/DMARC 等投递配置检查与邮件日志、标签筛选的自建邮件发送平台"
+   ]
+  },
+  "sha": "7e02e4655b69",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "47a23559e12b": {
+  "identity": {
+   "one_liner": "单 Go 二进制加 SQLite 的私有实时论坛，支持嵌套评论。",
+   "review": "Soliloquy 是一个用于团队讨论和交流的私有论坛程序，部署为一个 Go 二进制加一个 SQLite 文件。默认私密、邀请制，管理员可切换为公开只读；支持嵌套评论、实时更新、RSS 订阅和只读 JSON API。程序不做 TLS，需前置反向代理；实时更新基于内存 hub，只能运行单进程。",
+   "highlights": [
+    "单 Go 二进制与 SQLite 文件运行，提供 Linux/macOS 的 amd64 与 arm64 预编译包和 Docker 镜像",
+    "支持嵌套评论、实时通知、Markdown、全文搜索、@提及、RSS 订阅和只读 JSON API",
+    "邀请制与私有/公开模式切换，RSS 与 API 通过每成员的私密令牌访问私密论坛"
+   ],
+   "use_cases": [
+    "团队内部工作讨论与小型私人社区交流",
+    "需要低资源占用、简化部署的单进程自托管论坛",
+    "需要通过 RSS 或 JSON API 在外部读取帖子与评论的场景"
+   ]
+  },
+  "sha": "47a23559e12b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

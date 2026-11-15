@@ -3260,5 +3260,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "403385166780": {
+  "identity": {
+   "one_liner": "基于 WASM 组件模型的确定性工作流运行时，用 SQLite/PostgreSQL 持久化执行日志",
+   "review": "Obelisk 是一个以 WASM 组件模型和 WIT IDL 为基础的工作流运行时，提供确定性可回放的工作流、自动重试的活动和 webhook 端点，执行步骤持久化到 SQLite 或 PostgreSQL。通过单二进制分发的 CLI、REST API 与 Web UI 管理执行。项目处于 pre-release 阶段，CLI、REST API、WIT 与数据库 schema 可能变更，采用 AGPL-3.0 许可（wit/ 目录为 MIT）。",
+   "highlights": [
+    "工作流由运行时保证确定性，依托持久化执行日志实现回放与崩溃恢复",
+    "活动支持 HTTP 请求（WASI 0.2），在错误、超时和 WASM trap 时自动重试，要求活动自身满足幂等性",
+    "提供 CLI、REST API 和 Web UI，支持查看执行追踪、事件记录、日志，以及带回溯的时间旅行调试；支持 work stealing 执行器与子执行的并发结构"
+   ],
+   "use_cases": [
+    "AI 辅助生成代码的沙箱运行与审计",
+    "周期任务与后台作业，利用内置的错误处理和重试机制",
+    "端到端测试，每一步生成详细日志"
+   ]
+  },
+  "sha": "403385166780",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2623,5 +2623,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "4d944a2c47af": {
+  "identity": {
+   "one_liner": "移动端实时调试桌面工具，配多平台 SDK 查看与控制应用运行状态",
+   "review": "Flocon 是一个桌面调试应用，配合 Android、Kotlin Multiplatform、iOS、Flutter 的 SDK 使用：应用连上桌面端后，可实时查看网络请求（HTTP/GraphQL/gRPC）、数据库、偏好设置、分析事件、崩溃与时间线，并支持 mock 请求、模拟弱网、打开 deeplink、截图。桌面端内置 MCP 服务器（localhost:9042/mcp），供 Claude Code、Cursor 等 AI 代理读取数据并执行操作。桌面端支持 macOS/Linux/Windows，SDK 依赖 Maven Central 或 SPM/pub.dev 安装。",
+   "highlights": [
+    "提供网络检查器，可拦截、mock、延迟 HTTP/GraphQL/gRPC 请求",
+    "支持读取和编辑 SharedPreferences、DataStore、UserDefaults",
+    "内置 MCP 服务器，AI 代理可读取应用数据并执行 mock、截图、打开 deeplink 等操作"
+   ],
+   "use_cases": [
+    "移动/KMP/Flutter 应用开发中实时查看网络请求与数据库状态",
+    "调试崩溃场景，结合时间线排查崩溃前的事件序列",
+    "通过 AI 代理自动化测试：mock 接口、模拟弱网并验证应用表现"
+   ]
+  },
+  "sha": "4d944a2c47af",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b633a31a47ee": {
+  "identity": {
+   "one_liner": "TiDB SQL 层的实验性 Rust 实现，以只读节点形式加入 Go TiDB 集群。",
+   "review": "tidb-rs 是 TiDB SQL 层的 Rust 移植原型，从 Go TiDB v8.5.8 按块移植，作为只读节点与 Go TiDB 共存于同一集群。目前仅支持 autocommit 单表 SELECT（整数主键），通过 PD 客户端、etcd 注册和 TiKV coprocessor 读取集群数据，结果须与 Go TiDB 完全一致。优化器、计划缓存、写入事务、权限系统等尚未实现，构建需 C++ 编译器、CMake、protoc 与 OpenSSL。",
+   "highlights": [
+    "实现批量与异步 TSO 获取、乐观 schema 校验及 etcd 注册与 MDL 上报，行为对齐 Go TiDB",
+    "复用 TiKV 的 tidb_query_* crate 做行解码与下推求值，解析器移植自 TiDB 的 parser.y",
+    "实现 MySQL 协议（含 TLS、prepared statements）与 /metrics、/status 端口，指标名与 Go TiDB v8.5.8 一致"
+   ],
+   "use_cases": [
+    "在运行 Go TiDB 的 tiup playground 或既有集群中加入一个 Rust 只读 SQL 节点进行实验",
+    "面向 sysbench oltp_read_only 类型的单表整数主键点查与扫描查询场景",
+    "研究 TiDB SQL 层结构与 Go 到 Rust 移植方法的参考实现"
+   ]
+  },
+  "sha": "b633a31a47ee",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

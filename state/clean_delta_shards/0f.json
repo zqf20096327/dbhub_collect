@@ -27470,5 +27470,565 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "89b33a790c56+2": {
+  "fn": "jnjunaedi/e-commerce",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "delete",
+    3,
+    5,
+    3,
+    3
+   ],
+   [
+    "equal",
+    5,
+    10,
+    3,
+    8
+   ],
+   [
+    "replace",
+    10,
+    23,
+    8,
+    19,
+    [
+     "* **Primary Programming Language**: **Golang v1.26.2** (Clean, efficient, and prioritizes pure performance).",
+     "* **API & HTTP Server**: **`net/http`** (Standard Library) & **`go-chi/chi/v5`** for lightweight, high-concurrency routing.",
+     "* **RPC Framework**: **`gRPC`** (`google.golang.org/grpc`) for fast, low-latency cross-service communication.",
+     "* **Message Broker (Event-Driven)**: **Kafka Client** via **`twmb/franz-go`** for feature-complete, high-performance asynchronous event streaming.",
+     "* **Payment Gateway Integration**: **`midtrans/midtrans-go`** as the official API client for managing secure checkout transactions and billing settlement.",
+     "* **Data Storage (Database)**: **MySQL 8.0** as an ACID-compliant transaction storage.",
+     "* **Database Interface**: **`database/sql`** (Standard Library) for native connection pooling and raw SQL execution (utilizing `PrepareCtx`, `BeginTx`, `QueryRowContext`, `QueryContext`, `ExecContext`).",
+     "* **Database Driver**: **`go-sql-driver/mysql`** for native interaction with the MySQL engine.",
+     "* **Data Validation**: **`go-playground/validator/v10`** for secure structural payload and input validation tags.",
+     "* **Image Processing Utility**: **`disintegration/imaging`** for image manipulation and upload management.",
+     "* **Testing Library**: **`Stretchr/Testify`** (`assert` & `mock`) for building isolated unit test architectures [index]."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    28,
+    19,
+    24
+   ],
+   [
+    "delete",
+    28,
+    30,
+    24,
+    24
+   ],
+   [
+    "equal",
+    30,
+    33,
+    24,
+    27
+   ],
+   [
+    "replace",
+    33,
+    42,
+    27,
+    34,
+    [
+     "* **Auth Service**: Handles user authentication, credential verification, token generation (JWT), and authorization security across the platform.",
+     "* **User Service**: Manages customer profiles, account data structures, shipping addresses, and personal identification records.",
+     "* **Product Service**: Manages the global product catalog, regular inventory updates, and executes high-concurrency Flash Sale stock lock management.",
+     "* **Order Service**: Handles the complete checkout lifecycle, local order processing, idempotency tracking, and local outbox transaction logging.",
+     "* **Payment Service**: Manages interaction with payment gateways, processes billing transactions, and handles dynamic transaction invoices.",
+     "* **Notification Service**: Processes asynchronous customer communications (such as order confirmation emails via Kafka) driven by backend transaction workers.",
+     "* **Inter-Service Communication**: Leverages low-latency **gRPC** for internal synchronous network calls and the **Transactional Outbox Pattern** combined with a message broker for reliable asynchronous events."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    47,
+    34,
+    39
+   ],
+   [
+    "replace",
+    47,
+    57,
+    39,
+    47,
+    [
+     "* **Domain / Entity Layer (Core)**: ",
+     " Contains the fundamental business objects (`Order`, `Product`, `FlashSale`) and strict domain rules. This layer is written in pure Golang, has **zero dependencies** on any other layers or external libraries, and heavily utilizes *value types* instead of pointers to maximize stack allocation.",
+     "* **Use Case / Service Layer**: ",
+     " Orchestrates the specific business logic of the service (`CreateCheckout`, `DeductFlashSaleStock`). It interacts directly with the Domain layer and defines abstract interfaces (ports) for data access or external clients, completely unaware of *how* data is stored or fetched.",
+     "* **Repository / Adapter Layer**: ",
+     " Implements the interfaces defined by the Use Case layer. This is where **`database/sql`** and **`go-sql-driver/mysql`** reside. It executes raw SQL queries, manages local ACID transactions via `db.BeginTx`, and maps relational database rows directly into domain value structures using `rows.Scan()`. Additionally, it heavily utilizes **`PrepareCtx`** to pre-compile SQL statements natively, maximizing execution speed and ensuring full protection against SQL injection during high-volume traffic.",
+     "* **Delivery / Infrastructure Layer (HTTP / gRPC)**: ",
+     " The outermost gate handled by **`net/http`** (for client-facing REST APIs) and **`google.golang.org/grpc`** (for internal inter-service RPC communication). It parses payloads, decodes gRPC requests, runs entry-level validation, triggers the appropriate Use Case, and returns structured network responses."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    62,
+    47,
+    52
+   ],
+   [
+    "delete",
+    62,
+    64,
+    52,
+    52
+   ],
+   [
+    "equal",
+    64,
+    67,
+    52,
+    55
+   ],
+   [
+    "replace",
+    67,
+    72,
+    55,
+    56,
+    [
+     "System Architecture Flow"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    80,
+    56,
+    64
+   ],
+   [
+    "replace",
+    80,
+    112,
+    64,
+    65,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    65,
+    66
+   ],
+   [
+    "replace",
+    113,
+    117,
+    66,
+    69,
+    [
+     "1. **Ingress Request**: The client hits the API Gateway via HTTP, which parses the input into an immutable value struct and maps it to a gRPC client request.",
+     "2. **Local Isolation**: The Order Use Case coordinates internal business rules and commits the order alongside an outbox payload safely inside a local MySQL transaction block.",
+     "3. **Distributed Consistency**: The Outbox Worker polls the local transaction table asynchronously and synchronizes the state by invoking the downstream Product Service via gRPC to safely reduce physical catalog inventory."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    122,
+    69,
+    74
+   ],
+   [
+    "replace",
+    122,
+    127,
+    74,
+    77,
+    [
+     "* **Pure Pass-by-Value**: Data structures are passed across layer boundaries as explicit copies (`Product` instead of `*Product`) whenever feasible. This keeps the data scoped to the function execution block, ensuring it stays allocated on the **Stack** and prevents *Escape Analysis* from moving it to the **Heap**.",
+     "* **Boundary Decoupling via Interfaces**: Use Cases rely strictly on interfaces to communicate with Repositories. This decoupling allows **`Stretchr/Testify`** to inject lightweight mocks during unit testing, enabling full test coverage without needing network or database resources.",
+     "* **Explicit Resource Management**: Database rows and HTTP request bodies are closed immediately after consumption using native Go defer statements (`rows.Close()`, `r.Body.Close()`), ensuring deterministic memory cleanup without relying on the GC to release system descriptors."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    136,
+    77,
+    86
+   ],
+   [
+    "replace",
+    136,
+    233,
+    86,
+    87,
+    [
+     "…（97 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    263,
+    87,
+    117
+   ],
+   [
+    "delete",
+    263,
+    265,
+    117,
+    117
+   ],
+   [
+    "equal",
+    265,
+    272,
+    117,
+    124
+   ],
+   [
+    "replace",
+    272,
+    275,
+    124,
+    127,
+    [
+     "* **HTTP Method**: `POST`",
+     "* **Endpoint**: `http://localhost:8080/api/v1/auth/register`",
+     "* **Headers**: `Content-Type: application/json`"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    285,
+    127,
+    137
+   ],
+   [
+    "replace",
+    285,
+    288,
+    137,
+    140,
+    [
+     "* **HTTP Method**: `POST`",
+     "* **Endpoint**: `http://localhost:8080/api/v1/auth/login`",
+     "* **Headers**: `Content-Type: application/json`"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    296,
+    140,
+    148
+   ],
+   [
+    "delete",
+    296,
+    298,
+    148,
+    148
+   ],
+   [
+    "equal",
+    298,
+    301,
+    148,
+    151
+   ],
+   [
+    "replace",
+    301,
+    304,
+    151,
+    154,
+    [
+     "* **HTTP Method**: `POST`",
+     "* **Endpoint**: `http://localhost:8080/api/v1/products`",
+     "* **Headers**: `Content-Type: multipart/form-data`"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    306,
+    154,
+    156
+   ],
+   [
+    "replace",
+    306,
+    307,
+    156,
+    157,
+    [
+     "* `data` (Type: *Text*):"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    311,
+    157,
+    161
+   ],
+   [
+    "replace",
+    311,
+    316,
+    161,
+    162,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    316,
+    317,
+    162,
+    163
+   ],
+   [
+    "replace",
+    317,
+    318,
+    163,
+    164,
+    [
+     "* `product_images` (Type: *File*): Upload multiple binary images (`image1.png`, `image2.png`)."
+    ]
+   ],
+   [
+    "equal",
+    318,
+    320,
+    164,
+    166
+   ],
+   [
+    "replace",
+    320,
+    322,
+    166,
+    168,
+    [
+     "* **HTTP Method**: `GET`",
+     "* **Endpoint**: `http://localhost:8080/api/v1/products/01a17d38-d4cf-7bda-a3ed-54c829e37a17`"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    324,
+    168,
+    170
+   ],
+   [
+    "replace",
+    324,
+    328,
+    170,
+    172,
+    [
+     "* **HTTP Method**: `GET`",
+     "* **Endpoint**: `http://localhost:8080/api/v1/products/flash-sale/01a17d79-e5d8-7224-b1e1-25ae504724bf`"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    331,
+    172,
+    175
+   ],
+   [
+    "replace",
+    331,
+    334,
+    175,
+    178,
+    [
+     "* **HTTP Method**: `POST`",
+     "* **Endpoint**: `http://localhost:8080/api/v1/orders/checkout`",
+     "* **Headers**: `Content-Type: application/json`"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    342,
+    178,
+    186
+   ],
+   [
+    "replace",
+    342,
+    350,
+    186,
+    187,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    359,
+    187,
+    196
+   ],
+   [
+    "replace",
+    359,
+    367,
+    196,
+    197,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    368,
+    197,
+    198
+   ],
+   [
+    "delete",
+    368,
+    370,
+    198,
+    198
+   ],
+   [
+    "equal",
+    370,
+    374,
+    198,
+    202
+   ],
+   [
+    "replace",
+    374,
+    377,
+    202,
+    205,
+    [
+     "* **HTTP Method**: `POST`",
+     "* **Endpoint**: `http://localhost:8080/api/v1/transaction/payments`",
+     "* **Headers**: `Content-Type: application/json`"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    386,
+    205,
+    214
+   ],
+   [
+    "delete",
+    386,
+    387,
+    214,
+    214
+   ],
+   [
+    "equal",
+    387,
+    392,
+    214,
+    219
+   ],
+   [
+    "replace",
+    392,
+    394,
+    219,
+    221,
+    [
+     "* **Context:** Currently, the system isolates failures locally using database transactional rollbacks. As the ecosystem grows, complex multi-service workflows (such as matching a successful `Order` with a third-party `Payment` gateway deduction and an inventory commit in the `Product Service`) will require cross-network atomicity.",
+     "* **Evolution:** We plan to implement an **Orchestration-Based Saga Pattern**. A centralized coordinator inside the `Order Service` will manage successful steps via gRPC and fire explicit **Compensating Transactions** (such as releasing locked stock or triggering a refund) if a downstream payment execution fails mid-way."
+    ]
+   ],
+   [
+    "equal",
+    394,
+    396,
+    221,
+    223
+   ],
+   [
+    "replace",
+    396,
+    398,
+    223,
+    225,
+    [
+     "* **Context:** Tracking down performance bottlenecks or hidden heap allocations across multiple network hops (Gateway -> gRPC Client -> gRPC Server -> MySQL) can become difficult using raw local terminal logs.",
+     "* **Evolution:** Integrating **OpenTelemetry** linked with **Jaeger** or **Grafana Tempo**. By propagating a unique `trace_id` inside the gRPC Metadata Context, we can visually map the exact latency and execution profile of a user’s checkout request across all network microservice boundaries in real-time."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    400,
+    225,
+    227
+   ],
+   [
+    "replace",
+    400,
+    402,
+    227,
+    229,
+    [
+     "* **Context:** The current `flash_sale_caches` table resides directly inside the relational `order_db` MySQL storage. While it protects the main transaction tables, a relational database disk I/O still has structural throughput limitations under millions of requests.",
+     "* **Evolution:** Introducing a distributed in-memory **Redis Cluster** equipped with **Lua Scripting** to handle atomic `DECRBY` check-and-deduct operations for Flash Sales. MySQL will then purely receive finalized, asynchronous bulk inserts from the Outbox Worker, pushing the system's concurrency boundaries even further."
+    ]
+   ],
+   [
+    "equal",
+    402,
+    403,
+    229,
+    230
+   ],
+   [
+    "delete",
+    403,
+    404,
+    230,
+    230
+   ],
+   [
+    "equal",
+    404,
+    406,
+    230,
+    232
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

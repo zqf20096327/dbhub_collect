@@ -3103,5 +3103,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a563ae6fbe6e": {
+  "identity": {
+   "one_liner": "一组用于检测 PostgreSQL 模式问题的原生 SQL 查询集合",
+   "review": "pg-index-health-sql 提供一组原始 SQL 查询，用于检测 PostgreSQL 模式中的常见问题，如冗余索引、缺失主键、表膨胀、命名不规范等共 48 项检查。查询可在 psql 会话、脚本或监控面板中直接运行，无需安装外部库。支持 PostgreSQL 14–18，旧版本不保证兼容。",
+   "highlights": [
+    "提供 48 项模式检查 SQL，涵盖冗余/无效索引、缺失主键、表与索引膨胀、命名规范等",
+    "数据库原生分析，无需外部库或框架，可在 psql、脚本或监控面板中直接使用",
+    "支持 PostgreSQL 14 至 18，SQL 查询通过 SQLFluff 进行 lint"
+   ],
+   "use_cases": [
+    "在 psql 会话或脚本中对数据库模式进行健康检查",
+    "将 SQL 检查接入监控面板持续观察模式状态",
+    "在数据库升级或重构前排查索引、主键、约束等结构问题"
+   ]
+  },
+  "sha": "a563ae6fbe6e",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b467f9ea128d": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的开源后端平台，单个 Rust 二进制提供 REST/实时 API、认证与管理面板",
+   "review": "slonbase 是一个运行在 PostgreSQL 之上的自托管后端平台，将 REST 与实时 API、带角色的认证、文件存储、hooks 和多项目管理面板打包为一个 Rust 二进制。每个集合对应一张真实的 PostgreSQL 表，实时变更通过表触发器广播；支持多实例部署，共享状态存于数据库。README 声明其 API 与 PocketBase 兼容，可直接使用 PocketBase 的 JavaScript/Dart SDK，并提供导入已有 PocketBase 数据的命令。要求 PostgreSQL 14 及以上版本。",
+   "highlights": [
+    "单个 Rust 静态二进制（磁盘约 22 MB），内含管理面板、SQL 控制台和 schema 编辑器；每个集合对应一张真实 PostgreSQL 表，可用 SQL 查询、pg_dump 备份",
+    "基于表触发器的实时事件（SSE 订阅，按订阅者规则过滤）；支持密码、OAuth2、OTP、MFA 认证；文件可存磁盘或 S3 兼容存储",
+    "一个安装可运行多个相互隔离的项目（各占一个数据库）；可在负载均衡后运行多实例，状态通过 PostgreSQL 共享；提供 import-pocketbase 导入命令，多数 pb_hooks/pb_migrations 文件可直接运行"
+   ],
+   "use_cases": [
+    "需要将后端数据存于自有 PostgreSQL 实例或托管数据库服务的应用开发",
+    "从 PocketBase 迁移，希望保留现有 SDK 调用和用户密码哈希的项目",
+    "在一台服务器上以独立数据库托管多个应用，并通过统一面板管理"
+   ]
+  },
+  "sha": "b467f9ea128d",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

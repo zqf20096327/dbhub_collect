@@ -26706,5 +26706,968 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "16b462c06871+2": {
+  "fn": "CraazzzyyFoxx/overwatch-tournaments",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "Backend lint",
+     "Backend tests",
+     "Gateway CI",
+     "Frontend CI",
+     "Coverage",
+     "License: AGPL v3"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    13,
+    8,
+    13
+   ],
+   [
+    "replace",
+    13,
+    17,
+    13,
+    17,
+    [
+     "- **Documentation map:** docs/README.md",
+     "- **System architecture:** docs/architecture.md",
+     "- **Database model:** docs/database_erd.md",
+     "- **Contributing:** CONTRIBUTING.md"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    47,
+    17,
+    47
+   ],
+   [
+    "replace",
+    47,
+    56,
+    47,
+    48,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    60,
+    48,
+    52
+   ],
+   [
+    "replace",
+    60,
+    61,
+    52,
+    53,
+    [
+     "See docs/architecture.md for request flow, messaging guarantees, multitenancy, realtime replay, and deployment topology."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    53,
+    56
+   ],
+   [
+    "replace",
+    64,
+    75,
+    56,
+    67,
+    [
+     "|Directory|Runtime|Responsibility|",
+     "|----------------------------------------------------------------------|-----------------------------------|------------------------------------------------------------------------------------------------------------------|",
+     "|`backend/app-service`|`app-svc`|Game catalog, player identity, workspace administration, notifications, and binary assets|",
+     "|`backend/identity-service`|`identity-svc`|JWT sessions, OAuth, RBAC, memberships, API keys, custom domains, and player linking|",
+     "|`backend/tournament-service`|`tournament-svc`|Tournament lifecycle, registration, brackets, standings, Challonge/Sheets sync, map veto, organizer dashboard, and transactional outbox|",
+     "|`backend/stats-service`|`stats-svc`, `stats-worker`|Match-log ingestion, parsing, rank synchronization, achievements, backfills, and the public statistics and player-statistics reads|",
+     "|`backend/balancer-service`|`balancer-svc`|Genetic team balancing, native Rust `tournament_balancer`, and live captain drafts|",
+     "|`backend/analytics-service`|`analytics-svc`, `analytics-worker`|Analytics RPC plus long-running ML training and inference jobs|",
+     "|`backend/stream-service`|`stream-svc`|Twitch live-status polling and public tournament stream state|",
+     "|`backend/discord-service`|`discord-worker`|Discord bot, match-log upload, notifications, and commands|",
+     "|`backend/shared`|library|Shared ORM models, schemas, tenancy, RBAC, messaging, and observability|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    67,
+    68
+   ],
+   [
+    "replace",
+    76,
+    77,
+    68,
+    69,
+    [
+     "The edge implementation is documented separately in `gateway/README.md`. Frontend conventions and scripts live in `frontend/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    69,
+    72
+   ],
+   [
+    "replace",
+    80,
+    88,
+    72,
+    80,
+    [
+     "|Layer|Technologies|",
+     "|-----------------------|-------------------------------------------------------------------------------------------------------------|",
+     "|Frontend|Next.js 16.4, React 19.3, TypeScript 6.0, Tailwind CSS 4, Radix/Shadcn, TanStack Query/Table, Zustand, Vitest|",
+     "|Gateway|Go 1.26, `net/http`, RabbitMQ, Redis, PostgreSQL/pgx, OpenTelemetry|",
+     "|Backend|Python 3.15, FastStream, SQLAlchemy 2, Pydantic 2, Alembic, pytest|",
+     "|Balancing and analytics|Rust `tournament_balancer`, OpenSkill, LightGBM/XGBoost, Bayesian and Monte Carlo workflows|",
+     "|Data and messaging|PostgreSQL 16, Redis Stack, RabbitMQ 3.13, S3-compatible object storage|",
+     "|Operations|Docker Compose, nginx, Prometheus, Grafana, Loki, Tempo, OpenTelemetry Collector, Sentry|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    95,
+    80,
+    87
+   ],
+   [
+    "replace",
+    95,
+    108,
+    87,
+    88,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    118,
+    88,
+    98
+   ],
+   [
+    "replace",
+    118,
+    119,
+    98,
+    99,
+    [
+     "Host toolchains are optional when using Docker. Direct development requires Python 3.15 with uv, Bun, and Go 1.26."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    142,
+    99,
+    122
+   ],
+   [
+    "replace",
+    142,
+    149,
+    122,
+    123,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    224,
+    123,
+    198
+   ],
+   [
+    "replace",
+    224,
+    225,
+    198,
+    199,
+    [
+     "Gateway configuration is documented in `backend/env/gateway.env.example` and `gateway/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    225,
+    228,
+    199,
+    202
+   ],
+   [
+    "replace",
+    228,
+    242,
+    202,
+    216,
+    [
+     "|Command|Purpose|",
+     "|--------------------|-----------------------------------------------------------|",
+     "|`make dev-build`|Build development images|",
+     "|`make dev-up`|Start the core development stack|",
+     "|`make dev-up-full`|Start the core stack plus `workers` profile|",
+     "|`make dev-rebuild`|Rebuild and restart the core stack|",
+     "|`make dev-health`|Show container state and health|",
+     "|`make dev-logs`|Follow development logs|",
+     "|`make migrate`|Apply Alembic migrations in `app-svc`|",
+     "|`make test`|Run backend pytest suite in `app-svc`|",
+     "|`make loadtest`|Run headless Locust load tests|",
+     "|`make monitoring-up`|Start the separate monitoring stack|",
+     "|`make backup-run`|Create and verify a database backup|",
+     "|`make prod-up`|Start production (`PROD_SIZE=small\\|medium\\|large`)|"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    216,
+    217
+   ],
+   [
+    "replace",
+    243,
+    244,
+    217,
+    218,
+    [
+     "Run `make help` for the complete command list. Component-specific log and restart targets are defined in the root `Makefile`."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    256,
+    218,
+    230
+   ],
+   [
+    "replace",
+    256,
+    257,
+    230,
+    231,
+    [
+     "`CONTRIBUTING.md`. GitHub Actions runs independent"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    258,
+    231,
+    232
+   ],
+   [
+    "replace",
+    258,
+    259,
+    232,
+    233,
+    [
+     "`.github/workflows`."
+    ]
+   ],
+   [
+    "equal",
+    259,
+    262,
+    233,
+    236
+   ],
+   [
+    "replace",
+    262,
+    266,
+    236,
+    240,
+    [
+     "- **Production:** `docker-compose.production.yml` and `make prod-*`. Production scaling requires pgBouncer; the limits and non-replicable workers are documented in the `Makefile`. Host sizing (minimum 4 vCPU / 8 GB RAM / 80 GB SSD) and the bundled Postgres + pgBouncer (`db` profile): `docs/production-host.md`.",
+     "- **Monitoring:** `monitoring/README.md` covers Prometheus, Alertmanager, Grafana, Loki, Tempo, Promtail, exporters, and OpenTelemetry.",
+     "- **Backups:** `docs/backup-rustfs.md` covers PostgreSQL dumps to S3, verification, and restore.",
+     "- **Load testing:** `loadtests/README.md` documents Locust configuration, seeding, and reports."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    240,
+    241
+   ],
+   [
+    "replace",
+    267,
+    268,
+    241,
+    242,
+    [
+     "Do not reuse development credentials in production. Keep secrets in untracked environment files, restrict the admin API documentation endpoint, and configure allowed WebSocket origins. Security policy and vulnerability reporting: `SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    271,
+    242,
+    245
+   ],
+   [
+    "replace",
+    271,
+    273,
+    245,
+    247,
+    [
+     "- OverFast API for Overwatch data.",
+     "- Special thanks to Demogram, creator of the mix balancer and the inspiration behind OWT's tournament balancer."
+    ]
+   ],
+   [
+    "equal",
+    273,
+    275,
+    247,
+    249
+   ],
+   [
+    "replace",
+    275,
+    279,
+    249,
+    250,
+    [
+     "Copyright © 2024-2026 CraazzzyyFoxx."
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
+ },
+ "083b02ff3d86+2": {
+  "fn": "Esposter/Esposter",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    3,
+    [
+     "<a href=\"https://esposter.com\" target=\"_blank\" rel=\"noopener noreferrer\">",
+     " Esposter",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     " Esposter "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    7,
+    [
+     " /ɛsˈpɒstər/ — \"ess-POS-ter\", the last two syllables as in \"imposter\" "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    13,
+    8,
+    9,
+    [
+     " A nice and casual place for posting random things. "
+    ]
+   ],
+   [
+    "equal",
+    13,
+    21,
+    9,
+    17
+   ],
+   [
+    "replace",
+    21,
+    24,
+    17,
+    18,
+    [
+     "> **Experimental.** Every published package in this repository is experimental. Its exports, build entries and files may change or be removed in any release, including a minor release. See Stability."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    26,
+    18,
+    20
+   ],
+   [
+    "replace",
+    26,
+    38,
+    20,
+    22,
+    [
+     "（略）",
+     "## 🧱 The Stack"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    41,
+    22,
+    25
+   ],
+   [
+    "replace",
+    41,
+    65,
+    25,
+    32,
+    [
+     " <a href=\"https://viteplus.dev/guide/\">",
+     "",
+     " </a>",
+     "",
+     " Vite+ ",
+     "",
+     " The unified toolchain for the web: Vite, Vitest, oxlint, oxfmt and the <code>vp</code> command in one install."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    32,
+    35
+   ],
+   [
+    "replace",
+    68,
+    120,
+    35,
+    58,
+    [
+     " <a href=\"https://nuxt.com\">",
+     "",
+     " </a>",
+     "",
+     " Nuxt ",
+     "",
+     " The Intuitive Web Framework, based on Vue, with Pinia for state.",
+     "",
+     " <a href=\"https://vuejs.org\">",
+     "",
+     " </a>",
+     "",
+     " Vue ",
+     "",
+     " 🖖 Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web.",
+     "",
+     " <a href=\"https://0.vuetifyjs.com\">",
+     "",
+     " </a>",
+     "",
+     " Vuetify 0 ",
+     "",
+     " 🐉 Headless building blocks for Vue, under the app's own UI library."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    123,
+    58,
+    61
+   ],
+   [
+    "replace",
+    123,
+    175,
+    61,
+    84,
+    [
+     " <a href=\"https://orm.drizzle.team\">",
+     "",
+     " </a>",
+     "",
+     " Drizzle ORM ",
+     "",
+     " TypeScript ORM that feels like writing SQL.",
+     "",
+     " <a href=\"https://trpc.io\">",
+     "",
+     " </a>",
+     "",
+     " tRPC ",
+     "",
+     " 🧙‍♀️ Move Fast and Break Nothing. End-to-end typesafe APIs made easy.",
+     "",
+     " <a href=\"https://zod.dev\">",
+     "",
+     " </a>",
+     "",
+     " Zod ",
+     "",
+     " TypeScript-first schema validation with static type inference."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    178,
+    84,
+    87
+   ],
+   [
+    "replace",
+    178,
+    216,
+    87,
+    102,
+    [
+     " <a href=\"https://www.cloudflare.com\">",
+     "",
+     " </a>",
+     "",
+     " Cloudflare ",
+     "",
+     " Hosting, DNS and data: Workers for the web, realtime and jobs Workers, D1 for the relational database, R2 for files, Queues for async jobs, Durable Objects for the live state of each room, call and person, and RealtimeKit for calls.",
+     "",
+     " <a href=\"https://www.pulumi.com\">",
+     "",
+     " </a>",
+     "",
+     " Pulumi ",
+     "",
+     " Infrastructure as Code in any programming language."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    219,
+    102,
+    105
+   ],
+   [
+    "replace",
+    219,
+    243,
+    105,
+    106,
+    [
+     " <a href=\"https://www.namecheap.com\">"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    244,
+    106,
+    107
+   ],
+   [
+    "replace",
+    244,
+    245,
+    107,
+    114,
+    [
+     " </a>",
+     "",
+     " Namecheap ",
+     "",
+     " The registrar for esposter.com, whose nameservers point at Cloudflare.",
+     "",
+     "## 🏠 Local Development"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    260,
+    114,
+    129
+   ],
+   [
+    "replace",
+    260,
+    261,
+    129,
+    130,
+    [
+     "2. **Toolchain.** Install the global Vite+ CLI, then the node and pnpm versions the repository pins:"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    307,
+    130,
+    176
+   ],
+   [
+    "replace",
+    307,
+    308,
+    176,
+    177,
+    [
+     "Deployment targets are in the Nuxt deployment documentation."
+    ]
+   ],
+   [
+    "equal",
+    308,
+    309,
+    177,
+    178
+   ],
+   [
+    "replace",
+    309,
+    310,
+    178,
+    179,
+    [
+     "## 🧭 Architecture"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    311,
+    179,
+    180
+   ],
+   [
+    "replace",
+    311,
+    312,
+    180,
+    181,
+    [
+     "Esposter is a pnpm workspaces monorepo. See monorepo tooling for workspace script orchestration and publishing boundaries."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    314,
+    181,
+    183
+   ],
+   [
+    "replace",
+    314,
+    315,
+    183,
+    184,
+    [
+     "For how AI sessions land their commits, and how those commits are reviewed before they reach `main`, see the review docs."
+    ]
+   ],
+   [
+    "equal",
+    315,
+    318,
+    184,
+    187
+   ],
+   [
+    "replace",
+    318,
+    319,
+    187,
+    188,
+    [
+     "Workspace dependency graph"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    327,
+    188,
+    196
+   ],
+   [
+    "replace",
+    327,
+    328,
+    196,
+    197,
+    [
+     "## 📦 Packages"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    332,
+    197,
+    201
+   ],
+   [
+    "replace",
+    332,
+    370,
+    201,
+    239,
+    [
+     "|Package|Description|Published|",
+     "|---------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------:|",
+     "|`apps/infra`|Pulumi program for the Cloudflare estate|—|",
+     "|`apps/jobs`|Cloudflare Worker that consumes the queues and runs the Cron Trigger, reaching the Durable Objects through the realtime Worker's script name|—|",
+     "|`apps/realtime`|Cloudflare Worker that exports the Durable Object classes `RoomObject`, `CallObject` and `UserObject`, the live state and sockets of rooms, calls and users; its `fetch` answers 404|—|",
+     "|`apps/web`|Main Nuxt web application — frontend, server routes, tRPC API|—|",
+     "|`packages/configuration`|Shared ESLint, TSConfig, and tsdown build configurations|—|",
+     "|`packages/db`|Server-side helpers over D1 and R2: blob reads and writes, and the message, moderation, notification, resource and RBAC services|—|",
+     "|`packages/db-mock`|In-memory D1, R2 and Queues on Miniflare for tests|—|",
+     "|`packages/db-schema`|Drizzle SQLite schemas and migrations (D1 source of truth)|—|",
+     "|`packages/follow-ups`|Claude Code plugin — a session's unfinished follow-ups written into a TodoList and drained until none is left|—|",
+     "|`packages/genshin-engine`|Anime-style open-world engine for three.js WebGPU — toon materials, outlines, post-processing, world kits and music|✓|",
+     "|`packages/genshin-interface`|Genshin's 2D interface — the screen root, its units and pointer, and the pieces the game's screens share|✓|",
+     "|`packages/genshin-mods`|Claude Code plugin — eight mods, five under one band and three guards: next steps, cache and usage with a one-click handoff, recording mode, a goal meter, a collision guard, a delegation guard, a disk-scan guard and a whole-index guard|✓|",
+     "|`packages/genshin-persona`|Claude Code plugin — a Genshin character picked by birthday, replies spoken in its own cloned voice|✓|",
+     "|`packages/genshin-text`|The game's own text in its fifteen languages — the language registry, a locale matcher, and the game's strings by text id|✓|",
+     "|`packages/genshin-world`|Genshin's world on the engine — the region catalogue, each region's data, the TresJS components and the interface screens|✓|",
+     "|`packages/keyframe-store`|Content-addressed version store — zstd keyframes and deltas over any backend|✓|",
+     "|`packages/math-expression-compiler`|Math expressions compiled once into a function of plain numbers — mathjs's numeric language, checked against its recorded answers with every deliberate difference listed|✓|",
+     "|`packages/mjml-blocks`|MJML's components as block types on the headless block editor — each component's attributes, defaults and nesting rules, a render to MJML's JSON form and source, and a read back from MJML, with no framework, DOM or MJML runtime.|✓|",
+     "|`packages/nuxt-security-module`|Nuxt security module for Nitro 3 and h3 2 — security headers, a nonce Content Security Policy, subresource integrity, CORS, basic auth, a rate limiter and a request size limit|✓|",
+     "|`packages/parse-tmx`|Parser for Tiled Map Editor `.tmx` files|✓|",
+     "|`packages/pitch-transcription`|The notes in a recording — Basic Pitch on ONNX Runtime, its readings turned into notes, bends and MIDI|✓|",
+     "|`packages/shared`|Shared TypeScript types, utilities, and error classes|✓|",
+     "|`packages/shared-node`|Node-only shared tooling — the machine-wide download cache, hidden-window child processes and benchmark reporting for vitest bench runs|✓|",
+     "|`packages/vue-survey-engine-headless`|A headless Vue survey engine: the survey as a typed document on the headless block editor — its question kinds, the checks on a save, a runner of plain functions and the Vue composable over them, with no styling or DOM.|✓|",
+     "|`packages/survey-expression`|The survey's expression language — conditions, calculated values and validators over a survey's answers, checked against SurveyJS's recorded answers with every deliberate difference listed|✓|",
+     "|`packages/tresjs-nuxt`|TresJS for Nuxt — a Nuxt module that auto-imports the TresJS core API, registers TresCanvas for client and server, and registers every installed @tresjs package's components and composables, with no devtools UI of its own.|✓|",
+     "|`packages/trpc-msw`|tRPC for Mock Service Worker — every transport answered by tRPC's own handlers|✓|",
+     "|`packages/trpc-nuxt-module`|tRPC for Nuxt — a module registering the router's HTTP and WebSocket handlers, with composables over `useAsyncData`|✓|",
+     "|`packages/unplugin-pwa-nuxt`|Nuxt PWA module on unplugin-pwa — a service worker built by the app, its manifest and its client plugin, for Nuxt 5 and Nitro 3 only|✓|",
+     "|`packages/vue-block-editor-headless`|A headless Vue block editor: a typed node tree over a registry, the commands that edit it as JSON Patch operations, navigation and undo history, and an editing-session composable, with no styling or DOM.|✓|",
+     "|`packages/vue-canvas-frame-headless`|A headless canvas frame: an isolated document at a width, scaled down to fit a narrower pane, with its styles adopted into it, and no styling of its own.|✓|",
+     "|`packages/vue-editor-layout-headless`|A headless editor layout: the regions and panels of an editor held as data, resolved for the mode, tool, selection and window size, with the reader's sizes and open regions kept apart from it.|✓|",
+     "|`packages/vue-grid-layout-headless`|A headless grid: the placement of items on a grid of cells, and the pointer gestures that move and resize them, with no styling.|✓|",
+     "|`packages/vue-pdfjs-headless`|Headless Vue composables over pdfjs-dist: a document's loading, a page's drawing and the viewer's state, with no styling and no renderer of its own.|✓|",
+     "|`packages/vue-phaserjs`|Phaser game engine integration for Vue|✓|",
+     "|`scripts`|The repository's own tooling — workspace graph, dependency report, sweep scans|—|"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    371,
+    239,
+    240
+   ],
+   [
+    "replace",
+    371,
+    372,
+    240,
+    241,
+    [
+     "## 🔌 Claude Code Plugins"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    373,
+    241,
+    242
+   ],
+   [
+    "replace",
+    373,
+    374,
+    242,
+    243,
+    [
+     "This repository is also a Claude Code plugin marketplace named `esposter`. It is declared in `.claude-plugin/marketplace.json`. To add the marketplace, use the repository's GitHub name. To install a plugin, use its name and the marketplace name:"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    381,
+    243,
+    250
+   ],
+   [
+    "replace",
+    381,
+    385,
+    250,
+    254,
+    [
+     "|Plugin|What it does|",
+     "|:-------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`genshin-mods`|Eight mods. Five sit under one band above the prompt. Waypoints gives the next steps, one press each. Resin gives cache, context, limits and cost, with warm, compact and a one-click handoff. Veil is the recording mode. Commission gives a goal's task list and clock. Ward asks a question before editing a file another session just changed. The other three are guards. A delegation guard nudges a run of lookups toward a haiku agent. A disk-scan guard refuses a Bash scan from a root or home folder. A whole-index guard refuses a git command over the whole index while another session shares the checkout.|",
+     "|`genshin-persona`|The plugin speaks as the Genshin Impact character whose birthday is nearest to today. Each answer opens with a spoken line. The rest of each answer is plain prose. The plugin reads each reply aloud in the character's own cloned voice.|"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    386,
+    254,
+    255
+   ],
+   [
+    "replace",
+    386,
+    387,
+    255,
+    256,
+    [
+     "A plugin here is an ordinary workspace package. It is formatted, linted, tested and dependency-bumped with every other package. A merge to `main` releases it. An installed copy follows the marketplace on the next plugin update. For how plugins are built, and what they deliberately do not do, see the Claude interface page."
+    ]
+   ],
+   [
+    "equal",
+    387,
+    388,
+    256,
+    257
+   ],
+   [
+    "replace",
+    388,
+    389,
+    257,
+    258,
+    [
+     "## 🤝 Community"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    390,
+    258,
+    259
+   ],
+   [
+    "replace",
+    390,
+    391,
+    259,
+    260,
+    [
+     "We welcome contributions from everyone and are committed to maintaining a friendly, safe, and welcoming community. Start with the Contributing guide, which also lists the recommended editor extensions. Please see our Code of Conduct and Security Policy for more information."
+    ]
+   ],
+   [
+    "equal",
+    391,
+    392,
+    260,
+    261
+   ],
+   [
+    "replace",
+    392,
+    393,
+    261,
+    262,
+    [
+     "## ⚖️ License"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    394,
+    262,
+    263
+   ],
+   [
+    "replace",
+    394,
+    407,
+    263,
+    264,
+    [
+     "This project is licensed under the Apache-2.0 license."
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

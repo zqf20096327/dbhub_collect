@@ -3202,5 +3202,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "990fcc62265b": {
+  "identity": {
+   "one_liner": "AI 应用自托管基础设施：StateGraph 图引擎加 Postgres/Redis 持久化状态",
+   "review": "10xGraph 是自托管的 AI 应用核心库（Python 3.12+），开发者用 StateGraph 编排 agent、工具与任务，由配套的 10xgraph-api 服务端提供鉴权、租户隔离、后台任务并生成 Docker/Kubernetes 部署文件。状态经 PgCheckpointer 持久化到 Postgres、Redis 做热缓存，工具调用记录台账实现重放安全。面向需要自建 AI 后端并做 SOC 2/ISO 27001 审计的团队；需注意认证默认关闭、租户隔离需手动声明列。",
+   "highlights": [
+    "StateGraph 图引擎：支持条件边、预构建 agent（ReAct、Swarm、SupervisorTeam、PlanActReflect）及 MCP、依赖注入、人工审批中断",
+    "持久化与记忆：PgCheckpointer 实现 Postgres 检查点与 Redis 缓存、版本化 CAS 写入；PgVectorStore 支持相似度/全文/混合搜索",
+    "可观测与评估：事件发布到 Kafka/Redis Pub/Sub/RabbitMQ，追踪对接 Logfire/LangSmith/Phoenix/OTLP，含 LLM-as-judge 评估框架与 TestAgent 单元测试"
+   ],
+   "use_cases": [
+    "构建需要持久线程状态与崩溃恢复的多轮对话或工作流 agent",
+    "多租户 SaaS 后端：API 服务端提供 JWT 鉴权、角色访问与 Postgres 行级安全",
+    "需要审计追踪、指标与事件发布的自托管 AI 服务部署（Docker/K8s 生成）"
+   ]
+  },
+  "sha": "990fcc62265b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fc73f38e689e": {
+  "identity": {
+   "one_liner": "基于知识图谱与PostgreSQL的多租户AI记忆服务，经MCP提供读写。",
+   "review": "FaultLine 是一个自托管的 AI 记忆系统，将事实以类型化关系存入知识图谱而非文本摘要，写入前经验证门控，更正时归档旧值。每个用户使用独立的 PostgreSQL schema（faultline_<user_id>）实现隔离。面向本地 AI 使用者，通过 MCP server 供 OpenWebUI、Claude Desktop 等支持 MCP 的端点共享同一记忆库。许可证为 AGPL v3，需 Python 3.11+ 与 PostgreSQL。",
+   "highlights": [
+    "以 MCP server 暴露记忆库，支持 OpenWebUI、Claude Desktop 等 MCP 端点共享同一记忆",
+    "事实写入前经验证门控，以类型化关系（人物、IP、主机名等）存储，更正时归档旧值",
+    "每用户独立 PostgreSQL schema，通过不含 public 的 SET search_path 绑定，实现数据库层多租户隔离"
+   ],
+   "use_cases": [
+    "在本地多模型环境中跨 MCP 端点共享持久化用户记忆（如服务器 IP、设备、偏好）",
+    "需要按用户隔离记忆的多租户自托管部署",
+    "需要按领域结构存储事实的场景，如网络设备、Kubernetes、TLS 等"
+   ]
+  },
+  "sha": "fc73f38e689e",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a91650985dea": {
+  "identity": {
+   "one_liner": "陪伴型机器人的情感加权记忆层，用本地 SQLite 实现遗忘与召回",
+   "review": "hippocampus_22 为长期运行的陪伴机器人提供记忆层，按事件编码、巩固、遗忘、联想召回、元记忆五环节实现。记忆以事件加情绪权重形式存于单个本地 SQLite 文件（node:sqlite，零第三方依赖），支持库、HTTP 服务、DSH 插件三种接入方式，派生自 dsh-hippocampus v0.3.1。运行需 Node 环境；库方式使用时需要 DEEPSEEK_API_KEY。适合需要跨会话记忆且记忆按人隔离的聊天机器人场景。",
+   "highlights": [
+    "提供事件编码、情绪加权遗忘、联想召回和确定度标注（记得清/大概记得/只记得有这回事）",
+    "全部记忆存于单个本地 SQLite 文件，仅用 node:sqlite，不依赖第三方包",
+    "支持三种接入：npm 库、带 token 鉴权的 HTTP 服务、DSH 插件"
+   ],
+   "use_cases": [
+    "为陪伴型聊天机器人添加带情绪权重的跨会话记忆",
+    "多渠道接入（im/网页/QQ 桥）且需按人隔离记忆的场景",
+    "需要记忆衰减、事实改口作废等机制而非简单存档的对话系统"
+   ]
+  },
+  "sha": "a91650985dea",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

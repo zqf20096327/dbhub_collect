@@ -2946,5 +2946,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7da5387eb28b": {
+  "identity": {
+   "one_liner": "为 AI 代理提供带认知来源标注与信任策略的持久化记忆引擎",
+   "review": "ContextDB 是一个 Python 3.10+ 记忆引擎（Apache-2.0，PyPI 包 pycontextdb），供构建 AI 代理的开发者存储事实、经验与会话记忆。每条记忆携带认知来源（user_stated/agent_inferred/third_party）与置信度，动作前召回需通过 TrustPolicy 检查；PII 在向量化前被脱敏，支持 BM25+向量 RRF 融合检索，底层用 SQLite 或 Postgres，最低依赖为 SQLite+NumPy。",
+   "highlights": [
+    "每条记忆包含认知来源、置信度、独立佐证与 action-relevant 标志，recall_for_action() 按激活的 TrustPolicy 门控释放事实",
+    "多图检索：语义、时间、因果、实体四图通过 RRF（k=60）融合，查询分类器按查询标记分配各图权重",
+    "PII 在进入嵌入模型前检测并脱敏，写入/读取/删除记录于哈希链审计日志，支持按实体批量删除与类型化 TTL"
+   ],
+   "use_cases": [
+    "构建语音或多会话代理时，需要在执行动作前区分用户陈述与代理推断的事实",
+    "需要按时间区间或 as-of 语义检索记忆（valid_from/valid_until/superseded_by）",
+    "对 PII 处理、审计日志与数据删除有合规要求的代理记忆层"
+   ]
+  },
+  "sha": "7da5387eb28b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6a3e66ad2b6a": {
+  "identity": {
+   "one_liner": "Python 编写的本地优先、提供商无关的桌面 agent 运行框架，含工具循环与 MCP 客户端",
+   "review": "uh-harness (UH) 是一个 MIT 许可的 Python agent 框架，提供同步 run_turn 工具执行循环、MCP 客户端、SQLite 会话存储和本地 Web 界面。运行时依赖仅 httpx，模型层按 ollama→cloudflare→deepseek→omnirouter→router 链路回退，首次启动不要求 API key。适用于希望在桌面端通过本地模型或可配置云提供商运行带工具调用的 agent、并通过 config.toml 接入外部 MCP 服务器的开发者。",
+   "highlights": [
+    "同步 run_turn 循环执行模型请求的工具，结果回填，带 max_iterations 硬预算",
+    "MCP 客户端通过 stdio 挂载外部服务器，工具以 mcp__<server>__<tool> 形式进入循环，含每服务器 allowlist 与消息/结果大小上限",
+    "会话存于 SQLite FTS5（uh sessions list/show/search/resume），回退链切换打印到 stderr；uh dream --now 读取 SiYuan、RAG、skills 与 MCP 配置后仅提出建议不执行调用"
+   ],
+   "use_cases": [
+    "在 Ollama 或本地 OpenAI 兼容端点上零配置启动 CLI 对话（uh）",
+    "通过 config.toml 挂载 filesystem 等 MCP 服务器，让 agent 读取本地目录与工具",
+    "uh router serve 在 127.0.0.1 提供 OpenAI 兼容端点，供其他工具复用 UH 的提供商池"
+   ]
+  },
+  "sha": "6a3e66ad2b6a",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

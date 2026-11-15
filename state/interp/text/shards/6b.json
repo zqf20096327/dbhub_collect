@@ -2909,5 +2909,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6520d2d38a5f": {
+  "identity": {
+   "one_liner": "开源 CLI，将 Supabase 项目备份到自有 S3/R2/B2 存储桶并提供恢复演练验证",
+   "review": "backupdrill 是一个 Node.js CLI，通过 pg_dump 将 Supabase 的 Postgres 数据库、Auth 用户（角色可读时）以及 Storage 文件（需配置项目的 Storage S3 密钥）备份到用户自己的 S3/R2/B2 桶，生成带校验和的 manifest.json；其 drill 子命令可将快照恢复到临时 Postgres 以验证备份可用。数据经本机或 CI 直传桶内。使用前需注意：备份流量计入 Supabase 出口流量费用，免费计划可持续大规模备份不可行。",
+   "highlights": [
+    "backup 命令将 Postgres dump、auth.dump 及 Storage 文件写入用户自有桶，manifest.json 记录各文件校验和",
+    "drill 命令将最新快照恢复到一次性 Postgres 实例以验证可恢复性；estimate 命令可预估数据库与 Storage 的出口流量成本",
+    "支持 env 变量、配置文件与命令行 flag 三种配置方式（优先级 flag > env > file），并提供 Claude Code、Cursor 与 Pi 的插件/技能集成"
+   ],
+   "use_cases": [
+    "需要将 Supabase 数据库与 Storage 文件备份到自控存储桶并保留校验清单的团队",
+    "希望通过恢复演练验证 pg_dump 备份确实可恢复的开发者或 CI 流程",
+    "需要在定时备份前用 estimate 预估 Supabase 出口流量费用的项目维护者"
+   ]
+  },
+  "sha": "6520d2d38a5f",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

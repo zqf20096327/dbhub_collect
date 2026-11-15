@@ -3270,5 +3270,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "010b0559bbdd": {
+  "identity": {
+   "one_liner": "自托管的多智能体软件工厂，以角色分离和评审/QA裁决门控管理合并",
+   "review": "Hivemill 是一个自托管的 AI 编码智能体编排系统，运行在 herdr 终端多路复用器之上。用户向 boss 智能体描述需求，由 director 组建团队，coder、reviewer、QA 各司其职，judge 仅在评审与 QA 通过时合并 PR。写代码的智能体不能审查、测试或合并自己的变更。目标、任务与裁决记录存于 SQLite 并附追加式事件日志。需 Debian/Ubuntu 环境与已登录的 Claude Code，提供只读 Web UI 展示进度、成本与吞吐。",
+   "highlights": [
+    "固定角色分工：写代码者不能审查、测试或合并自己的变更，权限由 hooks 强制执行而非依赖信任",
+    "合并门控：judge 仅在 reviewer 与 QA 均通过时合并，否则附发现意见退回，所有裁决存入 SQLite",
+    "资源感知的 spawn gate：在 RAM、负载与 Claude 进程数允许前排队新智能体，可选 worker guard、沙箱与按任务独立 clone"
+   ],
+   "use_cases": [
+    "在单台 VM 上托管多个 AI 编码智能体协作完成目标，并以独立评审和测试作为合并前置条件",
+    "需要审计目标、任务、消息与裁决完整历史的团队，状态存于 SQLite 并导出 markdown",
+    "资源受限环境中小盒子上编排多智能体，spawn gate 按内存与负载排队"
+   ]
+  },
+  "sha": "010b0559bbdd",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

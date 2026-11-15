@@ -3151,5 +3151,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e7660170800c": {
+  "identity": {
+   "one_liner": "基于 plan/apply 工作流的 PostgreSQL 声明式 schema 管理工具",
+   "review": "pistachio 是一个面向 PostgreSQL 的声明式 schema 管理工具，用 Go 编写。用户在 SQL 文件中写出目标 schema，工具通过 pg_query_go 解析文件，计算文件与数据库的差异并生成 DDL：pista plan 仅打印，pista apply 执行，pista dump 从现有数据库导出。每次运行都重新计算差异，无需维护迁移历史。默认只管理 public schema，可通过 -n 指定其他 schema。",
+   "highlights": [
+    "通过 plan/apply 工作流将数据库与 SQL 文件对齐，plan 只打印 DDL 不执行，apply 支持单事务运行（--with-tx）及索引 CONCURRENTLY 标记",
+    "从文件中移除的对象仅当 --allow-drop 包含其类型时才被删除，否则以 -- skipped 注释形式显示在 plan 中",
+    "支持 diff --git 无需数据库即可输出分支间的 DDL，以及 dump --split 按 object 拆分文件、pista fmt 格式化"
+   ],
+   "use_cases": [
+    "以 SQL 文件为唯一 schema 来源，希望直接编辑 DDL 并将变更应用到 PostgreSQL 数据库的团队",
+    "需要查看 plan 中哪些语句会扫描或重写表及其锁影响的场景（plan --explain）",
+    "管理表、约束、索引、视图、enum、trigger、policy 等对象，且不涉及 CREATE EXTENSION、CREATE ROLE 或 GRANT 的项目"
+   ]
+  },
+  "sha": "e7660170800c",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d6d3ba138b6b": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的记忆运行时，FastAPI 服务经 MCP/REST 提供持久化记忆管理",
+   "review": "MNEMOS 是为 Agent 应用提供记忆生命周期的运行时服务，覆盖写入、嵌入、检索、压缩、版本化与导出等环节。基于 FastAPI 构建，默认使用 SQLite+sqlite-vec，可通过 DSN 在运行时切换到 PostgreSQL+pgvector、Oracle、Db2、MySQL、MariaDB 六种后端。Agent 通过 MCP stdio/HTTP、OpenAI 兼容接口或 REST 接入。需注意其 PyPI 子包尚未发布，pip 安装需从源码进行；Db2 后端仅支持 amd64。",
+   "highlights": [
+    "提供 search_memories、create_memory、kg_search、kronos_anomalies 等 MCP 工具，支持语义检索与知识图谱查询",
+    "六种持久化后端按 DSN 运行时选择，各后端在首次连接时自建 schema，通过 PersistenceBackend 协议统一实现",
+    "支持 MCP stdio 与 HTTP/SSE 传输、OpenAI 兼容接口、REST API，并通过 webhook 推送 memory.created/updated/deleted 等事件"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 客户端挂接持久化记忆存储与检索",
+    "需要跨多种数据库后端（含托管云数据库）部署的 Agent 记忆服务",
+    "边缘或开发环境使用 SQLite 单机运行，无独立数据库服务"
+   ]
+  },
+  "sha": "d6d3ba138b6b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

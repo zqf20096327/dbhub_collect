@@ -3600,5 +3600,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cfce070fa262": {
+  "identity": {
+   "one_liner": "轻量 PHP 框架，按请求路径加载命名空间控制器并调用公开方法",
+   "review": "SlightPHP 是一个基于 PHP 8.0+ 的轻量 Web 框架，通过请求路径映射到命名空间控制器方法来完成调度。README 面向使用 Composer 的 PHP 开发者，提供 Config、Db、Tpl 等插件及 Request/Response 对象。需要注意 6.x 各版本存在多处不兼容变更，升级须参考对应迁移指南。",
+   "highlights": [
+    "通过 #[\\SlightPHP\\Route] 注解限制控制器方法的 HTTP 方法，不匹配时返回 405 和 Allow 头",
+    "请求路径默认最多 10 段，可用 setMaxDepth() 调整；核心调度失败统一抛出 SlightPHP\\Exception",
+    "内置 Request/Response 对象，支持读取 route、get/post/cookie 等请求数据；插件含 Db、Tpl、Config、验证码"
+   ],
+   "use_cases": [
+    "基于路径到控制器方法映射的 Web 应用开发",
+    "需要使用 MySQL 数据库、Redis 服务或验证码组件的 PHP 项目",
+    "配合 Swoole、Workerman 等运行环境的 PHP 服务（见主题标签）"
+   ]
+  },
+  "sha": "cfce070fa262",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "271ed2e118e1": {
+  "identity": {
+   "one_liner": "基于离线 schema 快照的 PostgreSQL MCP 服务器与 CLI 工具",
+   "review": "DryRun 通过 CLI 连接 PostgreSQL 抽取完整目录（表、视图、索引、约束、RLS 策略、触发器等）生成快照文件 `.dryrun/history.db`，再以 MCP 服务器（stdio 或 SSE）向 AI 编码助手提供 9 个离线工具，包括 lint、查询验证、迁移锁分析和外键图探索。安装需 Homebrew、npm 或 Go 1.26+，要求 PostgreSQL 14 及以上；离线快照分发需提交 `dryrun.toml` 与 snapshots 目录，多数据库需每库各启一个 MCP 进程。",
+   "highlights": [
+    "CLI 抽取完整数据库目录并生成快照，lint、迁移安全分析、查询验证等均在离线快照上运行",
+    "MCP 服务器通过 stdio 或 SSE 暴露 9 个工具，连接真实数据库后额外启用 explain_query、check_drift、columnar_report",
+    "支持快照推送/拉取共享（snapshot push/pull）、快照间 diff、pg_stat_statements 查询形状统计与多副本统计"
+   ],
+   "use_cases": [
+    "让 AI 编码助手在编写 SQL 前获得 schema、索引、约束感知，而无需暴露数据库凭据",
+    "在 CI 或开发者本机离线检查 schema 规范与 DDL 迁移的锁类型和表重写风险",
+    "团队成员中仅一人持有数据库凭据，通过共享快照让其他人获得完整 schema 信息"
+   ]
+  },
+  "sha": "271ed2e118e1",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "45e7dc33d408": {
+  "identity": {
+   "one_liner": "基于 Rust 的自托管定时任务面板，以动态插件与 cron 调度任务",
+   "review": "插件面板是一个运行在本机设备上的定时任务管理工具，通过浏览器网页添加任务、设置执行时间并查看运行结果，无需云服务或独立数据库服务器，单个程序加 SQLite 文件即可运行。提供 JavaScript 插件机制（通过 panel:host API 使用日志、SQLite、HTTP、通知和定时任务）以及脚本执行（sh、node、bun、python3、php、二进制），支持标准五段 cron 和 @every 表达式，任务连续失败自动熔断，支持任务提前唤醒量与抖动后缀。面向需要在个人设备（树莓派、小主机、低配盒子）上长期运行定时任务的用户。当前版本 0.4.3，插件契约不兼容 0.3.x 老面板。仓库未附带开源许可证文件。",
+   "highlights": [
+    "支持 aarch64-linux-musl、x86_64-linux-musl 静态二进制及 Windows x64 产物，安装脚本强制校验 SHA256",
+    "插件通过 panel:host API 获取日志、SQLite、HTTP、通知和定时任务能力，网络出站经过 SSRF 门（默认禁回环与云元数据地址）",
+    "调度支持标准五段 cron、@every 表达式、抖动后缀、提前量唤醒，任务连续失败自动熔断并通知；数据存储于单一 data/ 目录（panel.db、auth.json、插件与脚本文件）"
+   ],
+   "use_cases": [
+    "在树莓派、家庭小主机等 ARM/x86 设备上长期运行定时签到、备份、清理等任务",
+    "用 JavaScript 编写带自带 Web 界面和配置表单的插件，或直接托管 sh/python/php 等第三方脚本按计划触发",
+    "通过局域网或 HTTPS 反向代理（nginx/Caddy）在手机等设备上访问和管理面板"
+   ]
+  },
+  "sha": "45e7dc33d408",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2883,5 +2883,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "744c8227555a": {
+  "identity": {
+   "one_liner": "用 Rust 与 GPUI 编写的跨平台多引擎数据库客户端，本地优先运行。",
+   "review": "DBDelve 是一款用 Rust 和 GPUI 框架构建的桌面数据库客户端，面向需要在多数据库间查询和编辑数据的开发者。它支持 Postgres、MySQL、MongoDB、Redis、ClickHouse 等十余种引擎，并可通过 ODBC 桥接 Oracle、Db2、BigQuery 等。提供连接项目管理、SSH 隧道、AWS SSM 隧道、schema 感知补全和查询计划展示。安装覆盖 macOS（Homebrew）、Linux（AUR/AppImage）和 Windows 安装包。",
+   "highlights": [
+    "支持 Postgres、MySQL、SQLite、MongoDB、Redis、ClickHouse、Snowflake 等引擎，并有内置 ODBC 桥接可达 Db2、Oracle 等其他数据库",
+    "单元格编辑会生成 UPDATE 语句供确认后执行；CSV/TSV/JSON 导入前逐行检查并显示每条语句",
+    "提供 schema 感知的 SQL 补全、查询计划面板（标注行数估算偏差）、命令面板与可重绑快捷键"
+   ],
+   "use_cases": [
+    "开发者同时在多个数据库引擎（关系型、文档型、键值型）间进行查询与数据维护",
+    "通过 SSH 隧道或 AWS SSM 访问私有网络中的数据库，或用 IAM 短期令牌登录云托管实例",
+    "将 CSV、Excel、Parquet、JSON 数据文件拖入窗口，在内存中的 DuckDB 里直接查询"
+   ]
+  },
+  "sha": "744c8227555a",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "03708d43f277": {
+  "identity": {
+   "one_liner": "每30分钟自动生成的DMR用户ID数据库，按机型格式提供下载",
+   "review": "该项目提供DMR用户数据库的BETA版本，每30分钟自动重建一次，新注册的DMR用户会被加入，但数据可能不完整。面向Ailunce、Anytone、Tytera对讲机用户及Pi-Star热点用户，按各机型格式分别生成文件（如Anytone带头部、MD-2017仅收录前10万条）。README包含将数据库接入Pi-Star的SSH修改步骤。",
+   "highlights": [
+    "每30分钟自动重建数据库，收录新注册DMR用户",
+    "针对Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017、Pi-Star 分别生成对应格式的文件",
+    "README提供修改Pi-Star HostFilesUpdate.sh 脚本以替换数据源的操作步骤"
+   ],
+   "use_cases": [
+    "为数字对讲机写入较新的DMR用户ID与呼号数据",
+    "替换Pi-Star热点的DMRIds.dat 数据源",
+    "需要较新注册用户信息的场景（接受数据可能不完整）"
+   ]
+  },
+  "sha": "03708d43f277",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f0a7822207e2": {
+  "identity": {
+   "one_liner": "面向 ASU-CCS 图书馆的 Spring Boot + React 全栈图书借阅管理系统",
+   "review": "Libro 是为 Aklan State University 计算机研究学院图书馆编写的全栈借阅管理系统：Java 25/Spring Boot 提供 REST API，React 19 + TypeScript 前端独立于 ui/ 目录，PostgreSQL 18 + Flyway 管理数据。按物理副本登记馆藏并记录逐本借阅历史；支持学生、教师、助理、馆员四种角色，JWT 无状态认证，借期 14 天、最多 3 笔在借。部署依赖 Docker Compose，需配置 JWT 密钥与 BCrypt 密码哈希等环境变量。",
+   "highlights": [
+    "以物理副本为目录单位，每份副本保留独立借阅历史；借阅通过行锁与活跃借阅唯一索引防止并发重复出借",
+    "提供 JWT Bearer 认证、BCrypt 密码、按 IP 限流的登录/注册，并在路由与服务层强制四种角色",
+    "包含 Flyway 管理的 schema、/livez 与 /readyz 探针、私有管理端口上的 Prometheus 指标、GitHub Actions CI/CD 与 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "高校或小型图书馆管理纸质书副本目录、读者账户与借还流程",
+    "作为 Spring Boot REST API + React 前端 + Testcontainers 测试的分库参考实现进行本地部署运行",
+    "需要按角色区分读者与馆员操作、并输出审计日志与馆藏统计的借阅场景"
+   ]
+  },
+  "sha": "f0a7822207e2",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

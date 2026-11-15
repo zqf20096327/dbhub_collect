@@ -2923,5 +2923,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0f0045c9b405": {
+  "identity": {
+   "one_liner": "连接 Microsoft SQL Server 的 DuckDB 扩展，基于原生 TDS 协议并支持查询下推",
+   "review": "该扩展让 DuckDB 通过原生 TDS 协议（含 TLS）直接连接 SQL Server，无需 ODBC/JDBC 驱动。提供目录集成、过滤与远程下推、DML、事务、BCP 批量加载，以及无需 SQL Server 即可读取 .bak 备份文件的表函数。需 DuckDB v1.4.1+ 和 SQL Server 2019+，支持 Azure AD、Kerberos/SSPI 认证。注意：项目处于实验阶段，API 可能随版本变化；下推的字符串比较遵循列的排序规则。",
+   "highlights": [
+    "实现原生 TDS 协议连接，无需外部 ODBC/JDBC 驱动",
+    "支持 WHERE 过滤下推与远程下推，将连接、聚合、ORDER BY/LIMIT 等转换为单条 T-SQL 在 SQL Server 执行",
+    "提供 mssql_backup_info/mssql_backup_scan 等表函数，可从本地、s3://、https:// 的 .bak 文件读取备份内容"
+   ],
+   "use_cases": [
+    "在 DuckDB 中直接查询附加的 SQL Server 数据库，配合 EXPLAIN 查看下推生成的 T-SQL",
+    "不部署 SQL Server 实例的情况下检查或读取 .bak 备份文件中的表结构与数据",
+    "通过 CTAS/COPY 将 SQL Server 数据批量加载到 DuckDB 进行分析"
+   ]
+  },
+  "sha": "0f0045c9b405",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6eff18ca3b34": {
+  "identity": {
+   "one_liner": "Go 编写的 ATProtocol 个人数据服务器（PDS），使用 SQLite 存储区块与 blob。",
+   "review": "Cocoon 是用 Go 实现的 ATProtocol PDS，面向想自托管 Bluesky 个人数据的用户。它通过 Docker Compose 部署，包含密钥初始化、邀请码生成和 Caddy 自动 HTTPS，数据默认存于 SQLite，可切换 PostgreSQL，并支持 S3 blob 备份与外发请求防护等配置。README 注明部分已实现的端点仍缺乏完善校验。",
+   "highlights": [
+    "实现 com.atproto 的 identity、repo、server、sync 等端点，并提供 ATProto Spaces（alpha）权限数据接口",
+    "默认使用 SQLite 数据库与区块/blob 存储，支持切换 PostgreSQL，S3 兼容存储用于 SQLite 备份与 blob 存放",
+    "提供 YubiKey 与验证器应用两步登录、邀请码管理、密码重置等管理命令，以及针对外发请求的私网地址与重定向防护"
+   ],
+   "use_cases": [
+    "自托管个人 ATProtocol 数据服务器，通过域名与 Docker 部署并自动获取 HTTPS 证书",
+    "使用自定义 PLC 目录搭建集成测试环境，避免测试账号注册到公共目录",
+    "将 blob（图片、视频等）存放到 S3 兼容存储并可选通过 CDN URL 302 跳转分发"
+   ]
+  },
+  "sha": "6eff18ca3b34",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3011,5 +3011,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9948ad64782e": {
+  "identity": {
+   "one_liner": "Oracle Labs 出品的软件供应链安全分析框架，验证构建完整性。",
+   "review": "Macaron 是 Oracle Labs 开发的软件供应链安全分析工具，用于验证制品及其依赖的构建完整性。它支持 Maven、Gradle、pip、npm、Go、Docker 等构建工具，可验证 attestation、检测恶意 Python 包、检查 SLSA 合规。其机制包括解析 CI 配置与 bash 脚本、构建调用图等中间表示以实现检查，并支持从源码重建包与发布制品比对。可通过 GitHub Action 使用，已集成到 Graal Development Kit 中。",
+   "highlights": [
+    "支持 PyPI、npm、Go 等生态的 attestation 验证，以及基于可定制启发式的恶意/可疑包检测",
+    "通过构建脚本静态分析实现可复现构建：从源码重建包并与发布制品比对以发现差异",
+    "提供可扩展的策略引擎，支持用户自定义规则以检查 SLSA 合规"
+   ],
+   "use_cases": [
+    "在 CI/CD 流水线中验证第三方或内部制品的构建来源与完整性",
+    "检测 PyPI、npm 等生态中的恶意或可疑包",
+    "检查制品与流程对 SLSA 框架的合规性，生成验证摘要 attestation"
+   ]
+  },
+  "sha": "9948ad64782e",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8ab481950e35": {
+  "identity": {
+   "one_liner": "Rust 编写的 Sigma 检测工程工具集，涵盖解析、评估、转换与流式运行时",
+   "review": "RSigma 是面向 Sigma 检测标准的 Rust 工具集：将 YAML 规则解析为强类型 AST 并编译为匹配器，实时评估日志事件，支持有状态关联与多格式输入（JSON、syslog、EVTX、OTLP 等）。提供 linter、formatter、LSP/MCP 服务及可插拔后端转换。README 未给出安装命令，文档在 rsigma.io，采用 MIT 许可。",
+   "highlights": [
+    "内置 90 项检查的 linter 与支持 VSCode、Neovim 等 LSP 编辑器的实时诊断、补全与格式化",
+    "流式守护进程支持热重载、Prometheus 指标、stdin/HTTP/NATS/OTLP 等输入及带重试与 DLQ 的多路输出",
+    "规则可转换为 PostgreSQL/TimescaleDB、LynxDB、Fibratus 原生查询，或经 sigma-cli 委托 30+ 个 pySigma 后端"
+   ],
+   "use_cases": [
+    "在 CI 中通过 GitHub Action 对规则仓库执行 lint、校验、回测与覆盖率检查",
+    "以长驻守护进程实时接收多格式日志并运行无状态检测与滑动/滚动/会话窗口关联",
+    "将 Sigma 规则转换为后端查询语言，对 PostgreSQL/TimescaleDB 日志归档执行只读狩猎"
+   ]
+  },
+  "sha": "8ab481950e35",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fa8d242f9bd6": {
+  "identity": {
+   "one_liner": "面向以色列家庭的本地优先记账应用，同步银行数据并存入单一 SQLite 文件",
+   "review": "Penny 是面向以色列家庭的本地优先理财应用，基于 Next.js/TypeScript 构建，数据存储于本地 SQLite 文件。它通过 israeli-bank-scrapers 每日同步 18 家银行和信用卡的交易，支持 CSV/XLSX 文件导入去重，包含预算、税务、养老金等 25+ 计算工具。界面以希伯来语优先并支持 RTL 布局。需注意：自动拉取银行数据可能违反银行服务条款，自动同步要求账户未启用两步验证，且 README 警告不可作为互联网服务运行。",
+   "highlights": [
+    "通过 israeli-bank-scrapers 每日同步 18 家以色列银行与信用卡，并通过 israeli-pension-scrapers 读取 5 家机构的养老金余额",
+    "凭据以 AES-256-GCM 加密存储，服务仅监听 127.0.0.1，数据保存在单个可备份的 SQLite 文件中",
+    "AI 分类可选：支持 Claude API、本地 Ollama、代码代理 CLI 或不使用 AI，可随时在设置中切换；提供希伯来语优先 RTL 布局、无障碍菜单和隐私模式"
+   ],
+   "use_cases": [
+    "希望将银行交易、预算与税务/养老金计算集中管理，且不将银行凭据上传至云端的以色列家庭",
+    "无法自动同步的账户，通过拖放 CSV/XLSX 对账单文件或受监控导入文件夹进行导入",
+    "通过 Docker 部署或安装为系统服务，在家庭网络内从手机访问的家庭财务管理场景"
+   ]
+  },
+  "sha": "fa8d242f9bd6",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ddd060d7a208": {
+  "identity": {
+   "one_liner": "基于 Raft 的 CP 型分布式 SQL 数据库，兼容 PostgreSQL 线协议",
+   "review": "Tardigrade 是一个公开开发的分布式 SQL 数据库，定位为 CP 系统：支持可串行化事务，按 range 使用 Raft 复制，兼容 PostgreSQL 线协议，通过拒绝工作而非分叉数据来承受少数派分区故障。采用邮件驱动的 RFC+patch 贡献流程，不接受 Pull Request；以 AGPLv3 或更高版本发布。技术设计文档保留了 CockroachDB 撰写的设计笔记与 RFC 作参考。",
+   "highlights": [
+    "支持可串行化事务，按 range 进行 Raft 复制",
+    "兼容 PostgreSQL 线协议",
+    "少数派分区故障时以拒绝工作方式保持一致性"
+   ],
+   "use_cases": [
+    "需要可串行化事务且优先一致性的 SQL 场景",
+    "使用 PostgreSQL 协议客户端的应用接入",
+    "需容忍少数派分区中断、可接受拒绝写入的环境"
+   ]
+  },
+  "sha": "ddd060d7a208",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

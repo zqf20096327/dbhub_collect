@@ -3086,5 +3086,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9ae038291384": {
+  "identity": {
+   "one_liner": "把十个编程渠道封装为 OpenAI/Anthropic 兼容 API 的凭证池网关",
+   "review": "Coding2API 将 CodeBuddy（国内/国际）、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce、小浣熊、灵犀等渠道封装为 OpenAI / Responses / Anthropic 兼容接口，供团队通过公共凭证池统一调用。调度按健康度与到期额度选号，支持会话粘性、按人用量统计与月度账单；数据存 SQLite，Python 3.12+/uv 或 Docker 部署。README 注明为逆向接口，未做安全审计，仅供学习研究，公网部署需反向代理与鉴权。",
+   "highlights": [
+    "提供 /v1/chat/completions（流式/非流式）、/v1/responses、/v1/messages、/v1/models 与 /v1/user/balance 接口，模型@渠道写法可强制指定上游",
+    "凭证池支持设备码登录、多账号切换、额度探测、每日签到与 token 预刷新，凭证加密入库；模型列表只列出有可用凭证的渠道",
+    "包含 admin/operator/viewer 三角色体系、审计日志、月度账单 CSV/JSONL 导出、按人/渠道/模型/凭证的用量统计（不存对话内容）"
+   ],
+   "use_cases": [
+    "团队内部搭建统一的模型 API 网关，用 sk-... Key 接入任意 OpenAI 兼容客户端（含 Codex CLI、Claude Code）",
+    "需要多人共用凭证池并按人统计用量、生成月度账单的小型团队",
+    "本地或 VPS 上以 Docker/Caddy 部署，用于学习研究各渠道的接口封装与调度机制"
+   ]
+  },
+  "sha": "9ae038291384",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "140e112a60cf": {
+  "identity": {
+   "one_liner": "本地优先的 SNOMED CT 工具链，单二进制将 RF2 转为 NDJSON 及多种查询格式",
+   "review": "sct 是一个命令行工具，用于将 SNOMED CT 的 RF2 发布文件转换为规范 NDJSON 工件，并可派生 SQLite、Parquet、Markdown、Arrow 等格式，供 sqlite3、duckdb、jq 等标准工具本地查询，无需远程术语服务器。面向处理临床术语数据的开发者和健康信息学团队。核心 FHIR 服务器、TUI、搜索、MCP 等子命令默认编译在内，gui、dmwb、diagram-svg 为可选 feature；作者声明该项目仍处于进行中状态。",
+   "highlights": [
+    "提供单一二进制实现 RF2 到 NDJSON、SQLite（FTS5）、Parquet、Markdown、Arrow IPC、传递闭包表等多种工件的转换与导出",
+    "内置 FHIR R4 术语服务器（$lookup/$validate-code/$subsumes/$expand，支持 ECL）、MCP 服务器、TUI/GUI，以及词法/模糊/语义多种搜索",
+    "支持通过 NHS TRUD API 下载 RF2 发布、读取 CTV3 与 Read v2 映射、解析 refset，并提供 diff、info、cite 等辅助子命令"
+   ],
+   "use_cases": [
+    "在没有远程术语服务器的本地环境中，用 sqlite3、duckdb、jq、ripgrep 等标准工具查询 SNOMED CT 概念数据",
+    "部署自托管的 FHIR R4 术语服务器（含 Docker Compose + Caddy HTTPS 流程），提供概念查找、校验、包含关系与 ECL 展开服务",
+    "为 LLM/MCP 工具链提供本地术语访问，或生成 Ollama 向量嵌入做语义搜索（依赖 Ollama，标注为实验性）"
+   ]
+  },
+  "sha": "140e112a60cf",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0df074dd9de8": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 MongoDB 原生 GUI 客户端，移植自 Robomongo",
+   "review": "Rustyrobo 是将不再维护的 Robomongo/Robo 3T 以 Rust 重写的 MongoDB GUI，未复用原代码。保留原布局、快捷键与内嵌 shell，支持 MongoDB 3.6 至 8.x，提供 SSH 隧道、JSON/CSV 导入导出、mongodump 格式备份。提供 Linux/macOS/Windows 预编译包，也可用 Rust 1.88+ 自行构建；RTL 文本仅部分支持。",
+   "highlights": [
+    "内嵌 Mongo shell，支持 MongoDB 3.6 至 8.x",
+    "提供 SSH 隧道、集合的 JSON/CSV 导入导出及 mongodump 格式的备份恢复",
+    "以单一原生 Rust 二进制分发，覆盖 Linux、macOS、Windows"
+   ],
+   "use_cases": [
+    "需要图形界面浏览和编辑 MongoDB 文档的开发者",
+    "此前使用 Robo 3T 且需要兼容新版 MongoDB 3.6–8.x 的用户",
+    "需通过 SSH 隧道连接远程 MongoDB 并进行导出/备份操作的场景"
+   ]
+  },
+  "sha": "0df074dd9de8",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2425abe8322": {
+  "identity": {
+   "one_liner": "以自然语言匹配并对比开源项目的决策平台",
+   "review": "GitStarts 采集 GitHub 仓库数据（默认目标 3000 个），提供榜单、搜索与语义匹配。用户用自然语言描述需求，系统经需求结构化、Qdrant 向量召回与 BM25 加权 RRF、rerank 精排输出候选，并可按 8 个固定维度做 AI 深读对比。面向需要选型的开发者，前后端加 AI 网关经 Docker Compose 部署。",
+   "highlights": [
+    "混合召回：MySQL 硬过滤 + Qdrant 向量召回 + BM25 按 0.8/0.2 加权 RRF，前 60 候选经 bge-reranker-v2-m3 精排，rank = rerank",
+    "8 维度逐格证据对比（定位/技术栈/部署/许可/活跃度等），结论附证据或标注「信息不足」，支持 Markdown 导出与分享链接",
+    "M0–M8 已上线：GitHub OAuth 登录、每日配额原子扣减、SSE 流式对话、README 分块 embedding 索引、token 与延迟全链路记录"
+   ],
+   "use_cases": [
+    "有功能想法但不确定是否存在现成开源项目，用自然语言检索候选仓库",
+    "候选项目较多时，按统一维度生成含证据的横向对比报告辅助决策",
+    "需要 GitHub 热门仓库榜单、按平台/语言/许可证筛选与活跃度排序的仓库检索站"
+   ]
+  },
+  "sha": "f2425abe8322",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

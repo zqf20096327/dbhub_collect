@@ -3366,5 +3366,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "105fbe551583": {
+  "identity": {
+   "one_liner": "Rust+GPUI 编写的原生代码编辑器，内置 AI 代理面板与只读查看器",
+   "review": "FluxCode 是一个用 Rust 与 GPUI 框架实现的单进程原生代码编辑器，运行于 Windows、macOS 和 Linux，仍在开发中。它提供 ACP 协议的 AI 代理面板、内置源代码管理、Python 友好终端、二进制/PDF/Office/ZIP/SQLite 只读视图和基于 invite code 的实时协同。无调试器、扩展目录与语言服务器；README 附带与 Zed、VS Code 的基准对比及复现脚本。安装通过 Releases 提供的安装包，Windows/Linux 免管理员权限。",
+   "highlights": [
+    "代理面板实现 Agent Client Protocol，运行命令或修改文件前需经用户确认，每轮文件改动可撤销",
+    "内置源代码管理、Go to File 搜索、Python 错误卡片，以及 SQLite、PDF、Office、ZIP 等文件的只读查看",
+    "实时协同以主持人电脑为服务器，使用 ChaCha20-Poly1305 加密，经 operational transformation 合并编辑"
+   ],
+   "use_cases": [
+    "希望通过 ACP 运行 OpenCode 等 AI 代理并逐轮控制其权限的编码工作流",
+    "需要同时查看代码与 PDF、Office、SQLite 等文件的场景",
+    "本地机器间多人同时编辑同一文件夹或仓库的协同开发"
+   ]
+  },
+  "sha": "105fbe551583",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ed37049cdb9": {
+  "identity": {
+   "one_liner": "基于字段声明关系和流式查询构建器的 Rust ORM",
+   "review": "TideORM 是一个 Rust ORM，通过 #[tideorm::model] 宏定义模型，关系（HasOne/HasMany/BelongsTo 等）直接声明在字段上，并提供 .with() 预加载以减少 N+1 查询。支持 PostgreSQL、MySQL/MariaDB、SQLite 等后端，可同时连接多个数据库。加密字段功能要求预先迁移明文旧数据，且查询谓词不会自动加密。适合需要多数据库支持并使用 async/await 的 Rust 项目。",
+   "highlights": [
+    "提供字段声明式关系模型（HasOne、HasMany、BelongsTo、HasManyThrough）及嵌套预加载，用于避免 N+1 查询",
+    "通过 feature flag 支持 PostgreSQL、MySQL/MariaDB、SQLite，以及经 PostgreSQL/MySQL 驱动连接 CockroachDB、TiDB、Vitess 等兼容服务器",
+    "包含查询构建器（过滤、join、union、CTE、窗口函数）、分块读取、游标分页、迁移、种子数据、软删除、事务及可选字段加密等数据生命周期工具"
+   ],
+   "use_cases": [
+    "需要在 PostgreSQL、MySQL、SQLite 等多种后端之间切换或同时连接多数据库（多租户、读写分离）的 Rust 应用",
+    "使用 async/await 工作流并需要模型定义、预加载、批量插入和事务管理的服务端开发",
+    "需要对敏感列（如手机号）在写入时加密、读取时自动解密的数据存储场景（需注意明文旧数据需先迁移，且加密列上的过滤查询不支持自动加密比较）"
+   ]
+  },
+  "sha": "6ed37049cdb9",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bc1c68c2de6c": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的公寓共享充电桩使用分析 SQL 项目",
+   "review": "该项目对公寓楼车库共享充电桩的 6,878 条充电会话数据做 SQL 分析，回答三个问题：各车库独立用户数、最热门的开始时段、平均充电超 10 小时的用户。数据来自 DataCamp 项目简报，原始 CSV 先经 Python（pandas）清洗分号分隔、逗号小数等格式问题，再载入 PostgreSQL。部分会话缺少拔出时间，聚合时被 AVG 忽略。",
+   "highlights": [
+    "提供三个 SQL 查询：按车库统计共享站独立用户数、按星期与小时统计前 10 热门开始时段、筛出平均时长超 10 小时的共享站用户",
+    "包含 Python 清洗脚本，处理分号分隔、逗号小数、日期格式解析、多余列删除等问题，输出 data/cleaned/charging_sessions.csv",
+    "数据集含 24 个车库、97 个用户、2018-12 至 2020-01 的会话记录，其中 1,412 条为共享站会话"
+   ],
+   "use_cases": [
+    "物业管理人员了解共享充电桩的用户分布与高峰时段",
+    "SQL 学习者参考 COUNT(DISTINCT)、HAVING 聚合过滤与排序平局处理的示例",
+    "需要对原始 CSV 做格式清洗后再载入 PostgreSQL 的数据处理流程参考"
+   ]
+  },
+  "sha": "bc1c68c2de6c",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

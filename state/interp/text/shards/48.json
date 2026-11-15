@@ -2914,5 +2914,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "44b61233a74d": {
+  "identity": {
+   "one_liner": "面向智能体 harness 的持久性语言，编译至各平台崩溃保证",
+   "review": "harnesslang 是一种用于编写智能体 harness 的语言，程序描述模型、工具、效应类别与状态循环，编译器针对目标平台（Rust/JSONL、SQLite、Postgres、Cloudflare Durable Objects、Vercel Workflow）验证崩溃与重跑路径上的持久性性质并生成代码。适合需要在进程崩溃后正确处理不可撤销外部调用（如支付、shell 命令）的开发者。限制：超出平台请求上限的 handler 会被拒绝而非拆分；部分平台限制标注为未验证。",
+   "highlights": [
+    "hl check/hl prove 对所有目标的每条路径（含崩溃与重跑）验证：外部调用前先持久化、单次完成状态、无溢出、不变量成立、出站请求最坏情况符合平台限制",
+    "提供五个编译目标：native-jsonl、native-sqlite、server-postgres、cloudflare、vercel，生成代码仅依赖各语言标准库与平台自身 API",
+    "hl sim 按种子运行各目标的故障模型（崩溃、撕裂/丢失写入、租约接管、重试步骤）"
+   ],
+   "use_cases": [
+    "编写崩溃后不得重复或遗漏外部效应（shell 命令、评论、支付）的智能体 harness",
+    "需要在多个持久性后端（本地 SQLite/JSONL 或 Cloudflare/Vercel 托管环境）部署同一 harness 逻辑",
+    "针对 Claude、OpenAI 等 API 构建带子会话的编码智能体（仓库内含 hl-agent 与示例）"
+   ]
+  },
+  "sha": "44b61233a74d",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

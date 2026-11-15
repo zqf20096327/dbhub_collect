@@ -3236,5 +3236,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9aaf7c19c8fb": {
+  "identity": {
+   "one_liner": "基于 Tauri+Rust 的桌面 AI 小说创作软件，含多代理质检工作流",
+   "review": "StoryMoss（草苔）是一款 Tauri+Rust+React 构建的桌面小说创作软件，面向小说作者，提供幕前写作与幕后资产管理双界面，集成角色/世界观/伏笔等资产库、多代理协作、质量门与批量续写训练流程。支持 OpenAI、Anthropic、Ollama 及本地 API，可从源码构建或下载安装包运行，固定 Rust 1.95.0 工具链。",
+   "highlights": [
+    "采用主创/管理/编辑审计三代理协作架构，章节经加权质量门（阈值 0.75）后交付，支持每故事最多 3 个 write 任务并行与数据库原子分配章号",
+    "提供知识图谱、伏笔看板、叙事分析等资产管理，正文生成后自动提取角色/关系/世界观/大纲回流资产库，续写前按需检索前文原文",
+    "接入 OpenAI/Anthropic/Ollama/本地 API 并按角色×任务路由模型；续写训练支持 1–20 章批量连续生成并出具逐章对比分析报告"
+   ],
+   "use_cases": [
+    "长篇小说创作中管理角色、世界观、伏笔与卷弧计划等故事资产",
+    "借助本地或云端 LLM 进行单拍续写、划词改写与多章批量续写训练",
+    "通过编辑审计与质量门流程核对 AI 生成内容与作者改动的一致率"
+   ]
+  },
+  "sha": "9aaf7c19c8fb",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4112eb95ce99": {
+  "identity": {
+   "one_liner": "为 Claude Code 与 Codex CLI 提供本地持久记忆的 Rust CLI，基于 hooks、MCP 与 SQLite/SQLCipher",
+   "review": "remem 通过 hooks 自动捕获 Claude Code、Codex CLI 等编码代理会话，经后台 LLM 蒸馏为可检索的决策、修复依据与项目模式，存储于默认启用 SQLCipher 加密的 SQLite，并通过 MCP、CLI、REST 在 SessionStart 注入相关记忆。支持来源标注、时效标签、审核队列与注入审计；Cursor v1 仅注册 MCP。适合进行长期持续编码工作的开发者。",
+   "highlights": [
+    "通过 hooks 自动捕获会话并由后台 worker 进行提取、蒸馏与生命周期治理，提供来源标注、时效标签、抑制与注入审计",
+    "单一本地存储支持 MCP、CLI 与经认证的 localhost REST 访问，新装默认使用 SQLCipher 加密的 SQLite",
+    "提供 remem doctor/status/search 等命令检查 schema、密钥、hooks、MCP 注册及安装路径漂移，并支持只读记忆诊断报告"
+   ],
+   "use_cases": [
+    "长期运行的项目开发中让新会话延续此前的根因分析、commit 与未完成 TODO",
+    "跨 Claude Code 与 Codex CLI 共享同一份项目作用域的工程记忆",
+    "需要按项目检索历史决策、bug 修复依据与原始会话证据的场景"
+   ]
+  },
+  "sha": "4112eb95ce99",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -33368,5 +33368,278 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "bc1c68c2de6c+2": {
+  "fn": "stateri-science/ev-charging-habits-sql",
+  "clean_ver": "2",
+  "raw_lines": 20,
+  "ops": [
+   [
+    "equal",
+    0,
+    20,
+    0,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "|Column|Definition|Data type|"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    33,
+    22,
+    33,
+    [
+     "|`garage_id`|Identifier for the garage or building|VARCHAR|",
+     "|`user_id`|Identifier for the individual user|VARCHAR|",
+     "|`user_type`|Whether the station is Shared or Private|VARCHAR|",
+     "|`start_plugin`|Date and time the session started|TIMESTAMP|",
+     "|`start_plugin_hour`|Hour (24 hour clock) the session started|NUMERIC|",
+     "|`end_plugout`|Date and time the session ended|TIMESTAMP|",
+     "|`end_plugout_hour`|Hour (24 hour clock) the session ended|NUMERIC|",
+     "|`duration_hours`|Length of the session in hours|NUMERIC|",
+     "|`el_kwh`|Electricity used in kilowatt hours|NUMERIC|",
+     "|`month_plugin`|Month the session started|VARCHAR|",
+     "|`weekdays_plugin`|Day of the week the session started|VARCHAR|"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    40,
+    33,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "|Issue in the raw file|Fix|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ],
+   [
+    "replace",
+    42,
+    49,
+    42,
+    49,
+    [
+     "|Fields separated by semicolons, so the file opens as a single column|Read with `sep=\";\"`|",
+     "|Decimal commas (`0,87`), so numbers load as text|Read with `decimal=\",\"`|",
+     "|Dates written as `21.12.2018 10:20`|Parsed with format `%d.%m.%Y %H:%M`|",
+     "|`NA` text used for missing values|Converted to proper nulls|",
+     "|Capitalized column names (`Garage_ID`, `El_kWh`)|Lowercased to match the table|",
+     "|Four extra columns: `session_ID`, `Shared_ID`, `Plugin_category`, `Duration_category`|Dropped|",
+     "|Column order differed from the description|Reordered|"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    56,
+    49,
+    56
+   ],
+   [
+    "replace",
+    56,
+    82,
+    56,
+    57,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    99,
+    57,
+    74
+   ],
+   [
+    "replace",
+    99,
+    100,
+    74,
+    75,
+    [
+     "|garage_id|num_unique_users|"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    75,
+    76
+   ],
+   [
+    "replace",
+    101,
+    109,
+    76,
+    84,
+    [
+     "|Bl2|18|",
+     "|AsO2|17|",
+     "|UT9|16|",
+     "|AdO3|3|",
+     "|MS1|2|",
+     "|SR2|2|",
+     "|AdA1|1|",
+     "|Ris|1|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    118,
+    84,
+    93
+   ],
+   [
+    "replace",
+    118,
+    123,
+    93,
+    94,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    125,
+    94,
+    96
+   ],
+   [
+    "replace",
+    125,
+    126,
+    96,
+    97,
+    [
+     "|weekdays_plugin|start_plugin_hour|num_charging_sessions|"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    97,
+    98
+   ],
+   [
+    "replace",
+    127,
+    137,
+    98,
+    108,
+    [
+     "|Sunday|17|30|",
+     "|Friday|15|28|",
+     "|Thursday|16|26|",
+     "|Thursday|19|26|",
+     "|Sunday|18|25|",
+     "|Sunday|15|25|",
+     "|Wednesday|19|25|",
+     "|Monday|15|24|",
+     "|Friday|16|24|",
+     "|Sunday|14|23|"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    148,
+    108,
+    119
+   ],
+   [
+    "replace",
+    148,
+    152,
+    119,
+    120,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    154,
+    120,
+    122
+   ],
+   [
+    "replace",
+    154,
+    155,
+    122,
+    123,
+    [
+     "|user_id|avg_charging_duration (hours)|"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    123,
+    124
+   ],
+   [
+    "replace",
+    156,
+    162,
+    124,
+    130,
+    [
+     "|Share-9|16.85|",
+     "|Share-17|12.89|",
+     "|Share-25|12.21|",
+     "|Share-18|12.09|",
+     "|Share-8|11.55|",
+     "|AdO3-1|10.37|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    189,
+    130,
+    157
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

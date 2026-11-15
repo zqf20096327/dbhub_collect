@@ -2752,5 +2752,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e0049b368b9d": {
+  "identity": {
+   "one_liner": "基于 SQL Server Change Tracking 同步数据库变更的服务与库",
+   "review": "SyncChanges 提供 Windows 服务、控制台工具和 .NET 库三种形态，读取源库 Change Tracking 记录并将增删改复制到多个目标库。面向只有 Web/Express 等不支持内置复制功能的版本、需要单写多读同步的场景。要求源库为 SQL Server 2008 以上并启用 Change Tracking，建议开启快照隔离；目标库自动创建 SyncInfo 表记录版本，外键约束通过延迟插入或临时禁用处理。",
+   "highlights": [
+    "支持控制台应用、Windows 服务和 NuGet 库三种使用方式，配置文件可指定复制的表、超时、间隔和批大小",
+    "仅依赖 Change Tracking，源库可用所有版本（含 Web/Express），目标库无需启用 Change Tracking",
+    "通过延迟插入、延迟删除和同事务内禁用/恢复外键约束处理外键依赖，无需手动关闭约束"
+   ],
+   "use_cases": [
+    "源库为单一写入库、多个只读目标库需周期性保持一致的单向同步部署",
+    "仅使用 SQL Server Web/Express 等版本、无法使用 Mirroring/Replication/AlwaysOn 的环境",
+    "通过任务计划程序定时调用或以服务按轮询间隔自动执行变更复制的运维场景"
+   ]
+  },
+  "sha": "e0049b368b9d",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1caaf4eb8fb1": {
+  "identity": {
+   "one_liner": "AusTraits 数据库的源数据仓库，用于从450+原始来源重建澳洲植物性状数据集",
+   "review": "该仓库保存 AusTraits 数据库的原始数据，收录超过 25k 个澳大利亚植物分类群、500 余种性状的测量值。数据使用者应从 Zenodo 下载编译版本，或通过 R 包 austraits 按版本号加载；本仓库面向需重跑构建流程的用户，需安装 traits.build 并运行 build.R。注意：原始数据未经许可不可单独复用。",
+   "highlights": [
+    "包含来自 450+ 个不同来源的原始数据，覆盖 500 余种植物性状和 25k+ 个分类群",
+    "通过 traits.build R 包实现可复现的数据库重建流程，支持多 CPU 并行构建",
+    "性状定义基于 AusTraits Plant Dictionary 形式化词汇表"
+   ],
+   "use_cases": [
+    "重新编译生成 AusTraits 数据集并检查数据处理决策",
+    "在 R 中按版本加载、筛选和绘图分析植物性状数据",
+    "向项目贡献新数据或报告数据质量问题"
+   ]
+  },
+  "sha": "1caaf4eb8fb1",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "647d1cab0a52": {
+  "identity": {
+   "one_liner": "面向SaaS工单的支持运维工作台，通过MCP工具提出修复并需人工审批执行",
+   "review": "sAIpport是一个支持运维演示项目：调查器读取账户与事件数据，检索带版本的流程文档并给出修复建议，操作员审批后由worker执行一次并重新读取账户验证结果。适用于希望评估带人工审批环节的LLM支持工作流的开发者。注意其连接的SaaS是合成实验室，客户回复仅为可编辑草稿，生产化需真实业务连接器。",
+   "highlights": [
+    "通过stdio MCP适配器提供七个带类型工具，委派访问绑定租户、执行者、运行和worker租约",
+    "修复提案包含不可变载荷、摘要与预期账户版本，仅操作员可决策；外部操作幂等并附带回执核对与新鲜验证",
+    "提供Offline可复现驱动与Live两种模式，Live经OpenRouter调用免费模型并记录模型ID、token用量、成本与工具证据"
+   ],
+   "use_cases": [
+    "演示和评估带人工审批、结果验证的可复现LLM支持工单工作流",
+    "本地运行检索与工作流评测脚本，比较不同检索配置的表现",
+    "作为可运行的组合展示，了解MCP工具、租约任务与权限控制的具体实现"
+   ]
+  },
+  "sha": "647d1cab0a52",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8f76d26a1509": {
+  "identity": {
+   "one_liner": "基于 Rust 扩展的 Python 类型化 HTTP API 框架，支持架构规则检查",
+   "review": "Hinoki 是一个面向 Python HTTP API 开发的 pre-alpha 框架，供需要类型化端点与可执行架构规则的开发者使用。核心机制是用端点声明统一驱动校验、响应与 OpenAPI 文档生成，并通过 Rust 扩展（PyO3）处理路由、Schema 校验、加密与 SQL ORM 编译。ORM 支持 SQLite、PostgreSQL、MySQL、MariaDB；迁移文件需人工审阅后自行应用。项目未发布到 PyPI，需从源码安装，文档注明 API 与迁移格式可能变更。",
+   "highlights": [
+    "端点通过 @http.get/post/put/patch/delete/query 装饰器声明类型、访问权限、事务与错误，同一声明驱动校验、响应和 OpenAPI 3.1 文档生成",
+    "hinoki check 命令运行架构规则（访问、事务、Schema、导入方向），以文件、行号和修复建议报告违规并以非零状态退出",
+    "Rust 扩展实现路径匹配、部分参数解析、Schema 校验/序列化、加密及 SQL ORM 编译执行；ORM 支持 SQLite/PostgreSQL/MySQL/MariaDB 及 queryset、事务、需人工审阅的迁移文件"
+   ],
+   "use_cases": [
+    "需要将架构约束作为规则纳入 CI 检查的 Python HTTP API 项目",
+    "使用 SQLite/PostgreSQL/MySQL/MariaDB 且希望迁移 SQL 由人工审阅后应用的模型驱动后端开发",
+    "需要 OpenAPI 3.1 文档、Swagger UI/ReDoc、进程内测试客户端和可选 admin 的 ASGI 应用（经 Granian 运行）"
+   ]
+  },
+  "sha": "8f76d26a1509",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3136,5 +3136,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "06dfefb494d5": {
+  "identity": {
+   "one_liner": "离线漏洞数据库与包搜索库，多源告警合并为 CVE 5.2 格式存入 SQLite",
+   "review": "appthreat-vulnerability-db（vdb）从 AppThreat vuln-list、OSV、NVD 和 GitHub 下载告警数据，转换为 CVE 5.2 规范并连同 purl/vers 索引一起存入 SQLite 的 .vdb7 文件，供扫描时完全离线查询。主要供 owasp-dep-scan 使用，也可通过 vdb CLI 直接检索。v7 相比 6.x 更改了数据库文件、镜像 URL、环境变量与版本比较 API，且不读取 v6 数据库。",
+   "highlights": [
+    "合并 Linux vuln-list、OSV、NVD、GitHub 等上游源的告警，支持按 purl、CPE 或 git URL 查询",
+    "查询完全基于本地 SQLite 文件，扫描期间无网络访问；缺失数据以报错或 coverage_gap 标记而非静默返回",
+    "vdb db refresh 支持分片、多压缩编码（xz/zst）与原子化暂存校验刷新，中断后保持一致"
+   ],
+   "use_cases": [
+    "为依赖扫描工具（如 owasp-dep-scan）提供离线漏洞查询数据源",
+    "在无法联网的 CI 或扫描环境中执行软件组成分析（SCA）",
+    "自建并发布与自身环境匹配的定制漏洞数据库镜像"
+   ]
+  },
+  "sha": "06dfefb494d5",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4321bcb38142": {
+  "identity": {
+   "one_liner": "以 JSON 文件形式分发的免费健身动作数据库，含 708 个动作与插图。",
+   "review": "该仓库是 RepDB 健身动作库的免费公开版，将 708 个动作整理为单个 exercises.json 与 512×512 WebP 插图，附目标肌群、器械、MET 值和英/德/西三语说明。面向健身类应用开发者。数据以静态文件而非 API 形式分发，无密钥与限流；商业应用内使用需在应用内展示 RepDB 署名链接，且不得再分发为数据集或用于生成式 AI 训练。循环动画等需购买付费版 Standard。",
+   "highlights": [
+    "提供 708 个动作的单文件 JSON 记录，字段包括分类、力类型、难度、器械、主/次要肌群、MET 值、单双侧与自重标记等",
+    "包含 1,231 张 512×512 WebP 插图（多数动作为起始与顶峰两姿态）、29 个肌肉图标和 64 个器械图标",
+    "名称、描述、步骤说明和技巧以英文、德文、西班牙文三语提供；官方提供 Next.js、React Native (Expo) 与 Flutter 示例应用"
+   ],
+   "use_cases": [
+    "为健身或训练类应用、网站内置动作库与图文说明",
+    "基于 MET 值做卡路里估算，或按器械、难度、肌群筛选训练计划",
+    "用 Pillow 将起始/顶峰两帧交叉淡化生成为简易 GIF 动图"
+   ]
+  },
+  "sha": "4321bcb38142",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "647e76c56609": {
+  "identity": {
+   "one_liner": "用 Zig 编写、内嵌 SQLite 的 Linux 入侵防护守护进程",
+   "review": "fail2zig 是一个 Linux 入侵防护守护进程，监控文件与 journald 日志，通过内建有界解析器检测攻击行为，并经 nftables、ipset 或 iptables 执行封禁。单个静态二进制包含守护进程、管理命令、规则测试和 fail2ban 迁移工具，运行时无需 Python 或共享 SQLite 库。适用于需要在 Linux 主机上基于日志封禁来源 IP 的运维人员；限制包括仅支持 Linux、不支持运行时任意正则与 shell 封禁动作、fail2ban 不承诺完全兼容，journald 与旧式防火墙后端仍依赖宿主工具。",
+   "highlights": [
+    "单静态二进制集成守护进程、管理命令、规则测试与 fail2ban 迁移工具，静态内嵌 SQLite，运行时无需 Python 或共享 SQLite 库",
+    "支持 nftables（直接 netlink）、ipset 与 iptables 三种封禁后端，提供 status/stats/jails/list/history 等管理命令及可选回环 HTTP 指标接口",
+    "内建 16 个过滤器覆盖 SSH、nginx、Apache、邮件、DNS、FTP、MySQL、PortSentry 与 recidive，支持自定义有界规则与 fail2ban 配置导入"
+   ],
+   "use_cases": [
+    "对 SSH、nginx、Apache、MySQL 等服务的日志进行攻击检测并自动封禁来源地址",
+    "通过 fail2ban 导入工具将现有 fail2ban 配置迁移至本项目，先离线投影验证再切换",
+    "在无需 Python 运行时环境中部署静态二进制形式的封禁守护进程"
+   ]
+  },
+  "sha": "647e76c56609",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2884,5 +2884,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1166b584809a": {
+  "identity": {
+   "one_liner": "自托管文档智能平台，以布局感知解析加本地向量检索支撑有引用的文档问答。",
+   "review": "DocuMind 面向需要自托管处理私有文档的用户，支持 PDF/DOCX/XLSX/PPTX/TXT/CSV/Markdown 上传（默认上限 25MB），经 IBM Docling 解析为保留表格与标题结构的 Markdown，本地生成 384 维向量存入 Qdrant，并由 Gemini 生成受限引用的问答。README 说明其定位为单主机部署与组合规模使用，生产上线前的验证步骤尚未完成。通过 Docker Compose 一条命令启动 7 个服务，Gemini API Key 仅聊天问答需要，可选配置。",
+   "highlights": [
+    "用 IBM Docling 做保留布局层次、多栏阅读顺序和表格数据的结构化解析",
+    "本地运行 all-MiniLM-L6-v2 生成 384 维嵌入，向量检索强制带 user_id 和 document_id 过滤",
+    "引用由后端从 Qdrant 元数据（chunk_id、章节、分数）构造，低于 0.35 相关分时返回确定性无证据回复而不调用 LLM"
+   ],
+   "use_cases": [
+    "对含表格和复杂排版的私有文档进行解析与检索问答",
+    "需要多用户数据隔离的自托管文档工作区",
+    "将解析结果导出为 Markdown/HTML/JSON 供后续处理"
+   ]
+  },
+  "sha": "1166b584809a",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6b6727089701": {
+  "identity": {
+   "one_liner": "Java数据库模式演化库，通过应用SQL补丁逐步演进表结构",
+   "review": "Darwin是一个Java库，用于在应用生命周期内维护和演进数据库表结构。它将带版本号的SQL补丁文件放在classpath上，应用启动时根据DataSource识别数据库类型（支持MySQL、Oracle、H2），并按应用版本与已应用版本之间的差异逐个执行补丁。库记录每条SQL的执行日志以实现可追溯，并在不完整补丁中恢复执行；运行需JDK 1.8+、Spring框架与Commons Logging，用Maven构建。",
+   "highlights": [
+    "按版本号管理SQL补丁文件，应用启动时自动比较并逐个应用新增补丁",
+    "记录所有已执行SQL语句及补丁发现时间、执行耗时、异常等信息",
+    "支持多数据库方言并存（MySQL/Oracle/H2），可根据DataSource自动选择"
+   ],
+   "use_cases": [
+    "应用随版本迭代需要持续变更数据库表结构的Java项目",
+    "同一套库需同时维护多种数据库（如MySQL与Oracle）结构的场景",
+    "多节点集群环境下需要避免并发执行迁移的服务"
+   ]
+  },
+  "sha": "6b6727089701",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ac3e49d1e7bb": {
+  "identity": {
+   "one_liner": "Rust + Tauri 构建的桌面 SQL 客户端，支持多种数据库并内置 MCP 服务器",
+   "review": "PlatypusDB 是一款面向开发者、DBA 和分析师的桌面 SQL 客户端，采用 Rust 核心 + Tauri 2 + React 界面，支持 PostgreSQL、MySQL、SQL Server、SQLite、DuckDB 等 20 种左右数据源。提供查询、数据编辑、表设计、执行计划、图表等功能；连接按类型着色区分，代理（AI agent）通过 MCP 访问时默认只读且需人工确认变更。采用 AGPL-3.0 许可，支持 Windows、macOS 和 Linux。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、Oracle、ClickHouse、DuckDB、MongoDB、Redis、Snowflake 等 20 种左右数据源，使用统一编辑器与结果网格",
+    "提供连接类型着色、危险语句确认、生产连接手动提交、编辑保存生成撤销脚本等机制",
+    "内置 MCP 服务器，Claude Code、Cursor 等 AI 代理可按只读或读写权限使用已保存连接，写入操作需在应用内确认"
+   ],
+   "use_cases": [
+    "日常需要切换多个数据库进行查询、浏览和编辑数据的开发与运维工作",
+    "分析慢查询：使用 Explain Analyze 热图与索引建议定位执行计划中的耗时步骤",
+    "让 AI 编码代理通过 MCP 只读访问已保存的数据库连接"
+   ]
+  },
+  "sha": "ac3e49d1e7bb",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

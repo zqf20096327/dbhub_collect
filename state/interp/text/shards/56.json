@@ -2809,5 +2809,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d9b68d2d5c24": {
+  "identity": {
+   "one_liner": "JVM 上的 SQL 解析器，将 SQL 语句解析为可遍历的 Java 类层次结构（AST）",
+   "review": "JSqlParser 读取 SQL 文本并生成 Java 对象树，可通过 Visitor 模式遍历，也支持用 fluent API 从 Java 构建语句并渲染回 SQL 文本。面向需要在 JVM 上解析或改写 SQL 的开发者，覆盖 SQL 标准及 Oracle、MySQL、PostgreSQL 等多种方言。安装建议使用 Manticore 持续构建版本，Maven Central 上的 com.github.jsqlparser 上游发布版本较旧。",
+   "highlights": [
+    "将 SQL 文本解析为 Java 类层次结构（AST），支持 Visitor 模式遍历，并可反向从 Java 对象渲染为 SQL 文本",
+    "单一语法覆盖 SQL 标准及 BigQuery、Snowflake、Oracle、MS SQL Server、PostgreSQL、MySQL、MariaDB、SQLite 等多种方言",
+    "提供语句分类 API（getFeatures），以三值（proven/not excludable/ruled out）判断语句是否返回行或修改数据，支持嵌套子查询、绑定参数、窗口函数、Oracle hints 等语法"
+   ],
+   "use_cases": [
+    "在应用执行 SQL 前做只读校验：通过 Features API 判断语句是否包含数据修改操作",
+    "SQL 改写与格式化工具：解析为 AST 后遍历重写节点，再渲染回 SQL 文本",
+    "需要处理多数据库方言 SQL 的 JVM 项目，如 SQL 审计、查询分析工具"
+   ]
+  },
+  "sha": "d9b68d2d5c24",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e831ce02c30b": {
+  "identity": {
+   "one_liner": "TRMNL 电子墨水屏的自托管 BYOS 服务器，一个 Docker 镜像加自有 Postgres",
+   "review": "Kuroshiro 是面向 TRMNL 生态的开源 BYOS 后端，供持有 TRMNL、Xteink、Kindle 或运行开源 TRMNL 固件设备的用户自建服务端。它将 NestJS API 与 Vue 3 管理界面打包进单个容器，配合 Postgres 运行，可导入 trmnl.com 官方 Recipe 目录。项目处于 alpha 阶段，1.0.0 前管理界面、API 与配置存档格式仍可能变更，更新前需备份数据库。",
+   "highlights": [
+    "提供 Recipe 导入、Plugin（轮询数据源与 Webhook）、Screen 调度、Device Groups、固件 OTA 同步与上传、设备模拟器等能力",
+    "通过 Apprise sidecar 发送低电量、设备离线等告警，并以 /metrics 暴露 Prometheus 指标，GET /health 返回健康状态",
+    "镜像发布于 ghcr.io/usetrmnl/kuroshiro（next/latest/x.x.x 标签），并提供 Home Assistant OS add-on 打包"
+   ],
+   "use_cases": [
+    "自托管管理 TRMNL 电子墨水屏的内容显示与轮换，替代官方云端接入",
+    "通过 Plugin 轮询外部 API 或接收 Webhook 推送，用 Liquid 模板渲染面板",
+    "以 Home Assistant add-on 方式部署，数据纳入 HA 备份"
+   ]
+  },
+  "sha": "e831ce02c30b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

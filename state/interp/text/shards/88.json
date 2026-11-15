@@ -2847,5 +2847,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c577df214f49": {
+  "identity": {
+   "one_liner": "Windows 本机 MCP 工具源码 monorepo 与托盘中枢，组件各自持有生命周期边界",
+   "review": "该仓库包含八个本地 MCP 适配器、一个非 MCP 的 KGI Broker Bridge 和一个 PowerShell/WinForms 编写的 Windows 运行时托盘中枢，采用 source-only monorepo 形式：各组件保留自己的依赖、测试、PID authority 与安全边界，中枢不接管领域数据或组件生命周期。文档明确声明仓库不含 LICENSE，个人数据、SQLite、token 等不得进入 Git。适合在 Windows 主机上以本地优先方式管理多个 MCP 组件的用户。",
+   "highlights": [
+    "提供八个 MCP 项目（Python/FastAPI 与 TypeScript/Node.js）和一个 Windows 托盘 orchestration/observability 中枢，各组件采用 unified-lifecycle-v3 controller 接入",
+    "source-only 仓库结构：SQLite、DPAPI 密文、token、log、PID、正式财务数据等运行时数据均被 Git-ignored，不进入公开源码",
+    "Control Center 中枢不读取 domain payload、credential 或私有 runtime state，仅在组件自动 mutation 前执行 bounded controller ownership audit，权限未知时 fail closed"
+   ],
+   "use_cases": [
+    "在 Windows 主机上集中查看、启动、重启与关闭多个本地 MCP 组件的运行状态",
+    "为外部系统（OMI backend、学习 Hub、Codex CLI、KGI 行情）构建受控、默认只读的本机 MCP 适配层",
+    "本地优先管理个人记忆、个人资产账本等数据只存本机、不入 Git 的领域应用"
+   ]
+  },
+  "sha": "c577df214f49",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

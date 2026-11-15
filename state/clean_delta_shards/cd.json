@@ -29601,5 +29601,1152 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "271ed2e118e1+2": {
+  "fn": "boringSQL/dryrun",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "`dryrun` is part of the boringSQL suite alongside RegreSQL and Fixturize."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    14,
+    7,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "We've already seen where this leads: production databases wiped by AI agents, and SQL injection in MCP servers that were supposed to be read-only."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    32,
+    15,
+    32
+   ],
+   [
+    "replace",
+    32,
+    34,
+    32,
+    34,
+    [
+     "- **Query stats** - captures `pg_stat_statements` per node, collapses ORM query variants into shapes, diffs two captures to surface new or slowed queries",
+     "- **Multi-node stats** - per-replica statistics, seq_scan hotspots, routing imbalances"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    82,
+    34,
+    82
+   ],
+   [
+    "replace",
+    82,
+    83,
+    82,
+    83,
+    [
+     "The npm package wraps the same Go binary; every CLI command works identically. Commands like `lint` need a schema snapshot first — see Quickstart. Prebuilt binaries cover macOS (Apple Silicon + Intel), Linux (x64 + arm64), and Windows x64. On other platforms (Alpine/musl, Windows arm64), use Homebrew or build from source."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    83,
+    86
+   ],
+   [
+    "replace",
+    86,
+    87,
+    86,
+    87,
+    [
+     "Requires Go 1.26+. If you don't have it, install via go.dev/dl."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    106,
+    87,
+    106
+   ],
+   [
+    "replace",
+    106,
+    107,
+    106,
+    107,
+    [
+     "(Installed via npm or Homebrew but didn't clone the repo? You won't have `examples/demo` — jump to Quickstart to point `dryrun` at your own schema. The sample output below is what `lint` produces.)"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    112,
+    107,
+    112
+   ],
+   [
+    "replace",
+    112,
+    125,
+    112,
+    113,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    179,
+    113,
+    167
+   ],
+   [
+    "replace",
+    179,
+    184,
+    167,
+    168,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    188,
+    168,
+    172
+   ],
+   [
+    "replace",
+    188,
+    189,
+    172,
+    173,
+    [
+     "Without a snapshot the server still starts, and its tools answer that no schema is loaded. Capture one with `dryrun init --db \"$DATABASE_URL\"` or pull one a teammate pushed (`dryrun snapshot pull --from-path ./snapshots`, see Quickstart), and the server picks it up on the next tool call, without a restart."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    173,
+    174
+   ],
+   [
+    "replace",
+    190,
+    191,
+    174,
+    175,
+    [
+     "For projects with multiple databases, run one `dryrun mcp-serve` per database and add an entry per server in your client config. Native multi-database serving inside one MCP process is tracked in #7."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    175,
+    176
+   ],
+   [
+    "replace",
+    192,
+    193,
+    176,
+    177,
+    [
+     "See the Tutorial for live database setup, SSE transport, and Claude Desktop configuration."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    206,
+    177,
+    190
+   ],
+   [
+    "replace",
+    206,
+    207,
+    190,
+    191,
+    [
+     "This creates `dryrun.toml` (with `[project] id` and default profile), the `.dryrun/` data directory, and captures the database into `.dryrun/history.db`. Snapshots are keyed by `(project_id, database_id)`; set `database_id` per profile when a project has multiple databases (e.g. `auth`, `billing`). See `docs/dryrun-toml.md` for the full config reference."
+    ]
+   ],
+   [
+    "equal",
+    207,
+    239,
+    191,
+    223
+   ],
+   [
+    "replace",
+    239,
+    240,
+    223,
+    224,
+    [
+     "Commands that read the stored snapshot warn when its newest data is older than `[history] stale_after` (default 72h, `\"0\"` disables), so an old copy does not read as current. See dryrun.toml."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    257,
+    224,
+    241
+   ],
+   [
+    "replace",
+    257,
+    258,
+    241,
+    242,
+    [
+     "The MCP `describe_table` (node breakdown) and `detect kind=anomalies` tools then expose per-node `idx_scan` so you can spot routing imbalances. See docs/multi-node-stats.md."
+    ]
+   ],
+   [
+    "equal",
+    258,
+    275,
+    242,
+    259
+   ],
+   [
+    "replace",
+    275,
+    282,
+    259,
+    260,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    291,
+    260,
+    269
+   ],
+   [
+    "replace",
+    291,
+    292,
+    269,
+    270,
+    [
+     "See `docs/dryrun-toml.md` for all profile options."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    295,
+    270,
+    273
+   ],
+   [
+    "replace",
+    295,
+    296,
+    273,
+    274,
+    [
+     "> **Note:** the MCP server is currently single-database. Using the default profile. Or the option is to run one `dryrun mcp-serve` process per database. Native multi-database support inside one MCP process is tracked in #7."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    346,
+    274,
+    324
+   ],
+   [
+    "replace",
+    346,
+    347,
+    324,
+    325,
+    [
+     "A remote that keeps its bundles stores one payload per schema hash, so it doesn't record a reverted migration as new. A fresh reader still lands on the current schema when newer stats point to it; a reader already on the superseded schema stays there until the hash changes. A writer that pushes to an empty location each run doesn't have this limit (details). `pull` warns if the source's newest capture is over 48 hours old."
+    ]
+   ],
+   [
+    "equal",
+    347,
+    355,
+    325,
+    333
+   ],
+   [
+    "replace",
+    355,
+    356,
+    333,
+    334,
+    [
+     "See `docs/dryrun-toml.md` for per-profile remotes and sharing one stream across projects."
+    ]
+   ],
+   [
+    "equal",
+    356,
+    359,
+    334,
+    337
+   ],
+   [
+    "replace",
+    359,
+    371,
+    337,
+    349,
+    [
+     "- **Tutorial** for offline, online, and multi-node workflows with full tool reference",
+     "- **Multi-node statistics** for cluster-wide stats collection, aggregation rules, and replica imbalance detection",
+     "- **Query stats** for `pg_stat_statements` capture, shape grouping, and diffing",
+     "- **Anonymized snapshots** for producing a snapshot you can hand to someone else: the PII mapping, masked capture, and what to check before sending",
+     "- **Configuration reference** for `dryrun.toml` profiles, conventions, remotes, and lint rules",
+     "- **CLI stability** for which commands are stable versus experimental",
+     "- **Security overview** for the CLI/MCP split and masking",
+     "- **boringSQL**, the blog and project home",
+     "- **dryrun project page**, overview and docs",
+     "- **Don't let AI touch your production database**, why most Postgres MCPs are unsafe and what `dryrun` does differently",
+     "- **RegreSQL**, SQL regression testing and **`dryrun`**'s companion tool",
+     "- **Fixturize**, subset and mask production data for dev/test"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    373,
+    349,
+    351
+   ],
+   [
+    "replace",
+    373,
+    375,
+    351,
+    352,
+    [
+     "BSD 2-Clause License"
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
+ },
+ "4e5c6ddbd50c+2": {
+  "fn": "nico-amsterdam/vue-crud-nuxt",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "- ☎ **Mobile compatible**: Responsive web design. Manifest enables 'Add to Home Screen'"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    25,
+    13,
+    25
+   ],
+   [
+    "replace",
+    25,
+    36,
+    25,
+    26,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    40,
+    26,
+    30
+   ],
+   [
+    "replace",
+    40,
+    41,
+    30,
+    31,
+    [
+     "Rebuild of this Vue CRUD application with Nuxt 4 and Pinia, with the option to deploy it on Cloudflare, so everything can run on the edge in the cloud."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    43,
+    31,
+    33
+   ],
+   [
+    "replace",
+    43,
+    44,
+    33,
+    34,
+    [
+     "You can use this project as a starter for your Nuxt application. Nuxt offers features like a router, Server-side rendering with hydration, and a git based CMS with a free editor."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    47,
+    34,
+    37
+   ],
+   [
+    "replace",
+    47,
+    48,
+    37,
+    38,
+    [
+     "This functionality is powered by nuxt-auth-utils. Nuxt-auth-utils also supports OAuth/OIDC for many providers, so with a bit of work you can use those as well."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    38,
+    39
+   ],
+   [
+    "replace",
+    49,
+    50,
+    39,
+    40,
+    [
+     "Sqlite is the central database. More specifically Cloudflare D1."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    57,
+    40,
+    47
+   ],
+   [
+    "replace",
+    57,
+    58,
+    47,
+    48,
+    [
+     "For a safe content-security-policy I am waiting for this PR."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    65,
+    48,
+    55
+   ],
+   [
+    "replace",
+    65,
+    88,
+    55,
+    56,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    56,
+    57
+   ],
+   [
+    "delete",
+    89,
+    90,
+    57,
+    57
+   ],
+   [
+    "equal",
+    90,
+    93,
+    57,
+    60
+   ],
+   [
+    "replace",
+    93,
+    96,
+    60,
+    63,
+    [
+     "- install Bun. Other package managers like pnpm can also be used, but the Bun package manager is faster.",
+     "- install Node. I recommend using nvm for the installation of Node.",
+     "- Create a GitHub project with this template and get the project without git history. Or download, clone or fork the source code."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    63,
+    64
+   ],
+   [
+    "replace",
+    97,
+    98,
+    64,
+    65,
+    [
+     " `git clone https://github.com/nico-amsterdam/vue-crud-nuxt.git`"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    104,
+    65,
+    71
+   ],
+   [
+    "replace",
+    104,
+    105,
+    71,
+    72,
+    [
+     "- `bun migrate:create` # run this again after making changes in schema.ts"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    107,
+    72,
+    74
+   ],
+   [
+    "replace",
+    107,
+    108,
+    74,
+    75,
+    [
+     "- open browser http://localhost:3000/ # Nuxt DevTools is available at the bottom of the page"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    111,
+    75,
+    78
+   ],
+   [
+    "replace",
+    111,
+    112,
+    78,
+    79,
+    [
+     "- `bun test` # For coverage report: `bun test --coverage`. Fancy test ui: `bun vitest:ui`"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    79,
+    82
+   ],
+   [
+    "replace",
+    115,
+    117,
+    82,
+    84,
+    [
+     "- `bun preview` # A preview is without Nuxt DevTools",
+     "- open browser http://localhost:8787/ # Uses the same local database as with `bun dev`"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    119,
+    84,
+    86
+   ],
+   [
+    "replace",
+    119,
+    129,
+    86,
+    96,
+    [
+     " - Required is a Cloudflare account. There is a free tier",
+     " - Fill in your Cloudflare ID in wrangler.jsonc and in the .env file",
+     " - `bun wrangler login`",
+     " - `bun create:db` # interactive. Fill in DB for the database binding. Adds the binding in wrangler.jsonc",
+     " - `bun create:kv` # Adds the binding in wrangler.jsonc",
+     " - Remove double binding entries from wrangler.jsonc, but do not delete the `migrations_dir` property",
+     " - `bun migrate`",
+     " - `bun secret:nuxt` # Use a random 32 bytes hex string",
+     " - `bun run build`",
+     " - `bun deploy:app`"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    137,
+    96,
+    104
+   ],
+   [
+    "replace",
+    137,
+    138,
+    104,
+    105,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    105,
+    108
+   ],
+   [
+    "replace",
+    141,
+    142,
+    108,
+    109,
+    [
+     "|Script|Description|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    109,
+    110
+   ],
+   [
+    "replace",
+    143,
+    171,
+    110,
+    137,
+    [
+     "|`bun update:types`|Generate TypeScript types from your Cloudflare Worker configuration|",
+     "|`bun run build`|Bundle everything for preview and deploy|",
+     "|`bun typecheck`|Run TypeScript type checking without emitting files|",
+     "|`bun typecheck:watch`|Run TypeScript type checking in watch mode|",
+     "|`bun create:kv`|Create a new Cloudflare key-value store|",
+     "|`bun create:db`|Create a new Cloudflare D1 database|",
+     "|`bun migrate:create`|Generate database migration files using Drizzle Kit|",
+     "|`bun migrate:dev`|Apply database migrations to local development database|",
+     "|`bun migrate`|Apply database migrations to remote production database|",
+     "|`bun test:db:dev`|Test local development database connection and query products table|",
+     "|`bun test:db`|Test remote production database connection and query products table|",
+     "|`bun vitest`|Run tests|",
+     "|`bun vitest:ui`|Start UI to run tests|",
+     "|`bun dev`|Start local development server with DevTools|",
+     "|`bun preview`|Start local development server without DevTools|",
+     "|`bun secret:nuxt`|Set Nuxt password for encrypted cookies|",
+     "|`bun logtail`|Stream real-time logs from deployed Cloudflare Worker|",
+     "|`bun rollback:app`|Rollback to previous deployment version|",
+     "|`bun delete:app`|Delete the deployed Cloudflare Worker|",
+     "|`bun databases`|List all Cloudflare D1 databases|",
+     "|`bun kv-workers`|List all Cloudflare KV workers|",
+     "|`bun studio:db`|Open Drizzle Studio for production database management|",
+     "|`bun studio:db:dev`|Open Drizzle Studio for local development database|",
+     "|`bun studio:kv:dev`|Open Drizzle Studio for local key-value store|",
+     "|`bun introspect:db`|Introspect database schema using Drizzle Kit|",
+     "|`bun dbcat:db:dev`|View local development database content using dbcat CLI tool|",
+     "|`bun dbcat:kv:dev`|View local key-value store content using dbcat CLI tool|"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    181,
+    137,
+    147
+   ],
+   [
+    "replace",
+    181,
+    182,
+    147,
+    148,
+    [
+     "To fix, reconnect the worker with the correct database in the Cloudflare dashboard:"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    186,
+    148,
+    152
+   ],
+   [
+    "replace",
+    186,
+    187,
+    152,
+    153,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    191,
+    153,
+    157
+   ],
+   [
+    "delete",
+    191,
+    192,
+    157,
+    157
+   ]
+  ],
+  "at": "2026-11-15"
+ },
+ "7562395176c4+2": {
+  "fn": "openctemio/openctem",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "API CI",
+     "Web CI",
+     "CodeQL",
+     "License: GPL-3.0"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    10,
+    6,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "|Directory|What|Image|"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    15,
+    12,
+    15,
+    [
+     "|`server/`|Go API server, migrations, admin CLI (module `github.com/openctemio/openctem/server`)|`ghcr.io/openctemio/openctem-server` (`openctem-api` up to v0.22.x)|",
+     "|`web/`|Next.js web console, and the platform console for platform administrators (same source, `console` build target)|`ghcr.io/openctemio/openctem-web`, `ghcr.io/openctemio/openctem-console`|",
+     "|`deploy/allinone/`|API + web + platform console + gateway in one container (Postgres/Redis external)|`ghcr.io/openctemio/openctem`|"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    17,
+    15,
+    17
+   ],
+   [
+    "replace",
+    17,
+    26,
+    17,
+    26,
+    [
+     "sensor (runs scans in your networks),",
+     "sdk-go,",
+     "ctis (shared contract),",
+     "ci (CI/CD runner and pipeline integrations),",
+     "sast-rules (the signed SAST rules pack for opengrep),",
+     "helm-charts,",
+     "openctem-ansible (hardened VM install kit),",
+     "docs (public documentation, published at",
+     "docs.openctem.io)."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    30,
+    26,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "(RFC-020):"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    31,
+    33
+   ],
+   [
+    "replace",
+    33,
+    36,
+    33,
+    36,
+    [
+     " requests, releases (v0.1.x–v0.8.0) and old links carry over and redirect here.",
+     " Its Go code moved to `server/`; the module path is now",
+     " `github.com/openctemio/openctem/server`."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    36,
+    37
+   ],
+   [
+    "replace",
+    37,
+    40,
+    37,
+    40,
+    [
+     " openctemio/ui is archived (read-only); its",
+     " old releases stay there. Cite its PRs as `openctemio/ui#NNN`: a bare `#NNN`",
+     " means this repository."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    40,
+    41
+   ],
+   [
+    "replace",
+    41,
+    42,
+    41,
+    42,
+    [
+     " They release nothing; only `vX.Y.Z` tags do (see Releases)."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    42,
+    43
+   ],
+   [
+    "replace",
+    43,
+    45,
+    43,
+    45,
+    [
+     " `openctem-api` and `api` keep their v0.22.x and earlier tags and receive no new ones.",
+     "- `openctemio/agent` had already become openctemio/sensor (RFC-023)."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    45,
+    46
+   ],
+   [
+    "replace",
+    46,
+    48,
+    46,
+    48,
+    [
+     "More: repository map,",
+     "CI/CD and releases."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    64,
+    48,
+    64
+   ],
+   [
+    "replace",
+    64,
+    65,
+    64,
+    65,
+    [
+     "the guide):"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    77,
+    65,
+    77
+   ],
+   [
+    "replace",
+    77,
+    81,
+    77,
+    81,
+    [
+     "- **Compose, one HTTPS port:** `server/deploy/docker-compose.yml`",
+     " runs the gateway (`server/deploy/gateway`, Caddy), web, the",
+     " platform console, API, the job signer, Postgres and Redis, plus one-shot",
+     " migration and bootstrap containers; only the gateway is published."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    86,
+    81,
+    86
+   ],
+   [
+    "replace",
+    86,
+    90,
+    86,
+    87,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    87,
+    88
+   ],
+   [
+    "replace",
+    91,
+    109,
+    88,
+    106,
+    [
+     " An unset `APP_ENV` means `production`, so the container refuses to start",
+     " until the production checks pass: `DB_SSLMODE` `require` or `verify-full`, a",
+     " Redis password of 32+ characters with `REDIS_TLS_ENABLED=true` (plus",
+     " `REDIS_TLS_CA_FILE` for a private CA), an `APP_ENCRYPTION_KEY` (`openssl rand",
+     " -hex 32`; keep it, the stored credentials need it), a `FINGERPRINT_KEY`",
+     " (`openssl rand -hex 32`; keep it, never rotate it), and no secret left at",
+     " example text. The session secret `AUTH_JWT_SECRET` is derived from",
+     " `APP_ENCRYPTION_KEY` when unset; set it (64+ characters, `openssl rand -hex",
+     " 64`) to rotate the two independently.",
+     " For a throwaway trial without TLS to the datastores, set `APP_ENV=development`",
+     " explicitly; never for real data.",
+     " `--entrypoint /opt/openctem/api/server ... -check-config` validates the",
+     " settings without starting anything.",
+     " `GATEWAY=on` (default) serves only :443 (`OPENCTEM_TLS_MODE` internal | acme |",
+     " files | http, as in the Compose gateway); `GATEWAY=off` serves the API on :8080",
+     " and the web on :3000 for your own proxy. `/data` keeps attachments and the",
+     " gateway's CA: mount a volume.",
+     "- **Kubernetes:** helm-charts."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    111,
+    106,
+    108
+   ],
+   [
+    "replace",
+    111,
+    112,
+    108,
+    109,
+    [
+     "docs.openctem.io/install."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    125,
+    109,
+    122
+   ],
+   [
+    "replace",
+    125,
+    126,
+    122,
+    123,
+    [
+     "`.github/workflows/docker-publish.yml`."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    140,
+    123,
+    137
+   ],
+   [
+    "replace",
+    140,
+    143,
+    137,
+    140,
+    [
+     "- User and operator documentation: docs.openctem.io",
+     "- Engineering documentation (architecture, development, RFCs): `server/docs/`",
+     " and `web/docs/`"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    146,
+    140,
+    143
+   ],
+   [
+    "replace",
+    146,
+    148,
+    143,
+    145,
+    [
+     "See CONTRIBUTING.md. Report vulnerabilities privately as described",
+     "in SECURITY.md, never in a public issue."
+    ]
+   ]
+  ],
+  "at": "2026-11-15"
  }
 }

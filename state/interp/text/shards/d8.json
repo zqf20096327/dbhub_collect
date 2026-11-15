@@ -3106,5 +3106,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6da54e15dc9e": {
+  "identity": {
+   "one_liner": "在数据库事务中提交的类型化持久任务链库",
+   "review": "Queuert 是一个面向 Node.js/TypeScript 的任务链库，任务链以 Promise 风格组合，状态存储在使用者自己的 Postgres、SQLite、MySQL/MariaDB 或 Redis 中，无需独立服务器。入队和处理器完成均在使用者数据库事务内提交，任务类型由 defineJobTypes 声明并由编译器校验输入输出。适用于已在使用数据库、需要后台任务与事务一致性的应用。",
+   "highlights": [
+    "入队与处理器完成在数据库事务内提交，事务回滚则链不创建",
+    "任务输入、输出、续接类型端到端推断，续接形状错误为编译错误",
+    "支持 Postgres/SQLite/MySQL/MariaDB/Redis 存储，通过 LISTEN/NOTIFY、Redis pub/sub、NATS 或 IPC 唤醒 worker"
+   ],
+   "use_cases": [
+    "与数据库写入同事务提交的后台任务处理",
+    "多步骤、编译器校验类型的任务链编排",
+    "需要延时执行与去重键的定时/幂等任务场景"
+   ]
+  },
+  "sha": "6da54e15dc9e",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

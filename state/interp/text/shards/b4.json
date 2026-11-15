@@ -3636,5 +3636,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b4b3a41bedaf": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理记忆层，MCP 服务+SQLite 单进程运行",
+   "review": "Rembric 为 MCP 兼容的 AI 编码代理提供自托管的记忆、会话与仪表盘服务。整个系统以单个 Docker 镜像、单 Node 进程和单个 SQLite 文件运行，MCP 端点为 http://<host>:8787/mcp。服务器在进程内加载 gte-multilingual-base 嵌入模型实现语义候选检测，不产生外部 API 调用；配置仅通过环境变量，必需 REMBRIC_ADMIN_TOKEN。支持 Claude Code、Codex CLI、opencode 等原生插件，其他 MCP 客户端通过普通 MCP URL 接入。限制：数据目录不可挂载到 NFS/SMB，镜像为 distroless 无 shell，备份需走仪表盘或指定命令。",
+   "highlights": [
+    "提供 MCP 端点（:8787/mcp）与 HTTP 接入，支持任意 MCP 客户端，含 Claude Code、Codex CLI、ChatGPT（OAuth 2.1）等原生插件",
+    "以 append-only 方式存储记忆于单个 SQLite 文件，凭据类文本以 [REDACTED:<kind>] 形式落库，上传前在客户端脱敏 <private> 段",
+    "进程内嵌入模型（gte-multilingual-base，ONNX q8，768 维）支持跨语言语义候选检测，无需外部 API 或网络调用"
+   ],
+   "use_cases": [
+    "为多个 MCP 兼容编码代理提供共享的自托管记忆与会话数据，配合 LAN 或 Tailscale 部署",
+    "在无外网的隔离环境中运行本地语义记忆检索",
+    "通过仪表盘执行备份、整合清扫（consolidation sweep）与版本升级/回滚等运维操作"
+   ]
+  },
+  "sha": "b4b3a41bedaf",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

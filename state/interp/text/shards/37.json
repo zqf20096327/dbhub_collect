@@ -3033,5 +3033,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "82410fcad8e0": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 .NET 嵌入式文档数据库，提供完整 LINQ/IQueryable 支持。",
+   "review": "SoloDB 是一个运行于应用进程内的 .NET 文档数据库库，将 C#/F# 对象以 JSON 文档形式存入 SQLite，可通过 LINQ/IQueryable 强类型查询，也可回退到原生 SQL。它支持事务、属性索引、FTS5 全文检索、DBRef/SoloRef 关系与删除策略、文件存储及 NativeAOT。通过 NuGet 安装，面向 .NET 6 与 .NET Standard 2.0/2.1。",
+   "highlights": [
+    "以 .NET 库形式进程内运行，无需独立服务器，基于 SQLite 提供事务与原生 SQL 访问",
+    "支持 LINQ/IQueryable 查询、属性索引、FTS5 加权全文搜索、多态集合及 DBRef/DBRefMany/SoloRef 关系与删除策略",
+    "内置连接池、分层文件存储 API、事件回调（OnInserting 等）与自定义 ID 生成策略"
+   ],
+   "use_cases": [
+    "需要在 .NET 应用内嵌存储无模式 JSON 文档并使用强类型 LINQ 查询的场景",
+    "需要事务完整性、关系引用与删除级联策略的桌面/服务端应用",
+    "内存模式用于临时数据存储与测试，或多线程并发访问的进程内数据层"
+   ]
+  },
+  "sha": "82410fcad8e0",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d26484d005ad": {
+  "identity": {
+   "one_liner": "SQLite 声明式 schema 管理工具，采用类 Terraform 的 plan/apply 工作流",
+   "review": "hazel 是面向 SQLite 的声明式 schema 管理工具，用 Go 编写。它从 SQL 文件读取目标 schema，与实际数据库比对后生成 DDL。机制上先将 schema 文件在内存数据库中运行，再从 sqlite_schema 和 PRAGMA 读取，视图与表达式按编译字节码比对；SQLite 不支持的变更以重建表实现，仅在允许时执行。提供 Homebrew、发布二进制与 Linux 包安装。",
+   "highlights": [
+    "提供 plan、apply、dump、fmt、diff 五个子命令，apply 在单个事务中执行 DDL",
+    "在内存数据库中运行 schema 文件，通过 sqlite_schema 与 schema PRAGMA 读取并比对两侧 schema",
+    "支持将数据库 schema 导出为 SQL，并可在 Docker 演示镜像中试用"
+   ],
+   "use_cases": [
+    "以 SQL 文件声明式管理 SQLite 数据库结构变更",
+    "在应用变更前预览生成的 DDL 差异",
+    "导出并格式化现有 SQLite 数据库的 schema 文件"
+   ]
+  },
+  "sha": "d26484d005ad",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

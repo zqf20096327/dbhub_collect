@@ -3070,5 +3070,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e29647d0460b": {
+  "identity": {
+   "one_liner": "基于 Svelte 与 Svedit 引擎的页内直接编辑网站框架",
+   "review": "Editable 用于构建无需独立 CMS 的 Svelte 网站：编辑者在页面上直接修改内容，而内容模型、组件、布局与样式保留在用户自有代码库中。每个站点是独立 git 仓库，Editable 作为 upstream 模板可拉取更新；内容存于 SQLite，通过 .env 配置管理员密码与语言。依赖 Git、pnpm 与 Node.js 26。",
+   "highlights": [
+    "提供 TextProperty、MediaProperty、NodeArrayProperty、Node 等原语，通过 path 将 Svelte 组件与编辑器连接",
+    "编辑模式支持 Ctrl+E/Ctrl+Shift+E 进入，读模式下可新建页面；文档基于 schema 定义内容规则",
+    "每个站点拥有独立 git 仓库，内容数据库可用 pnpm data:reset 重置并自动备份"
+   ],
+   "use_cases": [
+    "开发者为自己的项目或客户搭建可由非技术人员直接在页面上编辑内容的网站",
+    "需要内容模型与组件代码归自己所有、以 git 管理并跟随上游更新升级的站点",
+    "需要自定义内容类型（如 Hero、按钮、媒体区块）并通过 schema 控制编辑规则的场景"
+   ]
+  },
+  "sha": "e29647d0460b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ae40f62422e2": {
+  "identity": {
+   "one_liner": "自托管的持久记忆 MCP 服务器与本地 AI 编码工作区",
+   "review": "SynaBun 是一个开源、自托管的持久记忆 MCP 服务器和 AI 工作区，将记忆存于本地单个 SQLite 文件中，无需账户或云服务。它为 Claude Code、Codex、OpenCode、Gemini CLI 等工具提供 remember、recall、forget 等记忆工具，并通过本地 Web 界面 Neural Interface（localhost:3344）浏览记忆。需要 Node.js 22.19+；不下载嵌入模型时仅有关键词搜索；不含模型访问，需用户自行登录编码工具账户。",
+   "highlights": [
+    "通过 stdio 提供 MCP 服务器，暴露 remember、recall、reflect、forget、restore 等记忆工具，支持关键词与语义检索",
+    "通过 Neural Interface（localhost:3344）提供 3D 记忆地图、终端、文件浏览器、白板及 Claude Code/Codex/OpenCode 侧边面板",
+    "支持任务模板循环或定时运行、浏览器工具、Discord/YouTube 等集成，以及经 WhatsApp 消息助理"
+   ],
+   "use_cases": [
+    "在多个会话、多个项目和多个 AI 编码工具之间保留并复用上下文（如部署流程、项目约定）",
+    "集中管理和审查 AI 工具保存的记忆，包括浏览、编辑、删除和恢复",
+    "同时运行 Claude Code、Codex 和 OpenCode 等编码代理并让 SynaBun Assistant 分派与汇总任务"
+   ]
+  },
+  "sha": "ae40f62422e2",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5b2f806c77e8": {
+  "identity": {
+   "one_liner": "Python+SQLite单进程开源销售漏斗：追踪、VSL、Pix收款、会员区、WhatsApp机器人集成于一体",
+   "review": "该项目把数字产品在线销售流程的多个环节集成到一个Python应用中：广告追踪与Meta CAPI、VSL页、直接生成Pix二维码的收款（不经过支付网关）、支付后解锁的会员区、弃单挽回、WhatsApp/Telegram消息机器人和广告素材库。数据存于SQLite，产品、挽回序列和机器人流程均通过config.json配置。未配置凭据时消息标记为simulado，不外发。MIT协议，提供Docker部署方式。",
+   "highlights": [
+    "追踪器记录UTM/fbclid/gclid/ttclid及vsl播放、CTA点击、结账、购买等事件，并通过Meta Conversions API服务端发送InitiateCheckout和Purchase",
+    "Checkout直接向卖家密钥生成Pix BR Code（复制粘贴），支付确认通过HMAC签名的webhook实现，支持幂等；也支持通过link_pagamento外接Stripe、Mercado Pago等支付链接",
+    "产品、挽回序列、机器人流程和Composio集成事件均以config.json数据定义；提供/health探针、pytest集成测试和管理API（/api/admin/funil等）"
+   ],
+   "use_cases": [
+    "需要追踪广告来源到Pix支付全链路并回传Meta CAPI的数字产品（infoproduto）销售",
+    "通过WhatsApp/Telegram机器人做关键词触发的消息流和弃单挽回序列",
+    "单服务器或Kubernetes（Docker镜像+tick定时器）自托管的完整销售运营站点"
+   ]
+  },
+  "sha": "5b2f806c77e8",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e05efbcf13ce": {
+  "identity": {
+   "one_liner": "面向阿尔及利亚市场的B2B/B2C市场平台，基于Spring Boot单体架构。",
+   "review": "Algérie Office是一个2019-2020年间开发的B2B/B2C市场平台，用于连接企业、客户、顾问与合作方，提供企业名录、OAuth2与双因素认证、WebSocket实时通知、Excel导入导出及邮件短信集成。采用Spring Boot MVC单体架构，前端使用JSP/JSTL，部署于Azure。仓库为存档版本，正在用Spring REST API与Angular进行现代化重构。",
+   "highlights": [
+    "支持企业名录、B2B/B2C交易流程、OAuth2与双因素认证",
+    "通过WebSocket实现实时通知，集成SendGrid邮件与Twilio短信",
+    "提供Excel导入导出、业务报表与多语言支持，部署于Azure存储并使用Application Insights"
+   ],
+   "use_cases": [
+    "企业需要集中展示商业信息并进行B2B/B2C交易的场景",
+    "需要研究市场平台安全实现、云集成与报表功能的参考案例",
+    "评估从JSP单体应用向REST API+Angular现代化迁移的实践样本"
+   ]
+  },
+  "sha": "e05efbcf13ce",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

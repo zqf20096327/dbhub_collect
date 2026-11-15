@@ -3322,5 +3322,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0d3a81db040f": {
+  "identity": {
+   "one_liner": "将多家 Agent 会话 JSONL 索引到同一 SQLite，供 CLI 查询与桌面浏览",
+   "review": "Trajex 将 Claude Code、Codex、Pi 和 DeepSeek Harness 的 JSONL 会话记录解析为统一的 canonical record，持久化到本地 SQLite 并通过 FTS5 全文索引。Agent 侧提供 trajex CLI 和可编程 JS Query API，App 侧是 Electron + Vue 桌面端用于浏览会话时间线，两者共享同一份 `~/.trajex/trajex.sqlite`。CLI 无运行时 npm 依赖，使用 Node 22 内置 node:sqlite，安装需要 Node.js 22.13+。",
+   "highlights": [
+    "将四个 provider 的会话 JSONL 索引到同一 SQLite schema，数据行带 source 值，非 Claude 的 ID 加 provider 前缀避免主键冲突",
+    "CLI 提供 search()、context()、sql() 等 JS Query API 及 sessions、memories、failures、fileHistory 等结构化 helpers，并支持经用户批准注册 memory files",
+    "App 含 Sessions 浏览（含 tool calls、diffs、terminal output）、Memory 列表、GitHub 风格 Activity 热力图与 Settings 数据源配置"
+   ],
+   "use_cases": [
+    "让 coding agent 通过 /trajex skill 用自然语言查询历史会话，例如某文件最近被哪些 sessions 修改",
+    "在桌面端浏览多个 provider 的会话记录、查看 token 使用统计与热力图",
+    "将检索得出的结论经人工批准后注册为 memory，供未来 sessions 通过 memories() 召回"
+   ]
+  },
+  "sha": "0d3a81db040f",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

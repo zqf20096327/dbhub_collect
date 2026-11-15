@@ -3040,5 +3040,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "462f3aeeea0a": {
+  "identity": {
+   "one_liner": "自动化数据库测试工具，生成SQL语句并用测试预言发现逻辑与性能缺陷",
+   "review": "SQLancer 是一个用于测试数据库管理系统（DBMS）实现的工具，目标是找出 DBMS 代码中的缺陷而非用户查询问题。它面向 DBMS 开发者与测试人员，通过多阶段流程自动生成 SQL：先建表结构与数据，再生成查询并使用 TLP、NoREC、PQS、DQP 等 oracle 验证结果。截至 2025 年 1 月支持 21 个 DBMS，每个 DBMS 需要专门实现代码；多数 DBMS 仅支持之前的发布版本，测试其他版本可能出现误报。",
+   "highlights": [
+    "实现 TLP、NoREC、PQS、DQP、CODDTest 等多种测试预言，用于检测逻辑缺陷；通过 CERT 检测性能问题，通过隐式 oracle 检测崩溃缺陷",
+    "支持反馈引导的测试输入生成方式，旨在覆盖更多不同查询计划",
+    "内置实验性 delta debugging 实现（--use-reducer）用于缩减触发缺陷的测试输入，并将可复现语句写入日志文件"
+   ],
+   "use_cases": [
+    "DBMS 开发者对自己维护的数据库系统进行持续自动化缺陷检测",
+    "对 SQLite、DuckDB、H2 等嵌入式数据库进行开箱测试（无需单独安装）",
+    "对 MySQL、PostgreSQL、CockroachDB、TiDB 等 21 个受支持 DBMS 的特定发布版本进行逻辑与崩溃缺陷验证"
+   ]
+  },
+  "sha": "462f3aeeea0a",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a9e76d7fca69": {
+  "identity": {
+   "one_liner": "自托管的链接聚合页（link-in-bio）服务，基于 Next.js 与 Docker 单命令部署",
+   "review": "LinkBreeze 是一个自托管的开源链接主页项目，用于在一个页面上聚合个人链接，面向创作者与个人站长。它支持多页面、主题定制、内嵌 YouTube/Spotify 等组件、二维码生成，并内置无 Cookie 的访问统计（IP 哈希处理）。部署以 Docker/Podman 镜像为主，也支持 Node.js 18+ 手动运行；数据存储于 SQLite 文件，并通过环境变量配置。README 中含与其他同类产品的对比表，属于项目自述。",
+   "highlights": [
+    "支持无限多页面，每页可配置独立 slug、主题、链接与统计，并提供 11 个预设主题及基于 token 的自定义器",
+    "内置隐私导向统计：统计浏览量、点击、来源与设备，不含 Cookie、IP 做哈希处理并可自动清理",
+    "提供迁移向导，可从 Linktree、Bento、Hopp.bio、LittleLink 或任意 HTML/JSON 导出文件导入链接"
+   ],
+   "use_cases": [
+    "在自有服务器上运行个人/创作者的链接聚合主页，数据存于本地 SQLite",
+    "从 Linktree 等托管服务迁移现有链接页到自托管环境",
+    "通过 Docker、Docker Compose、Coolify、群晖 NAS 或 Kubernetes 等方式部署，并配合 Caddy/Nginx/Cloudflare Tunnel 接入自定义域名"
+   ]
+  },
+  "sha": "a9e76d7fca69",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "22b34a07932f": {
+  "identity": {
+   "one_liner": "Flutter 编写的本地优先跨平台 AI 聊天客户端，支持 13 种平台与 SQLite 本地存储。",
+   "review": "LumenFlow 是用 Flutter 构建的 AI 聊天应用，运行于 Android、iOS、Windows、Linux 和 macOS。它为 13 种平台类型提供独立端点与密钥配置，按协议区分适配器，内置带迭代上限的工具调用循环、MCP 工具接入和滚动式长对话记忆压缩，数据与凭据存储于本地 SQLite。采用 MIT 许可证，Android 端要求 Android 10 及以上。",
+   "highlights": [
+    "支持 13 种平台类型，覆盖 Chat Completions、Responses、Claude Messages、Gemini Interactions 四类 API 协议，各平台可独立配置端点、密钥与默认模型",
+    "提供有界工具调用循环、内置工具集与 Streamable HTTP MCP 服务器工具接入；长对话支持滚动记忆压缩、硬记忆条目与 recall 按需召回",
+    "数据本地存储于 SQLite，支持 TXT/JSON/PDF/.lumenflow 导出与导入，PDF 内嵌 Noto Sans SC 字体，对话与设置可打包备份"
+   ],
+   "use_cases": [
+    "需要在多平台模型服务间切换并统一管理端点与密钥的日常 AI 对话",
+    "包含工具调用、MCP 外部工具或文本附件读取的自动化任务会话",
+    "带角色卡、世界信息与记忆持久化的角色扮演长对话，以及对话记录的本地归档与 PDF 导出"
+   ]
+  },
+  "sha": "22b34a07932f",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f93e04b56c02": {
+  "identity": {
+   "one_liner": "基于SQL管道与Power BI的菲律宾作物生产与气候风险仪表板项目",
+   "review": "该项目将两个原始数据文件清洗并建模为星型模式，覆盖2010至2025年菲律宾53个省、89种作物的季度产量及天气、ENSO数据。SQL（SQLite）负责连接、去重、窗口函数与校验，Power BI作为展示层，用于分析产量变化与降雨、温度及厄尔尼诺/拉尼娜现象的关系。需注意：天气字段为建模数据而非站点实测，原始数据需从Kaggle单独下载，且2011年前数据基本为空。",
+   "highlights": [
+    "将原始文件清洗为包含事实表（fact_crop_metrics、fact_weather）和维度表（dim_province、dim_crop、dim_date）的星型模式",
+    "处理省份名称大小写不一致、重复天气序列、省份标签合并（NORTH COTABATO并入COTABATO）等数据质量问题",
+    "以透明的同比增长区间替换原始启发式risk_label，并按数据字典公式重新计算滚动异常值与气候压力指标"
+   ],
+   "use_cases": [
+    "分析2011年以来各省、各类作物的季度产量变化及同比降幅最大的省份",
+    "对比厄尔尼诺/拉尼娜季度与中性季度的产量增长差异",
+    "识别省内气候压力较高的地区"
+   ]
+  },
+  "sha": "f93e04b56c02",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

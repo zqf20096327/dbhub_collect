@@ -2909,5 +2909,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e983f9d22b35": {
+  "identity": {
+   "one_liner": "受 SwiftData 启发的 Swift 跨平台声明式本地 ORM",
+   "review": "Vein 是面向 Swift 的本地优先 ORM，基于 SQLite（含 SQLCipher 加密），API 风格源自 SwiftData，可在 Apple、Linux、Android、Windows 上运行，并提供 SwiftUI/SwiftCrossUI 绑定。模型经 @Model 宏在编译期生成表结构，支持显式声明式迁移、@LazyField 惰性加载和事务回滚；Android 端目前不自动启用数据库级加密，模型不遵循 Codable，迁移若有未处理数据会回滚失败。",
+   "highlights": [
+    "使用 @Model 宏在编译期自动生成 schema，无需手写；模型与表 1:1 对应，支持显式声明式迁移并在数据未处理时回滚",
+    "底层在所有平台使用同一 SQLite + SQLCipher 引擎，支持 #Predicate/#Filter 过滤、自定义 SQL 表达式、@LazyField 惰性加载与字段级锁的线程安全读写",
+    "提供 SwiftUI 与 SwiftCrossUI 响应式绑定，VeinCore 可脱离 UI 框架独立使用（如配合 Skip），并支持内存数据库与关系完整性诊断工具"
+   ],
+   "use_cases": [
+    "需在 Apple 之外平台（Android/Linux/Windows）复用同一套 Swift 模型的本地持久化",
+    "SwiftUI 或 SwiftCrossUI 应用中需要与 UI 响应式集成的本地数据库存储",
+    "需要加密数据库或测试迁移场景（内存数据库 + VeinTesting 辅助工具）"
+   ]
+  },
+  "sha": "e983f9d22b35",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

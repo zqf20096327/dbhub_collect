@@ -3050,5 +3050,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8cac6b15f089": {
+  "identity": {
+   "one_liner": "C#/.NET 编写的 SQL 分布式数据库，SQL 接口加 Raft 复制的事务性 KV 存储层。",
+   "review": "CamusDB 是用 C#/.NET 实现的 SQL 分布式数据库，默认采用可串行化隔离与强一致性，跨分区写入经 Raft 共识上的两阶段提交。它提供写时复制数据库分支、删除对象恢复、AS OF 时间旅行读、查询结果缓存等功能，底层用 RocksDB 持久化，客户端经 JSON/HTTP 或 gRPC 访问。README 注明已在生产使用但部分特性仍处早期，API 与存储格式可能随版本变化。",
+   "highlights": [
+    "默认可串行化隔离：悲观两阶段锁加范围/谓词锁，死锁用 wait-die 调度避免，跨分区写入经 Raft 上的两阶段提交复制",
+    "支持 CREATE DATABASE … BRANCH FROM 的写时复制分支，分支即时创建、任意嵌套，父库与分支互相不可见",
+    "提供 SHOW ORPHAN TABLES / RELINK TO 的删除恢复机制，以及 AS OF SYSTEM TIME 的多版本历史读"
+   ],
+   "use_cases": [
+    "需要可串行化隔离与强一致复制的 .NET 技术栈应用",
+    "为生产库建立即时 staging 克隆、schema 迁移演练或按 PR 生成的临时数据库",
+    "误删数据的恢复排查：读回被删除或覆盖的历史行并重新插入"
+   ]
+  },
+  "sha": "8cac6b15f089",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dc0debe10bb8": {
+  "identity": {
+   "one_liner": "本地FastAPI服务，将DeepSeek网页版会话封装为REST+SSE API",
+   "review": "DS FastAPI Wrapper是一个Python本地服务，通过调用DeepSeek网页版的私有HTTP端点，将网页会话暴露为REST和SSE流式接口，并用SQLite持久化会话与消息。它自动完成工作量证明挑战、维护父消息ID以延续上下文，支持思考模式、联网搜索标志和文件上传（≤20 MiB）。面向想用HTTP脚本调用自己DeepSeek账号的开发者；无Web界面、无API鉴权，依赖非公开端点，适合本地实验。",
+   "highlights": [
+    "提供流式（SSE）与非流式聊天端点，解析DeepSeek流格式为thinking与text事件",
+    "通过内置WebAssembly模块自动求解每次补全的工作证明挑战，并用父消息ID串联多轮上下文",
+    "支持会话CRUD、消息历史存储（含推理文本）及最大20 MiB的文件上传"
+   ],
+   "use_cases": [
+    "为个人DeepSeek网页账号构建脚本化/命令行调用入口",
+    "作为本地实验或Agent项目的起点接入HTTP客户端",
+    "需要将对话历史与思考过程持久化到本地SQLite的工具链"
+   ]
+  },
+  "sha": "dc0debe10bb8",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dad12f111f70": {
+  "identity": {
+   "one_liner": "Go + PostgreSQL 的个人书签管理器，含网页界面与浏览器捕获",
+   "review": "Pocketmark 是用 Go 编写的个人书签管理器，通过 Docker Compose 或 Linux 二进制部署，数据存于 PostgreSQL，并内置 Web 界面。功能包括嵌套集合、标签、全文检索、离线页面存档、文件附件与文本标注，可经 Chrome 扩展捕获页面为 HTML、PNG 或 PDF，并通过 Floccus 经 WebDAV 双向同步浏览器书签。项目明确限定为个人使用，不支持协作、公开分享、SSO 与自动化。",
+   "highlights": [
+    "支持嵌套集合、标签、收藏与笔记组织书签，并可检索书签及已保存的页面文本",
+    "支持离线保存页面、附件与文本标注，Chrome 扩展可将页面捕获为渲染 HTML、PNG 或 PDF",
+    "通过 WebDAV 与 Floccus 双向同步浏览器书签（XBEL 格式），保留顺序、标签与注释"
+   ],
+   "use_cases": [
+    "个人自托管书签库，需全文检索、离线阅读与页面存档",
+    "通过 Floccus 在多浏览器间同步书签（含嵌套文件夹与删除操作）",
+    "使用 Chrome 扩展保存页面截图或 PDF 副本以留存原始内容"
+   ]
+  },
+  "sha": "dad12f111f70",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

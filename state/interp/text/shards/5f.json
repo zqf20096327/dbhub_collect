@@ -3081,5 +3081,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "b1c4dc39987c": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制的 .NET 库，将行级变更以 JSON 流式发送到消息队列或应用。",
+   "review": "PgOutput2Json 是一个 .NET 库，通过 PostgreSQL 内置的 pgoutput 插件连接复制槽，读取 INSERT/UPDATE/DELETE 行级变更并转为 JSON，发送到 .NET 应用或 RabbitMQ、Kafka、Redis 等输出端。需 PostgreSQL 14 及以上，wal_level 设为 logical 并创建复制用户与 publication。投递为 at-least-once，消息带 LSN+序号去重键，消费方需幂等处理或维护水位线。",
+   "highlights": [
+    "使用 PostgreSQL 自带的 pgoutput 插件，无需额外安装解码插件",
+    "支持输出到 Kafka、RabbitMQ、Redis、MongoDB、SQLite、ClickHouse、Amazon Kinesis/DynamoDB、Azure Event Hubs、Webhook 及 .NET 委托处理器",
+    "提供紧凑模式（Compact Mode），消息中省略列名、以 schema 属性携带列定义"
+   ],
+   "use_cases": [
+    "监听数据库插入/更新后触发后台任务或异步日志写入",
+    "低延迟刷新应用缓存",
+    "为数据仓库（DWH）做轻量级 ETL 或实时数据聚合"
+   ]
+  },
+  "sha": "b1c4dc39987c",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f215560d72f9": {
+  "identity": {
+   "one_liner": "基于 Django 与 SQLite 的论文共读与结构化阅读卡片社区应用",
+   "review": "这是一个面向学生和研究小组的论文共读应用，将论文资料、阅读笔记和讨论集中在同一处。核心机制是按研究问题、方法、结果、局限等字段组织的结构化阅读卡片，每位读者可为同一论文维护独立卡片。运行仅需 Python 3.11–3.14 与 Git，无需模型 API 或 GPU。当前版本使用 SQLite 和 Django 开发服务器，适合本地运行与小规模试用；论文需手动录入，不提供私密存储，自动抓取、PDF 解析等功能未实现。",
+   "highlights": [
+    "提供按研究问题、核心方法、主要结果、局限、个人理解、待讨论问题组织的结构化阅读卡片，每位读者可为同一论文维护独立卡片",
+    "支持论文检索（按标题、作者、标签）、分页浏览、Markdown 笔记导出和 BibTeX 引用导出",
+    "基于 Python、Django 和 SQLite 构建，使用服务端模板和本地静态资源，运行无需模型 API 或 GPU"
+   ],
+   "use_cases": [
+    "高校学生和研究小组组织论文共读活动，集中管理论文资料、阅读笔记与讨论",
+    "个人记录论文阅读进度（未读/在读/已读）并按关键词与状态筛选自己的卡片",
+    "需要导出 Markdown 笔记和 BibTeX 引用用于文献管理或报告写作的场景"
+   ]
+  },
+  "sha": "f215560d72f9",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d44d1d5e5b99": {
+  "identity": {
+   "one_liner": "自托管单作者 PHP 微博客，SQLite 单文件存储，支持 Micropub 与全文搜索",
+   "review": "Lamb 是一个用 PHP 编写的自托管单作者微博客平台，数据存储于 SQLite 单文件数据库。它提供拖拽/粘贴图片、内联 #标签、内置全文搜索、草稿与定时发布，并通过 Micropub 端点对接 IndieWeb 应用，支持 Markdown 导出与 WordPress/Known 导入。安装方式需参照 release 分支文档，项目使用 Devbox 构建。",
+   "highlights": [
+    "图片通过拖拽或粘贴进入编辑器，无需单独上传步骤或资源库",
+    "内置全文搜索与草稿、定时发布、回收站恢复功能，基于 SQLite 单文件存储",
+    "提供 Micropub 端点，可从 iA Writer、Ulysses 等 IndieWeb 兼容应用发文，并支持一键导出全部文章为 Markdown 及图片"
+   ],
+   "use_cases": [
+    "个人自托管微博客或轻量博客的搭建",
+    "通过 Micropub 从 iA Writer、Ulysses 等编辑器远程发文",
+    "从 WordPress 或 Known 迁移内容到独立博客"
+   ]
+  },
+  "sha": "d44d1d5e5b99",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

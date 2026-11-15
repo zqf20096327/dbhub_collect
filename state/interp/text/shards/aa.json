@@ -3267,5 +3267,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e772e1eec24c": {
+  "identity": {
+   "one_liner": "基于 Python CLI 的抖音内容下载工具，支持批量、去水印与增量去重",
+   "review": "该项目提供命令行工具与 Douzy 桌面应用两种形态，用于下载抖音视频、图集等无水印内容。CLI 通过 config.yml 配置链接与参数，支持日期过滤、重试、SQLite 记录去重与 Playwright 浏览器回退；README 说明抖音请求验证目前导致单视频、合集、音乐、收藏等 CLI 下载受限，日常下载建议使用桌面端。MIT 许可，面向学习与个人数据管理。",
+   "highlights": [
+    "支持批量下载、日期范围过滤、重试与基于 SQLite 的下载历史去重，可配置增量跳过或覆盖",
+    "提供 cookie_fetcher 工具获取登录 cookies，并对主页内容提供 Playwright 浏览器回退",
+    "支持配置评论获取、语音转写、通知及实验性直播录制；可输出热榜与关键词搜索结果为 JSONL"
+   ],
+   "use_cases": [
+    "批量下载指定创作者主页的作品并做增量更新管理",
+    "需要配置化、可脚本化的下载流程（线程数、路径、日期过滤等参数均可配置）",
+    "配合桌面端 Douzy 处理多平台内容归档与本地浏览"
+   ]
+  },
+  "sha": "e772e1eec24c",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e7c66b0b93b": {
+  "identity": {
+   "one_liner": "单文件部署的 PostgreSQL 健康检查函数，按严重程度输出改进建议",
+   "review": "pgFirstAid 是一个开源 SQL 函数（及视图），对 PostgreSQL 数据库运行一系列健康检查，输出按 CRITICAL 到 INFO 分级的问题清单，含修复步骤和官方文档链接。安装只需执行一个 SQL 文件，无外部依赖，适合 DBA 及非 DBA 用户。仅读取系统目录，无写操作；可选依赖 pg_stat_statements 做查询负载检查。支持 PostgreSQL 10+，兼容 RDS、Aurora、Azure、Cloud SQL 等托管环境，许可证为 GPLv3。",
+   "highlights": [
+    "单 SQL 文件部署，零外部依赖，只读操作，不改数据或 schema",
+    "检查结果按 CRITICAL→HIGH→MEDIUM→LOW→INFO 分级，含修复建议与 PostgreSQL 官方文档链接",
+    "非 INFO 结果附带 agent_prompt，可用于 AI 代理的只读诊断流程"
+   ],
+   "use_cases": [
+    "定期巡检生产库，按严重程度筛查并处理稳定性/性能问题",
+    "部署前或 schema 变更、数据迁移后的健康验证",
+    "集成到 CI/CD 流水线做数据库健康门禁与日常监控"
+   ]
+  },
+  "sha": "8e7c66b0b93b",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "95dcc25c383e": {
+  "identity": {
+   "one_liner": "单文件 PHP SQL 框架，基于 PDO 提供查询构建器与读写路由",
+   "review": "NDT-DBF 是一个以单个 DBF.php 文件运行、基于 PDO 的 PHP SQL 库，提供查询构建器、事务与嵌套保存点、读写路由、软删除、keyset 分页和 JSON 字段读写。面向 PHP 8.1+ 开发者，可直接 require 或经 Composer 安装。README 明确说明它是 SQL 库而非 ORM、迁移系统或权限边界；SQL Server 仅支持 SQL 编译，无实时集成测试。",
+   "highlights": [
+    "运行时集中于 DBF.php 单文件，仅需 PHP 8.1+、PDO 及对应数据库驱动",
+    "支持 MySQL/MariaDB、PostgreSQL、SQLite 的事务、嵌套保存点、upsert 与 JSON 读写，并提供读/写连接自动路由",
+    "提供软删除（deleted_at 时间戳或 flag 模式）、租户 scope、forUpdate 行锁、keyset 分页与流式 chunk 处理"
+   ],
+   "use_cases": [
+    "PHP 项目中以单文件方式接入 MySQL、PostgreSQL 或 SQLite 数据库进行增删改查",
+    "配置主库写入、从库读取的分离路由场景",
+    "需要软删除、多租户查询过滤或基于唯一键的分页遍历的应用"
+   ]
+  },
+  "sha": "95dcc25c383e",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

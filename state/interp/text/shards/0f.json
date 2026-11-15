@@ -3027,5 +3027,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "119ea7e60420": {
+  "identity": {
+   "one_liner": "本地运行的开源 Oracle Cloud Infrastructure 模拟器",
+   "review": "floci-oci 是 Floci 模拟器家族中面向 OCI 的成员，用 Docker 在本地 4599 端口提供对象存储、IAM、Queue、Vault/KMS 等服务，供开发和 CI 环境使用。请求签名只解析上下文不校验，官方 SDK、OCI CLI 和 Terraform provider 无需改动即可对接；基于 Quarkus 构建，部分服务（Functions、OKE、PostgreSQL）通过真实容器 sidecar 实现。未实现身份域、对象版本化、复制等功能。",
+   "highlights": [
+    "支持 Object Storage、Identity、Queue、Streaming、Vault/KMS、Secrets、Functions、OKE、PostgreSQL 数据库、Organizations 等服务，实现 opc-request-id、opc-next-page、etag/if-match、OCID 和 work requests 等 OCI 线协议细节",
+    "官方 oci-java-sdk、Python SDK、OCI CLI 与 oracle/oci Terraform provider 可直接使用；提供 bin/ocilocal 包装脚本自动注入端点",
+    "提供内存、持久化、混合和预写日志四种存储模式；支持 GraalVM native-image；Functions/OKE/数据库通过 Fn Project、k3s、PostgreSQL 真实容器运行"
+   ],
+   "use_cases": [
+    "本地开发与测试 OCI 集成代码，无需 Oracle Cloud 账号或上传 API 密钥",
+    "CI 流水线中运行依赖 OCI 服务的自动化测试",
+    "用 Terraform/OpenTofu 验证 OCI 基础设施配置的本地演练"
+   ]
+  },
+  "sha": "119ea7e60420",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e8b712d7d5b3": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 .NET 事件存储与文档数据库，Critter Stack 成员",
+   "review": "Fisher 提供 Marten 风格 API 的事件溯源与文档存储，后端为进程内 SQLite 文件，无需安装数据库服务器。面向 .NET 开发者，通过 AddFisher 进行 DI 注册。文档说明其单元OfWork为顺序执行，独占追加方法采用失败而非等待语义，且缺少编译查询等部分 Marten 功能。",
+   "highlights": [
+    "提供事件溯源与文档存储，支持 LINQ 查询（含 joins、分组、分页）、补丁更新、批量插入与用户声明索引",
+    "支持五种投影形态、异步投影守护进程、订阅、事件重写（含数据脱敏与流压缩）及两种多租户方式",
+    "通过 AddFisher 注册 DI，附 Fisher.AspNetCore、Fisher.EntityFrameworkCore 等配套包"
+   ],
+   "use_cases": [
+    "无需部署数据库服务器的单进程 .NET 应用中实现事件溯源",
+    "使用与 Marten 相同 API、但希望以 SQLite 文件作为存储的项目",
+    "以每租户一文件方式实现 database-per-tenant 隔离的方案"
+   ]
+  },
+  "sha": "e8b712d7d5b3",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "33c22c399727": {
+  "identity": {
+   "one_liner": "Go 编写的本地桌面 SQL 客户端，单可执行文件支持四类数据库",
+   "review": "DB-G 是本地优先的桌面数据库客户端，用 Go 与 mygo 构建，编译为单一可执行文件，无需 Java、Electron 或 WebView 运行时。它为 SQLite、MySQL、PostgreSQL、ClickHouse 提供连接、SQL 编辑执行、对象树、补全与导出等功能，配置与数据保存在本机目录。Windows 提供 exe 安装包，Linux 需要 GTK 3 环境。",
+   "highlights": [
+    "支持 SQLite、MySQL、PostgreSQL、ClickHouse 四种数据源，共用对象树、补全、结果表格与导出流程",
+    "提供 SQL 编辑器（高亮、多光标、补全）、多语句执行、结果单元格编辑、CSV/JSON/SQL INSERT 导出与执行计划查看",
+    "元数据按页加载并带 24 小时磁盘缓存；连接密码 AES-256-GCM 本机加密，日志自动脱敏"
+   ],
+   "use_cases": [
+    "在本地桌面统一管理多种数据库连接并进行日常查询与数据修改",
+    "需要免安装、无运行时依赖的 SQL 工作台的 Windows/Linux 用户",
+    "通过 Ollama 或 OpenAI-compatible 接口在客户端内使用 AI 生成与改写 SQL"
+   ]
+  },
+  "sha": "33c22c399727",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2905,5 +2905,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ce6a6c69cd97": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 Apache Flink 连接器，提供 DataStream 与 Table API 写入。",
+   "review": "该仓库是 ClickHouse 团队维护的官方 Flink 连接器，用于将 Flink 作业中的数据写入 ClickHouse。支持 DataStream API（ClickHouseAsyncSink 构建 sink）和 Table API/Flink SQL（通过 'connector' = 'clickhouse' 注册，仅支持 insert-only 写入）。安装为 Maven 依赖，最新版 2.0.0 需 Java 17+，1.17 系列需 Java 11+。SQL sink 要求 ClickHouse 服务器最低 23.10 版本，Schema 在规划阶段做类型校验，列按名称区分大小写匹配。",
+   "highlights": [
+    "支持 DataStream API 与 Table API/Flink SQL 两种接入方式，SQL sink 仅支持插入操作",
+    "提供批量写入参数配置（行数、字节数、刷新间隔、并发请求数等）及重试策略选项（sink.max-retries 默认 -1 表示无限重试）",
+    "在任务规划阶段校验 Flink Schema 与目标表列类型的匹配，类型映射包含隐式无损扩展与逐记录范围检查"
+   ],
+   "use_cases": [
+    "将 Flink 流处理作业的输出数据批量写入 ClickHouse 表",
+    "通过 Flink SQL 的 INSERT INTO 语句向 ClickHouse 追加数据（需 upsert 场景时配合 ReplacingMergeTree/AggregatingMergeTree 使用）",
+    "需要写入 JSON 列的场景：Flink STRING 写入 ClickHouse JSON 列开箱即用"
+   ]
+  },
+  "sha": "ce6a6c69cd97",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

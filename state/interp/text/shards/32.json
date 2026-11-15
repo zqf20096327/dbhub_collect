@@ -2658,5 +2658,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0be0db201947": {
+  "identity": {
+   "one_liner": "仿 psql 的通用 SQL 数据库命令行客户端，用 Go 实现",
+   "review": "usql 是一个用 Go 编写的通用命令行数据库客户端，交互模型仿照 PostgreSQL 的 psql，支持 psql 的变量、反引号、反斜杠命令等核心特性，并额外提供跨数据库复制、上下文补全和终端图表功能。它面向需要在非 PostgreSQL 数据库上使用 psql 式操作界面的管理员和开发者，可通过 Release、Homebrew、AUR、Go、Docker 安装，且能用构建标签裁剪内置驱动。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、Oracle、SQL Server、SQLite3 等 50 余种数据库的连接协议（scheme），包含关系型、NoSQL 与非关系型数据库",
+    "提供变量、反引号、反斜杠命令、上下文补全、终端图表渲染及数据库间数据复制功能",
+    "通过 go build 标签（no_<tag>、no_drivers、no_charts 等）可自定义构建时包含的驱动集合"
+   ],
+   "use_cases": [
+    "需要在同一命令行工具中连接多种不同数据库的日常运维与开发",
+    "希望在非 PostgreSQL 数据库上使用 psql 风格交互界面（变量、反斜杠命令）的场景",
+    "通过 Docker 镜像或自定义构建标签在容器或受限环境中运行特定数据库客户端"
+   ]
+  },
+  "sha": "0be0db201947",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9fb20abdd83f": {
+  "identity": {
+   "one_liner": "Go+SQLite支付教学实验室，统一接入七个支付与法币入金通道",
+   "review": "该项目是面向学习支付集成的开发者的Go教学库，覆盖微信支付、Stripe、Allscale及MoonPay等四家法币买币通道，共七种接入方式。demo模式默认无需真实商户凭据即可本地运行，代码内嵌逐步教程、mock演示与异常恢复场景；真实API适配器未经公网交易验收，且不包含扣点、退款发起、出款等业务功能。",
+   "highlights": [
+    "支持微信支付（小程序/JSAPI/H5/Native/App）、Stripe、Allscale储值，以及MoonPay、Alchemy Pay、Transak、Ramp四家法币买币接入，各通道实现独立签名与验签机制",
+    "提供幂等键去重、Webhook验签、主动查单恢复、回调重试退避与隔离队列，使用SQLite持久化订单与账务",
+    "教程内嵌于Go二进制，支持离线阅读与Markdown导出，demo模式无需真实密钥即可本地跑通全部通道"
+   ],
+   "use_cases": [
+    "学习七种支付/买币通道的签名、验签与状态查询实现细节",
+    "本地演示回调丢失、重复/乱序通知、金额不符等异常场景的处理流程",
+    "作为支付网关接入代码与幂等、对账机制的参考实现"
+   ]
+  },
+  "sha": "9fb20abdd83f",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d231829b0845": {
+  "identity": {
+   "one_liner": "面向小型商户的多租户 ERP，每笔业务单据自动生成复式记账分录",
+   "review": "Karobar ERP 是用 Django、Celery 与 React 构建的多租户 ERP，为使用纸质账本或电子表格的小商店、批发商和分销商提供库存、销售/POS、采购、复式记账、GST/VAT 报表和薪资功能，界面支持英文、乌尔都语和阿拉伯语（含 RTL）。每个租户的数据隔离通过 X-Tenant 头和查询管理器实现。当前版本为 v0.6.0，v1.0.0 前尚待完成端到端测试和公开演示。MIT 许可。",
+   "highlights": [
+    "提供库存（多仓库、批次过期、FIFO 或移动平均计价）、销售/POS、采购、复式记账、GST/VAT 报表与薪资模块，界面支持英文、乌尔都语和阿拉伯语并按需 RTL",
+    "采用多租户架构：除 User 和 Tenant 外每张表带 tenant 列，查询经管理器过滤， posted 单据不可变更、每笔分录必须平衡",
+    "技术栈为 Django 5.2 + MySQL 8.4 + Redis + React/TypeScript，通过 Docker Compose 运行，npm run dev 一条命令启动开发环境"
+   ],
+   "use_cases": [
+    "小型商店、批发商和分销商统一管理库存、销售、采购、账簿和员工薪资",
+    "需要在一个部署实例上服务多个独立业务（租户），各租户拥有独立的仓库、客户、账簿和员工",
+    "服务乌尔都语或阿拉伯语用户，需要 RTL 界面与对应语言的打印账单"
+   ]
+  },
+  "sha": "d231829b0845",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b9ded4f7d257": {
+  "identity": {
+   "one_liner": "新加坡国会演讲非官方档案网站，覆盖1955年至今的记录",
+   "review": "Open Hansard 是一个展示新加坡国会报告的非官方网站，数据来自作者的 hansard-scraper 项目，通过将印刷姓名、出席名单与演讲段落关联起来组织内容。面向想查询议员发言、追溯政治人物历史发言的研究者、记者与公众。前端 React+TypeScript，后端 FastAPI 只读访问 PostgreSQL 数据库，代码以 MIT 许可开源，SPRS 仍是权威记录来源。",
+   "highlights": [
+    "按人物、会议、主题浏览，将议员的演讲、议会成员资格与出席记录关联在同一页面",
+    "演讲保持原文拼写，每段提供复制链接、引用与纠错功能，搜索可按议会、日期、报告类型等过滤",
+    "提供本地运行与 Docker 部署方式，数据变更通过独立的 scraper 项目进行，API 保持只读"
+   ],
+   "use_cases": [
+    "查询某议员在某议题上的历次发言与出席记录",
+    "追溯早期议员跨年份的立场演变与相关报告原文出处",
+    "开发者基于开源代码与数据库结构自行搭建档案副本"
+   ]
+  },
+  "sha": "b9ded4f7d257",
+  "source": "readme",
+  "generated_at": "2026-11-15",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
