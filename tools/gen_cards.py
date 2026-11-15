@@ -46,6 +46,8 @@ VER = "gen_cards/1.7"
 # v1.6（2026-11-15 用户令「项目不完整的归档」）:
 #   内容块（简介/README首段/能力徽章/适配库）<=1 且星数 <10 -> 不出活跃卡、搬 archive
 #   （reason=incomplete）。星数条件防误伤：neo4j 本体 README 极简但项目真实，>=10 星保留。
+# v1.6b/v2 口径（2026-11-15 深夜用户令「只保留完整的，3-4 块」）：incomplete 改为块数 <3
+#   即归，取消星数豁免（约 4,044 张：2 块 3,730 + 1 块高星 314；neo4j 本体 1 块也在内）。
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = HERE + os.sep + "cache"
 OUT = HERE + os.sep + "cards"
@@ -77,9 +79,10 @@ def n_blocks(r):
     return n
 
 def incomplete(r):
-    """不完整归档判定（2026-11-15）：内容块 <=1 且星数 <10——没内容又没人验证过的空壳仓。
-    块少但 >=10 星的不算（README 懒得写但项目真实，如 neo4j 本体）。"""
-    return (r.get("stars") or 0) < 10 and n_blocks(r) <= 1
+    """不完整归档判定（v2，2026-11-15 深夜用户令「只保留完整的 3-4 块」）：内容块 <3 即归档，
+    无星数豁免——README 懒得写的大项目（neo4j 本体 1 块）同样归，数据补齐（tags/dbs 回填）
+    后下次全量自动回池。"""
+    return n_blocks(r) < 3
 
 def clean_ver(t):
     """剥版本标签前缀：release/2.60.0、v2.60.0 -> 2.60.0（空值原样）。"""
@@ -355,7 +358,7 @@ def rerender_archive(arc_dir, run_date):
 
 def _selftest():
     rc = gc._selftest() or 0
-    repos = {"a/live": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]]},   # 2 块：不触发 incomplete
+    repos = {"a/live": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]], "dbs": ["MySQL"]},  # 3 块：完整
              "a/arch": {"archived": True}, "a/app": {"judge": {"cat": "应用"}},
              "a/dapp": {"desc": {"cat": "应用", "one_liner": "x"}}, "a/dlib": {"desc": {"cat": "开发库", "one_liner": "据描述"}}}
     assert exit_reason("x/gone", repos) == "pool-exit"
@@ -377,21 +380,21 @@ def _selftest():
     assert exit_reason("a/live", repos) == "below-min-stars"          # 合格目标没选中：不算出池
     nr = {"a/nr": {"stars": 5, "readme_file": False},                    # 无 README：归档（口径 A）
           "a/nr-app": {"stars": 5, "readme_file": False, "judge": {"cat": "应用"}},
-          "a/old": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]]}}   # 旧缓存无 readme_file 字段：安全侧不归档
+          "a/old": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]], "dbs": ["MySQL"]}}   # 旧缓存无 readme_file 字段：安全侧不归档
     assert no_readme(nr["a/nr"]) and not no_readme(nr["a/old"]) and not no_readme(repos["a/live"])
     assert exit_reason("a/nr", nr) == "no-readme"
     assert exit_reason("a/nr-app", nr) == "app-category"              # 应用类优先于 no-readme 归因
     assert exit_reason("a/old", nr) == "below-min-stars"              # 字段缺失不触发归档
     ic = {"a/shell": {"stars": 0, "readme_file": True},                  # 0 块空壳：归档
-          "a/shell1": {"stars": 5, "readme_file": True, "readme0": "x"},  # 1 块低星：归档
-          "a/thin-star": {"stars": 300, "readme_file": True},            # 0 块但高星：保留（neo4j 型）
+          "a/shell1": {"stars": 5, "readme_file": True, "readme0": "x"},  # 1 块：归档
+          "a/thin2": {"stars": 900, "readme_file": True, "readme0": "x"}, # 2 块高星：v2 口径也归档（无星数豁免）
           "a/ok": {"stars": 5, "readme_file": True, "readme0": "x",
                    "tags": [["orm", "ORM", "high"]], "dbs": ["MySQL"]}}  # 3 块低星：保留
-    assert incomplete(ic["a/shell"]) and incomplete(ic["a/shell1"])
-    assert not incomplete(ic["a/thin-star"]) and not incomplete(ic["a/ok"])
+    assert incomplete(ic["a/shell"]) and incomplete(ic["a/shell1"]) and incomplete(ic["a/thin2"])
+    assert not incomplete(ic["a/ok"])
     assert n_blocks(ic["a/ok"]) == 3 and n_blocks(ic["a/shell"]) == 0
     assert exit_reason("a/shell", ic) == "incomplete"
-    assert exit_reason("a/thin-star", ic) == "below-min-stars"        # 高星薄资料不归档
+    assert exit_reason("a/thin2", ic) == "incomplete"                # 高星薄资料同样归档（v2）
     assert clean_ver("release/2.60.0") == "2.60.0" and clean_ver("v1.2") == "1.2" and clean_ver(None) is None
     with tempfile.TemporaryDirectory() as td:                          # 归档搬迁实测
         out, arc = os.path.join(td, "cards"), os.path.join(td, "archive")
@@ -436,11 +439,12 @@ def _selftest():
         vd = os.path.join(td, "vcard"); os.makedirs(os.path.join(vd, "o"))         # verify 四项校验
         io.open(os.path.join(vd, "o", "ok.html"), "w", encoding="utf-8").write("h")
         io.open(os.path.join(vd, "o", "ok.json"), "w", encoding="utf-8").write("{}")
-        vr = {"o/ok": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]]}}
+        vr = {"o/ok": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]], "dbs": ["MySQL"]}}
         assert verify(vr, {"o/ok": {}}, vd) == []                       # 好例全过
         bad = dict(vr); bad["o/shell"] = {"stars": 0, "readme_file": True}
         assert any("V1 o/shell" in x for x in verify(bad, {"o/ok": {}, "o/shell": {}}, vd))   # incomplete 混进清单
-        bad["o/new"] = {"stars": 9, "readme0": "x", "tags": [["orm", "ORM", "high"]], "dbs": ["MySQL"]}
+        bad["o/new"] = {"stars": 9, "readme0": "x", "tags": [["orm", "ORM", "high"]],
+                        "dbs": ["MySQL"], "readme_file": True}
         assert any(x.startswith("V2 o/new") for x in verify(bad, {"o/ok": {}}, vd))           # 合格仓漏收
         os.remove(os.path.join(vd, "o", "ok.json"))
         e3 = verify(vr, {"o/ok": {}}, vd)
