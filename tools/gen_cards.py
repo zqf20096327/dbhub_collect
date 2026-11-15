@@ -32,7 +32,7 @@ import argparse, datetime, io, json, os, re, shutil, sys, tempfile, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_card as gc
 
-VER = "gen_cards/1.7"
+VER = "gen_cards/1.8"
 # v1.7（2026-11-15 用户令「下次生成时严格校验」）:
 #   全量跑末尾 verify() 四项校验（V1 清单内无应归档卡 / V2 合格仓无漏 / V3-V4 盘面与清单
 #   三方一致），任一失败打印明细并 exit 1——daily_cards 链自动中止，不带病收工。
@@ -48,6 +48,8 @@ VER = "gen_cards/1.7"
 #   （reason=incomplete）。星数条件防误伤：neo4j 本体 README 极简但项目真实，>=10 星保留。
 # v1.6b/v2 口径（2026-11-15 深夜用户令「只保留完整的，3-4 块」）：incomplete 改为块数 <3
 #   即归，取消星数豁免（约 4,044 张：2 块 3,730 + 1 块高星 314；neo4j 本体 1 块也在内）。
+# v1.8（2026-11-15 深夜用户令「其他的也归档」）：类目=其他 -> 不出活跃卡、搬 archive
+#   （reason=other-category，1,435 张：判定层 13 类都不匹配的兜底类，教程/书单/杂项）。
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = HERE + os.sep + "cache"
 OUT = HERE + os.sep + "cards"
@@ -68,6 +70,15 @@ def no_readme(r):
     判定源是 build_cache v1.3 的 readme_file 字段——旧缓存没这个字段时返回 False
     （宁可一张不归，不可把 2 万张全归），必须重建 index 才生效。"""
     return "readme_file" in r and not r["readme_file"]
+
+def cat_of(r):
+    """类目取法（与 is_app 同源）：judge 层优先，无 judge 的仓退 desc 降级层。"""
+    return ((r.get("judge") or {}).get("cat")) or ((r.get("desc") or {}).get("cat"))
+
+def is_other(r):
+    """「其他」类归档判定（2026-11-15 深夜用户令）：判定层 13 类都不匹配的兜底类目——
+    教程/书单/面试资料/杂项，不是数据库项目本体或工具。"""
+    return cat_of(r) == "其他"
 
 def n_blocks(r):
     """内容完整度：数四个内容块（简介/README 首段/能力徽章/适配库），块数=用户看到的卡面信息量。"""
@@ -206,7 +217,7 @@ def qualified(r, min_stars=0):
     """活跃卡资格（docs/归档策略.md 第一节六条件）：targets 过滤与 verify V2 反向校验共用
     同一函数——校验与过滤一套代码，口径永不漂移。"""
     return ((r.get("stars") or 0) >= min_stars and not r.get("archived")
-            and not is_app(r) and not no_readme(r) and not incomplete(r))
+            and not is_app(r) and not is_other(r) and not no_readme(r) and not incomplete(r))
 
 def verify(repos, manifest, out_dir, min_stars=0):
     """全量跑末尾严格校验（归档策略.md 第三节 V1-V4）。返回错误明细列表，空=全过。
@@ -217,6 +228,7 @@ def verify(repos, manifest, out_dir, min_stars=0):
         if r is None: errs.append(f"V1 {fn}: not-in-pool"); continue
         if r.get("archived"): errs.append(f"V1 {fn}: github-archived")
         elif is_app(r): errs.append(f"V1 {fn}: app-category")
+        elif is_other(r): errs.append(f"V1 {fn}: other-category")
         elif no_readme(r): errs.append(f"V1 {fn}: no-readme")
         elif incomplete(r): errs.append(f"V1 {fn}: incomplete")
     expect = {fn for fn, r in repos.items() if qualified(r, min_stars)}   # V2 合格仓无漏
@@ -240,6 +252,7 @@ def exit_reason(fn, repos):
     if r is None: return "pool-exit"
     if r.get("archived"): return "github-archived"
     if is_app(r): return "app-category"
+    if is_other(r): return "other-category"
     if no_readme(r): return "no-readme"
     if incomplete(r): return "incomplete"
     return "below-min-stars"
@@ -385,6 +398,12 @@ def _selftest():
     assert exit_reason("a/nr", nr) == "no-readme"
     assert exit_reason("a/nr-app", nr) == "app-category"              # 应用类优先于 no-readme 归因
     assert exit_reason("a/old", nr) == "below-min-stars"              # 字段缺失不触发归档
+    assert is_other({"judge": {"cat": "其他"}}) and is_other({"desc": {"cat": "其他"}})   # judge 优先退 desc
+    assert not is_other({"judge": {"cat": "开发库"}}) and not is_other({})
+    oth = {"a/oth": {"stars": 9, "judge": {"cat": "其他"}, "readme0": "x",
+                     "tags": [["cdc", "CDC", "high"]], "dbs": ["MySQL"]}}   # 3 块也归：类目优先于完整度
+    assert exit_reason("a/oth", oth) == "other-category"
+    assert not qualified(oth["a/oth"])
     ic = {"a/shell": {"stars": 0, "readme_file": True},                  # 0 块空壳：归档
           "a/shell1": {"stars": 5, "readme_file": True, "readme0": "x"},  # 1 块：归档
           "a/thin2": {"stars": 900, "readme_file": True, "readme0": "x"}, # 2 块高星：v2 口径也归档（无星数豁免）
@@ -451,7 +470,7 @@ def _selftest():
         assert any(x.startswith("V3") for x in e3) and not any(x.startswith("V4") for x in e3)  # 缺 json 只报 V3
         os.remove(os.path.join(vd, "o", "ok.html"))
         assert any(x.startswith("V4") for x in verify(vr, {"o/ok": {}}, vd))       # 缺 html 报 V4
-    print("OK gen_cards selftest: 50 asserts passed")
+    print("OK gen_cards selftest: 54 asserts passed")
     return rc
 
 def main():
@@ -502,6 +521,7 @@ def main():
         r = repos.get(fn)
         if not r: print(f"SKIP not-in-index {fn}"); continue
         if is_app(r): print(f"SKIP app-category {fn}"); continue
+        if is_other(r): print(f"SKIP other-category {fn}"); continue
         if no_readme(r): print(f"SKIP no-readme {fn}"); continue
         if incomplete(r): print(f"SKIP incomplete {fn}"); continue
         card = finish_card(build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver), corpus, mdate)
