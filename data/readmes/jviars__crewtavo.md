@@ -194,7 +194,10 @@ to the **crewtavo** service's variables on Railway, or to `.env.instance` when s
     <td width="50%" valign="top">
       <img src="docs/images/quote.png" alt="A quote with line items from the price list and an optional add-on">
       <p><strong>Quotes.</strong> Line items from your price list, formulas and satellite map
-      measurements, optional add-ons, deposits and promo codes. Clients approve and sign online.</p>
+      measurements, optional add-ons, deposits, payment schedules and promo codes. Clients approve
+      and sign online. Draft a quote fills one in from a request (with AI if you switch it on, else
+      from your price list), you can hear about big quotes as they're sent, approved or sent
+      back, and your Google rating and best reviews can show on the quote.</p>
     </td>
   </tr>
   <tr>
@@ -234,12 +237,20 @@ to the **crewtavo** service's variables on Railway, or to `.env.instance` when s
     </td>
     <td width="34%" valign="top">
       <p><strong>In the field.</strong> <em>My day</em> on any phone: on my way, start and finish,
-      gate codes, checklists with signatures, photos, materials used and a crew clock. It installs
-      like an app on Android and iPhone, keeps working with no signal and catches up when the
-      connection is back.</p>
+      gate codes, checklists with signatures, photos (draw arrows, circles and notes on them, and
+      the original is kept), materials used and a crew clock. The clock
+      runs for visits only, or for the whole day with the driving between visits on it: your
+      choice. Turn it on and the phone reminds the crew to start and finish a visit as they get to
+      the property and leave, or starts their clock there itself and moves it to driving as they
+      leave, while Crewtavo is open on the phone. It never takes anyone off the clock by itself: on
+      the visits-only clock it asks first. It installs like an app on Android and iPhone, keeps working with no signal and
+      catches up when the connection is back. Each crew member can use it in Spanish: their day,
+      the clock, chat, guides, timesheets and the notifications they get, while the office stays in
+      English.</p>
       <p><strong>For your clients.</strong> The Client Hub, with no account to create: approve
       quotes, pay invoices (with an optional tip), see the next visit, ask for changes, request
-      work and message the office.</p>
+      work and message the office. A booking form on your website, or its link, lets people pick a
+      time from the openings your schedule really has.</p>
     </td>
   </tr>
 </table>
@@ -327,11 +338,69 @@ to the **crewtavo** service's variables on Railway, or to `.env.instance` when s
 
 **And also:**
 
+- **Quotes:** a quote can carry a payment schedule: payments, each a percent of the total, an
+  amount or the rest, due when the client approves (the deposit), on a date or so many days after
+  they approve, when the work starts, when it's done or when you invoice it. The payments have to
+  come to the total; the client sees them in the Client Hub and on the PDF, and approving keeps them
+  as signed. Templates and copies carry the schedule with each dated payment's day to set again, and
+  a quote can't be sent while a payment's day is unset or already past. Draft a quote, on a request, fills in a draft: with
+  Claude switched on (Settings → Company; it checks your key first), Claude reads the request and
+  your price list and picks lines only from it, at your prices, with quantities when the client gave
+  them (the others are 1, flagged to check); without it, the price list items whose names match the
+  client's choices. A request from a booking form or the Client Hub can get its draft by itself: the request
+  stays as it came in, with a note that a draft is ready, until you send that quote, and when
+  nothing on the price list matches no quote is made.
+  "Tell me about quotes over" an amount tells owners, admins and the quote's salesperson on the bell
+  and their phone when one is sent, approved or sent back for changes. "Show reviews on quotes"
+  (Marketing → Reviews) puts your Google rating and up to three reviews you pick (or your newest
+  5-star ones) on the quote in the Client Hub, and on its PDF if you tick it, as they are on Google:
+  the reviewer's name and words, with a link to your profile on Google Maps. Reviews show only
+  while Google Business Profile is syncing: a copy the sync hasn't seen on Google for 30 days is
+  removed.
 - **Jobs and invoicing:** one-off and recurring jobs, multi-day work, change orders the client
-  approves, batch invoicing, payment reminders, deposits, progress billing and retainage. Invoices
-  go through Stripe for card and bank payments; invoices made in Stripe come in too, with the fees
-  and bank deposits behind every payment. Refunds, write-offs for invoices that won't be paid,
-  expenses and job costing, timesheets and pay.
+  approves, batch invoicing, payment reminders, deposits, progress billing and retainage. A quote's
+  payment schedule carries to its job: each payment becomes a draft invoice when its date comes
+  (where you are), when the work starts, or when you press Invoice now, once each, and the office is
+  told it's ready to send, or it's sent by itself if you turn that on. Each invoice is for the amount
+  the client signed, tax included; the last payment to be invoiced is the job's final invoice, which
+  takes off the others and carries the tax, so together they come to the quote's total and nothing
+  more needs invoicing. The job shows each payment and where it is. A one-off
+  job moves to Requires invoicing when its last visit is finished, and the office is told. Extra
+  work on one visit of a recurring job (mulch, an aeration, a storm cleanup) is added to that visit
+  by the office or by the crew on site, and billed once with it, without changing the job's price.
+  Change prices on the Jobs page raises or lowers many recurring jobs at once, with a preview of
+  every line first and an undo. A quote's deposit is invoiced as the client approves it, whether or
+  not you take payments online. An invoice can still be edited after it's sent, payments and all,
+  and a late fee can be taken off or turned off for one invoice. Invoices go through Stripe for
+  card and bank payments; invoices made in Stripe come in too, with the fees and bank deposits
+  behind every payment. Refunds (by hand or through Stripe, taken off the invoice or left owing),
+  write-offs for invoices that won't be paid, expenses and job costing, timesheets and pay. A job
+  costs the same everywhere: on its page, in Finance and to an AI assistant. Set a margin (Settings
+  → Company → Job costing) and the people who see job costs are told when a one-off job's profit
+  falls below it, once, and the job's page warns while it stays there; after you change the margin,
+  the jobs already below it are listed under Below your margin on the Jobs page. Turn on reading
+  receipts (Settings → Company → Receipts, with your own Claude or OpenAI key) and a receipt photo or a
+  supplier's invoice fills in the expense for you to check, with its tax and lines, suggests the job
+  it names and the job's materials its lines match (to log as materials used in the same save), and
+  the office can drop a stack at once to check and save one by one. A supplier's invoice logged that
+  way counts once: what's logged against the job's estimate through its line items, the rest
+  (delivery, anything not on the estimate) as an expense, and a material the crew already logged
+  isn't logged twice. A receipt that looks to be in already (the same invoice number, or the same
+  vendor, day and total) is asked about before it's saved again, and expenses saved without a job
+  are listed on Finance → Profit. Request, quote, job and invoice
+  numbers can carry on from the system you're moving from (Settings → Company).
+- **Online booking:** request, estimate and booking forms to link to or embed in your website,
+  with your own questions, a service area by ZIP or postal code, file and photo uploads and promo
+  codes. Turn on "Let clients pick a time" for an estimate or booking form (Settings → Online
+  booking) and people choose a day and a time from real openings: your working days and hours,
+  around the visits and busy calendar times of the crew the form books (or, with no crew, the
+  whole schedule, so nobody is double-booked), after the lead time you set, up to the most a day
+  you set, for the next 60 days, in your time zone. A form either books at once (the visit goes on
+  the schedule at a fixed time, and two people can't take the same opening) or holds the time for
+  your OK, which is one press on the request. The client is told on the page, by email and by text,
+  gets a file for their calendar, and can ask to move or cancel the visit from their Client Hub. One
+  person holds one upcoming booking a form. Forms that were there before stay plain request forms
+  until you turn times on.
 - **Plans and files:** plan sets, specs, permits and addenda on requests, quotes, jobs and
   properties, up to 200 MB each. New versions replace old ones (with the history kept), the crew
   sees only current sheets on their phones, and clients can attach plans to a booking request. A
@@ -346,11 +415,45 @@ to the **crewtavo** service's variables on Railway, or to `.env.instance` when s
   account. Job offers they accept or decline in the field app (a lapsed certificate warns, and the
   offer records it), what's owed and paid, 1099-NEC totals by year, and a workers' comp audit
   report. Subs sign in with a link or a code by text or email, no password.
-- **Communication:** email from your own mailbox, two-way texting through Twilio, a message center,
-  and notifications in the app, by email, by text or as phone push, each person's choice.
+- **Communication:** email from your own mailbox, two-way texting through your own Twilio account
+  (connected on the Apps page, no server settings), a message center, and notifications in the app,
+  by email, by text or as phone push, each person's choice. Clients are told when a visit is
+  booked, moved or cancelled, reminded the day before (again for the new day when a visit moves
+  after its reminder went) and texted when the crew is on the way; each message is a switch in
+  Settings → Client notifications. A booking, move or cancelling goes ten minutes after the
+  change, so a visit dragged twice is one message and one put back is none, and a route being
+  re-ordered or a recurring job's whole schedule changing messages nobody. (A business that was
+  running before these three messages existed has them off until it turns them on.) A client's
+  other contacts (a spouse, a property manager) can be ticked to get what the client gets about
+  their visits, quotes, invoices and receipts too, a
+  quote or invoice can go to several people at once, and a text from a number nobody knows is kept
+  in Messages to add to a client.
 - **Automations and marketing:** rules like "when a quote is sent, wait 3 days, then email the
-  client", campaigns, promo codes, Google review requests and referrals.
-- **Claude and ChatGPT:** a built-in connector that can look things up or run the business:
+  client" or "when a visit is moved, text the client", campaigns, promo codes, Google review
+  requests and referrals. A campaign can be a postcard: a job photo (or any picture) on the front,
+  a note with the campaign merge fields on the back, previewed at its real size, printed and mailed
+  by Lob through the business's own Lob account (Apps → Lob; a test key makes the cards without
+  mailing anything) to the clients in the segment with a full mailing address, never archived or
+  opted-out ones, with what each card brought in. A finished job or visit becomes a showcase:
+  before and after photos (their drawn-on copies, if any) and a few lines about the work (written
+  by hand or with AI), on a page in the business's logo and colour with Get a quote to its
+  booking form. It never shows the client's name or address (the town only if chosen), asks before
+  showing photos nobody marked OK to share, and can't show a client's who asked that their property
+  not be posted. Copy its link, post it to Facebook or Instagram, or unpublish it. Marketing →
+  Reviews shows how the business compares with up to five nearby competitors on Google (rating
+  and number of reviews), found by name or suggested from its trade and town. The figures are
+  read from Google in the browser when someone presses Compare now and shown as they are at that
+  moment; Crewtavo keeps only each place's Google ID, as Google's terms require, so there's no
+  history of them. It's off until an owner or admin turns it on with a Google key that has Places.
+- **Crewtavo's own AI, on your key or plan:** the drafts, rewrites, answers from your guides and
+  receipt reading run on Claude or OpenAI, whichever you set up under Apps: your own Anthropic key,
+  your own OpenAI key (checked with OpenAI before it's saved, with the model picked from the ones
+  OpenAI lists for it), or the server's Claude key. With both keys you choose which one is used.
+  Each person can also Continue with ChatGPT (Apps → ChatGPT, or Settings → AI assistants once an
+  owner or admin lets the team) so their own ChatGPT Plus or Pro plan pays for what they ask
+  themselves; everyone else's asks, anything Crewtavo drafts by itself and whatever the plan can't
+  take stay on the company's key.
+- **Claude and ChatGPT:** a built-in connector, added in Settings → AI assistants, that can look things up or run the business:
   import customers and recurring services (with a preview first, and no duplicates on a second
   run), manage the schedule, quotes, invoices and payments, read the money figures, invite people
   and change roles, approve time and mark people paid. Each person signs in with their own account;
@@ -360,13 +463,23 @@ to the **crewtavo** service's variables on Railway, or to `.env.instance` when s
   dates, adds their piece pay (per square, per job or per day, from their rate card), flags
   overtime and unapproved time, downloads for your payroll service, and records who's been paid and
   how. Paid time is locked, and hours are paid once: where periods overlap, a later one owes only
-  what the earlier didn't pay. Subs are paid by the job instead, under Subcontractors. Crewtavo
-  doesn't move the money.
+  what the earlier didn't pay. Finishing a visit clocks out everyone still on its clock. On the
+  whole-day clock (Settings → Company → Time clock; new businesses start on it) they go on to
+  Driving instead, from On my way until Stop for the day: travel is paid time, on no job's costs.
+  Subs are paid by the job instead, under Subcontractors. A receipt someone paid with their own
+  money is marked to reimburse; with reading on, the one they add from a visit fills itself in for
+  them to check. Crewtavo doesn't move the money.
 - **Every trade:** trade presets ([`packages/core/src/presets`](packages/core/src/presets)) load
-  starter services, quote formulas, checklists, booking forms and SOP categories when a company
-  signs up: plumbing, HVAC, electrical, cleaning, pool and spa, pest control, handyman,
-  landscaping, lawn and exterior maintenance, paving and sitework, roofing and exteriors, or a
-  general starting point for any other trade.
+  starter services, quote formulas, checklists, weather rules, booking forms, custom fields and SOP
+  categories when a company signs up (a trade's estimate or booking form starts with its visit
+  length, lead time and most a day set, and offers times from the first day): plumbing, HVAC, electrical, cleaning, pool and spa, pest
+  control, handyman, landscaping, lawn and exterior maintenance, paving and sitework, roofing and
+  exteriors, or a general starting point for any other trade. A paving job priced with the paving
+  calculator gets the same weather holds and checklists as one priced from the price list, each
+  line that works from a depth gets its own (6 inches of stone under 2 of asphalt), and job
+  costing counts crew days and load tickets once, against what was estimated. A roofer keeps an
+  insurance claim's details on quotes and jobs, and can type in a roof report's measurements
+  (EagleView, Hover) instead of tracing the roof.
 
 ## How it fits together
 
@@ -404,10 +517,11 @@ Everything an instance needs is generated. These optional settings turn on extra
 | --- | --- |
 | `APP_URL` | Your own domain. **Settings → Web address** sets it on Railway. Defaults to the instance's address. |
 | `ENCRYPTION_KEY` | A separate key for app tokens and client links (32+ characters). Keep it stable once set: changing it disconnects every app and invalidates links already sent. |
-| `ANTHROPIC_API_KEY`, `AI_MODEL` | AI rewriting and answers from your SOPs. Companies can also add their own key on the Apps page. |
+| `ANTHROPIC_API_KEY`, `AI_MODEL` | AI rewriting and answers from your SOPs, with Claude. Companies can also add their own Claude or OpenAI key on the Apps page. |
+| `OPENAI_MODEL` | The OpenAI model used with a company's own OpenAI key or a person's ChatGPT plan, instead of the one picked on Apps → ChatGPT. There is no server-wide OpenAI key. |
 | `GOOGLE_MAPS_BROWSER_KEY`, `GOOGLE_MAPS_SERVER_KEY` | Optional: Google satellite on the measuring map (Map Tiles API), and roof pitch suggestions (Solar API). Measuring needs no key: it uses free US and state imagery. |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | A Stripe account shared by every company on the server. Usually not needed: each business connects its own Stripe on the Apps page. |
-| `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` | Text messages, and two-way texting. |
+| `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` | A Twilio account shared by every company on the server. Usually not needed: each business connects its own Twilio account on the Apps page. |
 | `RESEND_API_KEY`, `EMAIL_FROM` | Email through Resend. Needed on Railway's trial and Hobby plans, which block SMTP; elsewhere, a default sender until the business connects its own mailbox. |
 | `QUICKBOOKS_CLIENT_ID`, `QUICKBOOKS_CLIENT_SECRET` | An Intuit app for QuickBooks Online sync. Usually not needed: each business pastes its own Intuit app's keys on the Apps page. |
 | `ZOHO_CLIENT_ID`, `ZOHO_CLIENT_SECRET`, `ZOHO_ACCOUNTS_URL` | A Zoho app for Zoho Books sync. Usually not needed: each business pastes its own Zoho app's keys on the Apps page. |

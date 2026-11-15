@@ -69,7 +69,7 @@ LumenFlow (Chinese: 流光) is a Flutter-based AI chat application for Android, 
 - **Cupertino-style UI** with light/dark/system themes.
 - **User profiles** with avatar, name, gender, and birthday.
 - **Prompt presets and role-play**: localized built-in cards plus user-imported XML, TXT, and `.lumenflow` cards; editable metadata, world info with an activation preview, avatars and full-body illustrations, language/tag filters, token estimates, duplicate detection, and conversation snapshots.
-- **Character card generator**: a local web page with character fields, a world info editor, metadata/avatar/illustration handling, and `.lumenflow` export.
+- **Character card generator**: a local web page with character fields, advanced world info editing and activation tests, entry search/bulk actions, multi-draft storage, metadata/avatar/illustration handling, a visual card preview, and `.lumenflow` export.
 - **Markdown extras**: fenced code with Night Owl syntax highlighting, copy/download actions, inline-code styling, and inline/block math rendering.
 - **Adaptive layout**: two-column desktop workspace that falls back to a single column when the window is narrow.
 - **Local notifications**; Android live-update support.
@@ -260,7 +260,7 @@ Role-play presets pair a small metadata record with an optional character-card b
 
 - Import XML, TXT, or `.lumenflow` character cards from **Settings → Preset Management**. XML/TXT files are limited to 200 KB and validated for UTF-8, XML structure/root, and an optional `<role_name>`.
 - Editable metadata covers name, description, author, version, icon, language, and tags. The import dialog shows a token estimate and warns above 4,000/8,000 tokens.
-- World info supports a background plus keyword-activated entries. The app shows an activation preview; editing happens in the bundled generator.
+- World info supports a background plus keyword-activated entries with per-entry positions/depth, recursion, inclusion groups, probability, sticky/cooldown windows, token budgets, and minimum activations. The app's activation preview shows matched/skipped entries with reasons and metadata; editing happens in the bundled generator.
 - PNG avatars are normalized to at most 1024 px and 2 MB. PNG illustrations are normalized to at most 2048 px and 8 MB. A missing or invalid avatar falls back to the selected preset icon; a missing or invalid illustration shows the no-illustration placeholder.
 - Duplicate detection uses a SHA-256 hash of normalized card content, combined with world info when present; importing a duplicate requires confirmation.
 - Presets can be duplicated, exported, deleted, and filtered by language or tag.
@@ -268,11 +268,11 @@ Role-play presets pair a small metadata record with an optional character-card b
 
 ### Prompt assembly
 
-- The final system prompt is composed of localized base rules (including the default reply-language rule) → custom prompt → selected preset → note/recall instructions → world info → memory.
+- The final system prompt is composed of localized base rules (including the default reply-language rule) → custom prompt → before-preset world info → selected preset → after-preset world info → note/recall instructions → system world info → memory. At-depth world info is inserted into the request history and is not persisted.
 - Replies default to the UI language and follow the user's input language. A selected card's own language and tone remain part of its prompt.
 - Prompts are not interpolated with `${userProfile.*}` values. When a card needs the user's name, gender, or birthday, it should call `builtin__get_user_profile`.
 
-The character-card generator opens a local web page served by the app (`HttpServerService`, loopback ports 5050–5059). It edits character fields, world info, metadata, an avatar, and a full-body illustration, then exports a `.lumenflow` archive.
+The character-card generator is a local web page that can be served by the app (`HttpServerService`, loopback ports 5050–5059) or launched standalone with `python open_generator.py` from the project root. It edits character fields and world info, tests world-info activation against sample conversations, searches and bulk-manages entries, stores multiple drafts in IndexedDB, handles metadata, avatar, and full-body illustration, previews the rendered card, and exports a `.lumenflow` archive.
 
 ## Data Storage
 

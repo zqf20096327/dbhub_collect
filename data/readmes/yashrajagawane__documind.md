@@ -27,11 +27,38 @@
 
 ---
 
+> **Project status:** The application, deployment automation, and operational tooling are implemented. A live production launch is **not yet qualified**: staging verification, provider-specific checks, and a restore rehearsal still need to be completed. See [Project Status & Limitations](#project-status--limitations) before deploying with real documents.
+
+<details>
+<summary><strong>Contents</strong></summary>
+
+- [What is DocuMind?](#what-is-documind)
+- [Product Workspace](#product-workspace)
+- [Processing Workflow](#processing-workflow)
+- [System Architecture](#system-architecture)
+- [Trust & Security Guarantees](#trust--security-guarantees)
+- [Quick Start](#quick-start)
+- [Local Development](#local-development)
+- [API at a Glance](#api-at-a-glance)
+- [Operations & Troubleshooting](#operations--troubleshooting)
+- [Production Deployment](#production-deployment)
+- [Observability & Recovery](#observability--recovery)
+- [Essential Technology Stack](#essential-technology-stack)
+- [Repository Guide](#repository-guide)
+- [Documentation Index](#documentation-index)
+- [Project Status & Limitations](#project-status--limitations)
+- [Contributing & Developer Workflow](#contributing--developer-workflow)
+- [License](#license)
+
+</details>
+
+---
+
 ## What is DocuMind?
 
 Most document Q&A tools treat documents as unstructured blobs of text: they strip tables, ignore layout hierarchy, pass untrusted text straight to an LLM, and let the model hallucinate citations.
 
-**DocuMind** is an open-source, privately-hosted document intelligence platform engineered for technical and structured documents. It preserves tables and headings during parsing, indexes content locally with open-source embeddings, and synthesizes answers using Google Gemini while constructing citations on the server from verified vector search metadata.
+**DocuMind** is an open-source document intelligence platform designed for self-hosting and technical or structured documents. It preserves tables and headings during parsing, indexes content locally with open-source embeddings, and can synthesize answers using Google Gemini while constructing citations on the server from verified vector search metadata.
 
 ### Core Capabilities
 
@@ -40,6 +67,20 @@ Most document Q&A tools treat documents as unstructured blobs of text: they stri
 - **Grounded Conversational Q&A** — Generates answers with Gemini 3.8 Flash bounded by strict `<DOCUMENT_EVIDENCE>` delimiters.
 - **Server-Constructed Citations** — Chunk IDs, section titles, and relevance scores are assembled by the backend from Qdrant metadata; the LLM cannot invent citations.
 - **Strict Tenant & Document Isolation** — All vector search queries enforce mandatory `user_id` and `document_id` payload filters.
+
+### At a Glance
+
+| Area | Current behavior |
+|---|---|
+| Supported uploads | PDF, DOCX, XLSX, PPTX, TXT, CSV, and Markdown; default maximum size is 25 MB |
+| Processing | Durable Celery jobs, lease-based recovery, and visible per-document processing state |
+| Search | Local 384-dimensional embeddings with Qdrant filtering by owner and document |
+| Answers | Gemini-backed document Q&A when `GEMINI_API_KEY` is configured; deterministic no-evidence response otherwise |
+| Exports | Parsed content as Markdown, text, JSON, HTML, or original upload |
+| Deployment shape | Docker Compose on a single host, with a separate hardened production overlay |
+| Source of truth | PostgreSQL owns accounts, document metadata, and processing lifecycle; vectors are rebuildable |
+
+DocuMind is designed for private, single-host deployments and portfolio-scale use. Before treating it as a production service, complete the live qualification steps described in the deployment runbook and status section below.
 
 ---
 
@@ -191,6 +232,124 @@ To verify deployment integrity, run the authenticated smoke test:
 python scripts/smoke_test.py
 ```
 
+### Stop, Inspect, and Reset
+
+```bash
+# Follow all service logs
+docker compose logs -f --tail=100
+
+# Stop containers while keeping database, vector, and upload volumes
+docker compose down
+
+# Stop containers and permanently delete local Compose volumes
+docker compose down --volumes
+```
+
+The final command deletes local database, Qdrant, and uploaded-file data. Use it only when you intend to reset the development instance.
+
+---
+
+## Operations & Troubleshooting
+
+### Inspect the stack
+
+```bash
+docker compose ps
+docker compose logs --tail=100 backend worker scheduler
+docker compose exec backend alembic current
+```
+
+The API's `/api/v1/health` endpoint checks that the process responds. `/api/v1/ready` also checks PostgreSQL and Redis and should be used as the readiness signal. A document may need time to pass through parsing, chunking, and indexing; poll its document status before retrying.
+
+### Common symptoms
+
+| Symptom | First checks |
+|---|---|
+| Frontend cannot reach API | Confirm `NEXT_PUBLIC_API_BASE_URL`, browser-reachable backend URL, and `CORS_ORIGINS` agree |
+| Upload remains processing | Inspect worker and scheduler logs, then check PostgreSQL and Redis health; review lease and attempt settings |
+| Parsing fails or container exits | Check available memory; Docling can need 4 GB or more during intensive parsing |
+| Chat reports unavailable | Confirm `GEMINI_API_KEY`, Gemini connectivity, Qdrant health, and that the document has indexed chunks |
+| Chat returns no evidence | Rephrase around document wording, verify indexing completed, and review `RETRIEVAL_MIN_SCORE` |
+| Production validation fails | Run `scripts/validate_production_config.py` against the selected environment file and fix every reported issue |
+
+Avoid disabling ownership checks, CORS validation, rate limiting, or network isolation to work around an error. For deeper procedures, see the [production runbook](docs/DEPLOYMENT-PRODUCTION.md) and [configuration reference](docs/CONFIGURATION.md).
+
+---
+
+## Production Deployment
+
+The supported production baseline is a single Linux host running Docker Compose, with Caddy terminating HTTPS. The production overlay removes public ports from PostgreSQL, Redis, Qdrant, the API, worker, scheduler, and frontend; only Caddy publishes ports 80 and 443.
+
+Before pointing real users or private documents at a host, prepare DNS and firewall rules, private encrypted object storage, independent staging resources, monitoring credentials, and a verified backup plan. Production requires private S3-compatible storage, secure refresh cookies, an HTTPS-only CORS origin, non-template secrets, and an authenticated Qdrant service.
+
+The repository includes a production environment template and a validation command:
+
+```bash
+cp .env.production.example .env.production
+chmod 600 .env.production
+python scripts/validate_production_config.py --env-file .env.production
+```
+
+Do not use the local `.env.example` as a production configuration. Use the full step-by-step instructions in [Production Deployment Runbook](docs/DEPLOYMENT-PRODUCTION.md), including host setup, firewall rules, qualification, rollback, and secret provisioning.
+
+### Automated release path
+
+1. A push or pull request runs frontend lint, typecheck, tests, and build; backend lint, tests, and migration SQL generation.
+2. Successful pushes build and publish backend and frontend images to GHCR, tagged by commit SHA; release tags provide readable aliases.
+3. Operators dispatch the staging deployment workflow with an approved image tag and qualify that environment.
+4. Production deployment uses the same versioned images, a protected GitHub environment approval, a pre-deploy backup reference, migrations, and authenticated post-deploy smoke checks.
+5. The workflow saves a sanitized release record. Rollback uses a known-good image while database changes remain forward-only.
+
+Configure GitHub environments, host SSH credentials, image registry access, protected production reviewers, and smoke-test credentials as documented in the runbook. Workflow files are in [`.github/workflows`](.github/workflows).
+
+---
+
+## Observability & Recovery
+
+The production Compose overlay provides an optional `observability` profile with Prometheus, Alertmanager, and Grafana. The metrics endpoint is protected by `METRICS_TOKEN`; the dashboards and alert rules are provisioned from `infra/monitoring/`. Keep the observability UIs bound to localhost or behind an authenticated private access layer.
+
+PostgreSQL is the authoritative application store. The repository includes encrypted backup and disposable restore scripts; Qdrant is a derived index with a rebuild utility. A backup is not qualified until a restore has been exercised and the restored application data has been checked.
+
+Operational assets include:
+
+- `scripts/backup_postgres.sh` — create an encrypted PostgreSQL backup.
+- `scripts/restore_postgres_disposable.sh` — restore into a disposable target for rehearsal.
+- `backend/app/indexing/rebuild.py` — rebuild vector data from ready PostgreSQL documents and parsed artifacts; run with `cd backend && python -m app.indexing.rebuild` in an environment with indexing dependencies and service configuration.
+- `infra/systemd/` — example systemd service/timer assets for scheduled backup execution.
+- `infra/monitoring/` — Prometheus scraping, alert rules, Alertmanager configuration, and Grafana provisioning.
+
+Record backup retention, encryption key custody, restore duration, and the result of a rehearsal in the deployment record. Follow the [production runbook](docs/DEPLOYMENT-PRODUCTION.md) for exact host commands and the [production launch report](docs/PRODUCTION-LAUNCH-REPORT.md) for sign-off evidence.
+
+---
+
+## Repository Guide
+
+| Path | Purpose |
+|---|---|
+| `frontend/` | Next.js web application and client-side API integration |
+| `backend/app/api/` | FastAPI routes and HTTP request/response boundaries |
+| `backend/app/services/` | Parsing, storage, retrieval, embeddings, and Gemini adapters |
+| `backend/app/jobs/` | Celery tasks, lease recovery, and scheduled reconciliation |
+| `backend/alembic/` | PostgreSQL schema migrations |
+| `backend/tests/` and `frontend/` tests | Backend and frontend automated test suites |
+| `tests/evals/` | Retrieval and grounded-answer evaluation tooling |
+| `infra/caddy/` | Reverse proxy routing and HTTPS configuration |
+| `infra/monitoring/` | Metrics, alerting, and Grafana provisioning |
+| `scripts/` | Deployment, validation, smoke testing, backup, restore, and release utilities |
+| `docs/` | API contracts, architecture, design, deployment, qualification, and project records |
+
+### Main services
+
+| Service | Responsibility | Persistent or derived data |
+|---|---|---|
+| `frontend` | Workspace UI | No authoritative application data |
+| `backend` | Authenticated API and orchestration | PostgreSQL records; private file objects |
+| `worker` / `scheduler` | Document processing and stale-job recovery | PostgreSQL job state and Redis queue messages |
+| `postgres` | Source of truth for accounts, documents, sessions, and jobs | Must be backed up |
+| `qdrant` | Semantic vector search index | Rebuildable derived index |
+| `redis` | Queue broker and distributed rate limit state | Operational state, configured separately from PostgreSQL |
+| `proxy` | TLS termination and routing in production | Caddy certificate and configuration volumes |
+
 ---
 
 ## Essential Technology Stack
@@ -205,6 +364,86 @@ Testing & Tooling      Pytest · Vitest · Testing Library · Docker Compose · 
 
 ---
 
+## Local Development
+
+Docker Compose is the simplest way to run the whole application. For faster iteration, you can also run the frontend and backend from their own folders while keeping PostgreSQL, Redis, and Qdrant in Compose.
+
+### Backend
+
+Use Python 3.11 or 3.12. The optional groups install parsing, vector indexing, and Gemini features; the base development group is intended for API and unit-test work.
+
+```bash
+cd backend
+python -m venv .venv
+# Activate the virtual environment for your shell, then:
+python -m pip install -e ".[dev,processing,indexing,rag]"
+```
+
+Set the environment values from the root `.env.example` for your local services, then run:
+
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Frontend
+
+Use Node.js 22 or newer. `NEXT_PUBLIC_API_BASE_URL` must point to the backend API base URL reachable by the browser (normally `http://localhost:8000/api/v1`).
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+The development server opens at `http://localhost:3000`. For complete service wiring, migrations, background jobs, and document parsing, prefer the [Docker Compose quick start](#quick-start).
+
+---
+
+## API at a Glance
+
+The versioned API lives under `/api/v1`; interactive OpenAPI documentation is available at `http://localhost:8000/docs` when the backend is running.
+
+| Capability | Endpoints |
+|---|---|
+| Authentication | `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout` |
+| Account | `GET /users/me` |
+| Documents | `POST /documents`, `GET /documents`, `GET /documents/{id}`, `DELETE /documents/{id}` |
+| Content | `GET /documents/{id}/preview`, `/raw`, `/export`; export formats include `markdown`, `txt`, `json`, `html`, and `original` |
+| Processing | `POST /documents/{id}/index`, `/retry`; `GET /processing/{id}/status` |
+| Grounded Q&A | `POST /documents/{id}/chat` |
+| Operations | `GET /health`, `/ready`, `/metrics` |
+
+Most account and document routes require `Authorization: Bearer <access-token>`. Login returns the short-lived access token and sets the refresh token as an HttpOnly cookie; refresh and logout use that cookie. Metrics require the `X-Metrics-Token` header when a metrics token is configured.
+
+Example health check:
+
+```bash
+curl --fail http://localhost:8000/api/v1/health
+```
+
+See the [complete API reference](docs/API.md) for request schemas, response examples, authentication details, and error codes. Use `/ready` for dependency readiness; `/health` is a basic liveness check.
+
+---
+
+## Configuration & Secrets
+
+Start from [`.env.example`](.env.example) for local Compose and [`.env.production.example`](.env.production.example) for a production host. Keep real environment files out of Git and restrict access to them on the host.
+
+| Setting | Local default or example | Production guidance |
+|---|---|---|
+| `ENVIRONMENT` | `development` | Set to `production`; startup validation enforces secure settings |
+| `CORS_ORIGINS` | `http://localhost:3000` | Exact HTTPS browser origin only; no wildcard |
+| `POSTGRES_PASSWORD` | Local-only sample value | Replace with a unique generated secret |
+| `JWT_SECRET_KEY` | Placeholder in example | Generate a long random value; rotation invalidates existing sessions |
+| `STORAGE_BACKEND` | `local` | Use private S3-compatible storage; enable encryption and recovery controls |
+| `QDRANT_API_KEY` | Empty for local development | Set a unique key; keep Qdrant private to the Docker network |
+| `GEMINI_API_KEY` | Empty | Needed only for Gemini answer synthesis |
+| `METRICS_TOKEN` | Empty | Set a strong value before enabling Prometheus scraping |
+
+The complete variable list, defaults, and validation rules are in [Configuration Reference](docs/CONFIGURATION.md). Never paste secrets into issue reports, terminal transcripts, release records, or screenshots. `GEMINI_API_KEY` is optional for local parsing and indexing, but grounded chat requires it.
+
+---
+
 ## Documentation Index
 
 Detailed implementation guides, design records, and API contracts are available in the `docs/` directory:
@@ -215,18 +454,35 @@ Detailed implementation guides, design records, and API contracts are available 
 | [Configuration Reference](docs/CONFIGURATION.md) | Full list of environment variables, defaults, and production requirements |
 | [Production Deployment Runbook](docs/DEPLOYMENT-PRODUCTION.md) | Supported single-host deployment, TLS, private network, and release procedure |
 | [Production Launch Report](docs/PRODUCTION-LAUNCH-REPORT.md) | Go/no-go evidence, post-deploy checks, observation window, and closeout |
+| [Deployment Completion Plan](docs/DEPLOYMENT-COMPLETION-PLAN.md) | Deployment phases, repository deliverables, and live exit gates |
+| [Implementation Progress](docs/IMPLEMENTATION-PROGRESS.md) | Application implementation inventory and currently open work |
+| [Staging Qualification Report](docs/STAGING-QUALIFICATION-REPORT.md) | Record staging smoke, RAG evaluation, and operator evidence |
+| [Release Checklist](docs/RELEASE-CHECKLIST.md) | Pre-release, qualification, rollback, and operational checks |
 | [Deployment Decision Record](docs/DEPLOYMENT-DECISION.md) | Approved initial topology, environment defaults, recovery targets, and provisioning inputs |
 | [Free Demo Guide (Zero-Cost)](docs/DEPLOYMENT-FREE-GUIDE.md) | Portfolio/demo guidance only; not suitable for private production documents |
 | [Architecture Guide](docs/ARCHITECTURE.md) | Component boundaries, ingestion flows, and service layer architecture |
 | [Architecture Decisions (ADRs)](docs/ARCHITECTURE-DECISIONS.md) | Accepted ADRs (ADR-001 through ADR-008) governing technology and design choices |
 | [Design System](docs/DESIGN.md) | Dark-mode design tokens, typography, component states, and accessibility standards |
-| [Project Roadmap](docs/ROADMAP.md) | Completed milestones and upcoming features (cross-document search, hybrid retrieval) |
+| [Project Roadmap](docs/ROADMAP.md) | Product direction and future capabilities; pair with Implementation Progress for current status |
 
 ---
 
 ## Project Status & Limitations
 
-DocuMind is an active, production-grade open-source project. In the spirit of engineering transparency, please note these current limitations:
+DocuMind is an actively developed open-source project with deployment and operations tooling in the repository. Tooling being present does not mean a production environment has been provisioned or qualified. The deployment status is:
+
+| Deployment phase | Repository status | Live environment status |
+|---|---|---|
+| Phase 0 — deployment decision | Decision record and operating defaults documented | Provider, domain, budget, and access owners are still provisioning inputs |
+| Phase 1 — packaging and security | Production Compose overlay, Caddy, private networks, validation, and runbook implemented | Host, DNS, S3 bucket, and secrets not provisioned |
+| Phase 2 — release automation | CI, image publishing, protected staging/production workflows implemented | Requires GitHub environments, host credentials, registry access, and a successful tagged deployment |
+| Phase 3 — staging qualification | Smoke, RAG evaluation, and qualification records available | Live staging checks and document lifecycle evaluation pending |
+| Phase 4 — operations and recovery | Monitoring, backup, disposable restore, and rebuild tooling available | Alert delivery and a successful restore rehearsal pending |
+| Phase 5 — production launch | Preflight, deployment smoke, release record, and observation report available | Production launch and 24-hour observation window not completed |
+
+The implementation plan and evidence templates live in the [deployment completion plan](docs/DEPLOYMENT-COMPLETION-PLAN.md), [staging qualification report](docs/STAGING-QUALIFICATION-REPORT.md), and [production launch report](docs/PRODUCTION-LAUNCH-REPORT.md). Do not treat the repository checklist or CI result as production approval.
+
+Current operational and product limitations:
 
 - **Deployment Qualification** — Phase 0 decisions and the Phase 1 repository baseline are complete; live staging qualification, provider-specific firewall/storage validation, and restore rehearsal remain outstanding. See the [deployment decision](docs/DEPLOYMENT-DECISION.md) and [production runbook](docs/DEPLOYMENT-PRODUCTION.md).
 - **Release Automation** — CI builds commit-pinned images and GitHub Actions includes protected staging/production deployment workflows. Configure the repository environments and host secrets using the [production runbook](docs/DEPLOYMENT-PRODUCTION.md); no live environment has been configured yet.
@@ -238,6 +494,8 @@ DocuMind is an active, production-grade open-source project. In the spirit of en
 - **Worker Memory Footprint** — IBM Docling layout models require at least 4 GB of RAM allocated to the Celery worker container during intensive parsing tasks.
 - **Monitoring Dashboards** — Prometheus metrics are exported at `/api/v1/metrics`, but production Grafana dashboards and alerting rules are deployment-specific.
 - **Security Audit** — While designed with defensive security controls (JWT in memory, CSRF/XSS mitigations, fail-closed rate limits), DocuMind has not undergone an independent third-party commercial penetration audit.
+- **External Model Processing** — Embeddings are computed locally, but grounded chat sends retrieved evidence and the user question to the configured Gemini API. Review the provider's data handling terms and configure the service accordingly before processing sensitive documents.
+- **Single-Host Baseline** — The production Compose path is a single-host deployment, not a highly available multi-region architecture. PostgreSQL, Redis, and Qdrant need separately managed persistence, monitoring, and capacity planning.
 
 ---
 
@@ -260,6 +518,20 @@ npm test
 ```
 
 Please ensure all tests pass and code compiles before submitting a pull request. Refer to the [Architecture Decision Records](docs/ARCHITECTURE-DECISIONS.md) before proposing significant architectural changes.
+
+### Continuous integration
+
+GitHub Actions runs the frontend and backend checks on pushes and pull requests. The current workflow runs `npm ci`, ESLint, TypeScript typechecking, Vitest, and a Next.js production build; on the backend it installs the development dependencies, runs Ruff and Pytest, and renders the Alembic migration chain as SQL. Release image publication follows those checks on eligible pushes.
+
+Security workflows add CodeQL analysis, dependency review, and secret scanning. Deployment workflows are separate and require configured environments and host credentials; a green CI run by itself does not mean that a live staging or production deployment has been qualified.
+
+### Contribution checklist
+
+- Keep changes aligned with the existing API and architecture contracts.
+- Add or update tests for behavioral changes and migrations where appropriate.
+- Do not commit `.env` files, credentials, real user documents, or production release secrets.
+- Update relevant docs when configuration, APIs, deployment steps, or recovery behavior change.
+- Include a concise summary and verification evidence in the pull request.
 
 ---
 

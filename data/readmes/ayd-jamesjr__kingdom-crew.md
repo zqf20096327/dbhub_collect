@@ -1,113 +1,212 @@
 # Kingdom Crew Fellowship Website
 
-Official website for Kingdom Crew Fellowship, UNILAK Rwamagana Campus.
-HTML + CSS + vanilla JavaScript frontend, with an optional Node/Express backend (TiDB Cloud database + AI assistant).
+A digital platform for **Kingdom Crew Fellowship at the University of Lay Adventists of Kigali (UNILAK), Rwamagana Campus**.
 
-## What works without any backend
-Pages, navigation, events and gallery (from `config.js`), social links, the Bible reader (loads text from the free bible-api.com), form validation. The contact form and AI assistant **need the backend** because a static page cannot safely store messages or hide an API key.
+The project combines a responsive multi-page website with an optional Node.js/Express API, a TiDB Cloud (MySQL-compatible) database, and a server-side AI assistant integration.
 
-## Folder map
-```
+> **Project category:** Fellowship & Community — this is a fellowship project, distinct from academic coursework and client projects.
+
+## Overview
+
+The frontend presents fellowship information and community resources. When the backend and external services are configured, the application can also load published events, save contact inquiries, and provide an AI-powered assistant.
+
+## Features
+
+### Website frontend
+- Multi-page website: Home, About, Activities, Events, Gallery, Bible, and Contact
+- Responsive navigation and page styling
+- Configurable social links, events, and gallery content
+- Bible reader that retrieves passage text from Bible API
+- Client-side form validation
+
+### Backend and integrations
+- Node.js and Express server
+- TiDB Cloud database connection using `mysql2`
+- API endpoint for published events
+- Contact inquiry endpoint with input validation and parameterized SQL
+- AI assistant endpoint using an OpenAI-compatible API provider
+- Rate limiting and security headers
+- Health endpoint for checking service configuration
+
+**Backend-dependent features require valid environment variables and configured external services.** The static frontend can be previewed separately, but contact submissions, database-backed events, and AI responses need the backend.
+
+## Technology Stack
+
+| Area | Technologies |
+|---|---|
+| Frontend | HTML5, CSS3, vanilla JavaScript |
+| Backend | Node.js, Express |
+| Database | TiDB Cloud / MySQL-compatible |
+| Database driver | mysql2 |
+| AI integration | OpenAI-compatible chat completions API |
+| Security middleware | Helmet, express-rate-limit |
+| Configuration | dotenv |
+| Hosting option | Render |
+
+## Project Structure
+
+```text
 kingdom-crew/
-├── public/            <- the website (this is what visitors see)
-│   ├── *.html         index, about, activities, events, gallery, bible, contact
-│   ├── css/style.css  colours and layout (edit colours at the top)
-│   ├── js/config.js   EDIT THIS: contacts, social links, events, gallery
-│   ├── js/scriptures.js  Bible book summaries
-│   ├── js/main.js     all interactive features
-│   └── images/        put your logo and photos here
-├── src/server.js      Express server + API
-├── src/config/db.js   TiDB connection
-├── schema.sql         database tables
-├── .env.example       list of secret settings
-└── package.json
+├── public/
+│   ├── index.html
+│   ├── about.html
+│   ├── activities.html
+│   ├── events.html
+│   ├── gallery.html
+│   ├── bible.html
+│   ├── contact.html
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── config.js
+│   │   ├── main.js
+│   │   └── scriptures.js
+│   └── images/
+├── src/
+│   ├── config/
+│   │   └── db.js
+│   └── server.js
+├── schema.sql
+├── .env.example
+├── .gitignore
+├── package.json
+└── package-lock.json
 ```
 
-## 1. Run it on your computer
-1. Install Node.js (LTS) from nodejs.org.
-2. Open the folder in VS Code, then open the terminal (Ctrl+`).
-3. Run:
-   ```
-   npm install
-   copy .env.example .env      (Mac/Linux: cp .env.example .env)
-   npm start
-   ```
-4. Open http://localhost:3000. The site works immediately. Database and AI show friendly "not connected yet" messages until you fill `.env`.
+## Run Locally
 
-Frontend only (no backend): open `public/index.html` with the VS Code "Live Server" extension.
+### Requirements
 
-## 2. Add your real details
-Open `public/js/config.js`:
-- Paste real Facebook, Instagram, TikTok, YouTube URLs and the **existing** WhatsApp Community invite link into the `social` block. Empty links show as "(soon)" and do not link anywhere.
-- Edit `events` and `gallery`. For photos: copy the file into `public/images/`, then add `{ src: 'images/yourphoto.jpg', alt: 'Describe the photo', caption: 'Caption' }`.
-- The official logo is in `public/images/` (`logo-full.png` for light backgrounds, `logo-full-light.png` for dark ones, `logo-emblem*.png` for the cross-and-Bible mark alone). To change it, replace those files keeping the same names.
+- Node.js 18 or later
+- npm
+- A code editor such as Visual Studio Code
 
-## 3. Connect the database (TiDB Cloud)
-1. Create a free TiDB Cloud Serverless cluster, click **Connect**, and copy host, port, user and password.
-2. Open the **SQL Editor**, paste all of `schema.sql`, run it.
-3. Put the values in `.env` (`DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME`). Restart `npm start`.
-4. Visit http://localhost:3000/api/health. It should show `"database": true`.
-5. Test: send a message on the Contact page, then run `SELECT * FROM inquiries;` in TiDB.
+### 1. Clone the repository
 
-Mark an event published by inserting a row in `events` with `is_published = 1`. Delete the `DEMO:` row.
-
-## 4. Connect the AI assistant (free option: Groq)
-The browser never sees your key. It talks to `/api/chat` on your server, which calls the AI provider.
-1. Go to console.groq.com, sign in, and create an API key. Groq's free tier needs no billing setup.
-2. In `.env` set `AI_API_KEY=` to that key. The other three AI lines are already filled for Groq (`AI_BASE_URL`, `AI_MODEL`, `AI_FALLBACK_MODEL`).
-3. Restart `npm start` and check http://localhost:3000/api/health shows `"ai": true`. Then open the chat button on the site and ask a question.
-4. On Render, add the same four variables under Environment.
-
-**Free limits (as reported by third-party guides in October 2026; confirm in your Groq console):** the main model allows roughly 1,000 requests and 200,000 tokens per day, the fallback model (`llama-3.1-8b-instant`) roughly 14,400 requests per day, both about 30 requests per minute. That is plenty for a fellowship site, but no free service is guaranteed. Providers can change limits or models, so the server retries once with the fallback model and shows a polite message if both are busy.
-
-**Alternative: Google Gemini.** Get a key at aistudio.google.com and use the Gemini lines commented out in `.env.example`. Free-tier limits are lower and not fully published, and free-tier data handling differs by provider, so read each provider's terms before sending visitors' questions to it.
-
-**OpenAI** works too (`AI_BASE_URL=https://api.openai.com/v1`), but its API is pay-as-you-go.
-
-Built-in safeguards: 20 questions per 10 minutes per visitor, short answers, and a system prompt that forbids inventing fellowship facts and directs crisis situations to real people.
-
-## 5. Put it on GitHub
+```bash
+git clone https://github.com/ayd-jamesjr/kingdom-crew.git
+cd kingdom-crew
 ```
-git init
-git add .
-git commit -m "Kingdom Crew website"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/kingdom-crew.git
-git push -u origin main
+
+### 2. Install dependencies
+
+```bash
+npm install
 ```
-`.env` is ignored by `.gitignore`, so your secrets are not uploaded. Check this on GitHub before sharing.
 
-## 6. Publish (pick one)
-**A. Render (full site: database + AI)**
-1. render.com > New > Web Service > connect your GitHub repo.
-2. Build command `npm install`, start command `npm start`.
-3. Under Environment, add every variable from `.env.example` with your real values.
-4. Deploy. Render provides HTTPS. Free instances may sleep when idle, so the first visit can be slow. Check Render's current free-tier terms.
+### 3. Configure environment variables
 
-**B. GitHub Pages (static only, free)**
-Settings > Pages > deploy from `main`, folder `/public` is not selectable on all setups; if so, move the contents of `public/` to the repo root or use a `gh-pages` branch. All links are relative, so a `/kingdom-crew/` subfolder URL works. For the form and AI to work from Pages, deploy the backend on Render, set `apiBase` in `config.js` to the Render URL, and set `ALLOWED_ORIGIN` on Render to your Pages address.
+Copy `.env.example` to `.env` and add the values for the services you intend to use.
 
-After publishing, replace `YOUR-SITE-ADDRESS` in `public/robots.txt` and `public/sitemap.xml`.
+On macOS/Linux:
 
-## 7. Updating later
-Edit `config.js` (events, photos, links), commit and push. Render redeploys automatically.
+```bash
+cp .env.example .env
+```
 
-## Checklist: real links to insert (in `public/js/config.js`)
-- [ ] Facebook page URL
-- [ ] Instagram profile URL
-- [ ] TikTok profile URL
-- [ ] YouTube channel URL
-- [ ] WhatsApp Community invite link (the existing community)
-- [ ] Real photos and events
-- [ ] Leadership approval of motto, mission and vision (`about.html`)
-- [ ] `YOUR-SITE-ADDRESS` in robots.txt and sitemap.xml
+On Windows PowerShell:
 
-## Common problems
-- **"Cannot find module"**: run `npm install` again.
-- **Port in use**: change `PORT` in `.env`.
-- **Database error**: check host/user/password, and that `schema.sql` was run.
-- **AI "key is not valid"**: re-copy the key; no spaces or quotes.
-- **Bible text will not load**: needs internet; check the passage spelling.
+```powershell
+Copy-Item .env.example .env
+```
 
-## Not built yet (honest scope)
-Member accounts, admin dashboard, member directory and community feed from the larger master prompt are not in this version. The current database has only `inquiries` and `events`. Build those in later phases once this foundation is confirmed working.
+At minimum, the server can be started with the example configuration, but database-backed and AI features will remain unavailable until their settings are configured.
+
+### 4. Start the server
+
+```bash
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+For development with Node's watch mode:
+
+```bash
+npm run dev
+```
+
+### Frontend-only preview
+
+You can preview the static website by opening `public/index.html` directly or using the Live Server extension in Visual Studio Code. API-backed functionality will not work in a frontend-only preview.
+
+## Database Setup — TiDB Cloud
+
+The repository includes `schema.sql` for the current database structure.
+
+1. Create or select a TiDB Cloud cluster.
+2. Open the TiDB SQL Editor and run the contents of `schema.sql`.
+3. Add the connection details to your local `.env` file:
+   - `DATABASE_HOST`
+   - `DATABASE_PORT`
+   - `DATABASE_USER`
+   - `DATABASE_PASSWORD`
+   - `DATABASE_NAME`
+4. Restart the server.
+5. Check [http://localhost:3000/api/health](http://localhost:3000/api/health) to confirm the server's reported configuration.
+
+The current schema defines two tables:
+
+- `inquiries` — contact form submissions
+- `events` — fellowship events, including a clearly labelled demo row
+
+Remove or replace the demo event before using the database for real fellowship information. Only publish event details that have been confirmed by fellowship leadership.
+
+## AI Assistant Configuration
+
+The backend can connect to an OpenAI-compatible chat completions API. Configure these variables in `.env`:
+
+- `AI_API_KEY`
+- `AI_BASE_URL`
+- `AI_MODEL`
+- `AI_FALLBACK_MODEL` (optional)
+
+The example environment file includes a Groq configuration as a starting point. Provider availability, model names, pricing, and usage limits can change; check the provider's current documentation and terms before relying on a particular model.
+
+The API key must remain on the server. **Never put it in files under `public/` or commit it to GitHub.**
+
+## Deployment
+
+The Express server serves the frontend from `public/` and exposes the API routes, so the full application can be deployed as a Node.js web service on a compatible platform such as Render.
+
+Typical Render settings:
+
+- **Build command:** `npm install`
+- **Start command:** `npm start`
+
+Add the required database and AI settings as service environment variables in the hosting dashboard. Do not upload your local `.env` file. After deployment, verify the health endpoint and test the features that depend on external services.
+
+A static hosting service can serve the frontend, but the API must still be deployed separately and configured for cross-origin requests if the frontend and backend use different origins.
+
+## Security and Responsible Use
+
+- Keep `.env` and all real credentials out of version control.
+- Keep AI provider keys on the server, never in browser JavaScript.
+- Use HTTPS for deployed services.
+- The contact endpoint validates submitted fields, applies a request limit, and uses parameterized SQL.
+- Confirm the privacy notice, consent wording, data retention, and access process before collecting real visitor information.
+- Have fellowship leadership review public contact details, meeting information, events, and faith-related content before publishing them.
+- Treat AI responses as informational assistance, not official fellowship statements or pastoral care.
+
+## Current Scope and Future Development
+
+The current repository includes the website frontend, Express API foundation, database schema for inquiries and events, and an AI assistant integration point.
+
+The following larger-platform features are **not implemented in this version**:
+
+- Member accounts and authentication
+- Admin dashboard
+- Member directory
+- Community feed
+
+These can be considered for future phases after the existing foundation has been tested and the requirements have been agreed with fellowship leadership.
+
+## Project Classification
+
+**Fellowship & Community Project — Kingdom Crew, UNILAK Rwamagana Campus**
+
+This project is presented separately from personal projects, client work, and UNILAK academic coursework.
+
+---
+
+*Built to support fellowship connection, communication, and community.*

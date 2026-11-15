@@ -17,6 +17,14 @@ Small teams usually split their work across a chat tool, an issue tracker, a wik
 - **Live delivery re-checks every recipient.** Chat messages are saved over REST and then published over Socket.IO. Each recipient's session and channel membership are checked again at publish time, so a revoked user stops receiving messages. A client UUID makes retries safe.
 - **Security.** Sessions are revocable: NextAuth JWTs are backed by `LoginSession` rows, sign-out ends the current session, a password change ends every other session, and a password reset ends them all, dropping the matching live sockets. Removing someone from a workspace removes their live channel subscriptions. Invite and reset tokens are single-use and stored only as hashes. Browser writes need an exact Origin match (the Google invite-acceptance route relies on a SameSite=Lax, HttpOnly profile cookie instead), and rate limits are applied per user and per IP.
 
+## Interface
+
+The interface has a light and a dark theme built on one token set, a public landing page, and a shell with a collapsible sidebar. 
+
+| Landing Page| 
+|---|
+| ![Landing page](docs/images/landing.png) | 
+
 ## Architecture
 
 ```mermaid
@@ -54,7 +62,7 @@ flowchart LR
 |---|---|
 | Web app and API | Next.js 16.4.1 (App Router), React 19.3, NextAuth 4.24 (JWT strategy), zod 4.6, Node.js 22.12 or later |
 | Realtime | Socket.IO 4.8.4 on the same `node:http` server ([`server.ts`](server.ts)) |
-| Data | PostgreSQL 16, Prisma 6.19.3 (25 models, 9 migrations) |
+| Data | PostgreSQL 16, Prisma 6.19.3 (27 models, 10 migrations) |
 | Agent | Python 3.13, FastAPI, LangGraph 1.2, langchain-google-genai 4.5, run in Docker as a non-root user |
 | Email | Mailtrap (API or SMTP) for invites, welcome mail and password reset |
 
@@ -66,10 +74,11 @@ flowchart LR
 | Module | Capabilities |
 |---|---|
 | Workspaces | 3-step "Create your workspace" wizard. Joining an existing workspace is invite-only, through emailed links that expire after 7 days and work once. ADMIN / MEMBER roles. Email and password sign-in, plus Google, GitHub and Bitbucket when configured |
-| Chat | Public and private channels, one-level threads, live delivery with a Live / Reconnecting indicator, cursor-paged history, retry-safe sends, ticket keys shown as links |
+| Chat | Public and private channels, one-level threads, live delivery with a Live / Reconnecting indicator, typing indicators, cursor-paged history, retry-safe sends, ticket keys shown as links |
 | Issue tracking | Per-project access, several boards per project with editable columns, drag and drop with mouse, touch or keyboard, four filters, comments with @mentions, sprints with one active per project |
 | Reports | Burndown with an ideal line, velocity over the last 6 completed sprints, status and assignee breakdowns, CSV export |
 | Docs | Nested Markdown pages per project, formatting toolbar and preview, clickable checklists, edit-conflict protection, PostgreSQL full-text search |
+| Code hosts | GitHub and Bitbucket repositories linked to a project. A pull request that names a ticket key in its title or branch appears on that ticket with its status, kept current by signed webhooks or a manual sync. A merged pull request offers to move the ticket to Done |
 | Time | One running timer per person (server clock, 24-hour cap), manual entries, a weekly report by day, ticket and person, CSV export |
 | Overview and alerts | Your open, overdue and recently completed tickets, active sprints, and in-app alerts for assignments, comments and mentions. Each alert type can be turned off |
 | Synk AI | Five tools: `create_ticket`, `update_ticket` (needs confirmation), `find_tickets`, `create_doc` and `search_workspace`. Each reply lists the actions it took, with links |
@@ -123,6 +132,8 @@ Audit:  4 ActionLog rows: find_tickets, update_ticket (dry run), update_ticket (
 
 Now suppose the user asks "Assign SYN-12 to Sarah" in a project with two members named Sarah. The dry run returns `ambiguous` with both names, the graph does not pause, and the agent asks which Sarah the user means.
 
+**Accuracy.** On the PRD's 30-prompt test set (15 happy path, 5 ambiguity, 5 permission denial, 5 edge cases), the agent scored 30 of 30 with `gemini-3.5-flash-lite`, against a target of 90%. See [`docs/ai-agent-eval.md`](docs/ai-agent-eval.md).
+
 ## Trade-offs
 
 | Decision | What it buys | What it costs |
@@ -166,6 +177,8 @@ compose.yaml              PostgreSQL and the agent service for local development
 | [`docs/issue-tracking.md`](docs/issue-tracking.md) | Projects, boards, sprints, the access model and how reports are calculated |
 | [`docs/docs-module.md`](docs/docs-module.md) | Markdown pages, rendering, conflict handling, search |
 | [`docs/time-tracking.md`](docs/time-tracking.md) | Timers, manual entries, weekly reports |
+| [`docs/testing.md`](docs/testing.md) | Results against the PRD quality targets: coverage, the denial suite, response times, the timed walkthrough |
+| [`docs/code-hosts.md`](docs/code-hosts.md) | GitHub and Bitbucket: linking repositories, pull requests on tickets, webhooks |
 | [`docs/chat-implementation.md`](docs/chat-implementation.md) | Original chat design notes (API table and roadmap predate later modules) |
 | [`docs/chat-qa.md`](docs/chat-qa.md) | Chat verification records and manual acceptance plan |
 

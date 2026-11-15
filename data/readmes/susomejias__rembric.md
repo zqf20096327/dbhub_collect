@@ -172,6 +172,8 @@ Compose auto-merges the override on every `up`. Point your agent at `http://127.
 
 ### Upgrading
 
+> **Upgrading to v0.31.0 behind a reverse proxy or tunnel** (nginx, Caddy, Traefik, Cloudflare Tunnel…): set `REMBRIC_TRUSTED_PROXY_HOPS` in `.env` (usually `1`) or every client will share one lockout and rate-limit identity. [What changed and which value to use](./docs/updates.md#updating-to-v0310-behind-a-reverse-proxy-or-tunnel-one-time).
+
 **Auto-updater from the UI.** The dashboard checks for new releases (once a day, [opt-out](./docs/updates.md)) and shows a badge + changelog modal when one is out. Mount the Docker socket and the same modal gains a one-click **Update** button that backs up the database, pulls the new image, swaps the container with health-check and rollback, and reloads the page on the new version — see [docs/updates.md](./docs/updates.md) for setup and the security trade-off. Without the socket nothing breaks: you get the notification plus the manual flow below.
 
 Docker manages versions for you. With `REMBRIC_VERSION` unset in `.env`, the compose file pulls `:latest`:
@@ -261,14 +263,15 @@ Per-token token-bucket limiter on `/mcp` requests. Disabled by default — singl
 
 Applied to every bearer-authenticated surface (`/mcp`, `/api`, `/healthz`, `/admin`, `/dashboard/login`). The failed-attempt lockout is always on (it only ever penalises repeated authentication _failures_ from one network identity, and runs before the token-hash check so bogus bearers can't exhaust CPU).
 
-| Variable                      | Default   | Description                                                                                                                                                                     |
-| ----------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AUTH_LOCKOUT_MAX_FAILURES`   | `10`      | Failed auth attempts from one IP within the window before it is locked out (`429`).                                                                                             |
-| `AUTH_LOCKOUT_WINDOW_MS`      | `60000`   | Window (ms) over which failures accumulate.                                                                                                                                     |
-| `AUTH_LOCKOUT_MS`             | `60000`   | Lockout duration (ms) once tripped. A successful auth clears the identity's counter.                                                                                            |
-| `MAX_BODY_BYTES`              | `4194304` | Max raw request body on `/mcp` and `/api`; larger is rejected with `413`.                                                                                                       |
-| `REMBRIC_MCP_ALLOWED_HOSTS`   | _unset_   | Comma-separated `Host` allow-list (incl. port) for opt-in DNS-rebinding protection on the MCP transport. When set, requests with an unlisted `Host` are rejected.               |
-| `REMBRIC_MCP_ALLOWED_ORIGINS` | _unset_   | Comma-separated `Origin` allow-list. When set, a request whose `Origin` is present and unlisted is rejected. Setting either allow-list enables the transport's rebinding check. |
+| Variable                      | Default   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ----------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AUTH_LOCKOUT_MAX_FAILURES`   | `10`      | Failed auth attempts from one IP within the window before it is locked out (`429`).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `AUTH_LOCKOUT_WINDOW_MS`      | `60000`   | Window (ms) over which failures accumulate.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `AUTH_LOCKOUT_MS`             | `60000`   | Lockout duration (ms) once tripped. A successful auth clears the identity's counter.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `MAX_BODY_BYTES`              | `4194304` | Max raw `POST` body on `/mcp` and on every `/api` route that reads a JSON body; larger is rejected with `413` (`/api`: `payload_too_large`) while reading, and a declared `Content-Length` over it before reading. An invalid value falls back to the default. `/mcp` reads it once per process.                                                                                                                                                                                                                                 |
+| `REMBRIC_TRUSTED_PROXY_HOPS`  | `0`       | How many reverse proxies in front of the server append to `X-Forwarded-For`. The client identity behind the failed-attempt lockout and the OAuth rate limits is the TCP peer address at `0`, and otherwise the entry that many hops left of it, so a client-sent `X-Forwarded-For` cannot choose it. Behind a proxy, `0` puts every client in the proxy's one bucket. An invalid value is treated as `0` with a startup warning. Applied by the production launcher (`apps/web/server.js`, the Docker image), not by `next dev`. |
+| `REMBRIC_MCP_ALLOWED_HOSTS`   | _unset_   | Comma-separated `Host` allow-list for opt-in DNS-rebinding protection on the MCP transport, matched by hostname (a port in an entry is accepted but ignored). When set, a request whose `Host` hostname is unlisted is rejected with `403` before authentication.                                                                                                                                                                                                                                                                |
+| `REMBRIC_MCP_ALLOWED_ORIGINS` | _unset_   | Comma-separated `Origin` allow-list, matched by hostname (a scheme or port in an entry is accepted but ignored). When set, a request whose `Origin` is present and its hostname unlisted is rejected with `403`. Setting either allow-list enables the transport's rebinding check.                                                                                                                                                                                                                                              |
 
 **OAuth token confinement.** An OAuth grant is bound to the project it was consented for (the connector's `/mcp/<slug>` path, carried as the RFC 8707 resource indicator): the minted token authorizes only that project (`project:<id>` / `read:project:<id>`), and stays unbound (`*` / `read:*`) for a path-less `/mcp` grant, whose consent screen named no project. Deploying this version **revokes all previously-issued OAuth tokens**, so existing OAuth clients re-authorize once (static tokens are unaffected). The dashboard session cookie is marked `Secure` when `REMBRIC_PUBLIC_URL` is `https`.
 
@@ -434,7 +437,7 @@ To reclaim file-level disk after a large purge, run `VACUUM` against the SQLite 
 
 ## Architecture
 
-Single Node process, single SQLite file, packaged as a multi-arch Docker image (`linux/amd64`, `linux/arm64`). Agents reach it over HTTP(S) + a bearer token at `/mcp/<slug>` (or `/mcp` + `project.use`); the operator dashboard is served from the same process.
+Single Node process, single SQLite file, packaged as a multi-arch Docker image (`linux/amd64`, `linux/arm64`). Agents reach it over HTTP(S) + a bearer token at `/mcp/<slug>` (or `/mcp` for the default project); the operator dashboard is served from the same process.
 
 Four load-bearing invariants:
 
@@ -494,7 +497,7 @@ It deliberately does **not** contribute a stream to the hybrid RRF fusion: in it
         └───────────┬──────────────────────────────────┬───────────────┘
                     │                                  │
      MCP: HTTP(S) + Bearer                Session lifecycle: HTTP(S)
-     /mcp/<slug>  or  /mcp + project.use  POST /api/<slug>/sessions{,/:id/end,/:id/summary}
+     /mcp/<slug>  or  /mcp (default)      POST /api/<slug>/sessions{,/:id/end,/:id/summary}
                     │                     (hooks + in-process providers; never MCP)
                     ▼                                  ▼
    ┌───────────────────────────────────────────────────────────────────────┐
@@ -514,15 +517,14 @@ It deliberately does **not** contribute a stream to the hybrid RRF fusion: in it
    │  │    capture_passive}      │        │         │ /tokens          │   │
    │  │  memory.session_*        │        │         │ /maintenance     │   │
    │  │  memory.*_prompt(s)      │        │         │ /oauth  /update  │   │
-   │  │  project.{use,list,      │        │         │                  │   │
-   │  │    current}              │        │         │                  │   │
+   │  │  project.{list,current}  │        │         │                  │   │
    │  └────────────┬─────────────┘        │         └────────┬─────────┘   │
    │               ▼                      ▼                  ▼             │
    │  ┌─────────────────────────────────────────────────────────────────┐  │
    │  │  Service layer  (owns scope resolution + transactions)          │  │
    │  │   MemoryService · PromptsService · RelationsService             │  │
    │  │   ProjectsService · TokensService · AgentSessionsService         │  │
-   │  │   EntitiesService · OAuthService · SessionRouter                │  │
+   │  │   EntitiesService · OAuthService                                │  │
    │  │   hybrid-search · review (derived) · save-time-candidates       │  │
    │  └──────────────────────────────┬──────────────────────────────────┘  │
    │                                 ▼                                     │

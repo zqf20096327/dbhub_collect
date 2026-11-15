@@ -25,7 +25,7 @@
   <img src=".github/screenshots/admin-dashboard.png" alt="Dashboard admin RAYXO" width="900">
 </p>
 
-> **Status:** beta, versi terbaru [v0.7.2](https://github.com/fianbiasa/rayxo/releases/latest). Backup dan migrasi belum ada, lihat [Berikutnya](#berikutnya).
+> **Status:** beta, versi terbaru [v0.8.1](https://github.com/fianbiasa/rayxo/releases/latest). Backup tersimpan di disk server; backup ke FTP, SFTP, dan S3 menyusul, lihat [Berikutnya](#berikutnya).
 
 ## Instalasi
 
@@ -68,7 +68,7 @@ Dengan syarat itu terpenuhi, `setup.sh` otomatis memasang **SSL Let's Encrypt** 
 <details>
 <summary><strong>Pilihan instalasi, email panel, dan lupa password</strong></summary>
 
-`setup.sh` dari sebuah rilis otomatis mengunduh paket rilis yang sama dari GitHub dan memverifikasi checksum-nya. Versi tertentu: `--version 0.7.2`. Versi PHP untuk website (default 7.4 sampai 8.5): `--php-versions "8.2 8.3 8.4"`; versi yang sudah terpasang tidak dihapus. `setup.sh` aman dijalankan ulang kalau berhenti di tengah. Pilihan lengkap: `bash setup.sh --help`.
+`setup.sh` dari sebuah rilis otomatis mengunduh paket rilis yang sama dari GitHub dan memverifikasi checksum-nya. Versi tertentu: `--version 0.8.1`. Versi PHP untuk website (default 7.4 sampai 8.5): `--php-versions "8.2 8.3 8.4"`; versi yang sudah terpasang tidak dihapus. `setup.sh` aman dijalankan ulang kalau berhenti di tengah. Pilihan lengkap: `bash setup.sh --help`.
 
 **Email panel** (verifikasi, reset password) dikirim lewat Postfix di server itu sendiri (port 587 dengan login `rayxo@<hostname>`) dan ditandatangani DKIM oleh OpenDKIM. Di akhir instalasi, `setup.sh` menampilkan rekaman DNS yang perlu dipasang beserta statusnya (✔/✘), dan menyimpannya di `/etc/rayxo/dns-records.txt`:
 
@@ -100,7 +100,7 @@ Password baru ditampilkan sekali, dan semua session lama akun itu dikeluarkan.
 
 ## Yang sudah bisa dipakai
 
-- **Web:** domain, subdomain, alias, pointer, redirect; Nginx → Apache → PHP-FPM per akun dengan PHP 7.4–8.5 per domain; pengaturan per website (halaman error, folder berpassword, proteksi hotlink, tipe MIME, CGI, batas bandwidth dan disk); log dan laporan GoAccess.
+- **Web:** domain, subdomain, alias, pointer, redirect; Nginx → Apache → PHP-FPM per akun dengan PHP 7.4–8.5 per domain dan ionCube Loader opsional; pengaturan per website (halaman error, folder berpassword, proteksi hotlink, tipe MIME, CGI, batas bandwidth dan disk); log dan laporan GoAccess.
 - **SSL:** Let's Encrypt otomatis termasuk wildcard dan `mail.<domain>`, sertifikat sendiri, CSR, dan self-signed.
 - **Database:** MariaDB dengan phpMyAdmin sekali klik, import/export, periksa dan perbaiki tabel, akses dari luar server per IP.
 - **Email:** Postfix, Dovecot, Rspamd, dan Roundcube; forwarder, catch-all, autoresponder, filter, filter spam, DKIM/SPF/DMARC otomatis, batas kirim, antrean email, dan konfigurasi otomatis aplikasi email.
@@ -108,6 +108,8 @@ Password baru ditampilkan sekali, dan semua session lama akun itu dikeluarkan.
 - **File & akses:** file manager, FTP/FTPS, SFTP, SSH dalam jail dengan SSH key, cron job.
 - **Reseller:** paket reseller dengan overselling dan batas resource per akun, akun dan paket sendiri, masuk sebagai pelanggan, pindah pemilik, branding (nama, warna, logo), dan domain login panel sendiri.
 - **Batas & statistik:** kuota disk dan inode, grafik harian bandwidth, disk, CPU, dan RAM, batas CPU/RAM/proses/IO per akun (cgroups, untuk PHP, cron job, dan SSH), alamat IP sendiri per akun (shared atau dedicated).
+- **Backup & pindahan:** backup dan restore mandiri oleh pelanggan, backup terjadwal semua akun, backup manual dan pemulihan akun yang terhapus oleh admin dan reseller, backup panel itu sendiri untuk dipulihkan di server baru, transfer akun dari server RAYXO lain, serta impor backup cPanel dan DirectAdmin.
+- **WHMCS:** modul server yang membuat, men-suspend, mengaktifkan lagi, menghapus, dan mengganti paket atau password akun, login ke panel tanpa password dari WHMCS, dan sinkron pemakaian disk dan bandwidth. Unduh di [rayxopanel.com/download](https://rayxopanel.com/download/).
 - **Operasional:** REST API dengan login key, notifikasi email dan Telegram, tiket bantuan dengan lampiran, pesan massal, monitor layanan dengan watchdog, process monitor, editor file konfigurasi, riwayat login, task, dan audit log.
 - **Keamanan akun:** setiap akun hosting adalah user Linux sendiri; login panel dengan 2FA atau passkey.
 
@@ -153,11 +155,11 @@ Repo ini berisi kode sumber lengkap. Server tidak membangun apa pun: `setup.sh` 
 
 ## Berikutnya
 
-| Fase | Isi                                                                                                                |
-| ---- | ------------------------------------------------------------------------------------------------------------------ |
-| P4   | Backup dan restore (lokal, FTP, SFTP, S3), impor backup cPanel dan DirectAdmin, transfer antar server, modul WHMCS |
-| P5   | Brute force monitor, firewall, ModSecurity, kebijakan 2FA dan password, update panel sekali klik, UI dua bahasa    |
-| P6   | App installer dan WordPress manager, Git deploy, Node.js/Python, DNSSEC, multi-server                              |
+| Fase | Isi                                                                                                             |
+| ---- | --------------------------------------------------------------------------------------------------------------- |
+| P4   | Backup ke FTP, SFTP, dan S3                                                                                     |
+| P5   | Brute force monitor, firewall, ModSecurity, kebijakan 2FA dan password, update panel sekali klik, UI dua bahasa |
+| P6   | App installer dan WordPress manager, Git deploy, Node.js/Python, DNSSEC, multi-server                           |
 
 Panel dirancang untuk menjual shared hosting (Admin → Reseller → User) di satu server; desain agent sudah disiapkan untuk multi-server.
 
@@ -203,12 +205,12 @@ Lalu di `.env` set `AGENT_DRIVER=socket` dan `AGENT_SOCKET` ke path socket di at
 Rilis dibuat otomatis oleh GitHub Actions (`.github/workflows/release.yml`) setiap kali tag versi di-push:
 
 ```bash
-git tag v0.8.0 && git push origin v0.8.0
+git tag v0.9.0 && git push origin v0.9.0
 ```
 
-Workflow menjalankan `installer/build-release.sh`, lalu menerbitkan `setup.sh`, `rayxo-<versi>-linux-{amd64,arm64}.tar.gz`, dan file `.sha256`-nya di [Releases](https://github.com/fianbiasa/rayxo/releases).
+Workflow menjalankan `installer/build-release.sh`, lalu menerbitkan `setup.sh`, `rayxo-<versi>-linux-{amd64,arm64}.tar.gz`, modul WHMCS `rayxo-whmcs-<versi>.zip` (dari `whmcs/`), dan file `.sha256`-nya di [Releases](https://github.com/fianbiasa/rayxo/releases).
 
-Untuk uji tanpa rilis: jalankan `installer/build-release.sh 0.8.0-dev` di Mac, salin isi `dist/` ke server, lalu `bash setup.sh --package rayxo-0.8.0-dev-linux-amd64.tar.gz`.
+Untuk uji tanpa rilis: jalankan `installer/build-release.sh 0.9.0-dev` di Mac, salin isi `dist/` ke server, lalu `bash setup.sh --package rayxo-0.9.0-dev-linux-amd64.tar.gz`.
 
 ## Lisensi
 

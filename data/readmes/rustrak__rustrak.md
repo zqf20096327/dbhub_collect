@@ -240,6 +240,16 @@ sections, with the highlighted project's pages in a preview column, so Enter on
 a project goes to the project and its pages stay one keystroke away. Typing
 flattens everything into one relevance-ordered list.
 
+### On your phone
+
+The dashboard is a Progressive Web App. Open your Rustrak instance in Safari or
+Chrome, add it to your home screen, and it launches full screen like a native
+app, with a bottom tab bar and screens built for touch instead of a shrunken
+desktop page. There is no app store build and nothing extra to deploy: the
+phone talks to the same server.
+
+<img width="2000" height="1100" alt="wp-mobile" src="https://github.com/user-attachments/assets/002b6433-4167-4b04-8c5a-4e7d8c483e30" />
+
 ## From code, and from your editor
 
 The REST API has a typed client, and the server has an MCP endpoint built in,
@@ -283,6 +293,8 @@ and `GET /api/telemetry/preview` shows the exact document before it leaves.
 | [Configuration](https://rustrak.dev/configuration/environment) | Every environment variable |
 | [API reference](https://rustrak.dev/reference/api) | Endpoints and schemas |
 | [Architecture](https://rustrak.dev/reference/architecture) | Two-phase ingestion, grouping, storage |
+
+Questions, ideas or something to show? Join [GitHub Discussions](https://github.com/rustrak/rustrak/discussions). Bugs go to [Issues](https://github.com/rustrak/rustrak/issues).
 
 ## Contributors
 

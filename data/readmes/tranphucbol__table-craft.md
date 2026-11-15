@@ -181,7 +181,10 @@ for commands and conventions, and [RELEASING.md](RELEASING.md) is how a maintain
 
 ## License
 
-[MIT](LICENSE)
+TableCraft is free software under the [GNU General Public License v3.0 or later](LICENSE); see
+[NOTICE](NOTICE). Plugins may use any license ([LICENSE-EXCEPTION](LICENSE-EXCEPTION)), and the
+plugin API, [`@tablecraft-app/plugin-api`](packages/plugin-api), is [MIT](packages/plugin-api/LICENSE).
+Releases before the change stayed MIT.
 
 Database logos come from [Simple Icons](https://simpleicons.org) (CC0). The names and logos are
 trademarks of their owners, shown only to say which database a data source is; their use implies

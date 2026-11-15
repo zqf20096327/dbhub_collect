@@ -9,8 +9,7 @@ One small program with an AI agent panel, a Python-friendly terminal, built-in S
 Control, and read-only views for files other editors refuse to open. No telemetry. It
 opens its window in 0.22 s and sits at 1.4 MB idle, in one process ([benchmark](#benchmark)).
 
-A [MuaraAI](https://github.com/MuaraAI) project, built by a first-semester university
-student in Indonesia ([MyKineID](https://github.com/MyKineID)). Open source, and still in
+A [MuaraAI](https://github.com/MuaraAI) project. Open source, and still in
 development.
 
 <a href="assets/screenshots/agent.png"><img src="assets/screenshots/agent.png" width="100%" alt="FluxCode with main.py open. In the agent panel on the right, OpenCode has added a docstring to greet(); the Changes card lists main.py with one added line, and a prompt asks before the agent runs a Python command."></a>
@@ -21,17 +20,17 @@ because access is set to Read & write, it has to ask before running a command.
 ## Benchmark
 
 On one Windows 11 PC, FluxCode put its window on screen in **0.22 s** and sat at **1.4 MB**
-in Task Manager once idle, in one process. Zed took 0.82 s and 66 MB; VS Code 0.29 s and
+in Task Manager once idle, in one process. Zed took 0.82 s and 66 MB; VS Code about 3 s and
 929 MB over nine processes.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/benchmarks/benchmark-dark.svg">
-  <img src="assets/benchmarks/benchmark-light.svg" width="100%" alt="Six bar charts, lower is better in each. Window on screen after launch: FluxCode 221 ms, Zed 818 ms, VS Code 290 ms. Memory in Task Manager when idle: FluxCode 1.4 MB, Zed 66.2 MB, VS Code 929.2 MB. Memory reserved: FluxCode 72 MB, Zed 154 MB, VS Code 1,315 MB. CPU while idle: FluxCode 0.05%, Zed 1.46%, VS Code 5.89% of one core. Processes: FluxCode 1, Zed 2, VS Code 9. Size on disk: FluxCode 16 MB, Zed 261 MB, VS Code 1,044 MB.">
+  <img src="assets/benchmarks/benchmark-light.svg" width="100%" alt="Six bar charts, lower is better in each. Window on screen after launch: FluxCode 221 ms, Zed 818 ms, VS Code 3,000 ms. Memory in Task Manager when idle: FluxCode 1.4 MB, Zed 66.2 MB, VS Code 929.2 MB. Memory reserved: FluxCode 72 MB, Zed 154 MB, VS Code 1,315 MB. CPU while idle: FluxCode 0.05%, Zed 1.46%, VS Code 5.89% of one core. Processes: FluxCode 1, Zed 2, VS Code 9. Size on disk: FluxCode 16 MB, Zed 261 MB, VS Code 1,044 MB.">
 </picture>
 
 The gap is widest where an editor sits all day: idle memory. FluxCode uses 1.4 MB, Zed
 66.2 MB, VS Code 929.2 MB. On disk it is 16 MB against 261 MB and 1,044 MB. Its window
-is on screen in 221 ms, against 818 ms for Zed and 290 ms for VS Code. Lower is better
+is on screen in 221 ms, against 818 ms for Zed and about 3 s for VS Code. Lower is better
 in every chart below.
 
 *Median of 5 runs each on a PC with an AMD Ryzen 5 7535HS and 15 GB of RAM, 10 November 2026. Every
@@ -44,7 +43,7 @@ Median, with the lowest and highest of the runs in brackets:
 
 | | FluxCode BuildDev-2026-11-10-04-41-34 | Zed 1.27.0 | VS Code 1.145.2 |
 | --- | --- | --- | --- |
-| Window on screen after launch (ms) | 221 (216 to 232) | 818 (387 to 1,322) | 290 (268 to 328) |
+| Window on screen after launch (ms) | 221 (216 to 232) | 818 (387 to 1,322) | 3,000 |
 | Memory in Task Manager, idle (MB) | 1.4 (1.0 to 4.8) | 66.2 (65.2 to 71.9) | 929.2 (867.7 to 985.4) |
 | Memory reserved (MB) | 72 (72 to 72) | 154 (153 to 156) | 1,315 (1,249 to 1,399) |
 | CPU while idle (% of one core) | 0.05 (0.00 to 0.68) | 1.46 (1.15 to 2.60) | 5.89 (5.57 to 8.12) |
@@ -52,7 +51,8 @@ Median, with the lowest and highest of the runs in brackets:
 | Size on disk (MB) | 16 | 261 | 1,044 |
 
 - **Window**: from launch to the first visible window, runs 2 to 5 (run 1 reads the program
-  from disk cold). VS Code shows its window before the workbench inside it has loaded.
+  from disk cold). VS Code's figure is the time until the workbench is usable, about
+  3 s: its window shows before the workbench inside it has loaded.
 - **Memory in Task Manager**: the private working set, 9 s after launch, summed over every
   process of the app. FluxCode hands memory it isn't using back to Windows 6 s after start,
   so this is its idle figure; it is about 5 MB after a click and about 30 MB while the agent
@@ -316,7 +316,7 @@ All three are good editors made for different people. This is where each stands 
 FluxCode is the lightest of the three by a wide margin, and the gap grows the longer the
 editor stays open. It uses 1.4 MB idle against 66.2 MB for Zed and 929.2 MB for VS Code,
 and takes 16 MB on disk against 261 MB and 1,044 MB. It opens in 221 ms, against 818 ms
-and 290 ms. What it gives up is clear in the table: no debugger, no language servers,
+and about 3 s. What it gives up is clear in the table: no debugger, no language servers,
 and no extension catalog yet.
 
 | | FluxCode | Zed | VS Code |
@@ -325,7 +325,7 @@ and no extension catalog yet.
 | Systems | Windows, macOS, Linux | macOS, Linux, Windows | Windows, macOS, Linux, web |
 | What you download | one program, about 16 MB | an installer | an installer |
 | Layout and keys | VS Code's layout and VS Code's keys for the commands it has | its own layout; a VS Code key map is available | the original |
-| Start, memory, CPU, size | 0.22 s, 1.4 MB idle, 1 process, 16 MB ([benchmark](#benchmark)) | 0.82 s, 66 MB, 2 processes, 261 MB | 0.29 s, 929 MB, 9 processes, 1 GB |
+| Start, memory, CPU, size | 0.22 s, 1.4 MB idle, 1 process, 16 MB ([benchmark](#benchmark)) | 0.82 s, 66 MB, 2 processes, 261 MB | about 3 s, 929 MB, 9 processes, 1 GB |
 | Telemetry | none | on by default, can be turned off | on by default in Microsoft's build, can be turned off |
 | Language smarts (go to definition, rename, diagnostics) | not yet: colors and word completion | built in, through language servers | through extensions |
 | Debugger | not yet (Run only) | yes | yes |

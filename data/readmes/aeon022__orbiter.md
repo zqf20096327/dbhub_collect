@@ -10,6 +10,8 @@
 
 > Portable single-file CMS for Astro — everything in one `.pod` file.
 
+**[orbiter.sh](https://orbiter.sh)** · [Docs](https://orbiter.sh/docs) · **No Node on your host? → [Lander](https://github.com/aeon022/lander)**, the same admin on PHP hosting.
+
 Content, media, schema, config, users — all in one SQLite database. Copy the file and your entire site moves with it. No cloud. No API keys. No external services.
 
 ```
@@ -151,6 +153,12 @@ ORBITER_POD=./test.pod npm run dev --workspace=packages/admin
 curl http://localhost:4322/health
 # → { "ok": true, "pod": "/path/to/content.pod" }
 ```
+
+---
+
+## Lander — Orbiter on PHP hosting
+
+No Node on your host? **[Lander](https://orbiter.sh/lander)** runs the same admin on ordinary PHP hosting (PHP 8.1+, SQLite): same SQL file (`.pod`, a plain SQLite database, only renamed), same Station interface, plus a live read API (`/api/public/<collection>`) for your site. Docs: [orbiter.sh/docs/lander](https://orbiter.sh/docs/lander). Source: [aeon022/lander](https://github.com/aeon022/lander) (MIT).
 
 ---
 
@@ -978,13 +986,9 @@ Trash (soft delete + restore + permanent delete), activity log, bulk actions (pu
 
 ### Themes
 
-Three themes × two schemes (dark/light) × two layouts, switchable in Settings:
+Ten themes × two schemes (dark/light) × three styles (Classic, Glass, Station), switchable in Settings → Appearance, plus font choice, custom colours and UI zoom:
 
-| Theme | Dark | Light |
-|-------|------|-------|
-| **Space** | Space station HUD — cyan + electric blue | Solar Command — ice blue |
-| **Zen** | Japandi — slate, mauve, moss | Japandi light |
-| **Catppuccin** | Mocha | Latte |
+Space (default), missionctl, Zen, Catppuccin, Terminal, Paper, Nord, Gruvbox, Dracula, Tokyo Night.
 
 **Layouts:** Classic (sidebar + content grid) or **Station** (Space Station mode — floating magnification dock, HUD panel with stats/notes, frosted glass page headers). Layout and theme saved to `localStorage`.
 

@@ -132,8 +132,12 @@ O painel abre por login (`/entrar`, com o `ADMIN_TOKEN`; o cookie guarda um deri
   Eventos: `checkout` e `compra`. Campos: `{pedido}`, `{nome}`, `{email}`, `{telefone}`, `{produto}`, `{valor}`, `{status}`.
   Com `EMAIL_VIA=composio`, o e-mail de acesso sai do Gmail conectado.
 
-A Genesis hospeda uma instância em https://funil.genesisinnovation.com.br (app + Evolution própria num compose, túnel de
-um hostname): `apps/factory/deploy/factory01/instalar-funil-aberto.sh` no repositório da Genesis.
+A Genesis hospeda uma instância em https://funil.genesisinnovation.com.br num cluster Kubernetes (k3s) com **escala a
+zero**: o KEDA HTTP segura a primeira requisição, sobe o pod e o desliga depois de 10 min sem visita (até 2 réplicas com
+20 requisições simultâneas cada); o SQLite fica num disco de 1 Gi. Como o laço interno da recuperação dorme junto com o
+pod, um CronJob roda `python3 app.py tick` a cada 10 min no mesmo disco. A etapa é reservada no banco antes de enviar,
+então tick e laço juntos não duplicam mensagem. Para rodar assim na sua infraestrutura: imagem deste `Dockerfile`, volume
+em `/data`, sonda em `/health` e um agendador chamando `tick` (ou `POST /api/admin/recuperacao`).
 
 ## Configuração
 
@@ -156,6 +160,8 @@ Testes: `python3 -m pytest -q tests` (sobem o servidor de verdade e percorrem o 
 | `EMAIL_VIA` | `composio` manda o e-mail de acesso pelo Gmail conectado na Composio | SMTP |
 | `COMPOSIO_USUARIO`, `COMPOSIO_URL` | dono das contas conectadas na Composio; outro endereço da API (testes) | derivado do `BASE_URL`; a API pública |
 | `CONEXOES_URL`, `CONEXOES_SERVICO_TOKEN`, `CONEXOES_USUARIO` | WhatsApp por um serviço de conexões que já tem o número ligado (o `maus-conexoes` da Genesis): o funil não abre outro QR | Evolution própria ou Cloud API |
+| `WORKERS` | processos que servem juntos o mesmo socket (um por núcleo de CPU); só o 1º roda a recuperação | `1` |
+| `FUNIL_RECUPERACAO_LACO` | `0` desliga o laço interno da recuperação, para um agendador de fora chamar `python3 app.py tick` | `1` |
 | `FUNIL_TETO_WHATSAPP_DIA` | teto de mensagens de WhatsApp em 24 h | `300` |
 | `TELEGRAM_API` | outro endereço da Bot API (testes) | `https://api.telegram.org` |
 

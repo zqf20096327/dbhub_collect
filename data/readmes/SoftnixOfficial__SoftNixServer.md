@@ -2,11 +2,11 @@
 
 <img src="docs/logo.png" alt="SoftNix Server logo" width="140" />
 
-# SoftNix Server
+# SoftNix Server — Free Laragon & XAMPP Alternative for Windows
 
-### Local + Live PHP Server for Windows
+### Local PHP & Laravel development server (Apache / Nginx · MySQL · PostgreSQL · Redis)
 
-**A free, fast and secure local development server for PHP & Laravel —<br/>with a one-click Realtime mode for WebSockets, queues and WiFi sharing.**
+**A free, fast and secure local server for PHP, Laravel and WordPress on Windows 10 / 11 —<br/>a modern alternative to Laragon, XAMPP, WampServer and Laravel Herd, with one-click Realtime mode, public share links and deploy.**
 
 [![Latest release](https://img.shields.io/github/v/release/SoftnixOfficial/SoftNixServer?style=for-the-badge&color=2563EB&label=Latest)](https://github.com/SoftnixOfficial/SoftNixServer/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/SoftnixOfficial/SoftNixServer/total?style=for-the-badge&color=16A34A)](https://github.com/SoftnixOfficial/SoftNixServer/releases)
@@ -37,6 +37,34 @@
 
 ---
 
+## 🔎 What is SoftNix Server?
+
+**SoftNix Server is a free local web server for Windows** — a WAMP stack (Windows, Apache or Nginx, MySQL / MariaDB, PHP) made for
+**Laravel**, **WordPress** and plain **PHP** projects. If you are looking for a **Laragon alternative**, a **XAMPP alternative**,
+a **WampServer alternative** or a free **Laravel Herd alternative for Windows**, it gives you the same "install and run localhost"
+experience and adds the tools you normally install separately.
+
+| | **SoftNix Server** | XAMPP | Laragon |
+|---|:---:|:---:|:---:|
+| Automatic `https://project.test` domains | ✅ | — (manual virtual hosts) | ✅ |
+| Apache **and** Nginx, switch any time | ✅ | Apache only | ✅ |
+| Several PHP versions, switch in one click | ✅ | — | ✅ |
+| Redis + Laravel Reverb (WebSocket) + queue worker in one click | ✅ | — | Redis |
+| `dump()` / `dd()` viewer and live `laravel.log` | ✅ | — | — |
+| Database snapshots (save / restore) | ✅ | — | — |
+| Deploy changed files to your hosting (SSH) | ✅ | — | — |
+| Test on your phone with a QR code (WiFi) | ✅ | — | — |
+| Move projects and databases over in one click | from Laragon | — | — |
+| Price | **Free**, no licence key | Free | see laragon.org |
+
+<sub>Comparison of built-in features as we understand them (November 2026). XAMPP, Laragon, WampServer and Laravel Herd are
+products of their respective owners; SoftNix Server is not affiliated with them.</sub>
+
+**Runs next to XAMPP or Laragon:** if their Apache or MySQL already uses a port, SoftNix tells you which program it is and moves
+to a free port in one click. Nothing in your XAMPP / Laragon folders is changed.
+
+---
+
 ## ✨ Why SoftNix Server?
 
 Most local servers stop at "Apache + PHP + MySQL". SoftNix Server gives you all of that **plus the things modern
@@ -47,7 +75,7 @@ in one small app with **one click per task**.
 - ⚡ **Realtime built-in** — Redis + Laravel Reverb (WebSocket) + Queue worker + WiFi share with QR code.
 - 🔒 **Secure by default** — services listen on `127.0.0.1`, every download is SHA-256 verified, no tracking.
 - 🪶 **Tiny installer** (~2 MB) — it downloads only the servers you choose, from their official websites.
-- 🔄 **Auto-updates** — new versions are offered inside the app; your projects and databases are always kept.
+- 🔄 **Always up to date** — the app checks for a new version every time it starts and updates itself in seconds; your projects and databases are always kept.
 - 🧩 **All-in-one** — PHP extensions, Xdebug, Node versions, PostgreSQL, dump viewer, database snapshots, public share links
   and one-click deploy to your hosting: the tools you used to install separately, built in (and downloaded only when you use them).
 
@@ -127,7 +155,7 @@ in one small app with **one click per task**.
 - Light & **dark theme**, system tray, start with Windows
 - **First-time setup** downloads everything you pick (~170 MB)
 - Logs viewer, settings window, port editor
-- **Auto-update** from GitHub Releases (SHA-256 verified)
+- **Automatic updates** from GitHub Releases (SHA-256 verified, required so everyone has the latest fixes)
 - **Deploy to live** — uploads only the changed files to your hosting over SSH (key login), runs migrations, maintenance page while it updates
 - **Settings → Downloads** — see and remove optional add-ons
 - Clean uninstall — **keeps your projects and databases**
@@ -247,9 +275,9 @@ flowchart LR
 - Downloads are **HTTPS only** and **SHA-256 verified** before they are used. Archives are checked against path tricks.
 - Secrets (Redis password, random MySQL password, SMTP password) are encrypted with **Windows DPAPI**.
 - Administrator rights are requested only for the hosts file, the firewall rule and uninstall cleanup.
-- **No tracking.** The app checks GitHub for updates (can be turned off in Settings).
+- **No tracking.** The app checks GitHub for a new version when it starts; new versions are required.
 - **Anonymous usage count:** the installer sends *install / update / uninstall* (with an optional reason you pick when
-  uninstalling), and the app sends one "still in use" signal per day — only a random ID, the app version and the Windows
+  uninstalling and, if you leave the box ticked, the last three error lines of the SoftNix log so we can fix what went wrong), and the app sends one "still in use" signal per day — only a random ID, the app version and the Windows
   version. No name, no files, no projects. To turn it off, run the setup with `/NOSTATS`.
 - **Feedback** you send from *Help → Report a bug / Request a feature* goes to the SoftNix team (your email only if you type it).
 
@@ -274,8 +302,40 @@ Click **Yes** when Windows asks for permission to update the hosts file, and tru
 <details>
 <summary><b>How do I update?</b></summary>
 
-SoftNix checks for updates when it starts. When a new version is out you'll see <b>Update now</b> — it downloads,
-verifies and installs the update and restarts the app. Or use <b>Help → Check for updates</b>.
+SoftNix checks for a new version every time it starts. When one is out you see <b>Update now</b> — it downloads, verifies
+(SHA-256) and installs the update in a few seconds and restarts the app. Updates are <b>required</b>, so nobody stays on a
+version with known bugs. Projects, databases and settings are always kept. Without internet the app starts normally.
+</details>
+
+<details>
+<summary><b>Is SoftNix Server a free alternative to Laragon and XAMPP?</b></summary>
+
+Yes. It is a free local PHP server for Windows (Apache or Nginx, PHP 8.2 – 8.5, MariaDB / MySQL, PostgreSQL, Redis, Mailpit,
+phpMyAdmin) with automatic <code>.test</code> domains and HTTPS like Laragon, and it is as simple to start as XAMPP:
+install, click <b>Start all</b>, open <code>http://localhost</code>. There is no licence key and no paid version.
+</details>
+
+<details>
+<summary><b>Can I install it while XAMPP or Laragon is installed?</b></summary>
+
+Yes. SoftNix installs into its own folder (<code>C:\softnix</code>) and never changes XAMPP or Laragon. If their Apache or
+MySQL is running on port 80 / 443 / 3306, SoftNix shows which program uses the port and offers a free port in one click —
+or stop the other server and click <b>Start all</b> again.
+</details>
+
+<details>
+<summary><b>How do I move my projects from XAMPP?</b></summary>
+
+Copy your project folders from <code>C:\xampp\htdocs</code> into <code>C:\softnix\www</code>. Export each database in XAMPP's
+phpMyAdmin (<b>Export → SQL</b>) and import it with <b>Menu → MySQL → Import .sql file</b>. For Laravel projects use
+<b>Menu → www → project → Connect MySQL database</b> to fill <code>.env</code>.
+</details>
+
+<details>
+<summary><b>A download fails during first-time setup</b></summary>
+
+Some internet providers block one of the official download sites. Click <b>Retry</b> — only the failed parts are downloaded
+again. If it keeps failing, try another network or a VPN, or set your DNS to <code>1.1.1.1</code>.
 </details>
 
 <details>

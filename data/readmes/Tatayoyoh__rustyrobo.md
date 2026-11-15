@@ -20,7 +20,7 @@
 <a href="https://tatayoyoh.github.io/rustyrobo/">Website</a>
 </p>
 
-![rustyrobo](docs/screenshots/05-tree.png)
+![Rustyrobo driven by the keyboard: connection manager, Ctrl+P, tree view, Edit Document](docs/demo.gif)
 
 ## Why
 
@@ -44,17 +44,23 @@ and rebuilds it as a single native Rust binary that supports current MongoDB ver
 - Improved connection manager and redesigned connection editor
 - Improved document view/edit modal
 - Field-name and operator autocompletion
-- Find in the results (Ctrl+F), copy the value under the pointer (Ctrl+C) or with its name (Ctrl+Shift+C)
-- Updates itself: tells when a new version is available (asks GitHub for the latest release at startup; can be turned off in Options)
+- Find in the results (Ctrl+F)
+- Kick copy the value under the pointer (Ctrl+C) or with its name field (Ctrl+Shift+C)
 - Real colour themes
-- All languages: uses the fonts of your system, with right-to-left text in the results
 - Native single binary, light on resources
 - Multi document selection
-- A favorite script manager
-- Import / export of collections and query results in JSON and CSV
-- Dump / restore of databases in the formats of mongodump (folder or archive), no tools to install
-- Query history: search the scripts you ran and open them again (Ctrl+H)
-- Edit values in place in the table view (double-click a cell)
+- A favorite script manager (Ctrl+J)
+- Import / export of collections in JSON and CSV
+- Dump / restore of databases in the formats of mongodump
+- Query history (Ctrl+H)
+- Edit values in place in tree / table views
+- Kick collection access (Ctrl+P)
+- Kick section switch : explorer, editor, results, logs (Alt+arrows)
+- Keyboard navigation
+
+## Known issues
+
+- right-to-left texts partialy supported (egui issue)
 
 ## Install
 
@@ -100,10 +106,6 @@ Settings are stored in `~/.config/rustyrobo/settings.json` (override with `RUSTY
 | ![](docs/screenshots/13-history.png) | ![](docs/screenshots/14-export.png) |
 | **Editing in the table** | |
 | ![](docs/screenshots/15-table-edit.png) | |
-
-## Roadmap
-
-What Studio 3T offers and rustyrobo does not yet: see [ROADMAP.md](ROADMAP.md).
 
 ## License
 

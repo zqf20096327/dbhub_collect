@@ -43,6 +43,13 @@ If you have Go installed, you can install SmoothDB using:
 go install github.com/sted/smoothdb@latest
 ```
 
+To build a container image, use `misc/Dockerfile` from the repository root. The image holds only the binary and runs as a non-root user. Give the configuration with the `SMOOTHDB_*` environment variables, or mount a `config.jsonc` on `/data`:
+
+```
+docker build -f misc/Dockerfile --build-arg VERSION=$(git describe --tags --always) -t smoothdb .
+docker run -p 4000:4000 -e SMOOTHDB_DATABASE_URL=postgresql://... -e SMOOTHDB_JWT_SECRET=... smoothdb
+```
+
 To test your installation type 
 
 ```
@@ -99,7 +106,9 @@ Content-Type: application/json
 
 The response holds `access_token`, `token_type`, `expires_in`, `expires_at`, `refresh_token` and `user`.
 
-The server does not start without a `JWTSecret` when `LoginMode` is not `"none"` (with `JWTKeys`, only for `"db"`). `/token` is rate limited per client address (`LoginRateLimit`).
+The server does not start without a `JWTSecret` when `LoginMode` is not `"none"` (with `JWTKeys`, only for `"db"`). As in PostgREST, a passphrase `JWTSecret` must have at least 32 characters, after the base64 decoding when `JWTSecretIsBase64` is set; only `SMOOTHDB_DEBUG` accepts a shorter one. `/token` is rate limited per client address (`LoginRateLimit`).
+
+In `"db"` mode a connection proves the password only when PostgreSQL asks for one (password, md5 or scram-sha-256 in `pg_hba.conf`). Under `trust`, `peer`, `ident` or certificate authentication `/token` refuses every login, unless `LoginAllowTrust` is set, for development only (`SMOOTHDB_DEBUG` sets it). An empty password and the name of the authenticator are always refused.
 
 We will omit the Authorization header in the following examples.
 
@@ -416,7 +425,7 @@ GET /api/testdb/employees?id=start.1&manager_id=recurse.all&select=id,name,__dep
 GET /api/testdb/employees?id=start.1&manager_id=recurse.all&select=id,name,__path&order=__path HTTP/1.1
 ```
 
-**Edge tables (`via`).** Traverse a graph through a separate edge table with source/target columns. Add the `!both` hint to follow edges in either direction; filter which edges to follow with the standard `table.column` syntax (`eq`, `in`, `or`, …):
+**Edge tables (`via`).** Traverse a graph through a separate edge table with source/target columns. The edge table is a name in the schema of the request, without a dot. Add the `!both` hint to follow edges in either direction; filter which edges to follow with the standard `table.column` syntax (`eq`, `in`, `or`, …):
 
 ```http
 GET /api/testdb/documents?id=after.1&id=recurse.all&relationships=via(src_id,dst_id) HTTP/1.1
@@ -684,9 +693,12 @@ Enable it with `EnableAdminUI`. The Admin area also needs `EnableAdminRoute`:
 ```json
 {
 	"EnableAdminRoute": true,
+	"AdminRoles": ["admin"],
 	"EnableAdminUI": true
 }
 ```
+
+Only the roles in `AdminRoles` may use the admin routes; `"*"` admits every role, and an empty list refuses all of them. The PostgreSQL privileges of a role are not enough of a limit: SQL that the admin API stores (a function body, a view, a column default, a policy) can switch to any role granted to the authenticator when it runs. Give `AdminRoles` only to roles you trust with the authenticator.
 
 The UI signs in with `/token` (`LoginMode` `"db"` or `"gotrue"`). With `AllowAnon` and a `Database.AnonRole` it also works without a login.
 
@@ -748,8 +760,9 @@ The configuration file *config.jsonc* (JSON with Comments) is created automatica
 | LoginMode | Login mode: "none", "db", "gotrue" | none |
 | AuthURL | URL of the external AuthN service | "" |
 | LoginRateLimit | Max POST /token attempts per minute per client address, 0 to disable | 30 |
+| LoginAllowTrust | With LoginMode "db", issue a token when PostgreSQL did not ask for a password (trust, peer, ident, certificate); for development only | false |
 | AllowAnon | Allow unauthenticated connections; also requires a non-empty Database.AnonRole, otherwise anonymous requests are refused (401) | false |
-| JWTSecret | Secret for JWT tokens: a passphrase (HS256), a JWK or a JWK set. Required when LoginMode is not "none" (with JWTKeys, only for "db") | "" |
+| JWTSecret | Secret for JWT tokens: a passphrase (HS256) of at least 32 characters, a JWK or a JWK set. Required when LoginMode is not "none" (with JWTKeys, only for "db") | "" |
 | JWTSecretIsBase64 | JWTSecret is base64-encoded | false |
 | JWTAud | Audience the JWT `aud` claim must contain, when present; "" for any | "" |
 | JWTRoleClaimKey | JSONPath of the role in the JWT claims, a subset of PostgREST's (e.g. `$.app_metadata.role`) | "$.role" |
@@ -758,6 +771,7 @@ The configuration file *config.jsonc* (JSON with Comments) is created automatica
 | SessionMode | Session mode: "none" (no cache), "claims" (cache the verified claims); "role" is a deprecated alias of "claims" | "claims" |
 | MaxSessions | Maximum number of cached sessions; beyond it a request runs without a session | 10000 |
 | EnableAdminRoute | Enable administration of databases and tables | false |
+| AdminRoles | Roles that may use the admin routes; `"*"` for every role. A refused request answers 403, or 401 when anonymous | [] for none |
 | EnableAdminUI | Enable Admin dashboard | false |
 | EnableAPIRoute | Enable API access | true |
 | BaseAPIURL | Base URL for the API | "/api" |
@@ -781,7 +795,7 @@ The configuration file *config.jsonc* (JSON with Comments) is created automatica
 | Database.AnonRole | Role for anonymous requests, and for tokens without a role claim, when AllowAnon is true; empty refuses anonymous access (like PostgREST's unset db-anon-role). Set it to an explicit non-superuser role, never the connecting role | "" |
 | Database.AllowedDatabases | Allowed databases | [] for all |
 | Database.SchemaSearchPath | Schema search path of the connections (name resolution of unqualified types, functions and views) | [] for Postgres search path |
-| Database.ExposedSchemas | Schemas a request may select with `Accept-Profile`/`Content-Profile`, the first being the default (PostgREST's `db-schemas`); a header naming another schema answers 406 | [] for every schema, with the first of the search path as default |
+| Database.ExposedSchemas | Schemas a request may select with `Accept-Profile`/`Content-Profile`, the first being the default (PostgREST's `db-schemas`); a header naming another schema answers 406; `pg_catalog` and `information_schema` are not allowed, as in PostgREST | [] for every schema except the system schemas (`pg_*`, `information_schema`), with the first of the search path as default |
 | Database.TransactionMode | General transaction mode for operations: "none", "commit", "rollback" (also "commit-allow-override", "rollback-allow-override", overridable per request with `Prefer: tx=commit` / `tx=rollback`). Whatever the mode, GET and HEAD requests (and POST calls to STABLE or IMMUTABLE functions) run read-only, see [Functions](#functions) | "none" |
 | Database.MaxRows | Maximum rows a read answers, at the top level and in each embed (PostgREST's `db-max-rows`); 0 for no limit | 0 |
 | Database.AggregatesEnabled | Enable aggregate functions | true |
@@ -818,9 +832,10 @@ The configuration file *config.jsonc* (JSON with Comments) is created automatica
 | SMOOTHDB_AUTH_URL | AuthURL |
 | SMOOTHDB_ALLOW_ANON | AllowAnon |
 | SMOOTHDB_ENABLE_ADMIN_ROUTE | EnableAdminRoute | 
+| SMOOTHDB_ADMIN_ROLES | AdminRoles (comma-separated list) |
 | SMOOTHDB_CORS_ALLOWED_ORIGINS | CORSAllowedOrigins (comma-separated list) |
 | SMOOTHDB_CORS_ALLOW_CREDENTIALS | CORSAllowCredentials (true/false) |
-| SMOOTHDB_DEBUG | true forces: AllowAnon: true, LoginMode: "db", EnableAdminRoute: true, EnableAdminUI: "true", Logging.Level: "trace", Logging.StdOut: true, EnableDebugRoute: true |
+| SMOOTHDB_DEBUG | true forces: AllowAnon: true, LoginMode: "db", LoginAllowTrust: true, EnableAdminRoute: true, AdminRoles: ["*"] when empty, EnableAdminUI: "true", Logging.Level: "trace", Logging.StdOut: true, EnableDebugRoute: true; it also accepts a JWTSecret passphrase shorter than 32 characters |
 	
 ### Command line parameters
 
@@ -851,6 +866,10 @@ The authenticator must be able to login and should not "inherits” the privileg
 ```sql
 CREATE ROLE auth LOGIN NOINHERIT
 ```
+
+A request runs as its role, but its connection stays logged in as the authenticator. SQL that runs in a request can therefore switch to any role granted to the authenticator, with `SET ROLE` or `set_config('role', ...)`. This is the same in PostgREST. Grant to the authenticator only the roles that requests use, and do not expose functions that run SQL text from their arguments.
+
+PostgreSQL checks the `CONNECT` privilege of a database only for the authenticator, which opens the connections. SmoothDB checks it for the request role: a request on `/api/<db>` or `/admin/databases/<db>/...` whose role has no `CONNECT` on `<db>` answers 403 (42501), or 401 when it is anonymous. SmoothDB caches the answer per role, so a `GRANT` or `REVOKE CONNECT` takes effect at the next schema cache reload. Template databases are not served.
 
 Invoking
 

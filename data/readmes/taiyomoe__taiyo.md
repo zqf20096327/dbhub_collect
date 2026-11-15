@@ -88,6 +88,7 @@ taiyo/
 - [Dragonfly](https://www.dragonflydb.io/) — Redis-compatible cache (Better Auth secondary storage, rate limits)
 - [RustFS](https://rustfs.com/) — S3-compatible object store for cover/banner/staff images
 - [HyperDX](https://www.hyperdx.io/) — observability stack
+- [Umami](https://umami.is/) — cookieless audience measurement
 
 ## 🚀 Getting started
 
@@ -162,6 +163,12 @@ collector only accepts logs after you sign up in its UI; copy the ingestion key
 into `HYPERDX_INGESTION_KEY` in `apps/api/.env` to turn log shipping on. Without
 the profile, or until then, the API logs to stdout only.
 
+**Umami** measures production's audience and is opt-in locally too: add `umami` to
+`COMPOSE_PROFILES` (`"hyperdx,umami"` for both) and rerun `pnpm bootstrap`. Sign in
+with `admin` / `umami`, add a website, and put its id into `VITE_UMAMI_WEBSITE_ID` in
+`apps/web/.env`. The web relays the tracker under `/u` on its own origin, so only the
+script and the event endpoint of Umami are public.
+
 ## 📝 Available scripts
 
 Root-level:
@@ -177,6 +184,7 @@ pnpm lint               # oxlint (type-aware; doubles as the typecheck gate)
 pnpm lint:fix           # oxlint --fix
 pnpm lint:ws            # sherif — workspace dependency validation
 pnpm knip               # unused exports + dead deps
+pnpm lint:messages      # unused i18n messages + keys missing from a locale
 pnpm test:unit          # vitest (vitest.config.unit.ts)
 pnpm test:integration   # vitest (vitest.config.integration.ts) — requires pnpm bootstrap
 ```
@@ -237,11 +245,11 @@ applied, frozen history.
 Three independent workflows, one job each, all triggered on the same events and
 all running in parallel:
 
-| Workflow                               | Runs                                           |
-| -------------------------------------- | ---------------------------------------------- |
-| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`            |
-| `.github/workflows/ci-unit.yml`        | `test:unit`                                    |
-| `.github/workflows/ci-integration.yml` | `test:integration`, against service containers |
+| Workflow                               | Runs                                                 |
+| -------------------------------------- | ---------------------------------------------------- |
+| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`, `lint:messages` |
+| `.github/workflows/ci-unit.yml`        | `test:unit`                                          |
+| `.github/workflows/ci-integration.yml` | `test:integration`, against service containers       |
 
 All three run on pull requests and on direct pushes to `main` and `develop`,
 and install via the shared `.github/actions/setup` composite action. The two

@@ -8,6 +8,11 @@ at once.** A user picks a project, a scenario and a target environment, queues a
 run, and reads the results in plain words. No infrastructure code, and no way to
 aim load at a server you do not own.
 
+<img alt="A scenario drawn on the canvas, the k6 script Ballast generates from it, a run with its live output, and the verdict: every threshold met" src="assets/readme/demo.gif" width="100%">
+
+**Try it at [myballast.pro](https://myballast.pro)**: free during the beta, sign in
+with GitHub or Google. Or [run it yourself](#self-hosting).
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features-dark.svg">
   <img alt="A visual builder, safe by design, and results you can read" src="assets/readme/features-light.svg" width="100%">
@@ -33,8 +38,66 @@ aim load at a server you do not own.
 
 ## Status
 
-Ballast is under active development. The API and the database schema can still
-change between versions.
+Ballast is in public beta and under active development. The hosted version at
+myballast.pro is free during the beta; a paid plan will come later, and
+self-hosting stays free. The API and the database schema can still change
+between versions.
+
+## Limits
+
+- **200 virtual users and one hour per run.** These are constants in the code, not
+  settings: Ballast is built for realistic multi-step API scenarios, not for
+  simulating a million users.
+- **One region.** Load leaves from Ballast's own servers.
+- **HTTP and HTTPS only.**
+- **Targets must be reachable from the internet** and their ownership proved
+  before any run.
+- **No run comparison or trends yet**: each run has its own verdict.
+- **A young project**, built by one person.
+
+## Self-hosting
+
+Run all of Ballast on one machine, from images. You need Docker (with Compose)
+and `openssl`, nothing else.
+
+```bash
+make selfhost
+```
+
+The first run writes `.env.selfhost` with generated passwords and keys, and
+stops short of letting anyone in: Ballast stores no password, so people sign in
+with GitHub or Google, and that needs an OAuth app of your own. Create one at
+https://github.com/settings/developers with
+
+- Homepage URL: `http://localhost:3000`
+- Authorization callback URL: `http://localhost:3000/auth/github/callback`
+
+put its client ID and secret in `.env.selfhost`, and run `make selfhost` again.
+Ballast is on http://localhost:3000; the first sign-in creates your
+organization. `make selfhost-logs` follows it, `make selfhost-down` stops it and
+keeps the data.
+
+What to know before you rely on it:
+
+- **Only targets reachable from the internet can be tested.** A target is
+  verified by reading a challenge file from it, and the verifier refuses
+  private, loopback and link-local addresses, with no setting to allow them.
+  A staging server on your own network cannot be verified.
+- **The worker holds the Docker socket**, which gives it what root has on the
+  host: it starts each run's generator and proxy through it. Run it on a
+  machine you dedicate to Ballast.
+- **No TLS.** The front end is published on `127.0.0.1` only. To open it to
+  anyone else, put a reverse proxy with a certificate in front, and set
+  `BALLAST_PUBLIC_URL` and `BALLAST_WEB_URL` to its `https` address (and the
+  OAuth app's URLs with them).
+- **Stopping drains.** `make selfhost-down` lets a run in progress finish,
+  up to an hour and six minutes, rather than cut a measurement in half.
+- **One worker, three runs at a time**, two per organization. More wait in the
+  queue.
+- Keep `BALLAST_SECRET_KEY` with your database backups: without it, the
+  secrets stored in the database cannot be read.
+
+The sections below are for working on Ballast itself.
 
 ## Prerequisites
 

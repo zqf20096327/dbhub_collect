@@ -55,8 +55,8 @@ brew install --cask deltascope
 Pin a specific release:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Fanduzi/DeltaScope/v0.511.1/install.sh | \
-  DELTASCOPE_VERSION=v0.511.1 sh
+curl -fsSL https://raw.githubusercontent.com/Fanduzi/DeltaScope/v0.512.0/install.sh | \
+  DELTASCOPE_VERSION=v0.512.0 sh
 ```
 
 ## MCP
@@ -147,6 +147,9 @@ Example JSON shape:
 ```json
 {
   "verdict": "review",
+  "coverage": {
+    "status": "complete"
+  },
   "summary": {
     "statements": 1,
     "blockers": 0,
@@ -161,6 +164,14 @@ Example JSON shape:
   }
 }
 ```
+
+`coverage.status` reports whether every recognized statement aspect had audited semantics (`complete`, `unverified`, `incomplete`). Recognized-but-unsupported statements stay in `statements` with `coverage.status=incomplete` and bounded `unsupported` evidence, floor the verdict to at least `review`, and surface as `ErrUnsupportedStatement` (SDK), exit 1 (CLI), HTTP 400, or MCP `isError=true`. Enabled required rules that declare required metadata facts report per-statement `evidence_gaps` (`rule_id`, `reason_code`, `required_facts`) when those facts are unavailable: gaps are not findings, they mark the statement `unverified`, floor the verdict to `review`, and carry warning-equivalent `--fail-on` weight.
+
+MySQL/TiDB requests have a fixed quota of **1024 top-level normalized statements** for ordered enrichment and subsequent rule evaluation. Statement 1024 is processed normally; statement 1025 and every later statement remain in the result with `coverage.status=incomplete` and one `unsupported` entry whose feature is `audit.resource_limit`. This is not a policy rule and cannot be disabled: the partial result has at least `review` (a prior `reject` stays), with the existing unsupported error channel (application/SDK `ErrUnsupportedStatement`, CLI exit 1 even with `--fail-on none`, HTTP 400, MCP `isError=true`). A genuine parser failure still takes precedence, including CLI exit 2. The check runs **after parsing/extraction**; it does not bound SQL size, parsing depth, elapsed time, memory, or OOM risk. Input parsing, normalization, and retained result storage can still grow with input. PostgreSQL is unchanged. Splitting a migration into requests is not automatically equivalent: earlier derived schema facts are not carried across requests. See the [ordered-audit quota contract](docs/reference/audit-capability-matrix.md#ordered-audit-statement-quota-mysqltidb).
+
+Recognized MySQL/TiDB stored-object lifecycle statements (`PROCEDURE`, `FUNCTION`, `TRIGGER`, `EVENT` create/alter/drop) preserve outer migration table facts: defining a body does not execute its SQL, and dropping one does not drop a same-named table. This only skips outer table-state mutation — the statement itself still audits: MySQL bodies run through the shared static member analyzer (`routine.*`, `trigger.*`, `event.*` scoped evidence including bounded `*.body.*` members), triggers bind `OLD`/`NEW` legality to the declared event, and events model schedule shape with an enabled-execution warning; TiDB forms keep their vendor boundary. Earlier contamination and resource limits are not cleared, and each statement still consumes one statement slot. No body executes, no scheduler or trigger action is simulated, and TiDB gains no stored-object support. See [stored-object lifecycle and outer table state](docs/reference/audit-capability-matrix.md#stored-object-lifecycle-and-outer-table-state-mysqltidb).
+
+Version-dependent checks (currently `ddl.index.key_length.max_bytes.require`) resolve their bound from a canonical version fact plus known-bit instance facts. Supply it offline with `--target-version [v]MAJOR.MINOR.PATCH` — the result then carries a top-level `version` block (`product`, canonical `version`, `source`, `validated_range`). Online the observed server identity is authoritative and its product is read from the banner itself: a matching `--target-version` proceeds, a version or product mismatch is an input error (SDK typed error, CLI exit 2, HTTP 400, MCP `isError=true`), and the raw server banner is never projected into output. When a version or instance fact that could change the outcome is missing (e.g. an unobserved `innodb_page_size` or TiDB `max-index-length`), the rule reports a bounded `evidence_gaps` entry instead of assuming a default; validated series are MySQL 5.7.x/8.0.x/8.4.x and TiDB 8.5.x.
 
 Audit a TiDB statement:
 
@@ -308,7 +319,7 @@ SQL mistakes are cheap to catch before they run and expensive after. DeltaScope 
 
 - Create-table governance across identifiers, comments, primary keys, audit columns, charset/collation, indexes, and table options.
 - Alter-table governance for destructive actions, compatibility checks, existence validation, and merge guidance.
-- Object-lifecycle checks for `CREATE VIEW`, `DROP TABLE`, `TRUNCATE TABLE`, and database/schema lifecycle DDL across MySQL, TiDB, and PostgreSQL.
+- Object-lifecycle checks for MySQL/TiDB views, `DROP TABLE`, `TRUNCATE TABLE`, and database/schema DDL; TiDB `ALTER VIEW` remains a vendor boundary. PostgreSQL retains its separate view rules.
 - DML protections for `WHERE`, `LIMIT`, `ORDER BY`, subqueries, join conditions, bulk insert patterns, denylisted objects, and conservative affected-row impact estimation.
 - Stable product surfaces: `deltascope` CLI, `deltascope-server`, `deltascope-mcp`, and `pkg/deltascope`.
 - `deltascope-mcp` is the official MCP stdio server and exposes `audit_sql`, `describe_rule`, `list_rules`, and `get_capabilities`.

@@ -13,12 +13,21 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
 
+## System Screenshots
+
+<p align="center">
+  <img src="assets/system-preview.gif" alt="Animated preview of Libro: sign-in, staff dashboard, catalog, book detail with loan slots, and My Loans" width="800">
+</p>
+
+<p align="center"><sub>Sign-in, staff dashboard, catalog, book detail, and My Loans.</sub></p>
+
 ## Project Overview
 
 Libro is a full-stack library management system for the library of Aklan State University – College of Computer Studies (ASU-CCS): a Java 25 / Spring Boot REST API with a React and TypeScript web UI (`ui/`), backed by PostgreSQL. It manages physical book copies, user accounts, and loan history, with role-based screens for students, faculty, library assistants, and the librarian. Each catalog record is one physical copy, which keeps loan history accurate per copy (see [Domain Decisions](docs/guides/domain-decisions.md)).
 
 ## Table of Contents
 
+- [System Screenshots](#system-screenshots)
 - [Project Overview](#project-overview)
 - [Features](#features)
 - [Architecture](#architecture)
@@ -182,7 +191,6 @@ Copy [`.env.example`](.env.example) for the local template. The settings below c
 | `LIBRO_DOMAIN` | For the TLS proxy | `localhost` locally; set a real host name for deployment. |
 | `MANAGEMENT_SERVER_PORT` | No | `9091`; private Actuator health and Prometheus port. |
 | `LIBRO_DATA_DIR` | Production deploy only | Block-volume path for database data, backups, and release state. |
-| `LIBRO_BACKUP_BUCKET` | No | Optional object-storage bucket for off-host backups; see the runbook before enabling uploads. |
 
 ### CI/CD Secrets
 
@@ -300,6 +308,7 @@ Three services make up the core system, and two more are optional (profile `metr
 | [`scripts/smoke-journey.sh`](scripts/smoke-journey.sh) | Full client journey for a disposable, freshly seeded local stack. |
 | [`scripts/backup.sh`](scripts/backup.sh) / [`scripts/restore.sh`](scripts/restore.sh) | `pg_dump` and `pg_restore` through the running `db` container. |
 | [`scripts/seed-demo.sh`](scripts/seed-demo.sh) | Creates the public demo accounts and a synthetic catalog through the API. |
+| [`scripts/reset-demo.sh`](scripts/reset-demo.sh) | Local only: wipes the database volume, restarts the stack, and reseeds the demo data. |
 | [`scripts/ci/trivy-scan.sh`](scripts/ci/trivy-scan.sh) | Runs Trivy from its own pinned Docker image against the repository or a built image. Shared by CI and CD. |
 | [`.trivyignore`](.trivyignore) | Accepted vulnerability findings (one CVE per line with a reason and expiry). Currently empty. |
 | [`.github/dependabot.yml`](.github/dependabot.yml) | Weekly update PRs for Docker base images and Compose images, among other ecosystems. |
@@ -455,7 +464,7 @@ CD extends CI and never replaces it. Its triggers:
 
 1. Resolves the revision to the exact commit CI validated (`workflow_run.head_sha`), never a newer `main`.
 2. Checks out that commit without persisting git credentials.
-3. Builds one `linux/arm64` image with `LIBRO_COMMIT` and `LIBRO_BUILD_TIME` build arguments and OCI `source` and `revision` labels.
+3. Builds one `linux/arm64` image with `LIBRO_COMMIT` and `LIBRO_BUILD_TIME` build arguments and `source` and `revision` image labels.
 4. Scans that exact image with `scripts/ci/trivy-scan.sh`.
 5. Unless the run is a pull request, logs in to GitHub Container Registry with `GITHUB_TOKEN` (via `--password-stdin`), pushes `ghcr.io/<owner>/libro-api:<commit-sha>`, and outputs the immutable `name@sha256:` digest.
 
@@ -467,10 +476,10 @@ CD extends CI and never replaces it. Its triggers:
 
 **`deploy` job** (`ubuntu-latest`, 20 min, `environment: production`, needs `image` and `ui`):
 
-- Runs only when the event is not a pull request **and** the repository variable `OCI_DEPLOY_ENABLED` is `true`. The `production` environment's required reviewers then hold the job until someone approves it.
+- Runs only when the event is not a pull request **and** the repository variable `DEPLOY_ENABLED` is `true`. The `production` environment's required reviewers then hold the job until someone approves it.
 - Uses `concurrency: production-deploy` with `cancel-in-progress: false`, so two deployments never overlap and a running one is never cancelled.
 - Validates inputs before they reach a remote shell: a 40-character commit SHA and a digest-pinned GHCR reference.
-- Writes the deploy key (mode `600`) and a pinned `known_hosts`, then connects with `StrictHostKeyChecking=yes`, which rejects any other host key. Secrets: `OCI_SSH_KEY`, `OCI_SSH_KNOWN_HOSTS`, `OCI_HOST`, `OCI_USER`.
+- Writes the deploy key (mode `600`) and a pinned `known_hosts`, then connects with `StrictHostKeyChecking=yes`, which rejects any other host key. Secrets: `DEPLOY_SSH_KEY`, `DEPLOY_SSH_KNOWN_HOSTS`, `DEPLOY_HOST`, `DEPLOY_USER`.
 - Over SSH, runs `cd /opt/libro`, checks out the validated commit (so scripts and Compose files match the image), and runs `scripts/deploy.sh --image <digest>`. The values are passed as arguments through a quoted heredoc, never as shell code.
 - The server never rebuilds the release, so what was scanned is exactly what runs. `deploy.sh` backs up the database, starts the image, waits for health, smoke tests it, and rolls back to the previous image on failure.
 - Only after `deploy.sh` succeeds, a second step streams the `libro-ui` tarball over the same SSH connection to `scripts/install-ui.sh`, which refuses an upload without `index.html` and updates `ui/dist` in place (new files first, `index.html` next, stale files last). Caddy serves that directory straight from its bind mount, so no restart is needed, and a rolled-back release never leaves a newer UI in front of an older API.
@@ -481,7 +490,7 @@ Weekly update PRs for Maven (`pom.xml`, up to 5 open), Docker (Dockerfile base i
 
 ### Triggers & Quality Gates
 
-Gate summary, in order: (1) all five CI jobs pass; (2) CI succeeds on a `main` push, which unlocks the CD `image` job; (3) the image passes the Trivy scan before it is pushed; (4) the deploy job requires `OCI_DEPLOY_ENABLED=true` plus `production` environment approval; (5) `deploy.sh` passes its health check and smoke test or automatically rolls back. Setup for the environment, secrets, and enable variable is in the [Operations Runbook](docs/devops/runbook.md#7-enable-automated-deployment).
+Gate summary, in order: (1) all five CI jobs pass; (2) CI succeeds on a `main` push, which unlocks the CD `image` job; (3) the image passes the Trivy scan before it is pushed; (4) the deploy job requires `DEPLOY_ENABLED=true` plus `production` environment approval; (5) `deploy.sh` passes its health check and smoke test or automatically rolls back. Setup for the environment, secrets, and enable variable is in the [Operations Runbook](docs/devops/runbook.md#7-enable-automated-deployment).
 
 CD ships both halves of a release: the scanned API image (by digest) and the web UI build (`ui/dist`), installed together from the same validated commit.
 

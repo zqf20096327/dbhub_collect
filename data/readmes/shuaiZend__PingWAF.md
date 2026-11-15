@@ -199,10 +199,13 @@ docker compose up -d
 git clone https://github.com/shuaiZend/PingWAF.git && cd PingWAF
 cd web && npm ci && npm run build && cd ..
 cargo build --release --bin pingwaf --features full
+# Close self-service signups and set the at-rest encryption key before the first start.
+PINGWAF_ALLOW_REGISTRATION=false \
+PINGWAF_SECRET_KEY="$(openssl rand -hex 32)" \
 ./target/release/pingwaf all-in-one --db-url "postgres://pingwaf:pingwaf@localhost:5432/pingwaf"
 ```
 
-Then open the dashboard at **https://localhost:9080** (HTTPS with a self-signed certificate generated on first boot) and sign in with `admin@pingwaf.local` / `pingwaf123` — **change the default password and `PINGWAF_JWT_SECRET` before any production use**.
+Then open the dashboard at **https://localhost:9080** (HTTPS with a self-signed certificate generated on first boot) and sign in with `admin@pingwaf.local` / `pingwaf123` — the first sign-in forces a password change. Before any production use also **set `PINGWAF_JWT_SECRET`, keep the `PINGWAF_SECRET_KEY` you generated backed up, and leave `PINGWAF_ALLOW_REGISTRATION=false`** — see the [hardening checklist](./SECURITY.md#hardening-checklist).
 
 👉 Full install wizard, the interactive installer and TLS / port options: **<https://www.pingwaf.com/install/>** · step-by-step guide: **<https://www.pingwaf.com/quickstart/>** · in-repo walkthrough (database setup, first site, distributed agents, systemd): **[docs/quick-start.md](./docs/quick-start.md)**.
 
@@ -250,9 +253,9 @@ PINGWAF_CONFIG=/etc/pingwaf/pingwaf.toml pingwaf all-in-one   # equivalent
 | `PINGWAF_DB_URL` | `postgres://pingwaf:pingwaf@localhost:5432/pingwaf` | PostgreSQL DSN |
 | `PINGWAF_ADMIN_ADDR` | `0.0.0.0:9080` | REST API + dashboard listen address |
 | `PINGWAF_GRPC_ADDR` | `0.0.0.0:9090` | gRPC control-plane listen address |
-| `PINGWAF_JWT_SECRET` | `change-me-in-production` | JWT signing secret (**≥ 16 chars**, change in production) |
+| `PINGWAF_JWT_SECRET` | `change-me-in-production` | JWT signing secret (**32 random bytes**, `openssl rand -hex 32`; change in production) |
 | `PINGWAF_ADMIN_EMAIL` | `admin@pingwaf.local` | Seeded administrator email |
-| `PINGWAF_ADMIN_PASSWORD` | `pingwaf123` | Seeded administrator password (**change in production**) |
+| `PINGWAF_ADMIN_PASSWORD` | `pingwaf123` | Seeded administrator password (**change in production**; the compose file and installers have no default — they require it or generate a random one) |
 | `PINGWAF_ALLOW_REGISTRATION` | `true` | Whether `POST /api/v1/auth/register` accepts signups (`docker-compose.yml` sets this to `false`) |
 | `PINGWAF_HEARTBEAT_INTERVAL` | `15` | Heartbeat interval the control plane hands to agents at registration (seconds). The agent-side `--heartbeat-interval-secs` flag reads the same variable but falls back to `30`, and only applies when the control plane hands nothing down |
 | `PINGWAF_TLS_ENABLED` | `true` | Serve the REST API + dashboard over HTTPS (self-signed until replaced); `false` behind a TLS-terminating proxy |
@@ -298,7 +301,7 @@ PINGWAF_CONFIG=/etc/pingwaf/pingwaf.toml pingwaf all-in-one   # equivalent
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read **[CONTRIBUTING.md](./CONTRIBUTING.md)** before opening a pull request, and **[SECURITY.md](./SECURITY.md)** for how to responsibly report a vulnerability.
+Contributions are welcome! Please read **[CONTRIBUTING.md](./CONTRIBUTING.md)** before opening a pull request, and **[SECURITY.md](./SECURITY.md)** for how to responsibly report a vulnerability — privately, via [GitHub private vulnerability reporting](https://github.com/shuaiZend/PingWAF/security/advisories/new) or `security@pingwaf.com`. Never report a vulnerability in a public issue.
 
 ---
 

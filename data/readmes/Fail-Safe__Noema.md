@@ -63,6 +63,57 @@ A Trace has a **type** that describes its intent:
 
 ## Installation
 
+### Install script (Linux + macOS)
+
+Install the latest stable release for amd64 or arm64 without sudo:
+
+```sh
+curl -fsSL https://noemacortex.com/install.sh | sh
+```
+
+To download and inspect the script first:
+
+```sh
+curl -fsSL https://noemacortex.com/install.sh -o install.sh
+less install.sh
+sh install.sh
+```
+
+The script prefers static musl builds on Linux, which avoid a system glibc
+requirement and support distributions such as Debian 12, Ubuntu 22.04,
+RHEL/Rocky 9, and Alpine. For older releases without a musl archive, it falls
+back to the glibc archive and warns about potentially incompatible systems.
+On macOS it selects the native archive and ad-hoc signs the binary when
+`codesign` is available. It does not reconcile launchd services.
+
+The installer uses curl or wget and verifies the archive against the release's
+`checksums.txt` using `sha256sum` or `shasum -a 256`. It installs to
+`$HOME/.local/bin`, prints PATH instructions when needed, and never edits shell
+startup files. Run `sh install.sh --help` for usage.
+
+| Environment variable | Purpose |
+| --- | --- |
+| `NOEMA_VERSION` | Pin a version, with or without `v`, including prereleases (for example `0.24.1` or `v0.24.1-rc.1`). Default: latest stable via GitHub's release redirect. |
+| `NOEMA_INSTALL_DIR` | Override the destination directory. Default: `$HOME/.local/bin`. |
+| `NOEMA_SKIP_VERIFY` | Set to `1` to permit installation when neither SHA-256 tool exists. Available verification tools still verify and reject mismatches. |
+
+Apply environment overrides to `sh`, for example:
+
+```sh
+curl -fsSL https://noemacortex.com/install.sh | NOEMA_VERSION=0.24.1 NOEMA_INSTALL_DIR="$HOME/bin" sh
+```
+
+After installing:
+
+```sh
+noema init --name my-cortex
+noema serve --transport stdio
+```
+
+See [agent setup](https://noemacortex.com/#agent-setup) to connect your client.
+The repository's separate zsh `./install` script builds from source; `install.sh`
+downloads published release binaries.
+
 ### With Homebrew (macOS + Linux)
 
 The fastest path. One command taps `Fail-Safe/homebrew-tap` and
@@ -433,10 +484,35 @@ small startup bootstrap for memory retrieval and preference-revision reuse. An
 MCP entry without that bootstrap is callable but not reliably memory-aware after
 a fresh session or compaction.
 
-Supported clients are `codex`, `claude-code`, `cursor`, `opencode` (OpenCode v1),
+Supported clients are `codex`, `claude-code`, `cursor`, `opencode` (OpenCode v1 and v2),
 and `ohmypi` (Oh My Pi / OMP). Pi is listed as planned because it needs a
 first-class MCP extension rather than configuration alone; OMP has native MCP
 support.
+
+OpenCode integration selects the adapter from `opencode --version`, falling back
+to the target configuration when the executable cannot be probed. Unsupported
+major versions are refused before writing. V1 uses `mcp.noema`; V2 uses
+`mcp.servers.noema` and a default-exported context-hook plugin at the same
+`plugins/noema-session-bootstrap.ts` path. The hook supplies the canonical memory
+bootstrap on model requests, including after compaction. An existing
+`opencode.json` is reused when no `opencode.jsonc` exists.
+V1 retains its legacy system-transform hook, which also injects the bootstrap
+into compaction summary-generation requests (observed with OpenCode 1.18.31);
+its bootstrap is not limited to ordinary agent requests.
+
+On V2, installation migrates a recognized V1 Noema connection and exact managed
+bootstrap without changing unrelated servers or plugins. Matching V2 servers
+may omit the optional `disabled: false` field and are left untouched. Duplicate
+Noema entries in both layouts are a conflict, even with `--force`. Incompatible
+legacy options, including scalar `timeout`, must be resolved explicitly before
+migration; Noema does not discard options or guess timeout conversions.
+Customized bootstrap files are protected by drift detection. An existing
+`plugins/noema-session-bootstrap/` directory is an ownership conflict, even with
+`--force`: Noema neither overwrites it nor installs a duplicate flat plugin.
+Resolve that directory explicitly before installing or removing the integration.
+Preview migration with `noema integrate opencode install --scope user --check`
+and the same transport, URL, and bearer-token environment reference as the
+existing connection.
 
 ### Choosing an integration mode
 

@@ -3,7 +3,7 @@
     <h1>灵取证</h1>
     <p>专业的Android设备数据取证工具</p>
   <p>
-    <img src="https://img.shields.io/badge/版本-1.0.0-blue.svg" alt="version"/>
+    <img src="https://img.shields.io/badge/版本-1.2.0-blue.svg" alt="version"/>
     <img src="https://img.shields.io/badge/许可证-Mulan PSL-green.svg" alt="license"/>
     <img src="https://img.shields.io/badge/平台-MacOS%20%7C%20Linux | Windows-White.svg" alt="platform"/>
     <img src="https://img.shields.io/badge/语言-C++-red.svg" alt="language"/>
@@ -199,6 +199,8 @@ sudo apt install adb android-tools-adb android-tools-fastboot
 | WhatsApp 数据 | 提取 WhatsApp 聊天记录和媒体文件             | `12` | 小粉丝     |
 | 浏览器数据    | 提取浏览器历史记录和缓存                     | `13` | 小探险家   |
 | 通知记录      | 导出设备通知历史                             | `14` | 小使者     |
+| 现场快筛      | 指纹/锁屏/root/电量/最近通讯 + 隔离清单       | `16` | 小警探     |
+| 应用安装历史  | 首次安装/最近更新时间(+root 含 USB 连接历史)  | `17` | 小档案员   |
 
 ## 命令行用法
 
@@ -211,28 +213,58 @@ lqz verify --deep -o <输出目录>             # 校验证据链
 lqz connect 192.168.1.10                    # 无线连接设备
 ```
 
-**子命令**
+**提取子命令(需设备在线)**
 
 | 子命令 | 说明 | 子命令 | 说明 |
 | --- | --- | --- | --- |
-| `dump-call-logs` | 导出通话记录 | `dump-photos` | 导出照片 |
-| `dump-sms` | 导出短信 | `dump-videos` | 导出视频 |
-| `dump-documents` | 导出文档 | `dump-apks` | 导出应用 |
-| `dump-sensitive` | 提取敏感信息 | `dump-network` | 获取WiFi信息 |
-| `dump-system` | 导出系统信息 | `dump-packages` | 应用列表 |
-| `dump-whatsapp` | 提取WhatsApp数据 | `dump-browser` | 浏览器数据 |
-| `dump-notifications` | 通知记录 | `extract-wechat` | 提取微信数据 |
-| `connect <ip>` | 无线连接设备 | `verify` | 校验 custody 链 |
+| `triage` | 现场快筛(指纹/锁屏/root/最近通讯+隔离清单) | `dump-app-history` | 应用安装历史(+root 含 USB 连接历史) |
+| `record-screen [秒]` | 设备屏幕录制(自动分块,默认 60 秒) | `dump-call-logs` | 导出通话记录 |
+| `dump-photos` | 导出照片 | `dump-sms` | 导出短信 |
+| `dump-videos` | 导出视频 | `dump-documents` | 导出文档 |
+| `dump-apks` | 导出应用 | `dump-sensitive` | 提取敏感信息 |
+| `dump-network` | 获取WiFi信息 | `dump-system` | 导出系统信息 |
+| `dump-packages` | 应用列表 | `dump-whatsapp` | 提取WhatsApp数据 |
+| `dump-browser` | 浏览器数据 | `dump-notifications` | 通知记录 |
+| `extract-wechat` | 提取微信数据 | `connect <ip>` | 无线连接设备 |
+
+**案件与串并案(无需设备)**
+
+| 子命令 | 说明 |
+| --- | --- |
+| `case-new --case <编号> [--officer 办案人] [--unit 单位]` | 新建案件 |
+| `case-list` | 列出全部案件 |
+| `case-register --case <编号> <标识>` | 登记设备指纹(IMEI/MEID/ICCID/序列号) |
+| `link <标识>` | 串并案查询:该设备是否出现在历史案件中 |
+
+```bash
+lqz case-new --case XS2026-001 --officer 张三 --unit 某市刑侦支队
+lqz link 861234567890123          # → 串并案命中:案件 XS2026-001(首次登记 ...)
+lqz triage --case XS2026-001      # 快筛完成后自动登记指纹并查询串并案
+```
+
+**分析与报告(无需设备,`-i` 为提取目录)**
+
+| 子命令 | 说明 |
+| --- | --- |
+| `scan-keywords -i <目录> [--dict 词典]` | 关键字扫描(默认内置示例词典) |
+| `match-hashes -i <目录> --hash-list <库>` | 哈希库比对(SHA-256,每行一个 64 位 hex) |
+| `timeline -i <目录>` | 统一时间线(通话记录 + 应用安装历史) |
+| `report -i <目录> [--dict 词典] [--hash-list 库]` | 生成 HTML 检验报告(离线可打印) |
+| `timestamp -i <目录> --tsa <URL>` | RFC3161 可信时间戳(manifest/custody,需 openssl+curl) |
+| `verify -o <目录> [--deep]` | 校验 custody 链 |
+
+分析产物写入 `<提取目录>_analysis/`,**不写入证据目录**,保证 custody 链与 manifest 不被污染。
 
 **通用选项**
 
 - `-s, --serial <序列号>` — 目标设备序列号(adb -s)
-- `-o, --output <目录>` — 输出目录(默认 `Datas/<子命令>`;`verify` 时必填)
+- `-o, --output <目录>` / `-i <目录>` — 输出目录(默认 `Datas/<子命令>`;分析命令中 `-i` 为输入提取目录)
 - `--json` — 结果以单行 JSON 输出到 stdout,便于 `jq` 等工具处理
 - `--deep` — 配合 `verify`:逐文件校验内容哈希
+- `--case <编号>` / `--officer <姓名>` / `--unit <单位>` — 案件上下文(写入 manifest/custody)
 - `-h, --help` / `-V, --version`
 
-**退出码**:`0` 成功(含 --help/--version)、`1` 提取失败、`2` 参数错误、`3` 设备离线。
+**退出码**:`0` 成功(含 --help/--version)、`1` 执行失败、`2` 参数错误、`3` 设备离线。
 
 `--json` 成功输出示例:
 
@@ -244,10 +276,28 @@ lqz connect 192.168.1.10                    # 无线连接设备
 
 每次提取完成后,输出目录会生成两个证据文件:
 
-- **`manifest.json`** — 文件清单:相对路径、字节大小、SHA-256、UTC 修改时间
-- **`custody.log`** — 防篡改哈希链(append-only JSONL):每条记录包含操作者、工具版本、时间戳、manifest 摘要与产物哈希,`hash = sha256(prev_hash + "|" + canonical)`,首条为全零锚点的创世记录
+- **`manifest.json`** — 文件清单:相对路径、字节大小、SHA-256、SM3 双哈希、UTC 修改时间,以及案件编号/办案人/办案单位
+- **`custody.log`** — 防篡改哈希链(append-only JSONL):每条记录包含操作者、工具版本、时间戳、案件信息、manifest 摘要与产物哈希,`hash = sha256(prev_hash + "|" + canonical)`,并附国密 **SM3 双哈希锚点**(`record_sm3 = sm3(prev_hash + "|" + canonical)`);首条为全零锚点的创世记录
 
-使用 `lqz verify --deep -o <目录>` 可重算整条链:任何记录的字段被篡改、顺序错乱、manifest 被修改,或(配合 `--deep`)提取物内容被改动,都会被检出。
+使用 `lqz verify --deep -o <目录>` 可重算整条链:任何记录的字段被篡改、顺序错乱、SM3 锚点失配、manifest 被修改,或(配合 `--deep`)提取物内容被改动,都会被检出。旧版本(1.0/1.1)生成的链无 SM3 锚点与案件字段,仍可正常校验(向后兼容)。
+
+案件库位于 `~/.lqz/cases.jsonl`(可用 `LQZ_HOME` 环境变量覆盖),登记设备指纹后,同一设备出现在后续案件中时可被 `link` 检出(串并案)。
+
+## v1.2 面向执法办案的新特性
+
+- **现场快筛 `triage`**:5 分钟内产出指纹(IMEI/ICCID/序列号)、锁屏状态、root 状态、电量、账户、最近通话短信、WiFi AP,并生成《现场设备隔离清单》(防远程擦除)
+- **串并案**:案件库 + 设备指纹登记 + `link` 查询;`triage --case <编号>` 自动登记并查询历史案件
+- **国密合规**:SM3 双哈希、custody 链 SM3 锚点、案件编号/办案人写入证据记录
+- **关键字扫描**:词典驱动(`类别|关键字` 格式),命中上下文导出,内置示例词典(`dict/builtin_categories.txt`,办案单位应替换为审定词库)
+- **HTML 检验报告**:单文件离线可打印(证据清单、关键字命中、时间线、应用风险标记、疑似加密容器、哈希库比对)
+- **应用风险标记**:内置特征表识别 Tor/VPN/加密通讯/保险箱/远控/提权/反取证类应用(启发式,非穷尽)
+- **疑似加密容器检测**:容器类扩展名 + 高熵 512 对齐启发式(仅提示核验)
+- **哈希库比对**:外部 SHA-256 哈希库(如违规内容哈希集)比对
+- **RFC3161 可信时间戳**:`timestamp` 子命令对 manifest/custody 取证时间戳(需 openssl/curl 与 TSA 服务)
+- **应用安装历史**:解析 `dumpsys package packages`(root 时附带 USB 连接历史)
+- **屏幕录制**:`record-screen` 自动分块录制取证过程(单块上限 180 秒)
+
+**待扩展(需要外部服务/模型,当前为设计预留)**:微信/QQ 数据库解密、ADB backup(.ab)原生解析、语音消息转写(ASR)、图像 OCR/人脸检测、外文聊天翻译、PhotoDNA 类哈希集 — 欢迎按插件方式贡献。
 
 ## 运行方法
 

@@ -41,6 +41,8 @@ about Microsoft's 2006 `AutoIndex.sql` prototype: a modern version, with AI doin
 - To collect: `VIEW SERVER STATE` (or `VIEW SERVER PERFORMANCE STATE`), `VIEW DATABASE STATE` and
   `VIEW DEFINITION`. To call the model: `EXECUTE ANY EXTERNAL ENDPOINT`. To create indexes:
   `ALTER` on the tables.
+- A user database. `sp_AIIndexTuner` refuses the system databases and databases that a SQL Server
+  feature owns: the replication distribution database, `SSISDB` and Reporting Services catalogs.
 
 ## Compared with AI SQL Tuner Studio
 
@@ -91,6 +93,21 @@ can apply what it finds.
    on each run (`SessionId`, `SessionLoginTime`). A run from your own session is always found;
    finding one from another session needs `VIEW SERVER STATE` (`VIEW DATABASE STATE` in Azure
    SQL Database).
+
+To see which build a database has, run `SELECT AIIndexTuner.fn_Version();`. The version is also
+in the header of [aisqltuner-index-tuner.sql](aisqltuner-index-tuner.sql), on each
+`AIIndexTuner.Run` row (`Version`), and in the first result set of `sp_AIIndexTuner`. Include it
+when you report a problem.
+
+### Uninstall
+
+Run [setup/Uninstall.sql](setup/Uninstall.sql) in the database. It drops `dbo.sp_AIIndexTuner`,
+`dbo.sp_AIIndexTuner_Apply`, the `AIIndexTuner` schema with everything in it (including all runs
+and recommendations) and the database scoped credential named in `AIIndexTuner.Config`. Indexes the
+tool created or widened are kept; set `RemoveIndexTags = 1` in its step 0 to also remove their
+`AIIndexTuner` extended property, or `DropCredential = 0` to keep the credential. It leaves the
+database master key and the server settings from `Configure-Endpoint.sql` step 1 alone. To remove
+an index the tool created, run its `UndoDDL` from `AIIndexTuner.Recommendation` first.
 
 ## What it does
 
@@ -248,12 +265,22 @@ EXEC dbo.sp_AIIndexTuner_Apply @RunId = 7, @MinPriority = 'Low', @MinConfidence 
 ### Apply-mode safety
 
 - **The model's script is never executed.** Plan cache text goes into the prompt, so a crafted
-  query could try to steer what the model writes. The proc builds the `CREATE INDEX`,
+  query could try to steer what the model writes. The system prompt tells the model to treat
+  query text, predicates and names in the input as data, never as instructions, and query text
+  reaches it only as quoted strings; but that only makes steering harder, so the proc builds the
+  `CREATE INDEX`,
   `CREATE INDEX ... WITH (DROP_EXISTING = ON)` or `DROP INDEX` itself:
   - It uses only the structured fields.
   - It checks every table and column against the catalog.
   - It quotes every name with `QUOTENAME`.
   - It allows only known option values.
+- **One session at a time applies a run's recommendations.** CREATE mode and
+  `sp_AIIndexTuner_Apply` take an exclusive application lock on the run. A second session that
+  tries to apply the same run (a manual apply while an Agent job is still building, say) fails at
+  once with error 50102 and changes nothing; apply again when the first is done. A recommendation
+  already `Applied` is never marked `Skipped` or `Failed` afterwards. Inside your own transaction,
+  a build error that makes the transaction uncommittable comes back to you as itself, and the
+  recommendation is left as it was.
 - **Recommendations it skips, each with a reason:**
   - an existing index already has the same leading keys and covers the includes, which also makes
     reruns safe
@@ -270,8 +297,10 @@ EXEC dbo.sp_AIIndexTuner_Apply @RunId = 7, @MinPriority = 'Low', @MinConfidence 
   - indexes named by an index hint in a module, a plan guide or a Query Store hint
   - indexes a forced Query Store plan uses, since the plan would fail with `NO_INDEX`
   - low-use drops before the usage statistics cover 7 days. An index that another index makes
-    redundant can be dropped at any time. Redundant here means the other index has the same leading
-    keys, covers its includes and filter, and keeps any uniqueness. On SQL Server, a low-use drop
+    redundant can be dropped at any time. Redundant here means another nonclustered index has the
+    same leading keys, covers its includes and filter, and keeps any uniqueness. The clustered index
+    does not count: a narrow nonclustered index on the clustering key makes counts and range scans
+    cheaper, so dropping one is a low-use decision. On SQL Server, a low-use drop
     also needs the error log to confirm the period, which takes securityadmin or sysadmin and doesn't
     work inside `INSERT ... EXEC`. On Azure SQL Database a failover can reset the statistics without
     a trace, so the 7 days are counted from the times it can see.
@@ -353,6 +382,8 @@ WHERE ep.name = N'AIIndexTuner';
 | `LockTimeoutSec` | 30 | The longest a drop, an offline build or a columnstore build waits for its locks before it fails (NULL = no limit) |
 | `OnlineWaitMinutes` | 5 | How long an online rowstore build waits at low priority for its locks before it gives up (NULL = wait at normal priority, without limit) |
 | `BuildMaxDop` | NULL | `MAXDOP` for every index build (NULL = the server's setting) |
+| `CollectPhysicalStats` | 1 | 0 skips `sys.dm_db_index_physical_stats` in HEAP TABLE ANALYSIS and INDEX PAGE DENSITY, which read pages of each table |
+| `PhysicalStatsMaxPages` | 1280000 | Those two sections skip a table with more reserved pages (10 GB by default) and list it as skipped (NULL = no limit) |
 
 ### Step log
 
@@ -426,9 +457,12 @@ all of the query text and predicates above; it does not affect the column values
 
 - **Claude:** Claude deployments are not supported yet.
 - **No timeouts:** T-SQL has no per-statement timeout, so a collector section cannot be cut off
-  the way the desktop app's are. Work is bounded by row caps instead, including the 20,000-plan
-  cap on Query Store scope resolution. Each section runs in its own `TRY...CATCH`, so a failed
-  section is reported and skipped.
+  the way the desktop app's are. Work is bounded instead: by row caps, including the 20,000-plan
+  cap on Query Store scope resolution; by `PhysicalStatsMaxPages` for the two sections that read
+  pages; and by a 10-second lock timeout, so a section blocked behind an index rebuild or other
+  schema change is skipped rather than waiting, and queueing others behind it. The collector also
+  runs at `DEADLOCK_PRIORITY LOW`. Each section runs in its own `TRY...CATCH`, so a failed section
+  is reported and skipped.
 - **Error log:** reading it needs `securityadmin` or `sysadmin`. Without that, the usage window
   says which resets it could not see.
 - **`INSERT ... EXEC`:** wrapping `sp_AIIndexTuner` in `INSERT ... EXEC` breaks two parts,
@@ -460,6 +494,7 @@ all of the query text and predicates above; it does not affect the column values
 .\tests\Run-All.ps1                               # localhost, Windows authentication
 .\tests\Run-All.ps1 -Database AIIndexTunerTest2   # another test database
 .\tests\Run-All.ps1 -Collation Turkish_100_CI_AS  # a test database in that collation
+.\tests\Run-All.ps1 -User sa                      # SQL authentication; password from $env:SQLCMDPASSWORD
 ```
 
 The test runner:
@@ -476,6 +511,12 @@ The test runner:
 3. installs the tool and runs a workload, including a forced plan whose index is then dropped
    (a `NO_INDEX` forced-plan failure)
 4. runs [tests/03_Run-Tests.sql](tests/03_Run-Tests.sql)
+5. runs [setup/Uninstall.sql](setup/Uninstall.sql) twice and checks what it removed and kept
+
+[GitHub Actions](.github/workflows/ci.yml) runs the same on every pull request, on SQL Server 2025
+in a container, once with a test database collated differently from the instance and once with
+`Turkish_100_CI_AS`. It also fails a pull request whose `aisqltuner-index-tuner.sql` does not match
+what `build.ps1` makes from `src/`.
 
 The tests use `@TestResponse` canned model answers, so they need no AI endpoint. They cover:
 
@@ -598,6 +639,9 @@ existing install.
 | `src/` | Source, one object or group per file, in install order |
 | `aisqltuner-index-tuner.sql` | Single-file install script, generated by `build.ps1` from `src/` |
 | `setup/Configure-Endpoint.sql` | Credential and configuration template |
+| `setup/Uninstall.sql` | Removes the tool from a database |
+| `VERSION` | The version `build.ps1` stamps into the install script |
+| `.github/workflows/ci.yml` | CI: install script up to date, tests in two collations |
 | `tests/` | Test database, workload, tests and runner |
 | `bench/` | Benchmark: challenge database, workload, rubric, runner, cases, prerequisites and results |
 | `diagrams/` | [Architecture](diagrams/architecture.svg), [data flow](diagrams/data-flow.svg), [data model](diagrams/data-model.svg) and [recommendation types](diagrams/recommendation-types.svg) diagrams, as SVG and PNG |

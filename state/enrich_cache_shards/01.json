@@ -4,7 +4,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.3.2",
   "rel_pub": "2025-10-22",
-  "rel_days": 388,
+  "rel_days": 389,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -82,7 +82,7 @@
   "commit_7d": 10,
   "rel_ver": "v1.7.5.3555",
   "rel_pub": "2026-11-06",
-  "rel_days": 8,
+  "rel_days": 9,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -156,8 +156,8 @@
  "strelov1/freehire": {
   "commit_90d": 2672,
   "commit_7d": 262,
-  "rel_ver": "deploy-20261114-2051",
-  "rel_pub": "2026-11-14",
+  "rel_ver": "deploy-20261115-2050",
+  "rel_pub": "2026-11-15",
   "rel_days": 0,
   "rel_n90": 30,
   "rel_pre": false,
@@ -174,98 +174,98 @@
    "HTML": 1,
    "JavaScript": 1
   },
-  "enriched_at": "20261114",
+  "enriched_at": "20261115",
   "dim_ts": {
    "commit": "20261113",
-   "release": "20261114",
+   "release": "20261115",
    "security": "20261027"
   },
   "rel_notes": [
    {
-    "t": "deploy-20261114-2051",
-    "d": "2026-11-14",
-    "n": "## Changes\n- #4611 fix(gmail): re-land sent-mail sync with a bounded first scan and rate-limit handling\n\n## How it was verified\n- Pre-flight: CI green on 24280f2e5 (30/30 checks). No migrations in the batch (the columns it needs were applied earlier), no Meilisearch settings change, no new cmd, no new env vars, no routes outside /api/. No release, backup or reindex blocking, load 16.\n- Baseline: smoke 15/15, p95 0.131 s, 5xx 0, about 112 rps.\n- After the flip: the live color serves 24280f2e5, nginx workers "
+    "t": "deploy-20261115-2050",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4662 refactor(web): split the job feed and job page components under 9000 tokens\n- #4663 fix(ingest): sweep hzz by source so vacancies that left the feeds close\n\n## How it was verified\n- Pre-flight: CI green on 0cb17dddf; no migrations, no Meilisearch settings, no new cmd/, no new env vars, no new routes; no release, backup or pause flag in the way, load 12.\n- Baseline: API 106 rps, 5xx 0, p95 0.248 s, smoke 15/15, search drift 0.\n- After the flip: the live color serves 0cb17dddf and the previ"
    },
    {
-    "t": "deploy-20261114-2007",
-    "d": "2026-11-14",
-    "n": "- After the flip: live color serves 7bd5212f2, the other holds 132a0a232; nginx workers newer than the flip, 0 emerg lines; 4 of 4 checked daemons started on the new build at 19:41; crawler binaries carry the target revision; 0 application database errors and 0 deadlocks in the 26 minutes after the migrations.\n- #4601 db: contract legacy job activity columns"
+    "t": "deploy-20261115-2025",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4651 refactor(api): split handler.go and search.go under 9000 tokens\n- #4636 chore(cmd): compress over-explained comments in cmd\n- #4652 test: split location, search filter and tracking tests under 9000 tokens\n- #4654 refactor(web): generate the résumé wire types from Go\n\n## How it was verified\n- Pre-flight: CI green on 21b7ef34a; no migrations, no Meilisearch settings change, no new cmd/, no new env vars or routes; no release, backup or reindex running, load 17-18, no open outage.\n- Audit: "
    },
    {
-    "t": "deploy-20261114-1235",
-    "d": "2026-11-14",
-    "n": "## Changes\n- #4582 ci: fail PRs over the size limit and give code review more time\n\n## How it was verified\n- Pre-flight: CI green on 132a0a232 (29 checks success, 20 skipped, 0 failed); no migrations, no search settings change, no new commands, no new env vars or routes (the batch touches only .github/ scripts and workflows).\n- After the flip: live color serves 132a0a232, previous color 117af1363; nginx workers reloaded at the flip, no emerg; background daemons (facetd, enrich, mail ingest, auto-apply) on t"
+    "t": "deploy-20261115-1849",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4658 feat(billing): show payment attempt history\n- #4657 fix(assistant): reject multilingual negated experience quotes\n\n## How it was verified\n- Pre-flight: CI green on ae9be30bc (30/30 checks). No migrations, no Meilisearch setting change, no new cmd, no new env vars, no routes outside /api/. Load 19 (under the 20 limit), no release or backup running.\n- After the flip: the live color serves ae9be30bc, the previous color holds the prior build, nginx reloaded (new workers, 0 emerg), daemons on "
    },
    {
-    "t": "deploy-20261114-1157",
-    "d": "2026-11-14",
-    "n": "- #4557: GET /api/v1/jobs/changes answers 400 without since or cursor (a missing route would be 404); with since=3 minutes back it returns 200 with changes (seq, kind, at, closed_reason) and a next_cursor; the cursor walk returns the next changes with 200; a garbage cursor and a since older than 30 days both return 400. Same answers with and without cache-bust. Write side: 126 change rows after 2 minutes and 5,387 after 26 minutes (1,703 opened, 3,684 closed); every posting created after the flip that is li"
+    "t": "deploy-20261115-1829",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4648 feat(taxonomy): distinguish system administration and telecom engineering\n- #4649 fix(web): help candidates discover their specializations\n\n## How it was verified\n- Pre-flight: CI green on 01ade20a7 (27 check runs, none failing). Flags: no migrations, no Meilisearch setting changes (new values of the existing category attribute), no new cmd/, no new routes outside /api/, no new env vars. No release, backup or reindex job running; production not paused; load below the limit; no open incide"
    },
    {
-    "t": "deploy-20261114-1123",
-    "d": "2026-11-14",
-    "n": "- Crawls on the new build finished with failed=0, cheap-write share 88-100% per provider. Deadlocks in the database log since the flip: 0.\n- #4580 perf(db): restore activity-only job observations"
+    "t": "deploy-20261115-1747",
+    "d": "2026-11-15",
+    "n": "- #4619 docs(db): close out the job activity rollout"
    },
    {
-    "t": "deploy-20261114-0353-bb",
-    "d": "2026-11-14",
-    "n": "- All 33 checks on revision `39ad8d8b` completed successfully or were explicitly skipped/neutral. This batch needed no database migrations or search-setting changes.\n- The running revision was confirmed as `39ad8d8b`; public health returned 200 with the database up."
+    "t": "deploy-20261115-1358",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4645 feat(employer): serve company teams over HTTP and mail the invitation\n- #4647 feat(web): manage the company team and join it from an invitation\n- #4646 refactor: split the frontend files over 10000 tokens, size limit 10000\n- #4639 chore(ingest): compress over-explained comments in source adapters (l-z)\n- #4638 chore(ingest): compress over-explained comments in source adapters (a-k)\n- #4635 chore(dict): compress over-explained comments in internal/dict\n- #4627 chore(candidate): compress ov"
    },
    {
-    "t": "extension-v0.1.14",
-    "d": "2026-11-12",
-    "n": "Automated build from commit 746d461f25cb2552bbd404981982770fa5729e92."
+    "t": "deploy-20261115-1235",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4643 feat(employer): invite colleagues into a company team\n\n## How it was verified\n- Pre-flight: CI green on d3e5bf8ac (CI, Lint, Contract, CodeQL, gitleaks). Flags: no migrations (the team tables came with 0271, already live), no Meilisearch change, no new cmd, no new routes outside /api/, no new env vars. No release running, no backup running, no pause flag, no invalid index, load 8 of 12 cores.\n- After the flip: the live color serves d3e5bf8ac, the other color the previous build; nginx relo"
    },
    {
-    "t": "deploy-20261112-2320",
-    "d": "2026-11-12",
-    "n": "## Changes\n- #4526 feat(dict): expand industrial maintenance skill vocabulary\n- #4524 refactor: remove dead code (bakeoff in prod binary, anonymous-only MCP server, trivial web type copies)\n- #4525 refactor(assistant): share the small helpers of the assistant tools\n- #4521 fix(web): improve interface typography and reduce decorative motion\n- #4523 fix(web): prevent profile tier badge overlap\n- #4519 fix(design-system): inset the chevron on every native select\n- #4522 chore(openspec): archive mcp-cli-session"
+    "t": "deploy-20261115-1147",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4644 feat(employer): a company team owns its vacancies and applications\n\n## How it was verified\n- pre-flight: CI green on 261738f (33 check runs, all success); flags: one additive migration (0271: two new tables, a function, triggers on users and company_accounts; no DDL on jobs, no DROP/RENAME, old code still runs on the new schema), no Meilisearch change, no new cmd/, no new env vars, no new routes; no release, backup, reindex, long lock or pause in the way, load 6.5/12 cores.\n- baseline (30"
    },
    {
-    "t": "deploy-20261112-1514",
-    "d": "2026-11-12",
-    "n": "## Changes\n- #4507 feat(mcp): let agents read the plan and today's AI allowances\n- #4510 refactor(web): alias API wire types to the contract (mentors, companies, intake, tracking, employer, experience)\n\n## How it was verified\n- Pre-flight: CI green on the target (28 checks success, 2 skipped); no migrations, no search settings change, no new cmd, no new env vars, no new routes outside /api; no release or dump running, load 12.5, no outage open.\n- After the flip: the live color serves the target, the other t"
+    "t": "deploy-20261115-0838",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4642 feat(web): the employer's applicant inbox\n\n## How it was verified\n- Pre-flight: CI green on 279b4118e (30 of 30 checks). One PR, web only: no migrations, no Meilisearch settings, no new cmd/, no new env vars, no nginx change.\n- After the flip: the live color serves 279b4118e, nginx reloaded (new workers, no errors), daemons restarted on the new build.\n- Changed surface: the new inbox page /my/employer/vacancies/applications answers 302 to sign-in (a missing page answers 404), with and wit"
    },
    {
-    "t": "deploy-20261112-1442",
-    "d": "2026-11-12",
-    "n": "## Changes\n- #4508 feat(mcp): let agents see who wrote to the inbox\n\n## How it was verified\n- Pre-flight: CI green on the target (29 checks success, 1 skipped); no migrations, no search-settings change, no new cmd/, no new env vars, no new routes; no release, backup or reindex running, pause flag off, no open outage.\n- After the flip: live color serves the target commit, the other holds the previous build; nginx reloaded (new workers after the flip, 0 emerg); daemons run the new build.\n- #4508 (new MCP tool"
+    "t": "deploy-20261115-0806",
+    "d": "2026-11-15",
+    "n": "## Changes\n- #4641 feat(employer): the candidate's letter when an employer decides\n- #4640 feat(employer): serve the applicant inbox over HTTP and tell candidates\n\n## How it was verified\n- Pre-flight: CI green on a58659591 (35 of 35 checks); no migrations, no Meilisearch settings change, no new cmd/, no new env vars (mail sender already configured); the new routes are under /api/, no nginx edit.\n- Baseline (30 min before): smoke 15/15, p95 0.097 s, API 5xx 0, 97 rps.\n- After the flip: the live color serves "
    }
   ],
   "etag": {
-   "release": "W/\"794a0552bf029f9a4e3dc1d80145cd6c5050d3e3446a75fdeec3ac87fdb5a38a\""
+   "release": "W/\"335bae5a26f80b04660903287a59efe85861c0a5ce5972e4b3978efabc22e633\""
   },
   "rel_dates": [
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
+   "2026-11-15",
    "2026-11-14",
    "2026-11-14",
    "2026-11-14",
    "2026-11-14",
    "2026-11-14",
    "2026-11-14",
+   "2026-11-14",
    "2026-11-12",
    "2026-11-12",
    "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-12",
-   "2026-11-11",
-   "2026-11-11",
-   "2026-11-11",
-   "2026-11-11",
-   "2026-11-11",
-   "2026-11-11",
-   "2026-11-11",
-   "2026-11-11",
-   "2026-11-11"
+   "2026-11-12"
   ]
  },
  "proofrock/ws4sqlite": {
@@ -273,7 +273,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.16.6",
   "rel_pub": "2025-10-31",
-  "rel_days": 379,
+  "rel_days": 380,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -309,7 +309,7 @@
   "commit_7d": 3,
   "rel_ver": "v1.38.10",
   "rel_pub": "2026-10-18",
-  "rel_days": 27,
+  "rel_days": 28,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -383,7 +383,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.11",
   "rel_pub": "2026-09-22",
-  "rel_days": 53,
+  "rel_days": 54,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -405,7 +405,7 @@
   "commit_7d": 0,
   "rel_ver": "0.14.0",
   "rel_pub": "2025-05-21",
-  "rel_days": 542,
+  "rel_days": 543,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -445,7 +445,7 @@
   "commit_7d": 0,
   "rel_ver": "2.1.0",
   "rel_pub": "2020-01-10",
-  "rel_days": 2500,
+  "rel_days": 2501,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -464,7 +464,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2021-04-21",
-  "rel_days": 2033,
+  "rel_days": 2034,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -487,7 +487,7 @@
   "commit_7d": 0,
   "rel_ver": "2.3.0",
   "rel_pub": "2018-10-22",
-  "rel_days": 2945,
+  "rel_days": 2946,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -507,7 +507,7 @@
   "commit_7d": 66,
   "rel_ver": "v3.0.2",
   "rel_pub": "2026-10-26",
-  "rel_days": 19,
+  "rel_days": 20,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -551,7 +551,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.1",
   "rel_pub": "2025-09-05",
-  "rel_days": 435,
+  "rel_days": 436,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -600,7 +600,7 @@
   "commit_7d": 0,
   "rel_ver": "0.40.1",
   "rel_pub": "2026-05-04",
-  "rel_days": 194,
+  "rel_days": 195,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -622,7 +622,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.9.0",
   "rel_pub": "2018-12-15",
-  "rel_days": 2891,
+  "rel_days": 2892,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -669,7 +669,7 @@
  "pomm-project/pomm-bundle": {
   "rel_ver": "3.0.0",
   "rel_pub": "2020-10-18",
-  "rel_days": 2218,
+  "rel_days": 2219,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -688,7 +688,7 @@
  "VMDashboard/vmdashboard": {
   "rel_ver": "v19.01.03",
   "rel_pub": "2020-11-25",
-  "rel_days": 2180,
+  "rel_days": 2181,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -709,7 +709,7 @@
  "andrei-polukhin/pgdbtemplate": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-05-07",
-  "rel_days": 191,
+  "rel_days": 192,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -743,7 +743,7 @@
  "simonw/paginate-json": {
   "rel_ver": "1.0",
   "rel_pub": "2023-08-30",
-  "rel_days": 1172,
+  "rel_days": 1173,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -834,7 +834,7 @@
  "jpazvd/wbopendata": {
   "rel_ver": "v18.8.0",
   "rel_pub": "2026-08-08",
-  "rel_days": 98,
+  "rel_days": 99,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -882,7 +882,7 @@
  "TeamDerUntergang/Telegram-UserBot": {
   "rel_ver": "v3.4",
   "rel_pub": "2020-06-18",
-  "rel_days": 2340,
+  "rel_days": 2341,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -967,7 +967,7 @@
  "ansible-collections/community.elastic": {
   "rel_ver": "latest",
   "rel_pub": "2024-04-18",
-  "rel_days": 940,
+  "rel_days": 941,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1149,7 +1149,7 @@
  "oceanbase/dify-on-mysql": {
   "rel_ver": "1.8.0",
   "rel_pub": "2025-09-16",
-  "rel_days": 424,
+  "rel_days": 425,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1205,7 +1205,7 @@
  "Lombiq/UI-Testing-Toolbox": {
   "rel_ver": "v15.0.0",
   "rel_pub": "2026-07-18",
-  "rel_days": 119,
+  "rel_days": 120,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1241,7 +1241,7 @@
  "LuckyIndraEfendi/Mangazuna": {
   "rel_ver": "3.1",
   "rel_pub": "2024-02-09",
-  "rel_days": 1009,
+  "rel_days": 1010,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1289,7 +1289,7 @@
  "pierreforstmann/pg_readonly": {
   "rel_ver": "1.0.6",
   "rel_pub": "2026-07-15",
-  "rel_days": 122,
+  "rel_days": 123,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1321,7 +1321,7 @@
  "circuitsacul/apgorm": {
   "rel_ver": "v1.0.0-b.14",
   "rel_pub": "2022-11-22",
-  "rel_days": 1453,
+  "rel_days": 1454,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1364,7 +1364,7 @@
  "JumpCodeFrog/telegram-shop-bot": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2026-09-25",
-  "rel_days": 50,
+  "rel_days": 51,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -1412,7 +1412,7 @@
  "kbennett2000/lan-games": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-05-28",
-  "rel_days": 170,
+  "rel_days": 171,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1449,7 +1449,7 @@
  "raw-lab/NFixDB": {
   "rel_ver": "v2.1",
   "rel_pub": "2024-04-23",
-  "rel_days": 935,
+  "rel_days": 936,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1509,7 +1509,7 @@
  "SiavashGolchoobian/SqlDeep": {
   "rel_ver": "v3.0.0.7",
   "rel_pub": "2025-01-03",
-  "rel_days": 680,
+  "rel_days": 681,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1631,7 +1631,7 @@
  "Marco-Sulla/ewa": {
   "rel_ver": "v1.5.7",
   "rel_pub": "2019-05-29",
-  "rel_days": 2726,
+  "rel_days": 2727,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1692,7 +1692,7 @@
   "commit_7d": 7,
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-12",
-  "rel_days": 155,
+  "rel_days": 156,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2055,7 +2055,8 @@
   "etag": {
    "release": "\"5413a3d7a94e107ad4bf6a1e44921961ddec684112159b8c553eb804cbcb5c69\""
   },
-  "rel_dates": []
+  "rel_dates": [],
+  "rel_n90": 0
  },
  "diazandre935-pixel/tidb-cloud-starter": {
   "commit_90d": 0,
@@ -2383,7 +2384,7 @@
  "DerKezorm/nexlore": {
   "rel_ver": "v1.5.1",
   "rel_pub": "2026-10-06",
-  "rel_days": 39,
+  "rel_days": 40,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2433,7 +2434,7 @@
  "Vincentkeio/clover-mail": {
   "rel_ver": "v2.0.2",
   "rel_pub": "2026-10-15",
-  "rel_days": 30,
+  "rel_days": 31,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -2460,7 +2461,7 @@
  "federicoaecom/mimir": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 27,
+  "rel_days": 28,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2512,7 +2513,7 @@
  "directus/monospace-starter": {
   "rel_ver": "monoerp@0.1.1",
   "rel_pub": "2026-11-03",
-  "rel_days": 11,
+  "rel_days": 12,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2551,7 +2552,7 @@
  "XWJ-z/ZXDesk": {
   "rel_ver": "v0.9.7",
   "rel_pub": "2026-11-05",
-  "rel_days": 9,
+  "rel_days": 10,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2595,7 +2596,7 @@
  "catzoidhub/DevCatz": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-11-04",
-  "rel_days": 10,
+  "rel_days": 11,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,

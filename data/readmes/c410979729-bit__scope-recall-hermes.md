@@ -1,6 +1,6 @@
 # Scope Recall
 
-This checkout is `4.0.4.dev0`, a development version; the newest release is `4.0.3`. Local, source-backed memory shared by Claude Code, Codex, Hermes, WorkBuddy and DeepSeek Harness.
+This checkout is `4.0.5.dev0`, a development version; the newest release is `4.0.4`. Local, source-backed memory shared by Claude Code, Codex, Hermes, WorkBuddy and DeepSeek Harness.
 SQLite keeps the original conversations; model-derived facts and vectors remain traceable and rebuildable.
 
 ## Quick start

@@ -1,6 +1,6 @@
 # PyLrcGet
 
-> 🎵 A native desktop lyrics manager and player for local music libraries.
+> A native desktop lyrics manager and player for local music libraries.
 
 Browse, edit, sync, download, export, embed, and publish synced or plain lyrics
 without leaving your desktop workflow.
@@ -13,22 +13,22 @@ without leaving your desktop workflow.
 [![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](#)
 
-## ✨ What it does
+## What it does
 
-- 🎧 Scans local folders recursively into SQLite with incremental refresh and exclusions.
-- 📚 Browses Tracks, Albums, Artists, Album Artists, Lyrics Browser, and Lyrics Activity.
-- 📝 Edits synced (`.lrc`) and plain lyrics, with unsaved drafts and playback highlighting.
-- 🌐 Downloads through an ordered provider matrix; LRCLIB is enabled by default.
-- 💾 Exports `.lrc` / `.txt` sidecars and embeds lyrics into supported formats.
-- 🤖 Provides local AI Auto Sync with CUDA when available and CPU fallback.
-- 🎨 Includes playback controls, themes, keyboard shortcuts, logs, and responsive layouts.
+- Scans local folders recursively into SQLite with incremental refresh and exclusions.
+- Browses Tracks, Albums, Artists, Album Artists, Lyrics Browser, and Lyrics Activity.
+- Edits synced (`.lrc`) and plain lyrics, with unsaved drafts and playback highlighting.
+- Downloads through an ordered provider matrix; LRCLIB is enabled by default.
+- Exports `.lrc` / `.txt` sidecars and embeds lyrics into supported formats.
+- Provides local AI Auto Sync with CUDA when available and CPU fallback.
+- Includes playback controls, themes, keyboard shortcuts, logs, and responsive layouts.
 
 Provider settings are opt-in: a disabled provider is never used as an automatic
 fallback. See [Musixmatch provider notes](docs/MULTI_PROVIDER_MUSIXMATCH.md).
 When enough lyrics already exist on the same album, language detection can
 reject a confidently mismatched provider result instead of saving it.
 
-## 📸 Screenshots
+## Screenshots
 
 Add final captures under `docs/screenshots/`. The following views are the most
 useful for the project page and release notes:
@@ -63,7 +63,7 @@ images inside the repository so the README also renders offline:
 ![Clear Lyrics dialog](docs/screenshots/clear-lyrics.png)
 -->
 
-## 🚀 Quick start
+## Quick start
 
 ```powershell
 py -3.13 -m venv .venv
@@ -77,27 +77,70 @@ The project is pinned to Python 3.13.15 for development, AI setup, tests, and
 release builds. The app does not modify a music folder during normal scanning;
 exports and embedding are explicit user actions.
 
-## 🤖 Optional AI Auto Sync
+## Optional AI Auto Sync
+
+Open **Settings > AI Sync > Manage AI runtime** to install missing AI packages.
+You can also select a track and click **Sync with AI** to open setup when needed.
+
+For a batch, select multiple tracks (or Ctrl+A for the current track list), then
+choose **Sync with AI** in the selection bar or **Sync selected tracks with AI**
+from the context menu. Tracks run one at a time; instrumental tracks, missing
+audio and tracks without lyrics are skipped. Results stay as unsaved drafts.
+Cancel stops the current sync and queue; drafts already completed remain available.
+
+AI setup installs a tested combination of Torch 2.8.0, Torchaudio 2.8.0 and
+WhisperX 3.8.6. It also prepares the English pronunciation dictionaries in the
+application's `nltk_data` cache. Missing data or unsupported core package versions
+are reported for repair through **Manage AI runtime**.
+
+CPU forces processor execution; Auto selects an available accelerator, while
+the English alignment model itself stays on the CPU where it runs faster.
+Explicit CUDA reports an error when CUDA is unavailable. Manual timing hints use
+guided alignment. The fuzzy threshold applies to fallback text matching. With
+Demucs enabled, English lyrics are aligned against the song and its separated
+vocals together; separation always runs with an accelerator and, on CPU, only
+when the first alignment looks inconsistent.
+
+See the [local AI validation report](docs/AI_VALIDATION.md) for tested configurations
+and measured timing limits.
 
 ```powershell
 python -m pip install -e ".[ai]"
 ```
 
-The packaged app can install the AI stack into its own runtime. WhisperX
-supports the multilingual path; `lyrics-aligner` is used for English when it
-is available. CUDA is selected automatically when available, but GPU is not
-guaranteed to be faster for every backend.
+The packaged app can install the AI stack into its own runtime without a
+system Python or Git installation. On the first install, it downloads and verifies a
+pinned Python 3.13.15 bootstrap, caches it locally, and installs the AI stack
+into an isolated runtime. WhisperX supports the multilingual path;
+`lyrics-aligner` is used for English when it is available. CUDA is selected
+automatically when available, but GPU is not guaranteed to be faster for every
+backend. AI packages and models are still downloaded separately and can be
+large. The bootstrap distribution is provided by
+[python-build-standalone](https://github.com/astral-sh/python-build-standalone);
+its license files are retained with the cached runtime.
 
-If the bootstrap interpreter must be selected explicitly:
+To use a separately installed Python 3.13.15 bootstrap explicitly:
 
 ```powershell
 $env:PYLRCGET_AI_BOOTSTRAP_PYTHON = "C:\Path\to\python.exe"
 ```
 
-Optional Demucs is used only as a candidate vocal-stem path and is not
+Optional Demucs adds separated-vocal evidence to English alignment and is not
 required for the base AI workflow.
 
-## 🌐 Lyrics providers
+## Lyrics providers
+
+LRCLIB searches use the lightweight `/api/v2/search` endpoint. Search results
+show lyrics availability without downloading every result's lyrics; the selected
+record is loaded in the background through `/api/get/{id}`. Older instances
+automatically fall back to `/api/search` when v2 is unavailable. Rate limits,
+server errors and network failures do not trigger fallback; request pacing and
+`Retry-After` handling apply to both API versions.
+
+In **Settings > Lyrics > Providers > LRCLIB**, adjust **Request interval** to
+pace requests across workers (default: one second). Rate-limited lookups honor
+the server's Retry-After delay and retry automatically. Increase the interval
+if your LRCLIB instance still limits requests; zero disables the regular pause.
 
 | Provider | Default | Notes |
 |---|:---:|---|
@@ -109,7 +152,7 @@ matching uses artist, title, album, duration, and version metadata. Full
 transport limitations are documented in
 [docs/MULTI_PROVIDER_MUSIXMATCH.md](docs/MULTI_PROVIDER_MUSIXMATCH.md).
 
-## 🎼 Supported audio formats
+## Supported audio formats
 
 | Format | Scan | Lyrics read/write | Sidecar export |
 |---|:---:|:---:|:---:|
@@ -122,7 +165,7 @@ transport limitations are documented in
 Playback depends on the active backend and installed codecs. Metadata support
 can be broader than playback support for a specific format.
 
-## ⚙️ Important settings
+## Important settings
 
 | Area | Examples |
 |---|---|
@@ -135,7 +178,7 @@ can be broader than playback support for a specific format.
 Download modes are `Prefer synced`, `Synced only`, and `Plain only`. Export
 and embedding format choices are configured independently from download mode.
 
-## ⚡ Performance and design notes
+## Performance and design notes
 
 The scanner separates audio and sidecar state, reuses stored metadata for
 unchanged audio, and avoids unnecessary Mutagen and sidecar reads. LRCLIB
@@ -147,7 +190,7 @@ results, known trade-offs, and the TagLib decision. The benchmark harnesses
 are documented in [tools/perf/README.md](tools/perf/README.md) and
 [tools/ai_sync_bench/README.md](tools/ai_sync_bench/README.md).
 
-## 🛠️ Development
+## Development
 
 Run the test suite and static checks from the repository root:
 
@@ -168,7 +211,7 @@ Performance fixtures and benchmark output are generated under `benchmarks/`;
 do not point a mutating benchmark at a real music folder. Read-only source
 measurements must use the harness `--read-only-source` option.
 
-## 📦 Building locally
+## Building locally
 
 ```powershell
 python -m pip install -r requirements.txt pyinstaller
@@ -181,13 +224,19 @@ For the portable single-file build:
 pyinstaller --noconfirm pylrcget-portable.spec
 ```
 
-## 🧭 Releases and troubleshooting
+## Releases and troubleshooting
 
 Releases use Conventional Commits and semantic-release. See
 [CHANGELOG.md](CHANGELOG.md) for published changes.
 
+From the next release, download filenames identify the CPU target: Windows/Linux
+`x64` and macOS `arm64` (Apple Silicon). Existing release filenames stay unchanged.
+The updater selects the native target; labeled installer aliases keep updates
+working for previously installed versions. See [release packaging](docs/release-notes.md#download-architecture-names).
+
 - **No lyrics found:** check provider enablement/order and the track metadata.
-- **AI dependencies missing:** use the AI setup dialog or install the `ai` extra with Python 3.13.15.
+- **AI dependencies missing:** packaged builds can install them from the AI setup
+  dialog; source builds need Python 3.13.15.
 - **Playback issue:** verify the backend and codec support for the file format.
 - **Windows SmartScreen warning:** release executables are currently unsigned.
 

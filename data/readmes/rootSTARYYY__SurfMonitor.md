@@ -2,7 +2,7 @@
   <img src="build/icon.png" alt="Surf Monitor Logo" width="72" />
 </p>
 
-<h1 align="center">Surf Monitor (v4.2.1)</h1>
+<h1 align="center">Surf Monitor (v6.0.0)</h1>
 
 <p align="center">
   A local-first Windows desktop infrastructure, website, and remote Linux VPS monitoring suite built with <strong>Electron 33</strong>, <strong>React 18</strong>, <strong>TypeScript</strong>, <strong>Vite</strong>, <strong>Tailwind CSS</strong>, <strong>Recharts</strong>, and <strong>SQLite (<code>better-sqlite3</code>)</strong>.
@@ -97,4 +97,4 @@ npm run dev
 npm run build:win
 ```
 
-Outputs the NSIS installer (`Surf Monitor-Setup-4.2.1.exe`) into `release\`, using `build\icon.ico` and `build\icon.png`.
+Outputs the NSIS installer (`Surf Monitor-Setup-6.0.0.exe`) into `release\`, using `build\icon.ico` and `build\icon.png`.

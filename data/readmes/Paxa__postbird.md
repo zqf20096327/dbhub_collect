@@ -1,62 +1,76 @@
 # Postbird 
+[![Build and Release](https://github.com/Paxa/postbird/actions/workflows/build.yml/badge.svg)](https://github.com/Paxa/postbird/actions/workflows/build.yml)
 [![Backers on Open Collective](https://opencollective.com/postbird/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/postbird/sponsors/badge.svg)](#sponsors)
 
-Postbird is a cross-platform PostgreSQL GUI client, written in JavaScript, runs with Electron
+Postbird is an open-source, ultra-fast cross-platform PostgreSQL GUI client—now rewritten in **TypeScript** and powered by **Electrobun & Bun**.
 
-<img src="https://user-images.githubusercontent.com/26019/41055418-dcc55700-69f3-11e8-8d3e-572cf5febedc.png" alt="Connection Screen" width=65%>
-<img src="https://user-images.githubusercontent.com/26019/41055416-dc5a5464-69f3-11e8-87b8-994e763da816.png" alt="Table Content" width=65%>
-<img src="https://user-images.githubusercontent.com/26019/41055417-dc8eb56a-69f3-11e8-8145-6f0d5eb147a6.png" alt="Table Structure" width=65%>
+<p>
+  <img src="https://github.com/user-attachments/assets/d45be643-cd45-463b-b19c-ee8b034aa27f" alt="Old Postbird Logo" width="72" valign="middle" />
+  &nbsp;&nbsp;→&nbsp;&nbsp;
+  <img src="https://github.com/user-attachments/assets/c688a035-8b95-412b-a767-2002be472665" alt="New Postbird Logo" width="72" valign="middle" />
+</p>
+
+* **Ultra-low RAM:** ~45MB idle memory footprint (compared to ~250MB on Electron).
+* **Instant Startup:** Sub-80ms cold boot via native OS WebKit/WebView2 webviews.
+* **Compact Downloads:** Standalone macOS DMG is only ~28MB.
+* **Modern PostgreSQL 18.2:** Bundled dump and restore binaries with automatic macOS Gatekeeper bypass.
+* **Built-in AI Assistant (`Cmd+K` / `Ctrl+K`):** Write, explain, and optimize SQL queries directly in the Query tab. Auto-discovers local CLIs and servers (`claude`, `agy`, Apple Foundation Models `fm`, Ollama) plus cloud presets (Google AI Studio, Groq, OpenAI-compatible). Privacy-first: only schema metadata is shared on demand, never row data unless explicitly enabled.
+
+<img src="https://github.com/user-attachments/assets/a5847290-0faa-4c2a-81dd-0891428d6361" alt="Connection Screen" width="65%">
+<img src="https://github.com/user-attachments/assets/eff845c3-292b-4fae-a817-05911ed44ee6" alt="Table Content" width="65%">
+<img src="https://github.com/user-attachments/assets/06e1a451-6c5e-47f5-9833-956e96587485" alt="Table Structure" width="65%">
+<img src="https://github.com/user-attachments/assets/624220fe-6521-405a-b51d-ceaba4cfb48b" alt="Query and AI Assistant" width="65%">
 
 ## Download
 
-**Version 0.8.4**
+**Latest Release (v0.9.0)**
 
-MacOS: [Postbird-0.8.4.dmg](https://github.com/Paxa/postbird/releases/download/0.8.4/Postbird-0.8.4.dmg) - MacOS 10.9+
-
-Linux packages:
-
-* [Postbird_0.8.4_amd64.deb](https://github.com/Paxa/postbird/releases/download/0.8.4/Postbird_0.8.4_amd64.deb)
-* [Postbird-0.8.4.x86_64.rpm](https://github.com/Paxa/postbird/releases/download/0.8.4/Postbird-0.8.4.x86_64.rpm)
-* [Postbird_0.8.4_amd64.snap](https://github.com/Paxa/postbird/releases/download/0.8.4/Postbird_0.8.4_amd64.snap)
-* [postbird-0.8.4.AppImage](https://github.com/Paxa/postbird/releases/download/0.8.4/postbird-0.8.4.AppImage)
-* [Postbird-0.8.4.apk](https://github.com/Paxa/postbird/releases/download/0.8.4/Postbird-0.8.4.apk)
-* [Postbird-0.8.4.pacman](https://github.com/Paxa/postbird/releases/download/0.8.4/Postbird-0.8.4.pacman)
+* **macOS (Apple Silicon M1/M2/M3/M4):** [Postbird-macos-arm64.dmg](https://github.com/Paxa/postbird/releases/download/v0.9.0/Postbird-macos-arm64.dmg)
+* **Windows (64-bit):** [Postbird-windows-x64.zip](https://github.com/Paxa/postbird/releases/download/v0.9.0/Postbird-windows-x64.zip)
+* **Linux (x86_64):**
+  * [.deb (Debian, Ubuntu, Mint)](https://github.com/Paxa/postbird/releases/download/v0.9.0/Postbird-linux-x64.deb)
+  * [.rpm (Fedora, RHEL, openSUSE)](https://github.com/Paxa/postbird/releases/download/v0.9.0/Postbird-linux-x64.rpm)
+  * [.AppImage (Universal)](https://github.com/Paxa/postbird/releases/download/v0.9.0/Postbird-linux-x64.AppImage)
+* **Linux (ARM64 / AArch64):**
+  * [.deb](https://github.com/Paxa/postbird/releases/download/v0.9.0/Postbird-linux-arm64.deb)
+  * [.rpm](https://github.com/Paxa/postbird/releases/download/v0.9.0/Postbird-linux-arm64.rpm)
+  * [.AppImage](https://github.com/Paxa/postbird/releases/download/v0.9.0/Postbird-linux-arm64.AppImage)
 
 Via snap:
-```
+```sh
 sudo snap install postbird
 ```
 Snap page: https://snapcraft.io/postbird
 
-Windows installer: [Postbird.Setup.0.8.4.exe](https://github.com/Paxa/postbird/releases/download/0.8.4/Postbird-Setup-0.8.4.exe)<br>
-Windows portable: [Postbird-0.8.4-win.zip](https://github.com/Paxa/postbird/releases/download/0.8.4/Postbird-0.8.4-win.zip)
-
-Latest artifacts: https://nightly.link/Paxa/postbird/workflows/build/master
-
 ## Development
 
-[ ![Codeship Status for Paxa/postbird](https://app.codeship.com/projects/c2450da0-9339-0135-ee6d-1663622ccf5e/status?branch=master)](https://app.codeship.com/projects/250798)
-[![Build Status](https://travis-ci.org/Paxa/postbird.svg?branch=master)](https://travis-ci.org/Paxa/postbird)
+Requires [Bun](https://bun.sh) (v1.2+).
 
-
-Pull requests and suggestions are welcome
-
-To run newest version, simply:
+To run locally in development mode:
 
 ```sh
 git clone git@github.com:Paxa/postbird.git
 cd postbird
-yarn
-yarn start
+bun install
+bun start
 ```
 
-Build package:
+Run tests:
 ```sh
-yarn dist
-ls ./dist
+# Unit tests
+bun test
+
+# Automated UI integration tests
+bun run test:ui
 ```
 
-See [CONTRIBUTING.md](/CONTRIBUTING.md) for more details
+Build standalone distribution package:
+```sh
+bun run dist
+ls -la artifacts/
+```
+
+See [AGENTS.md](/AGENTS.md) for architecture and contributor details.
 
 ## Help Project
 

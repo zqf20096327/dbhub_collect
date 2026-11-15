@@ -9,9 +9,9 @@ A lightweight Go vector-store library inspired by `Microsoft.Extensions.VectorDa
 
 Scope:
 - Go 1.25+
-- Postgres + `pgvector`
+- PostgreSQL + `pgvector`, embedded SQLite, and in-memory model storage
 - Model-driven collections with typed/native keys, named vectors, struct tags, and optional embeddings
-- PostgreSQL provider plus an in-memory model provider
+- Shared model contracts and conformance tests across all three providers
 - Original Record API and custom codecs remain supported
 
 This library can be used to build retrieval systems such as:
@@ -25,23 +25,52 @@ The minimum Go version is now 1.25 because the patched pgx and text dependencies
 require it. Use current stable Go for up-to-date standard-library security fixes.
 
 - Go 1.25+
-- PostgreSQL 16+ with `pgvector` extension
+- PostgreSQL provider: PostgreSQL 16+ with `pgvector` extension
+- SQLite provider: a writable database file; no database server or C toolchain required
 - Docker (optional, for integration tests and sample compose flows)
 
 ## Project layout
 
 - `vectordata`: backend-agnostic core interfaces, record model, filters, typed wrapper
 - `stores/postgres`: Postgres implementation with `pgxpool`
+- `stores/sqlite`: durable SQLite model collections with exact search
+- `stores/memory`: transient model collections for development and contract tests
 - `samples`: runnable demos (see `samples/README.md`)
 - `docs`: architecture and implementation notes
 
 ## Install
 
 ```bash
-go get github.com/gabisonia/go-vectorstore
+go get github.com/gabisonia/go-vectorstore@latest
 ```
 
+Use the [release list](https://github.com/gabisonia/go-vectorstore/releases) to
+check available tags and pin the resolved version in go.mod. This checkout
+prepares v0.4.1; its tag becomes available after release publication. See the
+[upgrade guide](docs/upgrading.md) and [compatibility policy](docs/releases.md).
+
 ## Quick Start (Local)
+
+For typed text retrieval with no server or API key:
+
+```sh
+go run ./samples/typed-search -category architecture
+go run ./samples/typed-rag
+```
+
+These commands are on master and included in source versions from v0.4.1. Fixture
+mode uses an instructional deterministic embedder. See the [sample index](samples/README.md)
+for real OpenAI opt-in, provider selection, expected output, and cleanup.
+For coding-agent integrations, start with the [AI usage guide](docs/ai-guide.md)
+and [documentation discovery index](llms.txt).
+
+Run the persistent SQLite example without a server or API key:
+
+```sh
+go run ./samples/sqlite-store -db /tmp/vectorstore-demo.db
+```
+
+For the PostgreSQL semantic-search example:
 
 1. Start local Postgres + `pgvector` from the repository root:
 
@@ -86,14 +115,36 @@ Run a complete example without an API key:
 go run ./samples/model-store
 ```
 
-The same sample accepts `-dsn` to use PostgreSQL. It demonstrates automatic
-embedding generation with a deterministic instructional embedder, typed reads,
+The same sample accepts `-sqlite /path/to/models.db` for embedded storage,
+`-dsn` to use PostgreSQL and `-embedding-batch-size` to
+bound embedding requests. It demonstrates store-wide embedding defaults
+with a deterministic instructional embedder, typed reads,
 array filtering, and generated keys. Use a real embedding model for semantic search.
 
 See [the model API guide](docs/model-api.md) for collection lifecycle, explicit
-schemas, native UUID/int64 keys, multiple vectors, iterator APIs, embeddings and
-PostgreSQL hybrid search. Stores also expose optional `CapabilityProvider`
-metadata for supported keys, data types, metrics, indexes and hybrid search.
+schemas, native UUID/int64 keys, UUID/byte data, date-only/time-only properties,
+exact decimals, and native numeric/bool/UUID/timestamp/calendar arrays,
+multiple vectors, iterator APIs, embeddings and
+PostgreSQL hybrid search. Models can opt into float16 (`halfvec`) storage with
+`precision=float16` while keeping `[]float32` inputs and outputs. Stores also expose optional `CapabilityProvider`
+metadata for supported keys, data types, metrics, index combinations and hybrid search.
+All three providers support Manhattan (`DistanceL1`) search; PostgreSQL supports L1 HNSW
+indexes and rejects unsupported L1/IVFFlat combinations before database work.
+Models can also use packed `BinaryVector` fields with `kind=binary`, Hamming
+distance and `SearchBinary`. PostgreSQL provides native `bit(n)` storage,
+HNSW/IVFFlat indexes and binary hybrid search.
+Sparse models use `SparseVector` with zero-based coordinates, `kind=sparse`, and
+`SearchSparse`. All three providers support cosine/L2/inner-product/L1 sparse search;
+PostgreSQL adds `sparsevec(n)` storage, HNSW indexes and sparse hybrid search.
+PostgreSQL offers [model migration planning and explicit additive application](docs/migrations.md)
+with schema drift detection, reviewable SQL and backfill/re-embedding classifications.
+Vectors may be nullable with `optional` (or pointer fields). Missing vectors are
+stored without an embedding and excluded from searches on that property.
+`ContainsAny` and `ContainsAll` support array overlap and containment; PostgreSQL
+uses native predicates for indexed native arrays.
+
+See the [provider and .NET parity checklist](docs/parity.md), [SQLite guide](docs/sqlite.md),
+[upgrade guide](docs/upgrading.md), and [changelog](CHANGELOG.md).
 Original `Record`/`Collection` callers remain compatible.
 Bulk PostgreSQL writes automatically use binary vector parameters to reduce
 serialization allocations; see [the measured transport comparison](docs/performance.md#binary-vector-ingestion-and-copy-comparison).
@@ -308,30 +359,51 @@ any publishing job runs. Existing tags must point to the checked-out, tested
 commit; the workflow will not move a tag to another commit. Prerelease versions
 are published as GitHub prereleases.
 
-Release options:
+`VERSION` selects the source version being prepared or tagged (`0.4.1`). It does
+not establish that the tag has been published. Choose an unused version and update
+`VERSION` and the changelog in a reviewed PR before publishing from master. Published tags are immutable; documentation updates after
+a release do not change the source stored under that tag.
 
-1. Manual (recommended): run `Release` workflow via GitHub UI with `version` input (`0.3.1` or `v0.3.1`).
+Release options for that new version:
+
+1. Manual (recommended): run `Release` workflow on master via GitHub UI with the new `version` input, with or without leading `v`.
 2. Tag-driven: push a semver tag and the workflow publishes release notes automatically:
 
 ```bash
-VERSION="$(cat VERSION)"
-git tag "v${VERSION}"
-git push origin "v${VERSION}"
+RELEASE_VERSION="$(cat VERSION)" # After updating VERSION to the unused release version.
+git tag "v${RELEASE_VERSION}"
+git push origin "v${RELEASE_VERSION}"
 ```
 
 ## Samples
 
 - Overview and entry points: [`samples/README.md`](samples/README.md)
-- Model-driven collections (no API key): `samples/model-store`
+- Typed semantic search and RAG: [`typed-search`](samples/typed-search/README.md), [`typed-rag`](samples/typed-rag/README.md)
+- Focused model workflows: [`recipes`](samples/recipes/README.md)
+- Model-driven collections (no API key): [`samples/model-store`](samples/model-store/README.md)
+- Persistent SQLite and optional vectors (no API key): [`samples/sqlite-store`](samples/sqlite-store/README.md)
 - Semantic search sample app: `samples/semantic-search`
 - RAG sample app (`RAGrimosa`): `samples/ragrimosa`
 
 ## Documentation
 
+- Production operation: [`docs/production.md`](docs/production.md)
+- Compatibility and release policy: [`docs/releases.md`](docs/releases.md)
+- Private vulnerability reporting and support: [`SECURITY.md`](SECURITY.md)
+
+- AI application usage: [`docs/ai-guide.md`](docs/ai-guide.md)
+- Repository agent instructions: [`AGENTS.md`](AGENTS.md)
+- Documentation discovery: [`llms.txt`](llms.txt)
+
 - Docs index: [`docs/README.md`](docs/README.md)
 - Internals and architecture: [`docs/architecture.md`](docs/architecture.md)
 - Connector development guide: [`docs/connector-development.md`](docs/connector-development.md)
 - Model-driven API: [`docs/model-api.md`](docs/model-api.md)
+- SQLite provider: [`docs/sqlite.md`](docs/sqlite.md)
+- Provider and .NET parity: [`docs/parity.md`](docs/parity.md)
+- Upgrade guide: [`docs/upgrading.md`](docs/upgrading.md)
+- Model migrations: [`docs/migrations.md`](docs/migrations.md)
+- Changelog: [`CHANGELOG.md`](CHANGELOG.md)
 - Benchmarks and performance notes: [`docs/performance.md`](docs/performance.md)
 
 ## License

@@ -79,7 +79,7 @@ Full documentation, including guides, CLI reference, and library API docs, lives
 
 ### Alert & Triage
 
-* **[Enrichment](https://rsigma.io/guide/enrichers/):** Injects context (asset info, IP reputation, identity, GeoIP, runbook URLs, ...) into detection and correlation results via `template`, `lookup`, `http`, `command`, `stix`, and `mmdb` primitives
+* **[Enrichment](https://rsigma.io/guide/enrichers/):** Injects context (asset info, IP reputation, identity, GeoIP, runbook URLs, ...) into detection and correlation results via `template`, `lookup`, `http`, `command`, `stix`, `mmdb`, and `dns` primitives
 * **[Risk-based alerting](https://rsigma.io/guide/risk-based-alerting/):** Scores each firing per entity (user, host, source IP) and raises a single incident when an entity's accumulated risk crosses a threshold
 * **[Alert pipeline](https://rsigma.io/guide/alert-pipeline/):** Silences, inhibits, and deduplicates results, then groups the survivors into incidents, modeled on Alertmanager
 * **[Webhook alerts](https://rsigma.io/guide/webhooks/):** Delivers detections to Slack, Teams, Discord, PagerDuty, or any HTTP endpoint with templated payloads, HMAC request signing, per-webhook retry, rate limiting, and DLQ
@@ -321,7 +321,7 @@ See [BENCHMARKS.md](BENCHMARKS.md) for full Criterion results across all subsyst
 ## Reference
 
 - [pySigma](https://github.com/SigmaHQ/pySigma): reference Python implementation
-- [Sigma Specification V2.1.0](https://github.com/SigmaHQ/sigma-specification): formal specification
+- [Sigma Specification V2.1.0](https://github.com/SigmaHQ/sigma-specification/tree/0c857d07da0e71eaaab2d667b3cce6f2c8469578/specification): formal specification
 - [sigma-rust](https://github.com/jopohl/sigma-rust): Pratt parsing approach
 - [sigmars](https://github.com/crowdalert/sigmars): correlation support patterns
 - [sigma_engine](https://github.com/SigmaHQ/sigma_engine): official SigmaHQ Rust library for parsing and matching Sigma rules against events

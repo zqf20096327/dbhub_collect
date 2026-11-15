@@ -2,24 +2,19 @@
 
 Disposable database workspaces for applications and agents.
 
-![Forkget comic: fork, test, diff, discard](doc/assets/intro-comic.svg)
-
 Forkget creates isolated branches from a pinned snapshot of MySQL,
 PostgreSQL, TiDB or MongoDB. Connect through an admitted native client,
 inspect typed changes, save a complete result and replay it against its retained
 baseline. Branches have explicit permissions, row budgets and expiry.
 
-Version **0.0.9** is an **experimental early release** for local evaluation
-with disposable, non-production data. It has not completed production or
-managed-environment qualification. Build and deployment instructions describe
-the current source. Download the source, Linux binaries and Console from the
-[v0.0.9 prerelease](https://github.com/pterchan/ForkGet/releases/tag/v0.0.9).
+This source is being prepared for **v0.1.0-rc.1**. No release binaries or container
+archives are currently published. The candidate is experimental and is not a
+production or managed-service qualification.
 
 **TiDB correctness limitation:** concurrent parent deletion and child insertion
 can leave a committed orphan on TiDB 8.5.8, including with real TiKV. Forkget
 currently neither repairs nor reliably refuses that race. Concurrent foreign-key
-integrity remains an unresolved correctness blocker for a qualified four-engine
-release; serial application success does not close it.
+integrity remains a release blocker; serial application success does not close it.
 
 ## Get started
 

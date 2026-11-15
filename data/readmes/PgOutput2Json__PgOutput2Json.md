@@ -70,7 +70,7 @@ The key columns are the **replica identity** columns PostgreSQL sends with the c
 - `REPLICA IDENTITY FULL`: **all columns**, so the key changes with every update. Kafka log compaction, and routing by key, then treat each version of a row as a different row. Partition-key columns (`WithPartitionKeyFields`) keep the routing stable, but the Kafka message key still changes.
 - `REPLICA IDENTITY NOTHING`: empty.
 
-If the message key matters, use `DEFAULT`, or `USING INDEX` on a stable unique key. The initial data copy reads the primary key from the catalog, so for `FULL`, `NOTHING` and `USING INDEX` tables its keys differ from those of the streamed changes.
+If the message key matters, use `DEFAULT`, or `USING INDEX` on a stable unique key. The rows of the initial data copy have the same key columns as the streamed changes.
 
 ### Values
 
@@ -92,8 +92,9 @@ Compact mode is off by default. Your message handler, the message brokers and th
 With `.WithJsonOptions(o => o.WriteMode = JsonWriteMode.Compact)`, `"k"` and `"r"` are arrays of values without column names, which makes the messages smaller. The column names come in a schema property:
 
 ```
-"s": ["schema.table", ["id", 1, 23], ["name", 0, 1043, 104], ...]
-                       // column name, part of the key (1/0), type OID, type modifier (only if present)
+"s": ["schema.table", ["id", 1, 23], ["name", 0, 1043, 104], ["moods", 0, 16384, -1, "_mood"], ...]
+                       // column name, part of the key (1/0), type OID, type modifier (only if present),
+                       // type name (only for types that are not built in)
 ```
 
 The schema is not repeated in every message. It comes with the first row of a table after the listener connects, and again after the table changes. After a reconnect it is not always repeated for every table. **Consumers must remember the last schema per table** and decode rows with it, as the SQLite, MongoDB and DynamoDB adapters do. A consumer that starts reading in the middle of a stream must already know the schema, for example from its own store.
@@ -114,7 +115,7 @@ A replay is usually one batch, but it can be more:
 Every message carries a deduplication key: the transaction final LSN (`"w"`) plus the message number within that transaction (`"n"`). Consumers use it in one of two ways:
 
 - **Apply changes idempotently.** Upsert and delete by key. Replayed changes arrive in order, so the result is the same.
-- **Keep a watermark.** Remember the highest `(w, n)` pair processed and skip anything at or below it. Keep one watermark per table, in each partition or stream you read: the order is guaranteed only there. On Kafka, a message the broker rejects can arrive late and out of order; see the Kafka output for how to prevent that.
+- **Keep a watermark.** Remember the highest `(w, n)` pair processed and skip anything at or below it. Keep one watermark per table, in each partition or stream you read: the order is guaranteed only there. On Kafka and Kinesis, a message the output rejects can arrive late and out of order; see those outputs.
 
 The rows of the initial data copy have change type `"C"` and no position: `"w"` and `"n"` are 0. Upsert them by key and leave them out of the watermark. A copy that failed and started again publishes its rows again. While a table is being copied and synced, its changes are published behind the changes of the other tables, which is one more reason to keep the watermark per table.
 
@@ -123,6 +124,8 @@ The outputs that store data instead of forwarding messages (SQLite, MongoDB, Dyn
 ## 🧪 Testing
 
 Every output is covered by integration tests, which run on each change against PostgreSQL 14 to 18.
+
+To measure the throughput on your own machine, run the [benchmark](https://github.com/PgOutput2Json/PgOutput2Json/tree/main/src/PgOutput2Json.Benchmark): it copies and streams rows to a null output or to ClickHouse, and reports rows per second, CPU and allocations.
 
 ## 🤖 AI-assisted Development
 
@@ -325,6 +328,10 @@ public class Worker : BackgroundService
 Run the code, and with a little luck, you should see JSON messages being pushed into the `my_queue` in RabbitMQ when you make a change in the tables specified in `my_publication`. 
 The routing key will be in the form: `schema.table.key_partition`. Since we did not configure anything specific in the PgOutput2Json, the `key_partition` will always be `0`.
 
+### 3.4 Batch Size
+
+At the end of every batch the listener waits for the confirms of RabbitMQ (publisher confirms). `UseRabbitMq` therefore sets the batch size to 1,000 changes (the default of the library is 100). In our [benchmark](https://github.com/PgOutput2Json/PgOutput2Json/tree/main/src/PgOutput2Json.Benchmark), with a durable queue bound to the exchange, the initial copy and the stream ran at about 31,000 rows per second with batches of 1,000, and at about 24,000 and 21,000 with batches of 100 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and RabbitMQ in Docker on the same machine). Larger batches added nothing: RabbitMQ itself used most of the CPU, routing and confirming every message, also when the messages were not persistent. For more throughput, use [RabbitMQ Streams](#4-using-rabbitmq-streams). To use another size, call `WithBatchSize` after `UseRabbitMq`. A batch that is not full is still confirmed after the batch wait time (100 ms by default).
+
 ## 4. Using RabbitMQ (Streams)
 
 Using RabbitMQ Streams is similar to the standard RabbitMQ setup, but instead of creating an exchange and binding queues, you need to create a stream, and configure the stream protocol in RabbitMQ.
@@ -388,6 +395,12 @@ public class Worker : BackgroundService
 Once the stream is configured in RabbitMQ and the .NET service is running, changes to the PostgreSQL tables specified in `my_publication` will be pushed to the `my_stream` stream in RabbitMQ. 
 No need to manage exchanges or queues — everything will flow directly through the stream.
 
+### 4.3 Batch Size
+
+The producer has up to one batch of messages in flight, and the listener waits for their confirmations at the end of the batch. `UseRabbitMqStreams` therefore sets the batch size to 10,000 changes (the default of the library is 100). In our [benchmark](https://github.com/PgOutput2Json/PgOutput2Json/tree/main/src/PgOutput2Json.Benchmark) the initial copy ran at about 170,000 rows per second and the stream at about 100,000 with batches of 10,000, and at about 68,000 and 42,000 with batches of 100 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and RabbitMQ in Docker on the same machine). To use another size, call `WithBatchSize` after `UseRabbitMqStreams`. A batch that is not full is still confirmed after the batch wait time (100 ms by default). After an error, the unconfirmed messages of the batch are sent again.
+
+The messages go to the client in lists of `options.MessageBufferSize` (100 by default), each of which is one frame. A super stream gets them one by one, since it routes each message to its partition.
+
 ## 5. Using Kafka
 
 Kafka is supported out of the box and works similarly to the RabbitMQ integrations. PgOutput2Json will publish JSON messages directly to a Kafka topic.
@@ -443,6 +456,10 @@ public class Worker : BackgroundService
 ```
 
 Once the service is running, any changes made to the tables listed in `my_publication` will be published to the `my_topic` topic in Kafka as JSON messages.
+
+### 5.3 Batch Size
+
+At the end of every batch the listener waits until Kafka has acknowledged all of its messages (with `acks=all`, which idempotence needs). `UseKafka` therefore sets the batch size to 10,000 changes (the default of the library is 100). In our [benchmark](https://github.com/PgOutput2Json/PgOutput2Json/tree/main/src/PgOutput2Json.Benchmark) the initial copy ran at about 140,000 rows per second and the stream at about 94,000 with batches of 10,000, and at about 8,800 and 8,300 with batches of 100 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and Kafka in Docker on the same machine). The batching of librdkafka itself (`linger.ms`, 5 ms by default) made no difference there. To use another size, call `WithBatchSize` after `UseKafka`. A batch that is not full is still confirmed after the batch wait time (100 ms by default). After an error, the unconfirmed messages of the batch are sent again.
 
 ## 6. Using Redis
 
@@ -509,6 +526,24 @@ Optionally, initial data copy can be enabled with `WithInitialDataCopy(true)` wh
 
 The PgOutput2Json library will create the SQLite database if it does not already exist, along with any table included in logical replication. A table is created the first time a row belonging to that table is changed. If a table already exists, it is not modified, but new columns will be created automatically, if a new column is added to the source PostgreSQL table.
 
+The output writes through a connection of its own, opened without pooling, so it neither gets nor leaves connection settings in the pool your application uses (for example `PRAGMA query_only`). On that connection it turns off the foreign key checks, like PostgreSQL's own logical replication: the rows arrive in the order of the table syncs and the batches, not in the order of the foreign keys, so a child row can come before its parent. Your application's connections still check them. To check them on the output's connection too, run `PRAGMA foreign_keys = ON` in `options.PostConnectionSetup`.
+
+Triggers on the tables fire for the replicated rows too: SQLite cannot turn them off for one connection, as PostgreSQL's replication does. A trigger can tell the output's writes apart by the foreign key setting of the connection that fires it:
+
+```sql
+CREATE TRIGGER items_audit AFTER UPDATE ON items
+WHEN (SELECT foreign_keys FROM pragma_foreign_keys) = 1 -- not the replication
+BEGIN
+    INSERT INTO audit (item_id) VALUES (new.id);
+END;
+```
+
+This tells connections with foreign key checks off from those with them on, so it works as long as your application's connections check them (the default of Microsoft.Data.Sqlite and EF Core), and you do not turn them on in `PostConnectionSetup`.
+
+### Batch size
+
+Every batch of changes is one transaction. `UseSqlite` sets the batch size to 1,000 changes (the default of the library is 100). In our [benchmark](https://github.com/PgOutput2Json/PgOutput2Json/tree/main/src/PgOutput2Json.Benchmark) with batches of 1,000 and the database file on the server's disk, the initial copy ran at about 55,000 rows per second and the stream at about 50,000, or about 68,000 and 61,000 with `options.UseWal = true` (the WAL journal mode of SQLite), since a commit then waits less for the disk. With the file in memory (tmpfs), where a commit does not wait for a disk, they ran at about 85,000 and 75,000 (with or without `UseWal`), and at about 72,000 and 68,000 with batches of 100 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs, 8 GB RAM and its local disk with ext4, with PostgreSQL in Docker on the same machine). Larger batches add little. To use another size, call `WithBatchSize` after `UseSqlite`. A batch that is not full is still written after the batch wait time (100 ms by default).
+
 > ⚠️ **Important:** Be sure to set up the PostgreSQL database first, as described in the **QuickStart** section above.
 
 ### 7.1 Create a .NET Worker Service
@@ -557,7 +592,11 @@ public class Worker : BackgroundService
 PgOutput2Json supports copying modified PostgreSQL rows to MongoDB collections. By default, rows are copied only when they change, using logical replication.
 Optionally, initial data copy can be enabled with `WithInitialDataCopy(true)` when configuring the builder.
 
-The PgOutput2Json library will create the MongoDB database if it does not already exist, along with one collection for each table included in logical replication. Collections are created the first time a row belonging to the respective table is changed. Additionally, one unique index is created for each collection, covering the fields that are a part of the primary key.
+The PgOutput2Json library will create the MongoDB database if it does not already exist, along with one collection for each table included in logical replication. Collections are created the first time a row belonging to the respective table is changed. Additionally, one unique index is created for each collection, covering the fields that are a part of the primary key. A key field that is an array is stored as its JSON text (`["a","b"]`): a unique index on an array field indexes each element, so two rows whose keys share an element would be duplicates.
+
+Arrays are stored as BSON arrays. Arrays of enums, user-defined types and domains over arrays are arrays of strings; before version 2.1 they were a string with the PostgreSQL array literal (`{sad,happy}`), and documents written before keep it until their row changes.
+
+A changed row replaces its document (found by the key), so the document has exactly the columns of the row: a field that is not a column of the table is not kept. An update that did not change a large value (TOAST), which PostgreSQL does not send, sets the other fields instead, and keeps that one. Writing a change to MongoDB costs it a look-up of the key and a write of the document, so its own speed is the limit of this output.
 
 > ⚠️ **Important:** Be sure to set up the PostgreSQL database first, as described in the **QuickStart** section above.
 
@@ -662,6 +701,15 @@ public class Worker : BackgroundService
 }
 ```
 
+### 9.2 Records Out of Order After a Rejected Record
+
+A batch of changes is sent in `PutRecords` requests of up to 500 records and 5 MB, one after the other.
+
+Kinesis can accept the records of a request that follow a record it rejected (for example one throttled with `ProvisionedThroughputExceededException`). The batch is not confirmed and is replayed, so the rejected record reaches the stream once the problem is gone, but **after** records that follow it in the WAL. For example, if record 2 of 1, 2, 3 is rejected, the shard ends up with 1, 3, 1, 2, 3.
+
+- A consumer that applies changes idempotently is not affected: a row may show an older version for a moment, and the replay brings it up to date.
+- A consumer that keeps a watermark (the highest `(w, n)` pair processed) skips the late record as a duplicate, and loses it. Give the stream enough capacity that records are not throttled (on-demand mode, or enough shards), or apply the changes idempotently.
+
 ## 10. Using Amazon DynamoDB
 
 PgOutput2Json supports copying modified PostgreSQL rows to Amazon DynamoDB tables. By default, rows are copied only when they change, using logical replication.
@@ -723,6 +771,10 @@ public class Worker : BackgroundService
     }
 }
 ```
+### 10.2. Batch Size
+
+Every batch of changes is written with `BatchWriteItem` requests of up to 25 items, and `MaxParallelBatchWrites` of them (8 by default) are in flight at a time. Two changes of the same row are never in flight together, so they are applied in order. The position is saved once per batch, after its rows. `UseDynamoDb` sets the batch size to 1,000 changes (the default of the library is 100), so that the parallel requests have work. In our [benchmark](https://github.com/PgOutput2Json/PgOutput2Json/tree/main/src/PgOutput2Json.Benchmark), against DynamoDB Local, 8 parallel requests were about 2.5 times faster than one (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and DynamoDB Local in Docker on the same machine). DynamoDB Local is not DynamoDB: on AWS the throughput depends on the network and on the capacity of the tables, so measure it with your own tables (`--dynamodb URL`). To use another size, call `WithBatchSize` after `UseDynamoDb`. A batch that is not full is still written after the batch wait time (100 ms by default).
+
 ## 11. Using Azure Event Hubs
 
 ### Connection String
@@ -745,11 +797,11 @@ Make sure to create the Event Hub in your namespace before running the applicati
 
 ### Partitioning Strategy
 
-Event Hubs uses the partition key (derived from table name) to distribute messages across partitions. This ensures:
+The publisher chooses the partition of every event itself (murmur2, as the Kafka output does). By default it hashes the table name, so all the rows of a table go to one partition, in the order of the changes, and the tables are spread over the partitions. With partition-key columns configured for a table (`WithPartitionKeyFields`), it hashes the values of those columns instead, so the rows of the table are spread over the partitions.
 
-- Messages from the same table are processed in order
-- Load is distributed across multiple partitions for better throughput
-- Parallel processing capabilities for consumers
+At the end of every batch the events are sent once per partition, and the partitions are sent at the same time. Each partition gets its events in WAL order, also the events of different tables.
+
+Up to version 2.0.1, the partition of a table without partition-key columns was chosen by Event Hubs, from the table name as the partition key. After an upgrade, a table can therefore move to another partition. A consumer that keeps a watermark per table and partition must take the watermark of the table from its old partition.
 
 ### Create a .NET Worker Service
 
@@ -882,12 +934,16 @@ If `options.UseStandardWebhooks` is `true` then each request includes standard h
 In both cases, the request includes:
 - `User-Agent`: string in this format: `PgHook/ReplicationSlotName`;
 
+### Batch size
+
+Every batch of changes is one POST, and the listener waits for its answer before it goes on. The batch size is the default of the library, 100 changes. In our [benchmark](https://github.com/PgOutput2Json/PgOutput2Json/tree/main/src/PgOutput2Json.Benchmark), with a webhook that only reads the request, the initial copy ran at about 130,000 rows per second and the stream at about 81,000 with batches of 100, at about 184,000 and 86,000 with batches of 1,000, and at about 209,000 and 106,000 with batches of 10,000 (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL in Docker on the same machine and the webhook in the process of the benchmark). A larger batch is a larger request (about 300 bytes a row in the benchmark), so call `WithBatchSize` after `UseWebhook` if your webhook takes it. A batch that is not full is still sent after the batch wait time (100 ms by default).
+
 ## 13. Using ClickHouse
 
 PgOutput2Json can keep a copy of your PostgreSQL tables in ClickHouse. By default, rows are copied only when they change, using logical replication.
 Optionally, initial data copy can be enabled with `WithInitialDataCopy(true)` when configuring the builder.
 
-The output uses the HTTP interface of ClickHouse and needs no ClickHouse client library. It is tested with ClickHouse 26.10.
+The output uses the HTTP interface of ClickHouse, and sends the rows as JSON, or in the faster RowBinary format if you turn it on (see [Insert format](#insert-format)). It needs no ClickHouse client library, and is tested with ClickHouse 26.10.
 
 > ⚠️ **Important:** Be sure to set up the PostgreSQL database first, as described in the **QuickStart** section above.
 
@@ -895,10 +951,11 @@ The output uses the HTTP interface of ClickHouse and needs no ClickHouse client 
 
 A table is created the first time one of its rows arrives, as a `ReplacingMergeTree` ordered by the key columns of the PostgreSQL table.
 
-ClickHouse is slow at updating and deleting rows, so the output never does either. Every change is inserted as a new row, with two extra columns:
+ClickHouse is slow at updating and deleting rows, so the output never does either. Every change is inserted as a new row, with three extra columns:
 
 - `_version`: the position of the change in the PostgreSQL WAL (`w * 2^64 + n` of the [deduplication key](#-delivery-and-deduplication)). A copied row has version 0.
 - `_deleted`: 1 if the change is a delete.
+- `_synced_at`: when ClickHouse wrote the row, in UTC. It shows how far behind the copy is, and lets a materialized view process only the new rows. A change that PostgreSQL replays is written again, with a new time.
 
 ClickHouse keeps the row with the highest version per key when it merges the parts of a table, which happens in the background at a time you cannot predict. Until then the older versions are still there, so **read the tables with `FINAL`**:
 
@@ -910,14 +967,60 @@ This returns the current rows, without the deleted ones.
 
 A change that PostgreSQL replays after a reconnect has the same key and version as the first time, so it changes nothing. This is why the output does not save its position.
 
-The row of a delete stays in the table as a marker. ClickHouse can remove the markers: see `OPTIMIZE ... FINAL CLEANUP` in the ClickHouse documentation of `ReplacingMergeTree`.
+Tables created before version 2.1 have no `_synced_at`, and the output does not add it: ClickHouse would show the time of the query for the rows written before. Add it yourself if that is fine for you:
+
+```sql
+ALTER TABLE orders ADD COLUMN _synced_at DateTime64(6, 'UTC') DEFAULT now64(6)
+```
+
+### Deleted rows
+
+The row of a delete stays in the table, marked deleted. `FINAL` hides it, but it takes space. With `options.CleanUpDeletedRowsAfter = TimeSpan.FromHours(1)` the output sets the cleanup settings of `ReplacingMergeTree` on its tables (a new table when it is created, an existing one on the next start), and ClickHouse removes the deleted rows in a merge once no new rows have arrived in a table for that long. ClickHouse still marks this feature experimental.
+
+- A table that gets new rows all the time never waits that long. Run `OPTIMIZE TABLE orders FINAL CLEANUP` instead, for example at night: the settings allow it. It rewrites the whole table.
+- Once a deleted row is removed, nothing hides an older version of it. When PostgreSQL replays changes after a reconnect, a deleted row can show up again until the replayed delete arrives.
+- Setting the option back to null does not remove the settings from the tables.
 
 ### Tables
 
 - A table of the `public` schema keeps its name. A table of another schema is named `schema_table`. Set `options.GetTableName` to choose the names yourself.
-- A table that already exists is used as it is. To choose the engine (for example a replicated one), the partitioning or the column types, create the table before the first row arrives. It needs the columns `_version UInt128` and `_deleted UInt8`.
+- A table that already exists is used as it is. To choose the column types or an engine the options do not offer (for example a replicated one), create the table before the first row arrives. It needs the columns `_version UInt128` and `_deleted UInt8`. With RowBinary, a column type it does not cover makes the rows of the table go as JSON: see [Insert format](#insert-format).
 - A column added in PostgreSQL is added in ClickHouse. A column dropped in PostgreSQL stays. A changed column type is not followed: change the ClickHouse table yourself. Neither is a changed primary key definition (other key columns), because ClickHouse cannot change the order of an existing table: drop the ClickHouse table and copy it again. An update that changes the key value of a row is followed.
 - The database must exist.
+
+### Order, partitions and engine
+
+`options.Tables` sets them per PostgreSQL table:
+
+```csharp
+.UseClickHouse(options =>
+{
+    options.Tables["public.orders"] = new ClickHouseTableOptions
+    {
+        OrderBy = ["tenant_id", "id"],
+        PartitionBy = "intDiv(tenant_id, 1000)",
+    };
+    options.Tables["public.events"] = new ClickHouseTableOptions { Engine = ClickHouseTableEngine.MergeTree };
+})
+```
+
+- `OrderBy`: the key columns, in the order you want. The default is the order of the table.
+- `PartitionBy`: a `PARTITION BY` expression. The default is no partitions. The cleanup of [deleted rows](#deleted-rows) works per partition: a partition that has had no new rows (inserts, updates or deletes) for that long is cleaned up, even while other partitions of the table get new rows.
+- `Engine`:
+  - `ReplacingMergeTree` (the default) keeps the latest version of every row.
+  - `MergeTree` keeps every version, deletes included: the history of the table, in the order of `_version`. Read it without `FINAL`. A change that PostgreSQL replays after a reconnect is there twice, with the same `_version`.
+  - `Null` keeps nothing: only the materialized views on the table get the rows. An update that did not change a large value has `null` for it, because there is no row to take it from, unless the table has `REPLICA IDENTITY FULL`.
+
+ClickHouse replaces and deletes the rows by the `ORDER BY`, and only within a partition. The row of a delete has only the key columns. So `OrderBy` must have exactly the key columns, and `PartitionBy` may use only key columns; otherwise the output stops with an error when it creates the table. The key columns are those of the replica identity. To sort or partition by another column, make it part of the replica identity, for example:
+
+```sql
+CREATE UNIQUE INDEX orders_tenant_id ON orders (tenant_id, id);
+ALTER TABLE orders REPLICA IDENTITY USING INDEX orders_tenant_id;
+```
+
+A table without a key gets only inserts, so it can be ordered and partitioned by any of its columns.
+
+The options are used only when the output creates the table: ClickHouse cannot change the order, the partitions or the engine of an existing table. To change them, drop the ClickHouse table and copy it again.
 
 ### Column types
 
@@ -932,12 +1035,24 @@ The row of a delete stays in the table as a marker. ClickHouse can remove the ma
 | `date` | `Date32` |
 | `timestamp` | `DateTime64(6)` |
 | `timestamptz` | `DateTime64(6, 'UTC')` |
-| arrays | `String` with the JSON text, e.g. `[1,2,null]` |
+| arrays of the types above, and of `text`, `bytea` and the other types sent as text | `Array(Nullable(...))` of the element type, e.g. `integer[]` is `Array(Nullable(Int32))` (see [Arrays](#arrays)) |
+| arrays of enums and user-defined types | `Array(Nullable(String))`, e.g. `['sad','happy']` |
 | `json`, `jsonb` | `JSON` (see [JSON columns](#json-columns)) |
 | `bytea` | `String` with the bytes in hex |
 | anything else (`text`, `time`, `interval`, enums...) | `String` with the text PostgreSQL sends |
 
-Key columns are not `Nullable`, all the other columns are.
+Key columns are not `Nullable`, all the other columns are, except arrays. A key column that is an array, or json, is a `String`.
+
+### Arrays
+
+An array is a ClickHouse array, so `has()`, `arrayJoin()` and the other array functions work on it without parsing. Two things differ from PostgreSQL:
+
+- **A null array is an empty array**, because ClickHouse arrays cannot be `Nullable`. A `NULL` element stays `null`.
+- **One dimension.** PostgreSQL does not send the number of dimensions of a column (`integer[]` and `integer[][]` are the same type), so the ClickHouse column has one. A multi-dimensional value stops the replication with an error that names the column. Change that column to a `String` (`ALTER TABLE ... MODIFY COLUMN ... String`), and the listener continues with the JSON text (for an array of an enum or a user-defined type, the PostgreSQL array literal).
+
+The library sends the arrays of enums and user-defined types as the PostgreSQL array literal (`{sad,happy}`). The output knows they are arrays from the name of the type that PostgreSQL sends with the schema (an array type is named after its element type with an underscore: `_mood`), and stores their elements as strings. A domain over an array, such as `CREATE DOMAIN ints AS int[]`, is also an `Array(Nullable(String))`.
+
+With `options.UseArrayTypes = false`, new array columns are `String`s with the JSON text, as before version 2.1, and a null array stays `null`. An existing column keeps its type.
 
 ### JSON columns
 
@@ -965,9 +1080,21 @@ A `json` column that is part of the key is a `String`, as is an array of `json`.
 
 ### Batch size
 
-ClickHouse wants few, large inserts. `UseClickHouse` therefore sets the batch size to 10,000 changes (the default of the library is 100). In our test the initial copy ran at about 1,600 rows per second with batches of 100 and at about 75,000 with batches of 10,000. To use another size, call `WithBatchSize` after `UseClickHouse`. A batch that is not full is still sent after the batch wait time (100 ms by default).
+ClickHouse wants few, large inserts. `UseClickHouse` therefore sets the batch size to 10,000 changes (the default of the library is 100). In our benchmark the initial copy ran at about 1,500 rows per second with batches of 100 and at about 95,000 with batches of 10,000, or about 105,000 with RowBinary (see [Insert format](#insert-format)) (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and ClickHouse in Docker on the same machine). To use another size, call `WithBatchSize` after `UseClickHouse`. A batch that is not full is still sent after the batch wait time (100 ms by default).
 
-With `options.UseAsyncInserts` (on by default) ClickHouse collects the rows of several inserts before it writes them, which keeps the number of parts low when changes arrive a few at a time. An insert is still acknowledged only when the rows are written. It adds some 50 to 200 ms to every batch. Turn it off if you want the lowest latency and your batches are large.
+With `options.UseAsyncInserts` (on by default) a batch of fewer than 1,000 rows is an asynchronous insert: ClickHouse collects the rows of several inserts before it writes them, which keeps the number of parts low when changes arrive a few at a time. The insert is still acknowledged only when the rows are written, which adds some 50 to 200 ms to the batch. A larger batch is written at once, since the output sends one insert at a time and would only wait for ClickHouse. Turn the option off for the lowest latency of small batches.
+
+## Insert format
+
+By default the rows are sent as JSON (`JSONCompactEachRow`), and ClickHouse parses every value itself: what it stores is what its own parser makes of the value.
+
+With `options.UseRowBinary = true` they are sent in RowBinary, which ClickHouse reads two to three times faster (measured on a Hetzner CX33, a cost-optimized cloud server with 4 shared vCPUs and 8 GB RAM, with PostgreSQL and ClickHouse in Docker on the same machine). In our [benchmark](https://github.com/PgOutput2Json/PgOutput2Json/tree/main/src/PgOutput2Json.Benchmark) it made the initial copy and the stream about 10% faster on the same machine, since the inserts are only a part of the time. It is newer, and off by default, as the binary format of PostgreSQL's own replication: the output then does what the parser of ClickHouse does with the text (the time zone of a `timestamp`, dates out of range, decimal digits), so a difference would be stored without an error.
+
+RowBinary has no conversion: every value must be of the type the column has. So the output reads the column types of each table from ClickHouse when it starts, and writes each value as that type. It covers the types it creates, also when an existing table has them differently (another integer width, `Nullable` or not, another `DateTime64` precision or time zone), and also every integer (`Int8` to `Int256`, `UInt8` to `UInt256`), `Date`, `DateTime`, `Enum8`, `Enum16`, `FixedString`, `IPv4`, `IPv6` and `LowCardinality` of these. Values ClickHouse cannot store are handled as with the text: a date out of the range of the type is its first or its last one, and a value that is not in an `Enum`, too long for a `FixedString`, or an address with a netmask (an `inet` like `10.0.0.0/8`, or a `cidr`) stops the replication with an error that names the column.
+
+A table with any other column type (for example `Map`, `Tuple` or `Nested`) gets its rows as JSON (`JSONCompactEachRow`), which ClickHouse converts to the type of the column. The output logs this when it prepares the table. So does a table with a `DateTime` or `DateTime64` without a time zone when the time zone of the server is not known to .NET.
+
+A `timestamp` (without time zone) is written as a time of the time zone of the column, or of the server if the column has none, as ClickHouse reads the text of a time.
 
 ### Create a .NET Worker Service
 
@@ -1020,8 +1147,12 @@ public class Worker : BackgroundService
 | `Endpoint` | `http://localhost:8123` | The HTTP interface of ClickHouse. |
 | `Database` | `default` | The database of the tables. It must exist. |
 | `Username`, `Password` | `default`, empty | |
-| `UseAsyncInserts` | `true` | See [Batch size](#batch-size). |
+| `UseAsyncInserts` | `true` | For batches of fewer than 1,000 rows. See [Batch size](#batch-size). |
+| `UseRowBinary` | `false` | See [Insert format](#insert-format). |
 | `UseJsonType` | `true` | See [JSON columns](#json-columns). |
+| `UseArrayTypes` | `true` | See [Arrays](#arrays). |
+| `CleanUpDeletedRowsAfter` | none | Removes the deleted rows. See [Deleted rows](#deleted-rows). |
+| `Tables` | empty | The order, partitions and engine per table. See [Order, partitions and engine](#order-partitions-and-engine). |
 | `Settings` | empty | ClickHouse settings sent with every request, e.g. `options.Settings["insert_quorum"] = "2"`. |
 | `GetTableName` | see [Tables](#tables) | Returns the ClickHouse table name for a PostgreSQL table (`schema.table`). |
 | `HttpClient` | none | Your own `HttpClient`, e.g. with a proxy or a client certificate. |

@@ -71,6 +71,7 @@ volumes:
 - **Screens.** Upload images, fetch links, write HTML, or combine Plugins into Mashups with 7 layouts. Gate any Screen to a day/time Schedule.
 - **Every TRMNL panel.** All sizes and colour depths TRMNL sells, synced daily from the official model list, plus custom colour Palettes.
 - **Firmware.** Official releases sync automatically, or push a custom OTA build. A Firmware is blocked unless it fits the Device's model.
+- **Device Groups.** Put Devices of any model in a named Group that owns one set of Screens and Schedules; each member shows them rendered for its own panel, at its own pace.
 - **Devices.** Auto-provisioning, battery, Wi-Fi, firmware version, Qwiic sensor readings, logs, Sleep Mode, Special Functions, and a Device Simulator to poll as any Device without hardware.
 - **Alerts and metrics.** A sweep watches for low battery, offline Devices and failing fetches and notifies through an [Apprise](https://github.com/caronc/apprise-api) sidecar. `/metrics` serves Prometheus gauges.
 - **Mirroring.** Show what the official TRMNL cloud would show, on a Device Kuroshiro manages.
@@ -93,13 +94,13 @@ Kuroshiro isn't the only way to run a TRMNL: the device also works with the offi
 | Device models & palettes | Full official catalog synced daily, plus admin-created custom colour Palettes | Device models & palettes supported | Defines the catalog—sells the hardware |
 | Plugins | `Poll` (multiple named Data Sources, each fetched or a literal value) & `Webhook` (3 merge strategies) | "Extensions"/Exchanges, single- or multi-source polling | 1,000+ native, community & private plugins |
 | Recipe import | Browse, search and sort the trmnl.com catalog in the admin UI and import in one click, or paste an id—serverless-transform Recipes included, which Terminus's importer rejects | Imports via its Extension Gallery | Native—it's the source catalog |
-| Screen scheduling | Per-Screen day/time Schedule gates rotation eligibility | Playlist model: weekday/date windows, skip-if-stale TTL, device-grouped playlists | Playlist Scheduler, group scheduling by time of day |
+| Screen scheduling | Per-Screen day/time Schedule gates rotation eligibility; Screens can be shared by a Device Group | Playlist model: weekday/date windows, skip-if-stale TTL, device-grouped playlists | Playlist Scheduler, group scheduling by time of day |
 | Mashups | 7 layouts | Supported | 8 layouts |
 | Firmware | Official sync + custom OTA upload, hard-blocked unless the Firmware is compatible with the Device's model | Official sync + custom upload, no model-compatibility link | Manages its own hardware directly |
 | Sensors | Device-attached Qwiic sensors (CO₂/humidity/pressure/temperature), exposed to Plugin templates | Device-attached *and* server-attached (Raspberry Pi) sensors | — |
 | Sleep Mode | Per-Device night window that parks the Device until the window ends, with an optional dedicated sleep Screen | Supported | Supported |
 
-The short version: Kuroshiro trades Terminus's multi-user accounts and device-grouped playlists for a simpler single-admin, single-container deployment, while going further than either self-hosted option on per-Device-Model firmware safety and mixed fetch/literal Data Sources within one Plugin.
+The short version: Kuroshiro trades Terminus's multi-user accounts for a simpler single-admin, single-container deployment, while going further than either self-hosted option on per-Device-Model firmware safety and mixed fetch/literal Data Sources within one Plugin.
 
 ### Every BYOS at a glance
 
@@ -123,7 +124,7 @@ TRMNL keeps a [feature matrix of BYOS implementations](https://docs.trmnl.com/go
 | Maintained | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🔴 | 🔴 | 🔴 |
 | Semantic Versioning | 🟢 | 🟢 | 🔴 | ⚪️ | 🟢 | ⚪️ | ⚪️ | ⚪️ |
 
-¹ As a per-Device Rotation of Screens, each gated by its own day/time Schedule, rather than named playlists shared between Devices.
+¹ As a Rotation of Screens, each gated by its own day/time Schedule, owned by a Device or shared by a Device Group, rather than named playlists.
 
 The other servers' columns are TRMNL's own assessment as of October 2026; the Kuroshiro column is ours. See [`docs/adr`](./docs/adr) for the design decisions (and prior-art comparisons) behind both tables.
 
@@ -169,11 +170,10 @@ The Alerts page
 
 ## Roadmap
 
-Done: Device Logs viewer, refresh-rate controls, drag-and-drop Screen reordering, Sleep Mode, Liquid templates, Housekeeping, Recipe import, Mashups, Screen Schedules, system logs.
+Done: Device Groups, Device Logs viewer, refresh-rate controls, drag-and-drop Screen reordering, Sleep Mode, Liquid templates, Housekeeping, Recipe import, Mashups, Screen Schedules, system logs.
 
 Next, in no fixed order:
 
-- **Device Grouping**: share one Schedule and rotation across multiple Devices
 - **Server-attached Sensors**: readings from a Raspberry Pi next to the server, independent of what a Device reports
 - **Smart image caching**: prune and reuse stored renders more cleverly
 

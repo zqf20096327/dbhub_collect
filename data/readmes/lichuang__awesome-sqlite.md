@@ -38,6 +38,7 @@
 * [asg017/sqlite-rembed: A SQLite extension for generating text embeddings from remote APIs (OpenAI, Nomic, Ollama, llamafile...)](https://github.com/asg017/sqlite-rembed)
 * [phiresky/sqlite-zstd: Transparent dictionary-based row-level compression for SQLite](https://github.com/phiresky/sqlite-zstd)
 * [asg017/sqlite-loadable-rs: A framework for writing fast and performant SQLite extensions in Rust](https://github.com/asg017/sqlite-loadable-rs)
+* [arbazsiddiqui/sqlite-sparse: Semantic search in one SQLite file. No model, no server at query time.](https://github.com/arbazsiddiqui/sqlite-sparse)
 
 ## GUI
 
@@ -98,7 +99,10 @@
 * [aergoio/sqlite-stored-procedures: Stored Procedures for SQLite](https://github.com/aergoio/sqlite-stored-procedures)
 * [simonw/datasette: An open source multi-tool for exploring and publishing data](https://github.com/simonw/datasette)
 * [simonw/sqlite-utils: Python CLI utility and library for manipulating SQLite databases](https://github.com/simonw/sqlite-utils)
+* [OrbitalKeyAi/sqliteproof: Structural validation localised to the table -- which tables survived, how many rows were lost, and what is safe to export](https://github.com/OrbitalKeyAi/sqliteproof)
 * [dbcli/litecli: CLI for SQLite Databases with auto-completion and syntax highlighting](https://github.com/dbcli/litecli)
 * [asg017/sqlite-ecosystem: An overview of all my SQLite extensions, and a roadmap for future extensions and tooling!](https://github.com/asg017/sqlite-ecosystem)
 * [dpapathanasiou/simple-graph: This is a simple graph database in SQLite, inspired by "SQLite as a document database"](https://github.com/dpapathanasiou/simple-graph)
 * [torymur/sqlite-repr: Visual representation of on-disk database file format used by all releases of SQLite since version 3.0.0.](https://github.com/torymur/sqlite-repr)
+* [huynhtanan/amazon-bestsellers-tracker: Python tracker that snapshots Amazon Best Sellers across 17 country stores into SQLite, with example SQL diff queries for rank jumps and new entries.](https://github.com/huynhtanan/amazon-bestsellers-tracker)
+* [huynhtanan/walmart-deals-tracker: Python tracker that watches Walmart Rollback-only deals and stores daily snapshots in SQLite, with SQL queries for price drops and first-party vs marketplace filtering.](https://github.com/huynhtanan/walmart-deals-tracker)

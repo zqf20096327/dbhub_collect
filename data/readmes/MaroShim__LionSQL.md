@@ -3,7 +3,7 @@
 Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures
 
 [![Version](https://img.shields.io/badge/version-v0.92.0-blue.svg)](CHANGELOG.md)
-[![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8.svg?logo=go&logoColor=white)](go.mod)
+[![Go Version](https://img.shields.io/badge/Go-1.26%2B-00ADD8.svg?logo=go&logoColor=white)](go.mod)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
 [![Architecture](https://img.shields.io/badge/Architecture-PGWire%20%7C%20T--SQL%20%7C%20VDBE-blueviolet)](doc/ARCHITECTURE.md)
@@ -34,7 +34,7 @@ LionSQL is a high-performance, embedded OLTP database engine that natively compi
 [Postgres Wire v3]             [MSSQL TDS 7.x/8.0]             [Web Studio & SPA Web Server]
   Port :5433                      Port :1433                      Port :8090 (/_/, /)
  (psql, DBeaver,                  (sqlcmd, SSMS,                  (Admin UI, SPA Web Hosting,
-  GORM, Prisma)                    Azure Data Studio)              REST API, Realtime SSE,
+  GORM, Prisma)                    Beekeeper Studio)               REST API, Realtime SSE,
         │                                │                         Webhooks, RLS, Cron, JS SDK)
         └────────────────────────────────┼────────────────────────────────┘
                                          │
@@ -82,13 +82,13 @@ LionSQL's core capabilities are organized across five foundational architectural
 ### 1. Dual Wire Protocols & Connection Pooling
 - **Concurrent Dual Wire Protocols**:
   - **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding.
-  - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution.
+  - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution.
 - **Built-in Goroutine Connection Pooler**:
   Handles 10,000+ simultaneous connections over lightweight Go goroutines, eliminating connection bottlenecks without external poolers.
 
 > [!TIP]
 > **Recommended Application Protocol: PostgreSQL Wire (`:5433`)**
-> While LionSQL faithfully serves both protocols, **PGWire (`:5433`) is strongly recommended as the default application protocol**, even when executing T-SQL stored procedures (`EXEC sp_name @p1=$1;`). PGWire's lightweight framing and single-packet pipelining (`Parse` + `Bind` + `Execute` + `Sync`) deliver higher raw network throughput (376,000+ tpmC / 13,900+ TPS) with lower serialization latency than Microsoft TDS RPC streams, while offering universal, zero-quirk driver support across Go (`pgx`, `lib/pq`), Node.js, Python, Java, and Rust. TDS (`:1433`) is primarily intended for legacy Microsoft tooling (SSMS, Azure Data Studio, legacy .NET `SqlClient`).
+> While LionSQL faithfully serves both protocols, **PGWire (`:5433`) is strongly recommended as the default application protocol**, even when executing T-SQL stored procedures (`EXEC sp_name @p1=$1;`). PGWire's lightweight framing and single-packet pipelining (`Parse` + `Bind` + `Execute` + `Sync`) deliver higher raw network throughput (376,000+ tpmC / 13,900+ TPS) with lower serialization latency than Microsoft TDS RPC streams, while offering universal, zero-quirk driver support across Go (`pgx`, `lib/pq`), Node.js, Python, Java, and Rust. TDS (`:1433`) is primarily intended for legacy Microsoft tooling (SSMS, legacy .NET `SqlClient`).
 
 ### 2. Enterprise T-SQL Procedural Runtime
 - **Stored Procedures, Functions & Triggers**:
@@ -146,7 +146,7 @@ LionSQL's core capabilities are organized across five foundational architectural
 
 #### Prerequisites
 - **Supported Operating Systems**: **macOS**, **Linux** (officially supported), **Windows** (standalone binary available)
-- Go 1.22 or higher
+- Go 1.26 or higher (Go 1.26+)
 - (Optional, for WiredTiger backend) `wiredtiger` development headers and libraries:
   - macOS: `brew install wiredtiger`
   - Linux (Ubuntu/Debian): `sudo apt-get install libwiredtiger-dev`
@@ -187,14 +187,14 @@ Upon startup, the console displays the connection endpoints:
 ```text
 --------------------------------------------------------------------------------
  LionSQL - Single binary High-Concurrency OLTP Database Server with T-SQL & Stored Procedure (v0.92.0)
- (built: 2026-11-09 14:00:00 KST, commit: 2eb8712, go1.24 darwin/arm64) [tags: wiredtiger]
+ (built: 2026-11-09 14:00:00 KST, commit: 2eb8712, go1.26 darwin/arm64) [tags: wiredtiger]
 --------------------------------------------------------------------------------
  [Configuration]  Zero-Config (Built-in Defaults)
  [Web Dashboard]  http://127.0.0.1:8090/_/
  [HTTP API]       http://127.0.0.1:8090/api/health
  [CDC Stream]     http://127.0.0.1:8090/api/cdc/stream (NDJSON / SSE)
  [Superuser Auth] admin@lionsql.local (JWT Auth: false)
- [Supported GUI]  DBeaver / Beekeeper Studio / DbGate / Azure Data Studio
+ [Supported GUI]  DBeaver / Beekeeper Studio / DbGate / SSMS
  [Postgres Wire]  psql -h 127.0.0.1 -p 5433 (PostgreSQL v3 protocol, psql / pgx)
  [TDS / MSSQL]    sqlcmd -S 127.0.0.1,1433 (TDS 7.x/8.0 protocol, sqlcmd / SSMS)
  [Data Directory] data
@@ -387,17 +387,23 @@ run();
 | `-work-mem` | `64MB` | Default memory limit per query operator before spill-to-disk |
 | `-max-workers` | `NumCPU * 4` | Maximum concurrent query execution workers |
 | `-max-idle-sessions` | `64` | Maximum idle storage sessions to retain in pool |
-| `-auth` | `false` | Enforce JWT authentication on protected REST endpoints |
-| `-seed` | `true` | Seed sample accounts and `TransferFunds` procedure on startup |
+| `-auth` | `true` | Enforce JWT authentication on protected REST endpoints |
+| `-seed` | `false` | Seed sample accounts and `TransferFunds` procedure on startup |
 
 ### Unified CLI & Daemon Controls
 
 LionSQL provides a modern, unified CLI with first-class lifecycle commands:
 
 ```bash
-# Foreground execution (default)
+# Foreground execution (default - no arguments)
 ./bin/lionsql                   # Start immediately using ./data
 ./bin/lionsql serve -dir=./data # Explicit serve subcommand
+
+# Interactive SQL Terminal Shell & CLI (Dual Entrypoints)
+./bin/lionsql -i                # Interactive T-SQL prompt (short flag)
+./bin/lionsql cli               # Interactive T-SQL prompt (subcommand)
+./bin/lionsql -i -e "SELECT 1;" # Headless one-off query execution
+./bin/lionsql cli -f script.sql # Headless batch script execution
 
 # Background daemon management
 ./bin/lionsql start -dev        # Start daemon in background (creates lionsql.pid & lionsql.log)
@@ -562,7 +568,7 @@ LionSQL strictly adheres to a **3-Stage Verification Pipeline** for every change
      # 2. 8-core concurrent verification (107 files, 551,217 queries in 47.2s)
      ./bin/sqllogictest -dir test/slt -parallel 8
 
-     # 3. Procedural (T-SQL/Babelfish) verification (14 suites, 100% PASS)
+     # 3. Procedural (T-SQL/Babelfish) verification (30 suites, 100% PASS)
      go test -tags wiredtiger -v -race ./test/slt_proc/...
      ```
 3. **Commit Integrity**:

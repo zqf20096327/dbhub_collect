@@ -65,7 +65,8 @@ the rest are gathered into an hourly reminder between 09:00 and 21:00.
 
 ### What you need
 
-- A Mac. Linux and Docker are not supported yet; see
+- A Mac. Linux (Ubuntu 24.04) is in testing (see
+  [On Linux](docs/start/owner-setup.md#on-linux)); Docker is not supported yet. See
   [supported versions](docs/start/owner-setup.md#supported-versions).
 - Claude Code or Codex, signed in.
 - A Telegram account.
@@ -177,7 +178,7 @@ whenever you ask.
 | Google Calendar, Gmail, Drive, Sheets | Changed events, mail, files and rows                                 | The logged-in `gws` command          |
 | iCal feeds                            | Events in the calendar feeds you add                                 | Private URL, typed on the setup page |
 | Obsidian                              | Notes in the vault folders you choose                                | Local folder                         |
-| iMessage                              | Messages in the chats you choose                                     | Local database (Full Disk Access)    |
+| iMessage (macOS)                      | Messages in the chats you choose                                     | Local database (Full Disk Access)    |
 | Claude Code                           | Conversations in the projects you choose                             | Local folder                         |
 | Kagemusha bridge                      | A read-only view of a local Kagemusha database                       | Local database                       |
 
@@ -237,10 +238,10 @@ These are the current package versions.
 
 | Package                                                     | Role                             | Version |
 | ----------------------------------------------------------- | -------------------------------- | ------- |
-| [MAMA OS](packages/standalone/README.md)                    | Owner agent and `mama` command   | 0.80.0  |
+| [MAMA OS](packages/standalone/README.md)                    | Owner agent and `mama` command   | 0.81.0  |
 | [mama-core](packages/mama-core/README.md)                   | Shared engine and public exports | 8.9.1   |
 | [Public MCP server](packages/mcp-server/README.md)          | Development memory over stdio    | 2.6.2   |
-| [Claude Code plugin](packages/claude-code-plugin/README.md) | Development commands and hooks   | 2.5.0   |
+| [Claude Code plugin](packages/claude-code-plugin/README.md) | Development commands and hooks   | 2.5.1   |
 
 ## Roadmap
 
@@ -265,13 +266,13 @@ Messengers: Telegram is live; Discord and Slack have not run live yet. Windows i
 | Install          | One command per platform, a check of the AI CLI you sign in to, a Node path that survives upgrades, document tools on Linux | 2 / 6       |
 | Setup            | Pairing in Telegram instead of typed IDs, defaults instead of edited files, the service started for you                     | 1 / 7       |
 | Operations       | Status, `mama doctor`, update (also from chat), backup and restore, upgrade checks, logs, log rotation, uninstall           | 7 / 9       |
-| Linux            | Document rendering, sandbox checks, a full run                                                                              | 2 / 5       |
+| Linux            | Document rendering, sandbox checks, a full run                                                                              | 4 / 5       |
 | Docker           | An official image, signing in inside the container, the same isolation inside it                                            | 0 / 5       |
 | Everyday use     | Chat commands such as `/stop`, usage and limits, a health view, Discord and Slack verified or marked experimental           | 1 / 4       |
 | People           | The remaining live checks, and use by more than one person                                                                  | 0 / 5       |
 | Your own work    | The owner checks of stage 2 accepted                                                                                        | 0 / 4       |
 | Fixes and guides | Chatwork polling, shutdown order, prompt size, test stability, CI coverage, a guide per platform, what 1.x promises         | 1 / 7       |
-| **Total**        |                                                                                                                             | **14 / 52** |
+| **Total**        |                                                                                                                             | **16 / 52** |
 
 Each item, with what is true today and how it is checked, is in the
 [1.0 work list](docs/development/work/v1.md). Ongoing live checks are in the

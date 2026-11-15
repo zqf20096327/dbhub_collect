@@ -25,7 +25,7 @@
   <a href="https://github.com/hellwand/tasmofleet/discussions">Discussions</a>
 </p>
 
-![The TasmoFleet dashboard: fleet state, what needs attention, recent transactions](docs/media/dashboard.png)
+![The TasmoFleet dashboard: fleet state, what needs attention, recent transactions](https://hellwand.github.io/tasmofleet/assets/dashboard.png)
 
 TasmoFleet is a self-hosted fleet manager for [Tasmota](https://tasmota.github.io/) devices, one Go
 binary with an embedded SQLite database. All screenshots show simulated devices; the
@@ -58,9 +58,9 @@ import from TasmoAdmin.
 
 | Device list                                                                   | Policy rule editor                                                                                 |
 | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| ![Device list with status, firmware and chip columns](docs/media/devices.png) | ![Policy rule editor suggesting commands from the Tasmota catalogue](docs/media/policy-editor.png) |
+| ![Device list with status, firmware and chip columns](https://hellwand.github.io/tasmofleet/assets/devices.png) | ![Policy rule editor suggesting commands from the Tasmota catalogue](https://hellwand.github.io/tasmofleet/assets/policy-editor.png) |
 
-![A firmware update of four devices: pick them, review, start, watch each device's progress](docs/media/demo.webp)
+![A firmware update of four devices: pick them, review, start, watch each device's progress](https://hellwand.github.io/tasmofleet/assets/demo.webp)
 
 ## Quick start (Docker)
 
@@ -107,6 +107,16 @@ A manual template is in [deploy/unraid/tasmofleet.xml](deploy/unraid/tasmofleet.
 sign-in). The app and its documentation are in
 [deploy/homeassistant/tasmofleet](deploy/homeassistant/tasmofleet/DOCS.md).
 
+## MQTT and the broker ACL
+
+> [!CAUTION]
+> **Set up an ACL on your MQTT broker before you use TasmoFleet's MQTT features.** MQTT is the first way TasmoFleet
+> talks to a device that is online on its broker (reads, changes, backups and restores). The broker hands every command,
+> every password in it and the complete configuration dump of every backed-up or restored device to **every client
+> that may subscribe to the device's topics**: Home Assistant, Node-RED, MQTT Explorer, other devices. Without an ACL
+> that is every client of the broker. A ready, tested rule set is in the [broker ACL guide](docs/mqtt-broker-acl.md);
+> note that the Mosquitto app of Home Assistant currently does not enforce an `acl_file` (the guide says what to do).
+
 ## Backing up TasmoFleet
 
 Back up the whole data directory (the `/data` volume): it holds the database and the device
@@ -118,12 +128,21 @@ possible. How to take, schedule and restore them:
 
 - [Installing](docs/installation.md), [upgrading](docs/upgrading.md), [configuration](docs/configuration.md)
   (every environment variable, TLS, time zone, Home Assistant app)
+- [Broker ACL guide](docs/mqtt-broker-acl.md): who may read what on your MQTT broker (read this before MQTT)
 - [Backing up TasmoFleet](docs/backing-up.md) and [emergency access](docs/runbooks/emergency-access.md)
 - [What TasmoFleet changes on your devices](docs/device-changes.md), including the two roles
 - Reverse proxy, OIDC (Authentik), Prometheus, Grafana and Unraid examples: [deploy/](deploy/)
 - Design and behaviour: [spec](docs/spec/2026-10-18-tasmofleet-design.md); security notes per
   feature: [docs/security/](docs/security/); research: [docs/research/](docs/research/)
 - [CHANGELOG](CHANGELOG.md), [ROADMAP](ROADMAP.md), [development](docs/development.md)
+
+## Community projects
+
+Unofficial projects by other people. They are not maintained or endorsed by TasmoFleet.
+
+- [tasmofleet-keycloak-theme](https://github.com/Noschvie/tasmofleet-keycloak-theme): a Keycloak
+  login theme in the TasmoFleet look (light and dark), for people who use Keycloak as their OIDC
+  provider. AGPL-3.0-or-later.
 
 ## Status
 

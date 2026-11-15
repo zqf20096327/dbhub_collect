@@ -6,12 +6,13 @@
   <b>Hisabi is a self-hosted personal finance app that turns your bank SMS into a calm, clear picture of your money: what needs you, how the month is going, and where it all went.</b>
 </p>
 
-<p align="center"><a href="https://hisabi.on-forge.com/" target="__blank"><img src="https://raw.githubusercontent.com/hisabi-app/hisabi/refs/heads/main/public/images/showcase.png" /></a></p>
+<p align="center"><img src="https://raw.githubusercontent.com/hisabi-app/hisabi/refs/heads/main/public/images/showcase.png" /></p>
 
 
 ## 🛠 Features
 
 - [x] 📩 **Paste a bank SMS:** Hisabi picks out the amount, the card and the shop, and remembers each shop's category for next time
+- [x] 🔄 **SMS sync from your Mac:** if your iPhone's messages reach your Mac, a small background tool sends new bank SMS as they arrive, without ever adding one twice ([tools/mac-sms-sync](tools/mac-sms-sync))
 - [x] ✅ **Needs you:** new brands to categorize, budgets over or ahead of pace, and messages it couldn't read, at the top of the home, with actions right there
 - [x] 📈 **This month at a glance:** what you've spent so far against the same point last month, plus a few insights written as plain sentences
 - [x] 🎯 **Budgets:** monthly, weekly, yearly or custom, shown as rings, with history to compare periods
@@ -26,41 +27,37 @@
 
 New to Hisabi? The home starts with just the SMS box and fills in as your transactions come in, so you never stare at empty charts.
 
-## 🎮 Demo
+## ▶️ Installation
 
-Try the app with the [live demo](https://hisabi.on-forge.com/), or watch the [first alpha version](https://www.youtube.com/watch?v=kfwcMdlFn9o).
+On a fresh Ubuntu 22.04+ or Debian 12+ server, with a domain pointing at it:
 
-## ▶️ Installation 
-
-> Docker Installation
-   
 ```bash
-git clone https://github.com/hisabi-app/hisabi && cd hisabi
-
-make build # build the docker image
-make run # the same as docker-compose up -d
-
-# wait for a few seconds to allow the DB to finish the setup then run
-make install # only for the first time
+curl -fsSL https://raw.githubusercontent.com/hisabi-app/hisabi/main/install.sh -o install.sh
+sudo bash install.sh --domain hisabi.example.com
 ```
 
-Once done, visit the app on `http://localhost`
+The script installs PHP 8.4, MySQL (MariaDB on Debian), Node and [Caddy](https://caddyserver.com), builds Hisabi in `/var/www/hisabi` and gets an HTTPS certificate for the domain. At the end it asks for your name, email and password. Without `--domain`, Hisabi is served over plain http on port 80.
 
 ### Upgrading
 
-Pull the latest code, rebuild, and run the migrations:
+Run the script again with `sudo bash install.sh`. It pulls the latest code, rebuilds and runs the migrations, and keeps your `.env` and database.
+
+### Moving from the Docker install
+
+Export the database on the old machine, then install with it:
 
 ```bash
-git pull
-make build && make run
-docker-compose exec app php artisan migrate --force
+docker-compose exec -T mysql mysqldump -uroot -proot hisabi > hisabi.sql   # on the old machine
+sudo bash install.sh --domain hisabi.example.com --import hisabi.sql       # on the new server
 ```
 
 ## 💬 Your bank's SMS
 
-Hisabi reads SMS using the templates in `config/hisabi.php` (`sms_templates`), with placeholders such as `{amount}`, `{brand}`, `{card}`, `{date}`, `{time}` and `{ignore}`. If your bank's messages aren't picked up, add a template that matches them. The currency is set in the same file.
+Hisabi reads SMS using the templates in `config/hisabi.php` (`sms_templates`), with placeholders such as `{amount}`, `{brand}`, `{card}`, `{date}`, `{time}` and `{ignore}`. If your bank's messages aren't picked up, add a template that matches them. A template can span several lines (`\n`) for banks that send multi-line messages. The currency is set in the same file.
 
 Messages Hisabi couldn't read show up under **Needs you**, so you can fix or delete them.
+
+To have new bank SMS arrive by themselves, see [tools/mac-sms-sync](tools/mac-sms-sync): it reads them from Messages on a Mac and sends them to `POST /api/v1/sms/sync` with a token from `php artisan hisabi:sms-sync-token`. A message that was already synced or pasted is never added again.
 
 ## 📺 Kitchen display
 

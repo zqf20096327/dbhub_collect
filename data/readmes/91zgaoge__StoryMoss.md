@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.98.5-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.98.6-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -120,6 +120,11 @@ npm run build
 
 OG.md`](./CHANGELOG.md)。
 
+### v0.98.6 · 修复发布门禁重跑缺陷，恢复 macOS 公证与发布
+
+- **重跑不再被 nightly tag 误拦**：docs-guard 只与上一个稳定 tag 比较，`vX.Y.Z-nightly` 不再参与 `PREV` 选择；此前 nightly 与稳定 tag 指向同一 commit 时 diff 为空，会误判「必需文档未更新」。
+- **macOS 公证恢复**：Apple Developer Program 协议续签后重新触发 macOS 签名/公证与全平台打包、官网同步与 updater 校验。
+
 ### v0.98.5 · 训练源章节缓存 + 栗子读书 MCP 读竞态修复
 
 - **反复训练不再重复取章**：MCP 源章节按「服务器 + 书 + 章号」缓存到本地 SQLite；第一次训练取章并回写，后续训练直接命中缓存，日志显示命中/新读数量。取章更省时，也不再反复触碰回环 HTTP。
@@ -185,8 +190,4 @@ v0.95.0 留下的一批状态机债务已逐项收口：
 
 ### v0.94.0 · 续写训练按真实创作流程重建资产，再续写、编审与对比
 
-训练沙盒此前只有灌入的章节正文，没有世界观、故事大纲、角色和关系，writer 很容易拒绝或另起新故事。现在训练会先把取得的上下文章重建为**世界观、故事大纲（含下一节点）、角色卡、角色关系、逐章梗概**，再进入与正作相同的续写管线（writer → 质量门 → 修订 → 装配），而不是从零创世。资产分析只使用前文实际出现的人名/地名，未接地的人名直接跳过；长章保留开场与结尾窗口，末章结尾用于下一节点判断。续写完成后，判官除对比真实后续章，还会看到上一章结尾现场，专门检查 AI 是否紧接现场；报告固定记录「资产重建 → 编审 → 对比」三段流程与本轮资产计数，改进建议继续自动注入下一轮训练。
-
-### v0.93.16 · 续写训练不再「另起新故事」，空稿不再冒充正文
-
-真机检查发现两个训练沙盒的续写与前作
+训练沙盒此前只有灌入的章节正文，没有世界观、故事大纲、角色和关系，writer 很容易拒绝或另起新故事。现在训练会先把取得的上下文章重建为**世界观、故事大纲（含下一节点）、角色

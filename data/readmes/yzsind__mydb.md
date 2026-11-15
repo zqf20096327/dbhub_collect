@@ -4,25 +4,39 @@
 
 # MyDB
 
-**A high-performance database, compatible with MySQL**
+**A high-performance MySQL-compatible database for HTAP and AI agents**
 
-Let agents manage data flexibly — transactions, analytics, AI model calls and hybrid search through SQL.
+Mixed transactional and analytical workloads, with native AI retrieval.
 
-[Download](https://github.com/yzsind/mydb/releases/tag/v1.2.1) · [Performance evaluation](#performance-evaluation) · [Quick Start](#quick-start) · [Built for AI Agents](#built-for-ai-agents) · [Documentation](docs/README.md) · [MySQL Compatibility](docs/mysql80-compatibility.md)
+[Download](https://github.com/yzsind/mydb/releases/tag/v1.2.1) · [Why MyDB](docs/why-mydb.md) · [Performance evaluation](#performance-evaluation) · [Quick Start](#quick-start) · [Built for AI Agents](#built-for-ai-agents) · [Documentation](docs/README.md) · [MySQL Compatibility](docs/mysql80-compatibility.md)
 
 </div>
 
 ---
 
-MyDB is a general-purpose database built in Rust, designed around three directions: **AI agents, high-performance hybrid transactional/analytical processing (HTAP), and MySQL compatibility**. Through a familiar SQL interface, applications and agents can manage business data, evolve table schemas, run real-time analytics, combine keyword and vector retrieval, and call text-generation and embedding services.
+MyDB is a general-purpose database built in Rust for **HTAP (hybrid
+transactional/analytical processing), AI agents, and MySQL compatibility**.
+It is designed for mixed workloads that combine transactional reads and writes
+with analytical queries over the same business data. Native full-text and
+vector retrieval and external model calls extend these workflows through
+familiar SQL.
+
+Applications can reuse MySQL clients and drivers, while native REST and MCP
+interfaces give services and agents direct access to the same engine. Automatic
+Zone Maps, online schema changes, and directly queryable backups reduce the
+work needed to tune access, evolve data structures, and inspect earlier data.
 
 MyDB 1.2.1 is a public-preview release intended for feature validation and controlled-environment evaluation. It is not yet a production-grade MySQL replacement, and on-disk formats are not guaranteed to be backward compatible.
 
-| Core capability | What it gives you |
+| Core advantage | What it gives you |
 | --- | --- |
-| **Built for AI agents** | SQL model calls, native vectors, BM25 + RRF hybrid search, and model access controls support retrieval and generation; online DDL and automatic zone maps simplify data management. |
-| **High-performance HTAP** | Parallel hash joins, vectorized execution, and a cost-based optimizer power both transactional and analytical workloads. |
-| **MySQL compatible** | Reuse MySQL clients, JDBC drivers, core SQL, and row binlog integration. |
+| **Built for AI agents** | Native vectors, hybrid retrieval, SQL model calls, and REST/MCP access connect agents with business data. |
+| **High-performance HTAP** | Transactional reads and writes alongside analytical queries on one dataset, with parallel execution, vectorization, and automatic Zone Maps. |
+| **MySQL compatible** | Reuse MySQL clients, JDBC drivers, common SQL, and ROW/FULL binlog integration. |
+
+Read [Why MyDB](docs/why-mydb.md) for the application benefits, design choices,
+and published evidence behind these advantages. RRF is a technical preview;
+the linked references describe each capability's supported scope.
 
 ## Performance evaluation
 
@@ -33,7 +47,7 @@ MyDB 1.2.1 is a public-preview release intended for feature validation and contr
 | Point queries · 100M rows, 20 clients | 316,968 queries/s | 174,566 queries/s | **1.82x throughput** |
 | Read-only transactions · 100M rows, 20 clients | 14,323 transactions/s | 7,294 transactions/s | **1.96x throughput** |
 | TPC-H-derived analytics · SF=10, 22 query medians summed | 57.727 s | 882.784 s | **15.29x speedup** |
-| TPC-DS-derived analytics · SF=10, 55 matching query files | 113.968 s | 2,576.552 s | **22.61x speedup** |
+| TPC-DS-derived analytics · SF=10, 55 matching query files | 113.968 s | 2,576.552 s | **22.61x speedup on that subset** |
 | Bulk import · TPC-H SF=10, `LOAD DATA LOCAL INFILE` | 25.708 s | 357.495 s | **13.91x speedup** |
 
 Same 16-vCPU host, 10 GiB database memory limits, and durable commits; results
@@ -226,9 +240,18 @@ verification details, Windows limitations, and distribution scope.
 
 ## REST SQL
 
-An optional [REST SQL API](docs/rest-api.md) accepts parameterized SQL over HTTPS, supports persistent transactions and NDJSON streaming, and shares MySQL account permissions. Accounts can create, list, retrieve, and revoke API keys through TLS MySQL SQL. Each account supports 1024 keys; keys never expire unless an expiration is specified.
+An optional [REST SQL API](docs/rest-api.md) accepts parameterized SQL over
+HTTPS, supports persistent transactions and NDJSON streaming, and shares MySQL
+accounts and permissions. Accounts manage their API keys through SQL over a
+TLS-authenticated MySQL connection.
 
-The optional [MCP Server](docs/mcp.md) provides native AI client tools over the same HTTP listener.
+The optional [MCP Server](docs/mcp.md) gives agents native tools to discover
+databases and tables, inspect schemas and query plans, execute parameterized
+SQL, and manage sessions. REST and MCP share an HTTP listener and support
+batches, transactions through persistent sessions, timeouts, and cancellation.
+API keys inherit their owning account's current permissions and quotas, so
+applications can use these interfaces without building a separate SQL gateway
+or MCP adapter. Both interfaces are enabled explicitly; HTTPS is the default.
 
 ## Built for AI Agents
 
@@ -249,17 +272,32 @@ assignment. See [LLM and embedding calls](docs/ai.md) and the
 
 ### Smart indexing: fewer full scans without manual indexes
 
-MyDB enables automatic **zone maps** on persistent user tables by default: per-block statistics let queries skip data blocks that cannot match a predicate, often turning a full scan into a small range read on tables with no hand-built B-tree index. Pruning is conservative — whenever statistics are missing or a predicate cannot be proven safe, the executor falls back to a regular scan. See the [feature overview](docs/feature-overview.md) for how the mechanism and fallbacks work.
+MyDB enables automatic **Zone Maps** on persistent user tables by default.
+Per-block summaries let eligible scans skip blocks that cannot match a
+predicate, reducing work without requiring a hand-built B-tree index for every
+filtering pattern. Serial, parallel, and vectorized scans retain final
+predicate checks; missing or untrusted summaries fall back to a regular scan.
+The benefit depends on data layout and selectivity. See the
+[feature overview](docs/feature-overview.md) for the mechanism and fallbacks.
 
 ### Online DDL: schemas that evolve with the task
 
-MyDB minimizes DDL locking and query waiting by coordinating schema versions, index builds, and concurrent access in the native storage layer:
+MyDB's heap tables keep row storage separate from indexes, so adding a primary
+key does not reorganize the heap into a clustered table. Schema versions,
+online builds, and concurrent change capture reduce interruption during
+supported schema changes:
 
 - **Online index and primary key creation**: regular and unique B-tree indexes and newly added primary keys allow concurrent DML while being built.
 - **Read-compatible column changes**: adding columns without storage rewrites, compatible type modifications, and some metadata-only changes keep ordinary queries running.
+- **Online column type changes**: supported physical rewrites use shadow storage and incremental catch-up, allowing concurrent reads and writes during the build.
 - **Constraints and charset settings**: online foreign keys, CHECK constraints, and default charset/collation metadata changes.
 
-"Lock-free DDL" is a design direction, not a current guarantee: publication still coordinates with write transactions, and replacing primary keys, rewriting column data, or converting charsets still takes locks. See [ALTER TABLE](docs/statement/ddl/alter-table.md) and the [DDL compatibility boundaries](docs/mysql80-compatibility.md#table-ddl).
+Preparation and publication still require barriers, and some physical rewrites
+and partition operations wait for readers. Supported algorithms and lock modes
+depend on the operation, types, and indexes. See
+[ALTER TABLE](docs/statement/ddl/alter-table.md),
+[online column type changes](docs/online-column-type-change.md), and the
+[DDL compatibility boundaries](docs/mysql80-compatibility.md#table-ddl).
 
 ### Native vectors: from storage to large-scale similarity search
 
@@ -352,7 +390,12 @@ above are illustrative values and do not share the configured model's embedding 
 
 ## High-performance HTAP
 
-MyDB consolidates OLTP and OLAP in one engine — from concurrent point lookups and updates to multi-table joins, aggregation, and window computation — picking an execution path per query shape.
+MyDB is designed for HTAP mixed workloads: transactional point lookups,
+inserts, and updates run alongside joins, aggregation, and window queries on
+the same data. MVCC and locking provide transaction semantics, while the
+optimizer selects execution paths for different query shapes. Parallel
+execution, data skipping, and unified memory budgets support the analytical
+work within that mixed workload.
 
 | Design | Capability |
 | --- | --- |
@@ -379,17 +422,46 @@ The full coverage map, transactional differences, and unsupported features are l
 
 | Feature | Use |
 | --- | --- |
+| **FULL OUTER JOIN** | Compare datasets while retaining unmatched rows from both sides. |
+| **CUBE / GROUPING SETS** | Compute several levels of aggregation in one query. |
+| **Window GROUPS / EXCLUDE** | Express additional window frame and exclusion rules. |
 | **Wider TIMESTAMP range** | Supports dates beyond 2038, up to year 9999. |
 | **Sequences** | Standalone sequence objects with `NEXTVAL`, `CURRVAL`, and friends. |
-| **DML `RETURNING`** | Return rows directly from INSERT, UPDATE, and DELETE, saving follow-up queries. |
+| **DML `RETURNING` with OLD / NEW** | Return modified rows directly, saving follow-up queries; multi-target restrictions apply. |
 | **`generate_series()`** | Integer, decimal, and datetime series for time axes, gap filling, and data generation. |
-| **`EXPLAIN ANALYZE`** | Inspect actual per-step performance of an execution plan. |
-| **`SHOW MYDB MEMORY`** | Inspect global memory usage for capacity planning and diagnostics. |
-| **Native backup and replication** | Online physical backup, WAL archiving, PITR, and an independent primary/replica physical replication protocol. |
+| **TABLESAMPLE** | Explore data with row/page sampling, percentage or exact row counts, and repeatable samples. |
+| **B-tree INCLUDE** | Cover query columns without adding them to the search key. |
+| **`CREATE OR REPLACE` routines** | Replace procedure and function definitions while preserving routine grants. |
+| **SQL ROWID** | Locate heap rows directly; physical addresses can be reused. |
 
-Persistent DROP/TRUNCATE tables are protected by the default-on [recycle bin](docs/recycle-bin.md), including read-only inspection, restore and asynchronous reclamation.
+See the [SQL capability map](docs/mysql80-compatibility.md#select-capabilities),
+[DML RETURNING](docs/dml-returning.md), [sequences](docs/sequences.md),
+[series generation](docs/generate-series.md), and [SQL ROWID](docs/rowid.md).
 
-See [sequences](docs/statement/ddl/create-sequence.md), [series generation](docs/generate-series.md), [backup and recovery](docs/backup-and-recovery.md), and [native replication](docs/native-replication.md).
+## Data protection and native replication
+
+MyDB combines recovery with direct SQL inspection, giving operators and agents
+more ways to investigate earlier data before restoring an entire instance.
+
+| Capability | What it gives you |
+| --- | --- |
+| [Recycle bin](docs/recycle-bin.md) | Query and restore retained tables after eligible DROP or TRUNCATE operations, including tables removed by DROP DATABASE. |
+| [Time travel](docs/mysql80-compatibility.md#time-travel-queries) | Query and join historical data with `FOR SYSTEM_TIME AS OF` within the retained history window. |
+| [Direct backup queries](docs/backup-and-recovery.md) | Open a sealed physical base read-only without copying the whole database or replaying WAL. |
+| [Online backup and PITR](docs/backup-and-recovery.md) | Capture a full instance baseline, archive subsequent WAL, verify recovery inputs, and restore by time or LSN. |
+| [Native WAL replication](docs/native-replication.md) | Maintain a MyDB standby independently of MySQL binlog, with asynchronous or semi-synchronous replication and controlled role changes. |
+
+The recycle bin defaults to a seven-day retention target, subject to expiration
+and disk-pressure reclamation; triggers, foreign keys, row policies, and grants
+are not restored with the table. WAL archiving is enabled separately from a full
+backup. Native role changes require external fencing of the former primary.
+
+Unified memory accounting, query budgets, cache reclamation, and spill-capable
+operators help manage resource use across these workloads. `SHOW MYDB MEMORY`,
+`SHOW MYDB MEMORY SESSIONS`, and `SHOW ENGINE MYDB STATUS` expose memory and
+engine diagnostics. See [memory configuration](docs/configuration-resources.md)
+and [MVCC and locking](docs/mvcc-and-locking.md) for resource and concurrency
+behavior.
 
 ## Compatibility boundaries
 
@@ -404,6 +476,7 @@ Unimplemented SQL or protocol capabilities return clear errors rather than faili
 
 | Entry point | Contents |
 | --- | --- |
+| [Why MyDB](docs/why-mydb.md) | HTAP mixed workloads, AI capabilities, application benefits, and performance evidence |
 | [Documentation index](docs/README.md) | Product, SQL, operations, and implementation docs |
 | [Feature overview](docs/feature-overview.md) | Capability map and implementation boundaries |
 | [AI model calls](docs/ai.md) / [Hybrid search](docs/hybrid-search.md) | Model setup, embeddings, generation, permissions, and retrieval fusion |

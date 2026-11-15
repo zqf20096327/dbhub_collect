@@ -9,7 +9,7 @@
 
 A building is a manufactured product with coordinates. Drop an IFC file into a browser tab and watch it become what it always should have been — a thing you can query, cost, schedule, and *own*. No installer. No seat license. No server to rent. No salesman to call.
 
-Beside it runs a full ERP kernel, folded from the Compiere → ADempiere → iDempiere lineage, that reproduces a real ERP's books **to the cent** — serverless, offline, in the same tab. The building becomes a procurement order. The order becomes accounts. All of it from one signed log you can replay and verify yourself.
+Beside it runs a full ERP kernel, folded from the Compiere → ADempiere → iDempiere lineage, that reproduces a real ERP's books **to the cent on every scenario compared against a live iDempiere** ([what is and is not measured](https://red1oon.github.io/BIMCompiler/FeatureComparison/#how-closely-the-kernel-matches-legacy-idempiere)) — serverless, offline, in the same tab. The building becomes a procurement order. The order becomes accounts. All of it from one signed log you can replay and verify yourself.
 
 **Why this exists, plainly.** The big tools are cathedrals — and cathedrals are worth building. They house real work, they employ brilliant engineers, they carry decades of hard-won domain knowledge. This stands on all of that, gratefully. What it adds is a **bazaar beside the cathedral** — open, composable, running in a browser tab — because the best ideas in this industry deserve to reach the widest possible hands. The ambition is to become the first truly unified BIM-ERP platform: not by displacing what came before, but by taking the next step nobody has taken yet.
 
@@ -72,7 +72,7 @@ The ERP side has its own long sprint, in order:
 
 - **AD renderer** — `erp/erp.html`: every window, tab and field rendered live from the Application Dictionary in SQLite WASM; multi-tenant, `?login=` demo auto-login, shareable context (Share pill captures *and* restores), mobile cards ≤760px
 - **iDempiere client** — `erp/idempiere.html`: the same AD framework rendered as an iDempiere-flavoured client, with a real Odoo Client 12 tenant folded in as a second renderer
-- **Lens family** — over the one op-log: durable, drag-to-`SET_STATUS` **Kanban** (Odoo-marvel cards), chat-as-inbox **feed-fold**, **Data Globe** graph, Accts-Posted ledger lens — one-tap Graph ⇆ Kanban
+- **Lens family** — over the one op-log: durable, drag-to-`SET_STATUS` **Kanban** (Odoo-marvel cards), chat-as-inbox **feed-fold**, **Pivot**, **Data Globe** graph, Accts-Posted ledger lens — one-tap Graph ⇆ Kanban; plus the standalone **uniCenta-style till and kitchen** (`erp/till.html`, `erp/kitchen.html`). [Table of every lens, shipped vs concept](https://red1oon.github.io/BIMCompiler/ERPUserGuide/#other-views-of-the-same-log-the-lens-family)
 - **⚖ Rule pill** — *lifecycle-as-data*: "when may this Order Complete" is itself a signed, reversible op that re-folds live; client-scoped to the logged-in tenant, honest-disabled
 - **One signed op-log** — the live write path is genuinely signed; gated signed **Complete** governs the CO lifecycle; GL debits == credits self-verify on every hop
 - **Glassbowl** — `erp/glassbowl.html`: the engine rendered *from its own data* — the kernel inspecting itself
@@ -89,10 +89,10 @@ A proven kernel and architecture, not a finished ERP. The constituent techniques
 
 ## Roadmap
 
-**ERP — two big objectives.** Once migration from **both iDempiere and Odoo** is stable on the signed op-log, fold the kernel forward into two new op-log-native apps:
+**ERP — two big objectives, both built.** The kernel has been folded forward into two op-log-native apps:
 
-1. **uniCenta POS** — a new browser version, driven by **replenishment** (the POS lifecycle as folds over the same ledger).
-2. **Warehouse mobile walk** — a phone-first pick/put-away "walk the aisles" app over the same tenant.
+1. **uniCenta POS** — *landed* as a standalone till, kitchen and branch-admin screen, driven by replenishment (the POS lifecycle as folds over the same ledger). Guide: [Till & Kitchen User Guide](https://red1oon.github.io/BIMCompiler/TillUserGuide/).
+2. **Warehouse mobile walk** — *landed*: a phone-first pick/put-away "walk the aisles" app over the same tenant ([ERP guide §10](https://red1oon.github.io/BIMCompiler/ERPUserGuide/#10-warehouse-walk)).
 
 **BIM — authoring.** The DAGeVu modeller (above) now brings B-rep authoring to the browser over the op-log; next:
 
@@ -106,7 +106,7 @@ A proven kernel and architecture, not a finished ERP. The constituent techniques
 
 ## Architecture
 
-140+ vanilla JS modules (≈100 BIM + 40 ERP). No framework, no build step, no server dependency.
+About 2,600 JS and HTML files of app code (viewer 729, modeller 643, erp 843, common 135, plus teams, capex and others; measured 2026-11-15 on `main`, excluding tests, witnesses, sandbox and scripts; `common/lib` holds third-party code). Vanilla JS: no framework, no build step, no server dependency.
 
 Application state lives in **two SQLite databases** queried via sql-wasm — one for the BIM model, one for the ERP Application Dictionary. Three.js r184 ESM handles rendering with BatchedMesh and distance-based LOD; IFC files are parsed client-side by web-ifc and stored in IndexedDB. Both engines share one signed operation log.
 

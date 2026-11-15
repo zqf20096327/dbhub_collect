@@ -6,8 +6,8 @@
 
 **Redefining what a media manager is supposed to be.**
 
-A local-first media library for your videos and photos — scan, browse,
-search, and play, all offline.
+A local-first media library for your videos, photos, and audio — scan,
+browse, search, and play, all offline.
 
 [![Test](https://github.com/zabuton-app/meguri/actions/workflows/test.yml/badge.svg)](https://github.com/zabuton-app/meguri/actions/workflows/test.yml)
 [![Build](https://github.com/zabuton-app/meguri/actions/workflows/build.yml/badge.svg)](https://github.com/zabuton-app/meguri/actions/workflows/build.yml)
@@ -19,9 +19,9 @@ search, and play, all offline.
 </div>
 
 Meguri is a personal desktop app for browsing, searching, and playing local
-videos and images with thumbnails. It recursively scans any folder you point it at,
-generates thumbnails, tags, and metadata, and lets you browse the collection in
-a native window.
+videos, images, and audio with thumbnails. It recursively scans any folder you
+point it at, generates thumbnails, tags, and metadata, and lets you browse the
+collection in a native window.
 
 The name **Meguri** comes from the Japanese word _巡り_ — "going around,
 coming back around" — with the sentiment of wandering back through your
@@ -396,7 +396,8 @@ stream when the player can decode it and preserves the surround channel count.
 The original file stays untouched.
 
 For previewed clips and MKV, AVI, WMV, FLV, or TS clips with multiple audio
-tracks, use **Audio track** beside the volume control in the full player.
+tracks, open **Audio and subtitles** beside the volume control in the full
+player and choose under **Audio track**.
 **Default** uses the usual playback selection when you open a clip. Switching
 tracks keeps the playhead and play or pause state.
 
@@ -411,10 +412,13 @@ catalogue. A link opens in your browser only when you choose **Open**.
 
 ### Embedded subtitles
 
-Use **Subtitle track** in the clip player or fullscreen to choose an embedded
-text track or turn captions off. Meguri remembers the choice per clip. When the
-audio language is known, **Match audio language** can choose the corresponding
-subtitle. Meguri loads text near the playhead as you watch or seek.
+Open **Audio and subtitles** in the clip player or fullscreen and choose an
+embedded text track under **Subtitle track**, or turn captions off. The button
+is underlined while subtitles are on. Meguri remembers the choice per clip.
+When the audio language is known, **Match audio language** chooses the
+corresponding subtitle and shows which one it picks for the current audio.
+Meguri loads text near the playhead as you watch or seek; a mark on the button
+shows loading or a track that could not be loaded.
 
 Supported tracks include SRT, ASS/SSA as plain text, WebVTT, and MP4 timed text.
 
@@ -552,10 +556,10 @@ Meguri is **privacy-first**: everything stays on your machine.
   (`api.github.com/repos/zabuton-app/meguri/releases/latest`). The request
   carries nothing but the app name and version in its `User-Agent`, though
   GitHub sees your IP address, as with any request. It runs shortly after
-  startup, at most once every six hours, and when you click **Check now** in
-  the settings or **Check for Updates…** in the tray menu. To turn the
-  automatic check off, open **Settings → App → Updates** and turn off
-  **Check automatically on startup**.
+  startup and then while the app keeps running, every six hours (hourly
+  while GitHub cannot be reached), and when you click **Check now** in the settings or **Check for
+  Updates…** in the tray menu. To turn the automatic check off, open
+  **Settings → App → Updates** and turn off **Check automatically**.
 - **Fully offline.** All features work without an internet connection.
 
 ## Architecture
@@ -577,6 +581,8 @@ Meguri/
 │     ├─ jobs.ts            # scan pipeline
 │     └─ server.ts          # local HTTP media server (Range)
 ├─ src/                     # renderer (React + TypeScript)
+│  ├─ main.tsx              # entry point: calls renderApp()
+│  ├─ renderApp.tsx         # startup: providers, router
 │  ├─ ipc/                  # typed client for window.api
 │  ├─ components/  routes/  themes/  hooks/
 ├─ electron.vite.config.ts  # unified build of main/preload/renderer

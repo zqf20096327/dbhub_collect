@@ -2,17 +2,17 @@
 
 **Ekwo** is open source accounting, ready to use on **[Ekwo Cloud](https://cloud.ekwo.ai)**: the web application for your invoices, your bank statements, your VAT returns and the electronic invoices your country uses, in your own instance, with an account opened in a minute. **Ekwo OS** is the free and open source core it runs on, under AGPL-3.0: install it on your own Supabase project and own your accounting data, forever.
 
-Built and maintained by **Ekwo**. Ekwo OS is a schema, the rules of each country as data, and the tools — a command line and an MCP server — with which you, your accountant and the AI agent you choose work in the same books, each with their own access. Ekwo reads any supplier invoice, in any language, with the AI model you choose, and every entry is posted on your confirmation. What Ekwo is, and its limits: [DISCLAIMER.md](DISCLAIMER.md).
+Built and maintained by **Ekwo**. Ekwo OS is a schema, the rules of each country as data, and the tools — a command line and an MCP server — with which you, your accountant and the AI agent you choose work on the same company data, each with their own access. Ekwo reads any supplier invoice, in any language, with the AI model you choose, and every transaction is recorded on your confirmation. What Ekwo is, and its limits: [DISCLAIMER.md](DISCLAIMER.md).
 
-![An empty Supabase project, npx ekwo-os init, ekwo status, a company, a sale invoice posted and its VAT return prepared, for two countries side by side](docs/demo/install.gif)
+![An empty Supabase project, npx ekwo-os init, ekwo status, a company, a sale invoice recorded and its VAT return prepared, for two countries side by side](docs/demo/install.gif)
 
 *From an empty Supabase project to a prepared VAT return, for two countries
 side by side. How it was recorded: [`docs/demo/`](docs/demo/).*
 
-**Try it on your own books.** Already using Claude? [Start with
+**Try it on your own company data.** Already using Claude? [Start with
 Claude](docs/start-with-claude.md) goes from a free Supabase project to your
-own books taken over, questioned and your next VAT return prepared, in about
-twenty minutes. Or open the same books in the web application,
+own company data taken over, questioned and your next VAT return prepared, in
+about twenty minutes. Or open the same company data in the web application,
 [Ekwo Cloud](https://cloud.ekwo.ai).
 
 ---
@@ -22,44 +22,44 @@ twenty minutes. Or open the same books in the web application,
 > The long version — financial autonomy for every business, accounting as a
 > commons, a network rather than a vendor — is in [MANIFESTO.md](MANIFESTO.md).
 
-**The data belongs to the business, and the work of keeping the books can be
+**The data belongs to the business, and the work of keeping the accounts can be
 done by software the business also owns.** So the whole accounting core is
 open, the data sits in a Postgres database you control, and the interface is
 designed for machines as much as for people. Supabase gives the schema a REST
-API for free, and an MCP server sits on top of it, so an AI agent can book a
+API for free, and an MCP server sits on top of it, so an AI agent can record a
 purchase, match a payment or prepare a VAT return on your own data — as you,
 under your own row level security, without the data leaving your account.
 
 What ships today:
 
-- **The core** — schema, posting rules, taxes, reports, financial statements,
+- **The core** — schema, recording rules, taxes, reports, financial statements,
   as migrations you apply to a database you control.
 - **A country pack for every country listed below**, each a versioned set of
-  data with a year of books that proves it.
+  data with a year of company data that proves it.
 - **`ekwo`, the command line** — one command installs everything on your own
-  Supabase project; the same tool then keeps books from a terminal.
+  Supabase project; the same tool then keeps the accounts from a terminal.
 - **The MCP server**, hosted at `https://mcp.ekwo.ai/mcp` or run locally with
-  `npx @ekwo-ai/mcp`, so any AI agent can operate the books.
+  `npx @ekwo-ai/mcp`, so any AI agent can operate the company data.
 - **Modules** for fixed assets, budgets, corporate income tax and electronic
   invoicing.
 - **The compass of the company** — `financial_analysis()` reads, from the
-  posted entries, the aggregates a country pack defines (revenue, equity,
+  recorded transactions, the aggregates a country pack defines (revenue, equity,
   cash, receivables, payables…), or, in a country whose pack defines none,
   thirteen of them read by account type through the generic framework, so that days of cash, net margin, current
   ratio, equity ratio, days of sales and of purchases outstanding and growth
-  come from the books with nothing to set up. The Analysis screen of Ekwo
+  come from the company data with nothing to set up. The Analysis screen of Ekwo
   Cloud and the `financial_analysis` tool of the MCP server read it;
   [`docs/analysis.md`](docs/analysis.md) says how, and how a pack adds the
   section.
 - **Format libraries** under MIT — the files administrations, banks and
   e-invoicing networks exchange, written and read.
 
-Who it is for: a company that wants to keep its own books with an AI at the
-keyboard, and a founder who wants to know, from those books, how long the cash
+Who it is for: a company that wants to keep its own accounts with an AI at the
+keyboard, and a founder who wants to know, from that data, how long the cash
 lasts and how fast customers pay; an accounting firm that runs several
 companies inside one installation; a developer who needs a real double-entry
 core with tax rules as data rather than as code; and anyone who wants to leave
-a proprietary system with the books intact.
+a proprietary system with its company data intact.
 
 ## What is in this repository
 
@@ -67,13 +67,13 @@ A double-entry accounting core for Postgres. There is no server to run:
 Supabase turns the schema into a REST API with an OpenAPI description, and row
 level security decides who sees what.
 
-- **Double entry, enforced by the database.** An entry cannot be posted unless
-  it balances, and a locked period refuses writes at the trigger — not in a
-  form validator.
-- **Documents and entries are two layers.** An invoice answers to EN 16931 and
-  Peppol; an entry answers to the chart of accounts. Keeping them apart keeps
+- **Double entry, enforced by the database.** A transaction cannot be
+  recorded unless it balances, and a locked period refuses writes at the
+  trigger — not in a form validator.
+- **Documents and transactions are two layers.** An invoice answers to EN 16931
+  and Peppol; a transaction answers to the chart of accounts. Keeping them apart keeps
   both honest.
-- **Country rules are data.** A tax points at the ledger accounts it posts to
+- **Country rules are data.** A tax points at the accounts it records to
   and at the boxes of the declaration it feeds. Adding a régime is a row, not a
   release.
 - **Every label is data, in every language a country pack publishes.**
@@ -86,7 +86,7 @@ level security decides who sees what.
   The version and review status of each are in
   [`docs/packs.md`](docs/packs.md#the-packs-of-this-checkout).
 - **Statutory files.** The French FEC, XBRL annual accounts, Peppol UBL and
-  Factur-X invoices, recapitulative statements — written from the ledger by the
+  Factur-X invoices, recapitulative statements — written from the accounts by the
   format libraries.
 - **Tested on real Postgres.** The test suite runs the migrations, the seeds,
   the accounting scenarios, the installer and the MCP server against Postgres
@@ -101,9 +101,9 @@ company.
 | Module code | Schema | What it does |
 |---|---|---|
 | [`assets`](modules/fixed-assets/) | `fixed_assets` | Fixed assets, their depreciation schedule and their disposal. Durations and methods are country pack data. |
-| [`budgets`](modules/budgets/) | `budgets` | A budget per financial year and the variance against the ledger. |
-| [`tax`](modules/corporate-tax/) | `tax` | Corporate income tax estimated from the books: adjustments, losses and rates are country pack data. An estimate until an owner calls it final. |
-| [`einvoicing`](modules/einvoicing/) | `einvoicing` | The electronic invoice of a posted sale, in the format the company's country pack declares, checked against the rules of that format, and every sending with its state. |
+| [`budgets`](modules/budgets/) | `budgets` | A budget per financial year and the variance against the accounts. |
+| [`tax`](modules/corporate-tax/) | `tax` | Corporate income tax estimated from the company data: adjustments, losses and rates are country pack data. An estimate until an owner calls it final. |
+| [`einvoicing`](modules/einvoicing/) | `einvoicing` | The electronic invoice of a recorded sale, in the format the company's country pack declares, checked against the rules of that format, and every sending with its state. |
 
 ```sh
 npx -y ekwo-os@latest module list                          # what is here, and what the database holds
@@ -113,7 +113,7 @@ npx -y ekwo-os@latest module enable assets --company "…"   # turn one on for a
 Then add the module's schema to the project's exposed schemas (Supabase
 dashboard → Project Settings → API); `ekwo module enable` prints the line.
 
-A module never writes the ledger directly: it hands its lines to the core,
+A module never writes to the accounts directly: it hands its lines to the core,
 which applies the same balancing, numbering and lock rules as everywhere else.
 [`docs/modules.md`](docs/modules.md) is how to write one.
 
@@ -133,8 +133,8 @@ and the address of the first administrator. Then it applies the migrations,
 loads every country pack, creates that administrator in *your* Supabase Auth
 and opens the first financial year. Running it twice creates nothing twice.
 
-Ekwo does not create the project and does not pay for it: your books are on
-your account from the first row. The installation guide, with every flag and
+Ekwo does not create the project and does not pay for it: your company data is
+on your account from the first row. The installation guide, with every flag and
 the four settings to change on your project before going live, is
 [`packages/cli`](packages/cli/README.md).
 
@@ -372,8 +372,8 @@ companies ─┬─ company_members            who may read or write, and what t
            ├─ accounts                   chart of accounts, 18 account types
            ├─ journals ── journal_sequences
            ├─ contacts                   customers, suppliers, employees
-           ├─ taxes ── tax_postings      ledger account + declaration box, per tax
-           ├─ entries ── entry_lines     the ledger; lines carry the truth
+           ├─ taxes ── tax_postings      account + declaration box, per tax
+           ├─ entries ── entry_lines     the transactions; lines carry the truth
            ├─ products                   what a line is filled in from, never stock
            ├─ documents ── document_lines invoices, credit notes, quotes
            ├─ payments                   money in and out
@@ -384,10 +384,10 @@ companies ─┬─ company_members            who may read or write, and what t
 user_preferences                         one row per person, null everywhere
 ```
 
-`post_document()` turns a document into an entry. `trial_balance`,
-`general_ledger`, `aged_balance`, `contact_statement`, `vat_return`,
-`ec_sales_list`, `financial_statement` and `fec_lines` read the ledger back.
-`opening_balance()` takes over the balances of whatever kept the books before,
+`post_document()` records a document as a transaction (a row of `entries`).
+`trial_balance`, `general_ledger`, `aged_balance`, `contact_statement`, `vat_return`,
+`ec_sales_list`, `financial_statement` and `fec_lines` read the accounts back.
+`opening_balance()` takes over the balances of whatever kept the accounts before,
 and `close_fiscal_year()` closes a year the way the country pack says;
 `reopen_fiscal_year()` reopens it to correct it, and `close_fiscal_year_finally()`
 freezes it for good where the country's law asks for that.
@@ -402,15 +402,15 @@ One installation belongs to one customer, so there is no `tenant_id`.
 
 | Preset | Holds |
 |---|---|
-| `viewer` | every `.read` — the books, the documents, the chart, the catalogue |
-| `client` | what a viewer holds, plus handing a file over to whoever keeps the books |
-| `accountant` | that, plus writing and posting, matching, the settings and the year-end close |
+| `viewer` | every `.read` — the accounts, the documents, the chart, the catalogue |
+| `client` | what a viewer holds, plus handing a file over to whoever keeps the accounts |
+| `accountant` | that, plus writing and recording, matching, the settings and the year-end close |
 | `owner` | that, plus the company itself and its members |
 
 What the policies actually test is a **capability** — `documents.post`,
 `payments.write`, `year_end.close` and the rest of
 `select * from capabilities`. A member can be granted or refused one
-capability without inventing a role. A firm keeps the books of many companies
+capability without inventing a role. A firm keeps the accounts of many companies
 in one installation, and the person who runs one of them is a `client` of that
 one and sees no other ([`docs/firms.md`](docs/firms.md)). People are invited
 with `invite_member()`; your users live in your own Supabase Auth, and Ekwo
@@ -426,14 +426,14 @@ Never hand a script the `service_role` key.
 ## The TypeScript packages
 
 - [`ekwo-os`](packages/cli/) — the `ekwo` command line: installing, operating,
-  and keeping books as a signed-in person. Every command takes `--json`.
+  and keeping the accounts as a signed-in person. Every command takes `--json`.
 - [`@ekwo-ai/mcp`](packages/mcp/) — the MCP server. It acts **as the user**,
   never as `service_role`, and every write goes through the schema's own
   functions. Hosted at `https://mcp.ekwo.ai/mcp` for clients that add remote
   servers (sign-in in the browser, nothing stored in a configuration file), or
   `npx -y @ekwo-ai/mcp@latest` over stdio.
 - [`@ekwo-ai/core`](packages/core/) — the types of the schema, a typed client,
-  and the book-keeping functions the command line and the MCP server share.
+  and the accounting functions the command line and the MCP server share.
 
 ```ts
 import { EkwoClient } from '@ekwo-ai/core';
@@ -452,7 +452,7 @@ const boxes   = await ekwo.vatReturn({ companyId, from: '2026-07-01', to: '2026-
 format, organised by format and never by country. None imports the core: the
 core produces rows, and a library turns rows into a file, or a file into rows.
 
-- **Written from the ledger:** the French FEC ([`fec`](packages/formats/fec/)),
+- **Written from the accounts:** the French FEC ([`fec`](packages/formats/fec/)),
   XBRL annual accounts ([`xbrl-cbso`](packages/formats/xbrl-cbso/)), a
   periodic VAT return ([`vat-consignment`](packages/formats/vat-consignment/)),
   and four recapitulative statements of European Union supplies
@@ -470,7 +470,7 @@ core produces rows, and a library turns rows into a file, or a file into rows.
 - **Bank statements, read:** [`camt053`](packages/formats/camt053/),
   [`coda`](packages/formats/coda/), [`cfonb120`](packages/formats/cfonb120/),
   and CSV, described by a column profile: [`csv-statement`](packages/formats/csv-statement/).
-- **Books kept elsewhere, read:** [`trial-balance`](packages/formats/trial-balance/),
+- **Company data kept elsewhere, read:** [`trial-balance`](packages/formats/trial-balance/),
   [`journal-items`](packages/formats/journal-items/),
   [`journal-report`](packages/formats/journal-report/),
   [`transaction-journal`](packages/formats/transaction-journal/),
@@ -485,9 +485,9 @@ is here and always will be.
 | Ekwo OS, on your Supabase | Managed edition, on [ekwo.ai](https://ekwo.ai) |
 |---|---|
 | The whole schema, migrations, row level security | Provisioning and running the instance |
-| Journals, entries, matching, charts of accounts | Backups, restores, version upgrades |
+| Journals, transactions, matching, charts of accounts | Backups, restores, version upgrades |
 | Invoicing, credit notes, taxes, reports, statutory files | AI agents you set up, acting on your instructions |
-| Importing bank files and books kept elsewhere | Bank connections under contract |
+| Importing bank files and company data kept elsewhere | Bank connections under contract |
 | Writing and checking electronic invoices | A Peppol access point to send and receive them |
 | Everything above, forever, for nothing | Transmission to administrations, on the business's instruction |
 
@@ -524,7 +524,7 @@ Three ways to get help, from the open to the dedicated:
 Row level security is the whole model: every table carries it, every policy
 asks one question — `has_capability()` — and the reports run as the caller. An
 anonymous request sees nothing. The MCP server and the command line refuse a
-`service_role` key for keeping books, and the CI fails if a table ever arrives
+`service_role` key for keeping the accounts, and the CI fails if a table ever arrives
 without a policy.
 
 Three things the schema cannot do for you, printed by `ekwo init` at the end
@@ -537,7 +537,7 @@ and [SECURITY.md](SECURITY.md).
 ## What this is not
 
 Ekwo is open source data infrastructure. It is not an accounting firm and
-gives no accounting, tax, financial, legal or investment advice. Your books,
+gives no accounting, tax, financial, legal or investment advice. Your company data,
 returns and filings are yours; a country pack is a reading of the rules at a
 date, and a review is a professional's good-faith reading, not a guarantee.
 Where accounting and tax are regulated professions, consult a professional

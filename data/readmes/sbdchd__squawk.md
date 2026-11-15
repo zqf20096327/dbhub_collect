@@ -199,7 +199,7 @@ Rule violations can be ignored via the `squawk-ignore` comment:
 alter table t drop column c cascade;
 ```
 
-You can also ignore multiple rules by making a comma seperated list:
+You can also ignore multiple rules by making a comma separated list:
 
 ```sql
 -- squawk-ignore ban-drop-column, renaming-column,ban-drop-database
@@ -265,7 +265,7 @@ to your project's `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/sbdchd/squawk
-    rev: v2.72.0
+    rev: v2.73.0
     hooks:
       - id: squawk
         files: path/to/postgres/migrations/written/in/sql

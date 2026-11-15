@@ -18,9 +18,19 @@ It indexes polyglot source files, project manifests, HTTP/gRPC/GraphQL endpoints
 2. **Surgical MCP Context for AI Agents**: Gives coding agents instant access to call chains, cross-service dependencies, data lineage, and blast-radius impact analysis without burning millions of tokens on blind `grep` searches.
 3. **CI Architecture Gates (Semantic Invariant Gates)**: Enforces architectural boundaries in the IDE and CI (`ce gate check`) using declarative OpenCypher rules and SHA-256 ratchet baselines.
 
-### Benchmarks: Autonomous AI Agents & MCP Graph Engines
-*(We run two distinct types of benchmarks: **1. End-to-End AI Agent Workflows** (measuring how much time, tokens, and missed dependencies a graph saves an LLM on real tasks) and **2. Deterministic Graph Engine Head-to-Head** (cold indexing speed, RAM, MCP latency, and extraction recall across `371` verified items without an LLM). Full catalog: [benchmarks/README.md](./benchmarks/README.md) and [code-explorer.app/benchmarks.html](https://code-explorer.app/benchmarks.html).)*
+### Benchmarks: Real-Life Feature Coding, AI Agent Audits & MCP Graph Engines
+*(We run three complementary benchmark tracks across 8 case studies: **1. Real-Life Feature Coding & Architectural Guardrails** (4-task brownfield feature implementation ablation on `twentyhq/twenty` and pre-commit ratchet gates on `argoproj/argo-cd`), **2. Autonomous Multi-Hop Audits** (measuring time, tokens, and recall on blast-radius discovery), and **3. Deterministic Graph Engine Head-to-Head** (cold indexing speed, RAM, MCP latency, and recall across `371` verified items without an LLM). Full catalog: [benchmarks/README.md](./benchmarks/README.md) and [code-explorer.app/benchmarks](https://code-explorer.app/benchmarks).)*
 
+#### 1. Real-Life Feature Implementation & Architectural Guardrails (`Cases 08, 07 & 06`)
+<!-- BEGIN:md.catalog_reallife_table -->
+| Case Study & Task | Repository Under Test | Compared Tools | Time & LLM Turns | Cumulative Input Tokens | Architectural Compliance & Outcome |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **[Case Study 08: 4-Task Brownfield Architecture & Feature Suite](./08-multi-task-architecture-suite-on-twenty/README.md)**<br>4 backend features & unit test suites across 4 modules (`resetTwoFactorAuthenticationMethodsForUser`, `triggerReconnectAccountBanner`, `suspendWorkspaceAdminPanel`, `isSubdomainAvailable`) comparing **`CBM`** vs **`CodeExplorer Phase 1 (Navigation Only)`** vs **`Phase 2 (Navigation + Gates)`** | `twentyhq/twenty`<br>`46` packages, `24,527` files, `2.49M` LOC (TS, NestJS, GraphQL, TypeORM) | `CodeExplorer`<br>vs<br>`CBM` | **`1.29×` faster suite total**<br>`34m 14s` vs `44m 6s`<br>`125` turns vs `127` turns | `9,745,267` vs `10,030,169`<br>(`$0.48` vs `$0.48`, `92` vs `96` file reads) | **`0/4` vs `4/4` violated tasks (`100%` caught)**<br>Navigation alone copied adjacent `[TOL]` debt in `4/4` tasks; `ce gate check` fixed `4/4` in `1` iter (`0` tampering, `14/14` unit tests pass for both via `run-acceptance-tests.mjs`) |
+| **[Case Study 07: Real-Life Feature Implementation & Self-Healing](./07-agent-feature-ce-vs-cbm-on-twenty/README.md)**<br>Implement `suspendWorkspaceAdminPanel` GraphQL mutation, service orchestration & unit tests on `twentyhq/twenty` (4 repo-wide architectural gates, zero rule hints) | `twentyhq/twenty`<br>`46` packages, `24,527` files, `2.49M` LOC (TS, NestJS, GraphQL, TypeORM, BullMQ) | `CodeExplorer`<br>vs<br>`CBM` | **`1.57×` faster end-to-end**<br>`12m 59s` vs `20m 25s` (`10m 3s` vs `15m 17s` initial draft, `1.52×` faster)<br>`43` turns vs `54` turns | **`1.25×` fewer est. tokens**<br>`3,387,918` vs `4,230,784`<br>(`31` vs `43` file reads) | **`4/4 PASS` vs `1 new` violation (`SIG-TWENTY-003`)**<br>Both passed unit tests (`4/4` vs `3/3`) & `oxlint`; pre-configured gate caught copied legacy coupling from `workspace.service.ts:989` (`[TOL]` -> `[NEW]`) & `ce` refactored in `1` turn |
+| **[Case Study 06: Pre-Commit Architectural Guard (Showcase)](./06-precommit-architectural-guard/README.md)**<br>6 invariant gates + 4-phase brownfield SHA-256 ratchet lifecycle (Day 0 audit, line-shift-immune baseline freeze, PR regression block & monotonic debt tightening) | `argoproj/argo-cd`<br>`18` subsystems, `4,216` files (Go, TypeScript, K8s) | `CodeExplorer` (`ce gate check` & `ratchet`) | **`422 ms`** Day 0 check<br>**`183–356 ms`** ratcheted checks | **`0` tokens**<br>(**`$0.00`**) | **4-phase deterministic lifecycle**<br>Freezes `17` legacy errors + `4` warnings (`Exit 0`), blocks `1 new` PR leak (`Exit 1`), tightens ceiling |
+<!-- END:md.catalog_reallife_table -->
+
+#### 2. Multi-Hop Architectural Audits (`Cases 01, 02 & 05`)
 <!-- BEGIN:md.root_agent_table -->
 | Metric | **`twentyhq/twenty` (`24.5k` files): `CBM` → `CodeExplorer`** ([Case 01](./benchmarks/01-agent-audit-ce-vs-cbm-on-twenty/README.md)) | **324-Service Multi-Repo (`13.8k` files): `ripgrep` → `CodeExplorer`** ([Case 02](./benchmarks/02-enterprise-microservices-deep-audit/README.md)) | **`OrchardCore` (`334` .NET projects): `ripgrep` → `CodeExplorer`** ([Case 05](./benchmarks/05-polyglot-architecture-and-blast-radius/README.md)) |
 | :--- | :--- | :--- | :--- |
@@ -161,7 +171,7 @@ ce mcp
 Text search (`grep`, `ripgrep`) works well for finding literals, but it cannot reliably trace interface implementations, cross-service HTTP/gRPC calls, message queue publishers/consumers, or SQL table usage across projects. Reading dozens of files to reconstruct call graphs consumes context window budget and degrades agent accuracy.
 
 Running `ce mcp` exposes the indexed SQLite graph over the Model Context Protocol:
-* **Architecture & Entry Points**: Query projects, dependencies, HTTP/gRPC/GraphQL endpoints, and message consumers via `get_architecture_map` and `get_project_entry_points`.
+* **Architecture & Service Contracts**: Query projects, dependencies, C1/C2/C3 topology views, Mermaid/C4 diagrams (`get_architecture_map`), and HTTP/gRPC/GraphQL endpoints or cross-service flows (`get_service_contracts`).
 * **Low-Token File Outlines**: Inspect classes, methods, and line ranges in a file via `get_file_outline` before reading full source text.
 * **Impact & Lineage Analysis**: Trace downstream callers of a symbol (`analyze_code_impact`) or all SQL/ORM readers and writers of a database table (`inspect_data_lineage`).
 * **OpenCypher Queries**: Execute read-only Cypher queries (`execute_custom_read_cypher`) and save reusable project queries in `.codeexplorer/queries/`.
@@ -332,7 +342,7 @@ CodeExplorer sits between code-intelligence indexers and architecture-testing li
 | **GitHub CodeQL** | Deep semantic and security dataflow queries over per-language databases, built from the compiler for compiled languages. | No build required. One graph across all languages, with cross-service HTTP/gRPC/queue edges and architecture gates with ratchet baselines. Not a security dataflow engine. |
 | **Joern** | Open-source Code Property Graph for vulnerability research, queried with a Scala DSL. | Architecture-level ontology instead of a low-level CPG, standard OpenCypher, and MCP / VS Code / CI integration out of the box. |
 | **Serena** and other LSP-based MCP servers | Precise symbol lookup and editing for agents through language servers. | Gives agents the system view (cross-service calls, data lineage, blast radius) rather than symbol-level edits. Works well alongside an LSP-based server. |
-| **`codebase-memory-mcp` (`CBM`)** | Fast Go/C Tree-sitter structural & call-graph indexing (`96.9s` on `twenty`), low RAM usage, branch graph diffing (`compare_graphs`), and runtime trace overlays (`ingest_traces`). | Adds Layer 4–5 architectural ontology (ORM/SQL database tables, `READS_FROM`/`WRITES_TO` lineage, BullMQ/Kafka queues, GraphQL/REST endpoints), NestJS DI call resolution, and CI Semantic Invariant Gates ([Case Study 03](./benchmarks/03-code-explorer-vs-codebase-memory-mcp/README.md)). |
+| **`codebase-memory-mcp` (`CBM`)** | Fast Go/C Tree-sitter structural & call-graph indexing (`96.9s` on `twenty`), low RAM usage, branch graph diffing (`compare_graphs`), and runtime trace overlays (`ingest_traces`). | Adds Layer 4–5 architectural ontology (ORM/SQL database tables, `READS_FROM`/`WRITES_TO` lineage, BullMQ/Kafka queues, GraphQL/REST endpoints), NestJS DI call resolution, and CI Semantic Invariant Gates ([Case Study 01](./benchmarks/01-agent-audit-ce-vs-cbm-on-twenty/README.md), [Case Study 03](./benchmarks/03-code-explorer-vs-codebase-memory-mcp/README.md), [Case Study 07](./benchmarks/07-agent-feature-ce-vs-cbm-on-twenty/README.md)). |
 | **`graphify`** | Unsupervised Leiden community clustering, cross-community bridge detection (`graphify://surprises`), docstring rationale extraction, GitHub PR triage, and Obsidian/HTML knowledge vault exports. | Scales to 24.5k-file monorepos (`147s` vs. `>45m` timeout on `twenty`), queries an indexed SQLite database via OpenCypher (`599ms` cold MCP init vs. `3.7s`), and models endpoints, queues, and database lineage ([Case Study 04](./benchmarks/04-code-explorer-vs-graphify/README.md)). |
 | **Aider repo map** | Compact Tree-sitter summary of important symbols, placed directly into the prompt. | A persistent graph the agent can query on demand with multi-hop questions, instead of a static summary. |
 | **ArchUnit**, **NetArchTest**, **dependency-cruiser** | Architecture rules written as tests inside one language ecosystem. ArchUnit can also freeze existing violations. | One rule language (OpenCypher) across languages and services, and the same graph also powers visualization and agent context. |
@@ -373,28 +383,25 @@ Parsing, indexing, queries, gates, and the MCP server run locally, and the graph
 
 ## MCP Tools
 
+CodeExplorer exposes a focused **15-tool** MCP surface (14 read-only query tools + `scan_workspace`):
+
 | Tool | Description |
 | :--- | :--- |
-| `get_architecture_map` | High-level workspace architecture: projects, services, databases, ingress endpoints, and egress calls. |
-| `get_project_dependencies` | Direct and transitive project/package dependencies (`projectFilter` optional). |
-| `get_project_entry_points` | HTTP endpoints, gRPC methods, GraphQL resolvers, CLI commands, and message consumers for a project. |
-| `find_symbol` | Locate types, interfaces, methods, or functions by name pattern. |
-| `get_file_outline` | Return classes, methods, fields, and line ranges for a file without reading the full file. |
-| `get_call_chain` | Trace invocation paths between two functions up to `maxDepth`. |
-| `resolve_call_target` | Resolve concrete class implementations of an interface or abstract method. |
-| `analyze_code_impact` | Compute downstream callers and files affected by changing a symbol. |
-| `inspect_data_lineage` | Find all SQL queries, ORM entities, methods, and services reading from or writing to a table. |
-| `find_refactoring_opportunities` | Identify unreferenced symbols, dead code, or high-coupling types. |
-| `execute_custom_read_cypher` | Execute a read-only OpenCypher (`MATCH`) query against the graph. |
-| `list_project_queries` | List saved parameterized queries in `.codeexplorer/queries/`. |
-| `save_project_query` | Validate and save a reusable OpenCypher query to `.codeexplorer/queries/`. |
-| `execute_project_query` | Run a saved or built-in query by name with parameter binding. |
-| `export_architecture_diagram` | Export Mermaid or C4 diagrams for architecture, data lineage, or CQRS flows. |
-| `fetch_code_snippets` | Read source snippets by file and line range from graph node results. |
-| `get_taxonomy` | Return active node labels, relationship types, and counts in the workspace graph. |
-| `get_node_definition` | Return schema documentation for a specific ontology node kind. |
-| `init_workspace` / `scan_workspace` | Initialize or re-index the workspace graph from an MCP client. |
-| `get_workspace_status` | Return index health, schema version, and node/edge counts. |
+| `scan_workspace` | Auto-initialize (if needed) and incrementally index or rebuild (`clear=true`) `.codeexplorer/graph.db`. |
+| `get_taxonomy` | Active graph ontology schema, single node-kind specifications (`kind`), or workspace index status (`statusOnly=true`). |
+| `get_architecture_map` | Workspace overview, zoomed C1/C2/C3/tiers topology views (`view`), and Mermaid/C4 diagram export (`format`). |
+| `get_project_dependencies` | Directed project-to-project and external package dependencies (`all`, `runtime`, `build`). |
+| `get_service_contracts` | Service ingress/egress contracts, internal handler coordinates (`entry_points`), and multi-hop cross-service traces (`flow`). |
+| `find_symbol` | Substring AST lookup (`substring`) and hybrid trigram + vector search (`hybrid`) across code, routes, tables, and topics. |
+| `get_file_outline` | Structural AST outline of a file or directory without reading raw source text. |
+| `fetch_code_snippets` | Batch reader for exact 1-based source line ranges on disk. |
+| `get_callers` | Direct 1-hop inbound callers/consumers, or concrete interface implementations when `methodName` is provided. |
+| `get_call_chain` | Directed function-to-function invocation paths between `startFunction` and `endFunction`. |
+| `analyze_code_impact` | Multi-hop transitive blast radius across upstream callers, endpoints, and downstream projects. |
+| `inspect_data_lineage` | End-to-end SQL queries, ORM entities, functions, and services reading from or writing to a table. |
+| `get_affected_tests` | Test Impact Analysis from changed files/diffs/symbols and static test reachability coverage (`coverageStatus`). |
+| `check_semantic_gates` | Evaluate Semantic Invariant Gates (`SIG-*`), list gate definitions (`listOnly=true`), or scan dead code / god objects (`anomalies`). |
+| `execute_custom_read_cypher` | Execute ad-hoc read-only OpenCypher (`query`), run saved `.codeexplorer/queries/` templates (`savedQuery`), or list saved queries (`listSaved=true`). |
 
 ---
 

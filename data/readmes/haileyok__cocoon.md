@@ -167,6 +167,18 @@ COCOON_S3_CDN_URL="https://cdn.example.com"
 
 > **Tip**: For Cloudflare R2, you can use the public bucket URL as the CDN URL. For AWS S3, you can use CloudFront or the S3 bucket URL directly if public access is enabled.
 
+#### Outbound proxy requests
+
+Requests forwarded to AppViews, chat services and feed generators must use public destinations. Cocoon blocks private and loopback addresses, including DNS answers and redirect targets, and refuses HTTPS-to-HTTP redirects. Service credentials are removed for the rest of a redirect chain once it changes scheme, host or port.
+
+These requests connect directly, ignoring `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY`. Private-network AppViews are not supported. The configured PLC directory is separate and unchanged. Proxy timeouts remain 20 seconds for response headers and two minutes for the whole request.
+
+#### Lexicon lookups
+
+OAuth permission-set and Spaces type lookups fetch identity documents and lexicon records directly, without environment proxies. Public fetches require HTTPS, a DNS hostname and port 443; private addresses are blocked even when returned by DNS or reached through a redirect. Identity-document redirects are not followed. Each HTTP request has a ten-second timeout and a 2 MiB response limit, with a thirty-second limit for the full lookup.
+
+The configured PLC directory remains trusted for direct DID-document requests, so a local PLC still works. This exception does not extend to redirects or the PDS endpoints listed in its documents. Lexicons hosted on private, HTTP, IP-literal or custom-port PDS endpoints cannot be resolved.
+
 #### PLC Directory
 
 Cocoon uses the public PLC directory (`https://plc.directory`) to create, update, and resolve `did:plc` identities. You can point it at a different directory, such as a local PLC instance for integration testing, so that test accounts are never registered with the real directory:
@@ -299,13 +311,14 @@ Just because something is implemented doesn't mean it is finished. Tons of these
 
 Cocoon implements the ATProto Spaces alpha. See [docs/spaces.md](docs/spaces.md).
 
-- [x] `com.atproto.space.createRecord`, `putRecord`, `deleteRecord`, `applyWrites`
+- [x] `com.atproto.space.createRecord`, `putRecord`, `deleteRecord`, `applyWrites`, `clearRecords`
 - [x] `com.atproto.space.getRecord`, `listRecords`, `listRepoOps`, `getLatestCommit`, `getRepo`, `listSpaces`
 - [x] `com.atproto.space.getBlob`, `listBlobs`
-- [x] `com.atproto.space.getDelegationToken`, `getSpaceCredential`, `notifyCredentialRevoked`
-- [x] `com.atproto.space.notifyWrite`, `registerNotify`, `unregisterNotify`, `listRepos`
-- [x] `com.atproto.simplespace.createSpace`, `getSpace`, `updateSpace`, `deleteSpace`
-- [x] `com.atproto.simplespace.putMember`, `removeMember`, `listMembers`
+- [x] `com.atproto.space.getDelegationToken`, `authorizeSpaceSync`, `notifyCredentialsRevoked`
+- [x] `com.atproto.space.notifyRepoUpdate`, `listWriters`, `removeWriter`
+- [x] `com.atproto.space.createSpace`, `getSpace`, `updateSpace`, `deleteSpace`
+- [x] `com.atproto.space.exportSpaceMeta`, `importSpaceMeta`, `importRepo`
+- [x] `com.atproto.memberspace.putMembers`, `removeMembers`, `listMembers`
 
 ### Other
 

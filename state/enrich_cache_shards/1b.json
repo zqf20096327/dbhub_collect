@@ -2,9 +2,9 @@
  "thedotmack/claude-mem": {
   "commit_7d": 625,
   "commit_90d": 2219,
-  "rel_ver": "v15.18.3",
-  "rel_pub": "2026-11-12",
-  "rel_days": 2,
+  "rel_ver": "v15.18.5",
+  "rel_pub": "2026-11-15",
+  "rel_days": 0,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 143,
-  "enriched_at": "20261114",
+  "enriched_at": "20261115",
   "lang": {
    "TypeScript": 46,
    "JavaScript": 40,
@@ -24,10 +24,20 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261113",
-   "release": "20261114",
+   "release": "20261115",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "v15.18.5",
+    "d": "2026-11-15",
+    "n": "## Critical fixes\n\n- **The tree-sitter CLI installs on networks where its download script keeps failing** (#6110, thanks @rigel905, closes #6109). On some networks tree-sitter-cli's own `install.js` had its request reset every time, or exited 0 on a truncated file. The pinned SHA-256 check correctly refused the file, but nothing recovered after that, so `smart_search`, `smart_outline`, `smart_unfold` and the File Read Gate stayed off on every worker start, and `npx claude-mem repair` aborted. Now, when the "
+   },
+   {
+    "t": "v15.18.4",
+    "d": "2026-11-15",
+    "n": "- **Faster project-filtered session lists in the viewer** (#6053, thanks @Afloat16). A new index on project, start time and id lets the viewer read one page of a long project history without sorting every session. Existing databases get the index on the next worker start.\n- **Worker listing endpoints stop at offset 10,000** (#6083, thanks @xunguangzlj-cloud). `/api/observations`, `/api/summaries`, `/api/prompts`, the session feeds and `/api/tool-uses` used to pass any offset straight into SQLite, where a de"
+   },
    {
     "t": "v15.18.3",
     "d": "2026-11-12",
@@ -67,22 +77,14 @@
     "t": "v15.16.0",
     "d": "2026-11-11",
     "n": "## New\n\n- **My Work refresh on your API provider (opt-in):** set `CLAUDE_MEM_WORK_VIEW_AGENT=api` to run the My Work refresh on the provider you already selected (`openrouter`, `openai-compatible`, or the legacy `cmem` spelling). Installs with no logged-in Claude Code, Codex or Gemini CLI (for example OpenCode or DSH hosts) can now use My Work. With an API provider selected and the setting empty, the refresh no longer falls back to a logged-in Claude Code: no agent runs and nothing is spent until you choose"
-   },
-   {
-    "t": "v15.15.2",
-    "d": "2026-11-10",
-    "n": "## Critical fix\n\n- **Antigravity no longer denies every tool call after an upgrade from 14.x (#5670):** an in-place upgrade from an older install left a `PreToolUse` hook (and a `PreInvocation` context hook) in `~/.gemini/config/hooks.json`. agy kept firing it before every tool call, the current adapter answered with no decision, and agy denied every call until you re-ran install. Now the Antigravity installer finds those stale entries and migrates the file in place with the same merge install performs. It "
-   },
-   {
-    "t": "v15.15.1",
-    "d": "2026-11-10",
-    "n": "## No replay after an outage\n\nWhen the worker was down or refused a capture, some capture paths kept that work and sent it again later, which could start model calls nobody asked for. They now drop what the worker refused and carry on with new work (#5663):\n\n- **Transcript capture:** a transcript line the worker refuses or cannot take is skipped. Before, the watcher stopped at that line and, once the worker was back, sent it again with every line after it. A restart no longer resends lines from an outage ei"
    }
   ],
   "etag": {
-   "release": "W/\"2f6edf7262d064d917c5f98b93ec3e175734795db2a93ec24c05cf11b5434b4c\""
+   "release": "W/\"f32acb6853edee55d8d60dc87b8a5602dbc6c37aa0be8a81e9193d60f6fae6f0\""
   },
   "rel_dates": [
+   "2026-11-15",
+   "2026-11-15",
    "2026-11-12",
    "2026-11-12",
    "2026-11-12",
@@ -110,9 +112,7 @@
    "2026-10-30",
    "2026-10-29",
    "2026-10-29",
-   "2026-10-28",
-   "2026-10-26",
-   "2026-10-25"
+   "2026-10-28"
   ]
  },
  "porsager/postgres": {
@@ -120,7 +120,7 @@
   "commit_90d": 84,
   "rel_ver": "v4.1.1",
   "rel_pub": "2026-11-11",
-  "rel_days": 3,
+  "rel_days": 4,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -198,7 +198,7 @@
   "commit_90d": 6051,
   "rel_ver": "26.3.1.16",
   "rel_pub": "2026-09-21",
-  "rel_days": 54,
+  "rel_days": 55,
   "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
@@ -207,7 +207,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 233,
-  "enriched_at": "20261114",
+  "enriched_at": "20261115",
   "lang": {
    "C++": 53,
    "C": 25,
@@ -218,7 +218,7 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261113",
-   "release": "20261114",
+   "release": "20261115",
    "security": "20261027"
   },
   "rel_notes": [
@@ -239,7 +239,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"50bfe8b65b665070418ad055743bb6a6fc1c6d9e6d61d930fd96144b10f43ae8\""
+   "release": "W/\"f262aeadcb7b7e39d0e763d81f902108f58e2f15809a6245e63cc29780ee6131\""
   },
   "rel_dates": [
    "2026-09-21",
@@ -251,7 +251,7 @@
   "commit_90d": 0,
   "rel_ver": "v0.5.41",
   "rel_pub": "2025-07-11",
-  "rel_days": 491,
+  "rel_days": 492,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -354,7 +354,7 @@
   "commit_7d": 0,
   "rel_ver": "v4.0",
   "rel_pub": "2023-09-06",
-  "rel_days": 1165,
+  "rel_days": 1166,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -394,7 +394,7 @@
   "commit_7d": 8,
   "rel_ver": "v2.2.2",
   "rel_pub": "2026-11-04",
-  "rel_days": 10,
+  "rel_days": 11,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -606,7 +606,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.1.9",
   "rel_pub": "2025-03-19",
-  "rel_days": 605,
+  "rel_days": 606,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -625,7 +625,7 @@
   "commit_7d": 0,
   "rel_ver": "1.0.2",
   "rel_pub": "2017-08-05",
-  "rel_days": 3388,
+  "rel_days": 3389,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -692,7 +692,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-04-02",
-  "rel_days": 226,
+  "rel_days": 227,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -713,7 +713,7 @@
   "commit_7d": 3,
   "rel_ver": "v1.0.0",
   "rel_pub": "2023-10-18",
-  "rel_days": 1123,
+  "rel_days": 1124,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -748,7 +748,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.9",
   "rel_pub": "2023-11-08",
-  "rel_days": 1102,
+  "rel_days": 1103,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -791,7 +791,7 @@
  "simonw/markdown-to-sqlite": {
   "rel_ver": "1.0",
   "rel_pub": "2021-06-13",
-  "rel_days": 1980,
+  "rel_days": 1981,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -839,7 +839,7 @@
  "kkrisz1/staruml-reverse-db": {
   "rel_ver": "v2.1.8",
   "rel_pub": "2023-08-27",
-  "rel_days": 1175,
+  "rel_days": 1176,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -857,7 +857,7 @@
  "dan-kimani/mysql-mongo-etl": {
   "rel_ver": "v1.4.0",
   "rel_pub": "2020-03-29",
-  "rel_days": 2421,
+  "rel_days": 2422,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -890,7 +890,7 @@
  "truenormis/savvy": {
   "rel_ver": "v1.3.1",
   "rel_pub": "2026-09-08",
-  "rel_days": 67,
+  "rel_days": 68,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -924,7 +924,7 @@
  "daobab-projects/daobab-core": {
   "rel_ver": "Daobab",
   "rel_pub": "2023-11-29",
-  "rel_days": 1081,
+  "rel_days": 1082,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1032,7 +1032,7 @@
  "tikv/migration": {
   "rel_ver": "br-v1.0.2",
   "rel_pub": "2025-04-17",
-  "rel_days": 576,
+  "rel_days": 577,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1101,7 +1101,7 @@
  "epost/purescript-node-postgres": {
   "rel_ver": "v4.1.0",
   "rel_pub": "2017-12-16",
-  "rel_days": 3255,
+  "rel_days": 3256,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1120,7 +1120,7 @@
  "go-fries/fries": {
   "rel_ver": "v4.2.0",
   "rel_pub": "2026-09-14",
-  "rel_days": 61,
+  "rel_days": 62,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1167,7 +1167,7 @@
  "majiayu000/remem": {
   "rel_ver": "v0.6.98",
   "rel_pub": "2026-09-27",
-  "rel_days": 48,
+  "rel_days": 49,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1188,7 +1188,7 @@
  "datreant/MDSynthesis": {
   "rel_ver": "0.6.1",
   "rel_pub": "2016-05-17",
-  "rel_days": 3833,
+  "rel_days": 3834,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1392,7 +1392,7 @@
  "kowala-tech/kcoin": {
   "rel_ver": "3.0.0",
   "rel_pub": "2018-10-04",
-  "rel_days": 2963,
+  "rel_days": 2964,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1503,7 +1503,7 @@
  "elky84/light": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-01-02",
-  "rel_days": 1777,
+  "rel_days": 1778,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1536,7 +1536,7 @@
  "oracle-quickstart/oci-elastic": {
   "rel_ver": "v2.0",
   "rel_pub": "2022-02-01",
-  "rel_days": 1747,
+  "rel_days": 1748,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1554,7 +1554,7 @@
  "nativeapptemplate/nativeapptemplateapi": {
   "rel_ver": "v1.0.0-with-nfc",
   "rel_pub": "2026-04-23",
-  "rel_days": 205,
+  "rel_days": 206,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1575,7 +1575,7 @@
  "ozankasikci/global-agent-memory": {
   "rel_ver": "v0.1.7",
   "rel_pub": "2026-08-31",
-  "rel_days": 75,
+  "rel_days": 76,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1609,7 +1609,7 @@
  "Dani3lSun/apex-plugin-videoplayer": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2016-02-24",
-  "rel_days": 3916,
+  "rel_days": 3917,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1652,7 +1652,7 @@
  "claranet/ansible-role-patroni": {
   "rel_ver": "1.1.0",
   "rel_pub": "2026-07-24",
-  "rel_days": 113,
+  "rel_days": 114,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1671,7 +1671,7 @@
  "HenryJi529/OpenMorningstar": {
   "rel_ver": "v0.2.14",
   "rel_pub": "2024-03-04",
-  "rel_days": 985,
+  "rel_days": 986,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1736,7 +1736,7 @@
  "oceanbase/spark-connector-oceanbase": {
   "rel_ver": "v1.5",
   "rel_pub": "2026-07-22",
-  "rel_days": 115,
+  "rel_days": 116,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1760,7 +1760,7 @@
  "gz08/database": {
   "rel_ver": "v1.0-final",
   "rel_pub": "2026-06-20",
-  "rel_days": 147,
+  "rel_days": 148,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1783,7 +1783,7 @@
  "huaweicloud-samples/database-dify-gaussdb": {
   "rel_ver": "v1.16.1-gaussdb",
   "rel_pub": "2026-08-15",
-  "rel_days": 91,
+  "rel_days": 92,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1849,7 +1849,7 @@
  "Linuxndroid/WhatsApp-Viewer": {
   "rel_ver": "v.1.0",
   "rel_pub": "2025-10-23",
-  "rel_days": 387,
+  "rel_days": 388,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1900,7 +1900,7 @@
   "commit_7d": 0,
   "rel_ver": "flink-connector-jdbc-dameng_20250331_(适用于v3.3及以上版本)",
   "rel_pub": "2025-03-31",
-  "rel_days": 593,
+  "rel_days": 594,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2680,7 +2680,7 @@
  "phuthuycoding/dbclone": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-10-05",
-  "rel_days": 40,
+  "rel_days": 41,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2704,7 +2704,7 @@
  "macolszewski/dbeast_manager": {
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 27,
+  "rel_days": 28,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2751,7 +2751,7 @@
  "Paul0Franca/lurkqvd": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-24",
-  "rel_days": 21,
+  "rel_days": 22,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2817,7 +2817,7 @@
  "BalianWang/busytok": {
   "rel_ver": "v0.0.16",
   "rel_pub": "2026-07-15",
-  "rel_days": 122,
+  "rel_days": 123,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2861,7 +2861,7 @@
  "EnriqueMuhammad/Zephix-DBStudio": {
   "rel_ver": "v0.3.2",
   "rel_pub": "2026-11-01",
-  "rel_days": 13,
+  "rel_days": 14,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2960,7 +2960,7 @@
   },
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-10-07",
-  "rel_days": 38,
+  "rel_days": 39,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -3004,7 +3004,7 @@
   },
   "rel_ver": "v2.12.0",
   "rel_pub": "2026-11-10",
-  "rel_days": 4,
+  "rel_days": 5,
   "rel_n90": 17,
   "rel_pre": false,
   "rel_none": false,
@@ -3133,7 +3133,7 @@
   },
   "rel_ver": "@tidblink/server@0.3.0-rc.0",
   "rel_pub": "2026-11-11",
-  "rel_days": 3,
+  "rel_days": 4,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -3172,7 +3172,7 @@
   },
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-11-13",
-  "rel_days": 1,
+  "rel_days": 2,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -3213,7 +3213,7 @@
   },
   "rel_ver": "v0.4.0",
   "rel_pub": "2026-10-29",
-  "rel_days": 16,
+  "rel_days": 17,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,

@@ -1,13 +1,15 @@
 # Texins Flying Club — Tidbyt Flight Tracker
 
+🌐 **Live Web Dashboard & Virtual Tidbyt:** [**https://houston88.github.io/tidbyt-housty-flight-tracker/**](https://houston88.github.io/tidbyt-housty-flight-tracker/)
+
 Tracks the four Texins Flying Club aircraft out of McKinney National Airport (`KTKI`) using the FlightAware AeroAPI v4:
 
-| N-Number | Aircraft Type | Livery Color |
-| :--- | :--- | :--- |
-| **`N121DB`** | Piper Arrow II | Sky Blue (`#4fc3f7`) |
-| **`N3QZ`** | Cessna 182 | Amber Gold (`#ffd54f`) |
-| **`N4135W`** | Piper Archer IV | Mint Green (`#81c784`) |
-| **`N6833C`** | Piper Cherokee | Coral Orange (`#ff8a65`) |
+| N-Number | Aircraft Type | Real Livery Scheme | Primary Accent |
+| :--- | :--- | :--- | :--- |
+| **`N121DB`** | 1972 Piper Arrow II | White upper, Royal Cobalt Blue swept tail & belly, Gold swoop | Royal Blue (`#3b82f6`) |
+| **`N3QZ`** | 1973 Cessna 182P Skylane | White fuselage, Scarlet Red wingtip, stripe & tail bars, Navy nose | Scarlet Red (`#ef5350`) |
+| **`N4135W`** | 1999 Piper Archer III | Crisp White upper cabin & mid-tail, Deep Blue lower fuselage & upper tail | Aviation Blue (`#60a5fa`) |
+| **`N6833C`** | 1965 Piper Cherokee 180 | Crisp White fuselage & tail with Navy Blue cap/belly & Silver pin-striping | Ice Silver (`#cbd5e1`) |
 
 ## Previews
 
@@ -79,16 +81,18 @@ make push-bg
 
 To keep flight telemetry fresh throughout the day:
 
-#### Option A: GitHub Actions (Cloud — Hourly 7 AM to 9 PM CT)
-This repository includes [`.github/workflows/update-tidbyt.yml`](.github/workflows/update-tidbyt.yml), which automatically renders and pushes fresh flight status to your Tidbyt every hour between **7:00 AM and 9:00 PM Central Time** (`America/Chicago`), and stays off overnight.
+#### Option A: GitHub Actions + Live GitHub Pages Dashboard (Cloud — Hourly 7 AM to 9 PM CT)
+This repository includes [`.github/workflows/update-tidbyt.yml`](.github/workflows/update-tidbyt.yml), which runs every hour between **7:00 AM and 9:00 PM Central Time** (`America/Chicago`) and stays off overnight.
 
-To enable it on GitHub:
-1. Go to your repository on GitHub -> **Settings** -> **Secrets and variables** -> **Actions**.
-2. Click **New repository secret** and add these three secrets from your `.env` file:
-   - `FLIGHTAWARE_API_KEY`
-   - `TIDBYT_DEVICE_ID`
-   - `TIDBYT_API_KEY`
-3. You can test it immediately under the **Actions** tab -> **Update Tidbyt Flight Tracker** -> **Run workflow**.
+To prevent duplicate API charges, each hourly run calls [`scripts/fetch_fleet_status.py`](scripts/fetch_fleet_status.py) **once**, and reuses that single snapshot (`fleet_b64`) to:
+1. Render and push `texins_flights.webp` to your physical Tidbyt (`pixlet push -b`).
+2. Render lightweight 64×32 `.webp` animations (`live.webp`, `board.webp`, `cycle.webp`, `demo.webp`) scaled up sharply in the browser via CSS `image-rendering: pixelated` with **zero extra FlightAware API calls**.
+3. Publish the hybrid web dashboard ([`site/index.html`](site/index.html) + `fleet_status.json` + `.webp` files) to **GitHub Pages** (`https://houston88.github.io/tidbyt-housty-flight-tracker/`).
+
+To enable GitHub Pages on your repo:
+1. Go to your repository on GitHub -> **Settings** -> **Pages**.
+2. Under **Build and deployment -> Source**, select **GitHub Actions**.
+3. Ensure your three secrets (`FLIGHTAWARE_API_KEY`, `TIDBYT_DEVICE_ID`, `TIDBYT_API_KEY`) are set under **Settings -> Secrets and variables -> Actions**.
 
 #### Option B: Local Cron Job (Linux / macOS / Raspberry Pi)
 Add a crontab entry (`crontab -e`) to update every hour from 7 AM to 9 PM:

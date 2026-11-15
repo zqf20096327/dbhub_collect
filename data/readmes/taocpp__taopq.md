@@ -16,7 +16,7 @@ It has no dependencies beyond [`libpq`➚](https://www.postgresql.org/docs/curre
 
 The library provides support for database connections, transactions, nested transactions, prepared statements, large objects, connection pools, pipeline mode, high-speed bulk data transfer, and more.
 An extensible traits mechanism is used to convert C++ types into SQL statement parameters, and conversely to convert query results into arbitrary C++ types.
-The following example shows the basic look and feel of the library.
+The following example gives a quick overview of the library.
 
 ```c++
 #include <iostream>
@@ -60,18 +60,27 @@ int main()
 
 ## Documentation
 
-* [Table of Content](doc/TOC.md)
+* [Table of Contents](doc/TOC.md)
 * [Requirements](doc/Requirements.md)
 * [Installation](doc/Installation.md)
 * [Getting Started](doc/Getting-Started.md)
 * [Connection](doc/Connection.md)
+* [Connection Pool](doc/Connection-Pool.md)
 * [Transaction](doc/Transaction.md)
 * [Statement](doc/Statement.md)
+* [Parameter Type Conversion](doc/Parameter-Type-Conversion.md)
 * [Result](doc/Result.md)
+* [Result Type Conversion](doc/Result-Type-Conversion.md)
+* [Aggregate Support](doc/Aggregate-Support.md)
+* [Error Handling](doc/Error-Handling.md)
+* [Binary Data](doc/Binary-Data.md)
+* [Bulk Transfer](doc/Bulk-Transfer.md)
+* [Large Object](doc/Large-Object.md)
+* [Performance](doc/Performance.md)
 
 ## Contact
 
-For questions and suggestions regarding taoPQ, success or failure stories, and any other kind of feedback, please feel free to open a [discussion](https://github.com/taocpp/taopq/discussions), an [issue](https://github.com/taocpp/taopq/issues) or a [pull request](https://github.com/taocpp/taopq/pulls) on GitHub or contact the authors at `taocpp(at)icemx.net`.
+For questions, suggestions, success stories, or any other feedback, please feel free to open a [discussion](https://github.com/taocpp/taopq/discussions), an [issue](https://github.com/taocpp/taopq/issues), or a [pull request](https://github.com/taocpp/taopq/pulls) on GitHub, or contact the authors at `taocpp(at)icemx.net`.
 
 ## The Art of C++
 
@@ -88,7 +97,7 @@ taoPQ is part of [The Art of C++](https://taocpp.github.io/).
 Copyright (c) 2016-2026 Daniel Frey and Dr. Colin Hirsch
 
 taoPQ is certified [Open Source➚](http://www.opensource.org/docs/definition.html) software.
-It is [licensed➚](https://pdimov.github.io/blog/2020/09/06/why-use-the-boost-license/) under the terms of the [Boost Software License, Version 1.0➚](https://www.boost.org/LICENSE_1_0.txt) reproduced here.
+It is [licensed➚](https://pdimov.github.io/blog/2020/09/06/why-use-the-boost-license/) under the [Boost Software License, Version 1.0➚](https://www.boost.org/LICENSE_1_0.txt), reproduced below.
 
 > Boost Software License - Version 1.0 - August 17th, 2003
 >

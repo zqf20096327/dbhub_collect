@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://stard.armanckeser.com/run"><img src="img/run.gif" alt="A round of a run in the demo: a card bought from the shop is dragged onto the board, two teams of creatures fight, then the run finishes with 5 wins and 2 losses and shows the final team" width="480" /></a>
+  <a href="https://stard.armanckeser.com/run"><img src="img/run.gif" alt="A round of a run in the demo: cards bought from the shop go straight onto the board, two teams of creatures fight and the round is won, then the run finishes with 5 wins and 1 loss and shows the final team" width="480" /></a>
 </p>
 
 <p align="center">

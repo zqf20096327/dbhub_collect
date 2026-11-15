@@ -119,7 +119,9 @@ targets; an oracle that folds harnesslang journals with nanocode's own
 `nanocode-turnlog`; a kill -9 drill of the generated `native-jsonl` code;
 `hl-agent` (`agent/`), nanocode's Claude harness written in harnesslang
 (`examples/claude_code.hl`) and run as a coding agent against the Anthropic
-API, starting subagents (`examples/claude_code_child.hl`) as child sessions.
+API, starting subagents (`examples/claude_code_child.hl`) as child sessions;
+with an OpenAI model it runs Codex's harness (`examples/codex_agent.hl`)
+against the Responses API.
 Not built yet: splitting a handler over
 Cloudflare's request limit (`hl check` refuses it instead). The platform
 limits in `src/target/` come from summaries of vendor documentation and are
@@ -139,7 +141,7 @@ and the nanocode oracle cover it.
     target/release/hl check examples/agent.hl
     target/release/hl prove --target vercel examples/reviewer.hl
     target/release/hl sim --target cloudflare --seeds 0..1000 examples/agent.hl
-    target/release/hl emit --target native-jsonl examples/agent.hl
+    target/release/hl emit --format source --target native-jsonl examples/agent.hl
     scripts/check.sh
     cargo build --release --manifest-path agent/Cargo.toml
     agent/target/release/hl-agent run --instruction task.md --cwd . --model claude-haiku-4-5 --journal output/run
@@ -148,6 +150,65 @@ and the nanocode oracle cover it.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): the design, journal and proofs
 - [docs/CODE_MODE.md](docs/CODE_MODE.md): code mode
 - `DECISIONS.md`: what each change established, with measurements
+
+## Deploy
+
+`hl deploy`, `status`, `monitor`, `logs`, `rollback`, `secrets` and `destroy` ship a
+harness and watch it without wrangler or the Vercel CLI: they call the
+Cloudflare and Vercel REST APIs with `CLOUDFLARE_API_TOKEN` and
+`CLOUDFLARE_ACCOUNT_ID` or `VERCEL_TOKEN` (and `VERCEL_TEAM_ID`). `hl deploy
+FILE` ships what `hl emit` writes; `hl deploy --bundle DIR` ships a prebuilt
+directory, its main module named by `DIR/hl-bundle.json`. The native targets
+install versioned copies under `.hl/deploy/` with the same commands. Against
+the fake of both APIs in `oracle/deploy/`, which checks every request against
+the providers' pinned OpenAPI specs:
+
+```console
+$ scripts/deploy-drill.sh --demo
+> hl deploy --target cloudflare --name demo --out output/deploy-demo/cloudflare --bundle docs/snippets/deploy
+deploy cloudflare demo: 1 file, 241 bytes, digest 40b7aa88e20c (from docs/snippets/deploy)
+  migration hl-v1: new SQLite-backed class HarnessObject
+  version a0000000-0000-4000-8000-000000000001 serves 100% (deployment d0000000-0000-4000-8000-000000000002)
+  url https://demo.hl-fake.workers.dev
+  wrote output/deploy-demo/cloudflare
+> echo sk-demo | hl secrets set API_KEY ...
+secrets cloudflare demo: set API_KEY (a new version serves it)
+> hl status --target cloudflare --name demo --out output/deploy-demo/cloudflare
+status cloudflare demo
+  url https://demo.hl-fake.workers.dev
+  version a0000000-0000-4000-8000-000000000003 (#2, uploaded 2026-11-14T00:00:04.000Z) serves 100% (deployment d0000000-0000-4000-8000-000000000004)
+  versions: 2
+  secrets: API_KEY
+> hl logs --target cloudflare --name demo --out output/deploy-demo/cloudflare --follow --events 1
+tail cloudflare demo: following (tail 00000000000000000000000000000005)
+2026-11-14T00:00:06.000Z ok POST https://demo.hl-fake.workers.dev/sessions/s1/turn
+  log turn 1 answered
+> hl monitor --target cloudflare --name demo --out output/deploy-demo/cloudflare
+monitor cloudflare demo
+  url https://demo.hl-fake.workers.dev
+  version a0000000-0000-4000-8000-000000000003 serves 100% (deployment d0000000-0000-4000-8000-000000000004)
+  last 60 minutes: 1 events, 0 errors (0.0% failed)
+  recent 1:
+    2026-11-14T00:00:06.000Z log turn 1 answered
+> hl rollback --target cloudflare --name demo --out output/deploy-demo/cloudflare
+rollback cloudflare demo: version a0000000-0000-4000-8000-000000000001 (#1) serves 100% (deployment d0000000-0000-4000-8000-000000000006), was a0000000-0000-4000-8000-000000000003
+  the Durable Object's storage is not rolled back: the older code reads the journal as it is now
+  secrets belong to versions: the serving version has the secrets it was uploaded or last changed with
+> hl destroy --target cloudflare --name demo --out output/deploy-demo/cloudflare --yes
+destroy cloudflare demo: deleted the script, its versions and its Durable Objects' storage
+```
+
+`hl deploy FILE` puts a bearer token in front of every route: the first
+deploy draws 32 random bytes, sets them as the `HL_AUTH_TOKEN` secret in the
+same request that creates the script or project, and writes them to
+`OUT/auth-token` (mode 600); requests without `Authorization: Bearer TOKEN`
+get 401, and a deployment without the secret answers 503 rather than serve.
+`hl secrets set HL_AUTH_TOKEN` rotates it. A `--bundle` ships as it is.
+`hl monitor` shows the serving version, the error rate over `--minutes` and
+the latest turns in one round trip.
+
+`hl deploy --endpoints` lists every operation it calls, with its operation ID
+in the pinned specs.
 
 ## License
 

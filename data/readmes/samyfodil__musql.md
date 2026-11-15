@@ -119,6 +119,15 @@ id  name
 Run Time: real 0.001
 ```
 
+With no file, or `:memory:`, it opens an in-memory database, gone when the
+shell exits:
+
+```sh
+$ ./musql open
+Opened an in-memory database; nothing is saved when it exits.
+musql> SELECT 1 + 1;
+```
+
 `musql` is in the [release archive](https://github.com/samyfodil/musql/releases/latest)
 with `musqld` and `musql-convert`. `.help` lists the shell's commands.
 
@@ -446,7 +455,8 @@ CRDT merges can violate constraints that each local write satisfied, such as
 foreign keys or a multi-column `CHECK`. Replicated databases also refuse
 virtual tables, and in CRDT mode triggers and `WITHOUT ROWID`. Read the
 [replication guide](replication/README.md) for setup, conflict behavior, and
-supported schemas, or start with the [libp2p example](examples/libp2p/).
+supported schemas. [replication/rpc](replication/rpc/) is a ready transport
+over ConnectRPC, and [examples/libp2p](examples/libp2p/) one over libp2p.
 
 ## How it works
 
@@ -467,6 +477,7 @@ changes within the same transaction as the data it tracks.
 | [driver](driver/) | The `database/sql` interface, connection handling, and transaction change capture. |
 | [convert/sqlite](convert/sqlite/) | Import and export between SQLite files and musql storage. |
 | [replication](replication/) | Change logs, conflict resolution, synchronization, and leader/quorum integration. |
+| [replication/rpc](replication/rpc/) | Replication's wire format and a transport over ConnectRPC, in a separate module. |
 | [examples/doom](examples/doom/) | DOOM compiled to VDBE bytecode, with windowed and headless runners. |
 | [examples/libp2p](examples/libp2p/) | A replication transport and end-to-end tests in a separate module. |
 | [compat-harness](compat-harness/) | Differential tests against C SQLite in a separate module that requires CGo. |

@@ -20,7 +20,7 @@
         * [Лекция №1](https://pelmesh619.github.io/itmo_conspects/devopstech/devopstech-nexign/devopstech-nexign_2026_09_01.html)
         * [Лекция №2](https://pelmesh619.github.io/itmo_conspects/devopstech/devopstech-nexign/devopstech-nexign_2026_09_12.html)
         * [Лекция №3](https://pelmesh619.github.io/itmo_conspects/devopstech/devopstech-nexign/devopstech-nexign_2026_09_15.html)
-        * Лекция №4 - в разработке
+        * [Лекция №4](https://pelmesh619.github.io/itmo_conspects/devopstech/devopstech-nexign/devopstech-nexign_2026_09_22.html)
         * Лекция №5 - в разработке
         * Лекция №6 - в разработке
         * Лекция №7 - в разработке
@@ -40,7 +40,7 @@
         * [Лекция №5](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_10_01.html)
         * [Лекция №7](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_10_15.html)
         * [Лекция №9](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_10_29.html)
-        * Лекция №11 - в разработке
+        * [Лекция №11](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_11_12.html)
 
 * Разработка нагруженных систем (лектор Суховицкий А. А.)
 
@@ -79,6 +79,7 @@
     * [Лекция №5](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_10_03.html)
     * [Лекция №7](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_10_17.html)
     * [Лекция №9](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_10_31.html)
+    * Лекция №11 - в разработке
 
 * Администрирование в ОС Windows (лектор Береснев А. Д.)
 
@@ -92,8 +93,10 @@
 
 * Анализ данных и информационных поиск (лектор Хлопотов М. В.)
 
+    [**Весь курс**](https://pelmesh619.github.io/itmo_conspects/dataanalysis/dataanalysis_superconspect.html)
+
     * [Лекция №3](https://pelmesh619.github.io/itmo_conspects/dataanalysis/dataanalysis_2026_09_14.html)
-    * Лекция №5 - в разработке
+    * [Лекция №5](https://pelmesh619.github.io/itmo_conspects/dataanalysis/dataanalysis_2026_09_28.html)
     * Лекция №7 - в разработке
     * Лекция №9 - в разработке
     * Лекция №11 - в разработке

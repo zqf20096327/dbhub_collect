@@ -24,6 +24,13 @@
 </div>
 
 <p align="center">
+  <strong><a href="https://github.com/rudalabs/TeamCraft/releases">Download TeamCraft</a></strong>
+  for Windows, macOS and Linux.<br />
+  To try it, pick the desktop app <em>with local server</em>: app, server and
+  database in one installer, nothing to set up (<a href="#download">which file?</a>).
+</p>
+
+<p align="center">
   <a href="https://github.com/rudalabs/TeamCraft/actions/workflows/ci.yml"><img src="https://github.com/rudalabs/TeamCraft/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
   <a href="https://github.com/rudalabs/TeamCraft/actions/workflows/desktop.yml"><img src="https://github.com/rudalabs/TeamCraft/actions/workflows/desktop.yml/badge.svg?branch=main" alt="Desktop app" /></a>
   <a href="https://github.com/rudalabs/TeamCraft/actions/workflows/docs.yml"><img src="https://github.com/rudalabs/TeamCraft/actions/workflows/docs.yml/badge.svg?branch=main" alt="Docs" /></a>
@@ -65,6 +72,52 @@
 > and no liability for any damage or data loss. See sections 6 and 7 of the
 > [MPL-2.0](LICENSE).
 
+## Download
+
+**Every download is on the
+[Releases page](https://github.com/rudalabs/TeamCraft/releases)** – 0.x
+versions are pre-releases (see the warning above). Which one you need:
+
+- **Just try TeamCraft on your laptop** – the desktop app **with local
+  server** (`TeamCraft-with-local-server_…`): one installer with the app, the
+  server and its PostgreSQL database. It installs **TeamCraft Local**, an app
+  of its own; start it and it starts its local server, your browser opens to
+  create the administrator account, and you are signed in. No Docker, no database
+  set-up, no configuration. The data stays in your user folder – this is for
+  trying TeamCraft out, not for a team's real data.
+- **Connect to your team's server** – the desktop app.
+- **Run a server for your team** – the [Docker install](#quick-start) (one
+  command on Linux) or the server archive.
+
+|                                              | Linux x86_64                            | Linux ARM64                | macOS (Apple silicon) | Windows x64                                   | Windows ARM64                                     |
+|----------------------------------------------|-----------------------------------------|----------------------------|-----------------------|-----------------------------------------------|---------------------------------------------------|
+| **Desktop app with local server** (try it)   | `.AppImage`                             | –                          | `.dmg`                | `_x64-setup.exe`                              | –                                                 |
+| **Desktop app**                              | `.AppImage`, `.deb`, `.rpm`, `.flatpak` | `.deb`, `.rpm`, `.flatpak` | `.dmg`, `.app.zip`    | `.msi`, `_x64-setup.exe`, `_x64_portable.zip` | `.msi`, `_arm64-setup.exe`, `_arm64_portable.zip` |
+| **Server** (`teamcraft`)                     | `.tar.gz`                               | `.tar.gz`                  | –                     | `.zip`                                        | –                                                 |
+
+- **With local server:** the same app plus the server (`teamcraft-server`)
+  and PostgreSQL's programs, installed as *TeamCraft Local* next to the
+  desktop app – with its own settings and sign-in, so an existing desktop app
+  stays connected to your team's server. The local server listens only on
+  this computer and stops with the app; see
+  [Try it on your computer](https://rudalabs.github.io/TeamCraft/guide/local-server.html).
+- **Server:** runs on Linux in production, or as the
+  [Docker image](docs/src/admin/docker.md) on any platform. On macOS, build it
+  from source ([platforms/macos.md](platforms/macos.md)). With PostgreSQL
+  installed, `teamcraft local` starts a test installation with its own
+  database in one command.
+- **Flatpak:** `flatpak install --user TeamCraft_*.flatpak`; the GNOME runtime
+  comes from Flathub. Packages for Arch (AUR) and snap:
+  [packaging/](packaging/README.md).
+- **Windows portable:** the `_portable.zip` holds `TeamCraft.exe` without an
+  installer; it needs the WebView2 runtime, which Windows 10 and 11 include.
+- **Checksums:** `sha256sum -c --ignore-missing SHA256SUMS.txt`.
+- **Not code-signed yet:** macOS asks to confirm the first start
+  (*right-click → Open*); Windows SmartScreen shows *More info → Run anyway*.
+- **Newest `main` build:** built every night; attached as artifacts to the latest run of the
+  [Release workflow](https://github.com/rudalabs/TeamCraft/actions/workflows/release.yml)
+  (kept 14 days, for signed-in GitHub users).
+
 ## Who it is for
 
 TeamCraft is free of charge and open source (MPL-2.0): no licence fees, no
@@ -89,6 +142,16 @@ onboarding where new members sign in with the accounts they already have.
 
 ## Quick start
 
+**Try it on your laptop** – install the desktop app *with local server* from
+the [Releases page](https://github.com/rudalabs/TeamCraft/releases) and start
+*TeamCraft Local* – it starts its own server ([Download](#download)). With
+PostgreSQL already installed, the server alone does the same on the command
+line – a private database and the server on <http://127.0.0.1:8080>:
+
+```sh
+teamcraft local
+```
+
 **Install on Linux with Docker** – TeamCraft and PostgreSQL in containers,
 data in Docker volumes, nothing to build:
 
@@ -110,39 +173,14 @@ docker compose up -d db     # PostgreSQL on 127.0.0.1, no password needed
 cargo run --release         # applies the migrations, serves http://localhost:8080
 ```
 
-Open <http://localhost:8080> and create the administrator on the login page
-(offered once, while the server listens on localhost). Then *Projects → New
+Open the setup link the server prints when it starts
+(`no administrator yet: open http://localhost:8080/login?setup=…`) and create
+the administrator – offered once, while the server listens on localhost. Then *Projects → New
 project group*, *Items → New item* with a STEP file, and open it in 3D.
 
 No configuration is needed for a local test. Step-by-step guides, including
 native PostgreSQL and the desktop app:
 **[Linux](platforms/linux.md)** · **[macOS](platforms/macos.md)** · **[Windows](platforms/windows.md)**.
-
-## Download
-
-Builds of every tagged version are on the
-**[Releases page](https://github.com/rudalabs/TeamCraft/releases)** – 0.x
-versions are pre-releases (see the warning above):
-
-|                          | Linux x86_64                            | Linux ARM64                | macOS (Apple silicon) | Windows x64                                   | Windows ARM64                                     |
-|--------------------------|-----------------------------------------|----------------------------|-----------------------|-----------------------------------------------|---------------------------------------------------|
-| **Server** (`teamcraft`) | `.tar.gz`                               | `.tar.gz`                  | –                     | `.zip`                                        | –                                                 |
-| **Desktop app**          | `.AppImage`, `.deb`, `.rpm`, `.flatpak` | `.deb`, `.rpm`, `.flatpak` | `.dmg`, `.app.zip`    | `.msi`, `_x64-setup.exe`, `_x64_portable.zip` | `.msi`, `_arm64-setup.exe`, `_arm64_portable.zip` |
-
-- **Server:** runs on Linux in production, or as the
-  [Docker image](docs/src/admin/docker.md) on any platform. On macOS, build it
-  from source ([platforms/macos.md](platforms/macos.md)).
-- **Flatpak:** `flatpak install --user TeamCraft_*.flatpak`; the GNOME runtime
-  comes from Flathub. Packages for Arch (AUR) and snap:
-  [packaging/](packaging/README.md).
-- **Windows portable:** the `_portable.zip` holds `TeamCraft.exe` without an
-  installer; it needs the WebView2 runtime, which Windows 10 and 11 include.
-- **Checksums:** `sha256sum -c --ignore-missing SHA256SUMS.txt`.
-- **Not code-signed yet:** macOS asks to confirm the first start
-  (*right-click → Open*); Windows SmartScreen shows *More info → Run anyway*.
-- **Newest `main` build:** built every night; attached as artifacts to the latest run of the
-  [Release workflow](https://github.com/rudalabs/TeamCraft/actions/workflows/release.yml)
-  (kept 14 days, for signed-in GitHub users).
 
 ## Features
 
@@ -261,7 +299,9 @@ end-to-end tests against a real PostgreSQL.
   project group, a navigable *Graph* of every revision (BOM children,
   references and where-used, coloured by state, with quantities and preview
   images), *Park* of work in progress, an Agent view, crash reports the user
-  decides about and an update notice (never installs anything itself).
+  decides about and an update notice (never installs anything itself). The
+  download *with local server* also runs a private test server with its own
+  database on the laptop (*Try TeamCraft on this computer*).
 - **REST API** – everything the UI does, with personal access tokens.
 - **MCP server** – AI assistants such as Claude Code search, explain BOMs and
   draft changes with your rights, never approving anything.
@@ -324,6 +364,9 @@ there is no separate enterprise edition.
 - **Operations**
   - [Docker install](https://rudalabs.github.io/TeamCraft/admin/docker.html)
     with one script.
+  - Evaluations without a server: the desktop download *with local server*,
+    or `teamcraft local` – a private PostgreSQL and the server, both only on
+    127.0.0.1 ([details](https://rudalabs.github.io/TeamCraft/guide/local-server.html)).
   - [Backup and restore](https://rudalabs.github.io/TeamCraft/admin/operations.html#backups)
     of database and vault in one command.
   - `/healthz` and `/readyz` probes and
@@ -495,6 +538,7 @@ Third-party components (complete list with versions in `Cargo.lock` and
 | argon2, sha2                         | password hashing, content hashes            | MIT / Apache-2.0                                             |
 | ring                                 | signatures of OIDC back-channel logout tokens | Apache-2.0 AND ISC                                         |
 | Tauri 2                              | desktop app                                 | MIT / Apache-2.0                                             |
+| PostgreSQL (builds of theseus-rs/postgresql-binaries) | database of the desktop downloads *with local server* only, with its `COPYRIGHT.txt` | PostgreSQL Licence |
 | futures-core                         | desktop app: cancellable streamed uploads   | MIT / Apache-2.0                                             |
 | Montserrat, Oswald                   | fonts                                       | SIL OFL 1.1                                                  |
 | libfuzzer-sys (libFuzzer)            | fuzz targets in `fuzz/` only, never shipped | MIT / Apache-2.0 (libFuzzer: Apache-2.0 with LLVM exception) |

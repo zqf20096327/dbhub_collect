@@ -28,9 +28,9 @@ I also practice competitive programming — 200+ problems solved on LeetCode and
 
 ## What's inside
 
-- **`notes/`** — 130 learning notes across C#, ASP.NET Core, EF Core, SQL Server and data structures & algorithms. Each note is a short, focused write-up of one concept.
+- **`notes/`** — 145 learning notes across C#, ASP.NET Core, EF Core, SQL Server and data structures & algorithms. Each note is a short, focused write-up of one concept.
 
-- **`examples/`** — Runnable C# code: two pointers, sliding window, binary search, recursion, sorting, LINQ queries, dynamic programming, LINQ deferred execution, graph traversal (BFS/DFS), heaps (with PriorityQueue) and stacks/queues (with a balanced-brackets checker). Drop a file into a console project (or a C# script runner) and run it.
+- **`examples/`** — Runnable C# code: two pointers, sliding window, binary search, recursion, sorting, LINQ queries, dynamic programming, LINQ deferred execution, graph traversal (BFS/DFS), heaps (with PriorityQueue), stacks/queues (with a balanced-brackets checker) and tries (with insert, search and prefix search). Drop a file into a console project (or a C# script runner) and run it.
 
 - Topics are organized by area: `notes/csharp/`, `notes/aspnet/`, `notes/efcore/`, `notes/sql/` and `notes/dsa/`.
 
@@ -39,11 +39,11 @@ I also practice competitive programming — 200+ problems solved on LeetCode and
 
 ### C#
 
-Language fundamentals and OOP, value vs reference types, records, tuples, pattern matching, generics, interfaces, delegates and events, extension methods, async/await, yield iterators, nullable reference types, exception handling, string interpolation and LINQ basics. SOLID principles, design patterns (Singleton, Factory, Strategy, Repository), Docker for .NET apps and unit testing with xUnit and Moq. CQRS with MediatR, clean architecture, Dapper, Span and Memory, and System.Threading.Channels. Source generators and async streams (IAsyncEnumerable). Cancellation tokens, primary constructors, reflection basics and garbage collection. Immutable collections, custom attributes, parallel programming with Parallel and PLINQ, and System.Text.Json serialization.
+Language fundamentals and OOP, value vs reference types, records, tuples, pattern matching, generics, interfaces, delegates and events, extension methods, async/await, yield iterators, nullable reference types, exception handling, string interpolation and LINQ basics. SOLID principles, design patterns (Singleton, Factory, Strategy, Repository), Docker for .NET apps and unit testing with xUnit and Moq. CQRS with MediatR, clean architecture, Dapper, Span and Memory, and System.Threading.Channels. Source generators and async streams (IAsyncEnumerable). Cancellation tokens, primary constructors, reflection basics and garbage collection. Immutable collections, custom attributes, parallel programming with Parallel and PLINQ, and System.Text.Json serialization. Expression trees, operator overloading and benchmarking with BenchmarkDotNet.
 
 ### ASP.NET Core
 
-Web APIs, routing, controllers, dependency injection, middleware, model binding, validation, configuration, logging and minimal APIs. JWT authentication and refresh tokens, authorization policies and claims, SignalR, gRPC, the Options pattern, background services, API versioning, rate limiting, Serilog structured logging, Swagger/OpenAPI, Redis distributed caching, HttpClientFactory and output caching. Problem Details (RFC 7807) error responses. Endpoint filters, distributed caching with IDistributedCache and Blazor basics. ASP.NET Core Identity, GraphQL basics, raw WebSockets, Quartz.NET scheduling and response compression.
+Web APIs, routing, controllers, dependency injection, middleware, model binding, validation, configuration, logging and minimal APIs. JWT authentication and refresh tokens, authorization policies and claims, SignalR, gRPC, the Options pattern, background services, API versioning, rate limiting, Serilog structured logging, Swagger/OpenAPI, Redis distributed caching, HttpClientFactory and output caching. Problem Details (RFC 7807) error responses. Endpoint filters, distributed caching with IDistributedCache and Blazor basics. ASP.NET Core Identity, GraphQL basics, raw WebSockets, Quartz.NET scheduling and response compression. Razor Pages, MVC controllers, localization and globalization, the Data Protection API and security headers.
 
 ### Entity Framework Core
 
@@ -51,11 +51,11 @@ DbContext and models, CRUD operations and migrations. Change tracking, loading s
 
 ### SQL Server
 
-Joins, indexes, transactions, stored procedures, CTEs and window functions. GROUP BY and HAVING, views, database normalization, execution plans, index deep dives, locking and isolation levels, and query optimization. Temp tables vs table variables, the MERGE statement, PIVOT and UNPIVOT, and deadlocks.
+Joins, indexes, transactions, stored procedures, CTEs and window functions. GROUP BY and HAVING, views, database normalization, execution plans, index deep dives, locking and isolation levels, and query optimization. Temp tables vs table variables, the MERGE statement, PIVOT and UNPIVOT, and deadlocks. Triggers for auditing and enforcing rules.
 
 ### Data structures & algorithms
 
-Two pointers, sliding window, binary search, hashmaps, linked lists, stacks and queues, recursion and binary trees — with runnable C# examples in `examples/`. Plus graphs and heaps, with sorting and dynamic programming examples. Also dynamic programming basics, greedy algorithms, tries and segment trees. Also binary search trees, union-find, topological sort and Dijkstra's shortest path. Also backtracking, AVL trees, B-trees, the knapsack problem and KMP string matching.
+Two pointers, sliding window, binary search, hashmaps, linked lists, stacks and queues, recursion and binary trees — with runnable C# examples in `examples/`. Plus graphs and heaps, with sorting and dynamic programming examples. Also dynamic programming basics, greedy algorithms, tries and segment trees. Also binary search trees, union-find, topological sort and Dijkstra's shortest path. Also backtracking, AVL trees, B-trees, the knapsack problem and KMP string matching. Also red-black trees, Bloom filters, the LRU cache, bit manipulation and prefix sums — with a runnable trie example.
 
 
 ## Learning roadmap

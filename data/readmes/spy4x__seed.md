@@ -7,7 +7,7 @@ of your SaaS, already built: sign-in with a second factor, groups with roles, pe
 billing, realtime, an offline app and an admin area, on Postgres and Docker Compose. MIT-licensed,
 usable today, built in public.
 
-[![CI](https://ci.antonshubin.com/api/badges/15/status.svg)](https://ci.antonshubin.com/repos/15)
+[![CI](https://ci.antonshubin.com/api/badges/15/status.svg?events=push,cron)](https://ci.antonshubin.com/repos/15)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 <!-- Seed's own site: see docs/start-a-product.md -->
@@ -214,7 +214,7 @@ app, and [`docs/screenshots/admin-video.ts`](docs/screenshots/admin-video.ts)
 
 ```sh
 deno task check           # lint, format check, type check and unit tests
-deno task hooks:install   # runs the checks before every commit
+deno task hooks:install   # refuses a push while check is red, in every worktree
 deno task e2e:local       # browser tests on a stack of their own
 ```
 

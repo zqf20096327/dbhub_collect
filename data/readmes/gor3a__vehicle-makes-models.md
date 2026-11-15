@@ -1,6 +1,6 @@
 # vehicle-makes-models
 
-![Free & open dataset of car makes, models, generations, and engine specs — 164 makes, 2,621 models, 7,169 generations, 30,390 engines. JSON, CSV, SQLite. ODbL.](docs/announcement-card.png)
+![Free & open dataset of car makes, models, generations, and engine specs — 216 makes, 3,640 models, 8,102 generations, 31,520 engines. JSON, CSV, SQLite. ODbL.](docs/announcement-card.png)
 
 A free, open dataset of car **makes**, **models**, **generations**, and **engine specs** —
 global coverage with extra Egypt-market nameplates (e.g. Speranza, El Nasr) that
@@ -8,8 +8,8 @@ most datasets miss. Shipped as **JSON**, **CSV**, and **SQLite** so you can use 
 from anything.
 
 > **Dataset status:** Fully populated. The tier-3 schema (generations + engines + raw
-> specs) covers all crawled makes — **164 makes, 2,621 models, 7,169 generations, and
-> 30,390 engine variants**. The data is regenerated on a weekly schedule and published as
+> specs) covers all crawled makes — **216 makes, 3,640 models, 8,102 generations, and
+> 31,520 engine variants**. The data is regenerated on a weekly schedule and published as
 > [versioned releases](https://github.com/gor3a/vehicle-makes-models/releases) with
 > downloadable JSON, CSV, and SQLite on each release.
 

@@ -5,7 +5,7 @@
 
 **Durable, typed job chains that commit with your database transactions.**
 
-Queuert is a job-chain library — durable, typed background work in your database. Job chains compose like Promise chains (`.then`, `Promise.all`), but they survive crashes and commit with your transactions. Postgres or SQLite, no Redis required, no separate server.
+Queuert is a job-chain library — durable, typed background work in your database. Job chains compose like Promise chains (`.then`, `Promise.all`), but they survive crashes and commit with your transactions. Postgres, SQLite, MySQL/MariaDB or Redis, no separate server.
 
 [**Documentation**](https://kvet.github.io/queuert/) | [**Getting Started**](https://kvet.github.io/queuert/getting-started/introduction/) | [**Comparison**](https://kvet.github.io/queuert/comparison/)
 
@@ -34,15 +34,15 @@ const jobTypes = defineJobTypes<{
 Start the chain _inside_ your DB transaction. If the transaction rolls back, the chain is never created. No outbox glue, no dual-write window.
 
 ```ts
-const client = await createClient({ stateAdapter, jobTypes });
+const client = createClient({ stateAdapter, jobTypes });
 
-await withTransactionHooks(async (transactionHooks) =>
+await withTxHooks(async (txHooks) =>
   db.transaction(async (tx) => {
     const user = await tx.users.create({ name: "Alice", email: "alice@example.com" });
 
     await client.createChain({
       tx,
-      transactionHooks,
+      txHooks,
       typeName: "provision-account",
       input: { userId: user.id },
       //         ↑ wrong shape here is a compile error
@@ -54,7 +54,7 @@ await withTransactionHooks(async (transactionHooks) =>
 Each handler continues with the next step. The compiler enforces that `continueWith` matches the declared next type's input.
 
 ```ts
-const worker = await createInProcessWorker({
+const workerRunner = createWorkerRunner({
   client,
   processors: createProcessors({
     client,
@@ -64,11 +64,11 @@ const worker = await createInProcessWorker({
         attemptHandler: async ({ job, complete }) => {
           const accountId = await provisionAccount(job.input.userId);
 
-          return withTransactionHooks(async (transactionHooks) =>
+          return withTxHooks(async (txHooks) =>
             db.transaction(async (tx) =>
               complete({
                 tx,
-                transactionHooks,
+                txHooks,
                 continueWith: {
                   typeName: "send-welcome-email",
                   input: { userId: job.input.userId, accountId },
@@ -84,19 +84,19 @@ const worker = await createInProcessWorker({
   }),
 });
 
-const stop = await worker.start();
+await workerRunner.start();
 ```
 
 ## Where it fits
 
 Background-work libraries trade off across two axes: what storage tier they own, and what shape of work they model.
 
-|                       | Queuert               | pg-boss             | Graphile Worker | BullMQ            | DBOS              | Temporal          | Inngest           |
-| --------------------- | --------------------- | ------------------- | --------------- | ----------------- | ----------------- | ----------------- | ----------------- |
-| Category              | Job-chain library     | Job queue           | Job queue       | Job queue         | Workflow library  | Workflow platform | Workflow platform |
-| Storage               | Your DB (PG / SQLite) | Postgres            | Postgres        | Redis or Postgres | Postgres          | Separate cluster  | Inngest server    |
-| Transactional enqueue | ✅ structural         | 🟡 per-call adapter | 🟡 SQL function | ❌ app discipline | 🟡 system DB only | ❌ app discipline | ❌ app discipline |
-| Operate a server?     | No                    | No                  | No              | Redis, or none    | No                | Yes               | Yes               |
+|                       | Queuert                                         | pg-boss             | Graphile Worker | BullMQ            | DBOS              | Temporal          | Inngest           |
+| --------------------- | ----------------------------------------------- | ------------------- | --------------- | ----------------- | ----------------- | ----------------- | ----------------- |
+| Category              | Job-chain library                               | Job queue           | Job queue       | Job queue         | Workflow library  | Workflow platform | Workflow platform |
+| Storage               | Your DB (PG / SQLite / MySQL / MariaDB / Redis) | Postgres            | Postgres        | Redis or Postgres | Postgres          | Separate cluster  | Inngest server    |
+| Transactional enqueue | ✅ structural                                   | 🟡 per-call adapter | 🟡 SQL function | ❌ app discipline | 🟡 system DB only | ❌ app discipline | ❌ app discipline |
+| Operate a server?     | No                                              | No                  | No              | Redis, or none    | No                | Yes               | Yes               |
 
 Queuert sits between job queues and workflow engines. A one-job chain _is_ a queue; a multi-step chain with blockers is closer to a workflow. Neither label fully fits, which is why the canonical term is "job-chain library."
 
@@ -106,8 +106,8 @@ For deeper comparisons, see the [docs site](https://kvet.github.io/queuert/compa
 
 - **Transactional, both ends.** Enqueue commits inside your DB transaction; handler completion and next-step `continueWith` commit in the same transaction as your domain writes. For DB-bound work, no outbox at enqueue and no idempotency-key ritual at processing — both halves are structural.
 - **Typed job chains.** Inputs, outputs, continuations, and blockers infer end-to-end via `defineJobTypes`. Refactoring is compiler-checked.
-- **Lives in your database.** Postgres or SQLite. No Redis required, no workflow server, no separate persistence tier to operate.
-- **Sub-second wakeup.** `LISTEN/NOTIFY` (or Redis pub/sub, or NATS) wakes workers when a row commits — not on a polling timer.
+- **Lives in your database.** Postgres, SQLite, MySQL/MariaDB or Redis. No workflow server, no separate persistence tier to operate.
+- **Sub-second wakeup.** `LISTEN/NOTIFY` (or Redis pub/sub, NATS, or IPC between processes on one host) wakes workers when a row commits — not on a polling timer.
 - **Schedule for later.** Delay a chain to a specific time or duration. Schedule retries with backoff. Future work, no extra infrastructure.
 - **Deduplication.** Pass a deduplication key on enqueue. Identical keys collapse to a single chain — at-most-once, by construction.
 - **Lean and battle-tested.** Zero runtime dependencies in every package — driver libraries are `peerDependencies` you already own. Thousands of tests across adapters and a shared conformance suite every state and notify adapter must pass.
@@ -119,15 +119,18 @@ For deeper comparisons, see the [docs site](https://kvet.github.io/queuert/compa
 npm install queuert
 
 # State adapter (pick one)
-npm install @queuert/postgres   # PostgreSQL — recommended for production
-npm install @queuert/sqlite     # SQLite (experimental)
+npm install @queuert/postgres   # PostgreSQL
+npm install @queuert/sqlite     # SQLite
+npm install @queuert/mysql      # MySQL / MariaDB (experimental)
+npm install @queuert/redis      # Redis (experimental)
 
 # Notify adapter (optional, for sub-second wakeup)
+npm install @queuert/postgres   # PostgreSQL LISTEN/NOTIFY
 npm install @queuert/redis      # Redis pub/sub
 npm install @queuert/nats       # NATS pub/sub (experimental)
-# Or use PostgreSQL LISTEN/NOTIFY via @queuert/postgres — no extra infra
+npm install @queuert/ipc        # Processes on one host, e.g. sharing a SQLite file (experimental)
 
-# Dashboard (optional, experimental)
+# Dashboard (optional)
 npm install @queuert/dashboard
 
 # Observability (optional)
@@ -138,7 +141,7 @@ npm install @queuert/otel
 
 - [Getting Started](https://kvet.github.io/queuert/getting-started/introduction/)
 - [Chain Patterns](https://kvet.github.io/queuert/guides/chain-patterns/)
-- [Transaction Hooks](https://kvet.github.io/queuert/guides/transaction-hooks/)
+- [Tx Hooks](https://kvet.github.io/queuert/guides/tx-hooks/)
 - [Job Blockers](https://kvet.github.io/queuert/guides/job-blockers/)
 - [Comparison with other libraries](https://kvet.github.io/queuert/comparison/)
 - [Benchmarks](https://kvet.github.io/queuert/benchmarks/)
