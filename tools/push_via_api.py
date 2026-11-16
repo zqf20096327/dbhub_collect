@@ -55,7 +55,8 @@ def _load_token(use_gh: bool = False) -> str:
                 if out.returncode == 0 and tok:
                     return tok
         raise SystemExit("找不到 gh CLI 或未登录（--gh-token 需要 gh auth login）")
-    for line in (ROOT / ".env").read_text(encoding="utf-8").splitlines():
+    env = globals().get("_ENV_ROOT", ROOT)   # --repo 跨仓推送时 .env 仍回本仓读
+    for line in (env / ".env").read_text(encoding="utf-8").splitlines():
         if line.startswith("GITHUB_TOKEN="):
             return line.split("=", 1)[1].strip().strip('"')
     raise SystemExit(".env 里没有 GITHUB_TOKEN")
@@ -102,12 +103,18 @@ def _req(url: str, token: str, method: str = "GET", payload: dict | None = None)
 
 
 def main() -> int:
+    global ROOT
     ap = argparse.ArgumentParser(description="git 断连时经 Data API 推送本地 commit")
     ap.add_argument("commit", help="本地 commit sha（重放其文件变更到远端 HEAD）")
+    ap.add_argument("--repo", help="目标仓本地路径（默认本仓；跨仓推送用，如 D:/dbhub_page）")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--gh-token", action="store_true",
                     help="用 gh CLI 的 token（含 workflow scope，推 .github/ 改动必须）")
     args = ap.parse_args()
+    if args.repo:                       # 跨仓推送：ROOT 重定向（token 仍读本仓 .env）
+        env_root = ROOT
+        ROOT = Path(args.repo).resolve()
+        globals()["_ENV_ROOT"] = env_root
 
     token, slug = _load_token(args.gh_token), _repo_slug()
 

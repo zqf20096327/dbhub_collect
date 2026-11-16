@@ -27,7 +27,7 @@ URL 规范（与 P3 dbhub_page 改造约定一致，改这里必须同步那边�
 import argparse, datetime, io, json, os, re, sys, time
 import xml.etree.ElementTree as ET
 
-VER = "build_site/1.0"
+VER = "build_site/1.1"   # 1.1：补 urls.json URL 契约出口（站点侧唯一权威，防 gen_card canonical/sitemap/站点页三处漂移）
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PAGE = 100
 
@@ -53,6 +53,11 @@ def cat_slug(cat):
     s = CAT_SLUG.get(cat) or slugify(cat)
     assert s != "misc" or cat in ("综合", "未分类"), f"类目撞车: {cat!r} -> misc"
     return s
+
+def hostile(fn):
+    """Windows 不可建目录的仓名（段尾点/尾空格，如 frank-z7/opengauss-batman.）——站点不部署。
+    与 dbhub_page/gen/cards.py 的判定保持同步（跨仓不 import，两处各写一份并注释）。"""
+    return any(s != s.rstrip(". ") for s in fn.split("/"))
 
 def cat_of(r):
     return ((r.get("judge") or {}).get("cat")) or ((r.get("desc") or {}).get("cat"))
@@ -83,6 +88,9 @@ def build_lists(site):
     man = loadj(ROOT + "/cards/manifest.json")["cards"]
     items = [light(fn, idx[fn]) for fn in man if fn in idx]
     assert len(items) == len(man), f"index 缺活跃仓 {len(man) - len(items)} 个"
+    skp = sorted(fn for fn in man if hostile(fn))
+    if skp: print(f"SKIP 站点不部署 {len(skp)} 个 Windows 敌对仓名: {skp[:3]}")
+    items = [it for it in items if not hostile(it["fn"])]
     os.makedirs(site + "/data/cat", exist_ok=True); os.makedirs(site + "/data/db", exist_ok=True)
     n_urls = 0; n_files = 0; total = 0
     by_cat = {}
@@ -122,7 +130,7 @@ def build_sitemap(site):
     t0 = time.time(); base = site_base()
     idx = loadj(ROOT + "/cache/index.json")["repos"]
     man = loadj(ROOT + "/cards/manifest.json")["cards"]
-    items = [light(fn, idx[fn]) for fn in man if fn in idx]
+    items = [light(fn, idx[fn]) for fn in man if fn in idx and not hostile(fn)]
     by_cat = {}
     for it in items: by_cat.setdefault(it["cat"] or "综合", []).append(it)
     urls = ["/", "/projects/"] + [f"/db/{slugify(d)}/" for d in
@@ -152,7 +160,12 @@ def build_robots(site):
     base = site_base()
     txt = f"User-agent: *\nAllow: /\n\nSitemap: {base}/sitemap.xml\n"
     io.open(site + "/robots.txt", "w", encoding="utf-8", newline="\n").write(txt)
-    print(f"OK robots: Allow / + Sitemap 指针 -> {len(txt)} B")
+    urls = {"base": base, "card": "/p/{fn}/", "db": "/db/{slug}/",
+            "cat_first": "/cat/{slug}/", "cat_page": "/cat/{slug}/{n}.html",
+            "all_first": "/projects/", "all_page": "/projects/{n}.html",
+            "note": "改模式须同步 gen_card seo_head canonical 与 dbhub_page gen；build --verify 交叉比对"}
+    dumpj(urls, site + "/urls.json")
+    print(f"OK robots: Allow / + Sitemap 指针 -> {len(txt)} B；urls.json 契约已出")
     return txt
 
 # ---------- 自检 ----------
@@ -173,7 +186,10 @@ def _selftest():
     assert cat_slug("备份") == "backup" and cat_slug("综合") == "misc" and cat_slug("内核/引擎") == "engine"
     assert len(set(CAT_SLUG.values())) == len(CAT_SLUG), "映射表自身有撞车"
     assert f"/db/{slugify('SQL Server')}/" == "/db/sql-server/"               # 库页 URL 形
-    print("OK build_site selftest: 11 asserts passed")
+    assert hostile("a/b.") and hostile("a./b") and not hostile("a/b") and not hostile("a/b_c")
+    u = {"card": "/p/{fn}/", "db": "/db/{slug}/", "cat_page": "/cat/{slug}/{n}.html"}
+    assert u["card"].format(fn="a/b") == "/p/a/b/" and u["db"].format(slug="x") == "/db/x/"  # 契约模式可格式化
+    print("OK build_site selftest: 13 asserts passed")
     return 0
 
 def main():
