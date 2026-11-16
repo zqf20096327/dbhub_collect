@@ -3718,21 +3718,22 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T00:24:05Z",
+  "collected_at": "2026-11-16T00:25:54Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
+  "pushed_at": "2026-11-15",
   "stars": 0,
   "tree": {
-   "sha": "11824c0912b9962819781027ba32679d7e84a5c7",
-   "etag": "W/\"e556945e6eef7773b98b00f1a27026988d7ebfbbfa46ed75f389fba0a1ab7829\"",
+   "sha": "3f571e58e9d2f37d8167401129cb890b92e2cbc3",
+   "etag": "W/\"ea9812b521d631e4533ffc4ee3557e7cdd0bbf933a44fb38f26257a3c3beef5b\"",
    "truncated": false,
-   "path_count": 1276,
+   "path_count": 1383,
    "matched": [
     "Cargo.toml",
     "crates/base/Cargo.toml",
     "crates/chunk/Cargo.toml",
     "crates/codec/Cargo.toml",
     "crates/distsql/Cargo.toml",
+    "crates/domain/Cargo.toml",
     "crates/execdetails/Cargo.toml",
     "crates/executor/Cargo.toml",
     "crates/expr-pushdown/Cargo.toml",
@@ -3748,10 +3749,12 @@
     "crates/planner/Cargo.toml",
     "crates/query-smoke/Cargo.toml",
     "crates/runtime/Cargo.toml",
+    "crates/server/Cargo.toml",
     "crates/session/Cargo.toml",
     "crates/sessionctx/Cargo.toml",
     "crates/sessiontxn/Cargo.toml",
     "crates/sql/Cargo.toml",
+    "crates/statistics/Cargo.toml",
     "crates/store/Cargo.toml",
     "crates/systable/Cargo.toml",
     "crates/tablecodec/Cargo.toml",
@@ -3793,9 +3796,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "21d16948cace92a576f0819a6b41e6396773712f",
+    "blob_sha": "8d7519e2a27ca03c7382437ee8104d0faeb7f8fb",
     "ecosystem": "cargo",
-    "bytes": 9253
+    "bytes": 9445
    },
    {
     "path": "crates/base/Cargo.toml",
@@ -3887,6 +3890,28 @@
     ]
    },
    {
+    "path": "crates/domain/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "8f07ae409f52f247d0240038e98d97b9bd85db41",
+    "ecosystem": "cargo",
+    "bytes": 1228,
+    "names": [
+     "tidb-base",
+     "tidb-kv",
+     "tidb-model",
+     "tidb-infoschema",
+     "tidb-sessionctx",
+     "tokio",
+     "futures",
+     "log"
+    ],
+    "dev": [
+     "tokio",
+     "parking_lot",
+     "tidb-parser"
+    ]
+   },
+   {
     "path": "crates/execdetails/Cargo.toml",
     "kind": "dep",
     "blob_sha": "7f03cea71b2a78f9f414e50794407be949a41324",
@@ -3905,9 +3930,9 @@
    {
     "path": "crates/executor/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "913891d801f1fac6e149443adafca0ed221021dc",
+    "blob_sha": "c75bdf9e1960ec32acdc284c4bb38437a6cf9757",
     "ecosystem": "cargo",
-    "bytes": 1488,
+    "bytes": 2111,
     "names": [
      "async-trait",
      "tidb-base",
@@ -3924,10 +3949,16 @@
      "tipb",
      "futures",
      "parking_lot",
-     "log"
+     "log",
+     "tidb-kv",
+     "tidb-tablecodec",
+     "tidb-codec",
+     "tikv-client"
     ],
     "dev": [
-     "tokio"
+     "tokio",
+     "flate2",
+     "serde_json"
     ]
    },
    {
@@ -4065,10 +4096,11 @@
    {
     "path": "crates/meta/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "868d47d715ba1439d97f6ecf3d2d0b8211263de5",
+    "blob_sha": "343f62462daf7ff90ab3c198e0ccf8839de21b3c",
     "ecosystem": "cargo",
-    "bytes": 543,
+    "bytes": 564,
     "names": [
+     "parking_lot",
      "codec",
      "futures",
      "serde",
@@ -4110,10 +4142,11 @@
    {
     "path": "crates/mysql-protocol/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b40dc17954716ddc5c4293f95d948dd8934a1d02",
+    "blob_sha": "635fc90cb309bcdefceed0f9ecb48fcede4119a8",
     "ecosystem": "cargo",
-    "bytes": 1042,
+    "bytes": 1610,
     "names": [
+     "futures",
      "getrandom",
      "rcgen",
      "sha1",
@@ -4125,6 +4158,15 @@
      "tracing"
     ],
     "dev": [
+     "tidb-base",
+     "tidb-chunk",
+     "tidb-executor",
+     "tidb-expression",
+     "tidb-kv",
+     "tidb-model",
+     "tidb-parser",
+     "tidb-sessionctx",
+     "tidb-types",
      "mysql_async",
      "tokio"
     ]
@@ -4132,10 +4174,11 @@
    {
     "path": "crates/parser/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b686fed049a55a96ceae44370694406ab4da60bb",
+    "blob_sha": "1cfe03f0980c633c1637687a7c10b810c6cbf2de",
     "ecosystem": "cargo",
-    "bytes": 688,
+    "bytes": 709,
     "names": [
+     "parking_lot",
      "tidb-base",
      "log"
     ],
@@ -4149,11 +4192,13 @@
    {
     "path": "crates/planner/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "91affa1359031000bd31cfe93fa0ca5a559f0a14",
+    "blob_sha": "d150e843bf7994bfdfe96b25bf560e6573ae1eaa",
     "ecosystem": "cargo",
-    "bytes": 1723,
+    "bytes": 2016,
     "names": [
      "tidb-base",
+     "tidb-infoschema",
+     "tidb-domain",
      "tidb-expression",
      "tidb-expr-pushdown",
      "tidb-sessionctx",
@@ -4165,6 +4210,7 @@
      "tidb-codec",
      "tidb-tablecodec",
      "tidb-execdetails",
+     "tidb-statistics",
      "tipb",
      "log",
      "parking_lot"
@@ -4209,18 +4255,55 @@
     ]
    },
    {
+    "path": "crates/server/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "08130dc37f28e9b6e10866f9666d803b155b2dd2",
+    "ecosystem": "cargo",
+    "bytes": 1052,
+    "names": [
+     "tidb-base",
+     "tidb-parser",
+     "tidb-chunk",
+     "tidb-types",
+     "tidb-expression",
+     "tidb-executor",
+     "tidb-session",
+     "log"
+    ],
+    "dev": [
+     "serde_json",
+     "flate2"
+    ]
+   },
+   {
     "path": "crates/session/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "58474a6fff3208384191c7985892c356af85e723",
+    "blob_sha": "18374826b697f0386e8d4011ffb67b60091b7e8d",
     "ecosystem": "cargo",
-    "bytes": 796,
+    "bytes": 1481,
     "names": [
      "tidb-base",
      "tidb-parser",
      "tidb-sessionctx",
      "tidb-types",
      "tidb-planner",
-     "tidb-executor"
+     "tidb-executor",
+     "tidb-sessiontxn",
+     "tidb-kv",
+     "tidb-store",
+     "tidb-infoschema",
+     "tidb-chunk",
+     "tidb-memory",
+     "futures",
+     "parking_lot",
+     "log"
+    ],
+    "dev": [
+     "tidb-model",
+     "tidb-executor",
+     "tokio",
+     "flate2",
+     "serde_json"
     ]
    },
    {
@@ -4279,6 +4362,24 @@
      "tidb-meta",
      "tidb-mysql-protocol",
      "tidb-parser"
+    ]
+   },
+   {
+    "path": "crates/statistics/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "27a69a14c79ab777cbd9ca1f7d9a3081a8f87f59",
+    "ecosystem": "cargo",
+    "bytes": 1247,
+    "names": [
+     "tidb-base",
+     "tidb-parser",
+     "tidb-types",
+     "tidb-model",
+     "tidb-chunk",
+     "tidb-codec",
+     "tidb-expression",
+     "tidb-sessionctx",
+     "log"
     ]
    },
    {
@@ -4406,9 +4507,9 @@
    {
     "path": "crates/poc/domain/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5535c7da28a464979d4aef981411982daf0498c2",
+    "blob_sha": "d894cb6ea529b7fdd271fb876b8cf6610526a1ca",
     "ecosystem": "cargo",
-    "bytes": 1438,
+    "bytes": 1564,
     "names": [
      "etcd-client",
      "futures",
@@ -4425,6 +4526,8 @@
      "tidb-systable",
      "tidb-base",
      "tidb-model",
+     "tidb-domain",
+     "tidb-kv",
      "tikv-client",
      "parking_lot",
      "tracing",
@@ -4432,7 +4535,6 @@
     ],
     "dev": [
      "tidb-infoschema",
-     "tidb-kv",
      "tidb-tablecodec",
      "tidb-types"
     ]
@@ -4456,9 +4558,9 @@
    {
     "path": "crates/poc/kv/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "fe4ee2f48cd143b99ac5930618d87e7d0f91e991",
+    "blob_sha": "52f918abb35d2cee06aaf0ca266ccaa2057d8af2",
     "ecosystem": "cargo",
-    "bytes": 779,
+    "bytes": 775,
     "names": [
      "futures",
      "thiserror",
@@ -4508,11 +4610,12 @@
    {
     "path": "crates/poc/session/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "188968dd36c2ab76e08c3fd26f8213bdca2a3ad6",
+    "blob_sha": "49e94c2bb4cf22dc1b148759a87fdd30ce597119",
     "ecosystem": "cargo",
-    "bytes": 1171,
+    "bytes": 1549,
     "names": [
      "futures",
+     "log",
      "tidb-distsql",
      "poc-domain",
      "poc-executor",
@@ -4526,12 +4629,16 @@
      "tidb-expression",
      "tidb-parser",
      "tidb-session",
+     "tidb-server",
+     "tidb-domain",
      "tidb-sessionctx"
     ],
     "dev": [
      "tidb-distsql",
      "tidb-sessiontxn",
-     "tokio"
+     "tokio",
+     "tidb-infoschema",
+     "tidb-model"
     ]
    },
    {
@@ -4916,8 +5023,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "6a47ffc71acb2f8d6b3e3e9b392dbb9dff590612",
-    "bytes": 6476
+    "blob_sha": "90ba116b807ad53e35e72c46e0115fd75ce667ae",
+    "bytes": 7934
    },
    {
     "path": ".github/workflows/eval-gate.yml",
@@ -5168,15 +5275,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T02:51:35Z",
+  "collected_at": "2026-11-15T23:40:17Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
-  "stars": 3757,
+  "pushed_at": "2026-11-15",
+  "stars": 3758,
   "tree": {
-   "sha": "54e5a23a29e2c48a8abeff2253fb314767c4243a",
-   "etag": "W/\"81c7c610e38d36049ee3a1d6e4cbf0df9404b0f9c5b9d605e1f99a47052a31b0\"",
+   "sha": "41293e853ec3961fe8b7a731d14f3210afb62141",
+   "etag": "W/\"49fa4705846461807de2b876c285553b3bff5ee47d2a90c27322b23d84223cb5\"",
    "truncated": false,
-   "path_count": 1982,
+   "path_count": 1983,
    "matched": [
     "package.json",
     "docs/package.json",
@@ -5247,7 +5354,7 @@
    {
     "path": "docs/package.json",
     "kind": "dep",
-    "blob_sha": "7aed7da404b3aa7f2c35443e700b4364c2abdfbf",
+    "blob_sha": "ede0d1909be8c87aceb1b1ac94f636e1ea96cdc0",
     "ecosystem": "npm",
     "bytes": 4250,
     "names": [
@@ -5337,7 +5444,7 @@
    {
     "path": "scripts/package.json",
     "kind": "dep",
-    "blob_sha": "f246a7e584e464df8fb9fbb19e3a349abd71bf43",
+    "blob_sha": "dcbbcaae247a1b87c5d8757aa245dc150243f499",
     "ecosystem": "npm",
     "bytes": 2264,
     "dev": [
@@ -5374,7 +5481,7 @@
    {
     "path": "examples/cloudflare-todomvc/package.json",
     "kind": "dep",
-    "blob_sha": "f1305dbafa4b31bd6e5feeda0082bba88c91e582",
+    "blob_sha": "199eefbf36d131ce61b5c7771d4c52c71faf2d8e",
     "ecosystem": "npm",
     "bytes": 1304,
     "names": [
@@ -5391,7 +5498,7 @@
    {
     "path": "examples/tutorial-starter/package.json",
     "kind": "dep",
-    "blob_sha": "271e7514743595a9fbea3a0fd4a68194f3c2539c",
+    "blob_sha": "1d9daffca25563acb022e718828ac3d2bfeeda9d",
     "ecosystem": "npm",
     "bytes": 1249,
     "names": [
@@ -5412,7 +5519,7 @@
    {
     "path": "examples/web-email-client/package.json",
     "kind": "dep",
-    "blob_sha": "c8382a4e7bbd430c1a802b2d49e09823ae49a55e",
+    "blob_sha": "f7e8db64b54cef62ad48d0214a0cfb3a8afe9ef8",
     "ecosystem": "npm",
     "bytes": 1784,
     "names": [
@@ -5444,7 +5551,7 @@
    {
     "path": "examples/web-linearlite/package.json",
     "kind": "dep",
-    "blob_sha": "6167a9afbb28ba94b289990944f12d3cf5eedfca",
+    "blob_sha": "c29186ec07d7110544286c3ba92ee5b97a446620",
     "ecosystem": "npm",
     "bytes": 3090,
     "names": [
@@ -5508,7 +5615,7 @@
    {
     "path": "examples/web-todomvc-script/package.json",
     "kind": "dep",
-    "blob_sha": "23ea250279a179c45be54e9871a01a3cdd0e5c0d",
+    "blob_sha": "25581dc4e2d8d36d1473c9c74152f6a2c603ff06",
     "ecosystem": "npm",
     "bytes": 1578,
     "names": [
@@ -5531,7 +5638,7 @@
    {
     "path": "examples/web-todomvc-sync-cf/package.json",
     "kind": "dep",
-    "blob_sha": "ee6d5b86b705b518429ebc2468e0da0d5e7446a6",
+    "blob_sha": "00647575bca16256bf985272dafcf5a83635b35c",
     "ecosystem": "npm",
     "bytes": 1875,
     "names": [
@@ -5563,7 +5670,7 @@
    {
     "path": "examples/web-todomvc/package.json",
     "kind": "dep",
-    "blob_sha": "5d8278eb0d37919ae6a4259f1dc6693014eda9a4",
+    "blob_sha": "8b5ecde69281f236dc6b3fdf8103f4355b81959a",
     "ecosystem": "npm",
     "bytes": 1832,
     "names": [
@@ -5594,7 +5701,7 @@
    {
     "path": "tests/integration/package.json",
     "kind": "dep",
-    "blob_sha": "79b30232fcf5586858bc4299d6ad1777d6a2d261",
+    "blob_sha": "d1ea2e81c772e3f347233a30cf768397c90e483a",
     "ecosystem": "npm",
     "bytes": 2548,
     "names": [
@@ -5644,7 +5751,7 @@
    {
     "path": "tests/package-common/package.json",
     "kind": "dep",
-    "blob_sha": "afa6ff33d9918d947ff800eb0b34d296431c5938",
+    "blob_sha": "1607d25d4453152611ce8ce1383551de30b8a6fd",
     "ecosystem": "npm",
     "bytes": 1515,
     "names": [
@@ -5675,7 +5782,7 @@
    {
     "path": "tests/perf-eventlog/package.json",
     "kind": "dep",
-    "blob_sha": "87a1d1ab8e06327430cd87c3ec59b0dca6673b18",
+    "blob_sha": "ea10e486891f6694d9b919829f6230c0023215b0",
     "ecosystem": "npm",
     "bytes": 2336,
     "names": [
@@ -5720,7 +5827,7 @@
    {
     "path": "tests/perf/package.json",
     "kind": "dep",
-    "blob_sha": "e6e6e955c12a8817af2e67d025be4f81c72df48a",
+    "blob_sha": "15485f6ea18027f9b611465f1c7d36078c28ad53",
     "ecosystem": "npm",
     "bytes": 2027,
     "names": [
@@ -5759,7 +5866,7 @@
    {
     "path": "tests/sync-provider/package.json",
     "kind": "dep",
-    "blob_sha": "5ece74ad584f988a54e5ac32dde908c065bf3c1c",
+    "blob_sha": "cf3678e7ba4eef14aba5cd43094dc7c1ce5666da",
     "ecosystem": "npm",
     "bytes": 1814,
     "names": [
@@ -5804,7 +5911,7 @@
    {
     "path": "packages/@livestore/adapter-cloudflare/package.json",
     "kind": "dep",
-    "blob_sha": "cc9bb2aafbcab38bec56f86f08fab82efe7d022f",
+    "blob_sha": "871facb733c6b77ebe2bd58c37c1850a8827f635",
     "ecosystem": "npm",
     "bytes": 1996,
     "names": [
@@ -5833,7 +5940,7 @@
    {
     "path": "packages/@livestore/adapter-web/package.json",
     "kind": "dep",
-    "blob_sha": "31b51d2b249ac809baa3143b60ebcd86ea708201",
+    "blob_sha": "47981764ace2569648d733b8c1bfe47e3cb1d466",
     "ecosystem": "npm",
     "bytes": 2358,
     "names": [
@@ -5861,7 +5968,7 @@
    {
     "path": "packages/@livestore/common-cf/package.json",
     "kind": "dep",
-    "blob_sha": "b829217d16d4e9ca9a76c98cb623476ee992aba9",
+    "blob_sha": "6310fa01b3c9b329eba086461c554b5a84439cfe",
     "ecosystem": "npm",
     "bytes": 1487,
     "names": [
@@ -5887,7 +5994,7 @@
    {
     "path": "packages/@livestore/common/package.json",
     "kind": "dep",
-    "blob_sha": "d7db367d54b0c2bbc64ca283969476b86a90cba2",
+    "blob_sha": "f31f9cd88902e0edd8fdcf362e848b4ad4c02a95",
     "ecosystem": "npm",
     "bytes": 2477,
     "names": [
@@ -5923,7 +6030,7 @@
    {
     "path": "packages/@livestore/effect-playwright/package.json",
     "kind": "dep",
-    "blob_sha": "13c5869c3addd885122c8162aef5f812da20bd37",
+    "blob_sha": "70972f739eb54d9b101bf94b9acee92bbada907c",
     "ecosystem": "npm",
     "bytes": 1034,
     "names": [
@@ -5949,7 +6056,7 @@
    {
     "path": "packages/@livestore/framework-toolkit/package.json",
     "kind": "dep",
-    "blob_sha": "96beae6b0d89bc672dde254fd3a55afdff99d4e0",
+    "blob_sha": "cd0699a0f49bb6bd7800891fa5653e9ac1a172a6",
     "ecosystem": "npm",
     "bytes": 1836,
     "names": [
@@ -5976,7 +6083,7 @@
    {
     "path": "packages/@livestore/livestore/package.json",
     "kind": "dep",
-    "blob_sha": "f36d03deb6f4943bc53e771ef73f2b7cb52e0ffd",
+    "blob_sha": "1bc6163cf6477b18851d0b377a1ff43695dbd105",
     "ecosystem": "npm",
     "bytes": 2101,
     "names": [
@@ -6006,7 +6113,7 @@
    {
     "path": "packages/@livestore/peer-deps/package.json",
     "kind": "dep",
-    "blob_sha": "d941a276875499abc7168d36f721c54d6d3556a9",
+    "blob_sha": "359d4d5e8b92149f2a83ae30c655f670baed0b77",
     "ecosystem": "npm",
     "bytes": 1091,
     "names": [
@@ -6025,7 +6132,7 @@
    {
     "path": "packages/@livestore/react/package.json",
     "kind": "dep",
-    "blob_sha": "67a80902b5de800134a34b5de5708b37fd839690",
+    "blob_sha": "8c1b965cba2f7e6db4e444ca5622191eace35151",
     "ecosystem": "npm",
     "bytes": 2385,
     "names": [
@@ -6066,7 +6173,7 @@
    {
     "path": "packages/@livestore/sqlite-wasm/package.json",
     "kind": "dep",
-    "blob_sha": "72289c972fcebc037f5e062f5f5cbcb1d73b786e",
+    "blob_sha": "2a48ec4e1034ad2418383719237557ac468334a9",
     "ecosystem": "npm",
     "bytes": 2923,
     "names": [
@@ -6097,7 +6204,7 @@
    {
     "path": "packages/@livestore/sync-cf/package.json",
     "kind": "dep",
-    "blob_sha": "bcd226002d211716d962d9cd2f44649f86520681",
+    "blob_sha": "fbaa7a37e90e132ec060bb5cb01f5df8b5221be7",
     "ecosystem": "npm",
     "bytes": 2136,
     "names": [
@@ -6134,7 +6241,7 @@
    {
     "path": "packages/@livestore/utils-dev/package.json",
     "kind": "dep",
-    "blob_sha": "6fb6c8445cc336e462deb62ba96c6a9e16e4c9db",
+    "blob_sha": "a39079333dddb105263c8a8ff16da42eb36998d4",
     "ecosystem": "npm",
     "bytes": 2305,
     "names": [
@@ -6174,7 +6281,7 @@
    {
     "path": "packages/@livestore/utils/package.json",
     "kind": "dep",
-    "blob_sha": "8c52f786cca2171e5e648aab3d234ffe971c650e",
+    "blob_sha": "684231c16ea363ec304fe5ce65c4f08340d2f8bc",
     "ecosystem": "npm",
     "bytes": 3295,
     "names": [
@@ -6234,7 +6341,7 @@
    {
     "path": "packages/@livestore/webmesh/package.json",
     "kind": "dep",
-    "blob_sha": "55392025dcc4629fb0957368d3420c2890da32f2",
+    "blob_sha": "f1769f747be3f796896ee2351bb428c9a582cf1d",
     "ecosystem": "npm",
     "bytes": 1750,
     "names": [
@@ -6268,7 +6375,7 @@
    {
     "path": "packages/@local/astro-tldraw/package.json",
     "kind": "dep",
-    "blob_sha": "d521e9ee3ff4b8180ce6d133ef996463c4834066",
+    "blob_sha": "da3a694bc53bd8ba1a2ed143fde014d14d0d5e94",
     "ecosystem": "npm",
     "bytes": 1155,
     "names": [
@@ -6295,7 +6402,7 @@
    {
     "path": "packages/@local/astro-twoslash-code/package.json",
     "kind": "dep",
-    "blob_sha": "f6ae72496965695078ad476e21eca0bc1087be28",
+    "blob_sha": "1f1fc06331b478114f55f9750ef557f06747ad41",
     "ecosystem": "npm",
     "bytes": 1597,
     "names": [
@@ -6341,7 +6448,7 @@
    {
     "path": "packages/@local/astro-twoslash-code/example/package.json",
     "kind": "dep",
-    "blob_sha": "1865b386d2a8c16a7162994e2c4f44e4d3eb7a8c",
+    "blob_sha": "8f737086d1416aa2843e699ae03c80facb692a91",
     "ecosystem": "npm",
     "bytes": 1453,
     "names": [
@@ -6374,7 +6481,7 @@
    {
     "path": "docs/src/content/_assets/code/package.json",
     "kind": "dep",
-    "blob_sha": "f16740b16ef064bb84f8ee2a02c7ea4969707655",
+    "blob_sha": "1e7735ccb04f4a29c31c19e32b008d19462479b3",
     "ecosystem": "npm",
     "bytes": 2925,
     "names": [
@@ -10580,15 +10687,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T00:00:47Z",
+  "collected_at": "2026-11-16T00:03:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
-  "stars": 45,
+  "pushed_at": "2026-11-15",
+  "stars": 50,
   "tree": {
-   "sha": "bcf86b8a94d9d39e20edd41347e4f876ee6bae8c",
-   "etag": "W/\"fa84275362272469b8001bbe02c13a591e0d03b2935156335046879dc242f0ea\"",
+   "sha": "9930d1b927f5658a8c9f953e5ffdc91059196d5d",
+   "etag": "W/\"34160ebf1e57486bb4d78ef6ba532f982bd1e01eab1f003c59a9b1f33825f2c9\"",
    "truncated": false,
-   "path_count": 3269,
+   "path_count": 3362,
    "matched": [
     "package.json",
     "adapters/mcp/package.json",
@@ -10599,6 +10706,7 @@
     "docs/promotion/demo/package.json",
     "evaluation/context-read-qualification/counter-deps/package.json",
     ".github/workflows/ci.yml",
+    ".github/workflows/core-shard.yml",
     ".github/workflows/local-embedder-qualification.yml",
     ".github/workflows/mcp-registry.yml",
     ".github/workflows/npx-setup.yml"
@@ -10608,9 +10716,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "3ef075cf7b7bc816dc1157617d276321a2061ec4",
+    "blob_sha": "21d6bf8e389dff07ee15e49bd4c1f1d5a6099cd4",
     "ecosystem": "npm",
-    "bytes": 9491
+    "bytes": 9616
    },
    {
     "path": "adapters/mcp/package.json",
@@ -10684,8 +10792,14 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "8a7a029b49d92ba8ac6bca7f0cc763e6a6b1f15c",
-    "bytes": 13506
+    "blob_sha": "d72104f72da8830b0fe9d9039be8aba58f9cc65a",
+    "bytes": 14250
+   },
+   {
+    "path": ".github/workflows/core-shard.yml",
+    "kind": "ci",
+    "blob_sha": "6a29d1fa76d5bc578ab602743c529d389d545446",
+    "bytes": 3656
    },
    {
     "path": ".github/workflows/local-embedder-qualification.yml",
@@ -10752,6 +10866,15 @@
     "adapters/mcp/context-read-tools.mjs",
     "adapters/mcp/context-read-transport.mjs",
     "adapters/mcp/demo-transcript.mjs",
+    "adapters/mcp/local-authority-router.mjs",
+    "adapters/mcp/local-context-continuations.mjs",
+    "adapters/mcp/local-daemon-identity.mjs",
+    "adapters/mcp/local-daemon-liveness.mjs",
+    "adapters/mcp/local-daemon-state.mjs",
+    "adapters/mcp/local-daemon-wire.mjs",
+    "adapters/mcp/local-daemon.mjs",
+    "adapters/mcp/local-forwarder.mjs",
+    "adapters/mcp/local-shared-runtime.mjs",
     "adapters/mcp/method-package-access.mjs",
     "adapters/mcp/method-package-command.mjs",
     "adapters/mcp/method-package-files.mjs",
@@ -10834,8 +10957,15 @@
     "adapters/mcp/test/card-review-pty-framing.test.mjs",
     "adapters/mcp/test/card-support.mjs",
     "adapters/mcp/test/classification-recovery.test.mjs",
+    "adapters/mcp/test/commit-dispatch-compensation.test.mjs",
+    "adapters/mcp/test/commit-dispatch-maintenance-review.test.mjs",
+    "adapters/mcp/test/commit-dispatch-review.test.mjs",
+    "adapters/mcp/test/commit-dispatch-routes.test.mjs",
+    "adapters/mcp/test/commit-dispatch-sync-inventory.mjs",
+    "adapters/mcp/test/commit-dispatch-sync-paths.test.mjs",
     "adapters/mcp/test/configuration.test.mjs",
     "adapters/mcp/test/content-safety-s2h-cli.test.mjs",
+    "adapters/mcp/test/context-maintenance-demand.test.mjs",
     "adapters/mcp/test/context-read-assembly.test.mjs",
     "adapters/mcp/test/context-read-default-e2e.test.mjs",
     "adapters/mcp/test/context-read-default-entropy.test.mjs",
@@ -10850,6 +10980,30 @@
     "adapters/mcp/test/engine-cards.test.mjs",
     "adapters/mcp/test/episodes.test.mjs",
     "adapters/mcp/test/evidence.test.mjs",
+    "adapters/mcp/test/local-daemon-identity.test.mjs",
+    "adapters/mcp/test/local-daemon-multiprocess.test.mjs",
+    "adapters/mcp/test/local-daemon-reconnect.test.mjs",
+    "adapters/mcp/test/local-daemon-static.test.mjs",
+    "adapters/mcp/test/local-daemon-support.mjs",
+    "adapters/mcp/test/local-daemon-wire.test.mjs",
+    "adapters/mcp/test/local-shared-account-carry.test.mjs",
+    "adapters/mcp/test/local-shared-busy-parity.test.mjs",
+    "adapters/mcp/test/local-shared-capacity.test.mjs",
+    "adapters/mcp/test/local-shared-capture-reclaim-support.mjs",
+    "adapters/mcp/test/local-shared-capture-reclaim.test.mjs",
+    "adapters/mcp/test/local-shared-card-raw-consent.test.mjs",
+    "adapters/mcp/test/local-shared-commit-retry.test.mjs",
+    "adapters/mcp/test/local-shared-contention.test.mjs",
+    "adapters/mcp/test/local-shared-dispatch-keeper.test.mjs",
+    "adapters/mcp/test/local-shared-dispatch-lifecycle.test.mjs",
+    "adapters/mcp/test/local-shared-dispatch-rare.test.mjs",
+    "adapters/mcp/test/local-shared-guards.test.mjs",
+    "adapters/mcp/test/local-shared-placement-catalog.test.mjs",
+    "adapters/mcp/test/local-shared-publication-suppression.test.mjs",
+    "adapters/mcp/test/local-shared-reader-routes.test.mjs",
+    "adapters/mcp/test/local-shared-review-findings.test.mjs",
+    "adapters/mcp/test/local-shared-runtime.test.mjs",
+    "adapters/mcp/test/local-shared-support.mjs",
     "adapters/mcp/test/method-package-confinement.test.mjs",
     "adapters/mcp/test/method-package-exclusions.test.mjs",
     "adapters/mcp/test/method-package-files.test.mjs",
@@ -10864,6 +11018,7 @@
     "adapters/mcp/test/rationale.test.mjs",
     "adapters/mcp/test/raw-command.test.mjs",
     "adapters/mcp/test/raw-default-store.test.mjs",
+    "adapters/mcp/test/raw-request-scope.test.mjs",
     "adapters/mcp/test/raw-semantic-optin.test.mjs",
     "adapters/mcp/test/receipt-cards.test.mjs",
     "adapters/mcp/test/retained-raw-profile.test.mjs",
@@ -10875,48 +11030,7 @@
     "adapters/mcp/test/role-profile.test.mjs",
     "adapters/mcp/test/safety-command.test.mjs",
     "adapters/mcp/test/source-evidence-context.test.mjs",
-    "adapters/mcp/test/source-qualified-recall.test.mjs",
-    "adapters/mcp/test/source-snapshot.test.mjs",
-    "adapters/mcp/test/staged-evidence.test.mjs",
-    "adapters/mcp/test/stdio-eof.test.mjs",
-    "adapters/mcp/test/stdio.test.mjs",
-    "adapters/mcp/test/walkthrough.test.mjs",
-    "adapters/openai/prompts/qualify-candidates-pool.md",
-    "adapters/openai/test/capture-budget.test.mjs",
-    "adapters/openai/test/checklist.test.mjs",
-    "adapters/openai/test/classification-wire.test.mjs",
-    "adapters/openai/test/consolidate.test.mjs",
-    "adapters/openai/test/currentness.test.mjs",
-    "adapters/openai/test/diagnostics.test.mjs",
-    "adapters/openai/test/direct-candidate-wire-experiment.test.mjs",
-    "adapters/openai/test/embedding-support.mjs",
-    "adapters/openai/test/embedding.test.mjs",
-    "adapters/openai/test/episode-mode-parity.test.mjs",
-    "adapters/openai/test/episodes.test.mjs",
-    "adapters/openai/test/evaluation-resources.test.mjs",
-    "adapters/openai/test/extraction-profile.test.mjs",
-    "adapters/openai/test/extraction-source-domain.test.mjs",
-    "adapters/openai/test/generate-openai-legacy-fixture.mjs",
-    "adapters/openai/test/history-audit.test.mjs",
-    "adapters/openai/test/indexed-windows.test.mjs",
-    "adapters/openai/test/ingestion-design.test.mjs",
-    "adapters/openai/test/ingestion-semantic.test.mjs",
-    "adapters/openai/test/lifecycle.test.mjs",
-    "adapters/openai/test/live-harness.test.mjs",
-    "adapters/openai/test/local-token-count.test.mjs",
-    "adapters/openai/test/luna-profile.test.mjs",
-    "adapters/openai/test/openai-episode-parity.mjs",
-    "adapters/openai/test/openai-episodes.mjs",
-    "adapters/openai/test/openai-legacy-fixture.json",
-    "adapters/openai/test/ordered-history.test.mjs",
-    "adapters/openai/test/ordered-live-evidence.test.mjs",
-    "adapters/openai/test/procedural.test.mjs",
-    "adapters/openai/test/qualification-candidates.test.mjs",
-    "adapters/openai/test/qualification-evidence-pool.test.mjs",
-    "adapters/openai/test/qualification-interpretation-guidance.test.mjs",
-    "adapters/openai/test/qualification-meaning-probe.test.mjs",
-    "adapters/openai/test/qualification-meaning-results.test.mjs",
-    "adapters/openai/test/qualification-pool-wire.mjs"
+    "adapters/mcp/test/source-qualified-recall.test.mjs"
    ]
   },
   "fail_count": 0
@@ -16461,15 +16575,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:40:25Z",
+  "collected_at": "2026-11-16T00:19:44Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
-  "stars": 10,
+  "pushed_at": "2026-11-15",
+  "stars": 11,
   "tree": {
-   "sha": "5eb8a94688fcf460b27a04008fb65978194b271d",
-   "etag": "W/\"6153a553e4fd02a8bc734963b8b69ff4df9db53ecfa03fcf7427f0249c965fea\"",
+   "sha": "cabf3833dcd71f4d1e7166c7c02fc404bff76554",
+   "etag": "W/\"11d266032b57ddb24c3f359855f1369f30dc2cb1949b4770e6c9270775dce201\"",
    "truncated": false,
-   "path_count": 1557,
+   "path_count": 1563,
    "matched": [
     "Gemfile",
     "package.json",
@@ -16499,9 +16613,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "63b6c16b9bacb6eb97e60a57c83bbb7146c6eef6",
+    "blob_sha": "eed443cc4040cb4566cfd7888f56c1cdc957f6cc",
     "ecosystem": "npm",
-    "bytes": 15163,
+    "bytes": 15198,
     "names": [
      "@google/genai",
      "@mdxeditor/editor",

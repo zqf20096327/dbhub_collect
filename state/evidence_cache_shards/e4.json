@@ -2231,15 +2231,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:47:10Z",
+  "collected_at": "2026-11-15T23:52:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
-  "stars": 244,
+  "pushed_at": "2026-11-15",
+  "stars": 246,
   "tree": {
-   "sha": "d8f4cc1b84e89d1c5b2aa60cfdbfd2c30eb43608",
-   "etag": "W/\"2c0a317c44b06336c3a10b1a3d3fb1ca3ace8a2d395329508a95413b9a19e61c\"",
+   "sha": "9263bd436f1940314e0690e2fcb6779699b9c825",
+   "etag": "W/\"9801bd88cda45b5c2bd0d1493d1deab1a66ee2faac9cdb6f360e05a10f9f8944\"",
    "truncated": false,
-   "path_count": 5237,
+   "path_count": 5669,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -2247,8 +2247,11 @@
     "docs/package.json",
     "crates/benchmark-guard/Cargo.toml",
     "crates/jazz-alpha59-alpha60-dump/Cargo.toml",
+    "crates/jazz-app/Cargo.toml",
     "crates/jazz-cli/Cargo.toml",
+    "crates/jazz-codegen/Cargo.toml",
     "crates/jazz-compression/Cargo.toml",
+    "crates/jazz-ffi/Cargo.toml",
     "crates/jazz-napi/Cargo.toml",
     "crates/jazz-napi/package.json",
     "crates/jazz-native-relay/Cargo.toml",
@@ -2298,13 +2301,11 @@
     "dev/stress-tests/stress-test-expo/package.json",
     "dev/stress-tests/todo-react/package.json",
     "examples/band-book/benchmarks/Cargo.toml",
-    "examples/band-chat/benchmarks/Cargo.toml",
-    "examples/big-label/benchmarks/Cargo.toml",
-    "examples/doc-shelf/benchmarks/Cargo.toml",
     "dev/artifacts/linux-napi/Dockerfile",
     "dev/ci/toolchain/Dockerfile",
     "dev/artifacts/linux-napi/al2023/Dockerfile",
     ".github/workflows/alpha59-alpha60-exporter.yml",
+    ".github/workflows/attach-language-artifacts.yml",
     ".github/workflows/build-jazz-packages.yml",
     ".github/workflows/bundle-sizes.yml",
     ".github/workflows/changesets-release-pr.yml",
@@ -2338,16 +2339,16 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "1dc1673988877ad51c0ef80ff0d5e33e2fcd6370",
+    "blob_sha": "1677b2b5ddd94fe6b9ce5885b438f60577ffb254",
     "ecosystem": "cargo",
-    "bytes": 4764
+    "bytes": 4884
    },
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "a9b53e213275b2f79626ed3b0340c1b9794336db",
+    "blob_sha": "257774f0e64814c58376539a69797f02a63fb8a6",
     "ecosystem": "npm",
-    "bytes": 5186,
+    "bytes": 5284,
     "dev": [
      "@changesets/cli",
      "lefthook",
@@ -2428,13 +2429,47 @@
     ]
    },
    {
+    "path": "crates/jazz-app/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "b9262b9dc50ce4b555a7ada9790384cbb6d488c5",
+    "ecosystem": "cargo",
+    "bytes": 1434,
+    "names": [
+     "axum",
+     "jazz",
+     "jazz-native-transport.workspace",
+     "base64",
+     "futures-core",
+     "futures-util",
+     "getrandom",
+     "reqwest",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "tokio",
+     "tokio-tungstenite"
+    ],
+    "dev": [
+     "hmac",
+     "sha2",
+     "jazz-codegen",
+     "jazz-server",
+     "futures",
+     "serde_json",
+     "tempfile",
+     "tokio",
+     "tokio-tungstenite"
+    ]
+   },
+   {
     "path": "crates/jazz-cli/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "50e1c1a7036da2df4e0658d294d1c717929301fa",
+    "blob_sha": "fee0efc174829059df153deb84bce0abcbe1ea52",
     "ecosystem": "cargo",
-    "bytes": 2917,
+    "bytes": 2947,
     "names": [
      "jazz",
+     "jazz-codegen.workspace",
      "jazz-server",
      "jazz-alpha59-alpha60-dump",
      "serde_json",
@@ -2467,6 +2502,18 @@
     ]
    },
    {
+    "path": "crates/jazz-codegen/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a28ba0b03c278fabcb1934ba87791fa6f5b75889",
+    "ecosystem": "cargo",
+    "bytes": 320,
+    "names": [
+     "jazz",
+     "serde",
+     "serde_json"
+    ]
+   },
+   {
     "path": "crates/jazz-compression/Cargo.toml",
     "kind": "dep",
     "blob_sha": "2f842966f1b64dc6610650885abb77120ea81f9c",
@@ -2482,14 +2529,36 @@
     ]
    },
    {
+    "path": "crates/jazz-ffi/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "8d5910a59c2a6c036470b0a8adb67f466955ef7e",
+    "ecosystem": "cargo",
+    "bytes": 1037,
+    "names": [
+     "jazz-app",
+     "base64",
+     "futures-executor",
+     "serde_json",
+     "thiserror",
+     "tokio",
+     "uuid",
+     "uniffi"
+    ],
+    "dev": [
+     "jazz-server",
+     "tokio"
+    ]
+   },
+   {
     "path": "crates/jazz-napi/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "f78d7e60215cd98edc06dc0597eae8e8b2608e74",
+    "blob_sha": "f389d8101795809732441a083ff4f1e5643e903b",
     "ecosystem": "cargo",
-    "bytes": 1983,
+    "bytes": 2013,
     "names": [
      "jazz-native-relay",
      "jazz",
+     "jazz-codegen.workspace",
      "jazz-server",
      "jazz-otel.workspace",
      "jazz-text",
@@ -2513,7 +2582,7 @@
    {
     "path": "crates/jazz-napi/package.json",
     "kind": "dep",
-    "blob_sha": "245347a133aef512431549b34741ddc12468a1bf",
+    "blob_sha": "ab8a04624da2ec56185debc5c916365391a4b7ef",
     "ecosystem": "npm",
     "bytes": 1589,
     "dev": [
@@ -2612,7 +2681,7 @@
    {
     "path": "crates/jazz-rn/package.json",
     "kind": "dep",
-    "blob_sha": "4590d086c5a311b9be70af9fe5ac851279817ed2",
+    "blob_sha": "5a13c583e334ffb4acf129c80d936b049f309511",
     "ecosystem": "npm",
     "bytes": 4962,
     "names": [
@@ -2787,16 +2856,16 @@
    {
     "path": "crates/jazz-wasm/package.json",
     "kind": "dep",
-    "blob_sha": "d2f7846a5c2e886af0b8c1e36c98eaa38ba8062f",
+    "blob_sha": "cb29ca2f562464efc81a978d35561808c55d827c",
     "ecosystem": "npm",
     "bytes": 829
    },
    {
     "path": "crates/jazz/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "133229926b11da96326d4bd2c648bb78d581c00d",
+    "blob_sha": "1ce35bfd26fb953985d118289fb135330a30462f",
     "ecosystem": "cargo",
-    "bytes": 3278,
+    "bytes": 3450,
     "names": [
      "futures-core",
      "futures-channel",
@@ -2831,6 +2900,7 @@
     ],
     "dev": [
      "jazz",
+     "jsonschema",
      "divan.workspace",
      "jazz-benchmark-guard",
      "hdrhistogram",
@@ -3002,7 +3072,7 @@
    {
     "path": "examples/auth-betterauth-chat/package.json",
     "kind": "dep",
-    "blob_sha": "539dc5a95760b19e161b4f52b272fc1665f25174",
+    "blob_sha": "f19c1d1b19dce579abce9f2fb1dfe10301824f5f",
     "ecosystem": "npm",
     "bytes": 1198,
     "names": [
@@ -3032,7 +3102,7 @@
    {
     "path": "examples/auth-simple-chat/package.json",
     "kind": "dep",
-    "blob_sha": "64218cba23a3ef038f24e9f8edb7648b3f855d3d",
+    "blob_sha": "f9d3603fc0f37c7feaee073df445d973e0568730",
     "ecosystem": "npm",
     "bytes": 1088,
     "names": [
@@ -3062,7 +3132,7 @@
    {
     "path": "examples/auth-workos-chat/package.json",
     "kind": "dep",
-    "blob_sha": "1a1df2b645ee377a66e269c5f3c908fb583becd1",
+    "blob_sha": "ff787f7a2b1441385005b8b9d318f457227319d6",
     "ecosystem": "npm",
     "bytes": 1290,
     "names": [
@@ -3093,7 +3163,7 @@
    {
     "path": "examples/big-label/package.json",
     "kind": "dep",
-    "blob_sha": "23cea2fbbb186bb4e5dc194cf5c241343abe6793",
+    "blob_sha": "bb28c40a3fe2cb6bad06cb80fa11f9928c897c7c",
     "ecosystem": "npm",
     "bytes": 1055,
     "names": [
@@ -3118,7 +3188,7 @@
    {
     "path": "examples/branching-project-planner-ts/package.json",
     "kind": "dep",
-    "blob_sha": "f26e2c2e9a75335e4735a2d7ef02504cffe82616",
+    "blob_sha": "ac1f7c63bc74f507dac37afe0f86ae7a6759896b",
     "ecosystem": "npm",
     "bytes": 411,
     "names": [
@@ -3132,7 +3202,7 @@
    {
     "path": "examples/chat-react/package.json",
     "kind": "dep",
-    "blob_sha": "8adca5cee77fdd25f477dd1cacea1d306c25adb9",
+    "blob_sha": "360e928b3cc4a73f99079b3c978cb1d827706095",
     "ecosystem": "npm",
     "bytes": 2149,
     "names": [
@@ -3203,7 +3273,7 @@
    {
     "path": "examples/epic-drop/package.json",
     "kind": "dep",
-    "blob_sha": "872380d1ab7d3caa774d1d3d99a1fd78f78f3f26",
+    "blob_sha": "9869538f1d568af99a3598dc7a75755481cb607e",
     "ecosystem": "npm",
     "bytes": 1106,
     "names": [
@@ -3261,7 +3331,7 @@
    {
     "path": "examples/nextjs-csr-ssr/package.json",
     "kind": "dep",
-    "blob_sha": "858aff1b0ae2590714c8dc86c0397dca78a0e183",
+    "blob_sha": "36107de1b0fbd70a7a5de4398f7d89b23e1bf62d",
     "ecosystem": "npm",
     "bytes": 938,
     "names": [
@@ -3287,7 +3357,7 @@
    {
     "path": "examples/todo-client-localfirst-expo/package.json",
     "kind": "dep",
-    "blob_sha": "ce2a9bf331874a530a94f1176b6f8bddcc289c3c",
+    "blob_sha": "c152fd4f771797a3834a25a5f95115a1ccd483f9",
     "ecosystem": "npm",
     "bytes": 1165,
     "names": [
@@ -3311,7 +3381,7 @@
    {
     "path": "examples/todo-client-localfirst-react/package.json",
     "kind": "dep",
-    "blob_sha": "6e01eba9b506bab682788889f79625ec350b80d0",
+    "blob_sha": "81b62894975c024dcf55d4f3255a47159b06fd13",
     "ecosystem": "npm",
     "bytes": 914,
     "names": [
@@ -3336,7 +3406,7 @@
    {
     "path": "examples/todo-client-localfirst-solid/package.json",
     "kind": "dep",
-    "blob_sha": "193e8e2fd88ee0397e8b487381b0ef2f4ce46514",
+    "blob_sha": "71918d914a71698f9e7ef11ad4fa9b86e3552f47",
     "ecosystem": "npm",
     "bytes": 866,
     "names": [
@@ -3359,7 +3429,7 @@
    {
     "path": "examples/todo-client-localfirst-svelte/package.json",
     "kind": "dep",
-    "blob_sha": "a12a7f91c2703f72ae7b8b9adc863397f3f2c77c",
+    "blob_sha": "aebdf43f329a31737ecece0f1e19ac4aab638e1d",
     "ecosystem": "npm",
     "bytes": 904,
     "names": [
@@ -3382,7 +3452,7 @@
    {
     "path": "examples/todo-client-localfirst-ts/package.json",
     "kind": "dep",
-    "blob_sha": "ce0382d806ae9e770c5f57d17947765d7904b67a",
+    "blob_sha": "310b2feb1cfbdf1bcff87a849048af49c14e14d2",
     "ecosystem": "npm",
     "bytes": 724,
     "names": [
@@ -3401,7 +3471,7 @@
    {
     "path": "examples/todo-client-localfirst-vue/package.json",
     "kind": "dep",
-    "blob_sha": "0ff3e8775eabf26249b07428424bc24edbf2b178",
+    "blob_sha": "16dd000ba84c50974cae2c4d1d48f2c123d5c17c",
     "ecosystem": "npm",
     "bytes": 858,
     "names": [
@@ -3424,32 +3494,29 @@
    {
     "path": "examples/todo-server-rs/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "2b8456211eaedf0c0d35b1eb70ecff7c10289cf5",
+    "blob_sha": "650530abc40eb7bf51bc8acf4b55696aa7cadef7",
     "ecosystem": "cargo",
-    "bytes": 1066,
+    "bytes": 920,
     "names": [
-     "jazz",
-     "jazz-native-transport",
-     "reqwest",
-     "tokio",
-     "tokio-stream",
+     "jazz-app",
      "axum",
+     "futures-util",
+     "mimalloc",
      "serde",
      "serde_json",
+     "tokio",
+     "tower-http",
      "tracing",
      "tracing-subscriber",
-     "tower-http",
-     "uuid",
-     "futures-util",
-     "mimalloc"
+     "uuid"
     ],
     "dev": [
      "jazz-server",
-     "tempfile",
-     "tower",
      "http-body-util",
-     "futures-util",
-     "reqwest-eventsource"
+     "reqwest",
+     "reqwest-eventsource",
+     "tempfile",
+     "tower"
     ]
    },
    {
@@ -3474,7 +3541,7 @@
    {
     "path": "examples/world-tour/package.json",
     "kind": "dep",
-    "blob_sha": "bf6e5bb83ff0ac5d72d7d35cdc7bd7fb43f4fa71",
+    "blob_sha": "d82b60a1dc3253434d4a6cfda7c9a6d9796cbfb9",
     "ecosystem": "npm",
     "bytes": 1230,
     "names": [
@@ -3500,7 +3567,7 @@
    {
     "path": "packages/create-jazz/package.json",
     "kind": "dep",
-    "blob_sha": "7f76fa8d9f28db584628e0817317f4ae4f8a5897",
+    "blob_sha": "cb352eea54d8301c0b6e1faa80bad64bfe3e1ab7",
     "ecosystem": "npm",
     "bytes": 968,
     "dev": [
@@ -3546,9 +3613,9 @@
    {
     "path": "packages/jazz-tools/package.json",
     "kind": "dep",
-    "blob_sha": "8d4345fef78b582149307a68eac3888d1b18bc2d",
+    "blob_sha": "dfb1d529e3df60ca95210a692b615f57b1cca810",
     "ecosystem": "npm",
-    "bytes": 13336,
+    "bytes": 13638,
     "names": [
      "@noble/curves",
      "@noble/hashes",
@@ -3560,11 +3627,9 @@
      "@opentelemetry/sdk-trace-base",
      "@scure/bip39",
      "@standard-schema/spec",
-     "esbuild",
      "fs-native-extensions",
      "jazz-wasm",
      "jose",
-     "json-schema-to-ts",
      "tr46",
      "web-streams-polyfill",
      "whatwg-url-without-unicode",
@@ -3602,6 +3667,7 @@
      "@vue/server-renderer",
      "better-auth",
      "effect",
+     "esbuild",
      "fake-indexeddb",
      "jsdom",
      "libsodium",
@@ -3718,7 +3784,7 @@
    {
     "path": "dev/stress-tests/stress-test-expo/package.json",
     "kind": "dep",
-    "blob_sha": "0230a2bed1c63859163de295515f99be85cd4fe7",
+    "blob_sha": "e3ecbe08f437033864cc62e2480093150bd0ba86",
     "ecosystem": "npm",
     "bytes": 1029,
     "names": [
@@ -3742,7 +3808,7 @@
    {
     "path": "dev/stress-tests/todo-react/package.json",
     "kind": "dep",
-    "blob_sha": "af688a74c93c16fa46b891dfdccb9e10d1617eb5",
+    "blob_sha": "c6782605183b833175d87c6e33a186776d6e1608",
     "ecosystem": "npm",
     "bytes": 806,
     "names": [
@@ -3782,56 +3848,6 @@
     ]
    },
    {
-    "path": "examples/band-chat/benchmarks/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "2b4ca1a0d6bcdd37ac144bab1d5ee8b2d379325a",
-    "ecosystem": "cargo",
-    "bytes": 797,
-    "names": [
-     "jazz",
-     "jazz-benchmark-guard",
-     "libsqlite3-sys",
-     "uuid"
-    ],
-    "dev": [
-     "divan"
-    ]
-   },
-   {
-    "path": "examples/big-label/benchmarks/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "1e4c346cbedb5533d2ecf86bf3284e57951c635e",
-    "ecosystem": "cargo",
-    "bytes": 677,
-    "names": [
-     "jazz",
-     "sha2",
-     "tempfile",
-     "jazz-benchmark-guard",
-     "jazz-testkit",
-     "uuid"
-    ],
-    "dev": [
-     "divan"
-    ]
-   },
-   {
-    "path": "examples/doc-shelf/benchmarks/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "cbb989d0206a07a43584bba469aeb5cbb33f5e9e",
-    "ecosystem": "cargo",
-    "bytes": 508,
-    "names": [
-     "jazz",
-     "jazz-benchmark-guard",
-     "tempfile",
-     "serde_json"
-    ],
-    "dev": [
-     "divan"
-    ]
-   },
-   {
     "path": "dev/artifacts/linux-napi/Dockerfile",
     "kind": "image",
     "blob_sha": "100e8b88d0b5a51d072f7ddc8e5280387810fcf3",
@@ -3867,6 +3883,12 @@
     "bytes": 7054
    },
    {
+    "path": ".github/workflows/attach-language-artifacts.yml",
+    "kind": "ci",
+    "blob_sha": "5e6b81ac51970a60a17753c5fe93713ed546e1f2",
+    "bytes": 11535
+   },
+   {
     "path": ".github/workflows/build-jazz-packages.yml",
     "kind": "ci",
     "blob_sha": "4f07350dd0fbfde1dcafc7830054f72ba71e035a",
@@ -3887,8 +3909,8 @@
    {
     "path": ".github/workflows/ci-suite.yml",
     "kind": "ci",
-    "blob_sha": "b03fbe210ba3c8d31dd04f07e90446c2a696d5f8",
-    "bytes": 19568,
+    "blob_sha": "24c84c6c3dfbb636bfec9eae0673e5ca6f3b7298",
+    "bytes": 24555,
     "images": [
      "ghcr.io/garden-co/jazz-ci-toolchain@sha256:457972f436c36e4d00c31d89fe13506e43afff95fe933e831c0efb4b6f492dba"
     ]
@@ -4056,6 +4078,7 @@
     "dev/rn-device-acceptance/plugins/with-jazz-device-fixture.cjs",
     "dev/rn-device-acceptance/scripts/device-driver.mjs",
     "dev/rn-device-acceptance/scripts/device-driver.test.mjs",
+    "docs/lib/languages/plugin.ts",
     "packages/jazz-tools/src/reconcile-array.adapters.test.ts",
     "crates/jazz/src/tools/native_transport_connector.rs",
     "packages/jazz-tools/src/better-auth-adapter/example-migration-history.test.ts",
@@ -4077,10 +4100,25 @@
     "packages/jazz-tools/src/runtime/query-adapter.test.ts",
     "packages/jazz-tools/src/runtime/query-adapter.ts",
     "examples/chat-react/src/components/editor/floatingToolbarPlugin.ts",
-    "packages/jazz-tools/src/better-auth-adapter/fixtures/issuer-upgrade-schema.ts",
-    "packages/jazz-tools/src/better-auth-adapter/fixtures/permissions.ts",
-    "packages/jazz-tools/src/better-auth-adapter/fixtures/schema.ts",
-    "packages/jazz-tools/src/runtime/native-runtime/native-runtime-adapter.ts"
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/app.ts",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/issuer-upgrade.ts",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/jazz.app.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/jazz.permissions.json",
+    "packages/jazz-tools/src/runtime/native-runtime/native-runtime-adapter.ts",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/issuer-upgrade/jazz.app.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/issuer-upgrade/legacy.app.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/0f7261148930.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/0fe493411de2.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/22763a78d819.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/55a9ac8b000f.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/5806d5c6e98c.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/5c11d90336bf.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/7ce960ad34dc.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/8acd8a85eef5.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/a0d57d731cd5.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/b6640bee5491.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/c338db39787f.json",
+    "packages/jazz-tools/src/better-auth-adapter/fixtures/pre-files-snapshots/f9c2e1ab9391.json"
    ]
   },
   "fail_count": 0
@@ -5842,13 +5880,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T00:10:51Z",
+  "collected_at": "2026-11-16T00:13:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
+  "pushed_at": "2026-11-15",
   "stars": 19,
   "tree": {
-   "sha": "fc45a0a332efc27740661c9be3cf6da0a18bb7ae",
-   "etag": "W/\"78316489c3790345328bddd1b81a6f14db79931458deb6f8e94c9ec519037c6e\"",
+   "sha": "3e873f44600290107c8a22f0b34f46883a0f2c22",
+   "etag": "W/\"9939e95d07da0049973ffe19e872afdbc134a2cc888dd00cde2df5d01c01d0a2\"",
    "truncated": false,
    "path_count": 6564,
    "matched": [
@@ -5926,9 +5964,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "59929d20b0186b4440124ffb4ab78d6e0d189bcb",
+    "blob_sha": "70b29c65f7520a1529029bac74c907f8f86962c1",
     "ecosystem": "cargo",
-    "bytes": 10878
+    "bytes": 11582
    },
    {
     "path": "benches/Cargo.toml",
@@ -7076,7 +7114,7 @@
    {
     "path": "crates/vera-embedded/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c20d9f6ff4e894d7e3a606ef567058b35b981435",
+    "blob_sha": "95d6640183caf7ee9f1c449bcfe894b2ee4f39d6",
     "ecosystem": "cargo",
     "bytes": 2472,
     "names": [
@@ -7249,7 +7287,7 @@
    {
     "path": "tools/integration-test/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "46114c3df849814dd078a47d9bee6916643e3989",
+    "blob_sha": "e5827a6d55b031b977601b6be2f44ac9653fa2a1",
     "ecosystem": "cargo",
     "bytes": 2792,
     "names": [
@@ -7469,7 +7507,7 @@
    {
     "path": ".github/workflows/native-consumer.yml",
     "kind": "ci",
-    "blob_sha": "0648a7f0a3d092eb77ff52e79e1d44ea386c42b5",
+    "blob_sha": "e244a8896dfcbb16e127bcf4fb756a6e0bed1b7a",
     "bytes": 3300
    },
    {
@@ -11974,15 +12012,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:55:16Z",
+  "collected_at": "2026-11-15T23:59:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
+  "pushed_at": "2026-11-15",
   "stars": 91,
   "tree": {
-   "sha": "92bf6ef42d81f7537f3dd38153baae73f9eb942f",
-   "etag": "W/\"9c2dae8dced0ac1479a7ee8e31795fe8b32e11983b586d8bfa76ba6f215617a4\"",
+   "sha": "6041b8d476afdf3f5a23963b716292dcf16c5c54",
+   "etag": "W/\"f7cff645c0fb3411a089992f11efdd54b1b7196c1d575937963706cba8cf7242\"",
    "truncated": false,
-   "path_count": 4158,
+   "path_count": 4162,
    "matched": [
     "go.mod",
     "docs/requirements.txt",
@@ -14221,13 +14259,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:03:14Z",
+  "collected_at": "2026-11-16T00:05:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-15",
   "stars": 42,
   "tree": {
-   "sha": "63bcf20bd77d9dfe144ce07fc2590173cff44c1a",
-   "etag": "W/\"e470cda56afea025ed6587532eaa561c8fdef3e29e175760ef495aad71717e0f\"",
+   "sha": "fcf763e31a1a64bacfd420664ebabbbf986de9cb",
+   "etag": "W/\"2d68584408022a42e190290abf199a3559fecce5c319b5fd99937be61db993cf\"",
    "truncated": false,
    "path_count": 182,
    "matched": [
@@ -14245,9 +14283,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "af1d5ee373a3686ef1c0dd64b5ece202f0fa5f7d",
+    "blob_sha": "bca51f5df82f131108deabe077726e63fdc8d3a2",
     "ecosystem": "go",
-    "bytes": 2338,
+    "bytes": 2344,
     "names": [
      "github.com/a-h/templ",
      "github.com/aws/aws-sdk-go-v2",
@@ -14301,7 +14339,7 @@
    {
     "path": "site/package.json",
     "kind": "dep",
-    "blob_sha": "da9fc3686555c1a5e02c8b3e3bbbae16f05b8dcd",
+    "blob_sha": "8876059c0588fe067e374d090bdacc314ea56f50",
     "ecosystem": "npm",
     "bytes": 216,
     "names": [
@@ -14311,7 +14349,7 @@
    {
     "path": "ui/assets/package.json",
     "kind": "dep",
-    "blob_sha": "01fb7fc55ede487d0efcb3b4f9c807cc161eb63a",
+    "blob_sha": "ab0358613a59f58cd68c1d86f431f62daba168b8",
     "ecosystem": "npm",
     "bytes": 255,
     "dev": [
@@ -15831,15 +15869,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T03:07:50Z",
+  "collected_at": "2026-11-16T00:08:31Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-11",
+  "pushed_at": "2026-11-15",
   "stars": 32,
   "tree": {
-   "sha": "aa1fe800489582b46a5cbc1705f38a7fc6abd576",
-   "etag": "W/\"c13487b2b0b515ecb3f007badff0de0faf1e249157c7a9c7244332b9a309b5a0\"",
+   "sha": "4636beb751724db3068cec98137692e227ac0440",
+   "etag": "W/\"ddb0d460abb532eaab9d90482a516d2167252a101d943336206bebff52bb924f\"",
    "truncated": false,
-   "path_count": 343,
+   "path_count": 347,
    "matched": [
     "Cargo.toml",
     "requirements.txt",
@@ -16485,13 +16523,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T00:06:18Z",
+  "collected_at": "2026-11-16T00:09:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
+  "pushed_at": "2026-11-15",
   "stars": 29,
   "tree": {
-   "sha": "348bae93711c07e0f8bea1335806391267d46272",
-   "etag": "W/\"230552c301a9edbed22bf3d74da2384aa83a20c647709c13ade085fe2c973907\"",
+   "sha": "731e29cbbeaa99ae5174795af8a4f4cfb504b3c1",
+   "etag": "W/\"5be89435bef94a7df6e86af5dc1fbaf8b7eeb0cd911301c41e9f13169ab88136\"",
    "truncated": false,
    "path_count": 563,
    "matched": [
@@ -16521,7 +16559,7 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "df2230af27e85a383065a49c053df9c1d8e608f5",
+    "blob_sha": "44a1b3e3c7973d399bcab09d46e04a3263568f3e",
     "ecosystem": "pyproject",
     "bytes": 10245,
     "names": [
