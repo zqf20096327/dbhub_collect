@@ -32,7 +32,10 @@ import argparse, datetime, io, json, os, re, shutil, sys, tempfile, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_card as gc
 
-VER = "gen_cards/1.8"
+VER = "gen_cards/1.9"
+# v1.9（2026-11-16 用户令「不要一个卡片一个目录，放到一个目录中」）：
+#   cards/ 与 archive/ 平铺——文件名 owner__repo.html/.json（与 readmes 存档同款分隔符，
+#   GitHub 用户名不含下划线、仓名不含 __，fn 唯一故文件名唯一）。存量由 migrate_flat.py 搬平。
 # v1.7（2026-11-15 用户令「下次生成时严格校验」）:
 #   全量跑末尾 verify() 四项校验（V1 清单内无应归档卡 / V2 合格仓无漏 / V3-V4 盘面与清单
 #   三方一致），任一失败打印明细并 exit 1——daily_cards 链自动中止，不带病收工。
@@ -58,6 +61,14 @@ ROOT = "D:/dbhub_collect"
 SKIP_CATS = {"应用"}   # 应用类的仓不出卡（2026-11-13 用户令）；类目取法见 is_app
 
 def loadj(p): return json.load(io.open(p, encoding="utf-8"))
+
+def flat_name(fn, ext=""):
+    """平铺文件名：owner/repo -> owner__repo.<ext>（与 readmes 存档同款 __ 分隔）。"""
+    return fn.replace("/", "__") + ext
+
+def flat_rel(fn, ext=".html", base="cards"):
+    """manifest 里的 html 相对路径（建站侧拼根用）。"""
+    return f"{base}/{flat_name(fn, ext)}"
 
 def is_app(r):
     """应用类判定：judge 类目为准；无 README 仓没有 judge，退 desc 降级层类目（2026-11-14）。
@@ -234,13 +245,11 @@ def verify(repos, manifest, out_dir, min_stars=0):
     expect = {fn for fn, r in repos.items() if qualified(r, min_stars)}   # V2 合格仓无漏
     for fn in sorted(expect - set(manifest)):
         errs.append(f"V2 {fn}: qualified but missing from manifest")
-    n_json = n_html = 0                                   # V3/V4 盘面与清单三方一致
-    for owner in os.listdir(out_dir):
-        d = os.path.join(out_dir, owner)
-        if not os.path.isdir(d): continue
-        for f in os.listdir(d):
-            if f.endswith(".json"): n_json += 1
-            elif f.endswith(".html"): n_html += 1
+    n_json = n_html = 0                                   # V3/V4 盘面与清单三方一致（平铺，排除 manifest 本身）
+    for f in os.listdir(out_dir):
+        if f == "manifest.json": continue
+        if f.endswith(".json"): n_json += 1
+        elif f.endswith(".html"): n_html += 1
     if n_json != len(manifest): errs.append(f"V3 disk-json {n_json} != manifest {len(manifest)}")
     if n_html != len(manifest): errs.append(f"V4 disk-html {n_html} != manifest {len(manifest)}")
     return errs
@@ -258,18 +267,16 @@ def exit_reason(fn, repos):
     return "below-min-stars"
 
 def sweep_strays(out_dir, active):
-    """盘面清点：盘上有、活跃清单没有的卡（清单机制上线前遗留的孤儿），返回 {fn: 仿清单条目}。"""
+    """盘面清点：盘上有、活跃清单没有的卡（清单机制上线前遗留的孤儿），返回 {fn: 仿清单条目}。
+    平铺目录（v1.9）：文件名 owner__repo.json 反解回 owner/repo。"""
     ex = {}
-    for owner in os.listdir(out_dir):
-        d = os.path.join(out_dir, owner)
-        if not os.path.isdir(d): continue
-        for f in os.listdir(d):
-            if not f.endswith(".json"): continue
-            fn = (owner + "/" + f[:-5]).lower()
-            if fn in active: continue
-            try: c = loadj(os.path.join(d, f))
-            except Exception: c = {}
-            ex[fn] = {"stars": (c.get("basics") or {}).get("stars"), "fp": c.get("_fp")}
+    for f in os.listdir(out_dir):
+        if not f.endswith(".json") or f == "manifest.json": continue
+        fn = f[:-5].replace("__", "/").lower()
+        if fn in active: continue
+        try: c = loadj(os.path.join(out_dir, f))
+        except Exception: c = {}
+        ex[fn] = {"stars": (c.get("basics") or {}).get("stars"), "fp": c.get("_fp")}
     return ex
 
 def archive_exited(exited, repos, out_dir, arc_dir, run_date, active, absent=None):
@@ -283,18 +290,15 @@ def archive_exited(exited, repos, out_dir, arc_dir, run_date, active, absent=Non
     for fn, old in sorted(exited.items()):
         reason = exit_reason(fn, repos)
         if reason == "below-min-stars": st["kept"] += 1; continue
-        owner, repo = fn.split("/")
         moved = False
         for ext in (".html", ".json"):
-            src = os.path.join(out_dir, owner, repo + ext)
+            src = os.path.join(out_dir, flat_name(fn, ext))
             if os.path.exists(src):
-                os.makedirs(os.path.join(arc_dir, owner), exist_ok=True)
-                os.replace(src, os.path.join(arc_dir, owner, repo + ext))
+                os.makedirs(arc_dir, exist_ok=True)
+                os.replace(src, os.path.join(arc_dir, flat_name(fn, ext)))
                 moved = True
-        try: os.rmdir(os.path.join(out_dir, owner))        # 只在目录已空时成功
-        except OSError: pass
         if moved or fn not in acards:
-            acards[fn] = {"html": f"archive/{owner}/{repo}.html", "stars": (old or {}).get("stars"),
+            acards[fn] = {"html": flat_rel(fn, base="archive"), "stars": (old or {}).get("stars"),
                           "fp": (old or {}).get("fp"), "archived_at": run_date, "reason": reason,
                           "absent_since": absent.get(fn)}
             changed = True
@@ -329,12 +333,11 @@ def archive_apps(repos, make_card, arc_dir, run_date):
     for fn, r in repos.items():
         if fn in acards or not is_app(r) or r.get("archived"): continue
         card = make_card(fn, r)
-        owner, repo = fn.split("/")
-        d = os.path.join(arc_dir, owner); os.makedirs(d, exist_ok=True)
-        io.open(os.path.join(d, repo + ".html"), "w", encoding="utf-8", newline="\n").write(gc.render(card))
-        io.open(os.path.join(d, repo + ".json"), "w", encoding="utf-8", newline="\n").write(
+        os.makedirs(arc_dir, exist_ok=True)
+        io.open(os.path.join(arc_dir, flat_name(fn, ".html")), "w", encoding="utf-8", newline="\n").write(gc.render(card))
+        io.open(os.path.join(arc_dir, flat_name(fn, ".json")), "w", encoding="utf-8", newline="\n").write(
             json.dumps(card, ensure_ascii=False, indent=2))
-        acards[fn] = {"html": f"archive/{owner}/{repo}.html", "stars": r.get("stars"), "fp": card["_fp"],
+        acards[fn] = {"html": flat_rel(fn, base="archive"), "stars": r.get("stars"), "fp": card["_fp"],
                       "archived_at": run_date, "reason": "app-category", "absent_since": None,
                       "backfill": True}   # backfill=直接生成进档案（非从 cards/ 搬来）
         n += 1
@@ -351,8 +354,7 @@ def rerender_archive(arc_dir, run_date):
     if doc is None: return None
     st = {"ok": 0, "fail": 0, "no_json": 0, "fails": []}
     for fn in acards:
-        owner, repo = fn.split("/")
-        jp = os.path.join(arc_dir, owner, repo + ".json")
+        jp = os.path.join(arc_dir, flat_name(fn, ".json"))
         if not os.path.exists(jp):
             st["no_json"] += 1
             if len(st["fails"]) < 5: st["fails"].append(f"{fn}: no json")
@@ -363,7 +365,7 @@ def rerender_archive(arc_dir, run_date):
             st["fail"] += 1
             if len(st["fails"]) < 5: st["fails"].append(f"{fn}: {type(ex).__name__}")
             continue
-        io.open(os.path.join(arc_dir, owner, repo + ".html"), "w", encoding="utf-8", newline="\n").write(page)
+        io.open(os.path.join(arc_dir, flat_name(fn, ".html")), "w", encoding="utf-8", newline="\n").write(page)
         st["ok"] += 1
     if not (st["fail"] or st["no_json"]):
         _dump_arc(amp, doc, acards, run_date, render_ver=gc.VER)
@@ -417,20 +419,22 @@ def _selftest():
     assert clean_ver("release/2.60.0") == "2.60.0" and clean_ver("v1.2") == "1.2" and clean_ver(None) is None
     with tempfile.TemporaryDirectory() as td:                          # 归档搬迁实测
         out, arc = os.path.join(td, "cards"), os.path.join(td, "archive")
-        for fn in ("x/gone", "a/live"):
-            o, rp = fn.split("/"); os.makedirs(os.path.join(out, o), exist_ok=True)
+        os.makedirs(out, exist_ok=True)
+        for fn in ("x/gone", "a/live"):                                 # 平铺造卡（v1.9：owner__repo 两文件）
             for ext in (".html", ".json"):
-                io.open(os.path.join(out, o, rp + ext), "w", encoding="utf-8").write('{"_fp": "f1"}')
+                io.open(os.path.join(out, flat_name(fn, ext)), "w", encoding="utf-8").write('{"_fp": "f1"}')
         assert set(sweep_strays(out, {"a/live": {}})) == {"x/gone"}       # 盘面清点只认清单外的
         st = archive_exited({"x/gone": {"stars": 9, "fp": "f1"}, "a/live": {"stars": 5}},
                             repos, out, arc, "2026-11-14", {"a/live": {}}, {"x/gone": "20261112"})
         assert st["moved"] == 1 and st["kept"] == 1 and st["by"] == {"pool-exit": 1}
-        assert os.path.exists(os.path.join(arc, "x", "gone.html")) and not os.path.exists(os.path.join(out, "x"))
-        assert os.path.exists(os.path.join(out, "a", "live.json"))       # 低星未选中：原地不动
+        assert os.path.exists(os.path.join(arc, "x__gone.html"))
+        assert os.path.exists(os.path.join(out, "a__live.json"))         # 低星未选中：原地不动
+        assert flat_name("x/gone", ".html") == "x__gone.html"           # 平铺命名契约
         am = loadj(os.path.join(arc, "manifest.json"))["cards"]
         assert am["x/gone"]["reason"] == "pool-exit" and am["x/gone"]["absent_since"] == "20261112"
+        assert am["x/gone"]["html"] == "archive/x__gone.html"           # 清单路径=平铺
         st2 = archive_exited({}, repos, out, arc, "2026-11-15", {"x/gone": {}})   # 回池：打标不删档
-        assert st2["restored"] == 1 and st2["moved"] == 0 and os.path.exists(os.path.join(arc, "x", "gone.json"))
+        assert st2["restored"] == 1 and st2["moved"] == 0 and os.path.exists(os.path.join(arc, "x__gone.json"))
         assert loadj(os.path.join(arc, "manifest.json"))["cards"]["x/gone"]["restored_at"] == "2026-11-15"
         r2 = {"b/app": {"stars": 7, "judge": {"cat": "应用"}}, "b/dapp": {"stars": 3, "desc": {"cat": "应用", "one_liner": "d"}},
               "b/arch": {"stars": 9, "archived": True, "judge": {"cat": "应用"}}, "b/lib": {"stars": 5},
@@ -439,25 +443,25 @@ def _selftest():
         assert archive_apps(r2, mk, arc, "2026-11-16") == 2                       # 只补 b/app、b/dapp
         am2 = loadj(os.path.join(arc, "manifest.json"))["cards"]
         assert am2["b/app"]["reason"] == "app-category" and am2["b/dapp"]["backfill"] and "b/arch" not in am2
-        assert os.path.exists(os.path.join(arc, "b", "dapp.html")) and am2["x/gone"]["reason"] == "pool-exit"
+        assert os.path.exists(os.path.join(arc, "b__dapp.html")) and am2["x/gone"]["reason"] == "pool-exit"
         assert archive_apps(r2, mk, arc, "2026-11-17") == 0                       # 幂等：已在清单不重生成
-        io.open(os.path.join(arc, "b", "app.html"), "w", encoding="utf-8").write("OLD")
-        jb = io.open(os.path.join(arc, "b", "app.json"), "rb").read()
+        io.open(os.path.join(arc, "b__app.html"), "w", encoding="utf-8").write("OLD")
+        jb = io.open(os.path.join(arc, "b__app.json"), "rb").read()
         rs = rerender_archive(arc, "2026-11-18")
         assert rs["ok"] == 2 and rs["fail"] == 1                        # x/gone 残缺 json：渲染失败不写盘
-        assert "overflow-wrap" in io.open(os.path.join(arc, "b", "app.html"), encoding="utf-8").read()
-        assert io.open(os.path.join(arc, "b", "app.json"), "rb").read() == jb       # 数据快照一字不动
+        assert "overflow-wrap" in io.open(os.path.join(arc, "b__app.html"), encoding="utf-8").read()
+        assert io.open(os.path.join(arc, "b__app.json"), "rb").read() == jb       # 数据快照一字不动
         assert "render_ver" not in loadj(os.path.join(arc, "manifest.json"))        # 有失败不盖版本戳
-        io.open(os.path.join(arc, "x", "gone.json"), "w", encoding="utf-8").write(
+        io.open(os.path.join(arc, "x__gone.json"), "w", encoding="utf-8").write(
             json.dumps(mk("x/gone", r2["x/gone"]), ensure_ascii=False))
         assert rerender_archive(arc, "2026-11-18")["fail"] == 0
         assert loadj(os.path.join(arc, "manifest.json"))["render_ver"] == gc.VER    # 全过才盖戳
         r2["b/new"] = {"stars": 1, "judge": {"cat": "应用"}}
         assert archive_apps(r2, mk, arc, "2026-11-19") == 1
         assert loadj(os.path.join(arc, "manifest.json"))["render_ver"] == gc.VER    # 后续写清单保住戳
-        vd = os.path.join(td, "vcard"); os.makedirs(os.path.join(vd, "o"))         # verify 四项校验
-        io.open(os.path.join(vd, "o", "ok.html"), "w", encoding="utf-8").write("h")
-        io.open(os.path.join(vd, "o", "ok.json"), "w", encoding="utf-8").write("{}")
+        vd = os.path.join(td, "vcard"); os.makedirs(vd)                # verify 四项校验（平铺）
+        io.open(os.path.join(vd, "o__ok.html"), "w", encoding="utf-8").write("h")
+        io.open(os.path.join(vd, "o__ok.json"), "w", encoding="utf-8").write("{}")
         vr = {"o/ok": {"stars": 5, "readme0": "x", "tags": [["cdc", "CDC", "high"]], "dbs": ["MySQL"]}}
         assert verify(vr, {"o/ok": {}}, vd) == []                       # 好例全过
         bad = dict(vr); bad["o/shell"] = {"stars": 0, "readme_file": True}
@@ -465,10 +469,10 @@ def _selftest():
         bad["o/new"] = {"stars": 9, "readme0": "x", "tags": [["orm", "ORM", "high"]],
                         "dbs": ["MySQL"], "readme_file": True}
         assert any(x.startswith("V2 o/new") for x in verify(bad, {"o/ok": {}}, vd))           # 合格仓漏收
-        os.remove(os.path.join(vd, "o", "ok.json"))
+        os.remove(os.path.join(vd, "o__ok.json"))
         e3 = verify(vr, {"o/ok": {}}, vd)
         assert any(x.startswith("V3") for x in e3) and not any(x.startswith("V4") for x in e3)  # 缺 json 只报 V3
-        os.remove(os.path.join(vd, "o", "ok.html"))
+        os.remove(os.path.join(vd, "o__ok.html"))
         assert any(x.startswith("V4") for x in verify(vr, {"o/ok": {}}, vd))       # 缺 html 报 V4
     print("OK gen_cards selftest: 54 asserts passed")
     return rc
@@ -525,19 +529,18 @@ def main():
         if no_readme(r): print(f"SKIP no-readme {fn}"); continue
         if incomplete(r): print(f"SKIP incomplete {fn}"); continue
         card = finish_card(build_card(fn, r, hist, mcounts, arenas, repos, run_date, arena_ver), corpus, mdate)
-        owner, repo = fn.split("/")
-        d = os.path.join(a.out_dir, owner); os.makedirs(d, exist_ok=True)
-        jp = os.path.join(d, repo + ".json"); hp = os.path.join(d, repo + ".html")
+        jp = os.path.join(a.out_dir, flat_name(fn, ".json")); hp = os.path.join(a.out_dir, flat_name(fn, ".html"))
         if old_fps.get(fn) == card["_fp"] and not a.force:
             # 指纹比对走 manifest 单文件；清单缺指纹/丢清单时回退到重写，安全侧
             n_skip += 1
-            manifest[fn] = {"html": f"cards/{owner}/{repo}.html", "stars": r.get("stars"), "fp": card["_fp"],
+            manifest[fn] = {"html": flat_rel(fn), "stars": r.get("stars"), "fp": card["_fp"],
                             "tags": [t[0] for t in card["capabilities"]["tags"]] if card.get("capabilities") else []}
             continue
+        os.makedirs(a.out_dir, exist_ok=True)
         io.open(hp, "w", encoding="utf-8", newline="\n").write(gc.render(card))
         io.open(jp, "w", encoding="utf-8", newline="\n").write(json.dumps(card, ensure_ascii=False, indent=2))
         n_new += 1
-        manifest[fn] = {"html": f"cards/{owner}/{repo}.html", "stars": r.get("stars"), "fp": card["_fp"],
+        manifest[fn] = {"html": flat_rel(fn), "stars": r.get("stars"), "fp": card["_fp"],
                         "tags": [t[0] for t in card["capabilities"]["tags"]] if card.get("capabilities") else []}
         if card["trend"]["points"]: cov["trend"] += 1
         if card.get("intro"): cov["intro"] += 1
