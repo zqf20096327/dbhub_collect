@@ -2,7 +2,7 @@
 """build_site.py v1.0 -- 站点数据出口（P2：卡片不动，只产列表分片/库页数据/sitemap/robots）
 
 用法:
-  python -I build_site.py                     # 全部步骤
+  python -I build_site.py                     # 全部步骤（lists+vs+sitemap+robots）
   python -I build_site.py --steps lists,sitemap,robots
   python -I build_site.py --selftest
   DBHUB_SITE_BASE=https://x.pages.dev python -I build_site.py   # sitemap 绝对 URL 的域名（P4 部署时注入）
@@ -124,10 +124,63 @@ def build_lists(site):
           f"库页={len(dbs)} -> site/data in {time.time()-t0:.1f}s")
     return {"cats": by_cat, "pages_all": len(pages), "n_urls": n_urls, "items": items, "dbs": dbs}
 
+# ---------- ①b 对比页数据（vs） ----------
+
+def vs_slug(pair):
+    """(fnA, fnB) -> /vs/ 用 slug：owner__repo--owner__repo。理论上仓名含 -- 会歧义，撞车检测兜底（罕见对直接弃）。"""
+    return pair[0].replace("/", "__") + "--" + pair[1].replace("/", "__")
+
+VS_HERO_STARS = 1000   # 对比页只做热门主角（长尾主角的对比页搜索量撑不起）
+
+def build_vs(site):
+    """主角 ≥1000★ 且擂台有 ≥0.6 候选 -> 取首位候选成对（无序去重，星数高者为 a）。
+    数据源=活跃卡 JSON 的 arena.rows（读 1.4 万卡 JSON 约 10s，值这批高转化对比词页面）。"""
+    t0 = time.time()
+    idx = loadj(ROOT + "/cache/index.json")["repos"]
+    man = loadj(ROOT + "/cards/manifest.json")["cards"]
+    cards_dir = os.path.join(ROOT, "cards")
+    by_slug = {}; dropped = []; n_hero = 0; n_rival_out = 0
+    for fn in sorted(man):
+        p = os.path.join(cards_dir, fn.replace("/", "__") + ".json")
+        if not os.path.exists(p): continue
+        try: c = json.load(io.open(p, encoding="utf-8"))
+        except Exception: continue
+        b = c.get("basics") or {}
+        if (b.get("stars") or 0) < VS_HERO_STARS: continue
+        rows = (c.get("arena") or {}).get("rows") or []
+        hero = next((r for r in rows if r.get("me")), None)
+        rival = next((r for r in rows if not r.get("me") and (r.get("score") or 0) >= 0.6), None)
+        if not hero or not rival: continue
+        if rival["fn"] not in man or hostile(rival["fn"]):
+            n_rival_out += 1; continue          # 对手是归档/敌对名仓 -> 无 /p/ 页可链，弃对（内链 404 会被 gen VERIFY 拦）
+        n_hero += 1
+        pair = tuple(sorted([fn, rival["fn"]], key=lambda x: (-(idx.get(x, {}).get("stars") or 0), x)))
+        slug = vs_slug(pair)
+        if slug in by_slug and tuple(by_slug[slug]["pair"]) != pair:   # list!=tuple 恒真，须同型比较
+            dropped.append(slug); continue
+        a, bfn = pair
+        A, B = idx.get(a, {}), idx.get(bfn, {})
+        ha = next((r for r in rows if r.get("fn") == a), None) or {}
+        hb = next((r for r in rows if r.get("fn") == bfn), None) or {}
+        by_slug[slug] = {"pair": list(pair), "a": light(a, A), "b": light(bfn, B),
+                         "a_score": (ha.get("score")), "a_why": (ha.get("why") or "")[:200],
+                         "b_score": (hb.get("score")), "b_why": (hb.get("why") or "")[:200],
+                         "algo": (c.get("arena") or {}).get("sub", "")}
+    os.makedirs(site + "/data/vs", exist_ok=True)
+    for f in os.listdir(site + "/data/vs"):
+        os.remove(os.path.join(site + "/data/vs", f))          # 全量重写前清旧（弃用的对不留死链数据）
+    for slug, d in sorted(by_slug.items()):
+        d.pop("pair")
+        dumpj(d, f"{site}/data/vs/{slug}.json")
+    print(f"OK vs: 主角≥{VS_HERO_STARS}★ 且有对手 {n_hero}（对手不部署弃 {n_rival_out}）-> 去重后 {len(by_slug)} 对"
+          + (f"（撞车弃 {len(set(dropped))}）" if dropped else "")
+          + f" -> site/data/vs in {time.time()-t0:.1f}s")
+    return len(by_slug)
+
 # ---------- ② sitemap ----------
 
 def build_sitemap(site):
-    t0 = time.time(); base = site_base()
+    t0 = time.time(); base = site_base(); ct_vs = "/vs/{slug}/"
     idx = loadj(ROOT + "/cache/index.json")["repos"]
     man = loadj(ROOT + "/cards/manifest.json")["cards"]
     items = [light(fn, idx[fn]) for fn in man if fn in idx and not hostile(fn)]
@@ -140,6 +193,9 @@ def build_sitemap(site):
         urls += [f"/cat/{slug}/"] + [f"/cat/{slug}/{i}.html" for i in range(2, len(paged(lst)) + 1)]
     assert len(set(urls)) == len(urls), "sitemap 有重复 URL（slug 撞车）"
     urls += [it["url"] for it in items]
+    vs_dir = os.path.join(site, "data", "vs")            # 对比页（vs 步骤产物在即并入）
+    if os.path.isdir(vs_dir):
+        urls += [ct_vs.format(slug=f[:-5]) for f in os.listdir(vs_dir) if f.endswith(".json")]
     lastmod = datetime.date.today().isoformat()
     root = ET.Element("urlset", {"xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"})
     for u in urls:
@@ -160,9 +216,10 @@ def build_robots(site):
     base = site_base()
     txt = f"User-agent: *\nAllow: /\n\nSitemap: {base}/sitemap.xml\n"
     io.open(site + "/robots.txt", "w", encoding="utf-8", newline="\n").write(txt)
-    urls = {"base": base, "card": "/p/{fn}/", "db": "/db/{slug}/",
+    urls = {"base": base, "card": "/p/{fn}/", "db": "/db/{slug}/", "vs": "/vs/{slug}/",
             "cat_first": "/cat/{slug}/", "cat_page": "/cat/{slug}/{n}.html",
             "all_first": "/projects/", "all_page": "/projects/{n}.html",
+            "vs_first": "/vs/{slug}/",
             "note": "改模式须同步 gen_card seo_head canonical 与 dbhub_page gen；build --verify 交叉比对"}
     dumpj(urls, site + "/urls.json")
     print(f"OK robots: Allow / + Sitemap 指针 -> {len(txt)} B；urls.json 契约已出")
@@ -187,7 +244,8 @@ def _selftest():
     assert len(set(CAT_SLUG.values())) == len(CAT_SLUG), "映射表自身有撞车"
     assert f"/db/{slugify('SQL Server')}/" == "/db/sql-server/"               # 库页 URL 形
     assert hostile("a/b.") and hostile("a./b") and not hostile("a/b") and not hostile("a/b_c")
-    u = {"card": "/p/{fn}/", "db": "/db/{slug}/", "cat_page": "/cat/{slug}/{n}.html"}
+    u = {"card": "/p/{fn}/", "db": "/db/{slug}/", "cat_page": "/cat/{slug}/{n}.html", "vs": "/vs/{slug}/"}
+    assert vs_slug(("a/b", "c/d")) == "a__b--c__d"                     # vs slug 无歧义拼接
     assert u["card"].format(fn="a/b") == "/p/a/b/" and u["db"].format(slug="x") == "/db/x/"  # 契约模式可格式化
     print("OK build_site selftest: 13 asserts passed")
     return 0
@@ -201,8 +259,9 @@ def main():
     if a.selftest: sys.exit(_selftest())
     site = os.path.join(ROOT, a.out); os.makedirs(site, exist_ok=True)
     steps = a.steps.split(",")
-    for s in (steps if "all" not in steps else ["lists", "sitemap", "robots"]):
-        {"lists": lambda: build_lists(site), "sitemap": lambda: build_sitemap(site),
+    for s in (steps if "all" not in steps else ["lists", "vs", "sitemap", "robots"]):
+        {"lists": lambda: build_lists(site), "vs": lambda: build_vs(site),
+         "sitemap": lambda: build_sitemap(site),
          "robots": lambda: build_robots(site)}.get(s, lambda: p.error(f"unknown step {s}"))()
 
 if __name__ == "__main__":
