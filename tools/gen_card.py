@@ -13,9 +13,9 @@ v1.1（2026-11-12 用户三条指令）:
      - 项目年龄: pool.created_at -> 头部 meta 追加「创建于 YYYY」
   3. 生成 HTML 的同时写同名 .json（底稿+derived），供后续建站使用。
 """
-import argparse, copy, datetime, html, io, json, os, sys
+import argparse, copy, datetime, html, io, json, os, re, sys
 
-VER = "gen_card/1.7"   # 1.7：卡头能力徽章行（domain_tags 词控标签 high/mid 上卡，low 不展）
+VER = "gen_card/1.8"   # 1.8：P1 SEO 化——title 公式/meta description/JSON-LD/canonical（DBHUB_SITE_BASE 注入）
 STALE_DAYS = 180
 POOL_DEFAULT = "D:/dbhub_collect/data/live/pool.ndjson"
 
@@ -228,6 +228,35 @@ def render_cap(card):
         for s, n, c in tags)
     return f'<div class="cap"><span class="cap-label">能力</span>{chips}</div>'
 
+def seo_head(card):
+    """P1 SEO 化（站点改造工作清单 1.1）。title 公式=fn：一句话·GitHub 星数（fn 全名进 title，
+    sqlite 这类短名裸搜有歧义）；meta description=一句话+星数语言；JSON-LD SoftwareApplication。
+    canonical 只在环境变量 DBHUB_SITE_BASE 给了域名时输出（D1 域名未定，P4 部署时注入再全量重渲染）。
+    纪律：星数不冒充 aggregateRating（守 Google 结构化数据指南：评分须真实用户评价）；
+    esc() 是透传不转义——本函数内属性一律 html.escape(x, quote=True)。"""
+    b = card["basics"]; fn = card.get("fn") or b.get("name"); name = b.get("name") or fn
+    stars = b.get("stars"); ol = ((card.get("intro") or {}).get("text") or "").strip()
+    short = ol[:40].rstrip() + ("…" if len(ol) > 40 else "")
+    title = f"{fn}：{short} · GitHub {stars}★" if short else f"{fn} · GitHub {stars}★ · 数据库项目档案"
+    tail = f"GitHub {stars}★" + (f"，{b['language']} 开源" if b.get("language") else "")
+    desc = f"{ol[:120]}（{tail}）" if ol else f"{name}：{tail} 开源项目档案"
+    q = lambda s: html.escape(str(s), quote=True)
+    ld = {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": name,
+          "url": f"https://github.com/{fn}", "codeRepository": f"https://github.com/{fn}",
+          "description": ol or name, "applicationCategory": "DeveloperApplication"}
+    if b.get("language"): ld["programmingLanguage"] = b["language"]
+    lic = b["license"]["display"] if isinstance(b.get("license"), dict) else b.get("license")
+    if lic: ld["license"] = lic
+    if fn and "/" in str(fn): ld["author"] = {"@type": "Organization", "name": str(fn).split("/")[0]}
+    if b.get("pushed_at"): ld["dateModified"] = str(b["pushed_at"])[:10]
+    ldj = json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")   # 防 </script> 注入
+    base = os.environ.get("DBHUB_SITE_BASE", "").rstrip("/")
+    canon = f'<link rel="canonical" href="{q(base)}/p/{q(fn)}/">\n' if base else ""
+    return (f"<title>{q(title)}</title>\n"
+            f'<meta name="description" content="{q(desc)}">\n'
+            f'{canon}'
+            f'<script type="application/ld+json">{ldj}</script>')
+
 def render_head(card):
     b = card["basics"]; badge = card.get("badge", {})
     chips = f'<span class="chip">{esc(badge.get("main", "今日一库 · 项目名片"))}</span>'
@@ -349,7 +378,7 @@ def render(card):
     parts = [render_head(card)] + [f(card) for f in SECTIONS]
     return ("<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n<meta charset=\"UTF-8\">\n"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
-            f"<title>项目名片 · {esc(card['basics']['name'])}</title>\n<style>\n{CSS}</style>\n"
+            f"{seo_head(card)}\n<style>\n{CSS}</style>\n"
             "</head>\n<body>\n<div class=\"card\">\n" + "\n".join(parts) + "\n\n</div>\n</body>\n</html>\n")
 
 # ---------- 自检 ----------
@@ -428,7 +457,31 @@ def _selftest():
     assert c2["capabilities"]["tags"] == [["backup", "备份", "high"], ["orm", "ORM", "low"]]  # enrich 不动能力
     assert h.count('class="cap"') == 1 and "备份" in h and ">ORM<" not in h   # 卡头能力行：low 不上卡面
     assert h.index('class="c-meta"') < h.index('class="cap"') < h.index('class="sec"')  # 位置：meta 下、块区前
-    print(f"OK {VER} selftest: 24 asserts passed")
+    # P1 SEO 头部（seo_head）：title 公式/description/JSON-LD/canonical 开关/截断/转义
+    os.environ.pop("DBHUB_SITE_BASE", None)
+    assert "<title>t/t：one liner · GitHub 1234★</title>" in h
+    md = re.search(r'<meta name="description" content="([^"]*)"', h)
+    assert md and "one liner" in md.group(1) and "1234★" in md.group(1) and len(md.group(1)) <= 200
+    assert 'rel="canonical"' not in h                                          # 未给域名不出 canonical
+    ldj = re.search(r'<script type="application/ld\+json">(.*?)</script>', h, re.S).group(1)
+    ld = json.loads(ldj)                                                       # JSON-LD 可解析
+    assert ld["@type"] == "SoftwareApplication" and ld["name"] == "t" and ld["url"] == "https://github.com/t/t"
+    assert ld["author"] == {"@type": "Organization", "name": "t"} and ld["programmingLanguage"] == "Java"
+    assert ld["license"] == "MIT" and "aggregateRating" not in ld               # 星数不冒充评分（Google 指南）
+    assert ld["dateModified"] in ("2026-01-01", "2026-11-01")                   # pushed_at 进 dateModified
+    os.environ["DBHUB_SITE_BASE"] = "https://x.pages.dev/"
+    h2 = render(c2)
+    assert '<link rel="canonical" href="https://x.pages.dev/p/t/t/">' in h2    # 注入后出 canonical 且尾斜杠去重
+    del os.environ["DBHUB_SITE_BASE"]
+    hl = render({**c2, "intro": {"text": "长" * 50}})
+    tl = re.search(r"<title>(.*?)</title>", hl).group(1)
+    assert tl.count("长") == 40 and tl.endswith("… · GitHub 1234★")             # 一句话截 40 加省略号
+    hn = render({**c2, "intro": {}})
+    assert "数据库项目档案" in re.search(r"<title>(.*?)</title>", hn).group(1)  # 无一句话兜底
+    hx = render({**c2, "intro": {"text": 'a<b>&"c'}})
+    mdx = re.search(r'<meta name="description" content="([^"]*)"', hx)
+    assert "&lt;b&gt;&amp;&quot;c" in mdx.group(1) and "<b>" not in mdx.group(1)  # 属性转义
+    print(f"OK {VER} selftest: 45 asserts passed")
     return 0
 
 def main():
