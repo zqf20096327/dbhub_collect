@@ -2449,15 +2449,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T23:41:46Z",
+  "collected_at": "2026-11-17T05:01:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
-  "stars": 2706,
+  "pushed_at": "2026-11-17",
+  "stars": 2707,
   "tree": {
-   "sha": "35ccc988833413ae288fe48ffc2d14555374c7ec",
-   "etag": "W/\"20a047a310b42213b4acdbfea83d664c77d83b628bb9f2a5d1ddc53ead467668\"",
+   "sha": "4e93d2290b4818c18d0911821d654736751b6fbf",
+   "etag": "W/\"5ec44935303a1a2984ed1c95e7f0ffc6f1716a5ab3bc4ae659bf875a1224aadf\"",
    "truncated": false,
-   "path_count": 6317,
+   "path_count": 6679,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -2469,13 +2469,21 @@
     "apps/backgrounds/package.json",
     "apps/docs/package.json",
     "apps/viewer/package.json",
+    "crates/agent-kit-core/Cargo.toml",
+    "crates/agent-kit-providers/Cargo.toml",
+    "crates/agent-kit-runtime/Cargo.toml",
+    "crates/agent-kit-sandbox/Cargo.toml",
+    "crates/agent-kit-sessions/Cargo.toml",
+    "crates/agent-kit-store-sqlite/Cargo.toml",
+    "crates/grida-agent-master/Cargo.toml",
+    "crates/grida-agent/Cargo.toml",
     "crates/grida-ai/Cargo.toml",
     "crates/grida-auth/Cargo.toml",
     "crates/grida-cli/Cargo.toml",
     "packages/dotcanvas/package.json",
     "packages/emails/package.json",
     "packages/grida-account/package.json",
-    "packages/grida-ai-agent/package.json",
+    "packages/grida-ai-host/package.json",
     "packages/grida-ai/package.json",
     "packages/grida-auth/package.json",
     "packages/grida-canvas-bitmap/package.json",
@@ -2511,14 +2519,6 @@
     "packages/grida-react-icons/package.json",
     "packages/grida-svg-editor/package.json",
     "packages/grida-svg/package.json",
-    "packages/grida-text-editor/package.json",
-    "packages/grida-tokens/package.json",
-    "packages/grida-tree-view/package.json",
-    "packages/grida-tree/package.json",
-    "packages/react-p-queue/package.json",
-    "packages/translations/package.json",
-    "packages/ui/package.json",
-    "packages/workspace-utils/package.json",
     ".devcontainer/emscripten/Dockerfile",
     ".github/workflows/api.yml",
     ".github/workflows/auth-local.yml",
@@ -2544,9 +2544,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "63693878c4748067e7f7c79841bc4c13e83ec005",
+    "blob_sha": "ee6d89dba4c16a7c4beab6b8be5c2376918219b2",
     "ecosystem": "cargo",
-    "bytes": 505
+    "bytes": 787
    },
    {
     "path": "package.json",
@@ -2581,16 +2581,14 @@
    {
     "path": "desktop/package.json",
     "kind": "dep",
-    "blob_sha": "20762fa4877c0e608518db669ead396a8444f675",
+    "blob_sha": "0018cd161cd5dd2e7a97753762b9563af4981dd8",
     "ecosystem": "npm",
-    "bytes": 3397,
+    "bytes": 3569,
     "names": [
-     "@anthropic-ai/sandbox-runtime",
      "@hono/node-server",
      "@parcel/watcher",
      "hono",
-     "node-pty",
-     "undici"
+     "node-pty"
     ],
     "dev": [
      "@ai-sdk/gateway",
@@ -2606,8 +2604,9 @@
      "@electron-forge/plugin-vite",
      "@electron-forge/shared-types",
      "@electron/fuses",
-     "@grida/agent",
      "@grida/ai",
+     "@grida/ai-host",
+     "@grida/auth",
      "@grida/daemon",
      "@grida/desktop-bridge",
      "@grida/home",
@@ -2623,6 +2622,7 @@
      "electron-squirrel-startup",
      "react",
      "react-dom",
+     "smol-toml",
      "tailwind-merge",
      "tailwindcss",
      "ts-node",
@@ -2635,9 +2635,9 @@
    {
     "path": "editor/package.json",
     "kind": "dep",
-    "blob_sha": "c32d874e0d3ccd33a4f8e3accce941c5d71f7c2c",
+    "blob_sha": "6bbead86068a9e5c017fbf9e0a1a20682c4fda80",
     "ecosystem": "npm",
-    "bytes": 10093,
+    "bytes": 10207,
     "names": [
      "@ai-sdk/openai",
      "@ai-sdk/openai-compatible",
@@ -2664,8 +2664,8 @@
      "@faker-js/faker",
      "@fingerprintjs/fingerprintjs",
      "@formatjs/intl-localematcher",
-     "@grida/agent",
      "@grida/ai",
+     "@grida/ai-host",
      "@grida/bitmap",
      "@grida/canvas-sync",
      "@grida/canvas-wasm",
@@ -2893,6 +2893,168 @@
     ]
    },
    {
+    "path": "crates/agent-kit-core/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "3b618718ae4ced48729558a3da69e231f3dbc43b",
+    "ecosystem": "cargo",
+    "bytes": 480,
+    "names": [
+     "base64",
+     "serde",
+     "serde_json.workspace",
+     "futures-core",
+     "futures-channel",
+     "futures-util",
+     "tokio-util",
+     "sha2"
+    ],
+    "dev": [
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/agent-kit-providers/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "474e251597632c01b5c2cd8e621d706b8b510b3d",
+    "ecosystem": "cargo",
+    "bytes": 470,
+    "names": [
+     "agent-kit-core",
+     "base64",
+     "serde",
+     "serde_json.workspace",
+     "futures-core",
+     "futures-util"
+    ],
+    "dev": [
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/agent-kit-runtime/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "4b6ec8c36d8a27510c9760f5e7f28c51165db46d",
+    "ecosystem": "cargo",
+    "bytes": 510,
+    "names": [
+     "agent-kit-core",
+     "futures-util",
+     "serde",
+     "tokio"
+    ],
+    "dev": [
+     "serde_json.workspace",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/agent-kit-sandbox/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d4078123c367993ecac15474731fe30d13f75802",
+    "ecosystem": "cargo",
+    "bytes": 562,
+    "names": [
+     "agent-kit-core"
+    ]
+   },
+   {
+    "path": "crates/agent-kit-sessions/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "2bcc05662b82c66c4a66873d0eaf0a6b72940f11",
+    "ecosystem": "cargo",
+    "bytes": 300,
+    "names": [
+     "agent-kit-core",
+     "serde"
+    ]
+   },
+   {
+    "path": "crates/agent-kit-store-sqlite/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1f3cd997c57c5ea3c0ee417fe5bd3fa69e3f2fdb",
+    "ecosystem": "cargo",
+    "bytes": 622,
+    "names": [
+     "agent-kit-core",
+     "agent-kit-sessions",
+     "rusqlite",
+     "serde",
+     "serde_json.workspace",
+     "sha2",
+     "tokio"
+    ],
+    "dev": [
+     "tempfile",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/grida-agent-master/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "58e2dd9f5872293cc37f351992b1d7c41cab49ef",
+    "ecosystem": "cargo",
+    "bytes": 634,
+    "names": [
+     "agent-kit-core",
+     "agent-kit-runtime",
+     "serde",
+     "serde_json.workspace"
+    ],
+    "dev": [
+     "agent-kit-sessions",
+     "agent-kit-store-sqlite",
+     "tempfile",
+     "tokio",
+     "futures-util"
+    ]
+   },
+   {
+    "path": "crates/grida-agent/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "479d4033767980547672e09d8f7faf9380848561",
+    "ecosystem": "cargo",
+    "bytes": 2074,
+    "names": [
+     "agent-client-protocol",
+     "agent-kit-core",
+     "agent-kit-providers",
+     "agent-kit-runtime",
+     "agent-kit-sandbox",
+     "agent-kit-sessions",
+     "agent-kit-store-sqlite",
+     "base64",
+     "clap",
+     "futures-channel",
+     "futures-util",
+     "grida-agent-master",
+     "grida-auth",
+     "http-body-util",
+     "hyper",
+     "hyper-util",
+     "image",
+     "png",
+     "libc",
+     "reqwest",
+     "rmcp",
+     "serde",
+     "serde_json.workspace",
+     "sha2",
+     "sse-stream",
+     "subtle",
+     "tempfile",
+     "toml_edit",
+     "tokio",
+     "tokio-tungstenite",
+     "uuid",
+     "zeroize"
+    ],
+    "dev": [
+     "socket2",
+     "tokio",
+     "tokio-util"
+    ]
+   },
+   {
     "path": "crates/grida-ai/Cargo.toml",
     "kind": "dep",
     "blob_sha": "191d63a0c47f8d498414317a750a98557713c1aa",
@@ -2941,13 +3103,17 @@
    {
     "path": "crates/grida-cli/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "2ec7497d5991b3af217e16fd725e06c4f3717d08",
+    "blob_sha": "5f9308a3911fe95ccc2a19a573cd772c305ee1e0",
     "ecosystem": "cargo",
-    "bytes": 1455,
+    "bytes": 1624,
     "names": [
+     "agent-kit-core",
+     "agent-kit-providers",
+     "grida-agent",
      "grida-ai",
      "grida-auth",
      "clap.workspace",
+     "futures-util",
      "serde_json.workspace",
      "unicode-general-category.workspace",
      "bytes",
@@ -3021,26 +3187,15 @@
     ]
    },
    {
-    "path": "packages/grida-ai-agent/package.json",
+    "path": "packages/grida-ai-host/package.json",
     "kind": "dep",
-    "blob_sha": "31491f34cbc3e23dfd5b0d089cd53a764c694857",
+    "blob_sha": "59875c3fc68a52bdf7e1728d2df8b787dee42eb8",
     "ecosystem": "npm",
-    "bytes": 4851,
+    "bytes": 2018,
     "names": [
-     "@agentclientprotocol/sdk",
-     "@ai-sdk/gateway",
-     "@ai-sdk/openai",
-     "@ai-sdk/openai-compatible",
-     "@ai-sdk/provider",
      "@grida/ai",
      "@grida/daemon",
-     "@grida/home",
-     "@hono/node-server",
-     "ai",
-     "drizzle-orm",
-     "hono",
-     "yaml",
-     "zod"
+     "hono"
     ],
     "dev": [
      "tsdown",
@@ -3356,11 +3511,11 @@
    {
     "path": "packages/grida-desktop-bridge/package.json",
     "kind": "dep",
-    "blob_sha": "6971609f31414e34799cd77052c11b677e9b8a2f",
+    "blob_sha": "424f812817559175e44c0f54f51587a37163102d",
     "ecosystem": "npm",
-    "bytes": 910,
+    "bytes": 912,
     "names": [
-     "@grida/agent",
+     "@grida/ai-host",
      "@grida/daemon"
     ],
     "dev": [
@@ -3533,135 +3688,6 @@
     "bytes": 1419
    },
    {
-    "path": "packages/grida-text-editor/package.json",
-    "kind": "dep",
-    "blob_sha": "bb49a999a3f15801869deda373e1985b9ccd7619",
-    "ecosystem": "npm",
-    "bytes": 979,
-    "dev": [
-     "tsdown",
-     "typescript",
-     "vitest"
-    ]
-   },
-   {
-    "path": "packages/grida-tokens/package.json",
-    "kind": "dep",
-    "blob_sha": "74362ce8f57fb82af55271a0d69b3b78c808a3cb",
-    "ecosystem": "npm",
-    "bytes": 1000
-   },
-   {
-    "path": "packages/grida-tree-view/package.json",
-    "kind": "dep",
-    "blob_sha": "8d10cb443fe75de2eb760a196a4ff60a6a1cf2bf",
-    "ecosystem": "npm",
-    "bytes": 1740,
-    "names": [
-     "react"
-    ],
-    "dev": [
-     "@types/node",
-     "@types/react",
-     "react",
-     "tsdown",
-     "typescript",
-     "vitest"
-    ]
-   },
-   {
-    "path": "packages/grida-tree/package.json",
-    "kind": "dep",
-    "blob_sha": "fa8372e0d0add94f49b52518d668e04fdc054095",
-    "ecosystem": "npm",
-    "bytes": 147
-   },
-   {
-    "path": "packages/react-p-queue/package.json",
-    "kind": "dep",
-    "blob_sha": "8c45118299b65e17226f72ca15aff6bf4df89209",
-    "ecosystem": "npm",
-    "bytes": 1122,
-    "names": [
-     "p-queue",
-     "react",
-     "react-dom"
-    ],
-    "dev": [
-     "@types/react",
-     "react"
-    ]
-   },
-   {
-    "path": "packages/translations/package.json",
-    "kind": "dep",
-    "blob_sha": "7fced1d8294b4d8b937c04419c266adbd578c0c3",
-    "ecosystem": "npm",
-    "bytes": 704,
-    "names": [
-     "@formatjs/intl-localematcher",
-     "i18next",
-     "negotiator"
-    ],
-    "dev": [
-     "@types/negotiator"
-    ]
-   },
-   {
-    "path": "packages/ui/package.json",
-    "kind": "dep",
-    "blob_sha": "26a4c2fd4a6be375a573ead88ef57c44dc9a0444",
-    "ecosystem": "npm",
-    "bytes": 1569,
-    "names": [
-     "@base-ui/react",
-     "@radix-ui/react-icons",
-     "@radix-ui/react-use-controllable-state",
-     "@xyflow/react",
-     "ai",
-     "class-variance-authority",
-     "clsx",
-     "cmdk",
-     "embla-carousel-react",
-     "input-otp",
-     "lucide-react",
-     "motion",
-     "nanoid",
-     "next-themes",
-     "radix-ui",
-     "react-day-picker",
-     "react-hook-form",
-     "react-resizable-panels",
-     "recharts",
-     "shadcn",
-     "shiki",
-     "sonner",
-     "streamdown",
-     "tailwind-merge",
-     "tokenlens",
-     "tw-animate-css",
-     "use-stick-to-bottom",
-     "vaul",
-     "react",
-     "react-dom"
-    ],
-    "dev": [
-     "@tailwindcss/postcss",
-     "@types/react",
-     "@types/react-dom",
-     "react",
-     "react-dom",
-     "tailwindcss"
-    ]
-   },
-   {
-    "path": "packages/workspace-utils/package.json",
-    "kind": "dep",
-    "blob_sha": "ce362744e68b4a70ab9c37dabf181c975ae97abc",
-    "ecosystem": "npm",
-    "bytes": 557
-   },
-   {
     "path": ".devcontainer/emscripten/Dockerfile",
     "kind": "image",
     "blob_sha": "f581309e66c0b66a649a872c43ba435f0b32220d",
@@ -3679,8 +3705,8 @@
    {
     "path": ".github/workflows/auth-local.yml",
     "kind": "ci",
-    "blob_sha": "be8cbd72fede307567740328f5d11c9a78e80ff2",
-    "bytes": 10458
+    "blob_sha": "c6a25ee6a81c16220df5618cfaa9426e63d44381",
+    "bytes": 10533
    },
    {
     "path": ".github/workflows/ci-changes.yml",
@@ -3691,8 +3717,8 @@
    {
     "path": ".github/workflows/cli-docs.yml",
     "kind": "ci",
-    "blob_sha": "83d01766aad2dc4ca16e5bf418ee7acf805c4ce1",
-    "bytes": 2953
+    "blob_sha": "533b96404fb04d939d4ee5b83be784d05d877323",
+    "bytes": 2973
    },
    {
     "path": ".github/workflows/cli-native.yml",
@@ -3745,10 +3771,11 @@
    {
     "path": ".github/workflows/realease-desktop-app.yml",
     "kind": "ci",
-    "blob_sha": "68b0a949f46b872c3d6aa0d7287ab009aed7d400",
-    "bytes": 6984,
+    "blob_sha": "1b368f750d9ca652e555da6c2868957a75661be1",
+    "bytes": 7693,
     "images": [
-     "ubuntu-latest",
+     "ubuntu-24.04",
+     "ubuntu-24.04-arm",
      "windows-latest",
      "macos-26",
      "macos-15-intel"
@@ -3757,8 +3784,8 @@
    {
     "path": ".github/workflows/rust.yml",
     "kind": "ci",
-    "blob_sha": "f3aedf6f42002bf5860c808543ac4c3fa9230511",
-    "bytes": 2956
+    "blob_sha": "bae26ac1a91ac311baf090c94c4f468d13e068c7",
+    "bytes": 3843
    },
    {
     "path": ".github/workflows/split-probe.yml",
@@ -3781,8 +3808,8 @@
    {
     "path": ".github/workflows/verify-desktop-package.yml",
     "kind": "ci",
-    "blob_sha": "763659448084b2685b77daddd3b6a87e35f40281",
-    "bytes": 2612
+    "blob_sha": "df2d83f5bdb953bcedb149afbbe4ca032af79756",
+    "bytes": 2670
    }
   ],
   "clues": {
@@ -3802,6 +3829,8 @@
     "editor/grida-canvas-plugin-p666/index.ts",
     "editor/grida-canvas/editor-history-adapter.ts",
     "scripts/cli-contracts/auth-driver.mjs",
+    "crates/agent-kit-core/src/driver_state.rs",
+    "crates/agent-kit-store-sqlite/src/driver.rs",
     "editor/grida-canvas-react/plugins/use-follow.ts",
     "editor/grida-canvas-react/plugins/use-recorder.ts",
     "editor/grida-canvas/plugins/follow.ts",
@@ -3813,8 +3842,6 @@
     "editor/grida-canvas/plugins/sync/index.ts",
     "editor/grida-canvas/plugins/sync/presence-sync.ts",
     "editor/grida-canvas/plugins/sync/serialize.ts",
-    "packages/grida-ai-agent/src/acp/adapter.test.ts",
-    "packages/grida-ai-agent/src/acp/adapter.ts",
     "apps/docs/i18n/ko/docusaurus-plugin-content-blog/options.json"
    ]
   },
@@ -3903,13 +3930,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T23:55:55Z",
+  "collected_at": "2026-11-17T05:25:17Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
+  "pushed_at": "2026-11-16",
   "stars": 145,
   "tree": {
-   "sha": "94151c4f16434a0fe3f7ab9d6cf2482bde54818a",
-   "etag": "W/\"02ca66e15084de5460f2058219b306922b5ddd7f3f5076207113289d8e9f2426\"",
+   "sha": "5c75ed733597e4a591c732c30c534168a3459da9",
+   "etag": "W/\"1096770cb3359deba89cddb9241b09d2fbf05cc08e0aa75165eb7d08090445b1\"",
    "truncated": false,
    "path_count": 1100,
    "matched": [
@@ -3941,7 +3968,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "fda6a58419a501e35dbb07ea89a55b52e6678395",
+    "blob_sha": "5c6f46d1933574ca6a5c4791949104a3d74fdb8e",
     "ecosystem": "npm",
     "bytes": 1759,
     "names": [
@@ -3984,8 +4011,8 @@
    {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "2b2cb0601fe9cf7734552b9796a3d696c1b3a730",
-    "bytes": 2270,
+    "blob_sha": "7f4cbf79f74109fe4e36e8f57461f2df21ba1d69",
+    "bytes": 2258,
     "images": [
      "postgres:17.11-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0",
      "overflow-app"
@@ -4003,8 +4030,8 @@
    {
     "path": ".github/workflows/actionlint.yml",
     "kind": "ci",
-    "blob_sha": "edac3483644d6c83fbe477844d4d1905ccf50ec3",
-    "bytes": 4687
+    "blob_sha": "bf812782d62b8b98b4fd3b703ae8f81c00ce7a27",
+    "bytes": 4662
    },
    {
     "path": ".github/workflows/ci-pr.yml",
@@ -4015,8 +4042,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "158639c5f1dc6a171bd49b0d86a255e833967931",
-    "bytes": 31126,
+    "blob_sha": "4613e03c245ef827d6602e440d87daec83a27ca6",
+    "bytes": 30758,
     "images": [
      "${{"
     ]
@@ -4024,8 +4051,8 @@
    {
     "path": ".github/workflows/claim.yml",
     "kind": "ci",
-    "blob_sha": "1a39188c1bc2e85caace265739936e08ec49fdfe",
-    "bytes": 3536
+    "blob_sha": "29e8f8dc9e2a6a9b1a7df3fca94cc4f76717d0b0",
+    "bytes": 3428
    },
    {
     "path": ".github/workflows/code-scanning.yml",
@@ -4042,8 +4069,8 @@
    {
     "path": ".github/workflows/coverage-comment.yml",
     "kind": "ci",
-    "blob_sha": "8f204c89e1d4927661c72348178c5477176e3377",
-    "bytes": 17550
+    "blob_sha": "f8000d617bfedd5181849ea2ff430a78c4e9a204",
+    "bytes": 17515
    },
    {
     "path": ".github/workflows/dependency-audit.yml",
@@ -4060,19 +4087,19 @@
    {
     "path": ".github/workflows/ledger-relay.yml",
     "kind": "ci",
-    "blob_sha": "2281d56277b6498b580e2a44269a6702882d6dbd",
-    "bytes": 6871
+    "blob_sha": "f806e1812d79313db6a9fbc249ee5eb5311df9b9",
+    "bytes": 6859
    },
    {
     "path": ".github/workflows/pin-guard.yml",
     "kind": "ci",
-    "blob_sha": "0cd60267bf4948f37eb313fdb848f4a9ecbbe7b1",
+    "blob_sha": "23d59edb2f363f12c63654a9421f20cc87826e8e",
     "bytes": 569
    },
    {
     "path": ".github/workflows/pr-gate.yml",
     "kind": "ci",
-    "blob_sha": "57a6a8120e6b7c6481c850cfdf4fbc4aaacffc39",
+    "blob_sha": "7ce7998cd167d99cbde111eacffd7cdb68f94a3e",
     "bytes": 1369
    },
    {
@@ -4084,8 +4111,8 @@
    {
     "path": ".github/workflows/pr-suite.yml",
     "kind": "ci",
-    "blob_sha": "c8199f1a26d408507bedc83a89546361c4df7dfc",
-    "bytes": 15135,
+    "blob_sha": "41c18ee6f587453094061ec0c3e86191e68c7c05",
+    "bytes": 15051,
     "images": [
      "${{"
     ]
@@ -4093,8 +4120,8 @@
    {
     "path": ".github/workflows/ratchet-guard.yml",
     "kind": "ci",
-    "blob_sha": "14499b879f49843a5555e798f56bc303f361d403",
-    "bytes": 7928
+    "blob_sha": "c95054a85f014e17bfa155bfc00d9c08965a1620",
+    "bytes": 7903
    },
    {
     "path": ".github/workflows/scorecard.yml",
@@ -4105,8 +4132,8 @@
    {
     "path": ".github/workflows/secret-scan.yml",
     "kind": "ci",
-    "blob_sha": "8feeb83b777664bba9c155ff97b7a70231fc0266",
-    "bytes": 7887
+    "blob_sha": "aac121d48e1709050e2351b1cd354391b318695e",
+    "bytes": 7871
    },
    {
     "path": ".github/workflows/size-baseline.yml",
@@ -6386,15 +6413,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T23:38:56Z",
+  "collected_at": "2026-11-17T04:57:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
-  "stars": 5474,
+  "pushed_at": "2026-11-16",
+  "stars": 5483,
   "tree": {
-   "sha": "ea38e71024e1dd137c86a0b7c1190ab962d1684a",
-   "etag": "W/\"fe86bbc23f5b2431ec5c479fc11bbfa0e4a3a89e769023c7f4de0e9bcd21ac5e\"",
+   "sha": "b7bbfa7236990b6e3ee5264302003f8b8ff70c45",
+   "etag": "W/\"dc27b6320bac788984380330c408d8d924131add0f31dfeaf4f954994914ed33\"",
    "truncated": false,
-   "path_count": 2580,
+   "path_count": 2668,
    "matched": [
     "package.json",
     "e2e/package.json",
@@ -6403,6 +6430,7 @@
     "packages/explain/package.json",
     "packages/plugin-api/package.json",
     "packages/web-ui/package.json",
+    "src-tauri/vendor/sqlx-mysql/Cargo.toml",
     "docker/Dockerfile",
     "charts/tabularis/values.yaml",
     ".github/workflows/aur.yml",
@@ -6433,9 +6461,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "3c2bb039c85e9fa4b98b266c7a3db83e933c3197",
+    "blob_sha": "3b64fa174123865b3bcf74d5faf96a7f05dcd87d",
     "ecosystem": "npm",
-    "bytes": 5616,
+    "bytes": 5644,
     "names": [
      "@monaco-editor/react",
      "@tabularis/explain",
@@ -6464,6 +6492,7 @@
      "jsonc-parser",
      "lucide-react",
      "monaco-editor",
+     "monaco-vim",
      "process",
      "react",
      "react-colorful",
@@ -6535,9 +6564,9 @@
    {
     "path": "src-tauri/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "278d18f45c015f8ef1d4194a753495a22f45a8f3",
+    "blob_sha": "b3cc2e35da5f5c1b2ce5d0bb1ac18d15f250ce98",
     "ecosystem": "cargo",
-    "bytes": 7633,
+    "bytes": 7858,
     "names": [
      "serde_json",
      "tempfile",
@@ -6680,7 +6709,7 @@
    {
     "path": "packages/web-ui/package.json",
     "kind": "dep",
-    "blob_sha": "2b809ee6aed67f0c1cb6c4ca6dd30f8ac7d4dcf1",
+    "blob_sha": "97674d58c5ba530aa352a3076f8c27db761a3e5a",
     "ecosystem": "npm",
     "bytes": 1055,
     "dev": [
@@ -6699,10 +6728,17 @@
     ]
    },
    {
+    "path": "src-tauri/vendor/sqlx-mysql/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "90ccf65b436244499c01809f34c6678eb8d3262a",
+    "ecosystem": "cargo",
+    "bytes": 4201
+   },
+   {
     "path": "docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "bd97469254ffb56b86d1040dabdfe43a19845e4f",
-    "bytes": 3416,
+    "blob_sha": "48097dabf76676ad2d3651eb4706b55290be943e",
+    "bytes": 3613,
     "images": [
      "node:${NODE_VERSION}-${DEBIAN_VERSION}-slim",
      "rust:1-${DEBIAN_VERSION}",
@@ -6743,8 +6779,8 @@
    {
     "path": ".github/workflows/docker.yml",
     "kind": "ci",
-    "blob_sha": "9e95f42ea5f5877cbf4b6c3b5b989890d6546ac5",
-    "bytes": 6178,
+    "blob_sha": "0b719071fee75747863f8f0ae574879cc685980a",
+    "bytes": 7661,
     "images": [
      "name:"
     ]
@@ -6776,8 +6812,8 @@
    {
     "path": ".github/workflows/mysql-integration.yml",
     "kind": "ci",
-    "blob_sha": "d74d02ee1a32c51be9ad94d965915e205923583c",
-    "bytes": 2517,
+    "blob_sha": "a1dc6bedea1fadecadb2128d85910aa548492bce",
+    "bytes": 2898,
     "images": [
      "[",
      "${{"
@@ -6804,8 +6840,8 @@
    {
     "path": ".github/workflows/pg-integration.yml",
     "kind": "ci",
-    "blob_sha": "2321d4eced1b9a79ad3143e3147c21b152c03857",
-    "bytes": 2710,
+    "blob_sha": "6bf1a8f0e85456f91978a61be61beef72777ab22",
+    "bytes": 3060,
     "images": [
      "postgres:16"
     ]
@@ -7127,13 +7163,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T23:44:39Z",
+  "collected_at": "2026-11-17T05:06:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
+  "pushed_at": "2026-11-17",
   "stars": 1316,
   "tree": {
    "sha": "8db69b007944d89f748a61d4f94f574d96f9dee1",
-   "etag": "W/\"f0a07b4a445fde7ff6f0079a1622bf9907fbe10c58f0643d799fc8416764fd41\"",
+   "etag": "W/\"e07741f59b2f37ce005878973ddbc7d3d2d0858dbdcf4b20e2d4c00b310ca2ac\"",
    "truncated": false,
    "path_count": 2508,
    "matched": [
@@ -7830,13 +7866,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:42:12Z",
+  "collected_at": "2026-11-17T05:13:21Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
-  "stars": 526,
+  "pushed_at": "2026-11-16",
+  "stars": 529,
   "tree": {
    "sha": "5b8fe4989242f929992db7e4b1f0b61baa197a85",
-   "etag": "W/\"0cb9c541fb44aef908906a595d292a89698376f2ab327c8a383fc009213a5e92\"",
+   "etag": "W/\"6cf826d4fc19b5caae2b8f4ab324874ef64daff0be94841a4fe449fb590b2b59\"",
    "truncated": false,
    "path_count": 333,
    "matched": [
@@ -8590,15 +8626,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:51:29Z",
+  "collected_at": "2026-11-17T05:25:24Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
+  "pushed_at": "2026-11-17",
   "stars": 143,
   "tree": {
-   "sha": "4379007a81d1bfc8751ebcf8dbb1143ba6460ed8",
-   "etag": "W/\"f3846da31d0bccb53d08e6cd488de485aa3fc1dd3a5e801a88db37f926801392\"",
+   "sha": "c49e1ccee98f1dd77027869d0f907d8f4be1e2f2",
+   "etag": "W/\"69b5b5a2d75c6d4086aacc82ef74abe393cbfdcbc9a375420762b085aa288709\"",
    "truncated": false,
-   "path_count": 4333,
+   "path_count": 4343,
    "matched": [
     "go.mod",
     "e2e/package.json",
@@ -9651,15 +9687,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:04:37Z",
+  "collected_at": "2026-11-17T05:39:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
+  "pushed_at": "2026-11-16",
   "stars": 45,
   "tree": {
-   "sha": "a16323a072d31a4e55a71beeb88013ef638ca314",
-   "etag": "W/\"f41bd40c177ec041ffa38552b88468a53a145df209ef2de5777b07d4f876cc2a\"",
+   "sha": "f38fedea92635bf42e3ab3b205aecf29602630f8",
+   "etag": "W/\"b1da81e429b70bea3fe2a149c73720f1941c57b3df1f8e6daa0d5ebaa3457137\"",
    "truncated": false,
-   "path_count": 1490,
+   "path_count": 1493,
    "matched": [
     "go.mod",
     "loadtest/go.mod",
@@ -9685,9 +9721,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "d7d232d2f21e0d434e3a06ad7aa999d6ef182162",
+    "blob_sha": "991800bb9a3e771cee5406603556fcd22d3830ec",
     "ecosystem": "go",
-    "bytes": 9926,
+    "bytes": 9963,
     "names": [
      "github.com/SaveTheRbtz/zstd-seekable-format-go/pkg",
      "github.com/aws/aws-sdk-go-v2",
@@ -12480,13 +12516,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:31:56Z",
+  "collected_at": "2026-11-17T05:51:38Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-13",
-  "stars": 19,
+  "pushed_at": "2026-11-16",
+  "stars": 20,
   "tree": {
    "sha": "a19dd4d0f8fb2cff4473c4a4f825981b0161b3be",
-   "etag": "W/\"70dba68e0fad77e15e4c90b390f3c8d5625dc605462bb5c0583ae3eded065fa8\"",
+   "etag": "W/\"8e669d59cf6409a1321d6a6c28b915e368369523950dfe4199fad16b5c93d716\"",
    "truncated": false,
    "path_count": 6229,
    "matched": [
@@ -13997,15 +14033,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T23:43:21Z",
+  "collected_at": "2026-11-17T05:04:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
-  "stars": 1846,
+  "pushed_at": "2026-11-16",
+  "stars": 1850,
   "tree": {
-   "sha": "b303d720e91683dc29c247f142e2195f31e2d9a5",
-   "etag": "W/\"3a43d1379f6ee119c101b12a24d4dfc5fbc23c3d56069c487232650dde4b3a4e\"",
+   "sha": "f0f3609665f973d4d84519c0c90d87e1f3c5f664",
+   "etag": "W/\"3d404cf63c77232008982a7f884dc27eb59d0edae3e540e5b3e9216df75019ab\"",
    "truncated": false,
-   "path_count": 4287,
+   "path_count": 4293,
    "matched": [
     "composer.json",
     "package.json",
@@ -15836,13 +15872,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T04:57:24Z",
+  "collected_at": "2026-11-17T05:32:18Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-16",
   "stars": 81,
   "tree": {
    "sha": "0f650a7e693fcaadbe4e7e1a01a774c4e9a6f0ed",
-   "etag": "W/\"4b0c49cbf1b58e6b606ef24c5aeb6a0dd95ef5965a5d330352ed7d51e618a042\"",
+   "etag": "W/\"5f9463e7b7d5fe53462b4d658757e60e962b9c0d5a34814e6a7812f2cb2bbccd\"",
    "truncated": false,
    "path_count": 137,
    "matched": [
@@ -16691,13 +16727,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-12T02:05:09Z",
+  "collected_at": "2026-11-17T06:07:53Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-10",
+  "pushed_at": "2026-11-16",
   "stars": 3,
   "tree": {
-   "sha": "de7d8ffc08b6e3c522ed67c0db90fd29793ee37d",
-   "etag": "W/\"49dbe4afe5931293d84105c5262c5b471b595c5f2283049061115bf81e9a8301\"",
+   "sha": "99ebe9bf7161ecbcb70fcb28ebaf419a9ee4a3b3",
+   "etag": "W/\"fc34375b3262c752125767be21aad059ee4dc0c948f49e3a7a6d4fd55a1514b4\"",
    "truncated": false,
    "path_count": 34,
    "matched": [

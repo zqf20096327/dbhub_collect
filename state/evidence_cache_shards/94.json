@@ -952,13 +952,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:32:15Z",
+  "collected_at": "2026-11-17T04:59:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
-  "stars": 3518,
+  "pushed_at": "2026-11-16",
+  "stars": 3519,
   "tree": {
-   "sha": "e6663d3f0bae3cdc6964bb8280fe48f72e723d60",
-   "etag": "W/\"8a33bde29de7795c9217ddca6a816aa00c27816a4bc794fdcfbce09e59a25841\"",
+   "sha": "b7790da22b6b65f6df1e4459107b18fda2806d6e",
+   "etag": "W/\"c2760c8e8da9c6dfd544b3ad0c9e1ddeeea9fb4ccf3d2badc14c4d7651f4b604\"",
    "truncated": false,
    "path_count": 1545,
    "matched": [
@@ -7705,15 +7705,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T23:32:36Z",
+  "collected_at": "2026-11-17T05:00:26Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
+  "pushed_at": "2026-11-16",
   "stars": 3262,
   "tree": {
-   "sha": "bc09cfe0af5258bfb8d70648590c6299456a3e93",
-   "etag": "W/\"b39054568430f029e6a97caab92e5ffaf0fbb13dcd968e52008c4cef619ad55d\"",
+   "sha": "e34e4c907dff0aea10ca61116d934e53bd4d1eda",
+   "etag": "W/\"eda1b74321c27572f29f7175914bfac4fe8e64467116786e529d3f3e0f0db356\"",
    "truncated": false,
-   "path_count": 2193,
+   "path_count": 2215,
    "matched": [
     "Cargo.toml",
     "pom.xml",
@@ -7746,7 +7746,9 @@
     "rust/postgres-lakesoul/Cargo.toml",
     "script/weknora-es-harness/go.mod",
     "integrations/native-io/lakesoul-io-java/pom.xml",
+    "rust/postgres-lakesoul/client-compat/requirements.txt",
     "rust/third_party/sqllogictest/Cargo.toml",
+    "rust/postgres-lakesoul/client-compat/jdbc/pom.xml",
     "docker/lakesoul-python-wheel-build-env/Dockerfile",
     "script/build-env/Dockerfile",
     "docker/dockerfiles/presto-server/Dockerfile",
@@ -7762,6 +7764,7 @@
     ".github/workflows/ivm-bench.yml",
     ".github/workflows/maven-test.yml",
     ".github/workflows/native-build.yml",
+    ".github/workflows/pg-client-compat.yml",
     ".github/workflows/presto-cdc-test.yml",
     ".github/workflows/python-ci.yml",
     ".github/workflows/release-build.yml",
@@ -8632,9 +8635,9 @@
    {
     "path": "rust/postgres-lakesoul/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "1bcd35030b91b9f34cdf95768b708bb9c8bf6146",
+    "blob_sha": "1ab94f7f56640101caa2709ce4dc8071ed344d36",
     "ecosystem": "cargo",
-    "bytes": 2771,
+    "bytes": 2801,
     "names": [
      "lakesoul-build-info",
      "lakesoul-common",
@@ -8661,6 +8664,7 @@
      "tracing.workspace",
      "tracing-subscriber.workspace",
      "futures.workspace",
+     "jsonwebtoken.workspace",
      "bytes.workspace",
      "async-trait.workspace",
      "thiserror.workspace",
@@ -8726,11 +8730,34 @@
     ]
    },
    {
+    "path": "rust/postgres-lakesoul/client-compat/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "05bc0094a212eec13015d4ac23714908fc5154c3",
+    "ecosystem": "pypi",
+    "bytes": 294,
+    "names": [
+     "pytest",
+     "psycopg2-binary",
+     "psycopg",
+     "sqlalchemy"
+    ]
+   },
+   {
     "path": "rust/third_party/sqllogictest/Cargo.toml",
     "kind": "dep",
     "blob_sha": "6646a27bbd85b0102b09df0493e2b7bc17ee2183",
     "ecosystem": "cargo",
     "bytes": 2031
+   },
+   {
+    "path": "rust/postgres-lakesoul/client-compat/jdbc/pom.xml",
+    "kind": "dep",
+    "blob_sha": "db48285f692fb3b6e18acbf8139fa12e1448cf5a",
+    "ecosystem": "maven",
+    "bytes": 1302,
+    "names": [
+     "org.postgresql:postgresql"
+    ]
    },
    {
     "path": "docker/lakesoul-python-wheel-build-env/Dockerfile",
@@ -8852,6 +8879,15 @@
     "bytes": 6757
    },
    {
+    "path": ".github/workflows/pg-client-compat.yml",
+    "kind": "ci",
+    "blob_sha": "bd531ff875a95a4022c3d27d1d843cfa6e2d7669",
+    "bytes": 3444,
+    "images": [
+     "swr.ap-southeast-3.myhuaweicloud.com/dmetasoul-repo/postgres:18"
+    ]
+   },
+   {
     "path": ".github/workflows/presto-cdc-test.yml",
     "kind": "ci",
     "blob_sha": "11a7980e095a4aef474b99e2e54a7702b9255e3d",
@@ -8880,8 +8916,8 @@
    {
     "path": ".github/workflows/rust-ci.yml",
     "kind": "ci",
-    "blob_sha": "b266039f7d5a023a4e7e5fce40068524f72e3eaf",
-    "bytes": 9957,
+    "blob_sha": "c481da70049e0f15cff3fd2a4ce7b07b4ad43e51",
+    "bytes": 9999,
     "images": [
      "swr.ap-southeast-3.myhuaweicloud.com/dmetasoul-repo/postgres:18",
      "swr.ap-southeast-3.myhuaweicloud.com/dmetasoul-repo/rustfs:1.0.4"
@@ -8938,7 +8974,9 @@
     "website/docs/connectors/flink/cdc-whole-database/mysql-read-after-delete.png",
     "website/docs/connectors/flink/cdc-whole-database/mysql-update-1.png",
     "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/engine/postgres/_category_.json",
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/engine/postgres/authentication.md",
     "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/engine/postgres/compatibility.md",
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/engine/postgres/copy.md",
     "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/engine/postgres/ddl.md",
     "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/engine/postgres/detached-queries.md",
     "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/engine/postgres/federation.md",
@@ -11344,13 +11382,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-10T04:58:40Z",
+  "collected_at": "2026-11-17T05:33:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-09",
+  "pushed_at": "2026-11-16",
   "stars": 71,
   "tree": {
    "sha": "d2bab46be1d6a38c8fbc644cc998e81425dbdedf",
-   "etag": "W/\"8a3217819617fa3b10dde907b0a3813f382ebe0045a5f6d276bcad9a8d8dcff9\"",
+   "etag": "W/\"9992a6573f68d1d05e3a3d59d38a5ba2de806530d6d35349897f640c0ccdb8b7\"",
    "truncated": false,
    "path_count": 118,
    "matched": [
@@ -11467,15 +11505,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-13T03:37:15Z",
+  "collected_at": "2026-11-17T05:34:03Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-12",
+  "pushed_at": "2026-11-16",
   "stars": 69,
   "tree": {
-   "sha": "96ddbecf2ce068569ea44cc65dd406e4d92076e5",
-   "etag": "W/\"eae3149259d0eb4a8c4b458d654a728cd114e7a00a035b8d4d7d6f6f48bf2777\"",
+   "sha": "994c4d78efb0c124bceea66e1403cf064f7aaa10",
+   "etag": "W/\"08a2c9f8efc0c5307a44ea5ce7c9d4b2cde562cd43d07a582dd8675a715a6084\"",
    "truncated": false,
-   "path_count": 91,
+   "path_count": 94,
    "matched": [
     "Cargo.toml",
     ".github/workflows/engine-release-check.yml",
@@ -11487,9 +11525,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "bb8abdbff704fe035758512e25c1c66b78a10035",
+    "blob_sha": "9756f2b3b11c3210e2916fd91a3076a3833cfb04",
     "ecosystem": "cargo",
-    "bytes": 4660,
+    "bytes": 4785,
     "names": [
      "arrow",
      "serde_json",
@@ -11525,8 +11563,8 @@
    {
     "path": ".github/workflows/rust.yml",
     "kind": "ci",
-    "blob_sha": "94764b60a09f31c87b41145f3e37d72b8ab6bbde",
-    "bytes": 8597
+    "blob_sha": "99013172c5b7550110f9bee2ed8849bdb81fe83e",
+    "bytes": 9241
    }
   ],
   "clues": {
@@ -12564,13 +12602,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:51:18Z",
+  "collected_at": "2026-11-17T05:42:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
-  "stars": 35,
+  "pushed_at": "2026-11-16",
+  "stars": 36,
   "tree": {
    "sha": "46b048a5aed6e7408f7cc858285e73ebb7330411",
-   "etag": "W/\"ec3d88004a868092650dc89b43af31e7b5e88e8ff32d066b539dc3e891374299\"",
+   "etag": "W/\"d70ba0eac952507d1c3f5ba11d41cf98bb2b7c9f9cf2e28777ecc2fb079533a4\"",
    "truncated": false,
    "path_count": 54,
    "matched": [
@@ -15193,13 +15231,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:19:14Z",
+  "collected_at": "2026-11-17T05:59:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
+  "pushed_at": "2026-11-16",
   "stars": 12,
   "tree": {
    "sha": "50873ebfdfff023c3efd0f9b5e1bb5f3cea5de36",
-   "etag": "W/\"9d836b89394488ddf50a883bae9f9a140daca97e49556e8691eebcab0606801e\"",
+   "etag": "W/\"9225a6cdfeb5680b23ca643053aa65d3c035dcafc64a8e487a3833d466f6ec94\"",
    "truncated": false,
    "path_count": 443,
    "matched": [
@@ -15528,13 +15566,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:19:28Z",
+  "collected_at": "2026-11-17T05:57:17Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
-  "stars": 12,
+  "pushed_at": "2026-11-16",
+  "stars": 14,
   "tree": {
-   "sha": "d783a722c863a8490e8e6b61e7a0d588f83a94b3",
-   "etag": "W/\"1766c3799c285afcd87e1f6e02ab02d6b63d637af44838fc20761134dcadbf5f\"",
+   "sha": "c87f1a31843cd98fd5163eaf9aec60523b248486",
+   "etag": "W/\"0ce537868f22c4c63cddf4e1ec81fe8b5496391244bbc0a86238ed87a2bdd24a\"",
    "truncated": false,
    "path_count": 126,
    "matched": [
@@ -17044,13 +17082,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-15T23:54:40Z",
+  "collected_at": "2026-11-17T05:23:15Z",
   "default_branch": "trunk",
-  "pushed_at": "2026-11-15",
+  "pushed_at": "2026-11-16",
   "stars": 178,
   "tree": {
-   "sha": "b32a8ed1b9a31c27dec71303d1a60ce43354cdec",
-   "etag": "W/\"205995a4ca848599e08d433fd28e87a0f920220a4a516996660680a6d634f9c5\"",
+   "sha": "c8f30fe5e6f327ad533446e48587d3b442f942b8",
+   "etag": "W/\"47ac44929b7d9de4d42f4788039405951c84cd41bb4889720001000920e30826\"",
    "truncated": false,
    "path_count": 621,
    "matched": [
@@ -17790,15 +17828,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-14T03:24:22Z",
+  "collected_at": "2026-11-17T05:42:21Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-13",
+  "pushed_at": "2026-11-16",
   "stars": 36,
   "tree": {
-   "sha": "520fe91995a45bc081aed614e3f307482cb818dc",
-   "etag": "W/\"1e90fc10d4dfae03666c1624952f34185fbc718520cd55e82db0731043fb7307\"",
+   "sha": "6719e989234e7a3780d93a08475b9636fd24c1b2",
+   "etag": "W/\"1a330b3fa419203c64c0e91fe242f296ec76d987959291ef1b890462dd08feb8\"",
    "truncated": false,
-   "path_count": 370,
+   "path_count": 642,
    "matched": [
     "package.json",
     "integrations/dsh/agent-presets/package.json",
@@ -17810,9 +17848,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "3619f49b16c969af7473d945124c36551e75dfaa",
+    "blob_sha": "5cade75945982d4bf4643798bd35459940c7d62d",
     "ecosystem": "npm",
-    "bytes": 6669,
+    "bytes": 7388,
     "names": [
      "@deepseek-ai/dsh-host-apiproxy",
      "@deepseek-ai/schemastery",
@@ -17826,14 +17864,14 @@
    {
     "path": "integrations/dsh/agent-presets/package.json",
     "kind": "dep",
-    "blob_sha": "24bdf904ea7774f3d83c1b1f17f16e343c44cdb8",
+    "blob_sha": "463674a639fa8b8681e66eecbfeecc802becd052",
     "ecosystem": "npm",
     "bytes": 403
    },
    {
     "path": "integrations/dsh/mode-console/package.json",
     "kind": "dep",
-    "blob_sha": "aac506d01ed34b1ed0455441f127f57956ef279f",
+    "blob_sha": "736284d340b7ff1a1b35bc6b5b080e2e2ae70ec2",
     "ecosystem": "npm",
     "bytes": 382,
     "names": [
@@ -17856,7 +17894,30 @@
    ],
    "docs_matrix": [],
    "paths": [
-    "tests/qq-mode-plugin.test.mjs"
+    "tests/qq-mode-plugin.test.mjs",
+    "services/social/life/adapters/xml.js",
+    "services/social/life/adapters/arxiv/index.js",
+    "services/social/life/adapters/arxiv/manifest.json",
+    "services/social/life/adapters/calendar-ics/index.js",
+    "services/social/life/adapters/calendar-ics/manifest.json",
+    "services/social/life/adapters/github/index.js",
+    "services/social/life/adapters/github/manifest.json",
+    "services/social/life/adapters/paper/index.js",
+    "services/social/life/adapters/paper/manifest.json",
+    "services/social/life/adapters/rss/index.js",
+    "services/social/life/adapters/rss/manifest.json",
+    "services/social/life/adapters/arxiv/fixtures/feed.xml",
+    "services/social/life/adapters/calendar-ics/fixtures/basic.ics",
+    "services/social/life/adapters/calendar-ics/fixtures/malformed.ics",
+    "services/social/life/adapters/github/fixtures/issues.json",
+    "services/social/life/adapters/github/fixtures/notifications.json",
+    "services/social/life/adapters/github/fixtures/pulls.json",
+    "services/social/life/adapters/github/fixtures/releases.json",
+    "services/social/life/adapters/github/fixtures/repo.json",
+    "services/social/life/adapters/paper/fixtures/arxiv.xml",
+    "services/social/life/adapters/paper/fixtures/openalex.json",
+    "services/social/life/adapters/rss/fixtures/feed.xml",
+    "services/social/life/adapters/rss/fixtures/malformed.xml"
    ]
   },
   "fail_count": 0
@@ -17867,13 +17928,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:21:37Z",
+  "collected_at": "2026-11-17T06:03:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-14",
+  "pushed_at": "2026-11-15",
   "stars": 10,
   "tree": {
    "sha": "adddf639e685ffc14a40bb57c79122b7ba146b25",
-   "etag": "W/\"514027b47089d134f0cc856ca2ba8db85401f8c92324564a8e67733ef1730e5e\"",
+   "etag": "W/\"7be9bb37ea37705a289d819efcef9c1492683f541aa796f4855ec8e5869b10cb\"",
    "truncated": false,
    "path_count": 843,
    "matched": [
@@ -19810,15 +19871,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-16T00:14:31Z",
+  "collected_at": "2026-11-17T05:52:41Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-15",
-  "stars": 17,
+  "pushed_at": "2026-11-16",
+  "stars": 18,
   "tree": {
-   "sha": "5b63113bc6096779500bb1c99e624919bcf48fc0",
-   "etag": "W/\"f3d409762d69e99cea1525b6a8bf3bf02d3ed3c89d3b21eabfe342fb4242313c\"",
+   "sha": "9d393dae331695349381b75fcc9b82ecc6a256be",
+   "etag": "W/\"66cf84a5e04ecaa109af7cc16817c0e50954a609d7400d938fc17a67d84d19be\"",
    "truncated": false,
-   "path_count": 243,
+   "path_count": 254,
    "matched": [
     "pyproject.toml",
     ".github/workflows/ci.yml",
@@ -19830,7 +19891,7 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "5d24a57045f59450e6be0b5414f9b6c22dbe2f16",
+    "blob_sha": "db3d2817b984257dca1c748668ad82937ee34cdb",
     "ecosystem": "pyproject",
     "bytes": 3335,
     "names": [
@@ -19864,6 +19925,75 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "arriqaaq/varaq": {
+  "fn": "arriqaaq/varaq",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-17T04:46:17Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-16",
+  "stars": 4,
+  "tree": {
+   "sha": "0d3c02d52b0e8c5beba8f311b3b47548758bbe28",
+   "etag": "W/\"66831698b4aa701ff418871715c536c46f04a961815d68b26f9b62bd5198f160\"",
+   "truncated": false,
+   "path_count": 108,
+   "matched": [
+    "Cargo.toml",
+    "crates/varaq/Cargo.toml",
+    "crates/web/Cargo.toml",
+    ".github/workflows/veil.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f76730f18ed7b5388e935bfd99a16732d5430f93",
+    "ecosystem": "cargo",
+    "bytes": 1242
+   },
+   {
+    "path": "crates/varaq/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "cadf9dd64e7e705d4a6af669cd0c3a5feb72937f",
+    "ecosystem": "cargo",
+    "bytes": 1468,
+    "names": [
+     "thiserror.workspace",
+     "crc32c",
+     "libc.workspace"
+    ]
+   },
+   {
+    "path": "crates/web/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "cf124d1a717560376c1809bf2096b56ced5f0f4d",
+    "ecosystem": "cargo",
+    "bytes": 582,
+    "names": [
+     "varaq.workspace"
+    ]
+   },
+   {
+    "path": ".github/workflows/veil.yml",
+    "kind": "ci",
+    "blob_sha": "66031b96bcf22d9e8f71cce1d0cf623410259221",
+    "bytes": 3799
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "crates/varaq/src/wal/driver.rs"
+   ]
   },
   "fail_count": 0
  }
