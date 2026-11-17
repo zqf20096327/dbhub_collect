@@ -21829,5 +21829,3582 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "742f49478d79+2": {
+  "fn": "ClickHouse/mcp-clickhouse",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     "PyPI - Version"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    3,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    7,
+    [
+     "mcp-clickhouse MCP server"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    30,
+    7,
+    28
+   ],
+   [
+    "replace",
+    30,
+    35,
+    28,
+    33,
+    [
+     " * Execute SQL queries on your ClickHouse cluster.",
+     " * Input: `query` (string): The SQL query to execute.",
+     " * Optional input: `params` (object): Named values for ClickHouse `{name:Type}` placeholders. See Query parameters.",
+     " * Queries run in read-only mode by default (`CLICKHOUSE_ALLOW_WRITE_ACCESS=false`), but writes can be enabled explicitly if needed.",
+     " * `DESCRIBE (<query>)` and `EXPLAIN ESTIMATE <query>` run here too and are optional ways to inspect a query's result schema or its estimated reads. See Checking a query before running it."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    33,
+    35
+   ],
+   [
+    "replace",
+    37,
+    38,
+    35,
+    36,
+    [
+     " * List all databases on your ClickHouse cluster."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    40,
+    36,
+    38
+   ],
+   [
+    "replace",
+    40,
+    51,
+    38,
+    49,
+    [
+     " * List tables in a database with pagination.",
+     " * Required input: `database` (string).",
+     " * Optional inputs:",
+     " * `like` / `not_like` (string): Apply `LIKE` or `NOT LIKE` filters to table names.",
+     " * `page_token` (string): Single-use token returned by a previous call. It is retained for up to one hour.",
+     " * `page_size` (int, default `50`): Number of tables returned per page; must be greater than `0`.",
+     " * `include_detailed_columns` (bool, default `true`): When `false`, omits column metadata for lighter responses while keeping the full `create_table_query`.",
+     " * Response shape:",
+     " * `tables`: Array of table objects for the current page.",
+     " * `next_page_token`: Pass this single-use value back before it expires to fetch the next page, or `null` when there are no more tables.",
+     " * `total_tables`: Total count of tables that match the supplied filters."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    49,
+    52
+   ],
+   [
+    "replace",
+    54,
+    55,
+    52,
+    53,
+    [
+     "The server instructions suggest reading Agents Schema's"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    86,
+    53,
+    84
+   ],
+   [
+    "replace",
+    86,
+    88,
+    84,
+    86,
+    [
+     " example `\"18446744073709551615\"` with `{id:UInt64}`. Dates, timestamps, and exact",
+     " decimals can also be passed as strings with the corresponding ClickHouse type."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    86,
+    87
+   ],
+   [
+    "replace",
+    89,
+    90,
+    87,
+    88,
+    [
+     " `\"params\": {\"vector\": [0.25, 0.5, 0.75]}`."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    88,
+    89
+   ],
+   [
+    "replace",
+    91,
+    92,
+    89,
+    90,
+    [
+     " clickhouse-connect 1.8.0 but fail with the supported minimum 1.0.0."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    141,
+    90,
+    139
+   ],
+   [
+    "replace",
+    141,
+    142,
+    139,
+    140,
+    [
+     "Those are estimated reads from MergeTree family tables, after primary key and partition pruning. They are not run time and not result size, and other table engines are not covered."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    140,
+    141
+   ],
+   [
+    "replace",
+    143,
+    144,
+    141,
+    142,
+    [
+     "Neither statement runs the query body, but analysis is not always free: `DESCRIBE (SELECT (SELECT sleep(1)))` executes the scalar subquery while analyzing. Both are read-only and work under the default `CLICKHOUSE_ALLOW_WRITE_ACCESS=false`. See the ClickHouse documentation for EXPLAIN ESTIMATE and DESCRIBE."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    148,
+    142,
+    146
+   ],
+   [
+    "replace",
+    148,
+    153,
+    146,
+    151,
+    [
+     " * Execute SQL queries using chDB's embedded ClickHouse engine.",
+     " * Input: `query` (string): The SQL query to execute.",
+     " * Integers outside `[-9007199254740991, 9007199254740991]` are returned as decimal strings.",
+     " * Query data directly from various sources (files, URLs, databases) without ETL processes.",
+     " * Requires the optional `chdb` extra: `pip install 'mcp-clickhouse[chdb]'`"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    178,
+    151,
+    176
+   ],
+   [
+    "replace",
+    178,
+    179,
+    176,
+    177,
+    [
+     "|Mode|When to use|Env var|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    177,
+    178
+   ],
+   [
+    "replace",
+    180,
+    183,
+    178,
+    181,
+    [
+     "|Static bearer token|Simple deployments, internal services|`CLICKHOUSE_MCP_AUTH_TOKEN`|",
+     "|OAuth / OIDC (via FastMCP)|Azure Entra, Google, GitHub, WorkOS, etc.|`FASTMCP_SERVER_AUTH=<provider-class-path>` (+ provider-specific `FASTMCP_SERVER_AUTH_*` vars)|",
+     "|Disabled|Local development only|`CLICKHOUSE_MCP_AUTH_DISABLED=true`|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    204,
+    181,
+    202
+   ],
+   [
+    "replace",
+    204,
+    205,
+    202,
+    203,
+    [
+     " For Claude Desktop with HTTP/SSE transport:"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    209,
+    203,
+    207
+   ],
+   [
+    "replace",
+    209,
+    216,
+    207,
+    208,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    218,
+    208,
+    210
+   ],
+   [
+    "replace",
+    218,
+    219,
+    210,
+    211,
+    [
+     " Note: the `/health` endpoint is intentionally unauthenticated (see Health Check Endpoint above). To verify that bearer-token auth is actually rejecting unauthenticated requests, hit the MCP endpoint itself e.g. with the MCP Inspector, or by POSTing a JSON-RPC request to `/mcp` with and without the `Authorization` header and confirming the unauthenticated call returns `401`."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    211,
+    214
+   ],
+   [
+    "replace",
+    222,
+    223,
+    214,
+    215,
+    [
+     "For production deployments with identity providers (Azure Entra, Google, GitHub, WorkOS, etc.), delegate authentication to FastMCP's built-in auth providers instead of using a static token. Set `FASTMCP_SERVER_AUTH` to the **full class path** of a FastMCP auth provider, along with the provider-specific `FASTMCP_SERVER_AUTH_*` variables, and leave `CLICKHOUSE_MCP_AUTH_TOKEN` unset."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    238,
+    215,
+    230
+   ],
+   [
+    "replace",
+    238,
+    239,
+    230,
+    231,
+    [
+     "|Provider class path|Provider variable prefix|"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    240,
+    231,
+    232
+   ],
+   [
+    "replace",
+    240,
+    254,
+    232,
+    246,
+    [
+     "|`fastmcp.server.auth.providers.auth0.Auth0Provider`|`FASTMCP_SERVER_AUTH_AUTH0_`|",
+     "|`fastmcp.server.auth.providers.aws.AWSCognitoProvider`|`FASTMCP_SERVER_AUTH_AWS_COGNITO_`|",
+     "|`fastmcp.server.auth.providers.azure.AzureProvider`|`FASTMCP_SERVER_AUTH_AZURE_`|",
+     "|`fastmcp.server.auth.providers.descope.DescopeProvider`|`FASTMCP_SERVER_AUTH_DESCOPEPROVIDER_`|",
+     "|`fastmcp.server.auth.providers.discord.DiscordProvider`|`FASTMCP_SERVER_AUTH_DISCORD_`|",
+     "|`fastmcp.server.auth.providers.github.GitHubProvider`|`FASTMCP_SERVER_AUTH_GITHUB_`|",
+     "|`fastmcp.server.auth.providers.google.GoogleProvider`|`FASTMCP_SERVER_AUTH_GOOGLE_`|",
+     "|`fastmcp.server.auth.providers.introspection.IntrospectionTokenVerifier`|`FASTMCP_SERVER_AUTH_INTROSPECTION_`|",
+     "|`fastmcp.server.auth.providers.jwt.JWTVerifier`|`FASTMCP_SERVER_AUTH_JWT_`|",
+     "|`fastmcp.server.auth.providers.oci.OCIProvider`|`FASTMCP_SERVER_AUTH_OCI_`|",
+     "|`fastmcp.server.auth.providers.scalekit.ScalekitProvider`|`FASTMCP_SERVER_AUTH_SCALEKITPROVIDER_`|",
+     "|`fastmcp.server.auth.providers.supabase.SupabaseProvider`|`FASTMCP_SERVER_AUTH_SUPABASE_`|",
+     "|`fastmcp.server.auth.providers.workos.WorkOSProvider`|`FASTMCP_SERVER_AUTH_WORKOS_`|",
+     "|`fastmcp.server.auth.providers.workos.AuthKitProvider`|`FASTMCP_SERVER_AUTH_AUTHKITPROVIDER_`|"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    261,
+    246,
+    253
+   ],
+   [
+    "replace",
+    261,
+    262,
+    253,
+    254,
+    [
+     "FastMCP docs for each provider's configuration"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    271,
+    254,
+    263
+   ],
+   [
+    "replace",
+    271,
+    272,
+    263,
+    264,
+    [
+     "`MultiAuth`."
+    ]
+   ],
+   [
+    "equal",
+    272,
+    280,
+    264,
+    272
+   ],
+   [
+    "replace",
+    280,
+    288,
+    272,
+    273,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    291,
+    273,
+    276
+   ],
+   [
+    "replace",
+    291,
+    293,
+    276,
+    278,
+    [
+     " order. The first one that accepts the token wins, so every entry is a trust source:",
+     " a token valid for any of them reaches the tools."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    278,
+    279
+   ],
+   [
+    "replace",
+    294,
+    297,
+    279,
+    282,
+    [
+     " source, whether the primary provider is an OAuth provider or a token verifier.",
+     " An OAuth primary keeps its routes and discovery metadata. A token-verifier primary",
+     " serves no OAuth routes."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    282,
+    283
+   ],
+   [
+    "replace",
+    298,
+    300,
+    283,
+    285,
+    [
+     " exactly as it would be under `FASTMCP_SERVER_AUTH`. A class can therefore appear only",
+     " once across `FASTMCP_SERVER_AUTH` and `FASTMCP_SERVER_AUTH_VERIFIERS`."
+    ]
+   ],
+   [
+    "equal",
+    300,
+    301,
+    285,
+    286
+   ],
+   [
+    "replace",
+    301,
+    302,
+    286,
+    287,
+    [
+     " together with `CLICKHOUSE_MCP_AUTH_TOKEN` or `CLICKHOUSE_MCP_AUTH_DISABLED=true`."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    352,
+    287,
+    337
+   ],
+   [
+    "replace",
+    352,
+    354,
+    337,
+    339,
+    [
+     " * On macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`",
+     " * On Windows: `%APPDATA%/Claude/claude_desktop_config.json`"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    361,
+    339,
+    346
+   ],
+   [
+    "replace",
+    361,
+    383,
+    346,
+    347,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    387,
+    347,
+    351
+   ],
+   [
+    "replace",
+    387,
+    388,
+    351,
+    352,
+    [
+     "Or, if you'd like to try it out with the ClickHouse SQL Playground, you can use the following config:"
+    ]
+   ],
+   [
+    "equal",
+    388,
+    393,
+    352,
+    357
+   ],
+   [
+    "replace",
+    393,
+    414,
+    357,
+    358,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    422,
+    358,
+    366
+   ],
+   [
+    "replace",
+    422,
+    439,
+    366,
+    367,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    439,
+    447,
+    367,
+    375
+   ],
+   [
+    "replace",
+    447,
+    470,
+    375,
+    376,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    518,
+    376,
+    424
+   ],
+   [
+    "replace",
+    518,
+    519,
+    424,
+    425,
+    [
+     " To install chDB support as well:"
+    ]
+   ],
+   [
+    "equal",
+    519,
+    523,
+    425,
+    429
+   ],
+   [
+    "replace",
+    523,
+    524,
+    429,
+    430,
+    [
+     " To upgrade to the latest version:"
+    ]
+   ],
+   [
+    "equal",
+    524,
+    534,
+    430,
+    440
+   ],
+   [
+    "replace",
+    534,
+    551,
+    440,
+    441,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    551,
+    559,
+    441,
+    449
+   ],
+   [
+    "replace",
+    559,
+    572,
+    449,
+    450,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    572,
+    590,
+    450,
+    468
+   ],
+   [
+    "replace",
+    590,
+    606,
+    468,
+    469,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    606,
+    614,
+    469,
+    477
+   ],
+   [
+    "replace",
+    614,
+    625,
+    477,
+    478,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    625,
+    668,
+    478,
+    521
+   ],
+   [
+    "replace",
+    668,
+    682,
+    521,
+    522,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    682,
+    733,
+    522,
+    573
+   ],
+   [
+    "replace",
+    733,
+    734,
+    573,
+    574,
+    [
+     "3. Run `uv sync --locked --extra dev` to install the dependencies. On Python 3.10 through 3.14, add `--extra chdb` for chDB development. To install `uv` follow the instructions here. Then do `source .venv/bin/activate`."
+    ]
+   ],
+   [
+    "equal",
+    734,
+    742,
+    574,
+    582
+   ],
+   [
+    "replace",
+    742,
+    747,
+    582,
+    583,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    747,
+    751,
+    583,
+    587
+   ],
+   [
+    "replace",
+    751,
+    752,
+    587,
+    588,
+    [
+     "The package uses a flat module layout. Start with mcp_server.py"
+    ]
+   ],
+   [
+    "equal",
+    752,
+    754,
+    588,
+    590
+   ],
+   [
+    "replace",
+    754,
+    755,
+    590,
+    591,
+    [
+     "|Module|Responsibility|"
+    ]
+   ],
+   [
+    "equal",
+    755,
+    756,
+    591,
+    592
+   ],
+   [
+    "replace",
+    756,
+    765,
+    592,
+    601,
+    [
+     "|mcp_server.py, main.py|Startup assembly, tool and prompt registration, shutdown coordination, and CLI startup|",
+     "|clients.py|Request configuration, cached ClickHouse connections, and client leases|",
+     "|queries.py|Query execution, cancellation, and destructive-operation guards|",
+     "|metadata.py|Database and table discovery, metadata models, and pagination|",
+     "|chdb_backend.py, chdb_prompt.py|Optional chDB initialization, query execution, and prompt content|",
+     "|health.py, executors.py|Health probes and caching, and the worker pools used by server operations|",
+     "|auth.py, transport.py, http_security.py|Dotenv loading, authentication, HTTP/SSE app construction, and Host/Origin validation|",
+     "|mcp_env.py, serialization.py|Environment configuration and JSON result encoding|",
+     "|mcp_middleware_hook.py, skills_advisor.py|Custom middleware loading and server instructions|"
+    ]
+   ],
+   [
+    "equal",
+    765,
+    778,
+    601,
+    614
+   ],
+   [
+    "replace",
+    778,
+    779,
+    614,
+    615,
+    [
+     "|Group|Variables|Controls|"
+    ]
+   ],
+   [
+    "equal",
+    779,
+    780,
+    615,
+    616
+   ],
+   [
+    "replace",
+    780,
+    783,
+    616,
+    619,
+    [
+     "|**ClickHouse database connection**|`CLICKHOUSE_HOST`, `CLICKHOUSE_PORT`, `CLICKHOUSE_SECURE`, `CLICKHOUSE_VERIFY`, certificate variables|How **this MCP server** connects to your ClickHouse cluster over the **HTTP interface**|",
+     "|**MCP server / transport**|`CLICKHOUSE_MCP_*`, `FASTMCP_SERVER_AUTH`, `FASTMCP_SERVER_AUTH_*`, `FASTMCP_ENV_FILE`|MCP transport, authentication, and query-tool execution limits|",
+     "|**Middleware / chDB**|`MCP_MIDDLEWARE_MODULE`, `CHDB_*`|Optional extensions|"
+    ]
+   ],
+   [
+    "equal",
+    783,
+    791,
+    619,
+    627
+   ],
+   [
+    "replace",
+    791,
+    792,
+    627,
+    628,
+    [
+     "These variables configure the clickhouse-connect HTTP client and the behavior of ClickHouse-backed tools such as `run_query`, `list_databases`, and `list_tables`."
+    ]
+   ],
+   [
+    "equal",
+    792,
+    799,
+    628,
+    635
+   ],
+   [
+    "replace",
+    799,
+    801,
+    635,
+    637,
+    [
+     " * Required unless `CLICKHOUSE_CLIENT_CERT` uses the default or `\"mutual\"` TLS mode",
+     " * In default or `\"mutual\"` mode, certificate authentication is used and the password is not sent"
+    ]
+   ],
+   [
+    "equal",
+    801,
+    808,
+    637,
+    644
+   ],
+   [
+    "replace",
+    808,
+    815,
+    644,
+    651,
+    [
+     " * Default: `8443` if `CLICKHOUSE_SECURE=true`, `8123` if `CLICKHOUSE_SECURE=false`",
+     " * Usually doesn't need to be set unless using a non-standard port",
+     " * **Must be an HTTP interface port**, not the native TCP protocol port used by `clickhouse-client`",
+     " * Common values:",
+     " * HTTP: `8123` (plain) / `8443` (TLS) — used by this server and ClickHouse Cloud HTTPS",
+     " * Native TCP (not supported here): `9000` (plain) / `9440` (TLS) — used by `clickhouse-client`",
+     " * If the server responds with `Port 9000 is for clickhouse-client program`, you are pointed at the native protocol; switch to the HTTP port (`8123`/`8443` or your deployment's HTTP mapping)"
+    ]
+   ],
+   [
+    "equal",
+    815,
+    816,
+    651,
+    652
+   ],
+   [
+    "replace",
+    816,
+    818,
+    652,
+    654,
+    [
+     " * Default: None",
+     " * Set this if your user requires a specific role"
+    ]
+   ],
+   [
+    "equal",
+    818,
+    819,
+    654,
+    655
+   ],
+   [
+    "replace",
+    819,
+    823,
+    655,
+    659,
+    [
+     " * Default: `\"true\"`",
+     " * Set to `\"false\"` only when the MCP server reaches ClickHouse over plain HTTP (typical for local Docker Compose on port `8123`)",
+     " * Leave `\"true\"` for ClickHouse Cloud and any HTTPS database endpoint—even if the MCP server itself is exposed via HTTP, stdio, or an ingress that terminates TLS separately",
+     " * Mismatching this flag with the database port (e.g. `CLICKHOUSE_SECURE=false` against port `8443`) is a frequent setup mistake and usually surfaces as confusing HTTP client errors rather than a clear \"wrong scheme\" message"
+    ]
+   ],
+   [
+    "equal",
+    823,
+    824,
+    659,
+    660
+   ],
+   [
+    "replace",
+    824,
+    827,
+    660,
+    663,
+    [
+     " * Default: `\"true\"`",
+     " * Set to `\"false\"` to disable certificate verification (not recommended for production)",
+     " * TLS certificates: The package uses your operating system trust store via `truststore.inject_into_ssl()` at startup. Python's default SSL handling is used if injection is disabled with `MCP_CLICKHOUSE_TRUSTSTORE_DISABLE=1` or fails."
+    ]
+   ],
+   [
+    "equal",
+    827,
+    828,
+    663,
+    664
+   ],
+   [
+    "replace",
+    828,
+    831,
+    664,
+    667,
+    [
+     " * Default: unset (trust store integration is enabled)",
+     " * Set to exactly `\"1\"` before startup to skip `truststore.inject_into_ssl()` and use Python's default SSL certificate handling. Other values do not disable the integration.",
+     " * This does not disable certificate verification. `CLICKHOUSE_VERIFY` still controls verification for the ClickHouse HTTPS connection."
+    ]
+   ],
+   [
+    "equal",
+    831,
+    832,
+    667,
+    668
+   ],
+   [
+    "replace",
+    832,
+    835,
+    668,
+    671,
+    [
+     " * Default: None (uses the operating system trust store unless truststore injection is disabled or fails)",
+     " * Use this by itself when a ClickHouse server or private proxy presents a certificate signed by a private CA. This changes server certificate verification and does not enable client certificate authentication.",
+     " * Requires `CLICKHOUSE_SECURE=true` and `CLICKHOUSE_VERIFY=true`"
+    ]
+   ],
+   [
+    "equal",
+    835,
+    836,
+    671,
+    672
+   ],
+   [
+    "replace",
+    836,
+    839,
+    672,
+    675,
+    [
+     " * Default: None",
+     " * The file may also contain the private key. Otherwise set `CLICKHOUSE_CLIENT_CERT_KEY`.",
+     " * The ClickHouse user still comes from `CLICKHOUSE_USER`."
+    ]
+   ],
+   [
+    "equal",
+    839,
+    840,
+    675,
+    676
+   ],
+   [
+    "replace",
+    840,
+    843,
+    676,
+    679,
+    [
+     " * Default: None",
+     " * Optional when the private key is included in the client certificate file",
+     " * Cannot be used without `CLICKHOUSE_CLIENT_CERT`"
+    ]
+   ],
+   [
+    "equal",
+    843,
+    844,
+    679,
+    680
+   ],
+   [
+    "replace",
+    844,
+    851,
+    680,
+    687,
+    [
+     " * Default: None, which behaves as `\"mutual\"` when a client certificate is set",
+     " * `\"mutual\"`: Use the client certificate for ClickHouse X.509 user authentication. `CLICKHOUSE_PASSWORD` is optional and is not sent.",
+     " * `\"proxy\"`: Present the client certificate to a TLS-terminating proxy, then use ClickHouse Basic authentication. `CLICKHOUSE_PASSWORD` is required.",
+     " * `\"strict\"`: Present the client certificate because the ClickHouse server requires one at the TLS layer, then use ClickHouse Basic authentication. `CLICKHOUSE_PASSWORD` is required. This mode does not strengthen server certificate verification. `CLICKHOUSE_VERIFY` controls that verification.",
+     " * clickhouse-connect treats `\"proxy\"` and `\"strict\"` identically. The two names document intent.",
+     " * Values are trimmed and case-insensitive. A blank value is treated as unset. Other values are rejected before a ClickHouse client is created, on the first ClickHouse tool call or `/health` probe.",
+     " * Requires `CLICKHOUSE_CLIENT_CERT`. All client certificate options require `CLICKHOUSE_SECURE=true`."
+    ]
+   ],
+   [
+    "equal",
+    851,
+    852,
+    687,
+    688
+   ],
+   [
+    "replace",
+    852,
+    854,
+    688,
+    690,
+    [
+     " * Default: None (uses the connection hostname)",
+     " * This is useful when connecting through proxies or load balancers where the certificate hostname differs from the connection hostname. When set, this hostname will be used for both SNI (Server Name Indication) during the TLS handshake and for certificate hostname validation."
+    ]
+   ],
+   [
+    "equal",
+    854,
+    855,
+    690,
+    691
+   ],
+   [
+    "replace",
+    855,
+    857,
+    691,
+    693,
+    [
+     " * Default: None",
+     " * Set this when the ClickHouse HTTP interface is exposed behind a reverse proxy under a path prefix (for example, `/clickhouse`)"
+    ]
+   ],
+   [
+    "equal",
+    857,
+    858,
+    693,
+    694
+   ],
+   [
+    "replace",
+    858,
+    860,
+    694,
+    696,
+    [
+     " * Default: `\"30\"`",
+     " * Increase this value if you experience connection timeouts"
+    ]
+   ],
+   [
+    "equal",
+    860,
+    861,
+    696,
+    697
+   ],
+   [
+    "replace",
+    861,
+    863,
+    697,
+    699,
+    [
+     " * Default: the lower of `300` or `CLICKHOUSE_MCP_QUERY_TIMEOUT + 5`, so worker threads unblock shortly after a query timeout",
+     " * If explicitly set, the value is used as-is (e.g. `\"300\"` for long-running queries)"
+    ]
+   ],
+   [
+    "equal",
+    863,
+    864,
+    699,
+    700
+   ],
+   [
+    "replace",
+    864,
+    866,
+    700,
+    702,
+    [
+     " * Default: None (uses server default)",
+     " * Set this to automatically connect to a specific database"
+    ]
+   ],
+   [
+    "equal",
+    866,
+    867,
+    702,
+    703
+   ],
+   [
+    "replace",
+    867,
+    869,
+    703,
+    705,
+    [
+     " * Default: `\"true\"`",
+     " * Set to `\"false\"` to disable ClickHouse tools when using chDB only"
+    ]
+   ],
+   [
+    "equal",
+    869,
+    870,
+    705,
+    706
+   ],
+   [
+    "replace",
+    870,
+    873,
+    706,
+    709,
+    [
+     " * Default: `\"false\"`",
+     " * Set to `\"true\"` to allow non-destructive DDL and DML (CREATE, INSERT, ALTER ADD COLUMN). Destructive statements additionally need `CLICKHOUSE_ALLOW_DROP=true`",
+     " * When disabled (default), queries run with `readonly=1` setting to prevent data modifications"
+    ]
+   ],
+   [
+    "equal",
+    873,
+    874,
+    709,
+    710
+   ],
+   [
+    "replace",
+    874,
+    877,
+    710,
+    713,
+    [
+     " * Default: `\"false\"`",
+     " * Only takes effect when `CLICKHOUSE_ALLOW_WRITE_ACCESS=true` is also set",
+     " * This gate is a best-effort accident guard in the MCP server, not a security boundary. Restrict the ClickHouse user's grants for real enforcement (see Destructive Operation Protection)"
+    ]
+   ],
+   [
+    "equal",
+    877,
+    900,
+    713,
+    736
+   ],
+   [
+    "replace",
+    900,
+    901,
+    736,
+    737,
+    [
+     "These variables control the MCP process itself, including transport, authentication, and query-tool execution limits. They are independent of the ClickHouse database settings above. See also Authentication for HTTP/SSE Transports."
+    ]
+   ],
+   [
+    "equal",
+    901,
+    903,
+    737,
+    739
+   ],
+   [
+    "replace",
+    903,
+    907,
+    739,
+    743,
+    [
+     " * Default: `\"stdio\"`",
+     " * Valid options: `\"stdio\"`, `\"http\"`, `\"sse\"`. This is useful for local development with tools like MCP Inspector.",
+     " * `stdio` is typical for Claude Desktop; `http`/`sse` expose a network listener (bind host/port below)",
+     " * `\"sse\"` selects the deprecated standalone HTTP+SSE transport and logs a warning. Use `\"http\"` for Streamable HTTP in new deployments."
+    ]
+   ],
+   [
+    "equal",
+    907,
+    908,
+    743,
+    744
+   ],
+   [
+    "replace",
+    908,
+    911,
+    744,
+    747,
+    [
+     " * Default: `\"127.0.0.1\"`",
+     " * Set to `\"0.0.0.0\"` to bind to all network interfaces (useful for Docker or remote access)",
+     " * Only used when transport is `\"http\"` or `\"sse\"` — not related to `CLICKHOUSE_HOST`"
+    ]
+   ],
+   [
+    "equal",
+    911,
+    912,
+    747,
+    748
+   ],
+   [
+    "replace",
+    912,
+    914,
+    748,
+    750,
+    [
+     " * Default: `\"8000\"`",
+     " * Only used when transport is `\"http\"` or `\"sse\"` — not related to `CLICKHOUSE_PORT`"
+    ]
+   ],
+   [
+    "equal",
+    914,
+    915,
+    750,
+    751
+   ],
+   [
+    "replace",
+    915,
+    919,
+    751,
+    755,
+    [
+     " * Default: `\"30\"`",
+     " * Increase this if you see `Query timed out after ...` errors for heavy queries",
+     " * When a query times out, the server attempts to cancel it with `KILL QUERY`",
+     " * Unless `CLICKHOUSE_SEND_RECEIVE_TIMEOUT` is explicitly set, the HTTP read timeout is capped at this value plus five seconds"
+    ]
+   ],
+   [
+    "equal",
+    919,
+    920,
+    755,
+    756
+   ],
+   [
+    "replace",
+    920,
+    923,
+    756,
+    759,
+    [
+     " * Default: `\"10\"`",
+     " * Increase if your workload requires many concurrent tool calls",
+     " * Metadata tools use a separate pool with `min(4, CLICKHOUSE_MCP_MAX_WORKERS)` threads so schema discovery cannot delay queries"
+    ]
+   ],
+   [
+    "equal",
+    923,
+    924,
+    759,
+    760
+   ],
+   [
+    "replace",
+    924,
+    934,
+    760,
+    770,
+    [
+     " * Default: None",
+     " * One of `CLICKHOUSE_MCP_AUTH_TOKEN`, `FASTMCP_SERVER_AUTH`, or `CLICKHOUSE_MCP_AUTH_DISABLED=true` is **required** for HTTP/SSE transports",
+     " * Generate using `uuidgen` or `openssl rand -hex 32`",
+     " * Clients must send this token in the `Authorization: Bearer <token>` header",
+     "* `FASTMCP_SERVER_AUTH`: Delegate authentication to a FastMCP auth provider",
+     " * Default: None",
+     " * Value is the **full class path** of an AuthProvider subclass, e.g. `fastmcp.server.auth.providers.azure.AzureProvider` or `fastmcp.server.auth.providers.google.GoogleProvider`",
+     " * When set, mcp-clickhouse loads the provider from the existing `FASTMCP_SERVER_AUTH_*` environment variables; leave `CLICKHOUSE_MCP_AUTH_TOKEN` unset in this mode",
+     " * Custom providers receive no environment-derived constructor arguments and must support no-argument construction",
+     " * FastMCP 4 no longer supports Supabase HS256 verification. Supabase deployments must use RS256 or ES256."
+    ]
+   ],
+   [
+    "equal",
+    934,
+    935,
+    770,
+    771
+   ],
+   [
+    "replace",
+    935,
+    940,
+    771,
+    776,
+    [
+     " * Default: None",
+     " * Value is a comma-separated list of **full class paths** of TokenVerifier subclasses, e.g. `fastmcp.server.auth.providers.azure.AzureJWTVerifier` or `fastmcp.server.auth.providers.jwt.JWTVerifier`",
+     " * Requires `FASTMCP_SERVER_AUTH`. The provider and the verifiers are combined with FastMCP's `MultiAuth`: the provider is tried first, then each verifier in order",
+     " * Each verifier loads from its own `FASTMCP_SERVER_AUTH_*` prefix, so a class can appear only once across both variables",
+     " * Like `FASTMCP_SERVER_AUTH`, it is not read from the working-directory `.env` fallback"
+    ]
+   ],
+   [
+    "equal",
+    940,
+    941,
+    776,
+    777
+   ],
+   [
+    "replace",
+    941,
+    947,
+    777,
+    783,
+    [
+     " * Default: None. When unset, the compatibility loader reads missing provider fields from `.env` in the working directory. It does not read `FASTMCP_SERVER_AUTH` from that fallback",
+     " * Set it in the process environment before startup. A value loaded from the default `.env` cannot redirect the compatibility loader",
+     " * If process-set, this file may provide both `FASTMCP_SERVER_AUTH` and provider fields and replaces the working-directory fallback",
+     " * Process environment values take precedence case-insensitively",
+     " * The mcp-clickhouse compatibility loader reads this file only when building HTTP/SSE authentication and reads only `FASTMCP_SERVER_AUTH` and `FASTMCP_SERVER_AUTH_*` entries. FastMCP 4 may read the same file for its broader settings",
+     " * The default `.env` load is separate. It starts at the installed `mcp_clickhouse` package directory, resolves symlinks, walks upward to the filesystem root, and loads the first `.env` found or nothing. It never reads the working directory, regardless of launch method. That file may provide `FASTMCP_SERVER_AUTH` and provider fields along with other server settings. A source checkout normally finds the repository root `.env`"
+    ]
+   ],
+   [
+    "equal",
+    947,
+    948,
+    783,
+    784
+   ],
+   [
+    "replace",
+    948,
+    951,
+    784,
+    787,
+    [
+     " * Default: `\"false\"` (authentication is enabled)",
+     " * Set to `\"true\"` to disable authentication for local development/testing only",
+     " * **WARNING:** Only use for local development. Do not disable when exposed to networks"
+    ]
+   ],
+   [
+    "equal",
+    951,
+    952,
+    787,
+    788
+   ],
+   [
+    "replace",
+    952,
+    961,
+    788,
+    797,
+    [
+     " * Default for a loopback bind: bare and any-port forms of `127.0.0.1`, `localhost`, and `[::1]`",
+     " * If set, the value must contain at least one Host entry.",
+     " * A concrete non-loopback bind address defaults to that address and the configured port. A wildcard bind such as `0.0.0.0` or `::` requires an explicit non-empty value because the public Host cannot be inferred.",
+     " * Host validation is a defense in depth against DNS rebinding. Origin validation below is required separately by MCP.",
+     " * Entries are exact (`localhost:8000`) or accept any port (`localhost:*`). Example: `CLICKHOUSE_MCP_ALLOWED_HOSTS=127.0.0.1:8000,localhost:8000`",
+     " * The `host:*` form matches only values that carry a port. A port-less Host (a standard-port deployment where the client omits `:80`/`:443`) must be listed as a bare exact entry (`example.com`) as well.",
+     " * Requests with a non-matching or missing `Host` header get `421 Misdirected Request`. GET and HEAD requests to `/health` are exempt from Host and Origin validation so orchestrator probes keep working.",
+     " * Behind a reverse proxy, prefer preserving the original `Host` header. You can instead list the upstream `Host` value the proxy sends. Set an explicit list when a launcher such as `fastmcp run` overrides the bind address for remote access.",
+     " * mcp-clickhouse forces FastMCP's separate Host and Origin guard off. `FASTMCP_HTTP_HOST_ORIGIN_PROTECTION`, `FASTMCP_HTTP_ALLOWED_HOSTS`, and `FASTMCP_HTTP_ALLOWED_ORIGINS` do not apply. `CLICKHOUSE_MCP_ALLOWED_HOSTS` and `CLICKHOUSE_MCP_ALLOWED_ORIGINS` are authoritative."
+    ]
+   ],
+   [
+    "equal",
+    961,
+    962,
+    797,
+    798
+   ],
+   [
+    "replace",
+    962,
+    969,
+    798,
+    805,
+    [
+     " * Default: None. `X-Forwarded-Host` is ignored. Existing Uvicorn handling of `X-Forwarded-For` and `X-Forwarded-Proto` is unchanged.",
+     " * Entries must be IP addresses or CIDR networks, such as `127.0.0.1,10.20.0.0/24,2001:db8::1`. CIDRs must use their network address, so `10.20.0.1/24` is rejected. Host names, scoped IPv6 addresses, `*`, `0.0.0.0/0`, and `::/0` are also rejected.",
+     " * Trust is based on the immediate raw socket peer. A request from any other peer, or a request without a client address, ignores `X-Forwarded-Host` and validates `Host`.",
+     " * A trusted peer may send exactly one `X-Forwarded-Host` header containing one non-empty value. Duplicate fields, empty values, and comma separated lists get `421 Misdirected Request`. If the header is absent, `Host` is validated.",
+     " * Use the narrowest possible address or network. The MCP server must only be reachable through proxies in the configured ranges. Every trusted proxy must strip and overwrite client supplied `X-Forwarded-Host` and `X-Forwarded-Proto` values, and construct `X-Forwarded-For` from the verified connection peer.",
+     " * The built-in server and `fastmcp run` disable Uvicorn's outer proxy-header handling, validate Host from the raw peer, then apply `X-Forwarded-For` and `X-Forwarded-Proto`. Explicitly enabling `uvicorn_config[\"proxy_headers\"]` fails startup in this mode.",
+     " * Direct ASGI embedding must disable proxy-header handling in the outer ASGI server and call `mcp.http_app(raw_client_address_preserved=True)`. Without that explicit assertion, app construction fails when trusted proxies are configured."
+    ]
+   ],
+   [
+    "equal",
+    969,
+    970,
+    805,
+    806
+   ],
+   [
+    "replace",
+    970,
+    973,
+    806,
+    809,
+    [
+     " * Default: None, which rejects every request that carries an `Origin` header",
+     " * MCP requires Origin validation for HTTP/SSE transport connections. Requests without an Origin are accepted because non-browser MCP clients normally omit it. A non-matching Origin gets `403 Forbidden`. The `/health` endpoint is exempt as described above.",
+     " * Entries are exact (`http://localhost:3000`) or accept any port (`http://localhost:*`). As with hosts, the any-port form matches only origins that carry a port; a standard-port origin (`https://app.example.com`) must be listed exactly."
+    ]
+   ],
+   [
+    "equal",
+    973,
+    982,
+    809,
+    818
+   ],
+   [
+    "replace",
+    982,
+    986,
+    818,
+    819,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    986,
+    1017,
+    819,
+    850
+   ],
+   [
+    "replace",
+    1017,
+    1021,
+    850,
+    854,
+    [
+     " * Default: None (no middleware loaded)",
+     " * Set to the module name (without `.py` extension) of your middleware module",
+     " * The module must provide a `setup_middleware(mcp)` function",
+     " * See Custom Middleware for details and examples"
+    ]
+   ],
+   [
+    "equal",
+    1021,
+    1025,
+    854,
+    858
+   ],
+   [
+    "replace",
+    1025,
+    1029,
+    858,
+    862,
+    [
+     " * Default: `\"false\"`",
+     " * Set to `\"true\"` to enable chDB tools",
+     " * Requires installing the optional extra: `mcp-clickhouse[chdb]`",
+     " * On Python 3.15, an independently installed chDB can terminate the process when `CHDB_ENABLED=true`."
+    ]
+   ],
+   [
+    "equal",
+    1029,
+    1030,
+    862,
+    863
+   ],
+   [
+    "replace",
+    1030,
+    1033,
+    863,
+    866,
+    [
+     " * Default: `\":memory:\"` (in-memory database)",
+     " * Use `:memory:` for in-memory database",
+     " * Use a file path for persistent storage (e.g., `/path/to/chdb/data`)"
+    ]
+   ],
+   [
+    "equal",
+    1033,
+    1048,
+    866,
+    881
+   ],
+   [
+    "replace",
+    1048,
+    1053,
+    881,
+    882,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1053,
+    1061,
+    882,
+    890
+   ],
+   [
+    "replace",
+    1061,
+    1066,
+    890,
+    891,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1066,
+    1094,
+    891,
+    919
+   ],
+   [
+    "replace",
+    1094,
+    1098,
+    919,
+    920,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1098,
+    1107,
+    920,
+    929
+   ],
+   [
+    "replace",
+    1107,
+    1111,
+    929,
+    930,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1111,
+    1140,
+    930,
+    959
+   ],
+   [
+    "replace",
+    1140,
+    1145,
+    959,
+    960,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1145,
+    1168,
+    960,
+    983
+   ],
+   [
+    "replace",
+    1168,
+    1189,
+    983,
+    984,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1189,
+    1199,
+    984,
+    994
+   ],
+   [
+    "replace",
+    1199,
+    1204,
+    994,
+    995,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1204,
+    1208,
+    995,
+    999
+   ],
+   [
+    "replace",
+    1208,
+    1209,
+    999,
+    1000,
+    [
+     "YouTube"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "0cd39723c372+2": {
+  "fn": "PerpetualSoftware/pad",
+  "clean_ver": "2",
+  "raw_lines": 28,
+  "ops": [
+   [
+    "replace",
+    0,
+    28,
+    0,
+    2,
+    [
+     "Pad ",
+     " Project Management for the agent era. "
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    2,
+    3
+   ],
+   [
+    "replace",
+    29,
+    30,
+    3,
+    9,
+    [
+     " CI",
+     " Release",
+     " Go Report Card",
+     " Container image on GHCR",
+     " License",
+     " GitHub Sponsors"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    9,
+    10
+   ],
+   [
+    "replace",
+    31,
+    32,
+    10,
+    23,
+    [
+     " Website",
+     " &nbsp;·&nbsp;",
+     " Docs",
+     " &nbsp;·&nbsp;",
+     " Blog",
+     " &nbsp;·&nbsp;",
+     " Changelog",
+     " &nbsp;·&nbsp;",
+     " Reddit",
+     " &nbsp;·&nbsp;",
+     " X",
+     " &nbsp;·&nbsp;",
+     " Bluesky"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    23,
+    24
+   ],
+   [
+    "replace",
+    33,
+    39,
+    24,
+    27,
+    [
+     "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud.",
+     "",
+     " Pad dashboard for a project called Atlas: active work cards, an active plan at 4 of 7 tasks done, collection summaries, and what needs attention next"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    61,
+    27,
+    49
+   ],
+   [
+    "replace",
+    61,
+    62,
+    49,
+    50,
+    [
+     "Tools like Linear, Jira, and Notion are built for teams on the cloud. Pad is built for **developers on their machine** — and for the AI agents working alongside them. When you do want your projects on every device or a teammate on the board, Pad Cloud hosts the same product with sync, workspace invites, and role-based access. A self-hosted workspace moves there by export and import; see the move-to-Cloud guide."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    50,
+    51
+   ],
+   [
+    "replace",
+    63,
+    64,
+    51,
+    52,
+    [
+     "||Pad|Linear / Jira|Notion|"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    52,
+    53
+   ],
+   [
+    "replace",
+    65,
+    71,
+    53,
+    59,
+    [
+     "|**Setup**|`pad init`|Create account, invite team, configure|Create account, pick template|",
+     "|**AI agents**|Native `/pad` skill for 7+ tools|Third-party integrations|Third-party integrations|",
+     "|**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+     "|**Offline**|Full functionality|Read-only cache at best|Limited|",
+     "|**CLI**|First-class|Afterthought|None|",
+     "|**Price**|Free, open source|Per-seat pricing|Per-seat pricing|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    82,
+    59,
+    70
+   ],
+   [
+    "replace",
+    82,
+    86,
+    70,
+    71,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    98,
+    71,
+    83
+   ],
+   [
+    "replace",
+    98,
+    104,
+    83,
+    84,
+    [
+     " Pad tasks board: Open, In-Progress, Done and Cancelled columns of task cards, each showing priority and the plan it belongs to"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    147,
+    84,
+    127
+   ],
+   [
+    "replace",
+    147,
+    153,
+    127,
+    128,
+    [
+     " A task open beside the task list: its status, priority, effort and assignee, the plan it belongs to, and a body written by an agent, with a 2 of 4 checklist progress bar on its list row"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    175,
+    128,
+    150
+   ],
+   [
+    "replace",
+    175,
+    176,
+    150,
+    151,
+    [
+     "|Collection|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    151,
+    152
+   ],
+   [
+    "replace",
+    177,
+    183,
+    152,
+    158,
+    [
+     "|**Tasks**|Work items with status, priority, assignee, effort, due date|",
+     "|**Ideas**|Feature ideas with impact and category|",
+     "|**Plans**|Project milestones with progress tracking|",
+     "|**Docs**|Documentation, decisions, reference material|",
+     "|**Conventions**|Project rules that guide agent behavior|",
+     "|**Playbooks**|Multi-step workflows for agents to follow|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    210,
+    158,
+    185
+   ],
+   [
+    "replace",
+    210,
+    211,
+    185,
+    186,
+    [
+     "Requires Go 1.26+ and Node.js 22+. Alternatively, `nix develop` provides a shell with the exact Go and Node versions pinned — see the Nix section below."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    241,
+    186,
+    216
+   ],
+   [
+    "replace",
+    241,
+    242,
+    216,
+    217,
+    [
+     "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup. The compose file runs the released image; set `PAD_VERSION` in `.env` to pin it."
+    ]
+   ],
+   [
+    "equal",
+    242,
+    267,
+    217,
+    242
+   ],
+   [
+    "replace",
+    267,
+    268,
+    242,
+    243,
+    [
+     "Pre-built binaries for macOS, Linux, and Windows are available on the releases page."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    271,
+    243,
+    246
+   ],
+   [
+    "replace",
+    271,
+    272,
+    246,
+    247,
+    [
+     "Don't want to run anything? Pad Cloud is the managed option — same product, same CLI, same `/pad` skill, free during beta. Sign up on the web, then connect a project directory:"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    293,
+    247,
+    268
+   ],
+   [
+    "replace",
+    293,
+    294,
+    268,
+    269,
+    [
+     "**Automatic pre-migration snapshot (SQLite).** Whenever a SQLite-backed instance has pending migrations to apply, Pad first copies the database file to `pad.db.pre-<version>` next to it. If an upgrade ever goes wrong, stop the server and copy that snapshot back over `pad.db`. This is a convenience net, not a backup strategy — keep your own backups (see docs/backup.md). PostgreSQL instances are skipped here; use `pg_dump` or a provider snapshot before upgrading."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    301,
+    269,
+    276
+   ],
+   [
+    "replace",
+    301,
+    308,
+    276,
+    277,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    349,
+    277,
+    318
+   ],
+   [
+    "replace",
+    349,
+    356,
+    318,
+    319,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    356,
+    406,
+    319,
+    369
+   ],
+   [
+    "replace",
+    406,
+    407,
+    369,
+    370,
+    [
+     "|Tool|Actions|"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    408,
+    370,
+    371
+   ],
+   [
+    "replace",
+    408,
+    421,
+    371,
+    384,
+    [
+     "|`pad_item`|`create`, `update`, `delete`, `get`, `list`, `move`, `restore`, `link`, `unlink`, `deps`, `context`, `star`, `unstar`, `starred`, `comment`, `list-comments`, `edit-comment`, `delete-comment`, `backlinks`, `bulk-update`, `note`, `decide`, `export`, `import`, `history`, `remind`, `ack-reminder`, `reminders`, `unremind`, `schedule`, `schedule-forecast`, `schedule-edit`, `schedule-resolve`, `schedule-reopen`, `schedule-renegotiate`, `schedule-link`, `schedule-unlink`, `schedule-move`, `schedule-gate`, `schedule-dismiss`, `schedule-delete`, `agenda`, `link-pr`, `unlink-pr`, `claim`, `release`, `patch`|",
+     "|`pad_workspace`|`list`, `members`, `invite`, `storage`, `audit-log`, `create`, `claim`, `deleted`, `restore`|",
+     "|`pad_collection`|`list`, `create`, `update`, `delete`, `list-archived`, `restore`|",
+     "|`pad_project`|`dashboard`, `next`, `ready`, `stale`, `standup`, `changelog`, `report`, `activity`, `catch-up`|",
+     "|`pad_role`|`list`, `create`, `update`, `delete`|",
+     "|`pad_search`|`query`|",
+     "|`pad_playbook`|`list`, `get`, `run`, `match`|",
+     "|`pad_library`|`list`, `get`, `activate`|",
+     "|`pad_attachment`|`list`, `show`|",
+     "|`pad_board`|`show`, `changes` (remote HTTP with Apps only; read-only collection board)|",
+     "|`pad_chat`|`list`, `inbox`, `show`, `send`, `delete`, `read` (global agent chat; excluded from ChatGPT)|",
+     "|`pad_meta`|`server-info`, `version`, `tool-surface`, `bootstrap`|",
+     "|`pad_set_workspace`|session-default workspace pinning (response embeds the bootstrap blob)|"
+    ]
+   ],
+   [
+    "equal",
+    421,
+    432,
+    384,
+    395
+   ],
+   [
+    "replace",
+    432,
+    433,
+    395,
+    396,
+    [
+     "changelog lives in `internal/mcp/version.go`. Errors"
+    ]
+   ],
+   [
+    "equal",
+    433,
+    437,
+    396,
+    400
+   ],
+   [
+    "replace",
+    437,
+    438,
+    400,
+    401,
+    [
+     "Full guide at getpad.dev/mcp/local — install"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    443,
+    401,
+    406
+   ],
+   [
+    "replace",
+    443,
+    444,
+    406,
+    407,
+    [
+     "getpad.dev/mcp/remote. ChatGPT connects"
+    ]
+   ],
+   [
+    "equal",
+    444,
+    445,
+    407,
+    408
+   ],
+   [
+    "replace",
+    445,
+    446,
+    408,
+    409,
+    [
+     "getpad.dev/docs/mcp/chatgpt."
+    ]
+   ],
+   [
+    "equal",
+    446,
+    450,
+    409,
+    413
+   ],
+   [
+    "replace",
+    450,
+    451,
+    413,
+    414,
+    [
+     "docs/deployment.md."
+    ]
+   ],
+   [
+    "equal",
+    451,
+    458,
+    414,
+    421
+   ],
+   [
+    "replace",
+    458,
+    533,
+    421,
+    422,
+    [
+     "…（75 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    545,
+    422,
+    434
+   ],
+   [
+    "replace",
+    545,
+    556,
+    434,
+    435,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    556,
+    618,
+    435,
+    497
+   ],
+   [
+    "replace",
+    618,
+    619,
+    497,
+    498,
+    [
+     "|Environment|`~/.pad/config.toml`|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    619,
+    620,
+    498,
+    499
+   ],
+   [
+    "replace",
+    620,
+    623,
+    499,
+    502,
+    [
+     "|`PAD_DECISION_PROVIDER`|`decision_provider`|`typesafe` to enable; `none` (or unset) to disable|",
+     "|`PAD_TYPESAFE_API_KEY`|`typesafe_api_key`|the provider key: never logged, and write-only on the admin page|",
+     "|`PAD_DECISION_MODEL`|`decision_model`|model pin; defaults to `jev-1.13.0` (a fixed version, so stored answers stay comparable)|"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    634,
+    502,
+    513
+   ],
+   [
+    "replace",
+    634,
+    645,
+    513,
+    514,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    645,
+    647,
+    514,
+    516
+   ],
+   [
+    "replace",
+    647,
+    648,
+    516,
+    517,
+    [
+     "- **Go backend** — chi router, SQLite via modernc.org/sqlite (pure Go, no CGO), FTS5 full-text search, SSE for real-time updates"
+    ]
+   ],
+   [
+    "equal",
+    648,
+    655,
+    517,
+    524
+   ],
+   [
+    "replace",
+    655,
+    660,
+    524,
+    525,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    660,
+    661,
+    525,
+    526
+   ],
+   [
+    "replace",
+    661,
+    671,
+    526,
+    527,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    673,
+    527,
+    529
+   ],
+   [
+    "replace",
+    673,
+    674,
+    529,
+    530,
+    [
+     "See SECURITY.md for reporting vulnerabilities."
+    ]
+   ],
+   [
+    "equal",
+    674,
+    703,
+    530,
+    559
+   ],
+   [
+    "replace",
+    703,
+    705,
+    559,
+    560,
+    [
+     "Apache License 2.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "b8e8ee87faa0+2": {
+  "fn": "nitin27may/e-commerce-agents",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    12,
+    2,
+    12,
+    [
+     "Tests",
+     "Build Images",
+     "License: MIT",
+     "Python 3.12+",
+     ".NET 10",
+     "Next.js 16",
+     "MAF v1",
+     "PostgreSQL + pgvector",
+     "Docker",
+     "Open in GitHub Codespaces"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "A **hands-on course in Microsoft Agent Framework (MAF)** — 34 chapters in Python and .NET, with a no-key start — and the **multi-agent e-commerce platform** it builds up to. In the platform, six specialized AI agents collaborate over **A2A-style HTTP** (`/message:send`; spec conformance is tracked in #88) to handle product discovery, orders, pricing, reviews, inventory and support — with **two complete backends, Python and .NET / C#** (differences documented in the parity matrix), behind one Next.js frontend."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    25,
+    14,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "learning path — first agent, inside an agent, workflows,"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "course README."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    59,
+    28,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     "WSL2 still gives the best experience, and"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    64,
+    60,
+    64
+   ],
+   [
+    "replace",
+    64,
+    65,
+    64,
+    65,
+    [
+     "(`.devcontainer/`). It needs **no secrets**: `LLM_PROVIDER=replay` is set, so the"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    70,
+    65,
+    70
+   ],
+   [
+    "replace",
+    70,
+    71,
+    70,
+    71,
+    [
+     "breaks: the **Quick Start page**."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    71,
+    72
+   ],
+   [
+    "replace",
+    72,
+    73,
+    72,
+    73,
+    [
+     "**Generative UI, not raw JSON.** The chat surface never dumps a tool result as text or a code block. Every agent response is inspected by shape and rendered as the right interactive component: a single detailed result becomes a card, a list becomes a table, a distribution or trend becomes a chart, a status becomes a tone-coded badge — see it live in the screens gallery (review sentiment: rating distribution + 6-month trend, rendered from the same data an LLM would otherwise only describe in prose)."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    73,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     "**Pick your stack:** `agents/python/` or `agents/dotnet/` — same schema, same prompts, same frontend for either (`./scripts/dev.sh --dotnet`, or `docker-compose.dotnet.yml` directly). Parity is enforced by a dual-backend test gate, and `docs/parity-matrix.md` lists the remaining differences row by row."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    75,
+    76
+   ],
+   [
+    "replace",
+    76,
+    77,
+    76,
+    77,
+    [
+     "**Full documentation:** **nitinksingh.com/e-commerce-agents** — the concepts library, all 34 tutorial chapters, and the architecture reference, with every diagram rendered."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    77,
+    78
+   ],
+   [
+    "replace",
+    78,
+    80,
+    78,
+    80,
+    [
+     "Companion demo repo for the AI article series on nitinksingh.com:",
+     "**MAF v1: Putting It All Together**"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    80,
+    81
+   ],
+   [
+    "replace",
+    81,
+    82,
+    81,
+    82,
+    [
+     "**Building a Multi-Agent E-Commerce Platform — The Complete Guide**"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    82,
+    83
+   ],
+   [
+    "replace",
+    83,
+    84,
+    83,
+    84,
+    [
+     "documentation site are the canonical, always-current source."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    84,
+    85
+   ],
+   [
+    "replace",
+    85,
+    88,
+    85,
+    86,
+    [
+     "AI shopping assistant with product cards"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    91,
+    86,
+    89
+   ],
+   [
+    "replace",
+    91,
+    92,
+    89,
+    90,
+    [
+     "|I want to...|Go here|"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    90,
+    91
+   ],
+   [
+    "replace",
+    93,
+    106,
+    91,
+    102,
+    [
+     "|**Learn MAF step by step** — start with no key|tutorials/README.md — 34 chapters; run chapter 1 now|",
+     "|**Just run it**|Run it above — Docker, one command|",
+     "|Run the .NET backend, or Windows, or with no API key|Quick Start|",
+     "|Configure it|Configuration — one `.env`, and how it reaches each service|",
+     "|Read the documentation|**nitinksingh.com/e-commerce-agents** — rendered and searchable|",
+     "|**Brand new to AI — never run a model or written an agent**|AI Knowledge Hub — eleven modules, ten labs, free and local|",
+     "|Learn what an agent even is — new to AI/agents|Concepts — start at page 01|",
+     "|Understand how the agents work / add a new one|Architecture · Adding an Agent|",
+     "|Use the MCP server|MCP Integration|",
+     "|See what shipped and what is next|Roadmap · CHANGELOG|",
+     "|See the generative UI, test users and scenarios to try|Demo guide|"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    113,
+    102,
+    109
+   ],
+   [
+    "replace",
+    113,
+    191,
+    109,
+    110,
+    [
+     "…（78 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    195,
+    110,
+    114
+   ],
+   [
+    "replace",
+    195,
+    196,
+    114,
+    115,
+    [
+     "and the API surface — is in **Architecture**."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    115,
+    116
+   ],
+   [
+    "replace",
+    197,
+    198,
+    116,
+    117,
+    [
+     "**Pick your stack:** `agents/python/` or `agents/dotnet/` —"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    199,
+    117,
+    118
+   ],
+   [
+    "replace",
+    199,
+    202,
+    118,
+    119,
+    [
+     "`docs/parity-matrix.md` lists the remaining differences row by row."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    206,
+    119,
+    123
+   ],
+   [
+    "replace",
+    206,
+    207,
+    123,
+    124,
+    [
+     "**nitinksingh.com/e-commerce-agents** — with all"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    211,
+    124,
+    128
+   ],
+   [
+    "replace",
+    211,
+    212,
+    128,
+    129,
+    [
+     "|Section|What's in it|"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    129,
+    130
+   ],
+   [
+    "replace",
+    213,
+    221,
+    130,
+    138,
+    [
+     "|**Concepts**|14 pages for readers new to agents — what an agent is, the agentic loop, tools, harnesses, why multi-agent, orchestration patterns, graphs, state and memory, grounding, guardrails, HITL, evaluation, observability and cost, production concerns|",
+     "|**Tutorials**|34 chapters. Every chapter that ships code ships both Python and .NET, and every one is gated in CI — the tests replay fixtures (Python) or drive a scripted client (.NET), so the whole suite runs with no key and no network|",
+     "|**Architecture**|System design · agent flows · database schema · API reference · frontend · workflows|",
+     "|**Guides**|Adding an agent · MCP integration · telemetry · security · agent quality and evals · MAF best practices · releasing|",
+     "|**Getting Started**|Quick start · configuration · deployment · troubleshooting|",
+     "|**Reference**|Python vs .NET parity matrix · agent audit matrix · glossary · Mermaid style guide|",
+     "|**Demo guide**|Test users, the agent catalog, scenarios to try, and the screens gallery|",
+     "|**Roadmap**|What shipped, what is in progress, and what is deliberately not done|"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    223,
+    138,
+    140
+   ],
+   [
+    "replace",
+    223,
+    227,
+    140,
+    142,
+    [
+     "CONTRIBUTING.md (setup, conventions, testing policy, PR checklist),",
+     "CHANGELOG.md (what changed in each release) and CLAUDE.md."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    230,
+    142,
+    145
+   ],
+   [
+    "replace",
+    230,
+    231,
+    145,
+    146,
+    [
+     "|Layer|Technology|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    146,
+    147
+   ],
+   [
+    "replace",
+    232,
+    239,
+    147,
+    154,
+    [
+     "|Agent framework|Microsoft Agent Framework v1 — Python (`agent-framework-core`) **and** .NET (`Microsoft.Agents.AI`)|",
+     "|Agent communication|A2A-style HTTP (`/message:send`), plus optional MCP for product and inventory data (flag-gated, `MCP_ENABLED`)|",
+     "|LLM|OpenAI / Azure OpenAI, or any OpenAI-compatible endpoint (Ollama, vLLM, OpenRouter)|",
+     "|Backend|Python 3.12 + FastAPI · .NET 10 + ASP.NET Core|",
+     "|Data|PostgreSQL 16 + pgvector · Redis 7|",
+     "|Frontend|Next.js 16, React 19, Tailwind 4, shadcn/ui|",
+     "|Telemetry|OpenTelemetry → .NET Aspire Dashboard|"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    240,
+    154,
+    155
+   ],
+   [
+    "replace",
+    240,
+    244,
+    155,
+    157,
+    [
+     "Versions, ports and every environment variable: **Deployment** and",
+     "**Configuration**."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    249,
+    157,
+    162
+   ],
+   [
+    "replace",
+    249,
+    250,
+    162,
+    163,
+    [
+     "**Roadmap**."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    163,
+    164
+   ],
+   [
+    "replace",
+    251,
+    252,
+    164,
+    165,
+    [
+     "|Next|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    253,
+    165,
+    166
+   ],
+   [
+    "replace",
+    253,
+    256,
+    166,
+    169,
+    [
+     "|**Azure and Microsoft Foundry**|The biggest gap today: there is no Azure path at all. Not one deployment — the same six agents in **three topologies** (Container Apps, Foundry as model provider, Foundry Hosted Agents), with what each one costs you. One deployment is a tutorial; three with trade-offs is a reference|",
+     "|**Finish the gates**|The dual-backend parity suite runs locally but not in CI, and the .NET eval suite needs its baselines. Every parity claim this repo makes rests on a gate nobody runs automatically|",
+     "|**Retrieval and tooling**|A typed filter DSL for `search_products`, the two MCP servers published to PyPI, and prompt caching — now measurable, because the cost counter ships|"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    262,
+    169,
+    175
+   ],
+   [
+    "replace",
+    262,
+    263,
+    175,
+    176,
+    [
+     "> release is written up in the CHANGELOG, which says plainly when something never"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    265,
+    176,
+    178
+   ],
+   [
+    "delete",
+    265,
+    267,
+    178,
+    178
+   ],
+   [
+    "equal",
+    267,
+    268,
+    178,
+    179
+   ],
+   [
+    "replace",
+    268,
+    278,
+    179,
+    180,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    180,
+    181
+   ],
+   [
+    "replace",
+    279,
+    287,
+    181,
+    182,
+    [
+     "This project is licensed under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "e6ca17143fc1+2": {
+  "fn": "realiii/fudgeo",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Classes, and Tables. Easily read and write geometries and attributes to"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    7,
+    5,
+    7
+   ],
+   [
+    "replace",
+    7,
+    9,
+    7,
+    8,
+    [
+     "For details on OGC GeoPackages, please see the OGC web page."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    12,
+    8,
+    11
+   ],
+   [
+    "replace",
+    12,
+    14,
+    11,
+    12,
+    [
+     "`fudgeo` is available from the Python Package Index."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    12,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     "The `fudgeo` library is compatible with Python 3.10 to 3.15. Developed and "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "delete",
+    19,
+    20,
+    17,
+    17
+   ],
+   [
+    "equal",
+    20,
+    36,
+    17,
+    33
+   ],
+   [
+    "delete",
+    36,
+    37,
+    33,
+    33
+   ],
+   [
+    "equal",
+    37,
+    43,
+    33,
+    39
+   ],
+   [
+    "replace",
+    43,
+    47,
+    39,
+    40,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    69,
+    40,
+    62
+   ],
+   [
+    "replace",
+    69,
+    71,
+    62,
+    64,
+    [
+     "a new feature class. Feature classes require a name and a Spatial ",
+     "Reference, the name must follow SQLite naming requirements. Each"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    64,
+    65
+   ],
+   [
+    "replace",
+    72,
+    73,
+    65,
+    66,
+    [
+     "fields can be defined during creation. `SHAPE` is the default geometry"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    83,
+    66,
+    76
+   ],
+   [
+    "replace",
+    83,
+    119,
+    76,
+    77,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    141,
+    77,
+    99
+   ],
+   [
+    "replace",
+    141,
+    171,
+    99,
+    100,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    179,
+    100,
+    108
+   ],
+   [
+    "delete",
+    179,
+    180,
+    108,
+    108
+   ],
+   [
+    "equal",
+    180,
+    184,
+    108,
+    112
+   ],
+   [
+    "replace",
+    184,
+    196,
+    112,
+    113,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    201,
+    113,
+    118
+   ],
+   [
+    "replace",
+    201,
+    202,
+    118,
+    119,
+    [
+     "helper method `select`. "
+    ]
+   ],
+   [
+    "equal",
+    202,
+    210,
+    119,
+    127
+   ],
+   [
+    "replace",
+    210,
+    220,
+    127,
+    128,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    226,
+    128,
+    134
+   ],
+   [
+    "delete",
+    226,
+    227,
+    134,
+    134
+   ],
+   [
+    "equal",
+    227,
+    231,
+    134,
+    138
+   ],
+   [
+    "replace",
+    231,
+    241,
+    138,
+    139,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    139,
+    140
+   ],
+   [
+    "delete",
+    242,
+    243,
+    140,
+    140
+   ],
+   [
+    "equal",
+    243,
+    246,
+    140,
+    143
+   ],
+   [
+    "replace",
+    246,
+    247,
+    143,
+    144,
+    [
+     "Spatial Index Extension implementation based on section F.3. RTree Spatial Indexes"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    249,
+    144,
+    146
+   ],
+   [
+    "replace",
+    249,
+    250,
+    146,
+    147,
+    [
+     "Spatial Indexes apply to individual feature classes. A spatial index can be"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    256,
+    147,
+    153
+   ],
+   [
+    "replace",
+    256,
+    297,
+    153,
+    154,
+    [
+     "…（41 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    299,
+    154,
+    156
+   ],
+   [
+    "replace",
+    299,
+    302,
+    156,
+    159,
+    [
+     "Refer to **SQLite** documentation ",
+     "on how to use these indexes for faster filtering / querying. Also note",
+     "how to handle round off error "
+    ]
+   ],
+   [
+    "equal",
+    302,
+    304,
+    159,
+    161
+   ],
+   [
+    "delete",
+    304,
+    305,
+    161,
+    161
+   ],
+   [
+    "equal",
+    305,
+    306,
+    161,
+    162
+   ],
+   [
+    "replace",
+    306,
+    307,
+    162,
+    163,
+    [
+     "Metadata Extension implementation based on F.8. Metadata"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    310,
+    163,
+    166
+   ],
+   [
+    "replace",
+    310,
+    312,
+    166,
+    168,
+    [
+     "tables and feature classes. That said, not every table and feature class is ",
+     "required to have metadata. "
+    ]
+   ],
+   [
+    "equal",
+    312,
+    320,
+    168,
+    176
+   ],
+   [
+    "replace",
+    320,
+    328,
+    176,
+    177,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    334,
+    177,
+    183
+   ],
+   [
+    "replace",
+    334,
+    347,
+    183,
+    184,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    356,
+    184,
+    193
+   ],
+   [
+    "delete",
+    356,
+    357,
+    193,
+    193
+   ],
+   [
+    "equal",
+    357,
+    358,
+    193,
+    194
+   ],
+   [
+    "replace",
+    358,
+    359,
+    194,
+    195,
+    [
+     "Schema Extension implementation based on F.9. Schema"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    363,
+    195,
+    199
+   ],
+   [
+    "replace",
+    363,
+    364,
+    199,
+    200,
+    [
+     "to be defined for columns. Constraints definitions are intended for "
+    ]
+   ],
+   [
+    "equal",
+    364,
+    369,
+    200,
+    205
+   ],
+   [
+    "delete",
+    369,
+    370,
+    205,
+    205
+   ],
+   [
+    "equal",
+    370,
+    374,
+    205,
+    209
+   ],
+   [
+    "replace",
+    374,
+    382,
+    209,
+    210,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    388,
+    210,
+    216
+   ],
+   [
+    "replace",
+    388,
+    420,
+    216,
+    217,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    420,
+    427,
+    217,
+    224
+   ],
+   [
+    "delete",
+    427,
+    428,
+    224,
+    224
+   ],
+   [
+    "equal",
+    428,
+    429,
+    224,
+    225
+   ],
+   [
+    "replace",
+    429,
+    432,
+    225,
+    226,
+    [
+     "MIT"
+    ]
+   ],
+   [
+    "equal",
+    432,
+    671,
+    226,
+    465
+   ],
+   [
+    "replace",
+    671,
+    672,
+    465,
+    466,
+    [
+     "* improve `_convert_datetime` to handle different formats for timestamp (contributed by @alexeygribko)"
+    ]
+   ],
+   [
+    "equal",
+    672,
+    691,
+    466,
+    485
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

@@ -2936,5 +2936,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1ea423042002": {
+  "identity": {
+   "one_liner": "Rust+GPUI 编写的原生代码编辑器，内置 AI 代理面板与源码控制",
+   "review": "FluxCode 是 MuaraAI 开发的开源原生代码编辑器，以 Rust 编写、用 GPUI 由 GPU 绘制，运行于单个进程。它提供 ACP 协议的 AI 代理面板、面向 Python 的终端、内置源码控制，以及二进制、PDF、Office、ZIP、SQLite 文件的只读查看，并声明不含遥测。布局与快捷键仿照 VS Code，但没有调试器和语言服务器，VS Code 扩展的 JavaScript 不会执行。GPL-3.0 许可，仍在开发中。",
+   "highlights": [
+    "单进程 Rust 程序，GPU 绘制；README 基准显示约 50 ms 打开窗口、空闲时任务管理器内存 1.4 MB",
+    "代理面板支持 Agent Client Protocol，可列出 ACP 注册表中的代理并一键安装缺失代理",
+    "内置源码控制、随输入搜索的 Find in files，以及 SQLite/PDF/Office/ZIP/二进制文件的只读查看视图"
+   ],
+   "use_cases": [
+    "希望配合 ACP 兼容 AI 代理（如 OpenCode、Mura）进行代码编辑的开发者",
+    "需要打开其他编辑器报错的二进制、PDF、Office、ZIP 或 SQLite 文件做只读查看",
+    "Windows 10/11 或 Linux（glibc 2.35+、Vulkan）环境下的轻量编辑器安装；macOS 构建为预览版"
+   ]
+  },
+  "sha": "1ea423042002",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a41193c74512": {
+  "identity": {
+   "one_liner": "自托管宠物健康与照护追踪应用，SvelteKit+SQLite 单容器部署",
+   "review": "EinVault 是面向家庭实验室（homelab）环境的自托管宠物健康照护追踪应用，基于 SvelteKit 与 SQLite 构建，数据全部保留在自有硬件上。它提供宠物档案、日记、健康记录、用药与耗材管理、照护者看板等功能，以单个 Docker 容器运行、无外部依赖，部署需配置反向代理提供 TLS，并支持角色权限与多语言界面。",
+   "highlights": [
+    "支持健康追踪、用药、耗材、事件、活动日志与提醒管理，以及带 @companion、#type 与日期过滤的全文本搜索",
+    "提供 Bearer-token API 与可撤销的 ICS 日历订阅，供脚本、智能按钮和日历应用无头访问数据",
+    "单 Docker 容器自包含运行，SQLite 数据库，支持可选的视频转码（ffmpeg 转为 H.264 MP4）"
+   ],
+   "use_cases": [
+    "家庭中多成员/多角色共同记录宠物健康、用药与日常活动",
+    "托管或外出时为临时照护者生成可打印的一页照护清单",
+    "通过 API 和日历订阅将宠物提醒与记录接入 Home Assistant 或自定义脚本"
+   ]
+  },
+  "sha": "a41193c74512",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e1f2792a4c6a": {
+  "identity": {
+   "one_liner": "本地优先的桌面媒体库：扫描、缩略图、检索、播放视频图片音频",
+   "review": "Meguri 是一个本地优先的桌面媒体库应用，基于 Electron + React + TypeScript 构建，用于递归扫描本地文件夹，为视频、图片和音频生成缩略图、标签和元数据，并支持搜索与播放。数据存储于 SQLite（better-sqlite3），缩略图由内置的静态 ffmpeg/ffprobe 生成，无需系统安装 ffmpeg。提供 Windows（Microsoft Store/NSIS/portable）、macOS（dmg/zip，需 Apple silicon 与 macOS 13+）、Linux（AppImage/deb，glibc 2.35+）预编译包及 Arch AUR 包。macOS 首次启动需手动放行未公证的应用。",
+   "highlights": [
+    "递归扫描媒体文件夹，基于 mtime/size 增量扫描并通过内容哈希跟踪移动/重命名，标签、评分与播放历史在文件移动后仍保留",
+    "内置 ffmpeg 生成 WebP 缩略图，视频悬停可预览场景；通过本地 HTTP 服务器流式播放，非 faststart 容器动态 remux 为 fragmented MP4",
+    "支持 FTS5 全文搜索、按标签/类型/评分/日期过滤排序，以及 Discovery 随机推荐和任意列表的全屏连续播放"
+   ],
+   "use_cases": [
+    "在本地磁盘上整理和浏览大量视频、照片与音频文件",
+    "需要离线运行、不上传文件的媒体管理场景",
+    "多工作区管理多个媒体目录并为文件打标签、评分、记录历史"
+   ]
+  },
+  "sha": "e1f2792a4c6a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3fcfd6a867af": {
+  "identity": {
+   "one_liner": "基于 MCP 的 AI 代理共享记忆服务器，以双时态知识图存储于单个 SQLite 文件",
+   "review": "MIRSAD 是一个开源共享记忆服务器，供 Claude、ChatGPT 及任意 MCP 客户端共同读写。事实带有效期与记录时间，更新作废不删除；决策连同理由、证据、结果作为一等单元存储；跨代理冲突进入队列由所有者裁决。写入路径不含 LLM，数据存于单个 SQLite 文件。注意当前版本代理身份由客户端自行声明，移动/网页应用接入需 HTTPS 公网地址。",
+   "highlights": [
+    "双时态事实：记录有效期与录制时间，更新时作废旧值而非删除，支持查询过去某时点的真实状态",
+    "决策作为一等单元存储，包含理由、证据、被否方案与结果，可通过 why 查询追溯",
+    "跨代理写入冲突进入队列等待所有者裁决，查询时以最新值返回，不静默覆盖"
+   ],
+   "use_cases": [
+    "多个 AI 助手（Claude、ChatGPT 或任意 MCP 客户端）共享同一份事实与决策记忆",
+    "记录项目决策及其理由、证据和结果，供事后追溯询问",
+    "本地环境下可视化查看代理记忆随写入增长的网络图"
+   ]
+  },
+  "sha": "3fcfd6a867af",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d7bb2ea2fa54": {
+  "identity": {
+   "one_liner": "基于 Go 的 WhatsApp 机器人，以全局人物记忆知识系统驱动 LLM 对话",
+   "review": "wagoya 用 Go 实现一个由 LLM 驱动的 WhatsApp 机器人，可将某个号码作为伴随设备接入 WhatsApp，支持私信与群内 @提及触发。核心是以 WhatsApp LID 为键、跨会话共享的人物档案库，配合 FTS5 与嵌入混合检索的 save_fact/search_facts 工具链。适合想自托管个人/群聊助手的用户。部署为单个静态二进制，支持 anthropic 或 openrouter 两种模型接入。",
+   "highlights": [
+    "以 WhatsApp 身份（LID/号码）为键存储全局人物档案，事实带来源与信任级别，检索基于 SQLite FTS5 与嵌入混合搜索",
+    "提供可编辑的持久化人设、MCP 客户端、http_request 工具、提醒调度与后台记忆整理器；单静态二进制、无 CGO 的纯 Go SQLite",
+    "内置白名单 DM、洪泛控制、每日消费上限、提示注入加固与全局发消息间隔等运行限制机制"
+   ],
+   "use_cases": [
+    "在私聊或群聊中通过 @提及触发 LLM 助手对话",
+    "需要跨会话维护联系人长期记忆的场景",
+    "通过 MCP 工具与 HTTP API 让模型调用外部服务"
+   ]
+  },
+  "sha": "d7bb2ea2fa54",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

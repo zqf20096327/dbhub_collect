@@ -2952,5 +2952,73 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d5fc8cb0c93c": {
+  "identity": {
+   "one_liner": "开源协作知识库，单容器自托管文档、数据库、白板与日志。",
+   "review": "Flowplan 以 AGPL-3.0 许可开源，将块编辑器文档、多视图数据库、白板、日志、项目票据与工作流集成在一个页面树中。团队可经 Docker 单容器（默认 SQLite）或 PostgreSQL+Redis 集群模式自托管，支持 OIDC/LDAP 单点登录与 Notion、Obsidian 等导入；文档明确 Android 端目前仅提供 APK。",
+   "highlights": [
+    "数据库提供 23 种属性类型和表、看板、日历、时间线、画廊、图表等视图",
+    "单个容器即可运行（内置 SQLite），可选用 PostgreSQL（含 pgvector）、Redis 与 S3 组成多实例集群",
+    "导入 Notion、Confluence、AFFiNE、AppFlowy、Obsidian、Evernote 等来源，导出 Markdown、CSV、PDF、Word"
+   ],
+   "use_cases": [
+    "团队自托管知识库与文档协作，经 OIDC/LDAP/SCIM 单点登录并按记录级权限控制访问",
+    "数据从 Notion、Confluence、Obsidian 等工具迁移到自托管环境"
+   ],
+   "softened": [
+    "use_cases:『史诗』删条x1"
+   ]
+  },
+  "sha": "d5fc8cb0c93c",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7c8c7350a0a2": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 C# 客户端，含 HTTP/ADO.NET 与实验性原生 TCP 两种实现",
+   "review": "这是 ClickHouse 官方的 .NET 客户端，通过 ClickHouse.Driver NuGet 包发布，包含 HTTP 客户端与实验性原生 TCP 客户端两类。前者提供 ADO.NET 接口、支持 Dapper/EF Core 等 ORM 及多种数据格式，适用于大多数应用；后者要求 .NET 8+，支持列式块读取与追踪上下文传播。服务器兼容最近 3 个版本加最近 2 个 LTS。",
+   "highlights": [
+    "HTTP 客户端实现 ADO.NET 提供程序，支持 Dapper、EF Core、linq2db 等 ORM，经 HTTP(S) 以 RowBinary 格式传输数据",
+    "原生 TCP 客户端支持列式块读取、进度/日志回调及 W3C trace context 传播，当前处于实验状态，API 可能变更",
+    "提供 Serilog、EF Core、Aspire、Semantic Kernel 官方集成包"
+   ],
+   "use_cases": [
+    "在 .NET 6+ 应用中通过 ADO.NET 或 ORM（如 EF Core、Dapper）访问 ClickHouse Cloud 或自托管实例",
+    "需要高速读写或列式块读取、进度回调与链路追踪的 .NET 8+ 场景，使用实验性 TCP 客户端",
+    "接入 Serilog 日志或 Semantic Kernel 等官方集成生态的 C# 项目"
+   ]
+  },
+  "sha": "7c8c7350a0a2",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "597a4fda89d0": {
+  "identity": {
+   "one_liner": "面向固定长度数据的追加式文件数据库引擎，以 O(1) 索引定位记录",
+   "review": "ArrayDb 是 Aiursoft 开源的 .NET 库式数据库引擎，以 NuGet 包形式嵌入 C# 项目运行，而非独立进程。它采用追加写入（append-only）方式存储固定长度实体，通过分离字符串存储实现按索引 O(1) 定位，支持分区读写与批量操作。不支持 UPDATE 和单条 DELETE，删除仅能按分区键整段删除，适用于日志、遥测等时序数据的存取场景。",
+   "highlights": [
+    "提供固定长度记录的 O(1) 索引读取，字符串内容分离存储，对象以双文件布局持久化",
+    "支持分区写入/批量读写/分区删除，实体属性支持 int、string、DateTime、Guid 及定长 byte[] 等类型",
+    "内置 LRU 页缓存（默认 16MB 页、最多 64 页）、双队列写缓冲与两阶段写入崩溃安全机制"
+   ],
+   "use_cases": [
+    "时序或使用量数据的追加式存储，如日志、遥测与性能追踪",
+    "需要按索引快速定位固定长度记录的 .NET/C# 应用内嵌存储",
+    "以分区为单位的批量写入与整段过期清理场景"
+   ]
+  },
+  "sha": "597a4fda89d0",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

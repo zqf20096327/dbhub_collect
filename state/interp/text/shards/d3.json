@@ -3041,5 +3041,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "163f928bd42e": {
+  "identity": {
+   "one_liner": "Go 编写的 MySQL 表导入工具，写入临时表后原子替换原表",
+   "review": "Swoof 是一个用 Go 编写的 MySQL 表数据导入工具，用于将源库中的表结构（含触发器、约束）与数据复制到一个或多个目标库。它通过临时表写入、完成后重命名替换的方式避免长时间导入干扰现有表；支持 connections.yaml 预设连接、aliases.yaml 表集合、glob 通配表名、-w WHERE 行过滤以及 -diff/-drifted 模式差异检测。README 说明其基于 SQL 查询实现，速度不高于 Percona xtrabackup 类物理备份工具，但兼容更广的 MySQL 版本。适合开发环境中从生产库拉取指定表数据的场景。",
+   "highlights": [
+    "写入临时表并在完成后重命名替换，导入期间原表仍可使用",
+    "支持多目标并行导入，源数据只读一次并向所有目标分发",
+    "支持 DSN 连接串、connections.yaml 预设连接、aliases.yaml 表集合别名、glob 通配表名"
+   ],
+   "use_cases": [
+    "开发环境从生产库同步指定表或匹配模式的表",
+    "通过 -w 条件过滤同步超大表的特定行数据子集",
+    "使用 -diff/-drifted 检测并修复开发库与生产库的模式结构差异"
+   ]
+  },
+  "sha": "163f928bd42e",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

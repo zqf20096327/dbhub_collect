@@ -3403,5 +3403,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "fe049ecab9f0": {
+  "identity": {
+   "one_liner": "本地 SQLite 优先的 AI 长期记忆库，经人工审核入库并提供 MCP 接入",
+   "review": "memory-eternal 是一个面向 AI 编程助手的本地长期记忆库，数据存于本地 SQLite。写入须经待审队列人工批准，状态变更记录在由 SQLite 层强制执行的审计日志中。Agent 经 MCP stdio 读取与提议，不能批准自己写的卡。支持 Claude Code、Codex、Cursor、DSH 等宿主共读同一库；可选部署云端实例同步多设备，云端服务端组件为私有发布。",
+   "highlights": [
+    "内置 FTS5 + BM25 词法召回，默认零模型调用，可选 Ollama bge-m3 或 OpenAI 兼容端点做语义检索",
+    "先审后入：待审队列、人工批准、SQLite 层强制审计日志、删除进 30 天回收站",
+    "提供 MCP stdio 接口（recall/capture/stats/audit_list/revise 五个工具），并支持 MCP Streamable HTTP 通道与多实例 MEM Pair 配对互传"
+   ],
+   "use_cases": [
+    "多会话编程项目中沉淀决策与踩坑记录，供 Agent 后续召回",
+    "需要人工把关 AI 写入内容的团队/个人记忆管理",
+    "多实例或本机-云端场景下同步记忆库并保持审核闸门"
+   ]
+  },
+  "sha": "fe049ecab9f0",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8e3636607617": {
+  "identity": {
+   "one_liner": "本地优先的 AI 运营仪表盘，用专业智能体团队调度并执行任务",
+   "review": "Pin2Pin 是一个运行在本机的 AI 运营仪表盘，基于 FastAPI 与 SQLite，用户可创建公司档案、配置专家智能体、安排每日/每周任务并在任务板上审阅交付物。外部动作（如发邮件、发 Telegram）需所有者批准，提示词仅发送到用户配置的模型提供商。安装脚本目前仅支持 Windows，服务为单用户且无登录认证。",
+   "highlights": [
+    "支持配置 OpenRouter、Claude、OpenAI、Gemini、Grok、Groq、Mistral、DeepInfra、NVIDIA NIM、Together AI 等多种模型提供商，并可分别选择 Gemini 或 deAPI.ai 生成图像与视频",
+    "提供任务板、每日/每周智能体排程、任务内对话续聊，以及 Project Workspace 中带日志流和 Engineering 私聊的工程交接机制",
+    "服务仅绑定 127.0.0.1，运行数据（数据库、密钥、生成文件、会话）保存在 backend/ 下并被 .gitignore 排除"
+   ],
+   "use_cases": [
+    "在本地计算机上组织和调度多个专家智能体的周期性任务并审阅交付成果",
+    "需要人工批准外部动作（如发送邮件、发布 Telegram 帖子）的个人工作流",
+    "通过 Project Workspace 让 Engineering 智能体处理项目代码修改任务"
+   ]
+  },
+  "sha": "8e3636607617",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e16be9320434": {
+  "identity": {
+   "one_liner": "面向开发者的多语言社交平台，集成编程学院、在线代码练习与游戏化模块",
+   "review": "TEKA NEXUS 是一个基于 Next.js 16 与 TypeScript 构建的 PWA 平台，包含社交动态、项目协作工作区、300 节编程课程（Python/HTML/CSS/JavaScript）与 12 个游戏化模块。支持 7 种界面语言并对波斯语和阿拉伯语提供 RTL 布局，数据库使用 PostgreSQL。部署于 Vercel 与 Supabase，可通过 bun/npm 安装运行。",
+   "highlights": [
+    "提供 300 节双语课程，内置浏览器端 Python 子集解释器及沙盒化 JavaScript 运行时，实现自动评分",
+    "包含社交动态、项目工作区（看板、里程碑）与基于 socket.io 的实时团队聊天",
+    "支持 7 种语言界面、波斯语/阿拉伯语 RTL 布局、PWA 安装，认证采用 scrypt 哈希与 zod 校验的 REST 端点"
+   ],
+   "use_cases": [
+    "开发者在浏览器中学习 Python/HTML/CSS/JavaScript 并完成自动评分练习",
+    "团队使用看板、里程碑与实时聊天协作管理项目",
+    "需要多语言（含波斯语、阿拉伯语 RTL）界面的编程学习社区"
+   ]
+  },
+  "sha": "e16be9320434",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -24098,5 +24098,620 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "0501e3266acb+2": {
+  "fn": "Wave-RF/WaveHouse",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "WaveHouse"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    1,
+    2
+   ],
+   [
+    "replace",
+    7,
+    12,
+    2,
+    3,
+    [
+     " ClickHouse® is a great database with a subpar API. WaveHouse fixes that."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    3,
+    4
+   ],
+   [
+    "replace",
+    13,
+    19,
+    4,
+    5,
+    [
+     " The open-source real-time API gateway for ClickHouse: schema-aware ingest, async batching, real-time SSE streaming, and tiered query caching."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    5,
+    6
+   ],
+   [
+    "replace",
+    20,
+    24,
+    6,
+    7,
+    [
+     " All in a single binary."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    7,
+    8
+   ],
+   [
+    "replace",
+    25,
+    31,
+    8,
+    10,
+    [
+     " GitHub Release",
+     " License: Apache 2.0"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    10,
+    11
+   ],
+   [
+    "replace",
+    32,
+    33,
+    11,
+    15,
+    [
+     " Docs ·",
+     " Quick start ·",
+     " Why WaveHouse ·",
+     " Discussions "
+    ]
+   ],
+   [
+    "equal",
+    33,
+    65,
+    15,
+    47
+   ],
+   [
+    "replace",
+    65,
+    66,
+    47,
+    48,
+    [
+     "Full walkthrough at **wavehouse.dev/getting-started**."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    77,
+    48,
+    59
+   ],
+   [
+    "replace",
+    77,
+    78,
+    59,
+    60,
+    [
+     "- **Client** — `@wavehouse/sdk`: TypeScript client with query builder, live queries, streaming, and schema codegen; one runtime dependency (an SSE frame parser, ~1.4 KB gzipped). Its source and issues are in wavehouse-sdk-js; a Go SDK, not released yet, is in wavehouse-sdk-go."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    81,
+    60,
+    63
+   ],
+   [
+    "replace",
+    81,
+    90,
+    63,
+    72,
+    [
+     "||Direct ClickHouse|Kafka + CH (DIY)|Tinybird|**WaveHouse**|",
+     "|-----------------------------|:---------------:|:--------------:|:-----------:|:------------:|",
+     "|Self-hosted, single binary|—|—|✗ (SaaS)|✓|",
+     "|Safe high-rate inserts|✗|✓ (via Kafka)|✓|✓|",
+     "|Schema validation at the edge|✗|custom|✓|✓|",
+     "|Real-time push (SSE)|✗|custom service|✗|✓ native|",
+     "|Thundering-herd coalescing|✗|custom|✓|✓|",
+     "|Row/column policies (JWT)|✗|custom|tokens only|✓ Hasura-style|",
+     "|Cost model|infra|infra + eng time|per-vCPU SaaS|infra only|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    72,
+    73
+   ],
+   [
+    "replace",
+    91,
+    92,
+    73,
+    74,
+    [
+     "Full breakdown, failure modes, and our engineering rationale at **wavehouse.dev/why-wavehouse**."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    104,
+    74,
+    86
+   ],
+   [
+    "replace",
+    104,
+    105,
+    86,
+    87,
+    [
+     "The stack bind-mounts `deployments/compose/settings/` as its settings directory whose `policies.json` / `roles.json` carry a permissive trial policy, so you can ingest without a token; edit the files on the host and the running container adopts them. Create a table in ClickHouse (or import existing schema), then ingest — see the getting-started walkthrough for the full ingest → query → stream tour."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    113,
+    87,
+    95
+   ],
+   [
+    "replace",
+    113,
+    114,
+    95,
+    96,
+    [
+     "Tags carry a signed Sigstore build-provenance attestation — verify before you deploy:"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    134,
+    96,
+    116
+   ],
+   [
+    "replace",
+    134,
+    135,
+    116,
+    117,
+    [
+     "The settings directory is required (no default; the container images ship none — mount one at `/app/settings`). The seed ships no policy, so every request is denied until you write one to `./settings/policies.json` (and declare its roles in `roles.json`) — copy `deployments/compose/settings/policies.json` for the permissive trial policy. You'll still need ClickHouse reachable: the seed points at `localhost:9000`; for anything else, edit `clickhouse.addr` in `./settings/config.json`. Everything in the directory hot-reloads. See Settings Directory and Configuration for more information."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    138,
+    117,
+    120
+   ],
+   [
+    "replace",
+    138,
+    139,
+    120,
+    121,
+    [
+     "WaveHouse is in **alpha**. See SUPPORT.md for where to ask what, the alpha-stage response cadence (best-effort, 1–2 business days), and what's in vs. out of scope right now."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    121,
+    122
+   ],
+   [
+    "replace",
+    140,
+    141,
+    122,
+    123,
+    [
+     "Track what's shipped, in progress, and planned on the **project board**."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    146,
+    123,
+    128
+   ],
+   [
+    "replace",
+    146,
+    147,
+    128,
+    129,
+    [
+     "You'll need **Go 1.26+, GNU Make 4+, Docker (Compose v2), Node.js 22 LTS, and pnpm 11.21+**. See development docs for the authoritative source of truth with the full list, version requirements, and gotchas."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    156,
+    129,
+    138
+   ],
+   [
+    "replace",
+    156,
+    157,
+    138,
+    139,
+    [
+     "Issues, pull requests, and feedback welcome! See our CONTRIBUTING.md guidelines on how to structure your code and run the integration test suites."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    160,
+    139,
+    142
+   ],
+   [
+    "replace",
+    160,
+    161,
+    142,
+    143,
+    [
+     "Found a vulnerability? **Do NOT open a public issue.** Email `security@wave-rf.com` per SECURITY.md — we acknowledge within 48 hours and aim for an initial assessment in 5 business days."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    143,
+    146
+   ],
+   [
+    "replace",
+    164,
+    165,
+    146,
+    147,
+    [
+     "The repo contains a minimal Claude Code configuration: safety guardrails, a couple of slash commands and subagents, auto-format hooks, and worktrunk project hooks for parallel agent workflows. Personal preferences (status line, model, allow lists) stay user-level. See Claude Code & AI agents for setup + reference. `AGENTS.md` at the repo root is the canonical source of truth for project conventions."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    168,
+    147,
+    150
+   ],
+   [
+    "replace",
+    168,
+    169,
+    150,
+    151,
+    [
+     "> **AI-assisted, human-reviewed.** WaveHouse has been developed with AI assistance (Claude Code). Every change, whether AI- or human-authored, goes through the same review gates, tests, and CI before it gets merged. The docs are the source of truth, and please open an issue if anything is out of date. (or, obviously, if you notice an issue that isn't security-related)"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    171,
+    151,
+    153
+   ],
+   [
+    "replace",
+    171,
+    173,
+    153,
+    154,
+    [
+     "WaveHouse is open source under the Apache License 2.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "90559b00657c+2": {
+  "fn": "vercel-labs/eve-data-analyst-template",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Agent Stack MIT License"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Slack-based data analyst built on eve that answers questions about your business from a Postgres database. Ask \"What was our MRR last month?\" in Slack and it replies with the number, plus a chart or table when one helps."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Deploy with Vercel"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "replace",
+    12,
+    16,
+    12,
+    16,
+    [
+     "|Environment variable|What to enter|",
+     "|---|---|",
+     "|`DATABASE_URL`|The connection string for your Postgres database, version 14 or later. Use a database user that can create schemas and roles, such as the database owner.|",
+     "|`ANALYST_SEED_DEMO_DATA`|`true` loads demo data for a fictional SaaS company, with 18 months of subscriptions, billing, and website traffic. Enter `false` to use your own data.|"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    23,
+    16,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "Add an environment variable named `ANALYST_SCHEMAS` that lists the database schemas holding your tables, separated by commas, such as `public,billing`. Then redeploy. Use your own database in the customization guide covers the other available options."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    27,
+    24,
+    27
+   ],
+   [
+    "replace",
+    27,
+    34,
+    27,
+    34,
+    [
+     "|Layer|Technology|",
+     "|-----------------|--------------|",
+     "|Agent framework|eve|",
+     "|Slack integration|Vercel Connect|",
+     "|Data|Postgres|",
+     "|Memory storage|Vercel Blob|",
+     "|Sandbox|Vercel Sandbox|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    37,
+    34,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     "The agent looks up which tables it can read and what their columns mean, then loads your metric definitions from agent/skills/metric-definitions.md, so terms like \"MRR\" and \"churn\" follow your team's rules. It runs a summarizing query and replies with the number, the exact period, and the time zone. Trends, rankings, and breakdowns appear as Slack charts and tables."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    60,
+    38,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     "In this example, the person `U0456EFGH` queries as `analyst_exec` wherever they ask, everyone in the channel `C0789IJKL` queries as `analyst_finance` there, and an empty role turns off access for `U0999ZZZZ`. Bots, including Slack Workflows, get access once you add them to the map. See Control who can query what for how roles combine and how to set up team roles."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    61,
+    64
+   ],
+   [
+    "replace",
+    64,
+    65,
+    64,
+    65,
+    [
+     "Use Node.js 24 and pnpm, and install the Vercel CLI. Then clone your repository."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    74,
+    65,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     " Choose your deployed project when prompted. This also saves a Vercel OIDC token that lets the agent use AI Gateway locally. It expires after about 12 hours, so rerun `vercel env pull .env.local` to get a new one."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    83,
+    75,
+    83
+   ],
+   [
+    "replace",
+    83,
+    84,
+    83,
+    84,
+    [
+     " Use the same `DATABASE_URL` as your Vercel project, or a local Postgres database such as one started with `docker run -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres:17`."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    106,
+    84,
+    106
+   ],
+   [
+    "replace",
+    106,
+    114,
+    106,
+    114,
+    [
+     "|Customize|Where|",
+     "|---|---|",
+     "|Metric definitions|agent/skills/metric-definitions.md|",
+     "|SQL conventions|agent/skills/sql-style.md|",
+     "|Answer format, persona, and response style|agent/instructions.md|",
+     "|Schemas, time zone, roles, and limits|Environment variables listed in .env.example|",
+     "|What memory saves|`description` in agent/memory/|",
+     "|Model and session limits|agent/agent.ts and agent/lib/session-usage.ts|"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    114,
+    115
+   ],
+   [
+    "replace",
+    115,
+    116,
+    115,
+    116,
+    [
+     "For more, including team roles, approval thresholds, and connecting Stripe or PostHog, see CUSTOMIZATION.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

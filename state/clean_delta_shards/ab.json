@@ -35171,5 +35171,1044 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "3c9b3fe64894+2": {
+  "fn": "SimpleAI2026/SimpleBase",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "SimpleBase 首页"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    14,
+    10,
+    14,
+    [
+     "|从一句需求到可用服务|云助手|",
+     "|---|---|",
+     "|从一句需求到可用服务|云助手|",
+     "|AI 工作台、Demo 一键上线、对象存储底座|按模块分工的助手（数据库 / KV / 云函数 / 定时任务 / 对象存储 / 日志 / 沙盒），工具调用过程可展开，只读助手不可写|"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    19,
+    15,
+    19,
+    [
+     "|监控大盘|数据管理（暗色主题）|",
+     "|---|---|",
+     "|监控大盘|数据管理|",
+     "|数据库状态、配额、请求趋势、P50 / P90 / P99 接口耗时|系统库只读受保护，表结构一览，支持亮 / 暗主题与中英文切换|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    24,
+    19,
+    24
+   ],
+   [
+    "replace",
+    24,
+    35,
+    24,
+    35,
+    [
+     "|亮点|说明|",
+     "|---|---|",
+     "|**单二进制、零外部依赖起步**|`./build.sh dev` 一条命令拉起后端与控制台；本地默认本地盘，不需要 Postgres / Redis / S3。前端经 `go:embed` 打进同一个二进制|",
+     "|**每项目一个单文件库**|项目数据落在一个 DuckDB 或 SQLite 文件里，SQL 表、集合文档、KV 共用；S3 模式以「不可变快照 + manifest」同步，节点丢盘可只凭 S3 恢复|",
+     "|**SQL + 文档 + KV 三种模型同库**|参数化 SQL / 批量事务；JSON 集合支持 filter、投影、patch、导入导出、字段 schema；KV 支持 String / Hash / List / Set / ZSet / TTL|",
+     "|**进程内 Go 云函数**|自研 `gofunction` 解释器，单文件 `package main` 即可部署；版本、试跑、激活分离，试跑不过不上线；`/go/:project/:fn/:export` 直接 HTTP 调用|",
+     "|**自动化全家桶**|cron / interval / once 定时任务、记录与对象事件触发器、SSE 实时订阅（支持 `Last-Event-ID` 回放）、项目级备份与恢复|",
+     "|**本地开发、云端幂等重放**|`simplebase.json` 声明库、迁移、集合、函数、定时任务；`simplebase dev plan/apply` 先查后写，重复执行全部 skip，迁移只追加、改动已应用迁移会被拒绝；远端写入必须 `--yes`|",
+     "|**LLM 网关 + 云助手**|OpenAI 兼容 `chat/completions`、`responses`、`models`；云助手经 CLI 技能操作项目资源，破坏性命令需发起人确认，只读助手 fail-closed|",
+     "|**安全默认值**|API Key HMAC 存储、权限位 + Scoped Key（资源 / 动作 / 字段级）、跨项目 403、系统库只读、SQL 守卫（拒绝清单 / 多语句 / 行数与超时）、密钥不得进 YAML、审计与日志脱敏|",
+     "|**可验证的样例**|`examples/` 4 个业务站点 + 15 个能力用例，`scripts/examples-verify/verify.sh` 双实例模拟「本地 → 云端」逐站验证|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    42,
+    35,
+    42
+   ],
+   [
+    "replace",
+    42,
+    59,
+    42,
+    43,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    75,
+    43,
+    59
+   ],
+   [
+    "replace",
+    75,
+    76,
+    59,
+    60,
+    [
+     "首次用引导账号 `simplebase2026` / `simplebase2026` 登录（首次登录必须改密），右上角创建项目，在「设置 → 连接」签发 API Key。完整步骤见 5 分钟上手。"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    93,
+    60,
+    77
+   ],
+   [
+    "replace",
+    93,
+    94,
+    77,
+    78,
+    [
+     "教程见 本地开发、云端重放；AI 编码代理使用 `skills/simplebase`。"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    107,
+    78,
+    91
+   ],
+   [
+    "replace",
+    107,
+    121,
+    91,
+    105,
+    [
+     "|能力|主要路径|权限|",
+     "|---|---|---|",
+     "|数据库|`POST/GET/DELETE /databases`|建删 `database:admin`，读 `database:read`|",
+     "|SQL|`/databases/:id/query`、`/execute`、`/batch`|读 / 写|",
+     "|集合|`/databases/:id/data/collections/:c/documents`（含 batch / export / import）|读 / 写|",
+     "|KV|`POST /kv`|读 / 写|",
+     "|对象存储|`/s3/objects`、`/s3/presign`、`/s3/link`|读 / 写|",
+     "|云函数|`/gofunctions`、`POST /go/:projectID/:name/:export`|写 / 读|",
+     "|定时任务 / 触发器|`/cron-jobs`、`/function-triggers`|写 / `project:admin`|",
+     "|实时订阅|`GET /realtime`（SSE）|读|",
+     "|备份|`/backups`（需 `backup.enabled`）|`project:admin`|",
+     "|LLM|`/v1/chat/completions`、`/v1/responses`、`/v1/models`|`llm:invoke`|",
+     "|云助手|`/agents`、`/agent-threads/:id/runs`|读 / 写|",
+     "|配额与审计|`/quota`、`/audit`、`/logs`|读|"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    105,
+    106
+   ],
+   [
+    "replace",
+    122,
+    123,
+    106,
+    107,
+    [
+     "完整说明见 `docs/` 与 `docs/cli.md`。"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    107,
+    110
+   ],
+   [
+    "replace",
+    126,
+    127,
+    110,
+    111,
+    [
+     "详见 docs/ops/deployment.md。要点：副本数为 1（滚动升级先停旧再起新）；S3 bucket 私有并开启 TLS、SSE-KMS、版本控制；`auth.api_key_hash_secret` 只从环境变量注入，更换会使全部 Key 失效；浏览器直连需显式开启 CORS，且前端生产包不得包含写权限 Key。"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    134,
+    111,
+    118
+   ],
+   [
+    "replace",
+    134,
+    148,
+    118,
+    119,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    153,
+    119,
+    124
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "7e51f958d067+2": {
+  "fn": "Gana-Y/Florix_AI",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    9,
+    2,
+    9,
+    [
+     "Live Demo",
+     "FastAPI",
+     "ChromaDB-FC521F.svg?style=for-the-badge&logo=chroma&logoColor=white)",
+     "PostgreSQL-336791.svg?style=for-the-badge&logo=postgresql&logoColor=white)",
+     "Google Gemini",
+     "Docker",
+     "Tests-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "> 🌐 **Live Production Application:** https://florix-ai.vercel.app "
+    ]
+   ],
+   [
+    "equal",
+    11,
+    15,
+    11,
+    15
+   ],
+   [
+    "delete",
+    15,
+    17,
+    15,
+    15
+   ],
+   [
+    "equal",
+    17,
+    18,
+    15,
+    16
+   ],
+   [
+    "replace",
+    18,
+    37,
+    16,
+    17,
+    [
+     "（目录 17 行略）"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    17,
+    20
+   ],
+   [
+    "delete",
+    40,
+    42,
+    20,
+    20
+   ],
+   [
+    "equal",
+    42,
+    44,
+    20,
+    22
+   ],
+   [
+    "replace",
+    44,
+    45,
+    22,
+    23,
+    [
+     "Landing Page"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    48,
+    23,
+    26
+   ],
+   [
+    "replace",
+    48,
+    49,
+    26,
+    27,
+    [
+     "Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    27,
+    30
+   ],
+   [
+    "replace",
+    52,
+    53,
+    30,
+    31,
+    [
+     "Ingestion Workspace"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    56,
+    31,
+    34
+   ],
+   [
+    "replace",
+    56,
+    57,
+    34,
+    35,
+    [
+     "Oral Exam"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    60,
+    35,
+    38
+   ],
+   [
+    "replace",
+    60,
+    65,
+    38,
+    39,
+    [
+     "Planner"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    74,
+    39,
+    48
+   ],
+   [
+    "replace",
+    74,
+    111,
+    48,
+    49,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    49,
+    50
+   ],
+   [
+    "delete",
+    112,
+    114,
+    50,
+    50
+   ],
+   [
+    "equal",
+    114,
+    120,
+    50,
+    56
+   ],
+   [
+    "replace",
+    120,
+    123,
+    56,
+    59,
+    [
+     " * `M = 16` (Number of bidirectional links per vector node).",
+     " * `ef_construction = 64` (Index build search depth).",
+     " * `ef_search = 40` (Runtime query exploration factor)."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    59,
+    60
+   ],
+   [
+    "delete",
+    124,
+    126,
+    60,
+    60
+   ],
+   [
+    "equal",
+    126,
+    134,
+    60,
+    68
+   ],
+   [
+    "replace",
+    134,
+    138,
+    68,
+    69,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    140,
+    69,
+    71
+   ],
+   [
+    "delete",
+    140,
+    142,
+    71,
+    71
+   ],
+   [
+    "equal",
+    142,
+    146,
+    71,
+    75
+   ],
+   [
+    "replace",
+    146,
+    148,
+    75,
+    77,
+    [
+     " 1. **Tier 1 (Exact Match):** In-memory SHA-256 hash lookup ($O(1)$ in $<1\\text{ms}$).",
+     " 2. **Tier 2 (Semantic Embedding Match):** Vectorized similarity lookup in Redis. If the cosine similarity between the incoming query vector $\\vec{q}$ and a cached query $\\vec{k}$ satisfies $S_C(\\vec{q}, \\vec{k}) \\ge 0.92$, the verified completion is served immediately."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    77,
+    78
+   ],
+   [
+    "delete",
+    149,
+    151,
+    78,
+    78
+   ],
+   [
+    "equal",
+    151,
+    156,
+    78,
+    83
+   ],
+   [
+    "replace",
+    156,
+    164,
+    83,
+    91,
+    [
+     "|Metric|Target SLA|Production Benchmark|Evaluation Methodology|",
+     "|:---|:---:|:---:|:---|",
+     "|**Context Recall**|$\\ge 90\\%$|**94.6%**|Automated check verifying if ground-truth textbook answers exist in retrieved top-K chunks|",
+     "|**Context Precision**|$\\ge 88\\%$|**92.1%**|Signal-to-noise ratio of relevant chunks within the top-5 packed context window|",
+     "|**Faithfulness / Hallucination Rate**|$< 3.0\\%$|**< 2.1%**|Bidirectional NLI contradiction scoring against retrieved source documents|",
+     "|**Median Latency (p50)**|$< 250\\text{ms}$|**184ms**|End-to-end user query roundtrip with semantic cache and HNSW retrieval|",
+     "|**95th Percentile Latency (p95)**|$< 350\\text{ms}$|**242ms**|Retrieval latency under simultaneous multi-user viva exam sessions|",
+     "|**99th Percentile Latency (p99)**|$< 500\\text{ms}$|**310ms**|Peak query load during complex multi-document synthesis|"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    171,
+    91,
+    98
+   ],
+   [
+    "delete",
+    171,
+    173,
+    98,
+    98
+   ],
+   [
+    "equal",
+    173,
+    190,
+    98,
+    115
+   ],
+   [
+    "replace",
+    190,
+    193,
+    115,
+    118,
+    [
+     " 1. *Foundational Recall:* Direct architectural/theoretical definitions.",
+     " 2. *Analytical Scrutiny:* Demands proof of system trade-offs and edge-case behaviors.",
+     " 3. *Counter-Hypothetical Defense:* Challenges the student to defend decisions when constraints reverse."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    202,
+    118,
+    127
+   ],
+   [
+    "delete",
+    202,
+    204,
+    127,
+    127
+   ],
+   [
+    "equal",
+    204,
+    220,
+    127,
+    143
+   ],
+   [
+    "delete",
+    220,
+    222,
+    143,
+    143
+   ],
+   [
+    "equal",
+    222,
+    228,
+    143,
+    149
+   ],
+   [
+    "delete",
+    228,
+    230,
+    149,
+    149
+   ],
+   [
+    "equal",
+    230,
+    238,
+    149,
+    157
+   ],
+   [
+    "replace",
+    238,
+    245,
+    157,
+    158,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    249,
+    158,
+    162
+   ],
+   [
+    "delete",
+    249,
+    251,
+    162,
+    162
+   ],
+   [
+    "equal",
+    251,
+    259,
+    162,
+    170
+   ],
+   [
+    "replace",
+    259,
+    266,
+    170,
+    171,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    281,
+    171,
+    186
+   ],
+   [
+    "delete",
+    281,
+    283,
+    186,
+    186
+   ],
+   [
+    "equal",
+    283,
+    291,
+    186,
+    194
+   ],
+   [
+    "delete",
+    291,
+    293,
+    194,
+    194
+   ],
+   [
+    "equal",
+    293,
+    295,
+    194,
+    196
+   ],
+   [
+    "replace",
+    295,
+    296,
+    196,
+    197,
+    [
+     "Maintained with ❤️ by **Ganesh Yandigeri**"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    197,
+    198
+   ],
+   [
+    "replace",
+    297,
+    302,
+    198,
+    201,
+    [
+     "- 🌐 **Portfolio:** ganesh-portfolio-silk-five.vercel.app",
+     "- 💼 **LinkedIn:** linkedin.com/in/ganesh-yandigeri",
+     "- 🐙 **GitHub:** @Gana-Y"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    305,
+    201,
+    204
+   ],
+   [
+    "replace",
+    305,
+    306,
+    204,
+    205,
+    [
+     "Distributed under the MIT License. Built for high-performance applied AI learning."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "adaf5a122790+2": {
+  "fn": "moqui/mr-moqui",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    7,
+    5,
+    7,
+    [
+     "> openly in this repository (plans/Security-Review.md,",
+     "> docs/security/): with no production systems to protect, the repository is the"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "> privately to the board (SECURITY.md) and kept in the board's private repository until it is fixed."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    18,
+    9,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "It needs Rust 1.99 or newer and bash, on Linux, macOS, or Windows (Build). On Windows, use the MSVC toolchain, Visual Studio Build Tools and Git for Windows, and `moq.cmd` from PowerShell or cmd (Windows). This builds the release binary (target/release/moqui, the Maximal package: every feature, embedded Postgres and the dev tools, including SSH/SFTP, OAuth2/OIDC, SMTP/IMAP/POP, Git, XLSX and image processing) and uses it to load data and run. To deploy to a server, a container or a cluster, see Run and Deploy."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    26,
+    19,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "What is open is in plans/Remaining-Work.md."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    42,
+    27,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "MR Moqui spans five repositories in the moqui organization on GitHub. Component repositories use matching repository, `runtime/components/addon` directory and component.xml names."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     "|Repository|What it is|Where it came from|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    45,
+    46
+   ],
+   [
+    "replace",
+    46,
+    51,
+    46,
+    51,
+    [
+     "|mr-moqui|The framework, the `moq` script, the base components (`runtime/components/base`: framework, tools, webroot), and the dev components (`runtime/components/dev`: dev-aide, example, the demo lock-down, and the component template)|A Rust rebuild of Moqui Java (moqui-framework and moqui-runtime), started 2026-10-09|",
+     "|mr-mantle|Mantle Business Artifacts: the data model (entities and data) and the services|The Java components mantle-udm and mantle-usl. They were forked as `mr-mantle-udm` and `mr-mantle-usl` and converted from Groovy to JavaScript. Then `mr-mantle-usl` was renamed and `mr-mantle-udm` was merged into it|",
+     "|mr-marble|Marble ERP and the Simple Screens library it is built from, with My Account|The Java components SimpleScreens and MarbleERP. They were forked as `MrSimpleScreens` and `MrMarbleERP` for the port. Then `MrSimpleScreens` was renamed and `MrMarbleERP` was merged into it|",
+     "|mr-boss|IronStone BOSS: Commons & Comms (groupware and communication), Projects, and the other BOSS applications|New for MR Moqui. The repository was named `ironstone-boss` until 2026-10-25|",
+     "|mr-pass|IronStone PASS: the public-facing companion suite: Forum, Shop, Smithy, the Billing, Supplier, Support and Sales customer pages, Marketing's public subscription, forms, landing pages and event registration, and Blog/Publishing|New for MR Moqui; Shop is specified in its design|"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    51,
+    52
+   ],
+   [
+    "replace",
+    52,
+    53,
+    52,
+    53,
+    [
+     "The merges into `mr-mantle` and `mr-marble` kept the commit history of both repositories. On GitHub the renamed repositories redirect from their old names. A Java component that depends on `mantle-udm`, `mantle-usl`, `SimpleScreens` or `MarbleERP` now depends on `mr-mantle` or `mr-marble`, and its `component://` locations change the same way. See Moqui Java migration notes."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    58,
+    53,
+    58
+   ],
+   [
+    "replace",
+    58,
+    59,
+    58,
+    59,
+    [
+     "- Use one language (JavaScript) for scripts and templates on the server, and for inline expressions on the client, so that XML Screens can become client-renderable. The engine is quickjs-oxide, a QuickJS-compatible engine in safe Rust."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    59,
+    67
+   ],
+   [
+    "replace",
+    67,
+    75,
+    67,
+    75,
+    [
+     "1. **JavaScript for scripts and templates.** Scripts, XML actions, screen macros and text templates are JavaScript on quickjs-oxide; `ec.resource.expand()` is a template literal, and a small `if`/`list`/`assign` renderer (with a locked-down sandbox variant) handles structured text. Plan: Architecture-Proposal (Templating).",
+     "2. **SearchFacade replaces ElasticFacade.** Postgres full-text and JSON are the default backend; OpenSearch is optional. Plan: SearchFacade.",
+     "3. **qvt can be server-static.** With `server-static` set for `qvt`, the server sends a data-free compiled template and the client merges the data. Opt-in. Plan: QvtServerStatic.",
+     "4. **Print HTML is its own render mode.** `html-print` (print CSS and `@page`, also selected by the old `xsl-fo` name) is printed to PDF by one long-lived external Chromium; `/fop/<path>` sends a screen as PDF. Plan: Architecture-Proposal (Tool components and print).",
+     "5. **Cluster coordination uses the shared database.** Members find each other in a table; cache invalidation and notifications fan out over gRPC on client-certificate TLS (HTTP/1.1 POST as the alternative); no Hazelcast or Redis. Plan: Cluster.",
+     "6. **Sessions live in the database** (`moqui.server.HttpSession`, through the entity cache), with an optional guarantee mode so a load balancer without stickiness can fail over. Plan: Architecture-Proposal (Sessions and login).",
+     "7. **Keys are configuration, and unset secrets are generated.** Secrets are `default-property`s set by conf file or environment, never database rows; one still at its `CHANGEME` default is generated and saved to `runtime/.env`, which is loaded at startup like environment variables. Plan: MimoReview (Decisions 1–3).",
+     "8. **Feed registration commits with the entity change.** Search document keys are registered in the entity transaction; assembly and indexing run after commit, and an index failure does not roll back the change. Plan: SearchFacade."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    82,
+    75,
+    82
+   ],
+   [
+    "replace",
+    82,
+    83,
+    82,
+    83,
+    [
+     "Native component usage, the plan, and"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    88,
+    83,
+    88
+   ],
+   [
+    "replace",
+    88,
+    89,
+    88,
+    89,
+    [
+     "Reference guides for built features are in `docs/`, by tier and area with an index in `docs/README.md`, including building and testing, running and deploying and the practices for application development and Rust. The security policy links to the attack-surface map and the HTTP proof tests. For a Moqui Java deployment or component moving to MR Moqui, start with the Moqui Java migration notes. Design, status and review documents are in `plans/`, indexed by `plans/README.md`: what is still open, what comes next, the proposals, and the archive of built designs and finished reviews."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    93,
+    89,
+    93
+   ],
+   [
+    "replace",
+    93,
+    94,
+    93,
+    94,
+    [
+     "are in `docs/Build-Test.md`. Running and deploying (the runtime directory and conf lookup, HTTPS"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    94,
+    95
+   ],
+   [
+    "replace",
+    95,
+    96,
+    95,
+    96,
+    [
+     "`docs/Run-Deploy.md`; Podman and systemd are in `podman/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    108,
+    96,
+    108
+   ],
+   [
+    "replace",
+    108,
+    110,
+    108,
+    109,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

@@ -3099,5 +3099,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "cf91cf0ec855": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 CLI，覆盖本地开发与 ClickHouse Cloud 管理",
+   "review": "clickhousectl（别名 chctl）是 ClickHouse 官方命令行工具，支持安装切换本地版本、运行隔离服务器、执行 SQL，并可通过 API key 管理云端服务、Managed Postgres、ClickPipes 数据管道和 ClickStack 可观测性资源。面向开发者与运维人员，提供 bash/zsh/fish 补全；Managed Postgres 命令处于 beta 阶段，写操作需 API key。",
+   "highlights": [
+    "支持本地隔离服务器管理与 SQL 执行，以及云端服务的创建、配置、扩缩容、备份和查询",
+    "支持通过 ClickPipes 从 S3 或 Postgres CDC（逻辑复制）向 ClickHouse Cloud 导入数据",
+    "提供 bash/zsh/fish shell 补全、SHA256 校验、OAuth 与 API key 双认证机制"
+   ],
+   "use_cases": [
+    "本地开发环境：初始化项目目录、启动隔离的 ClickHouse 或 Docker 版 Postgres 服务器",
+    "云端运维：通过终端创建/扩缩容 Cloud 服务并执行 SQL 查询",
+    "数据接入：搭建 Postgres CDC 复制管道或从 S3 加载文件到 ClickHouse Cloud"
+   ]
+  },
+  "sha": "cf91cf0ec855",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "85c93f3f7603": {
+  "identity": {
+   "one_liner": "面向 PHP/MySQL 服务端渲染应用的轻量 MVC 框架，含 ActiveRecord ORM 与 Codex 插件。",
+   "review": "Pair 是一个 MIT 许可的 PHP 框架，当前稳定版为 4.1.14，定位中小型 PHP/MySQL 应用。它提供显式 MVC 响应、ActiveRecord 风格 ORM、CRUD 与 OpenAPI 工具、渐进式增强及认证 ACL 助手。运行要求 PHP 8.4+、MySQL 8.0+、Composer 2 与 Apache 2.4（mod_rewrite）。代码库设计为可被人工与 AI 辅助流程检视，并附六个技能的 Codex 配套插件。",
+   "highlights": [
+    "提供显式控制器与类型化页面状态对象，支持页面、片段、JSON、文本和空响应类型",
+    "内置 ActiveRecord 持久化、类型转换、关联与集合，附带基于代码生成器的模块、API 与 CRUD 生成命令",
+    "支持 PWA、推送、Passkey 与原生 iOS/Android 助手，无强制前端构建流程；升级工具支持 --dry-run"
+   ],
+   "use_cases": [
+    "使用 Composer 脚手架快速创建带认证、ACL、迁移与本地化的中小型 PHP/MySQL 应用",
+    "在服务端渲染项目中生成 CRUD 模块并维护 OpenAPI 契约的 API 开发",
+    "在支持 Git 插件市场的 Codex 环境中借助配套插件进行 Pair 应用的模块、表单、迁移与 CRUD 评审"
+   ]
+  },
+  "sha": "85c93f3f7603",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "51ec8a11efd0": {
+  "identity": {
+   "one_liner": "支持浏览器端端到端加密的文件分享与存储服务，可选密码保护后上传密文。",
+   "review": "Silocat 是一个文件分享与存储服务，用户可在浏览器中对文件分块加密后再上传，使服务器仅存密文。支持匿名上传（上限 20 GB、默认七天后过期）、文件夹结构保留、可配置的分享链接，以及向账户请求文件的接收链接。默认不开密码保护时文件以明文上传。架构为 SvelteKit 前端加 Rust/Axum 后端，存储用任意 S3 兼容对象存储，通过 docker compose 自托管，许可证为 AGPL-3.0。",
+   "highlights": [
+    "开启密码保护后，每块文件在浏览器端用 Argon2id 从口令派生密钥并以 XChaCha20-Poly1305 加密；无找回、无后门",
+    "支持匿名上传单文件最大 20 GB（浏览器本地持有管理密钥，默认七天后过期）、整目录上传、公开/一次性/关闭分享链接，可选链接密码与过期时间",
+    "自托管 compose 内置 Postgres 与 MinIO，可切换到 Cloudflare R2、Backblaze B2 或任意 S3 兼容存储；提供 API 密钥与官方 npm 客户端库封装客户端加密"
+   ],
+   "use_cases": [
+    "通过分享链接向他人发送加密文件，口令单独传递，服务器只存密文",
+    "创建请求链接让外部人员向自己的账户上传文件，无需注册并获取回执",
+    "在自有 VPS 或笔记本上单机部署私有文件分享与存储服务"
+   ]
+  },
+  "sha": "51ec8a11efd0",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d07477e54aea": {
+  "identity": {
+   "one_liner": "Rust 单二进制 CLI，把仓库已验证错误笔记建成 SQLite FTS5 索引与二跳耦合图",
+   "review": "MISTOLOGY 是一个 Rust 编写的单二进制 CLI 与 agent 技能，用于将仓库中经验证的错误笔记存为 .mistology/notes/ 下的 Git 跟踪 Markdown，并通过可重建的 SQLite FTS5 索引和有向 1/2 跳耦合图提供紧凑检索。面向使用 Claude Code、Codex、Gemini CLI、Cursor 等 agent 的开发者；cargo install 安装后由 mistology setup 写入技能文件，写入笔记需同时提供失败证据与验证证明。",
+   "highlights": [
+    "search -b 预检返回最多 6 条压缩简报，包含 1-hop 与 2-hop 有向耦合链，查询平均约 4 ms",
+    "笔记以 Git 跟踪的 Markdown 存储，索引库 index.db 可随时删除并在下次搜索时自动重建（约 85 ms / 500 篇）",
+    "提供 supersede 版本演进、--explain 诊断、doctor 与 events.jsonl，支持 setup 自动检测 ~/.claude、~/.gemini、~/.codex、~/.cursor、~/.agents 等技能目录"
+   ],
+   "use_cases": [
+    "在代码编辑或修复构建/测试错误前执行预检查询，查看目标文件与符号相关的耦合模块及已验证修正",
+    "将 Git 历史中的 bugfix/revert 提交批量整理为可检索的错误笔记",
+    "团队通过 setup --project 或项目规则文件（AGENTS.md 等）在仓库内共享统一的预检与记录流程"
+   ]
+  },
+  "sha": "d07477e54aea",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

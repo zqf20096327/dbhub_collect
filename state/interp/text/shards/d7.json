@@ -3313,5 +3313,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2db900f352b1": {
+  "identity": {
+   "one_liner": "将 GTFS Schedule 数据导入 PostgreSQL 以便 SQL 查询分析的工具",
+   "review": "该工具读取 GTFS Schedule 数据集并生成 SQL 导入 PostgreSQL（要求 >=15，需 PostGIS 与 CREATE 权限）。除按文件建表外，还提供 service_days、arrivals_departures、connections 等视图，将 stop_times 与服务日展开为绝对日期时间。支持 npm、预编译二进制与 Docker 安装，提供 GraphQL/REST 接口选项。导入耗时随数据规模从数秒到一小时以上。",
+   "highlights": [
+    "提供时间未展开与时间展开两种数据视图，并生成 service_days、arrivals_departures、connections、shapes_aggregated 等分析视图",
+    "支持 frequencies.txt、translations.txt（含 *_translated 视图），并通过 PostGraphile/PostgREST 暴露 GraphQL 与 RESTful API",
+    "提供 npm 安装、预编译二进制与 Docker 镜像（ghcr.io/public-transport/gtfs-via-postgres）三种使用方式"
+   ],
+   "use_cases": [
+    "对公交时刻表数据做 SQL 查询与统计分析（如按站点、日期统计到发车次）",
+    "需要绝对日期时间到发记录或服务日展开的行程查询场景",
+    "网络分析场景下使用未展开的时间数据"
+   ]
+  },
+  "sha": "2db900f352b1",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "687c9230ca40": {
+  "identity": {
+   "one_liner": "基于 Rust 的多租户分布式任务队列与定时调度服务，含 REST/gRPC 双协议。",
+   "review": "Spooled Backend 是用 Rust + Tokio 实现的任务队列与 worker 协调服务，依赖 PostgreSQL 存储和 Redis 缓存/发布订阅，面向需要分布式作业调度的团队。核心机制包括基于 FOR UPDATE SKIP LOCKED 的数据库锁、租约加重试实现至少一次投递、按组织隔离的查询作用域。注意自托管部署默认受套餐限额约束，需将 DEFAULT_PLAN_TIER 设为 enterprise 解除；快照栈仅用于本地试用而非生产。",
+   "highlights": [
+    "同时提供 REST（:8080）与 gRPC（默认 :50051，支持流式）两种 API，并通过 WebSocket/SSE 推送任务实时状态",
+    "支持 cron 定时任务（含时区）、DAG 依赖工作流、死信队列、出站 Webhook 自动重试与状态跟踪",
+    "内置 Bcrypt API 密钥、JWT 认证、HMAC 签名校验、多租户隔离与 Stripe 计费集成；Prometheus 指标与 Grafana 面板供自托管监控"
+   ],
+   "use_cases": [
+    "分布式系统中的 webhook 投递队列与后台作业调度（含 cron 周期任务）",
+    "需要多租户隔离与套餐限额的 SaaS 后端任务基础设施",
+    "通过 Docker Compose 或 Portainer 自托管部署，并接入 Prometheus/Grafana 监控"
+   ]
+  },
+  "sha": "687c9230ca40",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "299362b0ffc7": {
+  "identity": {
+   "one_liner": "渥太华大学 CEED 发起的创客项目发布网站",
+   "review": "MakerRepo 是渥太华大学创业与工程设计中心（CEED）发起的网站，供创客发布项目，并包含该校课程内容。基于 Ruby on Rails 与 PostgreSQL，本地运行需 master.key 与数据库备份，使用 SAML 证书，后台任务在开发环境用 async 适配器、生产环境用 Solid Queue。适合想自部署或贡献代码的开发者阅读。",
+   "highlights": [
+    "基于 Ruby on Rails 与 PostgreSQL，通过 rbenv/NVM 管理本地依赖",
+    "开发环境后台任务用 ActiveJob async 适配器，staging/production 使用 Solid Queue",
+    "部署通过 Docker Compose 与 GitHub Actions 工作流，推送 staging/master 分支分别触发部署"
+   ],
+   "use_cases": [
+    "创客发布和浏览制作类项目",
+    "开发者搭建本地环境并参与贡献代码",
+    "部署 staging/production 环境的运维场景"
+   ]
+  },
+  "sha": "299362b0ffc7",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

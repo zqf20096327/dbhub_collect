@@ -23495,5 +23495,969 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "a4dd354f4a4d+2": {
+  "fn": "embeddable-hq/mason-data",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     "- **Exceptionally fast:** Mason rewrites your Postgres queries to run on DuckDB's columnar engine, in the form DuckDB runs fastest. Analytical queries (`COUNT`, `SUM`, `GROUP BY`, etc.) over large tables run significantly faster than on Postgres.",
+     "- **Same SQL, same answers:** Mason is built from the ground up to match Postgres syntax and behaviour, so you can confidently point your existing SQL queries at Mason, without needing to port them to another SQL dialect (where subtle differences change your results)."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    8,
+    10
+   ],
+   [
+    "replace",
+    10,
+    13,
+    10,
+    13,
+    [
+     "npm",
+     "CI",
+     "License: Apache-2.0"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    18,
+    14,
+    15,
+    [
+     " How Mason works: Mason syncs the tables you choose from your Postgres. Each table is kept up to date on demand, by polling or by replication. A BI tool, an AI agent (over SQL or MCP) or your app connects as a user, and the user"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    15,
+    18
+   ],
+   [
+    "replace",
+    21,
+    29,
+    18,
+    26,
+    [
+     "- Try it in 2 minutes",
+     "- Use it with your database",
+     " - Set up a project · Choose tables and columns · Keep them up to date",
+     " - Connect a tool · Access control · Check on it · Run it on a server",
+     " - Hosted: Mason read-replica · Change a deployed project",
+     "- Speed and compatibility",
+     " - Speed · Compatibility",
+     "- Agents · Where to read more · Community · License"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    44,
+    26,
+    41
+   ],
+   [
+    "replace",
+    44,
+    46,
+    41,
+    43,
+    [
+     "generated table, `daily_orders`. Nothing is downloaded after `npm install` on most machines",
+     "(`cli/README.md`)."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    57,
+    43,
+    54
+   ],
+   [
+    "replace",
+    57,
+    61,
+    54,
+    55,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    65,
+    55,
+    59
+   ],
+   [
+    "replace",
+    65,
+    66,
+    59,
+    60,
+    [
+     "(Access control) and `mason/mason.yml` (the Mason version). Commit everything in `mason/`."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    75,
+    60,
+    69
+   ],
+   [
+    "replace",
+    75,
+    85,
+    69,
+    70,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    70,
+    73
+   ],
+   [
+    "replace",
+    88,
+    89,
+    73,
+    74,
+    [
+     " how the table stays up to date."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    74,
+    75
+   ],
+   [
+    "replace",
+    90,
+    91,
+    75,
+    76,
+    [
+     " `exclude:`. Name one with `--include` to sync it."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    76,
+    77
+   ],
+   [
+    "replace",
+    92,
+    93,
+    77,
+    78,
+    [
+     " `mason start`. If an entry has a mistake, Mason names the key and says how to fix it. You never write column types."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    78,
+    79
+   ],
+   [
+    "replace",
+    94,
+    97,
+    79,
+    82,
+    [
+     " database. If a hand edit or a rename would sync such a column again, Mason holds that table and says why on its line in `mason status`. Run the",
+     " `mason add --columns …` the line gives to sync it. In a project deployed read-only, the committed file is your",
+     " word, and the line says what to do there."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    102,
+    82,
+    87
+   ],
+   [
+    "replace",
+    102,
+    103,
+    87,
+    88,
+    [
+     "|`sync:`|`off` (the default)|`poll 5m`|`replication`|"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    88,
+    89
+   ],
+   [
+    "replace",
+    104,
+    109,
+    89,
+    94,
+    [
+     "|after the first sync|nothing, until you run `mason sync `|a `SELECT` of the table, at the interval you choose|reads the database's change log, like a replica|",
+     "|needs on your Postgres|a user that can `SELECT` the tables|the same|`wal_level = logical`, a user with `REPLICATION` (or `rds_replication`), and a publication|",
+     "|creates on your Postgres|nothing|nothing|a replication slot (and a publication, if you don't name one)|",
+     "|works on a read replica|yes|yes|yes, on Postgres 16+, with a publication you name|",
+     "|good for|trying Mason, and reports that run on a schedule|most tables, every few seconds to every few hours|big, busy tables, and changes within seconds|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    128,
+    94,
+    113
+   ],
+   [
+    "replace",
+    128,
+    130,
+    113,
+    115,
+    [
+     " Mason checks it, but never creates, changes or drops it. Otherwise Mason needs the right to create its own. A read",
+     " replica needs Postgres 16+ and a publication you name."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    115,
+    116
+   ],
+   [
+    "replace",
+    131,
+    132,
+    116,
+    117,
+    [
+     " `REPLICA IDENTITY NOTHING`. Give them `sync: poll <interval>` instead. `mason add` writes this for you."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    117,
+    118
+   ],
+   [
+    "replace",
+    133,
+    135,
+    118,
+    120,
+    [
+     " `max_slot_wal_keep_size` (Postgres 13+) on your database to limit it. Mason drops the slot, and checks it is gone,",
+     " when no table uses `replication` any more, and on `mason destroy`."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    120,
+    121
+   ],
+   [
+    "replace",
+    136,
+    137,
+    121,
+    122,
+    [
+     "If you change a table's `sync:`, Mason keeps its data and catches it up with one poll. `docs/DESIGN.md`"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    155,
+    122,
+    140
+   ],
+   [
+    "replace",
+    155,
+    156,
+    140,
+    141,
+    [
+     "run Mason on a server."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    141,
+    142
+   ],
+   [
+    "replace",
+    157,
+    158,
+    142,
+    143,
+    [
+     "`docs/POSTGRES-API.md` explains how tools connect and which SQL Mason answers."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    168,
+    143,
+    153
+   ],
+   [
+    "replace",
+    168,
+    179,
+    153,
+    154,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    189,
+    154,
+    164
+   ],
+   [
+    "replace",
+    189,
+    190,
+    164,
+    165,
+    [
+     " `SELECT *` over hidden columns is refused too. Mason never quietly returns fewer columns."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    193,
+    165,
+    168
+   ],
+   [
+    "replace",
+    193,
+    194,
+    168,
+    169,
+    [
+     "`docs/POSTGRES-API.md` has every rule."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    201,
+    169,
+    176
+   ],
+   [
+    "replace",
+    201,
+    205,
+    176,
+    177,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    212,
+    177,
+    184
+   ],
+   [
+    "replace",
+    212,
+    213,
+    184,
+    185,
+    [
+     "`mason --help` lists every command, and `cli/README.md` documents each one."
+    ]
+   ],
+   [
+    "equal",
+    213,
+    230,
+    185,
+    202
+   ],
+   [
+    "replace",
+    230,
+    232,
+    202,
+    204,
+    [
+     " Kubernetes, `strategy: Recreate`). The synced data stays on the volume, so a deploy is a few seconds of downtime,",
+     " not a sync from scratch."
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    204,
+    205
+   ],
+   [
+    "replace",
+    233,
+    234,
+    205,
+    206,
+    [
+     " `sslmode=require`), or mount one from your CA."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    206,
+    207
+   ],
+   [
+    "replace",
+    235,
+    236,
+    207,
+    208,
+    [
+     " Memory says how to size it."
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    208,
+    209
+   ],
+   [
+    "replace",
+    237,
+    238,
+    209,
+    210,
+    [
+     " Prometheus, with numbers only. `mason ui --ssh <user@server>` opens the server's web page from your machine."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    239,
+    210,
+    211
+   ],
+   [
+    "replace",
+    239,
+    240,
+    211,
+    212,
+    [
+     " Read the release notes before each upgrade."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    212,
+    213
+   ],
+   [
+    "replace",
+    241,
+    244,
+    213,
+    216,
+    [
+     "`deploy/mason-data/README.md` walks you through it, with",
+     "the settings to decide. `deploy/README.md` has guides for",
+     "Fly.io, Kubernetes, Railway and AWS ECS. Mason read-replica can also run it for you."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    247,
+    216,
+    219
+   ],
+   [
+    "replace",
+    247,
+    248,
+    219,
+    220,
+    [
+     "Mason read-replica runs Mason for you. It keeps a read replica of your Postgres up to date on a"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    257,
+    220,
+    229
+   ],
+   [
+    "replace",
+    257,
+    258,
+    229,
+    230,
+    [
+     "Change a deployed project has the steps for each change after that. Choose the hosted"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    230,
+    231
+   ],
+   [
+    "replace",
+    259,
+    260,
+    231,
+    232,
+    [
+     "`docs/HOSTED-API.md` documents the API the `mason` command uses."
+    ]
+   ],
+   [
+    "equal",
+    260,
+    269,
+    232,
+    241
+   ],
+   [
+    "replace",
+    269,
+    270,
+    241,
+    242,
+    [
+     " machine, `mason add` and `mason remove` edit the file for you."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    272,
+    242,
+    244
+   ],
+   [
+    "replace",
+    272,
+    277,
+    244,
+    249,
+    [
+     " (the minor version before 1.0), at its own patch or an older one. It refuses any other pin.",
+     " - On a hosted replica, run `npx @mason-data/cli@<version> deploy --replica <org>/<name>`. It shows what the",
+     " deploy changes before it sends it.",
+     " - On your own server, ship `mason/` with your release and restart the container, which runs",
+     " `ghcr.io/embeddable-hq/mason-data:<version>`."
+    ]
+   ],
+   [
+    "equal",
+    277,
+    283,
+    249,
+    255
+   ],
+   [
+    "replace",
+    283,
+    287,
+    255,
+    259,
+    [
+     " release notes, and make the changes it lists. Where Mason",
+     " runs on your machine or your server, `npx @mason-data/cli@<version> upgrade --check` in the project's folder lists",
+     " which of your synced tables that release reads again whole, and how large each is. It works when the Mason you run",
+     " now is a release after 0.22.0."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    288,
+    259,
+    260
+   ],
+   [
+    "replace",
+    288,
+    292,
+    260,
+    264,
+    [
+     " newest Mason the service offers. Mason on the replica restarts, and its connections drop. On the same release line,",
+     " it then runs the newest patch. A new release line waits beside the old one until you deploy a project pinned to it.",
+     " `mason replica status <org>/<name>` shows the versions the replica has. Skip this step when it already has the",
+     " version you pin."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    299,
+    264,
+    271
+   ],
+   [
+    "delete",
+    299,
+    300,
+    271,
+    271
+   ],
+   [
+    "equal",
+    300,
+    302,
+    271,
+    273
+   ],
+   [
+    "replace",
+    302,
+    303,
+    273,
+    274,
+    [
+     "||Postgres p95 (s)|Mason p95 (s)|Mason is|"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    304,
+    274,
+    275
+   ],
+   [
+    "replace",
+    304,
+    308,
+    275,
+    279,
+    [
+     "|1 M rows, 8 clients|2.06|0.14|15× faster|",
+     "|30 M rows, 8 clients|258|4.53|57× faster|",
+     "|10 M rows, 32 clients|96.6|3.51|28× faster|",
+     "|one order by its primary key, 30 M rows, 8 clients (p50)|0.013|0.99|79× slower|"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    309,
+    279,
+    280
+   ],
+   [
+    "replace",
+    309,
+    311,
+    280,
+    281,
+    [
+     "Mason is for scans and aggregates. A lookup through an index is faster on Postgres (docs/DESIGN.md \"Heap order, no index\"). Each p95 is over a mix of 6 dashboard queries. It was measured on m7g.xlarge, 4 vCPU, 15 GiB RAM, EBS gp3, against PostgreSQL 18.6, Docker (postgres:18) on the same machine. docs/MEASUREMENTS.md has every measurement and how it was taken."
+    ]
+   ],
+   [
+    "equal",
+    311,
+    315,
+    281,
+    285
+   ],
+   [
+    "replace",
+    315,
+    317,
+    285,
+    287,
+    [
+     "shapes into fast ones with the same answer. `docs/POSTGRES-API.md` explains each,",
+     "and how to make queries faster. `docs/BENCHMARK.md` shows how to run the benchmark yourself."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    328,
+    287,
+    298
+   ],
+   [
+    "replace",
+    328,
+    329,
+    298,
+    299,
+    [
+     "answer silently, and the few cases it answers differently on purpose are"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    332,
+    299,
+    302
+   ],
+   [
+    "delete",
+    332,
+    333,
+    302,
+    302
+   ],
+   [
+    "equal",
+    333,
+    338,
+    302,
+    307
+   ],
+   [
+    "replace",
+    338,
+    339,
+    307,
+    308,
+    [
+     "docs/SQL-SUPPORT.md is generated from the code. It lists the 1,153 verified pieces (types, functions,"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    341,
+    308,
+    310
+   ],
+   [
+    "delete",
+    341,
+    342,
+    310,
+    310
+   ],
+   [
+    "equal",
+    342,
+    343,
+    310,
+    311
+   ],
+   [
+    "replace",
+    343,
+    344,
+    311,
+    312,
+    [
+     "`docs/POSTGRES-API.md` says how a query is answered and how this is tested."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    347,
+    312,
+    315
+   ],
+   [
+    "replace",
+    347,
+    348,
+    315,
+    316,
+    [
+     "An agent connects like any Postgres client, or over MCP, as a user with a role (Access control). If"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    360,
+    316,
+    328
+   ],
+   [
+    "replace",
+    360,
+    361,
+    328,
+    329,
+    [
+     "an agent should read first. `cli/README.md` has the details."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    364,
+    329,
+    332
+   ],
+   [
+    "replace",
+    364,
+    365,
+    332,
+    333,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    366,
+    333,
+    334
+   ],
+   [
+    "replace",
+    366,
+    378,
+    334,
+    346,
+    [
+     "|`cli/README.md`|every command and option of `mason`|",
+     "|`docs/POSTGRES-API.md`|the Postgres API: how a tool connects, roles, which SQL is answered, and how to make queries fast|",
+     "|`docs/OBSERVABILITY.md`|what you can see about a running Mason: each command, its endpoint and its JSON|",
+     "|`docs/WEB-UI.md`|the web page (`mason ui`): its pages, how access to it is protected, and how to extend it|",
+     "|`docs/SQL-SUPPORT.md`|what is verified to answer exactly as Postgres does, and what is not (generated from the code)|",
+     "|`docs/MEASUREMENTS.md`|when Mason is faster than a Postgres read replica: every measurement and how it was taken|",
+     "|`docs/BENCHMARK.md`|how to run the benchmark against a Postgres read replica|",
+     "|`deploy/mason-data/README.md`|how to run the image on a server, and how to size it|",
+     "|`deploy/README.md`|which platforms can run Mason, each with a guide, and which can't|",
+     "|`docs/DESIGN.md`|the design: how a query is answered, the first sync, polling, replication, and the measurements behind them|",
+     "|`release-notes/`|what each release changes for you, and what to do before upgrading|",
+     "|`CLAUDE.md`|the rules of the codebase, for anyone who changes it, human or AI|"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    380,
+    346,
+    348
+   ],
+   [
+    "replace",
+    380,
+    387,
+    348,
+    349,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    388,
+    349,
+    350
+   ],
+   [
+    "replace",
+    388,
+    390,
+    350,
+    351,
+    [
+     "Apache-2.0 (LICENSE). Copyright Embeddable."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

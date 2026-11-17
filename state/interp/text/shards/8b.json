@@ -2805,5 +2805,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "98f6c16b31f0": {
+  "identity": {
+   "one_liner": "自托管 GitHub 安全仪表盘，基于六项检查计算安全评分并支持维护任务",
+   "review": "Clevis 是一个自托管的 GitHub 组织安全与活动仪表盘，由 FastAPI 后端、psycopg3 后台 worker 和 Next.js 前端三个可独立部署的服务组成。它通过 GitHub App 或 PAT 连接组织，运行 MFA、分支保护、密钥扫描等六项核心安全检查并生成评分趋势，支持 dry-run 的特权维护任务（如清理 Actions 缓存）并记录 append-only 审计日志。许可为 GPL v3。",
+   "highlights": [
+    "提供六项核心安全检查（MFA、分支保护、密钥扫描、Dependabot、代码扫描、force-push 保护）及可选卫生检查，各检查含 pass/fail/error/not_applicable 状态与修复指引",
+    "特权操作记录于 append-only 审计日志，任务经由 Postgres 任务队列（SELECT … FOR UPDATE SKIP LOCKED）分发给可多副本运行的 worker",
+    "GitHub 凭据与任务载荷使用 Fernet 加密存储，优先通过 GitHub App 短期 installation token 访问"
+   ],
+   "use_cases": [
+    "集中查看组织仓库的安全状况评分与修复建议",
+    "运行带 dry-run 与审计记录的 GitHub Actions 缓存清理等维护任务",
+    "自托管环境下跟踪仓库活动流与协作者访问情况"
+   ]
+  },
+  "sha": "98f6c16b31f0",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e6a790f42654": {
+  "identity": {
+   "one_liner": "为 seekdb 维护的第三方依赖固定版本源码、构建配方与补丁仓库",
+   "review": "该仓库包含 seekdb 所用的第三方依赖固定版本源码引用、按包构建配方和补丁。配方通过统一的 RecipeContext 接口处理配置构建，包运行器负责下载源码、校验 SHA256 并准备构建环境。支持生成源码包和二进制包，产物附 manifest.json 记录构建溯源信息。面向需要为 seekdb 交叉编译依赖包的构建工程师。",
+   "highlights": [
+    "支持 Linux x86_64/aarch64、macOS arm64、Windows /MD 与 /MT、Android arm64-v8a 共六个目标 profile",
+    "二进制包内含 manifest.json，记录补丁摘要、目标 profile、构建环境及逐文件哈希用于溯源",
+    "源码包（--kind source）在解压后可离线构建二进制包，无需网络访问"
+   ],
+   "use_cases": [
+    "为 seekdb 在多平台目标（含 Android）构建固定版本的第三方依赖二进制包",
+    "生成可离线复现构建的依赖源码分发包",
+    "维护带有序补丁和许可文件放置的包构建配方"
+   ]
+  },
+  "sha": "e6a790f42654",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3148,5 +3148,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5ebba226b820": {
+  "identity": {
+   "one_liner": "将 Pinecone 向量搜索引入 Postgres 的扩展，可在一张 pgvector 索引后切换三种搜索引擎",
+   "review": "pg_pinecone 是 Pinecone 官方发布的开源 PostgreSQL 扩展（基于 pgrx 用 Rust 构建），让应用继续发送 pgvector SQL，同时按表选择 pgvector、native（默认，本地执行、支持过滤、无网络调用）或 remote（同步到 Pinecone serverless 索引）三种引擎，切换可逆。要求 PostgreSQL 17/18、超级用户权限并安装 pgvector。适合已运行 Postgres 并希望按表调整向量搜索执行位置的团队。",
+   "highlights": [
+    "同一索引后提供 pgvector、native、remote 三种引擎，可按表切换且切换可逆，无需修改查询",
+    "native 引擎在 Postgres 内执行搜索并支持如租户 ID 的过滤条件，无需账号或网络访问",
+    "remote 引擎将表的搜索迁移到 Pinecone serverless 索引，Postgres 保留全部行数据；另支持与表同步的 BM25、向量及混合全文搜索"
+   ],
+   "use_cases": [
+    "已使用 pgvector 的表希望在不改 SQL 的情况下更换索引实现",
+    "单台 Postgres 服务器容量不足时，将特定表的搜索迁移到 Pinecone serverless 索引",
+    "在 Postgres 中对带过滤条件（如租户 ID）的向量数据执行本地搜索，或在 SQL 中运行全文/混合搜索"
+   ]
+  },
+  "sha": "5ebba226b820",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bf49c771f8ce": {
+  "identity": {
+   "one_liner": "Go 语言的 ORM 库，包含查询构造器、模型、关联、迁移等组件",
+   "review": "ThinkORM 是一个 Go 语言 ORM 库，提供查询构造器、ActiveRecord 风格模型、关联预加载、连接管理和 Schema 构建与迁移功能，支持 MySQL、MariaDB、Postgres、SQLite、SQL Server 多种方言。面向 Go Web 开发者，需 Go 1.27+，通过 go get 安装，测试套件使用内存 fake 驱动可离线运行，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "查询构造器支持 where 嵌套/子查询/JSON、CTE、游标分页及 lateral join 等连接方式",
+    "模型支持时间戳、软删除、脏跟踪、事件与观察者、UUID/ULID 键及关联（hasMany/belongsTo/morphTo 等）的预加载与 pivot 读写",
+    "连接管理支持命名连接、读写分离、断线重连，事务支持嵌套 savepoint 与死锁重试"
+   ],
+   "use_cases": [
+    "需要在 Go 项目中操作多种 SQL 数据库的应用开发",
+    "使用 Laravel/ThinkPHP 风格 ORM 模型的开发者迁移到 Go",
+    "需要 Schema 迁移管理和软删除、关联预加载等数据层功能的 Web 服务"
+   ]
+  },
+  "sha": "bf49c771f8ce",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2957,5 +2957,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "19df785cb31d": {
+  "identity": {
+   "one_liner": "将 Garmin/FitBit/MS Health 健康数据解析入库 SQLite 的 Python 脚本集",
+   "review": "GarminDB 是一组 Python 脚本，用于从 Garmin Connect 下载监测、睡眠、活动等数据，也支持 FitBit 与 MS Health 的 CSV 文件，解析后写入免服务器的 SQLite 数据库，生成日/周/月/年汇总表。适合拥有 Garmin 设备并想本地保存与分析健康数据的用户。脚本保留原始 JSON 和 FIT 文件，可离线重建数据库；需在配置文件中填写 Garmin Connect 账号密码。",
+   "highlights": [
+    "自动下载并导入 Garmin 每日监测数据（心率、活动、爬升、压力、强度分钟）、睡眠、体重与静息心率",
+    "生成日、周、月、年汇总表，并可通过命令行或 Jupyter notebook 绘图",
+    "保留下载的 JSON 与 FIT 文件，支持离线重建数据库；支持插件扩展处理第三方 Connect IQ 数据"
+   ],
+   "use_cases": [
+    "本地长期保存并增量更新 Garmin 健康与活动数据",
+    "用 Jupyter notebook 或 SQLite 浏览工具（如 DB Browser for SQLite）分析健康数据趋势",
+    "将活动记录导出为 TCX 文件，或按课程生成数据库视图比较活动"
+   ]
+  },
+  "sha": "19df785cb31d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2c9bc1428c3": {
+  "identity": {
+   "one_liner": "Rust ORM，通过宏声明模型与字段级关系，提供流式查询构建器。",
+   "review": "TideORM 是一个 Rust ORM，通过 #[tideorm::model] 属性宏声明模型与关系，提供流式查询构建、预加载、分块读取和迁移等数据生命周期工具。支持 PostgreSQL、MySQL/MariaDB、SQLite 及多种兼容数据库，通过 Cargo feature 选择后端和运行时。安装时需显式关闭默认特性以避免编译多余驱动。加密字段功能下查询条件不做重写，对加密列的过滤仍基于存储值。",
+   "highlights": [
+    "通过属性宏在模型字段上声明 HasOne/HasMany/BelongsTo/HasManyThrough 关系，query().with(...) 支持嵌套预加载以减少 N+1 查询",
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite，并可通过同名驱动连接 CockroachDB、YugabyteDB、TiDB、Vitess；Database::connect 可打开多数据库并用 db.scope(async {..}) 限定作用域",
+    "查询构建器支持过滤、OR 组、join、union、CTE 和窗口函数；聚合结果按指定类型读取（如 sum::<Decimal>），get_as::<T>() 可读入自定义结构体"
+   ],
+   "use_cases": [
+    "需要字段声明式关系和 eager loading 的 Rust async 后端开发",
+    "多租户或多数据库场景，需在同一进程内连接并切换多个数据库",
+    "需对敏感列做落库加密（encrypted-fields feature），并接受加密列上明文查询不透明的限制"
+   ]
+  },
+  "sha": "f2c9bc1428c3",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e834c08899cc": {
+  "identity": {
+   "one_liner": "Go 编写的轻量级邮件投递代理，提供 IMAP/LMTP/SASL 服务并用 SQLite 存储。",
+   "review": "Raven 是一个用 Go 编写的邮件投递代理，包含 IMAP 服务器（端口 143/993）、LMTP 投递服务（端口 24）和 SASL 认证服务（Unix socket/TCP 12345）三个组件。它采用每用户独立 SQLite 数据库的存储模型，可将附件存入 S3 兼容存储，并支持对接外部认证服务器。项目以 Docker 镜像形式发布，需挂载配置目录、数据目录和 TLS 证书，配置文件包括 raven.yaml 和 delivery.yaml，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "实现 IMAP4rev2 协议，支持 SELECT、FETCH、SEARCH、STORE、COPY、APPEND、EXPUNGE 等标准命令及 CREATE、DELETE、RENAME、LIST、SUBSCRIBE 等邮箱操作",
+    "采用每用户 SQLite 数据库架构，支持将邮件附件存入 S3 兼容存储（如 SeaweedFS）",
+    "提供 LMTP 投递服务接收来自 MTA（如 Postfix）的邮件，并通过 SASL 服务经 Unix socket 对接外部认证"
+   ],
+   "use_cases": [
+    "为邮件客户端提供 IMAP 邮箱访问服务",
+    "配合 Postfix 等 MTA 接收和投递入站邮件",
+    "通过容器化部署搭建带 TLS 的自托管邮件存储与检索服务"
+   ]
+  },
+  "sha": "e834c08899cc",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

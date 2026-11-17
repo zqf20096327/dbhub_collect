@@ -3229,5 +3229,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ac458a32ebbe": {
+  "identity": {
+   "one_liner": "基于 Elixir 与 PostgreSQL/pgmq 的工作流、后台任务与定时任务引擎。",
+   "review": "PgFlow 是一个原生 Elixir 实现的 pgflow 工作流引擎，在 PostgreSQL 中通过 pgmq 队列运行多步骤 DAG 工作流、一次性后台任务及基于 pg_cron 的定时任务，提供重试、可见性超时、并行执行与条件步骤等机制，并与 TypeScript/Deno 版本共享同一数据库 schema。使用前需 Elixir 1.18+ 与 PostgreSQL 17+ 及相应扩展；替换已存在的 flow 定义可能删除运行历史，需按升级指南操作。",
+   "highlights": [
+    "在 PostgreSQL 内通过 pgmq 实现队列，支持重试、可见性超时与投递保障；工作流状态存于 SQL 表，可用 SELECT 查询",
+    "支持依赖允许时的并行步骤、map 扇出处理数组，以及 if/if_not/when_unmet/when_exhausted 条件步骤",
+    "提供运行时 start_worker/scale_worker/check_worker 管理单个节点上的 worker，心跳可经 PgFlow.Workers.healthy?/2 查询"
+   ],
+   "use_cases": [
+    "在 Elixir 应用中处理订单处理等多步骤 DAG 工作流，失败时仅重试失败步骤",
+    "发送邮件、处理 webhook 等一次性后台任务入队执行",
+    "通过 pg_cron 按 cron 计划定时运行 flow 或 job（如每日报告、小时级清理）；宿主不支持 pg_cron 时可用 --no-cron 安装其余功能"
+   ]
+  },
+  "sha": "ac458a32ebbe",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

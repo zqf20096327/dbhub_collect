@@ -3240,5 +3240,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e6ca17143fc1": {
+  "identity": {
+   "one_liner": "基于 Python 和 SQLite 创建与读写 OGC GeoPackage 的轻量级库",
+   "review": "fudgeo 是一个用于创建和操作 OGC GeoPackage 的 Python 库，面向需要在 Python 中读写空间数据的开发者。它支持创建 GeoPackage、要素类和表格，使用常规 Python 对象和 SQLite 语法读写几何与属性，实现了 GeoPackage 标准中的 RTree 空间索引、元数据和 Schema 扩展。库对空间参考定义不做校验，用户需自行确保与目标平台兼容；支持 Python 3.10 至 3.15，采用 MIT 许可证。",
+   "highlights": [
+    "支持创建空 GeoPackage 或打开现有 GeoPackage，创建要素类和表格，并通过 SQL（SELECT/INSERT/UPDATE/DELETE）操作数据",
+    "实现 GeoPackage 编码标准的 RTree 空间索引、元数据（F.8）和 Schema（F.9）扩展",
+    "几何对象支持 Z/M 坐标，提供 copy、explode、字段重命名、属性索引及数据库优化（analyze/compact）等方法"
+   ],
+   "use_cases": [
+    "在 Python 脚本或应用中创建和编辑 GeoPackage 空间数据",
+    "需要按 GeoPackage 标准扩展（空间索引、元数据、Schema 约束）组织数据的项目",
+    "配合 ArcGIS 或 QGIS 等软件使用的 GeoPackage 数据准备（可选用 EPSG 或 ESRI WKT 定义 WGS 84）"
+   ]
+  },
+  "sha": "e6ca17143fc1",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4e3ad614647a": {
+  "identity": {
+   "one_liner": "扫描代码库并把架构、历史与流水线信息写入单个 SQLite 快照的分析工具",
+   "review": "Archstats 用 tree-sitter 等方式读取多语言代码库，将组件、单元、依赖、git 共变历史、复杂度与 CI/CD 构建信息写入一个 SQLite 快照文件；桌面应用、assert 规则检查和自定义 SQL 均读取该文件。适合需要以 SQL 形式查询代码架构数据的开发者。安装需下载二进制或用 Go 1.23+ 与 C 编译器自行构建；Swift 语法的生成代码需 go generate 拉取，go install @latest 不可用。",
+   "highlights": [
+    "支持 Java、Kotlin、C#、Go、Python、PHP、JavaScript/TypeScript（含 Vue、Svelte）、Swift、Objective-C、Dart 等语言的 tree-sitter 解析，Scala 用正则读取",
+    "assert 子命令支持以 YAML 中的 SQL 查询编写架构规则并对快照断言",
+    "提供 Go 库接口 engine.Analyze，输出格式支持 csv/json/tsv"
+   ],
+   "use_cases": [
+    "对代码库生成包含架构与 git 历史的 SQLite 快照，用 SQL 自行查询",
+    "以 YAML 规则文件约束组件间依赖（如 domain 不依赖 web 层）",
+    "在终端查看组件耦合度、不稳定性等视图，导出 csv/json/tsv"
+   ]
+  },
+  "sha": "4e3ad614647a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3009,5 +3009,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "982fa6d43f3b": {
+  "identity": {
+   "one_liner": "在 SQL 中运行 AI 函数的推理引擎，基于 Apache DataFusion 扩展实现。",
+   "review": "Quail 是 CMU Full Stack Data Lab 开发的开源引擎，让用户在 SQL 中调用 AI 函数（如 AI.IF、AI.CLASSIFY），将行文本发送给模型并返回结果。它扩展 Apache DataFusion 来解析、规划和执行其余 SQL。需 Python 3.12 和 CUDA GPU，也提供 Quail Server 在远程 GPU 上运行查询，并可通过 Rust crate 集成。适合需要在查询管道中处理非结构化文本的开发者。",
+   "highlights": [
+    "提供 AI.IF、AI.SCORE、AI.CLASSIFY、AI.EXTRACT、AI.MAP 等 AI 函数，可在 SQL 的过滤、连接中使用",
+    "作为 Apache DataFusion 扩展运行，同一查询中每行只读取一次并可仅对过滤后的行执行分类",
+    "支持 Python（uv pip install quail-engine）、Rust crate 两种调用方式，并提供 Quail Server 在远程 GPU 上断连后继续运行查询"
+   ],
+   "use_cases": [
+    "对文本数据（如评论）在 SQL 查询中进行过滤、打分或标签分类",
+    "从非结构化文档中提取问题答案及其位置",
+    "将 AI 函数集成进已有的 DataFusion 会话或 Rust 程序中"
+   ]
+  },
+  "sha": "982fa6d43f3b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0501e3266acb": {
+  "identity": {
+   "one_liner": "面向 ClickHouse 的实时 API 网关，提供模式感知摄入、批处理、SSE 推送与查询缓存",
+   "review": "WaveHouse 是一个开源（Apache 2.0）的 ClickHouse API 网关，以单个 Go 二进制运行，唯一外部依赖为 ClickHouse。它通过嵌入 NATS JetStream 提供异步摄入（先返回 200、后台批量写入）、基于 system.columns 的模式校验、可选去重与死信队列；查询侧提供进程内 Ristretto 或 Redis 结果缓存与 singleflight 合并；并支持原生 SSE 实时推送和 Hasura 风格的按表/按角色行列策略。项目处于 alpha 阶段，API、配置与磁盘状态在版本间可能变更且无迁移路径。安装支持 Docker Compose、容器镜像（带 Sigstore 签名证明）或 go install，设置目录为必需项。",
+   "highlights": [
+    "异步摄入：嵌入式 NATS JetStream WAL，后台批量写入，支持基于 ID 的可选去重与死信队列",
+    "查询能力：进程内 Ristretto 或共享 Redis 结果缓存，配合 singleflight 合并请求，提供参数化 SQL 的 named pipes 端点",
+    "实时推送：原生 SSE，在 ClickHouse 写入前广播，JetStream 为断线重连客户端补齐缺口"
+   ],
+   "use_cases": [
+    "为前端或用户侧应用提供 ClickHouse 数据的摄入、查询与实时推送接口",
+    "替代自建的自定义 API、队列、批量消费者、缓存层与鉴权服务的组合",
+    "需要边缘模式校验、参数化 SQL 端点与 JWT 行列级访问控制的实时分析场景"
+   ]
+  },
+  "sha": "0501e3266acb",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "56849e5f6dd4": {
+  "identity": {
+   "one_liner": "个人 dotfiles 与配置集合，用 GNU Stow 管理，含 Zsh 与 Emacs 配置",
+   "review": "这是作者的个人 dotfiles 仓库，包含 shell、Git、Emacs 等配置与脚本，通过 GNU Stow 按工具划分目录管理，不同系统使用不同配置子集。Shell 部分针对 Zsh（zinit + powerlevel10k）；Emacs 配置面向 Emacs 30 及以上版本，主体在 my-setup.el，并拆分出 org-autotask 等独立 Elisp 包。仓库提供 Ubuntu、CentOS 9、macOS 的系统初始化脚本，安装说明在 INSTALLATION.md。适用于想参考其个人配置的用户。",
+   "highlights": [
+    "配置文件按工具或功能区域划分，由 GNU Stow 管理，不同系统使用不同配置子集",
+    "Emacs 部分针对 Emacs 30+，配置了 org、magit、forge、lsp-mode、mu4e 等大量包，并包含若干自定义命令（如 kill-buffers-rm-worktree）",
+    "提供 setup-ubuntu.sh、setup-centos9.sh、setup-macos.sh 新系统初始化脚本"
+   ],
+   "use_cases": [
+    "参考或复用 Zsh/Emacs 个人环境配置",
+    "在新装的 Ubuntu、CentOS 9 或 macOS 系统上批量初始化环境",
+    "借鉴 Emacs 包集成细节与针对具体问题的修复补丁（如 woman 手册路径、modeline 精简）"
+   ]
+  },
+  "sha": "56849e5f6dd4",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7460e3428da6": {
+  "identity": {
+   "one_liner": "阿里架构演进的12章精读笔记集，含PDF与Markdown",
+   "review": "该项目是一套中文阅读笔记，按12章梳理阿里巴巴架构演进过程，覆盖从单机LAMP到数据库拆分、TDDL/Cobar、服务化、异步化、去IOE与OceanBase、异地多活及云化底座等阶段。语料来自5本本地原书约40万字。适合希望系统阅读这段架构史的中文读者，仓库提供原PDF、按章Markdown及在线阅读站，可通过下载或网页方式阅读。",
+   "highlights": [
+    "提供12章内容，按压力出现的顺序编排架构演进主题",
+    "提供仓库根目录可下载的原PDF（阿里架构演进精读.pdf）及按章Markdown文件",
+    "语料来自5本本地原书约40万字，并提供在线阅读站"
+   ],
+   "use_cases": [
+    "系统学习阿里巴巴架构演进历程的读者",
+    "需要按章节查阅TDDL、Cobar、HSF、OceanBase等专题笔记的开发者",
+    "偏好PDF下载或在线站点阅读的技术文档使用者"
+   ]
+  },
+  "sha": "7460e3428da6",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

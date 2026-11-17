@@ -2840,5 +2840,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6454bae53c1b": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的因果审计数据库，基于 Postgres 记录事件因果链",
+   "review": "ZizkaDB 是一个构建在 Postgres 上的开源数据库，用于记录 AI Agent 每个步骤及其触发原因，提供带 SHA-256 校验和与哈希链的审计日志、因果记忆和会话回放，面向需要 Agent 调试与 EU AI Act 第 12 条记录留存的团队。通过 Docker 单容器或克隆仓库部署，提供 Python/TypeScript SDK、MCP 服务器及 LangChain/LangGraph 等集成。注意：自托管版仅支持单 Agent 和单个 API 密钥，采用 AGPL-3.0 许可证。",
+   "highlights": [
+    "每个事件携带 parent_id 构成因果链，提供 db.why() 溯源、db.at() 时间旅行重建与 db.verify_chain() 哈希链完整性验证",
+    "提供 db.context_for() 因果记忆检索（按相关性、重要性与时效排序，支持 supersedes 更新）及 db.baseline() 漂移度量；关键词搜索无需外部 API 密钥",
+    "单容器 Docker 部署（含 API 与仪表盘），亦支持 Postgres+Qdrant+Redis 完整栈；提供保留策略、导出导入、Prometheus 指标与脱敏配置"
+   ],
+   "use_cases": [
+    "需要保留可验证决策记录以满足 EU AI Act Article 12 合规要求的 Agent 应用",
+    "排查 Agent 异常行为：追溯工具调用根因、逐步回放会话、测量行为漂移",
+    "为 Agent 提供跨运行的因果记忆上下文，配合 LangChain/LangGraph 等框架集成日志"
+   ]
+  },
+  "sha": "6454bae53c1b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "507eed8d244b": {
+  "identity": {
+   "one_liner": "SQL 数据库迁移工具，用版本化 .sql 文件追踪并应用/回滚迁移",
+   "review": "Migrondi 是一个面向 SQLite、SQL Server、PostgreSQL 和 MySQL 的 SQL 迁移工具：用户编写版本化的 .sql 文件，工具记录数据库已应用的迁移并执行待应用迁移或回滚。提供 CLI 与桌面应用 Migrondi UI 两种形态，通过 dotnet tool、Scoop、Flatpak 或自包含二进制包安装，CLI 需要 .NET 10/11 运行时（自包含包除外），UI 依赖 Vulkan 1.3 且 Linux 下仅支持 Wayland。还提供 Migrondi.Core/Mcp 库与 agent skills。",
+   "highlights": [
+    "支持 SQLite、SQL Server、PostgreSQL、MySQL 四种数据库的迁移应用与回滚",
+    "CLI 覆盖 Windows/Linux/macOS 的 x64 与 arm64，桌面应用另有平台子集",
+    "提供 migrondiui 桌面应用及 HTTP MCP 主机、Migrondi.Core/Migrondi.Mcp 库和两个 agent skills"
+   ],
+   "use_cases": [
+    "在多数据库项目中以版本化 SQL 文件管理 schema 变更",
+    "通过 MCP 主机或 agent skills 让 AI 代理驱动迁移流程",
+    "在 Windows、Linux、macOS 终端或桌面环境中执行迁移操作"
+   ]
+  },
+  "sha": "507eed8d244b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

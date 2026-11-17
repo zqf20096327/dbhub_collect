@@ -2752,5 +2752,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d20c61c1d522": {
+  "identity": {
+   "one_liner": "ioBroker 的 SQL 历史数据适配器，将状态数据存入 SQL 数据库",
+   "review": "ioBroker.sql 是 ioBroker 平台的适配器，用于把状态历史数据写入 SQL 数据库，支持 PostgreSQL、MySQL、Microsoft SQL Server 和 SQLite 四种后端。适配器提供防抖时间、块时间、仅记录变化值等数据点级记录规则，并按数值、字符串、计数器分表存储。适合需要为 ioBroker 状态持久化历史数据的用户。README 指出 SQLite 为文件型数据库，不适合大量事件；MySQL 8.0 需选择旧版认证方式。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、Microsoft SQL Server 和 SQLite 四种数据库后端",
+    "提供防抖时间、块时间、仅记录变化值、最小差值等可配置的记录规则",
+    "按数据类型分表存储（ts_number、ts_string、ts_counter），含时间戳、质量码和来源字段"
+   ],
+   "use_cases": [
+    "为 ioBroker 系统中的传感器、设备状态等数据点持久化历史记录",
+    "按自定义规则（防抖、仅变化、最小差值）采集数值或字符串状态",
+    "通过统计页管理历史数据规模，设置保留期限并清理过期数据"
+   ]
+  },
+  "sha": "d20c61c1d522",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b5012b60aa3e": {
+  "identity": {
+   "one_liner": "Rust 编写的开源关系数据库，各组件均为插件接口，可嵌入或以服务运行。",
+   "review": "Turborel 是用 Rust 编写的关系数据库系统，可嵌入为库或以 turboreld 服务进程运行，通过 turborel 命令行客户端用 SQL 查询。其存储引擎、索引、数据类型、认证、传输协议等均设计为可替换的插件接口。项目处于 alpha 阶段（版本 0.0.0），SQL、API、协议与文件格式在构建间可能变化。代码采用 BSD 2-Clause 许可证。",
+   "highlights": [
+    "支持 SQL 标准（SQL-86 完整、SQL-92 接近完整、SQL:2023 实现中），事务默认 READ COMMITTED、可调至 SERIALIZABLE，具备 MVCC、WAL、检查点与崩溃恢复",
+    "行式与列式存储可按表选择，内置 B-link 树、线性哈希、R-树索引，并由基于代价的规划器选择；支持 LZ4 压缩与 AES-256-GCM/ChaCha20-Poly1303 加密",
+    "通过 Viewstamped Replication 配合双向 TLS 实现复制，多数派确认后提交；存储、索引、数据类型、认证、传输协议等均为插件接口"
+   ],
+   "use_cases": [
+    "需要将数据库以库形式嵌入应用的场景（提供嵌入式模式）",
+    "需要按表选择行式或列式存储、执行窗口函数等分析型 SQL 的工作负载",
+    "需要多节点复制部署的场景：三台服务器可在失去一台时继续服务，备份可在数秒内选出新主节点"
+   ]
+  },
+  "sha": "b5012b60aa3e",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

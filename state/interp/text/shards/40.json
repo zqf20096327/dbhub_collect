@@ -3315,5 +3315,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "668591da81a9": {
+  "identity": {
+   "one_liner": "命令行数据库对比工具，为 MySQL/PostgreSQL/SQLite 生成双向模式与数据迁移 SQL。",
+   "review": "DBDiff 对比两个本地或远程数据库（MySQL、PostgreSQL、SQLite），生成包含 UP 与 DOWN 的 SQL 迁移脚本，并内置 migration:up/down/status/validate 等迁移执行器，也可配合 Flyway、Liquibase 使用。PostgreSQL 支持多 schema、RLS 策略、分区、枚举类型变更等对象，需 PHP pdo_sqlite 扩展运行 SQLite 驱动。",
+   "highlights": [
+    "通过 --driver 支持 MySQL、PostgreSQL 和 SQLite，支持 DSN URL 与 Unix socket 连接",
+    "对比表、视图、物化视图、触发器、存储过程、枚举、序列、RLS 策略及数据，同文件生成 UP/DOWN SQL",
+    "内置迁移执行器（up/down/status/validate/repair/baseline），兼容 Flyway、Liquibase、Laravel Migrations"
+   ],
+   "use_cases": [
+    "数据库版本控制：与 Flyway/Liquibase 等工具配合生成迁移脚本",
+    "对比不同环境（本地/远程、Supabase 项目）间的模式与数据差异",
+    "团队或企业内将目标库结构同步为源库结构并可回滚"
+   ]
+  },
+  "sha": "668591da81a9",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fec9f425e6cb": {
+  "identity": {
+   "one_liner": "自托管的 Excalidraw 白板应用，实时协作+账户+文件夹+搜索，数据存自有 Postgres",
+   "review": "Excaliself 将 Excalidraw 画布封装为自托管应用，提供实时协作、团队空间、共享图库、文件夹、全文搜索与回收站，数据存于自有的 Postgres。首个访客创建管理员账户，其余成员经邀请链接或 SSO 加入。支持 MCP 服务器供 AI 客户端读取、创建与提议编辑绘图。通过 Docker Compose、Coolify、Railway 等方式部署，含 amd64/arm64 预构建镜像。",
+   "highlights": [
+    "包含完整 Excalidraw 编辑器，支持自动保存、图片粘贴存储，粘贴图片同样入库",
+    "内置 MCP 服务器（/api/mcp），支持 Claude 等 AI 客户端查找、读取、创建、导出绘图，编辑需人工点击 Apply 后生效",
+    "部署路径多样：Docker Compose、Coolify、Railway、Hostinger、TrueNAS/Unraid/Portainer，启动时自动执行数据库迁移"
+   ],
+   "use_cases": [
+    "团队自托管协作绘图：通过链接共享绘图实时编辑，含实时光标与跟随模式，访客可免账户参与",
+    "替代托管服务的数据自控场景：将场景、集合与图片从 Excalidraw+ 导入到自己的 Postgres",
+    "AI 辅助图示工作流：用 MCP 客户端从简单图形或 Mermaid 流程图生成绘图、导出 PNG/SVG 用作文档插图"
+   ]
+  },
+  "sha": "fec9f425e6cb",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "99bd0a61bcc8": {
+  "identity": {
+   "one_liner": "读取 MySQL binlog 的 HTAP 分析副本，以 Parquet 存储并用 DuckDB 查询",
+   "review": "DBTrail 通过复制协议读取 MySQL/MariaDB/RDS/Aurora 的 binlog，在本地磁盘或 S3 生成 Parquet 分析副本，以 DuckDB 执行重查询，并提供 AS OF 时间旅行与行级撤销 SQL 生成。应用可经其路由保持单一连接。要求 ROW binlog、full row image 及每表主键；副本存在秒/分钟级延迟，不提供高可用与备份功能。",
+   "highlights": [
+    "以复制协议读取 binlog，无需在 MySQL 上安装插件、代理或触发器",
+    "分析副本为 Parquet 文件，存于本地磁盘或 S3，支持 DuckDB 查询与 AS OF 时间旅行查询",
+    "提供 MCP 接口，客户端可用自然语言查询变更历史并生成撤销 SQL；支持 Iceberg 导出"
+   ],
+   "use_cases": [
+    "将报表、仪表盘（Metabase、Grafana 等）的重聚合查询路由至列式副本执行",
+    "查询表在指定时刻的历史数据，或生成撤销误操作的 SQL",
+    "在不修改应用 SQL 的前提下为 MySQL 生态添加分析读取通道"
+   ]
+  },
+  "sha": "99bd0a61bcc8",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "15c5bbccbfd5": {
+  "identity": {
+   "one_liner": "将 GitHub Stars 转为卡片对战与星标整理的开源工具",
+   "review": "Stard 读取任意 GitHub 用户名的星标仓库，将其作为卡牌进行自动对战（无需注册），同时提供星标整理功能：按仓库健康分筛出废弃项目、写入 GitHub Lists、生成 README 个人卡片。运行方式包括 npx 本地执行或 Docker 自托管（应用+Postgres+Electric 三个容器）。自托管需提供带 repo 权限的 classic token，token 可编辑 Lists 和取消星标，部署时建议配置密码或 OIDC 认证。",
+   "highlights": [
+    "无需登录，输入 GitHub 用户名即可从其星标生成卡牌进行回合对战，5 胜结束一局、3 败结束",
+    "为每个仓库计算 0-10 健康分（基于最近提交、issue 关闭比、贡献者、星标增长、最近发布），归档仓库得 0 分",
+    "整理结果双向同步至 GitHub Lists，支持标签、评分、笔记，并在每次启动前自动备份；提供 /api/* 供 AI 代理调用"
+   ],
+   "use_cases": [
+    "批量整理数百个历史星标仓库，将仍活跃的项目归入 GitHub Lists 并识别已废弃项目",
+    "为 GitHub 个人主页 README 生成展示卡片：前四仓库海报、个人评分短评和 Lists 卡片（纯图片链接，无需部署）",
+    "让 Claude Code 或 Codex 通过 npx 命令或 Agent API 搜索、检查星标仓库，在推荐依赖前核实项目活跃度"
+   ]
+  },
+  "sha": "15c5bbccbfd5",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

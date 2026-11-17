@@ -3279,5 +3279,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8820c65c0a01": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式 B+树键值存储，基于 4 KiB 页并提供快照隔离事务",
+   "review": "Varaq 是嵌入 Rust 程序的库式键值存储，不提供服务器进程。它用 4 KiB 分页的 B+树管理数据，缓冲池支持超出内存容量的数据集，每个事务运行在快照隔离下，提交默认持久化（日志落盘才返回）。存储可放在内存、普通文件或浏览器 OPFS 中。README 明确标注当前为 0.1 早期版本，API 与磁盘格式在 1.0 前可能变更，升级需重建存储；普通文件后端不阻止第二个进程打开同一存储，重复打开会导致损坏。",
+   "highlights": [
+    "每个事务默认运行在快照隔离下，写冲突返回 Error::Conflict；提供 Eventual 与 Durable 两种持久化级别",
+    "缓冲池支持大于内存的数据集，读取使用乐观闩锁并校验版本，页面读取经 CRC-32C 校验",
+    "支持 Linux/macOS 等 Unix 系统、Linux 上的可选 io_uring 读取路径，以及通过 WebAssembly 与 OPFS 在浏览器中运行"
+   ],
+   "use_cases": [
+    "需要将事务性键值存储直接链接进 Rust 程序、不引入独立服务器或异步运行时的应用",
+    "需要存储超过内存容量的键值数据集的场景",
+    "浏览器应用中通过 OPFS 在 Web Worker 内运行本地持久化存储（多标签页经共享 leader 访问）"
+   ]
+  },
+  "sha": "8820c65c0a01",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

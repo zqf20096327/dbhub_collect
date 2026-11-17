@@ -3202,5 +3202,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "962a4fef2d65": {
+  "identity": {
+   "one_liner": "默认只读的 PostgreSQL MCP 服务器，供 AI 代理查询、内省与诊断数据库",
+   "review": "这是一个面向 Claude Code、Cursor 等 MCP 客户端的 PostgreSQL 服务器，提供 SQL 查询、模式内省、执行计划解释和性能诊断工具。默认只读，通过 ALLOW_WRITES 环境变量开启写入；用户 SQL 走扩展查询协议以限制单语句执行，并建议配合最小权限数据库角色作为主访问控制。npm 安装，配置 .mcp.json 后运行。",
+   "highlights": [
+    "提供 pg_query、pg_readonly、pg_explain、模式内省（pg_list_schemas/pg_list_tables/pg_describe_table）等工具，用户 SQL 以参数化方式经扩展查询协议发送",
+    "包含性能诊断与健康检查工具：pg_top_queries、pg_seq_scan_tables、pg_unused_indexes、pg_table_bloat、pg_inspect_locks、pg_replication_status、pg_health，以及基于 HypoPG 假设索引的 pg_index_advisor",
+    "默认只读，写入需设置 ALLOW_WRITES=1；结果集按 POSTGRES_MAX_ROWS（默认 1000）截断，支持结构化输出与可选审计日志"
+   ],
+   "use_cases": [
+    "让 AI 代理以只读方式查询和内省 PostgreSQL 数据库的模式与数据",
+    "数据库慢查询排查：查看执行计划、TOP 查询、顺序扫描表、未使用索引与表膨胀",
+    "按最小权限角色配置的受限写入代理，用于开发/测试环境的数据变更"
+   ]
+  },
+  "sha": "962a4fef2d65",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

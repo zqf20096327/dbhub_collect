@@ -3290,5 +3290,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "72f9596d0665": {
+  "identity": {
+   "one_liner": "本地插件，将编码代理的工具输出存入本地 SQLite 并按需检索，避免占用上下文窗口",
+   "review": "Context Mode 是一个运行在本地的编码代理插件，通过 hook 将工具输出转发到本地沙箱执行，把完整结果存入 SQLite（FTS5 搜索），代理只读取自己需要的部分；还支持让代理写脚本处理数据、仅返回打印结果。适用于 Claude Code、Codex、Gemini CLI 等 11 个代理，需 Node 24.15.0+，Windows 需 Git Bash。许可为 ELv2，无遥测，数据存于 ~/.context-mode。",
+   "highlights": [
+    "提供本地沙箱执行、SQLite 索引存储与 FTS5 搜索，按需向代理返回工具输出片段",
+    "支持 11 个编码代理（Claude Code、Codex、Gemini CLI、Copilot CLI 等），提供 9 个 MCP 工具及 hooks、skills 集成",
+    "所有数据保留在本机，安装后可离线运行，零遥测；官方基准（2026-11-01）显示 36 行大输出样本的中位数节省 99.4% 字节"
+   ],
+   "use_cases": [
+    "代理抓取网页或处理大量 JSON 数据时，只将查询结果写入上下文窗口",
+    "长会话压缩（compaction）后需要检索此前工具输出的场景",
+    "希望工具输出与使用数据不出本机的本地/离线环境"
+   ]
+  },
+  "sha": "72f9596d0665",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9b93da3cda5a": {
+  "identity": {
+   "one_liner": "开发者个人主页 README，展示全栈工程师 Syed Ahmer Shah 的项目与技能",
+   "review": "这是 Syed Ahmer Shah 的 GitHub profile README，用于集中呈现其个人技术履历：包含 8 个自述独立完成的项目条目（附案例链接与技术栈标签）、技能自评表、13 项认证列表及教育经历。主体为描述性内容而非可运行代码，适合招聘方或协作者快速浏览其背景。条目内容以作者自述为准。",
+   "highlights": [
+    "收录 8 个项目条目，每个附技术栈标签、案例研究与视频链接",
+    "提供技能分级表、13 项认证（各带发行方验证链接）与教育经历",
+    "汇总个人网站、LeetCode（676 题）、博客、外包平台等多类外部链接"
+   ],
+   "use_cases": [
+    "作为开发者个人名片，供招聘方或客户查看项目与技术栈",
+    "通过认证验证链接与案例研究核实作者自述经历",
+    "作为 GitHub profile README 的结构参考模板"
+   ]
+  },
+  "sha": "9b93da3cda5a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "33a74a71d285": {
+  "identity": {
+   "one_liner": "自托管家庭物品清单，含 REST API 与内置 MCP 服务器",
+   "review": "Ferret 是一个自托管的家庭物品清单系统，用于记录房产、房间、箱子中的物品，支持照片/条码录入、二维码标签、保修与维护提醒、库存与借出跟踪、保险报告。面向家庭多人使用，按 Docker 单容器部署，数据存于 SQLite，上传文件按家庭密钥加密。提供 REST API 与内置 MCP 服务器（55 个工具）；AI 功能需接入自有模型。",
+   "highlights": [
+    "单 Docker 容器运行，SQLite 存储，上传文件按家庭密钥静态加密，支持夜间备份与一键全量下载",
+    "内置 REST API 与 MCP 服务器（55 个工具），密钥可设只读与过期，删除项保留 30 天",
+    "支持条码/二维码扫描、照片录入、维护计划、库存与购物清单、借出记录与保险报告，PWA 可离线使用"
+   ],
+   "use_cases": [
+    "家庭多成员共同管理物品位置、保修、维护与库存记录",
+    "通过 Claude 等 MCP 客户端用自然语言查询和录入物品、跟进维护事项",
+    "需要自托管数据保存、生成保险理赔清单或打印箱子二维码标签的场景"
+   ]
+  },
+  "sha": "33a74a71d285",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6c64c80e0667": {
+  "identity": {
+   "one_liner": "自托管的 RAG 文档问答平台，含版面解析、向量检索与引用核验",
+   "review": "DocuMind 是一个开源文档智能平台，用于上传、解析文档并基于 RAG 进行对话问答。面向研究人员、分析师及评估自托管检索栈的开发者。采用 Next.js + FastAPI + PostgreSQL + Qdrant 架构，用 Docling 做保留表格与标题结构的版面解析，本地生成 384 维向量，引用由服务端从向量元数据构建。注意：生产上线资格流程尚未完成，README 明确要求先完成验证与恢复演练。",
+   "highlights": [
+    "使用 IBM Docling 解析版面层级、多栏阅读顺序与表格为 Markdown，本地生成 384 维向量，不经外部 API",
+    "引用（chunk ID、章节标题、相关度分数）由后端从 Qdrant 元数据组装，LLM 无法编造引用；向量查询强制 user_id/document_id 过滤",
+    "基于 PostgreSQL 与 Celery 的可恢复处理流水线，支持 SHA-256 去重、租约恢复与多格式导出"
+   ],
+   "use_cases": [
+    "自托管环境中对私有报告、结构化文档进行可溯源的问答与检索",
+    "技术团队评估异步文档摄取、作用域检索与引用完整性机制的参考实现",
+    "将 PDF/DOCX/XLSX/PPTX 等文档解析为结构化 Markdown 并多格式导出"
+   ]
+  },
+  "sha": "6c64c80e0667",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

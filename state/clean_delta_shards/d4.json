@@ -20000,5 +20000,1632 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "a41193c74512+2": {
+  "fn": "davefatkin/EinVault",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Ein, the EinVault mascot"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    1,
+    4
+   ],
+   [
+    "replace",
+    6,
+    8,
+    4,
+    6,
+    [
+     "License: MIT",
+     "Version"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    6,
+    9
+   ],
+   [
+    "replace",
+    11,
+    12,
+    9,
+    10,
+    [
+     "Want a look before you self-host? There's a read-only demo at **demo.einvault.app**. Pick a role and explore; nothing you do there sticks."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    10,
+    12
+   ],
+   [
+    "replace",
+    14,
+    49,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    72,
+    13,
+    36
+   ],
+   [
+    "replace",
+    72,
+    73,
+    36,
+    37,
+    [
+     "EinVault dashboard"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    37,
+    40
+   ],
+   [
+    "replace",
+    76,
+    77,
+    40,
+    41,
+    [
+     "Companion overview"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    41,
+    44
+   ],
+   [
+    "replace",
+    80,
+    81,
+    44,
+    45,
+    [
+     "Caretaker dashboard"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    45,
+    46
+   ],
+   [
+    "replace",
+    82,
+    85,
+    46,
+    49,
+    [
+     "|Member dashboard (mobile)|Caretaker dashboard (mobile)|",
+     "|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------|",
+     "|Member dashboard mobile|Caretaker dashboard mobile|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    49,
+    50
+   ],
+   [
+    "replace",
+    86,
+    89,
+    50,
+    51,
+    [
+     "More screenshots"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    94,
+    51,
+    56
+   ],
+   [
+    "replace",
+    94,
+    95,
+    56,
+    57,
+    [
+     "Download `docker-compose.prod.yml` and set your domain before starting:"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    117,
+    57,
+    79
+   ],
+   [
+    "replace",
+    117,
+    135,
+    79,
+    97,
+    [
+     "||Default|Description|",
+     "|-----------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`TZ`|`UTC`|Container timezone. Set to your local timezone (e.g. `America/New_York`, `Europe/London`) so dates and times display correctly. Celebration notifications go out at 09:00 in this zone (UTC if unset).|",
+     "|`UPLOAD_MAX_MB`|`10`|Maximum size in MB for image (photo and avatar) uploads. `BODY_SIZE_LIMIT` is derived from the larger of this and `VIDEO_MAX_MB` at container start.|",
+     "|`VIDEO_MAX_MB`|`100`|Maximum size in MB for journal video uploads. Videos are stored as-is unless transcoding is enabled (see below).|",
+     "|`MAX_DAILY_MEDIA`|`5`|Maximum number of journal photos and videos (combined) per companion per day. (Renamed from `MAX_DAILY_PHOTOS`, still honored with a deprecation warning.)|",
+     "|`MAX_NOTE_MEDIA`|`10`|Maximum number of photos and videos (combined) attached to a single note.|",
+     "|`MAX_DOCUMENTS_PER_COMPANION`|`200`|Maximum number of documents (uploads and Paperless references combined) stored per companion.|",
+     "|`REMINDER_UNDO_SECONDS`|`7`|Default undo window (seconds) when dismissing a Reminder. `0` disables the undo window. Each user can override in their settings.|",
+     "|`CALENDAR_FEED_HISTORY_DAYS`|`90`|Days of past events the calendar feed includes. `0` includes all history (larger feeds).|",
+     "|`CALENDAR_FEED_ENABLED`|`true`|Set `false` to disable the calendar feed endpoint entirely.|",
+     "|`API_TOKENS_ENABLED`|`true`|Set `false` to disable the Bearer-token API (token creation and the `/api/logs`, `/api/journal`, `/api/quick-logs` endpoints) entirely.|",
+     "|`API_RATE_LIMIT_PER_MINUTE`|`30`|Bearer API requests allowed per client IP per minute. Behind a reverse proxy, set adapter-node's `ADDRESS_HEADER` so each client gets its own budget.|",
+     "|`DEMO_MODE`|`false`|Enable read-only public demo mode. See Running a demo instance.|",
+     "|`user`|`1000:1000`|UID:GID the container runs as. Change if your `./data` directory has different ownership.|",
+     "|`./data` volume|`./data`|Where the database and uploads are stored on the host.|",
+     "|`DATABASE_URL`|`/data/einvault.db`|Database path inside the container. Unlikely to need changing.|",
+     "|`TWOFA_ENC_KEY`|-|32-byte base64 key (`openssl rand -base64 32`) that encrypts stored TOTP secrets. Required to enable two-factor authentication.|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    146,
+    97,
+    108
+   ],
+   [
+    "replace",
+    146,
+    157,
+    108,
+    119,
+    [
+     "||Default|Description|",
+     "|-----------------------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`VIDEO_TRANSCODE`|`false`|Enable background transcoding of uploaded videos to a web-playable MP4 plus a poster.|",
+     "|`VIDEO_KEEP_ORIGINAL`|`true`|Keep the original source file alongside the transcoded copy. The original is never served; it is retained for re-encoding or backup. `false` discards it.|",
+     "|`VIDEO_TRANSCODE_MAX_MB`|`VIDEO_MAX_MB`|Skip transcoding (store as-is) for inputs larger than this.|",
+     "|`VIDEO_TRANSCODE_MAX_SECONDS`|`600`|Skip transcoding for inputs longer than this.|",
+     "|`VIDEO_TRANSCODE_MAX_WIDTH`|`4096`|Skip transcoding for inputs wider than this.|",
+     "|`VIDEO_TRANSCODE_MAX_HEIGHT`|`4096`|Skip transcoding for inputs taller than this.|",
+     "|`VIDEO_FFMPEG_PATH`|`/usr/bin/ffmpeg`|Absolute path to the `ffmpeg` binary. Override if it lives elsewhere (e.g. `/opt/homebrew/bin/ffmpeg` on macOS).|",
+     "|`VIDEO_FFPROBE_PATH`|`/usr/bin/ffprobe`|Absolute path to the `ffprobe` binary.|",
+     "|`VIDEO_TMP_DIR`|`<data>/transcode-tmp`|Scratch directory for in-progress transcodes. Must be on disk with room for the source plus output. Do not point it at the in-memory `/tmp` tmpfs.|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    166,
+    119,
+    128
+   ],
+   [
+    "replace",
+    166,
+    176,
+    128,
+    138,
+    [
+     "||Default|Description|",
+     "|------------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`STORAGE_BACKEND`|`local`|`local` writes to `./data/uploads`. `s3` writes new uploads to the configured bucket. Reads always honor the per-row provider, so switching does not invalidate old rows.|",
+     "|`S3_ENDPOINT`|-|Full endpoint URL, e.g. `https://s3.garage.example.com` or `https://s3.us-east-1.amazonaws.com`.|",
+     "|`S3_BUCKET`|-|Bucket name. Must already exist and should be private.|",
+     "|`S3_REGION`|`auto`|Region. For non-AWS providers, `auto` usually works.|",
+     "|`S3_ACCESS_KEY_ID`|-|Access key. Scope it to this bucket only.|",
+     "|`S3_SECRET_ACCESS_KEY`|-|Secret key.|",
+     "|`S3_FORCE_PATH_STYLE`|`false`|Set to `true` for Garage, MinIO, and older S3 deployments. Leave `false` for AWS and R2.|",
+     "|`S3_PRESIGN_TTL_SECONDS`|`300`|Lifetime of presigned download URLs. Shorter is stricter, longer improves browser cache reuse on reload.|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    183,
+    138,
+    145
+   ],
+   [
+    "replace",
+    183,
+    188,
+    145,
+    150,
+    [
+     "||Default|Description|",
+     "|-----------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`IMMICH_URL`|-|Base URL of your Immich server, e.g. `http://immich.local:2283`. No trailing slash. Required if `IMMICH_API_KEY` is set.|",
+     "|`IMMICH_API_KEY`|-|API key. Required permissions: `asset.read`, `asset.view`. Generate in Immich → Account Settings → API Keys. Required if `IMMICH_URL` is set.|",
+     "|`IMMICH_ALBUM_ID`|-|If set, the picker only shows assets in this album. If unset, the picker shows the user's most recent assets across the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    195,
+    150,
+    157
+   ],
+   [
+    "replace",
+    195,
+    196,
+    157,
+    158,
+    [
+     "When `PAPERLESS_URL` and `PAPERLESS_API_TOKEN` are set, members and admins get an \"Add from Paperless\" option on the Documents tab that searches a Paperless-ngx instance and attaches a document by reference. The document stays in Paperless; EinVault stores only a reference and proxies reads through the server using the token. EinVault never uploads to or deletes from Paperless. Caretakers cannot use the picker. EinVault serves the archived (OCR'd PDF) version of each referenced document."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    199,
+    158,
+    161
+   ],
+   [
+    "replace",
+    199,
+    204,
+    161,
+    166,
+    [
+     "||Default|Description|",
+     "|---------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`PAPERLESS_URL`|-|Base URL of your Paperless-ngx instance, e.g. `http://paperless.local:8000`. No trailing slash. Required if `PAPERLESS_API_TOKEN` is set.|",
+     "|`PAPERLESS_API_TOKEN`|-|API token. Generate in Paperless under Settings → \"My Profile\". Use a dedicated user limited to the documents you want visible. Required if `PAPERLESS_URL` is set.|",
+     "|`PAPERLESS_TAG_ID`|-|If set, only documents carrying this Paperless tag ID can be searched and imported. Strongly recommended; without it every member can search the whole library.|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    211,
+    166,
+    173
+   ],
+   [
+    "replace",
+    211,
+    219,
+    173,
+    181,
+    [
+     "||Default|Description|",
+     "|-------------|-------|-------------------------------------------------------------------------------------------------------------------------------|",
+     "|`SMTP_HOST`|-|SMTP server hostname. Required (with `SMTP_FROM`) to enable email.|",
+     "|`SMTP_PORT`|`587`|SMTP port. Use `465` with `SMTP_SECURE=true` for implicit TLS, or `587` (default) for STARTTLS.|",
+     "|`SMTP_SECURE`|`false`|`true` = implicit TLS (port 465). `false` = STARTTLS upgrade on connect.|",
+     "|`SMTP_USER`|-|SMTP username. Leave unset for unauthenticated relays.|",
+     "|`SMTP_PASS`|-|SMTP password. Leave unset for unauthenticated relays.|",
+     "|`SMTP_FROM`|-|RFC 5322 From address shown to recipients, e.g. `EinVault <einvault@example.com>`. Required (with `SMTP_HOST`) to enable email.|"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    181,
+    184
+   ],
+   [
+    "replace",
+    222,
+    223,
+    184,
+    185,
+    [
+     "When `NTFY_URL` is set, EinVault can publish push notifications via ntfy. This configures the server only (base URL and optional access token). Each user sets their own topic name under Settings -> Notifications; a non-empty topic is that user's opt-in for pushes scoped to what they can see in the app (reminders due, shift alerts, celebrations). The notification scheduler runs when either SMTP or ntfy is configured. The forgot-password flow remains email-only."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    185,
+    188
+   ],
+   [
+    "replace",
+    226,
+    231,
+    188,
+    193,
+    [
+     "||Default|Description|",
+     "|-------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`NTFY_URL`|-|ntfy server base URL, e.g. `https://ntfy.sh` or a self-hosted instance. No topic in the URL.|",
+     "|`NTFY_TOKEN`|-|Bearer token for self-hosted ntfy servers with auth enabled. Used for every publish regardless of topic.|",
+     "|`NOTIFY_SCAN_INTERVAL_MS`|`60000`|How often the notification scheduler scans for due reminders, shift alerts, and celebrations, in milliseconds. Values below 250 fall back to the default. Mainly useful for automated tests.|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    260,
+    193,
+    222
+   ],
+   [
+    "replace",
+    260,
+    269,
+    222,
+    231,
+    [
+     "|||",
+     "|-------------------|---------------------------------------|",
+     "|Runs as root|No (runs as `node`, UID 1000)|",
+     "|`no-new-privileges`|Enabled|",
+     "|Linux capabilities|All dropped|",
+     "|Root filesystem|Read-only|",
+     "|Writable `/tmp`|tmpfs, 64 MB|",
+     "|CPU limit|0.5 cores (raise for video transcoding)|",
+     "|Memory limit|256 MB (raise for video transcoding)|"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    272,
+    231,
+    234
+   ],
+   [
+    "replace",
+    272,
+    279,
+    234,
+    241,
+    [
+     "|Tag|Description|",
+     "|--------------|---------------------------------------------------|",
+     "|`latest`|Latest stable release (published on version tags)|",
+     "|`x.y.z`|Pinned release|",
+     "|`x.y`|Latest patch of a minor release|",
+     "|`main`|Latest commit on `main`, unstable, for testing only|",
+     "|`sha-<commit>`|Specific commit build, useful for rollback|"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    282,
+    241,
+    244
+   ],
+   [
+    "replace",
+    282,
+    283,
+    244,
+    245,
+    [
+     "Each release image carries a Sigstore-signed SLSA provenance attestation and a SPDX SBOM, and only ships after Trivy clears the OS and library packages on both `linux/amd64` and `linux/arm64`. See SECURITY.md for the verification commands."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    289,
+    245,
+    251
+   ],
+   [
+    "delete",
+    289,
+    291,
+    251,
+    251
+   ],
+   [
+    "equal",
+    291,
+    301,
+    251,
+    261
+   ],
+   [
+    "delete",
+    301,
+    303,
+    261,
+    261
+   ],
+   [
+    "equal",
+    303,
+    326,
+    261,
+    284
+   ],
+   [
+    "replace",
+    326,
+    335,
+    284,
+    285,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    354,
+    285,
+    304
+   ],
+   [
+    "delete",
+    354,
+    356,
+    304,
+    304
+   ],
+   [
+    "equal",
+    356,
+    361,
+    304,
+    309
+   ],
+   [
+    "delete",
+    361,
+    363,
+    309,
+    309
+   ],
+   [
+    "equal",
+    363,
+    374,
+    309,
+    320
+   ],
+   [
+    "replace",
+    374,
+    380,
+    320,
+    326,
+    [
+     "|Variable|Description|",
+     "|--------------------|---------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_ISSUER_URL`|IdP base URL. Discovery happens at `<issuer>/.well-known/openid-configuration`. e.g. `https://auth.example.com`|",
+     "|`OIDC_CLIENT_ID`|Client ID registered with your IdP.|",
+     "|`OIDC_CLIENT_SECRET`|Client secret. Omit for public clients (PKCE-only).|",
+     "|`OIDC_REDIRECT_URI`|Must match what's registered with the IdP. e.g. `https://einvault.yourdomain.com/auth/oidc/callback`|"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    383,
+    326,
+    329
+   ],
+   [
+    "replace",
+    383,
+    393,
+    329,
+    339,
+    [
+     "|Variable|Default|Description|",
+     "|-------------------------------|----------------------|-----------------------------------------------------------------------------------------------------------------|",
+     "|`OIDC_SCOPES`|`openid profile email`|Space-separated scopes requested from the IdP.|",
+     "|`OIDC_PROVIDER_NAME`|`SSO`|Display label on the login button.|",
+     "|`OIDC_ALLOW_SIGNUP`|`false`|If `true`, auto-creates accounts for users who authenticate but have no matching record. See below.|",
+     "|`OIDC_DEFAULT_ROLE`|`member`|Role assigned to auto-created users. Allowed: `member`, `caretaker`. Admin can only be granted via groups.|",
+     "|`OIDC_ADMIN_GROUPS`|_(unset)_|Comma-separated. Users whose `groups` claim contains any value here are promoted to admin on every login.|",
+     "|`OIDC_POST_LOGOUT_REDIRECT_URI`|_(unset)_|If set and the IdP advertises `end_session_endpoint`, logout triggers RP-initiated logout at the IdP.|",
+     "|`OIDC_STATE_SECRET`|_(random)_|Pin a long random string. Without it, in-flight logins break across server restarts.|",
+     "|`OIDC_ALLOW_INSECURE_HTTP`|`false`|Allows plain-HTTP issuer URLs. Exists for automated tests against a local mock IdP. Never set this in production.|"
+    ]
+   ],
+   [
+    "equal",
+    393,
+    417,
+    339,
+    363
+   ],
+   [
+    "replace",
+    417,
+    418,
+    363,
+    364,
+    [
+     "By default, logout destroys the local EinVault session and returns the user to `/auth/login`. Set `OIDC_POST_LOGOUT_REDIRECT_URI` (and register it with your IdP) to also end the IdP session via RP-initiated logout."
+    ]
+   ],
+   [
+    "equal",
+    418,
+    421,
+    364,
+    367
+   ],
+   [
+    "replace",
+    421,
+    429,
+    367,
+    373,
+    [
+     "|Provider|Notes|",
+     "|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|**Authelia**|Register the redirect URI under the OIDC client config. Set `client_secret_basic` (default) or `none` for public clients.|",
+     "|**Authentik**|Create an OAuth2/OIDC provider; scope mapping for `groups` is built-in. `OIDC_ADMIN_GROUPS` matches the `groups` claim directly.|",
+     "|**Keycloak**|Add a \"Group Membership\" mapper to the client with token claim name `groups` and \"Full group path\" off. EinVault does not read `realm_access.roles`. Add the redirect URI to \"Valid Redirect URIs\".|",
+     "|**PocketID**|Public-client first; omit `OIDC_CLIENT_SECRET`. Register the redirect URI in the client settings.|"
+    ]
+   ],
+   [
+    "equal",
+    429,
+    460,
+    373,
+    404
+   ],
+   [
+    "delete",
+    460,
+    462,
+    404,
+    404
+   ],
+   [
+    "equal",
+    462,
+    481,
+    404,
+    423
+   ],
+   [
+    "replace",
+    481,
+    506,
+    423,
+    448,
+    [
+     "|Method & path|Body|Purpose|",
+     "|-----------------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`GET /api/companions`|-|List the companions the token user may target (members/admins: all active; caretakers: assigned). Returns `{ companions: [...] }` with each companion's full profile. Use this to discover `companionId`s.|",
+     "|`GET /api/companions/{companionId}`|-|Get one companion. Full-scope tokens get the full profile; write-scope tokens get the minimal projection (no PII). An id the token can't reach reads as `404`, same as unknown, so it can't be used to probe which ids exist; an archived companion reads as `404` too, not as a retrievable \"deleted\" record. Returns `{ companion }`.|",
+     "|`POST /api/logs`|`{ companionId or companionIds, type, subtypes?, notes?, durationMinutes?, loggedAt? }`|Log a daily event. `type` is one of `walk`, `meal`, `bathroom`, `litter`, `treat`, `play`, `grooming`, `other`. Each species allows a subset (a cat has no `bathroom`, a dog no `litter`, and an `other` companion has neither those nor `walk`); a type any target companion can't have is rejected with `400 typeNotAllowedForSpecies`. `subtypes` is an optional array of kinds valid for that type (e.g. `[\"pee\"]` for `bathroom`, `[\"leash\"]` for `walk`; the full list per type is in `/api/docs`); a value that no target companion can take is rejected with `400 invalidSubtype`, and one that fits only some targets is kept for those and dropped for the rest. Returns `201 { ids, eventGroupId }`.|",
+     "|`GET /api/logs`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back logged events for a companion, newest first. Each event includes its `subtypes` (`null` when none were logged). Returns `{ events: [...] }`.|",
+     "|`GET /api/journal`|query `?companionId=&date=` (`date` defaults to today)|Read back the journal entry for a companion/day. Returns `{ entry }` (or `{ entry: null }`).|",
+     "|`POST /api/journal`|`{ companionId, date?, body?, mood? }`|Upsert the journal entry for a day (`date` defaults to today). Sending both `body` and `mood` replaces them; omitting a key leaves that field untouched, so a mood-only or body-only post won't wipe the other. Caretaker tokens may only write today. Returns `201 { id, companionId, date }`.|",
+     "|`GET /api/notes`|query `?companionId=&tag=&match=&pinned=`|List a companion's notes, pinned first. Repeat `tag` to filter by several (up to 20); `match=all` returns only notes with every tag, default `any`. Full-scope tokens only, for members and admins. Returns `{ notes: [...], hasMore }`.|",
+     "|`POST /api/notes`|`{ companionId, title, body?, tags?, pinned?, sharedWithCaretakers? }`|Create a note. `body` is markdown (up to 20000 characters), `title` up to 200, and up to 10 tags of 32 characters each. Returns `201 { id, companionId }`.|",
+     "|`GET /api/notes/{id}`|-|Read one note.|",
+     "|`PATCH /api/notes/{id}`|`{ title?, body?, tags?, pinned?, sharedWithCaretakers? }`|Partial update; `tags` replaces the whole set. Returns the updated note.|",
+     "|`DELETE /api/notes/{id}`|-|Delete a note. Returns `204`.|",
+     "|`GET /api/quick-logs`|-|List the token user's enabled quick logs so a device can discover their ids. Returns `{ quickLogs: [...] }`.|",
+     "|`POST /api/quick-logs/{id}/execute`|`{ companionIds?, loggedAt? }` (optional)|Run a configured quick log. With no body it uses the quick log's remembered/assigned companions, so a physical button only needs the URL and token. Returns `201 { ids }`.|",
+     "|`POST /api/health-events`|`{ companionId, type, title, notes?, occurredAt?, vetName?, vetClinic? }`|Log a health event. `type` is one of `vet_visit`, `vaccination`, `medication`, `procedure`, `other`. `occurredAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/health-events`|query `?companionId=&date=` (`date` optional `YYYY-MM-DD`)|Read back health events for a companion, newest first by `occurredAt`. Returns `{ events: [...] }`.|",
+     "|`POST /api/weight`|`{ companionId, weight, unit, notes?, recordedAt? }`|Log a weight entry. `unit` is `kg`, `lbs`, `g`, or `oz`. `recordedAt` defaults to now and may be historical. Returns `201 { id, companionId }`.|",
+     "|`GET /api/weight`|query `?companionId=`|Read back weight entries for a companion, newest first by `recordedAt`. Returns `{ entries: [...] }`.|",
+     "|`GET /api/reminders`|query `?companionId=&status=due\\|all`|List reminders. Default `status=due` lists not-yet-completed reminders oldest-due first; `status=all` also includes completed reminders, ordered by due date (newest first). Omit `companionId` to list across every companion the token user may access. Returns `{ reminders: [...] }`.|",
+     "|`POST /api/reminders/{id}/complete`|-|Mark a reminder done. A recurring reminder spawns its next occurrence. Returns `200 { id, completedAt, nextReminderId }` (`nextReminderId` is `null` for a one-off).|",
+     "|`GET /api/medications`|query `?companionId=&status=active\\|all`|List medications. Default `status=active`; caretakers only ever see active ones. Write-scope tokens may call it so a device can find ids; they get active medications only, with just `id`, `companionId`, `name`, `active` and `nextDueAt`. Returns `{ medications: [...] }`.|",
+     "|`POST /api/medications/{id}/doses`|`{ givenAt?, note? }` (optional)|Record a dose. Completes the matching linked reminder occurrence (a missed one from an earlier day, or one due within 3 hours of `givenAt`), otherwise logs a standalone dose. Returns `201 { doseId, completedReminderId }`; a `givenAt` before the start date is `400 givenBeforeStart`, one more than 5 minutes in the future is `400 givenInFuture` (up to 5 minutes ahead counts as now), an ended medication is `409 medicationEnded`.|",
+     "|`GET /api/shifts`|query `?from=&to=` (both optional `YYYY-MM-DD`)|List the caretaker shift schedule, most recent shifts first (up to 200; use `from`/`to` to window further back). Admins and members see every shift; a caretaker sees only their own. Returns `{ shifts: [...] }`.|",
+     "|`GET /api/users`|-|List the user roster, scoped to what the token user may see: an admin sees everyone, a member sees everyone except admins, a caretaker sees only themselves. Returns `{ users: [...] }` with `id`, `displayName`, `role`, `isActive` per user, plus `username` (omitted for a member-role token, since a member has no need to see other users' login identifiers).|"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    514,
+    448,
+    456
+   ],
+   [
+    "delete",
+    514,
+    516,
+    456,
+    456
+   ],
+   [
+    "equal",
+    516,
+    527,
+    456,
+    467
+   ],
+   [
+    "delete",
+    527,
+    529,
+    467,
+    467
+   ],
+   [
+    "equal",
+    529,
+    534,
+    467,
+    472
+   ],
+   [
+    "replace",
+    534,
+    535,
+    472,
+    473,
+    [
+     "- **Session-based auth:** custom sessions with bcryptjs password hashing; optional OIDC SSO via `openid-client`"
+    ]
+   ],
+   [
+    "equal",
+    535,
+    537,
+    473,
+    475
+   ],
+   [
+    "delete",
+    537,
+    539,
+    475,
+    475
+   ],
+   [
+    "equal",
+    539,
+    540,
+    475,
+    476
+   ],
+   [
+    "replace",
+    540,
+    547,
+    476,
+    477,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    548,
+    477,
+    478
+   ],
+   [
+    "replace",
+    548,
+    550,
+    478,
+    479,
+    [
+     "MIT. See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "1401ac125358+2": {
+  "fn": "chdb-io/chdb-rust",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    3,
+    [
+     "Rust",
+     "Crates.io",
+     "docs.rs"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    3,
+    4
+   ],
+   [
+    "replace",
+    2,
+    5,
+    4,
+    5,
+    [
+     "# chdb-rust "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    9,
+    6,
+    7,
+    [
+     "Experimental chDB FFI bindings for Rust."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    21,
+    7,
+    19
+   ],
+   [
+    "replace",
+    21,
+    22,
+    19,
+    20,
+    [
+     "- **Arrow documentation map**: choose the Rust Arrow guide, runnable example, IPC route, or ADBC alternative"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    30,
+    20,
+    28
+   ],
+   [
+    "replace",
+    30,
+    31,
+    28,
+    29,
+    [
+     "**Full API Documentation** - Complete Rust API reference on docs.rs"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    36,
+    29,
+    34
+   ],
+   [
+    "replace",
+    36,
+    37,
+    34,
+    35,
+    [
+     "The library automatically downloads and manages `libchdb` dependencies during the build process."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    87,
+    35,
+    85
+   ],
+   [
+    "replace",
+    87,
+    91,
+    85,
+    89,
+    [
+     "|Variable|Meaning|",
+     "|---|---|",
+     "|`CHDB_LIB_DIR`|directory holding the library to link|",
+     "|`CHDB_INCLUDE_DIR`|directory holding the matching `chdb.h`, when it is not next to the library|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    115,
+    89,
+    113
+   ],
+   [
+    "replace",
+    115,
+    119,
+    113,
+    117,
+    [
+     "|||",
+     "|---|---|",
+     "|macOS|`~/Library/Caches/chdb-rust/<tag>/<asset>/`|",
+     "|Linux|`${XDG_CACHE_HOME:-~/.cache}/chdb-rust/<tag>/<asset>/`|"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    136,
+    117,
+    134
+   ],
+   [
+    "replace",
+    136,
+    140,
+    134,
+    138,
+    [
+     "||artifact|at run time|",
+     "|---|---|---|",
+     "|dynamic (default)|448 KB binary, and a 326 MB `libchdb.so` beside it|the library has to be findable|",
+     "|`--features static`|one file: 490 MB, or 361 MB stripped|nothing to find|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    163,
+    138,
+    161
+   ],
+   [
+    "replace",
+    163,
+    165,
+    161,
+    163,
+    [
+     " `./update_libchdb.sh --global` puts it in `/usr/local/lib`, which is on the",
+     " default search path for both loaders."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    163,
+    164
+   ],
+   [
+    "replace",
+    166,
+    167,
+    164,
+    165,
+    [
+     " `LD_LIBRARY_PATH` on Linux."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    165,
+    166
+   ],
+   [
+    "replace",
+    168,
+    169,
+    166,
+    167,
+    [
+     " library next to the executable:"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    217,
+    167,
+    215
+   ],
+   [
+    "replace",
+    217,
+    223,
+    215,
+    216,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    257,
+    216,
+    250
+   ],
+   [
+    "replace",
+    257,
+    262,
+    250,
+    255,
+    [
+     "||scheme|resolved|",
+     "|---|---|---|",
+     "|`version::EXPECTED_ENGINE_VERSION`|chdb-core|at compile time, `Option<&str>`|",
+     "|`version::engine_version()`|chdb-core|by the linked library|",
+     "|`version::clickhouse_version()`|ClickHouse|by `SELECT version()`|"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    292,
+    255,
+    285
+   ],
+   [
+    "replace",
+    292,
+    293,
+    285,
+    286,
+    [
+     "- **Runnable examples**: See the examples/ directory"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    296,
+    286,
+    289
+   ],
+   [
+    "replace",
+    296,
+    298,
+    289,
+    291,
+    [
+     "- **Detailed documentation**: See docs/examples.md for comprehensive examples and explanations",
+     "- **Test examples**: See tests/ directory for additional usage examples"
+    ]
+   ],
+   [
+    "equal",
+    298,
+    314,
+    291,
+    307
+   ],
+   [
+    "replace",
+    314,
+    315,
+    307,
+    308,
+    [
+     "See docs/examples.md for usage, or run:"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    332,
+    308,
+    325
+   ],
+   [
+    "replace",
+    332,
+    346,
+    325,
+    326,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    351,
+    326,
+    331
+   ],
+   [
+    "replace",
+    351,
+    354,
+    331,
+    334,
+    [
+     " buffers it; `flush` (or `flush_through` for one statement) is what publishes",
+     " it. A service that answers a client before flushing is choosing to lose that",
+     " write on a crash."
+    ]
+   ],
+   [
+    "equal",
+    354,
+    355,
+    334,
+    335
+   ],
+   [
+    "replace",
+    355,
+    357,
+    335,
+    337,
+    [
+     " in the caller — not `now()`, `rand()`, `generateUUIDv4()` or an",
+     " `INSERT ... SELECT` from a volatile source."
+    ]
+   ],
+   [
+    "equal",
+    357,
+    358,
+    337,
+    338
+   ],
+   [
+    "replace",
+    358,
+    360,
+    338,
+    340,
+    [
+     " opening a second object returns an error naming both paths. Fan out across",
+     " worker processes."
+    ]
+   ],
+   [
+    "equal",
+    360,
+    361,
+    340,
+    341
+   ],
+   [
+    "replace",
+    361,
+    362,
+    341,
+    342,
+    [
+     " prefix can read, modify or take it; access control is your storage's."
+    ]
+   ],
+   [
+    "equal",
+    362,
+    367,
+    342,
+    347
+   ],
+   [
+    "replace",
+    367,
+    368,
+    347,
+    348,
+    [
+     "`Connection::backup_database`, `restore_database` and `classify_query`."
+    ]
+   ],
+   [
+    "equal",
+    368,
+    382,
+    348,
+    362
+   ],
+   [
+    "replace",
+    382,
+    387,
+    362,
+    363,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    418,
+    363,
+    394
+   ],
+   [
+    "replace",
+    418,
+    422,
+    394,
+    395,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    428,
+    395,
+    401
+   ],
+   [
+    "delete",
+    428,
+    430,
+    401,
+    401
+   ],
+   [
+    "equal",
+    430,
+    431,
+    401,
+    402
+   ],
+   [
+    "replace",
+    431,
+    434,
+    402,
+    403,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    434,
+    450,
+    403,
+    419
+   ],
+   [
+    "replace",
+    450,
+    453,
+    419,
+    422,
+    [
+     " - Run tests: `cargo test`",
+     " - Check formatting: `cargo fmt --check`",
+     " - Run clippy: `cargo clippy`"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    471,
+    422,
+    440
+   ],
+   [
+    "replace",
+    471,
+    474,
+    440,
+    443,
+    [
+     " - Provide a clear description of your changes",
+     " - Reference any related issues",
+     " - Ensure CI checks pass"
+    ]
+   ],
+   [
+    "equal",
+    474,
+    486,
+    443,
+    455
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "cd139c8060b8+2": {
+  "fn": "ArcaneEcholan/SpringBootTemplate",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "English | 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    7,
+    3,
+    7
+   ],
+   [
+    "delete",
+    7,
+    9,
+    7,
+    7
+   ],
+   [
+    "equal",
+    9,
+    11,
+    7,
+    9
+   ],
+   [
+    "replace",
+    11,
+    15,
+    9,
+    11,
+    [
+     "- developers who find Spring Boot too complex",
+     "- developers who want a fast application startup"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    21,
+    11,
+    17
+   ],
+   [
+    "replace",
+    21,
+    25,
+    17,
+    21,
+    [
+     "|Hook Name|Desc|",
+     "|----------------------|-------------------------------------|",
+     "|**BeforeBeanInitHook**|before spring ioc bean initialization|",
+     "|**AfterBeanInitHook**|after spring ioc bean initialization|"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    30,
+    21,
+    26
+   ],
+   [
+    "replace",
+    30,
+    36,
+    26,
+    32,
+    [
+     "|Hook Name|Desc|",
+     "|--------------------------|--------------------------------|",
+     "|**beforeMvcRequest**|before mvc request|",
+     "|**handleEx/handleExtraEx**|handle mvc **exceptions**|",
+     "|**beforeWritingBody**|before writing **response body**|",
+     "|**afterMvcRequest**|after mvc request|"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    32,
+    35
+   ],
+   [
+    "replace",
+    39,
+    41,
+    35,
+    37,
+    [
+     "- **Dynamic Table Name**: Dynamically build table names based on runtime",
+     " context."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    37,
+    38
+   ],
+   [
+    "replace",
+    42,
+    44,
+    38,
+    40,
+    [
+     "- **Conditional Index Creation**: Conditionally create database indexes when",
+     " needed."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    55,
+    40,
+    51
+   ],
+   [
+    "replace",
+    55,
+    61,
+    51,
+    57,
+    [
+     "- serve_static: specify a static folder on the filesystem to serve.",
+     "|value||",
+     "|------------------|----|",
+     "|\"/path/to/static/\"|good|",
+     "|\"/path/to/static\"|bad: not end with \"/\"|",
+     "|\"path/to/static\"|bad: not start with \"/\"|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    79,
+    57,
+    75
+   ],
+   [
+    "replace",
+    79,
+    92,
+    75,
+    76,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    118,
+    76,
+    102
+   ],
+   [
+    "delete",
+    118,
+    120,
+    102,
+    102
+   ],
+   [
+    "equal",
+    120,
+    122,
+    102,
+    104
+   ],
+   [
+    "replace",
+    122,
+    123,
+    104,
+    105,
+    [
+     "- clone the project:"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    131,
+    105,
+    113
+   ],
+   [
+    "replace",
+    131,
+    132,
+    113,
+    114,
+    [
+     "- use **jdk8** to compile"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    114,
+    115
+   ],
+   [
+    "replace",
+    133,
+    136,
+    115,
+    116,
+    [
+     "- run `App.java`"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    139,
+    116,
+    119
+   ],
+   [
+    "replace",
+    139,
+    140,
+    119,
+    120,
+    [
+     "- Set `db.enabled: true`."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    120,
+    121
+   ],
+   [
+    "replace",
+    141,
+    142,
+    121,
+    122,
+    [
+     "- Start Database with docker:"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    147,
+    122,
+    127
+   ],
+   [
+    "replace",
+    147,
+    148,
+    127,
+    128,
+    [
+     "- Configure db properties at: `src/main/resources/application.yml`:"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    153,
+    128,
+    133
+   ],
+   [
+    "replace",
+    153,
+    158,
+    133,
+    134,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    160,
+    134,
+    136
+   ],
+   [
+    "delete",
+    160,
+    162,
+    136,
+    136
+   ],
+   [
+    "equal",
+    162,
+    163,
+    136,
+    137
+   ],
+   [
+    "delete",
+    163,
+    164,
+    137,
+    137
+   ],
+   [
+    "equal",
+    164,
+    165,
+    137,
+    138
+   ],
+   [
+    "delete",
+    165,
+    167,
+    138,
+    138
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

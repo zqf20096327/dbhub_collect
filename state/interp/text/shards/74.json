@@ -2945,5 +2945,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9540d1388852": {
+  "identity": {
+   "one_liner": "基于PostgreSQL RLS的零信任多租户AI代理语义记忆服务",
+   "review": "adk-memshield为AI代理提供多租户长期语义记忆，将所有权隔离从应用层WHERE子句移入PostgreSQL，通过FORCE ROW LEVEL SECURITY与事务级set_config绑定身份，实现租户、用户、密级和compartments四维过滤。提供Google ADK集成、框架无关核心库和MCP服务器，安装方式为pip/PyPI，Apache-2.0许可。运行时校验角色非超级用户、无BYPASSRLS且表启用强制RLS；身份上下文缺失时查询返回0行（fail-closed）。可选支持HMAC/JWT签名令牌验证身份，写入受pre_write钩子限制，仅能收紧或阻断。",
+   "highlights": [
+    "基于PostgreSQL pgvector与Row-Level Security在数据库层强制租户/用户/密级隔离，缺失过滤条件时仅返回更少的行而非他人数据",
+    "提供Google ADK的MemShieldMemoryService、框架无关的MemShieldStore核心与memshield-mcp MCP服务器三种接入方式",
+    "启动时可校验RLS配置（角色权限、强制RLS、每条命令的策略），支持HMAC与JWT/OIDC身份令牌绑定及clearance/compartments横向访问控制"
+   ],
+   "use_cases": [
+    "多租户、多代理部署中需要数据库层强制隔离的长期语义记忆存储",
+    "代理集群（swarm）场景下按密级限制子代理可检索的共享记忆",
+    "使用Google ADK或MCP协议构建、需要pgvector相似度检索并防止应用层过滤遗漏导致跨用户读取的应用"
+   ]
+  },
+  "sha": "9540d1388852",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

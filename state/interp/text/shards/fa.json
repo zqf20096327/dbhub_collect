@@ -3045,5 +3045,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2c865c67bc1e": {
+  "identity": {
+   "one_liner": "让编码代理构建分析的数据工具：探索、转换、维护数据库模型与语义层",
+   "review": "Dex 是 Exmergo 开发的 Agent Skills 工具集，连接数据库、数据仓库和 SQL 端点，供使用 Claude Code、Codex 等编码代理的分析工程师在代理中探索数据、编写 dbt 模型和语义层定义。核心机制为 explore/transform/maintain 三段循环：引擎只执行 SELECT、在 dev 目标上构建、源数据只读，每次变更以 diff 形式供人工审查，扫描前估算并限定成本。需在 PATH 安装 uv 0.13.4+，且需本地 shell，不支持 claude.ai 聊天。",
+   "highlights": [
+    "提供 explore、transform、maintain 三个技能，分别用于映射表结构与 ER 图、以可审查计划编写 dbt 模型与指标、检测 schema 与指标定义的漂移并给出修复建议",
+    "支持 Snowflake、BigQuery、Databricks、Redshift、Postgres、DuckDB、ClickHouse、Trino 八种连接器，扫描成本在服务端估算、确认并设上限，花费记入本地账本",
+    "内置查询防火墙拦截个人数据进入代理上下文（统计量可执行），凭据不会被读取进上下文；支持 dbt、Cube、Snowflake Semantic Views、Databricks Metric Views 等语义层"
+   ],
+   "use_cases": [
+    "在 Claude Code/Codex 中让代理探索陌生数据仓库，生成列画像、连接关系验证和 Mermaid ER 图",
+    "以可审查 diff 的方式构建和重构 dbt 模型、测试、文档与指标，并在 dev 目标上验证",
+    "数据源 schema 变更后，用快照对比检测受影响的模型和指标，审查代理提出的修改"
+   ]
+  },
+  "sha": "2c865c67bc1e",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

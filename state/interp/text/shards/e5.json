@@ -2724,5 +2724,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7792381dafb9": {
+  "identity": {
+   "one_liner": "chDB 的 Node.js 原生绑定，进程内运行 ClickHouse SQL OLAP 引擎。",
+   "review": "该包为 chDB 提供 Node.js/Bun/Deno 原生绑定，使应用可在进程内以 SQL 查询数据。安装时通过 optionalDependencies 分发各平台预编译二进制，无需本地编译。提供同步/异步查询、会话、服务端参数绑定、插入、流式结果与 Arrow 输出，v2 API 在 v3 中保持兼容。限制包括：每进程绑定单一数据目录，运行中的独立查询会阻止打开 Session；不支持 Windows（可用 WSL2）。",
+   "highlights": [
+    "提供同步/异步查询、Session 持久/内存会话、服务端参数绑定、插入与 AsyncIterable 流式结果",
+    "支持 Arrow IPC 输出，配原生包后可进行直接 Arrow 扫描、读取与批量插入",
+    "内置错误类型体系，每个错误携带 .code、ClickHouse 错误码与 .cause"
+   ],
+   "use_cases": [
+    "在 Node/Bun/Deno 应用中嵌入进程内 SQL OLAP 查询能力",
+    "已使用 @clickhouse/client 的项目通过 chdb/connection 子路径接入嵌入式引擎",
+    "需跨机器恢复的嵌入式数据库场景，可使用 chdb/durable 配合本地文件或 S3 兼容对象存储后端"
+   ]
+  },
+  "sha": "7792381dafb9",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fafbb1cf1b1b": {
+  "identity": {
+   "one_liner": "自托管家庭日记应用，按人加密存储并支持单日分享",
+   "review": "nexdiary 是部署在自己服务器上的家庭日记应用：白天随手记笔记，晚上整理成页面，可手写或由 AI 仅做整理排序。每位成员的日记相互隔离并加密存于数据库，管理员管理账号但看不到内容。基于 FastAPI 与 Docker 镜像发布，默认强制第二因子（TOTP 或 passkey），支持接入 Immich 拉取照片。适合想自托管、注重隐私的家庭使用。",
+   "highlights": [
+    "每日笔记保留时间戳、晚间整理为页面，封面图可选自有照片或 256 张内置插画",
+    "内容按人加密入库，默认要求第二因子，支持 passkey、已登录设备列表与防猜测限制",
+    "支持分享单日页面给指定家人（只读、仅可回心形反应）、时间胶囊、统计数据及导出为 PDF 书"
+   ],
+   "use_cases": [
+    "家庭各成员在同一服务器上各自记日记，偶尔分享特定一天",
+    "通过 Docker Compose 在 homelab 中自托管，经反向代理以 HTTPS 发布到公网",
+    "结合 Immich 照片库与 AI 辅助整理，将当日笔记与照片汇编成日记页"
+   ]
+  },
+  "sha": "fafbb1cf1b1b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

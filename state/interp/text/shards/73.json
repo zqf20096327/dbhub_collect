@@ -3135,5 +3135,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7d6e8c08613a": {
+  "identity": {
+   "one_liner": "为 AI 客户端与团队提供共享持久记忆的自托管 MCP 服务器",
+   "review": "Kagura Memory Cloud 是一个 Apache 2.0 开源的记忆存储服务，通过 MCP（Streamable HTTP）与 REST API 供 ChatGPT、Claude、Cursor 等客户端保存和检索决策与项目知识。数据按工作区—上下文—记忆三层组织，检索采用语义向量（Qdrant）加 BM25 关键词的混合方式，存储依赖 PostgreSQL、Redis，构建栈为 FastAPI 与 Next.js。自托管需 Docker Compose、Python 3.11+ 及外部 embedding 提供方；仅存储显式保存的内容，不自动导入历史聊天。",
+   "highlights": [
+    "提供 remember/recall/reference 等 MCP 工具，支持 ?profile=full 与 ?add_tools=explore 调整工具目录",
+    "实现语义搜索与 BM25 关键词匹配的混合检索，可选重排序，并以 PostgreSQL 与 Qdrant 分别存储记录、关键词、图与向量",
+    "支持记忆更新、取代（supersession）与修订历史查看，以及工作区、私有/共享上下文、角色等团队控制"
+   ],
+   "use_cases": [
+    "跨 AI 客户端复用同一工作区的项目决策与约束，恢复之前会话未完成的工作",
+    "团队通过共享上下文与角色权限协作维护项目知识库",
+    "为自建 agent 提供按需检索相关上下文、替代发送完整会话日志的接口"
+   ]
+  },
+  "sha": "7d6e8c08613a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "85ee140e2600": {
+  "identity": {
+   "one_liner": "面向印度屋顶光伏安装商的全流程运营平台，内置补贴合规校验与序列号级库存追踪。",
+   "review": "Rayora 是一个为屋顶光伏安装商设计的运营管理平台，基于 React 18 + TypeScript 前端与 FastAPI + PostgreSQL 后端，提供 Docker 部署。它将客户从首次咨询到 20 年保修的全流程纳入一条记录，包含 13 个模块：线索、报价、库存、安装、补贴追踪、服务工单、财务等。核心机制是规则强制：提交补贴申请前须通过 7 项检查（如 GPS 照片、DCR 组件、DISCOM 批准），库存按序列号登记并拒绝重复扫码。提供 6+1 种员工角色及免登录的客户视图，本地运行需 Python 3.11+、Node 20+、PostgreSQL 16。",
+   "highlights": [
+    "提供 7 项补贴检查门控，未全部通过时锁定提交（含姓名一致性、DCR 组件、GPS 照片、DISCOM 批准等）",
+    "面板与逆变器按序列号追踪出入库，扫码器拒绝错误或重复序列号，多步操作在单事务中完成",
+    "支持 QR 报修工单、GPS 照片安装记录、签名链接客户追踪页面及限时只读分享链接"
+   ],
+   "use_cases": [
+    "参与 PM Surya Ghar 补贴计划的印度屋顶光伏安装商管理从咨询到补贴入账的订单流程",
+    "安装团队以手机端进行现场安装登记（序列号、GPS 照片、客户签名），支持离线草稿",
+    "仓库按序列号管理库存、生成补货建议；财务侧处理发票、支付幂等与技师按月薪酬核算"
+   ]
+  },
+  "sha": "85ee140e2600",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

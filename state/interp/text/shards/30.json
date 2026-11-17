@@ -3075,5 +3075,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "631cdf49d5d7": {
+  "identity": {
+   "one_liner": "基于 ODPI-C 的 Go 语言 Oracle 数据库 database/sql 驱动",
+   "review": "godror 是一个实现了 database/sql/driver.Driver 接口的 Go 包，用于连接 Oracle 数据库，底层通过 ODPI-C 封装调用 OCI。编译需 Go 1.23 和 C 编译器（CGO_ENABLED=1），运行时依赖 Oracle 客户端库。支持存储过程 OUT 参数、PL/SQL 数组、会话池等；不支持 sql.NullString，NUMBER 以字符串传输以保留精度。",
+   "highlights": [
+    "实现 database/sql/driver.Driver 接口，支持通过 sql.Named 与 godror.Option 调用带 OUT 参数的存储过程及 PL/SQL 数组类型",
+    "提供驱动内置会话池（poolMinSessions 等参数），连接串支持服务名、Easy Connect 字符串及 (DESCRIPTION=...) 连接描述符",
+    "NUMBER 以 string 传输以保留 38 位十进制精度，LOB 自 2.9.0 起默认返回 string/[]byte，可用 LobAsReader() 选项改为 reader"
+   ],
+   "use_cases": [
+    "Go 应用通过标准 database/sql 访问 Oracle 数据库",
+    "需要在 Go 中调用含 OUT 参数或返回 REF CURSOR 的 Oracle 存储过程",
+    "需要长连接/会话池管理的 Oracle 数据库服务端程序"
+   ]
+  },
+  "sha": "631cdf49d5d7",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2289e7592f6d": {
+  "identity": {
+   "one_liner": "面向金融的开源知识图谱平台，以 LadybugDB 图数据库承载总账、XBRL 财报与自建模数据。",
+   "review": "RoboSystems 是一个开源（Apache 2.0）金融知识图谱平台，将总账数据、SEC XBRL 公开财报及用户自定义图数据（Parquet 导入、Cypher 查询）整合在同一图模型上，通过 MCP 为 AI 代理提供结构化、可追溯的数据访问。核心 API 位于 /v1，所有写操作为带幂等键与审计日志的命名 OperationEnvelope。支持本地 Docker 或 AWS 自部署，每租户独享专用图实例；附带 RoboLedger 会计与 RoboInvestor 投资组合两个扩展。",
+   "highlights": [
+    "统一图模型承载三类图：总账图、SEC XBRL 财报共享库、用户自定义 schema 图，数据从 Parquet 加载并以 Cypher 查询",
+    "写操作采用命名 OperationEnvelope 机制，支持 Idempotency-Key、审计日志与 SSE 进度流；每租户运行独立图数据库实例与专用 OLTP schema",
+    "扩展采用 CQRS 操作内核与 schema-per-tenant 隔离，读经 GraphQL、写经命名 REST 操作；RoboLedger 报表可序列化为 holon (JSON-LD)、XBRL 2.1 与 Tavi 三种形式"
+   ],
+   "use_cases": [
+    "在自有基础设施上为 AI 代理提供总账与上市公司 XBRL 财报的结构化查询（经 MCP）",
+    "使用 RoboLedger 扩展进行会计记账、结账流程管理、CoA 到 GAAP 映射及多期财务报表生成",
+    "使用 RoboInvestor 扩展跟踪私募持仓，并通过跨图关联查询发行方的已发布报告数据"
+   ]
+  },
+  "sha": "2289e7592f6d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

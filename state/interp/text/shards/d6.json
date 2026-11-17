@@ -3168,5 +3168,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "11f15670eae0": {
+  "identity": {
+   "one_liner": "基于 Claude Code Skill 的内心反思对话伴侣，本地 SQLite 记忆，纯代码场景不激活",
+   "review": "Satori 是一个以心理学与哲学传统为基础的反思对话类 Claude Code Skill（v6.6.0，Apache 2.0），面向开发者与需要情绪/反思支持的用户。它提供每轮至多一个视角加一个开放式提问的对话模式，纯编码请求时不激活，记忆以 SQLite 存于本地 ~/.satori/memory/。它声明不提供临床诊断或治疗，定位为配合而非替代心理治疗。通过 npx skills add 安装，支持 CLI/IDE 多种 agent 及网页聊天。",
+   "highlights": [
+    "支持 Claude Code、Cursor、Windsurf、Gemini CLI 等多种 CLI/IDE agent 环境，并提供网页聊天与本地开源模型的 Compact 版本（≤7,800 字符）",
+    "在 CLI/IDE 中将对话模式摘要存于本地 SQLite 库（~/.satori/memory/，POSIX 0700/0600 权限），读取延迟 <150ms",
+    "包含 8 条内置行为规则（Immovables）与三级风险门控，急性自伤意图时触发工具锁定并移交危机服务；附带 350 例基准测试报告"
+   ],
+   "use_cases": [
+    "开发者在终端/IDE 工作流之外进行倦怠、悲伤、人际冲突等自我反思对话，且不干扰编码任务",
+    "配合心理咨询使用、记录个人反思模式的本地化内存场景",
+    "在 ChatGPT、Ollama、LM Studio 等无 Skill 生态的环境运行 Compact 版本"
+   ]
+  },
+  "sha": "11f15670eae0",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4420b6f64bdd": {
+  "identity": {
+   "one_liner": "面向 AI 代理的本地权限网关，经 MCP 提供带审批与审计的连接器访问",
+   "review": "AIPermission 是运行于本机的单用户网关，用于让 AI 助手通过 MCP 调用内置连接器（Postgres、SSH、Kubernetes、S3 等）执行操作。凭据保存在 SQLCipher 加密的本地 SQLite 数据库中，MCP 客户端仅凭作用域令牌访问，每条权限解析为 blocked/approval_required/always_run 规则，操作历史与审计加密存放。它面向在本地开发环境中让 AI 操作自有系统的开发者；项目处于 pre-1.0 阶段，非远程多用户服务。",
+   "highlights": [
+    "内置 ClickHouse、Docker、Kafka、Kubernetes、Mail、Postgres、RabbitMQ、Redis、S3、SQL Server、SSH 等连接器，共用同一权限、审批、历史与审计管线",
+    "凭据存储于 SQLCipher 加密的本地 SQLite 数据库，不通过 MCP 或 REST API 返回给 AI 客户端；MCP 客户端使用作用域 API 令牌认证",
+    "每条权限对应 blocked / approval_required / always_run 三种规则，待审批请求携带上下文快照，相关变更会使请求失效；历史与审计记录受保留策略控制"
+   ],
+   "use_cases": [
+    "开发者本地使用 AI 客户端（通过 MCP）执行数据库查询、SSH 操作、容器或 Kubernetes 管理等连接器动作，凭据不直接暴露给 AI",
+    "对写操作或迁移类 SQL（Postgres/SQL Server 的 execute_sql）设置人工审批流程，操作前在本地 UI 确认",
+    "需要按令牌细粒度授权目标/凭据/动作组合，并保留本地加密执行历史与审计记录的工作流"
+   ]
+  },
+  "sha": "4420b6f64bdd",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f566bb2a078": {
+  "identity": {
+   "one_liner": "基于 Angular 17+ 与 Spring Boot 3 的全栈项目脚手架 CLI",
+   "review": "JAngular CLI 是一个 npm 全局命令行工具，通过 jangular init 命令生成包含 Angular 17+ 前端与 Spring Boot 3（Java 21）后端的完整项目。内置 JWT 认证、刷新令牌、RBAC 用户管理、Flyway 迁移与 docker-compose 配置，支持 MySQL、PostgreSQL、MSSQL 三种数据库，MIT 许可。需要 Node.js ≥ 18、Java ≥ 21 和 Maven 3.x 环境。",
+   "highlights": [
+    "通过 jangular init 生成含前后端的完整项目，提供 docker、build、test 子命令",
+    "后端包含 JWT 认证、RBAC、账户锁定、会话追踪与 Flyway 数据库迁移",
+    "前端提供独立组件架构、认证界面、路由守卫与 Tailwind CSS 样式"
+   ],
+   "use_cases": [
+    "快速初始化 Angular + Spring Boot 全栈项目模板",
+    "需要开箱即用 JWT 认证与用户管理的应用开发",
+    "使用 docker-compose 进行多容器开发与部署"
+   ]
+  },
+  "sha": "2f566bb2a078",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3432,5 +3432,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "66548715ea6a": {
+  "identity": {
+   "one_liner": "基于 tree-sitter 的语义代码书签 CLI，按代码结构而非行号锚定书签",
+   "review": "Codemark 是一个用 Rust 编写的 CLI 与 TUI 工具，将书签锚定到 tree-sitter 解析出的命名结构（函数、块、类型）上，代码重构后书签仍可解析，采用 Exact→Relaxed→Hash 分层匹配。面向开发者与 AI 编码代理，支持安装技能供 Claude Code 等代理创建与召回书签。语言语法以 WASM 在运行时加载，SQLite 打包内置；TUI 需 Nerd Font 显示图标。",
+   "highlights": [
+    "用 tree-sitter 将书签锚定到命名代码结构，经分层匹配在重构后仍可定位",
+    "支持本地向量嵌入的语义搜索与 SQLite 全文搜索，无需 API key",
+    "提供可安装的 agent skill，兼容 Claude Code、GitHub Copilot、Gemini CLI 及加载 .agents/skills 的代理"
+   ],
+   "use_cases": [
+    "长会话 AI 编码代理间持久化代码上下文与代码流导览",
+    "代码审计中追踪并评论特定函数或代码块",
+    "团队通过 push/pull 同步共享书签集合与导览"
+   ]
+  },
+  "sha": "66548715ea6a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4719e2d0951c": {
+  "identity": {
+   "one_liner": "RPA采集超市折扣食材，结合冰箱库存与健康条件由Gemini生成食谱的全栈平台",
+   "review": "RecipePick是一个单人全栈项目，用Playwright定时采集韩国大型超市的折扣食材，与用户录入的冰箱库存自动匹配，并按糖尿病、减肥、高血压等健康类型、过敏原和目标热量，调用Google Gemini以JSON schema生成食谱、营养成分与替代食材。后端FastAPI、前端React、数据库TiDB，支持Docker一键部署；未配置GEMINI_API_KEY时回退到模板食谱，TIDB_HOST留空则使用SQLite。",
+   "highlights": [
+    "支持Playwright无头浏览器采集折扣信息，遵守robots.txt，采集周期可在5分钟至24小时之间由管理员调整",
+    "提供基于response_schema的结构化食谱输出，含模型链fallback与规则模板兜底，生成食材、步骤、单人份营养与替代食材",
+    "包含REST 30个接口加1个WebSocket通道，支持JWT与Google/Naver/Kakao OAuth登录、RBAC管理后台及Telegram/Discord/邮件通知"
+   ],
+   "use_cases": [
+    "需要关注超市临期折扣并按冰箱现有食材规划一餐的个人用户",
+    "有糖尿病、高血压等饮食限制或过敏原排除需求、希望食谱标注营养与超标的用户",
+    "希望本地运行（SQLite+模板食谱）或用Docker部署完整前后端与爬虫流程的开发环境"
+   ]
+  },
+  "sha": "4719e2d0951c",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

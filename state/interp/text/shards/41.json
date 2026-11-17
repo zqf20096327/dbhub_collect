@@ -2590,5 +2590,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "60c7f93a132d": {
+  "identity": {
+   "one_liner": "可自托管的多协议终端工作台，集成 SSH、Docker、数据库与 AI 助手。",
+   "review": "NexTerm 是一个可自托管的服务器运维工作台，面向需要集中管理多台服务器的运维与开发人员。它基于 Go 与 React 构建，提供持久终端、分屏与布局模板、远程文件传输、Docker 与 MySQL/PostgreSQL/Redis 管理、端口转发及主机监控。支持从 Termius、PuTTY、Xshell 等工具导入主机配置；同步机制非端到端加密，需配合 HTTPS 使用。MIT 协议开源。",
+   "highlights": [
+    "支持 SSH、WinRM、Telnet、RDP/VNC 等多种连接方式，提供持久终端、命令广播与分屏",
+    "集成远程文件传输（含 trzsz）、Docker、MySQL/PostgreSQL/Redis 管理与端口转发",
+    "AI 助手可读取终端、文件和容器信息，写操作需用户确认"
+   ],
+   "use_cases": [
+    "集中管理大量 SSH/WinRM 服务器资产，替代分散的终端工具",
+    "需要在断网或关闭应用后保持远程命令持续运行的长期任务场景",
+    "自托管多用户环境，需要双因素认证与审计日志的团队运维"
+   ]
+  },
+  "sha": "60c7f93a132d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fca60ee33c87": {
+  "identity": {
+   "one_liner": "本地文档全文搜索工具，索引 PDF/Office 文件并支持热键快速检索",
+   "review": "Paperlight 是一款开源桌面文档搜索工具，用于按名称、文件夹或正文内容查找本机 PDF、Word、Excel 和 PowerPoint 文件。基于 Tauri 2、Rust、SQLite FTS5 和 React 构建，安装包约 5 MB，支持 Windows 10/11 及 Linux（beta）。它以只读方式索引，不修改文件，无需联网即可搜索；安装器尚未代码签名。可通过 winget 安装。",
+   "highlights": [
+    "支持按名称、文件夹及文档正文内容搜索 PDF、Word、Excel、PowerPoint 文件，高亮匹配段落",
+    "提供 Alt+Space 全局快捷搜索、文件拖拽/复制、重复文件查找与存储占用统计",
+    "离线运行、只读索引，文件增删改名后约一秒内更新索引，支持应用内可选更新"
+   ],
+   "use_cases": [
+    "在 Downloads、桌面、项目文件夹等分散位置快速定位记不清路径的文档",
+    "按文档类型（PDF/Word/表格/演示文稿）分桶检索并预览内容",
+    "查找字节级重复文档副本并查看磁盘空间占用分布"
+   ]
+  },
+  "sha": "fca60ee33c87",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "861b4f9f0b0a": {
+  "identity": {
+   "one_liner": "自托管的 Git 原生 Obsidian 笔记同步服务器",
+   "review": "PKV Sync 是一个自托管同步服务器，用于在手机、平板、桌面间同步 Obsidian 仓库。每个仓库对应一个 bare git 仓库，元数据存 SQLite，以单二进制部署，通过 Docker Compose 或原生安装运行。客户端为配套 Obsidian 插件；注意 1.0 暂无原生端到端加密，服务器可读取仓库内容。",
+   "highlights": [
+    "支持多用户多仓库同步，基于设备令牌认证，内置每仓库推送锁与幂等重试",
+    "以 git 为数据源，提供单文件历史、统一 diff、冲突以 .conflict-* 文件呈现并支持一键解决",
+    "内置 MCP 接口（默认挂载于 /mcp，亦支持 stdio），提供按 frontmatter 搜索、链接检查、带 dry run 与内容哈希防护的写入等工具"
+   ],
+   "use_cases": [
+    "在自有服务器上同步 Obsidian 笔记库，跨设备读写",
+    "需要单文件历史回溯与冲突可见化处理的团队或个人",
+    "通过 MCP 让本地 AI 工具读写并检索笔记仓库"
+   ]
+  },
+  "sha": "861b4f9f0b0a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d32dfb1ef45d": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理执行与治理平台，基于 ACP 驱动可复现交付流程",
+   "review": "MAIster 是一个自托管平台，将任务编排为版本固定的 Flow，在 Git worktree 隔离工作区中通过 Agent Client Protocol 运行编码代理（Claude Code、Codex 等），经人工输入、证据门与成本控制后将结果提升为 PR 或本地分支。面向在自己基础设施上运维多个私有仓库的技术负责人或小型工程团队。项目处于 beta 阶段，尚缺容器级隔离、OIDC/SSO、自动备份等生产化能力。",
+   "highlights": [
+    "提供控制平面（Next.js Web + Fastify supervisor），集中查看项目、工作区、任务与人工请求，PostgreSQL 作为持久存储",
+    "通过 ACP 适配器按会话生成代理进程，在协议边界强制能力限制，并保留可审计的运行台账",
+    "支持版本固定的 Flow 包安装与 pin，含 aif、pstack、openspec、spec-kit、BMAD 等方法包"
+   ],
+   "use_cases": [
+    "在自有基础设施上对私有仓库执行受治理的 AI 编码代理任务流程",
+    "需要人工输入、证据校验与预算控制后再合入目标分支的交付场景",
+    "用看板、审查与晋升机制管理多个代理会话的本地实验与评估"
+   ]
+  },
+  "sha": "d32dfb1ef45d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "01959717f560": {
+  "identity": {
+   "one_liner": "Duroxide 持久执行运行时的 MySQL 8.0+ 与 TiDB 存储提供者",
+   "review": "duroxide-mysql-tidb 为 Rust 持久执行运行时 Duroxide 实现 MySQL 8.0+ 与 TiDB 存储后端，基于 sqlx 0.9 实现 Provider 与 ProviderAdmin 接口，并通过 232 项官方验证测试。其采用纯客户端 SQL 事务设计，不使用存储过程、触发器或 FOR UPDATE SKIP LOCKED。部署于 TiDB 或复制 MySQL 时需使用单主强一致复制，不支持最终一致的异步复制。",
+   "highlights": [
+    "基于 sqlx 0.9 实现完整的 Provider 与 ProviderAdmin 接口，在 MySQL 8.0 与 TiDB 8.5 上通过 232 项官方验证测试",
+    "不依赖存储过程、触发器、RETURNING 子句或 FOR UPDATE SKIP LOCKED，队列采用候选窗口读取加比较设置更新方式认领任务",
+    "通过 MysqlProviderConfig 支持表前缀隔离、自定义连接池、mTLS 客户端证书以及外部化 schema 迁移管理"
+   ],
+   "use_cases": [
+    "为运行在 MySQL 8.0+ 或 TiDB 上的 Duroxide 应用提供持久化存储",
+    "多应用或租户需在同一 MySQL/TiDB 逻辑库中通过表前缀隔离数据的部署",
+    "在 CI 中使用 memory feature 的纯 Rust 内存实现运行无数据库的单元与集成测试"
+   ]
+  },
+  "sha": "01959717f560",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

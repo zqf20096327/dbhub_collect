@@ -3337,5 +3337,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1ff7eba4c899": {
+  "identity": {
+   "one_liner": "Clarity 团队维护的《命运2》实时数据仓库",
+   "review": "该仓库由 Clarity 团队维护（@StardustD2 管理），提供《命运2》游戏数据。README 未说明数据格式与安装方式；使用数据或合作需查阅其 Partnerships 页面，部分场景需建立合作关系。项目通过 Ko-Fi 接受捐赠以维持免费提供。社区贡献按维护者、编辑者等角色分工。",
+   "highlights": [
+    "提供由 Clarity 团队整理的《命运2》详细数据",
+    "以仓库形式持续更新（维护者 @StardustD2 有 1800 余次提交）",
+    "对外使用数据设有 Partnerships 页面说明使用条件"
+   ],
+   "use_cases": [
+    "需要《命运2》游戏数据来源的项目或工具开发者",
+    "希望了解数据使用授权条件的第三方使用者",
+    "以贡献者身份参与数据整理的社区成员"
+   ]
+  },
+  "sha": "1ff7eba4c899",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "11708e6c6883": {
+  "identity": {
+   "one_liner": "PlumeSQL：基于 PostgreSQL 自带解析器的桌面 SQL IDE，专用于 PostgreSQL。",
+   "review": "PlumeSQL 是一款面向 PostgreSQL 的桌面 IDE，支持 macOS、Windows 和 Linux，安装包约 14 MB，免费使用且无需注册账号，应用本身为闭源，仓库中的扩展与规范采用 MIT 许可。它内嵌 PostgreSQL 自身的解析器，在输入时由服务器完成名称与类型检查，包括未创建的 PL/pgSQL 函数体；SQL 文件可通过注释转为监控、图表等扩展工具。项目处于公开 beta 阶段，约每周发布一次，目前仅支持 Apple Silicon Mac、Windows x64 和 Linux x86_64。",
+   "highlights": [
+    "编辑器运行 PostgreSQL 自带解析器，提供补全与实时检查，支持 CTE、子查询和未写完的语句，PL/pgSQL 函数体可在不创建函数的情况下校验",
+    "SQL 文件可通过 @ 注释转为可运行的扩展工具，仓库包含 200 余个免费扩展，涵盖锁、EXPLAIN、PostGIS、pgvector、TimescaleDB 等",
+    "支持 Design/Properties 编辑并汇总为单一脚本在单事务中执行；@readonly 标记由 PostgreSQL 自身拒绝写入，无 WHERE 的 UPDATE 会标红提示"
+   ],
+   "use_cases": [
+    "日常编写和运行 PostgreSQL 查询，需要基于服务器真实状态（含临时表、未提交事务中的表）的补全与对象树",
+    "通过扩展方式构建锁监控、数据看板、EXPLAIN 分析等团队内部小工具",
+    "在受控生产连接上执行只读或需确认的变更操作，配合 @readonly、无 WHERE 标红等机制使用"
+   ]
+  },
+  "sha": "11708e6c6883",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "63e9573365d7": {
+  "identity": {
+   "one_liner": "open.mp 组件，让 Pawn 游戏模式通过强制 TLS 连接 MySQL 数据库。",
+   "review": "omp-MySQL 是一个 open.mp 原生组件（非旧版插件），将 .dll/.so/.dylib 放入 components/ 目录并在 Pawn 脚本中 include 后，即可让 SA-MP/open.mp 游戏模式读写 MySQL 数据库。内部静态链接 MariaDB Connector/C 与 OpenSSL，无需另装客户端库；最低要求 MySQL 5.7，因强制 TLS 而 5.5/5.6 无法连接。",
+   "highlights": [
+    "强制 TLS 连接（MySQL 8.0+ 使用 TLS 1.3，5.7 使用 TLS 1.2），拒绝明文连接；支持绑定参数的预处理语句与内置 Argon2id 密码哈希（mysql_hash/mysql_verify）",
+    "每个连接一个工作线程实现异步查询；静态链接 MariaDB Connector/C，提供 Windows dll、Linux i386 so、树莓派 arm64 so、macOS arm64 dylib",
+    "提供结果缓存、active-record 模型、MySQL 9 VECTOR 相似搜索、${ENV} 环境变量凭据展开、可选限流等配置项"
+   ],
+   "use_cases": [
+    "为 open.mp / SA-MP 风格的 Pawn 游戏模式添加数据库持久化（账号注册登录、封禁管理等，附 mysql-admin 示例 filterscript)",
+    "需要 TLS 加密连接现代 MySQL（5.7–9.x，含 caching_sha2_password 认证）的游戏服务器部署",
+    "需要从 SA-MP-MySQL 迁移的项目，可参考 Wiki 中旧 API 到新 API 的映射指南重写数据库代码"
+   ]
+  },
+  "sha": "63e9573365d7",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "885976a8b150": {
+  "identity": {
+   "one_liner": "离线考公刷题App，19.8万道题与图片内置本地SQLite，断网可刷。",
+   "review": "面向公务员、事业单位、三支一扶考生的 Android 刷题工具，覆盖行测/职测/公基/申论/综应五科。题库、解析、公式图片全部打包在 APK 内，运行于本地 SQLite，不联网即可使用。数据来自粉笔与华图公开接口，1.02% 的题因材料缺失或内容打码被屏蔽。安装包 490 MB，题库支持 14–40 MB 增量更新。",
+   "highlights": [
+    "内置 198,073 道唯一题、4,643 份试卷与 110,069 张图片，全程离线运行",
+    "提供随机刷题、按卷/按考点练习、错题再练、限时模考、背题模式与每日任务",
+    "题库更新采用逐行 diff 增量包（14–40 MB），边解压边事务写入，失败不损坏本地库"
+   ],
+   "use_cases": [
+    "无网络环境（通勤、异地）下的备考刷题",
+    "按省份、年份、卷型筛选真题卷进行成套练习或限时模考",
+    "基于学习统计、错题本与基础测评制定每日复习计划"
+   ]
+  },
+  "sha": "885976a8b150",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ee8f762e7841": {
+  "identity": {
+   "one_liner": "類 Notion 的 Markdown 筆記 Web App，基於 Next.js 15 與 Neon Postgres。",
+   "review": "MarkNote 是一個 Markdown 筆記 Web 應用，採用 Next.js 15（App Router）、Neon Postgres（HTTP driver）構建，可部署到 Netlify 或 Vercel。它提供分類與標籤管理、GFM 渲染、多媒體內嵌、基於 Neon Object Storage 的檔案庫，並可選用接入 OpenAI 相容模型的 AI 整理功能與供 AI agent 使用的 MCP 端點。訪問採單一密碼進站，部署前需設定 DATABASE_URL、APP_PASSWORD、AUTH_SECRET 等環境變數。",
+   "highlights": [
+    "提供分類與標籤管理、筆記釘選／封存／自動儲存，閱讀模式支援內嵌圖片、音訊、影片與 YouTube／Vimeo／Bilibili 播放器",
+    "支援多檔上傳的檔案庫（Neon Object Storage，S3 相容），可在筆記中插入檔案，並提供資料夾樹與用量統計",
+    "選用功能包含 OpenAI 相容模型的 AI 整理（潤飾、摘要、翻譯等，結果可預覽與復原）與 MCP Streamable HTTP 端點（供 Claude Desktop、Cursor 等 agent 讀寫筆記）"
+   ],
+   "use_cases": [
+    "在 Netlify 或 Vercel 上自建個人 Markdown 筆記站，用單一密碼保護訪問",
+    "需要將筆記內容開放給 AI agent 搜尋、讀取與更新的場景（透過 /api/mcp 端點與 MCP_TOKEN）",
+    "已在使用 Neon Postgres，希望筆記與檔案庫共用同一 Neon 專案的部署"
+   ]
+  },
+  "sha": "ee8f762e7841",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

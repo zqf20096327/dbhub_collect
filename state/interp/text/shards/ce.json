@@ -3273,5 +3273,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e7b5105febc2": {
+  "identity": {
+   "one_liner": "数据库设计文档工具：ERD 画布与 DBML 编辑器结合流程图、笔记与绘图",
+   "review": "ERD Builder Pro 提供面向开发者的数据库模式设计工具，支持在 ERD 画布或 DBML 编辑器中建模表与关系，并导出 PostgreSQL 和 MySQL 的 SQL DDL。桌面版与 CLI 另含 DB Client，可检查已连接的 PostgreSQL、MySQL、SQLite 数据库。支持 CLI（npm 安装）、桌面应用与 Docker 部署；仓库采用 Elastic License 2.0。",
+   "highlights": [
+    "支持 ERD 画布与 DBML 编辑器建模，并可导出 PostgreSQL 与 MySQL 的 SQL DDL",
+    "桌面版与 CLI 提供 DB Client，可浏览连接数据库的表、数据并运行查询",
+    "内置流程图、富文本笔记、绘图，以及实验性 MCP 支持（Web 端为只读）"
+   ],
+   "use_cases": [
+    "设计新数据库模式并生成 SQL DDL",
+    "检查现有 PostgreSQL、MySQL 或 SQLite 数据库的表结构与数据",
+    "在同一工作区绘制流程图并维护与模式相关的笔记文档"
+   ]
+  },
+  "sha": "e7b5105febc2",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "a06c2dbbd9e1": {
+  "identity": {
+   "one_liner": "基于 Turborepo/Turborepo 单仓结构的全栈 Web 应用启动模板，集成 Next.js、Postgres 与 Better-Auth。",
+   "review": "Vazen 是一个 TypeScript 全栈应用启动模板（MIT 许可），采用 pnpm 管理依赖，包含 web 与 docs 两个应用。技术栈覆盖 Next.js v16、Drizzle ORM、PostgreSQL、Better-Auth、oRPC 及 Sentry、PostHog 等服务；环境变量通过 .env.schema 声明并由 Varlock 校验，密钥可经 Infisical 按环境注入。适合需要直接获得整套开发工具链配置的团队二次开发。",
+   "highlights": [
+    "单仓包含 web 与 docs 两个应用，通过 portless 使用本地主机名（如 local.web.vazen.id）代替端口访问",
+    "环境变量经 .env.schema 声明，pnpm env:codegen 生成类型化 env.ts，可选用 Infisical 按环境注入密钥",
+    "开发工具链含 oxlint、oxfmt、commitlint、lefthook、Playwright 端到端测试与 Docker Compose 本地开发"
+   ],
+   "use_cases": [
+    "搭建包含认证、数据库、对象存储与监控的全栈 Web 应用起点",
+    "团队需要集中管理多环境密钥并生成类型化环境变量的项目",
+    "需要 Conventional Commits、lint、格式化与端到端测试等工程化配置的 monorepo 项目"
+   ]
+  },
+  "sha": "a06c2dbbd9e1",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "64c3df435797": {
+  "identity": {
+   "one_liner": "Mac 上的本地 PHP 开发环境应用，多站点多 PHP 版本并存，带 AI 代理快照回滚",
+   "review": "Benbow 是一款开源 Mac 应用，用于在本地同时运行 WordPress、Laravel、Symfony、Drupal 或自定义 PHP 项目，每个站点可指定 PHP 5.6–8.5 中任一版本。它通过原生二进制而非容器提供 PHP、Caddy、MySQL/PostgreSQL、Redis、Mailpit 等组件，文件集中于 ~/Library/Application Support/benbow/。面向 macOS 14+ 且 Apple Silicon 的 PHP 开发者，可从 DMG 安装或用 Go 从源码构建；含 CLI、MCP server，并支持把 AI 代理对站点文件和数据库的改动整体保留或撤销。",
+   "highlights": [
+    "支持 PHP 5.6 至 8.5 各版本并存，每版本独立 PHP-FPM、php.ini 与按站点 Xdebug，并提供升级前的兼容性检查",
+    "提供可信 HTTPS 证书（本地 CA 限于 .localhost/.test/.local）、每站点一键建库、Mailpit 邮件捕获与 APFS 快照",
+    "内建 AI 代理工作流：连接 Claude Code、Codex、Gemini CLI 等，记录文件与数据库变更，可整体保留或撤销"
+   ],
+   "use_cases": [
+    "在 Apple Silicon Mac 上同时维护多个不同 PHP 版本的站点，无需 Docker 或系统级安装",
+    "让 AI 代理执行插件更新、迁移或批量替换等操作前自动保存文件与数据库检查点",
+    "将 Next.js/Vite/Django 等前端或 API 服务以独立域名与 HTTPS 加入本地开发环境"
+   ]
+  },
+  "sha": "64c3df435797",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4a2a3eb9fcbc": {
+  "identity": {
+   "one_liner": "企业文档检索引擎，每次查询先做权限检查，混合向量与关键词搜索",
+   "review": "Louvain Engine 是一个 Apache-2.0 开源的检索引擎，用于将企业文档索引到 Postgres/pgvector，通过 MCP 与 HTTP 为 AI 代理和 RAG 提供带权限检查的混合搜索。运行需 Docker Compose、Node 22、pnpm 10，以 ./engine up 一条命令启动。权限以读者（reader）加集合（collection）授权，粒度为整个集合，无账号与单文档授权。",
+   "highlights": [
+    "向量（pgvector）与 BM25 关键词混合检索，可配置 reranker（本地 bge-reranker-v2-m3 sidecar 或 Cohere API）",
+    "每次查询先做权限围栏检查，授权在 SQL 语句内应用；文档、索引与服务均驻留本机（127.0.0.1）",
+    "通过 MCP 提供 louvain_search_sources / louvain_lookup_source / louvain_read_source 三个工具，插件为普通函数，经 engine.config.ts 配置"
+   ],
+   "use_cases": [
+    "为运行于本地的 AI 代理（如经 claude mcp add 接入 Claude）提供带权限过滤的企业文档检索",
+    "自托管 RAG 场景：将文件夹、记录或 HTTP 来源摄取为带来源引用的文档集合",
+    "需要多套独立语料与索引配置（profiles）并存切换的检索部署"
+   ]
+  },
+  "sha": "4a2a3eb9fcbc",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

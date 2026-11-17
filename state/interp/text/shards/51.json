@@ -3058,5 +3058,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "56687f073512": {
+  "identity": {
+   "one_liner": "多语言香水数据库：六份关联 CSV 结构化数据与配套 Parquet UGC 语料",
+   "review": "FragDB 提供约 15 万条香水结构化记录，分六份以竖线分隔的 CSV 文件（香水、品牌、调香师、香调、香调群、翻译词表），标签与名称含 23 种语言翻译，文件间通过唯一 ID 关联；配套 Parquet 数据集包含约 506 万条用户评论、2.6 万篇编辑文章和 28 万条新闻评论。提供 Python/JavaScript/PostgreSQL 导入示例与按记录计费的 HTTP API。许可为 CC-BY-NC-4.0，完整数据需付费，仓库内含免费 10-25 条样本。",
+   "highlights": [
+    "六份 CSV 文件共 158,900+ 记录，包含香调金字塔、评分、投票、品牌与调香师档案，支持 23 种语言翻译，UTF-8 编码、竖线分隔",
+    "配套 Parquet 数据集含 5,064,371 条多语言用户评论（覆盖 68.4% 香水）、26,048 篇 2008–2026 年编辑文章和 281,566 条线程化新闻评论",
+    "提供按记录计费的 HTTP API（list/basic/full 三级详情），无列表接口，通过免费索引文件枚举目录；数据可整库购买或订阅"
+   ],
+   "use_cases": [
+    "多语言 NLP 语料与情感分析、语言检测基准",
+    "香水推荐系统、基于文本的相似度计算与知识图谱构建",
+    "香水市场研究、趋势分析与社区讨论挖掘"
+   ]
+  },
+  "sha": "56687f073512",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e971d380586a": {
+  "identity": {
+   "one_liner": "基于Calico缓冲池加速pgvector向量检索的PostgreSQL扩展",
+   "review": "pgvectorfast是MIT DB组开发的PostgreSQL扩展，在未修改的PostgreSQL 18/19上替换默认共享缓冲管理器为Calico缓冲池，用于加速向量相似检索与分析扫描/连接。保持与pgvector全部数据类型、距离算符和索引类型的SQL及磁盘兼容。限制：仅支持Linux x86-64，需非LTO构建的服务器符号，重启后需手动执行CALL calico.activate()重新激活。",
+   "highlights": [
+    "用两级数组直接索引与路径缓存替换共享缓冲哈希表，并支持HNSW遍历中的无锁乐观读取（calico.optimistic_reads）",
+    "提供HNSW邻居分组预取，结合CPU缓存预取与PostgreSQL AIO/io_uring异步批量读取（hnsw.enable_prefetch）",
+    "与pgvector的vector/halfvec/bit/sparsevec类型及hnsw/ivfflat索引保持SQL和磁盘兼容，无需修改数据库文件"
+   ],
+   "use_cases": [
+    "在PostgreSQL 18/19上运行大规模HNSW向量相似检索的场景",
+    "将现有pgvector应用以drop-in方式迁移以改变缓冲管理行为",
+    "向量检索与分析扫描/连接混合负载的PostgreSQL实例"
+   ]
+  },
+  "sha": "e971d380586a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

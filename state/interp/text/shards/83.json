@@ -3117,5 +3117,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "13e1c1b81095": {
+  "identity": {
+   "one_liner": "纯本地 SQLite 的 DeepSeek Harness 跨会话长期记忆插件",
+   "review": "dsh-engram 是 DeepSeek Harness 的跨会话长期记忆插件，数据全部存于本地 SQLite（user/project/shared 三层分库），嵌入模型离线推理，不依赖外部服务与 API Key。提供 23 个 engram_* 窄参数工具，覆盖保存、检索、事实链、审计、复习等环节，并附 Web 管理面板。采用「记忆宫殿」信息架构组织记忆，安装一条 dsh plugin 命令即可使用。",
+   "highlights": [
+    "混合检索：FTS5（unicode61 + 中文 2-gram）与本地向量（默认 Xenova/paraphrase-multilingual-MiniLM-L12-v2，384 维，q8）RRF 融合，嵌入下载失败自动降级纯关键词并显式标记",
+    "证据门机制：engram_assess 由代码强制「声称充足 + 有效证据 + nextStrategy=answer」三者齐备才判充足，判定与拒绝明细写入审计日志",
+    "记忆按来源会话、轮次、seq 三级溯源，写入/修改/遗忘等操作全量入操作日志表，SM-2 间隔重复复习只给坐标与门牌线索不给正文"
+   ],
+   "use_cases": [
+    "需要 coding agent 在多个会话间保留用户画像与项目历史事实的场景",
+    "要求记忆数据不出本地、无外部服务依赖的个人或内网环境",
+    "通过 Markdown/JSON 导出或 Obsidian/Logseq 友好镜像将记忆库转为可人读知识库的场景"
+   ]
+  },
+  "sha": "13e1c1b81095",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "538e0a34a454": {
+  "identity": {
+   "one_liner": "开源设备租赁平台，含库存、预订、客户与合同管理",
+   "review": "Louez 是一个面向设备租赁业务的 Web 平台，提供商品目录、预订、客户管理、PDF 合同生成与统计功能。基于 Next.js、TypeScript、MySQL 和 Drizzle ORM 构建，通过 docker compose 一键部署，自带 MySQL、MinIO 图片存储和背景移除 worker，无需预先生成密钥或邮件服务器。默认单店模式，也可配置为多租户平台。",
+   "highlights": [
+    "仪表盘支持商品库存、多级定价、预订状态、周/月视图日历、客户数据库与收入统计",
+    "内置 AI 层：店面聊天顾问与语音接待员，自托管用户可通过 .env.example 配置自己的 AI 和电话服务商",
+    "docker compose 部署捆绑 MySQL、MinIO 和基于 rembg 的背景移除 worker，认证密钥自动生成，SMTP、Stripe、Google 登录均为可选配置"
+   ],
+   "use_cases": [
+    "相机、工具、派对设备、车辆等租赁业务的库存与预订管理",
+    "自托管部署替代订阅式租赁 SaaS，数据留在自有服务器",
+    "以 platform 模式运行为多店铺租赁平台（每店一个子域名店面）"
+   ]
+  },
+  "sha": "538e0a34a454",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b9ad721a785a": {
+  "identity": {
+   "one_liner": "基于 Rust 核心的 Python/TypeScript 异步 ORM，用 Prisma 语法单一 schema 驱动。",
+   "review": "MonOrm 是面向 Python 与 TypeScript 的异步 ORM，一个 Rust 引擎为两种语言生成相同的类型化模型、查询 API 与迁移。schema 采用 Prisma 语法，模型 API 为 Django 风格，支持 PostgreSQL 与 SQLite。项目处于活跃开发早期，作者自述已用于生产，但提醒其他用户暂勿用于生产或自担风险。安装通过 pip install monorm 或 npm 别名安装。",
+   "highlights": [
+    "一份 Prisma 语法 schema 同时生成 Python 与 TypeScript 的类型化模型、迁移和查询 API，Rust 核心通过 PyO3/napi 桥接两种语言",
+    "查询支持窗口函数、CTE（含递归）、子查询、全文搜索、JSON/数组列、游标分页，写入支持 upsert、批量操作与 RETURNING，并提供锁、读副本、N+1 检测与 OpenTelemetry",
+    "内置 timestamps、soft delete、locking、file storage 等 Rust crate 扩展，并提供 monorm init/makemigrations/migrate 命令行与 auth 应用"
+   ],
+   "use_cases": [
+    "团队需要在 Python 与 TypeScript 两种服务间共用同一份数据库 schema、迁移和查询行为",
+    "希望用 ORM 表达窗口函数、CTE、分区、触发器等 SQL 能力而少写原生 SQL 的应用",
+    "需要 Django 风格 objects/filter API 与 Prisma 风格 schema 文件并存的 Python 3.11+ 或 Node/Bun 项目"
+   ]
+  },
+  "sha": "b9ad721a785a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "17611d118194": {
+  "identity": {
+   "one_liner": "本地运行的个人财务管理应用，基于 Go、Angular 与 SQLite 构建。",
+   "review": "Finanças Local 是一个运行在用户本机的个人财务管理站点，提供交易记录、预算、目标、待付账单、投资与报表功能，并可通过 Meu Pluggy 服务接入巴西 Open Finance 自动拉取银行流水。面向希望在本地管理个人财务的 Windows 与 Linux 用户：Windows 提供 .msi 安装包，Linux 通过脚本安装为 systemd 服务。前端 Angular，后端 Go，数据库为 SQLite；数据存储在本机 dados 目录，站点仅监听本机地址并通过 HTTPS 访问。",
+   "highlights": [
+    "支持交易、预算、目标、待付账单、投资、贷款与年度报表等模块，并提供自动分类规则（如描述包含 UBER → Transporte）",
+    "通过 Meu Pluggy 连接 Open Finance，首次同步最近 365 天数据，此后每 6 小时自动同步，授权有效期为 12 个月",
+    "提供 Windows 与 Linux 安装器及配套管理器，支持数据库备份、版本更新提示与卸载后保留数据"
+   ],
+   "use_cases": [
+    "在个人电脑上本地管理收支、预算、目标与投资记录",
+    "通过 Meu Pluggy 自动同步银行流水与信用卡账单，并与手工记录核对差异",
+    "需要数据保留在本机、仅在本机或局域网内访问的自托管财务记录场景"
+   ]
+  },
+  "sha": "17611d118194",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

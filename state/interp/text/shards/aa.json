@@ -3333,5 +3333,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "c0bfbd35cf8a": {
+  "identity": {
+   "one_liner": "基于 Docker Compose 的一键部署栈，组合 Nextcloud、ONLYOFFICE Docs、Traefik 自动 TLS、备份容器共九个服务。",
+   "review": "该项目以 Docker Compose 文件形式提供 Nextcloud 与 ONLYOFFICE Docs 文档服务器的组合部署，共九个服务：Traefix 反向代理配合 Let's Encrypt 自动签发 TLS 证书，Nextcloud 使用 PostgreSQL 16 与 Redis，ONLYOFFICE 自带 PostgreSQL、Redis 与 RabbitMQ，另有定时备份容器。部署需要两条指向服务器的 DNS 记录，管理员账户通过 .env 配置，首次启动后需在 Nextcloud 应用商店安装 ONLYOFFICE 连接器并填写文档服务器地址与 JWT 密钥完成对接。仓库附带 update.sh 更新脚本、镜像摘要锁定、Sigstore 签名验证说明，以及数据库与数据的备份恢复脚本。",
+   "highlights": [
+    "包含九个服务的完整编排：Nextcloud + PostgreSQL 16 + Redis、ONLYOFFICE Docs + 独立 PostgreSQL/Redis/RabbitMQ、Traefix、备份容器",
+    "通过 Traefik 自动获取 Let's Encrypt 证书，服务间通信启用 JWT 认证，数据库/Redis/RabbitMQ 仅在内部网络监听",
+    "内置定时备份（默认 24 小时一次、7 天保留）与交互式恢复脚本，并提供 update.sh 升级脚本与镜像 digest 锁定"
+   ],
+   "use_cases": [
+    "自托管私有云盘并需要在浏览器内协作编辑 Word/Excel/PowerPoint 文档",
+    "需要 HTTPS 自动签发与定时数据库/数据备份的个人或团队自建部署",
+    "希望以 Docker Compose 方式维护、升级并验证部署供应链（镜像摘要锁定、Sigstore 签名）的环境"
+   ]
+  },
+  "sha": "c0bfbd35cf8a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

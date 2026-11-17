@@ -3151,5 +3151,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0355aa268b66": {
+  "identity": {
+   "one_liner": "Python 编写的工具调用型 Agent 教学应用，用 SQLite 持久化运行记录与事实",
+   "review": "该项目实现了一个使用工具完成任务的最小 Agent 循环：规划器选择动作、执行计算/记忆/取时四种工具、将事实与运行历史写入本地 SQLite。支持固定规则的 Demo 模式和接入 OpenAI 兼容模型的 Live 模式，内置对规划器调用、参数大小、工具输出等的多项预算限制。适合想理解工具调用循环的开发者本地学习使用。",
+   "highlights": [
+    "提供计算、保存事实、召回事实、获取时间四种工具，运行记录与事实持久化在本地 SQLite，重启后可召回",
+    "强制执行六次规划器调用、12 次工具调用、8 KiB 参数、16 KiB 工具输出、32 KiB 模型回复等预算与校验规则",
+    "对已结束的运行执行七项确定性完整性检查，支持重新打开已完成、未完成和失败的追踪记录"
+   ],
+   "use_cases": [
+    "本地学习工具调用 Agent 的循环机制与执行追踪",
+    "演示结果跨进程重启后从 SQLite 召回的记忆流程",
+    "通过 pytest、ruff 和 walkthrough 检查循环预算、工具校验与失败记录的实现"
+   ]
+  },
+  "sha": "0355aa268b66",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "10e23d7658b1": {
+  "identity": {
+   "one_liner": "部署在 VPS 上的自托管面板，通过 MCP 协议让 AI 代理部署与管理多个项目。",
+   "review": "PanelAlpha Engine 是安装在用户 VPS 上的自托管软件，用于托管 AI 构建项目、网站和开源应用。用户将支持 MCP 的 AI 代理连接到引擎，由代理通过 REST API/MCP 执行部署与维护；AI 不直接获得 root 权限。项目以 Docker 容器隔离各项目，提供备份、SSL、防火墙等管理功能。安装要求 Debian 12/13 或 Ubuntu 22.04/24.04/26.04、至少 2GB 内存与 1 CPU，以 root 通过 SSH 执行一行安装脚本，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "提供 311 个 MCP 工具，支持连接 Claude Code、Cursor、Codex 等任何符合 MCP 协议的 AI 代理",
+    "每个项目在独立 Docker 容器中运行，带磁盘、内存、CPU 限制，包含防火墙与 ModSecurity/OWASP 规则",
+    "支持从 Git 或文件部署多种技术栈，提供 live/staging 双环境、自动备份恢复、Let's Encrypt 证书与 Cloudflare DNS/隧道集成"
+   ],
+   "use_cases": [
+    "在个人 VPS 上自托管 AI 构建的项目、网站或网上找到的开源应用",
+    "需要预览地址、staging 环境与备份恢复的中小型项目部署",
+    "通过自然语言让 AI 代理执行服务器维护、日志排查与域名/证书配置"
+   ]
+  },
+  "sha": "10e23d7658b1",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

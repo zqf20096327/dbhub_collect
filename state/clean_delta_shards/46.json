@@ -25060,5 +25060,1533 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "98f6c16b31f0+2": {
+  "fn": "nazarli-shabnam/clevis",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    6,
+    0,
+    4
+   ],
+   [
+    "replace",
+    6,
+    14,
+    4,
+    8,
+    [
+     "CI",
+     "CodeQL",
+     "License: GPL v3",
+     "Self-host"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    8,
+    11
+   ],
+   [
+    "delete",
+    17,
+    21,
+    11,
+    11
+   ],
+   [
+    "equal",
+    21,
+    23,
+    11,
+    13
+   ],
+   [
+    "replace",
+    23,
+    24,
+    13,
+    14,
+    [
+     "|Area|Description|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    14,
+    15
+   ],
+   [
+    "replace",
+    25,
+    31,
+    15,
+    21,
+    [
+     "|**Overview**|At-a-glance stats across your repositories and organization.|",
+     "|**Activity**|Repository and org event streams pulled from the GitHub API.|",
+     "|**Repositories**|Browse and inspect repositories with their key signals in one place.|",
+     "|**Health & Security**|A computed **security score** backed by six core automated checks — **MFA enforcement**, **branch protection**, **secret scanning**, **Dependabot alerts**, **code scanning alerts**, and **default-branch force-push protection** — plus optional informational repo-hygiene checks (CODEOWNERS, SECURITY.md, license, stale branches, unpinned Actions) that count toward the score only when enabled. Each check has a **pass**, **fail**, **error**, or **not_applicable** status and remediation guidance.|",
+     "|**Collaborators**|See who has access across the surface you manage.|",
+     "|**Automation**|Run privileged maintenance jobs (e.g. clearing GitHub Actions caches) with **dry-run** support and a full **audit trail**.|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    21,
+    23
+   ],
+   [
+    "delete",
+    33,
+    35,
+    23,
+    23
+   ],
+   [
+    "equal",
+    35,
+    40,
+    23,
+    28
+   ],
+   [
+    "replace",
+    40,
+    41,
+    28,
+    29,
+    [
+     "|Component|Stack|Responsibility|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    29,
+    30
+   ],
+   [
+    "replace",
+    42,
+    46,
+    30,
+    34,
+    [
+     "|**`apps/api`**|FastAPI · SQLAlchemy 2 · Alembic|REST backend — auth, analytics, RBAC, and job enqueueing.|",
+     "|**`apps/worker`**|Python · psycopg3|Polls the job queue (`SELECT … FOR UPDATE SKIP LOCKED`) and executes GitHub API tasks. Safe to run as multiple replicas; to scale with Docker Compose, remove the fixed `container_name: worker` from `docker-compose.yml` first, then `docker compose up --scale worker=N`.|",
+     "|**`apps/ui`**|Next.js 15 · React 19 · TanStack Query|The dashboard — dense, dark, keyboard-friendly.|",
+     "|**`packages/checks`**|`clevis-checks` (Python)|The security-check engine — six core checks (MFA, branch protection, secret scanning, Dependabot alerts, code scanning alerts, default-branch force-push protection) plus five optional repo-hygiene checks — with built-in GitHub pagination.|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    34,
+    37
+   ],
+   [
+    "delete",
+    49,
+    51,
+    37,
+    37
+   ],
+   [
+    "equal",
+    51,
+    53,
+    37,
+    39
+   ],
+   [
+    "replace",
+    53,
+    54,
+    39,
+    43,
+    [
+     "Python",
+     "FastAPI",
+     "PostgreSQL",
+     "SQLAlchemy"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    43,
+    44
+   ],
+   [
+    "replace",
+    55,
+    69,
+    44,
+    49,
+    [
+     "Next.js",
+     "React",
+     "TypeScript",
+     "Tailwind CSS",
+     "Docker"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    81,
+    49,
+    61
+   ],
+   [
+    "replace",
+    81,
+    82,
+    61,
+    62,
+    [
+     "Then open the UI at **`http://localhost:3000`**. The base `docker-compose.yml` publishes no host ports (a reverse proxy such as Traefik is expected to route to the containers), so the `docker-compose.local.yml` override is what makes the stack reachable on `localhost`; for a real deployment see Reaching the stack."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    62,
+    63
+   ],
+   [
+    "replace",
+    83,
+    86,
+    63,
+    64,
+    [
+     "Full env var reference, GitHub App registration, and production hardening notes live in `docs/self-hosting.md`. Local dev without Docker is covered in `AGENTS.md`."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    92,
+    64,
+    70
+   ],
+   [
+    "replace",
+    92,
+    93,
+    70,
+    71,
+    [
+     "2. **Connect a GitHub org or account.** Go to **Settings → Connected GitHub accounts** and click **Install GitHub App** — this sends you to GitHub to authorize Clevis for that org/account, which is what grants read access to its repos. GitHub redirects you back into the app once you approve it, and the org/account shows up under \"Connected GitHub accounts\" a few seconds later. (The App itself is a one-time setup step for whoever deployed the instance — see `docs/self-hosting.md` if that hasn't been done yet.) If you install into a brand-new org and the connection doesn't complete, sign out and back in with **\"Sign in with GitHub\"** once (this is what verifies your admin access on that org) and retry the install."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    98,
+    71,
+    76
+   ],
+   [
+    "delete",
+    98,
+    100,
+    76,
+    76
+   ],
+   [
+    "equal",
+    100,
+    101,
+    76,
+    77
+   ],
+   [
+    "replace",
+    101,
+    106,
+    77,
+    78,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    78,
+    79
+   ],
+   [
+    "replace",
+    107,
+    109,
+    79,
+    80,
+    [
+     "Released under the GNU General Public License v3.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "f2a4d377edcc+2": {
+  "fn": "tranphucbol/table-craft",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "TableCraft logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    10,
+    1,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "history and EXPLAIN plans, with every database a plugin."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    18,
+    10,
+    16,
+    [
+     "Release",
+     "License",
+     "Built with TypeScript",
+     "Built with Electron",
+     "CI",
+     "Downloads"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    24,
+    17,
+    22,
+    [
+     "**Website** ·",
+     "**Download** ·",
+     "**Docs** ·",
+     "**Changelog** ·",
+     "**Report a bug**"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    22,
+    23
+   ],
+   [
+    "replace",
+    25,
+    30,
+    23,
+    26,
+    [
+     "Supported databases · Highlights · Install ·",
+     "Quick start · How it works · Agents ·",
+     "Contributing · License"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    35,
+    26,
+    31
+   ],
+   [
+    "replace",
+    35,
+    45,
+    31,
+    41,
+    [
+     "|Database|Plugin|Since|",
+     "|------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|",
+     "|SQLite|In the box|v0.1.0|",
+     "|MySQL, MariaDB, TiDB|In the box|v0.1.0|",
+     "|PostgreSQL|npm|v0.1.0|",
+     "|Redis|npm|v1.3.0|",
+     "|Oracle|npm|v1.11.0|",
+     "|SQL Server, Azure SQL|npm|v1.11.0|",
+     "|etcd|npm|v1.18.0|",
+     "|DuckDB|npm|v1.28.0|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    47,
+    41,
+    43
+   ],
+   [
+    "replace",
+    47,
+    48,
+    43,
+    44,
+    [
+     "first time you add such a data source (Plugins)."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    51,
+    44,
+    47
+   ],
+   [
+    "replace",
+    51,
+    83,
+    47,
+    79,
+    [
+     "- Let AI agents query your databases: Claude Code, OpenCode or Cursor connect over",
+     " MCP, on this machine only, each with its own token. Every data source starts **Off**; you choose",
+     " **Ask before reads**, **Read only** or **Ask before writes**, and passwords never leave TableCraft.",
+     "- Completion that knows your schema: tables after `FROM`, whole join",
+     " conditions after `JOIN`, and the columns of an alias after `o.`.",
+     "- Large results stay responsive: rows stay in the engine process and the grid reads",
+     " windows of them, so a million-row result does not freeze the window.",
+     "- A table editor that shows its SQL: edit cells, add and delete rows, preview",
+     " the statements, and submit them in one transaction.",
+     "- Explain Plan as a tree: estimated and actual rows, costs and timings; Explain Analyse",
+     " asks before it runs a write.",
+     "- An ER diagram that guesses missing keys: a schema's tables and keys, with the",
+     " `customer_id` columns a database never declared drawn dashed; hide a wrong guess, add a missed one.",
+     "- Darcula, IntelliJ Light and 43 more: Dark, Light, High contrast, ported themes such",
+     " as Gruvbox, Nord and Solarized, or your own theme file, three font roles, and a",
+     " compact density.",
+     "- DataGrip's keymap and layout: tool windows, `⇧⇧` Search Everywhere, `⇧⌘A`",
+     " Find Action, and the chords your hands already know.",
+     "- Import your connections:",
+     " from DataGrip, TablePro, MySQL Workbench or Beekeeper Studio, with SSH tunnels, folders and colours.",
+     "- Query history and a Services tree: every statement you ran, per",
+     " data source, with its outcome, row count and duration.",
+     "- Redis, standalone and Cluster: a key tree that scans instead of blocking, typed key",
+     " tabs with guarded edits, a `redis-cli` console with completion from the server, and a Server tab.",
+     "- etcd, from keys to cluster: guarded key editing with history and merge,",
+     " leases, live Watch, members and maintenance, users and roles, and a visual transaction builder.",
+     "- Oracle without the Instant Client: schemas, packages and their members in the tree,",
+     " `DBMS_OUTPUT` in Output, every SQL function of the manual in completion, sessions and plans.",
+     "- Plugins for any database: PostgreSQL, MySQL, SQLite, Oracle and SQL Server are",
+     " plugins, loaded the same way yours would be. SQLite and MySQL come in the box; PostgreSQL, Oracle,",
+     " SQL Server, DuckDB (Parquet and `csv.zst` files too), Redis and etcd",
+     " download the first time you need them."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    79,
+    82
+   ],
+   [
+    "replace",
+    86,
+    89,
+    82,
+    85,
+    [
+     "Download the latest build from the download page or below, or",
+     "pick any version on the Releases page. Once",
+     "installed, TableCraft updates itself."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    85,
+    86
+   ],
+   [
+    "replace",
+    90,
+    96,
+    86,
+    92,
+    [
+     "|Platform|Download|",
+     "|:--------------------|:-----------------------------------------------------------------------------------------------------------------------------|",
+     "|macOS (Apple silicon)|`TableCraft-arm64.dmg`|",
+     "|macOS (Intel)|`TableCraft-x64.dmg`|",
+     "|Windows x64|`TableCraft-x64.exe`|",
+     "|Linux x64|`TableCraft-x86_64.AppImage`|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    92,
+    95
+   ],
+   [
+    "replace",
+    99,
+    100,
+    95,
+    96,
+    [
+     "- **macOS**: see Running the unsigned macOS app."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    96,
+    97
+   ],
+   [
+    "replace",
+    101,
+    102,
+    97,
+    98,
+    [
+     " anyway**."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    107,
+    98,
+    103
+   ],
+   [
+    "replace",
+    107,
+    110,
+    103,
+    106,
+    [
+     " widget in the toolbar, and choose PostgreSQL, MySQL, SQLite or Oracle. PostgreSQL and Oracle",
+     " show **Download** the first time: TableCraft fetches the plugin, then opens the form",
+     " (Databases in the box and on demand)."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    106,
+    107
+   ],
+   [
+    "replace",
+    111,
+    112,
+    107,
+    108,
+    [
+     " Database tree."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    108,
+    109
+   ],
+   [
+    "replace",
+    113,
+    114,
+    109,
+    110,
+    [
+     " (`Ctrl+Enter`) to run the statement at the caret."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    125,
+    110,
+    121
+   ],
+   [
+    "replace",
+    125,
+    127,
+    121,
+    123,
+    [
+     "plugins. The specification describes the whole of v1, and",
+     "docs/decisions records why it is built this way."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    130,
+    123,
+    126
+   ],
+   [
+    "replace",
+    130,
+    131,
+    126,
+    127,
+    [
+     "The guide is also on the website at tablecraft1.dev/docs, with"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    135,
+    127,
+    131
+   ],
+   [
+    "replace",
+    135,
+    150,
+    131,
+    146,
+    [
+     "- Install: the installers, opening the unsigned macOS app, updates, and",
+     " building from source.",
+     "- Connections: data sources, SSH tunnels, SSL, and importing them from",
+     " DataGrip, TablePro, MySQL Workbench or Beekeeper Studio.",
+     "- Database explorer: the tree, DDL and SQL generation, the ER diagram,",
+     " and running a routine.",
+     "- SQL console: running statements, transactions, inspections and Explain.",
+     "- Completion and navigation: schema-aware completion, navigation and",
+     " snippets.",
+     "- Results and table data: the result grid, the table data editor and import.",
+     "- History, sessions and the log: query history, the Services tree,",
+     " server sessions and the app log.",
+     "- Agents (MCP): letting an AI agent query your data sources.",
+     "- Where your data lives: the profile folder, passwords, and what",
+     " TableCraft sends over the network."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    153,
+    146,
+    149
+   ],
+   [
+    "replace",
+    153,
+    160,
+    149,
+    156,
+    [
+     "- Plugins: which databases ship in the box and which download on demand.",
+     "- Redis: the key tree, key tabs, the command console and the Server tab.",
+     "- etcd: revision-guarded keys, leases, Watch and cluster administration.",
+     "- Oracle: connecting without the Instant Client, and what differs from SQL",
+     " databases.",
+     "- DuckDB: database files, Parquet and CSV files, file locks and",
+     " transactions."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    163,
+    156,
+    159
+   ],
+   [
+    "replace",
+    163,
+    168,
+    159,
+    164,
+    [
+     "- Search Everywhere and shortcuts: Search Everywhere, Find Action and",
+     " the keymap.",
+     "- Settings and appearance: the Settings dialog and every field of",
+     " `settings.json`.",
+     "- Themes: the bundled themes and where they come from."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    171,
+    164,
+    167
+   ],
+   [
+    "replace",
+    171,
+    173,
+    167,
+    169,
+    [
+     "- Writing plugins: the manifest, capabilities, plugin API",
+     " compatibility and the contract suite."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    177,
+    169,
+    173
+   ],
+   [
+    "replace",
+    177,
+    179,
+    173,
+    175,
+    [
+     " plugin, a CLI, AI assistance, Git integration, a debugger, notebooks, Docker and",
+     " Kubernetes integration."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    181,
+    175,
+    177
+   ],
+   [
+    "replace",
+    181,
+    186,
+    177,
+    178,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    178,
+    179
+   ],
+   [
+    "replace",
+    187,
+    196,
+    179,
+    180,
+    [
+     "TableCraft is free software under the GNU General Public License v3.0 or later; see"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "82762aab6de8+2": {
+  "fn": "gsl0001/Cortex",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    6,
+    0,
+    4
+   ],
+   [
+    "replace",
+    6,
+    11,
+    4,
+    9,
+    [
+     "Node",
+     "License",
+     "Tests",
+     "Database",
+     "Agents"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    20,
+    9,
+    18
+   ],
+   [
+    "replace",
+    20,
+    21,
+    18,
+    19,
+    [
+     "The Cortex command center — blocked work, unresolved questions, and recent captured memory, newest first"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    25,
+    19,
+    23
+   ],
+   [
+    "replace",
+    25,
+    33,
+    23,
+    29,
+    [
+     "**Contents:** What it does · How it compares ·",
+     "How it works ·",
+     "The memory lifecycle · Quickstart ·",
+     "Connect your agent · Using the system ·",
+     "The dashboard · Autonomy tiers · CLI reference ·",
+     "Deploy · Security"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    66,
+    29,
+    62
+   ],
+   [
+    "delete",
+    66,
+    68,
+    62,
+    62
+   ],
+   [
+    "equal",
+    68,
+    74,
+    62,
+    68
+   ],
+   [
+    "replace",
+    74,
+    75,
+    68,
+    69,
+    [
+     "||**Cortex**|Mem0|Zep|Supermemory|Letta|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    69,
+    70
+   ],
+   [
+    "replace",
+    76,
+    82,
+    70,
+    76,
+    [
+     "|**Price**|Free, MIT|Free tier, then $19+/mo cloud (OSS core)|Paid cloud (~$125/mo Flex)|Free tier, then $19+/mo cloud (MIT OSS core)|Free tier, then $20+/mo cloud (Apache-2.0 core)|",
+     "|**Your data lives**|Your machine, one SQLite file|Their cloud, or self-host (needs vector + graph DB)|Their cloud; DIY via the OSS Graphiti engine + a graph DB|Their cloud, or a self-hosted local binary|Their cloud, or self-hosted server|",
+     "|**Needs LLM/embedding calls**|No — deterministic local ranking (embeddings optional, via local Ollama)|Yes (LLM + embeddings)|Yes|Yes (self-host can use Ollama)|Yes (BYOK)|",
+     "|**Built for**|Coding agents specifically — hooks into Claude Code / Codex sessions|General AI-app memory|Agent memory / knowledge graph|General memory API + consumer app|Stateful agent framework|",
+     "|**Beyond memory**|Tasks, roadmaps, evening brief, portfolio doctor, autonomy policy|—|—|—|Agent runtime|",
+     "|**Setup**|`npm install`, `npm start` — no accounts, no other services|SDK + account (or multi-service self-host)|SDK + account|SDK + account (or local binary)|SDK + account (or self-host server)|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    94,
+    76,
+    88
+   ],
+   [
+    "delete",
+    94,
+    96,
+    88,
+    88
+   ],
+   [
+    "equal",
+    96,
+    107,
+    88,
+    99
+   ],
+   [
+    "replace",
+    107,
+    131,
+    99,
+    100,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    139,
+    100,
+    108
+   ],
+   [
+    "delete",
+    139,
+    141,
+    108,
+    108
+   ],
+   [
+    "equal",
+    141,
+    151,
+    108,
+    118
+   ],
+   [
+    "replace",
+    151,
+    171,
+    118,
+    119,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    175,
+    119,
+    123
+   ],
+   [
+    "replace",
+    175,
+    176,
+    123,
+    124,
+    [
+     "|Record type|Example|Kept because|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    124,
+    125
+   ],
+   [
+    "replace",
+    177,
+    183,
+    125,
+    131,
+    [
+     "|**Fix**|\"Login redirect looped; fixed by clearing stale cookie. Verified: `npm test`.\"|Durable, verifiable|",
+     "|**Research**|\"Vendor API rate-limits at 30 req/s; backoff needed.\"|Reusable finding|",
+     "|**Blocker**|\"Deploy blocked: missing prod DB migration.\"|Unblocks future work|",
+     "|**Decision**|\"Chose SQLite over Postgres — single-user, local-first.\"|Explains the \"why\"|",
+     "|**Task change**|task moved `ready → blocked → done`|Progress you can query|",
+     "|**Lesson**|a pattern promoted after recurring across sessions|Hard-won knowledge|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    205,
+    131,
+    153
+   ],
+   [
+    "delete",
+    205,
+    207,
+    153,
+    153
+   ],
+   [
+    "equal",
+    207,
+    243,
+    153,
+    189
+   ],
+   [
+    "replace",
+    243,
+    246,
+    189,
+    190,
+    [
+     "Next: connect your agent so sessions start feeding it."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    270,
+    190,
+    214
+   ],
+   [
+    "replace",
+    270,
+    280,
+    214,
+    215,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    280,
+    292,
+    215,
+    227
+   ],
+   [
+    "delete",
+    292,
+    294,
+    227,
+    227
+   ],
+   [
+    "equal",
+    294,
+    302,
+    227,
+    235
+   ],
+   [
+    "replace",
+    302,
+    306,
+    235,
+    236,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    309,
+    236,
+    239
+   ],
+   [
+    "replace",
+    309,
+    310,
+    239,
+    240,
+    [
+     " `localhost:4317`."
+    ]
+   ],
+   [
+    "equal",
+    310,
+    311,
+    240,
+    241
+   ],
+   [
+    "replace",
+    311,
+    313,
+    241,
+    243,
+    [
+     " Now every Claude Code session in that repo recalls context on start and",
+     " captures durable takeaways on stop."
+    ]
+   ],
+   [
+    "equal",
+    313,
+    314,
+    243,
+    244
+   ],
+   [
+    "replace",
+    314,
+    315,
+    244,
+    245,
+    [
+     " Cortex watches the session boundaries."
+    ]
+   ],
+   [
+    "equal",
+    315,
+    316,
+    245,
+    246
+   ],
+   [
+    "replace",
+    316,
+    317,
+    246,
+    247,
+    [
+     " throwing away the surrounding chatter."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    318,
+    247,
+    248
+   ],
+   [
+    "replace",
+    318,
+    319,
+    248,
+    249,
+    [
+     " open blockers, and relevant research — ranked and trimmed to a token budget."
+    ]
+   ],
+   [
+    "equal",
+    319,
+    325,
+    249,
+    255
+   ],
+   [
+    "replace",
+    325,
+    331,
+    255,
+    256,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    331,
+    334,
+    256,
+    259
+   ],
+   [
+    "replace",
+    334,
+    340,
+    259,
+    263,
+    [
+     " builds the evening brief — done work with evidence, a verify queue, what's",
+     " blocked, tonight's open items — and can ping it to Telegram. Schedule it",
+     " (see `scripts/eod-brief.ps1` for a Windows Task",
+     " Scheduler example) and you get a daily digest for free."
+    ]
+   ],
+   [
+    "equal",
+    340,
+    346,
+    263,
+    269
+   ],
+   [
+    "replace",
+    346,
+    347,
+    269,
+    270,
+    [
+     "|Area|What it shows|"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    348,
+    270,
+    271
+   ],
+   [
+    "replace",
+    348,
+    359,
+    271,
+    280,
+    [
+     "|**Command Center**|Blocked work, unresolved inbox questions, recent activity, and recall-economics cards — is the memory actually earning its tokens?|",
+     "|**Control Center**|The per-project autonomy dial (`watch` → `auto`), with pinned repos clearly marked|",
+     "|**Search**|Project-scoped search with **explained scores** and the exact token pack an agent would receive|",
+     "|**Tasks**|Every task with type, priority, status, and its full history|",
+     "|**Goals / Roadmap**|Milestones, weekly plans, and roadmap proposals|",
+     "|**Knowledge graph**|An interactive graph of records and their typed links — manual links are saved with full confidence, inferred ones keep their own provenance|",
+     "|**Activity log**|A chronological feed of everything captured|",
+     "|**Portfolio**|The portfolio doctor: which projects are active, stalled, or abandoned, with lifecycle controls|",
+     "|**Health & audit**|A read-only database health check, plus recall economics: per project and per session, whether served memory was used (`hit`), never served (`cold`), or re-injected and ignored (`thrash`), and what it cost in tokens|"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    367,
+    280,
+    288
+   ],
+   [
+    "replace",
+    367,
+    368,
+    288,
+    289,
+    [
+     "|Tier|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    369,
+    289,
+    290
+   ],
+   [
+    "replace",
+    369,
+    373,
+    290,
+    294,
+    [
+     "|`watch`|Remembered and reported; no agent process is ever launched|",
+     "|`plan`|Agents may propose tasks and flag stalls; never execute|",
+     "|`assist`|Runs only when a human releases a specific task|",
+     "|`auto`|May work the ready queue autonomously; results always park for review|"
+    ]
+   ],
+   [
+    "equal",
+    373,
+    383,
+    294,
+    304
+   ],
+   [
+    "replace",
+    383,
+    386,
+    304,
+    305,
+    [
+     "SETUP.md for details."
+    ]
+   ],
+   [
+    "equal",
+    386,
+    391,
+    305,
+    310
+   ],
+   [
+    "replace",
+    391,
+    392,
+    310,
+    311,
+    [
+     "|Group|Commands|"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    311,
+    312
+   ],
+   [
+    "replace",
+    393,
+    403,
+    312,
+    322,
+    [
+     "|**Search & recall**|`search`, `brief`, `stats`, `recall-economics`, `index rebuild`|",
+     "|**Promotion**|`consolidate` (proposes recurring records as rules for a repo's `CLAUDE.md` or a skill; writes proposal files only)|",
+     "|**Tasks**|`task add`, `task claim`, `task block`, `task done`, `next-task`|",
+     "|**Capture**|`fix add`, `research add`, `session start`, `session finish`|",
+     "|**Inbox**|`inbox add`, `inbox list`, `inbox resolve`|",
+     "|**Planning**|`roadmap proposal-add`, `roadmap show`, `goals`, `week show`, `week auto-plan`|",
+     "|**Portfolio**|`doctor --portfolio`, `project lifecycle`, `profile upsert`|",
+     "|**Reports**|`eod` (evening brief: `--html`, `--notify`, `--digest`)|",
+     "|**Agent hooks**|`claude install`, `claude recall`, `claude flush`|",
+     "|**Maintenance**|`audit --all [--fix]`, `maintenance sweep`, `maintenance dedupe-decisions`|"
+    ]
+   ],
+   [
+    "equal",
+    403,
+    416,
+    322,
+    335
+   ],
+   [
+    "delete",
+    416,
+    418,
+    335,
+    335
+   ],
+   [
+    "equal",
+    418,
+    435,
+    335,
+    352
+   ],
+   [
+    "delete",
+    435,
+    437,
+    352,
+    352
+   ],
+   [
+    "equal",
+    437,
+    440,
+    352,
+    355
+   ],
+   [
+    "replace",
+    440,
+    442,
+    355,
+    357,
+    [
+     "`.env.example` for the common knobs (`CORTEX_DB`, `CORTEX_HOST`,",
+     "`CORTEX_PORT`, `CORTEX_NEVER_AUTOPILOT`) and `SETUP.md` for the full"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    447,
+    357,
+    362
+   ],
+   [
+    "replace",
+    447,
+    448,
+    362,
+    363,
+    [
+     " in (`CORTEX_ALLOW_REMOTE=1`), and even then refuses to start without a token."
+    ]
+   ],
+   [
+    "equal",
+    448,
+    449,
+    363,
+    364
+   ],
+   [
+    "replace",
+    449,
+    450,
+    364,
+    365,
+    [
+     " `CORTEX_TOKEN` is set — even on localhost."
+    ]
+   ],
+   [
+    "equal",
+    450,
+    451,
+    365,
+    366
+   ],
+   [
+    "replace",
+    451,
+    452,
+    366,
+    367,
+    [
+     " require the token too — not just writes."
+    ]
+   ],
+   [
+    "equal",
+    452,
+    453,
+    367,
+    368
+   ],
+   [
+    "replace",
+    453,
+    456,
+    368,
+    371,
+    [
+     " injection (\"ignore previous instructions…\", and a broad family of phrasings)",
+     " are flagged on the way in, so a poisoned transcript can't smuggle instructions",
+     " into a future session's brief."
+    ]
+   ],
+   [
+    "equal",
+    456,
+    457,
+    371,
+    372
+   ],
+   [
+    "replace",
+    457,
+    458,
+    372,
+    373,
+    [
+     " are locked at the `watch` tier — no API write can raise them."
+    ]
+   ],
+   [
+    "equal",
+    458,
+    459,
+    373,
+    374
+   ],
+   [
+    "replace",
+    459,
+    462,
+    374,
+    377,
+    [
+     " (transcript distillation, the evening digest), so treat a leaked token as more",
+     " than read access. Keep the hub on loopback unless you front it with an",
+     " authenticating reverse proxy over TLS."
+    ]
+   ],
+   [
+    "equal",
+    462,
+    481,
+    377,
+    396
+   ],
+   [
+    "replace",
+    481,
+    483,
+    396,
+    397,
+    [
+     "MIT — see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

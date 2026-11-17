@@ -23957,5 +23957,1227 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "2db900f352b1+2": {
+  "fn": "public-transport/gtfs-via-postgres",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**Import GTFS Static/Schedule datasets into a PostgreSQL database**, to allow for efficient querying and analysis."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    10,
+    4,
+    10,
+    [
+     "npm version",
+     "binary build status",
+     "Prosperity/Apache license",
+     "minimum Node.js version",
+     "support me via GitHub Sponsors",
+     "chat with me via Matrix"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "- ✅ handles daylight saving time correctly but retains reasonable lookup performance"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    15,
+    13,
+    15,
+    [
+     "- ✨ joins `stop_times.txt`/`frequencies.txt`, `calendar.txt`/`calendar_dates.txt`, `trips.txt`, `route.txt` & `stops.txt` into views for straightforward data analysis (see below)",
+     "- 🚀 is carefully optimised to let PostgreSQL's query planner do its magic, yielding quick lookups even with large datasets (see performance section)"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "- ✨ exposes (almost) all data via GraphQL using PostGraphile, and as a RESTful API using PostgREST"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    24,
+    17,
+    24
+   ],
+   [
+    "replace",
+    24,
+    26,
+    24,
+    25,
+    [
+     "> If you don't have a good reason to use PostgreSQL (e.g. because you use one of `gtfs-via-postgres`' unique features like GraphQL support), I recommend you to use `gtfs-via-duckdb`. It is a fork of and the spiritual successor to `gtfs-via-postgres`. Refer to the comparison below for details."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    33,
+    25,
+    32
+   ],
+   [
+    "replace",
+    33,
+    34,
+    32,
+    33,
+    [
+     "Or use `npx`. ✨"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    33,
+    34
+   ],
+   [
+    "replace",
+    35,
+    36,
+    34,
+    35,
+    [
+     "There are also prebuilt binaries and Docker images available."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    35,
+    36
+   ],
+   [
+    "replace",
+    37,
+    38,
+    36,
+    37,
+    [
+     "*Note:* `gtfs-via-postgres` **needs PostgreSQL >=15** to work, as it uses the `WITH … AS NOT MATERIALIZED` syntax. You can check your PostgreSQL server's version with `psql -t -c 'SELECT version()'`."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    37,
+    38
+   ],
+   [
+    "delete",
+    39,
+    40,
+    38,
+    38
+   ],
+   [
+    "equal",
+    40,
+    45,
+    38,
+    43
+   ],
+   [
+    "replace",
+    45,
+    46,
+    43,
+    44,
+    [
+     "We're going to use the 2022-07-01 *VBB* feed as an example, which consists of individual files already."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    51,
+    44,
+    49
+   ],
+   [
+    "replace",
+    51,
+    68,
+    49,
+    50,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    70,
+    50,
+    52
+   ],
+   [
+    "replace",
+    70,
+    71,
+    52,
+    53,
+    [
+     "Depending on your specific setup, configure access to the PostgreSQL database via `PG*` environment variables:"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    79,
+    53,
+    61
+   ],
+   [
+    "replace",
+    79,
+    80,
+    61,
+    62,
+    [
+     "*Note*: `gtfs-via-postgres` generates SQL that contains the `CREATE EXTENSION postgis` instruction. For this to work, the PostgreSQL user you're connecting as needs the `CREATE` permission on the database. Also, the `postgis` extension must either be marked as trusted (by putting `trusted = true` into `$(pg_config --sharedir)/extension/postgis.control`), or your user must be a superuser."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    87,
+    62,
+    69
+   ],
+   [
+    "replace",
+    87,
+    96,
+    69,
+    70,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    98,
+    70,
+    72
+   ],
+   [
+    "replace",
+    98,
+    99,
+    72,
+    73,
+    [
+     "Importing will take 10s to 15m, depending on the size of the feed. On an M2 MacBook Air, importing the above feed takes about 9m; Importing the 260kb 2021-10-06 Amtrak feed takes 6s."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    73,
+    74
+   ],
+   [
+    "replace",
+    100,
+    101,
+    74,
+    75,
+    [
+     "The DELFI feed with ca. 330 MB may take 1 hour or more and require at least 35 GB of disk space for the database."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    104,
+    75,
+    78
+   ],
+   [
+    "replace",
+    104,
+    110,
+    78,
+    84,
+    [
+     "- `service_days` (materialized) \"applies\" `calendar_dates` to `calendar` to give you all days of operation for each \"service\" defined in `calendar`.",
+     "- `arrivals_departures` \"applies\" `stop_times`/`frequencies` to `trips` and `service_days` to give you all arrivals/departures at each stop with their *absolute* dates & times. It also resolves each stop's parent station ID & name.",
+     "- `connections` \"applies\" `stop_times`/`frequencies` to `trips` and `service_days`, just like `arrivals_departures`, but gives you departure (at stop A) & arrival (at stop B) *pairs*.",
+     "- `shapes_aggregated` aggregates individual shape points in `shapes` into a PostGIS `LineString`.",
+     "- `stats_by_route_date` provides the number of arrivals/departures by route ID and date. – read more",
+     "- `stats_by_agency_route_stop_hour` provides the number of arrivals/departures by agency ID, route ID, stop ID & hour. – read more"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    112,
+    84,
+    86
+   ],
+   [
+    "replace",
+    112,
+    113,
+    86,
+    87,
+    [
+     "As an example, we're going to use the `arrivals_departures` view to query all *absolute* departures at `de:11000:900120003` (*S Ostkreuz Bhf (Berlin)*) between `2022-03-23T12:30+01` and `2022-03-23T12:35+01`:"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    144,
+    87,
+    118
+   ],
+   [
+    "replace",
+    144,
+    148,
+    118,
+    119,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    119,
+    120
+   ],
+   [
+    "delete",
+    149,
+    150,
+    120,
+    120
+   ],
+   [
+    "equal",
+    150,
+    157,
+    120,
+    127
+   ],
+   [
+    "replace",
+    157,
+    235,
+    127,
+    128,
+    [
+     "…（78 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    237,
+    128,
+    130
+   ],
+   [
+    "replace",
+    237,
+    238,
+    130,
+    131,
+    [
+     "Some notable limitations mentioned in the PostgreSQL 15 documentation on date/time types:"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    249,
+    131,
+    142
+   ],
+   [
+    "replace",
+    249,
+    250,
+    142,
+    143,
+    [
+     "Instead of installing via `npm`, you can use the `ghcr.io/public-transport/gtfs-via-postgres` Docker image:"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    276,
+    143,
+    169
+   ],
+   [
+    "replace",
+    276,
+    281,
+    169,
+    170,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    285,
+    170,
+    174
+   ],
+   [
+    "replace",
+    285,
+    286,
+    174,
+    175,
+    [
+     "postgis-gtfs-importer imports GTFS Schedule data into a PostGIS database using `gtfs-via-postgres`. It allows running a production service (e.g. an API) on top of programmatically re-imported data from a periodically changing GTFS feed without downtime."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    287,
+    175,
+    176
+   ],
+   [
+    "replace",
+    287,
+    288,
+    176,
+    177,
+    [
+     "Because it works as atomically) as possible with PostgreSQL, it makes the import pipeline *robust*, even if an import fails or if simultaneous imports get started."
+    ]
+   ],
+   [
+    "equal",
+    288,
+    291,
+    177,
+    180
+   ],
+   [
+    "replace",
+    291,
+    292,
+    180,
+    181,
+    [
+     "If you want to export data from the database, use the `COPY` command; On an M1 MacBook Air#Third_generation_(Retina_with_Apple_silicon)), PostgreSQL 15 can export about 500k `connections` rows per second."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    301,
+    181,
+    190
+   ],
+   [
+    "replace",
+    301,
+    302,
+    190,
+    191,
+    [
+     "If you want to find stops by (geo)location, run `gtfs-via-postgres` with `--stops-location-index`. This will create a spatial index on `stops.stop_loc`, so that most PostGIS functions & operators make use of it."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    305,
+    191,
+    194
+   ],
+   [
+    "replace",
+    305,
+    306,
+    194,
+    195,
+    [
+     "The `--postgraphile` flag changes the SQL generated by `gtfs-via-postgres` slightly, so that you get a reasonably idiomatic GraphQL API out-of-the-box when running PostGraphile v4 on it:"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    325,
+    195,
+    214
+   ],
+   [
+    "replace",
+    325,
+    326,
+    214,
+    215,
+    [
+     "- serve a fully configured GraphiQL UI at `/graphiql`"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    215,
+    216
+   ],
+   [
+    "replace",
+    327,
+    328,
+    216,
+    217,
+    [
+     "- allow using PostgreSQL's `EXPLAIN` via GraphQL"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    334,
+    217,
+    223
+   ],
+   [
+    "replace",
+    334,
+    335,
+    223,
+    224,
+    [
+     "**As an example for the GraphQL API, check out the test query** or open the GraphiQL UI served at `localhost:3000/graphiql`."
+    ]
+   ],
+   [
+    "equal",
+    335,
+    338,
+    224,
+    227
+   ],
+   [
+    "replace",
+    338,
+    339,
+    227,
+    228,
+    [
+     "With the `--postgrest` flag, `gtfs-via-postgres` will augment the schema with a `web_anon` role and some comments, so that when running PostgREST on the database, you will get a powerful REST API."
+    ]
+   ],
+   [
+    "equal",
+    339,
+    340,
+    228,
+    229
+   ],
+   [
+    "replace",
+    340,
+    341,
+    229,
+    230,
+    [
+     "read more"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    344,
+    230,
+    233
+   ],
+   [
+    "replace",
+    344,
+    346,
+    233,
+    234,
+    [
+     "The `docs` directory contains more instructions on how to use `gtfs-via-postgres`."
+    ]
+   ],
+   [
+    "equal",
+    346,
+    349,
+    234,
+    237
+   ],
+   [
+    "replace",
+    349,
+    350,
+    237,
+    238,
+    [
+     "When matching time values from `stop_times` against dates from `calendar`/`calendar_dates`, you have to take into account that **GTFS Time values can be >24h and are not relative to the beginning of the day but relative to noon - 12h**. (There are a few libraries that don't do this.)"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    362,
+    238,
+    250
+   ],
+   [
+    "replace",
+    362,
+    363,
+    250,
+    251,
+    [
+     "For example, when querying all *absolute* departures at `de:11000:900120003` (*S Ostkreuz Bhf (Berlin)*) between `2022-03-23T12:30+01` and `2022-03-23T12:35+01` within the 2022-02-25 *VBB* feed, filtering by `date` speeds it up nicely (Apple M1, PostgreSQL 14.2):"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    380,
+    251,
+    268
+   ],
+   [
+    "replace",
+    380,
+    384,
+    268,
+    269,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    384,
+    385,
+    269,
+    270
+   ],
+   [
+    "delete",
+    385,
+    386,
+    270,
+    270
+   ],
+   [
+    "equal",
+    386,
+    389,
+    270,
+    273
+   ],
+   [
+    "replace",
+    389,
+    390,
+    273,
+    274,
+    [
+     "With all use cases I could think of, `gtfs-via-postgres` is reasonably fast. If there's a particular kind of query that you think should be faster, please open an Issue!"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    391,
+    274,
+    275
+   ],
+   [
+    "replace",
+    391,
+    392,
+    275,
+    276,
+    [
+     "The following benchmarks were run with the 2022-07-01 VBB GTFS dataset (41k `stops`, 6m `stop_times`, 207m arrivals/departures) using `gtfs-via-postgres@4.11.9` and PostgreSQL 18.1 on an M2 MacBook Air running macOS 14.8; All measurements are in milliseconds."
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    276,
+    277
+   ],
+   [
+    "replace",
+    393,
+    416,
+    277,
+    299,
+    [
+     "|query|avg|min|p25|p50|p75|p95|p99|max|iterations|",
+     "|-|-|-|-|-|-|-|-|-|-|",
+     "|<pre>SELECT * FROM stops ORDER BY ST_Distance(stop_loc::geometry, ST_SetSRID(ST_MakePoint(9.7, 50.547), 4326)) ASC LIMIT 100</pre>|15|14.506|15|15|15|15|15|14.658|170|",
+     "|<pre>SELECT * FROM arrivals_departures WHERE route_short_name = 'S1' AND t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02') AND date <= dates_filter_max('2022-08-09T07:30+02')</pre>|22|21.77|22|22|22|23|24|24.999|90|",
+     "|<pre>SELECT * FROM arrivals_departures WHERE station_id = 'de:11000:900100001' -- S+U Friedrichstr. (Berlin) AND t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02') AND date <= dates_filter_max('2022-08-09T07:30+02')</pre>|19|18.939|19|19|19|20|21|21.706|170|",
+     "|<pre>SELECT * FROM arrivals_departures WHERE station_id = 'de:11000:900100001' -- S+U Friedrichstr. (Berlin) AND t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02') AND date <= dates_filter_max('2022-08-09T07:30+02') AND stop_sequence = 0</pre>|5|5.375|5|5|5|6|6|5.684|500|",
+     "|<pre>SELECT * FROM arrivals_departures WHERE stop_id = 'de:11000:900100001::4' -- S+U Friedrichstr. (Berlin) AND t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02') AND date <= dates_filter_max('2022-08-09T07:30+02')</pre>|8|8.163|8|8|8|8|8|9.107|400|",
+     "|<pre>SELECT * FROM arrivals_departures WHERE trip_id = '168977951' AND date > '2022-08-08' AND date <= '2022-08-09'</pre>|2|2.085|2|2|2|2|2|2.277|500|",
+     "|<pre>SELECT count(*) FROM arrivals_departures WHERE stop_id = 'de:11000:900100001::4' -- S+U Friedrichstr. (Berlin)</pre>|67|66.065|67|67|67|67|69|68.927|50|",
+     "|<pre>SELECT count(*) FROM arrivals_departures WHERE stop_id = 'definitely-non-existent'</pre>|5|5.379|5|5|6|6|6|6.351|500|",
+     "|<pre>SELECT * FROM arrivals_departures WHERE t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02'::timestamp with time zone) AND date <= dates_filter_max('2022-08-09T07:30+02'::timestamp with time zone)</pre>|2734|2698.415|2704|2711|2738|2804|2817|2819.877|5|",
+     "|<pre>SELECT * FROM arrivals_departures WHERE t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= '2022-08-08' AND date <= '2022-08-09'</pre>|2153|1781.159|1886|2156|2183|2642|2734|2756.867|5|",
+     "|<pre>SELECT * FROM connections WHERE route_short_name = 'S1' AND t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02') AND date <= dates_filter_max('2022-08-09T07:30+02')</pre>|84|82.654|83|84|84|84|84|84.33|20|",
+     "|<pre>SELECT * FROM connections WHERE from_station_id = 'de:11000:900100001' -- S+U Friedrichstr. (Berlin) AND t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02') AND date <= dates_filter_max('2022-08-09T07:30+02')</pre>|58|57.796|58|58|58|58|58|58.308|50|",
+     "|<pre>SELECT * FROM connections WHERE from_station_id = 'de:11000:900100001' -- S+U Friedrichstr. (Berlin) AND t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02') AND date <= dates_filter_max('2022-08-09T07:30+02') AND from_stop_sequence = 0</pre>|10|9.851|10|10|10|11|11|12.626|300|",
+     "|<pre>SELECT * FROM connections WHERE from_stop_id = 'de:11000:900100001::4' -- S+U Friedrichstr. (Berlin) AND t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02') AND date <= dates_filter_max('2022-08-09T07:30+02')</pre>|14|13.467|14|14|14|14|14|13.714|200|",
+     "|<pre>SELECT * FROM connections WHERE trip_id = '168977951' AND date > '2022-08-08' AND date <= '2022-08-09'</pre>|4|3.577|4|4|4|4|5|6.152|500|",
+     "|<pre>SELECT count(*) FROM connections WHERE from_stop_id = 'de:11000:900100001::4' -- S+U Friedrichstr. (Berlin)</pre>|87|86.362|87|87|87|87|87|87.518|40|",
+     "|<pre>SELECT count(*) FROM connections WHERE from_stop_id = 'definitely-non-existent'</pre>|8|7.237|8|8|8|8|9|13.125|500|",
+     "|<pre>SELECT * FROM connections WHERE t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= dates_filter_min('2022-08-09T07:10+02'::timestamp with time zone) AND date <= dates_filter_max('2022-08-09T07:30+02'::timestamp with time zone) ORDER BY t_departure LIMIT 100</pre>|15584|15517.829|15549|15580|15617|15647|15653|15654.632|3|",
+     "|<pre>SELECT * FROM connections WHERE t_departure >= '2022-08-09T07:10+02' AND t_departure <= '2022-08-09T07:30+02' AND date >= '2022-08-08' AND date <= '2022-08-09' ORDER BY t_departure LIMIT 100</pre>|6816|6559.442|6685|6811|6945|7052|7074|7079.167|3|",
+     "|<pre>SELECT * FROM stats_by_route_date WHERE route_id = '17452_900' -- M4 AND date >= '2022-08-08' AND date <= '2022-08-14' AND is_effective = true</pre>|688|677.417|678|678|681|715|722|723.411|5|"
+    ]
+   ],
+   [
+    "equal",
+    416,
+    423,
+    299,
+    306
+   ],
+   [
+    "replace",
+    423,
+    424,
+    306,
+    307,
+    [
+     "`gtfs-via-duckdb` is a fork of and the spiritual successor to `gtfs-via-postgres`, importing GTFS into a *DuckDB* database file. The two have the same features, shortcomings and conceptual design (runtime access to the GTFS happens using SQL only)."
+    ]
+   ],
+   [
+    "equal",
+    424,
+    425,
+    307,
+    308
+   ],
+   [
+    "replace",
+    425,
+    426,
+    308,
+    309,
+    [
+     "`gtfs-via-duckdb`'s usage in production systems is much less complex: `duckdb-gtfs-importer` can enable the *robustness* and *atomicity* goals explained in `postgis-gtfs-importer`'s readme with a much simpler design (>1 DB files, symlink to the latest)."
+    ]
+   ],
+   [
+    "equal",
+    426,
+    427,
+    309,
+    310
+   ],
+   [
+    "replace",
+    427,
+    428,
+    310,
+    311,
+    [
+     "Because DuckDB tends to be more efficient than PostgreSQL, with the mostly OLAP-like queries run for GTFS analysis, so `gtfs-via-duckdb` imports datasets faster and queries for common use cases usually run faster."
+    ]
+   ],
+   [
+    "equal",
+    428,
+    431,
+    311,
+    314
+   ],
+   [
+    "replace",
+    431,
+    432,
+    314,
+    315,
+    [
+     "Node-GTFS (`gtfs` npm package) is widely used. It covers three use cases: importing GTFS into an SQLite DB, exporting GTFS/GeoJSON from it, and generating HTML or charts for humans."
+    ]
+   ],
+   [
+    "equal",
+    432,
+    435,
+    315,
+    318
+   ],
+   [
+    "replace",
+    435,
+    438,
+    318,
+    321,
+    [
+     "- it doesn't handle GTFS Time values correctly (1/2, checked on 2022-03-01)",
+     "- it doesn't always work in a streaming/iterative way (1/2, checked on 2022-03-01)",
+     "- sometimes does synchronous fs calls (1/2, checked on 2022-03-01)"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    441,
+    321,
+    324
+   ],
+   [
+    "replace",
+    441,
+    442,
+    324,
+    325,
+    [
+     "gtfs-sequelize uses sequelize.js to import a GTFS feed and query the DB."
+    ]
+   ],
+   [
+    "equal",
+    442,
+    445,
+    325,
+    328
+   ],
+   [
+    "replace",
+    445,
+    446,
+    328,
+    329,
+    [
+     "- it doesn't handle GTFS Time values correctly (1/2, cheked on 2022-03-01)"
+    ]
+   ],
+   [
+    "equal",
+    446,
+    451,
+    329,
+    334
+   ],
+   [
+    "replace",
+    451,
+    452,
+    334,
+    335,
+    [
+     "There are several forks of the original outdated project; fitnr's fork seems to be the most recent one."
+    ]
+   ],
+   [
+    "equal",
+    452,
+    459,
+    335,
+    342
+   ],
+   [
+    "replace",
+    459,
+    469,
+    342,
+    351,
+    [
+     "- gtfsdb – Python library for converting GTFS files into a relational database.",
+     "- pygtfs – A python (2/3) library for GTFS (fork of gtfs-sql)",
+     "- gtfspy – Public transport network analysis using Python and SQLite.",
+     "- GTFS Kit – A Python 3.6+ tool kit for analyzing General Transit Feed Specification (GTFS) data.",
+     "- GtfsToSql – Parses a GTFS feed into an SQL database (Java)",
+     "- gtfs-to-sqlite – A tool for generating an SQLite database from a GTFS feed. (Java)",
+     "- gtfs-lib – Java library & CLI for importing GTFS files into a PostgreSQL database.",
+     "- gtfs-schema – PostgreSQL schemas for GTFS feeds. (plain SQL)",
+     "- markusvalo/HSLtraffic – Scripts to create a PostgreSQL database for HSL GTFS-data. (plain SQL)"
+    ]
+   ],
+   [
+    "equal",
+    469,
+    471,
+    351,
+    353
+   ],
+   [
+    "replace",
+    471,
+    481,
+    353,
+    354,
+    [
+     "This project is dual-licensed: **My (@derhuerst) contributions are licensed under the *Prosperity Public License*, contributions of other people are licensed as Apache 2.0**."
+    ]
+   ],
+   [
+    "equal",
+    481,
+    482,
+    354,
+    355
+   ],
+   [
+    "replace",
+    482,
+    486,
+    355,
+    356,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "698cdf85936d+2": {
+  "fn": "Agantila/LLM-Wikitila",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "> English version: README.en.md"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "|Vorteil|Messwert|"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    19,
+    12,
+    19,
+    [
+     "|Trefferquote|**R@10 1,00** auf einem 50-Fragen-Katalog; `graphify query` (Graph-RAG) erreicht 0,25|",
+     "|Geschwindigkeit|~20 ms je Suche, deterministisch, kein Dienst, keine GPU|",
+     "|Beleg statt Behauptung|Originalpassage + Zitat statt Graph-Zusammenfassung|",
+     "|Gültigkeit statt Relevanz|Authority-Register löst ab, welche Quelle maßgeblich und noch aktuell ist|",
+     "|Kontrolliertes „nicht belegt“|Signale für fehlendes Wissen statt plausibler Falschantwort|",
+     "|Kein Vector Store nötig|SQLite FTS5/BM25 reicht; Embedding ist messbar überflüssig|",
+     "|Kein Modell im Laufzeitpfad|Decision-Modelle verschlechterten Ranking und Antwort-Tor gemessen|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "Details und Messgrenzen: docs/benefits.de.md · docs/validation.de.md"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    28,
+    21,
+    28
+   ],
+   [
+    "replace",
+    28,
+    34,
+    28,
+    29,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    40,
+    29,
+    35
+   ],
+   [
+    "replace",
+    40,
+    42,
+    35,
+    37,
+    [
+     "Für Menschen: docs/installation.de.md — Voraussetzungen, Schritt für Schritt, Fehlerbehebung.",
+     "Für KI-Agenten: docs/agentic-setup.de.md — Installation, Nutzung, Antwortvertrag und Pflege-Regeln für Agenten (Englisch: docs/agentic-setup.en.md)."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    49,
+    37,
+    44
+   ],
+   [
+    "replace",
+    49,
+    65,
+    44,
+    45,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    69,
+    45,
+    49
+   ],
+   [
+    "replace",
+    69,
+    70,
+    49,
+    50,
+    [
+     "LLM-Wikitila Stack-Komposition"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    50,
+    51
+   ],
+   [
+    "replace",
+    71,
+    72,
+    51,
+    52,
+    [
+     "Quelle: diagrams/stack-komposition.excalidraw — editierbar unter excalidraw.com (Datei per Drag-and-Drop öffnen); neu erzeugen mit `diagrams/generate_diagram.py`. Beschreibung der Komponenten: docs/architecture.de.md."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    75,
+    52,
+    55
+   ],
+   [
+    "replace",
+    75,
+    76,
+    55,
+    56,
+    [
+     "|Baustein|Anforderung|Pflicht?|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    56,
+    57
+   ],
+   [
+    "replace",
+    77,
+    82,
+    57,
+    62,
+    [
+     "|Python|**≥ 3.11** (Standardbibliothek reicht für die Suche)|ja|",
+     "|SQLite mit FTS5|in Python ≥ 3.11 enthalten|ja|",
+     "|Ollama + `maternion/ling-3.0-tiny:8b`|nur für den Wissensgraphen|optional|",
+     "|Graphify-Paket (`pip install graphifyy==0.4.16 networkx==3.6.1`)|nur für den Wissensgraphen|optional|",
+     "|`embeddinggemma:latest` (Ollama) + `numpy`|nur für optionales Embedding|optional|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    87,
+    62,
+    67
+   ],
+   [
+    "replace",
+    87,
+    88,
+    67,
+    68,
+    [
+     "|Thema|Deutsch|English|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    68,
+    69
+   ],
+   [
+    "replace",
+    89,
+    96,
+    69,
+    76,
+    [
+     "|Installation|docs/installation.de.md|docs/installation.en.md|",
+     "|Architektur|docs/architecture.de.md|docs/architecture.en.md|",
+     "|Authority-Register|docs/authority-register.de.md|docs/authority-register.en.md|",
+     "|Betrieb & Pflege|docs/operations.de.md|docs/operations.en.md|",
+     "|Validierung|docs/validation.de.md|docs/validation.en.md|",
+     "|Belegte Vorteile|docs/benefits.de.md|docs/benefits.en.md|",
+     "|Agentische Installation|docs/agentic-setup.de.md|docs/agentic-setup.en.md|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    76,
+    79
+   ],
+   [
+    "replace",
+    99,
+    100,
+    79,
+    80,
+    [
+     "MIT — offen und kommerziell nutzbar. Entwickelt von AGANTILA als LLM-Wiki-Erweiterung mit Graphify und belegtem Evidenz-Vertrag."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

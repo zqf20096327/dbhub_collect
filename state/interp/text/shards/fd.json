@@ -3466,5 +3466,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f29284d9ed73": {
+  "identity": {
+   "one_liner": "Home Assistant 侧边栏面板，用于分析、清理 recorder 数据库并修正能源仪表盘数据",
+   "review": "Database Doctor 是一个 Home Assistant 集成（原名 Energy Doctor，0.8 起改名），在侧边栏添加面板：按设备分组展示数据库占用与增长预测，通过 Home Assistant 自带功能（Adjust sum、statistics 导入、purge）修正能源仪表盘中的尖峰与缺口数据，并基于 Zigbee2MQTT 的 throttle/filtered_attributes 降低采样频率。数据修改不使用原生 SQL，清理前可备份，多数操作可撤销。通过 HACS 安装，支持英语、丹麦语、德语、瑞典语和荷兰语。",
+   "highlights": [
+    "按设备分析数据库占用，结合 YAML（含 !include 与 packages）读取实体实际用途，自动化与模板仅引用即时值的实体历史可清理",
+    "用 recorder 自带功能修复能源数据：尖峰与负小时经 Adjust sum 调整、离线缺口按时段摊回、统计警告集中处理，所有修复可撤销",
+    "按整屋/分组/单设备设置 Zigbee2MQTT 采样节流与保留时长，新设备自动套用；每天两次巡检并提示新的异常数据"
+   ],
+   "use_cases": [
+    "Home Assistant 数据库持续增长导致启动和备份变慢，需要定位占用来源并安全清理",
+    "电表/燃气表因重置或离线在能源仪表盘产生异常数值，需要修正",
+    "使用 Zigbee2MQTT 的家庭希望降低纯传感器设备的记录频率"
+   ]
+  },
+  "sha": "f29284d9ed73",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

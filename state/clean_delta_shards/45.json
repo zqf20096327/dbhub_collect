@@ -32567,5 +32567,428 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "0c79bea1e9cd+2": {
+  "fn": "c-sakel/open-invoice-germany",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "OpenInvoice Germany — free self-hostable invoicing with XRechnung / EN 16931, GoBD and § 14 UStG"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    9,
+    1,
+    7
+   ],
+   [
+    "replace",
+    9,
+    13,
+    7,
+    9,
+    [
+     "CI",
+     "&nbsp;·&nbsp; Licence: **AGPL-3.0** &nbsp;·&nbsp; **English** · Deutsch"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    9,
+    12
+   ],
+   [
+    "replace",
+    16,
+    19,
+    12,
+    13,
+    [
+     "> ⚠️ **Not tax or legal advice.** GoBD compliance additionally requires the user's own process documentation (Verfahrensdokumentation). All legal references with sources live in **COMPLIANCE.md** (single source of truth). No warranty."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    13,
+    16
+   ],
+   [
+    "replace",
+    22,
+    23,
+    16,
+    17,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    17,
+    18
+   ],
+   [
+    "replace",
+    24,
+    32,
+    18,
+    26,
+    [
+     "|Dashboard with receivables, cash flow by due date and monthly revenue|Invoice list with status tabs, cash-flow band and quick actions|",
+     "|**Dashboard** — receivables, due dates, revenue|**Invoices** — status tabs, filters, record payments|",
+     "|Invoice editor with line items, tax rates and totals|Detail view of a partly paid invoice with PDF preview, payments and document chain|",
+     "|**Editor** — line items, discounts, live totals|**Document view** — PDF, payments, archive, document chain|",
+     "|Layout designer with block order, columns and live preview|Invoice PDF following DIN 5008 with GiroCode and embedded e-invoice|",
+     "|**Layout designer** — blocks, columns, live preview|**PDF** — DIN 5008, GiroCode, ZUGFeRD/PDF/A-3|",
+     "|Dunning overview with overdue invoices, ageing and dunning levels|Customer list with number, city, type and VAT ID|",
+     "|**Dunning** — ageing, dunning levels|**Customers** — master data, B2B/B2C|"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    41,
+    26,
+    35
+   ],
+   [
+    "replace",
+    41,
+    42,
+    35,
+    36,
+    [
+     "The assistant calls the right tools in order (create customer/service → invoice → finalise → PDF + XRechnung). Finalising **enforces** the § 14 UStG mandatory fields — non-compliant invoices are rejected. The invoice is created and stored locally. Setup + examples: **docs/MCP.md**."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    47,
+    36,
+    41
+   ],
+   [
+    "replace",
+    47,
+    48,
+    41,
+    42,
+    [
+     "> 🔒 **Data protection (GDPR).** The app core runs **100% locally**, but the MCP feature is optional and **not automatically GDPR-compliant**: when you let a **cloud LLM** create the invoice, the data you describe (customer name, items, amounts = personal data) is sent to that provider and processed on your behalf (Art. 28 GDPR). For business use with real personal data, either use a **local model** (the MCP server is model-agnostic) or a **commercial API with a DPA** — consumer chat subscriptions usually come without a DPA. List the provider as a sub-processor in your records and privacy policy. Details: **docs/MCP.md**. Not legal advice."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    57,
+    42,
+    51
+   ],
+   [
+    "replace",
+    57,
+    58,
+    51,
+    52,
+    [
+     "Interactive docs (Swagger UI, session login or API key): `GET /api/docs`. Machine-readable spec: `GET /api/v1/openapi.json`. Full walkthrough with curl examples (customer → invoice → finalise → PDF/XRechnung → payment): **docs/API.md**."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    52,
+    53
+   ],
+   [
+    "replace",
+    59,
+    60,
+    53,
+    54,
+    [
+     "Event-driven **webhooks** (`/api/v1/Webhook`, scope `admin`) deliver events like `invoice.finalized` or `payment.recorded` to your own endpoint — HMAC-signed, with retry/backoff and an SSRF-guarded, https-only outbox. Events, payload shape, and signature-verification examples in Node.js and PHP: **docs/WEBHOOKS.md**."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    109,
+    54,
+    103
+   ],
+   [
+    "replace",
+    109,
+    110,
+    103,
+    104,
+    [
+     "In productive use since September 2026 for issuing real invoices. Everything listed above works and is covered by tests; e-invoices pass the official validators in every CI run. Not part of the project by design: financial accounting and multi-user/roles (the DATEV export only hands data to your tax advisor as a file). The software does not produce ZM (§ 18a UStG) or OSS returns (§ 18j UStG). See docs/ARCHITEKTUR.md and the honest list of **known limitations**."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    122,
+    104,
+    116
+   ],
+   [
+    "replace",
+    122,
+    123,
+    116,
+    117,
+    [
+     "Same tools via MCP: `convert_document`, `create_delivery_note`, `set_document_status`, `duplicate_document`, `create_partial_invoice`, `create_downpayment_invoice`, `create_final_invoice`, `get_billing_state`. Details: docs/ARCHITEKTUR.md, limitations: docs/LIMITATIONEN.md."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    137,
+    117,
+    131
+   ],
+   [
+    "replace",
+    137,
+    138,
+    131,
+    132,
+    [
+     "Money as integer cents, quantities as integer milli-units, tax per EN-16931 group — see docs/ARCHITEKTUR.md."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    147,
+    132,
+    141
+   ],
+   [
+    "replace",
+    147,
+    151,
+    141,
+    142,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    157,
+    142,
+    148
+   ],
+   [
+    "replace",
+    157,
+    158,
+    148,
+    149,
+    [
+     "**In the app:** `Settings` (create company) → `Customers` → `New invoice` → add line items → **Finalise** (assigns the number, makes it GoBD-immutable) → **PDF** and **XRechnung** export. Full step-by-step guide: **docs/ANLEITUNG.md** (German)."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    211,
+    149,
+    202
+   ],
+   [
+    "replace",
+    211,
+    212,
+    202,
+    203,
+    [
+     " already matches the baseline. `migrate resolve --applied 0_init` below is safe."
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    203,
+    204
+   ],
+   [
+    "replace",
+    213,
+    218,
+    204,
+    209,
+    [
+     " `CREATE INDEX` / `ALTER TABLE … ADD CONSTRAINT` (foreign keys)**: apply only",
+     " the statements that belong to `0_init` (see the `grep` rule above); leave out",
+     " statements for columns/tables that come from later migrations. Review the",
+     " remaining SQL, apply it with `docker compose run --rm app npx prisma db",
+     " execute --url \"$DATABASE_URL\" --stdin`, then continue with `migrate resolve`."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    209,
+    210
+   ],
+   [
+    "replace",
+    219,
+    221,
+    210,
+    212,
+    [
+     " `migrate resolve`. The database holds data the baseline does not account for —",
+     " get a second opinion before proceeding."
+    ]
+   ],
+   [
+    "equal",
+    221,
+    242,
+    212,
+    233
+   ],
+   [
+    "replace",
+    242,
+    243,
+    233,
+    234,
+    [
+     "SMTP only — no built-in Resend/SES integration (see docs/ARCHITEKTUR.md). Steps:"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    248,
+    234,
+    239
+   ],
+   [
+    "replace",
+    248,
+    249,
+    239,
+    240,
+    [
+     "5. Mail is sent as plain text; an optional HTML part (off by default, **Einstellungen → E-Mail → HTML-Version mitsenden**) is added alongside it. There is no delivery/bounce tracking (status stays `SENT`) — see docs/LIMITATIONEN.md for the full list of email limitations."
+    ]
+   ],
+   [
+    "equal",
+    249,
+    268,
+    240,
+    259
+   ],
+   [
+    "replace",
+    268,
+    269,
+    259,
+    260,
+    [
+     "This is essentially the same Schematron check as the **KoSIT validator** — and runs as a **hard gate in CI**. The KoSIT validator (Java) additionally runs there as an independent cross-check (also covering the upstream XSD check). Fast core rules are part of `npm test`."
+    ]
+   ],
+   [
+    "equal",
+    269,
+    272,
+    260,
+    263
+   ],
+   [
+    "replace",
+    272,
+    273,
+    263,
+    264,
+    [
+     "The Docker image contains the KoSIT validator 1.6.3 (Apache-2.0, includes Saxon-HE under MPL 2.0) with the XRechnung configuration 3.0.2 (Apache-2.0) and the EN 16931 rules (EUPL-1.2, compatible with AGPL-3.0), run as a separate process with a trimmed OpenJDK 21 runtime (GPL-2.0 with Classpath Exception). The artefacts are downloaded at build time with fixed SHA-256 sums (`scripts/fetch-einvoice-validator.sh`, pins in `assets/einvoice-validation/pins.env`); licence texts and sources are listed in assets/einvoice-validation/LICENSES/README.md and shipped in the image under `/opt/validator/LICENSES`. For a local run without Docker call the script once and set `EINVOICE_JAVA` (Java 17 or newer). `INCOMING_VALIDATION=off` disables the check."
+    ]
+   ],
+   [
+    "equal",
+    273,
+    275,
+    264,
+    266
+   ],
+   [
+    "replace",
+    275,
+    278,
+    266,
+    267,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    280,
+    267,
+    269
+   ],
+   [
+    "replace",
+    280,
+    282,
+    269,
+    271,
+    [
+     "Developed and maintained by sakel-it.de.",
+     "Originally based on OpenInvoice Germany by AutomationsManufaktur (original repository); licence and copyright notices remain in effect."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    284,
+    271,
+    273
+   ],
+   [
+    "replace",
+    284,
+    286,
+    273,
+    274,
+    [
+     "**AGPL-3.0.** You may use, modify and self-host the software. Anyone who runs it as a network service must make the (modified) source available to its users — keeping the project free for everyone. Rationale for the licence choice: docs/ARCHITEKTUR.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

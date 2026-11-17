@@ -33513,5 +33513,608 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "4cba8110165e+2": {
+  "fn": "Fanduzi/DeltaScope",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    4,
+    0,
+    2
+   ],
+   [
+    "replace",
+    4,
+    8,
+    2,
+    6,
+    [
+     "Release",
+     "Platform",
+     "Go Version",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    6,
+    7
+   ],
+   [
+    "replace",
+    9,
+    10,
+    7,
+    8,
+    [
+     "English 简体中文"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    8,
+    9
+   ],
+   [
+    "replace",
+    11,
+    13,
+    9,
+    10,
+    [
+     "Changelog Security License Release Notes"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    10,
+    13
+   ],
+   [
+    "replace",
+    16,
+    37,
+    13,
+    24,
+    [
+     " MySQL DML ",
+     " deltascope audit --sql &quot;delete from users&quot; returns Verdict reject and blocker dml.where.require",
+     " <code>delete from users</code> ",
+     "",
+     " MySQL DDL ",
+     " deltascope audit --sql &quot;alter table users drop column email&quot; returns Verdict pass and notice ddl.alter.drop_column.notice",
+     " <code>alter table users drop column email</code> ",
+     "",
+     " PostgreSQL ",
+     " deltascope audit --dialect postgresql --sql &quot;alter table users drop column email&quot; returns Verdict review and warning ddl.pg.alter.drop_column.advisory",
+     " <code>--dialect postgresql</code> <code>alter table users drop column email</code> "
+    ]
+   ],
+   [
+    "equal",
+    37,
+    71,
+    24,
+    58
+   ],
+   [
+    "replace",
+    71,
+    76,
+    58,
+    59,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    78,
+    59,
+    61
+   ],
+   [
+    "replace",
+    78,
+    79,
+    61,
+    62,
+    [
+     "More install options: MCP Quick Start."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    62,
+    65
+   ],
+   [
+    "replace",
+    82,
+    83,
+    65,
+    66,
+    [
+     "|Project|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    66,
+    67
+   ],
+   [
+    "replace",
+    84,
+    88,
+    67,
+    71,
+    [
+     "|Yearning / SQLE|Work-order / pre-approval platforms with a UI|",
+     "|sqlfluff|SQL linter and formatter|",
+     "|goInception|Chinese audit engine, often used behind Archery|",
+     "|**DeltaScope**|CLI + CI + MCP. No ticket UI. Works offline, or connect for live metadata.|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    103,
+    71,
+    86
+   ],
+   [
+    "replace",
+    103,
+    108,
+    86,
+    87,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    122,
+    87,
+    101
+   ],
+   [
+    "replace",
+    122,
+    127,
+    101,
+    102,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    150,
+    102,
+    125
+   ],
+   [
+    "replace",
+    150,
+    165,
+    125,
+    126,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    169,
+    126,
+    130
+   ],
+   [
+    "replace",
+    169,
+    170,
+    130,
+    131,
+    [
+     "MySQL/TiDB requests have a fixed quota of **1024 top-level normalized statements** for ordered enrichment and subsequent rule evaluation. Statement 1024 is processed normally; statement 1025 and every later statement remain in the result with `coverage.status=incomplete` and one `unsupported` entry whose feature is `audit.resource_limit`. This is not a policy rule and cannot be disabled: the partial result has at least `review` (a prior `reject` stays), with the existing unsupported error channel (application/SDK `ErrUnsupportedStatement`, CLI exit 1 even with `--fail-on none`, HTTP 400, MCP `isError=true`). A genuine parser failure still takes precedence, including CLI exit 2. The check runs **after parsing/extraction**; it does not bound SQL size, parsing depth, elapsed time, memory, or OOM risk. Input parsing, normalization, and retained result storage can still grow with input. PostgreSQL is unchanged. Splitting a migration into requests is not automatically equivalent: earlier derived schema facts are not carried across requests. See the ordered-audit quota contract."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    131,
+    132
+   ],
+   [
+    "replace",
+    171,
+    172,
+    132,
+    133,
+    [
+     "Recognized MySQL/TiDB stored-object lifecycle statements (`PROCEDURE`, `FUNCTION`, `TRIGGER`, `EVENT` create/alter/drop) preserve outer migration table facts: defining a body does not execute its SQL, and dropping one does not drop a same-named table. This only skips outer table-state mutation — the statement itself still audits: MySQL bodies run through the shared static member analyzer (`routine.*`, `trigger.*`, `event.*` scoped evidence including bounded `*.body.*` members), triggers bind `OLD`/`NEW` legality to the declared event, and events model schedule shape with an enabled-execution warning; TiDB forms keep their vendor boundary. Earlier contamination and resource limits are not cleared, and each statement still consumes one statement slot. No body executes, no scheduler or trigger action is simulated, and TiDB gains no stored-object support. See stored-object lifecycle and outer table state."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    219,
+    133,
+    180
+   ],
+   [
+    "replace",
+    219,
+    220,
+    180,
+    181,
+    [
+     "For a complete GitHub Actions workflow that combines a `config lint --strict` gate, inline `github-actions` annotations, and a `github-summary` job summary, see github-actions.yml. Output formats are documented in cli.md."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    221,
+    181,
+    182
+   ],
+   [
+    "replace",
+    221,
+    222,
+    182,
+    183,
+    [
+     "For GitLab CI, use `--format gitlab-codequality` and publish `gl-code-quality-report.json` as a Code Quality artifact; see use-deltascope-in-gitlab-ci.md."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    233,
+    183,
+    194
+   ],
+   [
+    "replace",
+    233,
+    236,
+    194,
+    197,
+    [
+     "- MySQL DDL audit tool — catch risky MySQL schema changes",
+     "- PostgreSQL DDL audit tool — review PostgreSQL schema changes and DCL",
+     "- SQL migration risk checker — CI and AI workflow integration"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    239,
+    197,
+    200
+   ],
+   [
+    "replace",
+    239,
+    240,
+    200,
+    201,
+    [
+     "Every tag publishes archives named `deltascope_<version>_<os>_<arch>.tar.gz` containing `deltascope`, `deltascope-server`, and `deltascope-mcp`. All archives support MySQL, TiDB, and PostgreSQL offline audit via `--dialect mysql|tidb|postgresql`. The installer script, Homebrew Cask, and npm MCP launcher all resolve platform-specific archives from GitHub Release assets. See the audit capability matrix for per-dialect coverage and release notes for version-by-version changes."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    249,
+    201,
+    210
+   ],
+   [
+    "replace",
+    249,
+    258,
+    210,
+    211,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    343,
+    211,
+    296
+   ],
+   [
+    "replace",
+    343,
+    344,
+    296,
+    297,
+    [
+     "For raw stdio TOML, native `deltascope-mcp`, direct connection, `connection_ref`, proxy setup, and common errors, see Use DeltaScope MCP."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    361,
+    297,
+    314
+   ],
+   [
+    "replace",
+    361,
+    368,
+    314,
+    315,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    402,
+    315,
+    349
+   ],
+   [
+    "replace",
+    402,
+    403,
+    349,
+    350,
+    [
+     "Paste a SQL snippet or point to a file — the agent audits it with DeltaScope and suggests fixes. See skills/README.md for full setup and usage."
+    ]
+   ],
+   [
+    "equal",
+    403,
+    406,
+    350,
+    353
+   ],
+   [
+    "replace",
+    406,
+    415,
+    353,
+    362,
+    [
+     "- Recipes",
+     "- Dev docs",
+     "- Reference docs",
+     "- Audit SQL with metadata",
+     "- Review DDL before migration",
+     "- Guard DML in CI",
+     "- Use with AI agents",
+     "- Inspect rules and config",
+     "- Troubleshoot metadata-aware audit"
+    ]
+   ],
+   [
+    "equal",
+    415,
+    418,
+    362,
+    365
+   ],
+   [
+    "replace",
+    418,
+    423,
+    365,
+    370,
+    [
+     "- Admin docs",
+     "- Concept docs",
+     "- Dev docs",
+     "- Reference docs",
+     "- Audit capability matrix"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    434,
+    370,
+    381
+   ],
+   [
+    "replace",
+    434,
+    435,
+    381,
+    382,
+    [
+     "- docs/dev/testing.md covers the full target set"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    450,
+    382,
+    397
+   ],
+   [
+    "replace",
+    450,
+    451,
+    397,
+    398,
+    [
+     "See docs/examples/runtime-config.yaml for a complete runtime config example."
+    ]
+   ],
+   [
+    "equal",
+    451,
+    458,
+    398,
+    405
+   ],
+   [
+    "replace",
+    458,
+    459,
+    405,
+    406,
+    [
+     "`POST /v1/audit` supports both offline JSON audit requests and metadata-aware requests with a `connection_id` that references a named connection defined in the server's runtime config. HTTP requests cannot submit credentials directly. The HTTP response keeps the public audit result body and adds a `context` block. See the full contract in HTTP API reference."
+    ]
+   ],
+   [
+    "equal",
+    459,
+    472,
+    406,
+    419
+   ],
+   [
+    "replace",
+    472,
+    473,
+    419,
+    420,
+    [
+     "The `connection_id` references a named connection in the server's runtime config (see docs/examples/runtime-config.yaml). The named connection can define `connect_timeout` as a Go duration string (`500ms`, `5s`, `1m`). Empty or `0s` falls back to the runtime config default. Invalid or negative values return a `400` error. MySQL, TiDB, and PostgreSQL all support metadata connect timeout."
+    ]
+   ],
+   [
+    "equal",
+    473,
+    483,
+    420,
+    430
+   ],
+   [
+    "replace",
+    483,
+    484,
+    430,
+    431,
+    [
+     "The stable public API lives in pkg/deltascope."
+    ]
+   ],
+   [
+    "equal",
+    484,
+    487,
+    431,
+    434
+   ],
+   [
+    "replace",
+    487,
+    488,
+    434,
+    435,
+    [
+     "DeltaScope keeps one audit path and exposes it through multiple entrypoints. Product-level and implementation-level diagrams live in docs/concept/architecture.md and docs/dev/architecture.md."
+    ]
+   ],
+   [
+    "equal",
+    488,
+    491,
+    435,
+    438
+   ],
+   [
+    "replace",
+    491,
+    492,
+    438,
+    439,
+    [
+     "|Module|Description|Doc|"
+    ]
+   ],
+   [
+    "equal",
+    492,
+    493,
+    439,
+    440
+   ],
+   [
+    "replace",
+    493,
+    525,
+    440,
+    472,
+    [
+     "|`cmd/deltascope`|CLI process entrypoint|README|",
+     "|`cmd/deltascope-server`|HTTP service entrypoint|README|",
+     "|`cmd/deltascope-mcp`|MCP service entrypoint|README|",
+     "|`internal/interfaces`|Transport adapter namespace|README|",
+     "|`internal/interfaces/cli`|CLI adapter layer|README|",
+     "|`internal/interfaces/http`|HTTP adapter layer|README|",
+     "|`internal/interfaces/mcp`|MCP adapter layer|README|",
+     "|`internal/application`|Use-case orchestration layer|README|",
+     "|`internal/application/audit`|Application parse/audit orchestration|README|",
+     "|`internal/application/auditmeta`|Shared metadata-aware audit preparation|README|",
+     "|`internal/application/connresolve`|Shared Transport Connection Resolution path that stops before open|README|",
+     "|`internal/application/rulepresence`|Catalog vs Default Policy vs Loaded vs Suppression|README|",
+     "|`internal/application/online`|Shared online identity, session, and bounded error boundary|README|",
+     "|`internal/application/policy`|Application policy loader|README|",
+     "|`internal/domain`|Core domain types and rules|README|",
+     "|`internal/domain/spec`|Normalized statement specifications|README|",
+     "|`internal/domain/rule`|Rule findings and level model|README|",
+     "|`internal/domain/rule/catalog`|Explanation-oriented shipped rule catalog|README|",
+     "|`internal/domain/rule/ddl`|DDL rule catalog|README|",
+     "|`internal/domain/rule/dml`|DML rule catalog|README|",
+     "|`internal/domain/policy`|Policy configuration model|README|",
+     "|`internal/domain/report`|Audit result aggregation and verdicts|README|",
+     "|`internal/infrastructure`|Infrastructure adapter layer|README|",
+     "|`internal/infrastructure/parser`|Parser adapter namespace|README|",
+     "|`internal/infrastructure/parser/tidb`|TiDB parser adapter|README|",
+     "|`internal/infrastructure/config/viper`|YAML config adapter|README|",
+     "|`internal/infrastructure/metadata/mysql`|Metadata provider for MySQL/TiDB-compatible engines|README|",
+     "|`internal/infrastructure/output`|Output renderer namespace|README|",
+     "|`internal/infrastructure/output/markdown`|Markdown renderer|README|",
+     "|`internal/infrastructure/output/json`|JSON renderer|README|",
+     "|`configs`|Example configuration files|README|",
+     "|`pkg/deltascope`|Stable public package surface|README|"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

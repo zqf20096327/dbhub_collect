@@ -2813,5 +2813,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "03ec847d8b44": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的嵌入式 SQL 数据库，内置 MVCC 事务与列式冷存储。",
+   "review": "Stoolap 是一个以 crate 形式嵌入应用的 SQL 数据库，无需外部服务器进程，面向低延迟事务负载与实时分析查询。它采用热/冷双存储架构：热区为内存 MVCC 加 WAL，冷区为带 LZ4 压缩的不可变列式文件。通过 stoolap = \"0.4\" 引入依赖即可使用，另有交互式 REPL 和 web 管理界面 Stoolap Studio。",
+   "highlights": [
+    "支持 ACID 事务与 MVCC 并发读写，语句在预编译时生成执行计划并可通过 EXPLAIN 查看",
+    "提供 B-tree、Hash、Bitmap、多列及 HNSW 向量索引，支持 VECTOR(N) 类型与近似最近邻搜索",
+    "热/冷列式存储含 zone maps、bloom 过滤器、字典编码与 LZ4 压缩，DSN 参数可配置 sync_mode 与 checkpoint_interval"
+   ],
+   "use_cases": [
+    "嵌入 Rust 应用处理低延迟事务工作负载",
+    "包含 join、CTE、窗口函数的实时分析查询",
+    "需向量检索与语义搜索（启用 semantic 特性可内置文本嵌入）的场景"
+   ]
+  },
+  "sha": "03ec847d8b44",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0727253bf249": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL Advisory Locks 的 Python 分布式应用级锁库",
+   "review": "PALs 是一个 Python 库，通过 PostgreSQL 会话级咨询锁实现分布式应用级加锁，适用于已使用 PostgreSQL 的应用，无需额外部署 Redis 等锁服务。锁可用作上下文管理器，并在连接归还池时默认调用 pg_advisory_unlock_all()。需注意咨询锁不会过期，持锁客户端挂起时其他客户端无法获取锁。通过 pip install PALs 安装。",
+   "highlights": [
+    "锁以上下文管理器形式工作，上下文退出时保证释放",
+    "连接归还 SQLAlchemy 连接池时默认调用 pg_advisory_unlock_all()，可通过 unlock_all_on_checkin=False 关闭",
+    "锁被垃圾回收时释放其连接，支持 Python 3.12 至 3.14"
+   ],
+   "use_cases": [
+    "已运行 PostgreSQL 的应用需要分布式应用级锁，且不想引入额外锁服务",
+    "需要锁在代码块结束后自动释放的任务互斥场景",
+    "高频场景下可关闭池归还解锁调用并自行监控、定期回收连接的部署"
+   ]
+  },
+  "sha": "0727253bf249",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "261d2efc2d81": {
+  "identity": {
+   "one_liner": "基于 Raft 与 MVCC 的 .NET 分布式系统，提供分布式锁、KV 存储与序列器",
+   "review": "Kahuna 是一个开源的分布式服务集群，为分布式系统提供三类组件：带 fencing token 与租约的分布式锁、支持事务与 watcher 的 KV 存储、以及全局有序 ID 序列器。架构上按分区组织数据，每个分区一个 Raft 组，事务结合 2PC 与 MVCC，支持乐观/悲观两种并发控制模式。面向 .NET 开发者，附 Kahuna.Client、限流器、Kubernetes Operator（alpha，API 可能变动）及 MIT 许可。",
+   "highlights": [
+    "基于 Raft 复制与 MVCC 快照隔离，每个分区独立 Raft 组，支持事务（2PC + 乐观/悲观并发控制）",
+    "Kahuna.Client 内置固定窗口、滑动窗口、令牌桶和并发四种限流器，预算集中存储在集群中；支持 Kahuna Script 调用注册的 C# 函数在集群侧执行业务逻辑",
+    "通过 Homebrew、.NET global tool、Docker 镜像及 Kubernetes Operator 安装运行；经 Jepsen 测试套件注入故障验证安全性"
+   ],
+   "use_cases": [
+    "需要跨节点/进程同步访问共享资源、防止竞态条件的应用",
+    "为元数据、缓存或应用状态提供容错 KV 存储",
+    "为分布式数据库、消息队列和事件驱动系统生成全局有序 ID，或多副本应用共享限流预算"
+   ]
+  },
+  "sha": "261d2efc2d81",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e2014faca96e": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 MCP 工具服务器，提供 40 个编码感知文件、二进制分析与远程运维工具",
+   "review": "agent-tool 是一个用 Go 编写的 MCP 工具服务器，为 Claude Code、Cursor、Codex 等 MCP 兼容代理提供 40 个工具，涵盖编码感知的文件读写、进程管理、SSH/SFTP、MySQL/Redis 查询、DAP 调试器、PE/ELF 静态分析及进程内存操作。通过 profile 机制按需暴露工具以控制上下文占用，默认 core 配置仅暴露 11 个 schema。需注意其网络工具默认启用 ECH/DoH，在部分地区的合规性需自行评估。",
+   "highlights": [
+    "提供 40 个工具，默认 core profile 仅暴露 11 个 schema，core-lite 约 6.4 KB",
+    "文件工具支持 EUC-KR、Shift-JIS、GB18030 等编码保持与转换，以及缩进风格保留",
+    "包含 PE/ELF/Mach-O 静态分析（反编译、反汇编、xref）与 DAP 调试器、进程内存读写工具"
+   ],
+   "use_cases": [
+    "让 AI 编码代理在保留缩进与文件编码约定的前提下编辑遗留项目文件",
+    "通过 SSH/SFTP、MySQL、Redis 工具集中执行远程运维与数据库查询",
+    "对二进制文件做静态分析、调试与进程内存检查（Windows/Linux）"
+   ]
+  },
+  "sha": "e2014faca96e",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "46e705cc9311": {
+  "identity": {
+   "one_liner": "基于 Tauri 2 的跨平台开发者工作台，集成终端 AI 编码代理与 Git、数据库、K8s 等工具",
+   "review": "DevCat 是一款免费的开源跨平台桌面应用，用于在真实终端中运行 AI 编码代理（Claude Code、Codex、Gemini CLI 等）或内置 DevCat Agent，并在同一窗口内管理 Git、SQL/NoSQL 数据库、Kubernetes、Docker、RabbitMQ 与 VPN/SSH 隧道。面向需要在本地统一操作多种开发基础设施的开发者，无需账号和服务器，可通过 Brew、安装脚本或 Releases 页获取。",
+   "highlights": [
+    "支持运行已安装的编码代理（Claude Code、OpenAI Codex、Gemini CLI、GitHub Copilot、Aider、opencode 或自定义 CLI）及内置 DevCat Agent，可接入任何 OpenAI 或 Anthropic 兼容模型",
+    "包含 Git 提交图、blame、分支/stash 管理，PostgreSQL/MySQL/SQLite/SQL Server 查询编辑器，MongoDB/Redis 客户端，以及 Kubernetes、Docker、RabbitMQ 连接管理",
+    "提供 Rooms 端到端加密协作、多代理共享记忆、DevCat Mobile 手机端控制与 Telegram/Discord 代理机器人审批机制"
+   ],
+   "use_cases": [
+    "在同一窗口内编写代码、审查代理产生的 diff 并提交到 Git 仓库",
+    "通过数据库连接直接让代理查询、导出或转储数据表内容",
+    "离开电脑后通过手机或聊天机器人继续控制代理、审批请求并接收结果"
+   ]
+  },
+  "sha": "46e705cc9311",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ce477d173d3": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 插件，提供带只读闸门的多数据源数据库查询工具",
+   "review": "dsh-db 是 DeepSeek Harness 的数据库插件，让模型通过 db_connections/db_schema/db_query/db_exec 四个工具查询 Vastbase/openGauss、PostgreSQL、MySQL、SQLite。数据源在设置界面添加，凭据存 DSH 凭据库。只读通过语句闸门、会话级只读连接与界面开关三层实现，写语句需逐条审批。已知限制：不支持 Oracle/SQL Server，结果以文本返回，同数据源查询串行执行。",
+   "highlights": [
+    "支持 Vastbase/openGauss、PostgreSQL、MySQL、SQLite 四类数据源，通过 opengauss.js 实现 sha256/SM3 认证",
+    "只读保障分三层：SQL 语句闸门、会话级只读连接（READ ONLY/query_only）、只读数据源上拒绝 db_exec",
+    "db_exec 每条写语句经 DSH 审批通道逐条授权，一次授权只管一条"
+   ],
+   "use_cases": [
+    "在 DSH 会话中让模型查询表结构与执行 SELECT，用于数据分析与排障",
+    "需要写入操作逐条人工审批的数据库运维辅助场景",
+    "需连接 openGauss/Vastbase（sha256/SM3 认证）的 Node.js 环境"
+   ]
+  },
+  "sha": "6ce477d173d3",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

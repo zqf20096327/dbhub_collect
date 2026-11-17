@@ -3406,5 +3406,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "3a497748bd5b": {
+  "identity": {
+   "one_liner": "用 Go 编写的 Granola 笔记本地 SQLite 归档工具，支持同步、搜索、导出与 TUI 浏览。",
+   "review": "graincrawl 将 Granola 的笔记、转录、面板、人员与工作区同步到本地 SQLite 归档，供需要可搜索、可导出会议数据的用户使用。它通过 Granola 私有桌面 API 同步，会话不可用时回退到桌面缓存，也可显式启用官方公共 API。对 Granola 侧保持只读，仅写入自身配置、缓存与归档。需要 macOS 13+ 或 Go 1.27+。",
+   "highlights": [
+    "支持私有桌面 API、桌面缓存回退与显式启用的公共 API 三种同步来源",
+    "提供搜索、单条查看、Markdown 导出、只读 SQL 查询与 --json 自动化输出",
+    "支持快照创建与导入，可在机器间迁移归档，默认合并或 --replace 精确还原"
+   ],
+   "use_cases": [
+    "在本地建立 Granola 会议笔记的可搜索归档并导出 Markdown",
+    "在机器间通过快照迁移归档而不触碰线上 Granola 资料",
+    "通过 JSON 输出与只读 SQL 将会议数据接入自动化流程"
+   ]
+  },
+  "sha": "3a497748bd5b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "43bff4897ea1": {
+  "identity": {
+   "one_liner": "Rust 编写的 MySQL 兼容 HTAP 数据库，内建向量与全文检索",
+   "review": "MyDB 是用 Rust 编写的通用数据库，面向混合事务/分析处理（HTAP）、AI 代理与 MySQL 兼容场景，支持复用 MySQL 客户端与 JDBC 驱动，并提供原生 REST 和 MCP 接口。README 发布了 sysbench、TPC 衍生负载及 HNSW 向量检索的基准数据。1.0.0 为公开预览版，用于功能验证与受控环境评估，磁盘格式不保证向后兼容。",
+   "highlights": [
+    "支持 MySQL 客户端、JDBC 驱动及 ROW/FULL binlog 集成，默认端口 8738，默认认证插件为 caching_sha2_password",
+    "提供原生向量（HNSW、IVF）与全文混合检索、SQL 外部模型调用，以及可选的 REST SQL API（HTTPS 参数化 SQL、NDJSON 流式输出）和 MCP Server",
+    "包含 MVCC 事务、自动 Zone Maps、在线 DDL、可直接查询的备份、WAL 复制等机制；提供 macOS/Linux/Windows 预编译包与 Docker 镜像"
+   ],
+   "use_cases": [
+    "需要用 MySQL 协议在同一数据集上混合运行事务与分析查询的业务系统",
+    "通过 SQL、REST 或 MCP 接口访问业务数据的 AI 代理应用",
+    "受控环境中对 HTAP 与向量检索能力的功能验证与评估"
+   ]
+  },
+  "sha": "43bff4897ea1",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6999947d0aaf": {
+  "identity": {
+   "one_liner": ".NET 纯托管实现的 Raft 共识库，存储与传输可替换",
+   "review": "raft-cs 是面向 .NET 的 Raft 共识算法纯托管实现，参考 tikv/raft-rs 设计，核心为确定性 RaftCore 状态机加异步 RaftNode 封装。存储 IRaftStorage 和传输 IRaftTransport 均为可替换抽象，附内存/文件 WAL 存储与内存/NanoMsg 传输实现。通过 NuGet 安装，MIT 许可，支持 netstandard2.0 至 net10.0 多目标。",
+   "highlights": [
+    "实现 pre-vote 领导选举、日志复制、快照压缩、联合共识成员变更与领导权转移",
+    "提供 IRaftStorage 与 IRaftTransport 抽象，内置内存与文件（WAL）存储、内存与 NanoMsg 传输",
+    "标注 IsAotCompatible，测试套件以 NativeAOT 二进制运行，目标 netstandard2.0/2.1 与 net8-10"
+   ],
+   "use_cases": [
+    "在 .NET 应用中构建多节点复制状态机",
+    "需要自定义日志存储或网络传输层的共识系统集成",
+    "需要在 NativeAOT 或裁剪环境下部署的共识组件"
+   ]
+  },
+  "sha": "6999947d0aaf",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

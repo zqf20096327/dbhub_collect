@@ -3309,5 +3309,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e846e2d1a574": {
+  "identity": {
+   "one_liner": "基于 TiKV 的 Redis 协议兼容分布式存储服务层，用 Rust 实现",
+   "review": "Tidis 是 PingCAP 开发的 TiKV 服务层，对外提供 Redis 协议接口，支持 string/hash/list/set/sortedset 五种数据结构，并用 Rust 重写、加入 Lua 脚本、TLS 连接与全局事务。部署依赖 TiUP 启动 PD、TiKV 和一个 TiDB 实例（用于触发 GC）。RESP 帧限制（如单帧 16 MiB）在 src/frame.rs 中定义，不可运行时配置。",
+   "highlights": [
+    "实现 Redis 协议，支持 string、hash、list、set、sortedset 数据类型",
+    "采用存算分离架构，复用 TiKV 的 Raft 副本、分片、线性扩展与全局事务能力",
+    "提供 Lua 脚本、TLS 连接、锁优化、一阶段提交与异步提交等特性"
+   ],
+   "use_cases": [
+    "已有 Redis 客户端（如 redis-cli）的应用接入分布式事务存储",
+    "依赖 Redis 协议/API 而非极致内存性能、需数据持久化保证的场景",
+    "需要基于低成本存储介质存放较大规模数据的键值/结构化数据存储"
+   ]
+  },
+  "sha": "e846e2d1a574",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f2a4d377edcc": {
+  "identity": {
+   "one_liner": "开源桌面数据库 IDE，每个数据库以插件形式接入并内置 MCP 服务器。",
+   "review": "TableCraft 是一款面向 macOS、Windows 和 Linux 的开源桌面数据库 IDE，采用 GPLv3 许可。它提供数据库树、带 schema 感知补全的 SQL 控制台、结果网格、数据编辑器、EXPLAIN 计划与查询历史。架构上分主进程、引擎进程与渲染进程，每个数据源拥有独立引擎进程；数据库方言全部以插件实现，SQLite、MySQL 内置，其余首次使用时从 npm 下载。安装包未签名，首次启动需额外操作。",
+   "highlights": [
+    "支持 SQLite、MySQL/MariaDB/TiDB、PostgreSQL、Redis、Oracle、SQL Server、etcd、DuckDB，其中内置插件离线可用，其余从 npm 按需下载",
+    "内置 MCP 服务器供 Claude Code、OpenCode、Cursor 等本机 AI 代理连接，每个数据源默认关闭，可选只读/读写前确认等权限，密码不离开应用",
+    "每个数据源运行独立引擎进程，结果行保留在引擎中由网格分窗口读取，SQL 方言能力（分句、补全、EXPLAIN）全部在插件内实现"
+   ],
+   "use_cases": [
+    "在本机通过图形界面管理多种数据库数据源并编写、执行 SQL 查询",
+    "让本机 AI 代理经 MCP 按权限策略查询数据库",
+    "编写自定义数据库插件，复用与内置插件相同的加载机制"
+   ]
+  },
+  "sha": "f2a4d377edcc",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8c4e10372a6b": {
+  "identity": {
+   "one_liner": "自托管家用轻量文档管理器，单容器含 OCR、检索与 Paperless-ngx 导入",
+   "review": "nexpaper 是面向家庭或小型公司的自托管文档归档应用：单容器运行，使用 SQLite，文档以普通文件存于 /data/dokumente。提供收件箱、OCR 全文检索、金库（vaults）权限体系、版本化页面编辑、期限提醒、ZUGFeRD/Factur-X/XRechnung 电子发票读取，并支持从 Paperless-ngx 导入。文档作为普通文件存放，需用户自行纳入服务器备份。",
+   "highlights": [
+    "单容器部署（SQLite，无 Redis/Celery/Postgres），经 docker compose 启动，默认监听 127.0.0.1:8560，首个账户为操作员并需日志中的 setup code",
+    "扫描件经 OCR 生成可搜索 PDF，原文以校验和保留；搜索支持词片段与过滤器（如 kind:invoice amount:>100），每次页面操作生成新版本",
+    "提供金库权限（读/编辑/管理）、过期链接分享、二次验证与 passkey、OpenID Connect 登录（authentik、Microsoft Entra ID、Keycloak 等）及开放 API（/api/v1）"
+   ],
+   "use_cases": [
+    "家庭或小型公司自有服务器/家庭实验室环境中的纸质文件扫描归档与全文检索",
+    "小型企业的电子发票（ZUGFeRD、Factur-X、XRechnung）读取、关联单据匹配与税务师导出（ZIP 含 PDF 与清单，README 声明不主张 GoBD 合规）",
+    "通过手机上传、扫描仪文件夹或邮箱输入文件，并从既有 Paperless-ngx 实例一次性迁移"
+   ]
+  },
+  "sha": "8c4e10372a6b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

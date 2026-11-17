@@ -3204,5 +3204,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2e82fe740d59": {
+  "identity": {
+   "one_liner": "自托管视频下载播放服务器，基于 yt-dlp 拉取多平台视频并本地存储",
+   "review": "MyTube 是一个自托管应用，通过 URL 下载 YouTube、Bilibili、Twitch、MissAV 及其他 yt-dlp 支持站点的内容，支持频道订阅自动下载、本地媒体库与集合管理。后端为 Node.js/Express + SQLite（Drizzle ORM），前端为 React 19 + MUI，提供 Docker 部署、Cloudflare Tunnel 远程访问、密码/访客账号登录。需 Node 22.22+ 或 23–26 版本。",
+   "highlights": [
+    "通过 yt-dlp 支持多平台视频下载，含并行队列、批量下载、cookies.txt 上传与自定义 yt-dlp 参数",
+    "支持频道订阅自动下载、自动字幕、TMDB 元数据抓取、私有 RSS 链接与多实例库互联",
+    "内置 Cloudflare Tunnel、Telegram 通知、任务钩子脚本，并可配置密码、Passkey 与手势登录"
+   ],
+   "use_cases": [
+    "在 NAS 或本地服务器自建私人视频库，自动追更订阅频道",
+    "配合 Docker 与 Cloudflare Tunnel 在无端口转发情况下远程访问自己的媒体库",
+    "需要 RSS 订阅、下载任务自动化钩子或通过 API/AI 助手管理媒体库的场景"
+   ]
+  },
+  "sha": "2e82fe740d59",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "68c812313931": {
+  "identity": {
+   "one_liner": "基于 JDBC 对比两条 SQL 查询结果的数据库测试工具",
+   "review": "DBTestCompare 是一款 Java 应用，读取 XML 格式的测试定义并运行两条 SQL 查询的结果对比，结果不同则测试失败。它面向需要做数据库数据校验的用户，支持任何提供 JDBC 驱动的数据库（已测试 SQL Server、Teradata、Snowflake、PostgreSQL、MySQL/MariaDB），可与 TestNG/TeamCity 集成。注意：授权数据库驱动需自行下载放入 jdbc_drivers 目录。",
+   "highlights": [
+    "读取 XML 测试定义目录执行 TestNG 测试，支持所有提供 JDBC 驱动的数据库",
+    "支持对比两个不同数据库引擎的数据、与 CSV 预期数据或行数对比、生成 Excel 报告、并行执行测试",
+    "支持 TeamCity Service Messages 输出，可通过 -D 参数配置测试目录与包含/排除过滤"
+   ],
+   "use_cases": [
+    "数据库迁移或版本变更后，对比源库与目标库的数据一致性",
+    "将 SQL 查询结果与 CSV 预期数据或预期行数进行校验",
+    "在 TeamCity 等 CI 流水线中集成数据库回归测试"
+   ]
+  },
+  "sha": "68c812313931",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e59ee7ee9123": {
+  "identity": {
+   "one_liner": "基于 SwiftUI、Metal 与 VideoToolbox 的原生 macOS Android 投屏与控制应用，支持最高 120 FPS 与 MCP 路由。",
+   "review": "AndOnMac 是一款开源（MIT）的原生 macOS 应用，用于投屏、控制 Android 设备并在两者间传输文件。它通过 VideoToolbox 硬解码 HEVC/H.264 与 CAMetalLayer 渲染实现高帧率串流，支持 USB、Wi-Fi、热点及蓝牙 PAN 连接，并内置基于 A* 路由的 UI 自动化与 MCP 服务器。要求 macOS 14+，应用未签名，安装 .dmg 时需手动清除 Gatekeeper 隔离属性。",
+   "highlights": [
+    "使用 VideoToolbox 硬件解码 HEVC（含 H.264 回退）配合 CAMetalLayer 与 CADisplayLink 渲染，README 标注支持最高 120 FPS 投屏、自适应码率、音频转发及性能 HUD",
+    "通过 headless Kotlin android-daemon 经 ADB TCP（:27189）流式更新 Shadow DOM，在持久空间图上运行 A* 路由，并内置 MCP 服务器（stdio/SSE）",
+    "集成 Apple Vision OCR（Cmd+Shift+X）与 SQLite FTS5 本地屏幕历史检索（Cmd+Shift+F），支持剪贴板同步、照片拖放与多窗口运行单个 Android 应用"
+   ],
+   "use_cases": [
+    "在 macOS 上以 USB 或无线方式投屏并操作 Android 设备，配合触控板手势与设备边框显示",
+    "为 AI 代理提供 Android UI 自动化端点：通过 MCP 服务器调用 android_navigate_to_node 进行图路由导航",
+    "在无法选中或复制文本的界面上使用 OCR 提取文本，并对本地屏幕历史进行全文检索"
+   ]
+  },
+  "sha": "e59ee7ee9123",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

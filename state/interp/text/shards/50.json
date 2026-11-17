@@ -3234,5 +3234,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7818f3b7192d": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL、经 MCP 服务的 AI 代理知识库，以 URI 图组织文档与检索",
+   "review": "AKB 为 AI 代理提供组织知识库：以 Vault 为权限单元，管理 Markdown 文档、表格与文件，通过 URI 关系图互联，并提供稠密加 BM25 的混合检索。后端基于 PostgreSQL，经 MCP（HTTP/stdio）或 REST API 访问，适用于 Claude Code、Cursor 等 MCP 客户端的使用者。许可证为 BSL 1.1，可用 Docker Compose 或 Kubernetes 自托管。",
+   "highlights": [
+    "提供 akb_put/akb_search/akb_browse/akb_relations 等一组 MCP 工具，覆盖文档 CRUD、混合检索、关系图与权限管理",
+    "检索采用稠密向量与 BM25 经 RRF 融合，README 报告 LongMemEval-S 上 Recall@5 为 98.4%（无 reranker）",
+    "vault 隔离由 PostgreSQL ACL 与角色（akb_user_<uid>、akb_vault_<vid>_*）实现，akb_sql 通过 SET LOCAL ROLE 在事务内执行"
+   ],
+   "use_cases": [
+    "为 Claude Code/Cursor/Cline 等 MCP 客户端接入团队文档、会话笔记与工程 wiki 的读写检索",
+    "通过 akb-sessions、akb-claude-code 等插件记录编码会话报告、任务与决策，形成代理记忆库",
+    "使用 akb-wiki 插件将本地文件、网页、GitHub PR/release、Confluence/Jira 内容摄取入 vault 并做带引用的只读问答"
+   ]
+  },
+  "sha": "7818f3b7192d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aad759934c49": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Rust 单二进制后端平台，兼容 PocketBase SDK",
+   "review": "slonbase 是一个运行于 PostgreSQL 之上的开源后端平台，以单个 Rust 二进制提供 REST 与 realtime API、角色认证、文件存储、hooks 及多项目管理面板。每个 collection 对应真实 PostgreSQL 表，数据可通过 SQL、pg_dump 等既有工具操作；通过表触发器推送变更事件。支持脚本安装、Docker、.deb/.rpm 包及 Render/Railway 等托管平台部署。",
+   "highlights": [
+    "每个 collection 映射为真实 PostgreSQL 表，过滤器编译为使用索引的参数化 SQL",
+    "基于表触发器的 SSE realtime 订阅，按订阅者规则过滤；多实例共享状态，支持负载均衡横向扩展",
+    "API 与 PocketBase 兼容，官方 JS/Dart SDK 可直接使用，并提供 import-pocketbase 导入工具"
+   ],
+   "use_cases": [
+    "希望数据存于 PostgreSQL 并用既有数据库工具管理/备份/复制的自托管应用后端",
+    "从 PocketBase 迁移且保留用户密码、hooks 与迁移文件的场景",
+    "在一台服务器上托管多个相互隔离项目的团队"
+   ]
+  },
+  "sha": "aad759934c49",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

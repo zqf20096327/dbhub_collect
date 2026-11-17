@@ -3305,5 +3305,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2c2820c6d0d5": {
+  "identity": {
+   "one_liner": "开源地理空间数据管理平台，通过 CLI 建立数据仓库并生成可共享的可视化产品",
+   "review": "DroneDB 是以 C++ 核心库和 ddb 命令行为主体的地理空间数据存储工具，用于索引、可视化和共享正射影像、点云、3D 模型、高斯泼溅及带地理标签的文件。它依赖 SQLite/SpatiaLite 建立本地仓库索引，可通过 push/pull 与 DroneDB Hub 同步。支持 Windows 和 Linux，MPL-2.0 许可；构建 Gaussian Splat 产品需额外安装 Rust 编译的 build-lod 工具。",
+   "highlights": [
+    "自动从图像 EXIF、栅格（GDAL）、点云和矢量文件中提取元数据并建立索引",
+    "提供 tile、cog、copc、3dtiles、gsplat、stac 等命令生成切片、COG/COPC、3D Tiles 等衍生产品",
+    "支持 GeoTIFF、LAS/LAZ、OBJ/glTF、GeoJSON/SHP 等多种地理空间格式，可通过 TMS 切片、COG、COPC 等方式共享数据"
+   ],
+   "use_cases": [
+    "存储和管理无人机航拍产生的正射影像、点云与三维模型数据集",
+    "为已索引的数据集生成地图切片、COG/COPC 或 3D Tiles 用于 Web 发布与分享",
+    "通过 push/pull 与 DroneDB Hub 同步数据集，进行团队协作"
+   ]
+  },
+  "sha": "2c2820c6d0d5",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7dd7dfdfa9b6": {
+  "identity": {
+   "one_liner": "Rust 编写的本地知识管理 CLI，支持书签、片段的全文与语义混合检索",
+   "review": "bkmr 是一个用 Rust 编写的命令行知识管理工具，将 URL、代码片段、Shell 脚本、Markdown、环境变量和纯文本存入本地 SQLite 数据库，提供 FTS 全文、语义搜索及二者 RRF 融合的混合检索，语义嵌入基于本地 ONNX 模型离线运行。通过 `_mem_` 系统标签和 JSON 输出可作为 AI Agent 的持久记忆接口；提供 LSP 服务器及 Neovim、IntelliJ 插件。内容类型由系统标签区分，每条记录最多一个系统标签。",
+   "highlights": [
+    "支持多种内容类型（URL、片段、脚本、Markdown、环境变量等），按系统标签触发对应操作",
+    "提供全文检索、本地离线语义搜索及 FTS+语义的 RRF 混合搜索（hsearch）",
+    "内置 LSP 服务器为编辑器提供片段补全，提供 --json/--np 等非交互输出便于自动化集成"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供本地持久化记忆存储与混合检索",
+    "开发者在终端与编辑器中管理、检索和执行代码片段与常用命令",
+    "需要离线、本地化存储的个人书签与知识库管理"
+   ]
+  },
+  "sha": "7dd7dfdfa9b6",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5cf30197e43e": {
+  "identity": {
+   "one_liner": "自托管的 ClickHouse 团队 Web 控制台，内置 RBAC 与监控",
+   "review": "CHouse UI 是面向自运维 ClickHouse 团队的自托管 Web 控制台。应用层持有 ClickHouse 连接凭据并加密存储在服务端，用户登录 CHouse UI 而非 ClickHouse；RBAC、数据访问规则与审计日志在应用层每个请求上强制执行。前端为 React 19 SPA，后端为 Bun + Hono，状态存于 SQLite 或 PostgreSQL；高可用需改用 PostgreSQL 并扩副本。",
+   "highlights": [
+    "提供应用级 RBAC，含六个内置角色与自定义角色、表级数据访问规则、OIDC/OAuth2/SAML SSO 和审计日志",
+    "提供查询工作区（Monaco SQL 编辑器、Visual EXPLAIN、保存与共享查询）、集群监控与基于基线的表级数据可观测性",
+    "支持 Docker Compose、Helm 和源码（需 Bun 1.x）三种部署方式，并提供 CLI 与 MCP 端点访问同一 API"
+   ],
+   "use_cases": [
+    "团队需要通过带权限控制的 Web 界面统一管理多个 ClickHouse 集群，凭据不下发到浏览器",
+    "需要集中查看查询日志、活动查询、复制与资源指标，并通过 Slack/邮件等渠道接收阈值告警",
+    "需要审计访问记录并支持 SSO 集成的组织内 ClickHouse 使用入口"
+   ]
+  },
+  "sha": "5cf30197e43e",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

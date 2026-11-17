@@ -3235,5 +3235,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "219b313979d5": {
+  "identity": {
+   "one_liner": "大众集团EV数据监测分析平台，采集行程、充电、电池健康数据",
+   "review": "iVDrive 为大众集团（从 Škoda 开始）的电动车提供数据监测与分析，涵盖行程、充电记录、电池健康与驾驶统计，并提供仅限读取分析数据的自然语言助手。项目处于 Beta 阶段，采用 Docker Compose 自部署，需每辆车配备 Škoda Connect 账户；许可证为 Elastic License 2.0，不允许作为托管服务转售给第三方。",
+   "highlights": [
+    "从实际充入电量测量电池健康度，提供置信评级和每月电池护照（邮件与PDF）",
+    "提供 16 个统计视图，包括能耗、里程、续航、空调损耗、海拔、温度、油电成本对比等",
+    "助手读取数据受限：每次数据库查询仅限分析表并按用户隔离；支持 ABRP 实时遥测（默认关闭）与远程指令（锁车、空调、充电等）"
+   ],
+   "use_cases": [
+    " Škoda 电动车车主追踪充电成本、电池健康与行程数据",
+    "在自有服务器或 NAS 上以 Docker 自托管车辆数据面板",
+    "在托管服务或自部署中用自然语言查询个人车辆数据"
+   ]
+  },
+  "sha": "219b313979d5",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1b5b32ec26e6": {
+  "identity": {
+   "one_liner": "命令行工具，将 HTML/RST/SGML 等文档转为 Markdown 并导入 PostgreSQL。",
+   "review": "pgEdge Document Loader 是一个 Go 编写的命令行工具，用于把 HTML、Markdown、reStructuredText 和 DocBook SGML/XML 文档转换为 Markdown，连同提取的标题、文件名、时间戳等元数据写入 PostgreSQL 表。支持单文件、目录、glob 模式及 Git 仓库来源，可经环境变量、.pgpass 或交互提示提供密码。使用前需自建目标表；README 标明项目处于活跃开发中。",
+   "highlights": [
+    "支持 HTML、Markdown、reStructuredText、DocBook SGML/XML 多种输入格式，统一转换为 Markdown",
+    "支持从 Git 仓库克隆并处理文档，输入方式包含单文件、目录和 glob 模式",
+    "支持可复用的 YAML 配置文件、自定义元数据列、更新已有行，以及事务性的全量成功或回滚处理"
+   ],
+   "use_cases": [
+    "将本地或 Git 仓库中的文档批量导入 PostgreSQL 表",
+    "为基于 PostgreSQL 的 RAG 流程准备 Markdown 格式的文档数据",
+    "通过更新模式对已导入的文档内容进行增量维护"
+   ]
+  },
+  "sha": "1b5b32ec26e6",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "fe1824dc07b4": {
+  "identity": {
+   "one_liner": "自托管 AI API 成本记录系统，按日期化模型价格精确核算 token 开销",
+   "review": "这是一个自托管的 AI API 成本台账，应用通过 API、TS/Python 客户端或 OpenTelemetry 上报各请求的 token 数，系统按带日期、分档的模型价格核算成本，按项目/供应商/模型展示，并支持月度预算告警。提示词与响应内容不被发送或存储。基于 Next.js 16 与 PostgreSQL 17，可用 Docker Compose 或 Vercel 部署，MIT 许可。",
+   "highlights": [
+    "分别对输入、缓存输入、缓存写入与输出计价，支持长提示词分档价格，金额以精确小数存储",
+    "价格按 effective_from/effective_to 版本化并记录来源与核查日期，价格变更不重写历史成本",
+    "提供 `POST /api/usage` 摄入接口、TypeScript/Python 客户端、OpenTelemetry 接入、预算告警（webhook/Slack/邮件）及账单对账（`npm run reconcile`）"
+   ],
+   "use_cases": [
+    "需要按项目、客户、功能、agent run 等维度记录 AI API 支出并设置月度预算与告警的团队",
+    "将记录成本与 Anthropic、OpenAI、Google Cloud 账单对账，或导出 CSV/FOCUS 报表",
+    "需要确认调用前预算余量（reserveBudget）或在应用内维护客户计费台账（收入减 AI 成本视图）的场景"
+   ]
+  },
+  "sha": "fe1824dc07b4",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c8f68e513237": {
+  "identity": {
+   "one_liner": "Open Hansard：新加坡1955年以来国会发言记录的非官方档案网站",
+   "review": "Open Hansard 是一个非官方的新加坡国会记录档案网站，收录1955年以来的会议报告，将印刷名、拼写差异的发言者与其贡献、议员职务和出席记录建立索引关联。面向想查议员发言、追踪政治人物履历的公众、研究者和记者；每份报告链接回官方 SPRS 源。数据由独立的 hansard-scraper 项目每日抓取，API 保持只读。",
+   "highlights": [
+    "将报告中按印刷名呈现的发言者关联到人物记录，并处理\"Gob Keng Swee\"等数字化拼写差异，转写文本保留原始拼写",
+    "按人物聚合其议会成员资格、出席记录与发言，支持按议会、日期、报告类型、人物或选区筛选搜索",
+    "前端 React+TypeScript，后端 FastAPI 只读接口，PostgreSQL 存储由独立 scraper 项目维护的数据；MIT 许可"
+   ],
+   "use_cases": [
+    "查询自己选区议员的发言与出席记录，追踪其历年贡献",
+    "研究者按主题搜索争议法案的辩论过程，通过引用链接回到 SPRS 原始报告",
+    "开发者参考其抓取与建库方式，基于 scraper 数据库在本地运行自己的副本"
+   ]
+  },
+  "sha": "c8f68e513237",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

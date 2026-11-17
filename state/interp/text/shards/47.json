@@ -3016,5 +3016,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "55c4be29a265": {
+  "identity": {
+   "one_liner": "面向 Scala 2 的 Apache Cassandra 客户端库，以 CQL 为中心提供类型安全编解码与编译期校验",
+   "review": "Helenus 是一组用于 Apache Cassandra 的 Scala 工具库，面向 Scala 2.13 用户。它受 Anorm 启发，以 CQL 查询语言为中心：提供 Scala 类型编解码器、编译期语法校验的 cql 字符串插值器，以及基于 case class 的 Tables DSL（支持 CREATE/DROP/SELECT/INSERT/UPDATE/DELETE）。编译期校验仅为语法检查，不验证 schema；Tables DSL 尚不支持计数器、集合元素级更新与逐列 LWT 条件。",
+   "highlights": [
+    "提供覆盖 Java/AnyVal/集合/枚举/元组/UDT 等 Scala 类型的 TypeCodec，含 Enumeratum 支持",
+    "cql 插值器在编译期做 CQL 语法校验，并另提供跳过校验的 unsafeCql/toUnsafeCQL 路径",
+    "Tables DSL 以 case class 为单一来源生成 DML/DDL，含索引、TTL、IF EXISTS 等编译期约束"
+   ],
+   "use_cases": [
+    "Scala 2.13 项目中直接编写 CQL 并获得编译期语法检查",
+    "需要将 case class 与 Cassandra 行/UDT 相互映射的数据访问层",
+    "结合 Akka/Pekko/Flink/Spark/Monix/ZIO 等流式框架做 Cassandra 数据读写或迁移"
+   ]
+  },
+  "sha": "55c4be29a265",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "19b7501d8262": {
+  "identity": {
+   "one_liner": "基于 Go Fiber v3、PostgreSQL 与 sqlc 的多租户 REST API 项目模板",
+   "review": "这是一个 Go 语言 REST API 脚手架，采用模块化单体架构（handler→service→repository→sqlc 分层），内置多租户身份体系（JWT、Google OAuth、API Key、TOTP MFA）、租户级 RBAC 与 PostgreSQL 行级安全。可通过 GitHub 模板复用，重命名脚本改写模块路径，支持 Docker Compose 与 Kubernetes 部署；README 自述面向生产场景但非成品 SaaS 平台。",
+   "highlights": [
+    "全库使用 UUIDv7 主键（PostgreSQL 18 uuidv7() 与 uuid.NewV7()），无整型自增键",
+    "内置认证与授权：JWT、Google OAuth、API Key、邀请机制、TOTP MFA 及恢复码，RBAC 存于数据库并结合行级安全",
+    "操作能力包含 RFC 9457 错误格式、游标分页、幂等键、限流、审计日志、特性开关、i18n（en/vi）、Prometheus 指标与可选 OpenTelemetry 追踪"
+   ],
+   "use_cases": [
+    "以 GitHub 模板方式启动新的多租户 Go REST API 项目",
+    "需要数据库任务队列、版本化领域事件及 Standard Webhooks 收发的后端服务开发",
+    "使用 Docker Compose 或 deploy/k8s 清单部署 API 与 worker 进程（APP_ROLE 可拆分）"
+   ]
+  },
+  "sha": "19b7501d8262",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2baef91e0616": {
+  "identity": {
+   "one_liner": "基于 TypeScript 与 discord.js v14 的 Discord 项目管理机器人，用弹窗交互管理 Jira 式任务",
+   "review": "该机器人通过 Discord 弹窗和交互按钮在服务器内实现项目管理：创建项目、Issue/任务、Sprint，指派成员并通过按钮更新任务状态（To Do/In Progress/Done）。使用 TypeScript 与 discord.js v14 编写，数据存储于 SQLite，无需外部数据库服务，适合希望在 Discord 内运行 Scrum 流程的团队自部署。",
+   "highlights": [
+    "提供项目、Issue、Sprint 的弹窗式创建流程，Issue 支持类型（Task/Bug/Story）、优先级与故事点估算",
+    "支持通过交互按钮更新任务状态并附加评论，Issue 采用项目键+编号（如 BOT-1）标识",
+    "使用 SQLite 作为数据存储，依赖 discord.js v14 与 TypeScript"
+   ],
+   "use_cases": [
+    "在 Discord 服务器内进行 Scrum/敏捷开发流程管理",
+    "小型团队的任务分配、状态跟踪与 Sprint 规划",
+    "希望使用 SQLite 本地存储、自托管项目管理工具的 Discord 社区"
+   ]
+  },
+  "sha": "2baef91e0616",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -29520,5 +29520,276 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "977a593f1661+2": {
+  "fn": "monbooru/monbooru",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Monbooru"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Designed for organizing your local media collection: images, videos, animated GIFs and manga archives. Tag it by hand or auto-tag it locally with ONNX models (WD14, JoyTag...), then search it by tag. Generation metadata from AI image tools (A1111/Forge, ComfyUI) is read too. The app itself never touches the internet; online features (downloading from boorus, reverse image lookup) live in monloader, an optional companion."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    22,
+    6,
+    7,
+    [
+     "**Demo** · **Documentation** · **Install** · **Releases** · **Changelog**"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    62,
+    7,
+    47
+   ],
+   [
+    "replace",
+    62,
+    63,
+    47,
+    48,
+    [
+     "- **Downloads and reverse lookup** through the optional monloader companion"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    70,
+    48,
+    55
+   ],
+   [
+    "replace",
+    70,
+    71,
+    55,
+    56,
+    [
+     "Edit the volume paths in `docker/docker-compose.yml`, then run `docker compose up -d`."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    76,
+    56,
+    61
+   ],
+   [
+    "replace",
+    76,
+    77,
+    61,
+    62,
+    [
+     "Download a build for your system from the releases, unpack it, and run it; a browser opens on a short setup page."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    87,
+    62,
+    72
+   ],
+   [
+    "replace",
+    87,
+    88,
+    72,
+    73,
+    [
+     "The documentation covers the first steps."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    107,
+    73,
+    92
+   ],
+   [
+    "replace",
+    107,
+    139,
+    92,
+    93,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    142,
+    93,
+    96
+   ],
+   [
+    "replace",
+    142,
+    145,
+    96,
+    99,
+    [
+     "- **monloader**: downloader. Fetches files and per-post metadata (via gallery-dl) from supported boorus and galleries and pushes them into a monbooru gallery over the REST API. It also answers monbooru's reverse lookups against boorus, IQDB, SauceNAO and the Hydrus Public Tag Repository, to backfill tags and sources; when a matched post has a better file than your local copy, one click replaces it in place. The PTR connection can also pull tag aliases and implications into your catalog, and send yours back.",
+     "- **monsender**: browser extension; sends the URL of the page you're browsing to monloader.",
+     "- **monbooru-plugins**: community registry of plugins, themes and extra taggers."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    147,
+    99,
+    101
+   ],
+   [
+    "replace",
+    147,
+    158,
+    101,
+    102,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    102,
+    103
+   ],
+   [
+    "replace",
+    159,
+    162,
+    103,
+    104,
+    [
+     "AGPL-3.0."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    164,
+    104,
+    106
+   ],
+   [
+    "replace",
+    164,
+    165,
+    106,
+    107,
+    [
+     "These cover monbooru and its companion repos (monloader, monsender, mondocs, monbooru-plugins)."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    107,
+    108
+   ],
+   [
+    "replace",
+    166,
+    167,
+    108,
+    109,
+    [
+     "Thanks to @gary-host-laptop and @CeareDelafont for sustained contributions over time. Everyone credited in a release is listed in CONTRIBUTORS."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    170,
+    109,
+    112
+   ],
+   [
+    "replace",
+    170,
+    171,
+    112,
+    113,
+    [
+     "Thanks to Danbooru for shaping the booru style, and to Hydrus Network a precursor in personal image and tag management that inspired monbooru."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    113,
+    116
+   ],
+   [
+    "replace",
+    174,
+    181,
+    116,
+    123,
+    [
+     "- htmx powers the server-rendered UI.",
+     "- SQLite, through the pure-Go modernc.org/sqlite driver, stores each gallery.",
+     "- ONNX Runtime, through onnxruntime_go, runs the auto-tagger. The supported models are the work of SmilingWolf (WD SwinV2 v3), animetimm (EVA02), fancyfeast (JoyTag), Camais03 (Camie Tagger v2), and PixAI (PixAI Tagger v1.0, in noaione's ONNX export).",
+     "- ffmpeg decodes video, AVIF and JPEG XL for thumbnails and hover previews; the bundled downloads carry a trimmed build of it from ffmpeg-builds, statically linked with libwebp, dav1d and libjxl.",
+     "- monloader is mostly a wrapper for gallery-dl, which does the actual scraping. Reverse lookups by image similarity are answered by IQDB and SauceNAO; md5 lookups by the boorus themselves. The PTR tag lookup syncs against the Hydrus Public Tag Repository (PTR) via Hydrus Network's repository protocol; the tags, aliases, and implications it serves are the work of the hydrus community.",
+     "- monsender's in-page image detection uses code from ushiro by gary-host-laptop and behind! by kubuzetto, originally under MPL-2.0.",
+     "- The mondocs site is built with Hugo."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    185,
+    123,
+    127
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

@@ -3129,5 +3129,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "aab0558bbbae": {
+  "identity": {
+   "one_liner": "DSH 的本地模型调度网关插件：OpenAI 兼容接口上实现按任务选路、容灾与缓存",
+   "review": "这是 DeepSeek Harness（DSH ≥ 0.2.1-rc.3）的插件，在 127.0.0.1 起 OpenAI 兼容网关，接管 HTTP 请求层实现模型路由，因 llm-pi-ai 适配器深冻结请求体而选择此层方案。内置 21 家厂商目录，密钥以密文落盘。未发布到 npm，需从 GitHub 或 Releases 安装，重启 DSH 两次完成接线。",
+   "highlights": [
+    "提供四档调度模式（frugal/balanced/max_power/free）与子代理专用打分规则，含硬过滤、并发打散与会话粘性",
+    "实现 429 退避、5xx 熔断、401 下线、上下文超限换大窗口等容灾策略，首字节发出后不降级",
+    "提供 SQLite 精确缓存（SHA-256 键，命中 0 token）与路由维度计量台账，支持跨厂商请求归一化与 Anthropic Messages 协议翻译"
+   ],
+   "use_cases": [
+    "将官方 API、免费镜像、自建中转等多种 OpenAI 兼容上游接入同一矩阵，按任务属性自动分配不同型号",
+    "同一批并发子代理需要分散到不同上游以避免集中触发 429 的场景",
+    "需要本地缓存重复请求、按路由维度记录各模型 token 用量与费用的使用场景"
+   ]
+  },
+  "sha": "aab0558bbbae",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

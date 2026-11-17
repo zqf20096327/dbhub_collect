@@ -2954,5 +2954,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bbb2391b963d": {
+  "identity": {
+   "one_liner": "面向 AI agent 的记忆系统，用睡眠周期在 PostgreSQL 上整合、修订记忆",
+   "review": "MemForge 是用 TypeScript 编写、以 PostgreSQL 为唯一存储的 agent 记忆系统，提供热/温/冷三层存储、向量与关键词混合检索、知识图谱，以及空闲期运行「睡眠周期」对低置信度记忆做 LLM 修订的机制。可通过 Docker 镜像、TypeScript/Python SDK 或 MCP Server 接入。注意：项目已于 2026-11-16 标记废弃，不再维护，此前公布的 LongMemEval 基准数据已被撤回。",
+   "highlights": [
+    "三层记忆（热/温/冷）与基于 pgvector、PostgreSQL FTS 和 trigram 的混合检索，全部数据存于单个 PostgreSQL 实例",
+    "10 阶段睡眠周期后台处理器，在空闲期执行评分、冲突消解、记忆修订、反思与图谱维护",
+    "提供 MCP Server（30 个工具）、TypeScript/Python SDK、JSONL 导入导出、Webhook 与按 agent ID 隔离的多租户支持"
+   ],
+   "use_cases": [
+    "为支持 MCP 的客户端（如 Claude Code、Cursor）接入具备检索与整合功能的持久记忆层",
+    "需要本地进程内嵌入（bge-small-en-v1.5，无需外部 API）的自托管部署",
+    "对已有多套 agent 会话数据进行 JSONL 导出、迁移与批量导入"
+   ]
+  },
+  "sha": "bbb2391b963d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

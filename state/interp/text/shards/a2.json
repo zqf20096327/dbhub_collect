@@ -3056,5 +3056,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1e7695172243": {
+  "identity": {
+   "one_liner": "连接 PostgreSQL 的只读诊断工具，读取统计视图生成健康报告",
+   "review": "pgbot 是一个 Go 编写的单一静态二进制工具，以 pg_monitor 只读角色连接 PostgreSQL 14–18，读取数据库自身统计视图，生成健康检查报告，并对比本地基线指出变化。除可选的 ask/explain AI 层外，所有检查均为确定性计算且无需 API key。当前为 beta 状态，--json 契约有版本号，人类可读输出不是稳定接口。",
+   "highlights": [
+    "提供 inspect、indexes、queries、tables、vacuum、waits 等子命令，从只读会话读取 pg_stat_statements 等统计视图",
+    "支持 --json（版本化契约，含 JSON Schema）、SARIF、JUnit、Prometheus 等输出格式，并通过 MCP 向 AI 代理提供检查结果",
+    "每次运行写入本地基线，diff/why 命令可离线对比快照并解释回退；只读性由 pg_monitor 角色加会话级 READ ONLY 设置实现"
+   ],
+   "use_cases": [
+    "对不拥有的数据库做即时健康检查与性能排查，无需部署监控平台",
+    "在 CI 中运行 lint/inspect 并以 SARIF/JUnit 格式输出检查结果",
+    "让 AI 代理通过 --json 契约或 MCP 获取结构化的 PostgreSQL 检查发现"
+   ]
+  },
+  "sha": "1e7695172243",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3810f30b37c5": {
+  "identity": {
+   "one_liner": "本地媒体库管理桌面应用，用自定义元数据与标签组织视频、图片、音频和文本",
+   "review": "MediaChips 是一款开源桌面应用，用于管理本地视频、图片、音频和文本文件。用户可自定义元数据字段、建立带层级和同义词的标签体系，并通过任意字段组合过滤浏览。库数据保存在本地 SQLite 数据库，支持 Windows、macOS、Linux 及 Docker/NAS 部署，可从 Google Drive、SFTP、FTP、WebDAV 等远程源导入文件。构建需 Node.js 18+ 与 npm 9+，原生模块 better-sqlite3 和 ffmpeg 需按运行时重新编译。",
+   "highlights": [
+    "支持自定义元数据字段（chips）与带图片、同义词、层级的标签体系，可按任意字段组合过滤并保存预设",
+    "内置悬停预览、3×3 故事板网格、时间线拖动和内联播放，含去重、批量编辑、路径标签正则提取、多数据库与备份恢复",
+    "提供插件机制（Stash 导入、Jellyfin、Plex、TMDB 等），可从远程源（Google Drive、SFTP、FTP、WebDAV）浏览并导入原始文件"
+   ],
+   "use_cases": [
+    "需要在本地对大量视频、图片或音频建立自定义元数据体系并按标签深度过滤的个人媒体收藏管理",
+    "通过 Docker 在 NAS 或家庭局域网部署媒体库，供局域网内其他设备浏览器访问",
+    "从 Stash 等已有工具迁移数据，或从云盘/远程服务器导入媒体并保留离线元数据"
+   ]
+  },
+  "sha": "3810f30b37c5",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "04f890f809c5": {
+  "identity": {
+   "one_liner": "Android SQLite 封装库，声明表结构后以方法调用完成多表 CRUD",
+   "review": "这是一个面向 Android 应用的 Java SQLite 封装库。开发者通过 EasiestDB.init 初始化、addTableColumns 声明表与列、doneAddingTables 收尾后，即可调用 addDataInTable、getAllDataFrom、searchInOneColumn、updateData、deleteRow 等方法完成增删改查，无需手写 SQL。每个表自动附带自增 ID 主键列，读取结果以 Cursor 返回，通过 JitPack 引入依赖，采用 MIT 许可证发布。",
+   "highlights": [
+    "支持一次声明多张表与列，此后各表的增删改查均以单次方法调用完成，无需编写 SQL 语句",
+    "每个表自动添加自增 ID 主键列；数据操作支持按列名或列索引指定字段，Datum 提供 String/int/double 类型重载",
+    "提供按列排序读取、单行读取、单列搜索、多列值匹配、按条件删除行及清空表/数据库等接口，查询结果以 Cursor 返回"
+   ],
+   "use_cases": [
+    "Android 应用中需要在本地 SQLite 存储多表数据、希望避免手写 SQL 语句的 Java 项目",
+    "需要按列搜索、多列条件匹配（如 ID 与密码校验）或按条件删除行的本地数据管理场景",
+    "通过 JitPack 快速引入依赖进行原型或小型应用开发的场景"
+   ]
+  },
+  "sha": "04f890f809c5",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

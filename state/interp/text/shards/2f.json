@@ -3471,5 +3471,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "57036cf213fd": {
+  "identity": {
+   "one_liner": "chDB 的 Go 语言绑定与 CLI，提供进程内 ClickHouse 兼容的 SQL OLAP 引擎调用",
+   "review": "chdb-go 为嵌入式 SQL OLAP 引擎 chDB 提供 Go 绑定、database/sql 驱动和交互式命令行工具。引擎可由系统安装的 libchdb 在运行时加载，也可通过导入平台模块将引擎打包进二进制并在首次运行时解压。README 还包含持久化对象存储（S3/R2/MinIO）模块与并发参数绑定机制。",
+   "highlights": [
+    "支持运行时动态加载 libchdb 与导入平台模块内嵌引擎两种方式，并提供 CLI 简单模式和交互式模式",
+    "提供 database/sql 驱动，支持 ClickHouse {name:Type} 占位符的 sql.Named 类型化参数绑定，连接可通过 SetMaxOpenConns 扩展读写并发",
+    "提供 durable 模块，将数据库状态以检查点加 WAL 段的形式写入对象存储（S3/R2/MinIO 或目录），通过单一 head.json 持有清单与单写者租约"
+   ],
+   "use_cases": [
+    "在 Go 程序中嵌入 SQL OLAP 引擎执行查询分析",
+    "需要自包含二进制或 FROM scratch 容器镜像的场景",
+    "使用自管理对象存储保存数据库状态并跨云迁移或供 Python/Node 读取的场景"
+   ]
+  },
+  "sha": "57036cf213fd",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "92ae0481b897": {
+  "identity": {
+   "one_liner": "自托管的倒计时器应用，基于 Next.js、PostgreSQL 与 Redis 构建定时事件管理。",
+   "review": "tickward 是一个可自托管的倒计时器应用，用于管理带时区的事件、周期性截止日期和共享项目。它以 Docker Compose 部署 Next.js 应用、PostgreSQL 与 Redis，提供版本化 REST API、Webhook、MCP 支持和只读分享链接，适合个人或团队自行搭建倒计时服务。项目采用 AGPL-3.0 许可证，当前发布英语、波兰语和意大利语界面。",
+   "highlights": [
+    "提供支持时区、描述、图片、循环规则、归档/恢复和置顶的倒计时计时器",
+    "支持项目与空间分组、只读公开分享链接、浏览器通知和可选邮箱验证码账号",
+    "提供版本化 REST API（含 OpenAPI 文档、幂等键）、Webhook 与 MCP 支持"
+   ],
+   "use_cases": [
+    "为跨时区事件、个人纪念日或周期性截止日期建立集中管理的倒计时页面",
+    "通过分享链接向他人展示只读计时器，或嵌入到其他页面",
+    "利用 REST API、Webhook 与 MCP 将计时器数据接入脚本或代理工作流"
+   ]
+  },
+  "sha": "92ae0481b897",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

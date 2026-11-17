@@ -2815,5 +2815,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "455fad7f3f8a": {
+  "identity": {
+   "one_liner": "基于 ADO.NET 扩展方法的 SQL 执行辅助库，以流畅命令封装连接、参数、执行与行映射。",
+   "review": "Open.Database.Extensions（ODX）是一个面向 .NET 开发者的 ADO.NET 辅助库：开发者自写 SQL，库以扩展方法和流畅命令封装连接开关、参数添加、执行、Dispose 及行到对象的映射，兼容任意 ADO.NET 提供程序并提供 DbConnectionFactory 以配合依赖注入。映射按名称匹配属性、大小写与下划线不敏感，列名不同可用 RowMap 声明；版本 11 目前为候选版本（11.0.0-rc.7），MIT 协议开源。",
+   "highlights": [
+    "在任意 ADO.NET 提供程序类型（DbConnection、DbCommand、DbDataReader、DbTransaction）上提供扩展方法，默认采用打开晚、关闭早、异常回滚等实践",
+    "提供 Map<T>() 按名称匹配列与公共可写属性/构造参数（忽略大小写与下划线），支持位置记录与单一公共构造函数的类，可用 RowMap<T> 声明列重命名映射",
+    "提供 ConnectionFactory、异步终端方法（ExecuteNonQuery/ExecuteScalar/ToArrayAsync 等）、Channel<T> 与 TPL Dataflow 流式输出包，支持 netstandard2.0/2.1、net10.0/net11.0 及裁剪和原生 AOT"
+   ],
+   "use_cases": [
+    "希望在 .NET 项目中直接编写 SQL 并减少 ADO.NET 样板代码（连接管理、参数添加、DataReader 读取循环）的场景",
+    "需要将查询结果行映射为强类型对象或记录，或需将行流式送入 Channel/Dataflow 进行数据流处理的场景",
+    "依赖注入友好的数据访问层，通过注册 DbConnectionFactory 统一创建连接的场景"
+   ]
+  },
+  "sha": "455fad7f3f8a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c4e4298e1606": {
+  "identity": {
+   "one_liner": "用 Rust 标准库从零实现的 SQL 数据库，分层 crate 架构。",
+   "review": "onyxdb 是一个用 Rust 标准库从零编写的 SQL 数据库项目，仅依赖标准库且禁用 unsafe，按 vfs、pagefile、bufpool、wal 等分层 crate 构建，各层依赖单向向下。README 提供了完整里程碑计划，当前处于 M1 阶段（键值存储可承受 kill -9），SQL、MVCC、B+tree、LSM 等多数 crate 仍为 planned 状态，适合关注数据库内部实现的读者按层阅读。",
+   "highlights": [
+    "仅依赖 Rust 标准库、无 unsafe，所有文件 I/O 经 vfs trait 抽象",
+    "包含 slotted pages、缓冲池、write-ahead log 等分层存储组件，页面带校验和",
+    "采用里程碑开发方式，每个里程碑是一个可运行版本，CI 对每次 push 运行测试与检查"
+   ],
+   "use_cases": [
+    "学习数据库存储引擎、WAL、缓冲池等内部机制的实现细节",
+    "作为分层 Rust 项目结构的参考代码库",
+    "在 M1 阶段测试可承受进程被 kill -9 的键值存取与扫描"
+   ]
+  },
+  "sha": "c4e4298e1606",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

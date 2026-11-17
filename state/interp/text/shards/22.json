@@ -2902,5 +2902,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "87d0a5ad5c34": {
+  "identity": {
+   "one_liner": "Go 编写的单二进制 Linux 服务器运维管理面板",
+   "review": "AcePanel 是一个用 Go 编写、以单个二进制分发的 Linux 服务器管理面板，README 主题标签涉及 Nginx/OpenResty、MySQL、PHP、fail2ban、frp、FTP、Gitea 等组件。官方提供脚本一键安装，支持主流发行版的 amd64 与 arm64 架构，面向需要管理 LNMP 网站与应用部署的运维人员。",
+   "highlights": [
+    "以 Go 编写并以单个二进制文件分发",
+    "支持主流 Linux 发行版的 amd64 与 arm64 架构，官方提供一键安装脚本",
+    "支持离线模式，面板进程停止后已运行的服务不受影响"
+   ],
+   "use_cases": [
+    "在自有服务器上管理网站与 LNMP 相关组件",
+    "部署后希望减少面板对系统改动、可离线运行的服务器运维场景",
+    "amd64 或 arm64 架构 Linux 主机的集中运维管理"
+   ]
+  },
+  "sha": "87d0a5ad5c34",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "35557568aa55": {
+  "identity": {
+   "one_liner": "MIRA：单线程持续对话的 AI 助手，实现记忆衰减、分段摘要与行为自适应。",
+   "review": "MIRA 是一个基于 Claude 的个人 AI 助手项目，源自作者构建食谱生成器的想法，定位为具有长期持久性的合成数字实体。它只有一条永久对话线程，通过异步段折叠生成第一人称摘要，配合按使用天数衰减的记忆系统、Subcortical 检索层和 Peanut Gallery 观察者。面向想要持久化个人助手的开发者，数据存储在 PostgreSQL。",
+   "highlights": [
+    "仅维护一条永久对话线程，旧对话折叠为第一人称记忆摘要，摘要引用前五条摘要形成连续叙事",
+    "记忆通过语义相似度、实体枢纽、图遍历与重排序被动加载，按使用天数而非日历天衰减",
+    "Text-Based LoRA 机制：每 7 个使用天将行为对齐信号合成进系统提示，实现基于文本的行为适配"
+   ],
+   "use_cases": [
+    "需要长期记忆与个性化行为适配的个人 AI 助手场景",
+    "依赖持续上下文与记忆检索的日常对话与任务协作",
+    "通过工具基类扩展自定义工具的个人自动化集成"
+   ]
+  },
+  "sha": "35557568aa55",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "93896dd1adb7": {
+  "identity": {
+   "one_liner": "Go database/sql 之上的薄层库，抽象占位符处理并提供统一 API",
+   "review": "DALí 是构建在 Go database/sql 之上的薄层库，不抽象 SQL 本身，只处理占位符转换与标识符转义，面向需要直接书写 SQL 的 Go 开发者。安装通过 go get，附带 dalivet 静态分析工具检查查询错误。库自行转义参数而非使用绑定参数，当前仅内置 MySQL 方言，其他方言需实现 dialect.Escaper 接口。",
+   "highlights": [
+    "提供 ?...、?ident、?values 等扩展占位符，在所有方言间统一占位符语法",
+    "提供 dalivet 静态分析器，可检查占位符数量与类型不匹配、目标类型错误等问题",
+    "参数在发送到数据库前完成插值，并支持通过 SetMiddlewareFunc 在查询执行前后插入操作"
+   ],
+   "use_cases": [
+    "在 Go 中直接编写含 IN 子句展开等占位符的原生 SQL 查询",
+    "需要统一的标识符转义写法（[ident]）跨方言编写 SQL",
+    "需要在每条查询执行前后统一插入日志等中间件逻辑"
+   ]
+  },
+  "sha": "93896dd1adb7",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

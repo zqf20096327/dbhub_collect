@@ -3388,5 +3388,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "775923b7f9c1": {
+  "identity": {
+   "one_liner": "用 Docker Compose 编排 Ghost 博客、Traefik 反向代理与 Let's Encrypt 证书的部署模板",
+   "review": "该项目提供一组 Docker Compose 配置文件，用于在一台 Linux 服务器上部署由 Traefik v3、Ghost 6 和 MySQL 8.4 组成的博客栈，并通过 Traefik 内置 ACME 客户端自动获取与续期 Let's Encrypt 证书。仓库不构建自定义镜像，仅编排上游官方镜像并按 sha256 摘要固定版本。部署前需准备公网服务器、域名 A 记录及开放的 80/443 端口；管理账号需在首次部署后立即在 /ghost 页面认领，否则任何人可先占。仓库另含定时备份与恢复脚本。",
+   "highlights": [
+    "通过 Traefik v3 实现 HTTP 到 HTTPS 的自动重定向与 Let's Encrypt TLS-ALPN 证书自动签发，Traefik 仪表板使用基础认证保护并部署在独立主机名上",
+    "内置 backups 容器按周期执行 mysqldump 压缩导出与内容目录 tar.gz 归档，按保留窗口清理旧备份，失败产物保留为 .failed 文件，并附带两个交互式恢复脚本",
+    "三个上游镜像均以 tag@sha256 摘要固定，CI 在每次推送及每日 06:00 UTC 运行 lint、Trivy 扫描、摘要漂移检查和端到端部署与备份恢复测试"
+   ],
+   "use_cases": [
+    "在自有 Linux 服务器（Ubuntu 22.04 LTS+ 或 Debian 12+）上以 Docker Compose 运行 Ghost 博客，要求内存约 1 GB 以上",
+    "需要自动化的 Let's Encrypt TLS 证书签发与续期，且不引入 Kubernetes 等额外编排平台的部署场景",
+    "需要数据库与内容目录的定时备份、保留策略清理及配套恢复脚本的单机自托管环境"
+   ]
+  },
+  "sha": "775923b7f9c1",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

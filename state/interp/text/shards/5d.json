@@ -2931,5 +2931,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e383aac56bc0": {
+  "identity": {
+   "one_liner": "基于 Zig 编写的零依赖内存键值缓存系统，采用类 Redis 协议。",
+   "review": "zcached 是用 Zig 编写的内存缓存系统，支持字符串、整数、浮点数和列表等数据类型，客户端可通过网络协议发送 SET/GET/PING 等命令。其网络层基于 Zig 0.17.1 的 std.Io 反应器（Linux 用 io_uring，macOS 用 kqueue），连接以协程方式运行，支持 TLS 与 AOF 持久化。适合需要内存键值存储且环境中有 Zig 编译器的场景。",
+   "highlights": [
+    "零依赖架构，仅需 Zig 编译器即可编译运行（TLS 依赖的 OpenSSL 为可选项）",
+    "运行时使用自定义 std.Io 反应器：Linux 上为 io_uring，macOS 上为 kqueue，每个 worker 为独立线程，其连接以协作式协程运行",
+    "支持 TLS 加密传输、AOF 持久化模式、流水线（pipeline）操作，内置基准测试工具"
+   ],
+   "use_cases": [
+    "需要内存键值缓存的应用场景",
+    "希望在具备 Zig 编译器的系统上部署、避免额外运行时依赖的环境",
+    "需要 TLS 加密或 AOF 持久化的键值存储部署"
+   ]
+  },
+  "sha": "e383aac56bc0",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

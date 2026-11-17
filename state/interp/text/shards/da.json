@@ -3261,5 +3261,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "5e9a810d2693": {
+  "identity": {
+   "one_liner": "基于 AT Protocol 的照片分享平台应用",
+   "review": "grain 是构建在 AT Protocol 上的照片分享应用，用户可创建相册、浏览信息流、评论并关注其他摄影者。项目采用 Rust 服务端（grain-serve 作为 appview）加 SvelteKit 前端的架构，通过 Jetstream 将网络数据索引到本地；还包含 grain CLI、用于审核的 MCP 服务器及 AT Protocol lexicon 定义。适合希望参与 AT Protocol 生态的摄影分享用户和开发者。",
+   "highlights": [
+    "支持创建相册、浏览信息流、发表评论和关注其他摄影师",
+    "服务端 grain-serve 通过 Jetstream 将 AT Protocol 网络数据索引到本地",
+    "包含 grain CLI、用于审核的 grain-mcp 服务器以及 lexicon 模式定义和 e2e 测试 harness"
+   ],
+   "use_cases": [
+    "在 AT Protocol 生态中分享和浏览摄影作品",
+    "基于 lexicon 和 appview 结构进行 AT Protocol 应用开发",
+    "本地运行参考 PDS 与测试 harness 进行端到端测试"
+   ]
+  },
+  "sha": "5e9a810d2693",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8d7a4daf978c": {
+  "identity": {
+   "one_liner": "面向 Ubuntu VPS 的免费开源主机控制面板，Laravel 面板加 Go root 代理",
+   "review": "RAYXO 是运行于 Ubuntu 24.04 LTS 的 Web 主机控制面板，采用 Laravel + React 面板（以非 root 用户运行）通过 Unix socket 调用以 root 运行的 Go 代理 rayxod 执行系统操作，面向需要销售共享主机的 Admin/Reseller/User 三级用户。提供域名、Let's Encrypt SSL、多版本 PHP（7.4–8.5）、MariaDB、邮件与 DNS、备份到 SFTP/FTP/S3，并可导入 cPanel/DirectAdmin 备份、对接 WHMCS。当前为 beta（v0.8.7），AGPL-3.0 许可，仅支持单服务器。",
+   "highlights": [
+    "面板以非 root 用户运行，所有系统变更经 Go 代理 rayxod 通过 Unix socket 按封闭动作列表执行；每个托管账户为独立 Linux 用户并通过 cgroups 限制 CPU/RAM/IO",
+    "集成 Nginx→Apache→PHP-FPM 栈、MariaDB、PowerDNS、Postfix/Dovecot/Rspamd/Roundcube，支持 per-domain PHP 7.4–8.5、Let's Encrypt（含 wildcard）、DKIM/SPF/DMARC",
+    "提供三级账户体系、带 overselling 的套餐、reseller 自有品牌与 nameserver、备份至 SFTP/FTP/S3、cPanel/DirectAdmin 备份导入、WHMCS 模块和带 login key 的 REST API"
+   ],
+   "use_cases": [
+    "在单台 Ubuntu VPS 上托管网站、数据库、邮件和 DNS，并管理域名、SSL 与定时备份",
+    "以 Admin→Reseller→User 三级结构销售共享主机，配合 WHMCS 自动开通、暂停与升降套餐",
+    "从 cPanel 或 DirectAdmin 导入备份迁移既有托管账户"
+   ]
+  },
+  "sha": "8d7a4daf978c",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "698cdf85936d": {
+  "identity": {
+   "one_liner": "面向 Markdown 文件夹的本地检索与知识图谱工具，基于 SQLite FTS5/BM25 提供带出处的搜索。",
+   "review": "LLM-Wikitila 用于将 Markdown 项目文件夹（知识库、文档目录）建立本地全文索引，检索结果包含文件、标题和原文段落，并带有 authority、时效与有效性状态标记；可选的本地知识图谱（Graphify + Ollama 小模型）仅用于导航。运行时依赖 Python ≥ 3.11 与内置 SQLite FTS5，不使用向量库、云服务或模型；索引存储为目标文件夹内的单个 SQLite 文件。README 中的命中率、速度等数据为项目自述，详细测量见其 docs。",
+   "highlights": [
+    "使用 SQLite FTS5/BM25 实现全文检索，索引为单个本地 SQLite 文件（.wikitila/index.db）",
+    "每条回答包含 answer_status（如 belegt/nicht_belegt 等四种）及原文段落 passages",
+    "可选知识图谱功能依赖 Ollama 与 Graphify 包，未被用作证据来源"
+   ],
+   "use_cases": [
+    "为本地 Markdown 知识库或文档目录建立可检索索引",
+    "需要返回原文出处而非摘要的检索场景",
+    "在无云服务、无向量库的本地环境中使用（需 Python ≥ 3.11）"
+   ]
+  },
+  "sha": "698cdf85936d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2b779b8b7411": {
+  "identity": {
+   "one_liner": "自托管的科技与网络安全情报仪表盘，聚合 IT 新闻、CVE、数据泄露与软件版本信息",
+   "review": "Panel 是一个面向个人使用的自托管监控面板，运行在家庭服务器或树莓派上，聚合 IT 新闻、CVE 漏洞、CISA KEV 已被利用漏洞、数据泄露和软件发布信息。技术上采用 TypeScript + Fastify + SQLite，通过 Docker Compose 部署三个容器（caddy/api/collector），内置 SSRF 安全的抓取客户端 safeFetch、基于 Zod 的输入校验和 Argon2id 密码哈希。项目按 README 自述处于规范第 0-9 阶段完成状态，发布镜像和公开演示尚在下一阶段规划中。",
+   "highlights": [
+    "内置 27 个默认信息源（NVD、CISA KEV、FIRST EPSS、GitHub Advisories、Hacker News、RSS 等），全部可在设置中编辑",
+    "支持通过规则、限速、静默时段和每日摘要向 Discord 或 Telegram 发送警报",
+    "安全机制包含 SSRF 防护的 safeFetch、实体禁用的 XML 解析、Trusted Types 严格 CSP、Drizzle 参数化查询及非 root 只读容器"
+   ],
+   "use_cases": [
+    "在家庭服务器或树莓派上搭建个人的 IT 安全与科技资讯监控面板",
+    "持续跟踪 CVE 评分排名、已被利用漏洞和数据泄露事件",
+    "通过 Discord/Telegram 接收带规则过滤的软件版本更新与威胁警报"
+   ]
+  },
+  "sha": "2b779b8b7411",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

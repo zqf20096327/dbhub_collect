@@ -3108,5 +3108,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "11174d09e25c": {
+  "identity": {
+   "one_liner": "基于元数据模型生成 PostgreSQL CRUD REST API 的 Node.js/Express 框架",
+   "review": "该项目用 TypeScript、Express 和 PostgreSQL 实现模型驱动的通用 REST 端点：每张数据库表通过模型（Object、Field、Collection）描述后即可获得增删改查接口。支持过滤、搜索、排序、分页、CSV 导出、图表统计与文件上传。配置在 config.js 中完成，需先创建 PostgreSQL 数据库并设置连接串。注释与评分选项尚未实现。",
+   "highlights": [
+    "通过元数据模型（含字段类型、主从表集合）描述数据库表，生成通用 CRUD 端点",
+    "支持查询过滤（eq/gt/ct/in 等操作符）、多字段搜索、排序、分页、CSV 导出及图表统计",
+    "支持文件上传、自动生成 OpenAPI/Swagger 文档，并提供限流与日志等配置项"
+   ],
+   "use_cases": [
+    "为已有 PostgreSQL 数据库快速暴露 REST CRUD 接口",
+    "配合 Evolutility-UI-React 构建模型驱动的低代码管理界面",
+    "需要列表查询、过滤导出和数据图表的后台数据服务"
+   ]
+  },
+  "sha": "11174d09e25c",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b690bec872c9": {
+  "identity": {
+   "one_liner": "面向巴西技术从业者的社交网络 Énóis 的后端 API，采用 Spring Boot 4 与六边形架构实现。",
+   "review": "该仓库是巴西技术社区社交网络 Énóis（enois.ia.br）的后端 API，承载业务规则、授权、内容审核、钱包（Faísca）与外部集成，前端为独立仓库 enois-frontend。项目采用 Spring Boot 4（Java 25）与六边形架构（端口与适配器），按功能分包为 identity、feed、media 等 10 个模块；开发环境用 H2 内存库，生产用 MariaDB 11.4，并通过 Flyway 管理数据库迁移。README 强调平台定位为 GPL-3.0 自由软件，声明不设付费计划、广告与付费推广，禁止机器自动化发帖，数据最小化（LGPD）作为架构规则。需注意打包后的应用无默认 profile，必须显式指定 SPRING_PROFILES_ACTIVE 才能启动。",
+   "highlights": [
+    "技术栈为 Spring Boot 4 + Java 25，按六边形架构组织为 identity、feed、media、messaging 等 10 个模块，使用 Flyway 迁移；支持 dev（H2 内存库）、hml 与 prd（MariaDB 11.4）三个 profile，并要求显式指定 SPRING_PROFILES_ACTIVE 才能启动。",
+    "提供 Swagger UI/OpenAPI 文档、Actuator 健康检查与 Prometheus 指标端点；已实现 TOTP 双因素认证（需配置 REDE_SECURITY_ENCRYPTION_KEY 环境变量）、基于环境变量切换的 ImageKit/S3 双媒体存储方案，以及可按类别推送的通知与每周摘要。",
+    "包含 24 个集成测试（全部通过为构建要求），并维护 CONTRIBUTING.md、CODE_OF_CONDUCT.md 与 SECURITY.md 等贡献与安全流程文档；媒体上传支持浏览器直传 S3 的签名上传路径。"
+   ],
+   "use_cases": [
+    "巴西技术社区成员的社交平台：对话交流、小组、求职发帖与内容讨论（README 明确声明这不是招聘网络，招聘仅是可发布内容之一）。",
+    "面向贡献者的开源后端开发：文档覆盖本地开发、架构、数据库迁移、缓存、部署与渗透测试流程，适合按其 CONTRIBUTING.md 流程参与开发。",
+    "需要媒体存储迁移场景的参考实现：通过环境变量在 ImageKit 与 S3 间切换，已存储资源保留原 URL 作为结构性回退。"
+   ]
+  },
+  "sha": "b690bec872c9",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ec897f7b731b": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件全文搜索数据库，含 BM25F 排序与 WAL 写入路径。",
+   "review": "Persia DB 定位为可链接进应用的搜索数据库：打开一个 .persia 文件、写入文档、获得排序结果，无需服务进程。当前为 pre-alpha（MVP 完成约 65%），Db 门面尚未导出，需通过 persia-engine 的 Database API 使用；crate 未发布，需以 git 依赖引入。默认搜索路径尚不支持松弛匹配。v1 范围不含 SQL、向量搜索与文件内加密。",
+   "highlights": [
+    "单文件容器存储：分段不可变，通过 WAL 提交写入，支持自动与手动压实回收空间",
+    "查询编译为带 BM25F 评分、过滤、排序、分面与分页的搜索，松弛级联（同义词/去词/前缀/模糊/回退）已作为库代码存在",
+    "Schema 字段类型含 text、keyword、i64、f64、bool、datetime、stored；附检查与校验数据库文件的 CLI"
+   ],
+   "use_cases": [
+    "在应用进程内嵌入全文搜索，不部署独立服务或集群",
+    "对数据库文件做只读完整性校验、分段检查与词项转储排查",
+    "按 SPEC 规划在对象存储（S3/GCS/Azure Blob）上复用相同分段字节（云端后端尚未实现）"
+   ]
+  },
+  "sha": "ec897f7b731b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c3d319613c5d": {
+  "identity": {
+   "one_liner": "基于 Next.js、Prisma 与 Postgres 的人力资源管理系统，覆盖考勤、薪酬、招聘等模块。",
+   "review": "Grove 是一个面向约百人规模公司的人力资源管理系统，为员工、经理、HR 与管理员四种角色提供差异化界面。包含人员目录、考勤、请假、薪酬、招聘、绩效与分析等 23 个功能模块、45 张数据库表；内置在线演示，一键以四类角色登录。薪酬模块在各处均明确标注为模拟性质，无真实支付能力。",
+   "highlights": [
+    "提供员工、经理、HR、超级管理员四种角色，权限按角色划分，审计日志记录每次变更",
+    "实现考勤打卡、请假审批流、Kanban 招聘看板、绩效评估周期与月度薪酬运行（含准备与定稿分离的四眼规则）",
+    "包含命令面板、全键盘快捷键、图表表格双视图、CSV 导入导出与 PDF 报表"
+   ],
+   "use_cases": [
+    "约百人规模公司的人员档案、考勤与请假管理",
+    "HR 执行招聘流程、入职离职清单与绩效评估",
+    "通过在线演示学习 Next.js + Prisma 全栈 HRMS 实现"
+   ]
+  },
+  "sha": "c3d319613c5d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

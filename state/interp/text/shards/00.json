@@ -2687,5 +2687,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "95da06bac90d": {
+  "identity": {
+   "one_liner": "AI Agent 长期记忆系统，单二进制本地运行，通过 MCP 接入。",
+   "review": "Uteke 是一个面向 AI Agent 的长期记忆存储工具，以单个 Rust 二进制发布，支持完全离线运行、无需 API key，安装时一次性下载约 200 MB 嵌入模型。检索路径不调用 LLM，采用本地向量与 SQLite 全文搜索的融合排序，并经 MCP（stdio 或 HTTP）供 Claude Code、Cursor、Codex 等客户端共享同一记忆库。可自托管（Apache-2.0）或使用其云端版本，Windows 支持需另行查看安装脚本。",
+   "highlights": [
+    "混合检索：向量相似度与 FTS5 全文搜索经 Reciprocal Rank Fusion 合并排序，检索路径零 LLM 调用",
+    "Rooms 多 Agent 共享记忆，带作者归属；支持时间点回溯（--at）、关系图、过期衰减与秘密脱敏存储",
+    "README 公布 LongMemEval-S 500 题的 recall_any@5 为 98.2%，原始输出已提交且提供复现文档"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等 MCP 客户端配置共享的本地长期记忆",
+    "多个 Agent 协作场景下，通过 Rooms 按项目/会议分组记忆并记录写入者",
+    "数据需留在本地设备、不能外发的自托管部署，或无 MCP 能力但可执行 shell 命令的 Agent 经 CLI 调用"
+   ]
+  },
+  "sha": "95da06bac90d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

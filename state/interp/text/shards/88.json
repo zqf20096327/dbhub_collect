@@ -2869,5 +2869,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "65ecfb13e5ff": {
+  "identity": {
+   "one_liner": "基于 Nx 的 NestJS + Fastify 单仓模板，含 DDD/CQRS 与四应用结构",
+   "review": "这是一个以 Nx 管理的 pnpm 单仓项目模板，包含 api、worker、scheduler、migration 四个可运行应用，代码按 DDD 限界上下文组织并用 @nx/enforce-module-boundaries 约束跨模块导入。技术栈为 NestJS、Fastify 5、Prisma 7、PostgreSQL、Redis、BullMQ、Better Auth，提供 REST/OpenAPI、GraphQL（Mercurius）与 Socket.io 三种接口面。README 中版本号存在不一致（标题处写 NestJS 11，正文写 NestJS 12），使用前需自行确认。需 Node 24、pnpm 与 Docker 环境运行。",
+   "highlights": [
+    "同一 Nx 工作区内提供 api、worker、scheduler、migration 四个可运行应用，共享单个 pnpm lockfile",
+    "REST（OpenAPI/Swagger）、GraphQL（Mercurius）与 Socket.io 运行在同一 Fastify 实例，实时通信使用 Redis adapter 跨实例广播",
+    "集成 OpenTelemetry 追踪、Sentry 错误上报、Prometheus /metrics 指标与 pino 结构化日志，日志对 cookie/authorization 头自动脱敏"
+   ],
+   "use_cases": [
+    "需要按 DDD/CQRS 结构组织多个 NestJS 服务的新项目脚手架",
+    "同时对外提供 REST、GraphQL 与 WebSocket 接口的 Node 后端服务",
+    "需要 BullMQ 后台任务、事务性 outbox 事件与定时任务（scheduler 应用）的场景"
+   ]
+  },
+  "sha": "65ecfb13e5ff",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e36781767b3d": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss 诊断智能体的容器化交付，每用户一个无状态 Agent Pod，状态存 NAS。",
+   "review": "该项目把 opencode 与 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户分配一个无状态 runtime Pod，会话数据与知识库索引全部落在 NAS（RWX PVC）上，并按诊断与知识库导入拆分为多个镜像。面向需要容器化部署诊断智能体的行内实施与运维团队，提供离线镜像包、K8s 清单与多份交付文档。诊断取数依赖 SQL 白名单，网关由平台侧提供。",
+   "highlights": [
+    "提供四个及以上镜像：runtime（诊断）、kb-import（知识库导入）、frontend 与 kbstd（官方文档集），支持 x86_64 与 aarch64 双架构",
+    "Pod 无状态，历史会话存于 NAS 的 users/<工号>/ 目录，新 Pod 挂载后自动打开 opencode.db；知识库索引由 kb-import 写入、runtime 只读",
+    "包含发版台脚本、冒烟测试、离线交付包（镜像 tar.gz + sha256 + K8s 清单与文档），以及按测试/交付仓库分工的 delivery/transform.py 生成机制"
+   ],
+   "use_cases": [
+    "行内环境按工号为 DBA 分配诊断 Agent 容器，接入 SSO 与平台网关进行数据库健康检查、Top SQL、WDR、锁等待等诊断",
+    "管理员通过 kb-import Pod 导入文档、网页剪藏、PDF/PPT 等材料构建知识库，与官方文档集分层检索",
+    "单机 Docker 演示/试用场景，使用提供的单机演示脚本与文档跑通含状态持久化的诊断流程"
+   ]
+  },
+  "sha": "e36781767b3d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

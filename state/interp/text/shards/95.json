@@ -3196,5 +3196,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "adaf5a122790": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 Moqui 框架，从数据库到 Web/RTC 的企业应用运行时",
+   "review": "MR Moqui 是对 Moqui Java 框架的 Rust 重实现，保留 XML 作为配置、实体、服务与屏幕的规范语言，将实体门面、服务门面等性能敏感部分以 Rust 实现，脚本与模板统一使用 JavaScript（quickjs-oxide 引擎）。项目仍处早期开发，0.1.0 发布前数据模型与存储布局不稳定，README 明确提示勿用于生产或暴露公网。构建需 Rust 1.99+ 与 bash，通过 ./moq 脚本完成构建、数据加载与运行，默认端口 8080/8443。",
+   "highlights": [
+    "默认使用嵌入式 Postgres，可切换外部 Postgres；SearchFacade 以 Postgres 全文检索为默认后端，OpenSearch 为可选组件",
+    "组件可提供原生 Rust 服务、工具、资源方案与模板渲染器，构建时通过 Cargo 链接进单一二进制",
+    "集群协调依赖共享数据库与 gRPC（客户端证书 TLS），会话存储在数据库中；支持经外部 Chromium 将 html-print 屏幕打印为 PDF"
+   ],
+   "use_cases": [
+    "在 Linux/macOS/Windows 开发机上构建并运行企业应用（Mantle、Marble ERP 等）的原型与演示",
+    "将既有 Moqui Java 部署或组件迁移到 Rust 运行时（附迁移说明文档）",
+    "开发含 XML 实体定义、服务与屏幕的 Moqui 风格应用，并利用嵌入式 Postgres 快速启动"
+   ]
+  },
+  "sha": "adaf5a122790",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c4079d239205": {
+  "identity": {
+   "one_liner": "Rust 单二进制自托管在线状态监控引擎，内置公开状态页",
+   "review": "KeepUp 是用 Rust 编写的自托管监控引擎，对 HTTP/HTTPS 目标执行合成探测，结果写入本地 SQLite（WAL 模式），并提供多租户公开状态页、延迟分位统计与状态变更 webhook 告警。适合需要自托管服务可用性监控并对外展示状态页的运维者。运行仅需单二进制与 Docker，需通过环境变量修改默认管理员凭据。",
+   "highlights": [
+    "支持 HTTP/HTTPS 合成探测，探测间隔 10s–3600s、超时 1s–60s 可配置，含失败重试阈值",
+    "数据持久化到本地 SQLite（WAL 模式），无外部数据库依赖，内存计算 P50/P95/P99 延迟分位",
+    "提供多 slug 公开状态页、7 天在线时间线、SVG 状态徽章，以及 Discord/Slack/通用 webhook 状态变更告警与维护窗口抑制"
+   ],
+   "use_cases": [
+    "自托管网站/API 可用性监控",
+    "对外发布多服务公开状态页与状态徽章",
+    "接入 Discord/Slack 接收服务上下线告警"
+   ]
+  },
+  "sha": "c4079d239205",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

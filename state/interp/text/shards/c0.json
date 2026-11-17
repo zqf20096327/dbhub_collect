@@ -3144,5 +3144,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8344260e17d6": {
+  "identity": {
+   "one_liner": "私有化部署即时通讯系统，Python 服务端 + Flutter 三端客户端 + WebRTC 通话",
+   "review": "Rosub 是一套 C/S 架构的自研即时通讯系统，含 Python 多线程服务端与 Flutter 构建的 Windows/Linux/Android 客户端。通信采用自定义二进制协议（v1.0.0 冻结，4字节长度+JSON头+消息体，TCP+TLS），数据存储于部署者自控的 SQLite（18 张表）。README 明确注明未内置实名机制，注册接口无门槛，仅适合熟人小范围部署，公网部署需自行处理备案、日志持久化等合规事项。",
+   "highlights": [
+    "自定义二进制协议（v1.0.0 已冻结），TCP + TLS 传输，Python 与 Dart 双端镜像实现",
+    "支持私聊/群聊、离线补发、5GB 文件传输（SHA-256 校验+断点续传）、群组治理与审计日志",
+    "音视频通话采用 WebRTC P2P mesh 直连，服务器仅中继信令"
+   ],
+   "use_cases": [
+    "在自有服务器上部署熟人小范围的聊天与文件传输系统",
+    "学习自定义二进制协议、thread-per-connection 服务端与 WebRTC 信令实现",
+    "需要群组治理工具（入群审批、审计日志、踢人/转让）的私有群组沟通场景"
+   ]
+  },
+  "sha": "8344260e17d6",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "68c0dbf06973": {
+  "identity": {
+   "one_liner": "面向马拉加的城市事件上报与处理平台，市民App上报、市政人员Web端流转处置。",
+   "review": "UrbanPulse 用于管理市民上报的城市事件：市民通过移动应用在地图上标记并拍照上报，市政工作人员在 Web 端分类、校验、指派部门和技术员，直至关闭或重开，事件遵循固定生命周期并记录历史。技术栈为 Java/Spring Boot 后端、React/React Native 双客户端、PostgreSQL+PostGIS，Docker Compose 部署于 nginx 之后。项目标注为开发中，未完成部分在需求文档中以 Planned 标记。",
+   "highlights": [
+    "提供市民移动端（React Native/Expo）上报与 Web 端（React）处理的双端应用，事件在地图上定位并支持照片附件",
+    "后端为 Java 25 与 Spring Boot 4.1 单体，REST API 以 OpenAPI 3.1 契约优先设计，数据库为 PostgreSQL 18 + PostGIS，仅经 Flyway 迁移变更",
+    "内置基于 OpenStreetMap 自建的马拉加矢量底图（无外部瓦片服务与 API key），并包含 k6 负载测试、审计日志、基于角色的权限体系与 Docker Compose 一键部署"
+   ],
+   "use_cases": [
+    "市政部门受理、分派与跟踪市民上报的城市事件全生命周期",
+    "在本地以 Docker 快速运行带演示用户的完整系统进行试用或开发",
+    "基于同一数据为分析人员生成期间运营报表（屏幕或 CSV 导出）"
+   ]
+  },
+  "sha": "68c0dbf06973",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

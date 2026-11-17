@@ -25125,5 +25125,1171 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "79b5726f6ed5+2": {
+  "fn": "saasyland/saasyland.com",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "This repository contains the website application. The SaaSy Land CLI and private generator templates are maintained separately and are not included here. See licensing for the distinction between the website source and the commercial product."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "SaaSy Land landing page: the headline \"The 300+ hour head start for builders who care about quality\", the install command, and the admin dashboard"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "The landing page in September 2026. View the full page."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    25,
+    11,
+    12,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    29,
+    12,
+    16
+   ],
+   [
+    "replace",
+    29,
+    44,
+    16,
+    31,
+    [
+     "|Area|Current implementation|",
+     "|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|Public website|Landing page, pricing presentation whose tier cards list what each tier includes today and what is arriving (`TIER_FEATURES`), localized legal pages, responsive layouts, theme support, and reduced-motion presentations. Public pages are prerendered during builds, and every count on the landing page, like every file path and command it cites, comes from the repository at build time (`scripts/repository-facts.ts`).|",
+     "|Documentation and blog|Localized MDX content, navigation, and documentation search through Fumadocs, whose own controls are translated in every language like the rest of the site. On wider screens the docs sidebar and table of contents line up with the site header, which keeps its place and its bottom line on every page; on a phone the docs keep the site header and one docs bar, and every docs page ends with the site footer. Published content is maintained in Git. Every build writes `sitemap.xml` with `hreflang` alternates and renders a social card for every prerendered page; see Search and social previews.|",
+     "|Authentication|Email/password registration with required email verification, GitHub and Google sign-in, password recovery, TOTP with backup codes, and session management. Better Auth's own endpoints enforce the same password, name, email and image rules as the forms, and verification and password-reset emails are limited per recipient.|",
+     "|Customer workspace|Protected `/app` area, `/app/license` and `/app/settings`. Accounts without a licence see the landing page's tier cards with regional prices and the course lessons a purchase unlocks (counted from D1), and start checkout in one press, with their email already filled in; a tier picked on the landing page carries through sign-up. After payment the workspace waits for the licence to activate. Licence owners see their key with the CLI commands that activate, show and free a machine, their machine activations, and activation deactivation. In `/app/settings` a customer picks the time zone that every date in the workspace is shown in.|",
+     "|Billing|Authenticated Polar checkout for the Core, Complete, and Agency tiers with regional (PPP) discounts, returning the buyer to the workspace in their language, and webhook handling for purchases, which records the buyer's consent to immediate delivery from the order's checkout field, full refunds (a partial refund keeps the licence), and licence-key benefits; a full refund marks the licence refunded and a revoked benefit marks it revoked. One licence per account: checkout is refused while a licence is active, and Polar's checkout endpoint is reachable only through that server-side check. Webhooks also copy each Polar order and subscription into D1 at Polar's latest version; no page reads them yet. Requires configured provider products and credentials.|",
+     "|CLI licence API|The API that the `saasyland` CLI calls under `/api/cli/v1` to read a licence, to activate, check and release machines and to download the template bundle of a release. It is built on the `@saasyland/stack/api` contract, which the CLI imports too: the key is checked against D1, machines are Polar activations identified by an HMAC of the machine ID, activating again from the same machine reuses its slot, bundles come from a private R2 bucket through short-lived signed URLs, requests are rate-limited per IP address and per licence key, and the licence records its first activation and its first template download, so a refund request can be checked against what the CLI received. See the CLI licence API guide.|",
+     "|Newsletter|Double opt-in subscription with localized email delivery, limited per recipient. The confirmation and unsubscribe links open a page that acts only when the visitor presses its button. Server functions read and change a signed-in user's subscription, but no workspace screen uses them yet.|",
+     "|Admin users and security|Database-backed user listing and a profile page per user: adding a user, renaming, role changes, password reset, ban/unban with confirmation, deletion, impersonation with a banner to stop it, and revoking a user's sessions. The profile also shows the user's licence: tier, status, purchase time, consent to immediate delivery, first activation, first template download, and whether a refund is still possible. The settings security tab connects password changes, TOTP, and session revocation, and the general tab saves the admin's own time zone.|",
+     "|Products and categories|D1 schemas, permission-checked CRUD use cases, and database-backed lists. Product creation/publishing controls are not fully connected.|",
+     "|Courses|A public catalogue at `/courses` with course and lesson pages backed by D1 (`course`, `chapter`, `lesson`, and `lesson_progress`). Each lesson is a free preview, free with an account, or paid (an active Complete or Agency licence); the server functions enforce access, and admins can watch every lesson. The player resumes where the viewer stopped and saves progress. Admins create and edit courses, chapters, and lessons at `/admin/courses`, where each lesson picks its video from the library. The landing page lists the published courses and their first lessons from D1, links each to its page, and plays a tour of the course pages. See the Courses guide.|",
+     "|Videos|Recordings are encoded on your machine to adaptive HLS with FFmpeg (`bun run video:publish:<environment>`), stored in a private R2 bucket, and streamed through signed, expiring `/media/` links with the Workers cache and range requests. `/admin/videos` lists, previews, and deletes them, and course lessons play them. See the Videos guide.|",
+     "|Affiliates|Referral links tracked by Affonso, loaded only on visits that carry a referral parameter; checkout passes the referral to Polar as order metadata, so commissions follow Polar's own order and refund records. `/affiliates` publishes the terms. Turned on by the `AFFONSO_PROGRAM_ID` variable. See the Affiliate programme guide.|",
+     "|Demo and unfinished screens|Analytics, payment administration, pricing models, blog administration, invitations, and role-management views, and the dashboard revenue chart, show demo data. The workspace profile and danger zone in general settings, and the landing-page editor, include unconnected controls. Each admin menu entry declares whether it works or is arriving (`status` in `src/data/<area>.navigation.ts`), and the landing page counts only the working sections.|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    49,
+    31,
+    36
+   ],
+   [
+    "replace",
+    49,
+    63,
+    36,
+    50,
+    [
+     "|Responsibility|Implementation|",
+     "|--------------------------------|------------------------------------------------------------------------------------------------------|",
+     "|Application and routing|React 19, TypeScript, TanStack Start and Router|",
+     "|Toolchain|Bun, Vite+, formatting, linting, and type checking configured in `vite.config.ts`|",
+     "|Hosting and storage|Cloudflare Workers, D1 (SQLite), KV, R2, and static assets|",
+     "|Database access|Drizzle ORM and checked-in SQLite migrations|",
+     "|Authentication and authorization|Better Auth with module-level permissions and server-function middleware|",
+     "|Data and forms|TanStack Query, Form, and Table; Zod validation|",
+     "|CLI contract|`@saasyland/stack/api`: the routes, schemas, errors and rate limits of the CLI licence API|",
+     "|UI|Tailwind CSS 4, shadcn-styled components with React Aria and Base UI, Motion, and locally served fonts|",
+     "|Localization and content|`use-intl`, ICU messages, Fumadocs, and MDX|",
+     "|External services|Resend for email; Polar for checkout, billing, and licence keys; Affonso for affiliate referrals|",
+     "|Video|FFmpeg encoding to HLS (CMAF) on the publisher's machine; Video.js 10 playback|",
+     "|Verification|Vite+/Vitest, Testing Library, jsdom, and Playwright with axe-core accessibility scans|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    50,
+    51
+   ],
+   [
+    "replace",
+    64,
+    65,
+    51,
+    52,
+    [
+     "`package.json` and `bun.lock` define the application toolchain. The separate Remotion project uses its own npm lockfile. Check them for security advisories with `bun audit` at the root and `npm audit` inside `remotion/`; GitHub reads the npm lockfile but not `bun.lock`, so Dependabot alerts miss the application's transitive packages. Each `minimatch` entry under `overrides` is a security fix that waits for a parent release, and the dependency conventions name the upstream change that will let it go."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    71,
+    52,
+    58
+   ],
+   [
+    "replace",
+    71,
+    72,
+    58,
+    59,
+    [
+     "- **Node.js 26.13.1 or newer**, the version in `.nvmrc`: `nvm use` and CI read it, and `engines` in `package.json` requires it. 26.13.1 is the November 2026 security release of the Node 26 LTS line. Node is also needed by the SQLite test harness."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    92,
+    59,
+    79
+   ],
+   [
+    "replace",
+    92,
+    93,
+    79,
+    80,
+    [
+     "Open <http://127.0.0.1:3000>. Sign in with any account below; each uses the password `WorkerTestPassword123!` from `e2e/data/accounts.ts`, and the licensed account and its licence come from `e2e/data/licenses.ts`."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    80,
+    81
+   ],
+   [
+    "replace",
+    94,
+    99,
+    81,
+    86,
+    [
+     "|Role|Email|Workspace|",
+     "|-----------------------|-----------------------|---------|",
+     "|Admin|`admin@example.test`|`/admin`|",
+     "|Customer|`customer@example.test`|`/app`|",
+     "|Customer with a licence|`licensed@example.test`|`/app`|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    86,
+    87
+   ],
+   [
+    "replace",
+    100,
+    101,
+    87,
+    88,
+    [
+     "This serves a built test application; rebuild it to see source changes. It uses dummy values from `.env.test`, the `test` environment in `wrangler.jsonc`, and isolated state under `.wrangler/test`. Provider interception is intended for local verification, not for validating real OAuth, email delivery, or payments. Keep this test configuration local."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    114,
+    88,
+    101
+   ],
+   [
+    "replace",
+    114,
+    116,
+    101,
+    103,
+    [
+     "2. Set the generated value as `AUTH_SECRET` in `.env.development`, then fill in the integration settings. Use `POLAR_SERVER=sandbox` for development.",
+     "3. If using your own Cloudflare account, provision D1, KV, and R2 and replace the development and preview binding IDs and bucket names before continuing. The checked-in values belong to the existing deployment."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    131,
+    103,
+    118
+   ],
+   [
+    "replace",
+    131,
+    132,
+    118,
+    119,
+    [
+     "Use `.env.development`, `.env.preview`, and `.env.production` for their corresponding environments. These files are ignored by Git; `.env.example` lists the configuration keys. `.env.test` contains committed dummy values for isolated tests."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    119,
+    120
+   ],
+   [
+    "replace",
+    133,
+    134,
+    120,
+    121,
+    [
+     "Server integrations read secrets through `env` from `cloudflare:workers`. Do not give private credentials a `VITE_` prefix, which makes values available to browser code. Deployment scripts upload only the keys that `secrets.required` in `wrangler.jsonc` declares, read from the matching environment file."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    121,
+    122
+   ],
+   [
+    "replace",
+    135,
+    147,
+    122,
+    134,
+    [
+     "|Variables|Purpose|",
+     "|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`AUTH_SECRET`|Long random secret used by Better Auth. Generate a separate value for each deployment environment.|",
+     "|`AUTH_GITHUB_CLIENT_ID`, `AUTH_GITHUB_CLIENT_SECRET`|GitHub OAuth application credentials.|",
+     "|`AUTH_GOOGLE_CLIENT_ID`, `AUTH_GOOGLE_CLIENT_SECRET`|Google OAuth application credentials.|",
+     "|`RESEND_API_KEY`, `RESEND_EMAIL_FROM`|Email API credentials and the sender accepted by your Resend account.|",
+     "|`POLAR_SERVER`|Polar environment: `sandbox` for development and preview, `production` for live billing. `polar:verify` refuses any other pairing.|",
+     "|`POLAR_ACCESS_TOKEN`, `POLAR_ORGANIZATION_ID`|Polar API access and the organization used for discounts and licence operations.|",
+     "|`POLAR_WEBHOOK_SECRET`|Secret used to verify Polar webhook deliveries.|",
+     "|`POLAR_PRODUCT_ID_CORE`, `POLAR_PRODUCT_ID_COMPLETE`, `POLAR_PRODUCT_ID_AGENCY`|Product IDs mapped to the three checkout tiers. Use IDs from the selected Polar environment.|",
+     "|`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_DATABASE_ID`, `CLOUDFLARE_ACCESS_TOKEN`|Credentials for Drizzle Studio and introspection over the D1 HTTP API. Application queries use the `DB` binding instead.|",
+     "|`AFFONSO_PROGRAM_ID`|Optional Worker variable (`vars` in `wrangler.jsonc`), set only for the environment that takes real payments. The public Affonso program ID that turns on affiliate referral tracking.|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    134,
+    135
+   ],
+   [
+    "replace",
+    148,
+    149,
+    135,
+    136,
+    [
+     "The development, preview, and production environments declare **every key above except `AFFONSO_PROGRAM_ID`** in `secrets.required`, including the Cloudflare credentials used by Drizzle tooling. `AFFONSO_PROGRAM_ID` is public, so it is a plain Worker variable under `vars`, not a secret; only the `test` environment sets one, a dummy ID for the browser tests. Supply the required secrets for the selected environment; see `wrangler.jsonc` for the authoritative list."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    152,
+    136,
+    139
+   ],
+   [
+    "replace",
+    152,
+    153,
+    139,
+    140,
+    [
+     "The public URL is configured in source: `src/presentation/branding/index.ts` defines `APP_DOMAIN` and derives `APP_URL` as `https://${APP_DOMAIN}`, together with the contact addresses, the GitHub organisation and repository URLs and the Instagram profile, which the footer links and the home page's structured data lists. **`VITE_APP_URL` is not read by the application.**"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    156,
+    140,
+    143
+   ],
+   [
+    "replace",
+    156,
+    163,
+    143,
+    150,
+    [
+     "|Location|What to configure|",
+     "|--------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`src/presentation/branding/index.ts`|Application name, canonical domain, preview host (`APP_PREVIEW_DOMAIN`), contact addresses, GitHub identity and Instagram profile (`APP_INSTAGRAM_URL`).|",
+     "|`src/modules/_core/constants/api.ts`|`DEPLOYED_HOSTS`, the preview and production hosts read from `APP_PREVIEW_DOMAIN` and `APP_DOMAIN`, and the one place the code names them by environment.|",
+     "|`wrangler.jsonc`|Worker names, custom-domain routes, D1 databases, KV namespaces, and R2 buckets for each environment.|",
+     "|`src/data/marketing.ts`|Tier prices (`TIER_PRICES`), tier features available now or arriving (`TIER_FEATURES`), and the consulting rate (`CONSULTING_HOURLY_RATE`); `polar:verify` checks Polar prices.|",
+     "|`src/presentation/styles/`|Theme, typography, fonts, and shared style definitions.|"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    164,
+    150,
+    151
+   ],
+   [
+    "replace",
+    164,
+    165,
+    151,
+    152,
+    [
+     "The branding names the preview host, `APP_PREVIEW_DOMAIN` (`preview.<APP_DOMAIN>`), and the production host, `APP_DOMAIN`, and `DEPLOYED_HOSTS` maps the `preview` and `production` environments to them. `appHostsForMode` reads it for the hosts Better Auth and newsletter links accept in each mode, and the deployment scripts' live check requests it, so change `APP_PREVIEW_DOMAIN` when your preview host has another name. The custom-domain `routes` in `wrangler.jsonc` and the environment URLs in `deploy-reusable.yml` name the same hosts and must match; `src/__test__/wrangler.test.ts` fails when the routes differ. Changing an environment file alone does not change the canonical URL. Rebuild after changing branding or deployment configuration."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    169,
+    152,
+    156
+   ],
+   [
+    "replace",
+    169,
+    173,
+    156,
+    160,
+    [
+     "- Configure Resend credentials and the sender address before testing verification, password recovery, or newsletter delivery. Templates live in `src/presentation/emails/`.",
+     "- Set up Polar as the Polar setup guide describes: separate sandbox and production organisations, an organisation token with the listed scopes, one one-time product per tier priced from `TIER_PRICES` with one licence-key benefit limited by `LICENSE_ACTIVATION_LIMITS` (`license.constants.ts`), never expiring and without a usage limit, and an automatic percentage discount without a code for each band in the pricing rules.",
+     "- Create one Polar webhook per deployed host at `https://<your-host>/api/auth/polar/webhooks`, in the raw format, signed with `POLAR_WEBHOOK_SECRET` and subscribed to exactly `POLAR_EVENTS` from `src/data/polar-events.ts`, the events every area handles; today these are the licence area's `LICENSE_WEBHOOK_EVENTS` and the order and subscription events that the billing area copies into D1 (`billing.polar-events.ts`). The licence handlers process paid orders, full refunds (a partial refund keeps the licence), and licence-benefit creation and revocation.",
+     "- Run `bun run polar:verify:<environment>` after every change in Polar. It reads the Polar keys from `.env.<environment>`, sends only GET requests, and fails with one line per difference between Polar and the code. Checkout and the check share one regional discount rule."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    160,
+    161
+   ],
+   [
+    "replace",
+    174,
+    175,
+    161,
+    162,
+    [
+     "The website associates purchases and issued keys with authenticated customers, exposes activation management and serves the CLI licence API through which the CLI activates machines and downloads the templates of its release. The CLI itself and the templates it generates are maintained separately; customers run it as the CLI guide describes, and its release notes and the roadmap say what it does today and what is arriving."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    182,
+    162,
+    169
+   ],
+   [
+    "replace",
+    182,
+    208,
+    169,
+    170,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    214,
+    170,
+    176
+   ],
+   [
+    "replace",
+    214,
+    215,
+    176,
+    177,
+    [
+     "Validate inputs at the server boundary and authorize protected functions themselves, in addition to page guards. Query and mutation keys are readonly tuples owned by the feature's `*.constants.ts`; include inputs that change the result in the query key. Domain values such as statuses, kinds, tiers, roles and provider IDs are named once in a constant object (`PRODUCT_STATUS`, `LICENSE_TIER`, `AUTH_PROVIDER`) in the owning module's or integration's `*.constants.ts`, and code, tests and e2e data import it instead of repeating the string. Reuse exported options for cache access, and invalidate only the data a mutation changes. Application documentation lives in `content/docs/`, including the architecture guides and the conventions, the coding standard every change follows. Coding agents start from `AGENTS.md`."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    177,
+    178
+   ],
+   [
+    "replace",
+    216,
+    217,
+    178,
+    179,
+    [
+     "Authentication entry points are in `src/integrations/better-auth/`:"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    179,
+    180
+   ],
+   [
+    "replace",
+    218,
+    227,
+    180,
+    189,
+    [
+     "|File|Responsibility|",
+     "|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`auth.server.ts`|Better Auth, providers, plugins (with those the areas add in `src/data/<area>.auth-plugins.ts`), the emails the areas send (`src/data/<area>.auth-emails.ts`), and allowed hosts.|",
+     "|`auth.access.ts`|Roles, permissions, and permission checks, built from each area's `src/data/<area>.access.ts`.|",
+     "|`auth.roles.ts`|Role codes and the default role.|",
+     "|`auth.hooks.ts`|Input policy run before Better Auth's own endpoints: the password, name, email and image rules.|",
+     "|`auth.routes.ts`|Sign-in/admin guards, the return path after sign-in, and role-based redirects.|",
+     "|`auth.middleware.ts`|Server-function authorization, error handling, rate limiting, and the client address Better Auth's limiter uses.|",
+     "|`auth.session.ts`|Request-scoped session lookup and UI query options.|"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    232,
+    189,
+    194
+   ],
+   [
+    "replace",
+    232,
+    233,
+    194,
+    195,
+    [
+     "`src/server.ts` sets baseline security headers on every Worker response: a Content Security Policy that sets `base-uri`, `frame-ancestors` and `object-src` to `'none'`, `Cross-Origin-Opener-Policy`, `Permissions-Policy`, `Referrer-Policy`, `X-Content-Type-Options`, `X-Frame-Options: DENY`, and HSTS on HTTPS responses. They are defined once, as `SECURITY_HEADERS` and `HTTPS_SECURITY_HEADERS` in `src/modules/_core/constants/api.ts`, and replace any value already on the response. Static files that bypass the Worker get the same headers from the `/*` rule in `public/_headers`, which a test keeps equal to those constants."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    240,
+    195,
+    202
+   ],
+   [
+    "replace",
+    240,
+    262,
+    202,
+    224,
+    [
+     "|Command|Purpose|",
+     "|---------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|",
+     "|`bun run dev`|Generate content/class-name tables and start development with remote preview bindings.|",
+     "|`bun run typegen`|Generate Worker declarations, class-name tables, and Fumadocs content/types.|",
+     "|`bun run check`|Generate class-name tables; check localization/content, formatting, lint, and types.|",
+     "|`bun run check:fix`|Run checks and apply supported formatting/lint fixes.|",
+     "|`bun run check:i18n`|Validate message parity, scoped translation keys, unrendered keys, ICU formats, forms of address, and localized content.|",
+     "|`bun run test`|Run node, integration, and component test projects.|",
+     "|`bun run test:unit` / `bun run test:integration` / `bun run test:component`|Run one test project.|",
+     "|`bun run test:watch` / `bun run test:changed`|Watch tests or run tests affected by changes.|",
+     "|`bun run test:coverage`|Run tests with the configured coverage gate and reports.|",
+     "|`bun run test:e2e:install`|Install Chromium/WebKit and their Playwright dependencies.|",
+     "|`bun run test:e2e`|Run the browser suite in Chromium and WebKit.|",
+     "|`bun run test:e2e:pr`|Run the browser suite in Chromium, as pull request CI does.|",
+     "|`bun run test:e2e:smoke`|Run the Chromium smoke suite.|",
+     "|`bun run test:all`|Run the Vite+ tests followed by Chromium smoke tests.|",
+     "|`bun run test:journey`|Buy each tier on preview with the Polar sandbox and use the published CLI with each licence.|",
+     "|`bun run build` / `bun run build:preview`|Build the preview Worker, prerender public pages, and verify/optimize output.|",
+     "|`bun run build:production`|Build and verify the production application.|",
+     "|`bun run build:test` / `bun run start:test`|Build or serve the isolated test application.|",
+     "|`bun run start`|Serve the most recently built application at `127.0.0.1:3000`.|",
+     "|`bun run video:publish:preview` / `bun run video:publish:production`|Encode a recording with FFmpeg, then upload and register it with your `wrangler login`.|"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    224,
+    225
+   ],
+   [
+    "replace",
+    263,
+    264,
+    225,
+    226,
+    [
+     "Run the commands from the root package scripts; the Remotion commands run inside `remotion/`."
+    ]
+   ],
+   [
+    "equal",
+    264,
+    267,
+    226,
+    229
+   ],
+   [
+    "replace",
+    267,
+    268,
+    229,
+    230,
+    [
+     "Unit and integration tests run in Node; component tests run in jsdom. Tests are colocated in `src/**/__test__/`. The test RPC helper exercises TanStack validation and middleware, and the D1 adapter applies the checked-in SQLite migrations. External provider operations are mocked. See the testing guide for fixtures and ownership conventions."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    280,
+    230,
+    242
+   ],
+   [
+    "replace",
+    280,
+    281,
+    242,
+    243,
+    [
+     "`bun run test:journey` runs the journey suite in `e2e/journey/` by hand against the preview deployment instead: it signs up through Resend's test inbox, buys each tier on the Polar sandbox checkout with Stripe's test card, and activates, fills, frees and deactivates machines with the published CLI until a refund ends the licence. It reads the Polar sandbox token and product IDs and a full-access Resend key from the environment or `.env.preview`; see Journey suite."
+    ]
+   ],
+   [
+    "equal",
+    281,
+    282,
+    243,
+    244
+   ],
+   [
+    "replace",
+    282,
+    283,
+    244,
+    245,
+    [
+     "`e2e/specs/accessibility.spec.ts` runs axe-core with the WCAG 2.0, 2.1 and 2.2 A and AA rules and axe's best practices on the public pages, the course pages, the docs home, every Conventions page and one page from each other docs section, a blog post, and both workspaces in the light and dark themes, and fails on any violation."
+    ]
+   ],
+   [
+    "equal",
+    283,
+    286,
+    245,
+    248
+   ],
+   [
+    "replace",
+    286,
+    289,
+    248,
+    251,
+    [
+     "- Main CI runs checks, coverage, and Chromium E2E on pull requests and pushes to `main`. Successful eligible runs then deploy to Cloudflare, and each successful production deploy is tagged and released on GitHub.",
+     "- Full E2E adds WebKit on pushes to `main` and runs Chromium and WebKit weekly and on manual dispatch.",
+     "- Video CI separately checks and bundles the Remotion project when `remotion/` or a website file it imports changes, directly or through other website files; `src/__test__/workflows.test.ts` fails when its trigger paths miss such a file or name a path that none of them matches."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    290,
+    251,
+    252
+   ],
+   [
+    "replace",
+    290,
+    291,
+    252,
+    253,
+    [
+     "The deployment workflow records actual deployment results in GitHub's `Preview` and `Production` environments. Configure its credentials as described below before enabling deployments."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    308,
+    253,
+    270
+   ],
+   [
+    "replace",
+    308,
+    309,
+    270,
+    271,
+    [
+     "Create separate production resources with `saasyland_com_production`, `bunx wrangler kv namespace create CACHE --env production`, `bunx wrangler r2 bucket create saasyland`, and `bunx wrangler r2 bucket create saasyland-bundles`, then update the `production` bindings. The `BUNDLES` buckets hold the CLI's template bundles, which the CLI repository's release uploads to both; see Publishing bundles. The deployment guard rejects missing bindings, placeholder IDs, and a production environment that shares its database, namespace, or bucket with preview; it does not verify that the existing IDs belong to your account or that the R2 buckets exist, and a deploy fails while a bound bucket is missing."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    312,
+    271,
+    274
+   ],
+   [
+    "replace",
+    312,
+    313,
+    274,
+    275,
+    [
+     "Module schemas are collected by `drizzle.schemas.ts`, and every table with `createdAt` and `updatedAt` spreads them from `timestamps()` in `drizzle.columns.ts`. Generate migrations with:"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    320,
+    275,
+    282
+   ],
+   [
+    "replace",
+    320,
+    328,
+    282,
+    290,
+    [
+     "|Command|Database affected|",
+     "|--------------------------------|--------------------------------------------------------------------------------------|",
+     "|`bun run db:migrate:test`|Local test database in `.wrangler/test`.|",
+     "|`bun run db:reset:test`|Deletes `.wrangler/test`, then migrates and seeds the local test database.|",
+     "|`bun run db:migrate:local`|Local development database; the regular development server still uses remote bindings.|",
+     "|`bun run db:migrate:development`|Remote database configured for development, shared with preview by default.|",
+     "|`bun run db:migrate:preview`|Remote preview database.|",
+     "|`bun run db:migrate:production`|Remote production database.|"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    335,
+    290,
+    297
+   ],
+   [
+    "replace",
+    335,
+    339,
+    297,
+    301,
+    [
+     "|Event|Cloudflare target|GitHub environment|URL|",
+     "|--------------------------------------------------------------------------|-------------------------------|------------------|-------------------------------|",
+     "|Pull request opened, reopened, or updated from a branch in this repository|`saasyland-preview` (`preview`)|`Preview`|<https://preview.saasyland.com>|",
+     "|Push to `main`, including merging a pull request|`saasyland` (`production`)|`Production`|<https://saasyland.com>|"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    342,
+    301,
+    304
+   ],
+   [
+    "replace",
+    342,
+    343,
+    304,
+    305,
+    [
+     "In repository Settings → Environments, configure the existing `Preview` and `Production` environments with these secrets:"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    344,
+    305,
+    306
+   ],
+   [
+    "replace",
+    344,
+    348,
+    306,
+    310,
+    [
+     "|Secret|Purpose|",
+     "|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`CLOUDFLARE_API_TOKEN`|Wrangler authentication with permission to deploy the Worker, manage its configured bindings/routes, and apply D1 migrations. Scope the token to the intended account and zones.|",
+     "|`CLOUDFLARE_ACCOUNT_ID`|Cloudflare account containing the selected Worker, D1 database, KV namespace, and R2 bucket.|"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    349,
+    310,
+    311
+   ],
+   [
+    "replace",
+    349,
+    350,
+    311,
+    312,
+    [
+     "These are deployment credentials. `CLOUDFLARE_API_TOKEN` is separate from the `CLOUDFLARE_ACCESS_TOKEN` used by Drizzle Studio. Repository secrets with the same names can be used as a fallback; environment-specific secrets allow different credentials for preview and production. Follow Cloudflare's GitHub Actions authentication guide when creating the token."
+    ]
+   ],
+   [
+    "equal",
+    350,
+    353,
+    312,
+    315
+   ],
+   [
+    "replace",
+    353,
+    354,
+    315,
+    316,
+    [
+     "Deployment jobs build and verify artifacts, apply the target D1 migrations, then deploy the tested revision. They do not run the live site check (`scripts/verify-deployment.ts`) that the manual deployment scripts run, because Cloudflare's bot protection answers 403 to requests from CI runners, nor any of the deploy checks the areas declare (`scripts/run-deploy-checks.ts`; today `auth:verify` and `polar:verify`), because CI has no `.env.<environment>` and GitHub holds only the Cloudflare deployment credentials. The URL each GitHub environment links to is typed in the workflow, and `src/__test__/workflows.test.ts` fails when it differs from the environment's host in `DEPLOYED_HOSTS`. Workflow runs and deployments queue rather than cancel one another, with a separate deployment queue per environment. Schema changes must remain compatible with the currently running application because migrations run before the new Worker is deployed. WebKit's additional main-branch suite runs independently of the production deployment gate."
+    ]
+   ],
+   [
+    "equal",
+    354,
+    355,
+    316,
+    317
+   ],
+   [
+    "replace",
+    355,
+    356,
+    317,
+    318,
+    [
+     "GitHub creates deployment records from the job's `environment` declaration and shows the job's real result. See GitHub's deployment tracking documentation."
+    ]
+   ],
+   [
+    "equal",
+    356,
+    357,
+    318,
+    319
+   ],
+   [
+    "replace",
+    357,
+    358,
+    319,
+    320,
+    [
+     "After a production deploy succeeds, the `release` job tags the deployed commit `vYYYY.MM.DD` with the UTC date (later deploys that day get `.2`, `.3`, and so on) and publishes a GitHub Release whose notes are the changelog entries that reached `main` that day. It is the only job with `contents: write`, and preview deploys are never tagged. The changelog dates each entry by the squash commit that brought its pull request to `main`, so the checkouts that build the site and the `release` job fetch every commit without its trees (`fetch-depth: 0` and `filter: tree:0`). CI/CD explains how to roll back to a release."
+    ]
+   ],
+   [
+    "equal",
+    358,
+    381,
+    320,
+    343
+   ],
+   [
+    "replace",
+    381,
+    382,
+    343,
+    344,
+    [
+     "Public pages are prerendered to `dist/client`; protected, authentication, newsletter-action, course, and API routes are excluded from prerendering. After prerendering, `scripts/deployed-worker.ts` builds the Worker that is deployed again, without the rendered MDX of docs and blog pages and without the landing and legal page translations, which only prerendered pages use. The build verifier checks the Worker deployment configuration, localized home/legal pages and SEO links, that every docs page and published blog post was prerendered, fonts, client JavaScript, and selected route exclusions. `scripts/generate-seo-files.ts` then reads the head of every prerendered page and writes `dist/client/sitemap.xml` and one social card per page under `dist/client/images/og/`; the Worker serves both from static assets. The application still requires a Worker for server-rendered routes, authentication, APIs, video delivery, and locale handling."
+    ]
+   ],
+   [
+    "equal",
+    382,
+    385,
+    344,
+    347
+   ],
+   [
+    "replace",
+    385,
+    386,
+    347,
+    348,
+    [
+     "The supported locales are `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `ja-JP`, `pl-PL`, `pt-BR`, and `uk-UA`, defined in `i18n.config.ts`."
+    ]
+   ],
+   [
+    "equal",
+    386,
+    397,
+    348,
+    359
+   ],
+   [
+    "replace",
+    397,
+    398,
+    359,
+    360,
+    [
+     "- Address the reader one way in each locale, in the form that `FORMS_OF_ADDRESS` in `forms-of-address.ts` names; `bun run check:i18n` rejects the forms that contradict it."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    408,
+    360,
+    370
+   ],
+   [
+    "replace",
+    408,
+    409,
+    370,
+    371,
+    [
+     "PageSpeed Insights mobile scores: Performance 98, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 3/3"
+    ]
+   ],
+   [
+    "equal",
+    409,
+    412,
+    371,
+    374
+   ],
+   [
+    "replace",
+    412,
+    413,
+    374,
+    375,
+    [
+     "PageSpeed Insights desktop scores: Performance 100, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 3/3"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    414,
+    375,
+    376
+   ],
+   [
+    "replace",
+    414,
+    421,
+    376,
+    383,
+    [
+     "|Metric|Mobile|Desktop|",
+     "|------------------------|------|-------|",
+     "|First Contentful Paint|1.2 s|0.4 s|",
+     "|Largest Contentful Paint|2.3 s|0.7 s|",
+     "|Total Blocking Time|0 ms|10 ms|",
+     "|Cumulative Layout Shift|0|0|",
+     "|Speed Index|2.4 s|0.6 s|"
+    ]
+   ],
+   [
+    "equal",
+    421,
+    422,
+    383,
+    384
+   ],
+   [
+    "replace",
+    422,
+    423,
+    384,
+    385,
+    [
+     "These are lab results. PageSpeed Insights runs on shared hardware, so scores vary between runs; compare several runs before judging a change. Run the analysis for current results."
+    ]
+   ],
+   [
+    "equal",
+    423,
+    426,
+    385,
+    388
+   ],
+   [
+    "replace",
+    426,
+    432,
+    388,
+    394,
+    [
+     "- Public pages are prerendered. `optimize-prerendered-html.ts` removes dependency `modulepreload` hints and keeps each page's entry hint at low priority, so the stylesheet and fonts load first. The script policy keeps that order: the Worker only adds each response's nonce to the entry script and its hint.",
+     "- The Worker's `Link` header names only the locale's fonts, whose file names stay the same across deploys. Cloudflare replays a page's last `Link` header as `103 Early Hints`, also after a deploy, so a hinted stylesheet, which Vite names after its content, would point at a deleted file. In the zone's Speed settings Early Hints stays on and Speed Brain is off, because Cloudflare refuses its prefetches of pages that run the Worker; see Cloudflare Workers.",
+     "- Providers whose value changes after hydration, such as the theme and Motion providers, wrap only their consumers and never a route `<Outlet />`. A change above a route's Suspense boundary forces that route to hydrate synchronously in one long task, or to render on the client and shift the layout.",
+     "- `robots.txt` and `llms.txt` are static files that bypass the Worker through `run_worker_first` in `wrangler.jsonc`. Lighthouse fails the SEO and Agentic Browsing audits for these files when the requests time out.",
+     "- `src/server.ts` serves prerendered pages from static assets and imports the TanStack Start handler only for other requests, so page requests do not load the full server bundle. Its static imports stay free of TanStack Start and provider SDKs, because a cold Worker evaluates them before it can answer.",
+     "- The deployed Worker leaves out what only prerendering needs: `scripts/deployed-worker.ts` rebuilds it after prerendering without rendered MDX and without the landing and legal page translations, which keeps the upload well below Cloudflare's Worker size limit."
+    ]
+   ],
+   [
+    "equal",
+    432,
+    435,
+    394,
+    397
+   ],
+   [
+    "replace",
+    435,
+    436,
+    397,
+    398,
+    [
+     "`remotion/` contains editable video compositions with a separate npm toolchain. Install it only when editing videos:"
+    ]
+   ],
+   [
+    "equal",
+    436,
+    446,
+    398,
+    408
+   ],
+   [
+    "replace",
+    446,
+    447,
+    408,
+    409,
+    [
+     "Normal application builds serve the checked-in assets without installing Remotion or rendering videos. Follow the rendering instructions when updating a composition, and regenerate its video and posters together."
+    ]
+   ],
+   [
+    "equal",
+    447,
+    449,
+    409,
+    411
+   ],
+   [
+    "replace",
+    449,
+    470,
+    411,
+    412,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    472,
+    412,
+    414
+   ],
+   [
+    "replace",
+    472,
+    473,
+    414,
+    415,
+    [
+     "The website source code and associated technical documentation, including account, checkout, and licence-management code, are covered by the MIT licence in `LICENSE` and the scope statements in `LICENSING.md`. A commercial purchase is not required to reuse the MIT-covered website code."
+    ]
+   ],
+   [
+    "equal",
+    473,
+    477,
+    415,
+    419
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "507eed8d244b+2": {
+  "fn": "AngelMunoz/Migrondi",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    4,
+    [
+     ".NET Core",
+     "NuGet Version",
+     "NuGet Version",
+     "NuGet Version"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    59,
+    4,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     "Download the archive for your platform from the releases page. Each release also carries a `.sha256` file for its archives."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    60,
+    61
+   ],
+   [
+    "replace",
+    61,
+    65,
+    61,
+    65,
+    [
+     "|App|Platforms|Archive|",
+     "|---|---|---|",
+     "|CLI|`win-x64`, `win-arm64`, `linux-x64`, `linux-arm64`, `osx-x64`, `osx-arm64`|`migrondi-<version>-<rid>.zip`|",
+     "|Migrondi UI|`win-x64`, `linux-x64`, `osx-arm64`|`migrondiui-<version>-<rid>.zip`|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    74,
+    65,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     "The repository ships two agent skills: `migrondi-cli` (drive the CLI and its MCP server) and `migrondi-library` (embed `Migrondi.Core`). Install them with the skills CLI:"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    88,
+    75,
+    88
+   ],
+   [
+    "replace",
+    88,
+    100,
+    88,
+    89,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    117,
+    89,
+    106
+   ],
+   [
+    "replace",
+    117,
+    118,
+    106,
+    107,
+    [
+     "The release workflow (`.github/workflows/release.yml`) packs the .NET tools, builds the archives, and publishes the release. See CONTRIBUTING.md for the release checklist."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

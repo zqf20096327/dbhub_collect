@@ -3106,5 +3106,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "017862942967": {
+  "identity": {
+   "one_liner": "Supabase 官方 Python 客户端库的 monorepo，用于从 Python 访问 Supabase 服务",
+   "review": "该仓库是 Supabase 各 Python 库（supabase、realtime、postgrest、storage3、supabase_auth、supabase_functions 等）的 monorepo，供 Python 开发者在 Flask、Django、FastAPI 等框架中查询 Postgres、使用身份认证、文件存储、Edge Functions 与实时数据流。README 主要面向贡献者，说明 main 分支的 v3 处于早期开发阶段且暂不接受外部贡献，v2 分支仅接受关键缺陷与安全修复；仅官方支持 CPython。本地开发依赖 uv、make、supabase-cli 与 docker，通过 make ci 运行测试。",
+   "highlights": [
+    "包含 supabase、realtime、postgrest、storage3、supabase_auth、supabase_functions、supabase_utils 七个子包",
+    "支持 Python 3.12 及所有未到生命周期终点的后续版本，纯 Python 实现，在 Linux 上测试，预期可在 CPython 支持的 macOS、Windows 等平台运行",
+    "提供 make ci 命令统一调度各子包测试，支持 -jN 并行执行及 {package_name}. 前缀的子包级命令"
+   ],
+   "use_cases": [
+    "在 Flask、Django、FastAPI 等 Python 应用中查询 Postgres 数据",
+    "在 Python 项目中使用 Supabase 的用户认证、文件存储与实时数据流功能",
+    "为 Supabase Python 各子库做本地开发与测试（需 uv、make、supabase-cli、docker）"
+   ]
+  },
+  "sha": "017862942967",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f72f109161ec": {
+  "identity": {
+   "one_liner": "将腾讯云 CloudBase 后端接入 AI 编程工具的集成层，通过 Plugin、Skills 与 MCP 实现后端操作",
+   "review": "该项目为腾讯云 CloudBase 后端提供 AI 工具集成：npm 包 @cloudbase/cloudbase-mcp 提供 MCP Server，可在对话中登录环境、查询和修改数据库（PostgreSQL 与文档型数据库）、部署和调用云函数/Cloud Run、管理存储与静态托管并读取日志；Agent Skills 提供场景化编码约束。需自备 CloudBase 环境与 Node.js v18.15.0+，支持远程 HTTP、OAuth 或静态凭证三种连接方式，敏感操作需人工确认。",
+   "highlights": [
+    "通过 MCP 支持数据库 CRUD、云函数/Cloud Run 的编写、部署、调用与调试，以及日志查看和重新部署",
+    "提供 Plugin、Skills、MCP 三种接入形态，覆盖 Cursor、Claude Code、Codex 等多款 AI IDE",
+    "支持远程 HTTP 端点、OAuth 交互授权与静态凭证（适用于 CI/CD）三种连接模式"
+   ],
+   "use_cases": [
+    "在 AI IDE 中以对话方式创建和操作 CloudBase 环境（数据库、登录方式、对象存储）",
+    "为 Web 应用或微信小程序生成代码后，直接在同一会话中部署与查看日志",
+    "使用静态凭证模式在 CI/CD 流程中接入 CloudBase MCP"
+   ]
+  },
+  "sha": "f72f109161ec",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "de025b773456": {
+  "identity": {
+   "one_liner": "基于 Gemini 常驻会话的 QQ 群聊机器人，实现攒批回复、额度分档与长期记忆。",
+   "review": "这是一个以 Rust 编写的 QQ 群机器人，通过 OneBot v11 WebSocket 对接外部 QQ 协议实现，把群消息攒批后交给 Gemini 常驻会话生成回复，提供节奏控制、按额度分档、每群独立记忆与表情库，并附带 React 管理台。适合自部署群机器人且愿意自行承担 QQ 风控与账号风险的用户，项目声明尚不完善，许可证为 AGPL-3.0-or-later。",
+   "highlights": [
+    "消息按静默窗口与条数/字数硬顶攒批后串行成轮，回复经 submit_reply 缓冲提交，发送前过新鲜度门，过期批次直接丢弃",
+    "按 5 小时/周双桶额度分 T0–T3 档动态收紧每群认领上限，另有每小时调用保险丝与泄洪摘要机制",
+    "每群独立长期记忆（定时折叠、压缩与交接），表情库以 pHash 去重并由模型收编；提供管理 API 与五页面 Web 管理台"
+   ],
+   "use_cases": [
+    "自建 QQ 群聊机器人，需要控制回复节奏与模型调用额度消耗",
+    "需要群级长期记忆、表情包管理与生图任务登记的长期挂机群聊场景",
+    "基于 lite 版基座二次开发自定义群机器人功能，或通过管理 API/webhook 接入外部系统"
+   ]
+  },
+  "sha": "de025b773456",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

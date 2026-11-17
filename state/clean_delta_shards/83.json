@@ -30697,5 +30697,388 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "e971d380586a+2": {
+  "fn": "mitdbg/pgvectorfast",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    2,
+    [
+     "pgvectorfast ",
+     " pgvectorfast is a high-performance drop-in enhancement for pgvector that accelerates vector similarity search and analytical queries in PostgreSQL using a fast shared buffer pool. "
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    2,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "Based on pgvector, pgvectorfast is a standard PostgreSQL extension on unmodified PostgreSQL 18 and 19 servers for fast vector similarity search. It preserves complete SQL and on-disk compatibility with all `pgvector` data types (`vector`, `halfvec`, `bit`, `sparsevec`), distance operators, and index types (`hnsw`, `ivfflat`). See the pgvector Documentation for the full SQL API, index parameters, and usage guide."
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    25,
+    7,
+    8,
+    [
+     " In-Memory HNSW Throughput (QPS): pgvector, pgvectorfast, Chroma, and Qdrant"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    8,
+    9
+   ],
+   [
+    "replace",
+    26,
+    27,
+    9,
+    16,
+    [
+     " Larger-Than-Memory HNSW Throughput (QPS): pgvector, pgvectorfast, Chroma, and Qdrant",
+     "",
+     " IVFFlat Median Latency (ms): pgvector vs pgvectorfast",
+     "",
+     " PostgreSQL Analytical Scan and Join Speedup Across Row Sizes",
+     "",
+     "See Detailed Benchmark Results for measured recall, latency breakdowns, and experimental configurations."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    32,
+    16,
+    21
+   ],
+   [
+    "replace",
+    32,
+    33,
+    21,
+    22,
+    [
+     "pgvectorfast replaces PostgreSQL's shared buffer manager with the **Calico** buffer pool (*Making Array-Based Translation Practical for Modern, High-Performance Buffer Management*), combining three techniques:"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    62,
+    22,
+    51
+   ],
+   [
+    "replace",
+    62,
+    63,
+    51,
+    52,
+    [
+     "Prebuilt `postgresql-18-pgvectorfast` packages for Linux x86-64 (`amd64`) are published for Debian 12 (`bookworm`) and Debian 13 (`trixie`) against the PostgreSQL PGDG APT repository. They declare `Conflicts`/`Replaces`/`Provides` for `postgresql-18-pgvector` and depend on matching `postgresql-18-dbgsym` symbols. (Ubuntu PGDG packages compile PostgreSQL with `-flto=auto`, which Calico rejects at startup because LTO inlines internal buffer-manager routines; on Ubuntu, use the Docker image or build from source against a non-LTO PostgreSQL build.)"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    52,
+    53
+   ],
+   [
+    "replace",
+    64,
+    65,
+    53,
+    54,
+    [
+     "1. Ensure the PostgreSQL APT repository (PGDG) is enabled (for example via `postgresql-common` / `/usr/share/postgresql-common/pgdg/apt.postgresql.org.sh`)."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    75,
+    54,
+    64
+   ],
+   [
+    "replace",
+    75,
+    76,
+    64,
+    65,
+    [
+     "3. Continue with Quick Start to preload `vectorfast` and enable the extension."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    79,
+    65,
+    68
+   ],
+   [
+    "replace",
+    79,
+    80,
+    68,
+    69,
+    [
+     "Install from PGXN using `pgxnclient`. Because PGXN compiles from source against your PostgreSQL installation, first ensure you have PostgreSQL 18 or 19 development headers (`pg_config`), non-LTO server symbols (such as `postgresql-18-dbgsym` on Debian PGDG, or an unstripped source build), `libcapstone-dev` (or Python `pip`), a C compiler, and GNU Make:"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    93,
+    69,
+    82
+   ],
+   [
+    "replace",
+    93,
+    94,
+    82,
+    83,
+    [
+     "Continue with Quick Start to preload `vectorfast` in `postgresql.conf` and activate Calico."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    154,
+    83,
+    143
+   ],
+   [
+    "replace",
+    154,
+    155,
+    143,
+    144,
+    [
+     "See the runnable getting-started example and the full pgvector Documentation for all vector types, distance operators, iterative scans, and indexing options."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    158,
+    144,
+    147
+   ],
+   [
+    "replace",
+    158,
+    162,
+    147,
+    151,
+    [
+     "|Parameter|Context|Default|Description|",
+     "|---|---|---|---|",
+     "|`calico.optimistic_reads`|Session / User|`on`|Enables lock-free optimistic tuple reads during HNSW traversal (`vector_l2_ops`).|",
+     "|`hnsw.enable_prefetch`|Session / User|`on`|Enables batched neighbor group prefetching (CPU prefetch + async read batching) during HNSW search.|"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    169,
+    151,
+    158
+   ],
+   [
+    "replace",
+    169,
+    175,
+    158,
+    159,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    159,
+    160
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "6ce477d173d3+2": {
+  "fn": "skyrocks/dsh-db",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "CI",
+     "license"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    12,
+    4,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "openGauss 官方有 Node.js 驱动 `openGauss-connector-nodejs`"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    40,
+    13,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "|工具|作用|安全|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ],
+   [
+    "replace",
+    42,
+    46,
+    42,
+    46,
+    [
+     "|`db_connections`|列出数据源|只读|",
+     "|`db_schema`|表/视图；给 `table` 时列字段、类型、可空、默认值|只读|",
+     "|`db_query`|跑一条 SELECT/SHOW/EXPLAIN，返回表格|三道闸|",
+     "|`db_exec`|跑一条写语句|需逐条授权|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    51,
+    46,
+    51
+   ],
+   [
+    "replace",
+    51,
+    56,
+    51,
+    56,
+    [
+     "1. **语句闸门**（sqlguard.js）：只放行 `select / with / show / explain / describe / values / table`",
+     " 开头的单条语句；注释和字符串先被抹掉，`-- delete` 不会误判，`with x as (delete …)` 躲不过。",
+     " **`PRAGMA` / `ATTACH` / `DETACH` 一律拒绝**——它们改的是数据库状态而不走写入审批",
+     " （`PRAGMA user_version=…`、`journal_mode`、`writable_schema` 都能改库）。读结构用 `db_schema`；",
+     " SQLite 的只读表函数（`SELECT * FROM pragma_table_info('t')`）仍然可用。"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    56,
+    57
+   ],
+   [
+    "replace",
+    57,
+    60,
+    57,
+    60,
+    [
+     " 连接后 `SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY`（MySQL 用",
+     " `SET SESSION TRANSACTION READ ONLY`，SQLite 用只读句柄 + `PRAGMA query_only`），",
+     " 写不进去是数据库说的，不靠插件自觉。"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    74,
+    60,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     " 第一次连生产库请先用只读账号试。"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    84,
+    75,
+    84
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

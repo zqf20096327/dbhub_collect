@@ -3128,5 +3128,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8e1cc9bfb564": {
+  "identity": {
+   "one_liner": "基于 better-sqlite3 的 Node.js SQLite 库，集成 SQLite3MultipleCiphers 实现多算法加密",
+   "review": "该库是 better-sqlite3 的分支，通过 SQLite3MultipleCiphers 扩展为 SQLite 数据库添加加密能力，提供同步 API 读写数据。加密与解密通过 key/rekey 等 PRAGMA 语句完成，可读取 DB Browser for SQLite 生成的 SQLCipher 数据库。适用于需要在客户端本地保护数据的 Node.js 或 Electron 项目；README 提示其默认 cipher 配置的数据库可能无法用 DB Browser 打开，建议改用 SQLiteStudio。",
+   "highlights": [
+    "支持通过 key/rekey PRAGMA 或 key()/rekey() 函数对数据库进行加密与解密",
+    "支持多种加密算法，并可读取 legacy SQLCipher 格式的加密数据库",
+    "提供同步 API、事务支持、用户自定义函数、Worker 线程与 64 位整数支持"
+   ],
+   "use_cases": [
+    "需要对本地 SQLite 数据文件加密的 Node.js/Electron 客户端项目",
+    "需要打开或生成与 DB Browser for SQLite (legacy SQLCipher) 兼容的加密数据库",
+    "使用同步 API 执行本地 SQL 查询、事务写入及大型查询的 Worker 线程场景"
+   ]
+  },
+  "sha": "8e1cc9bfb564",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cd5a38f106af": {
+  "identity": {
+   "one_liner": "Roundcube 邮件系统的模块化工具集，集成 PostfixAdmin/Postfix SQL 后端",
+   "review": "这是一个部署在 Roundcube plugins 目录下的 PHP 插件，包含别名、转发、假期回复、垃圾清理、大附件链接化、密码附加哈希等工具。面向同时使用 Roundcube 与 PostfixAdmin/Postfix SQL 后端的邮件管理员。各工具通过 toolbox_tools 数组按需启用，支持 PostgreSQL 与 MySQL，要求 Roundcube 1.7.2+ 与 PHP 8.1+，工具配置可按域名生效。",
+   "highlights": [
+    "提供 8 个可独立启用的工具模块，覆盖别名、转发、假期回复、自动清理、附件处理与按域名定制",
+    "password_hashes 后台模块在 password_change 事件后使用 PHP password_hash()/hash() API 写入可配置的附加哈希字段，不读写主密码字段",
+    "分别配置 PostfixAdmin/Postfix 与 Roundcube 的读写 SQL 连接（DSN），支持 MySQL 与 PostgreSQL"
+   ],
+   "use_cases": [
+    "让邮件用户在 Roundcube 网页端自行管理 PostfixAdmin 别名、转发地址与假期自动回复",
+    "在密码变更后向邮箱表写入多种算法的附加哈希，供其他需要验证凭据的系统读取",
+    "按域名定制空白页、CSS 与 Logo，或配置回收站/垃圾邮件文件夹的自动清理周期"
+   ]
+  },
+  "sha": "cd5a38f106af",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "785ee7e26d21": {
+  "identity": {
+   "one_liner": "Go 向量存储库，多后端（PostgreSQL/pgvector、SQLite、Redis、内存）模型驱动集合",
+   "review": "go-vectorstore 是一个受 Microsoft.Extensions.VectorData 启发的 Go 向量存储库，提供后端无关的核心接口与多种存储实现：PostgreSQL+pgvector、嵌入式 SQLite、Redis 快照与内存存储。开发者可通过 Go 结构体加 vectordata 标签定义集合，实现类型化 CRUD、过滤检索、密集/二进制/稀疏搜索及 PostgreSQL 混合搜索。要求 Go 1.25+，PostgreSQL 后端需 16+ 与 pgvector 扩展。",
+   "highlights": [
+    "支持 PostgreSQL+pgvector、嵌入式 SQLite、Redis 快照与内存四种存储后端，共享模型契约与一致性测试",
+    "支持密集、二进制（Hamming）、稀疏向量搜索，PostgreSQL 提供 HNSW/IVFFlat 索引与混合搜索",
+    "提供模型迁移规划、schema 漂移检测、向量可选（optional）与数组 ContainsAny/ContainsAll 过滤"
+   ],
+   "use_cases": [
+    "构建语义搜索系统",
+    "RAG 流水线（从向量库检索后交由 LLM 生成）",
+    "基于自有数据的上下文感知助手"
+   ]
+  },
+  "sha": "785ee7e26d21",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "76332f71211b": {
+  "identity": {
+   "one_liner": "基于 Telethon 的 Telegram 聊天导出工具，用并行账号与 takeout 模式高速写入 SQLite",
+   "review": "tg-chat-dump 是一个 Python CLI 工具，用于将 Telegram 聊天或论坛整体导出到 SQLite，并按论坛话题分目录存储 JSONL、TXT 等格式。它通过 Telegram 的 takeout 导出模式与多账号并行 worker 提升速度，每 100 条消息提交一次进度，中断后可续传。使用前需在 my.telegram.org 创建应用获取 api_id 和 api_hash，通过 pipx 安装并以二维码登录。",
+   "highlights": [
+    "以 SQLite 记录导出进度，中断后可续传，重复运行只抓取新增消息并标记已编辑或已删除的消息",
+    "将消息按论坛话题分入独立文件夹，支持整论坛一次导出或按话题导出",
+    "提供 html、csv、tdesktop JSON 等可选输出格式，支持 SOCKS5/HTTP 代理与定时更新（--schedule）"
+   ],
+   "use_cases": [
+    "需要将 Telegram 群组、频道或论坛完整备份到本地数据库与文件的场景",
+    "需要对导出消息进行离线检索、脚本处理（JSONL）或电子表格分析（CSV）的场景",
+    "网络受限环境下通过代理访问 Telegram 并定期增量更新已导出聊天的场景"
+   ]
+  },
+  "sha": "76332f71211b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

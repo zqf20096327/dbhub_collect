@@ -2869,5 +2869,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "353c90d42c9d": {
+  "identity": {
+   "one_liner": "将波兰电子日志 EduVulcan.pl 数据接入 Home Assistant 的插件",
+   "review": "Vultron 是一个 Home Assistant 加载项（也支持 Docker 部署），用于从 EduVulcan.pl 电子日志读取成绩、消息、课表、考勤等数据并生成传感器实体。默认通过无头 Chromium 每 40-60 分钟抓取网页数据，可选启用移动 API 以 15 分钟间隔获取。支持多子女账户与幼儿园账户。README 明确声明使用该项目违反 EduVulcan.pl 服务条款，且安装前需在网页端完成登录与新条款确认步骤。",
+   "highlights": [
+    "提供两种数据获取方式：默认无头浏览器抓取（每 40-60 分钟）和可选移动 API（默认每 15 分钟，最低 10 分钟）",
+    "自动识别家长账户下所有子女并生成各自独立的传感器集合，幼儿园账户走独立数据处理路径",
+    "内置随机化抓取间隔、周末固定时段和夜间停机调度，连续两次登录被拒后自动停止以避免账户锁定"
+   ],
+   "use_cases": [
+    "家长在 Home Assistant 仪表盘中查看子女的成绩更新、未读消息、课表和考试安排",
+    "需要无需浏览器、更高频率获取 EduVulcan 数据的家庭（付费版 EduVulcan 账户配合移动 API）",
+    "GPE 格但斯克地区用户，可通过 provider: gdansk 选项接入本地教育局系统"
+   ]
+  },
+  "sha": "353c90d42c9d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0c79bea1e9cd": {
+  "identity": {
+   "one_liner": "德国合规自托管开源发票软件，支持XRechnung/ZUGFeRD电子发票",
+   "review": "OpenInvoice Germany 是面向德国市场的自托管开源发票软件，提供发票、报价、订阅、催款等文档管理，并生成经官方 Schematron 校验的 XRechnung 与 ZUGFeRD/Factur-X 电子发票。其 GoBD 机制包含定稿不可变、哈希链审计和只增文档归档。项目明确声明不构成税务或法律建议，GoBD 合规还需用户自行编写流程文档。采用 AGPL-3.0 许可证。",
+   "highlights": [
+    "生成 XRechnung（UBL）与 ZUGFeRD/Factur-X 混合 PDF（PDF/A-3b），按官方 Schematron 规则校验，CI 中经 KoSIT validator 与 veraPDF 交叉验证",
+    "定稿后文档不可变、号码区间无间断、审计哈希链、以作废代替删除，并含审计导出（GDPdU/Z3）",
+    "提供版本化 REST API（/api/v1，OpenAPI 文档）、HMAC 签名 webhooks，以及 MCP 服务器供 AI 助手调用"
+   ],
+   "use_cases": [
+    "需接收/开具符合 EN 16931 结构化电子发票的德国自由职业者与中小企业",
+    "需按 GoBD 要求留存不可变审计记录并执行税务审计导出的自托管环境",
+    "通过 REST API 或 MCP 将开票流程集成到自动化工作流或 AI 助手中"
+   ]
+  },
+  "sha": "0c79bea1e9cd",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

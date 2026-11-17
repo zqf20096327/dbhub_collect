@@ -2936,5 +2936,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "94b6be2f1b88": {
+  "identity": {
+   "one_liner": "自托管多用户日程预约应用，基于 Quarkus + Postgres",
+   "review": "calit 是一个自托管的多用户预约排期应用，为每位用户提供 /<username>/<slug> 形式的独立预约页，预约可同步 Google Calendar 并自动生成 Meet 链接。技术栈为 Quarkus 与 PostgreSQL（唯一支持的数据库），SMTP 为必需依赖，部署方式为 Docker Compose 镜像启动并由 Flyway 迁移数据库。适用于需要自主掌控预约数据的团队或个人；首次部署通过 /setup 创建管理员账号。",
+   "highlights": [
+    "服务端渲染的预约页无需运行时 JavaScript，支持多用户隔离（独立会议类型、可用时间、Google 账号），以无状态多副本方式在负载均衡后运行，共享状态存于 Postgres",
+    "支持审批流程、自定义预约表单字段、提醒邮件、OIDC/SSO 登录、Cloudflare Turnstile 或自托管 ALTCHA 反滥用防护，UI 本地化为 en/de/he",
+    "邮件发送失败会进入持久化 outbox 按退避策略重试，提供 GDPR 相关工具（被邀者数据下载与删除、账户导出、可选保留窗口）"
+   ],
+   "use_cases": [
+    "需要自托管且自主拥有预约数据的个人或团队排期场景",
+    "多用户各自维护独立预约页与日历同步的组织",
+    "需要审批流、SSO 或 GDPR 合规工具的预约场景"
+   ]
+  },
+  "sha": "94b6be2f1b88",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "457975a0a279": {
+  "identity": {
+   "one_liner": "自托管功能开关（feature flag）服务器，基于 Spring Boot + React，支持按百分比和属性规则发布功能。",
+   "review": "можно. 是一个自托管的功能开关平台，供团队在生产环境切换功能、按百分比逐步发布并按属性对用户进行分群。它包含 RELEASE/KILLSWITCH 类型标志、基于属性求值的上下文与可复用分群、按环境配置的策略、带细粒度权限的 API 密钥、完整的审计日志，以及 Java 和 JavaScript 的本地求值 SDK。服务器采用 Spring Boot 4.0/JDK 25 和 PostgreSQL，Web 面板为内置于服务器的 React 19 SPA，通过 Docker Compose 部署，生产环境需设置长度不少于 32 字符的 JWT 密钥。项目采用 BSL 1.1 许可证。",
+   "highlights": [
+    "提供 RELEASE 与 KILLSWITCH 两类标志、百分比发布和基于属性的求值规则，规则按环境配置",
+    "提供 Java 与 JavaScript/TypeScript SDK，SDK 拉取规则后本地求值，无需每次网络调用",
+    "内置 React Web 面板、OpenAPI 3.1 文档与 Swagger UI，包含审计日志、按角色的访问控制（ADMIN/DEVELOPER/VIEWER），依赖 PostgreSQL 并经 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "需要在不重新部署的前提下在生产环境切换功能或作为 kill switch 的后端/前端团队",
+    "需要按用户属性或自定义分群对功能进行定向发布的团队",
+    "希望自托管功能开关服务并使用 PostgreSQL 存储的基础设施环境"
+   ]
+  },
+  "sha": "457975a0a279",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

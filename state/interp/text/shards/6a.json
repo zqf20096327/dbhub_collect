@@ -3051,5 +3051,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "742f49478d79": {
+  "identity": {
+   "one_liner": "连接 ClickHouse 与 AI 助手的 MCP 服务器",
+   "review": "这是一个为 ClickHouse 提供 MCP 协议接入的服务器，支持 run_query、list_databases、list_tables 等工具，默认以只读模式执行 SQL，可通过环境变量开启写权限；另含 chDB 嵌入式引擎查询工具与 /health 健康检查端点，HTTP/SSE 传输默认要求认证。面向需要让 AI 客户端访问 ClickHouse 集群的开发者，查询参数通过 {name:Type} 占位符绑定，超 safe-range 的整数以十进制字符串返回。",
+   "highlights": [
+    "提供 run_query、list_databases、list_tables 工具，list_tables 支持分页与名称过滤",
+    "查询默认只读（CLICKHOUSE_ALLOW_WRITE_ACCESS=false），支持 {name:Type} 占位符参数绑定",
+    "run_query 可执行 DESCRIBE(query) 与 EXPLAIN ESTIMATE 预检查询的输出结构与预估读取量"
+   ],
+   "use_cases": [
+    "让 MCP 客户端（如 Claude Desktop）连接 ClickHouse 集群执行只读分析查询",
+    "在编写 SQL 前通过 DESCRIBE/EXPLAIN ESTIMATE 检查结果结构与预估读取量",
+    "通过 chDB 附加依赖对文件、URL 等数据源直接执行 SQL 查询"
+   ]
+  },
+  "sha": "742f49478d79",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f524389f736b": {
+  "identity": {
+   "one_liner": "Go 文档型嵌入式数据库，内置 btree/WAL 引擎，支持类 MongoDB 查询",
+   "review": "Any Store 是面向 Go 的纯 Go 嵌入式文档数据库，存储引擎（btree/pager/WAL）源码内置于项目，设计对齐 SQLite 但使用自有磁盘格式。它提供类 MongoDB 查询语言、复合/唯一/稀疏索引、BM25 全文检索、向量检索（IVF-SQ/HNSW）、聚合管道、ACID 事务与多进程并发访问同一数据库文件。无隐藏 rowid，文档 id 即 btree 键，增量型 id 与随机 id 对写入局部性影响不同。MIT 许可，含 CLI 工具与 js/wasm 支持。",
+   "highlights": [
+    "支持类 MongoDB 查询、聚合管道、全文检索（BM25）与向量检索（IVF-SQ/HNSW/暴力扫描）",
+    "ACID 事务采用快照隔离读、全局单写者模型，支持多进程访问同一数据库文件",
+    "纯 Go 实现（无 CGO），含页级校验和、可选 AEAD 加密、崩溃恢复 WAL 与 js/wasm 运行能力"
+   ],
+   "use_cases": [
+    "Go 应用中需要嵌入式持久化文档数据且需全文或向量检索的场景",
+    "多个 OS 进程并发读写同一数据库文件的本地存储需求",
+    "wasm 环境或无法使用 CGO 的跨平台 Go 部署"
+   ]
+  },
+  "sha": "f524389f736b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

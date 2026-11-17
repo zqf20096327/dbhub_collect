@@ -3014,5 +3014,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "bf063e55a64c": {
+  "identity": {
+   "one_liner": "用纯 SQL DDL 声明目标 schema 的幂等式数据库迁移工具",
+   "review": "sqldef 是面向 MySQL、PostgreSQL、SQLite3 和 SQL Server 的 schema 管理工具：用户维护一份完整 schema 的 SQL 文件，工具对比当前与目标 schema 后生成并执行 DDL，可重复运行。各数据库对应独立命令，连接选项仿照原生客户端，支持 --export/--dry-run/--apply 工作流、离线文件对比模式，以及 @renamed 注解处理重命名。提供单二进制、Docker 镜像与 Homebrew 安装，MIT 许可。",
+   "highlights": [
+    "以普通 SQL DDL 描述目标 schema，对比当前与期望状态自动生成迁移 DDL，操作幂等可重复执行",
+    "支持离线模式，可对两个 SQL 文件做对比，无需连接数据库，适用于 CI/CD 与 schema 校验",
+    "通过 -- @renamed 注解支持表、列、索引和 ENUM 值的重命名；提供 --export/--dry-run/--apply 工作流"
+   ],
+   "use_cases": [
+    "维护单文件 schema 定义，通过编辑该文件来增删列、改约束、建索引并应用到数据库",
+    "在 CI/CD 流水线中离线对比 SQL 文件做 schema 校验或生成迁移脚本",
+    "配合 sqldef-preview-action 在 GitHub Actions 中预览 schema 变更"
+   ]
+  },
+  "sha": "bf063e55a64c",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "89411a34be65": {
+  "identity": {
+   "one_liner": "在 AWS 上创建数据库测试实验环境的命令行工具，通过预置 AMI 与 K3s 部署多数据库集群。",
+   "review": "easy-db-lab 是一个用于在 AWS 上创建数据库实验环境的工具，面向测试、基准测试与学习场景。它通过 Packer 构建包含多个 Cassandra 版本、ClickHouse、bcc 工具和 async-profiler 的 AMI，可在节点上按版本切换 Cassandra 并自动配置对应 Python/Java 版本；也支持经 K3s 部署 ClickHouse、OpenSearch、Spark 等。需要 AWS 账户、四项 IAM 策略及本地 Docker；Homebrew 安装目前仅支持 us-west-2 区域。",
+   "highlights": [
+    "支持 Apache Cassandra 2.2 至 trunk 版本、混合版本集群、自定义分支，以及可配置副本的分片 ClickHouse 集群和任意 K8s 兼容数据库",
+    "内置 Prometheus/Grafana 预配置面板、OpenTelemetry 追踪、async-profiler 火焰图和 bcc-tools 内核指标采集",
+    "提供 REPL 交互式 CLI、REST 状态端点、AI 助手集成，支持 Homebrew、容器镜像与源码构建三种安装方式"
+   ],
+   "use_cases": [
+    "搭建多版本 Cassandra 集群进行版本切换测试与故障演练",
+    "部署 ClickHouse、OpenSearch 或 Spark EMR 集群用于基准测试与分析负载",
+    "为数据库学习创建可销毁重建的隔离 AWS 实验环境"
+   ]
+  },
+  "sha": "89411a34be65",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f4e09d516b28": {
+  "identity": {
+   "one_liner": "基于 Next.js + Prisma/SQLite + Tiptap 的图文教程发布平台",
+   "review": "该项目是一个图文教程站点系统，前台展示教程与分类，后台提供 Tiptap 富文本编辑、分类树和站点设置管理。技术栈为 Next.js 16 App Router、React 19、Prisma 7 + SQLite、Tailwind CSS v4。内置登录限流、两步验证/通行密钥、HTML 白名单过滤、备份脚本与 Nginx 部署示例，部署时需 Node.js ≥ 22.12 并先完成数据库迁移再构建。",
+   "highlights": [
+    "Tiptap 3 富文本编辑器支持拖拽/粘贴上传图片，上传图片自动缩放转 WebP 并生成多尺寸响应式小图",
+    "包含 SEO 输出（sitemap/robots、OpenGraph、结构化数据）、后台一键更新流程与 PM2 部署脚本",
+    "提供会话吊销、TOTP 两步验证、通行密钥、登录限流、安全日志与 Webhook 安全告警等账号安全功能"
+   ],
+   "use_cases": [
+    "自建图文教程或博客站点并通过管理后台发文",
+    "在 Linux 服务器上以 PM2 + Nginx 方式部署 SQLite 单机站点",
+    "需要带鉴权后台、图片处理和备份机制的 Next.js 内容站点开发参考"
+   ]
+  },
+  "sha": "f4e09d516b28",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5fd6c7f1ba5a": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 Node.js/PostgreSQL 的多模块 ERP 与零售餐饮 POS 套件",
+   "review": "Famalth Lynx 是一套由 Flutter 客户端与 Node.js/Express、PostgreSQL 后端构成的 ERP 与 POS 系统，面向零售门店、餐厅、多分店与企业库存管理场景。项目包含餐厅桌台与厨房显示、零售条码开单与批次库存、复式记账财务、人事薪资等模块，并提供管理端、骑手端、顾客自助点餐端与供应商门户四个应用。支持 Windows 本地离线运行与云端部署，部署需配置 PostgreSQL 连接及 JWT、邮件、S3 存储等环境变量，README 提供安装程序与 Render.com 部署指南。",
+   "highlights": [
+    "提供四个客户端应用入口：主 POS 管理端、骑手配送端、顾客自助点餐端与供应商门户（main.dart / main_rider.dart / main_customer.dart / main_supplier.dart）",
+    "包含餐厅 POS、零售库存（批次/序列号/FEFO/FIFO）、复式记账总账与凭证、HR 薪资考勤等模块",
+    "支持 WhatsApp Webhook 单据推送、Google Drive 备份与 Google Sheets 同步、夜间审计与日结报告，本地离线运行并可自动同步 PostgreSQL 云端"
+   ],
+   "use_cases": [
+    "需要桌台管理、厨房显示（KDS/KOT）与外卖骑手调度的餐厅堂食/外卖运营",
+    "多门店多仓库零售场景下的条码开单、采购收货（GRN）与库存调拨",
+    "需要试算平衡表、损益表、资产负债表等财务报表与员工薪资管理的一体化门店后台"
+   ]
+  },
+  "sha": "5fd6c7f1ba5a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

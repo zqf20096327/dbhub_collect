@@ -22537,5 +22537,4243 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "687c9230ca40+2": {
+  "fn": "Spooled-Cloud/spooled-backend",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "License",
+     "Rust",
+     "Docker"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    5,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "**Live Demo (SpriteForge)** • Documentation • Website"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    58,
+    9,
+    58
+   ],
+   [
+    "replace",
+    58,
+    71,
+    58,
+    59,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    75,
+    59,
+    63
+   ],
+   [
+    "replace",
+    75,
+    76,
+    63,
+    64,
+    [
+     "|Port|Service|Change it with|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    64,
+    65
+   ],
+   [
+    "replace",
+    77,
+    80,
+    65,
+    68,
+    [
+     "|`8080`|REST API|`SPOOLED_HTTP_PORT`|",
+     "|`50051`|gRPC API (no TLS: `grpcurl -plaintext`)|`SPOOLED_GRPC_PORT`|",
+     "|`4321`|Dashboard|`SPOOLED_DASHBOARD_PORT`|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    68,
+    71
+   ],
+   [
+    "replace",
+    83,
+    84,
+    71,
+    72,
+    [
+     "This stack is for trying Spooled locally, not for production: it runs with `RUST_ENV=development`, fixed local credentials, and the `console` email provider (email login codes are printed by `docker compose -f docker-compose.quickstart.yml logs backend`). New organizations start on the `enterprise` plan (`DEFAULT_PLAN_TIER`) so plan limits do not get in the way. Backend images up to `0.1.130` ignore `DEFAULT_PLAN_TIER` and put new organizations on the Free plan (2 queues, 1 worker, no workflows); see Lifting plan limits. Stop and delete everything with `docker compose -f docker-compose.quickstart.yml down -v`."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    89,
+    72,
+    77
+   ],
+   [
+    "replace",
+    89,
+    90,
+    77,
+    78,
+    [
+     "> **Production gRPC TLS:** images from `v0.1.99` onward do not bake a historical `certs/grpc-key.pem` into the image. The production Compose stack automatically generates a private self-signed origin certificate in a Docker volume and renews it before expiration. No certificate setup is required. See SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    95,
+    78,
+    83
+   ],
+   [
+    "replace",
+    95,
+    121,
+    83,
+    84,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    123,
+    84,
+    86
+   ],
+   [
+    "replace",
+    123,
+    124,
+    86,
+    87,
+    [
+     "Then create your organization and first API key exactly as in Try it in 2 minutes (the key starts with `sp_live_`)."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    158,
+    87,
+    121
+   ],
+   [
+    "replace",
+    158,
+    159,
+    121,
+    122,
+    [
+     "Portainer details (Git stacks, ephemeral checkouts, recreate): docs/guides/production-host-portainer.md."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    162,
+    122,
+    125
+   ],
+   [
+    "replace",
+    162,
+    163,
+    125,
+    126,
+    [
+     "|Variable|Required|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    164,
+    126,
+    127
+   ],
+   [
+    "replace",
+    164,
+    196,
+    127,
+    159,
+    [
+     "|`DATABASE_URL`|✅|-|PostgreSQL connection string|",
+     "|`JWT_SECRET`|✅|-|32+ char secret for JWT signing|",
+     "|`ADMIN_API_KEY`|❌|-|Value of the `X-Admin-Key` header for `/api/v1/admin/*` and for creating organizations when `REGISTRATION_MODE=closed`. Not an API key; unset = admin API off|",
+     "|`DEFAULT_PLAN_TIER`|❌|`free`|Plan of every new organization (`free`/`starter`/`pro`/`enterprise`; an unknown value stops startup). Self-hosted organizations are **not** limit-free by default: set `enterprise` for a private install. Images up to `0.1.130` ignore it, see Lifting plan limits|",
+     "|`REDIS_URL`|❌|`redis://localhost:6379`|Redis for pub/sub & caching|",
+     "|`RUST_ENV`|❌|`production`|`development`/`staging`/`production` (unset/unknown values fail safe to production)|",
+     "|`REGISTRATION_MODE`|❌|`open`|`open`/`closed` - controls public registration|",
+     "|`PORT`|❌|`8080`|REST API server port|",
+     "|`GRPC_PORT`|❌|`50051`|gRPC API server port|",
+     "|`GRPC_TLS_ENABLED`|❌|`false`|Enable TLS for gRPC (required for Cloudflare Tunnel). The default is `false` in every `RUST_ENV`; `docker-compose.prod.yml` sets it to `true`|",
+     "|`GRPC_TLS_CERT_PATH`|❌|(Compose sets `/run/secrets/grpc-cert.pem`)|Path to TLS certificate (PEM); production Compose mounts the generated volume automatically|",
+     "|`GRPC_TLS_KEY_PATH`|❌|(Compose sets `/run/secrets/grpc-key.pem`)|Path to TLS private key (PEM); production Compose mounts the generated volume read-only|",
+     "|`METRICS_PORT`|❌|`9090`|Prometheus metrics port|",
+     "|`METRICS_TOKEN`|❌|-|If set, requires `Authorization: Bearer <token>` for `/metrics`|",
+     "|`TRUSTED_CLIENT_IP_HEADER`|❌|-|Edge header carrying the real client IP, believed from any caller once set. Unset: `CF-Connecting-IP`, then `X-Real-IP`, believed **only** when the TCP peer is a loopback/private/link-local address (a proxy of yours on the same host or network); any other caller is keyed on its own address. Production warns at boot while unset|",
+     "|`TRUSTED_PROXY_HOPS`|❌|`0`|Entries **your own** proxies append to `X-Forwarded-For`, counted from the right. `0` = never consult that header|",
+     "|`OUTGOING_WEBHOOK_MAX_ATTEMPTS`|❌|`5`|Delivery attempts per outgoing webhook event|",
+     "|`OUTGOING_WEBHOOK_MAX_CONCURRENT_DELIVERIES`|❌|`64`|Webhook delivery senders and request slots, process-wide; also sizes the bounded delivery queue (16 per sender, drops are counted)|",
+     "|`TURNSTILE_SECRET_KEY`|❌|-|Cloudflare Turnstile secret. When set, `POST /auth/email/start` requires a valid `turnstile_token` (`400 CAPTCHA_FAILED` otherwise). Leave unset until the site and the dashboard both send the token|",
+     "|`FRONTEND_URL`|❌|`https://spooled.cloud`|Website base URL Stripe Checkout returns to (`<FRONTEND_URL>/account/billing?checkout=success\\|cancel`)|",
+     "|`EMAIL_PROVIDER`|✅ in production|`console`|`resend`/`sendgrid`/`postmark`/`smtp`. The backend refuses to start with `console` when `RUST_ENV=production` (login codes would only be logged)|",
+     "|`EMAIL_API_KEY`|with `resend`/`sendgrid`/`postmark`|-|Provider API key|",
+     "|`SMTP_HOST` / `SMTP_PORT` / `SMTP_USERNAME` / `SMTP_PASSWORD`|with `smtp`|- / `587` / - / -|SMTP relay (STARTTLS on `SMTP_PORT`)|",
+     "|`EMAIL_FROM_ADDRESS` / `EMAIL_FROM_NAME`|❌|`noreply@spooled.cloud` / `Spooled Cloud`|Sender of login-code emails|",
+     "|`RATE_LIMIT_FAIL_CLOSED`|❌|`false`|`true` rejects requests while Redis cannot answer instead of letting them through|",
+     "|`CORS_ALLOWED_ORIGINS`|❌|spooled.cloud origins|Comma-separated allowed origins; blank keeps the default list|",
+     "|`EXTERNAL_URL`|❌|-|Public base URL of the API|",
+     "|`ENABLE_HSTS`|❌|`false`|Send `Strict-Transport-Security` (only behind HTTPS)|",
+     "|`DATABASE_DIRECT_URL`|❌|-|Direct (non-PgBouncer) Postgres URL; migrations run over it when set|",
+     "|`DATABASE_LIST_STATEMENT_TIMEOUT_MS`|❌|`5000`|Statement timeout of `GET /jobs` and `GET /jobs/dlq` in milliseconds; a list it stops answers `400 QUERY_TIMEOUT`. `0` is refused (Postgres would read it as no timeout)|",
+     "|`WORKER_LEASE_DURATION_SECS`|❌|`30`|Default job lease for a REST claim that sends none|",
+     "|`GRPC_DEFAULT_LEASE_DURATION_SECS`|❌|`300`|Lease for gRPC claims and renewals that send none (`0` = 300, at most 3600, must be greater than `WORKER_HEARTBEAT_INTERVAL_SECS`); reported by gRPC `Register`|"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    201,
+    159,
+    164
+   ],
+   [
+    "replace",
+    201,
+    202,
+    164,
+    165,
+    [
+     "|Variable|Default|Used by|"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    165,
+    166
+   ],
+   [
+    "replace",
+    203,
+    210,
+    166,
+    173,
+    [
+     "|`SPOOLED_BIND_ADDRESS`|`127.0.0.1`|`docker-compose.quickstart.yml`, `docker-compose.prod.yml` (API ports)|",
+     "|`SPOOLED_HTTP_PORT`|`8080`|quickstart, prod|",
+     "|`SPOOLED_GRPC_PORT`|`50051`|quickstart, prod|",
+     "|`SPOOLED_DASHBOARD_PORT`|`4321`|quickstart|",
+     "|`POSTGRES_HOST_PORT`|`5432` (prod, on `127.0.0.1`), `5433` (dev)|prod, `docker-compose.yml`|",
+     "|`PGBOUNCER_HOST_PORT` / `REDIS_HOST_PORT`|`6432` / `6379`|`docker-compose.yml`|",
+     "|`PROMETHEUS_HOST_PORT` / `GRAFANA_HOST_PORT`|`9091` / `3000`|`docker-compose.yml`|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    173,
+    174
+   ],
+   [
+    "replace",
+    211,
+    212,
+    174,
+    175,
+    [
+     "The leftmost `X-Forwarded-For` entry is whatever the caller sent, so it is never trusted for rate limiting: set `TRUSTED_CLIENT_IP_HEADER` or `TRUSTED_PROXY_HOPS` if you terminate behind a proxy that sets neither `CF-Connecting-IP` nor `X-Real-IP`. `CF-Connecting-IP` and `X-Real-IP` are likewise believed only from a private TCP peer unless `TRUSTED_CLIENT_IP_HEADER` names the header, so a proxy that reaches the backend from a public address must set it. An IPv6 client is rate-limited per /64. Details in docs/guides/operations.md."
+    ]
+   ],
+   [
+    "equal",
+    212,
+    215,
+    175,
+    178
+   ],
+   [
+    "replace",
+    215,
+    216,
+    178,
+    179,
+    [
+     "Every organization has a plan (`free`, `starter`, `pro` or `enterprise`, limits in Plan Limits & Tiers). A self-hosted organization is **not** limit-free by default: it starts on `DEFAULT_PLAN_TIER`, which defaults to `free` (2 queues, 1 worker, no workflows, 5 requests/second). For a private install:"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    227,
+    179,
+    190
+   ],
+   [
+    "replace",
+    227,
+    228,
+    190,
+    191,
+    [
+     " `ORG_ID` is `organization.id` from the `POST /api/v1/organizations` response (or `GET /api/v1/admin/organizations`)."
+    ]
+   ],
+   [
+    "equal",
+    228,
+    265,
+    191,
+    228
+   ],
+   [
+    "replace",
+    265,
+    273,
+    228,
+    236,
+    [
+     " - `SPOOLED_PLAN_<TIER>_MAX_JOBS_PER_DAY`",
+     " - `SPOOLED_PLAN_<TIER>_MAX_ACTIVE_JOBS`",
+     " - `SPOOLED_PLAN_<TIER>_MAX_QUEUES`",
+     " - `SPOOLED_PLAN_<TIER>_MAX_WORKERS`",
+     " - `SPOOLED_PLAN_<TIER>_MAX_API_KEYS`",
+     " - `SPOOLED_PLAN_<TIER>_MAX_SCHEDULES`",
+     " - `SPOOLED_PLAN_<TIER>_MAX_WORKFLOWS`",
+     " - `SPOOLED_PLAN_<TIER>_MAX_WEBHOOKS`"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    274,
+    236,
+    237
+   ],
+   [
+    "replace",
+    274,
+    279,
+    237,
+    242,
+    [
+     " - `SPOOLED_PLAN_<TIER>_MAX_PAYLOAD_SIZE_BYTES`",
+     " - `SPOOLED_PLAN_<TIER>_RATE_LIMIT_RPS`",
+     " - `SPOOLED_PLAN_<TIER>_RATE_LIMIT_BURST`",
+     " - `SPOOLED_PLAN_<TIER>_JOB_RETENTION_DAYS`",
+     " - `SPOOLED_PLAN_<TIER>_HISTORY_RETENTION_DAYS`"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    284,
+    242,
+    247
+   ],
+   [
+    "replace",
+    284,
+    285,
+    247,
+    248,
+    [
+     "Build and run the backend from source against PostgreSQL, PgBouncer and Redis in Docker. This is the one local development path; CONTRIBUTING.md and the Quick Start Guide use the same steps."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    297,
+    248,
+    260
+   ],
+   [
+    "replace",
+    297,
+    307,
+    260,
+    261,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    313,
+    261,
+    267
+   ],
+   [
+    "replace",
+    313,
+    314,
+    267,
+    268,
+    [
+     "Then create an organization and run jobs as in Try it in 2 minutes. New organizations start on the Free plan; see Lifting plan limits."
+    ]
+   ],
+   [
+    "equal",
+    314,
+    321,
+    268,
+    275
+   ],
+   [
+    "replace",
+    321,
+    322,
+    275,
+    276,
+    [
+     "Integration tests start their own PostgreSQL and Redis containers (testcontainers), so Docker must be running; see CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    322,
+    327,
+    276,
+    281
+   ],
+   [
+    "replace",
+    327,
+    328,
+    281,
+    282,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    329,
+    282,
+    283
+   ],
+   [
+    "replace",
+    329,
+    339,
+    283,
+    293,
+    [
+     "|`GET`|`/health`|Health check|",
+     "|`POST`|`/api/v1/jobs`|Create a job (enforces plan limits)|",
+     "|`GET`|`/api/v1/jobs`|List jobs (filters: `status` list, `q`, `job_type`, `created_after`, `created_before`; `X-Has-More` header)|",
+     "|`GET`|`/api/v1/jobs/{id}/history`|A job's recorded lifecycle events|",
+     "|`POST`|`/api/v1/jobs/bulk`|Bulk enqueue jobs (enforces plan limits)|",
+     "|`POST`|`/api/v1/jobs/claim`|Claim (lease) jobs for worker processing|",
+     "|`POST`|`/api/v1/jobs/{id}/complete`|Mark a job completed (worker ack)|",
+     "|`POST`|`/api/v1/jobs/{id}/fail`|Mark a job failed (worker nack)|",
+     "|`POST`|`/api/v1/jobs/{id}/heartbeat`|Extend a job lease (long-running jobs)|",
+     "|`GET`|`/api/v1/jobs/stats`|Get job statistics|"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    342,
+    293,
+    296
+   ],
+   [
+    "replace",
+    342,
+    343,
+    296,
+    297,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    344,
+    297,
+    298
+   ],
+   [
+    "replace",
+    344,
+    347,
+    298,
+    301,
+    [
+     "|`GET`|`/api/v1/jobs/dlq`|List jobs in dead letter queue|",
+     "|`POST`|`/api/v1/jobs/dlq/retry`|Retry jobs from DLQ (enforces plan limits)|",
+     "|`POST`|`/api/v1/jobs/dlq/purge`|Purge jobs from DLQ|"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    350,
+    301,
+    304
+   ],
+   [
+    "replace",
+    350,
+    351,
+    304,
+    305,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    352,
+    305,
+    306
+   ],
+   [
+    "replace",
+    352,
+    356,
+    306,
+    310,
+    [
+     "|`POST`|`/api/v1/organizations`|Create organization (returns initial API key)|",
+     "|`GET`|`/api/v1/organizations/usage`|Get plan usage and limits|",
+     "|`GET`|`/api/v1/organizations/check-slug`|Check if slug is available|",
+     "|`POST`|`/api/v1/organizations/generate-slug`|Generate unique slug from name|"
+    ]
+   ],
+   [
+    "equal",
+    356,
+    359,
+    310,
+    313
+   ],
+   [
+    "replace",
+    359,
+    360,
+    313,
+    314,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    361,
+    314,
+    315
+   ],
+   [
+    "replace",
+    361,
+    364,
+    315,
+    318,
+    [
+     "|`POST`|`/api/v1/schedules`|Create cron schedule|",
+     "|`POST`|`/api/v1/schedules/{id}/trigger`|Manually trigger schedule (enforces plan limits)|",
+     "|`POST`|`/api/v1/workflows`|Create workflow/DAG (enforces plan limits)|"
+    ]
+   ],
+   [
+    "equal",
+    364,
+    367,
+    318,
+    321
+   ],
+   [
+    "replace",
+    367,
+    368,
+    321,
+    322,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    369,
+    322,
+    323
+   ],
+   [
+    "replace",
+    369,
+    374,
+    323,
+    328,
+    [
+     "|`POST`|`/api/v1/outgoing-webhooks`|Configure outgoing notifications|",
+     "|`GET`|`/api/v1/outgoing-webhooks/{id}/deliveries`|Get delivery history|",
+     "|`POST`|`/api/v1/outgoing-webhooks/{id}/retry/{delivery_id}`|Retry failed delivery|",
+     "|`POST`|`/api/v1/webhooks/{org_id}/custom`|Incoming webhook (ingestion → creates jobs)|",
+     "|`GET`|`/api/v1/webhooks/deliveries`|Inbound webhook log (accepted requests, newest first)|"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    377,
+    328,
+    331
+   ],
+   [
+    "replace",
+    377,
+    378,
+    331,
+    332,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    379,
+    332,
+    333
+   ],
+   [
+    "replace",
+    379,
+    383,
+    333,
+    337,
+    [
+     "|`GET`|`/api/v1/ws`|WebSocket for real-time|",
+     "|`GET`|`/api/v1/events`|SSE stream of all events|",
+     "|`GET`|`/api/v1/events/queues/{name}`|SSE stream of queue updates|",
+     "|`GET`|`/api/v1/events/jobs/{id}`|SSE stream of job updates|"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    386,
+    337,
+    340
+   ],
+   [
+    "replace",
+    386,
+    387,
+    340,
+    341,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    388,
+    341,
+    342
+   ],
+   [
+    "replace",
+    388,
+    392,
+    342,
+    346,
+    [
+     "|`POST`|`/api/v1/auth/login`|Exchange API key for JWT|",
+     "|`POST`|`/api/v1/auth/refresh`|Refresh JWT token|",
+     "|`POST`|`/api/v1/auth/email/start`|Start email-based login (3/min and 10/hour per client IP; optional `turnstile_token`)|",
+     "|`POST`|`/api/v1/auth/email/verify`|Verify email login code (429 with `Retry-After` when throttled)|"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    395,
+    346,
+    349
+   ],
+   [
+    "replace",
+    395,
+    396,
+    349,
+    350,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    397,
+    350,
+    351
+   ],
+   [
+    "replace",
+    397,
+    400,
+    351,
+    354,
+    [
+     "|`GET`|`/api/v1/billing/status`|Get billing status (unrestricted API key)|",
+     "|`POST`|`/api/v1/billing/checkout`|Create a Stripe Checkout session for `starter` or `pro`, bound to the organization (unrestricted API key)|",
+     "|`POST`|`/api/v1/billing/portal`|Create Stripe customer portal session|"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    403,
+    354,
+    357
+   ],
+   [
+    "replace",
+    403,
+    404,
+    357,
+    358,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    404,
+    405,
+    358,
+    359
+   ],
+   [
+    "replace",
+    405,
+    414,
+    359,
+    368,
+    [
+     "|`GET`|`/api/v1/admin/organizations`|List all organizations|",
+     "|`POST`|`/api/v1/admin/organizations`|Create organization with plan tier|",
+     "|`GET`|`/api/v1/admin/organizations/{id}`|Get organization details|",
+     "|`PATCH`|`/api/v1/admin/organizations/{id}`|Update organization (plan, status)|",
+     "|`DELETE`|`/api/v1/admin/organizations/{id}`|Delete organization (soft or hard)|",
+     "|`POST`|`/api/v1/admin/organizations/{id}/api-keys`|Create API key for organization|",
+     "|`POST`|`/api/v1/admin/organizations/{id}/reset-usage`|Reset daily usage counters|",
+     "|`GET`|`/api/v1/admin/stats`|Platform-wide statistics|",
+     "|`GET`|`/api/v1/admin/plans`|List available plans with limits|"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    423,
+    368,
+    377
+   ],
+   [
+    "replace",
+    423,
+    440,
+    377,
+    378,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    440,
+    448,
+    378,
+    386
+   ],
+   [
+    "replace",
+    448,
+    456,
+    386,
+    387,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    460,
+    387,
+    391
+   ],
+   [
+    "replace",
+    460,
+    461,
+    391,
+    392,
+    [
+     "Each job has a `key` that `depends_on` refers to. Workflows are not available on the Free plan (`403 FEATURE_DISABLED`); see Lifting plan limits."
+    ]
+   ],
+   [
+    "equal",
+    461,
+    466,
+    392,
+    397
+   ],
+   [
+    "replace",
+    466,
+    489,
+    397,
+    398,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    489,
+    497,
+    398,
+    406
+   ],
+   [
+    "replace",
+    497,
+    504,
+    406,
+    407,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    504,
+    506,
+    407,
+    409
+   ],
+   [
+    "replace",
+    506,
+    507,
+    409,
+    410,
+    [
+     "`format` is `json` (the default: the signed event envelope), `slack`, `discord` or `teams`; a chat format sends one short message so the chat service's incoming-webhook URL works as it is. Events: `job.created`, `job.started`, `job.completed`, `job.failed`, `job.cancelled`, `job.deadlettered`, `job.retried`, `queue.paused`, `queue.resumed`, `worker.registered`, `worker.deregistered`, `schedule.triggered`, `workflow.completed` and `workflow.failed` (the two workflow events are announced at most once, see docs/guides/webhooks.md)."
+    ]
+   ],
+   [
+    "equal",
+    507,
+    508,
+    410,
+    411
+   ],
+   [
+    "replace",
+    508,
+    509,
+    411,
+    412,
+    [
+     "Deliveries retry with exponential backoff (`OUTGOING_WEBHOOK_MAX_ATTEMPTS`, default 5). After 20 consecutive failed deliveries the webhook is disabled automatically (`enabled: false`, `last_status: \"auto_disabled\"`) and receives no further events until you re-enable it with `PUT /api/v1/outgoing-webhooks/{id}` and `{\"enabled\": true}`. See docs/guides/webhooks.md."
+    ]
+   ],
+   [
+    "equal",
+    509,
+    540,
+    412,
+    443
+   ],
+   [
+    "replace",
+    540,
+    541,
+    443,
+    444,
+    [
+     "The service definitions are in `proto/spooled.proto`:"
+    ]
+   ],
+   [
+    "equal",
+    541,
+    546,
+    444,
+    449
+   ],
+   [
+    "replace",
+    546,
+    564,
+    449,
+    450,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    564,
+    575,
+    450,
+    461
+   ],
+   [
+    "replace",
+    575,
+    576,
+    461,
+    462,
+    [
+     "> set `GRPC_PORT=50052` or another available port. See gRPC Server Guide for details."
+    ]
+   ],
+   [
+    "equal",
+    576,
+    579,
+    462,
+    465
+   ],
+   [
+    "replace",
+    579,
+    580,
+    465,
+    466,
+    [
+     "Use `-plaintext` against `cargo run` and `docker-compose.quickstart.yml` (gRPC without TLS). The production Compose stack serves gRPC over TLS with a self-signed certificate: replace `-plaintext` with `-insecure` (or `-cacert grpc-cert.pem -servername backend`, see gRPC on the production stack)."
+    ]
+   ],
+   [
+    "equal",
+    580,
+    585,
+    466,
+    471
+   ],
+   [
+    "replace",
+    585,
+    608,
+    471,
+    472,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    608,
+    612,
+    472,
+    476
+   ],
+   [
+    "replace",
+    612,
+    613,
+    476,
+    477,
+    [
+     "|Feature|Description|"
+    ]
+   ],
+   [
+    "equal",
+    613,
+    614,
+    477,
+    478
+   ],
+   [
+    "replace",
+    614,
+    619,
+    478,
+    483,
+    [
+     "|**Health Check**|Standard gRPC health protocol (`grpc.health.v1.Health`)|",
+     "|**Reflection**|Service discovery for debugging tools|",
+     "|**Streaming**|Server + bidirectional streaming for efficient workers|",
+     "|**Compression**|gzip compression supported|",
+     "|**Auth**|`x-api-key` or `authorization: Bearer` metadata|"
+    ]
+   ],
+   [
+    "equal",
+    619,
+    622,
+    483,
+    486
+   ],
+   [
+    "replace",
+    622,
+    623,
+    486,
+    487,
+    [
+     "|Use Case|Recommended|"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    624,
+    487,
+    488
+   ],
+   [
+    "replace",
+    624,
+    629,
+    488,
+    493,
+    [
+     "|Web/mobile apps|REST API|",
+     "|Dashboard/admin|REST API|",
+     "|High-throughput workers|gRPC|",
+     "|Streaming job delivery|gRPC StreamJobs|",
+     "|Language with gRPC SDK|gRPC|"
+    ]
+   ],
+   [
+    "equal",
+    629,
+    636,
+    493,
+    500
+   ],
+   [
+    "replace",
+    636,
+    637,
+    500,
+    501,
+    [
+     "Built-in defaults from `src/config/plans.rs` (self-hosters can change them, see Lifting plan limits):"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    638,
+    501,
+    502
+   ],
+   [
+    "replace",
+    638,
+    639,
+    502,
+    503,
+    [
+     "|Tier|Active Jobs|Daily Jobs|Queues|Workers|API Keys|Webhooks|Schedules|Workflows|Max Payload|Rate Limit (req/s, burst)|Job / History Retention|"
+    ]
+   ],
+   [
+    "equal",
+    639,
+    640,
+    503,
+    504
+   ],
+   [
+    "replace",
+    640,
+    644,
+    504,
+    508,
+    [
+     "|**Free**|10|1,000|2|1|2|1|1|0 (disabled)|64 KB|5, 10|3 / 1 days|",
+     "|**Starter**|500|10,000|10|5|5|5|10|5|256 KB|25, 50|14 / 7 days|",
+     "|**Pro**|5,000|100,000|50|25|25|20|50|25|1 MB|100, 200|30 / 30 days|",
+     "|**Enterprise**|Unlimited|Unlimited|Unlimited|Unlimited|Unlimited|Unlimited|Unlimited|Unlimited|1 MB|500, 1000|90 / 90 days|"
+    ]
+   ],
+   [
+    "equal",
+    644,
+    668,
+    508,
+    532
+   ],
+   [
+    "replace",
+    668,
+    675,
+    532,
+    533,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    675,
+    701,
+    533,
+    559
+   ],
+   [
+    "replace",
+    701,
+    702,
+    559,
+    560,
+    [
+     "See Self-Hosting with Docker Compose for the complete `.env` (required: `POSTGRES_PASSWORD`, `JWT_SECRET`, `RUST_ENV=production`, `EMAIL_PROVIDER` with its SMTP or API-key settings; recommended: `DEFAULT_PLAN_TIER=enterprise` for a private install), host ports, gRPC TLS and Cloudflare Tunnel."
+    ]
+   ],
+   [
+    "equal",
+    702,
+    711,
+    560,
+    569
+   ],
+   [
+    "replace",
+    711,
+    724,
+    569,
+    570,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    724,
+    745,
+    570,
+    591
+   ],
+   [
+    "replace",
+    745,
+    754,
+    591,
+    592,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    754,
+    784,
+    592,
+    622
+   ],
+   [
+    "replace",
+    784,
+    787,
+    622,
+    625,
+    [
+     "- Quick Start Guide — Get running in 5 minutes",
+     "- Getting Started (Laravel users) — Familiar concepts for Laravel developers",
+     "- Real-world examples — 5 beginner-friendly examples you can copy/paste"
+    ]
+   ],
+   [
+    "equal",
+    787,
+    789,
+    625,
+    627
+   ],
+   [
+    "replace",
+    789,
+    793,
+    627,
+    631,
+    [
+     "- Jobs & Queues — Job lifecycle, creation, and processing",
+     "- Workers — Building production workers",
+     "- Retries & DLQ — Retry configuration and dead letter queue",
+     "- Webhooks — Incoming and outgoing webhooks"
+    ]
+   ],
+   [
+    "equal",
+    793,
+    795,
+    631,
+    633
+   ],
+   [
+    "replace",
+    795,
+    799,
+    633,
+    637,
+    [
+     "- API Usage Guide — Complete REST API reference",
+     "- gRPC Server Guide — High-performance gRPC API",
+     "- SDKs — Node.js, Python, Go, PHP SDKs",
+     "- OpenAPI Spec — OpenAPI 3.1 specification"
+    ]
+   ],
+   [
+    "equal",
+    799,
+    801,
+    637,
+    639
+   ],
+   [
+    "replace",
+    801,
+    804,
+    639,
+    642,
+    [
+     "- Architecture — System design and data flow",
+     "- Deployment Guide — Docker, Kubernetes, production checklist",
+     "- Operations Guide — Monitoring, maintenance, troubleshooting"
+    ]
+   ],
+   [
+    "equal",
+    804,
+    811,
+    642,
+    649
+   ],
+   [
+    "replace",
+    811,
+    820,
+    649,
+    650,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    820,
+    830,
+    650,
+    660
+   ],
+   [
+    "replace",
+    830,
+    831,
+    660,
+    661,
+    [
+     "Release contributors must keep the version in `Cargo.toml`, the root `spooled-backend` entry in `Cargo.lock`, and the matching `CHANGELOG.md` entry synchronized. Before tagging or deploying, follow the advisory release and deployment evidence checklist. Exceptions may be recorded with an owner and rationale, but a Git tag, manifest, or lockfile version mismatch for the same artifact is a release error and must not be published."
+    ]
+   ],
+   [
+    "equal",
+    831,
+    834,
+    661,
+    664
+   ],
+   [
+    "replace",
+    834,
+    837,
+    664,
+    665,
+    [
+     "Apache License 2.0 - see LICENSE for details."
+    ]
+   ],
+   [
+    "equal",
+    837,
+    839,
+    665,
+    667
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "e1f2792a4c6a+2": {
+  "fn": "zabuton-app/meguri",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Meguri logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    11,
+    1,
+    9
+   ],
+   [
+    "replace",
+    11,
+    19,
+    9,
+    15,
+    [
+     "Test",
+     "Build",
+     "Release",
+     "License: MIT",
+     "Platform",
+     "Buy Me a Coffee"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    34,
+    15,
+    30
+   ],
+   [
+    "replace",
+    34,
+    35,
+    30,
+    31,
+    [
+     "Meguri demo — browsing, search, playback, and Discovery"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    44,
+    31,
+    40
+   ],
+   [
+    "replace",
+    44,
+    45,
+    40,
+    41,
+    [
+     "free forever, and the source is yours to read. What is left"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    58,
+    41,
+    54
+   ],
+   [
+    "replace",
+    58,
+    59,
+    54,
+    55,
+    [
+     "Discovery demo — immersive random picks with a scene-preview rail and reshuffle"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    74,
+    55,
+    70
+   ],
+   [
+    "replace",
+    74,
+    75,
+    70,
+    71,
+    [
+     "Playlist demo — a full-screen player running a list hands-off, with shuffle and auto-advance"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    79,
+    71,
+    75
+   ],
+   [
+    "replace",
+    79,
+    80,
+    75,
+    76,
+    [
+     "Microsoft Store."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    76,
+    77
+   ],
+   [
+    "replace",
+    81,
+    82,
+    77,
+    78,
+    [
+     "Get it from Microsoft"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    84,
+    78,
+    80
+   ],
+   [
+    "replace",
+    84,
+    85,
+    80,
+    81,
+    [
+     "GitHub Releases."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    81,
+    82
+   ],
+   [
+    "replace",
+    86,
+    91,
+    82,
+    87,
+    [
+     "|Platform|Packages|",
+     "|--------|---------------------------------------------|",
+     "|Linux|AppImage / deb (glibc 2.35 or later)|",
+     "|Windows|Microsoft Store / Installer (NSIS) / portable|",
+     "|macOS|dmg / zip (Apple silicon, macOS 13 or later)|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    100,
+    87,
+    96
+   ],
+   [
+    "replace",
+    100,
+    101,
+    96,
+    97,
+    [
+     " **Open Anyway** next to the Meguri entry."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    115,
+    97,
+    111
+   ],
+   [
+    "replace",
+    115,
+    116,
+    111,
+    112,
+    [
+     "meguri-bin is the package"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    133,
+    112,
+    129
+   ],
+   [
+    "replace",
+    133,
+    134,
+    129,
+    130,
+    [
+     "A third-party meguri package, which"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    144,
+    130,
+    140
+   ],
+   [
+    "replace",
+    144,
+    145,
+    140,
+    141,
+    [
+     "Or run from source — see Setup and Launch."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    149,
+    141,
+    145
+   ],
+   [
+    "replace",
+    149,
+    151,
+    145,
+    147,
+    [
+     " sidebar to add, switch, and remove them; each root gets its own database and",
+     " thumbnails"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    147,
+    148
+   ],
+   [
+    "replace",
+    152,
+    153,
+    148,
+    149,
+    [
+     " and move/rename tracking via content hashes"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    149,
+    150
+   ],
+   [
+    "replace",
+    154,
+    157,
+    150,
+    153,
+    [
+     " folder in one workspace or by name, text, or regular expression in every",
+     " workspace, with the files a pattern would hide listed before you add it",
+     " (guide)"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    153,
+    154
+   ],
+   [
+    "replace",
+    158,
+    160,
+    154,
+    156,
+    [
+     " generated by the bundled ffmpeg; hovering a video thumbnail scrubs through",
+     " its scenes like a seek bar (toggleable in Settings)"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    156,
+    157
+   ],
+   [
+    "replace",
+    161,
+    167,
+    157,
+    163,
+    [
+     " images, with embedded cover art as their thumbnails; a click plays them in a",
+     " bottom player bar that keeps going while you browse, the detail view holds",
+     " their tags, rating, and history like any other file, and a live spectrum",
+     " plays over the cover art while a track plays — twelve patterns from bars",
+     " and an LED meter to particles and ripples, chosen in Settings or stepped",
+     " through with V"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    163,
+    164
+   ],
+   [
+    "replace",
+    168,
+    170,
+    164,
+    166,
+    [
+     " non-faststart containers are remuxed to fragmented MP4 on the fly (time seek",
+     " via `?t`), and unplayable codecs are handed off to the OS default player"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    166,
+    167
+   ],
+   [
+    "replace",
+    171,
+    173,
+    167,
+    169,
+    [
+     " rating, and captured, created, added, and played date ranges, with",
+     " conditions shown as removable badges"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    169,
+    170
+   ],
+   [
+    "replace",
+    174,
+    177,
+    170,
+    173,
+    [
+     " across workspaces by name (letter case and stray spacing aside, one tag is",
+     " one tag), ★ ratings, and playback history that survive file moves and",
+     " renames, plus a day-grouped history timeline across all workspaces"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    173,
+    174
+   ],
+   [
+    "replace",
+    178,
+    181,
+    174,
+    177,
+    [
+     " keywords, and folder rules, with suggestions of words no rule covers yet;",
+     " applied to new and changed files on every scan, or to the whole library at",
+     " once"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    177,
+    178
+   ],
+   [
+    "replace",
+    182,
+    184,
+    178,
+    180,
+    [
+     " workspace from the All view or a collection), as a list or as a cloud sized",
+     " by how many files carry each tag"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    180,
+    181
+   ],
+   [
+    "replace",
+    185,
+    186,
+    181,
+    182,
+    [
+     " rail of every month and day down the side to drag straight to any of them."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    182,
+    183
+   ],
+   [
+    "replace",
+    187,
+    189,
+    183,
+    185,
+    [
+     " in 2D or 3D, with nodes you can drag, search, and size by how often they",
+     " were played"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    185,
+    186
+   ],
+   [
+    "replace",
+    190,
+    192,
+    186,
+    188,
+    [
+     " as a heatmap, shaded by how many files you played, captured, created, or",
+     " added on each; click a day or drag across several to narrow the list to them"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    193,
+    188,
+    189
+   ],
+   [
+    "replace",
+    193,
+    195,
+    189,
+    191,
+    [
+     " one flat library, with a breadcrumb, a subfolder menu, and folder cards",
+     " that preview what is inside"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    196,
+    191,
+    192
+   ],
+   [
+    "replace",
+    196,
+    197,
+    192,
+    193,
+    [
+     " rate, favorite, or queue them for later in one go"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    193,
+    194
+   ],
+   [
+    "replace",
+    198,
+    200,
+    194,
+    196,
+    [
+     " from your library full-screen with a scene-preview rail",
+     " (see above)"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    196,
+    197
+   ],
+   [
+    "replace",
+    201,
+    203,
+    197,
+    199,
+    [
+     " with shuffle, repeat, manual ordering, and timed images",
+     " (see above)"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    204,
+    199,
+    200
+   ],
+   [
+    "replace",
+    204,
+    205,
+    200,
+    201,
+    [
+     " grid or the list into other desktop apps"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    201,
+    202
+   ],
+   [
+    "replace",
+    206,
+    207,
+    202,
+    203,
+    [
+     " view, ready to paste elsewhere"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    203,
+    204
+   ],
+   [
+    "replace",
+    208,
+    210,
+    204,
+    206,
+    [
+     " the library instead of a modal, keeping the grid, search, and player bar in",
+     " use while you watch, tag, and rate; Meguri remembers which you prefer"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    206,
+    207
+   ],
+   [
+    "replace",
+    211,
+    212,
+    207,
+    208,
+    [
+     " screen; replay it any time from Settings"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    208,
+    209
+   ],
+   [
+    "replace",
+    213,
+    215,
+    209,
+    211,
+    [
+     " window: drop a file on it to queue it in Watch Later, double-click it for",
+     " Discovery, or put it away from its menu"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    211,
+    212
+   ],
+   [
+    "replace",
+    216,
+    217,
+    212,
+    213,
+    [
+     " monokai / nord / catppuccin, etc.)"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    213,
+    214
+   ],
+   [
+    "replace",
+    218,
+    220,
+    214,
+    216,
+    [
+     " restyle the UI, or keep several stylesheets as CSS themes and pick one next",
+     " to the built-in themes; saved changes apply instantly"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    222,
+    216,
+    218
+   ],
+   [
+    "replace",
+    222,
+    224,
+    218,
+    220,
+    [
+     " leaves your machine; the only external request is an optional update check",
+     " (see below)"
+    ]
+   ],
+   [
+    "equal",
+    224,
+    229,
+    220,
+    225
+   ],
+   [
+    "replace",
+    229,
+    230,
+    225,
+    226,
+    [
+     "Side peek"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    233,
+    226,
+    229
+   ],
+   [
+    "replace",
+    233,
+    234,
+    229,
+    230,
+    [
+     "Audio player bar"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    238,
+    230,
+    234
+   ],
+   [
+    "replace",
+    238,
+    239,
+    234,
+    235,
+    [
+     "Audio spectrum"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    240,
+    235,
+    236
+   ],
+   [
+    "replace",
+    240,
+    241,
+    236,
+    237,
+    [
+     "The twelve spectrum patterns"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    244,
+    237,
+    240
+   ],
+   [
+    "replace",
+    244,
+    245,
+    240,
+    241,
+    [
+     "List view"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    248,
+    241,
+    244
+   ],
+   [
+    "replace",
+    248,
+    249,
+    244,
+    245,
+    [
+     "Folder view demo — the grid shown by folder, opening a folder and jumping to another from the breadcrumb"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    252,
+    245,
+    248
+   ],
+   [
+    "replace",
+    252,
+    253,
+    248,
+    249,
+    [
+     "Graph view demo — picking a tag from the search to light up its files, then orbiting the same graph in 3D"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    257,
+    249,
+    253
+   ],
+   [
+    "replace",
+    257,
+    258,
+    253,
+    254,
+    [
+     "Auto tagging — the code-prefix rule and the files it would tag"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    262,
+    254,
+    258
+   ],
+   [
+    "replace",
+    262,
+    263,
+    258,
+    259,
+    [
+     "Auto tagging — a keyword and the files it finds"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    259,
+    260
+   ],
+   [
+    "replace",
+    264,
+    265,
+    260,
+    261,
+    [
+     "Auto tagging — suggested words from the file names"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    268,
+    261,
+    264
+   ],
+   [
+    "replace",
+    268,
+    269,
+    264,
+    265,
+    [
+     "Tag cloud"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    272,
+    265,
+    268
+   ],
+   [
+    "replace",
+    272,
+    273,
+    268,
+    269,
+    [
+     "Bulk edit demo — four files selected, then rated, favorited and tagged from the selection bar"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    277,
+    269,
+    273
+   ],
+   [
+    "replace",
+    277,
+    278,
+    273,
+    274,
+    [
+     "Pet demo — the pixel-art zabuton dragged and dropped, fed a file, and bringing one back"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    281,
+    274,
+    277
+   ],
+   [
+    "replace",
+    281,
+    284,
+    277,
+    280,
+    [
+     "|gruvbox dark|nord dark|solarized light|",
+     "|-----------------------------------------------------|-----------------------------------------------|-----------------------------------------------------------|",
+     "|gruvbox dark|nord dark|solarized light|"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    371,
+    280,
+    367
+   ],
+   [
+    "replace",
+    371,
+    380,
+    367,
+    376,
+    [
+     "|Action|How|",
+     "|----------|--------------------------------------------------------------------------------------------------------------------|",
+     "|Scan|Runs automatically at startup. Re-scan via the header \"Scan\" (incremental, move tracking)|",
+     "|Exclude|Right-click a folder in the folder view to exclude it, or add patterns in Settings → Scan|",
+     "|Play|Click a thumbnail → play in the detail view (audio plays in the bottom bar). When unsupported, use \"Open externally\"|",
+     "|Tag / Rate|Assign in the detail view (tags have autocomplete). Click a tag in the grid to search|",
+     "|Search|Filter and sort by full text, kind, and rating in the top bar (conditions shown as badges, individually removable)|",
+     "|Theme|Switch from Theme at the top-right of the header|",
+     "|Zoom|Ctrl + wheel, Ctrl +/-, Ctrl + 0 to reset|"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    435,
+    376,
+    431
+   ],
+   [
+    "replace",
+    435,
+    436,
+    431,
+    432,
+    [
+     " the **Theme** list, next to the built-in themes"
+    ]
+   ],
+   [
+    "equal",
+    436,
+    437,
+    432,
+    433
+   ],
+   [
+    "replace",
+    437,
+    438,
+    433,
+    434,
+    [
+     " is active, for small tweaks"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    444,
+    434,
+    440
+   ],
+   [
+    "replace",
+    444,
+    445,
+    440,
+    441,
+    [
+     " This opens `<userData>/themes/`."
+    ]
+   ],
+   [
+    "equal",
+    445,
+    446,
+    441,
+    442
+   ],
+   [
+    "replace",
+    446,
+    448,
+    442,
+    444,
+    [
+     " in the **Theme** list right away, under the name from the `@name` line at",
+     " the top of the file (or the file name if there is none)."
+    ]
+   ],
+   [
+    "equal",
+    448,
+    450,
+    444,
+    446
+   ],
+   [
+    "replace",
+    450,
+    451,
+    446,
+    447,
+    [
+     "To try one, download a sample theme from `docs/themes/`:"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    452,
+    447,
+    448
+   ],
+   [
+    "replace",
+    452,
+    459,
+    448,
+    455,
+    [
+     "|File|Look|",
+     "|--------------------------------------------------|---------------------|",
+     "|cyberpunk.css|Neon on black|",
+     "|oled.css|True black|",
+     "|matrix.css|Green terminal rain|",
+     "|sky.css|Sky, clouds and trees|",
+     "|high-contrast.css|7:1 text, bold lines|"
+    ]
+   ],
+   [
+    "equal",
+    459,
+    462,
+    455,
+    458
+   ],
+   [
+    "replace",
+    462,
+    463,
+    458,
+    459,
+    [
+     "the sample themes for every one in both"
+    ]
+   ],
+   [
+    "equal",
+    463,
+    465,
+    459,
+    461
+   ],
+   [
+    "replace",
+    465,
+    466,
+    461,
+    462,
+    [
+     "Cyberpunk sample theme, dark"
+    ]
+   ],
+   [
+    "equal",
+    466,
+    467,
+    462,
+    463
+   ],
+   [
+    "replace",
+    467,
+    468,
+    463,
+    464,
+    [
+     "Sky sample theme, light"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    473,
+    464,
+    469
+   ],
+   [
+    "replace",
+    473,
+    475,
+    469,
+    471,
+    [
+     " commented template (an existing file is never overwritten) and opens it in",
+     " your default app."
+    ]
+   ],
+   [
+    "equal",
+    475,
+    476,
+    471,
+    472
+   ],
+   [
+    "replace",
+    476,
+    477,
+    472,
+    473,
+    [
+     " including a CSS theme. Pasting a sample theme into it works too."
+    ]
+   ],
+   [
+    "equal",
+    477,
+    487,
+    473,
+    483
+   ],
+   [
+    "replace",
+    487,
+    493,
+    483,
+    484,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    493,
+    496,
+    484,
+    487
+   ],
+   [
+    "replace",
+    496,
+    497,
+    487,
+    488,
+    [
+     "the side rail. See Theming Meguri with CSS for every"
+    ]
+   ],
+   [
+    "equal",
+    497,
+    516,
+    488,
+    507
+   ],
+   [
+    "replace",
+    516,
+    522,
+    507,
+    508,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    522,
+    542,
+    508,
+    528
+   ],
+   [
+    "replace",
+    542,
+    543,
+    528,
+    529,
+    [
+     "under the MIT License."
+    ]
+   ],
+   [
+    "equal",
+    543,
+    552,
+    529,
+    538
+   ],
+   [
+    "replace",
+    552,
+    554,
+    538,
+    540,
+    [
+     " such as Google Analytics, crash reporters, or any other third-party",
+     " measurement SDK."
+    ]
+   ],
+   [
+    "equal",
+    554,
+    555,
+    540,
+    541
+   ],
+   [
+    "replace",
+    555,
+    558,
+    541,
+    544,
+    [
+     " paths, tags, search queries, playback history, or anything else about your",
+     " library to any external server. Your files are streamed to the app window",
+     " by a local HTTP media server bound to `127.0.0.1`."
+    ]
+   ],
+   [
+    "equal",
+    558,
+    559,
+    544,
+    545
+   ],
+   [
+    "replace",
+    559,
+    567,
+    545,
+    553,
+    [
+     " versions, Meguri asks GitHub's API for the latest release",
+     " (`api.github.com/repos/zabuton-app/meguri/releases/latest`). The request",
+     " carries nothing but the app name and version in its `User-Agent`, though",
+     " GitHub sees your IP address, as with any request. It runs shortly after",
+     " startup and then while the app keeps running, every six hours (hourly",
+     " while GitHub cannot be reached), and when you click **Check now** in the settings or **Check for",
+     " Updates…** in the tray menu. To turn the automatic check off, open",
+     " **Settings → App → Updates** and turn off **Check automatically**."
+    ]
+   ],
+   [
+    "equal",
+    567,
+    575,
+    553,
+    561
+   ],
+   [
+    "replace",
+    575,
+    595,
+    561,
+    562,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    595,
+    603,
+    562,
+    570
+   ],
+   [
+    "replace",
+    603,
+    614,
+    570,
+    571,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    614,
+    615,
+    571,
+    572
+   ],
+   [
+    "replace",
+    615,
+    658,
+    572,
+    573,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    658,
+    664,
+    573,
+    579
+   ],
+   [
+    "replace",
+    664,
+    668,
+    579,
+    583,
+    [
+     " original media files untouched and only manages its own metadata and",
+     " thumbnails under `userData`, the authors accept no responsibility for any loss,",
+     " corruption, or deletion of files or data that may occur while using it. Keep",
+     " your own backups of anything important."
+    ]
+   ],
+   [
+    "equal",
+    668,
+    669,
+    583,
+    584
+   ],
+   [
+    "replace",
+    669,
+    671,
+    584,
+    586,
+    [
+     " opening files in external applications, removing items from the index, or",
+     " pointing it at a directory — are performed at your discretion and risk."
+    ]
+   ],
+   [
+    "equal",
+    671,
+    672,
+    586,
+    587
+   ],
+   [
+    "replace",
+    672,
+    674,
+    587,
+    589,
+    [
+     " thumbnails, and search output may be inaccurate or incomplete, and the app may",
+     " stop working after OS or dependency updates."
+    ]
+   ],
+   [
+    "equal",
+    674,
+    675,
+    589,
+    590
+   ],
+   [
+    "replace",
+    675,
+    676,
+    590,
+    591,
+    [
+     "See the License section for the full legal terms."
+    ]
+   ],
+   [
+    "equal",
+    676,
+    678,
+    591,
+    593
+   ],
+   [
+    "delete",
+    678,
+    679,
+    593,
+    593
+   ],
+   [
+    "equal",
+    679,
+    680,
+    593,
+    594
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "766cf15eb7d3+2": {
+  "fn": "AkaDaka1/ClicKit",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "ClicKit icon"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    11,
+    1,
+    9
+   ],
+   [
+    "replace",
+    11,
+    22,
+    9,
+    20,
+    [
+     "CI",
+     "Release",
+     "License: MIT",
+     "Python",
+     "Ruff",
+     "Windows",
+     "PySide6",
+     "Blockly",
+     "Cloud",
+     "Docker",
+     "PRs welcome"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    20,
+    21
+   ],
+   [
+    "replace",
+    23,
+    26,
+    21,
+    22,
+    [
+     "**English** · Русский"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    22,
+    25
+   ],
+   [
+    "replace",
+    29,
+    33,
+    25,
+    27,
+    [
+     " ClicKit simple mode: click point, mouse button, interval and repeat count",
+     " ClicKit scenario editor: Blockly canvas with a starter click scenario"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    27,
+    28
+   ],
+   [
+    "replace",
+    34,
+    37,
+    28,
+    29,
+    [
+     " Simple mode (left) and the block scenario editor with the starter click scenario (right), dark theme. "
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    29,
+    30
+   ],
+   [
+    "replace",
+    38,
+    41,
+    30,
+    31,
+    [
+     " Grafana dashboard: RPS, error rate, latency percentiles, in-flight requests, database pool, host CPU/RAM and API logs"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    31,
+    32
+   ],
+   [
+    "replace",
+    42,
+    45,
+    32,
+    33,
+    [
+     " ClicKit Cloud observability dashboard — provisioned from Git (M8 T2.2). "
+    ]
+   ],
+   [
+    "equal",
+    45,
+    52,
+    33,
+    40
+   ],
+   [
+    "replace",
+    52,
+    77,
+    40,
+    41,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    82,
+    41,
+    46
+   ],
+   [
+    "replace",
+    82,
+    83,
+    46,
+    47,
+    [
+     " (`.acl.json`); the interpreter executes only the known node types."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    47,
+    48
+   ],
+   [
+    "replace",
+    84,
+    85,
+    48,
+    49,
+    [
+     " talks to it through adapters and signals."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    49,
+    50
+   ],
+   [
+    "replace",
+    86,
+    87,
+    50,
+    51,
+    [
+     " emergency stop hotkey stays responsive."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    51,
+    52
+   ],
+   [
+    "replace",
+    88,
+    94,
+    52,
+    54,
+    [
+     " because both drive the single Windows pointer (see",
+     " `AI_CONTEXT.md` §3.1)."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    100,
+    54,
+    60
+   ],
+   [
+    "replace",
+    100,
+    101,
+    60,
+    61,
+    [
+     "`plans/README.md`. The app follows the Windows theme by default"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    120,
+    61,
+    80
+   ],
+   [
+    "replace",
+    120,
+    121,
+    80,
+    81,
+    [
+     "|Mode|Who it is for|"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    81,
+    82
+   ],
+   [
+    "replace",
+    122,
+    124,
+    82,
+    84,
+    [
+     "|🖱️ **Simple mode**|A classic auto-clicker: pick a spot on screen, set interval, mouse button and repeat count — done.|",
+     "|🧩 **Scenario mode**|A visual editor based on Blockly: build complex sequences from drag-and-drop blocks — clicks, moves, delays, loops, conditions — like snapping LEGO bricks.|"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    139,
+    84,
+    99
+   ],
+   [
+    "replace",
+    139,
+    140,
+    99,
+    100,
+    [
+     "|Milestone|Goal|Status|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    100,
+    101
+   ],
+   [
+    "replace",
+    141,
+    153,
+    101,
+    113,
+    [
+     "|**M0**|Repository skeleton: structure, dependencies, app entry point|✅ Done|",
+     "|**M1**|Click engine (core): input backends, global hotkeys, executor — no GUI|✅ Done|",
+     "|**M2**|Main window + Simple mode (MVP auto-clicker)|✅ Done|",
+     "|**M3**|Scenario model (IR): schema, interpreter, save / load|✅ Done|",
+     "|**M4**|Blockly visual editor with live execution|✅ Done|",
+     "|**M5**|Polish: themes, settings, logs, tests, `.exe` packaging|✅ Done|",
+     "|**M6**|DevOps: Docker test/build images, GHCR, dev releases|✅ Done|",
+     "|**M7**|ClicKit Cloud: scenario API, PostgreSQL, Docker|✅ Done|",
+     "|**M8**|Observability: metrics, logs, traces, dashboards, SLO|🚧 In progress|",
+     "|**M9**|Infrastructure as code: Terraform, k3s, Helm, HTTPS|📋 Planned|",
+     "|**M10**|Continuous delivery: staging/prod, rollback, DORA|📋 Planned|",
+     "|**M11**|Security & resilience: scanning, load, backups, chaos|📋 Planned|"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    113,
+    114
+   ],
+   [
+    "replace",
+    154,
+    156,
+    114,
+    116,
+    [
+     "Details: `ROADMAP.md`. Plans and task graphs:",
+     "`plans/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    160,
+    116,
+    120
+   ],
+   [
+    "replace",
+    160,
+    161,
+    120,
+    121,
+    [
+     "download from GitHub Releases:"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    163,
+    121,
+    123
+   ],
+   [
+    "replace",
+    163,
+    164,
+    123,
+    124,
+    [
+     " `ClicKit\\ClicKit.exe`; starts in a couple of seconds."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    198,
+    124,
+    158
+   ],
+   [
+    "replace",
+    198,
+    199,
+    158,
+    159,
+    [
+     " `F8` (the \"Current position\" button captures it instantly)."
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    159,
+    160
+   ],
+   [
+    "replace",
+    200,
+    201,
+    160,
+    161,
+    [
+     " repeats — or tick \"Infinite\"."
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    161,
+    162
+   ],
+   [
+    "replace",
+    202,
+    203,
+    162,
+    163,
+    [
+     " application, even when ClicKit is hidden in the tray."
+    ]
+   ],
+   [
+    "equal",
+    203,
+    204,
+    163,
+    164
+   ],
+   [
+    "replace",
+    204,
+    205,
+    164,
+    165,
+    [
+     " \"Remember my choice\" to skip the question for that case next time."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    215,
+    165,
+    175
+   ],
+   [
+    "replace",
+    215,
+    216,
+    175,
+    176,
+    [
+     " click → pause → repeat 3×(move + click)."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    176,
+    177
+   ],
+   [
+    "replace",
+    217,
+    218,
+    177,
+    178,
+    [
+     " coordinates and durations directly in the blocks."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    178,
+    179
+   ],
+   [
+    "replace",
+    219,
+    220,
+    179,
+    180,
+    [
+     " mode it starts clicks. `F6` stops either one from any application."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    221,
+    180,
+    181
+   ],
+   [
+    "replace",
+    221,
+    223,
+    181,
+    183,
+    [
+     " loop) get a warning and the scenario is not executed. `Ctrl+S` / `Ctrl+O`",
+     " save and open `.acl.json`; undo/redo live in the toolbar."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    254,
+    183,
+    214
+   ],
+   [
+    "replace",
+    254,
+    255,
+    214,
+    215,
+    [
+     "GitHub Actions"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    259,
+    215,
+    219
+   ],
+   [
+    "replace",
+    259,
+    260,
+    219,
+    220,
+    [
+     " sandbox and GPU);"
+    ]
+   ],
+   [
+    "equal",
+    260,
+    261,
+    220,
+    221
+   ],
+   [
+    "replace",
+    261,
+    263,
+    221,
+    223,
+    [
+     " `ClicKit-win64.zip`, archive/checksum checks and an offscreen smoke launch of",
+     " the built `.exe`."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    266,
+    223,
+    226
+   ],
+   [
+    "replace",
+    266,
+    267,
+    226,
+    227,
+    [
+     "`release.yml`"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    283,
+    227,
+    243
+   ],
+   [
+    "replace",
+    283,
+    284,
+    243,
+    244,
+    [
+     " a Linux/Xvfb container; the Windows test matrix remains the platform gate;"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    285,
+    244,
+    245
+   ],
+   [
+    "replace",
+    285,
+    286,
+    245,
+    246,
+    [
+     " build environment and produces the portable archive with `--zip`;"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    287,
+    246,
+    247
+   ],
+   [
+    "replace",
+    287,
+    289,
+    247,
+    249,
+    [
+     " `ghcr.io/akadaka1/clikit-build-win` on pushes to `master` (`<sha>` and",
+     " `latest`) or `dev` (`<sha>` and `dev`);"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    291,
+    249,
+    251
+   ],
+   [
+    "replace",
+    291,
+    292,
+    251,
+    252,
+    [
+     " the rolling draft GitHub Release `dev` with `--clobber`."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    318,
+    252,
+    278
+   ],
+   [
+    "replace",
+    318,
+    320,
+    278,
+    280,
+    [
+     " `docs/cloud.md`;",
+     "- API contract, error codes and limits: `docs/api.md`."
+    ]
+   ],
+   [
+    "equal",
+    320,
+    336,
+    280,
+    296
+   ],
+   [
+    "replace",
+    336,
+    338,
+    296,
+    298,
+    [
+     "See `docs/observability.md` for the checkpoint and",
+     "troubleshooting, and `docs/sre/slo.md` for the SLO contract."
+    ]
+   ],
+   [
+    "equal",
+    338,
+    345,
+    298,
+    305
+   ],
+   [
+    "replace",
+    345,
+    355,
+    305,
+    306,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    364,
+    306,
+    315
+   ],
+   [
+    "replace",
+    364,
+    370,
+    315,
+    321,
+    [
+     "- Architecture and coding rules: `AI_CONTEXT.md`",
+     "- Work log: `PROGRESS.md`",
+     "- Milestone plans and task graphs: `plans/README.md`",
+     "- Changelog: `CHANGELOG.md`",
+     "- API contract for ClicKit Cloud: `docs/api.md`",
+     "- Cloud operations guide: `docs/cloud.md`"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    373,
+    321,
+    324
+   ],
+   [
+    "replace",
+    373,
+    374,
+    324,
+    325,
+    [
+     "Contributions are welcome! Please read `CONTRIBUTING.md`"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    376,
+    325,
+    327
+   ],
+   [
+    "replace",
+    376,
+    377,
+    327,
+    328,
+    [
+     "to the `CODE_OF_CONDUCT.md`."
+    ]
+   ],
+   [
+    "equal",
+    377,
+    379,
+    328,
+    330
+   ],
+   [
+    "replace",
+    379,
+    380,
+    330,
+    331,
+    [
+     "reporting channel described in `SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    380,
+    390,
+    331,
+    341
+   ],
+   [
+    "replace",
+    390,
+    391,
+    341,
+    342,
+    [
+     "Released under the MIT License © 2026 Danil Momot. Third-party"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    392,
+    342,
+    343
+   ],
+   [
+    "delete",
+    392,
+    398,
+    343,
+    343
+   ],
+   [
+    "equal",
+    398,
+    407,
+    343,
+    352
+   ],
+   [
+    "replace",
+    407,
+    410,
+    352,
+    353,
+    [
+     "English · **Русский**"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    416,
+    353,
+    359
+   ],
+   [
+    "replace",
+    416,
+    417,
+    359,
+    360,
+    [
+     "`plans/README.md`. По умолчанию приложение следует теме Windows (в настройках можно"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    435,
+    360,
+    378
+   ],
+   [
+    "replace",
+    435,
+    436,
+    378,
+    379,
+    [
+     "|Режим|Для кого|"
+    ]
+   ],
+   [
+    "equal",
+    436,
+    437,
+    379,
+    380
+   ],
+   [
+    "replace",
+    437,
+    439,
+    380,
+    382,
+    [
+     "|🖱️ **Простой режим**|Классический автокликер: выбрал точку на экране, задал интервал, кнопку мыши и число повторов — готово.|",
+     "|🧩 **Режим сценариев**|Визуальный редактор на базе Blockly: сложные последовательности собираются перетаскиванием блоков — клики, движения, задержки, циклы, условия — как детали LEGO.|"
+    ]
+   ],
+   [
+    "equal",
+    439,
+    446,
+    382,
+    389
+   ],
+   [
+    "replace",
+    446,
+    471,
+    389,
+    390,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    471,
+    476,
+    390,
+    395
+   ],
+   [
+    "replace",
+    476,
+    477,
+    395,
+    396,
+    [
+     " (`.acl.json`), интерпретатор исполняет только известные типы узлов."
+    ]
+   ],
+   [
+    "equal",
+    477,
+    478,
+    396,
+    397
+   ],
+   [
+    "replace",
+    478,
+    479,
+    397,
+    398,
+    [
+     " общается с ним через адаптеры и сигналы."
+    ]
+   ],
+   [
+    "equal",
+    479,
+    480,
+    398,
+    399
+   ],
+   [
+    "replace",
+    480,
+    481,
+    399,
+    400,
+    [
+     " аварийный стоп по хоткею срабатывает всегда."
+    ]
+   ],
+   [
+    "equal",
+    481,
+    482,
+    400,
+    401
+   ],
+   [
+    "replace",
+    482,
+    483,
+    401,
+    402,
+    [
+     " двигают единственный указатель Windows (см. `AI_CONTEXT.md` §3.1)."
+    ]
+   ],
+   [
+    "equal",
+    483,
+    498,
+    402,
+    417
+   ],
+   [
+    "replace",
+    498,
+    499,
+    417,
+    418,
+    [
+     "|Веха|Цель|Статус|"
+    ]
+   ],
+   [
+    "equal",
+    499,
+    500,
+    418,
+    419
+   ],
+   [
+    "replace",
+    500,
+    512,
+    419,
+    431,
+    [
+     "|**M0**|Скелет репозитория: структура, зависимости, точка входа|✅ Готово|",
+     "|**M1**|Движок кликов (core): бэкенды ввода, глобальные хоткеи, исполнитель — без GUI|✅ Готово|",
+     "|**M2**|Главное окно + Простой режим (MVP-автокликер)|✅ Готово|",
+     "|**M3**|Модель сценариев (IR): схема, интерпретатор, сохранение / загрузка|✅ Готово|",
+     "|**M4**|Визуальный редактор Blockly с подсветкой выполнения|✅ Готово|",
+     "|**M5**|Полировка: темы, настройки, журналы, тесты, упаковка в `.exe`|✅ Готово|",
+     "|**M6**|DevOps: Docker-образы тестов и сборки, GHCR, dev-релизы|✅ Готово|",
+     "|**M7**|ClicKit Cloud: API сценариев, PostgreSQL, Docker|✅ Готово|",
+     "|**M8**|Наблюдаемость: метрики, логи, трейсы, дашборды, SLO|🚧 В работе|",
+     "|**M9**|Инфраструктура как код: Terraform, k3s, Helm, HTTPS|📋 Запланировано|",
+     "|**M10**|Непрерывная доставка: staging/prod, откат, DORA|📋 Запланировано|",
+     "|**M11**|Безопасность и устойчивость: сканирование, нагрузка, бэкапы, chaos|📋 Запланировано|"
+    ]
+   ],
+   [
+    "equal",
+    512,
+    513,
+    431,
+    432
+   ],
+   [
+    "replace",
+    513,
+    515,
+    432,
+    434,
+    [
+     "Подробнее: `ROADMAP.md`. Планы и графы задач:",
+     "`plans/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    515,
+    519,
+    434,
+    438
+   ],
+   [
+    "replace",
+    519,
+    520,
+    438,
+    439,
+    [
+     "скачать с GitHub Releases:"
+    ]
+   ],
+   [
+    "equal",
+    520,
+    522,
+    439,
+    441
+   ],
+   [
+    "replace",
+    522,
+    523,
+    441,
+    442,
+    [
+     " `ClicKit\\ClicKit.exe`; старт за пару секунд."
+    ]
+   ],
+   [
+    "equal",
+    523,
+    559,
+    442,
+    478
+   ],
+   [
+    "replace",
+    559,
+    560,
+    478,
+    479,
+    [
+     " (кнопка «Текущая позиция» берёт координаты мгновенно)."
+    ]
+   ],
+   [
+    "equal",
+    560,
+    561,
+    479,
+    480
+   ],
+   [
+    "replace",
+    561,
+    562,
+    480,
+    481,
+    [
+     " отметьте «Бесконечно»."
+    ]
+   ],
+   [
+    "equal",
+    562,
+    563,
+    481,
+    482
+   ],
+   [
+    "replace",
+    563,
+    564,
+    482,
+    483,
+    [
+     " работает из любого приложения, даже если ClicKit свёрнут в трей."
+    ]
+   ],
+   [
+    "equal",
+    564,
+    565,
+    483,
+    484
+   ],
+   [
+    "replace",
+    565,
+    566,
+    484,
+    485,
+    [
+     " «Запомнить мой выбор» избавит от вопроса для этого случая."
+    ]
+   ],
+   [
+    "equal",
+    566,
+    576,
+    485,
+    495
+   ],
+   [
+    "replace",
+    576,
+    577,
+    495,
+    496,
+    [
+     " идею: клик → пауза → цикл 3×(движение + клик)."
+    ]
+   ],
+   [
+    "equal",
+    577,
+    578,
+    496,
+    497
+   ],
+   [
+    "replace",
+    578,
+    579,
+    497,
+    498,
+    [
+     " вводите координаты и задержки прямо в блоках."
+    ]
+   ],
+   [
+    "equal",
+    579,
+    580,
+    498,
+    499
+   ],
+   [
+    "replace",
+    580,
+    582,
+    499,
+    501,
+    [
+     " сценарий, в «Простом режиме» — клики. `F6` останавливает и то, и другое",
+     " из любого приложения."
+    ]
+   ],
+   [
+    "equal",
+    582,
+    583,
+    501,
+    502
+   ],
+   [
+    "replace",
+    583,
+    585,
+    502,
+    504,
+    [
+     " цикла) получают предупреждение, а сценарий не запускается. `Ctrl+S` /",
+     " `Ctrl+O` сохраняют и открывают `.acl.json`; отмена и повтор — в тулбаре."
+    ]
+   ],
+   [
+    "equal",
+    585,
+    617,
+    504,
+    536
+   ],
+   [
+    "replace",
+    617,
+    618,
+    536,
+    537,
+    [
+     "GitHub Actions"
+    ]
+   ],
+   [
+    "equal",
+    618,
+    622,
+    537,
+    541
+   ],
+   [
+    "replace",
+    622,
+    623,
+    541,
+    542,
+    [
+     " без sandbox и GPU);"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    624,
+    542,
+    543
+   ],
+   [
+    "replace",
+    624,
+    626,
+    543,
+    545,
+    [
+     " `ClicKit-win64.zip`, проверку архива и контрольных сумм и смоук-запуск",
+     " собранного `.exe` без экрана."
+    ]
+   ],
+   [
+    "equal",
+    626,
+    629,
+    545,
+    548
+   ],
+   [
+    "replace",
+    629,
+    630,
+    548,
+    549,
+    [
+     "`release.yml`"
+    ]
+   ],
+   [
+    "equal",
+    630,
+    646,
+    549,
+    565
+   ],
+   [
+    "replace",
+    646,
+    647,
+    565,
+    566,
+    [
+     " Linux-контейнере с Xvfb; матрица Windows остаётся платформенным гейтом;"
+    ]
+   ],
+   [
+    "equal",
+    647,
+    648,
+    566,
+    567
+   ],
+   [
+    "replace",
+    648,
+    649,
+    567,
+    568,
+    [
+     " собирает переносимый архив через `--zip`;"
+    ]
+   ],
+   [
+    "equal",
+    649,
+    650,
+    568,
+    569
+   ],
+   [
+    "replace",
+    650,
+    652,
+    569,
+    571,
+    [
+     " `ghcr.io/akadaka1/clikit-build-win`: для `master` используются `<sha>` и",
+     " `latest`, для `dev` — `<sha>` и `dev`;"
+    ]
+   ],
+   [
+    "equal",
+    652,
+    654,
+    571,
+    573
+   ],
+   [
+    "replace",
+    654,
+    655,
+    573,
+    574,
+    [
+     " обновляет rolling draft-релиз GitHub `dev` через `--clobber`."
+    ]
+   ],
+   [
+    "equal",
+    655,
+    680,
+    574,
+    599
+   ],
+   [
+    "replace",
+    680,
+    682,
+    599,
+    601,
+    [
+     " диагностика): `docs/cloud.md`;",
+     "- контракт API, коды ошибок и лимиты — `docs/api.md`."
+    ]
+   ],
+   [
+    "equal",
+    682,
+    698,
+    601,
+    617
+   ],
+   [
+    "replace",
+    698,
+    700,
+    617,
+    619,
+    [
+     "Чекпоинт и диагностика — `docs/observability.md`,",
+     "контракт SLO — `docs/sre/slo.md`."
+    ]
+   ],
+   [
+    "equal",
+    700,
+    707,
+    619,
+    626
+   ],
+   [
+    "replace",
+    707,
+    717,
+    626,
+    627,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    717,
+    726,
+    627,
+    636
+   ],
+   [
+    "replace",
+    726,
+    732,
+    636,
+    642,
+    [
+     "- Архитектура и правила кодинга: `AI_CONTEXT.md`",
+     "- Журнал работ: `PROGRESS.md`",
+     "- Планы вех и графы задач: `plans/README.md`",
+     "- История изменений: `CHANGELOG.md`",
+     "- Контракт API ClicKit Cloud: `docs/api.md`",
+     "- Руководство по ClicKit Cloud: `docs/cloud.md`"
+    ]
+   ],
+   [
+    "equal",
+    732,
+    736,
+    642,
+    646
+   ],
+   [
+    "replace",
+    736,
+    737,
+    646,
+    647,
+    [
+     "`CONTRIBUTING.md`: там правила веток и коммитов, локальные"
+    ]
+   ],
+   [
+    "equal",
+    737,
+    738,
+    647,
+    648
+   ],
+   [
+    "replace",
+    738,
+    739,
+    648,
+    649,
+    [
+     "проекте, вы соглашаетесь с `CODE_OF_CONDUCT.md`."
+    ]
+   ],
+   [
+    "equal",
+    739,
+    741,
+    649,
+    651
+   ],
+   [
+    "replace",
+    741,
+    742,
+    651,
+    652,
+    [
+     "канал, описанный в `SECURITY.md`."
+    ]
+   ],
+   [
+    "equal",
+    742,
+    752,
+    652,
+    662
+   ],
+   [
+    "replace",
+    752,
+    753,
+    662,
+    663,
+    [
+     "Проект распространяется по лицензии MIT © 2026 Danil Momot."
+    ]
+   ],
+   [
+    "equal",
+    753,
+    755,
+    663,
+    665
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

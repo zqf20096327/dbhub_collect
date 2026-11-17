@@ -25874,5 +25874,2198 @@
    ]
   ],
   "at": "2026-11-14"
+ },
+ "f524389f736b+2": {
+  "fn": "anyproto/any-store",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Go Reference",
+     "Go Report Card",
+     "MIT License"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    11,
+    5,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "* **Mongo-style queries** — `$eq/$in/$gt/...`, logical operators, dot-path fields, modifiers (`$set`, `$inc`, ...). Formal semantics in docs/query-filter-contract.md."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    17,
+    14,
+    17,
+    [
+     "* **Full-text search** — btree-resident inverted index with BM25 ranking via `$text`: phrases, prefixes, anchored and per-field matching for search-as-you-type. See docs/full-text-search.md.",
+     "* **Vector search** — btree-resident ANN indexes (IVF-SQ, HNSW, brute-force) via `$knn`. See docs/vector-search.md and docs/vector-engine.md.",
+     "* **Aggregation** — MongoDB-style pipelines: shaping (`$match`, `$group`, `$sort`, `$unwind`, `$facet`, ...), computed expressions (arithmetic, conditionals, comparisons, date math), field-to-field `$expr` predicates, primary-key `$lookup` joins, and materialization via `$merge`/`$out` — with planner pushdown. See docs/aggregation.md."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    21,
+    17,
+    21
+   ],
+   [
+    "replace",
+    21,
+    23,
+    21,
+    23,
+    [
+     "* **Streaming iterators** — low-memory scans with a cursor API; AnyEnc arena encoding minimizes GC churn.",
+     "* **Cross-platform** — pure Go, no CGO; runs anywhere Go runs, including `js/wasm` (see wasm/)."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    45,
+    23,
+    45
+   ],
+   [
+    "replace",
+    45,
+    80,
+    45,
+    46,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    82,
+    46,
+    48
+   ],
+   [
+    "replace",
+    82,
+    83,
+    48,
+    49,
+    [
+     "The full end-to-end example lives in `example/` and the API docs."
+    ]
+   ],
+   [
+    "equal",
+    83,
+    113,
+    49,
+    79
+   ],
+   [
+    "replace",
+    113,
+    118,
+    79,
+    80,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    145,
+    80,
+    107
+   ],
+   [
+    "replace",
+    145,
+    153,
+    107,
+    108,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    167,
+    108,
+    122
+   ],
+   [
+    "replace",
+    167,
+    168,
+    122,
+    123,
+    [
+     "`$match`/`$sort`/`$limit` prefixes are pushed down into the index planner; the rest streams through the pipeline. Expressions compute derived values in `$project`/`$addFields`/`$group` (arithmetic, `$cond`/`$switch`, comparisons, `$dateDiff`-family date math over the first-class dateTime type); `$expr` brings field-to-field predicates into `$match`; `$lookup` resolves object-id relations as primary-key point lookups; `$facet` runs N sub-pipelines over one scan; `$merge`/`$out` materialize results into a collection where they are indexable like any other data. Operator reference and Mongo divergences: docs/aggregation.md."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    181,
+    123,
+    136
+   ],
+   [
+    "replace",
+    181,
+    189,
+    136,
+    137,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    199,
+    137,
+    147
+   ],
+   [
+    "replace",
+    199,
+    200,
+    147,
+    148,
+    [
+     "Conceptually mirrors SQLite's `cksumvfs`, generalized to also surface AEAD failures via the same API."
+    ]
+   ],
+   [
+    "equal",
+    200,
+    205,
+    148,
+    153
+   ],
+   [
+    "replace",
+    205,
+    215,
+    153,
+    154,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    217,
+    154,
+    156
+   ],
+   [
+    "replace",
+    217,
+    218,
+    156,
+    157,
+    [
+     "The page-1 DB header (first 100 bytes) is outside the per-page hash; its invariants are validated separately at open. Full design: docs/btree/specs/integrity.md."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    232,
+    157,
+    171
+   ],
+   [
+    "replace",
+    232,
+    233,
+    171,
+    172,
+    [
+     "An independent Go implementation following design conventions from SQLCipher (BSD-3-Clause) — reserved-tail page overhead, the page-1 plaintext-prefix rule, PBKDF2-HMAC-SHA256 key derivation. No SQLCipher code is included; the cryptography is Go-native and uses AEAD rather than SQLCipher's encrypt-then-MAC construction. Not SQLCipher-compatible on disk. See NOTICE.md."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    238,
+    172,
+    177
+   ],
+   [
+    "replace",
+    238,
+    242,
+    177,
+    181,
+    [
+     "|Format|Created by|Opened by|",
+     "|------|----------|---------|",
+     "|5|v2.0.0 – v2.4.x|every v2 release|",
+     "|6|v2.5.0 and later|v2.5.0 and later|"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    249,
+    181,
+    188
+   ],
+   [
+    "replace",
+    249,
+    250,
+    188,
+    189,
+    [
+     "`SchemaFormat` reports the format of an open database, and `CopyToLatestFormat` copies a database into a new file in the latest format. Moving a format 5 database onto format 6 is optional; docs/migration-format-5-to-6.md describes when to do it, what can differ in the copy, and how to put the copy in the old file's place."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    253,
+    189,
+    192
+   ],
+   [
+    "replace",
+    253,
+    258,
+    192,
+    197,
+    [
+     "* **API reference** — pkg.go.dev/github.com/anyproto/any-store/v2",
+     "* **Query semantics** — docs/query-filter-contract.md",
+     "* **Full-text search** — docs/full-text-search.md",
+     "* **Vector search** — docs/vector-search.md, docs/vector-engine.md",
+     "* **Aggregation** — docs/aggregation.md"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    261,
+    197,
+    200
+   ],
+   [
+    "replace",
+    261,
+    275,
+    200,
+    201,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    277,
+    201,
+    203
+   ],
+   [
+    "replace",
+    277,
+    278,
+    203,
+    204,
+    [
+     "Any Store is released under the MIT License — see LICENSE.md."
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    204,
+    205
+   ],
+   [
+    "replace",
+    279,
+    280,
+    205,
+    206,
+    [
+     "The storage engine derives from SQLite (public domain) and follows page-encryption design conventions from SQLCipher (BSD-3-Clause). Neither project's source is included. Attribution and scope: NOTICE.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "1e395dd6e3b5+2": {
+  "fn": "n24q02m/mnemo",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "> **Distribution & CLI:** the repo is `mnemo`; the PyPI distribution is **`n24q02m-mnemo`** (install `pip install n24q02m-mnemo` / `uvx n24q02m-mnemo`). Two console scripts ship: **`n24q02m-mnemo`** (legacy alias `mnemo-mcp`) starts the HTTP MCP server, and **`mnemo`** is the CLI-first memory surface that never serves. See CLI."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    14,
+    8,
+    13,
+    [
+     "CI",
+     "codecov",
+     "PyPI",
+     "License: Apache-2.0",
+     "SafeSkill 91/100"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    13,
+    14
+   ],
+   [
+    "replace",
+    15,
+    21,
+    14,
+    19,
+    [
+     "Python",
+     "SQLite",
+     "MCP",
+     "semantic-release",
+     "Renovate"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    19,
+    20
+   ],
+   [
+    "replace",
+    22,
+    25,
+    20,
+    21,
+    [
+     " Sister projects from n24q02m (click to expand) "
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    21,
+    22
+   ],
+   [
+    "replace",
+    26,
+    47,
+    22,
+    40,
+    [
+     "|Project|Tagline|Tag|",
+     "|-----------------------------------------------------------------------------|--------------------------------------------------------------------------------|-----------|",
+     "|better-semantic-release|Drop-in python-semantic-release fork with built-in release-safety guards (orp...|Tooling|",
+     "|claude-plugins|Claude Code plugin marketplace for the n24q02m MCP servers -- install web sea...|Marketplace|",
+     "|crg|Knowledge graph for token-efficient code reviews -- semantic search and call-...|MCP|",
+     "|email|IMAP/SMTP email for AI agents -- read, send, organize folders, and manage att...|MCP|",
+     "|fastretrieval|Fast multi-model retrieval runtime: ONNX and GGUF embeddings, reranking, and ...|Tooling|",
+     "|hull|hull is the shared monorepo core for the wet, crg and mnemo self-hosted stack|MCP|",
+     "|jules-task-archiver|Chrome Extension for bulk operations on Jules tasks via batchexecute API -- a...|Tooling|",
+     "|mnemo|Persistent AI memory with hybrid search. Open, free, unlimited.|MCP|",
+     "|notion|Markdown-first Notion for AI agents -- pages, databases, blocks, and comments...|MCP|",
+     "|sillstone|Pure-Rust multimedia, hashing, and array suite|Tooling|",
+     "|skret|Secrets without the server.|CLI|",
+     "|tacet|A self-distilling neuro-symbolic cascade that amortises LLM cost across knowl...|Tooling|",
+     "|telegram|Telegram for AI agents -- messages, chats, media, and contacts across both bo...|MCP|",
+     "|tools-docs|Docs portal for the n24q02m open-source tool stack (skret, MCP plugins, hull,...|Tooling|",
+     "|wet|Open-source MCP server for AI agents: web search, content extraction, and lib...|MCP|",
+     "|workspace|Google Workspace MCP server (Docs/Drive/Calendar/Gmail/Sheets/Slides/Tasks/Ch...|MCP|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    49,
+    40,
+    42
+   ],
+   [
+    "replace",
+    49,
+    68,
+    42,
+    43,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    76,
+    43,
+    51
+   ],
+   [
+    "replace",
+    76,
+    77,
+    51,
+    52,
+    [
+     "|Phase|Version|Status|Highlights|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    52,
+    53
+   ],
+   [
+    "replace",
+    78,
+    81,
+    53,
+    56,
+    [
+     "|**Phase 1**|**v1.x**|**Shipped**|Typed `memory(action=\"capture\")` (6 context_types + dedup) -- RRF (k=60) hybrid fusion + cross-encoder rerank + temporal decay -- importance x recency archive policy + restore -- Alembic migrations -- multi-provider LLM dispatch (pre-de-host) -- plugin trinity (recall-context + memory-commit skills, SessionStart + opt-in PostToolUse hooks)|",
+     "|**Phase 2**|v1.x+1|**Shipped, partially removed**|LLM-driven compression of older memories (kept, now via `[models.chat]` cell) + Passport sync (encrypted import/export bundle; **removed 2026-09**)|",
+     "|**Phase 3**|**v2.0.0**|**Shipped (BREAKING)**|Temporal knowledge graph -- bitemporal `valid_from` / `valid_to` columns -- entity resolution via embedding KNN -- `entity_search` / `entity_graph` / `history` actions -- `KG_AUTO_ENABLED` opt-in auto-extract on capture|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    93,
+    56,
+    68
+   ],
+   [
+    "replace",
+    93,
+    94,
+    68,
+    69,
+    [
+     "- **Plugin trinity** -- Ships `/recall-context` + `/memory-commit` skills and SessionStart + opt-in PostToolUse hooks (see docs/ARCHITECTURE.md)"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    69,
+    70
+   ],
+   [
+    "replace",
+    95,
+    96,
+    70,
+    71,
+    [
+     "- **LLM compression** -- Per-turn compression through the `[models.chat]` provider cell targets ~3x token reduction at >=0.9 fact retention; graceful skip when the cell is unconfigured (see docs/compression.md)"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    104,
+    71,
+    79
+   ],
+   [
+    "replace",
+    104,
+    112,
+    79,
+    80,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    116,
+    80,
+    84
+   ],
+   [
+    "replace",
+    116,
+    117,
+    84,
+    85,
+    [
+     "Setup page for full steps):"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    85,
+    86
+   ],
+   [
+    "replace",
+    118,
+    119,
+    86,
+    87,
+    [
+     "|Client|Install|"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    87,
+    88
+   ],
+   [
+    "replace",
+    120,
+    124,
+    88,
+    92,
+    [
+     "|Claude Code (plugin)|`/plugin marketplace add n24q02m/claude-plugins` then `/plugin install mnemo@n24q02m-plugins` (requires a running instance; see Self-hosting)|",
+     "|Claude Code (HTTP)|start the server (`uvx n24q02m-mnemo` or docker compose), then `claude mcp add --transport http mnemo http://127.0.0.1:8000/mcp`|",
+     "|Codex / Gemini CLI / Cursor / Windsurf|start the server, then register the `http://<host>:<port>/mcp` HTTP endpoint in the client's MCP settings|",
+     "|Any MCP client|point it at the `/mcp` endpoint of a running instance (Streamable HTTP)|"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    131,
+    92,
+    99
+   ],
+   [
+    "replace",
+    131,
+    132,
+    99,
+    100,
+    [
+     "|Feature|mnemo|Mem0|Letta|OpenMemory|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    100,
+    101
+   ],
+   [
+    "replace",
+    133,
+    146,
+    101,
+    114,
+    [
+     "|Hybrid retrieval (FTS + vec)|yes (FTS5 + RRF + sqlite-vec)|yes|partial|yes|",
+     "|Cross-encoder rerank|yes (Fastretrieval Qwen3 local + `[models.rerank]` cell)|partial (Cohere only)|no|no|",
+     "|Temporal decay scoring|yes (exp half-life)|no|no|no|",
+     "|Importance boost in rank|yes (LLM 0.0-1.0)|no|no|no|",
+     "|Soft-archive + restore policy|yes (importance x recency)|no|no|no|",
+     "|Self-hostable (single SQLite file)|yes (zero ext deps)|partial (cloud-first)|yes (Postgres)|yes (Postgres + Qdrant)|",
+     "|LLM dispatch|yes (`[models.chat]` cell, any OpenAI-spec endpoint)|partial|yes|partial|",
+     "|Plugin trinity (skills + hooks)|yes (recall-context + memory-commit)|n/a|n/a|n/a|",
+     "|Cross-machine migration|yes (rclone backup/restore outside the server)|yes (cloud)|n/a|n/a|",
+     "|LLM compression on capture|yes ([models.chat] cell, ~3x at >=0.90 retention)|no|no|no|",
+     "|Bitemporal `valid_from` / `valid_to` queries|yes (`as_of` time-travel)|no|partial (events only)|no|",
+     "|Entity resolution via embedding KNN|yes (cosine threshold tunable)|no|no|no|",
+     "|Audit trail with state hashes|yes (`memory_audit` table)|no|no|no|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    159,
+    114,
+    127
+   ],
+   [
+    "replace",
+    159,
+    160,
+    127,
+    128,
+    [
+     "> and follow the current setup docs."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    171,
+    128,
+    139
+   ],
+   [
+    "replace",
+    171,
+    178,
+    139,
+    146,
+    [
+     "> - wet -- Web search + content extraction",
+     "> - imagine-mcp -- Image/video understanding + generation",
+     "> - better-notion-mcp -- Notion API",
+     "> - better-email-mcp -- Email management",
+     "> - better-telegram-mcp -- Telegram",
+     "> - better-godot-mcp -- Godot Engine",
+     "> - crg -- Code review knowledge graph"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    183,
+    146,
+    151
+   ],
+   [
+    "replace",
+    183,
+    184,
+    151,
+    152,
+    [
+     "Full docs at **docs.n24q02m.com/servers/mnemo/setup/**:"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    152,
+    153
+   ],
+   [
+    "replace",
+    185,
+    188,
+    153,
+    156,
+    [
+     "- Setup -- install methods for Claude Code, Codex, Gemini CLI, Cursor, Windsurf, mcp.json",
+     "- Modes overview -- http",
+     "- Multi-user setup -- per-JWT-sub credential model"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    196,
+    156,
+    164
+   ],
+   [
+    "replace",
+    196,
+    197,
+    164,
+    165,
+    [
+     "mnemo was previously packaged for Smithery via a"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    207,
+    165,
+    175
+   ],
+   [
+    "replace",
+    207,
+    208,
+    175,
+    176,
+    [
+     "|Tool|Actions|Description|"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    209,
+    176,
+    177
+   ],
+   [
+    "replace",
+    209,
+    212,
+    177,
+    180,
+    [
+     "|`add_memory`, `search_memory`, `list_memories`, `update_memory`, `delete_memory`, `export_memories`, `import_memories`, `memory_stats`, `restore_memory`, `archived_memories`, `consolidate_memories`|(one action each)|Specialized single-purpose memory tools -- the recommended surface|",
+     "|`memory` (legacy dispatcher, **DEPRECATED** -- use the granular tools above instead; will be removed in a future release)|`add`, `capture`, `search`, `list`, `as_of`, `update`, `delete`, `export`, `import`, `stats`, `restore`, `archived`, `archive_now`, `consolidate`, `compress`, `entity_search`, `entity_graph`, `history`|Core CRUD + typed capture (6 context_types) + hybrid search (RRF + rerank + temporal decay) + import/export + soft-archive + restore + on-demand archive sweep + LLM consolidation + LLM compression + temporal KG (entity search / graph / history / as_of)|",
+     "|`config`|`status`, `set`, `warmup`, `backfill_embeddings`|Server status, update runtime settings, pre-download embedding model, backfill missing embedding vectors|"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    215,
+    180,
+    183
+   ],
+   [
+    "replace",
+    215,
+    216,
+    183,
+    184,
+    [
+     "|Component|Trigger|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    184,
+    185
+   ],
+   [
+    "replace",
+    217,
+    224,
+    185,
+    192,
+    [
+     "|`mnemo:recall-context` skill|session start, before significant decisions, \"what do I know about X?\"|Pulls cwd / topic-relevant memories with `context_type` filtering|",
+     "|`mnemo:memory-commit` skill|\"remember this\" / \"save this\" / \"ghi nho\" / \"luu lai\"|Typed manual capture with `context_type` decision tree|",
+     "|`mnemo:knowledge-audit` skill|periodic / \"audit memory\"|Find duplicates, contradictions, stale entries; consolidate|",
+     "|`mnemo:session-handoff` skill|end of session|Capture decisions / preferences / corrections / conventions / open questions|",
+     "|`mnemo:temporal-query` skill|\"as of\" / \"back in\" / \"history of\" / \"what did I think then\"|Point-in-time snapshots via `action=\"as_of\"` and version-chain tracing via `superseded_by`|",
+     "|SessionStart hook|every session init|Non-blocking nudge to invoke `recall-context`|",
+     "|PostToolUse hook (opt-in)|`CAPTURE_AUTO_ENABLED=true`|Hint `memory-commit` after Write/Edit of CLAUDE.md / AGENTS.md / ARCHITECTURE.md / docs/*.md|"
+    ]
+   ],
+   [
+    "equal",
+    224,
+    227,
+    192,
+    195
+   ],
+   [
+    "replace",
+    227,
+    228,
+    195,
+    196,
+    [
+     "|URI|Description|"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    229,
+    196,
+    197
+   ],
+   [
+    "replace",
+    229,
+    230,
+    197,
+    198,
+    [
+     "|`mnemo://stats`|Database statistics and server status|"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    233,
+    198,
+    201
+   ],
+   [
+    "replace",
+    233,
+    234,
+    201,
+    202,
+    [
+     "|Prompt|Parameters|Description|"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    202,
+    203
+   ],
+   [
+    "replace",
+    235,
+    237,
+    203,
+    205,
+    [
+     "|`save_summary`|`summary`|Generate prompt to save a conversation summary as memory|",
+     "|`recall_context`|`topic`|Generate prompt to recall relevant memories about a topic|"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    259,
+    205,
+    227
+   ],
+   [
+    "replace",
+    259,
+    262,
+    227,
+    230,
+    [
+     " starts a server): `capture`, `recall`, `reflect`, `fetch`, and the",
+     " `standing-*` family operate directly on a SQLite memory DB.",
+     " `mnemo-pilot` is a legacy alias of the same entry point."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    230,
+    231
+   ],
+   [
+    "replace",
+    263,
+    266,
+    231,
+    234,
+    [
+     " bare invocation starts the HTTP server; a leading subcommand",
+     " (`config-init`, `warmup`, `token-hash`, `token-verify`) runs an action",
+     " and exits."
+    ]
+   ],
+   [
+    "equal",
+    266,
+    274,
+    234,
+    242
+   ],
+   [
+    "replace",
+    274,
+    279,
+    242,
+    243,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    287,
+    243,
+    251
+   ],
+   [
+    "replace",
+    287,
+    292,
+    251,
+    252,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    294,
+    252,
+    254
+   ],
+   [
+    "replace",
+    294,
+    295,
+    254,
+    255,
+    [
+     "|Subcommand|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    255,
+    256
+   ],
+   [
+    "replace",
+    296,
+    300,
+    256,
+    260,
+    [
+     "|`config-init [--force]`|Write the default instance `config.toml` (server auth + `[models.*]` provider cells)|",
+     "|`warmup`|Pre-download the Fastretrieval-managed local ONNX embedding model so first use works offline|",
+     "|`token-hash`|Mint a `scrypt$` hash for `[server] token_hash` (shared-token auth)|",
+     "|`token-verify`|Verify a candidate token against a stored `scrypt$` hash|"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    354,
+    260,
+    314
+   ],
+   [
+    "replace",
+    354,
+    355,
+    314,
+    315,
+    [
+     "CLI for the full surface (`reflect`, `standing-*`, …)."
+    ]
+   ],
+   [
+    "equal",
+    355,
+    362,
+    315,
+    322
+   ],
+   [
+    "replace",
+    362,
+    363,
+    322,
+    323,
+    [
+     " `auth = \"token\"` send the shared token as the Bearer credential."
+    ]
+   ],
+   [
+    "equal",
+    363,
+    380,
+    323,
+    340
+   ],
+   [
+    "replace",
+    380,
+    381,
+    340,
+    341,
+    [
+     "|Upstream|Action|"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    382,
+    341,
+    342
+   ],
+   [
+    "replace",
+    382,
+    387,
+    342,
+    347,
+    [
+     "|`401` / `403`|disable that credential, use the next one|",
+     "|`429`|cool it down (`Retry-After` / `rate_limit_reset`, 1 s–1 h, default 60 s), use the next one|",
+     "|`5xx`|retry once on the same credential, then use the next one|",
+     "|anything else|re-raise; the credential is not blamed|",
+     "|pool empty / all blocked|one error naming the pool counts and the earliest retry, never a key|"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    389,
+    347,
+    349
+   ],
+   [
+    "replace",
+    389,
+    392,
+    349,
+    352,
+    [
+     " `CredentialStore(mnemo_config_dir() / \"credentials.db\").add_credential(...)`,",
+     " or the `KeyPool`/`CredentialStore` API directly; a task cell with no",
+     " `api_key` still works as long as its provider pool holds one."
+    ]
+   ],
+   [
+    "equal",
+    392,
+    393,
+    352,
+    353
+   ],
+   [
+    "replace",
+    393,
+    395,
+    353,
+    355,
+    [
+     " one derived from `base_url`. `account = \"<account-id>\"` (optional) selects a",
+     " named account's own pool — rotation never crosses accounts."
+    ]
+   ],
+   [
+    "equal",
+    395,
+    396,
+    355,
+    356
+   ],
+   [
+    "replace",
+    396,
+    398,
+    356,
+    358,
+    [
+     " pool on startup **while the pool is empty** and keeps working untouched; the",
+     " env var is never deleted and no key is ever logged."
+    ]
+   ],
+   [
+    "equal",
+    398,
+    399,
+    358,
+    359
+   ],
+   [
+    "replace",
+    399,
+    400,
+    359,
+    360,
+    [
+     " pool, so an entry contributes its key and endpoint, not a model override."
+    ]
+   ],
+   [
+    "equal",
+    400,
+    419,
+    360,
+    379
+   ],
+   [
+    "replace",
+    419,
+    420,
+    379,
+    380,
+    [
+     "|`[server] auth`|Bind allowed|Storage|Who can read your data?|"
+    ]
+   ],
+   [
+    "equal",
+    420,
+    421,
+    380,
+    381
+   ],
+   [
+    "replace",
+    421,
+    424,
+    381,
+    384,
+    [
+     "|`no-auth` (default)|loopback only (non-loopback bind refused)|`~/.mnemo/memories.db` + `config.toml`|Only your OS user|",
+     "|`token`|any|same, one shared `default` namespace|Anyone holding the shared token|",
+     "|`multi`|any|per-namespace `~/.mnemo/subs/<ns>/memories.db` (via `users.toml`)|Each token holder sees only their own namespace|"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    426,
+    384,
+    386
+   ],
+   [
+    "replace",
+    426,
+    428,
+    386,
+    387,
+    [
+     "Apache-2.0 -- See LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "d7ca8be204df+2": {
+  "fn": "observecraft/observecraft",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "ObserveCraft"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    10,
+    1,
+    5
+   ],
+   [
+    "replace",
+    10,
+    23,
+    5,
+    13,
+    [
+     "CI",
+     "Release",
+     "License: MIT",
+     "Rust",
+     "TypeScript",
+     "React",
+     "ClickHouse",
+     "OpenTelemetry"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    13,
+    14
+   ],
+   [
+    "replace",
+    24,
+    26,
+    14,
+    18,
+    [
+     "PRs Welcome",
+     "GitHub stars",
+     "GitHub issues",
+     "Last commit"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    18,
+    19
+   ],
+   [
+    "replace",
+    27,
+    28,
+    19,
+    21,
+    [
+     "Features · Quickstart · Architecture · Configuration ·",
+     "Contributing · Support · License"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    21,
+    22
+   ],
+   [
+    "replace",
+    29,
+    34,
+    22,
+    23,
+    [
+     " Trace view with waterfall and span details"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    38,
+    23,
+    27
+   ],
+   [
+    "replace",
+    38,
+    39,
+    27,
+    28,
+    [
+     " without stitching five tools together."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    28,
+    29
+   ],
+   [
+    "replace",
+    40,
+    41,
+    29,
+    30,
+    [
+     " tables you own and can query directly."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    30,
+    31
+   ],
+   [
+    "replace",
+    42,
+    43,
+    31,
+    32,
+    [
+     " Kafka before answering, so processing restarts and storage outages don't lose data, and live tail streams from it."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    32,
+    33
+   ],
+   [
+    "replace",
+    44,
+    45,
+    33,
+    34,
+    [
+     " audit trail."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    34,
+    35
+   ],
+   [
+    "replace",
+    46,
+    47,
+    35,
+    36,
+    [
+     " several organizations and switch between them."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    51,
+    36,
+    40
+   ],
+   [
+    "replace",
+    51,
+    52,
+    40,
+    41,
+    [
+     "||Area|Highlights|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    41,
+    42
+   ],
+   [
+    "replace",
+    53,
+    71,
+    42,
+    60,
+    [
+     "|📜|**Logs**|Query language with facets, histogram, live tail (SSE), anomaly insights, list/timeseries/top-list/table/tree-map/pie visualizations, trace ↔ log links|",
+     "|🔀|**Splunk migration**|Translate SPL searches step by step (filters, stats, timechart, top, macros) and import exported alerts and dashboards as log monitors and dashboards after a review|",
+     "|🗂️|**Log indexes**|Per-org indexes (Datadog model): filters route each log to the first matching index, each with its own retention, daily quota and sampled exclusion filters; Live Tail and archives still get every log|",
+     "|🗄️|**Log archives**|Hourly Parquet archives in your own S3-compatible bucket, Archive Search with DuckDB (no rehydration needed), rehydration back into the explorer with scan limits|",
+     "|📤|**Log forwarding**|Custom destinations: logs matching a query, after pipelines, forwarded to an HTTP endpoint, Splunk HEC or Elasticsearch with tag filtering; Flex Logs tier for longer index retention; all Logs Configuration resources managed with Datadog's Terraform provider (`datadog_logs_*`)|",
+     "|🧭|**APM**|Service catalog, endpoints, recommendations (N+1 queries, error hot spots), deployments, service pages with latency/error breakdowns|",
+     "|🌐|**Cloud Network Monitoring**|Traffic between clients and servers grouped by any tag (service, availability zone, namespace, pod, host, IP, port): volume, throughput, TCP retransmits, latency and jitter, connections; DNS view (requests, response time, timeouts, SERVFAIL, NXDOMAIN by domain); summary graphs, client/server facets, flow side panel, network map|",
+     "|🔥|**Continuous Profiler**|Datadog profiler uploads: CPU and memory per service over time, merged flame graphs with endpoint and package breakdowns, profile list, A/B comparison with differences coloured, CPU-burst insights with review status|",
+     "|🔎|**Trace explorer**|Span and trace search, facets, group-by analytics, flame graph, waterfall, span list, service map, span ↔ host metrics, logs and processes|",
+     "|📈|**Metrics**|Explorer and summary, query engine (`avg:system.cpu.user{env:prod} by {host}`), gauges, counters, histograms, exponential histograms and summaries (`http.server.request.duration.p95`), span-derived `trace.*` metrics|",
+     "|🧩|**Dashboards**|Drag-and-drop dashboards, lists, starring, built-in host and APM dashboards|",
+     "|🖥️|**Infrastructure**|Host list and map, host details with metrics, processes, pods, containers, spans and logs; Processes explorer; Event Management (All Events)|",
+     "|☸️|**Containers**|Kubernetes Overview and Explorer (pods, workloads, nodes, network, policies, storage, access control, CRDs, containers, container images) with facets, group-by, map and side panels (YAML, logs, APM, metrics, events, monitors); Resource Utilization; ECS Explorer (tasks, task definitions, services, clusters). Collector manifests in `deploy/examples/kubernetes`, ECS (FireLens + ADOT) in `deploy/examples/ecs`|",
+     "|🚨|**Monitors**|Metric, APM, log and change monitors; warn/alert thresholds with recovery; backtesting; downtimes; notifications to webhooks (HMAC-signed), Slack and email with retries; quality checks|",
+     "|🧯|**Incidents**|Declare, triage, timeline, impacts, follow-ups and analytics|",
+     "|🚀|**Software Delivery**|CI pipeline explorer, flaky-test management, DORA metrics from OpenTelemetry CI/CD semantic conventions; GitLab CI pipelines pulled through GitLab's API (no inbound access needed)|",
+     "|🤖|**MCP server**|AI agents (Claude Code, IDE assistants) query logs, metrics, traces, monitors, incidents, dashboards and security findings over the Model Context Protocol with an application key; read-only tools, audited (docs/mcp.md)|",
+     "|🔐|**Identity & tenancy**|Organizations with an instance admin console, one account across orgs, password + TOTP MFA, SAML 2.0, OIDC, roles, teams, SAML group mappings, application and ingest API keys, audit trail|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    60,
+    61
+   ],
+   [
+    "replace",
+    72,
+    75,
+    61,
+    62,
+    [
+     " 📸 More screenshots "
+    ]
+   ],
+   [
+    "equal",
+    75,
+    77,
+    62,
+    64
+   ],
+   [
+    "replace",
+    77,
+    78,
+    64,
+    65,
+    [
+     "APM home"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    65,
+    67
+   ],
+   [
+    "replace",
+    80,
+    81,
+    67,
+    68,
+    [
+     "Span explorer"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    83,
+    68,
+    70
+   ],
+   [
+    "replace",
+    83,
+    84,
+    70,
+    71,
+    [
+     "Monitors list"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    86,
+    71,
+    73
+   ],
+   [
+    "replace",
+    86,
+    87,
+    73,
+    74,
+    [
+     "Host list"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    89,
+    74,
+    76
+   ],
+   [
+    "replace",
+    89,
+    92,
+    76,
+    77,
+    [
+     "Pipelines overview"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    103,
+    77,
+    88
+   ],
+   [
+    "replace",
+    103,
+    109,
+    88,
+    89,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    151,
+    89,
+    131
+   ],
+   [
+    "replace",
+    151,
+    152,
+    131,
+    132,
+    [
+     "- **Kubernetes (Helm):** see Deploy on Kubernetes."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    132,
+    133
+   ],
+   [
+    "replace",
+    153,
+    156,
+    133,
+    136,
+    [
+     " image (`ghcr.io/observecraft/observecraft`, set `OC_VERSION` to pin a release; built from source when it can't be",
+     " pulled) with the API, the web app (served on `:8080`), the intake (`:4318`) and the demo generator. Add `--profile tls`",
+     " (with `OC_DOMAIN` and `OC_INTAKE_DOMAIN`) for automatic HTTPS through Caddy."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    158,
+    136,
+    138
+   ],
+   [
+    "replace",
+    158,
+    160,
+    138,
+    140,
+    [
+     " (SimpleSAMLphp on `:8081`, user `user1` / `user1pass`) and an OIDC provider (issuer `http://localhost:8082/default`).",
+     " Configure them under *Organization Settings → Login Methods*."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    168,
+    140,
+    148
+   ],
+   [
+    "replace",
+    168,
+    169,
+    148,
+    149,
+    [
+     " Agent's Kubernetes manifests."
+    ]
+   ],
+   [
+    "equal",
+    169,
+    170,
+    149,
+    150
+   ],
+   [
+    "replace",
+    170,
+    171,
+    150,
+    151,
+    [
+     " evaluates the flags managed under *Software Delivery → Feature Flags*."
+    ]
+   ],
+   [
+    "equal",
+    171,
+    190,
+    151,
+    170
+   ],
+   [
+    "replace",
+    190,
+    191,
+    170,
+    171,
+    [
+     "**docs/sending-data.md** has the setup for every sender: the Datadog Agent and tracers, DogStatsD,"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    196,
+    171,
+    176
+   ],
+   [
+    "replace",
+    196,
+    197,
+    176,
+    177,
+    [
+     "**docs/datadog-api.md**."
+    ]
+   ],
+   [
+    "equal",
+    197,
+    205,
+    177,
+    185
+   ],
+   [
+    "replace",
+    205,
+    206,
+    185,
+    186,
+    [
+     "releases:"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    226,
+    186,
+    206
+   ],
+   [
+    "replace",
+    226,
+    227,
+    206,
+    207,
+    [
+     "For production, `values-ha.yaml` runs ClickHouse sharded and replicated with"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    239,
+    207,
+    219
+   ],
+   [
+    "replace",
+    239,
+    240,
+    219,
+    220,
+    [
+     "Images and charts are signed and come with an SBOM and build provenance; SECURITY.md"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    241,
+    220,
+    221
+   ],
+   [
+    "delete",
+    241,
+    242,
+    221,
+    221
+   ],
+   [
+    "equal",
+    242,
+    249,
+    221,
+    228
+   ],
+   [
+    "replace",
+    249,
+    250,
+    228,
+    229,
+    [
+     " 1,000 and fail at 3,000), seconds since each signal was last written, failing mutations, replication delay;"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    229,
+    230
+   ],
+   [
+    "replace",
+    251,
+    252,
+    230,
+    231,
+    [
+     " cloud crawl jobs;"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    253,
+    231,
+    232
+   ],
+   [
+    "replace",
+    253,
+    255,
+    232,
+    234,
+    [
+     " needs the Datadog Agent on ObserveCraft's cluster, reporting to the operator's organization) plus disk, and the next",
+     " 30 days at the current growth; **usage**: each organization's stored events per signal and their estimated bytes."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    267,
+    234,
+    246
+   ],
+   [
+    "replace",
+    267,
+    285,
+    246,
+    247,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    290,
+    247,
+    252
+   ],
+   [
+    "replace",
+    290,
+    292,
+    252,
+    254,
+    [
+     "server's log ingester move their Kafka offsets only after storing (see ADR-0004",
+     "and ADR-0005)."
+    ]
+   ],
+   [
+    "equal",
+    292,
+    293,
+    254,
+    255
+   ],
+   [
+    "replace",
+    293,
+    294,
+    255,
+    256,
+    [
+     "|Path|What|"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    256,
+    257
+   ],
+   [
+    "replace",
+    295,
+    299,
+    257,
+    261,
+    [
+     "|`web/`|React + Vite + TypeScript UI. `src/api/*/client.ts` is the only data-access layer.|",
+     "|`server/`|Rust workspace: `oc-query` (search syntax → ClickHouse/DuckDB SQL, matcher), `oc-store` (ClickHouse + Postgres, migrations, retention), `oc-api` (`observecraft-server`), `oc-intake` (telemetry gateway: OTLP HTTP/gRPC, Datadog APIs), `oc-tracegen` (synthetic data).|",
+     "|`server/migrations/`|ClickHouse (telemetry) and Postgres (metadata) schemas.|",
+     "|`deploy/`|Docker Compose stack, Helm charts (`helm/observecraft`, `helm/observecraft-agent`), Vector aggregator (`vector/normalize.vrl`, with unit tests) + load generator, OTel Collector config (shared by Compose and Helm), RustFS, Caddy (TLS), Kubernetes and ECS examples (`examples/`).|"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    308,
+    261,
+    270
+   ],
+   [
+    "replace",
+    308,
+    309,
+    270,
+    271,
+    [
+     "The server reads its settings from environment variables; see `.env.example` for the full list. The"
+    ]
+   ],
+   [
+    "equal",
+    309,
+    311,
+    271,
+    273
+   ],
+   [
+    "replace",
+    311,
+    312,
+    273,
+    274,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    313,
+    274,
+    275
+   ],
+   [
+    "replace",
+    313,
+    323,
+    275,
+    285,
+    [
+     "|`OC_HTTP_ADDR`|`0.0.0.0:8080`|API listen address|",
+     "|`OC_CLICKHOUSE_URL`|`http://localhost:8123`|ClickHouse HTTP endpoint (`OC_CLICKHOUSE_USER` / `_PASSWORD`)|",
+     "|`OC_CLICKHOUSE_CLUSTER`|—|ClickHouse cluster name (from `remote_servers`, with Keeper): tables are created replicated and sharded on it. Unset for a single server|",
+     "|`OC_RUN_MIGRATIONS`|`true`|Apply migrations at startup (under a Postgres lock, so replicas can start together). `false` when a deploy step runs `observecraft-server migrate`|",
+     "|`OC_CLICKHOUSE_DROP_LEGACY_SCHEMA`|`false`|Allow replacing a ClickHouse schema from before the org-sorted tables (deletes its telemetry)|",
+     "|`OC_ORG_QUERY_TIMEOUT_SECONDS` / `OC_ORG_QUERY_MAX_MEMORY_BYTES` / `OC_ORG_QUERY_MAX_ROWS_TO_READ`|`60` / `4294967296` / `0` (none)|Limits on each telemetry query of an organization (`OC_QUERY_TIMEOUT_SECONDS` / `OC_QUERY_MAX_MEMORY_BYTES` still work); queries also send the org as ClickHouse `quota_key` for per-org quotas. A query stopped at a limit gets 503 with what to change|",
+     "|`OC_ORG_QUERY_CONCURRENCY` / `OC_ORG_QUERY_QUEUE_TIMEOUT_MS`|`16` / `10000`|ClickHouse queries of one organization running at once on each server replica (0 = no limit); more wait up to the timeout, then the API answers 429 (\"retry shortly\"). Background jobs (metric rollups, monitors, schedulers) are exempt|",
+     "|`OC_POSTGRES_URL`|`postgres://observecraft:…@localhost:5432/observecraft`|Postgres connection string|",
+     "|`OC_KAFKA_BROKERS`|`localhost:19092`|Kafka bootstrap brokers (`host:port,…`). The server ingests logs and reads live tail from it; the intake (`oc-intake`) writes telemetry to it, and forwards over HTTP to the Collector and Vector when it is unset|",
+     "| `OC_LOG_INGEST` | `kafka` | `kafka`: the server reads the log topics itself (ADR-0005; `OC_LOG_INGEST_CONCURRENCY` batches at once, by default the CPUs it may use, 4–16; switching from `vector`, it"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    324,
+    285,
+    286
+   ],
+   [
+    "replace",
+    324,
+    362,
+    286,
+    324,
+    [
+     "|`OC_CACHE_URL`|—|**Required.** Shared cache of all server replicas: Valkey (or another Redis-protocol server), `redis://[user:password@]host:6379/0` or `rediss://…` for TLS. The server exits at startup when it is unset or unreachable for 30 s; later outages only cost cache hits|",
+     "|`OC_DATADOG_API_ALLOW_APP_KEY_CREATION`|`false`|Lets the Datadog-compatible API create application keys when the caller is itself an application key (Terraform's `datadog_application_key`). Off by default so a leaked key can't create keys that outlive its revocation; see docs/datadog-api.md|",
+     "|`OC_CACHE_MAX_VALUE_BYTES` / `OC_CACHE_LOAD_TIMEOUT_SECONDS`|`8388608` / `30`|Largest value stored (after compression); how long replicas wait for another replica's load of the same entry|",
+     "|`OC_INVENTORY_CACHE_MAX_OBJECTS`|`500000`|Kubernetes objects the in-process inventory cache keeps over all orgs|",
+     "|`OC_PUBLIC_URL`|`http://localhost:5173`|Origin users open the app on (SSO redirects, login links, notification links)|",
+     "|`OC_AWS_PRINCIPAL_ARN`|unset|The AWS IAM role the server assumes customers' AWS integration roles with; their roles trust it (Integrations → Amazon Web Services)|",
+     "|`OC_GCP_PRINCIPAL_EMAIL`|unset|The GCP service account the server impersonates customers' service accounts with (the STS delegate); they grant it Service Account Token Creator|",
+     "|`OC_SLACK_CLIENT_ID`, `OC_SLACK_CLIENT_SECRET`|unset|This install's Slack app, for \"Add to Slack\" in Integrations → Slack (without them, workspaces connect with their own app's bot token)|",
+     "|`OC_SLACK_SIGNING_SECRET`|unset|That app's signing secret: verifies the mute buttons of Slack alerts|",
+     "|`OC_CLOUD_CRAWLERS`|`aws,azure,gcp`|The cloud integrations whose metrics the server crawls (CloudWatch, Azure Monitor, Cloud Monitoring); needs `OC_KAFKA_BROKERS`|",
+     "|`OC_CLOUD_CRAWL_INTERVAL_SECS`|`600`|How often each account's region, subscription or project is read|",
+     "|`OC_CLOUD_CRAWL_CONCURRENCY`|`8`|Crawl jobs one server runs at a time per cloud (add servers to crawl more)|",
+     "|`OC_SECRET_KEY`|—|**Required in production.** Encrypts MFA seeds, OIDC secrets, archive and channel credentials (`openssl rand -base64 48`)|",
+     "|`OC_INSTANCE_ADMIN_EMAIL`|—|Account that creates and manages organizations (becomes an admin of the install's org)|",
+     "|`OC_RETENTION_LOGS_DAYS` / `_TRACES_DAYS`|`15` / `15`|Defaults for a new org's first log index and its span retention (orgs change them in *Log Indexes* / *Data Retention*)|",
+     "|`OC_RETENTION_LOGS_MAX_DAYS` / `_TRACES_MAX_DAYS`|`365` / `90`|Most the instance admin can grant an org (*Instance Admin → Retention limits*)|",
+     "|`OC_RETENTION_METRICS_DAYS` / `_CI_DAYS`|`30` / `30`|Install-wide metric and CI retention|",
+     "|`OC_RAW_LOGS_HOURS`|`72`|Every log stays this long unindexed, as the source of archives|",
+     "|`OC_LOGPROC_ADDR` / `OC_INTERNAL_TOKEN`|`0.0.0.0:8090` / —|Internal listener: the log indexer Vector posts to (`OC_LOG_INGEST=vector`), and the server's own metrics (`GET /metrics`, Prometheus text: `oc_cache_*`). Keep it off the public network; the token is optional|",
+     "|`OC_SMTP_URL` / `OC_SMTP_FROM`|—|SMTP server for ObserveCraft's emails (`smtps://user:pass@host:465`): monitors, On-Call, reports, verification. HTML and text, with the logo and graphs attached inline (no image is fetched from the install)|",
+     "|`OC_ASSIST_PROVIDER`|—|The install's default model for Assist: `anthropic` (the Messages API) or `openai` (any OpenAI-compatible chat completions endpoint: OpenAI, Azure OpenAI, vLLM, LiteLLM, Ollama). Each organization can set its own in Organization Settings → Assist AI (key sealed), which replaces this one for it. Unset and no organization provider: Assist says it isn't set up|",
+     "|`OC_ASSIST_API_KEY` / `OC_ASSIST_MODEL` / `OC_ASSIST_BASE_URL`|— / `claude-opus-5` (anthropic) / `https://api.anthropic.com`|The provider's key (required for anthropic), model (required for openai) and URL (required for openai, e.g. `https://api.openai.com/v1`)|",
+     "|`OC_ASSIST_ALLOW_PRIVATE`|`false`|Lets organizations point Assist at private addresses (a model on the install's network); leave off on multi-tenant installs|",
+     "|`OC_ASSIST_FALLBACKS` / `OC_ASSIST_MAX_TOKENS`|`true` / 64000 (anthropic), 4096 (openai)|Anthropic's server-side fallback when the model declines a request; the most a model turn writes|",
+     "|`OC_SYNTHETICS_ALLOW_PRIVATE`|`false`|Let synthetic tests reach loopback, private, link-local (cloud metadata) and other internal addresses|",
+     "|`OC_DATA_DIR`|`.oc-data`|Local cache for Archive Search and rehydration|",
+     "|`OC_COOKIE_SECURE`|`false`|Set `true` when served over HTTPS|",
+     "|`OC_SESSION_HOURS`|`12`|Idle session lifetime (sessions also end 7 days after sign-in)|",
+     "|`OC_WEB_DIST`|—|Serve the built web app from the API (production-style)|",
+     "|`OC_LOG_FORWARD_ALLOW_PRIVATE`|`false`|Custom destinations may forward logs to private and loopback addresses|",
+     "|`OC_SCANNER_TOKEN`|—|Bearer token of Cloud Security's account scanners (16+ characters; the `scanner` service / `scanner.enabled`). Without it no account is scanned|",
+     "|`OC_POSTURE_SCAN_INTERVAL_HOURS`|`24`|Hours between two Prowler scans of a cloud account|",
+     "|`OC_KEV_URL`|CISA's catalog|Known Exploited Vulnerabilities JSON the Security research feed reads every six hours (`off` without internet access)|",
+     "|`OC_SELF_MONITORING`|`true`|ObserveCraft monitoring itself: every minute one server writes `observecraft.*` metrics (ClickHouse disks, parts and freshness, the log ingester's Kafka lag, Postgres, jobs, cost, each organization's usage) into the operator's organization, with the *ObserveCraft Overview* dashboard and recommended monitors there; see Monitoring ObserveCraft itself|",
+     "|`OC_SELF_MONITORING_ORG` / `OC_SELF_MONITORING_NOTIFY`|first instance admin's org / —|The operator's organization; the handles its recommended monitors notify (`@slack-ops @ops@example.com`)|",
+     "|`OC_HEARTBEAT_URL`|—|Called every minute while Postgres and ClickHouse answer (e.g. a healthchecks.io check), so a service outside alerts when ObserveCraft is down|",
+     "|`OC_SELF_MONITORING_NAMESPACE` / `OC_SELF_MONITORING_STORAGE_GB_MONTH`|`observecraft` / `0.08`|Kubernetes namespace of the install (its containers' cost, from the Datadog Agent's `container.*`); USD per GB-month of disk|",
+     "|`OC_SEED_DEMO`|`true`|Fictional demo users, teams, monitors and incidents, a demo ingest key and archive. **Set `false` in production.**|"
+    ]
+   ],
+   [
+    "equal",
+    362,
+    373,
+    324,
+    335
+   ],
+   [
+    "replace",
+    373,
+    375,
+    335,
+    337,
+    [
+     " only from its session or application key, a sender's org only from its ingest API key — never from client input.",
+     " An integration test (`server/crates/oc-api/tests/tenancy.rs`) checks isolation end to end."
+    ]
+   ],
+   [
+    "equal",
+    375,
+    376,
+    337,
+    338
+   ],
+   [
+    "replace",
+    376,
+    377,
+    338,
+    339,
+    [
+     " belongs to another org; sessions started with SSO stay in that org."
+    ]
+   ],
+   [
+    "equal",
+    377,
+    378,
+    339,
+    340
+   ],
+   [
+    "replace",
+    378,
+    379,
+    340,
+    341,
+    [
+     " SQL."
+    ]
+   ],
+   [
+    "equal",
+    379,
+    380,
+    341,
+    342
+   ],
+   [
+    "replace",
+    380,
+    381,
+    342,
+    343,
+    [
+     " protection), OIDC with PKCE and nonce, HttpOnly SameSite cookies with origin checks on writes."
+    ]
+   ],
+   [
+    "equal",
+    381,
+    383,
+    343,
+    345
+   ],
+   [
+    "replace",
+    383,
+    384,
+    345,
+    346,
+    [
+     "Found a vulnerability? Please report it privately; see CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    384,
+    390,
+    346,
+    352
+   ],
+   [
+    "replace",
+    390,
+    391,
+    352,
+    353,
+    [
+     "|Area|Status|"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    392,
+    353,
+    354
+   ],
+   [
+    "replace",
+    392,
+    412,
+    354,
+    374,
+    [
+     "|Ingest (OTLP HTTP/gRPC, Datadog logs and metrics APIs), API keys, organizations|✅ Live|",
+     "|Helm charts (platform; OpenTelemetry Collector agent), Datadog Agent / Operator examples|✅ Live|",
+     "|Logs, live tail, log indexes (retention, quotas, exclusions), archives, Archive Search, rehydration, trace ↔ log links|✅ Live (ClickHouse, S3 + DuckDB)|",
+     "|APM, trace explorer, metrics (all OTLP types), dashboards, infrastructure|✅ Live (ClickHouse)|",
+     "|APM settings: span flow overview, default environment and primary tags, ingestion per service, span-based metrics and retention filters (Terraform `datadog_spans_metric`, `datadog_apm_retention_filter` / `_order`), span pipelines|✅ Live (ClickHouse, Postgres); retention filters and pipelines not applied to incoming spans yet|",
+     "|Monitors (metric, APM, log) with webhook / Slack / email notifications, downtimes, incidents|✅ Live (Postgres)|",
+     "|Identity, SSO, audit trail|✅ Live (Postgres)|",
+     "|CI visibility, flaky tests, DORA metrics|✅ Live (ClickHouse)|",
+     "|Error tracking, integrations catalog|🧪 UI with in-browser mocks|",
+     "|Log pipelines (parsing, remapping), logs → metrics, self-serve signup and per-org usage limits (SaaS mode)|🗺️ Planned|",
+     "|Datadog Agent / Cluster Agent (Helm chart, Operator): metrics, distributions, logs, APM from dd-trace libraries, service checks, Kubernetes, host metadata, live processes and containers, events, continuous profiles, network connections (system-probe)|✅ Live|",
+     "|PagerDuty / on-call|🗺️ Planned|",
+     "|RUM: applications (Terraform `datadog_rum_application`), browser and mobile SDK events, Summary, Explorer|✅ Live (ClickHouse, Postgres)|",
+     "|RUM Session Replay: browser recordings, player, playlists, watch history, heatmaps; Product Analytics|✅ Live (ClickHouse, Postgres)|",
+     "|Cloud SIEM: content packs (CloudTrail, Okta, GitHub, Kubernetes audit, web servers, …), log detection rules and suppressions (Terraform `datadog_security_monitoring_rule` / `_suppression`), signals and triage; Security overview, inbox and research feed (CISA KEV)|✅ Live (ClickHouse, Postgres)|",
+     "|Cloud Security: host and container image vulnerabilities from the Agent's SBOMs, Kubernetes and host misconfigurations, inventory, infrastructure packages, CVE explorer|✅ Live (Postgres, ClickHouse)|",
+     "|App & API Protection: security traces from the tracers' AppSec spans, attackers and users, API endpoints and findings (OWASP API Top 10), In-App WAF custom rules, exclusion filters and policies (Terraform `datadog_appsec_waf_custom_rule` / `_exclusion_filter`), denylist and detection rules|✅ Live (ClickHouse, Postgres); not yet pushed to tracers|",
+     "|Workload Protection: the Agent's runtime security events, agent policies and rules (Terraform `datadog_csm_threats_policy` / `_agent_rule`), Agents and coverage, `workload_security` detection rules and signals, `workload_activity` findings, MITRE ATT&CK coverage|✅ Live (ClickHouse, Postgres); policies reach Agents as downloaded files|",
+     "|AI Guard: the tracers' AI Guard SDK evaluate endpoint with our own evaluator (prompt injection, jailbreak, prompt extraction, exfiltration, destructive tool calls, sensitive data), Investigate with the conversation timeline, Signals, Discover (AI services and model providers from LLM spans), Playground, per-service blocking|✅ Live (ClickHouse, Postgres)|",
+     "|Live debugger|🗺️ Planned|"
+    ]
+   ],
+   [
+    "equal",
+    412,
+    414,
+    374,
+    376
+   ],
+   [
+    "replace",
+    414,
+    423,
+    376,
+    377,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    425,
+    377,
+    379
+   ],
+   [
+    "replace",
+    425,
+    426,
+    379,
+    380,
+    [
+     "Sponsor @andreimerfu, ObserveCraft's maintainer, to help fund"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    431,
+    380,
+    385
+   ],
+   [
+    "replace",
+    431,
+    437,
+    385,
+    386,
+    [
+     "ObserveCraft is released under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

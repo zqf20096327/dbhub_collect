@@ -2951,5 +2951,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "dfe0f7ceaa47": {
+  "identity": {
+   "one_liner": "Rust 库，基于逻辑复制协议解析并流式传输 PostgreSQL WAL 日志",
+   "review": "pg-walstream 是一个 Rust 库，通过 PostgreSQL 逻辑与物理复制协议解析并流式消费 WAL。默认使用 rustls 纯 Rust TLS 后端（无需 libpq/OpenSSL），也支持 libpq。实现逻辑复制协议版本 1-4，提供快照获取、LSN 跟踪、serde 行反序列化与事件序列化。最低 Rust 版本 1.88，支持 no_std 解析器构建以用于 wasm 及嵌入式目标。",
+   "highlights": [
+    "实现 PostgreSQL 逻辑复制协议版本 1-4，支持流式大事务、两阶段提交与多流并行复制",
+    "提供 BASE_BACKUP 命令、复制槽管理与物理复制 WAL 流，支持全部 SSL 模式及 Cleartext/MD5/SCRAM-SHA-256 认证",
+    "ChangeEvent 支持 JSON/CBOR/MessagePack/postcard/bincode 序列化，内置 serde 行反序列化与可选 #[derive(WalTable)] 宏"
+   ],
+   "use_cases": [
+    "通过逻辑复制协议消费 PostgreSQL WAL 变更事件",
+    "为备用节点流式传输原始 WAL 数据或执行 PITR 与基础备份",
+    "在 wasm 或嵌入式目标上运行仅含协议解析器的 no_std 构建"
+   ]
+  },
+  "sha": "dfe0f7ceaa47",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f0868bbcbae4": {
+  "identity": {
+   "one_liner": "在 SQL Server 内运行的存储过程式 AI 索引调优工具",
+   "review": "aisqltuner-index-tuner 是一个运行在 SQL Server 内的 T-SQL 存储过程工具：它收集数据库的索引诊断信息（缺失索引、索引重叠、非 SARGable 谓词、Query Store 数据等），通过 sp_invoke_external_rest_endpoint 调用用户自己的 Azure OpenAI 部署生成建议，存入表中并可在验证后创建索引。面向使用 SQL Server 2025 等支持外部 REST 端点平台的 DBA，MIT 许可开源；不支持 2022 及更早版本。",
+   "highlights": [
+    "单存储过程收集索引诊断（缺失索引、重叠索引、计划缓存语句、Query Store 顶部查询、非 SARGable 谓词等）并发送至用户自己的 Azure OpenAI 部署",
+    "支持仅推荐、或经验证后创建索引、删除冗余索引等模式，带优先级/置信度阈值与列存储、删除开关参数",
+    "建议与运行记录存于 AIIndexTuner 架构的表中，可通过 SQL Server Agent 定时执行，支持按架构/表过滤"
+   ],
+   "use_cases": [
+    "对 SQL Server 2025、Azure SQL Database 或 Fabric SQL Database 用户数据库进行周期性索引调优",
+    "希望使用自有 Azure OpenAI 端点与 API 密钥、在数据库内部完成诊断收集到建议落库流程的 DBA",
+    "需要通过 Agent 作业定时运行并在阈值控制下自动创建或删除索引的场景"
+   ]
+  },
+  "sha": "f0868bbcbae4",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

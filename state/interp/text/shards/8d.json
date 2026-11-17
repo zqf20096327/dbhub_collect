@@ -2840,5 +2840,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d70d049b945d": {
+  "identity": {
+   "one_liner": "内存事件总线库，支持 Python/TS/Rust/Go 多语言异步事件驱动开发",
+   "review": "abxbus 是一个运行在内存中的事件总线库，提供 Python、TypeScript（node/browser）、Rust 和 Go 的异步事件 API。事件以 Pydantic/Zod 模型定义，支持在运行时之间交换。核心机制包括嵌套事件追踪、FIFO 或并行处理模式、事件处理器返回值类型校验，以及 ContextVar 传播。通过 uv 或 pip 安装（JS 见 abxbus-ts/README.md）。",
+   "highlights": [
+    "支持多模式事件订阅（按模型类、通配符等）及同步/异步处理器注册",
+    "内置 FIFO 严格串行或 parallel 并行处理，支持嵌套子事件追踪与多级超时控制",
+    "通过 BaseEvent[ReturnType] 泛型在编译期和运行时校验处理器返回值类型"
+   ],
+   "use_cases": [
+    "构建包含多级嵌套子事件、需要追踪因果关系的异步事件驱动应用",
+    "在 Python/TS/Rust/Go 之间以一致的 JSON 事件格式交换事件",
+    "需要请求上下文（request ID、会话、tracing span）随事件传播的应用"
+   ]
+  },
+  "sha": "d70d049b945d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "b0729d4ee83d": {
+  "identity": {
+   "one_liner": "基于 Kiwix ZIM 归档与 SQLite 增量层的离线 Wikipedia 阅读器",
+   "review": "WekI 是一个本地单用户应用：读取只读的 Wikipedia ZIM 快照，用 SQLite 存储在线同步到的新文章、删除与重定向记录，联网时通过 Wikimedia 事件流增量更新，并维护持久化队列。面向需要在无网络环境下阅读 Wikipedia 的用户。当前为实验版本，同步目标限于 Simple English Wikipedia，尚未支持完整英文维基的规模化同步。",
+   "highlights": [
+    "将只读 ZIM 归档与 SQLite 更新层结合，读取时按更新内容、删除/重定向记录、原始归档的顺序解析文章",
+    "同步过程使用持久化 backlog 与游标，未完成的工作保留至后续运行，并通过数据库事务保持一致性",
+    "本地全文搜索覆盖归档与更新文章；内测基准显示 ZIM 文章查询 p50 为 0.002 ms，更新文章搜索 p50 为 0.42 ms"
+   ],
+   "use_cases": [
+    "无网络环境下阅读已下载的 Simple English Wikipedia 快照",
+    "恢复联网后增量同步快照日期之后的新文章与修改",
+    "需要备份本地知识库的开发者（提供 overlay 备份脚本，需同时保留 ZIM 与配置文件）"
+   ]
+  },
+  "sha": "b0729d4ee83d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2aaabef6fa0d": {
+  "identity": {
+   "one_liner": "一个通过 MCP 协议访问达梦 DM8、SQL Server 和 MySQL 的轻量只读优先数据库服务器",
+   "review": "multidb-mcp 是一个用 TypeScript 编写的 MCP Server，通过 npx 启动后，让 Claude Code、Cursor、Cline 等 AI 客户端以统一工具接口查询达梦 DM8、SQL Server 和 MySQL/MariaDB。它默认只读，写操作需按连接逐级开启 INSERT/UPDATE/DELETE/DDL 四类权限，并提供列脱敏、查询超时、结果行数与体积上限和 stderr 结构化审计日志。配置基于环境变量，支持单连接或多连接 JSON 数组。",
+   "highlights": [
+    "支持达梦 DM8、SQL Server、MySQL/MariaDB 三种数据库，提供 test_connection、list_tables、describe_table、execute_sql 等工具，并实现 MCP 的 Tools/Resources/Prompts 三原语",
+    "默认只读，写权限按连接粒度分四类开关控制；支持 ? 占位符参数化查询、标识符白名单校验与多语句拦截",
+    "提供按列名正则的结果脱敏（fixed/null/partial）、maxRows/maxResultBytes/maxQueryLength 三重结果治理及 JSON 审计日志"
+   ],
+   "use_cases": [
+    "在支持 MCP 的 AI 客户端中通过自然语言查询和探查达梦、SQL Server 或 MySQL 数据库的表结构与数据",
+    "需要限制 AI 只能只读访问生产库，或按连接分别配置细粒度写权限的多环境场景",
+    "查询结果包含邮箱、手机号等敏感列，需要服务端脱敏和审计留痕的合规场景"
+   ]
+  },
+  "sha": "2aaabef6fa0d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

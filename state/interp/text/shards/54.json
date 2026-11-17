@@ -2974,5 +2974,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "89020dd847c6": {
+  "identity": {
+   "one_liner": "为每个 git worktree 提供独立服务、端口与 Postgres 数据库的 Go 命令行工具",
+   "review": "isola 是一个单二进制 Go CLI，为同一机器上的多个 git worktree 各自运行独立的进程、端口、*.localhost URL、环境变量和从模板克隆的 Postgres 数据库，使多个分支或 AI 编码代理可并行运行互不冲突。配置经由 isola init 生成的 .isola.toml 声明，支持 setup 步骤、按需服务、git hook 自动启停和 worktree 移除后的自动清理；不使用 Docker，需连接用户已有的 Postgres/Redis 服务器。",
+   "highlights": [
+    "每个 worktree 获得独立进程、端口、子域名 URL、环境变量及从模板克隆的数据库，worktree 移除时自动清理",
+    "支持配置式 setup 步骤、按需服务、post-checkout hook 自动启动，以及 TUI 仪表盘和机器可读输出",
+    "Postgres accessory 基于已有服务器按 worktree 克隆数据库；Redis 按编号分配逻辑 DB"
+   ],
+   "use_cases": [
+    "多个分支（如 AI 代理并行重构、hotfix）在同一机器同时运行服务而不发生端口和数据库冲突",
+    "为新 worktree 自动完成依赖安装、迁移等启动准备",
+    "通过 *.localhost 子域名 URL 在浏览器中并行访问各分支的前端/服务"
+   ]
+  },
+  "sha": "89020dd847c6",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

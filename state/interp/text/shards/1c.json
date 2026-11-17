@@ -3216,5 +3216,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "63b4ef28d1d4": {
+  "identity": {
+   "one_liner": "轻量级 PHP 框架，按请求路径加载命名空间控制器并调用公开方法。",
+   "review": "SlightPHP 是一个 PHP 8.0+ 的轻量框架，通过 Composer 安装，将 /home/main/entry 这类 URL 路径映射到命名空间控制器的公开方法。核心仅负责路由调度，Db、Redis、Tpl 等插件经 Composer suggest 按需安装；6.x 系列引入 Request/Response 对象与 Route 方法注解，多次版本包含不兼容变更，升级需参照官方迁移指南。",
+   "highlights": [
+    "按请求路径调度命名空间控制器方法，默认最多 10 段路径，可通过 setMaxDepth 调整",
+    "支持 #[Route] 注解限制 HTTP 方法，不匹配时抛出异常并返回 405 和 Allow",
+    "控制器通过 Request/Response 对象读取路由分段、请求数据并设置响应；插件依赖由 Composer 按需声明"
+   ],
+   "use_cases": [
+    "需要按 URL 路径直接映射控制器方法的 PHP Web 应用开发",
+    "只需核心路由、按需引入数据库/模板/验证码等组件的项目",
+    "已在用 SlightPHP 旧版本、需按迁移指南升级到 6.x 的应用"
+   ]
+  },
+  "sha": "63b4ef28d1d4",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "6ebe09ffd1f9": {
+  "identity": {
+   "one_liner": "本地运行的个人助理：Rust 内核逐轮记录可查的 append-only 记忆账本",
+   "review": "Joy 是一个在本地运行的个人助理，Rust 内核实现代理循环、记忆与 36 个工具，TypeScript 提供聊天网关与仪表盘，Python 提供轻量 SDK。它面向希望任务数据与 API 密钥留在本机的用户，提供终端 REPL、Web 工作台（中英双语）与开发中的 Mac 桌面端，每轮对话写入一行 append-only 账本，FTS5 索引可从账本重建。发布物覆盖 macOS/Linux 四种架构，支持 Docker 运行，目前无 Windows 写入边界支持。",
+   "highlights": [
+    "每轮对话写入一行 append-only 账本，记录检索决策、工具执行、所用模型与开销，记忆库通过 ledger:… 链接回源回合，FTS5 索引可从账本重建",
+    "预适配 12 个模型提供商并支持 Ollama 离线运行，通过 65 个 JSON-RPC 方法暴露协议，事件流为 turnStarted→gateDecided→textDelta→toolStarted→toolCompleted→turnCompleted",
+    "内置 36 个工具（23 个常开、13 个可开关）并支持 MCP 服务器；会话提供只读、标准（确认一次）与完全访问三种权限模式"
+   ],
+   "use_cases": [
+    "在本地管理含记忆与日程的个人任务（日历工具幂等，支持 ICS 与可选 Apple Calendar 同步）",
+    "通过 Telegram、Discord、WeChat、Lark 等聊天网关接入对话",
+    "在终端或 Web 仪表盘上以本地模型（Ollama）离线运行代理任务"
+   ]
+  },
+  "sha": "6ebe09ffd1f9",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

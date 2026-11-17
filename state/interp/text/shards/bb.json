@@ -3087,5 +3087,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "9bdfac9e1ba8": {
+  "identity": {
+   "one_liner": "在自有 Cloudflare 账户上运行的类型安全实时后端框架，提供 Convex 风格开发体验。",
+   "review": "Lunora 是一个 TypeScript 后端框架：开发者编写带校验器的查询、变更和动作，生产环境部署为 Cloudflare Workers——Durable Objects 持有实时状态，D1 存 SQL，R2 存 blobs，Queues 跑任务。开发环境经 @cloudflare/vite-plugin 运行在 workerd 上，保存即生成客户端类型并推送实时更新。当前为 alpha 版，安装包名为 lunorash，首次稳定版发布前可能出现破坏性变更。",
+   "highlights": [
+    "提供端到端类型安全：schema、校验器、查询结果与客户端钩子来自同一来源，开发服务器在保存时重新生成类型",
+    "客户端经 WebSocket 订阅实时查询，mutation 将变更推送给所有订阅者",
+    "支持 @lunora/mcp 将部署的表、函数、日志和问题暴露给 MCP 客户端；可生成 Python、Go、Ruby、Rust、Swift、Java、Kotlin、Dart 等语言的类型化客户端"
+   ],
+   "use_cases": [
+    "在自有 Cloudflare 账户上部署带实时订阅的全栈应用",
+    "需要 React、Vue、Solid、Svelte、Angular、React Native 等多端类型化客户端的项目",
+    "通过本地 Studio 管理界面浏览数据、执行 SQL、查看日志与追踪的开发调试场景"
+   ]
+  },
+  "sha": "9bdfac9e1ba8",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "833f16913af9": {
+  "identity": {
+   "one_liner": "OceanBase MySQL 租户的 Tcl 9 绑定库",
+   "review": "obmysqltcl 0.1 是面向 OceanBase MySQL 租户的 Tcl 9 扩展绑定，命令参数与结果遵循 mysqltcl 风格。它动态链接独立安装的 OceanBase Connector/C（libobclnt），初始目标平台为 Linux、Tcl 9 与 Connector/C 2.2.14，Windows 尚待支持；通过 build.sh 编译生成包文件，支持 TLS 连接校验，句柄归属于创建它的解释器。",
+   "highlights": [
+    "命令遵循 mysqltcl 的参数与结果格式，提供 ::obmysql::* 命名空间及 obmysqlconnect、obmysqlexec 等旧名称",
+    "-ssl true 可强制 TLS 并验证服务器证书与主机名，TLS 不可用时返回错误而非回退到未加密登录",
+    "构建产物仅包含绑定与包索引，不复制数据库客户端库，编译时不嵌入客户端库 RPATH"
+   ],
+   "use_cases": [
+    "在 Tcl 9 脚本中连接并查询 OceanBase MySQL 租户",
+    "需要 mysqltcl 风格 API 访问 OceanBase 的存量 Tcl 应用",
+    "需要 TLS 证书校验的数据库连接场景"
+   ]
+  },
+  "sha": "833f16913af9",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

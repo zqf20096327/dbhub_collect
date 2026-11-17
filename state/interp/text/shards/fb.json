@@ -2853,5 +2853,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "e848c26bbcd3": {
+  "identity": {
+   "one_liner": "Go 编写的 ATProtocol 个人数据服务器（PDS），内置 SQLite 块与 blob 存储",
+   "review": "Cocoon 是用 Go 实现的 ATProtocol PDS，默认使用 SQLite 存储数据块和 blob，可通过 Docker Compose 部署并经 Caddy 自动获取 HTTPS 证书，支持切换 PostgreSQL、S3 备份与 blob 存储、YubiKey/验证器两步登录。作者在 README 中注明部分已实现端点存在校验不完善等问题。适合想自托管 Bluesky 数据、具备 Docker 与域名运维能力的用户。",
+   "highlights": [
+    "实现 identity、repo、server、sync 等分类下的 com.atproto.* 端点清单",
+    "默认使用 SQLite，支持 PostgreSQL、S3 数据库备份（仅 SQLite）与 S3 blob 存储及 CDN 重定向",
+    "对发往 AppView、聊天服务、feed generator 的出站请求阻止私有与回环地址，并验证 lexicon 记录签名与包含证明"
+   ],
+   "use_cases": [
+    "自托管个人 ATProtocol 数据服务器（个人或小范围邀请制账户）",
+    "需要通过 PLC 目录配置进行本地集成测试的环境",
+    "需要 S3 blob 存储/CDN 分发或 PostgreSQL 后端的生产部署"
+   ]
+  },
+  "sha": "e848c26bbcd3",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

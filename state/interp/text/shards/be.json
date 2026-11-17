@@ -2951,5 +2951,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "a4dd354f4a4d": {
+  "identity": {
+   "one_liner": "基于列式存储的 Postgres 只读副本，单 Node.js 进程运行",
+   "review": "Mason 是一个可嵌入运行的 Postgres 只读副本工具：按需同步选定的表和列，通过轮询或逻辑复制保持更新，并将 Postgres 查询改写为 DuckDB 列式查询执行。适合需要为 BI 工具、AI 代理提供分析查询入口的团队。它只读取源库、不写入；逻辑复制需 wal_level=logical，无主键表只能用轮询。",
+   "highlights": [
+    "将 Postgres SQL 查询改写到 DuckDB 列式引擎上执行，支持 COUNT、SUM、GROUP BY 等聚合查询",
+    "支持三种同步方式：手动 sync、按间隔轮询（1s–24h）、逻辑复制（读 WAL 变更日志）",
+    "提供基于角色的访问控制，可按表、列、行限制读取，每用户只读且查询有日志，支持 MCP"
+   ],
+   "use_cases": [
+    "为 Metabase 等 BI 工具提供 Postgres 协议兼容的分析查询入口",
+    "为 AI 代理分配独立用户和受限角色，通过 SQL 或 MCP 读取数据",
+    "将生产库的分析查询分流到只读副本，源库仅承担 SELECT 同步"
+   ]
+  },
+  "sha": "a4dd354f4a4d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

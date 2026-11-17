@@ -3458,5 +3458,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "1e2a0ad3b857": {
+  "identity": {
+   "one_liner": "开源职位搜索引擎，直接抓取公司ATS页面并聚合去重",
+   "review": "freehire 是一个用 Go 编写的开源职位搜索引擎，从 Workday、Greenhouse、Lever 等 168 个 ATS 平台爬取公司官方招聘页，将职位规范化为统一 schema 并按键去重，提供分面全文检索、HTTP API、CLI 与 MCP 接口。适合求职者及构建求职工具的开发者自托管使用。",
+   "highlights": [
+    "直接爬取公司 ATS 页面（Workday、Greenhouse、Lever、Ashby、iCIMS 等），链接指向原始职位页",
+    "统一 schema 规范化并按稳定键去重，跨板重复发布合并为一条记录",
+    "提供公开免密钥 HTTP API、CLI、MCP 服务器，支持分面搜索与 PostgreSQL/pgvector + Meilisearch 存储检索"
+   ],
+   "use_cases": [
+    "按地区、工作形式、资历、技能等分面条件筛选公司直发的技术职位",
+    "开发者通过 HTTP API、CLI 或 MCP 接口将职位数据集成到自己的应用或 AI agent 中",
+    "自托管完整流水线（抓取、富化、索引）以搭建私有职位搜索服务"
+   ]
+  },
+  "sha": "1e2a0ad3b857",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "3c9b3fe64894": {
+  "identity": {
+   "one_liner": "单 Go 二进制的自托管 AI 后端：集成 SQL/文档/KV 数据库、云函数、存储与 LLM 网关。",
+   "review": "SimpleBase 是一个用 Go 编写的自托管后端服务，将 SQL/集合/KV 数据库（基于 DuckDB/SQLite）、对象存储、进程内 Go 云函数、定时任务、实时订阅与 OpenAI 兼容的 LLM 网关打包为单个二进制，内置 Vue 控制台和 CLI。面向 SaaS 开发者，支持本地本地盘开发、S3 在线持久层，以及通过 simplebase.json 声明式配置实现本地到云端的幂等重放部署。约束包括副本数固定为 1、每项目一个数据库、系统库只读等。",
+   "highlights": [
+    "单二进制包含数据库、对象存储、云函数、定时任务、实时订阅与 LLM 网关，前端经 go:embed 打包，./build.sh dev 一条命令拉起",
+    "每项目一个单文件库（DuckDB/SQLite），SQL/JSON 集合/KV 三种模型共用；S3 模式以不可变快照加 manifest 同步，可凭 S3 恢复",
+    "内置 OpenAI 兼容 LLM 端点（chat/completions、responses、models）与按模块分工的云助手，破坏性命令需确认、只读助手 fail-closed"
+   ],
+   "use_cases": [
+    "为 SaaS 应用搭建自托管后端，用 API Key 和 Scoped Key 管理项目级资源访问",
+    "本地用 simplebase dev plan/apply 开发，沿同一声明文件幂等重放到云端环境",
+    "通过云助手以自然语言操作建表、编写云函数、安排定时任务等项目资源"
+   ]
+  },
+  "sha": "3c9b3fe64894",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "79f626a37950": {
+  "identity": {
+   "one_liner": "以 S3/R2 存储桶为状态、在请求处理器内运行数据库引擎的 TypeScript 文档数据库",
+   "review": "baerly-storage 是一个无服务器的 TypeScript 文档数据库库，数据存于用户自己的 S3/R2 存储桶，数据库引擎以库代码形式在每个请求处理器内运行。提交依赖 S3 强一致性与 create-if-absent 条件写入：每集合一条编号日志，单次日志创建即提交。提供 8 个动词的小型 API，无 DDL 与 SQL。适用于单集合访问模式的小型内部工具，明确不支持跨集合原子写入与多写者浏览器直连，可通过 baerly export 导出 Postgres 快照。",
+   "highlights": [
+    "提供 8 个动词的文档 API（first/all/count/get/insert/update/replace/delete），配 where/order/limit 修饰符与 eq/gt/gte/lt/lte/in 操作符",
+    "写入通过 create-if-absent（If-None-Match: \"*\"）创建下一编号日志对象实现提交，每个集合内写入线性化",
+    "持久化契约是存储桶布局加条件写入规则，支持 baerly export --target=postgres 导出按集合的 SQL 快照"
+   ],
+   "use_cases": [
+    "核心工作可由单一集合完成的小型应用，如待办清单、单看板、活动 RSVP、单频道聊天",
+    "在 Cloudflare Workers 等边缘环境运行、以自有对象存储桶持久化状态的 TypeScript 应用",
+    "面向小型工作负载的内部工具，无需常驻数据库服务，空闲时不占用进程"
+   ]
+  },
+  "sha": "79f626a37950",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "5ec65205d36d": {
+  "identity": {
+   "one_liner": "GSPro 模拟高尔夫的挥杆追踪、统计与 AI 解说工具",
+   "review": "GSPro Shotcast 面向 GSPro 3.1.x 模拟高尔夫用户，通过 OCR 读取屏幕数据，将每次挥杆的发射数据、落点与成绩写入本地 SQLite 文件，生成本地统计页面（击球增益、球杆距离、成绩卡、球洞回放等），并支持发布为受密码保护的在线页面。可选启用两名 AI 解说员实时解说球局，需自备 LLM 与云语音服务或本地模型。",
+   "highlights": [
+    "将每次挥杆的发射数据、落点与得分写入本地 SQLite 数据库，无需云服务或账号",
+    "本地统计页面提供击球增益、球杆距离与散布、按距离的进攻与推杆数据、球洞回放与差点指数",
+    "两名 AI 解说员在击球飞行中实时解说，支持英语及多种欧洲语言的云语音，可完全本地运行"
+   ],
+   "use_cases": [
+    "GSPro 模拟器玩家记录赛季挥杆与统计数据",
+    "高尔夫联盟发布受密码保护的统计页面并向成员分享直播",
+    "练习或联赛中需要实时解说与赛后回放的场景"
+   ]
+  },
+  "sha": "5ec65205d36d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

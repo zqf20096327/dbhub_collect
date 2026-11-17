@@ -3158,5 +3158,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8b5edfb50c25": {
+  "identity": {
+   "one_liner": "自托管的 MCP 服务器，为 AI 代理提供共享长期记忆、文档搜索与代码索引。",
+   "review": "Loom 是 ClickHouse 开源的 MCP 服务器，为编码代理提供跨会话共享的长期记忆，每条记忆关联到具体文件与符号，并在代理读写这些代码时呈现。它还包含带引用的文档检索和可查询定义、调用方与变更影响的仓库代码索引。代理经 MCP、HTTP 或 Python/TypeScript SDK 接入；数据存于 ClickHouse，首次启动可选 Postgres。支持 Docker 单机或 Kubernetes/Helm 部署。",
+   "highlights": [
+    "通过 MCP、HTTP、Python/TypeScript SDK 接入，提供 Claude Code、Codex、Cursor、VS Code 插件",
+    "记忆与代码文件、符号关联，在代理编辑时出现，并在重构后跟随、变更时标记",
+    "支持 PDF、.docx、.pptx 提取的文档搜索，引用标注文档、版本与行号"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Cursor 等编码代理配置会话间共享的长期记忆与上下文加载",
+    "为自研代理应用提供按用户隔离的记忆存储（SDK 接入）",
+    "搭建多用户 MCP 记忆服务器，供团队共享上下文、任务收件箱与决策记录"
+   ]
+  },
+  "sha": "8b5edfb50c25",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "8ef86e86af7f": {
+  "identity": {
+   "one_liner": "为 Claude Code CLI 会话自动保存检查点并提供本地网页时间线看板的工具",
+   "review": "CCheckpoints 通过向 Claude Code 设置添加 userPromptSubmit 和 stop 两个钩子，将用户发送的每条消息保存为检查点，存入本地 SQLite 数据库，并在 127.0.0.1:9271 端口启动后台服务器与网页看板。通过 npm 全局安装后一条命令即可完成配置，数据全部保存在本机。适合在长会话中需要回溯提问记录和代码变动的 Claude Code CLI 使用者。",
+   "highlights": [
+    "自动保存每条发送给 Claude Code 的消息为带时间戳的检查点，数据存于本地 SQLite 数据库",
+    "提供会话列表、检查点时间线和任意两个检查点之间的差异对比视图",
+    "一条命令完成钩子配置、启动 127.0.0.1:9271 后台服务器并打开看板"
+   ],
+   "use_cases": [
+    "回溯长会话中各时间点的提问内容和对话上下文",
+    "对比两个检查点之间的代码变化，定位引入问题或查看代码演进",
+    "查看历史 Claude Code 会话的开始时间与持续时长"
+   ]
+  },
+  "sha": "8ef86e86af7f",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9d9412a01d36": {
+  "identity": {
+   "one_liner": "介于编码代理与 Git 之间的事务性 Go 运行时，用 AST 校验门禁提交",
+   "review": "Nomos 是一个约 20 MB 的静态 Go 二进制（Apache 2.0），置于编码代理与 Git 之间，通过 pre-commit 运行 42 项多语言 AST 检查门禁、保护 main 分支、可选 git worktree 隔离与 SQLite 记忆库，面向使用 Claude Code、Cursor 等代理的仓库维护者。安装经 curl 脚本，nomos init 后在 feat/* 分支上正常提交即自动验证。",
+   "highlights": [
+    "支持 Go、TypeScript、Python、Rust、Ruby、C/C++、Java、Kotlin、C# 共 11 种语言的 AST 检查，可在无 LLM 调用下运行",
+    "提供 nomos xray 只读审计、nomos init 自动基线（nomos.baseline.json）与分支/worktree 两种隔离模式",
+    "包含基于 SQLite（mneme.db）的本地记忆库与只读 stdio MCP 接口，post-commit 仅在检查通过后记录经验"
+   ],
+   "use_cases": [
+    "使用编码代理开发的仓库需要阻止删除/跳过测试、空 stub、修改 linter 配置等提交",
+    "存量大型代码库需建立基线并只约束新改动（ratchet 模式）",
+    "需在 CI 中输出 SARIF 2.1.0 报告或 GitHub PR 校验凭据的场景"
+   ]
+  },
+  "sha": "9d9412a01d36",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

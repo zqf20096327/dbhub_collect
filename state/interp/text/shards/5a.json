@@ -2675,5 +2675,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "7c4c7c2e05e2": {
+  "identity": {
+   "one_liner": "pgBackRest 是 PostgreSQL 的备份与恢复工具，支持并行处理和多仓库。",
+   "review": "pgBackRest 用于 PostgreSQL 数据库的备份与恢复，面向需要备份大型数据库的运维场景。它通过并行压缩（lz4/zstd）、自定义协议实现本地或远程（TLS/SSH）操作，支持全量/差异/增量备份（文件级或块级）、备份校验、Delta 恢复，以及 S3/Azure/GCS/SFTP 仓库和仓库加密。当前稳定版为 v2.60.1，兼容十个 PostgreSQL 版本。",
+   "highlights": [
+    "支持全量、差异、增量备份（文件级或块级），并通过每文件校验和在恢复/验证时复核以检查备份完整性",
+    "支持并行备份与恢复、并行异步 WAL 推送/获取，仓库可位于本地或经 TLS/SSH 远程操作",
+    "仓库可存放在 S3、Azure、GCS 兼容对象存储或 SFTP 服务器，支持仓库加密及基于版本化对象存储的时间点恢复"
+   ],
+   "use_cases": [
+    "需要对 PostgreSQL 集群执行定期全量/差异/增量备份并设置保留策略的环境",
+    "使用 S3/Azure/GCS 等对象存储作为备份仓库、需要加密或防勒索恢复能力的部署",
+    "从备库执行备份以降低主库负载，或在 TB 级数据库上通过快照/增量恢复缩短恢复时间的场景"
+   ]
+  },
+  "sha": "7c4c7c2e05e2",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "0bfbb349ad6f": {
+  "identity": {
+   "one_liner": "跨平台本地开发环境桌面应用，统一管理运行时、数据库、Web服务器与AI工具",
+   "review": "FlyEnv 是一款运行于 Windows、macOS 和 Linux 的桌面应用，用于在单一界面中管理本地开发所需的多种组件，包括 PHP、Node.js、Python、Java、Go 等运行时，MySQL、PostgreSQL、MongoDB 等数据库，Nginx、Apache 等 Web 服务器，以及 AI 编码工具和内置 MCP Server。它以原生方式直接在操作系统上运行服务，无需容器，并支持按项目切换运行时版本、创建本地域名和 HTTPS。适用于需要在本地搭建多语言项目栈的开发者。基于 BSD 3-Clause 协议开源，安装包通过 GitHub Actions 构建。",
+   "highlights": [
+    "支持多种语言运行时（PHP、Node.js、Python、Java、Go、.NET 等）、数据库（MySQL、PostgreSQL、MongoDB、ClickHouse 等）和 Web 服务器（Nginx、Apache、Caddy 等）",
+    "提供按项目切换运行时版本、定义项目启停命令与端口、创建本地域名并启用 HTTPS 的项目工作流功能",
+    "内置 FlyEnv MCP Server，可管理 AI 编码客户端（Claude Code、Codex 等），支持 AI 客户端查看本地服务、站点、配置与日志"
+   ],
+   "use_cases": [
+    "在本地开发 Laravel、Django、ERPNext 等多组件项目栈",
+    "按项目管理和切换不同版本的运行时环境",
+    "在本地开发工作区中集成 AI 编码工具与 MCP 工作流"
+   ]
+  },
+  "sha": "0bfbb349ad6f",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d7ca8be204df": {
+  "identity": {
+   "one_liner": "基于 OpenTelemetry 与 ClickHouse 的开源自托管可观测性平台",
+   "review": "ObserveCraft 是一个 MIT 许可、自托管的可观测性平台，将日志、指标、链路、仪表盘、监控告警、事件管理与 CI 可见性集成在同一系统中。数据经 OpenTelemetry 或 Vector 写入用户自有的 ClickHouse 存储；接收端为 Rust (axum) 实现，先写 Kafka 再应答以保证处理重启或存储故障时不丢数据。支持 SAML/OIDC/RBAC、多租户组织隔离，并通过 Docker、docker compose 或 Helm 部署运行。",
+   "highlights": [
+    "通过 OTLP（HTTP :4318 / gRPC :4317）与 Datadog API/Agent 格式接收日志、指标、链路等遥测数据，写入用户可直查的 ClickHouse 表",
+    "提供日志查询、Trace 瀑布图与火焰图、指标查询引擎、监控告警（webhook/Slack/邮件）、事件管理及 DORA 指标等 CI 可见性功能",
+    "日志支持按组织的索引与保留配额、每小时 Parquet 归档至自有 S3 兼容存储，并用 DuckDB 进行归档检索"
+   ],
+   "use_cases": [
+    "需要在自有网络内集中存储与查询日志、指标、链路遥测数据的团队",
+    "需多组织隔离及 SAML/OIDC 单点登录、RBAC 与审计记录的环境",
+    "希望基于 OpenTelemetry CI/CD 语义约定采集 DORA 指标并管理 CI 流水线的研发团队"
+   ]
+  },
+  "sha": "d7ca8be204df",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

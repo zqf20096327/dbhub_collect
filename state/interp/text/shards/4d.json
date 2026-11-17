@@ -2927,5 +2927,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "264efeebfe61": {
+  "identity": {
+   "one_liner": "自托管的开源告警系统，统一查询多数据源并路由通知",
+   "review": "Nightingale 是一个用 Go 编写、Apache-2.0 许可的自托管告警平台，对 Prometheus、VictoriaMetrics、Elasticsearch、Loki、ClickHouse、PostgreSQL 等数据源执行告警规则评估，并处理事件、将通知路由到 Slack、PagerDuty、Email、Telegram 等渠道。它面向需要将分散的指标、日志、SQL 告警集中管理并按业务组分配权限的团队；数据保留在原有存储中，可通过 Docker Compose 快速启动（依赖 MySQL、Redis），内置 AI 助手与 MCP 服务器，核心告警功能不依赖 AI 代理。",
+   "highlights": [
+    "支持以 PromQL、日志查询或 SQL 定义告警条件，可对同一类型多个数据源实例应用规则",
+    "内置 AI 代理与 MCP 服务器，支持 OpenAI 兼容 API、Claude、Gemini 等模型端点，并提供 A2A 集成",
+    "提供事件处理管道（屏蔽、订阅、标签改写）、告警执行记录查询及分布式评估（n9e-edge）"
+   ],
+   "use_cases": [
+    "将已有的 Prometheus/Loki/ClickHouse 等监控数据源的告警规则与通知路由集中到统一平台管理",
+    "按业务组组织告警规则与权限，并通过 OIDC/OAuth2/LDAP/CAS 接入团队登录",
+    "通过 MCP 或 Cursor 插件让外部 AI 助手查询告警事件、业务组等监控信息"
+   ]
+  },
+  "sha": "264efeebfe61",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "82762aab6de8": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的编码代理记忆与项目运营层，通过 hooks、MCP 和 HTTP/CLI 三种接口接入 Claude Code / Codex。",
+   "review": "Cortex 是一个本地运行的 Node 进程，为 Claude Code 与 Codex 等编码代理提供跨会话持久记忆和任务管理。它在会话边界自动捕获修复、研究结论、阻塞项等记录并丢弃闲聊；检索使用确定性本地评分（词法相关性、图邻近、记录质量、时间衰减），可选通过本地 Ollama 嵌入增强。所有数据存于单个 SQLite 文件（需 Node ≥ 25），服务器仅监听本机。启动需设置 CORTEX_TOKEN 写令牌，仪表盘运行在 localhost:4317。提供晚间简报、项目组合健康视图和分级自治策略，但自身不启动代理。",
+   "highlights": [
+    "支持三种接入方式：Claude Code 会话 hooks、提供 memory_search/memory_remember 等六个工具的 MCP 服务器、以及 HTTP/CLI 接口",
+    "召回排序融合词法相关性、类型化图邻近、记录质量与时间衰减四项信号，并按 token 预算打包，可选启用本地 Ollama 嵌入余弦相似度",
+    "提供 cortex eod 命令生成日终报告（文本/JSON/HTML，可推送 Telegram），以及按项目设置的 watch/plan/assist/auto 四级自治策略"
+   ],
+   "use_cases": [
+    "为个人编码代理项目维护跨会话的项目上下文记忆（修复记录、验证方式、研究结论）",
+    "集中查看多项目中被阻塞的任务、未解决问题与近期活动，并进行数据库审计",
+    "管理多项目的活跃/停滞状态与自治权限，生成每日工作简报"
+   ]
+  },
+  "sha": "82762aab6de8",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

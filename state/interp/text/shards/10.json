@@ -3211,5 +3211,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8c943e542754": {
+  "identity": {
+   "one_liner": "基于 DuckDB 与 React 的无人机飞行日志本地管理与分析应用",
+   "review": "Open DroneLog 是一个开源飞行日志分析应用，用于在本地导入、存储和分析 DJI (.txt)、Litchi CSV、Airdata CSV、DroneDeploy (.log/.tsv) 等格式的飞行日志。数据存于本地 DuckDB 数据库，含去重、遥测图表、飞行地图回放、电池健康与维护记录等功能。提供 Tauri v2 桌面版（Windows/macOS/Linux）、Docker Web 版及 Android APK；通过 parsers.json 可配置外部解析插件。",
+   "highlights": [
+    "支持多种日志格式导入（DJI .txt、Litchi CSV、Airdata CSV、DroneDeploy .log/.tsv 等），单位自动归一化，可经 parsers.json 配置外部解析插件",
+    "基于 DuckDB 的本地存储与分析，含基于序列号和起始时间的去重、自动降采样、遥测图表与带速度控制的飞行回放地图",
+    "提供 CSV/JSON/GPX/KML/摘要导出、11 种语言界面、多档案（Profile）隔离与数据库备份恢复"
+   ],
+   "use_cases": [
+    "在本地集中组织与检索个人或机队的 DJI/Litchi 等飞行日志，无需上传云端",
+    "跟踪每块电池的循环次数、满充容量趋势及维护阈值记录",
+    "生成可打印的飞行报告（A4 HTML 报表）或分享用 FlyCard 图片，用于记录与合规留档"
+   ]
+  },
+  "sha": "8c943e542754",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "736248eee20f": {
+  "identity": {
+   "one_liner": "本地运行的 AI 编程 agent 可观测性与评测工具，记录会话并转为评测",
+   "review": "coding.sh 通过 hooks、transcript 和 OpenTelemetry 记录 Claude Code、Codex 等编程 agent 的每次会话，包括提示词、模型调用、工具调用、文件改动与估算成本，存入本地 SQLite 索引供 CLI、本地查看器或 MCP 查询，并可将失败会话转为可重放的评测。需 Node 22.16+，无运行时依赖，未配置远程 sink 时会话数据不出本机，项目处于 pre-1.0 阶段。",
+   "highlights": [
+    "通过 hooks、transcript、包装器或 OpenTelemetry 采集会话数据，支持十多种编程 agent 及任意命令",
+    "会话存入本地 SQLite 索引，可在本地查看器浏览、CLI 全文搜索，并通过 MCP 提供给 agent 查询",
+    "支持将失败会话转为可重放评测，以配对统计进行 A/B 对比，并可用 SQLite、Postgres 或 ClickHouse 后端运行服务器"
+   ],
+   "use_cases": [
+    "查看本地多个 AI 编程 agent 的会话记录、token 用量与估算成本",
+    "将出错的 agent 会话转为评测用例，对比不同提示词、模型或配置的效果",
+    "为 API 应用接入 TypeScript/Python SDK 或 OpenTelemetry 采集追踪数据"
+   ]
+  },
+  "sha": "736248eee20f",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e96fc9678fa2": {
+  "identity": {
+   "one_liner": "单二进制 Go 编写的 OLTP 数据库服务器，支持 T-SQL、存储过程与 PGWire/TDS 双协议。",
+   "review": "LionSQL 是用 Go 实现的单二进制 OLTP 数据库服务器，原生编译执行 T-SQL 语法和存储过程，同时提供 PostgreSQL v3（端口 5433）与 MSSQL TDS（端口 1433）两种线协议，兼容 psql、SSMS 及 pgx、GORM 等驱动。内核将查询编译为 VDBE 字节码虚拟机执行并缓存预编译语句；存储层提供内存 OCC 引擎与 WiredTiger MVCC 磁盘引擎两种后端。官方支持 macOS 和 Linux（x86_64/arm64），Windows 为内存引擎的独立二进制版本。README 中性能数据均为项目自述的基准测试结果，未经验证。需注意许可证为 GPL v3。",
+   "highlights": [
+    "单一静态可执行文件包含数据库内核、PGWire/TDS 双协议监听、REST API 和 Web 管理界面，无外部运行时依赖",
+    "支持 CREATE PROCEDURE、函数、AFTER/INSTEAD OF 触发器，以及 IF...ELSE、WHILE、TRY...CATCH 等过程式语法",
+    "内置 Goroutine 连接池器、在线快照热备份、WAL 流复制，并通过 --app 参数可托管静态前端应用"
+   ],
+   "use_cases": [
+    "需在 macOS/Linux 上以单二进制方式部署、使用 T-SQL 与存储过程的 OLTP 事务场景",
+    "需同时兼容 PostgreSQL 客户端/驱动（psql、pgx、GORM、Prisma）与 MSSQL 工具（SSMS、sqlcmd）的迁移或并存环境",
+    "需要浏览器端管理界面、自动生成 REST CRUD API 及行级安全控制的轻量应用后端"
+   ]
+  },
+  "sha": "e96fc9678fa2",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9868f40a90af": {
+  "identity": {
+   "one_liner": "基于 PHP/MySQL 与 AJAX 的汽车票预订网站系统",
+   "review": "这是一个用 PHP、MySQL、AJAX、JavaScript 等实现的汽车票预订 Web 系统，面向乘客与管理员两类用户。系统提供实时座位查询与选座、Razorpay 支付集成、邮件确认通知，并包含管理路线、车辆与订单的后台面板。README 提供了 phpMyAdmin 导库、修改 db_config.php 的部署步骤，并给出默认后台账号 admin/123，部署前应修改该凭据。",
+   "highlights": [
+    "支持按日期、时间、目的地搜索筛选班次，并提供实时座位可用性与选座功能",
+    "集成 Razorpay 支付网关，通过 PHPMailer 或 SMTP 发送预订确认邮件",
+    "包含管理后台，可管理路线、预订、车辆与客户信息，采用 MIT 许可证"
+   ],
+   "use_cases": [
+    "搭建本地汽车票预订演示或课程项目",
+    "作为 PHP/MySQL/AJAX 学习参考部署在 XAMPP/WAMP 环境",
+    "为需要票务预订功能的小型线路运营场景提供基础实现"
+   ]
+  },
+  "sha": "9868f40a90af",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "c26b2cd268d9": {
+  "identity": {
+   "one_liner": "面向 AI agent 流量的本地优先 fail-closed 网关与 SDK，含审计与人工审批",
+   "review": "Mont 是一个针对 AI agent 的 REST 与 MCP 流量网关，可作为 Express 中间件、独立反向代理或 MCP 代理（stdio/HTTP）运行，数据存于内嵌 SQLite（WAL），无需 Redis 或云账户。核心机制包括默认拒绝的按路由/负载规则、每路由限流、消费预算、重复操作保护、人工审批队列与哈希链审计日志，采用 fail-closed 策略：仅当全部检查通过且审计行写入后才转发请求。采用 open-core 许可，社区版免费，Pro/Agency 功能按 Ed25519 离线密钥授权，过期后付费功能关闭且超额工作区流量不被转发。",
+   "highlights": [
+    "支持三种运行方式：Express 中间件、无代码反向代理、MCP 代理（stdio、Streamable HTTP、legacy SSE）",
+    "提供默认拒绝路由规则、payload 策略、每路由限流、消费预算与重复操作保护",
+    "所有版本包含哈希链审计账本、PII 清洗、影子（dry-run）规则与审批队列"
+   ],
+   "use_cases": [
+    "为调用电商、支付等生产 API 的 AI agent 设置审批、限流与预算",
+    "拦截并审计 MCP 工具调用（如 Claude、Cursor 与工具服务器之间）",
+    "在代理前置任意后端（Python、Go、Java 等）时留存防篡改审计证据"
+   ]
+  },
+  "sha": "c26b2cd268d9",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

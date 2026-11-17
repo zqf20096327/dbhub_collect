@@ -21419,5 +21419,1761 @@
    ]
   ],
   "at": "2026-11-15"
+ },
+ "9ec23c171b0b+2": {
+  "fn": "Trendyol/go-pq-cdc",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# go-pq-cdc Go Reference Go Report Card OpenSSF Scorecard"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    7,
+    1,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "Debezium vs go-pq-cdc benchmark"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    24,
+    8,
+    24
+   ],
+   [
+    "replace",
+    24,
+    26,
+    24,
+    26,
+    [
+     "📚 **Read Full Documentation** for detailed architecture, configuration, and best practices.",
+     "📚 **Protocol Version & Streaming Transactions** for `proto_version` behavior and migration guidance."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    26,
+    28
+   ],
+   [
+    "replace",
+    28,
+    51,
+    28,
+    29,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    57,
+    29,
+    35
+   ],
+   [
+    "replace",
+    57,
+    59,
+    35,
+    37,
+    [
+     "- Postgresql to Elasticsearch Connector",
+     "- Postgresql to Kafka Connector"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    61,
+    37,
+    39
+   ],
+   [
+    "replace",
+    61,
+    62,
+    39,
+    40,
+    [
+     "- Postgresql to RabbitMQ Connector"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    73,
+    40,
+    51
+   ],
+   [
+    "replace",
+    73,
+    149,
+    51,
+    52,
+    [
+     "…（76 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    153,
+    52,
+    56
+   ],
+   [
+    "replace",
+    153,
+    168,
+    56,
+    71,
+    [
+     "* Simple",
+     "* Simple File Config",
+     "* Simple With Heartbeat",
+     "* Streaming Transactions",
+     "* Snapshot Mode (Initial Data Capture)",
+     "* Snapshot Only Mode (One-Time Export)",
+     "* Snapshot with Query Condition",
+     "* Replica Identity Using Index",
+     "* Replica Identity Nothing",
+     "* PostgreSQL to Elasticsearch",
+     "* PostgreSQL to Kafka",
+     "* PostgreSQL to PostgreSQL",
+     "* Partitioned Tables",
+     "* Visibility Guard Lab",
+     "* Reading a Standby After an Event (CommitLSN)"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    186,
+    71,
+    89
+   ],
+   [
+    "replace",
+    186,
+    187,
+    89,
+    90,
+    [
+     "|Feature|Extra grants needed|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    90,
+    91
+   ],
+   [
+    "replace",
+    188,
+    194,
+    91,
+    97,
+    [
+     "|`publication.createIfNotExists: true`|`GRANT CREATE ON DATABASE <db> TO cdc_user;` so the publication can be created.|",
+     "|`slot.createIfNotExists: true`|`REPLICATION` role attribute (already in the example above).|",
+     "|Heartbeat with auto-created table|`GRANT CREATE ON SCHEMA <schema> TO cdc_user;` for the initial `CREATE TABLE`, plus `GRANT INSERT, UPDATE ON <heartbeat_table>` for the auto-managed singleton row.|",
+     "|Snapshot mode (initial / only)|`SELECT` on the source tables (already covered above).|",
+     "|Adding tables to an existing publication|The role must own the publication, e.g. `ALTER PUBLICATION cdc_publication OWNER TO cdc_user;`.|",
+     "|`visibilityGuard` (with or without `replicas`)|No extra grant: `pg_current_snapshot()`, `pg_last_wal_replay_lsn()`, `pg_control_recovery()` and `pg_control_system()` are callable by every role. `pg_hba.conf` on each listed standby must accept a normal connection from the CDC host.|"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    214,
+    97,
+    117
+   ],
+   [
+    "replace",
+    214,
+    215,
+    117,
+    118,
+    [
+     " and streams them to downstream systems as configured."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    118,
+    119
+   ],
+   [
+    "replace",
+    216,
+    219,
+    119,
+    122,
+    [
+     " go-pq-cdc automatically captures the slot again and resumes data capturing. Other deployments also monitor slot",
+     " activity,",
+     " and when detected as inactive, they initiate data capturing."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    233,
+    122,
+    136
+   ],
+   [
+    "replace",
+    233,
+    245,
+    136,
+    137,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    288,
+    137,
+    180
+   ],
+   [
+    "replace",
+    288,
+    289,
+    180,
+    181,
+    [
+     "> The connector validates this at startup for selective publications and returns an error if the heartbeat table is missing."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    307,
+    181,
+    199
+   ],
+   [
+    "replace",
+    307,
+    312,
+    199,
+    200,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    335,
+    200,
+    223
+   ],
+   [
+    "replace",
+    335,
+    336,
+    223,
+    224,
+    [
+     "You can run Simple With Heartbeat example."
+    ]
+   ],
+   [
+    "equal",
+    336,
+    349,
+    224,
+    237
+   ],
+   [
+    "replace",
+    349,
+    354,
+    237,
+    238,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    373,
+    238,
+    257
+   ],
+   [
+    "replace",
+    373,
+    374,
+    257,
+    258,
+    [
+     "You can run Replica Identity Using Index for a minimal `USING INDEX` setup."
+    ]
+   ],
+   [
+    "equal",
+    374,
+    377,
+    258,
+    261
+   ],
+   [
+    "replace",
+    377,
+    378,
+    261,
+    262,
+    [
+     "You can run Replica Identity Nothing for an insert-only `NOTHING` example."
+    ]
+   ],
+   [
+    "equal",
+    378,
+    381,
+    262,
+    265
+   ],
+   [
+    "replace",
+    381,
+    382,
+    265,
+    266,
+    [
+     "|Variable|Type|Required|Default|Description|Options|"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    383,
+    266,
+    267
+   ],
+   [
+    "replace",
+    383,
+    431,
+    267,
+    315,
+    [
+     "|`host`|string|yes|-|PostgreSQL host|Should be a valid hostname or IP address. Example: `localhost`.|",
+     "|`username`|string|yes|-|PostgreSQL username|Should have sufficient privileges to perform required database operations.|",
+     "|`password`|string|yes|-|PostgreSQL password|Keep secure and avoid hardcoding in the source code.|",
+     "|`database`|string|yes|-|PostgreSQL database|The database must exist and be accessible by the specified user.|",
+     "|`debugMode`|bool|no|false|For debugging purposes|Enables pprof for trace.|",
+     "|`metric.port`|int|no|8080|Set API port|Choose a port that is not in use by other applications.|",
+     "|`logger.logLevel`|string|no|info|Set logging level|[`DEBUG`, `WARN`, `INFO`, `ERROR`]|",
+     "|`logger.logger`|Logger|no|slog|Set logger|Can be customized with other logging frameworks if `slog` is not used.|",
+     "|`publication.createIfNotExists`|bool|no|-|Create publication if not exists. Otherwise, return `publication is not exists` error.||",
+     "|`publication.name`|string|yes|-|Set PostgreSQL publication name|Should be unique within the database.|",
+     "|`publication.operations`|[]string|yes|-|Set PostgreSQL publication operations. List of operations to track; all or a subset can be specified.|**INSERT:** Track insert operations. **UPDATE:** Track update operations. **DELETE:** Track delete operations.|",
+     "|`publication.tables`|[]Table|yes|-|Set tables which are tracked by data change capture|Define multiple tables as needed.|",
+     "|`publication.tables[i].name`|string|yes|-|Set the data change captured table name|Must be a valid table name in the specified database.|",
+     "|`publication.tables[i].replicaIdentity`|string|yes|-|Set the data change captured table replica identity [`DEFAULT`, `FULL`, `NOTHING`, `USING INDEX`]|**DEFAULT:** Captures primary key old values. **FULL:** Captures all old row columns. **NOTHING:** Captures no old row data (typically insert-only scenarios; update/delete matching can fail). **USING INDEX:** Captures old values from a chosen unique index. Applied independently of `createIfNotExists`: if set, the connector runs `ALTER TABLE ... REPLICA IDENTITY` when the table's current identity differs (requires DDL privilege on the table).|",
+     "|`publication.tables[i].replicaIdentityIndex`|string|no*|-|Unique index name used when `replicaIdentity` is `USING INDEX`.|Required only for `USING INDEX`, ignored otherwise.|",
+     "|`publication.tables[i].schema`|string|no|public|Set the data change captured table schema name|Must be a valid table name in the specified database.|",
+     "|`publication.tables[i].columns`|[]string|no|-|Only include these columns in replication and snapshotting|Must not be set when `replicaIdentity` is `FULL`; only compatible with `DEFAULT`.|",
+     "|`publication.tables[i].partitioned`|bool|no|false|Flag for replicating a partitioned table via the root table name instead of listing out the individual table parts. Sets `publish_via_partition_root = true` when creating the publication.|Only avaible with PostgreSQL 13+. This is a publication-wide setting, Setting any table with this will include it for all tables in the publication.|",
+     "|`publication.tables[i].snapshotPartitionStrategy`|string|no|auto|Override partition strategy for snapshot|**auto:** Auto-detect best strategy (sparse integer PKs fall back to `ctid_block`). **integer_range:** Sequential integer PKs. **ctid_block:** String/UUID/hash/sparse PKs. **offset:** Slow fallback.|",
+     "|`publication.tables[i].queryCondition`|string|no|-|Per-table query condition for snapshot queries (SNAPSHOT-ONLY, does NOT affect CDC). Takes precedence over global `snapshot.queryCondition`.|Example: `\"deleted_at IS NULL\"`. Appended to WHERE clause with `AND`.|",
+     "|`slot.createIfNotExists`|bool|no|-|Create replication slot if not exists. Otherwise, return `replication slot is not exists` error.||",
+     "|`slot.name`|string|yes|-|Set the logical replication slot name|Should be unique and descriptive. Quoted when sent to PostgreSQL.|",
+     "|`slot.slotActivityCheckerInterval`|int|no|1000|Set the slot activity check interval time in milliseconds|Specify as an integer value in milliseconds (e.g., `1000` for 1 second).|",
+     "|`slot.protoVersion`|int|no|2|`pgoutput` protocol version used in `START_REPLICATION`|`1`: no streaming of in-progress transactions. Works on PostgreSQL 10+. `2`: PostgreSQL 14+, streaming of in-progress transactions. `messages` is requested on PostgreSQL 14+ unless `slot.logicalMessages` is `off`.|",
+     "|`slot.logicalMessages`|string|no|auto|Logical decoding messages (`pg_logical_emit_message`), PostgreSQL 14+|**auto:** request the option when the server supports it. **on:** require it; startup fails on PostgreSQL 10-13. **off:** never request it, so no message is ever delivered. See Logical Decoding Messages.|",
+     "|`slot.failover`|bool|no|false|Create the slot with `FAILOVER true` (PostgreSQL 17+) so standbys running `sync_replication_slots` keep a synchronized copy; an existing slot is altered with `ALTER_REPLICATION_SLOT … (FAILOVER true)`.|Rejected with a clear error on older servers. Needs `synchronized_standby_slots` on the primary, see Failover slots.|",
+     "|`statusUpdateInterval`|duration|no|10s|How often the standby acknowledges the primary with a standby status update while WAL is flowing back-to-back.|Must stay well below the server's `wal_sender_timeout` (60s by default); not checked at startup. The 10s default matches `wal_receiver_status_interval`, the cadence Postgres expects from standbys. Set to `0` to disable the periodic update and reply only when PostgreSQL requests it.|",
+     "|`snapshot.enabled`|bool|no|false|Enable initial snapshot feature|When enabled, captures existing data before starting CDC.|",
+     "|`snapshot.mode`|string|no|never|Snapshot mode: `initial`, `never`, or `snapshot_only`|**initial:** Take snapshot only if no previous snapshot exists, then start CDC. **never:** Skip snapshot, start CDC immediately. **snapshot_only:** Take snapshot and exit (no CDC, no replication slot required).|",
+     "|`snapshot.chunkSize`|int64|no|8000|Number of rows per chunk during snapshot|Adjust based on table size. Larger chunks = fewer chunks but more memory per chunk.|",
+     "|`snapshot.claimTimeout`|duration|no|30s|Timeout to reclaim stale chunks|If a worker doesn't send heartbeat for this duration, chunk is reclaimed by another worker.|",
+     "|`snapshot.heartbeatInterval`|duration|no|5s|Interval for worker heartbeat updates|Workers send heartbeat every N seconds to indicate they're processing a chunk.|",
+     "|`snapshot.instanceId`|string|no|auto|Custom instance identifier (optional)|Auto-generated as `hostname-pid` if not specified. Useful for tracking workers.|",
+     "|`snapshot.tables`|[]Table|no*|-|Tables to snapshot (required for `snapshot_only` mode, optional for `initial` mode)|**snapshot_only:** Must be specified here (independent from publication). **initial:** If specified, must be a subset of publication tables. If not specified, all publication tables are snapshotted.|",
+     "|`snapshot.queryCondition`|string|no|-|Global query condition applied to all snapshot queries (SNAPSHOT-ONLY, does NOT affect CDC). Per-table `queryCondition` overrides this value.|Example: `\"status = 'active'\"`. Appended to WHERE clause with `AND`.|",
+     "|`heartbeat.table.name`|string|no|-|Name of the heartbeat table. Setting this enables heartbeat behavior.|Table is auto-created if missing and should be included in `publication.tables` if you want it replicated.|",
+     "|`heartbeat.table.schema`|string|no|public|Schema of the heartbeat table.|Defaults to `public` when omitted.|",
+     "|`heartbeat.interval`|duration|no|100ms|Interval between heartbeat updates when heartbeat is configured. Must be greater than 0.|Any valid Go duration string (e.g. `100ms`, `1s`, `5s`, `1m`).|",
+     "|`extensionSupport.enableTimescaleDB`|bool|no|false|Enable support for TimescaleDB hypertables. Ensures proper handling of compressed chunks during replication.||",
+     "|`visibilityGuard.enabled`|bool|no|false|Hold the first event of every transaction until the transaction is visible to new snapshots on the primary (closes the logical-decoding read-after-write window; see Visibility Guard).|Opens one extra regular connection to the same host as the replication connection. Heartbeat events bypass the gate.|",
+     "|`visibilityGuard.failMode`|string|no|closed|What to do when a transaction is not visible within `timeout`|**closed:** restart the stream; the event is redelivered from the confirmed LSN. **open:** log a warning, count it, dispatch anyway. Guard errors (replica, failover, connection loss) restart the stream in both modes.|",
+     "|`visibilityGuard.timeout`|duration|no|10s|Maximum time to wait per transaction|Must be less than half of the server's `wal_sender_timeout` (checked at startup, skipped when it is `0`). That bound matters when `statusUpdateInterval` is `0`: keepalive replies stop while the gate blocks.|",
+     "|`visibilityGuard.pollInterval`|duration|no|5ms|First poll interval; doubles up to 250ms with jitter||",
+     "|`visibilityGuard.replicas`|[]string|no|[]|Standbys (`host:port`) that must have applied the transaction before its first event is dispatched (see Visibility Guard).|Requires `enabled: true`. Credentials and database come from the main config. Direct standby hosts only, never a pooled endpoint. Shares `timeout` and `failMode` with the primary check. Must cover every region or cluster consumers read from.|",
+     "|`visibilityGuard.discovery.dns.names`|[]string|no|-|DNS names whose A and AAAA records are the standbys to gate, one name per region or cluster, for example `replica.<scope>.service.services.<region>.<domain>` (see Replica discovery).|Requires `enabled: true`. Mutually exclusive with `replicas` and with the Go hook `ResolveReplicas`. At least one valid DNS name; no duplicates (case-insensitive, a trailing dot is ignored). An empty or failing answer fails the refresh.|",
+     "|`visibilityGuard.discovery.dns.port`|int|no|`port`|PostgreSQL port combined with every address (a DNS record carries none).|Defaults to the main connection's `port`. 1-65535.|",
+     "|`visibilityGuard.discovery.dns.nameserver`|string|no|-|Literal `ip:port` of a DNS server (for example a Consul agent's DNS port, usually 8600). Every query goes to it over TCP.|A host name is rejected. When unset the system resolver configuration is used and a warning is logged at startup.|",
+     "|`visibilityGuard.discovery.dns.refreshInterval`|duration|no|10s|How long a discovered member list is trusted. A transaction is only released against a list younger than this; an older one is re-read first.|Must be greater than 0. `0` takes the default.|"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    434,
+    315,
+    318
+   ],
+   [
+    "replace",
+    434,
+    435,
+    318,
+    319,
+    [
+     "|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    436,
+    319,
+    320
+   ],
+   [
+    "replace",
+    436,
+    439,
+    320,
+    323,
+    [
+     "|`GET /status`|Returns a 200 OK status if the client is able to ping the PostgreSQL server successfully.|",
+     "|`GET /metrics`|Prometheus metric endpoint.|",
+     "|`GET /debug/pprof/*`|(Only for `debugMode=true`) pprof|"
+    ]
+   ],
+   [
+    "equal",
+    439,
+    445,
+    323,
+    329
+   ],
+   [
+    "replace",
+    445,
+    448,
+    329,
+    332,
+    [
+     " - Starts replication with `proto_version '1'`",
+     " - Does not request `streaming 'true'`, so in-progress transactions are not streamed",
+     " - On PostgreSQL 14 and newer, also requests `messages 'true'` unless `slot.logicalMessages` is `off`. PostgreSQL 10–13 do not receive that option, so those servers still start"
+    ]
+   ],
+   [
+    "equal",
+    448,
+    450,
+    332,
+    334
+   ],
+   [
+    "replace",
+    450,
+    453,
+    334,
+    337,
+    [
+     " - Requires PostgreSQL 14+",
+     " - Starts replication with `proto_version '2'` and `streaming 'true'`, plus `messages 'true'` unless `slot.logicalMessages` is `off`",
+     " - Supports streamed in-progress transactions (`STREAM START/STOP/COMMIT/ABORT`)"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    465,
+    337,
+    349
+   ],
+   [
+    "replace",
+    465,
+    470,
+    349,
+    354,
+    [
+     "|Field|Meaning|",
+     "|---|---|",
+     "|`Prefix`|the routing key given to `pg_logical_emit_message`|",
+     "|`Content`|the payload bytes, unmodified|",
+     "|`LSN`|the WAL position of the message itself, not a commit LSN|"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    493,
+    354,
+    377
+   ],
+   [
+    "replace",
+    493,
+    498,
+    377,
+    378,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    498,
+    505,
+    378,
+    385
+   ],
+   [
+    "replace",
+    505,
+    506,
+    385,
+    386,
+    [
+     "`pg_last_wal_replay_lsn() > CommitLSN` (strict, see below) and a timeline no"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    516,
+    386,
+    396
+   ],
+   [
+    "replace",
+    516,
+    517,
+    396,
+    397,
+    [
+     "docs/replica-guard-design.md."
+    ]
+   ],
+   [
+    "equal",
+    517,
+    530,
+    397,
+    410
+   ],
+   [
+    "replace",
+    530,
+    537,
+    410,
+    411,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    537,
+    569,
+    411,
+    443
+   ],
+   [
+    "replace",
+    569,
+    572,
+    443,
+    446,
+    [
+     " is conditional: it holds only if your routing never sends reads to a standby that sits on an orphaned history after a",
+     " crash failover (a standby that received WAL the new primary never had). A static list has the same gap; a Go hook that",
+     " supplies timelines narrows it."
+    ]
+   ],
+   [
+    "equal",
+    572,
+    573,
+    446,
+    447
+   ],
+   [
+    "replace",
+    573,
+    577,
+    447,
+    451,
+    [
+     " it, the error is fatal and the stream restarts, again and again until the name stops listing the node: typically about",
+     " one health-check interval. There is no hard bound if the health publisher stalls or DNS is stale, and an",
+     " orchestrator's restart backoff (for example CrashLoopBackOff) can stretch a few seconds of DNS lag into a minute of",
+     " downtime."
+    ]
+   ],
+   [
+    "equal",
+    577,
+    578,
+    451,
+    452
+   ],
+   [
+    "replace",
+    578,
+    580,
+    452,
+    454,
+    [
+     " fresh an answer is. A standby that was added or removed is picked up only after the health-check interval plus up to",
+     " `refreshInterval`, plus those caches."
+    ]
+   ],
+   [
+    "equal",
+    580,
+    581,
+    454,
+    455
+   ],
+   [
+    "replace",
+    581,
+    585,
+    455,
+    459,
+    [
+     " silently (see above). Entries in `/etc/hosts` override DNS for the names they match. The standard library resolver",
+     " is also trusted for message integrity: it accepts a TCP answer that still carries the truncation flag and can return",
+     " the records parsed before a malformed tail, so a damaged answer can lack a standby without an error; the upgrade",
+     " path is a message-level DNS client that rejects truncated or partially parsed answers."
+    ]
+   ],
+   [
+    "equal",
+    585,
+    586,
+    459,
+    460
+   ],
+   [
+    "replace",
+    586,
+    587,
+    460,
+    461,
+    [
+     " standby whose health check is only warning stays in the set (and is gated)."
+    ]
+   ],
+   [
+    "equal",
+    587,
+    588,
+    461,
+    462
+   ],
+   [
+    "replace",
+    588,
+    590,
+    462,
+    464,
+    [
+     " once the set is older than `refreshInterval` and a refresh has not succeeded, dispatch is held and then follows",
+     " `failMode`."
+    ]
+   ],
+   [
+    "equal",
+    590,
+    591,
+    464,
+    465
+   ],
+   [
+    "replace",
+    591,
+    594,
+    465,
+    468,
+    [
+     " routed standby to be gated. A `standby_leader` of a standby cluster is not under `replica.`: list its own name if",
+     " anything routes reads to it. The library does not verify coverage. A static `replicas` list must cover every region or",
+     " cluster consumers read from in the same way."
+    ]
+   ],
+   [
+    "equal",
+    594,
+    595,
+    468,
+    469
+   ],
+   [
+    "replace",
+    595,
+    596,
+    469,
+    470,
+    [
+     "Design record: docs/replica-guard-design.md."
+    ]
+   ],
+   [
+    "equal",
+    596,
+    609,
+    470,
+    483
+   ],
+   [
+    "replace",
+    609,
+    614,
+    483,
+    488,
+    [
+     " `CommitLSN` rule or `WaitReplayed` in Commit LSN and reading from a standby.",
+     " In Patroni deployments this is the more likely cause of \"the row is not there yet\" than the primary-side window. A",
+     " standby added to the cluster later is not covered until it is added to `replicas`. A listed standby that is promoted",
+     " keeps the connector from starting (it is no longer in recovery) until `replicas` is updated or the node is rebuilt as",
+     " a standby, so list standbys only where their addresses are stable."
+    ]
+   ],
+   [
+    "equal",
+    614,
+    646,
+    488,
+    520
+   ],
+   [
+    "replace",
+    646,
+    647,
+    520,
+    521,
+    [
+     " replication is switched off and commits stop waiting."
+    ]
+   ],
+   [
+    "equal",
+    647,
+    648,
+    521,
+    522
+   ],
+   [
+    "replace",
+    648,
+    649,
+    522,
+    523,
+    [
+     " visible without the acknowledgement (the server logs a WARNING)."
+    ]
+   ],
+   [
+    "equal",
+    649,
+    669,
+    523,
+    543
+   ],
+   [
+    "replace",
+    669,
+    671,
+    543,
+    545,
+    [
+     " standby. A replica endpoint that spreads connections over several standbys (HAProxy, pgbouncer with several hosts, a",
+     " DNS name with several addresses, a pool in the application) can pass the check on one standby and read from another."
+    ]
+   ],
+   [
+    "equal",
+    671,
+    672,
+    545,
+    546
+   ],
+   [
+    "replace",
+    672,
+    674,
+    546,
+    548,
+    [
+     " first statement, and a single combined statement (`… WHERE id = $1 AND pg_last_wal_replay_lsn() > $2`) takes its",
+     " snapshot before the function is evaluated."
+    ]
+   ],
+   [
+    "equal",
+    674,
+    675,
+    548,
+    549
+   ],
+   [
+    "replace",
+    675,
+    676,
+    549,
+    550,
+    [
+     " applied\". After a failover the new timeline can pass the old `CommitLSN` without containing that transaction."
+    ]
+   ],
+   [
+    "equal",
+    676,
+    677,
+    550,
+    551
+   ],
+   [
+    "replace",
+    677,
+    679,
+    551,
+    553,
+    [
+     " `remote_apply` on the producer, with the standby you read from listed in `synchronous_standby_names`, removes the",
+     " need for the check."
+    ]
+   ],
+   [
+    "equal",
+    679,
+    694,
+    553,
+    568
+   ],
+   [
+    "replace",
+    694,
+    695,
+    568,
+    569,
+    [
+     "example/replica-read demonstrates each point against a primary with two synchronous"
+    ]
+   ],
+   [
+    "equal",
+    695,
+    705,
+    569,
+    579
+   ],
+   [
+    "replace",
+    705,
+    708,
+    579,
+    582,
+    [
+     " physical slots before sending a change, so no event is delivered ahead of the standby that may become the next",
+     " primary. With the parameter empty there is no waiting: the synchronized slot can lag behind what consumers have already",
+     " seen, and those events are redelivered after failover."
+    ]
+   ],
+   [
+    "equal",
+    708,
+    709,
+    582,
+    583
+   ],
+   [
+    "replace",
+    709,
+    710,
+    583,
+    584,
+    [
+     " `primary_conninfo`."
+    ]
+   ],
+   [
+    "equal",
+    710,
+    711,
+    584,
+    585
+   ],
+   [
+    "replace",
+    711,
+    712,
+    585,
+    586,
+    [
+     " taking that standby down for good."
+    ]
+   ],
+   [
+    "equal",
+    712,
+    713,
+    586,
+    587
+   ],
+   [
+    "replace",
+    713,
+    714,
+    587,
+    588,
+    [
+     " `synchronized_standby_slots`; set it through `postgresql.parameters`."
+    ]
+   ],
+   [
+    "equal",
+    714,
+    715,
+    588,
+    589
+   ],
+   [
+    "replace",
+    715,
+    716,
+    589,
+    590,
+    [
+     " warning and retried on the next start."
+    ]
+   ],
+   [
+    "equal",
+    716,
+    725,
+    590,
+    599
+   ],
+   [
+    "replace",
+    725,
+    726,
+    599,
+    600,
+    [
+     "|Metric Name|Description|Labels|Value Type|"
+    ]
+   ],
+   [
+    "equal",
+    726,
+    727,
+    600,
+    601
+   ],
+   [
+    "replace",
+    727,
+    753,
+    601,
+    627,
+    [
+     "|go_pq_cdc_update_total|The total number of `UPDATE` operations captured on specific tables.|slot_name, host|Counter|",
+     "|go_pq_cdc_delete_total|The total number of `DELETE` operations captured on specific tables.|slot_name, host|Counter|",
+     "|go_pq_cdc_insert_total|The total number of `INSERT` operations captured on specific tables.|slot_name, host|Counter|",
+     "|go_pq_cdc_logical_message_total|The total number of logical decoding messages delivered to the handler.|slot_name, host|Counter|",
+     "|go_pq_cdc_cdc_latency_current|The current latency in capturing data changes from PostgreSQL, in nanoseconds.|slot_name, host|Gauge|",
+     "|go_pq_cdc_cdc_latency_current_milliseconds|The current latency in capturing data changes from PostgreSQL, in milliseconds.|slot_name, host|Gauge|",
+     "|go_pq_cdc_process_latency_current|The current latency in processing the captured data changes, in nanoseconds.|slot_name, host|Gauge|",
+     "|go_pq_cdc_process_latency_current_milliseconds|The current latency in processing the captured data changes, in milliseconds.|slot_name, host|Gauge|",
+     "|go_pq_cdc_message_buffer_length|Messages queued in the stream's internal channel, read at scrape time, out of a capacity of 1000. Near 1000 means the consumer cannot keep up; near 0 while slot lag grows means the upstream is the bottleneck.|slot_name, host|Gauge|",
+     "|go_pq_cdc_replication_slot_slot_confirmed_flush_lsn|The last confirmed flush Log Sequence Number (LSN) in the PostgreSQL replication slot.|slot_name, host|Gauge|",
+     "|go_pq_cdc_replication_slot_slot_current_lsn|The current Log Sequence Number (LSN) being processed in the PostgreSQL replication slot.|slot_name, host|Gauge|",
+     "|go_pq_cdc_replication_slot_slot_is_active|Indicates whether the PostgreSQL replication slot is currently active (1 for active, 0 for inactive).|slot_name, host|Gauge|",
+     "|go_pq_cdc_replication_slot_slot_lag|The replication lag measured by the difference between the current LSN and the confirmed flush LSN.|slot_name, host|Gauge|",
+     "|go_pq_cdc_replication_slot_slot_retained_wal_size|The size of Write-Ahead Logging (WAL) files retained for the replication slot in bytes.|slot_name, host|Gauge|",
+     "|go_pq_cdc_snapshot_in_progress|Indicates whether snapshot is currently in progress (1 for active, 0 for inactive).|slot_name, host|Gauge|",
+     "|go_pq_cdc_snapshot_total_tables|Total number of tables to snapshot.|slot_name, host|Gauge|",
+     "|go_pq_cdc_snapshot_total_chunks|Total number of chunks to process across all tables.|slot_name, host|Gauge|",
+     "|go_pq_cdc_snapshot_completed_chunks|Number of chunks completed in snapshot.|slot_name, host|Gauge|",
+     "|go_pq_cdc_snapshot_total_rows|Total number of rows read during snapshot.|slot_name, host|Counter|",
+     "|go_pq_cdc_snapshot_duration_seconds|Duration of the last snapshot operation in seconds.|slot_name, host|Gauge|",
+     "|go_pq_cdc_visibility_wait_duration_seconds|Time the visibility guard held a transaction until it became visible on the primary.|slot_name, host|Histogram|",
+     "|go_pq_cdc_visibility_timeout_total|Number of visibility guard waits that reached `visibilityGuard.timeout`.|slot_name, host|Counter|",
+     "|go_pq_cdc_visibility_fail_open_total|Number of transactions dispatched after a visibility guard timeout (`failMode: open`).|slot_name, host|Counter|",
+     "|go_pq_cdc_visibility_replica_lag_bytes|WAL bytes a listed standby still has to replay before the held transaction is applied (0 once applied).|slot_name, host, replica|Gauge|",
+     "|go_pq_cdc_visibility_replica_checks_total|Transactions certified per standby: `cached` (a poll under 1 s old already passed the commit) or `polled`.|slot_name, host, replica, result|Counter|",
+     "|runtime metrics|Prometheus Collector|N/A|N/A|"
+    ]
+   ],
+   [
+    "equal",
+    753,
+    756,
+    627,
+    630
+   ],
+   [
+    "replace",
+    756,
+    758,
+    630,
+    632,
+    [
+     "Import the grafana dashboard json file.",
+     "Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    758,
+    761,
+    632,
+    635
+   ],
+   [
+    "replace",
+    761,
+    762,
+    635,
+    636,
+    [
+     "|go-pq-cdc Version|slot.protoVersion|Minimum PostgreSQL Server Version|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    762,
+    763,
+    636,
+    637
+   ],
+   [
+    "replace",
+    763,
+    765,
+    637,
+    639,
+    [
+     "|0.0.2 or higher|1|10|No streaming transaction protocol messages|",
+     "|0.0.2 or higher|2|14|Supports streamed in-progress transactions|"
+    ]
+   ],
+   [
+    "equal",
+    765,
+    768,
+    639,
+    642
+   ],
+   [
+    "replace",
+    768,
+    769,
+    642,
+    643,
+    [
+     "|Date taking effect|Version|Change|How to check|"
+    ]
+   ],
+   [
+    "equal",
+    769,
+    770,
+    643,
+    644
+   ],
+   [
+    "replace",
+    770,
+    771,
+    644,
+    645,
+    [
+     "|Next release|TBD|Startup fails when heartbeat is enabled but the heartbeat table is missing from a selective publication.|Ensure `publication.tables` includes your heartbeat table, or use a `FOR ALL TABLES` publication. See Upgrade: heartbeat table must be in publication.|"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "60c7f93a132d+2": {
+  "fn": "Hello-CTF/NexTerm",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "NexTerm"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    1,
+    6
+   ],
+   [
+    "replace",
+    8,
+    11,
+    6,
+    9,
+    [
+     "Website",
+     "Release",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "**中文** | English · 官网与在线演示 · 下载 · 部署服务端"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    20,
+    12,
+    13,
+    [
+     " NexTerm 的终端与命令块界面（示例数据）"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    35,
+    13,
+    28
+   ],
+   [
+    "replace",
+    35,
+    36,
+    28,
+    29,
+    [
+     "同步不是端到端加密：登录时密码会发送给服务端，请只登录你信任的服务端并使用 HTTPS（详见安全说明）。完整功能见功能说明。"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    29,
+    32
+   ],
+   [
+    "replace",
+    39,
+    47,
+    32,
+    40,
+    [
+     "|平台|安装包（Releases）|",
+     "|---|---|",
+     "|Windows (amd64 / arm64)|`nexterm-desktop_windows_<架构>_x.y.z.exe`|",
+     "|macOS (Apple Silicon / Intel)|`nexterm-desktop_macos_<架构>_x.y.z.dmg`|",
+     "|Linux 桌面 (amd64 / arm64)|`nexterm-desktop_linux_<架构>_x.y.z.deb`|",
+     "|Android (arm64，预览版)|`nexterm-desktop_android_arm64_x.y.z.apk`|",
+     "|iOS / iPadOS (预览版)|TestFlight|",
+     "|Linux 服务端 / 懒猫微服|见部署服务端 / 应用中心（仅 amd64）|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    40,
+    43
+   ],
+   [
+    "replace",
+    50,
+    52,
+    43,
+    44,
+    [
+     " 安装提示 "
+    ]
+   ],
+   [
+    "equal",
+    52,
+    56,
+    44,
+    48
+   ],
+   [
+    "delete",
+    56,
+    58,
+    48,
+    48
+   ],
+   [
+    "equal",
+    58,
+    74,
+    48,
+    64
+   ],
+   [
+    "replace",
+    74,
+    75,
+    64,
+    65,
+    [
+     "安装输出会打印一次超级管理员 `admin` 的初始密码。服务默认只监听 `127.0.0.1:8080`，执行 `ssh -L 8080:127.0.0.1:8080 用户@服务器` 后打开 `http://localhost:8080`。升级、备份、反向代理、外部数据库、健康检查和日志等见服务端部署说明。"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    65,
+    68
+   ],
+   [
+    "replace",
+    78,
+    79,
+    68,
+    69,
+    [
+     "功能说明 · 安全说明 · 设备接入 · 服务端部署 · 本地数据库环境"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    87,
+    69,
+    77
+   ],
+   [
+    "replace",
+    87,
+    88,
+    77,
+    78,
+    [
+     "工具链、测试与协作约定见 AGENTS.md。"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    90,
+    78,
+    80
+   ],
+   [
+    "replace",
+    90,
+    92,
+    80,
+    81,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
+ },
+ "5fb42d15eff7+2": {
+  "fn": "keylorpineda/healthycropping",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    5,
+    [
+     "Download (GitHub Releases)",
+     " Model card",
+     " Datasets and licences",
+     " Field validation protocol",
+     " Setup guide (Spanish)"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    12,
+    6,
+    7,
+    [
+     " HealthyCropping, offline crop disease diagnosis for coffee, cacao and banana in Costa Rica. The full content of this card is available as text in the section below."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    7,
+    8
+   ],
+   [
+    "replace",
+    13,
+    17,
+    8,
+    10,
+    [
+     " CI",
+     " MIT License"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    10,
+    11
+   ],
+   [
+    "replace",
+    18,
+    20,
+    11,
+    12,
+    [
+     " Read this page as text "
+    ]
+   ],
+   [
+    "equal",
+    20,
+    24,
+    12,
+    16
+   ],
+   [
+    "replace",
+    24,
+    25,
+    16,
+    17,
+    [
+     "> **In active development.** There is no installable APK yet: the first signed APK is planned for `v1.0.0`, after field validation. Today the app can be built from source (see Run locally)."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    34,
+    17,
+    26
+   ],
+   [
+    "replace",
+    34,
+    40,
+    26,
+    32,
+    [
+     "|||",
+     "|:---|:---|",
+     "|Crops|3 (coffee, cacao, banana), one model each|",
+     "|Classes|12 health and disease classes in total|",
+     "|Model|`MobileNetV3-Large`, `224x224` RGB, float16 TFLite, about `6.1 MB` each|",
+     "|Network calls to diagnose|0|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    61,
+    32,
+    53
+   ],
+   [
+    "replace",
+    61,
+    66,
+    53,
+    58,
+    [
+     "|Crop|Organ|Classes|Test accuracy|Test macro-F1|Threshold|Documentation|",
+     "|:---|:---|:---|:---:|:---:|:---:|:---|",
+     "|**Coffee**|Leaf (underside)|`healthy`, `leaf_rust`, `leaf_miner`, `cercospora`, `brown_leaf_spot`, `red_spider_mite`|`81.1%`|`0.72`|`0.79`|Model card|",
+     "|**Cacao**|Pod|`healthy`, `monilia`, `black_pod`|`91.7%`|`0.85`|`0.51`|Model card|",
+     "|**Banana**|Leaf|`healthy`, `black_sigatoka`, `fusarium_wilt`|`97.5%`|`0.97`|`0.80`|Model card|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    58,
+    59
+   ],
+   [
+    "replace",
+    67,
+    68,
+    59,
+    60,
+    [
+     "Coffee is under the `0.80` macro-F1 target: `cercospora` and `red_spider_mite` have about 20 test leaves each, so one leaf moves their F1 by several points. The analysis and every run, including failed attempts, are in `docs/EXPERIMENTS.md`."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    60,
+    61
+   ],
+   [
+    "replace",
+    69,
+    74,
+    61,
+    66,
+    [
+     "|Crop|Confusion matrix (fine-tuned)|Grad-CAM|",
+     "|:---|:---|:---|",
+     "|Coffee|Coffee confusion matrix|Coffee Grad-CAM samples|",
+     "|Cacao|Cacao confusion matrix|Cacao Grad-CAM samples|",
+     "|Banana|Banana confusion matrix|Banana Grad-CAM samples|"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    77,
+    66,
+    69
+   ],
+   [
+    "replace",
+    77,
+    83,
+    69,
+    75,
+    [
+     "|Stamp|Meaning|",
+     "|:---|:---|",
+     "|`healthy`|No action needed|",
+     "|`watch`|Early or mild signs|",
+     "|`act now`|Treat, or call a technician|",
+     "|`retake`|Confidence under the threshold; take a new photo|"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    86,
+    75,
+    78
+   ],
+   [
+    "replace",
+    86,
+    87,
+    78,
+    79,
+    [
+     "Work follows the phases in `docs/PLAN.md`:"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    79,
+    80
+   ],
+   [
+    "replace",
+    88,
+    99,
+    80,
+    91,
+    [
+     "|Phase|Milestone|Scope|Status|",
+     "|:---|:---|:---|:---|",
+     "|0|`v0.1.0`|Repository setup, community standards, CI|Done|",
+     "|1|`v0.1.0`|Coffee datasets, leakage-free split, baseline|Done|",
+     "|2|`v0.1.0`|Coffee fine-tuning, float16 export, preprocessing fixture|Done|",
+     "|3|`v0.2.0`|App shell, design system, onboarding, home, settings|Done|",
+     "|4|`v0.2.0`|Camera, on-device inference, result screen, offline history|Done|",
+     "|5|`v0.3.0`|Cacao and banana models, all three crops in the app|Done; on-device check pending|",
+     "|6|`v0.4.0`|FastAPI, Firebase auth, farm/plot/scan sync|Done|",
+     "|7|`v0.5.0`|Gemini RAG explanations with cited sources|Done|",
+     "|8|`v1.0.0`|Field validation, benchmarks, signed APK release|In progress|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    112,
+    91,
+    104
+   ],
+   [
+    "replace",
+    112,
+    117,
+    104,
+    109,
+    [
+     "|Workspace|Stack|Purpose|",
+     "|:---|:---|:---|",
+     "|`app/`|React Native 0.76, Expo 52, TypeScript, SQLite, TFLite|Offline Android app|",
+     "|`api/`|Python 3.12, FastAPI, Firebase Admin, Cloudinary, Gemini|Token verification, sync, RAG advice, weather risk|",
+     "|`ml/`|Python 3.12, TensorFlow 2.18+, Pillow|Training, evaluation and float16 export|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    122,
+    109,
+    114
+   ],
+   [
+    "replace",
+    122,
+    123,
+    114,
+    115,
+    [
+     "Prerequisites: Node.js 20+ and `pnpm` for the app (never `npm` or `yarn`), the Android SDK, Python 3.12 and `uv` for `api/` and `ml/`. Step-by-step service setup (Spanish): `docs/SETUP_SERVICES_ES.md`."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    147,
+    115,
+    139
+   ],
+   [
+    "replace",
+    147,
+    153,
+    139,
+    143,
+    [
+     "- **Community Spotlight**: GitHub Discussions Announcement",
+     "- **Contributing Guidelines**: `CONTRIBUTING.md`",
+     "- **Architecture Overview**: `docs/ARCHITECTURE.md`",
+     "- **Code of Conduct**: `CODE_OF_CONDUCT.md`"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    161,
+    143,
+    151
+   ],
+   [
+    "delete",
+    161,
+    163,
+    151,
+    151
+   ],
+   [
+    "equal",
+    163,
+    165,
+    151,
+    153
+   ],
+   [
+    "replace",
+    165,
+    166,
+    153,
+    154,
+    [
+     "The MIT license in `LICENSE` applies **solely to the source code** in this repository. Training datasets remain under their respective upstream licenses documented in `docs/DATASETS.md`:"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    167,
+    154,
+    155
+   ],
+   [
+    "replace",
+    167,
+    170,
+    155,
+    158,
+    [
+     "- **RoCoLe** (Coffee — Mendeley Data, DOI `10.17632/c5yvn32dzg.2`)",
+     "- **BRACOL** (Coffee — Mendeley Data, DOI `10.17632/yy2k5y8mxg.1`)",
+     "- **CocoaMoniliaDataSet** (Cacao — Zenodo, DOI `10.5281/zenodo.17156051`, CC BY 4.0)"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    158,
+    159
+   ],
+   [
+    "replace",
+    171,
+    175,
+    159,
+    161,
+    [
+     "- **Banana Leaves Imagery** (Banana — NM-AIST DSpace `20.500.12479/3003`; DOI `10.1038/s41597-025-04456-4`)",
+     "- **BananaLSD** (Banana — Mendeley Data, DOI `10.17632/9tb7k297ff.1`)"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    178,
+    161,
+    164
+   ],
+   [
+    "replace",
+    178,
+    181,
+    164,
+    165,
+    [
+     "**HealthyCropping** (`com.keylorpineda.healthycropping`) is strictly non-commercial. Starting with `v1.0.0`, it will be distributed free of charge as an installable Android `.apk` exclusively through GitHub Releases, with no advertisements or paid subscriptions. Until then, releases only include the exported `.tflite` models."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    188,
+    165,
+    172
+   ],
+   [
+    "replace",
+    188,
+    193,
+    172,
+    173,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    173,
+    174
+   ],
+   [
+    "delete",
+    194,
+    196,
+    174,
+    174
+   ],
+   [
+    "equal",
+    196,
+    199,
+    174,
+    177
+   ],
+   [
+    "replace",
+    199,
+    203,
+    177,
+    179,
+    [
+     "- **Keylor Pineda** — @keylorpineda",
+     "- **Jefferson Abarca** — @JAbarca74"
+    ]
+   ]
+  ],
+  "at": "2026-11-17"
  }
 }

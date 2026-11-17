@@ -3612,5 +3612,137 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "ec91f7932eb1": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，网关在回复前注入相关记忆并提供 MCP 查存改工具。",
+   "review": "Stiller Brain 是用 Python 与 SQLite 实现的长期记忆服务，由 AI 写入经历、知识与计划，ST 网关在新消息到达时按关键词、场景等线索挑选相关记忆注入上下文，MCP 工具支持主动查询、保存与修改。接入依赖 OpenAI 兼容接口与 MCP 工具续轮能力，提供 Windows/Linux 及 Android Termux 实验部署路线，为非商业源码预览版本。",
+   "highlights": [
+    "提供 ST 网关（OpenAI 兼容 Chat Completions）在回复前按语境注入记忆，与带认证的 Streamable HTTP MCP 工具两种接入方式",
+    "包含自我定义、情感、学习、工具、规划五个模块及幻觉黑匣子，支持版本历史回看、自写提醒与主动整理",
+    "支持短期换窗交接（最近 30 分钟最多 3 条正文）、情绪词表、图片附件存储与工具档案日常档配置"
+   ],
+   "use_cases": [
+    "为具备网关接入与 MCP 工具调用能力的模型客户端添加跨对话的长期记忆",
+    "仅需记忆库时，单独连接 MCP 工具实现主动查询、保存与修改记录",
+    "个人在电脑或 Android 手机（Termux）本地部署私有记忆服务"
+   ]
+  },
+  "sha": "ec91f7932eb1",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1399f2ddbc8d": {
+  "identity": {
+   "one_liner": "PostgreSQL 分层扩展，把一张表的热数据留在本地分区、冷数据写入 Apache Iceberg 对象存储",
+   "review": "pgEdge ColdFront 是运行在 PostgreSQL 内部的数据分层与分区生命周期管理工具：它重写每条 SQL 语句路由到对应分层，使应用面对单一关系；冷层数据存为 Iceberg 格式，可经 S3、Azure 或 GCS 读写。当前处于 BETA 阶段，README 明确标注不可用于生产。支持 PostgreSQL 16/17/18，依赖 pg_duckdb 与 Lakekeeper 目录；单节点可用原生 PostgreSQL，分布式模式需 pgEdge 带 Spock 的构建。",
+   "highlights": [
+    "在 PostgreSQL 内部重写 SELECT/INSERT/UPDATE/DELETE 语句到对应数据分层，应用看到单一表",
+    "冷层数据以 Apache Iceberg 格式存储于 S3 兼容存储、Azure 或 GCS，且可读可写",
+    "设置保存在服务器端（coldfront schema 表），无独立配置文件，通过 archiver/partitioner/compactor 命令行工具管理"
+   ],
+   "use_cases": [
+    "需要将 PostgreSQL 表的旧行归档到对象存储、同时保持 SQL 读写透明的场景",
+    "已使用 pgEdge/Spock 多节点部署、希望统一管理分区生命周期的团队",
+    "希望基于 Iceberg 表格式在对象存储上管理历史数据的 PostgreSQL 16/17/18 用户"
+   ]
+  },
+  "sha": "1399f2ddbc8d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "dd7c9f1170ee": {
+  "identity": {
+   "one_liner": "在 TypeScript 类型检查器内解析 SQL，无需代码生成即可推断行类型的类型安全 SQL 库",
+   "review": "TypeSQL 是一个 TypeScript 库，在类型检查器中解析 SQL，推断查询的行类型与参数类型，无需代码生成、数据库连接或构建步骤。支持 PostgreSQL、SQLite、MySQL 和 MariaDB，DB 类型可从迁移文件、现有数据库或 Kysely/Drizzle/Prisma 模式获取。运行时压缩后小于 3 kB 且无依赖，采用 MIT 许可。",
+   "highlights": [
+    "在类型检查器内解析 SQL，实现行与参数类型的即时推断，无代码生成、无数据库连接、无构建步骤",
+    "支持 PostgreSQL、SQLite、MySQL、MariaDB，可从迁移、现有数据库或 Kysely/Drizzle/Prisma 获取 DB 类型",
+    "@typesql/core 运行时压缩后小于 3 kB 且无依赖，提供 VS Code 扩展支持表与列补全"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中以类型安全方式编写原生 SQL 查询",
+    "已有 Kysely、Drizzle 或 Prisma 模式定义的项目接入类型化 SQL",
+    "需要为 PostgreSQL、MySQL、SQLite 等数据库执行迁移与类型化查询"
+   ]
+  },
+  "sha": "dd7c9f1170ee",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "7a7809f06348": {
+  "identity": {
+   "one_liner": "用不可变断言模型存储相互矛盾事实并保留来源与时间的嵌入式证据数据库",
+   "review": "Positorium 是一个嵌入式证据数据库，用不可变 posit 模型保存来源、确定性、出现时间与断言时间各不相同的冲突事实，配合 Traqula 查询语言和追加式存储。它用 Rust 编写，面向需要保留证据轨迹的场景，提供 Python 绑定、本地 HTTP 服务和 WASM 测试环境；当前为 beta 阶段，不支持鉴权与网络暴露。",
+   "highlights": [
+    "不可变 posit 模型保留来源、确定性、出现时间与断言时间，追加式存储不覆盖冲突断言",
+    "Traqula 查询语言支持连接、union、安全 not exists、快照、typed 谓词、in effect、参数与排序限制",
+    "提供 CPython 3.9+ 嵌入式 Python 绑定、本地 HTTP/SSE 接口、WASM 浏览器测试环境，以及物理备份与逻辑导出/导入"
+   ],
+   "use_cases": [
+    "合规证据存档：需要保留每个断言来源、时间与精度的累积与修订场景",
+    "调查与主数据冲突管理：矛盾事实并存而不相互覆盖，配合快照与 'in effect' 查询显式化解决策略",
+    "嵌入式或本地使用：通过 Python 进程内嵌入或绑定 127.0.0.1 本地服务作为操作系统的旁路证据层"
+   ]
+  },
+  "sha": "7a7809f06348",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "cdc7c551f3fa": {
+  "identity": {
+   "one_liner": "面向 AI 编码助手的笔记记忆 MCP 服务器，以 wikilink 为图、SQLite 为存储",
+   "review": "该项目为拥有 markdown 笔记文件夹（如 Obsidian vault）并使用 Claude Code、Cursor、Codex 等 MCP 客户端的人提供检索层：sgm-index 对笔记建立嵌入索引并下载约 1.1 GB 模型，sgm-mcp 作为 MCP 服务器供客户端调用 memory_recall，检索结果分 DIRECT 与 ASSOCIATIVE 两组，后者沿 [[wikilinks]] 顺链找到未被直接命中的笔记（标记 <== +graph）。只读笔记，不写入或编辑；无需账号或 API key。",
+   "highlights": [
+    "以 [[wikilinks]] 作为图结构、SQLite 作为唯一存储，检索输出包含向量直接命中与顺链关联两组结果",
+    "提供 sgm-index / sgm-ask / sgm-doctor / sgm-mcp 命令行工具，增量索引仅重新嵌入新增或变更笔记，支持 uvx 或 pip 安装",
+    "仅读取笔记，不写入或编辑笔记文件；无需账号、API key 或 token"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等 MCP 客户端接入本地 markdown/Obsidian 笔记作为记忆检索层",
+    "问题未直接点名笔记时，通过 wikilink 链路召回相关笔记（如从项目笔记沿链接找到其工具的技术栈）",
+    "对本地笔记库进行离线索引与自检（sgm-doctor），或将该模块作为更大记忆设计中检索层的第 4/5 层使用"
+   ]
+  },
+  "sha": "cdc7c551f3fa",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "f53c7d1abe10": {
+  "identity": {
+   "one_liner": "基于 k3s 的开源自托管 PaaS 平台，用于部署应用、运行服务与创建隔离沙箱",
+   "review": "Pyo 是一个开源（Apache 2.0）自托管 PaaS，用户在自有或租用的 Linux x86-64 机器上运行脚本安装后，即可从 Git 仓库、镜像或模板构建并部署服务，获得 HTTPS、自动证书、数据库和沙箱等能力。底层基于 k3s，部署产物为标准 Kubernetes 资源，可通过仪表盘、CLI、API 或 MCP 操作。最低要求 2 核 CPU、2 GB 内存、40 GB 磁盘，并开放 80、443、8000 端口。",
+   "highlights": [
+    "支持 Dockerfile 构建、零配置构建或直接运行容器镜像，部署后提供自动 Let's Encrypt HTTPS 证书",
+    "内置 Postgres、MySQL 和 Redis 兼容的 KV 数据库，含故障转移、时间点恢复备份与只读副本",
+    "沙箱在 Firecracker microVM 或 gVisor 中运行，可通过 TypeScript SDK、MCP、CLI 或仪表盘操作"
+   ],
+   "use_cases": [
+    "在自有 VPS、专用服务器或本地机器上托管 Web 应用与服务",
+    "为 AI 智能体、代码解释器、预览环境或 CI 运行隔离沙箱",
+    "通过 CLI 和 API Key 在 CI 流水线中实现每次推送自动部署"
+   ]
+  },
+  "sha": "f53c7d1abe10",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3428,5 +3428,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "0b16f6b71ab8": {
+  "identity": {
+   "one_liner": "MoonBit 编写的 SQLite 子集，面向浏览器与 Node.js，支持 IndexedDB 离线持久化与 LTX 同步",
+   "review": "SQLike 是用 MoonBit 实现的 SQLite 子集数据库，运行于浏览器和 Node.js（Node 24+，ESM，运行时无需 MoonBit 编译器）。它提供内存 SQL 执行，或在构建期预编译 schema 与命名语句，使浏览器端可省略 SQL 解析器并通过 IndexedDB 持久化；可选 @mizchi/litestream 包提供基于 SQLite Session 变更集与 LTX v3 的同步。README 注明其只实现 SQLite 功能子集，schema 不一致时不会自动应用。",
+   "highlights": [
+    "提供 CRUD、JOIN、聚合、RETURNING、事务、索引、外键与基础触发器等 SQLite 子集能力",
+    "支持构建期编译预定义 schema 与语句，浏览器运行时可不含 SQL 解析器，并可按目录裁剪函数族、JOIN、CTE 等",
+    "支持 SQLite 镜像导出与 LTX v3 生成/应用，配合 @mizchi/litestream 提供 SQL 与 Session 变更集同步、重试与去重"
+   ],
+   "use_cases": [
+    "需要在浏览器中运行 SQL 并通过 IndexedDB 离线保存、重开连接恢复数据的 Web 应用",
+    "schema 与查询已知的场景，可用预编译目录构建仅含所需实现的运行时",
+    "需要离线数据与服务器（Node.js、Cloudflare Durable Objects 或 P2P 中继）同步的客户端应用"
+   ]
+  },
+  "sha": "0b16f6b71ab8",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -3207,5 +3207,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "29f7727786d8": {
+  "identity": {
+   "one_liner": "基于 Go 的 PostgreSQL/MySQL 即时 REST 与 MCP API 服务器，无需自建后端",
+   "review": "pRESTd 是用 Go 编写的 API 服务器，连接现有或新建的 PostgreSQL（9.5+ 默认）与 MySQL（8.0.19+，v2.5 起原生支持）数据库，自动生成 CRUD 的 REST 接口，并支持自定义 SQL 路由、JWT 认证与 ACL、只读 MCP 端点。部署方式包括 Docker、Homebrew 与 Go 安装，可通过环境变量、TOML 文件或 JSON 环境变量配置，支持单库或多数据库（registry 模式与 no-registry 模式）服务。适用于希望不为现有数据库手写后端即暴露 API 的开发者与团队。",
+   "highlights": [
+    "通过 GET /{database}/{schema}/{table} 路径提供数据库表的 CRUD REST 接口，无需编写后端代码",
+    "支持自定义 SQL 查询脚本，提供 {{sqlVal}}、{{sqlList}}、{{ident}} 模板辅助函数，插值值经过安全筛查，绑定值通过带外传输",
+    "支持 JWT 认证与 ACL、多数据库服务（registry 模式与 no-registry 模式，Postgres 最多 64 个连接池）、只读 MCP 端点，以及容器内通过 PREST_CONFIG_JSON 进行无挂载文件配置"
+   ],
+   "use_cases": [
+    "为现有 PostgreSQL 或 MySQL 数据库快速提供 REST API，避免手写后端服务",
+    "为 AI 客户端（如 Cursor、Claude）提供 MCP 接口以只读方式访问数据库",
+    "需要为多个数据库（同主机或不同主机）统一暴露 API 的场景，如多租户架构"
+   ]
+  },
+  "sha": "29f7727786d8",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "e47e51a314ae": {
+  "identity": {
+   "one_liner": "为 EF Core 数据库错误提供强类型异常的 .NET 库",
+   "review": "该项目将 EF Core 统一包装在 DbUpdateException 中的数据库错误，转换为 UniqueConstraintException、CannotInsertNullException 等具体异常类型，支持 SQLServer、PostgreSQL、SQLite、Oracle、MySql。使用时安装对应数据库的 NuGet 包，并在 DbContext 的 OnConfiguring 或 DbContextPool 配置中调用 UseExceptionProcessor。所有异常继承 DbUpdateException 以保持兼容；SQLite 下不填充 ConstraintName/ConstraintProperties。",
+   "highlights": [
+    "将数据库错误按原因转换为 UniqueConstraintException、MaxLengthExceededException、ReferenceConstraintException 等具体异常类型",
+    "通过 UseExceptionProcessor 扩展方法配置，支持 DbContext 池化场景",
+    "提供 IDbExceptionClassifier 接口与 DbExceptionClassifier 包，可用于无专用包的 ADO.NET 提供商及非 EF Core 场景"
+   ],
+   "use_cases": [
+    "需要在 EF Core 应用中按约束冲突类型（唯一约束、外键、非空、超长等）分别处理保存失败",
+    "使用 Devart dotConnect 或 Pomelo 等 EF Core 未提供专用包的数据库提供商",
+    "不使用 EF Core、需直接对 ADO.NET 数据库异常做分类的 .NET 项目"
+   ]
+  },
+  "sha": "e47e51a314ae",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "2f18b0e424c3": {
+  "identity": {
+   "one_liner": "面向 Windows 的人格中心 AI 伴侣运行时，持久保存人格、记忆与经历。",
+   "review": "PCAR 是一个以人格为中心的 AI 伴侣运行时，把身份、关系、会话历史与长期记忆在模型调用之外持久保存，使对话可接续过往经历。公开版 v0.1 提供 Windows 桌面工作台，需 Agent 辅助部署并配置自有模型服务；已验证 Windows 11 x64，QQ 接入当前暂停，聊天与后台模型任务可能产生调用费用。",
+   "highlights": [
+    "v0.1 提供人物与关系版本管理、会话历史、长期记忆、按需联网、备份与迁移",
+    "自动记忆按角色开启并需配置整理模型，新角色默认关闭",
+    "人物与聊天数据保存在本机，桌面包包含公开本地检索模型"
+   ],
+   "use_cases": [
+    "在 Windows 本机运行带持久记忆的 AI 伴侣人格",
+    "通过 Agent 辅助完成环境与实例配置后进行桌面聊天",
+    "对人格连续性与长期记忆机制进行研究和共建"
+   ]
+  },
+  "sha": "2f18b0e424c3",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

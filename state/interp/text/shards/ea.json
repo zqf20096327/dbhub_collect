@@ -3101,5 +3101,93 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "d62476885475": {
+  "identity": {
+   "one_liner": "单二进制 Go 数据库 GUI 客户端，支持多种 SQL 数据库与 Redis，无 Electron。",
+   "review": "DGopher 是一个用 Go 编写的桌面数据库客户端，提供 SQL 编辑、结果网格、查询计划、图表仪表盘、ER 图和 Redis 键浏览等功能，覆盖 PostgreSQL、MySQL、Oracle、ClickHouse、DuckDB 等多种引擎。项目尚未发布 1.0，macOS 和 Windows 安装包未签名。README 说明其大部分代码由 AI 编码代理编写，由维护者审核。",
+   "highlights": [
+    "以单个 Go 二进制发布，无 Electron、webview 或 JVM，支持 Linux、macOS 和 Windows",
+    "支持 PostgreSQL、MySQL、SQL Server、Oracle、ClickHouse、SQLite、DuckDB 等多种数据库及 Redis 客户端",
+    "提供生产连接标记、破坏性语句确认、审计日志、只读连接强制等安全机制"
+   ],
+   "use_cases": [
+    "跨多种数据库引擎的日常 SQL 查询与数据管理",
+    "通过 Git 仓库共享连接配置、查询文件与仪表盘的团队协作场景",
+    "在窗口中拖入 CSV、Parquet 或 JSON 文件，用 DuckDB 直接查询"
+   ]
+  },
+  "sha": "d62476885475",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "d5a0cdc88d8d": {
+  "identity": {
+   "one_liner": "自托管的净资产与现金流跟踪应用，按月手工录入，无银行连接",
+   "review": "Monido 是一个自托管的家庭财务应用，用于跟踪净资产和现金流。家庭成员每月录入各账户的月末余额及收支，仅已结转月份参与计算，所有指标由应用根据录入数据计算并公开公式。数据存于服务器端 SQLite，不连接银行。部署为单个 Docker 容器，支持 amd64/arm64。适合能运行容器的家庭服务器/NAS/VPS 用户，非逐笔记账或预算工具。",
+   "highlights": [
+    "按月录入月末余额与收支，支持多成员、多币种、贷款计划、房产估值、目标预测与财务健康指标，每个公式在 Finance rules 中说明",
+    "单容器运行（Node + SQLite），空闲内存低于 60 MB，镜像约 250 MB，数据存于 Docker 卷并支持备份、CSV 导出与撤销历史",
+    "提供可选的 Claude 顾问（通过用户自己的 Anthropic 账户连接）和 Telegram 登录/提醒，核心不含 AI；界面支持七种语言、明暗主题"
+   ],
+   "use_cases": [
+    "家庭在多个银行、多种币种及房产间持有资产，希望查看净资产总额及其变化方向",
+    "在自有服务器、NAS 或树莓派上自托管，手工维护月度财务快照而不连接银行",
+    "计算应急基金月数、储蓄率、通胀后的实际增长及目标达成日期"
+   ]
+  },
+  "sha": "d5a0cdc88d8d",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "1cc91c1e14f9": {
+  "identity": {
+   "one_liner": "自托管开源特性开关与实验平台，单个 Go 二进制 + PostgreSQL。",
+   "review": "Flagnetic 是一个自托管的特性开关与实验管理平台，以单个 Go 二进制运行，PostgreSQL 是唯一必需依赖。它包含布尔/字符串/数字/JSON 四类开关、百分比发布、实验生命周期管理、变更审批、审计日志及对 OIDC/SAML/SCIM 的支持。README 注明当前处于 developer preview（0.4），实验结果分析尚缺，需在自有数仓中读取事件。",
+   "highlights": [
+    "提供四种类型开关、定向规则、百分比发布、kill switch，以及经评审变更请求保护的环境治理流程",
+    "提供 Go、JavaScript/TypeScript、Dart/Flutter、Ruby、Python SDK 及 OpenFeature provider，服务端 SDK 本地求值且服务中断时沿用最后有效规则集",
+    "支持事件写入 ClickHouse、S3（JSON Lines/Parquet）或签名 webhook 的 sink，以及项目配置的 YAML/JSON 导出导入"
+   ],
+   "use_cases": [
+    "在自有基础设施中运行特性开关发布与灰度 rollout",
+    "管理带分配权重与曝光记录的 A/B 实验，事件导入自有数仓分析",
+    "从 Firebase Remote Config 模板迁移为单环境开关配置"
+   ]
+  },
+  "sha": "1cc91c1e14f9",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "98fa3d76fc82": {
+  "identity": {
+   "one_liner": "单二进制 MySQL 协议测试桩，模拟 OceanBase 双租户 SQL 行为",
+   "review": "OBmock 用 Go 实现内嵌 SQLite 的 SQL 引擎，通过 MySQL 线协议模拟 OceanBase 的 MySQL 与 Oracle 租户，供开发者与 CI 在不部署真库的情况下测试 SQL。它将 Oracle 方言翻译为 SQLite 执行，行为基准取自企业版实测，并附带 obcheck 兼容性预检工具。限制：PL/SQL 仅元数据级，并发写失真。",
+   "highlights": [
+    "单二进制进程同时提供 MySQL 租户桩与 Oracle 租户桩，客户端用标准 MySQL 驱动直连",
+    "Oracle 线支持 OBE 错误码、user_/all_/dba_ 数据字典、CONNECT BY 转 WITH RECURSIVE、MERGE INTO 等方言特性",
+    "提供 obcheck 兼容性预检工具与 Python/Go/Java/Rust 四语言测试容器包装，含自验证测试"
+   ],
+   "use_cases": [
+    "日常开发中替代 OceanBase 实例运行集成测试，测试代码在 mock 与真库间只需换 host/port",
+    "CI 流水线中一行启动测试容器包装，用例结束自动回收",
+    "迁移前用 obcheck 扫描 SQL 目录，标记 mock 不支持或需注意的特性"
+   ]
+  },
+  "sha": "98fa3d76fc82",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

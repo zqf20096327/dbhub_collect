@@ -3077,5 +3077,27 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "14760a9513a6": {
+  "identity": {
+   "one_liner": "基于 Docker Compose 的 WordPress 部署模板，集成 Traefik 与 Let's Encrypt 自动 TLS。",
+   "review": "该仓库提供一套 Docker Compose 配置，通过单条 `docker compose up` 部署官方 WordPress 镜像、Traefik 反向代理、MariaDB 11.4 LTS 及定时备份容器。Traefik 自动签发 Let's Encrypt 证书，备份容器按 24 小时周期执行数据库与 wp-content 备份并保留 30 天，配套交互式恢复脚本。三个上游镜像以 digest 固定，发布资产附 Sigstore 签名与 SLSA 证明。需自行配置域名、.env 变量并开放 80/443 端口。",
+   "highlights": [
+    "通过 Traefik 自动签发 Let's Encrypt TLS 证书，一个 compose 文件启动 WordPress、MariaDB 与备份服务",
+    "定时备份（mysqldump + wp-content 打包，默认 24 小时间隔、30 天保留）并附带交互式数据库与应用数据恢复脚本",
+    "镜像以 tag@sha256 固定，发布附带 Sigstore 签名与 SLSA 构建证明，可用 cosign 与 slsa-verifier 校验"
+   ],
+   "use_cases": [
+    "在自有服务器上以 HTTPS 域名自托管 WordPress 站点",
+    "需要数据库与站点文件定时备份及恢复流程的部署",
+    "对部署镜像来源有签名与溯源验证需求的场景"
+   ]
+  },
+  "sha": "14760a9513a6",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

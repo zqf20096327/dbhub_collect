@@ -2663,5 +2663,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "708fc5b456cf": {
+  "identity": {
+   "one_liner": "连接多种数据库的 MCP 服务器，默认仅加载 2 个工具以节省 token",
+   "review": "DBHub 是一个数据库 MCP 服务器，供 MCP 兼容客户端（如 Claude Desktop、Cursor、VS Code）连接和探索数据库。支持 PostgreSQL、MySQL、MariaDB、SQL Server、Oracle、SQLite 六种数据库，默认加载 execute_sql 和 search_objects 两个工具，占用约 1.4k token。默认仅含两个工具，explain_sql、health_check 等需手动开启；开发需 Node.js 22.5 以上。",
+   "highlights": [
+    "默认加载 execute_sql 和 search_objects 两个工具，官方文档称占用约 1.4k token",
+    "通过单一接口连接 PostgreSQL、MySQL、MariaDB、SQL Server、Oracle、SQLite，并支持 TOML 配置多连接",
+    "提供只读模式、行数限制、查询超时、SSH 隧道和 SSL/TLS 加密等选项"
+   ],
+   "use_cases": [
+    "本地开发中用 Claude Code、Cursor 等客户端进行 schema 探索、查询验证和数据调试",
+    "通过只读模式向非技术人员提供受限的数据库访问视图",
+    "用一个 DBHub 进程替代为每种数据库分别运行的 MCP 服务器，用于多数据库统一接入"
+   ]
+  },
+  "sha": "708fc5b456cf",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "bbeecf709248": {
+  "identity": {
+   "one_liner": "达梦数据库 DM8 的 GORM v2 方言驱动，内置官方 Go 驱动",
+   "review": "该包为达梦数据库 DM8 提供 GORM v2 的 gorm.Dialector 实现，面向使用 GORM 访问达梦的 Go 开发者。内置达梦官方 Go 驱动源码，无需手动复制；支持 DSN 生成、类型映射、AutoMigrate 与三种 Upsert 模式。要求 Go 1.20+，README 还列出了 UPDATE/DELETE 子句不支持 ORDER BY 等已知限制。",
+   "highlights": [
+    "实现完整的 gorm.Dialector，含建连、类型映射、引用符与保存点",
+    "clause.OnConflict 可翻译为达梦 MERGE INTO，并可切换 MySQL/PostgreSQL 兼容语法",
+    "迁移器基于达梦系统表判断表/列/索引/约束，支持 AutoMigrate 与列注释"
+   ],
+   "use_cases": [
+    "使用 GORM v2 开发访问达梦 DM8 的 Go 应用",
+    "将现有 GORM 项目迁移到达梦数据库而沿用 AutoMigrate",
+    "需要 MySQL 或 PostgreSQL 风格 Upsert 写法兼容达梦的场景"
+   ]
+  },
+  "sha": "bbeecf709248",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

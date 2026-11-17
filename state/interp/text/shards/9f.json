@@ -3374,5 +3374,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "8331357fde88": {
+  "identity": {
+   "one_liner": "基于Dolt存储引擎、兼容MongoDB协议的版本控制文档数据库",
+   "review": "DumboDB 是 DoltHub 开发的文档数据库，实现 MongoDB 8.0 wire 协议，可被标准 MongoDB 驱动和 mongosh 连接。它基于 Dolt 的 prolly tree 存储引擎，通过 dumboCommit、dumboMerge 等自定义命令对数据提供提交、分支与合并能力。项目处于 pre-1.0 阶段，README 明确尚未可用于生产环境，且不支持分片、TTL、capped collections 等功能。",
+   "highlights": [
+    "实现 MongoDB 8.0 wire 协议，支持 MQL 查询/更新操作符、聚合管道、二级索引、多文档事务、SCRAM/RBAC 与 X.509 认证及 TLS",
+    "基于 Dolt 的 prolly tree 存储引擎，通过提交间结构共享存储数据历史",
+    "通过 dumboCommit、dumboMerge 等自定义命令提供提交、分支、合并与历史查看"
+   ],
+   "use_cases": [
+    "在单节点环境中替代 mongod 运行 MongoDB 应用并使用现有驱动或 mongosh",
+    "需要对文档数据做提交、分支与合并的版本控制场景",
+    "使用 Docker 快速启动本地 MongoDB 兼容数据库进行开发测试"
+   ]
+  },
+  "sha": "8331357fde88",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "aa0e5f558735": {
+  "identity": {
+   "one_liner": "用 Docker Compose 编排 Mattermost、Traefik 与 Let's Encrypt 的部署模板",
+   "review": "该仓库是一个部署模板而非自建镜像，通过 Compose 编排 Traefik、Mattermost Team Edition 与 PostgreSQL 三个上游镜像。Traefik 处理 HTTP→HTTPS 重定向并用 TLS-ALPN 自动签发与续期 Let's Encrypt 证书；内置定时数据库与上传文件备份、还原脚本、镜像 sha256 摘要锁定及 CI 部署验证。面向需要自托管 Mattermost 的团队，要求有公网 Linux 服务器、受控域名和 Docker Engine 24+，凭据通过 .env 提供。",
+   "highlights": [
+    "Traefik v3 自动完成 HTTP→HTTPS 重定向与 Let's Encrypt TLS-ALPN 证书签发，含 websocket 支持，仪表盘经 Basic-auth 保护",
+    "backups 容器按 BACKUP_INTERVAL（默认 24h）循环执行 pg_dump|gzip 数据库备份、上传目录 tar.gz 归档与保留期清理，附交互式还原脚本",
+    "三个上游镜像均以 tag@sha256 摘要固定，支持通过 *_IMAGE_VERSION / *_IMAGE_TAG 两级变量覆盖，CI 每日校验固定版本的新鲜度"
+   ],
+   "use_cases": [
+    "在自有 Linux 服务器上以 Docker Compose 自托管 Mattermost 团队工作区，无需 Kubernetes",
+    "需要自动化的 HTTPS 证书签发与续期、避免手动证书管理的单机部署",
+    "需要数据库与上传文件定时备份、还原脚本及生产环境容器加固配置的部署场景"
+   ]
+  },
+  "sha": "aa0e5f558735",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "defdea1e2935": {
+  "identity": {
+   "one_liner": "基于 Lean 验证 SQLite 语句与迁移的库",
+   "review": "Belay 是一个 Lean 库，用于证明关于 SQLite 数据库、语句和迁移的事实：用户编写 SQL 并声明应成立的性质，`#sql_check` 搜索反例数据库或由 Lean 内核验证证明。它建模 SQLite 3.51.0 的一个子集，用 5525 个案例对照原生 SQLite 检查模型。适用于需要在构建期核查迁移（如 PRAGMA 在事务中失效导致级联删除）正确性的开发者；不支持并发、锁与查询计划相关的事实，模型外的 SQL 被拒绝。",
+   "highlights": [
+    "提供 `#sql_check`，对反例输出破坏声明的最小数据库行集和可粘贴到 sqlite3 shell 的重放脚本，结果为 false、proved 或 unknown",
+    "提供 `preserves`、`succeeds`、`ensures`、`simulates` 等记法来陈述迁移对查询结果的影响，证明由 Lean 内核在每次构建时验证",
+    "模型对照 SQLite 自身测试套件与项目语料库（5,525 个案例）重放核对，模型外 SQL 被拒绝"
+   ],
+   "use_cases": [
+    "在构建期检查 schema 迁移是否保留指定查询的结果，并获取最小反例数据库",
+    "将发现的具体反例转为测试用例（`sql_refute`）纳入回归验证",
+    "配合编码代理编写 SQL、陈述声明、运行检查并撰写证明，由内核核查证明"
+   ]
+  },
+  "sha": "defdea1e2935",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

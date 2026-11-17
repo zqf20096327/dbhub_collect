@@ -3116,5 +3116,71 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "f97b68e84112": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core MVC 的个人/企业管理 Web 应用，内置财务记账、预算表格与日历等模块",
+   "review": "Maroik 是一个 ASP.NET Core MVC Web 应用，包含费用记录、电子表格式预算、带邮件提醒的日历、公告板、看板、文件管理和角色用户管理。项目采用 DDD 与 Clean Architecture，通过 PostgreSQL 存储并使用 Docker 部署；仓库提供完整的部署脚本、每日 04:00 备份、备份恢复流程与种子账号。部署需三个不入库的服务器文件（.env.prod、Init.sql、上传目录）。",
+   "highlights": [
+    "财务模块金额以 numeric(20,4) 精确存储，收支更新与资产余额在同一事务内加行锁完成；预算模块支持 Excel 兼容公式，服务器端按存储输入每次重算",
+    "文件管理器按 16 MB 分块上传并支持取消，后台经 ClamAV 病毒扫描，容量配额由管理员设置（默认 0 GB）",
+    "Deploy.sh 支持本地构建与跟随 GitHub main 两种部署方式，可配置 Cloudflare Tunnel 或 Caddy + Let's Encrypt 证书，并安装每日备份等 cron 任务"
+   ],
+   "use_cases": [
+    "需要自托管个人或小型业务站点，使用财务记账、年度预算表格和日程管理",
+    "团队或社区需要公告板、文件共享与基于角色的用户管理",
+    "已有备份档案，需要在新服务器上按文档恢复整套栈运行"
+   ]
+  },
+  "sha": "f97b68e84112",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "50484fe7450b": {
+  "identity": {
+   "one_liner": "纯 Erlang 实现的 Ecto 风格数据库层，提供可插拔 PostgreSQL/SQLite 后端",
+   "review": "Kura 是面向 Erlang/OTP 应用的数据库层，实现 schema、changeset、可组合查询构建、迁移、多租户等 Ecto 风格抽象。通过 behaviour 定义 schema 与 repo，SQL 采用参数化生成。后端可插拔：kura_postgres（经 minato）与 kura_sqlite（经 esqlite）。注意部分能力（如窗口函数、向量搜索）依赖后端声明的 capability，SQLite 暂不支持数组与向量类型。",
+   "highlights": [
+    "提供 schema、changeset、查询构建器、Repo CRUD、关联预加载、组合主键与嵌入式 schema",
+    "支持 Multi 事务管道、基于模块发现的迁移、乐观锁、offset/cursor 分页与服务端游标流式读取",
+    "实现 {encrypted, Type} 字段的 AES-256-GCM 加密存储、密钥轮换与列绑定（v2 帧），并通过 capability 模型声明后端支持的查询特性"
+   ],
+   "use_cases": [
+    "需要数据校验与参数化 SQL 的 Erlang 应用数据访问层",
+    "基于 schema 前缀或租户属性隔离的多租户系统",
+    "使用 pgvector 向量列做嵌入检索的场景（需 PostgreSQL）"
+   ]
+  },
+  "sha": "50484fe7450b",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "518b4f964a53": {
+  "identity": {
+   "one_liner": "多账户 Gmail 统一收件箱客户端，本地缓存支持键盘操作",
+   "review": "Mailboat 是一个运行在 macOS 和 Windows 上的开源 Gmail 客户端，使用 Tauri、Rust、SQLite 和 React 构建。它将多个 Gmail 账户汇总到一个收件箱中，并通过本地缓存支持即时浏览和搜索，支持键盘快捷键和命令面板。用户需要自行配置 Google OAuth 凭据才能使用，登录令牌存储在系统密钥链中。该项目尚处于早期开发阶段，当前版本为 0.2.1。",
+   "highlights": [
+    "支持将多个 Gmail 账户汇总到一个统一收件箱中，并直接调用 Gmail API",
+    "使用 SQLite 与 FTS5 实现本地全文搜索，支持 Gmail 原生搜索操作符（如 from:、has:attachment）",
+    "包含 ⌘K 命令面板与 Gmail 快捷键（j/k、e、# 等），邮件正文在沙箱环境中以无脚本方式渲染"
+   ],
+   "use_cases": [
+    "需要同时管理个人与工作等多个 Gmail 账户的用户",
+    "偏好纯键盘操作与快捷键导航的桌面邮件使用者",
+    "希望在本地缓存中快速浏览和搜索邮件的 macOS / Windows 用户"
+   ]
+  },
+  "sha": "518b4f964a53",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

@@ -2750,5 +2750,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "6631587eca53": {
+  "identity": {
+   "one_liner": "企业知识库问答系统，为答案标注文档版本、出处位置与时效有效性。",
+   "review": "document.ai/EAER 是一套面向企业的知识库问答引擎，核心机制是把版本、有效期、权限与验证纳入问答流程：代码层做引用、权限、时效等确定性检查，语义判断交由模型，证据不足则拒答。提供 Fast/Deep/Verified 三种执行模式与三类时间查询。运行依赖 Python 3.14、PostgreSQL、OpenSearch 及 OpenAI 兼容生成服务，许可证为 AGPL-3.0；集群版尚未实现，真实客户文档核对未做。",
+   "highlights": [
+    "每条答案标注来源文档的版本、具体位置，以及依据在目标日期是否有效；时间查询区分当前生效、某天实际生效与回溯三类",
+    "验证层由代码执行确定性检查（证据来源、权限、定位、数值日期、时效），语义支持判断由模型完成，核心结论未通过则整题拒答",
+    "检索与写入模块分离、权限由数据库二次核对，授权范围以句柄传递不进入模型上下文，包含提示注入防护与 OpenTelemetry 追踪"
+   ],
+   "use_cases": [
+    "制度、规范类文档会修订与作废的企业场景，需要答案标明版本与有效期的知识库问答",
+    "不同用户权限不同、需在数据库层核对访问范围的企业内部检索",
+    "需要按历史时点查询（回溯至某天系统所知的内容）的审计或合规问答"
+   ]
+  },
+  "sha": "6631587eca53",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "982bd0535a15": {
+  "identity": {
+   "one_liner": "React+Vite 前端与 Spring Boot 后端的全栈脚手架模板，零配置即可运行",
+   "review": "该项目是一个全栈启动模板，前端为 React 19 + Vite，后端为 Spring Boot 3.5 + Java 21（Maven），内置 todos 示例演示从前端到 JPA 的完整链路。默认使用内存 H2 数据库，通过 DB_URL 环境变量切换到 MySQL；开发环境由 Vite 代理 /api，Docker 部署时由 nginx 代理。面向从零学习 Web 全栈开发的学习者。",
+   "highlights": [
+    "提供 todo 示例功能，覆盖 React → API 客户端 → controller → service → JPA 的完整路径",
+    "默认使用内存 H2 数据库，设置 DB_URL 等环境变量即可切换到 MySQL",
+    "错误响应采用 RFC 9457 problem+json 格式，包含逐字段校验信息；提供 /actuator/health 健康检查端点"
+   ],
+   "use_cases": [
+    "初学者按示例代码路径学习前后端交互并仿照新增功能模块",
+    "以 Docker Compose 一键启动包含 MySQL 的本地开发或演示环境",
+    "作为包含测试、CI 与环境变量配置的全栈项目起点模板"
+   ]
+  },
+  "sha": "982bd0535a15",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

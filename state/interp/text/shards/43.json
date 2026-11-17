@@ -2738,5 +2738,49 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2b12735b69e5": {
+  "identity": {
+   "one_liner": "Django/SQLAlchemy 静态分析工具：ER 图、N+1 检测与迁移风险 lint",
+   "review": "ORM Lens（前身为 django-orm-lens）通过静态解析 Django 与 SQLAlchemy（Alembic）模型，无需数据库、无需启动应用或可用的虚拟环境，即可生成 ER 图、检测 N+1 循环、发现 schema 漂移并评估迁移风险。它提供 VS Code 扩展、CLI（17 个子命令，含 SARIF 与 pre-commit 支持）及面向 AI 代理的 MCP 服务器三种形态，采用 MIT 许可证，支持 Python 3.9+ 与 Docker 多架构镜像。",
+   "highlights": [
+    "静态解析模型代码，无需数据库连接、无需 DJANGO_SETTINGS_MODULE 或可运行环境，适用于冷克隆与损坏的 venv",
+    "提供 18 条 lint 规则（DOL001–DOL041）及 QuickFixes、schema 漂移检测、迁移爆炸半径分析与索引建议",
+    "三种分发形态：VS Code 扩展（侧边栏树与实时 Mermaid ER 图）、CLI（含 GitHub Action 与 SARIF 输出）、只读 MCP 服务器（14 个工具）"
+   ],
+   "use_cases": [
+    "在 CI 中对迁移风险与 schema 漂移做 lint 检查，输出 PR 注释",
+    "接手陌生 Django/SQLAlchemy 项目时快速查看应用与模型的关系图",
+    "让 AI 编码代理通过 MCP 工具查询真实模型结构"
+   ]
+  },
+  "sha": "2b12735b69e5",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "4cba8110165e": {
+  "identity": {
+   "one_liner": "面向 MySQL/TiDB/PostgreSQL 的离线 SQL 审计引擎，提供 CLI 与 MCP 服务两种运行方式",
+   "review": "DeltaScope 是用 Go 编写的 SQL 审计工具，对 MySQL、TiDB、PostgreSQL 的 DDL/DML 语句输出 verdict（pass/review/reject）、blocker、notice 等结果。可通过安装脚本、Homebrew 或 npm 的 MCP 启动器部署，支持离线运行，也可连接数据库读取元数据。单次请求对 MySQL/TiDB 有 1024 条顶层语句配额，超出的语句标记为 incomplete。",
+   "highlights": [
+    "支持 --dialect mysql|tidb|postgresql 离线审计，也可连接数据库进行基于元数据的审查",
+    "提供 JSON、SARIF、github-actions、github-summary、gitlab-codequality 等输出格式，并支持 --fail-on 控制退出码",
+    "以 CLI 二进制、HTTP 服务（deltascope-server）和 MCP 服务（deltascope-mcp）形式发布于各平台 Release 归档中"
+   ],
+   "use_cases": [
+    "在 CI/CD 流水线中审计迁移 SQL 文件，按 warning/review 阈值阻断合并",
+    "通过 MCP 协议将 SQL 审计能力接入 AI 编码工具或代理工作流",
+    "在无法连接数据库的离线环境中用 --target-version 声明版本事实进行规则校验"
+   ]
+  },
+  "sha": "4cba8110165e",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }

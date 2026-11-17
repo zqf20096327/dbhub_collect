@@ -2855,5 +2855,115 @@
   "ver": 4,
   "prompt_ver": "4.0",
   "layer": "text"
+ },
+ "2900a0360a4a": {
+  "identity": {
+   "one_liner": "基于 FoundationDB 的分布式事务文档数据库，以命名空间实现多租户隔离。",
+   "review": "Kronotop 是构建在 FoundationDB 之上的分布式文档数据库，以命名空间（FoundationDB 键前缀）作为轻量逻辑数据库，支持多租户隔离。提供 Bucket 文档模型与 ZMap 有序键值模型，两者可在同一 ACID 事务中提交；文档正文存于本地磁盘的 Volume 引擎。当前处于开发者预览阶段，API 与内部格式可能变动。运行需 Java 25 以上，可通过 Docker Compose 或源码构建部署。",
+   "highlights": [
+    "提供 Bucket（BSON 文档）与 ZMap（有序键值）两种数据模型，可在同一事务中共同提交",
+    "支持 RESP2/RESP3 协议，可使用 redis-cli、valkey-cli 等现有客户端连接",
+    "支持单字段、复合与向量二级索引，以及游标分批返回查询结果的流式读取"
+   ],
+   "use_cases": [
+    "多租户 SaaS：每个租户一个命名空间，键空间级隔离，单事务可跨多个命名空间提交",
+    "Agent 记忆存储：每代理一个命名空间，向量检索与 ZMap 状态更新在同一事务内完成",
+    "分布式协调：基于租约的锁、原子获取与带 fencing token 的版本戳提交"
+   ]
+  },
+  "sha": "2900a0360a4a",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "ad9e252e3ce6": {
+  "identity": {
+   "one_liner": "DBOS 相关文章、资源与社区项目的精选清单",
+   "review": "该仓库是一个收录 DBOS 资源的 awesome 清单，面向希望了解或使用 DBOS 持久化执行框架的开发者。内容按类别组织：文档与示例链接、博客文章与媒体报道、播客、基准测试、集成与社区贡献项目（含 Pydantic AI、LlamaIndex、Supabase 等集成及 Rust、Scala、Clojure 第三方实现）、技术演讲和官方社交媒体入口。清单本身不含代码，仅通过链接导航外部资源。",
+   "highlights": [
+    "收录文档、博客、播客、基准测试、演讲等多类外部资源链接",
+    "包含 Pydantic AI、LlamaIndex、OpenAI Agents SDK、Supabase 等集成方案",
+    "收录 Rust、Scala、Clojure 等语言的社区第三方实现"
+   ],
+   "use_cases": [
+    "查找 DBOS 官方文档、示例与博客入口",
+    "了解 DBOS 与 AI 代理框架、数据平台的集成做法",
+    "寻找 TypeScript 之外的社区语言实现"
+   ]
+  },
+  "sha": "ad9e252e3ce6",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "699442431f1c": {
+  "identity": {
+   "one_liner": "CVE 漏洞与 PoC 汇总索引库，通过 GitHub Actions 每日聚合多源数据",
+   "review": "该仓库每日聚合 CVEProject、Nuclei、Exploit-DB、Metasploit、CISA KEV、EPSS 等数据源，生成包含约 15.6 万条 CVE 的 JSON 索引，附 0-100 风险评分（基于 KEV、EPSS、CVSS 等）。使用方为安全运营、渗透测试与 DevSecOps 人员；无需 API 密钥，通过 curl 下载 JSON 后可用 jq 等本地工具查询。",
+   "highlights": [
+    "每 24 小时通过 GitHub Actions 聚合 CVE 列表、Nuclei 模板、Exploit-DB CSV、Metasploit 模块、CISA KEV 与 EPSS 数据并去重归一化",
+    "以压缩 JSON 格式发布数据，README 给出与 NVD JSON 对比的 token 用量基准",
+    "提供本地 CLI 查询方式，数据通过 raw.githubusercontent.com 下载，无需注册 API"
+   ],
+   "use_cases": [
+    "查询某 CVE 是否存在公开 PoC、Nuclei 模板或 Metasploit 模块",
+    "结合 CISA KEV 与 EPSS 数据筛选已收录的漏洞条目",
+    "将 JSON 索引接入脚本或检索流程进行本地化漏洞数据查询"
+   ]
+  },
+  "sha": "699442431f1c",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "37478669f367": {
+  "identity": {
+   "one_liner": "基于 Postgres + pgvector 的自托管 AI 记忆库，支持混合检索、MCP 与知识图谱",
+   "review": "Memory Vault 是一个本地优先的 AI 记忆存储系统，将决策、对话、笔记等以向量嵌入、全文索引和关系数据统一存入单个 Postgres 数据库。它通过 MCP 让 Claude 在会话中读写记忆，提供 REST API、Web 仪表盘和基于 LM Studio 的本地 LLM 问答，供自托管用户和 AI 应用开发者使用。默认 CPU 运行，无需 GPU；远程 MCP 访问默认关闭，需配置令牌。",
+   "highlights": [
+    "提供语义向量与关键词结合的混合检索（向量 + 全文 + RRF），向量、全文与关系数据存放于同一 Postgres 数据库",
+    "通过 MCP 暴露 recall、remember、forget、purge_forgotten、move_memory、memory_status 六个工具，支持 stdio、Streamable HTTP 和 SSE 传输",
+    "自动提取实体与关系生成知识图谱，支持多记忆空间命名空间与带来源标注的本地 LLM 问答"
+   ],
+   "use_cases": [
+    "为 Claude Desktop / Claude Code 会话提供跨会话的记忆读写",
+    "通过本地 LLM 检索个人笔记与项目资料，数据保留在本机",
+    "基于 REST API 将持久记忆层集成到自建 AI 应用中"
+   ]
+  },
+  "sha": "37478669f367",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
+ },
+ "9e3878fae4b9": {
+  "identity": {
+   "one_liner": "面向 Grace Shop 的 Flutter POS 收银 Android 应用，连接 Railway/TiDB 后端 API",
+   "review": "这是 Grace Shop 的安卓收银（POS）客户端，用 Flutter 构建，界面语言为印尼语。它连接部署在 Railway 上的 Node.js + TiDB MySQL 后端，全部数据来自实时 API，应用内不含示例数据。功能涵盖登录（cookie 会话，服务端 24 小时有效）、收银结账（支持 Tunai/QRIS/Transfer/借记卡四种支付方式）、商品库存管理、交易查询与取消（管理员，取消时由服务端回补库存）以及营收报表。角色区分：管理员可增删改商品、取消交易、查看报表；收银员仅可查看。README 还包含特定 VM 环境下的构建说明，如强制 JVM 使用 IPv4、配置 egress 代理及 pub-cache 离线依赖等。",
+   "highlights": [
+    "提供收银结账流程：商品网格、搜索与分类筛选、购物车数量调整，结账请求发送至 POST /api/checkout，支持 Tunai、QRIS、Transfer、Kartu debit 四种支付方式",
+    "支持基于 cookie（kasirku_session，HttpOnly，24 小时）的登录会话，应用重启后可恢复登录，登出时同步删除服务端会话",
+    "管理员可管理商品（增改删，商品曾出现在交易中时删除被服务端拒绝）、取消交易（服务端回补库存）并查看 7/30/90 天营收与交易报表、热销商品及按支付方式的销售汇总"
+   ],
+   "use_cases": [
+    "Grace Shop 门店的日常收银与销售录入，连接已部署在 Railway 的后端实例使用",
+    "管理员通过应用查看当日营收、7/30/90 天经营摘要与热销商品报表，并处理商品和交易取消",
+    "基于 Flutter 工具链自行构建 APK（flutter build apk --release）用于安装测试"
+   ]
+  },
+  "sha": "9e3878fae4b9",
+  "source": "readme",
+  "generated_at": "2026-11-17",
+  "ver": 4,
+  "prompt_ver": "4.0",
+  "layer": "text"
  }
 }
