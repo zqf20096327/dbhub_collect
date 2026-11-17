@@ -27,7 +27,7 @@ URL 规范（与 P3 dbhub_page 改造约定一致，改这里必须同步那边�
 import argparse, datetime, io, json, os, re, sys, time
 import xml.etree.ElementTree as ET
 
-VER = "build_site/1.1"   # 1.1：补 urls.json URL 契约出口（站点侧唯一权威，防 gen_card canonical/sitemap/站点页三处漂移）
+VER = "build_site/1.2"   # 1.2：light() 增 dbs（站点旧版排版复刻需要：清单「库」列 + 冠军矩阵通用标记）；1.1：补 urls.json 契约出口
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PAGE = 100
 
@@ -66,9 +66,11 @@ def one_liner(r):
     return ((r.get("text") or {}).get("one_liner") or (r.get("desc") or {}).get("one_liner") or "").strip()
 
 def light(fn, r):
-    """列表分片轻字段：够列表页渲染即可，严禁整卡拷贝（卡 JSON 有 _fp 等内部字段，且体积失控）。"""
+    """列表分片轻字段：够列表页渲染即可，严禁整卡拷贝（卡 JSON 有 _fp 等内部字段，且体积失控）。
+    dbs=适配库名单（通常 1-3 个）：站点旧版排版的清单「库」列与冠军矩阵「通用工具」标记用。"""
     return {"fn": fn, "name": (fn.split("/")[-1] if "/" in fn else fn),
             "stars": r.get("stars"), "lang": r.get("language"), "cat": cat_of(r),
+            "dbs": (r.get("dbs") or [])[:6],
             "ol": one_liner(r)[:120], "url": f"/p/{fn}/"}
 
 def paged(items, page=PAGE):
@@ -232,11 +234,11 @@ def _selftest():
     assert slugify("测试/质量") == "misc" and slugify("") == "misc"
     assert paged([]) == [[]] and [len(p) for p in paged(list(range(255)))] == [100, 100, 55]
     assert [len(p) for p in paged(list(range(100)))] == [100]
-    r = {"stars": 9, "language": "Go", "judge": {"cat": "备份"},
+    r = {"stars": 9, "language": "Go", "judge": {"cat": "备份"}, "dbs": ["PostgreSQL"],
          "text": {"one_liner": "x" * 200}}
     it = light("a/b", r)
     assert it == {"fn": "a/b", "name": "b", "stars": 9, "lang": "Go", "cat": "备份",
-                  "ol": "x" * 120, "url": "/p/a/b/"}
+                  "dbs": ["PostgreSQL"], "ol": "x" * 120, "url": "/p/a/b/"}
     assert light("c/d", {"desc": {"cat": "管理", "one_liner": "y"}})["cat"] == "管理"
     assert light("e/f", {})["cat"] is None and light("e/f", {})["ol"] == ""   # 空仓安全
     assert slugify("内核/引擎") == "misc" and slugify("YashanDB") == "yashandb"
