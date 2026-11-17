@@ -142,11 +142,16 @@ Now it's reversed, and the default is string, to get a Lob reader, give the `Lob
 
 Watch out, Oracle will error out if the CLOB is too large, and you have to use `godror.Lob` in such cases!
 
-If you return Lob as a reader, watch out with `sql.QueryRow`, `sql.QueryRowContext` !
-They close the statement right after you `Scan` from the returned `*Row`, the returned `Lob` will be invalid, producing
-`getSize: ORA-00000: DPI-1002: invalid dpiLob handle`.
+If you return Lob as a reader, the `Lob` of a row is valid only till the next `rows.Next` call,
+and till its statement is closed: after that it returns `godror.ErrLOBClosed`.
 
-So, use a separate `Stmt` or `sql.QueryContext`.
+So watch out with `sql.QueryRow`, `sql.QueryRowContext` !
+They close the rows right after you `Scan` from the returned `*Row`, and the statement with it,
+unless it is a prepared one.
+
+So, use `sql.QueryContext` and read the `Lob` before the next `rows.Next`, or use a separate `Stmt`
+(`Prepare`): then the `Lob` of the last row read remains valid after `rows.Close` (and `Row.Scan`),
+till the `Stmt` is executed again or closed.
 
 For writing a LOB, the LOB locator returned from the database is valid only till the `Stmt` is valid!
 So `Prepare` the statement for the retrieval, then `Exec`, and only `Close` the stmt iff you've finished with your LOB!
@@ -165,8 +170,8 @@ time.Now().Format("2-Jan-06 3:04:05.000000 PM")
 See [#121 under the old project](https://github.com/go-goracle/goracle/issues/121).
 
 ### Timezone
-See the [documentation](./doc/timezone.md) - but for short, the database's OS' time zone is used,
-as that's what SYSDATE/SYSTIMESTAMP uses. If you want something different (because you fill DATE columns differently),
+See the [documentation](./doc/timezone.md) - but for short, the session's time zone (SESSIONTIMEZONE) is used
+for DATE and TIMESTAMP values, as that's what the server uses to convert them. If you want something different (because you fill DATE columns with SYSDATE in another time zone),
 then set the "location" in  the connection string, or the `Timezone` in the `ConnectionParams` accord to your chosen timezone.
 
 ### Stored procedure returning cursor (result set)

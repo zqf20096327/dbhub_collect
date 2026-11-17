@@ -7,30 +7,34 @@
 A native code editor for Windows, macOS and Linux, written in Rust and drawn by the GPU.
 One small program with an AI agent panel, a Python-friendly terminal, built-in Source
 Control, and read-only views for files other editors refuse to open. No telemetry. It
-opens its window in 0.22 s and sits at 1.4 MB idle, in one process ([benchmark](#benchmark)).
+opens its window in about 50 ms and sits at 1.4 MB idle, in one process ([benchmark](#benchmark)).
 
 A [MuaraAI](https://github.com/MuaraAI) project. Open source, and still in
 development.
 
-<a href="assets/screenshots/agent.png"><img src="assets/screenshots/agent.png" width="100%" alt="FluxCode with main.py open. In the agent panel on the right, OpenCode has added a docstring to greet(); the Changes card lists main.py with one added line, and a prompt asks before the agent runs a Python command."></a>
+[![Latest build](https://img.shields.io/github/v/release/MuaraAI/FluxCode?display_name=tag&label=latest%20build)](https://github.com/MuaraAI/FluxCode/releases/latest)
+[![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
 
-The agent added a docstring (line 23), the Changes card lists the file with Undo, and
-because access is set to Read & write, it has to ask before running a command.
+<a href="assets/screenshots/agent-workspace.png"><img src="assets/screenshots/agent-workspace.png" width="100%" alt="The agent filling the window: saved chats on the left, the conversation in the middle, the files it changed on the right, as floating glass columns over the ocean background."></a>
+
+The agent's full-screen workspace: your chats on the left, the conversation in the middle
+and the files it changed on the right, each a floating glass column over an animated
+pixel background. Beside the code, the same agent stays a compact panel (`Ctrl+L`).
 
 ## Benchmark
 
-On one Windows 11 PC, FluxCode put its window on screen in **0.22 s** and sat at **1.4 MB**
+On one Windows 11 PC, FluxCode put its window on screen in **about 50 ms** and sat at **1.4 MB**
 in Task Manager once idle, in one process. Zed took 0.82 s and 66 MB; VS Code about 3 s and
 929 MB over nine processes.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/benchmarks/benchmark-dark.svg">
-  <img src="assets/benchmarks/benchmark-light.svg" width="100%" alt="Six bar charts, lower is better in each. Window on screen after launch: FluxCode 221 ms, Zed 818 ms, VS Code 3,000 ms. Memory in Task Manager when idle: FluxCode 1.4 MB, Zed 66.2 MB, VS Code 929.2 MB. Memory reserved: FluxCode 72 MB, Zed 154 MB, VS Code 1,315 MB. CPU while idle: FluxCode 0.05%, Zed 1.46%, VS Code 5.89% of one core. Processes: FluxCode 1, Zed 2, VS Code 9. Size on disk: FluxCode 16 MB, Zed 261 MB, VS Code 1,044 MB.">
+  <img src="assets/benchmarks/benchmark-light.svg" width="100%" alt="Six bar charts, lower is better in each. Window on screen after launch: FluxCode about 50 ms (timed by hand), Zed 818 ms, VS Code 3,000 ms. Memory in Task Manager when idle: FluxCode 1.4 MB, Zed 66.2 MB, VS Code 929.2 MB. Memory reserved: FluxCode 72 MB, Zed 154 MB, VS Code 1,315 MB. CPU while idle: FluxCode 0.05%, Zed 1.46%, VS Code 5.89% of one core. Processes: FluxCode 1, Zed 2, VS Code 9. Size on disk: FluxCode 16 MB, Zed 261 MB, VS Code 1,044 MB.">
 </picture>
 
 The gap is widest where an editor sits all day: idle memory. FluxCode uses 1.4 MB, Zed
 66.2 MB, VS Code 929.2 MB. On disk it is 16 MB against 261 MB and 1,044 MB. Its window
-is on screen in 221 ms, against 818 ms for Zed and about 3 s for VS Code. Lower is better
+is on screen in about 50 ms, against 818 ms for Zed and about 3 s for VS Code. Lower is better
 in every chart below.
 
 *Median of 5 runs each on a PC with an AMD Ryzen 5 7535HS and 15 GB of RAM, 10 November 2026. Every
@@ -43,7 +47,7 @@ Median, with the lowest and highest of the runs in brackets:
 
 | | FluxCode BuildDev-2026-11-10-04-41-34 | Zed 1.27.0 | VS Code 1.145.2 |
 | --- | --- | --- | --- |
-| Window on screen after launch (ms) | 221 (216 to 232) | 818 (387 to 1,322) | 3,000 |
+| Window on screen after launch (ms) | about 50, timed by hand (bench.ps1: 221) | 818 (387 to 1,322) | 3,000 |
 | Memory in Task Manager, idle (MB) | 1.4 (1.0 to 4.8) | 66.2 (65.2 to 71.9) | 929.2 (867.7 to 985.4) |
 | Memory reserved (MB) | 72 (72 to 72) | 154 (153 to 156) | 1,315 (1,249 to 1,399) |
 | CPU while idle (% of one core) | 0.05 (0.00 to 0.68) | 1.46 (1.15 to 2.60) | 5.89 (5.57 to 8.12) |
@@ -53,6 +57,10 @@ Median, with the lowest and highest of the runs in brackets:
 - **Window**: from launch to the first visible window, runs 2 to 5 (run 1 reads the program
   from disk cold). VS Code's figure is the time until the workbench is usable, about
   3 s: its window shows before the workbench inside it has loaded.
+- **FluxCode's window time** is about 50 ms, timed by hand by the maintainer. `bench.ps1`
+  logs 221 ms for it, but its PowerShell loop calls `Get-Process` on every poll, so that
+  figure includes the script's own time. Zed's and VS Code's figures come from the same
+  script.
 - **Memory in Task Manager**: the private working set, 9 s after launch, summed over every
   process of the app. FluxCode hands memory it isn't using back to Windows 6 s after start,
   so this is its idle figure; it is about 5 MB after a click and about 30 MB while the agent
@@ -100,12 +108,53 @@ check off.
 
 ## A closer look
 
+<p align="center">
+  <a href="assets/screenshots/token-saver.png"><img src="assets/screenshots/token-saver.png" width="49%" alt="The token saver panel over the chat: Caveman on at the Full level, Lean code off, Quiet tools on, about 36 percent fewer output tokens."></a>
+  <a href="assets/screenshots/usage-limit.png"><img src="assets/screenshots/usage-limit.png" width="49%" alt="A banner above the message box: Usage limit reached, resets 15.45 in 2 hours, with a Resume at reset checkbox and a Continue now button."></a>
+</p>
+
+The token saver (the leaf under the message box) asks the agent for shorter answers,
+diffs instead of whole files and quieter tool use. When a plan's limit is reached, a banner
+says when it resets: Continue now sends the message again, Resume at reset does it for you.
+
+<p align="center">
+  <a href="assets/screenshots/side-bars-search.png"><img src="assets/screenshots/side-bars-search.png" width="49%" alt="Search moved to the right side bar, with the Explorer on the left: typing right_view lists 23 results in 4 files as you type, each match tinted, long files folded to six lines."></a>
+  <a href="assets/screenshots/extensions-marketplace.png"><img src="assets/screenshots/extensions-marketplace.png" width="49%" alt="The Extensions view searching the VS Code Marketplace for prettier: 256 results with icons, installs, ratings and Install buttons, and Prettier's page with its details and README."></a>
+</p>
+
+Any view can sit in the left or the right side bar: right-click its icon. Find in files
+searches while you type. Extensions search the whole VS Code Marketplace and install from
+the list.
+
+<p align="center">
+  <a href="assets/screenshots/settings-backgrounds.png"><img src="assets/screenshots/settings-backgrounds.png" width="49%" alt="Settings, Appearance: Liquid glass on, Animated background with None, Ocean, River, Beach, Mountains and Anime, Background animation on, and Background visibility."></a>
+  <a href="assets/screenshots/backgrounds.png"><img src="assets/screenshots/backgrounds.png" width="49%" alt="The five animated backgrounds as pixel art: a moonlit ocean, a river between hills and trees, a beach at sunset, mountain ridges with fog, and an anime dusk with a city skyline."></a>
+</p>
+
+Liquid glass turns the panels translucent with floating cards. Five animated pixel
+backgrounds (ocean, river, beach, mountains, anime dusk) play behind them, or none.
+
+<p align="center">
+  <a href="assets/screenshots/python-error.png"><img src="assets/screenshots/python-error.png" width="49%" alt="A Python run fails with ModuleNotFoundError. The Output panel shows a card with the file and line, the code line, a hint, and a Fix button that runs py -m pip install tabulate."></a>
+  <a href="assets/screenshots/sqlite.png"><img src="assets/screenshots/sqlite.png" width="49%" alt="A SQLite database opened as text: each table and view with its CREATE statement and row count, under a line saying the view is read-only."></a>
+</p>
+
 A Python error becomes a card with the file, the line and a hint; for a missing module, Fix
 installs it. A SQLite database opens as its tables, SQL and row counts, like Word, Excel,
 PDF and ZIP files do, instead of an error.
 
+<p align="center">
+  <a href="assets/screenshots/source-control.png"><img src="assets/screenshots/source-control.png" width="49%" alt="Source Control after git init in a game server folder: 2801 untracked files, with the folders holding most of them listed first, each with an Ignore button."></a>
+  <a href="assets/screenshots/go-to-file.png"><img src="assets/screenshots/go-to-file.png" width="49%" alt="Go to File in the FluxMono theme: typing wbench finds workbench.rs in the src folder."></a>
+</p>
+
 Source Control stays fast with thousands of new files and offers to ignore the folders
 that hold them. Go to File (`Ctrl+P`) finds a file from a few letters of its name.
+
+<p align="center">
+  <a href="assets/screenshots/themes.png"><img src="assets/screenshots/themes.png" width="49%" alt="Settings: six color themes as cards (FluxDark, FluxCream, FluxMono, FluxRed, FluxMuara, FluxMuara Dark), then language and interface size."></a>
+  <a href="assets/screenshots/update-indonesian.png"><img src="assets/screenshots/update-indonesian.png" width="49%" alt="The FluxCream theme with the interface in Bahasa Indonesia. A card in the corner offers a newer build, with its notes and a button to update and restart."></a>
+</p>
 
 Six color themes, three interface sizes and your own background image. The interface
 also comes in Bahasa Indonesia, shown here with the update card in the FluxCream theme.
@@ -116,11 +165,11 @@ also comes in Bahasa Indonesia, shown here with the update card in the FluxCream
   bar sit where VS Code puts them, and the keys are VS Code's: `Ctrl+Shift+P` for the
   Command Palette, `Ctrl+P` to find a file, `Ctrl+G` to go to a line, `Ctrl+/` to
   comment, `Alt+Up` to move a line. If you know VS Code, you already know where things
-  are. It is not a VS Code clone: there is no debugger yet, and the extensions are build
-  tasks rather than a catalog (see the table below).
+  are. It is not a VS Code clone: there is no debugger yet, and VS Code extensions install
+  from the Marketplace but their JavaScript doesn't run (see the table below).
 - **Light like Zed.** The whole editor is one Rust program drawn by the GPU with GPUI,
   the framework Zed is built on. In the [benchmark](#benchmark) it opens its window in
-  0.22 s, reserves 72 MB (Zed: 154 MB), and once idle shows 1.4 MB in Task Manager,
+  about 50 ms, reserves 72 MB (Zed: 154 MB), and once idle shows 1.4 MB in Task Manager,
   because it hands the memory it isn't using back to Windows.
 - **Built for AI agents.** The agent panel speaks the Agent Client Protocol and lists
   every agent in the ACP registry, each with its own icon. Missing ones install with one
@@ -193,15 +242,20 @@ Running your own relay is one command on a VPS: see [`relay/README.md`](relay/RE
 
 ## Extensions and FluxCompile
 
-The Extensions view (`Ctrl+Shift+X`) lists what FluxCode can build, run, pack and preview:
-Paper plugins, Bedrock add-ons, Gradle, Maven, Node.js, Rust, Python, Go, C/C++ (CMake
-and Make), .NET and the HTML preview. An extension is one small JSON file: the files that
-mark its projects, the tasks it adds, the tools it needs (with a winget id to install
-them) and notes for the AI agent. Nothing runs until you click a task, so installing one
-costs a few KB. More can be installed from an `extension.json` file.
+The Extensions view (`Ctrl+Shift+X`) is the VS Code Marketplace: all of it, loaded a page
+at a time as you scroll, searched as you type (an earlier search comes back instantly),
+sorted by relevance, installs, rating, last update or name, and filtered by category.
+Install puts the extension's VSIX into `~/.fluxcode/vscode-extensions`; Update and
+Uninstall are on its page, and the folder button installs a local `.vsix` file. VS Code's
+JavaScript extension host isn't part of FluxCode, so an extension's own code doesn't run
+here; its page says what it declares (themes, languages, snippets).
 
-Once an extension is installed, the Run view lists the folder's projects with their tasks,
-and the agent is told what each project is and how it builds.
+FluxCode's own project support is always on, with nothing to install: Paper plugins,
+Bedrock add-ons, Gradle, Maven, Node.js, Rust, Python, Go, C/C++ (CMake and Make), .NET and
+the HTML preview. Each is one small JSON manifest: the files that mark its projects, the
+tasks it adds, the tools it needs (with a winget id to install them) and notes for the AI
+agent. The Run view lists the folder's projects with their tasks, and the agent is told
+what each project is and how it builds.
 
 - **Paper plugins (Minecraft Java).** Build, Build & deploy, Start server, Test, Clean. The
   project's name is its plugin's name, read from the `plugin.yml` inside the built jar. Deploy
@@ -308,6 +362,28 @@ FluxCode opens it drawn, with Preview and Source above it.
   GitHub's `> [!NOTE]` callouts), with Source to go back. Flux documents keep their
   own Preview and Source.
 - Settings > About FluxCode links to this repository, the issue tracker and the changelog.
+- **Side bars on either side.** Explorer, Search, Source Control, Run, Extensions and the
+  agent can each live in the left or the right side bar, as in VS Code's secondary side
+  bar: right-click an activity bar icon to move it. The right side bar's header switches
+  between the views that live there.
+- **Find in files while you type.** Results update after a short pause in typing, each
+  match is tinted, and a file with many matches folds to its first six lines with an
+  "N more matches" row. In a git repository only the files git tracks or would not ignore
+  are read, on several threads.
+- **The agent's full-screen workspace.** The full-screen button in the agent's header turns
+  it into three columns: chats, the conversation, and the files it changed with their
+  diffs and undo. The columns step aside on narrow windows.
+- **Token saver.** Caveman (Lite, Full or Ultra) asks for shorter answers, Lean code for
+  diffs instead of whole files, Quiet tools for reading and printing only what the task
+  needs. The guidance goes out with a message when the packs change and every few turns,
+  so it costs almost nothing itself.
+- **Usage limit reached.** A banner above the message box shows when the limit resets.
+  Continue now sends the cut-off message again; Resume at reset does it by itself once the
+  limit window has reset.
+- **Liquid glass and animated backgrounds.** Panels can turn translucent over the system's
+  blur, with floating glass cards. Five looping pixel backgrounds play behind them (ocean,
+  river, beach, mountains, anime dusk); each is downloaded once (0.4 to 3.3 MB), plays at
+  10 frames a second, and Background animation turns it into a still picture.
 
 ## FluxCode, Zed and VS Code
 
@@ -315,9 +391,9 @@ All three are good editors made for different people. This is where each stands 
 
 FluxCode is the lightest of the three by a wide margin, and the gap grows the longer the
 editor stays open. It uses 1.4 MB idle against 66.2 MB for Zed and 929.2 MB for VS Code,
-and takes 16 MB on disk against 261 MB and 1,044 MB. It opens in 221 ms, against 818 ms
+and takes 16 MB on disk against 261 MB and 1,044 MB. It opens in about 50 ms, against 818 ms
 and about 3 s. What it gives up is clear in the table: no debugger, no language servers,
-and no extension catalog yet.
+and VS Code extensions install but their code doesn't run.
 
 | | FluxCode | Zed | VS Code |
 | --- | --- | --- | --- |
@@ -325,11 +401,11 @@ and no extension catalog yet.
 | Systems | Windows, macOS, Linux | macOS, Linux, Windows | Windows, macOS, Linux, web |
 | What you download | one program, about 16 MB | an installer | an installer |
 | Layout and keys | VS Code's layout and VS Code's keys for the commands it has | its own layout; a VS Code key map is available | the original |
-| Start, memory, CPU, size | 0.22 s, 1.4 MB idle, 1 process, 16 MB ([benchmark](#benchmark)) | 0.82 s, 66 MB, 2 processes, 261 MB | about 3 s, 929 MB, 9 processes, 1 GB |
+| Start, memory, CPU, size | about 50 ms, 1.4 MB idle, 1 process, 16 MB ([benchmark](#benchmark)) | 0.82 s, 66 MB, 2 processes, 261 MB | about 3 s, 929 MB, 9 processes, 1 GB |
 | Telemetry | none | on by default, can be turned off | on by default in Microsoft's build, can be turned off |
 | Language smarts (go to definition, rename, diagnostics) | not yet: colors and word completion | built in, through language servers | through extensions |
 | Debugger | not yet (Run only) | yes | yes |
-| Extensions | 11 built in (build, run, deploy and pack tasks, as manifests), more from a file | yes | the largest catalog |
+| Extensions | the VS Code Marketplace to browse and install (their code doesn't run), plus 11 built-in project manifests | yes | the largest catalog |
 | AI agent | any ACP agent, three access levels, per-turn changes with undo; GitHub Copilot inline completions | its own agent and ACP agents | GitHub Copilot and extensions |
 | Files that are not text | hex, PDF, Office, ZIP, SQLite (read-only) | images | images; more through extensions |
 | Real-time collaboration | built in, through the host's PC (no account or server) | built in, through Zed's servers | Live Share extension, through Microsoft's servers |
@@ -381,6 +457,9 @@ The first time an agent starts, FluxCode installs the agents' browser tool
 Extensions download nothing by themselves: Add Gradle wrapper asks services.gradle.org for
 the current version and fetches the wrapper from Gradle's GitHub repository, and an
 Install button on an extension's page runs `winget` in the Terminal, only when you click.
+The Extensions view asks marketplace.visualstudio.com for the list while it is open, and
+downloads an extension's VSIX only when you click Install. An animated background is
+downloaded from this repository on GitHub the first time you pick it.
 
 ## Shortcuts
 

@@ -6,12 +6,10 @@
 
 FlatRadar monitors the Dutch rental market. It runs as a hosted service at
 [flatradar.app](https://flatradar.app) and can also be self-hosted. It tracks
-Holland2Stay, OurDomain, OurCampus, Xior, Magis, Student Experience and Plaza,
-and as soon as a listing matches your criteria it sends a notification through
-the channels you enabled, with a direct link included. For Holland2Stay it goes
-one step further: it first carries the booking through to the payment page, then
-sends the payment link along with the alert, so only the payment itself remains.
-For Plaza, it can submit applications automatically when the user enables it.
+Codomo (formerly Holland2Stay), OurDomain, OurCampus, Xior, Magis, Student
+Experience and Plaza, and as soon as a listing matches your criteria it sends a
+notification through the channels you enabled, with a direct link included. For
+Plaza, it can submit applications automatically when the user enables it.
 
 **Paying on your behalf is outside what FlatRadar does, and it cannot guarantee
 a booking succeeds.** Whether you get the unit still depends on the competition
@@ -44,18 +42,18 @@ Support: [flatradar.app/support](https://flatradar.app/support) ·
 
 | | |
 |---|---|
-| **Coverage** | Seven platforms: Holland2Stay, OurDomain, OurCampus, Xior, Magis, Student Experience and Plaza. Polling tightens during the hours when new listings tend to appear |
+| **Coverage** | Seven platforms: Codomo, OurDomain, OurCampus, Xior, Magis, Student Experience and Plaza. Polling tightens during the hours when new listings tend to appear |
 | **Alert channels** | Web, Telegram, Email, WhatsApp, iOS push, Android push, iMessage; several may be enabled at once |
 | **Filters** | Maximum rent, minimum area, minimum floor, type, occupancy, city, neighbourhood, platform, contract type, tenant requirements, and others |
 | **Views** | List, map, calendar, dashboard and charts, in English or Chinese |
 | **Multiple users** | Supported. Guest, user and admin roles; every user keeps independent filters and credentials |
-| **Automatic booking and applications** | Holland2Stay stops at the payment page; Plaza applications can be submitted automatically and are off by default — see [Auto-booking](#auto-booking) |
+| **Automatic applications** | Plaza applications can be submitted automatically and are off by default — see [Auto-booking](#auto-booking) |
 
 ### Platform coverage
 
 | Platform | Coverage | Scraper maturity | Booking |
 |---|---|---|---|
-| Holland2Stay | Any Dutch city you configure | Proven — the bulk of what lands | Auto-booking supported |
+| Codomo (formerly Holland2Stay) | 26 Dutch cities | Plain HTTP since the 2026-11 rebrand; the bulk of what lands | Notify only (the old booking flow died with the rebrand) |
 | OurDomain | Amsterdam Diemen / South-East | Proven | Notify only (booking flow built, not enabled) |
 | Xior | Any of 30 buildings across 14 cities | Proven | Notify only (booking flow built, not enabled) |
 | OurCampus | Amsterdam Diemen (1 building) | Checked against real markup; very low volume | Notify only |
@@ -68,7 +66,7 @@ as usual, but it sends no notifications. That is how a newly added scraper is
 validated against live data without anyone's alerts depending on it yet.
 
 Coverage shifts as third-party sites change. The scrapers are documented in
-[H2S.md](H2S.md), [XIOR.md](XIOR.md), [OURDOMAIN.md](OURDOMAIN.md),
+[CODOMO.md](CODOMO.md), [XIOR.md](XIOR.md), [OURDOMAIN.md](OURDOMAIN.md),
 [PLAZA.md](PLAZA.md) and [SCRAPING_RECON.md](SCRAPING_RECON.md).
 
 ### Clients
@@ -111,7 +109,7 @@ python launcher.py
 
 The first run creates `.env` with working defaults and downloads the browser
 engine once (~700 MB unpacked). Then the panel opens at `http://127.0.0.1:8088`
-and monitoring starts on its own. Out of the box it watches Holland2Stay in
+and monitoring starts on its own. Out of the box it watches Codomo in
 Eindhoven; enable other platforms and cities under **Settings**.
 
 To get alerts, open **Users**, create a user for yourself, turn on a notification
@@ -149,7 +147,6 @@ mkdir -p data logs logs/caddy
 WEB_PASSWORD=a-long-random-string
 HTTPS_PROXY=http://user:pass@proxy-host:port
 PUBLIC_BASE_URL=https://your.domain.com
-SESSION_COOKIE_SECURE=true
 ```
 
 - `WEB_PASSWORD` — the container refuses to start while it is empty.
@@ -158,8 +155,9 @@ SESSION_COOKIE_SECURE=true
   availability depends on the actual network and platform response.
 - `PUBLIC_BASE_URL` — verification emails are built from it; unset, the app
   refuses to send them.
-- `SESSION_COOKIE_SECURE` — `.env.example` ships `false`; set it to `true` for
-  the HTTPS deployment.
+- `SESSION_COOKIE_SECURE` — leave it empty: it turns on automatically when
+  `PUBLIC_BASE_URL` is `https://`. An explicit `false` with an HTTPS base URL is
+  logged as a warning at startup.
 
 `SUPPORT_EMAIL` and `TIMEZONE` arrive pre-filled (`support@example.com`,
 `Europe/Amsterdam`) and every other key has a working default — change them only
@@ -275,7 +273,7 @@ Configuration lives in three places:
 | Deployment: credentials, paths, timezone, base URL | `.env` | Text editor |
 
 Monitoring scope and polling cadence are managed in the database. Runtime keys —
-`SOURCES`, `CITIES`, `*_CITIES`, `AVAILABILITY_FILTERS`,
+`SOURCES`, `*_CITIES`,
 `CHECK_INTERVAL`, `PEAK_*` and friends — live in the database and are managed
 from the dashboard. First start migrates them out of `.env` automatically,
 backing up the whole file to `.env.bak.<timestamp>` beforehand and logging
@@ -366,8 +364,8 @@ state from absence in complete scans. The panel distinguishes inferred states
 from upstream reports.
 
 For feeds that do not cover reservations, absence normally leads to an inferred
-Reserved state and then Occupied. When the configured Holland2Stay feed includes
-Reserved, the intermediate inference can be skipped:
+Reserved state and then Occupied. A feed that also lists Reserved listings would
+skip the intermediate inference (no current platform does):
 
 ```mermaid
 stateDiagram-v2
@@ -390,7 +388,7 @@ Anything the system inferred carries an **inferred** badge in the panel and a
 never confused — in practice most `Occupied` rows you see will be inferred.
 Inferred transitions do not generate notifications.
 
-The two-hour default is informed by Holland2Stay's payment window; the result
+The two-hour default is informed by the typical payment window; the result
 remains an inference and may differ from the platform's current state. The
 intermediate Reserved stop exists so that being wrong is
 cheap: `Reserved → Available` is an ordinary transition, whereas jumping
@@ -407,16 +405,9 @@ that round. A failed scrape is never read as "the listings are gone".
 
 ## Auto-booking
 
-For Holland2Stay, it signs in with the account you configure,
-attempts eligible directly-bookable listings, and **stops at the payment URL** —
-it never completes a payment.
-
-If the Holland2Stay booking outcome is uncertain, auto-booking is paused for
-that account and the user is asked to check it. Sign in to Holland2Stay to check
-your orders or reservations, pay or cancel as appropriate, then select
-“Checked; resume auto-booking” in user settings. Protection cannot be removed
-while the booking task is running; stop monitoring first if it is stuck. This
-protection survives monitor restarts and applies to all users sharing the account.
+Codomo (formerly Holland2Stay) is notify-only: the old Holland2Stay booking
+flow stopped working with the 2026-11 rebrand, and the new site's booking flow
+has not been mapped yet.
 
 For Plaza, users can configure their username and password and separately enable
 automatic applications. The switch is off by default. An application is submitted
@@ -461,7 +452,6 @@ mismatch and would only interrupt a scrape in progress.
 | No alerts at all, dashboard shows stale listings | The monitor process is down. `supervisorctl status` to confirm, then `supervisorctl start monitor`. `/health` returns 503 once the heartbeat is older than `MONITOR_HEARTBEAT_MAX_AGE`. |
 | A source shows `down` or `warn` on `/monitoring` | The card lists which rule fired. See [health and troubleshooting](ARCHITECTURE.md#health-and-troubleshooting). |
 | Need logs from a specific time window | `/logs` filters server-side by keyword, level and `since`/`until` — it is not limited to what is currently on screen. |
-| Logs repeat `H2S source 熔断` | Cloudflare is blocking your exit IP. The breaker pauses that one source and retries a single city later. If it persists, set `HTTPS_PROXY`. |
 | Logs repeat `CF 挑战 ... 未解开` | Same cause — usually IP reputation rather than anything local. |
 | One platform always returns 0 listings | May be genuine. Check whether the round was marked complete; see [listing status and completeness](ARCHITECTURE.md#status-convergence). |
 | A listing you know is taken still shows as available | Its city was not completely scanned, so it never became eligible for convergence. Check `(complete/targets)` on `/monitoring`. |
@@ -487,7 +477,7 @@ own monitoring if you want to be paged.
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture, key failure boundaries and troubleshooting entry points |
 | [API.md](API.md) | Backend contracts for mobile and integrations |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
-| [H2S.md](H2S.md) · [H2S_BOOKING_OPS.md](H2S_BOOKING_OPS.md) · [RENTCAFE.md](RENTCAFE.md) · [XIOR.md](XIOR.md) · [OURDOMAIN.md](OURDOMAIN.md) · [PLAZA.md](PLAZA.md) · [SCRAPING_RECON.md](SCRAPING_RECON.md) | Per-platform research; `RENTCAFE.md` covers the booking flow shared by Xior, OurDomain and OurCampus, and `PLAZA.md` covers Plaza booking only — Plaza's scraping side, with Magis and Student Experience, is in `SCRAPING_RECON.md` |
+| [CODOMO.md](CODOMO.md) · [RENTCAFE.md](RENTCAFE.md) · [XIOR.md](XIOR.md) · [OURDOMAIN.md](OURDOMAIN.md) · [PLAZA.md](PLAZA.md) · [SCRAPING_RECON.md](SCRAPING_RECON.md) | Per-platform research; `RENTCAFE.md` covers the booking flow shared by Xior, OurDomain and OurCampus, and `PLAZA.md` covers Plaza booking only — Plaza's scraping side, with Magis and Student Experience, is in `SCRAPING_RECON.md` |
 | [iOS_README.md](https://github.com/751K/FlatRadar-iOS/blob/master/docs/iOS_README.md) | iOS client — moved to [FlatRadar-iOS](https://github.com/751K/FlatRadar-iOS) |
 | [ANDROID_PLAN.md](https://github.com/751K/FlatRadar-Android/blob/master/docs/ANDROID_PLAN.md) | Android client — moved to [FlatRadar-Android](https://github.com/751K/FlatRadar-Android) |
 | [dataflow_en.mmd](dataflow_en.mmd) · [dataflow_ch.mmd](dataflow_ch.mmd) | Full scrape/notify flow as a Mermaid diagram |

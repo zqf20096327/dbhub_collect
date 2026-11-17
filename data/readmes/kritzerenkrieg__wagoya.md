@@ -37,7 +37,7 @@ wagoya remembers people, not just conversations.
 
 - **`http_request`:** call any public HTTP API. Big responses (like a 400 KB OpenAPI file) can be searched with `find` or paged with `offset`, so the model reads an app's API docs instead of guessing. Pages that only render with JavaScript are read through the app's API instead.
 - **MCP client:** list servers in `data/mcp.json` (the same format as Claude Desktop / Claude Code), local commands or remote URLs, and their tools become available to the model as `mcp__<server>__<tool>`. Uses the official MCP Go SDK.
-- **Stored API keys:** owners save a key once, with `/key <host> <token>` in a DM to the bot or in `data/api_keys.json`, and `http_request` adds it to https requests to that host for owners only. The model never sees the key.
+- **Stored API keys:** owners save a key once, with `!key <host> <token>` in a DM to the bot or in `data/api_keys.json`, and `http_request` adds it to https requests to that host for owners only. The model never sees the key.
 - **Who can use them:** anyone who can trigger the bot can use `http_request`; MCP tools and stored keys are for whitelisted owners only. `http_request` refuses loopback, private, link-local and metadata addresses at connect time, so nobody can reach the server's own network through it.
 
 ```json
@@ -45,24 +45,6 @@ wagoya remembers people, not just conversations.
   "github": {"url": "https://api.githubcopilot.com/mcp/", "headers": {"Authorization": "Bearer <token>"}},
   "files":  {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "/srv/share"]}
 }}
-```
-
-### Claude Code tasks
-
-Owners can ask Rin to get coding work done ("have Claude Code add X to wagoya"). Claude Code runs on the owner's laptop with their own login, not on the server:
-
-- **Queue:** Rin's owner-only tools queue a task in `bot.db`, with the owner's own words. Her reply starts with `[Orchestration Initiated]`.
-- **Runner:** `cmd/claude-runner` on the laptop polls the queue over SSH (`wagoya task claim`), runs Claude Code in the repo's own folder, on whatever branch is checked out (R5), and reports back. Repos are the git checkouts under `roots`, up to 3 folders deep, found on every poll; an owner can also ask for a new project, which the runner creates in the first root (Q1).
-- **Permissions:** no limits of the runner's own (R1). Claude Code runs in `auto` mode with the owner's own settings (R6), and anything it needs permission for is posted as `[Orchestration Question]`: "Claude Code wants to do this… Reply *yes* to allow or *no* to deny." The server reads the owner's yes or no itself (R4). Actions the auto classifier refused are asked about at the end of the run, and a yes resumes the session with exactly those allowed. Waiting doesn't count toward the 30-minute limit.
-- **Results:** `[Orchestration Completed]` with Claude Code's own report (up to about 3,000 characters, R2), the commits and diff stat, then a line from Rin. She can fetch any task's full report (R3). A question from Claude Code comes as `[Orchestration Question]`; the owner's answer resumes the same session. Follow-ups ("also add a test for #3") continue it too.
-- **Pushing:** Claude Code can push, merge or deploy like anything else, if the owner allows it in a prompt. `push_claude_branch` remains for older tasks that have a `claude/task-N` branch.
-
-```sh
-go build -o ~/.local/bin/claude-runner ./cmd/claude-runner
-cat > ~/.config/wagoya-runner.json <<'JSON'
-{"host": "kritz", "remote": "~/wagoya/wagoya", "roots": ["~/Projects", "~/Programs"]}
-JSON
-claude-runner            # or: systemctl --user enable --now claude-runner (deploy/claude-runner.service)
 ```
 
 ### Chat behaviour
@@ -73,7 +55,7 @@ claude-runner            # or: systemctl --user enable --now claude-runner (depl
 - **Flood control:** someone who sends 10 messages in 2 minutes gets a one-word check by the model (spam or fast chat); spam earns a 5-minute timeout in every chat, and their messages are dropped before any model call. Model spend is capped at $2 a day; past it, only owners get answers.
 - **Ban-safe pacing:** all outgoing messages are globally spaced (default 1 every 3 s) and queued, never dropped.
 - **Web:** web search and link reading run as server-side tools on the provider.
-- **Owner commands:** handled by the bot itself, never stored or sent to the model. `/reset` clears the chat's transcript and summary for a fresh start (facts, memories and reminders stay). `/key` manages stored API keys, in a DM only. `/mute @person [30m]` and `/unmute @person` silence someone in every chat; `/mute` lists who is muted. Commands from anyone else are ignored.
+- **Owner commands:** handled by the bot itself, never stored or sent to the model. Commands start with `!` (so they don't clash with other bots' `/` commands). `!help` lists them. `!reset` clears the chat's transcript and summary for a fresh start (facts, memories and reminders stay). `!key` manages stored API keys, in a DM only. `!mute @person [30m]` and `!unmute @person` silence someone in every chat; `!mute` lists who is muted. `!budget` shows today's spend against the daily cap. Commands from anyone else are ignored.
 - **Prompt-injection hardening:** chat text, names and quotes are neutralised so they can't close or fake the prompt's sections. Owners are identified by WhatsApp ID, not by what a message claims.
 
 ### Model providers
@@ -134,7 +116,6 @@ internal/memtools   memory tools: search_facts, save_fact, invalidate_fact, save
 internal/tools      http_request (public-only) and the MCP client
 internal/ratelimit  global send pacer and per-chat cooldown
 internal/config     .env loading and validation
-cmd/claude-runner   laptop-side runner for Claude Code tasks (never deployed)
 ```
 
 Design notes: [`ARCHITECTURE.md`](ARCHITECTURE.md). Every design choice, with its reason: [`DECISIONS.md`](DECISIONS.md). Plan: [`ROADMAP.md`](ROADMAP.md).
@@ -145,7 +126,6 @@ Design notes: [`ARCHITECTURE.md`](ARCHITECTURE.md). Every design choice, with it
 go test ./...                           # offline
 LLM_LIVE=1 go test ./internal/llm -v    # real model calls (needs keys, costs money)
 EVAL=1 go test ./internal/eval          # golden set against the configured model (the deploy gate)
-CLAUDE_LIVE=1 go test ./cmd/claude-runner -run Live -v   # real Claude Code on a throwaway repo
 ```
 
 ## Data and privacy

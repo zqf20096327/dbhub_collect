@@ -1,7 +1,7 @@
 # Satori
 
 <p align="center">
-  <a href="https://metcalfsolutions.github.io/Satori/" aria-label="Take the Satori interactive tour"><img src="docs/assets/satori-hero-v6.svg" alt="Satori v6.6.0 overview diagram showing a psychologically grounded wisdom companion working across CLI, IDE, and Web Chat with a sub-8 KB Turn-1 load and 350-case trigger benchmark" width="820" /></a>
+  <a href="https://metcalf.solutions/satori/" aria-label="Take the Satori interactive tour"><img src="docs/assets/satori-hero-v6.svg" alt="Satori v6.6.0 overview diagram showing a psychologically grounded wisdom companion working across CLI, IDE, and Web Chat with a sub-8 KB Turn-1 load and 350-case trigger benchmark" width="820" /></a>
 </p>
 
 <p align="center">
@@ -21,11 +21,11 @@
 
 ```bash
 # Install Satori across CLI & IDE agent harnesses
-npx skills add @metcalfsolutions/satori
+npx skills add metcalfsolutions/satori
 ```
 
 > [!TIP]
-> **Looking for the visual interactive tour, web chat guides, or one-click zip downloads? [Visit Satori on GitHub Pages ->](https://metcalfsolutions.github.io/Satori/)**
+> **Find the interactive tour, web chat guides, or one-click zip downloads: [Visit Satori Website ->](https://metcalf.solutions/satori/)**
 
 <p align="center">
   <a href="https://github.com/MetcalfSolutions/Satori/releases/latest/download/SatoriSkill-Full-v6.6.0.zip"><strong>Download Satori Full (v6.6.0 .zip)</strong></a> ·
@@ -315,7 +315,7 @@ Satori supports **16 environments** across **2 categories** (`10 Agent Harnesses
 For AI coding agents and CLI environments, install Satori with a single command:
 
 ```bash
-npx skills add @metcalfsolutions/satori
+npx skills add metcalfsolutions/satori
 ```
 
 This single command automatically registers Satori across detected harnesses including Claude Code, Google Antigravity, Gemini CLI, Cursor, and OpenAI Codex CLI.
@@ -364,7 +364,7 @@ Download the release archive [`dist/SatoriSkill-Full-v6.6.0.zip`](https://github
 
 ### Troubleshooting Recovery
 
-1. **`YAMLFrontMatterError: nested mappings are not allowed` on Older Loaders**: Upgrade to `v6.6.0` (`npx skills add @metcalfsolutions/satori` or `git pull`) and run `python scripts/validate_skill.py` to confirm strict YAML frontmatter formatting.
+1. **`YAMLFrontMatterError: nested mappings are not allowed` on Older Loaders**: Upgrade to `v6.6.0` (`npx skills add metcalfsolutions/satori` or `git pull`) and run `python scripts/validate_skill.py` to confirm strict YAML frontmatter formatting.
 2. **Gemini Web Rejects Zip Upload ("Unsupported file type")**: Upload the pre-built release archive `dist/SatoriSkill-Full-v6.6.0.zip` (which packages root `LICENSE` as `LICENSE.md` and strips `.git` folders).
 3. **`satori_memory.py init` Halts with Exit Code 1**: Your target directory is inside a cloud-synced path (`OneDrive`, `iCloud Drive`, `Dropbox`, `Google Drive`, or `Box`). Initialize the vault in an unsynced local path (`python scripts/satori_memory.py --dir /local/unsynced/path/.satori init`) or pass `--allow-synced`.
 

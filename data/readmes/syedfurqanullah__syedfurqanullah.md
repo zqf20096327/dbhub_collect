@@ -1,7 +1,7 @@
 <h1 align="center">Hi, I'm Syed Furqan Ullah 👋</h1>
 
 <h3 align="center">
-Frontend Developer | UI/UX Focused | Building Modern Web Experiences
+Frontend Developer | UI/UX Focused | Building Modern Web Experiences.
 </h3>
 
 <p align="center">

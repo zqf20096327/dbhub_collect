@@ -227,7 +227,7 @@ anything missing. Then it builds `.venv` with the two workspace packages;
 generates a fresh TOTP key, persona key and ingest pepper into `.env.local`
 (mode 600), **never overwriting an existing one**; starts Postgres, Redis,
 MinIO and Mailpit and waits for the database to accept connections; applies
-all 184 Alembic migrations (Alembic head 0184); creates your first account,
+all 200 Alembic migrations (Alembic head 0200); creates your first account,
 printing the password **once** with a QR code to scan and waiting until you
 have saved it; offers the demo case; and starts the API, printing the console
 URL, <http://127.0.0.1:8000/ui/>. Detail and troubleshooting:
@@ -300,6 +300,18 @@ where these say `you@example.org`:
 > role. [`release/INSTALL.md`](release/INSTALL.md#nobody-holds-the-security-officer-role-yet)
 > gives the command that makes a second person the officer.
 
+> **Four readiness checks block collection until they are green.** A source
+> will not run while `readiness.BLOCKING_CHECKS` has one open:
+> `security_officer_present` needs an active account holding the Security
+> officer role (a second person, if break-glass is to be usable);
+> `retention_rules_confirmed` needs every retention rule
+> confirmed with a rationale by a named person; `prohibited_content_policy`
+> needs the policy and the designated person declared (docs/16 L1); and
+> `sample_origin_configured` needs `NOCTORNAL_SAMPLE_ORIGIN` set. The
+> register is the Admin pane, and each row says what it needs
+> ([`infra/production/README.md`](infra/production/README.md#what-stays-red-and-what-a-red-check-refuses)
+> for a production stack).
+
 > **If TOTP rejects every code**, your host clock is out of step.
 > `bootstrap.py totp-diagnose` says whether the clock or the secret is
 > wrong, and `bootstrap.py session` prints a URL that opens the console
@@ -325,7 +337,7 @@ export DATABASE_URL=postgresql+psycopg://noctornal:dev_only_change_me@127.0.0.1:
 .venv/bin/python -m pytest apps/api/tests packages/ontology -q
 ```
 
-With the containers up, expect **no failures** across **8446 tests** (`def test_`
+With the containers up, expect **no failures** across **9644 tests** (`def test_`
 functions across both pytest roots, maintained by
 `scripts/refresh_counters.py`; each parametrises to one or more collected
 items, and the collected total for a given release is in
@@ -667,10 +679,10 @@ test named after it.
 | **System of record** | Postgres 16 + pgvector | The graph, the assertion ledger and the audit log live in **one transactional store**, so an inference and its justification commit or fail together. A separate graph database makes that a distributed-transaction problem, which is how provenance gets lost. |
 | **API** | Python 3.12+ / FastAPI | Async, typed, OpenAPI for free. |
 | **SNA maths** | `igraph` (C core) + `leidenalg` | **Not NetworkX** (pure Python, and it falls over around 50k edges on betweenness). **Leiden, not Louvain**: Louvain can produce internally disconnected communities. |
-| **Object store** | MinIO, S3 object lock | Every exhibit is written under a per-object COMPLIANCE retention, which not even a root credential can shorten. The shipped compose file sets the BUCKET DEFAULT to `GOVERNANCE 365d`; the default is the floor for anything written by another path, and the guarantee above is the per-object lock `EvidenceStorage.put()` applies. GOVERNANCE alone is bypassable and is not a WORM guarantee. |
+| **Object store** | MinIO bundled, or any S3 store with object lock that passes [`docs/22`](docs/22-object-store-requirements.md) | Every exhibit is written under a per-object COMPLIANCE retention, which not even a root credential can shorten. The shipped compose file sets the BUCKET DEFAULT to `GOVERNANCE 365d`; the default is the floor for anything written by another path, and the guarantee above is the per-object lock `EvidenceStorage.put()` applies. GOVERNANCE alone is bypassable and is not a WORM guarantee. |
 | **Cache / limits** | Redis | GCRA rate limiting in one atomic Lua script. |
 | **Egress** | one pinned client and an egress proxy | Every outbound connection takes its route from one function and goes through one client that connects only to the address it checked. In production the proxy (HTTP CONNECT and SOCKS5 on one internal listener) is the only way out, and records every connection in a ledger the application cannot write ([`docs/20`](docs/20-outbound-connections.md)). |
-| **Migrations** | Alembic | 184 revisions (Alembic head 0184), one concern each. Reversible on an EMPTY database, which is what the round-trip test proves; a downgrade past `0017` on a populated one is refused on purpose, because dropping the seeded ontology would take the assertions with it. |
+| **Migrations** | Alembic | 200 revisions (Alembic head 0200), one concern each. Reversible on an EMPTY database, which is what the round-trip test proves; a downgrade past `0017` on a populated one is refused on purpose, because dropping the seeded ontology would take the assertions with it. |
 | **Live updates** | Postgres `LISTEN`/`NOTIFY` | Over Redis pub/sub because `pg_notify` inside a trigger is **part of the writing transaction**, no dual write, no lost event. |
 
 ### Frontend
@@ -689,7 +701,7 @@ enforces it.
 
 ### Testing
 
-**8446 tests** (`def test_` functions across two pytest roots, maintained by
+**9644 tests** (`def test_` functions across two pytest roots, maintained by
 `scripts/refresh_counters.py`). Every invariant has a test named
 after it. About half are database-backed and gated on `DATABASE_URL`; the
 rest need no services at all.
@@ -716,7 +728,7 @@ noctornal/
 │   └── generated/             TypeScript + SQL seed (do not edit)
 ├── db/
 │   ├── schema.sql             generated mirror (scripts/dump_schema.py; CI diffs it)
-│   └── migrations/versions/   184 Alembic revisions
+│   └── migrations/versions/   200 Alembic revisions
 ├── docs/                      the reasoning, one numbered document per subject
 ├── release/                   installers, INSTALL, MANUAL, CHANGELOG
 ├── scripts/                   launch, bootstrap, demo seeds, screenshots
@@ -736,6 +748,7 @@ noctornal/
 | [`docs/18-legal-review-pack.md`](docs/18-legal-review-pack.md) | **the sign-off document**, with a row to answer each question in |
 | [`docs/16-legal-and-external.md`](docs/16-legal-and-external.md) | **the register**: every place the build stops because the next step is a legal question, and why holding this material is dangerous |
 | [`docs/21-law-enforcement-readiness.md`](docs/21-law-enforcement-readiness.md) | **for an agency in the US or Canada**: what FRE 902(13), (14) and Canada Evidence Act ss. 31.1-31.8 ask, what the build supplies, and the steps before real casework |
+| [`docs/22-object-store-requirements.md`](docs/22-object-store-requirements.md) | **for an agency on its own S3 store**: what a store must do, the two profiles, the conformance suite, and the custody questions a store somebody else runs raises |
 | [`docs/17-flagged-for-review.md`](docs/17-flagged-for-review.md) | what may need to change: data not to be trusted, the Beta 1 review, known residuals, judgement calls |
 | [`docs/00-decisions.md`](docs/00-decisions.md) | the numbered decisions and why the architecture is the way it is |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | the map of what was built |
@@ -770,7 +783,25 @@ noctornal/
 
 **Beta. Unaudited. Not certified for evidential use. Not lawful to operate against real material until the five blocking items above are settled.** It is fit for other people to try on synthetic or published, non-personal data.
 
-This is Beta 1.5c, release 0.9.5, tag `v0.9.5c-beta`: Beta 1.5b with a new look for
+This is Beta 1.6c, release 0.9.6, tag `v0.9.6c-beta`: Beta 1.6a with seven fixes from a
+review of 2026-11-16 (listed in release/CHANGELOG.md), and no migration. Beta 1.6a was Beta 1.6 with one optional
+integration and one fix, and no migration. A host switch, `NOCTORNAL_MAASSPEC`, off
+by default, lets the ingest parser recognise the JSON spectrum that MaaSSpec emits,
+check it strictly and file it in the ingest queue as an IOC feed record; nothing in
+it becomes a graph element, a claim or a proposal. A repeat of an `Idempotency-Key`
+after 24 hours now answers as the first batch. Beta 1.6 was Beta 1.5c with the findings of the
+review of 2026-11-14 closed, each with a test, and sixteen migrations, 0185 to 0200. Who
+is on a case is filtered in the database for a request, a missing id costs what a hidden
+one costs, and lifting a legal hold takes two people. Every internal hop is TLS, the
+audit log keeps a keyed hash and never the value of what a failed sign-in typed, and a
+request draws its connection from a pool. Evidence can sit in another S3 store, a backup
+can be restored into a new store with its locks and holds, and the application is laid
+out for a cluster, with no manifest shipped. A collection watch can be stopped, resumed
+and edited, and the readiness register has 51 checks. None of this makes it lawful to
+operate against real material: that still waits on the five items above, and it has not
+been audited.
+
+Beta 1.5c was Beta 1.5b with a new look for
 the sociogram and a quieter console, and no migration. The graph sits on a lit navy
 stage with a soft halo behind each entity, the rows of legend and keys under it are one
 row with a Key and a Shortcuts button, and what a pane says once (what a setting
@@ -814,7 +845,7 @@ reads, selectors, search and the audit log hold at 100,000 entities and
 about 5,000 entities a case, and the ego network and the path search stop at
 5,000. That load was measured from a Windows host with Postgres in WSL2.
 
-Beyond what the tour shows, Beta 1.5c has entity merge under the two-person
+Beyond what the tour shows, Beta 1.6c has entity merge under the two-person
 policy; PGP verification and vendor keys; collection from feeds, forums and
 Telegram under a two-person authority (the operator's end-to-end Telegram
 check is `docs/17` F31); ingest; similarity search; Jira, the delivery
@@ -831,7 +862,7 @@ and 7-Zip archives, and live SIP interception. The reasons are in
 [`docs/17`](docs/17-flagged-for-review.md), [`docs/11`](docs/11-malware-handling.md)
 and [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
-**What is still open is in `docs/17`.** Its Known residuals at Beta 1.1 lists,
+**What is still open is in `docs/17`.** Its Known residuals lists,
 by area, what remains, among them a request role that can still read who works
 which case and still writes the collector's heartbeat and four queues, watches
 that cannot be stopped or edited, and YARA sources that ship unpinned until an

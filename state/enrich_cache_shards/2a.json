@@ -1,11 +1,11 @@
 {
  "prisma/orm": {
-  "commit_7d": 31,
-  "commit_90d": 472,
-  "rel_ver": "v8.0.0-rc.23",
-  "rel_pub": "2026-11-06",
-  "rel_days": 9,
-  "rel_n90": 24,
+  "commit_7d": 46,
+  "commit_90d": 457,
+  "rel_ver": "v8.0.0-rc.24",
+  "rel_pub": "2026-11-16",
+  "rel_days": 1,
+  "rel_n90": 22,
   "rel_pre": true,
   "rel_none": false,
   "sec_n": 1,
@@ -15,7 +15,7 @@
    "GHSA-pxcc-hj8w-fmm7(CVE-2021-21414,low)"
   ],
   "contrib_n": 29,
-  "enriched_at": "20261115",
+  "enriched_at": "20261117",
   "lang": {
    "TypeScript": 97,
    "JavaScript": 3,
@@ -23,11 +23,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261113",
-   "release": "20261115",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20261114"
   },
   "rel_notes": [
+   {
+    "t": "v8.0.0-rc.24",
+    "d": "2026-11-16",
+    "n": "- **A MongoDB TypeScript contract names a field's type with `type.X()`.** `field.objectId()`, `field.string()`, `field.date()`, `field.vector()`, `field.scalar(codecId)` and the other MongoDB field helpers are removed. Write `field.scalar(type.X())`, where `type` comes from the `defineContract` callback, as PSL names the type. The app recipe ships a script that rewrites them; the contract does not change. MongoDB PSL gains `Vector` and `Vector(length)`, and a type that takes no arguments, written with one, "
+   },
    {
     "t": "v8.0.0-rc.23",
     "d": "2026-11-06",
@@ -72,18 +77,14 @@
     "t": "v8.0.0-rc.16",
     "d": "2026-10-07",
     "n": "# v8.0.0-rc.16\n\nThis release moves the toolchain to `@prisma/cli-engine` 0.6.3, which shares one ArkType copy with the Prisma ORM packages. With engine 0.6.2, a fresh Bun install could resolve two ArkType copies, and `prisma orm init` and `prisma contract emit` then failed on a valid contract. A `@default` that PSL refuses is now reported at the written value, with a message that says what to write instead.\n\nThe upgrade recipes for this hop: the [app recipe](https://github.com/prisma/orm/blob/v8.0.0-rc.16/s"
-   },
-   {
-    "t": "v8.0.0-rc.15",
-    "d": "2026-10-07",
-    "n": "- **A contract column stores its data type id, not its database type name.** A SQL column in `contract.json` now stores `dataType`, for example `pg/int4`, where it stored `nativeType`, for example `int4`. A contract in the old format is refused with `CONTRACT.VALIDATION_FAILED`. Every contract's storage hash changes once. To upgrade, first upgrade every extension that ships migrations, such as pgvector and PostGIS, in the same step. Then run the script from the upgrade recipe in the project root. It rewrite"
    }
   ],
   "etag": {
-   "release": "W/\"bab6eb9a30ee7a59a054394e0f02e188440f368c0abdb108182e3fcffba4c054\"",
+   "release": "W/\"65252e3328c3a9023fe5bba08494c9dceaa689e21350fa569d4bc5683ac2d4ef\"",
    "security": "W/\"2203012f1764fa02d6842c02c02fb04cc456a03d7ef1ebab356033ea1ba2f35e\""
   },
   "rel_dates": [
+   "2026-11-16",
    "2026-11-06",
    "2026-10-30",
    "2026-10-30",
@@ -104,27 +105,24 @@
    "2026-08-25",
    "2026-08-25",
    "2026-08-25",
-   "2026-08-22",
-   "2026-08-18",
-   "2026-08-18",
-   "2026-08-17"
+   "2026-08-22"
   ]
  },
  "matomo-org/matomo": {
-  "commit_7d": 18,
-  "commit_90d": 334,
-  "rel_ver": "6.1.0-alpha.20261113180339",
-  "rel_pub": "2026-11-13",
-  "rel_days": 2,
+  "commit_7d": 17,
+  "commit_90d": 325,
+  "rel_ver": "5.14.3",
+  "rel_pub": "2026-11-16",
+  "rel_days": 1,
   "rel_n90": 30,
-  "rel_pre": true,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 345,
-  "enriched_at": "20261115",
+  "enriched_at": "20261117",
   "lang": {
    "PHP": 78,
    "JavaScript": 8,
@@ -134,11 +132,16 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261113",
-   "release": "20261115",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20261027"
   },
   "rel_notes": [
+   {
+    "t": "5.14.3",
+    "d": "2026-11-16",
+    "n": "## [Matomo 5.14.3 Changelog](https://matomo.org/changelog/matomo-5-14-3/)\n\n  Please use the attached archives for installing or updating Matomo.\n  The source code download is only meant for developers and will require extra work to install it.\n   - Latest stable production release can be found at https://matomo.org/download/ ([learn more](https://matomo.org/docs/installation/)) (recommended)\n   - Beta and Release Candidate releases can be found at https://builds.matomo.org/ ([learn more](https://matomo.org/"
+   },
    {
     "t": "6.1.0-alpha.20261113180339",
     "d": "2026-11-13",
@@ -183,17 +186,13 @@
     "t": "6.1.0-alpha.20261105180457",
     "d": "2026-11-05",
     "n": "## Matomo 6.1.0-alpha.20261105180457 (Pre-release)\n\n  We recommend to read [this FAQ](https://matomo.org/faq/how-to-update/faq_159/) before using a pre-release in a production environment.\n\n  Please use the attached archives for installing or updating Matomo.\n  The source code download is only meant for developers and will require extra work to install it.\n   - Latest stable production release can be found at https://matomo.org/download/ ([learn more](https://matomo.org/docs/installation/)) (recommended)\n  "
-   },
-   {
-    "t": "6.1.0-alpha.20261104180410",
-    "d": "2026-11-04",
-    "n": "## Matomo 6.1.0-alpha.20261104180410 (Pre-release)\n\n  We recommend to read [this FAQ](https://matomo.org/faq/how-to-update/faq_159/) before using a pre-release in a production environment.\n\n  Please use the attached archives for installing or updating Matomo.\n  The source code download is only meant for developers and will require extra work to install it.\n   - Latest stable production release can be found at https://matomo.org/download/ ([learn more](https://matomo.org/docs/installation/)) (recommended)\n  "
    }
   ],
   "etag": {
-   "release": "W/\"e3251d8dc10f625c17ce1f3cff8cf6fd7e4b62359cb8355df593881dc62cf336\""
+   "release": "W/\"04516bebffd101177ba24e012dffaa8fb728f29231eb690e7c964385f8934ca2\""
   },
   "rel_dates": [
+   "2026-11-16",
    "2026-11-13",
    "2026-11-12",
    "2026-11-11",
@@ -222,16 +221,15 @@
    "2026-10-14",
    "2026-10-13",
    "2026-10-13",
-   "2026-10-12",
-   "2026-10-09"
+   "2026-10-12"
   ]
  },
  "marketcalls/openalgo": {
-  "commit_7d": 30,
-  "commit_90d": 971,
+  "commit_7d": 39,
+  "commit_90d": 978,
   "rel_ver": "openalgo-broker-keys-live-data",
   "rel_pub": "2026-11-06",
-  "rel_days": 9,
+  "rel_days": 11,
   "rel_n90": 13,
   "rel_pre": false,
   "rel_none": false,
@@ -240,7 +238,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 87,
-  "enriched_at": "20261114",
+  "enriched_at": "20261117",
   "lang": {
    "Python": 70,
    "TypeScript": 28,
@@ -250,8 +248,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261113",
-   "release": "20261114",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20261027"
   },
   "rel_notes": [
@@ -307,7 +305,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"8fa93f94ee5c7106542e7b817824686c450cfecc3f30c6cef2affee84acf2d4d\""
+   "release": "W/\"1639d2118ae56d1994be1dac36fbcffecd035770040b8254e667092d1ce0c368\""
   },
   "rel_dates": [
    "2026-11-06",
@@ -357,7 +355,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.4.1",
   "rel_pub": "2017-02-28",
-  "rel_days": 3547,
+  "rel_days": 3549,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -383,7 +381,7 @@
   "commit_7d": 4,
   "rel_ver": "4.1.0",
   "rel_pub": "2026-10-11",
-  "rel_days": 35,
+  "rel_days": 37,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -423,7 +421,7 @@
   "commit_7d": 0,
   "rel_ver": "5.1.3",
   "rel_pub": "2026-04-02",
-  "rel_days": 227,
+  "rel_days": 229,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -442,7 +440,7 @@
   "commit_7d": 2,
   "rel_ver": "2.4.0",
   "rel_pub": "2026-09-08",
-  "rel_days": 68,
+  "rel_days": 70,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -478,11 +476,11 @@
   ]
  },
  "tidesdb/tidesdb": {
-  "commit_90d": 144,
-  "commit_7d": 2,
+  "commit_90d": 159,
+  "commit_7d": 8,
   "rel_ver": "v10.2.1",
   "rel_pub": "2026-10-12",
-  "rel_days": 34,
+  "rel_days": 36,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -497,7 +495,7 @@
    "PowerShell": 0,
    "Shell": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261117",
   "rel_notes": [
    {
     "t": "v10.2.1",
@@ -513,12 +511,44 @@
     "t": "v10.1.1",
     "d": "2026-10-04",
     "n": "TidesDB 10 PATCH (v10.1.1)\nChangelog: https://github.com/tidesdb/tidesdb/pull/682/commits\nhttps://tidesdb.com"
+   },
+   {
+    "t": "v10.1.0",
+    "d": "2026-09-30",
+    "n": "Beyond conflict detection, large transactions and lookups through long-lived iterators are now dramatically faster. A much stronger concurrency fuzzer and a new Elle-style history checker uncovered several rare correctness bugs, all of which are fixed in this release. Finally, the database statistics now include commit and conflict counters.\nTidesDB 10 MINOR (v10.1.0)\nhttps://tidesdb.com\nhttps://github.com/tidesdb/tidesdb/compare/v10.0.2...v10.1.0"
+   },
+   {
+    "t": "v10.0.2",
+    "d": "2026-09-24",
+    "n": "TidesDB 10 PATCH (v10.0.2)\nhttps://tidesdb.com\nhttps://github.com/tidesdb/tidesdb/compare/v10.0.1...v10.0.2"
+   },
+   {
+    "t": "v10.0.1",
+    "d": "2026-09-08",
+    "n": "TidesDB 10 PATCH (v10.0.1)\r\n\r\nImproved build compatibility by relaxing the minimum CMake requirement from `3.25` down to `3.12`. This ensures out-of-the-box compatibility with older LTS enterprise environments and legacy CI/CD pipelines without forcing a manual CMake upgrade.\r\n\r\nIf not required, no update needed.\r\n\r\nhttps://tidesdb.com\r\nhttps://github.com/tidesdb/tidesdb/compare/v10.0.0...v10.0.1"
+   },
+   {
+    "t": "v10.0.0",
+    "d": "2026-09-02",
+    "n": "- *A brand new fuzzer suite* - a model-based differential fuzzer with an independent oracle, a\n**TidesDB 10 opens a new on-disk format line and does not read 9.x data.** you must **dump and reload**. See\nTidesDB 10 MAJOR (v10.0.0)\nThis release is a major step forward for the engine. This release reworks the storage architecture, transaction system, concurrency paths, and background services around a simple goal, to make the database scale harder without making its behavior harder to reason about. From datab"
    }
   ],
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102"
-  }
+   "commit": "20261117",
+   "release": "20261117"
+  },
+  "etag": {
+   "release": "W/\"a6dd567f9b434088440d96398cc83f6a78e16624b87554591758ea79a540844e\""
+  },
+  "rel_dates": [
+   "2026-10-12",
+   "2026-10-12",
+   "2026-10-04",
+   "2026-09-30",
+   "2026-09-24",
+   "2026-09-08",
+   "2026-09-02"
+  ]
  },
  "matehat/Objective-LevelDB": {
   "commit_90d": 0,
@@ -562,7 +592,7 @@
   "commit_7d": 0,
   "rel_ver": "3.5.0",
   "rel_pub": "2025-03-31",
-  "rel_days": 594,
+  "rel_days": 596,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -605,7 +635,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-11-14",
-  "rel_days": 366,
+  "rel_days": 368,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -632,7 +662,7 @@
   "commit_7d": 185,
   "rel_ver": "v1.4.98",
   "rel_pub": "2026-11-10",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 30,
   "rel_pre": false,
   "rel_none": false,
@@ -694,7 +724,7 @@
   "commit_7d": 19,
   "rel_ver": "4.2",
   "rel_pub": "2026-01-22",
-  "rel_days": 297,
+  "rel_days": 299,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -750,7 +780,7 @@
   "commit_7d": 1,
   "rel_ver": "v2.0.5",
   "rel_pub": "2026-11-10",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -802,7 +832,7 @@
   "commit_7d": 0,
   "rel_ver": "0.18.1",
   "rel_pub": "2026-07-01",
-  "rel_days": 137,
+  "rel_days": 139,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -823,7 +853,7 @@
   "commit_7d": 0,
   "rel_ver": "1.1.15",
   "rel_pub": "2024-06-06",
-  "rel_days": 892,
+  "rel_days": 894,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -852,7 +882,7 @@
   "commit_7d": 1,
   "rel_ver": "2.0.8",
   "rel_pub": "2026-11-09",
-  "rel_days": 6,
+  "rel_days": 8,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -911,7 +941,7 @@
   "commit_7d": 0,
   "rel_ver": "8.0.1",
   "rel_pub": "2026-09-18",
-  "rel_days": 58,
+  "rel_days": 60,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -930,12 +960,12 @@
   }
  },
  "vladkens/ghstats": {
-  "commit_90d": 4,
+  "commit_90d": 20,
   "commit_7d": 0,
-  "rel_ver": "v0.10.0",
-  "rel_pub": "2026-08-25",
-  "rel_days": 82,
-  "rel_n90": 1,
+  "rel_ver": "v0.12.0",
+  "rel_pub": "2026-11-06",
+  "rel_days": 11,
+  "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -950,8 +980,18 @@
    "Dockerfile": 1,
    "Makefile": 1
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261117",
   "rel_notes": [
+   {
+    "t": "v0.12.0",
+    "d": "2026-11-06",
+    "n": "### Features\n\n- Added embeddable SVG cards for a profile README or a personal site: top 5 repositories by stars, forks, clones and views, and account totals (#44)\n- Added star history cards for all repositories or a single one, with up to 4 repositories on one chart, a log scale, aligned starts and a custom start date (#44)\n- Added a card builder at `/cards`: pick a card and its options, see a live preview and copy the Markdown or HTML (#47)\n- Added repo kind badges (Private, Template, Archived, Fork) with "
+   },
+   {
+    "t": "v0.11.0",
+    "d": "2026-11-04",
+    "n": "- Schema migrations run in one transaction, so a failed upgrade leaves the database unchanged (#35)"
+   },
    {
     "t": "v0.10.0",
     "d": "2026-08-25",
@@ -969,16 +1009,24 @@
    }
   ],
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102"
-  }
+   "commit": "20261117",
+   "release": "20261117"
+  },
+  "etag": {
+   "release": "W/\"71521fa1fc87b5b49fda632c420c3ef726770097d3b72005bfac82ad3a06fd82\""
+  },
+  "rel_dates": [
+   "2026-11-06",
+   "2026-11-04",
+   "2026-08-25"
+  ]
  },
  "mihnea-radulescu/imagefanreloaded": {
   "commit_90d": 22,
   "commit_7d": 3,
   "rel_ver": "1.2026.11.11",
   "rel_pub": "2026-11-10",
-  "rel_days": 5,
+  "rel_days": 7,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1016,7 +1064,7 @@
   "commit_7d": 0,
   "rel_ver": "offline_217",
   "rel_pub": "2026-08-16",
-  "rel_days": 91,
+  "rel_days": 93,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1035,7 +1083,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.3.0",
   "rel_pub": "2025-12-14",
-  "rel_days": 336,
+  "rel_days": 338,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1177,7 +1225,7 @@
  "tom1030507/OpenNotebookLM": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-08-25",
-  "rel_days": 82,
+  "rel_days": 84,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1193,9 +1241,9 @@
    "Shell": 0,
    "CSS": 0
   },
-  "enriched_at": "20261103",
-  "commit_90d": 300,
-  "commit_7d": 0,
+  "enriched_at": "20261117",
+  "commit_90d": 265,
+  "commit_7d": 33,
   "rel_notes": [
    {
     "t": "v0.1.0",
@@ -1204,9 +1252,15 @@
    }
   ],
   "dim_ts": {
-   "commit": "20261103",
-   "release": "20261103"
-  }
+   "commit": "20261117",
+   "release": "20261117"
+  },
+  "etag": {
+   "release": "W/\"5c8ed6ad2e9946c1212da9e53ed89c49154120152c866ff5b1e299b152942633\""
+  },
+  "rel_dates": [
+   "2026-08-25"
+  ]
  },
  "rebus-org/Debaser": {
   "rel_ver": null,
@@ -1225,7 +1279,7 @@
  "solnic/drops_relation": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2025-07-30",
-  "rel_days": 473,
+  "rel_days": 475,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1244,7 +1298,7 @@
  "rom-rb/rom-repository": {
   "rel_ver": "v1.3.3",
   "rel_pub": "2017-05-31",
-  "rel_days": 3455,
+  "rel_days": 3457,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1261,7 +1315,7 @@
  "khellang/EFCore.Sqlite.NodaTime": {
   "rel_ver": "v10.0.0",
   "rel_pub": "2026-02-10",
-  "rel_days": 278,
+  "rel_days": 280,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1322,7 +1376,7 @@
  "oracle/oci-hdfs-connector": {
   "rel_ver": "v3.4.1.0.0.5",
   "rel_pub": "2026-06-24",
-  "rel_days": 144,
+  "rel_days": 146,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1370,7 +1424,7 @@
  "chhetripradeep/chtop": {
   "rel_ver": "0.0.2",
   "rel_pub": "2023-01-29",
-  "rel_days": 1386,
+  "rel_days": 1388,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1401,7 +1455,7 @@
  "Awilum/sql-introduction": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-07-17",
-  "rel_days": 121,
+  "rel_days": 123,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -1520,7 +1574,7 @@
  "oracle/nb-javac": {
   "rel_ver": "release126",
   "rel_pub": "2021-10-18",
-  "rel_days": 1854,
+  "rel_days": 1856,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1568,7 +1622,7 @@
  "smourier/Doxie": {
   "rel_ver": "v1.2.2.0",
   "rel_pub": "2025-09-17",
-  "rel_days": 424,
+  "rel_days": 426,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1586,7 +1640,7 @@
  "lacanoid/pgsparql": {
   "rel_ver": "1.0",
   "rel_pub": "2025-02-07",
-  "rel_days": 646,
+  "rel_days": 648,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1634,7 +1688,7 @@
  "AlessioCoser/jako": {
   "rel_ver": "0.2.0",
   "rel_pub": "2023-06-28",
-  "rel_days": 1236,
+  "rel_days": 1238,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1709,7 +1763,7 @@
  "paiml/trueno-db": {
   "rel_ver": "v0.3.7",
   "rel_pub": "2025-12-16",
-  "rel_days": 334,
+  "rel_days": 336,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1842,7 +1896,7 @@
  "remkop22/postgres-from-row": {
   "rel_ver": "v0.5.2",
   "rel_pub": "2023-05-26",
-  "rel_days": 1269,
+  "rel_days": 1271,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1859,7 +1913,7 @@
  "laelhalawani/gguf_modeldb": {
   "rel_ver": "v0.0.3",
   "rel_pub": "2024-01-13",
-  "rel_days": 1037,
+  "rel_days": 1039,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1946,7 +2000,7 @@
  "stevemcqueenz/pfQuest-Reforged": {
   "rel_ver": "v1.0.55",
   "rel_pub": "2026-08-18",
-  "rel_days": 89,
+  "rel_days": 91,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -1980,7 +2034,7 @@
  "KerekesDavid/pycolytics": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2024-09-12",
-  "rel_days": 794,
+  "rel_days": 796,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2054,7 +2108,7 @@
  "R4nd5tr/waifu_gallery": {
   "rel_ver": "v0.0.0-alpha",
   "rel_pub": "2025-11-15",
-  "rel_days": 365,
+  "rel_days": 367,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2074,7 +2128,7 @@
  "Debiancc/tidb_force_visualization": {
   "rel_ver": "1.1.0",
   "rel_pub": "2018-09-25",
-  "rel_days": 2973,
+  "rel_days": 2975,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2197,7 +2251,7 @@
  "dodyac/Sqlitez": {
   "rel_ver": "v0.1.24-alpha",
   "rel_pub": "2025-05-11",
-  "rel_days": 553,
+  "rel_days": 555,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -2326,7 +2380,7 @@
  "tamnd/rucc": {
   "rel_ver": "v0.17.0",
   "rel_pub": "2026-09-30",
-  "rel_days": 46,
+  "rel_days": 48,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -2375,7 +2429,7 @@
  "DerKezorm/nextrmnl": {
   "rel_ver": "v0.3.0",
   "rel_pub": "2026-09-26",
-  "rel_days": 50,
+  "rel_days": 52,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2945,7 +2999,7 @@
  "farol-team/workscreen": {
   "rel_ver": "v1.0.4",
   "rel_pub": "2026-07-01",
-  "rel_days": 137,
+  "rel_days": 139,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2974,7 +3028,7 @@
   "commit_7d": 26,
   "rel_ver": "v2.2.1",
   "rel_pub": "2026-11-04",
-  "rel_days": 11,
+  "rel_days": 13,
   "rel_n90": 26,
   "rel_pre": false,
   "rel_none": false,
@@ -3133,7 +3187,7 @@
  "brycegao/invest-record-pro": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-06-03",
-  "rel_days": 165,
+  "rel_days": 167,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3177,7 +3231,7 @@
  "axadrn/moin": {
   "rel_ver": "v1.0.0-beta.9",
   "rel_pub": "2026-11-04",
-  "rel_days": 11,
+  "rel_days": 13,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3223,7 +3277,7 @@
   "commit_7d": 6,
   "rel_ver": "v2.1.1",
   "rel_pub": "2026-11-06",
-  "rel_days": 9,
+  "rel_days": 11,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -3272,7 +3326,7 @@
   },
   "rel_ver": "v3.6.0",
   "rel_pub": "2026-04-23",
-  "rel_days": 206,
+  "rel_days": 208,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -3302,7 +3356,7 @@
   },
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 25,
+  "rel_days": 27,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,

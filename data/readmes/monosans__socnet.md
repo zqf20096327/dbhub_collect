@@ -24,7 +24,7 @@ cp .env.example .env
 docker compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g)  # on Windows: docker compose build
 docker compose run --rm django python3 manage.py migrate
 docker compose run --rm django python3 manage.py compilemessages --locale en --locale ru
-docker compose up --remove-orphans
+docker compose up --remove-orphans --renew-anon-volumes
 ```
 
 Open <http://localhost:8000>. Emails, such as the sign-up confirmation, go to the log of the `django` container. [PgHero](https://github.com/ankane/pghero) runs at <http://localhost:8080>.
@@ -37,7 +37,7 @@ docker compose run --rm django python3 manage.py createsuperuser
 # Run the tests
 docker compose run --rm django pytest
 # Start with debugpy listening on port 5678
-docker compose -f compose.yaml -f compose.override.yaml -f compose.debug.yaml up --remove-orphans
+docker compose -f compose.yaml -f compose.override.yaml -f compose.debug.yaml up --remove-orphans --renew-anon-volumes
 ```
 
 ## Deploy
@@ -56,7 +56,7 @@ Static files and translations are collected and compiled when the container star
 
 - Backend: Python 3.14, Django 6.1, Channels, django-allauth, django-ninja, granian. Markdown rendering and HTML sanitization are written in Rust in `socnet_rs`, with pulldown-cmark, ammonia and PyO3.
 - Data: PostgreSQL 18, and in production Valkey 9 for the cache and Channels.
-- Frontend: Django templates, HTMX 2, Bootstrap 5, Font Awesome 6, TypeScript bundled with esbuild, viewerjs, luxon.
+- Frontend: Django templates, HTMX 2, Bootstrap 5, Font Awesome 7, TypeScript bundled with esbuild, viewerjs, luxon.
 - Infrastructure: Docker Compose, Caddy, Sentry.
 - Tests and linters: pytest, factory-boy, mypy, ruff, Oxlint, Stylelint.
 

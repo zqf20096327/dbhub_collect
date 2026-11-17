@@ -4,7 +4,7 @@
 chores, recipes and paperwork, on your own hardware (a Raspberry Pi is enough). An AI model of your
 choice suggests; a person in the family approves.
 
-![FamilyOS on a phone and on a display on the kitchen wall: the time, the weather, the next thing, each person's day, chores, shopping and meals](docs/images/hero-kitchen.webp)
+![FamilyOS on a phone and on a display on the kitchen wall: Today shows the time, the weather, the next thing, each person's day, chores, shopping and the board](docs/images/hero-kitchen.webp)
 
 https://github.com/user-attachments/assets/25be65a8-3f14-42ee-a2e2-a92d369a6ce8
 
@@ -45,7 +45,7 @@ Ask Hermes Agent, Claude or any MCP app about your family. Its changes wait for 
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="docs/images/readme-display.webp" width="100%" alt="A wall display at night in the Wall style: big clock, the next thing, who is next, tasks and shopping"><br>
+<img src="docs/images/readme-display.webp" width="100%" alt="A wall display at night in the Wall style: big clock, the next thing, who is next, shopping, the board and the house"><br>
 <b>Family display</b><br>
 A wall tablet or an old TV shows the day. It can never change anything.
 </td>
@@ -102,7 +102,7 @@ It makes an outside connection only when you set one up:
   your place rounded to about a kilometre.
 - **AI:** only to a provider you add, per area, and you can keep areas **Off** or **Local only**
   ([AI and privacy](docs/guide/ai.md)).
-- **Extensions:** the signed list is fetched only when you press **Look for more**.
+- **Extensions:** the signed list is fetched only when you press **Look for updates** or **Look for more**, or once a week if an admin switched that on.
 - **Telegram, email, backup targets, calendar subscriptions, Home Assistant:** only the addresses you enter.
 
 Details: [AI and privacy](docs/guide/ai.md), [extensions](docs/guide/extensions.md),
@@ -122,15 +122,16 @@ as its browser is Chrome 106 or newer.
 - [x] AI apps sign in with OAuth instead of a pasted key, for the person who approves them
 - **Home Assistant**
   - [x] Sensors and who is home on Today and the wall display, and switching the devices you choose:
-        lights, switches, fans (with their speeds), humidifiers, covers, valves, locks, buttons, scenes and scripts, robot
-        vacuums (start, pause, send home) and media players (play, pause, on and off)
+        lights (with brightness), switches, fans (speeds and presets), humidifiers (target and mode), covers and valves
+        (position), locks, buttons, scenes and scripts, robot vacuums (start, pause, send home) and media
+        players (play, pause, on and off, volume)
   - [x] FamilyOS notifications in the Home Assistant app
   - [x] [Integration](https://github.com/onurceri/familyos-homeassistant) (HACS custom repository): the
         family calendar, shopping lists, tasks and chores as entities, and a waiting-for-approval sensor
   - [x] Actions from your automations: add to a list, tick off a chore, post a note on the board
   - [x] Assist talks to FamilyOS as your own AI app, over OAuth
   - [ ] The integration in HACS's default list
-  - [ ] Thermostat temperature, alarm panels and media volume from FamilyOS
+  - [ ] Thermostat temperature and alarm panels from FamilyOS
 - [ ] Extensions from other authors, with your explicit consent
 - [ ] 1.0: a stable data format and API, with a backward-compatibility promise
 

@@ -121,13 +121,22 @@ live under the explicit `/adapters/drizzle/...` entrypoints.
 Packages that only define or share graph schemas can import the DSL and its
 schema-derived types from `@nicia-ai/typegraph/core`. Custom backend and search
 strategy authors can use the complete Drizzle-free contract vocabulary from
-`@nicia-ai/typegraph/backend`.
+`@nicia-ai/typegraph/backend`. That authoring surface, and
+`@nicia-ai/typegraph/adapters/drizzle/engine`, is not covered by semver and may
+change in any release; the bundled SQLite and PostgreSQL backends are the
+supported ones. Every other entrypoint is application API and is covered by
+semver: the root and the `/store`, `/query`, `/errors`, `/identity`,
+`/maintenance`, `/core`, `/schema`, `/indexes`, `/graph-extension`,
+`/graph-merge`, `/interchange`, `/profiler`, `/provenance`, `/sqlite/local`,
+`/postgres/pglite` and `/adapters/drizzle/...` subpaths other than
+`/adapters/drizzle/engine`. See
+[Stability](https://typegraph.dev/backend-authoring#stability).
 
 `drizzle-orm` is an optional peer dependency. `@nicia-ai/typegraph/sqlite/local`
 and `@nicia-ai/typegraph/postgres/pglite` load it only when their factory is
 called and refuse with a typed `ConfigurationError`
 (`MISSING_PEER_DEPENDENCY`) naming the package and the install command
-(`npm install drizzle-orm`) when it is absent. The six explicit
+(`npm install drizzle-orm`) when it is absent. The explicit
 `/adapters/drizzle/...` entrypoints expose Drizzle-native backends, connections,
 or schema builders and load `drizzle-orm` when the module is evaluated. Importing
 one without the peer installed therefore surfaces the raw module-resolution

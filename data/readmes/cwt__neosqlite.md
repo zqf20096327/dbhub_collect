@@ -38,24 +38,28 @@
 
 See [Release Notes](documents/releases/) for the full history.
 
-## Latest Release: v1.17.4
+## Latest Release: v1.18.1
 
-NeoSQLite v1.17.4 is a **critical correctness and SQLite engine compatibility release**. It resolves a major silent data type regression introduced by SQLite's internal subtype handling changes in SQLite **≥ 3.54.0** (including SQLite 3.54.1 on macOS / Homebrew), where scalar subqueries dropped the internal `'J'` JSON subtype across subquery boundaries. This previously caused `json_set()`, `jsonb_set()`, and `json_object()` to serialize subquery array and object results into escaped JSON string literals (e.g. `'"[1, 2, 3]"'`) instead of native JSON arrays or objects.
-
-By wrapping all JSON-producing scalar subqueries with an outer `json((SELECT ...))` expression, NeoSQLite restores the `'J'` subtype uniformly across modern SQLite (≥ 3.54) while maintaining full backward compatibility with older SQLite versions (≤ 3.53, e.g. Fedora 45). Additionally, this release eliminates unclosed connection `ResourceWarning` leaks and aligns NX-27017 wire protocol dependencies. Fully backward compatible.
+NeoSQLite v1.18.1 is a **cumulative correctness, SQL-tier parity, SQLite 3.26–3.54 compatibility, and runtime modernization release**. It rolls up every change since v1.17.4 and raises the minimum supported Python version to **3.12**.
 
 **Key Highlights:**
-- **SQLite ≥ 3.54 Scalar Subquery Subtype Fix** — Enclosed all scalar subqueries producing JSON in `json((SELECT ...))`, ensuring enclosing functions (`json_set`, `jsonb_set`, `json_object`) recognize outputs as structured JSON rather than plain text strings on SQLite ≥ 3.54.
-- **Hardened Array Updates** — Fixed `$push` (with `$position` and `$slice`), `$pull`, and `$pullAll` update SQL clauses so updated documents retain proper JSON array structures in both TEXT and JSONB modes.
-- **Hardened Aggregation & `$expr` Array Converters** — Updated SQL converters for `$slice`, `$firstN`, `$lastN`, `$sortArray`, `$filter`, `$map`, `$maxN`, `$minN`, `$setIntersection`, `$setUnion`, `$setDifference`, and `$objectToArray` to prevent stringification of nested arrays and objects.
-- **Clean Resource Management** — Resolved unclosed SQLite connection leaks and silenced associated `ResourceWarning` diagnostic notices.
-- **Cross-Engine Verification** — Verified 100% test pass on modern SQLite (macOS, SQLite 3.54.1 / Python 3.14) and older SQLite (Fedora 45 container, SQLite 3.53.4 / Python 3.15). All 3,034 tests in `neosqlite` pass with **80.70%** line coverage; all 180 tests in `nx_27017` pass.
+- **Cumulative Fixes Since v1.17.4** — Complete kill-switch coverage, Tier-1/Tier-2 SQL parity hardening, expanded Tier-3 promotion, CRUD/write parity, and coverage-driven bug fixes across aggregation, queries, cursors, and writes.
+- **SQLite 3.26–3.54 Compatibility & Migration** — Preserves scalar `_id` types via `BLOB` affinity (plus `neosqlite-migration` for legacy `_id TEXT` collections), maintains SQLite 3.26 compatibility (AlmaLinux/RHEL 8), and preserves JSON subtypes on SQLite 3.54+.
+- **Python 3.12 Minimum** — Python 3.10 and 3.11 are no longer supported. `nx-27017` v0.9.0 follows the same runtime floor.
+- **Python 3.11/3.12 Adoption** — Native `Z` parsing, `datetime.UTC`, `itertools.batched()`, `math.sumprod()`, `asyncio.run(..., loop_factory=...)`, `typing.Self`, `@override`, PEP 695 `type` aliases, PEP 701 f-strings, and `slots=True`.
+- **Hardening** — Removed the deprecated `sqlite3.version` report from `serverStatus`, finished fluent-typing coverage, hoisted hot-path imports, and now enforce Python 3.12 Ruff rules.
+- **Packaging Fixes** — `pymongo` and `uvloop` are declared by the correct extras, and `pysqlite3-binary` is conditional on Python `< 3.15`.
+- **Verification** — 3,122 tests pass (83.64% coverage) on macOS Python 3.14.10 / SQLite 3.54.1, and 3,099 pass with 23 skips (80.98% coverage) on AlmaLinux 8 Python 3.12.15 / SQLite 3.26.0. The NX-27017 suite passes 180 tests with 1 skip on both platforms.
 
-For full details, see [documents/releases/v1.17.4.md](documents/releases/v1.17.4.md). Previous release highlights are in [documents/releases/v1.17.3.md](documents/releases/v1.17.3.md).
+This release is **not backward compatible for Python 3.10/3.11 users**; stay on v1.17.4 for those interpreters. v1.18.0 was tagged but never published on PyPI; v1.18.1 supersedes it. For full details, see [documents/releases/v1.18.1.md](documents/releases/v1.18.1.md). Previous release highlights are in [documents/releases/v1.17.4.md](documents/releases/v1.17.4.md).
 
 ## Installation
 
 NeoSQLite supports Python 3.12, 3.13, 3.14, and 3.15.
+
+SQLite 3.26+ is supported. JSONB, aggregate ORDER BY, `RETURNING`, and the
+3.35+ math functions are used when available; older SQLite builds fall back to
+the Python tier or register compatible SQL functions automatically.
 
 ```bash
 pip install neosqlite
@@ -74,6 +78,28 @@ pip install neosqlite[memory-constrained]
 pip install "neosqlite[nx27017]"          # Core
 pip install "neosqlite[nx27017-speed]"    # With uvloop (Linux/macOS)
 ```
+
+> The `jsonb` extra installs `pysqlite3-binary` only on Linux x86_64 with
+> Python `< 3.14`, where upstream publishes `manylinux_x86_64` wheels
+> (cp312-cp313). On Python 3.14/3.15, macOS, Windows, or ARM the extra
+> installs no additional driver; the standard library SQLite is used.
+
+### Migrating legacy `_id TEXT` databases
+
+Databases created by NeoSQLite 1.17.4 and earlier on non-JSONB SQLite store
+`_id` values in a `TEXT` column. That loses the distinction between values such
+as integer `1` and string `"1"`. The migration command copies the database to a
+new file and rebuilds those collection tables with `_id BLOB`:
+
+```bash
+neosqlite-migration old.db new.db
+```
+
+The source file is never modified. Use `--dry-run` to list affected tables,
+and `--overwrite` to replace an existing destination atomically. After the
+migration succeeds, point the application at `new.db`. The command preserves
+collection indexes and triggers; tables with foreign keys, extra columns, or
+non-standard schemas are left untouched.
 
 ## Quickstart
 

@@ -17,11 +17,12 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat-square&logo=postgresql&logoColor=white)](docker-compose.yml)
 [![Qdrant](https://img.shields.io/badge/Qdrant-1.15.5-DC2626?style=flat-square)](docker-compose.yml)
 [![Celery](https://img.shields.io/badge/Celery-5.6.3-37814A?style=flat-square&logo=celery&logoColor=white)](backend/pyproject.toml)
+[![CI](https://github.com/yashrajagawane/documind/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/yashrajagawane/documind/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-6366f1?style=flat-square)](LICENSE)
 
 <br/>
 
-[Quick Start](#quick-start) &middot; [Product Views](#product-workspace) &middot; [Workflow](#processing-workflow) &middot; [Architecture](#system-architecture) &middot; [Trust & Security](#trust--security-guarantees) &middot; [Tech Stack](#essential-technology-stack) &middot; [Documentation](#documentation-index)
+[Get Started](#quick-start) &middot; [Capabilities](#what-is-documind) &middot; [Architecture](#system-architecture) &middot; [Security](#trust--security-guarantees) &middot; [Deploy](#production-deployment) &middot; [Operations](#observability--recovery) &middot; [Docs](#documentation-index)
 
 </div>
 
@@ -82,6 +83,23 @@ Most document Q&A tools treat documents as unstructured blobs of text: they stri
 
 DocuMind is designed for private, single-host deployments and portfolio-scale use. Before treating it as a production service, complete the live qualification steps described in the deployment runbook and status section below.
 
+### Who it is for
+
+- **Researchers and analysts** who need to inspect lengthy reports and trace answers back to source sections.
+- **Builders and teams** evaluating a self-hosted document parsing and retrieval stack.
+- **Developers** who want a reference implementation for asynchronous ingestion, scoped retrieval, and citation integrity.
+
+### Design promises
+
+| Promise | How the system supports it |
+|---|---|
+| Answers should be inspectable | Responses include citation metadata resolved from retrieved chunks |
+| Data access should be scoped | Ownership checks apply at the API and vector-query boundary |
+| Parsing should be recoverable | PostgreSQL job state, Celery delivery, leases, and scheduled reconciliation cooperate to recover stale work |
+| Derived search data should be replaceable | PostgreSQL and stored parsed artifacts can be used to rebuild the Qdrant index |
+
+These are implementation goals and controls, not a guarantee of perfect extraction, answer accuracy, or uninterrupted availability. Verify important source material directly in the document preview.
+
 ---
 
 ## Product Workspace
@@ -119,6 +137,29 @@ Every uploaded document moves through a recoverable, state-machine pipeline back
 4. **Filtered Vector Search** — Upserts points to Qdrant collection `documind_chunks`. Query execution enforces strict tenant payload filters and rejects evidence below a relevance score of `0.35`.
 5. **Grounded Answer Synthesis** — Formulates answers via Google Gemini 3.8 Flash inside explicit evidence fences. Citations are derived server-side from verified vector results.
 
+### Supported file formats
+
+| Format | Typical content | Practical note |
+|---|---|---|
+| PDF | Text, page layout, tables, and scanned pages | Scanned PDFs depend on OCR quality and may need more worker memory |
+| DOCX | Headings, paragraphs, and tables | Complex page styling is represented as extracted content, not reproduced as a Word layout |
+| XLSX | Workbook and sheet content | Validate important formulas and multi-sheet relationships in the preview |
+| PPTX | Slide text and structure | Visual relationships and image-only text may not be fully represented in extracted text |
+| TXT, CSV, Markdown | Plain text, rows, and Markdown structure | Best suited to text-first files with consistent encoding and delimiters |
+
+The default upload cap is 25 MB. Parsing quality depends on the source file; check the structural preview and tables before relying on an answer or export. For file validation details and configurable limits, see [Configuration Reference](docs/CONFIGURATION.md).
+
+### Processing lifecycle
+
+| State | Meaning | Next action |
+|---|---|---|
+| `uploaded` / `queued` | File is stored and waiting for a worker | The worker claims the queued job |
+| `processing` / `extracting` / `chunking` / `indexing` | Parsing and indexing stages are in progress | Poll document status; the UI surfaces current progress |
+| `ready` | Parsed artifact is available and the document can be previewed or queried | Inspect the preview; use chat and exports |
+| `failed` | Processing exhausted or encountered a non-recoverable error | Review the error, correct the source/configuration if needed, then retry |
+
+The worker uses a bounded attempt policy. A retry requeues a failed document through the API; repeated rapid retries do not repair invalid input or a missing dependency. See the [processing architecture](docs/ARCHITECTURE.md) for leases, recovery, and job ownership details.
+
 ---
 
 ## System Architecture
@@ -140,6 +181,26 @@ DocuMind follows a modular monolith pattern with explicit service isolation. Thi
 - **Async Processing & AI** — Redis 7.4 broker with Celery workers for CPU/memory-intensive parsing. Local vector embeddings run in-process, vector search runs in Qdrant, and grounded generation queries Gemini.
 
 *For detailed architectural decisions and sequence flows, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [docs/ARCHITECTURE-DECISIONS.md](docs/ARCHITECTURE-DECISIONS.md).*
+
+### Request and data boundaries
+
+```mermaid
+flowchart LR
+    U[Browser] -->|HTTPS / JSON + auth| P[Caddy in production]
+    P --> F[Next.js frontend]
+    P --> A[FastAPI API]
+    A -->|relational state| DB[(PostgreSQL)]
+    A -->|job messages| R[(Redis)]
+    R --> W[Celery worker]
+    W -->|parse and embed| D[Docling + local embeddings]
+    A -->|filtered retrieval| Q[(Qdrant)]
+    W -->|index chunks| Q
+    A -->|question + retrieved evidence| G[Gemini API]
+    A -->|private object access| S[(S3-compatible storage)]
+    W -->|private object access| S
+```
+
+The browser talks to the web/API edge only. Data stores and the worker are internal services in the production Compose network. Gemini is an outbound provider call made by the backend after retrieval; only the question and selected evidence are sent for answer generation.
 
 ---
 
@@ -167,6 +228,19 @@ LLMs frequently hallucinate page numbers, section titles, and source quotations 
 - **Zero Raw File Leakage:** Storage keys and S3 URIs remain strictly internal. Download and raw file access are always verified against user ownership and streamed through authenticated endpoints.
 - **Memory-Only Access Tokens:** Access tokens reside exclusively in React state (never `localStorage` or `sessionStorage`), protecting against XSS token theft. Session renewal uses a rotating HttpOnly, SameSite refresh cookie with SHA-256 token-family reuse detection.
 - **Fail-Closed Rate Limiting:** Sliding-window rate limits run via atomic Redis Lua scripts. If Redis is unreachable, the system fails closed (HTTP 503) rather than allowing unmetered LLM calls.
+
+### Security control map
+
+| Boundary | Control in the application | Operator responsibility |
+|---|---|---|
+| Account credentials | Password hashing, short-lived access JWT, rotating HttpOnly refresh cookie | Protect signing secrets and configure secure HTTPS cookies |
+| Document ownership | Server-side ownership checks and per-user vector filters | Keep service credentials private and qualify cross-user access behavior in staging |
+| Uploaded files | Private storage abstraction and authenticated download route | Configure private bucket policy, encryption, retention, and credential scope |
+| Public network | Production overlay exposes Caddy as the public edge | Restrict host firewall and verify actual provider firewall and published ports |
+| AI provider | Backend sends bounded retrieved context to Gemini | Review provider terms; do not assume local embeddings mean all AI processing stays local |
+| Operations access | Metrics token and loopback-bound observability ports | Rotate credentials, restrict dashboard access, and rehearse incident response |
+
+This is a practical boundary map, not a certification or penetration-test report. The system has not had an independent third-party security audit.
 
 ---
 
@@ -261,6 +335,13 @@ docker compose exec backend alembic current
 
 The API's `/api/v1/health` endpoint checks that the process responds. `/api/v1/ready` also checks PostgreSQL and Redis and should be used as the readiness signal. A document may need time to pass through parsing, chunking, and indexing; poll its document status before retrying.
 
+| Signal | What it tells you | Expected use |
+|---|---|---|
+| `/api/v1/health` | API process can answer a request | Liveness probe and quick endpoint check |
+| `/api/v1/ready` | API plus PostgreSQL and Redis are reachable | Readiness check before sending application traffic |
+| `/api/v1/metrics` | Operational counters and histograms are available | Prometheus scrape using `X-Metrics-Token` |
+| Compose service health | Role-specific container checks for API, frontend, worker, scheduler, and dependencies | Host-level triage alongside service logs |
+
 ### Common symptoms
 
 | Symptom | First checks |
@@ -290,6 +371,20 @@ chmod 600 .env.production
 python scripts/validate_production_config.py --env-file .env.production
 ```
 
+For a release candidate, set the two image variables to the exact GHCR images tagged with the same full Git SHA, then run the stronger preflight. It validates production settings, immutable image tags, and the effective Compose port exposure before deployment:
+
+```bash
+export DOCUMIND_BACKEND_IMAGE=ghcr.io/yashrajagawane/documind-backend:$GIT_SHA
+export DOCUMIND_FRONTEND_IMAGE=ghcr.io/yashrajagawane/documind-frontend:$GIT_SHA
+
+python scripts/production_preflight.py \
+  --env-file .env.production \
+  --backend-image "$DOCUMIND_BACKEND_IMAGE" \
+  --frontend-image "$DOCUMIND_FRONTEND_IMAGE"
+```
+
+`GIT_SHA` must contain the full 40-character commit SHA. The preflight requires Docker Compose and valid production values; it does not deploy the release or substitute for staging qualification.
+
 Do not use the local `.env.example` as a production configuration. Use the full step-by-step instructions in [Production Deployment Runbook](docs/DEPLOYMENT-PRODUCTION.md), including host setup, firewall rules, qualification, rollback, and secret provisioning.
 
 ### Automated release path
@@ -301,6 +396,21 @@ Do not use the local `.env.example` as a production configuration. Use the full 
 5. The workflow saves a sanitized release record. Rollback uses a known-good image while database changes remain forward-only.
 
 Configure GitHub environments, host SSH credentials, image registry access, protected production reviewers, and smoke-test credentials as documented in the runbook. Workflow files are in [`.github/workflows`](.github/workflows).
+
+```mermaid
+flowchart LR
+    PR[Pull request] --> CI[Lint, typecheck, tests, build, security checks]
+    CI --> IMG[Commit-pinned images]
+    IMG --> STG[Staging deployment]
+    STG --> QUAL[Live qualification + restore rehearsal]
+    QUAL -->|approved release| GATE[Protected production approval]
+    GATE --> PROD[Production deployment + smoke checks]
+    PROD --> OBS[24-hour observation + closeout]
+    QUAL -->|issue found| FIX[Fix, rebuild, and requalify]
+    FIX --> CI
+```
+
+The release gate is evidence-based: passing CI builds the candidate, while staging qualification and protected approval determine whether it can proceed to production.
 
 ---
 
@@ -317,6 +427,15 @@ Operational assets include:
 - `backend/app/indexing/rebuild.py` — rebuild vector data from ready PostgreSQL documents and parsed artifacts; run with `cd backend && python -m app.indexing.rebuild` in an environment with indexing dependencies and service configuration.
 - `infra/systemd/` — example systemd service/timer assets for scheduled backup execution.
 - `infra/monitoring/` — Prometheus scraping, alert rules, Alertmanager configuration, and Grafana provisioning.
+
+### Recovery targets and evidence
+
+| Objective | Initial target | Evidence needed to accept it |
+|---|---:|---|
+| Recovery point objective (RPO) | 24 hours | Confirm backup schedule, successful encrypted object upload, and restore point coverage |
+| Recovery time objective (RTO) | 8 hours | Time a disposable restore and service recovery rehearsal end to end |
+
+These are recorded planning targets, not measured service guarantees. Record actual restore duration, data verification, and any gaps during staging qualification; revise the targets if the chosen host or storage service cannot meet them.
 
 Record backup retention, encryption key custody, restore duration, and the result of a rehearsal in the deployment record. Follow the [production runbook](docs/DEPLOYMENT-PRODUCTION.md) for exact host commands and the [production launch report](docs/PRODUCTION-LAUNCH-REPORT.md) for sign-off evidence.
 
@@ -423,6 +542,38 @@ curl --fail http://localhost:8000/api/v1/health
 
 See the [complete API reference](docs/API.md) for request schemas, response examples, authentication details, and error codes. Use `/ready` for dependency readiness; `/health` is a basic liveness check.
 
+### Minimal authenticated API flow
+
+The example below uses `jq` to extract the access token. Use a disposable local account and a non-sensitive sample document.
+
+```bash
+API=http://localhost:8000/api/v1
+
+# Register and capture the short-lived access token.
+TOKEN=$(curl --fail --silent --show-error "$API/auth/register" \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"reader@example.test","password":"use-a-long-local-test-password"}' \
+  | jq -r '.access_token')
+
+# Upload a supported sample; the API returns its document record and ID.
+DOC_ID=$(curl --fail --silent --show-error "$API/documents" \
+  -H "Authorization: Bearer $TOKEN" \
+  -F 'file=@./sample.pdf' \
+  | jq -r '.id')
+
+# Check processing state before making a preview or chat request.
+curl --fail --silent --show-error "$API/documents/$DOC_ID" \
+  -H "Authorization: Bearer $TOKEN"
+
+# Once the response reports status "ready", ask a grounded question.
+curl --fail --silent --show-error -X POST "$API/documents/$DOC_ID/chat" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"What is the main conclusion of this document?"}'
+```
+
+Registration sets a refresh cookie as well as returning the access token. For browser clients, let the application manage cookie credentials and token lifecycle; avoid storing access tokens in browser persistent storage.
+
 ---
 
 ## Configuration & Secrets
@@ -496,6 +647,23 @@ Current operational and product limitations:
 - **Security Audit** — While designed with defensive security controls (JWT in memory, CSRF/XSS mitigations, fail-closed rate limits), DocuMind has not undergone an independent third-party commercial penetration audit.
 - **External Model Processing** — Embeddings are computed locally, but grounded chat sends retrieved evidence and the user question to the configured Gemini API. Review the provider's data handling terms and configure the service accordingly before processing sensitive documents.
 - **Single-Host Baseline** — The production Compose path is a single-host deployment, not a highly available multi-region architecture. PostgreSQL, Redis, and Qdrant need separately managed persistence, monitoring, and capacity planning.
+
+### Frequently asked questions
+
+**Can I run DocuMind without a Gemini API key?**
+Yes. Registration, upload, parsing, preview, and indexing can run without Gemini. Grounded answer generation requires `GEMINI_API_KEY` and a network connection to the configured Gemini API.
+
+**Are embeddings sent to a hosted embedding provider?**
+No. The configured Sentence Transformers model creates embeddings locally. The separate answer-generation step sends the question and retrieved evidence to Gemini when chat is used.
+
+**Can I use it for private production documents today?**
+The repository contains a production deployment path, but the live staging, provider, backup-restore, and launch gates have not been completed. Treat it as unqualified for production until the [deployment status](#project-status--limitations) gates are closed.
+
+**Can I run multiple application replicas?**
+The documented baseline targets one host and one Compose deployment. Scaling requires validating shared storage, worker concurrency, database and vector capacity, rate limits, and cross-replica behavior first.
+
+**Where should I start if a document fails?**
+Check the document status and backend/worker/scheduler logs, verify available memory and dependencies, then retry only after addressing the cause. See [Operations & Troubleshooting](#operations--troubleshooting).
 
 ---
 

@@ -75,6 +75,28 @@ npx orm-mysql migrate up [dir] --host=localhost --port=3306 --user=root --pass=p
 
 > [Migration examples](./examples/migration/)
 
+Run migrations from code with modules that are already loaded, e.g. when the migration files are bundled into a single executable and there is no directory to scan:
+
+```javascript
+const { migrateModules } = require("@axiosleo/orm-mysql");
+
+const modules = [
+  // `filename` is what gets recorded in `migrate_logs`; keep the name the file has on disk
+  // so the CLI and `migrateModules` recognize each other's work
+  { filename: "1706764048.init.js", ...require("./migration/1706764048.init.js") },
+];
+
+const { executed, skipped } = await migrateModules("up", modules, {
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "pwd",
+  database: "mydb",
+});
+```
+
+`up` runs the modules in the given order, `down` in reverse order. Each call opens its own connection and closes it before returning, so several databases can be migrated one after another in the same process. It rejects with the original error when a migration fails; migrations before the failing one stay applied and recorded.
+
 ## AI Skills
 
 This project ships with AI Skills that teach AI coding assistants how to use this library correctly. You can install them with a single command:

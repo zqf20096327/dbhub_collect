@@ -48,6 +48,16 @@ Of course we are not the only ones who have similar ideas. Both `Titan` and `Tid
 
 ## Running
 
+Inbound RESP frames have fixed limits on both TCP and TLS, including before
+`AUTH`: 16 MiB of encoded bytes per frame, 8 MiB per bulk string, 65,536 total
+declared array elements across a frame (including nested arrays), and 32 nested
+array levels. These limits are defined in `src/frame.rs` and are not configurable
+at runtime. Pipelined frames each receive their own budget. Malformed or
+over-limit input closes the offending connection; other clients remain usable.
+RESP integers accept an optional sign followed by decimal digits in the signed
+64-bit range. Lengths accept decimal digits or exactly `-1` for null, and all
+line and bulk terminators must be CRLF.
+
 - Start `PD`, `TiKV` and one `TiDB` (for trigger GC) using `TiUP`, you can follow the official instructions [English](https://docs.pingcap.com/tidb/stable/production-deployment-using-tiup) or [中文](https://docs.pingcap.com/zh/tidb/stable/production-deployment-using-tiup).
 
 - Build the Tidis server
@@ -467,7 +477,16 @@ tls_key_file = "path/server.key"
 tls_cert_file = "path/server.crt"
 tls_auth_client = false           # tls_ca_cert_file must be specified if tls_auth_client is true
 tls_ca_cert_file = "path/ca.crt"
+tls_max_concurrent_handshakes = 128 # maximum pending handshakes
+tls_handshake_timeout_ms = 10000   # deadline from socket acceptance
 ```
+
+Both handshake settings are optional and must be positive integers; the values
+above are the defaults. TLS handshakes run concurrently. When all handshake
+slots are occupied, new connections wait in the operating system's listen
+backlog until a handshake succeeds, fails, or times out. Established clients
+release their handshake slot and are registered only after TLS succeeds.
+Shutdown cancels pending handshakes and waits for their tasks to finish.
 
 - Client-side
 
@@ -499,7 +518,16 @@ In addition, the `1pc` and `async commit` options are helpful for better perform
 
 `Tidis` use `mlua` library to interpret lua scripts. We can use `EVAL/EVALSHA` to execute lua script with global transaction support, without caring about the `CROSSSLOT` error either.
 
-The lua script will be running in a new transaction context, so all read and writes in the lua script are guaranteed to be atomic.
+Standalone Lua scripts run in a new transaction context. Inside `MULTI`,
+`EVAL` and `EVALSHA` return `QUEUED` and execute in order within the shared
+transaction at `EXEC`. Scripts can read earlier queued writes, and later
+commands can read script writes. No queued writes are visible before `EXEC`;
+`DISCARD` drops them. Script lookup for `EVALSHA` also happens at `EXEC`.
+
+Tidis retains its existing all-or-nothing `EXEC` policy: an error response from
+a queued command or a Lua runtime error aborts and rolls back the entire
+transaction. This includes a missing script or a script returning an error
+reply, and differs from Redis's treatment of runtime errors inside `EXEC`.
 
 All lua script e2e test cases are located in [test/test_lua.py](https://github.com/tidb-incubator/tidis/blob/master/test/test_lua.py).
 

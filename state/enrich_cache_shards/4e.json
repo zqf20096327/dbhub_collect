@@ -21,12 +21,12 @@
   }
  },
  "simonw/datasette": {
-  "commit_7d": 84,
-  "commit_90d": 263,
-  "rel_ver": "1.0a42",
-  "rel_pub": "2026-11-08",
-  "rel_days": 7,
-  "rel_n90": 6,
+  "commit_7d": 68,
+  "commit_90d": 327,
+  "rel_ver": "1.0a43",
+  "rel_pub": "2026-11-15",
+  "rel_days": 2,
+  "rel_n90": 8,
   "rel_pre": true,
   "rel_none": false,
   "sec_n": 6,
@@ -41,7 +41,7 @@
    "GHSA-q6j3-c4wc-63vw(-,low)"
   ],
   "contrib_n": 101,
-  "enriched_at": "20261115",
+  "enriched_at": "20261117",
   "lang": {
    "Python": 82,
    "JavaScript": 10,
@@ -51,11 +51,21 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261113",
-   "release": "20261115",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20261114"
   },
   "rel_notes": [
+   {
+    "t": "1.0a43",
+    "d": "2026-11-15",
+    "n": "- Fixed a security issue where a database registered using `add_database(db, name=..., route=...)` with a route that differs from its name could be downloaded from `/<route>.db` by actors who were denied access to it. Permission rules for the `view-database-download` action that were written against the route no longer apply, and should use the database name like rules for every other action.\n- The `gt`, `gte`, `lt` and `lte` table filters no longer return a 500 error for an integer too large for SQLite's s"
+   },
+   {
+    "t": "0.65.6",
+    "d": "2026-11-15",
+    "n": "- Fixed a security issue where a database registered using `add_database(db, name=..., route=...)` with a route that differs from its name could be downloaded from `/<route>.db` by actors who were denied access to it. The `view-database-download` and `view-database` permission checks for that URL are now made against the database name. A `permission_allowed()` plugin hook that matched `view-database-download` against the route will now be passed the database name instead."
+   },
    {
     "t": "1.0a42",
     "d": "2026-11-08",
@@ -88,10 +98,12 @@
    }
   ],
   "etag": {
-   "release": "W/\"3cbdebad74d0a001c8fd77915a8dee854c5ec7d0816e5d88060e4a557741569c\"",
+   "release": "W/\"ed25fb154b3e8b2ba872049b37e2539653816bbda7f4bb2953516051bed5426e\"",
    "security": "W/\"8b15969a798f983470476c92cfd11239298ec00ed52558332425a48ea72fa5cf\""
   },
   "rel_dates": [
+   "2026-11-15",
+   "2026-11-15",
    "2026-11-08",
    "2026-09-24",
    "2026-09-16",
@@ -154,12 +166,12 @@
   }
  },
  "thevahidal/soul": {
-  "commit_90d": 0,
-  "commit_7d": 0,
-  "rel_ver": "v0.9.2",
-  "rel_pub": "2026-08-09",
-  "rel_days": 98,
-  "rel_n90": 0,
+  "commit_90d": 25,
+  "commit_7d": 25,
+  "rel_ver": "soul-cli-v0.11.0",
+  "rel_pub": "2026-11-16",
+  "rel_days": 1,
+  "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -173,16 +185,37 @@
    "Bru": 0,
    "SCSS": 0
   },
-  "enriched_at": "20261114",
+  "enriched_at": "20261117",
   "dim_ts": {
    "security": "20261027",
-   "commit": "20261114",
-   "release": "20261114"
+   "commit": "20261117",
+   "release": "20261117"
   },
   "etag": {
-   "release": "W/\"4a6ca0605c869c0e1f70115bdd4eb03eb1c994750f45d7ab4766002abd221c54\""
+   "release": "W/\"29338faa5fe8e09dd0e185f05f0b9bd4b83730e64cc580d9ef89b326dc268b01\""
   },
-  "rel_dates": []
+  "rel_dates": [
+   "2026-11-16",
+   "2026-11-16",
+   "2026-11-14"
+  ],
+  "rel_notes": [
+   {
+    "t": "soul-cli-v0.11.0",
+    "d": "2026-11-16",
+    "n": "## [0.11.0](https://github.com/thevahidal/soul/compare/soul-cli-v0.10.0...soul-cli-v0.11.0) (2026-11-16)\n\n\n### Features\n\n* add distinct, group/aggregate, new filter operators, OR groups and NOT to rows query ([95b70e4](https://github.com/thevahidal/soul/commit/95b70e4984fca5377b71b41e6736afb13a65083f))\n\n\n### Bug Fixes\n\n* reject repeated query params in row query helpers ([41f1cce](https://github.com/thevahidal/soul/commit/41f1cce2dc6d1a4467018612e31b285fe540c924))"
+   },
+   {
+    "t": "soul-cli-v0.10.0",
+    "d": "2026-11-16",
+    "n": "* **ci:** drop Node 20 from engines/CI matrix, unsupported by better-sqlite3 13 ([35b63ed](https://github.com/thevahidal/soul/commit/35b63ed49a3d649eece7cda8cc1ae6c267445f39))\n* correct _users_roles unique constraint to (user_id, role_id) ([021c058](https://github.com/thevahidal/soul/commit/021c058ee825db17d9e9c844b936dbd0fad4f3a7))\n* updatesuperuser crashes when setting --is_superuser via SQLite bind ([f5c3038](https://github.com/thevahidal/soul/commit/f5c30389d3e701314998229a2dee19e1232d855b))"
+   },
+   {
+    "t": "v0.9.3",
+    "d": "2026-11-14",
+    "n": "## What's Changed\n* chore: bump version to 0.9.2 by @thevahidal in https://github.com/thevahidal/soul/pull/247\n* Release 0.9.3 and guard npm publish against version mismatch by @thevahidal in https://github.com/thevahidal/soul/pull/256\n\n\n**Full Changelog**: https://github.com/thevahidal/soul/compare/v0.9.2...v0.9.3"
+   }
+  ]
  },
  "kawasin73/prsqlite": {
   "commit_90d": 0,
@@ -223,7 +256,7 @@
   "commit_7d": 0,
   "rel_ver": "app-13.0.3",
   "rel_pub": "2026-09-02",
-  "rel_days": 74,
+  "rel_days": 76,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -285,7 +318,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.4",
   "rel_pub": "2026-07-27",
-  "rel_days": 111,
+  "rel_days": 113,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -314,10 +347,10 @@
  "objectbox/objectbox-c": {
   "commit_90d": 0,
   "commit_7d": 0,
-  "rel_ver": "v6.0.0-beta2",
-  "rel_pub": "2026-09-30",
-  "rel_days": 46,
-  "rel_n90": 1,
+  "rel_ver": "v6.0.0-rc",
+  "rel_pub": "2026-11-13",
+  "rel_days": 4,
+  "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
   "sec_n": 0,
@@ -331,12 +364,17 @@
    "Shell": 1,
    "CMake": 1
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261117",
   "rel_notes": [
+   {
+    "t": "v6.0.0-rc",
+    "d": "2026-11-13",
+    "n": "DBpedia OpenAI embeddings (1536); about the same (0.9-1.25x) on lower dimensions like SIFT (128) and GloVe (100)"
+   },
    {
     "t": "v6.0.0-beta2",
     "d": "2026-09-30",
-    "n": "Lead feature: P2P Mesh Sync\r\n\r\n* WebAssembly (WASM): the library is now built as part of releases;\r\n  also updated the Emscripten toolchain, reducing the binary size significantly\r\n* Admin: modernized user interface based on Vue.js 3 and Material Design 3\r\n* Admin: optimized pages now loading faster\r\n* Android: log messages now use the logcat tag \"ObjectBox\" (previously \"Box\")\r\n* **Breaking:** removed previously deprecated functions from the C API:\r\n  * `obx_debug_log()` and `obx_debug_log_enabled()`: use `"
+    "n": "This beta is now outdated, check for the newest release instead."
    },
    {
     "t": "v6.0.0-beta",
@@ -350,9 +388,16 @@
    }
   ],
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102"
-  }
+   "commit": "20261117",
+   "release": "20261117"
+  },
+  "etag": {
+   "release": "W/\"26c25d7ea9e050f7ee8af6c57ef3d7571807abb3230e929c0262b8cecf4bc9e5\""
+  },
+  "rel_dates": [
+   "2026-11-13",
+   "2026-09-30"
+  ]
  },
  "oracle/container-images": {
   "commit_90d": 26,
@@ -381,7 +426,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.0.1",
   "rel_pub": "2019-05-05",
-  "rel_days": 2751,
+  "rel_days": 2753,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -460,7 +505,7 @@
    "release": "W/\"c1c7ec97f05d9e02c41c951c99840e4874f33895b793872d301392d85d405750\""
   },
   "rel_pub": "2026-11-07",
-  "rel_days": 8,
+  "rel_days": 10,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_dates": [
@@ -501,7 +546,7 @@
   "commit_7d": 0,
   "rel_ver": "2.7.7",
   "rel_pub": "2025-09-15",
-  "rel_days": 426,
+  "rel_days": 428,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -524,7 +569,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.25.0",
   "rel_pub": "2026-10-29",
-  "rel_days": 17,
+  "rel_days": 19,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -577,7 +622,7 @@
  "clement-tourriere/dbcrust": {
   "rel_ver": "v0.37.2",
   "rel_pub": "2026-09-08",
-  "rel_days": 68,
+  "rel_days": 70,
   "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
@@ -632,7 +677,7 @@
  "TheAngryByrd/Marten.FSharp": {
   "rel_ver": "v0.6.2",
   "rel_pub": "2023-06-11",
-  "rel_days": 1253,
+  "rel_days": 1255,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -651,7 +696,7 @@
  "david-pfx/Andl": {
   "rel_ver": "v0-16f06-alpha",
   "rel_pub": "2016-06-02",
-  "rel_days": 3818,
+  "rel_days": 3820,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -672,7 +717,7 @@
  "oracle/soda-for-java": {
   "rel_ver": "v.1.1.29",
   "rel_pub": "2024-11-05",
-  "rel_days": 740,
+  "rel_days": 742,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -738,7 +783,7 @@
  "blind-oracle/psql-streamer": {
   "rel_ver": "v1.1.0",
   "rel_pub": "2020-03-07",
-  "rel_days": 2444,
+  "rel_days": 2446,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -756,7 +801,7 @@
  "wenj91/gobatis": {
   "rel_ver": "v0.1.8",
   "rel_pub": "2022-06-10",
-  "rel_days": 1619,
+  "rel_days": 1621,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -786,7 +831,7 @@
  "SirWaithaka/simple-mpesa": {
   "rel_ver": "v0.1-alpha",
   "rel_pub": "2020-11-15",
-  "rel_days": 2191,
+  "rel_days": 2193,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -804,7 +849,7 @@
  "babelouest/hoel": {
   "rel_ver": "v1.4.29",
   "rel_pub": "2023-11-14",
-  "rel_days": 1097,
+  "rel_days": 1099,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -824,7 +869,7 @@
  "pigoz/effect-sql": {
   "rel_ver": "v0.0.34",
   "rel_pub": "2023-08-28",
-  "rel_days": 1175,
+  "rel_days": 1177,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -917,7 +962,7 @@
  "oracle/nosql-java-sdk": {
   "rel_ver": "v5.4.24",
   "rel_pub": "2026-08-28",
-  "rel_days": 79,
+  "rel_days": 81,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -935,7 +980,7 @@
  "LutrisEng/datom-rs": {
   "rel_ver": "v0.1.1-pre4",
   "rel_pub": "2021-08-26",
-  "rel_days": 1907,
+  "rel_days": 1909,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -982,7 +1027,7 @@
  "MartMbithi/Digital_Library": {
   "rel_ver": "v1.0",
   "rel_pub": "2020-06-24",
-  "rel_days": 2335,
+  "rel_days": 2337,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1003,7 +1048,7 @@
  "spences10/ccrecall": {
   "rel_ver": "v0.0.16",
   "rel_pub": "2026-09-23",
-  "rel_days": 53,
+  "rel_days": 55,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1036,7 +1081,7 @@
  "OmkarPathak/A-Simple-Note-Taking-Terminal-App": {
   "rel_ver": "v1.0",
   "rel_pub": "2017-07-30",
-  "rel_days": 3395,
+  "rel_days": 3397,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1068,7 +1113,7 @@
  "giulio-leone/harness-os": {
   "rel_ver": "v2.0.5",
   "rel_pub": "2026-04-02",
-  "rel_days": 227,
+  "rel_days": 229,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1182,7 +1227,7 @@
  "Michael-A-Kuykendall/botanica": {
   "rel_ver": "data-v0.2.0",
   "rel_pub": "2026-07-09",
-  "rel_days": 129,
+  "rel_days": 131,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1202,7 +1247,7 @@
  "akarindt/UmatoMusume": {
   "rel_ver": "v2.0-beta",
   "rel_pub": "2025-10-04",
-  "rel_days": 407,
+  "rel_days": 409,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1253,7 +1298,7 @@
  "oceanbase/obkv-table-client-go": {
   "rel_ver": "v0.1.7",
   "rel_pub": "2023-10-27",
-  "rel_days": 1115,
+  "rel_days": 1117,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1337,7 +1382,7 @@
  "WilliamRagstad/LavaStore.js": {
   "rel_ver": "v1.2.4",
   "rel_pub": "2020-12-13",
-  "rel_days": 2163,
+  "rel_days": 2165,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1412,7 +1457,7 @@
  "turbot/steampipe-plugin-alicloud": {
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-09-11",
-  "rel_days": 65,
+  "rel_days": 67,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1433,7 +1478,7 @@
  "Magi-Labs/Magio": {
   "rel_ver": "ext-v0.2.0",
   "rel_pub": "2026-08-10",
-  "rel_days": 97,
+  "rel_days": 99,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1453,7 +1498,7 @@
  "KGG-Dev-Course/taskmaster-api": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2023-12-11",
-  "rel_days": 1070,
+  "rel_days": 1072,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1470,7 +1515,7 @@
  "arhuman/mnemos": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-06-30",
-  "rel_days": 138,
+  "rel_days": 140,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1520,7 +1565,7 @@
  "shakfu/chimera": {
   "rel_ver": "0.4.1",
   "rel_pub": "2026-09-28",
-  "rel_days": 48,
+  "rel_days": 50,
   "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
@@ -1558,7 +1603,7 @@
  "trickle-labs/pg-ripple": {
   "rel_ver": "v0.136.0",
   "rel_pub": "2026-08-30",
-  "rel_days": 77,
+  "rel_days": 79,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -1625,7 +1670,7 @@
  "soft9000/PyDAO": {
   "rel_ver": "soft9000",
   "rel_pub": "2025-03-22",
-  "rel_days": 603,
+  "rel_days": 605,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1655,7 +1700,7 @@
  "Dylan-DPC-zz/Importer": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2017-04-18",
-  "rel_days": 3498,
+  "rel_days": 3500,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1774,7 +1819,7 @@
  "UzJu/CodeOrion": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-07-01",
-  "rel_days": 137,
+  "rel_days": 139,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -1976,8 +2021,8 @@
   }
  },
  "pingcap/wordpress-tidb-docker": {
-  "commit_90d": 1,
-  "commit_7d": 1,
+  "commit_90d": 4,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -1988,14 +2033,18 @@
   "lang": {
    "Shell": 100
   },
-  "enriched_at": "20261103",
+  "enriched_at": "20261117",
   "dim_ts": {
-   "commit": "20261103",
-   "release": "20261103",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20260930",
    "contrib": "20260930",
    "lang": "20260930"
-  }
+  },
+  "etag": {
+   "release": "\"94eeeab27b6341769075417309712d7496ad8ab5c308f94ade8d64dd3fe54db1\""
+  },
+  "rel_dates": []
  },
  "IronMind15/children-workplace": {
   "rel_ver": "v1.5.4",
@@ -2079,7 +2128,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.0",
   "rel_pub": "2025-09-19",
-  "rel_days": 422,
+  "rel_days": 424,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2667,7 +2716,7 @@
  "GDguzi/GD-DentOS": {
   "rel_ver": "v0.1.5",
   "rel_pub": "2026-08-04",
-  "rel_days": 103,
+  "rel_days": 105,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2694,7 +2743,7 @@
  "zukovlabs/enterprise-java-saas-starter-kit": {
   "rel_ver": "v2.0.0",
   "rel_pub": "2026-10-12",
-  "rel_days": 34,
+  "rel_days": 36,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2744,7 +2793,7 @@
  "Nishchalpr4/alembic-head-fixer": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 27,
+  "rel_days": 29,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2767,7 +2816,7 @@
  "openmdvr/openmdvr": {
   "rel_ver": "v0.1.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 26,
+  "rel_days": 28,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -2794,7 +2843,7 @@
  "VEST-Tokamak/vaft": {
   "rel_ver": "v0.9.0",
   "rel_pub": "2026-10-24",
-  "rel_days": 22,
+  "rel_days": 24,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -2821,7 +2870,7 @@
  "solariumdb/solariumdb": {
   "rel_ver": "v0.1.3",
   "rel_pub": "2026-10-28",
-  "rel_days": 18,
+  "rel_days": 20,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,

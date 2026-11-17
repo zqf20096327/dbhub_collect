@@ -1,11 +1,11 @@
 {
  "directus/directus": {
-  "commit_7d": 22,
-  "commit_90d": 153,
+  "commit_7d": 24,
+  "commit_90d": 150,
   "rel_ver": "v12.6.1",
   "rel_pub": "2026-11-04",
-  "rel_days": 11,
-  "rel_n90": 8,
+  "rel_days": 13,
+  "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 30,
@@ -22,7 +22,7 @@
    "GHSA-chfm-g7r3-vv42(CVE-2026-10716,high)"
   ],
   "contrib_n": 442,
-  "enriched_at": "20261114",
+  "enriched_at": "20261117",
   "lang": {
    "TypeScript": 79,
    "Vue": 19,
@@ -32,8 +32,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261113",
-   "release": "20261113",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20261114"
   },
   "rel_notes": [
@@ -79,7 +79,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"0404bf7d3bae79ad8d78995af314f1902e4f296a838798c421d6dfd7c1b9ef23\"",
+   "release": "W/\"94f2978f8a9c4791b822ba8369ddaa80350028e9b648ba0d09ef3179672835b0\"",
    "security": "W/\"f888d1c4b71309c9e1aae1a72c36f4bac7996479b1e97092ce261397cb33b663\""
   },
   "rel_dates": [
@@ -89,8 +89,7 @@
    "2026-10-07",
    "2026-09-23",
    "2026-09-22",
-   "2026-08-25",
-   "2026-08-18"
+   "2026-08-25"
   ]
  },
  "orbitinghail/sqlsync": {
@@ -120,7 +119,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2.1",
   "rel_pub": "2026-10-22",
-  "rel_days": 24,
+  "rel_days": 26,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -145,7 +144,7 @@
   "commit_7d": 2,
   "rel_ver": "4.3.5",
   "rel_pub": "2025-08-16",
-  "rel_days": 456,
+  "rel_days": 458,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -159,10 +158,10 @@
    "Batchfile": 1,
    "Shell": 0
   },
-  "enriched_at": "20261115",
+  "enriched_at": "20261117",
   "dim_ts": {
    "commit": "20261115",
-   "release": "20261115",
+   "release": "20261117",
    "security": "20261027"
   },
   "rel_notes": [
@@ -183,7 +182,7 @@
    }
   ],
   "etag": {
-   "release": "W/\"1bd4f29b194c215b5333ca5bedc5ed976aa5231a795f6c7dd9c78c80935f1910\""
+   "release": "W/\"cbb5df4b39842b321e04ea089e790c842542ee890a38087c406ee7f4d53f0dc7\""
   },
   "rel_dates": []
  },
@@ -214,12 +213,12 @@
   "rel_n90": 0
  },
  "nitrite/nitrite-java": {
-  "commit_90d": 92,
-  "commit_7d": 5,
+  "commit_90d": 85,
+  "commit_7d": 4,
   "rel_ver": "v5.4.2",
   "rel_pub": "2026-10-22",
-  "rel_days": 24,
-  "rel_n90": 8,
+  "rel_days": 26,
+  "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 3,
@@ -236,7 +235,7 @@
    "Kotlin": 3,
    "Shell": 0
   },
-  "enriched_at": "20261107",
+  "enriched_at": "20261117",
   "rel_notes": [
    {
     "t": "v5.4.2",
@@ -252,16 +251,40 @@
     "t": "v5.4.0",
     "d": "2026-10-05",
     "n": "- **An index still in the list layout is migrated the first time it is accessed** and the legacy map dropped, the way the composite layout already migrates a non-unique index. `IndexMap` exposes the single-id map to the scanner and the filters as one-element lists, so the read path is unchanged. The map has its own name because the RocksDB adapter decodes values by the declared type of the map they live in.\n- Every MVStore map was opened with H2's default `ObjectDataType`, which reads stored documents, inde"
+   },
+   {
+    "t": "v5.3.0",
+    "d": "2026-08-31",
+    "n": "**Reclamation on close is guaranteed; reclamation while running is not.** `close()` compacts synchronously and always shrinks the file. MVStore's background compaction runs on a one-second tick and attempts its work under a *try*-lock, so a writer holding the store lock makes it skip that round: how much a long-running application gets depends on its idle time and on how many cores are available to schedule the thread on. An application that holds the database open for months should not rely on the backgrou"
+   },
+   {
+    "t": "v5.2.0",
+    "d": "2026-08-30",
+    "n": "- **The bridge can open a transaction** (`docs/PROTOCOL.md` §3.1). A transaction is a second adapter over the same database rather than a mode on the first, so one connection's uncommitted documents can never reach another connection's reads. Nitrite's transaction lives above the storage engine — a `TransactionStore` buffers the writes and a journal replays them on commit — so this works identically on MVStore, RocksDB and in memory.\n- **`nitrite-bridge` — inspect a running Nitrite database from a de"
+   },
+   {
+    "t": "v5.1.0",
+    "d": "2026-08-22",
+    "n": "## Improvements\n\n- **A sorted, limited `find` no longer fetches the whole collection when the sort field is indexed.** `find(ALL, orderBy(\"createdAt\", Descending).limit(20))` asked for 20 rows and cost what draining every stored document costs. `SortedDocumentStream` collects the entire result set before `BoundedStream` gets to drop 99% of it — and the cost is the decode, not the comparison, so it scales with document *size* as well as count. An index on the sort field bought nothing: the index was only e"
    }
   ],
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20261107"
   },
   "etag": {
-   "security": "W/\"719af66da068a843db57c57e30a033d19c127cbe4df8eb8aab8eefdc5cb2a698\""
-  }
+   "security": "W/\"719af66da068a843db57c57e30a033d19c127cbe4df8eb8aab8eefdc5cb2a698\"",
+   "release": "W/\"61b66276597a6e2ca7f90b4342d44ab794796e252eba8e1e32835730d5ab4ad6\""
+  },
+  "rel_dates": [
+   "2026-10-22",
+   "2026-10-17",
+   "2026-10-05",
+   "2026-08-31",
+   "2026-08-30",
+   "2026-08-22"
+  ]
  },
  "zopefoundation/ZODB": {
   "commit_90d": 10,
@@ -287,7 +310,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.8.0",
   "rel_pub": "2025-06-22",
-  "rel_days": 511,
+  "rel_days": 513,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -308,7 +331,7 @@
   "commit_7d": 0,
   "rel_ver": "1.1.0",
   "rel_pub": "2024-05-19",
-  "rel_days": 910,
+  "rel_days": 912,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -392,7 +415,7 @@
   "commit_7d": 0,
   "rel_ver": "1.1.1",
   "rel_pub": "2021-02-02",
-  "rel_days": 2112,
+  "rel_days": 2114,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -414,7 +437,7 @@
   "commit_7d": 0,
   "rel_ver": "2.13.8",
   "rel_pub": "2020-11-24",
-  "rel_days": 2182,
+  "rel_days": 2184,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -450,7 +473,7 @@
   "commit_7d": 0,
   "rel_ver": "V2026.13.03",
   "rel_pub": "2026-03-13",
-  "rel_days": 247,
+  "rel_days": 249,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -473,7 +496,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.7.0",
   "rel_pub": "2025-11-16",
-  "rel_days": 364,
+  "rel_days": 366,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -500,7 +523,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.2",
   "rel_pub": "2019-06-16",
-  "rel_days": 2709,
+  "rel_days": 2711,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -544,7 +567,7 @@
  "savdagod/TidbytAssistant": {
   "rel_ver": "v2025.6.1",
   "rel_pub": "2025-06-12",
-  "rel_days": 521,
+  "rel_days": 523,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -581,7 +604,7 @@
  "ido50/sqlz": {
   "rel_ver": "v1.2.0",
   "rel_pub": "2023-10-09",
-  "rel_days": 1133,
+  "rel_days": 1135,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -598,7 +621,7 @@
  "henrythasler/cloud-tileserver": {
   "rel_ver": "v1.3.2",
   "rel_pub": "2025-09-02",
-  "rel_days": 439,
+  "rel_days": 441,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -619,7 +642,7 @@
  "kriasoft/knex-types": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2022-12-02",
-  "rel_days": 1444,
+  "rel_days": 1446,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -637,7 +660,7 @@
  "alexdeathway/headstart-django": {
   "rel_ver": "patch",
   "rel_pub": "2024-11-11",
-  "rel_days": 734,
+  "rel_days": 736,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -656,7 +679,7 @@
  "factorhouse/factorhouse-local": {
   "rel_ver": "v2.4",
   "rel_pub": "2026-04-10",
-  "rel_days": 219,
+  "rel_days": 221,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -693,7 +716,7 @@
  "pkvartsianyi/spatio": {
   "rel_ver": "core-v0.3.9",
   "rel_pub": "2026-06-22",
-  "rel_days": 146,
+  "rel_days": 148,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -821,7 +844,7 @@
  "oracle/create-database-app": {
   "rel_ver": "v1.6.1",
   "rel_pub": "2026-02-04",
-  "rel_days": 284,
+  "rel_days": 286,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -870,7 +893,7 @@
  "DavisDevelopment/pman": {
   "rel_ver": "v0.8.9",
   "rel_pub": "2018-07-12",
-  "rel_days": 3048,
+  "rel_days": 3050,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -907,7 +930,7 @@
  "cybrox/crunchdb": {
   "rel_ver": "3.2.2",
   "rel_pub": "2018-07-15",
-  "rel_days": 3045,
+  "rel_days": 3047,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1011,7 +1034,7 @@
  "TeamHavit/Havit-Server": {
   "rel_ver": "v1.1.1",
   "rel_pub": "2024-08-03",
-  "rel_days": 834,
+  "rel_days": 836,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1028,7 +1051,7 @@
  "Baterka/CSGOHunt.com-Copy": {
   "rel_ver": "v0.1-alpha",
   "rel_pub": "2018-04-17",
-  "rel_days": 3134,
+  "rel_days": 3136,
   "rel_n90": 0,
   "rel_pre": true,
   "rel_none": false,
@@ -1118,7 +1141,7 @@
  "dopos/dcape": {
   "rel_ver": "v3.1.0",
   "rel_pub": "2024-06-03",
-  "rel_days": 895,
+  "rel_days": 897,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1167,7 +1190,7 @@
  "TimMikeladze/arango-migrate": {
   "rel_ver": "2.0.0",
   "rel_pub": "2025-02-13",
-  "rel_days": 640,
+  "rel_days": 642,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1185,7 +1208,7 @@
  "salehhashemi1992/laravel-repository": {
   "rel_ver": "v0.6.0",
   "rel_pub": "2026-06-14",
-  "rel_days": 154,
+  "rel_days": 156,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1220,7 +1243,7 @@
  "HobnobMancer/cazy_webscraper": {
   "rel_ver": "v2.3.0.5",
   "rel_pub": "2026-06-21",
-  "rel_days": 147,
+  "rel_days": 149,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1305,7 +1328,7 @@
  "garutilorenzo/ansible-role-linux-mysql": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2022-08-31",
-  "rel_days": 1537,
+  "rel_days": 1539,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1338,7 +1361,7 @@
  "jdfesa/lumapse": {
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-09-06",
-  "rel_days": 70,
+  "rel_days": 72,
   "rel_n90": 2,
   "rel_pre": true,
   "rel_none": false,
@@ -1396,7 +1419,7 @@
  "AndreaBozzo/Ceres": {
   "rel_ver": "v0.7.0",
   "rel_pub": "2026-08-19",
-  "rel_days": 88,
+  "rel_days": 90,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1473,7 +1496,7 @@
  "flodlc/pg-mate": {
   "rel_ver": "1.0.20",
   "rel_pub": "2023-03-24",
-  "rel_days": 1332,
+  "rel_days": 1334,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1503,7 +1526,7 @@
  "kinto-technologies/SpringBoot3BatchStarter": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2024-12-18",
-  "rel_days": 697,
+  "rel_days": 699,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1562,7 +1585,7 @@
  "AalbatrossGuy/Aurora": {
   "rel_ver": "v0.2",
   "rel_pub": "2022-07-31",
-  "rel_days": 1568,
+  "rel_days": 1570,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1580,7 +1603,7 @@
  "boyobob/OdinsList": {
   "rel_ver": "v0.2.5",
   "rel_pub": "2026-03-10",
-  "rel_days": 250,
+  "rel_days": 252,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1697,7 +1720,7 @@
  "syndbg/onetui": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-09-27",
-  "rel_days": 49,
+  "rel_days": 51,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1868,7 +1891,7 @@
  "pgdesk/pgdesk": {
   "rel_ver": "v0.2.0",
   "rel_pub": "2026-09-29",
-  "rel_days": 47,
+  "rel_days": 49,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2128,7 +2151,7 @@
   "commit_7d": 0,
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-08-29",
-  "rel_days": 78,
+  "rel_days": 80,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -2304,12 +2327,12 @@
   }
  },
  "alibabacloud-sdk-swift/polardb-20170801": {
-  "commit_90d": 26,
+  "commit_90d": 27,
   "commit_7d": 1,
-  "rel_ver": "8.2.1",
-  "rel_pub": "2026-10-26",
-  "rel_days": 20,
-  "rel_n90": 12,
+  "rel_ver": "8.4.0",
+  "rel_pub": "2026-11-12",
+  "rel_days": 5,
+  "rel_n90": 27,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -2321,15 +2344,40 @@
    "Swift": 100,
    "Ruby": 0
   },
-  "enriched_at": "20261102",
+  "enriched_at": "20261117",
   "dim_ts": {
-   "commit": "20261102",
-   "release": "20261102",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
   },
   "rel_notes": [
+   {
+    "t": "8.4.0",
+    "d": "2026-11-12",
+    "n": "- Update API CreateAgenticDBProject: add request parameters ZoneId.\n- Update API DescribeDBClusterAccessWhitelist: add response parameters Body.ProjectItems.\n- Update API ModifyDBClusterAccessWhitelist: add request parameters ProjectId."
+   },
+   {
+    "t": "8.3.1",
+    "d": "2026-11-06",
+    "n": "- Generated 2017-08-01 for `polardb`."
+   },
+   {
+    "t": "8.3.0",
+    "d": "2026-11-06",
+    "n": "- Support API DescribeAIDBClusterResourceUsage.\n- Support API DescribeDBClusterModelEnhancement.\n- Support API DescribeDBInstances.\n- Support API DisableDBClusterCTable.\n- Support API DisableDBClusterDocumentDB.\n- Support API EnableAIDBClusterDatasetService.\n- Support API EnableDBClusterCTable.\n- Support API EnableDBClusterDocumentDB.\n- Support API ModifyAIDBClusterTask.\n- Support API ModifyDBClusterAutoUpgradeMinorVersion.\n- Support API ModifyDBNodeRouterWeight.\n- Support API RestartDBCluster."
+   },
+   {
+    "t": "8.2.3",
+    "d": "2026-11-03",
+    "n": "- Update API CreateAgenticDBTenantApiKey: add request parameters TenantId.\n- Update API DescribeAgenticDBProjects: add response parameters Body.Items.$.BranchCount."
+   },
+   {
+    "t": "8.2.2",
+    "d": "2026-11-02",
+    "n": "- Update API CreatePolarFs: add request parameters ResourceGroupId.\n- Update API DescribePolarFs: add request parameters ResourceGroupId.\n- Update API DescribePolarFs: add response parameters Body.Items.$.ResourceGroupId.\n- Update API DescribePolarFsAttribute: add response parameters Body.ResourceGroupId.\n- Update API RetrievalKnowledgeBase: add response parameters Body.Results.$.KnowledgeBaseId."
+   },
    {
     "t": "8.2.1",
     "d": "2026-10-26",
@@ -2344,7 +2392,49 @@
     "t": "8.1.0",
     "d": "2026-10-22",
     "n": "- Support API CreateAgenticDBTenant.\n- Support API DeleteAgenticDBTenant.\n- Support API DescribeAgenticDBBranchRestoreWindow.\n- Support API DescribeAgenticDBProjectHistoryRetention.\n- Support API ModifyAgenticDBProjectHistoryRetention.\n- Update API CreateAgenticDBBranch: add request parameters ParentTimestamp.\n- Update API CreateAgenticDBBranch: add response parameters Body.ParentTimestamp.\n- Update API CreateAgenticDBProject: add request parameters HistoryRetentionSeconds.\n- Update API CreateAgenticDBProje"
+   },
+   {
+    "t": "8.0.2",
+    "d": "2026-10-21",
+    "n": "- Update API CreateApplication: add request parameters MemApplicationSpec.PolarAIEmbedderInstanceId.\n- Update API CreateApplication: add request parameters MemApplicationSpec.PolarAIGraphLlmInstanceId.\n- Update API CreateApplication: add request parameters MemApplicationSpec.PolarAILlmInstanceId.\n- Update API CreateApplication: add request parameters MemApplicationSpec.PolarAIRerankerInstanceId."
+   },
+   {
+    "t": "8.0.1",
+    "d": "2026-10-19",
+    "n": "- Update API DescribeKnowledgeBaseAnswer: add response parameters Body.Sources.$.SourceUri.\n- Update API DescribeKnowledgeBaseFileShards: add response parameters Body.Shards.$.SourceUri.\n- Update API RetrievalKnowledgeBase: add response parameters Body.Results.$.SourceUri."
    }
+  ],
+  "etag": {
+   "release": "W/\"a82031fe8650b6f1e53e940e499fcab891c15dcb9243e42edff80647b130a6e2\""
+  },
+  "rel_dates": [
+   "2026-11-12",
+   "2026-11-06",
+   "2026-11-06",
+   "2026-11-03",
+   "2026-11-02",
+   "2026-10-26",
+   "2026-10-23",
+   "2026-10-22",
+   "2026-10-21",
+   "2026-10-19",
+   "2026-10-19",
+   "2026-10-14",
+   "2026-09-23",
+   "2026-09-21",
+   "2026-09-18",
+   "2026-09-16",
+   "2026-09-16",
+   "2026-09-11",
+   "2026-09-10",
+   "2026-09-09",
+   "2026-09-03",
+   "2026-09-02",
+   "2026-09-01",
+   "2026-09-01",
+   "2026-08-28",
+   "2026-08-27",
+   "2026-08-26"
   ]
  },
  "Orthologues/DM887-ReinforcementLearning": {
@@ -2376,7 +2466,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.4.48",
   "rel_pub": "2025-02-27",
-  "rel_days": 626,
+  "rel_days": 628,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2467,7 +2557,7 @@
   "commit_7d": 0,
   "rel_ver": "v1.0.2",
   "rel_pub": "2026-03-19",
-  "rel_days": 241,
+  "rel_days": 243,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2490,8 +2580,8 @@
   }
  },
  "pingcap/metering_sdk": {
-  "commit_90d": 2,
-  "commit_7d": 1,
+  "commit_90d": 1,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2503,14 +2593,18 @@
    "Go": 99,
    "Makefile": 1
   },
-  "enriched_at": "20261103",
+  "enriched_at": "20261117",
   "dim_ts": {
-   "commit": "20261103",
-   "release": "20261103",
+   "commit": "20261117",
+   "release": "20261117",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
-  }
+  },
+  "etag": {
+   "release": "\"94eeeab27b6341769075417309712d7496ad8ab5c308f94ade8d64dd3fe54db1\""
+  },
+  "rel_dates": []
  },
  "tikv/rust-protobuf": {
   "commit_90d": 0,
@@ -2562,7 +2656,7 @@
  "datafusion-contrib/datafusion-openlineage": {
   "rel_ver": "datafusion-openlineage-v0.0.10",
   "rel_pub": "2026-10-12",
-  "rel_days": 34,
+  "rel_days": 36,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -2586,7 +2680,7 @@
  "zabuton-app/meguri": {
   "rel_ver": "v0.9.0",
   "rel_pub": "2026-10-04",
-  "rel_days": 42,
+  "rel_days": 44,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2613,7 +2707,7 @@
  "PT-Perkasa-Pilar-Utama/monita": {
   "rel_ver": "v1.0.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 27,
+  "rel_days": 29,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2664,7 +2758,7 @@
   },
   "rel_ver": "1.1.0",
   "rel_pub": "2026-11-04",
-  "rel_days": 11,
+  "rel_days": 13,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -2736,7 +2830,7 @@
   },
   "rel_ver": "v1.2.2",
   "rel_pub": "2026-11-05",
-  "rel_days": 10,
+  "rel_days": 12,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,

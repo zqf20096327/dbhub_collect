@@ -57,6 +57,8 @@ If you self-host Supabase, we recommend upgrading your services to their latest 
 | PostgREST | [`postgrest`](src/postgrest)          | [PostgREST/postgrest](https://github.com/PostgREST/postgrest/releases)     | Latest release           |
 | Realtime  | [`realtime`](src/realtime)            | [supabase/realtime](https://github.com/supabase/realtime/releases)         | Latest release           |
 
+Listing objects with `list()` needs Supabase Storage v1.19.0 or newer, which added `POST /object/list-v2`.
+
 ## Local Development
 
 ### Clone the Repository
@@ -73,8 +75,6 @@ This repository relies on the following dependencies for development:
 - `make` for running project commands.
 - `supabase-cli` and `docker` for the `auth`, `postgrest`, `storage` and `realtime` test containers.
 
-All of these dependencies are included in the nix shell environment, through `flake.nix`. If you've got `nix` installed, you may prefer to use it through `nix develop`.
-
 ### Use a Virtual Environment
 
 We recommend using a virtual environment, preferably through `uv`, given it is currently the only tool that understands the workspace setup (you can read more about it in [the uv docs](https://docs.astral.sh/uv/concepts/projects/workspaces/)).
@@ -84,8 +84,6 @@ uv venv supabase-py
 source supabase-py/bin/activate
 uv sync
 ```
-
-If you're using nix, the generated `python` executable should have the correct dependencies installed for the whole workspace, given it is derived from the root's `pyproject.toml` using [uv2nix](https://github.com/pyproject-nix/uv2nix).
 
 ### Running tests and other commands
 

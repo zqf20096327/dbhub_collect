@@ -16,7 +16,7 @@
 
 <p align="center">
   <!-- languages -->
-  English · <a href="./i18n/zh-CN/README.md">简体中文</a> · <a href="./i18n/ja/README.md">日本語</a> · <a href="./i18n/ko/README.md">한국어</a> · <a href="./i18n/pt-BR/README.md">Português (Brasil)</a> · <a href="./i18n/es/README.md">Español</a> · <a href="./i18n/ru/README.md">Русский</a>
+  English · <a href="./i18n/zh-CN/README.md">简体中文</a> · <a href="./i18n/ja/README.md">日本語</a> · <a href="./i18n/ko/README.md">한국어</a> · <a href="./i18n/pt-BR/README.md">Português (Brasil)</a> · <a href="./i18n/es/README.md">Español</a>
   <!-- /languages -->
 </p>
 
@@ -58,6 +58,9 @@ into one place.
   [Namespaces and sharing](./docs/features/namespaces-and-sharing.md)
 - **A code index of your repositories** that coding agents query for definitions,
   callers and change impact. [Code index](./docs/use-cases/code-intelligence.md)
+- **Memories linked to the code they are about**, which follow it through refactors, are
+  flagged when it changes and appear when an agent reads or edits it.
+  [Memory linked to code](./docs/use-cases/memory-linked-to-code.md)
 - **Lower model cost for coding agents**, as [measured](#measured-results) below.
   [Coding-agent cost](./docs/use-cases/coding-agent-cost.md)
 - **Document search with citations (RAG)**, including PDF, `.docx` and `.pptx` files the
@@ -210,8 +213,11 @@ Start a new session; the first one connects to `http://localhost:7777`. In Codex
 `codex` interactively once and approve the plugin's hooks; until then only the tools
 work. Tell the agent something worth keeping, then ask about it in the next session.
 
-For Cursor on the machine running a personal installation, the button below adds the
-[local MCP entry](./docs/features/integrations/cursor.md#mcp-tools), which needs no token:
+For Cursor, on a Teams or Enterprise plan, a team admin can import this repository as a
+team marketplace; its [Cursor plugin](./docs/features/integrations/cursor.md#plugin),
+untested in Cursor, installs the MCP entry and Loom's skills. On the machine running a
+personal installation, the button below adds the [local MCP
+entry](./docs/features/integrations/cursor.md#mcp-tools), which needs no token:
 
 [![Add Loom to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=loom&config=eyJ1cmwiOiJodHRwOi8vbG9jYWxob3N0Ojc3NzcvbWNwP3Rvb2xzZXQ9Y29kaW5nIn0%3D)
 
@@ -289,6 +295,7 @@ For shared agent context, code intelligence and permissioned retrieval, start wi
 
 [Deployment](./docs/operations/deployment.md) · [FAQ](./docs/faq.md) ·
 [Contributing](./CONTRIBUTING.md) · [Security reporting](./SECURITY.md) ·
-[`llms.txt`](./llms.txt)
+[`llms.txt`](https://clickhouse.github.io/loom/llms.txt) ·
+[`llms-full.txt`](https://clickhouse.github.io/loom/llms-full.txt)
 
 Apache-2.0 · [License](./LICENSE) · [Notice](./NOTICE)

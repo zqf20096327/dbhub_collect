@@ -1,0 +1,194 @@
+<p align="center">
+  <img src="docs/assets/logo-curia-wordmark.svg" alt="Curia" height="48" />
+</p>
+
+<p align="center">
+  <strong>An open-source Digital Office of the CEO — communications, scheduling, research, and knowledge work with governance-first architecture.</strong>
+</p>
+
+<p align="center">
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.44.0-blueviolet" alt="Version: 0.44.0" /></a>
+  <img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT" />
+  <img src="https://img.shields.io/badge/node-%3E%3D26-brightgreen" alt="Node >= 26" />
+  <img src="https://img.shields.io/badge/typescript-ESM-blue" alt="TypeScript ESM" />
+  <a href="https://securityscorecards.dev/viewer/?uri=github.com/josephfung/curia"><img src="https://api.securityscorecards.dev/projects/github.com/josephfung/curia/badge" alt="OpenSSF Scorecard" /></a>
+  <a href="https://www.bestpractices.dev/projects/13136"><img src="https://www.bestpractices.dev/projects/13136/badge" alt="OpenSSF Best Practices" /></a>
+</p>
+
+<p align="center">
+  <a href="https://meetcuria.com">Website</a> &middot;
+  <a href="https://docs.meetcuria.com">Documentation</a> &middot;
+  <a href="CONTRIBUTING.md">Contributing</a> &middot;
+  <a href="SECURITY.md">Security</a>
+</p>
+
+---
+
+## What Is Curia?
+
+CEOs of knowledge-work companies are buried in digital operations — email, scheduling, research, information processing. The traditional answer is an executive assistant, but the cycle is brutal: hire, invest six months training, watch the institutional knowledge walk out the door when they leave.
+
+Curia is a coordinator and team of specialist agents that handle your communications, scheduling, research, and knowledge work — running continuously on your own server, with institutional memory that compounds over time and never walks out the door. Define agents in YAML, extend with custom skills, connect any channel.
+
+Every action is logged. Every decision is traceable. Every agent stays in its lane.
+
+| | Typical Agent Framework | Curia |
+|---|---|---|
+| **Security model** | "Trust the agent" | Hard-enforced layer separation — channel adapters *physically cannot* invoke tools |
+| **Self-modification** | Agents can edit their own prompts, tools, and code at runtime | Agents cannot modify themselves — new skills, agents, and prompts always require human approval |
+| **Audit trail** | Console.log | Append-only Postgres with causal tracing across every event |
+| **Institutional memory** | Conversation history + flat files (lost or stale across restarts) | Knowledge graph + entity memory + temporal decay (survives restarts, ages gracefully) |
+| **Error handling** | Retry and hope | Error budgets, state continuity, pattern detection — agents resume, not restart |
+| **Agent coordination** | Agents work in isolation | The Bullpen — structured, auditable, threaded inter-agent discussions |
+| **Multi-channel** | Many channels, often without consistent security boundaries | Email, Signal, CLI, HTTP API — every channel shares the same security model and audit trail |
+| **Autonomy** | All or nothing | Five configurable bands — from advisory-only to fully independent, with intent drift detection |
+
+---
+
+## Architecture
+
+Five layers connected by a message bus — four domain layers with hard security boundaries, plus a System layer for trusted cross-cutting infrastructure. No layer can call another directly. Every event is audited.
+
+<p align="center">
+  <img src="docs/assets/architecture-overview.png" alt="Curia Architecture — 5 layers connected by message bus" width="800" />
+</p>
+
+**[Full architecture guide →](https://docs.meetcuria.com/core-concepts/architecture)**
+
+---
+
+## What It Looks Like
+
+Agents are defined in YAML. No code required for simple agents:
+
+```yaml
+name: expense-tracker
+description: Tracks and categorizes expenses from receipts and emails
+
+system_prompt: |
+  You are an expense tracking assistant for the principal.
+  Extract amounts, vendors, categories, and dates from receipts.
+
+pinned_skills:
+  - email-parser
+  - spreadsheet-writer
+
+memory:
+  scopes: [expenses, vendors, budgets]
+
+schedule:
+  - cron: "0 9 * * 1"
+    task: "Generate weekly expense summary"
+
+error_budget:
+  max_turns: 20
+  max_cost_usd: 1.00
+```
+
+Need custom logic? Add a TypeScript handler — same config, plus hooks for `onTask`, `onToolResult`, and `beforeRespond`.
+
+Skills come in two flavours (local handlers and MCP servers) behind a single interface. Agents discover new skills automatically; sensitive skills require your approval on first use.
+
+**[Agents →](https://docs.meetcuria.com/agents/how-agents-work)** &middot; **[Skills →](https://docs.meetcuria.com/skills/how-skills-work)** &middot; **[Channels →](https://docs.meetcuria.com/channels/how-channels-work)** &middot; **[Security →](https://docs.meetcuria.com/security/overview)**
+
+---
+
+## Quickstart
+
+### Operator install (image)
+
+**Prerequisites:** [Docker](https://docs.docker.com/get-docker/) (with the Compose plugin), `curl`, and an [Anthropic API key](https://console.anthropic.com). No Node or pnpm required.
+
+```bash
+mkdir curia && cd curia
+curl -fsSL https://github.com/josephfung/curia/releases/latest/download/install.sh -o install.sh
+# Review the script, then:
+bash install.sh
+```
+
+The installer pulls the published image, generates secrets, runs migrations inside the container, and prints your bootstrap secret. Curia will be running at `http://localhost:3000`.
+
+By default it installs the **latest release** — both the config files and the image come from it. To pin a specific version, prefix the run with `CURIA_VERSION` (this pins the config *and* the image together):
+
+```bash
+CURIA_VERSION=v0.40.1 bash install.sh
+```
+
+Save the bootstrap secret to a password manager and use it on the login page to create your account.
+
+**To update:** Back up your database first, then pull and restart. Migrations apply
+automatically on boot; re-running when already up to date is a safe no-op.
+
+```bash
+# 1. Back up the database (custom-format dump, restorable with pg_restore)
+docker compose exec -T postgres pg_dump -U curia -Fc curia > curia-backup-$(date +%Y%m%d).dump
+
+# 2. Pull new images and restart — the app migrates the schema on startup
+docker compose pull && docker compose up -d
+```
+
+If an update misbehaves, restore the backup: stop the app, restore in place
+(`--clean --if-exists` drops and recreates objects), then bring the stack back up.
+
+```bash
+docker compose stop curia
+docker compose exec -T postgres pg_restore -U curia -d curia --clean --if-exists < curia-backup-YYYYMMDD.dump
+docker compose up -d
+```
+
+### Developer install (source)
+
+For contributing or hacking on the code. Requires Node >= 24, pnpm, and [Docker](https://docs.docker.com/get-docker/) (with the Compose plugin) for the Postgres container.
+
+```bash
+git clone https://github.com/josephfung/curia.git
+cd curia
+pnpm run setup
+```
+
+**[→ Full installation guide](https://docs.meetcuria.com/get-started/installation)**  
+(channels, production deploy, configuration reference)
+
+### Verifying release artifacts
+
+Every published release is signed with [cosign](https://github.com/sigstore/cosign) (keyless, via GitHub OIDC — no long-lived signing key). The SBOM, source tarball, and the install bundle's `SHA256SUMS` manifest each ship with a `.sigstore` bundle, verifiable against GitHub's OIDC issuer:
+
+```bash
+gh release download vX.Y.Z --dir verify && cd verify
+
+cosign verify-blob --bundle sbom.spdx.json.sigstore \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp '^https://github.com/josephfung/curia/.github/workflows/release.yml@' \
+  sbom.spdx.json
+```
+
+The install bundle (`install.sh`, `docker-compose*.yml`, `env.example`, `Caddyfile`, `setup-common.sh`, `seccomp-chrome.json`) is covered by one signed manifest — verify it, then check the files against it:
+
+```bash
+cosign verify-blob --bundle SHA256SUMS.sigstore \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp '^https://github.com/josephfung/curia/.github/workflows/release.yml@' \
+  SHA256SUMS && sha256sum -c SHA256SUMS
+```
+
+`cosign verify-blob` prints `Verified OK` on success and exits non-zero on failure — the `&&` above ensures a failed signature check stops before `sha256sum -c` (which only checks hashes, not authenticity) can print a misleading pass. If either command fails, do not trust the downloaded assets.
+
+---
+
+## Contributing
+
+Curia is in early development and welcomes contributions — including AI-assisted ones.
+
+- Read the **[Contributing Guide](CONTRIBUTING.md)** for dev setup, code standards, and how to add channels, skills, and agents
+- Read **[CLAUDE.md](CLAUDE.md)** for repo-level conventions (if you're using Claude Code, these load automatically)
+- See **[GOVERNANCE.md](GOVERNANCE.md)** for project roles, maintainers, and how decisions are made
+- Check **[open issues](https://github.com/josephfung/curia/issues)** — look for `good first issue` labels
+- Report security vulnerabilities via **[SECURITY.md](SECURITY.md)** — not public issues
+
+We evaluate code quality, not authorship. AI-generated contributions are held to the same review standards as human-written code. See the [AI contributions policy](CONTRIBUTING.md#ai-assisted-contributions) for details.
+
+---
+
+## License
+
+[MIT](LICENSE)

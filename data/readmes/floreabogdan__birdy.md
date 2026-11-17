@@ -58,6 +58,7 @@ Writing `bird.conf` is still a deliberate act you take in the UI, not something 
 **Observe**
 - Live sessions, per-peer detail, on-demand looking glass
 - Timeline of flaps and limit hits
+- RPKI feed health: serial, age and ROA count per RTR session
 - Alerts to Slack, Discord, email, or a webhook
 
 </td>
@@ -227,7 +228,9 @@ things follow from that, and both are one setting away:
   no Prometheus or Grafana needed to see when a session started leaking. Hover one and it names the
   point under the cursor: how many routes, and when
 - A Prometheus `/metrics` endpoint (on once the access list is narrowed) and a public `/healthz` probe
-- Login rate-limiting (per-IP lockout) and a downloadable off-box backup bundle
+- Login rate-limiting (a per-client lockout, IPv6 counted per /64, and a router-wide budget that never
+  locks out loopback), DNS-rebinding protection (an allowed-host-name list), and a downloadable off-box
+  backup bundle
 - Live BIRD-code preview on every editor: the generated config updates as you type, before you save
 - Every table paginated with numbered pages — the route browsers, the timeline, the apply history, and
   each library list
@@ -264,7 +267,10 @@ things follow from that, and both are one setting away:
 - Bogon prefixes and bogon ASNs, editable, in Settings
 - RPKI: RTR servers and per-policy validation (log-only or drop-invalid). The dry run says how many
   routes BIRD is tagging invalid right now — **the number you would drop by enforcing** — and lists
-  them; a table shows every import policy, whether it validates, and which peers ride on it
+  them; a table shows every import policy, whether it validates, and which peers ride on it. Each RTR
+  session shows its serial, how long that serial has stood still, and the ROAs it holds (also on
+  `/metrics`), so a feed that is connected but stale is visible, and it can be restarted from there.
+  The highest RTR version can be pinned per server, for a cache that will not negotiate down
 - A raw config block for everything birdy does not model, checked by `bird -p` before it saves
 
 **Preview and apply**
@@ -298,6 +304,11 @@ tunnel can never lock you out. While the list still allows everything, birdy say
 startup log and flags it on that settings page. The unauthenticated `/metrics` endpoint is gated on it
 too — no cookie can protect a Prometheus scrape, so
 it stays closed until the list is narrowed, and starts serving the moment it is.
+
+birdy answers a browser only when it is addressed by **IP, `localhost`, or a host name listed under
+Settings → Access control → Allowed host names** — a defence against DNS rebinding, where a hostile
+page points its own name at birdy to reach it from your trusted address. If you browse to birdy by
+name, add that name (reach it by IP or SSH tunnel first; the refusal page explains how).
 
 That is not encryption. On a public address the login and session cookie cross the network in the
 clear, and an allow-list does nothing about interception — only about who may connect. Either

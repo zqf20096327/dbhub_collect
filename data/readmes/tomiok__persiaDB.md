@@ -30,12 +30,12 @@
 </p>
 
 <!-- BEGIN GENERATED progress:summary by `cargo xtask progress`. Do not edit by hand. -->
-**Pre-alpha.** [`PROGRESS.md`](./PROGRESS.md) counts **361 of 550** MVP leaves done (66%), 0 in progress (last snapshot 2026-11-15). Post-MVP work is 0 of 180 and sits outside that percentage.
+**Pre-alpha.** [`PROGRESS.md`](./PROGRESS.md) counts **364 of 564** MVP leaves done (65%), 0 in progress (last snapshot 2026-11-16). Post-MVP work is 0 of 180 and sits outside that percentage.
 <!-- END GENERATED progress:summary -->
 
 Format 1.0 is unstable until the v1.0 release ([SPEC §15](./SPEC.md#15-versioning-and-compatibility)). The [docs homepage](https://tomiok.github.io/persiaDB/) plays this poster from [`persia-hero.webm`](./website/public/persia-hero.webm) and [`persia-hero.mp4`](./website/public/persia-hero.mp4).
 
-`persia` does not export `Db` yet (M10). Under it, [`persia-engine`](./crates/persia-engine/src/lib.rs) creates and opens a database file, puts, deletes and commits documents through a WAL, merges segments, and runs a ranked search over a collection snapshot: user text compiled to a query, BM25F scoring, filters, sorts, facets, and pages. Relaxation (M8) is in progress as library code: `search_relaxed` runs the whole cascade: L4 `fuzzy` also reports "did you mean" corrections, and L5 `fallback` returns the collection's top documents by static rank or recency, flagged in the response (`"fallback"`). Within a level, hits that need fewer edits rank first, and at L3 so do hits holding the other words as typed when L2 did not take them first (typo tiers). A request's `relax` options (`false`, or any collection key such as `min_results` or `fill`) merge over the collection's settings, and `explain` states the step each hit matched at. The `Db` facade is not built yet. The default search path (`CollectionViews::search`) does not relax, so a search that matches nothing returns no hits. A small CLI inspects and verifies files.
+`persia` does not export `Db` yet (M10). Under it, [`persia-engine`](./crates/persia-engine/src/lib.rs) creates and opens a database file, puts, deletes and commits documents through a WAL, merges segments, and runs a ranked search over a collection snapshot: user text compiled to a query, BM25F scoring, filters, sorts, facets, and pages. Relaxation (M8) is in progress as library code: `search_relaxed` runs the whole cascade: L4 `fuzzy` also reports "did you mean" corrections, and L5 `fallback` returns the collection's top documents by static rank or recency, flagged in the response (`"fallback"`). With the explicit opt-in `filters: "last_resort"`, one last step drops the request's filters when every level found too few hits, flagged as `"filters_dropped"`. Within a level, hits that need fewer edits rank first, and at L3 so do hits holding the other words as typed when L2 did not take them first (typo tiers). A request's `relax` options (`false`, or any collection key such as `min_results` or `fill`) merge over the collection's settings, and `explain` states the step each hit matched at. The `Db` facade is not built yet. The default search path (`CollectionViews::search`) does not relax, so a search that matches nothing returns no hits. A small CLI inspects and verifies files.
 
 **Space:** dead frames (replaced segments, old manifests, consumed WAL chunks) are reclaimed by compacting the container ([SPEC §4.6](./SPEC.md#46-compaction-of-the-container)). Call `Database::compact` to compact now; besides, every `merge_step` compacts when dead bytes reach 40% of the file and at least 1 MiB, unless `CompactionOptions::automatic` is turned off (`DatabaseOptions::compaction`). `Database::space_usage` reports the live and dead bytes.
 
@@ -48,7 +48,7 @@ The product is a search database you link, the way you link SQLite. The design i
 | **Embedded** | The calling process is the database. `Db::open("app.persia")` is the whole setup: no daemon, no config file, no cluster. | The facade is [M10](./ROADMAP.md). Under it, `persia_engine::db::Database` opens a file, writes, and searches as library code. |
 | **Rust, short dependency list** | The index format, analysis, segment codec, BM25F scoring, and query execution are written in this repository ([ADR-0001](./docs/adr/0001-own-engine-and-allowed-dependencies.md)). | `cargo deny` rejects Tantivy, SQLite, and RocksDB. `cargo xtask check-deps` rejects any direct dependency outside the workspace allow-list. There is no `build.rs`. |
 | **One file, then object storage** | A local database is `<name>.persia`, plus an optional `<name>.persia.blobs` pack. Segments are immutable. The same segment bytes are specified for S3, GCS, and Azure Blob, in front of stateless query nodes. | The container and the segment format exist. Cloud backends, the server, and Kubernetes are M11–M13. |
-| **A page of results** | By design, relaxation is the default ([SPEC §7.6](./SPEC.md#76-zero-results-avoidance-default-on)). Too few hits, and the engine walks synonyms, dropped terms, prefix, a fuzzy step, and a fallback, then names the step that matched. | In progress (M8): synonyms, dropped terms, prefix, fuzzy (with corrections and typo tiers) and the fallback (flagged in the response) are built as library code (`search_relaxed`), with per-request `relax` options. The default search path does not relax yet, so a search that matches nothing returns no hits. Metrics and the quality suite are next. |
+| **A page of results** | By design, relaxation is the default ([SPEC §7.6](./SPEC.md#76-zero-results-avoidance-default-on)). Too few hits, and the engine walks synonyms, dropped terms, prefix, a fuzzy step, and a fallback, then names the step that matched. | In progress (M8): synonyms, dropped terms, prefix, fuzzy (with corrections and typo tiers) and the fallback (flagged in the response) are built as library code, and so is the opt-in last step without the request's filters (`filters: "last_resort"`) (`search_relaxed`), with per-request `relax` options. The default search path does not relax yet, so a search that matches nothing returns no hits. Metrics and the quality suite are next. |
 
 Out of scope for v1, in the SPEC: SQL, joins, vector search, more than one writer on a shard, and encryption inside the file. Encryption at rest is v1.2. Geo and the enterprise work are v3.0. See [Status](#status).
 
@@ -117,7 +117,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             &DefaultFields::all(notes.schema()),
             &QueryLimits::default(),
         )
-        .query;
+        .into_query();
     let memtable = notes.memtable();
     let plan = SearchPlan::new(&query, notes.schema(), &notes.search_statistics(&memtable))?;
     let page = notes
@@ -229,7 +229,7 @@ flowchart TD
 | `persia-format` | Encodings, frames, header, superblock, checksums, compression, mmap. No I/O policy. | Implemented. |
 | `persia-storage` | `Storage`, memory, local files, the single-file container, crash-test faults. | Implemented. S3, GCS, and Azure Blob are M12. |
 | `persia-analysis` | Tokenizers, normalizers, stemmers, the analyzer registry. No internal dependencies. | Implemented. |
-| `persia-engine` | Schema, documents, manifests, segments, memtable, WAL, commit, recovery, merges, query compilation, BM25F, and search. Synchronous. I/O only through `Storage`. | Implemented as library code, M6 still in progress (M7 done). Relaxation (M8) is in progress: L1–L5 on `search_relaxed`; the default search does not relax yet. |
+| `persia-engine` | Schema, documents, manifests, segments, memtable, WAL, commit, recovery, merges, query compilation, BM25F, and search. Synchronous. I/O only through `Storage`. | Implemented as library code, M6 still in progress (M7 done). Relaxation (M8) is in progress: L1–L5 and the `last_resort` filter step on `search_relaxed`; the default search does not relax yet. |
 | `persia-cli` | The `persia` binary. | Inspect, dump, file sweep, and `verify`. See [CLI](#cli). |
 | `persia` | The embedded facade: `Db`, `Collection`. | Placeholder for M10: the dependency edges, no types. |
 | `persia-blob` | Content-addressed chunks, dedup, GC. | Core model implemented: content hash, fixed-size chunker, blob manifest encoding. The pack file, remote layout, `put_blob`/`get_blob` and GC are still in progress in M9. |
@@ -252,13 +252,13 @@ MVP (M0–M15) is the v1.0 release. The live graph, the burn-up, and the ready-n
 | **M5** Segment writer & reader | ✅ done | 48/48 |
 | **M6** Write path, durability, merging | 🔨 in progress | 49/58 |
 | **M7** Query engine & ranking | ✅ done | 51/51 |
-| **M8** Zero-results avoidance | 🔨 in progress | 28/49 |
+| **M8** Zero-results avoidance | 🔨 in progress | 31/52 |
 | **M9** Blob store | 🔨 in progress | 5/22 |
 | **M10** Embedded API | ⏳ blocked | 0/23 |
 | **M11** Server | ⏳ blocked | 0/23 |
 | **M12** Cloud storage backends | ⏳ blocked | 0/29 |
 | **M13** Distribution & Kubernetes | ⏳ blocked | 0/24 |
-| **M14** SDKs | ⏳ blocked | 0/19 |
+| **M14** SDKs | ⏳ blocked | 0/30 |
 | **M15** Benchmarks, hardening, v1.0 | ⏳ blocked | 0/23 |
 <!-- END GENERATED progress:milestones -->
 
@@ -279,13 +279,17 @@ From the table under [After v1.0](./ROADMAP.md) on `main`. None of these leaves 
 
 v2.1, v2.2, and v2.3 are separate targets: UI components, AI search, and on-device storage. Geo stays on v3.0 with the enterprise format work. The ordering notes are in that ROADMAP section.
 
+The embedded SDKs core moved to v1.0 via [14.6](./ROADMAP.md) (inside M14): `persia-ffi` and `persia.h`, the embedded Go SDK, `@persiadb/node`, the embedded Python package, and their prebuilt libraries. The rows above are unchanged. Still later: 16.4.1 (publish only after the v1.0 tag) and 16.6 (read-only WASM) on v1.1, and the Python HTTP client (21.2) on v1.2.
+
 ## SDKs
 
 Rust is the native API. The facade crate is [`persia`](./crates/persia/src/lib.rs), a placeholder until M10. The libraries under it are what a Rust caller can use today, as in the [quickstart](#index-documents-and-search-them).
 
-Go and TypeScript embedded bindings are planned for **v1.1** (M16). The design is [ADR-0018](./docs/adr/0018-embedded-sdk-bindings.md) and [`docs/sdk/`](./docs/sdk/README.md), and it is not implemented. One C ABI (`persia-ffi`) wraps `persia`. Go calls it through cgo and a static library by default (`sdk/persia`); an optional `persia_purego` build tag dynamically loads the shared library with `CGO_ENABLED=0` (Unix `Dlopen`, Windows `LoadLibrary`), behind the same API. TypeScript calls it through N-API (`@persiadb/node`) for Node.js, Bun, and Deno. Ranking, relaxation, and crash recovery stay in the Rust core.
+The embedded bindings are planned for **v1.0** ([ROADMAP 14.6](./ROADMAP.md)). They depend on the `persia` facade (M10). The design is [ADR-0018](./docs/adr/0018-embedded-sdk-bindings.md) and [`docs/sdk/`](./docs/sdk/README.md), and it is not implemented. One C ABI (`persia-ffi`) wraps `persia`. Go calls it through cgo and a static library by default (`sdk/persia`); an optional `persia_purego` build tag dynamically loads the shared library with `CGO_ENABLED=0` (Unix `Dlopen`, Windows `LoadLibrary`), behind the same API. TypeScript calls it through N-API (`@persiadb/node`) for Node.js, Bun, and Deno. Python binds the committed `persia.h` with cffi or ctypes, and installing that package does not need a Rust toolchain. Ranking, relaxation, and crash recovery stay in the Rust core.
 
-Two other clients are a different product, also unstarted: network clients in Rust (`persia-client`) and Go (`persia-go`) speak gRPC to `persia-server` (SPEC §13, M14). A Python SDK is v1.2 (M21), after the embedded bindings.
+What stays later inside M16 and M21: publishing only after the v1.0 tag (16.4.1) and the read-only WASM build (16.6) are v1.1. The Python HTTP client (21.2) is v1.2. SPEC §13 names the Python package in 14.6.11.
+
+Network clients in Rust (`persia-client`) and Go (`persia-go`) are a different product, also unstarted. They speak gRPC to `persia-server` (SPEC §13, M14) and still depend on the server (M11) and sharding (M13).
 
 ## Built with Claude Opus 5.5
 

@@ -10,6 +10,8 @@
 [4. From CAD to PDM — the upload macro](https://youtu.be/vMQPxwWQrGc) ·
 [5. A whole assembly — upload, download, update and drawings](https://youtu.be/vXHYbRlPu_s)
 
+📖 **[Wiki](https://github.com/pawelcel/EasyPDM/wiki)** — installation, using EasyPDM, the CAD integrations (with where the drawing sheets are), settings; with screenshots. FreeCAD add-on: [its own wiki](https://github.com/pawelcel/EasyPDM-FreeCAD/wiki).
+
 EasyPDM is where your Parts and Assemblies get one, shared order for the whole team:
 every item has its own number, revision, status and change history, and assemblies get
 a ready-made bill of materials (BOM). No more `bracket_v3_FINAL_FOR_REAL.SLDPRT` on a
@@ -110,10 +112,11 @@ them in an **EasyPDM menu**, with **Log in** (approved in the browser, so the CA
 sees your password) and **Log out**.
 
 Installation and details:
-- FreeCAD (add-on or macros): [`EasyPDM.FreeCad/README.md`](EasyPDM.FreeCad/README.md)
+- FreeCAD (add-on, in its own repository): [pawelcel/EasyPDM-FreeCAD](https://github.com/pawelcel/EasyPDM-FreeCAD), with [its wiki](https://github.com/pawelcel/EasyPDM-FreeCAD/wiki)
 - SolidWorks (macros, add-in in [`Addin/`](EasyPDM.SolidWorks/Addin/README.md)): [`EasyPDM.SolidWorks/README.md`](EasyPDM.SolidWorks/README.md)
 - Autodesk Inventor: [`EasyPDM.Inventor/README.md`](EasyPDM.Inventor/README.md)
-- SolidCraft (plugin + the EasyPDM companion, since SolidCraft plugins have no network):
+- SolidCraft (plugin + the EasyPDM SolidCraft companion, since SolidCraft plugins have no network):
+  **[installing step by step](https://github.com/pawelcel/EasyPDM/wiki/SolidCraft)** on the wiki; details in
   [`EasyPDM.SolidCraft/README.md`](EasyPDM.SolidCraft/README.md)
 
 **Upload** — you have a saved file open, you click Upload. Your browser opens

@@ -17,7 +17,7 @@ The repository is `medulla`. Package, CLI and API identifiers remain unchanged.
 [![PyPI - Version](https://img.shields.io/pypi/v/medulla)](https://pypi.org/project/medulla/)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-526cff)](https://knuckles-team.github.io/medulla/)
 [![GitHub license](https://img.shields.io/github/license/Knuckles-Team/medulla)](LICENSE)
-[![Version](https://img.shields.io/badge/version-3.3.3-blue)](https://github.com/Knuckles-Team/medulla/releases)
+[![Version](https://img.shields.io/badge/version-3.3.4-blue)](https://github.com/Knuckles-Team/medulla/releases)
 [![Build](https://github.com/Knuckles-Team/medulla/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Knuckles-Team/medulla/actions/workflows/ci.yml)
 [![GitHub Repo stars](https://img.shields.io/github/stars/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/Knuckles-Team/medulla)](https://github.com/Knuckles-Team/medulla/forks)
@@ -55,7 +55,7 @@ Claims can retain their evidence, provenance, confidence, and time of validity,
 so applications can inspect why information is present and how it changes.
 Use Medulla directly through its clients and query interfaces. It also
 serves as the durable knowledge layer beneath [Arbora](https://knuckles-team.github.io/arbora/)
-and [Agent Utilities](https://knuckles-team.github.io/meristem/).
+and [Meristem](https://knuckles-team.github.io/meristem/).
 Medulla is the database. Agent execution and connector runtimes live in
 their respective ecosystem projects.
 
@@ -98,7 +98,7 @@ source distribution builds the extension modules and carries no server.
 
 <p align="center">
   <a href="https://knuckles-team.github.io/.github/architecture/#eg">
-  <img src="https://raw.githubusercontent.com/Knuckles-Team/medulla/main/docs/assets/runtime-architecture.svg" alt="People use browser, terminal, desktop, or messaging clients. Arbora serves clients. Agent Utilities coordinates agents. Medulla stores knowledge. Connectors synchronize source systems." width="960">
+  <img src="https://raw.githubusercontent.com/Knuckles-Team/medulla/main/docs/assets/runtime-architecture.svg" alt="People use browser, terminal, desktop, or messaging clients. Arbora serves clients. Meristem coordinates agents. Medulla stores knowledge. Connectors synchronize source systems." width="960">
   </a>
   <br><a href="https://knuckles-team.github.io/.github/architecture/#eg">Explore the live architecture</a>
 </p>

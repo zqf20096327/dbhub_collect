@@ -1,4 +1,4 @@
-<p align="center"><img src="assets/logo/icon-bang.svg" alt="哗啦！标志：感叹号的点是一个打了勾的待办" width="96"></p>
+<p align="center"><img src="assets/logo/icon-sweep.svg" alt="哗啦！标志：三张待办卡片哗啦一下理成一张打了勾的卡片" width="96"></p>
 
 # Hola-Calendar
 

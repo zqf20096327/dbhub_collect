@@ -47,7 +47,7 @@ Other installation options:
 | pipx | `pipx install clickhousectl` |
 | pip | `pip install clickhousectl` |
 | cargo-binstall | `cargo binstall clickhousectl` |
-| Cargo, from source (Rust 1.94+) | `cargo install clickhousectl` |
+| Cargo, from source (Rust 1.94.1+) | `cargo install clickhousectl` |
 
 Check for or install a CLI update:
 
@@ -56,17 +56,34 @@ clickhousectl update --check
 clickhousectl update
 ```
 
+`update` replaces binaries installed by the script, a download, or Cargo; npm, uv, pipx, and pip installs are upgraded with their package manager, and `update` prints that command.
+
+The install script, `update`, and npm check each downloaded archive against the release's `SHA256SUMS`. See [Release verification](docs/reference/install-verification.md) to check a download or its build attestation yourself.
+
+### Shell completions
+
+To complete commands, flags, and local server names and installed versions with Tab, add one line to your shell startup file. It registers both `clickhousectl` and `chctl`:
+
+```bash
+eval "$(clickhousectl completions bash)"   # ~/.bashrc
+eval "$(clickhousectl completions zsh)"    # ~/.zshrc, after compinit
+clickhousectl completions fish | source    # ~/.config/fish/config.fish
+```
+
+Completion runs the installed CLI on each Tab press, so it stays current after `update`. It works offline and records no telemetry.
+
 ## Start locally
 
 Use the `latest` channel for the rolling master build of ClickHouse. A bare server start installs `latest` if no version or default is available.
 
 ```bash
+clickhousectl local init
 clickhousectl local clickhouse start dev --version latest
 clickhousectl local client dev --query "SELECT version()"
 clickhousectl local clickhouse stop dev
 ```
 
-Run these from the same project directory. Each named server has isolated data under `.clickhouse/`; stopping preserves it for the next start.
+`local init` marks the directory as a project; later commands work from it or any subdirectory, as Git does. Each named server has isolated data under the project's `.clickhouse/`; stopping preserves it for the next start.
 
 For local Postgres, start Docker first:
 
@@ -104,7 +121,7 @@ CLICKHOUSE_CLOUD_API_SECRET=your-api-secret
 
 Keep `.env` out of version control by adding it to `.gitignore`.
 
-OAuth tokens are global (`~/.clickhouse/tokens.json`); saved API keys are project-local (`.clickhouse/credentials.json`). For CI, inject `CLICKHOUSE_CLOUD_API_KEY` and `CLICKHOUSE_CLOUD_API_SECRET` through your secret manager. See [authentication and permissions](docs/reference/authentication.md) for precedence, organization selection, and logout.
+OAuth tokens are global (`~/.clickhouse/tokens.json`); saved API keys belong to the project (`.clickhouse/credentials.json` in its root). For CI, inject `CLICKHOUSE_CLOUD_API_KEY` and `CLICKHOUSE_CLOUD_API_SECRET` through your secret manager. See [authentication and permissions](docs/reference/authentication.md) for precedence, organization selection, and logout.
 
 ### Create and query ClickHouse
 
@@ -248,8 +265,8 @@ Structured commands support `--json` and select it automatically for detected co
 | [Telemetry](docs/reference/telemetry.md) | Recorded fields, opt-out, and local inspection |
 | [Feedback](docs/reference/feedback.md) | What `feedback` sends, the length limit, and errors |
 | [Contributing](CONTRIBUTING.md) | Build, checks, and documentation placement |
-| [CLI development](docs/development.md) | Code layout, tests, live integration suites, and debugging |
-| [Rust API library](crates/clickhouse-cloud-api/README.md) | Typed Cloud API client, usage examples, and API coverage |
+| [Development](docs/development.md) | Code layout, tests, live integration suites, and debugging |
+| [Rust API library](crates/clickhouse-cloud-api/README.md) | Typed Cloud API client, usage examples, and [changelog](crates/clickhouse-cloud-api/CHANGELOG.md) |
 
 ## Telemetry
 
@@ -266,4 +283,4 @@ Tell the team what the CLI could not do with `clickhousectl feedback "<message>"
 
 ## Contribute
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks, and documentation placement, and [CLI development](docs/development.md) for the code layout and test workflows.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks, and documentation placement, and the [development guide](docs/development.md) for the code layout and test workflows.

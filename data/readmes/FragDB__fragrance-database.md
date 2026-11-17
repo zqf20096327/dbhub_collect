@@ -497,7 +497,7 @@ The free sample contains 10 records per file. The full FragDB database includes:
 | Languages | 23 | 23 |
 | Total Records | ~84 | 158,957 |
 | Updates | None | Regular |
-| Commercial Use | Yes (sample) | Yes (licensed) |
+| Commercial Use | No — sample is CC BY-NC 4.0 | Yes (licensed) |
 
 **[Purchase at fragdb.net →](https://fragdb.net)**
 
@@ -512,7 +512,8 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ## License
 
-- **Sample Data & Code**: [MIT License](LICENSE.md)
+- **Sample Data** (`samples/`): [CC BY-NC 4.0](LICENSE.md) — non-commercial use only
+- **Code Examples** (`examples/`): [MIT License](LICENSE.md)
 - **Full Database**: Commercial license (see [fragdb.net](https://fragdb.net))
 
 ## Links

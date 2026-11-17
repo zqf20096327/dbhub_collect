@@ -18,13 +18,12 @@
 [![CI](https://github.com/yannicschuller/flowplan/actions/workflows/ci.yml/badge.svg)](https://github.com/yannicschuller/flowplan/actions/workflows/ci.yml)
 [![Docker image](https://github.com/yannicschuller/flowplan/actions/workflows/docker.yml/badge.svg)](https://github.com/yannicschuller/flowplan/pkgs/container/flowplan)
 [![Release](https://img.shields.io/github/v/release/yannicschuller/flowplan?color=3b3fd8)](https://github.com/yannicschuller/flowplan/releases)
-[![Stars](https://img.shields.io/github/stars/yannicschuller/flowplan?color=3b3fd8)](https://github.com/yannicschuller/flowplan/stargazers)
-[![Docs](https://img.shields.io/badge/docs-docs.flowplan.org-3b3fd8)](https://docs.flowplan.org/en)
-[![Demo](https://img.shields.io/badge/demo-try_it_now-3b3fd8)](https://flowplan.org/en/demo)
+[![Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fyannicschuller%2Fflowplan-status%2Fstatus-data%2Fbadge.json&cacheSeconds=300)](https://status.flowplan.org)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-3b3fd8.svg)](LICENSE)
+<br>
+[![Stars](https://img.shields.io/github/stars/yannicschuller/flowplan?color=3b3fd8)](https://github.com/yannicschuller/flowplan/stargazers)
 [![Discord](https://img.shields.io/badge/Discord-community-5865F2?logo=discord&logoColor=white)](https://discord.gg/bCEdB6MPrR)
 [![Sponsor](https://img.shields.io/github/sponsors/yannicschuller?logo=githubsponsors&label=sponsor&color=ea4aaa)](https://github.com/sponsors/yannicschuller)
-[![As seen on Open Source Alternatives](https://www.opensourcealternatives.to/badge-osa.svg)](https://www.opensourcealternatives.to)
 
 <br>
 
@@ -535,7 +534,17 @@ Stack: Next.js 16 (App Router), React 19, TypeScript, SQLite (`node:sqlite`) or 
 
 ## Community
 
-Questions, ideas, show-and-tell or just a hello: join the **[Flowplan Discord](https://discord.gg/bCEdB6MPrR)**. Bugs and feature requests are best filed as [GitHub issues](https://github.com/yannicschuller/flowplan/issues), so nothing gets lost.
+Questions, ideas, show-and-tell or just a hello: join the **[Flowplan Discord](https://discord.gg/bCEdB6MPrR)**. Bugs and feature requests are best filed as [GitHub issues](https://github.com/yannicschuller/flowplan/issues), so nothing gets lost. Is flowplan.org down or slow? The [status page](https://status.flowplan.org) shows disruptions and maintenance.
+
+### Featured on
+
+Flowplan is listed on these sites – reviews and votes there help others find it.
+
+<p>
+  <a href="https://www.producthunt.com/products/flowplan-2/reviews/new?utm_source=badge-product_review&amp;utm_medium=badge&amp;utm_source=badge-flowplan-2"><picture><source media="(prefers-color-scheme: dark)" srcset="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1357090&amp;theme=dark"><img src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1357090&amp;theme=light" alt="Flowplan on Product Hunt" height="48"></picture></a>
+  <a href="https://alternativeto.net/software/flowplan/about/?utm_source=badge&amp;utm_medium=referral"><picture><source media="(prefers-color-scheme: dark)" srcset="https://alternativeto.net/static/badges/badge-compact-dark.svg"><img src="https://alternativeto.net/static/badges/badge-compact-light.svg" alt="Flowplan on AlternativeTo" height="48"></picture></a>
+  <a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" alt="As seen on Open Source Alternatives" height="48"></a>
+</p>
 
 ### Help translate
 
@@ -558,6 +567,7 @@ Flowplan speaks German and English natively; every other language is a JSON cata
 <p>
   <a href="https://github.com/yannicschuller" title="yannicschuller"><img src="https://github.com/yannicschuller.png?size=96" width="48" height="48" alt="yannicschuller"></a>
   <a href="https://github.com/timthinks" title="timthinks"><img src="https://github.com/timthinks.png?size=96" width="48" height="48" alt="timthinks"></a>
+  <a href="https://github.com/hilsonp" title="hilsonp"><img src="https://github.com/hilsonp.png?size=96" width="48" height="48" alt="hilsonp"></a>
   <a href="https://github.com/scudong" title="scudong"><img src="https://github.com/scudong.png?size=96" width="48" height="48" alt="scudong"></a>
 </p>
 <!-- contributors:end -->

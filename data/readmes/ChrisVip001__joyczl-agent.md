@@ -9,12 +9,19 @@ English | [简体中文](README.zh.md)
 
 **A personal assistant that runs entirely on your own machine — with a memory you can actually inspect.**
 The focus is planning, executing, recovering, verifying and delivering complex personal tasks; everyday conversation is supporting interaction.
-Rust owns the agent loop, memory and 29 tools; TypeScript is only the dashboard and the chat gateways. Conversations, `state.db` and API keys never leave your laptop. The dashboard speaks both English and Chinese — switch it from the sidebar.
+Rust owns the agent loop, memory and 36 tools; TypeScript carries the shared clients, chat gateways and isolated browser adapter. Conversations, `state.db` and API keys never leave your laptop. The dashboard speaks both English and Chinese — switch it from the sidebar.
 
 > Most agents keep memory in a black box. Joy writes **one append-only ledger row per turn**. Open any row and you see that turn's full entry stream: the retrieval decision, which tools ran, which model answered, and what it cost. The memory library links back to source turns via `ledger:…` chips, and the FTS5 index can be rebuilt from the ledger. Nothing is hidden, nothing is silently lost.
 
-![Joy cockpit, English UI (dark theme)](docs/assets/dashboard.png)
-![Memory ledger panel — one append-only row per turn, index rebuildable from the ledger](docs/assets/memory-ledger.png)
+![Joy Web workbench](docs/assets/dashboard.jpg)
+
+The independent Mac desktop UI is under development: run `just desktop-install`, build the Rust CLI, then `just desktop-dev`; `just desktop-build` bundles the local Runtime into a Mac app. Web and desktop share settings, model/workspace/permission menus and design tokens through the transport-independent `@joy/ui` package. The rounded green Joy mark is shared by the app, Web favicon/install icons and interface; `just desktop-icons` regenerates platform icon assets from its SVG source. The composer supports server-enforced read-only, standard (confirm effects once) and full-access session modes; full access requires confirmation and preserves capability/sandbox limits. `just desktop-check` and `just smoke-desktop` validate the desktop foundation. See the [architecture and implementation specification](docs/agent-platform-architecture.md) for current status.
+
+The Web workbench now matches the desktop while preserving attachments, conversation branches, tasks, memory ledgers, skills, MCP, schedules and remote sign-in. Build with `just dashboard-build`, then start or restart `joy dashboard`; `just smoke-web` checks authentication, configuration and session permissions with a local model fixture. Narrow screens use drawer navigation and full-screen preferences, with shared bilingual controls. The composer’s plus button adds local files or images directly; the adjacent workspace button is the only project-folder entry and saves to the current conversation. These controls preserve the message draft. If the backend is older, the permission menu explains how to restart it and offers a retry.
+
+The Mac composer’s **+** button shares its component with Web and directly adds local files or images (20MB each). The adjacent workspace button selects the project folder using the system picker. Attachments can be removed before sending; images use the existing vision contract, while documents are passed as readable file paths. Image requests require a vision-enabled model. `just desktop-build` regenerates the application bundle.
+
+Web and Mac now open one persistent **main conversation**. Explicit work becomes independent tasks in the shared **Task progress** panel. New tasks automatically receive `<JOY_HOME>/workspaces/YYYY-MM-DD-title-id` folders; choose an existing project only when needed. A task card's follow-up retains its files and context. Task effects inherit the main conversation's current permission policy; results without objective checks await acceptance. `just smoke-interaction` checks the flow with a local fixture. CLI/gateway conversations retain their existing APIs. Reopening the task panel recovers still-live approvals from the Runtime; requests already answered, expired or revoked disappear without being recreated.
 
 ## Run it in two minutes
 
@@ -60,7 +67,7 @@ The response follows a notification stream: `turnStarted → gateDecided → tex
 |---|---|---|---|
 | State | Local SQLite + FTS5, one process owns `state.db` | Vendor cloud | You build it |
 | Memory | Append-only ledger, inspectable, rebuildable | Opaque | DIY |
-| Contract | 45 JSON-RPC methods from one generated definition | N/A | Varies |
+| Contract | 65 JSON-RPC methods from one generated definition | N/A | Varies |
 | Providers | 12 pre-adapted + models.dev catalog + Ollama | Fixed | DIY |
 | Release gate | Deterministic replay evals + judge | N/A | DIY |
 | Cost control | Stable prompt prefix for caching, deferred tool loading | N/A | DIY |
@@ -83,7 +90,7 @@ Releases ship every 1–2 weeks with real notes. If you want those without the n
   time, and `ledger:…` chips back to the source turns), and the context meter (six
   sections, with a notice before the window fills). One button compacts on demand
   ([docs/operations.md](docs/operations.md))
-- **Act**: 34 built-in tools (23 always on, 11 behind switches) plus MCP servers
+- **Act**: 36 built-in tools (23 always on, 13 behind switches) plus MCP servers
   ([docs/configuration.md](docs/configuration.md))
 - **Stay cheap**: the system prompt is a stable prefix plus a per-turn tail, so the
   provider can cache it; the skill catalog is one line per skill with bodies on demand, and
@@ -118,12 +125,12 @@ Releases ship every 1–2 weeks with real notes. If you want those without the n
 | `save_note` / `forget_note` / `search_memory` / `list_memory` / `manage_memory` | memory CRUD |
 | `create_event` / `list_events` | calendar (idempotent, ICS + optional Apple Calendar sync) |
 | `send_message` | message drafts into the outbox — never actually sends |
-| `search_web` | DuckDuckGo HTML, or Tavily with `TAVILY_API_KEY` |
+| `search_web` | Parallel MCP first; bounded built-in fallback to Tavily / Brave or DDG Lite → Bing; source URLs, excerpts and deduplication |
 | `read_file` | read a text file: paginated (2000 lines / 50KB, never mid-line), line numbers, a continuation protocol, and a re-read short-circuit; **on by default** |
 | `list_dir` | list a directory: directories first, files with sizes, 500-entry cap; **on by default** |
 | `glob` | find files by name pattern (`**` across directories, `*`/`?` inside one; a pattern with no `/` matches the file name at any depth), skipping `.git`, `node_modules`, `target`, `dist`, `build` and friends; **on by default** |
 | `grep` | search file contents and return `path:line: text` (plain text, optional `ignore_case` and a `glob` filter), skipping the same trees plus binaries and anything over 2 MB, capped at 200 matches; **on by default** |
-| `fetch_url` | fetch a page's text (HTML→plain, 50k cap); SSRF guard (blocks private/metadata targets, re-checks every redirect) + an external-content-is-data declaration |
+| `fetch_url` | Parallel MCP page extraction first, local HTTP fallback; 50k cap, public-target validation and untrusted-content wrapping; local redirects rechecked |
 | `create_skill` | persist an agreed workflow as procedural memory |
 | `job_output` / `job_list` / `job_kill` | read, list and stop background jobs (started with `run_command`'s `background=true`) |
 | `todo_write` | keep a per-session todo list, re-injected every turn (whole-table replace; one `in_progress` at a time) |
@@ -135,6 +142,7 @@ Releases ship every 1–2 weeks with real notes. If you want those without the n
 | `move_file` | move or rename one file, **both** ends inside the boundary, an existing destination refused — off unless `JOY_WRITE=1` |
 | `run_command` | shell commands — sandboxed, allowlisted, off unless `JOY_EXEC=1` ([SECURITY.md](SECURITY.md)) |
 | `delegate_task` | hand one self-contained job to a subagent (`tasks: [...]` fans out up to 4 independent jobs concurrently, merged in order) — off unless `JOY_DELEGATE=1`, cannot delegate again; pass `result_schema` for a structured answer (retried once, then prose) |
+| `browser_observe` / `browser_act` | Optional task browser: fresh DOM references, finite inputs, standard once-only approval and same-window human takeover. Requires installed components and a browser opened by a human for that task |
 | `read_skill` | read one skill's full body — the always-present catalog carries only its name and one line; **on by default** |
 | `read_memory_page` | read one page of the memory bundle by name, with the `sources` it was distilled from; **on by default** |
 | `find_tools` | search the deferred shelf by keyword and open what it finds for **this session** (`JOY_TOOL_POLICY=deferred`); **on by default** |
@@ -144,7 +152,7 @@ Releases ship every 1–2 weeks with real notes. If you want those without the n
 
 ### Providers and keys
 
-**Twelve LLM providers are pre-adapted in code** (`joyczl-provider`), switchable at will — and extendable without code: `<home>/models-catalog.json` patches built-in defaults or adds a provider, and `scripts/gen_catalog.py` generates those rows from [models.dev](https://models.dev) (context limits, vision, tool-call — joy's wire and key-env mappings included). See [docs/configuration.md](docs/configuration.md). `/model` lists configured profiles, `/model add ds deepseek deepseek-flash --env DEEPSEEK_API_KEY` adds one, `/model use ds` switches — no need to retype the key, effective immediately, no restart. Configuration lives in the REPL's `/model` and `models.json` — the dashboard carries no config panel. Keys go to the OS keychain first (macOS Keychain, Linux `secret-tool`, **Windows Credential Manager**), falling back to `<home>/secrets.json` (0600, plaintext) when there is none — the save response says which one it was, honestly. Key writes go through the `SecretVault` seam, so a server-side KMS backend can slot in without touching callers. **The old `JOY_API_KEY` / `JOY_BASE_URL` env vars are no longer read** — configuration has exactly one path: `models.json`. The dashboard also self-hosts: `JOY_OPS_HOST=0.0.0.0` demands `JOY_OPS_TOKEN` at startup, `/api/*` is Bearer-gated ([docs/operations.md](docs/operations.md)).
+**Twelve LLM providers are pre-adapted in code** (`joyczl-provider`), switchable at will — and extendable without code: `<home>/models-catalog.json` patches built-in defaults or adds a provider, and `scripts/gen_catalog.py` generates those rows from [models.dev](https://models.dev) (context limits, vision, tool-call — joy's wire and key-env mappings included). See [docs/configuration.md](docs/configuration.md). `/model` lists configured profiles, `/model add ds deepseek deepseek-flash --env DEEPSEEK_API_KEY` adds one, `/model use ds` switches — no need to retype the key, effective immediately, no restart. Configuration lives in `models.json`, edited through the REPL's `/model` or the model menu in the Web and desktop preferences. Keys go to the OS keychain first (macOS Keychain, Linux `secret-tool`, **Windows Credential Manager**), falling back to `<home>/secrets.json` (0600, plaintext) when there is none — the save response says which one it was, honestly. Key writes go through the `SecretVault` seam, so a server-side KMS backend can slot in without touching callers. **The old `JOY_API_KEY` / `JOY_BASE_URL` env vars are no longer read** — configuration has exactly one path: `models.json`. The dashboard also self-hosts: `JOY_OPS_HOST=0.0.0.0` demands `JOY_OPS_TOKEN` at startup, `/api/*` is Bearer-gated ([docs/operations.md](docs/operations.md)).
 
 Tool failures return to the model as text — the loop never crashes on one.
 
@@ -153,7 +161,7 @@ Tool failures return to the model as text — the loop never crashes on one.
 | Document | Content |
 |---|---|
 | [docs/architecture.md](docs/architecture.md) | principles, crate dependency graph, one turn's data flow, key mechanisms, design decisions |
-| [docs/protocol.md](docs/protocol.md) | the 45 JSON-RPC methods, notification sequence, error codes, clients |
+| [docs/protocol.md](docs/protocol.md) | the 65 JSON-RPC methods, notification sequence, error codes, clients |
 | [docs/configuration.md](docs/configuration.md) | every `JOY_*` variable, gateway variables, mcp.json, settings.json |
 | [docs/gateways.md](docs/gateways.md) | Telegram / Discord / WeChat / Lark setup, quirks, and security notes |
 | [docs/testing.md](docs/testing.md) | the four-layer quality system and the latest test report |
@@ -167,7 +175,7 @@ Tool failures return to the model as text — the loop never crashes on one.
 
 ## Roadmap
 
-**Next up (help wanted):** real-platform gateway integrations · Windows writable-boundary support · more replay eval cases · provider coverage beyond the 12 built in · Homebrew / npm packaging channels. See [open issues](https://github.com/ChrisVip001/joyczl-agent/issues) for the concrete list.
+**Next up (help wanted):** real-platform gateway integrations · Windows writable-boundary support · more replay eval cases · provider coverage beyond the 12 built in · publishing the existing Homebrew / npm packaging. See [open issues](https://github.com/ChrisVip001/joyczl-agent/issues) for the concrete list.
 
 <details>
 <summary>Shipped: phases P0–P20 (click to expand)</summary>
@@ -233,42 +241,6 @@ Tool failures return to the model as text — the loop never crashes on one.
 
 ## Runtime reliability
 
-Production entry points share one execution owner per canonical state database. Competing runtimes fail before recovery can alter live work. See [runtime ownership](docs/limitations.md#long-running-and-the-daemon-lock).
-
-File acceptance now records the measured content digest in a versioned receipt. The checks and receipt commit together; evidence failures stop completion. See [verification evidence](docs/protocol.md#versioned-verification-evidence).
-
-Unknown task operations can be inspected and reconciled with human evidence in the cockpit. Reconciliation records a receipt without rerunning tools or resuming work; original acceptance remains required. See [operation protocol](docs/protocol.md#operation-journal-and-human-reconciliation).
-
-Tasks can also retain a draft while waiting for one human-declared external input. The cockpit supports declaring the condition and providing data; persisted events survive restart, while human pause/cancel retains priority. See [external input protocol](docs/protocol.md#durable-external-input).
-
-Tasks recheck acceptance after recovery. Known checkpoint tokens remain charged when recovery stops for review or lacks model configuration; repeated recovery does not charge them twice. `just smoke-recovery` tests real process crashes with isolated local fixtures. Authorized tasks can wait durably for background jobs and resume after known completion; human pause/cancel takes precedence. Tool batches and background jobs persist intent before execution; unknown outcomes require reconciliation. Queued instructions remain recorded until completion. Generated memory views refresh after content corrections or new episodes and retry failed writes; existing memory can project without a configured model. Consolidation can retain source-bound temporary observations for up to 24 hours ([memory contract](docs/protocol.md#memory-validity-and-derivation-context)). Quick chat retains recent session context, SOUL and bounded saved personal preferences; skill discovery supports Chinese descriptions. OpenAI uses the native Responses adapter with local encrypted continuation; see [configuration](docs/configuration.md#native-openai-responses) for legacy-endpoint overrides. See [recovery boundaries and limits](docs/limitations.md#crash-recovery) before relying on unattended work. Plans restore complete versions after restart. A [budgeted live smoke](docs/live-reliability.md) records the current DeepSeek profile, evidence and costs.
-
-Click **Start task** to authorize durable queued work in its own session while continuing the original chat. See [independent task execution](docs/protocol.md#independent-task-execution).
-
-Task/goal stop status and notification production commit together. Failed commits cannot advertise completion; failed delivery is retained for retry against the original destination.
-
-Scheduled results and delivery intent persist together; file failures retry delivery. Unknown claimed work requires review and is not replayed. See [schedule recovery](docs/operations.md#schedule-recovery-and-delivery).
-
-Human memory deletion/correction now prevents matching old claims from being re-extracted automatically; forgotten subjects stay excluded from background extraction. Explicit memory writes remain available. See [memory boundaries](docs/limitations.md#memory).
-
-Stored constraints are strictly validated before planning and model calls. Recovery retains its checkpoint round number, charges known checkpoint usage once, and checks the remaining budget before proceeding.
+Execution ownership, crash recovery, acceptance receipts and delivery guarantees are described in [the changelog](CHANGELOG.md) and [docs/architecture.md](docs/architecture.md).
 
 English | [简体中文](README.zh.md) · Code is MIT.
-
-Human memory validity windows and extraction context are documented in [the memory protocol](docs/protocol.md#memory-validity-and-derivation-context).
-
-Mutating tools now coordinate across sessions and retain ownership for background jobs; see [mutation admission](docs/architecture.md#mutation-admission).
-
-Structured artifact checks now verify typed JSON values and retain file-version evidence; see [structured document acceptance](docs/protocol.md#structured-document-acceptance).
-
-Ordinary chats now have [human operation review](docs/protocol.md#ordinary-chat-operation-review), with read-only continuation while earlier outcomes remain unknown.
-
-When a full agent turn's tool table is empty, its capability note asks for plain text and disclosure of verification limits. This is guidance, not an output guarantee; see the [live support evidence and limits](docs/live-reliability.md).
-
-Full, delegated and quick replies now share memory-grounding and companionship instructions: distinguish current references from recalled history and avoid continuous-availability or guaranteed-recall promises. User `SOUL.md` stays intact; compliance still needs [live evaluation](docs/live-reliability.md).
-
-If required task step or artifact observations cannot be persisted, known usage is retained and acceptance/automatic continuation stop for review of work already performed. Existing files or external effects are not rolled back.
-
-[Staged research study](docs/long-research-study-2026-11-14.md): explicit first-day drafting, separate-context review and actual next-day continuation.
-
-Failed model rounds retain checkpointed token spend in task totals; an accounting failure keeps the checkpoint for review.

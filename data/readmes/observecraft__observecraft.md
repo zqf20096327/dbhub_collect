@@ -67,6 +67,7 @@ visibility in one place, built on OpenTelemetry and ClickHouse.**
 | 🚨 | **Monitors** | Metric, APM, log and change monitors; warn/alert thresholds with recovery; backtesting; downtimes; notifications to webhooks (HMAC-signed), Slack and email with retries; quality checks |
 | 🧯 | **Incidents** | Declare, triage, timeline, impacts, follow-ups and analytics |
 | 🚀 | **Software Delivery** | CI pipeline explorer, flaky-test management, DORA metrics from OpenTelemetry CI/CD semantic conventions; GitLab CI pipelines pulled through GitLab's API (no inbound access needed) |
+| 🤖 | **MCP server** | AI agents (Claude Code, IDE assistants) query logs, metrics, traces, monitors, incidents, dashboards and security findings over the Model Context Protocol with an application key; read-only tools, audited ([docs/mcp.md](docs/mcp.md)) |
 | 🔐 | **Identity & tenancy** | Organizations with an instance admin console, one account across orgs, password + TOTP MFA, SAML 2.0, OIDC, roles, teams, SAML group mappings, application and ingest API keys, audit trail |
 
 <details>
@@ -340,7 +341,7 @@ starts `OC_LOG_INGEST_HANDOVER_MINUTES`, 30, before the newest log Vector stored
 | `OC_RETENTION_METRICS_DAYS` / `_CI_DAYS` | `30` / `30` | Install-wide metric and CI retention |
 | `OC_RAW_LOGS_HOURS` | `72` | Every log stays this long unindexed, as the source of archives |
 | `OC_LOGPROC_ADDR` / `OC_INTERNAL_TOKEN` | `0.0.0.0:8090` / — | Internal listener: the log indexer Vector posts to (`OC_LOG_INGEST=vector`), and the server's own metrics (`GET /metrics`, Prometheus text: `oc_cache_*`). Keep it off the public network; the token is optional |
-| `OC_SMTP_URL` / `OC_SMTP_FROM` | — | SMTP server for monitor emails (`smtps://user:pass@host:465`) |
+| `OC_SMTP_URL` / `OC_SMTP_FROM` | — | SMTP server for ObserveCraft's emails (`smtps://user:pass@host:465`): monitors, On-Call, reports, verification. HTML and text, with the logo and graphs attached inline (no image is fetched from the install) |
 | `OC_ASSIST_PROVIDER` | — | The install's default model for Assist: `anthropic` (the Messages API) or `openai` (any OpenAI-compatible chat completions endpoint: OpenAI, Azure OpenAI, vLLM, LiteLLM, Ollama). Each organization can set its own in Organization Settings → Assist AI (key sealed), which replaces this one for it. Unset and no organization provider: Assist says it isn't set up |
 | `OC_ASSIST_API_KEY` / `OC_ASSIST_MODEL` / `OC_ASSIST_BASE_URL` | — / `claude-opus-5` (anthropic) / `https://api.anthropic.com` | The provider's key (required for anthropic), model (required for openai) and URL (required for openai, e.g. `https://api.openai.com/v1`) |
 | `OC_ASSIST_ALLOW_PRIVATE` | `false` | Lets organizations point Assist at private addresses (a model on the install's network); leave off on multi-tenant installs |

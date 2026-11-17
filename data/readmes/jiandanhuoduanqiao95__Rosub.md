@@ -64,7 +64,7 @@ cd chatroom_flutter
 flutter pub get
 
 # Android（侧载 APK，arm64 单包）
-flutter build apk --release --split-per-abi --dart-define=CHATROOM_SERVER_HOST=<你的服务器IP>
+flutter build apk --release --target-platform android-arm64 --dart-define=CHATROOM_SERVER_HOST=<你的服务器IP>
 
 # Linux
 flutter build linux --release --dart-define=CHATROOM_SERVER_HOST=<你的服务器IP>
@@ -72,6 +72,8 @@ flutter build linux --release --dart-define=CHATROOM_SERVER_HOST=<你的服务�
 # Windows
 flutter build windows --release --dart-define=CHATROOM_SERVER_HOST=<你的服务器IP>
 ```
+
+> versionCode 策略：Android 交付包采用平铺 arm64（`--target-platform android-arm64`），v1.1.2 基础 versionCode 为 4018。不要与 `--split-per-abi` 混用：split arm64 会在基础号上叠加 +2000（v1.1.1 为 4017，若 v1.1.2 用 split 则为 6018），后续改回平铺时必须高于上一 split 包实际 versionCode，否则报 `INSTALL_FAILED_VERSION_DOWNGRADE`。
 
 服务端发行包（零测试/零数据/零密钥）：`scripts/package_server_release.sh <版本号>`。
 

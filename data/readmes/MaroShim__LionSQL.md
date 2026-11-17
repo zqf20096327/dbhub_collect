@@ -2,7 +2,7 @@
 
 Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures
 
-[![Version](https://img.shields.io/badge/version-v0.92.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v0.93.0-blue.svg)](CHANGELOG.md)
 [![Go Version](https://img.shields.io/badge/Go-1.26%2B-00ADD8.svg?logo=go&logoColor=white)](go.mod)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
@@ -194,7 +194,7 @@ Upon startup, the console displays the connection endpoints:
  [HTTP API]       http://127.0.0.1:8090/api/health
  [CDC Stream]     http://127.0.0.1:8090/api/cdc/stream (NDJSON / SSE)
  [Superuser Auth] admin@lionsql.local (JWT Auth: false)
- [Supported GUI]  DBeaver / Beekeeper Studio / DbGate / SSMS
+ [Supported GUI]  DBeaver / Beekeeper Studio / DbGate / SSMS / Azure Data Studio (macOS/Linux)
  [Postgres Wire]  psql -h 127.0.0.1 -p 5433 (PostgreSQL v3 protocol, psql / pgx)
  [TDS / MSSQL]    sqlcmd -S 127.0.0.1,1433 (TDS 7.x/8.0 protocol, sqlcmd / SSMS)
  [Data Directory] data
@@ -418,6 +418,34 @@ LionSQL provides a modern, unified CLI with first-class lifecycle commands:
 ./bin/lionsql sql "SELECT 1"    # Quick interactive query execution
 ./bin/lionsql get [key]         # Query runtime configuration parameter(s) from running instance
 ./bin/lionsql set <key> <val>   # Dynamically update configuration (sudo-style password verification)
+```
+
+### Interactive SQL REPL Shell & Headless CLI (`lionsql cli`)
+
+Execute interactive REPL sessions, inline SQL queries (`-e`), and batch script files (`-f`) directly against the local database using the single binary without external client tools (`psql`, `sqlcmd`). OS-level directory locking (`dirlock`) automatically prevents concurrent process conflicts with running daemons.
+
+| Option / Flag | Aliases | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `cli` / `-i` | `--interactive`, `-shell` | `false` | Start interactive SQL/T-SQL REPL shell (`exit`, `quit`, `.exit` to quit) |
+| `-e "<sql>"` | `--execute`, `sql "<sql>"` | `""` | Execute inline SQL/T-SQL statement headlessly and format tabular output |
+| `-f <path>` | `--file` | `""` | Read and execute a `.sql` batch script file sequentially (`GO` batch separator supported) |
+| `-dir <path>` | `-data`, `-data-dir` | `data` | Target database data directory path |
+| `-engine <type>` | `--engine` | `wiredtiger` | Storage engine backend (`wiredtiger` or `memory`) |
+| `-disk <type>` | `--disk` | Platform default | Low-level disk persistence backend (`wiredtiger` or `compact`) |
+| `-memory <mode>` | `--memory` | `compact` | In-memory tuple layout mode (`compact` recommended) |
+
+```bash
+# 1. Interactive REPL Shell (multi-line input, execute with semicolon (;) or GO)
+./bin/lionsql cli -dir=./data
+./bin/lionsql -i -engine=memory -dir=./data
+
+# 2. Headless Inline Query Execution (CI/CD and script automation)
+./bin/lionsql -e "SELECT 1 + 1 AS result, @@VERSION AS version;"
+./bin/lionsql cli -dir=./data -e "CREATE TABLE items (id INT PRIMARY KEY, name VARCHAR(50)); INSERT INTO items VALUES (1, 'LionSQL'); SELECT * FROM items;"
+
+# 3. Batch SQL Script File Execution
+./bin/lionsql -f ./scripts/demo_seed.sql
+./bin/lionsql cli -dir=./data -f ./migrations/init_schema.sql
 ```
 
 ### Declarative Schema Migrations CLI (`lionsql migrate`)

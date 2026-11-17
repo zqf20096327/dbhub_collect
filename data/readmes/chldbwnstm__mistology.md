@@ -77,7 +77,33 @@ Install MISTOLOGY from https://github.com/chldbwnstm/mistology (`cargo install -
 
 `mistology setup` writes the embedded `SKILL.md` directly into your active agent skill folders (`~/.claude`, `~/.gemini`, `~/.codex`, `~/.cursor`, `~/.agents`)—no leftover clone directory, no fragile `/tmp` symlinks, and **no per-project `init` step** (`.mistology/notes/` and `.mistology/.gitignore` are created automatically when the first mistake is recorded). For team-shared workspace skills, ask your agent to run `mistology setup --project`.
 
-### 2. Seed an Existing Repo on Day 1 *(Optional — Once per Project)*
+### 2. Lock In Always-On Usage *(Recommended — Once per Project)*
+
+Skill files alone only run when an agent remembers to invoke them. Paste this prompt inside your repository to enforce **100% automatic preflight search, error lookup, and subagent coverage** via project rules and hooks:
+
+```text
+Configure this repository so coding agents always use `mistology` without skipping:
+1. Inspect existing project rule files (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, etc.) without overwriting existing rules, and add a concise Always-On MISTOLOGY rule:
+   - Preflight: before editing files, run `mistology search -b "<target files, symbols, and task>"` and check coupled modules (`← ...`).
+   - On error: when a build/lint/test command fails, run `mistology search -b "<exact error>"` before guessing a fix.
+   - Verified write: only when both a real mistake/failure and a verified fix are confirmed, run `mistology new` (or `mistology supersede <id>`) with `--file`, `--symbol`, and `--coupled`.
+2. If this project uses Claude Code, merge lightweight project-local hooks into `.claude/settings.json` (preserving existing hooks and never touching global `~/.claude/settings.json`): inject a MISTOLOGY reminder on `SessionStart` and `SubagentStart` so coding subagents also follow it, and run `mistology search -b` automatically on `UserPromptSubmit` and `PostToolUseFailure` (suppressing empty `관련 오답노트 없음` output and never blocking on non-zero exit).
+3. If subagents work inside git worktrees while `.mistology` is shared at a parent workspace root rather than committed per branch, pin the hook/command directory to that shared root so notes never fragment across worktrees.
+```
+
+<details>
+<summary><em>Prefer pasting a rule manually? Minimal 4-line snippet for <code>AGENTS.md</code> / <code>CLAUDE.md</code></em></summary>
+
+```markdown
+## MISTOLOGY (Always-On)
+- **Preflight**: Before editing code, run `mistology search -b "<target files, symbols, task>"` and inspect coupled modules (`← ...`).
+- **On Error**: Before fixing any build/test/runtime failure, run `mistology search -b "<exact error message>"`.
+- **Record Verified Fixes**: When both a mistake and its verified fix are confirmed, record via `mistology new` (or `mistology supersede <id>`) with `--file`, `--symbol`, and `--coupled`.
+```
+
+</details>
+
+### 3. Seed an Existing Repo on Day 1 *(Optional — Once per Project)*
 
 Already have months of bugfixes in Git? Turn past regressions into connected mistake notes right away:
 
@@ -85,7 +111,7 @@ Already have months of bugfixes in Git? Turn past regressions into connected mis
 Scan recent bugfix, revert, and regression commits in this repository's git log. Only for commits where both the concrete failure/error and coupled files are clear in the diff, seed verified mistake notes into mistology (skip routine feature commits or unverified guesses).
 ```
 
-### 3. Everyday Coding — Just Prompt Normally
+### 4. Everyday Coding — Just Prompt Normally
 
 Once the skill is installed, **just talk to your coding agent as usual**—the agent handles `search -b`, `new`, and `supersede` behind the scenes:
 

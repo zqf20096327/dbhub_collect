@@ -1,0 +1,286 @@
+<div align="center">
+
+<img src="assets/banner.svg" alt="OpenInvoice Germany — free self-hostable invoicing with XRechnung / EN 16931, GoBD and § 14 UStG" width="100%" />
+
+# OpenInvoice Germany
+
+**Free, self-hostable open-source invoicing software for Germany.**
+E-invoice (XRechnung / ZUGFeRD) · GoBD · § 14 UStG · small business § 19 · GDPR
+
+[![CI](https://github.com/c-sakel/open-invoice-germany/actions/workflows/ci.yml/badge.svg)](https://github.com/c-sakel/open-invoice-germany/actions/workflows/ci.yml)
+&nbsp;·&nbsp; Licence: **AGPL-3.0** &nbsp;·&nbsp; **English** · [Deutsch](README.de.md)
+
+</div>
+
+> **Why?** From 2025 German B2B must be able to *receive* structured e-invoices; from 2027/2028 *sending* becomes mandatory. Many freelancers and SMEs pay a monthly fee just to stay compliant. This project makes it **free and open** — you host it yourself, your data stays with you.
+
+> ⚠️ **Not tax or legal advice.** GoBD compliance additionally requires the user's own process documentation (Verfahrensdokumentation). All legal references with sources live in **[COMPLIANCE.md](COMPLIANCE.md)** (single source of truth). No warranty.
+
+---
+
+## 📸 Screenshots
+
+| | |
+|---|---|
+| <img src="docs/screenshots/startseite.png" alt="Dashboard with receivables, cash flow by due date and monthly revenue" width="420"> | <img src="docs/screenshots/rechnungen.png" alt="Invoice list with status tabs, cash-flow band and quick actions" width="420"> |
+| **Dashboard** — receivables, due dates, revenue | **Invoices** — status tabs, filters, record payments |
+| <img src="docs/screenshots/editor.png" alt="Invoice editor with line items, tax rates and totals" width="420"> | <img src="docs/screenshots/beleg.png" alt="Detail view of a partly paid invoice with PDF preview, payments and document chain" width="420"> |
+| **Editor** — line items, discounts, live totals | **Document view** — PDF, payments, archive, document chain |
+| <img src="docs/screenshots/layout-designer.png" alt="Layout designer with block order, columns and live preview" width="420"> | <img src="docs/screenshots/pdf-rechnung.png" alt="Invoice PDF following DIN 5008 with GiroCode and embedded e-invoice" width="300"> |
+| **Layout designer** — blocks, columns, live preview | **PDF** — DIN 5008, GiroCode, ZUGFeRD/PDF/A-3 |
+| <img src="docs/screenshots/mahnwesen.png" alt="Dunning overview with overdue invoices, ageing and dunning levels" width="420"> | <img src="docs/screenshots/kunden.png" alt="Customer list with number, city, type and VAT ID" width="420"> |
+| **Dunning** — ageing, dunning levels | **Customers** — master data, B2B/B2C |
+
+All data shown is fictitious. The UI is in German.
+
+## 🗣️ Talk to it with an AI assistant (MCP)
+
+Connect your local instance to any **MCP-capable AI assistant** and create legally sound invoices just by describing them:
+
+> "Create an invoice to Müller GmbH for 3 hours of consulting at €95, delivered today, finalise it and export the XRechnung."
+
+The assistant calls the right tools in order (create customer/service → invoice → finalise → PDF + XRechnung). Finalising **enforces** the § 14 UStG mandatory fields — non-compliant invoices are rejected. The invoice is created and stored locally. Setup + examples: **[docs/MCP.md](docs/MCP.md)**.
+
+```bash
+npm run mcp   # start the MCP server (stdio) / register it in your MCP client
+```
+
+> 🔒 **Data protection (GDPR).** The app core runs **100% locally**, but the MCP feature is optional and **not automatically GDPR-compliant**: when you let a **cloud LLM** create the invoice, the data you describe (customer name, items, amounts = personal data) is sent to that provider and processed on your behalf (Art. 28 GDPR). For business use with real personal data, either use a **local model** (the MCP server is model-agnostic) or a **commercial API with a DPA** — consumer chat subscriptions usually come without a DPA. List the provider as a sub-processor in your records and privacy policy. Details: **[docs/MCP.md](docs/MCP.md)**. Not legal advice.
+
+## REST API (`/api/v1`)
+
+A versioned, OpenAPI-documented REST API is available under `/api/v1`, calling the exact same domain functions as the UI and the MCP server — same GoBD rules, same § 14 UStG mandatory-field checks. Authentication is via a per-organisation **API key** (Bearer token, scopes `read`/`write`/`send`/`admin`), created under **Einstellungen → API**.
+
+```bash
+curl -H "Authorization: Bearer oig_..." https://your-instance/api/v1/Invoice
+```
+
+Interactive docs (Swagger UI, session login or API key): `GET /api/docs`. Machine-readable spec: `GET /api/v1/openapi.json`. Full walkthrough with curl examples (customer → invoice → finalise → PDF/XRechnung → payment): **[docs/API.md](docs/API.md)**.
+
+Event-driven **webhooks** (`/api/v1/Webhook`, scope `admin`) deliver events like `invoice.finalized` or `payment.recorded` to your own endpoint — HMAC-signed, with retry/backoff and an SSRF-guarded, https-only outbox. Events, payload shape, and signature-verification examples in Node.js and PHP: **[docs/WEBHOOKS.md](docs/WEBHOOKS.md)**.
+
+## Features
+
+- **Voice control via MCP** (any MCP-capable AI assistant) — see above.
+- **GoBD core**: finalisation (draft → immutable), gapless number ranges, append-only audit **hash-chain**, cancellation instead of deletion.
+- **§ 14 UStG**: mandatory-field check blocks finalisation when data is missing.
+- **Tax schemes**: standard rating (19/7/0), small business (§ 19), reverse charge (§ 13b), intra-EU supply, margin scheme (§ 25a), small amount (§ 33).
+- **Mandatory checks**: small-business turnover limits (§ 19 UStG; collected and invoiced net turnover, manual entry for turnover outside the program, dashboard card, notification and a hint on finalisation; the tax scheme is never switched automatically), small-amount invoice flag (§ 33 UStDV, up to 250 € gross), issue deadline for intra-EU supplies and services (§ 14a UStG, 15th of the following month) and an optional notice for consumers on default after 30 days (§ 286 Abs. 3 BGB, in the PDF and in BT-20, frozen on finalisation; off by default).
+- **E-invoice**: **XRechnung** (UBL, EN 16931) **and ZUGFeRD/Factur-X hybrid PDF** (embedded EN-16931 CII in a **PDF/A-3b** container), both generated natively and validated against the **official Schematron** rules (SaxonJS, no Java) — cross-checked by the KoSIT validator and veraPDF in CI. B2G: the customer's Leitweg-ID goes out as buyer reference (BT-10); a separate delivery address maps to BG-13/BG-15.
+- **GoBD operations**: write-once document archive (PDF, CII and UBL exactly as first issued), scheduled hash-chain verification with a status page, auditor export for tax audits (GDPdU/"Z3" data access incl. the official DTD), reversing entries instead of deleting payments, backup script templates.
+- **Foreign customers**: invoices in foreign currency with the exchange rate per § 16 Abs. 6 UStG (VAT shown in EUR), document language German or English, and an OSS threshold monitor (§ 3c Abs. 4 UStG) with dashboard card and notification.
+- **Documents**: quotes, order confirmations, pro-forma — convertible into an invoice.
+- **Discounts, surcharges & Skonto**: per-line discount (percent + fixed amount) and document-level discount/surcharge (allocated proportionally per tax rate), correctly mapped to `AllowanceCharge` in XRechnung/ZUGFeRD (BG-20/21/27/28); early-payment discount (Skonto, up to two terms) as BT-20 text incl. the `#SKONTO#TAGE=n#PROZENT=x.xx#` convention, with a payment-recording suggestion.
+- **Payment methods**: per-organisation catalogue (system codes + custom), optional customer default, snapshotted on finalisation, mapped to UNTDID 4461 `PaymentMeansCode`.
+- **Partial, down-payment & final invoices** (§ 14 Abs. 5 UStG): bill a percentage/amount/selected lines of a quote or delivery note (**partial invoice**), invoice a deposit before delivery (**down-payment invoice**, e-invoice type code 386), then close out with a **final invoice** that automatically deducts the down payments and their tax (immutable deduction snapshot, BT-113/BT-115/BG-3 in the e-invoice, matching PDF breakdown).
+- **Unified document editor with live preview**: one editor for invoices, quotes/order confirmations/pro-formas and delivery notes, with inline customer/product creation, a one-click PDF preview of the unsaved draft (watermarked, nothing written to the database), drag-and-drop or keyboard (`Alt+↑`/`Alt+↓`, `Enter`-to-add-row) line reordering, headings/text blocks/computed subtotals alongside regular item lines (only item lines go into the e-invoice XML), rich text (restricted markdown — bold/italic/underline, one list level, links) in line descriptions, article numbers, and header fields (subject, order number, internal reference, contact, delivery/billing address).
+- **Attachments**: upload files to any document (invoice, quote, delivery note, dunning, subscription) — 10 MB per file, 50 MB per document, MIME whitelist + magic-byte check, content-addressed storage with dedup, selectable as extra attachments when sending email.
+- **Payments & dunning**: record (partial) payments; staged reminders (payment reminder → 1st/2nd dunning) with **default interest** (§ 288 BGB, day-accurate across base-rate changes; half-yearly base-rate table maintained in UI/REST/MCP) + €40 flat fee (B2B), each as a PDF.
+- **Recurring invoices / subscriptions**: weekly–yearly templates, optional auto-finalisation, run via UI/MCP or cron (`npm run recurring:run`). Subscription lines can use heading/text/subtotal blocks, and usage-based lines are billed from recorded consumption (UI/REST/MCP, with `externalId`); a usage run only happens after the billing period has ended. Several subscriptions of one customer can be combined into one **collective invoice** with a block heading each (same due date and terms, up to 50 subscriptions).
+- **Credit notes**: full cancellation **or** partial credit, original stays finalised.
+- **Letterhead, print options & number ranges**: per-organisation branding (logo, colour, margins, sender line, footer) with a live preview; ten global print switches (footer, page numbers, fold/punch marks, which columns show) with per-document overrides while still a draft; nine configurable number ranges (quotes, order confirmations, pro-forma, delivery notes, invoices, credit notes, dunnings, plus customer and article numbers) with pattern/prefix/reset and a rewind guard.
+- **PDF layouts & layout designer** — seven built-in layouts (Standard, Schlicht, Klassik, Modern, Blau, Schwarz, Kompakt) following DIN 5008 Form B, plus a **layout designer** for your own versioned designs (block order, columns, fonts IBM Plex / Source Serif 4 / Inter) with live preview. Selectable per document type, overridable per draft document; the layout is frozen when an invoice is finalized. Footer is generated from company master data (four columns) or from three custom text fields.
+- **Templates & tags**: reusable document templates, text snippets and tags to filter documents.
+- **Reports**: charts for revenue, cash-in, payment behaviour, top products, quote outcome and recurring revenue.
+- **EPC QR code ("GiroCode")** on invoices — scan-to-pay in any German banking app, built from the same IBAN/amount already on the invoice; fails soft (no code, no error) if a prerequisite is missing (foreign currency, no IBAN, nothing outstanding).
+- **Customer comfort**: multiple addresses (billing/shipping/other) and contact persons per customer with a default flag and document snapshot, ten customer-level defaults (default currency/discount, invoice/quote email + CC, order reference, delivery/payment terms text), organisation-wide custom customer fields (text/number/date/boolean/select) available as `{{customField.<key>}}`, and "take over last document" (lines/texts/terms/prices) when creating a new quote/order confirmation/invoice.
+- **Workflow & UX**: a derived invoice status (due/overdue, never stored) drives every list/filter/dashboard; per-row quick actions (send, record payment, next dunning stage, convert, cancel, …) show only what's actually available for that document's status; filterable/searchable list pages for invoices, quotes, delivery notes and subscriptions; a per-document timeline (creation, sends, payments, dunnings, status changes) backed by a lightweight `ActivityLog` (UX history, **not** a GoBD audit substitute — the hash-chained `ChangeLog` is unchanged); a dashboard (open/due/overdue, aging, this month's revenue, recent documents) on the signed-in home page; a customer detail page with KPIs and per-customer document tabs; in-app notifications (invoice due/overdue, dunning stage reached, quote expiring, email bounced, recurring-invoice failure, invalid e-invoice) with per-type toggles and an optional daily email digest; an editable subscription (recurring invoice) with a run cap, per-subscription email template and period-text override; a collapsible, grouped navigation sidebar with a command palette (⌘K/Ctrl+K) search.
+- **PDF-centered document view**: invoice/document/delivery-note detail pages share one layout — the PDF embedded centre-stage (browser viewer, A4 aspect ratio, download fallback), a status card on the right (customer, dates, totals, payment/dunning), actions up top and a no-JS "more" menu for less-used ones (export, duplicate, cancel, convert), collapsible line items, and `‹`/`›`/`Alt+←`/`Alt+→` to step through the previously opened, filtered list.
+- **PDF export** ("other invoice") with all mandatory fields.
+- **Self-hosted**: SQLite solo without a server **or** PostgreSQL via Docker.
+- **Sign-in**: built-in admin account (scrypt hash + signed session cookie, hardened sign-in, password change) — app and API protected. Optional two-factor authentication (TOTP with recovery codes) and password reset by email (needs SMTP and `APP_BASE_URL`). API requests are logged (redacted) under Settings → API.
+- **E-invoice identifiers & VAT ID check**: Peppol endpoint IDs with EAS scheme (BT-34/BT-49) in UBL and CII, Leitweg-ID check-digit validation, and an optional VIES check of customer VAT IDs (on by default, skipped on finalisation; each check is stored append-only).
+- **Card and SEPA direct debit in the e-invoice** (BG-18/BG-19): card payments with only the last four digits, direct debit with creditor ID (company), mandate (customer) and pre-notification on the PDF; incomplete data gives payment means code 1 (not defined) in the e-invoice, with a notice on finalisation.
+- **Unit prices to 0.00001 EUR** (invoices, quotes/order confirmations, subscriptions): line totals are rounded half-up; BT-146 carries five decimals. Gross-price input is available via REST/MCP.
+- **CSV export & import**: export documents and contacts as CSV; import contacts and products with a preview, formula-injection protection and a 24 h double-import lock.
+- **Bulk cancellation**: cancel several invoices from the list at once (max. 50, each with its own cancellation document, result report); also via REST/MCP.
+- **Optional HTML email**: sent alongside the plain-text part, off by default.
+- **Bank reconciliation**: import account statements as CAMT.053/.054 (UTF-8 XML, no ZIP) with a preview, get match suggestions per incoming payment (invoice number, amount, counter-account, name), confirm one by one, split across invoices, or confirm all unambiguous ones in a single step; nothing is booked automatically and an overpayment is never booked. Returned direct debits are reversed by a counter-entry after confirmation, an allocation can be undone the same way. Counter-party name, IBAN and remittance text are stored (IBAN shown masked); also via REST and MCP.
+- **Actions after payment**: rules fire when an invoice is fully or partially paid (any source: manual, API, MCP, bank reconciliation, online payment) and run fixed actions: payment confirmation e-mail (template, send limits, at most once), tag, notification, webhook `payment_rule.triggered`, resume paused subscriptions. Grace period, dry run, run log with retry (UI/REST/MCP).
+- **Customer portal** (off by default): a personal, revocable link per customer (256-bit token, valid 365 days by default) opens a public page without login with the customer's finalised invoices, credit notes and sent dunning notices; PDF and e-invoice XML come from the write-once archive. Access log without IP (24 months); link creation, mail dispatch and settings also via REST and MCP.
+- **Online payment (Mollie, Stripe)** (off by default): invoices get a pay link at finalisation (precedence payment method, customer, company default); the customer pays on a public page, the payment is booked only after the app has fetched its status from the provider (never from the webhook body) and only through the regular payment function. Test mode never books, no cash discount online, refunds and chargebacks are counter-booked, overpayments are reported. The link appears in the PDF (with QR), the e-invoice payment terms, e-mail (placeholder) and the customer portal; the API key is stored encrypted (Stripe additionally verifies the webhook signature over the raw body before fetching the state; the webhook endpoint is created by hand in the Stripe dashboard); also via REST and MCP.
+- **DATEV export (file only)**: booking batch per month (DATEV format, Windows-1252, CRLF), optional debtor master data and an immutable export log, packed as a ZIP for your tax advisor; no login, no network call, no bookkeeping in the app. The account mapping (SKR03/SKR04 templates are only a proposal) must be confirmed in the UI (never via REST/MCP) after agreement with the tax advisor; every change voids the confirmation. Exporting payments is off by default. Cases the app cannot book safely (e.g. foreign-currency payments, reversal of a final invoice, margin scheme without account) are listed for manual booking; late postings in already exported months are exported as supplements. The lock flag is configurable, default 0 (batch not locked), and always written explicitly. Also via REST and MCP (the MCP tool writes the ZIP to a directory).
+- **Incoming invoices** (menu "Eingang", also REST and MCP): receive supplier invoices (UBL/CII XML, PDF with embedded XML, other PDF/images), keep the original file unchanged and write-once (SHA-256, never deleted), show a readable version with a sums check and check it against EN 16931 and XRechnung with the official KoSIT validator (separate Java process, no external service). The result only covers format and rules of the standard, not whether the invoice is correct. On top: a processing workflow (new, checked, approved, marked as paid, or rejected with a reason, all in the change log), assigning or creating the supplier as a contact, an internal note, due dates with early-payment discount and notification, payment details with a GiroCode and a warning when the IBAN changes, a ZIP handover for bookkeeping and inclusion in the auditor export. Optionally a dedicated invoice mailbox can be polled over IMAP (off by default, password login, never deletes or moves mails): XML and PDF attachments land in a review area and only become incoming invoices once you accept them. Nothing is booked and no transfer is executed.
+- **Postal dispatch via LetterXpress** (off by default, dry-run mode, confirmation per mode change and per document; dunning automation only with an explicit setting).
+- **API extras**: `updatedSince` and cursor pagination on lists, create + finalise + record payment in one call with a mandatory `Idempotency-Key` (24 h replay), bulk contacts (max. 100), bulk cancellation, gross-price input.
+- **Berlin time**: invoice, due and delivery dates in the e-invoice (BT-2/BT-9/BT-72), the Skonto deadline date and end, the month and year boundaries of reports and the OSS year follow the Berlin calendar day; overdue status and dunning still count UTC days.
+
+### Status
+
+In productive use since September 2026 for issuing real invoices. Everything listed above works and is covered by tests; e-invoices pass the official validators in every CI run. Not part of the project by design: financial accounting and multi-user/roles (the DATEV export only hands data to your tax advisor as a file). The software does not produce ZM (§ 18a UStG) or OSS returns (§ 18j UStG). See [docs/ARCHITEKTUR.md](docs/ARCHITEKTUR.md) and the honest list of **[known limitations](docs/LIMITATIONEN.md)**.
+
+## Documents workflow
+
+Quote → order confirmation → delivery note → invoice, all linked:
+
+1. Create a **quote** (draft, editable), send it — status moves `DRAFT → SENT`.
+2. Mark it `ACCEPTED` (or convert it straight into an **order confirmation**).
+3. **Convert** it into a **delivery note** (quantities from the quote/order, over-delivery blocked) and/or into an **invoice draft**.
+4. Every conversion is recorded as a document relation; the **document chain** (visible on every quote/invoice/delivery-note page) shows the full lineage — quote → order confirmation → delivery note → invoice → payments/dunnings.
+5. Billing status (none/partial/full) is derived from those relations, not stored.
+6. Instead of (or alongside) a full invoice, bill a **partial invoice** (percentage/amount/selected lines) or a **down-payment invoice** from a quote/order confirmation, then close out with a **final invoice** — deposits and their tax are deducted automatically (§ 14 Abs. 5 UStG).
+
+Same tools via MCP: `convert_document`, `create_delivery_note`, `set_document_status`, `duplicate_document`, `create_partial_invoice`, `create_downpayment_invoice`, `create_final_invoice`, `get_billing_state`. Details: [docs/ARCHITEKTUR.md](docs/ARCHITEKTUR.md), limitations: [docs/LIMITATIONEN.md](docs/LIMITATIONEN.md).
+
+### Let customers accept quotes online
+
+On a quote's detail page (**Documents → quote**), under "Acceptance link", generate a link — the URL is shown **once** (copy button), and can't be retrieved again afterwards. The customer opens it without logging in, sees the quote and a PDF download, and can accept or reject it (name required, email/comment optional). On decision: status `ACCEPTED`/`REJECTED`, an internal notification email, and — depending on the setting under **Settings → Documents** — an automatic order confirmation or invoice draft. The link can be revoked at any time. For the `{{offer.link}}` placeholder in the quote email template, set `APP_BASE_URL` (`.env`) — otherwise it stays empty.
+
+### Navigation and search
+The left sidebar groups the app into Overview, Sales (quotes, order confirmations, proforma invoices, delivery notes, invoices, credit notes, recurring invoices, dunning) and Administration (customers, products, notifications, settings). The sidebar can be collapsed to icons. The search field at the top (also ⌘K / Ctrl+K) finds documents by number or customer, plus customers and products, and offers quick actions.
+
+### Look and feel (Oberfläche)
+All colours, radii, shadows and fonts are design tokens in the `@theme` block of `src/app/globals.css` (`paper`, `sheet`, `ink`, `pen`, `stamp`, `seal`, `ledger`, …); components use the token classes (`bg-sheet`, `text-ink-soft`, …) instead of raw colours. Dark mode follows the system setting (`prefers-color-scheme`) — there is no manual switch. The fonts (IBM Plex Sans and Mono) are bundled locally via `@fontsource` (SIL OFL), so no request goes to an external font service. Lists render as cards on narrow screens, charts measure their container and keep a readable 11–13 px label size, and keyboard focus is shown as a 2 px outline.
+
+## Tech stack
+
+Next.js 16 (App Router) · TypeScript (strict) · Prisma 6 · SQLite/PostgreSQL · TailwindCSS · Zod · Vitest.
+Money as integer cents, quantities as integer milli-units, tax per EN-16931 group — see [docs/ARCHITEKTUR.md](docs/ARCHITEKTUR.md).
+
+## Quick start (solo / SQLite — no server needed)
+
+Requirements: **Node.js ≥ 22.22.2** and npm; `unzip` only for `npm run validate:erechnung`.
+
+```bash
+git clone https://github.com/c-sakel/open-invoice-germany.git
+cd open-invoice-germany
+npm install
+cp .env.example .env            # DATABASE_URL="file:./dev.db" is the default
+npm run db:migrate              # create the schema
+npm run db:seed                 # optional demo data
+npm run dev                     # http://localhost:3000
+```
+
+The SQLite file lives at `prisma/dev.db` and belongs to you alone. On first start you create your admin account under **`/setup`** (after `npm run db:seed` there is a demo login `admin@example.com` / `demo1234` — please change it). For **production**: set `AUTH_SECRET` in `.env` (`openssl rand -base64 32`) and run behind HTTPS.
+
+**Native production run without Docker** (`npm run build && npm start`): `AUTH_SECRET` is mandatory — the app refuses to sign sessions without it. Behind a TLS reverse proxy, forward `X-Forwarded-Proto` (the session cookie is only marked `Secure` for HTTPS; plain HTTP in a LAN works too). If your proxy cannot send that header, set `SESSION_COOKIE_SECURE=true`.
+
+**In the app:** `Settings` (create company) → `Customers` → `New invoice` → add line items → **Finalise** (assigns the number, makes it GoBD-immutable) → **PDF** and **XRechnung** export. Full step-by-step guide: **[docs/ANLEITUNG.md](docs/ANLEITUNG.md)** (German).
+
+## With Docker (PostgreSQL)
+
+From version 1.0.1 on, every release publishes a ready-made image for `linux/amd64` and `linux/arm64`: **`ghcr.io/c-sakel/open-invoice-germany`** (e.g. tags `1.1.0`, `1.1`, `1`, `latest`).
+
+```bash
+# .env next to docker-compose.yml (never commit it):
+#   POSTGRES_PASSWORD=<openssl rand -hex 24>
+#   AUTH_SECRET=<openssl rand -hex 32>
+docker compose up -d            # pulls the image; add --build to build from this checkout
+```
+
+Then open `http://localhost:3000` and create your account under `/setup`. The app only listens on `127.0.0.1` — put a TLS reverse proxy in front for outside access. `OIG_VERSION` in `.env` pins a version (default `1`, i.e. the latest 1.x).
+
+The image is built from the Next.js standalone output and contains only what the server needs at runtime — no screenshots, docs, tests or dev dependencies (the build context is an allowlist in `.dockerignore`). It runs as the unprivileged user `node` (UID 1000) with `tini` as init — program files belong to root, only the data directories are writable; the compose file additionally drops all Linux capabilities. Migrations run on every start (`prisma migrate deploy`).
+
+Two named volumes hold the data next to `oig-db`: `oig-attachments` (document attachments, `ATTACHMENTS_DIR`) and `oig-archive` (write-once document archive, `ARCHIVE_DIR`). Back up all three.
+
+**Upgrading from an image before 1.0.1** (it ran as root): the volumes still belong to root, and the container refuses to start with a hint. Change the owner once:
+
+```bash
+docker compose run --rm --user root --cap-add CHOWN --cap-add DAC_READ_SEARCH \
+  --entrypoint chown app -R node:node /app/data
+```
+
+**Upgrading an existing instance.** If the database was created with an older
+version using `prisma db push`, it has no migration history. The container will
+refuse to start and print the one command needed. Take a backup first.
+
+**Do not run `migrate resolve` blindly.** The `0_init` baseline reflects the
+current schema, including `RecurringInvoice`, `RecurringInvoiceLine` and
+`Invoice.recurringInvoiceId`. An older instance may predate these tables. If you
+mark the baseline as applied without checking, Prisma believes the schema is
+complete and later queries fail with `column ... does not exist`. Verify first:
+
+```bash
+docker compose run --rm app \
+  npx prisma migrate diff --from-url "$DATABASE_URL" \
+    --to-schema-datamodel prisma/schema.postgres.prisma --script
+```
+
+**Important:** `--to-schema-datamodel` compares against the current model
+(head), not against the `0_init` baseline. The baseline reference is
+`prisma/migrations-postgres/0_init/migration.sql` only. The diff can therefore
+also show tables or columns that were only introduced by a **later** migration
+under `prisma/migrations-postgres/` (e.g. the snapshot columns) — those
+must **not** be applied by hand; `migrate deploy` applies them automatically
+after the `resolve` step. To tell which migration introduces a given column,
+run `grep -l "<column name>" prisma/migrations-postgres/*/migration.sql`: if it
+only appears in `0_init`, it belongs to the baseline; if it (also) appears in a
+later migration, it came from there and must not be created by hand.
+
+- **Empty output** (only the comment "This is an empty migration"): the database
+  already matches the baseline. `migrate resolve --applied 0_init` below is safe.
+- **Output contains only `CREATE TABLE` / `ALTER TABLE ... ADD COLUMN` /
+  `CREATE INDEX` / `ALTER TABLE … ADD CONSTRAINT` (foreign keys)**: apply only
+  the statements that belong to `0_init` (see the `grep` rule above); leave out
+  statements for columns/tables that come from later migrations. Review the
+  remaining SQL, apply it with `docker compose run --rm app npx prisma db
+  execute --url "$DATABASE_URL" --stdin`, then continue with `migrate resolve`.
+- **Output contains any `DROP`**: stop. Do not apply it and do not run
+  `migrate resolve`. The database holds data the baseline does not account for —
+  get a second opinion before proceeding.
+
+Once the diff is clean (or has been applied):
+
+```bash
+docker compose run --rm app \
+  npx prisma migrate resolve --config prisma.postgres.config.ts --applied 0_init
+```
+
+After that the container starts normally and future schema changes go through
+`prisma migrate deploy`.
+
+**If a migration entry in `_prisma_migrations` is marked failed**, `migrate
+deploy` refuses to proceed and the container will not start. This is intentional
+(fail-closed) rather than silently continuing on an uncertain schema. Check what
+the migration partially applied, then resolve it with `prisma migrate resolve
+--rolled-back <name>`.
+
+`docker-compose.yml` starts the app + PostgreSQL. XRechnung and ZUGFeRD are generated inside the app, no extra service needed. The Postgres schema lives in `prisma/schema.postgres.prisma` (model-identical, only a different datasource).
+
+## Sending emails (E-Mail-Versand einrichten)
+
+SMTP only — no built-in Resend/SES integration (see [docs/ARCHITEKTUR.md](docs/ARCHITEKTUR.md)). Steps:
+
+1. Go to **Einstellungen → E-Mail-Versand** and enter your SMTP host, port, security mode, credentials, and sender address.
+2. `AUTH_SECRET` (see `.env.example`) also serves as the encryption key for the stored SMTP password — set it before configuring mail, and re-enter the password if you ever rotate `AUTH_SECRET`.
+3. Click **Testmail senden** to verify the configuration before using it on real documents.
+4. Under **Einstellungen → Vorlagen**, adjust the built-in email templates (subject/body/signature) per document type, or add your own; placeholders like `{{document.number}}` are listed in the editor.
+5. Mail is sent as plain text; an optional HTML part (off by default, **Einstellungen → E-Mail → HTML-Version mitsenden**) is added alongside it. There is no delivery/bounce tracking (status stays `SENT`) — see [docs/LIMITATIONEN.md](docs/LIMITATIONEN.md) for the full list of email limitations.
+
+## Tests
+
+```bash
+npm test          # Vitest: money, tax, number ranges, GoBD immutability, hash-chain, EN 16931
+```
+
+The integration tests prove, among other things, **gapless, immutable number ranges** and that finalised invoices cannot be edited.
+
+## E-invoice validation
+
+```bash
+npm run validate:erechnung      # official Schematron rules, no Java
+```
+
+Validates the generated XRechnung against the **official Schematron rules** in pure Node via SaxonJS:
+- **EN-16931 UBL Schematron** (ConnectingEurope) and
+- **XRechnung CIUS / BR-DE** (official KoSIT config 3.0.2; requires `unzip`).
+
+This is essentially the same Schematron check as the **[KoSIT validator](https://github.com/itplr-kosit/validator)** — and runs as a **hard gate in CI**. The KoSIT validator (Java) additionally runs there as an independent cross-check (also covering the upstream XSD check). Fast core rules are part of `npm test`.
+
+### Checking incoming invoices
+
+The Docker image contains the KoSIT validator 1.6.3 (Apache-2.0, includes Saxon-HE under MPL 2.0) with the XRechnung configuration 3.0.2 (Apache-2.0) and the EN 16931 rules (EUPL-1.2, compatible with AGPL-3.0), run as a separate process with a trimmed OpenJDK 21 runtime (GPL-2.0 with Classpath Exception). The artefacts are downloaded at build time with fixed SHA-256 sums (`scripts/fetch-einvoice-validator.sh`, pins in `assets/einvoice-validation/pins.env`); licence texts and sources are listed in [assets/einvoice-validation/LICENSES/README.md](assets/einvoice-validation/LICENSES/README.md) and shipped in the image under `/opt/validator/LICENSES`. For a local run without Docker call the script once and set `EINVOICE_JAVA` (Java 17 or newer). `INCOMING_VALIDATION=off` disables the check.
+
+## Contributing
+
+Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Please file legal corrections with a source (statute/BMF letter) against [COMPLIANCE.md](COMPLIANCE.md).
+
+## Maintainer
+
+Developed and maintained by [sakel-it.de](https://sakel-it.de).
+Originally based on OpenInvoice Germany by [AutomationsManufaktur](https://automationsmanufaktur.de) ([original repository](https://github.com/automationsmanufaktur-labs/open-invoice-germany)); licence and copyright notices remain in effect.
+
+## License
+
+**[AGPL-3.0](LICENSE).** You may use, modify and self-host the software. Anyone who runs it as a network service must make the (modified) source available to its users — keeping the project free for everyone. Rationale for the licence choice: [docs/ARCHITEKTUR.md](docs/ARCHITEKTUR.md#4-lizenz-empfehlung).

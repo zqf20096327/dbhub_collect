@@ -28,10 +28,13 @@ behind it, and each can be replaced or added to.
   on many threads at once and survive a crash with multi-version concurrency
   control, a write-ahead log, checkpoints and recovery.
 - Row and columnar storage, chosen per table.
-- Indexes as plug-ins. B-link trees and linear hash tables are built in,
-  any other method registers with its own options, and a cost-based
-  planner chooses among them. Zone maps and Bloom filters skip what a scan
-  cannot match.
+- Large objects up to 4G, stored, logged, read and sent a chunk at a
+  time, and reached by locators.
+- Indexes as plug-ins. B-link trees, linear hash tables and R-trees over
+  points and rectangles are built in. Any other method registers with its
+  own options, and a cost-based planner chooses among them for filters
+  and inner joins. Zone maps and Bloom filters skip what a scan cannot
+  match.
 - Collations, from binary order through case-insensitive to the Unicode
   Collation Algorithm and CLDR's tailorings for 48 languages, so text sorts
   and compares as its readers expect.
@@ -45,6 +48,13 @@ behind it, and each can be replaced or added to.
   with SEARCH and CYCLE, and row pattern recognition (MATCH_RECOGNIZE).
 - Arrays, row types, distinct types, DECFLOAT, regular expressions,
   sequences and identity columns.
+- Multisets, with MULTISET UNION, EXCEPT and INTERSECT, MEMBER,
+  SUBMULTISET and IS A SET, and COLLECT, FUSION and INTERSECTION.
+- Stored procedures and functions in SQL/PSM, with variables, cursors,
+  handlers, loops and SIGNAL, grouped into modules if wished, and
+  polymorphic table functions that take whole tables as arguments.
+- Triggers before, after and instead of a change, for each row or
+  statement, and roles with privileges granted and revoked.
 - Domains, assertions, temporary tables, scrollable cursors and dynamic SQL.
 - Import of CSV and tab-separated files through the client.
 - Library, embedded modes

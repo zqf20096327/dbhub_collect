@@ -253,9 +253,53 @@ built-in providers:
 | `fastmcp.server.auth.providers.workos.WorkOSProvider` | `FASTMCP_SERVER_AUTH_WORKOS_` |
 | `fastmcp.server.auth.providers.workos.AuthKitProvider` | `FASTMCP_SERVER_AUTH_AUTHKITPROVIDER_` |
 
+mcp-clickhouse also configures `fastmcp.server.auth.providers.azure.AzureJWTVerifier`
+from the `FASTMCP_SERVER_AUTH_AZUREJWT_` prefix. FastMCP 2 had no environment contract
+for this verifier. A `TENANT_ID` of `common`, `organizations`, or `consumers` skips the
+issuer check, so tokens issued for the app by any Entra tenant are accepted.
+
 Append the uppercase provider field name to the prefix. See the
 [FastMCP docs](https://gofastmcp.com/servers/auth) for each provider's configuration
 requirements.
+
+##### Accepting tokens from more than one source
+
+Some deployments serve two kinds of callers from one endpoint, for example interactive
+MCP clients that sign in through an OAuth proxy and a backend that sends access tokens
+it obtained itself. Set `FASTMCP_SERVER_AUTH_VERIFIERS` to a comma-separated list of
+token verifier class paths to accept their tokens in addition to the
+`FASTMCP_SERVER_AUTH` provider. mcp-clickhouse combines them with FastMCP's
+[`MultiAuth`](https://gofastmcp.com/servers/auth/multi-auth).
+
+Example (Entra OAuth proxy for MCP clients, plus Entra access tokens such as
+On-Behalf-Of tokens from a backend, both for one app registration):
+
+```bash
+export FASTMCP_SERVER_AUTH=fastmcp.server.auth.providers.azure.AzureProvider
+export FASTMCP_SERVER_AUTH_AZURE_TENANT_ID="<tenant-id>"
+export FASTMCP_SERVER_AUTH_AZURE_CLIENT_ID="<client-id>"
+export FASTMCP_SERVER_AUTH_AZURE_CLIENT_SECRET="<client-secret>"
+export FASTMCP_SERVER_AUTH_AZURE_BASE_URL="https://mcp.example.com"
+export FASTMCP_SERVER_AUTH_AZURE_REQUIRED_SCOPES="mcp.read"
+
+export FASTMCP_SERVER_AUTH_VERIFIERS=fastmcp.server.auth.providers.azure.AzureJWTVerifier
+export FASTMCP_SERVER_AUTH_AZUREJWT_TENANT_ID="<tenant-id>"
+export FASTMCP_SERVER_AUTH_AZUREJWT_CLIENT_ID="<client-id>"
+export FASTMCP_SERVER_AUTH_AZUREJWT_REQUIRED_SCOPES="mcp.read"
+```
+
+- The `FASTMCP_SERVER_AUTH` provider is tried first, then each verifier in the listed
+  order. The first one that accepts the token wins, so every entry is a trust source:
+  a token valid for any of them reaches the tools.
+- The `FASTMCP_SERVER_AUTH` provider's required scopes apply to tokens from every
+  source, whether the primary provider is an OAuth provider or a token verifier.
+  An OAuth primary keeps its routes and discovery metadata. A token-verifier primary
+  serves no OAuth routes.
+- Each entry must be a `TokenVerifier` subclass and is configured from its own prefix,
+  exactly as it would be under `FASTMCP_SERVER_AUTH`. A class can therefore appear only
+  once across `FASTMCP_SERVER_AUTH` and `FASTMCP_SERVER_AUTH_VERIFIERS`.
+- `FASTMCP_SERVER_AUTH_VERIFIERS` extends the FastMCP provider mode only. It is rejected
+  together with `CLICKHOUSE_MCP_AUTH_TOKEN` or `CLICKHOUSE_MCP_AUTH_DISABLED=true`.
 
 Auth values set directly in the process environment take precedence case-insensitively.
 The default `.env` load starts at the installed `mcp_clickhouse` package directory,
@@ -267,7 +311,7 @@ provider fields. Its values take precedence over the explicit or compatibility a
 file.
 For FastMCP 2 compatibility, mcp-clickhouse reads missing provider fields from `.env`
 in the working directory, but that compatibility fallback cannot select
-`FASTMCP_SERVER_AUTH`. A process-set `FASTMCP_ENV_FILE` replaces that compatibility
+`FASTMCP_SERVER_AUTH` or `FASTMCP_SERVER_AUTH_VERIFIERS`. A process-set `FASTMCP_ENV_FILE` replaces that compatibility
 fallback and may provide both the selector and provider fields. Set it before startup.
 The mcp-clickhouse compatibility loader reads only `FASTMCP_SERVER_AUTH` and
 `FASTMCP_SERVER_AUTH_*` from that file, so it cannot inject `CLICKHOUSE_*` settings.
@@ -438,7 +482,7 @@ Read-only mode still permits the ClickHouse user to cancel its own queries, incl
 
 ### Destructive Operation Protection
 
-Even when write access is enabled (`CLICKHOUSE_ALLOW_WRITE_ACCESS=true`), destructive operations require an additional opt-in flag for safety. The check covers any `DROP` statement (including the `ALTER TABLE ... DROP PARTITION` / `DROP PART` / `DROP COLUMN` clauses), any `TRUNCATE`, `DELETE` and `UPDATE` (both the lightweight statements and the `ALTER TABLE ... DELETE` / `ALTER TABLE ... UPDATE` mutations), `REPLACE TABLE`, `CREATE OR REPLACE`, `ALTER TABLE ... REPLACE PARTITION`, `ALTER TABLE ... CLEAR COLUMN` / `CLEAR INDEX` / `CLEAR PROJECTION`, and `DETACH ... PERMANENTLY`. Keywords inside string literals, quoted identifiers, SQL comments, and `{name:Type}` parameter names are ignored, so they neither trigger the check nor hide a statement from it.
+Even when write access is enabled (`CLICKHOUSE_ALLOW_WRITE_ACCESS=true`), destructive operations require an additional opt-in flag for safety. The check covers any `DROP` statement (including the `ALTER TABLE ... DROP PARTITION` / `DROP PART` / `DROP COLUMN` clauses), any `TRUNCATE`, `DELETE` and `UPDATE` (both the lightweight statements and the `ALTER TABLE ... DELETE` / `ALTER TABLE ... UPDATE` mutations), `REPLACE TABLE`, `CREATE OR REPLACE`, `ALTER TABLE ... REPLACE PARTITION`, `ALTER TABLE ... CLEAR COLUMN` / `CLEAR INDEX` / `CLEAR PROJECTION`, `OPTIMIZE ... DEDUPLICATE`, `ALTER TABLE ... MODIFY TTL` / `MATERIALIZE TTL`, `MODIFY/ALTER COLUMN` with `TTL`, and `DETACH ... PERMANENTLY`. This also blocks `MODIFY COLUMN c REMOVE TTL`. Keywords inside string literals, quoted identifiers, SQL comments, and `{name:Type}` parameter names are ignored, so they neither trigger the check nor hide a statement from it.
 
 This check runs in the MCP server and is a best-effort guard against accidents. It is not a security boundary. The security boundary is the ClickHouse user's grants. Read-only mode (the default) is enforced server-side via `readonly=1`. The destructive-operation gate is not server-enforced.
 
@@ -827,7 +871,7 @@ mcp-clickhouse requires clickhouse-connect 1.x, starting with 1.0.0.
   * Default: `"false"`
   * Set to `"true"` to allow non-destructive DDL and DML (CREATE, INSERT, ALTER ADD COLUMN). Destructive statements additionally need `CLICKHOUSE_ALLOW_DROP=true`
   * When disabled (default), queries run with `readonly=1` setting to prevent data modifications
-* `CLICKHOUSE_ALLOW_DROP`: Allow destructive operations (any `DROP` or `TRUNCATE`, `DELETE` and `UPDATE` including the `ALTER TABLE` variants, `REPLACE TABLE` / `REPLACE PARTITION` / `CREATE OR REPLACE`, `CLEAR COLUMN` / `CLEAR INDEX` / `CLEAR PROJECTION`, and `DETACH ... PERMANENTLY`)
+* `CLICKHOUSE_ALLOW_DROP`: Allow destructive operations (any `DROP` or `TRUNCATE`, `DELETE` and `UPDATE` including the `ALTER TABLE` variants, `REPLACE TABLE` / `REPLACE PARTITION` / `CREATE OR REPLACE`, `CLEAR COLUMN` / `CLEAR INDEX` / `CLEAR PROJECTION`, `OPTIMIZE ... DEDUPLICATE`, `MODIFY TTL` / `MATERIALIZE TTL`, `MODIFY/ALTER COLUMN` with `TTL` including `MODIFY COLUMN c REMOVE TTL`, and `DETACH ... PERMANENTLY`)
   * Default: `"false"`
   * Only takes effect when `CLICKHOUSE_ALLOW_WRITE_ACCESS=true` is also set
   * This gate is a best-effort accident guard in the MCP server, not a security boundary. Restrict the ClickHouse user's grants for real enforcement (see [Destructive Operation Protection](#destructive-operation-protection))
@@ -888,6 +932,12 @@ These variables control the MCP process itself, including transport, authenticat
   * When set, mcp-clickhouse loads the provider from the existing `FASTMCP_SERVER_AUTH_*` environment variables; leave `CLICKHOUSE_MCP_AUTH_TOKEN` unset in this mode
   * Custom providers receive no environment-derived constructor arguments and must support no-argument construction
   * FastMCP 4 no longer supports Supabase HS256 verification. Supabase deployments must use RS256 or ES256.
+* `FASTMCP_SERVER_AUTH_VERIFIERS`: Additional token verifiers accepted alongside the `FASTMCP_SERVER_AUTH` provider
+  * Default: None
+  * Value is a comma-separated list of **full class paths** of TokenVerifier subclasses, e.g. `fastmcp.server.auth.providers.azure.AzureJWTVerifier` or `fastmcp.server.auth.providers.jwt.JWTVerifier`
+  * Requires `FASTMCP_SERVER_AUTH`. The provider and the verifiers are combined with FastMCP's `MultiAuth`: the provider is tried first, then each verifier in order
+  * Each verifier loads from its own `FASTMCP_SERVER_AUTH_*` prefix, so a class can appear only once across both variables
+  * Like `FASTMCP_SERVER_AUTH`, it is not read from the working-directory `.env` fallback
 * `FASTMCP_ENV_FILE`: Optional file containing `FASTMCP_SERVER_AUTH` and provider-specific environment variables
   * Default: None. When unset, the compatibility loader reads missing provider fields from `.env` in the working directory. It does not read `FASTMCP_SERVER_AUTH` from that fallback
   * Set it in the process environment before startup. A value loaded from the default `.env` cannot redirect the compatibility loader

@@ -64,7 +64,16 @@ Profiles describe target ABI, target C flags where applicable, and supported bui
 
 Profiles are build contracts, not validation claims. The zlib 1.4 recipe builds only upstream's `zlibstatic` target and stages the static library and public headers. Linux aarch64, macOS, Windows, and Android profiles have not been built.
 
-The jemalloc 5.3.1 recipe uses the official GitHub release archive. It builds the static library with stats enabled and the `je_` API prefix, and packages the generated header and library. The Linux and Android builds disable jemalloc's initial-exec TLS requirement for embedded-library loading. The Windows package uses the static MSVC runtime (`/MT`).
+The jemalloc 5.3.1 recipe uses the official GitHub release archive. It builds the static library with stats enabled and the `je_` API prefix, and packages the generated header and library. The Linux and Android builds disable jemalloc's initial-exec TLS requirement for embedded-library loading. Windows packages support both the dynamic MSVC runtime (`/MD`) and static MSVC runtime (`/MT`).
+
+VSAG 0.16.20 also supports both Windows runtime profiles. Select `windows-x86_64-md` or `windows-x86_64-mt` in the workflow or with `--target` to choose the runtime for either package.
+
+Windows VSAG builds pin Clang 18.1.8 to match the packaged OpenMP runtime and
+define `ANTLR4CPP_STATIC` for the static ANTLR dependency. Before creating either
+VSAG version's archive, the recipe links an executable with all VSAG and DiskANN
+objects against the staged libraries and runs it beside the staged OpenMP DLL.
+Roaring remains a separate consumer dependency; the check uses VSAG's build-tree
+Roaring archive. The manifest records success as `windows_link_check: passed`.
 
 ## Licensing
 

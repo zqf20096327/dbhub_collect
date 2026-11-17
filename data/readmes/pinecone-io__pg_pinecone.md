@@ -40,15 +40,21 @@ to switch between them.
 **Requirements:** PostgreSQL 17 or 18, superuser access, and [pgvector][pgvector] installed on the
 server.
 
-Install it one of two ways:
+Install it one of four ways:
 
 - **Prebuilt release**: download the archive for your platform and Postgres version from the
   [releases page](https://github.com/pinecone-io/pg_pinecone/releases) and copy its files into your
   Postgres installation, as step 1 of the [quickstart][quickstart] shows.
+- **Postgres.app** (PostgreSQL 18, Apple silicon): download `pg_pinecone-pg18-<version>.pkg` from the
+  [releases page](https://github.com/pinecone-io/pg_pinecone/releases), open it, and restart the
+  server.
 - **Docker**: [`pineconeteam/pg_pinecone`](https://hub.docker.com/r/pineconeteam/pg_pinecone) is the
   [`pgvector/pgvector`](https://hub.docker.com/r/pgvector/pgvector) image with `pg_pinecone` added,
   one tag per Postgres major: `docker run -d -e POSTGRES_PASSWORD=secret pineconeteam/pg_pinecone:0.11.0-pg17`
   (add `-c shared_preload_libraries=pg_pinecone` for the `remote` engine).
+- **PGXN**: with Rust, cargo-pgrx 0.19.2, and the [PGXN client](https://pgxn.github.io/pgxnclient/),
+  `pgxn install pg_pinecone` builds the [PGXN release](https://pgxn.org/dist/pg_pinecone/) for the
+  `pg_config` on your `PATH`.
 
 Then create the extensions and index a vector column:
 
@@ -123,7 +129,7 @@ switching engines, and full-text search.
 In this repository:
 
 - [SQL reference](docs/reference.md): every function, setting, and error message
-- [Operator runbook](docs/runbook.md): monitoring, upgrades, and maintenance
+- [Operator runbook](docs/runbook.md): monitoring, upgrades, and maintenance; start with `SELECT * FROM pinecone.doctor()`
 - [Disaster recovery](docs/disaster-recovery.md): restoring a `remote` table
 - [Changelog](CHANGELOG.md)
 

@@ -10,11 +10,12 @@ A fast, keyboard-first Gmail client for macOS and Windows. Free and open source.
 
 [![CI](https://github.com/nwoolls/mailboat/actions/workflows/ci.yml/badge.svg)](https://github.com/nwoolls/mailboat/actions/workflows/ci.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/nwoolls/mailboat/badge)](https://scorecard.dev/viewer/?uri=github.com/nwoolls/mailboat)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16828/badge)](https://www.bestpractices.dev/projects/16828)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 ![Platforms: macOS and Windows](https://img.shields.io/badge/platforms-macOS%20%7C%20Windows-blue)
 ![Built with Tauri, Rust and React](https://img.shields.io/badge/built%20with-Tauri%20%C2%B7%20Rust%20%C2%B7%20React-orange)
 
-[Get started](#get-started) · [Features](#why-mailboat) · [Privacy](#your-mail-stays-yours) · [Build from source](#build-from-source) · [Roadmap](docs/ROADMAP.md) · [Architecture](docs/ARCHITECTURE.md)
+[Website](https://getmailboat.app) · [Get started](#get-started) · [Features](#why-mailboat) · [Privacy](#your-mail-stays-yours) · [Build from source](#build-from-source) · [Roadmap](docs/ROADMAP.md) · [Architecture](docs/ARCHITECTURE.md)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/hero-dark.png">
@@ -23,7 +24,7 @@ A fast, keyboard-first Gmail client for macOS and Windows. Free and open source.
 
 </div>
 
-> **Early development.** Version 0.1.0 is out, with signed downloads for Mac
+> **Early development.** Version 0.2.1 is out, with signed downloads for Mac
 > (Apple silicon) and Windows on the
 > [releases page](https://github.com/nwoolls/mailboat/releases/latest), and it
 > offers updates that you install when you choose. Expect rough edges. You bring your own Google credentials,
@@ -269,8 +270,9 @@ Mailboat runs on Windows: the releases page has a signed installer for x64 and
 one for Arm. Linux will follow.
 
 **What's next?**
-A website, and trying the setup with someone who has never used Google Cloud.
-The full list is in the [roadmap](docs/ROADMAP.md).
+Version 0.3.0: printing, label colors, a reworked Toybox, cloning a sent
+email, and a warning about recipients outside the domains you choose. The full
+list is in the [roadmap](docs/ROADMAP.md).
 
 ## Contributing and license
 

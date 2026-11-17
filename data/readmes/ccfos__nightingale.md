@@ -10,6 +10,8 @@
 
 <p align="center">
   <a href="https://github.com/ccfos/nightingale/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/ccfos/nightingale" /></a>
+  <a href="https://pkg.go.dev/github.com/ccfos/nightingale/v6"><img alt="Go Reference" src="https://pkg.go.dev/badge/github.com/ccfos/nightingale/v6.svg" /></a>
+  <a href="https://coveralls.io/github/ccfos/nightingale?branch=main"><img alt="Coverage status" src="https://coveralls.io/repos/github/ccfos/nightingale/badge.svg?branch=main" /></a>
   <a href="LICENSE"><img alt="Apache-2.0 license" src="https://img.shields.io/badge/license-Apache--2.0-blue" /></a>
   <a href="https://github.com/ccfos/nightingale/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ccfos/nightingale" /></a>
   <a href="https://hub.docker.com/r/flashcatcloud/nightingale"><img alt="Docker pulls" src="https://img.shields.io/docker/pulls/flashcatcloud/nightingale" /></a>
@@ -230,7 +232,7 @@ Questions, bug reports, documentation improvements, and contributions are welcom
 - [Adopter reports](https://github.com/ccfos/nightingale/issues/897) — see how others use Nightingale and share your own experience.
 - [Security policy](SECURITY.md) — report vulnerabilities privately and check version support.
 
-For substantial changes, open an issue to discuss the approach before submitting a pull request. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+Before submitting a pull request, read the [contributing guide](CONTRIBUTING.md): code changes are discussed in an issue first and must be verified on a running instance. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 Nightingale was originally developed at DiDi and donated to CCF ODC in 2022. Learn about [project governance](doc/community-governance.md), [committers](doc/committers.md), and [contributors](https://github.com/ccfos/nightingale/graphs/contributors).
 

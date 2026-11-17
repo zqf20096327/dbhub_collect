@@ -89,6 +89,35 @@ type User struct {
 $ go get github.com/mibk/dali
 ```
 
+## Checking queries with dalivet
+
+dalivet is a `go vet`-style analyzer that catches dali mistakes before they reach
+the database. Run it on every module that uses dali:
+
+```bash
+$ go install github.com/mibk/dali/dalivet/cmd/dalivet@latest
+$ go vet -vettool=$(which dalivet) ./...
+```
+
+It reports, among others:
+
+- query strings that are not constants (a string parameter passed on by a wrapper is fine),
+- placeholders whose count or argument types do not match,
+- destinations of `One`, `All` and `ScanAllRows` of the wrong type,
+- slices passed to `?...` or `?values...` with no visible length check,
+- unknown options in `db` struct tags, such as `db:"id,readonly"`.
+
+dali currently ignores an unknown tag option, so the field it was meant to change
+is still inserted. **A future version will reject unknown options at run time**;
+run dalivet now to find them.
+
+A `//dalivet:ignore` comment silences a diagnostic on its line, or on the next line
+when the comment stands alone:
+
+```go
+db.Query(`SELECT * FROM [user] WHERE [id] IN (?...)`, ids) //dalivet:ignore callers check the length
+```
+
 ## Caveats
 
 DALí processes the query unaware of the actual SQL syntax. This means it is quite stupid
@@ -102,6 +131,14 @@ To avoid this just use the whole string as a parameter.
 ```go
 conn.Query(`SELECT * FROM foo WHERE name = ?`, "really?")
 ```
+
+DALí escapes values itself instead of sending them as bind parameters, so the escaping
+must match how the server parses string literals. It is safe for MySQL and MariaDB
+connections using a UTF-8 character set (`utf8mb4`, `utf8mb3`) in the default SQL mode.
+Avoid multi-byte character sets such as GBK, Big5 or SJIS, whose characters can contain
+the byte of a backslash and so swallow an escape. With `NO_BACKSLASH_ESCAPES` enabled
+the escaping stays safe, but values containing backslashes or control characters are
+stored mangled (`\n` arrives as the two characters `\` and `n`).
 
 ## Features
 
@@ -193,9 +230,9 @@ for more information.
 
 ### Supported dialects
 
-Currently, only a MySQL dialect is implemented directly in this package (see [dialects](dialects)
+Currently, only a MySQL dialect is implemented directly in this package (see [dialect](dialect)
 for more information). Nevertheless, supporting another dialect should be as easy as creating
-a new dialect implementing *dialects.Dialect* interface. The most common dialects will be
+a new dialect implementing *dialect.Escaper* interface. The most common dialects will be
 implemented directly in the future.
 
 ## Thanks

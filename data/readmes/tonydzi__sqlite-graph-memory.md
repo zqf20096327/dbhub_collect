@@ -92,7 +92,7 @@ Cursor (`~/.cursor/mcp.json`; Claude Desktop, Zed and Windsurf use the same bloc
 }
 ```
 
-VS Code uses `.vscode/mcp.json` with `"servers"` and `"type": "stdio"`, see "Install in your client" under Details. `uvx` must be on the PATH that the client app sees; restart the app if `uv` was installed after it started. The Claude Code plugin route (also under Details) is an alternative to this step, never an addition.
+VS Code uses `.vscode/mcp.json` with `"servers"` and `"type": "stdio"`, see "Install in your client" under Details. `uvx` must be on the PATH that the client app sees; restart the app if `uv` was installed after it started. The optional Claude Code plugin adds recall instructions; it requires this separate MCP connection.
 
 **3. Without `uvx` (pip route).** In a virtual environment: `pip install 'sqlite-graph-memory[lite]'`, then `sgm-index <notes>`, `sgm-ask`, and in the client config `"command": "sgm-mcp"` with the absolute path to that environment's `sgm-mcp`. On an Intel Mac use Python 3.12.
 
@@ -186,13 +186,13 @@ Then point your client at the server. Use the absolute path of that index folder
 
 **Claude Code**
 
-As a plugin (asks for the index folder on install, Claude Code 2.1.275 or later):
+Optional recall workflow skill (Claude Code 2.1.275 or later). Since plugin 0.3.10 this is instructions only: it does not install or start the MCP server. Configure the server separately using the command below, then optionally install the skill:
 
 ```
 /plugin install sqlite-graph-memory --marketplace tonydzi/sqlite-graph-memory
 ```
 
-Or register the server by hand:
+Register the MCP server separately (required for recall, with or without the skill):
 
 ```bash
 claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=$HOME/.sgm-index -- uvx --python 3.12 --with 'sqlite-graph-memory[lite]' sqlite-graph-memory
@@ -485,6 +485,8 @@ vault (R@5 0.88 vs 0.85). Other memory systems (mem0, Letta, Khoj, plain RAG) ca
 board with one adapter file and a pull request: [bench/CONTRIBUTING.md](bench/CONTRIBUTING.md).
 CI recomputes every submitted number from the per-question outputs, so a typed-in number
 cannot get onto the board.
+
+What the abstention column means in practice, measured against Mem0 and Fidelis on this board: we return nothing on 10 of the 22 unanswerable questions, Mem0 on 3, and that gap comes from one threshold line in our adapter, which adds 12 false refusals. The full write-up with all the costs: [Hugging Face](https://huggingface.co/blog/TonyDzi/memory-says-i-dont-know) · [GitHub](https://github.com/tonydzi/clawrush/blob/main/longreads/memory-says-i-dont-know-2026-11-11.md) · [replay script](https://github.com/tonydzi/clawrush/blob/main/artifacts/memory-says-i-dont-know-2026-11-11/replay_threshold.py).
 
 ## Health check — `sgm-stats`
 

@@ -2,8 +2,8 @@
   <img src="https://axiodb.in/AXioDB.png" alt="AxioDB Logo" width="120" height="120" />
 </p>
 
-<h1 align="center">Embedded NoSQL Database for TypeScript & Ai Agents</h1>
-<p align="center"><b>Zero-native embedded database with ACID transactions & in-memory cache — verified on Node.js & Bun.</b></p>
+<h1 align="center">Embedded Database for AI Agents</h1>
+<p align="center"><b>Everything you expect from a production database without having to run a database.</b></p>
 
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/Install-npm%20i%20axiodb-cb3837?style=for-the-badge&logo=npm" alt="npm install axiodb" /></a>
@@ -69,7 +69,7 @@ No server to run, no `node-gyp`, no `electron-rebuild`. Requires Node.js ≥22 (
 Building with Claude Code, Cursor, Copilot, Antigravity, or Windsurf? Install the official AxioDB skill so your AI agent generates verified query syntax, accurate transaction patterns, and avoids hallucinated APIs:
 
 ```bash
-npx skills add nexoral/AxioDB --skill skill
+npx skills add nexoral/AxioDB --skill axiodb
 ```
 
 ## Why AxioDB?
@@ -117,7 +117,7 @@ Install these only when you need dedicated standalone apps or command-line scrip
 
 * 🖥️ **Desktop App (Electron GUI)** — A standalone desktop management application for Linux, macOS, and Windows to manage local and remote AxioDB instances without opening a web browser.
 * ⚡ **Terminal CLI (Go Binary)** — A lightweight, standalone CLI binary with an interactive REPL shell, TLS remote connections, and database backup/export/import tools.
-* 🤖 **AI Agent Skill** — Run `npx skills add nexoral/AxioDB --skill skill` to equip your AI coding assistant (Cursor, Claude Code, Windsurf, Copilot) with verified query syntax and schemas.
+* 🤖 **AI Agent Skill** — Run `npx skills add nexoral/AxioDB --skill axiodb` to equip your AI coding assistant (Cursor, Claude Code, Windsurf, Copilot) with verified query syntax and schemas.
 * 🐳 **Official Docker Container** — Deploy `theankansaha/axiodb` in Kubernetes, cloud servers, or Docker Compose with all surfaces (HTTP, TCP, MCP) ready to run.
 
 ## Performance & Testing

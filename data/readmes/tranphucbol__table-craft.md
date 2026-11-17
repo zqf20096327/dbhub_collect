@@ -6,9 +6,9 @@
 
 **A desktop database IDE in the spirit of JetBrains DataGrip**
 
-Connections, a database explorer, SQL consoles with schema-aware completion, a result grid, a table
-data editor, DDL and SQL generation, query history and EXPLAIN plans. Databases are reached through
-[datasource plugins](#supported-databases) loaded at runtime.
+Free and open source for macOS, Windows and Linux. Connections, a database explorer, SQL consoles
+with schema-aware completion, a result grid, a table data editor, DDL and SQL generation, query
+history and EXPLAIN plans, with [every database a plugin](#supported-databases).
 
 [![Release](https://img.shields.io/github/v/release/tranphucbol/table-craft?color=orange)](https://github.com/tranphucbol/table-craft/releases/latest)
 [![License](https://img.shields.io/github/license/tranphucbol/table-craft?color=blue)](LICENSE)
@@ -17,14 +17,15 @@ data editor, DDL and SQL generation, query history and EXPLAIN plans. Databases 
 [![CI](https://github.com/tranphucbol/table-craft/actions/workflows/ci.yml/badge.svg)](https://github.com/tranphucbol/table-craft/actions/workflows/ci.yml)
 [![Downloads](https://img.shields.io/github/downloads/tranphucbol/table-craft/total)](https://github.com/tranphucbol/table-craft/releases)
 
-**[Releases](https://github.com/tranphucbol/table-craft/releases)** ·
-**[Documentation](#documentation)** ·
-**[Contributing](CONTRIBUTING.md)** ·
+**[Website](https://tablecraft1.dev/)** ·
+**[Download](https://tablecraft1.dev/download/)** ·
+**[Docs](https://tablecraft1.dev/docs/)** ·
+**[Changelog](https://tablecraft1.dev/changelog/)** ·
 **[Report a bug](https://github.com/tranphucbol/table-craft/issues/new)**
 
 [Supported databases](#supported-databases) · [Highlights](#highlights) · [Install](#install) ·
 [Quick start](#quick-start) · [How it works](#how-it-works) · [Agents](docs/guide/agents.md) ·
-[License](#license)
+[Contributing](CONTRIBUTING.md) · [License](#license)
 
 </div>
 
@@ -48,27 +49,28 @@ first time you add such a data source ([Plugins](docs/guide/plugins.md)).
 
 ## Highlights
 
+- [Let AI agents query your databases](docs/guide/agents.md): Claude Code, OpenCode or Cursor connect over
+  MCP, on this machine only, each with its own token. Every data source starts **Off**; you choose
+  **Ask before reads**, **Read only** or **Ask before writes**, and passwords never leave TableCraft.
+- [Completion that knows your schema](docs/guide/completion.md): tables after `FROM`, whole join
+  conditions after `JOIN`, and the columns of an alias after `o.`.
+- [Large results stay responsive](docs/guide/data.md#result-grid): rows stay in the engine process and the grid reads
+  windows of them, so a million-row result does not freeze the window.
+- [A table editor that shows its SQL](docs/guide/data.md#table-data-editor): edit cells, add and delete rows, preview
+  the statements, and submit them in one transaction.
+- [Explain Plan as a tree](docs/guide/console.md#explain): estimated and actual rows, costs and timings; Explain Analyse
+  asks before it runs a write.
+- [An ER diagram that guesses missing keys](docs/guide/explorer.md#er-diagram): a schema's tables and keys, with the
+  `customer_id` columns a database never declared drawn dashed; hide a wrong guess, add a missed one.
+- [Darcula, IntelliJ Light and 43 more](docs/guide/themes.md): Dark, Light, High contrast, ported themes such
+  as Gruvbox, Nord and Solarized, or your own theme file, three font roles, and a
+  [compact density](docs/guide/settings.md).
 - [DataGrip's keymap and layout](docs/guide/shortcuts.md#search-everywhere): tool windows, `⇧⇧` Search Everywhere, `⇧⌘A`
   Find Action, and the chords your hands already know.
 - [Import your connections](docs/guide/connections.md#import-from-datagrip-tablepro-mysql-workbench-or-beekeeper-studio):
   from DataGrip, TablePro, MySQL Workbench or Beekeeper Studio, with SSH tunnels, folders and colours.
-- [An MCP server for AI agents](docs/guide/agents.md): Claude Code, OpenCode or Cursor list schemas and run
-  queries; each data source starts off, and writes wait for your approval.
-- [Completion that knows your schema](docs/guide/completion.md): tables after `FROM`, whole join
-  conditions after `JOIN`, and the columns of an alias after `o.`.
-- [A table editor that shows its SQL](docs/guide/data.md#table-data-editor): edit cells, add and delete rows, preview
-  the statements, and submit them in one transaction.
-- [An ER diagram that guesses missing keys](docs/guide/explorer.md#er-diagram): a schema's tables and keys, with the
-  `customer_id` columns a database never declared drawn dashed; hide a wrong guess, add a missed one.
-- [Explain Plan as a tree](docs/guide/console.md#explain): estimated and actual rows, costs and timings; Explain Analyse
-  asks before it runs a write.
 - [Query history and a Services tree](docs/guide/monitoring.md#query-history-and-services): every statement you ran, per
   data source, with its outcome, row count and duration.
-- [Large results stay responsive](docs/guide/data.md#result-grid): rows stay in the engine process and the grid reads
-  windows of them, so a million-row result does not freeze the window.
-- [Themes, fonts and density](docs/guide/settings.md): Dark, Light, High contrast, 43
-  [ported themes](docs/guide/themes.md) such as Gruvbox, Nord and Solarized, or your own theme file, three font
-  roles, and a compact layout.
 - [Redis, standalone and Cluster](docs/guide/redis.md): a key tree that scans instead of blocking, typed key
   tabs with guarded edits, a `redis-cli` console with completion from the server, and a Server tab.
 - [etcd, from keys to cluster](docs/guide/etcd.md): guarded key editing with history and merge,
@@ -82,9 +84,9 @@ first time you add such a data source ([Plugins](docs/guide/plugins.md)).
 
 ## Install
 
-Download the latest build for your platform below, or pick any version on the
-[Releases](https://github.com/tranphucbol/table-craft/releases) page. Once installed, TableCraft
-[updates itself](docs/guide/install.md#updates).
+Download the latest build from the [download page](https://tablecraft1.dev/download/) or below, or
+pick any version on the [Releases](https://github.com/tranphucbol/table-craft/releases) page. Once
+installed, TableCraft [updates itself](docs/guide/install.md#updates).
 
 | Platform              | Download                                                                                                                       |
 | :-------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
@@ -125,6 +127,9 @@ plugins. The [specification](docs/design/specification.md) describes the whole o
 [docs/decisions](docs/decisions/) records why it is built this way.
 
 ## Documentation
+
+The guide is also on the website at [tablecraft1.dev/docs](https://tablecraft1.dev/docs/), with
+search and a light and dark theme.
 
 **Using TableCraft**
 
@@ -169,7 +174,7 @@ plugins. The [specification](docs/design/specification.md) describes the whole o
 
 ## Not in v1
 
-- Later: ER diagrams, schema compare and migrations, XLSX and JSON import, a plugin marketplace, a MongoDB
+- Later: schema compare and migrations, XLSX and JSON import, a plugin marketplace, a MongoDB
   plugin, a CLI, AI assistance, Git integration, a debugger, notebooks, Docker and
   Kubernetes integration.
 

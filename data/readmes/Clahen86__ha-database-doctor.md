@@ -47,7 +47,7 @@ Database Doctor reads how each entity is used, not just where its name appears: 
 <p><img src="docs/panel-settings.png" alt="Settings: save less often, profiles, how long details are kept" width="300"></p>
 
 - **Profiles for the whole house** – Sparse, Balanced, Detailed – or three levels per group: temperature and climate, energy meters, other sensors. Or a level per device, or *Never touch*.
-- It uses Zigbee2MQTT's own *throttle* option, **only on devices with nothing but sensors**. Lights, plugs, buttons, motion and door sensors are never slowed down, and anything an automation or graph uses never goes below Normal. *Why not these?* lists the devices it leaves alone and why.
+- It uses Zigbee2MQTT's own *throttle* option, **only on devices with nothing but sensors**. Lights, plugs, buttons (also remotes with only battery and signal sensors), motion and door sensors are never slowed down, and anything an automation or graph uses never goes below Normal. *Why not these?* lists the devices it leaves alone and why.
 - **New devices** get the same automatically, and unused signal-strength (linkquality) entities can be switched off.
 - **How long details are kept**, per group: e.g. 3 days of second-by-second detail – graphs and hourly statistics always stay.
 - **Stop saving** an entity: Database Doctor never changes your YAML, so it collects the lines for `configuration.yaml` for you to copy.
@@ -56,6 +56,8 @@ Database Doctor reads how each entity is used, not just where its name appears: 
 
 - Data is only changed with the recorder's own functions (*Adjust sum*, import of statistics, purge) – never raw SQL. The database is otherwise only read, in a read-only session, to count what fills it.
 - Fixes and changes of how often devices save can be undone. A clean-up can't, so it offers Home Assistant's own backup first.
+- An entity that is gone but still used somewhere (an old meter in the energy dashboard, a paused AppDaemon app's sensor) is never offered for clean-up, and statistics the energy dashboard shows are never removed.
+- **Make the file smaller** runs by itself after a clean-up only on SQLite. On MariaDB and PostgreSQL it locks the tables for a while and needs as much free space as they take, so there you start it when it suits you. Free disk space is only shown when the database is on Home Assistant's own machine.
 - Your YAML files are never written.
 
 ### Help and answers
@@ -101,7 +103,12 @@ Spring og negative timer sættes til det normale for måleren med Home Assistant
 
 <p><img src="docs/panel-settings.png" alt="Indstillinger" width="300"></p>
 
-Profiler for hele huset eller niveau pr. gruppe og pr. enhed via Zigbee2MQTTs egen *throttle* – kun på enheder med rene sensorer. Lys, stik, knapper, bevægelses- og dørsensorer sættes aldrig ned, og det, der bruges, kommer aldrig under Normal. Nye enheder får det samme. Du vælger også, hvor længe detaljerne gemmes, mens grafer og timeværdier altid bliver.
+Profiler for hele huset eller niveau pr. gruppe og pr. enhed via Zigbee2MQTTs egen *throttle* – kun på enheder med rene sensorer. Lys, stik, knapper (også fjernbetjeninger med kun batteri- og signalsensorer), bevægelses- og dørsensorer sættes aldrig ned, og det, der bruges – også af en automation, selv om sensoren ikke gemmes – kommer aldrig under Normal. Nye enheder får det samme. Du vælger også, hvor længe detaljerne gemmes, mens grafer og timeværdier altid bliver.
+
+### Sikker
+
+- Slettede enheder, der stadig bruges et sted (fx en gammel måler i Energi), foreslås aldrig ryddet, og statistik, Energi-dashboardet viser, slettes aldrig.
+- **Gør filen mindre** kører kun af sig selv på SQLite. På MariaDB og PostgreSQL låser det tabellerne et stykke tid og kræver lige så meget fri plads, så dér starter du det selv.
 
 ### Installation
 

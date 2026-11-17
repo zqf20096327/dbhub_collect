@@ -16,9 +16,10 @@ Experimental [chDB](https://github.com/chdb-io/chdb) FFI bindings for Rust.
 - **Multiple output formats**: JSON, CSV, TabSeparated, and more
 - **Query result streaming**: Read large result sets in chunks with constant memory
 - **Streaming INSERT**: push rows in chunks in any input format, with engine backpressure; the stream also implements `std::io::Write`
-- **Arrow bulk insert** (feature `arrow`, on by default): register in-memory Arrow data and insert via `ArrowStream('name')`; `Connection::register_arrow_reader` offers an owned, scoped source for queries
+- **Arrow input and bulk insert** (feature `arrow`, on by default): use `Connection::register_arrow_reader` for a scoped SQL source, or `insert_record_batch_direct` / `insert_record_batch_reader` to write Arrow data; the raw registration APIs remain available for callers managing C Data pointers
 - **Arrow batch streaming** (with the `arrow` feature): stream query results as `RecordBatch` values via the Arrow C Data Interface
 - **One-shot Arrow export** (with the `arrow` feature): take a whole result as an Arrow stream without Arrow IPC; conversion between ClickHouse and Arrow buffers may still copy data
+- **Arrow documentation map**: [choose the Rust Arrow guide, runnable example, IPC route, or ADBC alternative](docs/arrow.md)
 - **Thread-safe**: Connections and results can be safely sent between threads
 - **Version accessors**: which chdb-core release is linked, where it came from, and which ClickHouse it carries
 - **Backup, restore and statement analysis**: the chdb-core management ABI, on any engine that exports it
@@ -41,7 +42,7 @@ Add `chdb-rust` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-chdb-rust = "2.1"
+chdb-rust = "2.2"
 ```
 
 The library will automatically download the required `libchdb` binary during the build process.
@@ -308,7 +309,7 @@ use chdb_rust::arrow::datatypes::{DataType, Field, Schema};
 SQL-only users can disable it to avoid building Arrow:
 
 ```toml
-chdb-rust = { version = "2.1", default-features = false }
+chdb-rust = { version = "2.2", default-features = false }
 ```
 
 See [docs/examples.md](docs/examples.md#fast-bulk-inserts-arrow) for usage, or run:
@@ -393,7 +394,8 @@ rather than through `aws-sdk-s3`, so enabling this costs an HTTP and TLS stack
 rather than an async runtime and several dozen crates.
 
 Credentials are never part of the URL — a namespace URL gets logged, committed
-and pasted into issues. They come from `AWS_ACCESS_KEY_ID` /
+and pasted into issues, so a `s3://user:secret@bucket/...` URL is refused rather
+than quietly ignored. They come from `AWS_ACCESS_KEY_ID` /
 `AWS_SECRET_ACCESS_KEY` / `AWS_SESSION_TOKEN`, or from `~/.aws/credentials`
 honouring `AWS_PROFILE`. SSO and instance roles are not resolved in-crate;
 export them first, the way the CLI does:
@@ -404,7 +406,7 @@ eval "$(aws configure export-credentials --profile my-profile --format env)"
 
 `AWS_CA_BUNDLE` is honoured, so a host behind a TLS-inspecting proxy works the
 same way `aws s3` does beside it. Any other provider is plugged in by
-implementing `durable::Backend` — six methods — and passing it to
+implementing `durable::Backend` — seven methods — and passing it to
 `Namespace::with_backend`.
 
 The protocol is specified in [CHDB_DURABLE_V1_CONTRACT.md][contract] in the chdb
@@ -414,9 +416,10 @@ repository, which is the source of truth rather than this implementation.
 cargo run --features durable --example 09_durable_object
 cargo test --features durable
 
-# Against a bucket you own. Skipped, loudly, when the variable is unset.
+# Against a bucket you own. These are `#[ignore]`d, so an ordinary run reports
+# them as ignored rather than as passing; `--ignored` opts into them.
 export CHDB_DURABLE_S3_BUCKET=my-bucket CHDB_DURABLE_S3_REGION=eu-central-1
-cargo test --features durable-s3 --test durable_s3 -- --test-threads=1
+cargo test --features durable-s3 --test durable_s3 -- --test-threads=1 --ignored
 ```
 
 Needs chdb-core v26.7.2-rc.2 or newer, which is where backup, restore and

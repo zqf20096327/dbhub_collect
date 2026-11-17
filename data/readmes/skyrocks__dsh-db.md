@@ -1,5 +1,8 @@
 # dsh-db
 
+[![CI](https://github.com/skyrocks/dsh-db/actions/workflows/ci.yml/badge.svg)](https://github.com/skyrocks/dsh-db/actions/workflows/ci.yml)
+![license](https://img.shields.io/badge/license-MIT-blue.svg)
+
 DeepSeek Harness 插件：**多数据源**数据库查询。在「设置 → 数据库」里添加、编辑、删除数据源，模型通过工具直接用它们；默认只读，写入逐条问你。
 
 支持 **海量 Vastbase / openGauss**、PostgreSQL、MySQL、SQLite。
@@ -46,11 +49,15 @@ npm install
 
 三层，任何一层拦下都算失败：
 
-1. **语句闸门**（[sqlguard.js](sqlguard.js)）：只放行 `select / with / show / explain / describe / values / table / pragma`
+1. **语句闸门**（[sqlguard.js](sqlguard.js)）：只放行 `select / with / show / explain / describe / values / table`
    开头的单条语句；注释和字符串先被抹掉，`-- delete` 不会误判，`with x as (delete …)` 躲不过。
-2. **会话级只读**：连接后 `SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY`
-   （MySQL 用 `SET SESSION TRANSACTION READ ONLY`，SQLite 用 `mode=ro` + `PRAGMA query_only`），
-   写不进去是数据库说的。
+   **`PRAGMA` / `ATTACH` / `DETACH` 一律拒绝**——它们改的是数据库状态而不走写入审批
+   （`PRAGMA user_version=…`、`journal_mode`、`writable_schema` 都能改库）。读结构用 `db_schema`；
+   SQLite 的只读表函数（`SELECT * FROM pragma_table_info('t')`）仍然可用。
+2. **会话级只读**：`db_query` / `db_schema` 走**独立的只读连接**，即使数据源本身是可写的也一样——
+   连接后 `SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY`（MySQL 用
+   `SET SESSION TRANSACTION READ ONLY`，SQLite 用只读句柄 + `PRAGMA query_only`），
+   写不进去是数据库说的，不靠插件自觉。
 3. **界面开关**：只读数据源上 `db_exec` 直接拒绝；改成可写只能由你点，模型改不了。
 
 ## 写入为什么要授权

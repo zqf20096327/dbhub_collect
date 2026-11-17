@@ -36,6 +36,7 @@ duroxide-mysql-tidb = "0.1"
 | `mysql-rsa` | Yes | MySQL `caching_sha2_password` RSA key exchange over plaintext local sockets |
 | `tls-rustls-aws-lc-rs` | No | Rustls TLS backend using `aws-lc-rs` |
 | `tls-native` | No | Platform/OpenSSL `native-tls` backend |
+| `memory` | No | Pure-Rust, zero-C `MemoryProvider` for fast in-memory testing without a database |
 
 ## Quick Start
 
@@ -119,13 +120,34 @@ let provider = MysqlProvider::new_with_config(config).await?;
 # }
 ```
 
+## In-Memory Provider (`memory` Feature)
+
+Enable the optional `memory` feature to use `MemoryProvider` — a zero-C, pure-Rust in-memory implementation of `Provider` and `ProviderAdmin` for fast unit and integration tests without MySQL, TiDB, or SQLite:
+
+```toml
+[dev-dependencies]
+duroxide-mysql-tidb = { version = "0.1", default-features = false, features = ["memory"] }
+```
+
+```rust,no_run
+# #[cfg(feature = "memory")]
+# fn example() {
+use std::sync::Arc;
+use duroxide_mysql_tidb::MemoryProvider;
+
+let store = Arc::new(MemoryProvider::new());
+# let _ = store;
+# }
+```
+
 ## Testing Against MySQL 8.0 and TiDB
 
-Unit and doc tests run without a database:
+Unit, doc, and in-memory provider validation tests run without a database:
 
 ```bash
-cargo test --lib
-cargo test --doc
+cargo test --lib --all-features
+cargo test --doc --all-features
+cargo test --test memory_provider_validations --features memory
 ```
 
 To run the full **232-test** Duroxide provider validation suite plus runtime scenario tests against a live MySQL 8.0 or TiDB instance, set `DUROXIDE_MYSQL_TEST_URL` (and `DUROXIDE_MYSQL_REQUIRE_DB=1` to fail if unset):

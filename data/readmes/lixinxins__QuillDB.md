@@ -19,7 +19,7 @@
 
 ## Introduction
 
-QuillDB is built with Electron, React, and TypeScript for macOS, Windows, and Linux. It brings multi-database connection management, object browsing, SQL editing and execution, data maintenance, import/export, SSH/SFTP, and an AI database assistant together in one desktop workbench — suited for daily development, data troubleshooting, and database operations.
+QuillDB is built with Electron, React, and TypeScript for macOS, Windows, and Linux. It brings multi-database connection management, object browsing, SQL editing and execution, data maintenance, import/export, and SSH/SFTP together in one desktop workbench — suited for daily development, data troubleshooting, and database operations.
 
 It currently supports 12 database engines out of the box: MySQL, MariaDB, PostgreSQL, SQLite, SQL Server, TiDB, ClickHouse, MongoDB, Redis, DuckDB, DM (达梦), and KingbaseES (人大金仓). Oracle and Elasticsearch connection options remain in the UI as planned capabilities; their adapters are not implemented yet. The repository also keeps the HarmonyOS ArkWeb build configuration, while the client project itself is not distributed with the repository.
 
@@ -50,10 +50,6 @@ The query workspace supports SQL highlighting and validation, running the select
   </tr>
 </table>
 
-### AI Database Assistant
-
-Generate queries and analyze SQL or database structures from natural language within the context of the current connection and database. Read operations can be executed directly; write and high-risk operations still require user confirmation.
-
 ## Features
 
 - Manage 12 database engines plus standalone SSH connections
@@ -69,7 +65,6 @@ Generate queries and analyze SQL or database structures from natural language wi
 - Table creation, structure design, rename, copy, truncate, and delete
 - Table data viewing, filtering, pagination, cell editing, record insert, and delete
 - SQL, CSV, JSON, and Excel import/export with preview, column mapping, and progress feedback
-- AI database assistant that generates, explains, and analyzes SQL in the current connection context
 - English and Chinese interface languages
 - Light and classic themes, resizable and collapsible database sidebar
 - Build configurations for macOS, Windows, and Linux installers
@@ -189,7 +184,7 @@ QuillDB is open-sourced under the [MIT License](LICENSE).
 
 ## 项目介绍
 
-QuillDB 基于 Electron、React 与 TypeScript 构建，面向 macOS、Windows 和 Linux。它将多数据库连接管理、对象浏览、SQL 编辑与执行、数据维护、导入导出、SSH/SFTP 和 AI 数据库助手整合在一个桌面工作台中，适合日常开发、数据排查与数据库运维。
+QuillDB 基于 Electron、React 与 TypeScript 构建，面向 macOS、Windows 和 Linux。它将多数据库连接管理、对象浏览、SQL 编辑与执行、数据维护、导入导出和 SSH/SFTP整合在一个桌面工作台中，适合日常开发、数据排查与数据库运维。
 
 目前内置 12 种数据库引擎连接能力，覆盖 MySQL、MariaDB、PostgreSQL、SQLite、SQL Server、TiDB、ClickHouse、MongoDB、Redis、DuckDB、达梦和人大金仓；Oracle 与 Elasticsearch 的连接选项已保留在界面中，适配器尚未实现，属规划中能力。仓库保留 HarmonyOS ArkWeb 构建配置，客户端工程暂未随仓库分发。
 
@@ -220,10 +215,6 @@ QuillDB 基于 Electron、React 与 TypeScript 构建，面向 macOS、Windows �
   </tr>
 </table>
 
-### AI 数据库助手
-
-在当前连接和数据库上下文中通过自然语言生成查询、分析 SQL 与数据库结构。读取操作可直接执行，写入及高风险操作仍需用户确认。
-
 ## 功能特性
 
 - 统一管理 12 种数据库引擎以及独立 SSH 连接
@@ -239,7 +230,6 @@ QuillDB 基于 Electron、React 与 TypeScript 构建，面向 macOS、Windows �
 - 数据表创建、结构设计、重命名、复制、清空和删除
 - 表数据查看、筛选、分页、字段编辑、记录新增与删除
 - SQL、CSV、JSON 和 Excel 数据导入导出，支持预览、字段选择和进度反馈
-- AI 数据库助手，可结合当前连接上下文生成、解释和分析 SQL
 - 中文与英文界面
 - 浅色与经典主题、可调整宽度和折叠的数据库侧栏
 - macOS、Windows、Linux 安装包构建配置

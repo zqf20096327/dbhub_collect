@@ -18,8 +18,15 @@ Documentation
 
 Contributing
 
-Discuss your change with the engineering team at contact@podomy.com
-before opening a PR in order not to waste anybody's effort or time.
+Tardigrade takes no pull requests. Propose first, patch second,
+both by email to contact@podomy.com.
+
+1. RFC: send a request for comments describing the problem and
+   the approach. Wait for agreement before writing any code.
+2. Patch: build the change as commits following /COMMITS,
+   export them with git format-patch, and send them with
+   git send-email. That mailed diff is the change; there is
+   no PR queue behind it.
 
   Commit message format - /COMMITS
   Contributor license agreement - /CLA

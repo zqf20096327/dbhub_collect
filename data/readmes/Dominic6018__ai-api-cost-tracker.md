@@ -20,7 +20,7 @@ It complements LLM gateways (which route requests and cap spend) and tracing too
 
 <sub>Demo data from `npm run db:demo`, captured by CI on 3 November 2026, and shown in your GitHub theme. The breakdown shows cost per resolved ticket for the Support Bot, the project that resolves tickets. The demo sets budgets from the current month's spend, so they're small this early in a month.</sub>
 
-> **Status:** Milestones 0–9 are complete: exact, tier-aware pricing, authenticated ingestion, the dashboard, budgets with alerts, Docker deployment, demo data, rate limiting, the TypeScript and Python clients, OpenTelemetry intake, reconciliation with Anthropic, OpenAI and Google Cloud bills, cost by customer, feature, agent run, tag and outcome, CSV and FOCUS exports, a reporting API, budget notifications and checks, and audited price management. Milestone 10 added roles, an audit log, organizations and single sign-on. Customer billing is not built. See [docs/ROADMAP.md](docs/ROADMAP.md), and [docs/PRODUCT_UPGRADE_AUDIT.md](docs/PRODUCT_UPGRADE_AUDIT.md) for a verified list of what works and what doesn't.
+> **Status:** Milestones 0–9 are complete: exact, tier-aware pricing, authenticated ingestion, the dashboard, budgets with alerts, Docker deployment, demo data, rate limiting, the TypeScript and Python clients, OpenTelemetry intake, reconciliation with Anthropic, OpenAI and Google Cloud bills, cost by customer, feature, agent run, tag and outcome, CSV and FOCUS exports, a reporting API, budget notifications and checks, and audited price management. Milestone 10 added roles, an audit log, organizations and single sign-on. Milestone 12 rounded out the clients, and Milestone 13 has a [billing ledger](docs/BILLING.md) with plans, monthly usage charges, prepaid credit and plan usage limits; and a revenue minus AI API cost view; invoicing and Stripe are not built. See [docs/ROADMAP.md](docs/ROADMAP.md), and [docs/PRODUCT_UPGRADE_AUDIT.md](docs/PRODUCT_UPGRADE_AUDIT.md) for a verified list of what works and what doesn't.
 
 ## Features
 
@@ -57,7 +57,7 @@ What it doesn't do yet (the plan is in [docs/PRODUCT_UPGRADE_PLAN.md](docs/PRODU
 - **Unpriced usage isn't estimated.** Usage with no stored price is kept as unpriced and left out of totals, budgets and exports until a price is added and `npm run reprice` runs; the tracker never guesses a cost.
 - **Usage is reported by your code**, through the API or the [TypeScript](clients/typescript/README.md) and [Python](clients/python/README.md) clients, or OpenTelemetry traces. Provider bills are compared with recorded costs (`npm run reconcile`), not imported as usage. The clients read usage from OpenAI, Anthropic and Gemini streams with `trackStream()` / `track_stream()`.
 - **Budgets only hold for calls that ask first.** A reservation stops concurrent steps from overspending, but a provider call your app makes without reserving isn't stopped (see [Reserving budget](#reserving-budget)). The TypeScript and Python clients reserve with `reserveBudget()` / `reserve_budget()`.
-- **Cost is broken down by project, provider, model, customer, user, feature, run and tag.** `metadata` is stored but not filterable. There's no customer billing, credits or revenue.
+- **Cost is broken down by project, provider, model, customer, user, feature, run and tag.** `metadata` is stored but not filterable. The [billing ledger](docs/BILLING.md) records what customers owe: plan fees and usage charges posted each month from the command line, adjustments, and prepaid credit applied against them. [`/revenue`](docs/BILLING.md#revenue-and-ai-api-cost) puts each customer's revenue next to their AI API cost. There are no invoices or payment collection yet.
 - **Prices are token prices (with audio and image tokens at their own rates) plus web search**, seeded and managed at `/prices`. OpenAI's Ultrafast tier isn't tracked.
 - **Organizations are managed from the command line**, as accounts are. An account is in one organization, and prices are shared across the install.
 - **Days are UTC days** for "today", "this month" and the charts.
@@ -123,6 +123,7 @@ To run the whole stack in Docker instead, see the [quick start](#quick-start-wit
 | `npm run api-key`          | Create or revoke ingestion API keys (see Recording usage)             |
 | `npm run user`             | Create, list and reset dashboard accounts (see Dashboard)             |
 | `npm run org`              | Create and list organizations (see Dashboard)                         |
+| `npm run billing`          | Billing customers, plans, adjustments and reversals (docs/BILLING.md) |
 | `npm run reprice`          | Price usage that was stored without a price (see Recording usage)     |
 | `npm run reconcile`        | Compare recorded costs with a provider's bill (see below)             |
 | `npm run budget-alerts`    | Send budget notifications to a webhook, Slack or email (see below)    |
@@ -140,6 +141,7 @@ src/
     overview/     Spend totals for today, this month and the last 30 days
     spend/        Daily spend chart and provider/model breakdown
     usage/        Usage events table with filters and pagination
+    changes/      Why spend changed between two periods
     projects/     Projects list, create and edit pages (server actions)
   db/
     schema.ts     Drizzle schema (projects, model_pricing, usage_events)
@@ -157,6 +159,10 @@ src/
     budget-notifications.ts  Sends each budget notification once, retrying failures
     budget-check.ts  Caps, spend and holds for the budget check, in one query
     budget-reservations.ts  Atomic reservations, settlement and release
+    billing.ts    Billing customers, append-only ledger entries, reversals and balances
+    billing-plans.ts  Billing plans and month-by-month subscriptions
+    billing-charges.ts  A month's usage cost per customer, and posting monthly charges
+    billing-credits.ts  Prepaid credit: grants, applying it to what's owed, refunds
     scripts/      `npm run api-key`, `user`, `db:demo`, `reconcile` and `budget-alerts` commands
     seed/         Sample project and dated model prices (`npm run db:seed`)
     demo/         Deterministic demo data generator and loader (`npm run db:demo`)
@@ -186,10 +192,12 @@ src/
     price-end-form.ts End-price form validation, requiring a source and check date
     usage-filters.ts Usage filter parsing, date bounds and cursors
     projects.ts   Project form validation
+    billing.ts    Billing amounts and fields: exact parsing and audit entries
 drizzle/          Generated SQL migrations
 Dockerfile        Multi-stage image: tools (migrations, CLI) and a non-root standalone runtime
 docs/DEPLOYMENT.md  Deployment guide
 docs/OPENTELEMETRY.md  OpenTelemetry intake and Collector setup
+docs/BILLING.md   The billing ledger, kept apart from provider cost
 scripts/          End-to-end smoke tests and screenshots run in CI
 clients/typescript/  Dependency-free client that reports usage from provider responses
 clients/python/      The same for Python, standard library only
@@ -204,6 +212,9 @@ docs/ROADMAP.md   Development roadmap
 - **usage_events**: individual requests with token counts (including cached and cache-write input tokens, and how many of the writes used the longer lifetime: Anthropic's 1-hour or OpenAI's 12-hour writes), the service tier (`standard`, `batch`, `flex` or `fast`), web searches (`web_search_requests`) and their cost (`web_search_cost_usd`, part of `cost_usd`), audio tokens (`audio_input_tokens`, `cached_audio_input_tokens` and `audio_output_tokens`) and image tokens (`image_input_tokens`, `cached_image_input_tokens` and `image_output_tokens`), parts of the input, cached and output counts, computed `cost_usd`, and an optional provider `request_id` for de-duplication.
 - **rate_limits**: fixed-window attempt counters for sign-in and API keys. Keys are SHA-256 hashes, so attempted emails and client IPs aren't stored. Ended windows are deleted as new attempts arrive.
 - **audit_log**: who changed projects, prices, accounts and API keys, written in the same transaction as the change. Never holds passwords, hashes, keys or session tokens.
+- **billing_plans** and **billing_subscriptions**: plans (a monthly fee, included usage and a usage multiplier, fixed once created) and which plan each customer is on, by UTC month, never overlapping.
+- **billing_credit_grants** and **billing_credit_uses**: prepaid credit and what's been applied or refunded from it. A trigger refuses a use beyond what's left of a grant or of expired credit; both are append-only.
+- **billing_customers** and **billing_ledger_entries**: who an organization bills, keyed by the usage `customerId`, and what they're billed, apart from provider cost. Entries are append-only: a trigger refuses updates and deletes, and corrections are reversing entries. See [docs/BILLING.md](docs/BILLING.md).
 - **budget_notifications**: budget notifications sent, unique per project, month, threshold and destination, with the spend and budget the message reported.
 - **spend_signal_notifications**: forecast-over-budget and spending-spike notifications sent, unique per project, kind, period (the month for a forecast, the UTC day for a spike) and destination, with the amount reported and what it was compared with.
 
@@ -263,7 +274,7 @@ Each account has a role, and every role can read the whole dashboard. Add `--rol
 | `member` | Manage   | Read                               |
 | `viewer` | Read     | Read                               |
 
-Admins can see who changed what at `/audit`: projects created and updated (with the fields that changed), prices added and ended, accounts created, role changes, password resets, sessions revoked, and API keys created and revoked. Changes made with `npm run user` or `npm run api-key` show as "command line". Each entry is saved in the same transaction as its change, and keeps the account's email if the account is later deleted. There's no way to edit or delete entries from the app, and they're kept indefinitely.
+Admins can see who changed what at `/audit`: projects created and updated (with the fields that changed), prices added and ended, accounts created, role changes, password resets, sessions revoked, API keys created and revoked, and billing customers, plans, plan changes, monthly charges, credit, adjustments and reversals. Changes made with `npm run user` or `npm run api-key` show as "command line". Each entry is saved in the same transaction as its change, and keeps the account's email if the account is later deleted. There's no way to edit or delete entries from the app, and they're kept indefinitely.
 
 Organizations keep teams apart: each sees only its own projects, usage, exports and audit log. Everything starts in one default organization. To add another:
 
@@ -275,6 +286,26 @@ npm run org -- list                                              # with account 
 ```
 
 Prices are shared by the whole install, so only the install's owners, the admins of the default organization, can change them. Admins of other organizations can read prices but not who added them. Scheduled budget notifications cover every organization and go to the install's one set of destinations. Project slugs are unique within an organization, so two organizations can each have a `web-app`; when they do, `npm run api-key -- create` needs `--org <slug>` to know which. Changes made from the command line to an account or API key are logged in that account's or project's organization.
+
+### Why spend changed
+
+`/changes` compares two periods of whole UTC days, the last 30 or 7 days against the period before or the last two finished months, for all projects or one, and splits the change in spend into:
+
+| Effect             | What it measures                                                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| Volume             | More or fewer requests, at the earlier mix of models and cost per request                                                         |
+| Model mix          | Requests moving between models, including models that started or stopped being used                                               |
+| Tokens per request | Longer or shorter requests on the same model, at its earlier cost per token                                                       |
+| Input/output mix   | On the same model, more or less of the tokens being output, which costs more than input                                           |
+| Cache rate         | On the same model, more or less of the input read from or written to the prompt cache                                             |
+| Price              | The model's rates in the price table at the end of each period                                                                    |
+| Other              | What those rates don't model: long-prompt tiers, batch, audio, images, web searches, a price change during a period, and rounding |
+
+Each driver is swapped from the earlier period to the later one in that order, holding the others (a chained substitution), so the effects add up to the change exactly, overall and per model; a different order would give somewhat different amounts, and the page says so. The last four split the change in a model's cost per token: its tokens of each kind (uncached and cached input, cache writes, output) are repriced at the model's standard rates in the price table at the end of each period. Whatever that repricing doesn't explain is **other**, which is zero when every request was billed at those plain rates; a model without a price in both periods has all of its cost-per-token change there. Each step is rounded once to the micro-dollar. Only priced requests count, and unpriced ones in either period are flagged.
+
+### Revenue
+
+`/revenue` shows, for a UTC month, each customer's revenue from the [billing ledger](docs/BILLING.md), the AI API cost of their usage, and **revenue minus AI API cost**, with its share of revenue. That difference leaves out every other cost, so it's never called profit. Customers whose usage wasn't billed, and usage with no customer, are listed too, and unpriced usage is flagged. See [Revenue and AI API cost](docs/BILLING.md#revenue-and-ai-api-cost).
 
 ### Single sign-on
 
@@ -460,7 +491,7 @@ curl -X POST https://costs.example.com/api/budget/check \
   -d '{"estimatedCostUsd": "0.25", "runId": "run_42"}'
 ```
 
-Both fields are optional. `estimatedCostUsd` is what the next step might cost, as a string or a number with up to 6 decimals (default 0). `runId` names the agent run, as in usage. The answer is always `200`:
+Every field is optional. `estimatedCostUsd` is what the next step might cost, as a string or a number with up to 6 decimals (default 0). `runId` names the agent run, and `customerId` the customer, as in usage. The answer is always `200`:
 
 ```json
 {
@@ -485,11 +516,12 @@ Both fields are optional. `estimatedCostUsd` is what the next step might cost, a
 ```
 
 - **Two caps:** the **monthly budget** against this UTC month's spend, counted as on the dashboard, and the project's **run budget** (set on the project form) against everything recorded with that `runId`. A cap without a value never denies; its `capUsd` and `remainingUsd` are `null`, and spend is still reported. `run` is `null` without a `runId`.
+- **The customer's plan:** with a `customerId`, `customer` checks the monthly usage limit of their [billing plan](docs/BILLING.md#usage-limits) against their spend and holds this UTC month in every project of the organization, with `plan` naming it. A customer with no plan, or a plan without a limit, is never denied by it. `customer` is `null` without a `customerId`.
 - **The rule:** a cap denies when nothing is left (spend at or over it, matching the dashboard's "over" at exactly 100%), or when the estimate is more than what's left. An estimate may use up exactly what's left. Comparisons are exact, in micro-dollars, and `remainingUsd` is negative when over.
-- **Denials are answers, not errors:** `reasons` lists `monthly_budget` and/or `run_budget`. Errors are `400` for an invalid body, `401`/`429` for keys as for usage, `403` for a read key, and `404` if the key's project was deleted. Responses are never cached.
+- **Denials are answers, not errors:** `reasons` lists `monthly_budget`, `run_budget` and/or `customer_limit`. Errors are `400` for an invalid body, `401`/`429` for keys as for usage, `403` for a read key, and `404` if the key's project was deleted. Responses are never cached.
 - **A check reserves nothing.** It sees recorded usage and unexpired [reservations](#reserving-budget) (reported as `heldUsd`), so steps checked at the same moment can each be allowed. To stop that, reserve instead.
 - **Failing open or closed is your choice.** If the tracker can't be reached, decide in your app whether to proceed.
-- **From the clients:** `tracker.checkBudget({ estimatedCostUsd, runId })` in [TypeScript](clients/typescript/README.md#budget-check) and `tracker.check_budget(estimated_cost_usd, run_id=...)` in [Python](clients/python/README.md#budget-check). A scoped tracker's run ID is used by default.
+- **From the clients:** `tracker.checkBudget({ estimatedCostUsd, runId, customerId })` in [TypeScript](clients/typescript/README.md#budget-check) and `tracker.check_budget(estimated_cost_usd, run_id=..., customer_id=...)` in [Python](clients/python/README.md#budget-check). A scoped tracker's run and customer IDs are used by default.
 
 ### Reserving budget
 

@@ -5,7 +5,7 @@
 # EinVault
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.11.0-7348f4.svg)](https://github.com/davefatkin/EinVault/releases)
+[![Version](https://img.shields.io/badge/version-1.12.0-7348f4.svg)](https://github.com/davefatkin/EinVault/releases)
 
 EinVault is a private, self-hosted companion health and care tracker built for homelabs. Track health records, daily activities, and care schedules for your animal companions. All data stays on your hardware. No cloud, no telemetry, no external accounts.
 
@@ -100,7 +100,7 @@ Download [`docker-compose.prod.yml`](docker-compose.prod.yml) and set your domai
 ORIGIN: https://einvault.yourdomain.com
 ```
 
-The image starts through `serve.js`, a small wrapper around the SvelteKit server that applies `ORIGIN` at runtime.
+The image starts through `serve.js`, a small wrapper around the SvelteKit server that lets token-authenticated API calls through Kit's CSRF check.
 
 Then:
 
@@ -323,7 +323,7 @@ No `.env` needed. The database defaults to `./data/einvault.db` and migrations r
 ```bash
 npm run dev            # dev server at http://localhost:5173
 npm run build          # production build
-node serve.js          # start the build outside Docker (not `node build`: serve.js applies ORIGIN and the API Content-Type shim)
+node serve.js          # start the build outside Docker (not `node build`: serve.js adds the API Content-Type shim)
 npm run check          # SvelteKit type checking
 npm run lint           # ESLint + Prettier check
 npm run format         # auto-format with Prettier

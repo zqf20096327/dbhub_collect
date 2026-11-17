@@ -184,8 +184,13 @@ a kiosk and it has not been certified on hardware; see [docs/vega-player.md](doc
   play fine but show no thumbnail in the content library. The Docker image includes it.
   The server logs a `[MEDIA]` line at startup telling you whether it was found, and
   backfills missing thumbnails automatically once ffmpeg appears after a restart.
+- **Chromium, Xvfb and PulseAudio** (optional) — only for Broadcast view's stream out and recording.
+  The Docker image does not include them; see [Broadcast streaming in Docker](docs/broadcast-docker.md)
+  for the small "-av" image that adds them, or install them on the host for a systemd install.
 
 ### Quick Start
+
+**Docker** is the simplest way to run it: see [Running ScreenTinker with Docker](docs/docker.md) for compose, HTTPS, the Android APK, backups and upgrades. From source:
 
 ```bash
 git clone https://github.com/screentinker/screentinker.git
@@ -790,7 +795,10 @@ sudo apt-get install -y nodejs ffmpeg
 /usr/bin/node -v    # must print v22.14 or newer (Node 26 works too: use setup_26.x)
 
 # Create a dedicated user
-sudo useradd -r -U -s /bin/false screentinker    # -U: also create its group (not every distro does by default)
+# -U: also create its group (not every distro does by default).
+# -m: create its home directory. `useradd -r` alone records /home/screentinker without creating it,
+#     and npm (run as this user by Platform -> System -> Update now) needs a home it can write.
+sudo useradd -r -U -m -s /bin/false screentinker
 
 # Copy the app and install its dependencies, THEN hand it to the service user.
 # (Running npm as yourself after the chown fails with EACCES: you can no longer write there.)

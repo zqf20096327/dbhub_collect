@@ -26,7 +26,7 @@ Roundcube is webmail bolted onto one mailbox. Thunderbird does not run in a
 browser. Commercial clients want to pull your mail onto their servers. nexmail
 is the third option — and if you can use Outlook, you should feel at home.
 
-> **Version 0.29.2.** It reads, writes, searches, sorts, labels, sends,
+> **Version 0.29.3.** It reads, writes, searches, sorts, labels, sends,
 > schedules, prints, answers for you while you are away, keeps a calendar and
 > your address books in sync with iCloud or Google, invites people to your own
 > appointments, rephrases a draft with an AI service of your choice, backs
@@ -222,7 +222,11 @@ rather than letting you guess why nothing works.
 **Rephrasing with AI, if you want it.** Every user can connect their own AI
 service on the *AI* page: an address, a key and a model. nexmail knows no
 provider; anything that speaks the common chat completions interface works,
-from Claude, Gemini or OpenAI to Ollama on a machine in your own network. In
+from Claude, Gemini or OpenAI to Ollama on a machine in your own network. A
+service in your own network is asked not to think (`reasoning_effort: "none"`),
+so a thinking model such as Qwen3 or DeepSeek-R1 does not spend a short answer
+on its thoughts; a server that does not know the field is asked once more
+without it. In
 the editor it fixes spelling, translates, or rephrases in one of nine tones,
 and shows old and new side by side before anything is replaced. Quotes and
 your signature are never sent, and the AI page lists verbatim what went out.

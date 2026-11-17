@@ -1,10 +1,12 @@
+[Español](README.es.md)
+
 <div align="center">
 
 # Condensity (Ex GameNest)
 
-### Encuentra con quién formar tu Steam Family
+### Find who to form your Steam Family with
 
-[![Ir a la página](https://img.shields.io/badge/Ir_a_la_p%C3%A1gina-5C7E10?style=for-the-badge&logo=steam&logoColor=white)](https://condensity.cl)
+[![Go to the website](https://img.shields.io/badge/Go_to_the_website-5C7E10?style=for-the-badge&logo=steam&logoColor=white)](https://condensity.cl)
 
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
@@ -16,21 +18,21 @@
 
 </div>
 
-Página web para encontrar personas de tu país con quienes formar una Steam Family, cruzando tu biblioteca y tu wishlist con las de cada publicación de forma transparente y sin necesidad de logearse con la propia Steam, con el fin de crear comunidades y acercar personas.
+Website to find people from your country to form a Steam Family with, cross-referencing your library and your wishlist with those of each listing transparently and without needing to log in with your own Steam, in order to create communities and bring people closer.
 
 <div align="center">
   <img src="docs/portada.jpg" width="800"/>
 </div>
 
-## Funciones
+## Features
 
-- Publicar tu biblioteca con los juegos que Steam permite compartir.
-- Ordenar publicaciones por coincidencias con tu wishlist y filtrarlas por país.
-- Ver qué parte de tu wishlist ofrece cada publicación y cuánto sería nuevo para ti.
-- Verificar tu cuenta de Steam con un código temporal en tu perfil.
-- Publicar de forma anónima o solo para cuentas verificadas.
-- Mensajes, bloqueos, denuncias y moderación.
-- Exportar tus datos o borrar tu cuenta.
+- Publish your library with the games Steam allows sharing.
+- Sort listings by matches with your wishlist and filter them by country.
+- See which part of your wishlist each listing offers and how much would be new to you.
+- Verify your Steam account with a temporary code on your profile.
+- Publish anonymously or only for verified accounts.
+- Messages, blocks, reports and moderation.
+- Export your data or delete your account.
 
 <table>
   <tr>
@@ -41,10 +43,10 @@ Página web para encontrar personas de tu país con quienes formar una Steam Fam
 
 ---
 
-## Código fuente
+## Source code
 
-El código fuente es privado, pero si gustas colaborar puedes enviarme un mensaje para darte acceso de lectura. La arquitectura y las medidas de seguridad están en [este doc](docs/arquitectura-y-seguridad.md).
+The source code is private, but if you'd like to collaborate you can send me a message and I'll give you read access. The architecture and security measures are in [this doc](docs/arquitectura-y-seguridad.md).
 
-## Autor
+## Author
 
 Pedro Morales.
